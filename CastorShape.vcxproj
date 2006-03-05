@@ -13,7 +13,7 @@
   <PropertyGroup Label="Globals">
     <SccProjectName />
     <SccLocalPath />
-    <ProjectGuid>{F447E1B1-0F6C-4F96-8088-5EB1234F5C34}</ProjectGuid>
+    <ProjectGuid>{E074F94C-0523-4679-BB0C-0A74809DB2B8}</ProjectGuid>
     <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -45,11 +45,15 @@
     <OutDir>.\Debug\</OutDir>
     <IntDir>.\Debug\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>Z:\Libs\glut-3.6\include;$(IncludePath)</IncludePath>
+    <LibraryPath>Z:\Libs\glut-3.6\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>.\Release\</OutDir>
     <IntDir>.\Release\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>Z:\Libs\glut-3.6\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>Z:\Libs\glut-3.6\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -87,7 +91,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OutputFile>.\Debug\CastorShape.exe</OutputFile>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glut32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -124,15 +128,42 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <SubSystem>Windows</SubSystem>
       <OutputFile>.\Release\CastorShape.exe</OutputFile>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glut32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CastorShape.cpp" />
+    <ClCompile Include="ComposantGeo\Arcs.cpp" />
+    <ClCompile Include="ComposantGeo\Face.cpp" />
+    <ClCompile Include="ComposantGeo\Geometrie.cpp" />
+    <ClCompile Include="ComposantGeo\Vecteur.cpp" />
+    <ClCompile Include="ComposantGeo\Vertex.cpp" />
+    <ClCompile Include="Global.cpp" />
+    <ClCompile Include="Primitives\Cone.cpp" />
+    <ClCompile Include="Primitives\Cylindre.cpp" />
+    <ClCompile Include="Primitives\Figure.cpp" />
+    <ClCompile Include="Primitives\Pave.cpp" />
+    <ClCompile Include="Primitives\Plan.cpp" />
+    <ClCompile Include="Primitives\Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="resource.h" />
     <ClInclude Include="..\..\..\..\Program Files\Microsoft Visual Studio\VC98\Include\BASETSD.H" />
+    <ClInclude Include="ComposantGeo\Arcs.h" />
+    <ClInclude Include="ComposantGeo\Face.h" />
+    <ClInclude Include="ComposantGeo\Geometrie.h" />
+    <ClInclude Include="ComposantGeo\Vecteur.h" />
+    <ClInclude Include="ComposantGeo\Vertex.h" />
+    <ClInclude Include="Global.h" />
+    <ClInclude Include="Primitives\Cone.h" />
+    <ClInclude Include="Primitives\Cylindre.h" />
+    <ClInclude Include="Primitives\Figure.h" />
+    <ClInclude Include="Primitives\Pave.h" />
+    <ClInclude Include="Primitives\Plan.h" />
+    <ClInclude Include="Primitives\Sphere.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ressource.rc" />
