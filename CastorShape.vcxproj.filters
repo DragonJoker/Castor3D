@@ -2,105 +2,123 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{97b1cdfc-4e8b-4333-aa5c-daf19b229a5c}</UniqueIdentifier>
+      <UniqueIdentifier>{2c81cd4d-83e6-4878-a6ed-635ba30b41dd}</UniqueIdentifier>
       <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
     </Filter>
     <Filter Include="Header Files">
-      <UniqueIdentifier>{51bc60c1-5f8a-43bd-a9db-509439941e2c}</UniqueIdentifier>
+      <UniqueIdentifier>{8524d538-b12c-46e4-8d7c-15211ad532ce}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl</Extensions>
     </Filter>
     <Filter Include="Resource Files">
-      <UniqueIdentifier>{225cdee8-59ff-442c-a4ef-7b54c9486f30}</UniqueIdentifier>
+      <UniqueIdentifier>{a6d08f12-3ab3-4d75-acf9-43c7a76fefb9}</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ComposantGeo\Arcs.cpp">
+    <ClCompile Include="Geometrie\Bases\Arcs.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CastorShape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Primitives\Cone.cpp">
+    <ClCompile Include="Math\CMatrice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Primitives\Cylindre.cpp">
+    <ClCompile Include="Geometrie\Primitive\Cone.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ComposantGeo\Face.cpp">
+    <ClCompile Include="Geometrie\Primitive\Cylindre.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Primitives\Figure.cpp">
+    <ClCompile Include="Geometrie\Bases\Face.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ComposantGeo\Geometrie.cpp">
+    <ClCompile Include="Geometrie\Primitive\Figure.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Global.cpp">
+    <ClCompile Include="src\Global.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Primitives\Pave.cpp">
+    <ClCompile Include="Geometrie\Primitive\Icosaedre.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Primitives\Plan.cpp">
+    <ClCompile Include="Geometrie\Primitive\Pave.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Primitives\Sphere.cpp">
+    <ClCompile Include="Geometrie\Primitive\Plan.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ComposantGeo\Vecteur.cpp">
+    <ClCompile Include="Geometrie\Primitive\Sphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ComposantGeo\Vertex.cpp">
+    <ClCompile Include="Geometrie\Primitive\Terrain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Vecteur.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\Vertex.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ComposantGeo\Arcs.h">
+    <ClInclude Include="Geometrie\Bases\Arcs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Primitives\Cone.h">
+    <ClInclude Include="Math\CMatrice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Primitives\Cylindre.h">
+    <ClInclude Include="Geometrie\Primitive\Cone.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ComposantGeo\Face.h">
+    <ClInclude Include="Geometrie\Bases\Constantes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Primitives\Figure.h">
+    <ClInclude Include="Geometrie\Primitive\Cylindre.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ComposantGeo\Geometrie.h">
+    <ClInclude Include="Geometrie\Bases\Face.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Global.h">
+    <ClInclude Include="Geometrie\Primitive\Figure.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Primitives\Pave.h">
+    <ClInclude Include="src\Global.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Primitives\Plan.h">
+    <ClInclude Include="Geometrie\Primitive\Icosaedre.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\Math.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Geometrie\Primitive\Pave.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Geometrie\Primitive\Plan.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Primitives\Sphere.h">
+    <ClInclude Include="Geometrie\Primitive\Sphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ComposantGeo\Vecteur.h">
+    <ClInclude Include="Geometrie\Primitive\Terrain.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ComposantGeo\Vertex.h">
+    <ClInclude Include="Math\Vecteur.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Program Files\Microsoft Visual Studio\VC98\Include\BASETSD.H">
-      <Filter>Resource Files</Filter>
+    <ClInclude Include="Math\Vertex.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icon2.ico">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

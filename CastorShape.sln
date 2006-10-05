@@ -1,20 +1,20 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CastorShape", "CastorShape.vcxproj", "{E074F94C-0523-4679-BB0C-0A74809DB2B8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CastorShape", "CastorShape.vcxproj", "{580DDF3C-15CD-4921-BA07-8561F6C5D9CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|x86 = Debug|x86
-		Release|x86 = Release|x86
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E074F94C-0523-4679-BB0C-0A74809DB2B8}.Debug|x86.ActiveCfg = Debug|Win32
-		{E074F94C-0523-4679-BB0C-0A74809DB2B8}.Debug|x86.Build.0 = Debug|Win32
-		{E074F94C-0523-4679-BB0C-0A74809DB2B8}.Release|x86.ActiveCfg = Release|Win32
-		{E074F94C-0523-4679-BB0C-0A74809DB2B8}.Release|x86.Build.0 = Release|Win32
+		{580DDF3C-15CD-4921-BA07-8561F6C5D9CE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{580DDF3C-15CD-4921-BA07-8561F6C5D9CE}.Debug|Win32.Build.0 = Debug|Win32
+		{580DDF3C-15CD-4921-BA07-8561F6C5D9CE}.Release|Win32.ActiveCfg = Release|Win32
+		{580DDF3C-15CD-4921-BA07-8561F6C5D9CE}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

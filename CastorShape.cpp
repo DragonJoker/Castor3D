@@ -2,9 +2,12 @@
 #include <gl\gl.h>
 #include <gl\glu.h>
 #include <stdio.h>
-#include <stdlib.h>   
+#include <stdlib.h> 
+#include "Math.h"     
+
 #include "resource.h"
-#include "global.h"
+#include "./src/global.h"
+#include "./Geometrie/Bases/Constantes.h"
 
 //_____________________________________________________________________________________________
 enum Type_Action
@@ -18,7 +21,9 @@ enum Type_Selection
 {
  objet_f,
  vertex_f,
- aucune_f
+ aucune_f,
+ tous_f,
+ dupliquer_f
 };
 //_____________________________________________________________________________________________
 enum Type_Modification
@@ -65,10 +70,11 @@ int g_translationZ;
 int PosMenuPrimitive =3;
 
 int g_nbFacesCone = 80;
-int g_nbFacesCylindre = 20;
-int g_nbFacesSphere = 20;
-int g_nbSubdivisionPlanX = 8;
-int g_nbSubdivisionPlanY = 8;
+int g_nbFacesCylindre = 40;
+int g_nbFacesSphere = 50;
+int g_nbSubdivisionPlanX = 2;
+int g_nbSubdivisionPlanY = 2;
+int g_nbFacesIco = 4;
 
 int g_fenSelection = NONE;
 
@@ -147,15 +153,6 @@ void InitGL()
    // Culling	
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
-
-	/*
-   glEnable(GL_CULL_FACE);
-   {
-        glFrontFace(GL_CW);
-        glPolygonMode(GL_BACK, GL_FILL);
-   }
-   */
-
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -205,40 +202,40 @@ void DessinerGrille(int TypeVue){
 		case VUE_FACE:
 			for(i=-1000; i<1001;i++){		
 					glBegin(GL_LINES);
-						glVertex3i(-1000, i, 0);
-						glVertex3i(1000, i, 0);				
+						glVertex3i(-1000, i, -2000);
+						glVertex3i(1000, i, -2000);				
 					glEnd();
 					
 					glBegin(GL_LINES);
-						glVertex3i(i, -1000, 0);
-						glVertex3i(i, 1000, 0);				
+						glVertex3i(i, -1000, -2000);
+						glVertex3i(i, 1000, -2000);				
 					glEnd();
 			}
 			break;
 		case VUE_COTE:
 			for(i=-1000; i<1001;i++){		
 					glBegin(GL_LINES);
-						glVertex3i(0, i, -1000);
-						glVertex3i(0, i, 1000);				
+						glVertex3i(2000, i, -1000);
+						glVertex3i(2000, i, 1000);				
 					glEnd();
 					
 					glBegin(GL_LINES);
-						glVertex3i(0, -1000, i);
-						glVertex3i(0, 1000, i);				
+						glVertex3i(2000, -1000, i);
+						glVertex3i(2000, 1000, i);				
 					glEnd();
 			}
 			break;
 		case VUE_DESSUS:
 			for(i=-1000; i<1001;i++){		
 					glBegin(GL_LINES);
-						glVertex3i(-1000, 0, i);
-						glVertex3i(1000, 0, i );				
+						glVertex3i(-1000, 2000, i);
+						glVertex3i(1000, 2000, i );				
 					glEnd();
 					
 					
 					glBegin(GL_LINES);
-						glVertex3i(i, 0, -1000);
-						glVertex3i(i, 0, 1000);				
+						glVertex3i(i, 2000, -1000);
+						glVertex3i(i, 2000, 1000);				
 					glEnd();
 			}
 			break;
@@ -264,7 +261,7 @@ void DessinerRepere(){
     glMaterialfv(GL_FRONT, GL_SHININESS, coulShininess);
 	glColor3f(1.0,0.0,0.0);
 	glVertex3f(0.0, 0.0,  0.0);
-	glVertex3f(100.0, 0.0,  0.0);
+	glVertex3f(1.0, 0.0,  0.0);
 	glEnd();
 
 	//Axe des Y en vert
@@ -274,7 +271,7 @@ void DessinerRepere(){
     glMaterialfv(GL_FRONT, GL_SPECULAR, coulSpecular2);
     glMaterialfv(GL_FRONT, GL_SHININESS, coulShininess);
 	glVertex3f(0.0, 0.0,  0.0);
-	glVertex3f( 0.0,100.0,  0.0);
+	glVertex3f( 0.0,1.0,  0.0);
 	glEnd();
 
 	//Axe des Z en bleu
@@ -284,7 +281,7 @@ void DessinerRepere(){
     glMaterialfv(GL_FRONT, GL_SPECULAR, coulSpecular3);
     glMaterialfv(GL_FRONT, GL_SHININESS, coulShininess);
 	glVertex3f(0.0, 0.0,  0.0);
-	glVertex3f( 0.0,  0.0, 100.0);
+	glVertex3f( 0.0,  0.0, 1.0);
 	glEnd();
 
 	glMaterialfv(GL_FRONT, GL_AMBIENT, coulSpecular4);
@@ -378,14 +375,14 @@ void DrawGLScene(int Type)
 			glPushMatrix();
 
 			glEnable(GL_LIGHTING);
-			//glEnable(GL_TEXTURE_2D);
 
-			glRotatef(g_fCubeRotationX,1.0,0.0,0.0);
-			glRotatef(g_fCubeRotationY,0.0,1.0,1.0);
+			glRotatef(g_fCubeRotationY,0.0,0.0,1.0);
+			glRotatef(-g_fCubeRotationX,0.0,1.0,0.0);
+			
+
 			DessinerRepere();
 			objets->Dessiner(facesTriangle);			
 
-		//	glDisable(GL_TEXTURE_2D);
 			glDisable(GL_LIGHTING);
 			glPopMatrix();			
 			break;
@@ -416,6 +413,42 @@ float CalculerCoor(int MouseCoord, int DimScreen, float Diviseur){
 	Taille = MouseCoord - Taille;
 	Taille /= Diviseur; 
 	return Taille;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+float CalculerAngle(point2D point_p)
+{
+	float angle_l = 0.0;
+
+	if(0 < point_p.y){
+		if(0 <point_p.x){
+			angle_l = atan(point_p.y / point_p.x);			
+		}else if(point_p.x < 0){
+			angle_l = -atan(point_p.x / point_p.y)+M_PI_PAR_2;	
+		}else{
+			angle_l = M_PI_PAR_2;
+		}
+	}else if(point_p.y < 0){
+		if(0 < point_p.x){
+			angle_l = -atan(point_p.x / point_p.y)+M_PI+M_PI_PAR_2;	
+		}else if(point_p.x < 0){
+			angle_l = atan(point_p.y/ point_p.x)+M_PI;
+		}else{
+			angle_l = M_PI+M_PI_PAR_2;
+		}		
+
+	}else{
+		if(0 < point_p.x){
+			angle_l = 0.0;	
+		}else if(point_p.x < 0){
+			angle_l = M_PI;
+		}else{
+			angle_l = 0.0;
+		}
+	}
+
+	return angle_l;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -512,6 +545,8 @@ void LButtonDownOnFace()
 	Cone* co    = NULL;
 	Sphere* sp  = NULL;
 	Plan* pl    = NULL;
+	Icosaedre* ico = NULL;
+	Terrain* ter = NULL;
 
 
 	//On verifie que le clique de la souris s'effectue dans la fenetre
@@ -550,6 +585,17 @@ void LButtonDownOnFace()
 					case plan_f:
 						pl = new Plan(1.0, 1.0, g_nbSubdivisionPlanX,g_nbSubdivisionPlanY,new Vertex(nbre1,-nbre2,0.0f));
 						objets->GeoActu = ((Figure * )(pl));
+						break;
+
+					case icosaedre_f:
+						ico = new Icosaedre(1.0, g_nbFacesIco,new Vertex(nbre1,-nbre2,0.0f));
+						objets->GeoActu = ((Figure * )(ico));
+						break;
+					
+					case terrain_f:
+                        ter = new Terrain("map.map");
+						objets->GeoActu = ((Figure * )(ter));
+					//	Terrain::GenererPoints(std::string NomFichier)
 						break;
 
 				}
@@ -591,6 +637,7 @@ void LButtonDownOnCote()
 	Cone* co    = NULL;
 	Sphere* sp  = NULL;
 	Plan* pl    = NULL;
+	Icosaedre* ico = NULL;
 
 	//On verifie que le clique de la souris s'effectue dans la fenetre
 	if(0<=g_iMouseLastX && g_iMouseLastX<=_rectFils.right &&  0<=g_iMouseLastY && g_iMouseLastY<=_rectFils.bottom	)
@@ -628,6 +675,11 @@ void LButtonDownOnCote()
 					case plan_f:
 						pl = new Plan(1.0, 1.0, g_nbSubdivisionPlanX, g_nbSubdivisionPlanY,new Vertex(0.0f,-nbre2,nbre1));
 						objets->GeoActu = ((Figure * )(pl));
+						break;
+
+					case icosaedre_f:
+						ico = new Icosaedre(1.0, g_nbFacesIco,new Vertex(0.0f,-nbre2,nbre1));
+						objets->GeoActu = ((Figure * )(ico));
 						break;
 				}
 
@@ -668,7 +720,7 @@ void LButtonDownOnDessus()
 	Cone* co    = NULL;
 	Sphere* sp  = NULL;
 	Plan* pl    = NULL;
-
+	Icosaedre* ico = NULL;
 					
 	//On verifie que le clique de la souris s'effectue dans la fenetre
 	if(0<=g_iMouseLastX && g_iMouseLastX<=_rectFils.right &&  0<=g_iMouseLastY && g_iMouseLastY<=_rectFils.bottom	)
@@ -707,6 +759,12 @@ void LButtonDownOnDessus()
 						pl = new Plan(1.0, 1.0, g_nbSubdivisionPlanX, g_nbSubdivisionPlanY,new Vertex(nbre1,0.0f,-nbre2));
 						objets->GeoActu = ((Figure * )(pl));
 						break;
+
+					case icosaedre_f:
+						ico = new Icosaedre(1.0, g_nbFacesIco,new Vertex(nbre1,0.0f,-nbre2));
+						objets->GeoActu = ((Figure * )(ico));
+						break;				
+
 					}			
 				
 			}break;
@@ -820,12 +878,23 @@ void LButtonUpOnFace()
 
 		case modifier_f:
 		{
-			Vecteur* Vec = new Vecteur(g_pointFin.x - g_pointDebut.x,
-									   g_pointFin.y - g_pointDebut.y,	
-									   0.0);
+			switch(ModificationActu)
+			{
+				case translation_f:
+				{
+					Vecteur* Vec = new Vecteur(g_pointFin.x - g_pointDebut.x,
+											   g_pointFin.y - g_pointDebut.y,	
+											   0.0);
 
-			objets->TranslaterSelection(Vec);
+					objets->TranslaterSelection(Vec);
+				}break;
 
+				case rotation_f:
+				{
+
+
+				}break;
+			}
 		}break;
 	}
 
@@ -879,11 +948,23 @@ void LButtonUpOnCote()
 
 		case modifier_f:
 		{
-			Vecteur* Vec = new Vecteur(0.0,
-									   g_pointFin.y - g_pointDebut.y,	
-									   g_pointFin.x - g_pointDebut.x);
+			switch(ModificationActu)
+			{
+				case translation_f:
+				{
+					Vecteur* Vec = new Vecteur(0.0,
+											   g_pointFin.y - g_pointDebut.y,	
+											   g_pointFin.x - g_pointDebut.x);
 
-			objets->TranslaterSelection(Vec);
+					objets->TranslaterSelection(Vec);
+				}break;
+
+				case rotation_f:
+				{
+
+
+				}break;
+			}
 
 		}break;
 	}
@@ -937,11 +1018,24 @@ void LButtonUpOnDessus()
 
 		case modifier_f:
 		{
-			Vecteur* Vec = new Vecteur(g_pointFin.x - g_pointDebut.x,
-									   0.0,	
-									   g_pointFin.y - g_pointDebut.y);
+			switch(ModificationActu)
+			{
+				case translation_f:
+				{
+					Vecteur* Vec = new Vecteur(g_pointFin.x - g_pointDebut.x,
+											   0.0,	
+											   g_pointFin.y - g_pointDebut.y);
 
-			objets->TranslaterSelection(Vec);
+					objets->TranslaterSelection(Vec);
+				}break;
+
+				case rotation_f:
+				{
+
+
+				}break;
+			}
+
 
 		}break;
 	}
@@ -1038,6 +1132,7 @@ void MouseMoveOnFace()
 	Cone* co     = NULL;
 	Sphere* sp   = NULL;
 	Plan* pl     = NULL;
+	Icosaedre * ico;
 
 	g_translationX += g_iMouseDeltaX;
 	g_translationY += g_iMouseDeltaY;
@@ -1074,6 +1169,11 @@ void MouseMoveOnFace()
 					Profondeur_l = pl->Profondeur;
 					pl->Modifier(g_translationX/g_fZoomFace, Profondeur_l);
 					break;
+
+				case icosaedre_f:
+					ico = (Icosaedre*)objets->GeoActu;
+					ico->Modifier(-g_translationX/g_fZoomFace);
+					break;
 			}
 		}break;
 
@@ -1085,17 +1185,44 @@ void MouseMoveOnFace()
 
 		case modifier_f:
 		{
-				//On calcule la veritable coordonnée de la souris 
-				g_pointFin.x =  CalculerCoor(g_iMouseLastX, _rectFils.right, g_fZoomFace);
-				g_pointFin.y = -CalculerCoor(g_iMouseLastY, _rectFils.bottom, g_fZoomFace);	
 
-				Vecteur* Vec = new Vecteur(g_pointFin.x - g_pointDebut.x, g_pointFin.y - g_pointDebut.y,  0.0);
-				objets->TranslaterSelection(Vec);
-				delete Vec;
-				
-				//On calcule la veritable coordonnée de la souris 
-				g_pointDebut.x =  CalculerCoor(g_iMouseLastX, _rectFils.right, g_fZoomFace);
-				g_pointDebut.y = -CalculerCoor(g_iMouseLastY, _rectFils.bottom, g_fZoomFace);
+			switch(ModificationActu)
+			{
+				case translation_f:
+				{
+					//On calcule la veritable coordonnée de la souris 
+					g_pointFin.x =  CalculerCoor(g_iMouseLastX, _rectFils.right, g_fZoomFace);
+					g_pointFin.y = -CalculerCoor(g_iMouseLastY, _rectFils.bottom, g_fZoomFace);	
+
+					Vecteur* Vec = new Vecteur(g_pointFin.x - g_pointDebut.x, g_pointFin.y - g_pointDebut.y,  0.0);
+					objets->TranslaterSelectionXY(Vec);
+					delete Vec;
+					
+					//On calcule la veritable coordonnée de la souris 
+					g_pointDebut.x =  CalculerCoor(g_iMouseLastX, _rectFils.right, g_fZoomFace);
+					g_pointDebut.y = -CalculerCoor(g_iMouseLastY, _rectFils.bottom, g_fZoomFace);
+				}break;
+
+				case rotation_f:
+				{
+					//On calcule la veritable coordonnée de la souris 
+					g_pointFin.x =  CalculerCoor(g_iMouseLastX, _rectFils.right, g_fZoomFace);
+					g_pointFin.y = -CalculerCoor(g_iMouseLastY, _rectFils.bottom, g_fZoomFace);	
+
+					float angle1 = CalculerAngle(g_pointDebut);
+					float angle2 = CalculerAngle(g_pointFin);
+						
+					float angleRotation = angle2 - angle1;	
+			     	objets->RotationSelectionZ(angleRotation);
+
+					//On calcule la veritable coordonnée de la souris 
+					g_pointDebut.x =  CalculerCoor(g_iMouseLastX, _rectFils.right, g_fZoomFace);
+					g_pointDebut.y = -CalculerCoor(g_iMouseLastY, _rectFils.bottom, g_fZoomFace);
+
+				}break;
+			}
+
+
 		}break;
 
 	}
@@ -1110,6 +1237,7 @@ void MouseMoveOnCote()
 	Cone* co;
 	Sphere* sp;
 	Plan* pl;
+	Icosaedre * ico;
 
 	g_translationX += g_iMouseDeltaX;
 	g_translationY += g_iMouseDeltaY;
@@ -1144,7 +1272,12 @@ void MouseMoveOnCote()
 				case plan_f:
 					pl = (Plan*)objets->GeoActu;
 					Largeur_l = pl->Largeur;
-					pl->Modifier(Largeur_l, -g_translationY/g_fZoomCote);
+					pl->Modifier(Largeur_l, g_translationX/g_fZoomCote);
+					break;
+
+				case icosaedre_f:
+					ico = (Icosaedre*)objets->GeoActu;
+					ico->Modifier(g_translationX/g_fZoomCote);
 					break;
 
 			}
@@ -1159,15 +1292,40 @@ void MouseMoveOnCote()
 
 		case modifier_f:
 		{
-			//On calcule la veritable coordonnée de la souris 
-			g_pointFin.x =  CalculerCoor(g_iMouseLastX, _rectFils.right, g_fZoomCote);
-			g_pointFin.y = -CalculerCoor(g_iMouseLastY, _rectFils.bottom, g_fZoomCote);
 
-			Vecteur* Vec = new Vecteur(0.0, g_pointFin.y - g_pointDebut.y, g_pointFin.x - g_pointDebut.x);
-			objets->TranslaterSelection(Vec);
+			switch(ModificationActu)
+			{
+				case translation_f:
+				{
+					//On calcule la veritable coordonnée de la souris 
+					g_pointFin.x =  CalculerCoor(g_iMouseLastX, _rectFils.right, g_fZoomCote);
+					g_pointFin.y = -CalculerCoor(g_iMouseLastY, _rectFils.bottom, g_fZoomCote);
 
-			g_pointDebut.x =  CalculerCoor(g_iMouseLastX, _rectFils.right, g_fZoomCote);
-			g_pointDebut.y = -CalculerCoor(g_iMouseLastY, _rectFils.bottom, g_fZoomCote);
+					Vecteur* Vec = new Vecteur(0.0, g_pointFin.y - g_pointDebut.y, g_pointFin.x - g_pointDebut.x);
+					objets->TranslaterSelectionYZ(Vec);
+
+					g_pointDebut.x =  CalculerCoor(g_iMouseLastX, _rectFils.right, g_fZoomCote);
+					g_pointDebut.y = -CalculerCoor(g_iMouseLastY, _rectFils.bottom, g_fZoomCote);
+				}break;
+
+				case rotation_f:
+				{
+					//On calcule la veritable coordonnée de la souris 
+					g_pointFin.x =  CalculerCoor(g_iMouseLastX, _rectFils.right, g_fZoomCote);
+					g_pointFin.y = -CalculerCoor(g_iMouseLastY, _rectFils.bottom, g_fZoomCote);
+				
+					float angle1 = CalculerAngle(g_pointDebut);
+					float angle2 = CalculerAngle(g_pointFin);
+						
+					float angleRotation = angle2 - angle1;	
+			     	objets->RotationSelectionX(-angleRotation);
+
+					g_pointDebut.x =  CalculerCoor(g_iMouseLastX, _rectFils.right, g_fZoomCote);
+					g_pointDebut.y = -CalculerCoor(g_iMouseLastY, _rectFils.bottom, g_fZoomCote);
+
+				}break;
+			}
+
 
 		}break;
 
@@ -1185,6 +1343,7 @@ void MouseMoveOnDessus()
 	Cone* co;
 	Sphere* sp;
 	Plan* pl;
+	Icosaedre * ico;
 
 	g_translationX += g_iMouseDeltaX;
 	g_translationY += g_iMouseDeltaY;
@@ -1224,6 +1383,11 @@ void MouseMoveOnDessus()
 					pl->Modifier(g_translationX/g_fZoomDessus,-g_translationY/g_fZoomDessus);
 					break;
 
+				case icosaedre_f:
+					ico = (Icosaedre*)objets->GeoActu;
+					ico->Modifier(g_translationX/g_fZoomDessus);
+					break;
+
 				}
 			}
 
@@ -1237,15 +1401,39 @@ void MouseMoveOnDessus()
 
 		case modifier_f:
 		{ 
-			//On calcule la veritable coordonnée de la souris 
-			g_pointFin.x =  CalculerCoor(g_iMouseLastX, _rectFils.right, g_fZoomDessus);
-			g_pointFin.y = -CalculerCoor(g_iMouseLastY, _rectFils.bottom, g_fZoomDessus);
 
-			Vecteur* Vec = new Vecteur(g_pointFin.x - g_pointDebut.x,  0.0,	 g_pointFin.y - g_pointDebut.y);
-			objets->TranslaterSelection(Vec);
+			switch(ModificationActu)
+			{
+				case translation_f:
+				{
+					//On calcule la veritable coordonnée de la souris 
+					g_pointFin.x =  CalculerCoor(g_iMouseLastX, _rectFils.right, g_fZoomDessus);
+					g_pointFin.y = -CalculerCoor(g_iMouseLastY, _rectFils.bottom, g_fZoomDessus);
 
-			g_pointDebut.x =  CalculerCoor(g_iMouseLastX, _rectFils.right, g_fZoomDessus);
-			g_pointDebut.y = -CalculerCoor(g_iMouseLastY, _rectFils.bottom, g_fZoomDessus);
+					Vecteur* Vec = new Vecteur(g_pointFin.x - g_pointDebut.x,  0.0,	 g_pointFin.y - g_pointDebut.y);
+					objets->TranslaterSelectionXZ(Vec);
+
+					g_pointDebut.x =  CalculerCoor(g_iMouseLastX, _rectFils.right, g_fZoomDessus);
+					g_pointDebut.y = -CalculerCoor(g_iMouseLastY, _rectFils.bottom, g_fZoomDessus);
+				}break;
+
+				case rotation_f:
+				{
+					//On calcule la veritable coordonnée de la souris 
+					g_pointFin.x =  CalculerCoor(g_iMouseLastX, _rectFils.right, g_fZoomDessus);
+					g_pointFin.y = -CalculerCoor(g_iMouseLastY, _rectFils.bottom, g_fZoomDessus);
+
+					float angle1 = CalculerAngle(g_pointDebut);
+					float angle2 = CalculerAngle(g_pointFin);
+						
+					float angleRotation = angle2 - angle1;	
+			     	objets->RotationSelectionY(angleRotation);
+
+					g_pointDebut.x =  CalculerCoor(g_iMouseLastX, _rectFils.right, g_fZoomDessus);
+					g_pointDebut.y = -CalculerCoor(g_iMouseLastY, _rectFils.bottom, g_fZoomDessus);
+
+				}break;
+			}
 
 		}break;
 
@@ -1449,6 +1637,66 @@ LRESULT CALLBACK DlgAProposProc(HWND Dlg,UINT message,WPARAM wParam,LPARAM lPara
 	return TRUE;
 }
 
+// Gestion des messages reçus par la boite dialogue de personnalisation de la couleur
+LRESULT CALLBACK DlgCouleursProc(HWND Dlg,UINT message,WPARAM wParam,LPARAM lParam)
+{
+	int Select;
+	float material[3];
+	float reflexion[3];
+	float shininess[1];
+	char * txt = new char[25];
+	int succes;
+	Figure * fTmp_l;
+
+/*	if (objets->GeoActu == NULL) {
+		EndDialog(Dlg,0);
+		return TRUE;		
+	}*/
+
+	switch(message)	{
+		case WM_COMMAND:
+			Select=LOWORD(wParam);
+			switch(Select) {
+				case IDOK:
+					// Récupération des spécificités
+					GetDlgItemText(Dlg,IDC_EDITSHININESS, txt, 25);
+					shininess[0] = atof(txt);
+					
+					material[0] = GetDlgItemInt(Dlg,IDC_MREDEDIT, &succes, false) / 255.0;
+					material[1] = GetDlgItemInt(Dlg,IDC_MGREENEDIT, &succes, false) / 255.0;
+					material[2] = GetDlgItemInt(Dlg,IDC_MBLUEEDIT, &succes, false) / 255.0;
+
+					reflexion[0] = GetDlgItemInt(Dlg,IDC_RREDEDIT, &succes, false) / 255.0;
+					reflexion[1] = GetDlgItemInt(Dlg,IDC_RGREENEDIT, &succes, false) / 255.0;
+					reflexion[2] = GetDlgItemInt(Dlg,IDC_RBLUEEDIT, &succes, false) / 255.0;
+
+					if (!succes) {
+						MessageBox(Dlg, "Les couleurs doivent être entieres", "Problème", MB_OK);
+					} else {
+						int i, taille = objets->GetTailleFigEnModif();
+						for (i = 0 ; i < taille ; i++) {
+							fTmp_l = objets->GetGeo(i);
+							fTmp_l->colorMaterial[0] = material[0];
+							fTmp_l->colorReflexion[0] = reflexion[0];
+							fTmp_l->colorMaterial[1] = material[1];
+							fTmp_l->colorReflexion[1] = reflexion[1];
+							fTmp_l->colorMaterial[2] = material[2];
+							fTmp_l->colorReflexion[2] = reflexion[2];
+							fTmp_l->shininess[0] = shininess[0];
+						}
+						EndDialog(Dlg,0);
+						return TRUE;	
+					}
+				case IDCANCEL:
+					EndDialog(Dlg,Select);
+					return TRUE;
+			}
+		default:
+			return FALSE;
+	}
+}
+
+
 // Gestion des messages reçus par la boite dialogue de personnalisation de sphere
 LRESULT CALLBACK DlgSphrProc(HWND Dlg,UINT message,WPARAM wParam,LPARAM lParam)
 {
@@ -1488,17 +1736,7 @@ LRESULT CALLBACK DlgSphrProc(HWND Dlg,UINT message,WPARAM wParam,LPARAM lParam)
 					}
 					// Ajout aux objets de la sphere avec les spécificités rentrées
 					if (rayonX > 0 && rayonZ > 0 && portionX > 0 && portionZ > 0 && prec > 0) {
-					/*	sph = new Sphere(alphaX,
-										 alphaZ,
-										 new Vertex3d(0,0,0),
-										 rayonX,
-										 rayonZ,
-										 portionX,
-										 portionZ,
-										 true,
-										 prec,
-										 new Vertex3d(.5, .5, .5),
-										 50.0);*/
+				
 						
 					//	objets->AjouterGeo((Geometrie * )(sph));
 					}
@@ -1519,6 +1757,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 
 	HWND hDlg = NULL;
 	HMENU MenuObj = NULL;
+	HWND editTmp = NULL;
+	char * txt = new char[3];
+	Figure * pFigTmp_l = NULL;
+	int coul, taille;
 
     switch(uMessage)
     {
@@ -1558,6 +1800,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
             switch(LOWORD(wParam))
             {
 				case IDOPEN:
+					
+					objets->ChargerSauvegarde("SaveMe.sav");/*
 					OPENFILENAME ofn;       // common dialog box structure
 					char szFile[260];       // buffer for file name
 				
@@ -1583,12 +1827,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 
 					// Display the Open dialog box. 
 
-					if (GetOpenFileName(&ofn)==TRUE) 
-						hf = CreateFile(ofn.lpstrFile, GENERIC_READ,
-							0, (LPSECURITY_ATTRIBUTES) NULL,
-							OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,
-							(HANDLE) NULL);
+					if (GetOpenFileName(&ofn)==TRUE){
+						hf = CreateFile(ofn.lpstrFile, GENERIC_READ,0, (LPSECURITY_ATTRIBUTES) NULL,OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL,(HANDLE) NULL);
+						objets->ChargerSauvegarde("SaveMe.sav");
+					}*/						
 
+				break;
+				
+				case IDSAVE:
+					objets->EcrireSauvegarde("SaveMe.sav");
 				break;
 
                 case IDCLOSE:
@@ -1677,6 +1924,34 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 					g_lastChecked = ID_PLAN;
 					break;
 
+
+				case ID_ICOSAEDRE:
+					ActionActu = creer_f;	
+					FigureActu = icosaedre_f;
+					
+					//On recupere le sous menu de la barre des titre et on la coche sphere 
+					//et on décoche l'ancien coché
+					MenuObj = (HMENU)GetSubMenu(GetMenu(hWnd), PosMenuPrimitive);
+					CheckMenuItem(  MenuObj,ID_ICOSAEDRE, MF_CHECKED);
+					CheckMenuItem(  MenuObj,g_lastChecked, MF_UNCHECKED);
+					g_lastChecked = ID_ICOSAEDRE;
+									
+				break;
+
+				case ID_TERRAIN:
+					ActionActu = creer_f;	
+					FigureActu = terrain_f;
+					
+					//On recupere le sous menu de la barre des titre et on la coche sphere 
+					//et on décoche l'ancien coché
+					MenuObj = (HMENU)GetSubMenu(GetMenu(hWnd), PosMenuPrimitive);
+					CheckMenuItem(  MenuObj,ID_TERRAIN, MF_CHECKED);
+					CheckMenuItem(  MenuObj,g_lastChecked, MF_UNCHECKED);
+					g_lastChecked = ID_TERRAIN;
+									
+				break;
+				
+
  
 				case ID_SELECTIONNER_GEOMETRIES:
 					ActionActu = selectionner_f;
@@ -1692,12 +1967,66 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 					ActionActu = selectionner_f;
 					SelectionActu = aucune_f;
 					objets->ViderSelection();
+				break;
 
+
+				case ID_SELECTION_TOUS:
+					ActionActu = selectionner_f;
+					SelectionActu = tous_f;
+					objets->TousSelectionner();
+				break;
+
+				case ID_SELECTION_DUPLIQUER:
+					ActionActu = selectionner_f;
+					SelectionActu = dupliquer_f;
+					objets->DupliquerSelection();
 				break;
 
 				case ID_ACTIONS_TRANSLATION:
 					ActionActu = modifier_f;
 					ModificationActu = translation_f;
+				break;
+
+				case ID_ACTIONS_ROTATION:
+					ActionActu = modifier_f;
+					ModificationActu = rotation_f;
+				break;
+
+				case ID_ACTIONS_COULEUR:
+					hDlg=CreateDialog(_Instance,(LPCTSTR)IDD_COLORS,NULL,(DLGPROC)DlgCouleursProc); 
+					taille = objets->GetTailleFigEnModif();
+					if (taille == 1 || (taille > 0 && objets->MemeCouleur())) {
+						pFigTmp_l = objets->GetGeo(0);
+
+						coul = (int)(pFigTmp_l->colorMaterial[0] * 255);
+						txt = itoa(coul, txt, 10);
+						SetDlgItemText(hDlg, IDC_MREDEDIT, txt);
+
+						coul = (int)(pFigTmp_l->colorMaterial[1] * 255);
+						txt = itoa(coul, txt, 10);
+						SetDlgItemText(hDlg, IDC_MGREENEDIT, txt);
+
+						coul = (int)(pFigTmp_l->colorMaterial[2] * 255);
+						txt = itoa(coul, txt, 10);
+						SetDlgItemText(hDlg, IDC_MBLUEEDIT, txt);
+
+						coul = (int)(pFigTmp_l->colorReflexion[0] * 255);
+						txt = itoa(coul, txt, 10);
+						SetDlgItemText(hDlg, IDC_RREDEDIT, txt);
+
+						coul = (int)(pFigTmp_l->colorReflexion[1] * 255);
+						txt = itoa(coul, txt, 10);
+						SetDlgItemText(hDlg, IDC_RGREENEDIT, txt);
+
+						coul = (int)(pFigTmp_l->colorReflexion[2] * 255);
+						txt = itoa(coul, txt, 10);
+						SetDlgItemText(hDlg, IDC_RBLUEEDIT, txt);
+
+						coul = (int)(pFigTmp_l->shininess[0]);
+						txt = itoa(coul, txt, 10);
+						SetDlgItemText(hDlg, IDC_EDITSHININESS, txt);
+					}
+					ShowWindow(hDlg,SW_SHOW);					
 				break;
 
 				case IDAPROPOS:
@@ -1757,6 +2086,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMessage, WPARAM wParam, LPARAM lParam)
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
 {
+
+//	objets->ChargerSauvegarde("SaveMe.sav");
+	//objets->CreerListe(facesTriangle);
+
 	MSG Msg;
 	WNDCLASSEX wc;
 	_Instance = hInstance;
@@ -1813,10 +2146,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
 	ShowWindow(_HwndFen, nCmdShow);
     UpdateWindow(_HwndFen);
 
-	CreerFenFils(VUE_3D);
+
 	CreerFenFils(VUE_DESSUS);
 	CreerFenFils(VUE_COTE);
 	CreerFenFils(VUE_FACE);
+	CreerFenFils(VUE_3D);
+
     PostMessage(_HwndFenFils, WM_MDITILE, MDITILE_HORIZONTAL, 0);
 
 	while(GetMessage(&Msg, NULL, 0, 0))
@@ -1845,7 +2180,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE, LPSTR, int nCmdShow)
         }
 	
 	}
-
+//	objets->EcrireSauvegarde("SaveMe.sav");
 
 	return Msg.wParam;
+	
+
+
+return 0;
 }
