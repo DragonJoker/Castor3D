@@ -1,0 +1,101 @@
+/*
+This source file is part of Castor3D (http://dragonjoker.co.cc
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU Lesser General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License along with
+this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+Place - Suite 330, Boston, MA 02111-1307, USA, or go to
+http://www.gnu.org/copyleft/lesser.txt.
+*/
+#ifndef ___C3D_Ray___
+#define ___C3D_Ray___
+
+#include "Module_Camera.h"
+#include "../geometry/Module_Geometry.h"
+
+namespace Castor3D
+{
+	/*!
+	A ray is an origin and a direction in 3D
+	\author Sylvain DOREMUS
+	\date 14/02/2010
+	*/
+	class CS3D_API Ray
+	{
+	public:
+		Vector3f * m_origin;		//!< The ray origin
+		Vector3f * m_direction;		//!< The ray direction
+
+	public:
+		/**
+		 * Constructor from mouse coordinates and a viewport
+		 *@param p_point : [in] The mouse coordinates
+		 *@param p_camera : [in] The camera from which to retrieve the ray
+		 */
+		Ray( const Point2D<int> & p_point, const Camera & p_camera);
+		Ray( int p_x, int p_y, const Camera & p_camera);
+		Ray( const Vector3f & p_rOrigin, const Vector3f & p_rDirection);
+		/**
+		 * Copy constructor
+		 */
+		Ray( const Ray & p_ray);
+		/**
+		 * Destructor
+		 */
+		~Ray();
+		/**
+		* Tells if the ray intersects the given triangle of vertices
+		*@param p_v1 : [in] The first triangle vertex
+		*@param p_v1 : [in] The second triangle vertex
+		*@param p_v1 : [in] The third triangle vertex
+		*@return true if the ray intersects the triangle, false if not
+		*/
+		float Intersects( const Vector3f & p_v1, const Vector3f & p_v2, const Vector3f & p_v3);
+		/**
+		 * Tells if the ray intersects the given face
+		 *@param p_face : [in] The face to test
+		 *@return true if the ray intersects the face, false if not
+		 */
+		float Intersects( const Face & p_face);
+		/**
+		* Tells if the vertex is on the ray
+		*@param p_face : [in] The face to test
+		*@return true if vertex is on the ray, false if not
+		*/
+		float Intersects( const Vector3f & p_vertex);
+		/**
+		* Tells if the ray intersects the given Combo box
+		*@param p_box : [in] The box to test
+		*@return true if the ray intersects the face, false if not
+		*/
+		float Intersects( const ComboBox & p_box);
+		/**
+		* Tells if the ray intersects the given Sphere
+		*@param p_sphere : [in] The sphere to test
+		*@return true if the ray intersects the face, false if not
+		*/
+		float Intersects( const Sphere & p_sphere);
+		/**
+		* Tells if the ray intersects the given Sphere
+		*@param p_sphere : [in] The sphere to test
+		*@return true if the ray intersects the face, false if not
+		*/
+		float Intersects( Geometry * p_pGeometry, Face ** p_ppFace, Submesh ** p_ppSubmesh);
+		/**
+		 * Projects the given vertex on the ray
+		 *@param p_vertex : [in] The vertex we want to project
+		 *@return true if the vertex can be projected on the ray, false if not
+		 */
+		bool ProjectVertex( const Vector3f & p_vertex, Vector3f & p_result);
+	};
+}
+
+#endif

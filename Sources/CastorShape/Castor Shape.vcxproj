@@ -1,0 +1,282 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug - Multibyte|Win32">
+      <Configuration>Debug - Multibyte</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug - Unicode|Win32">
+      <Configuration>Debug - Unicode</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release - MultiByte|Win32">
+      <Configuration>Release - MultiByte</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release - Unicode|Win32">
+      <Configuration>Release - Unicode</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D695A10A-00C4-473B-8517-7C9E9A5EA9E1}</ProjectGuid>
+    <RootNamespace>CastorShape</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - Multibyte|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - MultiByte|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug - Multibyte|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release - MultiByte|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>15.0.26430.15</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - MultiByte|Win32'">
+    <OutDir>$(SolutionDir)Bin\$(Configuration)\</OutDir>
+    <IntDir>_generation\$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">
+    <OutDir>$(SolutionDir)Bin\$(Configuration)\</OutDir>
+    <IntDir>_generation\$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">
+    <OutDir>$(SolutionDir)Bin\$(Configuration)\</OutDir>
+    <IntDir>_generation\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - Multibyte|Win32'">
+    <OutDir>$(SolutionDir)Bin\$(Configuration)\</OutDir>
+    <IntDir>_generation\$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release - MultiByte|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>include/CastorShape;../Castor3D/include;../CastorUtils/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>PrecompiledHeaders.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>CastorUtils.lib;Castor3D.lib;wxmsw28_gl.lib;wxmsw28_core.lib;wxbase28.lib;wxmsw28_adv.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregex.lib;wxexpat.lib;winmm.lib;comctl32.lib;rpcrt4.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../Bin/Release - Multibyte;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;libcpmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>include/CastorShape;../Castor3D/include;../CastorUtils/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_UNICODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>PrecompiledHeaders.h</PrecompiledHeaderFile>
+      <ProgramDataBaseFileName>$(IntDir)CastorShape.pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>CastorUtilsu.lib;Castor3Du.lib;wxmsw28u_gl.lib;wxmsw28u_core.lib;wxbase28u.lib;wxmsw28u_adv.lib;wxtiff.lib;wxjpeg.lib;wxpng.lib;wxzlib.lib;wxregexu.lib;wxexpat.lib;winmm.lib;comctl32.lib;rpcrt4.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../Bin/Release - Unicode;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;libcpmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>include\CastorShape;../Castor3D/include;../CastorUtils/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>PrecompiledHeaders.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>CastorUtilsdu.lib;Castor3Ddu.lib;wxmsw28ud_gl.lib;wxmsw28ud_core.lib;wxbase28ud.lib;wxmsw28ud_adv.lib;wxtiffd.lib;wxjpegd.lib;wxpngd.lib;wxzlibd.lib;wxregexud.lib;wxexpatd.lib;winmm.lib;comctl32.lib;rpcrt4.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../Bin/Debug - Unicode;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;libcpmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug - Multibyte|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>include/CastorShape;../Castor3D/include;../CastorUtils/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>PrecompiledHeaders.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>CastorUtilsd.lib;Castor3Dd.lib;wxmsw28d_gl.lib;wxmsw28d_core.lib;wxbase28d.lib;wxmsw28d_adv.lib;wxtiffd.lib;wxjpegd.lib;wxpngd.lib;wxzlibd.lib;wxregexd.lib;wxexpatd.lib;winmm.lib;comctl32.lib;rpcrt4.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../Bin/Debug - Multibyte;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;libcpmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <LinkTimeCodeGeneration />
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\CastorShape\geometry\GeometriesListFrame.cpp" />
+    <ClCompile Include="src\CastorShape\geometry\NewConeDialog.cpp" />
+    <ClCompile Include="src\CastorShape\geometry\NewCubeDialog.cpp" />
+    <ClCompile Include="src\CastorShape\geometry\NewCylinderDialog.cpp" />
+    <ClCompile Include="src\CastorShape\geometry\NewGeometryDialog.cpp" />
+    <ClCompile Include="src\CastorShape\geometry\NewIcosaedronDialog.cpp" />
+    <ClCompile Include="src\CastorShape\geometry\NewPlaneDialog.cpp" />
+    <ClCompile Include="src\CastorShape\geometry\NewSphereDialog.cpp" />
+    <ClCompile Include="src\CastorShape\geometry\NewTorusDialog.cpp" />
+    <ClCompile Include="src\CastorShape\glsl\ScriptBlock.cpp" />
+    <ClCompile Include="src\CastorShape\glsl\scriptcompiler.cpp" />
+    <ClCompile Include="src\CastorShape\glsl\ScriptCompiler_Compile.cpp" />
+    <ClCompile Include="src\CastorShape\glsl\ScriptEngine.cpp" />
+    <ClCompile Include="src\CastorShape\glsl\ScriptFunctions.cpp" />
+    <ClCompile Include="src\CastorShape\glsl\ScriptFunctions_Gen_Ope.cpp" />
+    <ClCompile Include="src\CastorShape\glsl\ScriptNode.cpp" />
+    <ClCompile Include="src\CastorShape\glsl\Structure.cpp" />
+    <ClCompile Include="src\CastorShape\glsl\TextCtrl.cpp" />
+    <ClCompile Include="src\CastorShape\glsl\TextLinesCtrl.cpp" />
+    <ClCompile Include="src\CastorShape\glsl\TextPanel.cpp" />
+    <ClCompile Include="src\CastorShape\glsl\UniformVariableDialog.cpp" />
+    <ClCompile Include="src\CastorShape\glsl\VariableType.cpp" />
+    <ClCompile Include="src\CastorShape\main\CastorShape.cpp" />
+    <ClCompile Include="src\CastorShape\main\FrameListener.cpp" />
+    <ClCompile Include="src\CastorShape\main\MainFrame.cpp" />
+    <ClCompile Include="src\CastorShape\main\RenderPanel.cpp" />
+    <ClCompile Include="src\CastorShape\material\EnvironmentFrame.cpp" />
+    <ClCompile Include="src\CastorShape\material\MaterialPanel.cpp" />
+    <ClCompile Include="src\CastorShape\material\MaterialsFrame.cpp" />
+    <ClCompile Include="src\CastorShape\material\MaterialsListView.cpp" />
+    <ClCompile Include="src\CastorShape\material\NewMaterialDialog.cpp" />
+    <ClCompile Include="src\CastorShape\material\PassPanel.cpp" />
+    <ClCompile Include="src\CastorShape\material\ShaderDialog.cpp" />
+    <ClCompile Include="src\CastorShape\precompiled_headers\PrecompiledHeaders.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug - Multibyte|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release - MultiByte|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\CastorShape\geometry\GeometriesListFrame.h" />
+    <ClInclude Include="include\CastorShape\geometry\Module_Geometry.h" />
+    <ClInclude Include="include\CastorShape\geometry\NewConeDialog.h" />
+    <ClInclude Include="include\CastorShape\geometry\NewCubeDialog.h" />
+    <ClInclude Include="include\CastorShape\geometry\NewCylinderDialog.h" />
+    <ClInclude Include="include\CastorShape\geometry\NewGeometryDialog.h" />
+    <ClInclude Include="include\CastorShape\geometry\NewIcosaedronDialog.h" />
+    <ClInclude Include="include\CastorShape\geometry\NewPlaneDialog.h" />
+    <ClInclude Include="include\CastorShape\geometry\NewSphereDialog.h" />
+    <ClInclude Include="include\CastorShape\geometry\NewTorusDialog.h" />
+    <ClInclude Include="include\CastorShape\glsl\Context.h" />
+    <ClInclude Include="include\CastorShape\glsl\Function.h" />
+    <ClInclude Include="include\CastorShape\glsl\MapIterator.h" />
+    <ClInclude Include="include\CastorShape\glsl\module_script.h" />
+    <ClInclude Include="include\CastorShape\glsl\ScriptBlock.h" />
+    <ClInclude Include="include\CastorShape\glsl\ScriptCompiler.h" />
+    <ClInclude Include="include\CastorShape\glsl\ScriptEngine.h" />
+    <ClInclude Include="include\CastorShape\glsl\ScriptFunctionOperators.h" />
+    <ClInclude Include="include\CastorShape\glsl\ScriptFunctions.h" />
+    <ClInclude Include="include\CastorShape\glsl\ScriptNode.h" />
+    <ClInclude Include="include\CastorShape\glsl\ScriptNodeValue.h" />
+    <ClInclude Include="include\CastorShape\glsl\Structure.h" />
+    <ClInclude Include="include\CastorShape\glsl\TextCtrl.h" />
+    <ClInclude Include="include\CastorShape\glsl\TextLinesCtrl.h" />
+    <ClInclude Include="include\CastorShape\glsl\TextPanel.h" />
+    <ClInclude Include="include\CastorShape\glsl\UniformVariableDialog.h" />
+    <ClInclude Include="include\CastorShape\glsl\VariableType.h" />
+    <ClInclude Include="include\CastorShape\main\CastorShape.h" />
+    <ClInclude Include="include\CastorShape\main\FrameListener.h" />
+    <ClInclude Include="include\CastorShape\main\MainFrame.h" />
+    <ClInclude Include="include\CastorShape\main\Module_GUI.h" />
+    <ClInclude Include="include\CastorShape\main\RenderPanel.h" />
+    <ClInclude Include="include\CastorShape\material\EnvironmentFrame.h" />
+    <ClInclude Include="include\CastorShape\material\MaterialPanel.h" />
+    <ClInclude Include="include\CastorShape\material\MaterialsFrame.h" />
+    <ClInclude Include="include\CastorShape\material\MaterialsListView.h" />
+    <ClInclude Include="include\CastorShape\material\Module_Material.h" />
+    <ClInclude Include="include\CastorShape\material\NewMaterialDialog.h" />
+    <ClInclude Include="include\CastorShape\material\PassPanel.h" />
+    <ClInclude Include="include\CastorShape\material\ShaderDialog.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="src\CastorShape\precompiled_headers\PrecompiledHeaders.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Castor Shape.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="rsc\castor.bmp" />
+    <Image Include="rsc\castor.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Castor3D\Castor3D.vcxproj">
+      <Project>{7a0071ee-2296-4634-b6e1-8074f5b3fb09}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\GLRenderSystem\GLRenderSystem.vcxproj">
+      <Project>{1fb81b2f-38ad-4f7e-8c24-6d7ce2647d53}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

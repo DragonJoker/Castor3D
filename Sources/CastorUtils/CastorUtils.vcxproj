@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug - Multibyte|Win32">
+      <Configuration>Debug - Multibyte</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug - Unicode|Win32">
+      <Configuration>Debug - Unicode</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release - Multibyte|Win32">
+      <Configuration>Release - Multibyte</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release - Unicode|Win32">
+      <Configuration>Release - Unicode</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2E9BB6E9-AC74-4894-8DF8-33B5B1CC8A9D}</ProjectGuid>
+    <RootNamespace>CastorUtils</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.15063.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - Multibyte|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - Multibyte|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release - Multibyte|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug - Multibyte|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>15.0.26430.15</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - Multibyte|Win32'">
+    <OutDir>$(SolutionDir)Bin\$(Configuration)\</OutDir>
+    <IntDir>_generation\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - Multibyte|Win32'">
+    <OutDir>$(SolutionDir)Bin\$(Configuration)\</OutDir>
+    <IntDir>_generation\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">
+    <OutDir>$(SolutionDir)Bin\$(Configuration)\</OutDir>
+    <IntDir>_generation\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">
+    <OutDir>$(SolutionDir)Bin\$(Configuration)\</OutDir>
+    <IntDir>_generation\$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug - Multibyte|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>Z:\Libs\FreeImage\Dist;Z:\Libs\FreeImage\Wrapper\FreeImagePlus\dist;Z:\Libs\boost_1_59_0;include/CastorUtils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>FreeImaged.lib;FreeImagePlusd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)d.lib</OutputFile>
+      <AdditionalLibraryDirectories>Z:\Libs\FreeImage\Dist\Dll\x86;Z:\Libs\FreeImage\Wrapper\FreeImagePlus\dist\x86</AdditionalLibraryDirectories>
+    </Lib>
+    <PostBuildEvent>
+      <Command />
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release - Multibyte|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>Z:\Libs\FreeImage\Dist;Z:\Libs\FreeImage\Wrapper\FreeImagePlus\dist;Z:\Libs\boost_1_59_0;include/CastorUtils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader />
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>FreeImage.lib;FreeImagePlus.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>Z:\Libs\FreeImage\Dist\Dll\x86;Z:\Libs\FreeImage\Wrapper\FreeImagePlus\dist\x86</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug - Unicode|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>Z:\Libs\FreeImage\Dist;Z:\Libs\FreeImage\Wrapper\FreeImagePlus\dist;Z:\Libs\boost_1_59_0;include/CastorUtils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>FreeImaged.lib;FreeImagePlusd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)du.lib</OutputFile>
+      <AdditionalLibraryDirectories>Z:\Libs\FreeImage\Dist\Dll\x86;Z:\Libs\FreeImage\Wrapper\FreeImagePlus\dist\x86</AdditionalLibraryDirectories>
+    </Lib>
+    <PostBuildEvent>
+      <Command />
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release - Unicode|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>Z:\Libs\FreeImage\Dist;Z:\Libs\FreeImage\Wrapper\FreeImagePlus\dist;Z:\Libs\boost_1_59_0;include/CastorUtils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader />
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>FreeImage.lib;FreeImagePlus.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)u.lib</OutputFile>
+      <AdditionalLibraryDirectories>Z:\Libs\FreeImage\Dist\Dll\x86;Z:\Libs\FreeImage\Wrapper\FreeImagePlus\dist\x86</AdditionalLibraryDirectories>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\CastorUtils\CastorString.cpp" />
+    <ClCompile Include="src\CastorUtils\Colour.cpp" />
+    <ClCompile Include="src\CastorUtils\DynamicLibrary.cpp" />
+    <ClCompile Include="src\CastorUtils\File.cpp" />
+    <ClCompile Include="src\CastorUtils\Image.cpp" />
+    <ClCompile Include="src\CastorUtils\Matroska.cpp" />
+    <ClCompile Include="src\CastorUtils\Memory.cpp" />
+    <ClCompile Include="src\CastorUtils\Memory_Impl.cpp" />
+    <ClCompile Include="src\CastorUtils\Mutex.cpp" />
+    <ClCompile Include="src\CastorUtils\MutexManager.cpp" />
+    <ClCompile Include="src\CastorUtils\PixelFormat.cpp" />
+    <ClCompile Include="src\CastorUtils\PreciseTimer.cpp" />
+    <ClCompile Include="src\CastorUtils\Quaternion.cpp" />
+    <ClCompile Include="src\CastorUtils\RotationMatrix.cpp" />
+    <ClCompile Include="src\CastorUtils\StringConverter.cpp" />
+    <ClCompile Include="src\CastorUtils\Vector3f.cpp" />
+    <ClCompile Include="src\CastorUtils\VertexSpherical.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\CastorUtils\AutoSingleton.h" />
+    <ClInclude Include="include\CastorUtils\Buffer.h" />
+    <ClInclude Include="include\CastorUtils\CastorString.h" />
+    <ClInclude Include="include\CastorUtils\Colour.h" />
+    <ClInclude Include="include\CastorUtils\Container.h" />
+    <ClInclude Include="include\CastorUtils\DynamicLibrary.h" />
+    <ClInclude Include="include\CastorUtils\Exception.h" />
+    <ClInclude Include="include\CastorUtils\File.h" />
+    <ClInclude Include="include\CastorUtils\Image.h" />
+    <ClInclude Include="include\CastorUtils\Line.h" />
+    <ClInclude Include="include\CastorUtils\Macros.h" />
+    <ClInclude Include="include\CastorUtils\Manager.h" />
+    <ClInclude Include="include\CastorUtils\Matrix.h" />
+    <ClInclude Include="include\CastorUtils\Matroska.h" />
+    <ClInclude Include="include\CastorUtils\Memory.h" />
+    <ClInclude Include="include\CastorUtils\Memory_Impl.h" />
+    <ClInclude Include="include\CastorUtils\MinMax.h" />
+    <ClInclude Include="include\CastorUtils\Module_Image.h" />
+    <ClInclude Include="include\CastorUtils\Module_Utils.h" />
+    <ClInclude Include="include\CastorUtils\MultiThreadConfig.h" />
+    <ClInclude Include="include\CastorUtils\Mutex.h" />
+    <ClInclude Include="include\CastorUtils\MutexManager.h" />
+    <ClInclude Include="include\CastorUtils\Named.h" />
+    <ClInclude Include="include\CastorUtils\NonCopyable.h" />
+    <ClInclude Include="include\CastorUtils\Path.h" />
+    <ClInclude Include="include\CastorUtils\PixelFormat.h" />
+    <ClInclude Include="include\CastorUtils\Plane.h" />
+    <ClInclude Include="include\CastorUtils\Point.h" />
+    <ClInclude Include="include\CastorUtils\PreciseTimer.h" />
+    <ClInclude Include="include\CastorUtils\Quaternion.h" />
+    <ClInclude Include="include\CastorUtils\Resource.h" />
+    <ClInclude Include="include\CastorUtils\ResourceLoader.h" />
+    <ClInclude Include="include\CastorUtils\RotationMatrix.h" />
+    <ClInclude Include="include\CastorUtils\Singleton.h" />
+    <ClInclude Include="include\CastorUtils\SlottedObjectPool.h" />
+    <ClInclude Include="include\CastorUtils\STLMacros.h" />
+    <ClInclude Include="include\CastorUtils\STLMapMacros.h" />
+    <ClInclude Include="include\CastorUtils\STLSetMacros.h" />
+    <ClInclude Include="include\CastorUtils\StringConverter.h" />
+    <ClInclude Include="include\CastorUtils\Thread.h" />
+    <ClInclude Include="include\CastorUtils\ThreadSpecific.h" />
+    <ClInclude Include="include\CastorUtils\Utils.h" />
+    <ClInclude Include="include\CastorUtils\Vector3f.h" />
+    <ClInclude Include="include\CastorUtils\VertexSpherical.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CastorUtils.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
