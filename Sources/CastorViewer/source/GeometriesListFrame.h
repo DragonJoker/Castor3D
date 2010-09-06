@@ -38,7 +38,6 @@ namespace CastorViewer
 		Castor3D::Scene * m_scene;
 		wxTreeCtrl * m_pTreeGeometries;
 		wxArrayString m_items;
-		std::map< wxTreeItemId, wxString > m_ids;
 		unsigned int m_nbItems;
 		wxButton * m_pButtonDeleteSelected;
 		wxComboBox * m_pComboMaterials;

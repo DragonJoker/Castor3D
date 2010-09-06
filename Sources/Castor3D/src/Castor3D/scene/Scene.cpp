@@ -478,28 +478,17 @@ std::map <String, bool> Scene :: GetGeometriesVisibility()
 	return l_mapReturn;
 }
 
-bool Scene :: Write( General::Utils::File & p_file)const
+bool Scene :: Write( General::Utils::FileIO * p_pFile)const
 {
 	bool l_bReturn = true;
 
 	Log::LogMessage( C3D_T( "Writing Scene Name"));
-	size_t l_nameLength = m_name.size();
-
-	if ( ! p_file.Write<size_t>( l_nameLength))
-	{
-		l_bReturn = false;
-	}
-
-	if (l_bReturn && ! p_file.WriteArray<Char>( m_name.c_str(), l_nameLength))
-	{
-		l_bReturn = false;
-	}
 
 	if (l_bReturn)
 	{
 		Log::LogMessage( C3D_T( "Writing Root Camera"));
 
-		if ( ! m_rootCamera->Write( p_file))
+		if ( ! m_rootCamera->Write( p_pFile))
 		{
 			l_bReturn = false;
 		}
@@ -509,7 +498,7 @@ bool Scene :: Write( General::Utils::File & p_file)const
 	{
 		Log::LogMessage( C3D_T( "Writing Root Scene Node"));
 
-		if ( ! m_rootNode->Write( p_file))
+		if ( ! m_rootNode->Write( p_pFile))
 		{
 			l_bReturn = false;
 		}
@@ -519,7 +508,7 @@ bool Scene :: Write( General::Utils::File & p_file)const
 	{
 		Log::LogMessage( C3D_T( "Writing Lights"));
 
-		if ( ! _writeLights( p_file))
+		if ( ! _writeLights( p_pFile))
 		{
 			l_bReturn = false;
 		}
@@ -529,84 +518,11 @@ bool Scene :: Write( General::Utils::File & p_file)const
 	{
 		Log::LogMessage( C3D_T( "Writing Geometries"));
 
-		if ( ! _writeGeometries( p_file))
+		if ( ! _writeGeometries( p_pFile))
 		{
 			l_bReturn = false;
 		}
 	}
-
-	return l_bReturn;
-}
-
-bool Scene :: Read( General::Utils::File & p_file)
-{
-	bool l_bReturn = true;
-	ClearScene();
-	size_t l_nameLength = 0;
-
-	if ( ! p_file.Read<size_t>( l_nameLength))
-	{
-		l_bReturn = false;
-	}
-
-	if (l_bReturn)
-	{
-		Char * l_name = new Char[l_nameLength+1];
-
-		if ( ! p_file.ReadArray<Char>( l_name, l_nameLength))
-		{
-			delete [] l_name;
-			l_bReturn = false;
-		}
-		else
-		{
-			l_name[l_nameLength] = 0;
-			m_name = l_name;
-			delete [] l_name;
-		}
-	}
-
-	if (l_bReturn)
-	{
-		Log::LogMessage( C3D_T( "Reading Root Camera"));
-
-		if (! m_rootCamera->Read( p_file))
-		{
-			l_bReturn = false;
-		}
-	}
-
-	if (l_bReturn)
-	{
-		Log::LogMessage( C3D_T( "Reading Root Scene Node"));
-
-		if (! m_rootNode->Read( p_file, this))
-		{
-			l_bReturn = false;
-		}
-	}
-
-	if (l_bReturn)
-	{
-		Log::LogMessage( C3D_T( "Reading Lights"));
-
-		if (! _readLights( p_file))
-		{
-			l_bReturn = false;
-		}
-	}
-
-	if (l_bReturn)
-	{
-		Log::LogMessage( C3D_T( "Reading Geometries"));
-
-		if (! _readGeometries( p_file))
-		{
-			l_bReturn = false;
-		}
-	}
-
-	m_changed = true;
 
 	return l_bReturn;
 }
@@ -629,9 +545,9 @@ bool Scene :: ImportMD2( const String & p_file, const String & p_texName)
 	return _importExternal( p_file, & l_importer);
 }
 
-bool Scene :: ImportMD3( const String & p_file, const String & p_texName)
+bool Scene :: ImportMD3( const String & p_file)
 {
-	Md3Importer l_importer( p_texName);
+	Md3Importer l_importer;
 	return _importExternal( p_file, & l_importer);
 }
 
@@ -649,184 +565,59 @@ bool Scene :: ImportASE( const String & p_file)
 
 bool Scene :: ImportBSP( const String & p_file)
 {
-	BspImporter l_importer;
-	return _importExternal( p_file, & l_importer);
+//	BspImporter l_importer;
+//	return _importExternal( p_file, & l_importer);
+	return false;
 }
 
-bool Scene :: _writeLights( File & p_file)const
+bool Scene :: _writeLights( FileIO * p_pFile)const
 {
 	bool l_bReturn = true;
 	size_t l_nbLights = m_addedLights.size();
 
-	l_bReturn = (p_file.Write<size_t>( l_nbLights) == sizeof( size_t));
+	Log::LogMessage( C3D_T( "NbLights : %d"), l_nbLights);
+	Light::eTYPE l_type;
+	LightStrMap::const_iterator l_it = m_addedLights.begin();
 
-	if (l_bReturn)
+	while (l_bReturn && l_it != m_addedLights.end())
 	{
-		Log::LogMessage( C3D_T( "NbLights : %d"), l_nbLights);
-		Light::eTYPE l_type;
-		LightStrMap::const_iterator l_it = m_addedLights.begin();
+		l_type = l_it->second->GetLightType();
 
-		while (l_bReturn && l_it != m_addedLights.end())
+		if (l_type == Light::eDirectional)
 		{
-			l_type = l_it->second->GetLightType();
-
-			l_bReturn = (p_file.Write<Light::eTYPE>( l_type) == sizeof( Light::eTYPE));
-
-			if (l_bReturn)
-			{
-				if (l_type == Light::eDirectional)
-				{
-					l_bReturn = static_cast <DirectionalLight *>( l_it->second)->Write( p_file);
-				}
-				else if (l_type == Light::ePoint)
-				{
-					l_bReturn = static_cast <PointLight *>( l_it->second)->Write( p_file);
-				}
-				else if (l_type == Light::eSpot)
-				{
-					l_bReturn = static_cast <SpotLight *>( l_it->second)->Write( p_file);
-				}
-			}
-
-			++l_it;
+			l_bReturn = static_cast <DirectionalLight *>( l_it->second)->Write( p_pFile);
 		}
+		else if (l_type == Light::ePoint)
+		{
+			l_bReturn = static_cast <PointLight *>( l_it->second)->Write( p_pFile);
+		}
+		else if (l_type == Light::eSpot)
+		{
+			l_bReturn = static_cast <SpotLight *>( l_it->second)->Write( p_pFile);
+		}
+
+		++l_it;
 	}
 
 	return l_bReturn;
 }
 
-bool Scene :: _readLights( General::Utils::File & p_file)
-{
-	bool l_bReturn = true;
-	size_t l_nbLights = 0;
-	int l_index = static_cast <int>( LILight1);
-
-	l_bReturn = (p_file.Read<size_t>( l_nbLights) == sizeof( size_t));
-
-	if (l_bReturn)
-	{
-		Log::LogMessage( C3D_T( "NbLights : "), l_nbLights);
-		Light::eTYPE l_type;
-		Light * l_light;
-
-		for (size_t i = 0 ; i < l_nbLights && l_bReturn ; i++)
-		{
-			l_light = NULL;
-			l_bReturn = (p_file.Read<Light::eTYPE>( l_type) == sizeof( Light::eTYPE));
-
-			if (l_bReturn)
-			{
-				LightRenderer * l_renderer = Root::GetRenderSystem()->CreateLightRenderer();
-
-				if (l_type == Light::eDirectional)
-				{
-					l_light = new DirectionalLight( l_renderer);
-					l_bReturn = static_cast <DirectionalLight *>( l_light)->Read( p_file, this);
-				}
-				else if (l_type == Light::ePoint)
-				{
-					l_light = new PointLight( l_renderer);
-					l_bReturn =static_cast <PointLight *>( l_light)->Read( p_file, this);
-				}
-				else if (l_type == Light::eSpot)
-				{
-					l_light = new SpotLight( l_renderer);
-					l_bReturn = static_cast <SpotLight *>( l_light)->Read( p_file, this);
-				}
-			}
-
-			if (l_bReturn)
-			{
-				if (l_light != NULL)
-				{
-					m_addedLights[l_light->GetName()] = l_light;
-				}
-
-				if (l_index == static_cast <int>( LILight7))
-				{
-					l_index = static_cast <int>( LILight0);
-				}
-				else if (l_index == static_cast <int>( LILight1))
-				{
-					l_index = static_cast <int>( LILight2);
-				}
-				else if (l_index == static_cast <int>( LILight2))
-				{
-					l_index = static_cast <int>( LILight3);
-				}
-				else if (l_index == static_cast <int>( LILight3))
-				{
-					l_index = static_cast <int>( LILight4);
-				}
-				else if (l_index == static_cast <int>( LILight4))
-				{
-					l_index = static_cast <int>( LILight5);
-				}
-				else if (l_index == static_cast <int>( LILight5))
-				{
-					l_index = static_cast <int>( LILight6);
-				}
-				else if (l_index == static_cast <int>( LILight6))
-				{
-					l_index = static_cast <int>( LILight7);
-				}
-			}
-		}
-	}
-
-	return l_bReturn;
-}
-
-bool Scene :: _writeGeometries( General::Utils::File & p_file)const
+bool Scene :: _writeGeometries( General::Utils::FileIO * p_pFile)const
 {
 	bool l_bReturn = true;
 	size_t l_nbGeometries = m_addedPrimitives.size();
-	l_bReturn = (p_file.Write<size_t>( l_nbGeometries) == sizeof( size_t));
 
-	if (l_bReturn)
-	{
-		Log::LogMessage( C3D_T( "NbGeometries : %d"), l_nbGeometries);
-		GeometryStrMap::const_iterator l_it = m_addedPrimitives.begin();
-
-		while (l_bReturn && l_it != m_addedPrimitives.end())
-		{
-			l_bReturn = l_it->second->Write( p_file);
-			++l_it;
-		}
-	}
-
-	return l_bReturn;
-}
-
-
-
-bool Scene :: _readGeometries( General::Utils::File & p_file)
-{
-	bool l_bReturn = true;
-	size_t l_nbGeometries = 0;
-	l_bReturn = (p_file.Read<size_t>( l_nbGeometries) == sizeof( size_t));
-	Geometry * l_geometry;
 	Log::LogMessage( C3D_T( "NbGeometries : %d"), l_nbGeometries);
+	GeometryStrMap::const_iterator l_it = m_addedPrimitives.begin();
 
-	for (size_t i = 0 ; i < l_nbGeometries && l_bReturn ; i++)
+	while (l_bReturn && l_it != m_addedPrimitives.end())
 	{
-		l_geometry = new Geometry;
-		l_bReturn = l_geometry->Read( p_file, this);
-
-		if ( ! l_bReturn)
-		{
-			delete l_geometry;
-		}
-		else
-		{
-			m_addedPrimitives[l_geometry->GetName()] = l_geometry;
-		}
+		l_bReturn = l_it->second->Write( p_pFile);
+		++l_it;
 	}
 
 	return l_bReturn;
 }
-
-
 
 bool Scene :: _importExternal( const String & p_fileName, ExternalImporter * p_importer)
 {

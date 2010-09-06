@@ -22,12 +22,21 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	//! PLY file importer
+	/*!
+	Imports data from PLY files
+	\author Sylvain DOREMUS
+	\date 25/08/2010
+	*/
 	class CS3D_API PlyImporter : public ExternalImporter
 	{
 	private:
 		friend class Scene;
 
 	public:
+		/**
+		 * Constructor
+		 */
 		PlyImporter();
 
 	private:

@@ -27,6 +27,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	//! Main system
 	/*!
 	Holds the render windows, the plugins, the render drivers...
 	It is a singleton, so only one can be launched at a time
@@ -38,7 +39,7 @@ namespace Castor3D
 	{
 	private:
 		static Root * sm_singleton;
-		static General::MultiThreading::RecursiveMutex sm_mutex;		//!< The mutex, to make this threadsafe
+		static General::MultiThreading::Mutex sm_mutex;		//!< The mutex, to make this threadsafe
 		static RenderSystem * sm_renderSystem;				//!< The render system, useful if you want to render something... loaded in a plugin
 
 	private:

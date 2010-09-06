@@ -51,7 +51,7 @@ AnimatedObjectGroup * AnimationManager :: CreateAnimatedObjectGroup( const Strin
 
 
 
-bool AnimationManager::Write( File & p_file)const
+bool AnimationManager::Write( FileIO & p_file)const
 {
 	size_t l_nbMaterials = m_objectMap.size();
 	if ( ! p_file.Write<size_t>( l_nbMaterials))
@@ -73,7 +73,7 @@ bool AnimationManager::Write( File & p_file)const
 
 
 
-bool AnimationManager::Read( File & p_file)
+bool AnimationManager::Read( FileIO & p_file)
 {
 	size_t l_nbMaterials = 0;
 	if ( ! p_file.Read<size_t>( l_nbMaterials))

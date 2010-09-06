@@ -29,13 +29,14 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	//! Plugin class
 	/*!
 	Manages the plugin functions, allows plugins to check versions and to register themselves
 	\author Sylvain DOREMUS
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class Plugin 
+	class CS3D_API Plugin 
 	{
 	private:
 		typedef void fnGetRequiredVersion( int &);		//!< Signature for the plugin's version checking function
@@ -52,15 +53,15 @@ namespace Castor3D
 		 * Constructor
 		 *@param p_fileName : [in] The plugin name
 		 */
-		CS3D_API Plugin( const String & p_fileName);
+		Plugin( const String & p_fileName);
 		/**
 		 * Copy constructor
 		 */
-		CS3D_API Plugin( const Plugin & p_plugin);
+		Plugin( const Plugin & p_plugin);
 		/**
 		 * Destructor
 		 */
-		CS3D_API ~Plugin();
+		~Plugin();
 
 	private:
 		/**
@@ -72,11 +73,11 @@ namespace Castor3D
 		/**
 		 * Retrieves required version
 		 */
-		CS3D_API void GetRequiredVersion( int & p_version){ m_pfnGetRequiredVersion( p_version); }
+		void GetRequiredVersion( int & p_version){ m_pfnGetRequiredVersion( p_version); }
 		/**
 		 * Register the plugin to a root system
 		 */
-		CS3D_API void RegisterPlugin( Root & p_root){ m_pfnRegisterPlugin( p_root); }
+		void RegisterPlugin( Root & p_root){ m_pfnRegisterPlugin( p_root); }
 
 	};
 }

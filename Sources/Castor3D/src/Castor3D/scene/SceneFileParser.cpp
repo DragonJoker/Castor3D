@@ -51,6 +51,7 @@ SceneFileParser :: SceneFileParser()
 	m_mapSubmeshParsers			["}"]					= Parser_SubmeshEnd;
 
 	m_mapSmoothingGroupParsers	["face"]				= Parser_SmoothingGroupFace;
+	m_mapSmoothingGroupParsers	["uv"]					= Parser_SmoothingGroupFaceUV;
 	m_mapSmoothingGroupParsers	["}"]					= Parser_SmoothingGroupEnd;
 
 	m_mapMaterialParsers		["pass"]				= Parser_MaterialPass;
@@ -61,6 +62,9 @@ SceneFileParser :: SceneFileParser()
 	m_mapPassParsers			["specular"]			= Parser_PassSpecular;
 	m_mapPassParsers			["emissive"]			= Parser_PassEmissive;
 	m_mapPassParsers			["shininess"]			= Parser_PassShininess;
+	m_mapPassParsers			["alpha"]				= Parser_PassAlpha;
+	m_mapPassParsers			["tex_base"]			= Parser_PassBaseTexColour;
+	m_mapPassParsers			["double_face"]			= Parser_PassDoubleFace;
 	m_mapPassParsers			["texture_unit"]		= Parser_PassTextureUnit;
 	m_mapPassParsers			["shader_program"]		= Parser_PassShader;
 	m_mapPassParsers			["}"]					= Parser_PassEnd;

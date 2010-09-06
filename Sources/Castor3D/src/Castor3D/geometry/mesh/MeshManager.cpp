@@ -11,9 +11,11 @@
 #include "geometry/mesh/PlaneMesh.h"
 #include "geometry/mesh/SphericMesh.h"
 #include "geometry/mesh/TorusMesh.h"
+#include "geometry/mesh/ProjectionMesh.h"
 #include "main/Root.h"
 
 #include "geometry/basic/Face.h"
+#include "geometry/basic/Arc.h"
 #include "render_system/RenderSystem.h"
 #include "render_system/MeshRenderer.h"
 
@@ -76,6 +78,17 @@ Mesh * MeshManager :: CreateMesh( const String & p_name, UIntArray p_faces,
 		l_mesh = new IcosaedricMesh( p_size[0], p_faces[0], p_name);
 		AddElement( l_mesh);
 	}
+	else if (p_type == Mesh::eProjection)
+	{
+		Castor3D::Arc * pArc = new Castor3D::Arc;
+		pArc->AddVertex( new Vector3f( 0.0, 0.0, 0.0), 0);
+		pArc->AddVertex( new Vector3f( 0.0, 1.0, 0.0), 1);
+		pArc->AddVertex( new Vector3f( 1.0, 1.0, 0.0), 2);
+		pArc->AddVertex( new Vector3f( 0.0, 2.0, 0.0), 3);
+		pArc->AddVertex( new Vector3f( 2.0, 4.0, 0.0), 4);
+		l_mesh = new ProjectionMesh( pArc, p_size[0], true, p_faces[0], p_name);
+		AddElement( l_mesh);
+	}
 	else if (p_type == Mesh::eCustom)
 	{
 		l_mesh = new Mesh( p_name);
@@ -98,7 +111,7 @@ bool MeshManager :: Write( const String & p_path)const
 	MeshLoader l_loader;
 	while (l_it != m_objectMap.end())
 	{
-		if ( ! l_loader.SaveToFile( l_path, l_it->second))
+		if ( ! l_loader.SaveToFileIO( l_path, l_it->second))
 		{
 			return false;
 		}
@@ -114,7 +127,7 @@ bool MeshManager :: Read( const String & p_path)
 	size_t l_slashIndex = p_path.find_last_of( C3D_T( "//"));
 	String l_path = p_path.substr( 0, l_slashIndex);
 
-	File::ListDirectoryFiles( l_path, l_files);
+	FileBase::ListDirectoryFiles( l_path, l_files);
 
 	String l_fileName;
 	String l_matName;
@@ -125,7 +138,7 @@ bool MeshManager :: Read( const String & p_path)
 	{
 		if (l_files[i].find( C3D_T( ".csmesh")) != String::npos)
 		{
-			l_mesh = l_loader.LoadFromFile( l_files[i]);
+			l_mesh = l_loader.LoadFromFileIO( l_files[i]);
 			if (l_mesh != NULL)
 			{
 				AddElement( l_mesh);

@@ -183,41 +183,24 @@ void Light :: SetSpecular( const Vector3f & p_specular)
 	m_renderer->ApplySpecular( m_specular.ptr());
 }
 
-bool Light :: Write( File & p_file)const
+bool Light :: Write( FileIO * p_pFile)const
 {
-	Log::LogMessage( C3D_T( "Writing Light ") + m_name);
-	size_t l_nameLength = m_name.size();
-	bool l_bReturn = (p_file.Write<size_t>( l_nameLength) > 0);
+	bool l_bReturn = p_pFile->Print( 256, "\tposition %f %f %f\n", m_position.x, m_position.y, m_position.z);
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.WriteArray<Char>( m_name.c_str(), l_nameLength) > 0);
+		l_bReturn = p_pFile->Print( 256, "\tdiffuse %f %f %f %f\n", m_diffuse.r, m_diffuse.g, m_diffuse.b, m_diffuse.a);
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Write<bool>( m_enabled) > 0);
-	}
-
-	if (l_bReturn)
-	{
-		l_bReturn = (p_file.WriteArray<float>( m_position.const_ptr(), 4) > 0);
-	}
-
-	if (l_bReturn)
-	{
-		l_bReturn = (p_file.WriteArray<float>( m_diffuse.const_ptr(), 4) > 0);
-	}
-
-	if (l_bReturn)
-	{
-		l_bReturn = (p_file.WriteArray<float>( m_specular.const_ptr(), 4) > 0);
+		l_bReturn = p_pFile->Print( 256, "\tspecular %f %f %f %f\n", m_specular.r, m_specular.g, m_specular.b, m_specular.a);
 	}
 
 	return l_bReturn;
 }
 
-bool Light :: Read( File & p_file, Scene * p_scene)
+bool Light :: Read( FileIO & p_file, Scene * p_scene)
 {
 	size_t l_nameLength = 0;
 	bool l_bReturn = (p_file.Read<size_t>( l_nameLength) > 0);

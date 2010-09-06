@@ -72,13 +72,13 @@ namespace Castor3D
 		 *@param p_file : [in] The file to write in
 		 *@return true if successful, false if not
 		 */
-		bool Write( General::Utils::File & p_file)const;
+		bool Write( General::Utils::FileIO & p_file)const;
 		/**
 		 * Reads the viewport from a file
 		 *@param p_file : [in] The file to read from
 		 *@return true if successful, false if not
 		 */
-		bool Read( General::Utils::File & p_file);
+		bool Read( General::Utils::FileIO & p_file);
 
 	public:
 		inline ProjectionType	GetType			()const { return m_type; }

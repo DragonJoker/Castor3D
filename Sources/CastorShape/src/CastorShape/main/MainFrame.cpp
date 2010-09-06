@@ -54,6 +54,7 @@ BEGIN_EVENT_TABLE( CSMainFrame, wxFrame)
 	EVT_MENU( mbNewPlane,				CSMainFrame::_onNewPlane)
 	EVT_MENU( mbNewSphere,				CSMainFrame::_onNewSphere)
 	EVT_MENU( mbNewTorus,				CSMainFrame::_onNewTorus)
+	EVT_MENU( mbNewProjection,			CSMainFrame::_onNewProjection)
 	EVT_MENU( mbNewMaterial,			CSMainFrame::_onNewMaterial)
 	EVT_MENU( mbGeometries,				CSMainFrame::_onShowGeometriesList)
 	EVT_MENU( mbMaterials,				CSMainFrame::_onShowMaterialsList)
@@ -335,10 +336,10 @@ void CSMainFrame :: _onMenuClose( wxCommandEvent & event)
 
 void CSMainFrame :: _onSaveScene( wxCommandEvent & event)
 {
-	wxFileDialog * l_fileDialog = new wxFileDialog( this, C3D_T( "Enregistrer une scene"), wxEmptyString, wxEmptyString, C3D_T( "Castor Shape files (*.cscn)|*.cscn"));
+	wxFileDialog * l_fileDialog = new wxFileDialog( this, C3D_T( "Enregistrer une scene"), wxEmptyString, wxEmptyString, C3D_T( "Castor Shape files (*.escn)|*.escn"));
 	if (l_fileDialog->ShowModal() == wxID_OK)
 	{
-		File l_file( l_fileDialog->GetPath().c_str(), File::eWrite);
+		FileIO l_file( l_fileDialog->GetPath().c_str(), FileIO::eWrite);
 		wxString l_filePath = l_fileDialog->GetPath();
 		l_filePath.Replace( C3D_T( "\\"), C3D_T( "/"));
 		if (MaterialManager::GetSingletonPtr()->Write( l_filePath.c_str()))
@@ -359,7 +360,7 @@ void CSMainFrame :: _onSaveScene( wxCommandEvent & event)
 			Log::LogMessage( C3D_T( "Can't write meshes"));
 			return;
 		}
-		if (SceneManager::GetSingletonPtr()->GetElementByName( C3D_T( "MainScene"))->Write( l_file))
+		if (SceneManager::GetSingletonPtr()->GetElementByName( C3D_T( "MainScene"))->Write( & l_file))
 		{
 			Log::LogMessage( C3D_T( "Save Successfull"));
 		}
@@ -374,7 +375,7 @@ void CSMainFrame :: _onSaveScene( wxCommandEvent & event)
 
 void CSMainFrame :: _onLoadScene( wxCommandEvent & event)
 {
-	wxString l_wildcard = C3D_T( "Castor Shape files (*.cscn)|*.cscn|3DS files (*.3ds)|*.3ds|ASCII Scene Export files (*.ase)|*.ase|Quake 2 Model files (*.md2)|*.md2|Quake 3 Model files (*.md3)|*.md3|Obj files (*.obj)|*.obj|PLY files (*.ply)|*.ply");
+	wxString l_wildcard = C3D_T( "Castor Shape files (*.escn)|*.escn|3DS files (*.3ds)|*.3ds|ASCII Scene Export files (*.ase)|*.ase|Quake 2 Model files (*.md2)|*.md2|Quake 3 Model files (*.md3)|*.md3|Obj files (*.obj)|*.obj|PLY files (*.ply)|*.ply");
 	wxFileDialog * l_fileDialog = new wxFileDialog( this, C3D_T( "Ouvrir une scene"), wxEmptyString, wxEmptyString, l_wildcard);
 
 	if (l_fileDialog->ShowModal() == wxID_OK)
@@ -411,13 +412,7 @@ void CSMainFrame :: _onLoadScene( wxCommandEvent & event)
 		}
 		else if (l_fileDialog->GetPath().find( C3D_T( ".md3")) != String::npos || l_fileDialog->GetPath().find( C3D_T( ".MD3")) != String::npos)
 		{
-			wxFileDialog l_dialog( this, C3D_T( "Ouvrir une image"), wxEmptyString, wxEmptyString, C3D_T( "Fichiers BMP (*.bmp)|*.bmp|Fichiers GIF (*.gif)|*.gif\
-																										  |Fichiers JPG (*.jpg)|*.jpg|Fichiers PNG (*.png)|*.png\
-																										  |Images (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg"));
-			if (l_dialog.ShowModal() == wxID_OK)
-			{
-				SceneManager::GetSingletonPtr()->GetElementByName( C3D_T( "MainScene"))->ImportMD3( l_fileDialog->GetPath().c_str(), l_dialog.GetPath().c_str());
-			}
+			SceneManager::GetSingletonPtr()->GetElementByName( C3D_T( "MainScene"))->ImportMD3( l_fileDialog->GetPath().c_str());
 		}
 		else
 		{
@@ -430,8 +425,6 @@ void CSMainFrame :: _onLoadScene( wxCommandEvent & event)
 			Log::LogMessage( l_fileDialog->GetPath().c_str());
 
 			wxString l_filePath = l_fileDialog->GetPath();
-			l_filePath.Replace( C3D_T( "\\"), C3D_T( "/"));
-			File l_file( l_fileDialog->GetPath().c_str(), File::eRead);
 
 			if (MaterialManager::GetSingletonPtr()->Read( l_filePath.c_str()))
 			{
@@ -443,277 +436,225 @@ void CSMainFrame :: _onLoadScene( wxCommandEvent & event)
 				return;
 			}
 
-			if (MeshManager::GetSingletonPtr()->Read( l_filePath.c_str()))
-			{
-				Log::LogMessage( C3D_T( "Meshes read"));
-			}
-			else
-			{
-				Log::LogMessage( C3D_T( "Can't read meshes"));
-				return;
-			}
-
-			if (SceneManager::GetSingletonPtr()->GetElementByName( C3D_T( "MainScene"))->Read( l_file))
-			{
-				Log::LogMessage( C3D_T( "Load Successfull"));
-			}
-			else
-			{
-				Log::LogMessage( C3D_T( "Load Failed"));
-			}
+			SceneFileParser l_parser;
+			l_parser.ParseFile( l_filePath.c_str());
 		}
 	}
 	ShowPanels();
 }
 
-//******************************************************************************
-
 void CSMainFrame :: _onNewCone( wxCommandEvent & event)
 {
 	CSNewConeDialog * l_dialog = new CSNewConeDialog( this, mfNewGeometry);
+
 	if (l_dialog->ShowModal() == wxID_OK)
 	{
 		Scene * l_mainScene = SceneManager::GetSingletonPtr()->GetElementByName( C3D_T( "MainScene"));
+
 		if (l_mainScene != NULL)
 		{
 			float l_radius = l_dialog->GetConeRadius();
-			if (l_radius == 0.0)
-			{
-				l_dialog->Destroy();
-				return;
-			}
 			float l_height = l_dialog->GetConeHeight();
-			if (l_radius == 0.0)
-			{
-				l_dialog->Destroy();
-				return;
-			}
 			int l_nbFaces = l_dialog->GetFacesNumber();
-			if (l_nbFaces < 1)
+
+			if (l_radius != 0.0 && l_height != 0.0  && l_nbFaces >= 1)
 			{
-				l_dialog->Destroy();
-				return;
+				_createGeometry( Mesh::eCone, l_dialog->GetGeometryName(), l_dialog->GetFacesNumberStr(),
+								 C3D_T( "Cone"), l_mainScene, l_dialog, l_nbFaces, 0, l_height, l_radius);
 			}
-			_createGeometry( Mesh::eCone, l_dialog->GetGeometryName(), l_dialog->GetFacesNumberStr(),
-							 C3D_T( "Cone"), l_mainScene, l_dialog, l_nbFaces, 0, l_height, l_radius);
 		}
+
 		ShowPanels();
 	}
+
 	l_dialog->Destroy();
 }
-//******************************************************************************
 
 void CSMainFrame :: _onNewCube( wxCommandEvent & event)
 {
 	CSNewCubeDialog * l_dialog = new CSNewCubeDialog( this, mfNewGeometry);
+
 	if (l_dialog->ShowModal() == wxID_OK)
 	{
 		Scene * l_mainScene = SceneManager::GetSingletonPtr()->GetElementByName( C3D_T( "MainScene"));
+
 		if (l_mainScene != NULL)
 		{
 			float l_width = l_dialog->GetCubeWidth();
-			if (l_width == 0.0)
-			{
-				l_dialog->Destroy();
-				return;
-			}
 			float l_height = l_dialog->GetCubeHeight();
-			if (l_height == 0.0)
-			{
-				l_dialog->Destroy();
-				return;
-			}
 			float l_depth = l_dialog->GetCubeDepth();
-			if (l_depth == 0.0)
+
+			if (l_width != 0.0 && l_height != 0.0 && l_depth != 0.0)
 			{
-				l_dialog->Destroy();
-				return;
+				_createGeometry( Mesh::eCube, l_dialog->GetGeometryName(), C3DEmptyString,
+								 C3D_T( "Cube"), l_mainScene, l_dialog, 0, 0, l_width, l_height, l_depth);
 			}
-			_createGeometry( Mesh::eCube, l_dialog->GetGeometryName(), C3DEmptyString,
-							 C3D_T( "Cube"), l_mainScene, l_dialog, 0, 0, l_width, l_height, l_depth);
 		}
+
 		ShowPanels();
 	}
+
 	l_dialog->Destroy();
 }
-
-//******************************************************************************
 
 void CSMainFrame :: _onNewCylinder( wxCommandEvent & event)
 {
 	CSNewCylinderDialog * l_dialog = new CSNewCylinderDialog( this, mfNewGeometry);
+
 	if (l_dialog->ShowModal() == wxID_OK)
 	{
 		Scene * l_mainScene = SceneManager::GetSingletonPtr()->GetElementByName( C3D_T( "MainScene"));
+
 		if (l_mainScene != NULL)
 		{
 			float l_radius = l_dialog->GetCylinderRadius();
-			if (l_radius == 0.0)
-			{
-				l_dialog->Destroy();
-				return;
-			}
 			float l_height = l_dialog->GetCylinderHeight();
-			if (l_radius == 0.0)
-			{
-				l_dialog->Destroy();
-				return;
-			}
 			int l_nbFaces = l_dialog->GetFacesNumber();
-			if (l_nbFaces < 1)
+
+			if (l_radius != 0.0 && l_height != 0.0 && l_nbFaces >= 1)
 			{
-				l_dialog->Destroy();
-				return;
+				_createGeometry( Mesh::eCylinder, l_dialog->GetGeometryName(), l_dialog->GetFacesNumberStr(),
+								 C3D_T( "Cylinder"), l_mainScene, l_dialog, l_nbFaces, 0, l_height, l_radius);
 			}
-			_createGeometry( Mesh::eCylinder, l_dialog->GetGeometryName(), l_dialog->GetFacesNumberStr(),
-							 C3D_T( "Cylinder"), l_mainScene, l_dialog, l_nbFaces, 0, l_height, l_radius);
 		}
+
 		ShowPanels();
 	}
+
 	l_dialog->Destroy();
 }
-
-//******************************************************************************
 
 void CSMainFrame :: _onNewIcosaedron( wxCommandEvent & event)
 {
 	CSNewIcosaedronDialog * l_dialog = new CSNewIcosaedronDialog( this, mfNewGeometry);
+
 	if (l_dialog->ShowModal() == wxID_OK)
 	{
 		Scene * l_mainScene = SceneManager::GetSingletonPtr()->GetElementByName( C3D_T( "MainScene"));
+
 		if (l_mainScene != NULL)
 		{
 			float l_radius = l_dialog->GetIcosaedronRadius();
-			if (l_radius == 0.0)
-			{
-				l_dialog->Destroy();
-				return;
-			}
 			int l_nbFaces = l_dialog->GetNbSubdiv();
-			if (l_nbFaces < 1)
+
+			if (l_radius != 0.0 && l_nbFaces >= 1)
 			{
-				l_dialog->Destroy();
-				return;
+				_createGeometry( Mesh::eIcosaedron, l_dialog->GetGeometryName(), l_dialog->GetNbSubdivStr(),
+								 C3D_T( "Icosaedron"), l_mainScene, l_dialog, l_nbFaces, 0, l_radius);
 			}
-			_createGeometry( Mesh::eIcosaedron, l_dialog->GetGeometryName(), l_dialog->GetNbSubdivStr(),
-							 C3D_T( "Icosaedron"), l_mainScene, l_dialog, l_nbFaces, 0, l_radius);
 		}
+
 		ShowPanels();
 	}
+
 	l_dialog->Destroy();
 }
-
-//******************************************************************************
 
 void CSMainFrame :: _onNewPlane( wxCommandEvent & event)
 {
 	CSNewPlaneDialog * l_dialog = new CSNewPlaneDialog( this, mfNewGeometry);
+
 	if (l_dialog->ShowModal() == wxID_OK)
 	{
 		Scene * l_mainScene = SceneManager::GetSingletonPtr()->GetElementByName( C3D_T( "MainScene"));
+
 		if (l_mainScene != NULL)
 		{
 			float l_width = l_dialog->GetGeometryWidth();
-			if (l_width == 0.0)
-			{
-				l_dialog->Destroy();
-				return;
-			}
 			float l_depth = l_dialog->GetGeometryDepth();
-			if (l_depth == 0.0)
-			{
-				l_dialog->Destroy();
-				return;
-			}
 			int l_nbWidthSubdiv = l_dialog->GetNbWidthSubdiv();
-			if (l_nbWidthSubdiv < 0)
-			{
-				l_dialog->Destroy();
-				return;
-			}
 			int l_nbDepthSubdiv = l_dialog->GetNbDepthSubdiv();
-			if (l_nbDepthSubdiv < 0)
+
+			if (l_width != 0.0 && l_depth != 0.0 && l_nbWidthSubdiv >= 0 && l_nbDepthSubdiv >= 0)
 			{
-				l_dialog->Destroy();
-				return;
+				_createGeometry( Mesh::ePlane, l_dialog->GetGeometryName(), l_dialog->GetNbDepthSubdivStr() + C3D_T( "x") + l_dialog->GetNbWidthSubdivStr(),
+								 C3D_T( "Plane"), l_mainScene, l_dialog, l_nbDepthSubdiv, l_nbWidthSubdiv, l_width, l_depth);
 			}
-			_createGeometry( Mesh::ePlane, l_dialog->GetGeometryName(), l_dialog->GetNbDepthSubdivStr() + C3D_T( "x") + l_dialog->GetNbWidthSubdivStr(),
-							 C3D_T( "Plane"), l_mainScene, l_dialog, l_nbDepthSubdiv, l_nbWidthSubdiv, l_width, l_depth);
 		}
+
 		ShowPanels();
 	}
+
 	l_dialog->Destroy();
 }
-
-//******************************************************************************
 
 void CSMainFrame :: _onNewSphere( wxCommandEvent & event)
 {
 	CSNewSphereDialog * l_dialog = new CSNewSphereDialog( this, mfNewGeometry);
+
 	if (l_dialog->ShowModal() == wxID_OK)
 	{
 		Scene * l_mainScene = SceneManager::GetSingletonPtr()->GetElementByName( C3D_T( "MainScene"));
+
 		if (l_mainScene != NULL)
 		{
 			float l_radius = l_dialog->GetSphereRadius();
-			if (l_radius == 0.0)
-			{
-				l_dialog->Destroy();
-				return;
-			}
 			int l_nbFaces = l_dialog->GetFacesNumber();
-			if (l_nbFaces < 3)
+
+			if (l_radius != 0.0 && l_nbFaces >= 3)
 			{
-				l_dialog->Destroy();
-				return;
+				_createGeometry( Mesh::eSphere, l_dialog->GetGeometryName(), l_dialog->GetFacesNumberStr(),
+								 C3D_T( "Sphere"), l_mainScene, l_dialog, l_nbFaces, 0, l_radius);
 			}
-			_createGeometry( Mesh::eSphere, l_dialog->GetGeometryName(), l_dialog->GetFacesNumberStr(),
-							 C3D_T( "Sphere"), l_mainScene, l_dialog, l_nbFaces, 0, l_radius);
 		}
+
 		ShowPanels();
 	}
+
 	l_dialog->Destroy();
 }
-
-//******************************************************************************
 
 void CSMainFrame :: _onNewTorus( wxCommandEvent & event)
 {
 	CSNewTorusDialog * l_dialog = new CSNewTorusDialog( this, mfNewGeometry);
+
 	if (l_dialog->ShowModal() == wxID_OK)
 	{
 		Scene * l_mainScene = SceneManager::GetSingletonPtr()->GetElementByName( C3D_T( "MainScene"));
+
 		if (l_mainScene != NULL)
 		{
 			float l_width = l_dialog->GetInternalRadius();
-			if (l_width == 0.0)
-			{
-				l_dialog->Destroy();
-				return;
-			}
 			float l_radius = l_dialog->GetExternalRadius();
-			if (l_radius == 0.0)
-			{
-				l_dialog->Destroy();
-				return;
-			}
 			int l_nbRadiusSubdiv = l_dialog->GetExternalNbFaces();
-			if (l_nbRadiusSubdiv < 1)
-			{
-				l_dialog->Destroy();
-				return;
-			}
 			int l_nbWidthSubdiv = l_dialog->GetInternalNbFaces();
-			if (l_nbWidthSubdiv < 1)
+
+			if (l_width != 0.0 && l_radius != 0.0 && l_nbRadiusSubdiv >= 1 && l_nbWidthSubdiv >= 1)
 			{
-				l_dialog->Destroy();
-				return;
+				_createGeometry( Mesh::eTorus, l_dialog->GetGeometryName(), l_dialog->GetExternalNbFacesStr() + C3D_T( "x") + l_dialog->GetInternalNbFacesStr(),
+								 C3D_T( "Torus"), l_mainScene, l_dialog, l_nbWidthSubdiv, l_nbRadiusSubdiv, l_width, l_radius);
 			}
-			_createGeometry( Mesh::eTorus, l_dialog->GetGeometryName(), l_dialog->GetExternalNbFacesStr() + C3D_T( "x") + l_dialog->GetInternalNbFacesStr(),
-							 C3D_T( "Torus"), l_mainScene, l_dialog, l_nbWidthSubdiv, l_nbRadiusSubdiv, l_width, l_radius);
 		}
+
 		ShowPanels();
 	}
+
+	l_dialog->Destroy();
+}
+
+void CSMainFrame :: _onNewProjection( wxCommandEvent & event)
+{
+	CSNewSphereDialog * l_dialog = new CSNewSphereDialog( this, mfNewGeometry);
+
+	if (l_dialog->ShowModal() == wxID_OK)
+	{
+		Scene * l_mainScene = SceneManager::GetSingletonPtr()->GetElementByName( C3D_T( "MainScene"));
+
+		if (l_mainScene != NULL)
+		{
+			float l_fDepth = l_dialog->GetSphereRadius();
+			int l_nbFaces = l_dialog->GetFacesNumber();
+
+			if (l_fDepth != 0.0 && l_nbFaces >= 1)
+			{
+				_createGeometry( Mesh::eProjection, l_dialog->GetGeometryName(), l_dialog->GetFacesNumberStr(),
+								 C3D_T( "Projection"), l_mainScene, l_dialog, l_nbFaces, 0, l_fDepth, 0.0);
+			}
+		}
+
+		ShowPanels();
+	}
+
 	l_dialog->Destroy();
 }
 
@@ -1037,46 +978,47 @@ void CSMainFrame :: _buildMenuBar()
 	wxMenuBar * l_menuBar = new wxMenuBar();
 
 	l_menu = new wxMenu();
-	l_menu->Append( mbSaveScene, C3D_T( "&Sauver la Scene\tCTRL+F+S"));
-	l_menu->Append( mLoadScene, C3D_T( "&Ouvrir une Scene\tCTRL+F+O"));
-	l_menu->Append( mbRender, C3D_T( "&Rendu de scène\tCTRL+F+R"));
+	l_menu->Append( mbSaveScene,					C3D_T( "&Sauver la Scene\tCTRL+F+S"));
+	l_menu->Append( mLoadScene,						C3D_T( "&Ouvrir une Scene\tCTRL+F+O"));
+	l_menu->Append( mbRender,						C3D_T( "&Rendu de scène\tCTRL+F+R"));
 	l_menu->AppendSeparator();
-	l_menu->Append( mbExit, C3D_T( "&Quitter\tALT+F4"));
-	l_menuBar->Append( l_menu, C3D_T( "&Fichier"));
+	l_menu->Append( mbExit,							C3D_T( "&Quitter\tALT+F4"));
+	l_menuBar->Append( l_menu,						C3D_T( "&Fichier"));
 	
 	l_menu = new wxMenu();
 	l_subMenu = new wxMenu();
-	l_subMenu->Append( mbNewCone, C3D_T( "C&one"));
-	l_subMenu->Append( mbNewCube, C3D_T( "C&ube"));
-	l_subMenu->Append( mbNewCylinder, C3D_T( "C&ylindre"));
-	l_subMenu->Append( mbNewIcosaedron, C3D_T( "&Icosaedre"));
-	l_subMenu->Append( mbNewPlane, C3D_T( "&Plan"));
-	l_subMenu->Append( mbNewSphere, C3D_T( "&Sphere"));
-	l_subMenu->Append( mbNewTorus, C3D_T( "&Torre"));	
-	l_menu->AppendSubMenu( l_subMenu, C3D_T( "Nouvelle &Geometrie\tCTRL+N+G"));
-	l_menu->Append( mbNewMaterial, C3D_T( "&Material\tCTRL+N+M"));
-	l_menuBar->Append( l_menu, C3D_T( "&Nouveau"));
+	l_subMenu->Append( mbNewCone,					C3D_T( "C&one"));
+	l_subMenu->Append( mbNewCube,					C3D_T( "C&ube"));
+	l_subMenu->Append( mbNewCylinder,				C3D_T( "C&ylindre"));
+	l_subMenu->Append( mbNewIcosaedron,				C3D_T( "&Icosaedre"));
+	l_subMenu->Append( mbNewPlane,					C3D_T( "&Plan"));
+	l_subMenu->Append( mbNewSphere,					C3D_T( "&Sphere"));
+	l_subMenu->Append( mbNewTorus,					C3D_T( "&Torre"));
+	l_subMenu->Append( mbNewProjection,				C3D_T( "&Projection"));	
+	l_menu->AppendSubMenu( l_subMenu,				C3D_T( "Nouvelle &Geometrie\tCTRL+N+G"));
+	l_menu->Append( mbNewMaterial,					C3D_T( "&Material\tCTRL+N+M"));
+	l_menuBar->Append( l_menu,						C3D_T( "&Nouveau"));
 
 	l_menu = new wxMenu();
-	l_menu->Append( mbGeometries, C3D_T( "&Geometries\tCTRL+A+G"));
-	l_menu->Append( mbMaterials, C3D_T( "&Materiaux\tCTRL+A+M"));
-	l_menuBar->Append( l_menu, C3D_T( "&Affichage"));
+	l_menu->Append( mbGeometries,					C3D_T( "&Geometries\tCTRL+A+G"));
+	l_menu->Append( mbMaterials,					C3D_T( "&Materiaux\tCTRL+A+M"));
+	l_menuBar->Append( l_menu,						C3D_T( "&Affichage"));
 
 	l_menu = new wxMenu();
-	l_menu->AppendCheckItem( mbSelect, C3D_T( "&Sélectionner\tCTRL+E+S"));
-	l_menu->AppendCheckItem( mbModify, C3D_T( "&Modifier\tCTRL+E+M"));
-	l_menu->Append( mbNone, C3D_T( "&Annuler\tCTRL+E+C"));
+	l_menu->AppendCheckItem( mbSelect,				C3D_T( "&Sélectionner\tCTRL+E+S"));
+	l_menu->AppendCheckItem( mbModify,				C3D_T( "&Modifier\tCTRL+E+M"));
+	l_menu->Append( mbNone,							C3D_T( "&Annuler\tCTRL+E+C"));
 	l_menu->AppendSeparator();
-	l_menu->AppendRadioItem( mbSelectGeometries, C3D_T( "&Géométrie\tCTRL+E+G"))->Enable( false);
-	l_menu->AppendRadioItem( mbSelectPoints, C3D_T( "&Point\tCTRL+E+P"))->Enable( false);
+	l_menu->AppendRadioItem( mbSelectGeometries,	C3D_T( "&Géométrie\tCTRL+E+G"))->Enable( false);
+	l_menu->AppendRadioItem( mbSelectPoints,		C3D_T( "&Point\tCTRL+E+P"))->Enable( false);
 	l_menu->AppendSeparator();
-	l_menu->Append( mbCloneSelection, C3D_T( "&Dupliquer\tCTRL+E+D"));
+	l_menu->Append( mbCloneSelection,				C3D_T( "&Dupliquer\tCTRL+E+D"));
 	l_subMenu = new wxMenu();
-	l_subMenu->Append( mbSubdividePNTriangles, C3D_T( "PN &Triangles\tCTRL+E+S+T"));
-	l_subMenu->Append( mbSubdivideLoop, C3D_T( "&Loop\tCTRL+E+S+L"));
-	l_menu->AppendSubMenu( l_subMenu, C3D_T( "&Subdiviser"));
-	l_menu->Append( mbSelectNone, C3D_T( "&Aucune\tCTRL+E+A"));
-	l_menuBar->Append( l_menu, C3D_T( "&Sélection"));
+	l_subMenu->Append( mbSubdividePNTriangles,		C3D_T( "PN &Triangles\tCTRL+E+S+T"));
+	l_subMenu->Append( mbSubdivideLoop,				C3D_T( "&Loop\tCTRL+E+S+L"));
+	l_menu->AppendSubMenu( l_subMenu,				C3D_T( "&Subdiviser"));
+	l_menu->Append( mbSelectNone,					C3D_T( "&Aucune\tCTRL+E+A"));
+	l_menuBar->Append( l_menu,						C3D_T( "&Sélection"));
 
 	SetMenuBar( l_menuBar);
 }

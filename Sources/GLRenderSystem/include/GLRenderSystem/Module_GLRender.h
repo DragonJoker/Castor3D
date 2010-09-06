@@ -18,6 +18,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___MODULE_GLRENDER___
 #define ___MODULE_GLRENDER___
 
+#	ifdef GLRENDERSYSTEM_EXPORTS
+#		define CS3D_GL_API __declspec(dllexport)
+#	else
+#		define CS3D_GL_API __declspec(dllimport)
+#	endif
+
 namespace Castor3D
 {
 	class GLRenderSystem;

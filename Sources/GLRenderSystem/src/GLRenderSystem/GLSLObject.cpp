@@ -119,7 +119,7 @@ void GLShaderObject :: RetrieveCompilerLog( String & p_strCompilerLog)
 		char * infoLog;
 		infoLog = new char[infologLength];
 		glGetShaderInfoLog( m_shaderObject, infologLength, & charsWritten, infoLog);
-		p_strCompilerLog = infoLog;
+		p_strCompilerLog.assign( infoLog);
 		delete infoLog;
 	}
 }

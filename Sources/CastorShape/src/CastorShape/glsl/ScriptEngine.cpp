@@ -80,9 +80,9 @@ ScriptNode * ScriptEngine :: GetVariable( const String & p_variableName)const
 	return m_compiler->GetProgramConstant( p_variableName);
 }
 
-ScriptNode * ScriptEngine :: CompileScriptFile( const String & p_strFileName)
+ScriptNode * ScriptEngine :: CompileScriptFileIO( const String & p_strFileName)
 {
-	return m_compiler->CompileScriptFile( p_strFileName);
+	return m_compiler->CompileScriptFileIO( p_strFileName);
 }
 
 void ScriptEngine :: ScriptError( ScriptNode * p_node, const String & p_string)

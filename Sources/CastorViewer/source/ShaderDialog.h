@@ -55,7 +55,7 @@ namespace CastorViewer
 	private:
 		void _cleanup();
 		void _loadShader();
-		void _openShaderFile( );
+		void _openShaderFileIO( );
 
 		DECLARE_EVENT_TABLE()
 		void _onVertexFolder	( wxCommandEvent & event);

@@ -7,46 +7,6 @@ class CSCastorShape;
 class CSMainFrame;
 class CSRenderPanel;
 
-enum MainFrameMenuBarIDs
-{
-	mbExit,
-	mbSaveScene,
-	mLoadScene,
-	mbNewGeometry,
-	mbNewCone,
-	mbNewCube,
-	mbNewCylinder,
-	mbNewIcosaedron,
-	mbNewPlane,
-	mbNewSphere,
-	mbNewTorus,
-	mbNewMaterial,
-	mbGeometries,
-	mbMaterials,
-	mbSelectGeometries,
-	mbSelectPoints,
-	mbCloneSelection,
-	mbSubdividePNTriangles,
-	mbSubdivideLoop,
-	mbSelectNone,
-	mbSelect,
-	mbModify,
-	mbNone,
-	mbRender
-};
-
-enum MainFrameIDs
-{
-	mainFrame,
-	frame3d,
-	frame2d,
-	csTimer,
-	mfNewGeometry,
-	mfNewMaterial,
-	mfGeometries,
-	mfMaterials
-};
-
 typedef enum SelectionType
 {
 	stVertex,

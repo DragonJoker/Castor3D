@@ -26,7 +26,7 @@ namespace Castor3D
 	// Vertex Arrays
 	//**************************************************************************
 
-	class GLVBVertexBuffer : public VertexBuffer
+	class CS3D_GL_API GLVBVertexBuffer : public VertexBuffer
 	{
 	public:
 		GLVBVertexBuffer()
@@ -37,7 +37,7 @@ namespace Castor3D
 		virtual void Deactivate();
 	};
 
-	class GLVBNormalsBuffer : public NormalsBuffer
+	class CS3D_GL_API GLVBNormalsBuffer : public NormalsBuffer
 	{
 	public:
 		GLVBNormalsBuffer()
@@ -48,7 +48,7 @@ namespace Castor3D
 		virtual void Deactivate();
 	};
 
-	class GLVBVertexAttribsBuffer : public VertexAttribsBuffer
+	class CS3D_GL_API GLVBVertexAttribsBuffer : public VertexAttribsBuffer
 	{
 	public:
 		GLVBVertexAttribsBuffer()
@@ -59,7 +59,7 @@ namespace Castor3D
 		virtual void Deactivate();
 	};
 
-	class GLVBTextureBuffer : public TextureBuffer
+	class CS3D_GL_API GLVBTextureBuffer : public TextureBuffer
 	{
 	public:
 		GLVBTextureBuffer()
@@ -74,7 +74,7 @@ namespace Castor3D
 	// Vertex Buffer Objects
 	//**************************************************************************
 
-	class GLVBOVertexBuffer : public VertexBuffer
+	class CS3D_GL_API GLVBOVertexBuffer : public VertexBuffer
 	{
 	public:
 		unsigned int m_index;
@@ -93,7 +93,7 @@ namespace Castor3D
 		virtual void Deactivate();
 	};
 
-	class GLVBONormalsBuffer : public NormalsBuffer
+	class CS3D_GL_API GLVBONormalsBuffer : public NormalsBuffer
 	{
 	public:
 		unsigned int m_index;
@@ -112,7 +112,7 @@ namespace Castor3D
 		virtual void Deactivate();
 	};
 
-	class GLVBOVertexAttribsBuffer : public VertexAttribsBuffer
+	class CS3D_GL_API GLVBOVertexAttribsBuffer : public VertexAttribsBuffer
 	{
 	public:
 		unsigned int m_index;
@@ -131,7 +131,7 @@ namespace Castor3D
 		virtual void Deactivate();
 	};
 
-	class GLVBOTextureBuffer : public TextureBuffer
+	class CS3D_GL_API GLVBOTextureBuffer : public TextureBuffer
 	{
 	public:
 		unsigned int m_index;

@@ -23,7 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	class GLSceneNodeRenderer : public SceneNodeRenderer
+	class CS3D_GL_API GLSceneNodeRenderer : public SceneNodeRenderer
 	{
 	public:
 		GLSceneNodeRenderer( GLRenderSystem * p_rs)

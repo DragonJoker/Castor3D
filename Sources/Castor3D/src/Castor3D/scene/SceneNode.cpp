@@ -393,17 +393,11 @@ void SceneNode :: RemoveTransformations()
 	m_renderer->RemoveTransformations();
 }
 
-bool SceneNode :: Write( General::Utils::File & p_file)const
+bool SceneNode :: Write( General::Utils::FileIO * p_pFile)const
 {
 	bool l_bReturn = false;
 	Log::LogMessage( C3D_T( "Writing Node %s"), m_name.c_str());
-	l_bReturn = WriteOne( p_file);
-
-	if (l_bReturn)
-	{
-		size_t l_nbChilds = m_childs.size();
-		l_bReturn = (p_file.Write<size_t>( l_nbChilds) == sizeof( size_t));
-	}
+	l_bReturn = WriteOne( p_pFile);
 
 	if (l_bReturn)
 	{
@@ -412,7 +406,7 @@ bool SceneNode :: Write( General::Utils::File & p_file)const
 
 		while (l_it != m_childs.end() && l_bReturn)
 		{
-			l_bReturn = l_it->second->Write( p_file);
+			l_bReturn = l_it->second->Write( p_pFile);
 			++l_it;
 		}
 	}
@@ -421,138 +415,42 @@ bool SceneNode :: Write( General::Utils::File & p_file)const
 	{
 		Log::LogMessage( C3D_T( "Childs Written"));
 	}
+
 	return l_bReturn;
 }
 
-bool SceneNode :: Read( General::Utils::File & p_file, Scene * p_scene)
+bool SceneNode :: WriteOne( General::Utils::FileIO * p_pFile)const
 {
 	bool l_bReturn = true;
-	DestroyAllChilds();
-	l_bReturn = ReadOne( p_file);
-	size_t l_nbChilds = 0;
 
-	if (l_bReturn)
+	if (m_name != "RootNode")
 	{
-		if (m_name != C3D_T( "RootNode"))
+		l_bReturn = p_pFile->WriteLine( "scene_node " + m_name + "\n{\n");
+
+		if (l_bReturn && m_parent != NULL && m_parent->GetName() != "RootNode")
 		{
-			p_scene->AddNode( this);
+			l_bReturn = p_pFile->WriteLine( "\tattach_to " + m_parent->m_name + "\n");
 		}
-
-		Log::LogMessage( C3D_T( "Reading Node %s"), m_name.c_str());
-		l_bReturn = (p_file.Read<size_t>( l_nbChilds) == sizeof( size_t));
-	}
-
-	if (l_bReturn)
-	{
-		Log::LogMessage( C3D_T( "Reading Childs"));
-		SceneNode * l_node;
-		for (size_t i = 0 ; i < l_nbChilds && l_bReturn ; i++)
-		{
-			l_node = new SceneNode( Root::GetRenderSystem()->CreateSceneNodeRenderer());
-			l_bReturn = l_node->Read( p_file, p_scene);
-
-			if (l_bReturn)
-			{
-				l_node->AttachTo( this);
-			}
-		}
-	}
-
-	if (l_bReturn)
-	{
-		Log::LogMessage( C3D_T( "Childs Read"));
-	}
-
-	return true;
-}
-
-bool SceneNode :: WriteOne( General::Utils::File & p_file)const
-{
-	bool l_bReturn = false;
-	size_t l_nameLength = m_name.size();
-	l_bReturn = (p_file.Write<size_t>( l_nameLength) == sizeof( size_t));
-
-	if (l_bReturn)
-	{
-		l_bReturn = (p_file.WriteArray<Char>( m_name.c_str(), l_nameLength) == l_nameLength);
-	}
-
-	if (l_bReturn)
-	{
-		l_bReturn = (p_file.Write<bool>( m_displayable) == sizeof( bool));
-	}
-
-	if (l_bReturn)
-	{
-		l_bReturn = (p_file.Write<bool>( m_visible) == sizeof( bool));
-	}
-
-	if (l_bReturn)
-	{
-		l_bReturn = m_orientation.Write( p_file);
-	}
-
-	if (l_bReturn)
-	{
-		l_bReturn = WriteVertex( m_position, p_file);
-	}
-
-	if (l_bReturn)
-	{
-		l_bReturn = WriteVertex( m_scale, p_file);
-	}
-
-	return l_bReturn;
-}
-
-bool SceneNode :: ReadOne( General::Utils::File & p_file)
-{
-	bool l_bReturn = false;
-	size_t l_nameLength = 0;
-
-	l_bReturn = (p_file.Read<size_t>( l_nameLength) == sizeof( size_t));
-
-	if (l_bReturn)
-	{
-		Char * l_name = new Char[l_nameLength+1];
-		l_bReturn = (p_file.ReadArray<Char>( l_name, l_nameLength) == l_nameLength);
 
 		if (l_bReturn)
 		{
-			l_name[l_nameLength] = 0;
-			m_name = l_name;
-			delete [] l_name;
+			l_bReturn = p_pFile->Print( 256, "\torientation %f %f %f %f\n", m_orientation.x, m_orientation.y, m_orientation.z, m_orientation.w);
 		}
-		else
+
+		if (l_bReturn)
 		{
-			delete [] l_name;
+			l_bReturn = p_pFile->Print( 256, "\tposition %f %f %f\n", m_position.x, m_position.y, m_position.z);
 		}
-	}
 
-	if (l_bReturn)
-	{
-		l_bReturn = (p_file.Read<bool>( m_displayable) == sizeof( bool));
-	}
+		if (l_bReturn)
+		{
+			l_bReturn = p_pFile->Print( 256, "\tscale %f %f %f\n", m_scale.x, m_scale.y, m_scale.z);
+		}
 
-	if (l_bReturn)
-	{
-		l_bReturn = (p_file.Read<bool>( m_visible) == sizeof( bool));
-	}
-
-	if (l_bReturn)
-	{
-		l_bReturn = m_orientation.Read( p_file);
-	}
-
-	if (l_bReturn)
-	{
-		m_orientation.ToRotationMatrix( m_matrix);
-		l_bReturn = ReadVertex( & m_position, p_file);
-	}
-
-	if (l_bReturn)
-	{
-		l_bReturn = ReadVertex( & m_scale, p_file);
+		if (l_bReturn)
+		{
+			l_bReturn = p_pFile->WriteLine( "}\n");
+		}
 	}
 
 	return l_bReturn;

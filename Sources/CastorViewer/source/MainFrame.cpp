@@ -47,6 +47,16 @@ void MainFrame :: LoadScene( const String & p_strFileName)
 		Log::LogMessage( C3D_T( "Material manager cleared"));
 		Log::LogMessage( m_strFilePath.c_str());
 
+		if (MaterialManager::GetSingletonPtr()->Read( m_strFilePath.c_str()))
+		{
+			Log::LogMessage( C3D_T( "Materials read"));
+		}
+		else
+		{
+			Log::LogMessage( C3D_T( "Can't read materials"));
+			return;
+		}
+
 		SceneFileParser l_parser;
 		l_parser.ParseFile( m_strFilePath.c_str());
 	}
@@ -219,7 +229,7 @@ void MainFrame :: _onLoadScene( wxCommandEvent & event)
 
 	if (l_fileDialog->ShowModal() == wxID_OK)
 	{
-		m_strFilePath = makeString( l_fileDialog->GetPath());
+		m_strFilePath = l_fileDialog->GetPath().c_str();
 		m_strFilePath.Replace( C3D_T( "\\"), C3D_T( "/"));
 
 		LoadScene();

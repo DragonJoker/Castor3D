@@ -12,6 +12,12 @@
 //******************************************************************************
 class CSRenderPanel : public wxPanel
 {
+private:
+	enum eIDs
+	{
+		csTimer,
+	};
+
 public:
 	ActionType m_actionType;
 	SelectionType m_selectionType;

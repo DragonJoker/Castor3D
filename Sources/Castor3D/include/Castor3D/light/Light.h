@@ -53,18 +53,17 @@ namespace Castor3D
 		//! The light's position, 4 floats for OpenGL compatibility : x, y, z, and w. w is used to tell if the light is directional or point
 		Point4D<float> m_position;
 		//! The ambient colour values (RGBA)
-		Point4D<float> m_ambient;
+		Colour m_ambient;
 		//! The diffuse colour values (RGBA)
-		Point4D<float> m_diffuse;
+		Colour m_diffuse;
 		//! The specular colour values (RGBA)
-		Point4D<float> m_specular;
+		Colour m_specular;
 		//! This light's renderer
 		LightRenderer * m_renderer;
 		/**
 		 * Constructor, not to be used by the user, use Scene::CreateLight function instead
 		 *@param p_renderer : A light renderer, may be OpenGL or Direct3D
 		 *@param p_name : The light's name, default is void
-		 *@param p_index : The light's index (max 8 active lights at a time)
 		 */
 		Light( LightRenderer * p_renderer, const String & p_name);
 
@@ -172,15 +171,15 @@ namespace Castor3D
 		void SetSpecular( const Vector3f & p_specular);
 		/**
 		 * Writes the light in a file
-		 *@param p_file : a pointer to file to write in
+		 *@param p_pFile : a pointer to file to write in
 		 */
-		virtual bool Write( General::Utils::File & p_file)const;
+		virtual bool Write( General::Utils::FileIO * p_pFile)const;
 		/**
 		 * Reads the light from a file
 		 *@param p_file : a pointer to file to read from
 		*@param p_scene : [in] The scene to find the node to attach this light to
 		 */
-		virtual bool Read( General::Utils::File & p_file, Scene * p_scene);
+		virtual bool Read( General::Utils::FileIO & p_file, Scene * p_scene);
 		
 	protected:
 		/**

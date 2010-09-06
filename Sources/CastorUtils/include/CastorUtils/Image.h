@@ -38,8 +38,8 @@ namespace General
 	class ImageLoader : ResourceLoader <Image>
 	{
 	public:
-		Image * LoadFromFile( const String & p_file);
-		bool SaveToFile( const String & p_file, Image * p_image)
+		Image * LoadFromFileIO( const String & p_file);
+		bool SaveToFileIO( const String & p_file, Image * p_image)
 		{
 			LoaderError( "Le loader enregistré pour ce format ne prend pas en charge l'exportation");
 		}

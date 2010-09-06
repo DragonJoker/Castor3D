@@ -50,7 +50,7 @@ public:
 						   Castor3D::Scene * p_scene,
 						   const wxPoint & pos = wxDefaultPosition,
 						   const wxSize & size = wxDefaultSize,
-						   wxWindowID id = mfGeometries,
+						   wxWindowID id = wxID_ANY,
 						   long style = wxCAPTION | wxSYSTEM_MENU | wxCLOSE_BOX | wxFRAME_FLOAT_ON_PARENT | wxFRAME_NO_TASKBAR,
 						   wxString name = wxString( (wxChar *)"CSGeometriesListFrame", 21));
 	~CSGeometriesListFrame();

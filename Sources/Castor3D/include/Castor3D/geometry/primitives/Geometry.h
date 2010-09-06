@@ -66,26 +66,19 @@ namespace Castor3D
 		void CreateBuffers( NormalsMode p_nm, size_t & p_nbFaces, size_t & p_nbVertex);
 		/**
 		 * Writes the geometry in a file
-		 *@param p_file : [in] file to write in
+		 *@param p_pFile : [in] file to write in
 		 *@return true if successful, false if not
 		 */
-		bool Write( General::Utils::File & p_file)const;
-		/**
-		 * Reads the geometry from a file
-		 *@param p_file : [in] file to read from
-		 *@param p_scene : [in] The scene where we can find the node to attach the geometry
-		 *@return true if successful, false if not
-		 */
-		bool Read( General::Utils::File & p_file, Scene * p_scene);
+		bool Write( General::Utils::FileIO * p_pFile)const;
 		/**
 		 * Renders this geometry in a given display mode
 		 *@param p_displayMode : [in] the display mode in which the render must be made
 		 */
 		void Render( DrawType p_displayMode);
 		/**
-		 * Subdivides the submesh of this geometry
-		 *@param
-		 *@return
+		 * Subdivides a submesh of this geometry
+		 *@param p_index : [in] The submesh index
+		 *@param p_mode : [in] The subdivision mode
 		 */
 		void Subdivide( unsigned int p_index, SubdivisionMode p_mode);
 

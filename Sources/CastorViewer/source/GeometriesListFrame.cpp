@@ -36,13 +36,13 @@ GeometriesListFrame :: GeometriesListFrame( wxWindow * parent, const wxString & 
 		m_items( NULL),
 		m_nbItems( 0)
 {
-	m_pTreeGeometries = new wxTreeCtrl( this, eGeometriesList, wxDefaultPosition, GetClientSize() - wxSize( 0, 50), wxTR_HIDE_ROOT | wxTR_HAS_BUTTONS | wxTR_MULTIPLE);
+	m_pTreeGeometries = new wxTreeCtrl( this, eGeometriesList, wxDefaultPosition, GetClientSize() - wxSize( 0, 50), wxTR_HIDE_ROOT | wxTR_HAS_BUTTONS | wxTR_MULTIPLE | wxTR_EXTENDED);
 	m_pTreeGeometries->Show();
 	m_pComboMaterials = new wxComboBox( this, eMaterialsList, "", wxPoint( 0, GetClientSize().y - 45), wxSize( GetClientSize().x, 20));
 	m_pComboMaterials->Hide();
 	m_pButtonDeleteSelected = new wxButton( this, eDeleteSelected, C3D_T( "Supprimer"), wxPoint( 0, GetClientSize().y - 20), wxSize( GetClientSize().x, 20));
 
-	wxTreeItemId l_idRoot = m_pTreeGeometries->AddRoot( "Gï¿½omï¿½tries");
+	wxTreeItemId l_idRoot = m_pTreeGeometries->AddRoot( "Géométries");
 	Geometry * l_pGeometry;
 	wxString l_strName;
 	wxTreeItemId l_idGeometry;
@@ -87,8 +87,7 @@ GeometriesListFrame :: GeometriesListFrame( wxWindow * parent, const wxString & 
 
 		m_items.push_back( l_strName);
 		l_idGeometry = m_pTreeGeometries->AppendItem( l_idRoot, l_strName, eFolder, eFolderSelected, new GeometryTreeItemData( l_pGeometry));
-		m_ids.insert( std::make_pair( l_idGeometry, l_strName));
-		m_pTreeGeometries->AppendItem( l_idGeometry, l_pGeometry->IsVisible() ? "Visible" : "Cachï¿½", eFile, eFileSelected, new GeometryTreeItemData( l_pGeometry));
+		m_pTreeGeometries->AppendItem( l_idGeometry, l_pGeometry->IsVisible() ? "Visible" : "Caché", eFile, eFileSelected, new GeometryTreeItemData( l_pGeometry));
 
 		for (size_t i = 0 ; i < l_pGeometry->GetMesh()->GetNbSubmeshes() ; i++)
 		{
@@ -116,7 +115,7 @@ END_EVENT_TABLE()
 void GeometriesListFrame :: OnCheck( wxCommandEvent & event)
 {
 	unsigned int l_selected = static_cast <unsigned int>( event.GetInt());
-	Geometry * l_geometry = m_scene->GetGeometry( makeString( m_items[l_selected]));
+	Geometry * l_geometry = m_scene->GetGeometry( m_items[l_selected].c_str());
 
 	if (l_geometry)
 	{
@@ -132,8 +131,7 @@ void GeometriesListFrame :: OnDelete( wxCommandEvent & event)
 
 	for (size_t i = 0 ; i < l_arraySelected.size() ; i++)
 	{
-		Geometry * l_geometry = m_scene->GetGeometry( makeString( m_ids[l_arraySelected[i]]));
-		m_ids.erase( l_arraySelected[i]);
+		Geometry * l_geometry = m_scene->GetGeometry( m_items[l_arraySelected[i]].c_str());
 		m_scene->RemoveGeometry( l_geometry);
 	}
 }
@@ -154,15 +152,15 @@ void GeometriesListFrame :: OnActivateItem( wxTreeEvent & event)
 {
 	wxTreeItemId l_item = event.GetItem();
 	GeometryTreeItemData * l_pItemData = (GeometryTreeItemData *)m_pTreeGeometries->GetItemData( l_item);
-	String l_strText = makeString( m_pTreeGeometries->GetItemText( l_item));
+	String l_strText = m_pTreeGeometries->GetItemText( l_item);
 
 	if (l_strText == "Visible")
 	{
 		m_pComboMaterials->Hide();
 		l_pItemData->GetGeometry()->SetVisible( false);
-		m_pTreeGeometries->SetItemText( l_item, "Cachï¿½");
+		m_pTreeGeometries->SetItemText( l_item, "Caché");
 	}
-	else if (l_strText == "Cachï¿½")
+	else if (l_strText == "Caché")
 	{
 		m_pComboMaterials->Hide();
 		l_pItemData->GetGeometry()->SetVisible( true);

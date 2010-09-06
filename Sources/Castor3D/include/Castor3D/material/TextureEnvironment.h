@@ -22,6 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	//! Textures combinations representation
 	/*!
 	A texture environment is a combination of modes, operands and sources used to configure texture units and their interactions in multi-textured materials
 	\author Sylvain DOREMUS
@@ -109,13 +110,13 @@ namespace Castor3D
 		 *@param p_file : [in] The file to write in
 		 *@return true if successful, false if not
 		 */
-		bool Write( General::Utils::File & p_file)const;
+		bool Write( General::Utils::FileIO & p_file)const;
 		/**
 		 * Reads this texture environment from a file
 		 *@param p_file : [in] The file to read from
 		 *@return true if successful, false if not
 		 */
-		bool Read( General::Utils::File & p_file);
+		bool Read( General::Utils::FileIO & p_file);
 
 	public:
 		inline void SetMode					( EnvironmentMode p_mode)			{ m_mode = p_mode; }

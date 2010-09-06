@@ -22,77 +22,84 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	struct CS3D_API Md3Header
-	{ 
-		char	m_fileID[4];
-		int		m_version;
-		char	m_strFile[68];
-		int		m_numFrames;
-		int		m_numTags;
-		int		m_numMeshes;
-		int		m_numMaxSkins;
-		int		m_headerSize;
-		int		m_tagStart;
-		int		m_tagEnd;
-		int		m_fileSize;
-	};
-
-	struct CS3D_API Md3MeshInfo
-	{
-		char	m_meshID[4];
-		char	m_strName[68];
-		int		m_numMeshFrames;
-		int		m_numSkins;
-		int     m_numVertices;
-		int		m_numTriangles;
-		int		m_triStart;
-		int		m_headerSize;
-		int     m_uvStart;
-		int		m_vertexStart;
-		int		m_meshSize;
-	};
-
-	struct CS3D_API Md3Tag
-	{
-		char		m_strName[64];
-		ImportedVertex3	m_position;
-		float		m_rotation[3][3];
-	};
-
-	struct CS3D_API Md3Bone
-	{
-		float	m_mins[3];
-		float	m_maxs[3];
-		float	m_position[3];
-		float	m_scale;
-		char	m_creator[16];
-	};
-
-
-	struct CS3D_API Md3Triangle
-	{
-	   signed short	 m_vertex[3];
-	   unsigned char m_normal[2];
-	};
-
-	struct CS3D_API Md3Face
-	{
-	   int m_vertexIndices[3];				
-	};
-
-	struct CS3D_API Md3TexCoord
-	{
-	   float m_textureCoord[2];
-	};
-
-	struct CS3D_API Md3Skin 
-	{
-		char m_strName[68];
-	};
-
+	//! MD3 file importer
+	/*!
+	Imports data from MD3 (Quake3) files
+	\author Sylvain DOREMUS
+	\date 25/08/2010
+	*/
 	class CS3D_API Md3Importer : public ExternalImporter
 	{
 	private:
+		struct Md3Header
+		{ 
+			char	m_fileID[4];
+			int		m_version;
+			char	m_strFile[68];
+			int		m_numFrames;
+			int		m_numTags;
+			int		m_numMeshes;
+			int		m_numMaxSkins;
+			int		m_headerSize;
+			int		m_tagStart;
+			int		m_tagEnd;
+			int		m_fileSize;
+		};
+
+		struct Md3MeshInfo
+		{
+			char	m_meshID[4];
+			char	m_strName[68];
+			int		m_numMeshFrames;
+			int		m_numSkins;
+			int     m_numVertices;
+			int		m_numTriangles;
+			int		m_triStart;
+			int		m_headerSize;
+			int     m_uvStart;
+			int		m_vertexStart;
+			int		m_meshSize;
+		};
+
+		struct Md3Tag
+		{
+			char		m_strName[64];
+			Point3D<float>	m_position;
+			float		m_rotation[3][3];
+		};
+
+		struct Md3Bone
+		{
+			float	m_mins[3];
+			float	m_maxs[3];
+			float	m_position[3];
+			float	m_scale;
+			char	m_creator[16];
+		};
+
+
+		struct Md3Triangle
+		{
+		   signed short	 m_vertex[3];
+		   unsigned char m_normal[2];
+		};
+
+		struct Md3Face
+		{
+		   int m_vertexIndices[3];				
+		};
+
+		struct Md3TexCoord
+		{
+		   float m_textureCoord[2];
+		};
+
+		struct Md3Skin 
+		{
+			char m_strName[68];
+		};
+
+	public:
 		Md3Header			m_header;
 
 		Md3Skin			*	m_skins;
@@ -103,21 +110,23 @@ namespace Castor3D
 
 		Md3Tag			*	m_tags;
 		int					m_numOfTags;
-		Imported3DModel	**	m_links;
+		Mesh			**	m_links;
+		std::map <String, Submesh *> m_mapSubmeshesByName;
 
-		String				m_textureName;
-
-		File			*	m_pFile;
+		FileIO			*	m_pFile;
 
 	public:
-		Md3Importer( const String & p_textureName = C3DEmptyString);								
+		/**
+		 * Constructor
+		 */
+		Md3Importer();
 
 	private:
 		virtual bool _import();
-		bool _loadSkin( Imported3DModel * p_model, const String & p_strSkin);
-		bool _loadShader( Imported3DModel * p_model, const String & p_strShader);
-		void _readMD3Data( Imported3DModel * p_model);
-		void _convertDataStructures( Imported3DModel * p_model, Md3MeshInfo p_meshHeader);
+		void _readMD3Data( Mesh * p_pMesh);
+		void _convertDataStructures( Mesh * p_pMesh, Md3MeshInfo p_meshHeader);
+		bool _loadSkin( const String & p_strSkin);
+		bool _loadShader( Mesh * p_pMesh, const String & p_strShader);
 		void _cleanUp();
 	};
 }

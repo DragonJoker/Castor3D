@@ -111,37 +111,37 @@ namespace Castor3D
 	 *@param p_face : The face to write
 	 *@param p_file : The file to write in
 	 */
-	bool WriteFace( Face * p_face, General::Utils::File & p_file);
+	bool WriteFace( Face * p_face, General::Utils::FileIO & p_file);
 	/**
 	 * Reads a face from a file
 	 *@param p_face : The face to read
 	 *@param p_file : The file to read from
 	 */
-	bool ReadFace( Face * p_face, General::Utils::File & p_file);
+	bool ReadFace( Face * p_face, General::Utils::FileIO & p_file);
 	/**
 	 * Writes a vertex in a file
 	 *@param p_vertex : A pointer to the vertex to write
 	 *@param p_file : The file to write in
 	 */
-	bool WriteVertex( const Vector3f * p_vertex, General::Utils::File & p_file);
+	bool WriteVertex( const Vector3f * p_vertex, General::Utils::FileIO & p_file);
 	/**
 	 * Reads a vertex from a file
 	 *@param p_vertex : A pointer to the vertex to read
 	 *@param p_file : The file to read from
 	 */
-	bool ReadVertex( Vector3f * p_vertex, General::Utils::File & p_file);
+	bool ReadVertex( Vector3f * p_vertex, General::Utils::FileIO & p_file);
 	/**
 	 * Writes a vertex in a file
 	 *@param p_vertex : The vertex to write
 	 *@param p_file : The file to write in
 	 */
-	bool WriteVertex( const Vector3f & p_vertex, General::Utils::File & p_file);
+	bool WriteVertex( const Vector3f & p_vertex, General::Utils::FileIO & p_file);
 	/**
 	 * Reads a vertex from a file
 	 *@param p_vertex : The vertex to read
 	 *@param p_file : The file to read from
 	 */
-	bool ReadVertex( Vector3f & p_vertex, General::Utils::File & p_file);
+	bool ReadVertex( Vector3f & p_vertex, General::Utils::FileIO & p_file);
 
 	//! Face array
 	typedef std::vector	<Face>						FaceArray;

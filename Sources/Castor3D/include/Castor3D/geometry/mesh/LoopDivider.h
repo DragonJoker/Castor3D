@@ -22,6 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	//! Loop subdivision algorithm Edge List
 	/*!
 	Specialisation of EdgeList for Loop subdivision algorithm. Creates LoopEdge instead of Edge
 	\author Sylvain DOREMUS
@@ -47,8 +48,9 @@ namespace Castor3D
 	private:
 		void _fill();
 	};
+	//! Loop subdivision algorithm Subdiviser
 	/*!
-	Loop algorithm specialisation of Subdiviser.
+	This class implements the Loop subdivision algorithm
 	\author Sylvain DOREMUS
 	\date 12/03/2010
 	*/

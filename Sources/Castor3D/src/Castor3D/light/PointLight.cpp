@@ -61,28 +61,29 @@ void PointLight :: SetAttenuation( const Vector3f & p_attenuation)
 	m_renderer->ApplyQuadraticAtt( m_attenuation.z);
 }
 
-bool PointLight :: Write( General::Utils::File & p_file)const
+bool PointLight :: Write( General::Utils::FileIO * p_pFile)const
 {
-	bool l_bReturn = Light::Write( p_file);
+	bool l_bReturn = p_pFile->WriteLine( "light " + m_name + "\n{\n");
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.WriteArray<float>( m_attenuation.const_ptr(), 3) == sizeof( float) * 3);
+		l_bReturn = p_pFile->WriteLine( "\ttype point_light\n");
 	}
-
-	return l_bReturn;
-}
-
-bool PointLight :: Read( General::Utils::File & p_file, Scene * p_scene)
-{
-	bool l_bReturn = Light::Read( p_file, p_scene);
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.ReadArray<float>( m_attenuation.ptr(), 3) == sizeof( float) * 3);
+		l_bReturn = Light::Write( p_pFile);
 	}
 
-	SetEnabled( m_enabled);
+	if (l_bReturn)
+	{
+		l_bReturn = p_pFile->Print( 256, "\tattenuation %f %f %f %f\n", m_attenuation.r, m_attenuation.g, m_attenuation.b);
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_pFile->WriteLine( "}\n");
+	}
 
 	return l_bReturn;
 }

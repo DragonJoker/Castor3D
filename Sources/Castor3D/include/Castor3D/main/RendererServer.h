@@ -23,9 +23,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	/**
-	 * Used to define OpenGL driver and Direct3D driver
-	 */
+	//! Renderer driver
+	/*!
+	 * Used to introduce OpenGL and Direct3D drivers
+	\author Sylvain DOREMUS
+	\date 25/08/2010
+	*/
 	class RendererDriver
 	{
 		public:
@@ -42,9 +45,9 @@ namespace Castor3D
 			 */ 
 			virtual RenderSystem * CreateRenderSystem() = 0;
 	};
-
+	//! Renderer server
 	/**
-	 * Registers available RendererDriver
+	 * Registers available RendererDriver (OpenGL or Direct3D)
 	 */
 	class RendererServer
 	{

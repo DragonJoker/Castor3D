@@ -145,13 +145,13 @@ void ShaderDialog :: _loadShader()
 	}
 	else
 	{
-		m_shaderProgram->SetVertexFile( m_strVertexShader.c_str());
-		m_shaderProgram->SetFragmentFile( m_strFragmentShader.c_str());
+		m_shaderProgram->SetVertexFileIO( m_strVertexShader.c_str());
+		m_shaderProgram->SetFragmentFileIO( m_strFragmentShader.c_str());
 
 		if ( ! m_strGeometryShader.empty())
 		{
 			m_shaderProgram->UsesGeometryShader( true);
-			m_shaderProgram->SetGeometryFile( m_strGeometryShader.c_str());
+			m_shaderProgram->SetGeometryFileIO( m_strGeometryShader.c_str());
 		}
 		else
 		{

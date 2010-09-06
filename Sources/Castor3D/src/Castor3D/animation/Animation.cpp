@@ -33,14 +33,14 @@ Animation :: ~Animation()
 
 
 
-bool Animation :: Write( File & p_file)const
+bool Animation :: Write( FileIO & p_file)const
 {
 	return true;
 }
 
 
 
-bool Animation :: Read( File & p_file)
+bool Animation :: Read( FileIO & p_file)
 {
 	return true;
 }

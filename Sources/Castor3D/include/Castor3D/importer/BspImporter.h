@@ -19,7 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_BspImporter___
 
 #include "ExternalImporter.h"
-
+/*
 namespace Castor3D
 {
 	#define FACE_POLYGON	1
@@ -38,10 +38,10 @@ namespace Castor3D
 
 	struct CS3D_API BSPVertex
 	{
-		ImportedVertex3 m_position;
-		ImportedVertex2 m_textureCoord;
-		ImportedVertex2 m_lightmapCoord;
-		ImportedVertex3 m_normal;
+		Point3D<float> m_position;
+		Point2D<float> m_textureCoord;
+		Point2D<float> m_lightmapCoord;
+		Point3D<float> m_normal;
 		unsigned char m_color[4];
 	};
 
@@ -57,9 +57,9 @@ namespace Castor3D
 		int m_lightmapID;
 		int m_mapCorner[2];
 		int m_mapSize[2];
-		ImportedVertex3 m_mapPos;
-		ImportedVertex3 m_mapVecs[2];
-		ImportedVertex3 m_normal;
+		Point3D<float> m_mapPos;
+		Point3D<float> m_mapVecs[2];
+		Point3D<float> m_normal;
 		int m_size[2];
 	};
 
@@ -159,7 +159,7 @@ namespace Castor3D
 		BSPVertex	*	m_verts;
 		BSPFace		*	m_faces;
 
-		File		*	m_pFile;
+		FileIO		*	m_pFile;
 
 		unsigned int m_textures[MAX_TEXTURES];	
 
@@ -172,13 +172,12 @@ namespace Castor3D
 		virtual bool _import();
 
 	private:
-		void _renderLevel( const ImportedVertex3 & p_pos);
+		void _renderLevel( const Point3D<float> & p_pos);
 		void _destroy();
 		void _findTextureExtension( const String & p_strFileName);
 		void _renderFace( int p_faceIndex);
 		void _convertToMesh( Mesh * p_mesh, BSPTexture * p_textures);
 	};
 }
-
-
+*/
 #endif

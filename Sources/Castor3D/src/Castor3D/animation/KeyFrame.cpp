@@ -72,14 +72,14 @@ void KeyFrame :: Update( float p_time, float p_weight)
 
 
 
-bool KeyFrame :: Write( File & p_file)const
+bool KeyFrame :: Write( FileIO & p_file)const
 {
 	return true;
 }
 
 
 
-bool KeyFrame :: Read( File & p_file)
+bool KeyFrame :: Read( FileIO & p_file)
 {
 	return true;
 }

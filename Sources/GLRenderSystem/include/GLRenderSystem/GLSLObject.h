@@ -23,7 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	class GLShaderObject : public ShaderObject
+	class CS3D_GL_API GLShaderObject : public ShaderObject
 	{
 	protected:
 		friend class GLShaderProgram;
@@ -71,7 +71,7 @@ namespace Castor3D
 	};
 
 	//! Class holding Vertex Shader
-	class GLVertexShader : public GLShaderObject
+	class CS3D_GL_API GLVertexShader : public GLShaderObject
 	{
 	public:
 		/**
@@ -85,7 +85,7 @@ namespace Castor3D
 	};
 
 	//! Class holding Fragment Shader
-	class GLFragmentShader : public GLShaderObject
+	class CS3D_GL_API GLFragmentShader : public GLShaderObject
 	{
 	public:
 		/**
@@ -100,7 +100,7 @@ namespace Castor3D
 	};
 
 	//! Class holding Geometry Shader
-	class GLGeometryShader : public GLShaderObject
+	class CS3D_GL_API GLGeometryShader : public GLShaderObject
 	{
 	public:
 		/**

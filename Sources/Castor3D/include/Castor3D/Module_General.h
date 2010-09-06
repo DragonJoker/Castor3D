@@ -42,7 +42,8 @@ namespace General
 {
 	namespace Utils
 	{
-		class File;
+		class FileIO;
+		class FileStream;
 	}
 }
 

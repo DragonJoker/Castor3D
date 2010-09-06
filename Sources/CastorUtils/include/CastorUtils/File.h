@@ -80,21 +80,17 @@ namespace General
 		virtual ~FileBase(){}
 
 		virtual bool IsOk()=0;
-
 		virtual void CopyToString( String & p_strOut);
-
 		virtual void Seek( long p_lOffset, OffsetMode p_eOrigin)=0;
-
 		void Seek( long p_lPosition)
 		{
 			Seek( p_lPosition, eBeginning);
 		}
-
 		virtual long Tell()=0;
-
 		virtual bool ReadLine( String & p_toRead, size_t p_size)=0;
-
 		virtual bool ReadWord( String & p_toRead)=0;
+		virtual bool WriteLine( const String & p_strLine)=0;
+		virtual bool Print( size_t p_uiMaxSize, const char * p_pFormat, ...)=0;
 
 //		virtual int Scanf( const char * p_pFormat, size_t p_uiCount, ...)=0;
 
@@ -112,21 +108,21 @@ namespace General
 		inline const String & GetFileName()const { return m_strFileName; }
 	};
 
-	class File : public FileBase
+	class FileIO : public FileBase
 	{
 	private:
 		FILE * m_file;
 
 	public:
-		File( const String & p_fileName, OpenMode p_mode);
-		virtual ~File();
+		FileIO( const String & p_fileName, OpenMode p_mode);
+		virtual ~FileIO();
 
 		template <typename T>
 		int Write( const T & p_toWrite)
 		{
 			int l_iReturn = 0;
 
-			if (m_eMode == eWrite && m_file != NULL)
+			if (m_eMode == eWrite && IsOk())
 			{
 				l_iReturn = fwrite( & p_toWrite, sizeof( T), 1, m_file) * sizeof( T);
 			}
@@ -139,7 +135,7 @@ namespace General
 		{
 			int l_iReturn = 0;
 
-			if (m_eMode == eRead && m_file != NULL)
+			if (m_eMode == eRead && IsOk())
 			{
 				size_t l_uiSize = sizeof( T);
 				l_iReturn = fread( & p_toRead, sizeof( T), 1, m_file) * sizeof( T);
@@ -153,7 +149,7 @@ namespace General
 		{
 			int l_iReturn = 0;
 
-			if (m_eMode == eWrite && m_file != NULL)
+			if (m_eMode == eWrite && IsOk())
 			{
 				l_iReturn = fwrite( p_toWrite, sizeof( T), p_count, m_file) * sizeof( T);
 			}
@@ -166,12 +162,31 @@ namespace General
 		{
 			int l_iReturn = 0;
 
-			if (m_eMode == eRead && m_file != NULL)
+			if (m_eMode == eRead && IsOk())
 			{
 				l_iReturn = fread( p_toRead, sizeof( T), p_count, m_file) * sizeof( T);
 			}
 
 			return l_iReturn;
+		}
+
+		template <typename T>
+		FileIO & operator << ( const T & p_toWrite)
+		{
+			String l_strLine;
+			l_strLine << p_toWrite;
+			WriteArray<char>( l_strLine.char_str(), l_strLine.size());
+			return *this;
+		}
+
+		template <typename T>
+		FileIO & operator >> ( T & p_toRead)
+		{
+			size_t l_uiSize = sizeof( T);
+			char l_pBuffer[l_uiSize];
+			ReadArray<char>( l_pBuffer, l_uiSize);
+			memccpy( & p_toRead, l_pBuffer, 1, sizeof( T));
+			return * this;
 		}
 
 		virtual bool IsOk()
@@ -181,7 +196,7 @@ namespace General
 
 		virtual void Seek( long p_lOffset, OffsetMode p_eOrigin=eBeginning)
 		{
-			if (m_file != NULL)
+			if (IsOk())
 			{
 				switch (p_eOrigin)
 				{
@@ -202,7 +217,7 @@ namespace General
 
 		virtual long Tell()
 		{
-			if (m_file != NULL)
+			if (IsOk())
 			{
 				return ftell( m_file);
 			}
@@ -212,7 +227,7 @@ namespace General
 
 		virtual bool ReadLine( String & p_toRead, size_t p_size)
 		{
-			if (m_eMode == eRead && m_file != NULL)
+			if (m_eMode == eRead && IsOk())
 			{
 				char * l_line = new char[p_size];
 				fgets( l_line, p_size, m_file);
@@ -245,19 +260,20 @@ namespace General
 
 		virtual bool ReadWord( String & p_toRead)
 		{
-			if (m_eMode == eRead && m_file != NULL)
+			if (m_eMode == eRead && IsOk())
 			{
 				p_toRead.clear();
-				char l_cChar = 0;
+				char l_cChar = ' ';
 
-				while ( ! feof( m_file) && l_cChar != ' ')
+				while ( ! feof( m_file) && (l_cChar == ' ' || l_cChar == '\n' || l_cChar == '\r' || l_cChar == '\t'))
 				{
 					l_cChar = getc( m_file);
+				}
 
-					if ( ! feof( m_file))
-					{
-						p_toRead += l_cChar;
-					}
+				while ( ! feof( m_file) && l_cChar != ' ' && l_cChar != '\n' && l_cChar != '\r' && l_cChar != '\t')
+				{
+					p_toRead += l_cChar;
+					l_cChar = getc( m_file);
 				}
 
 				if ( ! feof( m_file))
@@ -268,6 +284,20 @@ namespace General
 
 			return false;
 		}
+
+		virtual bool WriteLine( const String & p_strLine)
+		{
+			bool l_bReturn = false;
+
+			if (m_eMode == eWrite && IsOk())
+			{
+				l_bReturn = WriteArray<char>( p_strLine.char_str(), p_strLine.size()) == p_strLine.size();
+			}
+
+			return l_bReturn;
+		}
+
+		virtual bool Print( size_t p_uiMaxSize, const char * p_pFormat, ...);
 
 //		inline int Scanf( const char * p_pFormat, size_t p_uiCount, ...);
 	};
@@ -286,7 +316,7 @@ namespace General
 		{
 			int l_iReturn = 0;
 
-			if (m_mode == eWrite)
+			if (m_mode == eWrite && IsOk())
 			{
 				const char * l_pBuffer = reinterpret_cast<const char *>( & p_toWrite);
 				size_t l_uiSize = sizeof( T);
@@ -311,7 +341,7 @@ namespace General
 		{
 			int l_iReturn = 0;
 
-			if (m_mode == eRead)
+			if (m_mode == eRead && IsOk())
 			{
 				char * l_pBuffer = reinterpret_cast<char *>( & p_toRead);
 				size_t l_uiSize = sizeof( T);
@@ -335,7 +365,7 @@ namespace General
 		{
 			int l_iReturn = 0;
 
-			if (m_mode == eWrite)
+			if (m_eMode == eWrite && IsOk())
 			{
 				const char * l_pBuffer = reinterpret_cast<const char *>( p_toWrite);
 				size_t l_uiSize = sizeof( T) * p_count;
@@ -359,7 +389,7 @@ namespace General
 		{
 			int l_iReturn = 0;
 
-			if (m_eMode == eRead)
+			if (m_eMode == eRead && IsOk())
 			{
 				char * l_pBuffer = reinterpret_cast<char *>( p_toRead);
 				size_t l_uiSize = sizeof( T) * p_count;
@@ -379,14 +409,14 @@ namespace General
 		}
 
 		template <typename T>
-		File & operator << ( const T & p_toWrite)
+		FileStream & operator << ( const T & p_toWrite)
 		{
 			*m_file << p_toWrite;
 			return *this;
 		}
 
 		template <typename T>
-		File & operator >> ( T & p_toRead)
+		FileStream & operator >> ( T & p_toRead)
 		{
 			*m_file >> p_toRead;
 			return * this;
@@ -399,7 +429,7 @@ namespace General
 
 		virtual void Seek( long p_lOffset, OffsetMode p_eOrigin=eBeginning)
 		{
-			if (m_eMode == eRead)
+			if (m_eMode == eRead && IsOk())
 			{
 				switch (p_eOrigin)
 				{
@@ -437,7 +467,7 @@ namespace General
 
 		virtual long Tell()
 		{
-			if (m_eMode == eRead)
+			if (m_eMode == eRead && IsOk())
 			{
 				return m_file->tellg();
 			}
@@ -449,7 +479,7 @@ namespace General
 
 		virtual bool ReadLine( String & p_toRead, size_t p_size)
 		{
-			if (m_eMode == eRead)
+			if (m_eMode == eRead && IsOk())
 			{
 				char * l_line = new char[p_size];
 				m_file->getline( l_line, p_size, '\n');
@@ -472,7 +502,7 @@ namespace General
 
 		virtual bool ReadWord( String & p_toRead)
 		{
-			if (m_eMode == eRead)
+			if (m_eMode == eRead && IsOk())
 			{
 				char l_word[256];
 				*m_file >> l_word;
@@ -482,6 +512,20 @@ namespace General
 
 			return false;
 		}
+
+		virtual bool WriteLine( const String & p_strLine)
+		{
+			bool l_bReturn = false;
+
+			if (m_eMode == eWrite && IsOk())
+			{
+				l_bReturn = WriteArray<char>( p_strLine.char_str(), p_strLine.size()) == p_strLine.size();
+			}
+
+			return l_bReturn;
+		}
+
+		virtual bool Print( size_t p_uiMaxSize, const char * p_pFormat, ...);
 
 //		virtual int Scanf( const char * p_pFormat, size_t p_uiCount, ...);
 	};

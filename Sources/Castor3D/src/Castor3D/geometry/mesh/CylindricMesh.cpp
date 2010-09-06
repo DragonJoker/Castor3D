@@ -42,7 +42,7 @@ void CylindricMesh :: GeneratePoints()
 		return;
 	}
 
-	Submesh * l_submesh = CreateSubmesh( 2);
+	Submesh * l_submesh = CreateSubmesh( 3);
 
 	//CALCUL DE LA POSITION DES POINTS
 	float angleRotation = M_PI_MULT_2 / m_nbFaces;
@@ -98,7 +98,7 @@ void CylindricMesh :: GeneratePoints()
 		l_v1 = l_topArc->GetVertex( i);
 		l_v2 = pTopCenter_l;
 		l_v3 = l_topArc->GetVertex( i + 1);
-		l_pFace = l_submesh->AddFace( l_v2, l_v1, l_v3, 0);
+		l_pFace = l_submesh->AddFace( l_v2, l_v1, l_v3, 2);
 		SetTexCoordV1( l_pFace, 0.5, 0.5);
 		SetTexCoordV2( l_pFace, 1.0f - (1.0f + l_v1->x / m_radius) / 2.0f, (1.0f + l_v1->z / m_radius) / 2.0f);
 		SetTexCoordV3( l_pFace, 1.0f - (1.0f + l_v3->x / m_radius) / 2.0f, (1.0f + l_v3->z / m_radius) / 2.0f);
@@ -115,7 +115,7 @@ void CylindricMesh :: GeneratePoints()
 	l_v1 = l_topArc->GetVertex( m_nbFaces - 1);
 	l_v2 = pTopCenter_l;
 	l_v3 = l_topArc->GetVertex( 0);
-	l_pFace = l_submesh->AddFace( l_v2, l_v1, l_v3, 0);
+	l_pFace = l_submesh->AddFace( l_v2, l_v1, l_v3, 2);
 	SetTexCoordV1( l_pFace, 0.5, 0.5);
 	SetTexCoordV2( l_pFace, 1.0f - (1.0f + l_v1->x / m_radius) / 2.0f, (1.0f + l_v1->z / m_radius) / 2.0f);
 	SetTexCoordV3( l_pFace, 1.0f - (1.0f + l_v3->x / m_radius) / 2.0f, (1.0f + l_v3->z / m_radius) / 2.0f);

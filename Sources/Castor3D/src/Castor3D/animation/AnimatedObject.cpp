@@ -22,12 +22,12 @@ AnimatedObject :: ~AnimatedObject()
 {
 }
 
-bool AnimatedObject :: Write( File & p_file)const
+bool AnimatedObject :: Write( FileIO & p_file)const
 {
 	return true;
 }
 
-bool AnimatedObject :: Read( File & p_file)
+bool AnimatedObject :: Read( FileIO & p_file)
 {
 	return true;
 }

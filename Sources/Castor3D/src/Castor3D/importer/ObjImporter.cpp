@@ -26,7 +26,7 @@ ObjImporter :: ObjImporter()
 		m_pFile( NULL),
 		m_objectHasUV( false),
 		m_pCurrentSubmesh( NULL),
-//		m_pSmoothingGroup( NULL),
+		m_pSmoothingGroup( NULL),
 		m_bReadingFaces( false),
 		m_bReadingVertex( true),
 		m_iNbTexCoords( 0)
@@ -35,7 +35,7 @@ ObjImporter :: ObjImporter()
 
 bool ObjImporter :: _import()
 {
-	m_pFile = new File( m_fileName, File::eRead);
+	m_pFile = new FileIO( m_fileName, FileIO::eRead);
 
 	m_pScene = SceneManager::GetSingleton().GetElementByName( "MainScene");
 
@@ -133,7 +133,7 @@ void ObjImporter :: _readObjFile()
 
 			if (l_strSection == C3D_T( "mtllib"))
 			{
-				_readMatFile( l_strValue);
+				_readMatFileIO( l_strValue);
 			}
 			else if (l_strSection == C3D_T( "usemtl"))
 			{
@@ -182,7 +182,7 @@ void ObjImporter :: _readObjFile()
 			m_bReadingVertex = false;
 			m_bReadingFaces = true;
 
-			m_pFile = new File( m_fileName, File::eRead);
+			m_pFile = new FileIO( m_fileName, FileIO::eRead);
 		}
 	}
 
@@ -211,11 +211,11 @@ void ObjImporter :: _applyMaterial( const String & p_strMaterialName)
 	}
 }
 
-void ObjImporter :: _readMatFile( const String & p_strFileName)
+void ObjImporter :: _readMatFileIO( const String & p_strFileName)
 {
 	if ( ! m_bReadingFaces)
 	{
-		m_pMatFile = new File( m_filePath + p_strFileName, File::eRead);
+		m_pMatFile = new FileIO( m_filePath + p_strFileName, FileIO::eRead);
 
 		String l_strLine;
 		Char l_char = 0;
@@ -363,7 +363,7 @@ void ObjImporter :: _readSubmeshInfo( const String & p_strLine)
 				m_pCurrentSubmesh = m_mapSubmeshes.find( l_arraySplitted[1])->second;
 			}
 
-//			m_pSmoothingGroup = NULL;
+			m_pSmoothingGroup = NULL;
 		}
 	}
 }
@@ -376,16 +376,6 @@ void ObjImporter :: _readGroupInfo( const String & p_strLine)
 
 		if (l_arraySplitted.size() > 1)
 		{
-			if (m_mapSubmeshes.find( l_arraySplitted[1]) == m_mapSubmeshes.end())
-			{
-				_createSubmesh();
-			}
-			else
-			{
-				m_pCurrentSubmesh = m_mapSubmeshes.find( l_arraySplitted[1])->second;
-			}
-
-/*
 			if (m_mapSmoothGroups.find( l_arraySplitted[1]) == m_mapSmoothGroups.end())
 			{
 				if (m_pCurrentSubmesh == NULL)
@@ -402,7 +392,6 @@ void ObjImporter :: _readGroupInfo( const String & p_strLine)
 				m_pSmoothingGroup = m_mapSmoothGroups.find( l_arraySplitted[1])->second;
 				m_pCurrentSubmesh = m_mapSmoothGroupSubmesh.find( l_arraySplitted[1])->second;
 			}
-*/
 		}
 	}
 }
@@ -411,8 +400,8 @@ void ObjImporter :: _readVertexInfo( const String & p_strLine)
 {
 	if ( ! m_bReadingFaces)
 	{
-		ImportedVertex3 l_vertex = {0};
-		ImportedVertex2 l_coords = {0};
+		Point3D<float> l_vertex;
+		Point2D<float> l_coords;
 		String l_line;
 		Char l_char = 0;
 		Char l_cDump = 0;
@@ -448,11 +437,6 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 		return;
 	}
 
-	if (m_pCurrentSubmesh == NULL)
-	{
-		_createSubmesh();
-	}
-/*
 	if (m_pSmoothingGroup == NULL)
 	{
 		m_pSmoothingGroup = m_pCurrentSubmesh->AddSmoothingGroup();
@@ -462,7 +446,7 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 			m_mapSmoothGroupSubmesh.insert( std::map <String, Submesh *>::value_type( "-1", m_pCurrentSubmesh));
 		}
 	}
-*/
+
 	String l_line;
 
 //	Log::LogMessage( "Line : " + p_strLine);
@@ -534,7 +518,7 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 			l_pV3 = m_pCurrentSubmesh->GetVertex( l_iIndex);
 		}
 
-		if ((l_pFace = m_pCurrentSubmesh->AddFace( l_pV1, l_pV2, l_pV3, /*m_pSmoothingGroup->m_idGroup - 1*/1)) != NULL)
+		if ((l_pFace = m_pCurrentSubmesh->AddFace( l_pV1, l_pV2, l_pV3, m_pSmoothingGroup->m_idGroup - 1)) != NULL)
 		{
 			if (m_objectHasUV)
 			{
@@ -595,7 +579,7 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 					l_pV3 = m_pCurrentSubmesh->GetVertex( l_iIndex);
 				}
 
-				if ((l_pFace = m_pCurrentSubmesh->AddFace( l_pV1, l_pV2, l_pV3, /*m_pSmoothingGroup->m_idGroup - 1*/1)) != NULL)
+				if ((l_pFace = m_pCurrentSubmesh->AddFace( l_pV1, l_pV2, l_pV3, m_pSmoothingGroup->m_idGroup - 1)) != NULL)
 				{
 					if (m_objectHasUV)
 					{

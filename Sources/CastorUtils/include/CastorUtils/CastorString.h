@@ -36,20 +36,13 @@ namespace General
 	typedef std::stringstream StringStream;
 
 	class d_dll String : public std::string
-	{
-	public:
-		typedef std::string MyString;
-		typedef std::wstring MyUnString;
 #else
 	typedef wchar_t Char;
 	typedef std::wstringstream StringStream;
 
 	class d_dll String : public std::wstring
-	{
-	public:
-		typedef std::wstring MyString;
-		typedef std::string MyUnString;
 #endif
+	{
 	public:
 		String();
 		String( const char * p_pChars);
@@ -63,11 +56,6 @@ namespace General
 		const char * char_str()const;
 		const wchar_t * wchar_str()const;
 
-		String substr( size_t p_begin, size_t p_count = String::npos )const
-		{
-			return MyString::substr( p_begin, p_count );
-		}
-
 		size_t find( const std::wstring & p_strToFind, size_t p_uiOffset=0)const;
 		size_t find_first_of( const std::wstring & p_strToFind, size_t p_uiOffset=0)const;
 		size_t find_last_of( const std::wstring & p_strToFind, size_t p_uiOffset=npos)const;
@@ -80,6 +68,8 @@ namespace General
 		size_t find_first_not_of( wchar_t p_strToFind, size_t p_uiOffset=0)const;
 		size_t find_last_not_of( wchar_t p_strToFind, size_t p_uiOffset=npos)const;
 
+		bool operator ==( const wchar_t * p_pToCompare)const;
+
 		size_t find( const std::string & p_strToFind, size_t p_uiOffset=0)const;
 		size_t find_first_of( const std::string & p_strToFind, size_t p_uiOffset=0)const;
 		size_t find_last_of( const std::string & p_strToFind, size_t p_uiOffset=npos)const;
@@ -91,6 +81,8 @@ namespace General
 		size_t find_last_of( char p_strToFind, size_t p_uiOffset=npos)const;
 		size_t find_first_not_of( char p_strToFind, size_t p_uiOffset=0)const;
 		size_t find_last_not_of( char p_strToFind, size_t p_uiOffset=npos)const;
+
+		bool operator ==( const char * p_pToCompare)const;
 
 		StringArray Split( const String & p_delims, unsigned int p_maxSplits=10)const;
 		String & Trim( bool p_bLeft=true, bool p_bRight=true);
@@ -115,227 +107,18 @@ namespace General
 
 		void Replace( const String & p_find, const String & p_replaced);
 
-		inline String & operator+=( const String & p_rhs )
-		{
-			MyString::operator+=( p_rhs );
-			return *this;
-		}
-
-		inline String & operator+=( const std::string & p_rhs )
-		{
-			MyString::operator+=( String( p_rhs));
-			return *this;
-		}
-
-		inline String & operator+=( const std::wstring & p_rhs )
-		{
-			MyString::operator+=( String( p_rhs));
-			return *this;
-		}
-
-		inline String & operator+=( const char * p_rhs )
-		{
-			MyString::operator+=( String( p_rhs));
-			return *this;
-		}
-
-		inline String & operator+=( const wchar_t * p_rhs )
-		{
-			MyString::operator+=( String( p_rhs));
-			return *this;
-		}
-
-#ifndef _UNICODE
-		void fromWString( const std::wstring & p_strWideString);
-		void toWString( std::wstring & p_strWideString)const;
-#else
-		void fromString( const std::string & p_strString);
-		void toString( std::string & p_strString)const;
-#endif
-
 	private:
-		mutable MyUnString m_unstring;
+#ifndef _UNICODE
+		void _fromWString( const std::wstring & p_strWideString);
+		void _toWString( std::wstring & p_strWideString)const;
+#else
+		void _fromString( const std::string & p_strString);
+		void _toString( std::string & p_strString)const;
+#endif
 	};
 
-	inline bool operator==( const String & p_lhs, const String & p_rhs )
-	{
-		return String::MyString( p_lhs ) == String::MyString( p_rhs );
-	}
-
-	inline bool operator==( const String & p_lhs, const std::string & p_rhs )
-	{
-		return p_lhs == String( p_rhs );
-	}
-
-	inline bool operator==( const String & p_lhs, const std::wstring & p_rhs )
-	{
-		return p_lhs == String( p_rhs );
-	}
-
-	inline bool operator==( const std::string & p_lhs, const String & p_rhs )
-	{
-		return String( p_lhs ) == p_rhs;
-	}
-
-	inline bool operator==( const std::wstring & p_lhs, const String & p_rhs )
-	{
-		return String( p_lhs ) == p_rhs;
-	}
-
-	inline bool operator==( const String & p_lhs, const char * p_rhs )
-	{
-		return p_lhs == String( p_rhs );
-	}
-
-	inline bool operator==( const String & p_lhs, const wchar_t * p_rhs )
-	{
-		return p_lhs == String( p_rhs );
-	}
-
-	inline bool operator==( const char * p_lhs, const String & p_rhs )
-	{
-		return String( p_lhs ) == p_rhs;
-	}
-
-	inline bool operator==( const wchar_t * p_lhs, const String & p_rhs )
-	{
-		return String( p_lhs ) == p_rhs;
-	}
-
-	template< size_t N >
-	inline bool operator==( const String & p_lhs, const char p_rhs[N] )
-	{
-		return p_lhs == String( p_rhs );
-	}
-
-	template< size_t N >
-	inline bool operator==( const String & p_lhs, const wchar_t p_rhs[N] )
-	{
-		return p_lhs == String( p_rhs );
-	}
-
-	template< size_t N >
-	inline bool operator==( const char p_lhs[N], const String & p_rhs )
-	{
-		return String( p_lhs ) == p_rhs;
-	}
-
-	template< size_t N >
-	inline bool operator==( const wchar_t p_lhs[N], const String & p_rhs )
-	{
-		return String( p_lhs ) == p_rhs;
-	}
-
-	inline bool operator!=( const String & p_lhs, const String & p_rhs )
-	{
-		return String::MyString( p_lhs ) != String::MyString( p_rhs );
-	}
-
-	inline bool operator!=( const String & p_lhs, const std::string & p_rhs )
-	{
-		return p_lhs != String( p_rhs );
-	}
-
-	inline bool operator!=( const String & p_lhs, const std::wstring & p_rhs )
-	{
-		return p_lhs != String( p_rhs );
-	}
-
-	inline bool operator!=( const std::string & p_lhs, const String & p_rhs )
-	{
-		return String( p_lhs ) != p_rhs;
-	}
-
-	inline bool operator!=( const std::wstring & p_lhs, const String & p_rhs )
-	{
-		return String( p_lhs ) != p_rhs;
-	}
-
-	inline bool operator!=( const String & p_lhs, const char * p_rhs )
-	{
-		return p_lhs != String( p_rhs );
-	}
-
-	inline bool operator!=( const String & p_lhs, const wchar_t * p_rhs )
-	{
-		return p_lhs != String( p_rhs );
-	}
-
-	inline bool operator!=( const char * p_lhs, const String & p_rhs )
-	{
-		return String( p_lhs ) != p_rhs;
-	}
-
-	inline bool operator!=( const wchar_t * p_lhs, const String & p_rhs )
-	{
-		return String( p_lhs ) != p_rhs;
-	}
-
-	inline String operator+( const String & p_lhs, const String & p_rhs )
-	{
-		String l_tmp( p_lhs );
-		l_tmp += p_rhs;
-		return l_tmp;
-	}
-
-	inline String operator+( const String & p_lhs, const std::string & p_rhs )
-	{
-		String l_tmp( p_lhs );
-		l_tmp += p_rhs;
-		return l_tmp;
-	}
-
-	inline String operator+( const String & p_lhs, const std::wstring & p_rhs )
-	{
-		String l_tmp( p_lhs );
-		l_tmp += p_rhs;
-		return l_tmp;
-	}
-
-	inline String operator+( const String & p_lhs, const char * p_rhs )
-	{
-		String l_tmp( p_lhs );
-		l_tmp += p_rhs;
-		return l_tmp;
-	}
-
-	inline String operator+( const String & p_lhs, const wchar_t * p_rhs )
-	{
-		String l_tmp( p_lhs );
-		l_tmp += p_rhs;
-		return l_tmp;
-	}
-
-	inline String operator+( const std::string & p_lhs, const String & p_rhs )
-	{
-		String l_tmp( p_lhs );
-		l_tmp += p_rhs;
-		return l_tmp;
-	}
-
-	inline String operator+( const std::wstring & p_lhs, const String & p_rhs )
-	{
-		String l_tmp( p_lhs );
-		l_tmp += p_rhs;
-		return l_tmp;
-	}
-
-	inline String operator+( const char * p_lhs, const String & p_rhs )
-	{
-		String l_tmp( p_lhs );
-		l_tmp += p_rhs;
-		return l_tmp;
-	}
-
-	inline String operator+( const wchar_t * p_lhs, const String & p_rhs )
-	{
-		String l_tmp( p_lhs );
-		l_tmp += p_rhs;
-		return l_tmp;
-	}
-
 	template <typename T>
-	inline String ToString( const T & p_tValue)
+	String ToString( const T & p_tValue)
 	{
 		String l_strReturn;
 		l_strReturn.Parse( p_tValue);

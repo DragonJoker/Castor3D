@@ -23,7 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	class GLSubmeshRenderer : public SubmeshRenderer
+	class CS3D_GL_API GLSubmeshRenderer : public SubmeshRenderer
 	{
 	protected:
 		GLRenderSystem * m_glRenderSystem;

@@ -11,6 +11,47 @@
 class CSMainFrame : public wxFrame
 {
 private:
+	enum eMENU_BAR_IDs
+	{
+		mbExit,
+		mbSaveScene,
+		mLoadScene,
+		mbNewGeometry,
+		mbNewCone,
+		mbNewCube,
+		mbNewCylinder,
+		mbNewIcosaedron,
+		mbNewPlane,
+		mbNewSphere,
+		mbNewTorus,
+		mbNewProjection,
+		mbNewMaterial,
+		mbGeometries,
+		mbMaterials,
+		mbSelectGeometries,
+		mbSelectPoints,
+		mbCloneSelection,
+		mbSubdividePNTriangles,
+		mbSubdivideLoop,
+		mbSelectNone,
+		mbSelect,
+		mbModify,
+		mbNone,
+		mbRender
+	};
+
+	enum eFRAME_IDs
+	{
+		mainFrame,
+		frame3d,
+		frame2d,
+		mfNewGeometry,
+		mfNewMaterial,
+		mfGeometries,
+		mfMaterials
+	};
+
+private:
 	CSRenderPanel * m_3dFrame;
 	CSRenderPanel * m_2dFrameHD;
 	CSRenderPanel * m_2dFrameBG;
@@ -75,6 +116,7 @@ private:
 	void _onNewPlane				( wxCommandEvent & event);
 	void _onNewSphere				( wxCommandEvent & event);
 	void _onNewTorus				( wxCommandEvent & event);
+	void _onNewProjection			( wxCommandEvent & event);
 	void _onNewMaterial				( wxCommandEvent & event);
 	void _onShowGeometriesList		( wxCommandEvent & event);
 	void _onShowMaterialsList		( wxCommandEvent & event);

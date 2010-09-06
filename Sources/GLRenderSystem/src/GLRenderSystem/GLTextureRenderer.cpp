@@ -22,7 +22,7 @@ bool GLTextureRenderer :: Initialise()
 {
 //	glPixelStorei( GL_UNPACK_ALIGNMENT, 1);
 	glGenTextures( 1, & m_texGLName);
-	CheckGLError( "GLTextureRenderer :: Apply - glGenTextures");
+	CheckGLError( "GLTextureRenderer :: Initialise - glGenTextures");
 
 	if (m_texGLName == 0)
 	{
@@ -31,21 +31,28 @@ bool GLTextureRenderer :: Initialise()
 	}
 	int l_textureType = GLRenderSystem::GetTextureDimension( m_target->GetTextureType());
 	glBindTexture( l_textureType, m_texGLName);
+	CheckGLError( "GLTextureRenderer :: Initialise - glBindTexture");
 
 	glTexParameteri( l_textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	CheckGLError( "GLTextureRenderer :: Initialise - glTexParameteri - 1");
 	glTexParameteri( l_textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	CheckGLError( "GLTextureRenderer :: Initialise - glTexParameteri - 2");
 
 	glTexParameteri( l_textureType, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	CheckGLError( "GLTextureRenderer :: Initialise - glTexParameteri - 1");
 	glTexParameteri( l_textureType, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	CheckGLError( "GLTextureRenderer :: Initialise - glTexParameteri - 2");
 /**/
 	glTexImage2D( l_textureType, 0, 4, m_target->GetWidth(),
 				  m_target->GetHeight(), 0, GL_RGBA, 
 				  GL_UNSIGNED_BYTE, m_target->GetImagePixels());
+	CheckGLError( "GLTextureRenderer :: Initialise - glTexImage2D");
 /**/
 /**/
 	gluBuild2DMipmaps( l_textureType, GL_RGBA, m_target->GetWidth(),
 					   m_target->GetHeight(), GL_RGBA, GL_UNSIGNED_BYTE,
 					   m_target->GetImagePixels());
+	CheckGLError( "GLTextureRenderer :: Initialise - gluBuild2DMipmaps");
 	return true;
 /**/
 }

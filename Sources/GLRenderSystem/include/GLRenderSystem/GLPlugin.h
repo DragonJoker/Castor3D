@@ -26,10 +26,10 @@ namespace Castor3D
 	class GLRendererDriver : public RendererDriver
 	{
 	  public:
-		virtual ~GLRendererDriver() {}
-
-		virtual const String & GetName() const;
-		virtual RenderSystem * CreateRenderSystem();
+		CS3D_GL_API virtual ~GLRendererDriver() {}
+	    
+		CS3D_GL_API virtual const String & GetName() const;
+		CS3D_GL_API virtual RenderSystem * CreateRenderSystem();
 	};
 }
 

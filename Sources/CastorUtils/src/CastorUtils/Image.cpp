@@ -6,14 +6,18 @@ using namespace General::Resource;
 
 //*********************************************************************************************
 
-Image * ImageLoader :: LoadFromFile( const String & p_file)
+Image * ImageLoader :: LoadFromFileIO( const String & p_file)
 {
+	String l_strPath = p_file;
+	l_strPath.Replace( "\\", "/");
 	fipImage * l_image = new fipImage();
-	if ( ! l_image->load( p_file.char_str()))
+
+	if ( ! l_image->load( l_strPath.char_str()))
 	{
 		delete l_image;
 		return NULL;
 	}
+
 	l_image->convertTo32Bits();
 	unsigned int l_width = l_image->getWidth();
 	unsigned int l_height = l_image->getHeight();
@@ -29,6 +33,7 @@ Image * ImageLoader :: LoadFromFile( const String & p_file)
 		l_buffer->Add( l_pixels[l_pix * 4 + 0]);
 		l_buffer->Add( l_pixels[l_pix * 4 + 3]);
 	}
+
 	delete l_image;
 
 	Image * l_newImage = new Image( p_file, l_buffer);
@@ -73,7 +78,7 @@ Image * ImageManager :: CreateImage( const String & p_name, const String & p_pat
 	else
 	{
 		ImageLoader l_loader;
-		l_image = l_loader.LoadFromFile( p_path);
+		l_image = l_loader.LoadFromFileIO( p_path);
 		if (l_image != NULL)
 		{
 			l_image->SetName( p_name);

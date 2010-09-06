@@ -39,12 +39,9 @@ namespace Castor3D
 	*/
 	typedef enum AnimationState
 	{
-		//! Playing animation state
-		AnimationPlaying,
-		//! Stopped animation state
-		AnimationStopped,
-		//! Paused animation state
-		AnimationPaused
+		AnimationPlaying,	//!< Playing animation state
+		AnimationStopped,	//!< Stopped animation state
+		AnimationPaused		//!< Paused animation state
 	} AnimationState;
 
 	//! KeyFrame pointer map, sorted by time index

@@ -28,12 +28,18 @@ void GLPassRenderer :: Apply( Submesh * p_submesh, DrawType p_displayMode)
 	glEnable( GL_BLEND);
 	CheckGLError( "GLPassRenderer :: Apply - glEnable( GL_BLEND)");
 	glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	CheckGLError( "GLPassRenderer :: Apply - glBlendFunc");
 
 	glMaterialfv( GL_FRONT_AND_BACK, GL_AMBIENT, m_target->GetAmbient());
+	CheckGLError( "GLPassRenderer :: Apply - glMaterialfv( GL_AMBIENT)");
 	glMaterialfv( GL_FRONT_AND_BACK, GL_DIFFUSE, m_target->GetDiffuse());
+	CheckGLError( "GLPassRenderer :: Apply - glMaterialfv( GL_DIFFUSE)");
 	glMaterialfv( GL_FRONT_AND_BACK, GL_SPECULAR, m_target->GetSpecular());
+	CheckGLError( "GLPassRenderer :: Apply - glMaterialfv( GL_SPECULAR)");
 	glMaterialfv( GL_FRONT_AND_BACK, GL_EMISSION, m_target->GetEmissive());
+	CheckGLError( "GLPassRenderer :: Apply - glMaterialfv( GL_EMISSION)");
 	glMaterialf( GL_FRONT_AND_BACK, GL_SHININESS, m_target->GetShininess());
+	CheckGLError( "GLPassRenderer :: Apply - glMaterialf( GL_SHININESS)");
 
 	if ( ! m_target->IsDoubleFace())
 	{

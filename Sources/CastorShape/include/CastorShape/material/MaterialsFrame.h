@@ -20,7 +20,7 @@ public:
 	CSMaterialsFrame( wxWindow * parent, const wxString & title,
 					  const wxPoint & pos = wxDefaultPosition,
 					  const wxSize & size = wxSize( 500, 500),
-					  wxWindowID id = mfMaterials,
+					  wxWindowID id = wxID_ANY,
 					  long style = wxCAPTION | wxSYSTEM_MENU | wxCLOSE_BOX | wxFRAME_FLOAT_ON_PARENT | wxFRAME_NO_TASKBAR,
 					  wxString name = C3D_T( "MaterialsFrame"));
 	~CSMaterialsFrame();

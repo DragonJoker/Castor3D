@@ -51,11 +51,11 @@ namespace General
 	class ResourceLoader
 	{
 	public:
-		T * LoadFromFile( const String & p_file)
+		T * LoadFromFileIO( const String & p_file)
 		{
 			LoaderError( "Le loader enregistré pour ce format ne prend pas en charge l'importation");
 		}
-		bool SaveToFile( const String & p_file, T * p_resource)
+		bool SaveToFileIO( const String & p_file, T * p_resource)
 		{
 			LoaderError( "Le loader enregistré pour ce format ne prend pas en charge l'exportation");
 		}

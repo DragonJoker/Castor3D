@@ -70,6 +70,7 @@ namespace Castor3D
 
 	// Smoothing Group Parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_SmoothingGroupFace)
+	DECLARE_ATTRIBUTE_PARSER( Parser_SmoothingGroupFaceUV)
 	DECLARE_ATTRIBUTE_PARSER( Parser_SmoothingGroupEnd)
 
 	// Material Parsers
@@ -82,6 +83,9 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassSpecular)
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassEmissive)
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassShininess)
+	DECLARE_ATTRIBUTE_PARSER( Parser_PassAlpha)
+	DECLARE_ATTRIBUTE_PARSER( Parser_PassBaseTexColour)
+	DECLARE_ATTRIBUTE_PARSER( Parser_PassDoubleFace)
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassTextureUnit)
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassShader)
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassEnd)

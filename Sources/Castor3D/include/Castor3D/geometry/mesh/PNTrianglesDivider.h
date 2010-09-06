@@ -22,8 +22,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	//! PN Triangles algorithm specialisation of Subdiviser.
 	/*!
-	PN Triangles algorithm specialisation of Subdiviser.
+	This class implements the PN Triangles subdivision algorithm
 	\author Sylvain DOREMUS
 	\date 12/03/2010
 	*/

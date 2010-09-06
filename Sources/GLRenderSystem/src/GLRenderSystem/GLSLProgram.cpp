@@ -173,7 +173,7 @@ void GLShaderProgram :: RetrieveLinkerLog( String & strLog)
 	}
 	if (m_linkerLog!=0)
 	{
-		strLog = m_linkerLog;
+		strLog.assign( m_linkerLog);
 	}
 	else
 	{

@@ -69,8 +69,8 @@ void UniformVariableDialog :: _onOk( wxCommandEvent & event)
 {
 	if (m_pUniformVariable != NULL)
 	{
-		m_pUniformVariable->SetName( makeString( m_pEditName->GetValue()));
-		m_pUniformVariable->SetValue( makeString( m_pEditValue->GetValue()));
+		m_pUniformVariable->SetName( m_pEditName->GetValue().c_str());
+		m_pUniformVariable->SetValue( m_pEditValue->GetValue().c_str());
 	}
 
 	EndDialog( wxID_OK);

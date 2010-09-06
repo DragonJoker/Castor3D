@@ -56,7 +56,7 @@ END_EVENT_TABLE()
 
 void MaterialPanel :: _onMaterialName( wxCommandEvent & event)
 {
-	String l_name = makeString( m_materialName->GetValue());
+	String l_name = m_materialName->GetValue().c_str();
 	m_material->SetName( l_name);
 	m_material->Initialise();
 	wxGetApp().GetMainFrame()->ShowPanels();

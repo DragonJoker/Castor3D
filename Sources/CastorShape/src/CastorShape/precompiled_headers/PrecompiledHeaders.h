@@ -73,6 +73,7 @@ using namespace General::Templates;
 #include <Castor3D/scene/SceneManager.h>
 #include <Castor3D/scene/Scene.h>
 #include <Castor3D/scene/SceneNode.h>
+#include <Castor3D/scene/SceneFileParser.h>
 #include <Castor3D/light/Module_Light.h>
 #include <Castor3D/light/Light.h>
 #include <Castor3D/light/PointLight.h>

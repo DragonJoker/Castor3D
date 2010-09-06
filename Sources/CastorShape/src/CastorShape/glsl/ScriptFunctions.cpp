@@ -270,7 +270,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Arr_Get)
 
 	GET_AND_EXEC_TWO_PARAM( NodeValueBaseArray, arr, int, l_index);
 
-	if (l_index >= 0 && l_index < arr.size())
+	if (l_index >= 0 && l_index < int( arr.size()))
 	{
 		caller->CopyValue_Ref( arr[l_index]);
 	}

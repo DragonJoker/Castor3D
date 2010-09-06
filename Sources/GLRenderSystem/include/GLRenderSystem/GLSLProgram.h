@@ -23,7 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	class GLShaderProgram : public ShaderProgram
+	class CS3D_GL_API GLShaderProgram : public ShaderProgram
 	{
 	private:   
 		GLuint		m_programObject;
@@ -71,8 +71,8 @@ namespace Castor3D
 
 		/*! This method simply calls glBindAttribLocation for the current ProgramObject
 		\warning NVidia implementation is different than the GLSL standard: GLSL attempts to eliminate aliasing
-		of vertex attributes but this is integral to NVIDIAï¿½s hardware approach and necessary for maintaining
-		compatibility with existing OpenGL applications that NVIDIA customers rely on. NVIDIAï¿½s GLSL 
+		of vertex attributes but this is integral to NVIDIA’s hardware approach and necessary for maintaining
+		compatibility with existing OpenGL applications that NVIDIA customers rely on. NVIDIA’s GLSL 
 		implementation therefore does not allow built-in vertex attributes to collide with a generic vertex
 		attributes that is assigned to a particular vertex  attribute index with glBindAttribLocation.
 		For example, you should not use gl_Normal (a built-in vertex attribute) and also use 

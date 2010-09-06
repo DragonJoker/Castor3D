@@ -23,7 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {	
-	class GLTextureRenderer : public TextureRenderer
+	class CS3D_GL_API GLTextureRenderer : public TextureRenderer
 	{
 		friend class GLRenderSystem;
 
@@ -32,7 +32,8 @@ namespace Castor3D
 
 	public:
 		GLTextureRenderer( GLRenderSystem * p_rs)
-			:	TextureRenderer( p_rs)
+			:	TextureRenderer( p_rs),
+				m_texGLName( 0)
 		{}
 		virtual ~GLTextureRenderer(){ Cleanup(); }
 

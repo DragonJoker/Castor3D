@@ -20,6 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	//! Frame event class
 	/*!
 	The interface which represents a frame event. Basically a frame event as a FrameEventType to know when it must be applied.
 	It can be applied, so the function must be implemented by children classes
@@ -51,6 +52,7 @@ namespace Castor3D
 		inline FrameEventType GetType() { return m_type; }
 	};
 
+	//! User event synchronisation class
 	/*!
 	The manager of the frame events. It can add frame events and applies them at the wanted times
 	\author Sylvain DOREMUS

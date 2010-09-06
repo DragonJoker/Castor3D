@@ -22,8 +22,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	//! Edge representation
 	/*!
-	Specialisation of Edge for the Loop subdivision algorithm. Allows to create a vertex on this edge
+	An edge is defined between 2 vertices in a same face
 	\author Sylvain DOREMUS
 	\date 12/03/2010
 	*/
@@ -43,10 +44,26 @@ namespace Castor3D
 		int m_refCount;
 
 	public:
+		/**
+		 * Constructor
+		 *@param p_v1 : [in] The 1st vector
+		 *@param p_v2 : [in] The 2nd vector
+		 *@param p_f1 : [in] The 1st face of the edge
+		 *@param p_toDivide : [in] Tells if the edge is to be divided
+		 */
 		Edge( Vector3f * p_v1, Vector3f * p_v2, Face * p_f1, bool p_toDivide);
+		/**
+		 * Destructor
+		 */
 		~Edge();
-
+		/**
+		 * Adds a face to the edge (max 2 faces, 1 at each side of the edge)
+		 */
 		void AddFace( Face * p_face);
+		/**
+		 * Divides the edge id est adds a vertex in a portion of the edge determined by p_value (0.5 = middle).
+		 * Doesn't divide the faces
+		 */
 		Vector3f * Divide( Submesh * p_submesh, float p_value);
 
 	public:
@@ -62,8 +79,14 @@ namespace Castor3D
 		inline void	SetToDelete	() { m_toDelete = true; }
 	};
 
-	typedef std::map <Vector3f *, Edge *> EdgePtrMap;
+	typedef std::map <Vector3f *, Edge *> EdgePtrMap;	//!< Map of edges, ordered by vertex
 
+	//! Face edges representation
+	/*!
+	Holds the three edges constituted by a face
+	\author Sylvain DOREMUS
+	\date 25/08/2010
+	*/
 	class FaceEdges
 	{
 	private:
@@ -75,11 +98,38 @@ namespace Castor3D
 		Edge * m_edgeCA;
 
 	public:
+		/**
+		 * Constructor
+		 *@param p_submesh : [in] The submesh holding the face
+		 *@param p_sgIndex : [in] The smoothing group index in the submesh
+		 *@param p_face : [in] The face
+		 *@param p_existingEdges : [in/out] The map of already existing edges, sorted by vertex
+		 *@param p_vertexNeighbourhood : [in/out] The list of vertices neighbours
+		 *@param p_allEdges : [in/out] All the edges
+		 */
 		FaceEdges( Submesh * p_submesh, size_t p_sgIndex, Face * p_face, 
 				   std::map <Vector3f *, EdgePtrMap> & p_existingEdges,
 				   std::map <Vector3f *, int> & p_vertexNeighbourhood,
 				   std::set <Edge *> & p_allEdges);
+		/**
+		 * Constructor
+		 *@param p_submesh : [in] The submesh holding the face
+		 *@param p_sgIndex : [in] The smoothing group index in the submesh
+		 *@param p_face : [in] The face
+		 *@param l_ab : [in] Edge between 1st and 2nd vertex
+		 *@param l_bc : [in] Edge between 2nd and 3rd vertex
+		 *@param l_ca : [in] Edge between 3rd and 1st vertex
+		 */
 		FaceEdges( Submesh * p_submesh, size_t p_sgIndex, Face * p_face, Edge * l_ab, Edge * l_bc, Edge * l_ca);
+		/**
+		 * Divides the edges held by this object, creates needed faces to complete the division
+		 *@param p_value : [in] The weight of division (if 0.5, divides all edges in the middle)
+		 *@param p_existingEdges : [in/out] The map of already existing edges, sorted by vertex
+		 *@param p_vertexNeighbourhood : [in/out] The list of vertices neighbours
+		 *@param p_allEdges : [in/out] All the edges
+		 *@param p_newFaces : [in/out] The array of newly created faces. All faces created by the subdivision are put in this array
+		 *@param p_newVertices : [in/out] The array of newly created vertices. All vertices created by the subdivision are put in this array
+		 */
 		void Divide( float p_value, std::map <Vector3f *, EdgePtrMap> & p_existingEdges,
 					 std::map <Vector3f *, int> & p_vertexNeighbourhood,
 					 std::set <Edge *> & p_allEdges, std::vector <FaceEdges *> & p_newFaces,
@@ -98,6 +148,7 @@ namespace Castor3D
 		inline Edge * GetEdgesBC() { return m_edgeBC; }
 		inline Edge * GetEdgesCA() { return m_edgeCA; }
 	};
+	//! Subdivisers main class
 	/*!
 	Abstract class for subdivisers, contains the header for the main Subdivide function
 	\author Sylvain DOREMUS
@@ -106,14 +157,23 @@ namespace Castor3D
 	class Subdiviser
 	{
 	protected:
-		Submesh * m_submesh;
-		Vector3fPtrArray * m_vertex;
-		SmoothGroupPtrArray * m_smoothGroups;
+		Submesh * m_submesh;					//!< The submesh being subdivided
+		Vector3fPtrArray * m_vertex;			//!< All the vertices
+		SmoothGroupPtrArray * m_smoothGroups;	//!< The submesh smoothing groups
 
 	public:
+		/**
+		 * Constructor
+		 *@param p_submesh : [in] The submesh to subdivide
+		 */
 		Subdiviser( Submesh * p_submesh);
+		/**
+		 * Destructor
+		 */
 		virtual ~Subdiviser(){}
-
+		/**
+		 * Main subdivision function, must be implemented by children classes
+		 */
 		virtual void Subdivide( Vector3f * p_center)=0;
 
 	protected:

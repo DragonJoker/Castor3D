@@ -14,11 +14,11 @@
 using namespace Castor3D;
 //*********************************************************************************************
 
-Material * MaterialLoader :: LoadFromFile( const String & p_file)
+Material * MaterialLoader :: LoadFromFileIO( const String & p_file)
 {
 	Material * l_pReturn = NULL;
 	bool l_bResult;
-	File l_file( p_file, File::eRead);
+	FileIO l_file( p_file, FileIO::eRead);
 
 	size_t l_nameLength = 0;
 	l_bResult = (l_file.Read<size_t>( l_nameLength) == sizeof( size_t));
@@ -73,28 +73,35 @@ Material * MaterialLoader :: LoadFromFile( const String & p_file)
 	return l_pReturn;
 }
 
-bool MaterialLoader :: SaveToFile( const String & p_file, Material * p_material)
+bool MaterialLoader :: SaveToFileIO( FileIO * p_pFile, Material * p_material)
 {
-	File l_file( p_file + C3D_T( "/") + p_material->GetName() + C3D_T( ".csmat"), File::eWrite);
-
-	size_t l_nameLength = p_material->GetName().size();
-	bool l_bReturn = (l_file.Write<size_t>( l_nameLength) == sizeof( size_t));
+	bool l_bReturn = p_pFile->WriteLine( "material " + p_material->GetName() + "\n");
 
 	if (l_bReturn)
 	{
-		l_bReturn = (l_file.WriteArray<Char>( p_material->GetName().c_str(), l_nameLength) == l_nameLength);
+		l_bReturn = p_pFile->WriteLine( "{\n");
 	}
 
 	size_t l_nbPasses = p_material->GetNbPasses();
-
-	if (l_bReturn)
-	{
-		l_bReturn = (l_file.Write<size_t>( l_nbPasses) == sizeof( size_t));
-	}
+	bool l_bFirst = true;
 
 	for (size_t i = 0 ; i < l_nbPasses && l_bReturn ; i++)
 	{
-		l_bReturn = p_material->GetPass( i)->Write( l_file);
+		if (l_bFirst)
+		{
+			l_bFirst = false;
+		}
+		else
+		{
+			p_pFile->WriteLine( "\n");
+		}
+
+		l_bReturn = p_material->GetPass( i)->Write( p_pFile);
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_pFile->WriteLine( "}\n");
 	}
 
 	return l_bReturn;

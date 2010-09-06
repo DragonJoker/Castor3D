@@ -63,8 +63,9 @@ const char * String :: char_str()const
 
 const wchar_t * String :: wchar_str()const
 {
-	_toWString( m_unstring);
-	return m_unstring.c_str();
+	std::wstring l_strReturn;
+	_toWString( l_strReturn);
+	return l_strReturn.c_str();
 }
 
 size_t String :: find( const std::wstring & p_strToFind, size_t p_uiOffset)const
@@ -150,6 +151,12 @@ size_t String :: find_last_not_of( wchar_t p_char, size_t p_uiOffset)const
 	std::wstring l_strReturn;
 	l_strReturn.assign( l_buffer);
 	return find_last_not_of( l_strReturn, p_uiOffset);
+}
+
+bool String :: operator ==( const wchar_t * p_pToCompare)const
+{
+	String l_strToCompare( p_pToCompare);
+	return std::operator ==( *this, l_strToCompare);
 }
 
 size_t String :: find( const std::string & p_strToFind, size_t p_uiOffset)const
@@ -255,7 +262,7 @@ String :: String()
 String :: String( const char * p_pChars)
 	:	std::wstring()
 {
-	fromString( p_pChars);
+	_fromString( p_pChars);
 }
 
 String :: String( const wchar_t * p_pChars)
@@ -273,7 +280,7 @@ String :: String( char p_char)
 	char l_buffer[2];
 	l_buffer[0] = p_char;
 	l_buffer[1] = 0;
-	fromString( l_buffer);
+	_fromString( l_buffer);
 }
 
 String :: String( wchar_t p_char)
@@ -288,7 +295,7 @@ String :: String( wchar_t p_char)
 String :: String( const std::string & p_strString)
 	:	std::wstring()
 {
-	fromString( p_strString);
+	_fromString( p_strString);
 }
 
 String :: String( const std::wstring & p_strString)
@@ -303,8 +310,11 @@ const Char * String :: c_str()const
 
 const char * String :: char_str()const
 {
-	toString( m_unstring);
-	return m_unstring.c_str();
+	std::string l_strReturn;
+
+	_toString( l_strReturn);
+
+	return l_strReturn.c_str();
 }
 
 const wchar_t * String :: wchar_str()const
@@ -315,35 +325,35 @@ const wchar_t * String :: wchar_str()const
 size_t String :: find( const std::string & p_strToFind, size_t p_uiOffset)const
 {
 	std::string l_strReturn;
-	toString( l_strReturn);
+	_toString( l_strReturn);
 	return l_strReturn.find( p_strToFind, p_uiOffset);
 }
 
 size_t String :: find_first_of( const std::string & p_strToFind, size_t p_uiOffset)const
 {
 	std::string l_strReturn;
-	toString( l_strReturn);
+	_toString( l_strReturn);
 	return l_strReturn.find_first_of( p_strToFind, p_uiOffset);
 }
 
 size_t String :: find_last_of( const std::string & p_strToFind, size_t p_uiOffset)const
 {
 	std::string l_strReturn;
-	toString( l_strReturn);
+	_toString( l_strReturn);
 	return l_strReturn.find_last_of( p_strToFind, p_uiOffset);
 }
 
 size_t String :: find_first_not_of( const std::string & p_strToFind, size_t p_uiOffset)const
 {
 	std::string l_strReturn;
-	toString( l_strReturn);
+	_toString( l_strReturn);
 	return l_strReturn.find_first_not_of( p_strToFind, p_uiOffset);
 }
 
 size_t String :: find_last_not_of( const std::string & p_strToFind, size_t p_uiOffset)const
 {
 	std::string l_strReturn;
-	toString( l_strReturn);
+	_toString( l_strReturn);
 	return l_strReturn.find_last_not_of( p_strToFind, p_uiOffset);
 }
 
@@ -395,6 +405,12 @@ size_t String :: find_last_not_of( char p_char, size_t p_uiOffset)const
 	std::string l_strReturn;
 	l_strReturn.assign( l_buffer);
 	return find_last_not_of( l_strReturn, p_uiOffset);
+}
+
+bool String :: operator ==( const char * p_pToCompare)const
+{
+	String l_strToCompare( p_pToCompare);
+	return std::operator ==( *this, l_strToCompare);
 }
 
 size_t String :: find( const std::wstring & p_strToFind, size_t p_uiOffset)const
@@ -472,7 +488,7 @@ size_t String :: find_last_not_of( wchar_t p_char, size_t p_uiOffset)const
 	return std::wstring::find_last_not_of( l_strReturn, p_uiOffset);
 }
 
-void String :: fromString( const std::string & p_strSring)
+void String :: _fromString( const std::string & p_strSring)
 {
 	resize( p_strSring.length());
 
@@ -481,7 +497,7 @@ void String :: fromString( const std::string & p_strSring)
     std::use_facet <std::ctype <wchar_t> > ( loc).widen( & p_strSring[0], & p_strSring[p_strSring.length()], & operator[]( 0));
 }
 
-void String :: toString( std::string & p_strString)const
+void String :: _toString( std::string & p_strString)const
 {
 	p_strString.clear();
 	p_strString.resize( length());
@@ -491,6 +507,11 @@ void String :: toString( std::string & p_strString)const
     std::use_facet <std::ctype <wchar_t> > ( loc).narrow( & operator[]( 0), & operator[]( length()), '?', & p_strString[0]);
 }
 #endif
+
+bool String :: operator ==( const Char * p_pToCompare)const
+{
+	return std::operator ==( *this, p_pToCompare);
+}
 
 StringArray String :: Split( const String & p_delims, unsigned int p_maxSplits)const
 {

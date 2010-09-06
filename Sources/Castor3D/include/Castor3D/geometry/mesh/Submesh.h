@@ -136,11 +136,12 @@ namespace Castor3D
 		 */
 		Vector3f * AddVertex( float x, float y, float z);
 		Vector3f * AddVertex( Vector3f * p_v);
+		Vector3f * AddVertex( float * p_v);
 		/**
 		 * Creates and adds a face to the wanted smoothgroup
 		 *@param a : [in] The first face's vertex
-		 *@param b : [in] The first face's vertex
-		 *@param c : [in] The first face's vertex
+		 *@param b : [in] The second face's vertex
+		 *@param c : [in] The third face's vertex
 		 *@param p_sgIndex : [in] The wanted smoothing group index
 		 *@return The created face
 		 */
@@ -148,12 +149,32 @@ namespace Castor3D
 		/**
 		 * Creates and adds a face to the wanted smoothgroup
 		 *@param a : [in] The first face's vertex index
-		 *@param b : [in] The first face's vertex index
-		 *@param c : [in] The first face's vertex index
+		 *@param b : [in] The second face's vertex index
+		 *@param c : [in] The third face's vertex index
 		 *@param p_sgIndex : [in] The wanted smoothing group index
 		 *@return The created face
 		 */
 		Face * AddFace( size_t a, size_t b, size_t c, size_t p_sgIndex);
+		/**
+		 * Creates and adds a quad face to the wanted smoothgroup
+		 *@param a : [in] The first face's vertex
+		 *@param b : [in] The second face's vertex
+		 *@param c : [in] The third face's vertex
+		 *@param d : [in] The fourth face's vertex
+		 *@param p_sgIndex : [in] The wanted smoothing group index
+		 *@return The created face
+		 */
+		void AddQuadFace( Vector3f * a, Vector3f * b, Vector3f * c, Vector3f * d, size_t p_sgIndex);
+		/**
+		 * Creates and adds a quad face to the wanted smoothgroup
+		 *@param a : [in] The first face's vertex index
+		 *@param b : [in] The second face's vertex index
+		 *@param c : [in] The third face's vertex index
+		 *@param d : [in] The fourth face's vertex index
+		 *@param p_sgIndex : [in] The wanted smoothing group index
+		 *@return The created face
+		 */
+		void AddQuadFace( size_t a, size_t b, size_t c, size_t d, size_t p_sgIndex);
 		/**
 		 * Adds a smoothing group to the submesh
 		 */
@@ -197,13 +218,13 @@ namespace Castor3D
 		 *@param p_file : [in] The file to write in
 		 *@return true if successful, false if not
 		 */
-		virtual bool Write( General::Utils::File & p_file)const;
+		virtual bool Write( General::Utils::FileIO & p_file)const;
 		/**
 		 * Reads the submesh from a file
 		 *@param p_file : [in] The file to read from
 		 *@return true if successful, false if not
 		 */
-		virtual bool Read( General::Utils::File & p_file);
+		virtual bool Read( General::Utils::FileIO & p_file);
 		/**
 		 * 
 		 */

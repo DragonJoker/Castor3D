@@ -1,5 +1,5 @@
 #include "PrecompiledHeader.h"
-
+/*
 #include "importer/Module_Importer.h"
 
 #include "importer/BspImporter.h"
@@ -34,7 +34,7 @@ BspImporter :: BspImporter()
 
 bool BspImporter :: _import()
 {
-	m_pFile = new File( m_fileName, File::eRead);
+	m_pFile = new FileIO( m_fileName, FileIO::eRead);
 	size_t l_uiSlashIndex = 0;
 
 	if (m_fileName.find_last_of( C3D_T( "\\")) != String::npos)
@@ -172,3 +172,4 @@ void BspImporter::_convertToMesh( Mesh * p_mesh, BSPTexture * p_textures)
 		l_submesh->SetMaterial( l_materials[l_bspFace.m_textureID]);
 	}
 }
+*/

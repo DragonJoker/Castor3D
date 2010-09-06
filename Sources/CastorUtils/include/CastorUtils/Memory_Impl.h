@@ -18,6 +18,4 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GENERAL_MEMORY_H_IMPL___
 #define ___GENERAL_MEMORY_H_IMPL___
 
-#include "Mutex.h"
-
 #endif

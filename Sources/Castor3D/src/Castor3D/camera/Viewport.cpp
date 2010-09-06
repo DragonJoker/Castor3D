@@ -57,7 +57,7 @@ Vector3f Viewport :: GetDirection( const Point2D<int> & p_mouse)
 	return m_renderer->GetDirection( p_mouse);
 }
 
-bool Viewport :: Write( General::Utils::File & p_file)const
+bool Viewport :: Write( General::Utils::FileIO & p_file)const
 {
 	if ( ! p_file.Write<int>( m_type))
 	{
@@ -108,7 +108,7 @@ bool Viewport :: Write( General::Utils::File & p_file)const
 	return true;
 }
 
-bool Viewport :: Read( General::Utils::File & p_file)
+bool Viewport :: Read( General::Utils::FileIO & p_file)
 {
 	if ( ! p_file.Read<ProjectionType>( m_type))
 	{

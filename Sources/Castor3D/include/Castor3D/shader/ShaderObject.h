@@ -73,13 +73,13 @@ namespace Castor3D
 		}
 		/**
 		 * Loads a shader file.
-		 *@param filename The name of the ASCII file containing the shader.
+		 *@param p_filename : [in] The name of the ASCII file containing the shader.
 		 *@return returns 0 if everything is ok.\n -1: File not found\n -2: Empty File\n -3: no memory
 		 */
 		virtual int Load( const String & p_filename)=0;
 		/**
 		 * Load program from null-terminated char array.
-		 *@param program Address of the memory containing the shader program.
+		 *@param p_program : [in] Address of the memory containing the shader program.
 		 */
 		virtual int LoadFromMemory( const String & p_program)=0;
 		/**

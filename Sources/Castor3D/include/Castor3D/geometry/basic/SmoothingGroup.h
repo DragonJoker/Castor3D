@@ -46,8 +46,10 @@ namespace Castor3D
 		/**
 		 * Computes the vertexes normals for a given number of vertexes
 		 *@param p_nbVertex : [in] The number of vertex for which we generate normals
+		 *@param p_normals : [in] The faces normals for all vertex
+		 *@param p_tangents : [in] The faces tangents for all vertex
 		 */
-		void SetNormals( size_t p_nbVertex, Vector3fPtrArray & p_normals, Vector3fPtrArray & p_tangents);
+		void SetNormals( size_t p_nbVertex, const Vector3fPtrArray & p_normals, const Vector3fPtrArray & p_tangents);
 	};
 }
 

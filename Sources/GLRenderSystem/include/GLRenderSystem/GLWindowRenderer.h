@@ -23,7 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	class GLWindowRenderer : public WindowRenderer
+	class CS3D_GL_API GLWindowRenderer : public WindowRenderer
 	{
 	protected:
 		GLContext * m_context;

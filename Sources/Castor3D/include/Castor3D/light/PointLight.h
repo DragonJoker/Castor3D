@@ -76,16 +76,9 @@ namespace Castor3D
 		void SetAttenuation	( const Vector3f & p_attenuation);
 		/**
 		 * Writes the PointLight in a file
-		 *@param p_file : the file to write in
+		 *@param p_pFile : the file to write in
 		 */
-		virtual bool Write( General::Utils::File & p_file)const;
-		/**
-		* Reads the PointLight from a file
-		*@param p_file : [in] The file to read from
-		*@param p_scene : [in] The scene to find the node to attach thid light to
-		*@param p_index : [in] The index of this light
-		*/
-		virtual bool Read( General::Utils::File & p_file, Scene * p_scene);
+		virtual bool Write( General::Utils::FileIO * p_pFile)const;
 
 	public:
 		/**

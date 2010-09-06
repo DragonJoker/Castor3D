@@ -35,9 +35,7 @@ void * DynamicLibrary :: GetFunction( const Char * p_name)
 	if (m_library != NULL)
 	{
 #ifndef __GNUG__
-		std::string l_name;
-		String( p_name).toString( l_name);
-		return GetProcAddress( static_cast <HMODULE> ( m_library), l_name.c_str());
+		return GetProcAddress( static_cast <HMODULE> ( m_library), String( p_name).char_str());
 #else
 		return dlsym( m_library, p_name);
 #endif

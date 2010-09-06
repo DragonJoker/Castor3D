@@ -124,16 +124,9 @@ namespace Castor3D
 		float * Get4x4RotationMatrix();
 		/**
 		 * Writes the spot light in a file
-		 *@param p_file : a pointer to file to write in
+		 *@param p_pFile : a pointer to file to write in
 		 */
-		virtual bool Write( General::Utils::File & p_file)const;
-		/**
-		 * Reads the spot light from a file
-		 *@param p_file : a pointer to file to read from
-		*@param p_scene : [in] The scene to find the node to attach this light to
-		*@param p_index : [in] The index of this light
-		 */
-		virtual bool Read( General::Utils::File & p_file, Scene * p_scene);
+		virtual bool Write( General::Utils::FileIO * p_pFile)const;
 
 	public:
 		/**

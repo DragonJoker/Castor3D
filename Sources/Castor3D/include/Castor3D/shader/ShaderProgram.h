@@ -58,6 +58,9 @@ namespace Castor3D
 	public:
 		/**
 		 * Constructor
+		 *@param p_vertexShaderFile : [in] The vertex shader file
+		 *@param p_fragmentShaderFile : [in] The fragment shader file
+		 *@param p_geometryShaderFile : [in] The geometry shader file
 		 */
 		ShaderProgram( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile);
 		ShaderProgram();
@@ -80,10 +83,8 @@ namespace Castor3D
 		 */
 		virtual void Cleanup();
 		/** 
-		 * Adds a Vertex, Fragment or Geometry Program 
-		 *@param p_shaderObject : [in] The shader object.
+		 * Initialises the program
 		 */
-//		void AddShader( ShaderObject * p_shaderObject);
 		virtual void Initialise();
 		/**
 		 * Links all Shaders held by this program
@@ -105,17 +106,17 @@ namespace Castor3D
 		 * Loads and sets the vertex program to the one contained in the file
 		 *@param p_strFile : The file address
 		 */
-		void SetVertexFile( const String & p_strFile);
+		void SetVertexFileIO( const String & p_strFile);
 		/**
 		 * Loads and sets the fragment program to the one contained in the file
 		 *@param p_strFile : The file address
 		 */
-		void SetFragmentFile( const String & p_strFile);
+		void SetFragmentFileIO( const String & p_strFile);
 		/**
 		 * Loads and sets the geometry program to the one contained in the file
 		 *@param p_strFile : The file address
 		 */
-		void SetGeometryFile( const String & p_strFile);
+		void SetGeometryFileIO( const String & p_strFile);
 
 	public:
 		inline void 	UsesGeometryShader		( bool p_use)		{ m_usesGeometryShader = p_use;}

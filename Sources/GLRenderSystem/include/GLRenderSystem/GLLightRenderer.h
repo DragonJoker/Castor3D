@@ -23,7 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	class GLLightRenderer : public LightRenderer
+	class CS3D_GL_API GLLightRenderer : public LightRenderer
 	{
 		friend class GLRenderSystem;
 

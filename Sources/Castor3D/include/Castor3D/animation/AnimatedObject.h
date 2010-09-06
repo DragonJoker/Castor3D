@@ -53,12 +53,12 @@ namespace Castor3D
 		 * Writes the animation in a file
 		 *@param p_file : the file to write in
 		 */
-		bool Write( General::Utils::File & p_file)const;
+		bool Write( General::Utils::FileIO & p_file)const;
 		/**
 		 * Reads the animation from a file
 		 @param p_file : the file to read from
 		 */
-		bool Read( General::Utils::File & p_file);
+		bool Read( General::Utils::FileIO & p_file);
 		/**
 		 * Updates the animations of the object, given the time since the last frame, the animation weight and the animation scale
 		 *@param p_tslf : time elapsed since the last frame

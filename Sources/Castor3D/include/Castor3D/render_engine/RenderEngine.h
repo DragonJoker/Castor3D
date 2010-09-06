@@ -20,16 +20,33 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	//! The render engine
+	/*!
+	Used to render scene in an image. To be implemented
+	\author Sylvain DOREMUS
+	\date 25/08/2010
+	*/
 	class CS3D_API RenderEngine
 	{
 	protected:
-		Scene * m_pScene;
-		String m_strFileName;
+		Scene * m_pScene;		//!< The scene to render
+		String m_strFileName;	//!< The file to write in
 
 	public:
+		/**
+		 * Constructor
+		 *@param p_strFileName : [in] The file path
+		 *@param p_pScene : [in] The scene to render
+		 */
 		RenderEngine( const String & p_strFileName, Scene * p_pScene);
+		/**
+		 * Destructor
+		 */
 		~RenderEngine();
-
+		/**
+		 * Renders the scene
+		 *@return true if successful, false if not
+		 */
 		bool Draw();
 	};
 }

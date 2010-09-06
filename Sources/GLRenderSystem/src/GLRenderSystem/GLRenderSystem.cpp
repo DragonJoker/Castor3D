@@ -318,8 +318,8 @@ bool GLRenderSystem :: HasGLSLSupport()
 		for (int i = 0 ; i < 8 ; i++)
 		{
 			GLLightRenderer::sm_pLightShaders.push_back( new GLShaderProgram());
-			GLLightRenderer::sm_pLightShaders[i]->SetVertexFile( GLLightRenderer::sm_vertexShader);
-			GLLightRenderer::sm_pLightShaders[i]->SetFragmentFile( GLLightRenderer::sm_fragmentShader);
+			GLLightRenderer::sm_pLightShaders[i]->SetVertexFileIO( GLLightRenderer::sm_vertexShader);
+			GLLightRenderer::sm_pLightShaders[i]->SetFragmentFileIO( GLLightRenderer::sm_fragmentShader);
 
 			Point3DUniformVariable<float> * l_pPosition = new Point3DUniformVariable<float>();
 			l_pPosition->SetName( "vPosition");

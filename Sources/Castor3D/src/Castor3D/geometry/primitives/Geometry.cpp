@@ -144,77 +144,29 @@ void Geometry :: Render( DrawType p_displayMode)
 
 
 
-bool Geometry :: Write( File & p_file)const
+bool Geometry :: Write( FileIO * p_pFile)const
 {
 	Log::LogMessage( C3D_T( "Writing Geometry ") + m_name);
 
-	if ( ! MovableObject::Write( p_file))
+	bool l_bReturn = p_pFile->WriteLine( "object " + m_name + "\n{\n");
+
+	if ( ! MovableObject::Write( p_pFile))
 	{
 		return false;
 	}
 
-	if ( ! p_file.Write<NormalsMode>( m_normalsMode))
+	if (l_bReturn)
 	{
-		return false;
+		l_bReturn = p_pFile->WriteLine( "\tmesh\n\t{\n\t\ttype custom\n\t\tfile " + m_mesh->GetName() + ".csmesh\n\t}\n");
 	}
 
-	size_t l_meshNameLength = m_mesh->GetName().size();
-	if ( ! p_file.Write<size_t>( l_meshNameLength))
+	if (l_bReturn)
 	{
-		return false;
-	}
-
-	if ( ! p_file.WriteArray<Char>( m_mesh->GetName().c_str(), l_meshNameLength))
-	{
-		return false;
+		l_bReturn = p_pFile->WriteLine( "}\n");
 	}
 
 	return true;
 }
-
-
-
-bool Geometry :: Read( File & p_file, Scene * p_scene)
-{
-	if ( ! MovableObject::Read( p_file, p_scene))
-	{
-		return false;
-	}
-
-	if ( ! p_file.Read<NormalsMode>( m_normalsMode))
-	{
-		return false;
-	}
-
-	size_t l_nameLength = 0;
-	if ( ! p_file.Read<size_t>( l_nameLength))
-	{
-		return false;
-	}
-	Char * l_meshName = new Char[l_nameLength+1];
-	if ( ! p_file.ReadArray<Char>( l_meshName, l_nameLength))
-	{
-		delete [] l_meshName;
-		return false;
-	}
-	l_meshName[l_nameLength] = 0;
-	m_mesh = MeshManager::GetSingletonPtr()->GetElementByName( l_meshName);
-	if (m_mesh != NULL)
-	{
-		Log::LogMessage( C3D_T( "Mesh found"));
-	}
-	else
-	{
-		Log::LogMessage( C3D_T( "Mesh %s doesn't exist"), l_meshName);
-	}
-	delete [] l_meshName;
-
-	m_dirty = true;
-
-	return true;
-}
-
-
 
 void Geometry :: Subdivide( unsigned int p_index, SubdivisionMode p_mode)
 {

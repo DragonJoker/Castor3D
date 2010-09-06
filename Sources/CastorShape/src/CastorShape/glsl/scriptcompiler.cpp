@@ -255,7 +255,7 @@ ScriptNode * ScriptCompiler :: CompileScript( const String & p_script)
 	return l_scriptNode;
 }
 
-ScriptNode * ScriptCompiler :: CompileScriptFile( const String & p_scriptFile)
+ScriptNode * ScriptCompiler :: CompileScriptFileIO( const String & p_scriptFile)
 {
 	m_strFileName = p_scriptFile;
 

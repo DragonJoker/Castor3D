@@ -129,12 +129,12 @@ namespace Castor3D
 		 * Writes the animation in a file
 		 *@param p_file : the file to write in
 		 */
-		bool Write( General::Utils::File & p_file)const;
+		bool Write( General::Utils::FileIO & p_file)const;
 		/**
 		 * Reads the animation from a file
 		 @param p_file : the file to read from
 		 */
-		bool Read( General::Utils::File & p_file);
+		bool Read( General::Utils::FileIO & p_file);
 		/**
 		 * Adds a moving object, with its wanted tranformations
 		 *@param p_object : the movable object to add

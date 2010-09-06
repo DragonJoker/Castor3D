@@ -150,7 +150,7 @@ void PassPanel :: _createPassPanel()
 	wxSize l_size = GetClientSize();
 	l_size.x -= 10;
 	l_size.y = 120;
-	new wxStaticBox( this, wxID_ANY, C3D_T( "Gï¿½nï¿½ral"), wxPoint( 5, 5), l_size);
+	new wxStaticBox( this, wxID_ANY, C3D_T( "Général"), wxPoint( 5, 5), l_size);
 
 	const float * l_ambientColour = m_pass->GetAmbient();
 	unsigned char l_ambientRed = (unsigned char)(l_ambientColour[0] * 255.0);
@@ -193,9 +193,10 @@ void PassPanel :: _createPassPanel()
 	m_blendButton->SetBackgroundColour( wxColour( l_red, l_green, l_blue));
 
 	new wxStaticText( this, wxID_ANY, C3D_T( "Exposant"), wxPoint( 20, 105));
-	Char l_shTxt[255];
-	Sprintf( l_shTxt, 255, C3D_T( "%f"), m_pass->GetShininess());
-	m_shininessText = new wxTextCtrl( this, eShininess, makeWxString( l_shTxt), wxPoint( 80, 100), wxSize( 40, 20), wxTE_PROCESS_ENTER | wxBORDER_SIMPLE);
+	Char * l_shTxt = new Char[255];
+	Sprintf( l_shTxt, 255, C3D_T( "%d"), m_pass->GetShininess());
+	m_shininessText = new wxTextCtrl( this, eShininess, l_shTxt, wxPoint( 80, 100), wxSize( 40, 20), wxTE_PROCESS_ENTER | wxBORDER_SIMPLE);
+	delete [] l_shTxt;
 
 	m_doubleFace = new wxCheckBox( this, eDoubleFace, C3D_T( "Double face"), wxPoint( 130, 100), wxSize( 100, 20), wxBORDER_SIMPLE);
 	m_doubleFace->SetValue( m_pass->IsDoubleFace());
@@ -538,10 +539,10 @@ void PassPanel :: _onTextureImage( wxCommandEvent & event)
 			delete m_selectedUnitImage;
 			m_selectedUnitImage = NULL;
 		}
-		SetMaterialImage( makeString( l_imagePath), 78, 78);
+		SetMaterialImage( l_imagePath.c_str(), 78, 78);
 		if (m_selectedTextureUnit)
 		{
-			m_selectedTextureUnit->SetTexture2D( makeString( l_imagePath));
+			m_selectedTextureUnit->SetTexture2D( l_imagePath.c_str());
 			MaterialManager::GetSingletonPtr()->SetToInitialise( m_pass->GetParent());
 			wxGetApp().GetMainFrame()->ShowPanels();
 		}

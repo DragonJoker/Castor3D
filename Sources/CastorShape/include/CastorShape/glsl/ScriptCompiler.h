@@ -138,7 +138,7 @@ namespace CastorShape
 
 	public:
 		ScriptNode *			GetProgramConstant( const String & p_variableName)const;
-		virtual ScriptNode *	CompileScriptFile( const String & p_scriptFile);
+		virtual ScriptNode *	CompileScriptFileIO( const String & p_scriptFile);
 		virtual ScriptNode *	CompileScript( const String & p_script);
 		UserFunction *			GetUserFunction( const String & p_functionName)const;// { return map::findOrNull( m_userFunctions, p_functionName); }
 

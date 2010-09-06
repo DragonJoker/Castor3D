@@ -23,6 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	//! Ray representation
 	/*!
 	A ray is an origin and a direction in 3D
 	\author Sylvain DOREMUS
@@ -41,10 +42,22 @@ namespace Castor3D
 		 *@param p_camera : [in] The camera from which to retrieve the ray
 		 */
 		Ray( const Point2D<int> & p_point, const Camera & p_camera);
+		/**
+		 * Constructor from mouse coordinates and a viewport
+		 *@param p_x : [in] The mouse x
+		 *@param p_y : [in] The mouse y
+		 *@param p_camera : [in] The camera from which to retrieve the ray
+		 */
 		Ray( int p_x, int p_y, const Camera & p_camera);
+		/**
+		 * Constructor from mouse coordinates and a viewport
+		 *@param p_rOrigin : [in] The origin of the ray
+		 *@param p_rDirection : [in] The The direction of the ray
+		 */
 		Ray( const Vector3f & p_rOrigin, const Vector3f & p_rDirection);
 		/**
 		 * Copy constructor
+		 *@param p_ray : [in] The ray to copy from
 		 */
 		Ray( const Ray & p_ray);
 		/**
@@ -54,8 +67,8 @@ namespace Castor3D
 		/**
 		* Tells if the ray intersects the given triangle of vertices
 		*@param p_v1 : [in] The first triangle vertex
-		*@param p_v1 : [in] The second triangle vertex
-		*@param p_v1 : [in] The third triangle vertex
+		*@param p_v2 : [in] The second triangle vertex
+		*@param p_v3 : [in] The third triangle vertex
 		*@return true if the ray intersects the triangle, false if not
 		*/
 		float Intersects( const Vector3f & p_v1, const Vector3f & p_v2, const Vector3f & p_v3);
@@ -67,7 +80,7 @@ namespace Castor3D
 		float Intersects( const Face & p_face);
 		/**
 		* Tells if the vertex is on the ray
-		*@param p_face : [in] The face to test
+		*@param p_vertex : [in] The face to test
 		*@return true if vertex is on the ray, false if not
 		*/
 		float Intersects( const Vector3f & p_vertex);
@@ -84,14 +97,17 @@ namespace Castor3D
 		*/
 		float Intersects( const Sphere & p_sphere);
 		/**
-		* Tells if the ray intersects the given Sphere
-		*@param p_sphere : [in] The sphere to test
+		* Tells if the ray intersects the given Geometry
+		*@param p_pGeometry : [in] The sphere to test
+		*@param p_ppFace : [out] The intersected face
+		*@param p_ppSubmesh : [out] The intersected submesh
 		*@return true if the ray intersects the face, false if not
 		*/
 		float Intersects( Geometry * p_pGeometry, Face ** p_ppFace, Submesh ** p_ppSubmesh);
 		/**
 		 * Projects the given vertex on the ray
 		 *@param p_vertex : [in] The vertex we want to project
+		 *@param p_result : [out] The projecion result
 		 *@return true if the vertex can be projected on the ray, false if not
 		 */
 		bool ProjectVertex( const Vector3f & p_vertex, Vector3f & p_result);

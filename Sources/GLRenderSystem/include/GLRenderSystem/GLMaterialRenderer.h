@@ -23,7 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	class GLPassRenderer : public PassRenderer
+	class CS3D_GL_API GLPassRenderer : public PassRenderer
 	{
 	public:
 		GLPassRenderer( GLRenderSystem * p_rs)

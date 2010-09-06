@@ -34,17 +34,14 @@ namespace General
 	public:
 		union
 		{
-			float pPtr[2];
-			struct
-			{
-				T x;
-				T y;
-			};
-			struct
-			{
-				T u;
-				T v;
-			};
+			T x;	//!< The X coordinate
+			T u;
+		};
+
+		union
+		{
+			T y;	//!< The Y coordinate
+			T v;
 		};
 
 	public:
@@ -122,25 +119,23 @@ namespace General
 	public:
 		union
 		{
-			float pPtr[3];
-			struct
-			{
-				T x;
-				T y;
-				T z;
-			};
-			struct
-			{
-				T u;
-				T v;
-				T w;
-			};
-			struct
-			{
-				T r;
-				T g;
-				T b;
-			};
+			T x;
+			T u;
+			T r;
+		};
+
+		union
+		{
+			T y;
+			T v;
+			T g;
+		};
+
+		union
+		{
+			T z;
+			T w;
+			T b;
 		};
 
 	public:
@@ -366,28 +361,30 @@ namespace General
 	public:
 		union
 		{
-			float pPtr[4];
-			struct
-			{
-				T x;
-				T y;
-				T z;
-				T w;
-			};
-			struct
-			{
-				T r;
-				T g;
-				T b;
-				T a;
-			};
-			struct
-			{
-				T left;
-				T top;
-				T right;
-				T bottom;
-			};
+			T x;
+			T r;
+			T left;
+		};
+
+		union
+		{
+			T y;
+			T g;
+			T top;
+		};
+
+		union
+		{
+			T z;
+			T b;
+			T right;
+		};
+
+		union
+		{
+			T w;
+			T a;
+			T bottom;
 		};
 
 	public:

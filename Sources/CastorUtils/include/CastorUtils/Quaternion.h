@@ -109,8 +109,8 @@ namespace General
 		void Normalise();
 		Quaternion Slerp( const Quaternion & p_target, float p_percent, bool p_shortestPath);
 
-		bool Write( Utils::File & p_file)const;
-		bool Read( Utils::File & p_file);
+		bool Write( Utils::FileIO & p_file)const;
+		bool Read( Utils::FileIO & p_file);
 	};
 	/**
 	 * Multiplies a quaternion by a scalar

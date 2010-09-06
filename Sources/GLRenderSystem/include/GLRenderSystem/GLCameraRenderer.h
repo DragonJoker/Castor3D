@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	class GLCameraRenderer : public CameraRenderer
+	class CS3D_GL_API GLCameraRenderer : public CameraRenderer
 	{
 	public:
 		GLCameraRenderer( RenderSystem * p_rs)
@@ -35,7 +35,7 @@ namespace Castor3D
 		virtual bool Select( Scene * p_scene, SelectionMode p_mode, void ** p_found, int x, int y);
 	};
 	
-	class GLViewportRenderer : public ViewportRenderer
+	class CS3D_GL_API GLViewportRenderer : public ViewportRenderer
 	{
 	public:
 		GLViewportRenderer( RenderSystem * p_rs)

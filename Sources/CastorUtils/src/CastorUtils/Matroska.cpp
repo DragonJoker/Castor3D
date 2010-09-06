@@ -1,5 +1,3 @@
-#if CASTOR_MKV
-
 #ifndef __GNUG__
 #	include <ebml/StdIOCallback.h>
 #	include <ebml/EbmlHead.h>
@@ -330,7 +328,7 @@ void MatroskaFile :: _initialiseSegment()
 	m_tracks = & GetChild <KaxTracks>( * m_segment);
 	m_tracks->EnableChecksum();
 
-	// crï¿½ation d'un bloc vide pour placer le seek head une fois le fichier rempli
+	// création d'un bloc vide pour placer le seek head une fois le fichier rempli
 	m_dummy.SetSize( 30000);
 	m_dummy.Render( * m_file, m_saveDefaults);
 	m_metaSeek = new KaxSeekHead();
@@ -394,5 +392,3 @@ KaxTrackEntry * MatroskaFile :: _addTrack( track_type p_type, const String & p_c
 
 	return l_track;
 }
-
-#endif

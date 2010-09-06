@@ -20,9 +20,9 @@ Castor3D::Plugin :: Plugin( const String & p_fileName)
 
 	Cout( C3D_T( "Plugin name [") << p_fileName << C3D_T( "]") << std::endl);
 
-	if ( ! m_library->Open( p_fileName))
+	if ( ! m_library->Open( p_fileName.char_str()))
 	{
-		Cerr( C3D_T( "Error encountered while loading plugin : ") << std::hex << dlerror() << std::endl);
+		Cerr( C3D_T( "Error encountered while loading plugin : ") << dlerror() << std::endl);
 		throw;
 	}
 

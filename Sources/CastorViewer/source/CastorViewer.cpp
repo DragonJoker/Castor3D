@@ -21,7 +21,7 @@ bool CastorViewerApp :: OnInit()
 
 	if (argc > 1)
 	{
-		String l_strFileName = makeString( argv[1] );
+		String l_strFileName = argv[1];
 		m_mainFrame->LoadScene( l_strFileName);
 	}
 

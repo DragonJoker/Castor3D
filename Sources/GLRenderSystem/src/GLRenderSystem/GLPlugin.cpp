@@ -8,16 +8,6 @@
 using namespace Castor3D;
 //******************************************************************************
 
-#ifdef _WIN32
-#	ifdef GLRENDERSYSTEM_EXPORTS
-#		define CS3D_GL_API __declspec(dllexport)
-#	else
-#		define CS3D_GL_API __declspec(dllimport)
-#	endif
-#else
-#	define CS3D_GL_API
-#endif
-
 extern "C" CS3D_GL_API void GetRequiredVersion( int & p_version)
 {
 	p_version = 1;

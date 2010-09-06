@@ -20,69 +20,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "MultiThreadConfig.h"
 
-#if GENLIB_MT_USE_STL
-
-#include <functional>
-#include <thread>
-
-namespace General
-{
-	namespace MultiThreading
-	{
-		//! to ease and uniformise the write of a thread
-		typedef std::thread Thread;
-
-#	ifndef GENLIB_THREAD_INIT
-#		define GENLIB_THREAD_INIT()
-#	endif
-
-		//! Pointer over a class function
-		template <class TClass>
-		class ClassFunctor
-		{
-		public:
-			TClass * m_instance;
-			void( TClass::* m_function )( );
-
-		public:
-			ClassFunctor( TClass * p_instance, void( TClass::* p_function )( ) )
-				: m_instance( p_instance ),
-				m_function( p_function )
-			{
-			}
-			void operator()()const
-			{
-				GENLIB_THREAD_INIT();
-				( m_instance->*m_function )( );
-			}
-		};
-	}
-}
-
-//! Creates a ClassFunctor
-#	define GENLIB_THREAD_CLASS_FUNCTOR( p_instance, p_class, p_function)		General :: MultiThreading :: ClassFunctor <p_class> ( p_instance, & p_class::p_function)
-//! Declares the BeginThread class function (to put in a class declaration)
-#	define GENLIB_THREAD_DECLARE_THREAD_FUNC									void BeginThread()
-//! Defines the BeginThread class function
-#	define GENLIB_THREAD_DEFINE_THREAD_FUNC( p_class)							void p_class::BeginThread()
-//! Creates a threaded class
-#	define GENLIB_THREAD_CREATE_CLASS_THREAD( p_class, p_instance)				new General :: MultiThreading :: Thread( GENLIB_THREAD_CLASS_FUNCTOR( p_instance, p_class, BeginThread))
-//! Creates a memeber threaded function
-#	define GENLIB_THREAD_CREATE_MEMBER_FUNC_THREAD( p_class, p_instance, p_func)new General :: MultiThreading :: Thread( GENLIB_THREAD_CLASS_FUNCTOR( p_instance, p_class, p_func))
-//! Deletes a thread
-#	define GENLIB_THREAD_DELETE_THREAD( p_thread)								delete p_thread
-//! Waits for a thread end
-#	define GENLIB_THREAD_WAIT_FOR_END_OF( p_thread)								p_thread->join()
-
-#	define GENLIB_AUTO_SHARED_MUTEX mutable std::recursive_mutex *				m_mutex;
-#	define GENLIB_SET_AUTO_SHARED_MUTEX_NULL									m_mutex = NULL;
-#	define GENLIB_NEW_AUTO_SHARED_MUTEX											m_mutex = new std::recursive_mutex();
-#	define GENLIB_MUTEX_CONDITIONAL( mutex)										if (mutex)
-
-#elif GENLIB_MT_USE_BOOST || defined( __GNUG__)
-
 #include <boost/function.hpp>
 #include <boost/thread/thread.hpp>
+
+#if GENLIB_MT_USE_BOOST || defined( __GNUG__)
 
 namespace General
 { namespace MultiThreading

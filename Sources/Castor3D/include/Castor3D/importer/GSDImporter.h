@@ -19,7 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CS3D_GSDImporter___
 
 #include "ExternalImporter.h"
-
+/*
 namespace Castor3D
 {
 	struct GSDHeader
@@ -67,5 +67,5 @@ namespace Castor3D
 		void _buildTreeData(treeData *dummie); // añade el objeto a la lista y actualiza esta con un hijo nuevo donde corresponda 
 	};
 }
-
+*/
 #endif

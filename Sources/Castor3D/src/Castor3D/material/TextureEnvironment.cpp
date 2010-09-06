@@ -129,7 +129,7 @@ AlphaOperand TextureEnvironment :: GetAlphaOperand( unsigned int p_index)const
 	return m_alphaOperands[p_index];
 }
 
-bool TextureEnvironment :: Write( General::Utils::File & p_file)const
+bool TextureEnvironment :: Write( General::Utils::FileIO & p_file)const
 {
 	bool l_bReturn = (p_file.Write<EnvironmentMode>( m_mode) == sizeof( EnvironmentMode));
 
@@ -196,7 +196,7 @@ bool TextureEnvironment :: Write( General::Utils::File & p_file)const
 	return l_bReturn;
 }
 
-bool TextureEnvironment :: Read( General::Utils::File & p_file)
+bool TextureEnvironment :: Read( General::Utils::FileIO & p_file)
 {
 	bool l_bReturn = (p_file.Read<EnvironmentMode>( m_mode) == sizeof( EnvironmentMode));
 

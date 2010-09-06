@@ -25,27 +25,36 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "../light/Light.h"
 #include "../geometry/mesh/Mesh.h"
 #include "../shader/Module_Shader.h"
-
 namespace Castor3D
 {
+	//! The context used into parsing functions
+	/*!
+	While parsing a scene file, the context holds the important data retrieved
+	\author Sylvain DOREMUS
+	\date 25/08/2010
+	*/
 	class SceneFileContext
 	{
 	public:
+		//! Scene file sections Enum
+		/*!
+		The enumeration which defines all the sections and subsections of a scene file
+		*/
 		typedef enum eSECTION
 		{
-			eNone,
-			eCamera,
-			eLight,
-			eNode,
-			eObject,
-			eMesh,
-			eSubmesh,
-			eSmoothingGroup,
-			eMaterial,
-			ePass,
-			eTextureUnit,
-			eShader,
-			eShaderVariable
+			eNone,				//!< No section id est root
+			eCamera,			//!< Camera section
+			eLight,				//!< Light section
+			eNode,				//!< SceneNode section
+			eObject,			//!< Geometry section
+			eMesh,				//!< Mesh subsection of a geometry section
+			eSubmesh,			//!< Submesh subsection of a Mesh subsection
+			eSmoothingGroup,	//!< SmoothingGroup subsection of a Submesh subsection
+			eMaterial,			//!< Material section
+			ePass,				//!< Pass subsection of a material section
+			eTextureUnit,		//!< TextureUnit subsection of a pass subsection
+			eShader,			//!< Shader subsection of a pass subsection
+			eShaderVariable		//!< Shader uniform variable subsection of a shader subsection
 
 		} eSECTION;
 
@@ -63,6 +72,8 @@ namespace Castor3D
 		TextureUnit					*	pTextureUnit;
 		ShaderProgram				*	pShaderProgram;
 		UniformVariable				*	pUniformVariable;
+		Face						*	pFace1;
+		Face						*	pFace2;
 
 		Light::eTYPE					eLightType;
 		Mesh::eTYPE						eMeshType;
@@ -77,11 +88,16 @@ namespace Castor3D
 		eSECTION						eSection;
 
 	public:
+		/**
+		 * Constructor
+		 */
 		SceneFileContext()
 		{
 			Initialise();
 		}
-
+		/**
+		 * Initialises all variables
+		 */
 		void Initialise()
 		{
 			pScene				= NULL;
@@ -97,6 +113,8 @@ namespace Castor3D
 			pTextureUnit		= NULL;
 			pShaderProgram		= NULL;
 			pUniformVariable	= NULL;
+			pFace1				= NULL;
+			pFace2				= NULL;
 
 			strName.clear();
 			strName2.clear();
@@ -106,7 +124,12 @@ namespace Castor3D
 			ui64Line			= 0;
 		}
 	};
-
+	//! ESCN file parser
+	/*!
+	Reads ESCN files and extracts all 3D data from it
+	\author Sylvain DOREMUS
+	\date 25/08/2010
+	*/
 	class CS3D_API SceneFileParser
 	{
 	private:
@@ -129,13 +152,60 @@ namespace Castor3D
 		String m_strSceneFilePath;
 
 	public:
+		/**
+		 * Constructor
+		 */
 		SceneFileParser();
+		/**
+		 * Destructor
+		 */
 		~SceneFileParser();
-
+		/**
+		 * Parses the given file (expecting it to be in ESCN file format
+		 *@param p_strFileName : [in] The file path
+		 *@return true if successful, false if not
+		 */
 		bool ParseFile( const String & p_strFileName);
-
+		/**
+		 * Logs an error in the log file
+		 */
 		static void ParseError( const String & p_strError, SceneFileContext * p_pContext);
+		/**
+		 * Logs a warning in the log file
+		 */
 		static void ParseWarning( const String & p_strWarning, SceneFileContext * p_pContext);
+		/**
+		 * Parses a Point2D
+		 */
+		template <typename T>
+		static bool ParseVector2( String & p_strParams, Point2D<T> & p_vResult, SceneFileContext * p_pContext)
+		{
+			bool l_bReturn = false;
+
+			StringArray l_arrayValues = p_strParams.Split( " ");
+
+			if (l_arrayValues.size() >= 2)
+			{
+				if (l_arrayValues.size() > 2)
+				{
+					PARSING_WARNING( "More arguments than needed");
+				}
+
+				p_vResult.x = T( atof( l_arrayValues[0].c_str()));
+				p_vResult.y = T( atof( l_arrayValues[1].c_str()));
+
+				l_bReturn = true;
+			}
+			else
+			{
+				PARSING_ERROR( "Wrong number of args");
+			}
+
+			return l_bReturn;
+		}
+		/**
+		 * Parses a Point3D
+		 */
 		template <typename T>
 		static bool ParseVector3( String & p_strParams, Point3D<T> & p_vResult, SceneFileContext * p_pContext)
 		{
@@ -150,9 +220,9 @@ namespace Castor3D
 					PARSING_WARNING( "More arguments than needed");
 				}
 
-				p_vResult.x = T( atof( l_arrayValues[0].char_str()));
-				p_vResult.y = T( atof( l_arrayValues[1].char_str()));
-				p_vResult.z = T( atof( l_arrayValues[2].char_str()));
+				p_vResult.x = T( atof( l_arrayValues[0].c_str()));
+				p_vResult.y = T( atof( l_arrayValues[1].c_str()));
+				p_vResult.z = T( atof( l_arrayValues[2].c_str()));
 
 				l_bReturn = true;
 			}
@@ -163,6 +233,9 @@ namespace Castor3D
 
 			return l_bReturn;
 		}
+		/**
+		 * Parses a Point4D
+		 */
 		template <typename T>
 		static bool ParseVector4( String & p_strParams, Point4D<T> & p_vResult, SceneFileContext * p_pContext)
 		{
@@ -177,10 +250,10 @@ namespace Castor3D
 					PARSING_WARNING( "More arguments than needed");
 				}
 
-				p_vResult.x = T( atof( l_arrayValues[0].char_str()));
-				p_vResult.y = T( atof( l_arrayValues[1].char_str()));
-				p_vResult.z = T( atof( l_arrayValues[2].char_str()));
-				p_vResult.w = T( atof( l_arrayValues[3].char_str()));
+				p_vResult.x = T( atof( l_arrayValues[0].c_str()));
+				p_vResult.y = T( atof( l_arrayValues[1].c_str()));
+				p_vResult.z = T( atof( l_arrayValues[2].c_str()));
+				p_vResult.w = T( atof( l_arrayValues[3].c_str()));
 
 				l_bReturn = true;
 			}
@@ -195,8 +268,6 @@ namespace Castor3D
 	private:
 		bool _parseScriptLine( String & p_line);
 		bool _invokeParser( String & p_line, const AttributeParserMap & p_parsers);
-
-	public:
 		virtual inline bool _delegateParser( String & p_line)	{ return false; }
 	};
 }

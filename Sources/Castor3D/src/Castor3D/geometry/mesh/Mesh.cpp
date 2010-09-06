@@ -13,12 +13,12 @@
 using namespace Castor3D;
 //*********************************************************************************************
 
-Mesh * MeshLoader :: LoadFromFile( const String & p_file)
+Mesh * MeshLoader :: LoadFromFileIO( const String & p_file)
 {
 	Mesh * l_pReturn = NULL;
 	bool l_bResult = false;
 
-	File l_file( p_file, File::eRead);
+	FileIO l_file( p_file, FileIO::eRead);
 	size_t l_nameLength = 0;
 
 	if (l_file.Read<size_t>( l_nameLength))
@@ -51,7 +51,7 @@ Mesh * MeshLoader :: LoadFromFile( const String & p_file)
 						}
 					}
 
-					l_pReturn->CreateBuffers();
+//					l_pReturn->CreateBuffers();
 				}
 			}
 		}
@@ -66,7 +66,7 @@ Mesh * MeshLoader :: LoadFromFile( const String & p_file)
 	return l_pReturn;
 }
 
-Mesh * MeshLoader :: LoadFromExtFile( const String & p_file)
+Mesh * MeshLoader :: LoadFromExtFileIO( const String & p_file)
 {
 	Mesh * l_pReturn = NULL;
 	StringArray l_arraySplitted = p_file.Split( ".");
@@ -99,14 +99,18 @@ Mesh * MeshLoader :: LoadFromExtFile( const String & p_file)
 		{
 			l_pReturn = _loadFromMd3( p_file);
 		}
+		else if (l_strExt == "csmesh")
+		{
+			l_pReturn = LoadFromFileIO( p_file);
+		}
 	}
 
 	return l_pReturn;
 }
 
-bool MeshLoader :: SaveToFile( const String & p_file, Mesh * p_mesh)
+bool MeshLoader :: SaveToFileIO( const String & p_file, Mesh * p_mesh)
 {
-	File l_file( p_file + C3D_T( "/") + p_mesh->GetName() + C3D_T( ".csmesh"), File::eWrite);
+	FileIO l_file( p_file + C3D_T( "/") + p_mesh->GetName() + C3D_T( ".csmesh"), FileIO::eWrite);
 
 	//on écrit le nom du mesh
 	size_t l_nameLength = p_mesh->GetName().size();
@@ -351,11 +355,16 @@ void Mesh :: SetSmoothNormals()
 	}
 }
 
-void Mesh :: SetNormals()
+void Mesh :: SetNormals( bool p_bReverted)
 {
 	for (size_t i = 0 ; i < m_submeshes.size() ; i++)
 	{
 		m_submeshes[i]->SetNormals();
+
+		if (p_bReverted)
+		{
+			m_submeshes[i]->InvertNormals();
+		}
 	}
 }
 

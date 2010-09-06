@@ -15,12 +15,6 @@
 
 #include "render_engine/RenderEngine.h"
 
-#include <fstream>
-
-#include <CastorUtils/Vector3f.h>
-
-using namespace General;
-using namespace General::Math;
 using namespace Castor3D;
 
 RenderEngine :: RenderEngine( const String & p_strFileName, Scene * p_pScene)
@@ -38,7 +32,7 @@ bool RenderEngine :: Draw()
 	bool l_bReturn = false;
 	std::ofstream l_imageFile( m_strFileName.c_str(), std::ios_base::binary);
 
-	if (l_imageFile)
+	if (l_imageFile != NULL)
 	{
 		int l_iSizeX = 256;
 		int l_iSizeY = 256;
@@ -107,7 +101,7 @@ bool RenderEngine :: Draw()
 
 						Material * l_pCurrentMat = l_pNearestSubmesh->GetMaterial(); 
 
-						// calcul de la valeur d'ï¿½clairement au point 
+						// calcul de la valeur d'éclairement au point 
 						for (LightStrMap::iterator l_it = m_pScene->GetLightsIterator() ; l_it != l_itLightsEnd; ++l_it)
 						{
 							Light * l_pCurrent = l_it->second;
@@ -145,7 +139,7 @@ bool RenderEngine :: Draw()
 							}
 						}
 
-						// on itï¿½re sur la prochaine reflexion
+						// on itére sur la prochaine reflexion
 						coef *= l_pCurrentMat->GetPass( 0)->GetShininess();
 
 						float l_fReflet = 2.0f * l_viewRay.m_direction->dotProduct( l_vNormal);

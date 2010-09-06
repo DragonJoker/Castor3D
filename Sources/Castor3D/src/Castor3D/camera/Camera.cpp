@@ -108,60 +108,8 @@ void Camera :: Resize( unsigned int p_width, unsigned int p_height)
 	m_viewport->SetWindowHeight( p_height);
 }
 
-bool Camera :: Write( File & p_file)const
+bool Camera :: Write( FileIO * p_pFile)const
 {
-	size_t l_length = m_name.size();
-	if (p_file.Write<size_t>( l_length) != sizeof( size_t))
-	{
-		return false;
-	}
-	if (p_file.WriteArray<Char>( m_name.c_str(), l_length) != l_length)
-	{
-		return false;
-	}
-	if (! WriteVertex( & m_position, p_file))
-	{
-		return false;
-	}
-	if (! m_orientation.Write( p_file))
-	{
-		return false;
-	}
-	if ( ! m_viewport->Write( p_file))
-	{
-		return false;
-	}
-	return true;
-}
-
-bool Camera :: Read( File & p_file)
-{
-	size_t l_nameLength = 0;
-	if (p_file.Read<size_t>( l_nameLength) != sizeof( size_t))
-	{
-		return false;
-	}
-	Char * l_name = new Char[l_nameLength+1];
-	if (p_file.ReadArray<Char>( l_name, l_nameLength) != l_nameLength)
-	{
-		delete [] l_name;
-		return false;
-	}
-	l_name[l_nameLength] = 0;
-	m_name = l_name;
-	delete [] l_name;
-	if (! ReadVertex( & m_position, p_file))
-	{
-		return false;
-	}
-	if (! m_orientation.Read( p_file))
-	{
-		return false;
-	}
-	if ( ! m_viewport->Read( p_file))
-	{
-		return false;
-	}
 	return true;
 }
 

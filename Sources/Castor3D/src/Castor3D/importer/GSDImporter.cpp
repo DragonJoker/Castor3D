@@ -1,5 +1,5 @@
 #include "PrecompiledHeader.h"
-
+/*
 #include "importer/GSDImporter.h"
 
 using namespace Castor3D;
@@ -17,13 +17,13 @@ bool GSDImporter :: _import()
 {
 	bool l_bReturn = false;
 	GSDHeader header;
-	File l_file( m_fileName, FileBase::eRead);
+	FileIO l_file( m_fileName, FileBase::eRead);
 
 	if (l_file.IsOk()) 
 	{
 		l_file.Read<GSDHeader>( header);
 		m_version = header.version;
-	/*
+
 		std::list<GenericObjectData *> meshesList;
 		std::list<DummieData *> dummieList;  
 		GSDHeader header;
@@ -217,7 +217,6 @@ bool GSDImporter :: _import()
 		//        END OF CLEANING MEMORY
 		//===========================================
 		fclose(m_f);
-	*/
 	}
 
 	return l_bReturn;
@@ -241,3 +240,4 @@ void GSDImporter :: _buildTreeData( treeData *dummie)
 	m_tree.push_back(dummie);
 
 }
+*/

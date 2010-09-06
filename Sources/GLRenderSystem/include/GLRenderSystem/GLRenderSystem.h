@@ -59,34 +59,34 @@ namespace Castor3D
 		GLRenderSystem();
 		virtual ~GLRenderSystem();
 
-		virtual void Initialise();
-		virtual void DisplayArc( DrawType p_displayMode, const Vector3fPtrList & p_vertex);
+		CS3D_GL_API virtual void Initialise();
+		CS3D_GL_API virtual void DisplayArc( DrawType p_displayMode, const Vector3fPtrList & p_vertex);
 
-		bool InitOpenGLExtensions();	//!< Initialize OpenGL Extensions (using glew) \ingroup GLSL
-		bool HasGLSLSupport();			//!< Returns true if OpenGL Shading Language is supported. (This function will return a GLSL version number in a future release) \ingroup GLSL  
-		bool HasOpenGL2Support();		//!< Returns true if OpenGL 2.0 is supported. This function is deprecated and shouldn't be used anymore. \ingroup GLSL \deprecated
-		bool HasGeometryShaderSupport();//!< Returns true if Geometry Shaders are supported. \ingroup GLSL
-		bool HasShaderModel4();			//!< Returns true if Shader Model 4 is supported. \ingroup GLSL
+		bool CS3D_GL_API InitOpenGLExtensions();	//!< Initialize OpenGL Extensions (using glew) \ingroup GLSL
+		bool CS3D_GL_API HasGLSLSupport();			//!< Returns true if OpenGL Shading Language is supported. (This function will return a GLSL version number in a future release) \ingroup GLSL  
+		bool CS3D_GL_API HasOpenGL2Support();		//!< Returns true if OpenGL 2.0 is supported. This function is deprecated and shouldn't be used anymore. \ingroup GLSL \deprecated
+		bool CS3D_GL_API HasGeometryShaderSupport();//!< Returns true if Geometry Shaders are supported. \ingroup GLSL
+		bool CS3D_GL_API HasShaderModel4();			//!< Returns true if Shader Model 4 is supported. \ingroup GLSL
 
 		void AddContext( GLContext * p_context, RenderWindow * p_window);
 
-		virtual SubmeshRenderer *				CreateSubmeshRenderer				();
-		virtual TextureEnvironmentRenderer *	CreateTextureEnvironmentRenderer	();
-		virtual TextureRenderer *				CreateTextureRenderer				();
-		virtual PassRenderer *					CreatePassRenderer					();
-		virtual LightRenderer *					CreateLightRenderer					();
-		virtual CameraRenderer *				CreateCameraRenderer				();
-		virtual ViewportRenderer *				CreateViewportRenderer				();
-		virtual WindowRenderer *				CreateWindowRenderer				();
-		virtual SceneNodeRenderer *				CreateSceneNodeRenderer				();
-		virtual OverlayRenderer *				CreateOverlayRenderer				();
-		virtual ShaderObject *					CreateVertexShader					();
-		virtual ShaderObject *					CreateFragmentShader				();
-		virtual ShaderObject *					CreateGeometryShader				();
-		virtual ShaderProgram *					CreateShaderProgram					( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile);
+		CS3D_GL_API virtual SubmeshRenderer *				CreateSubmeshRenderer				();
+		CS3D_GL_API virtual TextureEnvironmentRenderer *	CreateTextureEnvironmentRenderer	();
+		CS3D_GL_API virtual TextureRenderer *				CreateTextureRenderer				();
+		CS3D_GL_API virtual PassRenderer *					CreatePassRenderer					();
+		CS3D_GL_API virtual LightRenderer *					CreateLightRenderer					();
+		CS3D_GL_API virtual CameraRenderer *				CreateCameraRenderer				();
+		CS3D_GL_API virtual ViewportRenderer *				CreateViewportRenderer				();
+		CS3D_GL_API virtual WindowRenderer *				CreateWindowRenderer				();
+		CS3D_GL_API virtual SceneNodeRenderer *				CreateSceneNodeRenderer				();
+		CS3D_GL_API virtual OverlayRenderer *				CreateOverlayRenderer				();
+		CS3D_GL_API virtual ShaderObject *					CreateVertexShader					();
+		CS3D_GL_API virtual ShaderObject *					CreateFragmentShader				();
+		CS3D_GL_API virtual ShaderObject *					CreateGeometryShader				();
+		CS3D_GL_API virtual ShaderProgram *					CreateShaderProgram					( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile);
 
-		virtual void ApplyTransformations( const Vector3f & p_position, float * p_matrix);
-		virtual void RemoveTransformations();
+		CS3D_GL_API virtual void ApplyTransformations( const Vector3f & p_position, float * p_matrix);
+		CS3D_GL_API virtual void RemoveTransformations();
 
 		static void GL_CheckError( const String & p_text);
 

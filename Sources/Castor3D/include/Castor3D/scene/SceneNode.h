@@ -171,29 +171,16 @@ namespace Castor3D
 						 size_t & p_nbFaces, size_t & p_nbVertex)const;
 		/**
 		 * Writes the node  and it's childs recursively in a file
-		 *@param p_file : [in] The file to write in
+		 *@param p_pFile : [in] The file to write in
 		 *@return true if successful, false if not
 		 */
-		bool Write( General::Utils::File & p_file)const;
+		bool Write( General::Utils::FileIO * p_pFile)const;
 		/**
 		 * Writes this node in a file
-		 *@param p_file : [in] The file to write in
+		 *@param p_pFile : [in] The file to write in
 		 *@return true if successful, false if not
 		 */
-		bool WriteOne( General::Utils::File & p_file)const;
-		/**
-		 * Reads the node  and it's childs recursively from a file
-		 *@param p_file : [in] The file to read from
-		 *@param p_scene : [in] The scene where to attach this node
-		 *@return true if successful, false if not
-		 */
-		bool Read( General::Utils::File & p_file, Scene * p_scene);
-		/**
-		 * Reads this node from a file
-		 *@param p_file : [in] The file to read from
-		 *@return true if successful, false if not
-		 */
-		bool ReadOne( General::Utils::File & p_file);
+		bool WriteOne( General::Utils::FileIO * p_pFile)const;
 		/**
 		 * Computes the rotation matrix and returns it
 		 *@return The rotation matrix

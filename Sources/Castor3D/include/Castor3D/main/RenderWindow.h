@@ -26,6 +26,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	//! Render window representation
 	/*!
 	Manages a window wher you can render a scene.
 	\author Sylvain DOREMUS
@@ -97,6 +98,7 @@ namespace Castor3D
 		/**
 		 * Renders one frame
 		 *@param p_tslf : [in] The time since the last frame was rendered
+		 *@param p_bForce : [in] Forces the rendering
 		 */
 		void RenderOneFrame( const float & p_tslf, const bool & p_bForce);
 		/**

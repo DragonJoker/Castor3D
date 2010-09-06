@@ -19,59 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___ASE___
 
 #include "ExternalImporter.h"
-/*
-static const String SCENE				= "*SCENE";
-static const String SCENE_NAME			= "*SCENE_FILENAME";
-
-static const String MATERIAL_LIST		= "*MATERIAL_LIST";
-static const String MATERIAL			= "*MATERIAL";
-static const String SUBMATERIAL			= "*SUBMATERIAL";
-static const String MATERIAL_COUNT      = "*MATERIAL_COUNT";
-static const String MATERIAL_NAME		= "*MATERIAL_NAME";
-static const String MATERIAL_DIFFUSE	= "*MATERIAL_DIFFUSE";
-static const String MATERIAL_AMBIENT	= "*MATERIAL_AMBIENT";
-static const String MATERIAL_SPECULAR	= "*MATERIAL_SPECULAR";
-static const String MATERIAL_SHININESS	= "*MATERIAL_SHINE";
-static const String TEXTURE				= "*BITMAP";
-static const String UTILE				= "*UVW_U_TILING";
-static const String VTILE				= "*UVW_V_TILING";
-static const String UOFFSET				= "*UVW_U_OFFSET";
-static const String VOFFSET				= "*UVW_V_OFFSET";
-
-static const String CAMERA				= "*CAMERAOBJECT";
-static const String CAMERA_SETTINGS		= "*CAMERA_SETTINGS";
-static const String CAMERA_NEAR			= "*CAMERA_NEAR";
-static const String CAMERA_FAR			= "*CAMERA_FAR";
-static const String CAMERA_FOV			= "*CAMERA_FOV";
-
-static const String OBJECT				= "*GEOMOBJECT";
-static const String MESH				= "*MESH";
-static const String MESH_VERTEX_LIST	= "*MESH_VERTEX_LIST";
-static const String MESH_FACE_LIST		= "*MESH_FACE_LIST";
-static const String MESH_TVERTLIST		= "*MESH_TVERTLIST";
-static const String MESH_TFACELIST		= "*MESH_TFACELIST";
-static const String VERTEX				= "*MESH_VERTEX";
-static const String FACE				= "*MESH_FACE";
-static const String TVERTEX				= "*MESH_TVERT";
-static const String TFACE				= "*MESH_TFACE";
-static const String NORMALS				= "*MESH_NORMALS";
-static const String FACE_NORMAL			= "*MESH_FACENORMAL";
-static const String VERTEX_NORMAL		= "*MESH_VERTEXNORMAL";
-static const String MESH_MAPPINGCHANNEL	= "*MESH_MAPPINGCHANNEL";
-static const String MATERIAL_ID			= "*MATERIAL_REF";
-
-static const String NODE				= "*NODE_TM";
-static const String NODE_NAME			= "*NODE_NAME";
-static const String NODE_POSITION		= "*TM_POS";
-static const String NODE_AXIS			= "*TM_ROTAXIS";
-static const String NODE_ANGLE			= "*TM_ROTANGLE";
-static const String NODE_SCALE			= "*TM_SCALE";
-
-static const String LIGHT				= "*LIGHT_OBJECT";
-static const String LIGHT_TYPE			= "*LIGHT_TYPE";
-static const String LIGHT_SETTINGS		= "*LIGHT_SETTINGS";
-static const String LIGHT_COLOR			= "*LIGHT_COLOR";
-*/
 
 static const Char * SCENE				= C3D_T( "*SCENE");
 static const Char * SCENE_NAME			= C3D_T( "*SCENE_FILENAME");
@@ -133,20 +80,22 @@ static const Char * ENDER				= C3D_T( "}");
 
 namespace Castor3D
 {
+	//! ASE file importer
+	/*!
+	Imports data from ASE (ASCII Scene Export) files
+	\author Sylvain DOREMUS
+	\date 25/08/2010
+	*/
 	class CS3D_API AseImporter : public ExternalImporter
 	{
 	private:
 		friend class Scene;
 
-		File * m_pFile;
+		FileIO * m_pFile;
 		String m_currentWord;
 		Vector3fPtrArray m_texCoords;
 		std::map <size_t, Material *> m_materials;
 		std::map <String, SceneNode *> m_nodes;
-/*
-		std::ifstream * m_fileStream;
-		SceneNodePtrArray m_nodes;
-*/
 
 	private:
 		virtual bool _import();
@@ -174,27 +123,6 @@ namespace Castor3D
 		void _retrieveFace( int * p_indices);
 		void _retrieveTextureVertex( float * p_position);
 		void _retrieveTextureFace( int * p_indices);
-
-/*
-	private:
-		void _readAseFile( Imported3DModel * p_model);
-		int _getObjectCount();
-		int _getNodeCount();
-		int _getMaterialCount();
-		void _getTextureInfo( ImportedMaterialInfo * p_texture, int p_desiredMaterial);
-		void _moveToObject( int p_desiredObject);
-		float _readFloat();
-		void _readObjectInfo( Imported3DObject * p_object, int p_desiredObject);
-		void _getTextureName( ImportedMaterialInfo * p_texture);
-		void _getMaterialName( ImportedMaterialInfo * p_texture);
-		void _readObjectData( Imported3DModel * p_model, Imported3DObject * p_object, int p_desiredObject);
-		void _getNodeInfo( SceneNode * p_node, int p_desiredNode);
-		void _getData( Imported3DModel * p_model, Imported3DObject * p_object, char * p_strDesiredData, int p_desiredObject);
-		void _readVertex( Imported3DObject * p_object);
-		void _readTextureVertex( Imported3DObject * p_object, ImportedMaterialInfo p_texture);
-		void _readFace( Imported3DObject * p_object);
-		void _readTextureFace( Imported3DObject * p_object);
-*/
 	};
 }
 

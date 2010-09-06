@@ -29,7 +29,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class GLOverlayRenderer : public OverlayRenderer
+	class CS3D_GL_API GLOverlayRenderer : public OverlayRenderer
 	{
 	protected:
 		friend class GLRenderSystem;

@@ -115,58 +115,44 @@ float * SpotLight :: Get4x4RotationMatrix()
 	return m_matrix;
 }
 
-bool SpotLight :: Write( General::Utils::File & p_file)const
+bool SpotLight :: Write( General::Utils::FileIO * p_pFile)const
 {
-	bool l_bReturn = Light::Write( p_file);
+	bool l_bReturn = p_pFile->WriteLine( "light " + m_name + "\n{\n");
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.WriteArray<float>( m_attenuation.const_ptr(), 3) == sizeof( float) * 3);
+		l_bReturn = p_pFile->WriteLine( "\ttype spot_light\n");
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Write<float>( m_exponent) == sizeof( float));
+		l_bReturn = Light::Write( p_pFile);
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Write<float>( m_cutOff) == sizeof( float));
+		l_bReturn = p_pFile->Print( 256, "\tattenuation %f %f %f %f\n", m_attenuation.r, m_attenuation.g, m_attenuation.b);
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = m_orientation.Write( p_file);
-	}
-
-	return l_bReturn;
-}
-
-bool SpotLight :: Read( General::Utils::File & p_file, Scene * p_scene)
-{
-	bool l_bReturn = Light::Read( p_file, p_scene);
-
-	if (l_bReturn)
-	{
-		l_bReturn = (p_file.ReadArray<float>( m_attenuation.ptr(), 3) == sizeof( float) * 3);
+		l_bReturn = p_pFile->Print( 256, "\texponent %f\n", m_exponent);
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Read<float>( m_exponent) == sizeof( float));
+		l_bReturn = p_pFile->Print( 256, "\tcut_off %f\n", m_cutOff);
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Read<float>( m_cutOff) == sizeof( float));
+		l_bReturn = p_pFile->Print( 256, "\torientation %f %f %f %f\n", m_orientation.x, m_orientation.y, m_orientation.z, m_orientation.w);
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = m_orientation.Read( p_file);
+		l_bReturn = p_pFile->WriteLine( "}\n");
 	}
-
-	SetEnabled( m_enabled);
 
 	return l_bReturn;
 }

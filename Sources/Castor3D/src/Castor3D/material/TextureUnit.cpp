@@ -75,46 +75,44 @@ void TextureUnit :: Remove()
 	}
 }
 
-bool TextureUnit :: Write( General::Utils::File & p_file)const
+bool TextureUnit :: Write( General::Utils::FileIO * p_pFile)const
 {
-	bool l_bReturn = (p_file.Write<bool>( m_textured) == sizeof( bool));
+	bool l_bReturn = true;
 
 	if (m_textured)
 	{
-		l_bReturn = (p_file.Write<eDIMENSION>( m_textureType) == sizeof( eDIMENSION));
-
 		if (l_bReturn)
 		{
-			l_bReturn = (p_file.WriteArray<float>( m_primaryColour.const_ptr(), 4) == sizeof( float) * 4);
+			l_bReturn = p_pFile->WriteLine( "\t\ttexture_unit\n\t\t{\n");
 		}
 
 		if (l_bReturn)
 		{
-			l_bReturn = (p_file.Write<eMAP_MODE>( m_mode) == sizeof( eMAP_MODE));
+			l_bReturn = p_pFile->Print( 256, "\t\t\tcolour %f %f %f %f\n", m_primaryColour.r, m_primaryColour.g, m_primaryColour.b, m_primaryColour.a);
 		}
 
 		if (l_bReturn)
 		{
-			l_bReturn = m_environment->Write( p_file);
+			l_bReturn = p_pFile->Print( 256, "\t\t\tmap_type %i\n", m_mode);
+		}
+
+		if (l_bReturn && m_image != NULL)
+		{
+			String l_strPath = m_image->GetPath();
+			l_strPath.Replace( "\\", "/");
+			l_bReturn = p_pFile->WriteLine( "\t\t\timage " + l_strPath + "\n");
 		}
 
 		if (l_bReturn)
 		{
-			size_t l_texPathLength = m_image->GetPath().size();
-
-			l_bReturn = (p_file.Write<size_t>( l_texPathLength) == sizeof( size_t));
-
-			if (l_bReturn)
-			{
-				l_bReturn = (p_file.WriteArray<Char>( m_image->GetPath().c_str(), l_texPathLength) == sizeof( l_texPathLength));
-			}
+			l_bReturn = p_pFile->WriteLine( "\t\t}\n");
 		}
 	}
 
 	return l_bReturn;
 }
 
-bool TextureUnit :: Read( General::Utils::File & p_file)
+bool TextureUnit :: Read( General::Utils::FileIO & p_file)
 {
 	bool l_bReturn = (p_file.Read<bool>( m_textured) == sizeof( bool));
 
@@ -163,7 +161,7 @@ bool TextureUnit :: Read( General::Utils::File & p_file)
 
 const unsigned char * TextureUnit :: GetImagePixels()const
 {
-	if (m_textured)
+	if (m_textured && m_image != NULL)
 	{
 		return m_image->GetBuffer();
 	}
@@ -173,7 +171,7 @@ const unsigned char * TextureUnit :: GetImagePixels()const
 
 unsigned int TextureUnit :: GetWidth()const
 {
-	if (m_textured)
+	if (m_textured && m_image != NULL)
 	{
 		return m_image->GetWidth();
 	}
@@ -183,7 +181,7 @@ unsigned int TextureUnit :: GetWidth()const
 
 unsigned int TextureUnit :: GetHeight()const
 {
-	if (m_textured)
+	if (m_textured && m_image != NULL)
 	{
 		return m_image->GetHeight();
 	}
@@ -193,7 +191,7 @@ unsigned int TextureUnit :: GetHeight()const
 
 String TextureUnit :: GetTexturePath()const
 {
-	if (m_textured)
+	if (m_textured && m_image != NULL)
 	{
 		return m_image->GetPath();
 	}

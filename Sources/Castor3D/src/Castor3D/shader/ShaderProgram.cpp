@@ -302,13 +302,13 @@ void ShaderProgram :: Initialise()
 	}
 }
 
-void ShaderProgram :: SetVertexFile( const String & p_strFile)
+void ShaderProgram :: SetVertexFileIO( const String & p_strFile)
 {
 	m_vertexFile = p_strFile;
 
 	if (FileBase::FileExists( p_strFile))
 	{
-		File l_file( p_strFile, File::eRead);
+		FileIO l_file( p_strFile, FileIO::eRead);
 		l_file.CopyToString( m_vertexProgram);
 	}
 
@@ -316,13 +316,13 @@ void ShaderProgram :: SetVertexFile( const String & p_strFile)
 	m_bError = false;
 }
 
-void ShaderProgram :: SetFragmentFile( const String & p_strFile)
+void ShaderProgram :: SetFragmentFileIO( const String & p_strFile)
 {
 	m_fragmentFile = p_strFile;
 
 	if (FileBase::FileExists( p_strFile))
 	{
-		File l_file( p_strFile, File::eRead);
+		FileIO l_file( p_strFile, FileIO::eRead);
 		l_file.CopyToString( m_fragmentProgram);
 	}
 
@@ -330,7 +330,7 @@ void ShaderProgram :: SetFragmentFile( const String & p_strFile)
 	m_bError = false;
 }
 
-void ShaderProgram :: SetGeometryFile( const String & p_strFile)
+void ShaderProgram :: SetGeometryFileIO( const String & p_strFile)
 {
 	if (m_usesGeometryShader)
 	{
@@ -338,7 +338,7 @@ void ShaderProgram :: SetGeometryFile( const String & p_strFile)
 
 		if (FileBase::FileExists( p_strFile))
 		{
-			File l_file( p_strFile, File::eRead);
+			FileIO l_file( p_strFile, FileIO::eRead);
 			l_file.CopyToString( m_geometryProgram);
 		}
 

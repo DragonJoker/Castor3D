@@ -50,22 +50,22 @@ namespace Castor3D
 		/**
 		 * Creates a mesh from the given parameters
 		 *@param p_name : [in] The mesh name
-		 *@param p_type : [in] The mesh type
 		 *@param p_faces : [in] The faces numbers
 		 *@param p_size : [in] The sizes values
+		 *@param p_type : [in] The mesh type
 		 *@return The created mesh, NULL if unknown MeshType (but is it possible ?)
 		 */
 		Mesh * CreateMesh( const String & p_name, UIntArray p_faces, 
 						   FloatArray p_size, Mesh::eTYPE p_type=Mesh::eCustom);
 		/**
 		 * Writes all the meshes in a file
-		 *@param p_file : [in] The file to write in
+		 *@param p_path : [in] The path of the file to write in
 		 *@return true if successful, false if not
 		 */
 		bool Write( const String & p_path)const;
 		/**
 		 * Reads all the meshes from a file
-		 *@param p_file : [in] The file to read from
+		 *@param p_path : [in] The path of the file to read from
 		 *@return true if successful, false if not
 		 */
 		bool Read( const String & p_path);

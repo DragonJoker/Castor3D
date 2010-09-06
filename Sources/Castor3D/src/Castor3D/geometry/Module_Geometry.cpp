@@ -36,7 +36,7 @@ void Castor3D :: SetTexCoordV3( Face * p_face, float x, float y)
 	p_face->m_vertex3TexCoord.y = y;
 }
 
-bool Castor3D :: WriteFace( Face * p_face, File & p_file)
+bool Castor3D :: WriteFace( Face * p_face, FileIO & p_file)
 {
 	// on écrit la normale de la face
 	if ( ! p_file.WriteArray<float>( p_face->m_faceNormal.const_ptr(), 3))
@@ -75,13 +75,17 @@ bool Castor3D :: WriteFace( Face * p_face, File & p_file)
 	return true;
 }
 
-bool Castor3D :: ReadFace( Face * p_face, File & p_file)
+bool Castor3D :: ReadFace( Face * p_face, FileIO & p_file)
 {
 	// on lit la normale de la face
 	if ( ! p_file.ReadArray<float>( p_face->m_faceNormal.ptr(), 3))
 	{
 		return false;
 	}
+
+	p_face->m_vertex1Normal = new Vector3f;
+	p_face->m_vertex2Normal = new Vector3f;
+	p_face->m_vertex3Normal = new Vector3f;
 
 	// on lit les normales par vertex de la face
 	if ( ! p_file.ReadArray<float>( p_face->m_vertex1Normal->ptr(), 3))
@@ -114,7 +118,7 @@ bool Castor3D :: ReadFace( Face * p_face, File & p_file)
 	return true;
 }
 
-bool Castor3D :: WriteVertex( const Vector3f & p_vertex, File & p_file)
+bool Castor3D :: WriteVertex( const Vector3f & p_vertex, FileIO & p_file)
 {
 	if ( ! p_file.Write<float>( p_vertex.x))
 	{
@@ -131,12 +135,12 @@ bool Castor3D :: WriteVertex( const Vector3f & p_vertex, File & p_file)
 	return true;
 }
 
-bool Castor3D :: WriteVertex( const Vector3f * p_vertex, File & p_file)
+bool Castor3D :: WriteVertex( const Vector3f * p_vertex, FileIO & p_file)
 {
 	return WriteVertex( * p_vertex, p_file);
 }
 
-bool Castor3D :: ReadVertex( Vector3f & p_vertex, File & p_file)
+bool Castor3D :: ReadVertex( Vector3f & p_vertex, FileIO & p_file)
 {
 	if ( ! p_file.Read<float>( p_vertex.x))
 	{
@@ -153,7 +157,7 @@ bool Castor3D :: ReadVertex( Vector3f & p_vertex, File & p_file)
 	return true;
 }
 
-bool Castor3D :: ReadVertex( Vector3f * p_vertex, File & p_file)
+bool Castor3D :: ReadVertex( Vector3f * p_vertex, FileIO & p_file)
 {
 	return ReadVertex( * p_vertex, p_file);
 }

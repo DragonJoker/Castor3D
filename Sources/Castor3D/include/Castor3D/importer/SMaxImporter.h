@@ -35,7 +35,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 // sub defines of MATERIAL
 #define SMAX_MATNAME			0xA000
+#define SMAX_MATAMBIENT			0xA010
 #define SMAX_MATDIFFUSE			0xA020
+#define SMAX_MATSPECULAR		0xA030
+#define SMAX_MATSHININESS		0xA040
+#define SMAX_MATALPHA			0xA050
+#define SMAX_MATTWOSIDED		0xA081
 #define SMAX_MATMAP				0xA200
 #define SMAX_MATMAPFILE			0xA300
 
@@ -52,33 +57,47 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	struct CS3D_API SMaxChunk
-	{
-		unsigned short int m_id;
-		unsigned int m_length;
-		unsigned int m_bytesRead;
-	};
-
+	//! 3DS file importer
+	/*!
+	Imports data from 3DS (3D Studio Max) files
+	\author Sylvain DOREMUS
+	\date 25/08/2010
+	*/
 	class CS3D_API SMaxImporter : public ExternalImporter
 	{
 	private:
-		File * m_pFile;
+		struct SMaxChunk
+		{
+			unsigned short int m_id;
+			unsigned int m_length;
+			unsigned int m_bytesRead;
+		};
+
+	private:
+		FileIO * m_pFile;
+		Point2D<float> * m_texVerts;
+		int m_iNumOfMaterials;
 
 	public:
+		/**
+		 * Constructor
+		 */
 		SMaxImporter();
 
 	private:
 		virtual bool _import();
 		int _getString( Char * p_pBuffer);
+		int _getString( String & p_strString);
 		void _readChunk( SMaxChunk * p_chunk);
-		void _processNextChunk( Imported3DModel * p_model, SMaxChunk * p_chunk);
-		void _processNextObjectChunk( Imported3DModel * p_model, Imported3DObject * p_object, SMaxChunk * p_chunk);
-		void _processNextMaterialChunk( Imported3DModel * p_model, SMaxChunk * p_chunk);
-		void _readColorChunk( ImportedMaterialInfo *p_material, SMaxChunk * p_chunk);
-		void _readVertices( Imported3DObject * p_object, SMaxChunk * p_chunk);
-		void _readVertexIndices( Imported3DObject * p_object, SMaxChunk * p_chunk);
-		void _readUVCoordinates( Imported3DObject * p_object, SMaxChunk * p_chunk);
-		void _readObjectMaterial( Imported3DModel * p_model, Imported3DObject * p_object, SMaxChunk * p_chunk);
+		void _processNextChunk( Mesh * p_pMesh, SMaxChunk * p_chunk);
+		void _processNextObjectChunk( Mesh * p_pMesh, Submesh * p_pSubmesh, SMaxChunk * p_chunk);
+		void _processNextMaterialChunk( SMaxChunk * p_chunk);
+		void _processMaterialMapChunk( String & p_strName, SMaxChunk * p_chunk);
+		void _readColorChunk( Colour & p_colour, SMaxChunk * p_chunk);
+		void _readVertices( Submesh * p_pSubmesh, SMaxChunk * p_chunk);
+		void _readVertexIndices( Submesh * p_pSubmesh, SMaxChunk * p_chunk);
+		void _readUVCoordinates( Submesh * p_pSubmesh, SMaxChunk * p_chunk);
+		void _readObjectMaterial( Submesh * p_pSubmesh, SMaxChunk * p_chunk);
 		void _cleanUp();
 	};
 }

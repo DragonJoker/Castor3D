@@ -24,7 +24,7 @@ using namespace General::MultiThreading;
 
 Root * Root :: sm_singleton = NULL;
 RenderSystem * Root :: sm_renderSystem = NULL;
-RecursiveMutex Root :: sm_mutex;
+Mutex Root :: sm_mutex;
 
 Root :: Root( unsigned int p_wantedFPS)
 	:	m_ended					( false),
@@ -168,7 +168,6 @@ void Root :: EndRendering()
 		_renderOneFrame( true);
 		m_ended = true;
 		Sleep( 500);
-		GENLIB_THREAD_WAIT_FOR_END_OF( m_mainLoop);
 		GENLIB_THREAD_DELETE_THREAD( m_mainLoop);
 		m_mainLoopCreated = false;
 	}
@@ -246,10 +245,16 @@ bool Root :: _postUpdate()
 
 void Root :: _lock()
 {
-	GENLIB_LOCK_MUTEX( sm_mutex);
+	if (m_mainLoopCreated)
+	{
+		GENLIB_LOCK_MUTEX( sm_mutex);
+	}
 }
 
 void Root :: _unlock()
 {
-	GENLIB_UNLOCK_MUTEX( sm_mutex);
+	if (m_mainLoopCreated)
+	{
+		GENLIB_UNLOCK_MUTEX( sm_mutex);
+	}
 }

@@ -23,20 +23,21 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	//! Material resource loader
 	/*!
-	Material loader from file
+	Loads and saves materials from/into a file
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
 	class CS3D_API MaterialLoader : General::Resource::ResourceLoader <Material>
 	{
 	public:
-		Material * LoadFromFile( const String & p_file);
-		bool SaveToFile( const String & p_file, Material * p_material);
+		Material * LoadFromFileIO( const String & p_file);
+		bool SaveToFileIO( FileIO * p_pFile, Material * p_material);
 	};
+	//! Definition of a material
 	/*!
-	Castor definition of a material : base colours (ambient, diffuse, specular, emissive), shininess, 
-	base texturing colour, texture units and texture units indexes
+	A material is composed of one or more passes.
 	\author Sylvain DOREMUS
 	\version 0.1
 	\date 09/02/2010

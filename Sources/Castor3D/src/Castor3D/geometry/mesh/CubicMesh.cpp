@@ -14,7 +14,6 @@
 
 using namespace Castor3D;
 
-
 CubicMesh :: CubicMesh( float width_p, float height_p, float depth_p,
 						const String & p_name)
 	:	Mesh( p_name),
@@ -26,13 +25,9 @@ CubicMesh :: CubicMesh( float width_p, float height_p, float depth_p,
 	GeneratePoints();
 }
 
-
-
 CubicMesh :: ~CubicMesh()
 {
 }
-
-
 
 void CubicMesh :: GeneratePoints()
 {
@@ -54,14 +49,14 @@ void CubicMesh :: GeneratePoints()
 	m_submeshes.push_back( l_submesh);
 
     //Calcul des coordonnées des 8 sommets du pav,
-	l_submesh->AddVertex( -m_width,	-m_height,	-m_depth);
-	l_submesh->AddVertex( m_width,	-m_height,	-m_depth);
-	l_submesh->AddVertex( m_width,	-m_height,	m_depth);
-	l_submesh->AddVertex( -m_width,	-m_height,	m_depth);
-	l_submesh->AddVertex( -m_width,	m_height,	m_depth);
-	l_submesh->AddVertex( -m_width,	m_height,	-m_depth);
-	l_submesh->AddVertex( m_width,	m_height,	-m_depth);
-	l_submesh->AddVertex( m_width,	m_height,	m_depth);
+	l_submesh->AddVertex( -m_width / 2,	-m_height / 2,	-m_depth / 2);
+	l_submesh->AddVertex( m_width / 2,	-m_height / 2,	-m_depth / 2);
+	l_submesh->AddVertex( m_width / 2,	-m_height / 2,	m_depth / 2);
+	l_submesh->AddVertex( -m_width / 2,	-m_height / 2,	m_depth / 2);
+	l_submesh->AddVertex( -m_width / 2,	m_height / 2,	m_depth / 2);
+	l_submesh->AddVertex( -m_width / 2,	m_height / 2,	-m_depth / 2);
+	l_submesh->AddVertex( m_width / 2,	m_height / 2,	-m_depth / 2);
+	l_submesh->AddVertex( m_width / 2,	m_height / 2,	m_depth / 2);
 
 	unsigned int l_nbTrianglesCoords = 12 * 3 * 3;
 	unsigned int l_nbTrianglesTexCoords = 12 * 3 * 2;
@@ -74,146 +69,50 @@ void CubicMesh :: GeneratePoints()
 	l_submesh->GetRenderer()->GetLinesTexCoords()->Cleanup();
 
 	//CONSTRUCTION FACES /!\ Pour OpenGL le Z est inversé
-	Face * l_face;
 	Vector3fPtrArray l_vertex = l_submesh->m_vertex;
 	if (CptNegatif == 1 || CptNegatif == 3)
 	{
 		// Faces du bas
-		l_face = l_submesh->AddFace( l_vertex[1], l_vertex[3], l_vertex[0], 0);
-		SetTexCoordV1( l_face, 1.0, 1.0);
-		SetTexCoordV2( l_face, 0.0, 1.0);
-		SetTexCoordV3( l_face, 0.0, 0.0);
-
-		l_face = l_submesh->AddFace( l_vertex[2], l_vertex[3], l_vertex[1], 0);
-		SetTexCoordV1( l_face, 1.0, 0.0);
-		SetTexCoordV2( l_face, 0.0, 1.0);
-		SetTexCoordV3( l_face, 1.0, 1.0);
+		l_submesh->AddQuadFace( 0, 1, 2, 3, 0);
 
 		// Face du haut
-		l_face = l_submesh->AddFace( l_vertex[7], l_vertex[6], l_vertex[5], 1);
-		SetTexCoordV1( l_face, 1.0, 1.0);
-		SetTexCoordV2( l_face, 1.0, 0.0);
-		SetTexCoordV3( l_face, 0.0, 0.0);
+		l_submesh->AddQuadFace( 4, 7, 6, 5, 1);
 
-		l_face = l_submesh->AddFace( l_vertex[5], l_vertex[4], l_vertex[7], 1);
-		SetTexCoordV1( l_face, 0.0, 0.0);
-		SetTexCoordV2( l_face, 0.0, 1.0);
-		SetTexCoordV3( l_face, 1.0, 1.0);
-
-		// Face de derrišre
-		l_face = l_submesh->AddFace( l_vertex[6], l_vertex[1], l_vertex[0], 2);
-		SetTexCoordV1( l_face, 0.0, 0.0);
-		SetTexCoordV2( l_face, 0.0, 1.0);
-		SetTexCoordV3( l_face, 1.0, 1.0);
-
-		l_face = l_submesh->AddFace( l_vertex[0], l_vertex[5], l_vertex[6], 2);
-		SetTexCoordV1( l_face, 1.0, 1.0);
-		SetTexCoordV2( l_face, 1.0, 0.0);
-		SetTexCoordV3( l_face, 0.0, 0.0);
+		// Face de derrière
+		l_submesh->AddQuadFace( 5, 6, 1, 0, 2);
 
 		// Face de devant
-		l_face = l_submesh->AddFace( l_vertex[2], l_vertex[7], l_vertex[4], 3);
-		SetTexCoordV1( l_face, 1.0, 1.0);
-		SetTexCoordV2( l_face, 1.0, 0.0);
-		SetTexCoordV3( l_face, 0.0, 0.0);
-
-		l_face = l_submesh->AddFace( l_vertex[4], l_vertex[3], l_vertex[2], 3);
-		SetTexCoordV1( l_face, 0.0, 0.0);
-		SetTexCoordV2( l_face, 0.0, 1.0);
-		SetTexCoordV3( l_face, 1.0, 1.0);
+		l_submesh->AddQuadFace( 3, 2, 7, 4, 3);
 
 		// Faces de droite
-		l_face = l_submesh->AddFace( l_vertex[7], l_vertex[2], l_vertex[1], 4);
-		SetTexCoordV1( l_face, 0.0, 0.0);
-		SetTexCoordV2( l_face, 0.0, 1.0);
-		SetTexCoordV3( l_face, 1.0, 1.0);
-
-		l_face = l_submesh->AddFace( l_vertex[1], l_vertex[6], l_vertex[7], 4);
-		SetTexCoordV1( l_face, 1.0, 1.0);
-		SetTexCoordV2( l_face, 1.0, 0.0);
-		SetTexCoordV3( l_face, 0.0, 0.0);
+		l_submesh->AddQuadFace( 6, 7, 2, 1, 4);
 
 		// Face de gauche
-		l_face = l_submesh->AddFace( l_vertex[3], l_vertex[4], l_vertex[5], 5);
-		SetTexCoordV1( l_face, 1.0, 1.0);
-		SetTexCoordV2( l_face, 1.0, 0.0);
-		SetTexCoordV3( l_face, 0.0, 0.0);
-
-		l_face = l_submesh->AddFace( l_vertex[5], l_vertex[0], l_vertex[3], 5);
-		SetTexCoordV1( l_face, 0.0, 0.0);
-		SetTexCoordV2( l_face, 0.0, 1.0);
-		SetTexCoordV3( l_face, 1.0, 1.0);
+		l_submesh->AddQuadFace( 0, 3, 4, 5, 5);
 	}
 	else
 	{
-		// Faces du bas !!
-		l_face = l_submesh->AddFace( l_vertex[0], l_vertex[3], l_vertex[1], 0);
-		SetTexCoordV1( l_face, 0.0, 0.0);
-		SetTexCoordV2( l_face, 0.0, 1.0);
-		SetTexCoordV3( l_face, 1.0, 0.0);
+		// Faces du bas
+		l_submesh->AddQuadFace( 3, 2, 1, 0, 0);
 
-		l_face = l_submesh->AddFace( l_vertex[1], l_vertex[3], l_vertex[2], 0);
-		SetTexCoordV1( l_face, 1.0, 0.0);
-		SetTexCoordV2( l_face, 0.0, 1.0);
-		SetTexCoordV3( l_face, 1.0, 1.0);
+		// Face du haut
+		l_submesh->AddQuadFace( 5, 6, 7, 4, 1);
 
-		// Face du haut !!
-		l_face = l_submesh->AddFace( l_vertex[5], l_vertex[6], l_vertex[7], 1);
-		SetTexCoordV1( l_face, 1.0, 1.0);
-		SetTexCoordV2( l_face, 1.0, 0.0);
-		SetTexCoordV3( l_face, 0.0, 0.0);
+		// Face de derrière
+		l_submesh->AddQuadFace( 0, 1, 6, 5, 2);
 
-		l_face = l_submesh->AddFace( l_vertex[7], l_vertex[4], l_vertex[5], 1);
-		SetTexCoordV1( l_face, 0.0, 0.0);
-		SetTexCoordV2( l_face, 0.0, 1.0);
-		SetTexCoordV3( l_face, 1.0, 1.0);
+		// Face de devant
+		l_submesh->AddQuadFace( 4, 7, 2, 3, 3);
 
-		// Face de derrišre !!
-		l_face = l_submesh->AddFace( l_vertex[0], l_vertex[1], l_vertex[6], 2);
-		SetTexCoordV1( l_face, 0.0, 0.0);
-		SetTexCoordV2( l_face, 0.0, 1.0);
-		SetTexCoordV3( l_face, 1.0, 1.0);
+		// Faces de droite
+		l_submesh->AddQuadFace( 1, 2, 7, 6, 4);
 
-		l_face = l_submesh->AddFace( l_vertex[6], l_vertex[5], l_vertex[0], 2);
-		SetTexCoordV1( l_face, 1.0, 1.0);
-		SetTexCoordV2( l_face, 1.0, 0.0);
-		SetTexCoordV3( l_face, 0.0, 0.0);
-
-		// Face de devant !!
-		l_face = l_submesh->AddFace( l_vertex[4], l_vertex[7], l_vertex[2], 3);
-		SetTexCoordV1( l_face, 1.0, 1.0);
-		SetTexCoordV2( l_face, 1.0, 0.0);
-		SetTexCoordV3( l_face, 0.0, 0.0);
-
-		l_face = l_submesh->AddFace( l_vertex[2], l_vertex[3], l_vertex[4], 3);
-		SetTexCoordV1( l_face, 0.0, 0.0);
-		SetTexCoordV2( l_face, 0.0, 1.0);
-		SetTexCoordV3( l_face, 1.0, 1.0);
-
-		// Faces de droite !!
-		l_face = l_submesh->AddFace( l_vertex[1], l_vertex[2], l_vertex[7], 4);
-		SetTexCoordV1( l_face, 0.0, 0.0);
-		SetTexCoordV2( l_face, 0.0, 1.0);
-		SetTexCoordV3( l_face, 1.0, 1.0);
-
-		l_face = l_submesh->AddFace( l_vertex[7], l_vertex[6], l_vertex[1], 4);
-		SetTexCoordV1( l_face, 1.0, 1.0);
-		SetTexCoordV2( l_face, 1.0, 0.0);
-		SetTexCoordV3( l_face, 0.0, 0.0);
-
-		// Face de gauche !!
-		l_face = l_submesh->AddFace( l_vertex[5], l_vertex[4], l_vertex[3], 5);
-		SetTexCoordV1( l_face, 1.0, 1.0);
-		SetTexCoordV2( l_face, 1.0, 0.0);
-		SetTexCoordV3( l_face, 0.0, 0.0);
-
-		l_face = l_submesh->AddFace( l_vertex[3], l_vertex[0], l_vertex[5], 5);
-		SetTexCoordV1( l_face, 0.0, 0.0);
-		SetTexCoordV2( l_face, 0.0, 1.0);
-		SetTexCoordV3( l_face, 1.0, 1.0);
+		// Face de gauche
+		l_submesh->AddQuadFace( 5, 4, 3, 0, 5);
 	}
 
 	l_submesh->GenerateBuffers();
+
 	Log::LogMessage( C3D_T( "CubicMesh - %s - NbVertex : %d"), m_name.c_str(), l_submesh->m_vertex.size());
 }
 

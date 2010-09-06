@@ -298,7 +298,7 @@ Vector3f Quaternion::operator *( const Vector3f & p_vector)const
 	return p_vector + uv + uuv;
 }
 
-bool Quaternion :: Write( File & p_file)const
+bool Quaternion :: Write( FileIO & p_file)const
 {
 	if ( ! p_file.Write<float>( x))
 	{
@@ -319,7 +319,7 @@ bool Quaternion :: Write( File & p_file)const
 	return true;
 }
 
-bool Quaternion :: Read( File & p_file)
+bool Quaternion :: Read( FileIO & p_file)
 {
 	if ( ! p_file.Read<float>( x))
 	{

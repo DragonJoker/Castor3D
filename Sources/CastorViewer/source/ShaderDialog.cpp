@@ -135,26 +135,22 @@ void ShaderDialog :: _loadShader()
 	{
 		if (m_strGeometryShader.empty())
 		{
-			m_shaderProgram = RenderSystem::GetSingletonPtr()->CreateShaderProgram( makeString( m_strVertexShader)
-				, makeString( m_strFragmentShader)
-				, C3DEmptyString);
+			m_shaderProgram = RenderSystem::GetSingletonPtr()->CreateShaderProgram( m_strVertexShader.c_str(), m_strFragmentShader.c_str(), C3DEmptyString);
 		}
 		else
 		{
-			m_shaderProgram = RenderSystem::GetSingletonPtr()->CreateShaderProgram( makeString( m_strVertexShader)
-				, makeString( m_strFragmentShader)
-				, makeString( m_strGeometryShader));
+			m_shaderProgram = RenderSystem::GetSingletonPtr()->CreateShaderProgram( m_strVertexShader.c_str(), m_strFragmentShader.c_str(), m_strGeometryShader.c_str());
 		}
 	}
 	else
 	{
-		m_shaderProgram->SetVertexFile( makeString( m_strVertexShader));
-		m_shaderProgram->SetFragmentFile( makeString( m_strFragmentShader));
+		m_shaderProgram->SetVertexFileIO( m_strVertexShader.c_str());
+		m_shaderProgram->SetFragmentFileIO( m_strFragmentShader.c_str());
 
 		if ( ! m_strGeometryShader.empty())
 		{
 			m_shaderProgram->UsesGeometryShader( true);
-			m_shaderProgram->SetGeometryFile( makeString( m_strGeometryShader));
+			m_shaderProgram->SetGeometryFileIO( m_strGeometryShader.c_str());
 		}
 		else
 		{

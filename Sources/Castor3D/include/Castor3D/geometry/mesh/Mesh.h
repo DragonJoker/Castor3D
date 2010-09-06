@@ -20,17 +20,18 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	//! Mesh resource loader
 	/*!
-	Mesh loader from file
+	Loads and saves meshes from/into a file
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
 	class CS3D_API MeshLoader : General::Resource::ResourceLoader <Mesh>
 	{
 	public:
-		Mesh * LoadFromFile( const String & p_file);
-		Mesh * LoadFromExtFile( const String & p_file);
-		bool SaveToFile( const String & p_file, Mesh * p_mesh);
+		Mesh * LoadFromFileIO( const String & p_file);
+		Mesh * LoadFromExtFileIO( const String & p_file);
+		bool SaveToFileIO( const String & p_file, Mesh * p_mesh);
 
 	protected:
 		Mesh * _loadFrom3DS( const String & p_file);
@@ -64,6 +65,7 @@ namespace Castor3D
 			eTorus,			//!< Torus mesh type
 			ePlane,			//!< Plane mesh type
 			eIcosaedron,	//!< Triangular faces sphere mesh type
+			eProjection,	//!< Projection mesh type
 		} eTYPE;
 
 	protected:
@@ -138,8 +140,9 @@ namespace Castor3D
 		void SetSmoothNormals();
 		/**
 		 * Initialises all the normals
+		 *@param p_bReverted : [in] Tells if the normals are reverted
 		 */
-		void SetNormals();
+		void SetNormals( bool p_bReverted = false);
 		/**
 		 * Initialises vertex and texture buffers
 		 */
@@ -150,9 +153,9 @@ namespace Castor3D
 		 */
 		void CreateNormalsBuffers( NormalsMode p_nm);
 		/**
-		 * 
-		 *@param
-		 *@return
+		 * Subdivides a submesh, using the given method
+		 *@param p_index : [in] The index of the submesh to subdivide
+		 *@param p_mode : [in] The subdivision mode
 		 */
 		virtual bool Subdivide( unsigned int p_index, SubdivisionMode p_mode);
 

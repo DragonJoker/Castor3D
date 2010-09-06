@@ -187,7 +187,7 @@ void Submesh :: SetFlatNormals()
 			Point2D<float> l_vEdge1uv = l_w2 - l_w1;
 			Point2D<float> l_vEdge2uv = l_w3 - l_w1;
 
-			Vector3f l_vNormal = l_vEdge1.GetNormal( l_vEdge2);
+			Vector3f l_vNormal = l_vEdge2.GetNormal( l_vEdge1);
 
 			l_pFace->m_faceNormal = l_vNormal;
 
@@ -275,19 +275,6 @@ void Submesh :: _setBufferSmoothNormals( Face * p_pFace)
 	m_trianglesTangents->Add( p_pFace->m_vertex3Tangent->x);
 	m_trianglesTangents->Add( p_pFace->m_vertex3Tangent->y);
 	m_trianglesTangents->Add( p_pFace->m_vertex3Tangent->z);
-/*
-	m_trianglesTangents->Add( p_pFace->m_faceTangent.x);
-	m_trianglesTangents->Add( p_pFace->m_faceTangent.y);
-	m_trianglesTangents->Add( p_pFace->m_faceTangent.z);
-
-	m_trianglesTangents->Add( p_pFace->m_faceTangent.x);
-	m_trianglesTangents->Add( p_pFace->m_faceTangent.y);
-	m_trianglesTangents->Add( p_pFace->m_faceTangent.z);
-
-	m_trianglesTangents->Add( p_pFace->m_faceTangent.x);
-	m_trianglesTangents->Add( p_pFace->m_faceTangent.y);
-	m_trianglesTangents->Add( p_pFace->m_faceTangent.z);
-*/
 }
 
 void Submesh :: _setBufferFlatNormals( Face * p_pFace)
@@ -389,6 +376,12 @@ Vector3f * Submesh :: AddVertex( Vector3f * p_v)
 	return p_v;
 }
 
+Vector3f * Submesh :: AddVertex( float * p_v)
+{
+	Vector3f * l_result = new Vector3f( p_v[0], p_v[1], p_v[2], m_vertex.size());
+	return AddVertex( l_result);
+}
+
 Face * Submesh :: AddFace( Vector3f * a, Vector3f * b, Vector3f * c, size_t p_sgIndex)
 {
 	Face * l_face = new Face( a, b, c);
@@ -415,6 +408,34 @@ Face * Submesh :: AddFace( size_t a, size_t b, size_t c, size_t p_sgIndex)
 	l_v3 = m_vertex[c];
 
 	return AddFace( l_v1, l_v2, l_v3, p_sgIndex);
+}
+
+void Submesh :: AddQuadFace( Vector3f * a, Vector3f * b, Vector3f * c, Vector3f * d, size_t p_sgIndex)
+{
+	Face * l_pFace;
+	l_pFace = AddFace( b, d, a, 0);
+	SetTexCoordV1( l_pFace, 1.0, 1.0);
+	SetTexCoordV2( l_pFace, 0.0, 0.0);
+	SetTexCoordV3( l_pFace, 0.0, 1.0);
+
+	l_pFace = AddFace( c, d, b, 0);
+	SetTexCoordV1( l_pFace, 1.0, 0.0);
+	SetTexCoordV2( l_pFace, 0.0, 0.0);
+	SetTexCoordV3( l_pFace, 1.0, 1.0);
+}
+
+void Submesh :: AddQuadFace( size_t a, size_t b, size_t c, size_t d, size_t p_sgIndex)
+{
+	Face * l_pFace;
+	l_pFace = AddFace( b, d, a, 0);
+	SetTexCoordV1( l_pFace, 1.0, 1.0);
+	SetTexCoordV2( l_pFace, 0.0, 0.0);
+	SetTexCoordV3( l_pFace, 0.0, 1.0);
+
+	l_pFace = AddFace( c, d, b, 0);
+	SetTexCoordV1( l_pFace, 1.0, 0.0);
+	SetTexCoordV2( l_pFace, 0.0, 0.0);
+	SetTexCoordV3( l_pFace, 1.0, 1.0);
 }
 
 SmoothingGroup * Submesh :: AddSmoothingGroup()
@@ -539,7 +560,7 @@ void Submesh :: Subdivide( SubdivisionMode p_mode, Vector3f * p_center)
 	SetNormals();
 }
 
-bool Submesh :: Write( File & p_file)const
+bool Submesh :: Write( FileIO & p_file)const
 {
 	size_t l_nbVertex;
 	size_t l_nbFaces;
@@ -624,7 +645,7 @@ bool Submesh :: Write( File & p_file)const
 	return true;
 }
 
-bool Submesh :: Read( File & p_file)
+bool Submesh :: Read( FileIO & p_file)
 {
 	Cleanup();
 
@@ -636,7 +657,7 @@ bool Submesh :: Read( File & p_file)
 	size_t l_nbVertex;
 	size_t l_nbGroups;
 	size_t l_nbFaces;
-	size_t l_index;
+	size_t l_iV1, l_iV2, l_iV3;
 	size_t l_namelength;
 	Face * l_face;
 	Char l_name[256];
@@ -665,13 +686,14 @@ bool Submesh :: Read( File & p_file)
 	for (size_t i = 0; i < l_nbVertex ; i++)
 	{
 		l_v = new Vector3f;
+
 		if ( ! ReadVertex( l_v, p_file))
 		{
 			Log::LogMessage( C3D_T( "Unable to retrieve vertex %i"), i);
 			return false;
 		}
-		l_v->m_index = m_vertex.size();
-		m_vertex.push_back( l_v);
+
+		AddVertex( l_v);
 	}
 
 	l_nbGroups = 0;
@@ -681,12 +703,11 @@ bool Submesh :: Read( File & p_file)
 		return false;
 	}
 
-	Vector3f * l_v1, * l_v2, * l_v3;
 	SmoothingGroup * l_pGroup;
 
 	for (size_t i = 0 ; i < l_nbGroups ; i++)
 	{
-		l_pGroup = new SmoothingGroup();
+		l_pGroup = AddSmoothingGroup();
 
 		if ( ! p_file.Read<size_t>( l_pGroup->m_idGroup))
 		{
@@ -700,35 +721,32 @@ bool Submesh :: Read( File & p_file)
 
 		for (size_t j = 0 ; j < l_nbFaces ; j++)
 		{
-			l_index = 0;
+			l_iV1 = 0;
+			l_iV2 = 0;
+			l_iV3 = 0;
 
-			if ( ! p_file.Read<size_t>( l_index))
+			if ( ! p_file.Read<size_t>( l_iV1))
 			{
 				return false;
 			}
-			l_v1 = m_vertex[l_index];
 
-			if ( ! p_file.Read<size_t>( l_index))
+			if ( ! p_file.Read<size_t>( l_iV2))
 			{
 				return false;
 			}
-			l_v2 = m_vertex[l_index];
 
-			if ( ! p_file.Read<size_t>( l_index))
+			if ( ! p_file.Read<size_t>( l_iV3))
 			{
 				return false;
 			}
-			l_v3 = m_vertex[l_index];
 
-			l_face = AddFace( l_v1, l_v2, l_v3, 0/*i*/);
+			l_face = AddFace( l_iV1, l_iV2, l_iV3, 0);
 
 			if ( ! ReadFace( l_face, p_file))
 			{
 				return false;
 			}
 		}
-
-		m_smoothGroups.push_back( l_pGroup);
 	}
 
 	GenerateBuffers();

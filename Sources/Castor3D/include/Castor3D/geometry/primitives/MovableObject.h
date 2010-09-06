@@ -55,17 +55,10 @@ namespace Castor3D
 		void Cleanup();
 		/**
 		 * Writes the object in a file
-		 *@param p_file : [in] the file to write in
+		 *@param p_pFile : [in] the file to write in
 		 *@return true if successful, false if not
 		 */
-		bool Write( General::Utils::File & p_file)const;
-		/**
-		 * Reads the object from a file
-		 *@param p_file : [in] The file to read from
-		 *@param p_scene : [in] The scene to find the node to attach this movable object
-		 *@return true if successful, false if not
-		 */
-		bool Read( General::Utils::File & p_file, Scene * p_scene);
+		bool Write( General::Utils::FileIO * p_pFile)const;
 		/**
 		 * Computes then returns the rotation matrix
 		 *@return The rotation matrix

@@ -22,39 +22,49 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	//! OBJ file importer
+	/*!
+	Imports 3D data from OBJ files
+	\author Sylvain DOREMUS
+	\date 25/08/2010
+	*/
 	class CS3D_API ObjImporter : public ExternalImporter
 	{
 	private:
 		std::vector <Vector3f *> m_arrayVertex;
-		std::vector <ImportedVertex2>  m_textureCoords;
+		std::vector <Point2D<float>>  m_textureCoords;
 		int m_iNbTexCoords;
 		bool m_bReadingVertex;
 		bool m_bReadingFaces;
 		bool m_objectHasUV;
 		Mesh * m_pMesh;
-		File * m_pMatFile;
+		FileIO * m_pMatFile;
 		std::map <String, Submesh *> m_mapSubmeshes;
 		Submesh * m_pCurrentSubmesh;
-//		std::map <String, Submesh *> m_mapSmoothGroupSubmesh;
-//		std::map <String, SmoothingGroup *> m_mapSmoothGroups;
-//		SmoothingGroup * m_pSmoothingGroup;
+		std::map <String, Submesh *> m_mapSmoothGroupSubmesh;
+		std::map <String, SmoothingGroup *> m_mapSmoothGroups;
+		SmoothingGroup * m_pSmoothingGroup;
 		float m_fAlpha;
 
 		Material * m_pCurrentMaterial;
 
-		File * m_pFile;
+		FileIO * m_pFile;
 
 	public:
+		/**
+		 * Constructor
+		 */
 		ObjImporter();
 
-		virtual bool _import();
 
 	private:
+		virtual bool _import();
+
 		void _createSubmesh();
 		void _readObjFile();
 		void _selectSubmesh( const String & p_strName);
 		void _applyMaterial( const String & p_strMaterialName);
-		void _readMatFile( const String & p_strFileName);
+		void _readMatFileIO( const String & p_strFileName);
 		void _readMatLightComponent( const String & p_strLine);
 		void _readMatTransparency( const String & p_strLine);
 		void _readMatLightRefDifExp( const String & p_strLine);

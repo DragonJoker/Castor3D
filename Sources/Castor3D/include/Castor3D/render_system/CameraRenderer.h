@@ -46,6 +46,8 @@ namespace Castor3D
 		virtual ~CameraRenderer(){}
 		/**
 		 * Applies the transformations of the camera
+		 *@param p_position : [in] The camera position
+		 *@param p_matrix : [in] The rotation matrix
 		 */
 		virtual void ApplyTransformations( const Vector3f & p_position, float * p_matrix) = 0;
 		/**
@@ -54,6 +56,7 @@ namespace Castor3D
 		virtual void RemoveTransformations() = 0;
 		/**
 		* Returns the first object at mouse coords x and y
+		*@param p_scene : [in] The scene from which the selection is made
 		*@param p_mode : [in] The selection mode (vertex, face, submesh, geometry)
 		*@param p_found : [out] The found object (vertex, face, submesh, geometry)
 		*@param x : [in] The x mouse coordinate

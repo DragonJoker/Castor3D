@@ -2,8 +2,6 @@
 
 #include "Memory.h"
 
-#include <cstdlib>
-
 using namespace General::Theory;
 using namespace General::Utils;
 
@@ -15,7 +13,7 @@ void * operator new( size_t p_size)
 
 	if (MemoryManager::Exists())
 	{
-		MultiThreading::RecursiveMutexLock scoped_lock( MemoryManager::GetSingleton().m_mutex);
+		boost::recursive_mutex::scoped_lock scoped_lock( MemoryManager::GetSingleton().m_mutex);
 
 		if ( ! MemoryManager::IsLocked())
 		{
@@ -43,7 +41,7 @@ void * operator new[]( size_t p_size)
 	
 	if (MemoryManager::Exists())
 	{
-		MultiThreading::RecursiveMutexLock scoped_lock( MemoryManager::GetSingleton().m_mutex);
+		boost::recursive_mutex::scoped_lock scoped_lock( MemoryManager::GetSingleton().m_mutex);
 
 		if ( ! MemoryManager::IsLocked())
 		{
@@ -69,7 +67,7 @@ void operator delete( void * p_pointer)
 {
 	if (MemoryManager::Exists())
 	{
-		MultiThreading::RecursiveMutexLock scoped_lock( MemoryManager::GetSingleton().m_mutex);
+		boost::recursive_mutex::scoped_lock scoped_lock( MemoryManager::GetSingleton().m_mutex);
 
 		if ( ! MemoryManager::IsLocked())
 		{
@@ -97,7 +95,7 @@ void operator delete[]( void * p_pointer)
 {
 	if (MemoryManager::Exists())
 	{
-		MultiThreading::RecursiveMutexLock scoped_lock( MemoryManager::GetSingleton().m_mutex);
+		boost::recursive_mutex::scoped_lock scoped_lock( MemoryManager::GetSingleton().m_mutex);
 
 		if ( ! MemoryManager::IsLocked())
 		{

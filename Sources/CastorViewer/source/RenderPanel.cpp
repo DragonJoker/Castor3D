@@ -238,10 +238,11 @@ void RenderPanel :: _onMouseMove( wxMouseEvent & event)
 {
 	m_x = event.GetX();
 	m_y = event.GetY();
-	m_deltaX = m_oldX - m_x;
-	m_deltaY = m_oldY - m_y;
+	m_deltaX = (m_oldX - m_x) / 2.0f;
+	m_deltaY = (m_oldY - m_y) / 2.0f;
 	m_oldX = m_x;
 	m_oldY = m_y;
+
 	if (m_mouseLeftDown)
 	{
 		if (m_renderWindow->GetType() == pt3DView)

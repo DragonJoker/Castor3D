@@ -79,7 +79,7 @@ void Pass :: SetTexBaseColour( float p_r, float p_g, float p_b, float p_a)
 {
 	m_texBaseColour = Colour( p_r, p_g, p_b, p_a);
 
-	vector::cycle( m_textureUnits, & TextureUnit::SetPrimaryColour, m_texBaseColour.ptr());
+	vector::cycle( m_textureUnits, & TextureUnit::SetPrimaryColour, m_texBaseColour);
 }
 
 void Pass :: AddTextureUnit( TextureUnit * p_texUnit)
@@ -140,55 +140,74 @@ String Pass :: GetTexturePath( unsigned int p_index)
 	return l_res;
 }
 
-bool Pass :: Write( General::Utils::File & p_file)const
+bool Pass :: Write( General::Utils::FileIO * p_pFile)const
 {
-	bool l_bReturn = (p_file.WriteArray<float>( m_ambient.const_ptr(), 3) == sizeof( float) * 3);
+	bool l_bReturn = p_pFile->WriteLine( "\tpass\n\t{\n");
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.WriteArray<float>( m_diffuse.const_ptr(), 3) == sizeof( float) * 3);
+		p_pFile->Print( 256, "\t\tambient %f %f %f %f\n", m_ambient.r, m_ambient.g, m_ambient.b, m_ambient.a);
 	}
-
+	
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.WriteArray<float>( m_specular.const_ptr(), 3) == sizeof( float) * 3);
+		p_pFile->Print( 256, "\t\tdiffuse %f %f %f %f\n", m_diffuse.r, m_diffuse.g, m_diffuse.b, m_diffuse.a);
 	}
-
+	
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.WriteArray<float>( m_emissive.const_ptr(), 3) == sizeof( float) * 3);
+		p_pFile->Print( 256, "\t\temissive %f %f %f %f\n", m_emissive.r, m_emissive.g, m_emissive.b, m_emissive.a);
 	}
-
+	
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Write<float>( m_shininess) == sizeof( float));
+		p_pFile->Print( 256, "\t\tspecular %f %f %f %f\n", m_specular.r, m_specular.g, m_specular.b, m_specular.a);
 	}
-
+	
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.WriteArray<float>( m_texBaseColour.const_ptr(), 3) == sizeof( float) * 3);
+		p_pFile->Print( 256, "\t\tshininess %f\n", m_shininess);
 	}
-
+	
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Write<bool>( m_doubleFace) == sizeof( bool));
+		p_pFile->Print( 256, "\t\ttex_base %f %f %f %f\n", m_texBaseColour.r, m_texBaseColour.g, m_texBaseColour.b, m_texBaseColour.a);
+	}
+	
+	if (l_bReturn)
+	{
+		p_pFile->WriteLine( "\t\tdouble_face " + String( m_doubleFace ? "true" : "false") + "\n");
 	}
 
 	if (l_bReturn)
 	{
 		size_t l_nbTextureUnits = m_textureUnits.size();
-		l_bReturn = (p_file.Write<size_t>( l_nbTextureUnits) == sizeof( size_t));
+		bool l_bFirst = true;
 
 		for (size_t i = 0 ; i < l_nbTextureUnits && l_bReturn ; i++)
 		{
-			l_bReturn = m_textureUnits[i]->Write( p_file);
+			if (l_bFirst)
+			{
+				l_bFirst = false;
+			}
+			else
+			{
+				p_pFile->WriteLine( "\n");
+			}
+
+			l_bReturn = m_textureUnits[i]->Write( p_pFile);
 		}
+	}
+	
+	if (l_bReturn)
+	{
+		l_bReturn = p_pFile->WriteLine( "\t}\n");
 	}
 
 	return l_bReturn;
 }
 
-bool Pass :: Read( General::Utils::File & p_file)
+bool Pass :: Read( General::Utils::FileIO & p_file)
 {
 	bool l_bReturn = (p_file.ReadArray<float>( m_ambient.ptr(), 3) == sizeof( float) * 3);
 

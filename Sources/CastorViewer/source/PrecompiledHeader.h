@@ -115,10 +115,4 @@ using namespace General::Templates;
 
 using namespace General::Utils;
 
-namespace CastorViewer
-{
-	wxString makeWxString( String const & p_in );
-	String makeString( wxString const & p_in );
-}
-
 #endif

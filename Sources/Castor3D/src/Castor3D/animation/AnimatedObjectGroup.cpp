@@ -41,12 +41,12 @@ void AnimatedObjectGroup :: AddAnimation( Animation * p_animation)
 	}
 }
 
-bool AnimatedObjectGroup :: Write( File & p_file)const
+bool AnimatedObjectGroup :: Write( FileIO & p_file)const
 {
 	return true;
 }
 
-bool AnimatedObjectGroup :: Read( File & p_file)
+bool AnimatedObjectGroup :: Read( FileIO & p_file)
 {
 	return true;
 }

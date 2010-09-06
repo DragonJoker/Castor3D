@@ -29,7 +29,7 @@ bool ExternalImporter :: Import( const String & p_fileName)
 
 	return l_bReturn;
 }
-
+/*
 void ExternalImporter :: _convertToMesh( Mesh * p_mesh, Imported3DModel * p_model)
 {
 	ImportedMaterialInfo l_mat;
@@ -65,8 +65,6 @@ void ExternalImporter :: _convertToMesh( Mesh * p_mesh, Imported3DModel * p_mode
 				l_unit->SetTexture2D( m_filePath + String( l_mat.m_strFile));
 			}
 		}
-
-		l_material->Initialise();
 	}
 
 	Submesh * l_submesh;
@@ -122,3 +120,4 @@ void ExternalImporter :: _convertToMesh( Mesh * p_mesh, Imported3DModel * p_mode
 
 	p_mesh->SetNormals();
 }
+*/

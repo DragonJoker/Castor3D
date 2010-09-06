@@ -35,7 +35,7 @@ SmoothingGroup :: ~SmoothingGroup()
 
 
  
-void SmoothingGroup :: SetNormals( size_t p_nbVertex, Vector3fPtrArray & p_normals, Vector3fPtrArray & p_tangents)
+void SmoothingGroup :: SetNormals( size_t p_nbVertex, const Vector3fPtrArray & p_normals, const Vector3fPtrArray & p_tangents)
 {
 	size_t i;
 	std::vector < std::vector <FaceAndAngle> > l_facesArray;

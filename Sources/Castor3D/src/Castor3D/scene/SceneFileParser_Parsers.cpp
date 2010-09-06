@@ -19,6 +19,7 @@
 #include "geometry/primitives/MovableObject.h"
 #include "geometry/primitives/Geometry.h"
 #include "geometry/basic/SmoothingGroup.h"
+#include "geometry/basic/Face.h"
 #include "geometry/mesh/Mesh.h"
 #include "geometry/mesh/Submesh.h"
 #include "geometry/mesh/MeshManager.h"
@@ -27,7 +28,6 @@
 #include "shader/UniformVariable.h"
 
 using namespace Castor3D;
-using namespace General::Utils;
 
 void Castor3D :: SceneFileParser :: ParseError( const String & p_strError, SceneFileContext * p_pContext)
 {
@@ -39,7 +39,7 @@ void Castor3D :: SceneFileParser :: ParseError( const String & p_strError, Scene
 void Castor3D :: SceneFileParser :: ParseWarning( const String & p_strWarning, SceneFileContext * p_pContext)
 {
 	StringStream l_streamWarning;
-	l_streamWarning << "Error Line #" << p_pContext->ui64Line << " / " << p_strWarning;
+	l_streamWarning << "Warning Line #" << p_pContext->ui64Line << " / " << p_strWarning;
 	Log::LogMessage( l_streamWarning.str());
 }
 
@@ -261,7 +261,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightCutOff)
 {
 	if (p_pContext->pLight != NULL)
 	{
-		float l_fFloat = float( atof( p_strParams.char_str()));
+		float l_fFloat = float( atof( p_strParams.c_str()));
 
 		if (p_pContext->eLightType == Light::eSpot)
 		{
@@ -284,7 +284,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightExponent)
 {
 	if (p_pContext->pLight != NULL)
 	{
-		float l_fFloat = float( atof( p_strParams.char_str()));
+		float l_fFloat = float( atof( p_strParams.c_str()));
 
 		if (p_pContext->eLightType == Light::eSpot)
 		{
@@ -482,51 +482,51 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshType)
 			if (l_strType == "cube")
 			{
 				l_eType = Mesh::eCube;
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[1].char_str())));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[2].char_str())));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[3].char_str())));
+				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[1].c_str())));
+				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[2].c_str())));
+				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[3].c_str())));
 			}
 			else if (l_strType == "cone")
 			{
 				l_eType = Mesh::eCone;
-				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[1].char_str()));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[2].char_str())));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[3].char_str())));
+				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[1].c_str()));
+				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[2].c_str())));
+				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[3].c_str())));
 			}
 			else if (l_strType == "cylinder")
 			{
 				l_eType = Mesh::eCylinder;
-				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[1].char_str()));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[2].char_str())));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[3].char_str())));
+				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[1].c_str()));
+				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[2].c_str())));
+				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[3].c_str())));
 			}
 			else if (l_strType == "sphere")
 			{
 				l_eType = Mesh::eSphere;
-				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[1].char_str()));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[2].char_str())));
+				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[1].c_str()));
+				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[2].c_str())));
 			}
 			else if (l_strType == "icosaedron")
 			{
 				l_eType = Mesh::eIcosaedron;
-				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[1].char_str()));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[2].char_str())));
+				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[1].c_str()));
+				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[2].c_str())));
 			}
 			else if (l_strType == "plane")
 			{
 				l_eType = Mesh::ePlane;
-				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[1].char_str()));
-				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[2].char_str()));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[3].char_str())));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[4].char_str())));
+				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[1].c_str()));
+				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[2].c_str()));
+				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[3].c_str())));
+				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[4].c_str())));
 			}
 			else if (l_strType == "torus")
 			{
 				l_eType = Mesh::eTorus;
-				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[1].char_str()));
-				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[2].char_str()));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[3].char_str())));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[4].char_str())));
+				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[1].c_str()));
+				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[2].c_str()));
+				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[3].c_str())));
+				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[4].c_str())));
 			}
 
 			if (l_eType != Mesh::eCustom)
@@ -554,7 +554,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshType)
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshFile)
 {
 	MeshLoader l_loader;
-	p_pContext->pMesh = l_loader.LoadFromExtFile( p_strParams);
+	p_pContext->pMesh = l_loader.LoadFromExtFileIO( p_pContext->pFile->GetFilePath() + "/" + p_strParams);
 
 	if (p_pContext->pMesh == NULL)
 	{
@@ -692,17 +692,74 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_SmoothingGroupFace)
 {
 	if (p_pContext->pSmoothingGroup != NULL)
 	{
-		Point4D<int> l_pt4Indices;
 		Point3D<int> l_pt3Indices;
+		StringArray l_arrayValues = p_strParams.Split( " ");
+		p_pContext->pFace1 = NULL;
+		p_pContext->pFace2 = NULL;
 
-		if (PARSE_V4( l_pt4Indices))
+		if (l_arrayValues.size() >= 4)
 		{
-			p_pContext->pSubmesh->AddFace( l_pt4Indices.x, l_pt4Indices.y, l_pt4Indices.z, p_pContext->pSmoothingGroup->m_idGroup);
-			p_pContext->pSubmesh->AddFace( l_pt4Indices.y, l_pt4Indices.w, l_pt4Indices.z, p_pContext->pSmoothingGroup->m_idGroup);
+			Point4D<int> l_pt4Indices;
+
+			if (PARSE_V4( l_pt4Indices))
+			{
+				p_pContext->pFace1 = p_pContext->pSubmesh->AddFace( l_pt4Indices.x, l_pt4Indices.y, l_pt4Indices.z, p_pContext->pSmoothingGroup->m_idGroup - 1);
+				p_pContext->pFace2 = p_pContext->pSubmesh->AddFace( l_pt4Indices.y, l_pt4Indices.w, l_pt4Indices.z, p_pContext->pSmoothingGroup->m_idGroup - 1);
+			}
 		}
 		else if (PARSE_V3( l_pt3Indices))
 		{
-			p_pContext->pSubmesh->AddFace( l_pt3Indices.x, l_pt3Indices.y, l_pt3Indices.z, p_pContext->pSmoothingGroup->m_idGroup);
+			p_pContext->pFace1 = p_pContext->pSubmesh->AddFace( l_pt3Indices.x, l_pt3Indices.y, l_pt3Indices.z, p_pContext->pSmoothingGroup->m_idGroup - 1);
+		}
+	}
+	else
+	{
+		PARSING_ERROR( "Smoothing Group not initialised");
+	}
+
+	return false;
+}
+
+IMPLEMENT_ATTRIBUTE_PARSER( Parser_SmoothingGroupFaceUV)
+{
+	if (p_pContext->pSmoothingGroup != NULL)
+	{
+		Point3D<int> l_pt3Indices;
+		StringArray l_arrayValues = p_strParams.Split( " ");
+
+		if (l_arrayValues.size() >= 8)
+		{
+			if (p_pContext->pFace1 != NULL)
+			{
+				p_pContext->pFace1->m_vertex1TexCoord.x = (float)atof( l_arrayValues[0].c_str());
+				p_pContext->pFace1->m_vertex1TexCoord.y = (float)atof( l_arrayValues[1].c_str());
+				p_pContext->pFace1->m_vertex2TexCoord.x = (float)atof( l_arrayValues[2].c_str());
+				p_pContext->pFace1->m_vertex2TexCoord.y = (float)atof( l_arrayValues[3].c_str());
+				p_pContext->pFace1->m_vertex3TexCoord.x = (float)atof( l_arrayValues[4].c_str());
+				p_pContext->pFace1->m_vertex3TexCoord.y = (float)atof( l_arrayValues[5].c_str());
+			}
+
+			if (p_pContext->pFace2 != NULL)
+			{
+				p_pContext->pFace2->m_vertex1TexCoord.x = (float)atof( l_arrayValues[2].c_str());
+				p_pContext->pFace2->m_vertex1TexCoord.y = (float)atof( l_arrayValues[3].c_str());
+				p_pContext->pFace2->m_vertex2TexCoord.x = (float)atof( l_arrayValues[6].c_str());
+				p_pContext->pFace2->m_vertex2TexCoord.y = (float)atof( l_arrayValues[7].c_str());
+				p_pContext->pFace2->m_vertex3TexCoord.x = (float)atof( l_arrayValues[4].c_str());
+				p_pContext->pFace2->m_vertex3TexCoord.y = (float)atof( l_arrayValues[5].c_str());
+			}
+		}
+		else if (l_arrayValues.size() >= 6)
+		{
+			if (p_pContext->pFace1 != NULL)
+			{
+				p_pContext->pFace1->m_vertex1TexCoord.x = (float)atof( l_arrayValues[0].c_str());
+				p_pContext->pFace1->m_vertex1TexCoord.y = (float)atof( l_arrayValues[1].c_str());
+				p_pContext->pFace1->m_vertex2TexCoord.x = (float)atof( l_arrayValues[2].c_str());
+				p_pContext->pFace1->m_vertex2TexCoord.y = (float)atof( l_arrayValues[3].c_str());
+				p_pContext->pFace1->m_vertex3TexCoord.x = (float)atof( l_arrayValues[4].c_str());
+				p_pContext->pFace1->m_vertex3TexCoord.y = (float)atof( l_arrayValues[5].c_str());
+			}
 		}
 	}
 	else
@@ -754,7 +811,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassAmbient)
 
 		if (PARSE_V4( l_crColour))
 		{
-			p_pContext->pPass->SetAmbient( l_crColour.ptr());
+			p_pContext->pPass->SetAmbient( l_crColour);
 		}
 	}
 	else
@@ -773,7 +830,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassDiffuse)
 
 		if (PARSE_V4( l_crColour))
 		{
-			p_pContext->pPass->SetDiffuse( l_crColour.ptr());
+			p_pContext->pPass->SetDiffuse( l_crColour);
 		}
 	}
 	else
@@ -792,7 +849,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassSpecular)
 
 		if (PARSE_V4( l_crColour))
 		{
-			p_pContext->pPass->SetSpecular( l_crColour.ptr());
+			p_pContext->pPass->SetSpecular( l_crColour);
 		}
 	}
 	else
@@ -811,7 +868,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassEmissive)
 
 		if (PARSE_V4( l_crColour))
 		{
-			p_pContext->pPass->SetEmissive( l_crColour.ptr());
+			p_pContext->pPass->SetEmissive( l_crColour);
 		}
 	}
 	else
@@ -826,8 +883,57 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassShininess)
 {
 	if (p_pContext->pPass != NULL)
 	{
-		float l_fFloat = float( atof( p_strParams.char_str()));
+		float l_fFloat = float( atof( p_strParams.c_str()));
 		p_pContext->pPass->SetShininess( l_fFloat);
+	}
+	else
+	{
+		PARSING_ERROR( "Pass not initialised.");
+	}
+
+	return false;
+}
+
+IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassAlpha)
+{
+	if (p_pContext->pPass != NULL)
+	{
+		float l_fFloat = float( atof( p_strParams.c_str()));
+		p_pContext->pPass->SetAlpha( l_fFloat);
+	}
+	else
+	{
+		PARSING_ERROR( "Pass not initialised.");
+	}
+
+	return false;
+}
+
+IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassBaseTexColour)
+{
+	if (p_pContext->pPass != NULL)
+	{
+		Colour l_crColour;
+
+		if (PARSE_V4( l_crColour))
+		{
+			p_pContext->pPass->SetTexBaseColour( l_crColour.r, l_crColour.g, l_crColour.b, l_crColour.a);
+		}
+	}
+	else
+	{
+		PARSING_ERROR( "Pass not initialised.");
+	}
+
+	return false;
+}
+
+IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassDoubleFace)
+{
+	if (p_pContext->pPass != NULL)
+	{
+		bool l_bDouble = p_strParams == "true";
+		p_pContext->pPass->SetDoubleFace( l_bDouble);
 	}
 	else
 	{
@@ -886,6 +992,10 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_UnitImage)
 		{
 			p_pContext->pTextureUnit->SetTexture2D( p_pContext->pFile->GetFilePath() + "/" + p_strParams);
 		}
+		else if (FileBase::FileExists( p_strParams))
+		{
+			p_pContext->pTextureUnit->SetTexture2D( p_strParams);
+		}
 		else
 		{
 			PARSING_ERROR( "File " + p_pContext->pFile->GetFilePath() + "/" + p_strParams + " not found, check the relativeness of the path");
@@ -922,7 +1032,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_UnitMapType)
 {
 	if (p_pContext->pTextureUnit != NULL)
 	{
-		TextureUnit::eMAP_MODE eMapMode = TextureUnit::eMAP_MODE( atoi( p_strParams.char_str()));
+		TextureUnit::eMAP_MODE eMapMode = TextureUnit::eMAP_MODE( atoi( p_strParams.c_str()));
 
 		p_pContext->pTextureUnit->SetTextureMapMode( eMapMode);
 	}
@@ -984,7 +1094,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVertexFile)
 {
 	if (p_pContext->pShaderProgram != NULL)
 	{
-		p_pContext->pShaderProgram->SetVertexFile( p_pContext->pFile->GetFilePath() + "/" + p_strParams);
+		p_pContext->pShaderProgram->SetVertexFileIO( p_pContext->pFile->GetFilePath() + "/" + p_strParams);
 	}
 	else
 	{
@@ -998,7 +1108,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderPixelFile)
 {
 	if (p_pContext->pShaderProgram != NULL)
 	{
-		p_pContext->pShaderProgram->SetFragmentFile( p_pContext->pFile->GetFilePath() + "/" + p_strParams);
+		p_pContext->pShaderProgram->SetFragmentFileIO( p_pContext->pFile->GetFilePath() + "/" + p_strParams);
 	}
 	else
 	{
@@ -1012,7 +1122,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderGeometryFile)
 {
 	if (p_pContext->pShaderProgram != NULL)
 	{
-		p_pContext->pShaderProgram->SetGeometryFile( p_pContext->pFile->GetFilePath() + "/" + p_strParams);
+		p_pContext->pShaderProgram->SetGeometryFileIO( p_pContext->pFile->GetFilePath() + "/" + p_strParams);
 	}
 	else
 	{

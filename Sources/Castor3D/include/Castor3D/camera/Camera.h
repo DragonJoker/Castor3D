@@ -117,15 +117,10 @@ namespace Castor3D
 		 *@param p_file : [in] The file to write in
 		 *@return true if successful, false if not
 		 */
-		bool Write( General::Utils::File & p_file)const;
-		/**
-		 * Reads the camera from a file
-		 *@param p_file : [in] The file to read from
-		 *@return true if successful, false if not
-		 */
-		bool Read( General::Utils::File & p_file);
+		bool Write( General::Utils::FileIO * p_file)const;
 		/**
 		* Returns the first object at mouse coords x and y
+		*@param p_scene : [in] The scene used for the selection
 		*@param p_mode : [in] The selection mode (vertex, face, submesh, geometry)
 		*@param p_found : [out] The found object (vertex, face, submesh, geometry)
 		*@param x : [in] The x mouse coordinate

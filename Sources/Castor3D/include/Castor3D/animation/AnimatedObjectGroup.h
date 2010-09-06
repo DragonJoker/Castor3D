@@ -68,12 +68,12 @@ namespace Castor3D
 		 * Writes the group in a file
 		 *@param p_file : the file to write in
 		 */
-		bool Write( General::Utils::File & p_file)const;
+		bool Write( General::Utils::FileIO & p_file)const;
 		/**
 		 * Reads the group from a file
 		 @param p_file : the file to read from
 		 */
-		bool Read( General::Utils::File & p_file);
+		bool Read( General::Utils::FileIO & p_file);
 		/**
 		 * Update all the animations
 		 *@param p_tslf : time since the last frame

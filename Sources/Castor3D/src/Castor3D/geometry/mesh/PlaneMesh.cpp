@@ -86,15 +86,7 @@ void PlaneMesh :: GeneratePoints()
 			l_v4 = l_submesh->GetVertex( j + i + 1);
 
 //			Log::LogMessage( "PlaneMesh :: GeneratePoints - Face 1");
-			l_face = l_submesh->AddFace( l_v1, l_v2, l_v3, 0);
-			SetTexCoordV1( l_face, l_v1->x / m_width, l_v1->z / m_depth);
-			SetTexCoordV2( l_face, l_v2->x / m_width, l_v2->z / m_depth);
-			SetTexCoordV3( l_face, l_v3->x / m_width, l_v3->z / m_depth);
-//			Log::LogMessage( "PlaneMesh :: GeneratePoints - Face 2");
-			l_face = l_submesh->AddFace( l_v1, l_v3, l_v4, 0);
-			SetTexCoordV1( l_face, l_v1->x / m_width, l_v1->z / m_depth);
-			SetTexCoordV2( l_face, l_v3->x / m_width, l_v3->z / m_depth);
-			SetTexCoordV3( l_face, l_v4->x / m_width, l_v4->z / m_depth);
+			l_submesh->AddQuadFace( l_v1, l_v2, l_v3, l_v4, 0);
 		}
 	}
 

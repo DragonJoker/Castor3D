@@ -107,9 +107,8 @@ namespace Castor3D
 							   ProjectionType p_type);
 		/**
 		* Creates a light
-		*@param p_name : [in] The light name
-		*@param p_index : [in] The light index
 		*@param p_type : [in] The light type
+		*@param p_name : [in] The light name
 		 */
 		Light * CreateLight( Light::eTYPE p_type, const String & p_name);
 		/**
@@ -124,12 +123,6 @@ namespace Castor3D
 		 *@return The named node, NULL if not found
 		 */
 		SceneNode * GetNode( const String & p_name)const;
-		SceneNodeStrMap::iterator GetNodesIterator() { return m_addedNodes.begin(); }
-		SceneNodeStrMap::const_iterator GetNodesEnd() { return m_addedNodes.end(); }
-		LightStrMap::iterator GetLightsIterator() { return m_addedLights.begin(); }
-		LightStrMap::const_iterator GetLightsEnd() { return m_addedLights.end(); }
-		GeometryStrMap::iterator GetGeometriesIterator() { return m_addedPrimitives.begin(); }
-		GeometryStrMap::const_iterator GetGeometriesEnd() { return m_addedPrimitives.end(); }
 		/**
 		 * Adds a node to the scene
 		 *@param p_node : [in] The node to add
@@ -152,43 +145,39 @@ namespace Castor3D
 		 */
 		Geometry * GetGeometry( String p_name);
 		/**
-		 * Removes the geometry given in argument from the scene and deletes it
-		 *@param p_geometry : [in] the geometry to remove
+		 * Removes the light given in argument from the scene and deletes it
+		 *@param p_pLight : [in] The light to remove
 		 */
 		void RemoveLight( Light * p_pLight);
 		/**
-		 * Removes the geometry given in argument from the scene and deletes it
-		 *@param p_geometry : [in] the geometry to remove
+		 * Removes the node given in argument from the scene and deletes it
+		 *@param p_pNode : [in] The node to remove
 		 */
 		void RemoveNode( SceneNode * p_pNode);
 		/**
 		 * Removes the geometry given in argument from the scene and deletes it
-		 *@param p_geometry : [in] the geometry to remove
+		 *@param p_pGeometry : [in] The geometry to remove
 		 */
 		void RemoveGeometry( Geometry * p_pGeometry);
 		/**
-		 * Removes the geometry given in argument from the scene and deletes it
-		 *@param p_geometry : [in] the geometry to remove
+		 * Removes the camera given in argument from the scene and deletes it
+		 *@param p_pCamera : [in] The camera to remove
 		 */
 		void RemoveCamera( Camera * p_pCamera);
 		/**
-		 * Removes the geometry given in argument from the scene and deletes it
-		 *@param p_geometry : [in] the geometry to remove
+		 * Removes all the lights from the scene
 		 */
 		void RemoveAllLights();
 		/**
-		 * Removes the geometry given in argument from the scene and deletes it
-		 *@param p_geometry : [in] the geometry to remove
+		 * Removes all the nodes from the scene
 		 */
 		void RemoveAllNodes();
 		/**
-		 * Removes the geometry given in argument from the scene and deletes it
-		 *@param p_geometry : [in] the geometry to remove
+		 * Removes all the geometries from the scene
 		 */
 		void RemoveAllGeometries();
 		/**
-		 * Removes the geometry given in argument from the scene and deletes it
-		 *@param p_geometry : [in] the geometry to remove
+		 * Removes all the cameras from the scene
 		 */
 		void RemoveAllCameras();
 		/**
@@ -198,16 +187,16 @@ namespace Castor3D
 		std::map <String, bool> GetGeometriesVisibility();
 		/**
 		 * Writes the scene in a file
-		 *@param p_file : [in] file to write in
+		 *@param p_pFile : [in] file to write in
 		 *@return true if successful, false if not
 		 */
-		bool Write( General::Utils::File & p_file)const;
+		bool Write( General::Utils::FileIO * p_pFile)const;
 		/**
 		 * Reads the scene from a file
 		 *@param p_file : [in] file to read from
 		 *@return true if successful, false if not
 		 */
-		bool Read( General::Utils::File & p_file);
+		bool Read( General::Utils::FileIO & p_file);
 		/**
 		* Reads the scene from a 3DS file
 		*@param p_file : [in] file to read from
@@ -223,15 +212,17 @@ namespace Castor3D
 		/**
 		* Reads the scene from a MD2 (Quake 2 Model) file
 		*@param p_file : [in] file to read from
+		*@param p_texName : [in] The texture name
 		*@return true if successful, false if not
 		*/
 		bool ImportMD2( const String & p_file, const String & p_texName=C3DEmptyString);
 		/**
 		* Reads the scene from a MD3 (Quake 3 Model) file
 		*@param p_file : [in] file to read from
+		*@param p_texName : [in] The texture name
 		*@return true if successful, false if not
 		*/
-		bool ImportMD3( const String & p_file, const String & p_texName=C3DEmptyString);
+		bool ImportMD3( const String & p_file);
 		/**
 		* Reads the scene from a ASE (ASCII Scene Export) file
 		*@param p_file : [in] file to read from
@@ -250,38 +241,20 @@ namespace Castor3D
 		*@return true if successful, false if not
 		*/
 		bool ImportBSP( const String & p_file);
-
+		/**
+		 * Selects the nearest element in the ray's way
+		 *@param p_ray : [in] The ray
+		 *@param p_geo : [out] The nearest met geometry
+		 *@param p_submesh : [out] The nearest met submesh
+		 *@param p_face : [out] The nearest met Face
+		 *@param p_vertex : [out] The nearest met Vertex
+		 */
 		void Select( Ray * p_ray, Geometry ** p_geo, Submesh ** p_submesh, Face ** p_face, Vector3f ** p_vertex);
 
 	private:
-		/**
-		 * Writes the lights in a file
-		 *@param p_file : [in] the file to write in
-		 *@return true if successful, false if not
-		 */
-		bool _writeLights( General::Utils::File & p_file)const;
-		/**
-		 * Reads the lights from a file
-		 *@param p_file : [in] the file to read from
-		 *@return true if successful, false if not
-		 */
-		bool _readLights( General::Utils::File & p_file);
-		/**
-		 * Writes the geometries in a file
-		 *@param p_file : [in] the file to write in
-		 *@return true if successful, false if not
-		 */
-		bool _writeGeometries( General::Utils::File & p_file)const;
-		/**
-		 * Reads the geometries from a file
-		 *@param p_file : [in] the file to read from
-		 *@return true if successful, false if not
-		 */
-		bool _readGeometries( General::Utils::File & p_file);
+		bool _writeLights( General::Utils::FileIO * p_pFile)const;
+		bool _writeGeometries( General::Utils::FileIO * p_pFile)const;
 		bool _importExternal( const String & p_fileName, ExternalImporter * p_importer);
-		/**
-		 * Deletes objects which need to be deleted
-		 */
 		void _deleteToDelete();
 
 	public:
@@ -309,6 +282,12 @@ namespace Castor3D
 		 * @return The lights
 		 */
 		inline LightStrMap		GetLights		()const { return m_addedLights; }
+		inline SceneNodeStrMap::iterator GetNodesIterator() { return m_addedNodes.begin(); }
+		inline SceneNodeStrMap::const_iterator GetNodesEnd() { return m_addedNodes.end(); }
+		inline LightStrMap::iterator GetLightsIterator() { return m_addedLights.begin(); }
+		inline LightStrMap::const_iterator GetLightsEnd() { return m_addedLights.end(); }
+		inline GeometryStrMap::iterator GetGeometriesIterator() { return m_addedPrimitives.begin(); }
+		inline GeometryStrMap::const_iterator GetGeometriesEnd() { return m_addedPrimitives.end(); }
 	};
 }
 

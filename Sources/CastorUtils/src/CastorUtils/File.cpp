@@ -159,7 +159,7 @@ void FileBase :: CopyToString( String & p_strOut)
 	{
 		ReadLine( l_strLine, 1024);
 
-		p_strOut += l_strLine + C3D_T( "\n" );
+		p_strOut += l_strLine + "\n";
 	}
 }
 
@@ -185,9 +185,34 @@ FileStream :: ~FileStream()
 	delete m_file;
 }
 
+bool FileStream :: Print( size_t p_uiMaxSize, const char * p_pFormat, ...)
+{
+	bool l_bReturn = false;
+	char * l_pText = new char[p_uiMaxSize];
+	va_list l_vaList;
+
+	if (p_pFormat != NULL)
+	{
+		va_start( l_vaList, p_pFormat);	
+#ifdef WIN32
+        vsnprintf_s( l_pText, p_uiMaxSize, p_uiMaxSize, p_pFormat, l_vaList);  
+#else
+        vsnprintf( l_pText, 256, cFormat_p, ap_l);  
+#endif
+		va_end( l_vaList);
+
+		WriteArray<char>( l_pText, strnlen( l_pText, p_uiMaxSize));
+		l_bReturn = true;
+	}
+
+	delete l_pText;
+
+	return l_bReturn;
+}
+
 //******************************************************************************************************
 
-File :: File( const String & p_fileName, OpenMode p_mode)
+FileIO :: FileIO( const String & p_fileName, OpenMode p_mode)
 	:	FileBase( p_fileName, p_mode)
 {
 	if (fopen_s( & m_file, p_fileName.char_str(), p_mode == eRead ? "rb" : "wb") != 0)
@@ -196,12 +221,38 @@ File :: File( const String & p_fileName, OpenMode p_mode)
 	}
 }
 
-File :: ~File()
+FileIO :: ~FileIO()
 {
 	if (m_file != NULL)
 	{
 		fclose( m_file);
 	}
+}
+
+bool FileIO :: Print( size_t p_uiMaxSize, const char * p_pFormat, ...)
+{
+	bool l_bReturn = false;
+	char * l_pText = new char[p_uiMaxSize];
+	va_list l_vaList;
+
+	if (p_pFormat != NULL)
+	{
+		va_start( l_vaList, p_pFormat);	
+#ifdef WIN32
+        vsnprintf_s( l_pText, 256, 256, p_pFormat, l_vaList);  
+#else
+        vsnprintf( l_pText, 256, cFormat_p, ap_l);  
+#endif
+		va_end( l_vaList);
+
+		fprintf( m_file, "%s", l_pText);
+
+		l_bReturn = true;
+	}
+
+	delete l_pText;
+
+	return l_bReturn;
 }
 
 //******************************************************************************************************

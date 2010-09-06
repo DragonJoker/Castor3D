@@ -24,9 +24,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	//! Definition of a material pass
 	/*!
-	Castor definition of a material : base colours (ambient, diffuse, specular, emissive), shininess, 
-	base texturing colour, texture units and texture units indexes
+	A pass is composed of : base colours (ambient, diffuse, specular, emissive), shininess, 
+	base texturing colour, texture units and texture units indexes. Shader programs can also be applied.
 	\author Sylvain DOREMUS
 	\version 0.1
 	\date 09/02/2010
@@ -109,22 +110,26 @@ namespace Castor3D
 		 *@param p_file : [in] The file to write in
 		 *@return true if successful, false if not
 		 */
-		bool Write( General::Utils::File & p_file)const;
+		bool Write( General::Utils::FileIO * p_file)const;
 		/**
 		 * Reads this material from a file
 		 *@param p_file : [in] The file to read from
 		 *@return true if successful, false if not
 		 */
-		bool Read( General::Utils::File & p_file);
+		bool Read( General::Utils::FileIO & p_file);
 
 	public:
 		inline void SetDiffuse			( float p_r, float p_g, float p_b, float p_a)	{ m_diffuse.x = p_r;m_diffuse.y = p_g;m_diffuse.z = p_b;m_diffuse.w = p_a; }
+		inline void SetDiffuse			( const Colour & p_cColour)						{ m_diffuse = p_cColour; }
 		inline void SetDiffuse			( float * p_diffuse)							{ m_diffuse.x = p_diffuse[0];m_diffuse.y = p_diffuse[1];m_diffuse.z = p_diffuse[2]; }
 		inline void SetAmbient			( float p_r, float p_g, float p_b, float p_a)	{ m_ambient.x = p_r;m_ambient.y = p_g;m_ambient.z = p_b;m_ambient.w = p_a; }
+		inline void SetAmbient			( const Colour & p_cColour)						{ m_ambient = p_cColour; }
 		inline void SetAmbient			( float * p_ambient)							{ m_ambient.x = p_ambient[0];m_ambient.y = p_ambient[1];m_ambient.z = p_ambient[2]; }
 		inline void SetSpecular			( float p_r, float p_g, float p_b, float p_a)	{ m_specular.x = p_r;m_specular.y = p_g;m_specular.z = p_b;m_specular.w = p_a; }
+		inline void SetSpecular			( const Colour & p_cColour)						{ m_specular = p_cColour; }
 		inline void SetSpecular			( float * p_specular)							{ m_specular.x = p_specular[0];m_specular.y = p_specular[1];m_specular.z = p_specular[2]; }
 		inline void SetEmissive			( float p_r, float p_g, float p_b, float p_a)	{ m_emissive.x = p_r;m_emissive.y = p_g;m_emissive.z = p_b;m_emissive.w = p_a; }
+		inline void SetEmissive			( const Colour & p_cColour)						{ m_emissive = p_cColour; }
 		inline void SetEmissive			( float * p_emissive)							{ m_emissive.x = p_emissive[0];m_emissive.y = p_emissive[1];m_emissive.z = p_emissive[2]; }
 		inline void SetShininess		( float p_shininess)							{ m_shininess = p_shininess; }
 		inline void SetDoubleFace		( bool p_double)								{ m_doubleFace = p_double; }

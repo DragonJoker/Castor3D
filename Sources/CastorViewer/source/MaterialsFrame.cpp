@@ -36,7 +36,7 @@ END_EVENT_TABLE()
 
 void MaterialsFrame :: _onSelected( wxListEvent& event)
 {
-	CreateMaterialPanel( makeString( event.GetText()));
+	CreateMaterialPanel( event.GetText().c_str());
 }
 
 void MaterialsFrame :: _onDeselected( wxListEvent& event)

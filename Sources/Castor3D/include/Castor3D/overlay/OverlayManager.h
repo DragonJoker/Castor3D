@@ -25,17 +25,37 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	//! The class managing and owning Overlays
+	/*!
+	This manager holds the references to the created overlays. It creates them end renders them.
+	\author Sylvain DOREMUS
+	\date 25/08/2010
+	*/
 	class CS3D_API OverlayManager : public General::Theory::AutoSingleton<OverlayManager>
 	{
-	protected:
+	private:
 		int m_iCurrentZIndex;
 		std::map <int, Overlay *> m_mapOverlaysByZIndex;
 		std::map <String, Overlay *> m_mapOverlaysByName;
 
 	public:
+		/**
+		 * Constructor
+		 */
 		OverlayManager();
+		/**
+		 * Destructor
+		 */
 		~OverlayManager();
-
+		/**
+		 * Creates an Overlay of the given type
+		 *@param p_strName : [in] The overlay name
+		 *@param p_pParent : [in] The parent overlay.
+		 *@param p_ptPosition : [in] The relative to parent position (if parent is NULL, it is screen relative)
+		 *@param p_ptSize : [in] The relative to parent size (if parent is NULL, it is screen relative)
+		 *@param p_iZIndex : [in] The wanted Z Index.
+		 *@return The created overlay
+		 */
 		template <class T>
 		T * CreateOverlay( const String & p_strName, Overlay * p_pParent, const Point2D<float> & p_ptPosition, const Point2D<float> & p_ptSize, int p_iZIndex=0)
 		{
@@ -82,7 +102,9 @@ namespace Castor3D
 
 			return l_pReturn;
 		}
-
+		/**
+		 * Renders all visible overlays
+		 */
 		void RenderOverlays();
 	};
 }

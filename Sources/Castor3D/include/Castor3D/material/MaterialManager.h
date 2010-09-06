@@ -24,6 +24,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	//! Material manager representation
 	/*!
 	Handles all the created materials, since they must be created by it
 	It also applies them over each geometry they are to be applied
@@ -50,8 +51,9 @@ namespace Castor3D
 		~MaterialManager();
 		/**
 		 * Creates a material, with the given name, if it is not already used
-		 *@param p_name : The wanted name of the material
-		 *@return
+		 *@param p_name : [in] The wanted name of the material
+		 *@param p_iNbInitialPasses : [in] The number of passes initially created in the material
+		 *@return The created material
 		 */
 		virtual Material * CreateMaterial( const String & p_name, int p_iNbInitialPasses=1);
 		/**
@@ -74,7 +76,7 @@ namespace Castor3D
 		bool Write( const String & p_path)const;
 		/**
 		 * Reads materials from separate files in the same folder than the given file path
-		 *@param p_file : [in] The file path
+		 *@param p_path : [in] The file path
 		 *@return true if successful, false if not
 		 */
 		bool Read( const String & p_path);
@@ -84,7 +86,7 @@ namespace Castor3D
 		 */
 		void SetToInitialise( Material * p_material);
 		/**
-		 * 
+		 * Deletes all the materials held
 		 */
 		void DeleteAll();
 

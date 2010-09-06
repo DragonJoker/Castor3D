@@ -73,7 +73,7 @@ void TextPanel :: ParseFile( ScriptCompiler * p_pCompiler)
 {
 	if (p_pCompiler != NULL)
 	{
-//		p_pCompiler->CompileScriptFile( m_strFileName.c_str());
+//		p_pCompiler->CompileScriptFileIO( m_strFileName.c_str());
 	}
 }
 

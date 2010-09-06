@@ -47,6 +47,7 @@ namespace Castor3D
 	#define IMPLEMENT_ATTRIBUTE_PARSER( X) bool Castor3D :: X( String & p_strParams, SceneFileContext * p_pContext)
 	#define PARSING_ERROR( p_strError) SceneFileParser::ParseError( p_strError, p_pContext)
 	#define PARSING_WARNING( p_strWarning) SceneFileParser::ParseWarning( p_strWarning, p_pContext)
+	#define PARSE_V2( V) SceneFileParser::ParseVector2( p_strParams, V, p_pContext)
 	#define PARSE_V3( V) SceneFileParser::ParseVector3( p_strParams, V, p_pContext)
 	#define PARSE_V4( V) SceneFileParser::ParseVector4( p_strParams, V, p_pContext)
 }
