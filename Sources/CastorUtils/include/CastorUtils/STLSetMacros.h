@@ -20,9 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <set>
 
-#include "Module_Utils.h"
-
-namespace General
+namespace Castor
 { namespace Utils
 {
 	//! std::set class functions

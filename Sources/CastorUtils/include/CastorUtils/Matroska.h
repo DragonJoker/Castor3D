@@ -18,8 +18,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___Matroska___
 #define ___Matroska___
 
-#include "Module_Utils.h"
-
 #include <matroska/c/libmatroska_t.h>
 
 namespace libmatroska
@@ -33,7 +31,7 @@ namespace libmatroska
 	class KaxBlockGroup;
 }
 
-namespace General
+namespace Castor
 {	namespace Resource
 {
 	struct EBML_TRACK
@@ -60,7 +58,8 @@ namespace General
 		}
 	};
 
-	typedef std::map <track_type, EBML_TRACK *> TrackMap;
+	typedef C3DMap(	track_type,	EBML_TRACK *)					TrackMap;
+	typedef C3DMap(	track_type,	libmatroska::KaxBlockGroup *)	KaxBlockMap;
 
 	class MatroskaFile
 	{
@@ -86,8 +85,8 @@ namespace General
 
 		StdIOCallback * m_file;
 
-		std::map <track_type, libmatroska::KaxBlockGroup *> m_currentGroups;
-		std::map <track_type, libmatroska::KaxBlockGroup *> m_previousGroups;
+		KaxBlockMap m_currentGroups;
+		KaxBlockMap m_previousGroups;
 
 		bool m_firstFrame;
 

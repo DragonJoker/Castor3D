@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -35,14 +35,14 @@ namespace Castor3D
 	private:
 		friend class Scene;
 		//! The attenuation variables : constant, linear and quadratic
-		Point3D<float> m_attenuation;
+		Point<float, 3> m_attenuation;
 		/**
 		 * Constructor, not to be used by the user, use Scene::CreateLight function instead
-		 *@param p_renderer : The renderer for this light, may be OpenGL or Direct3D
+		 *@param p_renderer : The renderer for the light, may be OpenGL or Direct3D
 		 *@param p_name : This light's name, default is void
 		 *@param p_index : This light's index (max 8 active lights at a time)
 		 */
-		PointLight( LightRenderer * p_renderer, const String & p_name=C3DEmptyString);
+		PointLight( const String & p_name=C3DEmptyString);
 
 	public:
 		/**
@@ -58,7 +58,7 @@ namespace Castor3D
 
 	public:
 		/**
-		 * Sets attenuation variables from an array of float
+		 * Sets attenuation variables from an array of real
 		 *@param p_attenuation : an array of three floats
 		 */
 		void SetAttenuation	( float * p_attenuation);
@@ -70,21 +70,21 @@ namespace Castor3D
 		 */
 		void SetAttenuation	( float p_const, float p_linear, float p_quadratic);
 		/**
-		 * Sets attenuation variables from a Vector3f
-		 *@param p_attenuation : a Vector3f
+		 * Sets attenuation variables from a Point3r
+		 *@param p_attenuation : a Point3r
 		 */
-		void SetAttenuation	( const Vector3f & p_attenuation);
+		void SetAttenuation	( const Point<float, 3> & p_attenuation);
 		/**
 		 * Writes the PointLight in a file
 		 *@param p_pFile : the file to write in
 		 */
-		virtual bool Write( General::Utils::FileIO * p_pFile)const;
+		virtual bool Write( Castor::Utils::File & p_pFile)const;
 
 	public:
 		/**
-		 *@return The light type (Point for this one), used for polymorphism
+		 *@return The light type (Point, here), used for polymorphism
 		 */
-		virtual inline eTYPE	GetLightType()const { return ePoint; }
+		virtual eTYPE	GetLightType()const { return ePoint; }
 		/**
 		 *@return The attenuation values, three floats : constant, linear and quadratic attenuation
 		 */

@@ -4,6 +4,10 @@
 #include "TextPanel.h"
 #include "TextLinesCtrl.h"
 
+#ifdef __WXMSW__
+#	include <wx/msw/msvcrt.h>      // redefines the new() operator 
+#endif
+
 using namespace CastorViewer;
 using namespace Castor3D;
 
@@ -405,7 +409,7 @@ void TextCtrl :: _onScrollThumbTrack( wxScrollWinEvent & p_event)
 	int l_currentPosition = p_event.GetPosition();
 	m_difference += (l_currentPosition - m_precPosition);
 	m_precPosition = l_currentPosition;
-	float l_ratio = ((float)(GetScrollRange( wxVERTICAL) - GetScrollThumb( wxVERTICAL))) / ((float)GetNumberOfLines());
+	real l_ratio = ((real)(GetScrollRange( wxVERTICAL) - GetScrollThumb( wxVERTICAL))) / ((real)GetNumberOfLines());
 //	std::cout << "TextCtrl :: _onScrollThumbTrack - Difference : " << m_difference << "\n";
 	while (abs( m_difference) >= l_ratio)
 	{

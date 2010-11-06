@@ -2,34 +2,38 @@
 
 #include "UniformVariableDialog.h"
 
+#ifdef __WXMSW__
+#	include <wx/msw/msvcrt.h>      // redefines the new() operator 
+#endif
+
 using namespace Castor3D;
 using namespace CastorViewer;
 
-UniformVariableDialog :: UniformVariableDialog( wxWindow * p_pParent, UniformVariable * p_pUniformVariable)
+UniformVariableDialog :: UniformVariableDialog( wxWindow * p_pParent, UniformVariablePtr p_pUniformVariable)
 	:	wxDialog( p_pParent, wxID_ANY, "Uniform Variable", wxDefaultPosition, wxSize( 200, 200)),
 		m_pUniformVariable( p_pUniformVariable),
-		m_bOwn( p_pUniformVariable == NULL)
+		m_bOwn( p_pUniformVariable.null())
 {
 	wxArrayString l_arrayChoices;
-	l_arrayChoices.push_back( C3D_T( "int"));
-	l_arrayChoices.push_back( C3D_T( "float"));
-	l_arrayChoices.push_back( C3D_T( "ivec2"));
-	l_arrayChoices.push_back( C3D_T( "ivec3"));
-	l_arrayChoices.push_back( C3D_T( "ivec4"));
-	l_arrayChoices.push_back( C3D_T( "vec2"));
-	l_arrayChoices.push_back( C3D_T( "vec3"));
-	l_arrayChoices.push_back( C3D_T( "vec4"));
-	l_arrayChoices.push_back( C3D_T( "mat2"));
-	l_arrayChoices.push_back( C3D_T( "mat3"));
-	l_arrayChoices.push_back( C3D_T( "mat4"));
+	l_arrayChoices.push_back( CU_T( "int"));
+	l_arrayChoices.push_back( CU_T( "real"));
+	l_arrayChoices.push_back( CU_T( "ivec2"));
+	l_arrayChoices.push_back( CU_T( "ivec3"));
+	l_arrayChoices.push_back( CU_T( "ivec4"));
+	l_arrayChoices.push_back( CU_T( "vec2"));
+	l_arrayChoices.push_back( CU_T( "vec3"));
+	l_arrayChoices.push_back( CU_T( "vec4"));
+	l_arrayChoices.push_back( CU_T( "mat2"));
+	l_arrayChoices.push_back( CU_T( "mat3"));
+	l_arrayChoices.push_back( CU_T( "mat4"));
 
-	new wxStaticText( this, wxID_ANY, C3D_T( "Type"), wxPoint( 10, 10), wxSize( 90, 20));
-	m_pComboType = new wxComboBox( this, eType, C3D_T( "int"), wxPoint( 100, 10), wxSize( 90, 20), l_arrayChoices, wxCB_READONLY);
+	new wxStaticText( this, wxID_ANY, CU_T( "Type"), wxPoint( 10, 10), wxSize( 90, 20));
+	m_pComboType = new wxComboBox( this, eType, CU_T( "int"), wxPoint( 100, 10), wxSize( 90, 20), l_arrayChoices, wxCB_READONLY);
 
-	new wxStaticText( this, wxID_ANY, C3D_T( "Nom"), wxPoint( 10, 40), wxSize( 90, 20));
+	new wxStaticText( this, wxID_ANY, CU_T( "Nom"), wxPoint( 10, 40), wxSize( 90, 20));
 	m_pEditName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxPoint( 100, 40), wxSize( 90, 20), wxBORDER_SIMPLE);
 
-	new wxStaticText( this, wxID_ANY, C3D_T( "Valeur"), wxPoint( 10, 70), wxSize( 90, 20));
+	new wxStaticText( this, wxID_ANY, CU_T( "Valeur"), wxPoint( 10, 70), wxSize( 90, 20));
 	m_pEditValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxPoint( 100, 70), wxSize( 90, 20), wxBORDER_SIMPLE);
 
 	if (m_bOwn)
@@ -67,7 +71,7 @@ void UniformVariableDialog :: _onClose( wxCloseEvent & event)
 
 void UniformVariableDialog :: _onOk( wxCommandEvent & event)
 {
-	if (m_pUniformVariable != NULL)
+	if ( ! m_pUniformVariable.null())
 	{
 		m_pUniformVariable->SetName( m_pEditName->GetValue().c_str());
 		m_pUniformVariable->SetValue( m_pEditValue->GetValue().c_str());
@@ -78,10 +82,11 @@ void UniformVariableDialog :: _onOk( wxCommandEvent & event)
 
 void UniformVariableDialog :: _onCancel( wxCommandEvent & event)
 {
-	if (m_bOwn && m_pUniformVariable != NULL)
+	if (m_bOwn && ! m_pUniformVariable.null())
 	{
-		delete m_pUniformVariable;
-		m_pUniformVariable = NULL;
+		m_pUniformVariable.reset();
+//		delete m_pUniformVariable;
+//		m_pUniformVariable = NULL;
 	}
 
 	EndDialog( wxID_CANCEL);
@@ -89,8 +94,9 @@ void UniformVariableDialog :: _onCancel( wxCommandEvent & event)
 
 void UniformVariableDialog :: _onSelectType( wxCommandEvent & event)
 {
-	delete m_pUniformVariable;
-	m_pUniformVariable = NULL;
+	m_pUniformVariable.reset();
+//	delete m_pUniformVariable;
+//	m_pUniformVariable = NULL;
 
 	switch (event.GetInt())
 	{
@@ -99,50 +105,50 @@ void UniformVariableDialog :: _onSelectType( wxCommandEvent & event)
 		break;
 
 	case 1:
-		m_pUniformVariable = new OneUniformVariable<float>();
+		m_pUniformVariable = new OneUniformVariable<real>();
 		break;
 
 	case 2:
-		m_pUniformVariable = new Point2DUniformVariable<int>();
+		m_pUniformVariable = new PointUniformVariable<int, 2>();
 		break;
 
 	case 3:
-		m_pUniformVariable = new Point3DUniformVariable<int>();
+		m_pUniformVariable = new PointUniformVariable<int, 3>();
 		break;
 
 	case 4:
-		m_pUniformVariable = new Point4DUniformVariable<int>();
+		m_pUniformVariable = new PointUniformVariable<int, 4>();
 		break;
 
 	case 5:
-		m_pUniformVariable = new Point2DUniformVariable<float>();
+		m_pUniformVariable = new PointUniformVariable<real, 2>();
 		break;
 
 	case 6:
-		m_pUniformVariable = new Point3DUniformVariable<float>();
+		m_pUniformVariable = new PointUniformVariable<real, 3>();
 		break;
 
 	case 7:
-		m_pUniformVariable = new Point4DUniformVariable<float>();
+		m_pUniformVariable = new PointUniformVariable<real, 4>();
 		break;
 
 	case 8:
-		m_pUniformVariable = new Matrix2UniformVariable<float>();
+		m_pUniformVariable = new MatrixUniformVariable<real, 2>();
 		break;
 
 	case 9:
-		m_pUniformVariable = new Matrix3UniformVariable<float>();
+		m_pUniformVariable = new MatrixUniformVariable<real, 3>();
 		break;
 
 	case 10:
-		m_pUniformVariable = new Matrix4UniformVariable<float>();
+		m_pUniformVariable = new MatrixUniformVariable<real, 4>();
 		break;
 
 	default:
 		break;
 	}
 
-	if (m_pUniformVariable != NULL)
+	if ( ! m_pUniformVariable.null())
 	{
 		m_pEditName->Show();
 		m_pEditValue->Show();

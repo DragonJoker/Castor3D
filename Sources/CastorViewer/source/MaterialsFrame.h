@@ -17,7 +17,7 @@ namespace CastorViewer
 	private:
 		MaterialsListView * m_materialsList;
 		int m_listWidth;
-		Castor3D::Material * m_selectedMaterial;
+		Castor3D::MaterialPtr m_selectedMaterial;
 
 		MaterialPanel * m_materialPanel;
 
@@ -31,6 +31,8 @@ namespace CastorViewer
 
 	private:
 		DECLARE_EVENT_TABLE()
+		void _onShow		( wxShowEvent & event);
+		void _onClose		( wxCloseEvent & event);
 		void _onSelected	( wxListEvent & event);
 		void _onDeselected	( wxListEvent & event);
 	};

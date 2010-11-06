@@ -11,14 +11,16 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___CSU_Buffer___
-#define ___CSU_Buffer___
+#ifndef ___Castor_Buffer___
+#define ___Castor_Buffer___
 
-namespace General
+#include "Module_Resource.h"
+
+namespace Castor
 {	namespace Resource
 {
 	//! Buffer management class
@@ -29,7 +31,7 @@ namespace General
 	template <typename T>
 	class Buffer
 	{
-	protected:
+	public:
 		friend class Resource;
 		T * m_buffer;				//!< The data buffer
 		unsigned int m_totalSize;	//!< The buffer size
@@ -44,20 +46,30 @@ namespace General
 				m_totalSize( 0),
 				m_filled( 0)
 		{}
+		/** 
+		* Constructor, initialises its buffer at NULL
+		*/
+		Buffer( T * p_pBuffer, unsigned int p_uiFilled)
+			:	m_buffer( new T[p_uiFilled]),
+				m_totalSize( p_uiFilled),
+				m_filled( p_uiFilled)
+		{
+			memcpy( m_buffer, p_pBuffer, p_uiFilled * sizeof( T));
+		}
 		/**
 		* Destructor, cleans the buffer
 		*/
-		virtual ~Buffer(){ Cleanup(); }
+		virtual ~Buffer()
+		{
+			Cleanup();
+		}
 		/**
 		* Cleanup function, deletes the buffer
 		*/
 		virtual void Cleanup()
 		{
-			if (m_buffer != NULL)
-			{
-				delete [] m_buffer;
-				m_buffer = NULL;
-			}
+			delete [] m_buffer;
+			m_buffer = NULL;
 			m_totalSize = 0;
 			m_filled = 0;
 		}
@@ -69,11 +81,30 @@ namespace General
 		virtual void InitialiseBuffer( unsigned int p_size, unsigned int p_filled)
 		{
 			Cleanup();
+
 			if (p_size > 0)
 			{
 				m_buffer = new T[p_size];
+				memset( m_buffer, 0, sizeof( T) * p_size);
 				m_totalSize = p_size;
 				m_filled = p_filled;
+			}
+		}
+		/**
+		* Initialisation function, initialises the buffer with the size in parameters
+		*@param p_size : the new size to allocate the buffer
+		*@param p_filled : tells th buffer must be considered filled from this
+		*/
+		virtual void InitialiseBuffer( const Buffer<T> & p_buffer)
+		{
+			Cleanup();
+
+			if (p_buffer.m_filled > 0)
+			{
+				m_buffer = new T[p_buffer.m_filled];
+				memcpy( m_buffer, p_buffer.m_buffer, p_buffer.m_filled * sizeof( T));
+				m_totalSize = p_buffer.m_filled;
+				m_filled = p_buffer.m_filled;
 			}
 		}
 
@@ -82,6 +113,15 @@ namespace General
 			if (m_filled < m_totalSize)
 			{
 				m_buffer[m_filled++] = p_element;
+			}
+		}
+
+		void AddArray( void * p_pArray, size_t p_uiNbElements)
+		{
+			if (m_filled + p_uiNbElements / sizeof( T) <= m_totalSize)
+			{
+				memcpy( & m_buffer[m_filled], p_pArray, p_uiNbElements);
+				m_filled += p_uiNbElements / sizeof( T);
 			}
 		}
 
@@ -96,13 +136,22 @@ namespace General
 		void IncreaseSize( unsigned int p_inc)
 		{
 			m_totalSize += p_inc;
+
 			if (m_buffer != NULL)
 			{
 				T * l_newBuf = new T[m_totalSize];
+
 				if (m_filled > 0)
 				{
 					memcpy( l_newBuf, m_buffer, m_filled);
 				}
+
+				delete [] m_buffer;
+				m_buffer = l_newBuf;
+			}
+			else
+			{
+				m_buffer = new T[m_totalSize];
 			}
 		}
 

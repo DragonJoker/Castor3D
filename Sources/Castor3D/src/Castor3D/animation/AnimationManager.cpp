@@ -1,104 +1,97 @@
 #include "PrecompiledHeader.h"
 
 #include "animation/Module_Animation.h"
-
-
 #include "geometry/Module_Geometry.h"
 #include "scene/Module_Scene.h"
-
 #include "animation/AnimationManager.h"
-#include "Log.h"
 
 using namespace Castor3D;
-
 
 AnimationManager :: AnimationManager()
 {
 	m_timer.Time();
 }
 
-
-
 AnimationManager :: ~AnimationManager()
 {
 	Clear();
 }
 
-
-
 void AnimationManager :: Update()
 {
-	m_timeSinceLastFrame = m_timer.Time();
-	map::cycle( m_objectMap, & AnimatedObjectGroup::Update,
-				static_cast <float>( m_timeSinceLastFrame));
-}
+	AnimationManager & l_pThis = GetSingleton();
+	l_pThis.m_timeSinceLastFrame = l_pThis.m_timer.Time();
 
-
-
-AnimatedObjectGroup * AnimationManager :: CreateAnimatedObjectGroup( const String & p_name)
-{
-	AnimatedObjectGroup * l_group = new AnimatedObjectGroup( p_name);
-
-	if ( ! AddElement( l_group))
+	for (C3DMap( String, AnimatedObjectGroupPtr)::iterator l_it = l_pThis.m_objectMap.begin() ; l_it != l_pThis.m_objectMap.end() ; ++l_it)
 	{
-		Log::LogMessage( C3D_T( "Can't add Material %s"), p_name.c_str());
-		delete l_group;
-		return NULL;
-	}
-	Log::LogMessage( C3D_T( "Material %s added"), p_name.c_str());
-	return l_group;
-}
-
-
-
-bool AnimationManager::Write( FileIO & p_file)const
-{
-	size_t l_nbMaterials = m_objectMap.size();
-	if ( ! p_file.Write<size_t>( l_nbMaterials))
-	{
-		return false;
+		l_it->second->Update( static_cast <real>( l_pThis.m_timeSinceLastFrame));
 	}
 
-	TypeMap::const_iterator l_it = m_objectMap.begin();
-	while (l_it != m_objectMap.end())
+//	map::cycle( m_objectMap, & AnimatedObjectGroup::Update,
+//				static_cast <real>( m_timeSinceLastFrame));
+}
+
+AnimatedObjectGroupPtr AnimationManager :: CreateAnimatedObjectGroup( const String & p_name)
+{
+	AnimationManager & l_pThis = GetSingleton();
+	AnimatedObjectGroupPtr l_pReturn( new AnimatedObjectGroup( p_name));
+
+	if ( ! l_pThis.AddElement( l_pReturn))
 	{
-		if ( ! l_it->second->Write( p_file))
+		Log::LogMessage( CU_T( "Can't add AnimatedObjectGroup %s"), p_name.c_str());
+		l_pReturn.reset();
+	}
+	else
+	{
+		Log::LogMessage( CU_T( "AnimatedObjectGroup %s added"), p_name.c_str());
+	}
+
+	return l_pReturn;
+}
+
+bool AnimationManager::Write( File & p_file)
+{
+	AnimationManager & l_pThis = GetSingleton();
+	size_t l_nbMaterials = l_pThis.m_objectMap.size();
+	bool l_bReturn = (p_file.Write( l_nbMaterials) == sizeof( size_t));
+
+	if (l_bReturn)
+	{
+		TypeMap::const_iterator l_it = l_pThis.m_objectMap.begin();
+
+		while (l_it != l_pThis.m_objectMap.end() && l_bReturn)
 		{
-			return false;
+			l_bReturn = l_it->second->Write( p_file);
+			++l_it;
 		}
-		++l_it;
 	}
-	return true;
+
+	return l_bReturn;
 }
 
-
-
-bool AnimationManager::Read( FileIO & p_file)
+bool AnimationManager::Read( File & p_file)
 {
+	AnimationManager & l_pThis = GetSingleton();
 	size_t l_nbMaterials = 0;
-	if ( ! p_file.Read<size_t>( l_nbMaterials))
-	{
-		return false;
-	}
+	bool l_bReturn = (p_file.Read( l_nbMaterials) == sizeof( size_t));
 
-	AnimatedObjectGroup * l_group;
-	for (size_t i = 0 ; i < l_nbMaterials ; i++)
+	if (l_bReturn)
 	{
-		l_group = NULL;
-		l_group = new AnimatedObjectGroup( C3DEmptyString);
-		if ( ! l_group->Read( p_file))
+		for (size_t i = 0 ; i < l_nbMaterials && l_bReturn ; i++)
 		{
-			return false;
-		}
-		if (l_group != NULL)
-		{
-			if ( ! AddElement( l_group))
+			AnimatedObjectGroupPtr l_group( new AnimatedObjectGroup( C3DEmptyString));
+
+			if ( ! l_group.null())
 			{
-				delete l_group;
+				l_bReturn = l_group->Read( p_file);
+
+				if ( ! l_pThis.AddElement( l_group))
+				{
+					l_group.reset();
+				}
 			}
 		}
 	}
-	return true;
+
+	return l_bReturn;
 }
-
-

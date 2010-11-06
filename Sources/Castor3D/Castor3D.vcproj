@@ -47,6 +47,9 @@
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="PrecompiledHeader.h"
+				ProgramDataBaseFileName="$(IntDir)\$(TargetName).pdb"
+				WarningLevel="0"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -62,6 +65,7 @@
 				AdditionalDependencies="CastorUtils.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="../Bin/Release - Multibyte"
+				GenerateDebugInformation="true"
 				SubSystem="2"
 				RandomizedBaseAddress="1"
 				DataExecutionPrevention="0"
@@ -121,6 +125,8 @@
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="PrecompiledHeader.h"
+				ProgramDataBaseFileName="$(IntDir)\$(TargetName).pdb"
+				WarningLevel="0"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -199,6 +205,7 @@
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="PrecompiledHeader.h"
+				ProgramDataBaseFileName="$(IntDir)\$(TargetName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -280,6 +287,7 @@
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="PrecompiledHeader.h"
+				ProgramDataBaseFileName="$(IntDir)\$(TargetName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -395,19 +403,15 @@
 			<Filter
 				Name="geometry"
 				>
-				<File
-					RelativePath=".\src\Castor3D\geometry\Module_Geometry.cpp"
-					>
-				</File>
 				<Filter
 					Name="basic"
 					>
 					<File
-						RelativePath=".\src\Castor3D\geometry\basic\Arc.cpp"
+						RelativePath=".\src\Castor3D\geometry\basic\Face.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\src\Castor3D\geometry\basic\Face.cpp"
+						RelativePath=".\src\Castor3D\geometry\basic\Pattern.cpp"
 						>
 					</File>
 					<File
@@ -516,6 +520,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\src\Castor3D\main\Pipeline.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Castor3D\main\Plugin.cpp"
 					>
 				</File>
@@ -559,10 +567,6 @@
 			<Filter
 				Name="render_system"
 				>
-				<File
-					RelativePath=".\src\Castor3D\render_system\Buffer.cpp"
-					>
-				</File>
 				<File
 					RelativePath=".\src\Castor3D\render_system\RenderSystem.cpp"
 					>
@@ -745,11 +749,11 @@
 					Name="basic"
 					>
 					<File
-						RelativePath=".\include\Castor3D\geometry\basic\Arc.h"
+						RelativePath=".\include\Castor3D\geometry\basic\Face.h"
 						>
 					</File>
 					<File
-						RelativePath=".\include\Castor3D\geometry\basic\Face.h"
+						RelativePath=".\include\Castor3D\geometry\basic\Pattern.h"
 						>
 					</File>
 					<File
@@ -909,6 +913,10 @@
 					RelativePath=".\include\Castor3D\main\Root.h"
 					>
 				</File>
+				<File
+					RelativePath=".\include\Castor3D\main\Serialisable.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="render_system"
@@ -918,27 +926,15 @@
 					>
 				</File>
 				<File
-					RelativePath=".\include\Castor3D\render_system\CameraRenderer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\Castor3D\render_system\LightRenderer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\Castor3D\render_system\MaterialRenderer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\Castor3D\render_system\MeshRenderer.h"
-					>
-				</File>
-				<File
 					RelativePath=".\include\Castor3D\render_system\Module_Render.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\Castor3D\render_system\OverlayRenderer.h"
+					RelativePath=".\include\Castor3D\main\Pipeline.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\Castor3D\render_system\Renderable.h"
 					>
 				</File>
 				<File
@@ -947,14 +943,6 @@
 				</File>
 				<File
 					RelativePath=".\include\Castor3D\render_system\RenderSystem.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\Castor3D\render_system\SceneRenderer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\Castor3D\render_system\WindowRenderer.h"
 					>
 				</File>
 			</Filter>
@@ -1075,18 +1063,6 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="overlay"
-				>
-				<File
-					RelativePath=".\include\Castor3D\overlay\Overlay.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\Castor3D\overlay\OverlayManager.h"
-					>
-				</File>
-			</Filter>
-			<Filter
 				Name="text"
 				>
 			</Filter>
@@ -1111,6 +1087,22 @@
 				</File>
 				<File
 					RelativePath=".\include\Castor3D\shader\UniformVariable.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="overlay"
+				>
+				<File
+					RelativePath=".\include\Castor3D\overlay\Module_Overlay.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\Castor3D\overlay\Overlay.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\Castor3D\overlay\OverlayManager.h"
 					>
 				</File>
 			</Filter>

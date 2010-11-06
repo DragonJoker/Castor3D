@@ -1,9 +1,11 @@
+#include "PrecompiledHeader.h"
+
 #include "Memory_Impl.h"
 
 #include "Memory.h"
 
-using namespace General::Theory;
-using namespace General::Utils;
+using namespace Castor::Theory;
+using namespace Castor::Utils;
 
 #undef new
 
@@ -13,7 +15,7 @@ void * operator new( size_t p_size)
 
 	if (MemoryManager::Exists())
 	{
-		boost::recursive_mutex::scoped_lock scoped_lock( MemoryManager::GetSingleton().m_mutex);
+		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( MemoryManager::GetSingleton().m_mutex);
 
 		if ( ! MemoryManager::IsLocked())
 		{
@@ -41,7 +43,7 @@ void * operator new[]( size_t p_size)
 	
 	if (MemoryManager::Exists())
 	{
-		boost::recursive_mutex::scoped_lock scoped_lock( MemoryManager::GetSingleton().m_mutex);
+		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( MemoryManager::GetSingleton().m_mutex);
 
 		if ( ! MemoryManager::IsLocked())
 		{
@@ -67,7 +69,7 @@ void operator delete( void * p_pointer)
 {
 	if (MemoryManager::Exists())
 	{
-		boost::recursive_mutex::scoped_lock scoped_lock( MemoryManager::GetSingleton().m_mutex);
+		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( MemoryManager::GetSingleton().m_mutex);
 
 		if ( ! MemoryManager::IsLocked())
 		{
@@ -95,7 +97,7 @@ void operator delete[]( void * p_pointer)
 {
 	if (MemoryManager::Exists())
 	{
-		boost::recursive_mutex::scoped_lock scoped_lock( MemoryManager::GetSingleton().m_mutex);
+		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( MemoryManager::GetSingleton().m_mutex);
 
 		if ( ! MemoryManager::IsLocked())
 		{

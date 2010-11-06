@@ -10,7 +10,7 @@ using namespace Castor3D;
 RenderSystem * RenderSystem :: sm_singleton = NULL;
 bool RenderSystem :: sm_useMultiTexturing = false;
 bool RenderSystem :: sm_initialised = false;
-
+bool RenderSystem :: sm_useShaders = false;
 
 RenderSystem :: RenderSystem()
 {

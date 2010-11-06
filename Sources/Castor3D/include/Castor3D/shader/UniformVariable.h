@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -36,9 +36,13 @@ namespace Castor3D
 		typedef enum eUNIFORM_VARIABLE_TYPE
 		{
 			eOne,	//!< One variable
+			eVec,	//!< array
+			eVec1,	//!< 1 variable array
 			eVec2,	//!< 2 variables array
 			eVec3,	//!< 3 variables array
 			eVec4,	//!< 4 variables array
+			eMat,	//!< matrix
+			eMat1,	//!< 1x1 matrix
 			eMat2,	//!< 2x2 matrix
 			eMat3,	//!< 3x3 matrix
 			eMat4	//!< 4x4 matrix
@@ -65,18 +69,18 @@ namespace Castor3D
 		 */
 		~UniformVariable(){}
 		/**
-		 * Gives the count type of this variable
+		 * Gives the count type of the variable
 		 *@return The count type
 		 */
 		virtual eUNIFORM_VARIABLE_TYPE GetType()=0;
 		/**
-		 * Gives the type of this variable (essentially bool, int or float)
-		 *@return The type of this variable
+		 * Gives the type of the variable (essentially bool, int or real)
+		 *@return The type of the variable
 		 */
 		virtual const type_info & GetSubType()=0;
 		/**
 		 * Gives the value string of the variable
-		 *@return The string containing the value of this variable
+		 *@return The string containing the value of the variable
 		 */
 		inline String GetStrValue()const { return m_strValue; }
 		/**
@@ -85,12 +89,12 @@ namespace Castor3D
 		 */
 		inline String GetName()const { return m_strName; }
 		/**
-		 * Defines the name of this variable, as it appears in the shader program
+		 * Defines the name of the variable, as it appears in the shader program
 		 *@param p_strName : [in] The variable name
 		 */
 		inline void SetName( const String & p_strName) { m_strName = p_strName; }
 		/**
-		 * Defines the value of this variable, from a string
+		 * Defines the value of the variable, from a string
 		 *@param p_strValue : [in] The string containing the value
 		 */
 		virtual void SetValue( const String & p_strValue)=0;
@@ -99,7 +103,7 @@ namespace Castor3D
 	//! Variable type shader variable representation
 	/*!
 	This is a variable which is given to a shader program during it's execution.
-	It has a variable type, so it can be derived in int, bool or float (essentially)
+	It has a variable type, so it can be derived in int, bool or real (essentially)
 	\author Sylvain DOREMUS
 	\date 14/08/2010
 	*/
@@ -119,7 +123,7 @@ namespace Castor3D
 		{
 		}
 		/**
-		 *@return The type of this variable (int, bool, float)
+		 *@return The type of the variable (int, bool, real)
 		 */
 		virtual const type_info & GetSubType() { return typeid( T); }
 	};
@@ -133,8 +137,8 @@ namespace Castor3D
 	template <typename T>
 	class OneUniformVariable : public TUniformVariable<T>
 	{
-	protected:
-		T m_tValue;	//!< The single value of this variable
+	public:
+		T m_tValue;	//!< The single value of the variable
 
 	public:
 		/**
@@ -150,17 +154,17 @@ namespace Castor3D
 		{
 		}
 		/**
-		 * Gives the value of this variable
+		 * Gives the value of the variable
 		 *@return The variable value
 		 */
 		inline T GetValue() { return m_tValue; }
 		/**
-		 * Gives the count type of this variable
+		 * Gives the count type of the variable
 		 *@return The count type
 		 */
 		virtual eUNIFORM_VARIABLE_TYPE GetType() { return eOne; }
 		/**
-		 * Defines the value of this variable, from a string
+		 * Defines the value of the variable, from a string
 		 *@param p_strValue : [in] The string containing the value
 		 */
 		virtual void SetValue( const String & p_strValue)
@@ -169,49 +173,49 @@ namespace Castor3D
 			m_tValue = T( atof( p_strValue.c_str()));
 		}
 		/**
-		 * Defines the value of this variable, from a single value
+		 * Defines the value of the variable, from a single value
 		 *@param p_tValue : [in] The new value
 		 */
 		inline void SetValue( T p_tValue) { m_tValue = p_tValue; }
 	};
 
-	//! Array of 2 values variable typed variable
+	//! Array of N values variable typed variable
 	/*!
-	This is an array of 2 values variable with a variable type
+	This is an array of N values variable with a variable type
 	\author Sylvain DOREMUS
 	\date 14/08/2010
 	*/
-	template <typename T>
-	class Point2DUniformVariable : public TUniformVariable<T>
+	template <typename T, size_t Count>
+	class PointUniformVariable : public TUniformVariable<T>
 	{
-	protected:
-		Point2D <T> m_ptValue;	//!< The value of this variable
+	public:
+		Point<T, Count> m_ptValue;	//!< The value of the variable
 
 	public:
 		/**
 		 * Constructor
 		 */
-		Point2DUniformVariable(){}
+		PointUniformVariable(){}
 		/**
 		 * Copy constructor
 		 */
-		Point2DUniformVariable( const Point2DUniformVariable & p_rVariable)
+		PointUniformVariable( const PointUniformVariable<T, Count> & p_rVariable)
 			:	TUniformVariable<T>( p_rVariable),
 				m_ptValue( p_rVariable.m_ptValue)
 		{
 		}
 		/**
-		 * Gives the value of this variable
+		 * Gives the value of the variable
 		 *@return The variable value
 		 */
-		inline Point2D <T> GetValue() { return m_ptValue; }
+		inline Point<T, Count> GetValue() { return m_ptValue; }
 		/**
-		 * Gives the count type of this variable
+		 * Gives the count type of the variable
 		 *@return The count type
 		 */
-		virtual eUNIFORM_VARIABLE_TYPE GetType() { return eVec2; }
+		virtual eUNIFORM_VARIABLE_TYPE GetType() { return eUNIFORM_VARIABLE_TYPE( eVec + Count); }
 		/**
-		 * Defines the value of this variable, from a string
+		 * Defines the value of the variable, from a string
 		 *@param p_strValue : [in] The string containing the value
 		 */
 		virtual void SetValue( const String & p_strValue)
@@ -219,176 +223,58 @@ namespace Castor3D
 			m_strValue = p_strValue;
 			StringArray l_arraySplitted = p_strValue.Split( ", \t");
 
-			if (l_arraySplitted.size() == 2)
+			if (l_arraySplitted.size() == Count)
 			{
-				for (size_t i = 0 ; i < l_arraySplitted.size() ; i++)
+				for (size_t i = 0 ; i < Count ; i++)
 				{
-					m_ptValue.ptr()[i] = T( atof( l_arraySplitted[i].c_str()));
+					m_ptValue[i] = T( atof( l_arraySplitted[i].c_str()));
 				}
 			}
 		}
 		/**
-		 * Defines the value of this variable, from a Point2D
+		 * Defines the value of the variable, from a Point2D
 		 *@param p_ptValue : [in] The new value
 		 */
-		inline void SetValue( Point2D <T> p_ptValue) { m_ptValue = p_ptValue; }
+		inline void SetValue( Point<T, Count> p_ptValue) { m_ptValue = p_ptValue; }
 	};
 
-	//! Array of 3 values variable typed variable
+	//! N dimensions matrix of variable type variable
 	/*!
-	This is an array of 3 values variable with a variable type
+	This is a N dimensions matrix variable with variable type
 	\author Sylvain DOREMUS
 	\date 14/08/2010
 	*/
-	template <typename T>
-	class Point3DUniformVariable : public TUniformVariable<T>
+	template <typename T, size_t Count>
+	class MatrixUniformVariable : public TUniformVariable<T>
 	{
-	protected:
-		Point3D <T> m_ptValue;	//!< The value of this variable
+	public:
+		Matrix <T, Count, Count> m_mValue;	//!< The value of the variable
 
 	public:
 		/**
 		 * Constructor
 		 */
-		Point3DUniformVariable(){}
+		MatrixUniformVariable(){}
 		/**
 		 * Copy constructor
 		 */
-		Point3DUniformVariable( const Point3DUniformVariable & p_rVariable)
-			:	TUniformVariable<T>( p_rVariable),
-				m_ptValue( p_rVariable.m_ptValue)
-		{
-		}
-		/**
-		 * Gives the value of this variable
-		 *@return The variable value
-		 */
-		inline Point3D <T> GetValue() { return m_ptValue; }
-		/**
-		 * Gives the count type of this variable
-		 *@return The count type
-		 */
-		virtual eUNIFORM_VARIABLE_TYPE GetType() { return eVec3; }
-		/**
-		 * Defines the value of this variable, from a string
-		 *@param p_strValue : [in] The string containing the value
-		 */
-		virtual void SetValue( const String & p_strValue)
-		{
-			m_strValue = p_strValue;
-			StringArray l_arraySplitted = p_strValue.Split( ", \t");
-
-			if (l_arraySplitted.size() == 3)
-			{
-				for (size_t i = 0 ; i < l_arraySplitted.size() ; i++)
-				{
-					m_ptValue.ptr()[i] = T( atof( l_arraySplitted[i].c_str()));
-				}
-			}
-		}
-		/**
-		 * Defines the value of this variable, from a Point3D
-		 *@param p_ptValue : [in] The new value
-		 */
-		inline void SetValue( Point3D <T> p_ptValue) { m_ptValue = p_ptValue; }
-	};
-
-	//! Array of 4 values variable typed variable
-	/*!
-	This is an array of 4 values variable with a variable type
-	\author Sylvain DOREMUS
-	\date 14/08/2010
-	*/
-	template <typename T>
-	class Point4DUniformVariable : public TUniformVariable<T>
-	{
-	protected:
-		Point4D <T> m_ptValue;	//!< The value of this variable
-
-	public:
-		/**
-		 * Constructor
-		 */
-		Point4DUniformVariable(){}
-		/**
-		 * Copy constructor
-		 */
-		Point4DUniformVariable( const Point4DUniformVariable & p_rVariable)
-			:	TUniformVariable<T>( p_rVariable),
-				m_ptValue( p_rVariable.m_ptValue)
-		{
-		}
-		/**
-		 * Gives the value of this variable
-		 *@return The variable value
-		 */
-		inline Point4D <T> GetValue() { return m_ptValue; }
-		/**
-		 * Gives the count type of this variable
-		 *@return The count type
-		 */
-		virtual eUNIFORM_VARIABLE_TYPE GetType() { return eVec4; }
-		/**
-		 * Defines the value of this variable, from a string
-		 *@param p_strValue : [in] The string containing the value
-		 */
-		virtual void SetValue( const String & p_strValue)
-		{
-			m_strValue = p_strValue;
-			StringArray l_arraySplitted = p_strValue.Split( ", \t");
-
-			if (l_arraySplitted.size() == 4)
-			{
-				for (size_t i = 0 ; i < l_arraySplitted.size() ; i++)
-				{
-					m_ptValue.ptr()[i] = T( atof( l_arraySplitted[i].c_str()));
-				}
-			}
-		}
-		/**
-		 * Defines the value of this variable, from a Point4D
-		 *@param p_ptValue : [in] The new value
-		 */
-		inline void SetValue( Point4D <T> p_ptValue) { m_ptValue = p_ptValue; }
-	};
-
-	//! 2 dimensions matrix of variable type variable
-	/*!
-	This is a 2 dimensions matrix variable with variable type
-	\author Sylvain DOREMUS
-	\date 14/08/2010
-	*/
-	template <typename T>
-	class Matrix2UniformVariable : public TUniformVariable<T>
-	{
-	protected:
-		Matrix2 <T> m_mValue;	//!< The value of this variable
-
-	public:
-		/**
-		 * Constructor
-		 */
-		Matrix2UniformVariable(){}
-		/**
-		 * Copy constructor
-		 */
-		Matrix2UniformVariable( const Matrix2UniformVariable & p_rVariable)
+		MatrixUniformVariable( const MatrixUniformVariable & p_rVariable)
 			:	TUniformVariable<T>( p_rVariable),
 				m_mValue( p_rVariable.m_mValue)
 		{
 		}
 		/**
-		 * Gives the value of this variable
+		 * Gives the value of the variable
 		 *@return The variable value
 		 */
-		inline Matrix2 <T> GetValue() { return m_mValue; }
+		inline Matrix <T, Count, Count> GetValue() { return m_mValue; }
 		/**
-		 * Gives the count type of this variable
+		 * Gives the count type of the variable
 		 *@return The count type
 		 */
-		virtual eUNIFORM_VARIABLE_TYPE GetType() { return eMat2; }
+		virtual eUNIFORM_VARIABLE_TYPE GetType() { return eUNIFORM_VARIABLE_TYPE( eMat + Count); }
 		/**
-		 * Defines the value of this variable, from a string
+		 * Defines the value of the variable, from a string
 		 *@param p_strValue : [in] The string containing the value
 		 */
 		virtual void SetValue( const String & p_strValue)
@@ -396,176 +282,32 @@ namespace Castor3D
 			m_strValue = p_strValue;
 			StringArray l_arrayLines = p_strValue.Split( ";");
 
-			if (l_arrayLines.size() == 2)
+			if (l_arrayLines.size() == Count)
 			{
 				bool l_bOK = true;
 
-				for (size_t i = 0 ; i < l_arrayLines.size() && l_bOK ; i++)
+				for (size_t i = 0 ; i < Count && l_bOK ; i++)
 				{
 					l_bOK = false;
 					StringArray l_arraySplitted = l_arrayLines[i].Split( ", \t");
 
-					if (l_arraySplitted.size() == 2)
+					if (l_arraySplitted.size() == Count)
 					{
 						l_bOK = true;
 
-						for (size_t j = 0 ; j < l_arraySplitted.size() ; j++)
+						for (size_t j = 0 ; j < Count ; j++)
 						{
-							m_mValue.m_matrix[i][j] = T( atof( l_arraySplitted[j].c_str()));
+							m_mValue.m_matrix[i * Count + j] = T( atof( l_arraySplitted[j].c_str()));
 						}
 					}
 				}
 			}
 		}
 		/**
-		 * Defines the value of this variable, from a Matrix2
+		 * Defines the value of the variable, from a Matrix2
 		 *@param p_mValue : [in] The new value
 		 */
-		inline void SetValue( Matrix2 <T> p_mValue) { m_mValue = p_mValue; }
-	};
-
-	//! 3 dimensions matrix of variable type variable
-	/*!
-	This is a 3 dimensions matrix variable with variable type
-	\author Sylvain DOREMUS
-	\date 14/08/2010
-	*/
-	template <typename T>
-	class Matrix3UniformVariable : public TUniformVariable<T>
-	{
-	protected:
-		Matrix3 <T> m_mValue;	//!< The value of this variable
-
-	public:
-		/**
-		 * Constructor
-		 */
-		Matrix3UniformVariable(){}
-		/**
-		 * Copy constructor
-		 */
-		Matrix3UniformVariable( const Matrix3UniformVariable & p_rVariable)
-			:	TUniformVariable<T>( p_rVariable),
-				m_mValue( p_rVariable.m_mValue)
-		{
-		}
-		/**
-		 * Gives the value of this variable
-		 *@return The variable value
-		 */
-		inline Matrix3 <T> GetValue() { return m_mValue; }
-		/**
-		 * Gives the count type of this variable
-		 *@return The count type
-		 */
-		virtual eUNIFORM_VARIABLE_TYPE GetType() { return eMat3; }
-		/**
-		 * Defines the value of this variable, from a string
-		 *@param p_strValue : [in] The string containing the value
-		 */
-		virtual void SetValue( const String & p_strValue)
-		{
-			m_strValue = p_strValue;
-			StringArray l_arrayLines = p_strValue.Split( ";");
-
-			if (l_arrayLines.size() == 3)
-			{
-				bool l_bOK = true;
-
-				for (size_t i = 0 ; i < l_arrayLines.size() && l_bOK ; i++)
-				{
-					l_bOK = false;
-					StringArray l_arraySplitted = l_arrayLines[i].Split( ", \t");
-
-					if (l_arraySplitted.size() == 3)
-					{
-						l_bOK = true;
-
-						for (size_t j = 0 ; j < l_arraySplitted.size() ; j++)
-						{
-							m_mValue.m_matrix[i][j] = T( atof( l_arraySplitted[j].c_str()));
-						}
-					}
-				}
-			}
-		}
-		/**
-		 * Defines the value of this variable, from a Matrix3
-		 *@param p_mValue : [in] The new value
-		 */
-		inline void SetValue( Matrix3 <T> p_mValue) { m_mValue = p_mValue; }
-	};
-
-	//! 4 dimensions matrix of variable type variable
-	/*!
-	This is a 4 dimensions matrix variable with variable type
-	\author Sylvain DOREMUS
-	\date 14/08/2010
-	*/
-	template <typename T>
-	class Matrix4UniformVariable : public TUniformVariable<T>
-	{
-	protected:
-		Matrix4 <T> m_mValue;	//!< The value of this variable
-
-	public:
-		/**
-		 * Constructor
-		 */
-		Matrix4UniformVariable(){}
-		/**
-		 * Copy constructor
-		 */
-		Matrix4UniformVariable( const Matrix4UniformVariable & p_rVariable)
-			:	TUniformVariable<T>( p_rVariable),
-				m_mValue( p_rVariable.m_mValue)
-		{
-		}
-		/**
-		 * Gives the value of this variable
-		 *@return The variable value
-		 */
-		inline Matrix4 <T> GetValue() { return m_mValue; }
-		/**
-		 * Gives the count type of this variable
-		 *@return The count type
-		 */
-		virtual eUNIFORM_VARIABLE_TYPE GetType() { return eMat4; }
-		/**
-		 * Defines the value of this variable, from a string
-		 *@param p_strValue : [in] The string containing the value
-		 */
-		virtual void SetValue( const String & p_strValue)
-		{
-			m_strValue = p_strValue;
-			StringArray l_arrayLines = p_strValue.Split( ";");
-
-			if (l_arrayLines.size() == 4)
-			{
-				bool l_bOK = true;
-
-				for (size_t i = 0 ; i < l_arrayLines.size() && l_bOK ; i++)
-				{
-					l_bOK = false;
-					StringArray l_arraySplitted = l_arrayLines[i].Split( ", \t");
-
-					if (l_arraySplitted.size() == 4)
-					{
-						l_bOK = true;
-
-						for (size_t j = 0 ; j < l_arraySplitted.size() ; j++)
-						{
-							m_mValue.m_matrix[i][j] = T( atof( l_arraySplitted[j].c_str()));
-						}
-					}
-				}
-			}
-		}
-		/**
-		 * Defines the value of this variable, from a Matrix4
-		 *@param p_mValue : [in] The new value
-		 */
-		inline void SetValue( Matrix4 <T> p_mValue) { m_mValue = p_mValue; }
+		inline void SetValue( Matrix <T, Count, Count> p_mValue) { m_mValue = p_mValue; }
 	};
 }
 

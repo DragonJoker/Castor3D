@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -44,11 +44,10 @@ namespace Castor3D
 	protected:
 		friend class ShaderProgram;
 
-		eTYPE m_programType;				//!< The program type
-		unsigned char * m_shaderSource;		//!< ASCII Source-Code
-		bool m_isCompiled;					//!< Tells if the program is compiled
-		bool m_bError;						//!< Tells if the program is in error after compilation (
-		bool m_memAlloc;					//!< true if memory for shader source was allocated
+		eTYPE m_programType;		//!< The program type
+		String m_shaderSource;		//!< ASCII Source-Code
+		bool m_isCompiled;			//!< Tells if the program is compiled
+		bool m_bError;				//!< Tells if the program is in error after compilation (
 
 	public:
 		/**
@@ -57,8 +56,6 @@ namespace Castor3D
 		ShaderObject()
 			:	m_isCompiled( false),
 				m_programType( eNone),
-				m_shaderSource( NULL),
-				m_memAlloc( false),
 				m_bError( false)
 		{}
 		/**
@@ -66,10 +63,6 @@ namespace Castor3D
 		 */
 		virtual ~ShaderObject()
 		{
-			if (m_shaderSource != NULL && m_memAlloc)
-			{
-				delete [] m_shaderSource;
-			}
 		}
 		/**
 		 * Loads a shader file.

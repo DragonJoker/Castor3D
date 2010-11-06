@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -33,8 +33,8 @@ namespace Castor3D
 	private:
 		friend class MeshManager;
 		unsigned int m_nbFaces;		//!< The number of subdivisions
-		float m_height;				//!< The cone height
-		float m_radius;				//!< The cone radius
+		real m_height;				//!< The cone height
+		real m_radius;				//!< The cone radius
 		/**
 		 * Constructor, only MeshManager can use it
 		 *@param p_height : [in] The wanted cone height
@@ -42,7 +42,7 @@ namespace Castor3D
 		 *@param p_nbFaces : [in] The wanted cone subdivisions number
 		 *@param p_name : [in] The mesh name
 		 */
-		ConicMesh( float p_height=0.0, float p_radius=0.0, unsigned int p_nbFaces=1,
+		ConicMesh( real p_height=0.0, real p_radius=0.0, unsigned int p_nbFaces=1,
 				   const String & p_name = C3DEmptyString);
 
 	public:
@@ -60,12 +60,15 @@ namespace Castor3D
 		 *@param p_height : [in] The new wanted cone height
 		 *@param p_nbFaces : [in] The new wanted cone subdivisions number
 		 */
-		void Modify( float p_radius, float p_height, unsigned int p_nbFaces);
+		void Modify( real p_radius, real p_height, unsigned int p_nbFaces);
 
 	public:
+		/**@name Accessors */
+		//@{
 		inline unsigned int	GetNbFaces	()const {return m_nbFaces;}
-		inline float		GetHeight	()const {return m_height;}
-		inline float		GetRadius	()const {return m_radius;}
+		inline real		GetHeight	()const {return m_height;}
+		inline real		GetRadius	()const {return m_radius;}
+		//@}
 
 		inline friend std::ostream & operator <<( std::ostream & o, const ConicMesh & c) { return o << "Cone(" << c.m_nbFaces << "," << c.m_height << "," << c.m_radius << ")";}
 	};

@@ -8,11 +8,11 @@ namespace CastorShape
 	class VariableTypeManager : public AutoSingleton<VariableTypeManager>
 	{
 	protected:
-		typedef std::map<String, VariableType *> TypeMap;
+		typedef C3DMap( String, VariableType *) TypeMap;
 
 	protected:
 		TypeMap m_types;
-		std::map<VariableBaseType, std::string> m_baseTypeNames;
+		C3DMap( VariableBaseType, std::string) m_baseTypeNames;
 		
 	public:
 		VariableTypeManager();

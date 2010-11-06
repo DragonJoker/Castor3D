@@ -11,14 +11,16 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_TextureEnvironment___
-#define ___C3D_TextureEnvironment___
+#ifndef ___CU_TextureEnvironment___
+#define ___CU_TextureEnvironment___
 
+#include "Module_Material.h"
 #include "../render_system/Module_Render.h"
+#include "../render_system/Renderable.h"
 
 namespace Castor3D
 {
@@ -30,7 +32,7 @@ namespace Castor3D
 	\date 09/02/2010
 	\todo Make the use of texture environment mode more easy to understand and user friendly
 	*/
-	class CS3D_API TextureEnvironment
+	class CS3D_API TextureEnvironment : public Renderable<TextureEnvironment, TextureEnvironmentRenderer>
 	{
 	private:
 		EnvironmentMode m_mode;								//!< The general environment mode
@@ -42,27 +44,24 @@ namespace Castor3D
 		int m_alphaTextureSourceIndex;						//!< The current Alpha source index
 		RGBOperand m_RGBOperands[3];						//!< The three RGB operands (max three are used, look at the RGB operand descriptions to learn when)
 		AlphaOperand m_alphaOperands[3];					//!< The three Alpha operands (max three are used, look at the Alpha operand descriptions to learn when)
-		float m_RGBScale;									//!< The current RGB scale
-		float m_alphaScale;									//!< The current Alpha scale
-		bool m_combineRGB;									//!< Tells whether or not this environment mode combines RGB
-		bool m_combineAlpha;								//!< Tells whether or not this environment mode combines Alpha
-		
-		TextureEnvironmentRenderer * m_renderer;			//!< Renderer
+		real m_RGBScale;									//!< The current RGB scale
+		real m_alphaScale;									//!< The current Alpha scale
+		bool m_combineRGB;									//!< Tells whether or not the environment mode combines RGB
+		bool m_combineAlpha;								//!< Tells whether or not the environment mode combines Alpha
 
 	public:
 		/**
 		 * Constructor
-		 *@param p_renderer : [in] The texture environment renderer, may be OpenGL or Direct3D
 		 */
-		TextureEnvironment( TextureEnvironmentRenderer * p_renderer);
+		TextureEnvironment();
 		/**
 		 * Destructor
 		 */
 		~TextureEnvironment();
 		/**
-		 * Apply this
+		 * Apply the environment
 		 */
-		void Apply();
+		virtual void Apply( eDRAW_TYPE p_displayMode);
 		/**
 		 * Sets RGB source for given index of given texture index
 		 *@param p_index : The index of the source
@@ -106,36 +105,62 @@ namespace Castor3D
 		 */
 		AlphaOperand		GetAlphaOperand		( unsigned int p_index)const;
 		/**
-		 * Writes this texture environment in a file
+		 * Writes the texture environment in a file
 		 *@param p_file : [in] The file to write in
 		 *@return true if successful, false if not
 		 */
-		bool Write( General::Utils::FileIO & p_file)const;
+		virtual bool Write( Castor::Utils::File & p_file)const;
 		/**
-		 * Reads this texture environment from a file
+		 * Reads the texture environment from a file
 		 *@param p_file : [in] The file to read from
 		 *@return true if successful, false if not
 		 */
-		bool Read( General::Utils::FileIO & p_file);
+		virtual bool Read( Castor::Utils::File & p_file);
 
 	public:
 		inline void SetMode					( EnvironmentMode p_mode)			{ m_mode = p_mode; }
 		inline void SetRGBCombination		( RGBCombination p_combination)		{ m_RGBCombination = p_combination; }
 		inline void SetAlphaCombination		( AlphaCombination p_combination)	{ m_alphaCombination = p_combination; }
-		inline void SetRGBScale				( float p_scale) 					{ m_RGBScale = p_scale; }
-		inline void SetAlphaScale			( float p_scale) 					{ m_alphaScale = p_scale; }
+		inline void SetRGBScale				( real p_scale) 					{ m_RGBScale = p_scale; }
+		inline void SetAlphaScale			( real p_scale) 					{ m_alphaScale = p_scale; }
 
 		inline EnvironmentMode				GetMode						()const { return m_mode; }
 		inline RGBCombination				GetRGBCombination			()const { return m_RGBCombination; }
 		inline AlphaCombination				GetAlphaCombination			()const { return m_alphaCombination; }
-		inline float						GetRGBScale					()const { return m_RGBScale; }
-		inline float						GetAlphaScale				()const { return m_alphaScale; }
+		inline real							GetRGBScale					()const { return m_RGBScale; }
+		inline real							GetAlphaScale				()const { return m_alphaScale; }
 		inline const CombinationSource *	GetRGBSources				()const { return m_RGBCombinationSources; }
 		inline const CombinationSource *	GetAlphaSources				()const { return m_alphaCombinationSources; }
 		inline const RGBOperand *			GetRGBOperands				()const { return m_RGBOperands; }
 		inline const AlphaOperand *			GetAlphaOperands			()const { return m_alphaOperands; }
 		inline int							GetRGBTextureSourceIndex	()const { return m_RGBTextureSourceIndex; }
 		inline int							GetAlphaTextureSourceIndex	()const { return m_alphaTextureSourceIndex; }
+	};
+	//! The TextureEnvironment renderer
+	/*!
+	Applies all the combination functions of a texture environment
+	\author Sylvain DOREMUS
+	\version 0.1
+	\date 09/02/2010
+	*/
+	class CS3D_API TextureEnvironmentRenderer : public Renderer<TextureEnvironment, TextureEnvironmentRenderer>
+	{
+	protected:
+		/**
+		 * Constructor, only RenderSystem can use it
+		 */
+		TextureEnvironmentRenderer()
+		{}
+
+	public:
+		/**
+		 * Destructor
+		 */
+		virtual ~TextureEnvironmentRenderer(){}
+		/**
+		 * Applies the combination functions
+		 */
+		virtual void Apply() = 0;
 	};
 }
 

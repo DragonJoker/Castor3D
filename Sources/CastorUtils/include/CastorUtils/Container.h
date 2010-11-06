@@ -11,18 +11,18 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_ComboBox___
-#define ___C3D_ComboBox___
+#ifndef ___Castor_Container___
+#define ___Castor_Container___
 
-namespace General
+namespace Castor
 {	namespace Math
 {
 	/*!
-	A container will be a simple object which is around a geometry, mesh or/and submesh
+	A container will be a simple object which surrounds a geometry, mesh or/and submesh
 	It can be a box, a sphere or other.
 	\author Sylvain DOREMUS
 	\date 14/02/2010
@@ -30,31 +30,32 @@ namespace General
 	class Container
 	{
 	protected:
-		Vector3f m_center; //!< The center of the container
+		typedef Templates::Value<real> value;
+		Point3r m_center; //!< The center of the container
 
 	public:
 		/**
 		 * Constructor
 		 */
-		Container( const Vector3f & p_center)
+		Container( const Point3r & p_center)
+			:	m_center( p_center)
 		{
-			m_center = Vector3f( p_center);
 		}
 		/**
-		 * Tests if a vertex is within the container
+		 * Tests if a vertex is within the container, id est inside it but not on it's limits
 		 *@param p_v : [in] The vertex to test
 		 *@return true if the vertex is within the container, false if not
 		 */
-		virtual bool IsWithin( const Vector3f & p_v)=0;
+		virtual bool IsWithin( const Point3r & p_v)=0;
 		/**
-		 * Tests if a vertex is on the limits of this container
+		 * Tests if a vertex is on the limits of this container, and not within
 		 *@param p_v : [in] The vertex to test
 		 *@return true if the vertex is on the limits of the container, false if not
 		 */
-		virtual bool IsOnLimits( const Vector3f & p_v)=0;
+		virtual bool IsOnLimits( const Point3r & p_v)=0;
 
 	public:
-		inline Vector3f	GetCenter	()const { return m_center; }
+		inline Point3r	GetCenter	()const { return m_center; }
 	};
 
 	/*!
@@ -65,15 +66,15 @@ namespace General
 	class ComboBox : public Container
 	{
 	protected:
-		Vector3f m_min;	//!< The min extent of the combo box
-		Vector3f m_max; //!< The max extent of the combo box
+		Point3r m_min;	//!< The min extent of the combo box
+		Point3r m_max; //!< The max extent of the combo box
 
 	public:
 		/**
 		 * Constructor
 		 */
-		ComboBox( const Vector3f & p_min, const Vector3f & p_max)
-			:	Container( p_min + (p_max - p_min) / 2.0f),
+		ComboBox( const Point3r & p_min, const Point3r & p_max)
+			:	Container( p_min + (p_max - p_min) / real( 2.0)),
 				m_min( p_min),
 				m_max( p_max)
 		{}
@@ -82,25 +83,25 @@ namespace General
 		 *@param p_v : [in] The vertex to test
 		 *@return true if the vertex is within the box, false if not
 		 */
-		virtual bool IsWithin( const Vector3f & p_v) { return (p_v.x >= m_min.x && p_v.x <= m_max.x) 
-															&& (p_v.y >= m_min.y && p_v.y <= m_max.y)
-															&& (p_v.z >= m_min.z && p_v.z <= m_max.z); }
+		virtual bool IsWithin( const Point3r & p_v) { return (p_v[0] > m_min[0] && p_v[0] < m_max[0]) 
+															&& (p_v[1] > m_min[1] && p_v[1] < m_max[1])
+															&& (p_v[2] > m_min[2] && p_v[2] < m_max[2]); }
 		/**
 		 * Tests if a vertex is on the limits of the box
 		 *@param p_v : [in] The vertex to test
 		 *@return true if the vertex is on the limits of the box, false if not
 		 */
-		virtual bool IsOnLimits( const Vector3f & p_v) { return IsWithin( p_v) 
-															&& (abs( p_v.x - m_min.x) < 0.0000001f
-																|| abs( p_v.x - m_max.x) < 0.0000001f
-																|| abs( p_v.y - m_min.y) < 0.0000001f
-																|| abs( p_v.y - m_max.y) < 0.0000001f
-																|| abs( p_v.z - m_min.z) < 0.0000001f
-																|| abs( p_v.z - m_max.z) < 0.0000001f); }
+		virtual bool IsOnLimits( const Point3r & p_v) { return ! IsWithin( p_v) 
+																&& (value::equals( p_v[0], m_min[0])
+																	|| value::equals( p_v[0], m_max[0])
+																	|| value::equals( p_v[1], m_min[1])
+																	|| value::equals( p_v[1], m_max[1])
+																	|| value::equals( p_v[2], m_min[2])
+																	|| value::equals( p_v[2], m_max[2])); }
 
 	public:
-		inline Vector3f	GetMin	()const { return m_min; }
-		inline Vector3f	GetMax	()const { return m_max; }
+		inline Point3r	GetMin	()const { return m_min; }
+		inline Point3r	GetMax	()const { return m_max; }
 	};
 
 	/*!
@@ -111,13 +112,13 @@ namespace General
 	class Sphere : public Container
 	{
 	private:
-		float m_radius;			//!< The radius of the sphere
+		real m_radius;			//!< The radius of the sphere
 
 	public:
 		/**
 		 * Constructor
 		 */
-		Sphere( const Vector3f & p_center, float p_radius)
+		Sphere( const Point3r & p_center, real p_radius)
 			:	Container( p_center),
 				m_radius( p_radius)
 		{
@@ -130,7 +131,7 @@ namespace General
 				m_radius( (p_box.GetMax() - m_center).GetLength())
 		{}
 
-		void Load( const Vector3f & p_center, float p_radius)
+		void Load( const Point3r & p_center, real p_radius)
 		{
 			m_center = p_center;
 			m_radius = p_radius;
@@ -145,16 +146,16 @@ namespace General
 		 *@param p_v : [in] The vertex to test
 		 *@return true if the vertex is within the box, false if not
 		 */
-		virtual bool IsWithin( const Vector3f & p_v) { return (p_v - m_center).GetLength() <= m_radius; }
+		virtual bool IsWithin( const Point3r & p_v) { return (p_v - m_center).GetLength() < m_radius; }
 		/**
 		 * Tests if a vertex is on the limits of the box
 		 *@param p_v : [in] The vertex to test
 		 *@return true if the vertex is on the limits of the box, false if not
 		 */
-		virtual bool IsOnLimits( const Vector3f & p_v) { return abs( (p_v - m_center).GetLength() - m_radius) < 0.0000001f; }
+		virtual bool IsOnLimits( const Point3r & p_v) { return value::equals( (p_v - m_center).GetLength(), m_radius); }
 
 	public:
-		inline float	GetRadius	()const { return m_radius; }
+		inline real	GetRadius	()const { return m_radius; }
 	};
 }
 }

@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -31,7 +31,7 @@ namespace Castor3D
 	{
 	public:
 		size_t m_idGroup;		//!< The group ID
-		FacePtrArray m_faces;	//!< The faces in this group
+		FacePtrArray m_faces;	//!< The faces in the group
 
 	public:
 		/**
@@ -49,7 +49,7 @@ namespace Castor3D
 		 *@param p_normals : [in] The faces normals for all vertex
 		 *@param p_tangents : [in] The faces tangents for all vertex
 		 */
-		void SetNormals( size_t p_nbVertex, const Vector3fPtrArray & p_normals, const Vector3fPtrArray & p_tangents);
+		void SetNormals( size_t p_nbVertex, const Point3rPtrArray & p_normals, const Point3rPtrArray & p_tangents);
 	};
 }
 

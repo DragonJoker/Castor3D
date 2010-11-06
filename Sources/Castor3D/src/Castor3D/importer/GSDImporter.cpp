@@ -17,15 +17,15 @@ bool GSDImporter :: _import()
 {
 	bool l_bReturn = false;
 	GSDHeader header;
-	FileIO l_file( m_fileName, FileBase::eRead);
+	File l_file( m_fileName, File::eRead);
 
 	if (l_file.IsOk()) 
 	{
 		l_file.Read<GSDHeader>( header);
 		m_version = header.version;
 
-		std::list<GenericObjectData *> meshesList;
-		std::list<DummieData *> dummieList;  
+		C3DList<GenericObjectData *> meshesList;
+		C3DList<DummieData *> dummieList;  
 		GSDHeader header;
 
 		m_f=fopen(m_FileName,"rb");
@@ -54,7 +54,7 @@ bool GSDImporter :: _import()
 		//        READING MESHES
 		//===========================================
 		GenericObjectData *o=NULL;
-		CBasicMesh *obj=NULL;
+		CBasicMeshPtrobj=NULL;
 		for(i=0;i<header.numberOfObjects;++i)
 		{ 
 			o = new GenericObjectData;
@@ -71,28 +71,28 @@ bool GSDImporter :: _import()
 
 			fread(&o->iC,sizeof(unsigned long),1,m_f);
 			fread(&o->vC,sizeof(unsigned long),1,m_f);
-			//fread(&o->tC,sizeof(float),1,m_f);
-			//fread(&o->vC,sizeof(float),1,m_f);
+			//fread(&o->tC,sizeof(real),1,m_f);
+			//fread(&o->vC,sizeof(real),1,m_f);
 
 			o->Index = new unsigned int[o->iC];
 			fread(o->Index,sizeof(unsigned int)*o->iC,1,m_f);
-			//o->Geometry = new float[o->vC*3*sizeof(float)];
-			o->Geometry = new float[o->vC*3];
-			fread(o->Geometry,o->vC*3*sizeof(float),1,m_f);
+			//o->Geometry = new real[o->vC*3*sizeof(real)];
+			o->Geometry = new real[o->vC*3];
+			fread(o->Geometry,o->vC*3*sizeof(real),1,m_f);
 
-			//o->TexCoord = new float[o->tC*2*sizeof(float)];
-			o->TexCoord = new float[o->vC*2];
-			fread(o->TexCoord,o->vC*2*sizeof(float),1,m_f);
+			//o->TexCoord = new real[o->tC*2*sizeof(real)];
+			o->TexCoord = new real[o->vC*2];
+			fread(o->TexCoord,o->vC*2*sizeof(real),1,m_f);
 
-			//o->Normals= new float[o->vC*3*sizeof(float)];
-			o->Normals= new float[o->vC*3];
-			fread(o->Normals,o->vC*3*sizeof(float),1,m_f);
+			//o->Normals= new real[o->vC*3*sizeof(real)];
+			o->Normals= new real[o->vC*3];
+			fread(o->Normals,o->vC*3*sizeof(real),1,m_f);
 
-			o->Tangent = new float[o->vC*3];
-			fread(o->Tangent,o->vC*3*sizeof(float),1,m_f);
+			o->Tangent = new real[o->vC*3];
+			fread(o->Tangent,o->vC*3*sizeof(real),1,m_f);
 
-			o->Binormal = new float[o->vC*3];
-			fread(o->Binormal,o->vC*3*sizeof(float),1,m_f);
+			o->Binormal = new real[o->vC*3];
+			fread(o->Binormal,o->vC*3*sizeof(real),1,m_f);
 
 			meshesList.push_back(o);
 			node = new treeData;
@@ -127,8 +127,8 @@ bool GSDImporter :: _import()
 		Model = new CBasicDummie(*d);
 		dummieList.erase( (dummieList.begin()) );
 		if(d) delete d;
-		std::list<GenericObjectData *>::iterator mIter=meshesList.begin();
-		std::list<DummieData *>::iterator hIter=dummieList.begin();  
+		C3DList<GenericObjectData *>::iterator mIter=meshesList.begin();
+		C3DList<DummieData *>::iterator hIter=dummieList.begin();  
 
 		while((meshesList.size()>0)||(dummieList.size()>0))
 		{

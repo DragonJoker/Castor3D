@@ -11,14 +11,17 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_TextureUnit___
-#define ___C3D_TextureUnit___
+#ifndef ___CU_TextureUnit___
+#define ___CU_TextureUnit___
 
+#include "Module_Material.h"
 #include <CastorUtils/Image.h>
+#include "../render_system/Module_Render.h"
+#include "../render_system/Renderable.h"
 
 namespace Castor3D
 {
@@ -29,7 +32,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API TextureUnit
+	class CS3D_API TextureUnit : public Renderable<TextureUnit, TextureRenderer>
 	{
 	public:
 		typedef enum eMAP_MODE
@@ -55,28 +58,25 @@ namespace Castor3D
 	protected:
 		friend class TextureRenderer;			//!< The texture renderer class can access protected and private functions
 		unsigned int m_index;					//!< This texture index in parent pass
-		General::Resource::Image * m_image;		//!< The image resource
-		TextureEnvironment * m_environment;		//!< The environment mode
+		Castor::Resource::ImagePtr m_image;		//!< The image resource
+		TextureEnvironmentPtr m_environment;	//!< The environment mode
 		eDIMENSION m_textureType;				//!< The texture dimension
-		bool m_textureInitialised;				//!< Tells whether or not this texture is initialised
-		bool m_textured;						//!< Tells whether this is textured (the image path has been given) or not
-		Colour m_primaryColour;				//!< The primary colour used in environment modes
-		eMAP_MODE m_mode;						//!< The mapping mode for this texture
-
-		TextureRenderer * m_renderer;			//!< The texture renderer
+		bool m_textureInitialised;				//!< Tells whether or not the texture is initialised
+		bool m_textured;						//!< Tells whether the texture is loaded (the image path has been given) or not
+		Colour m_primaryColour;					//!< The primary colour used in environment modes
+		eMAP_MODE m_mode;						//!< The mapping mode for the texture
 
 	public:
 		/**
 		 * Constructor
-		 *@param p_renderer : [in] The texture renderer, may be OpenGL or Direct3D
 		 */
-		TextureUnit( TextureRenderer * p_renderer);
+		TextureUnit();
 		/**
 		 * Constructor
 		 */
 		~TextureUnit();
 		/**
-		 * Initialises this texture, id est : fills the image buffer, creates the texture in the render system
+		 * Initialises the texture, id est : fills the image buffer, creates the texture in the render system
 		 */
 		void Initialise();
 		/**
@@ -85,25 +85,25 @@ namespace Castor3D
 		 */
 		void SetTexture2D( const String & p_name);
 		/**
-		 * Applies this texture unit and it's environment mode
+		 * Applies the texture unit and it's environment mode
 		 */
-		void Apply();
+		virtual void Apply( eDRAW_TYPE p_displayMode);
 		/**
-		 * Removes this texture unit from the stack, in order not to interfere with other ones
+		 * Removes the texture unit from the stack, in order not to interfere with other ones
 		 */
-		void Remove();
+		virtual void Remove();
 		/**
-		 * Writes this texture unit in a file
+		 * Writes the texture unit in a file
 		 *@param p_pFile : [in] The file to write in
 		 *@return true if successful, false if not
 		 */
-		bool Write( General::Utils::FileIO * p_pFile)const;
+		virtual bool Write( Castor::Utils::File & p_pFile)const;
 		/**
-		 * Reads this texture unit from a file
+		 * Reads the texture unit from a file
 		 *@param p_file : [in] The file to read from
 		 *@return true if successful, false if not
 		 */
-		bool Read( General::Utils::FileIO & p_file);
+		virtual bool Read( Castor::Utils::File & p_file);
 		const unsigned char * GetImagePixels()const;
 		unsigned int GetWidth()const;
 		unsigned int GetHeight()const;
@@ -112,7 +112,7 @@ namespace Castor3D
 	public:
 		inline unsigned int				GetIndex			()const { return m_index; }
 		inline eDIMENSION				GetTextureType		()const { return m_textureType; }
-		inline TextureEnvironment *		GetEnvironment		()const { return m_environment; }
+		inline TextureEnvironmentPtr	GetEnvironment		()const { return m_environment; }
 		inline const float *			GetPrimaryColour	()const { return m_primaryColour.const_ptr(); }
 		inline bool						IsTextured			()const { return m_textured; }
 		inline bool						TextureInitialised	()const { return m_textureInitialised; }
@@ -120,10 +120,48 @@ namespace Castor3D
 
 		inline void SetIndex			( unsigned int p_index)								{ m_index = p_index; }
 		inline void SetPrimaryColour	( const Colour & p_crColour)						{ m_primaryColour = p_crColour; }
-		inline void SetPrimaryColour	( float red, float green, float blue, float alpha)	{ m_primaryColour.x = red;m_primaryColour.y = green;m_primaryColour.z = blue;m_primaryColour.w = alpha; }
-		inline void SetPrimaryColour	( float * rvba)										{ m_primaryColour.x = rvba[0];m_primaryColour.y = rvba[1];m_primaryColour.z = rvba[2];m_primaryColour.w = rvba[3]; }
-		inline void SetPrimaryColour	( float * rvb, float alpha)							{ m_primaryColour.x = rvb[0];m_primaryColour.y = rvb[1];m_primaryColour.z = rvb[2];m_primaryColour.w = alpha; }
+		inline void SetPrimaryColour	( float red, float green, float blue, float alpha)	{ m_primaryColour[0] = red;		m_primaryColour[1] = green;		m_primaryColour[2] = blue;		m_primaryColour[3] = alpha; }
+		inline void SetPrimaryColour	( float * rvba)										{ m_primaryColour[0] = rvba[0];	m_primaryColour[1] = rvba[1];	m_primaryColour[2] = rvba[2];	m_primaryColour[3] = rvba[3]; }
+		inline void SetPrimaryColour	( float * rvb, float alpha)							{ m_primaryColour[0] = rvb[0];	m_primaryColour[1] = rvb[1];	m_primaryColour[2] = rvb[2];	m_primaryColour[3] = alpha; }
 		inline void SetTextureMapMode	( eMAP_MODE p_mode)									{ m_mode = p_mode; }
+	};
+	//! The TextureUnit renderer
+	/*!
+	Initialises a texture unit, draws it, removes it
+	\author Sylvain DOREMUS
+	\version 0.1
+	\date 09/02/2010
+	*/
+	class CS3D_API TextureRenderer : public Renderer<TextureUnit, TextureRenderer>
+	{
+	protected:
+		/**
+		 * Constructor, only RenderSystem can use it
+		 */
+		TextureRenderer()
+		{}
+
+	public:
+		/**
+		 * Destructor
+		 */
+		virtual ~TextureRenderer(){ Cleanup(); }
+		/**
+		 * Cleans up the renderer
+		 */
+		virtual void Cleanup(){}
+		/**
+		 * Initialises the texture, generates mipmapping...
+		 */
+		virtual bool Initialise() = 0;
+		/**
+		 * Draws the texture
+		 */
+		virtual void Apply() = 0;
+		/**
+		 * Removes the texture
+		 */
+		virtual void Remove() = 0;
 	};
 }
 

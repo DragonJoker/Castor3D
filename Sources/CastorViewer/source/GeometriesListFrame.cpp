@@ -11,12 +11,16 @@
 #include "icon6.xpm"
 #include "icon7.xpm"
 
+#ifdef __WXMSW__
+#	include <wx/msw/msvcrt.h>      // redefines the new() operator 
+#endif
+
 using namespace Castor3D;
 using namespace CastorViewer;
 
 //*************************************************************************************************************
 
-GeometryTreeItemData :: GeometryTreeItemData( Geometry * p_pGeometry)
+GeometryTreeItemData :: GeometryTreeItemData( GeometryPtr p_pGeometry)
 	:	wxTreeItemData(),
 		m_pGeometry( p_pGeometry)
 {
@@ -29,7 +33,7 @@ GeometryTreeItemData :: ~GeometryTreeItemData()
 //*************************************************************************************************************
 
 GeometriesListFrame :: GeometriesListFrame( wxWindow * parent, const wxString & title,
-											Scene * p_scene, const wxPoint & pos,
+											ScenePtr p_scene, const wxPoint & pos,
 											const wxSize & size)
 	:	wxFrame( parent, wxID_ANY, "Geometries list", pos, size),
 		m_scene( p_scene),
@@ -40,10 +44,10 @@ GeometriesListFrame :: GeometriesListFrame( wxWindow * parent, const wxString & 
 	m_pTreeGeometries->Show();
 	m_pComboMaterials = new wxComboBox( this, eMaterialsList, "", wxPoint( 0, GetClientSize().y - 45), wxSize( GetClientSize().x, 20));
 	m_pComboMaterials->Hide();
-	m_pButtonDeleteSelected = new wxButton( this, eDeleteSelected, C3D_T( "Supprimer"), wxPoint( 0, GetClientSize().y - 20), wxSize( GetClientSize().x, 20));
+	m_pButtonDeleteSelected = new wxButton( this, eDeleteSelected, CU_T( "Supprimer"), wxPoint( 0, GetClientSize().y - 20), wxSize( GetClientSize().x, 20));
 
 	wxTreeItemId l_idRoot = m_pTreeGeometries->AddRoot( "Géométries");
-	Geometry * l_pGeometry;
+	GeometryPtr l_pGeometry;
 	wxString l_strName;
 	wxTreeItemId l_idGeometry;
 	wxTreeItemId l_idSubmesh;
@@ -79,7 +83,7 @@ GeometriesListFrame :: GeometriesListFrame( wxWindow * parent, const wxString & 
 
 	m_pTreeGeometries->AssignImageList( l_images);
 
-	for (GeometryStrMap::iterator l_it = m_scene->GetGeometriesIterator() ; l_it != m_scene->GetGeometriesEnd() ; ++l_it)
+	for (GeometryPtrStrMap::iterator l_it = m_scene->GetGeometriesIterator() ; l_it != m_scene->GetGeometriesEnd() ; ++l_it)
 	{
 		l_iCount = 0;
 		l_pGeometry = l_it->second;
@@ -115,9 +119,9 @@ END_EVENT_TABLE()
 void GeometriesListFrame :: OnCheck( wxCommandEvent & event)
 {
 	unsigned int l_selected = static_cast <unsigned int>( event.GetInt());
-	Geometry * l_geometry = m_scene->GetGeometry( m_items[l_selected].c_str());
+	GeometryPtr l_geometry = m_scene->GetGeometry( m_items[l_selected].c_str());
 
-	if (l_geometry)
+	if ( ! l_geometry.null())
 	{
 		l_geometry->GetParent()->SetVisible( true);//m_list->IsChecked( l_selected));
 		static_cast <MainFrame *>( m_parent)->ShowPanels();
@@ -131,7 +135,7 @@ void GeometriesListFrame :: OnDelete( wxCommandEvent & event)
 
 	for (size_t i = 0 ; i < l_arraySelected.size() ; i++)
 	{
-		Geometry * l_geometry = m_scene->GetGeometry( m_items[l_arraySelected[i]].c_str());
+		GeometryPtr l_geometry = m_scene->GetGeometry( m_items[l_arraySelected[i]].c_str());
 		m_scene->RemoveGeometry( l_geometry);
 	}
 }
@@ -171,7 +175,7 @@ void GeometriesListFrame :: OnActivateItem( wxTreeEvent & event)
 		m_pComboMaterials->Clear();
 
 		StringArray l_arrayNames;
-		MaterialManager::GetSingleton().GetMaterialNames( l_arrayNames);
+		MaterialManager::GetMaterialNames( l_arrayNames);
 		wxArrayString l_wxarrayNames;
 
 		for (size_t i = 0 ; i < l_arrayNames.size() ; i++)

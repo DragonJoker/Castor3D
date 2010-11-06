@@ -11,16 +11,18 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
 #ifndef ___C3D_Overlay___
 #define ___C3D_Overlay___
 
+#include "Module_Overlay.h"
 #include "../Module_General.h"
 #include "../render_system/Module_Render.h"
 #include "../material/Module_Material.h"
+#include "../render_system/Renderable.h"
 
 namespace Castor3D
 {
@@ -30,56 +32,63 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 25/08/2010
 	*/
-	class CS3D_API Overlay
+	class CS3D_API Overlay : public Renderable<Overlay, OverlayRenderer>
 	{
 	protected:
-		OverlayRenderer * m_pRenderer;					//!< The renderer which holds renderer specific operations
-		Point2D<float> m_ptPosition;					//!< The relative position (to parent or screen)
-		Point2D<float> m_ptSize;						//!< The relative size (to parent or screen)
-		String m_strName;								//!< The overlay name
-		bool m_bVisible;								//!< The visibility
-		Overlay * m_pParent;							//!< The parent overlay, if any
-		std::map <int, Overlay *> m_mapOverlays;		//!< The childs, if any
-		int m_iCurrentZIndex;							//!< The z index of next children to add
+		OverlayRendererPtr m_pRenderer;		//!< The renderer which holds renderer specific operations
+		Point2r m_ptPosition;				//!< The relative position (to parent or screen)
+		Point2r m_ptSize;					//!< The relative size (to parent or screen)
+		String m_strName;					//!< The overlay name
+		bool m_bVisible;					//!< The visibility
+		OverlayPtr m_pParent;				//!< The parent overlay, if any
+		OverlayPtrIntMap m_mapOverlays;		//!< The childs, if any
+		int m_iCurrentZIndex;				//!< The z index of next children to add
 
 	public:
 		/**
 		 * Constructor
 		 *@param p_strName : [in] The overlay name
 		 *@param p_pParent : [in] The parent overlay (if any)
-		 *@param p_pRenderer : [in] The renderer
 		 */
-		Overlay( const String & p_strName, Overlay * p_pParent, OverlayRenderer * p_pRenderer);
+		Overlay( const String & p_strName, OverlayPtr p_pParent);
 		/**
 		 * Destructor
 		 */
 		virtual ~Overlay(){}
 		/**
-		 * Draws the overlay, virtual function to implement in children classes
-		 */
-		virtual void Render()=0;
-		/**
-		 * Adds a child to this overlay
+		 * Adds a child to the overlay
 		 *@param p_pOverlay : [in] The overlay to add
-		 *@param p_iZIndex : [in] The wanted Z Index for this child
+		 *@param p_iZIndex : [in] The wanted Z Index for the child
 		 *@return true if successful, false if not
 		 */
-		bool AddChild( Overlay * p_pOverlay, int p_iZIndex);
+		bool AddChild( OverlayPtr p_pOverlay, int p_iZIndex);
 		/**
-		 * Sets the position of this overlay
+		 * Sets the position of the overlay
 		 *@param p_ptPosition : [in] The new position, relative to parent
 		 */
-		void SetPosition( const Point2D<float> & p_ptPosition);
+		void SetPosition( const Point2r & p_ptPosition);
 		/**
-		 * Sets the size of this overlay
+		 * Sets the size of the overlay
 		 *@param p_ptSize : [in] The new size, relative to parent
 		 */
-		void SetSize( const Point2D<float> & p_ptSize);
+		void SetSize( const Point2r & p_ptSize);
+		/**
+		 * Writes the overlay in a file
+		 *@param p_file : [in] The file to write in
+		 *@return true if successful, false if not
+		 */
+		virtual bool Write( Castor::Utils::File & p_file)const { return true; }
+		/**
+		 * Reads the overlay from a file
+		 *@param p_file : [in] The file to read from
+		 *@return true if successful, false if not
+		 */
+		virtual bool Read( Castor::Utils::File & p_file) { return true; }
 
 	public:
 		inline String			GetName		()const { return m_strName; }
-		inline Point2D<float>	GetPosition	()const { return m_ptPosition; }
-		inline Point2D<float>	GetSize		()const { return m_ptSize; }
+		inline Point2r			GetPosition	()const { return m_ptPosition; }
+		inline Point2r			GetSize		()const { return m_ptSize; }
 		inline bool				IsVisible	()const { return m_bVisible; }
 	};
 	//! A simple overlay area
@@ -91,18 +100,16 @@ namespace Castor3D
 	class CS3D_API PanelOverlay : public Overlay
 	{
 	protected:
-		Material * m_pMaterial;	//!< The material used by this overlay
+		MaterialPtr m_pMaterial;	//!< The material used by the overlay
 
 	public:
 		/**
 		 * Constructor
 		 *@param p_strName : [in] The overlay name
 		 *@param p_pParent : [in] The parent overlay (if any)
-		 *@param p_pRenderer : [in] The renderer
 		 */
-		PanelOverlay( const String & p_strName, Overlay * p_pParent, OverlayRenderer * p_pRenderer)
-			:	Overlay( p_strName, p_pParent, p_pRenderer),
-				m_pMaterial( NULL)
+		PanelOverlay( const String & p_strName, OverlayPtr p_pParent)
+			:	Overlay( p_strName, p_pParent)
 		{
 		}
 		/**
@@ -112,12 +119,24 @@ namespace Castor3D
 		/**
 		 * Draws the overlay
 		 */
-		virtual void Render();
+		virtual void Apply( eDRAW_TYPE p_displayMode);
+		/**
+		 * Writes the overlay in a file
+		 *@param p_file : [in] The file to write in
+		 *@return true if successful, false if not
+		 */
+		virtual bool Write( Castor::Utils::File & p_file)const { return true; }
+		/**
+		 * Reads the overlay from a file
+		 *@param p_file : [in] The file to read from
+		 *@return true if successful, false if not
+		 */
+		virtual bool Read( Castor::Utils::File & p_file) { return true; }
 
 	public:
-		inline Material *		GetMaterial	()const { return m_pMaterial; }
+		inline MaterialPtr		GetMaterial	()const { return m_pMaterial; }
 
-		inline void SetMaterial	( Material * p_pMaterial)				{ m_pMaterial = p_pMaterial; }
+		inline void SetMaterial	( MaterialPtr p_pMaterial)				{ m_pMaterial = p_pMaterial; }
 	};
 	//! A simple overlay bordered area
 	/*!
@@ -128,22 +147,20 @@ namespace Castor3D
 	class CS3D_API BorderPanelOverlay : public PanelOverlay
 	{
 	protected:
-		Material * m_pBorderMaterial;	//!< The border material
-		Point4D <float> m_ptBorderSize;	//!< The border size
-		float m_fRightBorderSize;
-		float m_fTopBorderSize;
-		float m_fBottomBorderSize;
+		MaterialPtr m_pBorderMaterial;	//!< The border material
+		Point4r m_ptBorderSize;			//!< The border size
+		real m_fRightBorderSize;
+		real m_fTopBorderSize;
+		real m_fBottomBorderSize;
 
 	public:
 		/**
 		 * Constructor
 		 *@param p_strName : [in] The overlay name
 		 *@param p_pParent : [in] The parent overlay (if any)
-		 *@param p_pRenderer : [in] The renderer
 		 */
-		BorderPanelOverlay( const String & p_strName, Overlay * p_pParent, OverlayRenderer * p_pRenderer)
-			:	PanelOverlay( p_strName, p_pParent, p_pRenderer),
-				m_pBorderMaterial( NULL)
+		BorderPanelOverlay( const String & p_strName, OverlayPtr p_pParent)
+			:	PanelOverlay( p_strName, p_pParent)
 		{
 		}
 		/**
@@ -153,22 +170,34 @@ namespace Castor3D
 		/**
 		 * Draws the overlay
 		 */
-		virtual void Render();
+		virtual void Apply( eDRAW_TYPE p_displayMode);
+		/**
+		 * Writes the overlay in a file
+		 *@param p_file : [in] The file to write in
+		 *@return true if successful, false if not
+		 */
+		virtual bool Write( Castor::Utils::File & p_file)const { return true; }
+		/**
+		 * Reads the overlay from a file
+		 *@param p_file : [in] The file to read from
+		 *@return true if successful, false if not
+		 */
+		virtual bool Read( Castor::Utils::File & p_file) { return true; }
 
 	public:
-		inline Material *				GetMaterial			()const { return m_pMaterial; }
-		inline float					GetLeftBorderSize	()const { return m_ptBorderSize.left; }
-		inline float					GetRightBorderSize	()const { return m_ptBorderSize.right; }
-		inline float					GetTopBorderSize	()const { return m_ptBorderSize.top; }
-		inline float					GetBottomBorderSize	()const { return m_ptBorderSize.bottom; }
-		inline const Point4D <float>	GetBorderSize		()const { return m_ptBorderSize; }
+		inline MaterialPtr			GetMaterial			()const { return m_pMaterial; }
+		inline real					GetLeftBorderSize	()const { return m_ptBorderSize[0]; }
+		inline real					GetRightBorderSize	()const { return m_ptBorderSize[1]; }
+		inline real					GetTopBorderSize	()const { return m_ptBorderSize[2]; }
+		inline real					GetBottomBorderSize	()const { return m_ptBorderSize[3]; }
+		inline const Point4r		GetBorderSize		()const { return m_ptBorderSize; }
 
-		inline void SetMaterial			( Material * p_pMaterial)			{ m_pMaterial = p_pMaterial; }
-		inline void SetLeftBorderSize	( float p_fSize)					{ m_ptBorderSize.left = p_fSize; }
-		inline void SetRightBorderSize	( float p_fSize)					{ m_ptBorderSize.right = p_fSize; }
-		inline void SetTopBorderSize	( float p_fSize)					{ m_ptBorderSize.top = p_fSize; }
-		inline void SetBottomBorderSize	( float p_fSize)					{ m_ptBorderSize.bottom = p_fSize; }
-		inline void SetBorderSize		( const Point4D <float> & p_ptSize)	{ m_ptBorderSize = p_ptSize; }
+		inline void SetMaterial			( MaterialPtr p_pMaterial)			{ m_pMaterial = p_pMaterial; }
+		inline void SetLeftBorderSize	( real p_fSize)						{ m_ptBorderSize[0] = p_fSize; }
+		inline void SetRightBorderSize	( real p_fSize)						{ m_ptBorderSize[1] = p_fSize; }
+		inline void SetTopBorderSize	( real p_fSize)						{ m_ptBorderSize[2] = p_fSize; }
+		inline void SetBottomBorderSize	( real p_fSize)						{ m_ptBorderSize[3] = p_fSize; }
+		inline void SetBorderSize		( const Point4r & p_ptSize)			{ m_ptBorderSize = p_ptSize; }
 	};
 	//! A text overlay
 	/*!
@@ -186,10 +215,9 @@ namespace Castor3D
 		 * Constructor
 		 *@param p_strName : [in] The overlay name
 		 *@param p_pParent : [in] The parent overlay (if any)
-		 *@param p_pRenderer : [in] The renderer
 		 */
-		TextOverlay( const String & p_strName, Overlay * p_pParent, OverlayRenderer * p_pRenderer)
-			:	Overlay( p_strName, p_pParent, p_pRenderer)
+		TextOverlay( const String & p_strName, OverlayPtr p_pParent)
+			:	Overlay( p_strName, p_pParent)
 		{
 		}
 		/**
@@ -199,12 +227,48 @@ namespace Castor3D
 		/**
 		 * Draws the overlay
 		 */
-		virtual void Render(){}
+		virtual void Apply( eDRAW_TYPE p_displayMode){}
+		/**
+		 * Writes the overlay in a file
+		 *@param p_file : [in] The file to write in
+		 *@return true if successful, false if not
+		 */
+		virtual bool Write( Castor::Utils::File & p_file)const { return true; }
+		/**
+		 * Reads the overlay from a file
+		 *@param p_file : [in] The file to read from
+		 *@return true if successful, false if not
+		 */
+		virtual bool Read( Castor::Utils::File & p_file) { return true; }
 
 	public:
 		inline String	GetCaption	()const { return m_strCaption; }
 
 		inline void SetCaption	( const String & p_strCaption)	{ m_strCaption = p_strCaption; }
+	};
+	//! The Overlay renderer
+	/*!
+	\author Sylvain DOREMUS
+	\version 0.1
+	\date 09/02/2010
+	*/
+	class CS3D_API OverlayRenderer : public Renderer<Overlay, OverlayRenderer>
+	{
+	protected:
+		/**
+		 * Constructor
+		 */
+		OverlayRenderer()
+		{}
+	public:
+		/**
+		 * Destructor
+		 */
+		virtual ~OverlayRenderer(){}
+
+		virtual void DrawPanel()=0;
+		virtual void DrawBorderPanel()=0;
+		virtual void DrawText()=0;
 	};
 }
 

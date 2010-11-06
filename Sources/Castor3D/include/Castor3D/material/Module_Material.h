@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -22,30 +22,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	//! The texture environment class
-	class TextureEnvironment;
-	//! The texture unit class
-	class TextureUnit;
-	//! The material class
-	class Material;
-	//! The Material manager class
-	class MaterialManager;
-	//! The material pass class (for multipass materials)
-	class Pass;
-	//! Draw types enumerator
-	/*!
-	Enumerates the three different draw types : Triangles, Lines and Points
-	*/
-	typedef enum DrawType
-	{
-		DTTriangles		= 0,	//!< Triangles : Show textured triangles
-		DTLines			= 1,	//!< Lines : Show textured edges
-		DTPoints		= 2,	//!< Points : Show textured vertexes
-		DTTriangleStrip	= 3,	//!< TriangleStrip : Show textured triangle strips
-		DTTriangleFan	= 4,	//!< TriangleFan : Show textured triangle fans
-		DTQuads			= 5,	//!< Quads : Show textured quads
-		DTQuadStrip		= 6,	//!< QuadStrip : Show textured quad strips
-	} DrawType;
+	class TextureEnvironment;	//!< The texture environment class
+	class TextureUnit;			//!< The texture unit class
+	class Material;				//!< The material class
+	class MaterialManager;		//!< The Material manager class
+	class Pass;					//!< The material pass class (for multipass materials)
 
 	//! Environment modes enumerator
 	/*!
@@ -88,7 +69,6 @@ namespace Castor3D
 		COOneMinusSrcAlpha	= 3		//!< Uses 1 - source alpha
 	} RGBOperand;
 
-
 	//! Alpha Combinations enumerator
 	/*!
 	The different Alpha combination modes : none, replace, modulate, add, add signed, interpolate
@@ -123,7 +103,7 @@ namespace Castor3D
 		CSCurrentTexture	= 1,	//!< The current texture unit is the source
 		CSConstant			= 2,	//!< The source is the defined constant colour
 		CSPrimaryColour		= 3,	//!< The source is the fragment colour before texturing
-		CSPrevious			= 4		//!< The source is the fragment colour before this texture
+		CSPrevious			= 4		//!< The source is the fragment colour before the texture
 	} CombinationSource;
 
 
@@ -143,16 +123,18 @@ namespace Castor3D
 		LILight7 = 7
 	} LightIndexes;
 
-	//! TextureUnit pointer array
-	typedef std::vector <TextureUnit *>			TextureUnitPtrArray;
-	//! TextureUnit pointer array
-	typedef std::vector <Pass *>				PassPtrArray;
-	//! unsigned int array
-	typedef std::vector <unsigned int>			UIntArray;
-	//! Material pointer map, sorted by name
-	typedef std::map	<String, Material *>	MaterialPtrStrMap;
-	//! Material pointer array
-	typedef std::vector <Material *>			MaterialPtrArray;
+	typedef Templates::SharedPtr<TextureEnvironment>	TextureEnvironmentPtr;
+	typedef Templates::SharedPtr<TextureUnit>			TextureUnitPtr;
+	typedef Templates::SharedPtr<MaterialManager>		MaterialManagerPtr;
+	typedef Templates::SharedPtr<Material>				MaterialPtr;
+	typedef Templates::SharedPtr<Pass>					PassPtr;
+
+	typedef C3DMap(		String, MaterialPtr)	MaterialPtrStrMap;		//! Material pointer map, sorted by name
+	typedef C3DVector(	MaterialPtr)			MaterialPtrArray;		//! Material pointer array
+	typedef C3DMap(		size_t, MaterialPtr)	MaterialPtrUIntMap;
+	typedef C3DVector(	TextureUnitPtr)			TextureUnitPtrArray;	//! TextureUnit pointer array
+	typedef C3DVector(	PassPtr)				PassPtrArray;			//! TextureUnit pointer array
+	typedef C3DVector(	unsigned int)			UIntArray;				//! unsigned int array
 }
 
 #endif

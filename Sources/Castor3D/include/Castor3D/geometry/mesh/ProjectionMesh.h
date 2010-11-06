@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -32,8 +32,9 @@ namespace Castor3D
 	class ProjectionMesh : public Mesh
 	{
 	private:
-		Arc * m_pPattern;
-		float m_fDepth;
+		PatternPtr m_pPattern;
+		Point3r m_vAxis;
+		real m_fDepth;
 		bool m_bClosed;
 		unsigned int m_uiNbFaces;
 
@@ -44,10 +45,18 @@ namespace Castor3D
 		ProjectionMesh();
 		/**
 		 * Specified Constructor
-		 *@param p_fAlphaX
+		 *@param p_pPattern : [in] The arc to project
+		 *@param p_vAxis : [in] The axis along which th projection is done
+		 *@param p_bClosed : [in] Boolean telling if the projection must be closed (id est the pattern is closed)
+		 *@param p_fDepth : [in] The projection depth
+		 *@param p_uiNbFaces : [in] Number of subdivisions along the axis
+		 *@param p_strName : [in] The mesh name
 		 */
-		ProjectionMesh( Arc * p_pPattern, float p_fDepth, bool p_bClosed,
+		ProjectionMesh( PatternPtr p_pPattern, const Point3r & p_vAxis, bool p_bClosed, real p_fDepth,
 						unsigned int p_uiNbFaces=1, const String & p_strName = C3DEmptyString);
+		/**
+		 * Destructor
+		 */
 		~ProjectionMesh();
 		/**
 		 * Generates the mesh points
@@ -55,7 +64,10 @@ namespace Castor3D
 		virtual void GeneratePoints();
 
 	public:
+		/**@name Accessors */
+		//@{
 		inline unsigned int	GetNbFaces	()const { return m_uiNbFaces; }
+		//@}
 	};
 }
 

@@ -1,45 +1,42 @@
-/*******************************************************************************
- Auteur:  Sylvain DOREMUS & Loïc DASSONVILLE
- But:    Moteur 3D
-
- Fichier: SmoothingGroup.h - SmoothingGroup.cpp
-
- Desc:   Classe gérant les normales des faces de leur groupe
- 
-*******************************************************************************/
 #include "PrecompiledHeader.h"
 
 #include "geometry/Module_Geometry.h"
 
-
-
 #include "geometry/basic/SmoothingGroup.h"
-
 #include "geometry/basic/Face.h"
-
 
 using namespace Castor3D;
 
+//! The structure managing Face and Angle
+/*!
+This is used to compute the smoothing groups
+*/
+struct FaceAndAngle
+{
+	real m_angle;
+	FacePtr m_face;
+	int m_index;
+	Point3rPtr m_vertex1;
+	Point3rPtr m_vertex2;
+};
+//! FaceAndAngle attay
+typedef C3DVector( FaceAndAngle)	FaceAndAngleArray;
 
 SmoothingGroup :: SmoothingGroup( size_t p_id)
 	:	m_idGroup( p_id)
 {
 }
 
-
-
 SmoothingGroup :: ~SmoothingGroup()
 {
-	vector::deleteAll( m_faces);
+//	vector::deleteAll( m_faces);
 }
-
-
  
-void SmoothingGroup :: SetNormals( size_t p_nbVertex, const Vector3fPtrArray & p_normals, const Vector3fPtrArray & p_tangents)
+void SmoothingGroup :: SetNormals( size_t p_nbVertex, const Point3rPtrArray & p_normals, const Point3rPtrArray & p_tangents)
 {
 	size_t i;
-	std::vector < std::vector <FaceAndAngle> > l_facesArray;
-	Vector3fArray l_normalsArray, l_tangentsArray; 
+	C3DVector( FaceAndAngleArray) l_facesArray;
+	Point3rArray l_normalsArray, l_tangentsArray; 
 
 	//creation d'un vecteur de liste (chaque point contient la liste des faces auxquelles il appartient) 
 	l_facesArray.reserve( p_nbVertex);
@@ -54,12 +51,12 @@ void SmoothingGroup :: SetNormals( size_t p_nbVertex, const Vector3fPtrArray & p
 	//Pour chaque vertex, on stocke la liste des faces auxquelles il appartient 
 	for (i = 0 ; i < m_faces.size() ; i++)
 	{
-		Vector3f l_vec1m2( *m_faces[i]->m_vertex2, *m_faces[i]->m_vertex1);
-		Vector3f l_vec1m3( *m_faces[i]->m_vertex3, *m_faces[i]->m_vertex1);
-		Vector3f l_vec2m1( *m_faces[i]->m_vertex1, *m_faces[i]->m_vertex2);
-		Vector3f l_vec2m3( *m_faces[i]->m_vertex3, *m_faces[i]->m_vertex2);
-		Vector3f l_vec3m1( *m_faces[i]->m_vertex1, *m_faces[i]->m_vertex3);
-		Vector3f l_vec3m2( *m_faces[i]->m_vertex2, *m_faces[i]->m_vertex3);
+		Point3r l_vec1m2( *m_faces[i]->m_vertex1 - *m_faces[i]->m_vertex2);
+		Point3r l_vec1m3( *m_faces[i]->m_vertex1 - *m_faces[i]->m_vertex3);
+		Point3r l_vec2m1( *m_faces[i]->m_vertex2 - *m_faces[i]->m_vertex1);
+		Point3r l_vec2m3( *m_faces[i]->m_vertex2 - *m_faces[i]->m_vertex3);
+		Point3r l_vec3m1( *m_faces[i]->m_vertex3 - *m_faces[i]->m_vertex1);
+		Point3r l_vec3m2( *m_faces[i]->m_vertex3 - *m_faces[i]->m_vertex2);
 
 		FaceAndAngle l_faa1;
 		FaceAndAngle l_faa2;
@@ -88,19 +85,19 @@ void SmoothingGroup :: SetNormals( size_t p_nbVertex, const Vector3fPtrArray & p
 	}
 
 	//On effectue la moyennes des normales 	
-	std::vector<FaceAndAngle>::const_iterator l_it;
+	FaceAndAngleArray::const_iterator l_it;
 	for (i = 0 ; i < l_facesArray.size() ; i++)
 	{
-		Vector3f l_normal, l_tangent;
+		Point3r l_normal, l_tangent;
 		for (l_it = l_facesArray[i].begin(); l_it != l_facesArray[i].end(); l_it++)
 		{
-			l_normal.x += (*l_it).m_face->m_faceNormal[0] * (*l_it).m_angle;
-			l_normal.y += (*l_it).m_face->m_faceNormal[1] * (*l_it).m_angle;
-			l_normal.z += (*l_it).m_face->m_faceNormal[2] * (*l_it).m_angle;
+			l_normal[0] += (*l_it).m_face->m_faceNormal[0] * (*l_it).m_angle;
+			l_normal[1] += (*l_it).m_face->m_faceNormal[1] * (*l_it).m_angle;
+			l_normal[2] += (*l_it).m_face->m_faceNormal[2] * (*l_it).m_angle;
 
-			l_tangent.x += (*l_it).m_face->m_faceTangent[0] * (*l_it).m_angle;
-			l_tangent.y += (*l_it).m_face->m_faceTangent[1] * (*l_it).m_angle;
-			l_tangent.z += (*l_it).m_face->m_faceTangent[2] * (*l_it).m_angle;
+			l_tangent[0] += (*l_it).m_face->m_faceTangent[0] * (*l_it).m_angle;
+			l_tangent[1] += (*l_it).m_face->m_faceTangent[1] * (*l_it).m_angle;
+			l_tangent[2] += (*l_it).m_face->m_faceTangent[2] * (*l_it).m_angle;
 		}
 
 		l_normal.Normalise();
@@ -114,34 +111,34 @@ void SmoothingGroup :: SetNormals( size_t p_nbVertex, const Vector3fPtrArray & p
 	for (i = 0 ; i < m_faces.size() ; i++)
 	{
 		m_faces[i]->m_vertex1Normal = p_normals[m_faces[i]->m_vertex1->m_index];
-		m_faces[i]->m_vertex1Normal->x = l_normalsArray[m_faces[i]->m_vertex1->m_index].x;
-		m_faces[i]->m_vertex1Normal->y = l_normalsArray[m_faces[i]->m_vertex1->m_index].y;
-		m_faces[i]->m_vertex1Normal->z = l_normalsArray[m_faces[i]->m_vertex1->m_index].z;
+		m_faces[i]->m_vertex1Normal->m_coords[0] = l_normalsArray[m_faces[i]->m_vertex1->m_index][0];
+		m_faces[i]->m_vertex1Normal->m_coords[1] = l_normalsArray[m_faces[i]->m_vertex1->m_index][1];
+		m_faces[i]->m_vertex1Normal->m_coords[2] = l_normalsArray[m_faces[i]->m_vertex1->m_index][2];
 
 		m_faces[i]->m_vertex2Normal = p_normals[m_faces[i]->m_vertex2->m_index];
-		m_faces[i]->m_vertex2Normal->x = l_normalsArray[m_faces[i]->m_vertex2->m_index].x;
-		m_faces[i]->m_vertex2Normal->y = l_normalsArray[m_faces[i]->m_vertex2->m_index].y;
-		m_faces[i]->m_vertex2Normal->z = l_normalsArray[m_faces[i]->m_vertex2->m_index].z;
+		m_faces[i]->m_vertex2Normal->m_coords[0] = l_normalsArray[m_faces[i]->m_vertex2->m_index][0];
+		m_faces[i]->m_vertex2Normal->m_coords[1] = l_normalsArray[m_faces[i]->m_vertex2->m_index][1];
+		m_faces[i]->m_vertex2Normal->m_coords[2] = l_normalsArray[m_faces[i]->m_vertex2->m_index][2];
 
 		m_faces[i]->m_vertex3Normal = p_normals[m_faces[i]->m_vertex3->m_index];
-		m_faces[i]->m_vertex3Normal->x = l_normalsArray[m_faces[i]->m_vertex3->m_index].x;
-		m_faces[i]->m_vertex3Normal->y = l_normalsArray[m_faces[i]->m_vertex3->m_index].y;
-		m_faces[i]->m_vertex3Normal->z = l_normalsArray[m_faces[i]->m_vertex3->m_index].z;
+		m_faces[i]->m_vertex3Normal->m_coords[0] = l_normalsArray[m_faces[i]->m_vertex3->m_index][0];
+		m_faces[i]->m_vertex3Normal->m_coords[1] = l_normalsArray[m_faces[i]->m_vertex3->m_index][1];
+		m_faces[i]->m_vertex3Normal->m_coords[2] = l_normalsArray[m_faces[i]->m_vertex3->m_index][2];
 
 		m_faces[i]->m_vertex1Tangent = p_tangents[m_faces[i]->m_vertex1->m_index];
-		m_faces[i]->m_vertex1Tangent->x = l_tangentsArray[m_faces[i]->m_vertex1->m_index].x;
-		m_faces[i]->m_vertex1Tangent->y = l_tangentsArray[m_faces[i]->m_vertex1->m_index].y;
-		m_faces[i]->m_vertex1Tangent->z = l_tangentsArray[m_faces[i]->m_vertex1->m_index].z;
+		m_faces[i]->m_vertex1Tangent->m_coords[0] = l_tangentsArray[m_faces[i]->m_vertex1->m_index][0];
+		m_faces[i]->m_vertex1Tangent->m_coords[1] = l_tangentsArray[m_faces[i]->m_vertex1->m_index][1];
+		m_faces[i]->m_vertex1Tangent->m_coords[2] = l_tangentsArray[m_faces[i]->m_vertex1->m_index][2];
 
 		m_faces[i]->m_vertex2Tangent = p_tangents[m_faces[i]->m_vertex2->m_index];
-		m_faces[i]->m_vertex2Tangent->x = l_tangentsArray[m_faces[i]->m_vertex2->m_index].x;
-		m_faces[i]->m_vertex2Tangent->y = l_tangentsArray[m_faces[i]->m_vertex2->m_index].y;
-		m_faces[i]->m_vertex2Tangent->z = l_tangentsArray[m_faces[i]->m_vertex2->m_index].z;
+		m_faces[i]->m_vertex2Tangent->m_coords[0] = l_tangentsArray[m_faces[i]->m_vertex2->m_index][0];
+		m_faces[i]->m_vertex2Tangent->m_coords[1] = l_tangentsArray[m_faces[i]->m_vertex2->m_index][1];
+		m_faces[i]->m_vertex2Tangent->m_coords[2] = l_tangentsArray[m_faces[i]->m_vertex2->m_index][2];
 
 		m_faces[i]->m_vertex3Tangent = p_tangents[m_faces[i]->m_vertex3->m_index];
-		m_faces[i]->m_vertex3Tangent->x = l_tangentsArray[m_faces[i]->m_vertex3->m_index].x;
-		m_faces[i]->m_vertex3Tangent->y = l_tangentsArray[m_faces[i]->m_vertex3->m_index].y;
-		m_faces[i]->m_vertex3Tangent->z = l_tangentsArray[m_faces[i]->m_vertex3->m_index].z;
+		m_faces[i]->m_vertex3Tangent->m_coords[0] = l_tangentsArray[m_faces[i]->m_vertex3->m_index][0];
+		m_faces[i]->m_vertex3Tangent->m_coords[1] = l_tangentsArray[m_faces[i]->m_vertex3->m_index][1];
+		m_faces[i]->m_vertex3Tangent->m_coords[2] = l_tangentsArray[m_faces[i]->m_vertex3->m_index][2];
 	}
 
 	//destruction de la liste de liste de faces
@@ -153,5 +150,3 @@ void SmoothingGroup :: SetNormals( size_t p_nbVertex, const Vector3fPtrArray & p
 	l_normalsArray.clear();
 	l_tangentsArray.clear();
 }
-
-

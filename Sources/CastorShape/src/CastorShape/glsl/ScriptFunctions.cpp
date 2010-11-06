@@ -17,16 +17,16 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Vec2f_OperatorArray)
 {
 	VERBOSE_STARTFUNC( " [] (Vec2)");
 
-	GET_AND_EXEC_TWO_PARAM( Point2D<float>, l_vector, int, l_index);
+	GET_AND_EXEC_TWO_PARAM( Point2Real, l_vector, int, l_index);
 
 	if (l_index >= 0 && l_index < 2)
 	{
-		RETURN_AS( float) l_vector.ptr()[l_index];
+		RETURN_AS( real) l_vector[l_index];
 	}
 	else
 	{
 		SCRIPT_ERROR( "Error @ Vec2f_OperatorArray : index out of bounds");
-		RETURN_AS( float) 0.0;
+		RETURN_AS( real) 0.0;
 	}
 }
 
@@ -34,16 +34,16 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Vec3f_OperatorArray)
 {
 	VERBOSE_STARTFUNC( " [] (Vec3)");
 
-	GET_AND_EXEC_TWO_PARAM( Point3D<float>, l_vector, int, l_index);
+	GET_AND_EXEC_TWO_PARAM( Point3Real, l_vector, int, l_index);
 
 	if (l_index >= 0 && l_index < 3)
 	{
-		RETURN_AS( float) l_vector.ptr()[l_index];
+		RETURN_AS( real) l_vector[l_index];
 	}
 	else
 	{
 		SCRIPT_ERROR( "Error @ Vec3f_OperatorArray : index out of bounds");
-		RETURN_AS( float) 0.0;
+		RETURN_AS( real) 0.0;
 	}
 }
 
@@ -51,16 +51,16 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Vec4f_OperatorArray)
 {
 	VERBOSE_STARTFUNC( " [] (Vec4)");
 
-	GET_AND_EXEC_TWO_PARAM( Point4D<float>, l_vector, int, l_index);
+	GET_AND_EXEC_TWO_PARAM( Point4Real, l_vector, int, l_index);
 
 	if (l_index >= 0 && l_index < 4)
 	{
-		RETURN_AS( float) l_vector.ptr()[l_index];
+		RETURN_AS( real) l_vector[l_index];
 	}
 	else
 	{
 		SCRIPT_ERROR( "Error @ Vec4f_OperatorArray : index out of bounds");
-		RETURN_AS( float) 0.0;
+		RETURN_AS( real) 0.0;
 	}
 }
 
@@ -68,11 +68,11 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Vec2i_OperatorArray)
 {
 	VERBOSE_STARTFUNC( " [] (iVec2)");
 
-	GET_AND_EXEC_TWO_PARAM( Point2D<int>, l_vector, int, l_index);
+	GET_AND_EXEC_TWO_PARAM( Point2Int, l_vector, int, l_index);
 
 	if (l_index >= 0 && l_index < 2)
 	{
-		RETURN_AS( int) l_vector.ptr()[l_index];
+		RETURN_AS( int) l_vector[l_index];
 	}
 	else
 	{
@@ -85,11 +85,11 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Vec3i_OperatorArray)
 {
 	VERBOSE_STARTFUNC( " [] (iVec3)");
 
-	GET_AND_EXEC_TWO_PARAM( Point3D<int>, l_vector, int, l_index);
+	GET_AND_EXEC_TWO_PARAM( Point3Int, l_vector, int, l_index);
 
 	if (l_index >= 0 && l_index < 3)
 	{
-		RETURN_AS( int) l_vector.ptr()[l_index];
+		RETURN_AS( int) l_vector[l_index];
 	}
 	else
 	{
@@ -102,11 +102,11 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Vec4i_OperatorArray)
 {
 	VERBOSE_STARTFUNC( " [] (iVec4)");
 
-	GET_AND_EXEC_TWO_PARAM( Point4D<int>, l_vector, int, l_index);
+	GET_AND_EXEC_TWO_PARAM( Point4Int, l_vector, int, l_index);
 
 	if (l_index >= 0 && l_index < 4)
 	{
-		RETURN_AS( int) l_vector.ptr()[l_index];
+		RETURN_AS( int) l_vector[l_index];
 	}
 	else
 	{
@@ -123,7 +123,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Vec2b_OperatorArray)
 
 	if (l_index >= 0 && l_index < 2)
 	{
-		RETURN_AS( bool) l_vector.ptr()[l_index];
+		RETURN_AS( bool) l_vector[l_index];
 	}
 	else
 	{
@@ -140,7 +140,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Vec3b_OperatorArray)
 
 	if (l_index >= 0 && l_index < 3)
 	{
-		RETURN_AS( bool) l_vector.ptr()[l_index];
+		RETURN_AS( bool) l_vector[l_index];
 	}
 	else
 	{
@@ -157,7 +157,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Vec4b_OperatorArray)
 
 	if (l_index >= 0 && l_index < 4)
 	{
-		RETURN_AS( bool) l_vector.ptr()[l_index];
+		RETURN_AS( bool) l_vector[l_index];
 	}
 	else
 	{
@@ -285,124 +285,124 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Mth_Abs)
 {
 	VERBOSE_STARTFUNC( "Math_Abs");
 
-	GET_AND_EXEC_PARAM( float, p_value, 0);
+	GET_AND_EXEC_PARAM( real, p_value, 0);
 
-	RETURN_AS( float) abs( p_value);
+	RETURN_AS( real) abs( p_value);
 }
 
 EMUSE_SCRIPT_FUNCTION_DECLARE( Mth_Floor)
 {
 	VERBOSE_STARTFUNC( "Math_Floor");
 
-	GET_AND_EXEC_PARAM( float, p_value, 0);
+	GET_AND_EXEC_PARAM( real, p_value, 0);
 
-	RETURN_AS( float) floor( p_value);
+	RETURN_AS( real) floor( p_value);
 }
 
 EMUSE_SCRIPT_FUNCTION_DECLARE( Mth_Ceil)
 {
 	VERBOSE_STARTFUNC( "Math_Ceil");
 
-	GET_AND_EXEC_PARAM( float, p_value, 0);
+	GET_AND_EXEC_PARAM( real, p_value, 0);
 
-	RETURN_AS( float) ceil( p_value);
+	RETURN_AS( real) ceil( p_value);
 }
 
 EMUSE_SCRIPT_FUNCTION_DECLARE( Mth_Round)
 {
 	VERBOSE_STARTFUNC( "Math_Round");
 
-	GET_AND_EXEC_PARAM( float, p_value, 0);
+	GET_AND_EXEC_PARAM( real, p_value, 0);
 
-	RETURN_AS( float) ceil( p_value + 0.5);
+	RETURN_AS( real) ceil( p_value + 0.5);
 }
 
 EMUSE_SCRIPT_FUNCTION_DECLARE( Mth_Sin)
 {
 	VERBOSE_STARTFUNC( "Mth_Sin");
 
-	GET_AND_EXEC_PARAM( float, p_value, 0);
+	GET_AND_EXEC_PARAM( real, p_value, 0);
 
-	RETURN_AS( float) sin( p_value);
+	RETURN_AS( real) sin( p_value);
 }
 
 EMUSE_SCRIPT_FUNCTION_DECLARE( Mth_Cos)
 {
 	VERBOSE_STARTFUNC( "Mth_Cos");
 
-	GET_AND_EXEC_PARAM( float, p_value, 0);
+	GET_AND_EXEC_PARAM( real, p_value, 0);
 
-	RETURN_AS( float) cos( p_value);
+	RETURN_AS( real) cos( p_value);
 }
 
 EMUSE_SCRIPT_FUNCTION_DECLARE( Mth_Tan)
 {
 	VERBOSE_STARTFUNC( "Mth_Tan");
 
-	GET_AND_EXEC_PARAM( float, p_value, 0);
+	GET_AND_EXEC_PARAM( real, p_value, 0);
 
-	RETURN_AS( float) tan( p_value);
+	RETURN_AS( real) tan( p_value);
 }
 
 EMUSE_SCRIPT_FUNCTION_DECLARE( Mth_ASin)
 {
 	VERBOSE_STARTFUNC( "Mth_ASin");
 
-	GET_AND_EXEC_PARAM( float, p_value, 0);
+	GET_AND_EXEC_PARAM( real, p_value, 0);
 
-	RETURN_AS( float) asin( p_value);
+	RETURN_AS( real) asin( p_value);
 }
 
 EMUSE_SCRIPT_FUNCTION_DECLARE( Mth_ACos)
 {
 	VERBOSE_STARTFUNC( "Mth_ACos");
 
-	GET_AND_EXEC_PARAM( float, p_value, 0);
+	GET_AND_EXEC_PARAM( real, p_value, 0);
 
-	RETURN_AS( float) acos( p_value);
+	RETURN_AS( real) acos( p_value);
 }
 
 EMUSE_SCRIPT_FUNCTION_DECLARE( Mth_ATan)
 {
 	VERBOSE_STARTFUNC( "Mth_ATan");
 
-	GET_AND_EXEC_PARAM( float, p_value, 0);
+	GET_AND_EXEC_PARAM( real, p_value, 0);
  
-	RETURN_AS( float) atan( p_value);
+	RETURN_AS( real) atan( p_value);
 }
 
 EMUSE_SCRIPT_FUNCTION_DECLARE( Mth_Sqrt)
 {
 	VERBOSE_STARTFUNC( "Mth_Sqrt");
 
-	GET_AND_EXEC_PARAM( float, p_value, 0);
+	GET_AND_EXEC_PARAM( real, p_value, 0);
 
-	RETURN_AS( float) sqrt( p_value);
+	RETURN_AS( real) sqrt( p_value);
 }
 
 EMUSE_SCRIPT_FUNCTION_DECLARE( Mth_Min)
 {
 	VERBOSE_STARTFUNC( "Mth_Min");
 
-	GET_AND_EXEC_TWO_PARAM( float, p_a, float, p_b);
+	GET_AND_EXEC_TWO_PARAM( real, p_a, real, p_b);
 
-	RETURN_AS( float) min( p_a, p_b);
+	RETURN_AS( real) std::min<real>( p_a, p_b);
 }
 
 EMUSE_SCRIPT_FUNCTION_DECLARE( Mth_Max)
 {
 	VERBOSE_STARTFUNC( "Mth_Max");
 
-	GET_AND_EXEC_TWO_PARAM( float, p_a, float, p_b);
+	GET_AND_EXEC_TWO_PARAM( real, p_a, real, p_b);
 
-	RETURN_AS( float) max( p_a, p_b);
+	RETURN_AS( real) std::max<real>( p_a, p_b);
 }
 
 EMUSE_SCRIPT_FUNCTION_DECLARE( Mth_Minmax)
 {
 	VERBOSE_STARTFUNC( "Mth_Minmax");
 
-	GET_AND_EXEC_THREE_PARAM( float, p_min, float, p_value, float, p_max);
+	GET_AND_EXEC_THREE_PARAM( real, p_min, real, p_value, real, p_max);
 
-	RETURN_AS( float) minmax( p_min, p_value, p_max);
+	RETURN_AS( real) minmax( p_min, p_value, p_max);
 }

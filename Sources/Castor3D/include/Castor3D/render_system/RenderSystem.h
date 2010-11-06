@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -37,6 +37,7 @@ namespace Castor3D
 	protected:
 		static RenderSystem * sm_singleton;		//!< The singleton
 		static bool sm_useMultiTexturing;		//!< Tells whether or not we can use multitexturing
+		static bool sm_useShaders;				//!< Tells whether or not we can use shaders
 		static bool sm_initialised;				//!< tells whether or not it is initialised
 		SubmeshRendererPtrArray				m_submeshesRenderers;
 		TextureEnvironmentRendererPtrArray	m_texEnvRenderers;
@@ -50,7 +51,7 @@ namespace Castor3D
 		OverlayRendererPtrArray				m_overlayRenderers;
 
 	public:
-		static int sm_drawTypes[3];				//!< The link between Castor3D::DrawType and render system (OpenGL or Direct3D) draw types
+		static int sm_drawTypes[3];				//!< The link between Castor3D::eDRAW_TYPE and render system (OpenGL or Direct3D) draw types
 		static int sm_environmentModes[5];		//!< The link between Castor3D::EnvironmentMode and render system (OpenGL or Direct3D) environment modes
 		static int sm_RGBCombinations[8];		//!< The link between Castor3D::RGBCombination and render system (OpenGL or Direct3D) rgb combinations
 		static int sm_RGBOperands[4];			//!< The link between Castor3D::RGBOperand and render system (OpenGL or Direct3D) rgb operands
@@ -73,83 +74,119 @@ namespace Castor3D
 		 * Initialises the render system
 		 */
 		virtual void Initialise()							= 0;
+		virtual void Delete()								= 0;
 		/**
 		 * Display an arc in a given display mode
 		 */
-		virtual void DisplayArc( DrawType p_displayMode,
-								 const Vector3fPtrList & p_vertex) = 0;
+		virtual void DisplayArc( eDRAW_TYPE p_displayMode, const VertexPtrList & p_vertex) = 0;
 		/**
-		 * Creates a SubmeshRenderer, only the render system can do that
+		 * Creates a renderer
 		 */
-		virtual SubmeshRenderer *				CreateSubmeshRenderer				() = 0;
-		/**
-		 * Creates a TextureEnvironmentRenderer, only the render system can do that
-		 */
-		virtual TextureEnvironmentRenderer *	CreateTextureEnvironmentRenderer	() = 0;
-		/**
-		 * Creates a TextureRenderer, only the render system can do that
-		 */
-		virtual TextureRenderer *				CreateTextureRenderer				() = 0;
-		/**
-		 * Creates a PassRenderer, only the render system can do that
-		 */
-		virtual PassRenderer *				CreatePassRenderer						() = 0;
-		/**
-		 * Creates a LightRenderer, only the render system can do that
-		 */
-		virtual LightRenderer *					CreateLightRenderer					() = 0;
-		/**
-		 * Creates a CameraRenderer, only the render system can do that
-		 */
-		virtual CameraRenderer *				CreateCameraRenderer				() = 0;
-		/**
-		 * Creates a ViewportRenderer, only the render system can do that
-		 */
-		virtual ViewportRenderer *				CreateViewportRenderer				() = 0;
-		/**
-		 * Creates a WindowRenderer, only the render system can do that
-		 */
-		virtual WindowRenderer *				CreateWindowRenderer				() = 0;
-		/**
-		 * Creates a SceneNodeRenderer, only the render system can do that
-		 */
-		virtual SceneNodeRenderer *				CreateSceneNodeRenderer				() = 0;
-		/**
-		 * Creates a OverlayRenderer, only the render system can do that
-		 */
-		virtual OverlayRenderer *				CreateOverlayRenderer				() = 0;
+		template <typename Ty> static Templates::SharedPtr<Ty> CreateRenderer()
+		{
+			return sm_singleton->_createRendererNS<Ty>();
+		}
 		/**
 		 * Creates a Vertex Shader, only the render system can do that
 		 */
-		virtual ShaderObject *					CreateVertexShader					() = 0;
+		virtual ShaderObject *	CreateVertexShader		() = 0;
 		/**
 		 * Creates a Fragment Shader, only the render system can do that
 		 */
-		virtual ShaderObject *					CreateFragmentShader				() = 0;
+		virtual ShaderObject *	CreateFragmentShader	() = 0;
 		/**
 		 * Creates a Geometry Shader, only the render system can do that
 		 */
-		virtual ShaderObject *					CreateGeometryShader				() = 0;
+		virtual ShaderObject *	CreateGeometryShader	() = 0;
 		/**
 		 * Creates a ShaderProgram, only the render system can do that
 		 */
-		virtual ShaderProgram *					CreateShaderProgram					( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile) = 0;
+		virtual ShaderProgram *	CreateShaderProgram		( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile) = 0;
 		/**
 		 * Applies generic transformations (translation and rotation) from a position and an orientation
 		 */
-		virtual void ApplyTransformations( const Vector3f & p_position, float * p_matrix) = 0;
+		virtual void ApplyTransformations( const Point3r & p_position, real * p_matrix) = 0;
 		/**
 		* Removes generic transformations (translation and rotation) from a position and an orientation
 		*/
-		virtual void RemoveTransformations() = 0;
-
+		virtual void RemoveTransformations()=0;
+		/**
+		 * Begins the overlay (2d elements) rendering
+		 */
 		virtual void BeginOverlaysRendering()=0;
+		/**
+		 * Ends the overlay (2d elements) rendering
+		 */
 		virtual void EndOverlaysRendering()=0;
+		/**
+		 * Renders the ambient lighting
+		 */
+		virtual void RenderAmbientLight( const Colour & p_clColour)=0;
 
 	public:
-		static inline RenderSystem *	GetSingletonPtr		()	{ return sm_singleton; }
-		static inline bool				UseMultiTexturing	()	{ return sm_useMultiTexturing; }
-		static inline bool				IsInitialised		()	{ return sm_initialised; }
+		template <typename T>
+		static inline T *	GetSingletonPtr		()	{ return (T *)sm_singleton; }
+		static inline bool	UseMultiTexturing	()	{ return sm_useMultiTexturing; }
+		static inline bool	UseShaders			()	{ return sm_useShaders; }
+		static inline bool	IsInitialised		()	{ return sm_initialised; }
+
+	private:
+		template <typename Ty> Templates::SharedPtr<Ty> _createRendererNS()
+		{
+			Log::LogMessage( "Can't create a renderer of unknown type");
+		}
+
+		template <> Templates::SharedPtr<SubmeshRenderer> _createRendererNS()
+		{
+			return _createSubmeshRenderer();
+		}
+		template <> Templates::SharedPtr<TextureEnvironmentRenderer> _createRendererNS()
+		{
+			return _createTextureEnvironmentRenderer();
+		}
+		template <> Templates::SharedPtr<TextureRenderer> _createRendererNS()
+		{
+			return _createTextureRenderer();
+		}
+		template <> Templates::SharedPtr<PassRenderer> _createRendererNS()
+		{
+			return _createPassRenderer();
+		}
+		template <> Templates::SharedPtr<LightRenderer> _createRendererNS()
+		{
+			return _createLightRenderer();
+		}
+		template <> Templates::SharedPtr<CameraRenderer> _createRendererNS()
+		{
+			return _createCameraRenderer();
+		}
+		template <> Templates::SharedPtr<ViewportRenderer> _createRendererNS()
+		{
+			return _createViewportRenderer();
+		}
+		template <> Templates::SharedPtr<WindowRenderer> _createRendererNS()
+		{
+			return _createWindowRenderer();
+		}
+		template <> Templates::SharedPtr<SceneNodeRenderer> _createRendererNS()
+		{
+			return _createSceneNodeRenderer();
+		}
+		template <> Templates::SharedPtr<OverlayRenderer> _createRendererNS()
+		{
+			return _createOverlayRenderer();
+		}
+
+		virtual SubmeshRendererPtr				_createSubmeshRenderer				()=0;
+		virtual TextureEnvironmentRendererPtr	_createTextureEnvironmentRenderer	()=0;
+		virtual TextureRendererPtr				_createTextureRenderer				()=0;
+		virtual PassRendererPtr					_createPassRenderer					()=0;
+		virtual LightRendererPtr				_createLightRenderer				()=0;
+		virtual CameraRendererPtr				_createCameraRenderer				()=0;
+		virtual ViewportRendererPtr				_createViewportRenderer				()=0;
+		virtual WindowRendererPtr				_createWindowRenderer				()=0;
+		virtual SceneNodeRendererPtr			_createSceneNodeRenderer			()=0;
+		virtual OverlayRendererPtr				_createOverlayRenderer				()=0;
 	};
 }
 

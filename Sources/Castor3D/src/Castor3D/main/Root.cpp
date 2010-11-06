@@ -17,14 +17,11 @@
 #include "geometry/mesh/MeshManager.h"
 #include "shader/ShaderManager.h"
 
-#include "Log.h"
-
 using namespace Castor3D;
-using namespace General::MultiThreading;
+using namespace Castor::MultiThreading;
 
 Root * Root :: sm_singleton = NULL;
-RenderSystem * Root :: sm_renderSystem = NULL;
-Mutex Root :: sm_mutex;
+RecursiveMutex Root :: sm_mutex;
 
 Root :: Root( unsigned int p_wantedFPS)
 	:	m_ended					( false),
@@ -33,7 +30,8 @@ Root :: Root( unsigned int p_wantedFPS)
 		m_timeToWait			( m_timeSinceLastFrame),
 		m_elapsedTime			( 0),
 		m_windowsNumber			( 0),
-		m_mainLoopCreated		( false)
+		m_mainLoopCreated		( false),
+		m_rendererServer		( new RendererServer)
 {
 	sm_singleton = this;
 
@@ -54,65 +52,66 @@ Root :: ~Root()
 	}
 
 	m_ended = true;
-	m_loadedPlugins.clear();
-	delete sm_renderSystem;
-	map::deleteAll( m_windows);
+	RenderSystem::GetSingletonPtr<RenderSystem>()->Delete();
+//	map::deleteAll( m_windows);
 	m_windowsNumber = 0;
 	m_windows.clear();
+//	map::deleteAll( m_loadedPlugins);
+	delete m_rendererServer;
+	m_loadedPlugins.clear();
 	sm_singleton = NULL;
 }
 
-RenderWindow * Root :: CreateRenderWindow( Scene * p_mainScene,void * p_handle,
+RenderWindowPtr Root :: CreateRenderWindow( ScenePtr p_mainScene,void * p_handle,
 										   int p_windowWidth, int p_windowHeight,
-										   ProjectionType p_type,
+										   Viewport::eTYPE p_type,
 										   ProjectionDirection p_look)
 {
-	_lock();
-	RenderWindow * l_res = new RenderWindow( sm_renderSystem->CreateWindowRenderer(),
-											 p_mainScene, p_handle, p_windowWidth,
-											 p_windowHeight, p_type, p_look);
+	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( sm_mutex);
+	RenderWindowPtr l_res = new RenderWindow( p_mainScene, p_handle, p_windowWidth,
+											  p_windowHeight, p_type, p_look);
 	m_windows[l_res->GetIndex()] = l_res;
 	m_windowsNumber++;
 	m_windowsBegin = m_windows.begin();
 	m_windowsEnd = m_windows.end();
-	_unlock();
 	return l_res;
 }
 
 bool Root :: RemoveRenderWindow( size_t p_index)
 {
+	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( sm_mutex);
 	bool l_bReturn = false;
-	_lock();
+	RenderWindowPtr l_pWindow;
 
-	if (map::deleteValue( m_windows, p_index))
+	if (map::eraseValue( m_windows, p_index, l_pWindow))
 	{
+		l_pWindow.reset();
 		m_windowsNumber--;
 		m_windowsBegin = m_windows.begin();
 		m_windowsEnd = m_windows.end();
 		l_bReturn = true;
 	}
 
-	_unlock();
 	return l_bReturn;
 }
 
-bool Root :: RemoveRenderWindow( RenderWindow * p_window)
+bool Root :: RemoveRenderWindow( RenderWindowPtr p_window)
 {
 	bool l_bReturn = false;
 
-	if (p_window != NULL)
+	if ( ! p_window.null())
 	{
-		_lock();
+		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( sm_mutex);
+		RenderWindowPtr l_pWindow;
 
-		if (map::deleteValue( m_windows, p_window->GetIndex()))
+		if (map::eraseValue( m_windows, p_window->GetIndex(), l_pWindow))
 		{
+			l_pWindow.reset();
 			m_windowsNumber--;
 			m_windowsBegin = m_windows.begin();
 			m_windowsEnd = m_windows.end();
 			l_bReturn = true;
 		}
-
-		_unlock();
 	}
 
 	return l_bReturn;
@@ -120,11 +119,10 @@ bool Root :: RemoveRenderWindow( RenderWindow * p_window)
 
 void Root :: RemoveAllRenderWindows()
 {
-	_lock();
+	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( sm_mutex);
 
-	map::deleteAll( m_windows);
-
-	_unlock();
+//	map::deleteAll( m_windows);
+	m_windows.clear();
 }
 
 void Root :: LoadPlugin( const String & p_filePath)
@@ -133,8 +131,8 @@ void Root :: LoadPlugin( const String & p_filePath)
 	{
 		try
 		{
-			Plugin l_plugin( p_filePath);
-			l_plugin.RegisterPlugin( * this);
+			PluginPtr l_plugin = new Plugin( p_filePath);
+			l_plugin->RegisterPlugin( * this);
 			m_loadedPlugins.insert( PluginStrMap::value_type( p_filePath, l_plugin));
 		}
 		catch ( ... )
@@ -146,12 +144,13 @@ void Root :: LoadPlugin( const String & p_filePath)
 
 void Root :: StartRendering()
 {
-	if (sm_renderSystem != NULL && ! m_mainLoopCreated)
+	if ( ! m_mainLoopCreated)
 	{
-		m_mainLoop = GENLIB_THREAD_CREATE_MEMBER_FUNC_THREAD( Root, this, _mainLoop);
+		m_mainLoop = MultiThreading::CreateThread( & Root::MainLoop, this);
 
 		if (m_mainLoop != NULL)
 		{
+			m_mainLoop->ResumeThread();
 			m_mainLoopCreated = true;
 		}
 	}
@@ -159,17 +158,23 @@ void Root :: StartRendering()
 
 void Root :: EndRendering()
 {
+	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( sm_mutex);
+
 	if (m_mainLoopCreated)
 	{
-		MaterialManager::GetSingleton().DeleteAll();
-		SceneManager::GetSingleton().ClearScenes();
-		ShaderManager::GetSingleton().ClearShaders();
-		BufferManager::GetSingleton().Cleanup();
+		MaterialManager::DeleteAll();
+		SceneManager::ClearScenes();
+		ShaderManager::ClearShaders();
+		BufferManager::Cleanup();
 		_renderOneFrame( true);
 		m_ended = true;
 		Sleep( 500);
-		GENLIB_THREAD_DELETE_THREAD( m_mainLoop);
+		delete m_mainLoop;
 		m_mainLoopCreated = false;
+		MaterialManager::Clear();
+		SceneManager::Clear();
+		MeshManager::Clear();
+		AnimationManager::Clear();
 	}
 }
 
@@ -177,7 +182,7 @@ void Root :: RenderOneFrame()
 {
 	if ( ! m_mainLoopCreated)
 	{
-		if (sm_renderSystem != NULL && _preUpdate())
+		if (_preUpdate())
 		{
 			_update( true);
 			_postUpdate();
@@ -185,29 +190,28 @@ void Root :: RenderOneFrame()
 	}
 }
 
-void Root :: _mainLoop()
+size_t Root :: MainLoop( void * p_pThis)
 {
-	while ( ! m_ended)
+	Root * l_pThis = (Root *)p_pThis;
+
+	while ( ! l_pThis->m_ended)
 	{
-		_renderOneFrame( false);
+		l_pThis->_renderOneFrame( false);
+		Sleep( l_pThis->m_timeToWait > 0 ? static_cast <int>( l_pThis->m_timeToWait * 1000) : 10);
 	}
+
+	return 0;
 }
 
 void Root :: _renderOneFrame( bool p_bForce)
 {
-	_lock();
-
-	ShaderManager::GetSingleton().Update();
+	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( sm_mutex);
 
 	if (_preUpdate())
 	{
 		_update( p_bForce);
 		_postUpdate();
 	}
-
-	_unlock();
-
-	Sleep( m_timeToWait > 0 ? static_cast <int>( m_timeToWait * 1000) : 10);
 }
 
 bool Root :: _preUpdate()
@@ -225,9 +229,14 @@ bool Root :: _preUpdate()
 
 void Root :: _update( bool p_bForce)
 {
-	AnimationManager::GetSingletonPtr()->Update();
-	map::cycle( m_windows, & RenderWindow::RenderOneFrame, m_timeSinceLastFrame, p_bForce);
-	m_timeToWait = m_timeSinceLastFrame - static_cast <float>( m_timer.Time());
+	AnimationManager::Update();
+//	map::cycle( m_windows, & RenderWindow::RenderOneFrame, m_timeSinceLastFrame, p_bForce);
+	for (RenderWindowMap::iterator l_it = m_windowsBegin ; l_it != m_windowsEnd ; ++l_it)
+	{
+		l_it->second->RenderOneFrame( m_timeSinceLastFrame, p_bForce);
+	}
+
+	m_timeToWait = m_timeSinceLastFrame - static_cast <real>( m_timer.Time());
 }
 
 bool Root :: _postUpdate()
@@ -241,20 +250,4 @@ bool Root :: _postUpdate()
 	}
 
 	return l_bReturn;
-}
-
-void Root :: _lock()
-{
-	if (m_mainLoopCreated)
-	{
-		GENLIB_LOCK_MUTEX( sm_mutex);
-	}
-}
-
-void Root :: _unlock()
-{
-	if (m_mainLoopCreated)
-	{
-		GENLIB_UNLOCK_MUTEX( sm_mutex);
-	}
 }

@@ -11,9 +11,9 @@ public:
 	CSNewCubeDialog( wxWindow * parent, wxWindowID p_id);
 	~CSNewCubeDialog();
 
-	float GetCubeWidth()const;
-	float GetCubeHeight()const;
-	float GetCubeDepth()const;
+	real GetCubeWidth()const;
+	real GetCubeHeight()const;
+	real GetCubeDepth()const;
 };
 //******************************************************************************
 #endif

@@ -9,7 +9,7 @@ class CSMaterialsFrame : public wxFrame
 private:
 	CSMaterialsListView * m_materialsList;
 	int m_listWidth;
-	Castor3D::Material * m_selectedMaterial;
+	Castor3D::MaterialPtr m_selectedMaterial;
 
 	CSMaterialPanel * m_materialPanel;
 	wxButton * m_newMaterial;
@@ -22,7 +22,7 @@ public:
 					  const wxSize & size = wxSize( 500, 500),
 					  wxWindowID id = wxID_ANY,
 					  long style = wxCAPTION | wxSYSTEM_MENU | wxCLOSE_BOX | wxFRAME_FLOAT_ON_PARENT | wxFRAME_NO_TASKBAR,
-					  wxString name = C3D_T( "MaterialsFrame"));
+					  wxString name = CU_T( "MaterialsFrame"));
 	~CSMaterialsFrame();
 
 	void CreateMaterialPanel( const String & p_materialName);

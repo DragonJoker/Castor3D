@@ -2,20 +2,23 @@
 
 #include "MaterialsListView.h"
 
+#ifdef __WXMSW__
+#	include <wx/msw/msvcrt.h>      // redefines the new() operator 
+#endif
+
 #ifdef LoadImage
 #	undef LoadImage
 #	define LoadImage wxBitmap::LoadImage
 #endif
 
-using General::Templates::Manager;
+using Castor::Templates::Manager;
 using namespace Castor3D;
 using namespace CastorViewer;
 
 MaterialsListView :: MaterialsListView( wxWindow * parent, wxWindowID id, const wxPoint & pos, const wxSize & size)
 	:	wxListCtrl( parent, id, pos, size, wxLC_ICON | wxLC_SINGLE_SEL | wxLC_SORT_ASCENDING | wxBORDER_SIMPLE),
 		m_images( NULL),
-		m_nbItems( 0),
-		m_imagesArray( NULL)
+		m_nbItems( 0)
 {
 	SetColumnWidth( -1, c_columnWidth);
 	CreateList();
@@ -66,13 +69,13 @@ void MaterialsListView :: CreateList()
 
 void MaterialsListView :: AddItem( const String & p_materialName)
 {
-	float l_col0;
-	float l_col1;
-	float l_col2;
+	real l_col0;
+	real l_col1;
+	real l_col2;
 	unsigned char l_ccol0;
 	unsigned char l_ccol1;
 	unsigned char l_ccol2;
-	const float * l_colour = MaterialManager::GetSingletonPtr()->GetElementByName( p_materialName)->GetPass( 0)->GetAmbient();
+	const float * l_colour = MaterialManager::GetElementByName( p_materialName)->GetPass( 0)->GetAmbient();
 	l_col0 = l_colour[0] * 255.0;
 	l_col1 = l_colour[1] * 255.0;
 	l_col2 = l_colour[2] * 255.0;
@@ -92,7 +95,7 @@ void MaterialsListView :: AddItem( const String & p_materialName)
 	{
 		l_image = new wxImage( c_materialIconSize, c_materialIconSize);
 		l_image->SetRGB( wxRect( 0, 0, c_materialIconSize, c_materialIconSize), l_ccol0, l_ccol1, l_ccol2);
-		Log::LogMessage( "No texture for index %d", l_index);
+//		Log::LogMessage( "MaterialsListView :: AddItem - No texture for index %d", l_index);
 	}
 
 	wxBitmap l_bitmap( * l_image);
@@ -101,15 +104,15 @@ void MaterialsListView :: AddItem( const String & p_materialName)
 
 	if (InsertItem( l_index, p_materialName.c_str(), l_index) == -1)
 	{
-		Log::LogMessage( "Item not inserted");
+		Log::LogMessage( "MaterialsListView :: AddItem - Item not inserted");
 	}
 }
 
 wxImage * MaterialsListView :: GetMaterialImage( const String & p_materialName, unsigned int p_index, unsigned int p_width, unsigned int p_height)
 {
-	Material * l_material = MaterialManager::GetSingletonPtr()->GetElementByName( p_materialName);
+	MaterialPtr l_material = MaterialManager::GetElementByName( p_materialName);
 
-	if (l_material != NULL && p_index < l_material->GetPass( 0)->GetNbTexUnits())
+	if ( ! l_material.null() && p_index < l_material->GetPass( 0)->GetNbTexUnits())
 	{
 		String l_path;
 		l_path = l_material->GetPass( 0)->GetTextureUnit( p_index)->GetTexturePath();

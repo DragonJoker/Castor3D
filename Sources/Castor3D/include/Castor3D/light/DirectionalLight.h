@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -39,7 +39,7 @@ namespace Castor3D
 		 *@param p_name : The light's name, default is void
 		 *@param p_index : The light's index (max 8 active lights at a time)
 		 */
-		DirectionalLight( LightRenderer * p_renderer, const String & p_name=C3DEmptyString);
+		DirectionalLight( const String & p_name=C3DEmptyString);
 	public:
 		/**
 		 * Destructor
@@ -57,13 +57,13 @@ namespace Castor3D
 		 * Writes the directional light in a file
 		 *@param p_pFile : a pointer to file to write in
 		 */
-		virtual bool Write( General::Utils::FileIO * p_pFile)const;
+		virtual bool Write( Castor::Utils::File & p_pFile)const;
 
 	public:
 		/**
-		 *@return The light type (Directional for this one), used for polymorphism
+		 *@return The light type (Directional, here), used for polymorphism
 		 */
-		virtual inline eTYPE	GetLightType()const {return eDirectional;}
+		virtual eTYPE	GetLightType()const {return eDirectional;}
 	};
 }
 

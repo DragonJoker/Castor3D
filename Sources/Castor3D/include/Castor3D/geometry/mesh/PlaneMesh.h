@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -32,8 +32,8 @@ namespace Castor3D
 	{
 	private:
 		friend class MeshManager;
-		float m_depth;					//!< The plane depth
-		float m_width;					//!< The plane width
+		real m_depth;					//!< The plane depth
+		real m_width;					//!< The plane width
 		unsigned int m_subDivisionsW;	//!< The number of depth subsections
 		unsigned int m_subDivisionsD;	//!< The number of width subsections
 		/**
@@ -44,7 +44,7 @@ namespace Castor3D
 		 *@param p_subdivisionsDepth : [in] The wanted depth subsections
 		 *@param p_name : [in] The mesh name
 		 */
-		PlaneMesh( float p_width=0.0, float p_depth=0.0,
+		PlaneMesh( real p_width=0.0, real p_depth=0.0,
 				   unsigned int p_subdivisionsDepth=1, unsigned int p_subdivisionsWidth=1,
 				   const String & p_name = C3DEmptyString);
 
@@ -64,14 +64,17 @@ namespace Castor3D
 		 *@param p_subDivX : [in] The new wanted width subsections
 		 *@param p_subDivY : [in] The new wanted depth subsections
 		 */
-		void Modify( float p_width, float p_depth,
+		void Modify( real p_width, real p_depth,
 					 unsigned int p_subDivX, unsigned int p_subDivY);
 
 	public:
-		inline float		GetLength			()const {return m_depth;}
-		inline float		GetWidth			()const {return m_width;}
+		/**@name Accessors */
+		//@{
+		inline real		GetLength			()const {return m_depth;}
+		inline real		GetWidth			()const {return m_width;}
 		inline unsigned int	GetSubDivisionsX	()const {return m_subDivisionsW;}
 		inline unsigned int	GetSubDivisionsY	()const {return m_subDivisionsD;}
+		//@}
 
 		inline friend std::ostream & operator <<( std::ostream & o, const PlaneMesh & c) { return o << "Plane(" << c.m_depth << "," << c.m_width << "," << c.m_subDivisionsW << "," << c.m_subDivisionsD << ")";}
 	};

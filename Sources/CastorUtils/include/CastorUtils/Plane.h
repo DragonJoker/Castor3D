@@ -11,16 +11,16 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_Plane___
-#define ___C3D_Plane___
+#ifndef ___Castor_Plane___
+#define ___Castor_Plane___
 
 #include "Line.h"
 
-namespace General
+namespace Castor
 {	namespace Math
 {
 	/*!
@@ -28,44 +28,49 @@ namespace General
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
+	template <typename T>
 	class Plane
 	{
+	private:
+		typedef Templates::Value<T> value;
 	public:
-		Vector3f m_origin;
-		Vector3f m_normal;	// a, b, c coefficients
-		float m_d;			// d coefficient
+		Point<T, 3> m_origin;
+		Point<T, 3> m_normal;	// a, b, c coefficients
+		real m_d;			// d coefficient
 
 	public:
-		Plane( const Vector3f & p_p1, const Vector3f & p_p2, const Vector3f & p_p3)
+		Plane( const Point<T, 3> & p_p1, const Point<T, 3> & p_p2, const Point<T, 3> & p_p3)
 		{
-			Vector3f l_v( p_p1, p_p2);
-			Vector3f l_w( p_p1, p_p3);
+			Point<T, 3> l_v( p_p2 - p_p1);
+			Point<T, 3> l_w( p_p3 - p_p1);
 			m_normal = l_v ^ l_w;
 
 			m_normal.Normalise();
-			m_origin = Vector3f( p_p1);
+			m_origin = Point<T, 3>( p_p1);
 			m_d = 0.0f - m_normal.dotProduct( m_origin);
 		}
 
 		bool IsParallel( const Plane & p_plane)const
 		{
-			float l_ratioA = m_normal.x / p_plane.m_normal.x;
-			float l_ratioB = m_normal.y / p_plane.m_normal.y;
-			float l_ratioC = m_normal.z / p_plane.m_normal.z;
+			T l_ratioA = m_normal[0] / p_plane.m_normal[0];
+			T l_ratioB = m_normal[1] / p_plane.m_normal[1];
+			T l_ratioC = m_normal[2] / p_plane.m_normal[2];
 
-			return (abs( l_ratioA - l_ratioB) < 0.000001f) && (abs( l_ratioA - l_ratioC) < 0.000001f);
+			return (value::equals( l_ratioA, l_ratioB) && value::equals( l_ratioA, l_ratioC));
 		}
 
 		bool operator ==( const Plane & p_plane)const
 		{
-			if (! IsParallel( p_plane))
+			bool l_bReturn = false;
+
+			if (IsParallel( p_plane))
 			{
-				return false;
+				T l_ratioA = m_normal[0] / p_plane.m_normal[0];
+				T l_ratioD = m_d / p_plane.m_d;
+				l_bReturn = value::equals( l_ratioA, l_ratioD);
 			}
 
-			float l_ratioA = m_normal.x / p_plane.m_normal.x;
-			float l_ratioD = m_d / p_plane.m_d;
-			return (abs( l_ratioA - l_ratioD) < 0.000001f);
+			return l_bReturn;
 		}
 
 		bool operator !=( const Plane & p_plane)const
@@ -73,64 +78,56 @@ namespace General
 			return ( ! (*this == p_plane));
 		}
 
-		bool Intersects( const Plane & p_plane, Line & p_line)const
+		bool Intersects( const Plane & p_plane, Line<T> & p_line)const
 		{
-			if (IsParallel( p_plane))
+			bool l_bReturn = false;
+
+			if ( ! IsParallel( p_plane))
 			{
-				return false;
+				Point3r l_normal = m_normal ^ p_plane.m_normal;
+				//TODO : trouver le point d'origine
+				l_bReturn = true;
 			}
 
-			Vector3f l_normal = m_normal ^ p_plane.m_normal;
-
-			//TODO : trouver le point d'origine
-
-			return true;
+			return l_bReturn;
 		}
 
-		bool Intersects( const Plane & p_plane1, const Plane & p_plane2, Vector3f & p_intersection)const
+		bool Intersects( const Plane & p_plane1, const Plane & p_plane2, Point<T, 3> & p_intersection)const
 		{
-			if (IsParallel( p_plane1))
+			bool l_bReturn = false;
+
+			if ( ! IsParallel( p_plane1) && ! IsParallel( p_plane2) && ! p_plane1.IsParallel( p_plane2))
 			{
-				return false;
+				T a1 = m_normal[0], a2 = p_plane1.m_normal[0], a3 = p_plane2.m_normal[0];
+				T b1 = m_normal[1], b2 = p_plane1.m_normal[1], b3 = p_plane2.m_normal[1];
+				T c1 = m_normal[2], c2 = p_plane1.m_normal[2], c3 = p_plane2.m_normal[2];
+				T alpha, beta;
+
+				alpha = (a3 - (a2 * (b3 - (a3 / a1)) / (b2 - (a2 / a1)))) / a1;
+				beta = (b3 - (a3 / a1)) / (b2 - (a2 / a1));
+
+				T l_c3 = (c1 * alpha) + (c2 * beta);
+
+				if ( ! value::equals( c3, l_c3))
+				{
+					alpha = ((a2 * c1) / (a1 * (b2 - (a2 * b1) / a1))) - (c2 / (b2 - (a2 * b1) / a1));
+					beta = ((a2 * m_d) / (a1 * (b2 - (a2 * b1) / a1))) - (p_plane1.m_d / (b2 - (a2 * b1) / a1));
+
+					T x, y, z;
+
+					z = ((a3 * ((m_d + (beta * b1)) / a1)) - p_plane2.m_d) / ((b3 * alpha) + c3 - (a3 * ((alpha * b1) + c1) / a1));
+					y = (alpha * z) + beta;
+					x = (z * (0.0f - ((alpha * b1) + c1)) / a1) - ((m_d + (b1 * beta)) / a1);
+
+					p_intersection[0] = x;
+					p_intersection[1] = y;
+					p_intersection[2] = z;
+
+					l_bReturn = true;
+				}
 			}
-			if (IsParallel( p_plane2))
-			{
-				return false;
-			}
-			if (p_plane1.IsParallel( p_plane2))
-			{
-				return false;
-			}
 
-			float a1=m_normal.x, a2=p_plane1.m_normal.x, a3=p_plane2.m_normal.x;
-			float b1=m_normal.y, b2=p_plane1.m_normal.y, b3=p_plane2.m_normal.y;
-			float c1=m_normal.z, c2=p_plane1.m_normal.z, c3=p_plane2.m_normal.z;
-			float alpha, beta;
-
-			alpha = (a3 - (a2 * (b3 - (a3 / a1)) / (b2 - (a2 / a1)))) / a1;
-			beta = (b3 - (a3 / a1)) / (b2 - (a2 / a1));
-
-			float l_c3 = (c1 * alpha) + (c2 * beta);
-
-			if (abs(c3 - l_c3) < 0.000001)
-			{
-				return false;
-			}
-
-			alpha = ((a2 * c1) / (a1 * (b2 - (a2 * b1) / a1))) - (c2 / (b2 - (a2 * b1) / a1));
-			beta = ((a2 * m_d) / (a1 * (b2 - (a2 * b1) / a1))) - (p_plane1.m_d / (b2 - (a2 * b1) / a1));
-
-			float x, y, z;
-
-			z = ((a3 * ((m_d + (beta * b1)) / a1)) - p_plane2.m_d) / ((b3 * alpha) + c3 - (a3 * ((alpha * b1) + c1) / a1));
-			y = (alpha * z) + beta;
-			x = (z * (0.0f - ((alpha * b1) + c1)) / a1) - ((m_d + (b1 * beta)) / a1);
-
-			p_intersection.x = x;
-			p_intersection.y = y;
-			p_intersection.z = z;
-
-			return true;
+			return l_bReturn;
 		}
 	};
 }

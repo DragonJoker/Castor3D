@@ -11,17 +11,17 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
 #ifndef ___C3D_Submesh___
 #define ___C3D_Submesh___
 
+#include "../Module_Geometry.h"
 #include "../../render_system/Module_Render.h"
 #include "../../material/Module_Material.h"
-#include "../basic/SmoothingGroup.h"
-
+#include "../../render_system/Renderable.h"
 
 namespace Castor3D
 {
@@ -31,7 +31,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class CS3D_API Submesh
+	class CS3D_API Submesh : public Renderable<Submesh, SubmeshRenderer>
 	{
 		friend class Mesh;
 		friend class IcosaedricMesh;
@@ -43,36 +43,35 @@ namespace Castor3D
 		friend class ConicMesh;
 
 	protected:
-		Material * m_material;						//!< The material of this submesh
-		SmoothGroupPtrArray m_smoothGroups;			//!< The smoothgroups (which hold the faces)
+		Templates::WeakPtr<Material> m_material;			//!< The material
+		String m_strMatName;
+		SmoothGroupPtrArray m_smoothGroups;					//!< The smoothgroups (which hold the faces)
 
-		ComboBox * m_box;							//!< The combo box container
-		Sphere * m_sphere;							//!< The spheric container
+		ComboBoxPtr m_box;									//!< The combo box container
+		SpherePtr m_sphere;									//!< The spheric container
 		
-		Vector3fPtrArray m_vertex;					//!< The vertex pointer array
-		Vector3fPtrArray m_tangents;				//!< The vertex pointer array
-		Vector3fPtrArray m_normals;					//!< The vertex pointer array
+		VertexPtrArray m_vertex;							//!< The vertex pointer array
+		Point3rPtrArray m_tangents;							//!< The vertex pointer array
+		Point3rPtrArray m_normals;							//!< The vertex pointer array
 
-		SubmeshRenderer * m_renderer;				//!< The submesh renderer
-		VertexBuffer * m_triangles;					//!< The triangles vertex buffer
-		NormalsBuffer * m_trianglesNormals;			//!< The triangles normals buffer
-		VertexAttribsBuffer * m_trianglesTangents;	//!< The triangles tangent buffer
-		TextureBuffer * m_trianglesTexCoords;		//!< The triangles texture buffer
-		VertexBuffer * m_lines;						//!< The lines vertex buffer
-		NormalsBuffer * m_linesNormals;				//!< The lines normals buffer
-		TextureBuffer * m_linesTexCoords;			//!< The lines texture buffer
+		VertexBufferPtr				m_triangles;			//!< The triangles vertex buffer
+		NormalsBufferPtr			m_trianglesNormals;		//!< The triangles normals buffer
+		VertexAttribsBufferRealPtr	m_trianglesTangents;	//!< The triangles tangent buffer
+		TextureBufferPtr			m_trianglesTexCoords;	//!< The triangles texture buffer
+		VertexBufferPtr				m_lines;				//!< The lines vertex buffer
+		NormalsBufferPtr			m_linesNormals;			//!< The lines normals buffer
+		TextureBufferPtr			m_linesTexCoords;		//!< The lines texture buffer
 
-		std::map < SubdivisionMode, Subdiviser *> m_subdivisers;
+		SubdiviserPtrModeMap m_subdivisers;
 
 		NormalsMode m_normalsMode;
 
 	public:
 		/**
 		 * Constructor
-		 *@param p_renderer : [in] The SubmeshRenderer, may be OpenGL or Direct3D
-		 *@param p_sgNumber : [in] The number of smoothgroups of this submesh
+		 *@param p_sgNumber : [in] The number of smoothgroups
 		 */
-		Submesh( SubmeshRenderer * p_renderer, size_t p_sgNumber=0);
+		Submesh( size_t p_sgNumber=0);
 		/**
 		 * Destructor
 		 */
@@ -82,7 +81,7 @@ namespace Castor3D
 		 */
 		void Cleanup();
 		/**
-		* Sets this geometry's material
+		* Sets material
 		*@param p_matName : [in] the material name
 		*/
 		void SetMaterial( const String & p_matName);
@@ -99,18 +98,18 @@ namespace Castor3D
 		 *@param p_index : [in] The index of the wanted smoothgroup
 		 *@return The found SmoothingGroup, NULL if none
 		 */
-		SmoothingGroup * GetSmoothGroup( size_t p_index)const;
+		SmoothingGroupPtr GetSmoothGroup( size_t p_index)const;
 		/**
-		 * Returns the total number of faces of this submesh
+		 * Returns the total number of faces
 		 *@return The faces number
 		 */
 		size_t GetNbFaces()const;
 		/**
-		 * Tests if the given Vector3f is in mine
+		 * Tests if the given Point3r is in mine
 		 *@param p_vertex : [in] The vertex to test
 		 *@return The index of the vertex equal to parameter, -1 if not found
 		 */
-		int IsInMyVertex( const Vector3f & p_vertex);
+		int IsInMyVertex( const Vertex & p_vertex);
 		/**
 		 * Initialises the face normals
 		 */
@@ -134,9 +133,25 @@ namespace Castor3D
 		 *@param z : [in] The vertex Z coordinate
 		 *@return The created vertex
 		 */
-		Vector3f * AddVertex( float x, float y, float z);
-		Vector3f * AddVertex( Vector3f * p_v);
-		Vector3f * AddVertex( float * p_v);
+		VertexPtr AddVertex( real x, real y, real z);
+		/**
+		 * Adds a vertex to my list
+		 *@param p_v : [in] The vertex to add
+		 *@return The vertex
+		 */
+		VertexPtr AddVertex( const Vertex & p_v);
+		/**
+		 * Adds a vertex to my list
+		 *@param p_v : [in] The vertex to add
+		 *@return The vertex
+		 */
+		VertexPtr AddVertex( VertexPtr p_v);
+		/**
+		 * Creates and adds a vertex to my list
+		 *@param p_v : [in] The vertex coordinates
+		 *@return The created vertex
+		 */
+		VertexPtr AddVertex( real * p_v);
 		/**
 		 * Creates and adds a face to the wanted smoothgroup
 		 *@param a : [in] The first face's vertex
@@ -145,7 +160,7 @@ namespace Castor3D
 		 *@param p_sgIndex : [in] The wanted smoothing group index
 		 *@return The created face
 		 */
-		Face * AddFace( Vector3f * a, Vector3f * b, Vector3f * c, size_t p_sgIndex);
+		FacePtr AddFace( VertexPtr a, VertexPtr b, VertexPtr c, size_t p_sgIndex);
 		/**
 		 * Creates and adds a face to the wanted smoothgroup
 		 *@param a : [in] The first face's vertex index
@@ -154,17 +169,19 @@ namespace Castor3D
 		 *@param p_sgIndex : [in] The wanted smoothing group index
 		 *@return The created face
 		 */
-		Face * AddFace( size_t a, size_t b, size_t c, size_t p_sgIndex);
+		FacePtr AddFace( size_t a, size_t b, size_t c, size_t p_sgIndex);
 		/**
 		 * Creates and adds a quad face to the wanted smoothgroup
 		 *@param a : [in] The first face's vertex
 		 *@param b : [in] The second face's vertex
 		 *@param c : [in] The third face's vertex
 		 *@param d : [in] The fourth face's vertex
+		 *@param p_ptMinUV : [in] Minimum UV
+		 *@param p_ptMaxUV : [in] Maximum UV
 		 *@param p_sgIndex : [in] The wanted smoothing group index
 		 *@return The created face
 		 */
-		void AddQuadFace( Vector3f * a, Vector3f * b, Vector3f * c, Vector3f * d, size_t p_sgIndex);
+		void AddQuadFace( VertexPtr a, VertexPtr b, VertexPtr c, VertexPtr d, size_t p_sgIndex, const Point3r & p_ptMinUV = Point3r( real( 0), real( 0), real( 0)), const Point3r & p_ptMaxUV = Point3r( real( 1), real( 1), real( 1)));
 		/**
 		 * Creates and adds a quad face to the wanted smoothgroup
 		 *@param a : [in] The first face's vertex index
@@ -172,13 +189,15 @@ namespace Castor3D
 		 *@param c : [in] The third face's vertex index
 		 *@param d : [in] The fourth face's vertex index
 		 *@param p_sgIndex : [in] The wanted smoothing group index
+		 *@param p_ptMinUV : [in] The UV of the bottom left corner
+		 *@param p_ptMaxUV : [in] The UV of the top right corner
 		 *@return The created face
 		 */
-		void AddQuadFace( size_t a, size_t b, size_t c, size_t d, size_t p_sgIndex);
+		void AddQuadFace( size_t a, size_t b, size_t c, size_t d, size_t p_sgIndex, const Point3r & p_ptMinUV = Point3r( real( 0), real( 0), real( 0)), const Point3r & p_ptMaxUV = Point3r( real( 1), real( 1), real( 1)));
 		/**
 		 * Adds a smoothing group to the submesh
 		 */
-		SmoothingGroup * AddSmoothingGroup();
+		SmoothingGroupPtr AddSmoothingGroup();
 		/**
 		 * Generates the vertex and texture buffers
 		 */
@@ -191,44 +210,40 @@ namespace Castor3D
 		 *@param p_trianglesTexIndex : [in/out] The current triangle's texture index
 		 *@param p_linesTexIndex : [in/out] The current line's texture index
 		 */
-		void SetBuffersForFace( Face * p_face,
+		void SetBuffersForFace( FacePtr p_face,
 								unsigned int & p_trianglesIndex,
 								unsigned int & p_linesIndex,
 								unsigned int & p_trianglesTexIndex,
 								unsigned int & p_linesTexIndex);
 
-		void SetTangentBufferForFace( Face * p_face, unsigned int & p_trianglesTanIndex);
+		void SetTangentBufferForFace( FacePtr p_face, unsigned int & p_trianglesTanIndex);
 		/**
 		 * Fills the normals buffer of the given mode
 		 *@param p_nm : [in] The wanted NormalsMode
 		 */
 		void CreateNormalsBuffer( NormalsMode p_nm);
 		/**
-		 * Clones this submesh and returns the clone
+		 * Clones the submesh and returns the clone
 		 *@return The clone
 		 */
-		Submesh * Clone();
+		SubmeshPtr Clone();
 		/**
-		* Subdivides this mesh, in the given mode, centered on the given center, auto-center if NULL
+		* Subdivides the submesh, in the given mode, centered on the given center, auto-center if NULL
 		* auto-center computes the center for each face from it's vertices normals
 		*/
-		void Subdivide( SubdivisionMode p_mode, Vector3f * p_center=NULL);
+		void Subdivide( SubdivisionMode p_mode, Point3rPtr p_center=NULL);
 		/**
 		 * Writes the submesh in a file
 		 *@param p_file : [in] The file to write in
 		 *@return true if successful, false if not
 		 */
-		virtual bool Write( General::Utils::FileIO & p_file)const;
+		virtual bool Write( Castor::Utils::File & p_file)const;
 		/**
 		 * Reads the submesh from a file
 		 *@param p_file : [in] The file to read from
 		 *@return true if successful, false if not
 		 */
-		virtual bool Read( General::Utils::FileIO & p_file);
-		/**
-		 * 
-		 */
-		void InvertNormals();
+		virtual bool Read( Castor::Utils::File & p_file);
 		/**
 		 * 
 		 */
@@ -238,43 +253,113 @@ namespace Castor3D
 		 */	
 		void GetSmoothGroups( SmoothGroupPtrArray & p_array);
 
+		virtual void Apply( eDRAW_TYPE p_displayMode);
+
 	protected:
 		void _setBuffersForVertex( unsigned int & p_trianglesIndex,
 									unsigned int & p_linesIndex,
 									unsigned int & p_trianglesTexIndex,
 									unsigned int & p_linesTexIndex,
-									Vector3f * p_v1, Vector3f * p_v2,
-									const Point3D<float> & p_texCoord1, const Point3D<float> & p_texCoord2);
-		void _setTangentBufferForVertex( unsigned int & p_trianglesTanIndex, Vector3f * p_v1, Vector3f * p_tangent);
-		void _setBufferSmoothNormals( Face * p_face);
-		void _setBufferFlatNormals( Face * p_face);
+									VertexPtr p_v1, VertexPtr p_v2,
+									const Point3r & p_texCoord1, const Point3r & p_texCoord2);
+		void _setTangentBufferForVertex( unsigned int & p_trianglesTanIndex, VertexPtr * p_v1, VertexPtr * p_tangent);
+		void _setBufferSmoothNormals( FacePtr p_face);
+		void _setBufferFlatNormals( FacePtr p_face);
 		void _initBuffers();
 		/**
 		* This subdivision mode using PN Triangles surface subdivision
 		*/
-		void _subdividePNTriangles( Vector3f * p_center=NULL);
+		void _subdividePNTriangles( Point3rPtr p_center=NULL);
 		/**
 		 * This subdivision mode using Loop surface subdivision
 		 */
-		void _subdivideLoop( Vector3f * p_center=NULL);
+		void _subdivideLoop( Point3rPtr p_center=NULL);
 
 	private:
-		void _addFace( Face * p_face, size_t p_sgIndex)						{ m_smoothGroups[p_sgIndex]->m_faces.push_back( p_face); }
+		void _addFace( FacePtr p_face, size_t p_sgIndex);
 
 	public:
-		inline void			SetMaterial		( Material * p_mat)				{ m_material = p_mat; }
-		inline void			AddSmoothGroup	( SmoothingGroup * p_group)		{ m_smoothGroups.push_back( p_group); }
+		/**@name Accessors */
+		//@{
+		inline void SetMaterial		( MaterialPtr p_mat)			{ m_material = p_mat; }
+		inline void AddSmoothGroup	( SmoothingGroupPtr p_group)	{ m_smoothGroups.push_back( p_group); }
 
-		inline size_t				GetNbSmoothGroups		()const			{ return m_smoothGroups.size(); }
-		inline size_t				GetNbVertex				()const			{ return m_vertex.size(); }
-		inline Vector3f *			GetVertex				(size_t i)const	{ return (i < m_vertex.size() ? m_vertex[i] : NULL); }
-		inline SubmeshRenderer *	GetRenderer				()const			{ return m_renderer; }
-		inline Material *			GetMaterial				()const			{ return m_material; }
-		inline ComboBox *			GetComboBox				()const			{ return m_box; }
-		inline Sphere *				GetSphere				()const			{ return m_sphere; }
-		inline Vector3fPtrArray *	GetVertices				()				{ return & m_vertex; }
-		inline NormalsMode			GetNormalsMode			()const			{ return m_normalsMode; }
-		inline SmoothGroupPtrArray *GetSmoothGroups			()				{ return & m_smoothGroups; }
+		inline size_t					GetNbSmoothGroups		()const				{ return m_smoothGroups.size(); }
+		inline size_t					GetNbVertex				()const				{ return m_vertex.size(); }
+		inline VertexPtr				GetVertex				( size_t i)const	{ return (i < m_vertex.size() ? m_vertex[i] : NULL); }
+		inline MaterialPtr				GetMaterial				()const				{ return m_material; }
+		inline ComboBoxPtr				GetComboBox				()const				{ return m_box; }
+		inline SpherePtr				GetSphere				()const				{ return m_sphere; }
+		inline VertexPtrArray &			GetVertices				()					{ return m_vertex; }
+		inline NormalsMode				GetNormalsMode			()const				{ return m_normalsMode; }
+		inline SmoothGroupPtrArray	&	GetSmoothGroups			()					{ return m_smoothGroups; }
+		//@}
+	};
+	//! The submesh renderer
+	/*!
+	Initialises the vertex, normals, textures buffers of a submesh, draws it
+	\author Sylvain DOREMUS
+	\version 0.1
+	\date 09/02/2010
+	*/
+	class CS3D_API SubmeshRenderer : public Renderer<Submesh, SubmeshRenderer>
+	{
+	protected:
+		VertexBufferPtr				m_triangles;			//!< Pointer over geometry triangles vertex buffer
+//		VertexAttribsBufferRealPtr	m_trianglesNormals;		//!< Pointer over geometry triangles normals buffer
+		NormalsBufferPtr			m_trianglesNormals;		//!< Pointer over geometry triangles normals buffer
+		VertexAttribsBufferRealPtr	m_trianglesTangents;	//!< Pointer over geometry triangles tangents buffer
+		TextureBufferPtr			m_trianglesTexCoords;	//!< Pointer over geometry triangles texture coords buffer
+		VertexBufferPtr				m_lines;				//!< Pointer over geometry lines vertex buffer
+//		VertexAttribsBufferRealPtr	m_linesNormals;			//!< Pointer over geometry lines normals buffer
+		NormalsBufferPtr			m_linesNormals;			//!< Pointer over geometry lines normals buffer
+		TextureBufferPtr			m_linesTexCoords;		//!< Pointer over geometry lines texture coords buffer
+		/**
+		 * Constructor, only RenderSystem can use it
+		 */
+		SubmeshRenderer()
+		{}
+
+	public:
+		/**
+		 * Destructor
+		 */
+		virtual ~SubmeshRenderer(){ Cleanup(); }
+		/**
+		 * Cleans the renderer
+		 */
+		virtual void Cleanup(){}
+		/**
+		* Initialises the geometry's buffers
+		*/
+		virtual void Initialise() = 0;
+		/**
+		* Initialises the geometry's buffers
+		*/
+		virtual void Draw( eDRAW_TYPE p_mode, PassPtr p_pass) = 0;
+		/**
+		 * Shows the submesh vertices (enables its arrays)
+		 *@param p_displayMode : [in] The wanted disply mode
+		 */
+		virtual void ShowVertex( eDRAW_TYPE p_displayMode) = 0;
+		/**
+		 * Hides the submesh vertices (disables its arrays)
+		 */
+		virtual void HideVertex() = 0;
+
+	public:
+		/**@name Accessors */
+		//@{
+		inline VertexBufferPtr				GetTriangles			()const { return m_triangles; }
+//		inline VertexAttribsBufferRealPtr	GetTrianglesNormals		()const { return m_trianglesNormals; }
+		inline NormalsBufferPtr				GetTrianglesNormals		()const { return m_trianglesNormals; }
+		inline VertexAttribsBufferRealPtr	GetTrianglesTangents	()const { return m_trianglesTangents; }
+		inline TextureBufferPtr				GetTrianglesTexCoords	()const { return m_trianglesTexCoords; }
+		inline VertexBufferPtr				GetLines				()const { return m_lines; }
+//		inline VertexAttribsBufferRealPtr	GetLinesNormals			()const { return m_linesNormals; }
+		inline NormalsBufferPtr				GetLinesNormals			()const { return m_linesNormals; }
+		inline TextureBufferPtr				GetLinesTexCoords		()const { return m_linesTexCoords; }
+		//@}
 	};
 }
 

@@ -11,16 +11,16 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_Vector3f___
-#define ___C3D_Vector3f___
+#ifndef ___Castor_Vertex___
+#define ___Castor_Vertex___
 
 #include "Point.h"
 
-namespace General
+namespace Castor
 {	namespace Math
 {
 	/*!
@@ -29,11 +29,13 @@ namespace General
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class Vector3f : public Point3D<float>
+	class Vertex : public Point3r
 	{
+	private:
+		typedef Templates::Value<real> value;
 	public:
 		static unsigned long s_vertexNumber;	//!< Total number of vertex
-		static Vector3f ZeroVertex;
+		static Vertex ZeroVertex;
 
 	public :
 		size_t m_index;							//!< The index, for the smoothing groups
@@ -42,8 +44,8 @@ namespace General
 		/**
 		* Specified constructor
 		*/
-		Vector3f( float x = 0.0, float y = 0.0, float z = 0.0, size_t p_index = 0)
-			:	Point3D<float>( x, y, z),
+		Vertex( real x = 0, real y = 0, real z = 0, size_t p_index = 0)
+			:	Point3r( x, y, z),
 				m_index	( p_index)
 		{
 			s_vertexNumber++;
@@ -51,94 +53,62 @@ namespace General
 		/**
 		* Copy constructor
 		*/
-		Vector3f( const Vector3f & p_vertex)
-			:	Point3D<float>( p_vertex)
+		Vertex( const Vertex & p_vertex)
+			:	Point3r( p_vertex)
 		{
 			s_vertexNumber++;
 		}
 		/**
 		* Constructor from point
 		*/
-		Vector3f( const Point3D<float> & p_vertex)
-			:	Point3D<float>( p_vertex)
+		Vertex( const Point3r & p_vertex)
+			:	Point3r( p_vertex)
 		{
 			s_vertexNumber++;
 		}
 		/**
-		* Constructor from a float array
+		* Constructor from a real array
 		*/
-		Vector3f( const float * p_coord)
-			:	Point3D<float>( p_coord)
+		Vertex( const real * p_coord)
+			:	Point3r( p_coord)
 		{
 			s_vertexNumber++;
 		}
 		/**
 		* Constructor from the difference between second and first argument
 		*/
-		Vector3f( const Vector3f & p_v1, const Vector3f & p_v2)
-			:	Point3D<float>( p_v2.x - p_v1.x, p_v2.y - p_v1.y, p_v2.z - p_v1.z)
+		Vertex( const Vertex & p_v1, const Vertex & p_v2)
+			:	Point3r( p_v2 - p_v1)
 		{
 			s_vertexNumber++;
 		}
 		/**
 		* Destructor
 		*/
-		~Vector3f()
+		~Vertex()
 		{
 			s_vertexNumber--;
 		}
 
 	public:
-		inline void TranslateVertex( Vector3f & p_vertex)const
+		inline void TranslateVertex( Vertex & p_vertex)const
 		{
-			p_vertex.x += x;
-			p_vertex.y += y;
-			p_vertex.z += z;
+			p_vertex += (* this);
 		}
-		inline void TranslateVertexXY( Vector3f & p_vertex)const
+		inline void TranslateVertexXY( Vertex & p_vertex)const
 		{
-			p_vertex.x += x;
-			p_vertex.y += y;
+			p_vertex[0] += m_coords[0];
+			p_vertex[1] += m_coords[1];
 		}
-		inline void TranslateVertexXZ( Vector3f & p_vertex)const
+		inline void TranslateVertexXZ( Vertex & p_vertex)const
 		{
-			p_vertex.x += x;
-			p_vertex.z += z;
+			p_vertex[0] += m_coords[0];
+			p_vertex[2] += m_coords[2];
 		}
-		inline void TranslateVertexYZ( Vector3f & p_vertex)const
+		inline void TranslateVertexYZ( Vertex & p_vertex)const
 		{
-			p_vertex.y += y;
-			p_vertex.z += z;
-		}
-
-	public:
-		inline Vector3f	operator +( const Vector3f & p_vertex)const
-		{
-			return Vector3f( x + p_vertex.x, y + p_vertex.y, z + p_vertex.z);
-		}
-		inline Vector3f operator -( const Vector3f & p_vertex)const
-		{
-			return Vector3f( x - p_vertex.x, y - p_vertex.y, z - p_vertex.z);
-		}
-		inline Vector3f operator *( const Vector3f & p_vertex)const
-		{
-			return Vector3f( x * p_vertex.x, y * p_vertex.y, z * p_vertex.z);
-		}
-		inline Vector3f operator *( int p_value)const
-		{
-			return Vector3f( x * p_value, y * p_value, z * p_value);
-		}
-		inline Vector3f operator *( float p_value)const
-		{
-			return Vector3f( x * p_value, y * p_value, z * p_value);
-		}
-		inline bool operator !=( const Vector3f & p_vertex)const
-		{
-			return (x != p_vertex.x) || (y != p_vertex.y) || (z != p_vertex.z);
-		}
-		inline bool operator ==( const Vector3f & p_vertex)const
-		{
-			return (abs( x - p_vertex.x) < 0.0001f) && (abs( y - p_vertex.y) < 0.0001f) && (abs( z - p_vertex.z) < 0.0001f);
+			p_vertex[1] += m_coords[1];
+			p_vertex[2] += m_coords[2];
 		}
 	};
 }

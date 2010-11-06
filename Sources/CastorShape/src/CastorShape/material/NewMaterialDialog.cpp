@@ -17,16 +17,15 @@ CSNewMaterialDialog :: CSNewMaterialDialog( wxWindow * parent, wxWindowID p_id,
 										    const wxString & p_name,
 										    const wxPoint & pos, const wxSize & size,
 										    long style)
-	:	wxDialog( parent, p_id, p_name, pos, size, style, p_name),
-		m_material( NULL)
+	:	wxDialog( parent, p_id, p_name, pos, size, style, p_name)
 {
 	wxSize l_size = GetClientSize();
 	l_size.y -= 30;
-	m_material = MaterialManager::GetSingletonPtr()->CreateMaterial( C3D_T( "NewMaterial"));
+	m_material = MaterialManager::CreateMaterial( CU_T( "NewMaterial"));
 	m_materialPanel = new CSMaterialPanel( this, wxPoint( 0, 0), l_size);
-	m_materialPanel->CreateMaterialPanel( C3D_T( "NewMaterial"));
-	m_okButton = new wxButton( this, nmdOK, C3D_T( "OK"), wxPoint( 20, l_size.y + 5), wxSize( 60, 20), wxBORDER_SIMPLE);
-	m_cancelButton = new wxButton( this, nmdCancel, C3D_T( "Annuler"), wxPoint( 120, l_size.y + 5), wxSize( 60, 20), wxBORDER_SIMPLE);
+	m_materialPanel->CreateMaterialPanel( CU_T( "NewMaterial"));
+	m_okButton = new wxButton( this, nmdOK, CU_T( "OK"), wxPoint( 20, l_size.y + 5), wxSize( 60, 20), wxBORDER_SIMPLE);
+	m_cancelButton = new wxButton( this, nmdCancel, CU_T( "Annuler"), wxPoint( 120, l_size.y + 5), wxSize( 60, 20), wxBORDER_SIMPLE);
 }
 
 //******************************************************************************
@@ -39,9 +38,7 @@ CSNewMaterialDialog :: ~CSNewMaterialDialog()
 
 void CSNewMaterialDialog :: OnClose( wxCloseEvent & event)
 {
-	MaterialManager::GetSingletonPtr()->RemoveElement( m_material);
-	delete m_material;
-	m_material = NULL;
+	MaterialManager::RemoveElement( m_material);
 	EndModal( wxID_CANCEL);
 }
 
@@ -56,12 +53,11 @@ void CSNewMaterialDialog :: OnOk( wxCommandEvent& event)
 
 void CSNewMaterialDialog :: OnCancel( wxCommandEvent& event)
 {
-	if (m_material != NULL)
+	if ( ! m_material.null())
 	{
-		MaterialManager::GetSingletonPtr()->RemoveElement( m_material);
-		delete m_material;
-		m_material = NULL;
+		MaterialManager::RemoveElement( m_material);
 	}
+
 	EndModal( wxID_CANCEL);
 }
 

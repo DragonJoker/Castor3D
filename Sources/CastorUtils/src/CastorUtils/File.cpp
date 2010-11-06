@@ -1,3 +1,5 @@
+#include "PrecompiledHeader.h"
+
 #include "File.h"
 
 #include <sys/stat.h>
@@ -7,150 +9,177 @@
 #include <stdarg.h>
 #include <stdlib.h>
 
+#if CHECK_MEMORYLEAKS
+#	include "Memory.h"
+using namespace Castor::Utils;
+#endif
+
 using namespace boost::filesystem;
-using namespace General::Utils;
+using namespace Castor;
+using namespace Castor::Utils;
 
 //******************************************************************************************************
 
-bool FileBase :: FileExists( const Char * p_filename)
+File :: File( const String & p_strFileName, int p_iMode)
+	:	m_iMode( p_iMode),
+		m_strFileFullPath( p_strFileName)
 {
-	struct stat l_stat;
-	return (stat( String( p_filename).char_str(), & l_stat) == 0);
-}
-
-bool FileBase :: FileExists( const String & p_filename)
-{
-	return FileExists( p_filename.c_str());
-}
-
-bool FileBase :: DirectoryCreate( const String & p_filename)
-{
-	if (p_filename.empty())
+	if ( ! FileExists( m_strFileFullPath))
 	{
-		return false;
-	}
+		FILE * l_pFile;
+		fopen_s( & l_pFile, m_strFileFullPath.char_str(), "a+");
 
-	std::string l_filename = p_filename.char_str();
-
-	if (l_filename[l_filename.size() - 1] == '\\')
-	{
-		l_filename.erase( l_filename.size() - 1,1);
-	}
-
-	l_filename = l_filename.substr( 0, l_filename.find_last_of( '\\'));
-
-	if ( ! DirectoryExists( l_filename))
-	{
-		if ( ! DirectoryCreate( l_filename))
+		if (l_pFile != NULL)
 		{
-			return false;
+			fclose( l_pFile);
 		}
 	}
 
-	try
+	int l_iBitMask = std::ios_base::in | std::ios_base::out;
+
+	if (p_iMode & eAdd)
 	{
-		return create_directory( p_filename);
+		l_iBitMask = l_iBitMask | std::ios_base::app;
 	}
-	catch( std::exception &)
+
+	if (p_iMode & eBinary)
 	{
-		return false;
+		l_iBitMask = l_iBitMask | std::ios_base::binary;
 	}
+
+	m_file.open( p_strFileName.c_str(), l_iBitMask);
 }
 
-bool FileBase :: DirectoryExists( const String & p_filename)
+File :: ~File()
 {
-	try
-	{
-		return exists( p_filename) && is_directory( p_filename);
-	}
-	catch( std::exception &)
-	{
-		return false;
-	}
+	m_file.close();
 }
 
-bool FileBase :: FileDelete( const String & p_filename)
+unsigned long long File :: GetLength()
 {
-	try
+	unsigned long long l_ullReturn = 0;
+
+	if (IsOk())
 	{
-		return (remove( p_filename.char_str()) == 0);
+		long l_lPosition = Tell();
+		Seek( 0);
+		Seek( 0, eEnd);
+		l_ullReturn = Tell();
+		Seek( l_lPosition);
 	}
-	catch( std::exception &)
-	{
-		return false;
-	}
+
+	return l_ullReturn;
 }
 
-bool FileBase :: DirectoryDelete( const String & p_dirName)
+bool File :: IsOk()
 {
-	if ( ! exists( p_dirName))
-	{
-		return false;
-	}
+	return ! m_file.fail();
+}
 
-	try
+void File :: Seek( long p_lOffset, OffsetMode p_eOrigin)
+{
+	if ((m_iMode & eRead) && IsOk())
 	{
-		directory_iterator iend;
-		directory_iterator i( p_dirName.char_str());
-		for ( ;	i != iend ; ++ i)
+		switch (p_eOrigin)
 		{
-			if (is_directory( i->status() ))
-			{
-				if ( ! DirectoryDelete( i->path().string()))
-				{
-					return false;
-				}
-			}
-			else if ( ! (FileDelete( i->path().string())))
-			{
-				//ERROR : could not delete a file ?
-				return false;
-			}
-		}
-		remove( p_dirName);
-		return true;
-	}
-	catch( ... )
-	{
-		//ERROR : could not delete a directory ?
-		return false;
-	}
-}
+		case eBeginning:
+			m_file.seekg( p_lOffset, std::ios_base::beg);
+			break;
 
-bool FileBase :: ListDirectoryFiles( const String & p_folderPath, StringArray & p_files, bool p_recursive)
-{
-	if ( ! exists( p_folderPath))
-	{
-		return false;
+		case eCurrent:
+			m_file.seekg( p_lOffset, std::ios_base::cur);
+			break;
+
+		case eEnd:
+			m_file.seekg( p_lOffset, std::ios_base::end);
+			break;
+		}
 	}
-	try
+	else
 	{
-		directory_iterator iend;
-		directory_iterator i( p_folderPath.char_str());
-		for ( ;	i != iend ; ++ i)
+		switch (p_eOrigin)
 		{
-			if (is_directory( i->status() ) && p_recursive)
-			{
-				if ( ! ListDirectoryFiles( i->path().string(), p_files, p_recursive))
-				{
-					return false;
-				}
-			}
-			else
-			{
-				p_files.push_back( String( i->path().string()));
-			}
+		case eBeginning:
+			m_file.seekp( p_lOffset, std::ios_base::beg);
+			break;
+
+		case eCurrent:
+			m_file.seekp( p_lOffset, std::ios_base::cur);
+			break;
+
+		case eEnd:
+			m_file.seekp( p_lOffset, std::ios_base::end);
+			break;
 		}
-		return true;
-	}
-	catch( ... )
-	{
-		//ERROR : could not delete a directory ?
-		return false;
 	}
 }
 
-void FileBase :: CopyToString( String & p_strOut)
+void File :: Seek( long p_lPosition)
+{
+	Seek( p_lPosition, eBeginning);
+}
+
+long File :: Tell()
+{
+	if ((m_iMode & eRead) && IsOk())
+	{
+		return m_file.tellg();
+	}
+	else
+	{
+		return m_file.tellp();
+	}
+}
+
+bool File :: ReadLine( String & p_toRead, size_t p_size)
+{
+	if ((m_iMode & eRead) && IsOk())
+	{
+		char * l_line = new char[p_size];
+		m_file.getline( l_line, p_size, '\n');
+
+		if (strnlen( l_line, p_size) > 0)
+		{
+			p_toRead = String( l_line);
+		}
+		else
+		{
+			p_toRead.clear();
+		}
+
+		delete [] l_line;
+		return IsOk();
+	}
+
+	return false;
+}
+
+bool File :: ReadWord( String & p_toRead)
+{
+	if ((m_iMode & eRead) && IsOk())
+	{
+		char l_word[256];
+		m_file >> l_word;
+		p_toRead = String( l_word);
+		return ! m_file.fail();
+	}
+
+	return false;
+}
+
+bool File :: WriteLine( const String & p_strLine)
+{
+	bool l_bReturn = false;
+
+	if (((m_iMode & eWrite) || (m_iMode & eAdd)) && IsOk())
+	{
+		l_bReturn = WriteArray<char>( p_strLine.char_str(), p_strLine.size()) == p_strLine.size();
+	}
+
+	return l_bReturn;
+}
+
+void File :: CopyToString( String & p_strOut)
 {
 	p_strOut.clear();
 	String l_strLine;
@@ -163,29 +192,7 @@ void FileBase :: CopyToString( String & p_strOut)
 	}
 }
 
-//******************************************************************************************************
-
-FileStream :: FileStream( const String & p_fileName, OpenMode p_mode)
-	:	FileBase( p_fileName, p_mode)
-{
-	FILE * l_pFile;
-	fopen_s( & l_pFile, p_fileName.char_str(), "a");
-
-	if (l_pFile != NULL)
-	{
-		fclose( l_pFile);
-	}
-
-	m_file = new std::fstream( p_fileName.c_str(), std::fstream::out | std::fstream::in);
-}
-
-FileStream :: ~FileStream()
-{
-	m_file->close();
-	delete m_file;
-}
-
-bool FileStream :: Print( size_t p_uiMaxSize, const char * p_pFormat, ...)
+bool File :: Print( size_t p_uiMaxSize, const char * p_pFormat, ...)
 {
 	bool l_bReturn = false;
 	char * l_pText = new char[p_uiMaxSize];
@@ -209,57 +216,6 @@ bool FileStream :: Print( size_t p_uiMaxSize, const char * p_pFormat, ...)
 
 	return l_bReturn;
 }
-
-//******************************************************************************************************
-
-FileIO :: FileIO( const String & p_fileName, OpenMode p_mode)
-	:	FileBase( p_fileName, p_mode)
-{
-	if (fopen_s( & m_file, p_fileName.char_str(), p_mode == eRead ? "rb" : "wb") != 0)
-	{
-		m_file = NULL;
-	}
-}
-
-FileIO :: ~FileIO()
-{
-	if (m_file != NULL)
-	{
-		fclose( m_file);
-	}
-}
-
-bool FileIO :: Print( size_t p_uiMaxSize, const char * p_pFormat, ...)
-{
-	bool l_bReturn = false;
-	char * l_pText = new char[p_uiMaxSize];
-	va_list l_vaList;
-
-	if (p_pFormat != NULL)
-	{
-		va_start( l_vaList, p_pFormat);	
-#ifdef WIN32
-        vsnprintf_s( l_pText, 256, 256, p_pFormat, l_vaList);  
-#else
-        vsnprintf( l_pText, 256, cFormat_p, ap_l);  
-#endif
-		va_end( l_vaList);
-
-		fprintf( m_file, "%s", l_pText);
-
-		l_bReturn = true;
-	}
-
-	delete l_pText;
-
-	return l_bReturn;
-}
-
-//******************************************************************************************************
-
-
-
-
 /*
 #ifdef _WIN32
 int __cdecl _input_l(_Inout_ FILE * _File, _In_z_ __format_string const unsigned char *, _In_opt_ _locale_t _Locale, va_list _ArgList);
@@ -317,4 +273,183 @@ int File :: Scanf( const char * p_pFormat, size_t p_uiCount, ...)
 	return vscanf( l_strLine.c_str(), p_uiCount, (tchar *)p_pFormat, NULL, l_vaList);
 #endif
 }
-*/
+/**/
+int File :: _write( const char * p_pBuffer, size_t p_uiSize)
+{
+	int l_iReturn = 0;
+
+	if (((m_iMode & eWrite) || (m_iMode & eAdd)) && IsOk())
+	{
+		for (size_t i = 0 ; i < p_uiSize && IsOk() ; i++)
+		{
+			m_file.write( p_pBuffer + i, 1);
+			l_iReturn++;
+		}
+
+		if (m_file.fail() && l_iReturn > 0)
+		{
+			l_iReturn--;
+		}
+	}
+
+	return l_iReturn;
+}
+
+int File :: _read( char * p_pBuffer, size_t p_uiSize)
+{
+	int l_iReturn = 0;
+
+	if ((m_iMode & eRead) && IsOk())
+	{
+		for (size_t i = 0 ; i < p_uiSize && IsOk() ; i++)
+		{
+			m_file.read( p_pBuffer + i, 1);
+			l_iReturn++;
+		}
+
+		if (m_file.fail() && l_iReturn > 0)
+		{
+			l_iReturn--;
+		}
+	}
+
+	return l_iReturn;
+}
+
+bool File :: FileExists( const Char * p_filename)
+{
+	struct stat l_stat;
+	return (stat( String( p_filename).char_str(), & l_stat) == 0);
+}
+
+bool File :: FileExists( const String & p_filename)
+{
+	return FileExists( p_filename.c_str());
+}
+
+bool File :: DirectoryCreate( const String & p_filename)
+{
+	if (p_filename.empty())
+	{
+		return false;
+	}
+
+	std::string l_filename = p_filename.char_str();
+
+	if (l_filename[l_filename.size() - 1] == '\\')
+	{
+		l_filename.erase( l_filename.size() - 1,1);
+	}
+
+	l_filename = l_filename.substr( 0, l_filename.find_last_of( '\\'));
+
+	if ( ! DirectoryExists( l_filename))
+	{
+		if ( ! DirectoryCreate( l_filename))
+		{
+			return false;
+		}
+	}
+
+	try
+	{
+		return create_directory( p_filename);
+	}
+	catch( std::exception &)
+	{
+		return false;
+	}
+}
+
+bool File :: DirectoryExists( const String & p_filename)
+{
+	try
+	{
+		return exists( p_filename) && is_directory( p_filename);
+	}
+	catch( std::exception &)
+	{
+		return false;
+	}
+}
+
+bool File :: FileDelete( const String & p_filename)
+{
+	try
+	{
+		return (remove( p_filename.char_str()) == 0);
+	}
+	catch( std::exception &)
+	{
+		return false;
+	}
+}
+
+bool File :: DirectoryDelete( const String & p_dirName)
+{
+	if ( ! exists( p_dirName))
+	{
+		return false;
+	}
+
+	try
+	{
+		directory_iterator iend;
+		directory_iterator i( p_dirName.char_str());
+		for ( ;	i != iend ; ++ i)
+		{
+			if (is_directory( i->status() ))
+			{
+				if ( ! DirectoryDelete( i->path().string()))
+				{
+					return false;
+				}
+			}
+			else if ( ! (FileDelete( i->path().string())))
+			{
+				//ERROR : could not delete a file ?
+				return false;
+			}
+		}
+		remove( p_dirName);
+		return true;
+	}
+	catch( ... )
+	{
+		//ERROR : could not delete a directory ?
+		return false;
+	}
+}
+
+bool File :: ListDirectoryFiles( const String & p_folderPath, StringArray & p_files, bool p_recursive)
+{
+	if ( ! exists( p_folderPath))
+	{
+		return false;
+	}
+	try
+	{
+		directory_iterator iend;
+		directory_iterator i( p_folderPath.char_str());
+		for ( ;	i != iend ; ++ i)
+		{
+			if (is_directory( i->status() ) && p_recursive)
+			{
+				if ( ! ListDirectoryFiles( i->path().string(), p_files, p_recursive))
+				{
+					return false;
+				}
+			}
+			else
+			{
+				p_files.push_back( String( i->path().string()));
+			}
+		}
+		return true;
+	}
+	catch( ... )
+	{
+		//ERROR : could not delete a directory ?
+		return false;
+	}
+}

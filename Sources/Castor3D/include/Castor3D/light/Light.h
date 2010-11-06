@@ -11,15 +11,17 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
 #ifndef ___C3D_Light___
 #define ___C3D_Light___
 
+#include "Module_Light.h"
 #include "../render_system/Module_Render.h"
-
+#include "../scene/Module_Scene.h"
+#include "../render_system/Renderable.h"
 
 namespace Castor3D
 {
@@ -30,7 +32,7 @@ namespace Castor3D
 	\date 09/02/2010
 	\todo Show only the 8 nearest lights, hide the other ones
 	*/
-	class CS3D_API Light
+	class CS3D_API Light : public Renderable<Light, LightRenderer>
 	{
 	public:
 		//! The light types enumerator
@@ -46,44 +48,37 @@ namespace Castor3D
 
 	protected:
 		friend class Scene;
-		//! The light name
-		String m_name;
-		//! Tells if the light is enabled (for the 8 active lights law)
-		bool m_enabled;
-		//! The light's position, 4 floats for OpenGL compatibility : x, y, z, and w. w is used to tell if the light is directional or point
-		Point4D<float> m_position;
-		//! The ambient colour values (RGBA)
-		Colour m_ambient;
-		//! The diffuse colour values (RGBA)
-		Colour m_diffuse;
-		//! The specular colour values (RGBA)
-		Colour m_specular;
-		//! This light's renderer
-		LightRenderer * m_renderer;
+		String m_name;					//! The light name
+		bool m_enabled;					//! Tells if the light is enabled (for the 8 active lights law)
+		Point<float, 4> m_position;		//! The light's position, 4 floats for OpenGL compatibility : x, y, z, and w. w is used to tell if the light is directional or point
+		Colour m_ambient;				//! The ambient colour values (RGBA)
+		Colour m_diffuse;				//! The diffuse colour values (RGBA)
+		Colour m_specular;				//! The specular colour values (RGBA)
+
+	protected:
 		/**
 		 * Constructor, not to be used by the user, use Scene::CreateLight function instead
-		 *@param p_renderer : A light renderer, may be OpenGL or Direct3D
 		 *@param p_name : The light's name, default is void
 		 */
-		Light( LightRenderer * p_renderer, const String & p_name);
+		Light( const String & p_name);
 
 	public:
 		/**
 		 * Destructor	
 		 */
-		~Light();
+		virtual ~Light();
 		/**
 		 * Enables the light => Displays it
 		 */
-		void Enable();
+		virtual void Enable();
 		/**
 		 * Disables the light => Hides it
 		 */
-		void Disable();
+		virtual void Disable();
 		/**
 		 * Renders the light => Applies it's position
 		 */
-		virtual void Render();
+		virtual void Apply( eDRAW_TYPE p_displayMode);
 		/**
 		 * Sets the light's position from an array of 3 floats
 		 *@param p_vertex : the 3 floats array
@@ -97,10 +92,10 @@ namespace Castor3D
 		 */
 		void SetPosition( float x, float y, float z);
 		/**
-		 * Sets the light's position from a Vector3f
+		 * Sets the light's position from a Point3r
 		 *@param p_vertex : The new position
 		 */
-		void SetPosition( const Vector3f & p_vertex);
+		void SetPosition( const Point<float, 3> & p_vertex);
 		/**
 		 * Translates the light from an array of 3 floats
 		 *@param p_vector : the 3 floats array
@@ -114,10 +109,10 @@ namespace Castor3D
 		 */
 		void Translate( float x, float y, float z);
 		/**
-		 * Translates the light from a Vector3f
+		 * Translates the light from a Point3r
 		 *@param p_vertex : The new position
 		 */
-		void Translate( const Vector3f & p_vertex);
+		void Translate( const Point<float, 3> & p_vertex);
 		/**
 		 * Sets the light's ambient colour from an array of 3 floats
 		 *@param p_ambient : the 3 floats array
@@ -131,10 +126,10 @@ namespace Castor3D
 		 */
 		void SetAmbient( float r, float g, float b);
 		/**
-		 * Sets the light's ambient colour from a Vector3f
+		 * Sets the light's ambient colour from a Point3r
 		 *@param p_ambient : The new position
 		 */
-		void SetAmbient( const Vector3f & p_ambient);
+		void SetAmbient( const Colour & p_ambient);
 		/**
 		 * Sets the light's diffuse colour from an array of 3 floats
 		 *@param p_diffuse : the 3 floats array
@@ -148,10 +143,10 @@ namespace Castor3D
 		 */
 		void SetDiffuse( float r, float g, float b);
 		/**
-		 * Sets the light's diffuse colour from a Vector3f
+		 * Sets the light's diffuse colour from a Point3r
 		 *@param p_diffuse : The new position
 		 */
-		void SetDiffuse( const Vector3f & p_diffuse);
+		void SetDiffuse( const Colour & p_diffuse);
 		/**
 		 * Sets the light's specular colour from an array of 3 floats
 		 *@param p_specular : the 3 floats array
@@ -165,21 +160,20 @@ namespace Castor3D
 		 */
 		void SetSpecular( float r, float g, float b);
 		/**
-		 * Sets the light's specular colour from a Vector3f
+		 * Sets the light's specular colour from a Point3r
 		 *@param p_specular : The new position
 		 */
-		void SetSpecular( const Vector3f & p_specular);
+		void SetSpecular( const Colour & p_specular);
 		/**
 		 * Writes the light in a file
 		 *@param p_pFile : a pointer to file to write in
 		 */
-		virtual bool Write( General::Utils::FileIO * p_pFile)const;
+		virtual bool Write( Castor::Utils::File & p_pFile)const;
 		/**
 		 * Reads the light from a file
 		 *@param p_file : a pointer to file to read from
-		*@param p_scene : [in] The scene to find the node to attach this light to
 		 */
-		virtual bool Read( General::Utils::FileIO & p_file, Scene * p_scene);
+		virtual bool Read( Castor::Utils::File & p_file);
 		
 	protected:
 		/**
@@ -202,7 +196,7 @@ namespace Castor3D
 		 * Virtual function which returns the light type.
 		 * Must be implemented for each new light type
 		 */
-		virtual inline eTYPE	GetLightType()const=0;
+		virtual eTYPE	GetLightType()const { return eTYPE( -1); }
 		/**
 		 *@return The light name
 		 */
@@ -232,6 +226,79 @@ namespace Castor3D
 		 *@param p_enabled : The new enable status
 		 */
 		inline void SetEnabled( bool p_enabled){m_enabled = p_enabled;(m_enabled? _apply() : _remove());}
+	};
+	//! The Light renderer
+	/*!
+	Renders a light, applies it's colours values...
+	\author Sylvain DOREMUS
+	\version 0.1
+	\date 09/02/2010
+	*/
+	class CS3D_API LightRenderer : public Renderer<Light, LightRenderer>
+	{
+	protected:
+		/**
+		 * Constructor
+		 */
+		LightRenderer()
+		{}
+	public:
+		/**
+		 * Destructor
+		 */
+		virtual ~LightRenderer(){ Cleanup(); }
+		/**
+		 * Enables (shows) the light
+		 */
+		virtual void Enable() = 0;
+		/**
+		 * Disables (hides) the light
+		 */
+		virtual void Disable() = 0;
+		/**
+		 * Cleans up the renderer
+		 */
+		virtual void Cleanup(){}
+		/**
+		 * Applies ambient colour
+		 */
+		virtual void ApplyAmbient( float * p_ambient) = 0;
+		/**
+		 * Applies diffuse colour
+		 */
+		virtual void ApplyDiffuse( float * p_diffuse) = 0;
+		/**
+		 * Applies specular colour
+		 */
+		virtual void ApplySpecular( float * p_specular) = 0;
+		/**
+		 * Applies position
+		 */
+		virtual void ApplyPosition( float * p_position) = 0;
+		/**
+		 * Applies rotation
+		 */
+		virtual void ApplyOrientation( real * p_matrix) = 0;
+		/**
+		 * Applies constant attenuation
+		 */
+		virtual void ApplyConstantAtt( float p_constant) = 0;
+		/**
+		 * Applies linear attenuation
+		 */
+		virtual void ApplyLinearAtt( float p_linear) = 0;
+		/**
+		 * Applies quadratic attenuation
+		 */
+		virtual void ApplyQuadraticAtt( float p_quadratic) = 0;
+		/**
+		 * Applies exponent
+		 */
+		virtual void ApplyExponent( float p_exponent) = 0;
+		/**
+		 * Applies cut off
+		 */
+		virtual void ApplyCutOff( float p_cutOff) = 0;
 	};
 }
 

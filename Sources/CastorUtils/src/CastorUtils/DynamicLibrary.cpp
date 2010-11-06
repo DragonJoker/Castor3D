@@ -1,6 +1,14 @@
+#include "PrecompiledHeader.h"
+
 #include "DynamicLibrary.h"
 
-using namespace General::Utils;
+#if CHECK_MEMORYLEAKS
+#	include "Memory.h"
+using namespace Castor::Utils;
+#endif
+
+using namespace Castor;
+using namespace Castor::Utils;
 
 void DynamicLibrary :: _close()
 {

@@ -8,7 +8,7 @@
 #define LoadImage wxBitmap::LoadImage
 #endif
 //******************************************************************************
-using General::Templates::Manager;
+using Castor::Templates::Manager;
 using namespace Castor3D;
 //******************************************************************************
 //unsigned char * CSMaterialsListView::s_data = new unsigned char[c_materialIconSize * c_materialIconSize * 3];
@@ -24,8 +24,7 @@ CSMaterialsListView :: CSMaterialsListView( wxWindow * parent, wxWindowID id,
 											wxString name)
 	:	wxListCtrl( parent, id, pos, size, style | wxBORDER_SIMPLE, validator, name),
 		m_images( NULL),
-		m_nbItems( 0),
-		m_imagesArray( NULL)
+		m_nbItems( 0)
 {
 	SetColumnWidth( -1, c_columnWidth);
 	CreateList();
@@ -79,13 +78,13 @@ void CSMaterialsListView :: CreateList()
 
 void CSMaterialsListView :: AddItem( const String & p_materialName)
 {
-	float l_col0;
-	float l_col1;
-	float l_col2;
+	real l_col0;
+	real l_col1;
+	real l_col2;
 	unsigned char l_ccol0;
 	unsigned char l_ccol1;
 	unsigned char l_ccol2;
-	const float * l_colour = MaterialManager::GetSingletonPtr()->GetElementByName( p_materialName)->GetPass( 0)->GetAmbient();
+	const float * l_colour = MaterialManager::GetElementByName( p_materialName)->GetPass( 0)->GetAmbient();
 	l_col0 = l_colour[0] * 255.0;
 	l_col1 = l_colour[1] * 255.0;
 	l_col2 = l_colour[2] * 255.0;
@@ -122,14 +121,17 @@ wxImage * CSMaterialsListView :: GetMaterialImage( const String & p_materialName
 												   unsigned int p_width,
 												   unsigned int p_height)
 {
-	Material * l_material = MaterialManager::GetSingletonPtr()->GetElementByName( p_materialName);
-	if (l_material && p_index < l_material->GetPass( 0)->GetNbTexUnits())
+	MaterialPtr l_material = MaterialManager::GetElementByName( p_materialName);
+
+	if ( ! l_material.null() && p_index < l_material->GetPass( 0)->GetNbTexUnits())
 	{
 		String l_path;
 		l_path = l_material->GetPass( 0)->GetTextureUnit( p_index)->GetTexturePath();
+
 		if (l_path.size() > 0)
 		{
 			wxImage * l_tmp = new wxImage;
+
 			if (l_tmp->LoadFile( l_path.c_str()))
 			{
 				l_tmp->Rescale( p_width, p_height, wxIMAGE_QUALITY_HIGH);
@@ -137,6 +139,7 @@ wxImage * CSMaterialsListView :: GetMaterialImage( const String & p_materialName
 			}
 		}
 	}
+
 	return NULL;
 }
 

@@ -12,22 +12,22 @@
 class CSSelectObjectFrameEvent : public Castor3D::FrameEvent
 {
 private:
-	Castor3D::Scene * m_scene;
-	Castor3D::Geometry * m_geometry;
-	Castor3D::Submesh * m_submesh;
-	Castor3D::Face * m_face;
-	Vector3f * m_vertex;
-	Castor3D::Camera * m_camera;
+	Castor3D::ScenePtr m_scene;
+	Castor3D::GeometryPtr m_geometry;
+	Castor3D::SubmeshPtr m_submesh;
+	Castor3D::FacePtr m_face;
+	Point3rPtr m_vertex;
+	Castor3D::CameraPtr m_camera;
 	CSRenderPanel * m_panel;
 	int m_x;
 	int m_y;
 
 public:
-	CSSelectObjectFrameEvent( Castor3D::Scene * p_scene, Castor3D::Geometry * p_geometry,
-							  Castor3D::Submesh * p_submesh, Castor3D::Face * p_face,
-							  Vector3f * p_vertex, Castor3D::Camera * p_camera,
+	CSSelectObjectFrameEvent( Castor3D::ScenePtr p_scene, Castor3D::GeometryPtr p_geometry,
+							  Castor3D::SubmeshPtr p_submesh, Castor3D::FacePtr p_face,
+							  Point3rPtr p_vertex, Castor3D::CameraPtr p_camera,
 							  CSRenderPanel * p_panel,  int p_x, int p_y)
-		:	Castor3D::FrameEvent( Castor3D::fetQueueRender),
+		:	Castor3D::FrameEvent( Castor3D::FrameEvent::eQueueRender),
 			m_scene( p_scene),
 			m_geometry( p_geometry),
 			m_submesh( p_submesh),

@@ -20,21 +20,21 @@ CSNewGeometryDialog :: CSNewGeometryDialog( wxWindow * parent, wxWindowID p_id,
 		m_actualY( 10)
 {
 
-	m_okButton = new wxButton( this, ngpOK, C3D_T( "OK"), wxPoint( 70, m_actualY),
+	m_okButton = new wxButton( this, ngpOK, CU_T( "OK"), wxPoint( 70, m_actualY),
 							   wxSize( 60, 30), wxBORDER_SIMPLE);
 
-	AddTextCtrl( C3D_T( "Name"), C3D_T( "Geometry Name"), 110);
+	AddTextCtrl( CU_T( "Name"), CU_T( "Geometry Name"), 110);
 
 	StringArray l_choices1;
-	MaterialManager::GetSingletonPtr()->GetMaterialNames( l_choices1);
+	MaterialManager::GetMaterialNames( l_choices1);
 	wxArrayString l_choices;
-	l_choices.push_back( C3D_T( "New..."));
+	l_choices.push_back( CU_T( "New..."));
 	for (size_t i = 0 ; i < l_choices1.size() ; i++)
 	{
 		l_choices.push_back( wxString( l_choices1[i].c_str()));
 	}
 
-	AddComboBox( C3D_T( "Material"), l_choices, C3D_T( "New..."), ngpMaterialName, 110);
+	AddComboBox( CU_T( "Material"), l_choices, CU_T( "New..."), ngpMaterialName, 110);
 }
 
 //******************************************************************************
@@ -55,11 +55,11 @@ void CSNewGeometryDialog :: AddTextCtrl( const wxString & p_name,
 	}
 	wxSize l_size = GetClientSize() - wxSize( 30 + p_width, 0);
 	int l_width = l_size.x;
-	new wxStaticText( this, wxID_ANY, p_name + C3D_T( " : "), wxPoint( 10, m_actualY), wxSize( l_width, 20));
+	new wxStaticText( this, wxID_ANY, p_name + CU_T( " : "), wxPoint( 10, m_actualY), wxSize( l_width, 20));
 	wxTextCtrl * l_edit = new wxTextCtrl( this, wxID_ANY, p_defaultValue, 
 										  wxPoint( 80, m_actualY), wxSize( p_width, 20),
 										  wxBORDER_SIMPLE);
-	m_textCtrls.insert( std::map <wxString, wxTextCtrl *>::value_type( p_name, l_edit));
+	m_textCtrls.insert( C3DMap( wxString, wxTextCtrl *)::value_type( p_name, l_edit));
 	_updateY( 30);
 }
 
@@ -76,11 +76,11 @@ void CSNewGeometryDialog :: AddComboBox( const wxString & p_name,
 	}
 	wxSize l_size = GetClientSize() - wxSize( 30 + p_width, 0);
 	int l_width = l_size.x;
-	new wxStaticText( this, wxID_ANY, p_name + C3D_T( " : "), wxPoint( 10, m_actualY), wxSize( l_width, 20));
+	new wxStaticText( this, wxID_ANY, p_name + CU_T( " : "), wxPoint( 10, m_actualY), wxSize( l_width, 20));
 	wxComboBox * l_box = new wxComboBox( this, p_id, p_defaultValue,
 										 wxPoint( 80, m_actualY), wxSize( p_width, 20), 
 										 p_values, wxBORDER_SIMPLE | wxCB_READONLY);
-	m_comboBoxes.insert( std::map <wxString, wxComboBox *>::value_type( p_name, l_box));
+	m_comboBoxes.insert( C3DMap( wxString, wxComboBox *)::value_type( p_name, l_box));
 	_updateY( 30);
 }
 
@@ -110,7 +110,7 @@ wxString CSNewGeometryDialog :: GetCBValue( const wxString & p_name)const
 
 void CSNewGeometryDialog :: RemoveTextCtrl( const wxString & p_name)
 {
-	std::map <wxString, wxTextCtrl *>::iterator l_it = m_textCtrls.find( p_name);
+	C3DMap( wxString, wxTextCtrl *)::iterator l_it = m_textCtrls.find( p_name);
 	RemoveChild( l_it->second);
 	delete l_it->second;
 	m_textCtrls.erase( l_it);
@@ -120,7 +120,7 @@ void CSNewGeometryDialog :: RemoveTextCtrl( const wxString & p_name)
 
 void CSNewGeometryDialog :: RemoveComboBox( const wxString & p_name)
 {
-	std::map <wxString, wxComboBox *>::iterator l_it = m_comboBoxes.find( p_name);
+	C3DMap( wxString, wxComboBox *)::iterator l_it = m_comboBoxes.find( p_name);
 	RemoveChild( l_it->second);
 	delete l_it->second;
 	m_comboBoxes.erase( l_it);
@@ -130,26 +130,28 @@ void CSNewGeometryDialog :: RemoveComboBox( const wxString & p_name)
 
 String CSNewGeometryDialog :: GetGeometryName()const
 {
-	return String( GetTextValue( C3D_T( "Name")).c_str());
+	return String( GetTextValue( CU_T( "Name")).c_str());
 }
 
 //******************************************************************************
 
 String CSNewGeometryDialog :: GetMaterialName()const
 {
-	wxString l_value = GetCBValue( C3D_T( "Material"));
+	wxString l_value = GetCBValue( CU_T( "Material"));
 	String l_res = l_value.c_str();
 	CSNewMaterialDialog * l_dialog;
-	Material * l_material;
-	while (l_res == C3D_T( "New..."))
+	MaterialPtr l_material;
+
+	while (l_res == CU_T( "New..."))
 	{
-		l_material = NULL;
+		l_material.reset();
 		l_dialog = new CSNewMaterialDialog( NULL, wxID_ANY);
 
 		if (l_dialog->ShowModal() == wxID_OK)
 		{
 			l_material = l_dialog->GetMaterial();
-			if (l_material != NULL)
+
+			if ( ! l_material.null())
 			{
 				l_res = l_material->GetName();
 			}
@@ -180,12 +182,12 @@ void CSNewGeometryDialog :: _onOk(wxCommandEvent& event)
 void CSNewGeometryDialog :: _onMaterialSelect( wxCommandEvent& event)
 {
 /*
-	wxString l_value = GetCBValue( C3D_T( "Material"));
+	wxString l_value = GetCBValue( CU_T( "Material"));
 	wxString l_res;
-	if (l_value == C3D_T( "New..."))
+	if (l_value == CU_T( "New..."))
 	{
 		CSNewMaterialDialog * l_dialog = new CSNewMaterialDialog( NULL, wxID_ANY);
-		Material * l_material = NULL;
+		MaterialPtr l_material = NULL;
 		if (l_dialog->ShowModal() == wxID_OK)
 		{
 			l_material = l_dialog->GetMaterial();
@@ -194,18 +196,18 @@ void CSNewGeometryDialog :: _onMaterialSelect( wxCommandEvent& event)
 
 		if (l_material != NULL)
 		{
-			std::vector <String> l_choices1;
-			MaterialManager::GetSingletonPtr()->GetMaterialNames( l_choices1);
+			C3DVector <String> l_choices1;
+			MaterialManager::GetMaterialNames( l_choices1);
 
 			wxArrayString l_choices;
-			l_choices.push_back( C3D_T( "New..."));
+			l_choices.push_back( CU_T( "New..."));
 			for (size_t i = 0 ; i < l_choices1.size() ; i++)
 			{
 				l_choices.push_back( l_choices1[i].c_str());
 			}
 			l_res = l_material->GetName();
 
-			std::map <wxString, wxComboBox *>::iterator l_it = m_comboBoxes.find( C3D_T( "Material"));
+			C3DMap( wxString, wxComboBox *)::iterator l_it = m_comboBoxes.find( CU_T( "Material"));
 			RemoveChild( l_it->second);
 			delete l_it->second;
 			l_it->second = new wxComboBox( this, ngpMaterialName, l_res, wxPoint( 80, 40), wxSize( 110, 20), l_choices, wxBORDER_SIMPLE | wxCB_READONLY);

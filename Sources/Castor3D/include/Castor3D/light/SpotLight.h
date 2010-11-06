@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -39,9 +39,9 @@ namespace Castor3D
 		//! The actual orientation of the spot
 		Quaternion m_orientation;
 		//! The rotation matrix associated to the orientation
-		float * m_matrix;
+		real * m_matrix;
 		//! The attenuation variables : constant, linear and quadratic
-		Point3D<float> m_attenuation;
+		Point<float, 3> m_attenuation;
 		//! The light exponent, id est how much the light is focused
 		float m_exponent;
 		//! The angle of the cone
@@ -52,7 +52,7 @@ namespace Castor3D
 		*@param p_name : The light's name, default is void
 		*@param p_index : The light's index (max 8 active lights at a time)
 		*/
-		SpotLight( LightRenderer * p_renderer, const String & p_name=C3DEmptyString);
+		SpotLight( const String & p_name=C3DEmptyString);
 
 	public:
 		/**
@@ -62,7 +62,7 @@ namespace Castor3D
 		/**
 		 * Renders the light in the current window
 		 */
-		void Render();
+		virtual void Apply( eDRAW_TYPE p_displayMode);
 
 	private:
 		/**
@@ -75,24 +75,24 @@ namespace Castor3D
 		 * Rotates the light around Y Axis
 		 *@param p_angle : the rotation angle
 		 */
-		void Yaw( float p_angle);
+		void Yaw( real p_angle);
 		/**
 		 * Rotates the light around X Axis
 		 *@param p_angle : the rotation angle
 		 */
-		void Pitch( float p_angle);
+		void Pitch( real p_angle);
 		/**
 		 * Rotates the light around Z Axis
 		 *@param p_angle : the rotation angle
 		 */
-		void Roll( float p_angle);
+		void Roll( real p_angle);
 		/**
 		 * Rotates the light
 		 *@param p_quat : The rotation we want to add to the current rotation
 		 */
 		void Rotate( const Quaternion & p_quat);
 		/**
-		 * Sets attenuation variables from an array of float
+		 * Sets attenuation variables from an array of real
 		 *@param p_attenuation : an array of three floats
 		 */
 		void SetAttenuation	( float * p_attenuation);
@@ -104,10 +104,10 @@ namespace Castor3D
 		 */
 		void SetAttenuation	( float p_const, float p_linear, float p_quadratic);
 		/**
-		 * Sets attenuation variables from a Vector3f
-		 *@param p_attenuation : a Vector3f
+		 * Sets attenuation variables from a Point3r
+		 *@param p_attenuation : a Point3r
 		 */
-		void SetAttenuation	( const Vector3f & p_attenuation);
+		void SetAttenuation	( const Point<float, 3> & p_attenuation);
 		/**
 		 * Sets the light exponent
 		 *@param p_exponent : the new exponent value
@@ -121,18 +121,18 @@ namespace Castor3D
 		/**
 		 *@return The rotation matrix from the current orientation
 		 */
-		float * Get4x4RotationMatrix();
+		real * Get4x4RotationMatrix();
 		/**
 		 * Writes the spot light in a file
 		 *@param p_pFile : a pointer to file to write in
 		 */
-		virtual bool Write( General::Utils::FileIO * p_pFile)const;
+		virtual bool Write( Castor::Utils::File & p_pFile)const;
 
 	public:
 		/**
-		 *@return The light type (Spot for this one), used for polymorphism
+		 *@return The light type (Spot, here), used for polymorphism
 		 */
-		virtual inline eTYPE	GetLightType()const { return eSpot; }
+		virtual eTYPE	GetLightType()const { return eSpot; }
 		/**
 		 *@return The attenuation values, three floats : constant, linear and quadratic attenuation
 		 */

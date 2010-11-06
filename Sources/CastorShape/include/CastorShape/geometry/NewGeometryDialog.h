@@ -7,14 +7,14 @@
 class CSNewGeometryDialog : public wxDialog
 {
 protected:
-	std::map <wxString, wxTextCtrl *> m_textCtrls;
-	std::map <wxString, wxComboBox *> m_comboBoxes;
+	C3DMap( wxString, wxTextCtrl *) m_textCtrls;
+	C3DMap( wxString, wxComboBox *) m_comboBoxes;
 	int m_actualY;
 	wxButton * m_okButton;
 
 public:
 	CSNewGeometryDialog( wxWindow * parent, wxWindowID p_id,
-						 const wxString & p_name = C3D_T( "New Geometry"),
+						 const wxString & p_name = CU_T( "New Geometry"),
 						 const wxPoint & pos = wxPoint( 200, 200),
 						 const wxSize & size = wxSize( 200, 70),
 						 long style = wxDEFAULT_DIALOG_STYLE);

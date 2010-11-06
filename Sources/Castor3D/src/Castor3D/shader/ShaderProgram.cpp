@@ -7,7 +7,8 @@
 #include "shader/ShaderObject.h"
 #include "shader/UniformVariable.h"
 #include "render_system/RenderSystem.h"
-#include "Log.h"
+
+
 
 using namespace Castor3D;
 
@@ -16,13 +17,9 @@ ShaderProgram :: ShaderProgram( const String & p_vertexShaderFile, const String 
 		m_bError( false),
 		m_enabled( true),
 		m_usesGeometryShader( false),
-		m_manageMemory( false),
 		m_vertexFile( p_vertexShaderFile),
 		m_fragmentFile( p_fragmentShaderFile),
 		m_geometryFile( p_geometryShaderFile),
-		m_pVertexShader( NULL),
-		m_pFragmentShader( NULL),
-		m_pGeometryShader( NULL),
 		m_bFromMemory( false)
 {
 }
@@ -32,10 +29,6 @@ ShaderProgram :: ShaderProgram()
 		m_bError( false),
 		m_enabled( true),
 		m_usesGeometryShader( false),
-		m_manageMemory( false),
-		m_pVertexShader( NULL),
-		m_pFragmentShader( NULL),
-		m_pGeometryShader( NULL),
 		m_bFromMemory( true)
 {
 }
@@ -46,55 +39,22 @@ ShaderProgram :: ~ShaderProgram()
 
 void ShaderProgram :: Cleanup()
 {
-	delete m_pVertexShader;
-	m_pVertexShader = NULL;
-
-	delete m_pFragmentShader;
-	m_pFragmentShader = NULL;
-
-	delete m_pGeometryShader;
-	m_pGeometryShader = NULL;
+	m_pVertexShader.reset();
+	m_pFragmentShader.reset();
+	m_pGeometryShader.reset();
 }
 
-void ShaderProgram :: AddUniformVariable( UniformVariable * p_pUniformVariable)
+void ShaderProgram :: AddUniformVariable( UniformVariablePtr p_pUniformVariable)
 {
-	if (p_pUniformVariable != NULL)
+	if ( ! p_pUniformVariable.null())
 	{
 		if (m_mapUniformVariables.find( p_pUniformVariable->GetName()) == m_mapUniformVariables.end())
 		{
-			m_mapUniformVariables.insert( std::map <String, UniformVariable *>::value_type( p_pUniformVariable->GetName(), p_pUniformVariable));
+			m_mapUniformVariables.insert( UniformVariablePtrStrMap::value_type( p_pUniformVariable->GetName(), p_pUniformVariable));
 		}
 	}
 }
-/*
-void ShaderProgram :: AddShader( ShaderObject * p_shaderObject)
-{
-	if (p_shaderObject != NULL)
-	{
-		bool l_bOK = true;
 
-		if ( ! p_shaderObject->m_isCompiled)
-		{
-			Log::LogMessage( "**warning** please compile program before adding object! trying to compile now...");
-
-			if ( ! p_shaderObject->Compile())
-			{
-				Log::LogMessage( "...compile ERROR!");
-				l_bOK = false;
-			}
-			else
-			{   
-				Log::LogMessage( "...ok!");
-			}
-		}
-
-		if (l_bOK)
-		{
-			m_shaderList.push_back( p_shaderObject);
-		}
-	}
-}
-*/
 void ShaderProgram :: _initialiseFromMemory()
 {
 	if ( ! m_isLinked && ! m_bError)
@@ -103,29 +63,29 @@ void ShaderProgram :: _initialiseFromMemory()
 
 		m_usesGeometryShader = ! m_geometryFile.empty();
 
-		m_pVertexShader = RenderSystem::GetSingletonPtr()->CreateVertexShader();
-		m_pFragmentShader = RenderSystem::GetSingletonPtr()->CreateFragmentShader();
+		m_pVertexShader = RenderSystem::GetSingletonPtr<RenderSystem>()->CreateVertexShader();
+		m_pFragmentShader = RenderSystem::GetSingletonPtr<RenderSystem>()->CreateFragmentShader();
 
 		if (m_usesGeometryShader)
 		{
-			m_pGeometryShader = RenderSystem::GetSingletonPtr()->CreateGeometryShader();
+			m_pGeometryShader = RenderSystem::GetSingletonPtr<RenderSystem>()->CreateGeometryShader();
 		}
 
-		if ( ! m_vertexFile.empty())
+		if ( ! m_vertexProgram.empty())
 		{
-			if (m_pVertexShader->LoadFromMemory( m_vertexFile) != 0)
+			if (m_pVertexShader->LoadFromMemory( m_vertexProgram) != 0)
 			{ 
-				Log::LogMessage( " GLShaderManager :: LoadfromFile - can't load vertex shader");
+				Log::LogMessage( "ShaderProgram :: LoadfromMemory - can't load vertex shader");
 				Cleanup();
 				return;
 			}
 		}
 
-		if ( ! m_fragmentFile.empty())
+		if ( ! m_fragmentProgram.empty())
 		{
-			if (m_pFragmentShader->LoadFromMemory( m_fragmentFile) != 0)
+			if (m_pFragmentShader->LoadFromMemory( m_fragmentProgram) != 0)
 			{
-				Log::LogMessage( " GLShaderManager :: LoadfromFile - can't load fragment shader");
+				Log::LogMessage( "ShaderProgram :: LoadfromMemory - can't load fragment shader");
 				Cleanup();
 				return;
 			}
@@ -133,60 +93,57 @@ void ShaderProgram :: _initialiseFromMemory()
 
 		if (m_usesGeometryShader)
 		{
-			if (m_pGeometryShader->LoadFromMemory( m_geometryFile) != 0)
+			if (m_pGeometryShader->LoadFromMemory( m_geometryProgram) != 0)
 			{
-				Log::LogMessage( " GLShaderManager :: LoadfromFile - can't load fragment shader");
+				Log::LogMessage( "ShaderProgram :: LoadfromMemory - can't load fragment shader");
 				Cleanup();
 				return;
 			}
 		}
 
-		if ( ! m_vertexFile.empty())
+		if ( ! m_vertexProgram.empty())
 		{
 			if ( ! m_pVertexShader->Compile())
 			{
-				Log::LogMessage( "***COMPILER ERROR (Vertex Shader)");
+				Log::LogMessage( "ShaderProgram :: LoadfromMemory - ***COMPILER ERROR (Vertex Shader)");
 				Cleanup();
 				return;
 			}
-			Log::LogMessage( "***GLSL Vertex Shader compiled successfully");
+			Log::LogMessage( "ShaderProgram :: LoadfromMemory - ***Vertex Shader compiled successfully");
 		}
 
-		if ( ! m_fragmentFile.empty())
+		if ( ! m_fragmentProgram.empty())
 		{
 			if ( ! m_pFragmentShader->Compile())
 			{
-				Log::LogMessage( "***COMPILER ERROR (Fragment Shader)");
+				Log::LogMessage( "ShaderProgram :: LoadfromMemory - ***COMPILER ERROR (Fragment Shader)");
 				Cleanup();
 				return;
 
 			}
-			Log::LogMessage( "***GLSL Fragment Shader compiled successfully");
+			Log::LogMessage( "ShaderProgram :: LoadfromMemory - ***Fragment Shader compiled successfully");
 		}
 
 		if (m_usesGeometryShader)
 		{
 			if ( ! m_pGeometryShader->Compile())
 			{
-				Log::LogMessage( "***COMPILER ERROR (Geometry Shader)");
+				Log::LogMessage( "ShaderProgram :: LoadfromMemory - ***COMPILER ERROR (Geometry Shader)");
 				Cleanup();
 				return;
 
 			}
-			Log::LogMessage( "***GLSL Geometry Shader compiled successfully");
+			Log::LogMessage( "ShaderProgram :: LoadfromMemory - ***Geometry Shader compiled successfully");
 		}
 
 		if ( ! Link())
 		{
-			Log::LogMessage( "**LINKER ERROR");
+			Log::LogMessage( "ShaderProgram :: LoadfromMemory - **LINKER ERROR");
 			Cleanup();
 			return;
 		}
-		Log::LogMessage( "***GLSL Program Linked successfully");
 
-		ManageMemory();
-
-		ShaderManager::GetSingletonPtr()->AddProgram( this);
+		Log::LogMessage( "ShaderProgram :: LoadfromMemory - ***Program Linked successfully");
 	}
 }
 
@@ -198,19 +155,19 @@ void ShaderProgram :: _initialiseFromFile()
 
 		m_usesGeometryShader = ! m_geometryFile.empty();
 
-		m_pVertexShader = RenderSystem::GetSingletonPtr()->CreateVertexShader();
-		m_pFragmentShader = RenderSystem::GetSingletonPtr()->CreateFragmentShader();
+		m_pVertexShader = RenderSystem::GetSingletonPtr<RenderSystem>()->CreateVertexShader();
+		m_pFragmentShader = RenderSystem::GetSingletonPtr<RenderSystem>()->CreateFragmentShader();
 
 		if (m_usesGeometryShader)
 		{
-			m_pGeometryShader = RenderSystem::GetSingletonPtr()->CreateGeometryShader();
+			m_pGeometryShader = RenderSystem::GetSingletonPtr<RenderSystem>()->CreateGeometryShader();
 		}
 
 		if ( ! m_vertexFile.empty())
 		{
 			if (m_pVertexShader->Load( m_vertexFile) != 0)
 			{ 
-				Log::LogMessage( " GLShaderManager :: LoadfromFile - can't load vertex shader");
+				Log::LogMessage( "ShaderProgram :: LoadfromFile - can't load vertex shader");
 				Cleanup();
 				return;
 			}
@@ -220,7 +177,7 @@ void ShaderProgram :: _initialiseFromFile()
 		{
 			if (m_pFragmentShader->Load( m_fragmentFile) != 0)
 			{
-				Log::LogMessage( " GLShaderManager :: LoadfromFile - can't load fragment shader");
+				Log::LogMessage( "ShaderProgram :: LoadfromFile - can't load fragment shader");
 				Cleanup();
 				return;
 			}
@@ -230,7 +187,7 @@ void ShaderProgram :: _initialiseFromFile()
 		{
 			if (m_pGeometryShader->Load( m_geometryFile) != 0)
 			{
-				Log::LogMessage( " GLShaderManager :: LoadfromFile - can't load fragment shader");
+				Log::LogMessage( "ShaderProgram :: LoadfromFile - can't load fragment shader");
 				Cleanup();
 				return;
 			}
@@ -240,53 +197,49 @@ void ShaderProgram :: _initialiseFromFile()
 		{
 			if ( ! m_pVertexShader->Compile())
 			{
-				Log::LogMessage( "***COMPILER ERROR (Vertex Shader)");
+				Log::LogMessage( "ShaderProgram :: LoadfromFile - ***COMPILER ERROR (Vertex Shader : " + m_vertexFile + ")");
 				Cleanup();
 				m_bError = true;
 				return;
 			}
-			Log::LogMessage( "***GLSL Vertex Shader compiled successfully");
+			Log::LogMessage( "ShaderProgram :: LoadfromFile - ***Vertex Shader compiled successfully");
 		}
 
 		if ( ! m_fragmentFile.empty())
 		{
 			if ( ! m_pFragmentShader->Compile())
 			{
-				Log::LogMessage( "***COMPILER ERROR (Fragment Shader)");
+				Log::LogMessage( "ShaderProgram :: LoadfromFile - ***COMPILER ERROR (Fragment Shader : " + m_fragmentFile + ")");
 				Cleanup();
 				m_bError = true;
 				return;
 
 			}
-			Log::LogMessage( "***GLSL Fragment Shader compiled successfully");
+			Log::LogMessage( "ShaderProgram :: LoadFromFile - ***Fragment Shader compiled successfully");
 		}
 
 		if (m_usesGeometryShader)
 		{
 			if ( ! m_pGeometryShader->Compile())
 			{
-				Log::LogMessage( "***COMPILER ERROR (Geometry Shader)");
+				Log::LogMessage( "ShaderProgram :: LoadfromFile - ***COMPILER ERROR (Geometry Shader : " + m_geometryFile + ")");
 				Cleanup();
 				m_bError = true;
 				return;
 
 			}
-			Log::LogMessage( "***GLSL Geometry Shader compiled successfully");
+			Log::LogMessage( "ShaderProgram :: LoadfromFile - ***Geometry Shader compiled successfully");
 		}
 
 		if ( ! Link())
 		{
-			Log::LogMessage( "**LINKER ERROR");
+			Log::LogMessage( "ShaderProgram :: LoadfromFile - **LINKER ERROR");
 			Cleanup();
 			m_bError = true;
 			return;
 		}
 
-		Log::LogMessage( "***GLSL Program Linked successfully");
-
-		ManageMemory();
-
-		ShaderManager::GetSingletonPtr()->AddProgram( this);
+		Log::LogMessage( "ShaderProgram :: LoadfromFile - ***Program Linked successfully");
 	}
 }
 
@@ -302,13 +255,13 @@ void ShaderProgram :: Initialise()
 	}
 }
 
-void ShaderProgram :: SetVertexFileIO( const String & p_strFile)
+void ShaderProgram :: SetVertexFile( const String & p_strFile)
 {
 	m_vertexFile = p_strFile;
 
-	if (FileBase::FileExists( p_strFile))
+	if (File::FileExists( p_strFile))
 	{
-		FileIO l_file( p_strFile, FileIO::eRead);
+		File l_file( p_strFile, File::eRead);
 		l_file.CopyToString( m_vertexProgram);
 	}
 
@@ -316,13 +269,13 @@ void ShaderProgram :: SetVertexFileIO( const String & p_strFile)
 	m_bError = false;
 }
 
-void ShaderProgram :: SetFragmentFileIO( const String & p_strFile)
+void ShaderProgram :: SetFragmentFile( const String & p_strFile)
 {
 	m_fragmentFile = p_strFile;
 
-	if (FileBase::FileExists( p_strFile))
+	if (File::FileExists( p_strFile))
 	{
-		FileIO l_file( p_strFile, FileIO::eRead);
+		File l_file( p_strFile, File::eRead);
 		l_file.CopyToString( m_fragmentProgram);
 	}
 
@@ -330,17 +283,53 @@ void ShaderProgram :: SetFragmentFileIO( const String & p_strFile)
 	m_bError = false;
 }
 
-void ShaderProgram :: SetGeometryFileIO( const String & p_strFile)
+void ShaderProgram :: SetGeometryFile( const String & p_strFile)
 {
 	if (m_usesGeometryShader)
 	{
 		m_geometryFile = p_strFile;
 
-		if (FileBase::FileExists( p_strFile))
+		if (File::FileExists( p_strFile))
 		{
-			FileIO l_file( p_strFile, FileIO::eRead);
+			File l_file( p_strFile, File::eRead);
 			l_file.CopyToString( m_geometryProgram);
 		}
+
+		m_isLinked = false;
+		m_bError = false;
+	}
+}
+
+void ShaderProgram :: SetVertexText( const String & p_strContent)
+{
+	m_vertexFile.clear();
+	m_bFromMemory = true;
+
+	m_vertexProgram = p_strContent;
+
+	m_isLinked = false;
+	m_bError = false;
+}
+
+void ShaderProgram :: SetFragmentText( const String & p_strContent)
+{
+	m_fragmentFile.clear();
+	m_bFromMemory = true;
+
+	m_fragmentProgram = p_strContent;
+
+	m_isLinked = false;
+	m_bError = false;
+}
+
+void ShaderProgram :: SetGeometryText( const String & p_strContent)
+{
+	if (m_usesGeometryShader)
+	{
+		m_geometryFile.clear();
+		m_bFromMemory = true;
+
+		m_geometryProgram = p_strContent;
 
 		m_isLinked = false;
 		m_bError = false;

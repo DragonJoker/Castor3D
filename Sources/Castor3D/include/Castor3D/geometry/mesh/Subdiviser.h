@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -31,12 +31,12 @@ namespace Castor3D
 	class Edge
 	{
 	private:
-		Vector3f * m_firstVertex;
-		Vector3f * m_secondVertex;
-		Face * m_firstFace;
-		Face * m_secondFace;
+		VertexPtr m_firstVertex;
+		VertexPtr m_secondVertex;
+		FacePtr m_firstFace;
+		FacePtr m_secondFace;
 
-		Vector3f * m_createdVertex;
+		VertexPtr m_createdVertex;
 		bool m_divided;
 		bool m_toDivide;
 		bool m_toDelete;
@@ -51,7 +51,7 @@ namespace Castor3D
 		 *@param p_f1 : [in] The 1st face of the edge
 		 *@param p_toDivide : [in] Tells if the edge is to be divided
 		 */
-		Edge( Vector3f * p_v1, Vector3f * p_v2, Face * p_f1, bool p_toDivide);
+		Edge( VertexPtr p_v1, VertexPtr p_v2, FacePtr p_f1, bool p_toDivide);
 		/**
 		 * Destructor
 		 */
@@ -59,18 +59,18 @@ namespace Castor3D
 		/**
 		 * Adds a face to the edge (max 2 faces, 1 at each side of the edge)
 		 */
-		void AddFace( Face * p_face);
+		void AddFace( FacePtr p_face);
 		/**
 		 * Divides the edge id est adds a vertex in a portion of the edge determined by p_value (0.5 = middle).
 		 * Doesn't divide the faces
 		 */
-		Vector3f * Divide( Submesh * p_submesh, float p_value);
+		VertexPtr Divide( SubmeshPtr p_submesh, real p_value);
 
 	public:
 		inline bool			IsDivided	()						{ return m_divided; }
-		inline Vector3f *	GetVertex1	()						{ return m_firstVertex; }
-		inline Vector3f *	GetVertex2	()						{ return m_secondVertex; }
-		inline bool			IsInVertex	( Vector3f * p_vertex)	{ return m_firstVertex == p_vertex || m_secondVertex == p_vertex; }
+		inline VertexPtr 	GetVertex1	()						{ return m_firstVertex; }
+		inline VertexPtr	GetVertex2	()						{ return m_secondVertex; }
+		inline bool			IsInVertex	( VertexPtr p_vertex)	{ return m_firstVertex == p_vertex || m_secondVertex == p_vertex; }
 		inline bool			IsToDelete	()						{ return m_toDelete; }
 
 		inline int	Release		() { return --m_refCount; }
@@ -79,7 +79,6 @@ namespace Castor3D
 		inline void	SetToDelete	() { m_toDelete = true; }
 	};
 
-	typedef std::map <Vector3f *, Edge *> EdgePtrMap;	//!< Map of edges, ordered by vertex
 
 	//! Face edges representation
 	/*!
@@ -90,12 +89,12 @@ namespace Castor3D
 	class FaceEdges
 	{
 	private:
-		Submesh * m_submesh;
-		Face * m_face;
+		SubmeshPtr m_submesh;
+		FacePtr m_face;
 		size_t m_sgIndex;
-		Edge * m_edgeAB;
-		Edge * m_edgeBC;
-		Edge * m_edgeCA;
+		EdgePtr m_edgeAB;
+		EdgePtr m_edgeBC;
+		EdgePtr m_edgeCA;
 
 	public:
 		/**
@@ -107,10 +106,10 @@ namespace Castor3D
 		 *@param p_vertexNeighbourhood : [in/out] The list of vertices neighbours
 		 *@param p_allEdges : [in/out] All the edges
 		 */
-		FaceEdges( Submesh * p_submesh, size_t p_sgIndex, Face * p_face, 
-				   std::map <Vector3f *, EdgePtrMap> & p_existingEdges,
-				   std::map <Vector3f *, int> & p_vertexNeighbourhood,
-				   std::set <Edge *> & p_allEdges);
+		FaceEdges( SubmeshPtr p_submesh, size_t p_sgIndex, FacePtr p_face, 
+				   EdgePtrMapVPtrMap & p_existingEdges,
+				   IntVPtrMap & p_vertexNeighbourhood,
+				   std::set <EdgePtr> & p_allEdges);
 		/**
 		 * Constructor
 		 *@param p_submesh : [in] The submesh holding the face
@@ -120,33 +119,28 @@ namespace Castor3D
 		 *@param l_bc : [in] Edge between 2nd and 3rd vertex
 		 *@param l_ca : [in] Edge between 3rd and 1st vertex
 		 */
-		FaceEdges( Submesh * p_submesh, size_t p_sgIndex, Face * p_face, Edge * l_ab, Edge * l_bc, Edge * l_ca);
+		FaceEdges( SubmeshPtr p_submesh, size_t p_sgIndex, FacePtr p_face, EdgePtr l_ab, EdgePtr l_bc, EdgePtr l_ca);
 		/**
-		 * Divides the edges held by this object, creates needed faces to complete the division
+		 * Divides the edges held, creates needed faces to complete the division
 		 *@param p_value : [in] The weight of division (if 0.5, divides all edges in the middle)
 		 *@param p_existingEdges : [in/out] The map of already existing edges, sorted by vertex
 		 *@param p_vertexNeighbourhood : [in/out] The list of vertices neighbours
 		 *@param p_allEdges : [in/out] All the edges
-		 *@param p_newFaces : [in/out] The array of newly created faces. All faces created by the subdivision are put in this array
-		 *@param p_newVertices : [in/out] The array of newly created vertices. All vertices created by the subdivision are put in this array
+		 *@param p_newFaces : [in/out] The array of newly created faces. All faces created by the subdivision are put inside it
+		 *@param p_newVertices : [in/out] The array of newly created vertices. All vertices created by the subdivision are put inside it
 		 */
-		void Divide( float p_value, std::map <Vector3f *, EdgePtrMap> & p_existingEdges,
-					 std::map <Vector3f *, int> & p_vertexNeighbourhood,
-					 std::set <Edge *> & p_allEdges, std::vector <FaceEdges *> & p_newFaces,
-					 std::vector <Vector3f *> & p_newVertices);
+		void Divide( real p_value, EdgePtrMapVPtrMap & p_existingEdges, IntVPtrMap & p_vertexNeighbourhood,
+					 std::set <EdgePtr> & p_allEdges, FaceEdgesPtrArray & p_newFaces, VertexPtrArray & p_newVertices);
 
 	private:
-		Edge * _addEdge( Vector3f * p_v1, Vector3f * p_v2, bool p_toDivide, bool p_add1, bool p_add2,
-						 std::map <Vector3f *, EdgePtrMap> & p_existingEdges,
-						 std::map <Vector3f *, int> & p_vertexNeighbourhood,
-						 std::set <Edge *> & p_allEdges);
-		void _removeEdge( Edge * p_edge, std::map <Vector3f *, EdgePtrMap> & p_existingEdges,
-						  std::set <Edge *> & p_allEdges);
+		EdgePtr _addEdge( VertexPtr p_v1, VertexPtr p_v2, bool p_toDivide, bool p_add1, bool p_add2,
+						 EdgePtrMapVPtrMap & p_existingEdges, IntVPtrMap & p_vertexNeighbourhood, std::set <EdgePtr> & p_allEdges);
+		void _removeEdge( EdgePtr p_edge, EdgePtrMapVPtrMap & p_existingEdges, std::set <EdgePtr> & p_allEdges);
 
 	public:
-		inline Edge * GetEdgesAB() { return m_edgeAB; }
-		inline Edge * GetEdgesBC() { return m_edgeBC; }
-		inline Edge * GetEdgesCA() { return m_edgeCA; }
+		inline EdgePtr GetEdgesAB() { return m_edgeAB; }
+		inline EdgePtr GetEdgesBC() { return m_edgeBC; }
+		inline EdgePtr GetEdgesCA() { return m_edgeCA; }
 	};
 	//! Subdivisers main class
 	/*!
@@ -158,8 +152,8 @@ namespace Castor3D
 	{
 	protected:
 		Submesh * m_submesh;					//!< The submesh being subdivided
-		Vector3fPtrArray * m_vertex;			//!< All the vertices
-		SmoothGroupPtrArray * m_smoothGroups;	//!< The submesh smoothing groups
+		VertexPtrArray & m_vertex;				//!< All the vertices
+		SmoothGroupPtrArray & m_smoothGroups;	//!< The submesh smoothing groups
 
 	public:
 		/**
@@ -174,16 +168,16 @@ namespace Castor3D
 		/**
 		 * Main subdivision function, must be implemented by children classes
 		 */
-		virtual void Subdivide( Vector3f * p_center)=0;
+		virtual void Subdivide( Point3rPtr p_center)=0;
 
 	protected:
-		void _setTextCoords( Face * p_face, Vector3f * p_a, Vector3f * p_b, Vector3f * p_c, 
-							 Vector3f * p_d, Vector3f * p_e, Vector3f * p_f, size_t p_sgIndex);
-		Vector3f * _computeCenterFrom( const Vector3f & p_a, float * p_aNormal,
-									   const Vector3f & p_b, float * p_bNormal);
-		Vector3f * _computeCenterFrom( const Vector3f & p_a, float * p_aNormal,
-									   const Vector3f & p_b, float * p_bNormal,
-									   const Vector3f & p_c, float * p_cNormal);
+		void _setTextCoords( FacePtr p_face, VertexPtr p_a, VertexPtr p_b, VertexPtr p_c, 
+							 VertexPtr p_d, VertexPtr p_e, VertexPtr p_f, size_t p_sgIndex);
+		VertexPtr _computeCenterFrom( const Vertex & p_a, real * p_aNormal,
+									   const Vertex & p_b, real * p_bNormal);
+		VertexPtr _computeCenterFrom( const Vertex & p_a, real * p_aNormal,
+									   const Vertex & p_b, real * p_bNormal,
+									   const Vertex & p_c, real * p_cNormal);
 	};
 }
 

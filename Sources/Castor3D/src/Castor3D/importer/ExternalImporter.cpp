@@ -11,9 +11,9 @@
 #include "material/Pass.h"
 #include "geometry/primitives/Geometry.h"
 #include "render_system/RenderSystem.h"
-#include "render_system/MeshRenderer.h"
 #include "render_system/Buffer.h"
-#include "Log.h"
+#include "scene/SceneNode.h"
+
 
 using namespace Castor3D;
 
@@ -22,25 +22,30 @@ bool ExternalImporter :: Import( const String & p_fileName)
 	bool l_bReturn = false;
 
 	m_fileName = p_fileName;
-	size_t l_i = min( m_fileName.find_last_of( C3D_T( "/")), m_fileName.find_last_of( "\\"));
+	size_t l_i = std::min( m_fileName.find_last_of( CU_T( "/")), m_fileName.find_last_of( "\\"));
 	m_filePath = m_fileName.substr( 0, l_i + 1);
 
 	l_bReturn = _import();
 
 	return l_bReturn;
 }
+
+SceneNodePtr ExternalImporter :: GetNode()
+{
+	return (m_nodes.empty() ? SceneNodePtr() : m_nodes[0]);
+}
 /*
-void ExternalImporter :: _convertToMesh( Mesh * p_mesh, Imported3DModel * p_model)
+void ExternalImporter :: _convertToMesh( MeshPtr p_mesh, Imported3DModel * p_model)
 {
 	ImportedMaterialInfo l_mat;
-	Material * l_material;
-	Pass * l_pass;
-	TextureUnit * l_unit;
+	MaterialPtr l_material;
+	PassPtr l_pass;
+	TextureUnitPtr l_unit;
 
 	for (int i = 0 ; i < p_model->m_numOfMaterials ; i++)
 	{
 		l_mat = p_model->m_materials[i];
-		l_material = MaterialManager::GetSingletonPtr()->CreateMaterial( l_mat.m_strName);
+		l_material = MaterialManager::CreateMaterial( l_mat.m_strName);
 		l_pass = l_material->GetPass( 0);
 		l_pass->SetDoubleFace( true);
 		l_pass->SetAmbient( l_mat.m_fAmbient[0], l_mat.m_fAmbient[1], l_mat.m_fAmbient[2], 1.0f);
@@ -67,9 +72,9 @@ void ExternalImporter :: _convertToMesh( Mesh * p_mesh, Imported3DModel * p_mode
 		}
 	}
 
-	Submesh * l_submesh;
+	SubmeshPtr l_submesh;
 	Imported3DObject l_object;
-	Face * l_face;
+	FacePtr l_face;
 
 	for (int i = 0 ; i < p_model->m_numOfObjects ; i++)
 	{
@@ -86,7 +91,7 @@ void ExternalImporter :: _convertToMesh( Mesh * p_mesh, Imported3DModel * p_mode
 
 			for (int j = 0 ; j < l_object.m_numOfVerts ; j++)
 			{
-				l_submesh->AddVertex( l_object.m_vertex[j].x, l_object.m_vertex[j].y, l_object.m_vertex[j].z);
+				l_submesh->AddVertex( l_object.m_vertex[j][0], l_object.m_vertex[j][1], l_object.m_vertex[j][2]);
 			}
 
 			for (int j = 0 ; j < l_object.m_numOfFaces ; j++)
@@ -95,16 +100,16 @@ void ExternalImporter :: _convertToMesh( Mesh * p_mesh, Imported3DModel * p_mode
 				{
 					if (l_object.m_texVerts != NULL)
 					{
-						SetTexCoordV1( l_face, l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[0]].x, l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[0]].y);
-						SetTexCoordV2( l_face, l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[1]].x, l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[1]].y);
-						SetTexCoordV3( l_face, l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[2]].x, l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[2]].y);
+						l_face->SetTexCoordV1( l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[0]][0], l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[0]][1]);
+						l_face->SetTexCoordV2( l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[1]][0], l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[1]][1]);
+						l_face->SetTexCoordV3( l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[2]][0], l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[2]][1]);
 					}
 				}
 			}
 
 			if (l_object.m_materialID >= 0 && p_model->m_numOfMaterials > 0)
 			{
-				l_material = MaterialManager::GetSingletonPtr()->GetElementByName( p_model->m_materials[l_object.m_materialID].m_strName);
+				l_material = MaterialManager::GetElementByName( p_model->m_materials[l_object.m_materialID].m_strName);
 				l_submesh->SetMaterial( l_material);
 			}
 

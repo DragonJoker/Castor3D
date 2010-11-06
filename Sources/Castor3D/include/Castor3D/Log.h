@@ -11,12 +11,12 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_Log___
-#define ___C3D_Log___
+#ifndef ___Castor_Log___
+#define ___Castor_Log___
 
 namespace Castor3D
 {
@@ -30,43 +30,49 @@ namespace Castor3D
 	class CS3D_API Log
 	{
 	private:
-		//! The log file path
-		static String s_logFilePath;
+		static String s_logFilePath;	//!< The log file path
+		static Log s_singleton;
 
 	public:
 		/**
 		 * Constructor
-		 *@param p_logFilePath : The file path
 		 */
-		Log( String p_logFilePath);
+		Log();
 		/**
 		 * Destructor
 		 */
 		~Log();
 		/**
+		 * Sets the log file address
+		 *@param p_logFilePath : [in] The log file path
+		 */
+		static void SetFileName( const String & p_logFilePath);
+		/**
 		 * Logs a line in the log file, using va_args
-		 *@param p_format : the line format
-		 *@param ... : the arguments, following printf format
+		 *@param p_format : [in] the line format
+		 *@param ... : POD arguments, following printf format
 		 */
 		static void LogMessage( const char * p_format, ...);
 		/**
 		 * Logs a line, from a string
-		 *@param p_msg : The line to log
+		 *@param p_msg : [in] The line to log
 		 */
 		static void LogMessage( const std::string & p_msg);
 		/**
 		 * Logs an unicode line in the log file, using va_args
-		 *@param p_format : the line format
-		 *@param ... : the arguments, following printf format
+		 *@param p_format : [in] the line format
+		 *@param ... : POD arguments, following printf format
 		 */
 		static void LogMessage( const wchar_t * p_format , ...);
 		/**
 		 * Logs a line, from a wstring
-		 *@param p_msg : The line to log
+		 *@param p_msg : [in] The line to log
 		 */
 		static void LogMessage( const std::wstring & p_msg);
+
+	private:
+		static void _logMessage( const String & p_strToLog);
 	};
 }
 
 #endif
-

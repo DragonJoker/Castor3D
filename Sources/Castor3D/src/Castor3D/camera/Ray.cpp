@@ -11,83 +11,77 @@
 
 using namespace Castor3D;
 
-Ray :: Ray( const Point2D<int> & p_point, const Camera & p_camera)
-	:	m_origin( NULL),
-		m_direction( NULL)
+Ray :: Ray( const Point<int, 2> & p_point, const Camera & p_camera)
 {
-	Viewport l_viewport = *p_camera.GetViewport();
-	m_origin = new Vector3f( *p_camera.GetPosition());
-	m_origin->z += l_viewport.GetNearView();
-	Quaternion l_camOrient = *p_camera.GetOrientation();
-	*m_origin = l_camOrient * (*m_origin);
+	Viewport l_viewport = * p_camera.GetViewport();
+	m_origin = p_camera.GetPosition();
+	m_origin[2] += l_viewport.GetNearView();
+	Quaternion l_camOrient = p_camera.GetOrientation();
+	m_origin = l_camOrient * m_origin;
 
-	m_direction = new Vector3f( l_viewport.GetDirection( p_point));
-	m_direction->Normalise();
+	m_direction = l_viewport.GetDirection( p_point);
+	m_direction.Normalise();
 }
 
 Ray :: Ray( int p_x, int p_y, const Camera & p_camera)
-	:	m_origin( NULL),
-		m_direction( NULL)
 {
-	Viewport l_viewport = *p_camera.GetViewport();
-	m_origin = new Vector3f( *p_camera.GetPosition());
-	m_origin->z += l_viewport.GetNearView();
-	Quaternion l_camOrient = *p_camera.GetOrientation();
-	*m_origin = l_camOrient * (*m_origin);
+	Viewport l_viewport = * p_camera.GetViewport();
+	m_origin = p_camera.GetPosition();
+	m_origin[2] += l_viewport.GetNearView();
+	Quaternion l_camOrient = p_camera.GetOrientation();
+	m_origin = l_camOrient * m_origin;
 
-	Point2D<int> l_point( p_x, p_y);
-	m_direction = new Vector3f( l_viewport.GetDirection( l_point));
-	m_direction->Normalise();
+	Point<int, 2> l_point( p_x, p_y);
+	m_direction = l_viewport.GetDirection( l_point);
+	m_direction.Normalise();
 }
 
-Ray :: Ray( const Vector3f & p_rOrigin, const Vector3f & p_rDirection)
-	:	m_origin( new Vector3f( p_rOrigin)),
-		m_direction( new Vector3f( p_rDirection))
+Ray :: Ray( const Point3r & p_rOrigin, const Point3r & p_rDirection)
+	:	m_origin( p_rOrigin),
+		m_direction( p_rDirection)
 {
 }
 
 Ray :: Ray( const Ray & p_ray)
+	:	m_origin( p_ray.m_origin),
+		m_direction( p_ray.m_direction)
 {
-	m_origin = new Vector3f( *p_ray.m_origin);
-	m_direction = new Vector3f( *p_ray.m_direction);
-	m_direction->Normalise();
+	m_direction.Normalise();
 }
 
 Ray :: ~Ray()
 {
-	delete m_origin;
-	delete m_direction;
 }
 
-float Ray :: Intersects( const Vector3f & p_v1, const Vector3f & p_v2, const Vector3f & p_v3)
+real Ray :: Intersects( const Point3r & p_v1, const Point3r & p_v2, const Point3r & p_v3)
 {
-	float l_fReturn = -1.0f;
+	real l_fReturn = -1.0f;
 
-	Vector3f e1( p_v1, p_v2);
-	Vector3f e2( p_v3, p_v1);
-	Vector3f e3( p_v2, p_v3);
+	Point3r e1( p_v2 - p_v1);
+	Point3r e2( p_v1 - p_v3);
+	Point3r e3( p_v3 - p_v2);
 
-	Vector3f h = *m_direction ^ e2;
+	Point3r h = m_direction ^ e2;
 
-	float a = e1.dotProduct( h);
+	real a = e1.dotProduct( h);
 
-	if (a <= -0.00001 || a >= 0.00001)
+	if ( ! value::is_null( a))
 	{
-		float f = 1.0f / a;
+		real f = 1.0f / a;
 
-		Vector3f s( p_v1, *m_origin);
-		float u = f * s.dotProduct( h);
+		Point3r s( m_origin - p_v1);
+		real u = f * s.dotProduct( h);
 
 		if (u >= 0.0 && u <= 1.0)
 		{
-			Vector3f q = s ^ e1;
-			float v = f * m_direction->dotProduct( q);
+			Point3r q = s ^ e1;
+			real v = f * m_direction.dotProduct( q);
 
 			if (v >= 0.0 && u + v <= 1.0)
 			{
-				float t = f * e2.dotProduct( q);
+				real t = f * e2.dotProduct( q);
 
-				if (t > 0.00001f)
+				if ( ! value::is_null( t))
 				{
 					l_fReturn = t;
 				}
@@ -98,18 +92,18 @@ float Ray :: Intersects( const Vector3f & p_v1, const Vector3f & p_v2, const Vec
 	return l_fReturn;
 }
 
-float Ray :: Intersects( const Face & p_face)
+real Ray :: Intersects( const Face & p_face)
 {
-	Vector3f * l_v1 = p_face.m_vertex1;
-	Vector3f * l_v2 = p_face.m_vertex2;
-	Vector3f * l_v3 = p_face.m_vertex3;
+	Point3rPtr l_v1 = p_face.m_vertex1;
+	Point3rPtr l_v2 = p_face.m_vertex2;
+	Point3rPtr l_v3 = p_face.m_vertex3;
 	return Intersects( *l_v1, *l_v2, *l_v3);
 }
 
-float Ray :: Intersects( const Vector3f & p_vertex)
+real Ray :: Intersects( const Point3r & p_vertex)
 {
-	Vector3f u( p_vertex, * m_origin);
-	Vector3f puv;
+	Point3r u( m_origin - p_vertex);
+	Point3r puv;
 
 	if (ProjectVertex( u, puv) && puv.GetSquaredLength() < 0.000001)
 	{
@@ -119,19 +113,19 @@ float Ray :: Intersects( const Vector3f & p_vertex)
 	return -1.0f;
 }
 
-float Ray :: Intersects( const ComboBox & p_box)
+real Ray :: Intersects( const ComboBox & p_box)
 {
-	Vector3f l_v1( p_box.GetMin());
-	Vector3f l_v8( p_box.GetMax());
-	Vector3f l_v2( l_v8.x, l_v1.y, l_v1.z);
-	Vector3f l_v3( l_v1.x, l_v8.y, l_v1.z);
-	Vector3f l_v4( l_v8.x, l_v8.y, l_v1.z);
-	Vector3f l_v5( l_v8.x, l_v1.y, l_v8.z);
-	Vector3f l_v6( l_v1.x, l_v8.y, l_v8.z);
-	Vector3f l_v7( l_v8.x, l_v8.y, l_v8.z);
+	Point3r l_v1( p_box.GetMin());
+	Point3r l_v8( p_box.GetMax());
+	Point3r l_v2( l_v8[0], l_v1[1], l_v1[2]);
+	Point3r l_v3( l_v1[0], l_v8[1], l_v1[2]);
+	Point3r l_v4( l_v8[0], l_v8[1], l_v1[2]);
+	Point3r l_v5( l_v8[0], l_v1[1], l_v8[2]);
+	Point3r l_v6( l_v1[0], l_v8[1], l_v8[2]);
+	Point3r l_v7( l_v8[0], l_v8[1], l_v8[2]);
 
 	bool l_foundOne = false;
-	float l_dist, l_min = 1e6f;
+	real l_dist, l_min = 1e6f;
 
 	if ((l_dist = Intersects( l_v1, l_v2, l_v3)) >= 0)
 	{
@@ -142,67 +136,67 @@ float Ray :: Intersects( const ComboBox & p_box)
 	if ((l_dist = Intersects( l_v2, l_v4, l_v3)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = min( l_min, l_dist);
+		l_min = std::min( l_min, l_dist);
 	}
 
 	if ((l_dist = Intersects( l_v2, l_v6, l_v4)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = min( l_min, l_dist);
+		l_min = std::min( l_min, l_dist);
 	}
 
 	if ((l_dist = Intersects( l_v6, l_v8, l_v4)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = min( l_min, l_dist);
+		l_min = std::min( l_min, l_dist);
 	}
 
 	if ((l_dist = Intersects( l_v6, l_v5, l_v8)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = min( l_min, l_dist);
+		l_min = std::min( l_min, l_dist);
 	}
 
 	if ((l_dist = Intersects( l_v5, l_v7, l_v8)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = min( l_min, l_dist);
+		l_min = std::min( l_min, l_dist);
 	}
 
 	if ((l_dist = Intersects( l_v1, l_v7, l_v5)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = min( l_min, l_dist);
+		l_min = std::min( l_min, l_dist);
 	}
 
 	if ((l_dist = Intersects( l_v1, l_v3, l_v7)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = min( l_min, l_dist);
+		l_min = std::min( l_min, l_dist);
 	}
 
 	if ((l_dist = Intersects( l_v2, l_v1, l_v5)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = min( l_min, l_dist);
+		l_min = std::min( l_min, l_dist);
 	}
 
 	if ((l_dist = Intersects( l_v2, l_v5, l_v6)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = min( l_min, l_dist);
+		l_min = std::min( l_min, l_dist);
 	}
 
 	if ((l_dist = Intersects( l_v3, l_v4, l_v7)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = min( l_min, l_dist);
+		l_min = std::min( l_min, l_dist);
 	}
 
 	if ((l_dist = Intersects( l_v4, l_v7, l_v8)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = min( l_min, l_dist);
+		l_min = std::min( l_min, l_dist);
 	}
 
 	if (l_foundOne)
@@ -213,19 +207,19 @@ float Ray :: Intersects( const ComboBox & p_box)
 	return -1.0f;
 }
 
-float Ray :: Intersects( const Sphere & p_sphere)
+real Ray :: Intersects( const Sphere & p_sphere)
 {
-	float l_fReturn = -1.0f;
+	real l_fReturn = -1.0f;
 
 	// intersection rayon/sphere 
-	Vector3f l_vDist = p_sphere.GetCenter() - (* m_origin); 
-	float B = m_direction->dotProduct( l_vDist);
-	float D = B * B - l_vDist.dotProduct(l_vDist) + p_sphere.GetRadius() * p_sphere.GetRadius(); 
+	Point3r l_vDist = p_sphere.GetCenter() - m_origin; 
+	real B = m_direction.dotProduct( l_vDist);
+	real D = B * B - l_vDist.dotProduct(l_vDist) + p_sphere.GetRadius() * p_sphere.GetRadius(); 
 
 	if (D >= 0.0f)
 	{
-		float t0 = B - sqrtf( D);
-		float t1 = B + sqrtf( D);
+		real t0 = B - square_root( D);
+		real t1 = B + square_root( D);
 
 		if (t0 > 0.1f)
 		{
@@ -241,30 +235,30 @@ float Ray :: Intersects( const Sphere & p_sphere)
 	return l_fReturn;
 }
 
-float Ray :: Intersects( Geometry * p_pGeometry, Face ** p_ppFace, Submesh ** p_ppSubmesh)
+real Ray :: Intersects( GeometryPtr p_pGeometry, FacePtr* p_ppFace, SubmeshPtr* p_ppSubmesh)
 {
-	Vector3f l_vCenter = p_pGeometry->GetCenter()->operator +( p_pGeometry->GetParent()->GetPosition());
+	Point3r l_vCenter = p_pGeometry->GetCenter()->operator +( p_pGeometry->GetParent()->GetPosition());
 	Quaternion l_qOrientation = p_pGeometry->GetParent()->GetOrientation();
-	Vector3f l_vOrientedCenter = l_qOrientation * l_vCenter;
+	Point3r l_vOrientedCenter = l_qOrientation * l_vCenter;
 
-	Mesh * l_pMesh = p_pGeometry->GetMesh();
+	MeshPtr l_pMesh = p_pGeometry->GetMesh();
 	Sphere l_sphere( l_vCenter, l_pMesh->GetSphere()->GetRadius());
 
-	float l_fDistance = Intersects( l_sphere);
+	real l_fDistance = Intersects( l_sphere);
 /*
-	float l_faceDist = 10e6, l_vertexDist = 10e6;
-	float l_curfaceDist, l_curvertexDist;
+	real l_faceDist = 10e6, l_vertexDist = 10e6;
+	real l_curfaceDist, l_curvertexDist;
 */
 	if (l_fDistance >= 0.0f)
 	{
 		l_fDistance = -1.0f;
 		size_t l_nbSubmeshes = l_pMesh->GetNbSubmeshes();
-		Submesh * l_pSubmesh = NULL;
+		SubmeshPtr l_pSubmesh = NULL;
 
 		for (size_t i = 0 ; i < l_nbSubmeshes ; i++)
 		{
 			l_pSubmesh = l_pMesh->GetSubmesh( i);
-			Vector3f l_submeshCenter = l_vCenter + l_pSubmesh->GetSphere()->GetCenter();
+			Point3r l_submeshCenter = l_vCenter + l_pSubmesh->GetSphere()->GetCenter();
 			l_submeshCenter = l_qOrientation * l_submeshCenter;
 			l_sphere.Load( l_submeshCenter, l_pSubmesh->GetSphere()->GetRadius());
 
@@ -279,10 +273,10 @@ float Ray :: Intersects( Geometry * p_pGeometry, Face ** p_ppFace, Submesh ** p_
 
 				for (size_t j = 0 ; j < l_nbSmoothGroups ; j++)
 				{
-					SmoothingGroup * l_pGroup = l_pSubmesh->GetSmoothGroup( j);
+					SmoothingGroupPtr l_pGroup = l_pSubmesh->GetSmoothGroup( j);
 					for (size_t k = 0 ; k < l_pGroup->m_faces.size() ; k++)
 					{
-						Face * l_pFace = l_pGroup->m_faces[k];
+						FacePtr l_pFace = l_pGroup->m_faces[k];
 
 						if ((l_curfaceDist = Intersects( * l_pFace)) >= 0.0 && l_curfaceDist < l_faceDist)
 						{
@@ -324,11 +318,11 @@ float Ray :: Intersects( Geometry * p_pGeometry, Face ** p_ppFace, Submesh ** p_
 	return l_fDistance;
 }
 
-bool Ray :: ProjectVertex( const Vector3f & p_vertex, Vector3f & p_result)
+bool Ray :: ProjectVertex( const Point3r & p_vertex, Point3r & p_result)
 {
-	if (m_direction->dotProduct( p_vertex) >= 0.0)
+	if (m_direction.dotProduct( p_vertex) >= 0.0)
 	{
-		p_result = (*m_direction) * (m_direction->dotProduct( p_vertex) / m_direction->GetLength());
+		p_result = m_direction * (m_direction.dotProduct( p_vertex) / m_direction.GetLength());
 		return true;
 	}
 

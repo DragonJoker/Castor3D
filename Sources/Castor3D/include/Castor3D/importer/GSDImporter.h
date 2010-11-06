@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -41,7 +41,7 @@ namespace Castor3D
 	{
 	  char name[256];
 	  char parent[256];
-	  std::list<standardString *> childs;
+	  C3DList<standardString *> childs;
 	};
 
 	class GSDImporter : public ExternalImporter
@@ -49,7 +49,7 @@ namespace Castor3D
 	private:
 		friend class Scene;
 		char m_FileName[256];
-		std::vector<treeData *> m_tree;
+		C3DVector<treeData *> m_tree;
 		FILE *m_f;
 		long m_subObjectsNumber;
 		long m_MaterialsNumber;

@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -22,38 +22,23 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	//! Class which represents the moving objects
-	class MovingObject;
-	//! The class which manages key frames
-	class KeyFrame;
-	//! Animation manager class
-	class Animation;
-	//! Class which represents the animated objects
-	class AnimatedObject;
-	//! Class which represents the animated object groups
-	class AnimatedObjectGroup;
+	class MovingObject;			//!< Class which represents the moving objects
+	class KeyFrame;				//!< The class which manages key frames
+	class Animation;			//!< Animation manager class
+	class AnimatedObject;		//!< Class which represents the animated objects
+	class AnimatedObjectGroup;	//!< Class which represents the animated object groups
 
-	//! Animation State Enum
-	/*!
-	The enumeration which defines all the states of an animation : playing, stopped, paused
-	*/
-	typedef enum AnimationState
-	{
-		AnimationPlaying,	//!< Playing animation state
-		AnimationStopped,	//!< Stopped animation state
-		AnimationPaused		//!< Paused animation state
-	} AnimationState;
+	typedef Templates::SharedPtr<KeyFrame>				KeyFramePtr;
+	typedef Templates::SharedPtr<AnimatedObject>		AnimatedObjectPtr;
+	typedef Templates::SharedPtr<MovingObject>			MovingObjectPtr;
+	typedef Templates::SharedPtr<Animation>				AnimationPtr;
+	typedef Templates::SharedPtr<AnimatedObjectGroup>	AnimatedObjectGroupPtr;
 
-	//! KeyFrame pointer map, sorted by time index
-	typedef std::map	<float, KeyFrame *>				KeyFrameMap;
-	//! AnimatedObject pointer map, sorted by name
-	typedef std::map	<String, AnimatedObject *>		AnimatedObjectStrMap;
-	//! AnimatedObjectGroup pointer map, sorted by name
-	typedef std::map	<String, AnimatedObjectGroup *>	AnimatedObjectGroupStrMap;
-	//! MovingObject pointer map, sorted by name
-	typedef std::map	<String, MovingObject *>		MovingObjectStrMap;
-	//! Animation pointer map, sorted by name
-	typedef std::map	<String, Animation *>			AnimationStrMap;
+	typedef C3DMap(	String,	AnimatedObjectGroupPtr)	AnimatedObjectGroupPtrStrMap;	//!< AnimatedObjectGroup pointer map, sorted by name
+	typedef C3DMap(	String,	AnimationPtr)			AnimationPtrStrMap;				//!< Animation pointer map, sorted by name
+	typedef C3DMap(	real,	KeyFramePtr)			KeyFramePtrRealMap;				//!< KeyFrame pointer map, sorted by time index
+	typedef C3DMap(	String,	AnimatedObjectPtr)		AnimatedObjectPtrStrMap;		//!< AnimatedObject pointer map, sorted by name
+	typedef C3DMap(	String,	MovingObjectPtr)		MovingObjectPtrStrMap;			//!< MovingObject pointer map, sorted by name
 }
 
 #endif

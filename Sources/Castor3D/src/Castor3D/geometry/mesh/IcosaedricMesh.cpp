@@ -1,32 +1,20 @@
-/*******************************************************************************
- Auteur:  Sylvain DOREMUS + Loic DASSONVILLE
- But:    Moteur 3D
-
- Fichier: Icosaedre.h - Icosaedre.cpp
-
- Desc:   Classe gérant la primitive de l'icosaedre
-
-*******************************************************************************/
 #include "PrecompiledHeader.h"
 
 #include "geometry/Module_Geometry.h"
 
 #include "geometry/mesh/IcosaedricMesh.h"
 #include "geometry/mesh/Submesh.h"
-
-
 #include "geometry/basic/Face.h"
+#include "geometry/basic/SmoothingGroup.h"
 #include "main/Root.h"
 #include "render_system/RenderSystem.h"
-#include "render_system/MeshRenderer.h"
 #include "render_system/Buffer.h"
 
-#include "Log.h"
+
 
 using namespace Castor3D;
 
-
-IcosaedricMesh :: IcosaedricMesh( float radius_p, unsigned int nbFaces_p,
+IcosaedricMesh :: IcosaedricMesh( real radius_p, unsigned int nbFaces_p,
 								  const String & p_name)
 	:	Mesh( p_name),
 		m_radius	( radius_p),
@@ -36,13 +24,9 @@ IcosaedricMesh :: IcosaedricMesh( float radius_p, unsigned int nbFaces_p,
 	GeneratePoints();
 }
 
-
-
 IcosaedricMesh :: ~IcosaedricMesh ()
 {
 }
-
-
 
 void IcosaedricMesh :: GeneratePoints ()
 {
@@ -50,27 +34,27 @@ void IcosaedricMesh :: GeneratePoints ()
 	{
 		m_radius = -m_radius;
 	}
-	Submesh * l_submesh = new Submesh( Root::GetRenderSystem()->CreateSubmeshRenderer(), 1);
+	SubmeshPtr l_submesh = CreateSubmesh( 1);
 	m_submeshes.push_back( l_submesh);
 
 	// Dessin de l'icosaèdre
-	float phi = (1.0f + sqrt( 5.0f)) / 2.0f;
-	float X = m_radius / sqrt( phi * sqrt( 5.0f));
-	float Z = X * phi;
+	real phi = (1.0f + sqrt( 5.0f)) / 2.0f;
+	real X = m_radius / sqrt( phi * sqrt( 5.0f));
+	real Z = X * phi;
 
 	// on crée les 12 points le composant
-	Vector3f * pt1 = l_submesh->AddVertex( -X, 0, Z);
-	Vector3f * pt2 = l_submesh->AddVertex( X, 0, Z);
-	Vector3f * pt3 = l_submesh->AddVertex( -X, 0, -Z);
-	Vector3f * pt4 = l_submesh->AddVertex( X, 0, -Z);
-	Vector3f * pt5 = l_submesh->AddVertex( 0, Z, X);
-	Vector3f * pt6 = l_submesh->AddVertex( 0, Z, -X);
-	Vector3f * pt7 = l_submesh->AddVertex( 0, -Z, X);
-	Vector3f * pt8 = l_submesh->AddVertex( 0, -Z, -X);
-	Vector3f * pt9 = l_submesh->AddVertex( Z, X, 0);
-	Vector3f * pt10 = l_submesh->AddVertex(-Z, X, 0);
-	Vector3f * pt11 = l_submesh->AddVertex( Z, -X, 0);
-	Vector3f * pt12 = l_submesh->AddVertex( -Z, -X, 0);
+	VertexPtr pt1 = l_submesh->AddVertex( -X, 0, Z);
+	VertexPtr pt2 = l_submesh->AddVertex( X, 0, Z);
+	VertexPtr pt3 = l_submesh->AddVertex( -X, 0, -Z);
+	VertexPtr pt4 = l_submesh->AddVertex( X, 0, -Z);
+	VertexPtr pt5 = l_submesh->AddVertex( 0, Z, X);
+	VertexPtr pt6 = l_submesh->AddVertex( 0, Z, -X);
+	VertexPtr pt7 = l_submesh->AddVertex( 0, -Z, X);
+	VertexPtr pt8 = l_submesh->AddVertex( 0, -Z, -X);
+	VertexPtr pt9 = l_submesh->AddVertex( Z, X, 0);
+	VertexPtr pt10 = l_submesh->AddVertex(-Z, X, 0);
+	VertexPtr pt11 = l_submesh->AddVertex( Z, -X, 0);
+	VertexPtr pt12 = l_submesh->AddVertex( -Z, -X, 0);
 	
 	// on construit toutes les faces de l'isocaèdre
 	l_submesh->AddFace( pt2, pt1, pt5, 0);
@@ -97,20 +81,38 @@ void IcosaedricMesh :: GeneratePoints ()
 	// Division des faces de l'icosèdre
 	for (unsigned int i = 1 ; i < m_nbFaces ; i++)
 	{
-		l_submesh->_subdividePNTriangles( & Vector3f::ZeroVertex);
+		l_submesh->_subdividePNTriangles( & Vertex::ZeroVertex);
 	}
 
 	l_submesh->GenerateBuffers();
 
-	Log::LogMessage( C3D_T( "Icosaedre - %s - NbFaces : %d - NbVertex : %d"), m_name.c_str(), l_submesh->GetNbFaces(), l_submesh->m_vertex.size());
+	Log::LogMessage( CU_T( "Icosaedre - %s - NbFaces : %d - NbVertex : %d"), m_name.c_str(), l_submesh->GetNbFaces(), l_submesh->m_vertex.size());
 }
 
-
-
-void IcosaedricMesh :: Modify( float p_radius, unsigned int p_nbFaces)
+void IcosaedricMesh :: Modify( real p_radius, unsigned int p_nbFaces)
 {
 	m_nbFaces = p_nbFaces;
 	m_radius = p_radius;
 	Cleanup();
 	GeneratePoints();
+}
+
+void IcosaedricMesh :: SetNormals( bool p_bReverted)
+{
+	Mesh::SetNormals( p_bReverted);
+	SubmeshPtr l_pSubmesh = m_submeshes[0];
+
+	for (size_t i = 0 ; i < l_pSubmesh->m_smoothGroups.size() ; i++)
+	{
+		for (size_t j = 0 ; j < l_pSubmesh->m_smoothGroups[i]->m_faces.size() ; j++)
+		{
+			VertexSpherical l_vsVertex1( *l_pSubmesh->m_smoothGroups[i]->m_faces[j]->m_vertex1Normal);
+			VertexSpherical l_vsVertex2( *l_pSubmesh->m_smoothGroups[i]->m_faces[j]->m_vertex2Normal);
+			VertexSpherical l_vsVertex3( *l_pSubmesh->m_smoothGroups[i]->m_faces[j]->m_vertex3Normal);
+
+			l_pSubmesh->m_smoothGroups[i]->m_faces[j]->m_vertex1TexCoord = Point3r( 3, l_vsVertex1.m_phi, l_vsVertex1.m_theta, 0.0);
+			l_pSubmesh->m_smoothGroups[i]->m_faces[j]->m_vertex2TexCoord = Point3r( 3, l_vsVertex2.m_phi, l_vsVertex2.m_theta, 0.0);
+			l_pSubmesh->m_smoothGroups[i]->m_faces[j]->m_vertex3TexCoord = Point3r( 3, l_vsVertex3.m_phi, l_vsVertex3.m_theta, 0.0);
+		}
+	}
 }

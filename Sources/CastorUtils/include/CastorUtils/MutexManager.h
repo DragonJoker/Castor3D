@@ -11,12 +11,12 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___MUTEX_MANAGER_H___
-#define ___MUTEX_MANAGER_H___
+#ifndef ___Castor_MutexManager___
+#define ___Castor_MutexManager___
 
 #include "ThreadSpecific.h"
 #include "AutoSingleton.h"
@@ -24,9 +24,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <map>
 
-#define GENLIB_THREAD_INIT() General::MultiThreading::MutexManager::GetSingleton().RegisterThread()
+#define CASTOR_THREAD_INIT() Castor::MultiThreading::MutexManager::GetSingleton().RegisterThread()
 
-namespace General
+namespace Castor
 { namespace MultiThreading
 {
 	enum LockResult
@@ -93,7 +93,7 @@ namespace General
 	class MutexManager : public AutoSingleton <MutexManager>
 	{
 	private:
-		typedef std::map <const Mutex *, MutexState> MutexStateMap;
+		typedef C3DMap( const Mutex *, MutexState) MutexStateMap;
 
 	public:
 		ThreadSpecificUIntPtr m_threadID;
@@ -194,16 +194,16 @@ namespace General
 }
 }
 
-#ifdef GENLIB_SCOPED_LOCK
-#	undef GENLIB_SCOPED_LOCK
-#	undef GENLIB_SCOPED_RECURSIVE_LOCK
-#	undef GENLIB_LOCK_MUTEX
-#	undef GENLIB_UNLOCK_MUTEX
+#ifdef CASTOR_SCOPED_LOCK
+#	undef CASTOR_SCOPED_LOCK
+#	undef CASTOR_SCOPED_RECURSIVE_LOCK
+#	undef CASTOR_LOCK_MUTEX
+#	undef CASTOR_UNLOCK_MUTEX
 #endif
 
-#define GENLIB_SCOPED_LOCK( p_mutex)			General::MultiThreading::MutexLock l_mutex_lock_ ## p_mutex( p_mutex)
-#define GENLIB_SCOPED_RECURSIVE_LOCK( p_mutex)	General::MultiThreading::MutexLock l_mutex_lock_ ## p_mutex( p_mutex)
-#define GENLIB_LOCK_MUTEX( p_mutex)				General::MultiThreading::MutexManager::GetSingleton().SimpleLock( & p_mutex)
-#define GENLIB_UNLOCK_MUTEX( p_mutex)			General::MultiThreading::MutexManager::GetSingleton().SimpleUnlock( & p_mutex)
+#define CASTOR_SCOPED_LOCK( p_mutex)			Castor::MultiThreading::MutexLock l_mutex_lock_ ## p_mutex( p_mutex)
+#define CASTOR_SCOPED_RECURSIVE_LOCK( p_mutex)	Castor::MultiThreading::MutexLock l_mutex_lock_ ## p_mutex( p_mutex)
+#define CASTOR_LOCK_MUTEX( p_mutex)				Castor::MultiThreading::MutexManager::GetSingleton().SimpleLock( & p_mutex)
+#define CASTOR_UNLOCK_MUTEX( p_mutex)			Castor::MultiThreading::MutexManager::GetSingleton().SimpleUnlock( & p_mutex)
 
 #endif

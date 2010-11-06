@@ -1,57 +1,54 @@
 #include "PrecompiledHeader.h"
 
-#include "Module_General.h"
-
 #include "Log.h"
+
+#ifdef _WIN32
+#	include <Windows.h>
+#endif
 
 using namespace Castor3D;
 
 String Log :: s_logFilePath;
+Log Log :: s_singleton;
 
-Log :: Log( String p_logFilePath)
+Log :: Log()
 {
-	s_logFilePath = p_logFilePath;
-	FILE * l_logFile;
-	fopen_s( & l_logFile, s_logFilePath.char_str(), "w");
-
-	if (l_logFile == NULL) 
-	{
-		return;
-	}
-
-	fclose( l_logFile);
-
+	s_singleton = * this;
 #ifndef __GNUG__
-#ifdef _DEBUG
+#	ifdef _DEBUG
 	if (AllocConsole() == TRUE)
 	{
 		FILE * l_dump;
 		freopen_s( & l_dump, "conout$", "w", stdout); 
 		freopen_s( & l_dump, "conout$", "w", stderr);
 	}
-#endif
+#	endif
 #endif
 }
 
 Log :: ~Log()
 {
 #ifndef __GNUG__
-#ifdef _DEBUG
+#	ifdef _DEBUG
 	FreeConsole();
+#	endif
 #endif
-#endif
+}
+
+void Log :: SetFileName( const String & p_logFilePath)
+{
+	s_logFilePath = p_logFilePath;
+	FILE * l_pFile;
+	fopen_s( & l_pFile, p_logFilePath.char_str(), "w");
+
+	if (l_pFile != NULL)
+	{
+		fclose( l_pFile);
+	}
 }
 
 void Log :: LogMessage( const char * p_pFormat, ...)
 {
-	FILE * l_logFile;
-	fopen_s( & l_logFile, s_logFilePath.char_str(), "a+");
-
-	if (l_logFile == NULL) 
-	{
-		return;
-	}
-
 	char l_pText[256];
 	va_list l_vaList;
 
@@ -59,48 +56,22 @@ void Log :: LogMessage( const char * p_pFormat, ...)
 	{
 		va_start( l_vaList, p_pFormat);	
 #ifdef WIN32
-        vsnprintf_s( l_pText, 256, 256, p_pFormat, l_vaList);  
+		vsnprintf_s( l_pText, 256, 256, p_pFormat, l_vaList);  
 #else
-        vsnprintf( l_pText, 256, cFormat_p, ap_l);  
+		vsnprintf( l_pText, 256, cFormat_p, ap_l);  
 #endif
-		va_end( l_vaList);			 
-
-#ifdef _DEBUG
-		std::cout << l_pText << "\n";
-#endif
-		fprintf( l_logFile, "%s\n", l_pText);
+		va_end( l_vaList);
+		_logMessage( l_pText);
 	}
-
-	fclose( l_logFile);
 }
 
 void Log :: LogMessage( const std::string & p_msg)
 {
-	FILE * l_logFile;
-	fopen_s( & l_logFile, s_logFilePath.char_str(), "a+");
-
-	if (l_logFile == NULL) 
-	{
-		return;
-	}
-#ifdef _DEBUG
-	std::cout << p_msg.c_str() << "\n";
-#endif
-	fprintf( l_logFile, "%s\n", p_msg.c_str());
-
-	fclose( l_logFile);
+	_logMessage( p_msg);
 }
 
 void Log :: LogMessage( const wchar_t * p_pFormat , ...)
 {
-	FILE * l_logFile;
-	fopen_s( & l_logFile, s_logFilePath.char_str(), "a+");
-
-	if (l_logFile == NULL) 
-	{
-		return;
-	}
-
 	char l_pText[256];
 	va_list l_vaList;
 
@@ -108,39 +79,31 @@ void Log :: LogMessage( const wchar_t * p_pFormat , ...)
 	{
 		va_start( l_vaList, p_pFormat);	
 		String l_strFormat( p_pFormat);
-
 #ifdef WIN32
-        vsnprintf_s( l_pText, 256, 256, l_strFormat.char_str(), l_vaList);  
+		vsnprintf_s( l_pText, 256, 256, l_strFormat.char_str(), l_vaList);  
 #else
-        vsnprintf( l_pText, 256, l_strFormat.char_str(), ap_l);  
+		vsnprintf( l_pText, 256, l_strFormat.char_str(), ap_l);  
 #endif
-		va_end( l_vaList);			 
-
-#ifdef _DEBUG
-		std::cout << l_pText << "\n";
-#endif
-		fprintf( l_logFile, "%s\n", l_pText);
+		va_end( l_vaList);
+		_logMessage( l_pText);
 	}
-
-	fclose( l_logFile);
 }
 
 void Log :: LogMessage( const std::wstring & p_msg)
 {
-	FILE * l_logFile;
-	fopen_s( & l_logFile, s_logFilePath.char_str(), "a+");
+	_logMessage( p_msg);
+}
 
-	if (l_logFile == NULL) 
+void Log :: _logMessage( const String & p_strToLog)
+{
+	File l_logFile( s_logFilePath, File::eAdd);
+
+	if (l_logFile.IsOk()) 
 	{
-		return;
-	}
-	
-	String l_strMsg( p_msg);
-
 #ifdef _DEBUG
-	std::wcout << p_msg.c_str() << L"\n";
+		std::cout << p_strToLog.c_str() << std::endl;
 #endif
-	fprintf( l_logFile, "%s\n", l_strMsg.char_str());
-
-	fclose( l_logFile);
+		l_logFile << p_strToLog.c_str() << "\n";
+//		l_logFile.WriteArray<Char>( (p_strToLog + "\n").c_str(), p_strToLog.size() + 1);
+	}
 }

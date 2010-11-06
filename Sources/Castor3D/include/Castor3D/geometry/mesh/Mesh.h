@@ -11,12 +11,15 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
 #ifndef ___C3D_Mesh___
 #define ___C3D_Mesh___
+
+#include <CastorUtils/ResourceLoader.h>
+#include <CastorUtils/Resource.h>
 
 namespace Castor3D
 {
@@ -26,29 +29,44 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class CS3D_API MeshLoader : General::Resource::ResourceLoader <Mesh>
+	class CS3D_API MeshLoader : Castor::Resource::ResourceLoader <Mesh>
 	{
 	public:
-		Mesh * LoadFromFileIO( const String & p_file);
-		Mesh * LoadFromExtFileIO( const String & p_file);
-		bool SaveToFileIO( const String & p_file, Mesh * p_mesh);
+		/**
+		 * Loads a mesh from a file
+		 *@param p_file : [in] The name of the file where to read the mesh from
+		 *@return : The read mesh
+		 */
+		MeshPtr LoadFromFile( const String & p_file);
+		/**
+		 * Loads a mesh from a foreign file (3ds, ase, obj, ply, md2, md3)
+		 *@param p_file : [in] The name of the file where to read the mesh from
+		 *@return : The read mesh
+		 */
+		MeshPtr LoadFromExtFile( const String & p_file);
+		/**
+		 * Saves a mesh into a file
+		 *@param p_file : [in] the file to save the mesh in
+		 *@param p_mesh : [in] the mesh to save
+		 */
+		bool SaveToFile( const String & p_file, MeshPtr p_mesh);
 
-	protected:
-		Mesh * _loadFrom3DS( const String & p_file);
-		Mesh * _loadFromAse( const String & p_file);
-		Mesh * _loadFromObj( const String & p_file);
-		Mesh * _loadFromPly( const String & p_file);
-		Mesh * _loadFromMd2( const String & p_file);
-		Mesh * _loadFromMd3( const String & p_file);
+	private:
+		MeshPtr _loadFrom3DS( const String & p_file);
+		MeshPtr _loadFromAse( const String & p_file);
+		MeshPtr _loadFromObj( const String & p_file);
+		MeshPtr _loadFromPly( const String & p_file);
+		MeshPtr _loadFromMd2( const String & p_file);
+		MeshPtr _loadFromMd3( const String & p_file);
 	};
 	//! The mesh representation
 	/*!
 	A mesh is a collection of submeshes. It has a defined mesh type (torus, custom...) and a name.
-	If an attempt to create a mesh with the same name, you retrieve this one.
+	If an attempt to create a mesh with the same name, you retrieve the existing one.
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class CS3D_API Mesh : General::Resource::Resource
+	class CS3D_API Mesh : Castor::Resource::Resource
 	{
 	public:
 		//! The mesh types enumerator
@@ -76,8 +94,8 @@ namespace Castor3D
 		eTYPE m_meshType;						//!< The mesh type
 		bool m_modified;						//!< Tells whether or not the mesh is modified
 
-		ComboBox * m_box;						//!< The combo box container
-		Sphere * m_sphere;						//!< The sphere container
+		ComboBoxPtr m_box;						//!< The combo box container
+		SpherePtr m_sphere;						//!< The sphere container
 		SubdivisionMode m_preferredSubdivMode;	//!< The mesh's preferred subdivision mode, default is smTriangle, children classes should set it
 
 		SubmeshPtrArray m_submeshes;			//!< The submeshes array
@@ -95,7 +113,7 @@ namespace Castor3D
 		 */
 		~Mesh();
 		/**
-		 * Cleans up all this mesh's submeshes
+		 * Cleans up all submeshes
 		 */
 		void Cleanup();
 		/**
@@ -103,12 +121,12 @@ namespace Castor3D
 		 */
 		void ComputeContainers();
 		/**
-		 * Returns the total number of faces of this submesh
+		 * Returns the total number of faces
 		 *@return The faces number
 		 */
 		size_t GetNbFaces()const;
 		/**
-		 * Returns the total number of vertex of this submesh
+		 * Returns the total number of vertex
 		 *@return The vertex number
 		 */
 		size_t GetNbVertex()const;
@@ -117,19 +135,19 @@ namespace Castor3D
 		*@param p_index : [in] The wanted submesh index
 		*@return The found submesh, NULL if not found
 		*/
-		Submesh * GetSubmesh( unsigned int p_index);
+		SubmeshPtr GetSubmesh( unsigned int p_index);
 		/**
 		* Creates a submesh
 		*@param p_nbSmoothgroups : [in] The wanted number of smoothgroups
 		*@return The created submesh, NULL if not found
 		*/
-		Submesh * CreateSubmesh( unsigned int p_nbSmoothgroups);
+		SubmeshPtr CreateSubmesh( unsigned int p_nbSmoothgroups);
 		/**
-		 * Clones this mesh, with a new name
+		 * Clones the mesh, with a new name
 		 *@param p_name : [in] The name of the cloned mesh
 		 *@return The cloned mesh
 		 */
-		Mesh * Clone( const String & p_name);
+		MeshPtr Clone( const String & p_name);
 		/**
 		 * Initialises the face normals
 		 */
@@ -142,7 +160,7 @@ namespace Castor3D
 		 * Initialises all the normals
 		 *@param p_bReverted : [in] Tells if the normals are reverted
 		 */
-		void SetNormals( bool p_bReverted = false);
+		virtual void SetNormals( bool p_bReverted = false);
 		/**
 		 * Initialises vertex and texture buffers
 		 */
@@ -161,15 +179,17 @@ namespace Castor3D
 
 	public:
 		/**
-		 * Generates the vertex list, used for defined primitives, for custom meshes, this is dummy
+		 * Generates the vertex list, used for defined primitives, for custom meshes, dummy.
 		 */
 		virtual void GeneratePoints(){}
 
 	private:
-		void _setVBsForFaceSmooth( Face * p_face, unsigned int & p_trianglesIndex);
-		void _setVBsForFaceFlat( Face * p_face, unsigned int & p_trianglesIndex);
+		void _setVBsForFaceSmooth( FacePtr p_face, unsigned int & p_trianglesIndex);
+		void _setVBsForFaceFlat( FacePtr p_face, unsigned int & p_trianglesIndex);
 
 	public:
+		/**@name Accessors */
+		//@{
 		inline void SetModified		( bool p_modified)		{m_modified = p_modified;}
 		inline void SetMeshType		( eTYPE p_type)			{m_meshType = p_type;}
 
@@ -178,8 +198,9 @@ namespace Castor3D
 		inline eTYPE		GetMeshType				()const	{ return m_meshType;}
 		inline bool			IsModified				()const	{ return m_modified;}
 		inline String		GetName					()const	{ return m_name;}
-		inline ComboBox *	GetComboBox				()const { return m_box; }
-		inline Sphere *		GetSphere				()const { return m_sphere; }
+		inline ComboBoxPtr	GetComboBox				()const { return m_box; }
+		inline SpherePtr	GetSphere				()const { return m_sphere; }
+		//@}
 	};
 }
 

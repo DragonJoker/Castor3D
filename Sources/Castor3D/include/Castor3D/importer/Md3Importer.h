@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -64,16 +64,16 @@ namespace Castor3D
 		struct Md3Tag
 		{
 			char		m_strName[64];
-			Point3D<float>	m_position;
-			float		m_rotation[3][3];
+			Point3r	m_position;
+			real		m_rotation[3][3];
 		};
 
 		struct Md3Bone
 		{
-			float	m_mins[3];
-			float	m_maxs[3];
-			float	m_position[3];
-			float	m_scale;
+			real	m_mins[3];
+			real	m_maxs[3];
+			real	m_position[3];
+			real	m_scale;
 			char	m_creator[16];
 		};
 
@@ -91,7 +91,7 @@ namespace Castor3D
 
 		struct Md3TexCoord
 		{
-		   float m_textureCoord[2];
+		   real m_textureCoord[2];
 		};
 
 		struct Md3Skin 
@@ -110,10 +110,10 @@ namespace Castor3D
 
 		Md3Tag			*	m_tags;
 		int					m_numOfTags;
-		Mesh			**	m_links;
-		std::map <String, Submesh *> m_mapSubmeshesByName;
+		MeshPtr			*	m_links;
+		SubmeshPtrStrMap	m_mapSubmeshesByName;
 
-		FileIO			*	m_pFile;
+		File			*	m_pFile;
 
 	public:
 		/**
@@ -123,10 +123,10 @@ namespace Castor3D
 
 	private:
 		virtual bool _import();
-		void _readMD3Data( Mesh * p_pMesh);
-		void _convertDataStructures( Mesh * p_pMesh, Md3MeshInfo p_meshHeader);
+		void _readMD3Data( MeshPtr p_pMesh);
+		void _convertDataStructures( MeshPtr p_pMesh, Md3MeshInfo p_meshHeader);
 		bool _loadSkin( const String & p_strSkin);
-		bool _loadShader( Mesh * p_pMesh, const String & p_strShader);
+		bool _loadShader( MeshPtr p_pMesh, const String & p_strShader);
 		void _cleanUp();
 	};
 }

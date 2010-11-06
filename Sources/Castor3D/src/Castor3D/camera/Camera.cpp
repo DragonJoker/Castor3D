@@ -1,56 +1,42 @@
 #include "PrecompiledHeader.h"
 
-#include "camera/Module_Camera.h"
-
-#include "scene/Module_Scene.h"
-#include "geometry/Module_Geometry.h"
-#include "material/Module_Material.h"
-#include "render_system/Module_Render.h"
-#include "main/Module_Main.h"
-#include "shader/Module_Shader.h"
-
 #include "camera/Camera.h"
-#include "camera/Viewport.h"
-#include "scene/SceneNode.h"
-#include "geometry/Module_Geometry.h"
+
+#include "scene/Scene.h"
 #include "main/Root.h"
 #include "render_system/RenderSystem.h"
-#include "render_system/CameraRenderer.h"
 
 using namespace Castor3D;
 
-Camera :: Camera( CameraRenderer * p_renderer, const String & p_name,
-				  int p_ww, int p_wh, ProjectionType p_type)
+Camera :: Camera( const String & p_name,
+				 int p_ww, int p_wh, Viewport::eTYPE p_type)
 	:	m_name( p_name),
-		m_matrix( new float[16]),
-		m_renderer( p_renderer)
+		m_matrix( new real[16])
 {
-	m_renderer->SetTarget( this);
-	m_viewport = new Viewport( Root::GetRenderSystem()->CreateViewportRenderer(),
-							   p_ww, p_wh, p_type);
+	m_viewport = new Viewport( p_ww, p_wh, p_type);
 }
 
 Camera :: ~Camera()
 {
 	delete [] m_matrix;
-	delete m_viewport;
+//	delete m_viewport;
 }
 
-void Camera :: Yaw( float p_angle)
+void Camera :: Yaw( const Angle & p_angle)
 {
-	Quaternion l_tmp( Vector3f( 0.0, 1.0, 0.0), p_angle);
+	Quaternion l_tmp( Point3r( 0.0, 1.0, 0.0), p_angle);
 	m_orientation *= l_tmp;
 }
 
-void Camera :: Pitch( float p_angle)
+void Camera :: Pitch( const Angle & p_angle)
 {
-	Quaternion l_tmp( Vector3f( 1.0, 0.0, 0.0), p_angle);
+	Quaternion l_tmp( Point3r( 1.0, 0.0, 0.0), p_angle);
 	m_orientation *= l_tmp;
 }
 
-void Camera :: Roll( float p_angle)
+void Camera :: Roll( const Angle & p_angle)
 {
-	Quaternion l_tmp( Vector3f( 0.0, 0.0, 1.0), p_angle);
+	Quaternion l_tmp( Point3r( 0.0, 0.0, 1.0), p_angle);
 	m_orientation *= l_tmp;
 }
 
@@ -67,37 +53,35 @@ void Camera :: ResetOrientation()
 
 void Camera :: ResetPosition()
 {
-	m_position = Vector3f( 0, 0, 0);
+	m_position = Point3r( 0, 0, 0);
 }
 
-void Camera :: Translate( const Vector3f & p_t)
+void Camera :: Translate( const Point3r & p_t)
 {
 	m_position += p_t;
 }
 
-void Camera :: Translate( float x, float y, float z)
+void Camera :: Translate( real x, real y, real z)
 {
-	m_position.x += x;
-	m_position.y += y;
-	m_position.z += z;
+	m_position += Point3r( x, y, z);
 }
 
-float * Camera :: GetRotationMatrix()
+real * Camera :: GetRotationMatrix()
 {
 	m_orientation.ToRotationMatrix( m_matrix);
 	return m_matrix;
 }
 
-void Camera :: Apply()
+void Camera :: Apply( eDRAW_TYPE p_displayMode)
 {
-	m_viewport->Apply();
+	m_viewport->Apply( p_displayMode);
 	m_orientation.ToRotationMatrix( m_matrix);
-	m_renderer->ApplyTransformations( m_position, m_matrix);
+	m_pRenderer->ApplyTransformations( m_position, m_matrix);
 }
 
 void Camera :: Remove()
 {
-	m_renderer->RemoveTransformations();
+	m_pRenderer->RemoveTransformations();
 }
 
 void Camera :: Resize( unsigned int p_width, unsigned int p_height)
@@ -108,12 +92,12 @@ void Camera :: Resize( unsigned int p_width, unsigned int p_height)
 	m_viewport->SetWindowHeight( p_height);
 }
 
-bool Camera :: Write( FileIO * p_pFile)const
+bool Camera :: Write( File & p_pFile)const
 {
 	return true;
 }
 
-bool Camera :: Select( Scene * p_scene, SelectionMode p_mode, void ** p_found, int x, int y)
+bool Camera :: Select( ScenePtr p_scene, eSELECTION_MODE p_mode, void ** p_found, int x, int y)
 {
-	return m_renderer->Select( p_scene, p_mode, p_found, x, y);
+	return m_pRenderer->Select( p_scene, p_mode, p_found, x, y);
 }

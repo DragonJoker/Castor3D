@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -25,6 +25,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "../light/Light.h"
 #include "../geometry/mesh/Mesh.h"
 #include "../shader/Module_Shader.h"
+#include "../geometry/basic/Face.h"
+
 namespace Castor3D
 {
 	//! The context used into parsing functions
@@ -59,21 +61,21 @@ namespace Castor3D
 		} eSECTION;
 
 	public:
-		Scene						*	pScene;
-		SceneNode					*	pSceneNode;
-		Geometry					*	pGeometry;
-		Mesh						*	pMesh;
-		Submesh						*	pSubmesh;
-		SmoothingGroup				*	pSmoothingGroup;
-		Light						*	pLight;
-		Camera						*	pCamera;
-		Material					*	pMaterial;
-		Pass						*	pPass;
-		TextureUnit					*	pTextureUnit;
-		ShaderProgram				*	pShaderProgram;
-		UniformVariable				*	pUniformVariable;
-		Face						*	pFace1;
-		Face						*	pFace2;
+		ScenePtr						pScene;
+		SceneNodePtr					pSceneNode;
+		GeometryPtr						pGeometry;
+		MeshPtr							pMesh;
+		SubmeshPtr						pSubmesh;
+		SmoothingGroupPtr				pSmoothingGroup;
+		LightPtr						pLight;
+		CameraPtr						pCamera;
+		MaterialPtr						pMaterial;
+		PassPtr							pPass;
+		TextureUnitPtr					pTextureUnit;
+		ShaderProgramPtr				pShaderProgram;
+		UniformVariablePtr				pUniformVariable;
+		FacePtr							pFace1;
+		FacePtr							pFace2;
 
 		Light::eTYPE					eLightType;
 		Mesh::eTYPE						eMeshType;
@@ -81,7 +83,7 @@ namespace Castor3D
 		String							strName;
 		String							strName2;
 
-		General::Utils::FileStream	*	pFile;
+		Castor::Utils::File	*	pFile;
 
 		unsigned long long				ui64Line;
 
@@ -91,38 +93,11 @@ namespace Castor3D
 		/**
 		 * Constructor
 		 */
-		SceneFileContext()
-		{
-			Initialise();
-		}
+		SceneFileContext();
 		/**
 		 * Initialises all variables
 		 */
-		void Initialise()
-		{
-			pScene				= NULL;
-			pSceneNode			= NULL;
-			pGeometry			= NULL;
-			pMesh				= NULL;
-			pSubmesh			= NULL;
-			pSmoothingGroup		= NULL;
-			pLight				= NULL;
-			pCamera				= NULL;
-			pMaterial			= NULL;
-			pPass				= NULL;
-			pTextureUnit		= NULL;
-			pShaderProgram		= NULL;
-			pUniformVariable	= NULL;
-			pFace1				= NULL;
-			pFace2				= NULL;
-
-			strName.clear();
-			strName2.clear();
-			
-			pFile				= NULL;
-
-			ui64Line			= 0;
-		}
+		void Initialise();
 	};
 	//! ESCN file parser
 	/*!
@@ -147,7 +122,7 @@ namespace Castor3D
 		AttributeParserMap m_mapShaderParsers;
 		AttributeParserMap m_mapShaderVariableParsers;
 
-		SceneFileContext * m_pContext;
+		SceneFileContextPtr m_pContext;
 
 		String m_strSceneFilePath;
 
@@ -169,91 +144,32 @@ namespace Castor3D
 		/**
 		 * Logs an error in the log file
 		 */
-		static void ParseError( const String & p_strError, SceneFileContext * p_pContext);
+		static void ParseError( const String & p_strError, SceneFileContextPtr p_pContext);
 		/**
 		 * Logs a warning in the log file
 		 */
-		static void ParseWarning( const String & p_strWarning, SceneFileContext * p_pContext);
+		static void ParseWarning( const String & p_strWarning, SceneFileContextPtr p_pContext);
 		/**
-		 * Parses a Point2D
+		 * Parses a Point
 		 */
-		template <typename T>
-		static bool ParseVector2( String & p_strParams, Point2D<T> & p_vResult, SceneFileContext * p_pContext)
+		template <typename T, size_t Count>
+		static bool ParseVector( String & p_strParams, Point<T, Count> & p_vResult, SceneFileContextPtr p_pContext)
 		{
 			bool l_bReturn = false;
 
 			StringArray l_arrayValues = p_strParams.Split( " ");
 
-			if (l_arrayValues.size() >= 2)
+			if (l_arrayValues.size() >= Count)
 			{
-				if (l_arrayValues.size() > 2)
+				if (l_arrayValues.size() > Count)
 				{
 					PARSING_WARNING( "More arguments than needed");
 				}
 
-				p_vResult.x = T( atof( l_arrayValues[0].c_str()));
-				p_vResult.y = T( atof( l_arrayValues[1].c_str()));
-
-				l_bReturn = true;
-			}
-			else
-			{
-				PARSING_ERROR( "Wrong number of args");
-			}
-
-			return l_bReturn;
-		}
-		/**
-		 * Parses a Point3D
-		 */
-		template <typename T>
-		static bool ParseVector3( String & p_strParams, Point3D<T> & p_vResult, SceneFileContext * p_pContext)
-		{
-			bool l_bReturn = false;
-
-			StringArray l_arrayValues = p_strParams.Split( " ");
-
-			if (l_arrayValues.size() >= 3)
-			{
-				if (l_arrayValues.size() > 3)
+				for (size_t i = 0 ; i < Count ; i++)
 				{
-					PARSING_WARNING( "More arguments than needed");
+					p_vResult[i] = T( atof( l_arrayValues[i].c_str()));
 				}
-
-				p_vResult.x = T( atof( l_arrayValues[0].c_str()));
-				p_vResult.y = T( atof( l_arrayValues[1].c_str()));
-				p_vResult.z = T( atof( l_arrayValues[2].c_str()));
-
-				l_bReturn = true;
-			}
-			else
-			{
-				PARSING_ERROR( "Wrong number of args");
-			}
-
-			return l_bReturn;
-		}
-		/**
-		 * Parses a Point4D
-		 */
-		template <typename T>
-		static bool ParseVector4( String & p_strParams, Point4D<T> & p_vResult, SceneFileContext * p_pContext)
-		{
-			bool l_bReturn = false;
-
-			StringArray l_arrayValues = p_strParams.Split( " ");
-
-			if (l_arrayValues.size() >= 4)
-			{
-				if (l_arrayValues.size() > 4)
-				{
-					PARSING_WARNING( "More arguments than needed");
-				}
-
-				p_vResult.x = T( atof( l_arrayValues[0].c_str()));
-				p_vResult.y = T( atof( l_arrayValues[1].c_str()));
-				p_vResult.z = T( atof( l_arrayValues[2].c_str()));
-				p_vResult.w = T( atof( l_arrayValues[3].c_str()));
 
 				l_bReturn = true;
 			}

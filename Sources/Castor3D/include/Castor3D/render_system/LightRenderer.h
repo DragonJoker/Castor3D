@@ -75,7 +75,7 @@ namespace Castor3D
 		/**
 		 * Applies rotation
 		 */
-		virtual void ApplyOrientation( float * p_matrix) = 0;
+		virtual void ApplyOrientation( real * p_matrix) = 0;
 		/**
 		 * Applies constant attenuation
 		 */

@@ -12,8 +12,8 @@ private:
 	wxButton * m_deletePass;
 	wxPanel * m_passesPanel;
 
-	Castor3D::Material * m_material;
-	Castor3D::Pass * m_selectedPass;
+	Castor3D::MaterialPtr m_material;
+	Castor3D::PassPtr m_selectedPass;
 	int m_selectedPassIndex;
 	CSPassPanel * m_selectedPassPanel;
 

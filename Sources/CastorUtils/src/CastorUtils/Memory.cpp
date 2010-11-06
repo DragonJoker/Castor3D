@@ -1,12 +1,12 @@
-#include <fstream>
-#include <time.h>
+#include "PrecompiledHeader.h"
 
 #include "Memory.h"
 
 #undef new
 #undef delete
 
-using namespace General::Utils;
+using namespace Castor;
+using namespace Castor::Utils;
 
 unsigned int MemoryManager :: sm_initialised = 0;
 

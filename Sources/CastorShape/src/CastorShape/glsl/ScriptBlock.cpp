@@ -21,7 +21,7 @@ using namespace Castor3D;
 									+ ToString( m_lineNumBegin )									\
 									+ " ] -> " + p_desc );
 
-#define COMPILE_ERROR_IN_BLOCK( p_desc , p_block ) m_compiler->_error();GENLIB_EXCEPTION( "Compiler Error : [" + m_compiler->_getScriptFileName()+" @ L# "+ ToString( p_block->m_lineNumBegin ) + " ] -> " + p_desc );
+#define COMPILE_ERROR_IN_BLOCK( p_desc , p_block ) m_compiler->_error();CASTOR_EXCEPTION( "Compiler Error : [" + m_compiler->_getScriptFileName()+" @ L# "+ ToString( p_block->m_lineNumBegin ) + " ] -> " + p_desc );
 #define COMPILE_WARNING_IN_BLOCK( p_desc , p_block )  m_compiler->_warning();Log::LogMessage( "Compiler Warning [ "+m_compiler->_getScriptFileName()+" @ L# "+ ToString( p_block->m_lineNumBegin ) + " ] -> " + p_desc );
 
 ScriptBlock :: ScriptBlock()
@@ -284,8 +284,8 @@ bool ScriptBlock::_parseNumeral()
 	VERBOSE_COMPILATOR( "_parseNumeral");
 	bool l_real = false;
 	int l_intValue = 0;
-	float l_realValue = 0.0;
-	float l_depth=0.1;
+	real l_realValue = 0.0f;
+	real l_depth=0.1f;
 
 //	m_compiledScript = m_compiler->CreateScriptNode();
 	while( ! m_compiler->_eof() )
@@ -302,7 +302,7 @@ bool ScriptBlock::_parseNumeral()
 				else
 				{
 					l_realValue = l_realValue + l_depth * ( l_currentChar - '0');
-					l_depth *= 0.1;
+					l_depth *= 0.1f;
 				}
 			}
 			else
@@ -865,7 +865,7 @@ void ScriptBlock::_checkKeywords()
 	}
 	else if (m_contents.size() == 5)
 	{
-			if (m_contents == "float")				{m_variableType = VariableTypeManager::Get( EMVT_REAL);m_type = BT_VARIABLE_TYPE;}
+			if (m_contents == "real")				{m_variableType = VariableTypeManager::Get( EMVT_REAL);m_type = BT_VARIABLE_TYPE;}
 		else if (m_contents == "bvec2")				{m_variableType = VariableTypeManager::Get( EMVT_VEC2B);m_type = BT_VARIABLE_TYPE;}
 		else if (m_contents == "bvec3")				{m_variableType = VariableTypeManager::Get( EMVT_VEC3B);m_type = BT_VARIABLE_TYPE;}
 		else if (m_contents == "bvec4")				{m_variableType = VariableTypeManager::Get( EMVT_VEC4B);m_type = BT_VARIABLE_TYPE;}

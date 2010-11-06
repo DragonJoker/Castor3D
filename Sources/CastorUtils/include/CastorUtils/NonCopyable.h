@@ -11,14 +11,14 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___NON_COPYABLE_H___
-#define ___NON_COPYABLE_H___
+#ifndef ___Castor_NonCopyable___
+#define ___Castor_NonCopyable___
 
-namespace General
+namespace Castor
 { namespace Theory
 {
 	//! The noncopyable representation
@@ -49,10 +49,10 @@ namespace General
 	};
 }
 }
-//! A define to General::Theory::noncopyable class
-#define d_noncopyable	private General::Theory::noncopyable
-//! A define to General::Theory::noncopyable class
-#define d_unique		private General::Theory::noncopyable
+//! A define to Castor::Theory::noncopyable class
+#define d_noncopyable	private Castor::Theory::noncopyable
+//! A define to Castor::Theory::noncopyable class
+#define d_unique		private Castor::Theory::noncopyable
 #define d_debug_check_noncopyable
 
 #endif

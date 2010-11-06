@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -74,8 +74,8 @@ namespace Castor3D
 		};
 
 	private:
-		FileIO * m_pFile;
-		Point2D<float> * m_texVerts;
+		File * m_pFile;
+		Point2r * m_texVerts;
 		int m_iNumOfMaterials;
 
 	public:
@@ -89,15 +89,15 @@ namespace Castor3D
 		int _getString( Char * p_pBuffer);
 		int _getString( String & p_strString);
 		void _readChunk( SMaxChunk * p_chunk);
-		void _processNextChunk( Mesh * p_pMesh, SMaxChunk * p_chunk);
-		void _processNextObjectChunk( Mesh * p_pMesh, Submesh * p_pSubmesh, SMaxChunk * p_chunk);
+		void _processNextChunk( MeshPtr p_pMesh, SMaxChunk * p_chunk);
+		void _processNextObjectChunk( MeshPtr p_pMesh, SubmeshPtr p_pSubmesh, SMaxChunk * p_chunk);
 		void _processNextMaterialChunk( SMaxChunk * p_chunk);
 		void _processMaterialMapChunk( String & p_strName, SMaxChunk * p_chunk);
 		void _readColorChunk( Colour & p_colour, SMaxChunk * p_chunk);
-		void _readVertices( Submesh * p_pSubmesh, SMaxChunk * p_chunk);
-		void _readVertexIndices( Submesh * p_pSubmesh, SMaxChunk * p_chunk);
-		void _readUVCoordinates( Submesh * p_pSubmesh, SMaxChunk * p_chunk);
-		void _readObjectMaterial( Submesh * p_pSubmesh, SMaxChunk * p_chunk);
+		void _readVertices( SubmeshPtr p_pSubmesh, SMaxChunk * p_chunk);
+		void _readVertexIndices( SubmeshPtr p_pSubmesh, SMaxChunk * p_chunk);
+		void _readUVCoordinates( SubmeshPtr p_pSubmesh, SMaxChunk * p_chunk);
+		void _readObjectMaterial( SubmeshPtr p_pSubmesh, SMaxChunk * p_chunk);
 		void _cleanUp();
 	};
 }

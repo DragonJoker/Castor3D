@@ -12,9 +12,11 @@
 #include "geometry/mesh/Mesh.h"
 #include "geometry/mesh/Submesh.h"
 #include "geometry/primitives/Geometry.h"
+#include "geometry/basic/Face.h"
 #include "scene/Scene.h"
+#include "scene/SceneNode.h"
 #include "scene/SceneManager.h"
-#include "Log.h"
+
 
 using namespace Castor3D;
 
@@ -40,21 +42,21 @@ Md3Importer :: Md3Importer()
 
 bool Md3Importer :: _import()
 {
-	m_pFile = new FileIO( m_fileName, FileIO::eRead);
+	m_pFile = new File( m_fileName, File::eRead);
 
 	size_t l_uiSlashIndex = 0;
 
-	if (m_fileName.find_last_of( C3D_T( "\\")) != String::npos)
+	if (m_fileName.find_last_of( CU_T( "\\")) != String::npos)
 	{
-		l_uiSlashIndex = m_fileName.find_last_of( C3D_T( "\\")) + 1;
+		l_uiSlashIndex = m_fileName.find_last_of( CU_T( "\\")) + 1;
 	}
 
-	if (m_fileName.find_last_of( C3D_T( "/")) != String::npos)
+	if (m_fileName.find_last_of( CU_T( "/")) != String::npos)
 	{
-		l_uiSlashIndex = max( l_uiSlashIndex, m_fileName.find_last_of( C3D_T( "/")) + 1);
+		l_uiSlashIndex = std::max( l_uiSlashIndex, m_fileName.find_last_of( CU_T( "/")) + 1);
 	}
 
-	size_t l_uiDotIndex = m_fileName.find_last_of( C3D_T( "."));
+	size_t l_uiDotIndex = m_fileName.find_last_of( CU_T( "."));
 
 	UIntArray l_faces;
 	FloatArray l_sizes;
@@ -62,16 +64,16 @@ bool Md3Importer :: _import()
 	String l_meshName = m_fileName.substr( l_uiSlashIndex, l_uiDotIndex - l_uiSlashIndex);
 	String l_materialName = m_fileName.substr( l_uiSlashIndex, l_uiDotIndex - l_uiSlashIndex);
 
-	Mesh * l_pMesh = NULL;
+	MeshPtr l_pMesh;
 
-	if (MeshManager::GetSingletonPtr()->HasElement( l_meshName))
+	if (MeshManager::HasElement( l_meshName))
 	{
-		l_pMesh = MeshManager::GetSingletonPtr()->GetElementByName( l_meshName);
+		l_pMesh.reset( MeshManager::GetElementByName( l_meshName));
 	}
 	else
 	{
-		l_pMesh = MeshManager::GetSingletonPtr()->CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom);
-		Log::LogMessage( C3D_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
+		l_pMesh.reset( MeshManager::CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom));
+		Log::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
 	}
 
 	m_pFile->Read<Md3Header>( m_header);
@@ -88,12 +90,12 @@ bool Md3Importer :: _import()
 	_cleanUp();
 
 	m_pScene = SceneManager::GetSingleton().GetElementByName( "MainScene");
-	SceneNode * l_pNode = m_pScene->CreateSceneNode( l_name);
+	SceneNodePtr l_pNode = m_pScene->CreateSceneNode( l_name);
 
-	Geometry * l_pGeometry = new Geometry( l_pMesh, l_pNode, l_name);
-	Log::LogMessage( C3D_T( "PlyImporter::_import - Geometry %s created"), l_name.c_str());
+	GeometryPtr l_pGeometry = new Geometry( l_pMesh, l_pNode, l_name);
+	Log::LogMessage( CU_T( "PlyImporter::_import - Geometry %s created"), l_name.c_str());
 
-	m_geometries.insert( GeometryStrMap::value_type( l_name, l_pGeometry));
+	m_geometries.insert( GeometryPtrStrMap::value_type( l_name, l_pGeometry));
 
 	_cleanUp();
 
@@ -102,7 +104,7 @@ bool Md3Importer :: _import()
 	return true;
 }
 
-void Md3Importer :: _readMD3Data( Mesh * p_pMesh)
+void Md3Importer :: _readMD3Data( MeshPtr p_pMesh)
 {
 	int i = 0;
 	m_bones = new Md3Bone[m_header.m_numFrames];
@@ -113,11 +115,11 @@ void Md3Importer :: _readMD3Data( Mesh * p_pMesh)
 	m_pFile->ReadArray<Md3Tag>( m_tags, m_header.m_numFrames * m_header.m_numTags);
 	m_numOfTags = m_header.m_numTags;
 
-	m_links = (Mesh **) malloc( sizeof( Mesh) * m_header.m_numTags);
+	m_links = (MeshPtr *) malloc( sizeof( Mesh) * m_header.m_numTags);
 
 	for (i = 0 ; i < m_header.m_numTags ; i++)
 	{
-		m_links[i] = NULL;
+		m_links[i].reset();
 	}
 
 	long l_meshOffset = m_pFile->Tell();
@@ -169,31 +171,31 @@ void Md3Importer :: _readMD3Data( Mesh * p_pMesh)
 	p_pMesh->SetNormals();
 }
 
-void Md3Importer :: _convertDataStructures( Mesh * p_pMesh, Md3MeshInfo p_meshHeader)
+void Md3Importer :: _convertDataStructures( MeshPtr p_pMesh, Md3MeshInfo p_meshHeader)
 {
-	Submesh * l_pSubmesh = p_pMesh->CreateSubmesh( 1);
-	m_mapSubmeshesByName.insert( std::map <String, Submesh *>::value_type( p_meshHeader.m_strName, l_pSubmesh));
+	SubmeshPtr l_pSubmesh = p_pMesh->CreateSubmesh( 1);
+	m_mapSubmeshesByName.insert( SubmeshPtrStrMap::value_type( p_meshHeader.m_strName, l_pSubmesh));
 
 	for (int i = 0 ; i < p_meshHeader.m_numVertices * p_meshHeader.m_numMeshFrames ; i++)
 	{
 		l_pSubmesh->AddVertex( m_vertices[i].m_vertex[0] / 64.0f, m_vertices[i].m_vertex[1] / 64.0f, m_vertices[i].m_vertex[2] / 64.0f);
 	}
 
-	std::vector < Point2D<float> > l_texVerts;
+	Point2rArray l_texVerts;
 
 	for (int i = 0 ; i < p_meshHeader.m_numVertices ; i++)
 	{
-		l_texVerts.push_back( Point2D<float>( m_texCoords[i].m_textureCoord[0], -m_texCoords[i].m_textureCoord[1]));
+		l_texVerts.push_back( Point2r( 2, m_texCoords[i].m_textureCoord[0], -m_texCoords[i].m_textureCoord[1]));
 	}
 
-	Face * l_pFace;
+	FacePtr l_pFace;
 
 	for (int i = 0 ; i < p_meshHeader.m_numTriangles ; i++)
 	{
 		l_pFace = l_pSubmesh->AddFace( m_triangles[i].m_vertexIndices[0], m_triangles[i].m_vertexIndices[1], m_triangles[i].m_vertexIndices[2], 0);
-		SetTexCoordV1( l_pFace, l_texVerts[m_triangles[i].m_vertexIndices[0]].x, l_texVerts[m_triangles[i].m_vertexIndices[0]].y);
-		SetTexCoordV2( l_pFace, l_texVerts[m_triangles[i].m_vertexIndices[1]].x, l_texVerts[m_triangles[i].m_vertexIndices[1]].y);
-		SetTexCoordV3( l_pFace, l_texVerts[m_triangles[i].m_vertexIndices[2]].x, l_texVerts[m_triangles[i].m_vertexIndices[2]].y);
+		l_pFace->SetTexCoordV1( l_texVerts[m_triangles[i].m_vertexIndices[0]][0], l_texVerts[m_triangles[i].m_vertexIndices[0]][1]);
+		l_pFace->SetTexCoordV2( l_texVerts[m_triangles[i].m_vertexIndices[1]][0], l_texVerts[m_triangles[i].m_vertexIndices[1]][1]);
+		l_pFace->SetTexCoordV3( l_texVerts[m_triangles[i].m_vertexIndices[2]][0], l_texVerts[m_triangles[i].m_vertexIndices[2]][1]);
 	}
 }
 
@@ -201,9 +203,9 @@ bool Md3Importer :: _loadSkin( const String & p_strSkin)
 {
 	bool l_bReturn = false;
 
-	if (FileBase::FileExists( p_strSkin))
+	if (File::FileExists( p_strSkin))
 	{
-		FileIO l_fileIO( p_strSkin, FileIO::eRead);
+		File l_fileIO( p_strSkin, File::eRead);
 		String l_strLine, l_strSection, l_strImage;
 
 		while (l_fileIO.IsOk())
@@ -221,33 +223,33 @@ bool Md3Importer :: _loadSkin( const String & p_strSkin)
 				l_strImage = l_strLine.substr( l_strLine.find_last_of( ',') + 1);
 				l_strImage = l_strImage.substr( l_strImage.find_last_of( '/') + 1);
 
-				Material * l_material = MaterialManager::GetSingletonPtr()->CreateMaterial( l_strSection);
-				Pass * l_pass = l_material->GetPass( 0);
+				MaterialPtr l_material = MaterialManager::CreateMaterial( l_strSection);
+				PassPtr l_pass = l_material->GetPass( 0);
 				l_pass->SetAmbient( 0.0f, 0.0f, 0.0f, 1.0f);
 				l_pass->SetEmissive( 0.5f, 0.5f, 0.5f, 1.0f);
 
 				if ( ! l_strImage.empty())
 				{
-					TextureUnit * l_unit = new TextureUnit( RenderSystem::GetSingletonPtr()->CreateTextureRenderer());
+					TextureUnitPtr l_unit = new TextureUnit();
 
-					if (FileBase::FileExists( l_strImage))
+					if (File::FileExists( l_strImage))
 					{
 						l_unit->SetTexture2D( l_strImage);
 						l_pass->AddTextureUnit( l_unit);
 					}
-					else if (FileBase::FileExists( l_fileIO.GetFilePath() + "/" + l_strImage))
+					else if (File::FileExists( l_fileIO.GetFilePath() + "/" + l_strImage))
 					{
 						l_unit->SetTexture2D( l_fileIO.GetFilePath() + "/" + l_strImage);
 						l_pass->AddTextureUnit( l_unit);
 					}
 					else
 					{
-						delete l_unit;
+//						delete l_unit;
 					}
 				}
 
 				m_mapSubmeshesByName.find( l_strSection)->second->SetMaterial( l_material);
-				MaterialManager::GetSingletonPtr()->SetToInitialise( l_material);
+				MaterialManager::SetToInitialise( l_material);
 			}
 		}
 
@@ -257,13 +259,13 @@ bool Md3Importer :: _loadSkin( const String & p_strSkin)
 	return l_bReturn;
 }
 
-bool Md3Importer :: _loadShader( Mesh * p_pMesh, const String & p_strShader)
+bool Md3Importer :: _loadShader( MeshPtr p_pMesh, const String & p_strShader)
 {
 	bool l_bReturn = false;
 
-	if (FileBase::FileExists( p_strShader))
+	if (File::FileExists( p_strShader))
 	{
-		FileIO l_fileIO( p_strShader, FileIO::eRead);
+		File l_fileIO( p_strShader, File::eRead);
 		String l_strName = l_fileIO.GetFileName().substr( 0, l_fileIO.GetFileName().find_last_of( '.'));
 		String l_strLine;
 		size_t l_uiIndex = 0;
@@ -276,34 +278,34 @@ bool Md3Importer :: _loadShader( Mesh * p_pMesh, const String & p_strShader)
 			l_strMatName = l_strName;
 			l_strMatName << "_" << l_uiIndex;
 
-			Material * l_material = MaterialManager::GetSingletonPtr()->CreateMaterial( l_strMatName);
-			Pass * l_pass = l_material->GetPass( 0);
+			MaterialPtr l_material = MaterialManager::CreateMaterial( l_strMatName);
+			PassPtr l_pass = l_material->GetPass( 0);
 			l_pass->SetAmbient( 0.0f, 0.0f, 0.0f, 1.0f);
 			l_pass->SetEmissive( 0.5f, 0.5f, 0.5f, 1.0f);
 			l_pass->SetDoubleFace( true);
 
 			if ( ! l_strLine.empty())
 			{
-				TextureUnit * l_unit = new TextureUnit( RenderSystem::GetSingletonPtr()->CreateTextureRenderer());
+				TextureUnitPtr l_unit = new TextureUnit();
 
-				if (FileBase::FileExists( l_strLine))
+				if (File::FileExists( l_strLine))
 				{
 					l_unit->SetTexture2D( l_strLine);
 					l_pass->AddTextureUnit( l_unit);
 				}
-				else if (FileBase::FileExists( l_fileIO.GetFilePath() + "/" + l_strLine))
+				else if (File::FileExists( l_fileIO.GetFilePath() + "/" + l_strLine))
 				{
 					l_unit->SetTexture2D( l_fileIO.GetFilePath() + "/" + l_strLine);
 					l_pass->AddTextureUnit( l_unit);
 				}
 				else
 				{
-					delete l_unit;
+//					delete l_unit;
 				}
 			}
 
 			p_pMesh->GetSubmesh( l_uiIndex)->SetMaterial( l_material);
-			MaterialManager::GetSingletonPtr()->SetToInitialise( l_material);
+			MaterialManager::SetToInitialise( l_material);
 
 			l_uiIndex++;
 		}

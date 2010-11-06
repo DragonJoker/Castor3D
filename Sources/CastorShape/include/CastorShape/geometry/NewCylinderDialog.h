@@ -11,8 +11,8 @@ public:
 	CSNewCylinderDialog( wxWindow * parent, wxWindowID p_id);
 	~CSNewCylinderDialog();
 
-	float GetCylinderRadius()const;
-	float GetCylinderHeight()const;
+	real GetCylinderRadius()const;
+	real GetCylinderHeight()const;
 	int GetFacesNumber()const;
 	String	GetFacesNumberStr()const;
 };

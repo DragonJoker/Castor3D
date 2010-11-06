@@ -6,12 +6,16 @@
 #include "MainFrame.h"
 #include "TextPanel.h"
 
+#ifdef __WXMSW__
+#	include <wx/msw/msvcrt.h>      // redefines the new() operator 
+#endif
+
 using namespace Castor3D;
 using namespace CastorViewer;
 
 DECLARE_APP( CastorViewerApp)
 
-ShaderDialog :: ShaderDialog( wxWindow * p_pParent, Pass * p_pPass, const wxPoint & p_ptPosition, const wxSize p_ptSize)
+ShaderDialog :: ShaderDialog( wxWindow * p_pParent, PassPtr p_pPass, const wxPoint & p_ptPosition, const wxSize p_ptSize)
 	:	wxDialog( p_pParent, wxID_ANY, "Shaders", p_ptPosition, p_ptSize),
 		m_pPass( p_pPass),
 		m_bCompiled( true),
@@ -20,9 +24,9 @@ ShaderDialog :: ShaderDialog( wxWindow * p_pParent, Pass * p_pPass, const wxPoin
 {
 	wxSize l_size = GetClientSize();
 
-	m_vertexFolder = new wxButton( this, eVertex, C3D_T( "Vertex"), wxPoint( 10, 10), wxSize( 65, 20), wxBORDER_SIMPLE);
-	m_fragmentFolder = new wxButton( this, eFragment, C3D_T( "Fragment"), wxPoint( 10, 30), wxSize( 65, 20), wxBORDER_SIMPLE);
-	m_geometryFolder = new wxButton( this, eGeometry, C3D_T( "Geometry"), wxPoint( 10, 50), wxSize( 65, 20), wxBORDER_SIMPLE);
+	m_vertexFolder = new wxButton( this, eVertex, CU_T( "Vertex"), wxPoint( 10, 10), wxSize( 65, 20), wxBORDER_SIMPLE);
+	m_fragmentFolder = new wxButton( this, eFragment, CU_T( "Fragment"), wxPoint( 10, 30), wxSize( 65, 20), wxBORDER_SIMPLE);
+	m_geometryFolder = new wxButton( this, eGeometry, CU_T( "Geometry"), wxPoint( 10, 50), wxSize( 65, 20), wxBORDER_SIMPLE);
 
 	m_pEditors = new wxNotebook( this, eEditors, wxPoint( 85, 0), wxSize( l_size.x - 95, l_size.y - 60), wxNB_FIXEDWIDTH);
 
@@ -47,15 +51,15 @@ ShaderDialog :: ShaderDialog( wxWindow * p_pParent, Pass * p_pPass, const wxPoin
 	m_pGeometryEditor = new TextPanel( l_pTmpPanel, wxID_ANY, wxPoint( 0, 0), l_pTmpPanel->GetClientSize(),
 									   wxTE_MULTILINE | wxTE_RICH | wxTE_PROCESS_TAB, true);
 
-	if (m_pPass->GetShader() != NULL)
+	if ( ! m_pPass->GetShader().null())
 	{
 		m_bOwnShader = false;
 		m_shaderProgram = m_pPass->GetShader();
 	}
 
-	if (m_shaderProgram == NULL)
+	if (m_shaderProgram.null())
 	{
-		m_shaderProgram = RenderSystem::GetSingletonPtr()->CreateShaderProgram( "", "", "");
+		m_shaderProgram = ShaderManager::GetSingletonPtr()->CreateShaderProgramFromFiles( "", "", "");
 	}
 	else
 	{
@@ -74,24 +78,24 @@ ShaderDialog :: ShaderDialog( wxWindow * p_pParent, Pass * p_pPass, const wxPoin
 	
 	wxArrayString l_arrayChoices;
 
-	if (m_shaderProgram != NULL)
+	if ( ! m_shaderProgram.null())
 	{
-		const std::map <String, UniformVariable *> l_mapVariables = m_shaderProgram->GetUniformVariables();
+		const C3DMap( String, UniformVariablePtr) l_mapVariables = m_shaderProgram->GetUniformVariables();
 		int l_iCount = 0;
 
-		for (std::map <String, UniformVariable *>::const_iterator l_it = l_mapVariables.begin() ; l_it != l_mapVariables.end() ; ++l_it)
+		for (C3DMap( String, UniformVariablePtr)::const_iterator l_it = l_mapVariables.begin() ; l_it != l_mapVariables.end() ; ++l_it)
 		{
 			l_arrayChoices.push_back( l_it->first);
-			m_mapUniformVariables.insert( std::map <int, UniformVariable *>::value_type( l_iCount++, l_it->second));
+			m_mapUniformVariables.insert( C3DMap( int, UniformVariablePtr)::value_type( l_iCount++, l_it->second));
 		}
 	}
 
-	l_arrayChoices.push_back( C3D_T( "New..."));
+	l_arrayChoices.push_back( CU_T( "New..."));
 	m_pListUniformVariables = new wxListBox( this, eGrid, wxPoint( 85, l_size.y - 60), wxSize( l_size.x - 95, 60), l_arrayChoices, wxBORDER_SIMPLE | wxWANTS_CHARS);
 
-	m_loadShader = new wxButton( this, eLoadShader, C3D_T( "Appliquer"), wxPoint( 10, l_size.y - 75), wxSize( 65, 20), wxBORDER_SIMPLE);
-	m_pButtonOk = new wxButton( this, eOK, C3D_T( "OK"), wxPoint( 10, l_size.y - 50), wxSize( 65, 20), wxBORDER_SIMPLE);
-	m_pButtonCancel = new wxButton( this, eCancel, C3D_T( "Annuler"), wxPoint( 10, l_size.y - 25), wxSize( 65, 20), wxBORDER_SIMPLE);
+	m_loadShader = new wxButton( this, eLoadShader, CU_T( "Appliquer"), wxPoint( 10, l_size.y - 75), wxSize( 65, 20), wxBORDER_SIMPLE);
+	m_pButtonOk = new wxButton( this, eOK, CU_T( "OK"), wxPoint( 10, l_size.y - 50), wxSize( 65, 20), wxBORDER_SIMPLE);
+	m_pButtonCancel = new wxButton( this, eCancel, CU_T( "Annuler"), wxPoint( 10, l_size.y - 25), wxSize( 65, 20), wxBORDER_SIMPLE);
 }
 
 ShaderDialog :: ~ShaderDialog()
@@ -100,11 +104,11 @@ ShaderDialog :: ~ShaderDialog()
 
 void ShaderDialog :: _cleanup()
 {
-	if (m_bOwnShader && m_shaderProgram != NULL)
+	if (m_bOwnShader && ! m_shaderProgram.null())
 	{
-		m_pPass->SetShader( NULL);
+		m_pPass->SetShader( ShaderProgramPtr());
 		ShaderManager::GetSingletonPtr()->RemoveProgram( m_shaderProgram);
-		m_shaderProgram = NULL;
+		m_shaderProgram.reset();
 	}
 }
 
@@ -112,7 +116,7 @@ void ShaderDialog :: _loadShader()
 {
 	if (m_strVertexShader.empty())
 	{
-		wxMessageBox( C3D_T( "Remplissez le nom du vertex shader"), C3D_T( "ERROR"));
+		wxMessageBox( CU_T( "Remplissez le nom du vertex shader"), CU_T( "ERROR"));
 		return;
 	}
 
@@ -120,7 +124,7 @@ void ShaderDialog :: _loadShader()
 
 	if (m_strFragmentShader.empty())
 	{
-		wxMessageBox( C3D_T( "Remplissez le nom du fragment shader"), C3D_T( "ERROR"));
+		wxMessageBox( CU_T( "Remplissez le nom du fragment shader"), CU_T( "ERROR"));
 		return;
 	}
 
@@ -131,26 +135,26 @@ void ShaderDialog :: _loadShader()
 		m_pGeometryEditor->SaveFile( m_strGeometryShader, NULL);
 	}
 
-	if (m_shaderProgram == NULL)
+	if (m_shaderProgram.null())
 	{
 		if (m_strGeometryShader.empty())
 		{
-			m_shaderProgram = RenderSystem::GetSingletonPtr()->CreateShaderProgram( m_strVertexShader.c_str(), m_strFragmentShader.c_str(), C3DEmptyString);
+			m_shaderProgram = ShaderManager::GetSingletonPtr()->CreateShaderProgramFromFiles( m_strVertexShader.c_str(), m_strFragmentShader.c_str(), C3DEmptyString);
 		}
 		else
 		{
-			m_shaderProgram = RenderSystem::GetSingletonPtr()->CreateShaderProgram( m_strVertexShader.c_str(), m_strFragmentShader.c_str(), m_strGeometryShader.c_str());
+			m_shaderProgram = ShaderManager::GetSingletonPtr()->CreateShaderProgramFromFiles( m_strVertexShader.c_str(), m_strFragmentShader.c_str(), m_strGeometryShader.c_str());
 		}
 	}
 	else
 	{
-		m_shaderProgram->SetVertexFileIO( m_strVertexShader.c_str());
-		m_shaderProgram->SetFragmentFileIO( m_strFragmentShader.c_str());
+		m_shaderProgram->SetVertexFile( m_strVertexShader.c_str());
+		m_shaderProgram->SetFragmentFile( m_strFragmentShader.c_str());
 
 		if ( ! m_strGeometryShader.empty())
 		{
 			m_shaderProgram->UsesGeometryShader( true);
-			m_shaderProgram->SetGeometryFileIO( m_strGeometryShader.c_str());
+			m_shaderProgram->SetGeometryFile( m_strGeometryShader.c_str());
 		}
 		else
 		{
@@ -158,7 +162,7 @@ void ShaderDialog :: _loadShader()
 		}
 	}
 
-	for (std::map <int, UniformVariable *>::iterator l_it = m_mapUniformVariables.begin() ; l_it != m_mapUniformVariables.end() ; ++l_it)
+	for (C3DMap( int, UniformVariablePtr)::iterator l_it = m_mapUniformVariables.begin() ; l_it != m_mapUniformVariables.end() ; ++l_it)
 	{
 		m_shaderProgram->AddUniformVariable( l_it->second);
 	}
@@ -181,7 +185,7 @@ END_EVENT_TABLE()
 
 void ShaderDialog :: _onVertexFolder( wxCommandEvent & event)
 {
-	wxFileDialog l_dialog( this, C3D_T( "Select a glsl vertex shader file"), wxEmptyString, wxEmptyString, C3D_T( ""));
+	wxFileDialog l_dialog( this, CU_T( "Select a glsl vertex shader file"), wxEmptyString, wxEmptyString, CU_T( ""));
 
 	if (l_dialog.ShowModal() == wxID_OK)
 	{
@@ -193,7 +197,7 @@ void ShaderDialog :: _onVertexFolder( wxCommandEvent & event)
 
 void ShaderDialog :: _onFragmentFolder( wxCommandEvent & event)
 {
-	wxFileDialog l_dialog( this, C3D_T( "Select a glsl fragment shader file"), wxEmptyString, wxEmptyString, C3D_T( ""));
+	wxFileDialog l_dialog( this, CU_T( "Select a glsl fragment shader file"), wxEmptyString, wxEmptyString, CU_T( ""));
 
 	if (l_dialog.ShowModal() == wxID_OK)
 	{
@@ -205,7 +209,7 @@ void ShaderDialog :: _onFragmentFolder( wxCommandEvent & event)
 
 void ShaderDialog :: _onGeometryFolder( wxCommandEvent & event)
 {
-	wxFileDialog l_dialog( this, C3D_T( "Select a glsl geometry shader file"), wxEmptyString, wxEmptyString, C3D_T( ""));
+	wxFileDialog l_dialog( this, CU_T( "Select a glsl geometry shader file"), wxEmptyString, wxEmptyString, CU_T( ""));
 
 	if (l_dialog.ShowModal() == wxID_OK)
 	{
@@ -241,7 +245,7 @@ void ShaderDialog :: _onCancel( wxCommandEvent& event)
 void ShaderDialog :: _onGridCellChange( wxCommandEvent & event)
 {
 	int l_iRow = event.GetInt();
-	UniformVariable * l_pUniformVariable = NULL;
+	UniformVariablePtr l_pUniformVariable = NULL;
 
 	if (m_mapUniformVariables.find( l_iRow) == m_mapUniformVariables.end())
 	{
@@ -251,11 +255,11 @@ void ShaderDialog :: _onGridCellChange( wxCommandEvent & event)
 		{
 			l_pUniformVariable = l_dialog.GetUniformVariable();
 
-			if (l_pUniformVariable != NULL)
+			if ( ! l_pUniformVariable.null())
 			{
-				m_mapUniformVariables.insert( std::map <int, UniformVariable *>::value_type( l_iRow, l_pUniformVariable));
+				m_mapUniformVariables.insert( C3DMap( int, UniformVariablePtr)::value_type( l_iRow, l_pUniformVariable));
 				wxArrayString l_arrayString;
-				l_arrayString.push_back( l_pUniformVariable->GetName() + C3D_T( "=") + l_pUniformVariable->GetStrValue());
+				l_arrayString.push_back( l_pUniformVariable->GetName() + CU_T( "=") + l_pUniformVariable->GetStrValue());
 				m_pListUniformVariables->InsertItems( l_arrayString, l_iRow);
 			}
 		}
@@ -267,7 +271,7 @@ void ShaderDialog :: _onGridCellChange( wxCommandEvent & event)
 
 		if (l_dialog.ShowModal() == wxID_OK)
 		{
-			m_pListUniformVariables->SetString( l_iRow, l_pUniformVariable->GetName() + C3D_T( "=") + l_pUniformVariable->GetStrValue());
+			m_pListUniformVariables->SetString( l_iRow, l_pUniformVariable->GetName() + CU_T( "=") + l_pUniformVariable->GetStrValue());
 		}
 	}
 }

@@ -1,6 +1,13 @@
+#include "PrecompiledHeader.h"
+
 #include "PixelFormat.h"
 
-using namespace General::Resource;
+#if CHECK_MEMORYLEAKS
+#	include "Memory.h"
+using namespace Castor::Utils;
+#endif
+
+using namespace Castor::Resource;
 
 std::string FormatToString( PixelFormat p_fmt)
 {

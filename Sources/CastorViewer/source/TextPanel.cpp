@@ -4,6 +4,10 @@
 #include "TextCtrl.h"
 #include "TextLinesCtrl.h"
 
+#ifdef __WXMSW__
+#	include <wx/msw/msvcrt.h>      // redefines the new() operator 
+#endif
+
 using namespace CastorViewer;
 using namespace Castor3D;
 
@@ -73,7 +77,7 @@ void TextPanel :: ParseFile( ScriptCompiler * p_pCompiler)
 {
 	if (p_pCompiler != NULL)
 	{
-//		p_pCompiler->CompileScriptFileIO( m_strFileName.c_str());
+//		p_pCompiler->CompileScriptFile( m_strFileName.c_str());
 	}
 }
 

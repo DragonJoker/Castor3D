@@ -11,42 +11,45 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GENERAL_PATH_H___
-#define ___GENERAL_PATH_H___
+#ifndef ___Castor_Path___
+#define ___Castor_Path___
 
-#include <string>
-#include "Macros.h"
-
-#if GENLIB_WINDOWS
+#ifdef _WIN32
 #	define d_path_slash	'\\'
 #else
 #	define d_path_slash '/'
 #endif
 
-namespace General
+namespace Castor
 { namespace Utils
 {
-	class Path : public std::string
+	class Path : public String
 	{
 	public:
 		inline Path()
 		{}
 
 		inline Path( const char * p_data)
-		:	std::string( p_data)
-		{}
-		
-		inline Path( const std::string & p_data)
-		:	std::string( p_data)
-		{}
+			:	String( p_data)
+		{
+			_normalise();
+		}
+
+		inline Path( const String & p_data)
+			:	String( p_data)
+		{
+			_normalise();
+		}
 
 		inline Path( const Path & p_data)
-		:	std::string( p_data)
-		{}
+			:	String( p_data)
+		{
+			_normalise();
+		}
 
 		inline const Path operator /(const Path & p_path)const
 		{
@@ -63,28 +66,38 @@ namespace General
 			return *this;
 		}
 
-		inline const std::string GetPath()const
+		inline const String GetPath()const
 		{
+			String l_strReturn;
+
 			size_t l_index = find_last_of( d_path_slash);
 
-			if (l_index != std::string::npos)
+			if (l_index != String::npos)
 			{
-				return substr( 0, l_index);
+				l_strReturn = substr( 0, l_index);
 			}
 
-			return std::string();
+			return l_strReturn;
 		}
 
-		inline const std::string GetLeaf()const
+		inline const String GetLeaf()const
 		{
+			String l_strReturn = ( * this);
 			size_t l_index = find_last_of( d_path_slash);
 
-			if (l_index != std::string::npos)
+			if (l_index != String::npos)
 			{
-				return substr( l_index +1, std::string::npos);
+				l_strReturn = substr( l_index + 1, String::npos);
 			}
 
-			return std::string(*this);
+			return l_strReturn;
+		}
+
+	private:
+		void _normalise()
+		{
+			Replace( '\\', d_path_slash);
+			Replace( '/', d_path_slash);
 		}
 	};
 }

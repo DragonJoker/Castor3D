@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -33,7 +33,7 @@ namespace Castor3D
 	{
 	private:
 		friend class MeshManager;
-		float m_radius;				//!< The sphere radius, the basic sphere has a radius of 1.0 then is scaled to have the good radius
+		real m_radius;				//!< The sphere radius, the basic sphere has a radius of 1.0 then is scaled to have the good radius
 		unsigned int m_nbFaces;		//!< The subsections number
 		/**
 		 * Constructor, only the MeshManager can use it
@@ -41,7 +41,7 @@ namespace Castor3D
 		 *@param p_nbFaces : [in] The wanted subsections number
 		 *@param p_name : [in] The mesh name
 		 */
-		SphericMesh( float p_radius=0.0, unsigned int p_nbFaces=0,
+		SphericMesh( real p_radius=0.0, unsigned int p_nbFaces=0,
 					 const String & p_name = C3DEmptyString);
 
 	public:
@@ -54,15 +54,18 @@ namespace Castor3D
 		 */
 		virtual void GeneratePoints();
 		/**
-		 * Modifies this sphere caracteristics and rebuilds it
+		 * Modifies sphere caracteristics and rebuilds it
 		 *@param p_radius : [in] The new wanted radius
 		 *@param p_nbFaces : [in] The new wanted subsections number
 		 */
-		void Modify( float p_radius, unsigned int p_nbFaces);
+		void Modify( real p_radius, unsigned int p_nbFaces);
 
 	public:
+		/**@name Accessors */
+		//@{
 		inline unsigned int	GetNbFaces	()const {return m_nbFaces;}
-		inline float		GetRadius	()const {return m_radius;}
+		inline real		GetRadius	()const {return m_radius;}
+		//@}
 
 		inline friend std::ostream & operator <<( std::ostream & o, const SphericMesh & c) { return o << "Sphere(" << c.m_nbFaces << "," << c.m_radius << ")";}
 	};

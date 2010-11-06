@@ -57,7 +57,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Gen_IfBlock)
 			{
 				caller->ExecChild( 2 * i + 1);
 			}
-			catch (GenException & p_exception)
+			catch (Exception & p_exception)
 			{
 				Log::LogMessage( "EMuseInstance :: Initialise, exception (General) --> " + p_exception.GetDescription());
 			}
@@ -101,7 +101,7 @@ unsigned int i = 0;
 			{
 				code->Execute();
 			}
-			catch (GenException & p_exception)
+			catch (Exception & p_exception)
 			{
 				Log::LogMessage( "EMuseInstance :: Initialise, exception (General) --> " + p_exception.GetDescription());
 			}
@@ -129,7 +129,7 @@ unsigned int i = 0;
 			{
 				cond->Execute();
 			}
-			catch (GenException & p_exception)
+			catch (Exception & p_exception)
 			{
 				Log::LogMessage( "EMuseInstance :: Initialise, exception (General) --> " + p_exception.GetDescription());
 			}
@@ -194,7 +194,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Gen_ForLoop)
 			}
 		}
 	}
-	catch (GenException & p_exception)
+	catch (Exception & p_exception)
 	{
 		Log::LogMessage( "EMuseInstance :: Initialise, exception (General) --> " + p_exception.GetDescription());
 	}
@@ -215,7 +215,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Gen_ExecuteFunction)
 
 	if (numParams != static_cast <size_t> (l_node->get<int>()) )
 	{
-		SCRIPT_ERROR("Error @ ExecuteFunction, no correct numParams ! float value : " + ToString( numParams) + " , expected : " + ToString( l_node->get<int>() ));
+		SCRIPT_ERROR("Error @ ExecuteFunction, no correct numParams ! real value : " + ToString( numParams) + " , expected : " + ToString( l_node->get<int>() ));
 	}
 	else
 	{
@@ -272,7 +272,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Gen_MultiLineFunction)
 				l_sN->Execute();
 			}
 		}
-		catch (GenException & p_exception)
+		catch (Exception & p_exception)
 		{
 			Log::LogMessage( "EMuseInstance :: Initialise, exception (General) --> " + p_exception.GetDescription());
 		}
@@ -373,9 +373,9 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Ope_NegateReal)
 {
 	VERBOSE_STARTFUNC( "-(unary)real");
 
-	GET_AND_EXEC_PARAM( float, l_value, 0);
+	GET_AND_EXEC_PARAM( real, l_value, 0);
 
-	RETURN_AS( float) -l_value;
+	RETURN_AS( real) -l_value;
 }
 
 EMUSE_SCRIPT_FUNCTION_DECLARE( Ope_NegateInt)
@@ -441,7 +441,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Ope_IsSuperior_Real)
 {
 	VERBOSE_STARTFUNC( ">(real)");
 
-	GET_AND_EXEC_TWO_PARAM( float, a, float, b);
+	GET_AND_EXEC_TWO_PARAM( real, a, real, b);
 
 	RETURN_AS( bool) a > b;
 }
@@ -459,7 +459,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Ope_IsSuperiorOrEqual_Real)
 {
 	VERBOSE_STARTFUNC( ">=(real)");
 
-	GET_AND_EXEC_TWO_PARAM( float, a, float, b);
+	GET_AND_EXEC_TWO_PARAM( real, a, real, b);
 
 	RETURN_AS( bool) a >= b;
 }
@@ -477,7 +477,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Ope_IsInferior_Real)
 {
 	VERBOSE_STARTFUNC( "<(real)");
 
-	GET_AND_EXEC_TWO_PARAM( float, a, float, b);
+	GET_AND_EXEC_TWO_PARAM( real, a, real, b);
 
 	RETURN_AS( bool) a < b;
 }
@@ -495,7 +495,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Ope_IsInferiorOrEqual_Real)
 {
 	VERBOSE_STARTFUNC( "<=(real)");
 
-	GET_AND_EXEC_TWO_PARAM( float, a, float, b);
+	GET_AND_EXEC_TWO_PARAM( real, a, real, b);
 
 	RETURN_AS( bool) a <= b;
 }

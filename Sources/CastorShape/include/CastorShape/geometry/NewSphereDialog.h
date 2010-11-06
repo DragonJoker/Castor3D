@@ -12,7 +12,7 @@ public:
 	CSNewSphereDialog( wxWindow * parent, wxWindowID p_id);
 	~CSNewSphereDialog();
 	
-	float GetSphereRadius()const;
+	real GetSphereRadius()const;
 	int GetFacesNumber()const;
 	String GetFacesNumberStr()const;
 };

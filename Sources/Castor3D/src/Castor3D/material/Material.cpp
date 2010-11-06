@@ -9,32 +9,32 @@
 #include "render_system/RenderSystem.h"
 #include "main/Root.h"
 
-#include "Log.h"
-
 using namespace Castor3D;
+using namespace Castor::Utils;
+
 //*********************************************************************************************
 
-Material * MaterialLoader :: LoadFromFileIO( const String & p_file)
+MaterialPtr MaterialLoader :: LoadFromFile( const String & p_file)
 {
-	Material * l_pReturn = NULL;
+	MaterialPtr l_pReturn;
 	bool l_bResult;
-	FileIO l_file( p_file, FileIO::eRead);
+	File l_file( p_file, File::eRead);
 
 	size_t l_nameLength = 0;
-	l_bResult = (l_file.Read<size_t>( l_nameLength) == sizeof( size_t));
+	l_bResult = (l_file.Read( l_nameLength) == sizeof( size_t));
 
 	if (l_bResult)
 	{
 		Char * l_name = new Char[l_nameLength+1];
-		l_bResult = (l_file.ReadArray<Char>( l_name, l_nameLength) == l_nameLength);
+		l_bResult = (l_file.ReadArray( l_name, l_nameLength) == l_nameLength);
 
 		if (l_bResult)
 		{
 			l_name[l_nameLength] = 0;
 
-			Log::LogMessage( C3D_T( "Reading material ") + String( l_name));
+			Log::LogMessage( CU_T( "Reading material ") + String( l_name));
 
-			l_pReturn = MaterialManager::GetSingletonPtr()->CreateMaterial( l_name);
+			l_pReturn = MaterialManager::CreateMaterial( l_name);
 		}
 
 		delete [] l_name;
@@ -44,42 +44,42 @@ Material * MaterialLoader :: LoadFromFileIO( const String & p_file)
 
 	if (l_bResult)
 	{
-		l_bResult = (l_file.Read<size_t>( l_nbPasses) == sizeof( size_t));
+		l_bResult = (l_file.Read( l_nbPasses) == sizeof( size_t));
 	}
 
 	if (l_bResult)
 	{
-		Pass * l_pass;
+		PassPtr l_pass;
 
 		for (size_t i = 0 ; i < l_nbPasses && l_bResult ; i++)
 		{
 			l_pass = l_pReturn->CreatePass();
 			l_bResult = l_pass->Read( l_file);
-
+/*
 			if ( ! l_bResult)
 			{
-				delete l_pReturn;
+				l_pReturn.reset();
 				return NULL;
 			}
+*/
 		}
 	}
 
-	if ( ! l_bResult && l_pReturn != NULL)
+	if ( ! l_bResult && ! l_pReturn.null())
 	{
-		delete l_pReturn;
-		l_pReturn = NULL;
+		l_pReturn.reset();
 	}
 
 	return l_pReturn;
 }
 
-bool MaterialLoader :: SaveToFileIO( FileIO * p_pFile, Material * p_material)
+bool MaterialLoader :: SaveToFile( File & p_pFile, MaterialPtr p_material)
 {
-	bool l_bReturn = p_pFile->WriteLine( "material " + p_material->GetName() + "\n");
+	bool l_bReturn = p_pFile.WriteLine( "material " + p_material->GetName() + "\n");
 
 	if (l_bReturn)
 	{
-		l_bReturn = p_pFile->WriteLine( "{\n");
+		l_bReturn = p_pFile.WriteLine( "{\n");
 	}
 
 	size_t l_nbPasses = p_material->GetNbPasses();
@@ -93,7 +93,7 @@ bool MaterialLoader :: SaveToFileIO( FileIO * p_pFile, Material * p_material)
 		}
 		else
 		{
-			p_pFile->WriteLine( "\n");
+			p_pFile.WriteLine( "\n");
 		}
 
 		l_bReturn = p_material->GetPass( i)->Write( p_pFile);
@@ -101,7 +101,7 @@ bool MaterialLoader :: SaveToFileIO( FileIO * p_pFile, Material * p_material)
 
 	if (l_bReturn)
 	{
-		l_bReturn = p_pFile->WriteLine( "}\n");
+		l_bReturn = p_pFile.WriteLine( "}\n");
 	}
 
 	return l_bReturn;
@@ -122,17 +122,18 @@ Material :: Material( const String & p_name, int p_iNbInitialPasses)
 
 Material :: ~Material()
 {
-	vector::deleteAll( m_passes);
+//	vector::deleteAll( m_passes);
 }
 
 bool Material :: SetName( const String & p_name)
 {
 	bool l_bReturn = false;
-	if ( ! MaterialManager::GetSingletonPtr()->HasElement( p_name))
+
+	if ( ! MaterialManager::HasElement( p_name))
 	{
-		MaterialManager::GetSingletonPtr()->RemoveElement( m_name);
+		MaterialPtr l_pThis = MaterialManager::RemoveElement( m_name);
 		m_name = p_name;
-		MaterialManager::GetSingletonPtr()->AddElement( this);
+		MaterialManager::AddElement( l_pThis);
 		l_bReturn = true;
 	}
 
@@ -141,47 +142,66 @@ bool Material :: SetName( const String & p_name)
 
 void Material :: Initialise()
 {
-	vector::cycle( m_passes, & Pass::Initialise);
+	for (size_t i = 0 ; i < m_passes.size() ; i++)
+	{
+		m_passes[i]->Initialise();
+	}
+//	vector::cycle( m_passes, & Pass::Initialise);
 }
 
-void Material :: Apply( Submesh * p_submesh, DrawType p_displayMode)
+void Material :: Apply( eDRAW_TYPE p_displayMode)
 {
-	vector::cycle( m_passes, & Pass::Apply, p_submesh, p_displayMode);
+	for (size_t i = 0 ; i < m_passes.size() ; i++)
+	{
+		m_passes[i]->Apply( p_displayMode);
+	}
+//	vector::cycle( m_passes, & Pass::Apply, p_submesh, p_displayMode);
 }
 
-void Material :: Apply( DrawType p_displayMode)
+void Material :: Apply2D( eDRAW_TYPE p_displayMode)
 {
-	vector::cycle( m_passes, & Pass::Apply, p_displayMode);
+	for (size_t i = 0 ; i < m_passes.size() ; i++)
+	{
+		m_passes[i]->Apply2D( p_displayMode);
+	}
+//	vector::cycle( m_passes, & Pass::Apply, p_displayMode);
 }
 
 void Material :: Remove()
 {
-	vector::cycle( m_passes, & Pass::Remove);
+	for (size_t i = 0 ; i < m_passes.size() ; i++)
+	{
+		m_passes[i]->Remove();
+	}
+//	vector::cycle( m_passes, & Pass::Remove);
 }
 
-Pass * Material :: CreatePass()
+PassPtr Material :: CreatePass()
 {
-	Pass * l_newPass = new Pass( RenderSystem::GetSingletonPtr()->CreatePassRenderer(), this);
+	PassPtr l_newPass = new Pass( this);
 	m_passes.push_back( l_newPass);
 	return l_newPass;
 }
 
-Pass * Material :: GetPass( unsigned int p_index)
+PassPtr Material :: GetPass( unsigned int p_index)
 {
-	if (p_index >= m_passes.size())
+	PassPtr l_pReturn;
+
+	if (p_index < m_passes.size())
 	{
-		return NULL;
+		l_pReturn = m_passes[p_index];
 	}
 
-	return m_passes[p_index];
+	return l_pReturn;
 }
 
 void Material :: DestroyPass( unsigned int p_index)
 {
 	if (p_index < m_passes.size())
 	{
-		Pass * l_pass = m_passes[p_index];
+		PassPtr l_pass = m_passes[p_index];
 		vector::eraseValue( m_passes, l_pass);
-		delete l_pass;
+		l_pass.reset();
+//		delete l_pass;
 	}
 }

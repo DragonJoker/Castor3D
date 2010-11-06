@@ -31,22 +31,28 @@
 #include <wx/timer.h>
 #include <wx/treectrl.h>
 
-#include <CastorUtils/STLMacros.h>
-#include <CastorUtils/STLMapMacros.h>
-#include <CastorUtils/STLSetMacros.h>
+#include <CastorUtils/Value.h>
+using namespace Castor::Templates;
+
+#include <CastorUtils/Vector.h>
+#include <CastorUtils/List.h>
+#include <CastorUtils/Map.h>
+#include <CastorUtils/Multimap.h>
+#include <CastorUtils/Set.h>
 #include <CastorUtils/PreciseTimer.h>
 #include <CastorUtils/File.h>
-#include <CastorUtils/Vector3f.h>
+#include <CastorUtils/Point.h>
 #include <CastorUtils/Quaternion.h>
 #include <CastorUtils/Named.h>
 #include <CastorUtils/SlottedObjectPool.h>
 #include <CastorUtils/Path.h>
 #include <CastorUtils/MinMax.h>
 #include <CastorUtils/Colour.h>
+#include <CastorUtils/Angle.h>
 
-using namespace General::Math;
-using namespace General::Theory;
-using namespace General::Templates;
+using namespace Castor::Math;
+using namespace Castor::Theory;
+using namespace Castor::Templates;
 
 #include <Castor3D/Module_General.h>
 #include <Castor3D/main/Module_Main.h>
@@ -78,7 +84,6 @@ using namespace General::Templates;
 #include <Castor3D/light/PointLight.h>
 #include <Castor3D/light/DirectionalLight.h>
 #include <Castor3D/light/SpotLight.h>
-#include <Castor3D/Log.h>
 #include <Castor3D/animation/Module_Animation.h>
 #include <Castor3D/animation/AnimationManager.h>
 #include <Castor3D/animation/Animation.h>
@@ -94,6 +99,7 @@ using namespace General::Templates;
 #include <Castor3D/overlay/OverlayManager.h>
 #include <Castor3D/overlay/Overlay.h>
 #include <Castor3D/scene/SceneFileParser.h>
+#include <Castor3D/Log.h>
 
 #include <iostream>
 #include <string>
@@ -109,10 +115,12 @@ using namespace General::Templates;
 #endif
 
 #if CHECK_MEMORYLEAKS
-//#	warning "CastorViewer Checking Memory leaks"
+#	pragma message( "********************************************************************")
+#	pragma message( "	CastorViewer Checking Memory leaks")
+#	pragma message( "********************************************************************")
 #	include <CastorUtils/Memory.h>
 #endif
 
-using namespace General::Utils;
+using namespace Castor::Utils;
 
 #endif

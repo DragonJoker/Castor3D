@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -19,8 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_MaterialManager___
 
 #include "Material.h"
-#include <CastorUtils/Manager.h>
-#include <CastorUtils/AutoSingleton.h>
+#include <CastorUtils/UniqueManager.h>
 
 namespace Castor3D
 {
@@ -32,15 +31,18 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API MaterialManager : public General::Templates::Manager <Material>, public General::Theory::AutoSingleton<MaterialManager>
+	class CS3D_API MaterialManager : public Castor::Templates::UniqueManager<Material, MaterialManager>
 	{
 	private:
+		friend class Castor::Templates::UniqueManager<Material, MaterialManager>;
 
-		Material * m_defaultMaterial;			//!< The default material
-		MaterialPtrStrMap m_newMaterials;		//!< The newly created materials, a material is in this list until it is initialised
+	private:
+		MaterialPtr m_defaultMaterial;			//!< The default material
+		MaterialPtrStrMap m_newMaterials;		//!< The newly created materials, a material is in the list until it is initialised
 		MaterialPtrArray m_arrayToDelete;
+		static Castor::MultiThreading::RecursiveMutex m_mutex;
 
-	public:
+	private:
 		/**
 		 * Constructor
 		 */
@@ -49,49 +51,54 @@ namespace Castor3D
 		 * Destructor
 		 */
 		~MaterialManager();
+
+	public:
 		/**
 		 * Creates a material, with the given name, if it is not already used
 		 *@param p_name : [in] The wanted name of the material
 		 *@param p_iNbInitialPasses : [in] The number of passes initially created in the material
 		 *@return The created material
 		 */
-		virtual Material * CreateMaterial( const String & p_name, int p_iNbInitialPasses=1);
+		static MaterialPtr CreateMaterial( const String & p_name, int p_iNbInitialPasses=1);
 		/**
 		 * Initialises the default material
 		 */
-		void Initialise();
+		static void Initialise();
 		/**
 		 * Initialises all the newly created materials
 		 */
-		void Update();
+		static void Clear();
+		/**
+		 * Initialises all the newly created materials
+		 */
+		static void Update();
 		/**
 		 * Puts all the materials names in the given array
 		 *@param p_names : [in/out] The array of names to be filled
 		 */
-		void GetMaterialNames( StringArray & p_names)const;
+		static void GetMaterialNames( StringArray & p_names);
 		/**
 		 * Writes the materials in separate files
 		 *@return true if successful, false if not
 		 */
-		bool Write( const String & p_path)const;
+		static bool Write( const String & p_path);
 		/**
 		 * Reads materials from separate files in the same folder than the given file path
 		 *@param p_path : [in] The file path
 		 *@return true if successful, false if not
 		 */
-		bool Read( const String & p_path);
+		static bool Read( const String & p_path);
 		/**
 		 * Puts the given material in the newly created materials, to re-initialise it
 		 *@param p_material : [in] The material we want to initialise again
 		 */
-		void SetToInitialise( Material * p_material);
+		static void SetToInitialise( MaterialPtr p_material);
 		/**
 		 * Deletes all the materials held
 		 */
-		void DeleteAll();
+		static void DeleteAll();
 
-	public:
-		inline Material * GetDefaultMaterial() {return m_defaultMaterial;}
+		static MaterialPtr GetDefaultMaterial();
 	};
 }
 

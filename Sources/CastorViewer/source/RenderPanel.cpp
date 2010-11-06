@@ -4,6 +4,10 @@
 #include "CastorViewer.h"
 #include "MainFrame.h"
 
+#ifdef __WXMSW__
+#	include <wx/msw/msvcrt.h>      // redefines the new() operator 
+#endif
+
 #define ID_NEW_WINDOW 10000
 
 using namespace CastorViewer;
@@ -12,7 +16,7 @@ using namespace Castor3D;
 DECLARE_APP( CastorViewerApp)
 
 RenderPanel :: RenderPanel( wxWindow * parent, wxWindowID p_id,
-							    ProjectionType p_renderType, Scene * p_scene,
+							    Viewport::eTYPE p_renderType, ScenePtr p_scene,
 								const wxPoint & pos, const wxSize & size,
 								ProjectionDirection p_look, long style)
 	:	wxPanel( parent, p_id, pos, size, style),
@@ -56,7 +60,7 @@ void RenderPanel :: DrawOneFrame()
 
 void RenderPanel :: _initialiseRenderWindow()
 {
-	Log::LogMessage( C3D_T( "Initialising RenderWindow"));
+	Log::LogMessage( CU_T( "Initialising RenderWindow"));
 	m_renderWindow = Root::GetSingletonPtr()->CreateRenderWindow( m_mainScene,
 																  (void *)GetHandle(),
 																  GetClientSize().x,
@@ -245,34 +249,34 @@ void RenderPanel :: _onMouseMove( wxMouseEvent & event)
 
 	if (m_mouseLeftDown)
 	{
-		if (m_renderWindow->GetType() == pt3DView)
+		if (m_renderWindow->GetType() == Viewport::pt3DView)
 		{
-			m_renderWindow->GetCamera()->Yaw( m_deltaX);
-			m_renderWindow->GetCamera()->Pitch( m_deltaY);
+			m_renderWindow->GetCamera()->Yaw( Math::Angle( m_deltaX * Math::Angle::DegreesToRadians));
+			m_renderWindow->GetCamera()->Pitch( Math::Angle( m_deltaY * Math::Angle::DegreesToRadians));
 		}
 		else
 		{
-			m_renderWindow->GetCamera()->Roll( m_deltaX);
+			m_renderWindow->GetCamera()->Roll( Math::Angle( m_deltaX * Math::Angle::DegreesToRadians));
 		}
 	}
 	else if (m_mouseRightDown)
 	{
-		m_renderWindow->GetCamera()->Translate( Vector3f( -m_deltaX / 20.0f, m_deltaY / 20.0f, 0.0f));
+		m_renderWindow->GetCamera()->Translate( Point3r( -m_deltaX / 40.0f, m_deltaY / 40.0f, 0.0f));
 	}
 }
 
 void RenderPanel :: _onMouseWheel( wxMouseEvent & event)
 {
 	int l_wheelRotation = event.GetWheelRotation();
-	const Vector3f * l_cameraPos = m_renderWindow->GetCamera()->GetPosition();
+	const Point3r & l_cameraPos = m_renderWindow->GetCamera()->GetPosition();
 
 	if (l_wheelRotation < 0)
 	{
-		m_renderWindow->GetCamera()->Translate( Vector3f( 0.0f, 0.0f, (l_cameraPos->z - 1.0f) / 10));
+		m_renderWindow->GetCamera()->Translate( Point3r( 0.0f, 0.0f, (l_cameraPos[2] - 1.0f) / 10));
 	}
 	else if (l_wheelRotation > 0)
 	{
-		m_renderWindow->GetCamera()->Translate( Vector3f( 0.0f, 0.0f, (1.0f - l_cameraPos->z) / 10));
+		m_renderWindow->GetCamera()->Translate( Point3r( 0.0f, 0.0f, (1.0f - l_cameraPos[2]) / 10));
 	}
 }
 

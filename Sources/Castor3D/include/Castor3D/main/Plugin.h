@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -21,8 +21,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Module_Main.h"
 
 #ifdef WIN32
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+#	define WIN32_LEAN_AND_MEAN
+#	include <windows.h>
 #endif
 
 #include <CastorUtils/DynamicLibrary.h>
@@ -39,14 +39,14 @@ namespace Castor3D
 	class CS3D_API Plugin 
 	{
 	private:
-		typedef void fnGetRequiredVersion( int &);		//!< Signature for the plugin's version checking function
-		typedef void fnRegisterPlugin( Root &);			//!< Signature for the plugin's registration function
+		typedef void fnGetRequiredVersion( int &);			//!< Signature for the plugin's version checking function
+		typedef void fnRegisterPlugin( Root &);				//!< Signature for the plugin's registration function
 	
-		size_t * m_pDLLRefCount;						//!< Counts the number of occurences of the plugin
-		fnGetRequiredVersion * m_pfnGetRequiredVersion;	//!< The plugin's version checking function
-		fnRegisterPlugin * m_pfnRegisterPlugin;			//!< The plugin's registration function
+		size_t * m_pDLLRefCount;							//!< Counts the number of occurences of the plugin
+		fnGetRequiredVersion *	m_pfnGetRequiredVersion;	//!< The plugin's version checking function
+		fnRegisterPlugin *		m_pfnRegisterPlugin;		//!< The plugin's registration function
 
-		DynamicLibrary * m_library;
+		Utils::DynamicLibrary * m_library;
 
 	public:
 		/**

@@ -1,24 +1,17 @@
 #include "PrecompiledHeader.h"
-
-#include "material/Module_Material.h"
-
 #include "material/TextureEnvironment.h"
-#include "render_system/Module_Render.h"
-#include "render_system/MaterialRenderer.h"
 
 using namespace Castor3D;
 
-TextureEnvironment :: TextureEnvironment( TextureEnvironmentRenderer * p_renderer)
+TextureEnvironment :: TextureEnvironment()
 	:	m_mode( EMModulate),
 		m_RGBCombination( CCNone),
 		m_alphaCombination( ACNone),
 		m_RGBTextureSourceIndex( 0),
 		m_alphaTextureSourceIndex( 0),
 		m_RGBScale( 1.0),
-		m_alphaScale( 1.0),
-		m_renderer( p_renderer)
+		m_alphaScale( 1.0)
 {
-	m_renderer->SetTarget( this);
 	m_RGBCombinationSources[0] = CSCurrentTexture;
 	m_alphaCombinationSources[0] = CSCurrentTexture;
 	m_RGBOperands[0] = COSrcColour;
@@ -39,9 +32,9 @@ TextureEnvironment :: ~TextureEnvironment()
 {
 }
 
-void TextureEnvironment :: Apply()
+void TextureEnvironment :: Apply( eDRAW_TYPE p_displayMode)
 {
-	m_renderer->Apply();
+	m_pRenderer->Apply();
 }
 
 void TextureEnvironment :: SetRGBSource( unsigned int p_index, 
@@ -129,135 +122,135 @@ AlphaOperand TextureEnvironment :: GetAlphaOperand( unsigned int p_index)const
 	return m_alphaOperands[p_index];
 }
 
-bool TextureEnvironment :: Write( General::Utils::FileIO & p_file)const
+bool TextureEnvironment :: Write( Castor::Utils::File & p_file)const
 {
-	bool l_bReturn = (p_file.Write<EnvironmentMode>( m_mode) == sizeof( EnvironmentMode));
+	bool l_bReturn = (p_file.Write( m_mode) == sizeof( EnvironmentMode));
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Write<RGBCombination>( m_RGBCombination) == sizeof( RGBCombination));
+		l_bReturn = (p_file.Write( m_RGBCombination) == sizeof( RGBCombination));
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Write<AlphaCombination>( m_alphaCombination) == sizeof( AlphaCombination));
+		l_bReturn = (p_file.Write( m_alphaCombination) == sizeof( AlphaCombination));
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.WriteArray<CombinationSource>( m_RGBCombinationSources, 3) == sizeof( CombinationSource) * 3);
+		l_bReturn = (p_file.WriteArray( m_RGBCombinationSources, 3) == sizeof( CombinationSource) * 3);
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Write<int>( m_RGBTextureSourceIndex) == sizeof( int));
+		l_bReturn = (p_file.Write( m_RGBTextureSourceIndex) == sizeof( int));
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.WriteArray<CombinationSource>( m_alphaCombinationSources, 3) == sizeof( CombinationSource) * 3);
+		l_bReturn = (p_file.WriteArray( m_alphaCombinationSources, 3) == sizeof( CombinationSource) * 3);
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Write<int>( m_alphaTextureSourceIndex) == sizeof( int));
+		l_bReturn = (p_file.Write( m_alphaTextureSourceIndex) == sizeof( int));
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.WriteArray<RGBOperand>( m_RGBOperands, 3) == sizeof( RGBOperand) * 3);
+		l_bReturn = (p_file.WriteArray( m_RGBOperands, 3) == sizeof( RGBOperand) * 3);
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.WriteArray<AlphaOperand>( m_alphaOperands, 3) == sizeof( AlphaOperand) * 3);
+		l_bReturn = (p_file.WriteArray( m_alphaOperands, 3) == sizeof( AlphaOperand) * 3);
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Write<float>( m_RGBScale) == sizeof( float));
+		l_bReturn = (p_file.Write( m_RGBScale) == sizeof( real));
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Write<float>( m_alphaScale) == sizeof( float));
+		l_bReturn = (p_file.Write( m_alphaScale) == sizeof( real));
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Write<bool>( m_combineRGB) == sizeof( bool));
+		l_bReturn = (p_file.Write( m_combineRGB) == sizeof( bool));
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Write<bool>( m_combineAlpha) == sizeof( bool));
+		l_bReturn = (p_file.Write( m_combineAlpha) == sizeof( bool));
 	}
 
 	return l_bReturn;
 }
 
-bool TextureEnvironment :: Read( General::Utils::FileIO & p_file)
+bool TextureEnvironment :: Read( Castor::Utils::File & p_file)
 {
-	bool l_bReturn = (p_file.Read<EnvironmentMode>( m_mode) == sizeof( EnvironmentMode));
+	bool l_bReturn = (p_file.Read( m_mode) == sizeof( EnvironmentMode));
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Read<RGBCombination>( m_RGBCombination) == sizeof( RGBCombination));
+		l_bReturn = (p_file.Read( m_RGBCombination) == sizeof( RGBCombination));
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Read<AlphaCombination>( m_alphaCombination) == sizeof( AlphaCombination));
+		l_bReturn = (p_file.Read( m_alphaCombination) == sizeof( AlphaCombination));
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.ReadArray<CombinationSource>( m_RGBCombinationSources, 3) == sizeof( CombinationSource) * 3);
+		l_bReturn = (p_file.ReadArray( m_RGBCombinationSources, 3) == sizeof( CombinationSource) * 3);
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Read<int>( m_RGBTextureSourceIndex) == sizeof( int));
+		l_bReturn = (p_file.Read( m_RGBTextureSourceIndex) == sizeof( int));
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.ReadArray<CombinationSource>( m_alphaCombinationSources, 3) == sizeof( CombinationSource) * 3);
+		l_bReturn = (p_file.ReadArray( m_alphaCombinationSources, 3) == sizeof( CombinationSource) * 3);
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Read<int>( m_alphaTextureSourceIndex) == sizeof( int));
+		l_bReturn = (p_file.Read( m_alphaTextureSourceIndex) == sizeof( int));
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.ReadArray<RGBOperand>( m_RGBOperands, 3) == sizeof( RGBOperand) * 3);
+		l_bReturn = (p_file.ReadArray( m_RGBOperands, 3) == sizeof( RGBOperand) * 3);
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.ReadArray<AlphaOperand>( m_alphaOperands, 3) == sizeof( AlphaOperand) * 3);
+		l_bReturn = (p_file.ReadArray( m_alphaOperands, 3) == sizeof( AlphaOperand) * 3);
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Read<float>( m_RGBScale) == sizeof( float));
+		l_bReturn = (p_file.Read( m_RGBScale) == sizeof( real));
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Read<float>( m_alphaScale) == sizeof( float));
+		l_bReturn = (p_file.Read( m_alphaScale) == sizeof( real));
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Read<bool>( m_combineRGB) == sizeof( bool));
+		l_bReturn = (p_file.Read( m_combineRGB) == sizeof( bool));
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Read<bool>( m_combineAlpha) == sizeof( bool));
+		l_bReturn = (p_file.Read( m_combineAlpha) == sizeof( bool));
 	}
 
 	return l_bReturn;

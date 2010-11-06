@@ -6,29 +6,29 @@
 
 using namespace Castor3D;
 
-void FrameListener :: PostEvent( FrameEvent * p_event)
+void FrameListener :: PostEvent( FrameEventPtr p_event)
 {
-	if (p_event->GetType() == fetPreRender)
+	if (p_event->GetType() == FrameEvent::ePreRender)
 	{
 		m_preEvents.push_back( p_event);
 	}
-	else if (p_event->GetType() == fetQueueRender)
+	else if (p_event->GetType() == FrameEvent::eQueueRender)
 	{
 		m_queueEvents.push_back( p_event);
 	}
-	else if (p_event->GetType() == fetPostRender)
+	else if (p_event->GetType() == FrameEvent::ePostRender)
 	{
 		m_postEvents.push_back( p_event);
 	}
 }
 
-bool FrameListener :: FireEvents( FrameEventType p_type)
+bool FrameListener :: FireEvents( FrameEvent::eTYPE p_type)
 {
 	bool l_bReturn = false;
 
 	switch (p_type)
 	{
-	case fetPreRender:
+	case FrameEvent::ePreRender:
 		l_bReturn = true;
 
 		for (size_t i = 0 ; i < m_preEvents.size() && l_bReturn ; i++)
@@ -36,10 +36,11 @@ bool FrameListener :: FireEvents( FrameEventType p_type)
 			l_bReturn = m_preEvents[i]->Apply();
 		}
 
-		vector::deleteAll( m_preEvents);
+//		vector::deleteAll( m_preEvents);
+		m_preEvents.clear();
 		break;
 
-	case fetQueueRender:
+	case FrameEvent::eQueueRender:
 		l_bReturn = true;
 
 		for (size_t i = 0 ; i < m_queueEvents.size() && l_bReturn ; i++)
@@ -47,10 +48,11 @@ bool FrameListener :: FireEvents( FrameEventType p_type)
 			l_bReturn =m_queueEvents[i]->Apply();
 		}
 
-		vector::deleteAll( m_queueEvents);
+//		vector::deleteAll( m_queueEvents);
+		m_queueEvents.clear();
 		break;
 
-	case fetPostRender:
+	case FrameEvent::ePostRender:
 		l_bReturn = true;
 
 		for (size_t i = 0 ; i < m_postEvents.size() && l_bReturn ; i++)
@@ -58,7 +60,8 @@ bool FrameListener :: FireEvents( FrameEventType p_type)
 			l_bReturn = m_postEvents[i]->Apply();
 		}
 
-		vector::deleteAll( m_postEvents);
+//		vector::deleteAll( m_postEvents);
+		m_postEvents.clear();
 		break;
 	}
 

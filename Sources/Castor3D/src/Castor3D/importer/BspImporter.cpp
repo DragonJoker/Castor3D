@@ -14,7 +14,7 @@
 #include "render_system/Buffer.h"
 #include "render_system/MeshRenderer.h"
 #include "render_system/RenderSystem.h"
-#include "Log.h"
+
 
 using namespace Castor3D;
 
@@ -34,20 +34,20 @@ BspImporter :: BspImporter()
 
 bool BspImporter :: _import()
 {
-	m_pFile = new FileIO( m_fileName, FileIO::eRead);
+	m_pFile = new File( m_fileName, File::eRead);
 	size_t l_uiSlashIndex = 0;
 
-	if (m_fileName.find_last_of( C3D_T( "\\")) != String::npos)
+	if (m_fileName.find_last_of( CU_T( "\\")) != String::npos)
 	{
-		l_uiSlashIndex = m_fileName.find_last_of( C3D_T( "\\")) + 1;
+		l_uiSlashIndex = m_fileName.find_last_of( CU_T( "\\")) + 1;
 	}
 
-	if (m_fileName.find_last_of( C3D_T( "/")) != String::npos)
+	if (m_fileName.find_last_of( CU_T( "/")) != String::npos)
 	{
-		l_uiSlashIndex = max( l_uiSlashIndex, m_fileName.find_last_of( C3D_T( "/")) + 1);
+		l_uiSlashIndex = max( l_uiSlashIndex, m_fileName.find_last_of( CU_T( "/")) + 1);
 	}
 
-	size_t l_uiDotIndex = m_fileName.find_last_of( C3D_T( "."));
+	size_t l_uiDotIndex = m_fileName.find_last_of( CU_T( "."));
 
 	UIntArray l_faces;
 	FloatArray l_sizes;
@@ -55,16 +55,16 @@ bool BspImporter :: _import()
 	String l_meshName = m_fileName.substr( l_uiSlashIndex, l_uiDotIndex - l_uiSlashIndex);
 	String l_materialName = m_fileName.substr( l_uiSlashIndex, l_uiDotIndex - l_uiSlashIndex);
 
-	Mesh * l_pMesh = NULL;
+	MeshPtr l_pMesh = NULL;
 
-	if (MeshManager::GetSingletonPtr()->HasElement( l_meshName))
+	if (MeshManager::HasElement( l_meshName))
 	{
-		l_pMesh = MeshManager::GetSingletonPtr()->GetElementByName( l_meshName);
+		l_pMesh = MeshManager::GetElementByName( l_meshName);
 	}
 	else
 	{
-		l_pMesh = MeshManager::GetSingletonPtr()->CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom);
-		Log::LogMessage( C3D_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
+		l_pMesh = MeshManager::CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom);
+		Log::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
 	}
 
 	int i = 0;
@@ -93,9 +93,9 @@ bool BspImporter :: _import()
 	{
 		m_pFile->Read<BSPVertex>( m_verts[i]);
 		
-		float l_temp = m_verts[i].m_position.y;
-		m_verts[i].m_position.y = m_verts[i].m_position.z;
-		m_verts[i].m_position.z = -l_temp;
+		real l_temp = m_verts[i].m_position[1];
+		m_verts[i].m_position[1] = m_verts[i].m_position[2];
+		m_verts[i].m_position[2] = -l_temp;
 	}	
 
 	m_pFile->Seek( l_lumps[kIndices].m_offset);
@@ -132,31 +132,31 @@ BspImporter :: ~BspImporter()
 	_destroy();
 }
 
-void BspImporter::_convertToMesh( Mesh * p_mesh, BSPTexture * p_textures)
+void BspImporter::_convertToMesh( MeshPtr p_mesh, BSPTexture * p_textures)
 {
-	size_t l_i = min( m_fileName.find_last_of( C3D_T( "/")), m_fileName.find_last_of( C3D_T( "\\")));
+	size_t l_i = min( m_fileName.find_last_of( CU_T( "/")), m_fileName.find_last_of( CU_T( "\\")));
 	String l_filePath = m_fileName.substr( 0, l_i + 1);
 
 	MaterialPtrArray l_materials;
-	Material * l_material;
-	Pass * l_pass;
-	TextureUnit * l_unit;
+	MaterialPtr l_material;
+	PassPtr l_pass;
+	TextureUnitPtr l_unit;
 	for( int i = 0; i < m_numOfTextures; i++)
 	{
 		String l_strName;
-		l_strName = p_mesh->GetName() + C3D_T( "Material_") + l_strName;
+		l_strName = p_mesh->GetName() + CU_T( "Material_") + l_strName;
 		l_strName << i;
-		l_material = MaterialManager::GetSingletonPtr()->CreateMaterial( l_strName);
+		l_material = MaterialManager::CreateMaterial( l_strName);
 		l_pass = l_material->GetPass( 0);
 		l_pass->SetAmbient( 0.0f, 0.0f, 0.0f, 1.0f);
 		l_pass->SetEmissive( 0.5f, 0.5f, 0.5f, 1.0f);
 		l_unit = new TextureUnit( RenderSystem::GetSingletonPtr()->CreateTextureRenderer());
-		l_unit->SetTexture2D( l_filePath + C3D_T( "../") + String( p_textures[i].m_strName) + C3D_T( ".jpg"));
+		l_unit->SetTexture2D( l_filePath + CU_T( "../") + String( p_textures[i].m_strName) + CU_T( ".jpg"));
 		l_pass->AddTextureUnit( l_unit);
 		l_materials.push_back( l_material);
 	}
 
-	Submesh * l_submesh;
+	SubmeshPtr l_submesh;
 	BSPFace l_bspFace;
 	for (int i = 0 ; i < m_numOfFaces ; i++)
 	{
@@ -165,7 +165,7 @@ void BspImporter::_convertToMesh( Mesh * p_mesh, BSPTexture * p_textures)
 
 		for (int j = 0 ; j < l_bspFace.m_numOfVerts ; j++)
 		{
-			l_submesh->AddVertex( m_verts[l_bspFace.m_startIndex + j].m_position.x, m_verts[l_bspFace.m_startIndex + j].m_position.y, m_verts[l_bspFace.m_startIndex + j].m_position.z);
+			l_submesh->AddVertex( m_verts[l_bspFace.m_startIndex + j].m_position[0], m_verts[l_bspFace.m_startIndex + j].m_position[1], m_verts[l_bspFace.m_startIndex + j].m_position[2]);
 		}
 
 		l_submesh->ComputeFacesFromPolygonVertex();

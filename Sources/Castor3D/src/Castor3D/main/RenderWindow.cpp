@@ -1,31 +1,19 @@
 #include "PrecompiledHeader.h"
-
-#include "main/Module_Main.h"
-
 #include "main/RenderWindow.h"
-#include "main/FrameListener.h"
-#include "render_system/RenderSystem.h"
-#include "render_system/WindowRenderer.h"
-#include "render_system/Buffer.h"
-#include "material/Material.h"
-#include "material/MaterialManager.h"
-#include "material/TextureUnit.h"
-#include "scene/Scene.h"
-#include "scene/SceneNode.h"
-#include "camera/Camera.h"
-#include "camera/Viewport.h"
-#include "light/PointLight.h"
-#include "main/Root.h"
 
-#include "Log.h"
+#include "scene/Scene.h"
+#include "main/FrameListener.h"
+#include "camera/Camera.h"
+#include "material/MaterialManager.h"
+#include "shader/ShaderManager.h"
+#include "render_system/Buffer.h"
 
 using namespace Castor3D;
 
 size_t	RenderWindow :: s_nbRenderWindows	= 0;
 
-RenderWindow :: RenderWindow( WindowRenderer * p_renderer, Scene * p_mainScene, void * p_hWnd,
-							  int p_windowWidth, int p_windowHeight,
-							  ProjectionType p_type, ProjectionDirection p_look)
+RenderWindow :: RenderWindow( ScenePtr p_mainScene, void * p_hWnd, int p_windowWidth, int p_windowHeight,
+							  Viewport::eTYPE p_type, ProjectionDirection p_look)
 	:	m_type					( p_type),
 		m_lookAt				( p_look),
 		m_hWnd					( p_hWnd),
@@ -39,26 +27,24 @@ RenderWindow :: RenderWindow( WindowRenderer * p_renderer, Scene * p_mainScene, 
 		m_mainScene				( p_mainScene),
 		m_nbFrame				( 0),
 		m_windowWidth			( p_windowWidth),
-		m_windowHeight			( p_windowHeight),
-		m_renderer				( p_renderer),
-		m_camera				( NULL)
+		m_windowHeight			( p_windowHeight)
 {
-	m_renderer->SetTarget( this);
 	Char l_camName[255];
 	m_index = s_nbRenderWindows++;
-	Sprintf( l_camName, 255, C3D_T( "RenderCamera_%d"), m_index);
+	Sprintf( l_camName, 255, CU_T( "RenderCamera_%d"), m_index);
 
 	m_camera = m_mainScene->GetRootCamera();
 
 	_setViewPoint();
 
-	m_renderer->Initialise();
+	WindowRendererPtr l_pRenderer( m_pRenderer);
+	l_pRenderer->Initialise();
 	m_listener = new FrameListener();
 }
 
 RenderWindow :: ~RenderWindow()
 {
-	delete m_listener;
+//	delete m_listener;
 }
 
 bool RenderWindow :: PreRender()
@@ -70,7 +56,7 @@ bool RenderWindow :: PreRender()
 		m_changed = true;
 	}
 
-	if ( ! m_listener->FireEvents( fetPreRender))
+	if ( ! m_listener->FireEvents( FrameEvent::ePreRender))
 	{
 		return false;
 	}
@@ -78,11 +64,13 @@ bool RenderWindow :: PreRender()
 	return true;
 }
 
-void RenderWindow :: RenderOneFrame( const float & p_tslf, const bool & p_bForce)
+void RenderWindow :: RenderOneFrame( const real & p_tslf, const bool & p_bForce)
 {
+	WindowRendererPtr l_pRenderer( m_pRenderer);
+
 	if ( m_focused || m_toUpdate || p_bForce)
 	{
-		m_renderer->StartRender();
+		l_pRenderer->StartRender();
 
 		if (m_changed || m_mainScene->HasChanged())
 		{
@@ -90,24 +78,24 @@ void RenderWindow :: RenderOneFrame( const float & p_tslf, const bool & p_bForce
 			m_changed = false;
 		}
 
-
-		MaterialManager::GetSingletonPtr()->Update();
+		ShaderManager::GetSingleton().Update();
+		MaterialManager::Update();
 		BufferManager::GetSingleton().Update();
-		m_camera->Apply();
+		m_camera->Apply( m_drawType);
 
 		m_mainScene->Render( m_drawType, p_tslf);
 
-		m_listener->FireEvents( fetQueueRender);
+		m_listener->FireEvents( FrameEvent::eQueueRender);
 
 		m_camera->Remove();
 
-		m_renderer->EndRender();
+		l_pRenderer->EndRender();
 	}
 }
 
 bool RenderWindow :: PostRender()
 {
-	if ( ! m_listener->FireEvents( fetPostRender))
+	if ( ! m_listener->FireEvents( FrameEvent::ePostRender))
 	{
 		return false;
 	}
@@ -119,13 +107,14 @@ bool RenderWindow :: PostRender()
 
 void RenderWindow :: Resize( int x, int y)
 {
-	m_renderer->Resize(unsigned( x), unsigned( y));
+	WindowRendererPtr l_pRenderer( m_pRenderer);
+	l_pRenderer->Resize(unsigned( x), unsigned( y));
 	m_toUpdate = true;
 }
 
 void RenderWindow :: _setViewPoint()
 {
-	if (m_type == pt3DView)
+	if (m_type == Viewport::pt3DView)
 	{
 		m_drawType = DTTriangles;
 	}

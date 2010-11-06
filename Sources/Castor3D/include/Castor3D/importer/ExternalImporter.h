@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -20,7 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "../scene/Module_Scene.h"
 #include "../geometry/Module_Geometry.h"
-
 
 namespace Castor3D
 {
@@ -38,10 +37,10 @@ namespace Castor3D
 		String m_fileName;
 		String m_filePath;
 		SceneNodePtrArray m_nodes;
-		Scene * m_pScene;
+		ScenePtr m_pScene;
 
 	public:
-		GeometryStrMap m_geometries;
+		GeometryPtrStrMap m_geometries;
 
 	public:
 		/**
@@ -51,20 +50,17 @@ namespace Castor3D
 			:	m_fileName( C3DEmptyString)
 		{
 		}
-
 		/**
 		 * Import function
 		 *@param p_fileName : [in] The file path
 		 *@return true if successful, false if not
 		 */
 		bool Import( const String & p_fileName);
+		SceneNodePtr GetNode();
 
 	protected:
 		virtual bool _import()=0;
-//		void _convertToMesh( Mesh * p_mesh, Imported3DModel * p_model);
-
-	public:
-		inline SceneNode * GetNode() { return (m_nodes.empty() ? NULL : m_nodes[0]); }
+//		void _convertToMesh( MeshPtr p_mesh, Imported3DModel * p_model);
 	};
 }
 

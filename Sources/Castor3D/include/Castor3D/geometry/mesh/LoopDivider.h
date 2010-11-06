@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -31,19 +31,19 @@ namespace Castor3D
 	class LoopEdgeList
 	{
 	private:
-		Submesh * m_submesh;
-		std::set <Edge *> m_allEdges;
-		std::map <Vector3f *, EdgePtrMap> m_vertexEdges;
-		std::map <Vector3f *, Vector3f *> m_originalVertices;
-		std::map <Vector3f *, int> m_vertexNeighbourhood;
-		std::vector <FaceEdges *> m_facesEdges;
+		SubmeshPtr m_submesh;
+		std::set <EdgePtr> m_allEdges;
+		EdgePtrMapVPtrMap m_vertexEdges;
+		VertexPtrVPtrMap m_originalVertices;
+		IntVPtrMap m_vertexNeighbourhood;
+		FaceEdgesPtrArray m_facesEdges;
 
 	public:
-		LoopEdgeList( Submesh * p_submesh);
+		LoopEdgeList( SubmeshPtr p_submesh);
 		~LoopEdgeList();
 
 		void Divide();
-		void Average( Vector3f * p_center);
+		void Average( Point3rPtr p_center);
 
 	private:
 		void _fill();
@@ -63,7 +63,7 @@ namespace Castor3D
 		LoopSubdiviser( Submesh * p_submesh);
 		virtual ~LoopSubdiviser();
 
-		virtual void Subdivide( Vector3f * p_center);
+		virtual void Subdivide( Point3rPtr p_center);
 	};
 }
 

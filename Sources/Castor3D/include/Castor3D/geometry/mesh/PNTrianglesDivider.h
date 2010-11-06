@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -36,15 +36,15 @@ namespace Castor3D
 		{}
 		virtual ~PNTrianglesSubdiviser();
 
-		virtual void Subdivide( Vector3f * p_center);
+		virtual void Subdivide( Point3rPtr p_center);
 
 	private:
-		Vector3f * _computePointFrom( const Vector3f & p_a, float * p_aNormal,
-									  const Vector3f & p_b, float * p_bNormal,
-									  Vector3f * p_center=NULL);
-		Vector3f * _computePointFrom( const Vector3f & p_a, Vector3f * p_aNormal,
-									  const Vector3f & p_b, Vector3f * p_bNormal,
-									  Vector3f * p_center=NULL)
+		VertexPtr _computePointFrom( const Vertex & p_a, real * p_aNormal,
+									 const Vertex & p_b, real * p_bNormal,
+									 Point3rPtr p_center=NULL);
+		VertexPtr _computePointFrom( const Vertex & p_a, VertexPtr p_aNormal,
+									 const Vertex & p_b, VertexPtr p_bNormal,
+									 Point3rPtr p_center=NULL)
 		{
 			return _computePointFrom( p_a, p_aNormal->ptr(), p_b, p_bNormal->ptr(), p_center);
 		}

@@ -1,7 +1,9 @@
-#include "RotationMatrix.h"
-#include "Vector3f.h"
+#include "PrecompiledHeader.h"
 
-using namespace General::Math;
+#include "RotationMatrix.h"
+#include "Quaternion.h"
+
+using namespace Castor::Math;
 
 RotationMatrix :: RotationMatrix()
 {
@@ -11,28 +13,7 @@ RotationMatrix :: ~RotationMatrix()
 {
 }
 
-void RotationMatrix :: Initialise()
-{
-	for (int i = 0; i < 4; i++)
-	{
-		for (int j = 0; j < 4; j++)
-		{
-			m_matrix[i][j] = 0.0f;
-		}
-	}
-}
-
-void RotationMatrix :: LoadIdentity()
-{
-	Initialise();
-
-	for (int i = 0 ; i < 4 ; i++)
-	{
-		m_matrix[i][i] = 1;
-	}
-}
-
-void RotationMatrix :: LoadRotationX( float angle_p)
+void RotationMatrix :: LoadRotationX( real angle_p)
 {
 	//Ligne 1
 	m_matrix[0][0] = 1;
@@ -59,7 +40,7 @@ void RotationMatrix :: LoadRotationX( float angle_p)
 	m_matrix[3][3] = 1;
 }
 
-void RotationMatrix :: LoadRotationY( float angle_p)
+void RotationMatrix :: LoadRotationY( real angle_p)
 {
 	//Ligne 1
 	m_matrix[0][0] = cos(angle_p);
@@ -87,7 +68,7 @@ void RotationMatrix :: LoadRotationY( float angle_p)
 
 }
 
-void RotationMatrix :: LoadRotationZ( float angle_p)
+void RotationMatrix :: LoadRotationZ( real angle_p)
 {
 	//Ligne 1
 	m_matrix[0][0] = cos( angle_p);
@@ -114,7 +95,7 @@ void RotationMatrix :: LoadRotationZ( float angle_p)
 	m_matrix[3][3] = 1;
 }
 
-void RotationMatrix :: LoadScale( float hx_p, float hy_p, float hz_p)
+void RotationMatrix :: LoadScale( real hx_p, real hy_p, real hz_p)
 {
 	//Ligne 1
 	m_matrix[0][0] = hx_p;
@@ -141,7 +122,7 @@ void RotationMatrix :: LoadScale( float hx_p, float hy_p, float hz_p)
 	m_matrix[3][3] = 1;
 }
 
-void RotationMatrix :: LoadTranslation( float tx_p, float ty_p, float tz_p)
+void RotationMatrix :: LoadTranslation( real tx_p, real ty_p, real tz_p)
 {
 	//Ligne 1
 	m_matrix[0][0] = 1;
@@ -168,14 +149,14 @@ void RotationMatrix :: LoadTranslation( float tx_p, float ty_p, float tz_p)
 	m_matrix[3][3] = 1;
 }
 
-void RotationMatrix :: LoadRotationEuler( float rx_p, float ry_p, float rz_p)
+void RotationMatrix :: LoadRotationEuler( real rx_p, real ry_p, real rz_p)
 {
-	float a = cos( rx_p);
-	float b = sin( rx_p);
-	float c = cos( ry_p);
-	float d = sin( ry_p);
-	float e = cos( rz_p);
-	float f = sin( rz_p);
+	real a = cos( rx_p);
+	real b = sin( rx_p);
+	real c = cos( ry_p);
+	real d = sin( ry_p);
+	real e = cos( rz_p);
+	real f = sin( rz_p);
 
 	//Ligne 1
 	m_matrix[0][0] = c * e;
@@ -202,24 +183,24 @@ void RotationMatrix :: LoadRotationEuler( float rx_p, float ry_p, float rz_p)
 	m_matrix[3][3] = 1;
 }
 
-void RotationMatrix :: LoadRotation( float p_angle, const Vector3f & p_axis)
+void RotationMatrix :: LoadRotation( real p_angle, const Point3r & p_axis)
 {
-	float c = cos( p_angle);
-	float s = sin( p_angle);
+	real c = cos( p_angle);
+	real s = sin( p_angle);
 
-	float l_xSquared = (p_axis.x * p_axis.x);
-	float l_ySquared = (p_axis.y * p_axis.y);
-	float l_zSquared = (p_axis.z * p_axis.z);
+	real l_xSquared = (p_axis[0] * p_axis[0]);
+	real l_ySquared = (p_axis[1] * p_axis[1]);
+	real l_zSquared = (p_axis[2] * p_axis[2]);
 
-	float l_oneMinusC = (1-c);
+	real l_oneMinusC = (1-c);
 
-	float A = (p_axis.x * p_axis.y) * l_oneMinusC;
-	float B = (p_axis.x * p_axis.z) * l_oneMinusC;
-	float C = (p_axis.y * p_axis.z) * l_oneMinusC;
+	real A = (p_axis[0] * p_axis[1]) * l_oneMinusC;
+	real B = (p_axis[0] * p_axis[2]) * l_oneMinusC;
+	real C = (p_axis[1] * p_axis[2]) * l_oneMinusC;
 
-	float xs = (p_axis.x * s);
-	float ys = (p_axis.y * s); 
-	float zs = (p_axis.z * s);
+	real xs = (p_axis[0] * s);
+	real ys = (p_axis[1] * s); 
+	real zs = (p_axis[2] * s);
 
 
 	//Ligne 1
@@ -247,33 +228,18 @@ void RotationMatrix :: LoadRotation( float p_angle, const Vector3f & p_axis)
 	m_matrix[3][3] = 1;	
 }
 
-void RotationMatrix :: Multiply( Vector3f * p_vertex)
+void RotationMatrix :: LoadRotation( const Quaternion & p_quat)
 {
-	float x = (float)(m_matrix[0][0] * p_vertex->x + m_matrix[0][1] * p_vertex->y + m_matrix[0][2] * p_vertex->z + m_matrix[0][3] * 1);
-	float y = (float)(m_matrix[1][0] * p_vertex->x + m_matrix[1][1] * p_vertex->y + m_matrix[1][2] * p_vertex->z + m_matrix[1][3] * 1);
-	float z = (float)(m_matrix[2][0] * p_vertex->x + m_matrix[2][1] * p_vertex->y + m_matrix[2][2] * p_vertex->z + m_matrix[2][3] * 1);
-
-	p_vertex->x = x;
-	p_vertex->y = y;
-	p_vertex->z = z;
+	p_quat.ToRotationMatrix( * this);
 }
 
-RotationMatrix * RotationMatrix :: GetTranspose()
+void RotationMatrix :: Multiply( Point3rPtr p_vertex)
 {
-	RotationMatrix * l_result = new RotationMatrix();
- 
-	for (int i = 0 ; i < 4 ; i++)
-	{
-		for (int j = 0 ; j < 4 ; j++)
-		{
-			l_result->m_matrix[j][i] = m_matrix[i][j];
-		}
-	}
+	real x = (real)(m_matrix[0][0] * p_vertex->m_coords[0] + m_matrix[0][1] * p_vertex->m_coords[1] + m_matrix[0][2] * p_vertex->m_coords[2] + m_matrix[0][3] * 1);
+	real y = (real)(m_matrix[1][0] * p_vertex->m_coords[0] + m_matrix[1][1] * p_vertex->m_coords[1] + m_matrix[1][2] * p_vertex->m_coords[2] + m_matrix[1][3] * 1);
+	real z = (real)(m_matrix[2][0] * p_vertex->m_coords[0] + m_matrix[2][1] * p_vertex->m_coords[1] + m_matrix[2][2] * p_vertex->m_coords[2] + m_matrix[2][3] * 1);
 
-	return l_result;
-}
-
-float RotationMatrix::GetTrace()
-{
-	return m_matrix[0][0] + m_matrix[1][1] + m_matrix[2][2];
+	p_vertex->m_coords[0] = x;
+	p_vertex->m_coords[1] = y;
+	p_vertex->m_coords[2] = z;
 }

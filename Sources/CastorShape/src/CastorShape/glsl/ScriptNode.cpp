@@ -93,8 +93,8 @@ void ScriptNode :: Delete()
 
 bool ScriptNode :: IsBaseType( VariableType * p_type)const
 {
-//	genlib_assert( m_type != NULL);
-//	genlib_assert( p_type != NULL);
+//	genlib_CASTOR_ASSERT( m_type != NULL);
+//	genlib_CASTOR_ASSERT( p_type != NULL);
 
 	return m_type->GetBase() == p_type->GetBase();
 }
@@ -202,19 +202,19 @@ NodeValueBase * ScriptNode :: CreateNodeValue( VariableType * p_type)
 		case EMVT_NULLVALUE:	return NULL;
 		case EMVT_INT:			return _createValueBase <int>					( 0);
 		case EMVT_BOOL:			return _createValueBase <bool>					( false);
-		case EMVT_REAL:			return _createValueBase <float>					( 0.0);
-		case EMVT_VEC2F:		return _createValueBase <Point2D<float> >		( Point2D<float>( 0, 0));
-		case EMVT_VEC3F:		return _createValueBase <Point3D<float> >		( Point3D<float>( 0, 0, 0));
-		case EMVT_VEC4F:		return _createValueBase <Point4D<float> >		( Point4D<float>( 0, 0, 0, 0));
-		case EMVT_VEC2I:		return _createValueBase <Point2D<int> >			( Point2D<int>( 0, 0));
-		case EMVT_VEC3I:		return _createValueBase <Point3D<int> >			( Point3D<int>( 0, 0, 0));
-		case EMVT_VEC4I:		return _createValueBase <Point4D<int> >			( Point4D<int>( 0, 0, 0, 0));
+		case EMVT_REAL:			return _createValueBase <real>					( 0.0);
+		case EMVT_VEC2F:		return _createValueBase <Point2r >		( Point2r( 0, 0));
+		case EMVT_VEC3F:		return _createValueBase <Point3r >		( Point3r( 0, 0, 0));
+		case EMVT_VEC4F:		return _createValueBase <Point<real, 4> >		( Point<real, 4>( 0, 0, 0, 0));
+		case EMVT_VEC2I:		return _createValueBase <Point<int, 2> >		( Point<int, 2>( 0, 0));
+		case EMVT_VEC3I:		return _createValueBase <Point<int, 3> >		( Point<int, 3>( 0, 0, 0));
+		case EMVT_VEC4I:		return _createValueBase <Point<int, 4> >		( Point<int, 4>( 0, 0, 0, 0));
 		case EMVT_VEC2B:		return _createValueBase <Point2Bool>			( Point2Bool( false, false));
 		case EMVT_VEC3B:		return _createValueBase <Point3Bool>			( Point3Bool( false, false, false));
 		case EMVT_VEC4B:		return _createValueBase <Point4Bool>			( Point4Bool( false, false, false, false));
-		case EMVT_MAT2:			return _createValueBase <Matrix2<float> >		( Matrix2<float>());
-		case EMVT_MAT3:			return _createValueBase <Matrix3<float> >		( Matrix3<float>());
-		case EMVT_MAT4:			return _createValueBase <Matrix4<float> >		( Matrix4<float>());
+		case EMVT_MAT2:			return _createValueBase <Matrix2>				( Matrix2());
+		case EMVT_MAT3:			return _createValueBase <Matrix3>				( Matrix3());
+		case EMVT_MAT4:			return _createValueBase <Matrix4>				( Matrix4());
 		case EMVT_ARRAY:		return _createValueBase <NodeValueBaseArray>	();
 		case EMVT_STRUCT:		return _createValueBase <StructInstance *>		(new StructInstance( p_type));
 	}

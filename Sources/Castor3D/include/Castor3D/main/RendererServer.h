@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -42,8 +42,8 @@ namespace Castor3D
 			virtual const String & GetName()const = 0;
 			/**
 			 * Create a renderer
-			 */ 
-			virtual RenderSystem * CreateRenderSystem() = 0;
+			 */
+			virtual RenderSystem * CreateRenderSystem()=0;
 	};
 	//! Renderer server
 	/**
@@ -59,11 +59,12 @@ namespace Castor3D
 		 * Destructor
 		 */ 
 		CS3D_API ~RendererServer();
+		CS3D_API void Cleanup();
 		/**
 		 * Allows plugins to add new graphics drivers
 		 *@param p_driver : [in] The driver to register
 		 */ 
-		CS3D_API void AddRendererDriver( RendererDriver * p_driver);
+		CS3D_API void AddRendererDriver( RendererDriverPtr p_driver);
 		/**
 		 * Get the total number of registered graphics drivers
 		 *@return The number of registered drivers
@@ -74,7 +75,7 @@ namespace Castor3D
 		 *@param Index : [in] The index where to look for the driver 
 		 *@return The driver at the given index, NULL if not found
 		 */
-		CS3D_API RendererDriver * GetDriver( size_t Index);
+		CS3D_API RendererDriverPtr GetDriver( size_t Index);
 	};
 
 }

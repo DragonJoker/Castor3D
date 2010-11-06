@@ -11,12 +11,12 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___AUTO_SINGLETON_H___
-#define ___AUTO_SINGLETON_H___
+#ifndef ___Castor_AutoSingleton___
+#define ___Castor_AutoSingleton___
 
 #include "NonCopyable.h"
 
@@ -26,7 +26,7 @@ http://www.gnu.org/copyleft/lesser.txt.
  * If you never use it, it won't ever be created.
 **/
 
-namespace General
+namespace Castor
 { namespace Theory
 {
 	template <class T>

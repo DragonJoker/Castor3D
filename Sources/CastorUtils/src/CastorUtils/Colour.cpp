@@ -1,6 +1,13 @@
+#include "PrecompiledHeader.h"
+
 #include "Colour.h"
 
-using namespace Castor3D;
+#if CHECK_MEMORYLEAKS
+#	include "Memory.h"
+using namespace Castor::Utils;
+#endif
+
+using namespace Castor::Math;
 
 Colour Colour::FullAlphaWhite( 1.0, 1.0, 1.0, 1.0);
 Colour Colour::FullAlphaBlack( 0.0, 0.0, 0.0, 1.0);

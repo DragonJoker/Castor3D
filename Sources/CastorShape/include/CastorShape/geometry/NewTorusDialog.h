@@ -11,8 +11,8 @@ public:
 	CSNewTorusDialog( wxWindow * parent, wxWindowID p_id);
 	~CSNewTorusDialog();
 
-	float GetInternalRadius()const;
-	float GetExternalRadius()const;
+	real GetInternalRadius()const;
+	real GetExternalRadius()const;
 	int GetInternalNbFaces()const;
 	int GetExternalNbFaces()const;
 	String GetInternalNbFacesStr()const;

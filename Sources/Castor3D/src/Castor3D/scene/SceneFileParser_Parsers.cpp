@@ -2,9 +2,6 @@
 
 #include "scene/SceneFileParser_Parsers.h"
 #include "scene/SceneFileParser.h"
-
-#include "Log.h"
-
 #include "material/Material.h"
 #include "material/MaterialManager.h"
 #include "material/Pass.h"
@@ -24,19 +21,22 @@
 #include "geometry/mesh/Submesh.h"
 #include "geometry/mesh/MeshManager.h"
 #include "render_system/RenderSystem.h"
+#include "shader/ShaderManager.h"
 #include "shader/ShaderProgram.h"
 #include "shader/UniformVariable.h"
 
+
+
 using namespace Castor3D;
 
-void Castor3D :: SceneFileParser :: ParseError( const String & p_strError, SceneFileContext * p_pContext)
+void Castor3D :: SceneFileParser :: ParseError( const String & p_strError, SceneFileContextPtr p_pContext)
 {
 	StringStream l_streamError;
 	l_streamError << "Error Line #" << p_pContext->ui64Line << " / " << p_strError;
 	Log::LogMessage( l_streamError.str());
 }
 
-void Castor3D :: SceneFileParser :: ParseWarning( const String & p_strWarning, SceneFileContext * p_pContext)
+void Castor3D :: SceneFileParser :: ParseWarning( const String & p_strWarning, SceneFileContextPtr p_pContext)
 {
 	StringStream l_streamWarning;
 	l_streamWarning << "Warning Line #" << p_pContext->ui64Line << " / " << p_strWarning;
@@ -50,7 +50,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootSceneName)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootCamera)
 {
-	if (p_pContext->pScene != NULL)
+	if ( ! p_pContext->pScene.null())
 	{
 		p_pContext->eSection = SceneFileContext::eCamera;
 		p_pContext->strName = p_strParams;
@@ -65,7 +65,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootCamera)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootLight)
 {
-	if (p_pContext->pScene != NULL)
+	if ( ! p_pContext->pScene.null())
 	{
 		p_pContext->eSection = SceneFileContext::eLight;
 		p_pContext->strName = p_strParams;
@@ -80,7 +80,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootLight)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootSceneNode)
 {
-	if (p_pContext->pScene != NULL)
+	if ( ! p_pContext->pScene.null())
 	{
 		p_pContext->eSection = SceneFileContext::eNode;
 		p_pContext->strName = p_strParams;
@@ -96,10 +96,10 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootSceneNode)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootMaterial)
 {
-	if (p_pContext->pScene != NULL)
+	if ( ! p_pContext->pScene.null())
 	{
 		p_pContext->eSection = SceneFileContext::eMaterial;
-		p_pContext->pMaterial = MaterialManager::GetSingleton().CreateMaterial( p_strParams, 0);
+		p_pContext->pMaterial = MaterialManager::CreateMaterial( p_strParams, 0);
 		p_pContext->strName = p_strParams;
 		return true;
 	}
@@ -112,11 +112,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootMaterial)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootObject)
 {
-	if (p_pContext->pScene != NULL)
+	if ( ! p_pContext->pScene.null())
 	{
 		p_pContext->eSection = SceneFileContext::eObject;
 		p_pContext->strName = p_strParams;
-		p_pContext->pGeometry = new Geometry( NULL, NULL, p_pContext->strName);
+		p_pContext->pGeometry = new Geometry( MeshPtr(), NULL, p_pContext->strName);
 		return true;
 	}
 	else
@@ -124,6 +124,25 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootObject)
 		PARSING_ERROR( "No scene initialised. Enter a scene name");
 		return false;
 	}
+}
+
+IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootAmbientLight)
+{
+	if ( ! p_pContext->pScene.null())
+	{
+		Colour l_clColour;
+
+		if (PARSE_V4( float, l_clColour))
+		{
+			p_pContext->pScene->SetAmbientLight( l_clColour);
+		}
+	}
+	else
+	{
+		PARSING_ERROR( "No scene initialised. Enter a scene name");
+	}
+
+	return false;
 }
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightType)
@@ -153,11 +172,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightType)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightPosition)
 {
-	if (p_pContext->pLight != NULL)
+	if ( ! p_pContext->pLight.null())
 	{
-		Vector3f l_vVector;
+		Point<float, 3> l_vVector;
 
-		if (PARSE_V3( l_vVector))
+		if (PARSE_V3( float, l_vVector))
 		{
 			p_pContext->pLight->SetPosition( l_vVector.ptr());
 		}
@@ -172,13 +191,13 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightPosition)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightAmbient)
 {
-	if (p_pContext->pLight != NULL)
+	if ( ! p_pContext->pLight.null())
 	{
-		Vector3f l_vVector;
+		Point<float, 3> l_vVector;
 
-		if (PARSE_V3( l_vVector))
+		if (PARSE_V3( float, l_vVector))
 		{
-			p_pContext->pLight->SetAmbient( l_vVector);
+			p_pContext->pLight->SetAmbient( l_vVector.ptr());
 		}
 	}
 	else
@@ -191,13 +210,13 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightAmbient)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightDiffuse)
 {
-	if (p_pContext->pLight != NULL)
+	if ( ! p_pContext->pLight.null())
 	{
-		Vector3f l_vVector;
+		Point<float, 3> l_vVector;
 
-		if (PARSE_V3( l_vVector))
+		if (PARSE_V3( float, l_vVector))
 		{
-			p_pContext->pLight->SetDiffuse( l_vVector);
+			p_pContext->pLight->SetDiffuse( l_vVector.ptr());
 		}
 	}
 	else
@@ -210,13 +229,13 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightDiffuse)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightSpecular)
 {
-	if (p_pContext->pLight != NULL)
+	if ( ! p_pContext->pLight.null())
 	{
-		Vector3f l_vVector;
+		Point<float, 3> l_vVector;
 
-		if (PARSE_V3( l_vVector))
+		if (PARSE_V3( float, l_vVector))
 		{
-			p_pContext->pLight->SetSpecular( l_vVector);
+			p_pContext->pLight->SetSpecular( l_vVector.ptr());
 		}
 	}
 	else
@@ -229,19 +248,19 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightSpecular)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightAttenuation)
 {
-	if (p_pContext->pLight != NULL)
+	if ( ! p_pContext->pLight.null())
 	{
-		Vector3f l_vVector;
+		Point<float, 3> l_vVector;
 
-		if (PARSE_V3( l_vVector))
+		if (PARSE_V3( float, l_vVector))
 		{
 			if (p_pContext->eLightType == Light::ePoint)
 			{
-				((PointLight *)p_pContext->pLight)->SetAttenuation( l_vVector);
+				((PointLightPtr)p_pContext->pLight)->SetAttenuation( l_vVector);
 			}
 			else if (p_pContext->eLightType == Light::eSpot)
 			{
-				((SpotLight *)p_pContext->pLight)->SetAttenuation( l_vVector);
+				((SpotLightPtr)p_pContext->pLight)->SetAttenuation( l_vVector);
 			}
 			else
 			{
@@ -259,13 +278,13 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightAttenuation)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightCutOff)
 {
-	if (p_pContext->pLight != NULL)
+	if ( ! p_pContext->pLight.null())
 	{
 		float l_fFloat = float( atof( p_strParams.c_str()));
 
 		if (p_pContext->eLightType == Light::eSpot)
 		{
-			((SpotLight *)p_pContext->pLight)->SetCutOff( l_fFloat);
+			((SpotLightPtr)p_pContext->pLight)->SetCutOff( l_fFloat);
 		}
 		else
 		{
@@ -282,13 +301,13 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightCutOff)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightExponent)
 {
-	if (p_pContext->pLight != NULL)
+	if ( ! p_pContext->pLight.null())
 	{
 		float l_fFloat = float( atof( p_strParams.c_str()));
 
 		if (p_pContext->eLightType == Light::eSpot)
 		{
-			((SpotLight *)p_pContext->pLight)->SetExponent( l_fFloat);
+			((SpotLightPtr)p_pContext->pLight)->SetExponent( l_fFloat);
 		}
 		else
 		{
@@ -305,15 +324,15 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightExponent)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightOrientation)
 {
-	if (p_pContext->pLight != NULL)
+	if ( ! p_pContext->pLight.null())
 	{
 		Quaternion l_qQuaternion;
 
-		if (PARSE_V4( l_qQuaternion))
+		if (PARSE_V4( real, l_qQuaternion))
 		{
 			if (p_pContext->eLightType == Light::eSpot)
 			{
-				((SpotLight *)p_pContext->pLight)->Rotate( l_qQuaternion);
+				((SpotLightPtr)p_pContext->pLight)->Rotate( l_qQuaternion);
 			}
 			else
 			{
@@ -332,20 +351,20 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightOrientation)
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightEnd)
 {
 	p_pContext->eSection = SceneFileContext::eNone;
-	p_pContext->pLight = NULL;
+	p_pContext->pLight.reset();
 	p_pContext->strName.clear();
     return false;
 }
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_NodeParent)
 {
-	if (p_pContext->pSceneNode != NULL)
+	if ( ! p_pContext->pSceneNode.null())
 	{
-		SceneNode * l_pParent = p_pContext->pScene->GetNode( p_strParams);
+		SceneNodePtr l_pParent = p_pContext->pScene->GetNode( p_strParams);
 
-		if (l_pParent != NULL)
+		if ( ! l_pParent.null())
 		{
-			p_pContext->pSceneNode->AttachTo( l_pParent);
+			p_pContext->pSceneNode->AttachTo( l_pParent.get());
 		}
 		else
 		{
@@ -362,11 +381,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_NodeParent)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_NodePosition)
 {
-	if (p_pContext->pSceneNode != NULL)
+	if ( ! p_pContext->pSceneNode.null())
 	{
-		Vector3f l_vVector;
+		Point3r l_vVector;
 
-		if (PARSE_V3( l_vVector))
+		if (PARSE_V3( real, l_vVector))
 		{
 			p_pContext->pSceneNode->SetPosition( l_vVector);
 		}
@@ -381,11 +400,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_NodePosition)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_NodeOrientation)
 {
-	if (p_pContext->pSceneNode != NULL)
+	if ( ! p_pContext->pSceneNode.null())
 	{
 		Quaternion l_qQuaternion;
 
-		if (PARSE_V4( l_qQuaternion))
+		if (PARSE_V4( real, l_qQuaternion))
 		{
 			p_pContext->pSceneNode->SetOrientation( l_qQuaternion);
 		}
@@ -400,11 +419,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_NodeOrientation)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_NodeScale)
 {
-	if (p_pContext->pSceneNode != NULL)
+	if ( ! p_pContext->pSceneNode.null())
 	{
-		Vector3f l_vVector;
+		Point3r l_vVector;
 
-		if (PARSE_V3( l_vVector))
+		if (PARSE_V3( real, l_vVector))
 		{
 			p_pContext->pSceneNode->SetScale( l_vVector);
 		}
@@ -420,21 +439,21 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_NodeScale)
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_NodeEnd)
 {
 	p_pContext->eSection = SceneFileContext::eNone;
-	p_pContext->pSceneNode = NULL;
+	p_pContext->pSceneNode.reset();
 	p_pContext->strName.clear();
     return false;
 }
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_ObjectParent)
 {
-	if (p_pContext->pGeometry != NULL)
+	if ( ! p_pContext->pGeometry.null())
 	{
-		SceneNode * l_pParent = p_pContext->pScene->GetNode( p_strParams);
+		SceneNodePtr l_pParent = p_pContext->pScene->GetNode( p_strParams);
 
-		if (l_pParent != NULL)
+		if ( ! l_pParent.null())
 		{
-			p_pContext->pGeometry->SetParent( l_pParent);
-			l_pParent->AttachGeometry( p_pContext->pGeometry);
+			p_pContext->pGeometry->SetParent( l_pParent.get());
+			l_pParent->AttachGeometry( p_pContext->pGeometry.get());
 		}
 		else
 		{
@@ -460,7 +479,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_ObjectEnd)
 {
 	p_pContext->eSection = SceneFileContext::eNone;
 	p_pContext->pScene->AddGeometry( p_pContext->pGeometry);
-	p_pContext->pGeometry = NULL;
+	p_pContext->pGeometry.reset();
 	p_pContext->strName.clear();
     return false;
 }
@@ -474,7 +493,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshType)
 
 	if (l_strType != "custom")
 	{
-		if (p_pContext->pMesh == NULL)
+		if (p_pContext->pMesh.null())
 		{
 			StringArray l_arrayMeshInfos = p_strParams.Split( " ");
 			l_strType = l_arrayMeshInfos[0];
@@ -482,56 +501,56 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshType)
 			if (l_strType == "cube")
 			{
 				l_eType = Mesh::eCube;
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[1].c_str())));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[2].c_str())));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[3].c_str())));
+				l_arraySizes.push_back( real( atof( l_arrayMeshInfos[1].c_str())));
+				l_arraySizes.push_back( real( atof( l_arrayMeshInfos[2].c_str())));
+				l_arraySizes.push_back( real( atof( l_arrayMeshInfos[3].c_str())));
 			}
 			else if (l_strType == "cone")
 			{
 				l_eType = Mesh::eCone;
 				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[1].c_str()));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[2].c_str())));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[3].c_str())));
+				l_arraySizes.push_back( real( atof( l_arrayMeshInfos[2].c_str())));
+				l_arraySizes.push_back( real( atof( l_arrayMeshInfos[3].c_str())));
 			}
 			else if (l_strType == "cylinder")
 			{
 				l_eType = Mesh::eCylinder;
 				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[1].c_str()));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[2].c_str())));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[3].c_str())));
+				l_arraySizes.push_back( real( atof( l_arrayMeshInfos[2].c_str())));
+				l_arraySizes.push_back( real( atof( l_arrayMeshInfos[3].c_str())));
 			}
 			else if (l_strType == "sphere")
 			{
 				l_eType = Mesh::eSphere;
 				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[1].c_str()));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[2].c_str())));
+				l_arraySizes.push_back( real( atof( l_arrayMeshInfos[2].c_str())));
 			}
 			else if (l_strType == "icosaedron")
 			{
 				l_eType = Mesh::eIcosaedron;
 				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[1].c_str()));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[2].c_str())));
+				l_arraySizes.push_back( real( atof( l_arrayMeshInfos[2].c_str())));
 			}
 			else if (l_strType == "plane")
 			{
 				l_eType = Mesh::ePlane;
 				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[1].c_str()));
 				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[2].c_str()));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[3].c_str())));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[4].c_str())));
+				l_arraySizes.push_back( real( atof( l_arrayMeshInfos[3].c_str())));
+				l_arraySizes.push_back( real( atof( l_arrayMeshInfos[4].c_str())));
 			}
 			else if (l_strType == "torus")
 			{
 				l_eType = Mesh::eTorus;
 				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[1].c_str()));
 				l_arrayFaces.push_back( atoi( l_arrayMeshInfos[2].c_str()));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[3].c_str())));
-				l_arraySizes.push_back( float( atof( l_arrayMeshInfos[4].c_str())));
+				l_arraySizes.push_back( real( atof( l_arrayMeshInfos[3].c_str())));
+				l_arraySizes.push_back( real( atof( l_arrayMeshInfos[4].c_str())));
 			}
 
 			if (l_eType != Mesh::eCustom)
 			{
-				p_pContext->pMesh = MeshManager::GetSingleton().CreateMesh( p_pContext->strName, l_arrayFaces, l_arraySizes, l_eType);
+				p_pContext->pMesh = MeshManager::CreateMesh( p_pContext->strName, l_arrayFaces, l_arraySizes, l_eType);
 			}
 			else
 			{
@@ -540,12 +559,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshType)
 		}
 		else
 		{
-			PARSING_ERROR( "Mesh already initialised, ignoring this type directive");
+			PARSING_ERROR( "Mesh already initialised, ignoring that type directive");
 		}
 	}
 	else
 	{
-		p_pContext->pMesh = MeshManager::GetSingleton().CreateMesh( p_pContext->strName, l_arrayFaces, l_arraySizes, l_eType);
+		p_pContext->pMesh = MeshManager::CreateMesh( p_pContext->strName, l_arrayFaces, l_arraySizes, l_eType);
 	}
 
 	return false;
@@ -554,9 +573,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshType)
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshFile)
 {
 	MeshLoader l_loader;
-	p_pContext->pMesh = l_loader.LoadFromExtFileIO( p_pContext->pFile->GetFilePath() + "/" + p_strParams);
+	p_pContext->pMesh = l_loader.LoadFromExtFile( p_pContext->pFile->GetFilePath() + "/" + p_strParams);
 
-	if (p_pContext->pMesh == NULL)
+	if (p_pContext->pMesh.null())
 	{
 		PARSING_ERROR( "Can't load mesh file " + p_strParams);
 	}
@@ -566,9 +585,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshFile)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshMaterial)
 {
-	if (p_pContext->pMesh != NULL)
+	if ( ! p_pContext->pMesh.null())
 	{
-		if (MaterialManager::GetSingleton().HasElement( p_strParams))
+		if (MaterialManager::HasElement( p_strParams))
 		{
 			for (size_t i = 0 ; i < p_pContext->pMesh->GetNbSubmeshes() ; i++)
 			{
@@ -590,7 +609,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshMaterial)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshSubmesh)
 {
-	if (p_pContext->pMesh != NULL)
+	if ( ! p_pContext->pMesh.null())
 	{
 		p_pContext->eSection = SceneFileContext::eSubmesh;
 		p_pContext->pSubmesh = p_pContext->pMesh->CreateSubmesh( 0);
@@ -609,22 +628,22 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshEnd)
 {
 	p_pContext->eSection = SceneFileContext::eObject;
 
-	if (p_pContext->pMesh != NULL)
+	if ( ! p_pContext->pMesh.null())
 	{
 		p_pContext->pMesh->SetNormals();
 		p_pContext->pGeometry->SetMesh( p_pContext->pMesh);
 	}
 
-	p_pContext->pMesh = NULL;
+	p_pContext->pMesh.reset();
 	p_pContext->strName2.clear();
     return false;
 }
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_SubmeshMaterial)
 {
-	if (p_pContext->pSubmesh != NULL)
+	if ( ! p_pContext->pSubmesh.null())
 	{
-		if (MaterialManager::GetSingleton().HasElement( p_strParams))
+		if (MaterialManager::HasElement( p_strParams))
 		{
 			p_pContext->pSubmesh->SetMaterial( p_strParams);
 		}
@@ -643,13 +662,13 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_SubmeshMaterial)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_SubmeshVertex)
 {
-	if (p_pContext->pSubmesh != NULL)
+	if ( ! p_pContext->pSubmesh.null())
 	{
-		Vector3f l_vVector;
+		Point3r l_vVector;
 
-		if (PARSE_V3( l_vVector))
+		if (PARSE_V3( real, l_vVector))
 		{
-			p_pContext->pSubmesh->AddVertex( l_vVector.x, l_vVector.y, l_vVector.z);
+			p_pContext->pSubmesh->AddVertex( l_vVector);
 		}
 	}
 	else
@@ -662,7 +681,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_SubmeshVertex)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_SubmeshSmoothingGroup)
 {
-	if (p_pContext->pSubmesh != NULL)
+	if ( ! p_pContext->pSubmesh.null())
 	{
 		p_pContext->eSection = SceneFileContext::eSmoothingGroup;
 		p_pContext->pSmoothingGroup = p_pContext->pSubmesh->AddSmoothingGroup();
@@ -680,7 +699,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_SubmeshSmoothingGroup)
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_SubmeshEnd)
 {
 	p_pContext->eSection = SceneFileContext::eMesh;
-	if (p_pContext->pSubmesh != NULL)
+	if ( ! p_pContext->pSubmesh.null())
 	{
 		p_pContext->pSubmesh->GenerateBuffers();
 	}
@@ -690,26 +709,26 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_SubmeshEnd)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_SmoothingGroupFace)
 {
-	if (p_pContext->pSmoothingGroup != NULL)
+	if ( ! p_pContext->pSmoothingGroup.null())
 	{
-		Point3D<int> l_pt3Indices;
+		Point<int, 3> l_pt3Indices;
 		StringArray l_arrayValues = p_strParams.Split( " ");
 		p_pContext->pFace1 = NULL;
 		p_pContext->pFace2 = NULL;
 
 		if (l_arrayValues.size() >= 4)
 		{
-			Point4D<int> l_pt4Indices;
+			Point<int, 4> l_pt4Indices;
 
-			if (PARSE_V4( l_pt4Indices))
+			if (PARSE_V4( int, l_pt4Indices))
 			{
-				p_pContext->pFace1 = p_pContext->pSubmesh->AddFace( l_pt4Indices.x, l_pt4Indices.y, l_pt4Indices.z, p_pContext->pSmoothingGroup->m_idGroup - 1);
-				p_pContext->pFace2 = p_pContext->pSubmesh->AddFace( l_pt4Indices.y, l_pt4Indices.w, l_pt4Indices.z, p_pContext->pSmoothingGroup->m_idGroup - 1);
+				p_pContext->pFace1 = p_pContext->pSubmesh->AddFace( l_pt4Indices[0], l_pt4Indices[1], l_pt4Indices[2], p_pContext->pSmoothingGroup->m_idGroup - 1);
+				p_pContext->pFace2 = p_pContext->pSubmesh->AddFace( l_pt4Indices[1], l_pt4Indices[3], l_pt4Indices[2], p_pContext->pSmoothingGroup->m_idGroup - 1);
 			}
 		}
-		else if (PARSE_V3( l_pt3Indices))
+		else if (PARSE_V3( int, l_pt3Indices))
 		{
-			p_pContext->pFace1 = p_pContext->pSubmesh->AddFace( l_pt3Indices.x, l_pt3Indices.y, l_pt3Indices.z, p_pContext->pSmoothingGroup->m_idGroup - 1);
+			p_pContext->pFace1 = p_pContext->pSubmesh->AddFace( l_pt3Indices[0], l_pt3Indices[1], l_pt3Indices[2], p_pContext->pSmoothingGroup->m_idGroup - 1);
 		}
 	}
 	else
@@ -722,43 +741,43 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_SmoothingGroupFace)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_SmoothingGroupFaceUV)
 {
-	if (p_pContext->pSmoothingGroup != NULL)
+	if ( ! p_pContext->pSmoothingGroup.null())
 	{
-		Point3D<int> l_pt3Indices;
+		Point<int, 3> l_pt3Indices;
 		StringArray l_arrayValues = p_strParams.Split( " ");
 
 		if (l_arrayValues.size() >= 8)
 		{
-			if (p_pContext->pFace1 != NULL)
+			if ( ! p_pContext->pFace1.null())
 			{
-				p_pContext->pFace1->m_vertex1TexCoord.x = (float)atof( l_arrayValues[0].c_str());
-				p_pContext->pFace1->m_vertex1TexCoord.y = (float)atof( l_arrayValues[1].c_str());
-				p_pContext->pFace1->m_vertex2TexCoord.x = (float)atof( l_arrayValues[2].c_str());
-				p_pContext->pFace1->m_vertex2TexCoord.y = (float)atof( l_arrayValues[3].c_str());
-				p_pContext->pFace1->m_vertex3TexCoord.x = (float)atof( l_arrayValues[4].c_str());
-				p_pContext->pFace1->m_vertex3TexCoord.y = (float)atof( l_arrayValues[5].c_str());
+				p_pContext->pFace1->m_vertex1TexCoord[0] = ator( l_arrayValues[0].c_str());
+				p_pContext->pFace1->m_vertex1TexCoord[1] = ator( l_arrayValues[1].c_str());
+				p_pContext->pFace1->m_vertex2TexCoord[0] = ator( l_arrayValues[2].c_str());
+				p_pContext->pFace1->m_vertex2TexCoord[1] = ator( l_arrayValues[3].c_str());
+				p_pContext->pFace1->m_vertex3TexCoord[0] = ator( l_arrayValues[4].c_str());
+				p_pContext->pFace1->m_vertex3TexCoord[1] = ator( l_arrayValues[5].c_str());
 			}
 
-			if (p_pContext->pFace2 != NULL)
+			if ( ! p_pContext->pFace2.null())
 			{
-				p_pContext->pFace2->m_vertex1TexCoord.x = (float)atof( l_arrayValues[2].c_str());
-				p_pContext->pFace2->m_vertex1TexCoord.y = (float)atof( l_arrayValues[3].c_str());
-				p_pContext->pFace2->m_vertex2TexCoord.x = (float)atof( l_arrayValues[6].c_str());
-				p_pContext->pFace2->m_vertex2TexCoord.y = (float)atof( l_arrayValues[7].c_str());
-				p_pContext->pFace2->m_vertex3TexCoord.x = (float)atof( l_arrayValues[4].c_str());
-				p_pContext->pFace2->m_vertex3TexCoord.y = (float)atof( l_arrayValues[5].c_str());
+				p_pContext->pFace2->m_vertex1TexCoord[0] = ator( l_arrayValues[2].c_str());
+				p_pContext->pFace2->m_vertex1TexCoord[1] = ator( l_arrayValues[3].c_str());
+				p_pContext->pFace2->m_vertex2TexCoord[0] = ator( l_arrayValues[6].c_str());
+				p_pContext->pFace2->m_vertex2TexCoord[1] = ator( l_arrayValues[7].c_str());
+				p_pContext->pFace2->m_vertex3TexCoord[0] = ator( l_arrayValues[4].c_str());
+				p_pContext->pFace2->m_vertex3TexCoord[1] = ator( l_arrayValues[5].c_str());
 			}
 		}
 		else if (l_arrayValues.size() >= 6)
 		{
-			if (p_pContext->pFace1 != NULL)
+			if ( ! p_pContext->pFace1.null())
 			{
-				p_pContext->pFace1->m_vertex1TexCoord.x = (float)atof( l_arrayValues[0].c_str());
-				p_pContext->pFace1->m_vertex1TexCoord.y = (float)atof( l_arrayValues[1].c_str());
-				p_pContext->pFace1->m_vertex2TexCoord.x = (float)atof( l_arrayValues[2].c_str());
-				p_pContext->pFace1->m_vertex2TexCoord.y = (float)atof( l_arrayValues[3].c_str());
-				p_pContext->pFace1->m_vertex3TexCoord.x = (float)atof( l_arrayValues[4].c_str());
-				p_pContext->pFace1->m_vertex3TexCoord.y = (float)atof( l_arrayValues[5].c_str());
+				p_pContext->pFace1->m_vertex1TexCoord[0] = ator( l_arrayValues[0].c_str());
+				p_pContext->pFace1->m_vertex1TexCoord[1] = ator( l_arrayValues[1].c_str());
+				p_pContext->pFace1->m_vertex2TexCoord[0] = ator( l_arrayValues[2].c_str());
+				p_pContext->pFace1->m_vertex2TexCoord[1] = ator( l_arrayValues[3].c_str());
+				p_pContext->pFace1->m_vertex3TexCoord[0] = ator( l_arrayValues[4].c_str());
+				p_pContext->pFace1->m_vertex3TexCoord[1] = ator( l_arrayValues[5].c_str());
 			}
 		}
 	}
@@ -773,13 +792,13 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_SmoothingGroupFaceUV)
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_SmoothingGroupEnd)
 {
 	p_pContext->eSection = SceneFileContext::eSubmesh;
-	p_pContext->pSmoothingGroup = NULL;
+	p_pContext->pSmoothingGroup.reset();
 	return false;
 }
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_MaterialPass)
 {
-	if (p_pContext->pMaterial != NULL)
+	if ( ! p_pContext->pMaterial.null())
 	{
 		p_pContext->eSection = SceneFileContext::ePass;
 		p_pContext->pPass = p_pContext->pMaterial->CreatePass();
@@ -797,19 +816,19 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_MaterialPass)
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_MaterialEnd)
 {
 	p_pContext->eSection = SceneFileContext::eNone;
-	MaterialManager::GetSingleton().SetToInitialise( p_pContext->pMaterial);
-	p_pContext->pMaterial = NULL;
+	MaterialManager::SetToInitialise( p_pContext->pMaterial);
+	p_pContext->pMaterial.reset();
 	p_pContext->strName.clear();
 	return false;
 }
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassAmbient)
 {
-	if (p_pContext->pPass != NULL)
+	if ( ! p_pContext->pPass.null())
 	{
 		Colour l_crColour;
 
-		if (PARSE_V4( l_crColour))
+		if (PARSE_V4( float, l_crColour))
 		{
 			p_pContext->pPass->SetAmbient( l_crColour);
 		}
@@ -824,11 +843,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassAmbient)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassDiffuse)
 {
-	if (p_pContext->pPass != NULL)
+	if ( ! p_pContext->pPass.null())
 	{
 		Colour l_crColour;
 
-		if (PARSE_V4( l_crColour))
+		if (PARSE_V4( float, l_crColour))
 		{
 			p_pContext->pPass->SetDiffuse( l_crColour);
 		}
@@ -843,11 +862,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassDiffuse)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassSpecular)
 {
-	if (p_pContext->pPass != NULL)
+	if ( ! p_pContext->pPass.null())
 	{
 		Colour l_crColour;
 
-		if (PARSE_V4( l_crColour))
+		if (PARSE_V4( float, l_crColour))
 		{
 			p_pContext->pPass->SetSpecular( l_crColour);
 		}
@@ -862,11 +881,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassSpecular)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassEmissive)
 {
-	if (p_pContext->pPass != NULL)
+	if ( ! p_pContext->pPass.null())
 	{
 		Colour l_crColour;
 
-		if (PARSE_V4( l_crColour))
+		if (PARSE_V4( float, l_crColour))
 		{
 			p_pContext->pPass->SetEmissive( l_crColour);
 		}
@@ -881,7 +900,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassEmissive)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassShininess)
 {
-	if (p_pContext->pPass != NULL)
+	if ( ! p_pContext->pPass.null())
 	{
 		float l_fFloat = float( atof( p_strParams.c_str()));
 		p_pContext->pPass->SetShininess( l_fFloat);
@@ -896,7 +915,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassShininess)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassAlpha)
 {
-	if (p_pContext->pPass != NULL)
+	if ( ! p_pContext->pPass.null())
 	{
 		float l_fFloat = float( atof( p_strParams.c_str()));
 		p_pContext->pPass->SetAlpha( l_fFloat);
@@ -911,13 +930,13 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassAlpha)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassBaseTexColour)
 {
-	if (p_pContext->pPass != NULL)
+	if ( ! p_pContext->pPass.null())
 	{
 		Colour l_crColour;
 
-		if (PARSE_V4( l_crColour))
+		if (PARSE_V4( float, l_crColour))
 		{
-			p_pContext->pPass->SetTexBaseColour( l_crColour.r, l_crColour.g, l_crColour.b, l_crColour.a);
+			p_pContext->pPass->SetTexBaseColour( l_crColour);
 		}
 	}
 	else
@@ -930,7 +949,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassBaseTexColour)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassDoubleFace)
 {
-	if (p_pContext->pPass != NULL)
+	if ( ! p_pContext->pPass.null())
 	{
 		bool l_bDouble = p_strParams == "true";
 		p_pContext->pPass->SetDoubleFace( l_bDouble);
@@ -945,10 +964,10 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassDoubleFace)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassTextureUnit)
 {
-	if (p_pContext->pPass != NULL)
+	if ( ! p_pContext->pPass.null())
 	{
 		p_pContext->eSection = SceneFileContext::eTextureUnit;
-		p_pContext->pTextureUnit = new TextureUnit( RenderSystem::GetSingletonPtr()->CreateTextureRenderer());
+		p_pContext->pTextureUnit = new TextureUnit();
 		p_pContext->pPass->AddTextureUnit( p_pContext->pTextureUnit);
 		return true;
 	}
@@ -962,10 +981,10 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassTextureUnit)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassShader)
 {
-	if (p_pContext->pPass != NULL)
+	if ( ! p_pContext->pPass.null())
 	{
 		p_pContext->eSection = SceneFileContext::eShader;
-		p_pContext->pShaderProgram = RenderSystem::GetSingletonPtr()->CreateShaderProgram( "", "", "");
+		p_pContext->pShaderProgram = ShaderManager::GetSingletonPtr()->CreateShaderProgramFromFiles( "", "", "");
 		return true;
 	}
 	else
@@ -979,20 +998,20 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassShader)
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassEnd)
 {
 	p_pContext->eSection = SceneFileContext::eMaterial;
-	p_pContext->pPass = NULL;
+	p_pContext->pPass.reset();
 	p_pContext->strName.clear();
 	return false;
 }
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_UnitImage)
 {
-	if (p_pContext->pTextureUnit != NULL)
+	if ( ! p_pContext->pTextureUnit.null())
 	{
-		if (FileBase::FileExists( p_pContext->pFile->GetFilePath() + "/" + p_strParams))
+		if (File::FileExists( p_pContext->pFile->GetFilePath() + "/" + p_strParams))
 		{
 			p_pContext->pTextureUnit->SetTexture2D( p_pContext->pFile->GetFilePath() + "/" + p_strParams);
 		}
-		else if (FileBase::FileExists( p_strParams))
+		else if (File::FileExists( p_strParams))
 		{
 			p_pContext->pTextureUnit->SetTexture2D( p_strParams);
 		}
@@ -1011,11 +1030,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_UnitImage)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_UnitColour)
 {
-	if (p_pContext->pTextureUnit != NULL)
+	if ( ! p_pContext->pTextureUnit.null())
 	{
 		Colour l_crColour;
 
-		if (PARSE_V4( l_crColour))
+		if (PARSE_V4( float, l_crColour))
 		{
 			p_pContext->pTextureUnit->SetPrimaryColour( l_crColour.ptr());
 		}
@@ -1030,7 +1049,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_UnitColour)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_UnitMapType)
 {
-	if (p_pContext->pTextureUnit != NULL)
+	if ( ! p_pContext->pTextureUnit.null())
 	{
 		TextureUnit::eMAP_MODE eMapMode = TextureUnit::eMAP_MODE( atoi( p_strParams.c_str()));
 
@@ -1047,13 +1066,13 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_UnitMapType)
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_UnitEnd)
 {
 	p_pContext->eSection = SceneFileContext::ePass;
-	p_pContext->pTextureUnit = NULL;
+	p_pContext->pTextureUnit.reset();
 	return false;
 }
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVertexProgram)
 {
-	if (p_pContext->pShaderProgram != NULL)
+	if ( ! p_pContext->pShaderProgram.null())
 	{
 	}
 	else
@@ -1066,7 +1085,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVertexProgram)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderPixelProgram)
 {
-	if (p_pContext->pShaderProgram != NULL)
+	if ( ! p_pContext->pShaderProgram.null())
 	{
 	}
 	else
@@ -1079,7 +1098,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderPixelProgram)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderGeometryProgram)
 {
-	if (p_pContext->pShaderProgram != NULL)
+	if ( ! p_pContext->pShaderProgram.null())
 	{
 	}
 	else
@@ -1092,9 +1111,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderGeometryProgram)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVertexFile)
 {
-	if (p_pContext->pShaderProgram != NULL)
+	if ( ! p_pContext->pShaderProgram.null())
 	{
-		p_pContext->pShaderProgram->SetVertexFileIO( p_pContext->pFile->GetFilePath() + "/" + p_strParams);
+		p_pContext->pShaderProgram->SetVertexFile( p_pContext->pFile->GetFilePath() + "/" + p_strParams);
 	}
 	else
 	{
@@ -1106,9 +1125,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVertexFile)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderPixelFile)
 {
-	if (p_pContext->pShaderProgram != NULL)
+	if ( ! p_pContext->pShaderProgram.null())
 	{
-		p_pContext->pShaderProgram->SetFragmentFileIO( p_pContext->pFile->GetFilePath() + "/" + p_strParams);
+		p_pContext->pShaderProgram->SetFragmentFile( p_pContext->pFile->GetFilePath() + "/" + p_strParams);
 	}
 	else
 	{
@@ -1120,9 +1139,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderPixelFile)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderGeometryFile)
 {
-	if (p_pContext->pShaderProgram != NULL)
+	if ( ! p_pContext->pShaderProgram.null())
 	{
-		p_pContext->pShaderProgram->SetGeometryFileIO( p_pContext->pFile->GetFilePath() + "/" + p_strParams);
+		p_pContext->pShaderProgram->SetGeometryFile( p_pContext->pFile->GetFilePath() + "/" + p_strParams);
 	}
 	else
 	{
@@ -1134,7 +1153,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderGeometryFile)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVariable)
 {
-	if (p_pContext->pShaderProgram != NULL)
+	if ( ! p_pContext->pShaderProgram.null())
 	{
 		p_pContext->eSection = SceneFileContext::eShaderVariable;
 		return true;
@@ -1151,13 +1170,13 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderEnd)
 {
 	p_pContext->eSection = SceneFileContext::ePass;
 	p_pContext->pPass->SetShader( p_pContext->pShaderProgram);
-	p_pContext->pShaderProgram = NULL;
+	p_pContext->pShaderProgram.reset();
 	return false;
 }
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVariableType)
 {
-	if (p_pContext->pUniformVariable == NULL)
+	if (p_pContext->pUniformVariable.null())
 	{
 		if (p_strParams == "int")
 		{
@@ -1165,43 +1184,43 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVariableType)
 		}
 		else if (p_strParams == "float")
 		{
-			p_pContext->pUniformVariable = new OneUniformVariable<float>();
+			p_pContext->pUniformVariable = new OneUniformVariable<real>();
 		}
 		else if (p_strParams == "vec2i")
 		{
-			p_pContext->pUniformVariable = new Point2DUniformVariable<int>();
+			p_pContext->pUniformVariable = new PointUniformVariable<int, 2>();
 		}
 		else if (p_strParams == "vec3i")
 		{
-			p_pContext->pUniformVariable = new Point3DUniformVariable<int>();
+			p_pContext->pUniformVariable = new PointUniformVariable<int,3>();
 		}
 		else if (p_strParams == "vec4i")
 		{
-			p_pContext->pUniformVariable = new Point4DUniformVariable<int>();
+			p_pContext->pUniformVariable = new PointUniformVariable<int, 4>();
 		}
 		else if (p_strParams == "vec2f")
 		{
-			p_pContext->pUniformVariable = new Point2DUniformVariable<float>();
+			p_pContext->pUniformVariable = new PointUniformVariable<real, 2>();
 		}
 		else if (p_strParams == "vec3f")
 		{
-			p_pContext->pUniformVariable = new Point3DUniformVariable<float>();
+			p_pContext->pUniformVariable = new PointUniformVariable<real, 3>();
 		}
 		else if (p_strParams == "vec4f")
 		{
-			p_pContext->pUniformVariable = new Point4DUniformVariable<float>();
+			p_pContext->pUniformVariable = new PointUniformVariable<real, 4>();
 		}
 		else if (p_strParams == "mat2f")
 		{
-			p_pContext->pUniformVariable = new Matrix2UniformVariable<float>();
+			p_pContext->pUniformVariable = new MatrixUniformVariable<real, 2>();
 		}
 		else if (p_strParams == "mat3f")
 		{
-			p_pContext->pUniformVariable = new Matrix3UniformVariable<float>();
+			p_pContext->pUniformVariable = new MatrixUniformVariable<real, 3>();
 		}
 		else if (p_strParams == "mat4f")
 		{
-			p_pContext->pUniformVariable = new Matrix4UniformVariable<float>();
+			p_pContext->pUniformVariable = new MatrixUniformVariable<real, 4>();
 		}
 		else
 		{
@@ -1218,7 +1237,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVariableType)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVariableName)
 {
-	if (p_pContext->pUniformVariable != NULL)
+	if ( ! p_pContext->pUniformVariable.null())
 	{
 		p_pContext->pUniformVariable->SetName( p_strParams);
 	}
@@ -1232,7 +1251,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVariableName)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVariableValue)
 {
-	if (p_pContext->pUniformVariable != NULL)
+	if ( ! p_pContext->pUniformVariable.null())
 	{
 		p_pContext->pUniformVariable->SetValue( p_strParams);
 	}
@@ -1248,6 +1267,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVariableEnd)
 {
 	p_pContext->eSection = SceneFileContext::eShader;
 	p_pContext->pShaderProgram->AddUniformVariable( p_pContext->pUniformVariable);
-	p_pContext->pUniformVariable = NULL;
+	p_pContext->pUniformVariable.reset();
 	return false;
 }

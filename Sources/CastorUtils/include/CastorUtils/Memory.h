@@ -11,14 +11,12 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___MEMORY_MANAGER_H___
-#define ___MEMORY_MANAGER_H___
-
-#include "Module_Utils.h"
+#ifndef ___Castor_MemoryManager___
+#define ___Castor_MemoryManager___
 
 #ifndef __GNUG__
 #	define LOG_LOCATION "c:\\memoryleaks.log"
@@ -55,9 +53,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define DELETE( X) delete X
 #define DELETE_ARRAY( X) delete [] X
 */
-#ifndef ____GENLIB_NO_MEMORY_DEBUG____
+#ifndef ____CASTOR_NO_MEMORY_DEBUG____
 
-#	define MEMORY_MANAGER_START() General::Utils::MemoryManager::GetSingleton()
+#	define MEMORY_MANAGER_START() Castor::Utils::MemoryManager::GetSingleton()
 
 /*
 #	if defined(_MT) || defined(__MT__)
@@ -69,6 +67,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	endif
 */
 
+	#include "Module_Utils.h"
 	#include "Memory_Impl.h"
 
 	void operator delete[]( void * p_pointer);
@@ -76,7 +75,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 	void * operator new[]( size_t p_size);
 	void * operator new( size_t p_size);
 
-	namespace General
+	namespace Castor
 	{ namespace Utils
 	{
 		class MemoryBlock
@@ -137,16 +136,16 @@ http://www.gnu.org/copyleft/lesser.txt.
 			}
 		};
 
-		class MemoryManager : public General::Theory::AutoSingleton <MemoryManager>
+		class MemoryManager : public Castor::Theory::AutoSingleton <MemoryManager>
 		{
 		private:
 			static unsigned int sm_initialised;
 
-			typedef std::map	<void *, MemoryBlock>	MemoryBlockMap;
-			typedef std::vector	<MemoryBlock>			MemoryBlockArray;
+			typedef std::map <void *, MemoryBlock>	MemoryBlockMap;
+			typedef std::vector <MemoryBlock>		MemoryBlockArray;
 			
 		public:
-			General::MultiThreading::RecursiveMutex m_mutex;
+			Castor::MultiThreading::RecursiveMutex m_mutex;
 			MemoryBlock m_lastBlock;
 			MemoryBlockMap m_memoryMap;
 			MemoryBlockArray m_failedNews;
@@ -193,12 +192,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 	}
 	}
 	
-#	define new General::Utils::MemoryManager::GetSingleton() << MemoryBlock( __FILE__, __FUNCTION__, __LINE__) << new
+#	define new Castor::Utils::MemoryManager::GetSingleton() << Castor::Utils::MemoryBlock( __FILE__, __FUNCTION__, __LINE__) << new
 
 #else 
 
 #	define MEMORY_MANAGER_START
 
-#endif //____GENLIB_NO_MEMORY_DEBUG____
+#endif //____CASTOR_NO_MEMORY_DEBUG____
 
 #endif	//___MEMORY_MANAGER_H___

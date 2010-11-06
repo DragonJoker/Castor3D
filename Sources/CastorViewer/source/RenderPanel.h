@@ -6,27 +6,27 @@ namespace CastorViewer
 	class RenderPanel : public wxPanel
 	{
 	public:
-		float m_deltaX;
-		float m_deltaY;
-		float m_x;
-		float m_y;
-		float m_oldX;
-		float m_oldY;
+		real m_deltaX;
+		real m_deltaY;
+		real m_x;
+		real m_y;
+		real m_oldX;
+		real m_oldY;
 		bool m_mouseLeftDown;					//!< The left mouse button status
 		bool m_mouseRightDown;					//!< The right mouse button status
 		bool m_mouseMiddleDown;					//!< The middle mouse button status
 
 		wxTimer * m_timer;
-		Castor3D::ProjectionType m_renderType;
+		Castor3D::Viewport::eTYPE m_renderType;
 		Castor3D::ProjectionDirection m_lookAt;
-		Castor3D::RenderWindow * m_renderWindow;
-		Castor3D::Scene * m_mainScene;
-		Castor3D::FrameListener * m_listener;
+		Castor3D::RenderWindowPtr m_renderWindow;
+		Castor3D::ScenePtr m_mainScene;
+		Castor3D::FrameListenerPtr m_listener;
 
 	public:
 		RenderPanel( wxWindow * parent, wxWindowID p_id,
-					   Castor3D::ProjectionType p_renderType,
-					   Castor3D::Scene * p_scene,
+					   Castor3D::Viewport::eTYPE p_renderType,
+					   Castor3D::ScenePtr p_scene,
 					   const wxPoint & pos = wxDefaultPosition,
 					   const wxSize & size = wxDefaultSize,
 					   Castor3D::ProjectionDirection p_look = Castor3D::pdLookToFront,

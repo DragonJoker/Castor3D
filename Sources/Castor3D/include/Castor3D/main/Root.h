@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -24,6 +24,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <CastorUtils/NonCopyable.h>
 #include <CastorUtils/Mutex.h>
 #include <CastorUtils/Thread.h>
+#include "../camera/Viewport.h"
 
 namespace Castor3D
 {
@@ -35,28 +36,27 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API Root : public General::Theory::noncopyable
+	class CS3D_API Root : public Castor::Theory::noncopyable
 	{
 	private:
 		static Root * sm_singleton;
-		static General::MultiThreading::Mutex sm_mutex;		//!< The mutex, to make this threadsafe
-		static RenderSystem * sm_renderSystem;				//!< The render system, useful if you want to render something... loaded in a plugin
+		static Castor::MultiThreading::RecursiveMutex sm_mutex;	//!< The mutex, to make the Root threadsafe
 
 	private:
-	    PluginStrMap m_loadedPlugins;						//!< Loaded plugins
-		RendererServer m_rendererServer;					//!< The renderers (OpenGL or Direct3D)
+	    PluginStrMap m_loadedPlugins;							//!< Loaded plugins
+		RendererServer * m_rendererServer;						//!< The renderers (OpenGL or Direct3D)
 
-		RenderWindowMap m_windows;							//!< The render windows
+		RenderWindowMap m_windows;								//!< The render windows
 		RenderWindowMap::iterator m_windowsBegin;
 		RenderWindowMap::iterator m_windowsEnd;
-		PreciseTimer m_timer;								//!< The timer, to compute times (especially time since last frame)
-		bool m_ended;										//!< Tells if render has ended, by any reason
-		General::MultiThreading::Thread * m_mainLoop;		//!< The threaded render loop
-		unsigned int m_wantedFPS;							//!< The wanted frames per second, the root tries to respect it as much as possible
-		float m_timeSinceLastFrame;							//!< The time since the last frame was rendered
-		float m_timeToWait;									//!< The time to wait before the next frame render (if we have to wait, to respect wanted fps)
-		float m_elapsedTime;								//!< Elapsed time since the launch of the root
-		unsigned int m_windowsNumber;						//!< The number of render windows
+		Castor::Utils::PreciseTimer m_timer;					//!< The timer, to compute times (especially time since last frame)
+		bool m_ended;											//!< Tells if render has ended, by any reason
+		Castor::MultiThreading::Thread * m_mainLoop;			//!< The threaded render loop
+		unsigned int m_wantedFPS;								//!< The wanted frames per second, the root tries to respect it as much as possible
+		real m_timeSinceLastFrame;								//!< The time since the last frame was rendered
+		real m_timeToWait;										//!< The time to wait before the next frame render (if we have to wait, to respect wanted fps)
+		real m_elapsedTime;										//!< Elapsed time since the launch of the root
+		unsigned int m_windowsNumber;							//!< The number of render windows
 		bool m_mainLoopCreated;
 
 	public:
@@ -78,11 +78,11 @@ namespace Castor3D
 		 *@param p_type : [in] The projection type of the render window's camera's viewport
 		 *@param p_look : [in] Where the render window's camera must look
 		 */
-		RenderWindow * CreateRenderWindow( Scene * p_mainScene,
+		RenderWindowPtr CreateRenderWindow( ScenePtr p_mainScene,
 										   void * p_handle,
 										   int p_windowWidth,
 										   int p_windowHeight,
-										   ProjectionType p_type,
+										   Viewport::eTYPE p_type,
 										   ProjectionDirection p_look = pdLookToFront);
 		/**
 		 * Removes a render window, by index
@@ -93,7 +93,7 @@ namespace Castor3D
 		 * Removes a render window, by pointer
 		 *@param p_window : [in] The render window pointer
 		 */
-		bool RemoveRenderWindow( RenderWindow * p_window);
+		bool RemoveRenderWindow( RenderWindowPtr p_window);
 		/**
 		 * Removes all render windows
 		 */
@@ -118,14 +118,15 @@ namespace Castor3D
 		/**
 		 * Adds a frame listener to the array
 		 */
-		void AddFrameListener( FrameListener * p_listener);
+		void AddFrameListener( FrameListenerPtr p_listener);
 		/**
 		 * Removes a frame listener from the array
 		 */
-		void RemoveFrameListener( FrameListener * p_listener);
+		void RemoveFrameListener( FrameListenerPtr p_listener);
+
+		static size_t MainLoop( void * p_pThis);
 
 	private:
-		void _mainLoop();
 		void _renderOneFrame( bool p_bForce);
 		bool _preUpdate();
 		void _update( bool p_bForce);
@@ -137,19 +138,11 @@ namespace Castor3D
 		/**
 		 *@return The root singleton
 		 */
-		static inline Root *	GetSingletonPtr()	{ return sm_singleton; }
-		/**
-		 *@return The actual render system
-		 */
-		static inline RenderSystem *	GetRenderSystem	()	{ return sm_renderSystem; }
-		/**
-		 * Sets the render system
-		 */
-		static void SetRenderSystem	(RenderSystem * p_rs)	{ sm_renderSystem = p_rs; }
+		static inline Root *			GetSingletonPtr		() { return sm_singleton; }
 		/**
 		 *@return The renderer server
 		 */
-		inline RendererServer & GetRendererServer	() { return m_rendererServer; }
+		inline RendererServer &			GetRendererServer	() { return * m_rendererServer; }
 	};
 }
 

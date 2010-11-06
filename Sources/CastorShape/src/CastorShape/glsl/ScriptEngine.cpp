@@ -43,7 +43,7 @@ void ScriptEngine :: AddScriptZone( String & p_scriptString)
 	{
 		l_node = CompileScript( p_scriptString);
 	}
-	catch( GenException & p_exception)
+	catch( Exception & p_exception)
 	{
 		Log::LogMessage( "ScriptEngine : Failed compilation of code zone from scene file -> " + p_exception.GetDescription());
 		l_node = NULL;
@@ -80,9 +80,9 @@ ScriptNode * ScriptEngine :: GetVariable( const String & p_variableName)const
 	return m_compiler->GetProgramConstant( p_variableName);
 }
 
-ScriptNode * ScriptEngine :: CompileScriptFileIO( const String & p_strFileName)
+ScriptNode * ScriptEngine :: CompileScriptFile( const String & p_strFileName)
 {
-	return m_compiler->CompileScriptFileIO( p_strFileName);
+	return m_compiler->CompileScriptFile( p_strFileName);
 }
 
 void ScriptEngine :: ScriptError( ScriptNode * p_node, const String & p_string)

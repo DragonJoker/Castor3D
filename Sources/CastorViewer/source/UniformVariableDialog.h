@@ -14,7 +14,7 @@ namespace CastorViewer
 		};
 
 	protected:
-		Castor3D::UniformVariable * m_pUniformVariable;
+		Castor3D::UniformVariablePtr m_pUniformVariable;
 		bool m_bOwn;
 
 		wxComboBox * m_pComboType;
@@ -22,10 +22,10 @@ namespace CastorViewer
 		wxTextCtrl * m_pEditValue;
 
 	public:
-		UniformVariableDialog( wxWindow * p_pParent, Castor3D::UniformVariable * p_pUniformVariable=NULL);
+		UniformVariableDialog( wxWindow * p_pParent, Castor3D::UniformVariablePtr p_pUniformVariable=NULL);
 		~UniformVariableDialog();
 
-		inline Castor3D::UniformVariable * GetUniformVariable() { return m_pUniformVariable; }
+		inline Castor3D::UniformVariablePtr GetUniformVariable() { return m_pUniformVariable; }
 
 	private:
 		DECLARE_EVENT_TABLE()

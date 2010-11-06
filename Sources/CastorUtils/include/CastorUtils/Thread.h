@@ -11,29 +11,57 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GENERAL_LIB_THREAD_H___
-#define ___GENERAL_LIB_THREAD_H___
+#ifndef ___Castor_Thread___
+#define ___Castor_Thread___
 
 #include "MultiThreadConfig.h"
 
-#include <boost/function.hpp>
-#include <boost/thread/thread.hpp>
-
-#if GENLIB_MT_USE_BOOST || defined( __GNUG__)
-
-namespace General
-{ namespace MultiThreading
-{
+#ifndef CASTOR_THREAD_INIT
+#	define CASTOR_THREAD_INIT()
+#endif
+/*
 	//! to ease and uniformise the write of a thread
 	typedef boost::thread Thread;
 
-#	ifndef GENLIB_THREAD_INIT
-#		define GENLIB_THREAD_INIT()
+//! Declares the BeginThread class function (to put in a class declaration)
+#		define CASTOR_THREAD_DECLARE_THREAD_FUNC									void BeginThread()
+//! Defines the BeginThread class function
+#		define CASTOR_THREAD_DEFINE_THREAD_FUNC( p_class)							void p_class::BeginThread()
+//! Creates a threaded class
+#		define CASTOR_THREAD_CREATE_CLASS_THREAD( p_class, p_instance)				new Castor::MultiThreading::Thread( CASTOR_THREAD_CLASS_FUNCTOR( p_instance, p_class, BeginThread))
+//! Creates a memeber threaded function
+#		define CASTOR_THREAD_CREATE_MEMBER_FUNC_THREAD( p_class, p_instance, p_func)new Castor::MultiThreading::Thread( CASTOR_THREAD_CLASS_FUNCTOR( p_instance, p_class, p_func))
+//! Deletes a thread
+#		define CASTOR_THREAD_DELETE_THREAD( p_thread)								delete p_thread
+//! Waits for a thread end
+#		define CASTOR_THREAD_WAIT_FOR_END_OF( p_thread)								p_thread->join()
+
+#		define CASTOR_AUTO_SHARED_MUTEX mutable boost::recursive_mutex *			m_mutex;
+#		define CASTOR_SET_AUTO_SHARED_MUTEX_NULL									m_mutex = NULL;
+#		define CASTOR_NEW_AUTO_SHARED_MUTEX											m_mutex = new boost::recursive_mutex();
+#		define CASTOR_MUTEX_CONDITIONAL( mutex)										if (mutex)
+*/
+
+namespace Castor
+{ namespace MultiThreading
+{
+	typedef enum
+	{
+		eCreatedRunning		= 0,
+#	if CASTOR_MT_USE_BOOST
+		eCreateSuspended	= 1,
+#	elif CASTOR_MT_USE_MFC
+		eCreateSuspended	= 4,
+#	elif CASTOR_MT_USE_WIN32
+		eCreateSuspended	= 4,
+#	else
+		eCreateSuspended	= 1,
 #	endif
+	} eTHREAD_STATE;
 
 	//! Pointer over a class function
 	template <class TClass>
@@ -51,60 +79,49 @@ namespace General
 		}
 		void operator()()const
 		{
-			GENLIB_THREAD_INIT();
+			CASTOR_THREAD_INIT();
 			(m_instance->* m_function)();
 		}
 	};
-}
-}
+
+	typedef unsigned long (__cdecl * DWThreadStartFunction)( void *);
+	typedef DWThreadStartFunction PDWThreadStartFunction;
+	typedef unsigned int (__cdecl * UIThreadStartFunction)( void *);
+	typedef UIThreadStartFunction PUIThreadStartFunction;
 
 //! Creates a ClassFunctor
-#	define GENLIB_THREAD_CLASS_FUNCTOR( p_instance, p_class, p_function)		General :: MultiThreading :: ClassFunctor <p_class> ( p_instance, & p_class::p_function)
-//! Declares the BeginThread class function (to put in a class declaration)
-#	define GENLIB_THREAD_DECLARE_THREAD_FUNC									void BeginThread()
-//! Defines the BeginThread class function
-#	define GENLIB_THREAD_DEFINE_THREAD_FUNC( p_class)							void p_class::BeginThread()
-//! Creates a threaded class
-#	define GENLIB_THREAD_CREATE_CLASS_THREAD( p_class, p_instance)				new General :: MultiThreading :: Thread( GENLIB_THREAD_CLASS_FUNCTOR( p_instance, p_class, BeginThread))
-//! Creates a memeber threaded function
-#	define GENLIB_THREAD_CREATE_MEMBER_FUNC_THREAD( p_class, p_instance, p_func)new General :: MultiThreading :: Thread( GENLIB_THREAD_CLASS_FUNCTOR( p_instance, p_class, p_func))
-//! Deletes a thread
-#	define GENLIB_THREAD_DELETE_THREAD( p_thread)								delete p_thread
-//! Waits for a thread end
-#	define GENLIB_THREAD_WAIT_FOR_END_OF( p_thread)								p_thread->join()
+#define CASTOR_THREAD_CLASS_FUNCTOR( p_instance, p_class, p_function)		Castor::MultiThreading::ClassFunctor <p_class> ( p_instance, & p_class::p_function)
 
-#	define GENLIB_AUTO_SHARED_MUTEX mutable boost::recursive_mutex *			m_mutex;
-#	define GENLIB_SET_AUTO_SHARED_MUTEX_NULL									m_mutex = NULL;
-#	define GENLIB_NEW_AUTO_SHARED_MUTEX											m_mutex = new boost::recursive_mutex();
-#	define GENLIB_MUTEX_CONDITIONAL( mutex)										if (mutex)
+	class Thread
+	{
+	private:
+		void * m_thread;
+		bool m_bSuspended;
+		unsigned long m_dwID;
 
-#elif GENLIB_MT_USE_MFC
+	public:
+		Thread();
+		Thread( PDWThreadStartFunction lpStartAddress, void * lpParameter, void * lpThreadAttributes = NULL, size_t dwStackSize = 0, eTHREAD_STATE eCreationFlags = eCreateSuspended);
+		Thread( PUIThreadStartFunction lpStartAddress, void * lpParameter, void * lpThreadAttributes = NULL, size_t dwStackSize = 0, eTHREAD_STATE eCreationFlags = eCreateSuspended);
+		~Thread();
 
-#	ifndef WINVER
-#		define WINVER 0x0501
-#	endif
+		void CreateThread( PDWThreadStartFunction lpStartAddress, void * lpParameter, void * lpThreadAttributes = NULL, size_t dwStackSize = 0, eTHREAD_STATE eCreationFlags = eCreateSuspended);
+		void CreateThread( PUIThreadStartFunction lpStartAddress, void * lpParameter, void * lpThreadAttributes = NULL, size_t dwStackSize = 0, eTHREAD_STATE eCreationFlags = eCreateSuspended);
+		void ResumeThread();
+		void SuspendThread();
+		int GetThreadPriority();
+		bool SetThreadPriority( int iPriority);
 
-#	include <afxwin.h>
+		bool Wait( unsigned long p_ulMilliseconds);
+		inline void *			GetHandle	()const	{ return m_thread; }
+		inline unsigned long	GetID		()const	{ return m_dwID; }
+	};
 
-namespace General
-{ namespace MultiThreading
-{
-	//! to ease and uniformise the write of a thread
-	typedef CWinThread Thread;
+	Thread * CreateThread( PDWThreadStartFunction threadFunction, void * lpParameter, void * lpThreadAttributes = NULL, size_t dwStackSize = 0, eTHREAD_STATE eCreationFlags = eCreateSuspended, unsigned long * lpThreadId = NULL);
+	Thread * CreateThread( PUIThreadStartFunction threadFunction, void * lpParameter, void * lpThreadAttributes = NULL, size_t dwStackSize = 0, eTHREAD_STATE eCreationFlags = eCreateSuspended, unsigned long * lpThreadId = NULL);
+	bool WaitForMultipleThreads( bool bWaitAll, unsigned long dwMilliseconds, size_t dwNbThreads, ...);
+	bool WaitForSingleThread( Thread * pThread, unsigned long dwMilliseconds);
 }
 }
-
-//! Declares the BeginThread class function (to put in a class declaration)
-#	define GENLIB_THREAD_DECLARE_THREAD_FUNC						static unsigned int BeginThread( void * p_instance)
-//! Defines the BeginThread class function
-#	define GENLIB_THREAD_DEFINE_THREAD_FUNC( p_class)				unsigned int  p_class::BeginThread ( void * p_instance)
-//! Creates a threaded class
-#	define GENLIB_THREAD_CREATE_CLASS_THREAD( p_class, p_instance)	AfxBeginThread( p_class::BeginThread, static_cast <void *> ( p_instance), 0, 0, 0, 0)
-//! Creates a threaded function
-#	define GENLIB_THREAD_CREATE_FUNC_THREAD( p_func)				AfxBeginThread( p_func, 0, 0, 0, 0, 0)
-//! Deletes a thread
-#	define GENLIB_THREAD_DELETE_THREAD( p_thread)					delete ( p_thread)
-
-#endif
 
 #endif

@@ -41,21 +41,21 @@ namespace CastorViewer
 		wxString m_strFragmentShader;
 		wxString m_strGeometryShader;
 
-		Castor3D::ShaderProgram * m_shaderProgram;
-		Castor3D::Pass * m_pPass;
+		Castor3D::ShaderProgramPtr m_shaderProgram;
+		Castor3D::PassPtr m_pPass;
 		bool m_bCompiled;
 		bool m_bOwnShader;
 
-		std::map <int, Castor3D::UniformVariable *> m_mapUniformVariables;
+		C3DMap( int, Castor3D::UniformVariablePtr) m_mapUniformVariables;
 
 	public:
-		ShaderDialog( wxWindow * p_pParent, Castor3D::Pass * p_pPass, const wxPoint & p_ptPosition=wxPoint( 0, 0), const wxSize p_ptSize=wxSize( 800, 600));
+		ShaderDialog( wxWindow * p_pParent, Castor3D::PassPtr p_pPass, const wxPoint & p_ptPosition=wxPoint( 0, 0), const wxSize p_ptSize=wxSize( 800, 600));
 		~ShaderDialog();
 
 	private:
 		void _cleanup();
 		void _loadShader();
-		void _openShaderFileIO( );
+		void _openShaderFile( );
 
 		DECLARE_EVENT_TABLE()
 		void _onVertexFolder	( wxCommandEvent & event);

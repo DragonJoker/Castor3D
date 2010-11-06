@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -27,8 +27,13 @@ namespace Castor3D
 	class ShaderProgram;
 	class UniformVariable;
 
-	typedef std::vector <ShaderProgram *>	ShaderProgramPtrArray;
-	typedef std::vector <ShaderObject*>		ShaderObjectPtrArray;
+	typedef Templates::SharedPtr<UniformVariable>	UniformVariablePtr;
+	typedef Templates::SharedPtr<ShaderProgram>		ShaderProgramPtr;
+	typedef Templates::SharedPtr<ShaderObject>		ShaderObjectPtr;
+
+	typedef C3DVector(	ShaderProgramPtr)			ShaderProgramPtrArray;
+	typedef C3DVector(	ShaderObjectPtr)			ShaderObjectPtrArray;
+	typedef C3DMap(		String,	UniformVariablePtr)	UniformVariablePtrStrMap;
 }
 
 #endif

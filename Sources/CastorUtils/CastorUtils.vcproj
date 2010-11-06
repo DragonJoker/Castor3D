@@ -46,7 +46,9 @@
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="PrecompiledHeader.h"
+				ProgramDataBaseFileName="$(IntDir)\$(TargetName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -111,7 +113,11 @@
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="PrecompiledHeader.h"
+				ProgramDataBaseFileName="$(IntDir)\$(TargetName).pdb"
+				WarningLevel="0"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -172,7 +178,9 @@
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="PrecompiledHeader.h"
+				ProgramDataBaseFileName="$(IntDir)\$(TargetName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -238,7 +246,10 @@
 				PreprocessorDefinitions="WIN32;NDEBUG;_LIB"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="2"
+				PrecompiledHeaderThrough="PrecompiledHeader.h"
+				ProgramDataBaseFileName="$(IntDir)\$(TargetName).pdb"
+				WarningLevel="0"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -279,6 +290,26 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
+			<File
+				RelativePath=".\include\CastorUtils\PrecompiledHeader.cpp"
+				>
+				<FileConfiguration
+					Name="Debug - Multibyte|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release - Multibyte|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+			</File>
 			<Filter
 				Name="Utils"
 				>
@@ -311,10 +342,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\src\CastorUtils\Matroska.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\src\CastorUtils\PixelFormat.cpp"
 					>
 				</File>
@@ -330,6 +357,10 @@
 					RelativePath=".\src\CastorUtils\MutexManager.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\src\CastorUtils\Thread.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="General"
@@ -337,15 +368,35 @@
 				<File
 					RelativePath=".\src\CastorUtils\Memory.cpp"
 					>
+					<FileConfiguration
+						Name="Debug - Multibyte|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="2"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath=".\src\CastorUtils\Memory_Impl.cpp"
 					>
+					<FileConfiguration
+						Name="Debug - Multibyte|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							UsePrecompiledHeader="2"
+						/>
+					</FileConfiguration>
 				</File>
 			</Filter>
 			<Filter
 				Name="Math"
 				>
+				<File
+					RelativePath=".\src\CastorUtils\Angle.cpp"
+					>
+				</File>
 				<File
 					RelativePath=".\src\CastorUtils\Colour.cpp"
 					>
@@ -355,7 +406,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\src\CastorUtils\RotationMatrix.cpp"
+					RelativePath=".\src\CastorUtils\TransformationMatrix.cpp"
 					>
 				</File>
 				<File
@@ -374,7 +425,15 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\include\CastorUtils\config.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\CastorUtils\Module_Utils.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\CastorUtils\PrecompiledHeader.h"
 				>
 			</File>
 			<Filter
@@ -385,7 +444,39 @@
 					>
 				</File>
 				<File
+					RelativePath=".\include\CastorUtils\ScopedArray.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\CastorUtils\ScopedPtr.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\CastorUtils\SharedArray.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\CastorUtils\SharedCount.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\CastorUtils\SharedPtr.h"
+					>
+				</File>
+				<File
 					RelativePath=".\include\CastorUtils\SlottedObjectPool.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\CastorUtils\SmartPtrCommon.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\CastorUtils\UniqueManager.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\CastorUtils\Value.h"
 					>
 				</File>
 			</Filter>
@@ -433,15 +524,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\include\CastorUtils\STLMacros.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\CastorUtils\STLMapMacros.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\CastorUtils\STLSetMacros.h"
+					RelativePath=".\include\CastorUtils\PreciseTimer.h"
 					>
 				</File>
 				<File
@@ -473,6 +556,18 @@
 				Name="MultiThreading"
 				>
 				<File
+					RelativePath=".\include\CastorUtils\List.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\CastorUtils\Map.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\CastorUtils\Multimap.h"
+					>
+				</File>
+				<File
 					RelativePath=".\include\CastorUtils\MultiThreadConfig.h"
 					>
 				</File>
@@ -485,11 +580,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\include\CastorUtils\Set.h"
+					>
+				</File>
+				<File
 					RelativePath=".\include\CastorUtils\Thread.h"
 					>
 				</File>
 				<File
 					RelativePath=".\include\CastorUtils\ThreadSpecific.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\CastorUtils\Vector.h"
 					>
 				</File>
 			</Filter>
@@ -505,11 +608,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\include\CastorUtils\Matroska.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\CastorUtils\Module_Image.h"
+					RelativePath=".\include\CastorUtils\Module_Resource.h"
 					>
 				</File>
 				<File
@@ -528,6 +627,10 @@
 			<Filter
 				Name="Math"
 				>
+				<File
+					RelativePath=".\include\CastorUtils\Angle.h"
+					>
+				</File>
 				<File
 					RelativePath=".\include\CastorUtils\Colour.h"
 					>
@@ -557,15 +660,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\include\CastorUtils\PreciseTimer.h"
-					>
-				</File>
-				<File
 					RelativePath=".\include\CastorUtils\Quaternion.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\CastorUtils\RotationMatrix.h"
+					RelativePath=".\include\CastorUtils\TransformationMatrix.h"
 					>
 				</File>
 				<File

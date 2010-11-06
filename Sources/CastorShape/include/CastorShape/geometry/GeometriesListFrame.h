@@ -8,13 +8,13 @@
 class GeometryTreeItemData : public wxTreeItemData
 {
 protected:
-	Castor3D::Geometry * m_pGeometry;
+	Castor3D::GeometryPtr m_pGeometry;
 
 public:
-	GeometryTreeItemData( Castor3D::Geometry * p_pGeometry);
+	GeometryTreeItemData( Castor3D::GeometryPtr p_pGeometry);
 	~GeometryTreeItemData();
 
-	inline Castor3D::Geometry * GetGeometry() { return m_pGeometry; }
+	inline Castor3D::GeometryPtr GetGeometry() { return m_pGeometry; }
 };
 
 class CSGeometriesListFrame : public wxFrame
@@ -37,7 +37,7 @@ private:
 		eClassFunction	= 5,
 	};
 
-	Castor3D::Scene * m_scene;
+	Castor3D::ScenePtr m_scene;
 	wxTreeCtrl * m_pTreeGeometries;
 	wxArrayString m_items;
 	unsigned int m_nbItems;
@@ -47,7 +47,7 @@ private:
 
 public:
 	CSGeometriesListFrame( wxWindow * parent, const wxString & title,
-						   Castor3D::Scene * p_scene,
+						   Castor3D::ScenePtr p_scene,
 						   const wxPoint & pos = wxDefaultPosition,
 						   const wxSize & size = wxDefaultSize,
 						   wxWindowID id = wxID_ANY,

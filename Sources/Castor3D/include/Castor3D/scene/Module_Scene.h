@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -34,22 +34,25 @@ namespace Castor3D
 	class SceneFileContext;
 	class SceneFileParser;
 
-	//! Scene pointer map, sorted by name
-	typedef std::map	<String, Scene *>		SceneStrMap;
-	//! SceneNode pointer map, sorted by name
-	typedef std::map	<String, SceneNode *>	SceneNodeStrMap;
-	typedef std::vector	<SceneNode *>			SceneNodePtrArray;
-	
-	typedef bool ( * ParserFunction)( String & p_strParams, SceneFileContext * p_pContext);
-	typedef std::map <String, ParserFunction> AttributeParserMap;
+	typedef Templates::SharedPtr<SceneNode>			SceneNodePtr;
+	typedef Templates::SharedPtr<Scene>				ScenePtr;
+	typedef Templates::SharedPtr<SceneFileContext>	SceneFileContextPtr;
+	typedef Templates::SharedPtr<SceneFileParser>	SceneFileParserPtr;
 
-	#define DECLARE_ATTRIBUTE_PARSER( X) bool CS3D_API X( String & p_strParams, SceneFileContext * p_pContext);
-	#define IMPLEMENT_ATTRIBUTE_PARSER( X) bool Castor3D :: X( String & p_strParams, SceneFileContext * p_pContext)
+	typedef C3DMap(		String,	ScenePtr)		ScenePtrStrMap;		//!< Scene pointer map, sorted by name
+	typedef C3DMap(		String,	SceneNodePtr)	SceneNodePtrStrMap;	//!< SceneNode pointer map, sorted by name
+	typedef C3DVector(	SceneNodePtr)			SceneNodePtrArray;
+	
+	typedef bool ( * ParserFunction)( String & p_strParams, SceneFileContextPtr p_pContext);
+	typedef C3DMap(		String,	ParserFunction) AttributeParserMap;
+
+	#define DECLARE_ATTRIBUTE_PARSER( X) bool CS3D_API X( String & p_strParams, SceneFileContextPtr p_pContext);
+	#define IMPLEMENT_ATTRIBUTE_PARSER( X) bool Castor3D :: X( String & p_strParams, SceneFileContextPtr p_pContext)
 	#define PARSING_ERROR( p_strError) SceneFileParser::ParseError( p_strError, p_pContext)
 	#define PARSING_WARNING( p_strWarning) SceneFileParser::ParseWarning( p_strWarning, p_pContext)
-	#define PARSE_V2( V) SceneFileParser::ParseVector2( p_strParams, V, p_pContext)
-	#define PARSE_V3( V) SceneFileParser::ParseVector3( p_strParams, V, p_pContext)
-	#define PARSE_V4( V) SceneFileParser::ParseVector4( p_strParams, V, p_pContext)
+	#define PARSE_V2( T, V) SceneFileParser::ParseVector<T, 2>( p_strParams, V, p_pContext)
+	#define PARSE_V3( T, V) SceneFileParser::ParseVector<T, 3>( p_strParams, V, p_pContext)
+	#define PARSE_V4( T, V) SceneFileParser::ParseVector<T, 4>( p_strParams, V, p_pContext)
 }
 
 #endif

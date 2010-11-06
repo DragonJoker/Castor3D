@@ -2,15 +2,12 @@
 
 #include "animation/Module_Animation.h"
 
-
 #include "geometry/Module_Geometry.h"
 #include "scene/Module_Scene.h"
-
 #include "animation/Animation.h"
 #include "animation/KeyFrame.h"
 
 using namespace Castor3D;
-
 
 Animation :: Animation( const String & p_name)
 	:	m_name				( p_name),
@@ -24,30 +21,22 @@ Animation :: Animation( const String & p_name)
 {
 }
 
-
-
 Animation :: ~Animation()
 {
-	map::deleteAll( m_keyFrames);
+//	map::deleteAll( m_keyFrames);
 }
 
-
-
-bool Animation :: Write( FileIO & p_file)const
+bool Animation :: Write( File & p_file)const
 {
 	return true;
 }
 
-
-
-bool Animation :: Read( FileIO & p_file)
+bool Animation :: Read( File & p_file)
 {
 	return true;
 }
 
-
-
-void Animation :: Update( float p_tslf)
+void Animation :: Update( real p_tslf)
 {
 	if (m_state != AnimationPlaying)
 	{
@@ -78,9 +67,7 @@ void Animation :: Update( float p_tslf)
 	}
 }
 
-
-
-KeyFrame * Animation :: AddKeyFrame( float p_from, float p_to)
+KeyFramePtr Animation :: AddKeyFrame( real p_from, real p_to)
 {
 	if ( ! map::has( m_keyFrames, p_from))
 	{
@@ -88,29 +75,25 @@ KeyFrame * Animation :: AddKeyFrame( float p_from, float p_to)
 		{
 			m_length = p_to;
 		}
-		KeyFrame * l_keyframe = new KeyFrame( p_from, p_to);
-		m_keyFrames.insert( KeyFrameMap::value_type( p_from, l_keyframe));
+		KeyFramePtr l_keyframe = new KeyFrame( p_from, p_to);
+		m_keyFrames.insert( KeyFramePtrRealMap::value_type( p_from, l_keyframe));
 		m_lastKeyFrameIt = m_keyFrames.begin();
 		return l_keyframe;
 	}
 	return NULL;
 }
 
-
-
-void Animation :: RemoveKeyFrame( float p_time)
+void Animation :: RemoveKeyFrame( real p_time)
 {
-	map::deleteValue( m_keyFrames, p_time);
+	KeyFramePtr l_pKeyFrame;
+	map::eraseValue( m_keyFrames, p_time, l_pKeyFrame);
+	l_pKeyFrame.reset();
 }
-
-
 
 void Animation :: Play()
 {
 	m_state = AnimationPlaying;
 }
-
-
 
 void Animation :: Pause()
 {
@@ -119,8 +102,6 @@ void Animation :: Pause()
 		m_state = AnimationPaused;
 	}
 }
-
-
 
 void Animation :: Stop()
 {
@@ -131,5 +112,3 @@ void Animation :: Stop()
 		m_lastKeyFrameIt = m_keyFrames.begin();
 	}
 }
-
-

@@ -61,13 +61,13 @@ private:
 	wxPanel * m_separator2;
 	wxPanel * m_separator3;
 	wxPanel * m_separator4;
-	Castor3D::Geometry * m_repereX;
-	Castor3D::Geometry * m_repereY;
-	Castor3D::Geometry * m_repereZ;
-	Castor3D::Scene * m_mainScene;
+	Castor3D::GeometryPtr m_repereX;
+	Castor3D::GeometryPtr m_repereY;
+	Castor3D::GeometryPtr m_repereZ;
+	Castor3D::ScenePtr m_mainScene;
 	Castor3D::Root * m_castor3D;
-	Castor3D::Geometry * m_selectedGeometry;
-	std::vector <MaterialInfos *> m_selectedGeometryMaterials;
+	Castor3D::GeometryPtr m_selectedGeometry;
+	C3DVector( MaterialInfos *) m_selectedGeometryMaterials;
 	MaterialInfos m_selectedMaterial;
 
 	bool m_bWireFrame;
@@ -82,8 +82,8 @@ public:
 				 wxString name = wxString( (wxChar *)"CSMainFrame", 11));
 	~CSMainFrame();
 
-	void SelectGeometry( Castor3D::Geometry * p_geometry);
-	void SelectVertex( Vector3f * p_vertex);
+	void SelectGeometry( Castor3D::GeometryPtr p_geometry);
+	void SelectVertex( Point3rPtr p_vertex);
 	void ShowPanels();
 
 private:
@@ -137,9 +137,9 @@ private:
 	void _buildMenuBar();
 	void _createGeometry( Castor3D::Mesh::eTYPE p_meshType, String & p_name,
 						  const String & p_meshStrVars,
-						  const String & p_baseName, Castor3D::Scene * p_scene,
+						  const String & p_baseName, Castor3D::ScenePtr p_scene,
 						  CSNewGeometryDialog * p_dialog, unsigned int i=0,
-						  unsigned int j=0, float a=0.0, float b=0.0, float c=0.0);
+						  unsigned int j=0, real a=0.0, real b=0.0, real c=0.0);
 
 DECLARE_EVENT_TABLE()
 };

@@ -3,7 +3,7 @@
 #include "render_engine/Module_RenderEngine.h"
 
 #include "scene/Scene.h"
-#include "Log.h"
+
 #include "scene/SceneNode.h"
 #include "geometry/basic/Face.h"
 #include "geometry/mesh/Submesh.h"
@@ -17,7 +17,7 @@
 
 using namespace Castor3D;
 
-RenderEngine :: RenderEngine( const String & p_strFileName, Scene * p_pScene)
+RenderEngine :: RenderEngine( const String & p_strFileName, ScenePtr p_pScene)
 	:	m_strFileName( p_strFileName),
 		m_pScene( p_pScene)
 {
@@ -60,56 +60,56 @@ bool RenderEngine :: Draw()
 			Log::LogMessage( "y : %i", y);
 			for (int x = 0 ; x < l_iSizeX ; ++x)
 			{
-				float red = 0, green = 0, blue = 0;
-				float coef = 1.0f;
+				real red = 0, green = 0, blue = 0;
+				real coef = 1.0f;
 				int level = 0; 
 				// lancer de rayon 
-				Ray l_viewRay( Vector3f( float( x-128), float( y-128), -10000.0f), Vector3f( 0, 0, 1));
+				Ray l_viewRay( Point3r( real( x-128), real( y-128), -10000.0f), Point3r( 0, 0, 1));
 
-				SceneNodeStrMap::const_iterator l_itNodesEnd = m_pScene->GetNodesEnd();
-				LightStrMap::const_iterator l_itLightsEnd = m_pScene->GetLightsEnd();
-				Geometry * l_pNearestGeometry = NULL;
-				Submesh * l_pNearestSubmesh = NULL;
+				SceneNodePtrStrMap::const_iterator l_itNodesEnd = m_pScene->GetNodesEnd();
+				LightPtrStrMap::const_iterator l_itLightsEnd = m_pScene->GetLightsEnd();
+				GeometryPtr l_pNearestGeometry = NULL;
+				SubmeshPtr l_pNearestSubmesh = NULL;
 
 				do 
 				{ 
 					// recherche de l'intersection la plus proche
-					float l_fDistance = 20000.0f;
-					Face * l_pFace;
+					real l_fDistance = 20000.0f;
+					FacePtr l_pFace;
 
-					for (SceneNodeStrMap::iterator l_it = m_pScene->GetNodesIterator() ; l_it != l_itNodesEnd; ++l_it)
+					for (SceneNodePtrStrMap::iterator l_it = m_pScene->GetNodesIterator() ; l_it != l_itNodesEnd; ++l_it)
 					{ 
 						l_pNearestGeometry = l_it->second->GetNearestGeometry( & l_viewRay, l_fDistance, & l_pFace, & l_pNearestSubmesh);
 					}
 
-					if (l_pNearestGeometry != NULL)
+					if ( ! l_pNearestGeometry.null())
 					{
-//						Log::LogMessage( C3D_T( "Geometry : ") + l_pNearestGeometry->GetName());
-						Vector3f l_vNewStart = l_viewRay.m_origin->operator +( l_viewRay.m_direction->operator *( l_fDistance)); 
+//						Log::LogMessage( CU_T( "Geometry : ") + l_pNearestGeometry->GetName());
+						Point3r l_vNewStart = l_viewRay.m_origin + (l_viewRay.m_direction * l_fDistance); 
 						// la normale au point d'intersection 
-						Vector3f l_vNormal = l_vNewStart - l_pNearestSubmesh->GetSphere()->GetCenter();
-//						Vector3f l_vNormal( l_pFace->m_faceNormal);
-						float l_fTemp = l_vNormal.dotProduct( l_vNormal);
+						Point3r l_vNormal = l_vNewStart - l_pNearestSubmesh->GetSphere()->GetCenter();
+//						Point3r l_vNormal( l_pFace->m_faceNormal);
+						real l_fTemp = l_vNormal.dotProduct( l_vNormal);
 
 						if (l_fTemp == 0.0f)
 						{
 							break;
 						}
 
-						l_fTemp = 1.0f / sqrtf( l_fTemp); 
+						l_fTemp = real( 1.0) / square_root( l_fTemp); 
 						l_vNormal = l_vNormal * l_fTemp; 
 
-						Material * l_pCurrentMat = l_pNearestSubmesh->GetMaterial(); 
+						MaterialPtr l_pCurrentMat = l_pNearestSubmesh->GetMaterial(); 
 
 						// calcul de la valeur d'éclairement au point 
-						for (LightStrMap::iterator l_it = m_pScene->GetLightsIterator() ; l_it != l_itLightsEnd; ++l_it)
+						for (LightPtrStrMap::iterator l_it = m_pScene->GetLightsIterator() ; l_it != l_itLightsEnd; ++l_it)
 						{
-							Light * l_pCurrent = l_it->second;
-							Vector3f l_vDist = Vector3f( l_pCurrent->GetPosition()) - l_vNewStart;
+							LightPtr l_pCurrent = l_it->second;
+							Point3r l_vDist = Point3r( l_pCurrent->GetPosition()[0], l_pCurrent->GetPosition()[1], l_pCurrent->GetPosition()[2]) - l_vNewStart;
 
 							if (l_vNormal.dotProduct( l_vDist) > 0.0f)
 							{
-								float l_fT = sqrtf( l_vDist.dotProduct( l_vDist));
+								real l_fT = square_root( l_vDist.dotProduct( l_vDist));
 
 								if (l_fT > 0.0f)
 								{
@@ -117,11 +117,11 @@ bool RenderEngine :: Draw()
 									// calcul des ombres 
 									bool l_bInShadow = false; 
 
-									for (SceneNodeStrMap::iterator l_it = m_pScene->GetNodesIterator() ; ! l_bInShadow && l_it != l_itNodesEnd; ++l_it)
+									for (SceneNodePtrStrMap::iterator l_it = m_pScene->GetNodesIterator() ; ! l_bInShadow && l_it != l_itNodesEnd; ++l_it)
 									{
 										l_pNearestGeometry = l_it->second->GetNearestGeometry( & l_lightRay, l_fT, NULL, NULL);
 
-										if (l_pNearestGeometry != NULL)
+										if ( ! l_pNearestGeometry.null())
 										{
 											l_bInShadow = true;
 										}
@@ -130,7 +130,7 @@ bool RenderEngine :: Draw()
 									if ( ! l_bInShadow)
 									{
 										// lambert
-										float lambert = (l_lightRay.m_direction->dotProduct( l_vNormal)) * coef;
+										real lambert = (l_lightRay.m_direction.dotProduct( l_vNormal)) * coef;
 										red += lambert * l_pCurrent->GetDiffuse()[0] * l_pCurrentMat->GetPass( 0)->GetDiffuse()[0];
 										green += lambert * l_pCurrent->GetDiffuse()[1] * l_pCurrentMat->GetPass( 0)->GetDiffuse()[2];
 										blue += lambert * l_pCurrent->GetDiffuse()[1] * l_pCurrentMat->GetPass( 0)->GetDiffuse()[2];
@@ -142,16 +142,16 @@ bool RenderEngine :: Draw()
 						// on itére sur la prochaine reflexion
 						coef *= l_pCurrentMat->GetPass( 0)->GetShininess();
 
-						float l_fReflet = 2.0f * l_viewRay.m_direction->dotProduct( l_vNormal);
-						l_viewRay.m_origin->operator =( l_vNewStart);
-						l_viewRay.m_direction->operator =( l_viewRay.m_direction->operator -( l_vNormal * l_fReflet));
+						real l_fReflet = 2.0f * l_viewRay.m_direction.dotProduct( l_vNormal);
+						l_viewRay.m_origin = l_vNewStart;
+						l_viewRay.m_direction = l_viewRay.m_direction - (l_vNormal * l_fReflet);
 
 						level++;
 					}
 				} 
-				while ((coef > 0.0f) && (level < 10) && l_pNearestGeometry != NULL);
+				while ((coef > 0.0f) && (level < 10) && ! l_pNearestGeometry.null());
 
-				l_imageFile.put((unsigned char)min(blue*255.0f,255.0f)).put((unsigned char)min(green*255.0f, 255.0f)).put((unsigned char)min(red*255.0f, 255.0f));
+				l_imageFile.put( std::min<unsigned char>( unsigned char( blue*255.0f), 255)).put( std::min<unsigned char>( unsigned char( green*255.0f), 255)).put( std::min<unsigned char>( unsigned char( red*255.0f), 255));
 			}
 		}
 

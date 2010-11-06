@@ -11,32 +11,38 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_VertexSpherical___
-#define ___C3D_VertexSpherical___
+#ifndef ___Castor_VertexSpherical___
+#define ___Castor_VertexSpherical___
 
-namespace General
+#include "Point.h"
+
+namespace Castor
 {	namespace Math
 {
 	class VertexSpherical
 	{
 	public:
-		float m_radius;		//!< The radius (distance to origin)
-		float m_phi;		//!< The xy angle
-		float m_theta;		//!< The xz angle
+		real m_radius;		//!< The radius (distance to origin)
+		real m_phi;		//!< The xy angle
+		real m_theta;		//!< The xz angle
 
 	public:
+		/**
+		 * Specified constructor
+		 */
+		VertexSpherical( real p_radius=0, real p_phi=0, real p_theta=0);
 		/**
 		* Copy constructor
 		*/
 		VertexSpherical( const VertexSpherical & p_vertex);
 		/**
-		 * Specified constructor
-		 */
-		VertexSpherical( float p_radius=0, float p_phi=0, float p_theta=0);
+		* Constructor from Point3r
+		*/
+		VertexSpherical( const Point3r & p_vertex);
 		/**
 		 * Destructor
 		 */

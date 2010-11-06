@@ -11,18 +11,18 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___MACROS_H___
-#define ___MACROS_H___
+#ifndef ___Castor_Macros___
+#define ___Castor_Macros___
 
 /*
 	Usefull macros :
 
 	d_debug_only : [debug helper] this code will only exists in the debug build
-	d_debug_assert : [debug helper] this assert only exists in debug build
+	d_debug_CASTOR_ASSERT : [debug helper] this CASTOR_ASSERT only exists in debug build
 
 	d_no_default : [debug helper] use when all the cases possibles for a switch have been used.
 					Produces an error if somehow the code reaches the default
@@ -58,19 +58,19 @@ http://www.gnu.org/copyleft/lesser.txt.
 */
 
 
-#ifndef ___MUSE_DEBUG___
+#ifndef ___CASTOR_DEBUG___
 #	define d_debug_only
-#	define d_debug_assert( X)
+#	define d_debug_CASTOR_ASSERT( X)
 #else
 #	define d_debug_only if( 0)
-#	define d_debug_assert( X) Assert( X)
+#	define d_debug_CASTOR_ASSERT( X) Assert( X)
 #endif
 
 #ifndef __FUNCTION__
 #	define __FUNCTION__ ""
 #endif
 
-#define d_unreachable_code d_debug_assert( 0); d_hint( 0)
+#define d_unreachable_code d_debug_CASTOR_ASSERT( 0); d_hint( 0)
 #define d_no_default default : d_unreachable_code
 #define d_no_throw throw()
 #define d_coucou std::cout "Coucou" << __COUNTER__ << " : " << __FUNCTION__ << " @ line " << __LINE__ << std::endl

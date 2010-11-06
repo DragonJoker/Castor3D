@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
  */
@@ -33,14 +33,10 @@ namespace Castor3D
 	class CS3D_API MovingObject
 	{
 	private:
-		//! The wanted translation of the object
-		Vector3f m_translate;
-		//! The wanted scale of the object
-		Vector3f m_scale;
-		//! The wanted rotation of the object
-		Quaternion m_rotate;
-		//! the object affected by the animations
-		MovableObject * m_object;
+		Point3r m_translate;		//! The wanted translation of the object
+		Point3r m_scale;			//! The wanted scale of the object
+		Quaternion m_rotate;		//! The wanted rotation of the object
+		MovableObjectPtr m_object;	//! the object affected by the animations
 
 	public:
 		/**
@@ -54,8 +50,8 @@ namespace Castor3D
 		 *@param p_scale : the wanted object scale
 		 *@param p_rotate : the wanted object rotation
 		 */
-		MovingObject( MovableObject * p_object,
-					  const Vector3f & p_translate, const Vector3f & p_scale,
+		MovingObject( MovableObjectPtr p_object,
+					  const Point3r & p_translate, const Point3r & p_scale,
 					  const Quaternion & p_rotate);
 		/**
 		 * Destructor, dummy, destroy the movable object yourself
@@ -66,22 +62,26 @@ namespace Castor3D
 		 *@param p_percent : percentage between 0.0 and 1.0
 		 *@param p_weight : weight of the animation, determine how much to apply the transformations
 		 */
-		void Update( float p_percent, float p_weight);
+		void Update( real p_percent, real p_weight);
+
+	public:
+		/**@name Accessors */
+		//@{
 		/**
 		 * Sets the movable object to animate
 		 *@param p_object : the new movable object
 		 */
-		inline void SetObject		( MovableObject * p_object)			{ m_object = p_object; }
+		inline void SetObject		( MovableObjectPtr p_object)	{ m_object = p_object; }
 		/**
 		 * Sets the translation to apply to the movable object
 		 *@param p_translate : the new translation
 		 */
-		inline void SetTranslate	( const Vector3f & p_translate)	{ m_translate = p_translate; }
+		inline void SetTranslate	( const Point3r & p_translate)	{ m_translate = p_translate; }
 		/**
 		 * Sets the scale to apply to the movable object
 		 *@param p_scale : the new scale
 		 */
-		inline void SetScale		( const Vector3f & p_scale)		{ m_scale = p_scale; }
+		inline void SetScale		( const Point3r & p_scale)		{ m_scale = p_scale; }
 		/**
 		 * Sets the rotation to apply to the movable object
 		 *@param p_rotate : the new rotation
@@ -91,7 +91,8 @@ namespace Castor3D
 		 * Gives the movable object
 		 *@return the current movable object
 		 */
-		inline MovableObject * GetObject ()const { return m_object; }
+		inline MovableObjectPtr GetObject ()const { return m_object; }
+		//@}
 	};
 
 	//! The class which manages key frames
@@ -102,11 +103,11 @@ namespace Castor3D
 	{
 	protected:
 		//! The list of objects to move
-		MovingObjectStrMap m_toMove;
+		MovingObjectPtrStrMap m_toMove;
 		//! The end time index
-		float m_to;
+		real m_to;
 		//! The start time index
-		float m_from;
+		real m_from;
 
 	public:
 		/**
@@ -114,7 +115,7 @@ namespace Castor3D
 		 *@param p_from : when the animation starts
 		 *@param p_to : when the animation ends
 		 */
-		KeyFrame( float p_from, float p_to);
+		KeyFrame( real p_from, real p_to);
 		/**
 		 * Destructor, deletes all its objects
 		 */
@@ -124,17 +125,17 @@ namespace Castor3D
 		 *@param p_time : the current time index
 		 *@param p_weight : the animation weight
 		 */
-		void Update( float p_time, float p_weight);
+		void Update( real p_time, real p_weight);
 		/**
 		 * Writes the animation in a file
 		 *@param p_file : the file to write in
 		 */
-		bool Write( General::Utils::FileIO & p_file)const;
+		bool Write( Castor::Utils::File & p_file)const;
 		/**
 		 * Reads the animation from a file
 		 @param p_file : the file to read from
 		 */
-		bool Read( General::Utils::FileIO & p_file);
+		bool Read( Castor::Utils::File & p_file);
 		/**
 		 * Adds a moving object, with its wanted tranformations
 		 *@param p_object : the movable object to add
@@ -142,20 +143,22 @@ namespace Castor3D
 		 *@param p_scale : the wanted scale
 		 *@param p_rotate : the wanted rotation
 		 */
-		void AddMovingObject( MovableObject * p_object,
-							  const Vector3f & p_translate,
-							  const Vector3f & p_scale,
-							  const Quaternion & p_rotate);
+		void AddMovingObject( MovableObjectPtr p_object, const Point3r & p_translate,
+							  const Point3r & p_scale, const Quaternion & p_rotate);
 		/**
 		 * Removes a moving object, determined by its name, deletes the MovingObject, not the MovableObject
 		 *@param p_name : the name of the object to remove
 		 */
 		void RemoveMovingObject( const String & p_name);
+	public:
+		/**@name Accessors */
+		//@{
 		/**
 		 * Returns the end time index
 		 *@return The end time index
 		 */
-		inline float GetTo()const { return m_to; }
+		inline real GetTo()const { return m_to; }
+		//@}
 	};
 }
 

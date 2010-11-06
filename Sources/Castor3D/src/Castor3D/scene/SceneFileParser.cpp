@@ -4,10 +4,43 @@
 #include "scene/SceneFileParser_Parsers.h"
 #include "scene/SceneManager.h"
 
-#include "Log.h"
-
 using namespace Castor3D;
-using namespace General::Utils;
+using namespace Castor::Utils;
+
+//****************************************************************************************************
+
+SceneFileContext :: SceneFileContext()
+{
+	Initialise();
+}
+
+void SceneFileContext :: Initialise()
+{
+	pScene.reset();
+	pSceneNode.reset();
+	pGeometry.reset();
+	pMesh.reset();
+	pSubmesh.reset();
+	pSmoothingGroup.reset();
+	pLight.reset();
+	pCamera.reset();
+	pMaterial.reset();
+	pPass.reset();
+	pTextureUnit.reset();
+	pShaderProgram.reset();
+	pUniformVariable.reset();
+	pFace1.reset();
+	pFace2.reset();
+
+	strName.clear();
+	strName2.clear();
+	
+	pFile				= NULL;
+
+	ui64Line			= 0;
+}
+
+//****************************************************************************************************
 
 SceneFileParser :: SceneFileParser()
 	:	m_pContext( new SceneFileContext)
@@ -17,6 +50,7 @@ SceneFileParser :: SceneFileParser()
 	m_mapRootParsers			["scene_node"]			= Parser_RootSceneNode;
 	m_mapRootParsers			["camera"]				= Parser_RootCamera;
 	m_mapRootParsers			["material"]			= Parser_RootMaterial;
+	m_mapRootParsers			["ambient_light"]		= Parser_RootAmbientLight;
 
 	m_mapLightParsers			["type"]				= Parser_LightType;
 	m_mapLightParsers			["position"]			= Parser_LightPosition;
@@ -97,18 +131,18 @@ bool SceneFileParser :: ParseFile( const String & p_strFileName)
 {
 	bool l_bReturn = false;
 
-	FileStream * l_pFile = new FileStream( p_strFileName, FileBase::eRead);
+	File l_file( p_strFileName, File::eRead);
 
-	if (l_pFile->IsOk())
+	if (l_file.IsOk())
 	{
 		m_pContext->Initialise();
-		m_pContext->pFile = l_pFile;
-		m_pContext->pScene = SceneManager::GetSingleton().GetElementByName( "MainScene");
+		m_pContext->pFile = & l_file;
+		m_pContext->pScene = SceneManager::GetSingleton().CreateElement( "TmpScene");
 
 		bool l_bNextIsOpenBrace = false;
 		bool l_bCommented = false;
 
-		Log::LogMessage( "SceneFileParser : Parsing scene file [" + l_pFile->GetFileName() + "]");
+		Log::LogMessage( "SceneFileParser : Parsing scene file [" + l_file.GetFileName() + "]");
 
 		m_pContext->eSection = SceneFileContext::eNone;
 		m_pContext->ui64Line = 0;
@@ -119,11 +153,11 @@ bool SceneFileParser :: ParseFile( const String & p_strFileName)
 
 		String l_strLine;
 
-		while (l_pFile->IsOk())
+		while (l_file.IsOk())
 		{
 			if ( ! l_bReuse)
 			{
-				l_pFile->ReadLine( l_strLine, 1000);
+				l_file.ReadLine( l_strLine, 1000);
 				m_pContext->ui64Line++;
 			}
 			else
@@ -184,12 +218,13 @@ bool SceneFileParser :: ParseFile( const String & p_strFileName)
 			ParseError( "Parsing Error : ParseScript -> unexpected end of file", m_pContext);
 		}
 
-		Log::LogMessage( "SceneFileParser : Finished parsing script [" + l_pFile->GetFileName() + "]");
+		Log::LogMessage( "SceneFileParser : Finished parsing script [" + l_file.GetFileName() + "]");
 
 		l_bReturn = true;
-	}
 
-	delete l_pFile;
+		SceneManager::GetSingleton().GetElementByName( "MainScene")->Merge( m_pContext->pScene);
+		m_pContext->pScene.reset();
+	}
 
 	return l_bReturn;
 }
@@ -245,3 +280,5 @@ bool SceneFileParser::_invokeParser( String & p_line, const AttributeParserMap &
 
 	return l_bReturn;
 }
+
+//****************************************************************************************************

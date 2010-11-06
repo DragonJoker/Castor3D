@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -19,63 +19,65 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___ASE___
 
 #include "ExternalImporter.h"
+#include "../scene/Module_Scene.h"
+#include "../material/Module_Material.h"
 
-static const Char * SCENE				= C3D_T( "*SCENE");
-static const Char * SCENE_NAME			= C3D_T( "*SCENE_FILENAME");
+static const Char * SCENE				= CU_T( "*SCENE");
+static const Char * SCENE_NAME			= CU_T( "*SCENE_FILENAME");
 
-static const Char * MATERIAL_LIST		= C3D_T( "*MATERIAL_LIST");
-static const Char * MATERIAL			= C3D_T( "*MATERIAL");
-static const Char * SUBMATERIAL			= C3D_T( "*SUBMATERIAL");
-static const Char * MATERIAL_COUNT		= C3D_T( "*MATERIAL_COUNT");
-static const Char * MATERIAL_NAME		= C3D_T( "*MATERIAL_NAME");
-static const Char * MATERIAL_DIFFUSE	= C3D_T( "*MATERIAL_DIFFUSE");
-static const Char * MATERIAL_AMBIENT	= C3D_T( "*MATERIAL_AMBIENT");
-static const Char * MATERIAL_SPECULAR	= C3D_T( "*MATERIAL_SPECULAR");
-static const Char * MATERIAL_SHININESS	= C3D_T( "*MATERIAL_SHINE");
-static const Char * TEXTURE				= C3D_T( "*BITMAP");
-static const Char * UTILE				= C3D_T( "*UVW_U_TILING");
-static const Char * VTILE				= C3D_T( "*UVW_V_TILING");
-static const Char * UOFFSET				= C3D_T( "*UVW_U_OFFSET");
-static const Char * VOFFSET				= C3D_T( "*UVW_V_OFFSET");
+static const Char * MATERIAL_LIST		= CU_T( "*MATERIAL_LIST");
+static const Char * MATERIAL			= CU_T( "*MATERIAL");
+static const Char * SUBMATERIAL			= CU_T( "*SUBMATERIAL");
+static const Char * MATERIAL_COUNT		= CU_T( "*MATERIAL_COUNT");
+static const Char * MATERIAL_NAME		= CU_T( "*MATERIAL_NAME");
+static const Char * MATERIAL_DIFFUSE	= CU_T( "*MATERIAL_DIFFUSE");
+static const Char * MATERIAL_AMBIENT	= CU_T( "*MATERIAL_AMBIENT");
+static const Char * MATERIAL_SPECULAR	= CU_T( "*MATERIAL_SPECULAR");
+static const Char * MATERIAL_SHININESS	= CU_T( "*MATERIAL_SHINE");
+static const Char * TEXTURE				= CU_T( "*BITMAP");
+static const Char * UTILE				= CU_T( "*UVW_U_TILING");
+static const Char * VTILE				= CU_T( "*UVW_V_TILING");
+static const Char * UOFFSET				= CU_T( "*UVW_U_OFFSET");
+static const Char * VOFFSET				= CU_T( "*UVW_V_OFFSET");
 
-static const Char * CAMERA				= C3D_T( "*CAMERAOBJECT");
-static const Char * CAMERA_SETTINGS		= C3D_T( "*CAMERA_SETTINGS");
-static const Char * CAMERA_NEAR			= C3D_T( "*CAMERA_NEAR");
-static const Char * CAMERA_FAR			= C3D_T( "*CAMERA_FAR");
-static const Char * CAMERA_FOV			= C3D_T( "*CAMERA_FOV");
+static const Char * CAMERA				= CU_T( "*CAMERAOBJECT");
+static const Char * CAMERA_SETTINGS		= CU_T( "*CAMERA_SETTINGS");
+static const Char * CAMERA_NEAR			= CU_T( "*CAMERA_NEAR");
+static const Char * CAMERA_FAR			= CU_T( "*CAMERA_FAR");
+static const Char * CAMERA_FOV			= CU_T( "*CAMERA_FOV");
 
-static const Char * OBJECT				= C3D_T( "*GEOMOBJECT");
-static const Char * MESH				= C3D_T( "*MESH");
-static const Char * NUM_VERTEX			= C3D_T( "*MESH_NUMVERTEX");
-static const Char * NUM_TVERTEX			= C3D_T( "*MESH_NUMTVERTEX");
-static const Char * NUM_FACES			= C3D_T( "*MESH_NUMFACES");
-static const Char * MESH_VERTEX_LIST	= C3D_T( "*MESH_VERTEX_LIST");
-static const Char * MESH_FACE_LIST		= C3D_T( "*MESH_FACE_LIST");
-static const Char * MESH_TVERTLIST		= C3D_T( "*MESH_TVERTLIST");
-static const Char * MESH_TFACELIST		= C3D_T( "*MESH_TFACELIST");
-static const Char * VERTEX				= C3D_T( "*MESH_VERTEX");
-static const Char * FACE				= C3D_T( "*MESH_FACE");
-static const Char * TVERTEX				= C3D_T( "*MESH_TVERT");
-static const Char * TFACE				= C3D_T( "*MESH_TFACE");
-static const Char * NORMALS				= C3D_T( "*MESH_NORMALS");
-static const Char * FACE_NORMAL			= C3D_T( "*MESH_FACENORMAL");
-static const Char * VERTEX_NORMAL		= C3D_T( "*MESH_VERTEXNORMAL");
-static const Char * MESH_MAPPINGCHANNEL	= C3D_T( "*MESH_MAPPINGCHANNEL");
-static const Char * MATERIAL_ID			= C3D_T( "*MATERIAL_REF");
+static const Char * OBJECT				= CU_T( "*GEOMOBJECT");
+static const Char * MESH				= CU_T( "*MESH");
+static const Char * NUM_VERTEX			= CU_T( "*MESH_NUMVERTEX");
+static const Char * NUM_TVERTEX			= CU_T( "*MESH_NUMTVERTEX");
+static const Char * NUM_FACES			= CU_T( "*MESH_NUMFACES");
+static const Char * MESH_VERTEX_LIST	= CU_T( "*MESH_VERTEX_LIST");
+static const Char * MESH_FACE_LIST		= CU_T( "*MESH_FACE_LIST");
+static const Char * MESH_TVERTLIST		= CU_T( "*MESH_TVERTLIST");
+static const Char * MESH_TFACELIST		= CU_T( "*MESH_TFACELIST");
+static const Char * VERTEX				= CU_T( "*MESH_VERTEX");
+static const Char * FACE				= CU_T( "*MESH_FACE");
+static const Char * TVERTEX				= CU_T( "*MESH_TVERT");
+static const Char * TFACE				= CU_T( "*MESH_TFACE");
+static const Char * NORMALS				= CU_T( "*MESH_NORMALS");
+static const Char * FACE_NORMAL			= CU_T( "*MESH_FACENORMAL");
+static const Char * VERTEX_NORMAL		= CU_T( "*MESH_VERTEXNORMAL");
+static const Char * MESH_MAPPINGCHANNEL	= CU_T( "*MESH_MAPPINGCHANNEL");
+static const Char * MATERIAL_ID			= CU_T( "*MATERIAL_REF");
 
-static const Char * NODE				= C3D_T( "*NODE_TM");
-static const Char * NODE_NAME			= C3D_T( "*NODE_NAME");
-static const Char * NODE_POSITION		= C3D_T( "*TM_POS");
-static const Char * NODE_AXIS			= C3D_T( "*TM_ROTAXIS");
-static const Char * NODE_ANGLE			= C3D_T( "*TM_ROTANGLE");
-static const Char * NODE_SCALE			= C3D_T( "*TM_SCALE");
+static const Char * NODE				= CU_T( "*NODE_TM");
+static const Char * NODE_NAME			= CU_T( "*NODE_NAME");
+static const Char * NODE_POSITION		= CU_T( "*TM_POS");
+static const Char * NODE_AXIS			= CU_T( "*TM_ROTAXIS");
+static const Char * NODE_ANGLE			= CU_T( "*TM_ROTANGLE");
+static const Char * NODE_SCALE			= CU_T( "*TM_SCALE");
 
-static const Char * LIGHT				= C3D_T( "*LIGHT_OBJECT");
-static const Char * LIGHT_TYPE			= C3D_T( "*LIGHT_TYPE");
-static const Char * LIGHT_SETTINGS		= C3D_T( "*LIGHT_SETTINGS");
-static const Char * LIGHT_COLOR			= C3D_T( "*LIGHT_COLOR");
+static const Char * LIGHT				= CU_T( "*LIGHT_OBJECT");
+static const Char * LIGHT_TYPE			= CU_T( "*LIGHT_TYPE");
+static const Char * LIGHT_SETTINGS		= CU_T( "*LIGHT_SETTINGS");
+static const Char * LIGHT_COLOR			= CU_T( "*LIGHT_COLOR");
 
-static const Char * ENDER				= C3D_T( "}");
+static const Char * ENDER				= CU_T( "}");
 
 
 namespace Castor3D
@@ -91,11 +93,11 @@ namespace Castor3D
 	private:
 		friend class Scene;
 
-		FileIO * m_pFile;
+		File * m_pFile;
 		String m_currentWord;
-		Vector3fPtrArray m_texCoords;
-		std::map <size_t, Material *> m_materials;
-		std::map <String, SceneNode *> m_nodes;
+		Point3rPtrArray m_texCoords;
+		MaterialPtrUIntMap m_materials;
+		SceneNodePtrStrMap m_nodes;
 
 	private:
 		virtual bool _import();
@@ -103,25 +105,25 @@ namespace Castor3D
 	private:
 		void _readAseFile();
 		void _readSceneInfos();
-		Material * _readMaterialInfos();
+		MaterialPtr _readMaterialInfos();
 		void _readObjectInfos();
 		void _readLightInfos();
 		void _readCameraInfos();
 		void _readCameraSettings( Camera * p_camera);
-		SceneNode * _readNodeInfos( const String & p_name);
-		void _readMeshInfos( Mesh * p_mesh);
-		void _readVertexList( Submesh * p_submesh);
-		void _readFaceList( Submesh * p_submesh);
-		void _readTexCoordsList( Submesh * p_submesh);
-		void _readTexFaceList( Submesh * p_submesh);
-		void _readMeshNormals( Submesh * p_submesh);
+		SceneNodePtr _readNodeInfos( const String & p_name);
+		void _readMeshInfos( MeshPtr p_mesh);
+		void _readVertexList( SubmeshPtr p_submesh);
+		void _readFaceList( SubmeshPtr p_submesh);
+		void _readTexCoordsList( SubmeshPtr p_submesh);
+		void _readTexFaceList( SubmeshPtr p_submesh);
+		void _readMeshNormals( SubmeshPtr p_submesh);
 
-		void _readMeshMappingChannel( Submesh * p_submesh);
+		void _readMeshMappingChannel( SubmeshPtr p_submesh);
 
 		String _retrieveString();
-		void _retrieveVertex( float * p_position);
+		void _retrieveVertex( real * p_position);
 		void _retrieveFace( int * p_indices);
-		void _retrieveTextureVertex( float * p_position);
+		void _retrieveTextureVertex( real * p_position);
 		void _retrieveTextureFace( int * p_indices);
 	};
 }

@@ -11,18 +11,17 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_Quaternion___
-#define ___C3D_Quaternion___
+#ifndef ___Castor_Quaternion___
+#define ___Castor_Quaternion___
 
-#include "RotationMatrix.h"
-#include "File.h"
+#include "TransformationMatrix.h"
 #include "Point.h"
 
-namespace General
+namespace Castor
 {	namespace Math
 {
 	/*!
@@ -31,7 +30,7 @@ namespace General
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class Quaternion : public Point4D<float>
+	class Quaternion : public Point4r
 	{
 	public:
 		static const Quaternion Quat_Identity;	//!< Identity quaternion
@@ -47,31 +46,35 @@ namespace General
 		 */
 		Quaternion( const Quaternion & p_q);
 		/**
+		 * Copy constructor
+		 */
+		Quaternion( const Point4r & p_q);
+		/**
 		 * Constructor from rotation matrix
 		 */
-		Quaternion( RotationMatrix * p_matrix)
+		Quaternion( TransformationMatrixPtr p_matrix)
 		{
 			FromRotationMatrix( p_matrix);
 		}
 		/**
-		 * Constructor from rotation matrix
+		 * Constructor from matrix
 		 */
-		Quaternion( float * p_matrix)
+		Quaternion( real * p_matrix)
 		{
 			FromRotationMatrix( p_matrix);
 		}
 		/**
 		 * Constructor from axis and angle
 		 */
-		Quaternion( const Vector3f & p_vector, float p_degrees)
+		Quaternion( const Point3r & p_vector, const Angle & p_angle)
 		{
-			FromAxisAngle( p_vector, p_degrees);
+			FromAxisAngle( p_vector, p_angle);
 		}
 		/**
 		 * Specified constructor
 		 */
-		Quaternion( float p_w, float p_x, float p_y, float p_z)
-			:	Point4D<float>( p_x, p_y, p_z, p_w)
+		Quaternion( real p_w, real p_x, real p_y, real p_z)
+			:	Point4r( p_x, p_y, p_z, p_w)
 		{
 			Normalise();
 		}
@@ -81,36 +84,36 @@ namespace General
 		virtual ~Quaternion();
 
 	public:
-		void operator *=( const Quaternion & q);
 		Quaternion & operator =( const Quaternion & p_q);
-        Quaternion operator+ ( const Quaternion & q) const;
-		Quaternion operator- ( const Quaternion & q) const;
-		Quaternion operator* ( const Quaternion & q)const;
-		Quaternion operator* ( float fScalar) const;
-		Quaternion operator- () const;
-		float Dot( const Quaternion & p_quat)const;
-		Vector3f operator* (const Vector3f & p_vector)const;
+        Quaternion operator +( const Quaternion & q) const;
+		Quaternion operator -( const Quaternion & q) const;
+		Quaternion operator *( real p_fScalar) const;
+		Quaternion operator *( const Quaternion & q)const;
+		void operator *=( const Quaternion & q);
+		Quaternion operator -() const;
+		real Dot( const Quaternion & p_quat)const;
+		Point3r operator *(const Point3r & p_vector)const;
 
 	public:
-		void ToRotationMatrix( RotationMatrix & p_matrix);
-		void ToRotationMatrix( float * p_matrix)const;
-		void FromRotationMatrix( RotationMatrix * p_matrix);
-		void FromRotationMatrix( float * p_matrix);
-		void FromAxisAngle( const Vector3f & p_vector, float p_degrees);
-		void ToAxisAngle( Vector3f & p_vector, float & p_angle);
+		void ToRotationMatrix( TransformationMatrix & p_matrix)const;
+		void ToRotationMatrix( real * p_matrix)const;
+		void FromRotationMatrix( TransformationMatrixPtr p_matrix);
+		void FromRotationMatrix( real * p_matrix);
+		void FromAxisAngle( const Point3r & p_vector, const Angle & p_angle);
+		void ToAxisAngle( Point3r & p_vector, Angle & p_angle);
 
-		float GetYaw();
-		float GetPitch();
-		float GetRoll();
+		Angle GetYaw();
+		Angle GetPitch();
+		Angle GetRoll();
 
 		void Conjugate();
-		Quaternion* GetConjugate();
-		float GetMagnitude();
+		QuaternionPtr GetConjugate();
+		real GetMagnitude();
 		void Normalise();
-		Quaternion Slerp( const Quaternion & p_target, float p_percent, bool p_shortestPath);
+		Quaternion Slerp( const Quaternion & p_target, real p_percent, bool p_shortestPath);
 
-		bool Write( Utils::FileIO & p_file)const;
-		bool Read( Utils::FileIO & p_file);
+		bool Write( Utils::File & p_file)const;
+		bool Read( Utils::File & p_file);
 	};
 	/**
 	 * Multiplies a quaternion by a scalar
@@ -118,7 +121,7 @@ namespace General
 	 *@param p_quat : [in] The quaternion to multiply
 	 *@return The multiplied quaternion
 	 */
-	Quaternion operator* ( float p_scalar, const Quaternion & p_quat);
+	Quaternion operator * ( real p_scalar, const Quaternion & p_quat);
 }
 }
 

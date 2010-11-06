@@ -2,10 +2,8 @@
 
 #include "animation/Module_Animation.h"
 
-
 #include "geometry/Module_Geometry.h"
 #include "scene/Module_Scene.h"
-
 #include "animation/AnimatedObjectGroup.h"
 #include "animation/AnimatedObject.h"
 #include "animation/Animation.h"
@@ -19,42 +17,47 @@ AnimatedObjectGroup :: AnimatedObjectGroup( const String & p_name)
 
 AnimatedObjectGroup :: ~AnimatedObjectGroup()
 {
-	map::deleteAll( m_objects);
-	map::deleteAll( m_animations);
+	m_objects.clear();
+	m_playingAnimations.clear();
+	m_animations.clear();
 }
 
-AnimatedObject * AnimatedObjectGroup :: AddObject( MovableObject * p_object)
+AnimatedObjectPtr AnimatedObjectGroup :: AddObject( MovableObjectPtr p_object)
 {
-	if ( ! map::has( m_objects, p_object->GetName()))
+	AnimatedObjectPtr l_pReturn;
+
+	if (m_objects.find( p_object->GetName()) == m_objects.end())
 	{
-		AnimatedObject * l_object = new AnimatedObject( p_object, & m_animations);
-		m_objects.insert( AnimatedObjectStrMap::value_type( p_object->GetName(), l_object));
+		l_pReturn = new AnimatedObject( p_object, m_animations);
+		m_objects.insert( AnimatedObjectPtrStrMap::value_type( p_object->GetName(), l_pReturn));
 	}
-	return NULL;
+
+	return l_pReturn;
 }
 
-void AnimatedObjectGroup :: AddAnimation( Animation * p_animation)
+void AnimatedObjectGroup :: AddAnimation( AnimationPtr p_animation)
 {
-	if ( ! map::has( m_animations, p_animation->GetName()))
+	if (m_animations.find( p_animation->GetName()) == m_animations.end())
 	{
-		m_animations.insert( AnimationStrMap::value_type( p_animation->GetName(), p_animation));
+		m_animations.insert( AnimationPtrStrMap::value_type( p_animation->GetName(), p_animation));
 	}
 }
 
-bool AnimatedObjectGroup :: Write( FileIO & p_file)const
+bool AnimatedObjectGroup :: Write( File & p_file)const
 {
 	return true;
 }
 
-bool AnimatedObjectGroup :: Read( FileIO & p_file)
+bool AnimatedObjectGroup :: Read( File & p_file)
 {
 	return true;
 }
 
-void AnimatedObjectGroup :: Update( float p_tslf)
+void AnimatedObjectGroup :: Update( real p_tslf)
 {
-	AnimationStrMap::const_iterator l_endit = m_animations.end();
-	for (AnimationStrMap::iterator l_it = m_animations.begin() ; l_it != l_endit ; ++l_it)
+	AnimationPtrStrMap::const_iterator l_endit = m_animations.end();
+
+	for (AnimationPtrStrMap::iterator l_it = m_animations.begin() ; l_it != l_endit ; ++l_it)
 	{
 		l_it->second->Update( p_tslf);
 	}
@@ -62,45 +65,48 @@ void AnimatedObjectGroup :: Update( float p_tslf)
 
 void AnimatedObjectGroup :: StartAnimation( const String & p_name)
 {
-	Animation * l_anim = map::findOrNull( m_animations, p_name);
-	if (l_anim == NULL)
+	if (m_animations.find( p_name) != m_animations.end())
 	{
-		return;
+		m_animations.find( p_name)->second->Play();
 	}
-	l_anim->Play();
 }
 
 void AnimatedObjectGroup :: StopAnimation( const String & p_name)
 {
-	Animation * l_anim = map::findOrNull( m_animations, p_name);
-	if (l_anim == NULL)
+	if (m_animations.find( p_name) != m_animations.end())
 	{
-		return;
+		m_animations.find( p_name)->second->Stop();
 	}
-	l_anim->Stop();
 }
 
 void AnimatedObjectGroup :: PauseAnimation(  const String & p_name)
 {
-	Animation * l_anim = map::findOrNull( m_animations, p_name);
-	if (l_anim == NULL)
+	if (m_animations.find( p_name) != m_animations.end())
 	{
-		return;
+		m_animations.find( p_name)->second->Pause();
 	}
-	l_anim->Pause();
 }
 
 void AnimatedObjectGroup :: StartAllAnimations()
 {
-	map::cycle( m_animations, & Animation::Play);
+	for (AnimationPtrStrMap::iterator l_it = m_animations.begin() ; l_it != m_animations.end() ; ++l_it)
+	{
+		l_it->second->Play();
+	}
 }
 
 void AnimatedObjectGroup :: StopAllAnimations()
 {
-	map::cycle( m_animations, & Animation::Stop);
+	for (AnimationPtrStrMap::iterator l_it = m_animations.begin() ; l_it != m_animations.end() ; ++l_it)
+	{
+		l_it->second->Stop();
+	}
 }
 
 void AnimatedObjectGroup :: PauseAllAnimations()
 {
-	map::cycle( m_animations, & Animation::Pause);
+	for (AnimationPtrStrMap::iterator l_it = m_animations.begin() ; l_it != m_animations.end() ; ++l_it)
+	{
+		l_it->second->Pause();
+	}
 }

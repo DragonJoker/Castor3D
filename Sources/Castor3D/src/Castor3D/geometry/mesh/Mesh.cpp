@@ -7,68 +7,80 @@
 #include "geometry/basic/Face.h"
 #include "main/Root.h"
 #include "render_system/RenderSystem.h"
-#include "render_system/MeshRenderer.h"
-#include "Log.h"
+
 
 using namespace Castor3D;
 //*********************************************************************************************
 
-Mesh * MeshLoader :: LoadFromFileIO( const String & p_file)
+MeshPtr MeshLoader :: LoadFromFile( const String & p_file)
 {
-	Mesh * l_pReturn = NULL;
+	MeshPtr l_pReturn;
 	bool l_bResult = false;
 
-	FileIO l_file( p_file, FileIO::eRead);
+	File l_file( p_file, File::eRead);
 	size_t l_nameLength = 0;
+	l_bResult = l_file.Read( l_nameLength) == sizeof( size_t);
+	String l_strName;
 
-	if (l_file.Read<size_t>( l_nameLength))
+	if (l_bResult)
 	{
-		Char * l_name = new Char[l_nameLength+1];
-		if (l_file.ReadArray<Char>( l_name, l_nameLength))
+		Char * l_name = new Char[l_nameLength + 1];
+		l_bResult = l_file.ReadArray( l_name, l_nameLength) == l_nameLength * sizeof( Char);
+
+		if (l_bResult)
 		{
 			l_name[l_nameLength] = 0;
+			l_strName = l_name;
+		}
 
-			Log::LogMessage( C3D_T( "Reading mesh ") + String( l_name));
+		delete [] l_name;
+	}
 
-			l_pReturn = new Mesh( l_name);
-			delete [] l_name;
+	if (l_bResult)
+	{
+		Log::LogMessage( CU_T( "Reading mesh ") + l_strName);
+		l_pReturn.reset( new Mesh( l_strName));
+	}
 
-			Mesh::eTYPE l_meshType;
-			if (l_file.Read<Mesh::eTYPE>( l_meshType))
+	Mesh::eTYPE l_meshType;
+
+	if (l_bResult)
+	{
+		l_bResult = l_file.Read( l_meshType) == sizeof( Mesh::eTYPE);
+	}
+
+	size_t l_nbSubmeshes;
+
+	if (l_bResult)
+	{
+		l_pReturn->SetMeshType( l_meshType);
+		l_bResult = l_file.Read( l_nbSubmeshes) == sizeof( size_t);
+	}
+
+	if (l_bResult)
+	{
+		for (size_t i = 0 ; i < l_nbSubmeshes && l_bResult ; i++)
+		{
+			if ( ! l_pReturn->CreateSubmesh( 0)->Read( l_file))
 			{
-				l_pReturn->SetMeshType( l_meshType);
-
-				size_t l_nbSubmeshes;
-				if (l_file.Read<size_t>( l_nbSubmeshes))
-				{
-					l_bResult = true;
-
-					for (size_t i = 0 ; i < l_nbSubmeshes && l_bResult ; i++)
-					{
-						if ( ! l_pReturn->CreateSubmesh( 0)->Read( l_file))
-						{
-							l_bResult = false;
-						}
-					}
-
-//					l_pReturn->CreateBuffers();
-				}
+				l_bResult = false;
 			}
 		}
+
+//		l_pReturn->CreateBuffers();
 	}
 
 	if ( ! l_bResult)
 	{
-		delete l_pReturn;
-		l_pReturn = NULL;
+		l_pReturn.reset();
 	}
 
 	return l_pReturn;
 }
 
-Mesh * MeshLoader :: LoadFromExtFileIO( const String & p_file)
+MeshPtr MeshLoader :: LoadFromExtFile( const String & p_file)
 {
-	Mesh * l_pReturn = NULL;
+	MeshPtr l_pReturn;
 	StringArray l_arraySplitted = p_file.Split( ".");
 
 	if (l_arraySplitted.size() > 1)
@@ -99,101 +111,98 @@ Mesh * MeshLoader :: LoadFromExtFileIO( const String & p_file)
 		{
 			l_pReturn = _loadFromMd3( p_file);
 		}
-		else if (l_strExt == "csmesh")
+		else if (l_strExt == "cmsh")
 		{
-			l_pReturn = LoadFromFileIO( p_file);
+			l_pReturn = LoadFromFile( p_file);
 		}
 	}
 
 	return l_pReturn;
 }
 
-bool MeshLoader :: SaveToFileIO( const String & p_file, Mesh * p_mesh)
+bool MeshLoader :: SaveToFile( const String & p_file, MeshPtr p_mesh)
 {
-	FileIO l_file( p_file + C3D_T( "/") + p_mesh->GetName() + C3D_T( ".csmesh"), FileIO::eWrite);
+	File l_file( p_file + CU_T( "/") + p_mesh->GetName() + CU_T( ".cmsh"), File::eWrite);
+	bool l_bReturn = false;
 
 	//on écrit le nom du mesh
 	size_t l_nameLength = p_mesh->GetName().size();
-	if ( ! l_file.Write<size_t>( l_nameLength))
+	l_bReturn = l_file.Write( l_nameLength) == sizeof( size_t);
+
+	if (l_bReturn)
 	{
-		return false;
+		l_bReturn = l_file.WriteArray( p_mesh->GetName().c_str(), l_nameLength) == l_nameLength * sizeof( Char);
 	}
 
-	if ( ! l_file.WriteArray<Char>( p_mesh->GetName().c_str(), l_nameLength))
+	if (l_bReturn)
 	{
-		return false;
-	}
-
-	Mesh::eTYPE l_meshType = p_mesh->GetMeshType();
-	if ( ! l_file.Write<Mesh::eTYPE>( l_meshType))
-	{
-		return false;
+		Mesh::eTYPE l_meshType = p_mesh->GetMeshType();
+		l_bReturn = l_file.Write( l_meshType) == sizeof( Mesh::eTYPE);
 	}
 
 	size_t l_nbSubmeshes = p_mesh->GetNbSubmeshes();
-	if ( ! l_file.Write<size_t>( l_nbSubmeshes))
+
+	if (l_bReturn)
 	{
-		return false;
+		l_bReturn = l_file.Write( l_nbSubmeshes) == sizeof( size_t);
 	}
 
-	for (size_t i = 0 ; i < l_nbSubmeshes ; i++)
+	for (size_t i = 0 ; i < l_nbSubmeshes && l_bReturn ; i++)
 	{
-		if ( ! p_mesh->GetSubmesh( i)->Write( l_file))
-		{
-			return false;
-		}
+		l_bReturn = p_mesh->GetSubmesh( i)->Write( l_file);
 	}
 
-	return true;
+	return l_bReturn;
 }
-Mesh * MeshLoader :: _loadFrom3DS( const String & p_file)
+
+MeshPtr MeshLoader :: _loadFrom3DS( const String & p_file)
 {
-	Mesh * l_pReturn = NULL;
+	MeshPtr l_pReturn;
 
 
 
 	return l_pReturn;
 }
 
-Mesh * MeshLoader :: _loadFromAse( const String & p_file)
+MeshPtr MeshLoader :: _loadFromAse( const String & p_file)
 {
-	Mesh * l_pReturn = NULL;
+	MeshPtr l_pReturn;
 
 
 
 	return l_pReturn;
 }
 
-Mesh * MeshLoader :: _loadFromObj( const String & p_file)
+MeshPtr MeshLoader :: _loadFromObj( const String & p_file)
 {
-	Mesh * l_pReturn = NULL;
+	MeshPtr l_pReturn;
 
 
 
 	return l_pReturn;
 }
 
-Mesh * MeshLoader :: _loadFromPly( const String & p_file)
+MeshPtr MeshLoader :: _loadFromPly( const String & p_file)
 {
-	Mesh * l_pReturn = NULL;
+	MeshPtr l_pReturn;
 
 
 
 	return l_pReturn;
 }
 
-Mesh * MeshLoader :: _loadFromMd2( const String & p_file)
+MeshPtr MeshLoader :: _loadFromMd2( const String & p_file)
 {
-	Mesh * l_pReturn = NULL;
+	MeshPtr l_pReturn;
 
 
 
 	return l_pReturn;
 }
 
-Mesh * MeshLoader :: _loadFromMd3( const String & p_file)
+MeshPtr MeshLoader :: _loadFromMd3( const String & p_file)
 {
-	Mesh * l_pReturn = NULL;
+	MeshPtr l_pReturn;
 
 
 
@@ -221,22 +230,17 @@ Mesh :: ~Mesh()
 
 void Mesh :: Cleanup()
 {
-	vector::deleteAll( m_submeshes);
+//	vector::deleteAll( m_submeshes);
+	m_submeshes.clear();
 
-	delete m_box;
-	m_box = NULL;
-
-	delete m_sphere;
-	m_sphere = NULL;
+	m_box.reset();
+	m_sphere.reset();
 }
 
 void Mesh :: ComputeContainers()
 {
-	delete m_box;
-	m_box = NULL;
-
-	delete m_sphere;
-	m_sphere = NULL;
+	m_box.reset();
+	m_sphere.reset();
 
 	if (m_submeshes.size() == 0)
 	{
@@ -244,17 +248,18 @@ void Mesh :: ComputeContainers()
 	}
 
 	size_t i = 0;
-	ComboBox * l_box = NULL;
-	while (l_box == NULL && i < m_submeshes.size())
+	ComboBoxPtr l_box;
+
+	while (l_box.null() && i < m_submeshes.size())
 	{
 		m_submeshes[i]->ComputeContainers();
 		l_box = m_submeshes[i]->GetComboBox();
 		i++;
 	}
 
-	Vector3f l_min;
-	Vector3f l_max;
-	if (l_box != NULL)
+	Point3r l_min;
+	Point3r l_max;
+	if ( ! l_box.null())
 	{
 		l_min = ( l_box->GetMin());
 		l_max = ( l_box->GetMax());
@@ -264,31 +269,31 @@ void Mesh :: ComputeContainers()
 			m_submeshes[i]->ComputeContainers();
 			l_box = m_submeshes[i]->GetComboBox();
 
-			if (l_box != NULL)
+			if ( ! l_box.null())
 			{
-				if (l_box->GetMin().x < l_min.x)
+				if (l_box->GetMin()[0] < l_min[0])
 				{
-					l_min.x = l_box->GetMin().x;
+					l_min[0] = l_box->GetMin()[0];
 				}
-				if (l_box->GetMin().y < l_min.y)
+				if (l_box->GetMin()[1] < l_min[1])
 				{
-					l_min.y = l_box->GetMin().y;
+					l_min[1] = l_box->GetMin()[1];
 				}
-				if (l_box->GetMin().z < l_min.z)
+				if (l_box->GetMin()[2] < l_min[2])
 				{
-					l_min.z = l_box->GetMin().z;
+					l_min[2] = l_box->GetMin()[2];
 				}
-				if (l_box->GetMax().x > l_max.x)
+				if (l_box->GetMax()[0] > l_max[0])
 				{
-					l_max.x = l_box->GetMax().x;
+					l_max[0] = l_box->GetMax()[0];
 				}
-				if (l_box->GetMax().y > l_max.y)
+				if (l_box->GetMax()[1] > l_max[1])
 				{
-					l_max.y = l_box->GetMax().y;
+					l_max[1] = l_box->GetMax()[1];
 				}
-				if (l_box->GetMax().z > l_max.z)
+				if (l_box->GetMax()[2] > l_max[2])
 				{
-					l_max.z = l_box->GetMax().z;
+					l_max[2] = l_box->GetMax()[2];
 				}
 			}
 		}
@@ -318,7 +323,7 @@ size_t Mesh :: GetNbVertex()const
 	return l_nbFaces;
 }
 
-Submesh * Mesh :: GetSubmesh( unsigned int p_index)
+SubmeshPtr Mesh :: GetSubmesh( unsigned int p_index)
 {
 	if (p_index < m_submeshes.size())
 	{
@@ -327,11 +332,11 @@ Submesh * Mesh :: GetSubmesh( unsigned int p_index)
 	return NULL;
 }
 
-Submesh * Mesh :: CreateSubmesh( unsigned int p_nbSmoothGroups)
+SubmeshPtr Mesh :: CreateSubmesh( unsigned int p_nbSmoothGroups)
 {
-	Submesh * l_submesh = new Submesh( Root::GetRenderSystem()->CreateSubmeshRenderer(), p_nbSmoothGroups);
+	SubmeshPtr l_submesh = new Submesh( p_nbSmoothGroups);
 
-	if (l_submesh != NULL)
+	if ( ! l_submesh.null())
 	{
 		m_submeshes.push_back( l_submesh);
 	}
@@ -360,11 +365,6 @@ void Mesh :: SetNormals( bool p_bReverted)
 	for (size_t i = 0 ; i < m_submeshes.size() ; i++)
 	{
 		m_submeshes[i]->SetNormals();
-
-		if (p_bReverted)
-		{
-			m_submeshes[i]->InvertNormals();
-		}
 	}
 }
 
@@ -381,13 +381,17 @@ void Mesh :: CreateBuffers()
 void Mesh :: CreateNormalsBuffers( NormalsMode p_nm)
 {
 	m_normalsMode = p_nm;
-	vector::cycle( m_submeshes, & Submesh::CreateNormalsBuffer, p_nm);
+//	vector::cycle( m_submeshes, & Submesh::CreateNormalsBuffer, p_nm);
+	for (size_t i = 0 ; i < m_submeshes.size() ; i++)
+	{
+		m_submeshes[i]->CreateNormalsBuffer( p_nm);
+	}
 	ComputeContainers();
 }
 
-Mesh * Mesh :: Clone( const String & p_name)
+MeshPtr Mesh :: Clone( const String & p_name)
 {
-	Mesh * l_clone = new Mesh();
+	MeshPtr l_clone( new Mesh());
 	l_clone->m_meshType = m_meshType;
 
 	for (size_t i = 0 ; i < m_submeshes.size() ; i++)

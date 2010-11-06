@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -31,16 +31,29 @@ namespace Castor3D
 	*/
 	class CS3D_API Animation
 	{
+	public:
+		//! Animation State Enum
+		/*!
+		The enumeration which defines all the states of an animation : playing, stopped, paused
+		*/
+		typedef enum
+		{
+			AnimationPlaying,	//!< Playing animation state
+			AnimationStopped,	//!< Stopped animation state
+			AnimationPaused		//!< Paused animation state
+
+		} eSTATE;
+
 	protected:
-		KeyFrameMap m_keyFrames;					//!< The key frames
-		String m_name;								//!< The animation name
-		float m_length;								//!< The animation length
-		KeyFrameMap::iterator m_lastKeyFrameIt;		//!< The iterator on the last met key frame
-		float m_currentTime;						//!< The current playing time
-		AnimationState m_state;						//!< The current state of the animation
-		float m_weight;								//!< The animation weight
-		float m_scale;								//!< The animation scale
-		bool m_looped;								//!< Tells whether or not the animation is looped
+		KeyFramePtrRealMap m_keyFrames;					//!< The key frames
+		String m_name;									//!< The animation name
+		real m_length;									//!< The animation length
+		KeyFramePtrRealMap::iterator m_lastKeyFrameIt;	//!< The iterator on the last met key frame
+		real m_currentTime;								//!< The current playing time
+		eSTATE m_state;									//!< The current state of the animation
+		real m_weight;									//!< The animation weight
+		real m_scale;									//!< The animation scale
+		bool m_looped;									//!< Tells whether or not the animation is looped
 
 	public:
 		/**
@@ -57,26 +70,26 @@ namespace Castor3D
 		 *@param p_from : [in] The starting time
 		 *@param p_to : [in] The ending time
 		 */
-		KeyFrame * AddKeyFrame( float p_from, float p_to);
+		KeyFramePtr AddKeyFrame( real p_from, real p_to);
 		/**
 		 * Deletes the key frame at time index p_time
 		 *@param p_time : [in] The time index
 		 */
-		void RemoveKeyFrame( float p_time);
+		void RemoveKeyFrame( real p_time);
 		/**
 		 * Writes the animation in a file
 		 *@param p_file : [in] The file to write in
 		 */
-		bool Write( General::Utils::FileIO & p_file)const;
+		bool Write( Castor::Utils::File & p_file)const;
 		/**
 		 * Reads the animation from a file
 		 @param p_file : [in] The file to read from
 		 */
-		bool Read( General::Utils::FileIO & p_file);
+		bool Read( Castor::Utils::File & p_file);
 		/**
 		 * Updates the animation, updates the key frame at the good time index
 		 */
-		void Update( float p_tslf);
+		void Update( real p_tslf);
 		/**
 		 * Plays the animation
 		 */
@@ -91,6 +104,8 @@ namespace Castor3D
 		void Stop();
 
 	public:
+		/**@name Accessors */
+		//@{
 		/**
 		 * Returns the animation name
 		 *@return the animation name
@@ -100,22 +115,22 @@ namespace Castor3D
 		 * Returns the animation length
 		 *@return the animation length
 		 */
-		inline float			GetLength	()const { return m_length; }
+		inline real				GetLength	()const { return m_length; }
 		/**
 		 * Returns the animation state
 		 *@return the animation state
 		 */
-		inline AnimationState	GetState	()const { return m_state; }
+		inline eSTATE			GetState	()const { return m_state; }
 		/**
 		 * Returns the animation scale
 		 *@return the animation scale
 		 */
-		inline float			GetScale	()const { return m_scale; }
+		inline real				GetScale	()const { return m_scale; }
 		/**
 		 * Returns the animation weight
 		 *@return the animation weight
 		 */
-		inline float			GetWeight	()const { return m_weight; }
+		inline real				GetWeight	()const { return m_weight; }
 		/**
 		 * Returns whether or not the animation is looped
 		 *@return whether or not the animation is looped
@@ -125,17 +140,18 @@ namespace Castor3D
 		 * Sets the animation scale
 		 *@param p_scale : [in] The new animation scale
 		 */
-		inline void	SetScale	( float p_scale)	{ m_scale = p_scale; }
+		inline void	SetScale	( real p_scale)		{ m_scale = p_scale; }
 		/**
 		 * Sets the animation weight
 		 *@param p_weight : [in] The new animation weight
 		 */
-		inline void	SetWeight	( float p_weight)	{ m_weight = p_weight; }
+		inline void	SetWeight	( real p_weight)	{ m_weight = p_weight; }
 		/**
 		 * Sets the animation loop status
 		 *@param p_looped : [in] The new animation loop status
 		 */
 		inline void SetLooped	( bool p_looped)	{ m_looped = p_looped; }
+		//@}
 	};
 }
 

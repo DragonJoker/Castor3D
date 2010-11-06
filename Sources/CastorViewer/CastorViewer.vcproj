@@ -40,6 +40,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="-Zm164"
 				Optimization="0"
 				AdditionalIncludeDirectories="../Castor3D/include;../CastorUtils/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
@@ -48,6 +49,7 @@
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="PrecompiledHeader.h"
+				ProgramDataBaseFileName="$(IntDir)\$(TargetName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -124,6 +126,9 @@
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="PrecompiledHeader.h"
+				ProgramDataBaseFileName="$(IntDir)\$(TargetName).pdb"
+				WarningLevel="0"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -139,6 +144,7 @@
 				AdditionalDependencies="CastorUtils.lib Castor3D.lib wxmsw28_gl.lib wxmsw28_core.lib wxbase28.lib wxmsw28_adv.lib wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib winmm.lib comctl32.lib rpcrt4.lib wsock32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="../Bin/Release - Multibyte"
+				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
 			/>

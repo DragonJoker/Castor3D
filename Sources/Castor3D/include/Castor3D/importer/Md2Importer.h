@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -68,8 +68,8 @@ namespace Castor3D
 
 		struct Md2Triangle
 		{
-		   float m_vertex[3];
-		   float m_normal[3];
+		   real m_vertex[3];
+		   real m_normal[3];
 		};
 
 		struct Md2Face
@@ -85,8 +85,8 @@ namespace Castor3D
 
 		struct Md2AliasFrame
 		{
-		   float m_scale[3];
-		   float m_translate[3];
+		   real m_scale[3];
+		   real m_translate[3];
 		   char m_name[16];
 		   Md2AliasTriangle m_aliasVertices[1];
 		};
@@ -106,7 +106,7 @@ namespace Castor3D
 		Md2Face		*	m_triangles;
 		Md2Frame	*	m_frames;
 		String			m_textureName;
-		FileIO		*	m_pFile;
+		File		*	m_pFile;
 
 	public:
 		Md2Importer( const String & p_textureName = C3DEmptyString);// This inits the data members
@@ -114,7 +114,7 @@ namespace Castor3D
 	private:
 		virtual bool _import();
 		void _readMD2Data();
-		void _convertDataStructures( Mesh * p_pMesh);
+		void _convertDataStructures( MeshPtr p_pMesh);
 		void _cleanUp();
 	};
 }

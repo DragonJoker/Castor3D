@@ -11,53 +11,52 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___CSU_ResourceLoader___
-#define ___CSU_ResourceLoader___
+#ifndef ___Castor_ResourceLoader___
+#define ___Castor_ResourceLoader___
 
-#include "Module_Utils.h"
 #include "Exception.h"
 #include "Resource.h"
 
-namespace General
+namespace Castor
 {	namespace Resource
 {
-	class ResourceLoadingError : public General::Utils::GenException
+	class ResourceLoadingError : public Castor::Utils::Exception
 	{
 	public:
 		ResourceLoadingError(	const String & p_description, const String & p_file,
 			const String & p_function, unsigned int p_line)
-			:	GenException( p_description, p_file, p_function, p_line)
+			:	Exception( p_description, p_file, p_function, p_line)
 		{}
 	};
 
-	#	define LoaderError( p_text) throw ResourceLoadingError( p_text, __FILE__, __FUNCTION__, __LINE__)
+	#	define LOADER_ERROR( p_text) throw ResourceLoadingError( p_text, __FILE__, __FUNCTION__, __LINE__)
 
-	class UnsupportedFormatError : public General::Utils::GenException
+	class UnsupportedFormatError : public Castor::Utils::Exception
 	{
 	public:
 		UnsupportedFormatError(	const String & p_description, const Char * p_file,
 			const Char * p_function, unsigned int p_line)
-			:	GenException( p_description, p_file, p_function, p_line)
+			:	Exception( p_description, p_file, p_function, p_line)
 		{}
 	};
 
-	#	define UnsupportedError( p_text) throw UnsupportedFormatError( p_text, __FILE__, __FUNCTION__, __LINE__)
+	#	define UNSUPPORTED_ERROR( p_text) throw UnsupportedFormatError( p_text, __FILE__, __FUNCTION__, __LINE__)
 
 	template <class T>
 	class ResourceLoader
 	{
 	public:
-		T * LoadFromFileIO( const String & p_file)
+		T * LoadFromFile( const String & p_file)
 		{
-			LoaderError( "Le loader enregistré pour ce format ne prend pas en charge l'importation");
+			LOADER_ERROR( "Le loader enregistré pour ce format ne prend pas en charge l'importation");
 		}
-		bool SaveToFileIO( const String & p_file, T * p_resource)
+		bool SaveToFile( const String & p_file, T * p_resource)
 		{
-			LoaderError( "Le loader enregistré pour ce format ne prend pas en charge l'exportation");
+			LOADER_ERROR( "Le loader enregistré pour ce format ne prend pas en charge l'exportation");
 		}
 	};
 }

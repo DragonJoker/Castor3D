@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -22,7 +22,7 @@ namespace Castor3D
 {
 	//! Class which makes the interpolations
 	/*!
-	Template class which handles the interpolations, would it be quaternion, vector, float, ... interpolations
+	Template class which handles the interpolations, would it be quaternion, vector, real, ... interpolations
 	\author Sylvain DOREMUS
 	\version 0.1
 	\date 09/02/2010
@@ -31,12 +31,9 @@ namespace Castor3D
 	class CS3D_API Interpolator
 	{
 	protected:
-		//! The starting value
-		T m_src;
-		//! The current value
-		T m_current;
-		//! The ending value
-		T m_dest;
+		T m_src;		//!< The starting value
+		T m_current;	//!< The current value
+		T m_dest;		//!< The ending value
 
 	public:
 		/**
@@ -60,7 +57,7 @@ namespace Castor3D
 		 * Interpolation function, virtual, must be implemented for the interpolator you create
 		 *@param p_percent : the percentage
 		 */
-		virtual T Interpolate( float p_percent)=0;
+		virtual T Interpolate( real p_percent)=0;
 	};
 
 	//! Class which makes the linear interpolations for vertex
@@ -70,19 +67,21 @@ namespace Castor3D
 	\date 09/02/2010
 	\brief Linear Vector interpolation class overload
 	*/
-	class CS3D_API VertexLinearInterpolator : public Interpolator<Vector3f>
+	class CS3D_API VertexLinearInterpolator : public Interpolator<Point3r>
 	{
 		/**
 		 * Interpolation function, linear interpolation is easy...
 		 *@param p_percent : the percentage
 		 */
-		virtual Vector3f Interpolate( float p_percent)
+		virtual Point3r Interpolate( real p_percent)
 		{
-			m_current = Vector3f( m_dest, m_src);
+			m_current = Point3r( m_src - m_dest);
+
 			if (p_percent <= 0.0 || p_percent > 1.0)
 			{
 				return m_dest;
 			}
+
 			m_current /= p_percent;
 			return m_src + m_current;
 		}
@@ -102,7 +101,7 @@ namespace Castor3D
 		 * Interpolation function, linear interpolation is easy...
 		 *@param p_percent : the percentage
 		 */
-		virtual Quaternion Interpolate( float p_percent)
+		virtual Quaternion Interpolate( real p_percent)
 		{
 			m_current = m_current * (m_dest - m_src).Slerp( Quaternion::Quat_Identity, 1.0f - p_percent, true);
 			return m_current;

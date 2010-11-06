@@ -11,21 +11,16 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___MANAGER_H___
-#define ___MANAGER_H___
+#ifndef ___Castor_Manager___
+#define ___Castor_Manager___
 
-#include <map>
-#include <string>
+#include "SharedPtr.h"
 
-#include "Module_Utils.h"
-#include "STLMapMacros.h"
-
-
-namespace General
+namespace Castor
 { namespace Templates
 {
 	/*!
@@ -36,7 +31,8 @@ namespace General
 	class Manager
 	{
 	public:
-		typedef std::map <String, TObj *> TypeMap;
+		typedef SharedPtr<TObj> TObjPtr;
+		typedef C3DMap( String, TObjPtr) TypeMap;
 		TypeMap m_objectMap;
 
 	public:
@@ -53,9 +49,10 @@ namespace General
 	public:
 		void Clear() throw()
 		{
-			General::Utils::map::deleteAll( m_objectMap);
+			m_objectMap.clear();
+//			Castor::map::deleteAll( m_objectMap);
 		}
-		bool AddElement( TObj * p_element)
+		bool AddElement( TObjPtr p_element)
 		{
 			const typename TypeMap::iterator & ifind = m_objectMap.find( p_element->GetName());
 
@@ -64,57 +61,62 @@ namespace General
 				return false;
 			}
 
-			m_objectMap.insert( typename TypeMap::value_type( p_element->GetName(), p_element));
+			TObjPtr l_sharedPtr( p_element);
+			m_objectMap.insert( typename TypeMap::value_type( p_element->GetName(), l_sharedPtr));
 			return true;
 		}
 /*
 		TObj * CreateElement( const String & p_elementName)
 		{
-			return General::Utils::map::insert( m_objectMap, p_elementName, p_elementName);
+			return Castor::map::insert( m_objectMap, p_elementName, p_elementName);
 		}
 		template<typename TParam>
 		TObj * CreateElement( const String & p_elementName, const TParam & p_param)
 		{
-			return General::Utils::map::insert( m_objectMap, p_elementName, p_elementName, p_param);
+			return Castor::map::insert( m_objectMap, p_elementName, p_elementName, p_param);
 		}
 */
 		bool HasElement( const String & p_key)const
 		{
-			return General::Utils::map::has( m_objectMap, p_key);
+			return m_objectMap.find( p_key) != m_objectMap.end();
 		}
-		bool HasElement( TObj * p_element)const
+		bool HasElement( TObjPtr p_element)const
 		{
-			return General::Utils::map::has( m_objectMap, p_element->GetName());
+			return m_objectMap.find( p_element->GetName()) != m_objectMap.end();
 		}
-		TObj * RemoveElement( const String & p_key)
+		TObjPtr RemoveElement( const String & p_key)
 		{
+			TObjPtr l_ret;
 			const typename TypeMap::iterator & ifind = m_objectMap.find( p_key);
 
-			if (ifind == m_objectMap.end())
+			if (ifind != m_objectMap.end())
 			{
-				return NULL;
+				l_ret = ifind->second;
+				m_objectMap.erase( ifind);
 			}
 
-			TObj * l_ret = ifind->second;
-			m_objectMap.erase( ifind);
 			return l_ret;
 		}
-		bool RemoveElement( TObj * p_element)
+		TObjPtr RemoveElement( TObjPtr p_element)
 		{
-			return (RemoveElement( p_element->GetName()) != NULL);
+			return RemoveElement( p_element->GetName());
 		}
-		TObj * GetElementByName( const String & p_key)
+		TObjPtr GetElementByName( const String & p_key)
 		{
-			return General::Utils::map::findOrNull( m_objectMap, p_key);
+			return Utils::map::findOrNull( m_objectMap, p_key);
 		}
-		bool DestroyElement( TObj * p_element)
+		TObjPtr DestroyElement( TObjPtr & p_element)
 		{
+			return RemoveElement( p_element);
+/*
 			if (RemoveElement( p_element))
 			{
 				delete p_element;
 				return true;
 			}
+
 			return false;
+*/
 		}
 	};
 }

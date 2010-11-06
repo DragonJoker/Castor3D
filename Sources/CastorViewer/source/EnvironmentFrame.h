@@ -25,8 +25,8 @@ namespace CastorViewer
 		};
 
 	private:
-		Castor3D::TextureEnvironment * m_environment;
-		Castor3D::Pass * m_pass;
+		Castor3D::TextureEnvironmentPtr m_environment;
+		Castor3D::PassPtr m_pass;
 
 		wxButton * m_cancelButton;
 		wxButton * m_OKButton;
@@ -43,8 +43,8 @@ namespace CastorViewer
 		Castor3D::AlphaOperand m_AlphaOperands[3];
 
 	public:
-		EnvironmentFrame( wxWindow * parent, const wxString & title, Castor3D::Pass * p_pass,
-							Castor3D::TextureEnvironment * p_env, const wxPoint & pos = wxDefaultPosition,
+		EnvironmentFrame( wxWindow * parent, const wxString & title, Castor3D::PassPtr p_pass,
+							Castor3D::TextureEnvironmentPtr p_env, const wxPoint & pos = wxDefaultPosition,
 							const wxSize & size = wxSize( 200, 200));
 		~EnvironmentFrame();
 

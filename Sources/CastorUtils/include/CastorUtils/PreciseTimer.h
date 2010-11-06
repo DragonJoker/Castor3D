@@ -11,27 +11,21 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___PRECISE_TIMER_H___
-#define ___PRECISE_TIMER_H___
+#ifndef ___Castor_PreciseTimer___
+#define ___Castor_PreciseTimer___
 
-#include "Macros.h"
-
-#ifndef d_dll
-#define d_dll
-#endif
-
-namespace General
+namespace Castor
 { namespace Utils
 {
 	//! The precise timer representation
 	/*!
 	Allows precise timing
 	*/
-	class d_dll PreciseTimer
+	class PreciseTimer
 	{
 	private:
 		static long long sm_frequency;	//!< The processor frequency
@@ -69,7 +63,7 @@ namespace General
 	/*!
 	Allows precise repeat timing
 	*/
-	class d_dll RepeatTimer
+	class RepeatTimer
 	{
 	private:
 		long long m_previousTime;		//!< The last call time

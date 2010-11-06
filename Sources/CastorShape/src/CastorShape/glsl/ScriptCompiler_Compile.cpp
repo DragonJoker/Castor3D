@@ -14,7 +14,7 @@ using namespace Castor3D;
 
 #define COMPILE_ERROR_IN_BLOCK( p_desc, p_block)												\
 	_error();																					\
-	GENLIB_EXCEPTION(	"Compiler Error : [" + _getScriptFileName() + " @ L# "					\
+	CASTOR_EXCEPTION(	"Compiler Error : [" + _getScriptFileName() + " @ L# "					\
 						+ ToString( p_block->m_lineNumBegin)					\
 						+ " ] -> " + p_desc )
 
@@ -223,7 +223,7 @@ ScriptNode * ScriptCompiler :: _compileSentence( ScriptBlockArray & p_childs)
 			}
 		}
 	}
-	catch (const GenException & p_exception)
+	catch (const Exception & p_exception)
 	{
 		Log::LogMessage( "ScriptCompiler :: _compileSentence : exception caught : " + p_exception.GetDescription());
 	}
@@ -810,7 +810,7 @@ void ScriptCompiler :: _declareVariable( ScriptBlockArray & p_childs)
 void ScriptCompiler :: _declareVariableDetail( VariableType * p_type, ScriptBlockArray & p_array)
 {
 	VERBOSE_COMPILATOR_INTERNAL( "_declareVariableDetail");
-//	genlib_assert( p_array.size() > 0);
+//	genlib_CASTOR_ASSERT( p_array.size() > 0);
 
 	const String & l_variableName = p_array[0]->m_contents;
 
@@ -1039,7 +1039,7 @@ void ScriptCompiler :: _compileStructDeclatation( ScriptBlockArray & p_blockArra
 
 	const String & l_name = p_blockArray[1]->m_contents;
 
-//	genlib_assert( ! map::has( m_structures, l_name));
+//	genlib_CASTOR_ASSERT( ! map::has( m_structures, l_name));
 
 	Structure * l_struct = map::findOrNull( m_structures, l_name);
 	if (l_struct == NULL)

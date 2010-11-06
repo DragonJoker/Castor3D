@@ -12,7 +12,7 @@
 
 namespace CastorShape
 {
-	class ScriptCompiler : public General::Theory::Singleton<ScriptCompiler>
+	class ScriptCompiler : public Castor::Theory::Singleton<ScriptCompiler>
 	{
 	protected:
 		friend class ScriptBlock;
@@ -45,14 +45,14 @@ namespace CastorShape
 
 		char * m_buffer;
 		const String * m_stringBuffer;
-		FileStream * m_currentFileStream;
+		File * m_currentFile;
 		unsigned int m_currentBufferIndex;
 		unsigned int m_currentMaxIndex;
 
-		std::map< char, ScriptNode *> m_charFlyweight;
-		std::map< String, ScriptNode *> m_stringFlyweight;
-		std::map< int, ScriptNode *> m_intFlyweight;
-		std::map< float, ScriptNode *> m_realFlyweight;
+		C3DMap( char, ScriptNode *) m_charFlyweight;
+		C3DMap( String, ScriptNode *) m_stringFlyweight;
+		C3DMap( int, ScriptNode *) m_intFlyweight;
+		C3DMap( real, ScriptNode *) m_realFlyweight;
 
 		String m_strFileName;
 
@@ -64,7 +64,7 @@ namespace CastorShape
 		virtual ~ScriptCompiler();
 
 	public:
-		ScriptNode * GetUsableFunctionNode( const String & p_functionName)const;
+		ScriptNode * GetUsableFunctionNode( const String & p_functionName);
 
 	protected:
 		void 					_initialiseVariableMap();
@@ -119,7 +119,7 @@ namespace CastorShape
 
 	protected:
 		void					_typedef( ScriptBlockArray & p_blockArray);
-		VariableType *			FindType( const String & p_name)const;
+		VariableType *			FindType( const String & p_name);
 		ScriptNode *			_compileStructMember( ScriptBlockArray & p_left, ScriptBlockArray & p_right, ScriptBlock * p_block);
 		void					_compileFuncParamsWithinParenthesis( const ScriptBlockArray & p_blockArray, ScriptNodeArray & p_compiledNodes);
 
@@ -131,16 +131,16 @@ namespace CastorShape
 		ScriptNode *			_getUserVariable( const String & p_variableName);
 
 		UserFunction *			_createUserFunction(const String & p_functionName, VariableType * p_functionReturnType);
-		Function *				_getFunction( const String & p_functionName)const { return map::findOrNull( m_functions, p_functionName); }
-		Function *				_getClassFunction( VariableType * p_class, const String & p_functionName)const;
+		Function *				_getFunction( const String & p_functionName) { return map::findOrNull( m_functions, p_functionName); }
+		Function *				_getClassFunction( VariableType * p_class, const String & p_functionName);
 
 		ScriptNode *			_getOperator( ScriptBlock * p_operator, ScriptNode * p_leftOperand, ScriptNode * p_rightOperand);
 
 	public:
-		ScriptNode *			GetProgramConstant( const String & p_variableName)const;
-		virtual ScriptNode *	CompileScriptFileIO( const String & p_scriptFile);
+		ScriptNode *			GetProgramConstant( const String & p_variableName);
+		virtual ScriptNode *	CompileScriptFile( const String & p_scriptFile);
 		virtual ScriptNode *	CompileScript( const String & p_script);
-		UserFunction *			GetUserFunction( const String & p_functionName)const;// { return map::findOrNull( m_userFunctions, p_functionName); }
+		UserFunction *			GetUserFunction( const String & p_functionName);// { return map::findOrNull( m_userFunctions, p_functionName); }
 
 		ScriptNode *			CreateScriptNode();
 		ScriptNode *			CreateScriptNode( unsigned p_lineNum);
@@ -152,7 +152,7 @@ namespace CastorShape
 		void _releaseNode( ScriptNode * p_node);
 
 		ScriptNode * GetFlyweight( int p_value);
-		ScriptNode * GetFlyweight( float p_value);
+		ScriptNode * GetFlyweight( real p_value);
 
 	protected:
 		virtual char			_getNextChar();

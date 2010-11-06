@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -20,14 +20,15 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Point.h"
 
-namespace Castor3D
+namespace Castor
+{	namespace Math
 {
 	/*!
 	RGBA colour representation
 	\author Sylvain DOREMUS
 	\date 14/08/2010
 	*/
-	class Colour : public General::Math::Point4D<float>
+	class Colour : public Point<float, 4>
 	{
 	public:
 		static Colour FullAlphaWhite;
@@ -82,9 +83,14 @@ namespace Castor3D
 
 	public:
 		Colour( float p_r=0, float p_g=0, float p_b=0, float p_a=0)
-			:	Point4D<float>( p_r, p_g, p_b, p_a)
-		{}
+		{
+			m_coords[0] = p_r;
+			m_coords[1] = p_g;
+			m_coords[2] = p_b;
+			m_coords[3] = p_a;
+		}
 	};
+}
 }
 
 #endif

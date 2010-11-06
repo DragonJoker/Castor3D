@@ -20,7 +20,7 @@ namespace CastorShape
 		String					  instanceNum;
 		String					  lastDataRep;
 
-		float					  frameTime;
+		real					  frameTime;
 
 		bool					  m_continue;
 		bool					  m_breakOne;
@@ -43,7 +43,7 @@ namespace CastorShape
 		unsigned int			lineNo;
 		int						general_int;
 
-		float 					currentReal;
+		real 					currentReal;
 
 		bool 					usingShadow;
 		bool 					forceShadows;

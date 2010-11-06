@@ -11,20 +11,19 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_Image___
-#define ___C3D_Image___
+#ifndef ___Castor_Image___
+#define ___Castor_Image___
 
-#include "Module_Image.h"
-#include "Manager.h"
+#include "UniqueManager.h"
 #include "AutoSingleton.h"
 #include "Resource.h"
 #include "ResourceLoader.h"
 
-namespace General
+namespace Castor
 {	namespace Resource
 {
 	//! Image instance 
@@ -38,11 +37,7 @@ namespace General
 	class ImageLoader : ResourceLoader <Image>
 	{
 	public:
-		Image * LoadFromFileIO( const String & p_file);
-		bool SaveToFileIO( const String & p_file, Image * p_image)
-		{
-			LoaderError( "Le loader enregistré pour ce format ne prend pas en charge l'exportation");
-		}
+		ImagePtr LoadFromFile( const String & p_file);
 	};
 	/*!
 	Image resource
@@ -85,9 +80,11 @@ namespace General
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class ImageManager : public General::Templates::Manager<Image>, public General::Theory::AutoSingleton<ImageManager>
+	class ImageManager : public Castor::Templates::UniqueManager<Image, ImageManager>
 	{
-	public:
+		friend class Castor::Templates::UniqueManager<Image, ImageManager>;
+
+	protected:
 		/**
 		* Constructor
 		*/
@@ -96,13 +93,15 @@ namespace General
 		* Destructor
 		*/
 		~ImageManager(){}
+
+	public:
 		/**
 		* Creates an image with the given path and the given anem
 		*@param p_name : [in] The resource name
 		*@param p_path : [in] The image path
 		*@return The created image
 		*/
-		Image * CreateImage( const String & p_name, const String & p_path);
+		static ImagePtr CreateImage( const String & p_name, const String & p_path);
 	};
 }
 }

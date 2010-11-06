@@ -11,21 +11,18 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___CSU_Resource___
-#define ___CSU_Resource___
+#ifndef ___Castor_Resource___
+#define ___Castor_Resource___
 
-#include "Module_Utils.h"
 #include "Buffer.h"
 
-namespace General
+namespace Castor
 {	namespace Resource
 {
-	template <class T> class ResourceLoader;
-
 	/*!
 	A resource can be created only once, can be loaded and unloaded
 	\author Sylvain DOREMUS
@@ -60,6 +57,7 @@ namespace General
 		void Release()
 		{
 			*m_references--;
+
 			if (*m_references == 0)
 			{
 				delete this;
@@ -69,11 +67,6 @@ namespace General
 		inline String GetName()const { return m_name; }
 		inline void SetName( const String & p_name) { m_name = p_name; }
 	};
-
-	//! Resource pointer array
-	typedef std::vector <Resource *>			ResourcePtrArray;
-	//! Resource pointer map, sorted by name
-	typedef std::map	<String, Resource *>	ResourcePtrStrMap;
 }
 }
 

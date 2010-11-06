@@ -11,7 +11,7 @@ public:
 	CSNewIcosaedronDialog( wxWindow * parent, wxWindowID p_id);
 	~CSNewIcosaedronDialog();
 	
-	float GetIcosaedronRadius()const;
+	real GetIcosaedronRadius()const;
 	int GetNbSubdiv()const;
 	String GetNbSubdivStr()const;
 };

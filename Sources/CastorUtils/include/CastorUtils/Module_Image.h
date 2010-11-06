@@ -18,9 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CSU_Module_Image___
 #define ___CSU_Module_Image___
 
-#include "Module_Utils.h"
-
-namespace General
+namespace Castor
 {	namespace Resource
 {
 	//! The image representation

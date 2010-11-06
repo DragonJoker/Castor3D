@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_SceneManager___
 
 #include "Scene.h"
+#include <CastorUtils/UniqueManager.h>
 
 namespace Castor3D
 {
@@ -29,9 +30,11 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API SceneManager : public General::Templates::Manager<Scene>, public General::Theory::AutoSingleton<SceneManager>
+	class CS3D_API SceneManager : public Castor::Templates::UniqueManager<Scene, SceneManager>
 	{
-	public:
+	private:
+		friend class Castor::Templates::UniqueManager<Scene, SceneManager>;
+	private:
 		/**
 		 * Constructor
 		 */
@@ -41,12 +44,9 @@ namespace Castor3D
 		 */
 		~SceneManager();
 
-		Scene * CreateElement( const String & p_elementName)
-		{
-			return General::Utils::map::insert( m_objectMap, p_elementName, p_elementName);
-		}
-
-		void ClearScenes();
+	public:
+		static ScenePtr CreateElement( const String & p_elementName);
+		static void ClearScenes();
 	};
 }
 

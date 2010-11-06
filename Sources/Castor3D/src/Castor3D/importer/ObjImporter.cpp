@@ -12,20 +12,19 @@
 #include "geometry/mesh/Mesh.h"
 #include "geometry/mesh/Submesh.h"
 #include "geometry/basic/SmoothingGroup.h"
-#include "render_system/MeshRenderer.h"
 #include "render_system/Buffer.h"
 #include "geometry/primitives/Geometry.h"
+#include "geometry/basic/Face.h"
 #include "scene/SceneManager.h"
 #include "scene/Scene.h"
-#include "Log.h"
+#include "scene/SceneNode.h"
+
 
 using namespace Castor3D;
 
 ObjImporter :: ObjImporter()
-	:	m_pCurrentMaterial( NULL),
-		m_pFile( NULL),
+	:	m_pFile( NULL),
 		m_objectHasUV( false),
-		m_pCurrentSubmesh( NULL),
 		m_pSmoothingGroup( NULL),
 		m_bReadingFaces( false),
 		m_bReadingVertex( true),
@@ -35,7 +34,7 @@ ObjImporter :: ObjImporter()
 
 bool ObjImporter :: _import()
 {
-	m_pFile = new FileIO( m_fileName, FileIO::eRead);
+	m_pFile = new File( m_fileName, File::eRead);
 
 	m_pScene = SceneManager::GetSingleton().GetElementByName( "MainScene");
 
@@ -49,7 +48,7 @@ bool ObjImporter :: _import()
 
 	if ((l_uiIndex = m_fileName.find_last_of( "/")) != String::npos)
 	{
-		l_uiSlashIndex = max( l_uiSlashIndex, l_uiIndex + 1);
+		l_uiSlashIndex = std::max( l_uiSlashIndex, l_uiIndex + 1);
 	}
 
 	size_t l_uiDotIndex = m_fileName.find_last_of( ".");
@@ -60,23 +59,23 @@ bool ObjImporter :: _import()
 	String l_meshName = m_fileName.substr( l_uiSlashIndex, l_uiDotIndex - l_uiSlashIndex);
 	String l_materialName = m_fileName.substr( l_uiSlashIndex, l_uiDotIndex - l_uiSlashIndex);
 
-	if (MeshManager::GetSingletonPtr()->HasElement( l_meshName))
+	if (MeshManager::HasElement( l_meshName))
 	{
-		m_pMesh = MeshManager::GetSingletonPtr()->GetElementByName( l_meshName);
+		m_pMesh.reset( MeshManager::GetElementByName( l_meshName));
 	}
 	else
 	{
-		m_pMesh = MeshManager::GetSingletonPtr()->CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom);
-		Log::LogMessage( C3D_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
+		m_pMesh.reset( MeshManager::CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom));
+		Log::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
 	}
 
 	_readObjFile();
 
-	bool l_bHasMaterial = m_pCurrentMaterial != NULL;
+	bool l_bHasMaterial =  ! m_pCurrentMaterial.null();
 
 	if ( ! l_bHasMaterial)
 	{
-		m_pCurrentMaterial = MaterialManager::GetSingleton().CreateMaterial( l_materialName);
+		m_pCurrentMaterial.reset( MaterialManager::CreateMaterial( l_materialName));
 	}
 
 	for (size_t i = 0 ; i < m_pMesh->GetNbSubmeshes() ; i++)
@@ -94,12 +93,12 @@ bool ObjImporter :: _import()
 
 	m_pMesh->SetNormals();
 
-	SceneNode * l_pNode = m_pScene->CreateSceneNode( l_name);
+	SceneNodePtr l_pNode = m_pScene->CreateSceneNode( l_name);
 
-	Geometry * l_pGeometry = new Geometry( m_pMesh, l_pNode, l_name);
-	Log::LogMessage( C3D_T( "PlyImporter::_import - Geometry %s created"), l_name.c_str());
+	GeometryPtr l_pGeometry = new Geometry( m_pMesh, l_pNode, l_name);
+	Log::LogMessage( CU_T( "PlyImporter::_import - Geometry %s created"), l_name.c_str());
 
-	m_geometries.insert( GeometryStrMap::value_type( l_name, l_pGeometry));
+	m_geometries.insert( GeometryPtrStrMap::value_type( l_name, l_pGeometry));
 
 	delete m_pFile;
 
@@ -131,22 +130,22 @@ void ObjImporter :: _readObjFile()
 			l_strSection = l_strLine.substr( 0, l_strLine.find_first_of( ' '));
 			l_strValue = l_strLine.substr( l_strLine.find_first_of( ' ') + 1, String::npos);
 
-			if (l_strSection == C3D_T( "mtllib"))
+			if (l_strSection == CU_T( "mtllib"))
 			{
-				_readMatFileIO( l_strValue);
+				_readMatFile( l_strValue);
 			}
-			else if (l_strSection == C3D_T( "usemtl"))
+			else if (l_strSection == CU_T( "usemtl"))
 			{
 				_applyMaterial( l_strValue);
 			}
-			else if (l_strSection == C3D_T( "group"))
+			else if (l_strSection == CU_T( "group"))
 			{
 				_selectSubmesh( l_strValue);
 			}
 			else
 			{
 				l_char = l_strSection.at( 0);
-				String l_strLine = l_strSection + C3D_T( " ") + l_strValue;
+				String l_strLine = l_strSection + CU_T( " ") + l_strValue;
 
 				switch( l_char)
 				{
@@ -182,7 +181,7 @@ void ObjImporter :: _readObjFile()
 			m_bReadingVertex = false;
 			m_bReadingFaces = true;
 
-			m_pFile = new FileIO( m_fileName, FileIO::eRead);
+			m_pFile = new File( m_fileName, File::eRead);
 		}
 	}
 
@@ -204,18 +203,18 @@ void ObjImporter :: _applyMaterial( const String & p_strMaterialName)
 {
 	if (m_bReadingFaces)
 	{
-		if (m_pCurrentSubmesh != NULL && MaterialManager::GetSingleton().HasElement( p_strMaterialName))
+		if ( ! m_pCurrentSubmesh.null() && MaterialManager::HasElement( p_strMaterialName))
 		{
-			m_pCurrentSubmesh->SetMaterial( MaterialManager::GetSingleton().GetElementByName( p_strMaterialName));
+			m_pCurrentSubmesh->SetMaterial( MaterialManager::GetElementByName( p_strMaterialName));
 		}
 	}
 }
 
-void ObjImporter :: _readMatFileIO( const String & p_strFileName)
+void ObjImporter :: _readMatFile( const String & p_strFileName)
 {
 	if ( ! m_bReadingFaces)
 	{
-		m_pMatFile = new FileIO( m_filePath + p_strFileName, FileIO::eRead);
+		m_pMatFile = new File( m_filePath + p_strFileName, File::eRead);
 
 		String l_strLine;
 		Char l_char = 0;
@@ -226,44 +225,44 @@ void ObjImporter :: _readMatFileIO( const String & p_strFileName)
 
 			if ( ! l_strLine.empty())
 			{
-				if (l_strLine.find( C3D_T( "newmtl")) != String::npos)
+				if (l_strLine.find( CU_T( "newmtl")) != String::npos)
 				{
-					StringArray l_arraySplitted = l_strLine.Split( C3D_T( " "));
+					StringArray l_arraySplitted = l_strLine.Split( CU_T( " "));
 
 					if (l_arraySplitted.size() > 1)
 					{
-						if (MaterialManager::GetSingleton().HasElement( l_arraySplitted[1]))
+						if (MaterialManager::HasElement( l_arraySplitted[1]))
 						{
-							m_pCurrentMaterial = MaterialManager::GetSingleton().GetElementByName( l_arraySplitted[1]);
+							m_pCurrentMaterial = MaterialManager::GetElementByName( l_arraySplitted[1]);
 						}
 						else
 						{
-							m_pCurrentMaterial = MaterialManager::GetSingleton().CreateMaterial( l_arraySplitted[1]);
+							m_pCurrentMaterial = MaterialManager::CreateMaterial( l_arraySplitted[1]);
 						}
 
 						m_fAlpha = 1.0f;
 					}
 				}
-				else if (l_strLine.find( C3D_T( "illum")) != String::npos)
+				else if (l_strLine.find( CU_T( "illum")) != String::npos)
 				{
 				}
 				else
 				{
 					l_char = l_strLine.at( 0);
 
-					if (l_char == C3D_T( 'K'))
+					if (l_char == CU_T( 'K'))
 					{
 						_readMatLightComponent( l_strLine.substr( 1, String::npos));
 					}
-					else if (l_char == C3D_T( 'T') && l_strLine.at( 1) == C3D_T( 'r'))
+					else if (l_char == CU_T( 'T') && l_strLine.at( 1) == CU_T( 'r'))
 					{
 						_readMatTransparency( l_strLine.substr( 3, String::npos));
 					}
-					else if (l_char == C3D_T( 'd'))
+					else if (l_char == CU_T( 'd'))
 					{
 						_readMatTransparency( l_strLine.substr( 2, String::npos));
 					}
-					else if (l_char == C3D_T( 'N'))
+					else if (l_char == CU_T( 'N'))
 					{
 						_readMatLightRefDifExp( l_strLine.substr( 1, String::npos));
 					}
@@ -285,24 +284,24 @@ void ObjImporter :: _readMatLightComponent( const String & p_strLine)
 
 		l_char = p_strLine.at( 0);
 		l_line = p_strLine.substr( 2, String::npos);
-		StringArray l_arraySplitted = l_line.Split( C3D_T( " "));
+		StringArray l_arraySplitted = l_line.Split( CU_T( " "));
 
 		if (l_arraySplitted.size() >= 3)
 		{
 			float l_fR, l_fG, l_fB;
-			l_fR = (float)atof( l_arraySplitted[0].char_str());
-			l_fG = (float)atof( l_arraySplitted[1].char_str());
-			l_fB = (float)atof( l_arraySplitted[2].char_str());
+			l_fR = float( atof( l_arraySplitted[0].char_str()));
+			l_fG = float( atof( l_arraySplitted[1].char_str()));
+			l_fB = float( atof( l_arraySplitted[2].char_str()));
 
-			if (l_char == C3D_T( 'a'))
+			if (l_char == CU_T( 'a'))
 			{
 				m_pCurrentMaterial->GetPass( 0)->SetAmbient( l_fR, l_fG, l_fB, m_fAlpha);
 			}
-			else if (l_char == C3D_T( 'd'))
+			else if (l_char == CU_T( 'd'))
 			{
 				m_pCurrentMaterial->GetPass( 0)->SetDiffuse( l_fR, l_fG, l_fB, m_fAlpha);
 			}
-			else if (l_char == C3D_T( 's'))
+			else if (l_char == CU_T( 's'))
 			{
 				m_pCurrentMaterial->GetPass( 0)->SetSpecular( l_fR, l_fG, l_fB, m_fAlpha);
 			}
@@ -314,7 +313,7 @@ void ObjImporter :: _readMatTransparency( const String & p_strLine)
 {
 	if ( ! m_bReadingFaces)
 	{
-		m_fAlpha = (float)atof( p_strLine.char_str());
+		m_fAlpha = float( atof( p_strLine.char_str()));
 		const float * l_pfAmbient = m_pCurrentMaterial->GetPass( 0)->GetAmbient();
 		const float * l_pfDiffuse = m_pCurrentMaterial->GetPass( 0)->GetDiffuse();
 		const float * l_pfSpecular = m_pCurrentMaterial->GetPass( 0)->GetSpecular();
@@ -336,9 +335,9 @@ void ObjImporter :: _readMatLightRefDifExp( const String & p_strLine)
 		l_char = p_strLine.at( 0);
 		l_line = p_strLine.substr( 2, String::npos);
 
-		float l_fValue = (float)atof( l_line.char_str());
+		float l_fValue = float( atof( l_line.char_str()));
 
-		if (l_char == C3D_T( 's'))
+		if (l_char == CU_T( 's'))
 		{
 			m_pCurrentMaterial->GetPass( 0)->SetShininess( l_fValue);
 		}
@@ -349,14 +348,14 @@ void ObjImporter :: _readSubmeshInfo( const String & p_strLine)
 {
 	if (m_bReadingFaces)
 	{
-		StringArray l_arraySplitted = p_strLine.Split( C3D_T( " "));
+		StringArray l_arraySplitted = p_strLine.Split( CU_T( " "));
 
 		if (l_arraySplitted.size() > 1)
 		{
 			if (m_mapSubmeshes.find( l_arraySplitted[1]) == m_mapSubmeshes.end())
 			{
 				_createSubmesh();
-				m_mapSubmeshes.insert( std::map <String, Submesh *>::value_type( l_arraySplitted[1], m_pCurrentSubmesh));
+				m_mapSubmeshes.insert( SubmeshPtrStrMap::value_type( l_arraySplitted[1], m_pCurrentSubmesh));
 			}
 			else
 			{
@@ -372,20 +371,20 @@ void ObjImporter :: _readGroupInfo( const String & p_strLine)
 {
 	if (m_bReadingFaces)
 	{
-		StringArray l_arraySplitted = p_strLine.Split( C3D_T( " "));
+		StringArray l_arraySplitted = p_strLine.Split( CU_T( " "));
 
 		if (l_arraySplitted.size() > 1)
 		{
 			if (m_mapSmoothGroups.find( l_arraySplitted[1]) == m_mapSmoothGroups.end())
 			{
-				if (m_pCurrentSubmesh == NULL)
+				if (m_pCurrentSubmesh.null())
 				{
 					_createSubmesh();
 				}
 
 				m_pSmoothingGroup = m_pCurrentSubmesh->AddSmoothingGroup();
-				m_mapSmoothGroups.insert( std::map <String, SmoothingGroup *>::value_type( l_arraySplitted[1], m_pSmoothingGroup));
-				m_mapSmoothGroupSubmesh.insert( std::map <String, Submesh *>::value_type( l_arraySplitted[1], m_pCurrentSubmesh));
+				m_mapSmoothGroups.insert( SmoothGroupPtrStrMap::value_type( l_arraySplitted[1], m_pSmoothingGroup));
+				m_mapSmoothGroupSubmesh.insert( SubmeshPtrStrMap::value_type( l_arraySplitted[1], m_pCurrentSubmesh));
 			}
 			else
 			{
@@ -400,8 +399,8 @@ void ObjImporter :: _readVertexInfo( const String & p_strLine)
 {
 	if ( ! m_bReadingFaces)
 	{
-		Point3D<float> l_vertex;
-		Point2D<float> l_coords;
+		Point3r l_vertex;
+		Point2r l_coords;
 		String l_line;
 		Char l_char = 0;
 		Char l_cDump = 0;
@@ -409,20 +408,20 @@ void ObjImporter :: _readVertexInfo( const String & p_strLine)
 		l_char = p_strLine.at( 0);
 		l_line = p_strLine.substr( 1, String::npos);
 
-		if (l_char == C3D_T( ' '))
+		if (l_char == CU_T( ' '))
 		{
 			StringArray l_arraySplitted;
-			sscanf_s( l_line.char_str(), "%f %f %f", & l_vertex.x, & l_vertex.y, & l_vertex.z);
-			m_arrayVertex.push_back( new Vector3f( l_vertex.x, l_vertex.y, l_vertex.z));
+			sscanf_s( l_line.char_str(), "%f %f %f", & l_vertex[0], & l_vertex[1], & l_vertex[2]);
+			m_arrayVertex.push_back( new Point3r( l_vertex[0], l_vertex[1], l_vertex[2]));
 		}
-		else if (l_char == C3D_T( 't'))
+		else if (l_char == CU_T( 't'))
 		{
 			m_iNbTexCoords++;
-			sscanf_s( l_line.char_str(), "%f %f", & l_coords.x, & l_coords.y);
+			sscanf_s( l_line.char_str(), "%f %f", & l_coords[0], & l_coords[1]);
 			m_textureCoords.push_back( l_coords);
 			m_objectHasUV = true;
 		}
-		else if (l_char != C3D_T( 'n'))
+		else if (l_char != CU_T( 'n'))
 		{
 			Log::LogMessage( "Unknown vertex info : [%c]", l_char);
 		}
@@ -437,13 +436,13 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 		return;
 	}
 
-	if (m_pSmoothingGroup == NULL)
+	if (m_pSmoothingGroup.null())
 	{
 		m_pSmoothingGroup = m_pCurrentSubmesh->AddSmoothingGroup();
-		m_mapSmoothGroups.insert( std::map <String, SmoothingGroup *>::value_type( "-1", m_pSmoothingGroup));
+		m_mapSmoothGroups.insert( SmoothGroupPtrStrMap::value_type( "-1", m_pSmoothingGroup));
 		if (m_mapSmoothGroupSubmesh.find( "-1") == m_mapSmoothGroupSubmesh.end())
 		{
-			m_mapSmoothGroupSubmesh.insert( std::map <String, Submesh *>::value_type( "-1", m_pCurrentSubmesh));
+			m_mapSmoothGroupSubmesh.insert( SubmeshPtrStrMap::value_type( "-1", m_pCurrentSubmesh));
 		}
 	}
 
@@ -453,14 +452,14 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 
 	l_line = p_strLine.substr( 1, String::npos);
 
-	StringArray l_arraySplitted = l_line.Split( C3D_T( " "));
+	StringArray l_arraySplitted = l_line.Split( CU_T( " "));
 
 	if (l_arraySplitted.size() >= 3)
 	{
 		int l_iNbAdditionalFaces = l_arraySplitted.size() - 3;
 
-		std::vector <int> l_arrayVertex;
-		std::vector <int> l_arrayCoords;
+		IntArray l_arrayVertex;
+		IntArray l_arrayCoords;
 
 		for (size_t i = 0 ; i < l_arraySplitted.size() ; i++)
 		{
@@ -468,7 +467,7 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 
 			if (m_objectHasUV)
 			{
-				StringArray l_arraySlashSplitted = l_arraySplitted[i].Split( C3D_T( "/"));
+				StringArray l_arraySlashSplitted = l_arraySplitted[i].Split( CU_T( "/"));
 				l_arrayCoords.push_back( 0);
 				l_arrayVertex[i] = atoi( l_arraySlashSplitted[0].char_str());
 				l_arrayCoords[i] = atoi( l_arraySlashSplitted[1].char_str());
@@ -477,7 +476,7 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 			{
 				if (l_arraySplitted[i].find( "/") != String::npos)
 				{
-					StringArray l_arraySlashSplitted = l_arraySplitted[i].Split( C3D_T( "/"));
+					StringArray l_arraySlashSplitted = l_arraySplitted[i].Split( CU_T( "/"));
 					l_arrayVertex[i] = atoi( l_arraySlashSplitted[0].char_str());
 				}
 				else
@@ -487,13 +486,13 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 			}
 		}
 
-		Face * l_pFace;
+		FacePtr l_pFace;
 		int l_iIndex;
-		Vector3f * l_pV1, * l_pV2, * l_pV3;
+		VertexPtr l_pV1, l_pV2, l_pV3;
 
 		if ((l_iIndex = m_pCurrentSubmesh->IsInMyVertex( *m_arrayVertex[l_arrayVertex[1] - 1])) == -1)
 		{
-			l_pV1 = m_pCurrentSubmesh->AddVertex( new Vector3f( *m_arrayVertex[l_arrayVertex[1] - 1]));
+			l_pV1 = m_pCurrentSubmesh->AddVertex( new Vertex( *m_arrayVertex[l_arrayVertex[1] - 1]));
 		}
 		else
 		{
@@ -502,7 +501,7 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 
 		if ((l_iIndex = m_pCurrentSubmesh->IsInMyVertex( *m_arrayVertex[l_arrayVertex[0] - 1])) == -1)
 		{
-			l_pV2 = m_pCurrentSubmesh->AddVertex( new Vector3f( *m_arrayVertex[l_arrayVertex[0] - 1]));
+			l_pV2 = m_pCurrentSubmesh->AddVertex( new Vertex( *m_arrayVertex[l_arrayVertex[0] - 1]));
 		}
 		else
 		{
@@ -511,20 +510,20 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 
 		if ((l_iIndex = m_pCurrentSubmesh->IsInMyVertex( *m_arrayVertex[l_arrayVertex[l_arrayVertex.size() - 1] - 1])) == -1)
 		{
-			l_pV3 = m_pCurrentSubmesh->AddVertex( new Vector3f( *m_arrayVertex[l_arrayVertex[l_arrayVertex.size() - 1] - 1]));
+			l_pV3 = m_pCurrentSubmesh->AddVertex( new Vertex( *m_arrayVertex[l_arrayVertex[l_arrayVertex.size() - 1] - 1]));
 		}
 		else
 		{
 			l_pV3 = m_pCurrentSubmesh->GetVertex( l_iIndex);
 		}
 
-		if ((l_pFace = m_pCurrentSubmesh->AddFace( l_pV1, l_pV2, l_pV3, m_pSmoothingGroup->m_idGroup - 1)) != NULL)
+		if ( ! (l_pFace = m_pCurrentSubmesh->AddFace( l_pV1, l_pV2, l_pV3, m_pSmoothingGroup->m_idGroup - 1)).null())
 		{
 			if (m_objectHasUV)
 			{
-				SetTexCoordV1( l_pFace, m_textureCoords[l_arrayCoords[1] - 1].x, m_textureCoords[l_arrayCoords[1] - 1].y);
-				SetTexCoordV2( l_pFace, m_textureCoords[l_arrayCoords[0] - 1].x, m_textureCoords[l_arrayCoords[0] - 1].y);
-				SetTexCoordV3( l_pFace, m_textureCoords[l_arrayCoords[l_arrayCoords.size() - 1] - 1].x, m_textureCoords[l_arrayCoords[l_arrayCoords.size() - 1] - 1].y);
+				l_pFace->SetTexCoordV1( m_textureCoords[l_arrayCoords[1] - 1][0], 							m_textureCoords[l_arrayCoords[1] - 1][1]);
+				l_pFace->SetTexCoordV2( m_textureCoords[l_arrayCoords[0] - 1][0], 							m_textureCoords[l_arrayCoords[0] - 1][1]);
+				l_pFace->SetTexCoordV3( m_textureCoords[l_arrayCoords[l_arrayCoords.size() - 1] - 1][0],	m_textureCoords[l_arrayCoords[l_arrayCoords.size() - 1] - 1][1]);
 			}
 		}
 		else
@@ -554,7 +553,7 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 
 				if ((l_iIndex = m_pCurrentSubmesh->IsInMyVertex( *m_arrayVertex[l_iCurrentVertexIndex - 1])) == -1)
 				{
-					l_pV1 = m_pCurrentSubmesh->AddVertex( new Vector3f( *m_arrayVertex[l_iCurrentVertexIndex - 1]));
+					l_pV1 = m_pCurrentSubmesh->AddVertex( new Vertex( *m_arrayVertex[l_iCurrentVertexIndex - 1]));
 				}
 				else
 				{
@@ -563,7 +562,7 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 
 				if ((l_iIndex = m_pCurrentSubmesh->IsInMyVertex( *m_arrayVertex[l_iPreviousVertexIndex - 1])) == -1)
 				{
-					l_pV2 = m_pCurrentSubmesh->AddVertex( new Vector3f( *m_arrayVertex[l_iPreviousVertexIndex - 1]));
+					l_pV2 = m_pCurrentSubmesh->AddVertex( new Vertex( *m_arrayVertex[l_iPreviousVertexIndex - 1]));
 				}
 				else
 				{
@@ -572,21 +571,21 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 
 				if ((l_iIndex = m_pCurrentSubmesh->IsInMyVertex( *m_arrayVertex[l_iLastVertexIndex - 1])) == -1)
 				{
-					l_pV3 = m_pCurrentSubmesh->AddVertex( new Vector3f( *m_arrayVertex[l_iLastVertexIndex - 1]));
+					l_pV3 = m_pCurrentSubmesh->AddVertex( new Vertex( *m_arrayVertex[l_iLastVertexIndex - 1]));
 				}
 				else
 				{
 					l_pV3 = m_pCurrentSubmesh->GetVertex( l_iIndex);
 				}
 
-				if ((l_pFace = m_pCurrentSubmesh->AddFace( l_pV1, l_pV2, l_pV3, m_pSmoothingGroup->m_idGroup - 1)) != NULL)
+				if ( ! (l_pFace = m_pCurrentSubmesh->AddFace( l_pV1, l_pV2, l_pV3, m_pSmoothingGroup->m_idGroup - 1)).null())
 				{
 					if (m_objectHasUV)
 					{
 						l_iCurrentCoordIndex = l_arrayCoords[i + 2];
-						SetTexCoordV1( l_pFace, m_textureCoords[l_iCurrentCoordIndex - 1].x, m_textureCoords[l_iCurrentCoordIndex - 1].y);
-						SetTexCoordV2( l_pFace, m_textureCoords[l_iPreviousCoordIndex - 1].x, m_textureCoords[l_iPreviousCoordIndex - 1].y);
-						SetTexCoordV3( l_pFace, m_textureCoords[l_iLastCoordIndex - 1].x, m_textureCoords[l_iLastCoordIndex - 1].y);
+						l_pFace->SetTexCoordV1( m_textureCoords[l_iCurrentCoordIndex - 1][0],	m_textureCoords[l_iCurrentCoordIndex - 1][1]);
+						l_pFace->SetTexCoordV2( m_textureCoords[l_iPreviousCoordIndex - 1][0],	m_textureCoords[l_iPreviousCoordIndex - 1][1]);
+						l_pFace->SetTexCoordV3( m_textureCoords[l_iLastCoordIndex - 1][0],		m_textureCoords[l_iLastCoordIndex - 1][1]);
 						l_iPreviousCoordIndex = l_iCurrentCoordIndex;
 					}
 				}

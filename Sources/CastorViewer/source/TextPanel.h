@@ -36,7 +36,7 @@ namespace CastorViewer
 		wxString m_strFileName;
 
 		wxString m_search;
-		std::vector <SearchInfo *> m_searchPositions;
+		C3DVector( SearchInfo *) m_searchPositions;
 		size_t m_currentSearchPosition;
 
 	public:

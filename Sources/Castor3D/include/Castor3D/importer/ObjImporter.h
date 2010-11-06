@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -31,24 +31,24 @@ namespace Castor3D
 	class CS3D_API ObjImporter : public ExternalImporter
 	{
 	private:
-		std::vector <Vector3f *> m_arrayVertex;
-		std::vector <Point2D<float>>  m_textureCoords;
+		Point3rPtrArray m_arrayVertex;
+		Point2rArray  m_textureCoords;
 		int m_iNbTexCoords;
 		bool m_bReadingVertex;
 		bool m_bReadingFaces;
 		bool m_objectHasUV;
-		Mesh * m_pMesh;
-		FileIO * m_pMatFile;
-		std::map <String, Submesh *> m_mapSubmeshes;
-		Submesh * m_pCurrentSubmesh;
-		std::map <String, Submesh *> m_mapSmoothGroupSubmesh;
-		std::map <String, SmoothingGroup *> m_mapSmoothGroups;
-		SmoothingGroup * m_pSmoothingGroup;
+		MeshPtr m_pMesh;
+		File * m_pMatFile;
+		SubmeshPtrStrMap m_mapSubmeshes;
+		SubmeshPtr m_pCurrentSubmesh;
+		SubmeshPtrStrMap m_mapSmoothGroupSubmesh;
+		SmoothGroupPtrStrMap m_mapSmoothGroups;
+		SmoothingGroupPtr m_pSmoothingGroup;
 		float m_fAlpha;
 
-		Material * m_pCurrentMaterial;
+		MaterialPtr m_pCurrentMaterial;
 
-		FileIO * m_pFile;
+		File * m_pFile;
 
 	public:
 		/**
@@ -64,7 +64,7 @@ namespace Castor3D
 		void _readObjFile();
 		void _selectSubmesh( const String & p_strName);
 		void _applyMaterial( const String & p_strMaterialName);
-		void _readMatFileIO( const String & p_strFileName);
+		void _readMatFile( const String & p_strFileName);
 		void _readMatLightComponent( const String & p_strLine);
 		void _readMatTransparency( const String & p_strLine);
 		void _readMatLightRefDifExp( const String & p_strLine);

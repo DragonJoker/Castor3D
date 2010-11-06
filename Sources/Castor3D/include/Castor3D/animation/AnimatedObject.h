@@ -11,12 +11,14 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
 #ifndef ___C3D_AnimatedObject___
 #define ___C3D_AnimatedObject___
+
+#include "Module_Animation.h"
 
 namespace Castor3D
 {
@@ -32,10 +34,8 @@ namespace Castor3D
 	class CS3D_API AnimatedObject
 	{
 	protected:
-		//! The animations list
-		AnimationStrMap * m_animations;
-		//! The object affected by the animations
-		MovableObject * m_object;
+		AnimationPtrStrMap & m_animations;	//!< The animations list
+		MovableObjectPtr m_object;			//!< The object affected by the animations
 
 	public:
 		/**
@@ -43,8 +43,8 @@ namespace Castor3D
 		 *@param p_object : the MovableObject to affect
 		 *@param p_animations : the animations list
 		 */
-		AnimatedObject( MovableObject * p_object, 
-						AnimationStrMap * p_animations);
+		AnimatedObject( MovableObjectPtr p_object, 
+						AnimationPtrStrMap & p_animations);
 		/**
 		 * Destructor, dummy, destroy everything yourself (as you created all by yourself :P)
 		 */
@@ -53,19 +53,19 @@ namespace Castor3D
 		 * Writes the animation in a file
 		 *@param p_file : the file to write in
 		 */
-		bool Write( General::Utils::FileIO & p_file)const;
+		bool Write( Castor::Utils::File & p_file)const;
 		/**
 		 * Reads the animation from a file
 		 @param p_file : the file to read from
 		 */
-		bool Read( General::Utils::FileIO & p_file);
+		bool Read( Castor::Utils::File & p_file);
 		/**
 		 * Updates the animations of the object, given the time since the last frame, the animation weight and the animation scale
 		 *@param p_tslf : time elapsed since the last frame
 		 *@param p_weight : the animation weight, default value is 1.0 to tell full weight
 		 *@param p_scale : the time scale of the animation, value is 1.0 to tell normal scale
 		 */
-		void Update( float p_tslf, float p_weight = 1.0f, float p_scale = 1.0f);
+		void Update( real p_tslf, real p_weight = 1.0f, real p_scale = 1.0f);
 		/**
 		 * Starts the animation identified by the name
 		 *@param p_name : the name of the animation to start
@@ -91,11 +91,14 @@ namespace Castor3D
 		void PauseAllAnimations();
 
 	public:
+		/**@name Accessors */
+		//@{
 		/**
 		 * Returns the MovableObject
 		 *@return the MovableObject affected
 		 */
-		inline MovableObject *	GetObject		()const { return m_object; }
+		inline MovableObjectPtr	GetObject		()const { return m_object; }
+		//@}
 	};
 }
 

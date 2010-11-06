@@ -11,16 +11,16 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_PixelFormat___
-#define ___C3D_PixelFormat___
+#ifndef ___Castor_PixelFormat___
+#define ___Castor_PixelFormat___
 
-#include "Module_Image.h"
+#include "Module_Resource.h"
 
-namespace General
+namespace Castor
 {	namespace Resource
 {
 	std::string FormatToString( PixelFormat p_fmt);
@@ -28,7 +28,7 @@ namespace General
 	template <PixelFormat SrcFmt, PixelFormat DestFmt>
 	inline void ConvertPixel( const unsigned char * Src, unsigned char * Dest)
 	{
-		throw UnsupportedError( String( C3D_T( "Conversion software de format de pixel (")) +
+		throw UNSUPPORTED_ERROR( String( CU_T( "Conversion software de format de pixel (")) +
 			FormatToString(SrcFmt) + " -> " + FormatToString(DestFmt) + ")");
 	}
 	template <>

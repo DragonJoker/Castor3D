@@ -11,16 +11,16 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GENERAL_SINGLETON_H___
-#define ___GENERAL_SINGLETON_H___
+#ifndef ___Castor_Singleton___
+#define ___Castor_Singleton___
 
 #include "NonCopyable.h"
 
-namespace General
+namespace Castor
 { namespace Theory
 {
 	template <class T>
@@ -66,9 +66,9 @@ namespace General
 }
 }
 	
-#define GENLIB_INIT_SINGLETON( p_name) template <> p_name * General::Theory::Singleton <p_name> ::sm_singleton = NULL
-#define GENLIB_SINGLETON_FOR_DLL( p_name) static p_name & GetSingleton( void); static p_name * GetSingletonPtr( void)
-#define GENLIB_INIT_SINGLETON_FOR_DLL( p_name) p_name * p_name::sm_singleton = NULL; p_name * p_name :: GetSingletonPtr()	{ return sm_singleton; } p_name & p_name :: GetSingleton()	{ return *sm_singleton; }
-#define GENLIB_SET_SINGLETON()  sm_singleton = this
+#define CASTOR_INIT_SINGLETON( p_name) template <> p_name * Castor::Theory::Singleton <p_name> ::sm_singleton = NULL
+#define CASTOR_SINGLETON_FOR_DLL( p_name) static p_name & GetSingleton( void); static p_name * GetSingletonPtr( void)
+#define CASTOR_INIT_SINGLETON_FOR_DLL( p_name) p_name * p_name::sm_singleton = NULL; p_name * p_name :: GetSingletonPtr()	{ return sm_singleton; } p_name & p_name :: GetSingleton()	{ return *sm_singleton; }
+#define CASTOR_SET_SINGLETON()  sm_singleton = this
 
 #endif

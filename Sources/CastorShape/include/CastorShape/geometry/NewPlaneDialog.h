@@ -11,8 +11,8 @@ public:
 	CSNewPlaneDialog( wxWindow * parent, wxWindowID p_id);
 	~CSNewPlaneDialog();
 
-	float GetGeometryWidth()const;
-	float GetGeometryDepth()const;
+	real GetGeometryWidth()const;
+	real GetGeometryDepth()const;
 	int GetNbWidthSubdiv()const;
 	int GetNbDepthSubdiv()const;
 	String GetNbWidthSubdivStr()const;

@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -22,6 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "../geometry/Module_Geometry.h"
 #include "../light/Light.h"
 #include "../geometry/mesh/Mesh.h"
+#include "../camera/Viewport.h"
 
 namespace Castor3D
 {
@@ -35,30 +36,34 @@ namespace Castor3D
 	class CS3D_API Scene
 	{
 	private:
-		String m_name;							//!< The scene name
-		SceneNode * m_rootNode;					//!< The root scene node, each node is attached at this if not attached to another one
-		Camera * m_rootCamera;					//!< The root camera, necessary for any render
+		String m_name;									//!< The scene name
+		SceneNodePtr m_rootNode;						//!< The root scene node, each node is attached at the root node if not attached to another one
+		CameraPtr m_rootCamera;							//!< The root camera, necessary for any render
 
-		LightStrMap m_addedLights;				//!< The lights map
-		SceneNodeStrMap m_addedNodes;			//!< The nodes map
-		GeometryStrMap m_addedPrimitives;		//!< The geometries map
-		CameraStrMap m_addedCameras;			//!< The other cameras
+		LightPtrStrMap m_addedLights;					//!< The lights map
+		SceneNodePtrStrMap m_addedNodes;				//!< The nodes map
+		GeometryPtrStrMap m_addedPrimitives;			//!< The geometries map
+		CameraPtrStrMap m_addedCameras;					//!< The other cameras
 
 		LightPtrArray m_arrayLightsToDelete;			//!< The lights to delete array
 		SceneNodePtrArray m_arrayNodesToDelete;			//!< The nodes to delete array
 		GeometryPtrArray m_arrayPrimitivesToDelete;		//!< The geometries to delete array
 		CameraPtrArray m_arrayCamerasToDelete;			//!< The cameras to delete array
 
-		GeometryStrMap m_newlyAddedPrimitives;	//!< The newly added geometries, this map is used to make the vertex buffer of them, then they are removed from this list.
+		GeometryPtrStrMap m_newlyAddedPrimitives;		//!< The newly added geometries, it is used to make the vertex buffer of them, then they are removed from the map.
 
-		size_t m_nbFaces;						//!< The number of faces in this scene
-		size_t m_nbVertex;						//!< The number of vertexes in this scene
+		size_t m_nbFaces;								//!< The number of faces in the scene
+		size_t m_nbVertex;								//!< The number of vertexes in the scene
 
-		bool m_changed;							//!< Tells if the scene has changed, id est if a geometry has been created or added to it => Vertex buffers need to be generated
+		bool m_changed;									//!< Tells if the scene has changed, id est if a geometry has been created or added to it => Vertex buffers need to be generated
 
 		NormalsMode m_normalsMode;
 
-		Geometry * m_selectedGeometry;
+		GeometryPtr m_selectedGeometry;
+
+		Colour m_clAmbientLight;
+
+		Castor::MultiThreading::RecursiveMutex m_mutex;			//!< The mutex, to make the Scene threadsafe
 
 	public:
 		/**
@@ -79,13 +84,13 @@ namespace Castor3D
 		 *@param p_displayMode : [in] The mode in which the display must be made
 		 *@param p_tslf : [in] The time elapsed since the last frame was rendered
 		 */
-		void Render( DrawType p_displayMode, float p_tslf);
+		void Render( eDRAW_TYPE p_displayMode, real p_tslf);
 		/**
-		 * Creates a scene node in this scene, attached to the root node if th given parent is NULL
+		 * Creates a scene node in the scene, attached to the root node if th given parent is NULL
 		 *@param p_name : [in] The node name, default is empty
 		 *@param p_parent : [in] The parent node, if NULL, the created node will be attached to root
 		 */
-		SceneNode * CreateSceneNode( const String & p_name, SceneNode * p_parent = NULL);
+		SceneNodePtr CreateSceneNode( const String & p_name, SceneNodePtr p_parent = NULL);
 		/**
 		 * Creates a primitive, given a MeshType and the primitive definitions
 		 *@param p_name : [in] The primitive name
@@ -94,7 +99,7 @@ namespace Castor3D
 		 *@param p_faces : [in] The faces numbers
 		 *@param p_size : [in] The geometry dimensions
 		 */
-		Geometry * CreatePrimitive( const String & p_name, Mesh::eTYPE p_type,
+		GeometryPtr CreatePrimitive( const String & p_name, Mesh::eTYPE p_type,
 									const String & p_meshName, UIntArray p_faces,
 									FloatArray p_size);
 		/**
@@ -104,13 +109,13 @@ namespace Castor3D
 		 *@param p_type : [in] The viewport projection type
 		 */
 		Camera * CreateCamera( const String & p_name, int p_ww, int p_wh,
-							   ProjectionType p_type);
+							   Viewport::eTYPE p_type);
 		/**
 		* Creates a light
 		*@param p_type : [in] The light type
 		*@param p_name : [in] The light name
 		 */
-		Light * CreateLight( Light::eTYPE p_type, const String & p_name);
+		LightPtr CreateLight( Light::eTYPE p_type, const String & p_name);
 		/**
 		 * Creates the vertex buffers in a given normals mode, and tells if the face's or vertex's normals are shown
 		 *@param p_nm : [in] The normals mode (face or vertex)
@@ -122,48 +127,48 @@ namespace Castor3D
 		 *@param p_name : [in] The name of the node
 		 *@return The named node, NULL if not found
 		 */
-		SceneNode * GetNode( const String & p_name)const;
+		SceneNodePtr GetNode( const String & p_name)const;
 		/**
 		 * Adds a node to the scene
 		 *@param p_node : [in] The node to add
 		 */
-		void AddNode( SceneNode * p_node);
+		void AddNode( SceneNodePtr p_node);
 		/**
 		 * Adds a light to the scene
 		 *@param p_light : [in] The light to add
 		 */
-		void AddLight( Light * p_light);
+		void AddLight( LightPtr p_light);
 		/**
 		 * Adds a geometry to the scene
 		 *@param p_geometry : [in] The geometry to add
 		 */
-		void AddGeometry( Geometry * p_geometry);
+		void AddGeometry( GeometryPtr p_geometry);
 		/**
 		 * Retrieves the geometry with the given name
 		 *@param p_name : [in] the name of the geometry
 		 *@return The named geometry, NULL if not found
 		 */
-		Geometry * GetGeometry( String p_name);
+		GeometryPtr GetGeometry( const String & p_name);
 		/**
 		 * Removes the light given in argument from the scene and deletes it
 		 *@param p_pLight : [in] The light to remove
 		 */
-		void RemoveLight( Light * p_pLight);
+		void RemoveLight( LightPtr p_pLight);
 		/**
 		 * Removes the node given in argument from the scene and deletes it
 		 *@param p_pNode : [in] The node to remove
 		 */
-		void RemoveNode( SceneNode * p_pNode);
+		void RemoveNode( SceneNodePtr p_pNode);
 		/**
 		 * Removes the geometry given in argument from the scene and deletes it
 		 *@param p_pGeometry : [in] The geometry to remove
 		 */
-		void RemoveGeometry( Geometry * p_pGeometry);
+		void RemoveGeometry( GeometryPtr p_pGeometry);
 		/**
 		 * Removes the camera given in argument from the scene and deletes it
 		 *@param p_pCamera : [in] The camera to remove
 		 */
-		void RemoveCamera( Camera * p_pCamera);
+		void RemoveCamera( CameraPtr p_pCamera);
 		/**
 		 * Removes all the lights from the scene
 		 */
@@ -184,19 +189,19 @@ namespace Castor3D
 		 * Retrieves a map of visibility of the geometries, sorted by geometry name
 		 *@return The visibility map
 		 */
-		std::map <String, bool> GetGeometriesVisibility();
+		BoolStrMap GetGeometriesVisibility();
 		/**
 		 * Writes the scene in a file
 		 *@param p_pFile : [in] file to write in
 		 *@return true if successful, false if not
 		 */
-		bool Write( General::Utils::FileIO * p_pFile)const;
+		bool Write( Castor::Utils::File & p_pFile)const;
 		/**
 		 * Reads the scene from a file
 		 *@param p_file : [in] file to read from
 		 *@return true if successful, false if not
 		 */
-		bool Read( General::Utils::FileIO & p_file);
+		bool Read( Castor::Utils::File & p_file);
 		/**
 		* Reads the scene from a 3DS file
 		*@param p_file : [in] file to read from
@@ -219,7 +224,6 @@ namespace Castor3D
 		/**
 		* Reads the scene from a MD3 (Quake 3 Model) file
 		*@param p_file : [in] file to read from
-		*@param p_texName : [in] The texture name
 		*@return true if successful, false if not
 		*/
 		bool ImportMD3( const String & p_file);
@@ -249,12 +253,14 @@ namespace Castor3D
 		 *@param p_face : [out] The nearest met Face
 		 *@param p_vertex : [out] The nearest met Vertex
 		 */
-		void Select( Ray * p_ray, Geometry ** p_geo, Submesh ** p_submesh, Face ** p_face, Vector3f ** p_vertex);
+		void Select( Ray * p_ray, GeometryPtr * p_geo, SubmeshPtr * p_submesh, FacePtr * p_face, Point3rPtr * p_vertex);
+
+		void Merge( ScenePtr p_pScene);
 
 	private:
-		bool _writeLights( General::Utils::FileIO * p_pFile)const;
-		bool _writeGeometries( General::Utils::FileIO * p_pFile)const;
-		bool _importExternal( const String & p_fileName, ExternalImporter * p_importer);
+		bool _writeLights( Castor::Utils::File & p_pFile)const;
+		bool _writeGeometries( Castor::Utils::File & p_pFile)const;
+		bool _importExternal( const String & p_fileName, ExternalImporterPtr p_importer);
 		void _deleteToDelete();
 
 	public:
@@ -265,11 +271,11 @@ namespace Castor3D
 		/**
 		 * @return The root node
 		 */
-		inline SceneNode *		GetRootNode		()const { return m_rootNode; }
+		inline SceneNodePtr		GetRootNode		()const { return m_rootNode; }
 		/**
 		 * @return The root camera
 		 */
-		inline Camera *			GetRootCamera	()const { return m_rootCamera; }
+		inline CameraPtr		GetRootCamera	()const { return m_rootCamera; }
 		/**
 		 * @return The geometries number
 		 */
@@ -281,14 +287,18 @@ namespace Castor3D
 		/**
 		 * @return The lights
 		 */
-		inline LightStrMap		GetLights		()const { return m_addedLights; }
-		inline SceneNodeStrMap::iterator GetNodesIterator() { return m_addedNodes.begin(); }
-		inline SceneNodeStrMap::const_iterator GetNodesEnd() { return m_addedNodes.end(); }
-		inline LightStrMap::iterator GetLightsIterator() { return m_addedLights.begin(); }
-		inline LightStrMap::const_iterator GetLightsEnd() { return m_addedLights.end(); }
-		inline GeometryStrMap::iterator GetGeometriesIterator() { return m_addedPrimitives.begin(); }
-		inline GeometryStrMap::const_iterator GetGeometriesEnd() { return m_addedPrimitives.end(); }
+		inline LightPtrStrMap						GetLights				()const { return m_addedLights; }
+		inline Colour								GetAmbientLight			()const	{ return m_clAmbientLight; }
+		inline SceneNodePtrStrMap::iterator			GetNodesIterator		()		{ return m_addedNodes.begin(); }
+		inline SceneNodePtrStrMap::const_iterator	GetNodesEnd				()		{ return m_addedNodes.end(); }
+		inline LightPtrStrMap::iterator				GetLightsIterator		()		{ return m_addedLights.begin(); }
+		inline LightPtrStrMap::const_iterator		GetLightsEnd			()		{ return m_addedLights.end(); }
+		inline GeometryPtrStrMap::iterator			GetGeometriesIterator	()		{ return m_addedPrimitives.begin(); }
+		inline GeometryPtrStrMap::const_iterator	GetGeometriesEnd		()		{ return m_addedPrimitives.end(); }
+
+		inline void SetAmbientLight( const Colour & val) { m_clAmbientLight = val; }
 	};
+
 }
 
 #endif

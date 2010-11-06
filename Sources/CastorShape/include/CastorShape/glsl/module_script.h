@@ -1,7 +1,6 @@
 /*****************************************************************************
 
 	Author : Marc BILLON
-	Compagny : FDSSoftMedia - Copyright 2007
 
 *****************************************************************************/
 
@@ -137,30 +136,30 @@ namespace CastorShape
 
 	typedef void  ( d_fast_call RawFunction)(ScriptNode*);
 
-	typedef std::map <String, Function *>							FunctionMap;
-	typedef std::map <String, UserFunction *>						UserFunctionMap;
+	typedef C3DMap( String, Function *)							FunctionMap;
+	typedef C3DMap( String, UserFunction *)						UserFunctionMap;
 	typedef std::multimap <String, OperatorFunction *>				OperatorFunctionMultiMap;
-	typedef std::map <VariableBaseType, FunctionMap>				ClassFunctionMap;
+	typedef C3DMap( VariableBaseType, FunctionMap)				ClassFunctionMap;
 
-	typedef std::map <String, ScriptNode *>							ScriptNodeMap;
-	typedef std::map <String, ScriptTimer *>						TimerMap;
-	typedef std::vector <ScriptNode *>								ScriptNodeArray;
-	typedef std::vector <ScriptNodeArray>							ScriptNodeArrayArray;
-	typedef std::vector <VariableType *>							VariableTypeArray;
-	typedef std::map <String, VariableType *>						VariableTypeMap;
-	typedef std::vector <VariableBaseType>							VariableBaseTypeArray;
-	typedef std::vector <ScriptBlock *>								ScriptBlockArray;
+	typedef C3DMap( String, ScriptNode *)							ScriptNodeMap;
+	typedef C3DMap( String, ScriptTimer *)						TimerMap;
+	typedef C3DVector( ScriptNode *)							ScriptNodeArray;
+	typedef C3DVector( ScriptNodeArray)						ScriptNodeArrayArray;
+	typedef C3DVector( VariableType *)							VariableTypeArray;
+	typedef C3DMap( String, VariableType *)						VariableTypeMap;
+	typedef C3DVector( VariableBaseType)						VariableBaseTypeArray;
+	typedef C3DVector( ScriptBlock *)							ScriptBlockArray;
 	typedef std::queue <ScriptNode *>								ScriptNodeQueue;
 	typedef std::set <ScriptNode *>									ScriptNodeSet;
 
-	typedef std::vector <NodeValueBase *>							NodeValueBaseArray;
-	typedef std::map <int, NodeValueBase *>							NodeValueBaseIMap;
-	typedef std::map <String ,NodeValueBase *>						NodeValueBaseMap;
-	typedef std::map <float, NodeValueBase *>						NodeValueBaseRMap;
+	typedef C3DVector( NodeValueBase *)						NodeValueBaseArray;
+	typedef C3DMap( int, NodeValueBase *)							NodeValueBaseIMap;
+	typedef C3DMap( String ,NodeValueBase *)						NodeValueBaseMap;
+	typedef C3DMap( real, NodeValueBase *)						NodeValueBaseRMap;
 	typedef std::pair <NodeValueBase *, NodeValueBase *>			NodeValueBasePair;
 
-	typedef std::vector<StructRow*>									StructRowArray;
-	typedef std::map<String, Structure*>							StructureMap;
+	typedef C3DVector( StructRow*)								StructRowArray;
+	typedef C3DMap( String, Structure *)							StructureMap;
 	
 
 #define VERBOSE_COMPILATOR( p_string ) // std::cout << p_string << std::endl; // m_compiler->_log( p_string);

@@ -4,6 +4,8 @@
 namespace CastorViewer
 {
 	class RenderPanel;
+	class GeometriesListFrame;
+	class MaterialsFrame;
 
 	class MainFrame : public wxFrame
 	{
@@ -15,12 +17,14 @@ namespace CastorViewer
 			eGeometries,
 			eMaterials,
 		};
+
 	private:
-		RenderPanel		*	m_3dFrame;
-		Castor3D::Scene *	m_mainScene;
-		Castor3D::Root	*	m_castor3D;
-		Castor3D::Log	*	m_log;
-		String				m_strFilePath;
+		RenderPanel			*	m_3dFrame;
+		Castor3D::ScenePtr		m_mainScene;
+		Castor3D::Root		*	m_castor3D;
+		String					m_strFilePath;
+		GeometriesListFrame	*	m_geometriesList;
+		MaterialsFrame		*	m_materialsList;
 
 	public:
 		MainFrame( wxWindow * parent, const wxString & title);

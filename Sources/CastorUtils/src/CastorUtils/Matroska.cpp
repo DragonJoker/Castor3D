@@ -1,3 +1,5 @@
+#include "PrecompiledHeader.h"
+
 #ifndef __GNUG__
 #	include <ebml/StdIOCallback.h>
 #	include <ebml/EbmlHead.h>
@@ -28,7 +30,7 @@ using namespace libmatroska;
 
 #include "Matroska.h"
 
-using namespace General::Resource;
+using namespace Castor::Resource;
 
 #ifndef MKFOURCC
 #	define MKFOURCC( d, c, b, a) (DWORD)((char)a | (char)b << 8 | (char)c << 16 | (char)d << 24)
@@ -262,8 +264,8 @@ void MatroskaFile :: AddFrame( const EBML_TRACK_FRAME & p_frame)
 	KaxBlockGroup * l_group;
 	if (m_currentCluster->AddFrame( * l_it->second->m_track, m_timeIndex, * l_buffer, l_group, LACING_AUTO) && l_group != NULL)
 	{
-		std::map <track_type, KaxBlockGroup *>::iterator l_currentIt = m_currentGroups.find( p_frame.m_track);
-		std::map <track_type, KaxBlockGroup *>::iterator l_previousIt = m_previousGroups.find( p_frame.m_track);
+		KaxBlockMap::iterator l_currentIt = m_currentGroups.find( p_frame.m_track);
+		KaxBlockMap::iterator l_previousIt = m_previousGroups.find( p_frame.m_track);
 		l_currentIt->second = l_group;
 		m_cues->AddBlockGroup( * l_group);
 		l_previousIt->second = l_group;
@@ -366,8 +368,8 @@ KaxTrackEntry * MatroskaFile :: _addTrack( track_type p_type, const String & p_c
 	}
 
 	KaxBlockGroup * l_group;
-	m_currentGroups.insert( std::map <track_type, KaxBlockGroup *>::value_type( p_type, l_group));
-	m_previousGroups.insert( std::map <track_type, KaxBlockGroup *>::value_type( p_type, (KaxBlockGroup *)NULL));
+	m_currentGroups.insert( KaxBlockMap::value_type( p_type, l_group));
+	m_previousGroups.insert( KaxBlockMap::value_type( p_type, (KaxBlockGroup *)NULL));
 
 	KaxTrackEntry * l_track = & AddNewChild <KaxTrackEntry>( * m_tracks);
 	l_track->SetGlobalTimecodeScale( TIMECODE_SCALE);

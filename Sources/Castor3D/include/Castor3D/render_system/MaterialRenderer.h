@@ -127,7 +127,7 @@ namespace Castor3D
 		/**
 		 * Applies the material
 		 */
-		virtual void Apply( Submesh * p_submesh, DrawType p_displayMode) = 0;
+		virtual void Apply( SubmeshPtr p_submesh, DrawType p_displayMode) = 0;
 		/**
 		 * Applies the material
 		 */

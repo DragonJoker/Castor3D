@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_CameraRenderer___
 
 #include "Renderer.h"
+#include "../camera/Camera.h"
 
 namespace Castor3D
 {
@@ -49,7 +50,7 @@ namespace Castor3D
 		 *@param p_position : [in] The camera position
 		 *@param p_matrix : [in] The rotation matrix
 		 */
-		virtual void ApplyTransformations( const Vector3f & p_position, float * p_matrix) = 0;
+		virtual void ApplyTransformations( const Point3r & p_position, real * p_matrix) = 0;
 		/**
 		 * Removes the tranformations
 		 */
@@ -63,7 +64,7 @@ namespace Castor3D
 		*@param y : [in] The y mouse coordinate
 		*@return true if something was found, false if not
 		*/
-		virtual bool Select( Scene * p_scene, SelectionMode p_mode, void ** p_found, int x, int y) = 0;
+		virtual bool Select( ScenePtr p_scene, Camera::eSELECTION_MODE p_mode, void ** p_found, int x, int y) = 0;
 	};
 	//! The Viewport renderer
 	/*!
@@ -88,11 +89,11 @@ namespace Castor3D
 		/**
 		 * Renders the viewport's transformations
 		 */
-		virtual void Apply( ProjectionType p_type) = 0;
+		virtual void Apply( Viewport::eTYPE p_type) = 0;
 		/**
 		 * Retrieves the viewport direction and returns it
 		 */
-		virtual Vector3f GetDirection( const Point2D<int> & p_mouse)=0;
+		virtual Point3r GetDirection( const Point<int, 2> & p_mouse)=0;
 	};
 }
 

@@ -14,7 +14,7 @@ namespace CastorViewer
 		wxImageList * m_images;
 		wxListItem * m_items;
 		unsigned int m_nbItems;
-		std::vector <wxImage *> m_imagesArray;
+		C3DVector( wxImage *) m_imagesArray;
 
 	public:
 		MaterialsListView( wxWindow * parent, wxWindowID id = wxID_ANY, const wxPoint & pos = wxDefaultPosition,const wxSize & size = wxDefaultSize);

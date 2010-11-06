@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -34,7 +34,7 @@ namespace Castor3D
 	{
 	private:
 		friend class MeshManager;
-		float m_radius;				//!< The sphere radius
+		real m_radius;				//!< The sphere radius
 		unsigned int m_nbFaces;		//!< The subdivisions number
 		/**
 		 * Construstor, only the MeshManager can use it
@@ -42,7 +42,7 @@ namespace Castor3D
 		 *@param p_precision : [in] The wanted subdivisions number
 		 *@param p_name : [in] The mesh name
 		 */
-		IcosaedricMesh( float p_radius=0.0, unsigned int p_precision=0,
+		IcosaedricMesh( real p_radius=0.0, unsigned int p_precision=0,
 						const String & p_name = C3DEmptyString);
 
 	public:
@@ -59,11 +59,18 @@ namespace Castor3D
 		 *@param p_radius : [in] The new wanted radius
 		 *@param p_precision : [in] The new wanted subdivisions number
 		 */
-		void Modify( float p_radius, unsigned int p_precision);
+		void Modify( real p_radius, unsigned int p_precision);
+		/**
+		 * Defines the normals for the submesh
+		 */
+		virtual void SetNormals( bool p_bReverted = false);
 
 	public:
+		/**@name Accessors */
+		//@{
 		inline unsigned int	GetNbFaces	()const {return m_nbFaces;}
-		inline float		GetRadius	()const {return m_radius;}
+		inline real		GetRadius	()const {return m_radius;}
+		//@}
 
 		inline friend std::ostream & operator <<( std::ostream & o, const IcosaedricMesh & c) { return o << "Icosaedre(" << c.m_nbFaces << "," << c.m_radius << ")";}
 	};

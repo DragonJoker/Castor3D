@@ -47,6 +47,9 @@
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="PrecompiledHeaders.h"
+				ProgramDataBaseFileName="$(IntDir)\$(TargetName).pdb"
+				WarningLevel="0"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -63,6 +66,7 @@
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="../Bin/Release - Multibyte"
 				IgnoreDefaultLibraryNames="libcmt.lib;libcpmt.lib"
+				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="1"
 			/>
@@ -118,7 +122,8 @@
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="PrecompiledHeaders.h"
-				ProgramDataBaseFileName="$(IntDir)\CastorShape.pdb"
+				ProgramDataBaseFileName="$(IntDir)\$(TargetName).pdb"
+				WarningLevel="0"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -196,6 +201,7 @@
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="PrecompiledHeaders.h"
+				ProgramDataBaseFileName="$(IntDir)\$(TargetName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>
@@ -266,6 +272,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="-Zm164"
 				Optimization="0"
 				WholeProgramOptimization="false"
 				AdditionalIncludeDirectories="include/CastorShape;../Castor3D/include;../CastorUtils/include"
@@ -275,6 +282,7 @@
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="PrecompiledHeaders.h"
+				ProgramDataBaseFileName="$(IntDir)\$(TargetName).pdb"
 				WarningLevel="3"
 				DebugInformationFormat="4"
 			/>

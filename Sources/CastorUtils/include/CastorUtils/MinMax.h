@@ -11,12 +11,12 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___UTILS_MIN_MAX_H___
-#define ___UTILS_MIN_MAX_H___
+#ifndef ___Castor_MinMax___
+#define ___Castor_MinMax___
 
 //In case someone tries to create macros for these -_- template versions are better...
 #ifdef min
@@ -35,26 +35,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	undef nabs
 #endif
 
-#define min min
-#define max max
-#define abs abs
-#define nabs nabs
-
-namespace General
-{ namespace Utils
+namespace Castor
+{ namespace Math
 {
-	template <typename T>
-	inline const T & min( const T & p_a, const T & p_b)
-	{
-		return ((p_a < p_b) ? p_a : p_b);
-	}
-
-	template <typename T>
-	inline const T & max( const T & p_a, const T & p_b)
-	{
-		return ((p_a > p_b) ? p_a : p_b);
-	}
-
 	template <typename T>
 	inline const T & minmax( const T & p_min, const T & p_value, const T & p_max)
 	{
@@ -84,18 +67,6 @@ namespace General
 		{
 			p_value = p_max;
 		}
-	}
-
-	template <typename T>
-	inline T abs( const T & p_value)
-	{
-		return ((p_value < T()) ? -p_value : p_value);
-	}
-
-	template <typename T>
-	inline T nabs( const T & p_value)
-	{
-		return ((p_value < T()) ? p_value : -p_value);
 	}
 }
 }

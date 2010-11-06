@@ -8,10 +8,16 @@ using namespace Castor3D;
 
 RendererServer :: ~RendererServer()
 {
-	vector::deleteAll( m_rendererDrivers);
+	Cleanup();
 }
 
-void RendererServer :: AddRendererDriver( RendererDriver * p_driver)
+void RendererServer :: Cleanup()
+{
+//	vector::deleteAll( m_rendererDrivers);
+	m_rendererDrivers.clear();
+}
+
+void RendererServer :: AddRendererDriver( RendererDriverPtr p_driver)
 {
 	m_rendererDrivers.push_back( p_driver);
 }
@@ -21,7 +27,14 @@ size_t RendererServer :: GetDriverCount()const
 	return m_rendererDrivers.size();
 }
 
-RendererDriver * RendererServer :: GetDriver( size_t p_index)
+RendererDriverPtr RendererServer :: GetDriver( size_t p_index)
 {
-	return vector::getOrNull( m_rendererDrivers, p_index);
+	RendererDriverPtr l_pReturn;
+
+	if (p_index < m_rendererDrivers.size())
+	{
+		l_pReturn = m_rendererDrivers[p_index];
+	}
+
+	return l_pReturn;
 }

@@ -98,7 +98,7 @@ namespace CastorShape
 			{
 				if ( ! m_value->IsType <T> ())
 				{
-					GENLIB_EXCEPTION( "Runtime ScriptError : set value on an already existing value, of different type // file : " + m_strFileName + " line " + ToString( m_createdAtLine));
+					CASTOR_EXCEPTION( "Runtime ScriptError : set value on an already existing value, of different type // file : " + m_strFileName + " line " + ToString( m_createdAtLine));
 				}
 				else
 				{
@@ -114,7 +114,7 @@ namespace CastorShape
 			{
 				if ( ! m_value->IsType<T>())
 				{
-					GENLIB_EXCEPTION( "Runtime ScriptError : get value, type mismatched // file : " + m_strFileName + " line " + ToString( m_createdAtLine));
+					CASTOR_EXCEPTION( "Runtime ScriptError : get value, type mismatched // file : " + m_strFileName + " line " + ToString( m_createdAtLine));
 				}
 				else
 				{
@@ -123,7 +123,7 @@ namespace CastorShape
 			}
 			else
 			{
-				GENLIB_EXCEPTION( "Runtime ScriptError : get value, no value to return // file : " + m_strFileName + " line " + ToString( m_createdAtLine));
+				CASTOR_EXCEPTION( "Runtime ScriptError : get value, no value to return // file : " + m_strFileName + " line " + ToString( m_createdAtLine));
 			}
 		}
 

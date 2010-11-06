@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -35,14 +35,13 @@ namespace Castor3D
 
 		bool m_isLinked;					//!< Tells if the program is linked
 		bool m_bError;
-		ShaderObject * m_pVertexShader;
-		ShaderObject * m_pFragmentShader;
-		ShaderObject * m_pGeometryShader;
-		bool m_enabled;						//!< Tells if this shader is enabled
-		bool m_usesGeometryShader;			//!< Tells if this program uses a geometry shader
-		bool m_manageMemory;				//!< Tells that the program manages it's memory
-		DrawType m_nInputPrimitiveType;
-		DrawType m_nOutputPrimitiveType;
+		ShaderObjectPtr m_pVertexShader;
+		ShaderObjectPtr m_pFragmentShader;
+		ShaderObjectPtr m_pGeometryShader;
+		bool m_enabled;						//!< Tells if the shader is enabled
+		bool m_usesGeometryShader;			//!< Tells if the program uses a geometry shader
+		eDRAW_TYPE m_nInputPrimitiveType;
+		eDRAW_TYPE m_nOutputPrimitiveType;
 		int m_nVerticesOut;
 		String m_vertexFile;
 		String m_fragmentFile;
@@ -50,7 +49,7 @@ namespace Castor3D
 		String m_vertexProgram;
 		String m_fragmentProgram;
 		String m_geometryProgram;
-		std::map <String, UniformVariable *> m_mapUniformVariables;
+		UniformVariablePtrStrMap m_mapUniformVariables;
 		bool m_bFromMemory;
 		int m_iTangentAttribLocation;
 		int m_iBitangentAttribLocation;
@@ -72,14 +71,14 @@ namespace Castor3D
 		 * Adds a uniform variable to pass to the shader objects
 		 *@param p_pUniformVariable : the variable to pass
 		 */
-		virtual void AddUniformVariable( UniformVariable * p_pUniformVariable);
+		virtual void AddUniformVariable( UniformVariablePtr p_pUniformVariable);
 		/**
-		 * Retrieves the uniform variables this program holds
-		 *@return the map of variables held by this program
+		 * Retrieves the uniform variables the program holds
+		 *@return the map of variables held by the program
 		 */
-		std::map <String, UniformVariable *> GetUniformVariables()const { return m_mapUniformVariables; }
+		UniformVariablePtrStrMap GetUniformVariables()const { return m_mapUniformVariables; }
 		/**
-		 * Cleans this up
+		 * Cleans the up
 		 */
 		virtual void Cleanup();
 		/** 
@@ -87,7 +86,7 @@ namespace Castor3D
 		 */
 		virtual void Initialise();
 		/**
-		 * Links all Shaders held by this program
+		 * Links all Shaders held by the program
 		 */
 		virtual bool Link()=0;
 		/**
@@ -106,33 +105,47 @@ namespace Castor3D
 		 * Loads and sets the vertex program to the one contained in the file
 		 *@param p_strFile : The file address
 		 */
-		void SetVertexFileIO( const String & p_strFile);
+		void SetVertexFile( const String & p_strFile);
 		/**
 		 * Loads and sets the fragment program to the one contained in the file
 		 *@param p_strFile : The file address
 		 */
-		void SetFragmentFileIO( const String & p_strFile);
+		void SetFragmentFile( const String & p_strFile);
 		/**
 		 * Loads and sets the geometry program to the one contained in the file
 		 *@param p_strFile : The file address
 		 */
-		void SetGeometryFileIO( const String & p_strFile);
+		void SetGeometryFile( const String & p_strFile);
+		/**
+		 * Loads and sets the vertex program to the one contained in the text
+		 *@param p_strContent : The shader code
+		 */
+		void SetVertexText( const String & p_strContent);
+		/**
+		 * Loads and sets the fragment program to the one contained in the text
+		 *@param p_strContent : The shader code
+		 */
+		void SetFragmentText( const String & p_strContent);
+		/**
+		 * Loads and sets the geometry program to the one contained in the text
+		 *@param p_strContent : The shader code
+		 */
+		void SetGeometryText( const String & p_strContent);
 
 	public:
-		inline void 	UsesGeometryShader		( bool p_use)		{ m_usesGeometryShader = p_use;}
-		inline void 	Enable					()					{ m_enabled = true; }
-		inline void 	Disable					()					{ m_enabled = false; } 
-		inline void 	ManageMemory			()					{ m_manageMemory = true;}
-		inline void 	SetInputPrimitiveType	( DrawType p_type)	{ m_nInputPrimitiveType = p_type; }
-		inline void 	SetOutputPrimitiveType	( DrawType p_type)	{ m_nOutputPrimitiveType = p_type; }
-		inline void 	SetVerticesOut			( int p_nb)			{ m_nVerticesOut = p_nb; }
+		inline void 	UsesGeometryShader		( bool p_use)			{ m_usesGeometryShader = p_use;}
+		inline void 	Enable					()						{ m_enabled = true; }
+		inline void 	Disable					()						{ m_enabled = false; } 
+		inline void 	SetInputPrimitiveType	( eDRAW_TYPE p_type)	{ m_nInputPrimitiveType = p_type; }
+		inline void 	SetOutputPrimitiveType	( eDRAW_TYPE p_type)	{ m_nOutputPrimitiveType = p_type; }
+		inline void 	SetVerticesOut			( int p_nb)				{ m_nVerticesOut = p_nb; }
 
-		inline bool 	UsesGeometryShader		()const { return m_usesGeometryShader; }
-		inline String	GetVertexFile			()const { return m_vertexFile; }
-		inline String	GetFragmentFile			()const { return m_fragmentFile; }
-		inline String	GetGeometryFile			()const { return m_geometryFile; }
-		inline int		GetTangentAttribLocation()const { return m_iTangentAttribLocation; }
-		inline int		GetBitangentAttribLocation()const { return m_iBitangentAttribLocation; }
+		inline bool 	UsesGeometryShader			()const { return m_usesGeometryShader; }
+		inline String	GetVertexFile				()const { return m_vertexFile; }
+		inline String	GetFragmentFile				()const { return m_fragmentFile; }
+		inline String	GetGeometryFile				()const { return m_geometryFile; }
+		inline int		GetTangentAttribLocation	()const { return m_iTangentAttribLocation; }
+		inline int		GetBitangentAttribLocation	()const { return m_iBitangentAttribLocation; }
 
 	private:
 		virtual void _initialiseFromMemory();

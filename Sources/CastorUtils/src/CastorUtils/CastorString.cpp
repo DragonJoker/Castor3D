@@ -1,15 +1,28 @@
+#include "PrecompiledHeader.h"
+
 #include "CastorString.h"
 
-using namespace General::Utils;
+#if CHECK_MEMORYLEAKS
+#	include "Memory.h"
+using namespace Castor::Utils;
+#endif
 
-#ifndef _UNICODE
+using namespace Castor;
+
 String :: String()
-	:	std::string()
+	:	my_type()
 {
 }
 
+const Char * String :: c_str()const
+{
+	return my_type::c_str();
+}
+
+#ifndef _UNICODE
+
 String :: String( const char * p_pChars)
-	:	std::string()
+	:	my_type()
 {
 	if (p_pChars != NULL)
 	{
@@ -18,13 +31,13 @@ String :: String( const char * p_pChars)
 }
 
 String :: String( const wchar_t * p_pChars)
-	:	std::string()
+	:	my_type()
 {
 	_fromWString( p_pChars);
 }
 
 String :: String( char p_char)
-	:	std::string()
+	:	my_type()
 {
 	char l_buffer[2];
 	l_buffer[0] = p_char;
@@ -41,24 +54,19 @@ String :: String( wchar_t p_char)
 }
 
 String :: String( const std::string & p_strString)
-	:	std::string( p_strString)
+	:	my_type( p_strString)
 {
 }
 
 String :: String( const std::wstring & p_strString)
-	:	std::string()
+	:	my_type()
 {
 	_fromWString( p_strString);
 }
 
-const Char * String :: c_str()const
-{
-	return std::string::c_str();
-}
-
 const char * String :: char_str()const
 {
-	return std::string::c_str();
+	return my_type::c_str();
 }
 
 const wchar_t * String :: wchar_str()const
@@ -254,19 +262,14 @@ void String :: _toWString( std::wstring & p_strWideString)const
     std::use_facet <std::ctype <wchar_t> > ( loc).widen( & operator[]( 0), & operator[]( length()), & p_strWideString[0]);
 }
 #else
-String :: String()
-	:	std::wstring()
-{
-}
-
 String :: String( const char * p_pChars)
-	:	std::wstring()
+	:	my_type()
 {
 	_fromString( p_pChars);
 }
 
 String :: String( const wchar_t * p_pChars)
-	:	std::wstring()
+	:	my_type()
 {
 	if (p_pChars != NULL)
 	{
@@ -275,7 +278,7 @@ String :: String( const wchar_t * p_pChars)
 }
 
 String :: String( char p_char)
-	:	std::wstring()
+	:	my_type()
 {
 	char l_buffer[2];
 	l_buffer[0] = p_char;
@@ -293,19 +296,14 @@ String :: String( wchar_t p_char)
 }
 
 String :: String( const std::string & p_strString)
-	:	std::wstring()
+	:	my_type()
 {
 	_fromString( p_strString);
 }
 
 String :: String( const std::wstring & p_strString)
-	:	std::wstring( p_strString)
+	:	my_type( p_strString)
 {
-}
-
-const Char * String :: c_str()const
-{
-	return std::wstring::c_str();
 }
 
 const char * String :: char_str()const
@@ -494,7 +492,7 @@ void String :: _fromString( const std::string & p_strSring)
 
     std::locale loc( "french");
 
-    std::use_facet <std::ctype <wchar_t> > ( loc).widen( & p_strSring[0], & p_strSring[p_strSring.length()], & operator[]( 0));
+    std::use_facet <std::ctype <wchar_t> > ( loc)[3]iden( & p_strSring[0], & p_strSring[p_strSring.length()], & operator[]( 0));
 }
 
 void String :: _toString( std::string & p_strString)const

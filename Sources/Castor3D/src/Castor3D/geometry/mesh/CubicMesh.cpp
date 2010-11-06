@@ -7,14 +7,13 @@
 #include "geometry/basic/Face.h"
 #include "main/Root.h"
 #include "render_system/RenderSystem.h"
-#include "render_system/MeshRenderer.h"
 #include "render_system/Buffer.h"
 
-#include "Log.h"
+
 
 using namespace Castor3D;
 
-CubicMesh :: CubicMesh( float width_p, float height_p, float depth_p,
+CubicMesh :: CubicMesh( real width_p, real height_p, real depth_p,
 						const String & p_name)
 	:	Mesh( p_name),
 		m_height( height_p),
@@ -45,8 +44,7 @@ void CubicMesh :: GeneratePoints()
 		CptNegatif++;
 	}
 
-	Submesh * l_submesh = new Submesh( Root::GetRenderSystem()->CreateSubmeshRenderer(), 6);
-	m_submeshes.push_back( l_submesh);
+	SubmeshPtr l_submesh = CreateSubmesh( 6);
 
     //Calcul des coordonnées des 8 sommets du pav,
 	l_submesh->AddVertex( -m_width / 2,	-m_height / 2,	-m_depth / 2);
@@ -69,7 +67,8 @@ void CubicMesh :: GeneratePoints()
 	l_submesh->GetRenderer()->GetLinesTexCoords()->Cleanup();
 
 	//CONSTRUCTION FACES /!\ Pour OpenGL le Z est inversé
-	Vector3fPtrArray l_vertex = l_submesh->m_vertex;
+	VertexPtrArray l_vertex = l_submesh->m_vertex;
+
 	if (CptNegatif == 1 || CptNegatif == 3)
 	{
 		// Faces du bas
@@ -113,12 +112,12 @@ void CubicMesh :: GeneratePoints()
 
 	l_submesh->GenerateBuffers();
 
-	Log::LogMessage( C3D_T( "CubicMesh - %s - NbVertex : %d"), m_name.c_str(), l_submesh->m_vertex.size());
+	Log::LogMessage( CU_T( "CubicMesh - %s - NbVertex : %d"), m_name.c_str(), l_submesh->m_vertex.size());
 }
 
 
 
-void CubicMesh :: Modify( float width_p, float height_p, float depth_p )
+void CubicMesh :: Modify( real width_p, real height_p, real depth_p )
 {
 	m_width = width_p;
 	m_height = height_p;

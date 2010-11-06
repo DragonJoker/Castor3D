@@ -29,9 +29,9 @@ namespace CastorViewer
 		};
 
 	private:
-		Castor3D::Pass * m_pass;
+		Castor3D::PassPtr m_pass;
 		unsigned int m_selectedUnitIndex;
-		Castor3D::TextureUnit * m_selectedTextureUnit;
+		Castor3D::TextureUnitPtr m_selectedTextureUnit;
 		wxImage * m_selectedUnitImage;
 
 		wxPanel * m_textureUnitPanel;
@@ -68,14 +68,14 @@ namespace CastorViewer
 		PassPanel( wxWindow * parent, const wxPoint & pos = wxDefaultPosition, const wxSize & size = wxSize( 460, 380));
 		~PassPanel();
 
-		void CreatePassPanel( Castor3D::Pass * p_pass);
+		void CreatePassPanel( Castor3D::PassPtr p_pass);
 
-		void	GetDiffuse			( float & red, float & green, float & blue)const;
-		void	GetAmbient			( float & red, float & green, float & blue)const;
-		void	GetEmissive			( float & red, float & green, float & blue)const;
-		void	GetSpecular			( float & red, float & green, float & blue)const;
-		void	GetBlendColour		( float & red, float & green, float & blue)const;
-		float	GetShininess		()const;
+		void	GetDiffuse			( real & red, real & green, real & blue)const;
+		void	GetAmbient			( real & red, real & green, real & blue)const;
+		void	GetEmissive			( real & red, real & green, real & blue)const;
+		void	GetSpecular			( real & red, real & green, real & blue)const;
+		void	GetBlendColour		( real & red, real & green, real & blue)const;
+		real	GetShininess		()const;
 		int		GetTextureUnitIndex	()const;
 		wxImage * SetMaterialImage( unsigned int p_index,
 									unsigned int p_width, unsigned int p_height);

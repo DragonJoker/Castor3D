@@ -19,13 +19,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___STL_MACROS3_H___
 
 #include <map>
-#include <set>
-#include <vector>
-#include <list>
 
-#include "Module_Utils.h"
-
-namespace General
+namespace Castor
 { namespace Utils
 {
 	//! std::multimap class functions

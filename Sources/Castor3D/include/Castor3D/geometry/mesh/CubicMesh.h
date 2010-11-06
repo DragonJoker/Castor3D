@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -32,9 +32,9 @@ namespace Castor3D
 	{
 	private:
 		friend class MeshManager;
-		float m_height;				//!< The cube height
-		float m_width;				//!< The cube width
-		float m_depth;				//!< The cube depth
+		real m_height;				//!< The cube height
+		real m_width;				//!< The cube width
+		real m_depth;				//!< The cube depth
 		/**
 		 * Constructor, only MeshManager can use it
 		 *@param p_width : [in] The wanted cube width
@@ -42,7 +42,7 @@ namespace Castor3D
 		 *@param p_depth : [in] The wanted cube depth
 		 *@param p_name : [in] The mesh name
 		 */
-		CubicMesh( float p_width = 0.0, float p_height = 0.0, float p_depth = 0.0,
+		CubicMesh( real p_width = 0.0, real p_height = 0.0, real p_depth = 0.0,
 				   const String & p_name = C3DEmptyString);
 
 	public:
@@ -60,12 +60,15 @@ namespace Castor3D
 		 *@param p_height : [in] The new wanted cube height
 		 *@param p_depth : [in] The new wanted cube depth
 		 */
-		void Modify( float p_width, float p_height, float p_depth);
+		void Modify( real p_width, real p_height, real p_depth);
 
 	public:
-		inline float GetHeight	()const {return m_height;}
-		inline float GetWidth	()const {return m_width;}
-		inline float GetDepth	()const {return m_depth;}
+		/**@name Accessors */
+		//@{
+		inline real GetHeight	()const {return m_height;}
+		inline real GetWidth	()const {return m_width;}
+		inline real GetDepth	()const {return m_depth;}
+		//@}
 
 		inline friend std::ostream & operator <<( std::ostream & o, const CubicMesh & c) { return o << "Pave(" << c.m_height << "," << c.m_width << "," << c.m_depth << ")";}
 	};

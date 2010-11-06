@@ -15,7 +15,7 @@ namespace CastorShape
 		wxString m_strFileName;
 		int m_linesNumber;
 		bool m_scrollByWheel;
-		float m_difference;
+		real m_difference;
 		int m_precPosition;
 		TextLinesCtrl * m_lines;
 		TextPanel * m_panel;

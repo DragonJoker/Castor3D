@@ -20,16 +20,15 @@ CSMaterialsFrame :: CSMaterialsFrame( wxWindow * parent, const wxString & title,
 									  const wxPoint & pos, const wxSize & size,
 									  wxWindowID id, long style, wxString name)
 	:	wxFrame( parent, id, title, pos, size, style, name), 
-		m_listWidth( 120),
-		m_selectedMaterial( NULL)
+		m_listWidth( 120)
 {
 	wxSize l_size = GetClientSize();
 	m_materialsList = new CSMaterialsListView( this, mlfMaterialsList,
 											   wxPoint( l_size.x - m_listWidth, 0),
 											   wxSize( m_listWidth, l_size.y));
 	m_materialPanel = new CSMaterialPanel( this, wxPoint( 0, 25), wxSize( l_size.x - m_listWidth, l_size.y - 25));
-	m_newMaterial = new wxButton( this, mlfNewMaterial, C3D_T( "Nouveau"), wxPoint( 10, 3), wxSize( 50, 20), wxBORDER_SIMPLE);
-	m_deleteMaterial = new wxButton( this, mlfDeleteMaterial, C3D_T( "Supprimer"), wxPoint( 180, 3), wxSize( 80, 20), wxBORDER_SIMPLE);
+	m_newMaterial = new wxButton( this, mlfNewMaterial, CU_T( "Nouveau"), wxPoint( 10, 3), wxSize( 50, 20), wxBORDER_SIMPLE);
+	m_deleteMaterial = new wxButton( this, mlfDeleteMaterial, CU_T( "Supprimer"), wxPoint( 180, 3), wxSize( 80, 20), wxBORDER_SIMPLE);
 	m_deleteMaterial->Hide();
 	m_materialsList->Show();
 	m_newMaterialName = new wxTextCtrl( this, mlfNewMaterialName,
@@ -55,10 +54,10 @@ void CSMaterialsFrame :: _onSelected( wxListEvent& event)
 
 void CSMaterialsFrame :: _onDeselected( wxListEvent& event)
 {
-	if (m_selectedMaterial != NULL)
+	if ( ! m_selectedMaterial.null())
 	{
 		m_materialsList->CreateList();
-		m_selectedMaterial = NULL;
+		m_selectedMaterial.reset();
 	}
 	CreateMaterialPanel( C3DEmptyString);
 }
@@ -76,7 +75,7 @@ void CSMaterialsFrame :: _onNewMaterial( wxCommandEvent & event)
 void CSMaterialsFrame :: _onNewMaterialName ( wxCommandEvent & event)
 {
 	String l_name = m_newMaterialName->GetValue().c_str();
-	m_selectedMaterial = MaterialManager::GetSingletonPtr()->CreateMaterial( l_name);
+	m_selectedMaterial = MaterialManager::CreateMaterial( l_name);
 	m_materialsList->AddItem( l_name);
 	CreateMaterialPanel( l_name);
 	m_newMaterialName->Hide();
@@ -87,12 +86,12 @@ void CSMaterialsFrame :: _onNewMaterialName ( wxCommandEvent & event)
 
 void CSMaterialsFrame :: _onDeleteMaterial( wxCommandEvent & event)
 {
-	Scene * l_scene = SceneManager::GetSingletonPtr()->GetElementByName( C3D_T( "MainScene"));
-	std::map <String, bool> l_geometries = l_scene->GetGeometriesVisibility();
-	std::map <String, bool>::iterator l_it = l_geometries.begin();
-	Geometry * l_geometry;
-	Mesh * l_mesh;
-	Submesh * l_submesh;
+	ScenePtr l_scene = SceneManager::GetSingletonPtr()->GetElementByName( CU_T( "MainScene"));
+	BoolStrMap l_geometries = l_scene->GetGeometriesVisibility();
+	BoolStrMap::iterator l_it = l_geometries.begin();
+	GeometryPtr l_geometry;
+	MeshPtr l_mesh;
+	SubmeshPtr l_submesh;
 	while (l_it != l_geometries.end())
 	{
 		l_geometry = l_scene->GetGeometry( l_it->first);
@@ -102,13 +101,12 @@ void CSMaterialsFrame :: _onDeleteMaterial( wxCommandEvent & event)
 			l_submesh = l_mesh->GetSubmesh( i);
 			if (l_submesh->GetMaterialName() == m_selectedMaterial->GetName())
 			{
-				l_submesh->SetMaterial( C3D_T( "DefaultMaterial"));
+				l_submesh->SetMaterial( CU_T( "DefaultMaterial"));
 			}
 		}
 	}
-	MaterialManager::GetSingletonPtr()->RemoveElement( m_selectedMaterial);
-	delete m_selectedMaterial;
-	m_selectedMaterial = NULL;
+	MaterialManager::RemoveElement( m_selectedMaterial);
+	m_selectedMaterial.reset();
 	CreateMaterialPanel( C3DEmptyString);
 	m_materialsList->CreateList();
 }
@@ -117,7 +115,7 @@ void CSMaterialsFrame :: _onDeleteMaterial( wxCommandEvent & event)
 
 void CSMaterialsFrame :: CreateMaterialPanel( const String & p_materialName)
 {
-	m_selectedMaterial = MaterialManager::GetSingletonPtr()->GetElementByName( p_materialName);
+	m_selectedMaterial = MaterialManager::GetElementByName( p_materialName);
 	m_materialPanel->CreateMaterialPanel( p_materialName);
 	m_deleteMaterial->Show();
 }

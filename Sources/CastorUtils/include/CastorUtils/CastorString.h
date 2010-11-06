@@ -11,38 +11,34 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___CU_String___
-#define ___CU_String___
+#ifndef ___Castor_String___
+#define ___Castor_String___
 
 #include <string>
 #include <vector>
+#include <sstream>
 
 #ifndef d_dll
 #define d_dll
 #endif
 
-namespace General
-{	namespace Utils
+namespace Castor
 {
 	class String;
 	typedef std::vector <String> StringArray;
 
-#ifndef _UNICODE
 	typedef char Char;
-	typedef std::stringstream StringStream;
+	typedef std::basic_stringstream<Char, std::char_traits<Char>, std::allocator<Char> > StringStream;
 
-	class d_dll String : public std::string
-#else
-	typedef wchar_t Char;
-	typedef std::wstringstream StringStream;
-
-	class d_dll String : public std::wstring
-#endif
+	class d_dll String : public std::basic_string<Char, std::char_traits<Char>, std::allocator<Char> >
 	{
+	private:
+		typedef std::basic_string<Char, std::char_traits<Char>, std::allocator<Char> > my_type;
+
 	public:
 		String();
 		String( const char * p_pChars);
@@ -126,7 +122,6 @@ namespace General
 	}
 
 	static String C3DEmptyString;
-}
 }
 
 #endif

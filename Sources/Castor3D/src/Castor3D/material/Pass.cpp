@@ -1,27 +1,20 @@
 #include "PrecompiledHeader.h"
-
-#include "material/Module_Material.h"
-
 #include "material/Pass.h"
-#include "material/TextureUnit.h"
-#include "material/TextureEnvironment.h"
-#include "main/Root.h"
-#include "render_system/RenderSystem.h"
-#include "render_system/MaterialRenderer.h"
-#include "shader/ShaderProgram.h"
 
-#include "Log.h"
+#include "material/TextureUnit.h"
+#include "shader/ShaderProgram.h"
+#include "render_system/RenderSystem.h"
+#include "main/Root.h"
+#include "material/Material.h"
 
 using namespace Castor3D;
 
-Pass :: Pass( PassRenderer * p_renderer, Material * p_parent)
+Pass :: Pass( Material * p_parent)
 	:	m_shininess( 50.0),
 		m_doubleFace( false),
-		m_parent( p_parent),
-		m_renderer( p_renderer),
-		m_shaderProgram( NULL)
+//		m_shaderProgram( NULL),
+		m_pParent( p_parent)
 {
-	m_renderer->SetTarget( this);
 	m_textureUnits.clear();
 	SetDiffuse( 1.0f, 1.0f, 1.0f, 1.0f);
 	SetEmissive( 0.0f, 0.0f, 0.0f, 1.0f);
@@ -31,47 +24,68 @@ Pass :: Pass( PassRenderer * p_renderer, Material * p_parent)
 
 Pass :: ~Pass()
 {
-	vector::deleteAll( m_textureUnits);
+	m_textureUnits.clear();
+//	vector::deleteAll( m_textureUnits);
 }
 
 void Pass :: Initialise()
 {
-	vector::cycle( m_textureUnits, & TextureUnit::Initialise);
-	m_renderer->Initialise();
-}
-
-void Pass :: Apply( Submesh * p_submesh, DrawType p_displayMode)
-{
-	if (m_shaderProgram != NULL)
+	for (size_t i = 0 ; i < m_textureUnits.size() ; i++)
 	{
-		m_shaderProgram->Initialise();
-		m_shaderProgram->Begin();
+		m_textureUnits[i]->Initialise();
 	}
 
-	m_renderer->Apply( p_submesh, p_displayMode);
-	vector::cycle( m_textureUnits, & TextureUnit::Apply);
+	m_pRenderer->Initialise();
 }
 
-void Pass :: Apply( DrawType p_displayMode)
+void Pass :: Apply( eDRAW_TYPE p_displayMode)
 {
-	if (m_shaderProgram != NULL)
+	if ( ! m_shaderProgram.expired())
 	{
-		m_shaderProgram->Initialise();
-		m_shaderProgram->Begin();
+		ShaderProgramPtr l_pShader = m_shaderProgram.lock();
+		l_pShader->Initialise();
+		l_pShader->Begin();
 	}
 
-	m_renderer->Apply( p_displayMode);
-	vector::cycle( m_textureUnits, & TextureUnit::Apply);
+	m_pRenderer->Apply( p_displayMode);
+
+	for (size_t i = 0 ; i < m_textureUnits.size() ; i++)
+	{
+		m_textureUnits[i]->Apply( p_displayMode);
+	}
+}
+
+void Pass :: Apply2D( eDRAW_TYPE p_displayMode)
+{
+	if ( ! m_shaderProgram.expired())
+	{
+		ShaderProgramPtr l_pShader = m_shaderProgram.lock();
+		l_pShader->Initialise();
+		l_pShader->Begin();
+	}
+
+	m_pRenderer->Apply2D( p_displayMode);
+
+	for (size_t i = 0 ; i < m_textureUnits.size() ; i++)
+	{
+		m_textureUnits[i]->Apply( p_displayMode);
+	}
 }
 
 void Pass :: Remove()
 {
-	vector::cycle( m_textureUnits, & TextureUnit::Remove);
-	m_renderer->Remove();
 
-	if (m_shaderProgram != NULL)
+	for (size_t i = 0 ; i < m_textureUnits.size() ; i++)
 	{
-		m_shaderProgram->End();
+		m_textureUnits[i]->Remove();
+	}
+
+	m_pRenderer->Remove();
+
+	if ( ! m_shaderProgram.expired())
+	{
+		ShaderProgramPtr l_pShader = m_shaderProgram.lock();
+		l_pShader->End();
 	}
 }
 
@@ -79,12 +93,25 @@ void Pass :: SetTexBaseColour( float p_r, float p_g, float p_b, float p_a)
 {
 	m_texBaseColour = Colour( p_r, p_g, p_b, p_a);
 
-	vector::cycle( m_textureUnits, & TextureUnit::SetPrimaryColour, m_texBaseColour);
+	for (size_t i = 0 ; i < m_textureUnits.size() ; i++)
+	{
+		m_textureUnits[i]->SetPrimaryColour( m_texBaseColour);
+	}
 }
 
-void Pass :: AddTextureUnit( TextureUnit * p_texUnit)
+void Pass :: SetTexBaseColour( const Colour & p_crColour)
 {
-	if (p_texUnit != NULL)
+	m_texBaseColour = Colour( p_crColour);
+
+	for (size_t i = 0 ; i < m_textureUnits.size() ; i++)
+	{
+		m_textureUnits[i]->SetPrimaryColour( m_texBaseColour);
+	}
+}
+
+void Pass :: AddTextureUnit( TextureUnitPtr p_texUnit)
+{
+	if ( ! p_texUnit.null())
 	{
 		m_textureUnits.push_back( p_texUnit);
 		p_texUnit->SetIndex( static_cast <unsigned int>( m_textureUnits.size() - 1));
@@ -95,14 +122,15 @@ void Pass :: AddTextureUnit( TextureUnit * p_texUnit)
 bool Pass :: DestroyTextureUnit( size_t p_index)
 {
 	bool l_bReturn = false;
-	Log::LogMessage( C3D_T( "Destroying TextureUnit %d"), p_index);
+	Log::LogMessage( CU_T( "Destroying TextureUnit %d"), p_index);
 
 	if (p_index < m_textureUnits.size())
 	{
 		TextureUnitPtrArray::iterator l_it = m_textureUnits.begin();
-		TextureUnit * l_texUnit = ( * (l_it + p_index));
+		TextureUnitPtr l_texUnit = ( * (l_it + p_index));
 		m_textureUnits.erase( l_it + p_index);
-		delete l_texUnit;
+//		delete l_texUnit;
+		l_texUnit.reset();
 		unsigned int i = static_cast <unsigned int>( p_index);
 
 		for (l_it = m_textureUnits.begin() + p_index ; l_it != m_textureUnits.end() ; ++l_it)
@@ -117,14 +145,16 @@ bool Pass :: DestroyTextureUnit( size_t p_index)
 	return l_bReturn;
 }
 
-TextureUnit * Pass :: GetTextureUnit( unsigned int p_index)
+TextureUnitPtr Pass :: GetTextureUnit( unsigned int p_index)
 {
+	TextureUnitPtr l_pReturn;
+
 	if (p_index < m_textureUnits.size())
 	{
-		return m_textureUnits[p_index];
+		l_pReturn = m_textureUnits[p_index];
 	}
 
-	return NULL;
+	return l_pReturn;
 }
 
 String Pass :: GetTexturePath( unsigned int p_index)
@@ -133,50 +163,50 @@ String Pass :: GetTexturePath( unsigned int p_index)
 
 	if (p_index < m_textureUnits.size())
 	{
-		TextureUnit * l_texUnit = m_textureUnits[p_index];
+		TextureUnitPtr l_texUnit = m_textureUnits[p_index];
 		l_res = l_texUnit->GetTexturePath();
 	}
 
 	return l_res;
 }
 
-bool Pass :: Write( General::Utils::FileIO * p_pFile)const
+bool Pass :: Write( Castor::Utils::File & p_pFile)const
 {
-	bool l_bReturn = p_pFile->WriteLine( "\tpass\n\t{\n");
+	bool l_bReturn = p_pFile.WriteLine( "\tpass\n\t{\n");
 
 	if (l_bReturn)
 	{
-		p_pFile->Print( 256, "\t\tambient %f %f %f %f\n", m_ambient.r, m_ambient.g, m_ambient.b, m_ambient.a);
+		p_pFile.Print( 256, "\t\tambient %f %f %f %f\n", m_ambient[0], m_ambient[1], m_ambient[2], m_ambient[3]);
 	}
 	
 	if (l_bReturn)
 	{
-		p_pFile->Print( 256, "\t\tdiffuse %f %f %f %f\n", m_diffuse.r, m_diffuse.g, m_diffuse.b, m_diffuse.a);
+		p_pFile.Print( 256, "\t\tdiffuse %f %f %f %f\n", m_diffuse[0], m_diffuse[1], m_diffuse[2], m_diffuse[3]);
 	}
 	
 	if (l_bReturn)
 	{
-		p_pFile->Print( 256, "\t\temissive %f %f %f %f\n", m_emissive.r, m_emissive.g, m_emissive.b, m_emissive.a);
+		p_pFile.Print( 256, "\t\temissive %f %f %f %f\n", m_emissive[0], m_emissive[1], m_emissive[2], m_emissive[3]);
 	}
 	
 	if (l_bReturn)
 	{
-		p_pFile->Print( 256, "\t\tspecular %f %f %f %f\n", m_specular.r, m_specular.g, m_specular.b, m_specular.a);
+		p_pFile.Print( 256, "\t\tspecular %f %f %f %f\n", m_specular[0], m_specular[1], m_specular[2], m_specular[3]);
 	}
 	
 	if (l_bReturn)
 	{
-		p_pFile->Print( 256, "\t\tshininess %f\n", m_shininess);
+		p_pFile.Print( 256, "\t\tshininess %f\n", m_shininess);
 	}
 	
 	if (l_bReturn)
 	{
-		p_pFile->Print( 256, "\t\ttex_base %f %f %f %f\n", m_texBaseColour.r, m_texBaseColour.g, m_texBaseColour.b, m_texBaseColour.a);
+		p_pFile.Print( 256, "\t\ttex_base %f %f %f %f\n", m_texBaseColour[0], m_texBaseColour[1], m_texBaseColour[2], m_texBaseColour[3]);
 	}
 	
 	if (l_bReturn)
 	{
-		p_pFile->WriteLine( "\t\tdouble_face " + String( m_doubleFace ? "true" : "false") + "\n");
+		p_pFile.WriteLine( "\t\tdouble_face " + String( m_doubleFace ? "true" : "false") + "\n");
 	}
 
 	if (l_bReturn)
@@ -192,7 +222,7 @@ bool Pass :: Write( General::Utils::FileIO * p_pFile)const
 			}
 			else
 			{
-				p_pFile->WriteLine( "\n");
+				p_pFile.WriteLine( "\n");
 			}
 
 			l_bReturn = m_textureUnits[i]->Write( p_pFile);
@@ -201,44 +231,44 @@ bool Pass :: Write( General::Utils::FileIO * p_pFile)const
 	
 	if (l_bReturn)
 	{
-		l_bReturn = p_pFile->WriteLine( "\t}\n");
+		l_bReturn = p_pFile.WriteLine( "\t}\n");
 	}
 
 	return l_bReturn;
 }
 
-bool Pass :: Read( General::Utils::FileIO & p_file)
+bool Pass :: Read( Castor::Utils::File & p_file)
 {
-	bool l_bReturn = (p_file.ReadArray<float>( m_ambient.ptr(), 3) == sizeof( float) * 3);
+	bool l_bReturn = m_ambient.Read( p_file);
 
 	if (l_bReturn)
 	{
-		l_bReturn = (l_bReturn = p_file.ReadArray<float>( m_diffuse.ptr(), 3) == sizeof( float) * 3);
+		l_bReturn = m_diffuse.Read( p_file);
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (l_bReturn = p_file.ReadArray<float>( m_specular.ptr(), 3) == sizeof( float) * 3);
+		l_bReturn = m_specular.Read( p_file);
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.ReadArray<float>( m_emissive.ptr(), 3) == sizeof( float) * 3);
+		l_bReturn = m_emissive.Read( p_file);
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Read<float>( m_shininess) == sizeof( float));
+		l_bReturn = (p_file.Read( m_shininess) == sizeof( real));
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.ReadArray<float>( m_texBaseColour.ptr(), 3) == sizeof( float) * 3);
+		l_bReturn = m_texBaseColour.Read( p_file);
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = (p_file.Read<bool>( m_doubleFace) == sizeof( bool));
+		l_bReturn = (p_file.Read( m_doubleFace) == sizeof( bool));
 	}
 
 	if (l_bReturn)
@@ -246,20 +276,35 @@ bool Pass :: Read( General::Utils::FileIO & p_file)
 		size_t l_nbTextureUnits = 0;
 		l_bReturn = (p_file.Read<size_t>( l_nbTextureUnits) == sizeof( size_t));
 
-		TextureUnit * l_textureUnit;
+		TextureUnitPtr l_textureUnit;
 
 		for (size_t i = 0 ; i < l_nbTextureUnits && l_bReturn ; i++)
 		{
-			l_textureUnit = new TextureUnit( Root::GetRenderSystem()->CreateTextureRenderer());
+			l_textureUnit = new TextureUnit();
 
 			l_bReturn = l_textureUnit->Read( p_file);
 
 			if (l_bReturn)
 			{
-				this->AddTextureUnit( l_textureUnit);
+				AddTextureUnit( l_textureUnit);
 			}
 		}
 	}
 
 	return l_bReturn;
+}
+
+void Pass :: SetShader( ShaderProgramPtr p_program)
+{
+	m_shaderProgram = p_program;
+}
+
+ShaderProgramPtr Pass :: GetShader()const
+{
+	return m_shaderProgram.lock();
+}
+
+bool Pass :: HasShader()const
+{
+	return ! m_shaderProgram.expired();
 }

@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -32,16 +32,11 @@ namespace Castor3D
 	class CS3D_API AnimatedObjectGroup
 	{
 	protected:
-		//! The name of the group
-		String m_name;
-		//! The list of animations
-		AnimationStrMap m_animations;
-		//! The list of AnimatedObjects
-		AnimatedObjectStrMap m_objects;
-		//! The current time index
-		float m_currentTime;
-		//! The name of currently playing animations
-		AnimationStrMap * m_playingAnimations;
+		String m_name;								//!< The name of the group
+		real m_currentTime;							//!< The current time index
+		AnimationPtrStrMap m_animations;			//!< The list of animations
+		AnimatedObjectPtrStrMap m_objects;			//!< The list of AnimatedObjects
+		AnimationPtrStrMap m_playingAnimations;		//!< The map of currently playing animations
 
 	public:
 		/**
@@ -58,27 +53,27 @@ namespace Castor3D
 		 *@param p_object : the MovableObject from which to create an AnimatedObject
 		 *@return the created and added AnimatedObject
 		 */
-		AnimatedObject * AddObject( MovableObject * p_object);
+		AnimatedObjectPtr AddObject( MovableObjectPtr p_object);
 		/**
 		 * Adds the animation to the list
 		 *@param p_animation : the animation to add
 		 */
-		void AddAnimation( Animation * p_animation);
+		void AddAnimation( AnimationPtr p_animation);
 		/**
 		 * Writes the group in a file
 		 *@param p_file : the file to write in
 		 */
-		bool Write( General::Utils::FileIO & p_file)const;
+		bool Write( Castor::Utils::File & p_file)const;
 		/**
 		 * Reads the group from a file
 		 @param p_file : the file to read from
 		 */
-		bool Read( General::Utils::FileIO & p_file);
+		bool Read( Castor::Utils::File & p_file);
 		/**
 		 * Update all the animations
 		 *@param p_tslf : time since the last frame
 		 */
-		void Update( float p_tslf);
+		void Update( real p_tslf);
 		/**
 		 * Starts an animation, given its name
 		 *@param p_name : the animation name
@@ -106,11 +101,15 @@ namespace Castor3D
 		 * Pauses all the animations
 		 */
 		void PauseAllAnimations();
+	public:
+		/**@name Accessors */
+		//@{
 		/**
-		 * Returns the name of this group
-		 *@return the name of this group
+		 * Returns the name of the group
+		 *@return the name of the group
 		 */
 		inline const String & GetName() { return m_name; }
+		//@}
 	};
 }
 

@@ -13,11 +13,11 @@
 using namespace CastorShape;
 using namespace Castor3D;
 
-GENLIB_INIT_SINGLETON( ScriptCompiler);
+CASTOR_INIT_SINGLETON( ScriptCompiler);
 
 #define COMPILE_ERROR_IN_BLOCK( p_desc, p_block)												\
 	_error();																					\
-	GENLIB_EXCEPTION(	"Compiler Error : [" + _getScriptFileName() + " @ L# "					\
+	CASTOR_EXCEPTION(	"Compiler Error : [" + _getScriptFileName() + " @ L# "					\
 						+ ToString( p_block->m_lineNumBegin)					\
 						+ " ] -> " + p_desc )
 
@@ -30,11 +30,11 @@ GENLIB_INIT_SINGLETON( ScriptCompiler);
 ScriptCompiler :: ScriptCompiler( const Path & p_path)
 	:	m_currentLine			(0),
 		m_path					(p_path),
-		m_currentFileStream		(NULL),
+		m_currentFile		(NULL),
 		m_currentUserFunction	(NULL),
 		m_currentStructure		(NULL)
 {
-	GENLIB_SET_SINGLETON();
+	CASTOR_SET_SINGLETON();
 
 	m_nodePool.Allocate( 200);
 	m_blockPool.Allocate( 16);
@@ -110,7 +110,7 @@ ScriptCompiler :: ~ScriptCompiler()
 
 }
 
-ScriptNode * ScriptCompiler :: GetUsableFunctionNode( const String & p_functionName)const
+ScriptNode * ScriptCompiler :: GetUsableFunctionNode( const String & p_functionName)
 {
 	UserFunction * l_function = GetUserFunction( p_functionName);
 
@@ -155,7 +155,7 @@ void ScriptCompiler :: _log( const String & p_message)
 	Log::LogMessage( p_message);
 }
 
-ScriptNode * ScriptCompiler :: GetProgramConstant( const String & p_variableName)const
+ScriptNode * ScriptCompiler :: GetProgramConstant( const String & p_variableName)
 {
 	ScriptNode * l_node = map::findOrNull( m_constants, p_variableName);
 
@@ -179,7 +179,7 @@ ScriptNode * ScriptCompiler :: GetProgramConstant( const String & p_variableName
 
 char ScriptCompiler :: _getNextChar()
 {
-	if (m_currentFileStream != NULL)
+	if (m_currentFile != NULL)
 	{
 		if (m_currentBufferIndex < m_currentMaxIndex)
 		{
@@ -200,9 +200,9 @@ char ScriptCompiler :: _getNextChar()
 
 bool ScriptCompiler :: _eof()
 {
-	if (m_currentFileStream != NULL)
+	if (m_currentFile != NULL)
 	{
-		return ( ! m_currentFileStream->IsOk() && m_currentBufferIndex >= m_currentMaxIndex);
+		return ( ! m_currentFile->IsOk() && m_currentBufferIndex >= m_currentMaxIndex);
 	}
 	return m_stringBuffer->size() == m_currentBufferIndex;
 }
@@ -210,13 +210,13 @@ bool ScriptCompiler :: _eof()
 void ScriptCompiler :: _readFile()
 {
 	m_currentBufferIndex = 0;
-	m_currentMaxIndex = m_currentFileStream->ReadArray<char>( m_buffer, 1024);
+	m_currentMaxIndex = m_currentFile->ReadArray<char>( m_buffer, 1024);
 //	m_currentMaxIndex = ifstream::gcount();
 }
 
 void ScriptCompiler :: _putBack( char p_char)
 {
-	if (m_currentFileStream != NULL)
+	if (m_currentFile != NULL)
 	{
 		m_buffer[-- m_currentBufferIndex] = p_char;
 	}
@@ -232,7 +232,7 @@ ScriptNode * ScriptCompiler :: CompileScript( const String & p_script)
 
 	l_initialBlock->_initialise( this, BT_INITIAL, 0, 0, NULL);
 
-	m_currentFileStream = NULL;
+	m_currentFile = NULL;
 	m_currentBufferIndex = 0;
 	m_currentMaxIndex = 0;
 	m_stringBuffer = & p_script;
@@ -241,12 +241,12 @@ ScriptNode * ScriptCompiler :: CompileScript( const String & p_script)
 	{
 		l_initialBlock->Parse();
 	}
-	catch (GenException & p_except)
+	catch (Exception & p_except)
 	{
 		_log( "Critical failure : " + p_except.GetDescription());
 	}
 
-	m_currentFileStream = NULL;
+	m_currentFile = NULL;
 
 	ScriptNode * l_scriptNode = l_initialBlock->GetScriptNode();
 
@@ -255,7 +255,7 @@ ScriptNode * ScriptCompiler :: CompileScript( const String & p_script)
 	return l_scriptNode;
 }
 
-ScriptNode * ScriptCompiler :: CompileScriptFileIO( const String & p_scriptFile)
+ScriptNode * ScriptCompiler :: CompileScriptFile( const String & p_scriptFile)
 {
 	m_strFileName = p_scriptFile;
 
@@ -271,7 +271,7 @@ ScriptNode * ScriptCompiler :: CompileScriptFileIO( const String & p_scriptFile)
 	
 	String l_script;
 
-	FileStream *origStream;
+	File *origStream;
 //	DataStreamPtr stream;
 
 	int numDeleted;
@@ -280,7 +280,7 @@ ScriptNode * ScriptCompiler :: CompileScriptFileIO( const String & p_scriptFile)
 	
 	const Path & l_path = p_scriptFile;
 
-	origStream = new FileStream( l_path, FileBase::eRead);
+	origStream = new File( l_path, File::eRead);
 
 	if ( ! origStream->IsOk())
 	{
@@ -299,7 +299,7 @@ ScriptNode * ScriptCompiler :: CompileScriptFileIO( const String & p_scriptFile)
 		{
 			ScriptBlock * l_initialBlock = new ScriptBlock;
 			l_initialBlock->_initialise( this, BT_INITIAL, 0, 0, NULL);
-			m_currentFileStream = origStream;
+			m_currentFile = origStream;
 			m_currentBufferIndex = 0;
 			m_currentMaxIndex = 0;
 
@@ -307,12 +307,12 @@ ScriptNode * ScriptCompiler :: CompileScriptFileIO( const String & p_scriptFile)
 			{
 				l_initialBlock->Parse();
 			}
-			catch (GenException & p_e)
+			catch (Exception & p_e)
 			{
 				_log( "Compilation failed : file " + l_fileDescName + " gave an exception" + p_e.GetDescription());
 			}
 
-			m_currentFileStream = NULL;
+			m_currentFile = NULL;
 
 			l_scriptNode = l_initialBlock->GetScriptNode();
 
@@ -336,14 +336,14 @@ ScriptNode * ScriptCompiler :: CompileScriptFileIO( const String & p_scriptFile)
 		}
 	}
 
-	m_currentFileStream = NULL;
+	m_currentFile = NULL;
 
 	return l_scriptNode;
 }
 
 ScriptNode * ScriptCompiler :: _createConstant( VariableBaseType p_type, const String & p_name)
 {
-//	genlib_assert( ! map::has( m_constants, p_name));
+//	genlib_CASTOR_ASSERT( ! map::has( m_constants, p_name));
 
 	ScriptNode * l_node = CreateScriptNode(); //new ScriptNode( NULL, 0);
 
@@ -409,7 +409,7 @@ ScriptNode * ScriptCompiler :: _createUserVariable( const String & p_variableNam
 
 	if (_isInUserFunction())
 	{
-//		genlib_assert( m_currentUserFunction != NULL);
+//		genlib_CASTOR_ASSERT( m_currentUserFunction != NULL);
 		m_currentUserFunction->m_localVars.insert( ScriptNodeMap::value_type( p_variableName, l_node));
 	}
 	else
@@ -548,26 +548,26 @@ void ScriptCompiler :: _createOperator( const String & p_name, RawFunction * p_f
 
 void ScriptCompiler :: _initialiseOperatorMap()
 {
-	_createOperator( "+",	Ope_Add<float,int,float>, 				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
-	_createOperator( "+",	Ope_Add<float,float,int>, 				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
+	_createOperator( "+",	Ope_Add<real,int,real>, 				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
+	_createOperator( "+",	Ope_Add<real,real,int>, 				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
 	_createOperator( "+",	Ope_Add<int>,							EMVT_INT,			EMVT_INT,			EMVT_INT		);
-	_createOperator( "+",	Ope_Add<float>, 						EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
+	_createOperator( "+",	Ope_Add<real>, 						EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
 
 	_createOperator( "=",	Ope_Set<int>,							EMVT_INT,			EMVT_INT,			EMVT_INT		);
 	_createOperator( "=",	Ope_Set<bool>,							EMVT_BOOL,			EMVT_BOOL,			EMVT_BOOL		);
-	_createOperator( "=",	Ope_Set<float>,							EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
-	_createOperator( "=",	Ope_Set<Point2D<float> >,				EMVT_VEC2F,			EMVT_VEC2F,			EMVT_VEC2F		);
-	_createOperator( "=",	Ope_Set<Point3D<float> >,				EMVT_VEC3F,			EMVT_VEC3F,			EMVT_VEC3F		);
-	_createOperator( "=",	Ope_Set<Point4D<float> >,				EMVT_VEC4F,			EMVT_VEC4F,			EMVT_VEC4F		);
-	_createOperator( "=",	Ope_Set<Point2D<int> >,					EMVT_VEC2I,			EMVT_VEC2I,			EMVT_VEC2I		);
-	_createOperator( "=",	Ope_Set<Point3D<int> >,					EMVT_VEC3I,			EMVT_VEC3I,			EMVT_VEC3I		);
-	_createOperator( "=",	Ope_Set<Point4D<int> >,					EMVT_VEC4I,			EMVT_VEC4I,			EMVT_VEC4I		);
+	_createOperator( "=",	Ope_Set<real>,							EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
+	_createOperator( "=",	Ope_Set<Point2r >,				EMVT_VEC2F,			EMVT_VEC2F,			EMVT_VEC2F		);
+	_createOperator( "=",	Ope_Set<Point3r >,				EMVT_VEC3F,			EMVT_VEC3F,			EMVT_VEC3F		);
+	_createOperator( "=",	Ope_Set<Point<real, 4> >,				EMVT_VEC4F,			EMVT_VEC4F,			EMVT_VEC4F		);
+	_createOperator( "=",	Ope_Set<Point<int, 2> >,					EMVT_VEC2I,			EMVT_VEC2I,			EMVT_VEC2I		);
+	_createOperator( "=",	Ope_Set<Point<int, 3> >,					EMVT_VEC3I,			EMVT_VEC3I,			EMVT_VEC3I		);
+	_createOperator( "=",	Ope_Set<Point<int, 4> >,					EMVT_VEC4I,			EMVT_VEC4I,			EMVT_VEC4I		);
 	_createOperator( "=",	Ope_Set<Point2Bool >,					EMVT_VEC2B,			EMVT_VEC2B,			EMVT_VEC2B		);
 	_createOperator( "=",	Ope_Set<Point3Bool >,					EMVT_VEC3B,			EMVT_VEC3B,			EMVT_VEC3B		);
 	_createOperator( "=",	Ope_Set<Point4Bool >,					EMVT_VEC4B,			EMVT_VEC4B,			EMVT_VEC4B		);
-	_createOperator( "=",	Ope_Set<Matrix2<float> >,				EMVT_MAT2,			EMVT_MAT2,			EMVT_MAT2		);
-	_createOperator( "=",	Ope_Set<Matrix3<float> >,				EMVT_MAT3,			EMVT_MAT3,			EMVT_MAT3		);
-	_createOperator( "=",	Ope_Set<Matrix4<float> >,				EMVT_MAT4,			EMVT_MAT4,			EMVT_MAT4		);
+	_createOperator( "=",	Ope_Set<Matrix2>,						EMVT_MAT2,			EMVT_MAT2,			EMVT_MAT2		);
+	_createOperator( "=",	Ope_Set<Matrix3>,						EMVT_MAT3,			EMVT_MAT3,			EMVT_MAT3		);
+	_createOperator( "=",	Ope_Set<Matrix4>,						EMVT_MAT4,			EMVT_MAT4,			EMVT_MAT4		);
 	_createOperator( "=",	Ope_Set<NodeValueBaseArray>,			EMVT_ARRAY,			EMVT_ARRAY,			EMVT_ARRAY		);
 	_createOperator( "=",	Ope_SetNull<StructInstance *>,			EMVT_STRUCT,		EMVT_STRUCT,		EMVT_NULLVALUE	);
 	_createOperator( "=",	Ope_Set<StructInstance *>,				EMVT_STRUCT,		EMVT_STRUCT,		EMVT_STRUCT		);
@@ -576,76 +576,76 @@ void ScriptCompiler :: _initialiseOperatorMap()
 
 	_createOperator( "==",	Ope_Compare<int>,						EMVT_BOOL,			EMVT_INT,			EMVT_INT		);
 	_createOperator( "==",	Ope_Compare<bool>,						EMVT_BOOL,			EMVT_BOOL,			EMVT_BOOL		);
-	_createOperator( "==",	Ope_Compare<float>,						EMVT_BOOL,			EMVT_REAL,			EMVT_REAL		);
-	_createOperator( "==",	Ope_Compare<Point2D<float> >,			EMVT_BOOL,			EMVT_VEC2F,			EMVT_VEC2F		);
-	_createOperator( "==",	Ope_Compare<Point3D<float> >,			EMVT_BOOL,			EMVT_VEC3F,			EMVT_VEC3F		);
-	_createOperator( "==",	Ope_Compare<Point4D<float> >,			EMVT_BOOL,			EMVT_VEC4F,			EMVT_VEC4F		);
-	_createOperator( "==",	Ope_Compare<Point2D<int> >,				EMVT_BOOL,			EMVT_VEC2I,			EMVT_VEC2I		);
-	_createOperator( "==",	Ope_Compare<Point3D<int> >,				EMVT_BOOL,			EMVT_VEC3I,			EMVT_VEC3I		);
-	_createOperator( "==",	Ope_Compare<Point4D<int> >,				EMVT_BOOL,			EMVT_VEC4I,			EMVT_VEC4I		);
+	_createOperator( "==",	Ope_Compare<real>,						EMVT_BOOL,			EMVT_REAL,			EMVT_REAL		);
+	_createOperator( "==",	Ope_Compare<Point2r >,			EMVT_BOOL,			EMVT_VEC2F,			EMVT_VEC2F		);
+	_createOperator( "==",	Ope_Compare<Point3r >,			EMVT_BOOL,			EMVT_VEC3F,			EMVT_VEC3F		);
+	_createOperator( "==",	Ope_Compare<Point<real, 4> >,			EMVT_BOOL,			EMVT_VEC4F,			EMVT_VEC4F		);
+	_createOperator( "==",	Ope_Compare<Point<int, 2> >,				EMVT_BOOL,			EMVT_VEC2I,			EMVT_VEC2I		);
+	_createOperator( "==",	Ope_Compare<Point<int, 3> >,				EMVT_BOOL,			EMVT_VEC3I,			EMVT_VEC3I		);
+	_createOperator( "==",	Ope_Compare<Point<int, 4> >,				EMVT_BOOL,			EMVT_VEC4I,			EMVT_VEC4I		);
 	_createOperator( "==",	Ope_Compare<Point2Bool >,				EMVT_BOOL,			EMVT_VEC2B,			EMVT_VEC2B		);
 	_createOperator( "==",	Ope_Compare<Point3Bool >,				EMVT_BOOL,			EMVT_VEC3B,			EMVT_VEC3B		);
 	_createOperator( "==",	Ope_Compare<Point4Bool >,				EMVT_BOOL,			EMVT_VEC4B,			EMVT_VEC4B		);
-	_createOperator( "==",	Ope_Compare<Matrix2<float> >,			EMVT_BOOL,			EMVT_MAT2,			EMVT_MAT2		);
-	_createOperator( "==",	Ope_Compare<Matrix3<float> >,			EMVT_BOOL,			EMVT_MAT3,			EMVT_MAT3		);
-	_createOperator( "==",	Ope_Compare<Matrix4<float> >,			EMVT_BOOL,			EMVT_MAT4,			EMVT_MAT4		);
+	_createOperator( "==",	Ope_Compare<Matrix2>,					EMVT_BOOL,			EMVT_MAT2,			EMVT_MAT2		);
+	_createOperator( "==",	Ope_Compare<Matrix3>,					EMVT_BOOL,			EMVT_MAT3,			EMVT_MAT3		);
+	_createOperator( "==",	Ope_Compare<Matrix4>,					EMVT_BOOL,			EMVT_MAT4,			EMVT_MAT4		);
 	_createOperator( "==",	Ope_Compare<NodeValueBaseArray>,		EMVT_BOOL,			EMVT_ARRAY,			EMVT_ARRAY		);
 
 	_createOperator( "==",	Ope_CompareNull<StructInstance*>,		EMVT_BOOL,			EMVT_STRUCT,		EMVT_NULLVALUE	);
 
 	_createOperator( "!=",	Ope_IsDiff<int>,						EMVT_BOOL,			EMVT_INT,			EMVT_INT		);
 	_createOperator( "!=",	Ope_IsDiff<bool>,						EMVT_BOOL,			EMVT_BOOL,			EMVT_BOOL		);
-	_createOperator( "!=",	Ope_IsDiff<float>,						EMVT_BOOL,			EMVT_REAL,			EMVT_REAL		);
-	_createOperator( "!=",	Ope_IsDiff<Point2D<float> >,			EMVT_BOOL,			EMVT_VEC2F,			EMVT_VEC2F		);
-	_createOperator( "!=",	Ope_IsDiff<Point3D<float> >,			EMVT_BOOL,			EMVT_VEC3F,			EMVT_VEC3F		);
-	_createOperator( "!=",	Ope_IsDiff<Point4D<float> >,			EMVT_BOOL,			EMVT_VEC4F,			EMVT_VEC4F		);
-	_createOperator( "!=",	Ope_IsDiff<Point2D<int> >,				EMVT_BOOL,			EMVT_VEC2I,			EMVT_VEC2I		);
-	_createOperator( "!=",	Ope_IsDiff<Point3D<int> >,				EMVT_BOOL,			EMVT_VEC3I,			EMVT_VEC3I		);
-	_createOperator( "!=",	Ope_IsDiff<Point4D<int> >,				EMVT_BOOL,			EMVT_VEC4I,			EMVT_VEC4I		);
+	_createOperator( "!=",	Ope_IsDiff<real>,						EMVT_BOOL,			EMVT_REAL,			EMVT_REAL		);
+	_createOperator( "!=",	Ope_IsDiff<Point2r >,				EMVT_BOOL,			EMVT_VEC2F,			EMVT_VEC2F		);
+	_createOperator( "!=",	Ope_IsDiff<Point3r >,				EMVT_BOOL,			EMVT_VEC3F,			EMVT_VEC3F		);
+	_createOperator( "!=",	Ope_IsDiff<Point<real, 4> >,				EMVT_BOOL,			EMVT_VEC4F,			EMVT_VEC4F		);
+	_createOperator( "!=",	Ope_IsDiff<Point<int, 2> >,				EMVT_BOOL,			EMVT_VEC2I,			EMVT_VEC2I		);
+	_createOperator( "!=",	Ope_IsDiff<Point<int, 3> >,				EMVT_BOOL,			EMVT_VEC3I,			EMVT_VEC3I		);
+	_createOperator( "!=",	Ope_IsDiff<Point<int, 4> >,				EMVT_BOOL,			EMVT_VEC4I,			EMVT_VEC4I		);
 	_createOperator( "!=",	Ope_IsDiff<Point2Bool >,				EMVT_BOOL,			EMVT_VEC2B,			EMVT_VEC2B		);
 	_createOperator( "!=",	Ope_IsDiff<Point3Bool >,				EMVT_BOOL,			EMVT_VEC3B,			EMVT_VEC3B		);
 	_createOperator( "!=",	Ope_IsDiff<Point4Bool >,				EMVT_BOOL,			EMVT_VEC4B,			EMVT_VEC4B		);
-	_createOperator( "!=",	Ope_IsDiff<Matrix2<float> >,			EMVT_BOOL,			EMVT_MAT2,			EMVT_MAT2		);
-	_createOperator( "!=",	Ope_IsDiff<Matrix3<float> >,			EMVT_BOOL,			EMVT_MAT3,			EMVT_MAT3		);
-	_createOperator( "!=",	Ope_IsDiff<Matrix4<float> >,			EMVT_BOOL,			EMVT_MAT4,			EMVT_MAT4		);
+	_createOperator( "!=",	Ope_IsDiff<Matrix2>,					EMVT_BOOL,			EMVT_MAT2,			EMVT_MAT2		);
+	_createOperator( "!=",	Ope_IsDiff<Matrix3>,					EMVT_BOOL,			EMVT_MAT3,			EMVT_MAT3		);
+	_createOperator( "!=",	Ope_IsDiff<Matrix4>,					EMVT_BOOL,			EMVT_MAT4,			EMVT_MAT4		);
 	_createOperator( "!=",	Ope_IsDiff<NodeValueBaseArray>,			EMVT_BOOL,			EMVT_ARRAY,			EMVT_ARRAY		);
 
 	_createOperator( "!=",	Ope_IsDiffNull<StructInstance*>,		EMVT_BOOL,			EMVT_STRUCT,		EMVT_NULLVALUE	);
 
-	_createOperator( "+=",	Ope_AddEqual<int,float>,				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
-	_createOperator( "+=",	Ope_AddEqual<float,int>,				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
+	_createOperator( "+=",	Ope_AddEqual<int,real>,				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
+	_createOperator( "+=",	Ope_AddEqual<real,int>,				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
 	_createOperator( "+=",	Ope_AddEqual<int,int>,					EMVT_INT,			EMVT_INT,			EMVT_INT		);
-	_createOperator( "+=",	Ope_AddEqual<float,float>,				EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
+	_createOperator( "+=",	Ope_AddEqual<real,real>,				EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
 
-	_createOperator( "-",	Ope_Sub<float,int,float>,				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
-	_createOperator( "-",	Ope_Sub<float,float,int>,				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
+	_createOperator( "-",	Ope_Sub<real,int,real>,				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
+	_createOperator( "-",	Ope_Sub<real,real,int>,				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
 	_createOperator( "-",	Ope_Sub<int>,							EMVT_INT,			EMVT_INT,			EMVT_INT		);
-	_createOperator( "-",	Ope_Sub<float>,							EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
+	_createOperator( "-",	Ope_Sub<real>,							EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
 
-	_createOperator( "-=",	Ope_SubEqual<int,float>,				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
-	_createOperator( "-=",	Ope_SubEqual<float,int>,				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
+	_createOperator( "-=",	Ope_SubEqual<int,real>,				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
+	_createOperator( "-=",	Ope_SubEqual<real,int>,				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
 	_createOperator( "-=",	Ope_SubEqual<int,int>,					EMVT_INT,			EMVT_INT,			EMVT_INT		);
-	_createOperator( "-=",	Ope_SubEqual<float,float>,				EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
+	_createOperator( "-=",	Ope_SubEqual<real,real>,				EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
 
-	_createOperator( "/",	Ope_Div<float,int,float>,				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
-	_createOperator( "/",	Ope_Div<float,float,int>,				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
+	_createOperator( "/",	Ope_Div<real,int,real>,				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
+	_createOperator( "/",	Ope_Div<real,real,int>,				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
 	_createOperator( "/",	Ope_Div<int>,							EMVT_INT,			EMVT_INT,			EMVT_INT		);
-	_createOperator( "/",	Ope_Div<float>,							EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
+	_createOperator( "/",	Ope_Div<real>,							EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
 
-	_createOperator( "/=",	Ope_DivEqual<int,float>,				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
-	_createOperator( "/=",	Ope_DivEqual<float,int>,				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
+	_createOperator( "/=",	Ope_DivEqual<int,real>,				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
+	_createOperator( "/=",	Ope_DivEqual<real,int>,				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
 	_createOperator( "/=",	Ope_DivEqual<int,int>,					EMVT_INT,			EMVT_INT,			EMVT_INT		);
-	_createOperator( "/=",	Ope_DivEqual<float,float>,				EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
+	_createOperator( "/=",	Ope_DivEqual<real,real>,				EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
 
-	_createOperator( "*",	Ope_Mul<float,int,float>,				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
-	_createOperator( "*",	Ope_Mul<float,float,int>,				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
+	_createOperator( "*",	Ope_Mul<real,int,real>,				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
+	_createOperator( "*",	Ope_Mul<real,real,int>,				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
 	_createOperator( "*",	Ope_Mul<int>,							EMVT_INT,			EMVT_INT,			EMVT_INT		);
-	_createOperator( "*",	Ope_Mul<float>,							EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
+	_createOperator( "*",	Ope_Mul<real>,							EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
 
-	_createOperator( "*=",	Ope_MulEqual<int,float>,				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
-	_createOperator( "*=",	Ope_MulEqual<float,int>,				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
+	_createOperator( "*=",	Ope_MulEqual<int,real>,				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
+	_createOperator( "*=",	Ope_MulEqual<real,int>,				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
 	_createOperator( "*=",	Ope_MulEqual<int,int>,					EMVT_INT,			EMVT_INT,			EMVT_INT		);
-	_createOperator( "*=",	Ope_MulEqual<float,float>,				EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
+	_createOperator( "*=",	Ope_MulEqual<real,real>,				EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
 
 	_createOperator( "||",	Ope_Or,									EMVT_BOOL, 			EMVT_BOOL,			EMVT_BOOL		);
 	_createOperator( "&&",	Ope_And,								EMVT_BOOL, 			EMVT_BOOL,			EMVT_BOOL		);
@@ -692,7 +692,7 @@ void ScriptCompiler :: _initialiseVariableMap()
 	_createConstant(	EMVT_REAL,				"GENERAL_SCREEN_HEIGHT"		);
 
 	_constantGroup(		"Math");
-	_createConstant(	EMVT_REAL,				"PI"						)->set<float>(M_PI);
+	_createConstant(	EMVT_REAL,				"PI"						)->set<real>( Angle::Pi);
 	_createConstant(	EMVT_BOOL,				"true"						)->set( true);
 	_createConstant(	EMVT_BOOL,				"false"						)->set( false);
 	_createConstant(	EMVT_NULLVALUE,			"NULL"						);
@@ -729,11 +729,11 @@ void ScriptCompiler :: _initialiseFunctionMap()
 		_creaFunc(	"sqrt",							Mth_Sqrt,						EMVT_REAL,		EMVT_REAL,													EMVT_NULL);
 }
 
-Function * ScriptCompiler :: _getClassFunction( VariableType * p_class, const String & p_functionName)const
+Function * ScriptCompiler :: _getClassFunction( VariableType * p_class, const String & p_functionName)
 {
 	VariableBaseType l_base = p_class->GetBase();
 
-	const ClassFunctionMap::const_iterator & l_classMapIter = m_classFunctions.find( l_base);
+	ClassFunctionMap::iterator & l_classMapIter = m_classFunctions.find( l_base);
 
 	if (l_classMapIter != m_classFunctions.end())
 	{
@@ -773,7 +773,7 @@ ScriptNode * ScriptCompiler :: CreateScriptNode( unsigned int p_lineNum)
 	return l_node;
 }
 
-VariableType * ScriptCompiler :: FindType( const String & p_name)const
+VariableType * ScriptCompiler :: FindType( const String & p_name)
 {
 	VariableType * l_type = map::findOrNull( m_typedefs, p_name);
 
@@ -800,12 +800,12 @@ ScriptNode * ScriptCompiler :: GetFlyweight( int p_value)
 	l_node->SetType( VariableTypeManager::Get( EMVT_INT));
 	l_node->set<int>( p_value);
 
-	m_intFlyweight.insert( std::map< int, ScriptNode *>::value_type( p_value, l_node));
+	m_intFlyweight.insert( C3DMap( int, ScriptNode *)::value_type( p_value, l_node));
 
 	return l_node;
 }
 
-ScriptNode * ScriptCompiler :: GetFlyweight( float p_value)
+ScriptNode * ScriptCompiler :: GetFlyweight( real p_value)
 {
 	ScriptNode * l_node = map::findOrNull( m_realFlyweight, p_value); ;
 	
@@ -818,9 +818,9 @@ ScriptNode * ScriptCompiler :: GetFlyweight( float p_value)
 	l_node->Use();
 
 	l_node->SetType( VariableTypeManager::Get( EMVT_REAL));
-	l_node->set<float>( p_value);
+	l_node->set<real>( p_value);
 
-	m_realFlyweight.insert( std::map< float, ScriptNode *>::value_type( p_value, l_node));
+	m_realFlyweight.insert( C3DMap( real, ScriptNode *)::value_type( p_value, l_node));
 
 	return l_node;
 }
@@ -885,9 +885,8 @@ void ScriptCompiler :: ReleaseScriptNode( ScriptNode * p_node)
 }
 
 
-UserFunction * ScriptCompiler :: GetUserFunction( const String & p_functionName)const
+UserFunction * ScriptCompiler :: GetUserFunction( const String & p_functionName)
 {
-
 	if (_isInStructDecla())
 	{
 		UserFunction * l_function = m_currentStructure->GetFunction( p_functionName);

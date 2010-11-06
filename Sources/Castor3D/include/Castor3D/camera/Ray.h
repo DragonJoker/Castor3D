@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -31,9 +31,12 @@ namespace Castor3D
 	*/
 	class CS3D_API Ray
 	{
+	private:
+		typedef Templates::Value<real> value;
+
 	public:
-		Vector3f * m_origin;		//!< The ray origin
-		Vector3f * m_direction;		//!< The ray direction
+		Point3r m_origin;		//!< The ray origin
+		Point3r m_direction;	//!< The ray direction
 
 	public:
 		/**
@@ -41,7 +44,7 @@ namespace Castor3D
 		 *@param p_point : [in] The mouse coordinates
 		 *@param p_camera : [in] The camera from which to retrieve the ray
 		 */
-		Ray( const Point2D<int> & p_point, const Camera & p_camera);
+		Ray( const Point<int, 2> & p_point, const Camera & p_camera);
 		/**
 		 * Constructor from mouse coordinates and a viewport
 		 *@param p_x : [in] The mouse x
@@ -54,7 +57,7 @@ namespace Castor3D
 		 *@param p_rOrigin : [in] The origin of the ray
 		 *@param p_rDirection : [in] The The direction of the ray
 		 */
-		Ray( const Vector3f & p_rOrigin, const Vector3f & p_rDirection);
+		Ray( const Point3r & p_rOrigin, const Point3r & p_rDirection);
 		/**
 		 * Copy constructor
 		 *@param p_ray : [in] The ray to copy from
@@ -71,31 +74,31 @@ namespace Castor3D
 		*@param p_v3 : [in] The third triangle vertex
 		*@return true if the ray intersects the triangle, false if not
 		*/
-		float Intersects( const Vector3f & p_v1, const Vector3f & p_v2, const Vector3f & p_v3);
+		real Intersects( const Point3r & p_v1, const Point3r & p_v2, const Point3r & p_v3);
 		/**
 		 * Tells if the ray intersects the given face
 		 *@param p_face : [in] The face to test
 		 *@return true if the ray intersects the face, false if not
 		 */
-		float Intersects( const Face & p_face);
+		real Intersects( const Face & p_face);
 		/**
 		* Tells if the vertex is on the ray
 		*@param p_vertex : [in] The face to test
 		*@return true if vertex is on the ray, false if not
 		*/
-		float Intersects( const Vector3f & p_vertex);
+		real Intersects( const Point3r & p_vertex);
 		/**
 		* Tells if the ray intersects the given Combo box
 		*@param p_box : [in] The box to test
 		*@return true if the ray intersects the face, false if not
 		*/
-		float Intersects( const ComboBox & p_box);
+		real Intersects( const ComboBox & p_box);
 		/**
 		* Tells if the ray intersects the given Sphere
 		*@param p_sphere : [in] The sphere to test
 		*@return true if the ray intersects the face, false if not
 		*/
-		float Intersects( const Sphere & p_sphere);
+		real Intersects( const Sphere & p_sphere);
 		/**
 		* Tells if the ray intersects the given Geometry
 		*@param p_pGeometry : [in] The sphere to test
@@ -103,14 +106,14 @@ namespace Castor3D
 		*@param p_ppSubmesh : [out] The intersected submesh
 		*@return true if the ray intersects the face, false if not
 		*/
-		float Intersects( Geometry * p_pGeometry, Face ** p_ppFace, Submesh ** p_ppSubmesh);
+		real Intersects( GeometryPtr p_pGeometry, FacePtr* p_ppFace, SubmeshPtr* p_ppSubmesh);
 		/**
 		 * Projects the given vertex on the ray
 		 *@param p_vertex : [in] The vertex we want to project
 		 *@param p_result : [out] The projecion result
 		 *@return true if the vertex can be projected on the ray, false if not
 		 */
-		bool ProjectVertex( const Vector3f & p_vertex, Vector3f & p_result);
+		bool ProjectVertex( const Point3r & p_vertex, Point3r & p_result);
 	};
 }
 

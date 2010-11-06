@@ -1,12 +1,19 @@
+#include "PrecompiledHeader.h"
+
 #include "PreciseTimer.h"
 
 #include "Module_Utils.h"
+
+#if CHECK_MEMORYLEAKS
+#	include "Memory.h"
+using namespace Castor::Utils;
+#endif
 
 #ifndef __GNUG__
 #	include "Utils.h"
 #	include "Exception.h"
 
-using namespace General::Utils;
+using namespace Castor::Utils;
 
 long long PreciseTimer :: sm_frequency = 0;
 long long RepeatTimer :: sm_frequency = 0;
@@ -15,7 +22,7 @@ long long RepeatTimer :: sm_frequency = 0;
 #	include <sys/time.h>
 #	define NULL 0
 
-using namespace General::Utils;
+using namespace Castor::Utils;
 
 long long PreciseTimer :: sm_frequency = 1000000;
 long long RepeatTimer :: sm_frequency = 1000000;
@@ -24,27 +31,26 @@ long long RepeatTimer :: sm_frequency = 1000000;
 
 PreciseTimer :: PreciseTimer()
 {
-
 #ifndef __GNUG__
-
 	if (sm_frequency == 0)
 	{
-		QueryPerformanceFrequency( & sm_frequency);
+		LARGE_INTEGER l_liFrequency;
+		QueryPerformanceFrequency( & l_liFrequency);
+		sm_frequency = l_liFrequency.QuadPart;
 
 		if (sm_frequency == 0)
 		{
-			GENLIB_EXCEPTION( C3D_T( "Could not access the high precision timer"));
+			CASTOR_EXCEPTION( "Could not access the high precision timer");
 		}
 	}
 
-	QueryPerformanceCounter( & m_previousTime);
-
+	LARGE_INTEGER l_liCurrentTime;
+	QueryPerformanceCounter( & l_liCurrentTime);
+	m_previousTime = l_liCurrentTime.QuadPart;
 #else
-
 	timeval l_time;
 	gettimeofday( & l_time, NULL);
 	m_previousTime = l_time.tv_sec * 1000000 + l_time.tv_usec;
-
 #endif
 }
 
@@ -55,19 +61,15 @@ PreciseTimer :: ~PreciseTimer()
 double PreciseTimer :: Time()
 {
 	long long l_currentTime;
-
 #ifndef __GNUG__
-
-	QueryPerformanceCounter( & l_currentTime);
-
+	LARGE_INTEGER l_liCurrentTime;
+	QueryPerformanceCounter( & l_liCurrentTime);
+	l_currentTime = l_liCurrentTime.QuadPart;
 #else
-
 	timeval l_time;
 	gettimeofday( & l_time, NULL);
 	l_currentTime = l_time.tv_sec * 1000000 + l_time.tv_usec;
-
 #endif
-
 	double l_diff = static_cast <double> ( l_currentTime - m_previousTime) / static_cast <double> ( sm_frequency);
  
 	m_previousTime = l_currentTime;
@@ -84,27 +86,26 @@ double PreciseTimer :: TimeDiff( long long p_time)
 RepeatTimer :: RepeatTimer( double p_time)
 	:	m_repeatTime( p_time)
 {
-
 #ifndef __GNUG__
-
 	if (sm_frequency == 0)
 	{
-		QueryPerformanceFrequency( & sm_frequency);
+		LARGE_INTEGER l_liFrequency;
+		QueryPerformanceFrequency( & l_liFrequency);
+		sm_frequency = l_liFrequency.QuadPart;
 
 		if (sm_frequency == 0)
 		{
-			GENLIB_EXCEPTION( C3D_T( "Could not access the high precision timer"));
+			CASTOR_EXCEPTION( "Could not access the high precision timer");
 		}
 	}
 
-	QueryPerformanceCounter( & m_previousTime);
-
+	LARGE_INTEGER l_liCurrentTime;
+	QueryPerformanceCounter( & l_liCurrentTime);
+	m_previousTime = l_liCurrentTime.QuadPart;
 #else
-
 	timeval l_time;
 	gettimeofday( & l_time, NULL);
 	m_previousTime = l_time.tv_sec * 1000000 + l_time.tv_usec;
-
 #endif
 }
 
@@ -115,19 +116,15 @@ RepeatTimer :: ~RepeatTimer()
 bool RepeatTimer :: Time()
 {
 	long long l_currentTime;
-
 #ifndef __GNUG__
-
-	QueryPerformanceCounter( & l_currentTime);
-
+	LARGE_INTEGER l_liCurrentTime;
+	QueryPerformanceCounter( & l_liCurrentTime);
+	l_currentTime = l_liCurrentTime.QuadPart;
 #else
-
 	timeval l_time;
 	gettimeofday( & l_time, NULL);
 	l_currentTime = l_time.tv_sec * 1000000 + l_time.tv_usec;
-
 #endif
-
 	double l_diff = static_cast <double> ( l_currentTime - m_previousTime) / static_cast <double> ( sm_frequency);
 
 	if (l_diff >= m_repeatTime)

@@ -18,10 +18,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_RotationMatrix___
 #define ___C3D_RotationMatrix___
 
-#include "Module_Utils.h"
 #include "Matrix.h"
+#include "Point.h"
 
-namespace General
+namespace Castor
 {	namespace Math
 {
 	/*!
@@ -30,26 +30,25 @@ namespace General
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class RotationMatrix : public Matrix4<float>
+	class RotationMatrix : public Matrix<real, 4, 4>
 	{
 	public:
 		RotationMatrix();
 		virtual ~RotationMatrix();
 
 	public:
-		void Initialise();
-		void LoadIdentity();
-		void LoadRotationX( float p_angle);
-		void LoadRotationY( float p_angle);
-		void LoadRotationZ( float p_angle);
-		void LoadRotation( float p_angle, const Vector3f & p_axis);
-		void LoadRotationEuler( float p_rx, float p_ry, float p_rz);
-		void LoadScale( float p_hx, float p_hy, float p_hz);
-		void LoadTranslation( float p_tx, float p_ty, float p_tz);
-		RotationMatrix * GetTranspose();
+		void LoadRotationX( real p_angle);
+		void LoadRotationY( real p_angle);
+		void LoadRotationZ( real p_angle);
+		void LoadRotation( real p_angle, const Point3r & p_axis);
+		void LoadRotation( const Quaternion & p_quat);
+		void LoadRotationEuler( real p_rx, real p_ry, real p_rz);
+		void LoadScale( real p_hx, real p_hy, real p_hz);
+		void LoadTranslation( real p_tx, real p_ty, real p_tz);
+		RotationMatrixPtr GetTranspose();
 
-		void Multiply( Vector3f * p_vertex);
-		float GetTrace();
+		void Multiply( Point3rPtr p_vertex);
+		real GetTrace();
 	};
 }
 }

@@ -11,23 +11,19 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___EMUSE_EXCEPTION_H___
-#define ___EMUSE_EXCEPTION_H___
-
-#include <exception>
-#include <string>
+#ifndef ___Castor_Exception___
+#define ___Castor_Exception___
 
 #include "Module_Utils.h"
-#include "Macros.h"
 
-namespace General
+namespace Castor
 { namespace Utils
 {
-	class GenException : public std::exception
+	class Exception : public std::exception
 	{
 	public:
 		unsigned int	m_line;
@@ -37,17 +33,17 @@ namespace General
 		const Char *	m_typeDesc;
 
 	public:
-		GenException(	const String & p_description, const String & p_file,
+		Exception(	const String & p_description, const String & p_file,
 						const String & p_function, unsigned int p_line)
 			:	m_line			(p_line),
 				m_description	(p_description),
 				m_filename		(p_file),
 				m_functionName	(p_function)
 		{}
-		virtual ~GenException() d_no_throw {}
+		virtual ~Exception() throw() {}
 
 	public:
-		inline virtual const char * what() const d_no_throw { return m_description.char_str(); }
+		inline virtual const char * what() const throw() { return m_description.char_str(); }
 		inline const String & GetFilename()const { return m_filename; }
 		inline const String & GetFunction()const { return m_functionName; }
 		inline unsigned int GetLine()const { return m_line; }
@@ -56,6 +52,19 @@ namespace General
 }
 }
 
-#define GENLIB_EXCEPTION( p_text) throw General::Utils::GenException( p_text, __FILE__, __FUNCTION__, __LINE__)
+#	define CASTOR_EXCEPTION( p_text) throw Castor::Utils::Exception( p_text, __FILE__, __FUNCTION__, __LINE__)
+
+#ifndef CASTOR_USE_ASSERT
+#	define CASTOR_USE_ASSERT 1
+#endif
+
+#if CASTOR_USE_ASSERT
+#	ifdef CASTOR_ASSERT
+#		undef CASTOR_ASSERT
+#	endif
+#	define CASTOR_ASSERT( X) if ( ! (X)){ CASTOR_EXCEPTION( Castor::String( "Assert not respected : (") + #X + ") file " + __FILE__ + " @ L# " + Castor::ToString( __LINE__));}
+#else
+#	define CASTOR_ASSERT( X)
+#endif
 
 #endif

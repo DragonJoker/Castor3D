@@ -6,18 +6,16 @@
 #include "scene/SceneNode.h"
 #include "scene/Scene.h"
 
-#include "Log.h"
-
 using namespace Castor3D;
 
-MovableObject :: MovableObject( SceneNode * p_sn, const String & p_name)
+MovableObject :: MovableObject( SceneNodePtr p_sn, const String & p_name)
 	:	m_name( p_name),
-		m_matrix( new float[16]),
-		m_sceneNode( p_sn)
+		m_matrix( new real[16]),
+		m_sceneNode( p_sn.get())
 {
-	if (p_sn != NULL)
+	if (m_sceneNode != NULL)
 	{
-		p_sn->AttachGeometry( this);
+		m_sceneNode->AttachGeometry( this);
 	}
 }
 
@@ -30,14 +28,14 @@ void MovableObject :: Cleanup()
 {
 }
 
-bool MovableObject :: Write( FileIO * p_pFile)const
+bool MovableObject :: Write( File & p_pFile)const
 {
-	bool l_bReturn = p_pFile->WriteLine( "\tparent " + m_sceneNode->GetName() + "\n");
+	bool l_bReturn = p_pFile.WriteLine( "\tparent " + m_sceneNode->GetName() + "\n");
 
 	return true;
 }
 
-float * MovableObject :: Get4x4RotationMatrix()
+real * MovableObject :: Get4x4RotationMatrix()
 {
 	m_orientation.ToRotationMatrix( m_matrix);
 	return m_matrix;

@@ -11,7 +11,7 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
@@ -22,20 +22,13 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	//! The render window handler class
-	class RenderWindow;
-	//! The Castor3D core system
-	class Root;
-	//! Engine graphics driver
-	class RendererDriver;
-	//! Manages graphics related stuff
-	class RendererServer;
-	//! The plugin handler class
-	class Plugin;
-	//! The frame event representation
-	class FrameEvent;
-	//! The frame event listener
-	class FrameListener;
+	class RenderWindow;		//!< The render window handler class
+	class Root;				//!< The Castor3D core system
+	class RendererDriver;	//!< Engine graphics driver
+	class RendererServer;	//!< Manages graphics related stuff
+	class Plugin;			//!< The plugin handler class
+	class FrameEvent;		//!< The frame event representation
+	class FrameListener;	//!< The frame event listener
 
 	//! Projection Directions enumerator
 	/*!
@@ -50,34 +43,23 @@ namespace Castor3D
 		pdLookToTop,		//!< camera looks at the scene from the top
 		pdLookToBottom		//!< camera looks at the scene from the bottom
 	} ProjectionDirection;
+	
+	typedef Templates::SharedPtr<RenderWindow>		RenderWindowPtr;
+	typedef Templates::SharedPtr<Root>				RootPtr;
+	typedef Templates::SharedPtr<RendererDriver>	RendererDriverPtr;
+	typedef Templates::SharedPtr<RendererServer>	RendererServerPtr;
+	typedef Templates::SharedPtr<Plugin>			PluginPtr;
+	typedef Templates::SharedPtr<FrameEvent>		FrameEventPtr;
+	typedef Templates::SharedPtr<FrameListener>		FrameListenerPtr;
 
-	//! Frame Event Type enumeration
-	/*!
-	Describes the different types of frame event : pre-render, queue-render, post-render
-	*/
-	typedef enum FrameEventType
-	{
-		fetPreRender,		//!< This kind of event happens before any render
-		fetQueueRender,		//!< This kind of event happens after the render queue
-		fetPostRender,		//!< This kind of event happens after the buffer switch
-	} FrameEventType;
-
-	//! RenderWindow pointer array
-	typedef std::vector <RenderWindow *>		RenderWindowArray;
-	//! RendererDriver pointer array
-	typedef std::vector <RendererDriver *>		RendererDriverPtrArray;
-	//! RenderWindow pointer map, sorted by index
-	typedef std::map <size_t, RenderWindow *>	RenderWindowMap;
-	//! Plugin map, sorted by name
-	typedef std::map <String, Plugin>			PluginStrMap;
-	//! unsigned int array
-	typedef std::vector <unsigned int>			UIntArray;
-	//! float array
-	typedef std::vector <float>					FloatArray;
-	//! FrameEvent pointer array
-	typedef std::vector <FrameEvent *>			FrameEventArray;
-	//! FrameListener pointer array
-	typedef std::vector <FrameListener *>		FrameListenerArray;
+	typedef C3DVector(	RenderWindowPtr)			RenderWindowArray;		//!< RenderWindow pointer array
+	typedef C3DVector(	RendererDriverPtr)			RendererDriverPtrArray;	//!< RendererDriver pointer array
+	typedef C3DMap(		size_t, RenderWindowPtr)	RenderWindowMap;		//!< RenderWindow pointer map, sorted by index
+	typedef C3DMap(		String, PluginPtr)			PluginStrMap;			//!< Plugin map, sorted by name
+	typedef C3DVector(	unsigned int)				UIntArray;				//!< unsigned int array
+	typedef C3DVector(	real)						FloatArray;				//!< real array
+	typedef C3DVector(	FrameEventPtr)				FrameEventArray;		//!< FrameEvent pointer array
+	typedef C3DVector(	FrameListenerPtr)			FrameListenerArray;		//!< FrameListener pointer array
 }
 
 #endif

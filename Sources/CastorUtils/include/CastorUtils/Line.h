@@ -11,14 +11,16 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_Line___
-#define ___C3D_Line___
+#ifndef ___Castor_Line___
+#define ___Castor_Line___
 
-namespace General
+#include "Module_Utils.h"
+
+namespace Castor
 {	namespace Math
 {
 	/*!
@@ -26,28 +28,35 @@ namespace General
 	\author Sylvain DOREMUS
 	\date 14/08/2010
 	*/
+	template <typename T>
 	class Line2D
 	{
-	public:
-		float a;
-		float b;
+	private:
+		typedef Templates::Value<T> value;
 
 	public:
-		Line2D( float xA, float yA, float xB, float yB)
+		T a;
+		T b;
+
+	public:
+		Line2D( T xA, T yA, T xB, T yB)
 		{
-			a = (yA - yB) / (xA - xB);
-			b = yB - a * xB;
+			value::assign( a, (yA - yB) / (xA - xB));
+			value::assign( b, yB - a * xB);
 		}
 
-		bool Intersects( const Line2D & p_line, float & x, float & y)
+		bool Intersects( const Line2D & p_line, T & x, T & y)
 		{
-			if (abs( a - p_line.a) < 0.00000001)
+			bool l_bReturn = false;
+
+			if (value::equals( a, p_line.a))
 			{
-				return false;
+				x = (p_line.b - b) / (a - p_line.a);
+				y = a * x + b;
+				l_bReturn = true;
 			}
-			x = (p_line.b - b) / (a - p_line.a);
-			y = a * x + b;
-			return true;
+
+			return l_bReturn;
 		}
 	};
 
@@ -56,29 +65,33 @@ namespace General
 	\author Sylvain DOREMUS
 	\date 14/08/2010
 	*/
+	template <typename T>
 	class Line3D
 	{
-	public:
-		Vector3f m_slope;
-		Vector3f m_origin;
+	private:
+		typedef Templates::Value<T> value;
 
 	public:
-		Line3D( const Vector3f & p_A, const Vector3f & p_B)
+		Point<T, 3> m_slope;
+		Point<T, 3> m_origin;
+
+	public:
+		Line3D( const Point<T, 3> & p_A, const Point<T, 3> & p_B)
 		{
-			m_origin = Vector3f( p_A);
-			m_slope = Vector3f( p_A, p_B);
+			m_origin = Point<T, 3>( p_A);
+			m_slope = Point<T, 3>( p_B - p_A);
 		}
 
-		bool Intersects( const Line3D & p_line, Vector3f & p_point)
+		bool Intersects( const Line3D & p_line, Point<T, 3> & p_point)
 		{
 			return true;
 		}
 
-		bool IsIn( const Vector3f & p_point)
+		bool IsIn( const Point<T, 3> & p_point)
 		{
-			return (abs( p_point.x - m_origin.x) / m_slope.x < 0.000001f) 
-				&& (abs( p_point.y - m_origin.y) / m_slope.y < 0.000001f)
-				&& (abs( p_point.z - m_origin.z) / m_slope.z < 0.000001f);
+			return value::is_null( (p_point[0] - m_origin[0]) / m_slope[0])
+				&& value::is_null( (p_point[1] - m_origin[1]) / m_slope[1])
+				&& value::is_null( (p_point[2] - m_origin[2]) / m_slope[2]);
 		}
 	};
 }

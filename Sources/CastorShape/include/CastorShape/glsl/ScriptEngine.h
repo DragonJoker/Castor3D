@@ -37,11 +37,11 @@ namespace CastorShape
 		void Execute( ScriptNode * p_node );
 		ScriptNode * GetKeyboardBind( unsigned int p_keyCode, unsigned int p_bindType)const;
 		void AddScriptZone( String & p_scriptString);
-		ScriptNode * CompileScriptFileIO( const String & p_scriptFile);
+		ScriptNode * CompileScriptFile( const String & p_scriptFile);
 		ScriptNode * CompileScript( String & p_scriptString);
 		ScriptNode * GetVariable( const String & p_variableName)const;
 		ScriptNode * GetFunction( const String & p_functionName)const;
-		void ExecuteScriptFileIO( const String & p_filename);
+		void ExecuteScriptFile( const String & p_filename);
 
 	public:
 		static void ScriptError( ScriptNode * p_node, const String & p_string);

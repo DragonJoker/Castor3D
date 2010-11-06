@@ -11,10 +11,12 @@
 #include "geometry/mesh/MeshManager.h"
 #include "geometry/mesh/Mesh.h"
 #include "geometry/mesh/Submesh.h"
+#include "geometry/basic/Face.h"
 #include "geometry/primitives/Geometry.h"
 #include "scene/Scene.h"
+#include "scene/SceneNode.h"
 #include "scene/SceneManager.h"
-#include "Log.h"
+
 
 using namespace Castor3D;
 
@@ -32,21 +34,21 @@ Md2Importer::Md2Importer( const String & p_textureName)
 
 bool Md2Importer :: _import()
 {
-	m_pFile = new FileIO( m_fileName, FileIO::eRead);
+	m_pFile = new File( m_fileName, File::eRead);
 
 	size_t l_uiSlashIndex = 0;
 
-	if (m_fileName.find_last_of( C3D_T( "\\")) != String::npos)
+	if (m_fileName.find_last_of( CU_T( "\\")) != String::npos)
 	{
-		l_uiSlashIndex = m_fileName.find_last_of( C3D_T( "\\")) + 1;
+		l_uiSlashIndex = m_fileName.find_last_of( CU_T( "\\")) + 1;
 	}
 
-	if (m_fileName.find_last_of( C3D_T( "/")) != String::npos)
+	if (m_fileName.find_last_of( CU_T( "/")) != String::npos)
 	{
-		l_uiSlashIndex = max( l_uiSlashIndex, m_fileName.find_last_of( C3D_T( "/")) + 1);
+		l_uiSlashIndex = std::max( l_uiSlashIndex, m_fileName.find_last_of( CU_T( "/")) + 1);
 	}
 
-	size_t l_uiDotIndex = m_fileName.find_last_of( C3D_T( "."));
+	size_t l_uiDotIndex = m_fileName.find_last_of( CU_T( "."));
 
 	UIntArray l_faces;
 	FloatArray l_sizes;
@@ -54,24 +56,24 @@ bool Md2Importer :: _import()
 	String l_meshName = m_fileName.substr( l_uiSlashIndex, l_uiDotIndex - l_uiSlashIndex);
 	String l_materialName = m_fileName.substr( l_uiSlashIndex, l_uiDotIndex - l_uiSlashIndex);
 
-	Mesh * l_pMesh = NULL;
+	MeshPtr l_pMesh;
 
-	if (MeshManager::GetSingletonPtr()->HasElement( l_meshName))
+	if (MeshManager::HasElement( l_meshName))
 	{
-		l_pMesh = MeshManager::GetSingletonPtr()->GetElementByName( l_meshName);
+		l_pMesh.reset( MeshManager::GetElementByName( l_meshName));
 	}
 	else
 	{
-		l_pMesh = MeshManager::GetSingletonPtr()->CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom);
-		Log::LogMessage( C3D_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
+		l_pMesh.reset( MeshManager::CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom));
+		Log::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
 	}
 
 	m_pFile->Read<Md2Header>( m_header);
 
 	if (m_header.m_version != 8)
 	{
-		Log::LogMessage( C3D_T( "Invalid file format (Version not 8): ") + m_fileName);
-		MeshManager::GetSingletonPtr()->DestroyElement( l_pMesh);
+		Log::LogMessage( CU_T( "Invalid file format (Version not 8): ") + m_fileName);
+		MeshManager::DestroyElement( l_pMesh);
 		_cleanUp();
 		return false;
 	}
@@ -80,28 +82,28 @@ bool Md2Importer :: _import()
 
 	_convertDataStructures( l_pMesh);
 
-	Material * l_material = MaterialManager::GetSingletonPtr()->CreateMaterial( l_materialName);
-	Pass * l_pass = l_material->GetPass( 0);
+	MaterialPtr l_material = MaterialManager::CreateMaterial( l_materialName);
+	PassPtr l_pass = l_material->GetPass( 0);
 	l_pass->SetAmbient( 0.0f, 0.0f, 0.0f, 1.0f);
 	l_pass->SetEmissive( 0.5f, 0.5f, 0.5f, 1.0f);
 	l_pass->SetShininess( 64.0);
 
 	if ( ! m_textureName.empty())
 	{
-		TextureUnit * l_unit = new TextureUnit( RenderSystem::GetSingletonPtr()->CreateTextureRenderer());
+		TextureUnitPtr l_unit = new TextureUnit();
 
-		if (FileBase::FileExists( m_textureName))
+		if (File::FileExists( m_textureName))
 		{
 			l_unit->SetTexture2D( m_textureName);
 			l_pass->AddTextureUnit( l_unit);
 		}
 		else
 		{
-			delete l_unit;
+//			delete l_unit;
 		}
 	}
 
-	Submesh * l_submesh;
+	SubmeshPtr l_submesh;
 	for (size_t i = 0 ; i < l_pMesh->GetNbSubmeshes() ; i++)
 	{
 		l_submesh = l_pMesh->GetSubmesh( i);
@@ -110,15 +112,15 @@ bool Md2Importer :: _import()
 
 	l_pMesh->SetNormals();
 
-	MaterialManager::GetSingletonPtr()->SetToInitialise( l_material);
+	MaterialManager::SetToInitialise( l_material);
 
 	m_pScene = SceneManager::GetSingleton().GetElementByName( "MainScene");
-	SceneNode * l_pNode = m_pScene->CreateSceneNode( l_name);
+	SceneNodePtr l_pNode = m_pScene->CreateSceneNode( l_name);
 
-	Geometry * l_pGeometry = new Geometry( l_pMesh, l_pNode, l_name);
-	Log::LogMessage( C3D_T( "PlyImporter::_import - Geometry %s created"), l_name.c_str());
+	GeometryPtr l_pGeometry = new Geometry( l_pMesh, l_pNode, l_name);
+	Log::LogMessage( CU_T( "PlyImporter::_import - Geometry %s created"), l_name.c_str());
 
-	m_geometries.insert( GeometryStrMap::value_type( l_name, l_pGeometry));
+	m_geometries.insert( GeometryPtrStrMap::value_type( l_name, l_pGeometry));
 
 	_cleanUp();
 
@@ -170,9 +172,9 @@ void Md2Importer :: _readMD2Data()
 	}
 }
 
-void Md2Importer :: _convertDataStructures( Mesh * p_pMesh)
+void Md2Importer :: _convertDataStructures( MeshPtr p_pMesh)
 {
-	Submesh * l_pSubmesh = p_pMesh->CreateSubmesh( 1);
+	SubmeshPtr l_pSubmesh = p_pMesh->CreateSubmesh( 1);
 
 	for (int i = 0 ; i < m_header.m_numVertices ; i++)
 	{
@@ -181,21 +183,21 @@ void Md2Importer :: _convertDataStructures( Mesh * p_pMesh)
 
 	delete [] m_frames[0].m_vertices;
 
-	std::vector < Point2D<float> > l_texVerts;
+	Point2rArray l_texVerts;
 
 	for (int i = 0 ; i < m_header.m_numTexCoords ; i++)
 	{
-		l_texVerts.push_back( Point2D<float>( m_texCoords[i].u / float( m_header.m_skinWidth), 1 - m_texCoords[i].v / float( m_header.m_skinHeight)));
+		l_texVerts.push_back( Point2r( 2, m_texCoords[i].u / real( m_header.m_skinWidth), 1 - m_texCoords[i].v / real( m_header.m_skinHeight)));
 	}
 
-	Face * l_pFace;
+	FacePtr l_pFace;
 
 	for (int i = 0 ; i < m_header.m_numTriangles ; i++)
 	{
 		l_pFace = l_pSubmesh->AddFace( m_triangles[i].m_vertexIndices[0], m_triangles[i].m_vertexIndices[1], m_triangles[i].m_vertexIndices[2], 0);
-		SetTexCoordV1( l_pFace, l_texVerts[m_triangles[i].m_textureIndices[0]].x, l_texVerts[m_triangles[i].m_textureIndices[0]].y);
-		SetTexCoordV2( l_pFace, l_texVerts[m_triangles[i].m_textureIndices[1]].x, l_texVerts[m_triangles[i].m_textureIndices[1]].y);
-		SetTexCoordV3( l_pFace, l_texVerts[m_triangles[i].m_textureIndices[2]].x, l_texVerts[m_triangles[i].m_textureIndices[2]].y);
+		l_pFace->SetTexCoordV1( l_texVerts[m_triangles[i].m_textureIndices[0]][0], l_texVerts[m_triangles[i].m_textureIndices[0]][1]);
+		l_pFace->SetTexCoordV2( l_texVerts[m_triangles[i].m_textureIndices[1]][0], l_texVerts[m_triangles[i].m_textureIndices[1]][1]);
+		l_pFace->SetTexCoordV3( l_texVerts[m_triangles[i].m_textureIndices[2]][0], l_texVerts[m_triangles[i].m_textureIndices[2]][1]);
 	}
 
 	p_pMesh->ComputeContainers();

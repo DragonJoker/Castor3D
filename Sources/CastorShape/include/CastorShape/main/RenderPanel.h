@@ -21,33 +21,33 @@ private:
 public:
 	ActionType m_actionType;
 	SelectionType m_selectionType;
-	float m_deltaX;
-	float m_deltaY;
-	float m_x;
-	float m_y;
-	float m_oldX;
-	float m_oldY;
+	real m_deltaX;
+	real m_deltaY;
+	real m_x;
+	real m_y;
+	real m_oldX;
+	real m_oldY;
 	bool m_mouseLeftDown;					//!< The left mouse button status
 	bool m_mouseRightDown;					//!< The right mouse button status
 	bool m_mouseMiddleDown;					//!< The middle mouse button status
 	/**/
-	Castor3D::PointLight * m_light1;
-	Castor3D::PointLight * m_light2;
-	Castor3D::Material * m_material;
-	Castor3D::Material * m_materialNoTex;
+	Castor3D::PointLightPtr m_light1;
+	Castor3D::PointLightPtr m_light2;
+	Castor3D::MaterialPtr m_material;
+	Castor3D::MaterialPtr m_materialNoTex;
 	/**/
 
 	wxTimer * m_timer;
-	Castor3D::ProjectionType m_renderType;
+	Castor3D::Viewport::eTYPE m_renderType;
 	Castor3D::ProjectionDirection m_lookAt;
-	Castor3D::RenderWindow * m_renderWindow;
-	Castor3D::Scene * m_mainScene;
-	Castor3D::FrameListener * m_listener;
+	Castor3D::RenderWindowPtr m_renderWindow;
+	Castor3D::ScenePtr m_mainScene;
+	Castor3D::FrameListenerPtr m_listener;
 
 public:
 	CSRenderPanel( wxWindow * parent, wxWindowID p_id,
-				   Castor3D::ProjectionType p_renderType,
-				   Castor3D::Scene * p_scene,
+				   Castor3D::Viewport::eTYPE p_renderType,
+				   Castor3D::ScenePtr p_scene,
 				   const wxPoint & pos = wxDefaultPosition,
 				   const wxSize & size = wxDefaultSize,
 				   Castor3D::ProjectionDirection p_look = Castor3D::pdLookToFront,
@@ -58,8 +58,8 @@ public:
 	void UnFocus();
 
 	void DrawOneFrame();
-	void SelectGeometry( Castor3D::Geometry * m_geometry);
-	void SelectVertex( Vector3f * p_vertex);
+	void SelectGeometry( Castor3D::GeometryPtr m_geometry);
+	void SelectVertex( Point3rPtr p_vertex);
 
 public:
 	inline void SetSelectionType( SelectionType p_type) { m_selectionType = p_type; }

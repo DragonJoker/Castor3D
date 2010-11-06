@@ -24,7 +24,7 @@ END_EVENT_TABLE()
 //******************************************************************************
 
 CSEnvironmentFrame :: CSEnvironmentFrame( wxWindow * parent, const wxString & title,
-										  Pass * p_pass, TextureEnvironment * p_env,
+										  PassPtr p_pass, TextureEnvironmentPtr p_env,
 										  const wxPoint & pos, const wxSize & size,
 										  wxWindowID id, long style, wxString name)
 	:	wxFrame( parent, id, title, pos, size, style, name),
@@ -99,8 +99,8 @@ CSEnvironmentFrame :: CSEnvironmentFrame( wxWindow * parent, const wxString & ti
 		l_currentTop += 5;
 	}
 
-	m_OKButton = new wxButton( this, efOK, C3D_T( "OK"), wxPoint( 30, l_currentTop), wxSize( 60, 20), wxBORDER_SIMPLE);
-	m_cancelButton = new wxButton( this, efCancel, C3D_T( "Cancel"), wxPoint( 130, l_currentTop), wxSize( 60, 20), wxBORDER_SIMPLE);
+	m_OKButton = new wxButton( this, efOK, CU_T( "OK"), wxPoint( 30, l_currentTop), wxSize( 60, 20), wxBORDER_SIMPLE);
+	m_cancelButton = new wxButton( this, efCancel, CU_T( "Cancel"), wxPoint( 130, l_currentTop), wxSize( 60, 20), wxBORDER_SIMPLE);
 
 	SetSize( 220, l_currentTop + 50);
 }
@@ -110,7 +110,7 @@ CSEnvironmentFrame :: CSEnvironmentFrame( wxWindow * parent, const wxString & ti
 void CSEnvironmentFrame :: _createRGBSourceComboBox( unsigned int p_index,
 													 int p_currentTop)
 {
-	if (p_index >= 3 || m_environment == NULL || m_pass == NULL)
+	if (p_index >= 3 || m_environment.null() || m_pass.null())
 	{
 		return;
 	}
@@ -119,30 +119,30 @@ void CSEnvironmentFrame :: _createRGBSourceComboBox( unsigned int p_index,
 	unsigned int l_nbUnits = m_pass->GetNbTexUnits();
 	unsigned int l_nbChoices = 4 + l_nbUnits;
 	wxString * l_choices = new wxString[l_nbChoices];
-	l_choices[0] = C3D_T( "Current Texture");
-	l_choices[1] = C3D_T( "Constant");
-	l_choices[2] = C3D_T( "Primary Colour");
-	l_choices[3] = C3D_T( "Previous");
+	l_choices[0] = CU_T( "Current Texture");
+	l_choices[1] = CU_T( "Constant");
+	l_choices[2] = CU_T( "Primary Colour");
+	l_choices[3] = CU_T( "Previous");
 	wxString l_value = wxEmptyString;
 	for( unsigned int i = 0 ; i < l_nbUnits ; i++)
 	{
-		l_value = C3D_T( "Texture ");
+		l_value = CU_T( "Texture ");
 		l_value << i;
 		l_choices[4 + i] = l_value;
 	}
 	switch (l_source)
 	{
-		case CSCurrentTexture : l_value = C3D_T( "Current Texture");break;
-		case CSConstant : l_value = C3D_T( "Constant");break;
-		case CSPrevious : l_value = C3D_T( "Previous");break;
-		case CSPrimaryColour : l_value = C3D_T( "Primary Colour");break;
+		case CSCurrentTexture : l_value = CU_T( "Current Texture");break;
+		case CSConstant : l_value = CU_T( "Constant");break;
+		case CSPrevious : l_value = CU_T( "Previous");break;
+		case CSPrimaryColour : l_value = CU_T( "Primary Colour");break;
 		case CSTexture :
-			l_value = C3D_T( "Texture ");
+			l_value = CU_T( "Texture ");
 			l_value << l_textureIndex;
 		break;
 	}
 	std::cout << "RGB source " << p_index << " : " << l_value.char_str() << " (" << l_source << ")\n";
-	wxString l_text = C3D_T( "RGB Source ");
+	wxString l_text = CU_T( "RGB Source ");
 	l_text << p_index;
 	new wxStaticText( this, wxID_ANY, l_text, wxPoint( 5, p_currentTop), wxSize( 80, 20));
 	m_RGBSourcesCB[p_index] = new wxComboBox( this, efRGBSrc0 + p_index, l_value,
@@ -164,21 +164,21 @@ void CSEnvironmentFrame :: _createRGBOperandComboBox( unsigned int p_index,
 	RGBOperand l_operand = m_environment->GetRGBOperand( p_index);
 	unsigned int l_nbChoices = 4;
 	wxString * l_choices = new wxString[l_nbChoices];
-	l_choices[0] = C3D_T( "Source Colour");
-	l_choices[1] = C3D_T( "One Minus Source Colour");
-	l_choices[2] = C3D_T( "Source Alpha");
-	l_choices[3] = C3D_T( "One Minus Source Alpha");
+	l_choices[0] = CU_T( "Source Colour");
+	l_choices[1] = CU_T( "One Minus Source Colour");
+	l_choices[2] = CU_T( "Source Alpha");
+	l_choices[3] = CU_T( "One Minus Source Alpha");
 	wxString l_value;
 	switch (l_operand)
 	{
-		case COSrcColour : l_value = C3D_T( "Source Colour");break;
-		case COOneMinusSrcColour : l_value = C3D_T( "One Minus Source Colour");break;
-		case COSrcAlpha : l_value = C3D_T( "Source Alpha");break;
-		case COOneMinusSrcAlpha : l_value = C3D_T( "One Minus Source Alpha");break;
+		case COSrcColour : l_value = CU_T( "Source Colour");break;
+		case COOneMinusSrcColour : l_value = CU_T( "One Minus Source Colour");break;
+		case COSrcAlpha : l_value = CU_T( "Source Alpha");break;
+		case COOneMinusSrcAlpha : l_value = CU_T( "One Minus Source Alpha");break;
 		break;
 	}
 	std::cout << "RGB operand " << p_index << " : " << l_value.char_str() << " (" << l_operand << ")\n";
-	wxString l_text = C3D_T( "RGB Operand ");
+	wxString l_text = CU_T( "RGB Operand ");
 	l_text << p_index;
 	new wxStaticText( this, wxID_ANY, l_text, wxPoint( 5, p_currentTop), wxSize( 80, 20));
 	m_RGBOperandsCB[p_index] = new wxComboBox( this, efRGBOperand0 + p_index, l_value,
@@ -202,29 +202,29 @@ void CSEnvironmentFrame :: _createAlphaSourceComboBox( unsigned int p_index,
 	unsigned int l_nbUnits = m_pass->GetNbTexUnits();
 	unsigned int l_nbChoices = 4 + l_nbUnits;
 	wxString * l_choices = new wxString[l_nbChoices];
-	l_choices[0] = C3D_T( "Current Texture");
-	l_choices[1] = C3D_T( "Constant");
-	l_choices[2] = C3D_T( "Primary Colour");
-	l_choices[3] = C3D_T( "Previous");
+	l_choices[0] = CU_T( "Current Texture");
+	l_choices[1] = CU_T( "Constant");
+	l_choices[2] = CU_T( "Primary Colour");
+	l_choices[3] = CU_T( "Previous");
 	wxString l_value = wxEmptyString;
 	for( unsigned int i = 0 ; i < l_nbUnits ; i++)
 	{
-		l_value = C3D_T( "Texture ");
+		l_value = CU_T( "Texture ");
 		l_value << i;
 		l_choices[4 + i] = l_value;
 	}
 	switch (l_source)
 	{
-		case CSCurrentTexture : l_value = C3D_T( "Current Texture");break;
-		case CSConstant : l_value = C3D_T( "Constant");break;
-		case CSPrevious : l_value = C3D_T( "Previous");break;
-		case CSPrimaryColour : l_value = C3D_T( "Primary Colour");break;
+		case CSCurrentTexture : l_value = CU_T( "Current Texture");break;
+		case CSConstant : l_value = CU_T( "Constant");break;
+		case CSPrevious : l_value = CU_T( "Previous");break;
+		case CSPrimaryColour : l_value = CU_T( "Primary Colour");break;
 		case CSTexture :
-			l_value = C3D_T( "Texture ");
+			l_value = CU_T( "Texture ");
 			l_value << l_textureIndex;
 		break;
 	}
-	wxString l_text = C3D_T( "Alpha Source ");
+	wxString l_text = CU_T( "Alpha Source ");
 	l_text << p_index;
 	new wxStaticText( this, wxID_ANY, l_text, wxPoint( 5, p_currentTop), wxSize( 90, 20));
 	m_AlphaSourcesCB[p_index] = new wxComboBox( this, efAlphaSrc0 + p_index, l_value,
@@ -246,16 +246,16 @@ void CSEnvironmentFrame :: _createAlphaOperandComboBox( unsigned int p_index,
 	AlphaOperand l_operand = m_environment->GetAlphaOperand( p_index);
 	unsigned int l_nbChoices = 2;
 	wxString * l_choices = new wxString[l_nbChoices];
-	l_choices[0] = C3D_T( "Source Alpha");
-	l_choices[1] = C3D_T( "One Minus Source Alpha");
+	l_choices[0] = CU_T( "Source Alpha");
+	l_choices[1] = CU_T( "One Minus Source Alpha");
 	wxString l_value;
 	switch (l_operand)
 	{
-		case AOSrcAlpha : l_value = C3D_T( "Source Alpha");break;
-		case AOOneMinusSrcAlpha : l_value = C3D_T( "One Minus Source Alpha");break;
+		case AOSrcAlpha : l_value = CU_T( "Source Alpha");break;
+		case AOOneMinusSrcAlpha : l_value = CU_T( "One Minus Source Alpha");break;
 		break;
 	}
-	wxString l_text = C3D_T( "Alpha Operand ");
+	wxString l_text = CU_T( "Alpha Operand ");
 	l_text << p_index;
 	new wxStaticText( this, wxID_ANY, l_text, wxPoint( 5, p_currentTop), wxSize( 90, 20));
 	m_AlphaOperandsCB[p_index] = new wxComboBox( this, efAlphaOperand0 + p_index, l_value,
@@ -324,19 +324,19 @@ void CSEnvironmentFrame :: _onCancel( wxCommandEvent & event)
 void CSEnvironmentFrame :: _onRGBSource0Select( wxCommandEvent & event)
 {
 	wxString l_value = m_RGBSourcesCB[0]->GetValue();
-	if  (l_value == C3D_T( "Current Texture"))
+	if  (l_value == CU_T( "Current Texture"))
 	{
 		m_environment->SetRGBSource( 0, CSCurrentTexture);
 	}
-	else if (l_value == C3D_T( "Constant"))
+	else if (l_value == CU_T( "Constant"))
 	{
 		m_environment->SetRGBSource( 0, CSConstant);
 	}
-	else if (l_value == C3D_T( "Previous"))
+	else if (l_value == CU_T( "Previous"))
 	{
 		m_environment->SetRGBSource( 0, CSPrevious);
 	}
-	else if (l_value == C3D_T( "Primary Colour"))
+	else if (l_value == CU_T( "Primary Colour"))
 	{
 		m_environment->SetRGBSource( 0, CSPrimaryColour);
 	}
@@ -354,19 +354,19 @@ void CSEnvironmentFrame :: _onRGBSource0Select( wxCommandEvent & event)
 void CSEnvironmentFrame :: _onRGBSource1Select( wxCommandEvent & event)
 {
 	wxString l_value = m_RGBSourcesCB[1]->GetValue();
-	if  (l_value == C3D_T( "Current Texture"))
+	if  (l_value == CU_T( "Current Texture"))
 	{
 		m_environment->SetRGBSource( 1, CSCurrentTexture);
 	}
-	else if (l_value == C3D_T( "Constant"))
+	else if (l_value == CU_T( "Constant"))
 	{
 		m_environment->SetRGBSource( 1, CSConstant);
 	}
-	else if (l_value == C3D_T( "Previous"))
+	else if (l_value == CU_T( "Previous"))
 	{
 		m_environment->SetRGBSource( 1, CSPrevious);
 	}
-	else if (l_value == C3D_T( "Primary Colour"))
+	else if (l_value == CU_T( "Primary Colour"))
 	{
 		m_environment->SetRGBSource( 1, CSPrimaryColour);
 	}
@@ -384,19 +384,19 @@ void CSEnvironmentFrame :: _onRGBSource1Select( wxCommandEvent & event)
 void CSEnvironmentFrame :: _onRGBSource2Select( wxCommandEvent & event)
 {
 	wxString l_value = m_RGBSourcesCB[2]->GetValue();
-	if  (l_value == C3D_T( "Current Texture"))
+	if  (l_value == CU_T( "Current Texture"))
 	{
 		m_environment->SetRGBSource( 2, CSCurrentTexture);
 	}
-	else if (l_value == C3D_T( "Constant"))
+	else if (l_value == CU_T( "Constant"))
 	{
 		m_environment->SetRGBSource( 2, CSConstant);
 	}
-	else if (l_value == C3D_T( "Previous"))
+	else if (l_value == CU_T( "Previous"))
 	{
 		m_environment->SetRGBSource( 2, CSPrevious);
 	}
-	else if (l_value == C3D_T( "Primary Colour"))
+	else if (l_value == CU_T( "Primary Colour"))
 	{
 		m_environment->SetRGBSource( 2, CSPrimaryColour);
 	}
@@ -414,19 +414,19 @@ void CSEnvironmentFrame :: _onRGBSource2Select( wxCommandEvent & event)
 void CSEnvironmentFrame :: _onRGBOperand0Select( wxCommandEvent & event)
 {
 	wxString l_value = m_RGBOperandsCB[0]->GetValue();
-	if  (l_value == C3D_T( "Source Colour"))
+	if  (l_value == CU_T( "Source Colour"))
 	{
 		m_environment->SetRGBOperand( 0, COSrcColour);
 	}
-	else if (l_value == C3D_T( "One Minus Source Colour"))
+	else if (l_value == CU_T( "One Minus Source Colour"))
 	{
 		m_environment->SetRGBOperand( 0, COOneMinusSrcColour);
 	}
-	else if (l_value == C3D_T( "Source Alpha"))
+	else if (l_value == CU_T( "Source Alpha"))
 	{
 		m_environment->SetRGBOperand( 0, COSrcAlpha);
 	}
-	else if (l_value == C3D_T( "One Minus Source Alpha"))
+	else if (l_value == CU_T( "One Minus Source Alpha"))
 	{
 		m_environment->SetRGBOperand( 0, COOneMinusSrcAlpha);
 	}
@@ -437,19 +437,19 @@ void CSEnvironmentFrame :: _onRGBOperand0Select( wxCommandEvent & event)
 void CSEnvironmentFrame :: _onRGBOperand1Select( wxCommandEvent & event)
 {
 	wxString l_value = m_RGBOperandsCB[1]->GetValue();
-	if  (l_value == C3D_T( "Source Colour"))
+	if  (l_value == CU_T( "Source Colour"))
 	{
 		m_environment->SetRGBOperand( 1, COSrcColour);
 	}
-	else if (l_value == C3D_T( "One Minus Source Colour"))
+	else if (l_value == CU_T( "One Minus Source Colour"))
 	{
 		m_environment->SetRGBOperand( 1, COOneMinusSrcColour);
 	}
-	else if (l_value == C3D_T( "Source Alpha"))
+	else if (l_value == CU_T( "Source Alpha"))
 	{
 		m_environment->SetRGBOperand( 1, COSrcAlpha);
 	}
-	else if (l_value == C3D_T( "One Minus Source Alpha"))
+	else if (l_value == CU_T( "One Minus Source Alpha"))
 	{
 		m_environment->SetRGBOperand( 1, COOneMinusSrcAlpha);
 	}
@@ -460,19 +460,19 @@ void CSEnvironmentFrame :: _onRGBOperand1Select( wxCommandEvent & event)
 void CSEnvironmentFrame :: _onRGBOperand2Select( wxCommandEvent & event)
 {
 	wxString l_value = m_RGBOperandsCB[2]->GetValue();
-	if  (l_value == C3D_T( "Source Colour"))
+	if  (l_value == CU_T( "Source Colour"))
 	{
 		m_environment->SetRGBOperand( 2, COSrcColour);
 	}
-	else if (l_value == C3D_T( "One Minus Source Colour"))
+	else if (l_value == CU_T( "One Minus Source Colour"))
 	{
 		m_environment->SetRGBOperand( 2, COOneMinusSrcColour);
 	}
-	else if (l_value == C3D_T( "Source Alpha"))
+	else if (l_value == CU_T( "Source Alpha"))
 	{
 		m_environment->SetRGBOperand( 2, COSrcAlpha);
 	}
-	else if (l_value == C3D_T( "One Minus Source Alpha"))
+	else if (l_value == CU_T( "One Minus Source Alpha"))
 	{
 		m_environment->SetRGBOperand( 2, COOneMinusSrcAlpha);
 	}
@@ -483,19 +483,19 @@ void CSEnvironmentFrame :: _onRGBOperand2Select( wxCommandEvent & event)
 void CSEnvironmentFrame :: _onAlphaSource0Select( wxCommandEvent & event)
 {
 	wxString l_value = m_AlphaSourcesCB[0]->GetValue();
-	if  (l_value == C3D_T( "Current Texture"))
+	if  (l_value == CU_T( "Current Texture"))
 	{
 		m_environment->SetAlphaSource( 0, CSCurrentTexture);
 	}
-	else if (l_value == C3D_T( "Constant"))
+	else if (l_value == CU_T( "Constant"))
 	{
 		m_environment->SetAlphaSource( 0, CSConstant);
 	}
-	else if (l_value == C3D_T( "Previous"))
+	else if (l_value == CU_T( "Previous"))
 	{
 		m_environment->SetAlphaSource( 0, CSPrevious);
 	}
-	else if (l_value == C3D_T( "Primary Colour"))
+	else if (l_value == CU_T( "Primary Colour"))
 	{
 		m_environment->SetAlphaSource( 0, CSPrimaryColour);
 	}
@@ -513,19 +513,19 @@ void CSEnvironmentFrame :: _onAlphaSource0Select( wxCommandEvent & event)
 void CSEnvironmentFrame :: _onAlphaSource1Select( wxCommandEvent & event)
 {
 	wxString l_value = m_AlphaSourcesCB[1]->GetValue();
-	if  (l_value == C3D_T( "Current Texture"))
+	if  (l_value == CU_T( "Current Texture"))
 	{
 		m_environment->SetAlphaSource( 1, CSCurrentTexture);
 	}
-	else if (l_value == C3D_T( "Constant"))
+	else if (l_value == CU_T( "Constant"))
 	{
 		m_environment->SetAlphaSource( 1, CSConstant);
 	}
-	else if (l_value == C3D_T( "Previous"))
+	else if (l_value == CU_T( "Previous"))
 	{
 		m_environment->SetAlphaSource( 1, CSPrevious);
 	}
-	else if (l_value == C3D_T( "Primary Colour"))
+	else if (l_value == CU_T( "Primary Colour"))
 	{
 		m_environment->SetAlphaSource( 1, CSPrimaryColour);
 	}
@@ -543,19 +543,19 @@ void CSEnvironmentFrame :: _onAlphaSource1Select( wxCommandEvent & event)
 void CSEnvironmentFrame :: _onAlphaSource2Select( wxCommandEvent & event)
 {
 	wxString l_value = m_AlphaSourcesCB[2]->GetValue();
-	if  (l_value == C3D_T( "Current Texture"))
+	if  (l_value == CU_T( "Current Texture"))
 	{
 		m_environment->SetAlphaSource( 2, CSCurrentTexture);
 	}
-	else if (l_value == C3D_T( "Constant"))
+	else if (l_value == CU_T( "Constant"))
 	{
 		m_environment->SetAlphaSource( 2, CSConstant);
 	}
-	else if (l_value == C3D_T( "Previous"))
+	else if (l_value == CU_T( "Previous"))
 	{
 		m_environment->SetAlphaSource( 2, CSPrevious);
 	}
-	else if (l_value == C3D_T( "Primary Colour"))
+	else if (l_value == CU_T( "Primary Colour"))
 	{
 		m_environment->SetAlphaSource( 2, CSPrimaryColour);
 	}
@@ -573,11 +573,11 @@ void CSEnvironmentFrame :: _onAlphaSource2Select( wxCommandEvent & event)
 void CSEnvironmentFrame :: _onAlphaOperand0Select( wxCommandEvent & event)
 {
 	wxString l_value = m_AlphaOperandsCB[0]->GetValue();
-	if (l_value == C3D_T( "Source Alpha"))
+	if (l_value == CU_T( "Source Alpha"))
 	{
 		m_environment->SetAlphaOperand( 0, AOSrcAlpha);
 	}
-	else if (l_value == C3D_T( "One Minus Source Alpha"))
+	else if (l_value == CU_T( "One Minus Source Alpha"))
 	{
 		m_environment->SetAlphaOperand( 0, AOOneMinusSrcAlpha);
 	}
@@ -588,11 +588,11 @@ void CSEnvironmentFrame :: _onAlphaOperand0Select( wxCommandEvent & event)
 void CSEnvironmentFrame :: _onAlphaOperand1Select( wxCommandEvent & event)
 {
 	wxString l_value = m_AlphaOperandsCB[1]->GetValue();
-	if (l_value == C3D_T( "Source Alpha"))
+	if (l_value == CU_T( "Source Alpha"))
 	{
 		m_environment->SetAlphaOperand( 1, AOSrcAlpha);
 	}
-	else if (l_value == C3D_T( "One Minus Source Alpha"))
+	else if (l_value == CU_T( "One Minus Source Alpha"))
 	{
 		m_environment->SetAlphaOperand( 1, AOOneMinusSrcAlpha);
 	}
@@ -603,11 +603,11 @@ void CSEnvironmentFrame :: _onAlphaOperand1Select( wxCommandEvent & event)
 void CSEnvironmentFrame :: _onAlphaOperand2Select( wxCommandEvent & event)
 {
 	wxString l_value = m_AlphaOperandsCB[2]->GetValue();
-	if (l_value == C3D_T( "Source Alpha"))
+	if (l_value == CU_T( "Source Alpha"))
 	{
 		m_environment->SetAlphaOperand( 2, AOSrcAlpha);
 	}
-	else if (l_value == C3D_T( "One Minus Source Alpha"))
+	else if (l_value == CU_T( "One Minus Source Alpha"))
 	{
 		m_environment->SetAlphaOperand( 2, AOOneMinusSrcAlpha);
 	}

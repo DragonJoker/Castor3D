@@ -12,6 +12,7 @@ namespace CastorViewer
 
 	public:
 		virtual bool OnInit();
+		virtual int OnExit();
 
 		inline MainFrame * GetMainFrame() {return m_mainFrame;}
 	};

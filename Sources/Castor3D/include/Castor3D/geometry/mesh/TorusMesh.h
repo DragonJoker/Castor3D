@@ -11,12 +11,12 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_Torus___
-#define ___C3D_Torus___
+#ifndef ___CU_Torus___
+#define ___CU_Torus___
 
 #include "Mesh.h"
 
@@ -33,8 +33,8 @@ namespace Castor3D
 	{
 	private:
 		friend class MeshManager;
-		float m_internalRadius;				//!< The internal torus radius
-		float m_externalRadius;				//!< The torus radius
+		real m_internalRadius;				//!< The internal torus radius
+		real m_externalRadius;				//!< The torus radius
 		unsigned int m_internalNbFaces;		//!< The internal torus number of subsections
 		unsigned int m_externalNbFaces;		//!< The torus number of subsections
 		/**
@@ -45,7 +45,7 @@ namespace Castor3D
 		 *@param p_externalNbFaces : [in] The wanted torus subdivisions number
 		 *@param p_name : [in] The mesh name
 		 */
-		TorusMesh( float p_internalRadius=0.0, float p_externalRadius=0.0,
+		TorusMesh( real p_internalRadius=0.0, real p_externalRadius=0.0,
 				   unsigned int p_internalNbFaces=1, unsigned int p_externalNbFaces=1,
 				   const String & p_name = C3DEmptyString);
 
@@ -65,14 +65,17 @@ namespace Castor3D
 		 *@param p_internalNbFaces : [in] The wanted torus internal subdivisions number
 		 *@param p_externalNbFaces : [in] The wanted torus subdivisions number
 		 */
-		void Modify( float p_internalRadius, float p_externalRadius,
+		void Modify( real p_internalRadius, real p_externalRadius,
 					 unsigned int p_internalNbFaces, unsigned int p_externalNbFaces);
 
 	public:
+		/**@name Accessors */
+		//@{
 		inline unsigned int	GetInternalNbFaces	()const {return m_internalNbFaces;}
 		inline unsigned int	GetExternalNbFaces	()const {return m_externalNbFaces;}
-		inline float		GetInternalRadius	()const	{return m_internalRadius;}
-		inline float		GetExternalRadius	()const	{return m_externalRadius;}
+		inline real		GetInternalRadius	()const	{return m_internalRadius;}
+		inline real		GetExternalRadius	()const	{return m_externalRadius;}
+		//@}
 
 		inline friend std::ostream & operator <<( std::ostream & o, const TorusMesh & c) {return o << "Torus(" << c.m_internalNbFaces << "," << c.m_externalNbFaces << "," << c.m_internalRadius << "," << c.m_externalRadius << ")";}
 	};

@@ -18,12 +18,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___STL_MAP_MACROS_H___
 #define ___STL_MAP_MACROS_H___
 
+#include "CastorString.h"
 #include <map>
-#include <string>
 
-#include "Module_Utils.h"
-
-namespace General
+namespace Castor
 { namespace Utils
 {
 	//! std::map class functions

@@ -3,12 +3,14 @@
 #include "main/Module_Main.h"
 
 #include "main/Plugin.h"
-#include "Log.h"
-#ifdef WIN32
-#define dlerror() GetLastError()
+
+
+#ifdef _WIN32
+#	define dlerror() GetLastError()
 #endif
 
 using namespace Castor3D;
+using namespace Castor::Utils;
 
 
 Castor3D::Plugin :: Plugin( const String & p_fileName)
@@ -18,11 +20,11 @@ Castor3D::Plugin :: Plugin( const String & p_fileName)
 		m_library				( new DynamicLibrary)
 {
 
-	Cout( C3D_T( "Plugin name [") << p_fileName << C3D_T( "]") << std::endl);
+	Cout( CU_T( "Plugin name [") << p_fileName << CU_T( "]") << std::endl);
 
 	if ( ! m_library->Open( p_fileName.char_str()))
 	{
-		Cerr( C3D_T( "Error encountered while loading plugin : ") << dlerror() << std::endl);
+		Cerr( CU_T( "Error encountered while loading plugin : ") << dlerror() << std::endl);
 		throw;
 	}
 
@@ -30,7 +32,7 @@ Castor3D::Plugin :: Plugin( const String & p_fileName)
 
 	if (m_pfnGetRequiredVersion == NULL)
 	{
-		Cerr( C3D_T( "Error encountered while loading plugin factory : ") << dlerror() << std::endl);
+		Cerr( CU_T( "Error encountered while loading plugin factory : ") << dlerror() << std::endl);
 		throw;
 	}
 
@@ -38,7 +40,7 @@ Castor3D::Plugin :: Plugin( const String & p_fileName)
 
 	if (m_pfnRegisterPlugin == NULL)
 	{
-		Cerr( C3D_T( "Error encountered while loading plugin destroyer : ") << dlerror() << std::endl);
+		Cerr( CU_T( "Error encountered while loading plugin destroyer : ") << dlerror() << std::endl);
 		throw;
 	}
 
@@ -73,7 +75,7 @@ Castor3D::Plugin :: ~Plugin()
 	if (--*m_pDLLRefCount == 0)
 	{
 		delete m_pDLLRefCount;
-//		delete m_library; <= Hang on when trying to delete this...
+		delete m_library;
 	}
 }
 

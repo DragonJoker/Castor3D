@@ -6,10 +6,10 @@
 #include "shader/ShaderProgram.h"
 #include "shader/ShaderObject.h"
 #include "render_system/RenderSystem.h"
-#include "Log.h"
+
+
 
 using namespace Castor3D;
-
 
 ShaderManager :: ShaderManager()
 {
@@ -20,30 +20,34 @@ ShaderManager :: ShaderManager()
 
 ShaderManager :: ~ShaderManager()
 {
-	vector::deleteAll( m_shaderPrograms);
+	m_shaderPrograms.clear();
 }
 
 void ShaderManager :: Update()
 {
-	vector::deleteAll( m_arrayToDelete);
+	m_arrayToDelete.clear();
 }
 
 void ShaderManager :: ClearShaders()
 {
-	for (size_t i = 0 ; i < m_shaderPrograms.size() ; i++)
+	ShaderManager & l_pThis = GetSingleton();
+
+	for (size_t i = 0 ; i < l_pThis.m_shaderPrograms.size() ; i++)
 	{
-		m_arrayToDelete.push_back( m_shaderPrograms[i]);
+		l_pThis.m_arrayToDelete.push_back( l_pThis.m_shaderPrograms[i]);
 	}
 
-	m_shaderPrograms.clear();
+	l_pThis.m_shaderPrograms.clear();
 }
 
-void ShaderManager :: AddProgram( ShaderProgram * p_program)
+ShaderProgramPtr ShaderManager :: CreateShaderProgramFromFiles( const String & p_vertexFile, const String & p_fragmentFile, const String & p_geometryFile)
 {
-	m_shaderPrograms.push_back( p_program);
+	ShaderProgramPtr l_pProgram = RenderSystem::GetSingletonPtr<RenderSystem>()->CreateShaderProgram( p_vertexFile, p_fragmentFile, p_geometryFile);
+	m_shaderPrograms.push_back( l_pProgram);
+	return l_pProgram;
 }
 
-bool ShaderManager :: RemoveProgram( ShaderProgram * p_program)
+bool ShaderManager :: RemoveProgram( ShaderProgramPtr p_program)
 {
 	bool l_bReturn = false;
 

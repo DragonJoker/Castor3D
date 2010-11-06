@@ -11,612 +11,532 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_Point___
-#define ___C3D_Point___
+#ifndef ___Castor_Point___
+#define ___Castor_Point___
 
-#include "Module_Utils.h"
+#include "File.h"
+#include <cstdarg>
 
-namespace General
+namespace Castor
 {	namespace Math
 {
 	/*!
-	The representation of a 2D Point, with X and Y which can be of a wanted type (like int, float...)
+	The representation of a 2D Point, with X and Y which can be of a wanted type (like int, real...)
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	template <typename T>
-	class Point2D
+	template <typename T, size_t Count>
+	class Point
 	{
-	public:
-		union
-		{
-			T x;	//!< The X coordinate
-			T u;
-		};
+	private:
+		typedef T									value_type;
+		typedef value_type &						reference;
+		typedef value_type *						pointer;
+		typedef const value_type &					const_reference;
+		typedef const value_type *					const_pointer;
+		typedef Point<value_type, Count>			point;
+		typedef Point<value_type, Count> &			point_reference;
+		typedef Point<value_type, Count> *			point_pointer;
+		typedef const Point<value_type, Count> &	const_point_reference;
+		typedef const Point<value_type, Count> *	const_point_pointer;
+		typedef Templates::Value<value_type>		value;
 
-		union
-		{
-			T y;	//!< The Y coordinate
-			T v;
-		};
+	public:
+		value_type m_coords[Count];
 
 	public:
 		/**
-		* Specified T constructor
-		*/
-		Point2D( T p_x=T( 0), T p_y=T( 0))
-			:	x( p_x),
-				y( p_y)
+		 * Constructor from T array
+		 */
+		Point( const_pointer p_coords = NULL)
 		{
+			if (p_coords == NULL)
+			{
+				for (size_t i = 0 ; i < Count ; i++)
+				{
+					value::init( m_coords[i]);
+				}
+			}
+			else
+			{
+				for (size_t i = 0 ; i < Count ; i++)
+				{
+					value::assign( m_coords[i], p_coords[i]);
+				}
+			}
 		}
-		inline void operator +=( const Point2D & p)
-		{
-			x += p.x;
-			y += p.y;
-		}
-		inline void operator -=( const Point2D & p)
-		{
-			x -= p.x;
-			y -= p.y;
-		}
-		inline void operator *=( const Point2D & p)
-		{
-			x *= p.x;
-			y *= p.y;
-		}
-		inline void operator *=( T p_value)
-		{
-			x *= p_value;
-			y *= p_value;
-		}
-		inline void operator /=( T p_value)
-		{
-			x /= p_value;
-			y /= p_value;
-		}
-		inline Point2D operator	=( const Point2D & p)
-		{
-			x=p.x;
-			y=p.y;
-			return *this;
-		}
-		inline Point2D operator	+( const Point2D & p)const
-		{
-			return Point2D<T>( x + p.x, y + p.y);
-		}
-		inline Point2D operator	-( const Point2D & p)const
-		{
-			return Point2D<T>( x - p.x, y - p.y);
-		}
-		inline Point2D operator	/( T p_value)const
-		{
-			return Point2D<T>( x / p_value, y / p_value);
-		}
-		inline bool operator ==( const Point2D<T> & p_ptPoint)const
-		{
-			return (abs( x - p_ptPoint.x) < T( 0.0001f)) && (abs( y - p_ptPoint.y) < T( 0.0001f));
-		}
-		inline bool operator !=( const Point2D<T> & p_ptPoint)const
-		{
-			return (abs( x - p_ptPoint.x) >= T( 0.0001f)) || (abs( y - p_ptPoint.y) >= T( 0.0001f)) ;
-		}
-		inline float & operator[]( size_t p_uiIndex) { return ptr()[p_uiIndex]; }
-		inline T * ptr() { return &x; }
-		inline const T * const_ptr()const { return &x; }
-	};
-	/*!
-	The representation of a 3D Point, with X, Y and Z which can be of a wanted type (like int, float...)
-	\author Sylvain DOREMUS
-	\date 14/02/2010
-	*/
-	template <typename T>
-	class Point3D
-	{
-	public:
-		union
-		{
-			T x;
-			T u;
-			T r;
-		};
-
-		union
-		{
-			T y;
-			T v;
-			T g;
-		};
-
-		union
-		{
-			T z;
-			T w;
-			T b;
-		};
-
-	public:
 		/**
-		* Specified T constructor
-		*/
-		Point3D( T p_x=T( 0), T p_y=T( 0), T p_z=T( 0))
-			:	x( p_x),
-				y( p_y),
-				z( p_z)
+		 * Constructor from at least one coord
+		 */
+		Point( value_type p_vA)
 		{
+			if (Count >= 1)
+			{
+				value::assign( m_coords[0], p_vA);
+
+				for (size_t i = 1 ; i < Count ; i++)
+				{
+					value::init( m_coords[i]);
+				}
+			}
 		}
-		Point3D( const int * p_coord)
-			:	x( (T)p_coord[0]),
-				y( (T)p_coord[1]),
-				z( (T)p_coord[2])
+		/**
+		 * Constructor from at least one coord
+		 */
+		Point( value_type p_vA, value_type p_vB)
 		{
+			if (Count >= 2)
+			{
+				value::assign( m_coords[0], p_vA);
+				value::assign( m_coords[1], p_vB);
+
+				for (size_t i = 2 ; i < Count ; i++)
+				{
+					value::init( m_coords[i]);
+				}
+			}
 		}
-		Point3D( const float * p_coord)
-			:	x( (T)p_coord[0]),
-				y( (T)p_coord[1]),
-				z( (T)p_coord[2])
+		/**
+		 * Constructor from at least one coord
+		 */
+		Point( value_type p_vA, value_type p_vB, value_type p_vC)
 		{
+			if (Count >= 3)
+			{
+				value::assign( m_coords[0], p_vA);
+				value::assign( m_coords[1], p_vB);
+				value::assign( m_coords[2], p_vC);
+
+				for (size_t i = 3 ; i < Count ; i++)
+				{
+					value::init( m_coords[i]);
+				}
+			}
 		}
-		Point3D( const Point3D & p_point)
-			:	x( p_point.x),
-				y( p_point.y),
-				z( p_point.z)
+		/**
+		 * Constructor from at least one coord
+		 */
+		Point( value_type p_vA, value_type p_vB, value_type p_vC, value_type p_vD)
 		{
+			if (Count >= 4)
+			{
+				value::assign( m_coords[0], p_vA);
+				value::assign( m_coords[1], p_vB);
+				value::assign( m_coords[2], p_vC);
+				value::assign( m_coords[3], p_vD);
+
+				for (size_t i = 4 ; i < Count ; i++)
+				{
+					value::init( m_coords[i]);
+				}
+			}
+		}
+		/**
+		 * Constructor from another point
+		 */
+		Point( const_point_reference p_point)
+		{
+			for (size_t i = 0 ; i < Count ; i++)
+			{
+				value::assign( m_coords[i], p_point[i]);
+			}
 		}
 		/**
 		* Constructor from the difference between second and first argument
-		*/
-		Point3D( const Point3D & p_v1, const Point3D & p_v2)
-			:	x( p_v2.x - p_v1.x),
-				y( p_v2.y - p_v1.y),
-				z( p_v2.z - p_v1.z)
+		*
+		Point( const_point_reference p_v1, const_point_reference p_v2)
 		{
+			for (size_t i = 0 ; i < Count ; i++)
+			{
+				value::assign( m_coords[i], value::substract( p_v2[i], p_v1[i]));
+			}
 		}
+		/**
+		 * Constructor from at least one coord
+		 */
+		void ToValues( value_type * a, ...)const
+		{
+			if (Count >= 1)
+			{
+				value::assign( * a, m_coords[0]);
 
-		inline void operator +=( const Point3D & p_vertex)
-		{
-			x += p_vertex.x;
-			y += p_vertex.y;
-			z += p_vertex.z;
+				va_list l_list;
+				va_start( l_list, a);
+
+				for (size_t i = 1 ; i < Count ; i++)
+				{
+					value::assign( (* va_arg( l_list, value_type *)), m_coords[i]);
+				}
+
+				va_end( l_list);
+			}
 		}
-		inline void operator +=( T * p_coord)
+		/**
+		 * += operators
+		 */
+		inline void operator +=( const_point_reference p_pt)
 		{
-			x += p_coord[0];
-			y += p_coord[1];
-			z += p_coord[2];
-		}
-		inline void operator -=( const Point3D & p_vertex)
-		{
-			x -= p_vertex.x;
-			y -= p_vertex.y;
-			z -= p_vertex.z;
-		}
-		inline void operator *=( const Point3D & p_vertex)
-		{
-			x *= p_vertex.x;
-			y *= p_vertex.y;
-			z *= p_vertex.z;
-		}
-		inline void operator *=( float p_value)
-		{
-			x *= p_value;
-			y *= p_value;
-			z *= p_value;
-		}
-		inline void operator /=( int p_value)
-		{
-			if (p_value == 0.0)
+			for (size_t i = 0 ; i < Count ; i++)
 			{
-				return;
+				value::ass_add( m_coords[i], p_pt[i]);
+			}
+		}
+		inline void operator +=( pointer p_coords)
+		{
+			for (size_t i = 0 ; i < Count ; i++)
+			{
+				value::ass_add( m_coords[i], p_coords[i]);
+			}
+		}
+		/**
+		 * -= operators
+		 */
+		inline void operator -=( const_point_reference p_pt)
+		{
+			for (size_t i = 0 ; i < Count ; i++)
+			{
+				value::ass_substract( m_coords[i], p_pt[i]);
+			}
+		}
+		inline void operator -=( pointer p_coords)
+		{
+			for (size_t i = 0 ; i < Count ; i++)
+			{
+				value::ass_substract( m_coords[i], p_coords[i]);
+			}
+		}
+		/**
+		 * *= operators
+		 */
+		inline void operator *=( const_point_reference p_pt)
+		{
+			for (size_t i = 0 ; i < Count ; i++)
+			{
+				value::ass_multiply( m_coords[i], p_pt[i]);
+			}
+		}
+		inline void operator *=( pointer p_coords)
+		{
+			for (size_t i = 0 ; i < Count ; i++)
+			{
+				value::ass_multiply( m_coords[i], p_coords[i]);
+			}
+		}
+		inline void operator *=( value_type p_value)
+		{
+			for (size_t i = 0 ; i < Count ; i++)
+			{
+				value::ass_multiply( m_coords[i], p_value);
+			}
+		}
+		/**
+		 * /= operators
+		 */
+		inline void operator /=( value_type p_value)
+		{
+			if ( ! value::is_null( p_value))
+			{
+				for (size_t i = 0 ; i < Count ; i++)
+				{
+					value::ass_divide( m_coords[i], p_value);
+				}
+			}
+		}
+		/**
+		 * = operators
+		 */
+		inline point operator =( const_point_reference p_pt)
+		{
+			for (size_t i = 0 ; i < Count ; i++)
+			{
+				value::assign( m_coords[i], p_pt[i]);
 			}
 
-			x /= p_value;
-			y /= p_value;
-			z /= p_value;
+			return *this;
 		}
-		inline void operator /=( float p_value)
+		/**
+		 * + operators
+		 */
+		inline point operator +( const_point_reference p_pt)const
 		{
-			if (p_value == 0)
+			point l_ptReturn;
+
+			for (size_t i = 0 ; i < Count ; i++)
 			{
-				return;
+				value::assign( l_ptReturn[i], value::add( m_coords[i], p_pt[i]));
 			}
 
-			x /= p_value;
-			y /= p_value;
-			z /= p_value;
+			return l_ptReturn;
 		}
-		inline Point3D operator =( const Point3D & p_vertex)
+		inline point operator +( value_type p_value)const
 		{
-			x = p_vertex.x;
-			y = p_vertex.y;
-			z = p_vertex.z;
-			return * this;
-		}
-		inline Point3D operator /( int p_value)const
-		{
-			if (p_value == 0)
+			point l_ptReturn;
+
+			for (size_t i = 0 ; i < Count ; i++)
 			{
-				return * this;
+				value::assign( l_ptReturn[i], value::add( m_coords[i], p_value));
 			}
-			return Point3D( x / p_value, y / p_value, z / p_value);	
+
+			return l_ptReturn;
 		}
-		inline Point3D operator /( float p_value)const
+		/**
+		 * - operators
+		 */
+		inline point operator -( const_point_reference p_pt)const
 		{
-			if (p_value == 0.0)
+			point l_ptReturn;
+
+			for (size_t i = 0 ; i < Count ; i++)
 			{
-				return * this;
+				value::assign( l_ptReturn[i], value::substract( m_coords[i], p_pt[i]));
 			}
-			return Point3D( x / p_value, y / p_value, z / p_value);	
+
+			return l_ptReturn;
 		}
-		inline float & operator[]( size_t p_uiIndex) { return ptr()[p_uiIndex]; }
+		inline point operator -( value_type p_value)const
+		{
+			point l_ptReturn;
+
+			for (size_t i = 0 ; i < Count ; i++)
+			{
+				value::assign( l_ptReturn[i], value::substract( m_coords[i], p_value));
+			}
+
+			return l_ptReturn;
+		}
+		/**
+		 * * operators
+		 */
+		inline point operator *( const_point_reference p_pt)const
+		{
+			point l_ptReturn;
+
+			for (size_t i = 0 ; i < Count ; i++)
+			{
+				value::assign( l_ptReturn[i], value::multiply( m_coords[i], p_pt[i]));
+			}
+
+			return l_ptReturn;
+		}
+		inline point operator *( value_type p_value)const
+		{
+			point l_ptReturn( * this);
+
+			for (size_t i = 0 ; i < Count ; i++)
+			{
+				value::assign( l_ptReturn[i], value::multiply( m_coords[i], p_value));
+			}
+
+			return l_ptReturn;
+		}
+		/**
+		 * / operators
+		 */
+		inline point operator /( value_type p_value)const
+		{
+			point l_ptReturn( * this);
+
+			if ( ! value::is_null( p_value))
+			{
+				for (size_t i = 0 ; i < Count ; i++)
+				{
+					value::assign( l_ptReturn[i], value::divide( m_coords[i], p_value));
+				}
+			}
+
+			return l_ptReturn;
+		}
+		/**
+		 * == operators
+		 */
+		inline bool operator ==( const_point_reference p_pt)const
+		{
+			bool l_bReturn = true;
+
+			for (size_t i = 0 ; i < Count && l_bReturn ; i++)
+			{
+				l_bReturn = value::equals( m_coords[i], p_pt[i]);
+			}
+
+			return l_bReturn;
+		}
+		/**
+		 * != operators
+		 */
+		inline bool operator !=( const_point_reference p_pt)const
+		{
+			bool l_bReturn = true;
+
+			for (size_t i = 0 ; i < Count && l_bReturn ; i++)
+			{
+				l_bReturn = ! value::equals( m_coords[i], p_pt[i]);
+			}
+
+			return l_bReturn;
+		}
 		/**
 		* Vectorial product
 		*/
-		inline Point3D operator ^( const Point3D & p_vertex)const
+		inline point operator ^( const_point_reference p_vertex)const
 		{
-			Point3D l_result;
-			float l_x = p_vertex.x;
-			float l_y = p_vertex.y;
-			float l_z = p_vertex.z;
-			l_result.x = (y * l_z) - (l_y * z);
-			l_result.y = (z * l_x) - (l_z * x);
-			l_result.z = (x * l_y) - (l_x * y);
+			point l_result( * this);
+
+			if (Count == 3)
+			{
+				value_type l_x, l_y, l_z, x, y, z;
+				p_vertex.ToValues( & l_x, & l_y, & l_z);
+				ToValues( & x, & y, & z);
+				value::assign( l_result[0], value::substract( value::multiply( y, l_z), value::multiply( l_y, z)));
+				value::assign( l_result[1], value::substract( value::multiply( z, l_x), value::multiply( l_z, x)));
+				value::assign( l_result[2], value::substract( value::multiply( x, l_y), value::multiply( l_x, y)));
+			}
+
 			return l_result;
 		}
 		inline void Reverse()
 		{
-			x = -x;
-			y = -y;
-			z = -z;
+			for (size_t i = 0 ; i < Count ; i++)
+			{
+				value::ass_negate( m_coords[i]);
+			}
 		}
 		inline void Normalise()
 		{
-			float l_length = GetLength();	
-			if (l_length == 0.0f)
+			value_type l_length = GetLength();
+
+			if (value::is_null( l_length))
 			{
 				return;
 			}
-			x /= l_length;
-			y /= l_length;
-			z /= l_length;
+
+			operator /=( l_length);
 		}
-		inline Point3D GetNormalised()const
+		inline point GetNormalised()const
 		{
-			float l_length = GetLength();	
-			if (l_length == 0.0f)
+			point l_ptReturn( * this);
+			l_ptReturn.Normalise();
+			return l_ptReturn;
+		}
+		inline point GetNormal( const_point_reference p_vertex)const
+		{
+			point l_ptReturn = this->operator ^( p_vertex);
+			l_ptReturn.Normalise();
+			return l_ptReturn;
+		}
+		inline value_type dotProduct( const_point_reference p_vertex)const
+		{
+			value_type l_tReturn;
+			value::init( l_tReturn);
+
+			for (size_t i = 0 ; i < Count ; i++)
 			{
-				return *this;
+				value::ass_add( l_tReturn, value::multiply( m_coords[i], p_vertex[i]));
 			}
-			return Point3D( x / l_length, y / l_length, z / l_length);
+
+			return l_tReturn;
 		}
-		inline Point3D GetNormal( Point3D & p_vertex)const
+		inline value_type GetSquaredLength()const
 		{
-			Point3D l_normal = this->operator ^( p_vertex);
-			l_normal.Normalise();
-			return l_normal;
+			value_type l_tReturn;
+			value::init( l_tReturn);
+
+			for (size_t i = 0 ; i < Count ; i++)
+			{
+				value::ass_add( l_tReturn, value::multiply( m_coords[i], m_coords[i]));
+			}
+
+			return l_tReturn;
 		}
-		inline Point3D operator +( const Point3D & p_vertex)const
+		inline real GetLength()const
 		{
-			return Point3D( x + p_vertex.x, y + p_vertex.y, z + p_vertex.z);
+			return sqrt( (real)GetSquaredLength());
 		}
-		inline Point3D operator -( const Point3D & p_vertex)const
-		{
-			return Point3D( x - p_vertex.x, y - p_vertex.y, z - p_vertex.z);
-		}
-		inline Point3D operator *( const Point3D & p_vertex)const
-		{
-			return Point3D( x * p_vertex.x, y * p_vertex.y, z * p_vertex.z);
-		}
-		inline Point3D operator *( int p_value)const
-		{
-			return Point3D( x * p_value, y * p_value, z * p_value);
-		}
-		inline Point3D operator *( float p_value)const
-		{
-			return Point3D( x * p_value, y * p_value, z * p_value);
-		}
-		inline bool operator !=( const Point3D & p_vertex)const
-		{
-			return (x != p_vertex.x) || (y != p_vertex.y) || (z != p_vertex.z);
-		}
-		inline T dotProduct( const Point3D & p_vertex)const
-		{
-			return x * p_vertex.x + y * p_vertex.y + z * p_vertex.z;
-		}
-		inline T GetSquaredLength()const
-		{
-			return x * x + y * y + z * z;
-		}
-		inline float GetLength()const
-		{
-			return sqrt( (float)GetSquaredLength());
-		}
-		inline float GetCosTheta( Point3D & p_vector)const
+		inline real GetCosTheta( const_point_reference p_vector)const
 		{
 			return dotProduct( p_vector) / (GetLength() * p_vector.GetLength());
 		}
-		inline bool operator ==( const Point3D<T> & p_ptPoint)
-		{
-			return (abs( x - p_ptPoint.x) < T( 0.0001f)) && (abs( y - p_ptPoint.y) < T( 0.0001f)) && (abs( z - p_ptPoint.z) < T( 0.0001f));
-		}
-		inline bool operator !=( const Point3D<T> & p_ptPoint)
-		{
-			return (abs( x - p_ptPoint.x) >= T( 0.0001f)) || (abs( y - p_ptPoint.y) >= T( 0.0001f)) || (abs( z - p_ptPoint.z) >= T( 0.0001f));
-		}
-		inline T * ptr() { return &x; }
-		inline const T * const_ptr()const { return &x; }
-		inline operator Point2D<T>() { return Point2D<T>( x, y); }
-	};
-	/*!
-	The representation of a 4D Point, with X, Y, Z and W which can be of a wanted type (like int, float...)
-	\author Sylvain DOREMUS
-	\date 14/02/2010
-	*/
-	template <typename T>
-	class Point4D
-	{
-	public:
-		union
-		{
-			T x;
-			T r;
-			T left;
-		};
 
-		union
+		virtual bool Write( Utils::File & p_file)const
 		{
-			T y;
-			T g;
-			T top;
-		};
-
-		union
-		{
-			T z;
-			T b;
-			T right;
-		};
-
-		union
-		{
-			T w;
-			T a;
-			T bottom;
-		};
-
-	public:
-		/**
-		* Specified T constructor
-		*/
-		Point4D( T p_x=T( 0), T p_y=T( 0), T p_z=T( 0), T p_w=T( 0))
-			:	x( p_x),
-				y( p_y),
-				z( p_z),
-				w( p_w)
-		{
-		}
-		Point4D( const int * p_coord)
-			:	x( (T)p_coord[0]),
-				y( (T)p_coord[1]),
-				z( (T)p_coord[2]),
-				w( (T)p_coord[3])
-		{
-		}
-		Point4D( const float * p_coord)
-			:	x( (T)p_coord[0]),
-				y( (T)p_coord[1]),
-				z( (T)p_coord[2]),
-				w( (T)p_coord[3])
-		{
-		}
-		Point4D( const Point4D & p_point)
-			:	x( p_point.x),
-				y( p_point.y),
-				z( p_point.z),
-				w( p_point.w)
-		{
-		}
-		/**
-		* Constructor from the difference between second and first argument
-		*/
-		Point4D( const Point4D & p_v1, const Point4D & p_v2)
-			:	x( p_v2.x - p_v1.x),
-				y( p_v2.y - p_v1.y),
-				z( p_v2.z - p_v1.z),
-				w( p_v2.w - p_v1.w)
-		{
-		}
-
-		inline void operator +=( const Point3D<T> & p_vertex)
-		{
-			x += p_vertex.x;
-			y += p_vertex.y;
-			z += p_vertex.z;
-		}
-
-		inline void operator +=( const Point4D & p_vertex)
-		{
-			x += p_vertex.x;
-			y += p_vertex.y;
-			z += p_vertex.z;
-			w += p_vertex.w;
-		}
-		inline void operator +=( T * p_coord)
-		{
-			x += p_coord[0];
-			y += p_coord[1];
-			z += p_coord[2];
-			w += p_coord[3];
-		}
-		inline void operator -=( const Point4D & p_vertex)
-		{
-			x -= p_vertex.x;
-			y -= p_vertex.y;
-			z -= p_vertex.z;
-			w -= p_vertex.w;
-		}
-		inline void operator *=( const Point4D & p_vertex)
-		{
-			x *= p_vertex.x;
-			y *= p_vertex.y;
-			z *= p_vertex.z;
-			w *= p_vertex.w;
-		}
-		inline void operator *=( float p_value)
-		{
-			x *= p_value;
-			y *= p_value;
-			z *= p_value;
-			w *= p_value;
-		}
-		inline void operator /=( int p_value)
-		{
-			if (p_value == 0.0)
+			if ( ! p_file.WriteArray<value_type>( m_coords, Count))
 			{
-				return;
+				return false;
 			}
 
-			x /= p_value;
-			y /= p_value;
-			z /= p_value;
-			w /= p_value;
+			return true;
 		}
-		inline void operator /=( float p_value)
+
+		virtual bool Read( Utils::File & p_file)
 		{
-			if (p_value == 0)
+			if ( ! p_file.ReadArray<value_type>( m_coords, Count))
 			{
-				return;
+				return false;
 			}
 
-			x /= p_value;
-			y /= p_value;
-			z /= p_value;
-			w /= p_value;
+			return true;
 		}
-		inline Point4D operator =( const Point4D & p_vertex)
+		const_reference operator[]( size_t p_pos)const
 		{
-			x = p_vertex.x;
-			y = p_vertex.y;
-			z = p_vertex.z;
-			w = p_vertex.w;
-			return * this;
+			return (*(m_coords + p_pos));
 		}
-		inline Point4D operator /( int p_value)const
+		reference operator[]( size_t p_pos)
 		{
-			if (p_value == 0)
+			return (*(m_coords + p_pos));
+		}
+		inline pointer ptr()
+		{
+			return m_coords;
+		}
+		inline const_pointer const_ptr()const
+		{
+			return m_coords;
+		}
+		std::ostream & operator << ( std::ostream & l_streamOut)
+		{
+			for (size_t i = 0 ; i < Count ; i++)
 			{
-				return * this;
+				l_streamOut << "\t" << m_coords[i];
 			}
 
-			return Point4D( x / p_value, y / p_value, z / p_value, w / p_value);	
+			l_streamOut << std::endl;
+			return l_streamOut;
 		}
-		inline Point4D operator /( float p_value)const
+		std::istream & operator >> ( std::istream & l_streamIn)
 		{
-			if (p_value == 0.0)
+			for (size_t i = 0 ; i < Count ; i++)
 			{
-				return * this;
+				l_streamIn >> m_coords[i];
 			}
 
-			return Point4D( x / p_value, y / p_value, z / p_value, w / p_value);	
-		}
-		inline float & operator[]( size_t p_uiIndex) { return ptr()[p_uiIndex]; }
-		inline void Reverse()
-		{
-			x = -x;
-			y = -y;
-			z = -z;
-			w = -w;
-		}
-		inline Point4D operator +( const Point4D & p_vertex)const
-		{
-			return Point4D( x + p_vertex.x, y + p_vertex.y, z + p_vertex.z, w + p_vertex.w);
-		}
-		inline Point4D operator -( const Point4D & p_vertex)const
-		{
-			return Point4D( x - p_vertex.x, y - p_vertex.y, z - p_vertex.z, w - p_vertex.w);
-		}
-		inline Point4D operator *( const Point4D & p_vertex)const
-		{
-			return Point4D( x * p_vertex.x, y * p_vertex.y, z * p_vertex.z, w * p_vertex.w);
-		}
-		inline Point4D operator *( int p_value)const
-		{
-			return Point4D( x * p_value, y * p_value, z * p_value, w * p_value);
-		}
-		inline Point4D operator *( float p_value)const
-		{
-			return Point4D( x * p_value, y * p_value, z * p_value, w * p_value);
-		}
-		inline bool operator !=( const Point4D & p_vertex)const
-		{
-			return (x != p_vertex.x) || (y != p_vertex.y) || (z != p_vertex.z) || (w != p_vertex.w);
-		}
-		inline bool operator ==( const Point4D<T> & p_ptPoint)
-		{
-			return (abs( x - p_ptPoint.x) < T( 0.0001f)) && (abs( y - p_ptPoint.y) < T( 0.0001f)) && (abs( z - p_ptPoint.z) < T( 0.0001f)) && (abs( w - p_ptPoint.w) < T( 0.0001f));
-		}
-		inline bool operator !=( const Point4D<T> & p_ptPoint)
-		{
-			return (abs( x - p_ptPoint.x) >= T( 0.0001f)) || (abs( y - p_ptPoint.y) >= T( 0.0001f)) || (abs( z - p_ptPoint.z) < T( 0.0001f)) || (abs( w - p_ptPoint.w) >= T( 0.0001f));
-		}
-		inline T * ptr() { return &x; }
-		inline const T * const_ptr()const { return &x; }
-		inline operator Point3D<T>() { return Point3D<T>( x, y, z); }
-	};
-
-	class Point2Bool : public Point2D<bool>
-	{
-	public:
-		Point2Bool( bool p_bX=false, bool p_bY=false)
-			:	Point2D<bool>( p_bX, p_bY)
-		{
-		}
-		inline bool operator ==( const Point2Bool & p_ptPoint)
-		{
-			return (x == p_ptPoint.x) && (y == p_ptPoint.y);
-		}
-		inline bool operator !=( const Point2Bool & p_ptPoint)
-		{
-			return (x != p_ptPoint.x) || (y != p_ptPoint.y);
+			return l_streamIn;
 		}
 	};
 
-	class Point3Bool : public Point3D<bool>
+	template <typename T, size_t Count>
+	std::ostream & operator << ( std::ostream & l_streamOut, const Point <T, Count> & p_point)
 	{
-	public:
-		Point3Bool( bool p_bX=false, bool p_bY=false, bool p_bZ=false)
-			:	Point3D<bool>( p_bX, p_bY, p_bZ)
+		for (size_t i = 0 ; i < Count ; i++)
 		{
+			l_streamOut << "\t" << p_point[i];
 		}
-		inline bool operator ==( const Point3Bool & p_ptPoint)
-		{
-			return (x == p_ptPoint.x) && (y == p_ptPoint.y) && (z == p_ptPoint.z);
-		}
-		inline bool operator !=( const Point3Bool & p_ptPoint)
-		{
-			return (x != p_ptPoint.x) || (y != p_ptPoint.y) || (z != p_ptPoint.z);
-		}
-	};
 
-	class Point4Bool : public Point4D<bool>
+		l_streamOut << std::endl;
+		return l_streamOut;
+	}
+	template <typename T, size_t Count>
+	std::istream & operator >> ( std::istream & l_streamIn, Point <T, Count> & p_point)
 	{
-	public:
-		Point4Bool( bool p_bX=false, bool p_bY=false, bool p_bZ=false, bool p_bW=false)
-			:	Point4D<bool>( p_bX, p_bY, p_bZ, p_bW)
+		for (size_t i = 0 ; i < Count ; i++)
 		{
+			l_streamIn >> p_point[i];
 		}
-		inline bool operator ==( const Point4Bool & p_ptPoint)
-		{
-			return (x == p_ptPoint.x) && (y == p_ptPoint.y) && (z == p_ptPoint.z) && (w == p_ptPoint.w);
-		}
-		inline bool operator !=( const Point4Bool & p_ptPoint)
-		{
-			return (x != p_ptPoint.x) || (y != p_ptPoint.y) || (z != p_ptPoint.z) || (w != p_ptPoint.w);
-		}
-	};
+
+		return l_streamIn;
+	}
 }
 }
 

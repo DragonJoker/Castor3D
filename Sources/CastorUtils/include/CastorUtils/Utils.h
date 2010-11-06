@@ -11,14 +11,14 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
 
 You should have received a copy of the GNU Lesser General Public License along with
-this program; if not, write to the Free Software Foundation, Inc., 59 Temple
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___EMUSE_UTILS_H___
-#define ___EMUSE_UTILS_H___
+#ifndef ___Castor_Utils___
+#define ___Castor_Utils___
 
-#ifdef WIN32
+#ifdef _WIN32
 	//In case windows.h was already included ...
 #	ifndef _WINDOWS_
 
@@ -30,19 +30,18 @@ http://www.gnu.org/copyleft/lesser.txt.
 			__declspec( dllimport) void			__stdcall QueryPerformanceFrequency	( long long * p_perfFreq);
 			__declspec( dllimport) int			__stdcall GetSystemMetrics			( int p_code);
 		}
-
 #	endif
 
-#	define GENLIB_SLEEP( time) Sleep( time)
+#	define CASTOR_SLEEP( time) Sleep( time)
 
 #elif defined( __GNUG__)
 
-#	define GENLIB_SLEEP( time) sleep( time)
+#	define CASTOR_SLEEP( time) sleep( time)
 #	include <sys/time.h>
 #	include <errno.h>
 #	include <iostream>
 
-namespace General
+namespace Castor
 { namespace Utils
 {
 	inline void Sleep( double p_time)
@@ -76,7 +75,7 @@ namespace General
 }
 }
 
-using General::Utils::Sleep;
+using Castor::Utils::Sleep;
 
 #endif
 #endif
