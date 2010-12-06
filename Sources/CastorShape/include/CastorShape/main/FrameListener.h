@@ -15,8 +15,8 @@ private:
 	Castor3D::ScenePtr m_scene;
 	Castor3D::GeometryPtr m_geometry;
 	Castor3D::SubmeshPtr m_submesh;
-	Castor3D::FacePtr m_face;
-	Point3rPtr m_vertex;
+	Castor3D::Face * m_face;
+	Castor3D::Vertex * m_vertex;
 	Castor3D::CameraPtr m_camera;
 	CSRenderPanel * m_panel;
 	int m_x;
@@ -25,19 +25,8 @@ private:
 public:
 	CSSelectObjectFrameEvent( Castor3D::ScenePtr p_scene, Castor3D::GeometryPtr p_geometry,
 							  Castor3D::SubmeshPtr p_submesh, Castor3D::FacePtr p_face,
-							  Point3rPtr p_vertex, Castor3D::CameraPtr p_camera,
-							  CSRenderPanel * p_panel,  int p_x, int p_y)
-		:	Castor3D::FrameEvent( Castor3D::FrameEvent::eQueueRender),
-			m_scene( p_scene),
-			m_geometry( p_geometry),
-			m_submesh( p_submesh),
-			m_face( p_face),
-			m_vertex( p_vertex),
-			m_camera( p_camera),
-			m_panel( p_panel),
-			m_x( p_x),
-			m_y( p_y)
-	{}
+							  Castor3D::VertexPtr p_vertex, Castor3D::CameraPtr p_camera,
+							  CSRenderPanel * p_panel,  int p_x, int p_y);
 	virtual ~CSSelectObjectFrameEvent();
 
 	virtual bool Apply();

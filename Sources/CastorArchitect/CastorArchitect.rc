@@ -53,8 +53,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,0,0,0
- PRODUCTVERSION 0,0,0,1
+ FILEVERSION 0,0,1,0
+ PRODUCTVERSION 0,0,1,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -69,13 +69,14 @@ BEGIN
     BEGIN
         BLOCK "040c04b0"
         BEGIN
-            VALUE "FileDescription", "Application CastorAr"
-            VALUE "FileVersion", "0, 0, 0, 0"
-            VALUE "InternalName", "CastorAr"
+            VALUE "CompanyName", "DragonJoker"
+            VALUE "FileDescription", "Application CastorArchitect"
+            VALUE "FileVersion", "0, 0, 1, 0"
+            VALUE "InternalName", "CastorArchitect"
             VALUE "LegalCopyright", "Copyright (C) 2010"
-            VALUE "OriginalFilename", "CastorAr.exe"
-            VALUE "ProductName", "Application CastorAr"
-            VALUE "ProductVersion", "0, 0, 0, 1"
+            VALUE "OriginalFilename", "CastorArchitect.exe"
+            VALUE "ProductName", "Application CastorArchitect"
+            VALUE "ProductVersion", "0, 0, 1, 0"
         END
     END
     BLOCK "VarFileInfo"

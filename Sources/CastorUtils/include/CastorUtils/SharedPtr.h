@@ -31,51 +31,37 @@ namespace Castor
 	 It can also lock it from destruction by creating a SharedPtr from it.
 	*/
 	template <class T>
-	class WeakPtr
+	class WeakPtr : public std::tr1::weak_ptr<T>
 	{
 	private:
+		typedef std::tr1::weak_ptr<T> my_type;
 		template <class Y> friend class WeakPtr;
 		template <class Y> friend class SharedPtr;
-
-	private:
-		SharedCount m_count;
-		T * m_pPointer;
-		DeleterBase * m_pDelete;
 
 	public:
 		/**
 		 * Constructors
 		 */
 		WeakPtr()throw()
-			:	m_pPointer( NULL),
-				m_count(),
-				m_pDelete( NULL)
+			:	my_type()
 		{
 		}
 		WeakPtr( const WeakPtr & p_weakPtr)throw()
-			:	m_count( p_weakPtr.m_count),
-				m_pPointer( p_weakPtr.m_pPointer),
-				m_pDelete( p_weakPtr.m_pDelete)
+			:	my_type( p_weakPtr)
 		{
 		}
 		template <class Y>
 		WeakPtr( const WeakPtr<Y> & p_weakPtr)throw()		// p_weakPtr.get() must be convertible to T *
-			:	m_count( p_weakPtr.m_count),
-				m_pPointer( dynamic_cast <T *>( p_weakPtr.m_pPointer)),
-				m_pDelete( p_weakPtr.m_pDelete)
+			:	my_type( p_weakPtr)
 		{
 		}
 		WeakPtr( const SharedPtr<T> & p_sharedPtr)throw()
-			:	m_count( p_sharedPtr.m_count),
-				m_pPointer( p_sharedPtr.m_pPointer),
-				m_pDelete( p_sharedPtr.m_pDelete)
+			:	my_type( p_sharedPtr)
 		{
 		}
 		template <class Y>
 		WeakPtr( const SharedPtr<Y> & p_sharedPtr)throw()	// p_sharedPtr.get() must be convertible to T *
-			:	m_count( p_sharedPtr.m_count),
-				m_pPointer( dynamic_cast <T *>( p_sharedPtr.m_pPointer)),
-				m_pDelete( p_sharedPtr.m_pDelete)
+			:	my_type( p_sharedPtr)
 		{
 		}
 		/**
@@ -83,8 +69,6 @@ namespace Castor
 		 */
 		virtual ~WeakPtr()throw()
 		{
-			m_count.reset();
-			m_pPointer = NULL;
 		}
 
 		/**
@@ -92,19 +76,19 @@ namespace Castor
 		 */
 		WeakPtr & operator =( const WeakPtr & p_weakPtr)throw()
 		{
-			WeakPtr( p_weakPtr).swap( * this);
+			my_type::operator =( p_weakPtr);
 			return * this;
 		}
 		template <class Y>
 		WeakPtr & operator =( WeakPtr <Y> const & p_weakPtr)throw()
 		{
-			WeakPtr( p_weakPtr).swap( * this);
+			my_type::operator =( p_weakPtr);
 			return * this;
 		}
 		template <class Y>
 		WeakPtr & operator =( SharedPtr <Y> const & p_sharedPtr)throw()
 		{
-			WeakPtr( p_sharedPtr).swap( * this);
+			my_type::operator =( p_sharedPtr);
 			return * this;
 		}
 
@@ -121,7 +105,7 @@ namespace Castor
 		 */
 		bool expired()const throw()
 		{
-			return m_count.count() == 0;
+			return my_type::expired();
 		}
 
 		/**
@@ -129,7 +113,7 @@ namespace Castor
 		 */
 		void reset()throw()
 		{
-			WeakPtr().swap( * this);
+			my_type::reset();
 		}
 
 		/**
@@ -137,9 +121,7 @@ namespace Castor
 		 */
 		void swap( WeakPtr & p_weakPtr)throw()
 		{
-			m_count.swap( p_weakPtr.m_count);
-			std::swap( m_pPointer, p_weakPtr.m_pPointer);
-			std::swap( m_pDelete, p_weakPtr.m_pDelete);
+			my_type::swap( p_weakPtr);
 		}
 	};
 
@@ -149,326 +131,223 @@ namespace Castor
 	 (and so can't be put in std containers)
 	 */
 	template <class T>
-	class SharedPtr
+	class SharedPtr : public std::tr1::shared_ptr<T>
 	{
-	private:
-		template <class Y> friend class WeakPtr;
-		template <class Y> friend class SharedPtr;
+	public:
+		typedef const SharedPtr<T> & ParamType;
 
 	private:
-		SharedCount m_count;
-		T * m_pPointer;
-		DeleterBase * m_pDelete;
+		typedef std::tr1::shared_ptr<T> my_type;
+		template <class Y> friend class WeakPtr;
+		template <class Y> friend class SharedPtr;
 
 	public:
 		/**
 		 * Constructors
 		 */
-		SharedPtr()throw()
-			:	m_pPointer( NULL),
-				m_count(),
-				m_pDelete( NULL)
+		SharedPtr()
+			:	my_type()
 		{
-		}
-		SharedPtr( T * p_pPointer)throw()
-			:	m_pPointer( p_pPointer),
-				m_count()
-		{
-			m_pDelete = new DeleterPtr<T>( m_pPointer);
-			_ref();
 		}
 		template <class Y>
-		explicit SharedPtr( Y * p_pPointer)throw()	// p_pPointer must be convertible to T *
-			:	m_pPointer( dynamic_cast <T *>( p_pPointer)),
-				m_count()
+		explicit SharedPtr( Y * p_pPointer)
+			:	my_type( p_pPointer)
 		{
-			m_pDelete = new DeleterPtr<T>( m_pPointer);
-			_ref();
 		}
-		SharedPtr( const SharedPtr & p_sharedPtr)throw()
-			:	m_pPointer( p_sharedPtr.m_pPointer),
-				m_count( p_sharedPtr.m_count),
-				m_pDelete( p_sharedPtr.m_pDelete)
+		SharedPtr( const SharedPtr & p_sharedPtr)
+			:	my_type( p_sharedPtr)
 		{
-			_ref();
-		}
-		SharedPtr( const WeakPtr<T> & p_weakPtr)throw()
-			:	m_pPointer( p_weakPtr.m_pPointer),
-				m_count( p_weakPtr.m_count),
-				m_pDelete( p_weakPtr.m_pDelete)
-		{
-			_ref();
 		}
 		template <class Y>
-		SharedPtr( const WeakPtr<Y> & p_weakPtr)throw()	// p_weakPtr.get() must be convertible to T *
-			:	m_pPointer( dynamic_cast <T *>( p_weakPtr.m_pPointer)),
-				m_count( p_weakPtr.m_count),
-				m_pDelete( p_sharedPtr.m_pDelete)
+		SharedPtr( const SharedPtr<Y> & p_sharedPtr)
+			:	my_type( p_sharedPtr)
 		{
-			_ref();
 		}
 		template <class Y>
-		SharedPtr( const SharedPtr<Y> & p_sharedPtr)throw()	// p_sharedPtr.get() must be convertible to T *
-			:	m_pPointer( dynamic_cast <T *>( p_sharedPtr.m_pPointer)),
-				m_count( p_sharedPtr.m_count),
-				m_pDelete( p_sharedPtr.m_pDelete)
+		SharedPtr( const WeakPtr<Y> & p_weakPtr)
+			:	my_type( p_weakPtr)
 		{
-			_ref();
 		}
 		template <class Y>
-		SharedPtr( const SharedPtr<Y> & p_sharedPtr, static_cast_tag)throw()
-			:	m_pPointer( static_cast <T *>( p_sharedPtr.m_pPointer)),
-				m_count( p_sharedPtr.m_count),
-				m_pDelete( p_sharedPtr.m_pDelete)
+		SharedPtr( const SharedPtr<Y> & p_sharedPtr, const static_cast_tag & p_tag)
+			:	my_type( p_sharedPtr, std::tr1::_Static_tag())
 		{
-			_ref();
 		}
 		template <class Y>
-		SharedPtr( const SharedPtr<Y> & p_sharedPtr, const_cast_tag)throw()
-			:	m_pPointer( const_cast <T *>( p_sharedPtr.m_pPointer)),
-				m_count( p_sharedPtr.m_count),
-				m_pDelete( p_sharedPtr.m_pDelete)
+		SharedPtr( const SharedPtr<Y> & p_sharedPtr, const const_cast_tag & p_tag)
+			:	my_type( p_sharedPtr, std::tr1::_Const_tag())
 		{
-			_ref();
 		}
 		template <class Y>
-		SharedPtr( const SharedPtr<Y> & p_sharedPtr, dynamic_cast_tag)throw()
-			:	m_pPointer( dynamic_cast <T *>( p_sharedPtr.m_pPointer)),
-				m_count(),
+		SharedPtr( const SharedPtr<Y> & p_sharedPtr,const  dynamic_cast_tag & p_tag)
+			:	my_type( p_sharedPtr, std::tr1::_Dynamic_tag())
 		{
-			if (m_pPointer != NULL)
-			{
-				m_pDelete = p_sharedPtr.m_pDelete;
-				m_count = p_sharedPtr.m_count;
-			}
-
-			_ref();
 		}
 		template <class Y>
-		SharedPtr( const SharedPtr<Y> & p_sharedPtr, polymorphic_cast_tag)
-			:	m_pPointer( dynamic_cast <T *>( p_sharedPtr.m_pPointer)),
-				m_count()
+		SharedPtr( const SharedPtr<Y> & p_sharedPtr, T * p_pPointer)
+			:	my_type( p_sharedPtr, p_pPointer)
 		{
-			if (m_pPointer == NULL)
-			{
-				throw std::bad_cast;
-			}
-			else
-			{
-				m_count =  p_sharedPtr.m_count;
-				m_pDelete = p_sharedPtr.m_pDelete;
-			}
-
-			_ref();
-		}
-		template <class Y>
-		SharedPtr( const SharedPtr<Y> & p_sharedPtr, T * p_pPointer)throw()
-			:	m_pPointer( p_pPointer),
-				m_count( p_sharedPtr.m_count),
-				m_pDelete( p_sharedPtr.m_pDelete)
-		{
-			_ref();
 		}
 		/**
 		 * Destructor
 		 */
-		virtual ~SharedPtr()throw()
+		virtual ~SharedPtr()
 		{
-			m_count.unref();
-			if (null())
-			{
-				if (m_pPointer != NULL)
-				{
-					m_pDelete->Delete();
-					delete m_pDelete;
-				}
-			}
-			m_count.reset();
-			m_pPointer = NULL;
 		}
 
 		/**
 		 * Accessors
 		 */
-		T & operator *()throw()
+		T * get()const
 		{
-			return (* m_pPointer);
+			return my_type::get();
 		}
-		T * operator ->()throw()
+		T & operator *()
 		{
-			return m_pPointer;
+			return my_type::operator *();
 		}
-		const T & operator *()const throw()
+		T * operator ->()
 		{
-			return (* m_pPointer);
+			return my_type::operator ->();
 		}
-		const T * operator ->()const throw()
+		const T & operator *()const
 		{
-			return m_pPointer;
+			return my_type::operator *();
 		}
-		T * get()const throw()
+		const T * operator ->()const
 		{
-			return m_pPointer;
+			return my_type::operator ->();
 		}
-		bool operator ()()
+		long count()const
 		{
-			return m_count.count() != 0;
+			return my_type::use_count();
 		}
-		bool operator ! ()
+		bool unique()const
 		{
-			return m_count.count() == 0;
+			return my_type::unique();
 		}
-		long count()const throw()
+		bool null()const
 		{
-			return m_count.count();
-		}
-		bool unique()const throw()
-		{
-			return m_count.count() == 1;
-		}
-		bool null()const throw()
-		{
-			return m_count.count() == 0;
+			return count() == 0;
 		}
 
 		/**
 		 * Assignment operators
 		 */
-		SharedPtr & operator =( const SharedPtr & p_sharedPtr)throw()
+		SharedPtr & operator =( const SharedPtr & p_sharedPtr)
 		{
-			SharedPtr( p_sharedPtr).swap( * this);
+			my_type::operator =( p_sharedPtr);
 			return * this;
 		}
 		template <typename Y>
-		SharedPtr & operator =( const SharedPtr <Y> & p_sharedPtr)throw()	// p_sharedPtr.m_pPointer must be convertible to T *
+		SharedPtr & operator =( const SharedPtr<Y> & p_sharedPtr)	// p_sharedPtr.m_pPointer must be convertible to T *
 		{
-			SharedPtr( p_sharedPtr).swap( * this);
+			my_type::operator =( p_sharedPtr);
 			return * this;
 		}
 
 		/**
 		 * reset functions, used to reset the value of the current SharedPtr to another value (pointer, SharedPtr, ...)
 		 */
-		void reset()throw()
+		void reset()
 		{
-			SharedPtr().swap( * this);
+			my_type::reset();
 		}
 		template <typename Y>
-		void reset( Y * p_pPointer)throw()	// p_pPointer must be convertible to T *
+		void reset( Y * p_pPointer)	// p_pPointer must be convertible to T *
 		{
-			SharedPtr( p_pPointer).swap( * this);
-		}
-		template <typename Y>
-		void reset( SharedPtr<Y> p_sharedPtr)throw()	// p_pPointer must be convertible to T *
-		{
-			SharedPtr( p_sharedPtr).swap( * this);
-		}
-		template <typename Y>
-		void reset( SharedPtr<Y> p_sharedPtr, T * p_pPointer)throw()	// p_pPointer must be convertible to T *
-		{
-			SharedPtr( p_sharedPtr, p_pPointer).swap( * this);
+			my_type::reset( p_pPointer);
 		}
 
 		/**
 		 * swap function
 		 */
-		void swap( SharedPtr & p_sharedPtr)throw()
+		void swap( SharedPtr & p_sharedPtr)
 		{
-			m_count.swap( p_sharedPtr.m_count);
-			std::swap( m_pPointer, p_sharedPtr.m_pPointer);
-			std::swap( m_pDelete, p_sharedPtr.m_pDelete);
-		}
-
-	private:
-		void _ref()
-		{
-			if (m_pPointer != NULL)
-			{
-				m_count.ref();
-			}
+			my_type::swap( p_sharedPtr);
 		}
 	};
 
 	template <class T>
-	void swap( WeakPtr<T> & a, WeakPtr<T> & b)throw()
+	void swap( WeakPtr<T> & a, WeakPtr<T> & b)
 	{
 		a.swap( b);
 	}
 
 	template <class T>
-	void swap( SharedPtr<T> & a, SharedPtr<T> & b)throw()
+	void swap( SharedPtr<T> & a, SharedPtr<T> & b)
 	{
 		a.swap( b);
 	}
 
 	template <class T, class U>
-	SharedPtr<T> static_pointer_cast( const SharedPtr<U> & p_sharedPtr)throw()
+	SharedPtr<T> static_pointer_cast( const SharedPtr<U> & p_sharedPtr)
 	{
-		return SharedPtr<T> l_return( p_sharedPtr, static_cast_tag());
+		return SharedPtr<T>( p_sharedPtr, static_cast_tag());
 	}
 
 	template <class T, class U>
-	SharedPtr<T> const_pointer_cast( const SharedPtr<U> & p_sharedPtr)throw()
+	SharedPtr<T> const_pointer_cast( const SharedPtr<U> & p_sharedPtr)
 	{
-		return SharedPtr<T> l_return( p_sharedPtr, const_cast_tag());
+		return SharedPtr<T>( p_sharedPtr, const_cast_tag());
 	}
 
 	template <class T, class U>
-	SharedPtr<T> dynamic_pointer_cast( const SharedPtr<U> & p_sharedPtr)throw()
+	SharedPtr<T> dynamic_pointer_cast( const SharedPtr<U> & p_sharedPtr)
 	{
-		return SharedPtr<T> l_return( p_sharedPtr, dynamic_cast_tag());
+		return SharedPtr<T>( p_sharedPtr, dynamic_cast_tag());
 	}
 
 	template <class T>
-	bool operator ==( const SharedPtr<T> & a, const SharedPtr<T> & b)throw()
+	bool operator ==( const SharedPtr<T> & a, const SharedPtr<T> & b)
 	{
 		return a.get() == b.get();
 	}
 
 	template <class T>
-	bool operator !=( const SharedPtr<T> & a, const SharedPtr<T> & b)throw()
+	bool operator !=( const SharedPtr<T> & a, const SharedPtr<T> & b)
 	{
 		return a.get() != b.get();
 	}
 
 	template <class T>
-	bool operator <( const SharedPtr<T> & a, const SharedPtr<T> & b)throw()
+	bool operator <( const SharedPtr<T> & a, const SharedPtr<T> & b)
 	{
 		return a.get() < b.get();
 	}
 
 	template <class T>
-	bool operator ==( const T * a, const SharedPtr<T> & b)throw()
+	bool operator ==( const T * a, const SharedPtr<T> & b)
 	{
 		return a == b.get();
 	}
 
 	template <class T>
-	bool operator !=( const T * a, const SharedPtr<T> & b)throw()
+	bool operator !=( const T * a, const SharedPtr<T> & b)
 	{
 		return a != b.get();
 	}
 
 	template <class T>
-	bool operator <( const T * a, const SharedPtr<T> & b)throw()
+	bool operator <( const T * a, const SharedPtr<T> & b)
 	{
 		return a < b.get();
 	}
 
 	template <class T>
-	bool operator ==( const SharedPtr<T> & a, const T * b)throw()
+	bool operator ==( const SharedPtr<T> & a, const T * b)
 	{
 		return a.get() == b;
 	}
 
 	template <class T>
-	bool operator !=( const SharedPtr<T> & a, const T * b)throw()
+	bool operator !=( const SharedPtr<T> & a, const T * b)
 	{
 		return a.get() != b;
 	}
 
 	template <class T>
-	bool operator <( const SharedPtr<T> & a, const T * b)throw()
+	bool operator <( const SharedPtr<T> & a, const T * b)
 	{
 		return a.get() < b;
 	}

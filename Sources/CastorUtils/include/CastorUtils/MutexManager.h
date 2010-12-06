@@ -38,7 +38,7 @@ namespace Castor
 		LR_FAILURE_WRONG_THREAD
 	};
 
-	class MutexState
+	class MutexState : public MemoryTraced<MutexState>
 	{
 	private:
 		const Mutex * m_mutexPtr;

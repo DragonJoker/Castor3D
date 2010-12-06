@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_PNTrianglesDivider___
 
 #include "Subdiviser.h"
+#include "../basic/Vertex.h"
 
 namespace Castor3D
 {
@@ -28,7 +29,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 12/03/2010
 	*/
-	class PNTrianglesSubdiviser : public Subdiviser
+	class PNTrianglesSubdiviser : public Subdiviser, public MemoryTraced<PNTrianglesSubdiviser>
 	{
 	public:
 		PNTrianglesSubdiviser( Submesh * p_submesh)
@@ -36,18 +37,10 @@ namespace Castor3D
 		{}
 		virtual ~PNTrianglesSubdiviser();
 
-		virtual void Subdivide( Point3rPtr p_center);
+		virtual void Subdivide( const Point3r & p_center);
 
 	private:
-		VertexPtr _computePointFrom( const Vertex & p_a, real * p_aNormal,
-									 const Vertex & p_b, real * p_bNormal,
-									 Point3rPtr p_center=NULL);
-		VertexPtr _computePointFrom( const Vertex & p_a, VertexPtr p_aNormal,
-									 const Vertex & p_b, VertexPtr p_bNormal,
-									 Point3rPtr p_center=NULL)
-		{
-			return _computePointFrom( p_a, p_aNormal->ptr(), p_b, p_bNormal->ptr(), p_center);
-		}
+		Vertex _computePointFrom( const Vertex & p_a, const Vertex & p_b, const Point3r * p_center=NULL);
 	};
 }
 

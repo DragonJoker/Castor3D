@@ -25,28 +25,40 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "../light/Module_Light.h"
 #include "../importer/Module_Importer.h"
 #include "../render_system/Module_Render.h"
+#include "../geometry/Module_Geometry.h"
 
 namespace Castor3D
 {
 	class Scene;
 	class SceneManager;
-	class SceneNode;
+	class NodeBase;
+	template <typename T> class Node;
 	class SceneFileContext;
 	class SceneFileParser;
 
-	typedef Templates::SharedPtr<SceneNode>			SceneNodePtr;
+	typedef Node<Light>		LightNode;
+	typedef Node<Camera>	CameraNode;
+	typedef Node<Geometry>	GeometryNode;
+
+	typedef Templates::SharedPtr<NodeBase>			NodePtr;
+	typedef Templates::SharedPtr<LightNode>			LightNodePtr;
+	typedef Templates::SharedPtr<CameraNode>		CameraNodePtr;
+	typedef Templates::SharedPtr<GeometryNode>		GeometryNodePtr;
 	typedef Templates::SharedPtr<Scene>				ScenePtr;
 	typedef Templates::SharedPtr<SceneFileContext>	SceneFileContextPtr;
 	typedef Templates::SharedPtr<SceneFileParser>	SceneFileParserPtr;
 
-	typedef C3DMap(		String,	ScenePtr)		ScenePtrStrMap;		//!< Scene pointer map, sorted by name
-	typedef C3DMap(		String,	SceneNodePtr)	SceneNodePtrStrMap;	//!< SceneNode pointer map, sorted by name
-	typedef C3DVector(	SceneNodePtr)			SceneNodePtrArray;
+	typedef C3DMap(		String,	ScenePtr)			ScenePtrStrMap;			//!< Scene pointer map, sorted by name
+	typedef C3DMap(		String,	NodePtr)			NodePtrStrMap;			//!< SceneNode pointer map, sorted by name
+	typedef C3DMap(		String,	LightNodePtr)		LightNodePtrStrMap;		//!< LightNode pointer map, sorted by name
+	typedef C3DMap(		String,	CameraNodePtr)		CameraNodePtrStrMap;	//!< CameraNode pointer map, sorted by name
+	typedef C3DMap(		String,	GeometryNodePtr)	GeometryNodePtrStrMap;	//!< GeometryNode pointer map, sorted by name
+	typedef C3DVector(	NodePtr)					NodePtrArray;
 	
 	typedef bool ( * ParserFunction)( String & p_strParams, SceneFileContextPtr p_pContext);
 	typedef C3DMap(		String,	ParserFunction) AttributeParserMap;
 
-	#define DECLARE_ATTRIBUTE_PARSER( X) bool CS3D_API X( String & p_strParams, SceneFileContextPtr p_pContext);
+	#define DECLARE_ATTRIBUTE_PARSER( X) bool C3D_API X( String & p_strParams, SceneFileContextPtr p_pContext);
 	#define IMPLEMENT_ATTRIBUTE_PARSER( X) bool Castor3D :: X( String & p_strParams, SceneFileContextPtr p_pContext)
 	#define PARSING_ERROR( p_strError) SceneFileParser::ParseError( p_strError, p_pContext)
 	#define PARSING_WARNING( p_strWarning) SceneFileParser::ParseWarning( p_strWarning, p_pContext)

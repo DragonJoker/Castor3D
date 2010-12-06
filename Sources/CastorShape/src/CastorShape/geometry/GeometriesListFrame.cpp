@@ -39,11 +39,11 @@ CSGeometriesListFrame :: CSGeometriesListFrame( wxWindow * parent, const wxStrin
 {
 	m_pTreeGeometries = new wxTreeCtrl( this, eGeometriesList, wxDefaultPosition, GetClientSize() - wxSize( 0, 50), wxTR_HIDE_ROOT | wxTR_HAS_BUTTONS | wxTR_MULTIPLE | wxTR_EXTENDED);
 	m_pTreeGeometries->Show();
-	m_pComboMaterials = new wxComboBox( this, eMaterialsList, "", wxPoint( 0, GetClientSize().y - 45), wxSize( GetClientSize().x, 20));
+	m_pComboMaterials = new wxComboBox( this, eMaterialsList, wxEmptyString, wxPoint( 0, GetClientSize().y - 45), wxSize( GetClientSize().x, 20));
 	m_pComboMaterials->Hide();
 	m_pButtonDeleteSelected = new wxButton( this, eDeleteSelected, CU_T( "Supprimer"), wxPoint( 0, GetClientSize().y - 20), wxSize( GetClientSize().x, 20));
 
-	wxTreeItemId l_idRoot = m_pTreeGeometries->AddRoot( "Géométries");
+	wxTreeItemId l_idRoot = m_pTreeGeometries->AddRoot( CU_T( "Géométries"));
 	GeometryPtr l_pGeometry;
 	wxString l_strName;
 	wxTreeItemId l_idGeometry;
@@ -88,7 +88,7 @@ CSGeometriesListFrame :: CSGeometriesListFrame( wxWindow * parent, const wxStrin
 
 		m_items.push_back( l_strName);
 		l_idGeometry = m_pTreeGeometries->AppendItem( l_idRoot, l_strName, eFolder, eFolderSelected, new GeometryTreeItemData( l_pGeometry));
-		m_pTreeGeometries->AppendItem( l_idGeometry, l_pGeometry->IsVisible() ? "Visible" : "Caché", eFile, eFileSelected, new GeometryTreeItemData( l_pGeometry));
+		m_pTreeGeometries->AppendItem( l_idGeometry, l_pGeometry->IsVisible() ? CU_T( "Visible") : CU_T( "Caché"), eFile, eFileSelected, new GeometryTreeItemData( l_pGeometry));
 
 		for (size_t i = 0 ; i < l_pGeometry->GetMesh()->GetNbSubmeshes() ; i++)
 		{
@@ -159,13 +159,13 @@ void CSGeometriesListFrame :: OnActivateItem( wxTreeEvent & event)
 	{
 		m_pComboMaterials->Hide();
 		l_pItemData->GetGeometry()->SetVisible( false);
-		m_pTreeGeometries->SetItemText( l_item, "Caché");
+		m_pTreeGeometries->SetItemText( l_item, CU_T( "Caché"));
 	}
 	else if (l_strText == "Caché")
 	{
 		m_pComboMaterials->Hide();
 		l_pItemData->GetGeometry()->SetVisible( true);
-		m_pTreeGeometries->SetItemText( l_item, "Visible");
+		m_pTreeGeometries->SetItemText( l_item, CU_T( "Visible"));
 	}
 	else if (m_setGeometriesInTree.find( l_item) == m_setGeometriesInTree.end())
 	{

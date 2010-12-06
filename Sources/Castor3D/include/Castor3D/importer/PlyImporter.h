@@ -28,7 +28,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 25/08/2010
 	*/
-	class CS3D_API PlyImporter : public ExternalImporter
+	class C3D_API PlyImporter : public ExternalImporter, public MemoryTraced<PlyImporter>
 	{
 	private:
 		friend class Scene;

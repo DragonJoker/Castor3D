@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_Geometry___
 #define ___C3D_Geometry___
 
-#include "MovableObject.h"
+#include "../../main/MovableObject.h"
 #include "../../material/Module_Material.h"
 
 namespace Castor3D
@@ -30,14 +30,17 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API Geometry : public MovableObject
+	class C3D_API Geometry : public MovableObject, public MemoryTraced<MovableObject>
 	{
 	protected:
 		friend class Scene;
-		NormalsMode m_normalsMode;		//!< The normals mode
-		MeshPtr m_mesh;					//!< The mesh
-		bool m_changed;					//!< Tells if the geometry has changed (mesh, material ...)
-		bool m_listCreated;				//!< Tells if the Vertex Buffer are generated
+		Point3r m_center;					//!< The center's position, all vertexes position are relative to the center
+		Quaternion m_orientation;			//!< The orientation
+		Matrix4x4r m_matrix;				//!< The rotation matrix
+		eNORMALS_MODE m_normalsMode;	//!< The normals mode
+		MeshPtr m_mesh;						//!< The mesh
+		bool m_changed;						//!< Tells if the geometry has changed (mesh, material ...)
+		bool m_listCreated;					//!< Tells if the Vertex Buffer are generated
 		bool m_visible;
 		bool m_dirty;
 
@@ -48,7 +51,7 @@ namespace Castor3D
 		 *@param p_sn : [in] The scene node to which the geometry is attached
 		 *@param p_name : [in] The geometry name, default is void
 		 */
-		Geometry( MeshPtr p_mesh=MeshPtr(), SceneNodePtr p_sn=NULL, const String & p_name = C3DEmptyString);
+		Geometry( MeshPtr p_mesh=MeshPtr(), GeometryNodePtr p_sn=GeometryNodePtr(), const String & p_name = C3DEmptyString);
 		/**
 		 * Destructor
 		 */
@@ -63,7 +66,7 @@ namespace Castor3D
 		 *@param p_nbFaces : [in/out] Used to retrieve the faces number
 		 *@param p_nbVertex : [in/out] Used to retrieve the vertexes number
 		 */
-		void CreateBuffers( NormalsMode p_nm, size_t & p_nbFaces, size_t & p_nbVertex);
+		void CreateBuffers( eNORMALS_MODE p_nm, size_t & p_nbFaces, size_t & p_nbVertex);
 		/**
 		 * Writes the geometry in a file
 		 *@param p_pFile : [in] file to write in
@@ -81,16 +84,41 @@ namespace Castor3D
 		 *@param p_mode : [in] The subdivision mode
 		 */
 		void Subdivide( unsigned int p_index, SubdivisionMode p_mode);
+		/**
+		 * Computes then returns the rotation matrix
+		 *@return The rotation matrix
+		 */
+		const Matrix4x4r & GetRotationMatrix();
 
 	public:
 		/**@name Accessors */
 		//@{
-		inline MeshPtr	GetMesh			()const { return m_mesh; }
-		inline bool		HasListsCreated	()const { return m_listCreated; }
-		inline bool		IsVisible		()const { return m_visible; }
+		inline MeshPtr				GetMesh			()const { return m_mesh; }
+		inline bool					HasListsCreated	()const { return m_listCreated; }
+		inline bool					IsVisible		()const { return m_visible; }
+		/**
+		 * @return The object center position pointer
+		 */
+		inline const Point3r	*	GetCenter		()const { return & m_center; }
+		/**
+		 * @return The orientation
+		 */
+		inline const Quaternion	&	GetOrientation	()const	{ return m_orientation; }
+		/**
+		 * @return The object center position
+		 */
+		inline const Point3r	&	GetPosition		()const { return m_center; }
 
-		inline void	SetVisible	( bool p_visible)	{ m_visible = p_visible; }
-		inline void	SetMesh		( MeshPtr p_pMesh)	{ m_mesh = p_pMesh; }
+		inline void	SetVisible		( bool p_visible)	{ m_visible = p_visible; }
+		inline void	SetMesh			( MeshPtr p_pMesh)	{ m_mesh = p_pMesh; }
+		/**
+		 * @param p_position : [in] The new position
+		 */
+		inline void SetPosition		( const Point3r & p_position)			{ m_center = p_position; }
+		/**
+		 * @param p_orientation : [in] The new orientation
+		 */
+		inline void SetOrientation	( const Quaternion & p_orientation)		{ m_orientation = p_orientation; }
 		//@}
 	};
 }

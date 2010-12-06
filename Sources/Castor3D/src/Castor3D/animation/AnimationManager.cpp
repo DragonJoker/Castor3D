@@ -38,12 +38,12 @@ AnimatedObjectGroupPtr AnimationManager :: CreateAnimatedObjectGroup( const Stri
 
 	if ( ! l_pThis.AddElement( l_pReturn))
 	{
-		Log::LogMessage( CU_T( "Can't add AnimatedObjectGroup %s"), p_name.c_str());
+		Logger::LogMessage( CU_T( "Can't add AnimatedObjectGroup %s"), p_name.char_str());
 		l_pReturn.reset();
 	}
 	else
 	{
-		Log::LogMessage( CU_T( "AnimatedObjectGroup %s added"), p_name.c_str());
+		Logger::LogMessage( CU_T( "AnimatedObjectGroup %s added"), p_name.char_str());
 	}
 
 	return l_pReturn;

@@ -28,7 +28,7 @@ namespace Castor3D
 	\date 09/02/2010
 	*/
 	template <class T>
-	class CS3D_API Interpolator
+	class C3D_API Interpolator
 	{
 	protected:
 		T m_src;		//!< The starting value
@@ -67,7 +67,7 @@ namespace Castor3D
 	\date 09/02/2010
 	\brief Linear Vector interpolation class overload
 	*/
-	class CS3D_API VertexLinearInterpolator : public Interpolator<Point3r>
+	class C3D_API VertexLinearInterpolator : public Interpolator<Point3r>, public MemoryTraced<VertexLinearInterpolator>
 	{
 		/**
 		 * Interpolation function, linear interpolation is easy...
@@ -94,7 +94,7 @@ namespace Castor3D
 	\date 09/02/2010
 	\brief Linear Quaternion interpolation class overload
 	*/
-	class CS3D_API QuaternionLinearInterpolator : public Interpolator<Quaternion>
+	class C3D_API QuaternionLinearInterpolator : public Interpolator<Quaternion>, public MemoryTraced<QuaternionLinearInterpolator>
 	{
 	public:
 		/**

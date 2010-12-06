@@ -2,8 +2,9 @@
 
 #include "Memory.h"
 
-#undef new
-#undef delete
+#ifndef ____CASTOR_NO_MEMORY_DEBUG____
+#	undef new
+#	undef delete
 
 using namespace Castor;
 using namespace Castor::Utils;
@@ -19,13 +20,23 @@ MemoryManager :: MemoryManager()
 		m_totalMemoryAllocated		(0)
 {
 	sm_initialised = 1;
+	FILE * l_file;
+	fopen_s( & l_file, ALLOG_LOCATION, "w");
+	fclose( l_file);
+
+	fopen_s( & l_file, DEALLOG_LOCATION, "w");
+	fclose( l_file);
 }
 
 MemoryManager :: ~MemoryManager()
 {
 	sm_initialised = 0;
-//	MemoryLeaksReport( LOG_LOCATION);
 	_finalReport();
+
+	for (MemoryBlockMap::iterator l_it = m_memoryMap.begin() ; l_it != m_memoryMap.end() ; ++l_it)
+	{
+		delete l_it->second;
+	}
 }
 
 MemoryManager & MemoryManager :: operator <<( const MemoryBlock & p_block)
@@ -40,46 +51,36 @@ void MemoryManager :: _localise( void * p_ptr)
 
 	if (ifind != m_memoryMap.end())
 	{
-		ifind->second = m_lastBlock;
+		ifind->second->Assign( m_lastBlock);
 	}
 
 	m_lastBlock.Clear();
 }
 
-void MemoryManager :: AddLocation( size_t p_size, void * p_pointer, bool p_typeArray)
-{
-	RecordAllocation( p_size);
-
-	if (p_typeArray)
-	{
-		m_totalArraysAllocated ++;
-	}
-	else
-	{
-		m_totalObjectsAllocated ++;
-	}
-
-	m_memoryMap.insert( MemoryBlockMap::value_type( p_pointer, MemoryBlock( p_pointer, p_size, p_typeArray)));
-}
-
 bool MemoryManager :: RemoveLocation( void * p_pointer, bool p_isArray)
 {
+	bool l_bReturn = false;
 	const MemoryBlockMap::iterator & ifind = m_memoryMap.find( p_pointer);
 
 	if (ifind != m_memoryMap.end())
 	{
-		RecordDeallocation( ifind->second.size);
+		MemoryBlock * p_block = ifind->second;
+		RecordDeallocation( p_block->size);
 		m_memoryMap.erase( ifind);
-		return true;
+		delete p_block;
+		l_bReturn = true;
+	}
+	else
+	{
+		m_failedDeletes.push_back( new MemoryBlock( "", "", 0));
 	}
 
-//	m_failedDeletes.push_back( MemoryBlock( m_tempFileName, m_tempFuncName, m_tempLineNum, 0, p_isArray));
 	return false;
 }
 
 void MemoryManager :: FailedAlloc( unsigned int p_size, bool p_isArray)
 {
-//	m_failedNews.push_back( MemoryBlock( m_tempFileName, m_tempFuncName, m_tempLineNum, p_size, p_isArray));
+	m_failedNews.push_back( new MemoryBlock( "", "", 0));
 }
 
 void MemoryManager :: RecordAllocation( unsigned int p_size)
@@ -128,15 +129,15 @@ void MemoryManager :: _finalReport()
 
 			for ( ; iter != iend ; ++ iter)
 			{
-				const MemoryBlock & l_block = iter->second;
+				MemoryBlock * l_block = iter->second;
 
-				if (l_block.file == NULL)
+				if (l_block->file == NULL)
 				{
-					fprintf( l_file, "Outside object leaked : %d bytes\n", l_block.size);
+					fprintf( l_file, "Outside object leaked : %s, %d bytes\n", l_block->GetBlockType(), l_block->size);
 				}
 				else
 				{
-					fprintf( l_file, "%s leaked : %d bytes, created in %s(), line %d of file %s\n", (l_block.isArray ? "Array" : "Object"), l_block.size, l_block.function, l_block.line, l_block.file);
+					fprintf( l_file, "%s leaked : %d bytes, created in %s(), line %d of file %s\n", (l_block->isArray ? "Array" : "Object"), l_block->size, l_block->function, l_block->line, l_block->file);
 				}
 			}
 		}
@@ -199,8 +200,8 @@ void MemoryManager :: MemoryLeaksReport( const String & p_filename)
 
 		for ( ; iter != iend ; ++ iter)
 		{
-			const MemoryBlock & l_block = iter->second;
-			* out << (l_block.isArray ? "Array" : "Object") << " leaked : " << l_block.size << " bytes, created in " << l_block.function << "() , line " << l_block.line << " of file " << l_block.file << std::endl;
+			MemoryBlock * l_block = iter->second;
+			* out << (l_block->isArray ? "Array" : "Object") << " leaked : " << l_block->size << " bytes, created in " << l_block->function << "() , line " << l_block->line << " of file " << l_block->file << std::endl;
 		}
 	}
 	else
@@ -216,8 +217,8 @@ void MemoryManager :: MemoryLeaksReport( const String & p_filename)
 
 		for (size_t i = 0 ; i < imax ; i++)
 		{
-			const MemoryBlock & l_block = m_failedDeletes[i];
-			* out << "Deletion of an invalid " << (l_block.isArray ? "array" : "object") << " pointer @ " << l_block.function << "() , line " << l_block.line << " of file " << l_block.file << std::endl;
+			MemoryBlock * l_block = m_failedDeletes[i];
+			* out << "Deletion of an invalid " << (l_block->isArray ? "array" : "object") << " pointer @ " << l_block->function << "() , line " << l_block->line << " of file " << l_block->file << std::endl;
 		}
 	}
 	else
@@ -233,8 +234,8 @@ void MemoryManager :: MemoryLeaksReport( const String & p_filename)
 
 		for (size_t i = 0 ; i < imax ; i++)
 		{
-			const MemoryBlock & l_block = m_failedNews[i];
-			* out << "Failed allocation of an " << (l_block.isArray ? "array" : "object") << " pointer @ " << l_block.function << "() , line " << l_block.line << " of file " << l_block.file << std::endl;
+			MemoryBlock * l_block = m_failedNews[i];
+			* out << "Failed allocation of an " << (l_block->isArray ? "array" : "object") << " pointer @ " << l_block->function << "() , line " << l_block->line << " of file " << l_block->file << std::endl;
 		}
 	}
 	else
@@ -250,3 +251,4 @@ void MemoryManager :: MemoryLeaksReport( const String & p_filename)
 
 	MemoryManager::Unlock();
 }
+#endif

@@ -30,7 +30,6 @@ namespace CastorViewer
 		MainFrame( wxWindow * parent, const wxString & title);
 		~MainFrame();
 
-		void ShowPanels();
 		void LoadScene( const String & p_strFileName=C3DEmptyString);
 
 	private:

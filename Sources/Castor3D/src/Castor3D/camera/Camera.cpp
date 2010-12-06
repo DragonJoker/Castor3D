@@ -3,85 +3,45 @@
 #include "camera/Camera.h"
 
 #include "scene/Scene.h"
+#include "scene/NodeBase.h"
 #include "main/Root.h"
+#include "main/Pipeline.h"
 #include "render_system/RenderSystem.h"
 
 using namespace Castor3D;
 
-Camera :: Camera( const String & p_name,
-				 int p_ww, int p_wh, Viewport::eTYPE p_type)
-	:	m_name( p_name),
-		m_matrix( new real[16])
+Camera :: Camera( const String & p_name, int p_ww, int p_wh, CameraNodePtr p_pNode, Viewport::eTYPE p_type)
+	:	MovableObject( (NodeBase *)p_pNode.get(), p_name),
+		m_viewport( new Viewport( p_ww, p_wh, p_type))
 {
-	m_viewport = new Viewport( p_ww, p_wh, p_type);
 }
 
 Camera :: ~Camera()
 {
-	delete [] m_matrix;
-//	delete m_viewport;
-}
-
-void Camera :: Yaw( const Angle & p_angle)
-{
-	Quaternion l_tmp( Point3r( 0.0, 1.0, 0.0), p_angle);
-	m_orientation *= l_tmp;
-}
-
-void Camera :: Pitch( const Angle & p_angle)
-{
-	Quaternion l_tmp( Point3r( 1.0, 0.0, 0.0), p_angle);
-	m_orientation *= l_tmp;
-}
-
-void Camera :: Roll( const Angle & p_angle)
-{
-	Quaternion l_tmp( Point3r( 0.0, 0.0, 1.0), p_angle);
-	m_orientation *= l_tmp;
-}
-
-void Camera :: Rotate( const Quaternion & p_quat)
-{
-	m_orientation *= p_quat;
 }
 
 void Camera :: ResetOrientation()
 {
-	Quaternion l_tmp;
-	m_orientation = l_tmp;
+	m_pSceneNode->SetOrientation( Quaternion::Quat_Identity);
 }
 
 void Camera :: ResetPosition()
 {
-	m_position = Point3r( 0, 0, 0);
+	m_pSceneNode->SetPosition( Point3r( 0, 0, 0));
 }
 
-void Camera :: Translate( const Point3r & p_t)
+void Camera :: Render( eDRAW_TYPE p_displayMode)
 {
-	m_position += p_t;
+	m_viewport->Render( p_displayMode);
+	Pipeline::PushMatrix();
+	Pipeline::Translate( m_pSceneNode->GetPosition());
+	Pipeline::MultMatrix( m_pSceneNode->GetRotationMatrix());
+//	m_pRenderer->Render( p_displayMode);
 }
 
-void Camera :: Translate( real x, real y, real z)
+void Camera :: EndRender()
 {
-	m_position += Point3r( x, y, z);
-}
-
-real * Camera :: GetRotationMatrix()
-{
-	m_orientation.ToRotationMatrix( m_matrix);
-	return m_matrix;
-}
-
-void Camera :: Apply( eDRAW_TYPE p_displayMode)
-{
-	m_viewport->Apply( p_displayMode);
-	m_orientation.ToRotationMatrix( m_matrix);
-	m_pRenderer->ApplyTransformations( m_position, m_matrix);
-}
-
-void Camera :: Remove()
-{
-	m_pRenderer->RemoveTransformations();
+	Pipeline::PopMatrix();
 }
 
 void Camera :: Resize( unsigned int p_width, unsigned int p_height)

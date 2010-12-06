@@ -64,7 +64,7 @@ void Overlay :: SetSize( const Point2r & p_ptSize)
 	}
 }
 
-void PanelOverlay :: Apply( eDRAW_TYPE p_displayMode)
+void PanelOverlay :: Render( eDRAW_TYPE p_displayMode)
 {
 	if (m_bVisible)
 	{
@@ -72,12 +72,12 @@ void PanelOverlay :: Apply( eDRAW_TYPE p_displayMode)
 
 		for (OverlayPtrIntMap::iterator l_it = m_mapOverlays.begin() ; l_it != m_mapOverlays.end() ; ++l_it)
 		{
-			l_it->second->Apply( p_displayMode);
+			l_it->second->Render( p_displayMode);
 		}
 	}
 }
 
-void BorderPanelOverlay :: Apply( eDRAW_TYPE p_displayMode)
+void BorderPanelOverlay :: Render( eDRAW_TYPE p_displayMode)
 {
 	if (m_bVisible)
 	{
@@ -85,7 +85,7 @@ void BorderPanelOverlay :: Apply( eDRAW_TYPE p_displayMode)
 
 		for (OverlayPtrIntMap::iterator l_it = m_mapOverlays.begin() ; l_it != m_mapOverlays.end() ; ++l_it)
 		{
-			l_it->second->Apply( p_displayMode);
+			l_it->second->Render( p_displayMode);
 		}
 	}
 }

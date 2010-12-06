@@ -14,7 +14,7 @@ MainFrame :: MainFrame( wxWindow * p_pParent, const wxString & p_strTitle)
 		m_p3dFrame( NULL),
 		m_pCastor3D( NULL)
 {
-	Log::SetFileName( "CastorArchitect.log");
+	Logger::SetFileName( "CastorArchitect.log");
 	_buildMenuBar();
 	_buildStatusBar();
 	_initialise3D();
@@ -22,10 +22,6 @@ MainFrame :: MainFrame( wxWindow * p_pParent, const wxString & p_strTitle)
 }
 
 MainFrame :: ~MainFrame()
-{
-}
-
-void MainFrame :: ShowPanels()
 {
 }
 
@@ -39,20 +35,20 @@ void MainFrame :: LoadScene( const String & p_strFileName)
 	if ( ! m_strFilePath.empty())
 	{
 		m_pMainScene->ClearScene();
-		Log::LogMessage( CU_T( "Scene cleared"));
+		Logger::LogMessage( CU_T( "Scene cleared"));
 		MeshManager::Clear();
-		Log::LogMessage( CU_T( "Mesh manager cleared"));
+		Logger::LogMessage( CU_T( "Mesh manager cleared"));
 		MaterialManager::Clear();
-		Log::LogMessage( CU_T( "Material manager cleared"));
-		Log::LogMessage( m_strFilePath.c_str());
+		Logger::LogMessage( CU_T( "Material manager cleared"));
+		Logger::LogMessage( m_strFilePath.c_str());
 
 		if (MaterialManager::Read( m_strFilePath.c_str()))
 		{
-			Log::LogMessage( CU_T( "Materials read"));
+			Logger::LogMessage( CU_T( "Materials read"));
 		}
 		else
 		{
-			Log::LogMessage( CU_T( "Can't read materials"));
+			Logger::LogMessage( CU_T( "Can't read materials"));
 			return;
 		}
 
@@ -63,48 +59,20 @@ void MainFrame :: LoadScene( const String & p_strFileName)
 
 void MainFrame :: _initialise3D()
 {
-	Log::LogMessage( CU_T( "Initialising Castor3D"));
+	Logger::LogMessage( CU_T( "Initialising Castor3D"));
 
 	m_pCastor3D = new Root( 25);
 
 	try
 	{
-#ifdef _DEBUG
-#	if C3D_UNICODE
-			m_castor3D->LoadPlugin( CU_T( "GL2RenderSystemdu.dll"));
-#	else
-			m_pCastor3D->LoadPlugin( CU_T( "GL2RenderSystemd.dll"));
-#	endif
-#else
-#	if C3D_UNICODE
-			m_castor3D->LoadPlugin( CU_T( "GL2RenderSystemu.dll"));
-#	else
-			m_pCastor3D->LoadPlugin( CU_T( "GL2RenderSystem.dll"));
-#	endif
-#endif
-
-		RendererDriverPtr l_pDriver = m_pCastor3D->GetRendererServer().GetDriver( 0);
-
-		if ( ! l_pDriver.null())
-		{
-			l_pDriver->CreateRenderSystem();
-		}
-		else
-		{
-			return;
-		}
-
+		m_pCastor3D->LoadRenderer( RendererDriver::eOpenGL2);
 		m_pMainScene = SceneManager::GetSingletonPtr()->CreateElement( CU_T( "MainScene"));
 
-		Log::LogMessage( CU_T( "Castor3D Initialised"));
+		Logger::LogMessage( CU_T( "Castor3D Initialised"));
 		int l_width = GetClientSize().x;
 		int l_height = GetClientSize().y;
-		m_p3dFrame = new RenderPanel( this, wxID_ANY, Viewport::pt3DView, m_pMainScene, wxPoint( 0, 0), wxSize( l_width, l_height));
-
-		m_pCastor3D->StartRendering();
+		m_p3dFrame = new RenderPanel( this, wxID_ANY, Viewport::e3DView, m_pMainScene, wxPoint( 0, 0), wxSize( l_width, l_height));
 		m_p3dFrame->Show();
-
-		ShowPanels();
 	}
 	catch ( ... )
 	{
@@ -166,14 +134,11 @@ void MainFrame :: _onSize( wxSizeEvent & event)
 		m_p3dFrame->SetSize( l_width, l_height);
 		m_p3dFrame->SetPosition( wxPoint( 0, 0));
 	}
-
-	ShowPanels();
 }
 
 void MainFrame :: _onMove( wxMoveEvent & event)
 {
 	wxClientDC l_dc( this);
-	ShowPanels();
 }
 
 void MainFrame :: _onClose( wxCloseEvent & event)
@@ -226,7 +191,7 @@ void MainFrame :: _onMenuClose( wxCommandEvent & event)
 void MainFrame :: _onLoadScene( wxCommandEvent & event)
 {
 	wxString l_wildcard = CU_T( "Castor3D scene files (*.cscn)|*.cscn");
-	wxFileDialog * l_fileDialog = new wxFileDialog( this, CU_T( "Ouvrir une scene"), wxEmptyString, wxEmptyString, l_wildcard);
+	wxFileDialog * l_fileDialog = new wxFileDialog( this, CU_T( "Ouvrir une scène"), wxEmptyString, wxEmptyString, l_wildcard);
 
 	if (l_fileDialog->ShowModal() == wxID_OK)
 	{
@@ -235,18 +200,16 @@ void MainFrame :: _onLoadScene( wxCommandEvent & event)
 
 		LoadScene();
 	}
-
-	ShowPanels();
 }
 
 void MainFrame :: _onShowGeometriesList( wxCommandEvent & event)
 {
-	GeometriesListFrame * l_listFrame = new GeometriesListFrame( this, "Geometries", m_pMainScene, wxDefaultPosition, wxSize( 200, 300));
+	GeometriesListFrame * l_listFrame = new GeometriesListFrame( this, CU_T( "Géometries"), m_pMainScene, wxDefaultPosition, wxSize( 200, 300));
 	l_listFrame->Show();
 }
 
 void MainFrame :: _onShowMaterialsList( wxCommandEvent & event)
 {
-	MaterialsFrame * l_listFrame = new MaterialsFrame( this, "Materiaux", wxDefaultPosition);
+	MaterialsFrame * l_listFrame = new MaterialsFrame( this, CU_T( "Materiaux"), wxDefaultPosition);
 	l_listFrame->Show();
 }

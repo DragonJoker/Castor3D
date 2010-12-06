@@ -4,6 +4,7 @@
 #include "geometry/mesh/PNTrianglesDivider.h"
 #include "geometry/mesh/LoopDivider.h"
 #include "geometry/basic/SmoothingGroup.h"
+#include "geometry/basic/Vertex.h"
 #include "geometry/basic/Face.h"
 #include "material/MaterialManager.h"
 #include "render_system/Buffer.h"
@@ -17,12 +18,7 @@ Submesh :: Submesh( size_t p_sgNumber)
 		m_strMatName( "DefaultMaterial")
 {
 	m_triangles = m_pRenderer->GetTriangles();
-	m_trianglesNormals = m_pRenderer->GetTrianglesNormals();
-	m_trianglesTangents = m_pRenderer->GetTrianglesTangents();
-	m_trianglesTexCoords = m_pRenderer->GetTrianglesTexCoords();
 	m_lines = m_pRenderer->GetLines();
-	m_linesNormals = m_pRenderer->GetLinesNormals();
-	m_linesTexCoords = m_pRenderer->GetLinesTexCoords();
 
 	for (size_t i = 0 ; i < p_sgNumber ; i++)
 	{
@@ -38,19 +34,9 @@ Submesh :: ~Submesh()
 
 void Submesh :: Cleanup()
 {
-//	map::deleteAll( m_subdivisers);
-//	vector::deleteAll( m_smoothGroups);
 	m_subdivisers.clear();
 	m_smoothGroups.clear();
-//	vector::deleteAll( m_vertex);
-//	vector::deleteAll( m_tangents);
-//	vector::deleteAll( m_normals);
 	m_vertex.clear();
-	m_tangents.clear();
-	m_normals.clear();
-
-	m_box.reset();
-	m_sphere.reset();
 }
 
 void Submesh :: SetMaterial( const String & p_matName)
@@ -66,7 +52,7 @@ void Submesh :: SetMaterial( const String & p_matName)
 
 	if (m_material.expired())
 	{
-		Log::LogMessage( CU_T( "Material null"));
+		Logger::LogMessage( CU_T( "Material null"));
 	}
 	else
 	{
@@ -88,61 +74,46 @@ String Submesh :: GetMaterialName()const
 
 void Submesh :: ComputeContainers()
 {
-	m_box.reset();
-	m_sphere.reset();
-
 	if (m_vertex.size() <= 0)
 	{
 		return;
 	}
 
-	Point3r l_min( *m_vertex[0]);
-	Point3r l_max( *m_vertex[0]);
+	Point3r l_min( m_vertex[0]);
+	Point3r l_max( m_vertex[0]);
 
 	size_t l_nbVertex = m_vertex.size();
 
 	for (size_t i = 1 ; i < l_nbVertex ; i++)
 	{
-		if (m_vertex[i]->m_coords[0] > l_max[0])
+		if (m_vertex[i][0] > l_max[0])
 		{
-			l_max[0] = m_vertex[i]->m_coords[0];
+			l_max[0] = m_vertex[i][0];
 		}
-		if (m_vertex[i]->m_coords[0] < l_min[0])
+		if (m_vertex[i][0] < l_min[0])
 		{
-			l_min[0] = m_vertex[i]->m_coords[0];
+			l_min[0] = m_vertex[i][0];
 		}
-		if (m_vertex[i]->m_coords[1] > l_max[1])
+		if (m_vertex[i][1] > l_max[1])
 		{
-			l_max[1] = m_vertex[i]->m_coords[1];
+			l_max[1] = m_vertex[i][1];
 		}
-		if (m_vertex[i]->m_coords[1] < l_min[1])
+		if (m_vertex[i][1] < l_min[1])
 		{
-			l_min[1] = m_vertex[i]->m_coords[1];
+			l_min[1] = m_vertex[i][1];
 		}
-		if (m_vertex[i]->m_coords[2] > l_max[2])
+		if (m_vertex[i][2] > l_max[2])
 		{
-			l_max[2] = m_vertex[i]->m_coords[2];
+			l_max[2] = m_vertex[i][2];
 		}
-		if (m_vertex[i]->m_coords[2] < l_min[2])
+		if (m_vertex[i][2] < l_min[2])
 		{
-			l_min[2] = m_vertex[i]->m_coords[2];
+			l_min[2] = m_vertex[i][2];
 		}
 	}
 
-	m_box = new ComboBox( l_min, l_max);
-	m_sphere = new Sphere( *m_box);
-}
-
-SmoothingGroupPtr Submesh :: GetSmoothGroup( size_t p_index)const
-{
-	SmoothingGroupPtr l_pReturn = NULL;
-
-	if (p_index < m_smoothGroups.size() && p_index >= 0)
-	{
-		l_pReturn = m_smoothGroups[p_index];
-	}
-
-	return l_pReturn;
+	m_box.Load( l_min, l_max);
+	m_sphere.Load( m_box);
 }
 
 size_t Submesh :: GetNbFaces()const
@@ -151,216 +122,17 @@ size_t Submesh :: GetNbFaces()const
 
 	for (size_t i = 0 ; i < m_smoothGroups.size() ; i++)
 	{
-		l_nbFaces += m_smoothGroups[i]->m_faces.size();
+		l_nbFaces += m_smoothGroups[i].m_faces.size();
 	}
 
 	return l_nbFaces;
 }
 
-void Submesh :: SetFlatNormals()
-{
-	//On calcule la normale et la tangente de chaque face
-	FacePtr l_pFace;
-	SmoothingGroupPtr l_group;
-
-	for (size_t i = 0 ; i < m_smoothGroups.size() ; i++)
-	{
-		l_group = m_smoothGroups[i];
-
-		for (size_t j = 0 ; j < l_group->m_faces.size() ; j++)
-		{
-			l_pFace = l_group->m_faces[j];
-
-			const Point3r & l_v1 = * l_pFace->m_vertex1;
-			const Point3r & l_v2 = * l_pFace->m_vertex2;
-			const Point3r & l_v3 = * l_pFace->m_vertex3;
-
-			const Point3r & l_w1 = l_pFace->m_vertex1TexCoord;
-			const Point3r & l_w2 = l_pFace->m_vertex2TexCoord;
-			const Point3r & l_w3 = l_pFace->m_vertex3TexCoord;
-
-			Point3r l_vEdge1 = l_v2 - l_v1;
-			Point3r l_vEdge2 = l_v3 - l_v1;
-			Point3r l_vEdge1uv = l_w2 - l_w1;
-			Point3r l_vEdge2uv = l_w3 - l_w1;
-
-			Point3r l_vNormal = l_vEdge2.GetNormal( l_vEdge1);
-
-			l_pFace->m_faceNormal = l_vNormal;
-
-			real l_fCoeff = l_vEdge1uv[1] * l_vEdge2uv[0] - l_vEdge1uv[0] * l_vEdge2uv[1];
-
-			if (l_fCoeff != 0.0f)
-			{
-				real l_fMult = 1.0f / l_fCoeff;
-				l_pFace->m_faceTangent = (l_vEdge1 * -l_vEdge2uv[1] + l_vEdge2 * l_vEdge1uv[1]) * l_fMult;
-				l_pFace->m_faceTangent.Normalise();
-			}
-		}
-	}
-}
-
-void Submesh :: SetSmoothNormals()
-{
-	for (size_t i = 0 ; i < m_smoothGroups.size() ; i++)
-	{
-		m_smoothGroups[i]->SetNormals( m_vertex.size(), m_normals, m_tangents);
-	}
-}
-
-void Submesh :: SetNormals()
-{
-	SetFlatNormals();
-	SetSmoothNormals();
-}
-
-void Submesh :: CreateBuffers()
-{
-	m_pRenderer->Initialise();
-}
-
-void Submesh :: _setBuffersForVertex( unsigned int & p_trianglesIndex,
-									  unsigned int & p_linesIndex,
-									  unsigned int & p_trianglesTexIndex,
-									  unsigned int & p_linesTexIndex,
-									  VertexPtr p_v1, VertexPtr p_v2,
-									  const Point3r & p_texCoord1,
-									  const Point3r & p_texCoord2)
-{
-	// Triangles
-	m_trianglesTexCoords->Add( p_texCoord1[0]);
-	m_trianglesTexCoords->Add( p_texCoord1[1]);
-	m_triangles->Add( p_v1->m_coords[0]);
-	m_triangles->Add( p_v1->m_coords[1]);
-	m_triangles->Add( p_v1->m_coords[2]);
-
-	// Lines
-	m_linesTexCoords->Add( p_texCoord1[0]);
-	m_linesTexCoords->Add( p_texCoord1[1]);
-	m_lines->Add( p_v1->m_coords[0]);
-	m_lines->Add( p_v1->m_coords[1]);
-	m_lines->Add( p_v1->m_coords[2]);
-	m_linesTexCoords->Add( p_texCoord2[0]);
-	m_linesTexCoords->Add( p_texCoord2[1]);
-	m_lines->Add( p_v2->m_coords[0]);
-	m_lines->Add( p_v2->m_coords[1]);
-	m_lines->Add( p_v2->m_coords[2]);
-}
-
-void Submesh :: _setBufferSmoothNormals( FacePtr p_pFace)
-{
-	m_trianglesNormals->Add( p_pFace->m_vertex1Normal->m_coords[0]);
-	m_trianglesNormals->Add( p_pFace->m_vertex1Normal->m_coords[1]);
-	m_trianglesNormals->Add( p_pFace->m_vertex1Normal->m_coords[2]);
-
-	m_trianglesNormals->Add( p_pFace->m_vertex2Normal->m_coords[0]);
-	m_trianglesNormals->Add( p_pFace->m_vertex2Normal->m_coords[1]);
-	m_trianglesNormals->Add( p_pFace->m_vertex2Normal->m_coords[2]);
-
-	m_trianglesNormals->Add( p_pFace->m_vertex3Normal->m_coords[0]);
-	m_trianglesNormals->Add( p_pFace->m_vertex3Normal->m_coords[1]);
-	m_trianglesNormals->Add( p_pFace->m_vertex3Normal->m_coords[2]);
-
-	if (RenderSystem::UseShaders())
-	{
-		m_trianglesTangents->Add( p_pFace->m_vertex1Tangent->m_coords[0]);
-		m_trianglesTangents->Add( p_pFace->m_vertex1Tangent->m_coords[1]);
-		m_trianglesTangents->Add( p_pFace->m_vertex1Tangent->m_coords[2]);
-
-		m_trianglesTangents->Add( p_pFace->m_vertex2Tangent->m_coords[0]);
-		m_trianglesTangents->Add( p_pFace->m_vertex2Tangent->m_coords[1]);
-		m_trianglesTangents->Add( p_pFace->m_vertex2Tangent->m_coords[2]);
-
-		m_trianglesTangents->Add( p_pFace->m_vertex3Tangent->m_coords[0]);
-		m_trianglesTangents->Add( p_pFace->m_vertex3Tangent->m_coords[1]);
-		m_trianglesTangents->Add( p_pFace->m_vertex3Tangent->m_coords[2]);
-	}
-}
-
-void Submesh :: _setBufferFlatNormals( FacePtr p_pFace)
-{
-	m_trianglesNormals->Add( p_pFace->m_faceNormal[0]);
-	m_trianglesNormals->Add( p_pFace->m_faceNormal[1]);
-	m_trianglesNormals->Add( p_pFace->m_faceNormal[2]);
-
-	m_trianglesNormals->Add( p_pFace->m_faceNormal[0]);
-	m_trianglesNormals->Add( p_pFace->m_faceNormal[1]);
-	m_trianglesNormals->Add( p_pFace->m_faceNormal[2]);
-	
-	m_trianglesNormals->Add( p_pFace->m_faceNormal[0]);
-	m_trianglesNormals->Add( p_pFace->m_faceNormal[1]);
-	m_trianglesNormals->Add( p_pFace->m_faceNormal[2]);
-
-	if (RenderSystem::UseShaders())
-	{
-		m_trianglesTangents->Add( p_pFace->m_faceTangent[0]);
-		m_trianglesTangents->Add( p_pFace->m_faceTangent[1]);
-		m_trianglesTangents->Add( p_pFace->m_faceTangent[2]);
-
-		m_trianglesTangents->Add( p_pFace->m_faceTangent[0]);
-		m_trianglesTangents->Add( p_pFace->m_faceTangent[1]);
-		m_trianglesTangents->Add( p_pFace->m_faceTangent[2]);
-
-		m_trianglesTangents->Add( p_pFace->m_faceTangent[0]);
-		m_trianglesTangents->Add( p_pFace->m_faceTangent[1]);
-		m_trianglesTangents->Add( p_pFace->m_faceTangent[2]);
-	}
-}
-
-void Submesh :: SetBuffersForFace( FacePtr p_face, unsigned int & p_trianglesIndex,
-								   unsigned int & p_linesIndex,
-								   unsigned int & p_trianglesTexIndex,
-								   unsigned int & p_linesTexIndex)
-{
-	_setBuffersForVertex( p_trianglesIndex, p_linesIndex, p_trianglesTexIndex, p_linesTexIndex,
-						  p_face->m_vertex1, p_face->m_vertex2, p_face->m_vertex1TexCoord, p_face->m_vertex2TexCoord);
-
-	_setBuffersForVertex( p_trianglesIndex, p_linesIndex, p_trianglesTexIndex, p_linesTexIndex,
-						  p_face->m_vertex2, p_face->m_vertex3, p_face->m_vertex2TexCoord, p_face->m_vertex3TexCoord);
-
-	_setBuffersForVertex( p_trianglesIndex, p_linesIndex, p_trianglesTexIndex, p_linesTexIndex,
-						  p_face->m_vertex3, p_face->m_vertex1, p_face->m_vertex3TexCoord, p_face->m_vertex1TexCoord);
-}
-
-void Submesh :: CreateNormalsBuffer( NormalsMode p_nm)
-{
-	m_normalsMode = p_nm;
-	m_trianglesNormals->InitialiseBuffer( m_triangles->GetFilled(), 0);
-
-	if (RenderSystem::UseShaders())
-	{
-		m_trianglesTangents->InitialiseBuffer( m_triangles->GetFilled(), 0);
-	}
-
-	unsigned int l_trianglesIndex = 0;
-
-	if (m_normalsMode == nmSmoothGroups)
-	{
-		for (size_t i = 0 ; i < m_smoothGroups.size() ; i++)
-		{
-			for (size_t j = 0 ; j < m_smoothGroups[i]->m_faces.size() ; j++)
-			{
-				_setBufferSmoothNormals( m_smoothGroups[i]->m_faces[j]);
-			}
-		}
-	}
-	else if (m_normalsMode == nmFace)
-	{
-		for (size_t i = 0 ; i < m_smoothGroups.size() ; i++)
-		{
-			for (size_t j = 0 ; j < m_smoothGroups[i]->m_faces.size() ; j++)
-			{
-				_setBufferFlatNormals( m_smoothGroups[i]->m_faces[j]);
-			}
-		}
-	}
-}
-
-int Submesh :: IsInMyVertex( const Vertex & p_vertex)
+int Submesh :: IsInMyVertex( const Point3r & p_vertex)
 {
 	for (unsigned int i = 0 ; i < m_vertex.size() ; i++)
 	{
-		if (p_vertex == *m_vertex[i])
+		if (p_vertex == m_vertex[i])
 		{
 			return (int)i;
 		}
@@ -368,126 +140,170 @@ int Submesh :: IsInMyVertex( const Vertex & p_vertex)
 	return -1;
 }
 
-VertexPtr Submesh :: AddVertex( real x, real y, real z)
+void Submesh :: ComputeFlatNormals()
 {
-	VertexPtr l_result = new Vertex( x, y, z, m_vertex.size());
-	return AddVertex( l_result);
+	//On calcule la normale et la tangente de chaque face
+	for (size_t i = 0 ; i < m_smoothGroups.size() ; i++)
+	{
+		SmoothingGroup & l_group = m_smoothGroups[i];
+
+		for (size_t j = 0 ; j < l_group.m_faces.size() ; j++)
+		{
+			Face & l_face = l_group.m_faces[j];
+
+			const Point3r & l_v1 = l_face[0].GetCoords();
+			const Point3r & l_v2 = l_face[1].GetCoords();
+			const Point3r & l_v3 = l_face[2].GetCoords();
+
+			const Point2r & l_w1 = l_face[0].GetTexCoord();
+			const Point2r & l_w2 = l_face[1].GetTexCoord();
+			const Point2r & l_w3 = l_face[2].GetTexCoord();
+
+			Point3r l_vEdge1 = l_v2 - l_v1;
+			Point3r l_vEdge2 = l_v3 - l_v1;
+			Point2r l_vEdge1uv = l_w2 - l_w1;
+			Point2r l_vEdge2uv = l_w3 - l_w1;
+
+			Point3r l_vNormal = l_vEdge2 ^ l_vEdge1;
+			l_vNormal.Normalise();
+
+			l_face.m_faceNormal = l_vNormal;
+
+			real l_fCoeff = l_vEdge1uv[1] * l_vEdge2uv[0] - l_vEdge1uv[0] * l_vEdge2uv[1];
+
+			if (l_fCoeff != 0.0f)
+			{
+				real l_fMult = 1.0f / l_fCoeff;
+				l_face.m_faceTangent = (l_vEdge1 * -l_vEdge2uv[1] + l_vEdge2 * l_vEdge1uv[1]) * l_fMult;
+				l_face.m_faceTangent.Normalise();
+			}
+		}
+	}
 }
 
-VertexPtr Submesh :: AddVertex( const Vertex & p_v)
+void Submesh :: ComputeSmoothNormals()
 {
-	VertexPtr l_result = new Vertex( p_v);
-	return AddVertex( l_result);
+	for (size_t i = 0 ; i < m_smoothGroups.size() ; i++)
+	{
+		m_smoothGroups[i].SetNormals( m_vertex.size());
+	}
 }
 
-VertexPtr Submesh :: AddVertex( VertexPtr p_v)
+void Submesh :: ComputeNormals()
 {
-	p_v->m_index = m_vertex.size();
+	ComputeFlatNormals();
+	ComputeSmoothNormals();
+}
+
+void Submesh :: InitialiseBuffers()
+{
+	m_pRenderer->Initialise();
+}
+
+void Submesh :: SetNormals( eNORMALS_MODE p_nm)
+{
+	m_normalsMode = p_nm;
+
+	unsigned int l_trianglesIndex = 0;
+
+	switch (m_normalsMode)
+	{
+	case eSmooth:
+		for (size_t i = 0 ; i < m_smoothGroups.size() ; i++)
+		{
+			for (size_t j = 0 ; j < m_smoothGroups[i].m_faces.size() ; j++)
+			{
+				m_smoothGroups[i].m_faces[j].SetSmoothNormals();
+			}
+		}
+		break;
+
+	case eFace:
+		for (size_t i = 0 ; i < m_smoothGroups.size() ; i++)
+		{
+			for (size_t j = 0 ; j < m_smoothGroups[i].m_faces.size() ; j++)
+			{
+				m_smoothGroups[i].m_faces[j].SetFlatNormals();
+			}
+		}
+		break;
+	}
+}
+
+Point3r & Submesh :: AddVertex( real x, real y, real z)
+{
+	m_vertex.push_back( Point3r( x, y, z));
+	return m_vertex[m_vertex.size() - 1];
+}
+
+Point3r & Submesh :: AddVertex( const Point3r & p_v)
+{
 	m_vertex.push_back( p_v);
-	m_tangents.push_back( new Point3r);
-	m_normals.push_back( new Point3r);
-	return p_v;
+	return m_vertex[m_vertex.size() - 1];
 }
 
-VertexPtr Submesh :: AddVertex( real * p_v)
+Point3r & Submesh :: AddVertex( real * p_v)
 {
-	VertexPtr l_result = new Vertex( p_v[0], p_v[1], p_v[2], m_vertex.size());
-	return AddVertex( l_result);
+	m_vertex.push_back( p_v);
+	return m_vertex[m_vertex.size() - 1];
 }
 
-FacePtr Submesh :: AddFace( VertexPtr a, VertexPtr b, VertexPtr c, size_t p_sgIndex)
+Face & Submesh :: AddFace( size_t a, size_t b, size_t c, size_t p_sgIndex)
 {
-	FacePtr l_face = new Face( a, b, c);
-	_addFace( l_face, p_sgIndex);
-	m_triangles->IncreaseSize( 3 * 3);
-	m_trianglesTexCoords->IncreaseSize( 3 * 2);
-	if (RenderSystem::UseShaders())
-	{
-		m_trianglesTangents->IncreaseSize( 3 * 3);
-	}
-	m_lines->IncreaseSize( 6 * 3);
-	m_linesTexCoords->IncreaseSize( 6 * 2);
-	return l_face;
-}
+	CASTOR_ASSERT( a < m_vertex.size() && b < m_vertex.size() && c < m_vertex.size());
+	Face l_face( m_vertex[a], a, m_vertex[b], b, m_vertex[c], c);
+	Face & l_return = _addFace( l_face, p_sgIndex);
 
-FacePtr Submesh :: AddFace( size_t a, size_t b, size_t c, size_t p_sgIndex)
-{
-	VertexPtr l_v1, l_v2, l_v3;
+	m_triangles->IncreaseSize( 11 * 3, false);
+	m_lines->IncreaseSize( 22 * 3, false);
 
-	if (a >= m_vertex.size() || b >= m_vertex.size() || c >= m_vertex.size())
-	{
-		return NULL;
-	}
-
-	l_v1 = m_vertex[a];
-	l_v2 = m_vertex[b];
-	l_v3 = m_vertex[c];
-
-	return AddFace( l_v1, l_v2, l_v3, p_sgIndex);
-}
-
-void Submesh :: AddQuadFace( VertexPtr a, VertexPtr b, VertexPtr c, VertexPtr d, size_t p_sgIndex, const Point3r & p_ptMinUV, const Point3r & p_ptMaxUV)
-{
-	FacePtr l_pFace;
-	l_pFace = AddFace( a, b, c, p_sgIndex);
-	l_pFace->SetTexCoordV1( p_ptMinUV[0], p_ptMinUV[1]);
-	l_pFace->SetTexCoordV2( p_ptMaxUV[0], p_ptMinUV[1]);
-	l_pFace->SetTexCoordV3( p_ptMaxUV[0], p_ptMaxUV[1]);
-
-	l_pFace = AddFace( c, d, a, p_sgIndex);
-	l_pFace->SetTexCoordV1( p_ptMaxUV[0], p_ptMaxUV[1]);
-	l_pFace->SetTexCoordV2( p_ptMinUV[0], p_ptMaxUV[1]);
-	l_pFace->SetTexCoordV3( p_ptMinUV[0], p_ptMinUV[1]);
+	return l_return;
 }
 
 void Submesh :: AddQuadFace( size_t a, size_t b, size_t c, size_t d, size_t p_sgIndex, const Point3r & p_ptMinUV, const Point3r & p_ptMaxUV)
 {
-	FacePtr l_pFace;
-	l_pFace = AddFace( a, b, c, p_sgIndex);
-	l_pFace->SetTexCoordV1( p_ptMinUV[0], p_ptMinUV[1]);
-	l_pFace->SetTexCoordV2( p_ptMaxUV[0], p_ptMinUV[1]);
-	l_pFace->SetTexCoordV3( p_ptMaxUV[0], p_ptMaxUV[1]);
+	Face & l_face1 = AddFace( a, b, c, p_sgIndex);
+	l_face1.SetVertexTexCoords( 0, p_ptMinUV[0], p_ptMinUV[1]);
+	l_face1.SetVertexTexCoords( 1, p_ptMaxUV[0], p_ptMinUV[1]);
+	l_face1.SetVertexTexCoords( 2, p_ptMaxUV[0], p_ptMaxUV[1]);
 
-	l_pFace = AddFace( c, d, a, p_sgIndex);
-	l_pFace->SetTexCoordV1( p_ptMaxUV[0], p_ptMaxUV[1]);
-	l_pFace->SetTexCoordV2( p_ptMinUV[0], p_ptMaxUV[1]);
-	l_pFace->SetTexCoordV3( p_ptMinUV[0], p_ptMinUV[1]);
+	Face & l_face2 = AddFace( c, d, a, p_sgIndex);					  
+	l_face2.SetVertexTexCoords( 0, p_ptMaxUV[0], p_ptMaxUV[1]);
+	l_face2.SetVertexTexCoords( 1, p_ptMinUV[0], p_ptMaxUV[1]);
+	l_face2.SetVertexTexCoords( 2, p_ptMinUV[0], p_ptMinUV[1]);
 }
 
-SmoothingGroupPtr Submesh :: AddSmoothingGroup()
+SmoothingGroup & Submesh :: AddSmoothingGroup()
 {
-	SmoothingGroupPtr l_pReturn = new SmoothingGroup( m_smoothGroups.size() + 1);
-	m_smoothGroups.push_back( l_pReturn);
+	SmoothingGroup l_group( m_smoothGroups.size() + 1);
+	m_smoothGroups.push_back( l_group);
+	return m_smoothGroups[m_smoothGroups.size() - 1];
+}
 
-	return l_pReturn;
+void Submesh :: AddSmoothGroup( const SmoothingGroup & p_group)
+{
+	m_smoothGroups.push_back( p_group);
 }
 
 void Submesh :: GenerateBuffers()
 {
 	m_triangles->InitialiseBuffer( m_triangles->GetSize(), 0);
-	m_trianglesTexCoords->InitialiseBuffer( m_trianglesTexCoords->GetSize(), 0);
 	m_lines->InitialiseBuffer( m_lines->GetSize(), 0);
-	m_linesTexCoords->InitialiseBuffer( m_linesTexCoords->GetSize(), 0);
-
-	unsigned int l_trianglesCoordsIndex = 0;
-	unsigned int l_trianglesTexCoordsIndex = 0;
-	unsigned int l_trianglesTanCoordsIndex = 0;
-	unsigned int l_linesCoordsIndex = 0;
-	unsigned int l_linesTexCoordsIndex = 0;
 
 	for (size_t i = 0 ; i < m_smoothGroups.size() ; i++)
 	{
-		for (size_t j = 0 ; j < m_smoothGroups[i]->m_faces.size() ; j++)
+		for (size_t j = 0 ; j < m_smoothGroups[i].m_faces.size() ; j++)
 		{
-			SetBuffersForFace( m_smoothGroups[i]->m_faces[j], l_trianglesCoordsIndex, l_linesCoordsIndex,  l_trianglesTexCoordsIndex, l_linesTexCoordsIndex);
+			m_triangles->AddVertex( m_smoothGroups[i].m_faces[j][0], false);
+			m_triangles->AddVertex( m_smoothGroups[i].m_faces[j][1], false);
+			m_triangles->AddVertex( m_smoothGroups[i].m_faces[j][2], false);
 		}
 	}
 }
 
 SubmeshPtr Submesh :: Clone()
 {
-	SubmeshPtr l_clone = new Submesh();
-	FacePtr l_tmpFace;
+	SubmeshPtr l_clone( new Submesh());
 	bool l_found;
 	size_t l_index;
 
@@ -496,27 +312,26 @@ SubmeshPtr Submesh :: Clone()
 	//On effectue une copie des vertex
 	for (size_t i = 0 ; i < l_nbVertex ; i++)
 	{
-		l_clone->m_vertex.push_back( new Vertex( * m_vertex[i]));
+		l_clone->m_vertex.push_back( m_vertex[i]);
 	}
-
-	SmoothingGroupPtr l_pGroup, l_pNewGroup;
 
 	for (size_t i = 0 ; i < m_smoothGroups.size() ; i++)
 	{
-		l_pGroup = m_smoothGroups[i];
-		l_pNewGroup = new SmoothingGroup( l_pGroup->m_idGroup);
+		const SmoothingGroup & l_group = m_smoothGroups[i];
+		SmoothingGroup & l_newGroup = l_clone->AddSmoothingGroup();
+		l_newGroup.m_idGroup = l_group.m_idGroup;
 
-		for (size_t j = 0 ; j < l_pGroup->m_faces.size() ; j++)
+		for (size_t j = 0 ; j < l_group.m_faces.size() ; j++)
 		{
-			l_tmpFace = new Face;
+			Face l_tmpFace;
 			l_found = false;
 			l_index = 0;
 
 			while ( ! l_found && l_index < l_nbVertex)
 			{
-				if (l_pGroup->m_faces[j]->m_vertex1 == m_vertex[l_index])
+				if (l_group.m_faces[j][0].GetCoords() == m_vertex[l_index])
 				{
-					l_tmpFace->m_vertex1 = l_clone->m_vertex[l_index];
+					l_tmpFace[0].SetCoords( l_clone->m_vertex[l_index]);
 					l_found = true;
 				}
 				l_index++;
@@ -526,9 +341,9 @@ SubmeshPtr Submesh :: Clone()
 
 			while ( ! l_found && l_index < l_nbVertex)
 			{
-				if (l_pGroup->m_faces[j]->m_vertex2 == m_vertex[l_index])
+				if (l_group.m_faces[j][1].GetCoords() == m_vertex[l_index])
 				{
-					l_tmpFace->m_vertex2 = l_clone->m_vertex[l_index];
+					l_tmpFace[1].SetCoords( l_clone->m_vertex[l_index]);
 					l_found = true;
 				}
 				l_index++;
@@ -538,26 +353,26 @@ SubmeshPtr Submesh :: Clone()
 
 			while ( ! l_found && l_index < l_nbVertex)
 			{
-				if (l_pGroup->m_faces[j]->m_vertex3 == m_vertex[l_index])
+				if (l_group.m_faces[j][2].GetCoords() == m_vertex[l_index])
 				{
-					l_tmpFace->m_vertex3 = l_clone->m_vertex[l_index];
+					l_tmpFace[2].SetCoords( l_clone->m_vertex[l_index]);
 					l_found = true;
 				}	
 				l_index++;
 			}
 
-			l_tmpFace->m_faceNormal[0] = l_pGroup->m_faces[j]->m_faceNormal[0];
-			l_tmpFace->m_faceNormal[1] = l_pGroup->m_faces[j]->m_faceNormal[1];
-			l_tmpFace->m_faceNormal[2] = l_pGroup->m_faces[j]->m_faceNormal[2];
+			l_tmpFace.m_faceNormal[0] = l_group.m_faces[j].m_faceNormal[0];
+			l_tmpFace.m_faceNormal[1] = l_group.m_faces[j].m_faceNormal[1];
+			l_tmpFace.m_faceNormal[2] = l_group.m_faces[j].m_faceNormal[2];
 
-			l_pNewGroup->m_faces.push_back( l_tmpFace);
+			l_newGroup.m_faces.push_back( l_tmpFace);
 		}
 	}
 
 	return l_clone;
 }
 
-void Submesh :: Subdivide( SubdivisionMode p_mode, Point3rPtr p_center)
+void Submesh :: Subdivide( SubdivisionMode p_mode, Point3r * p_center)
 {
 	if (p_mode == SMPNTriangles)
 	{
@@ -573,10 +388,10 @@ void Submesh :: Subdivide( SubdivisionMode p_mode, Point3rPtr p_center)
 	}
 
 	GenerateBuffers();
-	SetNormals();
+	ComputeNormals();
 }
 
-void Submesh :: Apply( eDRAW_TYPE p_displayMode)
+void Submesh :: Render( eDRAW_TYPE p_displayMode)
 {
 	MaterialPtr l_pMaterial = m_material;
 	PassPtrArray l_passes = l_pMaterial->GetPasses();
@@ -587,9 +402,9 @@ void Submesh :: Apply( eDRAW_TYPE p_displayMode)
 	{
 		l_pass = l_passes[j];
 		l_textures = l_pass->GetTextureUnits();
-		l_pass->Apply( p_displayMode);
+		l_pass->Render( p_displayMode);
 		m_pRenderer->Draw( p_displayMode, l_pass);
-		l_pass->Remove();
+		l_pass->EndRender();
 	}
 }
 
@@ -597,7 +412,6 @@ bool Submesh :: Write( File & p_file)const
 {
 	size_t l_nbVertex;
 	size_t l_nbFaces;
-	FacePtr l_face;
 	size_t l_matNameLength = m_strMatName.size();
 
 	bool l_bReturn = p_file.Write( l_matNameLength) == sizeof( size_t);
@@ -618,7 +432,7 @@ bool Submesh :: Write( File & p_file)const
 	{
 		for (size_t i = 0; i < l_nbVertex && l_bReturn ; i++)
 		{
-			l_bReturn = m_vertex[i]->Write( p_file);
+			l_bReturn = m_vertex[i].Write( p_file);
 		}
 	}
 
@@ -631,9 +445,9 @@ bool Submesh :: Write( File & p_file)const
 	{
 		for (size_t i = 0 ; i < m_smoothGroups.size() && l_bReturn ; i++)
 		{
-			l_nbFaces = m_smoothGroups[i]->m_faces.size();
+			l_nbFaces = m_smoothGroups[i].m_faces.size();
 
-			l_bReturn = p_file.Write( m_smoothGroups[i]->m_idGroup) == sizeof( size_t);
+			l_bReturn = p_file.Write( m_smoothGroups[i].m_idGroup) == sizeof( size_t);
 
 			if (l_bReturn)
 			{
@@ -642,23 +456,16 @@ bool Submesh :: Write( File & p_file)const
 
 			for (size_t j = 0 ; j < l_nbFaces && l_bReturn ; j++)
 			{
-				l_face = m_smoothGroups[i]->m_faces[j];
+				const Face & l_face = m_smoothGroups[i].m_faces[j];
 
-				l_bReturn = p_file.Write( l_face->m_vertex1->m_index) == sizeof( size_t);
-
-				if (l_bReturn)
+				for (size_t k = 0 ; k <  3 && l_bReturn ; k++)
 				{
-					l_bReturn = p_file.Write( l_face->m_vertex2->m_index) == sizeof( size_t);
+					l_bReturn = p_file.Write( l_face[k].m_index) == sizeof( size_t);
 				}
 
 				if (l_bReturn)
 				{
-					l_bReturn = p_file.Write( l_face->m_vertex3->m_index) == sizeof( size_t);
-				}
-
-				if (l_bReturn)
-				{
-					l_bReturn = l_face->Write( p_file);
+					l_bReturn = l_face.Write( p_file);
 				}
 			}// endloop on faces
 		}// endloop on smoothing groups
@@ -672,16 +479,13 @@ bool Submesh :: Read( File & p_file)
 	Cleanup();
 
 	m_triangles->Cleanup();
-	m_trianglesTexCoords->Cleanup();
 	m_lines->Cleanup();
-	m_linesTexCoords->Cleanup();
 
 	size_t l_nbVertex;
 	size_t l_nbGroups;
 	size_t l_nbFaces;
 	size_t l_iV1, l_iV2, l_iV3;
 	size_t l_namelength;
-	FacePtr l_face;
 	Char l_name[256];
 	bool l_bReturn = p_file.Read( l_namelength) == sizeof( size_t);
 
@@ -708,12 +512,11 @@ bool Submesh :: Read( File & p_file)
 
 	if (l_bReturn)
 	{
-		VertexPtr l_v;
 		for (size_t i = 0; i < l_nbVertex && l_bReturn ; i++)
 		{
-			l_v = new Vertex;
+			Point3r l_v;
 
-			l_bReturn = l_v->Read( p_file);
+			l_bReturn = l_v.Read( p_file);
 
 			if (l_bReturn)
 			{
@@ -731,13 +534,12 @@ bool Submesh :: Read( File & p_file)
 
 	if (l_bReturn)
 	{
-		SmoothingGroupPtr l_pGroup;
 
 		for (size_t i = 0 ; i < l_nbGroups && l_bReturn ; i++)
 		{
-			l_pGroup = AddSmoothingGroup();
+			SmoothingGroup & l_group = AddSmoothingGroup();
 
-			l_bReturn = p_file.Read( l_pGroup->m_idGroup) == sizeof( size_t);
+			l_bReturn = p_file.Read( l_group.m_idGroup) == sizeof( size_t);
 
 			if (l_bReturn)
 			{
@@ -766,8 +568,7 @@ bool Submesh :: Read( File & p_file)
 
 					if (l_bReturn)
 					{
-						l_face = AddFace( l_iV1, l_iV2, l_iV3, 0);
-						l_bReturn = l_face->Read( p_file);
+						l_bReturn = AddFace( l_iV1, l_iV2, l_iV3, 0).Read( p_file);
 					}
 				}
 			}
@@ -781,137 +582,70 @@ bool Submesh :: Read( File & p_file)
 
 	return l_bReturn;
 }
-/*
-void Submesh :: InvertNormals()
-{
-	for (size_t i = 0 ; i < m_smoothGroups.size() ; i++)
-	{
-		for (size_t j = 0 ; j < m_smoothGroups[i]->m_faces.size() ; j++)
-		{
-			m_smoothGroups[i]->m_faces[j]->m_faceNormal.Reverse();
-		}
-	}
 
-	for (size_t i = 0 ; i < m_normals.size() ; i++)
-	{
-		m_normals[i]->Reverse();
-	}
-
-	for (size_t i = 0 ; i < m_tangents.size() ; i++)
-	{
-		m_tangents[i]->Reverse();
-	}
-
-	for (unsigned int i = 0 ; i < m_trianglesNormals->GetFilled() ; i++)
-	{
-		m_trianglesNormals->Negate( i);
-	}
-}
-*/
 void Submesh :: ComputeFacesFromPolygonVertex()
 {
 	int l_nbFaces = m_vertex.size() - 2;
-	unsigned int l_nbTrianglesCoords = 4 * l_nbFaces * 3 * 3;
-	unsigned int l_nbTrianglesTexCoords = 4 * l_nbFaces * 3 * 2;
+
+	unsigned int l_nbTrianglesCoords = 4 * l_nbFaces * 12 * 3;
 	m_triangles->InitialiseBuffer( l_nbTrianglesCoords, 0);
-	m_trianglesTexCoords->InitialiseBuffer( l_nbTrianglesTexCoords, 0);
-	unsigned int l_trianglesCoordsIndex = 0;
-	unsigned int l_trianglesTexCoordsIndex = 0;
 
-	unsigned int l_nbLinesCoords = 4 * l_nbFaces * 6 * 3;
-	unsigned int l_nbLinesTexCoords = 4 * l_nbFaces * 6 * 2;
+	unsigned int l_nbLinesCoords = 4 * l_nbFaces * 24 * 3;
 	m_lines->InitialiseBuffer( l_nbLinesCoords, 0);
-	m_linesTexCoords->InitialiseBuffer( l_nbLinesTexCoords, 0);
-	unsigned int l_linesCoordsIndex = 0;
-	unsigned int l_linesTexCoordsIndex = 0;
 
-	VertexPtr l_v1, l_v2, l_v3;
-	l_v1 = m_vertex[0];
-	l_v2 = m_vertex[1];
-	l_v3 = m_vertex[2];
+	Point3r l_v1 = m_vertex[0];
+	Point3r l_v2 = m_vertex[1];
+	Point3r l_v3 = m_vertex[2];
 
-	FacePtr l_face = AddFace( l_v1, l_v2, l_v3, 0);
-	l_face->SetTexCoordV1( 0.0, 0.0);
-	l_face->SetTexCoordV2( 0.0, 0.0);
-	l_face->SetTexCoordV3( 0.0, 0.0);
+	Face & l_face = AddFace( 0, 1, 2, 0);
+	l_face.SetVertexTexCoords( 0, 0.0, 0.0);
+	l_face.SetVertexTexCoords( 1, 0.0, 0.0);
+	l_face.SetVertexTexCoords( 2, 0.0, 0.0);
 
-	SetBuffersForFace( l_face, l_trianglesCoordsIndex, l_linesCoordsIndex, 
-						l_trianglesTexCoordsIndex, l_linesTexCoordsIndex);
+	m_triangles->AddVertex( l_face[0], false);
+	m_triangles->AddVertex( l_face[1], false);
+	m_triangles->AddVertex( l_face[2], false);
 
 	for (size_t i = 2 ; i < m_vertex.size() - 1 ; i++)
 	{
 		l_v2 = m_vertex[i];
 		l_v3 = m_vertex[i + 1];
-		l_face = AddFace( l_v1, l_v2, l_v3, 0);
+		Face & l_faceA = AddFace( 0, i, i + 1, 0);
 
-		l_face->SetTexCoordV1( 0.0, 0.0);
-		l_face->SetTexCoordV2( 0.0, 0.0);
-		l_face->SetTexCoordV3( 0.0, 0.0);
+		l_faceA.SetVertexTexCoords( 0, 0.0, 0.0);
+		l_faceA.SetVertexTexCoords( 1, 0.0, 0.0);
+		l_faceA.SetVertexTexCoords( 2, 0.0, 0.0);
 
-		SetBuffersForFace( l_face, l_trianglesCoordsIndex, l_linesCoordsIndex, 
-							l_trianglesTexCoordsIndex, l_linesTexCoordsIndex);
+		m_triangles->AddVertex( l_faceA[0], false);
+		m_triangles->AddVertex( l_faceA[1], false);
+		m_triangles->AddVertex( l_faceA[2], false);
 	}
 }
 
-void Submesh :: _subdividePNTriangles( Point3rPtr p_center)
+void Submesh :: _subdividePNTriangles( Point3r * p_center)
 {
 	m_pRenderer->Cleanup();
 
 	m_triangles = m_pRenderer->GetTriangles();
-	m_trianglesNormals = m_pRenderer->GetTrianglesNormals();
-	m_trianglesTangents = m_pRenderer->GetTrianglesTangents();
-	m_trianglesTexCoords = m_pRenderer->GetTrianglesTexCoords();
 	m_lines = m_pRenderer->GetLines();
-	m_linesNormals = m_pRenderer->GetLinesNormals();
-	m_linesTexCoords = m_pRenderer->GetLinesTexCoords();
 
-	PNTrianglesSubdiviserPtr l_diviser;
-
-	if (m_subdivisers.find( SMPNTriangles) == m_subdivisers.end())
-	{
-		l_diviser = new PNTrianglesSubdiviser( this);
-		m_subdivisers.insert( SubdiviserPtrModeMap::value_type( SMPNTriangles, l_diviser));
-	}
-	else
-	{
-		l_diviser = m_subdivisers.find( SMPNTriangles)->second;
-	}
-
-	l_diviser->Subdivide( p_center);
+	PNTrianglesSubdiviser l_diviser( this);
+	l_diviser.Subdivide( * p_center);
 }
 
-void Submesh :: _subdivideLoop( Point3rPtr p_center)
+void Submesh :: _subdivideLoop( Point3r * p_center)
 {
 	m_pRenderer->Cleanup();
 
 	m_triangles = m_pRenderer->GetTriangles();
-	m_trianglesNormals = m_pRenderer->GetTrianglesNormals();
-	m_trianglesTangents = m_pRenderer->GetTrianglesTangents();
-	m_trianglesTexCoords = m_pRenderer->GetTrianglesTexCoords();
 	m_lines = m_pRenderer->GetLines();
-	m_linesNormals = m_pRenderer->GetLinesNormals();
-	m_linesTexCoords = m_pRenderer->GetLinesTexCoords();
 
 	LoopSubdiviser l_diviser( this);
-	l_diviser.Subdivide( p_center);
-/*
-	LoopSubdiviser * l_diviser;
-	if (m_subdivisers.find( SMLoop) == m_subdivisers.end())
-	{
-		l_diviser = new LoopSubdiviser( this);
-		m_subdivisers.insert( C3DMap <SubdivisionMode, Subdiviser *>::value_type( SMLoop, l_diviser));
-	}
-	else
-	{
-		l_diviser = static_cast <LoopSubdiviser *>( m_subdivisers.find( SMLoop)->second);
-	}
-
-	l_diviser->Subdivide( p_center);
-*/
-
+	l_diviser.Subdivide( * p_center);
 }
 
-void Submesh :: _addFace( FacePtr p_face, size_t p_sgIndex)
+Face & Submesh :: _addFace( const Face & p_face, size_t p_sgIndex)
 {
-	m_smoothGroups[p_sgIndex]->m_faces.push_back( p_face);
+	m_smoothGroups[p_sgIndex].m_faces.push_back( p_face);
+	return m_smoothGroups[p_sgIndex].m_faces[m_smoothGroups[p_sgIndex].m_faces.size() - 1];
 }

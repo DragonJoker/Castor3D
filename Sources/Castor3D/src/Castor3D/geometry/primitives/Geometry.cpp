@@ -8,7 +8,7 @@
 #include "geometry/mesh/Submesh.h"
 #include "geometry/mesh/MeshManager.h"
 #include "geometry/basic/SmoothingGroup.h"
-#include "scene/SceneNode.h"
+#include "scene/NodeBase.h"
 #include "scene/SceneManager.h"
 #include "scene/Scene.h"
 #include "render_system/RenderSystem.h"
@@ -21,8 +21,8 @@
 
 using namespace Castor3D;
 
-Geometry :: Geometry ( MeshPtr p_mesh, SceneNodePtr p_sn, const String & p_name)
-	:	MovableObject( p_sn, p_name),
+Geometry :: Geometry ( MeshPtr p_mesh, GeometryNodePtr p_sn, const String & p_name)
+	:	MovableObject( (NodeBase *)p_sn.get(), p_name),
 		m_mesh( p_mesh),
 		m_changed( true),
 		m_listCreated( false),
@@ -42,9 +42,9 @@ void Geometry :: Cleanup()
 {
 }
 
-void Geometry :: CreateBuffers( NormalsMode p_nm, size_t & p_nbFaces, size_t & p_nbVertex)
+void Geometry :: CreateBuffers( eNORMALS_MODE p_nm, size_t & p_nbFaces, size_t & p_nbVertex)
 {
-	Log::LogMessage( CU_T( "Geometry :: CreateBuffers - %d"), p_nm);
+	Logger::LogMessage( CU_T( "Geometry :: CreateBuffers - %d"), p_nm);
 	Cleanup();
 
 	if ( ! m_mesh.null())
@@ -55,29 +55,15 @@ void Geometry :: CreateBuffers( NormalsMode p_nm, size_t & p_nbFaces, size_t & p
 		p_nbFaces += l_nbFaces;
 		p_nbVertex += l_nbVertex;
 
-		m_mesh->CreateNormalsBuffers( p_nm);
+		m_mesh->SetNormals( p_nm);
 
-		Cleanup();
+		size_t l_nbSubmeshes = m_mesh->GetNbSubmeshes();
+		m_listCreated = l_nbSubmeshes > 0;
 
-		unsigned int l_nbSubmeshes = static_cast <unsigned int>( m_mesh->GetNbSubmeshes());
-
-		for (unsigned int i = 0 ; i < l_nbSubmeshes ; i++)
-		{
-			m_mesh->GetSubmesh( i)->GetRenderer()->GetTrianglesNormals()->Initialise();
-
-			if (RenderSystem::UseShaders())
-			{
-				m_mesh->GetSubmesh( i)->GetRenderer()->GetTrianglesTangents()->Initialise();
-			}
-
-			m_mesh->GetSubmesh( i)->GetRenderer()->GetLinesNormals()->Initialise();
-		}
-		m_listCreated = m_mesh->GetNbSubmeshes() > 0;
-
-		m_mesh->CreateBuffers();
+		m_mesh->InitialiseBuffers();
 
 		m_normalsMode = p_nm;
-		Log::LogMessage( CU_T( "Geometry :: CreateBuffers - NbVertex : %d, NbFaces : %d"), l_nbVertex, l_nbFaces);
+		Logger::LogMessage( CU_T( "Geometry :: CreateBuffers - NbVertex : %d, NbFaces : %d"), l_nbVertex, l_nbFaces);
 		m_listCreated = m_mesh->GetNbSubmeshes() > 0;
 		m_dirty = false;
 	}
@@ -101,7 +87,7 @@ void Geometry :: Render( eDRAW_TYPE p_displayMode)
 		}
 		m_orientation.ToRotationMatrix( m_matrix);
 
-		RenderSystem::GetSingletonPtr<RenderSystem>()->ApplyTransformations( m_center, m_matrix);
+		RenderSystem::GetSingletonPtr()->ApplyTransformations( m_center, m_matrix);
 
 		unsigned int l_nbSubmeshes = static_cast <unsigned int>( m_mesh->GetNbSubmeshes());
 		SubmeshPtr l_submesh;
@@ -109,7 +95,7 @@ void Geometry :: Render( eDRAW_TYPE p_displayMode)
 		for (unsigned int i = 0 ; i < l_nbSubmeshes ; i++)
 		{
 			l_submesh = m_mesh->GetSubmesh( i);
-			l_submesh->Apply( p_displayMode);
+			l_submesh->Render( p_displayMode);
 /*
 			l_submeshRenderer = l_submesh->GetRenderer();
 			l_passes = l_submesh->GetMaterial()->GetPasses();
@@ -125,7 +111,7 @@ void Geometry :: Render( eDRAW_TYPE p_displayMode)
 */
 		}
 
-		RenderSystem::GetSingletonPtr<RenderSystem>()->RemoveTransformations();
+		RenderSystem::GetSingletonPtr()->RemoveTransformations();
 	}
 }
 
@@ -133,9 +119,9 @@ void Geometry :: Render( eDRAW_TYPE p_displayMode)
 
 bool Geometry :: Write( File & p_file)const
 {
-	Log::LogMessage( CU_T( "Writing Geometry ") + m_name);
+	Logger::LogMessage( CU_T( "Writing Geometry ") + m_strName);
 
-	bool l_bReturn = p_file.WriteLine( "object " + m_name + "\n{\n");
+	bool l_bReturn = p_file.WriteLine( "object " + m_strName + "\n{\n");
 
 	if ( ! MovableObject::Write( p_file))
 	{
@@ -162,4 +148,8 @@ void Geometry :: Subdivide( unsigned int p_index, SubdivisionMode p_mode)
 	m_visible = true;
 }
 
-
+const Matrix4x4r & Geometry :: GetRotationMatrix()
+{
+	m_orientation.ToRotationMatrix( m_matrix);
+	return m_matrix;
+}

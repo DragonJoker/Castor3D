@@ -10,11 +10,11 @@
 
 using namespace Castor3D;
 
-DirectionalLight :: DirectionalLight( const String & p_name)
-	:	Light( p_name)
+DirectionalLight :: DirectionalLight( LightNodePtr p_pNode, const String & p_name)
+	:	Light( p_pNode, p_name)
 {
 	m_diffuse = Colour( 0.0, 0.0, 0.0, 0.0);
-	m_position = Colour( 0.0, 0.0, 1.0, 0.0);
+	m_ptPositionType[3] = 1;
 }
 
 DirectionalLight :: ~DirectionalLight()
@@ -28,7 +28,7 @@ void DirectionalLight :: _initialise()
 
 bool DirectionalLight :: Write( File & p_pFile)const
 {
-	Log::LogMessage( CU_T( "Writing Light ") + m_name);
+	Logger::LogMessage( CU_T( "Writing Light ") + m_name);
 	bool l_bReturn = p_pFile.WriteLine( "light " + m_name + "\n{\n");
 
 	if (l_bReturn)

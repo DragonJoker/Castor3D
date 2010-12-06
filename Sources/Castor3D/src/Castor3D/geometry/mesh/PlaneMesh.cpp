@@ -4,6 +4,7 @@
 
 #include "geometry/mesh/PlaneMesh.h"
 #include "geometry/mesh/Submesh.h"
+#include "geometry/basic/Vertex.h"
 #include "geometry/basic/Face.h"
 #include "main/Root.h"
 #include "render_system/RenderSystem.h"
@@ -48,25 +49,18 @@ void PlaneMesh :: GeneratePoints()
 	Point3r l_ptPreviousUV;
 
 	SubmeshPtr l_submesh = CreateSubmesh( 1);
-	Point3rPtr l_vertex;
 
 	for (unsigned int i = 0 ; i < l_nbVertexW ; i++)
 	{
 		for (unsigned int j = 0 ; j < l_nbVertexD ; j++)
 		{
-			l_vertex = l_submesh->AddVertex( (i * l_gapW), 0.0, (j * l_gapD));
+			l_submesh->AddVertex( (i * l_gapW), 0.0, (j * l_gapD));
 		}
 	}
 
-	VertexPtr l_v1, l_v2, l_v3, l_v4;
-
+	Point3r l_v1, l_v2, l_v3, l_v4;
 	l_submesh->GetRenderer()->GetTriangles()->Cleanup();
-	l_submesh->GetRenderer()->GetTrianglesNormals()->Cleanup();
-	l_submesh->GetRenderer()->GetTrianglesTangents()->Cleanup();
-	l_submesh->GetRenderer()->GetTrianglesTexCoords()->Cleanup();
 	l_submesh->GetRenderer()->GetLines()->Cleanup();
-	l_submesh->GetRenderer()->GetLinesNormals()->Cleanup();
-	l_submesh->GetRenderer()->GetLinesTexCoords()->Cleanup();
 
 	for (unsigned int i = 0 ; i < m_subDivisionsW + 1 ; i++)
 	{
@@ -81,7 +75,7 @@ void PlaneMesh :: GeneratePoints()
 
 			l_ptCurrentUV[1] += 1.0f / real( m_subDivisionsD + 1);
 
-			l_submesh->AddQuadFace( l_v1, l_v2, l_v3, l_v4, 0, l_ptPreviousUV, l_ptCurrentUV);
+			l_submesh->AddQuadFace( j + i, j + m_subDivisionsW + 2 + i, j + m_subDivisionsW + 3 + i, j + i + 1, 0, l_ptPreviousUV, l_ptCurrentUV);
 
 			l_ptPreviousUV[1] = l_ptCurrentUV[1];
 		}
@@ -91,7 +85,7 @@ void PlaneMesh :: GeneratePoints()
 
 	l_submesh->GenerateBuffers();
 
-	Log::LogMessage( CU_T( "Plane - %s - NbVertex : %d"), m_name.c_str(), l_submesh->GetNbVertex());
+	Logger::LogMessage( CU_T( "Plane - %s - NbVertex : %d"), m_name.char_str(), l_submesh->GetNbVertex());
 }
 
 void PlaneMesh :: Modify( real p_width, real p_depth,

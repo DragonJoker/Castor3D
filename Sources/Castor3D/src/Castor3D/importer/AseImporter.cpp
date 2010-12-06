@@ -5,7 +5,8 @@
 #include "importer/AseImporter.h"
 #include "render_system/RenderSystem.h"
 #include "render_system/Buffer.h"
-#include "scene/SceneNode.h"
+#include "scene/NodeBase.h"
+#include "scene/Node.h"
 #include "scene/SceneManager.h"
 #include "scene/Scene.h"
 #include "camera/Camera.h"
@@ -21,8 +22,16 @@
 #include "geometry/basic/SmoothingGroup.h"
 #include "geometry/basic/Face.h"
 
-
 using namespace Castor3D;
+
+AseImporter :: AseImporter()
+	:	ExternalImporter( eASE)
+{
+}
+
+AseImporter :: ~AseImporter()
+{
+}
 
 bool AseImporter :: _import()
 {
@@ -42,7 +51,7 @@ bool AseImporter :: _import()
 			l_pMesh->GetSubmesh( i)->GenerateBuffers();
 		}
 
-		l_pMesh->SetNormals();
+		l_pMesh->ComputeNormals();
 	}
 
 //	vector::deleteAll( m_texCoords);
@@ -121,44 +130,44 @@ MaterialPtr AseImporter :: _readMaterialInfos()
 		else if (m_currentWord == MATERIAL_DIFFUSE)
 		{
 			m_pFile->ReadWord( m_currentWord);
-			l_diffuse[0] = float( atof( m_currentWord.c_str()));
+			l_diffuse[0] = m_currentWord.ToFloat();
 			m_pFile->ReadWord( m_currentWord);
-			l_diffuse[1] = float( atof( m_currentWord.c_str()));
+			l_diffuse[1] = m_currentWord.ToFloat();
 			m_pFile->ReadWord( m_currentWord);
-			l_diffuse[2] = float( atof( m_currentWord.c_str()));
+			l_diffuse[2] = m_currentWord.ToFloat();
 			l_pass->SetDiffuse( l_diffuse);
 		}
 		else if (m_currentWord == MATERIAL_AMBIENT)
 		{
 			m_pFile->ReadWord( m_currentWord);
-			l_ambient[0] = float( atof( m_currentWord.c_str()));
+			l_ambient[0] = m_currentWord.ToFloat();
 			m_pFile->ReadWord( m_currentWord);
-			l_ambient[1] = float( atof( m_currentWord.c_str()));
+			l_ambient[1] = m_currentWord.ToFloat();
 			m_pFile->ReadWord( m_currentWord);
-			l_ambient[2] = float( atof( m_currentWord.c_str()));
+			l_ambient[2] = m_currentWord.ToFloat();
 			l_pass->SetAmbient( l_ambient);
 		}
 		else if (m_currentWord == MATERIAL_SPECULAR)
 		{
 			m_pFile->ReadWord( m_currentWord);
-			l_specular[0] = float( atof( m_currentWord.c_str()));
+			l_specular[0] = m_currentWord.ToFloat();
 			m_pFile->ReadWord( m_currentWord);
-			l_specular[1] = float( atof( m_currentWord.c_str()));
+			l_specular[1] = m_currentWord.ToFloat();
 			m_pFile->ReadWord( m_currentWord);
-			l_specular[2] = float( atof( m_currentWord.c_str()));
+			l_specular[2] = m_currentWord.ToFloat();
 			l_pass->SetSpecular( l_specular);
 		}
 		else if (m_currentWord == MATERIAL_SHININESS)
 		{
 			m_pFile->ReadWord( m_currentWord);
-			l_shininess = float( atof( m_currentWord.c_str()));
+			l_shininess = m_currentWord.ToFloat();
 			l_pass->SetShininess( l_shininess * 128.0f);
 		}
 		else if (m_currentWord == TEXTURE)
 		{
-			size_t l_i = std::min( m_fileName.find_last_of( CU_T( "/")), m_fileName.find_last_of( CU_T( "\\")));
+			size_t l_i = std::min( m_fileName.find_last_of( "/"), m_fileName.find_last_of( "\\"));
 			String l_filePath = m_fileName.substr( 0, l_i + 1);
-			TextureUnitPtr l_unit = new TextureUnit();
+			TextureUnitPtr l_unit( new TextureUnit());
 			String l_texPath = _retrieveString();
 
 			if (File::FileExists( l_texPath))
@@ -195,7 +204,7 @@ void AseImporter :: _readLightInfos()
 
 void AseImporter :: _readCameraInfos()
 {
-	Camera * l_camera;
+	CameraPtr l_camera;
 	String l_nodeName;
 
 	while (m_pFile->IsOk())
@@ -212,15 +221,15 @@ void AseImporter :: _readCameraInfos()
 		}
 		else if (m_currentWord == NODE)
 		{
-			SceneNodePtr l_node = _readNodeInfos( l_nodeName);
-			l_camera->Rotate( l_node->GetOrientation());
-			l_camera->Translate( l_node->GetDerivedPosition());
+			NodePtr l_node = _readNodeInfos( l_nodeName);
+			l_camera->GetParent()->Rotate( l_node->GetOrientation());
+			l_camera->GetParent()->Translate( l_node->GetDerivedPosition());
 			l_node.reset();
 		}
 		else if (m_currentWord == NODE_NAME)
 		{
 			l_nodeName = _retrieveString();
-			l_camera = m_pScene->CreateCamera( l_nodeName, 800, 600, Viewport::pt3DView);
+			l_camera = m_pScene->CreateCamera( l_nodeName, 800, 600, m_pScene->CreateCameraNode( l_nodeName), Viewport::e3DView);
 		}
 		else if (m_currentWord == CAMERA_SETTINGS)
 		{
@@ -229,7 +238,7 @@ void AseImporter :: _readCameraInfos()
 	}
 }
 
-void AseImporter :: _readCameraSettings( Camera * p_camera)
+void AseImporter :: _readCameraSettings( CameraPtr p_camera)
 {
 	real l_near, l_far, l_fov;
 
@@ -262,9 +271,9 @@ void AseImporter :: _readCameraSettings( Camera * p_camera)
 	}
 }
 
-SceneNodePtr AseImporter :: _readNodeInfos( const String & p_name)
+GeometryNodePtr AseImporter :: _readNodeInfos( const String & p_name)
 {
-	SceneNodePtr l_node = m_pScene->CreateSceneNode( p_name);
+	GeometryNodePtr l_node = m_pScene->CreateGeometryNode( p_name);
 	real l_angle;
 	real l_position[3], l_axis[3], l_scale[3];
 	bool l_gotAngle = false;
@@ -332,7 +341,7 @@ SceneNodePtr AseImporter :: _readNodeInfos( const String & p_name)
 void AseImporter :: _readObjectInfos()
 {
 	GeometryPtr l_geometry;// = NULL;
-	SceneNodePtr l_node;// = NULL;
+	GeometryNodePtr l_node;// = NULL;
 	String l_nodeName;
 
 	while (m_pFile->IsOk())
@@ -363,18 +372,18 @@ void AseImporter :: _readObjectInfos()
 
 			if ( ! MeshManager::HasElement( l_nodeName))
 			{
-				l_mesh.reset( MeshManager::CreateMesh( l_nodeName, l_faces, l_sizes, Mesh::eCustom));
-				l_geometry = new Geometry( l_mesh, l_node, l_nodeName);
-				Log::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_nodeName.c_str());
+				l_mesh = MeshManager::CreateMesh( l_nodeName, l_faces, l_sizes, Mesh::eCustom);
+				l_geometry = GeometryPtr( new Geometry( l_mesh, l_node, l_nodeName));
+				Logger::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_nodeName.c_str());
 				_readMeshInfos( l_mesh);
 				m_geometries.insert( GeometryPtrStrMap::value_type( l_nodeName, l_geometry));
-				m_nodes.insert( SceneNodePtrStrMap::value_type( l_nodeName, l_node));
+				m_nodes.insert( NodePtrStrMap::value_type( l_nodeName, l_node));
 			}
 		}
 		else if (m_currentWord == MATERIAL_ID)
 		{
 			m_pFile->ReadWord( m_currentWord);
-			int l_id = atoi( m_currentWord.c_str());
+			int l_id = m_currentWord.ToInt();
 			MeshPtr l_mesh( l_geometry->GetMesh());
 
 			for (size_t i = 0 ; i < l_mesh->GetNbSubmeshes() ; i++)
@@ -401,10 +410,15 @@ void AseImporter :: _readMeshInfos( MeshPtr p_mesh)
 		else if (m_currentWord == MESH_VERTEX_LIST)
 		{
 			l_submesh = p_mesh->CreateSubmesh( 1);
+/*
 			l_submesh->GetRenderer()->GetTriangles()->Cleanup();
 			l_submesh->GetRenderer()->GetTrianglesTexCoords()->Cleanup();
 			l_submesh->GetRenderer()->GetLines()->Cleanup();
 			l_submesh->GetRenderer()->GetLinesTexCoords()->Cleanup();
+*/
+			l_submesh->GetRenderer()->GetTriangles()->Cleanup();
+			l_submesh->GetRenderer()->GetLines()->Cleanup();
+
 			_readVertexList( l_submesh);
 		}
 		else if (m_currentWord == MESH_FACE_LIST)
@@ -432,7 +446,7 @@ void AseImporter :: _readMeshInfos( MeshPtr p_mesh)
 		else if (m_currentWord == MATERIAL_ID)
 		{
 			m_pFile->ReadWord( m_currentWord);
-			l_id = atoi( m_currentWord.c_str());
+			l_id = m_currentWord.ToInt();
 			l_submesh->SetMaterial( m_materials.find( (size_t)l_id)->second);
 		}
 	}
@@ -493,7 +507,7 @@ void AseImporter :: _readTexCoordsList( SubmeshPtr p_submesh)
 		else if (m_currentWord == TVERTEX)
 		{
 			_retrieveTextureVertex( l_position);
-			m_texCoords.push_back( new Point3r( l_position));
+			m_texCoords.push_back( Point3rPtr( new Point3r( l_position)));
 		}
 	}
 }
@@ -501,7 +515,6 @@ void AseImporter :: _readTexCoordsList( SubmeshPtr p_submesh)
 void AseImporter :: _readTexFaceList( SubmeshPtr p_submesh)
 {
 	int l_indices[4];
-	FacePtr l_face;
 
 	while (m_pFile->IsOk())
 	{
@@ -515,10 +528,10 @@ void AseImporter :: _readTexFaceList( SubmeshPtr p_submesh)
 		{
 			_retrieveTextureFace( l_indices);
 
-			l_face = p_submesh->GetSmoothGroup( 0)->m_faces[ l_indices[0] ];
-			l_face->SetTexCoordV1( m_texCoords[ l_indices[1] ]->m_coords[0], m_texCoords[ l_indices[1] ]->m_coords[1]);
-			l_face->SetTexCoordV2( m_texCoords[ l_indices[2] ]->m_coords[0], m_texCoords[ l_indices[2] ]->m_coords[1]);
-			l_face->SetTexCoordV3( m_texCoords[ l_indices[3] ]->m_coords[0], m_texCoords[ l_indices[3] ]->m_coords[1]);
+			Face & l_face = p_submesh->GetSmoothGroup( 0).m_faces[ l_indices[0] ];
+			l_face.SetVertexTexCoords( 0, m_texCoords[ l_indices[1] ]->m_coords[0], m_texCoords[ l_indices[1] ]->m_coords[1]);
+			l_face.SetVertexTexCoords( 1, m_texCoords[ l_indices[2] ]->m_coords[0], m_texCoords[ l_indices[2] ]->m_coords[1]);
+			l_face.SetVertexTexCoords( 2, m_texCoords[ l_indices[3] ]->m_coords[0], m_texCoords[ l_indices[3] ]->m_coords[1]);
 		}
 	}
 }

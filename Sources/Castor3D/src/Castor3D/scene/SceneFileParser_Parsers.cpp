@@ -8,12 +8,13 @@
 #include "material/TextureUnit.h"
 #include "scene/Scene.h"
 #include "scene/SceneManager.h"
-#include "scene/SceneNode.h"
+#include "scene/Node.h"
 #include "camera/Camera.h"
 #include "light/Light.h"
 #include "light/SpotLight.h"
 #include "light/PointLight.h"
-#include "geometry/primitives/MovableObject.h"
+#include "main/MovableObject.h"
+#include "geometry/basic/Vertex.h"
 #include "geometry/primitives/Geometry.h"
 #include "geometry/basic/SmoothingGroup.h"
 #include "geometry/basic/Face.h"
@@ -23,7 +24,7 @@
 #include "render_system/RenderSystem.h"
 #include "shader/ShaderManager.h"
 #include "shader/ShaderProgram.h"
-#include "shader/UniformVariable.h"
+#include "shader/FrameVariable.h"
 
 
 
@@ -33,14 +34,14 @@ void Castor3D :: SceneFileParser :: ParseError( const String & p_strError, Scene
 {
 	StringStream l_streamError;
 	l_streamError << "Error Line #" << p_pContext->ui64Line << " / " << p_strError;
-	Log::LogMessage( l_streamError.str());
+	Logger::LogMessage( l_streamError.str());
 }
 
 void Castor3D :: SceneFileParser :: ParseWarning( const String & p_strWarning, SceneFileContextPtr p_pContext)
 {
 	StringStream l_streamWarning;
 	l_streamWarning << "Warning Line #" << p_pContext->ui64Line << " / " << p_strWarning;
-	Log::LogMessage( l_streamWarning.str());
+	Logger::LogMessage( l_streamWarning.str());
 }
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootSceneName)
@@ -78,13 +79,45 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootLight)
 	}
 }
 
-IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootSceneNode)
+IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootLightNode)
 {
 	if ( ! p_pContext->pScene.null())
 	{
 		p_pContext->eSection = SceneFileContext::eNode;
 		p_pContext->strName = p_strParams;
-		p_pContext->pSceneNode = p_pContext->pScene->CreateSceneNode( p_strParams);
+		p_pContext->pSceneNode = static_pointer_cast<NodeBase>( p_pContext->pScene->CreateLightNode( p_strParams));
+		return true;
+	}
+	else
+	{
+		PARSING_ERROR( "No scene initialised. Enter a scene name");
+		return false;
+	}
+}
+
+IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootCameraNode)
+{
+	if ( ! p_pContext->pScene.null())
+	{
+		p_pContext->eSection = SceneFileContext::eNode;
+		p_pContext->strName = p_strParams;
+		p_pContext->pSceneNode = NodePtr( p_pContext->pScene->CreateCameraNode( p_strParams));
+		return true;
+	}
+	else
+	{
+		PARSING_ERROR( "No scene initialised. Enter a scene name");
+		return false;
+	}
+}
+
+IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootGeometryNode)
+{
+	if ( ! p_pContext->pScene.null())
+	{
+		p_pContext->eSection = SceneFileContext::eNode;
+		p_pContext->strName = p_strParams;
+		p_pContext->pSceneNode = NodePtr( p_pContext->pScene->CreateGeometryNode( p_strParams));
 		return true;
 	}
 	else
@@ -116,7 +149,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootObject)
 	{
 		p_pContext->eSection = SceneFileContext::eObject;
 		p_pContext->strName = p_strParams;
-		p_pContext->pGeometry = new Geometry( MeshPtr(), NULL, p_pContext->strName);
+		p_pContext->pGeometry = GeometryPtr( new Geometry( MeshPtr(), GeometryNodePtr(), p_pContext->strName));
 		return true;
 	}
 	else
@@ -145,22 +178,51 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_RootAmbientLight)
 	return false;
 }
 
+IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightParent)
+{
+	NodePtr l_pParent = p_pContext->pScene->GetNode( p_strParams);
+
+	if ( ! l_pParent.null())
+	{
+		p_pContext->pSceneNode = l_pParent;
+	}
+	else
+	{
+		PARSING_ERROR( "Node " + p_strParams + " does not exist");
+	}
+
+	if ( ! p_pContext->pLight.null())
+	{
+		p_pContext->pLight->Detach();
+		p_pContext->pSceneNode->AttachObject( p_pContext->pLight.get());
+	}
+
+	return false;
+}
+
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightType)
 {
+	LightNodePtr l_pNode;
+
+	if ( ! p_pContext->pSceneNode.null())
+	{
+		l_pNode = static_pointer_cast< Node<Light> >( p_pContext->pSceneNode);
+	}
+
 	if (p_strParams == "point_light")
 	{
 		p_pContext->eLightType = Light::ePoint;
-		p_pContext->pLight = p_pContext->pScene->CreateLight( p_pContext->eLightType, p_pContext->strName);
+		p_pContext->pLight = p_pContext->pScene->CreateLight( p_pContext->eLightType, p_pContext->strName, l_pNode);
 	}
 	else if (p_strParams == "spot_light")
 	{
 		p_pContext->eLightType = Light::eSpot;
-		p_pContext->pLight = p_pContext->pScene->CreateLight( p_pContext->eLightType, p_pContext->strName);
+		p_pContext->pLight = p_pContext->pScene->CreateLight( p_pContext->eLightType, p_pContext->strName, l_pNode);
 	}
 	else if (p_strParams == "directional")
 	{
 		p_pContext->eLightType = Light::eDirectional;
-		p_pContext->pLight = p_pContext->pScene->CreateLight( p_pContext->eLightType, p_pContext->strName);
+		p_pContext->pLight = p_pContext->pScene->CreateLight( p_pContext->eLightType, p_pContext->strName, l_pNode);
 	}
 	else
 	{
@@ -174,11 +236,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightPosition)
 {
 	if ( ! p_pContext->pLight.null())
 	{
-		Point<float, 3> l_vVector;
+		Point3f l_vVector;
 
 		if (PARSE_V3( float, l_vVector))
 		{
-			p_pContext->pLight->SetPosition( l_vVector.ptr());
+			p_pContext->pLight->GetParent()->SetPosition( l_vVector[0], l_vVector[1], l_vVector[2]);
 		}
 	}
 	else
@@ -193,7 +255,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightAmbient)
 {
 	if ( ! p_pContext->pLight.null())
 	{
-		Point<float, 3> l_vVector;
+		Point3f l_vVector;
 
 		if (PARSE_V3( float, l_vVector))
 		{
@@ -212,7 +274,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightDiffuse)
 {
 	if ( ! p_pContext->pLight.null())
 	{
-		Point<float, 3> l_vVector;
+		Point3f l_vVector;
 
 		if (PARSE_V3( float, l_vVector))
 		{
@@ -231,7 +293,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightSpecular)
 {
 	if ( ! p_pContext->pLight.null())
 	{
-		Point<float, 3> l_vVector;
+		Point3f l_vVector;
 
 		if (PARSE_V3( float, l_vVector))
 		{
@@ -250,17 +312,17 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightAttenuation)
 {
 	if ( ! p_pContext->pLight.null())
 	{
-		Point<float, 3> l_vVector;
+		Point3f l_vVector;
 
 		if (PARSE_V3( float, l_vVector))
 		{
 			if (p_pContext->eLightType == Light::ePoint)
 			{
-				((PointLightPtr)p_pContext->pLight)->SetAttenuation( l_vVector);
+				static_pointer_cast<PointLight>( p_pContext->pLight)->SetAttenuation( l_vVector);
 			}
 			else if (p_pContext->eLightType == Light::eSpot)
 			{
-				((SpotLightPtr)p_pContext->pLight)->SetAttenuation( l_vVector);
+				static_pointer_cast<SpotLight>( p_pContext->pLight)->SetAttenuation( l_vVector);
 			}
 			else
 			{
@@ -284,7 +346,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightCutOff)
 
 		if (p_pContext->eLightType == Light::eSpot)
 		{
-			((SpotLightPtr)p_pContext->pLight)->SetCutOff( l_fFloat);
+			static_pointer_cast<SpotLight>( p_pContext->pLight)->SetCutOff( l_fFloat);
 		}
 		else
 		{
@@ -307,7 +369,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightExponent)
 
 		if (p_pContext->eLightType == Light::eSpot)
 		{
-			((SpotLightPtr)p_pContext->pLight)->SetExponent( l_fFloat);
+			static_pointer_cast<SpotLight>( p_pContext->pLight)->SetExponent( l_fFloat);
 		}
 		else
 		{
@@ -332,7 +394,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightOrientation)
 		{
 			if (p_pContext->eLightType == Light::eSpot)
 			{
-				((SpotLightPtr)p_pContext->pLight)->Rotate( l_qQuaternion);
+				static_pointer_cast<SpotLight>( p_pContext->pLight)->GetParent()->Rotate( l_qQuaternion);
 			}
 			else
 			{
@@ -353,6 +415,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_LightEnd)
 	p_pContext->eSection = SceneFileContext::eNone;
 	p_pContext->pLight.reset();
 	p_pContext->strName.clear();
+	p_pContext->pSceneNode.reset();
     return false;
 }
 
@@ -360,7 +423,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_NodeParent)
 {
 	if ( ! p_pContext->pSceneNode.null())
 	{
-		SceneNodePtr l_pParent = p_pContext->pScene->GetNode( p_strParams);
+		NodePtr l_pParent = p_pContext->pScene->GetNode( p_strParams);
 
 		if ( ! l_pParent.null())
 		{
@@ -448,12 +511,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_ObjectParent)
 {
 	if ( ! p_pContext->pGeometry.null())
 	{
-		SceneNodePtr l_pParent = p_pContext->pScene->GetNode( p_strParams);
+		NodePtr l_pParent = p_pContext->pScene->GetNode( p_strParams);
 
 		if ( ! l_pParent.null())
 		{
-			p_pContext->pGeometry->SetParent( l_pParent.get());
-			l_pParent->AttachGeometry( p_pContext->pGeometry.get());
+			l_pParent->AttachObject( p_pContext->pGeometry.get());
 		}
 		else
 		{
@@ -573,7 +635,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshType)
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshFile)
 {
 	MeshLoader l_loader;
-	p_pContext->pMesh = l_loader.LoadFromExtFile( p_pContext->pFile->GetFilePath() + "/" + p_strParams);
+	p_pContext->pMesh = l_loader.LoadFromFile( p_pContext->pFile->GetFilePath() + "/" + p_strParams);
 
 	if (p_pContext->pMesh.null())
 	{
@@ -630,7 +692,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_MeshEnd)
 
 	if ( ! p_pContext->pMesh.null())
 	{
-		p_pContext->pMesh->SetNormals();
+		p_pContext->pMesh->ComputeNormals();
 		p_pContext->pGeometry->SetMesh( p_pContext->pMesh);
 	}
 
@@ -684,7 +746,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_SubmeshSmoothingGroup)
 	if ( ! p_pContext->pSubmesh.null())
 	{
 		p_pContext->eSection = SceneFileContext::eSmoothingGroup;
-		p_pContext->pSmoothingGroup = p_pContext->pSubmesh->AddSmoothingGroup();
+		p_pContext->uiSmoothingGroup = p_pContext->pSubmesh->AddSmoothingGroup().m_idGroup;
 
 		return true;
 	}
@@ -703,32 +765,32 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_SubmeshEnd)
 	{
 		p_pContext->pSubmesh->GenerateBuffers();
 	}
-	p_pContext->pSubmesh = NULL;
+	p_pContext->pSubmesh.reset();
 	return false;
 }
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_SmoothingGroupFace)
 {
-	if ( ! p_pContext->pSmoothingGroup.null())
+	if (p_pContext->uiSmoothingGroup != 0)
 	{
-		Point<int, 3> l_pt3Indices;
+		Point3i l_pt3Indices;
 		StringArray l_arrayValues = p_strParams.Split( " ");
 		p_pContext->pFace1 = NULL;
 		p_pContext->pFace2 = NULL;
 
 		if (l_arrayValues.size() >= 4)
 		{
-			Point<int, 4> l_pt4Indices;
+			Point4i l_pt4Indices;
 
 			if (PARSE_V4( int, l_pt4Indices))
 			{
-				p_pContext->pFace1 = p_pContext->pSubmesh->AddFace( l_pt4Indices[0], l_pt4Indices[1], l_pt4Indices[2], p_pContext->pSmoothingGroup->m_idGroup - 1);
-				p_pContext->pFace2 = p_pContext->pSubmesh->AddFace( l_pt4Indices[1], l_pt4Indices[3], l_pt4Indices[2], p_pContext->pSmoothingGroup->m_idGroup - 1);
+				p_pContext->pFace1 = & p_pContext->pSubmesh->AddFace( l_pt4Indices[0], l_pt4Indices[1], l_pt4Indices[2], p_pContext->uiSmoothingGroup - 1);
+				p_pContext->pFace2 = & p_pContext->pSubmesh->AddFace( l_pt4Indices[1], l_pt4Indices[3], l_pt4Indices[2], p_pContext->uiSmoothingGroup - 1);
 			}
 		}
 		else if (PARSE_V3( int, l_pt3Indices))
 		{
-			p_pContext->pFace1 = p_pContext->pSubmesh->AddFace( l_pt3Indices[0], l_pt3Indices[1], l_pt3Indices[2], p_pContext->pSmoothingGroup->m_idGroup - 1);
+			p_pContext->pFace1 = & p_pContext->pSubmesh->AddFace( l_pt3Indices[0], l_pt3Indices[1], l_pt3Indices[2], p_pContext->uiSmoothingGroup - 1);
 		}
 	}
 	else
@@ -741,43 +803,43 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_SmoothingGroupFace)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_SmoothingGroupFaceUV)
 {
-	if ( ! p_pContext->pSmoothingGroup.null())
+	if (p_pContext->uiSmoothingGroup != 0)
 	{
-		Point<int, 3> l_pt3Indices;
+		Point3i l_pt3Indices;
 		StringArray l_arrayValues = p_strParams.Split( " ");
 
 		if (l_arrayValues.size() >= 8)
 		{
-			if ( ! p_pContext->pFace1.null())
+			if (p_pContext->pFace1 != NULL)
 			{
-				p_pContext->pFace1->m_vertex1TexCoord[0] = ator( l_arrayValues[0].c_str());
-				p_pContext->pFace1->m_vertex1TexCoord[1] = ator( l_arrayValues[1].c_str());
-				p_pContext->pFace1->m_vertex2TexCoord[0] = ator( l_arrayValues[2].c_str());
-				p_pContext->pFace1->m_vertex2TexCoord[1] = ator( l_arrayValues[3].c_str());
-				p_pContext->pFace1->m_vertex3TexCoord[0] = ator( l_arrayValues[4].c_str());
-				p_pContext->pFace1->m_vertex3TexCoord[1] = ator( l_arrayValues[5].c_str());
+				p_pContext->pFace1->m_vertex[0].GetTexCoord()[0] = ator( l_arrayValues[0].c_str());
+				p_pContext->pFace1->m_vertex[0].GetTexCoord()[1] = ator( l_arrayValues[1].c_str());
+				p_pContext->pFace1->m_vertex[1].GetTexCoord()[0] = ator( l_arrayValues[2].c_str());
+				p_pContext->pFace1->m_vertex[1].GetTexCoord()[1] = ator( l_arrayValues[3].c_str());
+				p_pContext->pFace1->m_vertex[2].GetTexCoord()[0] = ator( l_arrayValues[4].c_str());
+				p_pContext->pFace1->m_vertex[2].GetTexCoord()[1] = ator( l_arrayValues[5].c_str());
 			}
 
-			if ( ! p_pContext->pFace2.null())
+			if (p_pContext->pFace2 != NULL)
 			{
-				p_pContext->pFace2->m_vertex1TexCoord[0] = ator( l_arrayValues[2].c_str());
-				p_pContext->pFace2->m_vertex1TexCoord[1] = ator( l_arrayValues[3].c_str());
-				p_pContext->pFace2->m_vertex2TexCoord[0] = ator( l_arrayValues[6].c_str());
-				p_pContext->pFace2->m_vertex2TexCoord[1] = ator( l_arrayValues[7].c_str());
-				p_pContext->pFace2->m_vertex3TexCoord[0] = ator( l_arrayValues[4].c_str());
-				p_pContext->pFace2->m_vertex3TexCoord[1] = ator( l_arrayValues[5].c_str());
+				p_pContext->pFace2->m_vertex[0].GetTexCoord()[0] = ator( l_arrayValues[2].c_str());
+				p_pContext->pFace2->m_vertex[0].GetTexCoord()[1] = ator( l_arrayValues[3].c_str());
+				p_pContext->pFace2->m_vertex[1].GetTexCoord()[0] = ator( l_arrayValues[6].c_str());
+				p_pContext->pFace2->m_vertex[1].GetTexCoord()[1] = ator( l_arrayValues[7].c_str());
+				p_pContext->pFace2->m_vertex[2].GetTexCoord()[0] = ator( l_arrayValues[4].c_str());
+				p_pContext->pFace2->m_vertex[2].GetTexCoord()[1] = ator( l_arrayValues[5].c_str());
 			}
 		}
 		else if (l_arrayValues.size() >= 6)
 		{
-			if ( ! p_pContext->pFace1.null())
+			if (p_pContext->pFace1 != NULL)
 			{
-				p_pContext->pFace1->m_vertex1TexCoord[0] = ator( l_arrayValues[0].c_str());
-				p_pContext->pFace1->m_vertex1TexCoord[1] = ator( l_arrayValues[1].c_str());
-				p_pContext->pFace1->m_vertex2TexCoord[0] = ator( l_arrayValues[2].c_str());
-				p_pContext->pFace1->m_vertex2TexCoord[1] = ator( l_arrayValues[3].c_str());
-				p_pContext->pFace1->m_vertex3TexCoord[0] = ator( l_arrayValues[4].c_str());
-				p_pContext->pFace1->m_vertex3TexCoord[1] = ator( l_arrayValues[5].c_str());
+				p_pContext->pFace1->m_vertex[0].GetTexCoord()[0] = ator( l_arrayValues[0].c_str());
+				p_pContext->pFace1->m_vertex[0].GetTexCoord()[1] = ator( l_arrayValues[1].c_str());
+				p_pContext->pFace1->m_vertex[1].GetTexCoord()[0] = ator( l_arrayValues[2].c_str());
+				p_pContext->pFace1->m_vertex[1].GetTexCoord()[1] = ator( l_arrayValues[3].c_str());
+				p_pContext->pFace1->m_vertex[2].GetTexCoord()[0] = ator( l_arrayValues[4].c_str());
+				p_pContext->pFace1->m_vertex[2].GetTexCoord()[1] = ator( l_arrayValues[5].c_str());
 			}
 		}
 	}
@@ -792,7 +854,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_SmoothingGroupFaceUV)
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_SmoothingGroupEnd)
 {
 	p_pContext->eSection = SceneFileContext::eSubmesh;
-	p_pContext->pSmoothingGroup.reset();
+	p_pContext->uiSmoothingGroup = 0;
 	return false;
 }
 
@@ -967,7 +1029,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_PassTextureUnit)
 	if ( ! p_pContext->pPass.null())
 	{
 		p_pContext->eSection = SceneFileContext::eTextureUnit;
-		p_pContext->pTextureUnit = new TextureUnit();
+		p_pContext->pTextureUnit = TextureUnitPtr( new TextureUnit());
 		p_pContext->pPass->AddTextureUnit( p_pContext->pTextureUnit);
 		return true;
 	}
@@ -1176,51 +1238,51 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderEnd)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVariableType)
 {
-	if (p_pContext->pUniformVariable.null())
+	if (p_pContext->pFrameVariable.null())
 	{
 		if (p_strParams == "int")
 		{
-			p_pContext->pUniformVariable = new OneUniformVariable<int>();
+			p_pContext->pFrameVariable = FrameVariablePtr( new OneFrameVariable<int>());
 		}
 		else if (p_strParams == "float")
 		{
-			p_pContext->pUniformVariable = new OneUniformVariable<real>();
+			p_pContext->pFrameVariable = FrameVariablePtr( new OneFrameVariable<float>());
 		}
 		else if (p_strParams == "vec2i")
 		{
-			p_pContext->pUniformVariable = new PointUniformVariable<int, 2>();
+			p_pContext->pFrameVariable = FrameVariablePtr( new PointFrameVariable<int, 2>());
 		}
 		else if (p_strParams == "vec3i")
 		{
-			p_pContext->pUniformVariable = new PointUniformVariable<int,3>();
+			p_pContext->pFrameVariable = FrameVariablePtr( new PointFrameVariable<int,3>());
 		}
 		else if (p_strParams == "vec4i")
 		{
-			p_pContext->pUniformVariable = new PointUniformVariable<int, 4>();
+			p_pContext->pFrameVariable = FrameVariablePtr( new PointFrameVariable<int, 4>());
 		}
 		else if (p_strParams == "vec2f")
 		{
-			p_pContext->pUniformVariable = new PointUniformVariable<real, 2>();
+			p_pContext->pFrameVariable = FrameVariablePtr( new PointFrameVariable<float, 2>());
 		}
 		else if (p_strParams == "vec3f")
 		{
-			p_pContext->pUniformVariable = new PointUniformVariable<real, 3>();
+			p_pContext->pFrameVariable = FrameVariablePtr( new PointFrameVariable<float, 3>());
 		}
 		else if (p_strParams == "vec4f")
 		{
-			p_pContext->pUniformVariable = new PointUniformVariable<real, 4>();
+			p_pContext->pFrameVariable = FrameVariablePtr( new PointFrameVariable<float, 4>());
 		}
 		else if (p_strParams == "mat2f")
 		{
-			p_pContext->pUniformVariable = new MatrixUniformVariable<real, 2>();
+			p_pContext->pFrameVariable = FrameVariablePtr( new MatrixFrameVariable<float, 2, 2>());
 		}
 		else if (p_strParams == "mat3f")
 		{
-			p_pContext->pUniformVariable = new MatrixUniformVariable<real, 3>();
+			p_pContext->pFrameVariable = FrameVariablePtr( new MatrixFrameVariable<float, 3, 3>());
 		}
 		else if (p_strParams == "mat4f")
 		{
-			p_pContext->pUniformVariable = new MatrixUniformVariable<real, 4>();
+			p_pContext->pFrameVariable = FrameVariablePtr( new MatrixFrameVariable<float, 4, 4>());
 		}
 		else
 		{
@@ -1237,9 +1299,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVariableType)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVariableName)
 {
-	if ( ! p_pContext->pUniformVariable.null())
+	if ( ! p_pContext->pFrameVariable.null())
 	{
-		p_pContext->pUniformVariable->SetName( p_strParams);
+		p_pContext->pFrameVariable->SetName( p_strParams);
 	}
 	else
 	{
@@ -1251,9 +1313,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVariableName)
 
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVariableValue)
 {
-	if ( ! p_pContext->pUniformVariable.null())
+	if ( ! p_pContext->pFrameVariable.null())
 	{
-		p_pContext->pUniformVariable->SetValue( p_strParams);
+		p_pContext->pFrameVariable->SetValue( p_strParams);
 	}
 	else
 	{
@@ -1266,7 +1328,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVariableValue)
 IMPLEMENT_ATTRIBUTE_PARSER( Parser_ShaderVariableEnd)
 {
 	p_pContext->eSection = SceneFileContext::eShader;
-	p_pContext->pShaderProgram->AddUniformVariable( p_pContext->pUniformVariable);
-	p_pContext->pUniformVariable.reset();
+	p_pContext->pShaderProgram->AddFrameVariable( p_pContext->pFrameVariable);
+	p_pContext->pFrameVariable.reset();
 	return false;
 }

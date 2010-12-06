@@ -28,7 +28,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 25/08/2010
 	*/
-	class CS3D_API Md3Importer : public ExternalImporter
+	class C3D_API Md3Importer : public ExternalImporter, public MemoryTraced<Md3Importer>
 	{
 	private:
 		struct Md3Header

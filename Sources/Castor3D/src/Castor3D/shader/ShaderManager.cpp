@@ -42,7 +42,7 @@ void ShaderManager :: ClearShaders()
 
 ShaderProgramPtr ShaderManager :: CreateShaderProgramFromFiles( const String & p_vertexFile, const String & p_fragmentFile, const String & p_geometryFile)
 {
-	ShaderProgramPtr l_pProgram = RenderSystem::GetSingletonPtr<RenderSystem>()->CreateShaderProgram( p_vertexFile, p_fragmentFile, p_geometryFile);
+	ShaderProgramPtr l_pProgram( RenderSystem::GetSingletonPtr()->CreateShaderProgram( p_vertexFile, p_fragmentFile, p_geometryFile));
 	m_shaderPrograms.push_back( l_pProgram);
 	return l_pProgram;
 }

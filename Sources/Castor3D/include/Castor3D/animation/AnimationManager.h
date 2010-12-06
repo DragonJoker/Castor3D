@@ -30,10 +30,10 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API AnimationManager : public Castor::Templates::UniqueManager<AnimatedObjectGroup, AnimationManager>
+	class C3D_API AnimationManager : public Castor::Templates::UniqueManager<String, AnimatedObjectGroup, AnimationManager>
 	{
 	private:
-		friend class Castor::Templates::UniqueManager<AnimatedObjectGroup, AnimationManager>;
+		friend class Castor::Templates::UniqueManager<String, AnimatedObjectGroup, AnimationManager>;
 
 	private:
 		Utils::PreciseTimer m_timer;	//!< A timer, usefull for animation handling

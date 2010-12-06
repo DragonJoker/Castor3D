@@ -4,6 +4,7 @@
 
 #include "geometry/mesh/ProjectionMesh.h"
 #include "geometry/mesh/Submesh.h"
+#include "geometry/basic/Vertex.h"
 #include "geometry/basic/Face.h"
 #include "geometry/basic/Pattern.h"
 #include "main/Root.h"
@@ -14,7 +15,7 @@
 
 using namespace Castor3D;
 
-ProjectionMesh :: ProjectionMesh( PatternPtr p_pPattern, const Point3r & p_vAxis, bool p_bClosed,
+ProjectionMesh :: ProjectionMesh( Point3rPatternPtr p_pPattern, const Point3r & p_vAxis, bool p_bClosed,
 								  real p_fDepth, unsigned int p_uiNbFaces, const String & p_strName)
 	:	Mesh( p_strName),
 		m_pPattern( p_pPattern),
@@ -36,23 +37,24 @@ ProjectionMesh :: ~ProjectionMesh()
 
 void ProjectionMesh :: GeneratePoints()
 {
-    size_t l_uiNbElem = m_pPattern->GetNumVertex();
+	Point3rPattern & l_pattern = * m_pPattern;
+    size_t l_uiNbElem = l_pattern.GetSize();
 
     if (l_uiNbElem > 0)
 	{
-        if (m_bClosed && m_pPattern->GetVertex( 0) != m_pPattern->GetVertex( l_uiNbElem - 1))
+        if (m_bClosed && l_pattern[0] != l_pattern[l_uiNbElem - 1])
 		{
-            m_pPattern->AddVertex( m_pPattern->GetVertex( l_uiNbElem - 1), 0);
+            m_pPattern->AddPoint( l_pattern[l_uiNbElem - 1], 0);
             l_uiNbElem++;
-        }
+		}
 
 		real l_fTotalDistance = 0.0;
-		Point3r l_vDiff;
+		Point3r l_ptDiff;
 
 		for (size_t i = 1 ; i < l_uiNbElem ; i++)
 		{
-			Point3r l_vDiff = ((* m_pPattern->GetVertex( i)) - (* m_pPattern->GetVertex( i - 1)));
-			l_fTotalDistance += l_vDiff.GetSquaredLength();
+			l_ptDiff = (l_pattern[i] - l_pattern[i - 1]);
+			l_fTotalDistance += l_ptDiff.GetSquaredLength();
 		}
 
 		SubmeshPtr l_pSubmesh;
@@ -69,13 +71,15 @@ void ProjectionMesh :: GeneratePoints()
 		real l_fDistanceToOrigin = 0.0;
 		Point3r l_ptCurrentUV;
 		Point3r l_ptPreviousUV;
-		PatternPtrArray l_arrayPatterns;
-		PatternPtr l_pPreviousPattern = m_pPattern;
+		Point3rPattern::PointerArray l_arrayPatterns;
+		Point3rPattern & l_previousPattern = * m_pPattern;
+		size_t l_uiTmpIndex = 0;
 
         // Construction des faces
 		for (size_t j = 0 ; j < m_uiNbFaces ; j++)
 		{
-			PatternPtr l_pPattern = new Pattern;
+			Point3rPatternPtr l_pPattern( new Point3rPattern);
+			l_pattern = * l_pPattern;
 
 			l_ptCurrentUV[1] = 0;
 			l_ptPreviousUV[1] = 0;
@@ -83,34 +87,31 @@ void ProjectionMesh :: GeneratePoints()
 
 			for (size_t i = 0 ; i < l_uiNbElem ; i++)
 			{
-				VertexPtr l_pVertex = l_pPreviousPattern->GetVertex( i);
-				l_pVertex->operator +=( m_vAxis);
-				l_pVertex = l_pSubmesh->AddVertex( l_pVertex);
-				l_pPattern->AddVertex( l_pVertex, i);
+				Point3r & l_pVertex = l_previousPattern[i];
+				l_pVertex += m_vAxis;
+				l_pattern.AddPoint( l_pSubmesh->AddVertex( l_pVertex), i);
 			}
 
 			for (size_t i = 1 ; i < l_uiNbElem ; i++)
 			{
-				VertexPtr l_pV0 = l_pPreviousPattern->GetVertex( i - 1);
-				VertexPtr l_pV1 = l_pPreviousPattern->GetVertex( i);
-				VertexPtr l_pV2 = l_pPattern->GetVertex( i);
-				VertexPtr l_pV3 = l_pPattern->GetVertex( i - 1);
+				const Point3r & l_pV0 = l_previousPattern[i - 1];
+				const Point3r & l_pV1 = l_previousPattern[i];
+				const Point3r & l_pV2 = l_pattern[i];
+				const Point3r & l_pV3 = l_pattern[i - 1];
 
-				l_vDiff = ((* l_pV1) - (* l_pV0));
-				l_fDistanceToOrigin += l_vDiff.GetSquaredLength();
+				l_ptDiff = (l_pV1 - l_pV0);
+				l_fDistanceToOrigin += l_ptDiff.GetSquaredLength();
 				l_ptCurrentUV[1] = l_fDistanceToOrigin / l_fTotalDistance;
 
-				l_pSubmesh->AddQuadFace( l_pV0, l_pV1, l_pV2, l_pV3, l_uiNbElem, l_ptPreviousUV, l_ptCurrentUV);
+				l_pSubmesh->AddQuadFace( l_uiTmpIndex + i - 1, l_uiTmpIndex + i, l_uiTmpIndex + l_uiNbElem + i, l_uiTmpIndex + l_uiNbElem + i - 1, l_uiNbElem, l_ptPreviousUV, l_ptCurrentUV);
 
 				l_ptPreviousUV[1] = l_ptCurrentUV[1];
 			}
 
-			l_pPreviousPattern = l_pPattern;
+			l_previousPattern = l_pattern;
 			l_arrayPatterns.push_back( l_pPattern);
 			l_ptPreviousUV[0] = l_ptCurrentUV[0];
 		}
-
-//		vector::deleteAll( l_arrayPatterns);
 
 		l_pSubmesh->GenerateBuffers();
     }

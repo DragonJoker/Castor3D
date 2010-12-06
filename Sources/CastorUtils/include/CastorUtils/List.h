@@ -25,8 +25,8 @@ namespace Castor
 {
 	namespace MultiThreading
 	{
-		template <typename Ty, class Locker=MultiThreading::Mutex>
-		class List : public std::list <Ty>
+		template <typename Ty, class Locker=MultiThreading::RecursiveMutex>
+		class List : public std::list <Ty>, public MemoryTraced< List<Ty, Locker> >
 		{
 		private:
 			template <typename _Ty, class _Locker> friend class Castor::MultiThreading::List;

@@ -32,7 +32,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API TextureUnit : public Renderable<TextureUnit, TextureRenderer>
+	class C3D_API TextureUnit : public Renderable<TextureUnit, TextureRenderer>
 	{
 	public:
 		typedef enum eMAP_MODE
@@ -87,11 +87,11 @@ namespace Castor3D
 		/**
 		 * Applies the texture unit and it's environment mode
 		 */
-		virtual void Apply( eDRAW_TYPE p_displayMode);
+		virtual void Render( eDRAW_TYPE p_displayMode);
 		/**
 		 * Removes the texture unit from the stack, in order not to interfere with other ones
 		 */
-		virtual void Remove();
+		virtual void EndRender();
 		/**
 		 * Writes the texture unit in a file
 		 *@param p_pFile : [in] The file to write in
@@ -132,7 +132,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API TextureRenderer : public Renderer<TextureUnit, TextureRenderer>
+	class C3D_API TextureRenderer : public Renderer<TextureUnit, TextureRenderer>
 	{
 	protected:
 		/**
@@ -157,11 +157,11 @@ namespace Castor3D
 		/**
 		 * Draws the texture
 		 */
-		virtual void Apply() = 0;
+		virtual void Render() = 0;
 		/**
 		 * Removes the texture
 		 */
-		virtual void Remove() = 0;
+		virtual void EndRender() = 0;
 	};
 }
 

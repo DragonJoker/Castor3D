@@ -26,7 +26,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class CS3D_API ShaderObject
+	class C3D_API ShaderObject : public MemoryTraced<ShaderObject>
 	{
 	public:
 		//! Shader object type

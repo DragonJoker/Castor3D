@@ -29,7 +29,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class CS3D_API TorusMesh : public Mesh
+	class C3D_API TorusMesh : public Mesh
 	{
 	private:
 		friend class MeshManager;

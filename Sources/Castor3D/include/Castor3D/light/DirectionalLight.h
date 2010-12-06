@@ -29,7 +29,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API DirectionalLight : public Light
+	class C3D_API DirectionalLight : public Light
 	{
 	private:
 		friend class Scene;
@@ -39,7 +39,7 @@ namespace Castor3D
 		 *@param p_name : The light's name, default is void
 		 *@param p_index : The light's index (max 8 active lights at a time)
 		 */
-		DirectionalLight( const String & p_name=C3DEmptyString);
+		DirectionalLight( LightNodePtr p_pNode, const String & p_name=C3DEmptyString);
 	public:
 		/**
 		 * Destructor

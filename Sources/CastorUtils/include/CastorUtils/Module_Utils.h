@@ -27,6 +27,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Map.h"
 #include "Multimap.h"
 #include "Set.h"
+#include <cstdarg>
+#include <array>
 
 #undef CASTOR_UNICODE
 
@@ -47,6 +49,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	define CU_T( x) L##x						//!< The macro to use with constant strings, id est : : C3D_( "a string")
 #	define Cout( x) std::wcout << x				//!< Use std::wcout
 #	define Cerr( x) std::wcerr << x				//!< Use std::wcerr
+#	define atoi _wtoi
+#	define atof _wtof
+#	define atol _wtol
 #	ifndef WIN32									
 #		define Sprintf swnprintf				//!< Defines swnprintf instead of sprintf_s on Unix Systems
 #		define Strcpy wstrncpy
@@ -55,7 +60,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #		define Strcpy wcscpy_s
 #	endif
 #endif
-//! The empty string macro
 
 #ifndef WIN32
 #	define Sleep usleep
@@ -97,20 +101,16 @@ namespace Castor
 {
 	namespace Templates
 	{
-		template <typename T> class SharedPtr;
+//		template <typename T> class SharedPtr;
 		template <typename T> class ScopedPtr;
-		template <typename T> class WeakPtr;
+//		template <typename T> class WeakPtr;
 		class SharedCount;
 	}
 
 	namespace Math
 	{
-		//! vertex representation
-		class Vertex;
 		//! Spherical vertex representation
-		class VertexSpherical;
-		//! The transformation matrix representation
-		class TransformationMatrix;
+		class SphericalVertex;
 		//! The quaternion representation
 		class Quaternion;
 		//! The representation of a line (y = ax + b)
@@ -134,14 +134,32 @@ namespace Castor
 		typedef Point<real, 3>			Point3r;
 		typedef Point<real, 2>			Point2r;
 
+		typedef Point<float, 4>			Point4f;
+		typedef Point<float, 3>			Point3f;
+		typedef Point<float, 2>			Point2f;
+
+		typedef Point<double, 4>		Point4d;
+		typedef Point<double, 3>		Point3d;
+		typedef Point<double, 2>		Point2d;
+
+		typedef Point<int, 4>			Point4i;
+		typedef Point<int, 3>			Point3i;
+		typedef Point<int, 2>			Point2i;
+
 		typedef SquareMatrix<real, 4>	Matrix4x4r;
 		typedef SquareMatrix<real, 3>	Matrix3x3r;
 		typedef SquareMatrix<real, 2>	Matrix2x2r;
 
-		typedef Templates::SharedPtr<Vertex>				VertexPtr;
+		typedef SquareMatrix<float, 4>	Matrix4x4f;
+		typedef SquareMatrix<float, 3>	Matrix3x3f;
+		typedef SquareMatrix<float, 2>	Matrix2x2f;
+
+		typedef SquareMatrix<double, 4>	Matrix4x4d;
+		typedef SquareMatrix<double, 3>	Matrix3x3d;
+		typedef SquareMatrix<double, 2>	Matrix2x2d;
+
 		typedef Templates::SharedPtr<Quaternion>			QuaternionPtr;
-		typedef Templates::SharedPtr<TransformationMatrix>	TransformationMatrixPtr;
-		typedef Templates::SharedPtr<VertexSpherical>		VertexSphericalPtr;
+		typedef Templates::SharedPtr<SphericalVertex>		SphericalVertexPtr;
 		typedef Templates::SharedPtr<Container>				ContainerPtr;
 		typedef Templates::SharedPtr<ComboBox>				ComboBoxPtr;
 		typedef Templates::SharedPtr<Sphere>				SpherePtr;
@@ -149,6 +167,10 @@ namespace Castor
 		typedef Templates::SharedPtr<Point4r>				Point4rPtr;
 		typedef Templates::SharedPtr<Point3r>				Point3rPtr;
 		typedef Templates::SharedPtr<Point2r>				Point2rPtr;
+
+		typedef Templates::SharedPtr<Point4i>				Point4iPtr;
+		typedef Templates::SharedPtr<Point3i>				Point3iPtr;
+		typedef Templates::SharedPtr<Point2i>				Point2iPtr;
 
 		typedef Templates::SharedPtr<Matrix4x4r>			Matrix4x4rPtr;
 		typedef Templates::SharedPtr<Matrix3x3r>			Matrix3x3rPtr;
@@ -175,14 +197,8 @@ namespace Castor
 		//! Point3r pointer list
 		typedef C3DList(	Point2rPtr)				Point2rPtrList;
 
-		//! Point3r array
-		typedef C3DVector(	Vertex)					VertexArray;
-		//! Point3r pointer array
-		typedef C3DVector(	VertexPtr)				VertexPtrArray;
-		//! Point3r pointer list
-		typedef C3DList(	VertexPtr)				VertexPtrList;
-		//! VertexSpherical array
-		typedef C3DVector(	VertexSphericalPtr)		VertexSphericalPtrArray;
+		//! SphericalVertex array
+		typedef C3DVector(	SphericalVertexPtr)		SphericalVertexPtrArray;
 	}
 
 	typedef C3DMap(		String,		bool)	BoolStrMap;

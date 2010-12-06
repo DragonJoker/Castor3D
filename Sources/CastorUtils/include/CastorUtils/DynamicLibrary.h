@@ -29,32 +29,32 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Castor
 { namespace Utils
 {
-	class DynamicLibrary
+	class DynamicLibrary : public MemoryTraced<DynamicLibrary>
 	{
 	private:
 		void * m_library;
 
 	public:
-		DynamicLibrary()
+		DynamicLibrary()throw()
 			:	m_library (NULL)
 		{
 		}
 
-		~DynamicLibrary()
+		~DynamicLibrary()throw()
 		{
 			_close();
 		}
 
 	private:
-		void _close();
+		void _close()throw();
 
 	public:
 
-		bool Open( const Char * p_name);
-		bool Open( const String & p_name);
+		bool Open( const Char * p_name)throw();
+		bool Open( const String & p_name)throw();
 
-		void * GetFunction( const Char * p_name);
-		void * GetFunction( const String & p_name);
+		void * GetFunction( const Char * p_name)throw();
+		void * GetFunction( const String & p_name)throw();
 
 		inline bool IsOpen()const { return m_library != NULL; }
 	};

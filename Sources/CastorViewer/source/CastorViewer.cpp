@@ -6,16 +6,12 @@
 
 using namespace CastorViewer;
 
-#ifdef __WXMSW__
-#	include <wx/msw/msvcrt.h>      // redefines the new() operator 
-#endif
-
 IMPLEMENT_APP( CastorViewerApp)
 
 bool CastorViewerApp :: OnInit()
 {
-	Castor3D::Log::SetFileName( "CastorViewer.log");
-	bool l_bReturn = true;//wxApp::OnInit();
+	Castor3D::Logger::SetFileName( "CastorViewer.log");
+	bool l_bReturn = true;
 
 	if (l_bReturn)
 	{

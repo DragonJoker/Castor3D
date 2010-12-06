@@ -52,7 +52,7 @@ namespace Castor
 		/**
 		 * Constructor from rotation matrix
 		 */
-		Quaternion( TransformationMatrixPtr p_matrix)
+		Quaternion( const Matrix4x4r & p_matrix)
 		{
 			FromRotationMatrix( p_matrix);
 		}
@@ -95,9 +95,9 @@ namespace Castor
 		Point3r operator *(const Point3r & p_vector)const;
 
 	public:
-		void ToRotationMatrix( TransformationMatrix & p_matrix)const;
+		void ToRotationMatrix( Matrix4x4r & p_matrix)const;
 		void ToRotationMatrix( real * p_matrix)const;
-		void FromRotationMatrix( TransformationMatrixPtr p_matrix);
+		void FromRotationMatrix( const Matrix4x4r & p_matrix);
 		void FromRotationMatrix( real * p_matrix);
 		void FromAxisAngle( const Point3r & p_vector, const Angle & p_angle);
 		void ToAxisAngle( Point3r & p_vector, Angle & p_angle);

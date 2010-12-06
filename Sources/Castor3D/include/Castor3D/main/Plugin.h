@@ -36,7 +36,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API Plugin 
+	class C3D_API Plugin : public MemoryTraced<Plugin>
 	{
 	private:
 		typedef void fnGetRequiredVersion( int &);			//!< Signature for the plugin's version checking function
@@ -73,11 +73,11 @@ namespace Castor3D
 		/**
 		 * Retrieves required version
 		 */
-		void GetRequiredVersion( int & p_version){ m_pfnGetRequiredVersion( p_version); }
+		void GetRequiredVersion( int & p_version){ if (m_pfnGetRequiredVersion) m_pfnGetRequiredVersion( p_version); }
 		/**
 		 * Register the plugin to a root system
 		 */
-		void RegisterPlugin( Root & p_root){ m_pfnRegisterPlugin( p_root); }
+		void RegisterPlugin( Root & p_root){ if (m_pfnRegisterPlugin) m_pfnRegisterPlugin( p_root); }
 
 	};
 }

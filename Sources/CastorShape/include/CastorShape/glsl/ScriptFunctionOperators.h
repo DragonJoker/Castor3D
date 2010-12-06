@@ -1,13 +1,22 @@
 #ifndef ___EMUSE_SCRIPT_FUNCTIONS_OPERATORS___
 #define ___EMUSE_SCRIPT_FUNCTIONS_OPERATORS___
 
-
 #include "Module_Script.h"
 #include "ScriptFunctions.h"
 
+#pragma warning( push)
+#pragma warning( disable:4800)
+#pragma warning( disable:4804)
+
 namespace CastorShape
 {
+	template<typename T>
+	void d_fast_call Ope_SubEqual( ScriptNode * caller)
+	{
+		GET_AND_EXEC_TWO_PARAM( T, a, T, b);
 
+		RETURN_AS( T) a -= b;
+	}
 	template<typename T,typename U>
 	void d_fast_call Ope_SubEqual( ScriptNode * caller)
 	{
@@ -15,7 +24,21 @@ namespace CastorShape
 
 		RETURN_AS( T) a -= b;
 	}
+	template<typename R,typename T,typename U>
+	void d_fast_call Ope_SubEqual( ScriptNode * caller)
+	{
+		GET_AND_EXEC_TWO_PARAM( T, a, U, b);
 
+		RETURN_AS( R) a -= b;
+	}
+
+	template<typename T>
+	void d_fast_call Ope_MulEqual( ScriptNode * caller)
+	{
+		GET_AND_EXEC_TWO_PARAM( T, a, T, b);
+
+		RETURN_AS( T) a *= b;
+	}
 	template<typename T,typename U>
 	void d_fast_call Ope_MulEqual( ScriptNode * caller)
 	{
@@ -23,7 +46,21 @@ namespace CastorShape
 
 		RETURN_AS( T) a *= b;
 	}
+	template<typename R,typename T,typename U>
+	void d_fast_call Ope_MulEqual( ScriptNode * caller)
+	{
+		GET_AND_EXEC_TWO_PARAM( T, a, U, b);
 
+		RETURN_AS( R) a *= b;
+	}
+
+	template<typename T>
+	void d_fast_call Ope_AddEqual( ScriptNode * caller)
+	{
+		GET_AND_EXEC_TWO_PARAM( T, a, T, b);
+
+		RETURN_AS( T) a += b;
+	}
 	template<typename T,typename U>
 	void d_fast_call Ope_AddEqual( ScriptNode * caller)
 	{
@@ -31,13 +68,34 @@ namespace CastorShape
 
 		RETURN_AS( T) a += b;
 	}
+	template<typename R,typename T,typename U>
+	void d_fast_call Ope_AddEqual( ScriptNode * caller)
+	{
+		GET_AND_EXEC_TWO_PARAM( T, a, U, b);
 
+		RETURN_AS( R) a += b;
+	}
+
+	template<typename T>
+	void d_fast_call Ope_DivEqual( ScriptNode * caller)
+	{
+		GET_AND_EXEC_TWO_PARAM( T, a, T, b);
+
+		RETURN_AS( T) a /= b;
+	}
 	template<typename T,typename U>
 	void d_fast_call Ope_DivEqual( ScriptNode * caller)
 	{
 		GET_AND_EXEC_TWO_PARAM( T, a, U, b);
 
 		RETURN_AS( T) a /= b;
+	}
+	template<typename R,typename T,typename U>
+	void d_fast_call Ope_DivEqual( ScriptNode * caller)
+	{
+		GET_AND_EXEC_TWO_PARAM( T, a, U, b);
+
+		RETURN_AS( R) a /= b;
 	}
 
 	template<typename R,typename T,typename U>
@@ -171,5 +229,7 @@ namespace CastorShape
 	}
 
 }
+
+#pragma warning( pop)
 
 #endif

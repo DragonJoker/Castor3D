@@ -29,7 +29,7 @@ namespace Castor
 	\date 14/02/2010
 	*/
 	template <typename T>
-	class Plane
+	class Plane : public MemoryTraced< Plane<T> >
 	{
 	private:
 		typedef Templates::Value<T> value;
@@ -47,7 +47,7 @@ namespace Castor
 
 			m_normal.Normalise();
 			m_origin = Point<T, 3>( p_p1);
-			m_d = 0.0f - m_normal.dotProduct( m_origin);
+			m_d = 0.0f - m_normal.Dot( m_origin);
 		}
 
 		bool IsParallel( const Plane & p_plane)const

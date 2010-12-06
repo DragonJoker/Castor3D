@@ -65,7 +65,7 @@ namespace Castor
 
 	//! Pointer over a class function
 	template <class TClass>
-	class ClassFunctor
+	class ClassFunctor : public MemoryTraced< ClassFunctor<TClass> >
 	{
 	public:
 		TClass * m_instance;
@@ -92,7 +92,7 @@ namespace Castor
 //! Creates a ClassFunctor
 #define CASTOR_THREAD_CLASS_FUNCTOR( p_instance, p_class, p_function)		Castor::MultiThreading::ClassFunctor <p_class> ( p_instance, & p_class::p_function)
 
-	class Thread
+	class Thread : public MemoryTraced<Thread>
 	{
 	private:
 		void * m_thread;
@@ -119,7 +119,7 @@ namespace Castor
 
 	Thread * CreateThread( PDWThreadStartFunction threadFunction, void * lpParameter, void * lpThreadAttributes = NULL, size_t dwStackSize = 0, eTHREAD_STATE eCreationFlags = eCreateSuspended, unsigned long * lpThreadId = NULL);
 	Thread * CreateThread( PUIThreadStartFunction threadFunction, void * lpParameter, void * lpThreadAttributes = NULL, size_t dwStackSize = 0, eTHREAD_STATE eCreationFlags = eCreateSuspended, unsigned long * lpThreadId = NULL);
-	bool WaitForMultipleThreads( bool bWaitAll, unsigned long dwMilliseconds, size_t dwNbThreads, ...);
+	bool WaitForMultipleThreads( bool bWaitAll, unsigned long dwMilliseconds, size_t p_uiNbThreads, ...);
 	bool WaitForSingleThread( Thread * pThread, unsigned long dwMilliseconds);
 }
 }

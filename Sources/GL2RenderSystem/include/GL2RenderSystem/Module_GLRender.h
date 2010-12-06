@@ -15,96 +15,38 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___MODULE_GLRENDER___
-#define ___MODULE_GLRENDER___
+#ifndef ___GL2_ModuleRender___
+#define ___GL2_ModuleRender___
+
+#include <OpenGLCommon/Module_GLRender.h>
 
 #	ifdef GL2RENDERSYSTEM_EXPORTS
-#		define CS3D_GL_API __declspec(dllexport)
+#		define C3D_GL2_API __declspec(dllexport)
 #	else
-#		define CS3D_GL_API __declspec(dllimport)
+#		define C3D_GL2_API __declspec(dllimport)
 #	endif
 
 namespace Castor3D
 {
-	class GLRenderSystem;
-	class GLPlugin;
-	class GLContext;
-	class GLSubmeshRenderer;
-	class GLMeshRenderer;
-	class GLGeometryRenderer;
-	class GLTextureEnvironmentRenderer;
-	class GLTextureRenderer;
-	class GLMaterialRenderer;
-	class GLLightRenderer;
-	class GLCameraRenderer;
-	class GLViewportRenderer;
-	class GLWindowRenderer;
-	class GLSceneNodeRenderer;
-	class GLOverlayRenderer;
-	class GLShaderProgram;
-
-	class RenderWindow;
-	class Geometry;
-
-	template <typename T, size_t Count> class GLVertexAttribsBuffer;
-	class GLVBOVertexBuffer;
-	class GLVBONormalsBuffer;
+	class GLVBVertexBuffer;
+	class GLVBNormalsBuffer;
+	class GLVBTextureBuffer;
 	class GLVBOTextureBuffer;
-	typedef GLVertexAttribsBuffer<real, 3> GLVertexAttribsBuffer3r;
-	typedef GLVertexAttribsBuffer<real, 2> GLVertexAttribsBuffer2r;
+	class GLTextureBufferObject;
 
-	typedef Templates::SharedPtr<GLVBOVertexBuffer>			GLVBOVertexBufferPtr;
-	typedef Templates::SharedPtr<GLVBONormalsBuffer>		GLVBONormalsBufferPtr;
-	typedef Templates::SharedPtr<GLVBOTextureBuffer>		GLVBOTextureBufferPtr;
-	typedef Templates::SharedPtr<GLVertexAttribsBuffer2r>	GLVertexAttribsBuffer2rPtr;
-	typedef Templates::SharedPtr<GLVertexAttribsBuffer3r>	GLVertexAttribsBuffer3rPtr;
-	typedef Templates::SharedPtr<GLShaderProgram>			GLShaderProgramPtr;
+	class GL2RendererDriver;
+	class GL2RenderSystem;
+
+	class GL2LightRenderer;
+	class GL2PassRenderer;
+	class GL2SubmeshRenderer;
+	class GL2TextureRenderer;
+	class GL2WindowRenderer;
+
+	class GL2ShaderProgram;
+
+	typedef Templates::SharedPtr<GL2ShaderProgram>		GL2ShaderProgramPtr;
+	typedef Templates::SharedPtr<GLTextureBufferObject> GLTextureBufferObjectPtr;
 }
-
-typedef C3DMap( Castor3D::RenderWindow *, Castor3D::GLContext *) ContextPtrMap;
-
-#if CASTOR_USE_DOUBLE
-#	define glTranslate			glTranslated
-#	define glRotate				glRotated
-#	define glMultMatrix			glMultMatrixd
-#	define glScale				glScaled
-#	define glMultiTexCoord2		glMultiTexCoord2dARB
-#	define GL_REAL				GL_DOUBLE
-#	define glVertex2			glVertex2d
-#	define glTexCoord2			glTexCoord2d
-#	define glVertex3			glVertex3d
-#else
-#	define glTranslate			glTranslatef
-#	define glRotate				glRotatef
-#	define glMultMatrix			glMultMatrixf
-#	define glScale				glScalef
-#	define glMultiTexCoord2		glMultiTexCoord2fARB
-#	define GL_REAL				GL_FLOAT
-#	define glVertex2			glVertex2f
-#	define glTexCoord2			glTexCoord2f
-#	define glVertex3			glVertex3f
-#endif
-
-#	ifdef __GNUG__
-#		undef CS3D_GL_API
-#		define CS3D_GL_API
-#		define GLGetProcAddress(x)	glXGetProcAddress(reinterpret_cast <const GLubyte *>( x))
-#		define GLCreateContext		glXCreateNewContext
-#		define GLMakeCurrent		glXMakeContextCurrent
-//#		define GLCreateContext		glXCreateContext
-//#		define GLMakeCurrent		glXMakeCurrent
-#		define GLGetCurrentContext	glXGetCurrentContext
-#	else
-#		ifdef WIN32
-#			define GLGetProcAddress(x)	wglGetProcAddress(x)
-#			define GLCreateContext		wglCreateContext
-#			define GLMakeCurrent		wglMakeCurrent
-#			define GLGetCurrentContext	wglGetCurrentContext
-#		endif
-#	endif
-
-#	if CHECK_MEMORYLEAKS
-#		include <CastorUtils/Memory.h>
-#	endif
 
 #endif

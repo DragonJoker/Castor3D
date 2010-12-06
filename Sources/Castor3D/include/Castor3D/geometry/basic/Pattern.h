@@ -29,30 +29,54 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API Pattern
+	template <typename T>
+	class C3D_API Pattern : public MemoryTraced< Pattern<T> >
 	{
+	public:
+		typedef Templates::SharedPtr< Pattern<T> >	Pointer;
+		typedef C3DVector(	Pointer)				PointerArray;		//!< Pattern pointer array
+
 	private:
-		VertexPtrList m_vertex;	//!< The vertexes
+		typedef T				TObj;
+		typedef T &				TObjRef;
+		typedef const T &		TObjConstRef;
+		typedef C3DList( TObj)	TObjList;
+		TObjList m_listPoints;	//!< The points
 
 	public:
 		/**
 		 * Constructor
 		 */
-		Pattern();
+		Pattern()
+		{}
 		/**
 		 * Destructor
 		 */
-		~Pattern();
+		~Pattern()
+		{
+			m_listPoints.clear();
+		}
 		/**
 		 * Displays the pattern in a display mode
 		 *@param p_displayMode : [in] the mode in which the display must be made
 		 */
-		void Display( eDRAW_TYPE p_displayMode);
+		void Display( eDRAW_TYPE p_displayMode){}
 		/**
 		 * Builds the mirror pattern
 		 * @return the built arc
 		 */
-		PatternPtr GetReversed();
+		Pointer GetReversed()
+		{
+			Pointer l_result( new Pattern<T>());
+			TObjList::iterator l_it = m_listPoints.begin();
+
+			for (l_it = m_listPoints.begin() ; l_it != m_listPoints.end() ; l_it++)
+			{
+				l_result->m_listPoints.push_front( *l_it);
+			}
+
+			return l_result;
+		}
 
 	public:
 		/**@name Accessors */
@@ -61,23 +85,64 @@ namespace Castor3D
 		 * Tells if the pattern is closed (first vertex is also the last)
 		 *@return true if closed, false if not
 		 */
-		bool IsClosed();
+		bool IsClosed()
+		{
+			TObj l_v1, l_v2;
+			l_v1 = **m_listPoints.begin();
+			l_v2 = **m_listPoints.rbegin();
+			return l_v1 == l_v2;
+		}
 		/**
 		 * Adds a vertex to the list, at a given index
 		 *@param p_vertex : [in] the vertex to add
 		 *@param p_index : [in] the index at which the insert must be done
 		 */
-		void AddVertex( VertexPtr p_vertex, size_t p_index);
-		/**
-		 * Retrieves the vertex at a given index, NULL if none
-		 *@param p_index : The index we must look at
-		 *@return The retrieved vertex
-		 */
-		VertexPtr GetVertex( size_t p_index)const;
+		void AddPoint( TObjConstRef p_vertex, size_t p_index)
+		{
+			if (p_index >= m_listPoints.size())
+			{
+				m_listPoints.push_back( p_vertex);
+				return;
+			}
+
+			TObjList::iterator l_it = m_listPoints.begin();
+
+			for (size_t i = 0 ; i < p_index ; i++)
+			{
+				l_it++;
+			}
+
+			m_listPoints.insert( l_it, p_vertex);
+		}
 		/**
 		 * @return The number of vertex constituting me
 		 */
-		inline size_t GetNumVertex() { return m_vertex.size(); }
+		inline size_t GetSize() { return m_listPoints.size(); }
+
+		TObjRef operator []( size_t p_uiIndex)
+		{
+			CASTOR_ASSERT( p_uiIndex < m_listPoints.size());
+			TObjList::iterator l_it = m_listPoints.begin();
+
+			for (size_t i = 0 ; i < p_uiIndex ; i++)
+			{
+				l_it++;
+			}
+
+			return * l_it;
+		}
+		TObjConstRef operator []( size_t p_uiIndex)const
+		{
+			CASTOR_ASSERT( p_uiIndex < m_listPoints.size());
+			TObjList::const_iterator l_it = m_listPoints.begin();
+
+			for (size_t i = 0 ; i < p_uiIndex ; i++)
+			{
+				l_it++;
+			}
+
+			return * l_it;
+		}
 		//@}
 	};
 }

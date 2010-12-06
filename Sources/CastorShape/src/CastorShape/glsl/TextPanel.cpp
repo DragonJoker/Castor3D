@@ -19,16 +19,16 @@ TextPanel :: TextPanel( wxWindow * parent, wxWindowID id, const wxPoint& pos, co
 
 	if (p_showLines)
 	{
-		m_text = new TextCtrl( m_container, wxID_ANY, "", wxPoint( 40, 0), wxSize( x, y),
+		m_text = new TextCtrl( m_container, wxID_ANY, wxEmptyString, wxPoint( 40, 0), wxSize( x, y),
 							   wxTE_MULTILINE | wxTE_RICH | wxTE_PROCESS_TAB);
 	}
 	else
 	{
-		m_text = new TextCtrl( m_container, wxID_ANY, "", wxPoint( 0, 0), wxSize( m_container->GetClientSize().x, y),
+		m_text = new TextCtrl( m_container, wxID_ANY, wxEmptyString, wxPoint( 0, 0), wxSize( m_container->GetClientSize().x, y),
 							   wxTE_MULTILINE | wxTE_RICH | wxTE_PROCESS_TAB);
 	}
 
-	m_text->SetFont( wxFont( 10, wxFONTFAMILY_SCRIPT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, "Lucida Console"));
+	m_text->SetFont( wxFont( 10, wxFONTFAMILY_SCRIPT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, CU_T( "Lucida Console")));
 
 	UpdateText();
 }
@@ -52,7 +52,7 @@ void TextPanel :: SaveFile( const wxString & p_path, ScriptCompiler * p_pCompile
 
 	if (l_strPath.empty())
 	{
-		wxFileDialog l_dialog( NULL, "Choisissez un fichier", "", "", "GLSL File (*.glsl)|*.glsl", wxFD_SAVE);
+		wxFileDialog l_dialog( NULL, CU_T( "Choisissez un fichier"), wxEmptyString, wxEmptyString, CU_T( "GLSL File (*.glsl)|*.glsl"), wxFD_SAVE);
 
 		if (l_dialog.ShowModal() == wxOK)
 		{

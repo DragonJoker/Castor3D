@@ -31,13 +31,23 @@ namespace Castor
 	class String;
 	typedef std::vector <String> StringArray;
 
+#ifndef _UNICODE
 	typedef char Char;
+	typedef wchar_t UnChar;
+#else
+	typedef wchar_t Char;
+	typedef char UnChar;
+#endif
+
 	typedef std::basic_stringstream<Char, std::char_traits<Char>, std::allocator<Char> > StringStream;
 
 	class d_dll String : public std::basic_string<Char, std::char_traits<Char>, std::allocator<Char> >
 	{
 	private:
 		typedef std::basic_string<Char, std::char_traits<Char>, std::allocator<Char> > my_type;
+		typedef std::basic_string<UnChar, std::char_traits<UnChar>, std::allocator<UnChar> > my_untype;
+
+		mutable my_untype m_strOpposite;
 
 	public:
 		String();
@@ -52,6 +62,8 @@ namespace Castor
 		const char * char_str()const;
 		const wchar_t * wchar_str()const;
 
+		String substr( size_t p_uiOff = 0, size_t p_uiCount = npos)const;
+
 		size_t find( const std::wstring & p_strToFind, size_t p_uiOffset=0)const;
 		size_t find_first_of( const std::wstring & p_strToFind, size_t p_uiOffset=0)const;
 		size_t find_last_of( const std::wstring & p_strToFind, size_t p_uiOffset=npos)const;
@@ -65,6 +77,7 @@ namespace Castor
 		size_t find_last_not_of( wchar_t p_strToFind, size_t p_uiOffset=npos)const;
 
 		bool operator ==( const wchar_t * p_pToCompare)const;
+		bool operator !=( const wchar_t * p_pToCompare)const;
 
 		size_t find( const std::string & p_strToFind, size_t p_uiOffset=0)const;
 		size_t find_first_of( const std::string & p_strToFind, size_t p_uiOffset=0)const;
@@ -79,6 +92,7 @@ namespace Castor
 		size_t find_last_not_of( char p_strToFind, size_t p_uiOffset=npos)const;
 
 		bool operator ==( const char * p_pToCompare)const;
+		bool operator !=( const char * p_pToCompare)const;
 
 		StringArray Split( const String & p_delims, unsigned int p_maxSplits=10)const;
 		String & Trim( bool p_bLeft=true, bool p_bRight=true);
@@ -103,6 +117,31 @@ namespace Castor
 
 		void Replace( const String & p_find, const String & p_replaced);
 
+		bool IsInteger()const;
+		bool IsFloating()const;
+		short ToShort()const;
+		int ToInt()const;
+		long ToLong()const;
+		long long ToLongLong()const;
+		float ToFloat()const;
+		double ToDouble()const;
+
+		String operator + ( const char * p_pText)const;
+		String operator + ( const wchar_t * p_pText)const;
+		String operator + ( const String & p_strText)const;
+		String operator + ( const std::string & p_strText)const;
+		String operator + ( const std::wstring & p_strText)const;
+		String operator +=( const char * p_pText);
+		String operator +=( const wchar_t * p_pText);
+		String operator +=( const String & p_strText);
+		String operator +=( const std::string & p_strText);
+		String operator +=( const std::wstring & p_strText);
+		String operator = ( const char * p_pText);
+		String operator = ( const wchar_t * p_pText);
+		String operator = ( const String & p_strText);
+		String operator = ( const std::string & p_strText);
+		String operator = ( const std::wstring & p_strText);
+
 	private:
 #ifndef _UNICODE
 		void _fromWString( const std::wstring & p_strWideString);
@@ -111,7 +150,13 @@ namespace Castor
 		void _fromString( const std::string & p_strString);
 		void _toString( std::string & p_strString)const;
 #endif
+		String _add( const std::string & p_strText);
+		String _add( const std::wstring & p_strText);
+		void _updateOpp()const;
 	};
+
+	String operator +( const char * p_pText, const String & p_strText);
+	String operator +( const wchar_t * p_pText, const String & p_strText);
 
 	template <typename T>
 	String ToString( const T & p_tValue)

@@ -19,6 +19,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_Face___
 
 #include "../../main/Serialisable.h"
+#include "Vertex.h"
+#include "SmoothingGroup.h"
 
 namespace Castor3D
 {
@@ -31,34 +33,25 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API Face : public Serialisable
+	class C3D_API Face : public Serialisable, public MemoryTraced<Face>
 	{
 	public:
 		static unsigned long s_faceNumber;	//!< Defines the total number of created faces
 
 	public:
-		VertexPtr m_vertex1;			//!< The first vertex
-		Point3rPtr m_vertex1Normal;		//!< First vertex normal coordinates
-		Point3r m_vertex1TexCoord;		//!< First vertex texture coordinate
-		Point3rPtr m_vertex1Tangent;	//!< First vertex texture coordinates
-		VertexPtr m_vertex2;			//!< The second vertex
-		Point3rPtr m_vertex2Normal;		//!< Second vertex normal coordinates
-		Point3r m_vertex2TexCoord;		//!< First vertex texture coordinates
-		Point3rPtr m_vertex2Tangent;	//!< First vertex texture coordinates
-		VertexPtr m_vertex3;			//!< The third vertex
-		Point3rPtr m_vertex3Normal;		//!< Third vertex normal coordinates
-		Point3r m_vertex3TexCoord;		//!< First vertex texture coordinates
-		Point3rPtr m_vertex3Tangent;	//!< First vertex texture coordinates
+		Vertex m_vertex[3];				//!< The vertices
 
-		Point3r m_faceNormal;		//!< The face's normal, used to the three vertexes in face display mode
-		Point3r m_faceTangent;		//!< The face's normal, used to the three vertexes in face display mode
+		Point3r m_faceNormal;			//!< The face's normal, used to the three vertexes in face display mode
+		Point3r m_faceTangent;			//!< The face's tangent, used to the three vertexes in face display mode
+		Point3r m_smoothNormals[3];		//!< The face's normal, used to the three vertexes in smooth display mode
+		Point3r m_smoothTangents[3];	//!< The face's tangent, used to the three vertexes in smooth display mode
 
 	public:
 		/**
 		 * Constructor
 		 *@param p_v1, p_v2, p_v3 : [in] The three verexes
 		 */
-		Face( VertexPtr p_v1=NULL, VertexPtr p_v2=NULL, VertexPtr p_v3=NULL);
+		Face( const Point3r & p_v1=Point3r(), size_t p_uiIndex1 = 0, const Point3r & p_v2=Point3r(), size_t p_uiIndex2 = 0, const Point3r & p_v3=Point3r(), size_t p_uiIndex3 = 0);
 		/**
 		 * Destructor
 		 */
@@ -70,34 +63,21 @@ namespace Castor3D
 		Point3r GetFaceCenter();
 		/**
 		 * Set the texture coordinates for the first face vertex 
-		 *@param x,y : The UV coordinates
+		 *@param x,y : The UVW coordinates
 		 */
-		void SetTexCoordV1( real x, real y);
+		void SetVertexTexCoords( size_t p_iVertex, real x=0.0, real y=0.0);
 		/**
 		 * Set the texture coordinates for the first face vertex 
-		 *@param p_ptUV : The UV coordinates
+		 *@param p_ptUV : The UVW coordinates
 		 */
-		void SetTexCoordV1( const Point2r & p_ptUV);
+		void SetVertexTexCoords( size_t p_iVertex, const Point2r & p_ptUV);
 		/**
-		 * Set the texture coordinates for the second face vertex 
-		 *@param x,y : The UV coordinates
+		 * Set the texture coordinates for the first face vertex 
+		 *@param p_pCoords : The UVW coordinates
 		 */
-		void SetTexCoordV2( real x, real y);
-		/**
-		 * Set the texture coordinates for the second face vertex 
-		 *@param p_ptUV : The UV coordinates
-		 */
-		void SetTexCoordV2( const Point2r & p_ptUV);
-		/**
-		 * Set the texture coordinates for the third face vertex
-		 *@param x,y : The UV coordinates
-		 */
-		void SetTexCoordV3( real x, real y);
-		/**
-		 * Set the texture coordinates for the third face vertex 
-		 *@param p_ptUV : The UV coordinates
-		 */
-		void SetTexCoordV3( const Point2r & p_ptUV);
+		void SetVertexTexCoords( size_t p_iVertex, const real * p_pCoords);
+		void SetSmoothNormals();
+		void SetFlatNormals();
 		/**
 		 * Writes a face in a file
 		 *@param p_file : The file to write in
@@ -108,6 +88,9 @@ namespace Castor3D
 		 *@param p_file : The file to read from
 		 */
 		virtual bool Read( Castor::Utils::File & p_file);
+
+		inline Vertex &			operator []	( size_t p_uiIndex)			{ return m_vertex[p_uiIndex];}
+		inline const Vertex &	operator []	( size_t p_uiIndex)const	{ return m_vertex[p_uiIndex];}
 	};
 }
 

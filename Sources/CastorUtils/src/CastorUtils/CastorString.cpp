@@ -19,11 +19,18 @@ const Char * String :: c_str()const
 	return my_type::c_str();
 }
 
+String String :: substr( size_t p_uiOff, size_t p_uiCount)const
+{
+	return my_type::substr( p_uiOff, p_uiCount);
+}
+
 #ifndef _UNICODE
 
 String :: String( const char * p_pChars)
 	:	my_type()
 {
+	clear();
+
 	if (p_pChars != NULL)
 	{
 		assign( p_pChars);
@@ -33,12 +40,14 @@ String :: String( const char * p_pChars)
 String :: String( const wchar_t * p_pChars)
 	:	my_type()
 {
+	clear();
 	_fromWString( p_pChars);
 }
 
 String :: String( char p_char)
 	:	my_type()
 {
+	clear();
 	char l_buffer[2];
 	l_buffer[0] = p_char;
 	l_buffer[1] = 0;
@@ -47,6 +56,7 @@ String :: String( char p_char)
 
 String :: String( wchar_t p_char)
 {
+	clear();
 	wchar_t l_buffer[2];
 	l_buffer[0] = p_char;
 	l_buffer[1] = 0;
@@ -61,6 +71,7 @@ String :: String( const std::string & p_strString)
 String :: String( const std::wstring & p_strString)
 	:	my_type()
 {
+	clear();
 	_fromWString( p_strString);
 }
 
@@ -71,9 +82,8 @@ const char * String :: char_str()const
 
 const wchar_t * String :: wchar_str()const
 {
-	std::wstring l_strReturn;
-	_toWString( l_strReturn);
-	return l_strReturn.c_str();
+	_updateOpp();
+	return m_strOpposite.c_str();
 }
 
 size_t String :: find( const std::wstring & p_strToFind, size_t p_uiOffset)const
@@ -245,32 +255,62 @@ size_t String :: find_last_not_of( char p_char, size_t p_uiOffset)const
 
 void String :: _fromWString( const std::wstring & p_strWideString)
 {
-	resize( p_strWideString.length());
+	resize( p_strWideString.size());
 
     std::locale loc( "french");
 
-    std::use_facet <std::ctype <wchar_t> > ( loc).narrow( & p_strWideString[0], & p_strWideString[p_strWideString.length()], '?', & operator[]( 0));
+#ifdef _WIN32
+    std::use_facet <std::ctype <wchar_t> > ( loc)._Narrow_s( & p_strWideString[0], & p_strWideString[p_strWideString.size()], '?', & operator[]( 0), size());
+#else
+	std::use_facet <std::ctype <wchar_t> > ( loc).narrow( & p_strWideString[0], & p_strWideString[p_strWideString.size()], '?', & operator[]( 0));
+#endif
 }
 
 void String :: _toWString( std::wstring & p_strWideString)const
 {
 	p_strWideString.clear();
-	p_strWideString.resize( length());
+	p_strWideString.resize( size());
 
     std::locale loc( "french");
 
-    std::use_facet <std::ctype <wchar_t> > ( loc).widen( & operator[]( 0), & operator[]( length()), & p_strWideString[0]);
-}
+#ifdef _WIN32
+    std::use_facet <std::ctype <wchar_t> > ( loc)._Widen_s( & operator[]( 0), & operator[]( size()), & p_strWideString[0], p_strWideString.size());
 #else
+	std::use_facet <std::ctype <wchar_t> > ( loc).widen( & operator[]( 0), & operator[]( size()), & p_strWideString[0]);
+#endif
+}
+
+String String :: _add( const std::string & p_strText)
+{
+	assign( std::operator +( * this, p_strText));
+	return * this;
+}
+
+String String :: _add( const std::wstring & p_strText)
+{
+	String l_strText = p_strText;
+	assign( std::operator +( * this, l_strText));
+	return * this;
+}
+
+void String :: _updateOpp()const
+{
+	_toWString( m_strOpposite);
+}
+
+#else
+
 String :: String( const char * p_pChars)
 	:	my_type()
 {
+	clear();
 	_fromString( p_pChars);
 }
 
 String :: String( const wchar_t * p_pChars)
 	:	my_type()
 {
+	clear();
 	if (p_pChars != NULL)
 	{
 		assign( p_pChars);
@@ -280,6 +320,7 @@ String :: String( const wchar_t * p_pChars)
 String :: String( char p_char)
 	:	my_type()
 {
+	clear();
 	char l_buffer[2];
 	l_buffer[0] = p_char;
 	l_buffer[1] = 0;
@@ -289,6 +330,7 @@ String :: String( char p_char)
 String :: String( wchar_t p_char)
 	:	std::wstring()
 {
+	clear();
 	wchar_t l_buffer[2];
 	l_buffer[0] = p_char;
 	l_buffer[1] = 0;
@@ -298,6 +340,7 @@ String :: String( wchar_t p_char)
 String :: String( const std::string & p_strString)
 	:	my_type()
 {
+	clear();
 	_fromString( p_strString);
 }
 
@@ -308,11 +351,8 @@ String :: String( const std::wstring & p_strString)
 
 const char * String :: char_str()const
 {
-	std::string l_strReturn;
-
-	_toString( l_strReturn);
-
-	return l_strReturn.c_str();
+	_updateOpp();
+	return m_strOpposite.c_str();
 }
 
 const wchar_t * String :: wchar_str()const
@@ -488,23 +528,145 @@ size_t String :: find_last_not_of( wchar_t p_char, size_t p_uiOffset)const
 
 void String :: _fromString( const std::string & p_strSring)
 {
-	resize( p_strSring.length());
+	resize( p_strSring.size());
 
     std::locale loc( "french");
 
-    std::use_facet <std::ctype <wchar_t> > ( loc)[3]iden( & p_strSring[0], & p_strSring[p_strSring.length()], & operator[]( 0));
+#ifdef _WIN32
+    std::use_facet <std::ctype <wchar_t> > ( loc)._Widen_s( & p_strSring[0], & p_strSring[p_strSring.size()], & operator[]( 0), size());
+#else
+	std::use_facet <std::ctype <wchar_t> > ( loc).widen( & p_strSring[0], & p_strSring[p_strSring.size()], & operator[]( 0));
+#endif
 }
 
 void String :: _toString( std::string & p_strString)const
 {
 	p_strString.clear();
-	p_strString.resize( length());
+	p_strString.resize( size());
 
     std::locale loc( "french");
 
-    std::use_facet <std::ctype <wchar_t> > ( loc).narrow( & operator[]( 0), & operator[]( length()), '?', & p_strString[0]);
-}
+#ifdef _WIN32
+	std::use_facet <std::ctype <wchar_t> > ( loc)._Narrow_s( & operator[]( 0), & operator[]( size()), '?', & p_strString[0], p_strString.size());
+#else
+	std::use_facet <std::ctype <wchar_t> > ( loc).narrow( & operator[]( 0), & operator[]( size()), '?', & p_strString[0]);
 #endif
+}
+
+String String :: _add( const std::string & p_strText)
+{
+	String l_strText = p_strText;
+	assign( std::operator +( * this, l_strText));
+	return * this;
+}
+
+String String :: _add( const std::wstring & p_strText)
+{
+	assign( std::operator +( * this, p_strText));
+	return * this;
+}
+
+void String :: _updateOpp()const
+{
+	_toString( m_strOpposite);
+}
+
+#endif
+
+String String :: operator + ( const char * p_pText)const
+{
+	String l_strReturn( * this);
+	l_strReturn._add( p_pText);
+	return l_strReturn;
+}
+
+String String :: operator + ( const wchar_t * p_pText)const
+{
+	String l_strReturn( * this);
+	l_strReturn._add( p_pText);
+	return l_strReturn;
+}
+
+String String :: operator + ( const String & p_strText)const
+{
+	String l_strReturn( * this);
+	l_strReturn._add( p_strText);
+	return l_strReturn;
+}
+
+String String :: operator + ( const std::string & p_strText)const
+{
+	String l_strReturn( * this);
+	l_strReturn._add( p_strText);
+	return l_strReturn;
+}
+
+String String :: operator + ( const std::wstring & p_strText)const
+{
+	String l_strReturn( * this);
+	l_strReturn._add( p_strText);
+	return l_strReturn;
+}
+
+String String :: operator +=( const char * p_pText)
+{
+	return _add( p_pText);
+}
+
+String String :: operator +=( const wchar_t * p_pText)
+{
+	return _add( p_pText);
+}
+
+String String :: operator +=( const String & p_strText)
+{
+	return _add( p_strText);
+}
+
+String String :: operator +=( const std::string & p_strText)
+{
+	return _add( p_strText);
+}
+
+String String :: operator +=( const std::wstring & p_strText)
+{
+	return _add( p_strText);
+}
+
+String String :: operator = ( const char * p_pText)
+{
+	clear();
+	_add( p_pText);
+	return * this;
+}
+
+String String :: operator = ( const wchar_t * p_pText)
+{
+	clear();
+	_add( p_pText);
+	return * this;
+}
+
+String String :: operator = ( const String & p_strText)
+{
+	clear();
+	_add( p_strText);
+	return * this;
+}
+
+String String :: operator = ( const std::string & p_strText)
+{
+	clear();
+	_add( p_strText);
+	return * this;
+}
+
+String String :: operator = ( const std::wstring & p_strText)
+{
+	clear();
+	_add( p_strText);
+	return * this;
+}
 
 bool String :: operator ==( const Char * p_pToCompare)const
 {
@@ -632,4 +794,136 @@ void String :: Replace( const String & p_find, const String & p_replaced)
 	}
 
 	assign( l_return);
+}
+
+bool String :: IsInteger()const
+{
+	bool l_bReturn = true;
+
+	if ( ! empty())
+	{
+		l_bReturn = (at( 0) >= '0' && at( 0) <= '9') || at( 0) == '-';
+
+		for (size_t i = 1 ; i < size() && l_bReturn ; i++)
+		{
+			l_bReturn = at( i) >= '0' && at( i) <= '9';
+		}
+	}
+
+	return l_bReturn;
+}
+
+bool String :: IsFloating()const
+{
+	bool l_bReturn = true;
+
+	String l_strText( * this);
+	l_strText.Replace( ",", ".");
+	StringArray l_aParts;
+	l_aParts = l_strText.Split( ".", 10);
+	size_t l_uiSize = l_aParts.size();
+
+	if (l_uiSize > 0 && l_uiSize < 3)
+	{
+		l_bReturn = l_aParts[0].IsInteger();
+
+		if (l_bReturn && l_uiSize > 1)
+		{
+			l_bReturn = l_aParts[1].IsInteger();
+		}
+	}
+
+	return l_bReturn;
+}
+
+short String :: ToShort()const
+{
+	short sReturn = 0;
+
+	if ( ! empty())
+	{
+		sReturn = short( atoi( c_str()));
+	}
+
+	return sReturn;
+}
+
+int String :: ToInt()const
+{
+	int iReturn = 0;
+
+	if ( ! empty())
+	{
+		iReturn = atoi( c_str());
+	}
+
+	return iReturn;
+}
+
+long String :: ToLong()const
+{
+	long lReturn = 0;
+
+	if ( ! empty())
+	{
+		lReturn = atol( c_str());
+	}
+
+	return lReturn;
+}
+
+long long String :: ToLongLong()const
+{
+	long long llReturn = 0;
+
+	if ( ! empty())
+	{
+		llReturn = long long( atol( c_str()));
+	}
+
+	return llReturn;
+}
+
+float String :: ToFloat()const
+{
+	float fReturn = 0;
+
+	if ( ! empty())
+	{
+		fReturn = float( atof( c_str()));
+	}
+
+	return fReturn;
+}
+
+double String :: ToDouble()const
+{
+	double dReturn = 0;
+
+	if ( ! empty())
+	{
+		dReturn = atof( c_str());
+	}
+
+	return dReturn;
+}
+
+bool String :: operator !=( const wchar_t * p_pToCompare)const
+{
+	return ! operator ==( p_pToCompare);
+}
+
+bool String :: operator !=( const char * p_pToCompare)const
+{
+	return ! operator ==( p_pToCompare);
+}
+
+String Castor :: operator +( const char * p_pText, const String & p_strText)
+{
+	return String( p_pText) + p_strText;
+}
+
+String Castor :: operator +( const wchar_t * p_pText, const String & p_strText)
+{
+	return String( p_pText) + p_strText;
 }

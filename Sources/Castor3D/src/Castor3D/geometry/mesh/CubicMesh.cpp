@@ -47,27 +47,29 @@ void CubicMesh :: GeneratePoints()
 	SubmeshPtr l_submesh = CreateSubmesh( 6);
 
     //Calcul des coordonnées des 8 sommets du pav,
-	l_submesh->AddVertex( -m_width / 2,	-m_height / 2,	-m_depth / 2);
-	l_submesh->AddVertex( m_width / 2,	-m_height / 2,	-m_depth / 2);
-	l_submesh->AddVertex( m_width / 2,	-m_height / 2,	m_depth / 2);
+	l_submesh->AddVertex( -m_width / 2,	-m_height / 2, -m_depth / 2);
+	l_submesh->AddVertex(  m_width / 2,	-m_height / 2, -m_depth / 2);
+	l_submesh->AddVertex(  m_width / 2,	-m_height / 2,	m_depth / 2);
 	l_submesh->AddVertex( -m_width / 2,	-m_height / 2,	m_depth / 2);
-	l_submesh->AddVertex( -m_width / 2,	m_height / 2,	m_depth / 2);
-	l_submesh->AddVertex( -m_width / 2,	m_height / 2,	-m_depth / 2);
-	l_submesh->AddVertex( m_width / 2,	m_height / 2,	-m_depth / 2);
-	l_submesh->AddVertex( m_width / 2,	m_height / 2,	m_depth / 2);
+	l_submesh->AddVertex( -m_width / 2,	 m_height / 2,	m_depth / 2);
+	l_submesh->AddVertex( -m_width / 2,	 m_height / 2, -m_depth / 2);
+	l_submesh->AddVertex(  m_width / 2,	 m_height / 2, -m_depth / 2);
+	l_submesh->AddVertex(  m_width / 2,	 m_height / 2,	m_depth / 2);
 
 	unsigned int l_nbTrianglesCoords = 12 * 3 * 3;
 	unsigned int l_nbTrianglesTexCoords = 12 * 3 * 2;
 	unsigned int l_nbLinesCoords = 12 * 6 * 3;
 	unsigned int l_nbLinesTexCoords = 12 * 6 * 2;
-
+/*
 	l_submesh->GetRenderer()->GetTriangles()->Cleanup();
 	l_submesh->GetRenderer()->GetTrianglesTexCoords()->Cleanup();
 	l_submesh->GetRenderer()->GetLines()->Cleanup();
 	l_submesh->GetRenderer()->GetLinesTexCoords()->Cleanup();
+*/
+	l_submesh->GetRenderer()->GetTriangles()->Cleanup();
+	l_submesh->GetRenderer()->GetLines()->Cleanup();
 
 	//CONSTRUCTION FACES /!\ Pour OpenGL le Z est inversé
-	VertexPtrArray l_vertex = l_submesh->m_vertex;
 
 	if (CptNegatif == 1 || CptNegatif == 3)
 	{
@@ -112,7 +114,7 @@ void CubicMesh :: GeneratePoints()
 
 	l_submesh->GenerateBuffers();
 
-	Log::LogMessage( CU_T( "CubicMesh - %s - NbVertex : %d"), m_name.c_str(), l_submesh->m_vertex.size());
+	Logger::LogMessage( CU_T( "CubicMesh - %s - NbVertex : %d"), m_name.char_str(), l_submesh->GetVertices().size());
 }
 
 

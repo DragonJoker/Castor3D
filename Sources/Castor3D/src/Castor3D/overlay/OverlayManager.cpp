@@ -18,12 +18,12 @@ OverlayManager :: ~OverlayManager()
 
 void OverlayManager :: RenderOverlays()
 {
-	RenderSystem::GetSingletonPtr<RenderSystem>()->BeginOverlaysRendering();
-
+	RenderSystem::GetSingletonPtr()->BeginOverlaysRendering();
+/*
 	for (OverlayPtrIntMap::iterator l_it = m_mapOverlaysByZIndex.begin() ; l_it != m_mapOverlaysByZIndex.end() ; ++l_it)
 	{
 		l_it->second->Apply( DTTriangles);
 	}
-
-	RenderSystem::GetSingletonPtr<RenderSystem>()->EndOverlaysRendering();
+*/
+	RenderSystem::GetSingletonPtr()->EndOverlaysRendering();
 }

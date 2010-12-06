@@ -27,7 +27,6 @@ namespace CastorArchitect
 		MainFrame( wxWindow * p_pParent, const wxString & p_strTitle);
 		~MainFrame();
 
-		void ShowPanels();
 		void LoadScene( const String & p_strFileName=C3DEmptyString);
 
 	private:

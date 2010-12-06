@@ -12,7 +12,7 @@
 
 namespace CastorShape
 {
-	struct Context
+	struct ScriptContext
 	{
 		ScriptEngine			* scriptEngine;
 		ScriptTimerManager		* timerManager;
@@ -37,19 +37,12 @@ namespace CastorShape
 		String 					general_string_b;
 		String 					general_string_c;
 
-		String					autoPhysicsPreName;
-		String					autoPhysicsPostName;
-
 		unsigned int			lineNo;
 		int						general_int;
 
 		real 					currentReal;
 
-		bool 					usingShadow;
-		bool 					forceShadows;
-		bool					autoPhysics;
-
-		Context()
+		ScriptContext()
 			:	m_continue			(false),
 				m_breakOne			(false),
 				m_return			(false),

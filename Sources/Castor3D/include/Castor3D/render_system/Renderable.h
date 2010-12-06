@@ -36,7 +36,7 @@ namespace Castor3D
 	\date 29/10/2010
 	*/
 	template <class _Renderable, class _Renderer>
-	class Renderable : public Serialisable
+	class Renderable : public Serialisable, public MemoryTraced<_Renderable>
 	{
 	private:
 		typedef Templates::SharedPtr<_Renderer> renderer_type;
@@ -52,7 +52,11 @@ namespace Castor3D
 		Renderable()
 		{
 			m_pRenderer = RenderSystem::CreateRenderer<_Renderer>();
-			m_pRenderer->SetTarget( (_Renderable *)this);
+
+			if ( ! m_pRenderer.null())
+			{
+				m_pRenderer->SetTarget( (_Renderable *)this);
+			}
 		}
 		/**
 		 * Destructor
@@ -66,18 +70,18 @@ namespace Castor3D
 		 * Main render function, to be implemented by every derivated class
 		 *@param p_displayMode : [in] information about the draw type (triangles, lines, ...)
 		 */
-		virtual void Apply( eDRAW_TYPE p_displayMode)=0;
+		virtual void Render( eDRAW_TYPE p_displayMode)=0;
 		/**
 		 * Remove from render function, base implementation is dummy, so derivated classes
 		 * may or not implement a new behaviour for it
 		 */
-		virtual void Remove(){}
+		virtual void EndRender(){}
 		/**
 		 * 2D render function, base implementation is dummy, so derivated classes
 		 * may or not implement a new behaviour for it
 		 *@param p_displayMode : [in] information about the draw type (triangles, lines, ...)
 		 */
-		virtual void Apply2D( eDRAW_TYPE p_displayMode){}
+		virtual void Render2D( eDRAW_TYPE p_displayMode){}
 		/**
 		 * Accessor to the renderer
 		 */

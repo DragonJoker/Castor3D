@@ -32,10 +32,9 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 25/08/2010
 	*/
-	class CS3D_API Overlay : public Renderable<Overlay, OverlayRenderer>
+	class C3D_API Overlay : public Renderable<Overlay, OverlayRenderer>
 	{
 	protected:
-		OverlayRendererPtr m_pRenderer;		//!< The renderer which holds renderer specific operations
 		Point2r m_ptPosition;				//!< The relative position (to parent or screen)
 		Point2r m_ptSize;					//!< The relative size (to parent or screen)
 		String m_strName;					//!< The overlay name
@@ -97,7 +96,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 25/08/2010
 	*/
-	class CS3D_API PanelOverlay : public Overlay
+	class C3D_API PanelOverlay : public Overlay
 	{
 	protected:
 		MaterialPtr m_pMaterial;	//!< The material used by the overlay
@@ -119,7 +118,7 @@ namespace Castor3D
 		/**
 		 * Draws the overlay
 		 */
-		virtual void Apply( eDRAW_TYPE p_displayMode);
+		virtual void Render( eDRAW_TYPE p_displayMode);
 		/**
 		 * Writes the overlay in a file
 		 *@param p_file : [in] The file to write in
@@ -144,7 +143,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 25/08/2010
 	*/
-	class CS3D_API BorderPanelOverlay : public PanelOverlay
+	class C3D_API BorderPanelOverlay : public PanelOverlay
 	{
 	protected:
 		MaterialPtr m_pBorderMaterial;	//!< The border material
@@ -170,7 +169,7 @@ namespace Castor3D
 		/**
 		 * Draws the overlay
 		 */
-		virtual void Apply( eDRAW_TYPE p_displayMode);
+		virtual void Render( eDRAW_TYPE p_displayMode);
 		/**
 		 * Writes the overlay in a file
 		 *@param p_file : [in] The file to write in
@@ -205,7 +204,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 25/08/2010
 	*/
-	class CS3D_API TextOverlay : public Overlay
+	class C3D_API TextOverlay : public Overlay
 	{
 	protected:
 		String m_strCaption;		//!< The overlay caption
@@ -227,7 +226,7 @@ namespace Castor3D
 		/**
 		 * Draws the overlay
 		 */
-		virtual void Apply( eDRAW_TYPE p_displayMode){}
+		virtual void Render( eDRAW_TYPE p_displayMode){}
 		/**
 		 * Writes the overlay in a file
 		 *@param p_file : [in] The file to write in
@@ -252,7 +251,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API OverlayRenderer : public Renderer<Overlay, OverlayRenderer>
+	class C3D_API OverlayRenderer : public Renderer<Overlay, OverlayRenderer>
 	{
 	protected:
 		/**

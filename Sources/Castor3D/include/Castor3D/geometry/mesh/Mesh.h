@@ -29,7 +29,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class CS3D_API MeshLoader : Castor::Resource::ResourceLoader <Mesh>
+	class C3D_API MeshLoader : public Castor::Resource::ResourceLoader<Mesh>, public MemoryTraced<MeshLoader>
 	{
 	public:
 		/**
@@ -43,7 +43,7 @@ namespace Castor3D
 		 *@param p_file : [in] The name of the file where to read the mesh from
 		 *@return : The read mesh
 		 */
-		MeshPtr LoadFromExtFile( const String & p_file);
+		void LoadFromExtFile( const String & p_file, Scene * p_pScene);
 		/**
 		 * Saves a mesh into a file
 		 *@param p_file : [in] the file to save the mesh in
@@ -52,12 +52,12 @@ namespace Castor3D
 		bool SaveToFile( const String & p_file, MeshPtr p_mesh);
 
 	private:
-		MeshPtr _loadFrom3DS( const String & p_file);
-		MeshPtr _loadFromAse( const String & p_file);
-		MeshPtr _loadFromObj( const String & p_file);
-		MeshPtr _loadFromPly( const String & p_file);
-		MeshPtr _loadFromMd2( const String & p_file);
-		MeshPtr _loadFromMd3( const String & p_file);
+		void _loadFrom3DS( const String & p_file, Scene * p_pScene);
+		void _loadFromAse( const String & p_file, Scene * p_pScene);
+		void _loadFromObj( const String & p_file, Scene * p_pScene);
+		void _loadFromPly( const String & p_file, Scene * p_pScene);
+		void _loadFromMd2( const String & p_file, Scene * p_pScene);
+		void _loadFromMd3( const String & p_file, Scene * p_pScene);
 	};
 	//! The mesh representation
 	/*!
@@ -66,14 +66,14 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class CS3D_API Mesh : Castor::Resource::Resource
+	class C3D_API Mesh : public Castor::Resource::Resource, public MemoryTraced<Mesh>
 	{
 	public:
 		//! The mesh types enumerator
 		/*!
 		Actually, there are 8 mesh types defined : custom, cone, cylinder, sphere, cube, torus, plane and icosaedron
 		*/
-		typedef enum eTYPE
+		typedef enum
 		{
 			eCustom,		//!< Custom mesh type => User defined vertex...
 			eCone,			//!< Cone mesh type
@@ -84,7 +84,8 @@ namespace Castor3D
 			ePlane,			//!< Plane mesh type
 			eIcosaedron,	//!< Triangular faces sphere mesh type
 			eProjection,	//!< Projection mesh type
-		} eTYPE;
+		}
+		eTYPE;
 
 	protected:
 		friend class MeshManager;
@@ -94,20 +95,20 @@ namespace Castor3D
 		eTYPE m_meshType;						//!< The mesh type
 		bool m_modified;						//!< Tells whether or not the mesh is modified
 
-		ComboBoxPtr m_box;						//!< The combo box container
-		SpherePtr m_sphere;						//!< The sphere container
+		ComboBox m_box;							//!< The combo box container
+		Sphere m_sphere;						//!< The sphere container
 		SubdivisionMode m_preferredSubdivMode;	//!< The mesh's preferred subdivision mode, default is smTriangle, children classes should set it
 
 		SubmeshPtrArray m_submeshes;			//!< The submeshes array
-		NormalsMode m_normalsMode;
+		eNORMALS_MODE m_normalsMode;
 		bool m_bOK;
+
+	public :
 		/**
 		 * Constructor, only MeshManager can create a mesh
 		 *@param p_name : [in] This mesh name
 		 */
 		Mesh( const String & p_name=C3DEmptyString);
-
-	public :
 		/**
 		 * Destructor, only MeshManager can destroy a mesh
 		 */
@@ -151,25 +152,25 @@ namespace Castor3D
 		/**
 		 * Initialises the face normals
 		 */
-		void SetFlatNormals();
+		void ComputeFlatNormals();
 		/**
 		 * Initialises the vertex normals
 		 */
-		void SetSmoothNormals();
+		void ComputeSmoothNormals();
 		/**
 		 * Initialises all the normals
 		 *@param p_bReverted : [in] Tells if the normals are reverted
 		 */
-		virtual void SetNormals( bool p_bReverted = false);
+		virtual void ComputeNormals( bool p_bReverted = false);
 		/**
 		 * Initialises vertex and texture buffers
 		 */
-		void CreateBuffers();
+		void InitialiseBuffers();
 		/**
 		 * Fills the normals buffer of the given mode
 		 *@param p_nm : [in] The wanted NormalsMode
 		 */
-		void CreateNormalsBuffers( NormalsMode p_nm);
+		void SetNormals( eNORMALS_MODE p_nm);
 		/**
 		 * Subdivides a submesh, using the given method
 		 *@param p_index : [in] The index of the submesh to subdivide
@@ -193,13 +194,15 @@ namespace Castor3D
 		inline void SetModified		( bool p_modified)		{m_modified = p_modified;}
 		inline void SetMeshType		( eTYPE p_type)			{m_meshType = p_type;}
 
-		inline bool			IsOk					()const { return m_bOK; }
-		inline size_t		GetNbSubmeshes			()const { return m_submeshes.size(); }
-		inline eTYPE		GetMeshType				()const	{ return m_meshType;}
-		inline bool			IsModified				()const	{ return m_modified;}
-		inline String		GetName					()const	{ return m_name;}
-		inline ComboBoxPtr	GetComboBox				()const { return m_box; }
-		inline SpherePtr	GetSphere				()const { return m_sphere; }
+		inline bool				IsOk					()const { return m_bOK; }
+		inline size_t			GetNbSubmeshes			()const { return m_submeshes.size(); }
+		inline eTYPE			GetMeshType				()const	{ return m_meshType;}
+		inline bool				IsModified				()const	{ return m_modified;}
+		inline String			GetName					()const	{ return m_name;}
+		inline const ComboBox &	GetComboBox				()const	{ return m_box; }
+		inline const Sphere &	GetSphere				()const	{ return m_sphere; }
+		inline ComboBox &		GetComboBox				()		{ return m_box; }
+		inline Sphere &			GetSphere				()		{ return m_sphere; }
 		//@}
 	};
 }

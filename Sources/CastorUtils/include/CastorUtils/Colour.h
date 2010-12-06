@@ -28,7 +28,7 @@ namespace Castor
 	\author Sylvain DOREMUS
 	\date 14/08/2010
 	*/
-	class Colour : public Point<float, 4>
+	class Colour : public Point4f
 	{
 	public:
 		static Colour FullAlphaWhite;

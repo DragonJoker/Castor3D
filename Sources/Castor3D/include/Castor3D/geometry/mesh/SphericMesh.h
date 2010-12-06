@@ -29,7 +29,7 @@ namespace Castor3D
 	\date 14/02/2010
 	\todo Correct the vertex generation bug
 	*/
-	class CS3D_API SphericMesh : public Mesh
+	class C3D_API SphericMesh : public Mesh
 	{
 	private:
 		friend class MeshManager;

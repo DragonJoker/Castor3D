@@ -4,6 +4,7 @@
 
 #include "geometry/mesh/TorusMesh.h"
 #include "geometry/mesh/Submesh.h"
+#include "geometry/basic/Vertex.h"
 #include "geometry/basic/Face.h"
 #include "geometry/basic/Pattern.h"
 #include "main/Root.h"
@@ -49,68 +50,61 @@ void TorusMesh :: GeneratePoints()
 
 	SubmeshPtr l_submesh = CreateSubmesh( 1);
 
-	real internalRotationAngle_l = (Angle::PiMult2) / m_internalNbFaces;
-	real externalRotationAngle_l = (Angle::PiMult2) / m_externalNbFaces;
-	real alphaInternal_l = 0.0;
-	real alphaExternal_l = 0.0;
-	PatternPtr * l_arcs = new PatternPtr[m_externalNbFaces];
+	real l_internalRotationAngle = (Angle::PiMult2) / m_internalNbFaces;
+	real l_externalRotationAngle = (Angle::PiMult2) / m_externalNbFaces;
+	real l_alphaInternal = 0.0;
+	real l_alphaExternal = 0.0;
+	Point3rPattern * l_arcs = new Point3rPattern[m_externalNbFaces];
 
 	//CALCUL DE LA POSITION DES POINTS
-	VertexPtr l_vertex;
-	l_arcs[0] = new Pattern;
 
 	for (unsigned int i = 0 ; i < m_internalNbFaces ; i++)
 	{
-		alphaInternal_l += internalRotationAngle_l;
-		l_vertex = l_submesh->AddVertex( (m_internalRadius * cos( alphaInternal_l ) + m_externalRadius),
-										 (m_internalRadius * sin( alphaInternal_l )),
-										 0.0);
-		l_arcs[0]->AddVertex( l_vertex, -1);
+		l_alphaInternal += l_internalRotationAngle;
+		Point3r & l_vertex = l_submesh->AddVertex( (m_internalRadius * cos( l_alphaInternal ) + m_externalRadius), (m_internalRadius * sin( l_alphaInternal )), 0.0);
+		l_arcs[0].AddPoint( l_vertex, -1);
 	}
 
-	size_t arcSize = l_arcs[0]->GetNumVertex();
+	size_t l_arcSize = l_arcs[0].GetSize();
 
 	for (unsigned int i = 0 ; i < m_externalNbFaces-1 ; i++)
 	{
-		l_arcs[i+1] = new Pattern;
-		alphaExternal_l += externalRotationAngle_l;
+		l_alphaExternal += l_externalRotationAngle;
 
-		for (unsigned int j = 0 ; j < m_internalNbFaces ; j++)
+		for (unsigned int j = 0 ; j < l_arcSize ; j++)
 		{
-			l_vertex = new Vertex( * l_arcs[0]->GetVertex( j));
-			l_vertex->m_coords[2] = l_vertex->m_coords[0] * sin( alphaExternal_l);
-			l_vertex->m_coords[0] = l_vertex->m_coords[0] * cos( alphaExternal_l);
-			l_vertex->m_index = l_submesh->m_vertex.size();
-			l_arcs[i+1]->AddVertex( l_vertex, -1);
+			Point3r l_vertex = l_arcs[0][j];
+			l_vertex[2] = l_vertex[0] * sin( l_alphaExternal);
+			l_vertex[0] = l_vertex[0] * cos( l_alphaExternal);
+			l_arcs[i+1].AddPoint( l_vertex, -1);
 			l_submesh->AddVertex( l_vertex);
 		}
 	}
 
 	l_submesh->GetRenderer()->GetTriangles()->Cleanup();
-	l_submesh->GetRenderer()->GetTrianglesTexCoords()->Cleanup();
 	l_submesh->GetRenderer()->GetLines()->Cleanup();
-	l_submesh->GetRenderer()->GetLinesTexCoords()->Cleanup();
 
 	//GENERATION DES FACES
-	for (size_t j = 0 ; j < arcSize - 1 ; j++)
+	for (size_t j = 0 ; j < l_arcSize - 1 ; j++)
 	{
 		for (unsigned int i = 0 ; i < m_externalNbFaces - 1 ; i++)
 		{
-			l_submesh->AddQuadFace( l_arcs[i]->GetVertex( j), l_arcs[i + 1]->GetVertex( j), l_arcs[i + 1]->GetVertex( j + 1), l_arcs[i]->GetVertex( j + 1),
-									0, Point3r( real( i) / real( m_externalNbFaces), real( j) / real( arcSize), 0.0), Point3r( real( i + 1) / real( m_externalNbFaces), real( j + 1) / real( arcSize), 0.0));
+			l_submesh->AddQuadFace( i * l_arcSize + j, (i + 1) * l_arcSize + j, (i + 1) * l_arcSize + j + 1, i * l_arcSize + j + 1,
+									0, Point3r( real( i) / real( m_externalNbFaces), real( j) / real( l_arcSize), 0.0), Point3r( real( i + 1) / real( m_externalNbFaces), real( j + 1) / real( l_arcSize), 0.0));
 		}
 
-		l_submesh->AddQuadFace( l_arcs[m_externalNbFaces-1]->GetVertex( j), l_arcs[0]->GetVertex( j), l_arcs[0]->GetVertex( j + 1), l_arcs[m_externalNbFaces-1]->GetVertex( j + 1),
-								0, Point3r( real( m_externalNbFaces - 1) / real( m_externalNbFaces), real( j) / real( arcSize), 0.0), Point3r( 1.0, real( j + 1) / real( arcSize), 0.0));
-	}
-	for (unsigned int i = 0 ; i < m_externalNbFaces - 1 ; i++)
-	{
-		l_submesh->AddQuadFace( l_arcs[i]->GetVertex( arcSize - 1), l_arcs[i + 1]->GetVertex( arcSize - 1), l_arcs[i + 1]->GetVertex( 0), l_arcs[i]->GetVertex( 0),
-								0, Point3r( real( i) / real( m_externalNbFaces), real( arcSize - 1) / real( arcSize), 0.0), Point3r( real( i + 1) / real( m_externalNbFaces), 1.0, 0.0));
+		l_submesh->AddQuadFace( (m_externalNbFaces-1) * l_arcSize + j, j, j + 1, (m_externalNbFaces-1) * l_arcSize + j + 1,
+								0, Point3r( real( m_externalNbFaces - 1) / real( m_externalNbFaces), real( j) / real( l_arcSize), 0.0), Point3r( 1.0, real( j + 1) / real( l_arcSize), 0.0));
 	}
 
-	l_submesh->AddQuadFace( l_arcs[m_externalNbFaces - 1]->GetVertex( arcSize - 1), l_arcs[0]->GetVertex( arcSize - 1), l_arcs[0]->GetVertex( 0), l_arcs[m_externalNbFaces - 1]->GetVertex( 0),
-							0, Point3r( real( m_externalNbFaces - 1) / real( m_externalNbFaces), real( arcSize - 1) / real( arcSize), 0.0), Point3r( 1.0, 1.0, 0.0));
+	for (unsigned int i = 0 ; i < m_externalNbFaces - 1 ; i++)
+	{
+		l_submesh->AddQuadFace( i * l_arcSize + l_arcSize - 1, (i + 1) * l_arcSize + l_arcSize - 1, (i + 1) * l_arcSize, i * l_arcSize,
+								0, Point3r( real( i) / real( m_externalNbFaces), real( l_arcSize - 1) / real( l_arcSize), 0.0), Point3r( real( i + 1) / real( m_externalNbFaces), 1.0, 0.0));
+	}
+
+	l_submesh->AddQuadFace( (m_externalNbFaces - 1) * l_arcSize + l_arcSize - 1, l_arcSize - 1, 0, (m_externalNbFaces - 1) * l_arcSize,
+							0, Point3r( real( m_externalNbFaces - 1) / real( m_externalNbFaces), real( l_arcSize - 1) / real( l_arcSize), 0.0), Point3r( 1.0, 1.0, 0.0));
 
 	l_submesh->GenerateBuffers();
 
@@ -119,8 +113,8 @@ void TorusMesh :: GeneratePoints()
 //		delete l_arcs[i];
 	}
 	delete [] l_arcs;
-	Log::LogMessage( CU_T( "TorusMesh - %s - NbFaces : %d - NbVertex : %d"), m_name.c_str(),
-					 l_submesh->GetNbFaces(), l_submesh->m_vertex.size());
+	Logger::LogMessage( CU_T( "TorusMesh - %s - NbFaces : %d - NbVertex : %d"), m_name.char_str(),
+					 l_submesh->GetNbFaces(), l_submesh->GetVertices().size());
 
 }
 

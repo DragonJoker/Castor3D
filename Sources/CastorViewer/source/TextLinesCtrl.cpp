@@ -2,10 +2,6 @@
 
 #include "TextLinesCtrl.h"
 
-#ifdef __WXMSW__
-#	include <wx/msw/msvcrt.h>      // redefines the new() operator 
-#endif
-
 using namespace CastorViewer;
 using namespace Castor3D;
 
@@ -16,7 +12,7 @@ TextLinesCtrl :: TextLinesCtrl( wxWindow * parent, wxWindowID id, const wxPoint&
 {
 	m_lines = new wxListBox( this, wxID_ANY, wxPoint( 0, 0), GetClientSize(), 0, NULL,
 							 wxBORDER_NONE | wxLB_SINGLE | wxLB_NEEDED_SB);
-	m_lines->SetFont( wxFont( 10, wxFONTFAMILY_SCRIPT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, "Lucida Console"));
+	m_lines->SetFont( wxFont( 10, wxFONTFAMILY_SCRIPT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, CU_T( "Lucida Console")));
 }
 
 void TextLinesCtrl :: AddLines( unsigned int p_nbLines)

@@ -1,21 +1,17 @@
-//******************************************************************************
 #include "PrecompiledHeaders.h"
 
 #include "material/MaterialsListView.h"
-//******************************************************************************
+
 #ifdef LoadImage
-#undef LoadImage
-#define LoadImage wxBitmap::LoadImage
+#	undef LoadImage
+#	define LoadImage wxBitmap::LoadImage
 #endif
-//******************************************************************************
+
 using Castor::Templates::Manager;
 using namespace Castor3D;
-//******************************************************************************
-//unsigned char * CSMaterialsListView::s_data = new unsigned char[c_materialIconSize * c_materialIconSize * 3];
-//******************************************************************************
+
 BEGIN_EVENT_TABLE( CSMaterialsListView, wxListCtrl)
 END_EVENT_TABLE()
-//******************************************************************************
 
 CSMaterialsListView :: CSMaterialsListView( wxWindow * parent, wxWindowID id, 
 										    const wxPoint & pos,
@@ -30,8 +26,6 @@ CSMaterialsListView :: CSMaterialsListView( wxWindow * parent, wxWindowID id,
 	CreateList();
 }
 
-//******************************************************************************
-
 CSMaterialsListView :: ~CSMaterialsListView()
 {
 	if (m_images)
@@ -43,8 +37,6 @@ CSMaterialsListView :: ~CSMaterialsListView()
 	vector::deleteAll( m_imagesArray);
 	m_nbItems = 0;
 }
-
-//******************************************************************************
 
 void CSMaterialsListView :: CreateList()
 {
@@ -74,8 +66,6 @@ void CSMaterialsListView :: CreateList()
 	}
 }
 
-//******************************************************************************
-
 void CSMaterialsListView :: AddItem( const String & p_materialName)
 {
 	real l_col0;
@@ -103,18 +93,16 @@ void CSMaterialsListView :: AddItem( const String & p_materialName)
 	{
 		l_image = new wxImage( c_materialIconSize, c_materialIconSize);
 		l_image->SetRGB( wxRect( 0, 0, c_materialIconSize, c_materialIconSize), l_ccol0, l_ccol1, l_ccol2);
-		Log::LogMessage( "No texture for index %d", l_index);
+		Logger::LogMessage( CU_T( "CSMaterialsListView :: AddItem - No texture for index %d"), l_index);
 	}
 	wxBitmap l_bitmap( * l_image);
 	m_images->Add( l_bitmap);
 	m_imagesArray.push_back( l_image);
 	if (InsertItem( l_index, p_materialName.c_str(), l_index) == -1)
 	{
-		Log::LogMessage( "Item not inserted");
+		Logger::LogMessage( CU_T( "CSMaterialsListView :: AddItem - Item not inserted"));
 	}
 }
-
-//******************************************************************************
 
 wxImage * CSMaterialsListView :: GetMaterialImage( const String & p_materialName,
 												   unsigned int p_index,
@@ -142,5 +130,3 @@ wxImage * CSMaterialsListView :: GetMaterialImage( const String & p_materialName
 
 	return NULL;
 }
-
-//******************************************************************************

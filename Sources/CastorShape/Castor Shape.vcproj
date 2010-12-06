@@ -19,7 +19,7 @@
 		<Configuration
 			Name="Release - MultiByte|Win32"
 			OutputDirectory="$(SolutionDir)Bin\$(ConfigurationName)"
-			IntermediateDirectory="_generation\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)_generation\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
@@ -95,7 +95,7 @@
 		<Configuration
 			Name="Release - Unicode|Win32"
 			OutputDirectory="$(SolutionDir)Bin\$(ConfigurationName)"
-			IntermediateDirectory="_generation\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)_generation\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -172,7 +172,7 @@
 		<Configuration
 			Name="Debug - Unicode|Win32"
 			OutputDirectory="$(SolutionDir)Bin\$(ConfigurationName)"
-			IntermediateDirectory="_generation\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)_generation\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
 			>
@@ -250,7 +250,7 @@
 		<Configuration
 			Name="Debug - Multibyte|Win32"
 			OutputDirectory="$(SolutionDir)Bin\$(ConfigurationName)"
-			IntermediateDirectory="_generation\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)_generation\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
@@ -467,6 +467,10 @@
 				Name="glsl"
 				>
 				<File
+					RelativePath=".\src\CastorShape\glsl\FrameVariableDialog.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\CastorShape\glsl\ScriptBlock.cpp"
 					>
 				</File>
@@ -512,10 +516,6 @@
 				</File>
 				<File
 					RelativePath=".\src\CastorShape\glsl\TextPanel.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\CastorShape\glsl\UniformVariableDialog.cpp"
 					>
 				</File>
 				<File
@@ -641,6 +641,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\include\CastorShape\glsl\FrameVariableDialog.h"
+					>
+				</File>
+				<File
 					RelativePath=".\include\CastorShape\glsl\Function.h"
 					>
 				</File>
@@ -698,10 +702,6 @@
 				</File>
 				<File
 					RelativePath=".\include\CastorShape\glsl\TextPanel.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\CastorShape\glsl\UniformVariableDialog.h"
 					>
 				</File>
 				<File

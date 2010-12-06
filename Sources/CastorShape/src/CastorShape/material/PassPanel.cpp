@@ -36,14 +36,10 @@ CSPassPanel :: CSPassPanel( wxWindow * parent, const wxPoint & pos,
 								    const wxSize & size, wxWindowID id,
 									wxString name)
 	:	wxScrolledWindow( parent, id, pos, size, 524288 | wxBORDER_NONE, name),
-		m_pass( NULL),
-		m_selectedTextureUnit( NULL),
 		m_selectedUnitImage( NULL),
 		m_textureUnitPanel( NULL)
 {
 }
-
-//******************************************************************************
 
 CSPassPanel :: ~CSPassPanel()
 {
@@ -52,20 +48,17 @@ CSPassPanel :: ~CSPassPanel()
 		delete m_selectedUnitImage;
 		m_selectedUnitImage = NULL;
 	}
-	m_selectedTextureUnit = NULL;
-}
 
-//******************************************************************************
+	m_selectedTextureUnit.reset();
+}
 
 void CSPassPanel :: CreatePassPanel( PassPtr p_pass)
 {
 	m_pass = p_pass;
-	m_selectedTextureUnit = NULL;
+	m_selectedTextureUnit.reset();
 	m_selectedUnitIndex = -1;
 	_createPassPanel();
 }
-
-//******************************************************************************
 
 void CSPassPanel :: _onDeleteTextureUnit( wxCommandEvent & event)
 {
@@ -95,8 +88,6 @@ void CSPassPanel :: _onDeleteTextureUnit( wxCommandEvent & event)
 	}
 }
 
-//******************************************************************************
-
 void CSPassPanel :: _onAmbientColour( wxCommandEvent & event)
 {
 	wxColourDialog l_colourDialor( this);
@@ -111,8 +102,6 @@ void CSPassPanel :: _onAmbientColour( wxCommandEvent & event)
 		wxGetApp().GetMainFrame()->ShowPanels();
 	}
 }
-
-//******************************************************************************
 
 void CSPassPanel :: _onDiffuseColour( wxCommandEvent & event)
 {
@@ -129,8 +118,6 @@ void CSPassPanel :: _onDiffuseColour( wxCommandEvent & event)
 	}
 }
 
-//******************************************************************************
-
 void CSPassPanel :: _onSpecularColour( wxCommandEvent & event)
 {
 	wxColourDialog l_colourDialor( this);
@@ -145,8 +132,6 @@ void CSPassPanel :: _onSpecularColour( wxCommandEvent & event)
 		wxGetApp().GetMainFrame()->ShowPanels();
 	}
 }
-
-//******************************************************************************
 
 void CSPassPanel :: _onEmissiveColour( wxCommandEvent & event)
 {
@@ -163,8 +148,6 @@ void CSPassPanel :: _onEmissiveColour( wxCommandEvent & event)
 	}
 }
 
-//******************************************************************************
-
 void CSPassPanel :: _onBlendColour( wxCommandEvent & event)
 {
 	wxColourDialog l_colourDialor( this);
@@ -179,8 +162,6 @@ void CSPassPanel :: _onBlendColour( wxCommandEvent & event)
 		wxGetApp().GetMainFrame()->ShowPanels();
 	}
 }
-
-//******************************************************************************
 
 void CSPassPanel :: _onTextureImage( wxCommandEvent & event)
 {
@@ -206,15 +187,11 @@ void CSPassPanel :: _onTextureImage( wxCommandEvent & event)
 	l_fdlg->Destroy();
 }
 
-//******************************************************************************
-
 void CSPassPanel :: _onEnvironmentConfig( wxCommandEvent & event)
 {
 	CSEnvironmentFrame * l_frame = new CSEnvironmentFrame( this, CU_T( "Environment Config"), m_pass, m_selectedTextureUnit->GetEnvironment());
 	l_frame->Show();
 }
-
-//******************************************************************************
 
 void CSPassPanel :: _onShininess( wxCommandEvent & event)
 {
@@ -223,8 +200,6 @@ void CSPassPanel :: _onShininess( wxCommandEvent & event)
 	m_pass->Initialise();
 	wxGetApp().GetMainFrame()->ShowPanels();
 }
-
-//******************************************************************************
 
 void CSPassPanel :: _onTexturePath( wxCommandEvent & event)
 {/*
@@ -247,15 +222,11 @@ void CSPassPanel :: _onTexturePath( wxCommandEvent & event)
 	}*/
 }
 
-//******************************************************************************
-
 void CSPassPanel :: _onTextureSelect( wxCommandEvent & event)
 {
 	int l_selectedUnit = GetTextureUnitIndex();
 	_createTextureUnitPanel( l_selectedUnit);
 }
-
-//******************************************************************************
 
 void CSPassPanel :: _onTextureEnvModeSelect( wxCommandEvent & event)
 {
@@ -298,8 +269,6 @@ void CSPassPanel :: _onTextureEnvModeSelect( wxCommandEvent & event)
 	wxGetApp().GetMainFrame()->ShowPanels();
 }
 
-//******************************************************************************
-
 void CSPassPanel :: _onTextureRGBCombinationSelect( wxCommandEvent & event)
 {
 	wxString l_value = event.GetString();
@@ -339,8 +308,6 @@ void CSPassPanel :: _onTextureRGBCombinationSelect( wxCommandEvent & event)
 	wxGetApp().GetMainFrame()->ShowPanels();
 }
 
-//******************************************************************************
-
 void CSPassPanel :: _onTextureAlphaCombinationSelect( wxCommandEvent & event)
 {
 	wxString l_value = event.GetString();
@@ -372,16 +339,12 @@ void CSPassPanel :: _onTextureAlphaCombinationSelect( wxCommandEvent & event)
 	wxGetApp().GetMainFrame()->ShowPanels();
 }
 
-//******************************************************************************
-
 void CSPassPanel :: _onDoubleFace( wxCommandEvent & event)
 {
 	bool l_double = m_doubleFace->IsChecked();
 	m_pass->SetDoubleFace( l_double);
 	wxGetApp().GetMainFrame()->ShowPanels();
 }
-
-//******************************************************************************
 
 void CSPassPanel :: _onHasShader( wxCommandEvent & event)
 {
@@ -390,25 +353,20 @@ void CSPassPanel :: _onHasShader( wxCommandEvent & event)
 	l_dialog.ShowModal();
 }
 
-//******************************************************************************
-
 void CSPassPanel :: _onTextureMode( wxCommandEvent & event)
 {
 	m_selectedTextureUnit->SetTextureMapMode( (TextureUnit::eMAP_MODE)m_texMode->GetSelection());
 }
-
-//******************************************************************************
 
 void CSPassPanel :: _onAlpha( wxCommandEvent & event)
 {
 	m_pass->SetAlpha( real( event.GetInt()) / 255.0f);
 }
 
-//******************************************************************************
-
 void CSPassPanel :: _createPassPanel()
 {
-	m_selectedTextureUnit = NULL;
+	m_selectedTextureUnit.reset();
+
 	if ((m_textureUnitPanel != NULL && ! m_textureUnitPanel->DestroyChildren())
 		||  ! DestroyChildren() || m_pass.null())
 	{
@@ -493,8 +451,6 @@ void CSPassPanel :: _createPassPanel()
 	m_buttonShader = new wxButton( this, eHasShader, CU_T( "Editer les shaders"), wxPoint( 20, 345), wxSize( 150, 20));
 }
 
-//******************************************************************************
-
 void CSPassPanel :: _createTextureUnitPanel( int p_index)
 {
 	if ( ! m_textureUnitPanel->DestroyChildren())
@@ -512,7 +468,7 @@ void CSPassPanel :: _createTextureUnitPanel( int p_index)
 	m_deleteTextureUnit->Enable();
 	if (p_index == -1)
 	{
-		m_selectedTextureUnit = new TextureUnit();
+		m_selectedTextureUnit = TextureUnitPtr( new TextureUnit());
 		wxString l_value;
 		l_value << m_pass->GetNbTexUnits();
 		m_texturesComboBox->Insert( l_value, m_pass->GetNbTexUnits());
@@ -529,7 +485,7 @@ void CSPassPanel :: _createTextureUnitPanel( int p_index)
 		l_value << p_index;
 		m_texturesComboBox->SetValue( l_value);
 	}
-	if ( ! m_selectedTextureUnit)
+	if (m_selectedTextureUnit.null())
 	{
 		return;
 	}
@@ -671,16 +627,12 @@ void CSPassPanel :: _createTextureUnitPanel( int p_index)
 	m_texMode->SetSelection( (int)m_selectedTextureUnit->GetTextureMapMode());
 }
 
-//******************************************************************************
-
 void CSPassPanel :: GetDiffuse( real & red, real & green, real & blue)const
 {
 	red = ((real)m_diffuseColour.Red()) / 255.0;
 	green = ((real)m_diffuseColour.Green()) / 255.0;
 	blue = ((real)m_diffuseColour.Blue()) / 255.0;
 }
-
-//******************************************************************************
 
 void CSPassPanel :: GetAmbient( real & red, real & green, real & blue)const
 {
@@ -689,16 +641,12 @@ void CSPassPanel :: GetAmbient( real & red, real & green, real & blue)const
 	blue = ((real)m_ambientColour.Blue()) / 255.0;
 }
 
-//******************************************************************************
-
 void CSPassPanel :: GetEmissive( real & red, real & green, real & blue)const
 {
 	red = ((real)m_emissiveColour.Red()) / 255.0;
 	green = ((real)m_emissiveColour.Green()) / 255.0;
 	blue = ((real)m_emissiveColour.Blue()) / 255.0;
 }
-
-//******************************************************************************
 
 void CSPassPanel :: GetSpecular( real & red, real & green, real & blue)const
 {
@@ -707,8 +655,6 @@ void CSPassPanel :: GetSpecular( real & red, real & green, real & blue)const
 	blue = ((real)m_specularColour.Blue()) / 255.0;
 }
 
-//******************************************************************************
-
 void CSPassPanel :: GetBlendColour( real & red, real & green, real & blue)const
 {
 	red = ((real)m_blendColour.Red()) / 255.0;
@@ -716,15 +662,13 @@ void CSPassPanel :: GetBlendColour( real & red, real & green, real & blue)const
 	blue = ((real)m_blendColour.Blue()) / 255.0;
 }
 
-//******************************************************************************
-
 real CSPassPanel :: GetShininess()const
 {
 	wxString l_value = m_shininessText->GetValue();
 	
 	if (l_value.BeforeFirst( '.').IsNumber() && l_value.AfterFirst( '.').IsNumber())
 	{
-		real l_res = ator( l_value.char_str());
+		real l_res = ator( l_value.c_str());
 		if (l_res < 0.0)
 		{
 			l_res = 0.0;
@@ -739,17 +683,15 @@ real CSPassPanel :: GetShininess()const
 	return 0.0f;
 }
 
-//******************************************************************************
-
 int CSPassPanel :: GetTextureUnitIndex()const
 {
 	wxString l_value = m_texturesComboBox->GetValue();
-	Log::LogMessage( CU_T( "GetTextureUnitIndex - l_value : %s"), l_value.c_str());
+	Logger::LogMessage( CU_T( "GetTextureUnitIndex - l_value : %s"), l_value.c_str());
 	
 	if (l_value.IsNumber())
 	{
-		int l_res = atoi( l_value.char_str());
-		Log::LogMessage( "GetTextureUnitIndex - l_res : %d", l_res);
+		int l_res = atoi( l_value.c_str());
+		Logger::LogMessage( CU_T( "GetTextureUnitIndex - l_res : %d"), l_res);
 		return l_res;
 	}
 	if (l_value == CU_T( "New..."))
@@ -758,8 +700,6 @@ int CSPassPanel :: GetTextureUnitIndex()const
 	}
 	return -2;
 }
-
-//******************************************************************************
 
 wxImage * CSPassPanel :: SetMaterialImage( unsigned int p_index,
 										   unsigned int p_width,
@@ -773,8 +713,6 @@ wxImage * CSPassPanel :: SetMaterialImage( unsigned int p_index,
 	}	
 	return NULL;
 }
-
-//******************************************************************************
 
 wxImage * CSPassPanel :: SetMaterialImage( const String & p_path,
 										   unsigned int p_width,
@@ -791,5 +729,3 @@ wxImage * CSPassPanel :: SetMaterialImage( const String & p_path,
 	}
 	return m_selectedUnitImage;
 }
-
-//******************************************************************************

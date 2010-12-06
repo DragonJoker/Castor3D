@@ -29,7 +29,7 @@ std::string FormatToString( PixelFormat p_fmt)
 		return "24 bits 888 RGB";
 		break;
 	case pxfR8G8B8A8:
-		return "32 bits 8888 ARGB";
+		return "32 bits 8888 RGBA";
 		break;
 	case pxfDXTC1:
 		return "DXT1 8 bits compressed format";

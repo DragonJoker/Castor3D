@@ -1,6 +1,7 @@
 #include "PrecompiledHeader.h"
 
 #include "Log.h"
+#include <time.h>
 
 #ifdef _WIN32
 #	include <Windows.h>
@@ -8,12 +9,12 @@
 
 using namespace Castor3D;
 
-String Log :: s_logFilePath;
-Log Log :: s_singleton;
+String Logger :: s_logFilePath;
+String Logger :: s_strHeaders[eNbTypes] = { CU_T( ""), CU_T( "***WARNING*** "), CU_T( "***ERROR*** ") };
+MultiThreading::RecursiveMutex Logger :: s_mutex;
 
-Log :: Log()
+Logger :: Logger()
 {
-	s_singleton = * this;
 #ifndef __GNUG__
 #	ifdef _DEBUG
 	if (AllocConsole() == TRUE)
@@ -26,7 +27,7 @@ Log :: Log()
 #endif
 }
 
-Log :: ~Log()
+Logger :: ~Logger()
 {
 #ifndef __GNUG__
 #	ifdef _DEBUG
@@ -35,8 +36,9 @@ Log :: ~Log()
 #endif
 }
 
-void Log :: SetFileName( const String & p_logFilePath)
+void Logger :: SetFileName( const String & p_logFilePath)
 {
+	GetSingleton();
 	s_logFilePath = p_logFilePath;
 	FILE * l_pFile;
 	fopen_s( & l_pFile, p_logFilePath.char_str(), "w");
@@ -47,7 +49,7 @@ void Log :: SetFileName( const String & p_logFilePath)
 	}
 }
 
-void Log :: LogMessage( const char * p_pFormat, ...)
+void Logger :: Log( eLOG_TYPE p_eLogType, const char * p_pFormat, ...)
 {
 	char l_pText[256];
 	va_list l_vaList;
@@ -61,16 +63,16 @@ void Log :: LogMessage( const char * p_pFormat, ...)
 		vsnprintf( l_pText, 256, cFormat_p, ap_l);  
 #endif
 		va_end( l_vaList);
-		_logMessage( l_pText);
+		_logMessage( p_eLogType, l_pText);
 	}
 }
 
-void Log :: LogMessage( const std::string & p_msg)
+void Logger :: Log( eLOG_TYPE p_eLogType, const std::string & p_msg)
 {
-	_logMessage( p_msg);
+	_logMessage( p_eLogType, p_msg);
 }
 
-void Log :: LogMessage( const wchar_t * p_pFormat , ...)
+void Logger :: Log( eLOG_TYPE p_eLogType, const wchar_t * p_pFormat , ...)
 {
 	char l_pText[256];
 	va_list l_vaList;
@@ -85,25 +87,181 @@ void Log :: LogMessage( const wchar_t * p_pFormat , ...)
 		vsnprintf( l_pText, 256, l_strFormat.char_str(), ap_l);  
 #endif
 		va_end( l_vaList);
-		_logMessage( l_pText);
+		_logMessage( p_eLogType, l_pText);
 	}
 }
 
-void Log :: LogMessage( const std::wstring & p_msg)
+void Logger :: Log( eLOG_TYPE p_eLogType, const std::wstring & p_msg)
 {
-	_logMessage( p_msg);
+	_logMessage( p_eLogType, p_msg);
 }
 
-void Log :: _logMessage( const String & p_strToLog)
+void Logger :: LogMessage( const char * p_pFormat, ...)
 {
+	char l_pText[256];
+	va_list l_vaList;
+
+	if (p_pFormat != NULL)
+	{
+		va_start( l_vaList, p_pFormat);	
+#ifdef WIN32
+		vsnprintf_s( l_pText, 256, 256, p_pFormat, l_vaList);  
+#else
+		vsnprintf( l_pText, 256, cFormat_p, ap_l);  
+#endif
+		va_end( l_vaList);
+		_logMessage( eMessage, l_pText);
+	}
+}
+
+void Logger :: LogMessage( const std::string & p_msg)
+{
+	_logMessage( eMessage, p_msg);
+}
+
+void Logger :: LogMessage( const wchar_t * p_pFormat , ...)
+{
+	char l_pText[256];
+	va_list l_vaList;
+
+	if (p_pFormat != NULL)		  
+	{
+		va_start( l_vaList, p_pFormat);	
+		String l_strFormat( p_pFormat);
+#ifdef WIN32
+		vsnprintf_s( l_pText, 256, 256, l_strFormat.char_str(), l_vaList);  
+#else
+		vsnprintf( l_pText, 256, l_strFormat.char_str(), ap_l);  
+#endif
+		va_end( l_vaList);
+		_logMessage( eMessage, l_pText);
+	}
+}
+
+void Logger :: LogMessage( const std::wstring & p_msg)
+{
+	_logMessage( eMessage, p_msg);
+}
+
+void Logger :: LogWarning( const char * p_pFormat, ...)
+{
+	char l_pText[256];
+	va_list l_vaList;
+
+	if (p_pFormat != NULL)
+	{
+		va_start( l_vaList, p_pFormat);	
+#ifdef WIN32
+		vsnprintf_s( l_pText, 256, 256, p_pFormat, l_vaList);  
+#else
+		vsnprintf( l_pText, 256, cFormat_p, ap_l);  
+#endif
+		va_end( l_vaList);
+		_logMessage( eWarning, l_pText);
+	}
+}
+
+void Logger :: LogWarning( const std::string & p_msg)
+{
+	_logMessage( eWarning, p_msg);
+}
+
+void Logger :: LogWarning( const wchar_t * p_pFormat , ...)
+{
+	char l_pText[256];
+	va_list l_vaList;
+
+	if (p_pFormat != NULL)		  
+	{
+		va_start( l_vaList, p_pFormat);	
+		String l_strFormat( p_pFormat);
+#ifdef WIN32
+		vsnprintf_s( l_pText, 256, 256, l_strFormat.char_str(), l_vaList);  
+#else
+		vsnprintf( l_pText, 256, l_strFormat.char_str(), ap_l);  
+#endif
+		va_end( l_vaList);
+		_logMessage( eWarning, l_pText);
+	}
+}
+
+void Logger :: LogWarning( const std::wstring & p_msg)
+{
+	_logMessage( eWarning, p_msg);
+}
+
+
+void Logger :: LogError( const char * p_pFormat, ...)
+{
+	char l_pText[256];
+	va_list l_vaList;
+
+	if (p_pFormat != NULL)
+	{
+		va_start( l_vaList, p_pFormat);	
+#ifdef WIN32
+		vsnprintf_s( l_pText, 256, 256, p_pFormat, l_vaList);  
+#else
+		vsnprintf( l_pText, 256, cFormat_p, ap_l);  
+#endif
+		va_end( l_vaList);
+		_logMessage( eError, l_pText);
+	}
+}
+
+void Logger :: LogError( const std::string & p_msg)
+{
+	_logMessage( eError, p_msg);
+}
+
+void Logger :: LogError( const wchar_t * p_pFormat , ...)
+{
+	char l_pText[256];
+	va_list l_vaList;
+
+	if (p_pFormat != NULL)		  
+	{
+		va_start( l_vaList, p_pFormat);	
+		String l_strFormat( p_pFormat);
+#ifdef WIN32
+		vsnprintf_s( l_pText, 256, 256, l_strFormat.char_str(), l_vaList);  
+#else
+		vsnprintf( l_pText, 256, l_strFormat.char_str(), ap_l);  
+#endif
+		va_end( l_vaList);
+		_logMessage( eError, l_pText);
+	}
+}
+
+void Logger :: LogError( const std::wstring & p_msg)
+{
+	_logMessage( eError, p_msg);
+}
+
+void Logger :: _logMessage( eLOG_TYPE p_eLogType, const String & p_strToLog)
+{
+	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( s_mutex);
 	File l_logFile( s_logFilePath, File::eAdd);
 
 	if (l_logFile.IsOk()) 
 	{
-#ifdef _DEBUG
-		std::cout << p_strToLog.c_str() << std::endl;
+		struct tm l_dtToday;
+		time_t l_tTime;
+
+		time( & l_tTime);
+#ifdef _WIN32
+		localtime_s( & l_dtToday, & l_tTime);
+#else
+		l_dtToday = *localtime( & l_tTime);
 #endif
-		l_logFile << p_strToLog.c_str() << "\n";
-//		l_logFile.WriteArray<Char>( (p_strToLog + "\n").c_str(), p_strToLog.size() + 1);
+
+		String l_strToLog;
+		l_strToLog << (l_dtToday.tm_year + 1900) << CU_T( "-") << (l_dtToday.tm_mon + 1) << CU_T( "-") << l_dtToday.tm_mday;
+		l_strToLog << CU_T( " - ") << l_dtToday.tm_hour << CU_T( ":") << l_dtToday.tm_min << CU_T( ":") << l_dtToday.tm_sec << CU_T( "s");
+		l_strToLog << CU_T( " - ") << s_strHeaders[p_eLogType] << p_strToLog;
+#ifdef _DEBUG
+		std::cout << p_strToLog.char_str() << std::endl;
+#endif
+		l_logFile << l_strToLog.char_str() << "\n";
 	}
 }

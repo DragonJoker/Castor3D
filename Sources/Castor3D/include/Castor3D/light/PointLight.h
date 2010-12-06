@@ -30,19 +30,19 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API PointLight : public Light
+	class C3D_API PointLight : public Light
 	{
 	private:
 		friend class Scene;
 		//! The attenuation variables : constant, linear and quadratic
-		Point<float, 3> m_attenuation;
+		Point3f m_attenuation;
 		/**
 		 * Constructor, not to be used by the user, use Scene::CreateLight function instead
 		 *@param p_renderer : The renderer for the light, may be OpenGL or Direct3D
 		 *@param p_name : This light's name, default is void
 		 *@param p_index : This light's index (max 8 active lights at a time)
 		 */
-		PointLight( const String & p_name=C3DEmptyString);
+		PointLight( LightNodePtr p_pNode, const String & p_name=C3DEmptyString);
 
 	public:
 		/**
@@ -73,7 +73,7 @@ namespace Castor3D
 		 * Sets attenuation variables from a Point3r
 		 *@param p_attenuation : a Point3r
 		 */
-		void SetAttenuation	( const Point<float, 3> & p_attenuation);
+		void SetAttenuation	( const Point3f & p_attenuation);
 		/**
 		 * Writes the PointLight in a file
 		 *@param p_pFile : the file to write in

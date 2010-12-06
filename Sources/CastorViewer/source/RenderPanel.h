@@ -3,6 +3,9 @@
 
 namespace CastorViewer
 {
+	class CameraRotateEvent;
+	class CameraTranslateEvent;
+
 	class RenderPanel : public wxPanel
 	{
 	public:
@@ -22,6 +25,9 @@ namespace CastorViewer
 		Castor3D::RenderWindowPtr m_renderWindow;
 		Castor3D::ScenePtr m_mainScene;
 		Castor3D::FrameListenerPtr m_listener;
+
+		Templates::SharedPtr<CameraRotateEvent> m_pRotateCamEvent;
+		Templates::SharedPtr<CameraTranslateEvent> m_pTranslateCamEvent;
 
 	public:
 		RenderPanel( wxWindow * parent, wxWindowID p_id,

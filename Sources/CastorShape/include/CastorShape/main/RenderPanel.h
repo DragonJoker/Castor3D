@@ -59,7 +59,7 @@ public:
 
 	void DrawOneFrame();
 	void SelectGeometry( Castor3D::GeometryPtr m_geometry);
-	void SelectVertex( Point3rPtr p_vertex);
+	void SelectVertex( Castor3D::Vertex * p_vertex);
 
 public:
 	inline void SetSelectionType( SelectionType p_type) { m_selectionType = p_type; }

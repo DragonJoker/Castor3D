@@ -3,8 +3,8 @@
 #include "render_engine/Module_RenderEngine.h"
 
 #include "scene/Scene.h"
-
-#include "scene/SceneNode.h"
+#include "scene/NodeBase.h"
+#include "scene/Node.h"
 #include "geometry/basic/Face.h"
 #include "geometry/mesh/Submesh.h"
 #include "geometry/primitives/Geometry.h"
@@ -57,7 +57,7 @@ bool RenderEngine :: Draw()
 		// balayage 
 		for (int y = 0 ; y < l_iSizeY ; ++y)
 		{
-			Log::LogMessage( "y : %i", y);
+			Logger::LogMessage( CU_T( "y : %i"), y);
 			for (int x = 0 ; x < l_iSizeX ; ++x)
 			{
 				real red = 0, green = 0, blue = 0;
@@ -66,10 +66,10 @@ bool RenderEngine :: Draw()
 				// lancer de rayon 
 				Ray l_viewRay( Point3r( real( x-128), real( y-128), -10000.0f), Point3r( 0, 0, 1));
 
-				SceneNodePtrStrMap::const_iterator l_itNodesEnd = m_pScene->GetNodesEnd();
+				GeometryNodePtrStrMap::const_iterator l_itNodesEnd = m_pScene->GetGeometryNodesEnd();
 				LightPtrStrMap::const_iterator l_itLightsEnd = m_pScene->GetLightsEnd();
-				GeometryPtr l_pNearestGeometry = NULL;
-				SubmeshPtr l_pNearestSubmesh = NULL;
+				Geometry * l_pNearestGeometry = NULL;
+				SubmeshPtr l_pNearestSubmesh;
 
 				do 
 				{ 
@@ -77,19 +77,19 @@ bool RenderEngine :: Draw()
 					real l_fDistance = 20000.0f;
 					FacePtr l_pFace;
 
-					for (SceneNodePtrStrMap::iterator l_it = m_pScene->GetNodesIterator() ; l_it != l_itNodesEnd; ++l_it)
+					for (GeometryNodePtrStrMap::iterator l_it = m_pScene->GetGeometryNodesIterator() ; l_it != l_itNodesEnd; ++l_it)
 					{ 
 						l_pNearestGeometry = l_it->second->GetNearestGeometry( & l_viewRay, l_fDistance, & l_pFace, & l_pNearestSubmesh);
 					}
 
-					if ( ! l_pNearestGeometry.null())
+					if (l_pNearestGeometry != NULL)
 					{
-//						Log::LogMessage( CU_T( "Geometry : ") + l_pNearestGeometry->GetName());
+//						Logger::LogMessage( CU_T( "Geometry : ") + l_pNearestGeometry->GetName());
 						Point3r l_vNewStart = l_viewRay.m_origin + (l_viewRay.m_direction * l_fDistance); 
 						// la normale au point d'intersection 
-						Point3r l_vNormal = l_vNewStart - l_pNearestSubmesh->GetSphere()->GetCenter();
+						Point3r l_vNormal = l_vNewStart - l_pNearestSubmesh->GetSphere().GetCenter();
 //						Point3r l_vNormal( l_pFace->m_faceNormal);
-						real l_fTemp = l_vNormal.dotProduct( l_vNormal);
+						real l_fTemp = l_vNormal.Dot( l_vNormal);
 
 						if (l_fTemp == 0.0f)
 						{
@@ -105,11 +105,11 @@ bool RenderEngine :: Draw()
 						for (LightPtrStrMap::iterator l_it = m_pScene->GetLightsIterator() ; l_it != l_itLightsEnd; ++l_it)
 						{
 							LightPtr l_pCurrent = l_it->second;
-							Point3r l_vDist = Point3r( l_pCurrent->GetPosition()[0], l_pCurrent->GetPosition()[1], l_pCurrent->GetPosition()[2]) - l_vNewStart;
+							Point3r l_vDist = l_pCurrent->GetParent()->GetPosition() - l_vNewStart;
 
-							if (l_vNormal.dotProduct( l_vDist) > 0.0f)
+							if (l_vNormal.Dot( l_vDist) > 0.0f)
 							{
-								real l_fT = square_root( l_vDist.dotProduct( l_vDist));
+								real l_fT = square_root( l_vDist.Dot( l_vDist));
 
 								if (l_fT > 0.0f)
 								{
@@ -117,11 +117,11 @@ bool RenderEngine :: Draw()
 									// calcul des ombres 
 									bool l_bInShadow = false; 
 
-									for (SceneNodePtrStrMap::iterator l_it = m_pScene->GetNodesIterator() ; ! l_bInShadow && l_it != l_itNodesEnd; ++l_it)
+									for (GeometryNodePtrStrMap::iterator l_it = m_pScene->GetGeometryNodesIterator() ; ! l_bInShadow && l_it != l_itNodesEnd; ++l_it)
 									{
 										l_pNearestGeometry = l_it->second->GetNearestGeometry( & l_lightRay, l_fT, NULL, NULL);
 
-										if ( ! l_pNearestGeometry.null())
+										if (l_pNearestGeometry != NULL)
 										{
 											l_bInShadow = true;
 										}
@@ -130,7 +130,7 @@ bool RenderEngine :: Draw()
 									if ( ! l_bInShadow)
 									{
 										// lambert
-										real lambert = (l_lightRay.m_direction.dotProduct( l_vNormal)) * coef;
+										real lambert = (l_lightRay.m_direction.Dot( l_vNormal)) * coef;
 										red += lambert * l_pCurrent->GetDiffuse()[0] * l_pCurrentMat->GetPass( 0)->GetDiffuse()[0];
 										green += lambert * l_pCurrent->GetDiffuse()[1] * l_pCurrentMat->GetPass( 0)->GetDiffuse()[2];
 										blue += lambert * l_pCurrent->GetDiffuse()[1] * l_pCurrentMat->GetPass( 0)->GetDiffuse()[2];
@@ -142,14 +142,14 @@ bool RenderEngine :: Draw()
 						// on itére sur la prochaine reflexion
 						coef *= l_pCurrentMat->GetPass( 0)->GetShininess();
 
-						real l_fReflet = 2.0f * l_viewRay.m_direction.dotProduct( l_vNormal);
+						real l_fReflet = 2.0f * l_viewRay.m_direction.Dot( l_vNormal);
 						l_viewRay.m_origin = l_vNewStart;
 						l_viewRay.m_direction = l_viewRay.m_direction - (l_vNormal * l_fReflet);
 
 						level++;
 					}
 				} 
-				while ((coef > 0.0f) && (level < 10) && ! l_pNearestGeometry.null());
+				while ((coef > 0.0f) && (level < 10) && l_pNearestGeometry != NULL);
 
 				l_imageFile.put( std::min<unsigned char>( unsigned char( blue*255.0f), 255)).put( std::min<unsigned char>( unsigned char( green*255.0f), 255)).put( std::min<unsigned char>( unsigned char( red*255.0f), 255));
 			}

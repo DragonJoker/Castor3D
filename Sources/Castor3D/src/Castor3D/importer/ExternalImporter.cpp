@@ -12,7 +12,7 @@
 #include "geometry/primitives/Geometry.h"
 #include "render_system/RenderSystem.h"
 #include "render_system/Buffer.h"
-#include "scene/SceneNode.h"
+#include "scene/NodeBase.h"
 
 
 using namespace Castor3D;
@@ -30,9 +30,9 @@ bool ExternalImporter :: Import( const String & p_fileName)
 	return l_bReturn;
 }
 
-SceneNodePtr ExternalImporter :: GetNode()
+NodePtr ExternalImporter :: GetNode()
 {
-	return (m_nodes.empty() ? SceneNodePtr() : m_nodes[0]);
+	return (m_nodes.empty() ? NodePtr() : m_nodes[0]);
 }
 /*
 void ExternalImporter :: _convertToMesh( MeshPtr p_mesh, Imported3DModel * p_model)
@@ -100,9 +100,9 @@ void ExternalImporter :: _convertToMesh( MeshPtr p_mesh, Imported3DModel * p_mod
 				{
 					if (l_object.m_texVerts != NULL)
 					{
-						l_face->SetTexCoordV1( l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[0]][0], l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[0]][1]);
-						l_face->SetTexCoordV2( l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[1]][0], l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[1]][1]);
-						l_face->SetTexCoordV3( l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[2]][0], l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[2]][1]);
+						l_face->SetVertexTexCoords( 0, l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[0]][0], l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[0]][1]);
+						l_face->SetVertexTexCoords( 1, l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[1]][0], l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[1]][1]);
+						l_face->SetVertexTexCoords( 2, l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[2]][0], l_object.m_texVerts[l_object.m_faces[j].m_coordIndex[2]][1]);
 					}
 				}
 			}

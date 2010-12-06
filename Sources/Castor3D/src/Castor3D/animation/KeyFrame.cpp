@@ -4,14 +4,14 @@
 
 #include "geometry/Module_Geometry.h"
 #include "scene/Module_Scene.h"
+#include "scene/NodeBase.h"
 #include "animation/KeyFrame.h"
-#include "geometry/primitives/MovableObject.h"
+#include "main/MovableObject.h"
 
 using namespace Castor3D;
 
 
 MovingObject :: MovingObject()
-	:	m_object( NULL)
 {
 }
 
@@ -31,8 +31,8 @@ MovingObject :: ~MovingObject()
 
 void MovingObject :: Update( real p_percent, real p_weight)
 {
-	m_object->SetOrientation( (m_object->GetOrientation() * m_rotate.Slerp( Quaternion::Quat_Identity, 1.0f - p_percent, true)) * p_weight);
-	m_object->SetPosition( m_object->GetPosition() + (m_translate * p_percent));
+	m_object->GetParent()->SetOrientation( (m_object->GetParent()->GetOrientation() * m_rotate.Slerp( Quaternion::Quat_Identity, 1.0f - p_percent, true)) * p_weight);
+	m_object->GetParent()->SetPosition( m_object->GetParent()->GetPosition() + (m_translate * p_percent));
 }
 
 KeyFrame :: KeyFrame( real p_from, real p_to)
@@ -73,8 +73,8 @@ void KeyFrame :: AddMovingObject( MovableObjectPtr p_object,
 {
 	if ( ! map::has( m_toMove, p_object->GetName()))
 	{
-		MovingObjectPtr l_object = new MovingObject( p_object, p_translate,
-													p_scale, p_rotate);
+		MovingObjectPtr l_object( new MovingObject( p_object, p_translate,
+													p_scale, p_rotate));
 		m_toMove.insert( MovingObjectPtrStrMap::value_type( p_object->GetName(), l_object));
 	}
 }

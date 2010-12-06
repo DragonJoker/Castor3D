@@ -28,25 +28,29 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 12/03/2010
 	*/
-	class LoopEdgeList
+	class LoopEdgeList : public MemoryTraced<LoopEdgeList>
 	{
 	private:
-		SubmeshPtr m_submesh;
+		Submesh * m_submesh;
 		std::set <EdgePtr> m_allEdges;
 		EdgePtrMapVPtrMap m_vertexEdges;
-		VertexPtrVPtrMap m_originalVertices;
+		VertexVtxMap m_originalVertices;
 		IntVPtrMap m_vertexNeighbourhood;
 		FaceEdgesPtrArray m_facesEdges;
 
 	public:
-		LoopEdgeList( SubmeshPtr p_submesh);
-		~LoopEdgeList();
-
-		void Divide();
-		void Average( Point3rPtr p_center);
+		LoopEdgeList( Submesh * p_submesh)
+		{}
+		~LoopEdgeList()
+		{}
+		void Divide()
+		{}
+		void Average( const Point3r & p_center)
+		{}
 
 	private:
-		void _fill();
+		void _fill()
+		{}
 	};
 	//! Loop subdivision algorithm Subdiviser
 	/*!
@@ -54,16 +58,17 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 12/03/2010
 	*/
-	class LoopSubdiviser : public Subdiviser
+	class LoopSubdiviser : public Subdiviser, public MemoryTraced<LoopSubdiviser>
 	{
 	private:
 		LoopEdgeList * m_edges;
 
 	public:
 		LoopSubdiviser( Submesh * p_submesh);
-		virtual ~LoopSubdiviser();
-
-		virtual void Subdivide( Point3rPtr p_center);
+		virtual ~LoopSubdiviser()
+		{}
+		virtual void Subdivide( const Point3r & p_center)
+		{}
 	};
 }
 

@@ -59,7 +59,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Gen_IfBlock)
 			}
 			catch (Exception & p_exception)
 			{
-				Log::LogMessage( "EMuseInstance :: Initialise, exception (General) --> " + p_exception.GetDescription());
+				Logger::LogWarning( CU_T( "EMuseInstance :: Initialise, exception (General) --> ") + p_exception.GetDescription());
 			}
 
 		}
@@ -103,7 +103,7 @@ unsigned int i = 0;
 			}
 			catch (Exception & p_exception)
 			{
-				Log::LogMessage( "EMuseInstance :: Initialise, exception (General) --> " + p_exception.GetDescription());
+				Logger::LogWarning( CU_T( "EMuseInstance :: Initialise, exception (General) --> ") + p_exception.GetDescription());
 			}
 		}
 
@@ -131,7 +131,7 @@ unsigned int i = 0;
 			}
 			catch (Exception & p_exception)
 			{
-				Log::LogMessage( "EMuseInstance :: Initialise, exception (General) --> " + p_exception.GetDescription());
+				Logger::LogWarning( CU_T( "EMuseInstance :: Initialise, exception (General) --> ") + p_exception.GetDescription());
 			}
 			l_condition = cond->get<bool>();
 		}
@@ -196,7 +196,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Gen_ForLoop)
 	}
 	catch (Exception & p_exception)
 	{
-		Log::LogMessage( "EMuseInstance :: Initialise, exception (General) --> " + p_exception.GetDescription());
+		Logger::LogWarning( CU_T( "EMuseInstance :: Initialise, exception (General) --> ") + p_exception.GetDescription());
 	}
 
 }
@@ -274,7 +274,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Gen_MultiLineFunction)
 		}
 		catch (Exception & p_exception)
 		{
-			Log::LogMessage( "EMuseInstance :: Initialise, exception (General) --> " + p_exception.GetDescription());
+			Logger::LogWarning( CU_T( "EMuseInstance :: Initialise, exception (General) --> ") + p_exception.GetDescription());
 		}
 
 		if (ScriptEngine::GetContext()->m_breakOne || ScriptEngine::GetContext()->m_return || ScriptEngine::GetContext()->m_continue)

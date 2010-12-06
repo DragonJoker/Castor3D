@@ -35,7 +35,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API RenderWindow : public Renderable<RenderWindow, WindowRenderer>
+	class C3D_API RenderWindow : public Renderable<RenderWindow, WindowRenderer>
 	{
 	private:
 		static size_t s_nbRenderWindows;		//!< Number of render windows
@@ -48,7 +48,7 @@ namespace Castor3D
 		void * m_hWnd;							//!< The handle of the display window
 		eDRAW_TYPE m_drawType;					//!< The type of drawing
 		bool m_showNormals;						//!< Tells if we show normals
-		NormalsMode m_normalsMode;				//!< Normals mode
+		eNORMALS_MODE m_normalsMode;			//!< Normals mode
 
 		unsigned int m_timeSinceLastFrame;		//!< The time since the last frame was rendered
 
@@ -66,6 +66,7 @@ namespace Castor3D
 		CameraPtr m_camera;						//!< The camera associated to the window
 
 		FrameListenerPtr m_listener;
+		Castor::Resource::PixelFormat m_pixelFormat;
 
 	public:
 		/**
@@ -78,7 +79,7 @@ namespace Castor3D
 		 *@param p_look : [in] Where the camera must look
 		 */
 		RenderWindow( ScenePtr p_mainScene, void * p_hWnd,  int p_windowWidth, int p_windowHeight,
-					  Viewport::eTYPE p_type, ProjectionDirection p_look=pdLookToFront);
+					  Viewport::eTYPE p_type, Castor::Resource::PixelFormat p_pixelFormat=Castor::Resource::pxfR8G8B8A8, ProjectionDirection p_look=pdLookToFront);
 		/**
 		 * Destructor
 		 */
@@ -105,7 +106,7 @@ namespace Castor3D
 		 */
 		bool PostRender();
 
-		virtual void Apply( eDRAW_TYPE p_displayMode){}
+		virtual void Render( eDRAW_TYPE p_displayMode){}
 
 		virtual bool Write( Castor::Utils::File & p_file)const { return true; }
 		virtual bool Read( Castor::Utils::File & p_file) { return true; }
@@ -116,7 +117,7 @@ namespace Castor3D
 	public:
 		inline size_t			GetIndex		()const { return m_index; }
 		inline ScenePtr			GetMainScene	()const { return m_mainScene; }
-		inline eDRAW_TYPE			GeteDRAW_TYPE		()const { return m_drawType; }
+		inline eDRAW_TYPE		GetDrawType		()const { return m_drawType; }
 		inline bool				IsFocused		()const	{ return m_focused; }
 		inline void *			GetHWnd			()const { return m_hWnd; }
 		inline int				GetWindowWidth	()const { return m_windowWidth; }
@@ -124,16 +125,17 @@ namespace Castor3D
 		inline CameraPtr		GetCamera		()const { return m_camera; }
 		inline Viewport::eTYPE	GetType			()const { return m_type; }
 		inline bool				IsInitialised	()const { return m_initialised; }
-		inline NormalsMode		GetNormalsMode	()const { return m_normalsMode; }
+		inline eNORMALS_MODE	GetNormalsMode	()const { return m_normalsMode; }
 		inline bool				IsNormalsVisible()const { return m_showNormals; }
 		inline FrameListenerPtr	GetListener		()const { return m_listener; }
+		inline Castor::Resource::PixelFormat	GetPixelFormat	()const { return m_pixelFormat; }
 
 		inline void	SetToUpdate				()						{ m_toUpdate = true; }
 		inline void	SetInitialised			()						{ m_initialised = true; }
 		inline void SetChanged				( bool p_changed)		{ m_changed = p_changed; }
 		inline void Focus					()						{ m_focused = true; }
 		inline void UnFocus					()						{ m_focused = false; }
-		inline void SetNormalsMode			( NormalsMode p_nm) 	{ m_changed = (m_normalsMode != p_nm); m_normalsMode = p_nm; }
+		inline void SetNormalsMode			( eNORMALS_MODE p_nm) 	{ m_changed = (m_normalsMode != p_nm); m_normalsMode = p_nm; }
 		inline void SetNormalsVisibility	( bool p_vis) 			{ m_changed = (p_vis != m_showNormals); m_showNormals = p_vis; }
 	};
 	//! A window renderer
@@ -143,7 +145,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API WindowRenderer : public Renderer<RenderWindow, WindowRenderer>
+	class C3D_API WindowRenderer : public Renderer<RenderWindow, WindowRenderer>
 	{
 	protected:
 		/**

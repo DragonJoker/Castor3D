@@ -24,55 +24,37 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Castor
 {	namespace Math
 {
-	/*!
-	Holds the rotation of a 4x4 transformation matrix
-	\author Sylvain DOREMUS
-	\version 0.1
-	\date 09/02/2010
-	*/
-	class TransformationMatrix : public Matrix4x4r
-	{
-	public:
-		TransformationMatrix();
-		TransformationMatrix( const TransformationMatrix & p_matrix);
-		TransformationMatrix( const Angle & p_angle, const Point3r & p_axis);
-		TransformationMatrix( const Quaternion & p_quat);
-		virtual ~TransformationMatrix();
-
-	public:
-		void SetRotation( const Angle & p_angle, const Point3r & p_axis);
-		void SetRotation( const Quaternion & p_quat);
-		void SetRotationEuler( const Angle & p_rx, const Angle & p_ry, const Angle & p_rz);
-		void SetScale( real p_hx, real p_hy, real p_hz);
-		void SetScale( const Point3r & p_scale);
-		void SetTranslation( real p_tx, real p_ty, real p_tz);
-		void SetTranslation( const Point3r & p_translation);
-
-		void Rotate( const Angle & p_angle, const Point3r & p_axis);
-		void Rotate( const Quaternion & p_quat);
-		/**
-		 * Y axis rotation
-		 */
-		void Yaw( const Angle & p_angle);
-		/**
-		 * X axis rotation
-		 */
-		void Pitch( const Angle & p_angle);
-		/**
-		 * Z axis rotation
-		 */
-		void Roll( const Angle & p_angle);
-		void Scale( real p_hx, real p_hy, real p_hz);
-		void Scale( const Point3r & p_scale);
-		void Translate( real p_tx, real p_ty, real p_tz);
-		void Translate( const Point3r & p_translation);
-
-		TransformationMatrix operator *( const TransformationMatrix & p_matrix);
-		void operator *=( const TransformationMatrix & p_matrix);
-		Point3r operator *( Point3rPtr p_vertex);
-		Point3r operator *( const Point3r & p_vertex);
-	};
+	template <typename TypeA, typename TypeB>
+	void rotate			( SquareMatrix<TypeA, 4> & p_matrix, const Angle & p_angle, const Point<TypeB, 3> & p_axis);
+	template <typename TypeA>
+	void rotate			( SquareMatrix<TypeA, 4> & p_matrix, const Quaternion & p_quat);
+	template <typename TypeA>
+	void yaw			( SquareMatrix<TypeA, 4> & p_matrix, const Angle & p_angle);
+	template <typename TypeA>
+	void pitch			( SquareMatrix<TypeA, 4> & p_matrix, const Angle & p_angle);
+	template <typename TypeA>
+	void roll			( SquareMatrix<TypeA, 4> & p_matrix, const Angle & p_angle);
+	template <typename TypeA, typename TypeB>
+	void scale			( SquareMatrix<TypeA, 4> & p_matrix, TypeB p_hx, TypeB p_hy, TypeB p_hz);
+	template <typename TypeA, typename TypeB>
+	void scale			( SquareMatrix<TypeA, 4> & p_matrix, const Point<TypeB, 3> & p_scale);
+	template <typename TypeA, typename TypeB>
+	void translate		( SquareMatrix<TypeA, 4> & p_matrix, TypeB p_tx, TypeB p_ty, TypeB p_tz);
+	template <typename TypeA, typename TypeB>
+	void translate		( SquareMatrix<TypeA, 4> & p_matrix, const Point<TypeB, 3> & p_translation);
+	template <typename TypeA, typename TypeB>
+	void perspective	( SquareMatrix<TypeA, 4> & p_matrix, TypeB fovy, TypeB aspect, TypeB zNear, TypeB zFar);
+	template <typename TypeA, typename TypeB>
+	void ortho			( SquareMatrix<TypeA, 4> & p_matrix, TypeB left, TypeB right, TypeB bottom, TypeB top, TypeB zNear, TypeB zFar);
+	template <typename TypeA, typename TypeB>
+	void frustum		( SquareMatrix<TypeA, 4> & p_matrix, TypeB left, TypeB right, TypeB bottom, TypeB top, TypeB nearVal, TypeB farVal);
+	template <typename TypeA, typename TypeB, size_t Count>
+	Point<TypeB, Count>		operator *( const SquareMatrix<TypeA, 4> & p_matrix, const Point<TypeB, Count> & p_vertex);
+	template <typename TypeA, typename TypeB>
+	SquareMatrix<TypeA, 4>	operator *( const SquareMatrix<TypeA, 4> & p_matrixA, const SquareMatrix<TypeB, 4> & p_matrixB);
 }
 }
+
+#include "TransformationMatrix.inl"
 
 #endif

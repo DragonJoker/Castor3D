@@ -35,7 +35,7 @@ real CSNewCubeDialog :: GetCubeWidth()const
 	
 	if (l_value.BeforeFirst( '.').IsNumber() && l_value.AfterFirst( '.').IsNumber())
 	{
-		return ator( l_value.char_str());
+		return ator( l_value.c_str());
 	}
 	
 	return 0.0f;
@@ -49,7 +49,7 @@ real CSNewCubeDialog :: GetCubeHeight()const
 	
 	if (l_value.BeforeFirst( '.').IsNumber() && l_value.AfterFirst( '.').IsNumber())
 	{
-		return ator( l_value.char_str());
+		return ator( l_value.c_str());
 	}
 	
 	return 0.0f;
@@ -63,7 +63,7 @@ real CSNewCubeDialog :: GetCubeDepth()const
 	
 	if (l_value.BeforeFirst( '.').IsNumber() && l_value.AfterFirst( '.').IsNumber())
 	{
-		return ator( l_value.char_str());
+		return ator( l_value.c_str());
 	}
 	
 	return 0.0f;

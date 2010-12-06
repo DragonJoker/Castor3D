@@ -33,20 +33,25 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API Scene
+	class C3D_API Scene : public Managed<String, Scene>, public MemoryTraced<Scene>
 	{
 	private:
 		String m_name;									//!< The scene name
-		SceneNodePtr m_rootNode;						//!< The root scene node, each node is attached at the root node if not attached to another one
+		GeometryNodePtr m_rootGeometryNode;				//!< The root geometry node, each geometry node is attached at the root node if not attached to another one
+		LightNodePtr m_rootLightNode;					//!< The root light node, each light node is attached at the root node if not attached to another one
+		CameraNodePtr m_rootCameraNode;					//!< The root camera node, each camera node is attached at the root node if not attached to another one
 		CameraPtr m_rootCamera;							//!< The root camera, necessary for any render
 
 		LightPtrStrMap m_addedLights;					//!< The lights map
-		SceneNodePtrStrMap m_addedNodes;				//!< The nodes map
+		NodePtrStrMap m_addedNodes;						//!< The nodes map
+		LightNodePtrStrMap m_addedLightNodes;			//!< The nodes map
+		CameraNodePtrStrMap m_addedCameraNodes;			//!< The nodes map
+		GeometryNodePtrStrMap m_addedGeometryNodes;		//!< The nodes map
 		GeometryPtrStrMap m_addedPrimitives;			//!< The geometries map
 		CameraPtrStrMap m_addedCameras;					//!< The other cameras
 
 		LightPtrArray m_arrayLightsToDelete;			//!< The lights to delete array
-		SceneNodePtrArray m_arrayNodesToDelete;			//!< The nodes to delete array
+		NodePtrArray m_arrayNodesToDelete;				//!< The nodes to delete array
 		GeometryPtrArray m_arrayPrimitivesToDelete;		//!< The geometries to delete array
 		CameraPtrArray m_arrayCamerasToDelete;			//!< The cameras to delete array
 
@@ -57,7 +62,7 @@ namespace Castor3D
 
 		bool m_changed;									//!< Tells if the scene has changed, id est if a geometry has been created or added to it => Vertex buffers need to be generated
 
-		NormalsMode m_normalsMode;
+		eNORMALS_MODE m_normalsMode;
 
 		GeometryPtr m_selectedGeometry;
 
@@ -90,7 +95,19 @@ namespace Castor3D
 		 *@param p_name : [in] The node name, default is empty
 		 *@param p_parent : [in] The parent node, if NULL, the created node will be attached to root
 		 */
-		SceneNodePtr CreateSceneNode( const String & p_name, SceneNodePtr p_parent = NULL);
+		LightNodePtr CreateLightNode( const String & p_name, NodePtr p_parent=NodePtr());
+		/**
+		 * Creates a scene node in the scene, attached to the root node if th given parent is NULL
+		 *@param p_name : [in] The node name, default is empty
+		 *@param p_parent : [in] The parent node, if NULL, the created node will be attached to root
+		 */
+		CameraNodePtr CreateCameraNode( const String & p_name, NodePtr p_parent=NodePtr());
+		/**
+		 * Creates a scene node in the scene, attached to the root node if th given parent is NULL
+		 *@param p_name : [in] The node name, default is empty
+		 *@param p_parent : [in] The parent node, if NULL, the created node will be attached to root
+		 */
+		GeometryNodePtr CreateGeometryNode( const String & p_name, NodePtr p_parent=NodePtr());
 		/**
 		 * Creates a primitive, given a MeshType and the primitive definitions
 		 *@param p_name : [in] The primitive name
@@ -108,31 +125,31 @@ namespace Castor3D
 		 *@param p_ww, p_wh : [in] The window size
 		 *@param p_type : [in] The viewport projection type
 		 */
-		Camera * CreateCamera( const String & p_name, int p_ww, int p_wh,
-							   Viewport::eTYPE p_type);
+		CameraPtr CreateCamera( const String & p_name, int p_ww, int p_wh, CameraNodePtr p_pNode,
+							    Viewport::eTYPE p_type);
 		/**
 		* Creates a light
 		*@param p_type : [in] The light type
 		*@param p_name : [in] The light name
 		 */
-		LightPtr CreateLight( Light::eTYPE p_type, const String & p_name);
+		LightPtr CreateLight( Light::eTYPE p_type, const String & p_name, LightNodePtr p_pNode);
 		/**
 		 * Creates the vertex buffers in a given normals mode, and tells if the face's or vertex's normals are shown
 		 *@param p_nm : [in] The normals mode (face or vertex)
 		 *@param p_showNormals : [in] Whether or not to show the face or vertex normals
 		 */
-		void CreateList( NormalsMode p_nm, bool p_showNormals);
+		void CreateList( eNORMALS_MODE p_nm, bool p_showNormals);
 		/**
 		 * Retrieves the node with the given name
 		 *@param p_name : [in] The name of the node
 		 *@return The named node, NULL if not found
 		 */
-		SceneNodePtr GetNode( const String & p_name)const;
+		NodePtr GetNode( const String & p_name)const;
 		/**
 		 * Adds a node to the scene
 		 *@param p_node : [in] The node to add
 		 */
-		void AddNode( SceneNodePtr p_node);
+		void AddNode( NodePtr p_node);
 		/**
 		 * Adds a light to the scene
 		 *@param p_light : [in] The light to add
@@ -158,7 +175,7 @@ namespace Castor3D
 		 * Removes the node given in argument from the scene and deletes it
 		 *@param p_pNode : [in] The node to remove
 		 */
-		void RemoveNode( SceneNodePtr p_pNode);
+		void RemoveNode( NodePtr p_pNode);
 		/**
 		 * Removes the geometry given in argument from the scene and deletes it
 		 *@param p_pGeometry : [in] The geometry to remove
@@ -246,6 +263,13 @@ namespace Castor3D
 		*/
 		bool ImportBSP( const String & p_file);
 		/**
+		* Imports a scene from an foreign file
+		*@param p_file : [in] file to read from
+		*@param p_importer : [in] The importer, which is in charge of loading the scene
+		*@return true if successful, false if not
+		*/
+		bool ImportExternal( const String & p_fileName, ExternalImporter * p_importer);
+		/**
 		 * Selects the nearest element in the ray's way
 		 *@param p_ray : [in] The ray
 		 *@param p_geo : [out] The nearest met geometry
@@ -253,50 +277,59 @@ namespace Castor3D
 		 *@param p_face : [out] The nearest met Face
 		 *@param p_vertex : [out] The nearest met Vertex
 		 */
-		void Select( Ray * p_ray, GeometryPtr * p_geo, SubmeshPtr * p_submesh, FacePtr * p_face, Point3rPtr * p_vertex);
+		void Select( Ray * p_ray, GeometryPtr & p_geo, SubmeshPtr & p_submesh, Face * p_face, Vertex * p_vertex);
 
 		void Merge( ScenePtr p_pScene);
 
 	private:
 		bool _writeLights( Castor::Utils::File & p_pFile)const;
 		bool _writeGeometries( Castor::Utils::File & p_pFile)const;
-		bool _importExternal( const String & p_fileName, ExternalImporterPtr p_importer);
 		void _deleteToDelete();
 
 	public:
 		/**
 		 * @return The scene name
 		 */
-		inline String			GetName			()const { return m_name; }
+		inline String			GetName					()const { return m_name; }
 		/**
 		 * @return The root node
 		 */
-		inline SceneNodePtr		GetRootNode		()const { return m_rootNode; }
+		inline CameraNodePtr	GetRootCameraNode		()const { return m_rootCameraNode; }
+		/**
+		 * @return The root node
+		 */
+		inline LightNodePtr		GetRootLightNode		()const { return m_rootLightNode; }
+		/**
+		 * @return The root node
+		 */
+		inline GeometryNodePtr	GetRootGeometryNode		()const { return m_rootGeometryNode; }
 		/**
 		 * @return The root camera
 		 */
-		inline CameraPtr		GetRootCamera	()const { return m_rootCamera; }
+		inline CameraPtr		GetRootCamera			()const { return m_rootCamera; }
 		/**
 		 * @return The geometries number
 		 */
-		inline size_t			GetNbGeometries	()const { return m_addedPrimitives.size(); }
+		inline size_t			GetNbGeometries			()const { return m_addedPrimitives.size(); }
 		/**
-		 * @return Tells if the name has changed
+		 * @return Tells if the name has changed		
 		 */
-		inline bool				HasChanged		()const { return m_changed; }
+		inline bool				HasChanged				()const { return m_changed; }
 		/**
 		 * @return The lights
 		 */
-		inline LightPtrStrMap						GetLights				()const { return m_addedLights; }
-		inline Colour								GetAmbientLight			()const	{ return m_clAmbientLight; }
-		inline SceneNodePtrStrMap::iterator			GetNodesIterator		()		{ return m_addedNodes.begin(); }
-		inline SceneNodePtrStrMap::const_iterator	GetNodesEnd				()		{ return m_addedNodes.end(); }
-		inline LightPtrStrMap::iterator				GetLightsIterator		()		{ return m_addedLights.begin(); }
-		inline LightPtrStrMap::const_iterator		GetLightsEnd			()		{ return m_addedLights.end(); }
-		inline GeometryPtrStrMap::iterator			GetGeometriesIterator	()		{ return m_addedPrimitives.begin(); }
-		inline GeometryPtrStrMap::const_iterator	GetGeometriesEnd		()		{ return m_addedPrimitives.end(); }
+		inline LightPtrStrMap							GetLights					()const { return m_addedLights; }
+		inline Colour									GetAmbientLight				()const	{ return m_clAmbientLight; }
+		inline NodePtrStrMap::iterator					GetNodesIterator			()		{ return m_addedNodes.begin(); }
+		inline NodePtrStrMap::const_iterator			GetNodesEnd					()		{ return m_addedNodes.end(); }
+		inline GeometryNodePtrStrMap::iterator			GetGeometryNodesIterator	()		{ return m_addedGeometryNodes.begin(); }
+		inline GeometryNodePtrStrMap::const_iterator	GetGeometryNodesEnd			()		{ return m_addedGeometryNodes.end(); }
+		inline LightPtrStrMap::iterator					GetLightsIterator			()		{ return m_addedLights.begin(); }
+		inline LightPtrStrMap::const_iterator			GetLightsEnd				()		{ return m_addedLights.end(); }
+		inline GeometryPtrStrMap::iterator				GetGeometriesIterator		()		{ return m_addedPrimitives.begin(); }
+		inline GeometryPtrStrMap::const_iterator		GetGeometriesEnd			()		{ return m_addedPrimitives.end(); }
 
-		inline void SetAmbientLight( const Colour & val) { m_clAmbientLight = val; }
+		inline void SetAmbientLight( const Colour & val) { m_clAmbientLight[0] = val[0];m_clAmbientLight[1] = val[1];m_clAmbientLight[2] = val[2];m_clAmbientLight[3] = val[3]; }
 	};
 
 }

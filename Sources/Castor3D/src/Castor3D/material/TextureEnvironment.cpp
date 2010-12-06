@@ -32,9 +32,9 @@ TextureEnvironment :: ~TextureEnvironment()
 {
 }
 
-void TextureEnvironment :: Apply( eDRAW_TYPE p_displayMode)
+void TextureEnvironment :: Render( eDRAW_TYPE p_displayMode)
 {
-	m_pRenderer->Apply();
+	m_pRenderer->Render();
 }
 
 void TextureEnvironment :: SetRGBSource( unsigned int p_index, 

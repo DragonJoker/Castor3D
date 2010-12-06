@@ -19,7 +19,7 @@
 		<Configuration
 			Name="Debug - Multibyte|Win32"
 			OutputDirectory="$(SolutionDir)Bin\$(ConfigurationName)"
-			IntermediateDirectory="_generation\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)_generation\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="2"
 			>
@@ -86,7 +86,7 @@
 		<Configuration
 			Name="Release - Multibyte|Win32"
 			OutputDirectory="$(SolutionDir)Bin\$(ConfigurationName)"
-			IntermediateDirectory="_generation\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)_generation\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
@@ -151,7 +151,7 @@
 		<Configuration
 			Name="Debug - Unicode|Win32"
 			OutputDirectory="$(SolutionDir)Bin\$(ConfigurationName)"
-			IntermediateDirectory="_generation\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)_generation\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="1"
 			>
@@ -218,7 +218,7 @@
 		<Configuration
 			Name="Release - Unicode|Win32"
 			OutputDirectory="$(SolutionDir)Bin\$(ConfigurationName)"
-			IntermediateDirectory="_generation\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)_generation\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -309,6 +309,26 @@
 						UsePrecompiledHeader="1"
 					/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Debug - Unicode|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release - Unicode|Win32"
+					>
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"
+					/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath=".\src\CastorUtils\SmartPtrCommon.cpp"
+				>
 			</File>
 			<Filter
 				Name="Utils"
@@ -406,15 +426,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\src\CastorUtils\TransformationMatrix.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\CastorUtils\Vector3f.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\CastorUtils\VertexSpherical.cpp"
+					RelativePath=".\src\CastorUtils\SphericalVertex.cpp"
 					>
 				</File>
 			</Filter>
@@ -640,6 +652,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\include\CastorUtils\FastMath.h"
+					>
+				</File>
+				<File
 					RelativePath=".\include\CastorUtils\Line.h"
 					>
 				</File>
@@ -648,7 +664,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\include\CastorUtils\MinMax.h"
+					RelativePath=".\include\CastorUtils\Matrix.inl"
 					>
 				</File>
 				<File
@@ -660,7 +676,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\include\CastorUtils\Point.inl"
+					>
+				</File>
+				<File
 					RelativePath=".\include\CastorUtils\Quaternion.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\CastorUtils\SphericalVertex.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\CastorUtils\SquareMatrix.inl"
 					>
 				</File>
 				<File
@@ -668,11 +696,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\include\CastorUtils\Vector3f.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\CastorUtils\VertexSpherical.h"
+					RelativePath=".\include\CastorUtils\TransformationMatrix.inl"
 					>
 				</File>
 			</Filter>

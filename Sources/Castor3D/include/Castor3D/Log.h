@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___Castor_Log___
 #define ___Castor_Log___
 
+#include <CastorUtils/AutoSingleton.h>
+
 namespace Castor3D
 {
 	//! Log management class
@@ -27,26 +29,64 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API Log
+	class C3D_API Logger : protected Theory::AutoSingleton<Logger>, public MemoryTraced<Logger>
 	{
-	private:
-		static String s_logFilePath;	//!< The log file path
-		static Log s_singleton;
-
 	public:
+		typedef enum
+		{
+			eMessage,
+			eWarning,
+			eError,
+			eNbTypes,
+		}
+		eLOG_TYPE;
+
+	private:
+		friend class Theory::AutoSingleton<Logger>;
+		static String s_logFilePath;	//!< The log file path
+		static String s_strHeaders[eNbTypes];
+		static MultiThreading::RecursiveMutex s_mutex;
+
+	private:
 		/**
 		 * Constructor
 		 */
-		Log();
+		Logger();
 		/**
 		 * Destructor
 		 */
-		~Log();
+		~Logger();
+
+	public:
 		/**
 		 * Sets the log file address
 		 *@param p_logFilePath : [in] The log file path
 		 */
 		static void SetFileName( const String & p_logFilePath);
+		
+		/**
+		 * Logs a line in the log file, using va_args
+		 *@param p_format : [in] the line format
+		 *@param ... : POD arguments, following printf format
+		 */
+		static void Log( eLOG_TYPE p_eLogType, const char * p_format, ...);
+		/**
+		 * Logs a line, from a string
+		 *@param p_msg : [in] The line to log
+		 */
+		static void Log( eLOG_TYPE p_eLogType, const std::string & p_msg);
+		/**
+		 * Logs an unicode line in the log file, using va_args
+		 *@param p_format : [in] the line format
+		 *@param ... : POD arguments, following printf format
+		 */
+		static void Log( eLOG_TYPE p_eLogType, const wchar_t * p_format , ...);
+		/**
+		 * Logs a line, from a wstring
+		 *@param p_msg : [in] The line to log
+		 */
+		static void Log( eLOG_TYPE p_eLogType, const std::wstring & p_msg);
+
 		/**
 		 * Logs a line in the log file, using va_args
 		 *@param p_format : [in] the line format
@@ -70,8 +110,54 @@ namespace Castor3D
 		 */
 		static void LogMessage( const std::wstring & p_msg);
 
+		/**
+		 * Logs a line in the log file, using va_args
+		 *@param p_format : [in] the line format
+		 *@param ... : POD arguments, following printf format
+		 */
+		static void LogWarning( const char * p_format, ...);
+		/**
+		 * Logs a line, from a string
+		 *@param p_msg : [in] The line to log
+		 */
+		static void LogWarning( const std::string & p_msg);
+		/**
+		 * Logs an unicode line in the log file, using va_args
+		 *@param p_format : [in] the line format
+		 *@param ... : POD arguments, following printf format
+		 */
+		static void LogWarning( const wchar_t * p_format , ...);
+		/**
+		 * Logs a line, from a wstring
+		 *@param p_msg : [in] The line to log
+		 */
+		static void LogWarning( const std::wstring & p_msg);
+
+		/**
+		 * Logs a line in the log file, using va_args
+		 *@param p_format : [in] the line format
+		 *@param ... : POD arguments, following printf format
+		 */
+		static void LogError( const char * p_format, ...);
+		/**
+		 * Logs a line, from a string
+		 *@param p_msg : [in] The line to log
+		 */
+		static void LogError( const std::string & p_msg);
+		/**
+		 * Logs an unicode line in the log file, using va_args
+		 *@param p_format : [in] the line format
+		 *@param ... : POD arguments, following printf format
+		 */
+		static void LogError( const wchar_t * p_format , ...);
+		/**
+		 * Logs a line, from a wstring
+		 *@param p_msg : [in] The line to log
+		 */
+		static void LogError( const std::wstring & p_msg);
+
 	private:
-		static void _logMessage( const String & p_strToLog);
+		static void _logMessage( eLOG_TYPE p_eLogType, const String & p_strToLog);
 	};
 }
 

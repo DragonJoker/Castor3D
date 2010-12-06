@@ -3,8 +3,9 @@
 #include "camera/Ray.h"
 #include "camera/Viewport.h"
 #include "camera/Camera.h"
-#include "scene/SceneNode.h"
+#include "scene/NodeBase.h"
 #include "geometry/primitives/Geometry.h"
+#include "geometry/basic/Vertex.h"
 #include "geometry/mesh/Mesh.h"
 #include "geometry/mesh/Submesh.h"
 #include "geometry/basic/Face.h"
@@ -14,9 +15,9 @@ using namespace Castor3D;
 Ray :: Ray( const Point<int, 2> & p_point, const Camera & p_camera)
 {
 	Viewport l_viewport = * p_camera.GetViewport();
-	m_origin = p_camera.GetPosition();
+	m_origin = p_camera.GetParent()->GetPosition();
 	m_origin[2] += l_viewport.GetNearView();
-	Quaternion l_camOrient = p_camera.GetOrientation();
+	Quaternion l_camOrient = p_camera.GetParent()->GetOrientation();
 	m_origin = l_camOrient * m_origin;
 
 	m_direction = l_viewport.GetDirection( p_point);
@@ -26,9 +27,9 @@ Ray :: Ray( const Point<int, 2> & p_point, const Camera & p_camera)
 Ray :: Ray( int p_x, int p_y, const Camera & p_camera)
 {
 	Viewport l_viewport = * p_camera.GetViewport();
-	m_origin = p_camera.GetPosition();
+	m_origin = p_camera.GetParent()->GetPosition();
 	m_origin[2] += l_viewport.GetNearView();
-	Quaternion l_camOrient = p_camera.GetOrientation();
+	Quaternion l_camOrient = p_camera.GetParent()->GetOrientation();
 	m_origin = l_camOrient * m_origin;
 
 	Point<int, 2> l_point( p_x, p_y);
@@ -63,23 +64,23 @@ real Ray :: Intersects( const Point3r & p_v1, const Point3r & p_v2, const Point3
 
 	Point3r h = m_direction ^ e2;
 
-	real a = e1.dotProduct( h);
+	real a = e1.Dot( h);
 
 	if ( ! value::is_null( a))
 	{
 		real f = 1.0f / a;
 
 		Point3r s( m_origin - p_v1);
-		real u = f * s.dotProduct( h);
+		real u = f * s.Dot( h);
 
 		if (u >= 0.0 && u <= 1.0)
 		{
 			Point3r q = s ^ e1;
-			real v = f * m_direction.dotProduct( q);
+			real v = f * m_direction.Dot( q);
 
 			if (v >= 0.0 && u + v <= 1.0)
 			{
-				real t = f * e2.dotProduct( q);
+				real t = f * e2.Dot( q);
 
 				if ( ! value::is_null( t))
 				{
@@ -94,10 +95,7 @@ real Ray :: Intersects( const Point3r & p_v1, const Point3r & p_v2, const Point3
 
 real Ray :: Intersects( const Face & p_face)
 {
-	Point3rPtr l_v1 = p_face.m_vertex1;
-	Point3rPtr l_v2 = p_face.m_vertex2;
-	Point3rPtr l_v3 = p_face.m_vertex3;
-	return Intersects( *l_v1, *l_v2, *l_v3);
+	return Intersects( p_face[0].GetCoords(), p_face[1].GetCoords(), p_face[2].GetCoords());
 }
 
 real Ray :: Intersects( const Point3r & p_vertex)
@@ -213,8 +211,8 @@ real Ray :: Intersects( const Sphere & p_sphere)
 
 	// intersection rayon/sphere 
 	Point3r l_vDist = p_sphere.GetCenter() - m_origin; 
-	real B = m_direction.dotProduct( l_vDist);
-	real D = B * B - l_vDist.dotProduct(l_vDist) + p_sphere.GetRadius() * p_sphere.GetRadius(); 
+	real B = m_direction.Dot( l_vDist);
+	real D = B * B - l_vDist.Dot(l_vDist) + p_sphere.GetRadius() * p_sphere.GetRadius(); 
 
 	if (D >= 0.0f)
 	{
@@ -235,14 +233,14 @@ real Ray :: Intersects( const Sphere & p_sphere)
 	return l_fReturn;
 }
 
-real Ray :: Intersects( GeometryPtr p_pGeometry, FacePtr* p_ppFace, SubmeshPtr* p_ppSubmesh)
+real Ray :: Intersects( Geometry * p_pGeometry, FacePtr* p_ppFace, SubmeshPtr* p_ppSubmesh)
 {
 	Point3r l_vCenter = p_pGeometry->GetCenter()->operator +( p_pGeometry->GetParent()->GetPosition());
 	Quaternion l_qOrientation = p_pGeometry->GetParent()->GetOrientation();
 	Point3r l_vOrientedCenter = l_qOrientation * l_vCenter;
 
 	MeshPtr l_pMesh = p_pGeometry->GetMesh();
-	Sphere l_sphere( l_vCenter, l_pMesh->GetSphere()->GetRadius());
+	Sphere l_sphere( l_vCenter, l_pMesh->GetSphere().GetRadius());
 
 	real l_fDistance = Intersects( l_sphere);
 /*
@@ -253,14 +251,14 @@ real Ray :: Intersects( GeometryPtr p_pGeometry, FacePtr* p_ppFace, SubmeshPtr* 
 	{
 		l_fDistance = -1.0f;
 		size_t l_nbSubmeshes = l_pMesh->GetNbSubmeshes();
-		SubmeshPtr l_pSubmesh = NULL;
+		SubmeshPtr l_pSubmesh;
 
 		for (size_t i = 0 ; i < l_nbSubmeshes ; i++)
 		{
 			l_pSubmesh = l_pMesh->GetSubmesh( i);
-			Point3r l_submeshCenter = l_vCenter + l_pSubmesh->GetSphere()->GetCenter();
+			Point3r l_submeshCenter = l_vCenter + l_pSubmesh->GetSphere().GetCenter();
 			l_submeshCenter = l_qOrientation * l_submeshCenter;
-			l_sphere.Load( l_submeshCenter, l_pSubmesh->GetSphere()->GetRadius());
+			l_sphere.Load( l_submeshCenter, l_pSubmesh->GetSphere().GetRadius());
 
 			if (p_ppSubmesh != NULL)
 			{
@@ -320,9 +318,9 @@ real Ray :: Intersects( GeometryPtr p_pGeometry, FacePtr* p_ppFace, SubmeshPtr* 
 
 bool Ray :: ProjectVertex( const Point3r & p_vertex, Point3r & p_result)
 {
-	if (m_direction.dotProduct( p_vertex) >= 0.0)
+	if (m_direction.Dot( p_vertex) >= 0.0)
 	{
-		p_result = m_direction * (m_direction.dotProduct( p_vertex) / m_direction.GetLength());
+		p_result = m_direction * (m_direction.Dot( p_vertex) / m_direction.GetLength());
 		return true;
 	}
 

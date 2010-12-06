@@ -32,7 +32,7 @@ MaterialPtr MaterialLoader :: LoadFromFile( const String & p_file)
 		{
 			l_name[l_nameLength] = 0;
 
-			Log::LogMessage( CU_T( "Reading material ") + String( l_name));
+			Logger::LogMessage( CU_T( "Reading material ") + String( l_name));
 
 			l_pReturn = MaterialManager::CreateMaterial( l_name);
 		}
@@ -131,8 +131,8 @@ bool Material :: SetName( const String & p_name)
 
 	if ( ! MaterialManager::HasElement( p_name))
 	{
-		MaterialPtr l_pThis = MaterialManager::RemoveElement( m_name);
-		m_name = p_name;
+		MaterialPtr l_pThis = MaterialManager::RemoveElement( m_key);
+		m_key = p_name;
 		MaterialManager::AddElement( l_pThis);
 		l_bReturn = true;
 	}
@@ -149,36 +149,36 @@ void Material :: Initialise()
 //	vector::cycle( m_passes, & Pass::Initialise);
 }
 
-void Material :: Apply( eDRAW_TYPE p_displayMode)
+void Material :: Render( eDRAW_TYPE p_displayMode)
 {
 	for (size_t i = 0 ; i < m_passes.size() ; i++)
 	{
-		m_passes[i]->Apply( p_displayMode);
+		m_passes[i]->Render( p_displayMode);
 	}
 //	vector::cycle( m_passes, & Pass::Apply, p_submesh, p_displayMode);
 }
 
-void Material :: Apply2D( eDRAW_TYPE p_displayMode)
+void Material :: Render2D( eDRAW_TYPE p_displayMode)
 {
 	for (size_t i = 0 ; i < m_passes.size() ; i++)
 	{
-		m_passes[i]->Apply2D( p_displayMode);
+		m_passes[i]->Render2D( p_displayMode);
 	}
 //	vector::cycle( m_passes, & Pass::Apply, p_displayMode);
 }
 
-void Material :: Remove()
+void Material :: EndRender()
 {
 	for (size_t i = 0 ; i < m_passes.size() ; i++)
 	{
-		m_passes[i]->Remove();
+		m_passes[i]->EndRender();
 	}
 //	vector::cycle( m_passes, & Pass::Remove);
 }
 
 PassPtr Material :: CreatePass()
 {
-	PassPtr l_newPass = new Pass( this);
+	PassPtr l_newPass( new Pass( this));
 	m_passes.push_back( l_newPass);
 	return l_newPass;
 }

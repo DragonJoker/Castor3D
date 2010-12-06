@@ -25,8 +25,8 @@ namespace Castor
 {
 	namespace MultiThreading
 	{
-		template <typename T, typename U, class Locker=MultiThreading::Mutex>
-		class Multimap
+		template <typename T, typename U, class Locker=MultiThreading::RecursiveMutex>
+		class Multimap : public MemoryTraced< Multimap<T, U, Locker> >
 		{
 		private:
 			template <typename _Ky, typename _Ty, class _Locker> friend class Castor::MultiThreading::Multimap;

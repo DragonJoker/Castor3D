@@ -91,7 +91,7 @@ void MaterialsListView :: AddItem( const String & p_materialName)
 	{
 		l_image = new wxImage( c_materialIconSize, c_materialIconSize);
 		l_image->SetRGB( wxRect( 0, 0, c_materialIconSize, c_materialIconSize), l_ccol0, l_ccol1, l_ccol2);
-		Log::LogMessage( "No texture for index %d", l_index);
+		Logger::LogMessage( CU_T( "MaterialsListView :: AddItem - No texture for index %d"), l_index);
 	}
 
 	wxBitmap l_bitmap( * l_image);
@@ -100,7 +100,7 @@ void MaterialsListView :: AddItem( const String & p_materialName)
 
 	if (InsertItem( l_index, p_materialName.c_str(), l_index) == -1)
 	{
-		Log::LogMessage( "Item not inserted");
+		Logger::LogWarning( CU_T( "MaterialsListView :: AddItem - Item not inserted"));
 	}
 }
 

@@ -52,7 +52,7 @@ String Structure :: GetDesc() const
 	{
 		l_desc += m_members[i]->GetType()->GetDesc() + " " + m_members[i]->GetName() + "\n";
 	}
-	l_desc += "}\n";
+	l_desc += CU_T( "}\n");
 	return l_desc;
 }
 

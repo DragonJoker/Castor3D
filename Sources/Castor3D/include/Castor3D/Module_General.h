@@ -29,13 +29,13 @@ http://www.gnu.org/copyleft/lesser.txt.
 #   pragma warning (disable : 4275)
 
 #	ifdef CASTOR3D_EXPORTS
-#		define CS3D_API __declspec(dllexport)
+#		define C3D_API __declspec(dllexport)
 #	else
-#		define CS3D_API __declspec(dllimport)
+#		define C3D_API __declspec(dllimport)
 #	endif
 
 #else
-#	define CS3D_API
+#	define C3D_API
 #endif
 
 namespace Castor
@@ -61,7 +61,7 @@ namespace Castor
 #include <CastorUtils/NonCopyable.h>
 #include <CastorUtils/Manager.h>
 #include <CastorUtils/Map.h>
-#include <CastorUtils/MinMax.h>
+#include <CastorUtils/FastMath.h>
 #include <CastorUtils/Multimap.h>
 #include <CastorUtils/Mutex.h>
 #include <CastorUtils/Plane.h>
@@ -74,8 +74,7 @@ namespace Castor
 #include <CastorUtils/Set.h>
 #include <CastorUtils/Thread.h>
 #include <CastorUtils/Vector.h>
-#include <CastorUtils/Vector3f.h>
-#include <CastorUtils/VertexSpherical.h>
+#include <CastorUtils/SphericalVertex.h>
 
 #if CHECK_MEMORYLEAKS
 #	include <CastorUtils/Memory.h>

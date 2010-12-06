@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_ShaderProgram___
 
 #include "../material/Module_Material.h"
+#include "Module_Shader.h"
 
 namespace Castor3D
 {
@@ -28,7 +29,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class CS3D_API ShaderProgram
+	class C3D_API ShaderProgram : public MemoryTraced<ShaderProgram>
 	{
 	protected:
 		friend class ShaderManager;
@@ -49,7 +50,7 @@ namespace Castor3D
 		String m_vertexProgram;
 		String m_fragmentProgram;
 		String m_geometryProgram;
-		UniformVariablePtrStrMap m_mapUniformVariables;
+		FrameVariablePtrStrMap m_mapFrameVariables;
 		bool m_bFromMemory;
 		int m_iTangentAttribLocation;
 		int m_iBitangentAttribLocation;
@@ -69,14 +70,14 @@ namespace Castor3D
 		virtual ~ShaderProgram()=0;
 		/**
 		 * Adds a uniform variable to pass to the shader objects
-		 *@param p_pUniformVariable : the variable to pass
+		 *@param p_pFrameVariable : the variable to pass
 		 */
-		virtual void AddUniformVariable( UniformVariablePtr p_pUniformVariable);
+		virtual void AddFrameVariable( FrameVariablePtr p_pVariable);
 		/**
 		 * Retrieves the uniform variables the program holds
 		 *@return the map of variables held by the program
 		 */
-		UniformVariablePtrStrMap GetUniformVariables()const { return m_mapUniformVariables; }
+		FrameVariablePtrStrMap GetFrameVariables()const { return m_mapFrameVariables; }
 		/**
 		 * Cleans the up
 		 */
@@ -146,6 +147,7 @@ namespace Castor3D
 		inline String	GetGeometryFile				()const { return m_geometryFile; }
 		inline int		GetTangentAttribLocation	()const { return m_iTangentAttribLocation; }
 		inline int		GetBitangentAttribLocation	()const { return m_iBitangentAttribLocation; }
+		inline bool		IsLinked					()const { return m_isLinked; }
 
 	private:
 		virtual void _initialiseFromMemory();

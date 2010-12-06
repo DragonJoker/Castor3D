@@ -32,7 +32,7 @@ namespace Castor3D
 	class ProjectionMesh : public Mesh
 	{
 	private:
-		PatternPtr m_pPattern;
+		Point3rPatternPtr m_pPattern;
 		Point3r m_vAxis;
 		real m_fDepth;
 		bool m_bClosed;
@@ -52,7 +52,7 @@ namespace Castor3D
 		 *@param p_uiNbFaces : [in] Number of subdivisions along the axis
 		 *@param p_strName : [in] The mesh name
 		 */
-		ProjectionMesh( PatternPtr p_pPattern, const Point3r & p_vAxis, bool p_bClosed, real p_fDepth,
+		ProjectionMesh( Point3rPatternPtr p_pPattern, const Point3r & p_vAxis, bool p_bClosed, real p_fDepth,
 						unsigned int p_uiNbFaces=1, const String & p_strName = C3DEmptyString);
 		/**
 		 * Destructor

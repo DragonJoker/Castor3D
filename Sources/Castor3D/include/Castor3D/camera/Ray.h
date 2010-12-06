@@ -29,7 +29,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class CS3D_API Ray
+	class C3D_API Ray : public MemoryTraced<Ray>
 	{
 	private:
 		typedef Templates::Value<real> value;
@@ -106,7 +106,7 @@ namespace Castor3D
 		*@param p_ppSubmesh : [out] The intersected submesh
 		*@return true if the ray intersects the face, false if not
 		*/
-		real Intersects( GeometryPtr p_pGeometry, FacePtr* p_ppFace, SubmeshPtr* p_ppSubmesh);
+		real Intersects( Geometry * p_pGeometry, FacePtr* p_ppFace, SubmeshPtr* p_ppSubmesh);
 		/**
 		 * Projects the given vertex on the ray
 		 *@param p_vertex : [in] The vertex we want to project

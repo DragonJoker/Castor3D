@@ -32,7 +32,7 @@ real CSNewIcosaedronDialog :: GetIcosaedronRadius()const
 	
 	if (l_value.BeforeFirst( '.').IsNumber() && l_value.AfterFirst( '.').IsNumber())
 	{
-		return ator( l_value.char_str());
+		return ator( l_value.c_str());
 	}
 	
 	return INT_MIN;
@@ -46,7 +46,7 @@ int CSNewIcosaedronDialog :: GetNbSubdiv()const
 	
 	if (l_value.IsNumber())
 	{
-		return atoi( l_value.char_str());
+		return atoi( l_value.c_str());
 	}
 	
 	return INT_MIN;

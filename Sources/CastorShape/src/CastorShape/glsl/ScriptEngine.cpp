@@ -10,7 +10,7 @@
 using namespace CastorShape;
 using namespace Castor3D;
 
-Context * ScriptEngine :: sm_context = NULL;
+ScriptContext * ScriptEngine :: sm_context = NULL;
 
 ScriptEngine :: ScriptEngine( const Path & p_path)
 	:	m_path			(p_path)
@@ -28,7 +28,7 @@ void ScriptEngine :: Initialise()
 	m_compiler->Initialise();
 }
 
-void ScriptEngine :: SetContext( Context * p_context)
+void ScriptEngine :: SetContext( ScriptContext * p_context)
 {
 	m_context = p_context;
 	m_context->timerManager = m_timerManager;
@@ -45,7 +45,7 @@ void ScriptEngine :: AddScriptZone( String & p_scriptString)
 	}
 	catch( Exception & p_exception)
 	{
-		Log::LogMessage( "ScriptEngine : Failed compilation of code zone from scene file -> " + p_exception.GetDescription());
+		Logger::LogWarning( CU_T( "ScriptEngine : Failed compilation of code zone from scene file -> ") + p_exception.GetDescription());
 		l_node = NULL;
 	}
 
@@ -87,7 +87,7 @@ ScriptNode * ScriptEngine :: CompileScriptFile( const String & p_strFileName)
 
 void ScriptEngine :: ScriptError( ScriptNode * p_node, const String & p_string)
 {
-	Log::LogMessage( String("Runtime Error Line # ") + ToString( p_node->m_createdAtLine) + " @ file " + p_node->m_strFileName + " : " + p_string);
+	Logger::LogMessage( CU_T( "Runtime Error Line # ") + ToString( p_node->m_createdAtLine) + CU_T( " @ file ") + p_node->m_strFileName + CU_T( " : ") + p_string);
 }
 
 void ScriptEngine :: UseContext()const

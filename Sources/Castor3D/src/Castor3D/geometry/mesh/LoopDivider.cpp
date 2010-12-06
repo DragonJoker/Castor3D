@@ -4,6 +4,7 @@
 
 #include "geometry/mesh/LoopDivider.h"
 #include "geometry/mesh/Submesh.h"
+#include "geometry/basic/Vertex.h"
 #include "geometry/basic/Face.h"
 #include "geometry/basic/SmoothingGroup.h"
 
@@ -43,8 +44,8 @@ real alpha( unsigned int n)
 }
 
 //*********************************************************************************************
-
-LoopEdgeList :: LoopEdgeList( SubmeshPtr p_submesh)
+/*
+LoopEdgeList :: LoopEdgeList( Submesh * p_submesh)
 	:	m_submesh( p_submesh)
 {
 	_fill();
@@ -52,24 +53,22 @@ LoopEdgeList :: LoopEdgeList( SubmeshPtr p_submesh)
 
 LoopEdgeList :: ~LoopEdgeList()
 {
-	EdgePtrMapVPtrMap::iterator l_it = m_vertexEdges.begin();
-//	set::deleteAll( m_allEdges);
+	m_facesEdges.clear();
+	m_allEdges.clear();
 	m_vertexEdges.clear();
-//	map::deleteAll( m_originalVertices);
 	m_originalVertices.clear();
 }
 
 void LoopEdgeList :: Divide()
 {
 	FaceEdgesPtrArray l_newFaces;
-	VertexPtrArray l_newVertices;
+	VertexArray l_newVertices;
 	size_t l_size = m_facesEdges.size();
+
 	for (size_t i = 0 ; i < l_size ; i++)
 	{
 		l_newFaces.clear();
 		m_facesEdges[0]->Divide( 0.5f, m_vertexEdges, m_vertexNeighbourhood, m_allEdges, l_newFaces, l_newVertices);
-//		delete m_facesEdges[0];
-//		m_facesEdges[0] = NULL;
 		m_facesEdges[0].reset();
 		m_facesEdges.erase( m_facesEdges.begin());
 
@@ -77,7 +76,7 @@ void LoopEdgeList :: Divide()
 		{
 			if (m_originalVertices.find( l_newVertices[j]) == m_originalVertices.end())
 			{
-				m_originalVertices.insert( VertexPtrVPtrMap::value_type( l_newVertices[j], new Vertex( *l_newVertices[j])));
+				m_originalVertices.insert( VertexVtxMap::value_type( l_newVertices[j], l_newVertices[j]));
 			}
 		}
 		l_newVertices.clear();
@@ -88,13 +87,14 @@ void LoopEdgeList :: Divide()
 	}
 }
 
-void LoopEdgeList :: Average( Point3rPtr p_center)
+void LoopEdgeList :: Average( const Point3r & p_center)
 {
 	EdgePtrMapVPtrMap::iterator l_it = m_vertexEdges.begin();
 	IntVPtrMap::iterator l_nit;
 	EdgePtrMap::iterator l_edgeIt;
 	int l_nb;
 	VertexPtr l_vertex;
+
 	while (l_it != m_vertexEdges.end())
 	{
 		l_edgeIt = l_it->second.begin();
@@ -102,76 +102,75 @@ void LoopEdgeList :: Average( Point3rPtr p_center)
 		l_nit = m_vertexNeighbourhood.find( l_vertex);
 		l_nb = l_nit->second;
 
-		*l_vertex -= *p_center;
-		*l_vertex *= alpha( l_nb);
+		l_vertex->GetCoords() -= p_center;
+		l_vertex->GetCoords() *= alpha( l_nb);
+
 		while (l_edgeIt != l_it->second.end())
 		{
-			*l_vertex += (*(m_originalVertices.find( l_edgeIt->first)->second) - *p_center);
+			l_vertex->GetCoords() += ((m_originalVertices.find( l_edgeIt->first)->second)->GetCoords() - p_center);
 			++l_edgeIt;
 		}
-		*l_vertex /= (alpha( l_nb) + l_nb);
-		*l_vertex += *p_center;
+
+		l_vertex->GetCoords() /= (alpha( l_nb) + l_nb);
+		l_vertex->GetCoords() += p_center;
 		++l_it;
 	}
 }
 
 void LoopEdgeList :: _fill()
 {
-	SmoothingGroupPtr l_group;
-	FacePtr l_face;
-	VertexPtr l_vertex1;
-	VertexPtr l_vertex2;
-	VertexPtr l_vertex3;
 	FaceEdgesPtr l_faceEdges;
+
 	for (size_t i = 0 ; i < m_submesh->GetNbSmoothGroups() ; i++)
 	{
-		FacePtrArray l_faces;
-		l_group = m_submesh->GetSmoothGroup( i);
+		FaceArray l_faces;
+		SmoothingGroup & l_group = m_submesh->GetSmoothGroup( i);
+
 		for (size_t j = 0 ; j < l_group->m_faces.size() ; j++)
 		{
-			l_face = l_group->m_faces[j];
+			Face & l_face = l_group.m_faces[j];
 			l_faces.push_back( l_face);
 
-			l_vertex1 = l_face->m_vertex1;
-			l_vertex2 = l_face->m_vertex2;
-			l_vertex3 = l_face->m_vertex3;
+			Vertex & l_vertex1 = l_face.m_vertex[0];
+			Vertex & l_vertex2 = l_face.m_vertex[1];
+			Vertex & l_vertex3 = l_face.m_vertex[2];
 
 			if (m_originalVertices.find( l_vertex1) == m_originalVertices.end())
 			{
-				m_originalVertices.insert( VertexPtrVPtrMap::value_type( l_vertex1, new Vertex( *l_vertex1)));
+				m_originalVertices.insert( VertexVtxMap::value_type( l_vertex1, l_vertex1));
 			}
 			if (m_originalVertices.find( l_vertex2) == m_originalVertices.end())
 			{
-				m_originalVertices.insert( VertexPtrVPtrMap::value_type( l_vertex2, new Vertex( *l_vertex2)));
+				m_originalVertices.insert( VertexVtxMap::value_type( l_vertex2, l_vertex2));
 			}
 			if (m_originalVertices.find( l_vertex3) == m_originalVertices.end())
 			{
-				m_originalVertices.insert( VertexPtrVPtrMap::value_type( l_vertex3, new Vertex( *l_vertex3)));
+				m_originalVertices.insert( VertexVtxMap::value_type( l_vertex3, l_vertex3));
 			}
 
-			l_faceEdges = new FaceEdges( m_submesh, i, l_face, m_vertexEdges, m_vertexNeighbourhood, m_allEdges);
+			l_faceEdges = FaceEdgesPtr( new FaceEdges( m_submesh, i, l_face, m_vertexEdges, m_vertexNeighbourhood, m_allEdges));
 			m_facesEdges.push_back( l_faceEdges);
 		}
 		m_submesh->GetSmoothGroups()[i]->m_faces.clear();
 	}
 }
-
+*/
 //*********************************************************************************************
 
 LoopSubdiviser :: LoopSubdiviser( Submesh * p_submesh)
 	:	Subdiviser( p_submesh),
 		m_edges( new LoopEdgeList( p_submesh))
 {}
-
+/*
 LoopSubdiviser :: ~LoopSubdiviser()
 {
 	delete m_edges;
 }
 
-void LoopSubdiviser :: Subdivide( Point3rPtr p_center)
+void LoopSubdiviser :: Subdivide( const Point3r & p_center)
 {
 	m_edges->Divide();
 	m_edges->Average( p_center);
 }
-
+*/
 //*********************************************************************************************

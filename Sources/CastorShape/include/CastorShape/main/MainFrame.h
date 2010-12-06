@@ -72,8 +72,6 @@ private:
 
 	bool m_bWireFrame;
 
-	Castor3D::Log * m_log;
-
 public:
 	CSMainFrame( wxWindow * parent, const wxString & title, 
 				 const wxPoint & pos = wxDefaultPosition, 
@@ -83,7 +81,7 @@ public:
 	~CSMainFrame();
 
 	void SelectGeometry( Castor3D::GeometryPtr p_geometry);
-	void SelectVertex( Point3rPtr p_vertex);
+	void SelectVertex( Castor3D::Vertex * p_vertex);
 	void ShowPanels();
 
 private:

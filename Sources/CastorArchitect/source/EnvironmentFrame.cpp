@@ -8,7 +8,7 @@ using namespace CastorArchitect;
 EnvironmentFrame :: EnvironmentFrame( wxWindow * parent, const wxString & title,
 										  PassPtr p_pass, TextureEnvironmentPtr p_env,
 										  const wxPoint & pos, const wxSize & size)
-	:	wxFrame( parent, wxID_ANY, "Environment mode", pos, size),
+	:	wxFrame( parent, wxID_ANY, CU_T( "Environment mode"), pos, size),
 		m_environment( p_env),
 		m_pass( p_pass)
 {
@@ -88,8 +88,6 @@ EnvironmentFrame :: EnvironmentFrame( wxWindow * parent, const wxString & title,
 
 EnvironmentFrame :: ~EnvironmentFrame()
 {
-	m_environment = NULL;
-	m_pass = NULL;
 }
 
 void EnvironmentFrame :: _createRGBSourceComboBox( unsigned int p_index, int p_currentTop)
@@ -322,7 +320,7 @@ void EnvironmentFrame :: _onRGBSource0Select( wxCommandEvent & event)
 	{
 		l_value = l_value.substr( 0, l_value.find_last_of( ' '));
 		l_value.Trim();
-		int l_index = atoi( l_value.char_str());
+		int l_index = atoi( l_value.c_str());
 		m_environment->SetRGBSource( 0, CSTexture, l_index);
 	}
 }
@@ -350,7 +348,7 @@ void EnvironmentFrame :: _onRGBSource1Select( wxCommandEvent & event)
 	{
 		l_value = l_value.substr( 0, l_value.find_last_of( ' '));
 		l_value.Trim();
-		int l_index = atoi( l_value.char_str());
+		int l_index = atoi( l_value.c_str());
 		m_environment->SetRGBSource( 1, CSTexture, l_index);
 	}
 }
@@ -378,7 +376,7 @@ void EnvironmentFrame :: _onRGBSource2Select( wxCommandEvent & event)
 	{
 		l_value = l_value.substr( 0, l_value.find_last_of( ' '));
 		l_value.Trim();
-		int l_index = atoi( l_value.char_str());
+		int l_index = atoi( l_value.c_str());
 		m_environment->SetRGBSource( 2, CSTexture, l_index);
 	}
 }
@@ -469,7 +467,7 @@ void EnvironmentFrame :: _onAlphaSource0Select( wxCommandEvent & event)
 	{
 		l_value = l_value.substr( 0, l_value.find_last_of( ' '));
 		l_value.Trim();
-		int l_index = atoi( l_value.char_str());
+		int l_index = atoi( l_value.c_str());
 		m_environment->SetAlphaSource( 0, CSTexture, l_index);
 	}
 }
@@ -497,7 +495,7 @@ void EnvironmentFrame :: _onAlphaSource1Select( wxCommandEvent & event)
 	{
 		l_value = l_value.substr( 0, l_value.find_last_of( ' '));
 		l_value.Trim();
-		int l_index = atoi( l_value.char_str());
+		int l_index = atoi( l_value.c_str());
 		m_environment->SetAlphaSource( 1, CSTexture, l_index);
 	}
 }
@@ -525,7 +523,7 @@ void EnvironmentFrame :: _onAlphaSource2Select( wxCommandEvent & event)
 	{
 		l_value = l_value.substr( 0, l_value.find_last_of( ' '));
 		l_value.Trim();
-		int l_index = atoi( l_value.char_str());
+		int l_index = atoi( l_value.c_str());
 		m_environment->SetAlphaSource( 2, CSTexture, l_index);
 	}
 }

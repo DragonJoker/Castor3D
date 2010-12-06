@@ -34,7 +34,7 @@ namespace Castor
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class ImageLoader : ResourceLoader <Image>
+	class ImageLoader : ResourceLoader <Image>, public MemoryTraced<ImageLoader>
 	{
 	public:
 		ImagePtr LoadFromFile( const String & p_file);
@@ -44,7 +44,7 @@ namespace Castor
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class Image : public Resource
+	class Image : public Resource, public MemoryTraced<Image>
 	{
 	protected:
 		friend class ImageLoader;
@@ -80,9 +80,9 @@ namespace Castor
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class ImageManager : public Castor::Templates::UniqueManager<Image, ImageManager>
+	class ImageManager : public Castor::Templates::UniqueManager<String, Image, ImageManager>, public MemoryTraced<ImageManager>
 	{
-		friend class Castor::Templates::UniqueManager<Image, ImageManager>;
+		friend class Castor::Templates::UniqueManager<String, Image, ImageManager>;
 
 	protected:
 		/**

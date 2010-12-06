@@ -25,8 +25,8 @@ namespace Castor
 {
 	namespace MultiThreading
 	{
-		template <typename Ty, class Locker=MultiThreading::Mutex>
-		class Set : public std::set <Ty>
+		template <typename Ty, class Locker=MultiThreading::RecursiveMutex>
+		class Set : public std::set <Ty>, public MemoryTraced< Set<Ty, Locker> >
 		{
 		private:
 			template <typename _Ty, class _Locker> friend class Castor::MultiThreading::Set;
@@ -341,7 +341,7 @@ namespace Castor
 			_my_set intersects( const _my_set & p_set)
 			{
 				CASTOR_AUTO_SCOPED_LOCK();
-				CASTOR_SCOPED_LOCK( p_set.m_criticalSection);
+				CASTOR_SCOPED_LOCK( p_set.GetLocker());
 				_my_set l_set;
 
 				if (_my_set::empty() || static_cast <_my_set>( p_set).empty())

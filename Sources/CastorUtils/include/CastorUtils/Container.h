@@ -63,7 +63,7 @@ namespace Castor
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class ComboBox : public Container
+	class ComboBox : public Container, public MemoryTraced<ComboBox>
 	{
 	protected:
 		Point3r m_min;	//!< The min extent of the combo box
@@ -73,7 +73,7 @@ namespace Castor
 		/**
 		 * Constructor
 		 */
-		ComboBox( const Point3r & p_min, const Point3r & p_max)
+		ComboBox( const Point3r & p_min=Point3r(), const Point3r & p_max=Point3r())
 			:	Container( p_min + (p_max - p_min) / real( 2.0)),
 				m_min( p_min),
 				m_max( p_max)
@@ -83,25 +83,44 @@ namespace Castor
 		 *@param p_v : [in] The vertex to test
 		 *@return true if the vertex is within the box, false if not
 		 */
-		virtual bool IsWithin( const Point3r & p_v) { return (p_v[0] > m_min[0] && p_v[0] < m_max[0]) 
-															&& (p_v[1] > m_min[1] && p_v[1] < m_max[1])
-															&& (p_v[2] > m_min[2] && p_v[2] < m_max[2]); }
+		virtual bool IsWithin( const Point3r & p_v)
+		{ 
+			return (p_v[0] > m_min[0] && p_v[0] < m_max[0]) 
+					&& (p_v[1] > m_min[1] && p_v[1] < m_max[1])
+					&& (p_v[2] > m_min[2] && p_v[2] < m_max[2]);
+		}
 		/**
 		 * Tests if a vertex is on the limits of the box
 		 *@param p_v : [in] The vertex to test
 		 *@return true if the vertex is on the limits of the box, false if not
 		 */
-		virtual bool IsOnLimits( const Point3r & p_v) { return ! IsWithin( p_v) 
-																&& (value::equals( p_v[0], m_min[0])
-																	|| value::equals( p_v[0], m_max[0])
-																	|| value::equals( p_v[1], m_min[1])
-																	|| value::equals( p_v[1], m_max[1])
-																	|| value::equals( p_v[2], m_min[2])
-																	|| value::equals( p_v[2], m_max[2])); }
+		virtual bool IsOnLimits( const Point3r & p_v)
+		{
+			return ! IsWithin( p_v) 
+					&& (value::equals( p_v[0], m_min[0])
+						|| value::equals( p_v[0], m_max[0])
+						|| value::equals( p_v[1], m_min[1])
+						|| value::equals( p_v[1], m_max[1])
+						|| value::equals( p_v[2], m_min[2])
+						|| value::equals( p_v[2], m_max[2]));
+		}
+		/**
+		 * Reinitialises th combo box to the given limits
+		 */
+		void Load( const Point3r & p_ptMin, const Point3r & p_ptMax)
+		{
+			m_min = p_ptMin;
+			m_max = p_ptMax;
+		}
 
 	public:
-		inline Point3r	GetMin	()const { return m_min; }
-		inline Point3r	GetMax	()const { return m_max; }
+		inline const Point3r &	GetMin	()const	{ return m_min; }
+		inline const Point3r &	GetMax	()const	{ return m_max; }
+		inline Point3r &		GetMin	()		{ return m_min; }
+		inline Point3r &		GetMax	()		{ return m_max; }
+
+		inline void	SetMin	( const Point3r & p_ptMin) { m_min = p_ptMin; }
+		inline void	SetMax	( const Point3r & p_ptMax) { m_max = p_ptMax; }
 	};
 
 	/*!
@@ -109,7 +128,7 @@ namespace Castor
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class Sphere : public Container
+	class Sphere : public Container, public MemoryTraced<Sphere>
 	{
 	private:
 		real m_radius;			//!< The radius of the sphere
@@ -118,7 +137,7 @@ namespace Castor
 		/**
 		 * Constructor
 		 */
-		Sphere( const Point3r & p_center, real p_radius)
+		Sphere( const Point3r & p_center=Point3r(), real p_radius=0)
 			:	Container( p_center),
 				m_radius( p_radius)
 		{

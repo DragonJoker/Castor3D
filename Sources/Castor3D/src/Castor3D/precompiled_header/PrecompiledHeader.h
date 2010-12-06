@@ -18,6 +18,24 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_PRECOMPILED_HEADER_H___
 #define ___C3D_PRECOMPILED_HEADER_H___
 
+#ifndef CHECK_MEMORYLEAKS
+#	ifdef _DEBUG
+#		define CHECK_MEMORYLEAKS 1
+#	else
+#		define CHECK_MEMORYLEAKS 0
+#	endif
+#endif
+
+#pragma message( "********************************************************************")
+#pragma message( "	Castor3D")
+
+#if CHECK_MEMORYLEAKS
+#	pragma message( "		Checking Memory leaks")
+#endif
+#include <CastorUtils/Memory.h>
+
+#pragma message( "********************************************************************")
+
 #include <string>
 #include <vector>
 #include <map>
@@ -31,10 +49,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <algorithm>
 #include <stack>
 
-#include <glm/glm.hpp>
-#include <glm/ext.hpp>
-#include <glm/gtc/matrix_projection.hpp>
-
 #ifndef WIN32
 #	define sprintf_s snprintf
 #	define Sleep usleep
@@ -46,6 +60,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 //using namespace Castor::Templates;
 
 #include <CastorUtils/CastorString.h>
+#include <CastorUtils/SmartPtrCommon.h>
 #include <CastorUtils/Angle.h>
 #include <CastorUtils/AutoSingleton.h>
 #include <CastorUtils/Buffer.h>
@@ -59,7 +74,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <CastorUtils/NonCopyable.h>
 #include <CastorUtils/Manager.h>
 #include <CastorUtils/Map.h>
-#include <CastorUtils/MinMax.h>
+#include <CastorUtils/FastMath.h>
 #include <CastorUtils/Multimap.h>
 #include <CastorUtils/Mutex.h>
 #include <CastorUtils/Plane.h>
@@ -72,12 +87,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <CastorUtils/Set.h>
 #include <CastorUtils/Thread.h>
 #include <CastorUtils/Vector.h>
-#include <CastorUtils/Vector3f.h>
-#include <CastorUtils/VertexSpherical.h>
+#include <CastorUtils/SphericalVertex.h>
 
 using namespace Castor::Resource;
 using namespace Castor::Utils;
 using namespace Castor::Math;
+using namespace Castor::Templates;
 
 #include "animation/Module_Animation.h"
 #include "camera/Module_Camera.h"
@@ -96,24 +111,6 @@ using namespace Castor::Math;
 #include "material/Material.h"
 #include "animation/Animation.h"
 */
-
-#ifndef CHECK_MEMORYLEAKS
-#	ifdef _DEBUG
-#		define CHECK_MEMORYLEAKS 1
-#	else
-#		define CHECK_MEMORYLEAKS 0
-#	endif
-#endif
-
-#pragma message( "********************************************************************")
-#pragma message( "	Castor3D")
-
-#if CHECK_MEMORYLEAKS
-#	pragma message( "		Checking Memory leaks")
-#	include <CastorUtils/Memory.h>
-#endif
-
-#pragma message( "********************************************************************")
 
 #endif
 

@@ -32,7 +32,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API Viewport : public Renderable<Viewport, ViewportRenderer>
+	class C3D_API Viewport
 	{
 	public:
 		//! The  viewport projection types enumerator
@@ -41,8 +41,8 @@ namespace Castor3D
 		*/
 		typedef enum
 		{
-			pt3DView,	//!< 3 Dimensions projection type
-			pt2DView	//!< 2 Dimensions projection type
+			e3DView,	//!< 3 Dimensions projection type
+			e2DView	//!< 2 Dimensions projection type
 
 		} eTYPE;
 
@@ -74,7 +74,7 @@ namespace Castor3D
 		/**
 		 * Asks the renderer to apply the viewport
 		 */
-		virtual void Apply( eDRAW_TYPE p_displayMode);
+		virtual void Render( eDRAW_TYPE p_displayMode);
 		/**
 		 * Asks the direction from the renderer and returns it
 		 */
@@ -119,34 +119,6 @@ namespace Castor3D
 		inline void SetWindowWidth	( int p_ww)			{ m_windowWidth = p_ww; }
 		inline void SetWindowHeight	( int p_wh)			{ m_windowHeight = p_wh; }
 		//@}
-	};
-	//! The Viewport renderer
-	/*!
-	Renders a viewport : applies it's fov, sets the display width and height, ...
-	\author Sylvain DOREMUS
-	\version 0.1
-	\date 09/02/2010
-	*/
-	class CS3D_API ViewportRenderer : public Renderer<Viewport, ViewportRenderer>
-	{
-	public:
-		/**
-		 * Constructor
-		 */
-		ViewportRenderer()
-		{}
-		/**
-		 * Destructor
-		 */
-		virtual ~ViewportRenderer(){}
-		/**
-		 * Renders the viewport's transformations
-		 */
-		virtual void Apply( Viewport::eTYPE p_type) = 0;
-		/**
-		 * Retrieves the viewport direction and returns it
-		 */
-		virtual Point3r GetDirection( const Point<int, 2> & p_mouse)=0;
 	};
 }
 

@@ -12,9 +12,9 @@ TextureUnit :: TextureUnit()
 		m_textureInitialised( false),
 		m_textured( false),
 		m_mode( eNone),
-		m_primaryColour( 1, 1, 1, 1)
-{
-	m_environment = new TextureEnvironment();
+		m_primaryColour( 1, 1, 1, 1),
+		m_environment( new TextureEnvironment())
+{;
 }
 
 TextureUnit :: ~TextureUnit()
@@ -51,19 +51,19 @@ void TextureUnit :: Initialise()
 	}
 }
 
-void TextureUnit :: Apply( eDRAW_TYPE p_displayMode)
+void TextureUnit :: Render( eDRAW_TYPE p_displayMode)
 {
 	if (m_textured && m_textureInitialised)
 	{
-		m_pRenderer->Apply();
+		m_pRenderer->Render();
 	}
 }
 
-void TextureUnit :: Remove()
+void TextureUnit :: EndRender()
 {
 	if (m_textured && m_textureInitialised)
 	{
-		m_pRenderer->Remove();
+		m_pRenderer->EndRender();
 	}
 }
 

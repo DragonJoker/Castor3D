@@ -5,7 +5,7 @@
 #include "geometry/Module_Geometry.h"
 #include "scene/Module_Scene.h"
 #include "animation/AnimatedObject.h"
-#include "geometry/primitives/MovableObject.h"
+#include "main/MovableObject.h"
 
 using namespace Castor3D;
 

@@ -33,7 +33,7 @@ namespace Castor3D
 	\date 29/10/2010
 	*/
 	template <class _Renderable, class _Renderer>
-	class Renderer
+	class Renderer : public MemoryTraced<_Renderer>
 	{
 	protected:
 		typedef _Renderable * target_ptr;
@@ -45,6 +45,7 @@ namespace Castor3D
 		 * to be able to create a Renderer
 		 */
 		Renderer()
+			:	m_target( NULL)
 		{
 		}
 		/**

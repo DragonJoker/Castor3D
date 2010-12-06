@@ -20,6 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "../material/Module_Material.h"
 #include "../shader/Module_Shader.h"
+#include "../geometry/basic/Vertex.h"
 
 namespace Castor3D
 {
@@ -32,7 +33,7 @@ namespace Castor3D
 	\date 09/02/2010
 	*/
 	template <typename T>
-	class CS3D_API Buffer3D : public Castor::Resource::Buffer <T>
+	class C3D_API Buffer3D : public Castor::Resource::Buffer<T>
 	{
 	protected:
 		bool m_bToDelete;
@@ -42,6 +43,9 @@ namespace Castor3D
 		Buffer3D()
 			:	m_bAssigned( false),
 				m_bToDelete( false)
+		{
+		}
+		virtual ~Buffer3D()
 		{
 		}
 		/**
@@ -74,7 +78,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API VertexBuffer : public Buffer3D<real>
+	class C3D_API VertexBuffer : public Buffer3D<real>
 	{
 	public:
 		/**
@@ -95,7 +99,7 @@ namespace Castor3D
 	\date 09/02/2010
 	*/
 	template <typename T>
-	class CS3D_API VertexAttribsBuffer : public Buffer3D<T>
+	class C3D_API VertexAttribsBuffer : public Buffer3D<T>
 	{
 	public:
 		/**
@@ -117,7 +121,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API NormalsBuffer : public Buffer3D<real>
+	class C3D_API NormalsBuffer : public Buffer3D<real>
 	{
 	public:
 		/**
@@ -130,14 +134,14 @@ namespace Castor3D
 		virtual void Deactivate(){}
 	};
 
-	//! Texture buffer representation
+	//! Texture buffer representation, holds texture coordinates
 	/*!
 	Holds the texture coordinates of a submesh
 	\author Sylvain DOREMUS
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API TextureBuffer : public Buffer3D<real>
+	class C3D_API TextureBuffer : public Buffer3D<real>
 	{
 	public:
 		/**
@@ -154,6 +158,85 @@ namespace Castor3D
 		virtual void Deactivate()=0;
 	};
 
+	//! Vertex infos buffer representation
+	/*!
+	Holds the vertex, normals, texture and tangent coordinates of a submesh
+	\author Sylvain DOREMUS
+	\version 0.1
+	\date 09/02/2010
+	*/
+	class C3D_API VertexInfosBuffer : public Buffer3D<real>
+	{
+	public:
+		/**
+		 * Activation function, to activate the buffer and apply the normals in it
+		 */
+		virtual void Activate(){}
+		/**
+		 * De-activation function, to deactivate the buffer and hide it's content
+		 */
+		virtual void Deactivate(){}
+
+		virtual void AddVertex( Vertex & p_pVertex, bool p_bIncrease)
+		{
+			if (p_bIncrease)
+			{
+				IncreaseSize( Vertex::Size, true);
+			}
+
+			p_pVertex.LinkCoords( & m_buffer[m_filled]);
+			m_filled += Vertex::Size;
+		}
+	};
+
+	//! Texture buffer representation, holds texture data
+	/*!
+	Holds the texture coordinates of a submesh
+	\author Sylvain DOREMUS
+	\version 0.1
+	\date 09/02/2010
+	*/
+	class C3D_API TextureBufferObject : public Buffer3D<unsigned char>
+	{
+	protected:
+		Castor::Resource::PixelFormat  m_pixelFormat;
+		size_t m_uiSize;
+		const unsigned char * m_pBytes;
+
+	public:
+		TextureBufferObject()
+			:	m_pixelFormat( Castor::Resource::pxfR8G8B8A8),
+				m_uiSize( 0),
+				m_pBytes( NULL)
+		{}
+		~TextureBufferObject() { Cleanup(); }
+		/**
+		 * Activation function, void, use next
+		 */
+		virtual void Activate(){}
+		/**
+		 * Activation function, to activate the buffer and apply the textures in it
+		 */
+		virtual void Activate( PassPtr p_pass){}
+		/**
+		 * De-activation function, to deactivate the buffer and hide it's content
+		 */
+		virtual void Deactivate(){}
+		/**
+		* Initialisation function
+		*/
+		virtual void Initialise( const Castor::Resource::PixelFormat & p_format, size_t p_uiSize, const unsigned char * p_pBytes)
+		{
+			m_pixelFormat = p_format;
+			m_uiSize = p_uiSize;
+			m_pBytes = p_pBytes;
+		}
+		/**
+		* Cleanup function
+		*/
+		virtual void Cleanup(){}
+	};
+
 	//! 3D Buffer manager
 	/*!
 	Holds the buffers used by all the meshes and other things.
@@ -162,7 +245,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API BufferManager : public Castor::Theory::AutoSingleton <BufferManager>
+	class C3D_API BufferManager : public Castor::Theory::AutoSingleton <BufferManager>
 	{
 		friend class Castor::Theory::AutoSingleton <BufferManager>;
 
@@ -198,6 +281,11 @@ namespace Castor3D
 
 			void Update()
 			{
+				for (size_t i = 0 ; i < m_arrayBuffersToDelete.size() ; i++)
+				{
+					m_arrayBuffersToDelete[i]->Cleanup();
+				}
+
 				m_arrayBuffersToDelete.clear();
 			}
 
@@ -358,7 +446,7 @@ namespace Castor3D
 		template <typename T, typename _Ty>
 		static Templates::SharedPtr<_Ty> CreateBuffer()
 		{
-			Templates::SharedPtr<_Ty> l_pBuffer = new _Ty;
+			Templates::SharedPtr<_Ty> l_pBuffer = Templates::SharedPtr<_Ty>( new _Ty);
 
 			if ( ! _applyFunction( Templates::SharedPtr< Buffer3D<T> >( l_pBuffer), 0, & TBuffers<T>::AddBuffer))
 			{
@@ -375,7 +463,7 @@ namespace Castor3D
 		template <typename T, typename _Ty>
 		static Templates::SharedPtr<_Ty> CreateBuffer( const String & p_strArg)
 		{
-			Templates::SharedPtr<_Ty> l_pBuffer = new _Ty( p_strArg);
+			Templates::SharedPtr<_Ty> l_pBuffer = Templates::SharedPtr<_Ty>( new _Ty( p_strArg));
 
 			if ( ! _applyFunction( Templates::SharedPtr< Buffer3D<T> >( l_pBuffer), 0, & TBuffers<T>::AddBuffer))
 			{

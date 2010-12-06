@@ -2,7 +2,7 @@
 #define ___ShaderDialog___
 
 #include "../glsl/ScriptCompiler.h"
-#include "../glsl/UniformVariableDialog.h"
+#include "../glsl/FrameVariableDialog.h"
 
 namespace CastorShape
 {
@@ -33,7 +33,7 @@ namespace CastorShape
 		TextPanel * m_pVertexEditor;
 		TextPanel * m_pFragmentEditor;
 		TextPanel * m_pGeometryEditor;
-		wxListBox * m_pListUniformVariables;
+		wxListBox * m_pListFrameVariables;
 
 		wxButton * m_pButtonOk;
 		wxButton * m_pButtonCancel;
@@ -49,7 +49,7 @@ namespace CastorShape
 
 		ScriptCompiler * m_pCompiler;
 
-		C3DMap( int, Castor3D::UniformVariablePtr) m_mapUniformVariables;
+		C3DMap( int, Castor3D::FrameVariablePtr) m_mapFrameVariables;
 
 	public:
 		ShaderDialog( wxWindow * p_pParent, Castor3D::PassPtr p_pPass, const wxPoint & p_ptPosition=wxPoint( 0, 0), const wxSize p_ptSize=wxSize( 800, 600));

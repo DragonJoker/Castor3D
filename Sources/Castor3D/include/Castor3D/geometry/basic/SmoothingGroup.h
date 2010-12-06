@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_SmoothingGroup___
 #define ___C3D_SmoothingGroup___
 
+#include "../basic/Face.h"
+
 namespace Castor3D
 {
 	//! Smoothing groups handler class
@@ -27,11 +29,11 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API SmoothingGroup
+	class C3D_API SmoothingGroup : public MemoryTraced<SmoothingGroup>
 	{
 	public:
 		size_t m_idGroup;		//!< The group ID
-		FacePtrArray m_faces;	//!< The faces in the group
+		FaceArray m_faces;		//!< The faces in the group
 
 	public:
 		/**
@@ -49,7 +51,7 @@ namespace Castor3D
 		 *@param p_normals : [in] The faces normals for all vertex
 		 *@param p_tangents : [in] The faces tangents for all vertex
 		 */
-		void SetNormals( size_t p_nbVertex, const Point3rPtrArray & p_normals, const Point3rPtrArray & p_tangents);
+		void SetNormals( size_t p_nbVertex);
 	};
 }
 

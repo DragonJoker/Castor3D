@@ -48,7 +48,6 @@ CSRenderPanel :: CSRenderPanel( wxWindow * parent, wxWindowID p_id,
 		m_timer( NULL),
 		m_renderType( p_renderType),
 		m_lookAt( p_look),
-		m_renderWindow( NULL),
 		m_mainScene( p_scene),
 		m_mouseLeftDown( false),
 		m_mouseRightDown( false),
@@ -88,19 +87,20 @@ void CSRenderPanel :: SelectGeometry( GeometryPtr p_geometry)
 	g_mainFrame->SelectGeometry( p_geometry);
 }
 
-void CSRenderPanel :: SelectVertex( Point3rPtr p_vertex)
+void CSRenderPanel :: SelectVertex( Vertex * p_vertex)
 {
 	g_mainFrame->SelectVertex( p_vertex);
 }
 
 void CSRenderPanel :: _initialiseRenderWindow()
 {
-	Log::LogMessage( CU_T( "Initialising RenderWindow"));
+	Logger::LogMessage( CU_T( "Initialising RenderWindow"));
 	m_renderWindow = Root::GetSingletonPtr()->CreateRenderWindow( m_mainScene,
 																  (void *)GetHandle(),
 																  GetClientSize().x,
 																  GetClientSize().y,
 																  m_renderType,
+																  Castor::Resource::pxfR8G8B8A8,
 																  m_lookAt);
 	m_listener = m_renderWindow->GetListener();
 
@@ -110,7 +110,7 @@ void CSRenderPanel :: _initialiseRenderWindow()
 		m_timer->Start( 40);
 	}
 
-	Log::LogMessage( "RenderWindow Initialised");
+	Logger::LogMessage( CU_T( "RenderWindow Initialised"));
 }
 
 void CSRenderPanel :: _onSize( wxSizeEvent & event)
@@ -178,20 +178,20 @@ void CSRenderPanel :: _onKeyDown(wxKeyEvent& event)
 	int l_keyCode = event.GetKeyCode();
 	if (l_keyCode == 83)// s
 	{
-		if (m_renderWindow->GetNormalsMode() == nmFace)
+		if (m_renderWindow->GetNormalsMode() == eFace)
 		{
-			m_renderWindow->SetNormalsMode( nmSmoothGroups);
+			m_renderWindow->SetNormalsMode( eSmooth);
 		}
-		else if (m_renderWindow->GetNormalsMode() == nmSmoothGroups)
+		else if (m_renderWindow->GetNormalsMode() == eSmooth)
 		{
-			m_renderWindow->SetNormalsMode( nmFace);
+			m_renderWindow->SetNormalsMode( eFace);
 		}
 	}
 	else if (l_keyCode == 82)// s
 	{
 		m_renderWindow->GetCamera()->ResetPosition();
 		m_renderWindow->GetCamera()->ResetOrientation();
-		m_renderWindow->GetCamera()->Translate( 0.0f, 0.0f, -5.0f);
+		m_renderWindow->GetCamera()->GetParent()->Translate( 0.0f, 0.0f, -5.0f);
 	}
 	else if (l_keyCode == 78)// n
 	{
@@ -271,34 +271,34 @@ void CSRenderPanel :: _onMouseMove( wxMouseEvent & event)
 	m_oldY = m_y;
 	if (m_mouseLeftDown)
 	{
-		if (m_renderWindow->GetType() == Viewport::pt3DView)
+		if (m_renderWindow->GetType() == Viewport::e3DView)
 		{
-			m_renderWindow->GetCamera()->Yaw( m_deltaX * Angle::DegreesToRadians);
-			m_renderWindow->GetCamera()->Pitch( m_deltaY * Angle::DegreesToRadians);
+			m_renderWindow->GetCamera()->GetParent()->Yaw( m_deltaX * Angle::DegreesToRadians);
+			m_renderWindow->GetCamera()->GetParent()->Pitch( m_deltaY * Angle::DegreesToRadians);
 		}
 		else
 		{
-			m_renderWindow->GetCamera()->Roll( m_deltaX * Angle::DegreesToRadians);
+			m_renderWindow->GetCamera()->GetParent()->Roll( m_deltaX * Angle::DegreesToRadians);
 		}
 	}
 	else if (m_mouseRightDown)
 	{
-		m_renderWindow->GetCamera()->Translate( Point3r( -m_deltaX / 20.0f, m_deltaY / 20.0f, 0.0f));
+		m_renderWindow->GetCamera()->GetParent()->Translate( Point3r( -m_deltaX / 20.0f, m_deltaY / 20.0f, 0.0f));
 	}
 }
 
 void CSRenderPanel :: _onMouseWheel( wxMouseEvent & event)
 {
 	int l_wheelRotation = event.GetWheelRotation();
-	const Point3r & l_cameraPos = m_renderWindow->GetCamera()->GetPosition();
+	const Point3r & l_cameraPos = m_renderWindow->GetCamera()->GetParent()->GetPosition();
 
 	if (l_wheelRotation < 0)
 	{
-		m_renderWindow->GetCamera()->Translate( Point3r( 0.0f, 0.0f, (l_cameraPos[2] - 1.0f) / 10));
+		m_renderWindow->GetCamera()->GetParent()->Translate( Point3r( 0.0f, 0.0f, (l_cameraPos[2] - 1.0f) / 10));
 	}
 	else if (l_wheelRotation > 0)
 	{
-		m_renderWindow->GetCamera()->Translate( Point3r( 0.0f, 0.0f, (1.0f - l_cameraPos[2]) / 10));
+		m_renderWindow->GetCamera()->GetParent()->Translate( Point3r( 0.0f, 0.0f, (1.0f - l_cameraPos[2]) / 10));
 	}
 }
 
@@ -309,14 +309,14 @@ void CSRenderPanel :: _onMenuClose( wxCommandEvent & event)
 
 void CSRenderPanel :: _selectGeometry( int p_x, int p_y)
 {
-	Geometry l_geo( MeshPtr(), NULL, C3DEmptyString);
-	m_listener->PostEvent( new CSSelectObjectFrameEvent( m_mainScene, & l_geo, NULL, NULL, NULL, m_renderWindow->GetCamera(), this, p_x, p_y));
+	GeometryPtr l_geo( new Geometry());
+	m_listener->PostEvent( FrameEventPtr( new CSSelectObjectFrameEvent( m_mainScene, l_geo, SubmeshPtr(), FacePtr(), VertexPtr(), m_renderWindow->GetCamera(), this, p_x, p_y)));
 }
 
 void CSRenderPanel :: _selectVertex( int p_x, int p_y)
 {
-	Point3r l_vertex;
-	m_listener->PostEvent( new CSSelectObjectFrameEvent( m_mainScene, NULL, NULL, NULL, & l_vertex, m_renderWindow->GetCamera(), this, p_x, p_y));
+	VertexPtr l_vertex( new Vertex);
+	m_listener->PostEvent( FrameEventPtr( new CSSelectObjectFrameEvent( m_mainScene, GeometryPtr(), SubmeshPtr(), FacePtr(), l_vertex, m_renderWindow->GetCamera(), this, p_x, p_y)));
 }
 
 void CSRenderPanel :: _selectAll()

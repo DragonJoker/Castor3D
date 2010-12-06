@@ -14,14 +14,14 @@
 #include "geometry/basic/Face.h"
 #include "geometry/primitives/Geometry.h"
 #include "scene/Scene.h"
-#include "scene/SceneNode.h"
+#include "scene/NodeBase.h"
 #include "scene/SceneManager.h"
 
 
 using namespace Castor3D;
 
 Md2Importer::Md2Importer( const String & p_textureName)
-	:	ExternalImporter(),
+	:	ExternalImporter( eMD2),
 		m_textureName( p_textureName),
 		m_skins( NULL),
 		m_texCoords( NULL),
@@ -60,19 +60,19 @@ bool Md2Importer :: _import()
 
 	if (MeshManager::HasElement( l_meshName))
 	{
-		l_pMesh.reset( MeshManager::GetElementByName( l_meshName));
+		l_pMesh = MeshManager::GetElementByName( l_meshName);
 	}
 	else
 	{
-		l_pMesh.reset( MeshManager::CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom));
-		Log::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
+		l_pMesh = MeshManager::CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom);
+		Logger::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
 	}
 
 	m_pFile->Read<Md2Header>( m_header);
 
 	if (m_header.m_version != 8)
 	{
-		Log::LogMessage( CU_T( "Invalid file format (Version not 8): ") + m_fileName);
+		Logger::LogMessage( CU_T( "Invalid file format (Version not 8): ") + m_fileName);
 		MeshManager::DestroyElement( l_pMesh);
 		_cleanUp();
 		return false;
@@ -90,7 +90,7 @@ bool Md2Importer :: _import()
 
 	if ( ! m_textureName.empty())
 	{
-		TextureUnitPtr l_unit = new TextureUnit();
+		TextureUnitPtr l_unit( new TextureUnit());
 
 		if (File::FileExists( m_textureName))
 		{
@@ -110,15 +110,15 @@ bool Md2Importer :: _import()
 		l_submesh->SetMaterial( l_material);
 	}
 
-	l_pMesh->SetNormals();
+	l_pMesh->ComputeNormals();
 
 	MaterialManager::SetToInitialise( l_material);
 
 	m_pScene = SceneManager::GetSingleton().GetElementByName( "MainScene");
-	SceneNodePtr l_pNode = m_pScene->CreateSceneNode( l_name);
+	GeometryNodePtr l_pNode = m_pScene->CreateGeometryNode( l_name);
 
-	GeometryPtr l_pGeometry = new Geometry( l_pMesh, l_pNode, l_name);
-	Log::LogMessage( CU_T( "PlyImporter::_import - Geometry %s created"), l_name.c_str());
+	GeometryPtr l_pGeometry( new Geometry( l_pMesh, l_pNode, l_name));
+	Logger::LogMessage( CU_T( "PlyImporter::_import - Geometry %s created"), l_name.c_str());
 
 	m_geometries.insert( GeometryPtrStrMap::value_type( l_name, l_pGeometry));
 
@@ -159,7 +159,7 @@ void Md2Importer :: _readMD2Data()
 		Md2AliasFrame * l_frame = (Md2AliasFrame *) l_buffer;
 		m_frames[0].m_vertices = new Md2Triangle[m_header.m_numVertices];
 		m_pFile->ReadArray<char>( (char *)l_frame, m_header.m_frameSize);
-		strcpy( m_frames[0].m_strName, l_frame->m_name);
+		strcpy_s( m_frames[0].m_strName, 16, l_frame->m_name);
 
 		Md2Triangle * l_vertices = m_frames[0].m_vertices;
 
@@ -190,14 +190,12 @@ void Md2Importer :: _convertDataStructures( MeshPtr p_pMesh)
 		l_texVerts.push_back( Point2r( 2, m_texCoords[i].u / real( m_header.m_skinWidth), 1 - m_texCoords[i].v / real( m_header.m_skinHeight)));
 	}
 
-	FacePtr l_pFace;
-
 	for (int i = 0 ; i < m_header.m_numTriangles ; i++)
 	{
-		l_pFace = l_pSubmesh->AddFace( m_triangles[i].m_vertexIndices[0], m_triangles[i].m_vertexIndices[1], m_triangles[i].m_vertexIndices[2], 0);
-		l_pFace->SetTexCoordV1( l_texVerts[m_triangles[i].m_textureIndices[0]][0], l_texVerts[m_triangles[i].m_textureIndices[0]][1]);
-		l_pFace->SetTexCoordV2( l_texVerts[m_triangles[i].m_textureIndices[1]][0], l_texVerts[m_triangles[i].m_textureIndices[1]][1]);
-		l_pFace->SetTexCoordV3( l_texVerts[m_triangles[i].m_textureIndices[2]][0], l_texVerts[m_triangles[i].m_textureIndices[2]][1]);
+		Face & l_face = l_pSubmesh->AddFace( m_triangles[i].m_vertexIndices[0], m_triangles[i].m_vertexIndices[1], m_triangles[i].m_vertexIndices[2], 0);
+		l_face.SetVertexTexCoords( 0, l_texVerts[m_triangles[i].m_textureIndices[0]][0], l_texVerts[m_triangles[i].m_textureIndices[0]][1]);
+		l_face.SetVertexTexCoords( 1, l_texVerts[m_triangles[i].m_textureIndices[1]][0], l_texVerts[m_triangles[i].m_textureIndices[1]][1]);
+		l_face.SetVertexTexCoords( 2, l_texVerts[m_triangles[i].m_textureIndices[2]][0], l_texVerts[m_triangles[i].m_textureIndices[2]][1]);
 	}
 
 	p_pMesh->ComputeContainers();
@@ -207,7 +205,7 @@ void Md2Importer :: _convertDataStructures( MeshPtr p_pMesh)
 		p_pMesh->GetSubmesh( i)->GenerateBuffers();
 	}
 
-	p_pMesh->SetNormals();
+	p_pMesh->ComputeNormals();
 }
 
 void Md2Importer :: _cleanUp()

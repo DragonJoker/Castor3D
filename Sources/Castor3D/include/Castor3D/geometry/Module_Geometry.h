@@ -22,7 +22,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	class Pattern;
+	class Vertex;
+	template <typename T> class Pattern;
 	class Face;
 	class Graph;
 	class SmoothingGroup;
@@ -46,7 +47,12 @@ namespace Castor3D
 
 	struct FaceGroup;
 
-	typedef Templates::SharedPtr<Pattern>				PatternPtr;
+	typedef Pattern<Vertex>		VertexPattern;
+	typedef Pattern<Point3r>	Point3rPattern;
+
+	typedef Templates::SharedPtr<Vertex>				VertexPtr;
+	typedef Templates::SharedPtr<VertexPattern>			VertexPatternPtr;
+	typedef Templates::SharedPtr<Point3rPattern>		Point3rPatternPtr;
 	typedef Templates::SharedPtr<Face>					FacePtr;
 	typedef Templates::SharedPtr<Graph>					GraphPtr;
 	typedef Templates::SharedPtr<SmoothingGroup>		SmoothingGroupPtr;
@@ -72,11 +78,13 @@ namespace Castor3D
 	/*!
 	Actually, 2 Normals mode are implemented : Face and Smoothgroups
 	*/
-	typedef enum NormalsMode
+	typedef enum
 	{
-		nmFace			= 0,	//!< Face normals mode sets to each face vertex the same face normal
-		nmSmoothGroups	= 1		//!< Smoothgroup normals mode sets to each face vertex a normal computed from it's position relative to his neighbour's one
-	} NormalsMode;
+		eFace		= 0,	//!< Face normals mode sets to each face vertex the same face normal
+		eSmooth		= 1		//!< Smoothgroup normals mode sets to each face vertex a normal computed from it's position relative to his neighbour's one
+	}
+	eNORMALS_MODE;
+
 	//! The subdivision mode enumerator
 	/*!
 	Actually, 2 divisions mode, depending on which kind of face we consider : triangles or quads
@@ -92,25 +100,32 @@ namespace Castor3D
 		SMPlane
 	} SubdivisionMode;
 
-	typedef C3DVector(	PatternPtr)								PatternPtrArray;		//!< Pattern pointer array
+	typedef C3DVector(	Vertex)									VertexArray;			//!< Vertex array
+	typedef C3DVector(	VertexPtr)								VertexPtrArray;			//!< Vertex pointer array
+	typedef C3DList(	VertexPtr)								VertexPtrList;			//!< Vertex pointer list
 	typedef C3DVector(	Face)									FaceArray;				//!< Face array
 	typedef C3DVector(	FacePtr)								FacePtrArray;			//!< Face pointer array
 	typedef C3DVector(	FaceGroupPtr)							FaceGroupPtrArray;		//!< FaceGroup pointer array
 	typedef C3DVector(	SmoothingGroupPtr)						SmoothGroupPtrArray;	//!< Smoothing group pointer array
+	typedef C3DVector(	SmoothingGroup)							SmoothGroupArray;		//!< Smoothing group array
 	typedef C3DVector(	SubmeshPtr)								SubmeshPtrArray;		//!< Submesh pointer array
 	typedef C3DVector(	GeometryPtr)							GeometryPtrArray;		//!< Geometry pointer array
 	typedef C3DVector(	FaceEdgesPtr)							FaceEdgesPtrArray;
 	typedef C3DMap(		String,				MeshPtr)			MeshPtrStrMap;			//!< Mesh pointer array
 	typedef C3DMap(		String,				MovableObjectPtr)	MovableObjectPtrStrMap;	//!< MovableObject pointer map, sorted by name
 	typedef C3DMap(		String,				GeometryPtr)		GeometryPtrStrMap;		//!< Geometry pointer map, sorted by name
-	typedef C3DMap(		size_t,				SmoothingGroupPtr)	SmoothGroupPtrUIntMap;	//!< Smoothing group pointer array
-	typedef C3DMap(		String,				SmoothingGroupPtr)	SmoothGroupPtrStrMap;
+	typedef C3DMap(		size_t,				SmoothingGroup)		SmoothGroupUIntMap;		//!< Smoothing group int map
+	typedef C3DMap(		size_t,				SmoothingGroupPtr)	SmoothGroupPtrUIntMap;	//!< Smoothing group pointer int map
+	typedef C3DMap(		String,				SmoothingGroup)		SmoothGroupStrMap;		//!< Smoothing group string map
+	typedef C3DMap(		String,				SmoothingGroupPtr)	SmoothGroupPtrStrMap;	//!< Smoothing group pointer string map
 	typedef C3DMap(		VertexPtr,			EdgePtr)			EdgePtrMap;				//!< Map of edges, ordered by vertex
 	typedef C3DMap(		VertexPtr,			EdgePtrMap)			EdgePtrMapVPtrMap;
 	typedef C3DMap(		VertexPtr,			VertexPtr)			VertexPtrVPtrMap;
+	typedef C3DMap(		Vertex,				Vertex)				VertexVtxMap;
 	typedef C3DMap(		VertexPtr,			int)				IntVPtrMap;
 	typedef C3DMap(		SubdivisionMode,	SubdiviserPtr)		SubdiviserPtrModeMap;
 	typedef C3DMap(		String,				SubmeshPtr)			SubmeshPtrStrMap;
+	typedef C3DMap(		String,				int)				IntStrMap;
 }
 
 

@@ -52,14 +52,15 @@ namespace Castor3D
 	typedef Templates::SharedPtr<FrameEvent>		FrameEventPtr;
 	typedef Templates::SharedPtr<FrameListener>		FrameListenerPtr;
 
-	typedef C3DVector(	RenderWindowPtr)			RenderWindowArray;		//!< RenderWindow pointer array
-	typedef C3DVector(	RendererDriverPtr)			RendererDriverPtrArray;	//!< RendererDriver pointer array
-	typedef C3DMap(		size_t, RenderWindowPtr)	RenderWindowMap;		//!< RenderWindow pointer map, sorted by index
-	typedef C3DMap(		String, PluginPtr)			PluginStrMap;			//!< Plugin map, sorted by name
-	typedef C3DVector(	unsigned int)				UIntArray;				//!< unsigned int array
-	typedef C3DVector(	real)						FloatArray;				//!< real array
-	typedef C3DVector(	FrameEventPtr)				FrameEventArray;		//!< FrameEvent pointer array
-	typedef C3DVector(	FrameListenerPtr)			FrameListenerArray;		//!< FrameListener pointer array
+	typedef C3DVector(			RenderWindowPtr)	RenderWindowArray;			//!< RenderWindow pointer array
+	typedef C3DMap(		int,	RendererDriverPtr)	RendererDriverPtrIntMap;	//!< RendererDriver pointer map ordered by renderer type
+	typedef C3DMap(		size_t, RenderWindowPtr)	RenderWindowMap;			//!< RenderWindow pointer map, sorted by index
+	typedef C3DMap(		String, PluginPtr)			PluginStrMap;				//!< Plugin map, sorted by name
+	typedef C3DVector(			unsigned int)		UIntArray;					//!< unsigned int array
+	typedef C3DVector(			real)				FloatArray;					//!< real array
+	typedef C3DVector(			FrameEventPtr)		FrameEventArray;			//!< FrameEvent pointer array
+	typedef C3DVector(			FrameListenerPtr)	FrameListenerArray;			//!< FrameListener pointer array
+	typedef C3DMap(		int,	String)				StrIntMap;
 }
 
 #endif

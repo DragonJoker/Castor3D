@@ -17,20 +17,20 @@ CASTOR_INIT_SINGLETON( ScriptCompiler);
 
 #define COMPILE_ERROR_IN_BLOCK( p_desc, p_block)												\
 	_error();																					\
-	CASTOR_EXCEPTION(	"Compiler Error : [" + _getScriptFileName() + " @ L# "					\
-						+ ToString( p_block->m_lineNumBegin)					\
-						+ " ] -> " + p_desc )
+	CASTOR_EXCEPTION(	CU_T( "Compiler Error : [") + _getScriptFileName() + CU_T( " @ L# ")	\
+						+ ToString( p_block->m_lineNumBegin)									\
+						+ CU_T( " ] -> ") + p_desc );
 
 #define COMPILE_WARNING_IN_BLOCK( p_desc, p_block)												\
 	_warning();																					\
-	_log(	"Compiler Warning [ " + _getScriptFileName()										\
-							+ " @ L# " + ToString( p_block->m_lineNumBegin)	\
-							+ " ] -> " + p_desc );												\
+	Logger::LogWarning(	CU_T( "Compiler Warning [ ") + _getScriptFileName()						\
+							+ CU_T( " @ L# ") + ToString( p_block->m_lineNumBegin)				\
+							+ CU_T( " ] -> ") + p_desc );
 
 ScriptCompiler :: ScriptCompiler( const Path & p_path)
 	:	m_currentLine			(0),
 		m_path					(p_path),
-		m_currentFile		(NULL),
+		m_currentFile			(NULL),
 		m_currentUserFunction	(NULL),
 		m_currentStructure		(NULL)
 {
@@ -152,7 +152,7 @@ void ScriptCompiler :: Initialise()
 
 void ScriptCompiler :: _log( const String & p_message)
 {
-	Log::LogMessage( p_message);
+	Logger::LogMessage( p_message);
 }
 
 ScriptNode * ScriptCompiler :: GetProgramConstant( const String & p_variableName)
@@ -391,8 +391,8 @@ ScriptNode * ScriptCompiler :: _createUserVariable( const String & p_variableNam
 
 	if (l_node != NULL)
 	{
-		Log::LogMessage( "Warning : variable " + p_variableName + " is being redeclared : .\
-									Second declaration @ line " + ToString( _getCurrentLine()));
+		Logger::LogWarning( CU_T( "Variable ") + p_variableName + CU_T( " is being redeclared : .\
+									Second declaration @ line ") + ToString( _getCurrentLine()));
 		return l_node;
 	}
 
@@ -548,104 +548,199 @@ void ScriptCompiler :: _createOperator( const String & p_name, RawFunction * p_f
 
 void ScriptCompiler :: _initialiseOperatorMap()
 {
-	_createOperator( "+",	Ope_Add<real,int,real>, 				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
-	_createOperator( "+",	Ope_Add<real,real,int>, 				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
-	_createOperator( "+",	Ope_Add<int>,							EMVT_INT,			EMVT_INT,			EMVT_INT		);
-	_createOperator( "+",	Ope_Add<real>, 						EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
+#	define _createLOperators( p_strOpe, p_rawFunc)																									\
+	{																																				\
+		_createOperator( p_strOpe,	p_rawFunc<real,real,int>, 						EMVT_REAL,			EMVT_REAL,			EMVT_INT		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point2r, Point2r, real>,				EMVT_VEC2F,			EMVT_VEC2F,			EMVT_REAL		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point2r, Point2r, int>,				EMVT_VEC2F,			EMVT_VEC2F,			EMVT_INT		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point3r, Point3r, real>,				EMVT_VEC3F,			EMVT_VEC3F,			EMVT_REAL		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point3r, Point3r, int>,				EMVT_VEC3F,			EMVT_VEC3F,			EMVT_INT		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point4r, Point4r, real>,				EMVT_VEC4F,			EMVT_VEC4F,			EMVT_REAL		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point4r, Point4r, int>,				EMVT_VEC4F,			EMVT_VEC4F,			EMVT_INT		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point2i, Point2i, real>,				EMVT_VEC2I,			EMVT_VEC2I,			EMVT_REAL		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point2i, Point2i, int>,				EMVT_VEC2I,			EMVT_VEC2I,			EMVT_INT		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point3i, Point3i, real>,				EMVT_VEC3I,			EMVT_VEC3I,			EMVT_REAL		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point3i, Point3i, int>,				EMVT_VEC3I,			EMVT_VEC3I,			EMVT_INT		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point4i, Point4i, real>,				EMVT_VEC4I,			EMVT_VEC4I,			EMVT_REAL		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point4i, Point4i, int>,				EMVT_VEC4I,			EMVT_VEC4I,			EMVT_INT		);		\
+}
 
-	_createOperator( "=",	Ope_Set<int>,							EMVT_INT,			EMVT_INT,			EMVT_INT		);
-	_createOperator( "=",	Ope_Set<bool>,							EMVT_BOOL,			EMVT_BOOL,			EMVT_BOOL		);
-	_createOperator( "=",	Ope_Set<real>,							EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
-	_createOperator( "=",	Ope_Set<Point2r >,				EMVT_VEC2F,			EMVT_VEC2F,			EMVT_VEC2F		);
-	_createOperator( "=",	Ope_Set<Point3r >,				EMVT_VEC3F,			EMVT_VEC3F,			EMVT_VEC3F		);
-	_createOperator( "=",	Ope_Set<Point<real, 4> >,				EMVT_VEC4F,			EMVT_VEC4F,			EMVT_VEC4F		);
-	_createOperator( "=",	Ope_Set<Point<int, 2> >,					EMVT_VEC2I,			EMVT_VEC2I,			EMVT_VEC2I		);
-	_createOperator( "=",	Ope_Set<Point<int, 3> >,					EMVT_VEC3I,			EMVT_VEC3I,			EMVT_VEC3I		);
-	_createOperator( "=",	Ope_Set<Point<int, 4> >,					EMVT_VEC4I,			EMVT_VEC4I,			EMVT_VEC4I		);
-	_createOperator( "=",	Ope_Set<Point2Bool >,					EMVT_VEC2B,			EMVT_VEC2B,			EMVT_VEC2B		);
-	_createOperator( "=",	Ope_Set<Point3Bool >,					EMVT_VEC3B,			EMVT_VEC3B,			EMVT_VEC3B		);
-	_createOperator( "=",	Ope_Set<Point4Bool >,					EMVT_VEC4B,			EMVT_VEC4B,			EMVT_VEC4B		);
-	_createOperator( "=",	Ope_Set<Matrix2>,						EMVT_MAT2,			EMVT_MAT2,			EMVT_MAT2		);
-	_createOperator( "=",	Ope_Set<Matrix3>,						EMVT_MAT3,			EMVT_MAT3,			EMVT_MAT3		);
-	_createOperator( "=",	Ope_Set<Matrix4>,						EMVT_MAT4,			EMVT_MAT4,			EMVT_MAT4		);
+#	define _createLMOperators( p_strOpe, p_rawFunc)																								\
+	{																																			\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix2x2r, Matrix2x2r, int>,			EMVT_MAT2,			EMVT_MAT2,			EMVT_INT		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix2x2r, Matrix2x2r, real>,		EMVT_MAT2,			EMVT_MAT2,			EMVT_REAL		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix2x3r, Matrix2x3r, int>,			EMVT_MAT2x3,		EMVT_MAT2x3,		EMVT_INT		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix2x3r, Matrix2x3r, real>,		EMVT_MAT2x3,		EMVT_MAT2x3,		EMVT_REAL		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix2x4r, Matrix2x4r, int>,			EMVT_MAT2x4,		EMVT_MAT2x4,		EMVT_INT		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix2x4r, Matrix2x4r, real>,		EMVT_MAT2x4,		EMVT_MAT2x4,		EMVT_REAL		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix3x2r, Matrix3x2r, int>,			EMVT_MAT3x2,		EMVT_MAT3x2,		EMVT_INT		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix3x2r, Matrix3x2r, real>,		EMVT_MAT3x2,		EMVT_MAT3x2,		EMVT_REAL		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix3x3r, Matrix3x3r, int>,			EMVT_MAT3,			EMVT_MAT3,			EMVT_INT		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix3x3r, Matrix3x3r, real>,		EMVT_MAT3,			EMVT_MAT3,			EMVT_REAL		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix3x4r, Matrix3x4r, int>,			EMVT_MAT3x4,		EMVT_MAT3x4,		EMVT_INT		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix3x4r, Matrix3x4r, real>,		EMVT_MAT3x4,		EMVT_MAT3x4,		EMVT_REAL		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix4x2r, Matrix4x2r, int>,			EMVT_MAT4x2,		EMVT_MAT4x2,		EMVT_INT		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix4x2r, Matrix4x2r, real>,		EMVT_MAT4x2,		EMVT_MAT4x2,		EMVT_REAL		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix4x3r, Matrix4x3r, int>,			EMVT_MAT4x3,		EMVT_MAT4x3,		EMVT_INT		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix4x3r, Matrix4x3r, real>,		EMVT_MAT4x3,		EMVT_MAT4x3,		EMVT_REAL		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix4x4r, Matrix4x4r, int>,			EMVT_MAT4,			EMVT_MAT4,			EMVT_INT		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix4x4r, Matrix4x4r, real>,		EMVT_MAT4,			EMVT_MAT4,			EMVT_REAL		);	\
+	}
+
+#	define _createULOperators( p_strOpe, p_rawFunc)																									\
+	{																																				\
+		_createOperator( p_strOpe,	p_rawFunc<real,int,real>, 						EMVT_REAL,			EMVT_INT,			EMVT_REAL		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point2r, real, Point2r>,				EMVT_VEC2F,			EMVT_REAL,			EMVT_VEC2F		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point2r, int, Point2r>,				EMVT_VEC2F,			EMVT_INT,			EMVT_VEC2F		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point3r, real, Point3r>,				EMVT_VEC3F,			EMVT_REAL,			EMVT_VEC3F		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point3r, int, Point3r>,				EMVT_VEC3F,			EMVT_INT,			EMVT_VEC3F		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point4r, real, Point4r>,				EMVT_VEC4F,			EMVT_REAL,			EMVT_VEC4F		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point4r, int, Point4r>,				EMVT_VEC4F,			EMVT_INT,			EMVT_VEC4F		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point2i, real, Point2i>,				EMVT_VEC2I,			EMVT_REAL,			EMVT_VEC2I		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point2i, int, Point2i>,				EMVT_VEC2I,			EMVT_INT,			EMVT_VEC2I		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point3i, real, Point3i>,				EMVT_VEC3I,			EMVT_REAL,			EMVT_VEC3I		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point3i, int, Point3i>,				EMVT_VEC3I,			EMVT_INT,			EMVT_VEC3I		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point4i, real, Point4i>,				EMVT_VEC4I,			EMVT_REAL,			EMVT_VEC4I		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point4i, int, Point4i>,				EMVT_VEC4I,			EMVT_INT,			EMVT_VEC4I		);		\
+	}
+
+#	define _createULMOperators( p_strOpe, p_rawFunc)																							\
+	{																																			\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix2x2r, int, Matrix2x2r>,			EMVT_MAT2,			EMVT_INT,			EMVT_MAT2		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix2x2r, real, Matrix2x2r>,		EMVT_MAT2,			EMVT_REAL,			EMVT_MAT2		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix2x3r, int, Matrix2x3r>,			EMVT_MAT2x3,		EMVT_INT,			EMVT_MAT2x3		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix2x3r, real, Matrix2x3r>,		EMVT_MAT2x3,		EMVT_REAL,			EMVT_MAT2x3		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix2x4r, int, Matrix2x4r>,			EMVT_MAT2x4,		EMVT_INT,			EMVT_MAT2x4		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix2x4r, real, Matrix2x4r>,		EMVT_MAT2x4,		EMVT_REAL,			EMVT_MAT2x4		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix3x2r, int, Matrix3x2r>,			EMVT_MAT3x2,		EMVT_INT,			EMVT_MAT3x2		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix3x2r, real, Matrix3x2r>,		EMVT_MAT3x2,		EMVT_REAL,			EMVT_MAT3x2		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix3x3r, int, Matrix3x3r>,			EMVT_MAT3,			EMVT_INT,			EMVT_MAT3		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix3x3r, real, Matrix3x3r>,		EMVT_MAT3,			EMVT_REAL,			EMVT_MAT3		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix3x4r, int, Matrix3x4r>,			EMVT_MAT3x4,		EMVT_INT,			EMVT_MAT3x4		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix3x4r, real, Matrix3x4r>,		EMVT_MAT3x4,		EMVT_REAL,			EMVT_MAT3x4		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix4x2r, int, Matrix4x2r>,			EMVT_MAT4x2,		EMVT_INT,			EMVT_MAT4x2		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix4x2r, real, Matrix4x2r>,		EMVT_MAT4x2,		EMVT_REAL,			EMVT_MAT4x2		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix4x3r, int, Matrix4x3r>,			EMVT_MAT4x3,		EMVT_INT,			EMVT_MAT4x3		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix4x3r, real, Matrix4x3r>,		EMVT_MAT4x3,		EMVT_REAL,			EMVT_MAT4x3		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix4x4r, int, Matrix4x4r>,			EMVT_MAT4,			EMVT_INT,			EMVT_MAT4		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix4x4r, real, Matrix4x4r>,		EMVT_MAT4,			EMVT_REAL,			EMVT_MAT4		);	\
+	}
+
+#	define _createGenericOperators( p_strOpe, p_rawFunc)																			\
+	{																																\
+		_createOperator( p_strOpe,	p_rawFunc<int>,					EMVT_INT,			EMVT_INT,			EMVT_INT		);		\
+		_createOperator( p_strOpe,	p_rawFunc<bool>,				EMVT_BOOL,			EMVT_BOOL,			EMVT_BOOL		);		\
+		_createOperator( p_strOpe,	p_rawFunc<real>, 				EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point2r>,				EMVT_VEC2F,			EMVT_VEC2F,			EMVT_VEC2F		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point3r>,				EMVT_VEC3F,			EMVT_VEC3F,			EMVT_VEC3F		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point4r>,				EMVT_VEC4F,			EMVT_VEC4F,			EMVT_VEC4F		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point2i>,				EMVT_VEC2I,			EMVT_VEC2I,			EMVT_VEC2I		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point3i>,				EMVT_VEC3I,			EMVT_VEC3I,			EMVT_VEC3I		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point4i>,				EMVT_VEC4I,			EMVT_VEC4I,			EMVT_VEC4I		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point2b>,				EMVT_VEC2B,			EMVT_VEC2B,			EMVT_VEC2B		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point3b>,				EMVT_VEC3B,			EMVT_VEC3B,			EMVT_VEC3B		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point4b>,				EMVT_VEC4B,			EMVT_VEC4B,			EMVT_VEC4B		);		\
+	}
+
+#	define _createGenericMOperators( p_strOpe, p_rawFunc)																		\
+	{																															\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix2x2r>,			EMVT_MAT2,			EMVT_MAT2,			EMVT_MAT2		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix2x3r>,			EMVT_MAT2x3,		EMVT_MAT2x3,		EMVT_MAT2x3		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix2x4r>,			EMVT_MAT2x4,		EMVT_MAT2x4,		EMVT_MAT2x4		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix3x2r>,			EMVT_MAT3x2,		EMVT_MAT3x2,		EMVT_MAT3x2		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix3x3r>,			EMVT_MAT3,			EMVT_MAT3,			EMVT_MAT3		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix3x4r>,			EMVT_MAT3x4,		EMVT_MAT3x4,		EMVT_MAT3x4		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix4x2r>,			EMVT_MAT4x2,		EMVT_MAT4x2,		EMVT_MAT4x2		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix4x3r>,			EMVT_MAT4x3,		EMVT_MAT4x3,		EMVT_MAT4x3		);	\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix4x4r>,			EMVT_MAT4,			EMVT_MAT4,			EMVT_MAT4		);	\
+	}
+
+#	define _createGenericCompare( p_strOpe, p_rawFunc)																				\
+	{																																\
+		_createOperator( p_strOpe,	p_rawFunc<int>,					EMVT_BOOL,			EMVT_INT,			EMVT_INT		);		\
+		_createOperator( p_strOpe,	p_rawFunc<bool>,				EMVT_BOOL,			EMVT_BOOL,			EMVT_BOOL		);		\
+		_createOperator( p_strOpe,	p_rawFunc<real>, 				EMVT_BOOL,			EMVT_REAL,			EMVT_REAL		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point2r>,				EMVT_BOOL,			EMVT_VEC2F,			EMVT_VEC2F		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point3r>,				EMVT_BOOL,			EMVT_VEC3F,			EMVT_VEC3F		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point4r>,				EMVT_BOOL,			EMVT_VEC4F,			EMVT_VEC4F		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point2i>,				EMVT_BOOL,			EMVT_VEC2I,			EMVT_VEC2I		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point3i>,				EMVT_BOOL,			EMVT_VEC3I,			EMVT_VEC3I		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point4i>,				EMVT_BOOL,			EMVT_VEC4I,			EMVT_VEC4I		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point2b>,				EMVT_BOOL,			EMVT_VEC2B,			EMVT_VEC2B		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point3b>,				EMVT_BOOL,			EMVT_VEC3B,			EMVT_VEC3B		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Point4b>,				EMVT_BOOL,			EMVT_VEC4B,			EMVT_VEC4B		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix2x2r>,			EMVT_BOOL,			EMVT_MAT2,			EMVT_MAT2		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix2x3r>,			EMVT_BOOL,			EMVT_MAT2x3,		EMVT_MAT2x3		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix2x4r>,			EMVT_BOOL,			EMVT_MAT2x4,		EMVT_MAT2x4		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix3x2r>,			EMVT_BOOL,			EMVT_MAT3x2,		EMVT_MAT3x2		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix3x3r>,			EMVT_BOOL,			EMVT_MAT3,			EMVT_MAT3		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix3x4r>,			EMVT_BOOL,			EMVT_MAT3x4,		EMVT_MAT3x4		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix4x2r>,			EMVT_BOOL,			EMVT_MAT4x2,		EMVT_MAT4x2		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix4x3r>,			EMVT_BOOL,			EMVT_MAT4x3,		EMVT_MAT4x3		);		\
+		_createOperator( p_strOpe,	p_rawFunc<Matrix4x4r>,			EMVT_BOOL,			EMVT_MAT4,			EMVT_MAT4		);		\
+	}
+
+#	define _createOperators( p_strOpe, p_rawFunc)			\
+	{														\
+		_createGenericOperators( p_strOpe, p_rawFunc);		\
+		_createLOperators( p_strOpe, p_rawFunc);			\
+		_createULOperators( p_strOpe, p_rawFunc);			\
+	}
+
+#	define _createMOperators( p_strOpe, p_rawFunc)			\
+	{														\
+		_createGenericMOperators( p_strOpe, p_rawFunc);		\
+		_createLMOperators( p_strOpe, p_rawFunc);			\
+		_createULMOperators( p_strOpe, p_rawFunc);			\
+	}
+
+#	define _createLogicalOperators( p_strOpe, p_rawFunc)	\
+	{														\
+		_createGenericOperators( p_strOpe, p_rawFunc);		\
+		_createLOperators( p_strOpe, p_rawFunc);			\
+	}
+
+#	define _createLogicalMOperators( p_strOpe, p_rawFunc)	\
+	{														\
+		_createGenericMOperators( p_strOpe, p_rawFunc);		\
+		_createLMOperators( p_strOpe, p_rawFunc);			\
+	}
+
+	_createGenericOperators( "=", Ope_Set);
+	_createGenericMOperators( "=", Ope_Set);
 	_createOperator( "=",	Ope_Set<NodeValueBaseArray>,			EMVT_ARRAY,			EMVT_ARRAY,			EMVT_ARRAY		);
 	_createOperator( "=",	Ope_SetNull<StructInstance *>,			EMVT_STRUCT,		EMVT_STRUCT,		EMVT_NULLVALUE	);
 	_createOperator( "=",	Ope_Set<StructInstance *>,				EMVT_STRUCT,		EMVT_STRUCT,		EMVT_STRUCT		);
 
 	_createOperator( "=",	Ope_SetNull<StructInstance *>,			EMVT_STRUCT,		EMVT_STRUCT,		EMVT_NULLVALUE	);
 
-	_createOperator( "==",	Ope_Compare<int>,						EMVT_BOOL,			EMVT_INT,			EMVT_INT		);
-	_createOperator( "==",	Ope_Compare<bool>,						EMVT_BOOL,			EMVT_BOOL,			EMVT_BOOL		);
-	_createOperator( "==",	Ope_Compare<real>,						EMVT_BOOL,			EMVT_REAL,			EMVT_REAL		);
-	_createOperator( "==",	Ope_Compare<Point2r >,			EMVT_BOOL,			EMVT_VEC2F,			EMVT_VEC2F		);
-	_createOperator( "==",	Ope_Compare<Point3r >,			EMVT_BOOL,			EMVT_VEC3F,			EMVT_VEC3F		);
-	_createOperator( "==",	Ope_Compare<Point<real, 4> >,			EMVT_BOOL,			EMVT_VEC4F,			EMVT_VEC4F		);
-	_createOperator( "==",	Ope_Compare<Point<int, 2> >,				EMVT_BOOL,			EMVT_VEC2I,			EMVT_VEC2I		);
-	_createOperator( "==",	Ope_Compare<Point<int, 3> >,				EMVT_BOOL,			EMVT_VEC3I,			EMVT_VEC3I		);
-	_createOperator( "==",	Ope_Compare<Point<int, 4> >,				EMVT_BOOL,			EMVT_VEC4I,			EMVT_VEC4I		);
-	_createOperator( "==",	Ope_Compare<Point2Bool >,				EMVT_BOOL,			EMVT_VEC2B,			EMVT_VEC2B		);
-	_createOperator( "==",	Ope_Compare<Point3Bool >,				EMVT_BOOL,			EMVT_VEC3B,			EMVT_VEC3B		);
-	_createOperator( "==",	Ope_Compare<Point4Bool >,				EMVT_BOOL,			EMVT_VEC4B,			EMVT_VEC4B		);
-	_createOperator( "==",	Ope_Compare<Matrix2>,					EMVT_BOOL,			EMVT_MAT2,			EMVT_MAT2		);
-	_createOperator( "==",	Ope_Compare<Matrix3>,					EMVT_BOOL,			EMVT_MAT3,			EMVT_MAT3		);
-	_createOperator( "==",	Ope_Compare<Matrix4>,					EMVT_BOOL,			EMVT_MAT4,			EMVT_MAT4		);
+	_createGenericCompare( "==", Ope_Compare);
 	_createOperator( "==",	Ope_Compare<NodeValueBaseArray>,		EMVT_BOOL,			EMVT_ARRAY,			EMVT_ARRAY		);
-
 	_createOperator( "==",	Ope_CompareNull<StructInstance*>,		EMVT_BOOL,			EMVT_STRUCT,		EMVT_NULLVALUE	);
 
-	_createOperator( "!=",	Ope_IsDiff<int>,						EMVT_BOOL,			EMVT_INT,			EMVT_INT		);
-	_createOperator( "!=",	Ope_IsDiff<bool>,						EMVT_BOOL,			EMVT_BOOL,			EMVT_BOOL		);
-	_createOperator( "!=",	Ope_IsDiff<real>,						EMVT_BOOL,			EMVT_REAL,			EMVT_REAL		);
-	_createOperator( "!=",	Ope_IsDiff<Point2r >,				EMVT_BOOL,			EMVT_VEC2F,			EMVT_VEC2F		);
-	_createOperator( "!=",	Ope_IsDiff<Point3r >,				EMVT_BOOL,			EMVT_VEC3F,			EMVT_VEC3F		);
-	_createOperator( "!=",	Ope_IsDiff<Point<real, 4> >,				EMVT_BOOL,			EMVT_VEC4F,			EMVT_VEC4F		);
-	_createOperator( "!=",	Ope_IsDiff<Point<int, 2> >,				EMVT_BOOL,			EMVT_VEC2I,			EMVT_VEC2I		);
-	_createOperator( "!=",	Ope_IsDiff<Point<int, 3> >,				EMVT_BOOL,			EMVT_VEC3I,			EMVT_VEC3I		);
-	_createOperator( "!=",	Ope_IsDiff<Point<int, 4> >,				EMVT_BOOL,			EMVT_VEC4I,			EMVT_VEC4I		);
-	_createOperator( "!=",	Ope_IsDiff<Point2Bool >,				EMVT_BOOL,			EMVT_VEC2B,			EMVT_VEC2B		);
-	_createOperator( "!=",	Ope_IsDiff<Point3Bool >,				EMVT_BOOL,			EMVT_VEC3B,			EMVT_VEC3B		);
-	_createOperator( "!=",	Ope_IsDiff<Point4Bool >,				EMVT_BOOL,			EMVT_VEC4B,			EMVT_VEC4B		);
-	_createOperator( "!=",	Ope_IsDiff<Matrix2>,					EMVT_BOOL,			EMVT_MAT2,			EMVT_MAT2		);
-	_createOperator( "!=",	Ope_IsDiff<Matrix3>,					EMVT_BOOL,			EMVT_MAT3,			EMVT_MAT3		);
-	_createOperator( "!=",	Ope_IsDiff<Matrix4>,					EMVT_BOOL,			EMVT_MAT4,			EMVT_MAT4		);
+	_createGenericCompare( "!=", Ope_IsDiff);
 	_createOperator( "!=",	Ope_IsDiff<NodeValueBaseArray>,			EMVT_BOOL,			EMVT_ARRAY,			EMVT_ARRAY		);
-
 	_createOperator( "!=",	Ope_IsDiffNull<StructInstance*>,		EMVT_BOOL,			EMVT_STRUCT,		EMVT_NULLVALUE	);
 
-	_createOperator( "+=",	Ope_AddEqual<int,real>,				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
-	_createOperator( "+=",	Ope_AddEqual<real,int>,				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
-	_createOperator( "+=",	Ope_AddEqual<int,int>,					EMVT_INT,			EMVT_INT,			EMVT_INT		);
-	_createOperator( "+=",	Ope_AddEqual<real,real>,				EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
+	_createOperators(		"+",	Ope_Add);
+	_createOperators(		"-",	Ope_Sub);
+	_createMOperators(		"+",	Ope_Add);
+	_createMOperators(		"-",	Ope_Sub);
+	_createOperators(		"/",	Ope_Div);
+	_createLMOperators(		"/",	Ope_Div);
+	_createULMOperators(	"/",	Ope_Div);
+	_createOperators(		"*",	Ope_Mul);
+	_createLMOperators(		"*",	Ope_Mul);
+	_createULMOperators(	"*",	Ope_Mul);
 
-	_createOperator( "-",	Ope_Sub<real,int,real>,				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
-	_createOperator( "-",	Ope_Sub<real,real,int>,				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
-	_createOperator( "-",	Ope_Sub<int>,							EMVT_INT,			EMVT_INT,			EMVT_INT		);
-	_createOperator( "-",	Ope_Sub<real>,							EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
-
-	_createOperator( "-=",	Ope_SubEqual<int,real>,				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
-	_createOperator( "-=",	Ope_SubEqual<real,int>,				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
-	_createOperator( "-=",	Ope_SubEqual<int,int>,					EMVT_INT,			EMVT_INT,			EMVT_INT		);
-	_createOperator( "-=",	Ope_SubEqual<real,real>,				EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
-
-	_createOperator( "/",	Ope_Div<real,int,real>,				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
-	_createOperator( "/",	Ope_Div<real,real,int>,				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
-	_createOperator( "/",	Ope_Div<int>,							EMVT_INT,			EMVT_INT,			EMVT_INT		);
-	_createOperator( "/",	Ope_Div<real>,							EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
-
-	_createOperator( "/=",	Ope_DivEqual<int,real>,				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
-	_createOperator( "/=",	Ope_DivEqual<real,int>,				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
-	_createOperator( "/=",	Ope_DivEqual<int,int>,					EMVT_INT,			EMVT_INT,			EMVT_INT		);
-	_createOperator( "/=",	Ope_DivEqual<real,real>,				EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
-
-	_createOperator( "*",	Ope_Mul<real,int,real>,				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
-	_createOperator( "*",	Ope_Mul<real,real,int>,				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
-	_createOperator( "*",	Ope_Mul<int>,							EMVT_INT,			EMVT_INT,			EMVT_INT		);
-	_createOperator( "*",	Ope_Mul<real>,							EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
-
-	_createOperator( "*=",	Ope_MulEqual<int,real>,				EMVT_REAL,			EMVT_INT,			EMVT_REAL		);
-	_createOperator( "*=",	Ope_MulEqual<real,int>,				EMVT_REAL,			EMVT_REAL,			EMVT_INT		);
-	_createOperator( "*=",	Ope_MulEqual<int,int>,					EMVT_INT,			EMVT_INT,			EMVT_INT		);
-	_createOperator( "*=",	Ope_MulEqual<real,real>,				EMVT_REAL,			EMVT_REAL,			EMVT_REAL		);
+	_createLogicalOperators(	"+=",	Ope_AddEqual);
+	_createLogicalMOperators(	"+=",	Ope_AddEqual);
+	_createLogicalOperators(	"-=",	Ope_SubEqual);
+	_createLogicalMOperators(	"-=",	Ope_SubEqual);
+	_createLogicalOperators(	"/=",	Ope_DivEqual);
+	_createLMOperators(			"/=",	Ope_DivEqual);
+	_createLogicalOperators(	"*=",	Ope_MulEqual);
+	_createLMOperators(			"*=",	Ope_MulEqual);
 
 	_createOperator( "||",	Ope_Or,									EMVT_BOOL, 			EMVT_BOOL,			EMVT_BOOL		);
 	_createOperator( "&&",	Ope_And,								EMVT_BOOL, 			EMVT_BOOL,			EMVT_BOOL		);
@@ -682,6 +777,18 @@ void ScriptCompiler :: _initialiseOperatorMap()
 	_createOperator( "[]",	Vec2i_OperatorArray,					EMVT_REAL, 			EMVT_VEC2I,			EMVT_INT		);
 	_createOperator( "[]",	Vec3i_OperatorArray,					EMVT_REAL, 			EMVT_VEC3I,			EMVT_INT		);
 	_createOperator( "[]",	Vec4i_OperatorArray,					EMVT_REAL, 			EMVT_VEC4I,			EMVT_INT		);
+
+#	undef _createLOperators
+#	undef _createLMOperators
+#	undef _createULOperators
+#	undef _createULMOperators
+#	undef _createGenericOperators
+#	undef _createGenericMOperators
+#	undef _createLogicalOperators
+#	undef _createLogicalMOperators
+#	undef _createOperators
+#	undef _createMOperators
+#	undef _createGenericCompare
 }
 
 void ScriptCompiler :: _initialiseVariableMap()
@@ -717,7 +824,7 @@ void ScriptCompiler :: _initialiseFunctionMap()
 		_creaFunc(	"round",						Mth_Round,						EMVT_REAL,		EMVT_REAL,													EMVT_NULL);
 		_creaFunc(	"max",							Mth_Min,						EMVT_REAL,		EMVT_REAL,		EMVT_REAL,									EMVT_NULL);
 		_creaFunc(	"min",							Mth_Max,						EMVT_REAL,		EMVT_REAL,		EMVT_REAL,									EMVT_NULL);
-		_creaFunc(	"minmax",						Mth_Minmax,						EMVT_REAL,		EMVT_REAL,		EMVT_REAL,		EMVT_REAL,					EMVT_NULL);
+		_creaFunc(	"clamp",						Mth_Clamp,						EMVT_REAL,		EMVT_REAL,		EMVT_REAL,		EMVT_REAL,					EMVT_NULL);
 
 		_creaFunc(	"sin",							Mth_Sin,						EMVT_REAL,		EMVT_REAL,													EMVT_NULL);
 		_creaFunc(	"cos",							Mth_Cos,						EMVT_REAL,		EMVT_REAL,													EMVT_NULL);

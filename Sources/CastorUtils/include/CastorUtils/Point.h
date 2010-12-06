@@ -19,7 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___Castor_Point___
 
 #include "File.h"
-#include <cstdarg>
 
 namespace Castor
 {	namespace Math
@@ -45,499 +44,131 @@ namespace Castor
 		typedef const Point<value_type, Count> *	const_point_pointer;
 		typedef Templates::Value<value_type>		value;
 
-	public:
-		value_type m_coords[Count];
+	private:
+		bool m_bOwnCoords;
 
 	public:
-		/**
-		 * Constructor from T array
-		 */
-		Point( const_pointer p_coords = NULL)
-		{
-			if (p_coords == NULL)
-			{
-				for (size_t i = 0 ; i < Count ; i++)
-				{
-					value::init( m_coords[i]);
-				}
-			}
-			else
-			{
-				for (size_t i = 0 ; i < Count ; i++)
-				{
-					value::assign( m_coords[i], p_coords[i]);
-				}
-			}
-		}
-		/**
-		 * Constructor from at least one coord
-		 */
-		Point( value_type p_vA)
-		{
-			if (Count >= 1)
-			{
-				value::assign( m_coords[0], p_vA);
+		value_type * m_coords;
 
-				for (size_t i = 1 ; i < Count ; i++)
-				{
-					value::init( m_coords[i]);
-				}
-			}
-		}
+	public:
+		Point( const_pointer p_coords = NULL);
+		Point( value_type * p_pValues);
+		Point( const value_type & p_vA);
+		Point( const value_type & p_vA, const value_type & p_vB);
+		Point( const value_type & p_vA, const value_type & p_vB, const value_type & p_vC);
+		Point( const value_type & p_vA, const value_type & p_vB, const value_type & p_vC, const value_type & p_vD);
+		Point( const_point_reference p_point);
+		virtual ~Point();
 		/**
-		 * Constructor from at least one coord
+		 * operators
 		 */
-		Point( value_type p_vA, value_type p_vB)
-		{
-			if (Count >= 2)
-			{
-				value::assign( m_coords[0], p_vA);
-				value::assign( m_coords[1], p_vB);
+		point_reference operator +=( const_point_reference p_pt);
+		point_reference operator +=( const_pointer p_coords);
+		point_reference operator -=( const_point_reference p_pt);
+		point_reference operator -=( const_pointer p_coords);
+		point_reference operator *=( const_point_reference p_pt);
+		point_reference operator *=( const_pointer p_coords);
+		point_reference operator *=( const_reference p_value);
+		point_reference operator /=( const_reference p_value);
+		point_reference operator /=( const_point_reference p_value);
+		point_reference operator = ( const_point_reference p_pt);
+		point 			operator + ( const_point_reference p_pt)const;
+		point 			operator + ( const_reference p_value)const;
+		point 			operator - ( const_point_reference p_pt)const;
+		point 			operator - ( const_reference p_value)const;
+		point 			operator * ( const_point_reference p_pt)const;
+		point 			operator * ( const_reference p_value)const;
+		point 			operator / ( const_reference p_value)const;
+		point 			operator / ( const_point_reference p_value)const;
+		bool			operator ==( const_point_reference p_pt)const;
+		bool			operator !=( const_point_reference p_pt)const;
+		point			operator ^ ( const_point_reference p_vertex)const;
+		std::ostream & 	operator <<( std::ostream & l_streamOut);
+		std::istream & 	operator >>( std::istream & l_streamIn);
+		/**
+		 * Operations
+		 */
+		void 			Reverse();
+		void 			Normalise();
+		point 			GetNormalised()const;
+		value_type 		Dot( const_point_reference p_vertex)const;
+		value_type 		GetSquaredLength()const;
+		real 			GetLength()const;
+		real 			GetCosTheta( const_point_reference p_vector)const;
+		virtual bool 	Write( Utils::File & p_file)const;
+		virtual bool 	Read( Utils::File & p_file);
+		/**
+		 * Accessors
+		 */
+		void 			LinkCoords( void * p_pCoords);
+		void 			UnlinkCoords();
+		void 			ToValues( value_type * p_pResult)const;
+		const_reference	operator[]( size_t p_pos)const;
+		reference		operator[]( size_t p_pos);
+		pointer			ptr();
+		const_pointer	const_ptr()const;
 
-				for (size_t i = 2 ; i < Count ; i++)
-				{
-					value::init( m_coords[i]);
-				}
-			}
-		}
-		/**
-		 * Constructor from at least one coord
-		 */
-		Point( value_type p_vA, value_type p_vB, value_type p_vC)
-		{
-			if (Count >= 3)
-			{
-				value::assign( m_coords[0], p_vA);
-				value::assign( m_coords[1], p_vB);
-				value::assign( m_coords[2], p_vC);
-
-				for (size_t i = 3 ; i < Count ; i++)
-				{
-					value::init( m_coords[i]);
-				}
-			}
-		}
-		/**
-		 * Constructor from at least one coord
-		 */
-		Point( value_type p_vA, value_type p_vB, value_type p_vC, value_type p_vD)
-		{
-			if (Count >= 4)
-			{
-				value::assign( m_coords[0], p_vA);
-				value::assign( m_coords[1], p_vB);
-				value::assign( m_coords[2], p_vC);
-				value::assign( m_coords[3], p_vD);
-
-				for (size_t i = 4 ; i < Count ; i++)
-				{
-					value::init( m_coords[i]);
-				}
-			}
-		}
-		/**
-		 * Constructor from another point
-		 */
-		Point( const_point_reference p_point)
+		template <typename _Ty>
+		inline Point <T, Count> operator +=( const Point<_Ty, Count> & p_pt)
 		{
 			for (size_t i = 0 ; i < Count ; i++)
 			{
-				value::assign( m_coords[i], p_point[i]);
+				value::ass_add( m_coords[i], value_type( p_pt[i]));
 			}
-		}
-		/**
-		* Constructor from the difference between second and first argument
-		*
-		Point( const_point_reference p_v1, const_point_reference p_v2)
-		{
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				value::assign( m_coords[i], value::substract( p_v2[i], p_v1[i]));
-			}
-		}
-		/**
-		 * Constructor from at least one coord
-		 */
-		void ToValues( value_type * a, ...)const
-		{
-			if (Count >= 1)
-			{
-				value::assign( * a, m_coords[0]);
 
-				va_list l_list;
-				va_start( l_list, a);
-
-				for (size_t i = 1 ; i < Count ; i++)
-				{
-					value::assign( (* va_arg( l_list, value_type *)), m_coords[i]);
-				}
-
-				va_end( l_list);
-			}
+			return * this;
 		}
-		/**
-		 * += operators
-		 */
-		inline void operator +=( const_point_reference p_pt)
+		template <size_t _Count>
+		inline Point <T, Count> operator +=( const Point<value_type, _Count> & p_pt)
 		{
-			for (size_t i = 0 ; i < Count ; i++)
+			for (size_t i = 0 ; i < std::min<size_t>( Count, _Count) ; i++)
 			{
 				value::ass_add( m_coords[i], p_pt[i]);
 			}
+
+			return * this;
 		}
-		inline void operator +=( pointer p_coords)
+		template <typename _Ty, size_t _Count>
+		inline Point <T, Count> operator +=( const Point<_Ty, _Count> & p_pt)
 		{
-			for (size_t i = 0 ; i < Count ; i++)
+			for (size_t i = 0 ; i < std::min<size_t>( Count, _Count) ; i++)
 			{
-				value::ass_add( m_coords[i], p_coords[i]);
-			}
-		}
-		/**
-		 * -= operators
-		 */
-		inline void operator -=( const_point_reference p_pt)
-		{
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				value::ass_substract( m_coords[i], p_pt[i]);
-			}
-		}
-		inline void operator -=( pointer p_coords)
-		{
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				value::ass_substract( m_coords[i], p_coords[i]);
-			}
-		}
-		/**
-		 * *= operators
-		 */
-		inline void operator *=( const_point_reference p_pt)
-		{
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				value::ass_multiply( m_coords[i], p_pt[i]);
-			}
-		}
-		inline void operator *=( pointer p_coords)
-		{
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				value::ass_multiply( m_coords[i], p_coords[i]);
-			}
-		}
-		inline void operator *=( value_type p_value)
-		{
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				value::ass_multiply( m_coords[i], p_value);
-			}
-		}
-		/**
-		 * /= operators
-		 */
-		inline void operator /=( value_type p_value)
-		{
-			if ( ! value::is_null( p_value))
-			{
-				for (size_t i = 0 ; i < Count ; i++)
-				{
-					value::ass_divide( m_coords[i], p_value);
-				}
-			}
-		}
-		/**
-		 * = operators
-		 */
-		inline point operator =( const_point_reference p_pt)
-		{
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				value::assign( m_coords[i], p_pt[i]);
+				value::ass_add( m_coords[i], value_type( p_pt[i]));
 			}
 
-			return *this;
-		}
-		/**
-		 * + operators
-		 */
-		inline point operator +( const_point_reference p_pt)const
-		{
-			point l_ptReturn;
-
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				value::assign( l_ptReturn[i], value::add( m_coords[i], p_pt[i]));
-			}
-
-			return l_ptReturn;
-		}
-		inline point operator +( value_type p_value)const
-		{
-			point l_ptReturn;
-
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				value::assign( l_ptReturn[i], value::add( m_coords[i], p_value));
-			}
-
-			return l_ptReturn;
-		}
-		/**
-		 * - operators
-		 */
-		inline point operator -( const_point_reference p_pt)const
-		{
-			point l_ptReturn;
-
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				value::assign( l_ptReturn[i], value::substract( m_coords[i], p_pt[i]));
-			}
-
-			return l_ptReturn;
-		}
-		inline point operator -( value_type p_value)const
-		{
-			point l_ptReturn;
-
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				value::assign( l_ptReturn[i], value::substract( m_coords[i], p_value));
-			}
-
-			return l_ptReturn;
-		}
-		/**
-		 * * operators
-		 */
-		inline point operator *( const_point_reference p_pt)const
-		{
-			point l_ptReturn;
-
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				value::assign( l_ptReturn[i], value::multiply( m_coords[i], p_pt[i]));
-			}
-
-			return l_ptReturn;
-		}
-		inline point operator *( value_type p_value)const
-		{
-			point l_ptReturn( * this);
-
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				value::assign( l_ptReturn[i], value::multiply( m_coords[i], p_value));
-			}
-
-			return l_ptReturn;
-		}
-		/**
-		 * / operators
-		 */
-		inline point operator /( value_type p_value)const
-		{
-			point l_ptReturn( * this);
-
-			if ( ! value::is_null( p_value))
-			{
-				for (size_t i = 0 ; i < Count ; i++)
-				{
-					value::assign( l_ptReturn[i], value::divide( m_coords[i], p_value));
-				}
-			}
-
-			return l_ptReturn;
-		}
-		/**
-		 * == operators
-		 */
-		inline bool operator ==( const_point_reference p_pt)const
-		{
-			bool l_bReturn = true;
-
-			for (size_t i = 0 ; i < Count && l_bReturn ; i++)
-			{
-				l_bReturn = value::equals( m_coords[i], p_pt[i]);
-			}
-
-			return l_bReturn;
-		}
-		/**
-		 * != operators
-		 */
-		inline bool operator !=( const_point_reference p_pt)const
-		{
-			bool l_bReturn = true;
-
-			for (size_t i = 0 ; i < Count && l_bReturn ; i++)
-			{
-				l_bReturn = ! value::equals( m_coords[i], p_pt[i]);
-			}
-
-			return l_bReturn;
-		}
-		/**
-		* Vectorial product
-		*/
-		inline point operator ^( const_point_reference p_vertex)const
-		{
-			point l_result( * this);
-
-			if (Count == 3)
-			{
-				value_type l_x, l_y, l_z, x, y, z;
-				p_vertex.ToValues( & l_x, & l_y, & l_z);
-				ToValues( & x, & y, & z);
-				value::assign( l_result[0], value::substract( value::multiply( y, l_z), value::multiply( l_y, z)));
-				value::assign( l_result[1], value::substract( value::multiply( z, l_x), value::multiply( l_z, x)));
-				value::assign( l_result[2], value::substract( value::multiply( x, l_y), value::multiply( l_x, y)));
-			}
-
-			return l_result;
-		}
-		inline void Reverse()
-		{
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				value::ass_negate( m_coords[i]);
-			}
-		}
-		inline void Normalise()
-		{
-			value_type l_length = GetLength();
-
-			if (value::is_null( l_length))
-			{
-				return;
-			}
-
-			operator /=( l_length);
-		}
-		inline point GetNormalised()const
-		{
-			point l_ptReturn( * this);
-			l_ptReturn.Normalise();
-			return l_ptReturn;
-		}
-		inline point GetNormal( const_point_reference p_vertex)const
-		{
-			point l_ptReturn = this->operator ^( p_vertex);
-			l_ptReturn.Normalise();
-			return l_ptReturn;
-		}
-		inline value_type dotProduct( const_point_reference p_vertex)const
-		{
-			value_type l_tReturn;
-			value::init( l_tReturn);
-
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				value::ass_add( l_tReturn, value::multiply( m_coords[i], p_vertex[i]));
-			}
-
-			return l_tReturn;
-		}
-		inline value_type GetSquaredLength()const
-		{
-			value_type l_tReturn;
-			value::init( l_tReturn);
-
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				value::ass_add( l_tReturn, value::multiply( m_coords[i], m_coords[i]));
-			}
-
-			return l_tReturn;
-		}
-		inline real GetLength()const
-		{
-			return sqrt( (real)GetSquaredLength());
-		}
-		inline real GetCosTheta( const_point_reference p_vector)const
-		{
-			return dotProduct( p_vector) / (GetLength() * p_vector.GetLength());
-		}
-
-		virtual bool Write( Utils::File & p_file)const
-		{
-			if ( ! p_file.WriteArray<value_type>( m_coords, Count))
-			{
-				return false;
-			}
-
-			return true;
-		}
-
-		virtual bool Read( Utils::File & p_file)
-		{
-			if ( ! p_file.ReadArray<value_type>( m_coords, Count))
-			{
-				return false;
-			}
-
-			return true;
-		}
-		const_reference operator[]( size_t p_pos)const
-		{
-			return (*(m_coords + p_pos));
-		}
-		reference operator[]( size_t p_pos)
-		{
-			return (*(m_coords + p_pos));
-		}
-		inline pointer ptr()
-		{
-			return m_coords;
-		}
-		inline const_pointer const_ptr()const
-		{
-			return m_coords;
-		}
-		std::ostream & operator << ( std::ostream & l_streamOut)
-		{
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				l_streamOut << "\t" << m_coords[i];
-			}
-
-			l_streamOut << std::endl;
-			return l_streamOut;
-		}
-		std::istream & operator >> ( std::istream & l_streamIn)
-		{
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				l_streamIn >> m_coords[i];
-			}
-
-			return l_streamIn;
+			return * this;
 		}
 	};
 
 	template <typename T, size_t Count>
-	std::ostream & operator << ( std::ostream & l_streamOut, const Point <T, Count> & p_point)
-	{
-		for (size_t i = 0 ; i < Count ; i++)
-		{
-			l_streamOut << "\t" << p_point[i];
-		}
-
-		l_streamOut << std::endl;
-		return l_streamOut;
-	}
+	std::ostream & operator << ( std::ostream & l_streamOut, const Point <T, Count> & p_point);
 	template <typename T, size_t Count>
-	std::istream & operator >> ( std::istream & l_streamIn, Point <T, Count> & p_point)
-	{
-		for (size_t i = 0 ; i < Count ; i++)
-		{
-			l_streamIn >> p_point[i];
-		}
+	std::istream & operator >> ( std::istream & l_streamIn, Point <T, Count> & p_point);
+	template <typename T, size_t Count>
+	Point <T, Count> operator *( int p_value, const Point <T, Count> & p_ptPoint);
+	template <typename T, size_t Count>
+	Point <T, Count> operator +( int p_value, const Point <T, Count> & p_ptPoint);
+	template <typename T, size_t Count>
+	Point <T, Count> operator -( int p_value, const Point <T, Count> & p_ptPoint);
+	template <typename T, size_t Count>
+	Point <T, Count> operator /( int p_value, const Point <T, Count> & p_ptPoint);
+	template <typename T, size_t Count>
+	Point <T, Count> operator *( real p_value, const Point <T, Count> & p_ptPoint);
+	template <typename T, size_t Count>
+	Point <T, Count> operator +( real p_value, const Point <T, Count> & p_ptPoint);
+	template <typename T, size_t Count>
+	Point <T, Count> operator -( real p_value, const Point <T, Count> & p_ptPoint);
+	template <typename T, size_t Count>
+	Point <T, Count> operator /( real p_value, const Point <T, Count> & p_ptPoint);
+	template <typename T, size_t Count, typename _Ty>
+	Point <T, Count> operator +( const Point <T, Count> & p_ptA, const Point<_Ty, Count> & p_ptB);
+	template <typename T, size_t Count, size_t _Count>
+	Point <T, Count> operator +( const Point <T, Count> & p_ptA, const Point<T, _Count> & p_ptB);
+	template <typename T, size_t Count, typename _Ty, size_t _Count>
+	Point <T, Count> operator +( const Point <T, Count> & p_ptA, const Point<_Ty, _Count> & p_ptB);
+}
+}
 
-		return l_streamIn;
-	}
-}
-}
+#include "Point.inl"
 
 #endif

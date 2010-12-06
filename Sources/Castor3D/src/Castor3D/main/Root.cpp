@@ -40,6 +40,8 @@ Root :: Root( unsigned int p_wantedFPS)
 	SceneManager::GetSingleton();
 	AnimationManager::GetSingleton();
 	ShaderManager::GetSingleton();
+	m_windowsBegin = m_windows.begin();
+	m_windowsEnd = m_windows.end();
 
 	m_timer.Time();
 }
@@ -52,11 +54,9 @@ Root :: ~Root()
 	}
 
 	m_ended = true;
-	RenderSystem::GetSingletonPtr<RenderSystem>()->Delete();
-//	map::deleteAll( m_windows);
+	delete RenderSystem::GetSingletonPtr();
 	m_windowsNumber = 0;
 	m_windows.clear();
-//	map::deleteAll( m_loadedPlugins);
 	delete m_rendererServer;
 	m_loadedPlugins.clear();
 	sm_singleton = NULL;
@@ -65,11 +65,12 @@ Root :: ~Root()
 RenderWindowPtr Root :: CreateRenderWindow( ScenePtr p_mainScene,void * p_handle,
 										   int p_windowWidth, int p_windowHeight,
 										   Viewport::eTYPE p_type,
+										   Castor::Resource::PixelFormat p_pixelFormat,
 										   ProjectionDirection p_look)
 {
 	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( sm_mutex);
-	RenderWindowPtr l_res = new RenderWindow( p_mainScene, p_handle, p_windowWidth,
-											  p_windowHeight, p_type, p_look);
+	RenderWindowPtr l_res( new RenderWindow( p_mainScene, p_handle, p_windowWidth,
+											 p_windowHeight, p_type, p_pixelFormat, p_look));
 	m_windows[l_res->GetIndex()] = l_res;
 	m_windowsNumber++;
 	m_windowsBegin = m_windows.begin();
@@ -131,14 +132,39 @@ void Root :: LoadPlugin( const String & p_filePath)
 	{
 		try
 		{
-			PluginPtr l_plugin = new Plugin( p_filePath);
+			PluginPtr l_plugin( new Plugin( p_filePath));
 			l_plugin->RegisterPlugin( * this);
 			m_loadedPlugins.insert( PluginStrMap::value_type( p_filePath, l_plugin));
 		}
 		catch ( ... )
 		{
-			Log::LogMessage( "Root :: LoadPlugin - Fail");
+			Logger::LogError( CU_T( "Root :: LoadPlugin - Fail"));
 		}
+	}
+}
+
+void Root :: LoadRenderer( RendererDriver::eDRIVER_TYPE p_eType)
+{
+#ifdef _DEBUG
+#	if CASTOR_UNICODE
+			LoadPlugin( GetRendererServer().GetRendererName( p_eType) + "du.dll");
+#	else
+			LoadPlugin( GetRendererServer().GetRendererName( p_eType) + "d.dll");
+#	endif
+#else
+#	if C3D_UNICODE
+			LoadPlugin( GetRendererServer().GetRendererName( p_eType) + "u.dll");
+#	else
+			LoadPlugin( GetRendererServer().GetRendererName( p_eType) + ".dll");
+#	endif
+#endif
+
+	RendererDriverPtr l_pRenderer = GetRendererServer().GetRenderer( p_eType);
+
+	if ( ! l_pRenderer.null())
+	{
+		l_pRenderer->CreateRenderSystem();
+		StartRendering();
 	}
 }
 
@@ -166,6 +192,7 @@ void Root :: EndRendering()
 		SceneManager::ClearScenes();
 		ShaderManager::ClearShaders();
 		BufferManager::Cleanup();
+		RenderSystem::GetSingletonPtr()->CleanupRenderers();
 		_renderOneFrame( true);
 		m_ended = true;
 		Sleep( 500);
@@ -230,7 +257,7 @@ bool Root :: _preUpdate()
 void Root :: _update( bool p_bForce)
 {
 	AnimationManager::Update();
-//	map::cycle( m_windows, & RenderWindow::RenderOneFrame, m_timeSinceLastFrame, p_bForce);
+
 	for (RenderWindowMap::iterator l_it = m_windowsBegin ; l_it != m_windowsEnd ; ++l_it)
 	{
 		l_it->second->RenderOneFrame( m_timeSinceLastFrame, p_bForce);

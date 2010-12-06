@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___Castor_Resource___
 
 #include "Buffer.h"
+#include "Manager.h"
 
 namespace Castor
 {	namespace Resource
@@ -28,19 +29,18 @@ namespace Castor
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class Resource
+	class Resource : public Templates::Managed<String, Resource>
 	{
 	protected:
 		friend class ResourceManager;
 		int * m_references;		//!< The number of times this resource is used
-		String m_name;			//!< The resource name
 
 		/**
 		 * Constructor, needs the name
 		 */
 		Resource( const String & p_name=C3DEmptyString)
-			:	m_references( new int( 1)),
-				m_name( p_name)
+			:	Managed<String, Resource>( p_name),
+				m_references( new int( 1))
 		{
 		}
 
@@ -64,8 +64,8 @@ namespace Castor
 			}
 		}
 
-		inline String GetName()const { return m_name; }
-		inline void SetName( const String & p_name) { m_name = p_name; }
+		inline String GetName()const { return m_key; }
+		inline void SetName( const String & p_name) { m_key = p_name; }
 	};
 }
 }

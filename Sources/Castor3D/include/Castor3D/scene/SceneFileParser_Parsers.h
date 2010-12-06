@@ -26,12 +26,15 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootSceneName)
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootCamera)
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootLight)
-	DECLARE_ATTRIBUTE_PARSER( Parser_RootSceneNode)
+	DECLARE_ATTRIBUTE_PARSER( Parser_RootLightNode)
+	DECLARE_ATTRIBUTE_PARSER( Parser_RootCameraNode)
+	DECLARE_ATTRIBUTE_PARSER( Parser_RootGeometryNode)
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootMaterial)
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootObject)
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootAmbientLight)
 
 	// Light parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_LightParent)
 	DECLARE_ATTRIBUTE_PARSER( Parser_LightType)
 	DECLARE_ATTRIBUTE_PARSER( Parser_LightPosition)
 	DECLARE_ATTRIBUTE_PARSER( Parser_LightAmbient)

@@ -21,16 +21,16 @@ void SceneFileContext :: Initialise()
 	pGeometry.reset();
 	pMesh.reset();
 	pSubmesh.reset();
-	pSmoothingGroup.reset();
+	uiSmoothingGroup = 0;
 	pLight.reset();
 	pCamera.reset();
 	pMaterial.reset();
 	pPass.reset();
 	pTextureUnit.reset();
 	pShaderProgram.reset();
-	pUniformVariable.reset();
-	pFace1.reset();
-	pFace2.reset();
+	pFrameVariable.reset();
+	pFace1 = NULL;
+	pFace2 = NULL;
 
 	strName.clear();
 	strName2.clear();
@@ -47,11 +47,14 @@ SceneFileParser :: SceneFileParser()
 {
 	m_mapRootParsers			["object"]				= Parser_RootObject;
 	m_mapRootParsers			["light"]				= Parser_RootLight;
-	m_mapRootParsers			["scene_node"]			= Parser_RootSceneNode;
+	m_mapRootParsers			["light_node"]			= Parser_RootLightNode;
+	m_mapRootParsers			["camera_node"]			= Parser_RootCameraNode;
+	m_mapRootParsers			["geometry_node"]		= Parser_RootGeometryNode;
 	m_mapRootParsers			["camera"]				= Parser_RootCamera;
 	m_mapRootParsers			["material"]			= Parser_RootMaterial;
 	m_mapRootParsers			["ambient_light"]		= Parser_RootAmbientLight;
 
+	m_mapLightParsers			["parent"]				= Parser_LightParent;
 	m_mapLightParsers			["type"]				= Parser_LightType;
 	m_mapLightParsers			["position"]			= Parser_LightPosition;
 	m_mapLightParsers			["ambient"]				= Parser_LightAmbient;
@@ -142,7 +145,7 @@ bool SceneFileParser :: ParseFile( const String & p_strFileName)
 		bool l_bNextIsOpenBrace = false;
 		bool l_bCommented = false;
 
-		Log::LogMessage( "SceneFileParser : Parsing scene file [" + l_file.GetFileName() + "]");
+		Logger::LogMessage( CU_T( "SceneFileParser : Parsing scene file [") + l_file.GetFileName() + CU_T( "]"));
 
 		m_pContext->eSection = SceneFileContext::eNone;
 		m_pContext->ui64Line = 0;
@@ -172,14 +175,14 @@ bool SceneFileParser :: ParseFile( const String & p_strFileName)
 				continue;
 			}
 
-			if (l_strLine.size() >= 2 && l_strLine.substr( 0, 2) == "//")
+			if (l_strLine.size() >= 2 && l_strLine.substr( 0, 2) == CU_T( "//"))
 			{
 				continue;
 			}
 
 			if ( ! l_bCommented)
 			{
-				if (l_strLine.size() >= 2 && l_strLine.substr( 0, 2) == "/*")
+				if (l_strLine.size() >= 2 && l_strLine.substr( 0, 2) == CU_T( "/*"))
 				{
 					l_bCommented = true;
 				}
@@ -206,7 +209,7 @@ bool SceneFileParser :: ParseFile( const String & p_strFileName)
 			}
 			else
 			{
-				if (l_strLine.size() >= 2 && l_strLine.substr( 0, 2) == "*/")
+				if (l_strLine.size() >= 2 && l_strLine.substr( 0, 2) == CU_T( "*/"))
 				{
 					l_bCommented = false;
 				}
@@ -218,7 +221,7 @@ bool SceneFileParser :: ParseFile( const String & p_strFileName)
 			ParseError( "Parsing Error : ParseScript -> unexpected end of file", m_pContext);
 		}
 
-		Log::LogMessage( "SceneFileParser : Finished parsing script [" + l_file.GetFileName() + "]");
+		Logger::LogMessage( CU_T( "SceneFileParser : Finished parsing script [") + l_file.GetFileName() + CU_T( "]"));
 
 		l_bReturn = true;
 
@@ -262,7 +265,7 @@ bool SceneFileParser::_invokeParser( String & p_line, const AttributeParserMap &
 
     if (l_iter == p_parsers.end())
     {
-		Log::LogMessage( "Parser not found @ line #%i : %s", m_pContext->ui64Line, p_line.c_str());
+		Logger::LogWarning( CU_T( "Parser not found @ line #%i : %s"), m_pContext->ui64Line, p_line.c_str());
     }
 	else
 	{

@@ -9,7 +9,7 @@
 #include "geometry/primitives/Geometry.h"
 #include "geometry/basic/Face.h"
 #include "scene/Scene.h"
-#include "scene/SceneNode.h"
+#include "scene/NodeBase.h"
 #include "scene/SceneManager.h"
 #include "material/MaterialManager.h"
 #include "material/Material.h"
@@ -23,7 +23,7 @@ using namespace Castor3D;
 char g_buffer[50000] = {0};
 
 SMaxImporter :: SMaxImporter()
-	:	ExternalImporter(),
+	:	ExternalImporter( e3DS),
 		m_pFile( NULL),
 		m_iNumOfMaterials( 0),
 		m_texVerts( NULL)
@@ -60,12 +60,12 @@ bool SMaxImporter :: _import()
 
 		if (MeshManager::HasElement( l_meshName))
 		{
-			l_pMesh.reset( MeshManager::GetElementByName( l_meshName));
+			l_pMesh = MeshManager::GetElementByName( l_meshName);
 		}
 		else
 		{
-			l_pMesh.reset( MeshManager::CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom));
-			Log::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
+			l_pMesh = MeshManager::CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom);
+			Logger::LogMessage( CU_T( "CreatePrimitive - Mesh %s created") + l_meshName);
 		}
 
 		SMaxChunk l_currentChunk = {0};
@@ -79,12 +79,12 @@ bool SMaxImporter :: _import()
 		}
 
 		_processNextChunk( l_pMesh, & l_currentChunk);
-		l_pMesh->SetNormals();
+		l_pMesh->ComputeNormals();
 		m_pScene = SceneManager::GetSingleton().GetElementByName( "MainScene");
-		SceneNodePtr l_pNode = m_pScene->CreateSceneNode( l_name);
+		GeometryNodePtr l_pNode = m_pScene->CreateGeometryNode( l_name);
 
-		GeometryPtr l_pGeometry = new Geometry( l_pMesh, l_pNode, l_name);
-		Log::LogMessage( CU_T( "PlyImporter::_import - Geometry %s created"), l_name.c_str());
+		GeometryPtr l_pGeometry( new Geometry( l_pMesh, l_pNode, l_name));
+		Logger::LogMessage( CU_T( "PlyImporter::_import - Geometry %s created") + l_name);
 
 		m_geometries.insert( GeometryPtrStrMap::value_type( l_name, l_pGeometry));
 	}
@@ -96,7 +96,7 @@ bool SMaxImporter :: _import()
 
 void SMaxImporter :: _processNextChunk( MeshPtr p_pMesh, SMaxChunk * p_previousChunk)
 {
-	SubmeshPtr l_pSubmesh = NULL;
+	SubmeshPtr l_pSubmesh;
 
 	SMaxChunk l_currentChunk = {0};
 	SMaxChunk l_tempChunk = {0};
@@ -111,7 +111,7 @@ void SMaxImporter :: _processNextChunk( MeshPtr p_pMesh, SMaxChunk * p_previousC
 			l_currentChunk.m_bytesRead += m_pFile->ReadArray<char>( g_buffer, l_currentChunk.m_length - l_currentChunk.m_bytesRead);
 			if ((l_currentChunk.m_length - l_currentChunk.m_bytesRead == 4) && (((int *)g_buffer)[0] > 0x03))
 			{
-				Log::LogMessage( "File version is over version 3 and may load incorrectly");
+				Logger::LogWarning( CU_T( "File version is over version 3 and may load incorrectly"));
 			}
 		break;
 
@@ -254,7 +254,7 @@ void SMaxImporter :: _processNextMaterialChunk( SMaxChunk * p_previousChunk)
 
 		if ( ! l_strTexture.empty())
 		{
-			TextureUnitPtr l_pUnit = new TextureUnit();
+			TextureUnitPtr l_pUnit( new TextureUnit());
 			l_pUnit->SetTexture2D( m_pFile->GetFilePath() + "/" + l_strTexture);
 			l_pPass->AddTextureUnit( l_pUnit);
 			l_pUnit->SetPrimaryColour( 1.0, 1.0, 1.0, 1.0);
@@ -336,9 +336,9 @@ void SMaxImporter :: _readColorChunk( Colour & p_colour, SMaxChunk * p_chunk)
 	_readChunk( & l_tempChunk);
 	unsigned char l_pColour[3];
 	l_tempChunk.m_bytesRead += m_pFile->ReadArray<unsigned char>( l_pColour, l_tempChunk.m_length - l_tempChunk.m_bytesRead);
-	p_colour[0] = float( l_pColour[0]) / 255.0f;
-	p_colour[1] = float( l_pColour[1]) / 255.0f;
-	p_colour[2] = float( l_pColour[2]) / 255.0f;
+	p_colour[0] = float( l_pColour[0]) / 255;
+	p_colour[1] = float( l_pColour[1]) / 255;
+	p_colour[2] = float( l_pColour[2]) / 255;
 	p_chunk->m_bytesRead += l_tempChunk.m_bytesRead;
 }
 
@@ -350,7 +350,6 @@ void SMaxImporter :: _readVertexIndices( SubmeshPtr p_pSubmesh, SMaxChunk * p_ch
 	unsigned short l_dump = 0;
 	int l_iNumOfFaces = 0;
 	p_chunk->m_bytesRead += m_pFile->Read<short>( (short &)l_iNumOfFaces);
-	FacePtr l_pFace;
 
 	for (int i = 0 ; m_pFile->IsOk() && i < l_iNumOfFaces ; i++)
 	{
@@ -359,13 +358,13 @@ void SMaxImporter :: _readVertexIndices( SubmeshPtr p_pSubmesh, SMaxChunk * p_ch
 		p_chunk->m_bytesRead += m_pFile->Read<unsigned short>( l_index3);
 		p_chunk->m_bytesRead += m_pFile->Read<unsigned short>( l_dump);
 
-		l_pFace = p_pSubmesh->AddFace( l_index1, l_index2, l_index3, 0);
+		Face & l_face = p_pSubmesh->AddFace( l_index1, l_index2, l_index3, 0);
 
 		if (m_texVerts != NULL)
 		{
-			l_pFace->SetTexCoordV1( m_texVerts[l_index1][0], m_texVerts[l_index1][1]);
-			l_pFace->SetTexCoordV2( m_texVerts[l_index2][0], m_texVerts[l_index2][1]);
-			l_pFace->SetTexCoordV3( m_texVerts[l_index3][0], m_texVerts[l_index3][1]);
+			l_face.SetVertexTexCoords( 0, m_texVerts[l_index1][0], m_texVerts[l_index1][1]);
+			l_face.SetVertexTexCoords( 1, m_texVerts[l_index2][0], m_texVerts[l_index2][1]);
+			l_face.SetVertexTexCoords( 2, m_texVerts[l_index3][0], m_texVerts[l_index3][1]);
 		}
 	}
 }

@@ -5,9 +5,16 @@
 #include "geometry/mesh/Mesh.h"
 #include "geometry/mesh/Submesh.h"
 #include "geometry/basic/Face.h"
+#include "scene/Scene.h"
 #include "main/Root.h"
 #include "render_system/RenderSystem.h"
-
+#include "importer/SMaxImporter.h"
+#include "importer/AseImporter.h"
+#include "importer/Md2Importer.h"
+#include "importer/Md3Importer.h"
+#include "importer/ObjImporter.h"
+#include "importer/BspImporter.h"
+#include "importer/PlyImporter.h"
 
 using namespace Castor3D;
 //*********************************************************************************************
@@ -38,7 +45,7 @@ MeshPtr MeshLoader :: LoadFromFile( const String & p_file)
 
 	if (l_bResult)
 	{
-		Log::LogMessage( CU_T( "Reading mesh ") + l_strName);
+		Logger::LogMessage( CU_T( "Reading mesh ") + l_strName);
 		l_pReturn.reset( new Mesh( l_strName));
 	}
 
@@ -78,9 +85,8 @@ MeshPtr MeshLoader :: LoadFromFile( const String & p_file)
 	return l_pReturn;
 }
 
-MeshPtr MeshLoader :: LoadFromExtFile( const String & p_file)
+void MeshLoader :: LoadFromExtFile( const String & p_file, Scene * p_pScene)
 {
-	MeshPtr l_pReturn;
 	StringArray l_arraySplitted = p_file.Split( ".");
 
 	if (l_arraySplitted.size() > 1)
@@ -89,35 +95,29 @@ MeshPtr MeshLoader :: LoadFromExtFile( const String & p_file)
 
 		if (l_strExt == "3ds")
 		{
-			l_pReturn = _loadFrom3DS( p_file);
+			_loadFrom3DS( p_file, p_pScene);
 		}
 		else if (l_strExt == "ase")
 		{
-			l_pReturn = _loadFromAse( p_file);
+			_loadFromAse( p_file, p_pScene);
 		}
 		else if (l_strExt == "obj")
 		{
-			l_pReturn = _loadFromObj( p_file);
+			_loadFromObj( p_file, p_pScene);
 		}
 		else if (l_strExt == "ply")
 		{
-			l_pReturn = _loadFromPly( p_file);
+			_loadFromPly( p_file, p_pScene);
 		}
 		else if (l_strExt == "md2")
 		{
-			l_pReturn = _loadFromMd2( p_file);
+			_loadFromMd2( p_file, p_pScene);
 		}
 		else if (l_strExt == "md3")
 		{
-			l_pReturn = _loadFromMd3( p_file);
-		}
-		else if (l_strExt == "cmsh")
-		{
-			l_pReturn = LoadFromFile( p_file);
+			_loadFromMd3( p_file, p_pScene);
 		}
 	}
-
-	return l_pReturn;
 }
 
 bool MeshLoader :: SaveToFile( const String & p_file, MeshPtr p_mesh)
@@ -155,58 +155,40 @@ bool MeshLoader :: SaveToFile( const String & p_file, MeshPtr p_mesh)
 	return l_bReturn;
 }
 
-MeshPtr MeshLoader :: _loadFrom3DS( const String & p_file)
+void MeshLoader :: _loadFrom3DS( const String & p_file, Scene * p_pScene)
 {
-	MeshPtr l_pReturn;
-
-
-
-	return l_pReturn;
+	SMaxImporter l_importer;
+	p_pScene->ImportExternal( p_file, & l_importer);
 }
 
-MeshPtr MeshLoader :: _loadFromAse( const String & p_file)
+void MeshLoader :: _loadFromAse( const String & p_file, Scene * p_pScene)
 {
-	MeshPtr l_pReturn;
-
-
-
-	return l_pReturn;
+	AseImporter l_importer;
+	p_pScene->ImportExternal( p_file, & l_importer);
 }
 
-MeshPtr MeshLoader :: _loadFromObj( const String & p_file)
+void MeshLoader :: _loadFromObj( const String & p_file, Scene * p_pScene)
 {
-	MeshPtr l_pReturn;
-
-
-
-	return l_pReturn;
+	ObjImporter l_importer;
+	p_pScene->ImportExternal( p_file, & l_importer);
 }
 
-MeshPtr MeshLoader :: _loadFromPly( const String & p_file)
+void MeshLoader :: _loadFromPly( const String & p_file, Scene * p_pScene)
 {
-	MeshPtr l_pReturn;
-
-
-
-	return l_pReturn;
+	PlyImporter l_importer;
+	p_pScene->ImportExternal( p_file, & l_importer);
 }
 
-MeshPtr MeshLoader :: _loadFromMd2( const String & p_file)
+void MeshLoader :: _loadFromMd2( const String & p_file, Scene * p_pScene)
 {
-	MeshPtr l_pReturn;
-
-
-
-	return l_pReturn;
+	Md2Importer l_importer;
+	p_pScene->ImportExternal( p_file, & l_importer);
 }
 
-MeshPtr MeshLoader :: _loadFromMd3( const String & p_file)
+void MeshLoader :: _loadFromMd3( const String & p_file, Scene * p_pScene)
 {
-	MeshPtr l_pReturn;
-
-
-
-	return l_pReturn;
+	Md3Importer l_importer;
+	p_pScene->ImportExternal( p_file, & l_importer);
 }
 
 //*********************************************************************************************
@@ -214,8 +196,6 @@ MeshPtr MeshLoader :: _loadFromMd3( const String & p_file)
 Mesh :: Mesh( const String & p_name)
 	:	m_name( p_name),
 		m_modified( false),
-		m_box( NULL),
-		m_sphere( NULL),
 		m_preferredSubdivMode( SMPNTriangles),
 		m_bOK( false)
 {
@@ -232,75 +212,55 @@ void Mesh :: Cleanup()
 {
 //	vector::deleteAll( m_submeshes);
 	m_submeshes.clear();
-
-	m_box.reset();
-	m_sphere.reset();
 }
 
 void Mesh :: ComputeContainers()
 {
-	m_box.reset();
-	m_sphere.reset();
-
 	if (m_submeshes.size() == 0)
 	{
 		return;
 	}
 
-	size_t i = 0;
-	ComboBoxPtr l_box;
-
-	while (l_box.null() && i < m_submeshes.size())
+	for (size_t i = 0 ; i < m_submeshes.size() ; i++)
 	{
 		m_submeshes[i]->ComputeContainers();
-		l_box = m_submeshes[i]->GetComboBox();
-		i++;
 	}
 
-	Point3r l_min;
-	Point3r l_max;
-	if ( ! l_box.null())
+	Point3r l_min = m_submeshes[0]->GetComboBox().GetMin();
+	Point3r l_max = m_submeshes[0]->GetComboBox().GetMax();
+
+	for (size_t i = 1 ; i < m_submeshes.size() ; i++)
 	{
-		l_min = ( l_box->GetMin());
-		l_max = ( l_box->GetMax());
+		const ComboBox & l_box = m_submeshes[i]->GetComboBox();
 
-		for ( ; i < m_submeshes.size() ; i++)
+		if (l_box.GetMin()[0] < l_min[0])
 		{
-			m_submeshes[i]->ComputeContainers();
-			l_box = m_submeshes[i]->GetComboBox();
-
-			if ( ! l_box.null())
-			{
-				if (l_box->GetMin()[0] < l_min[0])
-				{
-					l_min[0] = l_box->GetMin()[0];
-				}
-				if (l_box->GetMin()[1] < l_min[1])
-				{
-					l_min[1] = l_box->GetMin()[1];
-				}
-				if (l_box->GetMin()[2] < l_min[2])
-				{
-					l_min[2] = l_box->GetMin()[2];
-				}
-				if (l_box->GetMax()[0] > l_max[0])
-				{
-					l_max[0] = l_box->GetMax()[0];
-				}
-				if (l_box->GetMax()[1] > l_max[1])
-				{
-					l_max[1] = l_box->GetMax()[1];
-				}
-				if (l_box->GetMax()[2] > l_max[2])
-				{
-					l_max[2] = l_box->GetMax()[2];
-				}
-			}
+			l_min[0] = l_box.GetMin()[0];
+		}
+		if (l_box.GetMin()[1] < l_min[1])
+		{
+			l_min[1] = l_box.GetMin()[1];
+		}
+		if (l_box.GetMin()[2] < l_min[2])
+		{
+			l_min[2] = l_box.GetMin()[2];
+		}
+		if (l_box.GetMax()[0] > l_max[0])
+		{
+			l_max[0] = l_box.GetMax()[0];
+		}
+		if (l_box.GetMax()[1] > l_max[1])
+		{
+			l_max[1] = l_box.GetMax()[1];
+		}
+		if (l_box.GetMax()[2] > l_max[2])
+		{
+			l_max[2] = l_box.GetMax()[2];
 		}
 	}
 
-	m_box = new ComboBox( l_min, l_max);
-	m_sphere = new Sphere( *m_box);
+	m_box.Load( l_min, l_max);
+	m_sphere.Load( m_box);
 }
 
 size_t Mesh :: GetNbFaces()const
@@ -318,23 +278,26 @@ size_t Mesh :: GetNbVertex()const
 	size_t l_nbFaces = 0;
 	for (size_t i = 0 ; i < m_submeshes.size() ; i++)
 	{
-		l_nbFaces += m_submeshes[i]->m_vertex.size();
+		l_nbFaces += m_submeshes[i]->GetVertices().size();
 	}
 	return l_nbFaces;
 }
 
 SubmeshPtr Mesh :: GetSubmesh( unsigned int p_index)
 {
+	SubmeshPtr l_pReturn;
+
 	if (p_index < m_submeshes.size())
 	{
-		return m_submeshes[p_index];
+		l_pReturn = m_submeshes[p_index];
 	}
-	return NULL;
+
+	return l_pReturn;
 }
 
 SubmeshPtr Mesh :: CreateSubmesh( unsigned int p_nbSmoothGroups)
 {
-	SubmeshPtr l_submesh = new Submesh( p_nbSmoothGroups);
+	SubmeshPtr l_submesh( new Submesh( p_nbSmoothGroups));
 
 	if ( ! l_submesh.null())
 	{
@@ -344,48 +307,49 @@ SubmeshPtr Mesh :: CreateSubmesh( unsigned int p_nbSmoothGroups)
 	return l_submesh;
 }
 
-void Mesh :: SetFlatNormals()
+void Mesh :: ComputeFlatNormals()
 {
 	for (size_t i = 0 ; i < m_submeshes.size() ; i++)
 	{
-		m_submeshes[i]->SetFlatNormals();
+		m_submeshes[i]->ComputeFlatNormals();
 	}
 }
 
-void Mesh :: SetSmoothNormals()
+void Mesh :: ComputeSmoothNormals()
 {
 	for (size_t i = 0 ; i < m_submeshes.size() ; i++)
 	{
-		m_submeshes[i]->SetSmoothNormals();
+		m_submeshes[i]->ComputeSmoothNormals();
 	}
 }
 
-void Mesh :: SetNormals( bool p_bReverted)
+void Mesh :: ComputeNormals( bool p_bReverted)
 {
 	for (size_t i = 0 ; i < m_submeshes.size() ; i++)
 	{
-		m_submeshes[i]->SetNormals();
+		m_submeshes[i]->ComputeNormals();
 	}
 }
 
-void Mesh :: CreateBuffers()
+void Mesh :: InitialiseBuffers()
 {
 	for (unsigned int i = 0 ; i < m_submeshes.size() ; i++)
 	{
-		m_submeshes[i]->CreateBuffers();
+		m_submeshes[i]->InitialiseBuffers();
 	}
 
 	m_bOK = true;
 }
 
-void Mesh :: CreateNormalsBuffers( NormalsMode p_nm)
+void Mesh :: SetNormals( eNORMALS_MODE p_nm)
 {
 	m_normalsMode = p_nm;
 //	vector::cycle( m_submeshes, & Submesh::CreateNormalsBuffer, p_nm);
 	for (size_t i = 0 ; i < m_submeshes.size() ; i++)
 	{
-		m_submeshes[i]->CreateNormalsBuffer( p_nm);
+		m_submeshes[i]->SetNormals( p_nm);
 	}
+
 	ComputeContainers();
 }
 
@@ -412,7 +376,7 @@ bool Mesh :: Subdivide( unsigned int p_index, SubdivisionMode p_mode)
 
 	m_bOK = false;
 
-	m_submeshes[p_index]->Subdivide( p_mode, & m_sphere->GetCenter());
+	m_submeshes[p_index]->Subdivide( p_mode, & m_sphere.GetCenter());
 
 	m_bOK = true;
 

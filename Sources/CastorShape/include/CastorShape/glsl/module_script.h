@@ -29,7 +29,13 @@ namespace CastorShape
 		EMVT_VEC3I,
 		EMVT_VEC4I,
 		EMVT_MAT2,
+		EMVT_MAT2x3,
+		EMVT_MAT2x4,
+		EMVT_MAT3x2,
 		EMVT_MAT3,
+		EMVT_MAT3x4,
+		EMVT_MAT4x2,
+		EMVT_MAT4x3,
 		EMVT_MAT4,
 		EMVT_SAMPLER1D,
 		EMVT_SAMPLER2D,
@@ -118,7 +124,7 @@ namespace CastorShape
 	class ScriptNode;
 	class ScriptTimer;
 	class ScriptTimerManager;
-	struct Context;
+	struct ScriptContext;
 
 	class NodeValueBase;
 	template<typename T>
@@ -164,7 +170,7 @@ namespace CastorShape
 
 #define VERBOSE_COMPILATOR( p_string ) // std::cout << p_string << std::endl; // m_compiler->_log( p_string);
 	#define VERBOSE_COMPILATOR_INTERNAL( p_string ) // std::cout << p_string << std::endl; // _log( p_string);
-	//Log::LogMessage( p_string )
+	//Logger::LogMessage( p_string )
 
 	
 }

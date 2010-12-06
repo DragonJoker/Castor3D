@@ -3,6 +3,7 @@
 #include "Quaternion.h"
 #include "Point.h"
 #include "Angle.h"
+//#include "FastMath.h"
 
 #if CHECK_MEMORYLEAKS
 #	include "Memory.h"
@@ -43,7 +44,7 @@ void Quaternion :: Conjugate()
 QuaternionPtr Quaternion :: GetConjugate()
 {
 	Normalise();
-	QuaternionPtr q = new Quaternion( * this);
+	QuaternionPtr q( new Quaternion( * this));
 	q->Reverse();
 	q->m_coords[3] = m_coords[3];
 	return q;
@@ -59,82 +60,116 @@ void Quaternion :: Normalise()
 	Point4r::Normalise();
 }
 
-void Quaternion :: ToRotationMatrix( TransformationMatrix & p_matrix)const
+void Quaternion :: ToRotationMatrix( Matrix4x4r & p_matrix)const
 {
-	p_matrix.SetRotation( * this);
+	p_matrix.Identity();
+	rotate( p_matrix, * this);
 }
 
 void Quaternion :: ToRotationMatrix( real * p_matrix)const
 {
+/**/
 	real x = m_coords[0];
 	real y = m_coords[1];
 	real z = m_coords[2];
 	real w = m_coords[3];
 
-	p_matrix[0] = 1.0f - 2.0f * ( y * y + z * z );
-	p_matrix[1] = 2.0f * ( x * y - z * w );
-	p_matrix[2] = 2.0f * ( x * z + y * w );
-	p_matrix[3] = 0;
-	p_matrix[4] = 2.0f * (x * y + z * w);
-	p_matrix[5] = 1.0f - 2.0f * ( x * x + z * z );
-	p_matrix[6] = 2.0f * ( y * z - x * w );
-	p_matrix[7] = 0;
-	p_matrix[8] = 2.0f * (x * z - y * w);
-	p_matrix[9] = 2.0f * (z * y + x * w );
-	p_matrix[10] = 1.0f - 2.0f * ( x * x + y * y );
-	p_matrix[11] = 0;
-	p_matrix[12] = 0.0f;
-	p_matrix[13] = 0.0f;
-	p_matrix[14] = 0.0f;
-	p_matrix[15] = 1.0f;
+	p_matrix[0 * 4 + 0] = 1.0f - 2.0f * ( y * y + z * z );
+	p_matrix[0 * 4 + 1] = 2.0f * ( x * y - z * w );
+	p_matrix[0 * 4 + 2] = 2.0f * ( x * z + y * w );
+	p_matrix[0 * 4 + 3] = 0;
+
+	p_matrix[1 * 4 + 0] = 2.0f * (x * y + z * w);
+	p_matrix[1 * 4 + 1] = 1.0f - 2.0f * ( x * x + z * z );
+	p_matrix[1 * 4 + 2] = 2.0f * ( y * z - x * w );
+	p_matrix[1 * 4 + 3] = 0;
+
+	p_matrix[2 * 4 + 0] = 2.0f * (x * z - y * w);
+	p_matrix[2 * 4 + 1] = 2.0f * (z * y + x * w );
+	p_matrix[2 * 4 + 2] = 1.0f - 2.0f * ( x * x + y * y );
+	p_matrix[2 * 4 + 3] = 0;
+
+	p_matrix[3 * 4 + 0] = 0.0f;
+	p_matrix[3 * 4 + 1] = 0.0f;
+	p_matrix[3 * 4 + 2] = 0.0f;
+	p_matrix[3 * 4 + 3] = 1;
+/**/
+/*
+	real a = Angle::DegreesToRadians * m_coords[3];
+	real c = cos( a);
+	real s = sin( a);
+
+	Point3r l_axis( m_coords[0], m_coords[1], m_coords[2]);
+	Point3r l_temp = (real( 1) - c) * l_axis;
+
+	p_matrix[0 * 4 + 0] = c + l_temp[0] * l_axis[0];
+	p_matrix[0 * 4 + 1] = 0 + l_temp[0] * l_axis[1] + s * l_axis[2];
+	p_matrix[0 * 4 + 2] = 0 + l_temp[0] * l_axis[2] - s * l_axis[1];
+	p_matrix[0 * 4 + 3] = 0;
+
+	p_matrix[1 * 4 + 0] = 0 + l_temp[1] * l_axis[0] - s * l_axis[2];
+	p_matrix[1 * 4 + 1] = c + l_temp[1] * l_axis[1];
+	p_matrix[1 * 4 + 2] = 0 + l_temp[1] * l_axis[2] + s * l_axis[0];
+	p_matrix[1 * 4 + 3] = 0;
+
+	p_matrix[2 * 4 + 0] = 0 + l_temp[2] * l_axis[0] + s * l_axis[1];
+	p_matrix[2 * 4 + 1] = 0 + l_temp[2] * l_axis[1] - s * l_axis[0];
+	p_matrix[2 * 4 + 2] = c + l_temp[2] * l_axis[2];
+	p_matrix[2 * 4 + 3] = 0;
+
+	p_matrix[3 * 4 + 0] = 0;
+	p_matrix[3 * 4 + 1] = 0;
+	p_matrix[3 * 4 + 2] = 0;
+	p_matrix[3 * 4 + 3] = 1;
+/**/
 }
 
-void Quaternion :: FromRotationMatrix( TransformationMatrixPtr p_matrix)
+void Quaternion :: FromRotationMatrix( const Matrix4x4r & p_matrix)
 {
 	real x = m_coords[0];
 	real y = m_coords[1];
 	real z = m_coords[2];
 	real w = m_coords[3];
-	real trace_l = p_matrix->GetTrace();
+	real trace_l = p_matrix.GetTrace();
 
 	if(trace_l > 0)
 	{
 		real s_l = 1.0f / (2.0f * sqrt(trace_l));
 
-		x = (p_matrix->m_matrix[2 * 4 + 1] - p_matrix->m_matrix[1 * 4 + 2])*s_l; 
-		y = (p_matrix->m_matrix[0 * 4 + 2] - p_matrix->m_matrix[2 * 4 + 0])*s_l; 
-		z = (p_matrix->m_matrix[1 * 4 + 0] - p_matrix->m_matrix[0 * 4 + 1])*s_l; 
+		x = (p_matrix[1][2] - p_matrix[2][1])*s_l; 
+		y = (p_matrix[2][0] - p_matrix[0][2])*s_l; 
+		z = (p_matrix[0][1] - p_matrix[1][0])*s_l; 
 		w = 1.0f / (4.0f * s_l);
 	}
 	else
 	{
-		if(p_matrix->m_matrix[0 * 4 + 0] > p_matrix->m_matrix[1 * 4 + 1] && 
-			p_matrix->m_matrix[0 * 4 + 0] > p_matrix->m_matrix[2 * 4 + 2])
+		if(p_matrix[0][0] > p_matrix[1][1] && 
+			p_matrix[0][0] > p_matrix[2][2])
 		{
-			real s_l = sqrt( 1+p_matrix->m_matrix[0 * 4 + 0]-p_matrix->m_matrix[1 * 4 + 1]-p_matrix->m_matrix[2 * 4 + 2])*2;
+			real s_l = sqrt( 1+p_matrix[0][0]-p_matrix[1][1]-p_matrix[2][2])*2;
 
 			x = 1.0f/(2.0f * s_l);
-			y = (p_matrix->m_matrix[0 * 4 + 1] - p_matrix->m_matrix[1 * 4 + 0])/s_l;
-			z = (p_matrix->m_matrix[0 * 4 + 2] - p_matrix->m_matrix[2 * 4 + 0])/s_l;
-			w = (p_matrix->m_matrix[1 * 4 + 2] - p_matrix->m_matrix[2 * 4 + 1])/s_l;
+			y = (p_matrix[1][0] - p_matrix[0][1])/s_l;
+			z = (p_matrix[2][0] - p_matrix[0][2])/s_l;
+			w = (p_matrix[2][1] - p_matrix[1][2])/s_l;
 
 		}
-		else if(p_matrix->m_matrix[1 * 4 + 1] > p_matrix->m_matrix[0 * 4 + 0] && 
-			p_matrix->m_matrix[1 * 4 + 1] > p_matrix->m_matrix[2 * 4 + 2])
+		else if(p_matrix[1][1] > p_matrix[0][0] && 
+			p_matrix[1][1] > p_matrix[2][2])
 		{
-			real s_l = sqrt( 1-p_matrix->m_matrix[0 * 4 + 0]+p_matrix->m_matrix[1 * 4 + 1]-p_matrix->m_matrix[2 * 4 + 2])*2;
-			x = (p_matrix->m_matrix[0 * 4 + 1] - p_matrix->m_matrix[1 * 4 + 0])/s_l;
+			real s_l = sqrt( 1-p_matrix[0][0]+p_matrix[1][1]-p_matrix[2][2])*2;
+			x = (p_matrix[1][0] - p_matrix[0][1])/s_l;
 			y = 1.0f/(2.0f * s_l);
-			z = (p_matrix->m_matrix[1 * 4 + 2] - p_matrix->m_matrix[2 * 4 + 1])/s_l;
-			w = (p_matrix->m_matrix[0 * 4 + 2] - p_matrix->m_matrix[2 * 4 + 0])/s_l;
+			z = (p_matrix[2][1] - p_matrix[1][2])/s_l;
+			w = (p_matrix[2][0] - p_matrix[0][2])/s_l;
 		}
 		else
 		{
-			real s_l = sqrt( 1-p_matrix->m_matrix[0 * 4 + 0]-p_matrix->m_matrix[1 * 4 + 1]+p_matrix->m_matrix[2 * 4 + 2])*2;
-			x = (p_matrix->m_matrix[0 * 4 + 2] - p_matrix->m_matrix[2 * 4 + 0])/s_l;
-			y = (p_matrix->m_matrix[1 * 4 + 2] - p_matrix->m_matrix[2 * 4 + 1])/s_l;
+			real s_l = sqrt( 1-p_matrix[0][0]-p_matrix[1][1]+p_matrix[2][2])*2;
+			x = (p_matrix[2][0] - p_matrix[0][2])/s_l;
+			y = (p_matrix[2][1] - p_matrix[1][2])/s_l;
 			z = 1.0f/(2.0f * s_l);
-			w = (p_matrix->m_matrix[0 * 4 + 1] - p_matrix->m_matrix[1 * 4 + 0])/s_l;
+			w = (p_matrix[1][0] - p_matrix[0][1])/s_l;
 
 		}
 	}
@@ -435,7 +470,7 @@ bool Quaternion :: Read( File & p_file)
 
 real Quaternion :: Dot( const Quaternion & p_quat) const
 {
-    return dotProduct( p_quat);
+	return Point4r::Dot( p_quat);
 }
 
 Quaternion Quaternion :: Slerp( const Quaternion & p_target, real p_percent, bool p_shortestPath)

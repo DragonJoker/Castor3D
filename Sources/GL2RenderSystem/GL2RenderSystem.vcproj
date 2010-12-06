@@ -19,7 +19,7 @@
 		<Configuration
 			Name="Release - MultiByte|Win32"
 			OutputDirectory="$(SolutionDir)Bin\$(ConfigurationName)"
-			IntermediateDirectory="_generation\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)_generation\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
@@ -41,8 +41,9 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="-Zm139"
 				Optimization="0"
-				AdditionalIncludeDirectories="include/GL2RenderSystem;../Castor3D/include;../CastorUtils/include"
+				AdditionalIncludeDirectories="include/GL2RenderSystem;../Castor3D/include;../CastorUtils/include;../OpenGLCommon/include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;GL2RENDERSYSTEM_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -62,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib glu32.lib glew32.lib CastorUtils.lib Castor3D.lib"
+				AdditionalDependencies="opengl32.lib glu32.lib glew32.lib CastorUtils.lib Castor3D.lib OpenGLCommon.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="../Bin/Release - Multibyte"
 				GenerateDebugInformation="true"
@@ -97,7 +98,7 @@
 		<Configuration
 			Name="Release - Unicode|Win32"
 			OutputDirectory="$(SolutionDir)Bin\$(ConfigurationName)"
-			IntermediateDirectory="_generation\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)_generation\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -119,7 +120,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="include/GL2RenderSystem;../Castor3D/include;../CastorUtils/include"
+				AdditionalOptions="-Zm139"
+				AdditionalIncludeDirectories="include/GL2RenderSystem;../Castor3D/include;../CastorUtils/include;../OpenGLCommon/include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;_UNICODE;GL2RENDERSYSTEM_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -138,7 +140,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib glu32.lib glew32.lib CastorUtilsu.lib Castor3Du.lib"
+				AdditionalDependencies="opengl32.lib glu32.lib glew32.lib CastorUtilsu.lib Castor3Du.lib  OpenGLCommonu.lib"
 				OutputFile="$(OutDir)\$(ProjectName)u.dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="../Bin/Release - Unicode"
@@ -175,7 +177,7 @@
 		<Configuration
 			Name="Debug - Unicode|Win32"
 			OutputDirectory="$(SolutionDir)Bin\$(ConfigurationName)"
-			IntermediateDirectory="_generation\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)_generation\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			>
@@ -196,8 +198,9 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="-Zm139"
 				Optimization="0"
-				AdditionalIncludeDirectories="include/GL2RenderSystem;../Castor3D/include;../CastorUtils/include"
+				AdditionalIncludeDirectories="include/GL2RenderSystem;../Castor3D/include;../CastorUtils/include;../OpenGLCommon/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;_UNICODE;GL2RENDERSYSTEM_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -219,7 +222,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib glu32.lib glew32.lib Castor3Ddu.lib CastorUtilsdu.lib"
+				AdditionalDependencies="opengl32.lib glu32.lib glew32.lib Castor3Ddu.lib CastorUtilsdu.lib  OpenGLCommondu.lib"
 				OutputFile="$(OutDir)\$(ProjectName)du.dll"
 				AdditionalLibraryDirectories="../Bin/Debug - Unicode"
 				GenerateDebugInformation="true"
@@ -255,7 +258,7 @@
 		<Configuration
 			Name="Debug - Multibyte|Win32"
 			OutputDirectory="$(SolutionDir)Bin\$(ConfigurationName)"
-			IntermediateDirectory="_generation\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)_generation\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
@@ -280,7 +283,7 @@
 				AdditionalOptions="-Zm139"
 				Optimization="0"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="include/GL2RenderSystem;../Castor3D/include;../CastorUtils/include"
+				AdditionalIncludeDirectories="include/GL2RenderSystem;../Castor3D/include;../CastorUtils/include;../OpenGLCommon/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL; GL2RENDERSYSTEM_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -302,7 +305,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib glu32.lib glew32.lib Castor3Dd.lib CastorUtilsd.lib"
+				AdditionalDependencies="opengl32.lib glu32.lib glew32.lib Castor3Dd.lib CastorUtilsd.lib OpenGLCommond.lib"
 				OutputFile="$(OutDir)\$(ProjectName)d.dll"
 				AdditionalLibraryDirectories="../Bin/Debug - Multibyte"
 				GenerateDebugInformation="true"
@@ -345,10 +348,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\src\GL2RenderSystem\GLOverlayRenderer.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\src\GL2RenderSystem\PrecompiledHeader.cpp"
 				>
 				<FileConfiguration
@@ -385,50 +384,26 @@
 				</FileConfiguration>
 			</File>
 			<Filter
-				Name="geometry"
+				Name="renderers"
 				>
 				<File
-					RelativePath=".\src\GL2RenderSystem\GLSubmeshRenderer.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="material"
-				>
-				<File
-					RelativePath=".\src\GL2RenderSystem\GLMaterialRenderer.cpp"
+					RelativePath=".\src\GL2RenderSystem\GL2LightRenderer.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\GL2RenderSystem\GLTexEnvironmentRenderer.cpp"
+					RelativePath=".\src\GL2RenderSystem\GL2MaterialRenderer.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\GL2RenderSystem\GLTextureRenderer.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="camera"
-				>
-				<File
-					RelativePath=".\src\GL2RenderSystem\GLCameraRenderer.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="shader"
-				>
-				<File
-					RelativePath=".\src\GL2RenderSystem\GLSLObject.cpp"
+					RelativePath=".\src\GL2RenderSystem\GL2SubmeshRenderer.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\GL2RenderSystem\GLSLProgram.cpp"
+					RelativePath=".\src\GL2RenderSystem\GL2TextureRenderer.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\GL2RenderSystem\GLUniformVariable.cpp"
+					RelativePath=".\src\GL2RenderSystem\GL2WindowRenderer.cpp"
 					>
 				</File>
 			</Filter>
@@ -436,39 +411,23 @@
 				Name="main"
 				>
 				<File
-					RelativePath=".\src\GL2RenderSystem\GLBuffer.cpp"
+					RelativePath=".\src\GL2RenderSystem\GL2Buffer.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\GL2RenderSystem\GLContext.cpp"
+					RelativePath=".\src\GL2RenderSystem\GL2Plugin.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\GL2RenderSystem\GLPipeline.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\GL2RenderSystem\GLPlugin.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\GL2RenderSystem\GLRenderSystem.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\GL2RenderSystem\GLSceneNodeRenderer.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\GL2RenderSystem\GLWindowRenderer.cpp"
+					RelativePath=".\src\GL2RenderSystem\GL2RenderSystem.cpp"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="light"
+				Name="shader"
 				>
 				<File
-					RelativePath=".\src\GL2RenderSystem\GLLightRenderer.cpp"
+					RelativePath=".\src\GL2RenderSystem\GL2ShaderProgram.cpp"
 					>
 				</File>
 			</Filter>
@@ -479,14 +438,6 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\include\GL2RenderSystem\GLOverlayRenderer.h"
-				>
-			</File>
-			<File
-				RelativePath=".\include\GL2RenderSystem\Module_GL.h"
-				>
-			</File>
-			<File
 				RelativePath=".\include\GL2RenderSystem\Module_GLRender.h"
 				>
 			</File>
@@ -495,66 +446,26 @@
 				>
 			</File>
 			<Filter
-				Name="geometry"
+				Name="renderers"
 				>
 				<File
-					RelativePath=".\include\GL2RenderSystem\GLSubmeshRenderer.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="material"
-				>
-				<File
-					RelativePath=".\include\GL2RenderSystem\GLMaterialRenderer.h"
+					RelativePath=".\include\GL2RenderSystem\GL2LightRenderer.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\GL2RenderSystem\GLTexEnvironmentRenderer.h"
+					RelativePath=".\include\GL2RenderSystem\GL2MaterialRenderer.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\GL2RenderSystem\GLTextureRenderer.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="light"
-				>
-				<File
-					RelativePath=".\include\GL2RenderSystem\GLLightRenderer.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="camera"
-				>
-				<File
-					RelativePath=".\include\GL2RenderSystem\GLCameraRenderer.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="shader"
-				>
-				<File
-					RelativePath=".\include\GL2RenderSystem\GLSLObject.h"
+					RelativePath=".\include\GL2RenderSystem\GL2SubmeshRenderer.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\GL2RenderSystem\GLSLProgram.h"
+					RelativePath=".\include\GL2RenderSystem\GL2TextureRenderer.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\GL2RenderSystem\GLUniformVariable.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\GL2RenderSystem\Module_GLSL.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\GL2RenderSystem\ShadersCode.h"
+					RelativePath=".\include\GL2RenderSystem\GL2WindowRenderer.h"
 					>
 				</File>
 			</Filter>
@@ -562,31 +473,23 @@
 				Name="main"
 				>
 				<File
-					RelativePath=".\include\GL2RenderSystem\GLBuffer.h"
+					RelativePath=".\include\GL2RenderSystem\GL2Buffer.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\GL2RenderSystem\GLContext.h"
+					RelativePath=".\include\GL2RenderSystem\GL2Plugin.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\GL2RenderSystem\GLPipeline.h"
+					RelativePath=".\include\GL2RenderSystem\GL2RenderSystem.h"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="shader"
+				>
 				<File
-					RelativePath=".\include\GL2RenderSystem\GLPlugin.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\GL2RenderSystem\GLRenderSystem.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\GL2RenderSystem\GLSceneNodeRenderer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\GL2RenderSystem\GLWindowRenderer.h"
+					RelativePath=".\include\GL2RenderSystem\GL2ShaderProgram.h"
 					>
 				</File>
 			</Filter>

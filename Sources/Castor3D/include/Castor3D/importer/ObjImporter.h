@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_ObjImporter___
 
 #include "ExternalImporter.h"
+#include "../geometry/basic/SmoothingGroup.h"
 
 namespace Castor3D
 {
@@ -28,10 +29,10 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 25/08/2010
 	*/
-	class CS3D_API ObjImporter : public ExternalImporter
+	class C3D_API ObjImporter : public ExternalImporter, public MemoryTraced<ObjImporter>
 	{
 	private:
-		Point3rPtrArray m_arrayVertex;
+		Point3rArray m_arrayVertex;
 		Point2rArray  m_textureCoords;
 		int m_iNbTexCoords;
 		bool m_bReadingVertex;
@@ -42,8 +43,8 @@ namespace Castor3D
 		SubmeshPtrStrMap m_mapSubmeshes;
 		SubmeshPtr m_pCurrentSubmesh;
 		SubmeshPtrStrMap m_mapSmoothGroupSubmesh;
-		SmoothGroupPtrStrMap m_mapSmoothGroups;
-		SmoothingGroupPtr m_pSmoothingGroup;
+		IntStrMap m_mapSmoothGroups;
+		int m_iGroup;
 		float m_fAlpha;
 
 		MaterialPtr m_pCurrentMaterial;

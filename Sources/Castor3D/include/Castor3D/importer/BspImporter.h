@@ -24,19 +24,19 @@ namespace Castor3D
 {
 	#define FACE_POLYGON	1
 
-	struct CS3D_API BSPHeader
+	struct C3D_API BSPHeader
 	{
 		char m_strID[4];
 		int m_version;
 	}; 
 
-	struct CS3D_API BSPLump
+	struct C3D_API BSPLump
 	{
 		int m_offset;
 		int m_length;
 	};
 
-	struct CS3D_API BSPVertex
+	struct C3D_API BSPVertex
 	{
 		Point3r m_position;
 		Point2r m_textureCoord;
@@ -45,7 +45,7 @@ namespace Castor3D
 		unsigned char m_color[4];
 	};
 
-	struct CS3D_API BSPFace
+	struct C3D_API BSPFace
 	{
 		int m_textureID;
 		int m_effect;
@@ -63,7 +63,7 @@ namespace Castor3D
 		int m_size[2];
 	};
 
-	struct CS3D_API BSPTexture
+	struct C3D_API BSPTexture
 	{
 		char m_strName[64];
 		int m_flags;
@@ -92,7 +92,7 @@ namespace Castor3D
 		kMaxLumps
 	};
 
-	class CS3D_API BSPBitset
+	class C3D_API BSPBitset
 	{
 	private:
 		unsigned int *m_bits;
@@ -147,7 +147,7 @@ namespace Castor3D
 	};
 
 
-	class BspImporter : public ExternalImporter
+	class BspImporter : public ExternalImporter, public MemoryTraced<BSPImporter>
 	{
 	private:
 		int  m_numOfVerts;

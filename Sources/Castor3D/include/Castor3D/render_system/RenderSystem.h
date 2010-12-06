@@ -32,13 +32,18 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API RenderSystem
+	class C3D_API RenderSystem : public MemoryTraced<RenderSystem>
 	{
 	protected:
-		static RenderSystem * sm_singleton;		//!< The singleton
-		static bool sm_useMultiTexturing;		//!< Tells whether or not we can use multitexturing
-		static bool sm_useShaders;				//!< Tells whether or not we can use shaders
-		static bool sm_initialised;				//!< tells whether or not it is initialised
+		static Castor::MultiThreading::RecursiveMutex	m_mutex;
+		static RenderSystem *							sm_singleton;			//!< The singleton
+		static bool										sm_useMultiTexturing;	//!< Tells whether or not we can use multitexturing
+		static bool										sm_useShaders;			//!< Tells whether or not we can use shaders
+		static bool										sm_forceShaders;		//!< Tells whether or not we can use shaders
+		static bool										sm_useGeometryShaders;	//!< Tells whether or not we can use geometry shaders
+		static bool										sm_initialised;			//!< tells whether or not it is initialised
+
+	protected:
 		SubmeshRendererPtrArray				m_submeshesRenderers;
 		TextureEnvironmentRendererPtrArray	m_texEnvRenderers;
 		TextureRendererPtrArray				m_textureRenderers;
@@ -46,20 +51,14 @@ namespace Castor3D
 		LightRendererPtrArray				m_lightRenderers;
 		WindowRendererPtrArray				m_windowRenderers;
 		CameraRendererPtrArray				m_cameraRenderers;
-		ViewportRendererPtrArray			m_viewportRenderers;
-		SceneNodeRendererPtrArray			m_nodeRenderers;
 		OverlayRendererPtrArray				m_overlayRenderers;
 
-	public:
-		static int sm_drawTypes[3];				//!< The link between Castor3D::eDRAW_TYPE and render system (OpenGL or Direct3D) draw types
-		static int sm_environmentModes[5];		//!< The link between Castor3D::EnvironmentMode and render system (OpenGL or Direct3D) environment modes
-		static int sm_RGBCombinations[8];		//!< The link between Castor3D::RGBCombination and render system (OpenGL or Direct3D) rgb combinations
-		static int sm_RGBOperands[4];			//!< The link between Castor3D::RGBOperand and render system (OpenGL or Direct3D) rgb operands
-		static int sm_alphaCombinations[6];		//!< The link between Castor3D::AlphaCombination and render system (OpenGL or Direct3D) alpha combinations
-		static int sm_alphaOperands[2];			//!< The link between Castor3D::AlphaOperand and render system (OpenGL or Direct3D) alpha operands
-		static int sm_combinationSources[5];	//!< The link between Castor3D::CombinationSource and render system (OpenGL or Direct3D) combination sources
-		static int sm_textureDimensions[3];		//!< The link between Castor3D::TextureDimension and render system (OpenGL or Direct3D) texture dimensions
-		static int sm_lightIndexes[8];			//!< The link between Castor3D::LightIndexes and render system (OpenGL or Direct3D) light indexes
+		TextureRendererPtrArray				m_textureRenderersToCleanup;
+
+		ContextPtrMap						m_contextMap;
+		Context	*							m_mainContext;
+		Context	*							m_currentContext;
+		ShaderProgram *						m_pCurrentProgram;
 
 	public:
 		/**
@@ -69,22 +68,32 @@ namespace Castor3D
 		/**
 		 * Destructor
 		 */
-		virtual ~RenderSystem(){}
+		virtual ~RenderSystem();
 		/**
 		 * Initialises the render system
 		 */
 		virtual void Initialise()							= 0;
 		virtual void Delete()								= 0;
+		virtual void CleanupRenderers();
+		virtual void CleanupRenderersToCleanup();
 		/**
 		 * Display an arc in a given display mode
 		 */
-		virtual void DisplayArc( eDRAW_TYPE p_displayMode, const VertexPtrList & p_vertex) = 0;
+		virtual void DisplayArc( eDRAW_TYPE p_displayMode, const Point3rPtrList & p_vertex) = 0;
 		/**
 		 * Creates a renderer
 		 */
 		template <typename Ty> static Templates::SharedPtr<Ty> CreateRenderer()
 		{
-			return sm_singleton->_createRendererNS<Ty>();
+			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+			Templates::SharedPtr<Ty> l_pReturn;
+
+			if (sm_singleton != NULL)
+			{
+				l_pReturn = sm_singleton->_createRendererNS<Ty>();
+			}
+
+			return l_pReturn;
 		}
 		/**
 		 * Creates a Vertex Shader, only the render system can do that
@@ -105,35 +114,57 @@ namespace Castor3D
 		/**
 		 * Applies generic transformations (translation and rotation) from a position and an orientation
 		 */
-		virtual void ApplyTransformations( const Point3r & p_position, real * p_matrix) = 0;
+		virtual void ApplyTransformations( const Point3r & p_position, real * p_matrix);
+		/**
+		 * Applies generic transformations (translation and rotation) from a position and an orientation
+		 */
+		virtual void ApplyTransformations( const Point3r & p_position, const Matrix4x4r & p_matrix);
 		/**
 		* Removes generic transformations (translation and rotation) from a position and an orientation
 		*/
-		virtual void RemoveTransformations()=0;
+		virtual void RemoveTransformations();
 		/**
 		 * Begins the overlay (2d elements) rendering
 		 */
-		virtual void BeginOverlaysRendering()=0;
+		virtual void BeginOverlaysRendering();
 		/**
 		 * Ends the overlay (2d elements) rendering
 		 */
-		virtual void EndOverlaysRendering()=0;
+		virtual void EndOverlaysRendering();
 		/**
 		 * Renders the ambient lighting
 		 */
 		virtual void RenderAmbientLight( const Colour & p_clColour)=0;
+		/**
+		 * Adds a rendering context
+		 */
+		void AddContext( Context * p_context, RenderWindow * p_window);
+
+		virtual int LockLight()=0;
+		virtual void UnlockLight( int p_iIndex)=0;
 
 	public:
+		static inline RenderSystem	*	GetSingletonPtr			()	{ return _getSingletonPtr<RenderSystem>(); }
+		static inline bool				UseMultiTexturing		()	{ return sm_useMultiTexturing; }
+		static inline bool				UseShaders				()	{ return sm_useShaders; }
+		static inline bool				ForceShaders			()	{ return sm_forceShaders; }
+		static inline bool				HasGeometryShader		()	{ return sm_useGeometryShaders; }
+		static inline bool				IsInitialised			()	{ return sm_initialised; }
+		inline Context				*	GetCurrentContext		()	{ return m_currentContext; }
+		inline Context				*	GetMainContext			()	{ return m_mainContext; }
+		inline ShaderProgram		*	GetCurrentShaderProgram	()	{ return m_pCurrentProgram; }
+
+		virtual void	SetCurrentShaderProgram	( ShaderProgram * p_pVal)	{ m_pCurrentProgram = p_pVal; }
+		inline void		SetMainContext			( Context * p_context)		{ m_mainContext = p_context; }
+
+	protected:
 		template <typename T>
-		static inline T *	GetSingletonPtr		()	{ return (T *)sm_singleton; }
-		static inline bool	UseMultiTexturing	()	{ return sm_useMultiTexturing; }
-		static inline bool	UseShaders			()	{ return sm_useShaders; }
-		static inline bool	IsInitialised		()	{ return sm_initialised; }
+		static inline T			*	_getSingletonPtr	()	{ return (T *)sm_singleton; }
 
 	private:
 		template <typename Ty> Templates::SharedPtr<Ty> _createRendererNS()
 		{
-			Log::LogMessage( "Can't create a renderer of unknown type");
+			Logger::LogWarning( CU_T( "Can't create a renderer of unknown type"));
 		}
 
 		template <> Templates::SharedPtr<SubmeshRenderer> _createRendererNS()
@@ -160,17 +191,9 @@ namespace Castor3D
 		{
 			return _createCameraRenderer();
 		}
-		template <> Templates::SharedPtr<ViewportRenderer> _createRendererNS()
-		{
-			return _createViewportRenderer();
-		}
 		template <> Templates::SharedPtr<WindowRenderer> _createRendererNS()
 		{
 			return _createWindowRenderer();
-		}
-		template <> Templates::SharedPtr<SceneNodeRenderer> _createRendererNS()
-		{
-			return _createSceneNodeRenderer();
 		}
 		template <> Templates::SharedPtr<OverlayRenderer> _createRendererNS()
 		{
@@ -183,9 +206,7 @@ namespace Castor3D
 		virtual PassRendererPtr					_createPassRenderer					()=0;
 		virtual LightRendererPtr				_createLightRenderer				()=0;
 		virtual CameraRendererPtr				_createCameraRenderer				()=0;
-		virtual ViewportRendererPtr				_createViewportRenderer				()=0;
 		virtual WindowRendererPtr				_createWindowRenderer				()=0;
-		virtual SceneNodeRendererPtr			_createSceneNodeRenderer			()=0;
 		virtual OverlayRendererPtr				_createOverlayRenderer				()=0;
 	};
 }

@@ -30,9 +30,12 @@ namespace Castor
 	A collection class, allowing you to store named objects, removing, finding or adding them as you wish.
 	Autodeletion of all the contained items on deletion of the manager.
 	*/
-	template <typename TObj, class T>
-	class UniqueManager : public Manager<TObj>
+	template <typename Key, typename TObj, class T>
+	class UniqueManager : public Manager<Key, TObj>
 	{
+	protected:
+		Castor::MultiThreading::RecursiveMutex m_mutex;
+
 	protected:
 		UniqueManager(){}
 		~UniqueManager()
@@ -59,14 +62,15 @@ namespace Castor
 		static void Clear() throw()
 		{
 			UniqueManager * l_pThis = GetSingletonPtr();
+			CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( l_pThis->m_mutex);
 			((Manager *)l_pThis)->Clear();
 		}
 		static bool AddElement( TObjPtr p_element)
 		{
 			UniqueManager * l_pThis = GetSingletonPtr();
+			CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( l_pThis->m_mutex);
 			return ((Manager *)l_pThis)->AddElement( p_element);
 		}
-/*
 		static TObjPtr CreateElement( const String & p_elementName)
 		{
 			UniqueManager * l_pThis = GetSingletonPtr();
@@ -78,35 +82,58 @@ namespace Castor
 			UniqueManager * l_pThis = GetSingletonPtr();
 			return ((Manager *)l_pThis)->CreateElement( p_elementName, p_param);
 		}
-*/
+		template<typename TParam1, typename TParam2>
+		TObjPtr CreateElement( const String & p_elementName, const TParam1 & p_param1, const TParam2 & p_param2)
+		{
+			UniqueManager * l_pThis = GetSingletonPtr();
+			return ((Manager *)l_pThis)->CreateElement( p_elementName, p_param1, p_param2);
+		}
+		template<typename TParam1, typename TParam2, typename TParam3>
+		TObjPtr CreateElement( const String & p_elementName, const TParam1 & p_param1, const TParam2 & p_param2, const TParam3 & p_param3)
+		{
+			UniqueManager * l_pThis = GetSingletonPtr();
+			return ((Manager *)l_pThis)->CreateElement( p_elementName, p_param1, p_param2, p_param3);
+		}
+		template<typename TParam1, typename TParam2, typename TParam3, typename TParam4>
+		TObjPtr CreateElement( const String & p_elementName, const TParam1 & p_param1, const TParam2 & p_param2, const TParam3 & p_param3, const TParam4 & p_param4)
+		{
+			UniqueManager * l_pThis = GetSingletonPtr();
+			return ((Manager *)l_pThis)->CreateElement( p_elementName, p_param1, p_param2, p_param3, p_param4);
+		}
 		static bool HasElement( const String & p_key)
 		{
 			UniqueManager * l_pThis = GetSingletonPtr();
+			CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( l_pThis->m_mutex);
 			return ((Manager *)l_pThis)->HasElement( p_key);
 		}
 		static bool HasElement( TObjPtr p_element)
 		{
 			UniqueManager * l_pThis = GetSingletonPtr();
+			CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( l_pThis->m_mutex);
 			return ((Manager *)l_pThis)->HasElement( p_element);
 		}
 		static TObjPtr RemoveElement( const String & p_key)
 		{
 			UniqueManager * l_pThis = GetSingletonPtr();
+			CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( l_pThis->m_mutex);
 			return ((Manager *)l_pThis)->RemoveElement( p_key);
 		}
 		static TObjPtr RemoveElement( TObjPtr p_element)
 		{
 			UniqueManager * l_pThis = GetSingletonPtr();
+			CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( l_pThis->m_mutex);
 			return ((Manager *)l_pThis)->RemoveElement( p_element);
 		}
 		static TObjPtr GetElementByName( const String & p_key)
 		{
 			UniqueManager * l_pThis = GetSingletonPtr();
+			CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( l_pThis->m_mutex);
 			return ((Manager *)l_pThis)->GetElementByName( p_key);
 		}
 		static TObjPtr DestroyElement( TObjPtr & p_element)
 		{
 			UniqueManager * l_pThis = GetSingletonPtr();
+			CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( l_pThis->m_mutex);
 			return ((Manager *)l_pThis)->DestroyElement( p_element);
 		}
 	};

@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___Castor_Manager___
 
 #include "SharedPtr.h"
+#include "Value.h"
 
 namespace Castor
 { namespace Templates
@@ -27,12 +28,13 @@ namespace Castor
 	A collection class, allowing you to store named objects, removing, finding or adding them as you wish.
 	Autodeletion of all the contained items on deletion of the manager.
 	*/
-	template <typename TObj>
+	template <typename Key, typename TObj>
 	class Manager
 	{
 	public:
 		typedef SharedPtr<TObj> TObjPtr;
-		typedef C3DMap( String, TObjPtr) TypeMap;
+		typedef typename CallTraits<Key>::ParamType KeyParamType;
+		typedef C3DMap( Key, TObjPtr) TypeMap;
 		TypeMap m_objectMap;
 
 	public:
@@ -50,41 +52,117 @@ namespace Castor
 		void Clear() throw()
 		{
 			m_objectMap.clear();
-//			Castor::map::deleteAll( m_objectMap);
+		}
+		TObjPtr CreateElement( KeyParamType p_key)
+		{
+			TObjPtr l_pReturn;
+			const typename TypeMap::iterator & ifind = m_objectMap.find( p_key);
+
+			if (ifind != m_objectMap.end())
+			{
+				l_pReturn = ifind->second;
+			}
+			else
+			{
+				l_pReturn = TObjPtr( new TObj( p_key));
+				m_objectMap.insert( typename TypeMap::value_type( p_key, l_pReturn));
+			}
+
+			return l_pReturn;
+		}
+		template<typename TParam>
+		TObjPtr CreateElement( KeyParamType p_key, typename CallTraits<TParam>::ParamType p_param)
+		{
+			TObjPtr l_pReturn;
+			const typename TypeMap::iterator & ifind = m_objectMap.find( p_key);
+
+			if (ifind != m_objectMap.end())
+			{
+				l_pReturn = ifind->second;
+			}
+			else
+			{
+				l_pReturn = TObjPtr( new TObj( p_key, p_param));
+				m_objectMap.insert( typename TypeMap::value_type( p_key, l_pReturn));
+			}
+
+			return l_pReturn;
+		}
+		template<typename TParam1, typename TParam2>
+		TObjPtr CreateElement( KeyParamType p_key, typename CallTraits<TParam1>::ParamType p_param1, typename CallTraits<TParam2>::ParamType p_param2)
+		{
+			TObjPtr l_pReturn;
+			const typename TypeMap::iterator & ifind = m_objectMap.find( p_key);
+
+			if (ifind != m_objectMap.end())
+			{
+				l_pReturn = ifind->second;
+			}
+			else
+			{
+				l_pReturn = TObjPtr( new TObj( p_key, p_param1, p_param2));
+				m_objectMap.insert( typename TypeMap::value_type( p_key, l_pReturn));
+			}
+
+			return l_pReturn;
+		}
+		template<typename TParam1, typename TParam2, typename TParam3>
+		TObjPtr CreateElement( KeyParamType p_key, typename CallTraits<TParam1>::ParamType p_param1, typename CallTraits<TParam2>::ParamType p_param2, typename CallTraits<TParam3>::ParamType p_param3)
+		{
+			TObjPtr l_pReturn;
+			const typename TypeMap::iterator & ifind = m_objectMap.find( p_key);
+
+			if (ifind != m_objectMap.end())
+			{
+				l_pReturn = ifind->second;
+			}
+			else
+			{
+				l_pReturn = TObjPtr( new TObj( p_key, p_param1, p_param2, p_param3));
+				m_objectMap.insert( typename TypeMap::value_type( p_key, l_pReturn));
+			}
+
+			return l_pReturn;
+		}
+		template<typename TParam1, typename TParam2, typename TParam3, typename TParam4>
+		TObjPtr CreateElement( KeyParamType p_key, typename CallTraits<TParam1>::ParamType p_param1, typename CallTraits<TParam2>::ParamType p_param2, typename CallTraits<TParam3>::ParamType p_param3, typename CallTraits<TParam4>::ParamType p_param4)
+		{
+			TObjPtr l_pReturn;
+			const typename TypeMap::iterator & ifind = m_objectMap.find( p_key);
+
+			if (ifind != m_objectMap.end())
+			{
+				l_pReturn = ifind->second;
+			}
+			else
+			{
+				l_pReturn = TObjPtr( new TObj( p_key, p_param1, p_param2, p_param3, p_param4));
+				m_objectMap.insert( typename TypeMap::value_type( p_key, l_pReturn));
+			}
+
+			return l_pReturn;
 		}
 		bool AddElement( TObjPtr p_element)
 		{
-			const typename TypeMap::iterator & ifind = m_objectMap.find( p_element->GetName());
+			const typename TypeMap::iterator & ifind = m_objectMap.find( p_element->GetKey());
 
 			if (ifind != m_objectMap.end())
 			{
 				return false;
 			}
 
-			TObjPtr l_sharedPtr( p_element);
-			m_objectMap.insert( typename TypeMap::value_type( p_element->GetName(), l_sharedPtr));
+			m_objectMap.insert( typename TypeMap::value_type( p_element->GetKey(), p_element));
 			return true;
 		}
-/*
-		TObj * CreateElement( const String & p_elementName)
-		{
-			return Castor::map::insert( m_objectMap, p_elementName, p_elementName);
-		}
-		template<typename TParam>
-		TObj * CreateElement( const String & p_elementName, const TParam & p_param)
-		{
-			return Castor::map::insert( m_objectMap, p_elementName, p_elementName, p_param);
-		}
-*/
-		bool HasElement( const String & p_key)const
+		bool HasElement( KeyParamType p_key)const
 		{
 			return m_objectMap.find( p_key) != m_objectMap.end();
 		}
 		bool HasElement( TObjPtr p_element)const
 		{
-			return m_objectMap.find( p_element->GetName()) != m_objectMap.end();
+			return m_objectMap.find( p_element->GetKey()) != m_objectMap.end();
 		}
-		TObjPtr RemoveElement( const String & p_key)
+		TObjPtr RemoveElement( KeyParamType p_key)
 		{
 			TObjPtr l_ret;
 			const typename TypeMap::iterator & ifind = m_objectMap.find( p_key);
@@ -99,25 +177,35 @@ namespace Castor
 		}
 		TObjPtr RemoveElement( TObjPtr p_element)
 		{
-			return RemoveElement( p_element->GetName());
+			return RemoveElement( p_element->GetKey());
 		}
-		TObjPtr GetElementByName( const String & p_key)
+		TObjPtr GetElementByName( KeyParamType p_key)
 		{
 			return Utils::map::findOrNull( m_objectMap, p_key);
 		}
 		TObjPtr DestroyElement( TObjPtr & p_element)
 		{
 			return RemoveElement( p_element);
-/*
-			if (RemoveElement( p_element))
-			{
-				delete p_element;
-				return true;
-			}
-
-			return false;
-*/
 		}
+	};
+
+	template <typename Key, typename TObj>
+	class Managed
+	{
+	public:
+		typedef typename CallTraits<Key>::ParamType KeyParamType;
+		friend class Manager <Key, TObj>;
+
+	protected:
+		Key m_key;
+
+	public:
+		Managed( KeyParamType p_key)
+			:	m_key( p_key)
+		{}
+		~Managed()
+		{}
+		inline KeyParamType GetKey()const { return m_key; }
 	};
 }
 }

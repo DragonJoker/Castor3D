@@ -78,35 +78,38 @@ namespace CastorShape
 		enum {NType = p_nodeType};										\
 	};
 
-	typedef Matrix<real, 2, 2> Matrix2;
-	typedef Matrix<real, 3, 3> Matrix3;
-	typedef Matrix<real, 4, 4> Matrix4;
-	typedef Point<bool, 2>	Point2Bool;
-	typedef Point<bool, 3>	Point3Bool;
-	typedef Point<bool, 4>	Point4Bool;
-	typedef Point<int, 2>	Point2Int;
-	typedef Point<int, 3>	Point3Int;
-	typedef Point<int, 4>	Point4Int;
-	typedef Point2r	Point2Real;
-	typedef Point3r	Point3Real;
-	typedef Point<real, 4>	Point4Real;
+	typedef Matrix<real, 2, 3> Matrix2x3r;
+	typedef Matrix<real, 2, 4> Matrix2x4r;
+	typedef Matrix<real, 3, 2> Matrix3x2r;
+	typedef Matrix<real, 3, 4> Matrix3x4r;
+	typedef Matrix<real, 4, 2> Matrix4x2r;
+	typedef Matrix<real, 4, 3> Matrix4x3r;
+	typedef Point<bool, 2>	Point2b;
+	typedef Point<bool, 3>	Point3b;
+	typedef Point<bool, 4>	Point4b;
 
 	EMUSE_BIND_NODE_VALUE(	int,				EMVT_INT);
 	EMUSE_BIND_NODE_VALUE(	real,				EMVT_REAL);
 
 	EMUSE_BIND_NODE_VALUE(	bool,				EMVT_BOOL);
-	EMUSE_BIND_NODE_VALUE(	Point2Bool,			EMVT_VEC2B);
-	EMUSE_BIND_NODE_VALUE(	Point3Bool,			EMVT_VEC3B);
-	EMUSE_BIND_NODE_VALUE(	Point4Bool,			EMVT_VEC4B);
-	EMUSE_BIND_NODE_VALUE(	Point2Int,			EMVT_VEC2I);
-	EMUSE_BIND_NODE_VALUE(	Point3Int,			EMVT_VEC3I);
-	EMUSE_BIND_NODE_VALUE(	Point4Int,			EMVT_VEC4I);
-	EMUSE_BIND_NODE_VALUE(	Point2Real,			EMVT_VEC2F);
-	EMUSE_BIND_NODE_VALUE(	Point3Real,			EMVT_VEC3F);
-	EMUSE_BIND_NODE_VALUE(	Point4Real,			EMVT_VEC4F);
-	EMUSE_BIND_NODE_VALUE(	Matrix2,			EMVT_MAT2);
-	EMUSE_BIND_NODE_VALUE(	Matrix3,			EMVT_MAT3);
-	EMUSE_BIND_NODE_VALUE(	Matrix4,			EMVT_MAT4);
+	EMUSE_BIND_NODE_VALUE(	Point2b,			EMVT_VEC2B);
+	EMUSE_BIND_NODE_VALUE(	Point3b,			EMVT_VEC3B);
+	EMUSE_BIND_NODE_VALUE(	Point4b,			EMVT_VEC4B);
+	EMUSE_BIND_NODE_VALUE(	Point2i,			EMVT_VEC2I);
+	EMUSE_BIND_NODE_VALUE(	Point3i,			EMVT_VEC3I);
+	EMUSE_BIND_NODE_VALUE(	Point4i,			EMVT_VEC4I);
+	EMUSE_BIND_NODE_VALUE(	Point2r,			EMVT_VEC2F);
+	EMUSE_BIND_NODE_VALUE(	Point3r,			EMVT_VEC3F);
+	EMUSE_BIND_NODE_VALUE(	Point4r,			EMVT_VEC4F);
+	EMUSE_BIND_NODE_VALUE(	Matrix2x2r,			EMVT_MAT2);
+	EMUSE_BIND_NODE_VALUE(	Matrix2x3r,			EMVT_MAT2x3);
+	EMUSE_BIND_NODE_VALUE(	Matrix2x4r,			EMVT_MAT2x4);
+	EMUSE_BIND_NODE_VALUE(	Matrix3x2r,			EMVT_MAT3x2);
+	EMUSE_BIND_NODE_VALUE(	Matrix3x3r,			EMVT_MAT3);
+	EMUSE_BIND_NODE_VALUE(	Matrix3x4r,			EMVT_MAT3x4);
+	EMUSE_BIND_NODE_VALUE(	Matrix4x2r,			EMVT_MAT4x2);
+	EMUSE_BIND_NODE_VALUE(	Matrix4x3r,			EMVT_MAT4x3);
+	EMUSE_BIND_NODE_VALUE(	Matrix4x4r,			EMVT_MAT4);
 
 	EMUSE_BIND_NODE_VALUE(	NodeValueBaseArray,	EMVT_ARRAY);
 

@@ -32,11 +32,11 @@ struct MaterialInfos
 };
 
 #ifndef _UNICODE
-#	if C3D_UNICODE
+#	if CASTOR_UNICODE
 #		error "CastorShape compiling in ASCII mode while Castor3D is in UNICODE mode"
 #	endif
 #else
-#	if ! C3D_UNICODE
+#	if ! CASTOR_UNICODE
 #		error "CastorShape compiling in UNICODE mode while Castor3D is in ASCII mode"
 #	endif
 #endif

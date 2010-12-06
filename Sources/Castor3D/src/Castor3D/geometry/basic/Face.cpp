@@ -3,23 +3,21 @@
 #include "geometry/Module_Geometry.h"
 
 #include "geometry/basic/Face.h"
+#include "geometry/basic/Vertex.h"
 
 using namespace Castor3D;
 
 unsigned long Face :: s_faceNumber = 0;
 
-Face :: Face( VertexPtr p_v1, VertexPtr p_v2, VertexPtr p_v3)
-	:	m_vertex1( p_v1),
-		m_vertex2( p_v2),
-		m_vertex3( p_v3),
-		m_vertex1Normal( NULL),
-		m_vertex2Normal( NULL),
-		m_vertex3Normal( NULL),
-		m_vertex1Tangent( NULL),
-		m_vertex2Tangent( NULL),
-		m_vertex3Tangent( NULL)
+Face :: Face( const Point3r & p_v1, size_t p_uiIndex1, const Point3r & p_v2, size_t p_uiIndex2, const Point3r & p_v3, size_t p_uiIndex3)
 {
 	s_faceNumber++;
+	m_vertex[0].SetCoords( p_v1);
+	m_vertex[0].m_index = p_uiIndex1;
+	m_vertex[1].SetCoords( p_v2);
+	m_vertex[1].m_index = p_uiIndex2;
+	m_vertex[2].SetCoords( p_v3);
+	m_vertex[2].m_index = p_uiIndex3;
 }
 
 Face :: ~Face()
@@ -30,50 +28,47 @@ Face :: ~Face()
 
 Point3r Face :: GetFaceCenter()
 {
-	Point3r l_vertexMean;
+	Point3r l_vertexAvrg;
 
-	l_vertexMean += *m_vertex1;
-	l_vertexMean += *m_vertex2;
-	l_vertexMean += *m_vertex3;
-	l_vertexMean /= real( 3.0);
+	l_vertexAvrg += m_vertex[0].GetCoords();
+	l_vertexAvrg += m_vertex[1].GetCoords();
+	l_vertexAvrg += m_vertex[2].GetCoords();
+	l_vertexAvrg /= real( 3.0);
 
-	return l_vertexMean;
+	return l_vertexAvrg;
 }
 
-void Face :: SetTexCoordV1( real x, real y)
+void Face :: SetVertexTexCoords( size_t p_iVertex, real x, real y)
 {
-	m_vertex1TexCoord[0] = x;
-	m_vertex1TexCoord[1] = y;
+	m_vertex[p_iVertex].SetTexCoord( x, y);
 }
 
-void Face :: SetTexCoordV1( const Point2r & p_ptUV)
+void Face :: SetVertexTexCoords( size_t p_iVertex, const Point2r & p_ptUV)
 {
-	m_vertex1TexCoord[0] = p_ptUV[0];
-	m_vertex1TexCoord[1] = p_ptUV[1];
+	m_vertex[p_iVertex].SetTexCoord( p_ptUV);
 }
 
-void Face :: SetTexCoordV2( real x, real y)
+void Face :: SetVertexTexCoords( size_t p_iVertex, const real * p_pCoords)
 {
-	m_vertex2TexCoord[0] = x;
-	m_vertex2TexCoord[1] = y;
+	m_vertex[p_iVertex].SetTexCoord( p_pCoords);
 }
 
-void Face :: SetTexCoordV2( const Point2r & p_ptUV)
+void Face :: SetSmoothNormals()
 {
-	m_vertex2TexCoord[0] = p_ptUV[0];
-	m_vertex2TexCoord[1] = p_ptUV[1];
+	for (size_t i = 0 ; i < 3 ; i++)
+	{
+		m_vertex[i].SetNormal( m_smoothNormals[i]);
+		m_vertex[i].SetTangent( m_smoothTangents[i]);
+	}
 }
 
-void Face :: SetTexCoordV3( real x, real y)
+void Face :: SetFlatNormals()
 {
-	m_vertex3TexCoord[0] = x;
-	m_vertex3TexCoord[1] = y;
-}
-
-void Face :: SetTexCoordV3( const Point2r & p_ptUV)
-{
-	m_vertex3TexCoord[0] = p_ptUV[0];
-	m_vertex3TexCoord[1] = p_ptUV[1];
+	for (size_t i = 0 ; i < 3 ; i++)
+	{
+		m_vertex[i].SetNormal( m_faceNormal);
+		m_vertex[i].SetTangent( m_faceTangent);
+	}
 }
 
 bool Face :: Write( File & p_file)const
@@ -85,31 +80,21 @@ bool Face :: Write( File & p_file)const
 	}
 
 	// on écrit les normales par vertex de la face
-	if ( ! m_vertex1Normal->Write( p_file))
+	for (size_t i = 0 ; i < 3 ; i++)
 	{
-		return false;
-	}
-	if ( ! m_vertex2Normal->Write( p_file))
-	{
-		return false;
-	}
-	if ( ! m_vertex3Normal->Write( p_file))
-	{
-		return false;
+		if ( ! m_vertex[0].GetNormal().Write( p_file))
+		{
+			return false;
+		}
 	}
 
 	// on écrit les coordonnées de texture de la face
-	if ( ! m_vertex1TexCoord.Write( p_file))
+	for (size_t i = 0 ; i < 3 ; i++)
 	{
-		return false;
-	}
-	if ( ! m_vertex2TexCoord.Write( p_file))
-	{
-		return false;
-	}
-	if ( ! m_vertex3TexCoord.Write( p_file))
-	{
-		return false;
+		if ( ! m_vertex[0].GetTexCoord().Write( p_file))
+		{
+			return false;
+		}
 	}
 
 	return true;
@@ -123,36 +108,22 @@ bool Face :: Read( File & p_file)
 		return false;
 	}
 
-	m_vertex1Normal = new Point3r;
-	m_vertex2Normal = new Point3r;
-	m_vertex3Normal = new Point3r;
-
 	// on lit les normales par vertex de la face
-	if ( ! m_vertex1Normal->Read( p_file))
+	for (size_t i = 0 ; i < 3 ; i++)
 	{
-		return false;
-	}
-	if ( ! m_vertex2Normal->Read( p_file))
-	{
-		return false;
-	}
-	if ( ! m_vertex3Normal->Read( p_file))
-	{
-		return false;
+		if ( ! m_vertex[0].GetNormal().Read( p_file))
+		{
+			return false;
+		}
 	}
 
 	// on lit les coordonnées de texture par vertex de la face
-	if ( ! m_vertex1TexCoord.Read( p_file))
+	for (size_t i = 0 ; i < 3 ; i++)
 	{
-		return false;
-	}
-	if ( ! m_vertex2TexCoord.Read( p_file))
-	{
-		return false;
-	}
-	if ( ! m_vertex3TexCoord.Read( p_file))
-	{
-		return false;
+		if ( ! m_vertex[0].GetTexCoord().Read( p_file))
+		{
+			return false;
+		}
 	}
 
 	return true;

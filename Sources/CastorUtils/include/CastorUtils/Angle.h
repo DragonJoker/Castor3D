@@ -26,7 +26,7 @@ namespace Castor
 	/*!
 		Helper class to manage angles without taking care of degrees or radians
 	*/
-	class Angle
+	class Angle : public MemoryTraced<Angle>
 	{
 	private:
 		real m_rAngle; //!< Angle in radian

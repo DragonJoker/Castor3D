@@ -29,10 +29,9 @@ namespace Castor3D
 	\todo Review all the animation system because it's not clear, not optimised, and not good enough to be validated.
 	\todo Write and Read functions.
 	*/
-	class CS3D_API AnimatedObjectGroup
+	class C3D_API AnimatedObjectGroup : public Managed<String, AnimatedObjectGroup>, public MemoryTraced<AnimatedObjectGroup>
 	{
 	protected:
-		String m_name;								//!< The name of the group
 		real m_currentTime;							//!< The current time index
 		AnimationPtrStrMap m_animations;			//!< The list of animations
 		AnimatedObjectPtrStrMap m_objects;			//!< The list of AnimatedObjects
@@ -108,7 +107,7 @@ namespace Castor3D
 		 * Returns the name of the group
 		 *@return the name of the group
 		 */
-		inline const String & GetName() { return m_name; }
+		inline const String & GetName() { return m_key; }
 		//@}
 	};
 }

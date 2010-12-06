@@ -1,4 +1,3 @@
-//******************************************************************************
 #include "PrecompiledHeaders.h"
 
 #include "main/MainFrame.h"
@@ -15,63 +14,14 @@
 #include "geometry/GeometriesListFrame.h"
 #include "material/MaterialsFrame.h"
 #include "material/NewMaterialDialog.h"
-//******************************************************************************
+
 #define ID_NEW_WINDOW 10000
-//******************************************************************************
+
 using namespace Castor3D;
-//******************************************************************************
+
 unsigned int g_nbGeometries;
 CSMainFrame * g_mainFrame;
 DECLARE_APP( CSCastorShape)
-//******************************************************************************
-
-BEGIN_EVENT_TABLE( CSMainFrame, wxFrame)
-	EVT_SIZE(				CSMainFrame::_onSize)
-	EVT_MOVE(				CSMainFrame::_onMove)
-	EVT_CLOSE(				CSMainFrame::_onClose)
-	EVT_ENTER_WINDOW(		CSMainFrame::_onEnterWindow)
-	EVT_LEAVE_WINDOW(		CSMainFrame::_onLeaveWindow)
-	EVT_ERASE_BACKGROUND(	CSMainFrame::_onEraseBackground)
-	EVT_KEY_DOWN(			CSMainFrame::_onKeyDown)
-	EVT_KEY_UP(				CSMainFrame::_onKeyUp)
-	EVT_LEFT_DOWN(			CSMainFrame::_onMouseLDown)
-	EVT_LEFT_UP(			CSMainFrame::_onMouseLUp)
-	EVT_MIDDLE_DOWN(		CSMainFrame::_onMouseMDown)
-	EVT_MIDDLE_UP(			CSMainFrame::_onMouseMUp)
-	EVT_RIGHT_DOWN(			CSMainFrame::_onMouseRDown)
-	EVT_RIGHT_UP(			CSMainFrame::_onMouseRUp)
-	EVT_MOTION(				CSMainFrame::_onMouseMove)
-	EVT_MOUSEWHEEL(			CSMainFrame::_onMouseWheel)
-
-    EVT_MENU( wxID_EXIT,				CSMainFrame::_onMenuClose)
-	EVT_MENU( mbExit,					CSMainFrame::_onMenuClose)
-	EVT_MENU( mbSaveScene,				CSMainFrame::_onSaveScene)
-	EVT_MENU( mLoadScene,				CSMainFrame::_onLoadScene)
-	EVT_MENU( mbNewCone,				CSMainFrame::_onNewCone)
-	EVT_MENU( mbNewCube,				CSMainFrame::_onNewCube)
-	EVT_MENU( mbNewCylinder,			CSMainFrame::_onNewCylinder)
-	EVT_MENU( mbNewIcosaedron,			CSMainFrame::_onNewIcosaedron)
-	EVT_MENU( mbNewPlane,				CSMainFrame::_onNewPlane)
-	EVT_MENU( mbNewSphere,				CSMainFrame::_onNewSphere)
-	EVT_MENU( mbNewTorus,				CSMainFrame::_onNewTorus)
-	EVT_MENU( mbNewProjection,			CSMainFrame::_onNewProjection)
-	EVT_MENU( mbNewMaterial,			CSMainFrame::_onNewMaterial)
-	EVT_MENU( mbGeometries,				CSMainFrame::_onShowGeometriesList)
-	EVT_MENU( mbMaterials,				CSMainFrame::_onShowMaterialsList)
-	EVT_MENU( mbSelectGeometries,		CSMainFrame::_onSelectGeometries)
-	EVT_MENU( mbSelectPoints,			CSMainFrame::_onSelectPoints)
-	EVT_MENU( mbCloneSelection,			CSMainFrame::_onCloneSelection)
-	EVT_MENU( mbSelectNone,				CSMainFrame::_onSelectNone)
-	EVT_MENU( mbSubdividePNTriangles,	CSMainFrame::_onSubdivideAllPNTriangles)
-	EVT_MENU( mbSubdivideLoop,			CSMainFrame::_onSubdivideAllLoop)
-	EVT_MENU( mbSelect,					CSMainFrame::_onSelect)
-	EVT_MENU( mbModify,					CSMainFrame::_onModify)
-	EVT_MENU( mbNone,					CSMainFrame::_onNothing)
-	EVT_MENU( mbRender,					CSMainFrame::_onRender)
-
-END_EVENT_TABLE()
-
-//******************************************************************************
 
 CSMainFrame :: CSMainFrame( wxWindow * parent, const wxString & title, 
 						    const wxPoint & pos, const wxSize & size,
@@ -82,7 +32,6 @@ CSMainFrame :: CSMainFrame( wxWindow * parent, const wxString & title,
 		m_2dFrameBG			( NULL),
 		m_2dFrameBD			( NULL),
 		m_castor3D			( NULL),
-		m_selectedGeometry	( NULL),
 		m_bWireFrame		( false)
 {
 	m_selectedMaterial.m_ambient[0] = 0.2f;
@@ -93,20 +42,15 @@ CSMainFrame :: CSMainFrame( wxWindow * parent, const wxString & title,
 	m_selectedMaterial.m_emissive[2] = 0.0f;
 	g_mainFrame = this;
 
-	Log::SetFileName( "CastorShape.log");
+	Logger::SetFileName( "CastorShape.log");
 
 	_buildMenuBar();
 	_initialise3D();
-	 wxInitAllImageHandlers();
 }
-
-//******************************************************************************
 
 CSMainFrame :: ~CSMainFrame()
 {
 }
-
-//******************************************************************************
 
 void CSMainFrame :: SelectGeometry( GeometryPtr p_geometry)
 {
@@ -150,21 +94,241 @@ void CSMainFrame :: SelectGeometry( GeometryPtr p_geometry)
 	}
 }
 
-//******************************************************************************
-
-void CSMainFrame :: SelectVertex( Point3rPtr p_vertex)
+void CSMainFrame :: SelectVertex( Vertex * p_vertex)
 {
 }
 
-//******************************************************************************
+void CSMainFrame :: ShowPanels()
+{
+	if (m_3dFrame != NULL)
+	{
+		m_3dFrame->DrawOneFrame();
+		m_2dFrameHD->DrawOneFrame();
+		m_2dFrameBG->DrawOneFrame();
+		m_2dFrameBD->DrawOneFrame();
+	}
+}
+
+void CSMainFrame :: _initialise3D()
+{
+	Logger::LogMessage( CU_T( "Initialising Castor3D"));
+
+	m_castor3D = new Root( 25);
+
+	try
+	{
+		m_castor3D->LoadRenderer( RendererDriver::eOpenGL2);
+		m_mainScene = SceneManager::GetSingletonPtr()->CreateElement( "MainScene");
+
+		Logger::LogMessage( CU_T( "Castor3D Initialised"));
+		int l_width = GetClientSize().x / 2;
+		int l_height = GetClientSize().y / 2;
+		m_3dFrame = new CSRenderPanel( this, frame3d, Viewport::e3DView, m_mainScene,
+									   wxPoint( 0, 0),
+									   wxSize( l_width - 1, l_height - 1));
+		m_2dFrameHD = new CSRenderPanel( this, frame2d, Viewport::e2DView, m_mainScene,
+										 wxPoint( l_width + 1, 0),
+										 wxSize( l_width - 1, l_height - 1));
+		m_2dFrameBG = new CSRenderPanel( this, frame2d, Viewport::e2DView, m_mainScene,
+										 wxPoint( 0, l_height + 1),
+										 wxSize( l_width - 1, l_height - 1), pdLookToLeft);
+		m_2dFrameBD = new CSRenderPanel( this, frame2d, Viewport::e2DView, m_mainScene,
+										 wxPoint( l_width + 1, l_height + 1),
+										 wxSize( l_width - 1, l_height - 1), pdLookToTop);
+
+		m_separator1 = new wxPanel( this, wxID_ANY, wxPoint( 0, l_height - 1),
+									wxSize( l_width, 2));
+		m_separator2 = new wxPanel( this, wxID_ANY, wxPoint( l_width, l_height - 1),
+									wxSize( l_width, 2));
+		m_separator3 = new wxPanel( this, wxID_ANY, wxPoint( l_width - 1, 0),
+									wxSize( 2, l_height));
+		m_separator4 = new wxPanel( this, wxID_ANY, wxPoint( l_width - 1, l_height),
+									wxSize( 2, l_height));
+
+		m_3dFrame->Show();
+		m_2dFrameHD->Show();
+		m_2dFrameBG->Show();
+		m_2dFrameBD->Show();
+
+		ShowPanels();
+
+		ScenePtr l_pScene = SceneManager::GetSingletonPtr()->GetElementByName( "MainScene");
+
+		DirectionalLightPtr l_light1 = Templates::static_pointer_cast<DirectionalLight>( l_pScene->CreateLight( Light::eDirectional, "Light1", l_pScene->CreateLightNode( "Light1Node")));
+		if ( ! l_light1.null())
+		{
+			l_light1->GetParent()->SetPosition( 0.0f, 0.0f, 1.0f);
+			l_light1->SetDiffuse( 1.0f, 1.0f, 1.0f);
+			l_light1->SetSpecular( 1.0f, 1.0f, 1.0f);
+			l_light1->SetEnabled( true);
+		}
+
+		DirectionalLightPtr l_light2 = Templates::static_pointer_cast<DirectionalLight>( l_pScene->CreateLight( Light::eDirectional, "Light2", l_pScene->CreateLightNode( "Light2Node")));
+		if ( ! l_light2.null())
+		{
+			l_light2->GetParent()->SetPosition( 0.0f, -1.0f, 1.0f);
+			l_light2->SetDiffuse( 1.0f, 1.0f, 1.0f);
+			l_light2->SetSpecular( 1.0f, 1.0f, 1.0f);
+			l_light2->SetEnabled( true);
+		}
+
+		DirectionalLightPtr l_light3 = Templates::static_pointer_cast<DirectionalLight>( l_pScene->CreateLight( Light::eDirectional, "Light3", l_pScene->CreateLightNode( "Light3Node")));
+		if ( ! l_light3.null())
+		{
+			l_light3->GetParent()->SetPosition( -1.0f, -1.0f, -1.0f);
+			l_light3->SetDiffuse( 1.0f, 1.0f, 1.0f);
+			l_light3->SetSpecular( 1.0f, 1.0f, 1.0f);
+			l_light3->SetEnabled( true);
+		}
+
+/*
+		MaterialPtr l_pMaterial = MaterialManager::CreateMaterial( "Overlay");
+		PanelOverlayPtr l_pOverlay = OverlayManager::GetSingleton().CreateOverlay<PanelOverlay>( "FirstOverlay", NULL, Point2r( 0.25f, 0.25f), Point2r( 0.5f, 0.5f));
+		l_pOverlay->SetMaterial( l_pMaterial);
+		MaterialPtr l_pMaterial2 = MaterialManager::CreateMaterial( "Overlay2");
+		OverlayManager::GetSingleton().CreateOverlay<PanelOverlay>( "SecondOverlay", l_pOverlay, Point2r( 0.25f, 0.25f), Point2r( 0.5f, 0.5f))->SetMaterial( l_pMaterial2);
+*/
+	}
+	catch ( ... )
+	{
+	}
+}
+
+void CSMainFrame :: _buildMenuBar()
+{
+	wxMenu * l_menu;
+	wxMenu * l_subMenu;
+	wxMenuBar * l_menuBar = new wxMenuBar();
+
+	l_menu = new wxMenu();
+	l_menu->Append( mbSaveScene,					CU_T( "&Sauver la Scene\tCTRL+F+S"));
+	l_menu->Append( mLoadScene,						CU_T( "&Ouvrir une Scene\tCTRL+F+O"));
+	l_menu->Append( mbRender,						CU_T( "&Rendu de scène\tCTRL+F+R"));
+	l_menu->AppendSeparator();
+	l_menu->Append( mbExit,							CU_T( "&Quitter\tALT+F4"));
+	l_menuBar->Append( l_menu,						CU_T( "&Fichier"));
+	
+	l_menu = new wxMenu();
+	l_subMenu = new wxMenu();
+	l_subMenu->Append( mbNewCone,					CU_T( "C&one"));
+	l_subMenu->Append( mbNewCube,					CU_T( "C&ube"));
+	l_subMenu->Append( mbNewCylinder,				CU_T( "C&ylindre"));
+	l_subMenu->Append( mbNewIcosaedron,				CU_T( "&Icosaedre"));
+	l_subMenu->Append( mbNewPlane,					CU_T( "&Plan"));
+	l_subMenu->Append( mbNewSphere,					CU_T( "&Sphere"));
+	l_subMenu->Append( mbNewTorus,					CU_T( "&Torre"));
+	l_subMenu->Append( mbNewProjection,				CU_T( "&Projection"));	
+	l_menu->AppendSubMenu( l_subMenu,				CU_T( "Nouvelle &Geometrie\tCTRL+N+G"));
+	l_menu->Append( mbNewMaterial,					CU_T( "&Material\tCTRL+N+M"));
+	l_menuBar->Append( l_menu,						CU_T( "&Nouveau"));
+
+	l_menu = new wxMenu();
+	l_menu->Append( mbGeometries,					CU_T( "&Geometries\tCTRL+A+G"));
+	l_menu->Append( mbMaterials,					CU_T( "&Materiaux\tCTRL+A+M"));
+	l_menuBar->Append( l_menu,						CU_T( "&Affichage"));
+
+	l_menu = new wxMenu();
+	l_menu->AppendCheckItem( mbSelect,				CU_T( "&Sélectionner\tCTRL+E+S"));
+	l_menu->AppendCheckItem( mbModify,				CU_T( "&Modifier\tCTRL+E+M"));
+	l_menu->Append( mbNone,							CU_T( "&Annuler\tCTRL+E+C"));
+	l_menu->AppendSeparator();
+	l_menu->AppendRadioItem( mbSelectGeometries,	CU_T( "&Géométrie\tCTRL+E+G"))->Enable( false);
+	l_menu->AppendRadioItem( mbSelectPoints,		CU_T( "&Point\tCTRL+E+P"))->Enable( false);
+	l_menu->AppendSeparator();
+	l_menu->Append( mbCloneSelection,				CU_T( "&Dupliquer\tCTRL+E+D"));
+	l_subMenu = new wxMenu();
+	l_subMenu->Append( mbSubdividePNTriangles,		CU_T( "PN &Triangles\tCTRL+E+S+T"));
+	l_subMenu->Append( mbSubdivideLoop,				CU_T( "&Loop\tCTRL+E+S+L"));
+	l_menu->AppendSubMenu( l_subMenu,				CU_T( "&Subdiviser"));
+	l_menu->Append( mbSelectNone,					CU_T( "&Aucune\tCTRL+E+A"));
+	l_menuBar->Append( l_menu,						CU_T( "&Sélection"));
+
+	SetMenuBar( l_menuBar);
+}
+
+void CSMainFrame :: _createGeometry( Mesh::eTYPE p_meshType, String & p_name,
+									 const String & p_meshStrVars,
+									 const String & p_baseName, ScenePtr p_scene,
+									 CSNewGeometryDialog * p_dialog, unsigned int i,
+									 unsigned int j, real a, real b, real c)
+{
+	if (p_name.empty() || p_name == CU_T( "Geometry Name"))
+	{
+		Char l_buffer[256];
+		Sprintf( l_buffer, 255, CU_T( "%s%d"), p_baseName.c_str(), g_nbGeometries);
+		p_name = l_buffer;
+	}
+
+	GeometryNodePtr l_sceneNode = p_scene->CreateGeometryNode( CU_T( "SN_") + p_name);
+
+	if ( ! l_sceneNode.null())
+	{
+		UIntArray l_faces;
+		FloatArray l_dimensions;
+		l_faces.push_back( i);
+		l_faces.push_back( j);
+		l_dimensions.push_back( a);
+		l_dimensions.push_back( b);
+		l_dimensions.push_back( c);
+		GeometryPtr l_geometry = p_scene->CreatePrimitive( p_name, p_meshType, p_baseName + CU_T( "_") + p_meshStrVars, l_faces, l_dimensions);
+
+		if ( ! l_geometry.null())
+		{
+			String l_materialName = p_dialog->GetMaterialName();
+			MeshPtr l_mesh = l_geometry->GetMesh();
+
+			for (size_t i = 0 ; i < l_mesh->GetNbSubmeshes() ; i++)
+			{
+				l_mesh->GetSubmesh( i)->SetMaterial( l_materialName);
+			}
+
+			l_sceneNode->AttachObject( l_geometry.get());
+			l_sceneNode->SetVisible( true);
+			g_nbGeometries++;
+		}
+	}
+}
+
+BEGIN_EVENT_TABLE( CSMainFrame, wxFrame)
+	EVT_SIZE(				CSMainFrame::_onSize)
+	EVT_MOVE(				CSMainFrame::_onMove)
+	EVT_CLOSE(				CSMainFrame::_onClose)
+	EVT_ENTER_WINDOW(		CSMainFrame::_onEnterWindow)
+	EVT_LEAVE_WINDOW(		CSMainFrame::_onLeaveWindow)
+	EVT_ERASE_BACKGROUND(	CSMainFrame::_onEraseBackground)
+
+    EVT_MENU( wxID_EXIT,				CSMainFrame::_onMenuClose)
+	EVT_MENU( mbExit,					CSMainFrame::_onMenuClose)
+	EVT_MENU( mbSaveScene,				CSMainFrame::_onSaveScene)
+	EVT_MENU( mLoadScene,				CSMainFrame::_onLoadScene)
+	EVT_MENU( mbNewCone,				CSMainFrame::_onNewCone)
+	EVT_MENU( mbNewCube,				CSMainFrame::_onNewCube)
+	EVT_MENU( mbNewCylinder,			CSMainFrame::_onNewCylinder)
+	EVT_MENU( mbNewIcosaedron,			CSMainFrame::_onNewIcosaedron)
+	EVT_MENU( mbNewPlane,				CSMainFrame::_onNewPlane)
+	EVT_MENU( mbNewSphere,				CSMainFrame::_onNewSphere)
+	EVT_MENU( mbNewTorus,				CSMainFrame::_onNewTorus)
+	EVT_MENU( mbNewProjection,			CSMainFrame::_onNewProjection)
+	EVT_MENU( mbNewMaterial,			CSMainFrame::_onNewMaterial)
+	EVT_MENU( mbGeometries,				CSMainFrame::_onShowGeometriesList)
+	EVT_MENU( mbMaterials,				CSMainFrame::_onShowMaterialsList)
+	EVT_MENU( mbSelectGeometries,		CSMainFrame::_onSelectGeometries)
+	EVT_MENU( mbSelectPoints,			CSMainFrame::_onSelectPoints)
+	EVT_MENU( mbCloneSelection,			CSMainFrame::_onCloneSelection)
+	EVT_MENU( mbSelectNone,				CSMainFrame::_onSelectNone)
+	EVT_MENU( mbSubdividePNTriangles,	CSMainFrame::_onSubdivideAllPNTriangles)
+	EVT_MENU( mbSubdivideLoop,			CSMainFrame::_onSubdivideAllLoop)
+	EVT_MENU( mbSelect,					CSMainFrame::_onSelect)
+	EVT_MENU( mbModify,					CSMainFrame::_onModify)
+	EVT_MENU( mbNone,					CSMainFrame::_onNothing)
+	EVT_MENU( mbRender,					CSMainFrame::_onRender)
+END_EVENT_TABLE()
 
 void CSMainFrame :: _onPaint( wxPaintEvent & WXUNUSED(event))
 {
 	wxPaintDC l_dc( this);
 	Root::GetSingletonPtr()->RenderOneFrame();
 }
-
-//******************************************************************************
 
 void CSMainFrame :: _onSize( wxSizeEvent & event)
 {
@@ -198,19 +362,16 @@ void CSMainFrame :: _onSize( wxSizeEvent & event)
 	ShowPanels();
 }
 
-//******************************************************************************
-
 void CSMainFrame :: _onMove( wxMoveEvent & event)
 {
 	wxClientDC l_dc( this);
 	ShowPanels();
 }
 
-//******************************************************************************
-
 void CSMainFrame :: _onClose( wxCloseEvent & event)
 {
 	vector::deleteAll( m_selectedGeometryMaterials);
+	m_mainScene.reset();
 
 	if (m_castor3D != NULL)
 	{
@@ -244,93 +405,23 @@ void CSMainFrame :: _onClose( wxCloseEvent & event)
 	Destroy();
 }
 
-//******************************************************************************
-
 void CSMainFrame :: _onEnterWindow( wxMouseEvent & WXUNUSED(event))
 {
     SetFocus();
 }
 
-//******************************************************************************
-
 void CSMainFrame :: _onLeaveWindow( wxMouseEvent & WXUNUSED(event))
 {
 }
-
-//******************************************************************************
 
 void CSMainFrame :: _onEraseBackground(wxEraseEvent& event)
 {
 }
 
-//******************************************************************************
-
-void CSMainFrame :: _onKeyDown(wxKeyEvent& event)
-{
-}
-
-//******************************************************************************
-
-void CSMainFrame :: _onKeyUp(wxKeyEvent& event)
-{
-}
-
-//******************************************************************************
-
-void CSMainFrame :: _onMouseLDown( wxMouseEvent & event)
-{
-}
-
-//******************************************************************************
-
-void CSMainFrame :: _onMouseLUp( wxMouseEvent & event)
-{
-}
-
-//******************************************************************************
-
-void CSMainFrame :: _onMouseMDown( wxMouseEvent & event)
-{
-}
-
-//******************************************************************************
-
-void CSMainFrame :: _onMouseMUp( wxMouseEvent & event)
-{
-}
-
-//******************************************************************************
-
-void CSMainFrame :: _onMouseRDown( wxMouseEvent & event)
-{
-}
-
-//******************************************************************************
-
-void CSMainFrame :: _onMouseRUp( wxMouseEvent & event)
-{
-}
-
-//******************************************************************************
-
-void CSMainFrame :: _onMouseMove( wxMouseEvent & event)
-{
-}
-
-//******************************************************************************
-
-void CSMainFrame :: _onMouseWheel( wxMouseEvent & event)
-{
-}
-
-//******************************************************************************
-
 void CSMainFrame :: _onMenuClose( wxCommandEvent & event)
 {
 	Close( true);
 }
-
-//******************************************************************************
 
 void CSMainFrame :: _onSaveScene( wxCommandEvent & event)
 {
@@ -342,34 +433,32 @@ void CSMainFrame :: _onSaveScene( wxCommandEvent & event)
 		l_filePath.Replace( CU_T( "\\"), CU_T( "/"));
 		if (MaterialManager::Write( l_filePath.c_str()))
 		{
-			Log::LogMessage( CU_T( "Materials written"));
+			Logger::LogMessage( CU_T( "Materials written"));
 		}
 		else
 		{
-			Log::LogMessage( CU_T( "Can't write materials"));
+			Logger::LogMessage( CU_T( "Can't write materials"));
 			return;
 		}
 		if (MeshManager::Write( l_filePath.c_str()))
 		{
-			Log::LogMessage( CU_T( "Meshes written"));
+			Logger::LogMessage( CU_T( "Meshes written"));
 		}
 		else
 		{
-			Log::LogMessage( CU_T( "Can't write meshes"));
+			Logger::LogMessage( CU_T( "Can't write meshes"));
 			return;
 		}
 		if (SceneManager::GetSingletonPtr()->GetElementByName( CU_T( "MainScene"))->Write( l_file))
 		{
-			Log::LogMessage( CU_T( "Save Successfull"));
+			Logger::LogMessage( CU_T( "Save Successfull"));
 		}
 		else
 		{
-			Log::LogMessage( CU_T( "Save Failed"));
+			Logger::LogMessage( CU_T( "Save Failed"));
 		}
 	}
 }
-
-//******************************************************************************
 
 void CSMainFrame :: _onLoadScene( wxCommandEvent & event)
 {
@@ -415,22 +504,22 @@ void CSMainFrame :: _onLoadScene( wxCommandEvent & event)
 		else
 		{
 			m_mainScene->ClearScene();
-			Log::LogMessage( CU_T( "Scene cleared"));
+			Logger::LogMessage( CU_T( "Scene cleared"));
 			MeshManager::Clear();
-			Log::LogMessage( CU_T( "Mesh manager cleared"));
+			Logger::LogMessage( CU_T( "Mesh manager cleared"));
 			MaterialManager::Clear();
-			Log::LogMessage( CU_T( "Material manager cleared"));
-			Log::LogMessage( l_fileDialog->GetPath().c_str());
+			Logger::LogMessage( CU_T( "Material manager cleared"));
+			Logger::LogMessage( l_fileDialog->GetPath().c_str());
 
 			wxString l_filePath = l_fileDialog->GetPath();
 
 			if (MaterialManager::Read( l_filePath.c_str()))
 			{
-				Log::LogMessage( CU_T( "Materials read"));
+				Logger::LogMessage( CU_T( "Materials read"));
 			}
 			else
 			{
-				Log::LogMessage( CU_T( "Can't read materials"));
+				Logger::LogMessage( CU_T( "Can't read materials"));
 				return;
 			}
 
@@ -661,7 +750,7 @@ void CSMainFrame :: _onNewMaterial( wxCommandEvent & event)
 	CSNewMaterialDialog * l_dialog = new CSNewMaterialDialog( this, mfNewMaterial);
 	if (l_dialog->ShowModal() == wxID_OK)
 	{
-		Log::LogMessage( CU_T( "Material Created"));
+		Logger::LogMessage( CU_T( "Material Created"));
 	}
 	l_dialog->Destroy();
 }
@@ -686,7 +775,7 @@ void CSMainFrame :: _onShowMaterialsList( wxCommandEvent & event)
 
 void CSMainFrame :: _onSelectGeometries( wxCommandEvent & event)
 {
-	SelectGeometry( NULL);
+	SelectGeometry( GeometryPtr());
 	m_3dFrame->SetSelectionType( stGeometry);
 
 	m_2dFrameHD->SetSelectionType( stGeometry);
@@ -697,7 +786,7 @@ void CSMainFrame :: _onSelectGeometries( wxCommandEvent & event)
 
 void CSMainFrame :: _onSelectPoints( wxCommandEvent & event)
 {
-	SelectGeometry( NULL);
+	SelectGeometry( GeometryPtr());
 	m_3dFrame->SetSelectionType( stVertex);
 
 	m_2dFrameHD->SetSelectionType( stVertex);
@@ -718,7 +807,7 @@ void CSMainFrame :: _onCloneSelection( wxCommandEvent & event)
 
 void CSMainFrame :: _onSelectNone( wxCommandEvent & event)
 {
-	SelectGeometry( NULL);
+	SelectGeometry( GeometryPtr());
 	m_3dFrame->SetSelectionType( stNone);
 
 	m_2dFrameHD->SetSelectionType( stNone);
@@ -751,7 +840,7 @@ void CSMainFrame :: _onSelect( wxCommandEvent & event)
 		m_2dFrameBG->SetActionType( atSelect);
 		m_2dFrameBD->SetActionType( atSelect);
 
-		SelectGeometry( NULL);
+		SelectGeometry( GeometryPtr());
 		if (GetMenuBar()->FindItem( mbSelectGeometries)->IsChecked())
 		{
 			m_3dFrame->SetSelectionType( stGeometry);
@@ -809,7 +898,7 @@ void CSMainFrame :: _onNothing( wxCommandEvent & event)
 	GetMenuBar()->FindItem( mbSelectGeometries)->Enable( false);
 	GetMenuBar()->FindItem( mbSelectPoints)->Enable( false);
 
-	SelectGeometry( NULL);
+	SelectGeometry( GeometryPtr());
 
 	m_3dFrame->SetActionType( atNone);
 
@@ -846,220 +935,4 @@ void CSMainFrame :: _onRender( wxCommandEvent & event)
 {
 	RenderEngine renderEngine( CU_T( "Scene.tga"), SceneManager::GetSingleton().GetElementByName( CU_T( "MainScene")));
 	renderEngine.Draw();
-}
-
-void CSMainFrame :: ShowPanels()
-{
-	if (m_3dFrame != NULL)
-	{
-		m_3dFrame->DrawOneFrame();
-
-		m_2dFrameHD->DrawOneFrame();
-		m_2dFrameBG->DrawOneFrame();
-		m_2dFrameBD->DrawOneFrame();
-
-	}
-}
-
-void CSMainFrame :: _initialise3D()
-{
-	Log::LogMessage( CU_T( "Initialising Castor3D"));
-
-	m_castor3D = new Root( 25);
-	try
-	{
-#ifdef _DEBUG
-#	if C3D_UNICODE
-		m_castor3D->LoadPlugin( CU_T( "GL3RenderSystemdu.dll"));
-#	else
-		m_castor3D->LoadPlugin( CU_T( "GL3RenderSystemd.dll"));
-#	endif
-#else
-#	if C3D_UNICODE
-		m_castor3D->LoadPlugin( CU_T( "GL3RenderSystemu.dll"));
-#	else
-		m_castor3D->LoadPlugin( CU_T( "GL3RenderSystem.dll"));
-#	endif
-#endif
-
-		RendererDriverPtr l_driver = m_castor3D->GetRendererServer().GetDriver( 0);
-
-		if ( ! l_driver.null())
-		{
-			l_driver->CreateRenderSystem();
-		}
-		else
-		{
-			return;
-		}
-		
-
-		m_mainScene = SceneManager::GetSingletonPtr()->CreateElement( CU_T( "MainScene"));
-
-		Log::LogMessage( CU_T( "Castor3D Initialised"));
-		int l_width = GetClientSize().x / 2;
-		int l_height = GetClientSize().y / 2;
-		m_3dFrame = new CSRenderPanel( this, frame3d, Viewport::pt3DView, m_mainScene,
-									   wxPoint( 0, 0),
-									   wxSize( l_width - 1, l_height - 1));
-		m_2dFrameHD = new CSRenderPanel( this, frame2d, Viewport::pt2DView, m_mainScene,
-										 wxPoint( l_width + 1, 0),
-										 wxSize( l_width - 1, l_height - 1));
-		m_2dFrameBG = new CSRenderPanel( this, frame2d, Viewport::pt2DView, m_mainScene,
-										 wxPoint( 0, l_height + 1),
-										 wxSize( l_width - 1, l_height - 1), pdLookToLeft);
-		m_2dFrameBD = new CSRenderPanel( this, frame2d, Viewport::pt2DView, m_mainScene,
-										 wxPoint( l_width + 1, l_height + 1),
-										 wxSize( l_width - 1, l_height - 1), pdLookToTop);
-
-		m_separator1 = new wxPanel( this, wxID_ANY, wxPoint( 0, l_height - 1),
-									wxSize( l_width, 2));
-		m_separator2 = new wxPanel( this, wxID_ANY, wxPoint( l_width, l_height - 1),
-									wxSize( l_width, 2));
-		m_separator3 = new wxPanel( this, wxID_ANY, wxPoint( l_width - 1, 0),
-									wxSize( 2, l_height));
-		m_separator4 = new wxPanel( this, wxID_ANY, wxPoint( l_width - 1, l_height),
-									wxSize( 2, l_height));
-
-		m_castor3D->StartRendering();
-		m_3dFrame->Show();
-		m_2dFrameHD->Show();
-		m_2dFrameBG->Show();
-		m_2dFrameBD->Show();
-
-		ShowPanels();
-
-		DirectionalLightPtr l_light1 = SceneManager::GetSingletonPtr()->GetElementByName( "MainScene")->CreateLight( Light::eDirectional, "Light1");
-		if ( ! l_light1.null())
-		{
-			l_light1->SetPosition( 0.0f, 0.0f, 1.0f);
-			l_light1->SetDiffuse( 1.0f, 1.0f, 1.0f);
-			l_light1->SetSpecular( 1.0f, 1.0f, 1.0f);
-			l_light1->SetEnabled( true);
-		}
-
-		DirectionalLightPtr l_light2 = SceneManager::GetSingletonPtr()->GetElementByName( "MainScene")->CreateLight( Light::eDirectional, "Light2");
-		if ( ! l_light2.null())
-		{
-			l_light2->SetPosition( 0.0f, -1.0f, 1.0f);
-			l_light2->SetDiffuse( 1.0f, 1.0f, 1.0f);
-			l_light2->SetSpecular( 1.0f, 1.0f, 1.0f);
-			l_light2->SetEnabled( true);
-		}
-
-		DirectionalLightPtr l_light3 = SceneManager::GetSingletonPtr()->GetElementByName( "MainScene")->CreateLight( Light::eDirectional, "Light3");
-		if ( ! l_light3.null())
-		{
-			l_light3->SetPosition( -1.0f, -1.0f, -1.0f);
-			l_light3->SetDiffuse( 1.0f, 1.0f, 1.0f);
-			l_light3->SetSpecular( 1.0f, 1.0f, 1.0f);
-			l_light3->SetEnabled( true);
-		}
-
-/*
-		MaterialPtr l_pMaterial = MaterialManager::CreateMaterial( "Overlay");
-		PanelOverlayPtr l_pOverlay = OverlayManager::GetSingleton().CreateOverlay<PanelOverlay>( "FirstOverlay", NULL, Point2r( 0.25f, 0.25f), Point2r( 0.5f, 0.5f));
-		l_pOverlay->SetMaterial( l_pMaterial);
-		MaterialPtr l_pMaterial2 = MaterialManager::CreateMaterial( "Overlay2");
-		OverlayManager::GetSingleton().CreateOverlay<PanelOverlay>( "SecondOverlay", l_pOverlay, Point2r( 0.25f, 0.25f), Point2r( 0.5f, 0.5f))->SetMaterial( l_pMaterial2);
-*/
-	}
-	catch ( ... )
-	{
-	}
-}
-
-void CSMainFrame :: _buildMenuBar()
-{
-	wxMenu * l_menu;
-	wxMenu * l_subMenu;
-	wxMenuBar * l_menuBar = new wxMenuBar();
-
-	l_menu = new wxMenu();
-	l_menu->Append( mbSaveScene,					CU_T( "&Sauver la Scene\tCTRL+F+S"));
-	l_menu->Append( mLoadScene,						CU_T( "&Ouvrir une Scene\tCTRL+F+O"));
-	l_menu->Append( mbRender,						CU_T( "&Rendu de scène\tCTRL+F+R"));
-	l_menu->AppendSeparator();
-	l_menu->Append( mbExit,							CU_T( "&Quitter\tALT+F4"));
-	l_menuBar->Append( l_menu,						CU_T( "&Fichier"));
-	
-	l_menu = new wxMenu();
-	l_subMenu = new wxMenu();
-	l_subMenu->Append( mbNewCone,					CU_T( "C&one"));
-	l_subMenu->Append( mbNewCube,					CU_T( "C&ube"));
-	l_subMenu->Append( mbNewCylinder,				CU_T( "C&ylindre"));
-	l_subMenu->Append( mbNewIcosaedron,				CU_T( "&Icosaedre"));
-	l_subMenu->Append( mbNewPlane,					CU_T( "&Plan"));
-	l_subMenu->Append( mbNewSphere,					CU_T( "&Sphere"));
-	l_subMenu->Append( mbNewTorus,					CU_T( "&Torre"));
-	l_subMenu->Append( mbNewProjection,				CU_T( "&Projection"));	
-	l_menu->AppendSubMenu( l_subMenu,				CU_T( "Nouvelle &Geometrie\tCTRL+N+G"));
-	l_menu->Append( mbNewMaterial,					CU_T( "&Material\tCTRL+N+M"));
-	l_menuBar->Append( l_menu,						CU_T( "&Nouveau"));
-
-	l_menu = new wxMenu();
-	l_menu->Append( mbGeometries,					CU_T( "&Geometries\tCTRL+A+G"));
-	l_menu->Append( mbMaterials,					CU_T( "&Materiaux\tCTRL+A+M"));
-	l_menuBar->Append( l_menu,						CU_T( "&Affichage"));
-
-	l_menu = new wxMenu();
-	l_menu->AppendCheckItem( mbSelect,				CU_T( "&Sélectionner\tCTRL+E+S"));
-	l_menu->AppendCheckItem( mbModify,				CU_T( "&Modifier\tCTRL+E+M"));
-	l_menu->Append( mbNone,							CU_T( "&Annuler\tCTRL+E+C"));
-	l_menu->AppendSeparator();
-	l_menu->AppendRadioItem( mbSelectGeometries,	CU_T( "&Géométrie\tCTRL+E+G"))->Enable( false);
-	l_menu->AppendRadioItem( mbSelectPoints,		CU_T( "&Point\tCTRL+E+P"))->Enable( false);
-	l_menu->AppendSeparator();
-	l_menu->Append( mbCloneSelection,				CU_T( "&Dupliquer\tCTRL+E+D"));
-	l_subMenu = new wxMenu();
-	l_subMenu->Append( mbSubdividePNTriangles,		CU_T( "PN &Triangles\tCTRL+E+S+T"));
-	l_subMenu->Append( mbSubdivideLoop,				CU_T( "&Loop\tCTRL+E+S+L"));
-	l_menu->AppendSubMenu( l_subMenu,				CU_T( "&Subdiviser"));
-	l_menu->Append( mbSelectNone,					CU_T( "&Aucune\tCTRL+E+A"));
-	l_menuBar->Append( l_menu,						CU_T( "&Sélection"));
-
-	SetMenuBar( l_menuBar);
-}
-
-void CSMainFrame :: _createGeometry( Mesh::eTYPE p_meshType, String & p_name,
-									 const String & p_meshStrVars,
-									 const String & p_baseName, ScenePtr p_scene,
-									 CSNewGeometryDialog * p_dialog, unsigned int i,
-									 unsigned int j, real a, real b, real c)
-{
-	if (p_name.empty() || p_name == CU_T( "Geometry Name"))
-	{
-		Char l_buffer[256];
-		Sprintf( l_buffer, 255, CU_T( "%s%d"), p_baseName.c_str(), g_nbGeometries);
-		p_name = l_buffer;
-	}
-
-	SceneNodePtr l_sceneNode = p_scene->CreateSceneNode( CU_T( "SN_") + p_name);
-
-	if ( ! l_sceneNode.null())
-	{
-		UIntArray l_faces;
-		FloatArray l_dimensions;
-		l_faces.push_back( i);
-		l_faces.push_back( j);
-		l_dimensions.push_back( a);
-		l_dimensions.push_back( b);
-		l_dimensions.push_back( c);
-		GeometryPtr l_geometry = p_scene->CreatePrimitive( p_name, p_meshType, p_baseName + CU_T( "_") + p_meshStrVars, l_faces, l_dimensions);
-
-		if ( ! l_geometry.null())
-		{
-			String l_materialName = p_dialog->GetMaterialName();
-			MeshPtr l_mesh = l_geometry->GetMesh();
-
-			for (size_t i = 0 ; i < l_mesh->GetNbSubmeshes() ; i++)
-			{
-				l_mesh->GetSubmesh( i)->SetMaterial( l_materialName);
-			}
-
-			l_sceneNode->AttachGeometry( l_geometry.get());
-			l_sceneNode->SetVisible( true);
-			g_nbGeometries++;
-		}
-	}
 }

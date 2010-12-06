@@ -6,10 +6,6 @@
 #include "MainFrame.h"
 #include "ShaderDialog.h"
 
-#ifdef __WXMSW__
-#	include <wx/msw/msvcrt.h>      // redefines the new() operator 
-#endif
-
 using namespace Castor3D;
 using namespace CastorViewer;
 DECLARE_APP( CastorViewerApp)
@@ -17,8 +13,6 @@ DECLARE_APP( CastorViewerApp)
 
 PassPanel :: PassPanel( wxWindow * parent, const wxPoint & pos, const wxSize & size)
 	:	wxScrolledWindow( parent, wxID_ANY, pos, size, 524288 | wxBORDER_NONE),
-		m_pass( NULL),
-		m_selectedTextureUnit( NULL),
 		m_selectedUnitImage( NULL),
 		m_textureUnitPanel( NULL)
 {
@@ -31,13 +25,14 @@ PassPanel :: ~PassPanel()
 		delete m_selectedUnitImage;
 		m_selectedUnitImage = NULL;
 	}
-	m_selectedTextureUnit = NULL;
+
+	m_selectedTextureUnit.reset();
 }
 
 void PassPanel :: CreatePassPanel( PassPtr p_pass)
 {
 	m_pass = p_pass;
-	m_selectedTextureUnit = NULL;
+	m_selectedTextureUnit.reset();
 	m_selectedUnitIndex = -1;
 	_createPassPanel();
 }
@@ -83,7 +78,7 @@ real PassPanel :: GetShininess()const
 	
 	if (l_value.BeforeFirst( '.').IsNumber() && l_value.AfterFirst( '.').IsNumber())
 	{
-		real l_res = ator( l_value.char_str());
+		real l_res = ator( l_value.c_str());
 		if (l_res < 0.0)
 		{
 			l_res = 0.0;
@@ -101,12 +96,12 @@ real PassPanel :: GetShininess()const
 int PassPanel :: GetTextureUnitIndex()const
 {
 	wxString l_value = m_texturesComboBox->GetValue();
-	Log::LogMessage( CU_T( "GetTextureUnitIndex - l_value : %s"), l_value.c_str());
+	Logger::LogMessage( CU_T( "PassPanel :: GetTextureUnitIndex - l_value : %s"), l_value.c_str());
 	
 	if (l_value.IsNumber())
 	{
-		int l_res = atoi( l_value.char_str());
-		Log::LogMessage( "GetTextureUnitIndex - l_res : %d", l_res);
+		int l_res = atoi( l_value.c_str());
+		Logger::LogMessage( CU_T( "PassPanel :: GetTextureUnitIndex - l_res : %d"), l_res);
 		return l_res;
 	}
 	if (l_value == CU_T( "New..."))
@@ -248,7 +243,7 @@ void PassPanel :: _createTextureUnitPanel( int p_index)
 	m_deleteTextureUnit->Enable();
 	if (p_index == -1)
 	{
-		m_selectedTextureUnit = new TextureUnit();
+		m_selectedTextureUnit = TextureUnitPtr( new TextureUnit());
 		wxString l_value;
 		l_value << m_pass->GetNbTexUnits();
 		m_texturesComboBox->Insert( l_value, m_pass->GetNbTexUnits());
@@ -265,7 +260,7 @@ void PassPanel :: _createTextureUnitPanel( int p_index)
 		l_value << p_index;
 		m_texturesComboBox->SetValue( l_value);
 	}
-	if ( ! m_selectedTextureUnit)
+	if (m_selectedTextureUnit.null())
 	{
 		return;
 	}
@@ -448,7 +443,6 @@ void PassPanel :: _onDeleteTextureUnit( wxCommandEvent & event)
 		m_texturesComboBox->SetValue( CU_T( "New..."));
 		_createTextureUnitPanel( -2);
 		m_texturesComboBox->Update();
-		wxGetApp().GetMainFrame()->ShowPanels();
 		if (m_pass->GetNbTexUnits() == 0)
 		{
 			m_deleteTextureUnit->Disable();
@@ -467,7 +461,6 @@ void PassPanel :: _onAmbientColour( wxCommandEvent & event)
 		real l_ambient[3];
 		GetAmbient(l_ambient[0], l_ambient[1], l_ambient[2]);
 		m_pass->SetAmbient( l_ambient[0], l_ambient[1], l_ambient[2], 1.0f);
-		wxGetApp().GetMainFrame()->ShowPanels();
 	}
 }
 
@@ -482,7 +475,6 @@ void PassPanel :: _onDiffuseColour( wxCommandEvent & event)
 		real l_diffuse[3];
 		GetDiffuse(l_diffuse[0], l_diffuse[1], l_diffuse[2]);
 		m_pass->SetDiffuse( l_diffuse[0], l_diffuse[1], l_diffuse[2], 1.0f);
-		wxGetApp().GetMainFrame()->ShowPanels();
 	}
 }
 
@@ -497,7 +489,6 @@ void PassPanel :: _onSpecularColour( wxCommandEvent & event)
 		real l_specular[3];
 		GetSpecular(l_specular[0], l_specular[1], l_specular[2]);
 		m_pass->SetSpecular( l_specular[0], l_specular[1], l_specular[2], 1.0f);
-		wxGetApp().GetMainFrame()->ShowPanels();
 	}
 }
 
@@ -512,7 +503,6 @@ void PassPanel :: _onEmissiveColour( wxCommandEvent & event)
 		real l_emissive[3];
 		GetEmissive(l_emissive[0], l_emissive[1], l_emissive[2]);
 		m_pass->SetEmissive( l_emissive[0], l_emissive[1], l_emissive[2], 1.0f);
-		wxGetApp().GetMainFrame()->ShowPanels();
 	}
 }
 
@@ -527,7 +517,6 @@ void PassPanel :: _onBlendColour( wxCommandEvent & event)
 		real l_blendColour[3];
 		GetBlendColour( l_blendColour[0], l_blendColour[1], l_blendColour[2]);
 		m_pass->SetTexBaseColour( l_blendColour[0], l_blendColour[1], l_blendColour[2], 1.0);
-		wxGetApp().GetMainFrame()->ShowPanels();
 	}
 }
 
@@ -549,7 +538,6 @@ void PassPanel :: _onTextureImage( wxCommandEvent & event)
 		{
 			m_selectedTextureUnit->SetTexture2D( l_imagePath.c_str());
 			MaterialManager::SetToInitialise( m_pass->GetParent());
-			wxGetApp().GetMainFrame()->ShowPanels();
 		}
 	}
 	l_fdlg->Destroy();
@@ -566,7 +554,6 @@ void PassPanel :: _onShininess( wxCommandEvent & event)
 	real l_shininess = GetShininess();
 	m_pass->SetShininess( l_shininess);
 	m_pass->Initialise();
-	wxGetApp().GetMainFrame()->ShowPanels();
 }
 
 void PassPanel :: _onTexturePath( wxCommandEvent & event)
@@ -586,7 +573,6 @@ void PassPanel :: _onTexturePath( wxCommandEvent & event)
 	{
 		m_selectedTextureUnit->SetTexture2D( l_path.c_str());
 		MaterialManager::SetToInitialise( m_pass->GetParent());
-		wxGetApp().GetMainFrame()->ShowPanels();
 	}*/
 }
 
@@ -634,7 +620,6 @@ void PassPanel :: _onTextureEnvModeSelect( wxCommandEvent & event)
 		m_textureAlphaCombination->Show();
 		m_environmentConfigButton->Show();
 	}
-	wxGetApp().GetMainFrame()->ShowPanels();
 }
 
 void PassPanel :: _onTextureRGBCombinationSelect( wxCommandEvent & event)
@@ -673,7 +658,6 @@ void PassPanel :: _onTextureRGBCombinationSelect( wxCommandEvent & event)
 	{
 		m_selectedTextureUnit->GetEnvironment()->SetRGBCombination( CCInterpolate);
 	}
-	wxGetApp().GetMainFrame()->ShowPanels();
 }
 
 void PassPanel :: _onTextureAlphaCombinationSelect( wxCommandEvent & event)
@@ -704,14 +688,12 @@ void PassPanel :: _onTextureAlphaCombinationSelect( wxCommandEvent & event)
 	{
 		m_selectedTextureUnit->GetEnvironment()->SetAlphaCombination( ACInterpolate);
 	}
-	wxGetApp().GetMainFrame()->ShowPanels();
 }
 
 void PassPanel :: _onDoubleFace( wxCommandEvent & event)
 {
 	bool l_double = m_doubleFace->IsChecked();
 	m_pass->SetDoubleFace( l_double);
-	wxGetApp().GetMainFrame()->ShowPanels();
 }
 
 void PassPanel :: _onHasShader( wxCommandEvent & event)

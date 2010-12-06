@@ -11,24 +11,26 @@
 #include "geometry/mesh/MeshManager.h"
 #include "geometry/mesh/Mesh.h"
 #include "geometry/mesh/Submesh.h"
+#include "geometry/basic/Vertex.h"
 #include "geometry/basic/SmoothingGroup.h"
 #include "render_system/Buffer.h"
 #include "geometry/primitives/Geometry.h"
 #include "geometry/basic/Face.h"
 #include "scene/SceneManager.h"
 #include "scene/Scene.h"
-#include "scene/SceneNode.h"
+#include "scene/NodeBase.h"
 
 
 using namespace Castor3D;
 
 ObjImporter :: ObjImporter()
-	:	m_pFile( NULL),
+	:	ExternalImporter( eOBJ),
+		m_pFile( NULL),
 		m_objectHasUV( false),
-		m_pSmoothingGroup( NULL),
 		m_bReadingFaces( false),
 		m_bReadingVertex( true),
-		m_iNbTexCoords( 0)
+		m_iNbTexCoords( 0),
+		m_iGroup( -1)
 {
 }
 
@@ -61,12 +63,12 @@ bool ObjImporter :: _import()
 
 	if (MeshManager::HasElement( l_meshName))
 	{
-		m_pMesh.reset( MeshManager::GetElementByName( l_meshName));
+		m_pMesh = MeshManager::GetElementByName( l_meshName);
 	}
 	else
 	{
-		m_pMesh.reset( MeshManager::CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom));
-		Log::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
+		m_pMesh = MeshManager::CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom);
+		Logger::LogMessage( CU_T( "CreatePrimitive - Mesh ") + l_meshName + CU_T( " created"));
 	}
 
 	_readObjFile();
@@ -75,7 +77,7 @@ bool ObjImporter :: _import()
 
 	if ( ! l_bHasMaterial)
 	{
-		m_pCurrentMaterial.reset( MaterialManager::CreateMaterial( l_materialName));
+		m_pCurrentMaterial = MaterialManager::CreateMaterial( l_materialName);
 	}
 
 	for (size_t i = 0 ; i < m_pMesh->GetNbSubmeshes() ; i++)
@@ -91,12 +93,12 @@ bool ObjImporter :: _import()
 		}
 	}
 
-	m_pMesh->SetNormals();
+	m_pMesh->ComputeNormals();
 
-	SceneNodePtr l_pNode = m_pScene->CreateSceneNode( l_name);
+	GeometryNodePtr l_pNode = m_pScene->CreateGeometryNode( l_name);
 
-	GeometryPtr l_pGeometry = new Geometry( m_pMesh, l_pNode, l_name);
-	Log::LogMessage( CU_T( "PlyImporter::_import - Geometry %s created"), l_name.c_str());
+	GeometryPtr l_pGeometry( new Geometry( m_pMesh, l_pNode, l_name));
+	Logger::LogMessage( CU_T( "PlyImporter::_import - Geometry ") + l_name + CU_T( " created"));
 
 	m_geometries.insert( GeometryPtrStrMap::value_type( l_name, l_pGeometry));
 
@@ -108,10 +110,14 @@ bool ObjImporter :: _import()
 void ObjImporter :: _createSubmesh()
 {
 	m_pCurrentSubmesh = m_pMesh->CreateSubmesh( 0);
+/*
 	m_pCurrentSubmesh->GetRenderer()->GetTriangles()->Cleanup();
 	m_pCurrentSubmesh->GetRenderer()->GetTrianglesTexCoords()->Cleanup();
 	m_pCurrentSubmesh->GetRenderer()->GetLines()->Cleanup();
 	m_pCurrentSubmesh->GetRenderer()->GetLinesTexCoords()->Cleanup();
+*/
+	m_pCurrentSubmesh->GetRenderer()->GetTriangles()->Cleanup();
+	m_pCurrentSubmesh->GetRenderer()->GetLines()->Cleanup();
 }
 
 void ObjImporter :: _readObjFile()
@@ -166,7 +172,7 @@ void ObjImporter :: _readObjFile()
 				break;
 
 				case '#':
-//					Log::LogMessage( l_strSection + " " + l_strValue);
+//					Logger::LogMessage( l_strSection + " " + l_strValue);
 				break;
 
 				default:
@@ -185,7 +191,7 @@ void ObjImporter :: _readObjFile()
 		}
 	}
 
-//	Log::LogMessage( "LastLine : " + l_strSection + " " + l_strValue);
+//	Logger::LogMessage( CU_T( "LastLine : " + l_strSection + " " + l_strValue);
 }
 
 void ObjImporter :: _selectSubmesh( const String & p_strName)
@@ -289,9 +295,9 @@ void ObjImporter :: _readMatLightComponent( const String & p_strLine)
 		if (l_arraySplitted.size() >= 3)
 		{
 			float l_fR, l_fG, l_fB;
-			l_fR = float( atof( l_arraySplitted[0].char_str()));
-			l_fG = float( atof( l_arraySplitted[1].char_str()));
-			l_fB = float( atof( l_arraySplitted[2].char_str()));
+			l_fR = l_arraySplitted[0].ToFloat();
+			l_fG = l_arraySplitted[1].ToFloat();
+			l_fB = l_arraySplitted[2].ToFloat();
 
 			if (l_char == CU_T( 'a'))
 			{
@@ -313,7 +319,7 @@ void ObjImporter :: _readMatTransparency( const String & p_strLine)
 {
 	if ( ! m_bReadingFaces)
 	{
-		m_fAlpha = float( atof( p_strLine.char_str()));
+		m_fAlpha = p_strLine.ToFloat();
 		const float * l_pfAmbient = m_pCurrentMaterial->GetPass( 0)->GetAmbient();
 		const float * l_pfDiffuse = m_pCurrentMaterial->GetPass( 0)->GetDiffuse();
 		const float * l_pfSpecular = m_pCurrentMaterial->GetPass( 0)->GetSpecular();
@@ -335,7 +341,7 @@ void ObjImporter :: _readMatLightRefDifExp( const String & p_strLine)
 		l_char = p_strLine.at( 0);
 		l_line = p_strLine.substr( 2, String::npos);
 
-		float l_fValue = float( atof( l_line.char_str()));
+		float l_fValue = l_line.ToFloat();
 
 		if (l_char == CU_T( 's'))
 		{
@@ -362,7 +368,7 @@ void ObjImporter :: _readSubmeshInfo( const String & p_strLine)
 				m_pCurrentSubmesh = m_mapSubmeshes.find( l_arraySplitted[1])->second;
 			}
 
-			m_pSmoothingGroup = NULL;
+			m_iGroup = -1;
 		}
 	}
 }
@@ -382,13 +388,14 @@ void ObjImporter :: _readGroupInfo( const String & p_strLine)
 					_createSubmesh();
 				}
 
-				m_pSmoothingGroup = m_pCurrentSubmesh->AddSmoothingGroup();
-				m_mapSmoothGroups.insert( SmoothGroupPtrStrMap::value_type( l_arraySplitted[1], m_pSmoothingGroup));
+				SmoothingGroup & l_group = m_pCurrentSubmesh->AddSmoothingGroup();
+				m_iGroup = l_group.m_idGroup - 1;
+				m_mapSmoothGroups.insert( IntStrMap::value_type( l_arraySplitted[1], m_iGroup));
 				m_mapSmoothGroupSubmesh.insert( SubmeshPtrStrMap::value_type( l_arraySplitted[1], m_pCurrentSubmesh));
 			}
 			else
 			{
-				m_pSmoothingGroup = m_mapSmoothGroups.find( l_arraySplitted[1])->second;
+				m_iGroup = m_mapSmoothGroups.find( l_arraySplitted[1])->second;
 				m_pCurrentSubmesh = m_mapSmoothGroupSubmesh.find( l_arraySplitted[1])->second;
 			}
 		}
@@ -412,7 +419,7 @@ void ObjImporter :: _readVertexInfo( const String & p_strLine)
 		{
 			StringArray l_arraySplitted;
 			sscanf_s( l_line.char_str(), "%f %f %f", & l_vertex[0], & l_vertex[1], & l_vertex[2]);
-			m_arrayVertex.push_back( new Point3r( l_vertex[0], l_vertex[1], l_vertex[2]));
+			m_arrayVertex.push_back( Point3r( l_vertex[0], l_vertex[1], l_vertex[2]));
 		}
 		else if (l_char == CU_T( 't'))
 		{
@@ -423,7 +430,7 @@ void ObjImporter :: _readVertexInfo( const String & p_strLine)
 		}
 		else if (l_char != CU_T( 'n'))
 		{
-			Log::LogMessage( "Unknown vertex info : [%c]", l_char);
+			Logger::LogMessage( CU_T( "Unknown vertex info : [%c]"), l_char);
 		}
 	}
 }
@@ -436,10 +443,12 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 		return;
 	}
 
-	if (m_pSmoothingGroup.null())
+	if (m_iGroup == -1)
 	{
-		m_pSmoothingGroup = m_pCurrentSubmesh->AddSmoothingGroup();
-		m_mapSmoothGroups.insert( SmoothGroupPtrStrMap::value_type( "-1", m_pSmoothingGroup));
+		SmoothingGroup & l_group = m_pCurrentSubmesh->AddSmoothingGroup();
+		m_iGroup = l_group.m_idGroup - 1;
+		m_mapSmoothGroups.insert( IntStrMap::value_type( "-1", m_iGroup));
+
 		if (m_mapSmoothGroupSubmesh.find( "-1") == m_mapSmoothGroupSubmesh.end())
 		{
 			m_mapSmoothGroupSubmesh.insert( SubmeshPtrStrMap::value_type( "-1", m_pCurrentSubmesh));
@@ -448,7 +457,7 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 
 	String l_line;
 
-//	Log::LogMessage( "Line : " + p_strLine);
+//	Logger::LogMessage( CU_T( "Line : " + p_strLine);
 
 	l_line = p_strLine.substr( 1, String::npos);
 
@@ -469,15 +478,15 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 			{
 				StringArray l_arraySlashSplitted = l_arraySplitted[i].Split( CU_T( "/"));
 				l_arrayCoords.push_back( 0);
-				l_arrayVertex[i] = atoi( l_arraySlashSplitted[0].char_str());
-				l_arrayCoords[i] = atoi( l_arraySlashSplitted[1].char_str());
+				l_arrayVertex[i] = l_arraySlashSplitted[0].ToInt();
+				l_arrayCoords[i] = l_arraySlashSplitted[1].ToInt();
 			}
 			else
 			{
 				if (l_arraySplitted[i].find( "/") != String::npos)
 				{
 					StringArray l_arraySlashSplitted = l_arraySplitted[i].Split( CU_T( "/"));
-					l_arrayVertex[i] = atoi( l_arraySlashSplitted[0].char_str());
+					l_arrayVertex[i] = l_arraySlashSplitted[0].ToInt();
 				}
 				else
 				{
@@ -486,49 +495,50 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 			}
 		}
 
-		FacePtr l_pFace;
 		int l_iIndex;
-		VertexPtr l_pV1, l_pV2, l_pV3;
+		Point3r l_pV1, l_pV2, l_pV3;
+		size_t l_uiIndex1, l_uiIndex2, l_uiIndex3;
 
-		if ((l_iIndex = m_pCurrentSubmesh->IsInMyVertex( *m_arrayVertex[l_arrayVertex[1] - 1])) == -1)
+		if ((l_iIndex = m_pCurrentSubmesh->IsInMyVertex( m_arrayVertex[l_arrayVertex[1] - 1])) == -1)
 		{
-			l_pV1 = m_pCurrentSubmesh->AddVertex( new Vertex( *m_arrayVertex[l_arrayVertex[1] - 1]));
+			l_pV1 = m_pCurrentSubmesh->AddVertex( m_arrayVertex[l_arrayVertex[1] - 1]);
+			l_uiIndex1 = m_pCurrentSubmesh->GetVertices().size() - 1;
 		}
 		else
 		{
 			l_pV1 = m_pCurrentSubmesh->GetVertex( l_iIndex);
+			l_uiIndex1 = l_iIndex;
 		}
 
-		if ((l_iIndex = m_pCurrentSubmesh->IsInMyVertex( *m_arrayVertex[l_arrayVertex[0] - 1])) == -1)
+		if ((l_iIndex = m_pCurrentSubmesh->IsInMyVertex( m_arrayVertex[l_arrayVertex[0] - 1])) == -1)
 		{
-			l_pV2 = m_pCurrentSubmesh->AddVertex( new Vertex( *m_arrayVertex[l_arrayVertex[0] - 1]));
+			l_pV2 = m_pCurrentSubmesh->AddVertex( m_arrayVertex[l_arrayVertex[0] - 1]);
+			l_uiIndex2 = m_pCurrentSubmesh->GetVertices().size() - 1;
 		}
 		else
 		{
 			l_pV2 = m_pCurrentSubmesh->GetVertex( l_iIndex);
+			l_uiIndex2 = l_iIndex;
 		}
 
-		if ((l_iIndex = m_pCurrentSubmesh->IsInMyVertex( *m_arrayVertex[l_arrayVertex[l_arrayVertex.size() - 1] - 1])) == -1)
+		if ((l_iIndex = m_pCurrentSubmesh->IsInMyVertex( m_arrayVertex[l_arrayVertex[l_arrayVertex.size() - 1] - 1])) == -1)
 		{
-			l_pV3 = m_pCurrentSubmesh->AddVertex( new Vertex( *m_arrayVertex[l_arrayVertex[l_arrayVertex.size() - 1] - 1]));
+			l_pV3 = m_pCurrentSubmesh->AddVertex( m_arrayVertex[l_arrayVertex[l_arrayVertex.size() - 1] - 1]);
+			l_uiIndex3 = m_pCurrentSubmesh->GetVertices().size() - 1;
 		}
 		else
 		{
 			l_pV3 = m_pCurrentSubmesh->GetVertex( l_iIndex);
+			l_uiIndex3 = l_iIndex;
 		}
 
-		if ( ! (l_pFace = m_pCurrentSubmesh->AddFace( l_pV1, l_pV2, l_pV3, m_pSmoothingGroup->m_idGroup - 1)).null())
+		Face & l_face = m_pCurrentSubmesh->AddFace( l_uiIndex1, l_uiIndex2, l_uiIndex3, m_iGroup - 1);
+
+		if (m_objectHasUV)
 		{
-			if (m_objectHasUV)
-			{
-				l_pFace->SetTexCoordV1( m_textureCoords[l_arrayCoords[1] - 1][0], 							m_textureCoords[l_arrayCoords[1] - 1][1]);
-				l_pFace->SetTexCoordV2( m_textureCoords[l_arrayCoords[0] - 1][0], 							m_textureCoords[l_arrayCoords[0] - 1][1]);
-				l_pFace->SetTexCoordV3( m_textureCoords[l_arrayCoords[l_arrayCoords.size() - 1] - 1][0],	m_textureCoords[l_arrayCoords[l_arrayCoords.size() - 1] - 1][1]);
-			}
-		}
-		else
-		{
-			Log::LogMessage( "NULL Face !!!");
+			l_face.SetVertexTexCoords( 0, m_textureCoords[l_arrayCoords[1] - 1][0], 						m_textureCoords[l_arrayCoords[1] - 1][1]);
+			l_face.SetVertexTexCoords( 1, m_textureCoords[l_arrayCoords[0] - 1][0], 						m_textureCoords[l_arrayCoords[0] - 1][1]);
+			l_face.SetVertexTexCoords( 2, m_textureCoords[l_arrayCoords[l_arrayCoords.size() - 1] - 1][0],	m_textureCoords[l_arrayCoords[l_arrayCoords.size() - 1] - 1][1]);
 		}
 
 		if (l_iNbAdditionalFaces > 0)
@@ -551,47 +561,48 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 			{
 				l_iCurrentVertexIndex = l_arrayVertex[i + 2];
 
-				if ((l_iIndex = m_pCurrentSubmesh->IsInMyVertex( *m_arrayVertex[l_iCurrentVertexIndex - 1])) == -1)
+				if ((l_iIndex = m_pCurrentSubmesh->IsInMyVertex( m_arrayVertex[l_iCurrentVertexIndex - 1])) == -1)
 				{
-					l_pV1 = m_pCurrentSubmesh->AddVertex( new Vertex( *m_arrayVertex[l_iCurrentVertexIndex - 1]));
+					l_pV1 = m_pCurrentSubmesh->AddVertex( m_arrayVertex[l_iCurrentVertexIndex - 1]);
+					l_uiIndex1 = m_pCurrentSubmesh->GetVertices().size() - 1;
 				}
 				else
 				{
 					l_pV1 = m_pCurrentSubmesh->GetVertex( l_iIndex);
+					l_uiIndex1 = l_iIndex;
 				}
 
-				if ((l_iIndex = m_pCurrentSubmesh->IsInMyVertex( *m_arrayVertex[l_iPreviousVertexIndex - 1])) == -1)
+				if ((l_iIndex = m_pCurrentSubmesh->IsInMyVertex( m_arrayVertex[l_iPreviousVertexIndex - 1])) == -1)
 				{
-					l_pV2 = m_pCurrentSubmesh->AddVertex( new Vertex( *m_arrayVertex[l_iPreviousVertexIndex - 1]));
+					l_pV2 = m_pCurrentSubmesh->AddVertex( m_arrayVertex[l_iPreviousVertexIndex - 1]);
+					l_uiIndex2 = m_pCurrentSubmesh->GetVertices().size() - 1;
 				}
 				else
 				{
 					l_pV2 = m_pCurrentSubmesh->GetVertex( l_iIndex);
+					l_uiIndex2 = l_iIndex;
 				}
 
-				if ((l_iIndex = m_pCurrentSubmesh->IsInMyVertex( *m_arrayVertex[l_iLastVertexIndex - 1])) == -1)
+				if ((l_iIndex = m_pCurrentSubmesh->IsInMyVertex( m_arrayVertex[l_iLastVertexIndex - 1])) == -1)
 				{
-					l_pV3 = m_pCurrentSubmesh->AddVertex( new Vertex( *m_arrayVertex[l_iLastVertexIndex - 1]));
+					l_pV3 = m_pCurrentSubmesh->AddVertex( m_arrayVertex[l_iLastVertexIndex - 1]);
+					l_uiIndex3 = m_pCurrentSubmesh->GetVertices().size() - 1;
 				}
 				else
 				{
 					l_pV3 = m_pCurrentSubmesh->GetVertex( l_iIndex);
+					l_uiIndex3 = l_iIndex;
 				}
 
-				if ( ! (l_pFace = m_pCurrentSubmesh->AddFace( l_pV1, l_pV2, l_pV3, m_pSmoothingGroup->m_idGroup - 1)).null())
+				Face & l_faceB = m_pCurrentSubmesh->AddFace( l_uiIndex1, l_uiIndex2, l_uiIndex3, m_iGroup);
+
+				if (m_objectHasUV)
 				{
-					if (m_objectHasUV)
-					{
-						l_iCurrentCoordIndex = l_arrayCoords[i + 2];
-						l_pFace->SetTexCoordV1( m_textureCoords[l_iCurrentCoordIndex - 1][0],	m_textureCoords[l_iCurrentCoordIndex - 1][1]);
-						l_pFace->SetTexCoordV2( m_textureCoords[l_iPreviousCoordIndex - 1][0],	m_textureCoords[l_iPreviousCoordIndex - 1][1]);
-						l_pFace->SetTexCoordV3( m_textureCoords[l_iLastCoordIndex - 1][0],		m_textureCoords[l_iLastCoordIndex - 1][1]);
-						l_iPreviousCoordIndex = l_iCurrentCoordIndex;
-					}
-				}
-				else
-				{
-					Log::LogMessage( "NULL Face !!!");
+					l_iCurrentCoordIndex = l_arrayCoords[i + 2];
+					l_faceB.SetVertexTexCoords( 0, m_textureCoords[l_iCurrentCoordIndex - 1][0],	m_textureCoords[l_iCurrentCoordIndex - 1][1]);
+					l_faceB.SetVertexTexCoords( 1, m_textureCoords[l_iPreviousCoordIndex - 1][0],	m_textureCoords[l_iPreviousCoordIndex - 1][1]);
+					l_faceB.SetVertexTexCoords( 2, m_textureCoords[l_iLastCoordIndex - 1][0],		m_textureCoords[l_iLastCoordIndex - 1][1]);
+					l_iPreviousCoordIndex = l_iCurrentCoordIndex;
 				}
 
 				l_iPreviousVertexIndex = l_iCurrentVertexIndex;
@@ -600,8 +611,8 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 	}
 	else if (l_arraySplitted.size() > 0)
 	{
-		Log::LogMessage( "Too few vertices %d", l_arraySplitted.size());
+		Logger::LogMessage( CU_T( "Too few vertices %d"), l_arraySplitted.size());
 	}
 
-//	Log::LogMessage( "Line : " + p_strLine + " End");
+//	Logger::LogMessage( CU_T( "Line : " + p_strLine + " End");
 }

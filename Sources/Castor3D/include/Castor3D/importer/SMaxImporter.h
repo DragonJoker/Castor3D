@@ -63,7 +63,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 25/08/2010
 	*/
-	class CS3D_API SMaxImporter : public ExternalImporter
+	class C3D_API SMaxImporter : public ExternalImporter, public MemoryTraced<SMaxImporter>
 	{
 	private:
 		struct SMaxChunk

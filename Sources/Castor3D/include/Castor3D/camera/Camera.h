@@ -21,6 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Module_Camera.h"
 #include "../scene/Module_Scene.h"
 #include "../render_system/Renderable.h"
+#include "../main/MovableObject.h"
 #include "Viewport.h"
 
 namespace Castor3D
@@ -32,7 +33,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API Camera : public Renderable<Camera, CameraRenderer>
+	class C3D_API Camera : public MovableObject, public Renderable<Camera, CameraRenderer>
 	{
 	public:
 		//! The selection mode enumerator
@@ -51,14 +52,10 @@ namespace Castor3D
 
 	private:
 		friend class Scene;
-		friend class CameraRenderer;		
-		String m_name;					//! The camera name
-		Quaternion m_orientation;		//! The camera orientation, relative to its scene node
-		Point3r m_position;				//! The camera position, relative to its scene node
-		real * m_matrix;				//! The transformation matrix
-		ViewportPtr m_viewport;			//! The viewport of the camera
-		int m_windowWidth;				//! Display window width
-		int m_windowHeight;				//! Display window height
+		friend class CameraRenderer;
+		ViewportPtr m_viewport;		//! The viewport of the camera
+		int m_windowWidth;			//! Display window width
+		int m_windowHeight;			//! Display window height
 
 		/**
 		* Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
@@ -68,7 +65,7 @@ namespace Castor3D
 		*@param p_ww, p_wh : display window size
 		*@param p_type : Projection type
 		*/
-		Camera( const String & p_name, int p_ww, int p_wh, Viewport::eTYPE p_type);
+		Camera( const String & p_name, int p_ww, int p_wh, const CameraNodePtr p_pNode, Viewport::eTYPE p_type);
 
 	public:
 		/**
@@ -78,45 +75,15 @@ namespace Castor3D
 		/**
 		 * Applies the viewport, the rotation, and renders all
 		 */
-		virtual void Apply( eDRAW_TYPE p_displayMode);
+		virtual void Render( eDRAW_TYPE p_displayMode);
 		/**
 		 * Removes the transformations
 		 */
-		virtual void Remove();
+		virtual void EndRender();
 		/**
 		 * Resizes the viewport
 		 */
 		void Resize( unsigned int p_width, unsigned int p_height);
-		/**
-		 * Rotation around Y axis
-		 * @param p_angle : [in] The rotation angle
-		 */
-		void Yaw( const Angle & p_angle);//Rotation autour de l'axe Y
-		/**
-		 * Rotation around X axis
-		 * @param p_angle : [in] The rotation angle
-		 */
-		void Pitch( const Angle & p_angle);
-		/**
-		 * Rotation around Z axis
-		 * @param p_angle : [in] The rotation angle
-		 */
-		void Roll( const Angle & p_angle);
-		/**
-		 * Rotates the camera from a quaternion
-		 *@param p_quat : [in] orientation to add
-		 */
-		void Rotate( const Quaternion & p_quat);
-		/**
-		 * Translates the camera from a Point3r
-		 *@param p_vector : [in] The translation value
-		 */
-		void Translate( const Point3r & p_vector);
-		/**
-		 * Translates the camera from three floats
-		 *@param x, y, z : [in] The translation value
-		 */
-		void Translate( real x, real y, real z);
 		/**
 		 * Sets the orientation to 0
 		 */
@@ -125,11 +92,6 @@ namespace Castor3D
 		 * Sets the position to 0
 		 */
 		void ResetPosition();
-		/**
-		 * Computes and returns the rotation matrix
-		 *@return The rotation matrix
-		 */
-		real * GetRotationMatrix();
 		/**
 		 * Writes the camera in a file
 		 *@param p_file : [in] The file to write in
@@ -151,10 +113,7 @@ namespace Castor3D
 	public:
 		/**@name Accessors */
 		//@{
-		inline String					GetName			()const { return m_name; }
-		inline const Point3r &			GetPosition		()const { return m_position; }
 		inline ViewportPtr				GetViewport		()const { return m_viewport; }
-		inline const Quaternion &		GetOrientation	()const { return m_orientation; }
 		//@}
 	};
 	//! The Camera renderer
@@ -164,7 +123,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API CameraRenderer : public Renderer<Camera, CameraRenderer>
+	class C3D_API CameraRenderer : public Renderer<Camera, CameraRenderer>
 	{
 	protected:
 		/**
@@ -178,16 +137,6 @@ namespace Castor3D
 		 */
 		virtual ~CameraRenderer(){}
 		/**
-		 * Applies the transformations of the camera
-		 *@param p_position : [in] The camera position
-		 *@param p_matrix : [in] The rotation matrix
-		 */
-		virtual void ApplyTransformations( const Point3r & p_position, real * p_matrix) = 0;
-		/**
-		 * Removes the tranformations
-		 */
-		virtual void RemoveTransformations() = 0;
-		/**
 		* Returns the first object at mouse coords x and y
 		*@param p_scene : [in] The scene from which the selection is made
 		*@param p_mode : [in] The selection mode (vertex, face, submesh, geometry)
@@ -197,6 +146,9 @@ namespace Castor3D
 		*@return true if something was found, false if not
 		*/
 		virtual bool Select( ScenePtr p_scene, Camera::eSELECTION_MODE p_mode, void ** p_found, int x, int y) = 0;
+
+		virtual void Render( eDRAW_TYPE p_displayMode) = 0;
+		virtual void EndRender() = 0;
 	};
 }
 

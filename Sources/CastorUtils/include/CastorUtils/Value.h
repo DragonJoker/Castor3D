@@ -23,10 +23,41 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Castor
 { namespace Templates
 {
-	template <typename T> struct Value;
-
-	template <> struct Value<char>
+	template<class T, class U> struct is_same
 	{
+		static const bool value = false;
+	};
+
+	template<class T> struct is_same<T,T>
+	{
+		static const bool value = true;
+	};
+
+	template <typename T>
+	struct CallTraits
+	{
+		template <typename U, bool Big> struct CallTraitsImpl;
+
+		template <typename U>
+		struct CallTraitsImpl<U, true>
+		{
+			typedef const U& Type;
+		};
+
+		template <typename U>
+		struct CallTraitsImpl<U, false>
+		{
+			typedef U Type;
+		};
+
+		typedef typename CallTraitsImpl<T, (sizeof(T) > 8)>::Type ParamType;
+	};
+
+	template <typename T> class Value;
+
+	template <> class Value<char>
+	{
+	public:
 		static char	zero			()										{ return 0; }
 		static char	unit			()										{ return 1; }
 		static bool	equals			( const char & p_a, const char & p_b)	{ return p_a == p_b; }
@@ -44,10 +75,19 @@ namespace Castor
 		static char	ass_divide		( char & p_a, const char & p_b)			{ return assign( p_a, divide( p_a, p_b)); }
 		static char	ass_negate		( char & p_a)							{ return assign( p_a, negate( p_a)); }
 		static void	stick			( char & p_a)							{}
+		template <typename Ty> 
+		static char	assign			( char & p_a, const Ty & p_b)			{ return p_a = static_cast<char>( p_b); }
+		template <>
+		static char	assign<float>	( char & p_a, const float & p_b)		{ return p_a = char( int( p_b)); }
+		template <>
+		static char	assign<double>	( char & p_a, const double & p_b)		{ return p_a = char( int( p_b)); }
+		template <>
+		static char	assign<bool>	( char & p_a, const bool & p_b)			{ return p_a = (p_b ? 1 : 0); }
 	};
 
-	template <> struct Value<unsigned char>
+	template <> class Value<unsigned char>
 	{
+	public:
 		static unsigned char	zero			()														{ return 0; }
 		static unsigned char	unit			()														{ return 1; }
 		static bool				equals			( const unsigned char & p_a, const unsigned char & p_b)	{ return p_a == p_b; }
@@ -65,10 +105,19 @@ namespace Castor
 		static unsigned char	ass_divide		( unsigned char & p_a, const unsigned char & p_b)		{ return assign( p_a, divide( p_a, p_b)); }
 		static unsigned char	ass_negate		( unsigned char & p_a)									{ return assign( p_a, negate( p_a)); }
 		static unsigned char	stick			( unsigned char & p_a)									{}
+		template <typename Ty> 
+		static unsigned char	assign			( unsigned char & p_a, const Ty & p_b)					{ return p_a = static_cast<unsigned char>( p_b); }
+		template <> 
+		static unsigned char	assign<float>	( unsigned char & p_a, const float & p_b)				{ return p_a = unsigned char( unsigned int( p_b)); }
+		template <> 
+		static unsigned char	assign<double>	( unsigned char & p_a, const double & p_b)				{ return p_a = unsigned char( unsigned int( p_b)); }
+		template <> 
+		static unsigned char	assign<bool>	( unsigned char & p_a, const bool & p_b)				{ return p_a = (p_b ? 1 : 0); }
 	};
 
-	template <> struct Value<bool>
+	template <> class Value<bool>
 	{
+	public:
 		static bool	zero			()										{ return false; }
 		static bool	unit			()										{ return true; }
 		static bool	equals			( const bool & p_a, const bool & p_b)	{ return p_a == p_b; }
@@ -86,10 +135,17 @@ namespace Castor
 		static bool	ass_divide		( bool & p_a, const bool & p_b)			{ return assign( p_a, divide( p_a, p_b)); }
 		static bool	ass_negate		( bool & p_a)							{ return assign( p_a, negate( p_a)); }
 		static void stick			( bool & p_a)							{}
+		template <typename Ty> 
+		static bool	assign			( bool & p_a, const Ty & p_b)			{ return p_a = static_cast<bool>( p_b); }
+		template <>
+		static bool	assign<float>	( bool & p_a, const float & p_b)		{ return p_a = bool( int( p_b) != 0); }
+		template <>
+		static bool	assign<double>	( bool & p_a, const double & p_b)		{ return p_a = bool( int( p_b) != 0); }
 	};
 
-	template <> struct Value<int>
+	template <> class Value<int>
 	{
+	public:
 		static int	zero			()									{ return 0; }
 		static int	unit			()									{ return 1; }
 		static bool	equals			( const int & p_a, const int & p_b)	{ return p_a == p_b; }
@@ -106,11 +162,16 @@ namespace Castor
 		static int	ass_multiply	( int & p_a, const int & p_b)		{ return assign( p_a, multiply( p_a, p_b)); }
 		static int	ass_divide		( int & p_a, const int & p_b)		{ return assign( p_a, divide( p_a, p_b)); }
 		static int	ass_negate		( int & p_a)						{ return assign( p_a, negate( p_a)); }
-		static void stick			( int & p_a)							{}
+		static void stick			( int & p_a)						{}
+		template <typename Ty> 
+		static int	assign			( int & p_a, const Ty & p_b)		{ return p_a = static_cast<int>( p_b); }
+		template <> 
+		static int	assign<bool>	( int & p_a, const bool & p_b)		{ return p_a = (p_b ? 1 : 0); }
 	};
 
-	template <> struct Value<unsigned int>
+	template <> class Value<unsigned int>
 	{
+	public:
 		static unsigned int	zero			()														{ return 0; }
 		static unsigned int	unit			()														{ return 1; }
 		static bool			equals			( const unsigned int & p_a, const unsigned int & p_b)	{ return p_a == p_b; }
@@ -128,10 +189,15 @@ namespace Castor
 		static unsigned int	ass_divide		( unsigned int & p_a, const unsigned int & p_b)			{ return assign( p_a, divide( p_a, p_b)); }
 		static unsigned int	ass_negate		( unsigned int & p_a)									{ return assign( p_a, negate( p_a)); }
 		static void			stick			( unsigned int & p_a)									{}
+		template <typename Ty> 
+		static unsigned int	assign			( unsigned int & p_a, const Ty & p_b)					{ return p_a = static_cast<unsigned int>( p_b); }
+		template <> 
+		static unsigned int	assign<bool>	( unsigned int & p_a, const bool & p_b)					{ return p_a = (p_b ? 1 : 0); }
 	};
 
-	template <> struct Value<long>
+	template <> class Value<long>
 	{
+	public:
 		static long	zero			()										{ return 0; }
 		static long	unit			()										{ return 1; }
 		static bool	equals			( const long & p_a, const long & p_b)	{ return p_a == p_b; }
@@ -149,10 +215,15 @@ namespace Castor
 		static long	ass_divide		( long & p_a, const long & p_b)			{ return assign( p_a, divide( p_a, p_b)); }
 		static long	ass_negate		( long & p_a)							{ return assign( p_a, negate( p_a)); }
 		static void stick			( long & p_a)							{}
+		template <typename Ty> 
+		static long	assign			( long & p_a, const Ty & p_b)			{ return p_a = static_cast<long>( p_b); }
+		template <> 
+		static long	assign<bool>	( long & p_a, const bool & p_b)			{ return p_a = (p_b ? 1 : 0); }
 	};
 
-	template <> struct Value<unsigned long>
+	template <> class Value<unsigned long>
 	{
+	public:
 		static unsigned long	zero			()														{ return 0; }
 		static unsigned long	unit			()														{ return 1; }
 		static bool				equals			( const unsigned long & p_a, const unsigned long & p_b)	{ return p_a == p_b; }
@@ -170,10 +241,15 @@ namespace Castor
 		static unsigned long	ass_divide		( unsigned long & p_a, const unsigned long & p_b)		{ return assign( p_a, divide( p_a, p_b)); }
 		static unsigned long	ass_negate		( unsigned long & p_a)									{ return assign( p_a, negate( p_a)); }
 		static void				stick			( unsigned long & p_a)									{}
+		template <typename Ty> 
+		static unsigned long	assign			( unsigned long & p_a, const Ty & p_b)					{ return p_a = static_cast<unsigned long>( p_b); }
+		template <> 
+		static unsigned long	assign<bool>	( unsigned long & p_a, const bool & p_b)				{ return p_a = (p_b ? 1 : 0); }
 	};
 
-	template <> struct Value<long long>
+	template <> class Value<long long>
 	{
+	public:
 		static long long	zero			()												{ return 0; }
 		static long long	unit			()												{ return 1; }
 		static bool			equals			( const long long & p_a, const long long & p_b)	{ return p_a == p_b; }
@@ -191,10 +267,15 @@ namespace Castor
 		static long long	ass_divide		( long long & p_a, const long long & p_b)		{ return assign( p_a, divide( p_a, p_b)); }
 		static long long	ass_negate		( long long & p_a)								{ return assign( p_a, negate( p_a)); }
 		static void			stick			( long long & p_a)								{}
+		template <typename Ty> 
+		static long long	assign			( long long & p_a, const Ty & p_b)				{ return p_a = static_cast<long long>( p_b); }
+		template <> 
+		static long long	assign<bool>	( long long & p_a, const bool & p_b)			{ return p_a = (p_b ? 1 : 0); }
 	};
 
-	template <> struct Value<unsigned long long>
+	template <> class Value<unsigned long long>
 	{
+	public:
 		static unsigned long long	zero			()																	{ return 0; }
 		static unsigned long long	unit			()																	{ return 1; }
 		static bool					equals			( const unsigned long long & p_a, const unsigned long long & p_b)	{ return p_a == p_b; }
@@ -212,10 +293,15 @@ namespace Castor
 		static unsigned long long	ass_divide		( unsigned long long & p_a, const unsigned long long & p_b)			{ return assign( p_a, divide( p_a, p_b)); }
 		static unsigned long long	ass_negate		( unsigned long long & p_a)											{ return assign( p_a, negate( p_a)); }
 		static void					stick			( unsigned long long & p_a)											{}
+		template <typename Ty> 
+		static unsigned long long	assign			( unsigned long long & p_a, const Ty & p_b)							{ return p_a = static_cast<unsigned long long>( p_b); }
+		template <> 
+		static unsigned long long	assign<bool>	( unsigned long long & p_a, const bool & p_b)						{ return p_a = (p_b ? 1 : 0); }
 	};
 
-	template <> struct Value<float>
+	template <> class Value<float>
 	{
+	public:
 		static float	zero			()										{ return float( 0); }
 		static float	unit			()										{ return float( 1); }
 		static bool		equals			( const float & p_a, const float & p_b)	{ return std::abs( p_a - p_b) < std::numeric_limits<float>::epsilon(); }
@@ -253,10 +339,15 @@ namespace Castor
 				}
 			}
 		}
+		template <typename Ty> 
+		static float	assign			( float & p_a, const Ty & p_b)			{ return p_a = static_cast<float>( p_b); }
+		template <> 
+		static float	assign<bool>	( float & p_a, const bool & p_b)		{ return p_a = (p_b ? 1.0f : 0.0f); }
 	};
 
-	template <> struct Value<double>
+	template <> class Value<double>
 	{
+	public:
 		static double	zero			()											{ return double( 0); }
 		static double	unit			()											{ return double( 1); }
 		static bool		equals			( const double & p_a, const double & p_b)	{ return std::abs( p_a - p_b) < std::numeric_limits<double>::epsilon(); }
@@ -294,6 +385,10 @@ namespace Castor
 				}
 			}
 		}
+		template <typename Ty> 
+		static double	assign			( double & p_a, const Ty & p_b)				{ return p_a = static_cast<double>( p_b); }
+		template <> 
+		static double	assign<bool>	( double & p_a, const bool & p_b)			{ return p_a = (p_b ? 1.0 : 0.0); }
 	};
 }
 }

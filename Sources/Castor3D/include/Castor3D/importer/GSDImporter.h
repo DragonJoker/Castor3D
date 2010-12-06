@@ -44,7 +44,7 @@ namespace Castor3D
 	  C3DList<standardString *> childs;
 	};
 
-	class GSDImporter : public ExternalImporter
+	class GSDImporter : public ExternalImporter, public MemoryTraced<GSDImporter>
 	{
 	private:
 		friend class Scene;

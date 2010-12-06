@@ -30,10 +30,10 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API SceneManager : public Castor::Templates::UniqueManager<Scene, SceneManager>
+	class C3D_API SceneManager : public Castor::Templates::UniqueManager<String, Scene, SceneManager>
 	{
 	private:
-		friend class Castor::Templates::UniqueManager<Scene, SceneManager>;
+		friend class Castor::Templates::UniqueManager<String, Scene, SceneManager>;
 	private:
 		/**
 		 * Constructor

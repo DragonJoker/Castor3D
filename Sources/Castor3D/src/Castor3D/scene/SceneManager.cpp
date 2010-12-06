@@ -46,6 +46,4 @@ void SceneManager :: ClearScenes()
 	{
 		l_it->second->ClearScene();
 	}
-
-//	map::cycle( m_objectMap, & Scene::ClearScene);
 }

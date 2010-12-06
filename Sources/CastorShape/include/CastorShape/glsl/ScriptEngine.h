@@ -15,14 +15,14 @@ namespace CastorShape
 	class ScriptEngine d_debug_check_noncopyable
 	{
 	protected:
-		static Context * sm_context;
+		static ScriptContext * sm_context;
 
 	protected:
 		Path m_path;
 
 	public:
 		ScriptCompiler * m_compiler;
-		Context * m_context;
+		ScriptContext * m_context;
 		StringArray m_untrimmedCode;
 
 		ScriptTimerManager * m_timerManager;
@@ -45,10 +45,10 @@ namespace CastorShape
 
 	public:
 		static void ScriptError( ScriptNode * p_node, const String & p_string);
-		static inline Context * GetContext() { return sm_context; }
+		static inline ScriptContext * GetContext() { return sm_context; }
 		void UseContext()const;
-		void SetContext( Context * p_context);
-		static inline void SetGlobalContext( Context * p_context) { sm_context = p_context; }
+		void SetContext( ScriptContext * p_context);
+		static inline void SetGlobalContext( ScriptContext * p_context) { sm_context = p_context; }
 	};
 }
 

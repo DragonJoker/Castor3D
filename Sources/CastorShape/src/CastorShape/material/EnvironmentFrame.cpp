@@ -265,22 +265,14 @@ void CSEnvironmentFrame :: _createAlphaOperandComboBox( unsigned int p_index,
 	delete [] l_choices;
 }
 
-//******************************************************************************
-
 CSEnvironmentFrame :: ~CSEnvironmentFrame()
 {
-	m_environment = NULL;
-	m_pass = NULL;
 }
-
-//******************************************************************************
 
 void CSEnvironmentFrame :: _onOK( wxCommandEvent & event)
 {
 	Close();
 }
-
-//******************************************************************************
 
 void CSEnvironmentFrame :: _onCancel( wxCommandEvent & event)
 {
@@ -319,8 +311,6 @@ void CSEnvironmentFrame :: _onCancel( wxCommandEvent & event)
 	Close();
 }
 
-//******************************************************************************
-
 void CSEnvironmentFrame :: _onRGBSource0Select( wxCommandEvent & event)
 {
 	wxString l_value = m_RGBSourcesCB[0]->GetValue();
@@ -344,12 +334,10 @@ void CSEnvironmentFrame :: _onRGBSource0Select( wxCommandEvent & event)
 	{
 		l_value = l_value.substr( 0, l_value.find_last_of( ' '));
 		l_value.Trim();
-		int l_index = atoi( l_value.char_str());
+		int l_index = atoi( l_value.c_str());
 		m_environment->SetRGBSource( 0, CSTexture, l_index);
 	}
 }
-
-//******************************************************************************
 
 void CSEnvironmentFrame :: _onRGBSource1Select( wxCommandEvent & event)
 {
@@ -374,12 +362,10 @@ void CSEnvironmentFrame :: _onRGBSource1Select( wxCommandEvent & event)
 	{
 		l_value = l_value.substr( 0, l_value.find_last_of( ' '));
 		l_value.Trim();
-		int l_index = atoi( l_value.char_str());
+		int l_index = atoi( l_value.c_str());
 		m_environment->SetRGBSource( 1, CSTexture, l_index);
 	}
 }
-
-//******************************************************************************
 
 void CSEnvironmentFrame :: _onRGBSource2Select( wxCommandEvent & event)
 {
@@ -404,12 +390,10 @@ void CSEnvironmentFrame :: _onRGBSource2Select( wxCommandEvent & event)
 	{
 		l_value = l_value.substr( 0, l_value.find_last_of( ' '));
 		l_value.Trim();
-		int l_index = atoi( l_value.char_str());
+		int l_index = atoi( l_value.c_str());
 		m_environment->SetRGBSource( 2, CSTexture, l_index);
 	}
 }
-
-//******************************************************************************
 
 void CSEnvironmentFrame :: _onRGBOperand0Select( wxCommandEvent & event)
 {
@@ -432,8 +416,6 @@ void CSEnvironmentFrame :: _onRGBOperand0Select( wxCommandEvent & event)
 	}
 }
 
-//******************************************************************************
-
 void CSEnvironmentFrame :: _onRGBOperand1Select( wxCommandEvent & event)
 {
 	wxString l_value = m_RGBOperandsCB[1]->GetValue();
@@ -455,8 +437,6 @@ void CSEnvironmentFrame :: _onRGBOperand1Select( wxCommandEvent & event)
 	}
 }
 
-//******************************************************************************
-
 void CSEnvironmentFrame :: _onRGBOperand2Select( wxCommandEvent & event)
 {
 	wxString l_value = m_RGBOperandsCB[2]->GetValue();
@@ -477,8 +457,6 @@ void CSEnvironmentFrame :: _onRGBOperand2Select( wxCommandEvent & event)
 		m_environment->SetRGBOperand( 2, COOneMinusSrcAlpha);
 	}
 }
-
-//******************************************************************************
 
 void CSEnvironmentFrame :: _onAlphaSource0Select( wxCommandEvent & event)
 {
@@ -503,12 +481,10 @@ void CSEnvironmentFrame :: _onAlphaSource0Select( wxCommandEvent & event)
 	{
 		l_value = l_value.substr( 0, l_value.find_last_of( ' '));
 		l_value.Trim();
-		int l_index = atoi( l_value.char_str());
+		int l_index = atoi( l_value.c_str());
 		m_environment->SetAlphaSource( 0, CSTexture, l_index);
 	}
 }
-
-//******************************************************************************
 
 void CSEnvironmentFrame :: _onAlphaSource1Select( wxCommandEvent & event)
 {
@@ -533,12 +509,10 @@ void CSEnvironmentFrame :: _onAlphaSource1Select( wxCommandEvent & event)
 	{
 		l_value = l_value.substr( 0, l_value.find_last_of( ' '));
 		l_value.Trim();
-		int l_index = atoi( l_value.char_str());
+		int l_index = atoi( l_value.c_str());
 		m_environment->SetAlphaSource( 1, CSTexture, l_index);
 	}
 }
-
-//******************************************************************************
 
 void CSEnvironmentFrame :: _onAlphaSource2Select( wxCommandEvent & event)
 {
@@ -563,12 +537,10 @@ void CSEnvironmentFrame :: _onAlphaSource2Select( wxCommandEvent & event)
 	{
 		l_value = l_value.substr( 0, l_value.find_last_of( ' '));
 		l_value.Trim();
-		int l_index = atoi( l_value.char_str());
+		int l_index = atoi( l_value.c_str());
 		m_environment->SetAlphaSource( 2, CSTexture, l_index);
 	}
 }
-
-//******************************************************************************
 
 void CSEnvironmentFrame :: _onAlphaOperand0Select( wxCommandEvent & event)
 {
@@ -583,8 +555,6 @@ void CSEnvironmentFrame :: _onAlphaOperand0Select( wxCommandEvent & event)
 	}
 }
 
-//******************************************************************************
-
 void CSEnvironmentFrame :: _onAlphaOperand1Select( wxCommandEvent & event)
 {
 	wxString l_value = m_AlphaOperandsCB[1]->GetValue();
@@ -598,8 +568,6 @@ void CSEnvironmentFrame :: _onAlphaOperand1Select( wxCommandEvent & event)
 	}
 }
 
-//******************************************************************************
-
 void CSEnvironmentFrame :: _onAlphaOperand2Select( wxCommandEvent & event)
 {
 	wxString l_value = m_AlphaOperandsCB[2]->GetValue();
@@ -612,5 +580,3 @@ void CSEnvironmentFrame :: _onAlphaOperand2Select( wxCommandEvent & event)
 		m_environment->SetAlphaOperand( 2, AOOneMinusSrcAlpha);
 	}
 }
-
-//******************************************************************************

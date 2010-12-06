@@ -14,8 +14,6 @@ DECLARE_APP( CastorArchitectApp)
 
 PassPanel :: PassPanel( wxWindow * parent, const wxPoint & pos, const wxSize & size)
 	:	wxScrolledWindow( parent, wxID_ANY, pos, size, 524288 | wxBORDER_NONE),
-		m_pass( NULL),
-		m_selectedTextureUnit( NULL),
 		m_selectedUnitImage( NULL),
 		m_textureUnitPanel( NULL)
 {
@@ -28,13 +26,14 @@ PassPanel :: ~PassPanel()
 		delete m_selectedUnitImage;
 		m_selectedUnitImage = NULL;
 	}
-	m_selectedTextureUnit = NULL;
+
+	m_selectedTextureUnit.reset();
 }
 
 void PassPanel :: CreatePassPanel( PassPtr p_pass)
 {
 	m_pass = p_pass;
-	m_selectedTextureUnit = NULL;
+	m_selectedTextureUnit.reset();
 	m_selectedUnitIndex = -1;
 	_createPassPanel();
 }
@@ -80,7 +79,7 @@ real PassPanel :: GetShininess()const
 	
 	if (l_value.BeforeFirst( '.').IsNumber() && l_value.AfterFirst( '.').IsNumber())
 	{
-		real l_res = ator( l_value.char_str());
+		real l_res = ator( l_value.c_str());
 		if (l_res < 0.0)
 		{
 			l_res = 0.0;
@@ -98,12 +97,12 @@ real PassPanel :: GetShininess()const
 int PassPanel :: GetTextureUnitIndex()const
 {
 	wxString l_value = m_texturesComboBox->GetValue();
-	Log::LogMessage( CU_T( "GetTextureUnitIndex - l_value : %s"), l_value.c_str());
+	Logger::LogMessage( CU_T( "PassPanel :: GetTextureUnitIndex - l_value : %s"), l_value.c_str());
 	
 	if (l_value.IsNumber())
 	{
-		int l_res = atoi( l_value.char_str());
-		Log::LogMessage( "GetTextureUnitIndex - l_res : %d", l_res);
+		int l_res = atoi( l_value.c_str());
+		Logger::LogMessage( CU_T( "PassPanel :: GetTextureUnitIndex - l_res : %d"), l_res);
 		return l_res;
 	}
 	if (l_value == CU_T( "New..."))
@@ -245,7 +244,7 @@ void PassPanel :: _createTextureUnitPanel( int p_index)
 	m_deleteTextureUnit->Enable();
 	if (p_index == -1)
 	{
-		m_selectedTextureUnit = new TextureUnit();
+		m_selectedTextureUnit = TextureUnitPtr( new TextureUnit());
 		wxString l_value;
 		l_value << m_pass->GetNbTexUnits();
 		m_texturesComboBox->Insert( l_value, m_pass->GetNbTexUnits());
@@ -262,19 +261,23 @@ void PassPanel :: _createTextureUnitPanel( int p_index)
 		l_value << p_index;
 		m_texturesComboBox->SetValue( l_value);
 	}
-	if ( ! m_selectedTextureUnit)
+
+	if (m_selectedTextureUnit.null())
 	{
 		return;
 	}
+
 	if (m_selectedUnitImage)
 	{
 		delete m_selectedUnitImage;
 		m_selectedUnitImage = NULL;
 	}
+
 	wxSize l_size = m_textureUnitPanel->GetClientSize();
 	new wxStaticText( m_textureUnitPanel, wxID_ANY, CU_T( "Chemin de l'image : "), wxPoint( 0, -3));
 	m_texPathText = new wxStaticText( m_textureUnitPanel, wxID_ANY, m_selectedTextureUnit->GetTexturePath(), wxPoint( 120, -3), wxSize( l_size.x - 120, 16));
 	m_texImageButton = new wxBitmapButton( m_textureUnitPanel, eTextureImage, wxBitmap( 78, 78), wxPoint( 0, 15), wxSize( 80, 80), wxBORDER_SIMPLE);
+
 	if (p_index == -1 || m_selectedTextureUnit->GetTexturePath().empty())
 	{
 		m_selectedUnitImage = new wxImage( 78, 78);
@@ -291,6 +294,7 @@ void PassPanel :: _createTextureUnitPanel( int p_index)
 	l_envModes[3] = CU_T( "Add");
 	l_envModes[4] = CU_T( "Combine");
 	wxString l_value = CU_T( "Modulate");
+
 	if (m_selectedTextureUnit->GetEnvironment()->GetMode() == EMReplace)
 	{
 		l_value = CU_T( "Replace");
@@ -307,6 +311,7 @@ void PassPanel :: _createTextureUnitPanel( int p_index)
 	{
 		l_value = CU_T( "Combine");
 	}
+
 	new wxStaticText( m_textureUnitPanel, wxID_ANY, CU_T( "Environment mode"), wxPoint( 90, 16), wxSize( 90, 20));
 	m_textureEnvMode = new wxComboBox( m_textureUnitPanel, eTextureEnvMode, l_value, wxPoint( 190, 13), wxSize( 80, 20), 5, l_envModes, wxBORDER_SIMPLE | wxCB_READONLY);
 
@@ -320,6 +325,7 @@ void PassPanel :: _createTextureUnitPanel( int p_index)
 	l_rgbCombination[6] = CU_T( "Dot3 RGBA");
 	l_rgbCombination[7] = CU_T( "Interpolate");
 	l_value = CU_T( "None");
+
 	if (m_selectedTextureUnit->GetEnvironment()->GetRGBCombination() == CCReplace)
 	{
 		l_value = CU_T( "Replace");
@@ -348,8 +354,10 @@ void PassPanel :: _createTextureUnitPanel( int p_index)
 	{
 		l_value = CU_T( "Interpolate");
 	}
+
 	m_rgbCombinationText = new wxStaticText( m_textureUnitPanel, wxID_ANY, CU_T( "RGB Combination"), wxPoint( 90, 36), wxSize( 90, 20));
 	m_textureRGBCombination = new wxComboBox( m_textureUnitPanel, eTextureRGBCombination, l_value, wxPoint( 190, 33), wxSize( 80, 20), 8, l_rgbCombination, wxBORDER_SIMPLE | wxCB_READONLY);
+
 	if (m_selectedTextureUnit->GetEnvironment()->GetMode() != EMCombine)
 	{
 		m_rgbCombinationText->Hide();
@@ -364,6 +372,7 @@ void PassPanel :: _createTextureUnitPanel( int p_index)
 	l_alphaCombination[4] = CU_T( "Add Signed");
 	l_alphaCombination[5] = CU_T( "Interpolate");
 	l_value = CU_T( "None");
+
 	if (m_selectedTextureUnit->GetEnvironment()->GetAlphaCombination() == ACReplace)
 	{
 		l_value = CU_T( "Replace");
@@ -384,9 +393,11 @@ void PassPanel :: _createTextureUnitPanel( int p_index)
 	{
 		l_value = CU_T( "Interpolate");
 	}
+
 	m_alphaCombinationText = new wxStaticText( m_textureUnitPanel, wxID_ANY, CU_T( "Alpha Combination"), wxPoint( 90, 56), wxSize( 90, 17));
 	m_textureAlphaCombination = new wxComboBox( m_textureUnitPanel, eTextureAlphaCombination, l_value, wxPoint( 190, 53), wxSize( 80, 20), 8, l_alphaCombination, wxBORDER_SIMPLE | wxCB_READONLY);
 	m_environmentConfigButton = new wxButton( m_textureUnitPanel, eEnvironmentConfig, CU_T( "Configure Environment"), wxPoint( 120, 73), wxSize( 140, 20), wxBORDER_SIMPLE);
+
 	if (m_selectedTextureUnit->GetEnvironment()->GetMode() != EMCombine)
 	{
 		m_alphaCombinationText->Hide();
@@ -445,7 +456,6 @@ void PassPanel :: _onDeleteTextureUnit( wxCommandEvent & event)
 		m_texturesComboBox->SetValue( CU_T( "New..."));
 		_createTextureUnitPanel( -2);
 		m_texturesComboBox->Update();
-		wxGetApp().GetMainFrame()->ShowPanels();
 		if (m_pass->GetNbTexUnits() == 0)
 		{
 			m_deleteTextureUnit->Disable();
@@ -464,7 +474,6 @@ void PassPanel :: _onAmbientColour( wxCommandEvent & event)
 		real l_ambient[3];
 		GetAmbient(l_ambient[0], l_ambient[1], l_ambient[2]);
 		m_pass->SetAmbient( l_ambient[0], l_ambient[1], l_ambient[2], 1.0f);
-		wxGetApp().GetMainFrame()->ShowPanels();
 	}
 }
 
@@ -479,7 +488,6 @@ void PassPanel :: _onDiffuseColour( wxCommandEvent & event)
 		real l_diffuse[3];
 		GetDiffuse(l_diffuse[0], l_diffuse[1], l_diffuse[2]);
 		m_pass->SetDiffuse( l_diffuse[0], l_diffuse[1], l_diffuse[2], 1.0f);
-		wxGetApp().GetMainFrame()->ShowPanels();
 	}
 }
 
@@ -494,7 +502,6 @@ void PassPanel :: _onSpecularColour( wxCommandEvent & event)
 		real l_specular[3];
 		GetSpecular(l_specular[0], l_specular[1], l_specular[2]);
 		m_pass->SetSpecular( l_specular[0], l_specular[1], l_specular[2], 1.0f);
-		wxGetApp().GetMainFrame()->ShowPanels();
 	}
 }
 
@@ -509,7 +516,6 @@ void PassPanel :: _onEmissiveColour( wxCommandEvent & event)
 		real l_emissive[3];
 		GetEmissive(l_emissive[0], l_emissive[1], l_emissive[2]);
 		m_pass->SetEmissive( l_emissive[0], l_emissive[1], l_emissive[2], 1.0f);
-		wxGetApp().GetMainFrame()->ShowPanels();
 	}
 }
 
@@ -524,7 +530,6 @@ void PassPanel :: _onBlendColour( wxCommandEvent & event)
 		real l_blendColour[3];
 		GetBlendColour( l_blendColour[0], l_blendColour[1], l_blendColour[2]);
 		m_pass->SetTexBaseColour( l_blendColour[0], l_blendColour[1], l_blendColour[2], 1.0);
-		wxGetApp().GetMainFrame()->ShowPanels();
 	}
 }
 
@@ -546,7 +551,6 @@ void PassPanel :: _onTextureImage( wxCommandEvent & event)
 		{
 			m_selectedTextureUnit->SetTexture2D( l_imagePath.c_str());
 			MaterialManager::SetToInitialise( m_pass->GetParent());
-			wxGetApp().GetMainFrame()->ShowPanels();
 		}
 	}
 	l_fdlg->Destroy();
@@ -563,7 +567,6 @@ void PassPanel :: _onShininess( wxCommandEvent & event)
 	real l_shininess = GetShininess();
 	m_pass->SetShininess( l_shininess);
 	m_pass->Initialise();
-	wxGetApp().GetMainFrame()->ShowPanels();
 }
 
 void PassPanel :: _onTexturePath( wxCommandEvent & event)
@@ -583,7 +586,6 @@ void PassPanel :: _onTexturePath( wxCommandEvent & event)
 	{
 		m_selectedTextureUnit->SetTexture2D( l_path.c_str());
 		MaterialManager::SetToInitialise( m_pass->GetParent());
-		wxGetApp().GetMainFrame()->ShowPanels();
 	}*/
 }
 
@@ -631,7 +633,6 @@ void PassPanel :: _onTextureEnvModeSelect( wxCommandEvent & event)
 		m_textureAlphaCombination->Show();
 		m_environmentConfigButton->Show();
 	}
-	wxGetApp().GetMainFrame()->ShowPanels();
 }
 
 void PassPanel :: _onTextureRGBCombinationSelect( wxCommandEvent & event)
@@ -670,7 +671,6 @@ void PassPanel :: _onTextureRGBCombinationSelect( wxCommandEvent & event)
 	{
 		m_selectedTextureUnit->GetEnvironment()->SetRGBCombination( CCInterpolate);
 	}
-	wxGetApp().GetMainFrame()->ShowPanels();
 }
 
 void PassPanel :: _onTextureAlphaCombinationSelect( wxCommandEvent & event)
@@ -701,14 +701,12 @@ void PassPanel :: _onTextureAlphaCombinationSelect( wxCommandEvent & event)
 	{
 		m_selectedTextureUnit->GetEnvironment()->SetAlphaCombination( ACInterpolate);
 	}
-	wxGetApp().GetMainFrame()->ShowPanels();
 }
 
 void PassPanel :: _onDoubleFace( wxCommandEvent & event)
 {
 	bool l_double = m_doubleFace->IsChecked();
 	m_pass->SetDoubleFace( l_double);
-	wxGetApp().GetMainFrame()->ShowPanels();
 }
 
 void PassPanel :: _onHasShader( wxCommandEvent & event)

@@ -22,23 +22,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	class GLShaderObject;
-	class GLShaderProgram;
-	class GLVertexShader;
-	class GLFragmentShader;
-	class GLGeometryShader;
-	class GLUniformVariable;
-
-	typedef Templates::SharedPtr <GLShaderObject>		GLShaderObjectPtr;
-	typedef Templates::SharedPtr <GLShaderProgram>		GLShaderProgramPtr;
-	typedef Templates::SharedPtr <GLVertexShader>		GLVertexShaderPtr;
-	typedef Templates::SharedPtr <GLFragmentShader>		GLFragmentShaderPtr;
-	typedef Templates::SharedPtr <GLGeometryShader>		GLGeometryShaderPtr;
-	typedef Templates::SharedPtr <GLUniformVariable>	GLUniformVariablePtr;
-
-	typedef C3DVector(	GLShaderProgramPtr)							GLShaderProgramPtrArray;
-	typedef C3DVector(	GLShaderObjectPtr)							GLShaderObjectPtrArray;
-	typedef C3DMap(		String,				GLUniformVariablePtr)	GLUniformVariablePtrStrMap;
 }
 
 #endif

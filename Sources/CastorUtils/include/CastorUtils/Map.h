@@ -26,8 +26,8 @@ namespace Castor
 {
 	namespace MultiThreading
 	{
-		template <typename Ky, typename Ty, class Locker=MultiThreading::Mutex>
-		class Map : public std::map <Ky, Ty>
+		template <typename Ky, typename Ty, class Locker=MultiThreading::RecursiveMutex>
+		class Map : public std::map <Ky, Ty>, public MemoryTraced< Map<Ky, Ty, Locker> >
 		{
 		private:
 			template <typename _Ky, typename _Ty, class _Locker> friend class Castor::MultiThreading::Map;
@@ -350,7 +350,7 @@ namespace Castor
 			_my_type intersects( const _my_type & p_mapB)const
 			{
 				CASTOR_AUTO_SCOPED_LOCK();
-				CASTOR_SCOPED_LOCK( p_mapB.m_criticalSection);
+				CASTOR_SCOPED_LOCK( p_mapB.GetLocker());
 				_my_type l_map;
 
 				if (_my_map::empty() || static_cast<_my_map>( p_mapB).empty())

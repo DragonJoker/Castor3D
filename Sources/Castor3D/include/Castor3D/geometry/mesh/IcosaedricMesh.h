@@ -30,7 +30,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class CS3D_API IcosaedricMesh : public Mesh
+	class C3D_API IcosaedricMesh : public Mesh
 	{
 	private:
 		friend class MeshManager;
@@ -63,7 +63,7 @@ namespace Castor3D
 		/**
 		 * Defines the normals for the submesh
 		 */
-		virtual void SetNormals( bool p_bReverted = false);
+		virtual void ComputeNormals( bool p_bReverted = false);
 
 	public:
 		/**@name Accessors */

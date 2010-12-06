@@ -36,7 +36,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API Root : public Castor::Theory::noncopyable
+	class C3D_API Root : public Castor::Theory::noncopyable, public MemoryTraced<Root>
 	{
 	private:
 		static Root * sm_singleton;
@@ -83,6 +83,7 @@ namespace Castor3D
 										   int p_windowWidth,
 										   int p_windowHeight,
 										   Viewport::eTYPE p_type,
+										   Castor::Resource::PixelFormat p_pixelFormat=Castor::Resource::pxfR8G8B8A8,
 										   ProjectionDirection p_look = pdLookToFront);
 		/**
 		 * Removes a render window, by index
@@ -103,6 +104,11 @@ namespace Castor3D
 		 *@param p_filePath : [in] The plugin file path
 		 */
 		void LoadPlugin( const String & p_filePath);
+		/**
+		 * Loads a plugin, given the file's path
+		 *@param p_rendererName : [in] The renderer name
+		 */
+		void LoadRenderer( RendererDriver::eDRIVER_TYPE p_eType);
 		/**
 		 * Starts the render loop
 		 */

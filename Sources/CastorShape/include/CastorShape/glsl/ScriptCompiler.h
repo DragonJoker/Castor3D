@@ -71,13 +71,9 @@ namespace CastorShape
 		void 					_initialiseFunctionMap();
 		void 					_initialiseOperatorMap();
 
-		virtual void			_creaFunc(		const String & p_functionName,
-														RawFunction * p_function, VariableBaseType p_returnValue, ...);
-		virtual void			_classFunc(		const String & p_functionName,
-														RawFunction * p_function, VariableBaseType p_returnValue, ...);
-		virtual void			_createOperator(		const String & p_name,
-														RawFunction * p_func, VariableBaseType p_returnType,
-														VariableBaseType p_left, VariableBaseType p_right );
+		virtual void			_creaFunc( const String & p_functionName, RawFunction * p_function, VariableBaseType p_returnValue, ...);
+		virtual void			_classFunc( const String & p_functionName, RawFunction * p_function, VariableBaseType p_returnValue, ...);
+		virtual void			_createOperator( const String & p_name, RawFunction * p_func, VariableBaseType p_returnType, VariableBaseType p_left, VariableBaseType p_right );
 
 		virtual void			_functionGroup( const String & p_name){}
 

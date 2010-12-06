@@ -3,10 +3,7 @@
 #include "RenderPanel.h"
 #include "CastorViewer.h"
 #include "MainFrame.h"
-
-#ifdef __WXMSW__
-#	include <wx/msw/msvcrt.h>      // redefines the new() operator 
-#endif
+#include "MouseEvent.h"
 
 #define ID_NEW_WINDOW 10000
 
@@ -23,7 +20,6 @@ RenderPanel :: RenderPanel( wxWindow * parent, wxWindowID p_id,
 		m_timer( NULL),
 		m_renderType( p_renderType),
 		m_lookAt( p_look),
-		m_renderWindow( NULL),
 		m_mainScene( p_scene),
 		m_mouseLeftDown( false),
 		m_mouseRightDown( false),
@@ -60,14 +56,17 @@ void RenderPanel :: DrawOneFrame()
 
 void RenderPanel :: _initialiseRenderWindow()
 {
-	Log::LogMessage( CU_T( "Initialising RenderWindow"));
+	Logger::LogMessage( CU_T( "Initialising RenderWindow"));
 	m_renderWindow = Root::GetSingletonPtr()->CreateRenderWindow( m_mainScene,
 																  (void *)GetHandle(),
 																  GetClientSize().x,
 																  GetClientSize().y,
 																  m_renderType,
+																  Castor::Resource::pxfR8G8B8A8,
 																  m_lookAt);
 	m_listener = m_renderWindow->GetListener();
+	m_pRotateCamEvent = Templates::SharedPtr<CameraRotateEvent>( new CameraRotateEvent( m_renderWindow->GetCamera(), 0, 0, 0));
+	m_pTranslateCamEvent = Templates::SharedPtr<CameraTranslateEvent>( new CameraTranslateEvent( m_renderWindow->GetCamera(), 0, 0, 0));
 
 	if (m_timer == NULL)
 	{
@@ -75,7 +74,7 @@ void RenderPanel :: _initialiseRenderWindow()
 		m_timer->Start( 40);
 	}
 
-	Log::LogMessage( "RenderWindow Initialised");
+	Logger::LogMessage( CU_T( "RenderWindow Initialised"));
 }
 
 BEGIN_EVENT_TABLE( RenderPanel, wxPanel)
@@ -138,7 +137,7 @@ void RenderPanel :: _onClose( wxCloseEvent & event)
 
 void RenderPanel :: _onTimer( wxTimerEvent & WXUNUSED(event))
 {
-	wxClientDC l_dc( this);
+//	wxClientDC l_dc( this);
 	m_renderWindow->SetToUpdate();
 }
 
@@ -171,20 +170,13 @@ void RenderPanel :: _onKeyDown(wxKeyEvent& event)
 	int l_keyCode = event.GetKeyCode();
 	if (l_keyCode == 83)// s
 	{
-		if (m_renderWindow->GetNormalsMode() == nmFace)
-		{
-			m_renderWindow->SetNormalsMode( nmSmoothGroups);
-		}
-		else if (m_renderWindow->GetNormalsMode() == nmSmoothGroups)
-		{
-			m_renderWindow->SetNormalsMode( nmFace);
-		}
+		m_renderWindow->SetNormalsMode( eNORMALS_MODE( eSmooth - m_renderWindow->GetNormalsMode()));
 	}
-	else if (l_keyCode == 82)// s
+	else if (l_keyCode == 82)// r
 	{
 		m_renderWindow->GetCamera()->ResetPosition();
 		m_renderWindow->GetCamera()->ResetOrientation();
-		m_renderWindow->GetCamera()->Translate( 0.0f, 0.0f, -5.0f);
+		m_renderWindow->GetCamera()->GetParent()->Translate( 0.0f, 0.0f, -5.0f);
 	}
 	else if (l_keyCode == 78)// n
 	{
@@ -249,34 +241,35 @@ void RenderPanel :: _onMouseMove( wxMouseEvent & event)
 
 	if (m_mouseLeftDown)
 	{
-		if (m_renderWindow->GetType() == Viewport::pt3DView)
+		if (m_renderWindow->GetType() == Viewport::e3DView)
 		{
-			m_renderWindow->GetCamera()->Yaw( Math::Angle( m_deltaX * Math::Angle::DegreesToRadians));
-			m_renderWindow->GetCamera()->Pitch( Math::Angle( m_deltaY * Math::Angle::DegreesToRadians));
+			MouseCameraEvent::Add( m_pRotateCamEvent, m_listener, m_deltaX * Math::Angle::DegreesToRadians, m_deltaY * Math::Angle::DegreesToRadians, 0);
 		}
 		else
 		{
-			m_renderWindow->GetCamera()->Roll( Math::Angle( m_deltaX * Math::Angle::DegreesToRadians));
+			MouseCameraEvent::Add( m_pRotateCamEvent, m_listener, 0, 0, m_deltaX * Math::Angle::DegreesToRadians);
 		}
 	}
 	else if (m_mouseRightDown)
 	{
-		m_renderWindow->GetCamera()->Translate( Point3r( -m_deltaX / 40.0f, m_deltaY / 40.0f, 0.0f));
+		MouseCameraEvent::Add( m_pTranslateCamEvent, m_listener, -m_deltaX / real( 40), m_deltaY / real( 40), 0);
 	}
 }
 
 void RenderPanel :: _onMouseWheel( wxMouseEvent & event)
 {
 	int l_wheelRotation = event.GetWheelRotation();
-	const Point3r & l_cameraPos = m_renderWindow->GetCamera()->GetPosition();
+	const Point3r & l_cameraPos = m_renderWindow->GetCamera()->GetParent()->GetPosition();
+
+	FrameEventPtr l_pEvent;
 
 	if (l_wheelRotation < 0)
 	{
-		m_renderWindow->GetCamera()->Translate( Point3r( 0.0f, 0.0f, (l_cameraPos[2] - 1.0f) / 10));
+		MouseCameraEvent::Add( m_pTranslateCamEvent, m_listener, 0, 0, (l_cameraPos[2] - real( 1.0)) / 10);
 	}
 	else if (l_wheelRotation > 0)
 	{
-		m_renderWindow->GetCamera()->Translate( Point3r( 0.0f, 0.0f, (1.0f - l_cameraPos[2]) / 10));
+		MouseCameraEvent::Add( m_pTranslateCamEvent, m_listener, 0, 0, (real( 1.0) - l_cameraPos[2]) / 10);
 	}
 }
 

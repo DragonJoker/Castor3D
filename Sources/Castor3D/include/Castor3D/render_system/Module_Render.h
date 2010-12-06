@@ -33,13 +33,14 @@ namespace Castor3D
 	class LightRenderer;
 	class WindowRenderer;
 	class CameraRenderer;
-	class ViewportRenderer;
-	class SceneNodeRenderer;
 	class OverlayRenderer;
+	class Context;
+	class RenderWindow;
 
 	class VertexBuffer;
 	class NormalsBuffer;
 	class TextureBuffer;
+	class VertexInfosBuffer;
 	template <typename T> class VertexAttribsBuffer;
 
 	typedef VertexAttribsBuffer<real> VertexAttribsBufferReal;
@@ -51,24 +52,22 @@ namespace Castor3D
 	typedef Templates::SharedPtr<LightRenderer>					LightRendererPtr;
 	typedef Templates::SharedPtr<WindowRenderer>				WindowRendererPtr;
 	typedef Templates::SharedPtr<CameraRenderer>				CameraRendererPtr;
-	typedef Templates::SharedPtr<ViewportRenderer>				ViewportRendererPtr;
-	typedef Templates::SharedPtr<SceneNodeRenderer>				SceneNodeRendererPtr;
 	typedef Templates::SharedPtr<OverlayRenderer>				OverlayRendererPtr;
 	typedef Templates::SharedPtr<VertexBuffer>					VertexBufferPtr;
 	typedef Templates::SharedPtr<NormalsBuffer>					NormalsBufferPtr;
 	typedef Templates::SharedPtr<TextureBuffer>					TextureBufferPtr;
 	typedef Templates::SharedPtr<VertexAttribsBufferReal>		VertexAttribsBufferRealPtr;
+	typedef Templates::SharedPtr<VertexInfosBuffer>				VertexInfosBufferPtr;
 
-	typedef C3DVector( SubmeshRendererPtr)				SubmeshRendererPtrArray;
-	typedef C3DVector( TextureEnvironmentRendererPtr)	TextureEnvironmentRendererPtrArray;
-	typedef C3DVector( TextureRendererPtr)				TextureRendererPtrArray;
-	typedef C3DVector( PassRendererPtr)					PassRendererPtrArray;
-	typedef C3DVector( LightRendererPtr)				LightRendererPtrArray;
-	typedef C3DVector( WindowRendererPtr)				WindowRendererPtrArray;
-	typedef C3DVector( CameraRendererPtr)				CameraRendererPtrArray;
-	typedef C3DVector( ViewportRendererPtr)				ViewportRendererPtrArray;
-	typedef C3DVector( SceneNodeRendererPtr)			SceneNodeRendererPtrArray;
-	typedef C3DVector( OverlayRendererPtr)				OverlayRendererPtrArray;
+	typedef C3DVector( 	SubmeshRendererPtr)				SubmeshRendererPtrArray;
+	typedef C3DVector( 	TextureEnvironmentRendererPtr)	TextureEnvironmentRendererPtrArray;
+	typedef C3DVector( 	TextureRendererPtr)				TextureRendererPtrArray;
+	typedef C3DVector( 	PassRendererPtr)				PassRendererPtrArray;
+	typedef C3DVector( 	LightRendererPtr)				LightRendererPtrArray;
+	typedef C3DVector( 	WindowRendererPtr)				WindowRendererPtrArray;
+	typedef C3DVector( 	CameraRendererPtr)				CameraRendererPtrArray;
+	typedef C3DVector( 	OverlayRendererPtr)				OverlayRendererPtrArray;
+	typedef C3DMap(		RenderWindow *,	Context *)		ContextPtrMap;
 	/*!
 	Enumerates the different draw types : Triangles, Lines, Points...
 	*/

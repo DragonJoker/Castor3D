@@ -30,7 +30,7 @@ namespace Castor3D
 	\todo Review all the animation system because it's not clear, not optimised, and not good enough to be validated
 	\todo Write and Read functions.
 	*/
-	class CS3D_API MovingObject
+	class C3D_API MovingObject : public MemoryTraced<MovingObject>
 	{
 	private:
 		Point3r m_translate;		//! The wanted translation of the object
@@ -99,7 +99,7 @@ namespace Castor3D
 	/*!
 	Key frames are the frames are the frames where the animation must be at a precise state
 	*/
-	class CS3D_API KeyFrame
+	class C3D_API KeyFrame : public MemoryTraced<KeyFrame>
 	{
 	protected:
 		//! The list of objects to move

@@ -20,8 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Module_Utils.h"
 #include "Exception.h"
-#include <list>
-#include <cstdarg>
+#include "Point.h"
 
 namespace Castor
 {	namespace Math
@@ -39,632 +38,189 @@ namespace Castor
 		typedef T									value_type;
 		typedef Matrix<value_type, Rows, Columns>	my_type;
 		typedef Matrix<value_type, Columns, Rows>	my_transpose;
-		typedef Matrix<value_type, 1, Columns>		my_row;
-		typedef Matrix<value_type, Rows, 1>			my_column;
+		typedef Point<value_type, Columns>			my_row;
+		typedef Point<value_type, Rows>				my_column;
 		typedef Templates::Value<value_type>		value;
 
-	public:
-		typedef my_transpose Transpose;
-		T m_matrix[Rows * Columns];
+	private:
+		bool m_bOwnCoords;
 
 	public:
-		Matrix()
+		typedef my_column col_type;
+		typedef my_row row_type;
+		typedef my_transpose transpose_type;
+
+		col_type m_matrix[Columns];
+		value_type * m_pPointer;
+
+	public:
+		Matrix( const value_type & p_value=value::zero());
+		Matrix( const my_type & p_matrix);
+		explicit Matrix( const value_type * p_pMatrix);
+		template <typename Type>
+		explicit Matrix( const Type * p_pMatrix)
+			:	m_pPointer( new T[Rows * Columns]),
+				m_bOwnCoords( true)
 		{
-			for (size_t i = 0 ; i < Rows ; i++)
-			{
-				for (size_t j = 0 ; j < Columns ; j++)
-				{
-					value::init( m_matrix[i * Columns + j]);
-				}
-			}
+			Init();
+			operator =( p_pMatrix);
 		}
-		Matrix( const my_type & matrix)
+		template <typename Type>
+		explicit Matrix( const Matrix<Type, Columns, Rows> & p_matrix)
+			:	m_pPointer( new T[Rows * Columns]),
+				m_bOwnCoords( true)
 		{
-			for (size_t i = 0 ; i < Rows ; i++)
-			{
-				for (size_t j = 0 ; j < Columns ; j++)
-				{
-					value::assign( m_matrix[i * Columns + j], matrix[i * Columns + j]);
-				}
-			}
+			Init();
+			operator =( p_matrix);
 		}
-		explicit Matrix( value_type * matrix)
-		{
-			for (size_t i = 0 ; i < Rows ; i++)
-			{
-				for (size_t j = 0 ; j < Columns ; j++)
-				{
-					value::assign( m_matrix[i * Columns + j], matrix[i * Columns + j]);
-				}
-			}
-		}
-		virtual ~Matrix()
-		{
-		}
-		void SetRow( size_t p_uiRow, ...)
-		{
-			if (Columns >= 1)
-			{
-				va_list l_list;
-				va_start( l_list, p_uiRow);
+		virtual ~Matrix();
 
-				for (size_t i = 0 ; i < Columns ; i++)
-				{
-					value::assign( m_matrix[p_uiRow * Columns + i], va_arg( l_list, value_type));
-				}
-
-				va_end( l_list);
-			}
-		}
-		my_row GetRow( size_t p_uiRow)
-		{
-			CASTOR_ASSERT( p_uiRow < Rows);
-			my_row l_mReturn;
-
-			for (size_t j = 0 ; j < Columns ; j++)
-			{
-				value::assign( l_mReturn[j], m_matrix[p_uiRow * Columns + j]);
-			}
-
-			return mReturn;
-		}
-		void GetRow( my_row & p_mResult, size_t p_uiRow)
-		{
-			CASTOR_ASSERT( p_uiRow < Rows);
-
-			for (size_t j = 0 ; j < Columns ; j++)
-			{
-				value::assign( p_mResult[j], m_matrix[p_uiRow * Columns + j]);
-			}
-		}
-		my_column GetColumn( size_t p_uiColumn)
-		{
-			CASTOR_ASSERT( p_uiColumn < Columns);
-			my_row l_mReturn;
-
-			for (size_t i = 0 ; i < Rows ; i++)
-			{
-				value::assign( l_mReturn[i], m_matrix[i * Columns + p_uiColumn]);
-			}
-
-			return mReturn;
-		}
-		void GetColumn( my_column & p_mResult, size_t p_uiColumn)
-		{
-			CASTOR_ASSERT( p_uiColumn < Columns);
-
-			for (size_t i = 0 ; i < Rows ; i++)
-			{
-				value::assign( p_mResult[i], m_matrix[i * Columns + p_uiColumn]);
-			}
-		}
-		value_type GetValue( size_t p_uiRow, size_t p_uiColumn)
-		{
-			CASTOR_ASSERT( p_uiRow < Rows);
-			CASTOR_ASSERT( p_uiColumn < Columns);
-
-			return m_matrix[p_uiRow * Columns + p_uiColumn];
-		}
-		my_transpose GetTransposed()
-		{
-			my_transpose l_mReturn;
-
-			for (size_t i = 0 ; i < Rows ; i++)
-			{
-				for (size_t j = 0 ; j < Columns ; j++)
-				{
-					value::assign( l_mReturn[j * Columns + i], m_matrix[i * Columns + j]);
-				}
-			}
-
-			return l_mReturn;
-		}
-		void GetTransposed( my_transpose & p_mResult)
-		{
-			for (size_t i = 0 ; i < Rows ; i++)
-			{
-				for (size_t j = 0 ; j < Columns ; j++)
-				{
-					value::assign( p_mResult[j * Columns + i], m_matrix[i * Columns + j]);
-				}
-			}
-		}
-		void Triangle()
-		{
-			size_t l_uiMinDim = std::min<size_t>( Rows, Columns);
-			bool l_bContinue = true;
-			value_type l_tCoef;
-			size_t l_uiMaxIndex;
-
-			for (size_t i = 0 ; i < l_uiMinDim && l_bContinue ; i++)
-			{
-				l_uiMaxIndex = 0;
-
-				for (size_t j = 1 ; j < Rows ; j++)
-				{
-					if (std::abs( m_matrix[j * Columns + i]) > std::abs( m_matrix[l_uiMaxIndex * Columns + i]))
-					{
-						l_uiMaxIndex = j;
-					}
-				}
-
-				if ( ! value::is_null( m_matrix[l_uiMaxIndex * Columns + i]))
-				{
-					for (size_t k = i ; k < Columns ; k++)
-					{
-						std::swap( m_matrix[i * Columns + k], m_matrix[l_uiMaxIndex * Columns + k]);
-					}
-
-					for (size_t j = i + 1 ; j < Rows ; j++)
-					{
-						value::assign( l_tCoef, value::divide( m_matrix[j * Columns + i], m_matrix[i * Columns + i]));
-
-						for (size_t k = Columns - 1 ; k >= i && k < Columns ; k--)
-						{
-							value::ass_substract( m_matrix[j * Columns + k], l_tCoef * m_matrix[i * Columns + k]);
-						}
-					}
-				}
-				else
-				{
-					l_bContinue = false;
-				}
-			}
-
-			if (l_bContinue)
-			{
-				for (size_t i = 0 ; i < Rows ; i++)
-				{
-					for (size_t j = 0 ; j < Columns ; j++)
-					{
-						if (value::is_null( m_matrix[i * Columns + j]))
-						{
-							value::init( m_matrix[i * Columns + j]);
-						}
-					}
-				}
-			}
-		}
-		my_type GetMinor( size_t x, size_t y, size_t p_uiRows, size_t p_uiCols)
-		{
-			my_type l_mReturn;
-			l_mReturn.ToIdentity();
-			size_t l_i = 0, l_j = 0;
-
-			for (size_t i = 0 ; i < p_uiRows ; i++)
-			{
-				if (i != x)
-				{
-					l_j = 0;
-
-					for (size_t j = 0 ; j < p_uiCols ; j++)
-					{
-						if (j != y)
-						{
-							value::assign( l_mReturn[l_i * Columns + l_j++], m_matrix[i * Columns + j]);
-						}
-					}
-
-					l_i++;
-				}
-			}
-
-			return l_mReturn;
-		}
-		value_type GetCofactor( size_t p_uiRow, size_t p_uiColumn, size_t p_uiRows, size_t p_uiCols)
-		{
-			value_type l_tReturn;
-			value::assign( l_tReturn, value::zero());
-
-			if (p_uiRows > 1)
-			{
-				my_type l_mTmp = GetMinor( p_uiRow, p_uiColumn, p_uiRows, p_uiCols);
-
-				if ((p_uiRow + p_uiColumn) % 2 == 0)
-				{
-					value::assign( l_tReturn, l_mTmp.GetDeterminant( p_uiRows - 1, p_uiCols - 1));
-				}
-				else
-				{
-					value::assign( l_tReturn, -l_mTmp.GetDeterminant( p_uiRows - 1, p_uiCols - 1));
-				}
-
-			}
-			else if (p_uiRows == 1)
-			{
-				value::assign( l_tReturn, value::unit());
-			}
-
-			return l_tReturn;
-		}
-		value_type GetTrace()
-		{
-			value_type l_tSum;
-			value::init( l_tSum);
-
-			for (int i = 0 ; i < Rows ; i++)
-			{
-				if ( ! value::is_null( m_matrix[i * Columns + i]))
-				{
-					value::ass_add( l_tSum, m_matrix[i * Columns + i]);
-				}
-			}
-
-			return l_tSum;
-		}
-		my_type GetInverse()
-		{
-			my_type l_mReturn( * this);
-			l_mReturn.Invert();
-			return l_mReturn;
-		}
-		void ToIdentity()
-		{
-			for (size_t i = 0 ; i < Rows ; i++)
-			{
-				for (size_t j = 0 ; j < Columns ; j++)
-				{
-					if (i == j)
-					{
-						value::assign( m_matrix[i * Columns + j], value::unit());
-					}
-					else
-					{
-						value::init( m_matrix[i * Columns + j]);
-					}
-				}
-			}
-		}
-		void ToJordan( value_type p_tLambda)
-		{
-			for (size_t i = 0 ; i < Rows ; i++)
-			{
-				for (size_t j = 0 ; j < Columns ; j++)
-				{
-					if (i == j)
-					{
-						value::assign( m_matrix[i * Columns + i], p_tLambda);
-					}
-					else
-					{
-						value::init( m_matrix[i * Columns + j]);
-					}
-				}
-			}
-
-			value::assign( m_matrix[0 * Columns + 0], p_tLambda);
-
-			for (size_t i = 0 ; i < Rows - 1 ; i++)
-			{
-				value::assign( m_matrix[i * Columns + i + 1], value::unit());
-			}
-		}
-		value_type GetDeterminant( size_t p_uiRows = Rows, size_t p_uiCols = Columns)
-		{
-			value_type l_tReturn;
-			value::init( l_tReturn);
-
-			if (Rows == Columns)
-			{
-				value_type l_tCofactor;
-				value_type l_tValue;
-
-				for (size_t i = 0 ; i < Rows ; i++)
-				{
-					value::assign( l_tCofactor, GetCofactor( i, 0, p_uiRows, p_uiCols));
-					value::assign( l_tValue, m_matrix[i * Columns + 0]);
-					value::ass_add( l_tReturn, value::multiply( l_tValue, l_tCofactor));
-				}
-
-				if (value::is_null( l_tReturn))
-				{
-					value::init( l_tReturn);
-				}
-			}
-			else
-			{
-				CASTOR_EXCEPTION( "Can't compute the determinant of a non square matrix");
-			}
-
-			return l_tReturn;
-		}
-		inline bool operator ==( const my_type & p_matrix)
-		{
-			bool l_bReturn = true;
-
-			for (size_t i = 0 ; i < Rows && l_bReturn ; i++)
-			{
-				for (size_t j = 0 ; j < Columns && l_bReturn ; j++)
-				{
-					l_bReturn = value::equals( m_matrix[i * Columns + j], p_matrix[i * Columns + j]);
-				}
-			}
-
-			return l_bReturn;
-		}
-		inline bool operator !=( const my_type & p_matrix)
-		{
-			bool l_bReturn = false;
-
-			for (size_t i = 0 ; i < 2 && ! l_bReturn ; i++)
-			{
-				for (size_t j = 0 ; j < 2 && ! l_bReturn ; j++)
-				{
-					l_bReturn = ! value::equals( m_matrix[i * Columns + j], p_matrix[i * Columns + j]);
-				}
-			}
-
-			return l_bReturn;
-		}
-		inline my_type operator =( const my_type & p_matrix)
-		{
-			for (size_t i = 0 ; i < Rows ; i++)
-			{
-				for (size_t j = 0 ; j < Columns ; j++)
-				{
-					value::assign( m_matrix[i * Columns + j], p_matrix[i * Columns + j]);
-				}
-			}
-
-			return * this;
-		}
-		inline my_type operator =( const value_type * p_matrix)
-		{
-			for (size_t i = 0 ; i < Rows ; i++)
-			{
-				for (size_t j = 0 ; j < Columns ; j++)
-				{
-					value::assign( m_matrix[i * Columns + j], p_matrix[i * Columns + j]);
-				}
-			}
-
-			return * this;
-		}
+		void Init( const value_type & p_value=value::zero());
 		/**
-		 *		+ operators
+		 * Accessors
 		 */
-		my_type operator + ( const my_type & p_matrix)
-		{
-			my_type l_mReturn;
-
-			for(size_t i = 0 ; i < Rows ; i++)
-			{
-				for (size_t j = 0 ; j < Columns ; j++)
-				{
-					value::assign( l_mReturn[i * Columns + j], value::add( m_matrix[i * Columns + j], p_matrix[i * Columns + j]));
-				}
-			}
-		}
-		void operator += ( const my_type & p_matrix)
-		{
-			for (size_t i = 0 ; i < Rows ; i++)
-			{
-				for (size_t j = 0 ; j < Columns ; j++)
-				{
-					if ( ! value::is_null( p_matrix[i * Columns + j]))
-					{
-						value::ass_add( m_matrix[i * Columns + j], p_matrix[i * Columns + j]);
-					}
-				}
-			}
-		}
+		void						SetRow( size_t p_uiRow, const value_type * p_row);
+		void						SetRow( size_t p_uiRow, const row_type & p_row);
+		row_type					GetRow( size_t p_uiRow)const;
+		void 						GetRow( row_type & p_mResult, size_t p_uiRow)const;
+		void 						SetColumn( size_t p_uiColumn, const value_type * p_col);
+		void 						SetColumn( size_t p_uiColumn, const col_type & p_col);
+		col_type					GetColumn( size_t p_uiColumn)const;
+		void						GetColumn( col_type & p_mResult, size_t p_uiColumn)const;
+		value_type					GetValue( size_t p_uiRow, size_t p_uiColumn);
+		const col_type &			operator []( size_t i)const;
+		col_type &					operator []( size_t i);
+		inline value_type *			ptr();
+		inline const value_type *	const_ptr()const;
+		void						LinkCoords( void * p_pCoords);
 		/**
-		 *		- operators
+		 * Operations
 		 */
-		my_type operator - ( const my_type & p_matrix)
-		{
-			my_type l_mReturn;
-
-			for (size_t i = 0 ; i < Rows ; i++)
-			{
-				for (size_t j = 0 ; j < Columns ; j++)
-				{
-					value::assign( l_mReturn[i * Columns + j], value::substract( m_matrix[i * Columns + j], p_matrix[i * Columns + j]));
-				}
-			}
-		}
-		my_type operator -= ( const my_type & p_matrix)
-		{
-			for (size_t i = 0 ; i < Rows ; i++)
-			{
-				for (size_t j = 0 ; j < Columns ; j++)
-				{
-					if ( ! value::is_null( p_matrix[i * Columns + j]))
-					{
-						value::ass_substract( m_matrix[i * Columns + j], p_matrix[i * Columns + j]);
-					}
-				}
-			}
-		}
+		transpose_type	GetTransposed()const;
+		void			GetTransposed( transpose_type & p_mResult)const;
+		my_type			GetTriangle()const;
+		my_type			GetIdentity()const;
+		my_type			GetJordan( value_type p_tLambda)const;
+		my_type			GetMinor( size_t x, size_t y, size_t p_uiRows, size_t p_uiCols)const;
+		value_type		GetTrace()const;
+		void			Triangle();
+		void			Identity();
+		void			Jordan( value_type p_tLambda);
 		/**
-		 *		* operators
+		 *	operators
 		 */
-		template <typename _Ty>
-		void operator *= ( _Ty p_scalar)
-		{
-			for (size_t i = 0 ; i < Rows ; i++)
-			{
-				for (size_t j = 0 ; j < Columns ; j++)
-				{
-					value::ass_multiply( m_matrix[i * Columns + j], p_scalar);
-
-					if (value::is_null( m_matrix[i * Columns + j]))
-					{
-						value::init( m_matrix[i * Columns + j]);
-					}
-				}
-			}
-		}
+		bool 			operator ==( const my_type & p_matrix)const;
+		bool 			operator !=( const my_type & p_matrix)const;
+		my_type &		operator = ( const my_type & p_matrix);
+		my_type &		operator = ( const value_type * p_matrix);
+		my_type			operator + ( const my_type & p_matrix)const;
+		my_type			operator + ( value_type p_value)const;
+		my_type &		operator +=( const my_type & p_matrix);
+		my_type &		operator +=( value_type p_value);
+		my_type			operator - ( const my_type & p_matrix)const;
+		my_type			operator - ( value_type p_value)const;
+		my_type &		operator -=( const my_type & p_matrix);
+		my_type &		operator -=( value_type p_value);
+		my_type			operator * ( value_type p_value)const;
+		col_type		operator * ( const row_type & p_ptVector)const;
+		my_type &		operator *=( value_type p_scalar);
+		my_type			operator / ( value_type p_scalar)const;
+		my_type &		operator /=( value_type p_scalar);
+		std::ostream & 	operator <<( std::ostream & l_streamOut)const;
+		std::istream & 	operator >>( std::istream & l_streamIn);
 		template <size_t _Columns>
-		Matrix<value_type, Rows, _Columns> operator * ( const Matrix<value_type, Columns, _Columns> & p_matrix)
+		Matrix<value_type, Rows, _Columns>	operator * ( const Matrix<value_type, Columns, _Columns> & p_matrix)const
 		{
 			Matrix<value_type, Rows, _Columns> l_mReturn;
-			value_type l_tSomme;
 
 			for (size_t i = 0 ; i < Rows ; i++)
 			{
 				for (size_t j = 0 ; j < _Columns ; j++)
 				{
-					value::init( l_tSomme);
+					value::init( l_mReturn[j][i]);
 
 					for (size_t k = 0 ; k < Columns ; k++)
 					{
-						value::ass_add( l_tSomme, value::multiply( m_matrix[i * Columns + k], p_matrix[k * _Columns + j]));
-					}
-
-					if (value::is_null(l_tSomme))
-					{
-						value::init( l_mReturn[i * _Columns + j]);
-					}
-					else
-					{
-						value::assign( l_mReturn[i * _Columns + j], l_tSomme);
+						value::ass_add( l_mReturn[j][i], value::multiply( m_matrix[k][i], p_matrix[j][k]));
 					}
 				}
 			}
 
 			return l_mReturn;
 		}
-		/**
-		 *		/ operators
-		 */
-		template <typename _Ty>
-		void operator /= ( _Ty p_scalar)
+		template <typename Type>
+		my_type & operator = ( const Matrix<Type, Columns, Rows> & p_matrix)
 		{
 			for (size_t i = 0 ; i < Rows ; i++)
 			{
 				for (size_t j = 0 ; j < Columns ; j++)
 				{
-					value::ass_divide( m_matrix[i * Columns + j], p_scalar);
-
-					if (value::is_null( m_matrix[i * Columns + j]))
-					{
-						value::init( m_matrix[i * Columns + j]);
-					}
+					Templates::Value<T>::assign( m_matrix[j][i], value_type( p_matrix[j][i]));
 				}
 			}
+
+			return * this;
 		}
-		const value_type & operator []( size_t i)const
-		{
-			CASTOR_ASSERT( i < Rows * Columns);
-			return m_matrix[i];
-		}
-		value_type & operator []( size_t i)
-		{
-			CASTOR_ASSERT( i < Rows * Columns);
-			return m_matrix[i];
-		}
-		inline value_type * ptr()
-		{
-			return m_matrix;
-		}
-		inline const value_type * const_ptr()const
-		{
-			return m_matrix;
-		}
-		std::ostream & operator << ( std::ostream & l_streamOut)
+		template <typename Type>
+		my_type & operator = ( const Type * p_pMatrix)
 		{
 			for (size_t i = 0 ; i < Rows ; i++)
 			{
 				for (size_t j = 0 ; j < Columns ; j++)
 				{
-					l_streamOut << "\t" << m_matrix[i * Columns + j];
+					Templates::Value<T>::assign( m_matrix[j][i], value_type( p_pMatrix[j * Rows + i]));
 				}
-
-				l_streamOut << std::endl;
 			}
-			return l_streamOut;
+
+			return * this;
 		}
-		std::istream & operator >> ( std::istream & l_streamIn)
+		template <typename Type>
+		col_type operator * ( const Point<Type, Columns> & p_ptVector)const
 		{
+			col_type l_ptReturn;
+
 			for (size_t i = 0 ; i < Rows ; i++)
 			{
+				Templates::Value<T>::init( l_ptReturn[i]);
+
 				for (size_t j = 0 ; j < Columns ; j++)
 				{
-					l_streamIn >> m_matrix[i * Columns + j];
+					Templates::Value<T>::ass_add( l_ptReturn[i], Templates::Value<T>::multiply( m_matrix[j][i], value_type( p_ptVector[j])));
 				}
 			}
 
-			return l_streamIn;
+			return l_ptReturn;
 		}
 
 	protected:
-		void _recheck()
-		{
-			for (size_t i = 0 ; i < Rows ; i++)
-			{
-				for (size_t j = 0 ; j < Columns ; j++)
-				{
-					value::stick( m_matrix[i * Columns + j]);
-				}
-			}
-		}
+		void _recheck();
 	};
 
 	template <typename T, size_t Rows, size_t Columns>
-	Matrix <T, Rows, Columns> operator * ( T p_tScalar, const Matrix <T, Rows, Columns> & p_matrix)
-	{
-		Matrix <T, Rows, Columns> l_mReturn;
-
-		for (size_t i = 0 ; i < Rows ; i++)
-		{
-			for (size_t j = 0 ; j < Columns ; j++)
-			{
-				Value<T>::assign( l_mReturn[i * Columns + j], Value<T>::multiply( p_tScalar, p_matrix[i * Columns + j]));
-
-				if (Value<T>::is_null( l_mReturn[i * Columns + j]))
-				{
-					Value<T>::init( l_mReturn[i * Columns + j]);
-				}
-			}
-		}
-
-		return l_mReturn;
-	}
-
+	Matrix <T, Rows, Columns> operator + ( int p_tScalar, const Matrix <T, Rows, Columns> & p_matrix);
 	template <typename T, size_t Rows, size_t Columns>
-	Matrix <T, Rows, Columns> operator - ( const Matrix <T, Rows, Columns> & p_matrix)
-	{
-		my_type l_mReturn;
-
-		for (size_t i = 0 ; i < Rows ; i++)
-		{
-			for (size_t j = 0 ; j < Columns ; j++)
-			{
-				value::assign( l_mReturn[i * Columns + j], Value<T>::Negate( p_matrix[i * Columns + j]));
-			}
-		}
-
-		return l_mReturn;
-	}
+	Matrix <T, Rows, Columns> operator + ( real p_tScalar, const Matrix <T, Rows, Columns> & p_matrix);
 	template <typename T, size_t Rows, size_t Columns>
-	std::ostream & operator << ( std::ostream & l_streamOut, const Matrix <T, Rows, Columns> & p_matrix)
-	{
-		for (size_t i = 0 ; i < Rows ; i++)
-		{
-			for (size_t j = 0 ; j < Columns ; j++)
-			{
-				l_streamOut << "\t" << p_matrix[i * Columns + j];
-			}
-
-			l_streamOut << std::endl;
-		}
-
-		return l_streamOut;
-	}
+	Matrix <T, Rows, Columns> operator - ( int p_tScalar, const Matrix <T, Rows, Columns> & p_matrix);
 	template <typename T, size_t Rows, size_t Columns>
-	std::istream & operator >> ( std::istream & l_streamIn, Matrix <T, Rows, Columns> & p_matrix)
-	{
-		for (size_t i = 0 ; i < Rows ; i++)
-		{
-			for (size_t j = 0 ; j < Columns ; j++)
-			{
-				l_streamIn >> p_matrix[i * Columns + j];
-			}
-		}
+	Matrix <T, Rows, Columns> operator - ( real p_tScalar, const Matrix <T, Rows, Columns> & p_matrix);
+	template <typename T, size_t Rows, size_t Columns>
+	Matrix <T, Rows, Columns> operator * ( int p_tScalar, const Matrix <T, Rows, Columns> & p_matrix);
+	template <typename T, size_t Rows, size_t Columns>
+	Matrix <T, Rows, Columns> operator * ( real p_tScalar, const Matrix <T, Rows, Columns> & p_matrix);
+	template <typename T, size_t Rows, size_t Columns>
+	Matrix <T, Rows, Columns> operator / ( int p_tScalar, const Matrix <T, Rows, Columns> & p_matrix);
+	template <typename T, size_t Rows, size_t Columns>
+	Matrix <T, Rows, Columns> operator / ( real p_tScalar, const Matrix <T, Rows, Columns> & p_matrix);
+	template <typename T, size_t Rows, size_t Columns>
+	Point <T, Rows> operator * ( const Matrix <T, Rows, Columns> & p_matrix, const Point<T, Columns> & p_ptVector);
+	template <typename T, size_t Rows, size_t Columns>
+	Matrix <T, Rows, Columns> operator - ( const Matrix <T, Rows, Columns> & p_matrix);
+	template <typename T, size_t Rows, size_t Columns>
+	std::ostream & operator << ( std::ostream & l_streamOut, const Matrix <T, Rows, Columns> & p_matrix);
+	template <typename T, size_t Rows, size_t Columns>
+	std::istream & operator >> ( std::istream & l_streamIn, Matrix <T, Rows, Columns> & p_matrix);
 
-		return l_streamIn;
-	}
 	/*!
 	Templated matrix representation
 	\author Sylvain DOREMUS
@@ -679,277 +235,131 @@ namespace Castor
 		typedef Templates::Value<value_type>		value;
 
 	public:
-		SquareMatrix()
-		{
-		}
-		SquareMatrix( const my_square_type & p_matrix)
+		typedef my_square_type	square_matrix_type;
+		typedef my_type			matrix_type;
+
+	public:
+		SquareMatrix();
+		SquareMatrix( const my_square_type & p_matrix);
+		SquareMatrix( const my_type & p_matrix);
+		SquareMatrix( const value_type & p_value);
+		explicit SquareMatrix( const value_type * p_matrix);
+		template <typename Type>
+		SquareMatrix( const SquareMatrix<Type, Rows> & p_matrix)
 			:	my_type( p_matrix)
 		{
 		}
-		explicit SquareMatrix( value_type * p_matrix)
+		template <typename Type>
+		SquareMatrix( const Matrix<Type, Rows, Rows> & p_matrix)
 			:	my_type( p_matrix)
 		{
 		}
-		virtual ~SquareMatrix()
+		template <typename Type>
+		SquareMatrix( const Type * p_matrix)
+			:	my_type( p_matrix)
 		{
 		}
-		bool IsOrthogonal()
+		virtual ~SquareMatrix();
+		/**
+		 * Operations
+		 */
+		SquareMatrix<T, Rows-1>	GetMinor( size_t x, size_t y)const;
+		value_type		GetCofactor( size_t p_uiRow, size_t p_uiColumn)const;
+		value_type		GetDeterminant()const;
+		bool			IsOrthogonal()const;
+		void			Transpose();
+		bool			IsSymmetrical()const;
+		bool			IsAntiSymmetrical()const;
+		my_square_type	GetInverse()const;
+		virtual void	Invert();
+		my_square_type	Multiply( const my_square_type & p_matrix)const;
+		template <typename Type>
+		my_square_type	Multiply( const SquareMatrix<Type, Rows> & p_matrix)const
 		{
-			bool l_bReturn = false;
-
-			my_type l_mTmp( * this);
-			l_mTmp.ToTranspose();
-			my_square_type l_mId1;
-			l_mId1.Identity();
-			my_square_type l_mId2;
-			l_mId2.Identity();
-
-			if ((l_mId1 != (* this) * l_mTmp) || (l_mId2 != l_mTmp * (* this)))
-			{
-				l_bReturn = false;
-			}
-			else
-			{
-				l_bReturn = true;
-			}
-
-			return l_bReturn;
-		}
-		void ToTranspose()
-		{
-			my_type l_mResult( * this);
+			SquareMatrix<T, Rows> l_mResult;
 
 			for (size_t i = 0 ; i < Rows ; i++)
 			{
-				for (size_t j = 0 ; j < Columns ; j++)
+				for (size_t j = 0 ; j < Rows ; j++)
 				{
-					value::assign( m_matrix[i * Columns + j], l_mResult[j * Columns + i]);
-				}
-			}
-		}
-		bool IsSymmetrical()
-		{
-			bool l_bReturn = true;
-
-			for (size_t i = 0 ; i < Rows && l_bReturn ; i++)
-			{
-				for (size_t j = 0 ; j < Columns && l_bReturn ; j++)
-				{
-					l_bReturn = value::equals( m_matrix[i * Columns + j], m_matrix[j * Columns + i]);
+					l_mResult[i] += m_matrix[j] * value_type( p_matrix[i][j]);
 				}
 			}
 
-			return l_bReturn;
-		}
-		bool IsAntiSymmetrical()
-		{
-			bool l_bReturn = true;
-
-			for (size_t i = 0 ; i < Rows && l_bReturn ; i++)
-			{
-				for (size_t j = 0 ; j < Columns && l_bReturn ; j++)
-				{
-					if ( ! value::is_null( m_matrix[i * Columns + j] + m_matrix[j * Columns + i]))
-					{
-						l_bReturn = false;
-					}
-				}
-			}
-
-			return l_bReturn;
-		}
-		void Invert()
-		{
-			value_type l_tDeterminant = GetDeterminant();
-
-			if ( ! value::is_null( l_tDeterminant))
-			{
-				my_square_type l_mTmp;
-
-				for (size_t i = 0 ; i < Rows ; i++)
-				{
-					for (size_t j = 0 ; j < Rows ; j++)
-					{
-						value::assign( l_mTmp[i * Rows + j], value::divide( GetCofactor( j, i, Rows, Rows), l_tDeterminant));
-					}
-				}
-
-				for (size_t i = 0 ; i < Rows ; i++)
-				{
-					for (size_t j = 0 ; j < Rows ; j++)
-					{
-						if (value::is_null( l_mTmp[i * Rows + j]))
-						{
-							value::init( m_matrix[i * Rows + j]);
-						}
-						else
-						{
-							value::assign( m_matrix[i * Rows + j], l_mTmp[i * Rows + j]);
-						}
-					}
-				}
-			}
-		}
-		inline bool operator ==( const my_square_type & p_matrix)
-		{
-			return my_type::operator ==( my_type( p_matrix));
-		}
-		inline bool operator !=( const my_square_type & p_matrix)
-		{
-			return my_type::operator !=( my_type( p_matrix));
-		}
-		inline my_square_type operator =( const my_square_type & p_matrix)
-		{
-			my_type::operator =( my_type( p_matrix));
-			return * this;
-		}
-		inline my_square_type operator =( const value_type * p_matrix)
-		{
-			return my_type::operator =( p_matrix);
-			return * this;
+			return l_mResult;
 		}
 		/**
-		 *		+ operators
+		 *	Operators
 		 */
-		my_square_type operator + ( const my_square_type & p_matrix)
-		{
-			my_type::operator +( p_matrix);
-			return * this;
-		}
-		void operator += ( const my_square_type & p_matrix)
-		{
-			my_type::operator +=( p_matrix);
-		}
-		/**
-		 *		- operators
-		 */
-		my_square_type operator - ( const my_square_type & p_matrix)
-		{
-			my_type::operator -( p_matrix);
-			return * this;
-		}
-		void operator -= ( const my_square_type & p_matrix)
-		{
-			my_type::operator -=( p_matrix);
-		}
-		/**
-		 *		* operators
-		 */
-		template <typename _Ty>
-		void operator *= ( _Ty p_scalar)
-		{
-			my_type::operator *=( p_scalar);
-		}
-		void operator *= ( const my_square_type & p_matrix)
-		{
-			my_square_type l_mTmp( * this);
-			value_type l_tSomme;
+		bool 				operator ==( const my_square_type & p_matrix)const;
+		bool 				operator !=( const my_square_type & p_matrix)const;
+		my_square_type &	operator = ( const my_square_type & p_matrix);
+		my_square_type &	operator = ( const my_type & p_matrix);
+		my_square_type &	operator = ( const value_type * p_matrix);
+		my_square_type		operator + ( const my_square_type & p_matrix)const;
+		my_square_type &	operator +=( const my_square_type & p_matrix);
+		my_square_type		operator - ( const my_square_type & p_matrix)const;
+		my_square_type &	operator -=( const my_square_type & p_matrix);
+		my_square_type		operator * ( value_type p_scalar)const;
+		my_square_type		operator * ( const my_square_type & p_matrix)const;
+		col_type			operator * ( const col_type & p_ptVector)const;
+		my_square_type &	operator *=( value_type p_scalar);
+		my_square_type &	operator *=( const my_square_type & p_matrix);
+		my_square_type &	operator /=( value_type p_scalar);
+		my_square_type 		operator / ( value_type p_scalar)const;
+		std::ostream & 		operator <<( std::ostream & l_streamOut)const;
+		std::istream & 		operator >>( std::istream & l_streamIn);
 
-			for(size_t i = 0 ; i < Rows ; i++)
+
+		template <size_t _Columns>
+		Matrix <value_type, Rows, _Columns> Multiply( const Matrix <value_type, Rows, _Columns> & p_matrix)const
+		{
+			Matrix <value_type, Rows, _Columns> l_mReturn;
+
+			for (size_t i = 0 ; i < _Columns ; i++)
 			{
 				for (size_t j = 0 ; j < Rows ; j++)
 				{
-					value::init( l_tSomme);
-
-					for (size_t k = 0 ; k < Rows ; k++)
-					{
-						value::ass_add( l_tSomme, value::multiply( l_mTmp[i * Rows + k], p_matrix[k * Rows + j]));
-					}
-
-					if (value::is_null( l_tSomme))
-					{
-						value::init( m_matrix[i * Rows + j]);
-					}
-					else
-					{
-						value::assign( m_matrix[i * Rows + j], l_tSomme);
-					}
+					l_mReturn[i] += m_matrix[j] * p_matrix[i][j];
 				}
 			}
+
+			return l_mReturn;
 		}
-		/**
-		 *		/ operators
-		 */
-		template <typename _Ty>
-		void operator /= ( _Ty p_scalar)
+		template <typename Type>
+		my_square_type &	operator = ( const SquareMatrix <Type, Rows> & p_matrix)
 		{
-			my_type::operator /=( p_scalar);
+			my_type::operator =( p_matrix);
+			return * this;
 		}
-		std::ostream & operator << ( std::ostream & l_streamOut)
+		template <typename Type>
+		my_square_type &	operator = ( const Matrix <Type, Rows, Rows> & p_matrix)
 		{
-			return my_type::operator <<( l_streamOut);
+			my_type::operator =( p_matrix);
+			return * this;
 		}
-		std::istream & operator >> ( std::istream & l_streamIn)
+		template <typename Type>
+		my_square_type &	operator = ( const Type * p_matrix)
 		{
-			return my_type::operator >>( l_streamIn);
+			my_type::operator =( p_matrix);
+			return * this;
 		}
 	};
 
 	template <typename T, size_t Rows>
-	SquareMatrix <T, Rows> operator * ( T p_tScalar, const SquareMatrix <T, Rows> & p_matrix)
-	{
-		SquareMatrix <T, Rows> l_mReturn;
-
-		for (size_t i = 0 ; i < Rows ; i++)
-		{
-			for (size_t j = 0 ; j < Rows ; j++)
-			{
-				Value<T>::assign( l_mReturn[i * Rows + j], Value<T>::multiply( p_tScalar, p_matrix[i * Rows + j]));
-
-				if (Value<T>::is_null( l_mReturn[i * Rows + j]))
-				{
-					Value<T>::init( l_mReturn[i * Rows + j]);
-				}
-			}
-		}
-
-		return l_mReturn;
-	}
-
+	SquareMatrix <T, Rows> operator * ( T p_tScalar, const SquareMatrix <T, Rows> & p_matrix);
 	template <typename T, size_t Rows>
-	SquareMatrix <T, Rows> operator - ( const SquareMatrix <T, Rows> & p_matrix)
-	{
-		my_type l_mReturn;
-
-		for (size_t i = 0 ; i < Rows ; i++)
-		{
-			for (size_t j = 0 ; j < Columns ; j++)
-			{
-				value::assign( l_mReturn[i * Rows + j], Value<T>::negate( p_matrix[i * Rows + j]));
-			}
-		}
-
-		return l_mReturn;
-	}
+	SquareMatrix <T, Rows> operator - ( const SquareMatrix <T, Rows> & p_matrix);
 	template <typename T, size_t Rows>
-	std::ostream & operator << ( std::ostream & l_streamOut, const SquareMatrix <T, Rows> & p_matrix)
-	{
-		for (size_t i = 0 ; i < Rows ; i++)
-		{
-			for (size_t j = 0 ; j < Columns ; j++)
-			{
-				l_streamOut << "\t" << p_matrix[i * Columns + j];
-			}
-
-			l_streamOut << std::endl;
-		}
-
-		return l_streamOut;
-	}
+	std::ostream & operator << ( std::ostream & l_streamOut, const SquareMatrix <T, Rows> & p_matrix);
 	template <typename T, size_t Rows>
-	std::istream & operator >> ( std::istream & l_streamIn, SquareMatrix <T, Rows> & p_matrix)
-	{
-		for (size_t i = 0 ; i < Rows ; i++)
-		{
-			for (size_t j = 0 ; j < Columns ; j++)
-			{
-				l_streamIn >> p_matrix[i * Columns + j];
-			}
-		}
+	std::istream & operator >> ( std::istream & l_streamIn, SquareMatrix <T, Rows> & p_matrix);
 
-		return l_streamIn;
-	}
+	template <typename T, size_t Rows> struct CoFactorComputer;
 }
 }
+
+#include "Matrix.inl"
+#include "SquareMatrix.inl"
 
 #endif

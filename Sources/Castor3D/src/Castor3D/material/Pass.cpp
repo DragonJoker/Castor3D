@@ -16,10 +16,10 @@ Pass :: Pass( Material * p_parent)
 		m_pParent( p_parent)
 {
 	m_textureUnits.clear();
-	SetDiffuse( 1.0f, 1.0f, 1.0f, 1.0f);
-	SetEmissive( 0.0f, 0.0f, 0.0f, 1.0f);
-	SetAmbient( 0.0f, 0.0f, 0.0f, 1.0f);
-	SetSpecular( 1.0f, 1.0f, 1.0f, 1.0f);
+	SetDiffuse( 1, 1, 1, 1);
+	SetEmissive( 0, 0, 0, 1);
+	SetAmbient( 0, 0, 0, 1);
+	SetSpecular( 1, 1, 1, 1);
 }
 
 Pass :: ~Pass()
@@ -38,7 +38,7 @@ void Pass :: Initialise()
 	m_pRenderer->Initialise();
 }
 
-void Pass :: Apply( eDRAW_TYPE p_displayMode)
+void Pass :: Render( eDRAW_TYPE p_displayMode)
 {
 	if ( ! m_shaderProgram.expired())
 	{
@@ -47,15 +47,15 @@ void Pass :: Apply( eDRAW_TYPE p_displayMode)
 		l_pShader->Begin();
 	}
 
-	m_pRenderer->Apply( p_displayMode);
+	m_pRenderer->Render( p_displayMode);
 
 	for (size_t i = 0 ; i < m_textureUnits.size() ; i++)
 	{
-		m_textureUnits[i]->Apply( p_displayMode);
+		m_textureUnits[i]->Render( p_displayMode);
 	}
 }
 
-void Pass :: Apply2D( eDRAW_TYPE p_displayMode)
+void Pass :: Render2D( eDRAW_TYPE p_displayMode)
 {
 	if ( ! m_shaderProgram.expired())
 	{
@@ -64,23 +64,23 @@ void Pass :: Apply2D( eDRAW_TYPE p_displayMode)
 		l_pShader->Begin();
 	}
 
-	m_pRenderer->Apply2D( p_displayMode);
+	m_pRenderer->Render2D( p_displayMode);
 
 	for (size_t i = 0 ; i < m_textureUnits.size() ; i++)
 	{
-		m_textureUnits[i]->Apply( p_displayMode);
+		m_textureUnits[i]->Render2D( p_displayMode);
 	}
 }
 
-void Pass :: Remove()
+void Pass :: EndRender()
 {
 
 	for (size_t i = 0 ; i < m_textureUnits.size() ; i++)
 	{
-		m_textureUnits[i]->Remove();
+		m_textureUnits[i]->EndRender();
 	}
 
-	m_pRenderer->Remove();
+	m_pRenderer->EndRender();
 
 	if ( ! m_shaderProgram.expired())
 	{
@@ -122,7 +122,7 @@ void Pass :: AddTextureUnit( TextureUnitPtr p_texUnit)
 bool Pass :: DestroyTextureUnit( size_t p_index)
 {
 	bool l_bReturn = false;
-	Log::LogMessage( CU_T( "Destroying TextureUnit %d"), p_index);
+	Logger::LogMessage( CU_T( "Destroying TextureUnit %d"), p_index);
 
 	if (p_index < m_textureUnits.size())
 	{
@@ -280,7 +280,7 @@ bool Pass :: Read( Castor::Utils::File & p_file)
 
 		for (size_t i = 0 ; i < l_nbTextureUnits && l_bReturn ; i++)
 		{
-			l_textureUnit = new TextureUnit();
+			l_textureUnit = TextureUnitPtr( new TextureUnit());
 
 			l_bReturn = l_textureUnit->Read( p_file);
 
@@ -297,11 +297,19 @@ bool Pass :: Read( Castor::Utils::File & p_file)
 void Pass :: SetShader( ShaderProgramPtr p_program)
 {
 	m_shaderProgram = p_program;
+	m_pRenderer->Initialise();
 }
 
 ShaderProgramPtr Pass :: GetShader()const
 {
-	return m_shaderProgram.lock();
+	ShaderProgramPtr l_pReturn;
+
+	if ( ! m_shaderProgram.expired())
+	{
+		l_pReturn = m_shaderProgram.lock();
+	}
+
+	return l_pReturn;
 }
 
 bool Pass :: HasShader()const

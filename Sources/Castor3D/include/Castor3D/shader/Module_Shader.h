@@ -25,15 +25,18 @@ namespace Castor3D
 	class ShaderManager;
 	class ShaderObject;
 	class ShaderProgram;
-	class UniformVariable;
+	class FrameVariable;
+	template <typename T> class OneFrameVariable;
+	template <typename T, size_t Count> class PointFrameVariable;
+	template <typename T, size_t Rows, size_t Columns> class MatrixFrameVariable;
 
-	typedef Templates::SharedPtr<UniformVariable>	UniformVariablePtr;
+	typedef Templates::SharedPtr<FrameVariable>		FrameVariablePtr;
 	typedef Templates::SharedPtr<ShaderProgram>		ShaderProgramPtr;
 	typedef Templates::SharedPtr<ShaderObject>		ShaderObjectPtr;
 
 	typedef C3DVector(	ShaderProgramPtr)			ShaderProgramPtrArray;
 	typedef C3DVector(	ShaderObjectPtr)			ShaderObjectPtrArray;
-	typedef C3DMap(		String,	UniformVariablePtr)	UniformVariablePtrStrMap;
+	typedef C3DMap(		String,	FrameVariablePtr)	FrameVariablePtrStrMap;
 }
 
 #endif

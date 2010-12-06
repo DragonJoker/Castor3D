@@ -362,20 +362,21 @@ MultiThreading::Thread * MultiThreading :: CreateThread( PUIThreadStartFunction 
 		*lpThreadId = pReturn->GetID();
 	}	return pReturn;}
 
-bool MultiThreading :: WaitForMultipleThreads( bool bWaitAll, unsigned long dwMilliseconds, size_t dwNbThreads, ...)
+bool MultiThreading :: WaitForMultipleThreads( bool bWaitAll, unsigned long dwMilliseconds, size_t p_uiNbThreads, ...)
 {
 	bool l_bReturn = true;
 	std::vector <void *> pHandles;
-	va_list vaArgs;
-	va_start( vaArgs, dwNbThreads);
+	va_list l_vaArgs;
+	va_start( l_vaArgs, p_uiNbThreads);
 
-	for (size_t i = 0 ; i < dwNbThreads ; i++)
+	for (size_t i = 0 ; i < p_uiNbThreads ; i++)
 	{
-		MultiThreading::Thread * pThread = va_arg( vaArgs, MultiThreading::Thread *);
+		MultiThreading::Thread * pThread = va_arg( l_vaArgs, MultiThreading::Thread *);
 		CASTOR_ASSERT( pThread != NULL && pThread->GetHandle() != NULL);
 		pHandles.push_back( pThread->GetHandle());
 	}
-	va_end( vaArgs);
+
+	va_end( l_vaArgs);
 
 #if CASTOR_MT_USE_BOOST
 	boost::posix_time::time_duration time = boost::posix_time::microsec( dwMilliseconds);

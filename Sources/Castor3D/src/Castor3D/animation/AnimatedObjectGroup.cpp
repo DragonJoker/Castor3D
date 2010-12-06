@@ -7,11 +7,12 @@
 #include "animation/AnimatedObjectGroup.h"
 #include "animation/AnimatedObject.h"
 #include "animation/Animation.h"
-#include "geometry/primitives/MovableObject.h"
+#include "main/MovableObject.h"
 
 using namespace Castor3D;
 
 AnimatedObjectGroup :: AnimatedObjectGroup( const String & p_name)
+	:	Managed<String, AnimatedObjectGroup>( p_name)
 {
 }
 
@@ -28,7 +29,7 @@ AnimatedObjectPtr AnimatedObjectGroup :: AddObject( MovableObjectPtr p_object)
 
 	if (m_objects.find( p_object->GetName()) == m_objects.end())
 	{
-		l_pReturn = new AnimatedObject( p_object, m_animations);
+		l_pReturn = AnimatedObjectPtr( new AnimatedObject( p_object, m_animations));
 		m_objects.insert( AnimatedObjectPtrStrMap::value_type( p_object->GetName(), l_pReturn));
 	}
 

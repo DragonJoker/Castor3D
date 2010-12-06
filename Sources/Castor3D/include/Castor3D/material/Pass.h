@@ -34,7 +34,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API Pass : public Renderable<Pass, PassRenderer>
+	class C3D_API Pass : public Renderable<Pass, PassRenderer>
 	{
 	protected:
 		friend class Material;
@@ -70,15 +70,15 @@ namespace Castor3D
 		/**
 		 * Applies the pass
 		 */
-		virtual void Apply( eDRAW_TYPE p_displayMode);
+		virtual void Render( eDRAW_TYPE p_displayMode);
 		/**
 		 * Applies the pass
 		 */
-		virtual void Apply2D( eDRAW_TYPE p_displayMode);
+		virtual void Render2D( eDRAW_TYPE p_displayMode);
 		/**
 		 * Removes the pass (to avoid it from interfering with other passes)
 		 */
-		virtual void Remove();
+		virtual void EndRender();
 		/**
 		 * Adds a TextureUnit to the pass, set the unit's base colour to mine
 		 *@param p_texUnit : [in] The TextureUnit to add
@@ -151,7 +151,7 @@ namespace Castor3D
 		inline const float *		GetTexBaseColour	()const { return m_texBaseColour.const_ptr(); }
 		inline TextureUnitPtrArray	GetTextureUnits		()const { return m_textureUnits; }
 		inline bool					IsDoubleFace		()const { return m_doubleFace; }
-		inline MaterialPtr			GetParent			()const { return m_pParent; }
+		inline Material *			GetParent			()const { return m_pParent; }
 		inline float				GetAlpha			()const { return m_fAlpha; }
 	};
 	//! The Pass renderer
@@ -161,7 +161,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API PassRenderer : public Renderer<Pass, PassRenderer>
+	class C3D_API PassRenderer : public Renderer<Pass, PassRenderer>
 	{
 	protected:
 		/**
@@ -186,15 +186,15 @@ namespace Castor3D
 		/**
 		 * Applies the material
 		 */
-		virtual void Apply( eDRAW_TYPE p_displayMode) = 0;
+		virtual void Render( eDRAW_TYPE p_displayMode) = 0;
 		/**
 		 * Applies the material
 		 */
-		virtual void Apply2D( eDRAW_TYPE p_displayMode) = 0;
+		virtual void Render2D( eDRAW_TYPE p_displayMode) = 0;
 		/**
 		 * Removes the material
 		 */
-		virtual void Remove() = 0;
+		virtual void EndRender() = 0;
 	};
 }
 

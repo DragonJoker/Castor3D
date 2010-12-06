@@ -31,16 +31,15 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API MaterialManager : public Castor::Templates::UniqueManager<Material, MaterialManager>
+	class C3D_API MaterialManager : public Castor::Templates::UniqueManager<String, Material, MaterialManager>
 	{
 	private:
-		friend class Castor::Templates::UniqueManager<Material, MaterialManager>;
+		friend class Castor::Templates::UniqueManager<String, Material, MaterialManager>;
 
 	private:
-		MaterialPtr m_defaultMaterial;			//!< The default material
-		MaterialPtrStrMap m_newMaterials;		//!< The newly created materials, a material is in the list until it is initialised
+		MaterialPtr m_defaultMaterial;					//!< The default material
+		std::map <String, Material *> m_newMaterials;	//!< The newly created materials, a material is in the list until it is initialised
 		MaterialPtrArray m_arrayToDelete;
-		static Castor::MultiThreading::RecursiveMutex m_mutex;
 
 	private:
 		/**
@@ -93,6 +92,11 @@ namespace Castor3D
 		 *@param p_material : [in] The material we want to initialise again
 		 */
 		static void SetToInitialise( MaterialPtr p_material);
+		/**
+		 * Puts the given material in the newly created materials, to re-initialise it
+		 *@param p_material : [in] The material we want to initialise again
+		 */
+		static void SetToInitialise( Material * p_material);
 		/**
 		 * Deletes all the materials held
 		 */

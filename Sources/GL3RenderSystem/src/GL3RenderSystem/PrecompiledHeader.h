@@ -15,8 +15,26 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_GL_PRECOMPILED_HEADER_H___
-#define ___C3D_GL_PRECOMPILED_HEADER_H___
+#ifndef ___GL3_PrecompiledHeader___
+#define ___GL3_PrecompiledHeader___
+
+#	ifndef CHECK_MEMORYLEAKS
+#		ifdef _DEBUG
+#			define CHECK_MEMORYLEAKS 1
+#		else
+#			define CHECK_MEMORYLEAKS 0
+#		endif
+#	endif
+
+#pragma message( "********************************************************************")
+#pragma message( "	GL3RenderSystem")
+
+#if CHECK_MEMORYLEAKS
+#	pragma message( "		Checking Memory leaks")
+#endif
+#include <CastorUtils/Memory.h>
+
+#pragma message( "********************************************************************")
 
 #	include <CastorUtils/PreciseTimer.h>
 
@@ -34,7 +52,6 @@ using namespace Castor::Templates;
 #	include <CastorUtils/Map.h>
 #	include <CastorUtils/Multimap.h>
 #	include <CastorUtils/Set.h>
-#	include <CastorUtils/Vector3f.h>
 #	include <CastorUtils/Point.h>
 #	include <CastorUtils/Quaternion.h>
 #	include <CastorUtils/Colour.h>
@@ -67,65 +84,42 @@ using namespace Castor::Utils;
 #	include <Castor3D/material/TextureEnvironment.h>
 #	include <Castor3D/material/TextureUnit.h>
 #	include <Castor3D/geometry/Module_Geometry.h>
+#	include <Castor3D/geometry/basic/Vertex.h>
 #	include <Castor3D/geometry/basic/Face.h>
 #	include <Castor3D/geometry/mesh/Submesh.h>
 #	include <Castor3D/geometry/mesh/Mesh.h>
 #	include <Castor3D/geometry/primitives/Geometry.h>
 #	include <Castor3D/scene/Module_Scene.h>
 #	include <Castor3D/scene/SceneManager.h>
-#	include <Castor3D/scene/SceneNode.h>
+#	include <Castor3D/scene/Node.h>
 #	include <Castor3D/scene/Scene.h>
 #	include <Castor3D/shader/Module_Shader.h>
 #	include <Castor3D/shader/ShaderProgram.h>
 #	include <Castor3D/shader/ShaderManager.h>
 #	include <Castor3D/shader/ShaderObject.h>
-#	include <Castor3D/shader/UniformVariable.h>
+#	include <Castor3D/shader/FrameVariable.h>
 #	include <Castor3D/render_system/RenderSystem.h>
 #	include <Castor3D/render_system/Buffer.h>
 #	include <Castor3D/overlay/OverlayManager.h>
 #	include <Castor3D/overlay/Overlay.h>
 #	include <Castor3D/Log.h>
 
+#	include <OpenGLCommon/GLBuffer.h>
+#	include <OpenGLCommon/GLFrameVariable.h>
+#	include <OpenGLCommon/GLShaderObject.h>
+#	include <OpenGLCommon/GLShaderProgram.h>
+#	include <OpenGLCommon/GLContext.h>
+#	include <OpenGLCommon/GLPipeline.h>
+#	include <OpenGLCommon/GLRenderSystem.h>
+#	include <OpenGLCommon/GLCameraRenderer.h>
+#	include <OpenGLCommon/GLTexEnvironmentRenderer.h>
+#	include <OpenGLCommon/GLOverlayRenderer.h>
+#	include <OpenGLCommon/GLLightRenderer.h>
+#	include <OpenGLCommon/GLTextureRenderer.h>
+#	include <OpenGLCommon/GLMaterialRenderer.h>
+
 #	include <fstream>
 #	include <set>
-
-#	ifndef CHECK_MEMORYLEAKS
-#		ifdef _DEBUG
-#			define CHECK_MEMORYLEAKS 1
-#		else
-#			define CHECK_MEMORYLEAKS 0
-#		endif
-#	endif
-
-#pragma message( "********************************************************************")
-#pragma message( "	GL3RenderSystem")
-
-#if CHECK_MEMORYLEAKS
-#	pragma message( "		Checking Memory leaks")
-#	include <CastorUtils/Memory.h>
-#endif
-
-#pragma message( "********************************************************************")
-
-#if CASTOR_USE_DOUBLE
-#	define glTranslate			glTranslated
-#	define glMultMatrix			glMultMatrixd
-#	define glScale				glScaled
-#	define glMultiTexCoord2ARB	glMultiTexCoord2dARB
-#	define GL_REAL				GL_FLOAT
-#	define glVertex2			glVertex2d
-#	define glTexCoord2			glTexCoord2d
-#	define glVertex3			glVertex3d
-#else
-#	define glTranslate			glTranslatef
-#	define glMultMatrix			glMultMatrixf
-#	define glScale				glScalef
-#	define glMultiTexCoord2ARB	glMultiTexCoord2fARB
-#	define GL_REAL				GL_DOUBLE
-#	define glVertex2			glVertex2f
-#	define glTexCoord2			glTexCoord2f
-#	define glVertex3			glVertex3f
-#endif
 
 using namespace Castor::Utils;
 

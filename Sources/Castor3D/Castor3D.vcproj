@@ -19,7 +19,7 @@
 		<Configuration
 			Name="Release - MultiByte|Win32"
 			OutputDirectory="$(SolutionDir)Bin\$(ConfigurationName)"
-			IntermediateDirectory="_generation\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)_generation\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
@@ -97,7 +97,7 @@
 		<Configuration
 			Name="Release - Unicode|Win32"
 			OutputDirectory="$(SolutionDir)Bin\$(ConfigurationName)"
-			IntermediateDirectory="_generation\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)_generation\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -176,7 +176,7 @@
 		<Configuration
 			Name="Debug - Unicode|Win32"
 			OutputDirectory="$(SolutionDir)Bin\$(ConfigurationName)"
-			IntermediateDirectory="_generation\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)_generation\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			>
@@ -256,7 +256,7 @@
 		<Configuration
 			Name="Debug - Multibyte|Win32"
 			OutputDirectory="$(SolutionDir)Bin\$(ConfigurationName)"
-			IntermediateDirectory="_generation\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)_generation\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
@@ -411,11 +411,11 @@
 						>
 					</File>
 					<File
-						RelativePath=".\src\Castor3D\geometry\basic\Pattern.cpp"
+						RelativePath=".\src\Castor3D\geometry\basic\SmoothingGroup.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\src\Castor3D\geometry\basic\SmoothingGroup.cpp"
+						RelativePath=".\src\Castor3D\geometry\basic\Vertex.cpp"
 						>
 					</File>
 				</Filter>
@@ -424,10 +424,6 @@
 					>
 					<File
 						RelativePath=".\src\Castor3D\geometry\primitives\Geometry.cpp"
-						>
-					</File>
-					<File
-						RelativePath=".\src\Castor3D\geometry\primitives\MovableObject.cpp"
 						>
 					</File>
 				</Filter>
@@ -451,10 +447,6 @@
 						>
 					</File>
 					<File
-						RelativePath=".\src\Castor3D\geometry\mesh\LoopDivider.cpp"
-						>
-					</File>
-					<File
 						RelativePath=".\src\Castor3D\geometry\mesh\Mesh.cpp"
 						>
 					</File>
@@ -467,10 +459,6 @@
 						>
 					</File>
 					<File
-						RelativePath=".\src\Castor3D\geometry\mesh\PNTrianglesDivider.cpp"
-						>
-					</File>
-					<File
 						RelativePath=".\src\Castor3D\geometry\mesh\ProjectionMesh.cpp"
 						>
 					</File>
@@ -479,15 +467,27 @@
 						>
 					</File>
 					<File
-						RelativePath=".\src\Castor3D\geometry\mesh\Subdiviser.cpp"
-						>
-					</File>
-					<File
 						RelativePath=".\src\Castor3D\geometry\mesh\Submesh.cpp"
 						>
 					</File>
 					<File
 						RelativePath=".\src\Castor3D\geometry\mesh\TorusMesh.cpp"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="divider"
+					>
+					<File
+						RelativePath=".\src\Castor3D\geometry\mesh\LoopDivider.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Castor3D\geometry\mesh\PNTrianglesDivider.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\src\Castor3D\geometry\mesh\Subdiviser.cpp"
 						>
 					</File>
 				</Filter>
@@ -517,6 +517,10 @@
 				>
 				<File
 					RelativePath=".\src\Castor3D\main\FrameListener.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\Castor3D\main\MovableObject.cpp"
 					>
 				</File>
 				<File
@@ -644,6 +648,10 @@
 				Name="scene"
 				>
 				<File
+					RelativePath=".\src\Castor3D\scene\NodeBase.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\src\Castor3D\scene\Scene.cpp"
 					>
 				</File>
@@ -657,10 +665,6 @@
 				</File>
 				<File
 					RelativePath=".\src\Castor3D\scene\SceneManager.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\Castor3D\scene\SceneNode.cpp"
 					>
 				</File>
 			</Filter>
@@ -760,6 +764,10 @@
 						RelativePath=".\include\Castor3D\geometry\basic\SmoothingGroup.h"
 						>
 					</File>
+					<File
+						RelativePath=".\include\Castor3D\geometry\basic\Vertex.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="mesh"
@@ -781,10 +789,6 @@
 						>
 					</File>
 					<File
-						RelativePath=".\include\Castor3D\geometry\mesh\LoopDivider.h"
-						>
-					</File>
-					<File
 						RelativePath=".\include\Castor3D\geometry\mesh\Mesh.h"
 						>
 					</File>
@@ -797,19 +801,11 @@
 						>
 					</File>
 					<File
-						RelativePath=".\include\Castor3D\geometry\mesh\PNTrianglesDivider.h"
-						>
-					</File>
-					<File
 						RelativePath=".\include\Castor3D\geometry\mesh\ProjectionMesh.h"
 						>
 					</File>
 					<File
 						RelativePath=".\include\Castor3D\geometry\mesh\SphericMesh.h"
-						>
-					</File>
-					<File
-						RelativePath=".\include\Castor3D\geometry\mesh\Subdiviser.h"
 						>
 					</File>
 					<File
@@ -828,8 +824,20 @@
 						RelativePath=".\include\Castor3D\geometry\primitives\Geometry.h"
 						>
 					</File>
+				</Filter>
+				<Filter
+					Name="divider"
+					>
 					<File
-						RelativePath=".\include\Castor3D\geometry\primitives\MovableObject.h"
+						RelativePath=".\include\Castor3D\geometry\mesh\LoopDivider.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\Castor3D\geometry\mesh\PNTrianglesDivider.h"
+						>
+					</File>
+					<File
+						RelativePath=".\include\Castor3D\geometry\mesh\Subdiviser.h"
 						>
 					</File>
 				</Filter>
@@ -898,6 +906,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\include\Castor3D\main\MovableObject.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\Castor3D\main\Pipeline.h"
+					>
+				</File>
+				<File
 					RelativePath=".\include\Castor3D\main\Plugin.h"
 					>
 				</File>
@@ -926,11 +942,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\include\Castor3D\render_system\Module_Render.h"
+					RelativePath=".\include\Castor3D\render_system\Context.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\Castor3D\main\Pipeline.h"
+					RelativePath=".\include\Castor3D\render_system\Module_Render.h"
 					>
 				</File>
 				<File
@@ -954,6 +970,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\include\Castor3D\scene\Node.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\Castor3D\scene\NodeBase.h"
+					>
+				</File>
+				<File
 					RelativePath=".\include\Castor3D\scene\Scene.h"
 					>
 				</File>
@@ -967,10 +991,6 @@
 				</File>
 				<File
 					RelativePath=".\include\Castor3D\scene\SceneManager.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\Castor3D\scene\SceneNode.h"
 					>
 				</File>
 			</Filter>
@@ -1003,6 +1023,66 @@
 				</File>
 				<File
 					RelativePath=".\include\Castor3D\animation\Module_Animation.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="render_engine"
+				>
+				<File
+					RelativePath=".\include\Castor3D\render_engine\Module_RenderEngine.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\Castor3D\render_engine\RenderEngine.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="text"
+				>
+			</Filter>
+			<Filter
+				Name="shader"
+				>
+				<File
+					RelativePath=".\include\Castor3D\shader\FrameVariable.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\Castor3D\shader\FrameVariable.inl"
+					>
+				</File>
+				<File
+					RelativePath=".\include\Castor3D\shader\Module_Shader.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\Castor3D\shader\ShaderManager.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\Castor3D\shader\ShaderObject.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\Castor3D\shader\ShaderProgram.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="overlay"
+				>
+				<File
+					RelativePath=".\include\Castor3D\overlay\Module_Overlay.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\Castor3D\overlay\Overlay.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\Castor3D\overlay\OverlayManager.h"
 					>
 				</File>
 			</Filter>
@@ -1047,62 +1127,6 @@
 				</File>
 				<File
 					RelativePath=".\include\Castor3D\importer\SMaxImporter.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="render_engine"
-				>
-				<File
-					RelativePath=".\include\Castor3D\render_engine\Module_RenderEngine.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\Castor3D\render_engine\RenderEngine.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="text"
-				>
-			</Filter>
-			<Filter
-				Name="shader"
-				>
-				<File
-					RelativePath=".\include\Castor3D\shader\Module_Shader.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\Castor3D\shader\ShaderManager.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\Castor3D\shader\ShaderObject.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\Castor3D\shader\ShaderProgram.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\Castor3D\shader\UniformVariable.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="overlay"
-				>
-				<File
-					RelativePath=".\include\Castor3D\overlay\Module_Overlay.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\Castor3D\overlay\Overlay.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\Castor3D\overlay\OverlayManager.h"
 					>
 				</File>
 			</Filter>

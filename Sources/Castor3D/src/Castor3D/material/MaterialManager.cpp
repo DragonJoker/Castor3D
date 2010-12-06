@@ -12,8 +12,6 @@
 using namespace Castor3D;
 using namespace Castor::Templates;
 
-Castor::MultiThreading::RecursiveMutex MaterialManager :: m_mutex;
-
 MaterialManager :: MaterialManager()
 {
 }
@@ -27,8 +25,8 @@ MaterialManager :: ~MaterialManager()
 
 void MaterialManager::Initialise()
 {
-	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 	MaterialManager * l_pThis = GetSingletonPtr();
+	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( l_pThis->m_mutex);
 	l_pThis->m_defaultMaterial.reset( new Material( CU_T( "DefaultMaterial")));
 	l_pThis->m_defaultMaterial->Initialise();
 	l_pThis->m_defaultMaterial->GetPass( 0)->SetDoubleFace( true);
@@ -36,17 +34,17 @@ void MaterialManager::Initialise()
 
 void MaterialManager :: Clear()
 {
-	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 	MaterialManager * l_pThis = GetSingletonPtr();
-	UniqueManager<Material, MaterialManager>::Clear();
+	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( l_pThis->m_mutex);
+	UniqueManager<String, Material, MaterialManager>::Clear();
 	l_pThis->m_defaultMaterial.reset();
 }
 
 void MaterialManager :: Update()
 {
-	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 	MaterialManager * l_pThis = GetSingletonPtr();
-	TypeMap::iterator l_it = l_pThis->m_newMaterials.begin();
+	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( l_pThis->m_mutex);
+	std::map<String, Material *>::iterator l_it = l_pThis->m_newMaterials.begin();
 
 	while (l_it != l_pThis->m_newMaterials.end())
 	{
@@ -67,8 +65,8 @@ void MaterialManager :: Update()
 
 void MaterialManager :: GetMaterialNames( StringArray & l_names)
 {
-	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 	MaterialManager * l_pThis = GetSingletonPtr();
+	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( l_pThis->m_mutex);
 	l_names.clear();
 	TypeMap::const_iterator l_it = l_pThis->m_objectMap.begin();
 
@@ -81,21 +79,21 @@ void MaterialManager :: GetMaterialNames( StringArray & l_names)
 
 MaterialPtr MaterialManager :: CreateMaterial( const String & p_name, int p_iNbInitialPasses)
 {
-	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 	MaterialManager * l_pThis = GetSingletonPtr();
+	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( l_pThis->m_mutex);
 	MaterialPtr l_material;
 
 	if (l_pThis->m_objectMap.find( p_name) == l_pThis->m_objectMap.end())
 	{
 		l_material.reset( new Material( p_name, p_iNbInitialPasses));
 		l_pThis->AddElement( l_material);
-		Log::LogMessage( CU_T( "Material %s created"), p_name.c_str());
-		l_pThis->m_newMaterials[p_name] = l_material;
+		Logger::LogMessage( CU_T( "Material %s created"), p_name.char_str());
+		l_pThis->m_newMaterials[p_name] = l_material.get();
 	}
 	else
 	{
 		l_material = l_pThis->m_objectMap.find( p_name)->second;
-		Log::LogMessage( CU_T( "Can't create Material %s, already exists"), p_name.c_str());
+		Logger::LogMessage( CU_T( "Can't create Material %s, already exists"), p_name.char_str());
 		l_material->Ref();
 	}
 
@@ -104,12 +102,20 @@ MaterialPtr MaterialManager :: CreateMaterial( const String & p_name, int p_iNbI
 
 void MaterialManager :: SetToInitialise( MaterialPtr p_material)
 {
-	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-	MaterialManager * l_pThis = GetSingletonPtr();
-
 	if ( ! p_material.null())
 	{
-		MaterialPtrStrMap::iterator l_it = l_pThis->m_newMaterials.find( p_material->GetName());
+		SetToInitialise( p_material.get());
+	}
+}
+
+void MaterialManager :: SetToInitialise( Material * p_material)
+{
+	MaterialManager * l_pThis = GetSingletonPtr();
+	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( l_pThis->m_mutex);
+
+	if (p_material != NULL)
+	{
+		std::map<String, Material *>::iterator l_it = l_pThis->m_newMaterials.find( p_material->GetName());
 
 		if (l_it == l_pThis->m_newMaterials.end())
 		{
@@ -120,8 +126,8 @@ void MaterialManager :: SetToInitialise( MaterialPtr p_material)
 
 bool MaterialManager :: Write( const String & p_path)
 {
-	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 	MaterialManager * l_pThis = GetSingletonPtr();
+	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( l_pThis->m_mutex);
 	bool l_bReturn = true;
 	size_t l_slashIndex = p_path.find_last_of( CU_T( "."));
 	String l_path = p_path.substr( 0, l_slashIndex) + ".cmtl";
@@ -151,7 +157,6 @@ bool MaterialManager :: Write( const String & p_path)
 
 bool MaterialManager :: Read( const String & p_path)
 {
-	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 	StringArray l_files;
 	bool l_bReturn = true;
 	size_t l_slashIndex = p_path.find_last_of( CU_T( "."));
@@ -180,8 +185,8 @@ bool MaterialManager :: Read( const String & p_path)
 
 void MaterialManager :: DeleteAll()
 {
-	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 	MaterialManager * l_pThis = GetSingletonPtr();
+	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( l_pThis->m_mutex);
 	TypeMap::const_iterator l_it = l_pThis->m_objectMap.begin();
 
 	while (l_it != l_pThis->m_objectMap.end())
@@ -195,7 +200,7 @@ void MaterialManager :: DeleteAll()
 
 MaterialPtr MaterialManager :: GetDefaultMaterial()
 {
-	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 	MaterialManager * l_pThis = GetSingletonPtr();
+	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( l_pThis->m_mutex);
 	return l_pThis->m_defaultMaterial;
 }

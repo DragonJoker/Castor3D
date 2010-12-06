@@ -69,18 +69,21 @@ void Animation :: Update( real p_tslf)
 
 KeyFramePtr Animation :: AddKeyFrame( real p_from, real p_to)
 {
+	KeyFramePtr l_pReturn;
+
 	if ( ! map::has( m_keyFrames, p_from))
 	{
 		if (p_to > m_length)
 		{
 			m_length = p_to;
 		}
-		KeyFramePtr l_keyframe = new KeyFrame( p_from, p_to);
-		m_keyFrames.insert( KeyFramePtrRealMap::value_type( p_from, l_keyframe));
+
+		l_pReturn = KeyFramePtr( new KeyFrame( p_from, p_to));
+		m_keyFrames.insert( KeyFramePtrRealMap::value_type( p_from, l_pReturn));
 		m_lastKeyFrameIt = m_keyFrames.begin();
-		return l_keyframe;
 	}
-	return NULL;
+
+	return l_pReturn;
 }
 
 void Animation :: RemoveKeyFrame( real p_time)

@@ -53,8 +53,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,6,0,0
- PRODUCTVERSION 0,6,0,0
+ FILEVERSION 0,6,1,0
+ PRODUCTVERSION 0,6,1,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -69,13 +69,14 @@ BEGIN
     BEGIN
         BLOCK "040c04b0"
         BEGIN
-            VALUE "FileDescription", "Bibliothèque de liens dynamiques GLRender"
-            VALUE "FileVersion", "0, 6, 0, 0"
-            VALUE "InternalName", "GLRender"
+            VALUE "CompanyName", "DragonJoker"
+            VALUE "FileDescription", "Bibliothèque de liens dynamiques GL2RenderSystem"
+            VALUE "FileVersion", "0, 6, 1, 0"
+            VALUE "InternalName", "GL2RenderSystem"
             VALUE "LegalCopyright", "Copyright (C) 2010"
-            VALUE "OriginalFilename", "GLRender.dll"
-            VALUE "ProductName", "Bibliothèque de liens dynamiques GLRender"
-            VALUE "ProductVersion", "0, 6, 0, 0"
+            VALUE "OriginalFilename", "GL2RenderSystem.dll"
+            VALUE "ProductName", "Bibliothèque de liens dynamiques GL2RenderSystem"
+            VALUE "ProductVersion", "0, 6, 1, 0"
         END
     END
     BLOCK "VarFileInfo"

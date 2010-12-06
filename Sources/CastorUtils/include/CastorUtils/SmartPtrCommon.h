@@ -2,6 +2,7 @@
 #define ___Castor_SmartPtrCommon___
 
 #include "SharedCount.h"
+#include <iostream>
 
 namespace Castor
 {	namespace Templates
@@ -28,14 +29,23 @@ namespace Castor
 	class DeleterBase
 	{
 	public:
-		DeleterBase(){}
-		~DeleterBase(){}
+		static unsigned long long s_count;
+
+	public:
+		DeleterBase()
+		{
+//			std::cout << "New - " << ++s_count << "\n";
+		}
+		virtual ~DeleterBase()=0
+		{
+//			std::cout << "Delete - " << s_count-- << "\n";
+		}
 
 		virtual void Delete()=0;
 	};
 
 	template <class T>
-	class DeleterPtr : public DeleterBase
+	class DeleterPtr : public DeleterBase, public MemoryTraced< DeleterPtr<T> >
 	{
 	private:
 		T * m_pPointer;
@@ -45,7 +55,7 @@ namespace Castor
 			:	m_pPointer( p_pPointer)
 		{
 		}
-		~DeleterPtr()
+		virtual ~DeleterPtr()
 		{
 		}
 		virtual void Delete()
@@ -56,7 +66,7 @@ namespace Castor
 	};
 
 	template <class T>
-	class DeleterArray : public DeleterBase
+	class DeleterArray : public DeleterBase, public MemoryTraced< DeleterArray<T> >
 	{
 	private:
 		T * m_pPointer;
@@ -66,7 +76,7 @@ namespace Castor
 			:	m_pPointer( p_pPointer)
 		{
 		}
-		~DeleterArray()
+		virtual ~DeleterArray()
 		{
 		}
 		virtual void Delete()

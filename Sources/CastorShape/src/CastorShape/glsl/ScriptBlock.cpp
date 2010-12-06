@@ -10,19 +10,19 @@
 using namespace CastorShape;
 using namespace Castor3D;
 
-#define COMPILE_ERROR( p_desc )	m_compiler->_error();																\
-							Castor3D::Log::LogMessage( "Compiler Error : [" + m_compiler->_getScriptFileName()		\
-										+ " @ L# " + ToString( m_lineNumBegin)										\
-										+ " ] -> " + p_desc );
+#define COMPILE_ERROR( p_desc )	m_compiler->_error();																		\
+							Castor3D::Logger::LogMessage( CU_T( "Compiler Error : [") + m_compiler->_getScriptFileName()	\
+										+ CU_T( " @ L# ") + ToString( m_lineNumBegin)										\
+										+ CU_T( " ] -> ") + p_desc );
 
 #define COMPILE_WARNING( p_desc )	m_compiler->_warning();											\
-						Castor3D::Log::LogMessage( "Compiler Warning [ "							\
-									+ m_compiler->_getScriptFileName() + " @ L# "					\
+						Castor3D::Logger::LogMessage( CU_T( "Compiler Warning [ ")					\
+									+ m_compiler->_getScriptFileName() + CU_T( " @ L# ")			\
 									+ ToString( m_lineNumBegin )									\
-									+ " ] -> " + p_desc );
+									+ CU_T( " ] -> ") + p_desc );
 
-#define COMPILE_ERROR_IN_BLOCK( p_desc , p_block ) m_compiler->_error();CASTOR_EXCEPTION( "Compiler Error : [" + m_compiler->_getScriptFileName()+" @ L# "+ ToString( p_block->m_lineNumBegin ) + " ] -> " + p_desc );
-#define COMPILE_WARNING_IN_BLOCK( p_desc , p_block )  m_compiler->_warning();Log::LogMessage( "Compiler Warning [ "+m_compiler->_getScriptFileName()+" @ L# "+ ToString( p_block->m_lineNumBegin ) + " ] -> " + p_desc );
+#define COMPILE_ERROR_IN_BLOCK( p_desc , p_block ) m_compiler->_error();CASTOR_EXCEPTION( CU_T( "Compiler Error : [") + m_compiler->_getScriptFileName() + CU_T( " @ L# ") + ToString( p_block->m_lineNumBegin ) + CU_T( " ] -> ") + p_desc );
+#define COMPILE_WARNING_IN_BLOCK( p_desc , p_block )  m_compiler->_warning();Logger::LogWarning( CU_T( "Compiler Warning [ ") + m_compiler->_getScriptFileName() + CU_T( " @ L# ") + ToString( p_block->m_lineNumBegin ) + CU_T( " ] -> ") + p_desc );
 
 ScriptBlock :: ScriptBlock()
 	:	m_parent				(NULL),

@@ -17,7 +17,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Vec2f_OperatorArray)
 {
 	VERBOSE_STARTFUNC( " [] (Vec2)");
 
-	GET_AND_EXEC_TWO_PARAM( Point2Real, l_vector, int, l_index);
+	GET_AND_EXEC_TWO_PARAM( Point2r, l_vector, int, l_index);
 
 	if (l_index >= 0 && l_index < 2)
 	{
@@ -34,7 +34,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Vec3f_OperatorArray)
 {
 	VERBOSE_STARTFUNC( " [] (Vec3)");
 
-	GET_AND_EXEC_TWO_PARAM( Point3Real, l_vector, int, l_index);
+	GET_AND_EXEC_TWO_PARAM( Point3r, l_vector, int, l_index);
 
 	if (l_index >= 0 && l_index < 3)
 	{
@@ -51,7 +51,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Vec4f_OperatorArray)
 {
 	VERBOSE_STARTFUNC( " [] (Vec4)");
 
-	GET_AND_EXEC_TWO_PARAM( Point4Real, l_vector, int, l_index);
+	GET_AND_EXEC_TWO_PARAM( Point4r, l_vector, int, l_index);
 
 	if (l_index >= 0 && l_index < 4)
 	{
@@ -68,7 +68,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Vec2i_OperatorArray)
 {
 	VERBOSE_STARTFUNC( " [] (iVec2)");
 
-	GET_AND_EXEC_TWO_PARAM( Point2Int, l_vector, int, l_index);
+	GET_AND_EXEC_TWO_PARAM( Point2i, l_vector, int, l_index);
 
 	if (l_index >= 0 && l_index < 2)
 	{
@@ -85,7 +85,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Vec3i_OperatorArray)
 {
 	VERBOSE_STARTFUNC( " [] (iVec3)");
 
-	GET_AND_EXEC_TWO_PARAM( Point3Int, l_vector, int, l_index);
+	GET_AND_EXEC_TWO_PARAM( Point3i, l_vector, int, l_index);
 
 	if (l_index >= 0 && l_index < 3)
 	{
@@ -102,7 +102,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Vec4i_OperatorArray)
 {
 	VERBOSE_STARTFUNC( " [] (iVec4)");
 
-	GET_AND_EXEC_TWO_PARAM( Point4Int, l_vector, int, l_index);
+	GET_AND_EXEC_TWO_PARAM( Point4i, l_vector, int, l_index);
 
 	if (l_index >= 0 && l_index < 4)
 	{
@@ -119,7 +119,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Vec2b_OperatorArray)
 {
 	VERBOSE_STARTFUNC( " [] (bVec2)");
 
-	GET_AND_EXEC_TWO_PARAM( Point2Bool, l_vector, int, l_index);
+	GET_AND_EXEC_TWO_PARAM( Point2b, l_vector, int, l_index);
 
 	if (l_index >= 0 && l_index < 2)
 	{
@@ -136,7 +136,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Vec3b_OperatorArray)
 {
 	VERBOSE_STARTFUNC( " [] (bVec3)");
 
-	GET_AND_EXEC_TWO_PARAM( Point3Bool, l_vector, int, l_index);
+	GET_AND_EXEC_TWO_PARAM( Point3b, l_vector, int, l_index);
 
 	if (l_index >= 0 && l_index < 3)
 	{
@@ -153,7 +153,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Vec4b_OperatorArray)
 {
 	VERBOSE_STARTFUNC( " [] (Vbec4)");
 
-	GET_AND_EXEC_TWO_PARAM( Point4Bool, l_vector, int, l_index);
+	GET_AND_EXEC_TWO_PARAM( Point4b, l_vector, int, l_index);
 
 	if (l_index >= 0 && l_index < 4)
 	{
@@ -398,7 +398,7 @@ EMUSE_SCRIPT_FUNCTION_DECLARE( Mth_Max)
 	RETURN_AS( real) std::max<real>( p_a, p_b);
 }
 
-EMUSE_SCRIPT_FUNCTION_DECLARE( Mth_Minmax)
+EMUSE_SCRIPT_FUNCTION_DECLARE( Mth_Clamp)
 {
 	VERBOSE_STARTFUNC( "Mth_Minmax");
 

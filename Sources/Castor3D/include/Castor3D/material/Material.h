@@ -29,7 +29,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class CS3D_API MaterialLoader : Castor::Resource::ResourceLoader <Material>
+	class C3D_API MaterialLoader : Castor::Resource::ResourceLoader <Material>, public MemoryTraced<MaterialLoader>
 	{
 	public:
 		MaterialPtr LoadFromFile( const String & p_file);
@@ -42,7 +42,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API Material : public Castor::Resource::Resource
+	class C3D_API Material : public Castor::Resource::Resource, public MemoryTraced<Material>
 	{
 	protected:
 		friend class MaterialManager;			//!< The MaterialManager is a friend so it is the only one who can create a material :P
@@ -63,15 +63,15 @@ namespace Castor3D
 		/**
 		 * Applies the material
 		 */
-		void Apply( eDRAW_TYPE p_displayMode);
+		void Render( eDRAW_TYPE p_displayMode);
 		/**
 		 * Applies the material
 		 */
-		void Apply2D( eDRAW_TYPE p_displayMode);
+		void Render2D( eDRAW_TYPE p_displayMode);
 		/**
 		 * Removes the material (to avoid it from interfering with other materials)
 		 */
-		void Remove();
+		void EndRender();
 		/**
 		 * Sets my name, tells the MaterialManager my name has changed
 		 *@param p_name : [in] The wanted name
@@ -98,7 +98,7 @@ namespace Castor3D
 		void DestroyPass( unsigned int p_index);
 
 	public:
-		inline String				GetName				()const { return m_name; }
+		inline String				GetName				()const { return m_key; }
 		inline unsigned int			GetNbPasses			()const { return m_passes.size(); }
 		inline PassPtrArray			GetPasses			()const { return m_passes; }
 	};

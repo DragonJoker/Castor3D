@@ -20,11 +20,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 //! Tells whether or not to use doubles for type real (if not, floats are used)
 #undef CASTOR_USE_DOUBLE
-#define CASTOR_USE_DOUBLE 0
+#define CASTOR_USE_DOUBLE 1
 
 //! Tells whether or not to use Castor containers
 #undef CASTOR_USE_MT_CONTAINERS
-#define CASTOR_USE_MT_CONTAINERS 0
+#define CASTOR_USE_MT_CONTAINERS 1
 
 //! Tells whether or not to use MultiThreading in Castor dependant projects, check MultithreadConfig.h to configure multithreading
 #undef CASTOR_USE_MULTITHREADING

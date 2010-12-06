@@ -25,8 +25,8 @@ namespace Castor
 {
 	namespace MultiThreading
 	{
-		template <typename Ty, class Locker=MultiThreading::Mutex>
-		class Vector : public std::vector <Ty>
+		template <typename Ty, class Locker=MultiThreading::RecursiveMutex>
+		class Vector : public std::vector <Ty>, public MemoryTraced< Vector<Ty, Locker> >
 		{
 		private:
 			template <typename _Ty, class _Locker> friend class Castor::MultiThreading::Vector;
@@ -169,7 +169,7 @@ namespace Castor
 			bool operator ==( const Castor::MultiThreading::Vector <_Ty> & arrayVector)const
 			{
 				CASTOR_AUTO_SCOPED_LOCK();
-				CASTOR_SCOPED_LOCK( arrayVector.m_criticalSection);
+				CASTOR_SCOPED_LOCK( arrayVector.GetLocker());
 				size_t l_uiSize = _my_vector::size();
 				bool l_bReturn = (typeid( _arrayed_type) == typeid( _Ty)) && (l_uiSize == _my_vector( arrayVector).size());
 				size_t i = 0;
@@ -186,7 +186,7 @@ namespace Castor
 			bool operator !=( const Castor::MultiThreading::Vector <_Ty> & arrayVector)const
 			{
 				CASTOR_AUTO_SCOPED_LOCK();
-				CASTOR_SCOPED_LOCK( arrayVector.m_criticalSection);
+				CASTOR_SCOPED_LOCK( arrayVector.GetLocker());
 				size_t l_uiSize = _my_vector::size();
 				bool l_bReturn = (typeid( _arrayed_type) != typeid( _Ty)) || (l_uiSize != _my_vector( arrayVector).size());
 				size_t i = 0;
@@ -202,8 +202,8 @@ namespace Castor
 			_my_type & operator =( const _my_type & arrayOther)
 			{
 				CASTOR_AUTO_SCOPED_LOCK();
-				CASTOR_SCOPED_LOCK( arrayVector.m_criticalSection);
-				_my_vector::operator =( _my_vector( arrayVector));
+				CASTOR_SCOPED_LOCK( arrayOther.GetLocker());
+				_my_vector::operator =( _my_vector( arrayOther));
 				return * this;
 			}
 			virtual _reference front()

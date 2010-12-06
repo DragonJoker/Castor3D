@@ -29,7 +29,7 @@ namespace Castor
 	Not to be used to manage usual buffers
 	*/
 	template <typename T>
-	class Buffer
+	class Buffer : public MemoryTraced< Buffer<T> >
 	{
 	public:
 		friend class Resource;
@@ -80,7 +80,7 @@ namespace Castor
 		*/
 		virtual void InitialiseBuffer( unsigned int p_size, unsigned int p_filled)
 		{
-			Cleanup();
+			Buffer::Cleanup();
 
 			if (p_size > 0)
 			{
@@ -97,7 +97,7 @@ namespace Castor
 		*/
 		virtual void InitialiseBuffer( const Buffer<T> & p_buffer)
 		{
-			Cleanup();
+			Buffer::Cleanup();
 
 			if (p_buffer.m_filled > 0)
 			{
@@ -120,8 +120,25 @@ namespace Castor
 		{
 			if (m_filled + p_uiNbElements / sizeof( T) <= m_totalSize)
 			{
-				memcpy( & m_buffer[m_filled], p_pArray, p_uiNbElements);
+				if (p_pArray != NULL)
+				{
+					memcpy( & m_buffer[m_filled], p_pArray, p_uiNbElements);
+				}
+
 				m_filled += p_uiNbElements / sizeof( T);
+			}
+		}
+
+		void AddArray( T * p_pArray, size_t p_uiNbElements)
+		{
+			if (m_filled + p_uiNbElements <= m_totalSize)
+			{
+				if (p_pArray != NULL)
+				{
+					memcpy( & m_buffer[m_filled], p_pArray, p_uiNbElements * sizeof( T));
+				}
+
+				m_filled += p_uiNbElements;
 			}
 		}
 
@@ -133,31 +150,36 @@ namespace Castor
 			}
 		}
 
-		void IncreaseSize( unsigned int p_inc)
+		void IncreaseSize( unsigned int p_inc, bool p_bResizeBuffer)
 		{
 			m_totalSize += p_inc;
 
-			if (m_buffer != NULL)
+			if (p_bResizeBuffer)
 			{
-				T * l_newBuf = new T[m_totalSize];
-
-				if (m_filled > 0)
+				if (m_buffer != NULL)
 				{
-					memcpy( l_newBuf, m_buffer, m_filled);
-				}
+					T * l_newBuf = new T[m_totalSize];
 
-				delete [] m_buffer;
-				m_buffer = l_newBuf;
-			}
-			else
-			{
-				m_buffer = new T[m_totalSize];
+					if (m_filled > 0)
+					{
+						memcpy( l_newBuf, m_buffer, m_filled);
+					}
+
+					delete [] m_buffer;
+					m_buffer = l_newBuf;
+				}
+				else
+				{
+					m_buffer = new T[m_totalSize];
+				}
 			}
 		}
 
 		inline unsigned int	GetSize		()const { return m_totalSize; }
 		inline unsigned int	GetFilled	()const { return m_filled; }
 		inline T *			GetBuffer	()const { return m_buffer; }
+		inline T *			GetCurrent	()const { return & m_buffer[m_filled]; }
+		inline void			Offset		( int p_iOffset) { m_filled = unsigned int( Castor::Math::clamp( int( 0), int( m_filled) + p_iOffset, int( m_totalSize))); }
 	};
 }
 }

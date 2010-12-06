@@ -14,7 +14,7 @@
 #include "geometry/primitives/Geometry.h"
 #include "geometry/basic/Face.h"
 #include "scene/Scene.h"
-#include "scene/SceneNode.h"
+#include "scene/NodeBase.h"
 #include "scene/SceneManager.h"
 
 
@@ -31,7 +31,8 @@ bool _isInString( const String & p_strString, const String & p_strSubString)
 }
 
 Md3Importer :: Md3Importer()
-	:	m_skins( NULL),
+	:	ExternalImporter( eMD3),
+		m_skins( NULL),
 		m_texCoords( NULL),
 		m_triangles( NULL),
 		m_bones( NULL),
@@ -68,12 +69,12 @@ bool Md3Importer :: _import()
 
 	if (MeshManager::HasElement( l_meshName))
 	{
-		l_pMesh.reset( MeshManager::GetElementByName( l_meshName));
+		l_pMesh = MeshManager::GetElementByName( l_meshName);
 	}
 	else
 	{
-		l_pMesh.reset( MeshManager::CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom));
-		Log::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
+		l_pMesh = MeshManager::CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom);
+		Logger::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
 	}
 
 	m_pFile->Read<Md3Header>( m_header);
@@ -90,10 +91,10 @@ bool Md3Importer :: _import()
 	_cleanUp();
 
 	m_pScene = SceneManager::GetSingleton().GetElementByName( "MainScene");
-	SceneNodePtr l_pNode = m_pScene->CreateSceneNode( l_name);
+	GeometryNodePtr l_pNode = m_pScene->CreateGeometryNode( l_name);
 
-	GeometryPtr l_pGeometry = new Geometry( l_pMesh, l_pNode, l_name);
-	Log::LogMessage( CU_T( "PlyImporter::_import - Geometry %s created"), l_name.c_str());
+	GeometryPtr l_pGeometry( new Geometry( l_pMesh, l_pNode, l_name));
+	Logger::LogMessage( CU_T( "PlyImporter::_import - Geometry %s created"), l_name.c_str());
 
 	m_geometries.insert( GeometryPtrStrMap::value_type( l_name, l_pGeometry));
 
@@ -168,7 +169,7 @@ void Md3Importer :: _readMD3Data( MeshPtr p_pMesh)
 	_loadSkin( l_strFileName + ".skin");
 	_loadShader( p_pMesh, l_strFileName + ".shader");
 
-	p_pMesh->SetNormals();
+	p_pMesh->ComputeNormals();
 }
 
 void Md3Importer :: _convertDataStructures( MeshPtr p_pMesh, Md3MeshInfo p_meshHeader)
@@ -188,14 +189,12 @@ void Md3Importer :: _convertDataStructures( MeshPtr p_pMesh, Md3MeshInfo p_meshH
 		l_texVerts.push_back( Point2r( 2, m_texCoords[i].m_textureCoord[0], -m_texCoords[i].m_textureCoord[1]));
 	}
 
-	FacePtr l_pFace;
-
 	for (int i = 0 ; i < p_meshHeader.m_numTriangles ; i++)
 	{
-		l_pFace = l_pSubmesh->AddFace( m_triangles[i].m_vertexIndices[0], m_triangles[i].m_vertexIndices[1], m_triangles[i].m_vertexIndices[2], 0);
-		l_pFace->SetTexCoordV1( l_texVerts[m_triangles[i].m_vertexIndices[0]][0], l_texVerts[m_triangles[i].m_vertexIndices[0]][1]);
-		l_pFace->SetTexCoordV2( l_texVerts[m_triangles[i].m_vertexIndices[1]][0], l_texVerts[m_triangles[i].m_vertexIndices[1]][1]);
-		l_pFace->SetTexCoordV3( l_texVerts[m_triangles[i].m_vertexIndices[2]][0], l_texVerts[m_triangles[i].m_vertexIndices[2]][1]);
+		Face & l_face = l_pSubmesh->AddFace( m_triangles[i].m_vertexIndices[0], m_triangles[i].m_vertexIndices[1], m_triangles[i].m_vertexIndices[2], 0);
+		l_face.SetVertexTexCoords( 0, l_texVerts[m_triangles[i].m_vertexIndices[0]][0], l_texVerts[m_triangles[i].m_vertexIndices[0]][1]);
+		l_face.SetVertexTexCoords( 1, l_texVerts[m_triangles[i].m_vertexIndices[1]][0], l_texVerts[m_triangles[i].m_vertexIndices[1]][1]);
+		l_face.SetVertexTexCoords( 2, l_texVerts[m_triangles[i].m_vertexIndices[2]][0], l_texVerts[m_triangles[i].m_vertexIndices[2]][1]);
 	}
 }
 
@@ -230,7 +229,7 @@ bool Md3Importer :: _loadSkin( const String & p_strSkin)
 
 				if ( ! l_strImage.empty())
 				{
-					TextureUnitPtr l_unit = new TextureUnit();
+					TextureUnitPtr l_unit( new TextureUnit());
 
 					if (File::FileExists( l_strImage))
 					{
@@ -286,7 +285,7 @@ bool Md3Importer :: _loadShader( MeshPtr p_pMesh, const String & p_strShader)
 
 			if ( ! l_strLine.empty())
 			{
-				TextureUnitPtr l_unit = new TextureUnit();
+				TextureUnitPtr l_unit( new TextureUnit());
 
 				if (File::FileExists( l_strLine))
 				{

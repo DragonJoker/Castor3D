@@ -15,17 +15,66 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___Castor_MemoryManager___
-#define ___Castor_MemoryManager___
+#ifndef ___Castor_Memory___
+#define ___Castor_Memory___
 
-#ifndef __GNUG__
-#	define LOG_LOCATION "c:\\memoryleaks.log"
-#else
-#	define LOG_LOCATION "~/memoryleaks.log"
-#endif
+template <class T>
+class MemoryTraced
+{
+private:
+	size_t m_uiSize;
+
+public:
+	void * operator new( size_t p_size)
+	{
+		return Alloc( p_size);
+	}
+	void operator delete( void * p_pointer)
+	{
+		Dealloc( p_pointer);
+	}
+	void * operator new[]( size_t p_size)
+	{
+		return AllocArray( p_size);
+	}
+	void operator delete[]( void * p_pointer)
+	{
+		DeallocArray( p_pointer);
+	}
+
+	static void * Alloc( size_t p_size)
+	{
+		return TAlloc<T>( p_size);
+	}
+	static void Dealloc( void * p_pointer)
+	{
+		TDeallocArray<T>( p_pointer);
+	}
+	static void * AllocArray( size_t p_size)
+	{
+		return TAllocArray<T>( p_size);
+	}
+	static void DeallocArray( void * p_pointer)
+	{
+		TDeallocArray<T>( p_pointer);
+	}
+};
 
 #include "Mutex.h"
 #include "AutoSingleton.h"
+#include "Module_Utils.h"
+#include "Memory_Impl.h"
+#include "File.h"
+
+#ifndef __GNUG__
+#	define LOG_LOCATION "c:\\memoryleaks.log"
+#	define ALLOG_LOCATION "c:\\memoryalloc.log"
+#	define DEALLOG_LOCATION "c:\\memorydealloc.log"
+#else
+#	define LOG_LOCATION "~/memoryleaks.log"
+#	define ALLOG_LOCATION "~/memoryalloc.log"
+#	define DEALLOG_LOCATION "~/memorydealloc.log"
+#endif
 
 //NO one touches my defines
 #ifdef NEW
@@ -47,34 +96,158 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifdef new
 #	undef new
 #endif
-/*
-#define NEW(X) new X
-#define NEW_ARRAY( X, Y) new X[Y]
-#define DELETE( X) delete X
-#define DELETE_ARRAY( X) delete [] X
-*/
+
+#ifdef delete
+#	undef delete
+#endif
+
+#if ! CHECK_MEMORYLEAKS
+#	define ____CASTOR_NO_MEMORY_DEBUG____
+#endif
+
 #ifndef ____CASTOR_NO_MEMORY_DEBUG____
 
 #	define MEMORY_MANAGER_START() Castor::Utils::MemoryManager::GetSingleton()
 
+	template <class T>
+	void * TAlloc( size_t p_size)
+	{
+		T * l_ptr = (T *)malloc( p_size);
+		Castor::Utils::File l_file( ALLOG_LOCATION, Castor::Utils::File::eAdd);
+		l_file << "TAlloc" << " - " << l_ptr << " - " << p_size << " -\t" << typeid( T).name() << "\n";
+
+		if (Castor::Utils::MemoryManager::Exists())
+		{
+			CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( Castor::Utils::MemoryManager::GetSingleton().m_mutex);
+
+			if ( ! Castor::Utils::MemoryManager::IsLocked())
+			{
+				Castor::Utils::MemoryManager::Lock();
+
+				if (l_ptr != NULL)
+				{
+					Castor::Utils::MemoryManager::GetSingleton().AddLocation( p_size, l_ptr, false);
+				}
+				else
+				{
+					Castor::Utils::MemoryManager::GetSingleton().FailedAlloc( p_size, false);
+				}
+
+				Castor::Utils::MemoryManager::Unlock();
+			}
+		}
+
+		return l_ptr;
+	}
+
+	template <class T>
+	void TDealloc( void * p_pointer)
+	{
+		Castor::Utils::File l_file( DEALLOG_LOCATION, Castor::Utils::File::eAdd);
+		l_file << "TDealloc" << " - " << p_pointer << " - " << sizeof( T) << " -\t" << typeid( T).name() << "\n";
+
+		if (MemoryManager::Exists())
+		{
+			CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( Castor::Utils::MemoryManager::GetSingleton().m_mutex);
+
+			if ( ! Castor::Utils::MemoryManager::IsLocked())
+			{
+				Castor::Utils::MemoryManager::Lock();
+
+				if (Castor::Utils::MemoryManager::GetSingleton().RemoveLocation( p_pointer, false))
+				{
+					free( p_pointer);
+				}
+				else
+				{
+				}
+
+				Castor::Utils::MemoryManager::Unlock();
+			}
+			else
+			{
+				free( p_pointer);
+			}
+		}
+		else
+		{
+			free( p_pointer);
+		}
+	}
+
+	template <class T>
+	void * TAllocArray( size_t p_size)
+	{
+		T * l_ptr = (T *)malloc( p_size);
+		Castor::Utils::File l_file( ALLOG_LOCATION, Castor::Utils::File::eAdd);
+		l_file << "TAllocArray" << " - " << l_ptr << " - " << p_size << " - " << typeid( T).name() << "\n";
+
+		if (MemoryManager::Exists())
+		{
+			CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( MemoryManager::GetSingleton().m_mutex);
+
+			if ( ! MemoryManager::IsLocked())
+			{
+				MemoryManager::Lock();
+
+				if (l_ptr != NULL)
+				{
+					MemoryManager::GetSingleton().AddLocation( p_size, l_ptr, true);
+				}
+				else
+				{
+					MemoryManager::GetSingleton().FailedAlloc( p_size, true);
+				}
+
+				MemoryManager::Unlock();
+			}
+		}
+
+		return l_ptr;
+	}
+
+	template <class T>
+	void TDeallocArray( void * p_pointer)
+	{
+		Castor::Utils::File l_file( DEALLOG_LOCATION, Castor::Utils::File::eAdd);
+		l_file << "TDeallocArray" << " - " << p_pointer << " - " << typeid( T).name() << "\n";
+
+		if (MemoryManager::Exists())
+		{
+			CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( MemoryManager::GetSingleton().m_mutex);
+
+			if ( ! MemoryManager::IsLocked())
+			{
+				MemoryManager::Lock();
+
+				if (MemoryManager::GetSingleton().RemoveLocation( p_pointer, true))
+				{
+					free( p_pointer);
+				}
+				else
+				{
+				}
+
+				MemoryManager::Unlock();
+			}
+			else
+			{
+				free( p_pointer);
+			}
+		}
+		else
+		{
+			free( p_pointer);
+		}
+	}
 /*
-#	if defined(_MT) || defined(__MT__)
-#		pragma comment( lib, "GeneralMemory_mt.lib")
-#		pragma comment( lib, "libcpmt.lib")
-#	else
-#		pragma comment( lib, "GeneralMemory_md.lib")
-#		pragma comment( lib, "msvcprt.lib")
-#	endif
-*/
-
-	#include "Module_Utils.h"
-	#include "Memory_Impl.h"
-
-	void operator delete[]( void * p_pointer);
-	void operator delete( void * p_pointer);
-	void * operator new[]( size_t p_size);
 	void * operator new( size_t p_size);
-
+	void operator delete( void * p_pointer);
+/**/
+/*
+	void * operator new[]( size_t p_size);
+	void operator delete[]( void * p_pointer);
+/**/
 	namespace Castor
 	{ namespace Utils
 	{
@@ -83,7 +256,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 		public:
 			const char * file;
 			const char * function;
-			void * ptr;
 			unsigned int line;
 			size_t size;
 			bool isArray;
@@ -92,47 +264,97 @@ http://www.gnu.org/copyleft/lesser.txt.
 			MemoryBlock()
 				:	file		(NULL),
 					function	(NULL),
-					ptr			(NULL),
 					line		(0),
 					size		(0),
 					isArray		(false)
 			{}
 			MemoryBlock(	const char * p_file, const char * p_function,
-							unsigned int p_line)
+				unsigned int p_line)
 				:	file		(p_file),
 					function	(p_function),
-					ptr			(NULL),
 					line		(p_line),
 					size		(0),
 					isArray		(false)
 			{}
-			MemoryBlock( void * p_ptr, size_t p_size, bool p_array)
+			MemoryBlock( size_t p_size, bool p_array)
 				:	file		(NULL),
 					function	(NULL),
-					ptr			(p_ptr),
 					line		(0),
 					size		(p_size),
 					isArray		(p_array)
 			{}
-			~MemoryBlock(){}
+			virtual ~MemoryBlock(){}
+			void * operator new( size_t p_size)
+			{
+				void * l_pReturn = malloc( p_size);
+				return l_pReturn;
+			}
+			void operator delete( void * p_pointer)
+			{
+				free( p_pointer);
+			}
 
 		public:
 			MemoryBlock & operator =( const MemoryBlock & p_other)
 			{
-				file = p_other.file;
-				function = p_other.function;
-				line = p_other.line;
+				Assign( p_other);
 				return * this;
 			}
 
-			void Clear()
+			virtual void Clear()
 			{
 				file = NULL;
 				function = NULL;
-				ptr = NULL;
 				line = 0;
 				size = 0;
 				isArray = false;
+			}
+
+			void Assign( const MemoryBlock & p_block)
+			{
+				file = p_block.file;
+				function = p_block.function;
+				line = p_block.line;
+			}
+
+			virtual const char * GetBlockType()const { return "Unknown class"; }
+		};
+
+		template <class T>
+		class MemoryBlockImpl : public MemoryBlock
+		{
+		protected:
+			T * ptr;
+
+		public:
+			MemoryBlockImpl()
+				:	ptr( NULL)
+			{}
+			MemoryBlockImpl( const char * p_file, const char * p_function, unsigned int p_line)
+				:	MemoryBlock( p_file, p_function, p_line)
+					ptr( NULL)
+			{}
+			MemoryBlockImpl( T * p_ptr, size_t p_size, bool p_array)
+				:	MemoryBlock( p_size, p_array),
+					ptr( p_ptr)
+			{}
+			virtual const char * GetBlockType()const
+			{
+				return typeid( T).name();
+			}
+			virtual void Clear()
+			{
+				MemoryBlock::Clear();
+				ptr = NULL;
+			}
+			void * operator new( size_t p_size)
+			{
+				void * l_pReturn = malloc( p_size);
+				return l_pReturn;
+			}
+			void operator delete( void * p_pointer)
+			{
+				free( p_pointer);
 			}
 		};
 
@@ -141,9 +363,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 		private:
 			static unsigned int sm_initialised;
 
-			typedef std::map <void *, MemoryBlock>	MemoryBlockMap;
-			typedef std::vector <MemoryBlock>		MemoryBlockArray;
-			
+			typedef std::map <void *, MemoryBlock *>	MemoryBlockMap;
+			typedef std::vector <MemoryBlock *>			MemoryBlockArray;
+
 		public:
 			Castor::MultiThreading::RecursiveMutex m_mutex;
 			MemoryBlock m_lastBlock;
@@ -163,7 +385,22 @@ http://www.gnu.org/copyleft/lesser.txt.
 			~MemoryManager();
 
 		public:
-			void AddLocation( size_t p_size, void * p_pointer, bool p_typeArray);
+			template <typename T>
+			void AddLocation( size_t p_size, T * p_pointer, bool p_typeArray)
+			{
+				RecordAllocation( p_size);
+
+				if (p_typeArray)
+				{
+					m_totalArraysAllocated ++;
+				}
+				else
+				{
+					m_totalObjectsAllocated ++;
+				}
+
+				m_memoryMap.insert( MemoryBlockMap::value_type( p_pointer, new MemoryBlockImpl<T>( p_pointer, p_size, p_typeArray)));
+			}
 			bool RemoveLocation( void * p_pointer, bool p_isArray);
 			void FailedAlloc( size_t p_size, bool p_isArray);
 			void MemoryLeaksReport( const String & p_filename = String());
@@ -191,13 +428,51 @@ http://www.gnu.org/copyleft/lesser.txt.
 		};
 	}
 	}
-	
+
 #	define new Castor::Utils::MemoryManager::GetSingleton() << Castor::Utils::MemoryBlock( __FILE__, __FUNCTION__, __LINE__) << new
 
 #else 
 
 #	define MEMORY_MANAGER_START
 
+	template <class T>
+	void * TAlloc( size_t p_size)
+	{
+		void * l_pointer = malloc( p_size);
+
+		if (l_pointer == NULL)
+		{
+			throw std::bad_alloc();
+		}
+
+		return l_pointer;
+	}
+
+	template <class T>
+	void TDealloc( void * p_pointer)
+	{
+		free( p_pointer);
+	}
+
+	template <class T>
+	void * TAllocArray( size_t p_size)
+	{
+		void * l_pointer = malloc( p_size);
+
+		if (l_pointer == NULL)
+		{
+			throw std::bad_alloc();
+		}
+
+		return l_pointer;
+	}
+
+	template <class T>
+	void TDeallocArray( void * p_pointer)
+	{
+		free( p_pointer);
+	}
+
 #endif //____CASTOR_NO_MEMORY_DEBUG____
 
-#endif	//___MEMORY_MANAGER_H___
+#endif	//___Castor_Memory___

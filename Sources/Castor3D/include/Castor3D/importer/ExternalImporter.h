@@ -31,12 +31,27 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 25/08/2010
 	*/
-	class CS3D_API ExternalImporter
+	class C3D_API ExternalImporter
 	{
+	public:
+		typedef enum
+		{
+			e3DS,
+			eASE,
+			eOBJ,
+			ePLY,
+			eMD2,
+			eMD3,
+			eBSP,
+			eGSD
+		}
+		eTYPE;
+
 	protected:
+		eTYPE m_eType;
 		String m_fileName;
 		String m_filePath;
-		SceneNodePtrArray m_nodes;
+		NodePtrArray m_nodes;
 		ScenePtr m_pScene;
 
 	public:
@@ -46,8 +61,9 @@ namespace Castor3D
 		/**
 		 * Constructor
 		 */
-		ExternalImporter()
-			:	m_fileName( C3DEmptyString)
+		ExternalImporter( eTYPE p_eType)
+			:	m_fileName( C3DEmptyString),
+				m_eType( p_eType)
 		{
 		}
 		/**
@@ -56,7 +72,9 @@ namespace Castor3D
 		 *@return true if successful, false if not
 		 */
 		bool Import( const String & p_fileName);
-		SceneNodePtr GetNode();
+		NodePtr GetNode();
+
+		inline eTYPE	GetType	()const { return m_eType; }
 
 	protected:
 		virtual bool _import()=0;

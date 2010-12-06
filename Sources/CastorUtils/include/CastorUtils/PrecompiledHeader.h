@@ -15,11 +15,6 @@
 #	include <time.h>
 #	include <vector>
 
-#	include "config.h"
-#	include "Value.h"
-
-using namespace Castor::Templates;
-
 #	pragma message( "********************************************************************")
 #	pragma message( "	CastorUtils")
 
@@ -27,11 +22,16 @@ using namespace Castor::Templates;
 #	ifdef _DEBUG
 #		define CHECK_MEMORYLEAKS 1
 #		pragma message( "		Checking Memory leaks")
-#		include "Memory.h"
 #	else
 #		define CHECK_MEMORYLEAKS 0
 #	endif
+#	include "Memory.h"
 #endif
+
+#	include "config.h"
+#	include "Value.h"
+
+using namespace Castor::Templates;
 
 #if CASTOR_USE_DOUBLE
 #	pragma message( "		'real' is defined as double")

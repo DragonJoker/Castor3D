@@ -136,11 +136,13 @@ bool File :: ReadLine( String & p_toRead, size_t p_size)
 	if ((m_iMode & eRead) && IsOk())
 	{
 		char * l_line = new char[p_size];
+		String l_strLine;
 		m_file.getline( l_line, p_size, '\n');
+		l_strLine = l_line;
 
-		if (strnlen( l_line, p_size) > 0)
+		if (l_strLine.size() > 0)
 		{
-			p_toRead = String( l_line);
+			p_toRead = l_strLine;
 		}
 		else
 		{
@@ -173,7 +175,7 @@ bool File :: WriteLine( const String & p_strLine)
 
 	if (((m_iMode & eWrite) || (m_iMode & eAdd)) && IsOk())
 	{
-		l_bReturn = WriteArray<char>( p_strLine.char_str(), p_strLine.size()) == p_strLine.size();
+		l_bReturn = WriteArray( p_strLine.char_str(), p_strLine.size()) == p_strLine.size();
 	}
 
 	return l_bReturn;
@@ -188,7 +190,7 @@ void File :: CopyToString( String & p_strOut)
 	{
 		ReadLine( l_strLine, 1024);
 
-		p_strOut += l_strLine + "\n";
+		p_strOut += l_strLine + CU_T( "\n");
 	}
 }
 

@@ -29,7 +29,7 @@ namespace Castor
 	\date 14/08/2010
 	*/
 	template <typename T>
-	class Line2D
+	class Line2D : public MemoryTraced< Line2D<T> >
 	{
 	private:
 		typedef Templates::Value<T> value;
@@ -66,7 +66,7 @@ namespace Castor
 	\date 14/08/2010
 	*/
 	template <typename T>
-	class Line3D
+	class Line3D : public MemoryTraced< Line3D<T> >
 	{
 	private:
 		typedef Templates::Value<T> value;

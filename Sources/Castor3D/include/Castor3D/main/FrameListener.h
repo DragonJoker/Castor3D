@@ -28,7 +28,7 @@ namespace Castor3D
 	\version 0.1
 	\date 03/03/2010
 	*/
-	class CS3D_API FrameEvent
+	class C3D_API FrameEvent : public MemoryTraced<FrameEvent>
 	{
 	public:
 		//! Frame Event Type enumeration
@@ -73,7 +73,7 @@ namespace Castor3D
 	\version 0.1
 	\date 03/03/2010
 	*/
-	class CS3D_API FrameListener
+	class C3D_API FrameListener : public MemoryTraced<FrameListener>
 	{
 	protected:
 		FrameEventArray m_preEvents;		//!< The events happening at pre render

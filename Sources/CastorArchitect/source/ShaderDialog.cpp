@@ -12,10 +12,9 @@ using namespace CastorArchitect;
 DECLARE_APP( CastorArchitectApp)
 
 ShaderDialog :: ShaderDialog( wxWindow * p_pParent, PassPtr p_pPass, const wxPoint & p_ptPosition, const wxSize p_ptSize)
-	:	wxDialog( p_pParent, wxID_ANY, "Shaders", p_ptPosition, p_ptSize),
+	:	wxDialog( p_pParent, wxID_ANY, CU_T( "Shaders"), p_ptPosition, p_ptSize),
 		m_pPass( p_pPass),
 		m_bCompiled( true),
-		m_shaderProgram( NULL),
 		m_bOwnShader( true)
 {
 	wxSize l_size = GetClientSize();
@@ -27,21 +26,21 @@ ShaderDialog :: ShaderDialog( wxWindow * p_pParent, PassPtr p_pPass, const wxPoi
 	m_pEditors = new wxNotebook( this, eEditors, wxPoint( 85, 0), wxSize( l_size.x - 95, l_size.y - 60), wxNB_FIXEDWIDTH);
 
 	wxPanel * l_pTmpPanel = new wxPanel( m_pEditors, wxID_ANY, wxPoint( 0, 0));
-	m_pEditors->AddPage( l_pTmpPanel, "Vertex", true);
+	m_pEditors->AddPage( l_pTmpPanel, CU_T( "Vertex"), true);
 	l_pTmpPanel->SetBackgroundColour( *wxWHITE);
 	l_pTmpPanel->SetSize( 0, 22, m_pEditors->GetClientSize().x, m_pEditors->GetClientSize().y - 22);
 	m_pVertexEditor = new TextPanel( l_pTmpPanel, wxID_ANY, wxPoint( 0, 0), l_pTmpPanel->GetClientSize(),
 									 wxTE_MULTILINE | wxTE_RICH | wxTE_PROCESS_TAB, true);
 
 	l_pTmpPanel = new wxPanel( m_pEditors, wxID_ANY, wxPoint( 0, 0));
-	m_pEditors->AddPage( l_pTmpPanel, "Fragment", true);
+	m_pEditors->AddPage( l_pTmpPanel, CU_T( "Fragment"), true);
 	l_pTmpPanel->SetBackgroundColour( *wxWHITE);
 	l_pTmpPanel->SetSize( 0, 22, m_pEditors->GetClientSize().x, m_pEditors->GetClientSize().y - 22);
 	m_pFragmentEditor = new TextPanel( l_pTmpPanel, wxID_ANY, wxPoint( 0, 0), l_pTmpPanel->GetClientSize(),
 									   wxTE_MULTILINE | wxTE_RICH | wxTE_PROCESS_TAB, true);
 
 	l_pTmpPanel = new wxPanel( m_pEditors, wxID_ANY, wxPoint( 0, 0));
-	m_pEditors->AddPage( l_pTmpPanel, "Geometry", true);
+	m_pEditors->AddPage( l_pTmpPanel, CU_T( "Geometry"), true);
 	l_pTmpPanel->SetBackgroundColour( *wxWHITE);
 	l_pTmpPanel->SetSize( 0, 22, m_pEditors->GetClientSize().x, m_pEditors->GetClientSize().y - 22);
 	m_pGeometryEditor = new TextPanel( l_pTmpPanel, wxID_ANY, wxPoint( 0, 0), l_pTmpPanel->GetClientSize(),
@@ -76,18 +75,18 @@ ShaderDialog :: ShaderDialog( wxWindow * p_pParent, PassPtr p_pPass, const wxPoi
 
 	if ( ! m_shaderProgram.null())
 	{
-		const C3DMap( String, UniformVariablePtr) l_mapVariables = m_shaderProgram->GetUniformVariables();
+		const C3DMap( String, FrameVariablePtr) l_mapVariables = m_shaderProgram->GetFrameVariables();
 		int l_iCount = 0;
 
-		for (C3DMap( String, UniformVariablePtr)::const_iterator l_it = l_mapVariables.begin() ; l_it != l_mapVariables.end() ; ++l_it)
+		for (C3DMap( String, FrameVariablePtr)::const_iterator l_it = l_mapVariables.begin() ; l_it != l_mapVariables.end() ; ++l_it)
 		{
 			l_arrayChoices.push_back( l_it->first);
-			m_mapUniformVariables.insert( C3DMap( int, UniformVariablePtr)::value_type( l_iCount++, l_it->second));
+			m_mapFrameVariables.insert( C3DMap( int, FrameVariablePtr)::value_type( l_iCount++, l_it->second));
 		}
 	}
 
 	l_arrayChoices.push_back( CU_T( "New..."));
-	m_pListUniformVariables = new wxListBox( this, eGrid, wxPoint( 85, l_size.y - 60), wxSize( l_size.x - 95, 60), l_arrayChoices, wxBORDER_SIMPLE | wxWANTS_CHARS);
+	m_pListFrameVariables = new wxListBox( this, eGrid, wxPoint( 85, l_size.y - 60), wxSize( l_size.x - 95, 60), l_arrayChoices, wxBORDER_SIMPLE | wxWANTS_CHARS);
 
 	m_loadShader = new wxButton( this, eLoadShader, CU_T( "Appliquer"), wxPoint( 10, l_size.y - 75), wxSize( 65, 20), wxBORDER_SIMPLE);
 	m_pButtonOk = new wxButton( this, eOK, CU_T( "OK"), wxPoint( 10, l_size.y - 50), wxSize( 65, 20), wxBORDER_SIMPLE);
@@ -100,9 +99,9 @@ ShaderDialog :: ~ShaderDialog()
 
 void ShaderDialog :: _cleanup()
 {
-	if (m_bOwnShader &&  ! m_shaderProgram.null())
+	if (m_bOwnShader && ! m_shaderProgram.null())
 	{
-		m_pPass->SetShader( NULL);
+		m_pPass->SetShader( ShaderProgramPtr());
 		ShaderManager::GetSingletonPtr()->RemoveProgram( m_shaderProgram);
 		m_shaderProgram.reset();
 	}
@@ -158,9 +157,9 @@ void ShaderDialog :: _loadShader()
 		}
 	}
 
-	for (C3DMap( int, UniformVariablePtr)::iterator l_it = m_mapUniformVariables.begin() ; l_it != m_mapUniformVariables.end() ; ++l_it)
+	for (C3DMap( int, FrameVariablePtr)::iterator l_it = m_mapFrameVariables.begin() ; l_it != m_mapFrameVariables.end() ; ++l_it)
 	{
-		m_shaderProgram->AddUniformVariable( l_it->second);
+		m_shaderProgram->AddFrameVariable( l_it->second);
 	}
 
 	m_pPass->SetShader( m_shaderProgram);
@@ -241,33 +240,33 @@ void ShaderDialog :: _onCancel( wxCommandEvent& event)
 void ShaderDialog :: _onGridCellChange( wxCommandEvent & event)
 {
 	int l_iRow = event.GetInt();
-	UniformVariablePtr l_pUniformVariable = NULL;
+	FrameVariablePtr l_pVariable;
 
-	if (m_mapUniformVariables.find( l_iRow) == m_mapUniformVariables.end())
+	if (m_mapFrameVariables.find( l_iRow) == m_mapFrameVariables.end())
 	{
-		UniformVariableDialog l_dialog( this);
+		FrameVariableDialog l_dialog( this);
 
 		if (l_dialog.ShowModal() == wxID_OK)
 		{
-			l_pUniformVariable = l_dialog.GetUniformVariable();
+			l_pVariable = l_dialog.GetFrameVariable();
 
-			if ( ! l_pUniformVariable.null())
+			if ( ! l_pVariable.null())
 			{
-				m_mapUniformVariables.insert( C3DMap( int, UniformVariablePtr)::value_type( l_iRow, l_pUniformVariable));
+				m_mapFrameVariables.insert( C3DMap( int, FrameVariablePtr)::value_type( l_iRow, l_pVariable));
 				wxArrayString l_arrayString;
-				l_arrayString.push_back( l_pUniformVariable->GetName() + CU_T( "=") + l_pUniformVariable->GetStrValue());
-				m_pListUniformVariables->InsertItems( l_arrayString, l_iRow);
+				l_arrayString.push_back( l_pVariable->GetName() + CU_T( "=") + l_pVariable->GetStrValue());
+				m_pListFrameVariables->InsertItems( l_arrayString, l_iRow);
 			}
 		}
 	}
 	else
 	{
-		l_pUniformVariable = m_mapUniformVariables.find( l_iRow)->second;
-		UniformVariableDialog l_dialog( this, l_pUniformVariable);
+		l_pVariable = m_mapFrameVariables.find( l_iRow)->second;
+		FrameVariableDialog l_dialog( this, l_pVariable);
 
 		if (l_dialog.ShowModal() == wxID_OK)
 		{
-			m_pListUniformVariables->SetString( l_iRow, l_pUniformVariable->GetName() + CU_T( "=") + l_pUniformVariable->GetStrValue());
+			m_pListFrameVariables->SetString( l_iRow, l_pVariable->GetName() + CU_T( "=") + l_pVariable->GetStrValue());
 		}
 	}
 }

@@ -66,7 +66,7 @@ namespace Castor
 	private:
 		int m_iMode;
 		Path m_strFileFullPath;
-		typedef std::basic_fstream<Char, std::char_traits<Char> > stream_file;
+		typedef std::basic_fstream<char, std::char_traits<char> > stream_file;
 		stream_file m_file;
 
 	public:
@@ -100,36 +100,48 @@ namespace Castor
 
 		template <typename T> int Write( const T & p_toWrite)
 		{
+			return _write( reinterpret_cast <const char *>( & p_toWrite), sizeof( T));
+/*
 			size_t l_uiSize = sizeof( T);
 			char * l_pBuffer = new char[l_uiSize];
 			memccpy( l_pBuffer, & p_toWrite, 1, l_uiSize);
 			return _write( l_pBuffer, l_uiSize);
+*/
 		}
 
 		template <typename T> int Read( T & p_toRead)
 		{
+			return _read( reinterpret_cast <char *>( & p_toRead), sizeof( T));
+/*
 			size_t l_uiSize = sizeof( T);
 			char * l_pBuffer = new char[l_uiSize];
 			int l_iReturn = _read( l_pBuffer, l_uiSize);
 			memccpy( & p_toRead, l_pBuffer, 1, l_iReturn);
 			return l_iReturn;
+*/
 		}
 
 		template <typename T> int WriteArray( const T * p_toWrite, size_t p_count)
 		{
+			return _write( reinterpret_cast <const char *>( p_toWrite), sizeof( T) * p_count);
+/*
 			size_t l_uiSize = sizeof( T) * p_count;
 			char * l_pBuffer = new char[l_uiSize];
 			memccpy( l_pBuffer, p_toWrite, 1, l_uiSize);
 			return _write( l_pBuffer, l_uiSize);
+*/
 		}
 
 		template <typename T> int ReadArray( T * p_toRead, size_t p_count)
 		{
+			return _read( reinterpret_cast <char *>( & p_toRead), sizeof( T) * p_count);
+/*
 			size_t l_uiSize = sizeof( T) * p_count;
 			char * l_pBuffer = new char[l_uiSize];
 			int l_iReturn = _read( l_pBuffer, l_uiSize);
 			memccpy( & p_toRead, l_pBuffer, 1, l_iReturn);
 			return l_iReturn;
+*/
 		}
 
 	private:

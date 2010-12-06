@@ -13,6 +13,7 @@
 #include "geometry/mesh/TorusMesh.h"
 #include "geometry/mesh/ProjectionMesh.h"
 #include "main/Root.h"
+#include "geometry/basic/Vertex.h"
 #include "geometry/basic/Face.h"
 #include "geometry/basic/Pattern.h"
 #include "render_system/RenderSystem.h"
@@ -84,12 +85,12 @@ MeshPtr MeshManager :: CreateMesh( const String & p_name, const UIntArray & p_fa
 
 	case Mesh::eProjection:
 		{
-			PatternPtr l_pPattern = new Pattern;
-			l_pPattern->AddVertex( new Vertex( 0.0, 0.0, 0.0), 0);
-			l_pPattern->AddVertex( new Vertex( 0.0, 1.0, 0.0), 1);
-			l_pPattern->AddVertex( new Vertex( 1.0, 1.0, 0.0), 2);
-			l_pPattern->AddVertex( new Vertex( 0.0, 2.0, 0.0), 3);
-			l_pPattern->AddVertex( new Vertex( 2.0, 4.0, 0.0), 4);
+			Point3rPatternPtr l_pPattern( new Point3rPattern);
+			l_pPattern->AddPoint( Point3r( 0.0, 0.0, 0.0), 0);
+			l_pPattern->AddPoint( Point3r( 0.0, 1.0, 0.0), 1);
+			l_pPattern->AddPoint( Point3r( 1.0, 1.0, 0.0), 2);
+			l_pPattern->AddPoint( Point3r( 0.0, 2.0, 0.0), 3);
+			l_pPattern->AddPoint( Point3r( 2.0, 4.0, 0.0), 4);
 			l_mesh.reset( new ProjectionMesh( l_pPattern, Point3r( 0.0, 0.0, 1.0), true, p_size[0], p_faces[0], p_name));
 			l_pThis.AddElement( l_mesh);
 		}
@@ -101,7 +102,7 @@ MeshPtr MeshManager :: CreateMesh( const String & p_name, const UIntArray & p_fa
 		break;
 
 	default:
-		Log::LogMessage( CU_T( "Can't create mesh ") + p_name + CU_T( " - Undefined mesh type"));
+		Logger::LogMessage( CU_T( "Can't create mesh ") + p_name + CU_T( " - Undefined mesh type"));
 	}
 
 	return l_mesh;
@@ -147,7 +148,7 @@ bool MeshManager :: Read( const String & p_path)
 	{
 		if (l_files[i].find( CU_T( ".cmsh")) != String::npos)
 		{
-			l_mesh.reset( l_loader.LoadFromFile( l_files[i]));
+			l_mesh = MeshPtr( l_loader.LoadFromFile( l_files[i]));
 			if (l_mesh.null())
 			{
 				l_pThis.AddElement( l_mesh);

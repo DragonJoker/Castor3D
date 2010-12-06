@@ -1,7 +1,7 @@
 #ifndef ___ShaderDialog___
 #define ___ShaderDialog___
 
-#include "UniformVariableDialog.h"
+#include "FrameVariableDialog.h"
 
 namespace CastorViewer
 {
@@ -32,7 +32,7 @@ namespace CastorViewer
 		TextPanel * m_pVertexEditor;
 		TextPanel * m_pFragmentEditor;
 		TextPanel * m_pGeometryEditor;
-		wxListBox * m_pListUniformVariables;
+		wxListBox * m_pListFrameVariables;
 
 		wxButton * m_pButtonOk;
 		wxButton * m_pButtonCancel;
@@ -46,7 +46,7 @@ namespace CastorViewer
 		bool m_bCompiled;
 		bool m_bOwnShader;
 
-		C3DMap( int, Castor3D::UniformVariablePtr) m_mapUniformVariables;
+		C3DMap( int, Castor3D::FrameVariablePtr) m_mapFrameVariables;
 
 	public:
 		ShaderDialog( wxWindow * p_pParent, Castor3D::PassPtr p_pPass, const wxPoint & p_ptPosition=wxPoint( 0, 0), const wxSize p_ptSize=wxSize( 800, 600));

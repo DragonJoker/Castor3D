@@ -55,14 +55,18 @@ namespace Castor
 #	define CASTOR_EXCEPTION( p_text) throw Castor::Utils::Exception( p_text, __FILE__, __FUNCTION__, __LINE__)
 
 #ifndef CASTOR_USE_ASSERT
-#	define CASTOR_USE_ASSERT 1
+#	if _DEBUG
+#		define CASTOR_USE_ASSERT 1
+#	else
+#		define CASTOR_USE_ASSERT 0
+#	endif
 #endif
 
 #if CASTOR_USE_ASSERT
 #	ifdef CASTOR_ASSERT
 #		undef CASTOR_ASSERT
 #	endif
-#	define CASTOR_ASSERT( X) if ( ! (X)){ CASTOR_EXCEPTION( Castor::String( "Assert not respected : (") + #X + ") file " + __FILE__ + " @ L# " + Castor::ToString( __LINE__));}
+#	define CASTOR_ASSERT( X) if ( ! (X)){ CASTOR_EXCEPTION( Castor::String( "Assert not respected : (") + String( #X) + String( ") file ") + String( __FILE__) + String( " @ L# ") + Castor::ToString( __LINE__));}
 #else
 #	define CASTOR_ASSERT( X)
 #endif

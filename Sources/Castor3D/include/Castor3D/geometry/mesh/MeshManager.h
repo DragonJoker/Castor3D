@@ -30,10 +30,10 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class CS3D_API MeshManager : public Castor::Templates::UniqueManager<Mesh, MeshManager>
+	class C3D_API MeshManager : public Castor::Templates::UniqueManager<String, Mesh, MeshManager>
 	{
 	private:
-		friend class Castor::Templates::UniqueManager<Mesh, MeshManager>;
+		friend class Castor::Templates::UniqueManager<String, Mesh, MeshManager>;
 
 	private:
 		MeshPtrStrMap m_meshMap;	//!< The created meshes map, sorted by name

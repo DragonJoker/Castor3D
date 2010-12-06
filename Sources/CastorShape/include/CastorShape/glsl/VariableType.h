@@ -8,7 +8,7 @@ namespace CastorShape
 	class VariableTypeManager : public AutoSingleton<VariableTypeManager>
 	{
 	protected:
-		typedef C3DMap( String, VariableType *) TypeMap;
+		typedef C3DMap( std::string, VariableType *) TypeMap;
 
 	protected:
 		TypeMap m_types;
@@ -19,7 +19,7 @@ namespace CastorShape
 		~VariableTypeManager();
 
 	protected:
-		String _hash( VariableBaseType p_type, VariableType * p_subType1 = NULL, VariableType * p_subType2 = NULL);
+		std::string _hash( VariableBaseType p_type, VariableType * p_subType1 = NULL, VariableType * p_subType2 = NULL);
 
 		VariableType * _add( VariableBaseType p_type, VariableType * p_subType1 = NULL, VariableType * p_subType2 = NULL, const String & p_hash = C3DEmptyString);
 		VariableType * _get( VariableBaseType p_type, VariableType * p_subType1, VariableType * p_subType2);
@@ -27,7 +27,7 @@ namespace CastorShape
 		void _populateBaseTypeNames();
 
 	public:
-		static inline std::string GetBaseTypeName( VariableBaseType p_type) { return GetSingletonPtr()->m_baseTypeNames[p_type]; }
+		static inline String GetBaseTypeName( VariableBaseType p_type) { return GetSingletonPtr()->m_baseTypeNames[p_type]; }
 
 		static inline VariableType * Get( VariableBaseType p_type, VariableType * p_subType1 = NULL, VariableType * p_subType2 = NULL)
 		{

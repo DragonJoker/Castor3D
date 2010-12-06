@@ -15,91 +15,70 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___MODULE_GLRENDER___
-#define ___MODULE_GLRENDER___
+#ifndef ___GL3_ModuleRender___
+#define ___GL3_ModuleRender___
+
+#include <OpenGLCommon/Module_GLRender.h>
 
 #	ifdef GL3RENDERSYSTEM_EXPORTS
-#		define CS3D_GL_API __declspec(dllexport)
+#		define C3D_GL3_API __declspec(dllexport)
 #	else
-#		define CS3D_GL_API __declspec(dllimport)
+#		define C3D_GL3_API __declspec(dllimport)
 #	endif
 
 namespace Castor3D
 {
-	class GLRenderSystem;
-	class GLPlugin;
-	class GLContext;
-	class GLSubmeshRenderer;
-	class GLMeshRenderer;
-	class GLGeometryRenderer;
-	class GLTextureEnvironmentRenderer;
-	class GLTextureRenderer;
-	class GLMaterialRenderer;
-	class GLLightRenderer;
-	class GLCameraRenderer;
-	class GLViewportRenderer;
-	class GLWindowRenderer;
-	class GLSceneNodeRenderer;
-	class GLOverlayRenderer;
-	class GLShaderProgram;
-
-	class RenderWindow;
-	class Geometry;
-
-	class GLUniformVariable;
-	class GLOneIntUniformVariable;
-	class GLTwoIntsUniformVariable;
-	class GLThreeIntsUniformVariable;
-	class GLFourIntsUniformVariable;
-	class GLOneFloatUniformVariable;
-	class GLTwoFloatsUniformVariable;
-	class GLThreeFloatsUniformVariable;
-	class GLFourFloatsUniformVariable;
-	class GLMatrix2fUniformVariable;
-	class GLMatrix3fUniformVariable;
-	class GLMatrix4fUniformVariable;
-
-	class GLUBOVariable;
 	class GLUniformBufferObject;
+	class GLUBOVariableBase;
+	template <typename T> class GLUBOOneVariable;
+	template <typename T, size_t Count> class GLUBOPointVariable;
+	template <typename T, size_t Rows, size_t Columns> class GLUBOMatrixVariable;
+	template <typename T, size_t Rows> class GLUBOSquareMatrixVariable;
+	class GL3ShaderProgram;
+	class GL3Context;
+	class GL3LightRenderer;
+	class GL3PassRenderer;
 
-	template <typename T, size_t Count> class GLVertexAttribsBuffer;
-	class GLVBOVertexBuffer;
-	class GLVBONormalsBuffer;
-	class GLVBOTextureBuffer;
-	typedef GLVertexAttribsBuffer<real, 3> GLVertexAttribsBuffer3r;
-	typedef GLVertexAttribsBuffer<real, 2> GLVertexAttribsBuffer2r;
-	typedef GLVertexAttribsBuffer<int, 2> GLVertexAttribsBuffer2i;
+	class GL4ShaderProgram;
+	class GL4LightRenderer;
+	class GL4PassRenderer;
 
-	typedef Templates::SharedPtr<GLVBOVertexBuffer>			GLVBOVertexBufferPtr;
-	typedef Templates::SharedPtr<GLVBONormalsBuffer>		GLVBONormalsBufferPtr;
-	typedef Templates::SharedPtr<GLVBOTextureBuffer>		GLVBOTextureBufferPtr;
-	typedef Templates::SharedPtr<GLVertexAttribsBuffer2r>	GLVertexAttribsBuffer2rPtr;
-	typedef Templates::SharedPtr<GLVertexAttribsBuffer3r>	GLVertexAttribsBuffer3rPtr;
-	typedef Templates::SharedPtr<GLVertexAttribsBuffer2i>	GLVertexAttribsBuffer2iPtr;
-	typedef Templates::SharedPtr<GLShaderProgram>			GLShaderProgramPtr;
-	typedef Templates::SharedPtr<GLUniformBufferObject>		GLUniformBufferObjectPtr;
+	typedef GLUBOOneVariable<float>					GLUBOFloatVariable;
+	typedef GLUBOOneVariable<int>					GLUBOIntVariable;
+	typedef GLUBOPointVariable<float,	2>			GLUBOPoint2fVariable;
+	typedef GLUBOPointVariable<int,		2>			GLUBOPoint2iVariable;
+	typedef GLUBOPointVariable<float,	3>			GLUBOPoint3fVariable;
+	typedef GLUBOPointVariable<int,		3>			GLUBOPoint3iVariable;
+	typedef GLUBOPointVariable<float,	4>			GLUBOPoint4fVariable;
+	typedef GLUBOPointVariable<int,		4>			GLUBOPoint4iVariable;
+	typedef GLUBOMatrixVariable<real,	2,	2>		GLUBOMatrix2x2rVariable;
+	typedef GLUBOMatrixVariable<real,	3,	3>		GLUBOMatrix3x3rVariable;
+	typedef GLUBOMatrixVariable<real,	4,	4>		GLUBOMatrix4x4rVariable;
+	typedef GLUBOMatrixVariable<float,	2,	2>		GLUBOMatrix2x2fVariable;
+	typedef GLUBOMatrixVariable<float,	3,	3>		GLUBOMatrix3x3fVariable;
+	typedef GLUBOMatrixVariable<float,	4,	4>		GLUBOMatrix4x4fVariable;
+
+	typedef Templates::SharedPtr <GLUniformBufferObject>		GLUniformBufferObjectPtr;
+	typedef Templates::SharedPtr <GLUBOVariableBase>			GLUBOVariablePtr;
+	typedef Templates::SharedPtr <GL3ShaderProgram>				GL3ShaderProgramPtr;
+	typedef Templates::SharedPtr <GLUBOFloatVariable>			GLUBOFloatVariablePtr;
+	typedef Templates::SharedPtr <GLUBOIntVariable>				GLUBOIntVariablePtr;
+	typedef Templates::SharedPtr <GLUBOPoint2fVariable>			GLUBOPoint2fVariablePtr;
+	typedef Templates::SharedPtr <GLUBOPoint2iVariable>			GLUBOPoint2iVariablePtr;
+	typedef Templates::SharedPtr <GLUBOPoint3fVariable>			GLUBOPoint3fVariablePtr;
+	typedef Templates::SharedPtr <GLUBOPoint3iVariable>			GLUBOPoint3iVariablePtr;
+	typedef Templates::SharedPtr <GLUBOPoint4fVariable>			GLUBOPoint4fVariablePtr;
+	typedef Templates::SharedPtr <GLUBOPoint4iVariable>			GLUBOPoint4iVariablePtr;
+	typedef Templates::SharedPtr <GLUBOMatrix2x2rVariable>		GLUBOMatrix2x2rVariablePtr;
+	typedef Templates::SharedPtr <GLUBOMatrix3x3rVariable>		GLUBOMatrix3x3rVariablePtr;
+	typedef Templates::SharedPtr <GLUBOMatrix4x4rVariable>		GLUBOMatrix4x4rVariablePtr;
+	typedef Templates::SharedPtr <GLUBOMatrix2x2fVariable>		GLUBOMatrix2x2fVariablePtr;
+	typedef Templates::SharedPtr <GLUBOMatrix3x3fVariable>		GLUBOMatrix3x3fVariablePtr;
+	typedef Templates::SharedPtr <GLUBOMatrix4x4fVariable>		GLUBOMatrix4x4fVariablePtr;
+
+
+	typedef C3DMap(		String,				GLUniformBufferObjectPtr)	GLUniformBufferObjectPtrStrMap;
+	typedef C3DMap(		String,				GLUBOVariablePtr)			GLUBOVariablePtrStrMap;
 }
-
-typedef C3DMap( Castor3D::RenderWindow *, Castor3D::GLContext *) ContextPtrMap;
-
-#	ifdef __GNUG__
-#		undef CS3D_GL_API
-#		define CS3D_GL_API
-#		define GLGetProcAddress(x)		glXGetProcAddress(reinterpret_cast <const GLubyte *>( x))
-#		define GLCreateContext			glXCreateNewContext
-#		define GLMakeCurrent			glXMakeContextCurrent
-//#		define GLCreateContext			glXCreateContext
-//#		define GLMakeCurrent			glXMakeCurrent
-#		define GLGetCurrentContext		glXGetCurrentContext
-#		define GLSwapBuffers( context)	glXSwapBuffers( context->GetDisplay(), context->GetWindow())
-#	else
-#		ifdef WIN32
-#			define GLGetProcAddress(x)		wglGetProcAddress(x)
-#			define GLCreateContext			wglCreateContext
-#			define GLMakeCurrent			wglMakeCurrent
-#			define GLGetCurrentContext		wglGetCurrentContext
-#			define GLSwapBuffers( context)	SwapBuffers( context->GetDC())
-#		endif
-#	endif
 
 #endif

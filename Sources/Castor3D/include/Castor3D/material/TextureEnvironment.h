@@ -32,7 +32,7 @@ namespace Castor3D
 	\date 09/02/2010
 	\todo Make the use of texture environment mode more easy to understand and user friendly
 	*/
-	class CS3D_API TextureEnvironment : public Renderable<TextureEnvironment, TextureEnvironmentRenderer>
+	class C3D_API TextureEnvironment : public Renderable<TextureEnvironment, TextureEnvironmentRenderer>
 	{
 	private:
 		EnvironmentMode m_mode;								//!< The general environment mode
@@ -61,7 +61,7 @@ namespace Castor3D
 		/**
 		 * Apply the environment
 		 */
-		virtual void Apply( eDRAW_TYPE p_displayMode);
+		virtual void Render( eDRAW_TYPE p_displayMode);
 		/**
 		 * Sets RGB source for given index of given texture index
 		 *@param p_index : The index of the source
@@ -143,7 +143,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class CS3D_API TextureEnvironmentRenderer : public Renderer<TextureEnvironment, TextureEnvironmentRenderer>
+	class C3D_API TextureEnvironmentRenderer : public Renderer<TextureEnvironment, TextureEnvironmentRenderer>
 	{
 	protected:
 		/**
@@ -160,7 +160,7 @@ namespace Castor3D
 		/**
 		 * Applies the combination functions
 		 */
-		virtual void Apply() = 0;
+		virtual void Render() = 0;
 	};
 }
 

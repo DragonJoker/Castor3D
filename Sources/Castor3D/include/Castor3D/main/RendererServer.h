@@ -29,53 +29,76 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 25/08/2010
 	*/
-	class RendererDriver
+	class RendererDriver : public MemoryTraced<RendererDriver>
 	{
-		public:
-			/**
-			 * Destructor
-			 */ 
-			virtual ~RendererDriver() {}
-			/**
-			 * Get name of the graphics driver
-			 */ 
-			virtual const String & GetName()const = 0;
-			/**
-			 * Create a renderer
-			 */
-			virtual RenderSystem * CreateRenderSystem()=0;
-	};
-	//! Renderer server
-	/**
-	 * Registers available RendererDriver (OpenGL or Direct3D)
-	 */
-	class RendererServer
-	{
-		private:
-			RendererDriverPtrArray m_rendererDrivers;	//!< The renderer drivers array
+	public:
+		typedef enum
+		{
+			eOpenGL2,
+			eOpenGL3,
+			eDirect3D,
+		}
+		eDRIVER_TYPE;
+
+	protected:
+		eDRIVER_TYPE m_eType;
 
 	public:
 		/**
 		 * Destructor
 		 */ 
-		CS3D_API ~RendererServer();
-		CS3D_API void Cleanup();
+		virtual ~RendererDriver() {}
+		/**
+		 * Get name of the graphics driver
+		 */ 
+		virtual const String & GetName()const = 0;
+		/**
+		 * Create a renderer
+		 */
+		virtual void CreateRenderSystem()=0;
+	};
+	//! Renderer server
+	/**
+	 * Registers available RendererDriver (OpenGL or Direct3D)
+	 */
+	class RendererServer : public MemoryTraced<RendererServer>
+	{
+	private:
+		RendererDriverPtrIntMap m_mapRenderers;	//!< The renderer drivers array
+		StrIntMap m_mapNames;
+
+	public:
+		/**
+		 * Constructor
+		 */ 
+		C3D_API RendererServer();
+		/**
+		 * Destructor
+		 */ 
+		C3D_API ~RendererServer();
+		C3D_API void Cleanup();
 		/**
 		 * Allows plugins to add new graphics drivers
 		 *@param p_driver : [in] The driver to register
 		 */ 
-		CS3D_API void AddRendererDriver( RendererDriverPtr p_driver);
+		C3D_API void AddRenderer( RendererDriver::eDRIVER_TYPE p_eType, RendererDriverPtr p_driver);
 		/**
 		 * Get the total number of registered graphics drivers
 		 *@return The number of registered drivers
 		 */
-		CS3D_API size_t GetDriverCount()const;
+		C3D_API size_t GetRendererCount()const;
 		/**
-		 * Access a driver by its index
-		 *@param Index : [in] The index where to look for the driver 
-		 *@return The driver at the given index, NULL if not found
+		 * Access a renderer by its type
+		 *@param p_eType : [in] The renderer type
+		 *@return The renderer at the given type, NULL if not found
 		 */
-		CS3D_API RendererDriverPtr GetDriver( size_t Index);
+		C3D_API RendererDriverPtr GetRenderer( RendererDriver::eDRIVER_TYPE p_eType);
+		/**
+		 * Access a renderer name by its type
+		 *@param p_eType : [in] The renderer type
+		 *@return The name of the renderer
+		 */
+		C3D_API String GetRendererName( RendererDriver::eDRIVER_TYPE p_eType);
 	};
 
 }

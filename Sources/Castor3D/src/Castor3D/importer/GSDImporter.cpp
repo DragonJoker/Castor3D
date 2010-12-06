@@ -5,7 +5,7 @@
 using namespace Castor3D;
 
 GSDImporter :: GSDImporter()
-	:	ExternalImporter()
+	:	ExternalImporter( eGSD)
 {
 }
 

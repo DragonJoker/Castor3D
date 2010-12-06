@@ -29,7 +29,7 @@ namespace Castor3D
 	\todo Review all the animation system because it's not clear, not optimised, and not good enough to be validated
 	\todo Write and Read functions.
 	*/
-	class CS3D_API Animation
+	class C3D_API Animation : public MemoryTraced<Animation>
 	{
 	public:
 		//! Animation State Enum

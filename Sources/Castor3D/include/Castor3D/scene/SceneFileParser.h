@@ -35,7 +35,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 25/08/2010
 	*/
-	class SceneFileContext
+	class SceneFileContext : public MemoryTraced<SceneFileContext>
 	{
 	public:
 		//! Scene file sections Enum
@@ -62,20 +62,20 @@ namespace Castor3D
 
 	public:
 		ScenePtr						pScene;
-		SceneNodePtr					pSceneNode;
+		NodePtr							pSceneNode;
 		GeometryPtr						pGeometry;
 		MeshPtr							pMesh;
 		SubmeshPtr						pSubmesh;
-		SmoothingGroupPtr				pSmoothingGroup;
+		size_t							uiSmoothingGroup;
 		LightPtr						pLight;
 		CameraPtr						pCamera;
 		MaterialPtr						pMaterial;
 		PassPtr							pPass;
 		TextureUnitPtr					pTextureUnit;
 		ShaderProgramPtr				pShaderProgram;
-		UniformVariablePtr				pUniformVariable;
-		FacePtr							pFace1;
-		FacePtr							pFace2;
+		FrameVariablePtr				pFrameVariable;
+		Face *							pFace1;
+		Face *							pFace2;
 
 		Light::eTYPE					eLightType;
 		Mesh::eTYPE						eMeshType;
@@ -105,7 +105,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 25/08/2010
 	*/
-	class CS3D_API SceneFileParser
+	class C3D_API SceneFileParser : public MemoryTraced<SceneFileParser>
 	{
 	private:
 		AttributeParserMap m_mapRootParsers;

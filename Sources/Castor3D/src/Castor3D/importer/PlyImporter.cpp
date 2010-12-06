@@ -5,7 +5,7 @@
 #include "importer/PlyImporter.h"
 #include "render_system/RenderSystem.h"
 #include "render_system/Buffer.h"
-#include "scene/SceneNode.h"
+#include "scene/NodeBase.h"
 #include "scene/SceneManager.h"
 #include "scene/Scene.h"
 #include "camera/Camera.h"
@@ -25,7 +25,7 @@
 using namespace Castor3D;
 
 PlyImporter :: PlyImporter()
-	:	ExternalImporter()
+	:	ExternalImporter( ePLY)
 {
 }
 
@@ -57,12 +57,12 @@ bool PlyImporter :: _import()
 
 	if (MeshManager::HasElement( l_meshName))
 	{
-		l_pMesh.reset( MeshManager::GetElementByName( l_meshName));
+		l_pMesh = MeshManager::GetElementByName( l_meshName);
 	}
 	else
 	{
-		l_pMesh.reset( MeshManager::CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom));
-		Log::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
+		l_pMesh = MeshManager::CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom);
+		Logger::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
 	}
 
 	std::ifstream l_isFile;
@@ -206,7 +206,7 @@ bool PlyImporter :: _import()
 
 			// Parsing triangles
 			int l_iV1, l_iV2, l_iV3;
-			FacePtr l_pFace;
+
 			for (int i = 0 ; i < l_iNbFaces ; i++)
 			{
 				std::getline( l_isFile, l_strLine);
@@ -218,10 +218,10 @@ bool PlyImporter :: _import()
 				{
 					l_ssToken >> l_iV1 >> l_iV2 >> l_iV3;
 //					std::cout << "Indices: " << l_iV1 << ", " << l_iV2 << ", " << l_iV3 << std::endl;
-					l_pFace = l_pSubmesh->AddFace( l_pSubmesh->GetVertex( l_iV2), l_pSubmesh->GetVertex( l_iV1), l_pSubmesh->GetVertex( l_iV3), 0);
-					l_pFace->SetTexCoordV1( l_pfTexcoords[(l_iV2 * 2)], l_pfTexcoords[(l_iV2 * 2) + 1]);
-					l_pFace->SetTexCoordV2( l_pfTexcoords[(l_iV1 * 2)], l_pfTexcoords[(l_iV1 * 2) + 1]);
-					l_pFace->SetTexCoordV3( l_pfTexcoords[(l_iV3 * 2)], l_pfTexcoords[(l_iV3 * 2) + 1]);
+					Face & l_face = l_pSubmesh->AddFace( l_iV2, l_iV1, l_iV3, 0);
+					l_face.SetVertexTexCoords( 0, l_pfTexcoords[(l_iV2 * 2)], l_pfTexcoords[(l_iV2 * 2) + 1]);
+					l_face.SetVertexTexCoords( 1, l_pfTexcoords[(l_iV1 * 2)], l_pfTexcoords[(l_iV1 * 2) + 1]);
+					l_face.SetVertexTexCoords( 2, l_pfTexcoords[(l_iV3 * 2)], l_pfTexcoords[(l_iV3 * 2) + 1]);
 				}
 
 				l_ssToken.clear( std::istringstream::goodbit);
@@ -234,14 +234,14 @@ bool PlyImporter :: _import()
 
 	l_pSubmesh->ComputeContainers();
 	l_pSubmesh->GenerateBuffers();
-	l_pMesh->SetNormals();
+	l_pMesh->ComputeNormals();
 
 	l_isFile.close();
 
-	SceneNodePtr l_pNode = m_pScene->CreateSceneNode( l_name);
+	GeometryNodePtr l_pNode = m_pScene->CreateGeometryNode( l_name);
 
-	GeometryPtr l_pGeometry = new Geometry( l_pMesh, l_pNode, l_name);
-	Log::LogMessage( CU_T( "PlyImporter::_import - Geometry %s created"), l_name.c_str());
+	GeometryPtr l_pGeometry( new Geometry( l_pMesh, l_pNode, l_name));
+	Logger::LogMessage( CU_T( "PlyImporter::_import - Geometry %s created"), l_name.c_str());
 
 	m_geometries.insert( GeometryPtrStrMap::value_type( l_name, l_pGeometry));
 

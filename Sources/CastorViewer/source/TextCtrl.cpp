@@ -4,10 +4,6 @@
 #include "TextPanel.h"
 #include "TextLinesCtrl.h"
 
-#ifdef __WXMSW__
-#	include <wx/msw/msvcrt.h>      // redefines the new() operator 
-#endif
-
 using namespace CastorViewer;
 using namespace Castor3D;
 
@@ -30,11 +26,11 @@ TextCtrl :: ~TextCtrl()
 //	std::cout << "TextCtrl :: ~TextCtrl - " << m_file << " - Modified : " << m_modified << " - Saved : " << m_file->Saved << "\n";
 	if (m_modified)
 	{
-		if (wxMessageBox( "Enregistrer les modifications?", m_strFileName, wxYES_NO, this) == wxYES)
+		if (wxMessageBox( CU_T( "Enregistrer les modifications?"), m_strFileName, wxYES_NO, this) == wxYES)
 		{
 			if (m_strFileName.empty())
 			{
-				wxFileDialog l_dialog( NULL, "Choisissez un fichier", "", "", "GLSL File (*.glsl)|*.glsl", wxFD_SAVE);
+				wxFileDialog l_dialog( NULL, CU_T( "Choisissez un fichier"), wxEmptyString, wxEmptyString, CU_T( "GLSL File (*.glsl)|*.glsl"), wxFD_SAVE);
 
 				if (l_dialog.ShowModal() == wxOK)
 				{
@@ -225,7 +221,7 @@ void TextCtrl :: _onKeyDown( wxKeyEvent& p_event)
 					l_lineTxt = GetLineText( i);
 					if ( ! p_event.ShiftDown())
 					{
-						l_lineTxt = "\t" + l_lineTxt;
+						l_lineTxt = CU_T( "\t") + l_lineTxt;
 						l_end++;
 						if ( ! l_beginModified)
 						{
@@ -270,7 +266,7 @@ void TextCtrl :: _onKeyUp( wxKeyEvent & p_event)
 		else
 		{
 			wxString l_strPath;
-			wxFileDialog l_dialog( NULL, "Choisissez un fichier", "", "", "GLSL File (*.glsl)|*.glsl", wxFD_SAVE);
+			wxFileDialog l_dialog( NULL, CU_T( "Choisissez un fichier"), wxEmptyString, wxEmptyString, CU_T( "GLSL File (*.glsl)|*.glsl"), wxFD_SAVE);
 
 			if (l_dialog.ShowModal() == wxOK)
 			{

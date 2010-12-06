@@ -31,7 +31,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 25/08/2010
 	*/
-	class CS3D_API OverlayManager : public Castor::Theory::AutoSingleton<OverlayManager>
+	class C3D_API OverlayManager : public Castor::Theory::AutoSingleton<OverlayManager>
 	{
 	private:
 		int m_iCurrentZIndex;

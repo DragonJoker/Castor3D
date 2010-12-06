@@ -19,7 +19,7 @@
 		<Configuration
 			Name="Release - MultiByte|Win32"
 			OutputDirectory="$(SolutionDir)Bin\$(ConfigurationName)"
-			IntermediateDirectory="_generation\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)_generation\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
@@ -41,8 +41,9 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="-Zm139"
 				Optimization="0"
-				AdditionalIncludeDirectories="include/GL3RenderSystem;../Castor3D/include;../CastorUtils/include"
+				AdditionalIncludeDirectories="include/GL3RenderSystem;../Castor3D/include;../CastorUtils/include;../OpenGLCommon/include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;GL3RENDERSYSTEM_EXPORTS"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -62,7 +63,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib glu32.lib glew32.lib CastorUtils.lib Castor3D.lib"
+				AdditionalDependencies="opengl32.lib glu32.lib glew32.lib CastorUtils.lib Castor3D.lib OpenGLCommon.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="../Bin/Release - Multibyte"
 				GenerateDebugInformation="true"
@@ -97,7 +98,7 @@
 		<Configuration
 			Name="Release - Unicode|Win32"
 			OutputDirectory="$(SolutionDir)Bin\$(ConfigurationName)"
-			IntermediateDirectory="_generation\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)_generation\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			WholeProgramOptimization="1"
@@ -119,8 +120,9 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="include/GL3RenderSystem;../Castor3D/include;../CastorUtils/include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;GL3RenderSystem_EXPORTS;_UNICODE"
+				AdditionalOptions="-Zm139"
+				AdditionalIncludeDirectories="include/GL3RenderSystem;../Castor3D/include;../CastorUtils/include;../OpenGLCommon/include"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;GL3RENDERSYSTEM_EXPORTS;_UNICODE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
 				PrecompiledHeaderThrough="PrecompiledHeader.h"
@@ -138,7 +140,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib glu32.lib glew32.lib CastorUtilsu.lib Castor3Du.lib"
+				AdditionalDependencies="opengl32.lib glu32.lib glew32.lib CastorUtilsu.lib Castor3Du.lib OpenGLCommonu.lib"
 				OutputFile="$(OutDir)\$(ProjectName)u.dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="../Bin/Release - Unicode"
@@ -175,7 +177,7 @@
 		<Configuration
 			Name="Debug - Unicode|Win32"
 			OutputDirectory="$(SolutionDir)Bin\$(ConfigurationName)"
-			IntermediateDirectory="_generation\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)_generation\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			>
@@ -196,9 +198,10 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="-Zm139"
 				Optimization="0"
-				AdditionalIncludeDirectories="include/GL3RenderSystem;../Castor3D/include;../CastorUtils/include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;GL3RenderSystem_EXPORTS"
+				AdditionalIncludeDirectories="include/GL3RenderSystem;../Castor3D/include;../CastorUtils/include;../OpenGLCommon/include"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;GL3RENDERSYSTEM_EXPORTS;_UNICODE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -219,7 +222,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib glu32.lib glew32.lib Castor3Ddu.lib CastorUtilsdu.lib"
+				AdditionalDependencies="opengl32.lib glu32.lib glew32.lib Castor3Ddu.lib CastorUtilsdu.lib OpenGLCommondu.lib"
 				OutputFile="$(OutDir)\$(ProjectName)du.dll"
 				AdditionalLibraryDirectories="../Bin/Debug - Unicode"
 				GenerateDebugInformation="true"
@@ -255,7 +258,7 @@
 		<Configuration
 			Name="Debug - Multibyte|Win32"
 			OutputDirectory="$(SolutionDir)Bin\$(ConfigurationName)"
-			IntermediateDirectory="_generation\$(ConfigurationName)"
+			IntermediateDirectory="$(SolutionDir)_generation\$(ProjectName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
@@ -280,7 +283,7 @@
 				AdditionalOptions="-Zm139"
 				Optimization="0"
 				WholeProgramOptimization="false"
-				AdditionalIncludeDirectories="include/GL3RenderSystem;../Castor3D/include;../CastorUtils/include"
+				AdditionalIncludeDirectories="include/GL3RenderSystem;../Castor3D/include;../CastorUtils/include;../OpenGLCommon/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;GL3RENDERSYSTEM_EXPORTS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -302,7 +305,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="opengl32.lib glu32.lib glew32.lib Castor3Dd.lib CastorUtilsd.lib"
+				AdditionalDependencies="opengl32.lib glu32.lib glew32.lib Castor3Dd.lib CastorUtilsd.lib OpenGLCommond.lib"
 				OutputFile="$(OutDir)\$(ProjectName)d.dll"
 				AdditionalLibraryDirectories="../Bin/Debug - Multibyte"
 				GenerateDebugInformation="true"
@@ -345,10 +348,6 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\src\GL3RenderSystem\GLOverlayRenderer.cpp"
-				>
-			</File>
-			<File
 				RelativePath=".\src\GL3RenderSystem\PrecompiledHeader.cpp"
 				>
 				<FileConfiguration
@@ -385,34 +384,34 @@
 				</FileConfiguration>
 			</File>
 			<Filter
-				Name="geometry"
+				Name="renderers"
 				>
 				<File
-					RelativePath=".\src\GL3RenderSystem\GLSubmeshRenderer.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="material"
-				>
-				<File
-					RelativePath=".\src\GL3RenderSystem\GLMaterialRenderer.cpp"
+					RelativePath=".\src\GL3RenderSystem\GL3LightRenderer.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\GL3RenderSystem\GLTexEnvironmentRenderer.cpp"
+					RelativePath=".\src\GL3RenderSystem\GL3MaterialRenderer.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\GL3RenderSystem\GLTextureRenderer.cpp"
+					RelativePath=".\src\GL3RenderSystem\GL3SubmeshRenderer.cpp"
 					>
 				</File>
-			</Filter>
-			<Filter
-				Name="camera"
-				>
 				<File
-					RelativePath=".\src\GL3RenderSystem\GLCameraRenderer.cpp"
+					RelativePath=".\src\GL3RenderSystem\GL3TextureRenderer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\GL3RenderSystem\GL3WindowRenderer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\GL3RenderSystem\GL4LightRenderer.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\src\GL3RenderSystem\GL4MaterialRenderer.cpp"
 					>
 				</File>
 			</Filter>
@@ -420,15 +419,11 @@
 				Name="shader"
 				>
 				<File
-					RelativePath=".\src\GL3RenderSystem\GLSLObject.cpp"
+					RelativePath=".\src\GL3RenderSystem\GL3ShaderProgram.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\GL3RenderSystem\GLSLProgram.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\GL3RenderSystem\GLUniformVariable.cpp"
+					RelativePath=".\src\GL3RenderSystem\GL4ShaderProgram.cpp"
 					>
 				</File>
 			</Filter>
@@ -436,39 +431,19 @@
 				Name="main"
 				>
 				<File
-					RelativePath=".\src\GL3RenderSystem\GLBuffer.cpp"
+					RelativePath=".\src\GL3RenderSystem\GL3Buffer.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\GL3RenderSystem\GLContext.cpp"
+					RelativePath=".\src\GL3RenderSystem\GL3Context.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\GL3RenderSystem\GLPipeline.cpp"
+					RelativePath=".\src\GL3RenderSystem\GL3Plugin.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\src\GL3RenderSystem\GLPlugin.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\GL3RenderSystem\GLRenderSystem.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\GL3RenderSystem\GLSceneNodeRenderer.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\src\GL3RenderSystem\GLWindowRenderer.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="light"
-				>
-				<File
-					RelativePath=".\src\GL3RenderSystem\GLLightRenderer.cpp"
+					RelativePath=".\src\GL3RenderSystem\GL3RenderSystem.cpp"
 					>
 				</File>
 			</Filter>
@@ -479,14 +454,6 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\include\GL3RenderSystem\GLOverlayRenderer.h"
-				>
-			</File>
-			<File
-				RelativePath=".\include\GL3RenderSystem\Module_GL.h"
-				>
-			</File>
-			<File
 				RelativePath=".\include\GL3RenderSystem\Module_GLRender.h"
 				>
 			</File>
@@ -495,42 +462,34 @@
 				>
 			</File>
 			<Filter
-				Name="geometry"
+				Name="renderers"
 				>
 				<File
-					RelativePath=".\include\GL3RenderSystem\GLSubmeshRenderer.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="material"
-				>
-				<File
-					RelativePath=".\include\GL3RenderSystem\GLMaterialRenderer.h"
+					RelativePath=".\include\GL3RenderSystem\GL3LightRenderer.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\GL3RenderSystem\GLTexEnvironmentRenderer.h"
+					RelativePath=".\include\GL3RenderSystem\GL3MaterialRenderer.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\GL3RenderSystem\GLTextureRenderer.h"
+					RelativePath=".\include\GL3RenderSystem\GL3SubmeshRenderer.h"
 					>
 				</File>
-			</Filter>
-			<Filter
-				Name="light"
-				>
 				<File
-					RelativePath=".\include\GL3RenderSystem\GLLightRenderer.h"
+					RelativePath=".\include\GL3RenderSystem\GL3TextureRenderer.h"
 					>
 				</File>
-			</Filter>
-			<Filter
-				Name="camera"
-				>
 				<File
-					RelativePath=".\include\GL3RenderSystem\GLCameraRenderer.h"
+					RelativePath=".\include\GL3RenderSystem\GL3WindowRenderer.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\GL3RenderSystem\GL4LightRenderer.h"
+					>
+				</File>
+				<File
+					RelativePath=".\include\GL3RenderSystem\GL4MaterialRenderer.h"
 					>
 				</File>
 			</Filter>
@@ -538,23 +497,11 @@
 				Name="shader"
 				>
 				<File
-					RelativePath=".\include\GL3RenderSystem\GLSLObject.h"
+					RelativePath=".\include\GL3RenderSystem\GL3ShaderProgram.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\GL3RenderSystem\GLSLProgram.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\GL3RenderSystem\GLUniformVariable.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\GL3RenderSystem\Module_GLSL.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\GL3RenderSystem\ShadersCode.h"
+					RelativePath=".\include\GL3RenderSystem\GL4ShaderProgram.h"
 					>
 				</File>
 			</Filter>
@@ -562,31 +509,19 @@
 				Name="main"
 				>
 				<File
-					RelativePath=".\include\GL3RenderSystem\GLBuffer.h"
+					RelativePath=".\include\GL3RenderSystem\GL3Buffer.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\GL3RenderSystem\GLContext.h"
+					RelativePath=".\include\GL3RenderSystem\GL3Context.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\GL3RenderSystem\GLPipeline.h"
+					RelativePath=".\include\GL3RenderSystem\GL3Plugin.h"
 					>
 				</File>
 				<File
-					RelativePath=".\include\GL3RenderSystem\GLPlugin.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\GL3RenderSystem\GLRenderSystem.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\GL3RenderSystem\GLSceneNodeRenderer.h"
-					>
-				</File>
-				<File
-					RelativePath=".\include\GL3RenderSystem\GLWindowRenderer.h"
+					RelativePath=".\include\GL3RenderSystem\GL3RenderSystem.h"
 					>
 				</File>
 			</Filter>

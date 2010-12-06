@@ -12,17 +12,17 @@
 using namespace CastorShape;
 using namespace Castor3D;
 
-#define COMPILE_ERROR_IN_BLOCK( p_desc, p_block)												\
-	_error();																					\
-	CASTOR_EXCEPTION(	"Compiler Error : [" + _getScriptFileName() + " @ L# "					\
-						+ ToString( p_block->m_lineNumBegin)					\
-						+ " ] -> " + p_desc )
+#define COMPILE_ERROR_IN_BLOCK( p_desc, p_block)													\
+	_error();																						\
+	CASTOR_EXCEPTION(	String( "Compiler Error : [") + _getScriptFileName() + String( " @ L# ")	\
+						+ ToString( p_block->m_lineNumBegin)										\
+						+ String( " ] -> ") + p_desc )
 
-#define COMPILE_WARNING_IN_BLOCK( p_desc, p_block)												\
-	_warning();																					\
-	_log(	"Compiler Warning [ " + _getScriptFileName()						\
-							+ " @ L# " + ToString( p_block->m_lineNumBegin)	\
-							+ " ] -> " + p_desc );												\
+#define COMPILE_WARNING_IN_BLOCK( p_desc, p_block)													\
+	_warning();																						\
+	_log(	String( "Compiler Warning [ ") + _getScriptFileName()									\
+							+ String( " @ L# ") + ToString( p_block->m_lineNumBegin)				\
+							+ String( " ] -> ") + p_desc );											\
 
 
 UserFunction * ScriptCompiler :: _compileUserFunction( ScriptBlockArray & p_childs, bool p_predeclareOnly)
@@ -225,7 +225,7 @@ ScriptNode * ScriptCompiler :: _compileSentence( ScriptBlockArray & p_childs)
 	}
 	catch (const Exception & p_exception)
 	{
-		Log::LogMessage( "ScriptCompiler :: _compileSentence : exception caught : " + p_exception.GetDescription());
+		Logger::LogMessage( CU_T( "ScriptCompiler :: _compileSentence : exception caught : ") + p_exception.GetDescription());
 	}
 	
 	return NULL;
@@ -417,8 +417,8 @@ ScriptNode * ScriptCompiler :: _compileOperatedSentence( ScriptBlockArray & p_bl
 		else
 		{
 //			std::cout << "operator -> : " << l_leftNode->GetType()->GetDesc() << std::endl;
-			COMPILE_ERROR_IN_BLOCK( "Class function [" + l_rightOperands[0]->m_contents + "] of class "
-				+ VariableTypeManager::GetBaseTypeName( l_leftNode->GetBaseType()) + " not found", l_block);
+			COMPILE_ERROR_IN_BLOCK( String( "Class function [") + l_rightOperands[0]->m_contents + String( "] of class ")
+				+ VariableTypeManager::GetBaseTypeName( l_leftNode->GetBaseType()) + String( " not found"), l_block);
 		}
 	}
 	else
@@ -1247,10 +1247,10 @@ void ScriptCompiler :: _declareStruct (ScriptBlockArray & p_blockArray)
 
 void ScriptCompiler :: _printBlockArray( const String & p_where, const ScriptBlockArray & p_childs)
 {
-	std::cout << p_where << " : " << p_childs.size() << "\n{" << std::endl;
+	std::cout << p_where.char_str() << " : " << p_childs.size() << "\n{" << std::endl;
 	_times( p_childs.size())
 	{
-		std::cout << "\tcontains : " << i << " - " << p_childs[i]->m_contents << " @ " << p_childs[i]->m_type << std::endl;
+		std::cout << "\tcontains : " << i << " - " << p_childs[i]->m_contents.char_str() << " @ " << p_childs[i]->m_type << std::endl;
 	}
 	std::cout << "}"<<std::endl;
 }

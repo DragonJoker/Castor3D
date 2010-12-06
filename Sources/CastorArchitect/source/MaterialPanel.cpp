@@ -13,7 +13,6 @@ DECLARE_APP( CastorArchitectApp)
 
 MaterialPanel :: MaterialPanel( wxWindow * parent, const wxPoint & pos, const wxSize & size)
 	:	wxPanel( parent, wxID_ANY, pos, size, 524288 | wxBORDER_NONE),
-		m_selectedPass( NULL),
 		m_selectedPassIndex( -1),
 		m_selectedPassPanel( NULL)
 {
@@ -21,7 +20,6 @@ MaterialPanel :: MaterialPanel( wxWindow * parent, const wxPoint & pos, const wx
 
 MaterialPanel :: ~MaterialPanel()
 {
-	m_selectedPass = NULL;
 }
 
 void MaterialPanel :: CreateMaterialPanel( const String & p_materialName)
@@ -32,12 +30,12 @@ void MaterialPanel :: CreateMaterialPanel( const String & p_materialName)
 int MaterialPanel :: GetPassIndex()const
 {
 	wxString l_value = m_passSelector->GetValue();
-	Log::LogMessage( CU_T( "GetPassIndex - l_value : %s"), l_value.c_str());
+	Logger::LogMessage( CU_T( "GetPassIndex - l_value : %s"), l_value.c_str());
 	
 	if (l_value.IsNumber())
 	{
-		int l_res = atoi( l_value.char_str());
-		Log::LogMessage( "GetPassIndex - l_res : %d", l_res);
+		int l_res = atoi( l_value.c_str());
+		Logger::LogMessage( CU_T( "GetPassIndex - l_res : %d"), l_res);
 		return l_res;
 	}
 	if (l_value == CU_T( "New..."))
@@ -58,7 +56,6 @@ void MaterialPanel :: _onMaterialName( wxCommandEvent & event)
 	String l_name = m_materialName->GetValue().c_str();
 	m_material->SetName( l_name);
 	m_material->Initialise();
-	wxGetApp().GetMainFrame()->ShowPanels();
 }
 
 void MaterialPanel :: _onDeletePass( wxCommandEvent & event)
@@ -83,7 +80,6 @@ void MaterialPanel :: _onDeletePass( wxCommandEvent & event)
 		m_passSelector->SetValue( CU_T( "New..."));
 		m_passSelector->Update();
 		this->RemoveChild( m_selectedPassPanel);
-		wxGetApp().GetMainFrame()->ShowPanels();
 
 		if (m_material->GetNbPasses() == 1)
 		{
@@ -106,7 +102,7 @@ void MaterialPanel :: _createMaterialPanel( const Char * p_materialName)
 		m_material.reset();
 	}
 
-	m_selectedPass = NULL;
+	m_selectedPass.reset();
 	m_material = MaterialManager::GetElementByName( (p_materialName != NULL ? p_materialName : C3DEmptyString));
 
 	if ( ! DestroyChildren() || m_material.null())

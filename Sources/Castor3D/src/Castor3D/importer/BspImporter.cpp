@@ -21,6 +21,7 @@ using namespace Castor3D;
 extern bool g_textures;
 
 BspImporter :: BspImporter()
+	:	ExternalImporter( eBSP)
 {
 	m_numOfVerts    = 0;	
 	m_numOfFaces    = 0;
@@ -64,7 +65,7 @@ bool BspImporter :: _import()
 	else
 	{
 		l_pMesh = MeshManager::CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom);
-		Log::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
+		Logger::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
 	}
 
 	int i = 0;

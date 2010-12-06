@@ -2,6 +2,22 @@
 #ifndef ___CS_PRECOMPILED_HEADER_H___
 #define ___CS_PRECOMPILED_HEADER_H___
 //******************************************************************************
+
+#ifndef CHECK_MEMORYLEAKS
+#	ifdef _DEBUG
+#		define CHECK_MEMORYLEAKS 1
+#	else
+#		define CHECK_MEMORYLEAKS 0
+#	endif
+#endif
+
+#if CHECK_MEMORYLEAKS
+#	pragma message( "********************************************************************")
+#	pragma message( "	CastorShape Checking Memory leaks")
+#	pragma message( "********************************************************************")
+#endif
+#include <CastorUtils/Memory.h>
+
 #include <wx/app.h>
 #include <wx/button.h>
 #include <wx/bmpbuttn.h>
@@ -47,7 +63,7 @@ using namespace Castor::Templates;
 #include <CastorUtils/Named.h>
 #include <CastorUtils/SlottedObjectPool.h>
 #include <CastorUtils/Path.h>
-#include <CastorUtils/MinMax.h>
+#include <CastorUtils/FastMath.h>
 #include <CastorUtils/Colour.h>
 #include <CastorUtils/Angle.h>
 #include <CastorUtils/Macros.h>
@@ -73,6 +89,7 @@ using namespace Castor::Templates;
 #include <Castor3D/material/Pass.h>
 #include <Castor3D/material/TextureUnit.h>
 #include <Castor3D/geometry/Module_Geometry.h>
+#include <Castor3D/geometry/basic/Vertex.h>
 #include <Castor3D/geometry/mesh/MeshManager.h>
 #include <Castor3D/geometry/mesh/Mesh.h>
 #include <Castor3D/geometry/mesh/Submesh.h>
@@ -80,7 +97,7 @@ using namespace Castor::Templates;
 #include <Castor3D/scene/Module_Scene.h>
 #include <Castor3D/scene/SceneManager.h>
 #include <Castor3D/scene/Scene.h>
-#include <Castor3D/scene/SceneNode.h>
+#include <Castor3D/scene/Node.h>
 #include <Castor3D/scene/SceneFileParser.h>
 #include <Castor3D/light/Module_Light.h>
 #include <Castor3D/light/Light.h>
@@ -98,7 +115,7 @@ using namespace Castor::Templates;
 #include <Castor3D/shader/Module_Shader.h>
 #include <Castor3D/shader/ShaderManager.h>
 #include <Castor3D/shader/ShaderProgram.h>
-#include <Castor3D/shader/UniformVariable.h>
+#include <Castor3D/shader/FrameVariable.h>
 #include <Castor3D/overlay/OverlayManager.h>
 #include <Castor3D/overlay/Overlay.h>
 #include <Castor3D/Log.h>
@@ -107,21 +124,6 @@ using namespace Castor::Templates;
 #include <string>
 #include <vector>
 #include <math.h>
-
-#ifndef CHECK_MEMORYLEAKS
-#	ifdef _DEBUG
-#		define CHECK_MEMORYLEAKS 1
-#	else
-#		define CHECK_MEMORYLEAKS 0
-#	endif
-#endif
-
-#if CHECK_MEMORYLEAKS
-#	pragma message( "********************************************************************")
-#	pragma message( "	CastorShape Checking Memory leaks")
-#	pragma message( "********************************************************************")
-#	include <CastorUtils/Memory.h>
-#endif
 
 using namespace Castor::Utils;
 
