@@ -1,1 +1,0 @@
-doxygen Castor3D.Doxyfile
