@@ -37,7 +37,7 @@ void MaterialManager::Initialise()
 void MaterialManager :: Clear()
 {
 	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-	Manager<String, Material, MaterialManager>::Clear();
+	Manager<Material>::Clear();
 	m_defaultMaterial.reset();
 }
 
@@ -99,7 +99,7 @@ MaterialPtr MaterialManager :: CreateMaterial( const String & p_name, int p_iNbI
 
 void MaterialManager :: SetToInitialise( MaterialPtr p_material)
 {
-	if ( ! p_material == NULL)
+	if (p_material != NULL)
 	{
 		SetToInitialise( p_material.get());
 	}
@@ -111,71 +111,14 @@ void MaterialManager :: SetToInitialise( Material * p_material)
 
 	if (p_material != NULL)
 	{
-		std::map<String, Material *>::iterator l_it = m_newMaterials.find( p_material->GetName());
+		String l_strName = p_material->GetName();
+		std::map<String, Material *>::iterator l_it = m_newMaterials.find( l_strName);
 
 		if (l_it == m_newMaterials.end())
 		{
-			m_newMaterials[p_material->GetName()] = p_material;
+			m_newMaterials.insert(std::map<String, Material *>::value_type( l_strName, p_material));
 		}
 	}
-}
-
-bool MaterialManager :: Write( const String & p_path)
-{
-	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-	bool l_bReturn = true;
-	size_t l_slashIndex = p_path.find_last_of( CU_T( "."));
-	String l_path = p_path.substr( 0, l_slashIndex) + ".cmtl";
-	TypeMap::const_iterator l_it = m_objectMap.begin();
-	MaterialLoader l_loader;
-
-	File l_pFile( l_path, File::eWrite);
-	bool l_bFirst = true;
-
-	while (l_bReturn && l_it != m_objectMap.end())
-	{
-		if (l_bFirst)
-		{
-			l_bFirst = false;
-		}
-		else
-		{
-			l_pFile.WriteLine( "\n");
-		}
-
-		l_bReturn = l_loader.SaveToFile( l_pFile, l_it->second);
-		++l_it;
-	}
-
-	return l_bReturn;
-}
-
-bool MaterialManager :: Read( const String & p_path)
-{
-	StringArray l_files;
-	bool l_bReturn = true;
-	size_t l_slashIndex = p_path.find_last_of( CU_T( "."));
-	String l_path = p_path.substr( 0, l_slashIndex) + ".cmtl";
-
-	SceneFileParser l_parser( m_pParent);
-	l_parser.ParseFile( l_path);
-/*
-	File::ListDirectoryFiles( l_path, l_files);
-
-	String l_fileName;
-	String l_matName;
-	String l_dotIndex;
-	MaterialLoader l_loader;
-
-	for (size_t i = 0 ; i < l_files.size() && l_bReturn ; i++)
-	{
-		if (l_files[i].find( CU_T( ".cmtl")) != String::npos)
-		{
-			l_bReturn = (l_loader.LoadFromFile( l_files[i]) != NULL);
-		}
-	}
-*/
-	return l_bReturn;
 }
 
 void MaterialManager :: DeleteAll()
@@ -202,4 +145,73 @@ ImagePtr MaterialManager :: CreateImage( const String & p_strPath)
 {
 	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 	return m_pParent->GetImageManager()->CreateImage( p_strPath, p_strPath);
+}
+
+
+bool MaterialManager :: Write( File & p_file)const
+{
+	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+	bool l_bReturn = true;
+	TypeMap::const_iterator l_it = m_objectMap.begin();
+	MaterialLoader l_loader;
+
+	bool l_bFirst = true;
+
+	while (l_bReturn && l_it != m_objectMap.end())
+	{
+		if (l_bFirst)
+		{
+			l_bFirst = false;
+		}
+		else
+		{
+			p_file.WriteLine( "\n");
+		}
+
+		l_bReturn = l_loader.SaveToFile( p_file, l_it->second);
+		++l_it;
+	}
+
+	return l_bReturn;
+}
+
+bool MaterialManager :: Read( File & p_file)
+{
+	SceneFileParser l_parser( m_pParent);
+	return l_parser.ParseFile( p_file);
+}
+
+bool MaterialManager :: Save( File & p_file)const
+{
+	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+	bool l_bReturn = p_file.Write( m_objectMap.size()) == sizeof( size_t);
+	TypeMap::const_iterator l_it = m_objectMap.begin();
+
+	while (l_bReturn && l_it != m_objectMap.end())
+	{
+		l_bReturn = l_it->second->Save( p_file);
+		++l_it;
+	}
+
+	return l_bReturn;
+}
+
+bool MaterialManager :: Load( File & p_file)
+{
+	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+	size_t l_uiSize;
+	bool l_bReturn = p_file.Write( l_uiSize) == sizeof( size_t);
+
+	for (size_t i = 0 ; i < l_uiSize && l_bReturn ; i++)
+	{
+		MaterialPtr l_pMaterial( new Material( this, C3DEmptyString, 0));
+		l_bReturn = l_pMaterial->Save( p_file);
+
+		if (l_bReturn)
+		{
+			m_objectMap.insert( TypeMap::value_type( l_pMaterial->GetName(), l_pMaterial));
+		}
+	}
+
+	return l_bReturn;
 }

@@ -1,201 +1,92 @@
-#include "GL2RenderSystem/PrecompiledHeader.h"
+#include "Gl2RenderSystem/PrecompiledHeader.h"
 
-#include "GL2RenderSystem/GL2Buffer.h"
-#include "GL2RenderSystem/GL2RenderSystem.h"
+#include "Gl2RenderSystem/Gl2Buffer.h"
+#include "Gl2RenderSystem/Gl2RenderSystem.h"
 
 using namespace Castor3D;
 
 //******************************************************************************
 
-void GLVBIndicesBuffer :: Activate()
+void GlVbIndexBuffer :: Activate()
 {
 }
 
-void GLVBIndicesBuffer :: Deactivate()
+void GlVbIndexBuffer :: Deactivate()
 {
-}
-
-//******************************************************************************
-
-void GLVBVertexBuffer :: Activate()
-{
-	glEnableClientState( GL_VERTEX_ARRAY);
-	CheckGLError( CU_T( "GLVBVertexBuffer :: Activate - glEnableClientState"));
-	glVertexPointer( 3, GL_REAL, 0, m_buffer);
-	CheckGLError( CU_T( "GLVBVertexBuffer :: Activate - glVertexPointer"));
-}
-
-void GLVBVertexBuffer :: Deactivate()
-{
-	glDisableClientState( GL_VERTEX_ARRAY);
-	CheckGLError( CU_T( "GLVBVertexBuffer :: Deactivate - glDisableClientState"));
 }
 
 //******************************************************************************
 
-void GLVBNormalsBuffer :: Activate()
+void GlVbVertexBuffer :: Activate()
 {
-	glEnableClientState( GL_NORMAL_ARRAY);
-	CheckGLError( CU_T( "GLVBNormalsBuffer :: Activate - glEnableClientState"));
-	glNormalPointer( GL_REAL, 0, m_buffer);
-	CheckGLError( CU_T( "GLVBNormalsBuffer :: Activate - glNormalPointer"));
-}
+	static const unsigned int s_arraySize[] = {1, 2, 3, 4, 4};
+	static const unsigned int s_arrayType[] = {GL_FLOAT, GL_FLOAT, GL_FLOAT, GL_FLOAT, GL_UNSIGNED_BYTE};
 
-void GLVBNormalsBuffer :: Deactivate()
-{
-	glDisableClientState( GL_NORMAL_ARRAY);
-	CheckGLError( CU_T( "GLVBNormalsBuffer :: Deactivate - glDisableClientState"));
-}
-
-//******************************************************************************
-
-void GLVBTextureBuffer :: Activate( PassPtr p_pass)
-{
-	unsigned int l_nbUnits = p_pass->GetNbTexUnits();
-
-	if (l_nbUnits > 0)
+	for (BufferDeclaration::const_iterator l_it = m_bufferDeclaration.Begin() ; l_it != m_bufferDeclaration.End() ; ++l_it)
 	{
-		glEnableClientState( GL_TEXTURE_COORD_ARRAY);
-		CheckGLError( CU_T( "GLVBTextureBuffer :: Activate - glEnableClientState"));
-		if (RenderSystem::UseMultiTexturing())
+		switch (( * l_it).m_eUsage)
 		{
-			for (unsigned int j = 0 ; j < l_nbUnits ; j++)
-			{
-				glClientActiveTexture( GL_TEXTURE0 + j);
-				CheckGLError( CU_T( "GLVBTextureBuffer :: Activate - glClientActiveTexture"));
-				glTexCoordPointer( 2, GL_REAL, 0, m_buffer);
-				CheckGLError( CU_T( "GLVBTextureBuffer :: Activate - glTexCoordPointer"));
-			}
-		}
-		else
-		{
-			glTexCoordPointer( 2, GL_REAL, 0, m_buffer);
-			CheckGLError( CU_T( "GLVBTextureBuffer :: Activate - glTexCoordPointer"));
-		}
-	}
-}
+		case eUsagePosition:
+			CheckGlError( glEnableClientState( GL_VERTEX_ARRAY), CU_T( "GlVbVertexBuffer :: Activate"));
+			CheckGlError( glVertexPointer( s_arraySize[( * l_it).m_eDataType], s_arrayType[( * l_it).m_eDataType], m_bufferDeclaration.GetStride(), & m_buffer[( * l_it).m_uiOffset]), CU_T( "GlVbVertexBuffer :: Activate"));
+			break;
 
-void GLVBTextureBuffer :: Deactivate()
-{
-	glDisableClientState( GL_TEXTURE_COORD_ARRAY);
-	CheckGLError( CU_T( "GLVBTextureBuffer :: Deactivate - glDisableClientState"));
-}
+		case eUsageNormal:
+			CheckGlError( glEnableClientState( GL_NORMAL_ARRAY), CU_T( "GlVbVertexBuffer :: Activate"));
+			CheckGlError( glNormalPointer( s_arrayType[( * l_it).m_eDataType], m_bufferDeclaration.GetStride(), & m_buffer[( * l_it).m_uiOffset]), CU_T( "GlVbVertexBuffer :: Activate"));
+			break;
 
-//******************************************************************************
+		case eUsageTangent:
+			CheckGlError( glEnableClientState( GL_TANGENT_ARRAY_EXT), CU_T( "GlVbVertexBuffer :: Activate"));
+			CheckGlError( glTangentPointerEXT( s_arrayType[( * l_it).m_eDataType], m_bufferDeclaration.GetStride(), & m_buffer[( * l_it).m_uiOffset]), CU_T( "GlVbVertexBuffer :: Activate"));
+			break;
 
-GLVBOTextureBuffer :: GLVBOTextureBuffer()
-	:	TextureBuffer(),
-		m_index( GL_INVALID_INDEX)
-{
-}
+		case eUsageDiffuse:
+			CheckGlError( glEnableClientState( GL_COLOR_ARRAY), CU_T( "GlVbVertexBuffer :: Activate"));
+			CheckGlError( glColorPointer( s_arraySize[( * l_it).m_eDataType], s_arrayType[( * l_it).m_eDataType], m_bufferDeclaration.GetStride(), & m_buffer[( * l_it).m_uiOffset]), CU_T( "GlVbVertexBuffer :: Activate"));
+			break;
 
-GLVBOTextureBuffer :: ~GLVBOTextureBuffer()
-{
-	Cleanup();
-}
+		case eUsageTexCoords0:
+			CheckGlError( glActiveTexture( GL_TEXTURE0), CU_T( "GlVbVertexBuffer :: Activate"));
+			CheckGlError( glClientActiveTexture( GL_TEXTURE0), CU_T( "GlVbVertexBuffer :: Activate"));
+			CheckGlError( glEnableClientState( GL_TEXTURE_COORD_ARRAY), CU_T( "GlVbVertexBuffer :: Activate"));
+			CheckGlError( glTexCoordPointer( s_arraySize[( * l_it).m_eDataType], s_arrayType[( * l_it).m_eDataType], m_bufferDeclaration.GetStride(), & m_buffer[( * l_it).m_uiOffset]), CU_T( "GlVbVertexBuffer :: Activate"));
+			break;
 
-void GLVBOTextureBuffer :: Cleanup()
-{
-	for (unsigned int i = 0 ; i < m_arrayBuffers.size() ; i++)
-	{
-		m_arrayBuffers[i]->Cleanup();
-	}
+		case eUsageTexCoords1:
+			CheckGlError( glActiveTexture( GL_TEXTURE1), CU_T( "GlVbVertexBuffer :: Activate"));
+			CheckGlError( glClientActiveTexture( GL_TEXTURE1), CU_T( "GlVbVertexBuffer :: Activate"));
+			CheckGlError( glEnableClientState( GL_TEXTURE_COORD_ARRAY), CU_T( "GlVbVertexBuffer :: Activate"));
+			CheckGlError( glTexCoordPointer( s_arraySize[( * l_it).m_eDataType], s_arrayType[( * l_it).m_eDataType], m_bufferDeclaration.GetStride(), & m_buffer[( * l_it).m_uiOffset]), CU_T( "GlVbVertexBuffer :: Activate"));
+			break;
 
-	if (m_index != GL_INVALID_INDEX && glIsBuffer( m_index))
-	{
-		glDeleteBuffers( 1, & m_index);
-	}
+		case eUsageTexCoords2:
+			CheckGlError( glActiveTexture( GL_TEXTURE2), CU_T( "GlVbVertexBuffer :: Activate"));
+			CheckGlError( glClientActiveTexture( GL_TEXTURE2), CU_T( "GlVbVertexBuffer :: Activate"));
+			CheckGlError( glEnableClientState( GL_TEXTURE_COORD_ARRAY), CU_T( "GlVbVertexBuffer :: Activate"));
+			CheckGlError( glTexCoordPointer( s_arraySize[( * l_it).m_eDataType], s_arrayType[( * l_it).m_eDataType], m_bufferDeclaration.GetStride(), & m_buffer[( * l_it).m_uiOffset]), CU_T( "GlVbVertexBuffer :: Activate"));
+			break;
 
-	TextureBuffer::Cleanup();
-	m_index = GL_INVALID_INDEX;
-
-	for (unsigned int i = 0 ; i < m_arrayBuffers.size() ; i++)
-	{
-		m_arrayBuffers[i]->Cleanup();
-	}
-}
-
-void GLVBOTextureBuffer :: Initialise( PassPtr p_pPass)
-{
-	if ( ! RenderSystem::UseShaders() || p_pPass == NULL || ! p_pPass->HasShader())
-	{
-		glGenBuffers( 1, & m_index);
-		CheckGLError( CU_T( "GLVBOTextureBuffer :: Initialise - glGenBuffers"));
-		glBindBuffer( GL_ARRAY_BUFFER, m_index);
-		CheckGLError( CU_T( "GLVBOTextureBuffer :: Initialise - glBindBuffer"));
-		glBufferData( GL_ARRAY_BUFFER, m_filled * sizeof( real), m_buffer, GL_STREAM_DRAW);
-		CheckGLError( CU_T( "GLVBOTextureBuffer :: Initialise - glBufferData"));
-		m_bAssigned = (m_index != GL_INVALID_INDEX);
-		BufferManager::AssignBuffer<real>( m_index, this);
-	}
-	else
-	{
-		unsigned int l_nbUnits = p_pPass->GetNbTexUnits();
-		String l_strBase = "texture";
-		GLVertexAttribsBuffer2rPtr l_pBuffer;
-
-		for (unsigned int i = 0 ; i < l_nbUnits ; i++)
-		{
-			String l_strName = l_strBase;
-			l_strName << i;
-			l_pBuffer = BufferManager::CreateBuffer<real, GLVertexAttribsBuffer2r>( l_strName);
-			m_arrayBuffers.push_back( l_pBuffer);
-			l_pBuffer->InitialiseBuffer( * this);
-			l_pBuffer->Initialise();
+		case eUsageTexCoords3:
+			CheckGlError( glActiveTexture( GL_TEXTURE3), CU_T( "GlVbVertexBuffer :: Activate"));
+			CheckGlError( glClientActiveTexture( GL_TEXTURE3), CU_T( "GlVbVertexBuffer :: Activate"));
+			CheckGlError( glEnableClientState( GL_TEXTURE_COORD_ARRAY), CU_T( "GlVbVertexBuffer :: Activate"));
+			CheckGlError( glTexCoordPointer( s_arraySize[( * l_it).m_eDataType], s_arrayType[( * l_it).m_eDataType], m_bufferDeclaration.GetStride(), & m_buffer[( * l_it).m_uiOffset]), CU_T( "GlVbVertexBuffer :: Activate"));
+			break;
 		}
 	}
 }
 
-void GLVBOTextureBuffer :: Activate( PassPtr p_pPass)
+void GlVbVertexBuffer :: Deactivate()
 {
-	unsigned int l_nbUnits = p_pPass->GetNbTexUnits();
+	CheckGlError( glDisableClientState( GL_VERTEX_ARRAY), CU_T( "GlVbVertexBuffer :: DeactivateBufferObject - glDisableClientState GL_VERTEX_ARRAY"));
+	CheckGlError( glDisableClientState( GL_NORMAL_ARRAY), CU_T( "GlVbVertexBuffer :: DeactivateBufferObject - glDisableClientState GL_NORMAL_ARRAY"));
+	CheckGlError( glDisableClientState( GL_COLOR_ARRAY), CU_T( "GlVbVertexBuffer :: DeactivateBufferObject - glDisableClientState GL_COLOR_ARRAY"));
 
-	if (l_nbUnits > 0)
+	for (int i = 0; i < 4; ++i)
 	{
-		if ( ! RenderSystem::UseShaders() || p_pPass == NULL || ! p_pPass->HasShader())
-		{
-			glBindBuffer( GL_ARRAY_BUFFER, m_index);
-			CheckGLError( CU_T( "GLVBOTextureBuffer :: Activate - glBindBuffer"));
-			glEnableClientState( GL_TEXTURE_COORD_ARRAY);
-			CheckGLError( CU_T( "GLVBOTextureBuffer :: Activate - glEnableClientState"));
-
-			if (RenderSystem::UseMultiTexturing())
-			{
-				for (unsigned int j = 0 ; j < l_nbUnits ; j++)
-				{
-					glClientActiveTexture( GL_TEXTURE0 + j);
-					CheckGLError( CU_T( "GLVBOTextureBuffer :: Activate - glClientActiveTexture"));
-					glTexCoordPointer( 2, GL_REAL, 0, NULL);
-					CheckGLError( CU_T( "GLVBOTextureBuffer :: Activate - glTexCoordPointer"));
-				}
-			}
-			else
-			{
-				glTexCoordPointer( 2, GL_REAL, 0, NULL);
-				CheckGLError( CU_T( "GLGeometryRenderer :: Activate - glTexCoordPointer"));
-			}
-		}
-		else
-		{
-			for (unsigned int i = 0 ; i < m_arrayBuffers.size() ; i++)
-			{
-				m_arrayBuffers[i]->Activate();
-			}
-		}
-	}
-}
-
-void GLVBOTextureBuffer :: Deactivate()
-{
-	glDisableClientState( GL_TEXTURE_COORD_ARRAY);
-	CheckGLError( CU_T( "GLVBOTextureBuffer :: Deactivate - glDisableClientState"));
-}
-
-void GLVBOTextureBuffer :: SetShaderProgram( ShaderProgramPtr p_pProgram)
-{
-	for (unsigned int i = 0 ; i < m_arrayBuffers.size() ; i++)
-	{
-		m_arrayBuffers[i]->SetShaderProgram( p_pProgram);
+		CheckGlError( glActiveTexture( GL_TEXTURE0 + i), CU_T( "GlVbVertexBuffer :: DeactivateBufferObject - glActiveTexture"));
+		CheckGlError( glDisableClientState( GL_TEXTURE_COORD_ARRAY), CU_T( "GlVbVertexBuffer :: DeactivateBufferObject - glDisableClientState GL_TEXTURE_COORD_ARRAY"));
 	}
 }
 

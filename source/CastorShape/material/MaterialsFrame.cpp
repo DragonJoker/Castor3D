@@ -7,7 +7,7 @@ using namespace CastorShape;
 
 MaterialsFrame :: MaterialsFrame( MaterialManager * p_pManager, wxWindow * parent, const wxString & title,
 									  const wxPoint & pos, const wxSize & size)
-	:	GUICommon::MaterialsFrame( p_pManager, parent, title, pos, size)
+	:	GuiCommon::MaterialsFrame( p_pManager, parent, title, pos, size)
 {
 	wxSize l_size = GetClientSize();
 
@@ -26,11 +26,11 @@ MaterialsFrame :: ~MaterialsFrame()
 
 void MaterialsFrame :: CreateMaterialPanel( const String & p_materialName)
 {
-	GUICommon::MaterialsFrame::CreateMaterialPanel( p_materialName);
+	GuiCommon::MaterialsFrame::CreateMaterialPanel( p_materialName);
 	m_deleteMaterial->Show();
 }
 
-BEGIN_EVENT_TABLE( MaterialsFrame, GUICommon::MaterialsFrame)
+BEGIN_EVENT_TABLE( MaterialsFrame, GuiCommon::MaterialsFrame)
 	EVT_LIST_ITEM_SELECTED(		mlfMaterialsList, 	MaterialsFrame::_onSelected)
 	EVT_LIST_ITEM_DESELECTED(	mlfMaterialsList, 	MaterialsFrame::_onDeselected)
 	EVT_BUTTON(	mlfNewMaterial,						MaterialsFrame::_onNewMaterial)

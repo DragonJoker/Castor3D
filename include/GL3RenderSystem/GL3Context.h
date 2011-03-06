@@ -15,22 +15,19 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL3_Context___
-#define ___GL3_Context___
+#ifndef ___Gl3_Context___
+#define ___Gl3_Context___
 
-#include "Module_GLRender.h"
+#include "Module_Gl3Render.h"
 
-namespace Castor3D
-{
-	class GL3Context : public GLContext
-    {
-    public:
-        GL3Context( RenderWindow * p_window, void * p_win);
-        virtual ~GL3Context();
-
-	private:
-		void _createGL3Context();
-    };
-}
+#ifdef _WIN32
+#	include "Gl3MSWContext.h"
+#else
+#	ifndef CASTOR_GTK
+#		include "Gl3X11Context.h"
+#	else
+#		include "Gl3GtkContext.h"
+#	endif
+#endif
 
 #endif

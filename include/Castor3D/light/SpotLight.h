@@ -45,7 +45,7 @@ namespace Castor3D
 		*@param p_name : The light's name, default is void
 		*@param p_index : The light's index (max 8 active lights at a time)
 		*/
-		SpotLight( SceneNodePtr p_pNode, const String & p_name=C3DEmptyString);
+		SpotLight( Scene * p_pScene, SceneNodePtr p_pNode, const String & p_name=C3DEmptyString);
 
 	public:
 		/**
@@ -55,7 +55,7 @@ namespace Castor3D
 		/**
 		 * Renders the light in the current window
 		 */
-		virtual void Render( eDRAW_TYPE p_displayMode);
+		virtual void Render( ePRIMITIVE_TYPE p_displayMode);
 
 	private:
 		/**
@@ -91,30 +91,23 @@ namespace Castor3D
 		 *@param p_cutOff : the new cutoff value
 		 */
 		void SetCutOff( float p_cutOff);
-		/**
-		 * Writes the spot light in a file
-		 *@param p_pFile : a pointer to file to write in
-		 */
-		virtual bool Write( Castor::Utils::File & p_pFile)const;
 
-	public:
+		/**@name Inherited methods from Textable */
+		//@{
+		virtual bool Write( File & p_file)const;
+		virtual bool Read( File & p_file) { return false; }
+		//@}
+
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
+
 		/**@name Accessors */
 		//@{
-		/**
-		 *@return The light type (Spot, here), used for polymorphism
-		 */
-		virtual eTYPE			GetLightType	()const { return eSpot; }
-		/**
-		 *@return The attenuation values, three floats : constant, linear and quadratic attenuation
-		 */
 		inline const float *	GetAttenuation	()const { return m_attenuation.const_ptr(); }
-		/**
-		 *@return The exponent value
-		 */
 		inline float			GetExponent		()const { return m_exponent; }
-		/**
-		 *@return The cutoff value
-		 */
 		inline float			GetCutOff		()const { return m_cutOff; }
 		//@}
 	};

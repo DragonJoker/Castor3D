@@ -15,11 +15,11 @@ using namespace Castor3D;
 
 size_t	RenderWindow :: s_nbRenderWindows	= 0;
 
-RenderWindow :: RenderWindow( Root * p_pRoot, ScenePtr p_mainScene, void * p_hWnd, int p_windowWidth, int p_windowHeight,
-							 Viewport::eTYPE p_type, PixelFormat p_pixelFormat, ePROJECTION_DIRECTION p_look)
-	:	m_type					( p_type)
+RenderWindow :: RenderWindow( Root * p_pRoot, ScenePtr p_mainScene, void * p_handle, int p_windowWidth, int p_windowHeight,
+							 Viewport::eTYPE p_type, ePIXEL_FORMAT p_pixelFormat, ePROJECTION_DIRECTION p_look)
+    :   m_handle                ( p_handle)
+	,	m_type					( p_type)
 	,	m_lookAt				( p_look)
-	,	m_hWnd					( p_hWnd)
 	,	m_drawType				( eTriangles)
 	,	m_showNormals			( false)
 	,	m_normalsMode			( eFace)

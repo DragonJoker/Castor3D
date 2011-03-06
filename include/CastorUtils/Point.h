@@ -19,10 +19,82 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___Castor_Point___
 
 #include "File.h"
+#include <math.h>
+#include "Serialisable.h"
 
 namespace Castor
 {	namespace Math
 {
+	class PointBase
+	{
+	public:
+		/**@name Construction / Destruction */
+		//@{
+		PointBase(){}
+		virtual ~PointBase(){}
+		//@}
+
+		/**@name Copy */
+		//@{
+		PointBase( const PointBase & p_ptBase){}
+		virtual PointBase & operator =( const PointBase & p_ptBase){ return * this; }
+		//@}
+
+		virtual size_t			GetElementCount()const{ return 0; }
+		virtual size_t			GetElementSize()const{ return 0; }
+		virtual void			LinkCoords( const void * p_pCoords){}
+		virtual void 			UnlinkCoords(){}
+
+		template <typename T> T			*	ptr			()		{ return (T *)_ptr(); }
+		template <typename T> const T	*	const_ptr	()const	{ return (const T *)_const_ptr(); }
+
+	protected:
+		virtual void		*	_ptr() { return NULL; }
+		virtual const void	*	_const_ptr()const { return NULL; }
+	};
+
+	template <typename T>
+	class TPointBase : public PointBase
+	{
+	private:
+		template <typename _Ty> friend class TPointBase;
+		bool m_bOwnCoords;
+		T * m_coords;
+		size_t m_uiCount;
+
+	public:
+		/**@name Construction / Destruction */
+		//@{
+		TPointBase( size_t p_uiCount);
+		TPointBase( size_t p_uiCount, const T * p_pData);
+		virtual ~TPointBase();
+		//@}
+
+		/**@name Copy */
+		//@{
+		template <typename _Ty> explicit TPointBase( const TPointBase<_Ty> & p_ptBase);
+		template <typename _Ty> TPointBase<T> & operator =( const TPointBase<_Ty> & p_ptBase);
+		//@}
+
+		/**@name Accessors */
+		//@{
+		virtual size_t	GetElementCount()const { return m_uiCount; }
+		virtual size_t	GetElementSize()const { return sizeof( T); }
+		virtual void	LinkCoords( const void * p_pCoords);
+		virtual void	UnlinkCoords();
+		void 			ToValues( T * p_pResult)const;
+		const T		&	operator[]( size_t p_pos)const;
+		T			&	operator[]( size_t p_pos);
+		const T		&	at( size_t p_pos)const;
+		T			&	at( size_t p_pos);
+		T			*	ptr			()		{ return m_coords; }
+		const T		*	const_ptr	()const	{ return m_coords; }
+
+	private:
+		virtual void		*	_ptr		()		{ return m_coords; }
+		virtual const void	*	_const_ptr	()const	{ return m_coords; }
+		//@}
+	};
 	//! Templated point representation, with any number of coordinates
 	/*!
 	Can hold any type which has a defined Policy
@@ -30,7 +102,7 @@ namespace Castor
 	\date 14/02/2010
 	*/
 	template <typename T, size_t Count>
-	class Point
+	class Point : public TPointBase<T>, public Utils::Serialisable
 	{
 	private:
 		typedef T									value_type;
@@ -45,12 +117,6 @@ namespace Castor
 		typedef const Point<value_type, Count> *	const_point_pointer;
 		typedef Templates::Policy<value_type>		policy;
 
-	private:
-		bool m_bOwnCoords;
-
-	public:
-		value_type * m_coords;
-
 	public:
 		/**@name Constructors */
 		//@{
@@ -60,110 +126,11 @@ namespace Castor
 		Point( const value_type & p_vA, const value_type & p_vB, const value_type & p_vC);
 		Point( const value_type & p_vA, const value_type & p_vB, const value_type & p_vC, const value_type & p_vD);
 		Point( const_point_reference p_ptPoint);
-		template <typename _Ty>
-		Point( const _Ty * p_pValues)
-			:	m_coords( new T[Count]),
-				m_bOwnCoords( true)
-		{
-			if (p_pValues == NULL)
-			{
-				for (size_t i = 0 ; i < Count ; i++)
-				{
-					policy::init( m_coords[i]);
-				}
-			}
-			else
-			{
-				for (size_t i = 0 ; i < Count ; i++)
-				{
-					policy::assign( m_coords[i], p_pValues[i]);
-				}
-			}
-		}
-		template <typename _Ty>
-		Point( const _Ty & p_vA, const _Ty & p_vB)
-			:	m_coords( new T[Count]),
-				m_bOwnCoords( true)
-		{
-			if (Count > 0)
-			{
-				policy::assign( m_coords[0], p_vA);
-			}
-			if (Count > 1)
-			{
-				policy::assign( m_coords[1], p_vB);
-
-				for (size_t i = 2 ; i < Count ; i++)
-				{
-					policy::init( m_coords[i]);
-				}
-			}
-		}
-		template <typename _Ty>
-		Point( const _Ty & p_vA, const _Ty & p_vB, const _Ty & p_vC)
-			:	m_coords( new T[Count]),
-				m_bOwnCoords( true)
-		{
-			if (Count > 0)
-			{
-				policy::assign( m_coords[0], p_vA);
-			}
-			if (Count > 1)
-			{
-				policy::assign( m_coords[1], p_vB);
-			}
-			if (Count > 2)
-			{
-				policy::assign( m_coords[2], p_vC);
-
-				for (size_t i = 3 ; i < Count ; i++)
-				{
-					policy::init( m_coords[i]);
-				}
-			}
-		}
-		template <typename _Ty>
-		Point( const _Ty & p_vA, const _Ty & p_vB, const _Ty & p_vC, const _Ty & p_vD)
-			:	m_coords( new T[Count]),
-				m_bOwnCoords( true)
-		{
-			if (Count > 0)
-			{
-				policy::assign( m_coords[0], p_vA);
-			}
-			if (Count > 1)
-			{
-				policy::assign( m_coords[1], p_vB);
-			}
-			if (Count > 2)
-			{
-				policy::assign( m_coords[2], p_vC);
-			}
-			if (Count > 3)
-			{
-				policy::assign( m_coords[3], p_vD);
-
-				for (size_t i = 4 ; i < Count ; i++)
-				{
-					policy::init( m_coords[i]);
-				}
-			}
-		}
-		template <typename _Ty, size_t _Count>
-		Point( const Point<_Ty, _Count> & p_ptPoint)
-			:	m_coords( new T[Count]),
-				m_bOwnCoords( true)
-		{
-			for (size_t i = 0 ; i < std::min<size_t>( Count, _Count) ; i++)
-			{
-				policy::assign( m_coords[i], p_ptPoint[i]);
-			}
-
-			for (size_t i = _Count ; i < Count ; i++)
-			{
-				policy::init( m_coords[i]);
-			}
-		}
+		template <typename _Ty> Point( const _Ty * p_pValues);
+		template <typename _Ty> Point( const _Ty & p_vA, const _Ty & p_vB);
+		template <typename _Ty> Point( const _Ty & p_vA, const _Ty & p_vB, const _Ty & p_vC);
+		template <typename _Ty> Point( const _Ty & p_vA, const _Ty & p_vB, const _Ty & p_vC, const _Ty & p_vD);
+		template <typename _Ty, size_t _Count> Point( const Point<_Ty, _Count> & p_ptPoint);
 		virtual ~Point();
 		//@}
 		/**@name Operators */
@@ -191,83 +158,12 @@ namespace Castor
 		point			operator ^ ( const_point_reference p_vertex)const;
 		std::ostream & 	operator <<( std::ostream & l_streamOut);
 		std::istream & 	operator >>( std::istream & l_streamIn);
-		template <typename _Ty>
-		inline Point <T, Count> operator +=( const Point<_Ty, Count> & p_pt)
-		{
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				policy::ass_add<_Ty>( m_coords[i], p_pt[i]);
-			}
-
-			return * this;
-		}
-		template <size_t _Count>
-		inline Point <T, Count> operator +=( const Point<value_type, _Count> & p_pt)
-		{
-			for (size_t i = 0 ; i < std::min<size_t>( Count, _Count) ; i++)
-			{
-				policy::ass_add( m_coords[i], p_pt[i]);
-			}
-
-			return * this;
-		}
-		template <typename _Ty, size_t _Count>
-		inline Point <T, Count> operator +=( const Point<_Ty, _Count> & p_pt)
-		{
-			for (size_t i = 0 ; i < std::min<size_t>( Count, _Count) ; i++)
-			{
-				policy::ass_add<_Ty>( m_coords[i], p_pt[i]);
-			}
-
-			return * this;
-		}
-
-		template <typename _Ty>
-		inline Point <T, Count> operator =( const Point<_Ty, Count> & p_pt)
-		{
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				policy::assign<_Ty>( m_coords[i], p_pt[i]);
-			}
-
-			return * this;
-		}
-		template <size_t _Count>
-		inline Point <T, Count> operator =( const Point<value_type, _Count> & p_pt)
-		{
-			for (size_t i = 0 ; i < std::min<size_t>( Count, _Count) ; i++)
-			{
-				policy::assign( m_coords[i], p_pt[i]);
-			}
-
-			if (Count > _Count)
-			{
-				for (size_t i = _Count ; i < Count ; i++)
-				{
-					policy::init( m_coords[i]);
-				}
-			}
-
-			return * this;
-		}
-		template <typename _Ty, size_t _Count>
-		inline Point <T, Count> operator =( const Point<_Ty, _Count> & p_pt)
-		{
-			for (size_t i = 0 ; i < std::min<size_t>( Count, _Count) ; i++)
-			{
-				policy::assign<_Ty>( m_coords[i], p_pt[i]);
-			}
-
-			if (Count > _Count)
-			{
-				for (size_t i = _Count ; i < Count ; i++)
-				{
-					policy::init( m_coords[i]);
-				}
-			}
-
-			return * this;
-		}
+		template <typename _Ty> Point <T, Count> operator +=( const Point<_Ty, Count> & p_pt);
+		template <size_t _Count> Point <T, Count> operator +=( const Point<value_type, _Count> & p_pt);
+		template <typename _Ty, size_t _Count> Point <T, Count> operator +=( const Point<_Ty, _Count> & p_pt);
+		template <typename _Ty> Point <T, Count> operator =( const Point<_Ty, Count> & p_pt);
+		template <size_t _Count> Point <T, Count> operator =( const Point<value_type, _Count> & p_pt);
+		template <typename _Ty, size_t _Count> Point <T, Count> operator =( const Point<_Ty, _Count> & p_pt);
 		//@}
 		/**@name Operations */
 		//@{
@@ -278,18 +174,8 @@ namespace Castor
 		value_type 		GetSquaredLength()const;
 		real 			GetLength()const;
 		real 			GetCosTheta( const_point_reference p_vector)const;
-		virtual bool 	Write( Utils::File & p_file)const;
-		virtual bool 	Read( Utils::File & p_file);
-		//@}
-		/**@name Accessors */
-		//@{
-		void 			LinkCoords( const void * p_pCoords);
-		void 			UnlinkCoords();
-		void 			ToValues( value_type * p_pResult)const;
-		const_reference	operator[]( size_t p_pos)const;
-		reference		operator[]( size_t p_pos);
-		pointer			ptr();
-		const_pointer	const_ptr()const;
+		virtual bool 	Save( Utils::File & p_file)const;
+		virtual bool 	Load( Utils::File & p_file);
 		//@}
 	};
 

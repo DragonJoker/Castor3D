@@ -15,10 +15,10 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL_OverlayRenderer___
-#define ___GL_OverlayRenderer___
+#ifndef ___Gl_OverlayRenderer___
+#define ___Gl_OverlayRenderer___
 
-#include "Module_GLRender.h"
+#include "Module_GlRender.h"
 
 namespace Castor3D
 {
@@ -28,19 +28,19 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class GLOverlayRenderer : public OverlayRenderer
+	class GlOverlayRenderer : public OverlayRenderer
 	{
 	public:
 		/**
 		 * Constructor
 		 */
-		GLOverlayRenderer( SceneManager * p_pSceneManager)
+		GlOverlayRenderer( SceneManager * p_pSceneManager)
 			:	OverlayRenderer( p_pSceneManager)
 		{}
 		/**
 		 * Destructor
 		 */
-		virtual ~GLOverlayRenderer(){}
+		virtual ~GlOverlayRenderer(){}
 
 		virtual void DrawPanel();
 		virtual void DrawBorderPanel();

@@ -41,6 +41,15 @@ namespace CastorShape
 			eRender
 		};
 
+		enum eBMPs
+		{
+			eBmpFichier		= GuiCommon::GeometriesListFrame::eNbBmps,
+			eBmpAjouter,
+			eBmpParametres,
+			eBmpGeometries,
+			eBmpMaterials,
+		};
+
 	private:
 		RenderPanel * m_3dFrame;
 		bool m_bMultiFrames;
@@ -59,20 +68,22 @@ namespace CastorShape
 		Castor3D::GeometryPtr m_repereY;
 		Castor3D::GeometryPtr m_repereZ;
 		Castor3D::ScenePtr m_mainScene;
-		Castor3D::Root * m_castor3D;
+		Castor3D::Root * m_pCastor3D;
 		Castor3D::GeometryPtr m_selectedGeometry;
 		Container<MaterialInfos *>::Vector m_selectedGeometryMaterials;
 		MaterialInfos m_selectedMaterial;
 		Container<Castor3D::SubdividerPtr>::Vector m_arraySubdividers;
 		Container<Castor3D::SubdividerPtr>::Vector m_arraySubdividersDummy;
 
+		GuiCommon::ImagesLoader		*	m_pImagesLoader;
+
 		bool m_bWireFrame;
 
 	public:
-		MainFrame( wxWindow * parent, const wxString & title, 
-					 const wxPoint & pos = wxDefaultPosition, 
-					 const wxSize & size = wxDefaultSize, 
-					 long style = wxDEFAULT_FRAME_STYLE, 
+		MainFrame( wxWindow * parent, const wxString & title,
+					 const wxPoint & pos = wxDefaultPosition,
+					 const wxSize & size = wxDefaultSize,
+					 long style = wxDEFAULT_FRAME_STYLE,
 					 wxString name = wxString( (wxChar *)"MainFrame", 11));
 		~MainFrame();
 
@@ -87,7 +98,7 @@ namespace CastorShape
 		void _populateToolbar();
 		void _setSelectionType( SelectionType p_eType);
 		void _setActionType( ActionType p_eType);
-		void _createGeometry( Castor3D::Mesh::eTYPE p_meshType, String & p_name,
+		void _createGeometry( Castor3D::eMESH_TYPE p_meshType, String p_name,
 							  const String & p_meshStrVars,
 							  const String & p_baseName, Castor3D::ScenePtr p_scene,
 							  NewGeometryDialog * p_dialog, unsigned int i=0,

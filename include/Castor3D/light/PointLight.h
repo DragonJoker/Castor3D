@@ -42,7 +42,7 @@ namespace Castor3D
 		 *@param p_name : This light's name, default is void
 		 *@param p_index : This light's index (max 8 active lights at a time)
 		 */
-		PointLight( SceneNodePtr p_pNode, const String & p_name=C3DEmptyString);
+		PointLight( Scene * p_pScene, SceneNodePtr p_pNode, const String & p_name=C3DEmptyString);
 
 	public:
 		/**
@@ -74,23 +74,22 @@ namespace Castor3D
 		 *@param p_attenuation : a Point3r
 		 */
 		void SetAttenuation	( const Point3f & p_attenuation);
-		/**
-		 * Writes the PointLight in a file
-		 *@param p_pFile : the file to write in
-		 */
-		virtual bool Write( Castor::Utils::File & p_pFile)const;
 
-	public:
+		/**@name Inherited methods from Textable */
+		//@{
+		virtual bool Write( File & p_file)const;
+		virtual bool Read( File & p_file) { return false; }
+		//@}
+
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
+
 		/**@name Accessors */
 		//@{
-		/**
-		 *@return The light type (Point, here), used for polymorphism
-		 */
-		virtual eTYPE	GetLightType()const { return ePoint; }
-		/**
-		 *@return The attenuation values, three floats : constant, linear and quadratic attenuation
-		 */
-		inline float *	GetAttenuation	() { return m_attenuation.ptr(); }
+		inline float *		GetAttenuation	()		{ return m_attenuation.ptr(); }
 		//@}
 	};
 }

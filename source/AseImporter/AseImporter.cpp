@@ -146,43 +146,43 @@ MaterialPtr AseImporter :: _readMaterialInfos()
 		else if (m_currentWord == MATERIAL_DIFFUSE)
 		{
 			m_pFile->ReadWord( m_currentWord);
-			l_diffuse[0] = m_currentWord.ToFloat();
+			l_diffuse[0] = m_currentWord.to_float();
 			m_pFile->ReadWord( m_currentWord);
-			l_diffuse[1] = m_currentWord.ToFloat();
+			l_diffuse[1] = m_currentWord.to_float();
 			m_pFile->ReadWord( m_currentWord);
-			l_diffuse[2] = m_currentWord.ToFloat();
+			l_diffuse[2] = m_currentWord.to_float();
 			l_material->GetPass( 0)->SetDiffuse( l_diffuse);
 		}
 		else if (m_currentWord == MATERIAL_AMBIENT)
 		{
 			m_pFile->ReadWord( m_currentWord);
-			l_ambient[0] = m_currentWord.ToFloat();
+			l_ambient[0] = m_currentWord.to_float();
 			m_pFile->ReadWord( m_currentWord);
-			l_ambient[1] = m_currentWord.ToFloat();
+			l_ambient[1] = m_currentWord.to_float();
 			m_pFile->ReadWord( m_currentWord);
-			l_ambient[2] = m_currentWord.ToFloat();
+			l_ambient[2] = m_currentWord.to_float();
 			l_material->GetPass( 0)->SetAmbient( l_ambient);
 		}
 		else if (m_currentWord == MATERIAL_SPECULAR)
 		{
 			m_pFile->ReadWord( m_currentWord);
-			l_specular[0] = m_currentWord.ToFloat();
+			l_specular[0] = m_currentWord.to_float();
 			m_pFile->ReadWord( m_currentWord);
-			l_specular[1] = m_currentWord.ToFloat();
+			l_specular[1] = m_currentWord.to_float();
 			m_pFile->ReadWord( m_currentWord);
-			l_specular[2] = m_currentWord.ToFloat();
+			l_specular[2] = m_currentWord.to_float();
 			l_material->GetPass( 0)->SetSpecular( l_specular);
 		}
 		else if (m_currentWord == MATERIAL_SHININESS)
 		{
 			m_pFile->ReadWord( m_currentWord);
-			l_shininess = m_currentWord.ToFloat();
+			l_shininess = m_currentWord.to_float();
 			l_material->GetPass( 0)->SetShininess( l_shininess * 128.0f);
 		}
 		else if (m_currentWord == TEXTURE)
 		{
 			PassPtr l_pass = l_material->GetPass( 0);
-			size_t l_i = std::min( m_fileName.find_last_of( "/"), m_fileName.find_last_of( "\\"));
+			size_t l_i = std::min<size_t>( m_fileName.find_last_of( "/"), m_fileName.find_last_of( "\\"));
 			String l_filePath = m_fileName.substr( 0, l_i + 1);
 			TextureUnitPtr l_unit = l_pass->AddTextureUnit();
 			String l_texPath = _retrieveString();
@@ -386,8 +386,8 @@ void AseImporter :: _readObjectInfos()
 
 			if ( ! m_pManager->GetMeshManager()->HasElement( l_nodeName))
 			{
-				l_mesh = m_pManager->GetMeshManager()->CreateMesh( l_nodeName, l_faces, l_sizes, Mesh::eCustom);
-				l_geometry = GeometryPtr( new Geometry( l_mesh, l_node, l_nodeName));
+				l_mesh = m_pManager->GetMeshManager()->CreateMesh( l_nodeName, l_faces, l_sizes, eCustom);
+				l_geometry = GeometryPtr( new Geometry( m_pScene.get(), l_mesh, l_node, l_nodeName));
 				Logger::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_nodeName.c_str());
 				_readMeshInfos( l_mesh);
 				m_geometries.insert( GeometryPtrStrMap::value_type( l_nodeName, l_geometry));
@@ -397,7 +397,7 @@ void AseImporter :: _readObjectInfos()
 		else if (m_currentWord == MATERIAL_ID)
 		{
 			m_pFile->ReadWord( m_currentWord);
-			int l_id = m_currentWord.ToInt();
+			int l_id = m_currentWord.to_int();
 			MeshPtr l_mesh( l_geometry->GetMesh());
 
 			for (size_t i = 0 ; i < l_mesh->GetNbSubmeshes() ; i++)
@@ -452,7 +452,7 @@ void AseImporter :: _readMeshInfos( MeshPtr p_mesh)
 		else if (m_currentWord == MATERIAL_ID)
 		{
 			m_pFile->ReadWord( m_currentWord);
-			l_id = m_currentWord.ToInt();
+			l_id = m_currentWord.to_int();
 			l_submesh->SetMaterial( m_materials.find( (size_t)l_id)->second);
 		}
 	}
@@ -535,9 +535,9 @@ void AseImporter :: _readTexFaceList( SubmeshPtr p_submesh)
 			_retrieveTextureFace( l_indices);
 
 			FacePtr l_face = p_submesh->GetSmoothGroup( 0)->GetFace( l_indices[0]);
-			l_face->SetVertexTexCoords( 0, m_texCoords[ l_indices[1] ]->m_coords[0], m_texCoords[ l_indices[1] ]->m_coords[1]);
-			l_face->SetVertexTexCoords( 1, m_texCoords[ l_indices[2] ]->m_coords[0], m_texCoords[ l_indices[2] ]->m_coords[1]);
-			l_face->SetVertexTexCoords( 2, m_texCoords[ l_indices[3] ]->m_coords[0], m_texCoords[ l_indices[3] ]->m_coords[1]);
+			l_face->SetVertexTexCoords( 0, m_texCoords[ l_indices[1] ]->at( 0), m_texCoords[ l_indices[1] ]->at( 1));
+			l_face->SetVertexTexCoords( 1, m_texCoords[ l_indices[2] ]->at( 0), m_texCoords[ l_indices[2] ]->at( 1));
+			l_face->SetVertexTexCoords( 2, m_texCoords[ l_indices[3] ]->at( 0), m_texCoords[ l_indices[3] ]->at( 1));
 		}
 	}
 }
@@ -605,7 +605,7 @@ void AseImporter :: _retrieveVertex( real * p_position)
 
 	if (m_pFile->ReadLine( l_tmp, 256))
 	{
-		sscanf_s( l_tmp.char_str(), "%d %f %f %f", & l_index, & p_position[0], & p_position[1], & p_position[2]);
+		Sscanf( l_tmp.char_str(), "%d %f %f %f", & l_index, & p_position[0], & p_position[1], & p_position[2]);
 	}
 }
 
@@ -616,7 +616,7 @@ void AseImporter :: _retrieveFace( int * p_indices)
 
 	if (m_pFile->ReadLine( l_tmp, 256))
 	{
-		sscanf_s( l_tmp.char_str(), "%d:\tA:\t%d B:\t%d C:\t%d", & l_index, & p_indices[0], & p_indices[1], & p_indices[2]);
+		Sscanf( l_tmp.char_str(), "%d:\tA:\t%d B:\t%d C:\t%d", & l_index, & p_indices[0], & p_indices[1], & p_indices[2]);
 	}
 }
 
@@ -627,7 +627,7 @@ void AseImporter :: _retrieveTextureVertex( real * p_position)
 
 	if (m_pFile->ReadLine( l_tmp, 256))
 	{
-		sscanf_s( l_tmp.char_str(), "%d %f %f %f", & l_index, & p_position[0], & p_position[1], & p_position[2]);
+		Sscanf( l_tmp.char_str(), "%d %f %f %f", & l_index, & p_position[0], & p_position[1], & p_position[2]);
 	}
 }
 
@@ -637,6 +637,6 @@ void AseImporter :: _retrieveTextureFace( int * p_indices)
 
 	if (m_pFile->ReadLine( l_tmp, 256))
 	{
-		sscanf_s( l_tmp.char_str(), "%d %d %d %d", & p_indices[0], & p_indices[1], & p_indices[2], & p_indices[3]);
+		Sscanf( l_tmp.char_str(), "%d %d %d %d", & p_indices[0], & p_indices[1], & p_indices[2], & p_indices[3]);
 	}
 }

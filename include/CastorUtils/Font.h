@@ -5,6 +5,7 @@
 #include "ResourceLoader.h"
 #include <ft2build.h>
 #include <freetype/freetype.h>
+#include "Path.h"
 
 namespace Castor
 {	namespace Resources
@@ -17,10 +18,10 @@ namespace Castor
 	\author Sylvain DOREMUS
 	\date 17/01/2011
 	*/
-	class FontLoader : ResourceLoader<Font, FontManager>, public MemoryTraced<FontLoader>
+	class FontLoader : ResourceLoader<Font>, public MemoryTraced<FontLoader>
 	{
 	public:
-		FontPtr LoadFromFile( FontManager * p_pManager, const String & p_strName, const String & p_strPath, int p_uiHeight, ImageManager * p_pImageManager);
+		FontPtr LoadFromFile( Manager<Font> * p_pManager, const String & p_strName, const Utils::Path & p_strPath, int p_uiHeight, ImageManager * p_pImageManager);
 	};
 	//! Font resource
 	/*!
@@ -29,29 +30,32 @@ namespace Castor
 	\version 0.6.1.0
 	\date 17/01/2011
 	*/
-	class Font : public Resource<Font, FontManager>, public MemoryTraced<Font>
+	class Font : public Resource<Font>, public MemoryTraced<Font>
 	{
 	protected:
 		friend class FontLoader;
 		size_t m_uiHeight;		// Holds The Height Of The Font.
-		String m_strPath;
+		Utils::Path m_strPath;
 		ImagePtr m_pImage;
 		size_t m_uiNbRows;
 		size_t m_uiNbColumns;
 
 	protected:
-		Font( FontManager * p_pManager);
-		Font( FontManager * p_pManager, const String & p_strName, const String & p_strPath, size_t p_uiHeight, ImageManager * p_pImageManager);
+		Font( Manager<Font> * p_pManager);
+		Font( Manager<Font> * p_pManager, const String & p_strName, const Utils::Path & p_strPath, size_t p_uiHeight, ImageManager * p_pImageManager);
 
 	public:
-		void Initialise( const String & p_strPath, size_t p_uiHeight, ImageManager * p_pImageManager);
+		void Initialise( const Utils::Path & p_strPath, size_t p_uiHeight, ImageManager * p_pImageManager);
 		void Cleanup();
 
 		const unsigned char *	operator []( unsigned char p_char)const;
 		unsigned char *			operator []( unsigned char p_char);
 
+		inline const ImagePtr &	GetImage	()const { return m_pImage; }
+		inline size_t 			GetHeight	()const { return m_uiHeight; }
+
 	private:
-		void _loadChar( FT_Face p_ftFace, Buffer<unsigned char> & p_buffer, char p_char);
+		void _loadChar( FT_Face p_ftFace, Buffer<unsigned char> & p_buffer, unsigned char p_char);
 	};
 	//! Fonts manager
 	/*!
@@ -59,9 +63,9 @@ namespace Castor
 	\author Sylvain DOREMUS
 	\date 17/01/2011
 	*/
-	class FontManager : public Castor::Templates::Manager<String, Font, FontManager>, public MemoryTraced<FontManager>
+	class FontManager : public Castor::Templates::Manager<Font>, public MemoryTraced<FontManager>
 	{
-		friend class Castor::Templates::Manager<String, Font, FontManager>;
+		friend class Castor::Templates::Manager<Font>;
 
 	public:
 		/**
@@ -77,7 +81,7 @@ namespace Castor
 		*@param p_name : [in] The font face
 		*@return The created font
 		*/
-		FontPtr CreateFont( const String & p_strName, const String & p_strPath, size_t p_uiHeight, ImageManager * p_pImageManager);
+		FontPtr LoadFont( const String & p_strName, const Utils::Path & p_strPath, size_t p_uiHeight, ImageManager * p_pImageManager);
 	};
 }
 }

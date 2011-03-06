@@ -33,9 +33,9 @@ namespace Castor3D
 	public:
 		typedef enum
 		{
-			eOpenGL2,		//!< OpenGL2 Renderer
-			eOpenGL3,		//!< OpenGL3 Renderer
-			eDirect3D,		//!< Direct3D Renderer
+			eOpenGl2,		//!< OpenGl2 Renderer
+			eOpenGl3,		//!< OpenGL3 Renderer
+			eDirect3D9,		//!< Direct3D9 Renderer
 		}
 		eDRIVER_TYPE;
 

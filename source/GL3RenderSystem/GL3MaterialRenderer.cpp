@@ -1,42 +1,42 @@
-#include "GL3RenderSystem/PrecompiledHeader.h"
+#include "Gl3RenderSystem/PrecompiledHeader.h"
 
-#include "GL3RenderSystem/GL3MaterialRenderer.h"
-#include "GL3RenderSystem/GL3SubmeshRenderer.h"
-#include "GL3RenderSystem/GL3Buffer.h"
-#include "GL3RenderSystem/GL3RenderSystem.h"
-#include "GL3RenderSystem/GL3ShaderProgram.h"
+#include "Gl3RenderSystem/Gl3MaterialRenderer.h"
+#include "Gl3RenderSystem/Gl3SubmeshRenderer.h"
+#include "Gl3RenderSystem/Gl3Buffer.h"
+#include "Gl3RenderSystem/Gl3RenderSystem.h"
+#include "Gl3RenderSystem/Gl3ShaderProgram.h"
 
 using namespace Castor3D;
 
-GL3PassRenderer :: GL3PassRenderer( SceneManager * p_pSceneManager)
-	:	GLPassRenderer( p_pSceneManager)
+Gl3PassRenderer :: Gl3PassRenderer( SceneManager * p_pSceneManager)
+	:	GlPassRenderer( p_pSceneManager)
 {
-	m_pfnApply = PApplyFunc( & GL3PassRenderer::_apply);
-	m_pfnApply2D = PVoidFunc( & GL3PassRenderer::_apply2D);
-	m_pfnRemove = PVoidFunc( & GL3PassRenderer::_remove);
+	m_pfnApply = PApplyFunc( & Gl3PassRenderer::_apply);
+	m_pfnApply2D = PVoidFunc( & Gl3PassRenderer::_apply2D);
+	m_pfnRemove = PVoidFunc( & Gl3PassRenderer::_remove);
 }
 
-GL3PassRenderer :: ~GL3PassRenderer()
+Gl3PassRenderer :: ~Gl3PassRenderer()
 {
 	Cleanup();
 }
 
-void GL3PassRenderer :: Cleanup()
+void Gl3PassRenderer :: Cleanup()
 {
 }
 
-void GL3PassRenderer :: Initialise()
+void Gl3PassRenderer :: Initialise()
 {
-	m_pfnApply = PApplyFunc( & GL3PassRenderer::_apply);
-	m_pfnApply2D = PVoidFunc( & GL3PassRenderer::_apply2D);
-	m_pfnRemove = PVoidFunc( & GL3PassRenderer::_remove);
+	m_pfnApply = PApplyFunc( & Gl3PassRenderer::_apply);
+	m_pfnApply2D = PVoidFunc( & Gl3PassRenderer::_apply2D);
+	m_pfnRemove = PVoidFunc( & Gl3PassRenderer::_remove);
 }
 
-void GL3PassRenderer :: _apply( eDRAW_TYPE p_displayMode)
+void Gl3PassRenderer :: _apply( ePRIMITIVE_TYPE p_displayMode)
 {
-	GL3ShaderProgramPtr l_pProgram = m_target->GetShader<GL3ShaderProgram>();
+	Gl3ShaderProgramPtr l_pProgram = m_target->GetShader<Gl3ShaderProgram>();
 
-	if ( ! l_pProgram == NULL)
+	if (l_pProgram != NULL)
 	{
 		l_pProgram->SetMaterialAmbient( m_target->GetAmbient());
 		l_pProgram->SetMaterialDiffuse( m_target->GetDiffuse());
@@ -47,18 +47,16 @@ void GL3PassRenderer :: _apply( eDRAW_TYPE p_displayMode)
 
 	if ( ! m_target->IsDoubleFace())
 	{
-		glCullFace( GL_FRONT);
-		CheckGLError( CU_T( "GLPassRenderer :: Apply - glCullFace( GL_FRONT)"));
-		glEnable( GL_CULL_FACE);
-		CheckGLError( CU_T( "GLPassRenderer :: Apply - glEnable( GL_CULL_FACE)"));
+		CheckGlError( glCullFace( GL_FRONT), CU_T( "GlPassRenderer :: Apply - glCullFace( GL_FRONT)"));
+		CheckGlError( glEnable( GL_CULL_FACE), CU_T( "GlPassRenderer :: Apply - glEnable( GL_CULL_FACE)"));
 	}
 }
 
-void GL3PassRenderer :: _apply2D()
+void Gl3PassRenderer :: _apply2D()
 {
-	GL3ShaderProgramPtr l_pProgram = m_target->GetShader<GL3ShaderProgram>();
+	Gl3ShaderProgramPtr l_pProgram = m_target->GetShader<Gl3ShaderProgram>();
 
-	if ( ! l_pProgram == NULL)
+	if (l_pProgram != NULL)
 	{
 		l_pProgram->SetMaterialAmbient( m_target->GetAmbient());
 		l_pProgram->SetMaterialDiffuse( m_target->GetDiffuse());
@@ -68,8 +66,7 @@ void GL3PassRenderer :: _apply2D()
 	}
 }
 
-void GL3PassRenderer :: _remove()
+void Gl3PassRenderer :: _remove()
 {
-	glDisable( GL_CULL_FACE);
-	CheckGLError( CU_T( "GL3PassRenderer :: Remove - glDisable( GL_CULL_FACE)"));
+	CheckGlError( glDisable( GL_CULL_FACE), CU_T( "Gl3PassRenderer :: Remove - glDisable( GL_CULL_FACE)"));
 }

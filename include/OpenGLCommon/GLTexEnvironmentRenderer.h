@@ -15,26 +15,32 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL_TexEnvironmentRenderer___
-#define ___GL_TexEnvironmentRenderer___
+#ifndef ___Gl_TexEnvironmentRenderer___
+#define ___Gl_TexEnvironmentRenderer___
 
-#include "Module_GLRender.h"
+#include "Module_GlRender.h"
 
 namespace Castor3D
 {
-	class GLTextureEnvironmentRenderer : public TextureEnvironmentRenderer
+	class GlTextureEnvironmentRenderer : public TextureEnvironmentRenderer
 	{
-		friend class GLRenderSystem;
-		friend class GLTextureRenderer;
+	protected:
+		friend class GlRenderSystem;
+		friend class GlTextureRenderer;
+
+		typedef void (GlTextureEnvironmentRenderer:: * RenderFunc)();
+		typedef RenderFunc PRenderFunc;
+
+		PRenderFunc m_pfnRender;
 
 	public:
-		GLTextureEnvironmentRenderer( SceneManager * p_pSceneManager)
-			:	TextureEnvironmentRenderer( p_pSceneManager)
-		{}
-		virtual ~GLTextureEnvironmentRenderer(){}
+		GlTextureEnvironmentRenderer( SceneManager * p_pSceneManager);
+		virtual ~GlTextureEnvironmentRenderer();
+
 		virtual void Render();
 
 	protected:
+		void _render();
 		void _applyRGBCombinationStep( unsigned int p_index);
 		void _applyAlphaCombinationStep( unsigned int p_index);
 	};

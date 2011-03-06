@@ -20,11 +20,15 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Castor3D/importer/Importer.h>
 
+#ifndef _WIN32
+#	define C3D_Ase_API
+#else
 #	ifdef AseImporter_EXPORTS
 #		define C3D_Ase_API __declspec(dllexport)
 #	else
 #		define C3D_Ase_API __declspec(dllimport)
 #	endif
+#endif
 
 namespace Castor3D
 {

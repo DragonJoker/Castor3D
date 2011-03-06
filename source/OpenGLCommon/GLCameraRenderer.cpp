@@ -1,39 +1,35 @@
-#include "OpenGLCommon/PrecompiledHeader.h"
+#include "OpenGlCommon/PrecompiledHeader.h"
 
-#include "OpenGLCommon/GLCameraRenderer.h"
+#include "OpenGlCommon/GlCameraRenderer.h"
 
 using namespace Castor3D;
 
-bool GLCameraRenderer :: Select( ScenePtr p_scene, Camera::eSELECTION_MODE p_mode, void ** p_found, int x, int y)
+bool GlCameraRenderer :: Select( ScenePtr p_scene, Camera::eSELECTION_MODE p_mode, void ** p_found, int x, int y)
 {
 	int l_objectsFound = 0;
 	int	l_viewportCoords[4] = {0};
 	unsigned int l_selectBuffer[32] = {0};				
 
-	glSelectBuffer( 32, l_selectBuffer);
-	CheckGLError( CU_T( "GLCameraRenderer :: Select - glSelectBuffer"));
-	glGetIntegerv( GL_VIEWPORT, l_viewportCoords);
-	CheckGLError( CU_T( "GLCameraRenderer :: Select - glGetIntegerv"));
-	Pipeline::MatrixMode( Pipeline::eProjection);
+	CheckGlError( glSelectBuffer( 32, l_selectBuffer), CU_T( "GlCameraRenderer :: Select - glSelectBuffer"));
+	CheckGlError( glGetIntegerv( GL_VIEWPORT, l_viewportCoords), CU_T( "GlCameraRenderer :: Select - glGetIntegerv"));
+	Pipeline::MatrixMode( Pipeline::eMatrixProjection);
 	Pipeline::PushMatrix();
 
-	glRenderMode( GL_SELECT);
-	CheckGLError( CU_T( "GLCameraRenderer :: Select - glRenderMode"));
+	CheckGlError( glRenderMode( GL_SELECT), CU_T( "GlCameraRenderer :: Select - glRenderMode"));
 	Pipeline::LoadIdentity();
 
-	gluPickMatrix( x, l_viewportCoords[3] - y, 2, 2, l_viewportCoords);
-	CheckGLError( CU_T( "GLCameraRenderer :: Select - gluPickMatrix"));
+	Pipeline::PickMatrix( real( x), real( l_viewportCoords[3] - y), real( 2), real( 2), l_viewportCoords);
 	Pipeline::Perspective( m_target->GetViewport()->GetFOVY(), m_target->GetViewport()->GetRatio(),
 						   m_target->GetViewport()->GetNearView(), m_target->GetViewport()->GetFarView());
-	Pipeline::MatrixMode( Pipeline::eModelView);
+	Pipeline::MatrixMode( Pipeline::eMatrixModelView);
 	p_scene->Render( eTriangles, 0.0);
 
 	l_objectsFound = glRenderMode( GL_RENDER);
 
-	Pipeline::MatrixMode( Pipeline::eProjection);
+	Pipeline::MatrixMode( Pipeline::eMatrixProjection);
 	Pipeline::PopMatrix();
 
-	Pipeline::MatrixMode( Pipeline::eModelView);
+	Pipeline::MatrixMode( Pipeline::eMatrixModelView);
 
 	if (l_objectsFound > 0)
 	{		
@@ -55,19 +51,10 @@ bool GLCameraRenderer :: Select( ScenePtr p_scene, Camera::eSELECTION_MODE p_mod
 	return false;
 }
 
-void GLCameraRenderer :: Render( eDRAW_TYPE p_displayMode)
+void GlCameraRenderer :: Render( ePRIMITIVE_TYPE p_displayMode)
 {
-	glBegin( GL_TRIANGLES);
-		glColor3f( 0, 0, 0);
-		glVertex3f( 0, 0, 0);
-		glVertex3f( 1, 0, 0);
-		glVertex3f( 1, 1, 0);
-		glVertex3f( 0, 0, 0);
-		glVertex3f( 1, 1, 0);
-		glVertex3f( 0, 1, 0);
-	glEnd();
 }
 
-void GLCameraRenderer :: EndRender()
+void GlCameraRenderer :: EndRender()
 {
 }

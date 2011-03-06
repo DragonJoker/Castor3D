@@ -9,35 +9,38 @@ using namespace Castor::Utils;
 
 using namespace Castor::Resources;
 
-std::string FormatToString( PixelFormat p_fmt)
+std::string Castor::Resources :: FormatToString( ePIXEL_FORMAT p_fmt)
 {
 	switch( p_fmt)
 	{
-	case pxfL8 :
+	case eL8 :
 		return "8bit luminosity";
 		break;
-	case pxfL8A8:
-		return "16 bits luminosity and alpha";
+	case eA4L4:
+		return "8 bits alpha and luminosity";
 		break;
-	case pxfR5G5B5A1:
-		return "16 bits 5551 RGBA";
+	case eA8L8:
+		return "16 bits alpha and luminosity";
 		break;
-	case pxfR4G4B4A4:
-		return "16 bits 4444 RGBA";
+	case eA1R5G5B5:
+		return "16 bits 5551 ARGB";
 		break;
-	case pxfR8G8B8:
+	case eA4R4G4B4:
+		return "16 bits 4444 ARGB";
+		break;
+	case eR8G8B8:
 		return "24 bits 888 RGB";
 		break;
-	case pxfR8G8B8A8:
-		return "32 bits 8888 RGBA";
+	case eA8R8G8B8:
+		return "32 bits 8888 ARGB";
 		break;
-	case pxfDXTC1:
+	case eDXTC1:
 		return "DXT1 8 bits compressed format";
 		break;
-	case pxfDXTC3:
+	case eDXTC3:
 		return "DXT3 16 bits compressed format";
 		break;
-	case pxfDXTC5:
+	case eDXTC5:
 		return "DXT5 16 bits compressed format";
 		break;
 	default:

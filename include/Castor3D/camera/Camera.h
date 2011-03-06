@@ -46,7 +46,8 @@ namespace Castor3D
 			smSubmesh,		//!< Submesh selection mode
 			smObject		//!< Geometry selection mode
 
-		} eSELECTION_MODE;
+		}
+		eSELECTION_MODE;
 
 	private:
 		friend class Scene;
@@ -55,6 +56,9 @@ namespace Castor3D
 		unsigned int m_uiWindowWidth;	//!< Display window width
 		unsigned int m_uiWindowHeight;	//!< Display window height
 
+	public:
+		/**@name Construction / Destruction */
+		//@{
 		/**
 		* Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
 		* Not to be used by the user, use Scene::CreateCamera instead
@@ -63,18 +67,18 @@ namespace Castor3D
 		*@param p_pNode : [in] The parent camera node
 		*@param p_eType : [in] Projection type
 		*/
-		Camera( const String & p_strName, unsigned int p_uiWidth, unsigned int p_uiHeight, const SceneNodePtr p_pNode, Viewport::eTYPE p_eType);
-
-	public:
+		Camera( Scene * p_pScene, const String & p_strName, unsigned int p_uiWidth, unsigned int p_uiHeight, const SceneNodePtr p_pNode, Viewport::eTYPE p_eType);
 		/**
 		 * Destructor
 		 */
 		virtual ~Camera();
+		//@}
+
 		/**
 		 * Applies the viewport, the rotation, and renders all
 		 *@param p_eDisplayMode : [in] The display mode
 		 */
-		virtual void Render( eDRAW_TYPE p_eDisplayMode);
+		virtual void Render( ePRIMITIVE_TYPE p_eDisplayMode);
 		/**
 		 * Removes the transformations
 		 */
@@ -93,13 +97,6 @@ namespace Castor3D
 		 */
 		void ResetPosition();
 		/**
-		 * Writes the camera in a file
-		 *@param p_file : [in] The file to write in
-		 *@return true if successful, false if not
-		 */
-		virtual bool Write( Castor::Utils::File & p_file)const;
-		virtual bool Read( Castor::Utils::File & p_file){ return true; }
-		/**
 		* Returns the first object at mouse coords x and y
 		*@param p_pScene : [in] The scene used for the selection
 		*@param p_eMode : [in] The selection mode (vertex, face, submesh, geometry)
@@ -110,7 +107,18 @@ namespace Castor3D
 		*/
 		bool Select( ScenePtr p_pScene, eSELECTION_MODE p_eMode, void ** p_ppFound, int p_iX, int p_iY);
 
-	public:
+		/**@name Inherited methods from Textable */
+		//@{
+		virtual bool Write( File & p_file)const;
+		virtual bool Read( File & p_file) { return false; }
+		//@}
+
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
+
 		/**@name Accessors */
 		//@{
 		inline const Viewport *	GetViewport	()const	{ return & m_viewport; }
@@ -152,7 +160,7 @@ namespace Castor3D
 		 * Renders the target
 		 *@param p_eDisplayMode : [in] The display mode
 		 */
-		virtual void Render( eDRAW_TYPE p_eDisplayMode) = 0;
+		virtual void Render( ePRIMITIVE_TYPE p_eDisplayMode) = 0;
 		virtual void EndRender() = 0;
 	};
 }

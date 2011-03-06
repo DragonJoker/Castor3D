@@ -15,13 +15,12 @@
 
 using namespace Castor3D;
 
-bool Importer :: Import( const String & p_fileName)
+bool Importer :: Import( const Path & p_fileName)
 {
 	bool l_bReturn = false;
 
 	m_fileName = p_fileName;
-	size_t l_i = std::min( m_fileName.find_last_of( CU_T( "/")), m_fileName.find_last_of( "\\"));
-	m_filePath = m_fileName.substr( 0, l_i + 1);
+	m_filePath = m_fileName.GetPath();
 
 	l_bReturn = _import();
 
@@ -56,7 +55,7 @@ void Importer :: _convertToMesh( MeshPtr p_mesh, Imported3DModel * p_model)
 			l_unit = new TextureUnit( RenderSystem::GetSingletonPtr()->CreateTextureRenderer());
 			l_pass->AddTextureUnit( l_unit);
 			FILE * l_file = NULL;
-			fopen_s ( & l_file, String( l_mat.m_strFile).char_str(), "rb");
+			FOpen( l_file, String( l_mat.m_strFile).char_str(), "rb");
 
 			if (l_file != NULL)
 			{

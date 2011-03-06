@@ -19,9 +19,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___Castor_Path___
 
 #ifdef _WIN32
-#	define d_path_slash	'\\'
+#	define d_path_slash	CU_T( '\\')
 #else
-#	define d_path_slash '/'
+#	define d_path_slash CU_T( '/')
 #endif
 
 namespace Castor
@@ -83,7 +83,7 @@ namespace Castor
 
 		/**@name Accessors */
 		//@{
-		inline const String GetPath()const
+		inline const Path GetPath()const
 		{
 			String l_strReturn;
 
@@ -96,10 +96,41 @@ namespace Castor
 
 			return l_strReturn;
 		}
-		inline const String GetLeaf()const
+		inline const String GetFileName()const
 		{
 			String l_strReturn = ( * this);
 			size_t l_index = find_last_of( d_path_slash);
+
+			if (l_index != String::npos)
+			{
+				l_strReturn = substr( l_index + 1, String::npos);
+			}
+
+			l_index = l_strReturn.find_last_of( CU_T( "."));
+
+			if (l_index != String::npos)
+			{
+				l_strReturn = l_strReturn.substr( 0, l_index);
+			}
+
+			return l_strReturn;
+		}
+		inline const String GetFullFileName()const
+		{
+			String l_strReturn = ( * this);
+			size_t l_index = find_last_of( d_path_slash);
+
+			if (l_index != String::npos)
+			{
+				l_strReturn = substr( l_index + 1, String::npos);
+			}
+
+			return l_strReturn;
+		}
+		inline const String GetExtension()const
+		{
+			String l_strReturn = ( * this);
+			size_t l_index = find_last_of( CU_T( "."));
 
 			if (l_index != String::npos)
 			{
@@ -113,8 +144,8 @@ namespace Castor
 	private:
 		void _normalise()
 		{
-			Replace( '\\', d_path_slash);
-			Replace( '/', d_path_slash);
+			replace( '\\', d_path_slash);
+			replace( '/', d_path_slash);
 		}
 	};
 }

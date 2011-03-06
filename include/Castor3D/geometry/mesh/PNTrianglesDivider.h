@@ -15,8 +15,8 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_PNTrianglesDivider___
-#define ___C3D_PNTrianglesDivider___
+#ifndef ___C3D_PnTrianglesDivider___
+#define ___C3D_PnTrianglesDivider___
 
 #include "Subdivider.h"
 #include "../basic/Vertex.h"
@@ -29,11 +29,11 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 12/03/2010
 	*/
-	class C3D_API PNTrianglesDivider : public Subdivider, public MemoryTraced<PNTrianglesDivider>
+	class C3D_API PnTrianglesDivider : public Subdivider, public MemoryTraced<PnTrianglesDivider>
 	{
 	public:
-		PNTrianglesDivider( Submesh * p_submesh);
-		virtual ~PNTrianglesDivider();
+		PnTrianglesDivider( Submesh * p_submesh);
+		virtual ~PnTrianglesDivider();
 
 		virtual void Cleanup();
 

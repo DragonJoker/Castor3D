@@ -29,8 +29,8 @@ SelectObjectFrameEvent :: ~SelectObjectFrameEvent()
 bool SelectObjectFrameEvent :: Apply()
 {
 	Ray l_ray( m_x, m_y, * m_camera);
-	bool l_wantGeo = ! m_geometry == NULL;
-	bool l_wantSubmesh =! m_submesh == NULL;
+	bool l_wantGeo = m_geometry != NULL;
+	bool l_wantSubmesh = m_submesh != NULL;
 	bool l_wantFace = m_face != NULL;
 	bool l_wantVertex = m_vertex != NULL;
 	m_scene->Select( & l_ray, m_geometry, m_submesh, & m_face, m_vertex);

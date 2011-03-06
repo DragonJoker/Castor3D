@@ -30,31 +30,33 @@ namespace Castor
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	template <typename ResType, class _ResourceManager>
-	class Resource : public Templates::Managed<String, ResType, _ResourceManager>
+	template <typename ResType>
+	class Resource
 	{
 	protected:
-		typedef Templates::Manager<String, ResType, _ResourceManager> ResourceManager;
-		friend class ResourceManager;
+		typedef Templates::Manager<ResType> ResourceManager;
 
 		int * m_references;		//!< The number of times this resource is used
+		ResourceManager * m_pManager;
+		String m_strName;
 
 		/**
 		 * Constructor, needs the name
 		 */
-		Resource( _ResourceManager * p_pManager, const String & p_name)
-			:	Managed<String, ResType, _ResourceManager>( p_pManager, p_name)
-			,	m_references( new int( 1))
+		Resource( ResourceManager * p_pManager, const String & p_name)
+			:	m_references( new int( 1))
+			,	m_pManager( p_pManager)
+			,	m_strName( p_name)
 		{
 		}
 
 	public:
-
 		/**
 		 * virtual destructor
 		 */
-		virtual ~Resource(){}
-
+		virtual ~Resource()
+		{
+		}
 		void Ref()
 		{
 			*m_references++;
@@ -65,12 +67,24 @@ namespace Castor
 
 			if (*m_references == 0)
 			{
+				m_pManager->RemoveElement( m_strName);
 				delete this;
 			}
 		}
+		void SetName( const String & p_strName)
+		{
+			if ( ! m_pManager->HasElement( p_strName))
+			{
+				shared_ptr<ResType> l_pThis = m_pManager->RemoveElement( m_strName);
 
-		inline String GetName()const { return m_key; }
-		inline void SetName( const String & p_name) { m_key = p_name; }
+				if (l_pThis != NULL)
+				{
+					m_strName = p_strName;
+					m_pManager->AddElement( l_pThis);
+				}
+			}
+		}
+		inline String GetName()const { return m_strName; }
 	};
 }
 }

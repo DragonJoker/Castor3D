@@ -2,17 +2,21 @@
 
 #include "Castor3D/geometry/basic/SmoothingGroup.h"
 #include "Castor3D/geometry/basic/Face.h"
+#include "Castor3D/geometry/mesh/Submesh.h"
+#include "Castor3D/scene/SceneFileParser.h"
 
 using namespace Castor3D;
 
-SmoothingGroup :: SmoothingGroup( size_t p_id)
+SmoothingGroup :: SmoothingGroup( Submesh * p_pSubmesh, size_t p_id)
 	:	m_uiGroupID( p_id)
+	,	m_pSubmesh( p_pSubmesh)
 {
 }
 
 SmoothingGroup :: SmoothingGroup( const SmoothingGroup & p_toCopy)
 	:	m_uiGroupID( p_toCopy.m_uiGroupID)
 	,	m_arrayFaces( p_toCopy.m_arrayFaces)
+	,	m_pSubmesh( p_toCopy.m_pSubmesh)
 {
 }
 
@@ -125,4 +129,85 @@ SmoothingGroup & SmoothingGroup :: operator =( const SmoothingGroup & p_toCopy)
 	m_uiGroupID = p_toCopy.m_uiGroupID;
 	m_arrayFaces = p_toCopy.m_arrayFaces;
 	return * this;
+}
+
+bool SmoothingGroup :: Write( File & p_file)const
+{
+	bool l_bReturn = p_file.WriteLine( CU_T( "\t\t\tsmoothing_group\n\t\t\t{\n")) > 0;
+
+	size_t l_uiNbFaces = GetNbFaces();
+
+	for (size_t j = 0 ; j < l_uiNbFaces && l_bReturn ; j++)
+	{
+		l_bReturn = GetFace( j)->Write( p_file);
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_file.WriteLine( CU_T( "\t\t\t}\n")) > 0;
+	}
+
+	return l_bReturn;
+}
+
+bool SmoothingGroup :: Save( File & p_file)const
+{
+	size_t l_uiNbFaces = GetNbFaces();
+	bool l_bReturn = p_file.Write( GetGroupID()) == sizeof( size_t);
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_file.Write( l_uiNbFaces) == sizeof( size_t);
+	}
+
+	for (size_t j = 0 ; j < l_uiNbFaces && l_bReturn ; j++)
+	{
+		l_bReturn = GetFace( j)->Save( p_file);
+	}
+
+	return l_bReturn;
+}
+
+bool SmoothingGroup :: Load( File & p_file)
+{
+	size_t l_uiID;
+	size_t l_uiNbFaces;
+	bool l_bReturn = p_file.Read( l_uiID) == sizeof( size_t);
+
+	if (l_bReturn)
+	{
+		SetGroupID( l_uiID);
+		l_bReturn = p_file.Read( l_uiNbFaces) == sizeof( size_t);
+	}
+
+	if (l_bReturn)
+	{
+		size_t l_iV1, l_iV2, l_iV3;
+
+		for (size_t j = 0 ; j < l_uiNbFaces && l_bReturn ; j++)
+		{
+			l_iV1 = 0;
+			l_iV2 = 0;
+			l_iV3 = 0;
+
+			l_bReturn = p_file.Read( l_iV1) == sizeof( size_t);
+
+			if (l_bReturn)
+			{
+				l_bReturn = p_file.Read( l_iV2) == sizeof( size_t);
+			}
+
+			if (l_bReturn)
+			{
+				l_bReturn = p_file.Read( l_iV3) == sizeof( size_t);
+			}
+
+			if (l_bReturn)
+			{
+				l_bReturn = m_pSubmesh->AddFace( l_iV1, l_iV2, l_iV3, * this)->Load( p_file);
+			}
+		}
+	}
+
+	return l_bReturn;
 }

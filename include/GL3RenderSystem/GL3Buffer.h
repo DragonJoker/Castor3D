@@ -15,44 +15,99 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL3_Buffer___
-#define ___GL3_Buffer___
+#ifndef ___Gl3_Buffer___
+#define ___Gl3_Buffer___
 
-#include "Module_GLRender.h"
+#include "Module_Gl3Render.h"
 #include <Castor3D/render_system/Buffer.h>
-#include <OpenGLCommon/GLBuffer.h>
+#include <OpenGlCommon/GlBuffer.h>
 
 namespace Castor3D
 {
-	//**************************************************************************
-	// VBO Texture coords
-	//**************************************************************************
-
-	class C3D_GL3_API GLVBOTextureBuffer : public TextureBuffer
-	{
-	private:
-		std::vector <GLVertexAttribsBuffer2rPtr> m_arrayBuffers;
-
-	public:
-		GLVBOTextureBuffer();
-		virtual ~GLVBOTextureBuffer();
-
-		virtual void Cleanup();
-		virtual void CleanupBufferObject();
-		virtual void CleanupAttribute();
-		virtual void Initialise( PassPtr p_pass);
-		virtual void Activate( PassPtr p_pass);
-		virtual void Deactivate();
-		void SetShaderProgram( ShaderProgramPtr p_pProgram);
-	};
 
 	//**************************************************************************
 	// Uniform Buffer Objects
 	//**************************************************************************
 
-	class C3D_GL3_API GLUBOVariableBase
+	class Gl3VboVertexBuffer : public GlVboVertexBuffer
 	{
-		friend class GLUniformBufferObject;
+	public:
+		Gl3VboVertexBuffer( const BufferElementDeclaration * p_pElements, size_t uiNbElements);
+		virtual ~Gl3VboVertexBuffer();
+
+		virtual void Activate();
+		virtual void Deactivate();
+
+	private:
+		virtual void _activateBufferObject();
+	};
+
+	class C3D_Gl3_API GlUniformBufferObject : public Buffer3D<unsigned char>
+	{
+	public:
+		GlShaderProgram * m_pProgram;
+		size_t m_uiIndex;
+		int m_iUniformBlockIndex;
+		int m_iUniformBlockSize;
+		String m_strUniformBlockName;
+		GlUboVariablePtrStrMap m_mapVariables;
+		bool m_bChanged;
+
+	public:
+		GlUniformBufferObject( const String & p_strUniformBlockName);
+		virtual ~GlUniformBufferObject();
+
+		virtual void Cleanup();
+		virtual void Initialise( GlShaderProgram * p_pProgram);
+		virtual void Activate();
+		virtual void Deactivate();
+		virtual void * Lock( size_t p_uiOffset, size_t p_uiSize, size_t p_uiFlags);
+		virtual void Unlock();
+		bool AddVariable( GlUboVariablePtr p_pVariable);
+		template <typename T>
+		shared_ptr<T> CreateVariable( const String & p_strName, size_t p_uiCount)
+		{
+			shared_ptr<T> l_pReturn;
+
+			if (m_mapVariables.find( p_strName) != m_mapVariables.end())
+			{
+				l_pReturn = static_pointer_cast<T>( m_mapVariables.find( p_strName)->second);
+			}
+			else
+			{
+				l_pReturn = shared_ptr<T>( new T( this, p_strName, p_uiCount));
+
+				if (AddVariable( l_pReturn))
+				{
+					l_pReturn->SetBuffer( & m_buffer[l_pReturn->m_iOffset]);
+				}
+				else
+				{
+					l_pReturn.reset();
+				}
+			}
+
+			return l_pReturn;
+		}
+		template <typename T>
+		shared_ptr<T> GetVariable( const String & p_strName)
+		{
+			shared_ptr<T> l_pReturn;
+
+			if (m_mapVariables.find( p_strName) != m_mapVariables.end())
+			{
+				l_pReturn = static_pointer_cast<T>( m_mapVariables.find( p_strName)->second);
+			}
+
+			return l_pReturn;
+		}
+		inline void	SetModified	( bool p_bChanged) { m_bChanged = p_bChanged; }
+		inline bool	IsModified	()const { return m_bChanged; }
+	};
+
+	class C3D_Gl3_API GlUboVariableBase
+	{
+		friend class GlUniformBufferObject;
 
 	protected:
 		size_t m_uiIndex;
@@ -62,11 +117,11 @@ namespace Castor3D
 		bool m_bChanged;
 		size_t m_uiCount;
 		String m_strName;
-		GLUniformBufferObject * m_pParent;
+		GlUniformBufferObject * m_pParent;
 
 	public:
-		GLUBOVariableBase( GLUniformBufferObject * p_pParent, const String & p_strName, size_t p_uiCount);
-		~GLUBOVariableBase();
+		GlUboVariableBase( GlUniformBufferObject * p_pParent, const String & p_strName, size_t p_uiCount);
+		~GlUboVariableBase();
 
 		void Activate();
 		void Deactivate();
@@ -79,20 +134,20 @@ namespace Castor3D
 	};
 
 	template <typename T>
-	class C3D_GL3_API GLUBOOneVariable : public GLUBOVariableBase, public MemoryTraced< GLUBOOneVariable<T> >
+	class C3D_Gl3_API GlUboOneVariable : public GlUboVariableBase, public MemoryTraced< GlUboOneVariable<T> >
 	{
-		friend class GLUniformBufferObject;
+		friend class GlUniformBufferObject;
 
 	private:
 		T ** m_tValue;
 
 	public:
-		GLUBOOneVariable( GLUniformBufferObject * p_pParent, const String & p_strName, size_t p_uiCount)
-			:	GLUBOVariableBase( p_pParent, p_strName, p_uiCount)
+		GlUboOneVariable( GlUniformBufferObject * p_pParent, const String & p_strName, size_t p_uiCount)
+			:	GlUboVariableBase( p_pParent, p_strName, p_uiCount)
 		{
 			m_tValue = new T*[p_uiCount];
 		}
-		~GLUBOOneVariable()
+		~GlUboOneVariable()
 		{
 			delete [] m_tValue;
 		}
@@ -111,7 +166,7 @@ namespace Castor3D
 		}
 		void SetBuffer( void * p_pBuffer)
 		{
-			GLUBOVariableBase::SetBuffer( p_pBuffer);
+			GlUboVariableBase::SetBuffer( p_pBuffer);
 
 			for (size_t i = 0 ; i < m_uiCount ; i++)
 			{
@@ -124,20 +179,20 @@ namespace Castor3D
 	};
 
 	template <typename T, size_t Count>
-	class C3D_GL3_API GLUBOPointVariable : public GLUBOVariableBase, public MemoryTraced< GLUBOPointVariable<T, Count> >
+	class C3D_Gl3_API GlUboPointVariable : public GlUboVariableBase, public MemoryTraced< GlUboPointVariable<T, Count> >
 	{
-		friend class GLUniformBufferObject;
+		friend class GlUniformBufferObject;
 
 	private:
 		Point<T, Count> * m_ptValue;
 
 	public:
-		GLUBOPointVariable( GLUniformBufferObject * p_pParent, const String & p_strName, size_t p_uiCount)
-			:	GLUBOVariableBase( p_pParent, p_strName, p_uiCount)
+		GlUboPointVariable( GlUniformBufferObject * p_pParent, const String & p_strName, size_t p_uiCount)
+			:	GlUboVariableBase( p_pParent, p_strName, p_uiCount)
 		{
 			m_ptValue = new Point<T, Count>[p_uiCount];
 		}
-		~GLUBOPointVariable()
+		~GlUboPointVariable()
 		{
 			delete [] m_ptValue;
 		}
@@ -156,7 +211,7 @@ namespace Castor3D
 		}
 		void SetBuffer( void * p_pBuffer)
 		{
-			GLUBOVariableBase::SetBuffer( p_pBuffer);
+			GlUboVariableBase::SetBuffer( p_pBuffer);
 
 			for (size_t i = 0 ; i < m_uiCount ; i++)
 			{
@@ -169,20 +224,20 @@ namespace Castor3D
 	};
 
 	template <typename T, size_t Rows, size_t Columns>
-	class C3D_GL3_API GLUBOMatrixVariable : public GLUBOVariableBase, public MemoryTraced< GLUBOMatrixVariable<T, Rows, Columns> >
+	class C3D_Gl3_API GlUboMatrixVariable : public GlUboVariableBase, public MemoryTraced< GlUboMatrixVariable<T, Rows, Columns> >
 	{
-		friend class GLUniformBufferObject;
+		friend class GlUniformBufferObject;
 
 	private:
 		Matrix<T, Rows, Columns> * m_mtxValue;
 
 	public:
-		GLUBOMatrixVariable( GLUniformBufferObject * p_pParent, const String & p_strName, size_t p_uiCount)
-			:	GLUBOVariableBase( p_pParent, p_strName, p_uiCount)
+		GlUboMatrixVariable( GlUniformBufferObject * p_pParent, const String & p_strName, size_t p_uiCount)
+			:	GlUboVariableBase( p_pParent, p_strName, p_uiCount)
 		{
 			m_mtxValue = new Matrix<T, Rows, Columns>[p_uiCount];
 		}
-		~GLUBOMatrixVariable()
+		~GlUboMatrixVariable()
 		{
 			delete [] m_mtxValue;
 		}
@@ -201,7 +256,7 @@ namespace Castor3D
 		}
 		void SetBuffer( void * p_pBuffer)
 		{
-			GLUBOVariableBase::SetBuffer( p_pBuffer);
+			GlUboVariableBase::SetBuffer( p_pBuffer);
 
 			for (size_t i = 0 ; i < m_uiCount ; i++)
 			{
@@ -213,79 +268,18 @@ namespace Castor3D
 		virtual inline size_t					GetSize		()const						{ return sizeof( T) * Rows * Columns * m_uiCount; }
 	};
 
-	class C3D_GL3_API GLUniformBufferObject : public Buffer3D<unsigned char>
-	{
-	public:
-		GLShaderProgram * m_pProgram;
-		size_t m_uiIndex;
-		int m_iUniformBlockIndex;
-		int m_iUniformBlockSize;
-		String m_strUniformBlockName;
-		GLUBOVariablePtrStrMap m_mapVariables;
-		bool m_bChanged;
-
-	public:
-		GLUniformBufferObject( const String & p_strUniformBlockName);
-		virtual ~GLUniformBufferObject();
-
-		virtual void Cleanup();
-		virtual void Initialise( GLShaderProgram * p_pProgram);
-		virtual void Activate();
-		virtual void Deactivate();
-		bool AddVariable( GLUBOVariablePtr p_pVariable);
-		template <typename T>
-		typename SmartPtr<T>::Shared CreateVariable( const String & p_strName, size_t p_uiCount)
-		{
-			typename SmartPtr<T>::Shared l_pReturn;
-
-			if (m_mapVariables.find( p_strName) != m_mapVariables.end())
-			{
-				l_pReturn = static_pointer_cast<T>( m_mapVariables.find( p_strName)->second);
-			}
-			else
-			{
-				l_pReturn = typename SmartPtr<T>::Shared( new T( this, p_strName, p_uiCount));
-
-				if (AddVariable( l_pReturn))
-				{
-					l_pReturn->SetBuffer( & m_buffer[l_pReturn->m_iOffset]);
-				}
-				else
-				{
-					l_pReturn.reset();
-				}
-			}
-
-			return l_pReturn;
-		}
-		template <typename T>
-		typename SmartPtr<T>::Shared GetVariable( const String & p_strName)
-		{
-			typename SmartPtr<T>::Shared l_pReturn;
-
-			if (m_mapVariables.find( p_strName) != m_mapVariables.end())
-			{
-				l_pReturn = static_pointer_cast<T>( m_mapVariables.find( p_strName)->second);
-			}
-
-			return l_pReturn;
-		}
-		inline void	SetModified	( bool p_bChanged) { m_bChanged = p_bChanged; }
-		inline bool	IsModified	()const { return m_bChanged; }
-	};
-
 	//**************************************************************************
 	// Vertex Array Object
 	//**************************************************************************
 
-	class GLVertexArrayObjects
+	class GlVertexArrayObjects
 	{
 	private:
 		size_t m_uiIndex;
 
 	public:
-		GLVertexArrayObjects();
-		~GLVertexArrayObjects();
+		GlVertexArrayObjects();
+		~GlVertexArrayObjects();
 
 		void Cleanup();
 		void Initialise();
@@ -299,17 +293,19 @@ namespace Castor3D
 	// Texture Buffer Object
 	//**************************************************************************
 
-	class C3D_GL3_API GLTextureBufferObject : public TextureBufferObject
+	class C3D_Gl3_API GlTextureBufferObject : public TextureBufferObject
 	{
 	public:
 		unsigned int m_uiIndex;
 
 	public:
-		GLTextureBufferObject();
-		virtual ~GLTextureBufferObject();
+		GlTextureBufferObject();
+		virtual ~GlTextureBufferObject();
 
 		virtual void Cleanup();
-		virtual void Initialise( const Castor::Resources::PixelFormat & p_format, size_t p_uiSize, const unsigned char * p_pBytes);
+		virtual void Initialise( const Castor::Resources::ePIXEL_FORMAT & p_format, size_t p_uiSize, const unsigned char * p_pBytes);
+		virtual void * Lock( size_t p_uiOffset, size_t p_uiSize, size_t p_uiFlags);
+		virtual void Unlock();
 
 		inline unsigned int	GetIndex	()const { return m_uiIndex; }
 	};

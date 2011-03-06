@@ -62,7 +62,7 @@ bool Md2Importer :: _import()
 
 	if (m_fileName.find_last_of( CU_T( "/")) != String::npos)
 	{
-		l_uiSlashIndex = std::max( l_uiSlashIndex, m_fileName.find_last_of( CU_T( "/")) + 1);
+		l_uiSlashIndex = std::max<size_t>( l_uiSlashIndex, m_fileName.find_last_of( CU_T( "/")) + 1);
 	}
 
 	size_t l_uiDotIndex = m_fileName.find_last_of( CU_T( "."));
@@ -81,7 +81,7 @@ bool Md2Importer :: _import()
 	}
 	else
 	{
-		l_pMesh = m_pManager->GetMeshManager()->CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom);
+		l_pMesh = m_pManager->GetMeshManager()->CreateMesh( l_meshName, l_faces, l_sizes, eCustom);
 		Logger::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
 	}
 
@@ -133,7 +133,7 @@ bool Md2Importer :: _import()
 	m_pScene = m_pManager->GetElementByName( "MainScene");
 	SceneNodePtr l_pNode = m_pScene->CreateSceneNode( l_name);
 
-	GeometryPtr l_pGeometry( new Geometry( l_pMesh, l_pNode, l_name));
+	GeometryPtr l_pGeometry( new Geometry( m_pScene.get(), l_pMesh, l_pNode, l_name));
 	Logger::LogMessage( CU_T( "PlyImporter::_import - Geometry %s created"), l_name.c_str());
 
 	m_geometries.insert( GeometryPtrStrMap::value_type( l_name, l_pGeometry));
@@ -175,7 +175,7 @@ void Md2Importer :: _readMD2Data()
 		Md2AliasFrame * l_frame = (Md2AliasFrame *) l_buffer;
 		m_frames[0].m_vertices = new Md2Triangle[m_header.m_numVertices];
 		m_pFile->ReadArray<char>( (char *)l_frame, m_header.m_frameSize);
-		strcpy_s( m_frames[0].m_strName, 16, l_frame->m_name);
+		Strcpy( m_frames[0].m_strName, 16, l_frame->m_name);
 
 		Md2Triangle * l_vertices = m_frames[0].m_vertices;
 

@@ -3,15 +3,14 @@
 #include "Castor3D/light/DirectionalLight.h"
 #include "Castor3D/render_system/RenderSystem.h"
 #include "Castor3D/main/Root.h"
-
-
+#include "Castor3D/scene/SceneFileParser.h"
 
 using namespace Castor3D;
 
-DirectionalLight :: DirectionalLight( SceneNodePtr p_pNode, const String & p_name)
-	:	Light( p_pNode, p_name)
+DirectionalLight :: DirectionalLight( Scene * p_pScene, SceneNodePtr p_pNode, const String & p_name)
+	:	Light( p_pScene, p_pNode, p_name, eDirectional)
 {
-	m_diffuse = Colour( 0.0, 0.0, 0.0, 0.0);
+	m_diffuse = Colour( 0.0f, 0.0f, 0.0f, 0.0f);
 	m_ptPositionType[3] = 1;
 }
 
@@ -24,30 +23,28 @@ void DirectionalLight :: _initialise()
 	Light::_initialise();
 }
 
-bool DirectionalLight :: Write( File & p_pFile)const
+bool DirectionalLight :: Write( File & p_file)const
 {
-	Logger::LogMessage( CU_T( "Writing Light ") + m_name);
-	bool l_bReturn = p_pFile.WriteLine( "light " + m_name + "\n{\n");
+	bool l_bReturn = Light::Write( p_file);
 
 	if (l_bReturn)
 	{
-		l_bReturn = p_pFile.WriteLine( "\ttype directional\n");
+		l_bReturn = p_file.WriteLine( "\n}\n") > 0;
 	}
 
-	if (l_bReturn)
-	{
-		l_bReturn = Light::Write( p_pFile);
-	}
+	return l_bReturn;
+}
 
-	if (l_bReturn)
-	{
-		l_bReturn = p_pFile.Print( 256, "\tambient %f %f %f %f\n", m_ambient[0], m_ambient[1], m_ambient[2], m_ambient[3]);
-	}
+bool DirectionalLight :: Save( File & p_file)const
+{
+	bool l_bReturn = Light::Save( p_file);
 
-	if (l_bReturn)
-	{
-		l_bReturn = p_pFile.WriteLine( "}\n");
-	}
+	return l_bReturn;
+}
+
+bool DirectionalLight :: Load( File & p_file)
+{
+	bool l_bReturn = Light::Load( p_file);
 
 	return l_bReturn;
 }

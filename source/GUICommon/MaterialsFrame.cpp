@@ -1,11 +1,11 @@
-#include "GUICommon/PrecompiledHeader.h"
+#include "GuiCommon/PrecompiledHeader.h"
 
-#include "GUICommon/MaterialsFrame.h"
-#include "GUICommon/MaterialsListView.h"
-#include "GUICommon/MaterialPanel.h"
+#include "GuiCommon/MaterialsFrame.h"
+#include "GuiCommon/MaterialsListView.h"
+#include "GuiCommon/MaterialPanel.h"
 
 using namespace Castor3D;
-using namespace GUICommon;
+using namespace GuiCommon;
 
 MaterialsFrame :: MaterialsFrame( MaterialManager * p_pManager, wxWindow * parent, const wxString & title,
 									  const wxPoint & pos, const wxSize & size)
@@ -51,7 +51,7 @@ void MaterialsFrame :: _onSelected( wxListEvent& event)
 
 void MaterialsFrame :: _onDeselected( wxListEvent& event)
 {
-	if ( ! m_selectedMaterial == NULL)
+	if (m_selectedMaterial != NULL)
 	{
 		m_materialsList->CreateList();
 		m_selectedMaterial.reset();

@@ -15,18 +15,18 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL_FrameVariable___
-#define ___GL_FrameVariable___
+#ifndef ___Gl_FrameVariable___
+#define ___Gl_FrameVariable___
 
-#include "Module_GLRender.h"
+#include "Module_GlRender.h"
 
 namespace Castor3D
 {
-	template <typename Type> inline void ApplyVariable( int p_iGLIndex, const Type * p_pValue, size_t p_uiOcc);
-	template <typename Type, size_t Count> inline void ApplyVariable( int p_iGLIndex, const Type * p_pValue, size_t p_uiOcc);
-	template <typename Type, size_t Rows, size_t Columns> inline void ApplyVariable( int p_iGLIndex, const Type * p_pValue, size_t p_uiOcc);
+	template <typename Type> inline void ApplyVariable( int p_iGlIndex, const Type * p_pValue, size_t p_uiOcc);
+	template <typename Type, size_t Count> inline void ApplyVariable( int p_iGlIndex, const Type * p_pValue, size_t p_uiOcc);
+	template <typename Type, size_t Rows, size_t Columns> inline void ApplyVariable( int p_iGlIndex, const Type * p_pValue, size_t p_uiOcc);
 
-	class GLFrameVariableBase
+	class GlFrameVariableBase
 	{
 	protected:
 		int m_glIndex;
@@ -34,12 +34,12 @@ namespace Castor3D
 		bool m_bPresentInProgram;
 
 	public:
-		GLFrameVariableBase( GLuint * p_uiProgram)
+		GlFrameVariableBase( GLuint * p_uiProgram)
 			:	m_glIndex( -1),
 				m_uiParentProgram( p_uiProgram),
 				m_bPresentInProgram( true)
 		{}
-		virtual ~GLFrameVariableBase()
+		virtual ~GlFrameVariableBase()
 		{}
 		virtual void Apply()=0;
 
@@ -51,72 +51,72 @@ namespace Castor3D
 	};
 
 	template <typename T>
-	class GLOneFrameVariable : public OneFrameVariable<T>, public GLFrameVariableBase, public MemoryTraced< GLOneFrameVariable<T> >
+	class GlOneFrameVariable : public OneFrameVariable<T>, public GlFrameVariableBase, public MemoryTraced< GlOneFrameVariable<T> >
 	{
 	public:
-		GLOneFrameVariable( OneFrameVariable<T> * p_pVariable, GLuint * p_uiProgram)
-			:	GLFrameVariableBase( p_uiProgram),
+		GlOneFrameVariable( OneFrameVariable<T> * p_pVariable, GLuint * p_uiProgram)
+			:	GlFrameVariableBase( p_uiProgram),
 				OneFrameVariable<T>( *p_pVariable)
 		{
 		}
-		virtual ~GLOneFrameVariable()
+		virtual ~GlOneFrameVariable()
 		{
 		}
 		virtual void Apply()
 		{
-			if (m_bChanged)
+			if (this->m_bChanged)
 			{
-				_apply<T>( m_strName, m_tValue, m_uiOcc);
-				m_bChanged = false;
+				_apply<T>( this->m_strName, this->m_tValue, this->m_uiOcc);
+				this->m_bChanged = false;
 			}
 		}
 	};
 
 	template <typename T, size_t Count>
-	class GLPointFrameVariable : public PointFrameVariable<T, Count>, public GLFrameVariableBase, public MemoryTraced< GLPointFrameVariable<T, Count> >
+	class GlPointFrameVariable : public PointFrameVariable<T, Count>, public GlFrameVariableBase, public MemoryTraced< GlPointFrameVariable<T, Count> >
 	{
 	public:
-		GLPointFrameVariable( PointFrameVariable<T, Count> * p_pVariable, GLuint * p_uiProgram)
-			:	GLFrameVariableBase( p_uiProgram),
+		GlPointFrameVariable( PointFrameVariable<T, Count> * p_pVariable, GLuint * p_uiProgram)
+			:	GlFrameVariableBase( p_uiProgram),
 				PointFrameVariable<T, Count>( * p_pVariable)
 		{
 		}
-		virtual ~GLPointFrameVariable()
+		virtual ~GlPointFrameVariable()
 		{
 		}
 		virtual void Apply()
 		{
-			if (m_bChanged)
+			if (this->m_bChanged)
 			{
-				_apply<T, Count>( m_strName, m_pValues, m_uiOcc);
-				m_bChanged = false;
+				_apply<T, Count>( this->m_strName, this->m_pValues, this->m_uiOcc);
+				this->m_bChanged = false;
 			}
 		}
 	};
 
 	template <typename T, size_t Rows, size_t Columns>
-	class GLMatrixFrameVariable : public MatrixFrameVariable<T, Rows, Columns>, public GLFrameVariableBase, public MemoryTraced< GLMatrixFrameVariable<T, Rows, Columns> >
+	class GlMatrixFrameVariable : public MatrixFrameVariable<T, Rows, Columns>, public GlFrameVariableBase, public MemoryTraced< GlMatrixFrameVariable<T, Rows, Columns> >
 	{
 	public:
-		GLMatrixFrameVariable( MatrixFrameVariable<T, Rows, Columns> * p_pVariable, GLuint * p_uiProgram)
-			:	GLFrameVariableBase( p_uiProgram),
+		GlMatrixFrameVariable( MatrixFrameVariable<T, Rows, Columns> * p_pVariable, GLuint * p_uiProgram)
+			:	GlFrameVariableBase( p_uiProgram),
 				MatrixFrameVariable<T, Rows, Columns>( * p_pVariable)
 		{
 		}
-		virtual ~GLMatrixFrameVariable()
+		virtual ~GlMatrixFrameVariable()
 		{
 		}
 		virtual void Apply()
 		{
-			if (m_bChanged)
+			if (this->m_bChanged)
 			{
-				_apply<T, Rows, Columns>( m_strName, m_pValues, m_uiOcc);
-				m_bChanged = false;
+				_apply<T, Rows, Columns>( this->m_strName, this->m_pValues, this->m_uiOcc);
+				this->m_bChanged = false;
 			}
 		}
 	};
+#include "GlFrameVariable.inl"
 }
 
-#include "GLFrameVariable.inl"
 
 #endif

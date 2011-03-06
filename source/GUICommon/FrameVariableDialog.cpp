@@ -1,9 +1,9 @@
-#include "GUICommon/PrecompiledHeader.h"
+#include "GuiCommon/PrecompiledHeader.h"
 
-#include "GUICommon/FrameVariableDialog.h"
+#include "GuiCommon/FrameVariableDialog.h"
 
 using namespace Castor3D;
-using namespace GUICommon;
+using namespace GuiCommon;
 
 FrameVariableDialog :: FrameVariableDialog( wxWindow * p_pParent, FrameVariablePtr p_pFrameVariable)
 	:	wxDialog( p_pParent, wxID_ANY, CU_T( "Uniform Variable"), wxDefaultPosition, wxSize( 200, 200)),
@@ -67,7 +67,7 @@ void FrameVariableDialog :: _onClose( wxCloseEvent & event)
 
 void FrameVariableDialog :: _onOk( wxCommandEvent & event)
 {
-	if ( ! m_pFrameVariable == NULL)
+	if (m_pFrameVariable != NULL)
 	{
 		m_pFrameVariable->SetName( m_pEditName->GetValue().c_str());
 		m_pFrameVariable->SetValue( m_pEditValue->GetValue().c_str());
@@ -78,7 +78,7 @@ void FrameVariableDialog :: _onOk( wxCommandEvent & event)
 
 void FrameVariableDialog :: _onCancel( wxCommandEvent & event)
 {
-	if (m_bOwn && ! m_pFrameVariable == NULL)
+	if (m_bOwn && m_pFrameVariable != NULL)
 	{
 		m_pFrameVariable.reset();
 //		delete m_pFrameVariable;
@@ -144,7 +144,7 @@ void FrameVariableDialog :: _onSelectType( wxCommandEvent & event)
 		break;
 	}
 
-	if ( ! m_pFrameVariable == NULL)
+	if (m_pFrameVariable != NULL)
 	{
 		m_pEditName->Show();
 		m_pEditValue->Show();

@@ -3,9 +3,7 @@
 #include "Castor3D/shader/ShaderManager.h"
 #include "Castor3D/shader/ShaderProgram.h"
 #include "Castor3D/shader/ShaderObject.h"
-#include "Castor3D/shader/Cg/CgShaderProgram.h"
-#include "Castor3D/shader/Cg/CgShaderObject.h"
-#include "Castor3D/render_system/RenderSystem.h"
+//#include "Castor3D/render_system/RenderSystem.h"
 
 
 
@@ -13,52 +11,92 @@ using namespace Castor3D;
 
 ShaderManager :: ShaderManager()
 {
-	m_inputPrimitiveType = eTriangles;
-	m_outputPrimitiveType = eTriangles;
-	m_nbVerticesOut = 3;
 }
 
 ShaderManager :: ~ShaderManager()
 {
-	m_shaderPrograms.clear();
+	m_arrayGLSLPrograms.clear();
+	m_arrayHLSLPrograms.clear();
+	m_arrayCgPrograms.clear();
 }
 
 void ShaderManager :: Update()
 {
-	m_arrayToDelete.clear();
+	m_arrayGLSLToDelete.clear();
+	m_arrayHLSLToDelete.clear();
+	m_arrayCgToDelete.clear();
 }
 
 void ShaderManager :: ClearShaders()
 {
-	for (size_t i = 0 ; i < m_shaderPrograms.size() ; i++)
+	for (size_t i = 0 ; i < m_arrayGLSLPrograms.size() ; i++)
 	{
-		m_arrayToDelete.push_back( m_shaderPrograms[i]);
+		m_arrayGLSLToDelete.push_back( m_arrayGLSLPrograms[i]);
 	}
 
-	m_shaderPrograms.clear();
+	for (size_t i = 0 ; i < m_arrayHLSLPrograms.size() ; i++)
+	{
+		m_arrayHLSLToDelete.push_back( m_arrayHLSLPrograms[i]);
+	}
+
+	for (size_t i = 0 ; i < m_arrayCgPrograms.size() ; i++)
+	{
+		m_arrayCgToDelete.push_back( m_arrayCgPrograms[i]);
+	}
+
+	m_arrayGLSLPrograms.clear();
+	m_arrayHLSLPrograms.clear();
+	m_arrayCgPrograms.clear();
 }
 
-ShaderProgramPtr ShaderManager :: CreateShaderProgramFromFiles( const String & p_vertexFile, const String & p_fragmentFile, const String & p_geometryFile)
+void ShaderManager :: AddGLSLProgram( GlslShaderProgramPtr p_program)
 {
-	ShaderProgramPtr l_pProgram( RenderSystem::GetSingletonPtr()->CreateShaderProgram( p_vertexFile, p_fragmentFile, p_geometryFile));
-	m_shaderPrograms.push_back( l_pProgram);
-	return l_pProgram;
+	m_arrayGLSLPrograms.push_back( p_program);
 }
 
-CgShaderProgramPtr ShaderManager :: CreateCgShaderProgramFromFiles( const String & p_vertexFile, const String & p_fragmentFile, const String & p_geometryFile)
+void ShaderManager :: AddHLSLProgram( HlslShaderProgramPtr p_program)
 {
-	CgShaderProgramPtr l_pProgram( RenderSystem::GetSingletonPtr()->CreateCgShaderProgram( p_vertexFile, p_fragmentFile, p_geometryFile));
-	m_shaderPrograms.push_back( l_pProgram);
-	return l_pProgram;
+	m_arrayHLSLPrograms.push_back( p_program);
 }
 
-bool ShaderManager :: RemoveProgram( ShaderProgramPtr p_program)
+void ShaderManager :: AddCgProgram( CgShaderProgramPtr p_program)
+{
+	m_arrayCgPrograms.push_back( p_program);
+}
+
+bool ShaderManager :: RemoveGLSLProgram( GlslShaderProgramPtr p_program)
 {
 	bool l_bReturn = false;
 
-	if (vector::eraseValue( m_shaderPrograms, p_program))
+	if (vector::eraseValue( m_arrayGLSLPrograms, p_program))
 	{
-		m_arrayToDelete.push_back( p_program);
+		m_arrayGLSLToDelete.push_back( p_program);
+		l_bReturn = true;
+	}
+
+	return l_bReturn;
+}
+
+bool ShaderManager :: RemoveHLSLProgram( HlslShaderProgramPtr p_program)
+{
+	bool l_bReturn = false;
+
+	if (vector::eraseValue( m_arrayHLSLPrograms, p_program))
+	{
+		m_arrayHLSLToDelete.push_back( p_program);
+		l_bReturn = true;
+	}
+
+	return l_bReturn;
+}
+
+bool ShaderManager :: RemoveCgProgram( CgShaderProgramPtr p_program)
+{
+	bool l_bReturn = false;
+
+	if (vector::eraseValue( m_arrayCgPrograms, p_program))
+	{
+		m_arrayCgToDelete.push_back( p_program);
 		l_bReturn = true;
 	}
 

@@ -15,8 +15,8 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL_ModuleRender___
-#define ___GL_ModuleRender___
+#ifndef ___Gl_ModuleRender___
+#define ___Gl_ModuleRender___
 
 #include <Castor3D/material/TextureUnit.h>
 
@@ -25,100 +25,146 @@ namespace Castor3D
 	class RenderWindow;
 	class Geometry;
 
-	template <typename T, size_t Count> class GLVertexAttribs;
-	template <typename T> class GLVertexBufferObject;
-	template <typename T, size_t Count> class GLVertexAttribsBuffer;
-	class GLVBOVertexBuffer;
-	class GLVBONormalsBuffer;
-	class GLVBOTextureBuffer;
-	class GLVertexInfosBufferObject;
-	class GLRenderSystem;
-	class GLPlugin;
-	class GLContext;
-	class GLSubmeshRenderer;
-	class GLMeshRenderer;
-	class GLGeometryRenderer;
-	class GLTextureEnvironmentRenderer;
-	class GLTextureRenderer;
-	class GLMaterialRenderer;
-	class GLLightRenderer;
-	class GLCameraRenderer;
-	class GLWindowRenderer;
-	class GLOverlayRenderer;
-	class GLShaderObject;
-	class GLShaderProgram;
-	class GLVertexShader;
-	class GLFragmentShader;
-	class GLGeometryShader;
-	class GLFrameVariableBase;
-	class GLIntFrameVariable;
-	class GLRealFrameVariable;
-	template <typename T> class GLOneFrameVariable;
-	template <typename T, size_t Count> class GLPointFrameVariable;
-	template <typename T, size_t Rows, size_t Columns> class GLMatrixFrameVariable;
-	class CgGLShaderProgram;
-	class CgGLVertexShader;
-	class CgGLFragmentShader;
-	class CgGLGeometryShader;
-	class CgGLFrameVariableBase;
-	class CgGLIntFrameVariable;
-	class CgGLRealFrameVariable;
-	template <typename T> class CgGLOneFrameVariable;
-	template <typename T, size_t Count> class CgGLPointFrameVariable;
-	template <typename T, size_t Rows, size_t Columns> class CgGLMatrixFrameVariable;
-	class GLPipeline;
+	template <typename T, size_t Count> class GlVertexAttribs;
+	template <typename T> class GlVertexBufferObject;
+	template <typename T, size_t Count> class GlVertexAttribsBuffer;
+	class GlBufferBase;
+	class GlAttribsBase;
+	class GlVertexBuffer;
+	class GlIndexBuffer;
+	class GlRenderSystem;
+	class GlPlugin;
+	class GlSubmeshRenderer;
+	class GlMeshRenderer;
+	class GlGeometryRenderer;
+	class GlTextureEnvironmentRenderer;
+	class GlTextureRenderer;
+	class GlMaterialRenderer;
+	class GlLightRenderer;
+	class GlCameraRenderer;
+	class GlWindowRenderer;
+	class GlOverlayRenderer;
+	class GlShaderObject;
+	class GlShaderProgram;
+	class GlVertexShader;
+	class GlFragmentShader;
+	class GlGeometryShader;
+	class GlFrameVariableBase;
+	class GlIntFrameVariable;
+	class GlRealFrameVariable;
+	template <typename T> class GlOneFrameVariable;
+	template <typename T, size_t Count> class GlPointFrameVariable;
+	template <typename T, size_t Rows, size_t Columns> class GlMatrixFrameVariable;
+	class CgGlShaderProgram;
+	class CgGlVertexShader;
+	class CgGlFragmentShader;
+	class CgGlGeometryShader;
+	class CgGlFrameVariableBase;
+	class CgGlIntFrameVariable;
+	class CgGlRealFrameVariable;
+	template <typename T> class CgGlOneFrameVariable;
+	template <typename T, size_t Count> class CgGlPointFrameVariable;
+	template <typename T, size_t Rows, size_t Columns> class CgGlMatrixFrameVariable;
+	class GlPipeline;
+	class GlContext;
 
-	typedef GLVertexAttribs<real, 3>		GLVertexAttribs3r;
-	typedef GLVertexAttribs<real, 2>		GLVertexAttribs2r;
-	typedef GLVertexAttribs<int, 3>			GLVertexAttribs3i;
-	typedef GLVertexAttribs<int, 2>			GLVertexAttribs2i;
-	typedef GLVertexAttribsBuffer<real, 3>	GLVertexAttribsBuffer3r;
-	typedef GLVertexAttribsBuffer<real, 2>	GLVertexAttribsBuffer2r;
-	typedef GLVertexAttribsBuffer<int, 3>	GLVertexAttribsBuffer3i;
-	typedef GLVertexAttribsBuffer<int, 2>	GLVertexAttribsBuffer2i;
+	typedef GlVertexAttribs<real, 3>		GlVertexAttribs3r;
+	typedef GlVertexAttribs<real, 2>		GlVertexAttribs2r;
+	typedef GlVertexAttribs<int, 3>			GlVertexAttribs3i;
+	typedef GlVertexAttribs<int, 2>			GlVertexAttribs2i;
+	typedef GlVertexAttribsBuffer<real, 3>	GlVertexAttribsBuffer3r;
+	typedef GlVertexAttribsBuffer<real, 2>	GlVertexAttribsBuffer2r;
+	typedef GlVertexAttribsBuffer<int, 3>	GlVertexAttribsBuffer3i;
+	typedef GlVertexAttribsBuffer<int, 2>	GlVertexAttribsBuffer2i;
 
-	typedef SmartPtr<GLVBOVertexBuffer>::Shared		GLVBOVertexBufferPtr;
-	typedef SmartPtr<GLVBONormalsBuffer>::Shared		GLVBONormalsBufferPtr;
-	typedef SmartPtr<GLVBOTextureBuffer>::Shared		GLVBOTextureBufferPtr;
-	typedef SmartPtr<GLVertexAttribs3r>::Shared		GLVertexAttribs3rPtr;
-	typedef SmartPtr<GLVertexAttribs2r>::Shared		GLVertexAttribs2rPtr;
-	typedef SmartPtr<GLVertexAttribs3i>::Shared		GLVertexAttribs3iPtr;
-	typedef SmartPtr<GLVertexAttribs2i>::Shared		GLVertexAttribs2iPtr;
-	typedef SmartPtr<GLVertexAttribsBuffer3r>::Shared	GLVertexAttribsBuffer3rPtr;
-	typedef SmartPtr<GLVertexAttribsBuffer2r>::Shared	GLVertexAttribsBuffer2rPtr;
-	typedef SmartPtr<GLVertexAttribsBuffer3i>::Shared	GLVertexAttribsBuffer3iPtr;
-	typedef SmartPtr<GLVertexAttribsBuffer2i>::Shared	GLVertexAttribsBuffer2iPtr;
-	typedef SmartPtr <GLShaderObject>::Shared			GLShaderObjectPtr;
-	typedef SmartPtr <GLShaderProgram>::Shared		GLShaderProgramPtr;
-	typedef SmartPtr <GLVertexShader>::Shared			GLVertexShaderPtr;
-	typedef SmartPtr <GLFragmentShader>::Shared		GLFragmentShaderPtr;
-	typedef SmartPtr <GLGeometryShader>::Shared		GLGeometryShaderPtr;
-	typedef SmartPtr <GLFrameVariableBase>::Shared	GLFrameVariablePtr;
-	typedef SmartPtr <CgGLShaderProgram>::Shared		CgGLShaderProgramPtr;
-	typedef SmartPtr <CgGLVertexShader>::Shared		CgGLVertexShaderPtr;
-	typedef SmartPtr <CgGLFragmentShader>::Shared		CgGLFragmentShaderPtr;
-	typedef SmartPtr <CgGLGeometryShader>::Shared		CgGLGeometryShaderPtr;
-	typedef SmartPtr <CgGLFrameVariableBase>::Shared	CgGLFrameVariablePtr;
+	typedef shared_ptr<	GlAttribsBase			>	GlVertexAttribsPtr;
+	typedef shared_ptr<	GlVertexBuffer			>	GlVertexBufferPtr;
+	typedef shared_ptr<	GlIndexBuffer			>	GlIndexBufferPtr;
+	typedef shared_ptr<	GlVertexAttribs3r		>	GlVertexAttribs3rPtr;
+	typedef shared_ptr<	GlVertexAttribs2r		>	GlVertexAttribs2rPtr;
+	typedef shared_ptr<	GlVertexAttribs3i		>	GlVertexAttribs3iPtr;
+	typedef shared_ptr<	GlVertexAttribs2i		>	GlVertexAttribs2iPtr;
+	typedef shared_ptr<	GlVertexAttribsBuffer3r	>	GlVertexAttribsBuffer3rPtr;
+	typedef shared_ptr<	GlVertexAttribsBuffer2r	>	GlVertexAttribsBuffer2rPtr;
+	typedef shared_ptr<	GlVertexAttribsBuffer3i	>	GlVertexAttribsBuffer3iPtr;
+	typedef shared_ptr<	GlVertexAttribsBuffer2i	>	GlVertexAttribsBuffer2iPtr;
+	typedef shared_ptr<	GlShaderObject			>	GlShaderObjectPtr;
+	typedef shared_ptr<	GlShaderProgram			>	GlShaderProgramPtr;
+	typedef shared_ptr<	GlVertexShader			>	GlVertexShaderPtr;
+	typedef shared_ptr<	GlFragmentShader		>	GlFragmentShaderPtr;
+	typedef shared_ptr<	GlGeometryShader		>	GlGeometryShaderPtr;
+	typedef shared_ptr<	GlFrameVariableBase		>	GlFrameVariablePtr;
+	typedef shared_ptr<	CgGlShaderProgram		>	CgGlShaderProgramPtr;
+	typedef shared_ptr<	CgGlVertexShader		>	CgGlVertexShaderPtr;
+	typedef shared_ptr<	CgGlFragmentShader		>	CgGlFragmentShaderPtr;
+	typedef shared_ptr<	CgGlGeometryShader		>	CgGlGeometryShaderPtr;
+	typedef shared_ptr<	CgGlFrameVariableBase	>	CgGlFrameVariablePtr;
 
-	typedef Container<	GLShaderProgramPtr>::Vector						GLShaderProgramPtrArray;
-	typedef Container<	CgGLShaderProgramPtr>::Vector					CgGLShaderProgramPtrArray;
-	typedef Container<	GLShaderObjectPtr>::Vector						GLShaderObjectPtrArray;
-	typedef KeyedContainer<	String,				GLFrameVariablePtr>::Map	GLFrameVariablePtrStrMap;
-	typedef KeyedContainer<	String,				CgGLFrameVariablePtr>::Map	CgGLFrameVariablePtrStrMap;
+	typedef Container<		GlShaderProgramPtr							>::Vector	GlShaderProgramPtrArray;
+	typedef Container<		CgGlShaderProgramPtr						>::Vector	CgGlShaderProgramPtrArray;
+	typedef Container<		GlShaderObjectPtr							>::Vector	GlShaderObjectPtrArray;
+	typedef KeyedContainer<	String,				GlFrameVariablePtr		>::Map		GlFrameVariablePtrStrMap;
+	typedef KeyedContainer<	String,				CgGlFrameVariablePtr	>::Map		CgGlFrameVariablePtrStrMap;
 
-	void	GLCheckError			( const String & p_strText);
-	void	CgCheckError			( const String & p_strText);
-	Char *	GetGLSLErrorString		( int p_index);
-	int		GetDrawType				( eDRAW_TYPE p_index);
-	int 	GetEnvironmentMode		( TextureEnvironment::eMODE p_index);
-	int 	GetRGBCombination		( TextureEnvironment::eRGB_COMBINATION p_index);
-	int 	GetRGBOperand			( TextureEnvironment::eRGB_OPERAND p_index);
-	int 	GetAlphaCombination		( TextureEnvironment::eALPHA_COMBINATION p_index);
-	int 	GetAlphaOperand			( TextureEnvironment::eALPHA_OPERAND p_index);
-	int 	GetCombinationSource	( TextureEnvironment::eCOMBINATION_SOURCE p_index);
-	int 	GetTextureDimension		( TextureUnit::eDIMENSION p_index);
-	int		GetLightIndex			( eLIGHT_INDEXES p_uiIndex);
-	int		GetPixelFormatBits		( Castor::Resources::PixelFormat p_pixelFormat);
+	class GlEnum
+	{
+	public:
+		struct GlPixelFmt
+		{
+			GLenum Format;
+			GLenum Internal;
+			GLenum Type;
+		};
+
+	private:
+		static String		GlslStrings				[];
+		static String		GlslErrors				[];
+		static GLenum		DrawTypes				[eNbDrawTypes];
+		static GLenum		EnvironmentModes		[TextureEnvironment::eNbEnvModes];
+		static GLenum 		RgbCombinations			[TextureEnvironment::eNbRgbCombinations];
+		static GLenum 		RgbOperands				[TextureEnvironment::eNbRgbOperands];
+		static GLenum 		AlphaCombinations		[TextureEnvironment::eNbAlphaCombinations];
+		static GLenum 		AlphaOperands			[TextureEnvironment::eNbAlphaOperands];
+		static GLenum 		CombinationSources		[TextureEnvironment::eNbCombinationSources];
+		static GLenum 		TextureDimensions		[TextureUnit::eNbTextureDimensions];
+		static GLenum		AlphaFuncs				[TextureUnit::eNbAlphaFuncs];
+		static GLenum		TextureWrapMode			[TextureUnit::eNbWrapModes];
+		static GLenum		TextureInterpolation	[TextureUnit::eNbInterpolationModes];
+		static GLenum 		LightIndexes			[8];
+		static GLenum		SrcBlendFactors			[Pass::eNbSrcBlendFactors];
+		static GLenum		DstBlendFactors			[Pass::eNbDstBlendFactors];
+		static GLenum		Usages					[eNbUsages];
+		static GLenum 		TextureArguments		[TextureUnit::eNbTextureArguments];
+		static GLenum 		TextureRgbModes			[TextureUnit::eNbTextureRgbModes];
+		static GLenum 		TextureAlphaModes		[TextureUnit::eNbTextureAlphaModes];
+		static GlPixelFmt	PixelFormats			[eNbPixelFormats];
+
+	public:
+		static void			GlCheckError		( const String & p_strText, bool p_bThrows);
+		static void			CgCheckError		( const String & p_strText, bool p_bThrows);
+		static String		GetGlslErrorString	( int p_index);
+		static GLenum		Get					( ePRIMITIVE_TYPE p_index);
+		static GLenum 		Get					( TextureEnvironment::eMODE p_index);
+		static GLenum 		Get					( TextureEnvironment::eRGB_COMBINATION p_index);
+		static GLenum 		Get					( TextureEnvironment::eRGB_OPERAND p_index);
+		static GLenum 		Get					( TextureEnvironment::eALPHA_COMBINATION p_index);
+		static GLenum 		Get					( TextureEnvironment::eALPHA_OPERAND p_index);
+		static GLenum 		Get					( TextureEnvironment::eCOMBINATION_SOURCE p_index);
+		static GLenum 		Get					( TextureUnit::eDIMENSION p_index);
+		static GLenum		Get					( eLIGHT_INDEXES p_uiIndex);
+		static GLenum		Get					( TextureUnit::eALPHA_FUNC p_eAlphaFunc);
+		static GLenum		Get					( TextureUnit::eWRAP_MODE p_eWrapMode);
+		static GLenum		Get					( TextureUnit::eINTERPOLATION_MODE p_eInterpolationMode);
+		static GLenum		Get					( TextureUnit::eTEXTURE_ARGUMENT p_eArgument);
+		static GLenum		Get					( TextureUnit::eTEXTURE_RGB_MODE p_eMode);
+		static GLenum		Get					( TextureUnit::eTEXTURE_ALPHA_MODE p_eMode);
+		static GLenum		Get					( Pass::eSRC_BLEND_FACTOR p_eBlendFactor);
+		static GLenum		Get					( Pass::eDST_BLEND_FACTOR p_eBlendFactor);
+		static GlPixelFmt	Get					( Castor::Resources::ePIXEL_FORMAT p_pixelFormat);
+		static GLenum		Get					( eELEMENT_USAGE p_eUsage);
+		static GLenum		GetLockFlags		( size_t p_uiFlags);
+		static GLenum 		GetBufferFlags		( size_t p_ulFlags);
+	};
 }
 
 #if CASTOR_USE_DOUBLE
@@ -154,40 +200,38 @@ namespace Castor3D
 
 #endif
 
-#	ifdef __GNUG__
-#		undef CS3D_GL_API
-#		define CS3D_GL_API
-#		define glCreateContext				glXCreateNewContext
-#		define glMakeCurrent				glXMakeContextCurrent
-#		define glDeleteContext				glXDestroyContext
-#		define glSwapBuffers( context)		glXSwapBuffers( context->GetDisplay(), context->GetWindow())
-#		define GL_CONTEXT_MAJOR_VERSION		GLX_CONTEXT_MAJOR_VERSION_ARB
-#		define GL_CONTEXT_MINOR_VERSION		GLX_CONTEXT_MINOR_VERSION_ARB
-#		define GL_CONTEXT_FLAGS_ARB			GLX_CONTEXT_FLAGS_ARB
-#		define GL_FORWARD_COMPATIBLE_BIT	GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB
-#		define glCreateContextAttribs		glXCreateContextAttribsARB
-#	else
-#		ifdef WIN32
-#			define glCreateContext				wglCreateContext
-#			define glMakeCurrent				wglMakeCurrent
-#			define glSwapBuffers( context)		SwapBuffers( context->GetHDC())
-#			define glDeleteContext				wglDeleteContext
-#			define glShareLists					wglShareLists
-#			define glGetCurrentDC				wglGetCurrentDC
-#			define GL_CONTEXT_MAJOR_VERSION		WGL_CONTEXT_MAJOR_VERSION_ARB
-#			define GL_CONTEXT_MINOR_VERSION		WGL_CONTEXT_MINOR_VERSION_ARB
-#			define GL_CONTEXT_FLAGS_ARB			WGL_CONTEXT_FLAGS_ARB
-#			define GL_FORWARD_COMPATIBLE_BIT	WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB
-#			define glCreateContextAttribs		wglCreateContextAttribsARB
-#		endif
+#   ifdef _WIN32
+#	    define glCreateContext				wglCreateContext
+#   	define glDeleteContext				wglDeleteContext
+#   	define glShareLists					wglShareLists
+#   	define glGetCurrentDC				wglGetCurrentDC
+#   	define GL_CONTEXT_MAJOR_VERSION		WGL_CONTEXT_MAJOR_VERSION_ARB
+#   	define GL_CONTEXT_MINOR_VERSION		WGL_CONTEXT_MINOR_VERSION_ARB
+#   	define GL_CONTEXT_FLAGS_ARB			WGL_CONTEXT_FLAGS_ARB
+#   	define GL_FORWARD_COMPATIBLE_BIT	WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB
+#   	define glCreateContextAttribs		wglCreateContextAttribsARB
+#   else
+#   	ifdef __GNUG__
+#   		undef CS3D_GL_API
+#   		define CS3D_GL_API
+#   		define glCreateContext				glXCreateNewContext
+#   		define glDeleteContext				glXDestroyContext
+#   		define GL_CONTEXT_MAJOR_VERSION		GLX_CONTEXT_MAJOR_VERSION_ARB
+#   		define GL_CONTEXT_MINOR_VERSION		GLX_CONTEXT_MINOR_VERSION_ARB
+#   		define GL_CONTEXT_FLAGS_ARB			GLX_CONTEXT_FLAGS_ARB
+#	    	define GL_FORWARD_COMPATIBLE_BIT	GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB
+#	    	define glCreateContextAttribs		glXCreateContextAttribsARB
+#	    endif
 #	endif
 
-#ifdef _DEBUG
-#	define CheckGLError( x) GLCheckError( x)
-#	define CheckCgError( x) CgCheckError( x)
-#else
-#	define CheckGLError( x) GLCheckError( x)
-#	define CheckCgError( x) CgCheckError( x)
-#endif
+#   ifdef _DEBUG
+#	    define CheckGlError( func, txt) {func;GlEnum::GlCheckError( txt, false);}
+#	    define CheckCgError( func, txt) {func;GlEnum::CgCheckError( txt, false);}
+#   else
+#	    define CheckGlError( func) func
+#	    define CheckCgError( func) func
+#   endif
+
+#define CASTOR_GTK 1
 
 #endif

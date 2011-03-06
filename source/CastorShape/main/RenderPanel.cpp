@@ -69,16 +69,11 @@ void RenderPanel :: SelectVertex( Vertex * p_vertex)
 void RenderPanel :: _initialiseRenderWindow()
 {
 	Logger::LogMessage( CU_T( "Initialising RenderWindow"));
-	m_renderWindow = Root::GetSingletonPtr()->CreateRenderWindow( m_mainScene,
-																  (void *)GetHandle(),
-																  GetClientSize().x,
-																  GetClientSize().y,
-																  m_renderType,
-																  Castor::Resources::pxfR8G8B8A8,
-																  m_lookAt);
+	m_renderWindow = Root::GetSingletonPtr()->CreateRenderWindow( m_mainScene, (void *)GetHandle(), GetClientSize().x, GetClientSize().y,
+																  m_renderType, eA8R8G8B8, m_lookAt);
 	m_listener = m_renderWindow->GetListener();
-	m_pRotateCamEvent = SmartPtr<CameraRotateEvent>::Shared( new CameraRotateEvent( m_renderWindow->GetCamera(), 0, 0, 0));
-	m_pTranslateCamEvent = SmartPtr<CameraTranslateEvent>::Shared( new CameraTranslateEvent( m_renderWindow->GetCamera(), 0, 0, 0));
+	m_pRotateCamEvent = shared_ptr<CameraRotateEvent>( new CameraRotateEvent( m_renderWindow->GetCamera(), 0, 0, 0));
+	m_pTranslateCamEvent = shared_ptr<CameraTranslateEvent>( new CameraTranslateEvent( m_renderWindow->GetCamera(), 0, 0, 0));
 
 	if (m_timer == NULL)
 	{
@@ -322,7 +317,7 @@ void RenderPanel :: _onMenuClose( wxCommandEvent & event)
 
 void RenderPanel :: _selectGeometry( int p_x, int p_y)
 {
-	GeometryPtr l_geo( new Geometry());
+	GeometryPtr l_geo( new Geometry( m_mainScene.get()));
 	m_listener->PostEvent( FrameEventPtr( new SelectObjectFrameEvent( m_mainScene, l_geo, SubmeshPtr(), FacePtr(), VertexPtr(), m_renderWindow->GetCamera(), this, p_x, p_y)));
 }
 

@@ -20,7 +20,7 @@ long long RepeatTimer :: sm_frequency = 0;
 
 #else
 #	include <sys/time.h>
-#	define NULL 0
+//#	define NULL 0
 
 using namespace Castor::Utils;
 

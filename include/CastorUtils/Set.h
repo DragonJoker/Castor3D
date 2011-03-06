@@ -87,7 +87,7 @@ namespace Castor
 			{
 			}
 			template <class _Iter>
-			Set(_Iter p_itFirst, _Iter p_itLast, const key_compare & _Pred, const allocator_type & p_aAl)
+			Set(_Iter p_itFirst, _Iter p_itLast, const key_compare & p_cPred, const allocator_type & p_aAl)
 				:	_my_set( p_itFirst, p_itLast, p_cPred, p_aAl)
 			{
 			}
@@ -199,7 +199,7 @@ namespace Castor
 			void insert( _Iter p_itFirst, _Iter p_itLast)
 			{
 				CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-				_my_set::insert<_Iter>( p_itFirst, p_itLast);
+				_my_set::insert( p_itFirst, p_itLast);
 			}
 			iterator erase( const_iterator p_itWhere)
 			{
@@ -691,7 +691,7 @@ namespace Castor
 				if (p_set.size() > 0)
 				{
 					bReturn = true;
-					std::set <T>::reverse_iterator i = p_set.rbegin();
+					typename std::set <T>::reverse_iterator i = p_set.rbegin();
 					tResult = * i;
 					i++;
 					p_set.erase( i.base());

@@ -15,23 +15,23 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL_CameraRenderer___
-#define ___GL_CameraRenderer___
+#ifndef ___Gl_CameraRenderer___
+#define ___Gl_CameraRenderer___
 
-#include "Module_GLRender.h"
+#include "Module_GlRender.h"
 
 namespace Castor3D
 {
-	class GLCameraRenderer : public CameraRenderer
+	class GlCameraRenderer : public CameraRenderer
 	{
 	public:
-		GLCameraRenderer( SceneManager * p_pSceneManager)
+		GlCameraRenderer( SceneManager * p_pSceneManager)
 			:	CameraRenderer( p_pSceneManager)
 		{}
-		virtual ~GLCameraRenderer(){}
+		virtual ~GlCameraRenderer(){}
 
 		virtual bool Select( ScenePtr p_scene, Camera::eSELECTION_MODE p_mode, void ** p_found, int x, int y);
-		virtual void Render( eDRAW_TYPE p_displayMode);
+		virtual void Render( ePRIMITIVE_TYPE p_displayMode);
 		virtual void EndRender();
 	};
 }

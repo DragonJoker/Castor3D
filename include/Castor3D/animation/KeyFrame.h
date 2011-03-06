@@ -32,19 +32,20 @@ namespace Castor3D
 	\todo Review all the animation system because it's not clear, not optimised, and not good enough to be validated
 	\todo Write and Read functions.
 	*/
-	class C3D_API MovingObject : public MemoryTraced<MovingObject>
+	class C3D_API MovingObject : public Serialisable, public MemoryTraced<MovingObject>
 	{
 	private:
 		Point3r m_ptTranslate;		//!< The wanted translation of the object
 		Point3r m_ptScale;			//!< The wanted scale of the object
 		Quaternion m_qRotate;		//!< The wanted rotation of the object
 		MovableObjectPtr m_pObject;	//!< the object affected by the animations
+		Scene * m_pScene;
 
 	public:
 		/**
 		 * Default constructor, dummy
 		 */
-		MovingObject();
+		MovingObject( Scene * p_pScene);
 		/**
 		 * Specified constructor, initialises the transformations
 		 *@param p_pObject : [in] The object to affect
@@ -66,34 +67,23 @@ namespace Castor3D
 		 */
 		void Update( real p_rPercent, real p_rWeight);
 
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
+
 	public:
 		/**@name Accessors */
 		//@{
-		/**
-		 * Sets the movable object to animate
-		 *@param p_pObject : the new movable object
-		 */
-		inline void SetObject		( MovableObjectPtr p_pObject)	{ m_pObject = p_pObject; }
-		/**
-		 * Sets the translation to apply to the movable object
-		 *@param p_ptTranslate : the new translation
-		 */
+		inline void SetObject		( MovableObjectPtr p_pObject)		{ m_pObject = p_pObject; }
 		inline void SetTranslate	( const Point3r & p_ptTranslate)	{ m_ptTranslate = p_ptTranslate; }
-		/**
-		 * Sets the scale to apply to the movable object
-		 *@param p_ptScale : the new scale
-		 */
 		inline void SetScale		( const Point3r & p_ptScale)		{ m_ptScale = p_ptScale; }
-		/**
-		 * Sets the rotation to apply to the movable object
-		 *@param p_qRotate : the new rotation
-		 */
-		inline void SetRotate		( const Quaternion & p_qRotate)	{ m_qRotate = p_qRotate; }
-		/**
-		 * Gives the movable object
-		 *@return the current movable object
-		 */
-		inline MovableObjectPtr GetObject ()const { return m_pObject; }
+		inline void SetRotate		( const Quaternion & p_qRotate)		{ m_qRotate = p_qRotate; }
+		inline MovableObjectPtr		GetObject		()const { return m_pObject; }
+		inline const Quaternion	&	GetRotate		()const { return m_qRotate; }
+		inline const Point3r	&	GetScale		()const { return m_ptScale; }
+		inline const Point3r	&	GetTranslate	()const { return m_ptTranslate; }
 		//@}
 	};
 
@@ -101,40 +91,40 @@ namespace Castor3D
 	/*!
 	Key frames are the frames are the frames where the animation must be at a precise state
 	*/
-	class C3D_API KeyFrame : public MemoryTraced<KeyFrame>
+	class C3D_API KeyFrame : public Serialisable, public MemoryTraced<KeyFrame>
 	{
 	protected:
 		MovingObjectPtrStrMap m_mapToMove;	//!< The list of objects to move
 		real m_rTo;							//!< The end time index
 		real m_rFrom;						//!< The start time index
+		Scene * m_pScene;
 
 	public:
+		/**@name Construction / Destruction */
+		//@{
 		/**
 		 * Constructor, tells from which time index the animation starts and to which time index it ends
 		 *@param p_rFrom : [in] When the animation starts
 		 *@param p_rTo : [in] When the animation ends
 		 */
-		KeyFrame( real p_rFrom, real p_rTo);
+		KeyFrame( Scene * p_pScene, real p_rFrom=0, real p_rTo=0);
+		/**
+		 * Copy constructor
+		 *@param p_keyFrame : [in] The KeyFrame to copy
+		 */
+		KeyFrame( const KeyFrame & p_keyFrame);
 		/**
 		 * Destructor, deletes all its objects
 		 */
 		~KeyFrame();
+		//@}
+
 		/**
 		 * Updates the animation, given the time and the weight
 		 *@param p_rTime : [in] The current time index
 		 *@param p_rWeight : [in] The animation weight
 		 */
 		void Update( real p_rTime, real p_rWeight);
-		/**
-		 * Writes the animation in a file
-		 *@param p_file : the file to write in
-		 */
-		bool Write( Castor::Utils::File & p_file)const;
-		/**
-		 * Reads the animation from a file
-		 @param p_file : the file to read from
-		 */
-		bool Read( Castor::Utils::File & p_file);
 		/**
 		 * Adds a moving object, with its wanted tranformations
 		 *@param p_pObject : [in] The movable object to add
@@ -149,14 +139,17 @@ namespace Castor3D
 		 *@param p_strName : [in] The name of the object to remove
 		 */
 		void RemoveMovingObject( const String & p_strName);
-	public:
+
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
+
 		/**@name Accessors */
 		//@{
-		/**
-		 * Returns the end time index
-		 *@return The end time index
-		 */
 		inline real GetTo()const { return m_rTo; }
+		inline real GetFrom()const { return m_rFrom; }
 		//@}
 	};
 }

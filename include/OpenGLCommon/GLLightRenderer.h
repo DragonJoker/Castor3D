@@ -15,22 +15,22 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL_LightRenderer___
-#define ___GL_LightRenderer___
+#ifndef ___Gl_LightRenderer___
+#define ___Gl_LightRenderer___
 
-#include "Module_GLRender.h"
+#include "Module_GlRender.h"
 
 namespace Castor3D
 {
-	class GLLightRenderer : public LightRenderer
+	class GlLightRenderer : public LightRenderer
 	{
 	protected:
-		typedef void (GLLightRenderer:: * ColourFunction)( const Colour & p_colour);
-		typedef void (GLLightRenderer:: * OrientationFunction)( const Matrix4x4r & p_orientation);
-		typedef void (GLLightRenderer:: * PositionFunction)( const Point4f & p_position);
-		typedef void (GLLightRenderer:: * AttenuationComponentFunction)( float p_comp);
-		typedef void (GLLightRenderer:: * SpotComponentFunction)( float p_comp);
-		typedef void (GLLightRenderer:: * StateFunction)();
+		typedef void (GlLightRenderer:: * ColourFunction)( const Colour & p_colour);
+		typedef void (GlLightRenderer:: * OrientationFunction)( const Matrix4x4r & p_orientation);
+		typedef void (GlLightRenderer:: * PositionFunction)( const Point4f & p_position);
+		typedef void (GlLightRenderer:: * AttenuationComponentFunction)( float p_comp);
+		typedef void (GlLightRenderer:: * SpotComponentFunction)( float p_comp);
+		typedef void (GlLightRenderer:: * StateFunction)();
 		typedef ColourFunction PColourFunction;
 		typedef OrientationFunction POrientationFunction;
 		typedef PositionFunction PPositionFunction;
@@ -55,8 +55,8 @@ namespace Castor3D
 		PSpotComponentFunction			m_pfnCutOffFunction;
 
 	public:
-		GLLightRenderer( SceneManager * p_pSceneManager);
-		virtual ~GLLightRenderer(){}
+		GlLightRenderer( SceneManager * p_pSceneManager);
+		virtual ~GlLightRenderer(){}
 
 		virtual void Initialise();
 

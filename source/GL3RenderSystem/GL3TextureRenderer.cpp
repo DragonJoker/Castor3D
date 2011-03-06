@@ -1,114 +1,101 @@
-#include "GL3RenderSystem/PrecompiledHeader.h"
+#include "Gl3RenderSystem/PrecompiledHeader.h"
 
-#include "GL3RenderSystem/GL3TextureRenderer.h"
-#include "GL3RenderSystem/GL3Context.h"
-#include "GL3RenderSystem/GL3RenderSystem.h"
+#include "Gl3RenderSystem/Gl3TextureRenderer.h"
+#include "Gl3RenderSystem/Gl3Context.h"
+#include "Gl3RenderSystem/Gl3RenderSystem.h"
 
 using namespace Castor3D;
 
-GL3TextureRenderer :: GL3TextureRenderer( SceneManager * p_pSceneManager)
-	:	GLTextureRenderer( p_pSceneManager)
+Gl3TextureRenderer :: Gl3TextureRenderer( SceneManager * p_pSceneManager)
+	:	GlTextureRenderer( p_pSceneManager)
 	,	m_uiIndex( GL_INVALID_INDEX)
 {
 }
 
-GL3TextureRenderer :: ~GL3TextureRenderer()
+Gl3TextureRenderer :: ~Gl3TextureRenderer()
 {
 }
 
-bool GL3TextureRenderer :: Initialise()
+bool Gl3TextureRenderer :: Initialise()
 {
-	m_pfnCleanup	= PVoidFunction( & GL3TextureRenderer::_cleanup);
-	m_pfnInitialise	= PBoolFunction( & GL3TextureRenderer::_initialise);
-	m_pfnRender		= PVoidFunction( & GL3TextureRenderer::_render);
-	m_pfnEndRender	= PVoidFunction( & GL3TextureRenderer::_endRender);
+	m_pfnCleanup	= PVoidFunction( & Gl3TextureRenderer::_cleanup);
+	m_pfnInitialise	= PBoolFunction( & Gl3TextureRenderer::_initialise);
+	m_pfnRender		= PVoidFunction( & Gl3TextureRenderer::_render);
+	m_pfnEndRender	= PVoidFunction( & Gl3TextureRenderer::_endRender);
 
 	return (this->*m_pfnInitialise)();
 }
 
-void  GL3TextureRenderer :: _cleanup()
+void  Gl3TextureRenderer :: _cleanup()
 {
-	if (glIsTexture( m_texGLName))
+	if (glIsTexture( m_glTexName))
 	{
-		glDeleteTextures( 1, & m_texGLName);
-		CheckGLError( CU_T( "GLTextureRenderer :: Cleanup - glDeleteTextures"));
+		CheckGlError( glDeleteTextures( 1, & m_glTexName), CU_T( "GlTextureRenderer :: Cleanup - glDeleteTextures"));
 	}
 }
 
-bool GL3TextureRenderer :: _initialise()
+bool Gl3TextureRenderer :: _initialise()
 {
-	glGenTextures( 1, & m_texGLName);
-	CheckGLError( CU_T( "GLTextureRenderer :: Initialise - glGenTextures"));
+	CheckGlError( glGenTextures( 1, & m_glTexName), CU_T( "GlTextureRenderer :: Initialise - glGenTextures"));
 
-	if (m_texGLName == 0)
+	if (m_glTexName == 0)
 	{
-		Logger::LogError( CU_T( "GLTextureRenderer :: Initialise - Not a valid texture name"));
+		Logger::LogError( CU_T( "GlTextureRenderer :: Initialise - Not a valid texture name"));
 		return false;
 	}
 
-	int l_textureType = GetTextureDimension( m_target->GetTextureType());
-	glBindTexture( l_textureType, m_texGLName);
-	CheckGLError( CU_T( "GLTextureRenderer :: Initialise - glBindTexture"));
+	int l_textureType = GlEnum::Get( m_target->GetTextureType());
+	CheckGlError( glBindTexture( l_textureType, m_glTexName), CU_T( "GlTextureRenderer :: Initialise - glBindTexture"));
 
-	glTexParameteri( l_textureType, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	CheckGLError( CU_T( "GLTextureRenderer :: Initialise - glTexParameteri - GL_TEXTURE_WRAP_S"));
-	glTexParameteri( l_textureType, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	CheckGLError( CU_T( "GLTextureRenderer :: Initialise - glTexParameteri - GL_TEXTURE_WRAP_T"));
+	CheckGlError( glTexParameteri( l_textureType, GL_TEXTURE_WRAP_S, GlEnum::Get( m_target->GetWrapMode( 0))), CU_T( "GlTextureRenderer :: Initialise - glTexParameteri - GL_TEXTURE_WRAP_S"));
+	CheckGlError( glTexParameteri( l_textureType, GL_TEXTURE_WRAP_T, GlEnum::Get( m_target->GetWrapMode( 0))), CU_T( "GlTextureRenderer :: Initialise - glTexParameteri - GL_TEXTURE_WRAP_T"));
 
-	glTexParameteri( l_textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	CheckGLError( CU_T( "GLTextureRenderer :: Initialise - glTexParameteri - GL_TEXTURE_MIN_FILTER"));
-	glTexParameteri( l_textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	CheckGLError( CU_T( "GLTextureRenderer :: Initialise - glTexParameteri - GL_TEXTURE_MAG_FILTER"));
+	CheckGlError( glTexParameteri( l_textureType, GL_TEXTURE_MIN_FILTER, GlEnum::Get( m_target->GetInterpolationMode( 0))), CU_T( "GlTextureRenderer :: Initialise - glTexParameteri - GL_TEXTURE_MIN_FILTER"));
+	CheckGlError( glTexParameteri( l_textureType, GL_TEXTURE_MAG_FILTER, GlEnum::Get( m_target->GetInterpolationMode( 1))), CU_T( "GlTextureRenderer :: Initialise - glTexParameteri - GL_TEXTURE_MAG_FILTER"));
 
-	glTexImage2D( l_textureType, 0, GL_RGBA8, m_target->GetWidth(),
-				  m_target->GetHeight(), 0, GL_RGBA, 
-				  GL_UNSIGNED_BYTE, m_target->GetImagePixels());
-	CheckGLError( CU_T( "GLTextureRenderer :: Initialise - glTexImage2D"));
+	CheckGlError( glTexImage2D(	l_textureType, 0, GlEnum::Get( m_target->GetPixelFormat()).Internal, m_target->GetWidth(),
+								m_target->GetHeight(), 0, GlEnum::Get( m_target->GetPixelFormat()).Format,
+								GlEnum::Get( m_target->GetPixelFormat()).Type, m_target->GetImagePixels()),
+				  CU_T( "GlTextureRenderer :: Initialise - glTexImage2D"));
 
 	if (glGenerateMipmap == NULL)
 	{
-		gluBuild2DMipmaps( l_textureType, GL_RGBA8, m_target->GetWidth(), m_target->GetHeight(),
-			GL_RGBA, GL_UNSIGNED_BYTE, m_target->GetImagePixels());
+		CheckGlError( glGenerateMipmapEXT( l_textureType), CU_T( "GlTextureRenderer :: Initialise - glGenerateMipmap"));
 	}
 	else
 	{
-		glGenerateMipmap( l_textureType);
+		CheckGlError( glGenerateMipmap( l_textureType), CU_T( "GlTextureRenderer :: Initialise - glGenerateMipmap"));
 	}
-
-	CheckGLError( CU_T( "GLTextureRenderer :: Initialise - glGenerateMipmap"));
+	
 	return true;
 }
 
-void GL3TextureRenderer :: _render()
+void Gl3TextureRenderer :: _render()
 {
 	if (RenderSystem::UseMultiTexturing())
 	{
-		glActiveTexture( GL_TEXTURE0 + m_target->GetIndex());
-		CheckGLError( CU_T( "GLTextureRenderer :: Apply - glActiveTexture"));
-		glBindTexture( GetTextureDimension( m_target->GetTextureType()), m_texGLName);
-		CheckGLError( CU_T( "GLTextureRenderer :: Apply - glBindTexture"));
+		CheckGlError( glActiveTexture( GL_TEXTURE0 + m_target->GetIndex()), CU_T( "GlTextureRenderer :: Apply - glActiveTexture"));
+		CheckGlError( glBindTexture( GlEnum::Get( m_target->GetTextureType()), m_glTexName), CU_T( "GlTextureRenderer :: Apply - glBindTexture"));
 	}
 	else
 	{
-		glBindTexture( GetTextureDimension( m_target->GetTextureType()), m_texGLName);
-		CheckGLError( CU_T( "GLTextureRenderer :: Apply - glBindTexture"));
+		CheckGlError( glBindTexture( GlEnum::Get( m_target->GetTextureType()), m_glTexName), CU_T( "GlTextureRenderer :: Apply - glBindTexture"));
 	}
 
-	Pipeline::MatrixMode( Pipeline::eTexture);
+	Pipeline::MatrixMode( Pipeline::eMATRIX_MODE( Pipeline::eMatrixTexture0 + m_target->GetIndex()));
 	Pipeline::LoadIdentity();
 	//TODO : transformations de texture
 }
 
-void GL3TextureRenderer :: _endRender()
+void Gl3TextureRenderer :: _endRender()
 {
-	Pipeline::MatrixMode( Pipeline::eModelView);
+	Pipeline::MatrixMode( Pipeline::eMatrixModelView);
 
 	if (m_target->IsTextured() && m_target->TextureInitialised())
 	{
 		if (RenderSystem::UseMultiTexturing())
 		{
-			glActiveTexture( GL_TEXTURE0 + m_target->GetIndex());
-			CheckGLError( CU_T( "GLTextureRenderer :: Remove - glActiveTexture"));
+			CheckGlError( glActiveTexture( GL_TEXTURE0 + m_target->GetIndex()), CU_T( "GlTextureRenderer :: Remove - glActiveTexture"));
 		}
 	}
 }

@@ -3,6 +3,8 @@
 #include "Castor3D/render_system/RenderSystem.h"
 #include "Castor3D/material/TextureUnit.h"
 #include "Castor3D/material/MaterialManager.h"
+#include "Castor3D/scene/SceneManager.h"
+#include "Castor3D/shader/ShaderManager.h"
 #include "Castor3D/main/Pipeline.h"
 
 using namespace Castor3D;
@@ -66,7 +68,7 @@ void RenderSystem :: RemoveTransformations()
 
 void RenderSystem :: BeginOverlaysRendering()
 {
-	Pipeline::MatrixMode( Pipeline::eProjection);
+	Pipeline::MatrixMode( Pipeline::eMatrixProjection);
 	Pipeline::PushMatrix();
 	Pipeline::LoadIdentity();
 	Pipeline::Ortho( 0.0, 1.0, 0.0, 1.0, -1.0, 1.0);
@@ -75,12 +77,63 @@ void RenderSystem :: BeginOverlaysRendering()
 void RenderSystem :: EndOverlaysRendering()
 {
 	Pipeline::PopMatrix();
-	Pipeline::MatrixMode( Pipeline::eModelView);
+	Pipeline::MatrixMode( Pipeline::eMatrixModelView);
 }
 
 void RenderSystem :: AddContext( Context * p_context, RenderWindow * p_window)
 {
 	m_contextMap[p_window] = p_context;
+}
+
+IndexBufferPtr RenderSystem :: CreateIndexBuffer()
+{
+	IndexBufferPtr l_pReturn;
+
+	if (sm_singleton != NULL)
+	{
+		l_pReturn = sm_singleton->_createIndexBuffer();
+	}
+
+	return l_pReturn;
+}
+
+VertexBufferPtr RenderSystem :: CreateVertexBuffer( const BufferElementDeclaration * p_pElements, size_t p_uiCount)
+{
+	VertexBufferPtr l_pReturn;
+
+	if (sm_singleton != NULL)
+	{
+		l_pReturn = sm_singleton->_createVertexBuffer( p_pElements, p_uiCount);
+	}
+
+	return l_pReturn;
+}
+
+TextureBufferObjectPtr RenderSystem :: CreateTextureBuffer()
+{
+	TextureBufferObjectPtr l_pReturn;
+
+	if (sm_singleton != NULL)
+	{
+		l_pReturn = sm_singleton->_createTextureBuffer();
+	}
+
+	return l_pReturn;
+}
+
+void RenderSystem :: _addGlslShaderProgram( GlslShaderProgramPtr p_pToAdd)
+{
+	m_pSceneManager->GetMaterialManager()->GetShaderManager()->AddGLSLProgram( p_pToAdd);
+}
+
+void RenderSystem :: _addHlslShaderProgram( HlslShaderProgramPtr p_pToAdd)
+{
+	m_pSceneManager->GetMaterialManager()->GetShaderManager()->AddHLSLProgram( p_pToAdd);
+}
+
+void RenderSystem :: _addCgShaderProgram( CgShaderProgramPtr p_pToAdd)
+{
+	m_pSceneManager->GetMaterialManager()->GetShaderManager()->AddCgProgram( p_pToAdd);
 }
 
 VertexAttribsBufferBoolPtr RenderSystem :: _create1BoolVertexAttribsBuffer( const String & p_strArg)

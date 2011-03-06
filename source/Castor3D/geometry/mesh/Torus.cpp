@@ -23,7 +23,7 @@ Torus :: Torus( MeshManager * p_pManager, real internalRadius_p, real externalRa
 	,	m_internalNbFaces( internalNbFaces_p)
 	,	m_externalNbFaces( externalNbFaces_p)
 {
-	m_meshType = Mesh::eTorus;
+	m_meshType = eTorus;
 	GeneratePoints();
 }
 

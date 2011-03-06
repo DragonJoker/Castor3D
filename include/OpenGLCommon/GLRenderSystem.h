@@ -15,71 +15,83 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL_RenderSystem___
-#define ___GL_RenderSystem___
+#ifndef ___Gl_RenderSystem___
+#define ___Gl_RenderSystem___
 
-#include "Module_GLRender.h"
-#include "GLPipeline.h"
-#include "GLBuffer.h"
+#include "Module_GlRender.h"
+#include "GlPipeline.h"
+#include "GlBuffer.h"
+#include "GlContext.h"
 
 namespace Castor3D
 {
-	class GLRenderSystem : public RenderSystem
+	class GlRenderSystem : public RenderSystem
 	{
 	protected:
-		static bool sm_useVBO;
+		static bool sm_useVertexBufferObjects;
 		static bool sm_extensionsInit;
 		static bool sm_gpuShader4;
 
 	protected:
 		std::set <int>				m_setAvailableIndexes;
 		std::set <int>				m_setAvailableGLIndexes;
-		GLPipeline					m_pipeline;
+		GlPipeline					m_pipeline;
 		std::set <LightRendererPtr>	m_setLightRenderers;
-		int 						m_iOpenGLMajor;
-		int 						m_iOpenGLMinor;
+		int 						m_iOpenGlMajor;
+		int 						m_iOpenGlMinor;
 
 	public:
-		GLRenderSystem( SceneManager * p_pSceneManager);
-		virtual ~GLRenderSystem();
+		GlRenderSystem( SceneManager * p_pSceneManager);
+		virtual ~GlRenderSystem();
 
 		virtual void Initialise();
 		virtual void Delete();
 		virtual void Cleanup();
 
-		bool InitOpenGLExtensions();	//!< Initialize OpenGL Extensions (using glew) \ingroup GLSL
-		bool HasGLSLSupport();			//!< Returns true if OpenGL Shading Language is supported. (This function will return a GLSL version number in a future release) \ingroup GLSL  
-		bool HasOpenGL2Support();		//!< Returns true if OpenGL 2.0 is supported. This function is deprecated and shouldn't be used anymore. \ingroup GLSL \deprecated
+		bool InitOpenGlExtensions();	//!< Initialize OpenGL Extensions (using glew) \ingroup GLSL
+		bool HasGlslSupport();			//!< Returns true if OpenGL Shading Language is supported. (This function will return a GLSL version number in a future release) \ingroup GLSL
+		bool HasOpenGl2Support();		//!< Returns true if OpenGL 2.0 is supported. This function is deprecated and shouldn't be used anymore. \ingroup GLSL \deprecated
 		bool HasGeometryShaderSupport();//!< Returns true if Geometry Shaders are supported. \ingroup GLSL
 		bool HasShaderModel4();			//!< Returns true if Shader Model 4 is supported. \ingroup GLSL
-
-		virtual ShaderObject *		CreateVertexShader		();
-		virtual ShaderObject *		CreateFragmentShader	();
-		virtual ShaderObject *		CreateGeometryShader	();
-
-		virtual CgShaderObject *	CreateCgVertexShader	();
-		virtual CgShaderObject *	CreateCgFragmentShader	();
-		virtual CgShaderObject *	CreateCgGeometryShader	();
-		virtual CgShaderProgram *	CreateCgShaderProgram	( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile);
 
 		virtual void RenderAmbientLight( const Colour & p_clColour);
 
 		virtual int LockLight();
 		virtual void UnlockLight( int p_iIndex);
-		virtual void SetCurrentShaderProgram( ShaderProgram * p_pVal);
+		virtual void SetCurrentShaderProgram( ShaderProgramBase * p_pVal);
+		virtual void DrawIndexedPrimitives( ePRIMITIVE_TYPE p_eType, size_t p_uiMinVertex, size_t p_uiVertexCount, size_t p_uiFirstIndex, size_t p_uiCount);
 
 	public:
-		static inline bool	UseVBO			()	{ return sm_useVBO; }
-		static inline bool	IsExtensionInit	()	{ return sm_extensionsInit; }
-		static inline bool	HasGPUShader4	()	{ return sm_gpuShader4; }
-		static inline int	GetOpenGLMajor	()	{ return GetSingletonPtr()->m_iOpenGLMajor; }
-		static inline int	GetOpenGLMinor	()	{ return GetSingletonPtr()->m_iOpenGLMinor; }
+		static inline bool	UseVertexBufferObjects	()	{ return sm_useVertexBufferObjects; }
+		static inline bool	IsExtensionInit			()	{ return sm_extensionsInit; }
+		static inline bool	HasGpuShader4			()	{ return sm_gpuShader4; }
+		static inline int	GetOpenGlMajor			()	{ return GetSingletonPtr()->m_iOpenGlMajor; }
+		static inline int	GetOpenGlMinor			()	{ return GetSingletonPtr()->m_iOpenGlMinor; }
 
 		virtual void BeginOverlaysRendering();
 
-		inline static GLRenderSystem * GetSingletonPtr() { return RenderSystem::_getSingletonPtr<GLRenderSystem>(); }
+		inline static GlRenderSystem * GetSingletonPtr() { return RenderSystem::_getSingletonPtr<GlRenderSystem>(); }
+
+		GlContext			*	GetMainContext			()const	{ return _getMainContext<GlContext>(); }
+		GlContext			*	GetCurrentContext		()const	{ return _getCurrentContext<GlContext>(); }
+		GlShaderProgram		*	GetCurrentShaderProgram	()const	{ return _getCurrentShaderProgram<GlShaderProgram>(); }
 
 	private:
+
+		virtual GlslShaderObjectPtr		_createGlslVertexShader		();
+		virtual GlslShaderObjectPtr		_createGlslFragmentShader	();
+		virtual GlslShaderObjectPtr		_createGlslGeometryShader	();
+		virtual CgShaderObjectPtr		_createCgVertexShader		();
+		virtual CgShaderObjectPtr		_createCgFragmentShader		();
+		virtual CgShaderObjectPtr		_createCgGeometryShader		();
+
+		virtual HlslShaderObjectPtr		_createHlslVertexShader		() { return HlslShaderObjectPtr(); }
+		virtual HlslShaderObjectPtr		_createHlslFragmentShader	() { return HlslShaderObjectPtr(); }
+		virtual HlslShaderObjectPtr		_createHlslGeometryShader	() { return HlslShaderObjectPtr(); }
+		virtual HlslShaderProgramPtr	_createHlslShaderProgram	( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile) { return HlslShaderProgramPtr(); }
+
+		virtual CgShaderProgramPtr		_createCgShaderProgram		( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile);
+
 		virtual VertexAttribsBufferBoolPtr		_create1BoolVertexAttribsBuffer		( const String & p_strArg);
 		virtual VertexAttribsBufferIntPtr		_create1IntVertexAttribsBuffer		( const String & p_strArg);
 		virtual VertexAttribsBufferUIntPtr		_create1UIntVertexAttribsBuffer		( const String & p_strArg);
@@ -101,13 +113,13 @@ namespace Castor3D
 		virtual VertexAttribsBufferFloatPtr		_create4FloatVertexAttribsBuffer	( const String & p_strArg);
 		virtual VertexAttribsBufferDoublePtr	_create4DoubleVertexAttribsBuffer	( const String & p_strArg);
 
-		template <typename T, size_t Count> typename SmartPtr< GLVertexAttribsBuffer<T, Count> >::Shared _createAttribsBuffer( const String & p_strArg)
+		template <typename T, size_t Count> shared_ptr< GlVertexAttribsBuffer<T, Count> > _createAttribsBuffer( const String & p_strArg)
 		{
-			SmartPtr< GLVertexAttribsBuffer<T, Count> >::Shared l_pReturn;
+			shared_ptr< GlVertexAttribsBuffer<T, Count> > l_pReturn;
 
-			if (UseVBO() && UseShaders())
+			if (UseVertexBufferObjects() && UseShaders())
 			{
-				l_pReturn = BufferManager::CreateBuffer< T, GLVertexAttribsBuffer<T, Count> >( p_strArg);
+				l_pReturn = BufferManager::CreateBuffer< T, GlVertexAttribsBuffer<T, Count> >( p_strArg);
 			}
 
 			return l_pReturn;

@@ -22,7 +22,7 @@ MouseCameraEvent :: ~MouseCameraEvent()
 
 void MouseCameraEvent :: Add( FrameEventPtr p_pThis, FrameListenerPtr p_pListener, real p_deltaX, real p_deltaY, real p_deltaZ)
 {
-	SmartPtr<MouseCameraEvent>::Shared l_pThis = static_pointer_cast<MouseCameraEvent>( p_pThis);
+	shared_ptr<MouseCameraEvent> l_pThis = static_pointer_cast<MouseCameraEvent, FrameEvent>( p_pThis);
 	bool l_bToAdd = l_pThis->m_deltaX == 0 && l_pThis->m_deltaY == 0 && l_pThis->m_deltaZ == 0;
 
 	l_pThis->m_deltaX += p_deltaX;

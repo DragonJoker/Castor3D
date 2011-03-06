@@ -34,46 +34,53 @@ namespace Castor3D
 	public:
 		typedef enum
 		{
-			eModelView	=	0,
-			eProjection	=	1,
-			eTexture	=	2,
-			eNbModes	=	3,
+			eMatrixProjection,
+			eMatrixModelView,
+			eMatrixTexture0,
+			eMatrixTexture1,
+			eMatrixTexture2,
+			eMatrixTexture3,
+			eNbMatrixModes,
 		}
 		eMATRIX_MODE;
 
 	protected:
-		typedef void 	(__cdecl * VoidFunc)			();
-		typedef bool 	(__cdecl * BoolFunc)			();
-		typedef bool 	(__cdecl * MatrixModeFunc)		( eMATRIX_MODE p_eMode);
-		typedef bool 	(__cdecl * TranslateFunc)		( const Point3r & p_translate);
-		typedef bool 	(__cdecl * RotateFunc)			( const Quaternion & p_rotate);
-		typedef bool 	(__cdecl * ScaleFunc)			( const Point3r & p_translate);
-		typedef bool 	(__cdecl * MultMatrixMFunc)		( const Matrix4x4r & p_matrix);
-		typedef bool 	(__cdecl * MultMatrixPFunc)		( const real * p_matrix);
-		typedef bool 	(__cdecl * PerspectiveFunc)		( real p_rFOVY, real p_rRatio, real p_rNear, real p_rFar);
-		typedef bool 	(__cdecl * OrthoFunc)			( real p_rLeft, real p_rRight, real p_rBottom, real p_rTop, real p_rNear, real p_rFar);
-		typedef bool	(__cdecl * ProjectFunc)			( const Point3r & p_ptObj, const Point4r & p_ptViewport, Point3r & p_ptResult);
-		typedef bool	(__cdecl * UnProjectFunc)		( const Point3i & p_ptWin, const Point4r & p_ptViewport, Point3r & p_ptResult);
-		typedef void 	(__cdecl * ApplyViewportFunc)	( int p_iWindowWidth, int p_iWindowHeight);
+		typedef void 	VoidFunc				();
+		typedef bool 	BoolFunc				();
+		typedef bool 	MatrixModeFunc			( eMATRIX_MODE p_eMode);
+		typedef bool 	TranslateFunc			( const Point3r & p_translate);
+		typedef bool 	RotateFunc				( const Quaternion & p_rotate);
+		typedef bool 	ScaleFunc				( const Point3r & p_translate);
+		typedef bool 	MultMatrixMFunc			( const Matrix4x4r & p_matrix);
+		typedef bool 	MultMatrixPFunc			( const real * p_matrix);
+		typedef bool 	PerspectiveFunc			( real p_rFOVY, real p_rRatio, real p_rNear, real p_rFar);
+		typedef bool 	OrthoFunc				( real p_rLeft, real p_rRight, real p_rBottom, real p_rTop, real p_rNear, real p_rFar);
+		typedef bool	ProjectFunc				( const Point3r & p_ptObj, const Point4r & p_ptViewport, Point3r & p_ptResult);
+		typedef bool	UnProjectFunc			( const Point3i & p_ptWin, const Point4r & p_ptViewport, Point3r & p_ptResult);
+		typedef bool	PickMatrixFunc			( real x, real y, real width, real height, int viewport[4]);
+		typedef void 	ApplyViewportFunc		( int p_iWindowWidth, int p_iWindowHeight);
 
-		typedef MatrixModeFunc		PMatrixModeFunc;
-		typedef BoolFunc			PLoadIdentityFunc;
-		typedef BoolFunc			PPushMatrixFunc;
-		typedef BoolFunc			PPopMatrixFunc;
-		typedef TranslateFunc		PTranslateFunc;
-		typedef RotateFunc			PRotateFunc;
-		typedef ScaleFunc			PScaleFunc;
-		typedef MultMatrixMFunc		PMultMatrixMFunc;
-		typedef MultMatrixPFunc		PMultMatrixPFunc;
-		typedef PerspectiveFunc		PPerspectiveFunc;
-		typedef OrthoFunc			POrthoFunc;
-		typedef ProjectFunc			PProjectFunc;
-		typedef UnProjectFunc		PUnProjectFunc;
-		typedef VoidFunc			PApplyProjectionFunc;
-		typedef VoidFunc			PApplyModelViewFunc;
-		typedef VoidFunc			PApplyModelNormalFunc;
-		typedef VoidFunc			PApplyProjectionModelViewFunc;
-		typedef ApplyViewportFunc	PApplyViewportFunc;
+		typedef MatrixModeFunc			*	PMatrixModeFunc;
+		typedef BoolFunc				*	PLoadIdentityFunc;
+		typedef BoolFunc				*	PPushMatrixFunc;
+		typedef BoolFunc				*	PPopMatrixFunc;
+		typedef TranslateFunc			*	PTranslateFunc;
+		typedef RotateFunc				*	PRotateFunc;
+		typedef ScaleFunc				*	PScaleFunc;
+		typedef MultMatrixMFunc			*	PMultMatrixMFunc;
+		typedef MultMatrixPFunc			*	PMultMatrixPFunc;
+		typedef PerspectiveFunc			*	PPerspectiveFunc;
+		typedef OrthoFunc				*	POrthoFunc;
+		typedef OrthoFunc				*	PFrustumFunc;
+		typedef ProjectFunc				*	PProjectFunc;
+		typedef UnProjectFunc			*	PUnProjectFunc;
+		typedef	PickMatrixFunc			*	PPickMatrixFunc;
+		typedef VoidFunc				*	PApplyProjectionFunc;
+		typedef VoidFunc				*	PApplyModelViewFunc;
+		typedef VoidFunc				*	PApplyModelNormalFunc;
+		typedef VoidFunc				*	PApplyProjectionModelViewFunc;
+		typedef ApplyViewportFunc		*	PApplyViewportFunc;
+		typedef VoidFunc				*	PApplyCurrentMatrixFunc;
 
 	public:
 		typedef Matrix4x4f matrix4x4;
@@ -85,7 +92,7 @@ namespace Castor3D
 
 	protected:
 		static Pipeline * sm_singleton;
-		static MatrixStack sm_matrix[eNbModes];
+		static MatrixStack sm_matrix[eNbMatrixModes];
 		static eMATRIX_MODE sm_eCurrentMode;
 		static matrix3x3 sm_matrixNormal;
 		static matrix4x4 sm_matrixProjectionModelView;
@@ -101,13 +108,16 @@ namespace Castor3D
 		static PMultMatrixPFunc					sm_pfnMultMatrixPtr;
 		static PPerspectiveFunc					sm_pfnPerspective;
 		static POrthoFunc						sm_pfnOrtho;
+		static PFrustumFunc						sm_pfnFrustum;
 		static PProjectFunc						sm_pfnProject;
 		static PUnProjectFunc					sm_pfnUnProject;
+		static PPickMatrixFunc					sm_pfnPickMatrix;
 		static PApplyProjectionFunc				sm_pfnApplyProjection;
 		static PApplyModelViewFunc				sm_pfnApplyModelView;
 		static PApplyModelNormalFunc			sm_pfnApplyModelNormal;
 		static PApplyProjectionModelViewFunc	sm_pfnApplyProjectionModelView;
 		static PApplyViewportFunc				sm_pfnApplyViewport;
+		static PApplyCurrentMatrixFunc			sm_pfnApplyCurrentMatrix;
 
 	protected:
 		Pipeline();
@@ -125,15 +135,18 @@ namespace Castor3D
 		static bool 				MultMatrix					( const Matrix4x4r & p_matrix);
 		static bool 				MultMatrix					( const real * p_matrix);
 		static bool 				Perspective					( real p_rFOVY, real p_rRatio, real p_rNear, real p_rFar);
+		static bool 				Frustum						( real p_rLeft, real p_rRight, real p_rBottom, real p_rTop, real p_rNear, real p_rFar);
 		static bool 				Ortho						( real p_rLeft, real p_rRight, real p_rBottom, real p_rTop, real p_rNear, real p_rFar);
 		static bool 				Project						( const Point3r & p_ptObj, const Point4r & p_ptViewport, Point3r & p_ptResult);
 		static bool 				UnProject					( const Point3i & p_ptWin, const Point4r & p_ptViewport, Point3r & p_ptResult);
+		static bool 				PickMatrix					( real x, real y, real width, real height, int viewport[4]);
 		static void 				ApplyProjection				();
 		static void 				ApplyProjectionModelView	();
 		static void 				ApplyModelView				();
 		static void 				ApplyModelNormal			();
 		static void 				ApplyMatrices				();
 		static void					ApplyViewport				( int p_iWindowWidth, int p_iWindowHeight);
+		static void					ApplyCurrentMatrix			();
 
 	public:
 		static bool 	_matrixMode					( eMATRIX_MODE p_eMode);
@@ -146,14 +159,17 @@ namespace Castor3D
 		static bool 	_multMatrixMtx				( const Matrix4x4r & p_matrix);
 		static bool 	_multMatrixPtr				( const real * p_matrix);
 		static bool 	_perspective				( real p_rFOVY, real p_rRatio, real p_rNear, real p_rFar);
+		static bool		_frustum					( real p_rLeft, real p_rRight, real p_rBottom, real p_rTop, real p_rNear, real p_rFar);
 		static bool 	_ortho						( real p_rLeft, real p_rRight, real p_rBottom, real p_rTop, real p_rNear, real p_rFar);
 		static bool		_project					( const Point3r & p_ptObj, const Point4r & p_ptViewport, Point3r & p_ptResult);
 		static bool		_unProject					( const Point3i & p_ptWin, const Point4r & p_ptViewport, Point3r & p_ptResult);
+		static bool		_pickMatrix					( real x, real y, real width, real height, int viewport[4]);
 		static void 	_applyProjection			(){}
 		static void 	_applyModelView				(){}
 		static void 	_applyModelNormal			(){}
 		static void 	_applyProjectionModelView	(){}
 		static void 	_applyViewport				( int p_iWindowWidth, int p_iWindowHeight){}
+		static void 	_applyCurrentMatrix			(){}
 	};
 }
 

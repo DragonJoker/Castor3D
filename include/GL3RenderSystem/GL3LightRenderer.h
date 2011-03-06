@@ -15,14 +15,14 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL3_LightRenderer___
-#define ___GL3_LightRenderer___
+#ifndef ___Gl3_LightRenderer___
+#define ___Gl3_LightRenderer___
 
-#include "Module_GLRender.h"
+#include "Module_Gl3Render.h"
 
 namespace Castor3D
 {
-	class C3D_GL3_API GL3LightRenderer : public GLLightRenderer
+	class C3D_Gl3_API Gl3LightRenderer : public GlLightRenderer
 	{
 	private:
 		Colour		m_pAmbient;
@@ -38,8 +38,8 @@ namespace Castor3D
 		int			m_iGLPreviousIndex;
 
 	public:
-		GL3LightRenderer( SceneManager * p_pSceneManager);
-		virtual ~GL3LightRenderer(){}
+		Gl3LightRenderer( SceneManager * p_pSceneManager);
+		virtual ~Gl3LightRenderer(){}
 
 		virtual void Initialise();
 

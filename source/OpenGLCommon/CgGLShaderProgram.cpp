@@ -1,43 +1,42 @@
-#include "OpenGLCommon/PrecompiledHeader.h"
+#include "OpenGlCommon/PrecompiledHeader.h"
 
-#include "OpenGLCommon/CgGLShaderProgram.h"
-#include "OpenGLCommon/CgGLShaderObject.h"
-#include "OpenGLCommon/CgGLFrameVariable.h"
-#include "OpenGLCommon/GLRenderSystem.h"
+#include "OpenGlCommon/CgGlShaderProgram.h"
+#include "OpenGlCommon/CgGlShaderObject.h"
+#include "OpenGlCommon/CgGlFrameVariable.h"
+#include "OpenGlCommon/GlRenderSystem.h"
 
 using namespace Castor3D;
 
-CgGLShaderProgram :: CgGLShaderProgram()
+CgGlShaderProgram :: CgGlShaderProgram()
 	:	CgShaderProgram()
 {
 }
 
-CgGLShaderProgram :: CgGLShaderProgram( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile)
+CgGlShaderProgram :: CgGlShaderProgram( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile)
 	:	CgShaderProgram( p_vertexShaderFile, p_fragmentShaderFile, p_geometryShaderFile)
 {
 }
 
-CgGLShaderProgram :: ~CgGLShaderProgram()
+CgGlShaderProgram :: ~CgGlShaderProgram()
 {
-	m_mapCgGLFrameVariables.clear();
+	m_mapCgGlFrameVariables.clear();
 	Cleanup();
 
 	if (RenderSystem::UseShaders())
 	{
 		if (m_cgContext != NULL)
 		{
-			cgDestroyContext( m_cgContext);
-			CheckCgError( CU_T( "GLShaderProgram :: ~GLShaderProgram - cgDestroyContext"));
+			CheckCgError( cgDestroyContext( m_cgContext), CU_T( "GlShaderProgram :: ~GlShaderProgram - cgDestroyContext"));
 		}
 	}
 }
 
-void CgGLShaderProgram :: Cleanup()
+void CgGlShaderProgram :: Cleanup()
 {
 	CgShaderProgram::Cleanup();
 }
 
-void CgGLShaderProgram :: Initialise()
+void CgGlShaderProgram :: Initialise()
 {
 	if ( ! m_isLinked)
 	{
@@ -49,7 +48,7 @@ void CgGLShaderProgram :: Initialise()
 
 				for (int i = eVertexShader ; i < eNbShaderTypes ; i++)
 				{
-					if ( ! m_pShaders[i] == NULL && ! m_pShaders[i]->GetSource().empty())
+					if (m_pShaders[i] != NULL && ! m_pShaders[i]->GetSource().empty())
 					{
 						m_pShaders[i]->CreateProgram();
 					}
@@ -58,15 +57,15 @@ void CgGLShaderProgram :: Initialise()
 				m_cgContext = cgCreateContext();
 				CASTOR_ASSERT( m_cgContext != NULL && cgIsContext( m_cgContext));
 
-				m_usesGeometryShader = ! m_pShaders[eGeometryShader] == NULL && ! m_pShaders[eGeometryShader]->GetSource().empty();
+				m_usesGeometryShader = m_pShaders[eGeometryShader] != NULL && ! m_pShaders[eGeometryShader]->GetSource().empty();
 
 				for (int i = eVertexShader ; i < eNbShaderTypes ; i++)
 				{
-					if ( ! m_pShaders[i] == NULL && ! m_pShaders[i]->GetSource().empty())
+					if (m_pShaders[i] != NULL && ! m_pShaders[i]->GetSource().empty())
 					{
 						if ( ! m_pShaders[i]->Compile())
 						{
-							Logger::LogError( CU_T( "ShaderProgram :: LoadfromMemory - ***COMPILER ERROR (Shader %i)"), i);
+							Logger::LogError( CU_T( "ShaderProgram :: LoadfromMemory - ***COMPILER ERROR"));
 							Cleanup();
 							return;
 						}
@@ -86,7 +85,7 @@ void CgGLShaderProgram :: Initialise()
 	}
 }
 
-bool CgGLShaderProgram :: Link()
+bool CgGlShaderProgram :: Link()
 {
 	bool l_bReturn = false;
 
@@ -94,80 +93,80 @@ bool CgGLShaderProgram :: Link()
 	{
 		if ( ! m_isLinked)
 		{
-			SmartPtr< CgOneFrameVariable<float> >::Shared l_fUniform;
-			SmartPtr< CgPointFrameVariable<float, 4> >::Shared l_pt4Uniform;
-			SmartPtr< CgPointFrameVariable<float, 3> >::Shared l_pt3Uniform;
-			SmartPtr< CgMatrixFrameVariable<float, 4, 4> >::Shared l_mtxUniform;
+			shared_ptr< CgOneFrameVariable<float> > l_fUniform;
+			shared_ptr< CgPointFrameVariable<float, 4> > l_pt4Uniform;
+			shared_ptr< CgPointFrameVariable<float, 3> > l_pt3Uniform;
+			shared_ptr< CgMatrixFrameVariable<float, 4, 4> > l_mtxUniform;
 
-			l_pt4Uniform = SmartPtr< CgPointFrameVariable<float, 4> >::Shared( new CgPointFrameVariable<float, 4>( NULL, 1));
+			l_pt4Uniform = shared_ptr< CgPointFrameVariable<float, 4> >( new CgPointFrameVariable<float, 4>( NULL, 1));
 			l_pt4Uniform->SetName( CU_T( "in_AmbientLight"));
 			AddFrameVariable( l_pt4Uniform, GetProgram( eVertexShader));
-			m_pAmbientLight = static_pointer_cast< CgGLPointFrameVariable<float, 4> >( GetCgGLFrameVariable( CU_T( "in_AmbientLight")));
+			m_pAmbientLight = static_pointer_cast< CgGlPointFrameVariable<float, 4> >( GetCgGlFrameVariable( CU_T( "in_AmbientLight")));
 
-			l_pt4Uniform = SmartPtr< CgPointFrameVariable<float, 4> >::Shared( new CgPointFrameVariable<float, 4>( NULL, 8));
+			l_pt4Uniform = shared_ptr< CgPointFrameVariable<float, 4> >( new CgPointFrameVariable<float, 4>( NULL, 8));
 			l_pt4Uniform->SetName( CU_T( "in_LightsAmbient"));
 			AddFrameVariable( l_pt4Uniform, GetProgram( eVertexShader));
-			m_pAmbients = static_pointer_cast< CgGLPointFrameVariable<float, 4> >( GetCgGLFrameVariable( CU_T( "in_LightsAmbient")));
+			m_pAmbients = static_pointer_cast< CgGlPointFrameVariable<float, 4> >( GetCgGlFrameVariable( CU_T( "in_LightsAmbient")));
 
-			l_pt4Uniform = SmartPtr< CgPointFrameVariable<float, 4> >::Shared( new CgPointFrameVariable<float, 4>( NULL, 8));
+			l_pt4Uniform = shared_ptr< CgPointFrameVariable<float, 4> >( new CgPointFrameVariable<float, 4>( NULL, 8));
 			l_pt4Uniform->SetName( CU_T( "in_LightsDiffuse"));
 			AddFrameVariable( l_pt4Uniform, GetProgram( eVertexShader));
-			m_pDiffuses = static_pointer_cast< CgGLPointFrameVariable<float, 4> >( GetCgGLFrameVariable( CU_T( "in_LightsDiffuse")));
+			m_pDiffuses = static_pointer_cast< CgGlPointFrameVariable<float, 4> >( GetCgGlFrameVariable( CU_T( "in_LightsDiffuse")));
 
-			l_pt4Uniform = SmartPtr< CgPointFrameVariable<float, 4> >::Shared( new CgPointFrameVariable<float, 4>( NULL, 8));
+			l_pt4Uniform = shared_ptr< CgPointFrameVariable<float, 4> >( new CgPointFrameVariable<float, 4>( NULL, 8));
 			l_pt4Uniform->SetName( CU_T( "in_LightsSpecular"));
 			AddFrameVariable( l_pt4Uniform, GetProgram( eVertexShader));
-			m_pSpeculars = static_pointer_cast< CgGLPointFrameVariable<float, 4> >( GetCgGLFrameVariable( CU_T( "in_LightsSpecular")));
+			m_pSpeculars = static_pointer_cast< CgGlPointFrameVariable<float, 4> >( GetCgGlFrameVariable( CU_T( "in_LightsSpecular")));
 
-			l_pt4Uniform = SmartPtr< CgPointFrameVariable<float, 4> >::Shared( new CgPointFrameVariable<float, 4>( NULL, 8));
+			l_pt4Uniform = shared_ptr< CgPointFrameVariable<float, 4> >( new CgPointFrameVariable<float, 4>( NULL, 8));
 			l_pt4Uniform->SetName( CU_T( "in_LightsPosition"));
 			AddFrameVariable( l_pt4Uniform, GetProgram( eVertexShader));
-			m_pPositions = static_pointer_cast< CgGLPointFrameVariable<float, 4> >( GetCgGLFrameVariable( CU_T( "in_LightsPosition")));
+			m_pPositions = static_pointer_cast< CgGlPointFrameVariable<float, 4> >( GetCgGlFrameVariable( CU_T( "in_LightsPosition")));
 
-			l_mtxUniform = SmartPtr< CgMatrixFrameVariable<float, 4, 4> >::Shared( new CgMatrixFrameVariable<float, 4, 4>( NULL, 8));
+			l_mtxUniform = shared_ptr< CgMatrixFrameVariable<float, 4, 4> >( new CgMatrixFrameVariable<float, 4, 4>( NULL, 8));
 			l_mtxUniform->SetName( CU_T( "in_LightsOrientation"));
 			AddFrameVariable( l_mtxUniform, GetProgram( eVertexShader));
-			m_pOrientations = static_pointer_cast< CgGLMatrixFrameVariable<float, 4, 4> >( GetCgGLFrameVariable( CU_T( "in_LightsOrientation")));
+			m_pOrientations = static_pointer_cast< CgGlMatrixFrameVariable<float, 4, 4> >( GetCgGlFrameVariable( CU_T( "in_LightsOrientation")));
 
-			l_pt3Uniform = SmartPtr< CgPointFrameVariable<float, 3> >::Shared( new CgPointFrameVariable<float, 3>( NULL, 8));
+			l_pt3Uniform = shared_ptr< CgPointFrameVariable<float, 3> >( new CgPointFrameVariable<float, 3>( NULL, 8));
 			l_pt3Uniform->SetName( CU_T( "in_LightsAttenuation"));
 			AddFrameVariable( l_pt3Uniform, GetProgram( eVertexShader));
-			m_pAttenuations = static_pointer_cast< CgGLPointFrameVariable<float, 3> >( GetCgGLFrameVariable( CU_T( "in_LightsAttenuation")));
+			m_pAttenuations = static_pointer_cast< CgGlPointFrameVariable<float, 3> >( GetCgGlFrameVariable( CU_T( "in_LightsAttenuation")));
 
-			l_fUniform = SmartPtr< CgOneFrameVariable<float> >::Shared( new CgOneFrameVariable<float>( NULL, 8));
+			l_fUniform = shared_ptr< CgOneFrameVariable<float> >( new CgOneFrameVariable<float>( NULL, 8));
 			l_fUniform->SetName( CU_T( "in_LightsExponent"));
 			AddFrameVariable( l_fUniform, GetProgram( eVertexShader));
-			m_pExponents = static_pointer_cast< CgGLOneFrameVariable<float> >( GetCgGLFrameVariable( CU_T( "in_LightsExponent")));
+			m_pExponents = static_pointer_cast< CgGlOneFrameVariable<float> >( GetCgGlFrameVariable( CU_T( "in_LightsExponent")));
 
-			l_fUniform = SmartPtr< CgOneFrameVariable<float> >::Shared( new CgOneFrameVariable<float>( NULL, 8));
+			l_fUniform = shared_ptr< CgOneFrameVariable<float> >( new CgOneFrameVariable<float>( NULL, 8));
 			l_fUniform->SetName( CU_T( "in_LightsCutOff"));
 			AddFrameVariable( l_fUniform, GetProgram( eVertexShader));
-			m_pCutOffs = static_pointer_cast< CgGLOneFrameVariable<float> >( GetCgGLFrameVariable( CU_T( "in_LightsCutOff")));
+			m_pCutOffs = static_pointer_cast< CgGlOneFrameVariable<float> >( GetCgGlFrameVariable( CU_T( "in_LightsCutOff")));
 
-			l_pt4Uniform = SmartPtr< CgPointFrameVariable<float, 4> >::Shared( new CgPointFrameVariable<float, 4>( NULL, 1));
+			l_pt4Uniform = shared_ptr< CgPointFrameVariable<float, 4> >( new CgPointFrameVariable<float, 4>( NULL, 1));
 			l_pt4Uniform->SetName( CU_T( "in_MatAmbient"));
 			AddFrameVariable( l_pt4Uniform, GetProgram( eVertexShader));
-			m_pAmbient = static_pointer_cast< CgGLPointFrameVariable<float, 4> >( GetCgGLFrameVariable( CU_T( "in_MatAmbient")));
+			m_pAmbient = static_pointer_cast< CgGlPointFrameVariable<float, 4> >( GetCgGlFrameVariable( CU_T( "in_MatAmbient")));
 
-			l_pt4Uniform = SmartPtr< CgPointFrameVariable<float, 4> >::Shared( new CgPointFrameVariable<float, 4>( NULL, 1));
+			l_pt4Uniform = shared_ptr< CgPointFrameVariable<float, 4> >( new CgPointFrameVariable<float, 4>( NULL, 1));
 			l_pt4Uniform->SetName( CU_T( "in_MatDiffuse"));
 			AddFrameVariable( l_pt4Uniform, GetProgram( eVertexShader));
-			m_pDiffuse = static_pointer_cast< CgGLPointFrameVariable<float, 4> >( GetCgGLFrameVariable( CU_T( "in_MatDiffuse")));
+			m_pDiffuse = static_pointer_cast< CgGlPointFrameVariable<float, 4> >( GetCgGlFrameVariable( CU_T( "in_MatDiffuse")));
 
-			l_pt4Uniform = SmartPtr< CgPointFrameVariable<float, 4> >::Shared( new CgPointFrameVariable<float, 4>( NULL, 1));
+			l_pt4Uniform = shared_ptr< CgPointFrameVariable<float, 4> >( new CgPointFrameVariable<float, 4>( NULL, 1));
 			l_pt4Uniform->SetName( CU_T( "in_MatEmissive"));
 			AddFrameVariable( l_pt4Uniform, GetProgram( eVertexShader));
-			m_pEmissive = static_pointer_cast< CgGLPointFrameVariable<float, 4> >( GetCgGLFrameVariable( CU_T( "in_MatEmissive")));
+			m_pEmissive = static_pointer_cast< CgGlPointFrameVariable<float, 4> >( GetCgGlFrameVariable( CU_T( "in_MatEmissive")));
 
-			l_pt4Uniform = SmartPtr< CgPointFrameVariable<float, 4> >::Shared( new CgPointFrameVariable<float, 4>( NULL, 1));
+			l_pt4Uniform = shared_ptr< CgPointFrameVariable<float, 4> >( new CgPointFrameVariable<float, 4>( NULL, 1));
 			l_pt4Uniform->SetName( CU_T( "in_MatSpecular"));
 			AddFrameVariable( l_pt4Uniform, GetProgram( eVertexShader));
-			m_pSpecular = static_pointer_cast< CgGLPointFrameVariable<float, 4> >( GetCgGLFrameVariable( CU_T( "in_MatSpecular")));
+			m_pSpecular = static_pointer_cast< CgGlPointFrameVariable<float, 4> >( GetCgGlFrameVariable( CU_T( "in_MatSpecular")));
 
-			l_fUniform = SmartPtr< CgOneFrameVariable<float> >::Shared( new CgOneFrameVariable<float>( NULL, 1));
+			l_fUniform = shared_ptr< CgOneFrameVariable<float> >( new CgOneFrameVariable<float>( NULL, 1));
 			l_fUniform->SetName( CU_T( "in_MatShininess"));
 			AddFrameVariable( l_fUniform, GetProgram( eVertexShader));
-			m_pShininess = static_pointer_cast< CgGLOneFrameVariable<float> >( GetCgGLFrameVariable( CU_T( "in_MatShininess")));
+			m_pShininess = static_pointer_cast< CgGlOneFrameVariable<float> >( GetCgGlFrameVariable( CU_T( "in_MatShininess")));
 		}
 
 		l_bReturn = m_isLinked;
@@ -176,70 +175,70 @@ bool CgGLShaderProgram :: Link()
 	return l_bReturn;
 }
 
-void CgGLShaderProgram :: Begin()
+void CgGlShaderProgram :: Begin()
 {
 	if ( ! RenderSystem::UseShaders() || ! m_enabled || ! m_isLinked || m_bError)
 	{
 		return;
 	}
 
-	GLRenderSystem::GetSingletonPtr()->SetCurrentShaderProgram( this);
+	GlRenderSystem::GetSingletonPtr()->SetCurrentShaderProgram( this);
 
-	static_pointer_cast<CgGLShaderObject>( m_pShaders[eVertexShader])->Bind();
-	static_pointer_cast<CgGLShaderObject>( m_pShaders[ePixelShader])->Bind();
+	static_pointer_cast<CgGlShaderObject>( m_pShaders[eVertexShader])->Bind();
+	static_pointer_cast<CgGlShaderObject>( m_pShaders[ePixelShader])->Bind();
 
-	if ( ! m_pShaders[eGeometryShader] == NULL)
+	if (m_pShaders[eGeometryShader] != NULL)
 	{
-		static_pointer_cast<CgGLShaderObject>( m_pShaders[eGeometryShader])->Bind();
+		static_pointer_cast<CgGlShaderObject>( m_pShaders[eGeometryShader])->Bind();
 	}
 
 	ApplyAllVariables();
 }
 
-void CgGLShaderProgram :: ApplyAllVariables()
+void CgGlShaderProgram :: ApplyAllVariables()
 {
-	for (CgGLFrameVariablePtrStrMap::iterator l_it = m_mapCgGLFrameVariables.begin() ; l_it != m_mapCgGLFrameVariables.end() ; ++l_it)
+	for (CgGlFrameVariablePtrStrMap::iterator l_it = m_mapCgGlFrameVariables.begin() ; l_it != m_mapCgGlFrameVariables.end() ; ++l_it)
 	{
 		l_it->second->Apply();
 	}
 }
 
-void CgGLShaderProgram :: End()
+void CgGlShaderProgram :: End()
 {
 	if ( ! RenderSystem::UseShaders() || ! m_enabled)
 	{
 		return;
 	}
 
-	static_pointer_cast<CgGLShaderObject>( m_pShaders[eVertexShader])->Unbind();
-	static_pointer_cast<CgGLShaderObject>( m_pShaders[ePixelShader])->Unbind();
+	static_pointer_cast<CgGlShaderObject>( m_pShaders[eVertexShader])->Unbind();
+	static_pointer_cast<CgGlShaderObject>( m_pShaders[ePixelShader])->Unbind();
 
-	if ( ! m_pShaders[eGeometryShader] == NULL)
+	if (m_pShaders[eGeometryShader] != NULL)
 	{
-		static_pointer_cast<CgGLShaderObject>( m_pShaders[eGeometryShader])->Unbind();
+		static_pointer_cast<CgGlShaderObject>( m_pShaders[eGeometryShader])->Unbind();
 	}
 }
 
-CgGLFrameVariablePtr CgGLShaderProgram :: GetCgGLFrameVariable( const String & p_strName)
+CgGlFrameVariablePtr CgGlShaderProgram :: GetCgGlFrameVariable( const String & p_strName)
 {
-	CgGLFrameVariablePtr l_pReturn;
+	CgGlFrameVariablePtr l_pReturn;
 
-	if (m_mapCgGLFrameVariables.find( p_strName) != m_mapCgGLFrameVariables.end())
+	if (m_mapCgGlFrameVariables.find( p_strName) != m_mapCgGlFrameVariables.end())
 	{
-		l_pReturn = m_mapCgGLFrameVariables.find( p_strName)->second;
+		l_pReturn = m_mapCgGlFrameVariables.find( p_strName)->second;
 	}
 
 	return l_pReturn;
 }
 
-void CgGLShaderProgram :: AddFrameVariable( CgFrameVariablePtr p_pVariable, CgShaderObjectPtr p_pObject)
+void CgGlShaderProgram :: AddFrameVariable( CgFrameVariablePtr p_pVariable, CgShaderObjectPtr p_pObject)
 {
-	if ( ! p_pVariable == NULL && m_mapCgGLFrameVariables.find( p_pVariable->GetName()) == m_mapCgGLFrameVariables.end())
+	if (p_pVariable != NULL && m_mapCgGlFrameVariables.find( p_pVariable->GetName()) == m_mapCgGlFrameVariables.end())
 	{
 		switch (p_pVariable->GetType())
 		{
 		case FrameVariable::eOne:
-			if (p_pVariable->GetSubType() == typeid( double))
+			if (p_pVariable->GetSubType() == typeid( double).name())
 			{
 				AddFrameVariable<double>( static_pointer_cast< CgOneFrameVariable<double> >( p_pVariable), p_pObject);
 			}
@@ -250,7 +249,7 @@ void CgGLShaderProgram :: AddFrameVariable( CgFrameVariablePtr p_pVariable, CgSh
 			break;
 
 		case FrameVariable::eVec1:
-			if (p_pVariable->GetSubType() == typeid( double))
+			if (p_pVariable->GetSubType() == typeid( double).name())
 			{
 				AddFrameVariable<double, 1>( static_pointer_cast< CgPointFrameVariable<double, 1> >( p_pVariable), p_pObject);
 			}
@@ -261,7 +260,7 @@ void CgGLShaderProgram :: AddFrameVariable( CgFrameVariablePtr p_pVariable, CgSh
 			break;
 
 		case FrameVariable::eVec2:
-			if (p_pVariable->GetSubType() == typeid( double))
+			if (p_pVariable->GetSubType() == typeid( double).name())
 			{
 				AddFrameVariable<double, 2>( static_pointer_cast< CgPointFrameVariable<double, 2> >( p_pVariable), p_pObject);
 			}
@@ -272,7 +271,7 @@ void CgGLShaderProgram :: AddFrameVariable( CgFrameVariablePtr p_pVariable, CgSh
 			break;
 
 		case FrameVariable::eVec3:
-			if (p_pVariable->GetSubType() == typeid( double))
+			if (p_pVariable->GetSubType() == typeid( double).name())
 			{
 				AddFrameVariable<double, 3>( static_pointer_cast< CgPointFrameVariable<double, 3> >( p_pVariable), p_pObject);
 			}
@@ -283,7 +282,7 @@ void CgGLShaderProgram :: AddFrameVariable( CgFrameVariablePtr p_pVariable, CgSh
 			break;
 
 		case FrameVariable::eVec4:
-			if (p_pVariable->GetSubType() == typeid( double))
+			if (p_pVariable->GetSubType() == typeid( double).name())
 			{
 				AddFrameVariable<double, 4>( static_pointer_cast< CgPointFrameVariable<double, 4> >( p_pVariable), p_pObject);
 			}
@@ -294,7 +293,7 @@ void CgGLShaderProgram :: AddFrameVariable( CgFrameVariablePtr p_pVariable, CgSh
 			break;
 
 		case FrameVariable::eMat2x2:
-			if (p_pVariable->GetSubType() == typeid( double))
+			if (p_pVariable->GetSubType() == typeid( double).name())
 			{
 				AddFrameVariable<double, 2, 2>( static_pointer_cast< CgMatrixFrameVariable<double, 2, 2> >( p_pVariable), p_pObject);
 			}
@@ -305,7 +304,7 @@ void CgGLShaderProgram :: AddFrameVariable( CgFrameVariablePtr p_pVariable, CgSh
 			break;
 
 		case FrameVariable::eMat2x3:
-			if (p_pVariable->GetSubType() == typeid( double))
+			if (p_pVariable->GetSubType() == typeid( double).name())
 			{
 				AddFrameVariable<double, 2, 3>( static_pointer_cast< CgMatrixFrameVariable<double, 2, 3> >( p_pVariable), p_pObject);
 			}
@@ -316,7 +315,7 @@ void CgGLShaderProgram :: AddFrameVariable( CgFrameVariablePtr p_pVariable, CgSh
 			break;
 
 		case FrameVariable::eMat2x4:
-			if (p_pVariable->GetSubType() == typeid( double))
+			if (p_pVariable->GetSubType() == typeid( double).name())
 			{
 				AddFrameVariable<double, 2, 4>( static_pointer_cast< CgMatrixFrameVariable<double, 2, 4> >( p_pVariable), p_pObject);
 			}
@@ -327,7 +326,7 @@ void CgGLShaderProgram :: AddFrameVariable( CgFrameVariablePtr p_pVariable, CgSh
 			break;
 
 		case FrameVariable::eMat3x2:
-			if (p_pVariable->GetSubType() == typeid( double))
+			if (p_pVariable->GetSubType() == typeid( double).name())
 			{
 				AddFrameVariable<double, 3, 2>( static_pointer_cast< CgMatrixFrameVariable<double, 3, 2> >( p_pVariable), p_pObject);
 			}
@@ -338,7 +337,7 @@ void CgGLShaderProgram :: AddFrameVariable( CgFrameVariablePtr p_pVariable, CgSh
 			break;
 
 		case FrameVariable::eMat3x3:
-			if (p_pVariable->GetSubType() == typeid( double))
+			if (p_pVariable->GetSubType() == typeid( double).name())
 			{
 				AddFrameVariable<double, 3, 3>( static_pointer_cast< CgMatrixFrameVariable<double, 3, 3> >( p_pVariable), p_pObject);
 			}
@@ -349,7 +348,7 @@ void CgGLShaderProgram :: AddFrameVariable( CgFrameVariablePtr p_pVariable, CgSh
 			break;
 
 		case FrameVariable::eMat3x4:
-			if (p_pVariable->GetSubType() == typeid( double))
+			if (p_pVariable->GetSubType() == typeid( double).name())
 			{
 				AddFrameVariable<double, 3, 4>( static_pointer_cast< CgMatrixFrameVariable<double, 3, 4> >( p_pVariable), p_pObject);
 			}
@@ -360,7 +359,7 @@ void CgGLShaderProgram :: AddFrameVariable( CgFrameVariablePtr p_pVariable, CgSh
 			break;
 
 		case FrameVariable::eMat4x2:
-			if (p_pVariable->GetSubType() == typeid( double))
+			if (p_pVariable->GetSubType() == typeid( double).name())
 			{
 				AddFrameVariable<double, 4, 2>( static_pointer_cast< CgMatrixFrameVariable<double, 4, 2> >( p_pVariable), p_pObject);
 			}
@@ -371,7 +370,7 @@ void CgGLShaderProgram :: AddFrameVariable( CgFrameVariablePtr p_pVariable, CgSh
 			break;
 
 		case FrameVariable::eMat4x3:
-			if (p_pVariable->GetSubType() == typeid( double))
+			if (p_pVariable->GetSubType() == typeid( double).name())
 			{
 				AddFrameVariable<double, 4, 3>( static_pointer_cast< CgMatrixFrameVariable<double, 4, 3> >( p_pVariable), p_pObject);
 			}
@@ -382,7 +381,7 @@ void CgGLShaderProgram :: AddFrameVariable( CgFrameVariablePtr p_pVariable, CgSh
 			break;
 
 		case FrameVariable::eMat4x4:
-			if (p_pVariable->GetSubType() == typeid( double))
+			if (p_pVariable->GetSubType() == typeid( double).name())
 			{
 				AddFrameVariable<double, 4, 4>( static_pointer_cast< CgMatrixFrameVariable<double, 4, 4> >( p_pVariable), p_pObject);
 			}
@@ -395,7 +394,7 @@ void CgGLShaderProgram :: AddFrameVariable( CgFrameVariablePtr p_pVariable, CgSh
 	}
 }
 
-int CgGLShaderProgram :: AssignLight()
+int CgGlShaderProgram :: AssignLight()
 {
 	int l_iReturn = -1;
 
@@ -409,7 +408,7 @@ int CgGLShaderProgram :: AssignLight()
 	return l_iReturn;
 }
 
-void CgGLShaderProgram :: FreeLight( int p_iIndex)
+void CgGlShaderProgram :: FreeLight( int p_iIndex)
 {
 	if (p_iIndex != -1)
 	{
@@ -424,7 +423,7 @@ void CgGLShaderProgram :: FreeLight( int p_iIndex)
 	}
 }
 
-void CgGLShaderProgram :: SetAmbientLight( const Point4f & p_crColour)
+void CgGlShaderProgram :: SetAmbientLight( const Point4f & p_crColour)
 {
 	if (m_isLinked)
 	{
@@ -432,7 +431,7 @@ void CgGLShaderProgram :: SetAmbientLight( const Point4f & p_crColour)
 	}
 }
 
-void CgGLShaderProgram :: SetLightAmbient( int p_iIndex, const Point4f & p_crColour)
+void CgGlShaderProgram :: SetLightAmbient( int p_iIndex, const Point4f & p_crColour)
 {
 	if (m_isLinked)
 	{
@@ -440,7 +439,7 @@ void CgGLShaderProgram :: SetLightAmbient( int p_iIndex, const Point4f & p_crCol
 	}
 }
 
-void CgGLShaderProgram :: SetLightDiffuse( int p_iIndex, const Point4f & p_crColour)
+void CgGlShaderProgram :: SetLightDiffuse( int p_iIndex, const Point4f & p_crColour)
 {
 	if (m_isLinked)
 	{
@@ -448,7 +447,7 @@ void CgGLShaderProgram :: SetLightDiffuse( int p_iIndex, const Point4f & p_crCol
 	}
 }
 
-void CgGLShaderProgram :: SetLightSpecular( int p_iIndex, const Point4f & p_crColour)
+void CgGlShaderProgram :: SetLightSpecular( int p_iIndex, const Point4f & p_crColour)
 {
 	if (m_isLinked)
 	{
@@ -456,7 +455,7 @@ void CgGLShaderProgram :: SetLightSpecular( int p_iIndex, const Point4f & p_crCo
 	}
 }
 
-void CgGLShaderProgram :: SetLightPosition( int p_iIndex, const Point4f & p_ptPosition)
+void CgGlShaderProgram :: SetLightPosition( int p_iIndex, const Point4f & p_ptPosition)
 {
 	if (m_isLinked)
 	{
@@ -464,7 +463,7 @@ void CgGLShaderProgram :: SetLightPosition( int p_iIndex, const Point4f & p_ptPo
 	}
 }
 
-void CgGLShaderProgram :: SetLightOrientation( int p_iIndex, const Matrix4x4r & p_mtxOrientation)
+void CgGlShaderProgram :: SetLightOrientation( int p_iIndex, const Matrix4x4r & p_mtxOrientation)
 {
 	if (m_isLinked)
 	{
@@ -472,7 +471,7 @@ void CgGLShaderProgram :: SetLightOrientation( int p_iIndex, const Matrix4x4r & 
 	}
 }
 
-void CgGLShaderProgram :: SetLightAttenuation( int p_iIndex, const Point3f & p_ptAtt)
+void CgGlShaderProgram :: SetLightAttenuation( int p_iIndex, const Point3f & p_ptAtt)
 {
 	if (m_isLinked)
 	{
@@ -480,7 +479,7 @@ void CgGLShaderProgram :: SetLightAttenuation( int p_iIndex, const Point3f & p_p
 	}
 }
 
-void CgGLShaderProgram :: SetLightExponent( int p_iIndex, float p_fExp)
+void CgGlShaderProgram :: SetLightExponent( int p_iIndex, float p_fExp)
 {
 	if (m_isLinked)
 	{
@@ -488,7 +487,7 @@ void CgGLShaderProgram :: SetLightExponent( int p_iIndex, float p_fExp)
 	}
 }
 
-void CgGLShaderProgram :: SetLightCutOff( int p_iIndex, float p_fCut)
+void CgGlShaderProgram :: SetLightCutOff( int p_iIndex, float p_fCut)
 {
 	if (m_isLinked)
 	{
@@ -496,7 +495,7 @@ void CgGLShaderProgram :: SetLightCutOff( int p_iIndex, float p_fCut)
 	}
 }
 
-void CgGLShaderProgram :: SetMaterialAmbient( const Point4f & p_crColour)
+void CgGlShaderProgram :: SetMaterialAmbient( const Point4f & p_crColour)
 {
 	if (m_isLinked && m_pAmbient->GetValue() != p_crColour)
 	{
@@ -504,7 +503,7 @@ void CgGLShaderProgram :: SetMaterialAmbient( const Point4f & p_crColour)
 	}
 }
 
-void CgGLShaderProgram :: SetMaterialDiffuse( const Point4f & p_crColour)
+void CgGlShaderProgram :: SetMaterialDiffuse( const Point4f & p_crColour)
 {
 	if (m_isLinked && m_pDiffuse->GetValue() != p_crColour)
 	{
@@ -512,7 +511,7 @@ void CgGLShaderProgram :: SetMaterialDiffuse( const Point4f & p_crColour)
 	}
 }
 
-void CgGLShaderProgram :: SetMaterialSpecular( const Point4f & p_crColour)
+void CgGlShaderProgram :: SetMaterialSpecular( const Point4f & p_crColour)
 {
 	if (m_isLinked && m_pSpecular->GetValue() != p_crColour)
 	{
@@ -520,7 +519,7 @@ void CgGLShaderProgram :: SetMaterialSpecular( const Point4f & p_crColour)
 	}
 }
 
-void CgGLShaderProgram :: SetMaterialEmissive( const Point4f & p_crColour)
+void CgGlShaderProgram :: SetMaterialEmissive( const Point4f & p_crColour)
 {
 	if (m_isLinked && m_pEmissive->GetValue() != p_crColour)
 	{
@@ -528,7 +527,7 @@ void CgGLShaderProgram :: SetMaterialEmissive( const Point4f & p_crColour)
 	}
 }
 
-void CgGLShaderProgram :: SetMaterialShininess( float p_fShine)
+void CgGlShaderProgram :: SetMaterialShininess( float p_fShine)
 {
 	if (m_isLinked && m_pShininess->GetValue() != p_fShine)
 	{

@@ -57,26 +57,26 @@ bool GSDImporter :: _import()
 	GSDHeader header;
 	File l_file( m_fileName, File::eRead);
 
-	if (l_file.IsOk()) 
+	if (l_file.IsOk())
 	{
 		l_file.Read<GSDHeader>( header);
 		m_version = header.version;
 
 		C3DList<GenericObjectData *> meshesList;
-		C3DList<DummieData *> dummieList;  
+		C3DList<DummieData *> dummieList;
 		GSDHeader header;
 
-		m_f=fopen(m_FileName,"rb");
+		FOpen( m_f, m_FileName, "rb");
 		if(m_f==NULL)
 		return NULL;
-		fread(&header,sizeof(GSDHeader),1,m_f);    
+		fread(&header,sizeof(GSDHeader),1,m_f);
 		int i;
 		//===========================================
 		//        READING GROUPS
 		//===========================================
 		DummieData *dummie=NULL;
 		treeData *node=NULL;
-		dummie = new DummieData; 
+		dummie = new DummieData;
 		fread(dummie,sizeof(DummieData),1,m_f);
 		dummieList.push_back(dummie);
 		node=new treeData;
@@ -94,7 +94,7 @@ bool GSDImporter :: _import()
 		GenericObjectData *o=NULL;
 		CBasicMeshPtrobj=NULL;
 		for(i=0;i<header.numberOfObjects;++i)
-		{ 
+		{
 			o = new GenericObjectData;
 
 			fread(o->Name,sizeof(char)*256,1,m_f);
@@ -146,7 +146,7 @@ bool GSDImporter :: _import()
 		//===========================================
 		for(i=0;i<header.numberOfHelpers;++i)
 		{
-			dummie = new DummieData; 
+			dummie = new DummieData;
 			fread(dummie,sizeof(DummieData),1,m_f);
 			dummieList.push_back(dummie);
 			node=new treeData;
@@ -166,11 +166,11 @@ bool GSDImporter :: _import()
 		dummieList.erase( (dummieList.begin()) );
 		if(d) delete d;
 		C3DList<GenericObjectData *>::iterator mIter=meshesList.begin();
-		C3DList<DummieData *>::iterator hIter=dummieList.begin();  
+		C3DList<DummieData *>::iterator hIter=dummieList.begin();
 
 		while((meshesList.size()>0)||(dummieList.size()>0))
 		{
-			//Busco en las mallas, si no lo encuentro, entonces busco en los helpers, si no lo encuentro, sumo en los dos, 
+			//Busco en las mallas, si no lo encuentro, entonces busco en los helpers, si no lo encuentro, sumo en los dos,
 			//si lo encuentro en las mallas sumo mallas, si lo encuentro en helpers, sumo helpers
 			if(meshesList.size()>0)
 			{
@@ -215,18 +215,18 @@ bool GSDImporter :: _import()
 
 					if(hIter==dummieList.end())
 					{
-						hIter=dummieList.begin();        
+						hIter=dummieList.begin();
 					}
 				}
 			}
-		}  
+		}
 		// si no encuentra al padre, pasar al siguiente nodo
 		//===========================================
 		//         END OF BUILDING MODEL
 		//===========================================
 		//===========================================
 		//            CLEANING MEMORY
-		//===========================================  
+		//===========================================
 		for(;hIter!=dummieList.end();hIter++)
 		{
 			dummie = (*hIter);
@@ -242,7 +242,7 @@ bool GSDImporter :: _import()
 		dummieList.clear();
 		m_tree.clear();
 
-		mIter=meshesList.begin();  
+		mIter=meshesList.begin();
 
 		for(;mIter!=meshesList.end();mIter++)
 		{
@@ -270,11 +270,11 @@ void GSDImporter :: _buildTreeData( treeData *dummie)
 	{
 		if(!_stricmp(dummie->parent,m_tree[i]->name))
 		{
-			d = new standardString; 
+			d = new standardString;
 			strcpy(d->data,dummie->name);
 			m_tree[i]->childs.push_back(d);
 		}
-	}  
+	}
 	m_tree.push_back(dummie);
 
 }

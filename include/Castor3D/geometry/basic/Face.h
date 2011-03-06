@@ -18,7 +18,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_Face___
 #define ___C3D_Face___
 
-#include "../../main/Serialisable.h"
 #include "Vertex.h"
 
 namespace Castor3D
@@ -32,7 +31,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class C3D_API Face : public Serialisable, public MemoryTraced<Face>
+	class C3D_API Face : public Serialisable, public Textable, public MemoryTraced<Face>
 	{
 	public:
 		static unsigned long long FacesCount;	//!< Defines the total number of created faces
@@ -47,6 +46,8 @@ namespace Castor3D
 		mutable bool m_bCenterComputed;			//!< Tells if the center has already been computed. Mutable because it has no influence over a face.
 
 	public:
+		/**@name Construction / Destruction */
+		//@{
 		/**
 		 * Constructor
 		 *@param p_pt1, p_pt2, p_pt3 : [in] The three verexes
@@ -61,6 +62,8 @@ namespace Castor3D
 		 * Destructor
 		 */
 		~Face();
+		//@}
+
 		/**
 		 * Computes the center of a face, using the barycentre with the same weights
 		 *@return The computed face center
@@ -183,18 +186,22 @@ namespace Castor3D
 		 *@param p_ptNormal : [in] The normal
 		 */
 		void SetFlatTangent( const Point3r & p_ptTangent);
-		/**
-		 * Writes a face in a file
-		 *@param p_file : The file to write in
-		 */
-		virtual bool Write( Castor::Utils::File & p_file)const;
-		/**
-		 * Reads a face from a file
-		 *@param p_file : The file to read from
-		 */
-		virtual bool Read( Castor::Utils::File & p_file);
 
-	public:
+		/**@name Inherited methods from Textable */
+		//@{
+		virtual bool Write( File & p_file)const;
+		virtual bool Read( File & p_file) { return false; }
+		//@}
+
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file) { return false; }
+		//@}
+
+		bool Read( File & p_file, Submesh * p_pSubmesh);
+		bool Load( File & p_file, Submesh * p_pSubmesh);
+
 		/**@name Accessors */
 		//@{
 		inline Vertex *			GetVertexPtr	( size_t p_uiIndex)			{ CASTOR_ASSERT( p_uiIndex < m_vertex.size());m_bCenterComputed = false;return & m_vertex[p_uiIndex]; }

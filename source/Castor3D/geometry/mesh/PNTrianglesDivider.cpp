@@ -1,28 +1,28 @@
 #include "Castor3D/PrecompiledHeader.h"
 
-#include "Castor3D/geometry/mesh/PNTrianglesDivider.h"
+#include "Castor3D/geometry/mesh/PnTrianglesDivider.h"
 #include "Castor3D/geometry/mesh/Submesh.h"
 #include "Castor3D/geometry/basic/Face.h"
 #include "Castor3D/geometry/basic/SmoothingGroup.h"
 
 using namespace Castor3D;
 
-PNTrianglesDivider :: PNTrianglesDivider( Submesh * p_submesh)
+PnTrianglesDivider :: PnTrianglesDivider( Submesh * p_submesh)
 	:	Subdivider( p_submesh)
 {
 }
 
-PNTrianglesDivider :: ~PNTrianglesDivider()
+PnTrianglesDivider :: ~PnTrianglesDivider()
 {
 	Cleanup();
 }
 
-void PNTrianglesDivider :: Cleanup()
+void PnTrianglesDivider :: Cleanup()
 {
 	Subdivider::Cleanup();
 }
 
-void PNTrianglesDivider :: _subdivide()
+void PnTrianglesDivider :: _subdivide()
 {
 	FacePtrArray l_facesArray;
 
@@ -57,7 +57,7 @@ void PNTrianglesDivider :: _subdivide()
 	}
 }
 
-void PNTrianglesDivider :: _computePointFrom( Vertex & p_result, const Vertex & p_a, const Vertex & p_b, const Point3r * p_center)
+void PnTrianglesDivider :: _computePointFrom( Vertex & p_result, const Vertex & p_a, const Vertex & p_b, const Point3r * p_center)
 {
 	Point3r l_center;
 

@@ -20,6 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Resource.h"
 #include "ResourceLoader.h"
+#include "Colour.h"
 
 namespace Castor
 {	namespace Resources
@@ -32,11 +33,11 @@ namespace Castor
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class ImageLoader : ResourceLoader <Image, ImageManager>, public MemoryTraced<ImageLoader>
+	class ImageLoader : ResourceLoader<Image>, public MemoryTraced<ImageLoader>
 	{
 	public:
-		virtual ImagePtr LoadFromFile( ImageManager * p_pManager, const String & p_file);
-		ImagePtr LoadFromBuffer( ImageManager * p_pManager, const Buffer <unsigned char> & p_buffer, PixelFormat p_pixelFormat);
+		virtual ImagePtr LoadFromFile( Manager<Image> * p_pManager, const String & p_file);
+		ImagePtr LoadFromBuffer( Manager<Image> * p_pManager, const Math::Point<size_t, 2> & p_ptSize, ePIXEL_FORMAT p_pixelFormat, const Buffer <unsigned char> & p_buffer);
 	};
 	//! Image instance
 	/*!
@@ -44,21 +45,21 @@ namespace Castor
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class Image : public Resource<Image, ImageManager>, public MemoryTraced<Image>
+	class Image : public Resource<Image>, public MemoryTraced<Image>
 	{
 	protected:
 		friend class ImageLoader;
-		String m_path;
+		Utils::Path m_path;
 		Buffer<unsigned char> m_buffer;
-		unsigned int m_width;
-		unsigned int m_height;
-		PixelFormat m_pixelFormat;
+		Math::Point<size_t, 2> m_ptSize;
+		ePIXEL_FORMAT m_ePixelFormat;
 
 		/**
 		* Constructor, needs the name and the image path
 		*/
-		Image( ImageManager * p_pManager, const String & p_path, const Buffer <unsigned char> & p_buffer, PixelFormat p_pixelFormat);
-		Image( ImageManager * p_pManager, const Buffer <unsigned char> & p_buffer, PixelFormat p_pixelFormat);
+		Image( Manager<Image> * p_pManager, const Math::Point<size_t, 2> & p_ptSize, ePIXEL_FORMAT p_ePixelFormat, const Buffer <unsigned char> & p_buffer, const Utils::Path & p_path);
+		Image( Manager<Image> * p_pManager, const Math::Point<size_t, 2> & p_ptSize, ePIXEL_FORMAT p_ePixelFormat, const Buffer <unsigned char> & p_buffer);
+		Image( Manager<Image> * p_pManager, const Math::Point<size_t, 2> & p_ptSize = Math::Point<size_t, 2>( 1, 1), ePIXEL_FORMAT p_ePixelFormat = eA8R8G8B8);
 
 	public:
 		/**
@@ -66,19 +67,25 @@ namespace Castor
 		*/
 		virtual ~Image();
 
-		void Release();
+		void Fill( const Math::Colour & p_clrColour);
+		void SetPixel( int x, int y, const unsigned char * p_pPixel);
+		void SetPixel( int x, int y, const Math::Colour & p_clrColour);
+		void GetPixel( int x, int y, unsigned char * p_pPixel)const;
+		Math::Colour GetPixel( int x, int y)const;
+		void CopyImage( const Image & p_src);
+		Image SubImage(const Math::Rectangle & Rect)const;
+		void Flip();
+		void Mirror();
 
-	public:
 		/**@name Accessors */
 		//@{
-		inline unsigned int				GetWidth	()const { return m_width; }
-		inline unsigned int				GetHeight	()const { return m_height; }
-		inline String					GetPath		()const { return m_path; }
-		inline unsigned char *			GetBuffer	()		{ return m_buffer.GetBuffer(); }
-		inline const unsigned char *	GetBuffer	()const { return m_buffer.GetBuffer(); }
-
-		inline void SetWidth	( unsigned int p_w) { m_width = p_w; }
-		inline void SetHeight	( unsigned int p_h) { m_height = p_h; }
+		inline const Math::Point<size_t, 2>	&	GetSize			()const { return m_ptSize; }
+		inline size_t							GetWidth		()const { return m_ptSize[0]; }
+		inline size_t							GetHeight		()const { return m_ptSize[1]; }
+		inline Utils::Path						GetPath			()const { return m_path; }
+		inline unsigned char				*	GetBuffer		()		{ return m_buffer.GetBuffer(); }
+		inline const unsigned char			*	GetBuffer		()const { return m_buffer.GetBuffer(); }
+		inline ePIXEL_FORMAT					GetPixelFormat	()const	{ return m_ePixelFormat; }
 		//@}
 	};
 	//! Images manager
@@ -87,9 +94,9 @@ namespace Castor
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class ImageManager : public Castor::Templates::Manager<String, Image, ImageManager>, public MemoryTraced<ImageManager>
+	class ImageManager : public Castor::Templates::Manager<Image>, public MemoryTraced<ImageManager>
 	{
-		friend class Castor::Templates::Manager<String, Image, ImageManager>;
+		friend class Castor::Templates::Manager<Image>;
 
 	public:
 		/**
@@ -106,14 +113,14 @@ namespace Castor
 		*@param p_path : [in] The image path
 		*@return The created image
 		*/
-		ImagePtr CreateImage( const String & p_name, const String & p_path);
+		ImagePtr CreateImage( const String & p_name, const Utils::Path & p_path);
 		/**
 		* Creates an image from an already existing buffer and a pixel format
 		*@param p_buffer : [in] The image buffer
 		*@param p_pixelFormat : [in] The pixel format for the buffer
 		*@return The created image
 		*/
-		ImagePtr CreateImage( const String & p_name, const Buffer<unsigned char> & p_buffer, PixelFormat p_pixelFormat);
+		ImagePtr CreateImage( const String & p_name, const Math::Point<size_t, 2> & p_ptSize, ePIXEL_FORMAT p_pixelFormat, const Buffer<unsigned char> & p_buffer);
 	};
 }
 }

@@ -25,17 +25,17 @@ http://www.gnu.org/copyleft/lesser.txt.
 #		define CHECK_MEMORYLEAKS 0
 #	endif
 #endif
-
+/*
 #pragma message( "********************************************************************")
 #pragma message( "	Castor3D")
 
 #if CHECK_MEMORYLEAKS
 #	pragma message( "		Checking Memory leaks")
 #endif
-
+*/
 #include "Castor3D/Prerequisites.h"
 
-#pragma message( "********************************************************************")
+//#pragma message( "********************************************************************")
 
 #endif
 

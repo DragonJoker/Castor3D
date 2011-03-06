@@ -29,21 +29,18 @@ namespace Castor
 	A collection class, allowing you to store named objects, removing, finding or adding them as you wish.
 	Autodeletion of all the contained items on deletion of the manager.
 	*/
-	template <typename Key, typename TObj, class _Manager>
+	template <typename TObj>
 	class Manager
 	{
 	public:
-		typedef typename SmartPtr<TObj>::Shared TObjPtr;
-		typedef typename CallTraits<Key>::ParamType KeyParamType;
-		typedef typename KeyedContainer<Key, TObjPtr>::Map TypeMap;
+		typedef shared_ptr<TObj> TObjPtr;
+		typedef typename KeyedContainer<String, TObjPtr>::Map TypeMap;
 		TypeMap m_objectMap;
 		Castor::MultiThreading::RecursiveMutex m_mutex;
-		_Manager * m_pThis;
 
 	public:
 		Manager()
 		{
-			m_pThis = reinterpret_cast<_Manager *>( this);
 		}
 		~Manager()
 		{
@@ -62,7 +59,7 @@ namespace Castor
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 			ClearContainer( m_objectMap);
 		}
-		TObjPtr GetElement( KeyParamType p_key)
+		TObjPtr GetElement( const String & p_key)
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 			TObjPtr l_pReturn;
@@ -74,11 +71,12 @@ namespace Castor
 
 			return l_pReturn;
 		}
-		TObjPtr CreateElement( KeyParamType p_key)
+/*
+		TObjPtr CreateElement( const String & p_key)
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 			TObjPtr l_pReturn;
-			const typename TypeMap::iterator & ifind = m_objectMap.find( p_key);
+			typename TypeMap::iterator ifind = m_objectMap.find( p_key);
 
 			if (ifind != m_objectMap.end())
 			{
@@ -86,18 +84,18 @@ namespace Castor
 			}
 			else
 			{
-				l_pReturn = TObjPtr( new TObj( m_pThis, p_key));
+				l_pReturn = TObjPtr( new TObj( this, p_key));
 				m_objectMap.insert( typename TypeMap::value_type( p_key, l_pReturn));
 			}
 
 			return l_pReturn;
 		}
 		template<typename TParam>
-		TObjPtr CreateElement( KeyParamType p_key, typename CallTraits<TParam>::ParamType p_param)
+		TObjPtr CreateElement( const String & p_key, typename CallTraits<TParam>::ParamType p_param)
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 			TObjPtr l_pReturn;
-			const typename TypeMap::iterator & ifind = m_objectMap.find( p_key);
+			typename TypeMap::iterator ifind = m_objectMap.find( p_key);
 
 			if (ifind != m_objectMap.end())
 			{
@@ -105,18 +103,18 @@ namespace Castor
 			}
 			else
 			{
-				l_pReturn = TObjPtr( new TObj( m_pThis, p_key, p_param));
+				l_pReturn = TObjPtr( new TObj( this, p_key, p_param));
 				m_objectMap.insert( typename TypeMap::value_type( p_key, l_pReturn));
 			}
 
 			return l_pReturn;
 		}
 		template<typename TParam1, typename TParam2>
-		TObjPtr CreateElement( KeyParamType p_key, typename CallTraits<TParam1>::ParamType p_param1, typename CallTraits<TParam2>::ParamType p_param2)
+		TObjPtr CreateElement( const String & p_key, typename CallTraits<TParam1>::ParamType p_param1, typename CallTraits<TParam2>::ParamType p_param2)
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 			TObjPtr l_pReturn;
-			const typename TypeMap::iterator & ifind = m_objectMap.find( p_key);
+			typename TypeMap::iterator ifind = m_objectMap.find( p_key);
 
 			if (ifind != m_objectMap.end())
 			{
@@ -124,18 +122,18 @@ namespace Castor
 			}
 			else
 			{
-				l_pReturn = TObjPtr( new TObj( m_pThis, p_key, p_param1, p_param2));
+				l_pReturn = TObjPtr( new TObj( this, p_key, p_param1, p_param2));
 				m_objectMap.insert( typename TypeMap::value_type( p_key, l_pReturn));
 			}
 
 			return l_pReturn;
 		}
 		template<typename TParam1, typename TParam2, typename TParam3>
-		TObjPtr CreateElement( KeyParamType p_key, typename CallTraits<TParam1>::ParamType p_param1, typename CallTraits<TParam2>::ParamType p_param2, typename CallTraits<TParam3>::ParamType p_param3)
+		TObjPtr CreateElement( const String & p_key, typename CallTraits<TParam1>::ParamType p_param1, typename CallTraits<TParam2>::ParamType p_param2, typename CallTraits<TParam3>::ParamType p_param3)
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 			TObjPtr l_pReturn;
-			const typename TypeMap::iterator & ifind = m_objectMap.find( p_key);
+			typename TypeMap::iterator ifind = m_objectMap.find( p_key);
 
 			if (ifind != m_objectMap.end())
 			{
@@ -143,18 +141,18 @@ namespace Castor
 			}
 			else
 			{
-				l_pReturn = TObjPtr( new TObj( m_pThis, p_key, p_param1, p_param2, p_param3));
+				l_pReturn = TObjPtr( new TObj( this, p_key, p_param1, p_param2, p_param3));
 				m_objectMap.insert( typename TypeMap::value_type( p_key, l_pReturn));
 			}
 
 			return l_pReturn;
 		}
 		template<typename TParam1, typename TParam2, typename TParam3, typename TParam4>
-		TObjPtr CreateElement( KeyParamType p_key, typename CallTraits<TParam1>::ParamType p_param1, typename CallTraits<TParam2>::ParamType p_param2, typename CallTraits<TParam3>::ParamType p_param3, typename CallTraits<TParam4>::ParamType p_param4)
+		TObjPtr CreateElement( const String & p_key, typename CallTraits<TParam1>::ParamType p_param1, typename CallTraits<TParam2>::ParamType p_param2, typename CallTraits<TParam3>::ParamType p_param3, typename CallTraits<TParam4>::ParamType p_param4)
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 			TObjPtr l_pReturn;
-			const typename TypeMap::iterator & ifind = m_objectMap.find( p_key);
+			typename TypeMap::iterator ifind = m_objectMap.find( p_key);
 
 			if (ifind != m_objectMap.end())
 			{
@@ -162,26 +160,27 @@ namespace Castor
 			}
 			else
 			{
-				l_pReturn = TObjPtr( new TObj( m_pThis, p_key, p_param1, p_param2, p_param3, p_param4));
+				l_pReturn = TObjPtr( new TObj( this, p_key, p_param1, p_param2, p_param3, p_param4));
 				m_objectMap.insert( typename TypeMap::value_type( p_key, l_pReturn));
 			}
 
 			return l_pReturn;
 		}
+*/
 		bool AddElement( TObjPtr p_element)
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			const typename TypeMap::iterator & ifind = m_objectMap.find( p_element->GetKey());
+			typename TypeMap::iterator ifind = m_objectMap.find( p_element->GetName());
 
 			if (ifind != m_objectMap.end())
 			{
 				return false;
 			}
 
-			m_objectMap.insert( typename TypeMap::value_type( p_element->GetKey(), p_element));
+			m_objectMap.insert( typename TypeMap::value_type( p_element->GetName(), p_element));
 			return true;
 		}
-		bool HasElement( KeyParamType p_key)const
+		bool HasElement( const String & p_key)const
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 			return m_objectMap.find( p_key) != m_objectMap.end();
@@ -189,18 +188,18 @@ namespace Castor
 		bool HasElement( TObjPtr p_element)const
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			return m_objectMap.find( p_element->GetKey()) != m_objectMap.end();
+			return m_objectMap.find( p_element->GetName()) != m_objectMap.end();
 		}
-		TObjPtr RemoveElement( KeyParamType p_key)
+		TObjPtr RemoveElement( const String & p_key)
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 			TObjPtr l_ret;
-			const typename TypeMap::iterator & ifind = m_objectMap.find( p_key);
+			typename TypeMap::const_iterator ifind = m_objectMap.find( p_key);
 
 			if (ifind != m_objectMap.end())
 			{
 				l_ret = ifind->second;
-				m_objectMap.erase( ifind);
+				m_objectMap.erase( p_key);
 			}
 
 			return l_ret;
@@ -208,9 +207,9 @@ namespace Castor
 		TObjPtr RemoveElement( TObjPtr p_element)
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			return RemoveElement( p_element->GetKey());
+			return RemoveElement( p_element->GetName());
 		}
-		TObjPtr GetElementByName( KeyParamType p_key)
+		TObjPtr GetElementByName( const String & p_key)
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 			return Utils::map::findOrNull( m_objectMap, p_key);
@@ -220,33 +219,6 @@ namespace Castor
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 			return RemoveElement( p_element);
 		}
-	};
-	//! Managed element class
-	/*!
-	A managed element is defined by a key and is created (and owned) by the correct manager class
-	\author Sylvain DOREMUS
-	\version 0.6.1.0
-	\date 03/01/2011
-	*/
-	template <typename Key, typename TObj, class _Manager>
-	class Managed
-	{
-	public:
-		typedef typename CallTraits<Key>::ParamType KeyParamType;
-
-	protected:
-		Key m_key;
-		_Manager * m_pManager;
-
-	public:
-		Managed( _Manager * p_pManager, KeyParamType p_key)
-			:	m_key( p_key)
-			,	m_pManager( p_pManager)
-		{}
-		~Managed()
-		{}
-		inline KeyParamType		GetKey		()const { return m_key; }
-		inline _Manager	* 		GetManager	()const { return m_pManager; }
 	};
 }
 }

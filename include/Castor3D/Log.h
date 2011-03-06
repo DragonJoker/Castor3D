@@ -49,6 +49,7 @@ namespace Castor3D
 		static String s_logFilePath[eNbTypes];
 		static String s_strHeaders[eNbTypes];
 		static MultiThreading::RecursiveMutex s_mutex;
+		static eLOG_TYPE m_eCurrentLogType;
 
 	private:
 		/**
@@ -67,34 +68,6 @@ namespace Castor3D
 		 *@param p_eLogType : [in] The log type
 		 */
 		static void SetFileName( const String & p_logFilePath, eLOG_TYPE p_eLogType=eNbTypes);
-		
-		/**
-		 * Logs a line in the log file, using va_args
-		 *@param p_eLogType : [in] The log type
-		 *@param p_format : [in] the line format
-		 *@param ... : POD arguments, following printf format
-		 */
-		static void Log( eLOG_TYPE p_eLogType, const char * p_format, ...);
-		/**
-		 * Logs a line, from a string
-		 *@param p_eLogType : [in] The log type
-		 *@param p_msg : [in] The line to log
-		 */
-		static void Log( eLOG_TYPE p_eLogType, const std::string & p_msg);
-		/**
-		 * Logs an unicode line in the log file, using va_args
-		 *@param p_eLogType : [in] The log type
-		 *@param p_format : [in] the line format
-		 *@param ... : POD arguments, following printf format
-		 */
-		static void Log( eLOG_TYPE p_eLogType, const wchar_t * p_format , ...);
-		/**
-		 * Logs a line, from a wstring
-		 *@param p_eLogType : [in] The log type
-		 *@param p_msg : [in] The line to log
-		 */
-		static void Log( eLOG_TYPE p_eLogType, const std::wstring & p_msg);
-
 		/**
 		 * Logs a line in the log file, using va_args
 		 *@param p_format : [in] the line format
@@ -151,7 +124,7 @@ namespace Castor3D
 		 * Logs a line, from a string
 		 *@param p_msg : [in] The line to log
 		 */
-		static void LogError( const std::string & p_msg);
+		static void LogError( const std::string & p_msg, bool p_bThrow=true);
 		/**
 		 * Logs an unicode line in the log file, using va_args
 		 *@param p_format : [in] the line format
@@ -162,7 +135,20 @@ namespace Castor3D
 		 * Logs a line, from a wstring
 		 *@param p_msg : [in] The line to log
 		 */
-		static void LogError( const std::wstring & p_msg);
+		static void LogError( const std::wstring & p_msg, bool p_bThrow=true);
+
+		static Logger & Log( eLOG_TYPE p_eLogType)
+		{
+			m_eCurrentLogType = p_eLogType;
+			return GetSingleton();
+		}
+
+		template <class T> Logger & operator <<( const T & tToLog)
+		{
+			String stream;
+			stream << tToLog;
+			_logMessage( m_eCurrentLogType, stream);
+		}
 
 	private:
 		static void _logMessage( eLOG_TYPE p_eLogType, const String & p_strToLog);

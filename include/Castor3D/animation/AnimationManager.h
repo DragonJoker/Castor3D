@@ -30,24 +30,28 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class C3D_API AnimationManager : public Castor::Templates::Manager<String, AnimatedObjectGroup, AnimationManager>
+	class C3D_API AnimationManager : public Textable, public Serialisable, public Castor::Templates::Manager<AnimatedObjectGroup>
 	{
 	private:
-		friend class Castor::Templates::Manager<String, AnimatedObjectGroup, AnimationManager>;
+		friend class Castor::Templates::Manager<AnimatedObjectGroup>;
 
 	private:
 		Utils::PreciseTimer m_timer;	//!< A timer, usefull for animation handling
 		double m_dTimeSinceLastFrame;	//!< The time since the last frame
+		Scene * m_pScene;
 
 	public:
+		/**@name Construction / Destruction */
+		//@{
 		/**
 		 * Constructor, initialises the timer
 		 */
-		AnimationManager();
+		AnimationManager( Scene * p_pScene);
 		/**
 		 * Destructor, cleans up the list
 		 */
 		~AnimationManager();
+		//@}
 		/**
 		 * Creates an AnimatedObjectGroup with the name given as a parameter, adds it to the list and returns it
 		 *@param p_strName : the name of the AnimatedObjectGroup to create
@@ -58,16 +62,17 @@ namespace Castor3D
 		 * Refreshes all the AnimatedObjectGroup
 		 */
 		void Update();
-		/**
-		 * Writes the animation manager in a file
-		 *@param p_file : the file to write in
-		 */
-		bool Write( Castor::Utils::File & p_file);
-		/**
-		 * Reads the animation manager from a file
-		 *@param p_file : the file to read from
-		 */
-		bool Read( Castor::Utils::File & p_file);
+
+		/**@name Inherited methods from Textable */
+		//@{
+		virtual bool Write( File & p_file)const;
+		virtual bool Read( File & p_file);
+		//@}
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
 	};
 }
 

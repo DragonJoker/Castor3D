@@ -1,0 +1,1 @@
+#include "ImgToXPM/PrecompiledHeader.h"

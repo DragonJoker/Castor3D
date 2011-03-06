@@ -31,7 +31,7 @@ namespace Castor3D
 		RendererBase( SceneManager * p_pSceneManager)
 			:	m_pSceneManager( p_pSceneManager)
 		{}
-		virtual ~RendererBase()=0
+		virtual ~RendererBase()
 		{}
 	};
 	//! The renderer representation

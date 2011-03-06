@@ -15,18 +15,18 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL2_TextureRenderer___
-#define ___GL2_TextureRenderer___
+#ifndef ___Gl2_TextureRenderer___
+#define ___Gl2_TextureRenderer___
 
-#include "Module_GLRender.h"
+#include "Module_Gl2Render.h"
 
 namespace Castor3D
 {	
-	class C3D_GL2_API GL2TextureRenderer : public GLTextureRenderer
+	class C3D_Gl2_API Gl2TextureRenderer : public GlTextureRenderer
 	{
 	public:
-		GL2TextureRenderer( SceneManager * p_pSceneManager);
-		virtual ~GL2TextureRenderer();
+		Gl2TextureRenderer( SceneManager * p_pSceneManager);
+		virtual ~Gl2TextureRenderer();
 
 		virtual bool Initialise();
 	};

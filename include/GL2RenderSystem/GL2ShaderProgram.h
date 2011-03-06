@@ -15,40 +15,40 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL2_ShaderProgram___
-#define ___GL2_ShaderProgram___
+#ifndef ___Gl2_ShaderProgram___
+#define ___Gl2_ShaderProgram___
 
-#include "Module_GLRender.h"
+#include "Module_Gl2Render.h"
 
 namespace Castor3D
 {
-	class C3D_GL2_API GL2ShaderProgram : public GLShaderProgram
+	class C3D_Gl2_API Gl2ShaderProgram : public GlShaderProgram
 	{
 	private:
-		SmartPtr < GLPointFrameVariable<float, 4> >::Shared		m_pAmbients;
-		SmartPtr < GLPointFrameVariable<float, 4> >::Shared		m_pDiffuses;
-		SmartPtr < GLPointFrameVariable<float, 4> >::Shared		m_pSpeculars;
-		SmartPtr < GLPointFrameVariable<float, 4> >::Shared		m_pPositions;
-		SmartPtr < GLPointFrameVariable<float, 3> >::Shared		m_pAttenuations;
-		SmartPtr < GLMatrixFrameVariable<float, 4, 4> >::Shared	m_pOrientations;
-		SmartPtr < GLOneFrameVariable<float> >::Shared			m_pExponents;
-		SmartPtr < GLOneFrameVariable<float> >::Shared			m_pCutOffs;
+		shared_ptr < GlPointFrameVariable<float, 4> >		m_pAmbients;
+		shared_ptr < GlPointFrameVariable<float, 4> >		m_pDiffuses;
+		shared_ptr < GlPointFrameVariable<float, 4> >		m_pSpeculars;
+		shared_ptr < GlPointFrameVariable<float, 4> >		m_pPositions;
+		shared_ptr < GlPointFrameVariable<float, 3> >		m_pAttenuations;
+		shared_ptr < GlMatrixFrameVariable<float, 4, 4> >	m_pOrientations;
+		shared_ptr < GlOneFrameVariable<float> >			m_pExponents;
+		shared_ptr < GlOneFrameVariable<float> >			m_pCutOffs;
 
 		std::set <int> m_setFreeLights;
 
-		SmartPtr < GLPointFrameVariable<float, 4> >::Shared 	m_pAmbient;
-		SmartPtr < GLPointFrameVariable<float, 4> >::Shared 	m_pDiffuse;
-		SmartPtr < GLPointFrameVariable<float, 4> >::Shared 	m_pEmissive;
-		SmartPtr < GLPointFrameVariable<float, 4> >::Shared 	m_pSpecular;
-		SmartPtr < GLOneFrameVariable<float> >::Shared 		m_pShininess;
+		shared_ptr < GlPointFrameVariable<float, 4> > 	m_pAmbient;
+		shared_ptr < GlPointFrameVariable<float, 4> > 	m_pDiffuse;
+		shared_ptr < GlPointFrameVariable<float, 4> > 	m_pEmissive;
+		shared_ptr < GlPointFrameVariable<float, 4> > 	m_pSpecular;
+		shared_ptr < GlOneFrameVariable<float> > 		m_pShininess;
 		bool m_bMatChanged;
 
-		SmartPtr < GLPointFrameVariable<float, 4> >::Shared 	m_pAmbientLight;
+		shared_ptr < GlPointFrameVariable<float, 4> > 	m_pAmbientLight;
 
 	public:
-		GL2ShaderProgram();
-		GL2ShaderProgram( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile);
-		virtual ~GL2ShaderProgram();
+		Gl2ShaderProgram();
+		Gl2ShaderProgram( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile);
+		virtual ~Gl2ShaderProgram();
 		/**
 		 * Link all Shaders
 		 */

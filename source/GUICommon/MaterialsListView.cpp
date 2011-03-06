@@ -1,6 +1,6 @@
-#include "GUICommon/PrecompiledHeader.h"
+#include "GuiCommon/PrecompiledHeader.h"
 
-#include "GUICommon/MaterialsListView.h"
+#include "GuiCommon/MaterialsListView.h"
 
 #ifdef LoadImage
 #	undef LoadImage
@@ -9,7 +9,7 @@
 
 using Castor::Templates::Manager;
 using namespace Castor3D;
-using namespace GUICommon;
+using namespace GuiCommon;
 
 MaterialsListView :: MaterialsListView( Castor3D::MaterialManager * p_pManager, wxWindow * parent, wxWindowID id, const wxPoint & pos, const wxSize & size)
 	:	wxListCtrl( parent, id, pos, size, wxLC_ICON | wxLC_SINGLE_SEL | wxLC_SORT_ASCENDING | wxBORDER_SIMPLE)
@@ -128,7 +128,7 @@ void MaterialsListView :: _createBitmapFromBuffer( wxBitmap & p_bitmap, unsigned
 	p_bitmap.Create( p_width, p_height, 24);
 	wxNativePixelData l_data( p_bitmap);
 
-	if (l_data != NULL && l_data.GetWidth() == p_width && l_data.GetHeight() == p_height)
+	if (l_data.GetWidth() == p_width && l_data.GetHeight() == p_height)
 	{
 		wxNativePixelData::Iterator l_it( l_data);
 		unsigned char * l_pBuffer = p_pBuffer;

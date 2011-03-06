@@ -15,18 +15,18 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL3_Plugin___
-#define ___GL3_Plugin___
+#ifndef ___Gl3_Plugin___
+#define ___Gl3_Plugin___
 
-#include "Module_GLRender.h"
+#include "Module_Gl3Render.h"
 
 namespace Castor3D
 {
 	// OpenGL graphics drver
-	class C3D_GL3_API GL3RendererDriver : public RendererDriver
+	class C3D_Gl3_API Gl3RendererDriver : public RendererDriver
 	{
 	  public:
-		virtual ~GL3RendererDriver() {}
+		virtual ~Gl3RendererDriver() {}
 	    
 		virtual const String & GetName() const;
 		virtual void CreateRenderSystem( SceneManager * p_pSceneManager);

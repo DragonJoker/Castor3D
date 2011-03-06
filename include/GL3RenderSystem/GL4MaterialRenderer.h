@@ -15,14 +15,14 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL4_MaterialRenderer___
-#define ___GL4_MaterialRenderer___
+#ifndef ___Gl4_MaterialRenderer___
+#define ___Gl4_MaterialRenderer___
 
-#include "Module_GLRender.h"
+#include "Module_Gl3Render.h"
 
 namespace Castor3D
 {
-	class C3D_GL3_API GL4PassRenderer : public PassRenderer
+	class C3D_Gl3_API Gl4PassRenderer : public PassRenderer
 	{
 	protected:
 		Point4f			m_varAmbient;
@@ -32,21 +32,21 @@ namespace Castor3D
 		float			m_varShininess;
 		bool			m_bChanged;
 
-		GLUBOPoint4fVariablePtr 	m_pAmbient;
-		GLUBOPoint4fVariablePtr 	m_pDiffuse;
-		GLUBOPoint4fVariablePtr 	m_pEmissive;
-		GLUBOPoint4fVariablePtr 	m_pSpecular;
-		GLUBOFloatVariablePtr 		m_pShininess;
-		GLUniformBufferObjectPtr	m_pUniformBuffer;
+		GlUboPoint4fVariablePtr 	m_pAmbient;
+		GlUboPoint4fVariablePtr 	m_pDiffuse;
+		GlUboPoint4fVariablePtr 	m_pEmissive;
+		GlUboPoint4fVariablePtr 	m_pSpecular;
+		GlUboFloatVariablePtr 		m_pShininess;
+		GlUniformBufferObjectPtr	m_pUniformBuffer;
 
 	public:
-		GL4PassRenderer( SceneManager * p_pSceneManager);
-		virtual ~GL4PassRenderer();
+		Gl4PassRenderer( SceneManager * p_pSceneManager);
+		virtual ~Gl4PassRenderer();
 
 		virtual void Cleanup();
 		virtual void Initialise();
 
-		virtual void Render( eDRAW_TYPE p_displayMode);
+		virtual void Render( ePRIMITIVE_TYPE p_displayMode);
 		virtual void Render2D();
 		virtual void EndRender();
 	};

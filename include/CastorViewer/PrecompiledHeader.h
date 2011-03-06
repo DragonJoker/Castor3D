@@ -9,12 +9,27 @@
 #	endif
 #endif
 
+#include <string>
+
 #if CHECK_MEMORYLEAKS
 #	pragma message( "********************************************************************")
 #	pragma message( "	CastorViewer Checking Memory leaks")
 #	pragma message( "********************************************************************")
 #endif
 #include <CastorUtils/Memory.h>
+
+#ifdef _WIN32
+#   ifdef CASTOR_GTK
+#       ifdef __WXGTK__
+#           undef __WXMSW__
+#       else
+#           define __WXMSW__
+#       endif
+#   else
+#       undef __WXGTK__
+#       define __WXMSW__
+#   endif
+#endif
 
 #include <wx/app.h>
 #include <wx/button.h>
@@ -25,6 +40,7 @@
 #include <wx/combobox.h>
 #include <wx/dcclient.h>
 #include <wx/dialog.h>
+#include <wx/display.h>
 #include <wx/file.h>
 #include <wx/filedlg.h>
 #include <wx/frame.h>
@@ -42,6 +58,7 @@
 #include <wx/slider.h>
 #include <wx/statbox.h>
 #include <wx/stattext.h>
+#include <wx/statusbr.h>
 #include <wx/stdpaths.h>
 #include <wx/textctrl.h>
 #include <wx/timer.h>
@@ -125,18 +142,21 @@ using namespace Castor::Utils;
 #	endif
 #endif
 
-#include <GUICommon/EnvironmentFrame.h>
-#include <GUICommon/FrameVariableDialog.h>
-#include <GUICommon/GeometriesListFrame.h>
-#include <GUICommon/MaterialPanel.h>
-#include <GUICommon/MaterialsFrame.h>
-#include <GUICommon/MaterialsListView.h>
-#include <GUICommon/PassPanel.h>
-#include <GUICommon/ShaderDialog.h>
-#include <GUICommon/TextCtrl.h>
-#include <GUICommon/TextLinesCtrl.h>
-#include <GUICommon/TextPanel.h>
+#include <GuiCommon/EnvironmentFrame.h>
+#include <GuiCommon/FrameVariableDialog.h>
+#include <GuiCommon/GeometriesListFrame.h>
+#include <GuiCommon/ImagesLoader.h>
+#include <GuiCommon/MaterialPanel.h>
+#include <GuiCommon/MaterialsFrame.h>
+#include <GuiCommon/MaterialsListView.h>
+#include <GuiCommon/PassPanel.h>
+#include <GuiCommon/RendererSelector.h>
+#include <GuiCommon/ShaderDialog.h>
+#include <GuiCommon/SplashScreen.h>
+#include <GuiCommon/TextCtrl.h>
+#include <GuiCommon/TextLinesCtrl.h>
+#include <GuiCommon/TextPanel.h>
 
-using namespace GUICommon;
+using namespace GuiCommon;
 
 #endif

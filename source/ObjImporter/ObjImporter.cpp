@@ -67,7 +67,7 @@ bool ObjImporter :: _import()
 
 	if ((l_uiIndex = m_fileName.find_last_of( "/")) != String::npos)
 	{
-		l_uiSlashIndex = std::max( l_uiSlashIndex, l_uiIndex + 1);
+		l_uiSlashIndex = std::max<size_t>( l_uiSlashIndex, l_uiIndex + 1);
 	}
 
 	size_t l_uiDotIndex = m_fileName.find_last_of( ".");
@@ -84,13 +84,13 @@ bool ObjImporter :: _import()
 	}
 	else
 	{
-		m_pMesh = m_pManager->GetMeshManager()->CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom);
+		m_pMesh = m_pManager->GetMeshManager()->CreateMesh( l_meshName, l_faces, l_sizes, eCustom);
 		Logger::LogMessage( CU_T( "CreatePrimitive - Mesh ") + l_meshName + CU_T( " created"));
 	}
 
 	_readObjFile();
 
-	bool l_bHasMaterial =  ! m_pCurrentMaterial == NULL;
+	bool l_bHasMaterial = m_pCurrentMaterial != NULL;
 
 	if ( ! l_bHasMaterial)
 	{
@@ -114,7 +114,7 @@ bool ObjImporter :: _import()
 
 	SceneNodePtr l_pNode = m_pScene->CreateSceneNode( l_name);
 
-	GeometryPtr l_pGeometry( new Geometry( m_pMesh, l_pNode, l_name));
+	GeometryPtr l_pGeometry( new Geometry( m_pScene.get(), m_pMesh, l_pNode, l_name));
 	Logger::LogMessage( CU_T( "PlyImporter::_import - Geometry ") + l_name + CU_T( " created"));
 
 	m_geometries.insert( GeometryPtrStrMap::value_type( l_name, l_pGeometry));
@@ -134,7 +134,7 @@ void ObjImporter :: _readObjFile()
 	String l_strSection;
 	String l_strValue;
 	String l_strLine;
-	Char l_char = 0;
+	xchar l_char = 0;
 
 	while (m_pFile->IsOk())
 	{
@@ -218,7 +218,7 @@ void ObjImporter :: _applyMaterial( const String & p_strMaterialName)
 {
 	if (m_bReadingFaces)
 	{
-		if ( ! m_pCurrentSubmesh == NULL && m_pManager->GetMaterialManager()->HasElement( p_strMaterialName))
+		if (m_pCurrentSubmesh != NULL && m_pManager->GetMaterialManager()->HasElement( p_strMaterialName))
 		{
 			m_pCurrentSubmesh->SetMaterial( m_pManager->GetMaterialManager()->GetElementByName( p_strMaterialName));
 		}
@@ -232,7 +232,7 @@ void ObjImporter :: _readMatFile( const String & p_strFileName)
 		m_pMatFile = new File( m_filePath + p_strFileName, File::eRead);
 
 		String l_strLine;
-		Char l_char = 0;
+		xchar l_char = 0;
 
 		while (m_pMatFile->IsOk())
 		{
@@ -242,7 +242,7 @@ void ObjImporter :: _readMatFile( const String & p_strFileName)
 			{
 				if (l_strLine.find( CU_T( "newmtl")) != String::npos)
 				{
-					StringArray l_arraySplitted = l_strLine.Split( CU_T( " "));
+					StringArray l_arraySplitted = l_strLine.split( CU_T( " "));
 
 					if (l_arraySplitted.size() > 1)
 					{
@@ -294,19 +294,19 @@ void ObjImporter :: _readMatLightComponent( const String & p_strLine)
 	if ( ! m_bReadingFaces)
 	{
 		String l_line;
-		Char l_char = 0;
-		Char l_cDump = 0;
+		xchar l_char = 0;
+		xchar l_cDump = 0;
 
 		l_char = p_strLine.at( 0);
 		l_line = p_strLine.substr( 2, String::npos);
-		StringArray l_arraySplitted = l_line.Split( CU_T( " "));
+		StringArray l_arraySplitted = l_line.split( CU_T( " "));
 
 		if (l_arraySplitted.size() >= 3)
 		{
 			float l_fR, l_fG, l_fB;
-			l_fR = l_arraySplitted[0].ToFloat();
-			l_fG = l_arraySplitted[1].ToFloat();
-			l_fB = l_arraySplitted[2].ToFloat();
+			l_fR = l_arraySplitted[0].to_float();
+			l_fG = l_arraySplitted[1].to_float();
+			l_fB = l_arraySplitted[2].to_float();
 
 			if (l_char == CU_T( 'a'))
 			{
@@ -328,7 +328,7 @@ void ObjImporter :: _readMatTransparency( const String & p_strLine)
 {
 	if ( ! m_bReadingFaces)
 	{
-		m_fAlpha = p_strLine.ToFloat();
+		m_fAlpha = p_strLine.to_float();
 		const float * l_pfAmbient = m_pCurrentMaterial->GetPass( 0)->GetAmbient().const_ptr();
 		const float * l_pfDiffuse = m_pCurrentMaterial->GetPass( 0)->GetDiffuse().const_ptr();
 		const float * l_pfSpecular = m_pCurrentMaterial->GetPass( 0)->GetSpecular().const_ptr();
@@ -345,12 +345,12 @@ void ObjImporter :: _readMatLightRefDifExp( const String & p_strLine)
 	if ( ! m_bReadingFaces)
 	{
 		String l_line;
-		Char l_char = 0;
+		xchar l_char = 0;
 
 		l_char = p_strLine.at( 0);
 		l_line = p_strLine.substr( 2, String::npos);
 
-		float l_fValue = l_line.ToFloat();
+		float l_fValue = l_line.to_float();
 
 		if (l_char == CU_T( 's'))
 		{
@@ -363,7 +363,7 @@ void ObjImporter :: _readSubmeshInfo( const String & p_strLine)
 {
 	if (m_bReadingFaces)
 	{
-		StringArray l_arraySplitted = p_strLine.Split( CU_T( " "));
+		StringArray l_arraySplitted = p_strLine.split( CU_T( " "));
 
 		if (l_arraySplitted.size() > 1)
 		{
@@ -386,7 +386,7 @@ void ObjImporter :: _readGroupInfo( const String & p_strLine)
 {
 	if (m_bReadingFaces)
 	{
-		StringArray l_arraySplitted = p_strLine.Split( CU_T( " "));
+		StringArray l_arraySplitted = p_strLine.split( CU_T( " "));
 
 		if (l_arraySplitted.size() > 1)
 		{
@@ -418,8 +418,8 @@ void ObjImporter :: _readVertexInfo( const String & p_strLine)
 		Point3r l_vertex;
 		Point2r l_coords;
 		String l_line;
-		Char l_char = 0;
-		Char l_cDump = 0;
+		xchar l_char = 0;
+		xchar l_cDump = 0;
 
 		l_char = p_strLine.at( 0);
 		l_line = p_strLine.substr( 1, String::npos);
@@ -427,13 +427,13 @@ void ObjImporter :: _readVertexInfo( const String & p_strLine)
 		if (l_char == CU_T( ' '))
 		{
 			StringArray l_arraySplitted;
-			sscanf_s( l_line.char_str(), "%f %f %f", & l_vertex[0], & l_vertex[1], & l_vertex[2]);
+			Sscanf( l_line.char_str(), "%f %f %f", & l_vertex[0], & l_vertex[1], & l_vertex[2]);
 			m_arrayVertex.push_back( Point3r( l_vertex[0], l_vertex[1], l_vertex[2]));
 		}
 		else if (l_char == CU_T( 't'))
 		{
 			m_iNbTexCoords++;
-			sscanf_s( l_line.char_str(), "%f %f", & l_coords[0], & l_coords[1]);
+			Sscanf( l_line.char_str(), "%f %f", & l_coords[0], & l_coords[1]);
 			m_textureCoords.push_back( l_coords);
 			m_objectHasUV = true;
 		}
@@ -470,7 +470,7 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 
 	l_line = p_strLine.substr( 1, String::npos);
 
-	StringArray l_arraySplitted = l_line.Split( CU_T( " "));
+	StringArray l_arraySplitted = l_line.split( CU_T( " "));
 
 	if (l_arraySplitted.size() >= 3)
 	{
@@ -485,21 +485,21 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 
 			if (m_objectHasUV)
 			{
-				StringArray l_arraySlashSplitted = l_arraySplitted[i].Split( CU_T( "/"));
+				StringArray l_arraySlashSplitted = l_arraySplitted[i].split( CU_T( "/"));
 				l_arrayCoords.push_back( 0);
-				l_arrayVertex[i] = l_arraySlashSplitted[0].ToInt();
-				l_arrayCoords[i] = l_arraySlashSplitted[1].ToInt();
+				l_arrayVertex[i] = l_arraySlashSplitted[0].to_int();
+				l_arrayCoords[i] = l_arraySlashSplitted[1].to_int();
 			}
 			else
 			{
 				if (l_arraySplitted[i].find( "/") != String::npos)
 				{
-					StringArray l_arraySlashSplitted = l_arraySplitted[i].Split( CU_T( "/"));
-					l_arrayVertex[i] = l_arraySlashSplitted[0].ToInt();
+					StringArray l_arraySlashSplitted = l_arraySplitted[i].split( CU_T( "/"));
+					l_arrayVertex[i] = l_arraySlashSplitted[0].to_int();
 				}
 				else
 				{
-					sscanf_s( l_arraySplitted[i].char_str(), "%d", & l_arrayVertex[i]);
+					Sscanf( l_arraySplitted[i].char_str(), "%d", & l_arrayVertex[i]);
 				}
 			}
 		}

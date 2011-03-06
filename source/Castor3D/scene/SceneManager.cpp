@@ -32,3 +32,21 @@ void SceneManager :: ClearScenes()
 		l_it->second->ClearScene();
 	}
 }
+
+ScenePtr SceneManager :: CreateScene( const String & p_strName)
+{
+	ScenePtr l_pReturn;
+	TypeMap::iterator l_it = m_objectMap.find( p_strName);
+
+	if (l_it != m_objectMap.end())
+	{
+		l_pReturn = l_it->second;
+	}
+	else
+	{
+		l_pReturn.reset( new Scene( this, p_strName));
+		m_objectMap[p_strName] = l_pReturn;
+	}
+
+	return l_pReturn;
+}

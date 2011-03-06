@@ -5,7 +5,7 @@
 
 namespace CastorShape
 {
-	class MaterialsFrame : public GUICommon::MaterialsFrame
+	class MaterialsFrame : public GuiCommon::MaterialsFrame
 	{
 	public:
 		enum eIDs
@@ -17,7 +17,7 @@ namespace CastorShape
 		};
 
 	private:
-		GUICommon::MaterialPanel * m_materialPanel;
+		GuiCommon::MaterialPanel * m_materialPanel;
 		wxButton * m_newMaterial;
 		wxButton * m_deleteMaterial;
 		wxTextCtrl * m_newMaterialName;

@@ -33,7 +33,7 @@ namespace Castor3D
 	class C3D_API Pattern : public MemoryTraced< Pattern<T> >
 	{
 	public:
-		typedef typename Templates::SmartPtr< Pattern<T> >::Shared	Pointer;			//!< Pattern pointer
+		typedef typename Templates::shared_ptr< Pattern<T> >	Pointer;			//!< Pattern pointer
 		typedef typename Container<Pointer>::Vector		PointerArray;		//!< Pattern pointer array
 
 	private:
@@ -64,7 +64,7 @@ namespace Castor3D
 		{
 			Pointer l_pReturn( new Pattern<T>());
 
-			for (TObjList::iterator l_it = m_listElements.begin() ; l_it != m_listElements.end() ; l_it++)
+			for (typename TObjList::iterator l_it = m_listElements.begin() ; l_it != m_listElements.end() ; l_it++)
 			{
 				l_pReturn->m_listElements.push_front( *l_it);
 			}
@@ -82,7 +82,7 @@ namespace Castor3D
 			TObj l_t1, l_t2;
 			l_t1 = **m_listElements.begin();
 			l_t2 = **m_listElements.rbegin();
-			return l_v1 == l_v2;
+			return l_t1 == l_t2;
 		}
 		/**
 		 * Adds a vertex to the list, at a given index
@@ -97,7 +97,7 @@ namespace Castor3D
 				return;
 			}
 
-			TObjList::iterator l_it = m_listElements.begin();
+			typename TObjList::iterator l_it = m_listElements.begin();
 
 			for (size_t i = 0 ; i < p_uiIndex ; i++)
 			{
@@ -121,7 +121,7 @@ namespace Castor3D
 		TObjRef operator []( size_t p_uiIndex)
 		{
 			CASTOR_ASSERT( p_uiIndex < m_listElements.size());
-			TObjList::iterator l_it = m_listElements.begin();
+			typename TObjList::iterator l_it = m_listElements.begin();
 
 			for (size_t i = 0 ; i < p_uiIndex ; i++)
 			{
@@ -138,7 +138,7 @@ namespace Castor3D
 		TObjConstRef operator []( size_t p_uiIndex)const
 		{
 			CASTOR_ASSERT( p_uiIndex < m_listElements.size());
-			TObjList::const_iterator l_it = m_listElements.begin();
+			typename TObjList::const_iterator l_it = m_listElements.begin();
 
 			for (size_t i = 0 ; i < p_uiIndex ; i++)
 			{
@@ -155,7 +155,7 @@ namespace Castor3D
 		TObjRef GetElement( size_t p_uiIndex)
 		{
 			CASTOR_ASSERT( p_uiIndex < m_listElements.size());
-			TObjList::iterator l_it = m_listElements.begin();
+			typename TObjList::iterator l_it = m_listElements.begin();
 
 			for (size_t i = 0 ; i < p_uiIndex ; i++)
 			{
@@ -172,7 +172,7 @@ namespace Castor3D
 		TObjConstRef GetElement( size_t p_uiIndex)const
 		{
 			CASTOR_ASSERT( p_uiIndex < m_listElements.size());
-			TObjList::const_iterator l_it = m_listElements.begin();
+			typename TObjList::const_iterator l_it = m_listElements.begin();
 
 			for (size_t i = 0 ; i < p_uiIndex ; i++)
 			{

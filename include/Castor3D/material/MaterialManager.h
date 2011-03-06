@@ -31,18 +31,18 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class C3D_API MaterialManager : public Castor::Templates::Manager<String, Material, MaterialManager>
+	class C3D_API MaterialManager : public Serialisable, public Textable, public Castor::Templates::Manager<Material>
 	{
-	private:
-		friend class Castor::Templates::Manager<String, Material, MaterialManager>;
-
 	private:
 		MaterialPtr m_defaultMaterial;					//!< The default material
 		std::map <String, Material *> m_newMaterials;	//!< The newly created materials, a material is in the list until it is initialised
 		MaterialPtrArray m_arrayToDelete;
 		SceneManager * m_pParent;
 		ShaderManager	*	m_pShaderManager;
+
 	public:
+		/**@name Construction / Destruction */
+		//@{
 		/**
 		 * Constructor
 		 */
@@ -51,6 +51,8 @@ namespace Castor3D
 		 * Destructor
 		 */
 		~MaterialManager();
+		//@}
+
 		/**
 		 * Creates a material, with the given name, if it is not already used
 		 *@param p_name : [in] The wanted name of the material
@@ -76,17 +78,6 @@ namespace Castor3D
 		 */
 		void GetMaterialNames( StringArray & p_names);
 		/**
-		 * Writes the materials in separate files
-		 *@return true if successful, false if not
-		 */
-		bool Write( const String & p_path);
-		/**
-		 * Reads materials from separate files in the same folder than the given file path
-		 *@param p_path : [in] The file path
-		 *@return true if successful, false if not
-		 */
-		bool Read( const String & p_path);
-		/**
 		 * Puts the given material in the newly created materials, to re-initialise it
 		 *@param p_material : [in] The material we want to initialise again
 		 */
@@ -100,13 +91,33 @@ namespace Castor3D
 		 * Deletes all the materials held
 		 */
 		void DeleteAll();
-
+		/**
+		 * Gives the default material
+		 */
 		MaterialPtr GetDefaultMaterial();
-
+		/**
+		 * Creates an image from a file
+		 *@param p_strPath : [in] The image file path
+		 */
 		ImagePtr CreateImage( const String & p_strPath);
 
+		/**@name Inherited methods from Textable */
+		//@{
+		virtual bool Write( File & p_file)const;
+		virtual bool Read( File & p_file);
+		//@}
+
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
+
+		/**@name Accessors */
+		//@{
 		inline SceneManager		*	GetParent			()const	{ return m_pParent; }
 		inline ShaderManager	* 	GetShaderManager	()const { return m_pShaderManager; }
+		//@}
 	};
 }
 

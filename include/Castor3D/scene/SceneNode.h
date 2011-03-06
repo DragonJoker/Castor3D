@@ -30,46 +30,38 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class C3D_API SceneNode
+	class C3D_API SceneNode : public Serialisable, public Textable
 	{
 	public:
 		static unsigned long long Count;								//!< The total number of scene nodes
-
-		typedef enum
-		{
-			eBase,
-			eLight,
-			eCamera,
-			eGeometry
-		}
-		eTYPE;
 
 	protected:
 		typedef KeyedContainer< String, SceneNode *>::Map		SceneNodePtrStrMap;
 		typedef KeyedContainer< String, MovableObject *>::Map	MovableObjectPtrStrMap;
 
 	protected:
-		String m_name;									//!< The node's name
-		bool m_displayable;								//!< Tells if it is displayable. A node is displayable if his parent is either displayable or the root node
-		bool m_visible;									//!< The visible status. If a node is hidden, all objects attached to it are hidden
-		Quaternion m_orientation;						//!< The relative orientation of the node
-		Point3r m_position;								//!< The relative position of the node
-		Point3r m_scale;								//!< The relative scale transform value of the node
-		Quaternion m_derivedOrientation;				//!< The absolute orientation of the node
-		Point3r m_derivedPosition;						//!< The absolute position of the node
-		Point3r m_derivedScale;							//!< The absolute scale transform value of the node
-		Matrix4x4r m_matrix;							//!< The rotation matrix
+		String m_strName;								//!< The node's name
+		bool m_bDisplayable;							//!< Tells if it is displayable. A node is displayable if his parent is either displayable or the root node
+		bool m_bVisible;								//!< The visible status. If a node is hidden, all objects attached to it are hidden
+		Quaternion m_qOrientation;						//!< The relative orientation of the node
+		Point3r m_ptPosition;							//!< The relative position of the node
+		Point3r m_ptScale;								//!< The relative scale transform value of the node
+		Quaternion m_qDerivedOrientation;				//!< The absolute orientation of the node
+		Point3r m_ptDerivedPosition;					//!< The absolute position of the node
+		Point3r m_ptDerivedScale;						//!< The absolute scale transform value of the node
+		Matrix4x4r m_mtxMatrix;							//!< The rotation matrix
 
-		SceneNode * m_parent;							//!< This node's parent
-		SceneNodePtrStrMap m_childs;							//!< This node's childs		
-		MovableObjectPtrStrMap m_attachedObjects;		//!< This node's attached geometries
+		SceneNode * m_pParent;							//!< This node's parent
+		SceneNodePtrStrMap m_mapChilds;					//!< This node's childs		
+		MovableObjectPtrStrMap m_mapAttachedObjects;	//!< This node's attached geometries
+		Scene * m_pScene;
 
 	public:
 		/**
 		* Constructor
 		*@param p_name : [in] The node's name. If empty the name is "SceneNode<s_nbSceneNodes>"
 		*/
-		SceneNode( const String & p_name = C3DEmptyString);
+		SceneNode( Scene * p_pScene, const String & p_name = C3DEmptyString);
 		/**
 		 * Destructor
 		 */
@@ -78,7 +70,7 @@ namespace Castor3D
 		 * Draws the geometries and the child's ones in the display mode given
 		 *@param p_displayMode : [in] The mode in which the display must be done
 		 */
-		virtual void Render( eDRAW_TYPE p_displayMode);
+		virtual void Render( ePRIMITIVE_TYPE p_displayMode);
 		/**
 		 * Draws the geometries and the child's ones in the display mode given
 		 *@param p_displayMode : [in] The mode in which the display must be done
@@ -245,19 +237,6 @@ namespace Castor3D
 		 */
 		void SetScale		( real * p_pCoords);
 		/**
-		 * Writes the node  and it's childs recursively in a file
-		 *@param p_file : [in] The file to write in
-		 *@return true if successful, false if not
-		 */
-		virtual bool Write( Castor::Utils::File & p_file)const;
-		virtual bool Read( Castor::Utils::File & p_file){ return true; }
-		/**
-		 * Writes the node in a file
-		 *@param p_file : [in] The file to write in
-		 *@return true if successful, false if not
-		 */
-		bool WriteOne( Castor::Utils::File & p_file)const;
-		/**
 		 * Creates the vertex buffer of attached geometries
 		 *@param p_nm : [in] The normals mode (face or vertex)
 		 *@param p_showNormals : [in] Tells if we show normals (of faces or vertex)
@@ -270,32 +249,44 @@ namespace Castor3D
 		 */
 		Geometry * GetNearestGeometry( Ray * p_pRay, real & p_fDistance, FacePtr * p_ppFace, SubmeshPtr * p_ppSubmesh);
 
-	public:
+		/**@name Inherited methods from Textable */
+		//@{
+		virtual bool Write( File & p_file)const;
+		virtual bool Read( File & p_file) { return false; }
+		//@}
+
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
+
 		/**@name Accessors */
 		//@{
-		virtual eTYPE														GetType					()const										{ return eBase; }
-		inline const Point3r											&	GetPosition				()const										{ return m_position; }
-		inline Point3r													&	GetPosition				()											{ return m_position; }
-		inline Point3r														GetDerivedPosition		()const										{ return m_derivedPosition; }
-		inline const Quaternion											&	GetOrientation			()const										{ return m_orientation; }
-		inline Quaternion													GetDerivedOrientation	()const										{ return m_derivedOrientation; }
-		inline const Point3r											&	GetScale				()const										{ return m_scale; }
-		inline Point3r														GetDerivedScale			()const										{ return m_derivedScale; }
-		inline void															GetAxisAngle			( Point3r & p_axis, Angle & p_angle)		{ m_orientation.ToAxisAngle( p_axis, p_angle); }
-		inline bool															IsVisible				()const										{ return m_visible; }
-		inline bool															IsDisplayable			()const										{ return m_displayable; }
-		inline SceneNode												*	GetParent				()const										{ return m_parent; }
-		inline String														GetName					()const										{ return m_name; }
-		inline const KeyedContainer< String, SceneNode *>::Map		&	GetChilds				()const										{ return m_childs; }
-		inline const KeyedContainer< String, MovableObject *>::Map	&	GetAttachedObjects		()const										{ return m_attachedObjects; }
-		inline KeyedContainer< String, SceneNode *>::Map				&	GetChilds				()											{ return m_childs; }
-		inline KeyedContainer< String, MovableObject *>::Map			&	GetAttachedObjects		()											{ return m_attachedObjects; }
-		inline SceneNode *													GetChild				( const String & p_name)					{ return (m_childs.find( p_name) != m_childs.end() ? m_childs.find( p_name)->second : NULL); }
-		inline const Matrix4x4r &											GetRotationMatrix		()const										{ return m_matrix; }
-
-		inline void SetVisible		( bool p_visible)						{ m_visible = p_visible; }
-		inline void SetName			( const String & p_name)				{ m_name = p_name; }
+		inline const Point3r											&	GetPosition				()const										{ return m_ptPosition; }
+		inline Point3r													&	GetPosition				()											{ return m_ptPosition; }
+		inline Point3r														GetDerivedPosition		()const										{ return m_ptDerivedPosition; }
+		inline const Quaternion											&	GetOrientation			()const										{ return m_qOrientation; }
+		inline Quaternion													GetDerivedOrientation	()const										{ return m_qDerivedOrientation; }
+		inline const Point3r											&	GetScale				()const										{ return m_ptScale; }
+		inline Point3r														GetDerivedScale			()const										{ return m_ptDerivedScale; }
+		inline void															GetAxisAngle			( Point3r & p_axis, Angle & p_angle)		{ m_qOrientation.ToAxisAngle( p_axis, p_angle); }
+		inline bool															IsVisible				()const										{ return m_bVisible; }
+		inline bool															IsDisplayable			()const										{ return m_bDisplayable; }
+		inline SceneNode												*	GetParent				()const										{ return m_pParent; }
+		inline String														GetName					()const										{ return m_strName; }
+		inline const KeyedContainer< String, SceneNode *>::Map			&	GetChilds				()const										{ return m_mapChilds; }
+		inline const KeyedContainer< String, MovableObject *>::Map		&	GetAttachedObjects		()const										{ return m_mapAttachedObjects; }
+		inline KeyedContainer< String, SceneNode *>::Map				&	GetChilds				()											{ return m_mapChilds; }
+		inline KeyedContainer< String, MovableObject *>::Map			&	GetAttachedObjects		()											{ return m_mapAttachedObjects; }
+		inline SceneNode *													GetChild				( const String & p_name)					{ return (m_mapChilds.find( p_name) != m_mapChilds.end() ? m_mapChilds.find( p_name)->second : NULL); }
+		inline const Matrix4x4r &											GetRotationMatrix		()const										{ return m_mtxMatrix; }
+		inline void SetVisible		( bool p_visible)						{ m_bVisible = p_visible; }
+		inline void SetName			( const String & p_name)				{ m_strName = p_name; }
 		//@}
+
+	private:
+		bool _writeOne( Castor::Utils::File & p_file)const;
 	};
 }
 

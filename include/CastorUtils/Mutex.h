@@ -21,15 +21,13 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "MultiThreadConfig.h"
 #include "Memory.h"
 
-#	if CASTOR_MT_USE_BOOST
-#		include <boost/thread/recursive_mutex.hpp>
-#		include <boost/thread/mutex.hpp>
-#	endif
+#include <boost/thread/recursive_mutex.hpp>
+#include <boost/thread/mutex.hpp>
 
 namespace Castor
 { namespace MultiThreading
 {
-	//! Scoped lock templated class
+	//! Scoped lock template class
 	/*!
 	Class managing a lock/unlock of a mutex/recursive mutex inside a scope.
 	It's the only way to lock/unlock a mutex/recursive mutex.
@@ -81,7 +79,7 @@ namespace Castor
 		 */
 		bool TryLock()
 		{
-			m_bLocked = m_locker.TryLock()
+			m_bLocked = m_locker.TryLock();
 			return m_bLocked;
 		}
 		/**
@@ -89,7 +87,7 @@ namespace Castor
 		 */
 		bool TimeLock( unsigned long p_ulTimeOutMilliseconds)
 		{
-			m_bLocked = m_locker.TimeLock( p_ulTimeOutMilliseconds)
+			m_bLocked = m_locker.TimeLock( p_ulTimeOutMilliseconds);
 			return m_bLocked;
 		}
 		/**
@@ -132,7 +130,7 @@ namespace Castor
 	class Mutex : public Lockable<Mutex>, public MemoryTraced<Mutex>
 	{
 	private:
-		mutable void * m_pSemaphore;
+		mutable boost::mutex m_mutex;
 
 	public:
 		/**
@@ -161,7 +159,7 @@ namespace Castor
 	class RecursiveMutex : public Lockable<RecursiveMutex>, public MemoryTraced<RecursiveMutex>
 	{
 	private:
-		mutable void * m_pMutex;
+		mutable boost::recursive_mutex m_mutex;
 
 	public:
 		/**

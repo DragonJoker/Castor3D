@@ -194,7 +194,7 @@ namespace Castor
 				CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 				return _my_map::lower_bound( p_kKeyval);
 			}
-			const_iterator lower_bound( const _key_type & _Keyval)const
+			const_iterator lower_bound( const _key_type & p_kKeyval)const
 			{
 				CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 				return _my_map::lower_bound( p_kKeyval);
@@ -204,7 +204,7 @@ namespace Castor
 				CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 				return _my_map::upper_bound( p_kKeyval);
 			}
-			const_iterator upper_bound( const _key_type & _Keyval)const
+			const_iterator upper_bound( const _key_type & p_kKeyval)const
 			{
 				CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 				return _my_map::upper_bound( p_kKeyval);
@@ -250,8 +250,8 @@ namespace Castor
 			static inline void deleteAll( Castor::MultiThreading::Multimap <T, U *> & p_map)
 			{
 				CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( p_map.GetLocker());
-				typename Castor::MultiThreading::Multimap <T, U *> ::iterator i = p_map._my_map::begin();
-				const typename Castor::MultiThreading::Multimap <T, U *> ::iterator & iend = p_map._my_map::end();
+				typename Castor::MultiThreading::Multimap <T, U *> ::iterator i = p_map.begin();
+				const typename Castor::MultiThreading::Multimap <T, U *> ::iterator & iend = p_map.end();
 
 				for ( ; i != iend ; ++ i)
 				{
@@ -267,8 +267,8 @@ namespace Castor
 			static inline bool hasCouple( Castor::MultiThreading::Multimap <T, U> & p_map, const T & p_key, const U & p_subkey)
 			{
 				CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( p_map.GetLocker());
-				typename Castor::MultiThreading::Multimap <T, U> ::const_iterator i = p_map._my_map::find( p_key);
-				const typename Castor::MultiThreading::Multimap <T, U> ::const_iterator & iend = p_map._my_map::end();
+				typename Castor::MultiThreading::Multimap <T, U> ::const_iterator i = p_map.find( p_key);
+				const typename Castor::MultiThreading::Multimap <T, U> ::const_iterator & iend = p_map.end();
 
 				while (i != iend && i->first == p_key)
 				{
@@ -288,8 +288,8 @@ namespace Castor
 			static inline unsigned int count( MultiThreading::Multimap <T, U> & p_map, const T & p_key)
 			{
 				CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( p_map.GetLocker());
-				typename Castor::MultiThreading::Multimap <T, U> ::const_iterator i = p_map._my_map::find( p_key);
-				const typename Castor::MultiThreading::Multimap <T, U> ::const_iterator & iend = p_map._my_map::end();
+				typename Castor::MultiThreading::Multimap <T, U> ::const_iterator i = p_map.find( p_key);
+				const typename Castor::MultiThreading::Multimap <T, U> ::const_iterator & iend = p_map.end();
 
 				unsigned int l_count = 0;
 
@@ -308,7 +308,7 @@ namespace Castor
 			static inline bool has( Castor::MultiThreading::Multimap <T, U> & p_map, const T & p_key)
 			{
 				CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( p_map.GetLocker());
-				return p_map._my_map::find( p_key) != p_map._my_map::end();
+				return p_map.find( p_key) != p_map.end();
 			}
 			/**
 			 * Applies a function without argument to each argument of a multimap
@@ -317,8 +317,8 @@ namespace Castor
 			static inline void cycle( Castor::MultiThreading::Multimap <T, U *> & p_map, void( U::* p_func)( void))
 			{
 				CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( p_map.GetLocker());
-				typename Castor::MultiThreading::Multimap <T, U *> ::const_iterator i = p_map._my_map::begin();
-				const typename Castor::MultiThreading::Multimap <T, U *> ::const_iterator & iend = p_map._my_map::end();
+				typename Castor::MultiThreading::Multimap <T, U *> ::const_iterator i = p_map.begin();
+				const typename Castor::MultiThreading::Multimap <T, U *> ::const_iterator & iend = p_map.end();
 
 				for ( ; i != iend; ++ i)
 				{
@@ -332,8 +332,8 @@ namespace Castor
 			static inline void cycle( Castor::MultiThreading::Multimap <T, U *> & p_map, void( U::* p_func)( const Z &), const Z & p_param)
 			{
 				CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( p_map.GetLocker());
-				typename Castor::MultiThreading::Multimap <T, U *> :: const_iterator i = p_map._my_map::begin();
-				const typename Castor::MultiThreading::Multimap <T, U *> :: const_iterator & iend = p_map._my_map::end();
+				typename Castor::MultiThreading::Multimap <T, U *> :: const_iterator i = p_map.begin();
+				const typename Castor::MultiThreading::Multimap <T, U *> :: const_iterator & iend = p_map.end();
 
 				for ( ; i != iend; ++ i)
 				{
@@ -347,8 +347,8 @@ namespace Castor
 			static inline void cycle( Castor::MultiThreading::Multimap <T, U *> & p_map, void( U::* p_func)( Z &), Z & p_param)
 			{
 				CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( p_map.GetLocker());
-				typename Castor::MultiThreading::Multimap <T, U *> ::const_iterator i = p_map._my_map::begin();
-				const typename Castor::MultiThreading::Multimap <T, U *> ::const_iterator & iend = p_map._my_map::end();
+				typename Castor::MultiThreading::Multimap <T, U *> ::const_iterator i = p_map.begin();
+				const typename Castor::MultiThreading::Multimap <T, U *> ::const_iterator & iend = p_map.end();
 
 				for ( ; i != iend; ++ i)
 				{
@@ -362,8 +362,8 @@ namespace Castor
 			static inline void cycle( Castor::MultiThreading::Multimap <T, U *> & p_map, void( U::* p_func)( Z), const Z & p_param)
 			{
 				CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( p_map.GetLocker());
-				typename Castor::MultiThreading::Multimap <T, U *> ::const_iterator i = p_map._my_map::begin();
-				const typename Castor::MultiThreading::Multimap <T, U *> ::const_iterator & iend = p_map._my_map::end();
+				typename Castor::MultiThreading::Multimap <T, U *> ::const_iterator i = p_map.begin();
+				const typename Castor::MultiThreading::Multimap <T, U *> ::const_iterator & iend = p_map.end();
 
 				for ( ; i != iend; ++ i)
 				{

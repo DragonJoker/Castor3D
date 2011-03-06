@@ -1,9 +1,9 @@
-#include "GUICommon/PrecompiledHeader.h"
+#include "GuiCommon/PrecompiledHeader.h"
 
-#include "GUICommon/EnvironmentFrame.h"
+#include "GuiCommon/EnvironmentFrame.h"
 
 using namespace Castor3D;
-using namespace GUICommon;
+using namespace GuiCommon;
 
 EnvironmentFrame :: EnvironmentFrame( wxWindow * parent, const wxString & title,
 									  PassPtr p_pass, TextureEnvironmentPtr p_env,
@@ -13,30 +13,30 @@ EnvironmentFrame :: EnvironmentFrame( wxWindow * parent, const wxString & title,
 		m_pass( p_pass)
 {
 	int l_currentTop = 5;
-	TextureEnvironment::eRGB_COMBINATION l_RGBCombination = m_environment->GetRGBCombination();
+	TextureEnvironment::eRGB_COMBINATION l_RGBCombination = m_environment->GetRgbCombination();
 
-	if (l_RGBCombination != TextureEnvironment::eCCNone)
+	if (l_RGBCombination != TextureEnvironment::eRgbCombiNone)
 	{
-		m_RGBSources[0] = m_environment->GetRGBSource( 0, m_RGBTextures[0]);
-		m_RGBSources[1] = m_environment->GetRGBSource( 1, m_RGBTextures[1]);
-		m_RGBSources[2] = m_environment->GetRGBSource( 2, m_RGBTextures[2]);
-		m_RGBOperands[0] = m_environment->GetRGBOperand( 0);
-		m_RGBOperands[1] = m_environment->GetRGBOperand( 1);
-		m_RGBOperands[2] = m_environment->GetRGBOperand( 2);
+		m_RGBSources[0] = m_environment->GetRgbSource( 0, m_RGBTextures[0]);
+		m_RGBSources[1] = m_environment->GetRgbSource( 1, m_RGBTextures[1]);
+		m_RGBSources[2] = m_environment->GetRgbSource( 2, m_RGBTextures[2]);
+		m_RGBOperands[0] = m_environment->GetRgbOperand( 0);
+		m_RGBOperands[1] = m_environment->GetRgbOperand( 1);
+		m_RGBOperands[2] = m_environment->GetRgbOperand( 2);
 
 		_createRGBSourceCubeBox( 0, l_currentTop);
 		l_currentTop += 20;
 		_createRGBOperandCubeBox( 0, l_currentTop);
 		l_currentTop += 25;
 
-		if (l_RGBCombination != TextureEnvironment::eCCReplace)
+		if (l_RGBCombination != TextureEnvironment::eRgbCombiReplace)
 		{
 			_createRGBSourceCubeBox( 1, l_currentTop);
 			l_currentTop += 20;
 			_createRGBOperandCubeBox( 1, l_currentTop);
 			l_currentTop += 25;
 
-			if (l_RGBCombination == TextureEnvironment::eCCInterpolate)
+			if (l_RGBCombination == TextureEnvironment::eRgbCombiInterpolate)
 			{
 				_createRGBSourceCubeBox( 2, l_currentTop);
 				l_currentTop += 20;
@@ -46,9 +46,10 @@ EnvironmentFrame :: EnvironmentFrame( wxWindow * parent, const wxString & title,
 		}
 		l_currentTop += 5;
 	}
+
 	TextureEnvironment::eALPHA_COMBINATION l_AlphaCombination = m_environment->GetAlphaCombination();
 
-	if (l_AlphaCombination != TextureEnvironment::eACNone)
+	if (l_AlphaCombination != TextureEnvironment::eAlphaCombiNone)
 	{
 		m_AlphaSources[0] = m_environment->GetAlphaSource( 0, m_AlphaTextures[0]);
 		m_AlphaSources[1] = m_environment->GetAlphaSource( 1, m_AlphaTextures[1]);
@@ -62,14 +63,14 @@ EnvironmentFrame :: EnvironmentFrame( wxWindow * parent, const wxString & title,
 		_createAlphaOperandCubeBox( 0, l_currentTop);
 		l_currentTop += 25;
 
-		if (l_AlphaCombination != TextureEnvironment::eACReplace)
+		if (l_AlphaCombination != TextureEnvironment::eAlphaCombiReplace)
 		{
 			_createAlphaSourceCubeBox( 1, l_currentTop);
 			l_currentTop += 20;
 			_createAlphaOperandCubeBox( 1, l_currentTop);
 			l_currentTop += 25;
 
-			if (l_AlphaCombination == TextureEnvironment::eACInterpolate)
+			if (l_AlphaCombination == TextureEnvironment::eAlphaCombiInterpolate)
 			{
 				_createAlphaSourceCubeBox( 2, l_currentTop);
 				l_currentTop += 20;
@@ -97,7 +98,7 @@ void EnvironmentFrame :: _createRGBSourceCubeBox( unsigned int p_index, int p_cu
 		return;
 	}
 	int l_textureIndex = 0;
-	TextureEnvironment::eCOMBINATION_SOURCE l_source = m_environment->GetRGBSource( p_index, l_textureIndex);
+	TextureEnvironment::eCOMBINATION_SOURCE l_source = m_environment->GetRgbSource( p_index, l_textureIndex);
 	unsigned int l_nbUnits = m_pass->GetNbTexUnits();
 	unsigned int l_nbChoices = 4 + l_nbUnits;
 	wxString * l_choices = new wxString[l_nbChoices];
@@ -114,16 +115,16 @@ void EnvironmentFrame :: _createRGBSourceCubeBox( unsigned int p_index, int p_cu
 	}
 	switch (l_source)
 	{
-		case TextureEnvironment::eSrcCurrentTexture : l_value = CU_T( "Current Texture");break;
-		case TextureEnvironment::eSrcConstant : l_value = CU_T( "Constant");break;
-		case TextureEnvironment::eSrcPrevious : l_value = CU_T( "Previous");break;
-		case TextureEnvironment::eSrcPrimaryColour : l_value = CU_T( "Primary Colour");break;
-		case TextureEnvironment::eSrcTexture :
+		case TextureEnvironment::eCombiSrcCurrentTexture : l_value = CU_T( "Current Texture");break;
+		case TextureEnvironment::eCombiSrcConstant : l_value = CU_T( "Constant");break;
+		case TextureEnvironment::eCombiSrcPrevious : l_value = CU_T( "Previous");break;
+		case TextureEnvironment::eCombiSrcPrimaryColour : l_value = CU_T( "Primary Colour");break;
+		case TextureEnvironment::eCombiSrcTexture :
 			l_value = CU_T( "Texture ");
 			l_value << l_textureIndex;
 		break;
 	}
-	std::cout << "RGB source " << p_index << " : " << l_value.char_str() << " (" << l_source << ")\n";
+//	std::cout << "RGB source " << p_index << " : " << l_value.char_str() << " (" << l_source << ")\n";
 	wxString l_text = CU_T( "RGB Source ");
 	l_text << p_index;
 	new wxStaticText( this, wxID_ANY, l_text, wxPoint( 5, p_currentTop), wxSize( 80, 20));
@@ -140,7 +141,7 @@ void EnvironmentFrame :: _createRGBOperandCubeBox( unsigned int p_index, int p_c
 	{
 		return;
 	}
-	TextureEnvironment::eRGB_OPERAND l_operand = m_environment->GetRGBOperand( p_index);
+	TextureEnvironment::eRGB_OPERAND l_operand = m_environment->GetRgbOperand( p_index);
 	unsigned int l_nbChoices = 4;
 	wxString * l_choices = new wxString[l_nbChoices];
 	l_choices[0] = CU_T( "Source Colour");
@@ -150,13 +151,13 @@ void EnvironmentFrame :: _createRGBOperandCubeBox( unsigned int p_index, int p_c
 	wxString l_value;
 	switch (l_operand)
 	{
-		case TextureEnvironment::eCOSrcColour : l_value = CU_T( "Source Colour");break;
-		case TextureEnvironment::eCOOneMinusSrcColour : l_value = CU_T( "One Minus Source Colour");break;
-		case TextureEnvironment::eCOSrcAlpha : l_value = CU_T( "Source Alpha");break;
-		case TextureEnvironment::eCOOneMinusSrcAlpha : l_value = CU_T( "One Minus Source Alpha");break;
+		case TextureEnvironment::eRgbOpeSrcColour : l_value = CU_T( "Source Colour");break;
+		case TextureEnvironment::eRgbOpeOneMinusSrcColour : l_value = CU_T( "One Minus Source Colour");break;
+		case TextureEnvironment::eRgbOpeSrcAlpha : l_value = CU_T( "Source Alpha");break;
+		case TextureEnvironment::eRgbOpeOneMinusSrcAlpha : l_value = CU_T( "One Minus Source Alpha");break;
 		break;
 	}
-	std::cout << "RGB operand " << p_index << " : " << l_value.char_str() << " (" << l_operand << ")\n";
+//	std::cout << "RGB operand " << p_index << " : " << l_value.char_str() << " (" << l_operand << ")\n";
 	wxString l_text = CU_T( "RGB Operand ");
 	l_text << p_index;
 	new wxStaticText( this, wxID_ANY, l_text, wxPoint( 5, p_currentTop), wxSize( 80, 20));
@@ -191,11 +192,11 @@ void EnvironmentFrame :: _createAlphaSourceCubeBox( unsigned int p_index, int p_
 	}
 	switch (l_source)
 	{
-		case TextureEnvironment::eSrcCurrentTexture : l_value = CU_T( "Current Texture");break;
-		case TextureEnvironment::eSrcConstant : l_value = CU_T( "Constant");break;
-		case TextureEnvironment::eSrcPrevious : l_value = CU_T( "Previous");break;
-		case TextureEnvironment::eSrcPrimaryColour : l_value = CU_T( "Primary Colour");break;
-		case TextureEnvironment::eSrcTexture :
+		case TextureEnvironment::eCombiSrcCurrentTexture : l_value = CU_T( "Current Texture");break;
+		case TextureEnvironment::eCombiSrcConstant : l_value = CU_T( "Constant");break;
+		case TextureEnvironment::eCombiSrcPrevious : l_value = CU_T( "Previous");break;
+		case TextureEnvironment::eCombiSrcPrimaryColour : l_value = CU_T( "Primary Colour");break;
+		case TextureEnvironment::eCombiSrcTexture :
 			l_value = CU_T( "Texture ");
 			l_value << l_textureIndex;
 		break;
@@ -224,8 +225,8 @@ void EnvironmentFrame :: _createAlphaOperandCubeBox( unsigned int p_index, int p
 	wxString l_value;
 	switch (l_operand)
 	{
-		case TextureEnvironment::eAOSrcAlpha : l_value = CU_T( "Source Alpha");break;
-		case TextureEnvironment::eAOOneMinusSrcAlpha : l_value = CU_T( "One Minus Source Alpha");break;
+		case TextureEnvironment::eAlphaOpeSrcAlpha : l_value = CU_T( "Source Alpha");break;
+		case TextureEnvironment::eAlphaOpeOneMinusSrcAlpha : l_value = CU_T( "One Minus Source Alpha");break;
 		break;
 	}
 	wxString l_text = CU_T( "Alpha Operand ");
@@ -244,26 +245,26 @@ void EnvironmentFrame :: _onRGBSourceSelect( size_t p_uiIndex)
 
 	if  (l_value == CU_T( "Current Texture"))
 	{
-		m_environment->SetRGBSource( p_uiIndex, TextureEnvironment::eSrcCurrentTexture);
+		m_environment->SetRgbSource( p_uiIndex, TextureEnvironment::eCombiSrcCurrentTexture);
 	}
 	else if (l_value == CU_T( "Constant"))
 	{
-		m_environment->SetRGBSource( p_uiIndex, TextureEnvironment::eSrcConstant);
+		m_environment->SetRgbSource( p_uiIndex, TextureEnvironment::eCombiSrcConstant);
 	}
 	else if (l_value == CU_T( "Previous"))
 	{
-		m_environment->SetRGBSource( p_uiIndex, TextureEnvironment::eSrcPrevious);
+		m_environment->SetRgbSource( p_uiIndex, TextureEnvironment::eCombiSrcPrevious);
 	}
 	else if (l_value == CU_T( "Primary Colour"))
 	{
-		m_environment->SetRGBSource( p_uiIndex, TextureEnvironment::eSrcPrimaryColour);
+		m_environment->SetRgbSource( p_uiIndex, TextureEnvironment::eCombiSrcPrimaryColour);
 	}
 	else
 	{
 		l_value = l_value.substr( 0, l_value.find_last_of( ' '));
 		l_value.Trim();
 		int l_index = atoi( l_value.c_str());
-		m_environment->SetRGBSource( p_uiIndex, TextureEnvironment::eSrcTexture, l_index);
+		m_environment->SetRgbSource( p_uiIndex, TextureEnvironment::eCombiSrcTexture, l_index);
 	}
 }
 
@@ -273,19 +274,19 @@ void EnvironmentFrame :: _onRGBOperandSelect( size_t p_uiIndex)
 
 	if  (l_value == CU_T( "Source Colour"))
 	{
-		m_environment->SetRGBOperand( p_uiIndex, TextureEnvironment::eCOSrcColour);
+		m_environment->SetRgbOperand( p_uiIndex, TextureEnvironment::eRgbOpeSrcColour);
 	}
 	else if (l_value == CU_T( "One Minus Source Colour"))
 	{
-		m_environment->SetRGBOperand( p_uiIndex, TextureEnvironment::eCOOneMinusSrcColour);
+		m_environment->SetRgbOperand( p_uiIndex, TextureEnvironment::eRgbOpeOneMinusSrcColour);
 	}
 	else if (l_value == CU_T( "Source Alpha"))
 	{
-		m_environment->SetRGBOperand( p_uiIndex, TextureEnvironment::eCOSrcAlpha);
+		m_environment->SetRgbOperand( p_uiIndex, TextureEnvironment::eRgbOpeSrcAlpha);
 	}
 	else if (l_value == CU_T( "One Minus Source Alpha"))
 	{
-		m_environment->SetRGBOperand( p_uiIndex, TextureEnvironment::eCOOneMinusSrcAlpha);
+		m_environment->SetRgbOperand( p_uiIndex, TextureEnvironment::eRgbOpeOneMinusSrcAlpha);
 	}
 }
 
@@ -295,26 +296,26 @@ void EnvironmentFrame :: _onAlphaSourceSelect( size_t p_uiIndex)
 
 	if  (l_value == CU_T( "Current Texture"))
 	{
-		m_environment->SetAlphaSource( p_uiIndex, TextureEnvironment::eSrcCurrentTexture);
+		m_environment->SetAlphaSource( p_uiIndex, TextureEnvironment::eCombiSrcCurrentTexture);
 	}
 	else if (l_value == CU_T( "Constant"))
 	{
-		m_environment->SetAlphaSource( p_uiIndex, TextureEnvironment::eSrcConstant);
+		m_environment->SetAlphaSource( p_uiIndex, TextureEnvironment::eCombiSrcConstant);
 	}
 	else if (l_value == CU_T( "Previous"))
 	{
-		m_environment->SetAlphaSource( p_uiIndex, TextureEnvironment::eSrcPrevious);
+		m_environment->SetAlphaSource( p_uiIndex, TextureEnvironment::eCombiSrcPrevious);
 	}
 	else if (l_value == CU_T( "Primary Colour"))
 	{
-		m_environment->SetAlphaSource( p_uiIndex, TextureEnvironment::eSrcPrimaryColour);
+		m_environment->SetAlphaSource( p_uiIndex, TextureEnvironment::eCombiSrcPrimaryColour);
 	}
 	else
 	{
 		l_value = l_value.substr( 0, l_value.find_last_of( ' '));
 		l_value.Trim();
 		int l_index = atoi( l_value.c_str());
-		m_environment->SetAlphaSource( p_uiIndex, TextureEnvironment::eSrcTexture, l_index);
+		m_environment->SetAlphaSource( p_uiIndex, TextureEnvironment::eCombiSrcTexture, l_index);
 	}
 }
 
@@ -324,11 +325,11 @@ void EnvironmentFrame :: _onAlphaOperandSelect( size_t p_uiIndex)
 
 	if (l_value == CU_T( "Source Alpha"))
 	{
-		m_environment->SetAlphaOperand( p_uiIndex, TextureEnvironment::eAOSrcAlpha);
+		m_environment->SetAlphaOperand( p_uiIndex, TextureEnvironment::eAlphaOpeSrcAlpha);
 	}
 	else if (l_value == CU_T( "One Minus Source Alpha"))
 	{
-		m_environment->SetAlphaOperand( p_uiIndex, TextureEnvironment::eAOOneMinusSrcAlpha);
+		m_environment->SetAlphaOperand( p_uiIndex, TextureEnvironment::eAlphaOpeOneMinusSrcAlpha);
 	}
 }
 
@@ -356,39 +357,39 @@ void EnvironmentFrame :: _onOK( wxCommandEvent & event)
 
 void EnvironmentFrame :: _onCancel( wxCommandEvent & event)
 {
-	TextureEnvironment::eRGB_COMBINATION l_RGBCombination = m_environment->GetRGBCombination();
+	TextureEnvironment::eRGB_COMBINATION l_RGBCombination = m_environment->GetRgbCombination();
 
-	if (l_RGBCombination != TextureEnvironment::eCCNone)
+	if (l_RGBCombination != TextureEnvironment::eRgbCombiNone)
 	{
-		m_environment->SetRGBSource( 0, m_RGBSources[0], m_RGBTextures[0]);
-		m_environment->SetRGBOperand( 0, m_RGBOperands[0]);
+		m_environment->SetRgbSource( 0, m_RGBSources[0], m_RGBTextures[0]);
+		m_environment->SetRgbOperand( 0, m_RGBOperands[0]);
 
-		if (l_RGBCombination != TextureEnvironment::eCCReplace)
+		if (l_RGBCombination != TextureEnvironment::eRgbCombiReplace)
 		{
-			m_environment->SetRGBSource( 1, m_RGBSources[1], m_RGBTextures[1]);
-			m_environment->SetRGBOperand( 1, m_RGBOperands[1]);
+			m_environment->SetRgbSource( 1, m_RGBSources[1], m_RGBTextures[1]);
+			m_environment->SetRgbOperand( 1, m_RGBOperands[1]);
 
-			if (l_RGBCombination == TextureEnvironment::eCCInterpolate)
+			if (l_RGBCombination == TextureEnvironment::eRgbCombiInterpolate)
 			{
-				m_environment->SetRGBSource( 2, m_RGBSources[2], m_RGBTextures[2]);
-				m_environment->SetRGBOperand( 2, m_RGBOperands[2]);
+				m_environment->SetRgbSource( 2, m_RGBSources[2], m_RGBTextures[2]);
+				m_environment->SetRgbOperand( 2, m_RGBOperands[2]);
 			}
 		}
 	}
 
 	TextureEnvironment::eALPHA_COMBINATION l_AlphaCombination = m_environment->GetAlphaCombination();
 
-	if (l_AlphaCombination != TextureEnvironment::eACNone)
+	if (l_AlphaCombination != TextureEnvironment::eAlphaCombiNone)
 	{
 		m_environment->SetAlphaSource( 0, m_AlphaSources[0], m_AlphaTextures[0]);
 		m_environment->SetAlphaOperand( 0, m_AlphaOperands[0]);
 
-		if (l_AlphaCombination != TextureEnvironment::eACReplace)
+		if (l_AlphaCombination != TextureEnvironment::eAlphaCombiReplace)
 		{
 			m_environment->SetAlphaSource( 1, m_AlphaSources[1], m_AlphaTextures[1]);
 			m_environment->SetAlphaOperand( 1, m_AlphaOperands[1]);
 
-			if (l_AlphaCombination == TextureEnvironment::eACInterpolate)
+			if (l_AlphaCombination == TextureEnvironment::eAlphaCombiInterpolate)
 			{
 				m_environment->SetAlphaSource( 2, m_AlphaSources[2], m_AlphaTextures[2]);
 				m_environment->SetAlphaOperand( 2, m_AlphaOperands[2]);

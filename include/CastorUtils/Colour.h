@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Point.h"
 
+#undef RGB
+
 namespace Castor
 {	namespace Math
 {
@@ -29,67 +31,100 @@ namespace Castor
 	\author Sylvain DOREMUS
 	\date 14/08/2010
 	*/
-	class Colour : public Point4f
+	class Colour : public Point4f, public Utils::Textable
 	{
 	public:
-		static Colour FullAlphaWhite;
-		static Colour FullAlphaBlack;
-		static Colour FullAlphaRed;
-		static Colour FullAlphaGreen;
-		static Colour FullAlphaBlue;
-		static Colour FullAlphaDarkRed;
-		static Colour FullAlphaDarkGreen;
-		static Colour FullAlphaDarkBlue;
-		static Colour FullAlphaLightRed;
-		static Colour FullAlphaLightGreen;
-		static Colour FullAlphaLightBlue;
+		static const Colour FullAlphaWhite;
+		static const Colour FullAlphaBlack;
+		static const Colour FullAlphaRed;
+		static const Colour FullAlphaGreen;
+		static const Colour FullAlphaBlue;
+		static const Colour FullAlphaDarkRed;
+		static const Colour FullAlphaDarkGreen;
+		static const Colour FullAlphaDarkBlue;
+		static const Colour FullAlphaLightRed;
+		static const Colour FullAlphaLightGreen;
+		static const Colour FullAlphaLightBlue;
 
-		static Colour HighAlphaWhite;
-		static Colour HighAlphaBlack;
-		static Colour HighAlphaRed;
-		static Colour HighAlphaGreen;
-		static Colour HighAlphaBlue;
-		static Colour HighAlphaDarkRed;
-		static Colour HighAlphaDarkGreen;
-		static Colour HighAlphaDarkBlue;
-		static Colour HighAlphaLightRed;
-		static Colour HighAlphaLightGreen;
-		static Colour HighAlphaLightBlue;
+		static const Colour HighAlphaWhite;
+		static const Colour HighAlphaBlack;
+		static const Colour HighAlphaRed;
+		static const Colour HighAlphaGreen;
+		static const Colour HighAlphaBlue;
+		static const Colour HighAlphaDarkRed;
+		static const Colour HighAlphaDarkGreen;
+		static const Colour HighAlphaDarkBlue;
+		static const Colour HighAlphaLightRed;
+		static const Colour HighAlphaLightGreen;
+		static const Colour HighAlphaLightBlue;
 
-		static Colour MediumAlphaWhite;
-		static Colour MediumAlphaBlack;
-		static Colour MediumAlphaRed;
-		static Colour MediumAlphaGreen;
-		static Colour MediumAlphaBlue;
-		static Colour MediumAlphaDarkRed;
-		static Colour MediumAlphaDarkGreen;
-		static Colour MediumAlphaDarkBlue;
-		static Colour MediumAlphaLightRed;
-		static Colour MediumAlphaLightGreen;
-		static Colour MediumAlphaLightBlue;
+		static const Colour MediumAlphaWhite;
+		static const Colour MediumAlphaBlack;
+		static const Colour MediumAlphaRed;
+		static const Colour MediumAlphaGreen;
+		static const Colour MediumAlphaBlue;
+		static const Colour MediumAlphaDarkRed;
+		static const Colour MediumAlphaDarkGreen;
+		static const Colour MediumAlphaDarkBlue;
+		static const Colour MediumAlphaLightRed;
+		static const Colour MediumAlphaLightGreen;
+		static const Colour MediumAlphaLightBlue;
 
-		static Colour LowAlphaWhite;
-		static Colour LowAlphaBlack;
-		static Colour LowAlphaRed;
-		static Colour LowAlphaGreen;
-		static Colour LowAlphaBlue;
-		static Colour LowAlphaDarkRed;
-		static Colour LowAlphaDarkGreen;
-		static Colour LowAlphaDarkBlue;
-		static Colour LowAlphaLightRed;
-		static Colour LowAlphaLightGreen;
-		static Colour LowAlphaLightBlue;
+		static const Colour LowAlphaWhite;
+		static const Colour LowAlphaBlack;
+		static const Colour LowAlphaRed;
+		static const Colour LowAlphaGreen;
+		static const Colour LowAlphaBlue;
+		static const Colour LowAlphaDarkRed;
+		static const Colour LowAlphaDarkGreen;
+		static const Colour LowAlphaDarkBlue;
+		static const Colour LowAlphaLightRed;
+		static const Colour LowAlphaLightGreen;
+		static const Colour LowAlphaLightBlue;
 
-		static Colour Transparent;
+		static const Colour Transparent;
 
 	public:
-		Colour( float p_r=0, float p_g=0, float p_b=0, float p_a=0)
-		{
-			m_coords[0] = p_r;
-			m_coords[1] = p_g;
-			m_coords[2] = p_b;
-			m_coords[3] = p_a;
-		}
+		Colour( float p_r=0, float p_g=0, float p_b=0, float p_a=0);
+		Colour( unsigned char p_r, unsigned char p_g, unsigned char p_b, unsigned char p_a);
+
+		/**@name Conversions between float and unsigned char */
+		//@{
+		//@}
+
+		/**@name Inherited methods from Textable */
+		//@{
+		virtual bool Write( Utils::File & p_file)const;
+		virtual bool Read( Utils::File & p_file);
+		//@}
+
+		/**@name Accessors */
+		//@{
+		float & 		Red		()		{ return at( 0); }
+		float & 		Green	()		{ return at( 1); }
+		float & 		Blue	()		{ return at( 2); }
+		float & 		Alpha	()		{ return at( 3); }
+		const float & 	Red		()const	{ return at( 0); }
+		const float & 	Green	()const	{ return at( 1); }
+		const float & 	Blue	()const	{ return at( 2); }
+		const float & 	Alpha	()const	{ return at( 3); }
+		//@}
+
+		/**@name Convertors */
+		//@{
+		void 			CharRGB		( Point<unsigned char, 3> & p_ptResult)const;
+		void 			CharBGR		( Point<unsigned char, 3> & p_ptResult)const;
+		void 			CharRGBA	( Point<unsigned char, 4> & p_ptResult)const;
+		void 			CharBGRA	( Point<unsigned char, 4> & p_ptResult)const;
+		void 			CharARGB	( Point<unsigned char, 4> & p_ptResult)const;
+		void 			CharABGR	( Point<unsigned char, 4> & p_ptResult)const;
+		Point3f			RGB			()const { return Point3f( const_ptr()); }
+		Point4f			RGBA		()const { return Point4f( const_ptr()); }
+		Point4f			ARGB		()const { return Point4f( at( 3), at( 0), at( 1), at( 2)); }
+		Point4f			ABGR		()const { return Point4f( at( 3), at( 2), at( 1), at( 0)); }
+		Point4f			BGRA		()const { return Point4f( at( 2), at( 1), at( 0), at( 3)); }
+		unsigned long	ToLong		()const;
+		//@}
 	};
 }
 }

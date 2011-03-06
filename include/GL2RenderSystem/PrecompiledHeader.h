@@ -15,8 +15,8 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL2_PrecompiledHeader___
-#define ___GL2_PrecompiledHeader___
+#ifndef ___Gl2_PrecompiledHeader___
+#define ___Gl2_PrecompiledHeader___
 
 #	ifndef CHECK_MEMORYLEAKS
 #		ifdef _DEBUG
@@ -26,22 +26,29 @@ http://www.gnu.org/copyleft/lesser.txt.
 #		endif
 #	endif
 
+#include <string>
+/*
 #pragma message( "********************************************************************")
-#pragma message( "	GL2RenderSystem")
+#pragma message( "	Gl2RenderSystem")
 
 #if CHECK_MEMORYLEAKS
 #	pragma message( "		Checking Memory leaks")
 #endif
+*/
 #include <CastorUtils/Memory.h>
 
 #	include <CastorUtils/PreciseTimer.h>
 
-#	include <GL/glew.h>
-#	ifdef WIN32
-#		include <GL/wglew.h>
+#	include <OpenGlCommon/glew.h>
+#	ifdef _WIN32
+#		include <OpenGlCommon/wglew.h>
+#	else
+#		ifdef __GNUG__
+#			include <OpenGlCommon/glxew.h>
+#		endif
 #	endif
 
-#	include <Cg/cggl.h>
+#	include <Cg/cgGL.h>
 
 #	include <CastorUtils/Value.h>
 using namespace Castor::Templates;
@@ -92,33 +99,35 @@ using namespace Castor::Utils;
 #	include <Castor3D/shader/ShaderManager.h>
 #	include <Castor3D/shader/ShaderObject.h>
 #	include <Castor3D/shader/FrameVariable.h>
+#	include <Castor3D/shader/Cg/CgFrameVariable.h>
 #	include <Castor3D/render_system/RenderSystem.h>
 #	include <Castor3D/render_system/Buffer.h>
+#	include <Castor3D/render_system/BufferElement.h>
 #	include <Castor3D/overlay/OverlayManager.h>
 #	include <Castor3D/overlay/Overlay.h>
 #	include <Castor3D/Log.h>
 
-#	include <OpenGLCommon/GLBuffer.h>
-#	include <OpenGLCommon/GLFrameVariable.h>
-#	include <OpenGLCommon/GLShaderObject.h>
-#	include <OpenGLCommon/GLShaderProgram.h>
-#	include <OpenGLCommon/CgGLFrameVariable.h>
-#	include <OpenGLCommon/CgGLShaderObject.h>
-#	include <OpenGLCommon/CgGLShaderProgram.h>
-#	include <OpenGLCommon/GLContext.h>
-#	include <OpenGLCommon/GLPipeline.h>
-#	include <OpenGLCommon/GLRenderSystem.h>
-#	include <OpenGLCommon/GLCameraRenderer.h>
-#	include <OpenGLCommon/GLTexEnvironmentRenderer.h>
-#	include <OpenGLCommon/GLOverlayRenderer.h>
-#	include <OpenGLCommon/GLLightRenderer.h>
-#	include <OpenGLCommon/GLMaterialRenderer.h>
-#	include <OpenGLCommon/GLTextureRenderer.h>
+#	include <OpenGlCommon/GlBuffer.h>
+#	include <OpenGlCommon/GlFrameVariable.h>
+#	include <OpenGlCommon/GlShaderObject.h>
+#	include <OpenGlCommon/GlShaderProgram.h>
+#	include <OpenGlCommon/CgGlFrameVariable.h>
+#	include <OpenGlCommon/CgGlShaderObject.h>
+#	include <OpenGlCommon/CgGlShaderProgram.h>
+#	include <OpenGlCommon/GlContext.h>
+#	include <OpenGlCommon/GlPipeline.h>
+#	include <OpenGlCommon/GlRenderSystem.h>
+#	include <OpenGlCommon/GlCameraRenderer.h>
+#	include <OpenGlCommon/GlTexEnvironmentRenderer.h>
+#	include <OpenGlCommon/GlOverlayRenderer.h>
+#	include <OpenGlCommon/GlLightRenderer.h>
+#	include <OpenGlCommon/GlMaterialRenderer.h>
+#	include <OpenGlCommon/GlTextureRenderer.h>
 
 #	include <fstream>
 #	include <set>
 
-#pragma message( "********************************************************************")
+//#pragma message( "********************************************************************")
 
 using namespace Castor::Utils;
 

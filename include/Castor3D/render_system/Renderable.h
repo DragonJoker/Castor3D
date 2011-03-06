@@ -21,7 +21,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "../Prerequisites.h"
 #include "Renderer.h"
 #include "RenderSystem.h"
-#include "../main/Serialisable.h"
 
 namespace Castor3D
 {
@@ -36,10 +35,10 @@ namespace Castor3D
 	\date 29/10/2010
 	*/
 	template <class _Renderable, class _Renderer>
-	class Renderable : public Serialisable, public MemoryTraced<_Renderable>
+	class Renderable : public MemoryTraced<_Renderable>
 	{
 	private:
-		typedef typename Templates::SmartPtr<_Renderer>::Shared renderer_type;
+		typedef typename Templates::shared_ptr<_Renderer> renderer_type;
 
 	protected:
 		renderer_type m_pRenderer;
@@ -79,7 +78,7 @@ namespace Castor3D
 		 * Main render function, to be implemented by every derivated class
 		 *@param p_displayMode : [in] information about the draw type (triangles, lines, ...)
 		 */
-		virtual void Render( eDRAW_TYPE p_displayMode)=0;
+		virtual void Render( ePRIMITIVE_TYPE p_displayMode)=0;
 		/**
 		 * Remove from render function, base implementation is dummy, so derivated classes
 		 * may or not implement a new behaviour for it

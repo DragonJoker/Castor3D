@@ -18,8 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_Light___
 #define ___C3D_Light___
 
-#include "../render_system/Renderable.h"
 #include "../main/MovableObject.h"
+#include "../render_system/Renderable.h"
 
 namespace Castor3D
 {
@@ -41,18 +41,19 @@ namespace Castor3D
 		{
 			eDirectional,	//!< Directional light type
 			ePoint,			//!< Point light type
-			eSpot			//!< Spot light type
+			eSpot,			//!< Spot light type
+			eNbLightTypes,
 		}
-		eTYPE;
+		eLIGHT_TYPE;
 
 	protected:
 		friend class Scene;
-		String m_name;				//!< The light name
 		bool m_enabled;				//!< Tells if the light is enabled (for the 8 active lights law)
 		Colour m_ambient;			//!< The ambient colour values (RGBA)
 		Colour m_diffuse;			//!< The diffuse colour values (RGBA)
 		Colour m_specular;			//!< The specular colour values (RGBA)
 		Point4r m_ptPositionType;	//!< The position and type of the light (type is in 4th coordinate)
+		eLIGHT_TYPE m_eLightType;	//!< The light type
 
 	protected:
 		/**
@@ -60,7 +61,7 @@ namespace Castor3D
 		 *@param p_pNode : [in] The light's parent node
 		 *@param p_name : [in] The light's name, default is void
 		 */
-		Light( SceneNodePtr p_pNode, const String & p_name);
+		Light( Scene * p_pScene, SceneNodePtr p_pNode, const String & p_name, eLIGHT_TYPE p_eLightType);
 
 	public:
 		/**
@@ -79,7 +80,7 @@ namespace Castor3D
 		 * Renders the light => Applies it's position
 		 *@param p_displayMode : [in] The display mode
 		 */
-		virtual void Render( eDRAW_TYPE p_displayMode);
+		virtual void Render( ePRIMITIVE_TYPE p_displayMode);
 		/**
 		 * Renders the light => Applies it's position
 		 */
@@ -136,20 +137,33 @@ namespace Castor3D
 		 */
 		void SetSpecular( const Colour & p_specular);
 		/**
-		 * Writes the light in a file
-		 *@param p_file : a pointer to file to write in
-		 */
-		virtual bool Write( Castor::Utils::File & p_file)const;
-		/**
-		 * Reads the light from a file
-		 *@param p_file : a pointer to file to read from
-		 */
-		virtual bool Read( Castor::Utils::File & p_file){ return true; }
-		/**
 		 * Attaches this light to a Node
 		 *@param p_pNode : [in] The new light's parent node
 		 */
 		virtual void AttachTo( SceneNode * p_pNode);
+
+		/**@name Inherited methods from Textable */
+		//@{
+		virtual bool Write( File & p_file)const;
+		virtual bool Read( File & p_file) { return false; }
+		//@}
+
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
+
+		/**@name Accessors */
+		//@{
+		virtual eLIGHT_TYPE		GetLightType	()const { return m_eLightType; }
+		inline bool				IsEnabled		()const { return m_enabled; }
+		inline const Colour &	GetAmbient		()const { return m_ambient; }
+		inline const Colour &	GetDiffuse		()const { return m_diffuse; }
+		inline const Colour &	GetSpecular		()const { return m_specular; }
+		inline const Point4r &	GetPositionType	()const { return m_ptPositionType; }
+		inline void SetEnabled( bool p_enabled){m_enabled = p_enabled;(m_enabled? _apply() : _remove());}
+		//@}
 		
 	protected:
 		/**
@@ -166,43 +180,6 @@ namespace Castor3D
 		 * Disables the light
 		 */
 		void _remove();
-
-	public:
-		/**@name Accessors */
-		//@{
-		/**
-		 * Virtual function which returns the light type.
-		 * Must be implemented for each new light type
-		 */
-		virtual eTYPE			GetLightType	()const { return eTYPE( -1); }
-		/**
-		 *@return The light name
-		 */
-		inline String			GetName			()const { return m_name; }
-		/**
-		 *@returns The enable status
-		 */
-		inline bool				IsEnabled		()const { return m_enabled; }
-		/**
-		 *@return The ambient colour value (RGBA)
-		 */
-		inline const Colour &	GetAmbient		()const { return m_ambient; }
-		/**
-		 *@return The diffuse colour value (RGBA)
-		 */
-		inline const Colour &	GetDiffuse		()const { return m_diffuse; }
-		/**
-		 *@return The specular colour value (RGBA)
-		 */
-		inline const Colour &	GetSpecular		()const { return m_specular; }
-
-		inline const Point4r &	GetPositionType	()const { return m_ptPositionType; }
-		/**
-		 * Sets the enabled status, applies or remove the light
-		 *@param p_enabled : The new enable status
-		 */
-		inline void SetEnabled( bool p_enabled){m_enabled = p_enabled;(m_enabled? _apply() : _remove());}
-		//@}
 	};
 	//! The Light renderer
 	/*!

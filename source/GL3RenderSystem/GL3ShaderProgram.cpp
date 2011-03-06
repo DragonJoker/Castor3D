@@ -1,19 +1,19 @@
-#include "GL3RenderSystem/PrecompiledHeader.h"
+#include "Gl3RenderSystem/PrecompiledHeader.h"
 
-#include "GL3RenderSystem/GL3ShaderProgram.h"
-#include "GL3RenderSystem/GL3RenderSystem.h"
-#include "GL3RenderSystem/GL3Buffer.h"
-#include "GL3RenderSystem/GL3LightRenderer.h"
+#include "Gl3RenderSystem/Gl3ShaderProgram.h"
+#include "Gl3RenderSystem/Gl3RenderSystem.h"
+#include "Gl3RenderSystem/Gl3Buffer.h"
+#include "Gl3RenderSystem/Gl3LightRenderer.h"
 
 using namespace Castor3D;
 
-GL3ShaderProgram :: GL3ShaderProgram()
-	:	GLShaderProgram()
+Gl3ShaderProgram :: Gl3ShaderProgram()
+	:	GlShaderProgram()
 {
 }
 
-GL3ShaderProgram :: GL3ShaderProgram( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile)
-	:	GLShaderProgram( p_vertexShaderFile, p_fragmentShaderFile, p_geometryShaderFile)
+Gl3ShaderProgram :: Gl3ShaderProgram( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile)
+	:	GlShaderProgram( p_vertexShaderFile, p_fragmentShaderFile, p_geometryShaderFile)
 {
 	m_setFreeLights.insert( std::set<int>::value_type( 0));
 	m_setFreeLights.insert( std::set<int>::value_type( 1));
@@ -25,100 +25,100 @@ GL3ShaderProgram :: GL3ShaderProgram( const String & p_vertexShaderFile, const S
 	m_setFreeLights.insert( std::set<int>::value_type( 7));
 }
 
-GL3ShaderProgram :: ~GL3ShaderProgram()
+Gl3ShaderProgram :: ~Gl3ShaderProgram()
 {
 }
 
-bool GL3ShaderProgram :: Link()
+bool Gl3ShaderProgram :: Link()
 {
-	if (GLShaderProgram::Link())
+	if (GlShaderProgram::Link())
 	{
-		SmartPtr< OneFrameVariable<float> >::Shared l_fUniform;
-		SmartPtr< PointFrameVariable<float, 4> >::Shared l_pt4Uniform;
-		SmartPtr< PointFrameVariable<float, 3> >::Shared l_pt3Uniform;
-		SmartPtr< MatrixFrameVariable<float, 4, 4> >::Shared l_mtxUniform;
+		shared_ptr< OneFrameVariable<float> > l_fUniform;
+		shared_ptr< PointFrameVariable<float, 4> > l_pt4Uniform;
+		shared_ptr< PointFrameVariable<float, 3> > l_pt3Uniform;
+		shared_ptr< MatrixFrameVariable<float, 4, 4> > l_mtxUniform;
 
-		l_pt4Uniform = SmartPtr< PointFrameVariable<float, 4> >::Shared( new PointFrameVariable<float, 4>( 1));
+		l_pt4Uniform = shared_ptr< PointFrameVariable<float, 4> >( new PointFrameVariable<float, 4>( 1));
 		l_pt4Uniform->SetName( CU_T( "in_AmbientLight"));
 		AddFrameVariable( l_pt4Uniform, m_pShaders[eVertexShader]);
-		m_pAmbientLight = static_pointer_cast< GLPointFrameVariable<float, 4> >( GetGLFrameVariable( CU_T( "in_AmbientLight")));
+		m_pAmbientLight = static_pointer_cast< GlPointFrameVariable<float, 4> >( GetGlFrameVariable( CU_T( "in_AmbientLight")));
 
-		l_pt4Uniform = SmartPtr< PointFrameVariable<float, 4> >::Shared( new PointFrameVariable<float, 4>( 8));
+		l_pt4Uniform = shared_ptr< PointFrameVariable<float, 4> >( new PointFrameVariable<float, 4>( 8));
 		l_pt4Uniform->SetName( CU_T( "in_LightsAmbient"));
 		AddFrameVariable( l_pt4Uniform, m_pShaders[eVertexShader]);
-		m_pAmbients = static_pointer_cast< GLPointFrameVariable<float, 4> >( GetGLFrameVariable( CU_T( "in_LightsAmbient")));
+		m_pAmbients = static_pointer_cast< GlPointFrameVariable<float, 4> >( GetGlFrameVariable( CU_T( "in_LightsAmbient")));
 
-		l_pt4Uniform = SmartPtr< PointFrameVariable<float, 4> >::Shared( new PointFrameVariable<float, 4>( 8));
+		l_pt4Uniform = shared_ptr< PointFrameVariable<float, 4> >( new PointFrameVariable<float, 4>( 8));
 		l_pt4Uniform->SetName( CU_T( "in_LightsDiffuse"));
 		AddFrameVariable( l_pt4Uniform, m_pShaders[eVertexShader]);
-		m_pDiffuses = static_pointer_cast< GLPointFrameVariable<float, 4> >( GetGLFrameVariable( CU_T( "in_LightsDiffuse")));
+		m_pDiffuses = static_pointer_cast< GlPointFrameVariable<float, 4> >( GetGlFrameVariable( CU_T( "in_LightsDiffuse")));
 
-		l_pt4Uniform = SmartPtr< PointFrameVariable<float, 4> >::Shared( new PointFrameVariable<float, 4>( 8));
+		l_pt4Uniform = shared_ptr< PointFrameVariable<float, 4> >( new PointFrameVariable<float, 4>( 8));
 		l_pt4Uniform->SetName( CU_T( "in_LightsSpecular"));
 		AddFrameVariable( l_pt4Uniform, m_pShaders[eVertexShader]);
-		m_pSpeculars = static_pointer_cast< GLPointFrameVariable<float, 4> >( GetGLFrameVariable( CU_T( "in_LightsSpecular")));
+		m_pSpeculars = static_pointer_cast< GlPointFrameVariable<float, 4> >( GetGlFrameVariable( CU_T( "in_LightsSpecular")));
 
-		l_pt4Uniform = SmartPtr< PointFrameVariable<float, 4> >::Shared( new PointFrameVariable<float, 4>( 8));
+		l_pt4Uniform = shared_ptr< PointFrameVariable<float, 4> >( new PointFrameVariable<float, 4>( 8));
 		l_pt4Uniform->SetName( CU_T( "in_LightsPosition"));
 		AddFrameVariable( l_pt4Uniform, m_pShaders[eVertexShader]);
-		m_pPositions = static_pointer_cast< GLPointFrameVariable<float, 4> >( GetGLFrameVariable( CU_T( "in_LightsPosition")));
+		m_pPositions = static_pointer_cast< GlPointFrameVariable<float, 4> >( GetGlFrameVariable( CU_T( "in_LightsPosition")));
 
-		l_mtxUniform = SmartPtr< MatrixFrameVariable<float, 4, 4> >::Shared( new MatrixFrameVariable<float, 4, 4>( 8));
+		l_mtxUniform = shared_ptr< MatrixFrameVariable<float, 4, 4> >( new MatrixFrameVariable<float, 4, 4>( 8));
 		l_mtxUniform->SetName( CU_T( "in_LightsOrientation"));
 		AddFrameVariable( l_mtxUniform, m_pShaders[eVertexShader]);
-		m_pOrientations = static_pointer_cast< GLMatrixFrameVariable<float, 4, 4> >( GetGLFrameVariable( CU_T( "in_LightsOrientation")));
+		m_pOrientations = static_pointer_cast< GlMatrixFrameVariable<float, 4, 4> >( GetGlFrameVariable( CU_T( "in_LightsOrientation")));
 
-		l_pt3Uniform = SmartPtr< PointFrameVariable<float, 3> >::Shared( new PointFrameVariable<float, 3>( 8));
+		l_pt3Uniform = shared_ptr< PointFrameVariable<float, 3> >( new PointFrameVariable<float, 3>( 8));
 		l_pt3Uniform->SetName( CU_T( "in_LightsAttenuation"));
 		AddFrameVariable( l_pt3Uniform, m_pShaders[eVertexShader]);
-		m_pAttenuations = static_pointer_cast< GLPointFrameVariable<float, 3> >( GetGLFrameVariable( CU_T( "in_LightsAttenuation")));
+		m_pAttenuations = static_pointer_cast< GlPointFrameVariable<float, 3> >( GetGlFrameVariable( CU_T( "in_LightsAttenuation")));
 
-		l_fUniform = SmartPtr< OneFrameVariable<float> >::Shared( new OneFrameVariable<float>( 8));
+		l_fUniform = shared_ptr< OneFrameVariable<float> >( new OneFrameVariable<float>( 8));
 		l_fUniform->SetName( CU_T( "in_LightsExponent"));
 		AddFrameVariable( l_fUniform, m_pShaders[eVertexShader]);
-		m_pExponents = static_pointer_cast< GLOneFrameVariable<float> >( GetGLFrameVariable( CU_T( "in_LightsExponent")));
+		m_pExponents = static_pointer_cast< GlOneFrameVariable<float> >( GetGlFrameVariable( CU_T( "in_LightsExponent")));
 
-		l_fUniform = SmartPtr< OneFrameVariable<float> >::Shared( new OneFrameVariable<float>( 8));
+		l_fUniform = shared_ptr< OneFrameVariable<float> >( new OneFrameVariable<float>( 8));
 		l_fUniform->SetName( CU_T( "in_LightsCutOff"));
 		AddFrameVariable( l_fUniform, m_pShaders[eVertexShader]);
-		m_pCutOffs = static_pointer_cast< GLOneFrameVariable<float> >( GetGLFrameVariable( CU_T( "in_LightsCutOff")));
+		m_pCutOffs = static_pointer_cast< GlOneFrameVariable<float> >( GetGlFrameVariable( CU_T( "in_LightsCutOff")));
 
-		l_pt4Uniform = SmartPtr< PointFrameVariable<float, 4> >::Shared( new PointFrameVariable<float, 4>( 1));
+		l_pt4Uniform = shared_ptr< PointFrameVariable<float, 4> >( new PointFrameVariable<float, 4>( 1));
 		l_pt4Uniform->SetName( CU_T( "in_MatAmbient"));
 		AddFrameVariable( l_pt4Uniform, m_pShaders[eVertexShader]);
-		m_pAmbient = static_pointer_cast< GLPointFrameVariable<float, 4> >( GetGLFrameVariable( CU_T( "in_MatAmbient")));
+		m_pAmbient = static_pointer_cast< GlPointFrameVariable<float, 4> >( GetGlFrameVariable( CU_T( "in_MatAmbient")));
 
-		l_pt4Uniform = SmartPtr< PointFrameVariable<float, 4> >::Shared( new PointFrameVariable<float, 4>( 1));
+		l_pt4Uniform = shared_ptr< PointFrameVariable<float, 4> >( new PointFrameVariable<float, 4>( 1));
 		l_pt4Uniform->SetName( CU_T( "in_MatDiffuse"));
 		AddFrameVariable( l_pt4Uniform, m_pShaders[eVertexShader]);
-		m_pDiffuse = static_pointer_cast< GLPointFrameVariable<float, 4> >( GetGLFrameVariable( CU_T( "in_MatDiffuse")));
+		m_pDiffuse = static_pointer_cast< GlPointFrameVariable<float, 4> >( GetGlFrameVariable( CU_T( "in_MatDiffuse")));
 
-		l_pt4Uniform = SmartPtr< PointFrameVariable<float, 4> >::Shared( new PointFrameVariable<float, 4>( 1));
+		l_pt4Uniform = shared_ptr< PointFrameVariable<float, 4> >( new PointFrameVariable<float, 4>( 1));
 		l_pt4Uniform->SetName( CU_T( "in_MatEmissive"));
 		AddFrameVariable( l_pt4Uniform, m_pShaders[eVertexShader]);
-		m_pEmissive = static_pointer_cast< GLPointFrameVariable<float, 4> >( GetGLFrameVariable( CU_T( "in_MatEmissive")));
+		m_pEmissive = static_pointer_cast< GlPointFrameVariable<float, 4> >( GetGlFrameVariable( CU_T( "in_MatEmissive")));
 
-		l_pt4Uniform = SmartPtr< PointFrameVariable<float, 4> >::Shared( new PointFrameVariable<float, 4>( 1));
+		l_pt4Uniform = shared_ptr< PointFrameVariable<float, 4> >( new PointFrameVariable<float, 4>( 1));
 		l_pt4Uniform->SetName( CU_T( "in_MatSpecular"));
 		AddFrameVariable( l_pt4Uniform, m_pShaders[eVertexShader]);
-		m_pSpecular = static_pointer_cast< GLPointFrameVariable<float, 4> >( GetGLFrameVariable( CU_T( "in_MatSpecular")));
+		m_pSpecular = static_pointer_cast< GlPointFrameVariable<float, 4> >( GetGlFrameVariable( CU_T( "in_MatSpecular")));
 
-		l_fUniform = SmartPtr< OneFrameVariable<float> >::Shared( new OneFrameVariable<float>( 1));
+		l_fUniform = shared_ptr< OneFrameVariable<float> >( new OneFrameVariable<float>( 1));
 		l_fUniform->SetName( CU_T( "in_MatShininess"));
 		AddFrameVariable( l_fUniform, m_pShaders[eVertexShader]);
-		m_pShininess = static_pointer_cast< GLOneFrameVariable<float> >( GetGLFrameVariable( CU_T( "in_MatShininess")));
+		m_pShininess = static_pointer_cast< GlOneFrameVariable<float> >( GetGlFrameVariable( CU_T( "in_MatShininess")));
 	}
 
 	return m_isLinked;
 }
 
-void GL3ShaderProgram :: Begin()
+void Gl3ShaderProgram :: Begin()
 {
-	GL3RenderSystem::GetSingletonPtr()->SetCurrentShaderProgram( this);
-	GLShaderProgram::Begin();
+	Gl3RenderSystem::GetSingletonPtr()->SetCurrentShaderProgram( this);
+	GlShaderProgram::Begin();
 }
 
-int GL3ShaderProgram :: AssignLight()
+int Gl3ShaderProgram :: AssignLight()
 {
 	int l_iReturn = GL_INVALID_INDEX;
 
@@ -132,7 +132,7 @@ int GL3ShaderProgram :: AssignLight()
 	return l_iReturn;
 }
 
-void GL3ShaderProgram :: FreeLight( int p_iIndex)
+void Gl3ShaderProgram :: FreeLight( int p_iIndex)
 {
 	if (p_iIndex != GL_INVALID_INDEX)
 	{
@@ -147,7 +147,7 @@ void GL3ShaderProgram :: FreeLight( int p_iIndex)
 	}
 }
 
-void GL3ShaderProgram :: SetAmbientLight( const Point4f & p_crColour)
+void Gl3ShaderProgram :: SetAmbientLight( const Point4f & p_crColour)
 {
 	if (m_isLinked)
 	{
@@ -155,7 +155,7 @@ void GL3ShaderProgram :: SetAmbientLight( const Point4f & p_crColour)
 	}
 }
 
-void GL3ShaderProgram :: SetLightAmbient( int p_iIndex, const Point4f & p_crColour)
+void Gl3ShaderProgram :: SetLightAmbient( int p_iIndex, const Point4f & p_crColour)
 {
 	if (m_isLinked)
 	{
@@ -163,7 +163,7 @@ void GL3ShaderProgram :: SetLightAmbient( int p_iIndex, const Point4f & p_crColo
 	}
 }
 
-void GL3ShaderProgram :: SetLightDiffuse( int p_iIndex, const Point4f & p_crColour)
+void Gl3ShaderProgram :: SetLightDiffuse( int p_iIndex, const Point4f & p_crColour)
 {
 	if (m_isLinked)
 	{
@@ -171,7 +171,7 @@ void GL3ShaderProgram :: SetLightDiffuse( int p_iIndex, const Point4f & p_crColo
 	}
 }
 
-void GL3ShaderProgram :: SetLightSpecular( int p_iIndex, const Point4f & p_crColour)
+void Gl3ShaderProgram :: SetLightSpecular( int p_iIndex, const Point4f & p_crColour)
 {
 	if (m_isLinked)
 	{
@@ -179,7 +179,7 @@ void GL3ShaderProgram :: SetLightSpecular( int p_iIndex, const Point4f & p_crCol
 	}
 }
 
-void GL3ShaderProgram :: SetLightPosition( int p_iIndex, const Point4f & p_ptPosition)
+void Gl3ShaderProgram :: SetLightPosition( int p_iIndex, const Point4f & p_ptPosition)
 {
 	if (m_isLinked)
 	{
@@ -187,7 +187,7 @@ void GL3ShaderProgram :: SetLightPosition( int p_iIndex, const Point4f & p_ptPos
 	}
 }
 
-void GL3ShaderProgram :: SetLightOrientation( int p_iIndex, const Matrix4x4r & p_mtxOrientation)
+void Gl3ShaderProgram :: SetLightOrientation( int p_iIndex, const Matrix4x4r & p_mtxOrientation)
 {
 	if (m_isLinked)
 	{
@@ -195,7 +195,7 @@ void GL3ShaderProgram :: SetLightOrientation( int p_iIndex, const Matrix4x4r & p
 	}
 }
 
-void GL3ShaderProgram :: SetLightAttenuation( int p_iIndex, const Point3f & p_ptAtt)
+void Gl3ShaderProgram :: SetLightAttenuation( int p_iIndex, const Point3f & p_ptAtt)
 {
 	if (m_isLinked)
 	{
@@ -203,7 +203,7 @@ void GL3ShaderProgram :: SetLightAttenuation( int p_iIndex, const Point3f & p_pt
 	}
 }
 
-void GL3ShaderProgram :: SetLightExponent( int p_iIndex, float p_fExp)
+void Gl3ShaderProgram :: SetLightExponent( int p_iIndex, float p_fExp)
 {
 	if (m_isLinked)
 	{
@@ -211,7 +211,7 @@ void GL3ShaderProgram :: SetLightExponent( int p_iIndex, float p_fExp)
 	}
 }
 
-void GL3ShaderProgram :: SetLightCutOff( int p_iIndex, float p_fCut)
+void Gl3ShaderProgram :: SetLightCutOff( int p_iIndex, float p_fCut)
 {
 	if (m_isLinked)
 	{
@@ -219,7 +219,7 @@ void GL3ShaderProgram :: SetLightCutOff( int p_iIndex, float p_fCut)
 	}
 }
 
-void GL3ShaderProgram :: SetMaterialAmbient( const Point4f & p_crColour)
+void Gl3ShaderProgram :: SetMaterialAmbient( const Point4f & p_crColour)
 {
 	if (m_isLinked && m_pAmbient->GetValue() != p_crColour)
 	{
@@ -227,7 +227,7 @@ void GL3ShaderProgram :: SetMaterialAmbient( const Point4f & p_crColour)
 	}
 }
 
-void GL3ShaderProgram :: SetMaterialDiffuse( const Point4f & p_crColour)
+void Gl3ShaderProgram :: SetMaterialDiffuse( const Point4f & p_crColour)
 {
 	if (m_isLinked && m_pDiffuse->GetValue() != p_crColour)
 	{
@@ -235,7 +235,7 @@ void GL3ShaderProgram :: SetMaterialDiffuse( const Point4f & p_crColour)
 	}
 }
 
-void GL3ShaderProgram :: SetMaterialSpecular( const Point4f & p_crColour)
+void Gl3ShaderProgram :: SetMaterialSpecular( const Point4f & p_crColour)
 {
 	if (m_isLinked && m_pSpecular->GetValue() != p_crColour)
 	{
@@ -243,7 +243,7 @@ void GL3ShaderProgram :: SetMaterialSpecular( const Point4f & p_crColour)
 	}
 }
 
-void GL3ShaderProgram :: SetMaterialEmissive( const Point4f & p_crColour)
+void Gl3ShaderProgram :: SetMaterialEmissive( const Point4f & p_crColour)
 {
 	if (m_isLinked && m_pEmissive->GetValue() != p_crColour)
 	{
@@ -251,7 +251,7 @@ void GL3ShaderProgram :: SetMaterialEmissive( const Point4f & p_crColour)
 	}
 }
 
-void GL3ShaderProgram :: SetMaterialShininess( float p_fShine)
+void Gl3ShaderProgram :: SetMaterialShininess( float p_fShine)
 {
 	if (m_isLinked && m_pShininess->GetValue() != p_fShine)
 	{

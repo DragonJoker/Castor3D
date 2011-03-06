@@ -3,7 +3,8 @@
 #include "CastorUtils/Quaternion.h"
 #include "CastorUtils/Point.h"
 #include "CastorUtils/Angle.h"
-//#include "CastorUtils/FastMath.h"
+#include "CastorUtils/Matrix.h"
+#include "CastorUtils/TransformationMatrix.h"
 
 #if CHECK_MEMORYLEAKS
 #	include "CastorUtils/Memory.h"
@@ -46,7 +47,7 @@ QuaternionPtr Quaternion :: GetConjugate()
 	Normalise();
 	QuaternionPtr q( new Quaternion( * this));
 	q->Reverse();
-	q->m_coords[3] = m_coords[3];
+	q->at( 3) = at( 3);
 	return q;
 }
 
@@ -63,16 +64,16 @@ void Quaternion :: Normalise()
 void Quaternion :: ToRotationMatrix( Matrix4x4r & p_matrix)const
 {
 	p_matrix.Identity();
-	rotate( p_matrix, * this);
+	MtxUtils::rotate( p_matrix, * this);
 }
 
 void Quaternion :: ToRotationMatrix( real * p_matrix)const
 {
 /**/
-	real x = m_coords[0];
-	real y = m_coords[1];
-	real z = m_coords[2];
-	real w = m_coords[3];
+	real x = at( 0);
+	real y = at( 1);
+	real z = at( 2);
+	real w = at( 3);
 
 	p_matrix[0 * 4 + 0] = 1.0f - 2.0f * ( y * y + z * z );
 	p_matrix[0 * 4 + 1] = 2.0f * ( x * y - z * w );
@@ -95,11 +96,11 @@ void Quaternion :: ToRotationMatrix( real * p_matrix)const
 	p_matrix[3 * 4 + 3] = 1;
 /**/
 /*
-	real a = Angle::DegreesToRadians * m_coords[3];
+	real a = Angle::DegreesToRadians * at( 3);
 	real c = cos( a);
 	real s = sin( a);
 
-	Point3r l_axis( m_coords[0], m_coords[1], m_coords[2]);
+	Point3r l_axis( at( 0), at( 1), at( 2));
 	Point3r l_temp = (real( 1) - c) * l_axis;
 
 	p_matrix[0 * 4 + 0] = c + l_temp[0] * l_axis[0];
@@ -126,10 +127,10 @@ void Quaternion :: ToRotationMatrix( real * p_matrix)const
 
 void Quaternion :: FromRotationMatrix( const Matrix4x4r & p_matrix)
 {
-	real x = m_coords[0];
-	real y = m_coords[1];
-	real z = m_coords[2];
-	real w = m_coords[3];
+	real x = at( 0);
+	real y = at( 1);
+	real z = at( 2);
+	real w = at( 3);
 	real trace_l = p_matrix.GetTrace();
 
 	if(trace_l > 0)
@@ -174,20 +175,20 @@ void Quaternion :: FromRotationMatrix( const Matrix4x4r & p_matrix)
 		}
 	}
 
-	m_coords[0] = x;
-	m_coords[1] = y;
-	m_coords[2] = z;
-	m_coords[3] = w;
+	at( 0) = x;
+	at( 1) = y;
+	at( 2) = z;
+	at( 3) = w;
 
 	Normalise();
 }
 
 void Quaternion :: FromRotationMatrix( real * p_matrix)
 {
-	real x = m_coords[0];
-	real y = m_coords[1];
-	real z = m_coords[2];
-	real w = m_coords[3];
+	real x = at( 0);
+	real y = at( 1);
+	real z = at( 2);
+	real w = at( 3);
 	real l_trace = p_matrix[0] + p_matrix[5] + p_matrix[10];
 
 	if (l_trace > 0.0f)
@@ -230,10 +231,10 @@ void Quaternion :: FromRotationMatrix( real * p_matrix)
 		}
 	}
 
-	m_coords[0] = x;
-	m_coords[1] = y;
-	m_coords[2] = z;
-	m_coords[3] = w;
+	at( 0) = x;
+	at( 1) = y;
+	at( 2) = z;
+	at( 3) = w;
 
 	Normalise();
 }
@@ -244,21 +245,19 @@ void Quaternion :: FromAxisAngle( const Point3r & p_vector, const Angle & p_angl
 	real l_angle = p_angle.Radians();
 	real l_result = sin( l_angle / real( 2.0));
 	// Calculate the x, y and z of the quaternion
-	m_coords[0] = l_normalised[0] * l_result;
-	m_coords[1] = l_normalised[1] * l_result;
-	m_coords[2] = l_normalised[2] * l_result;
-	m_coords[3] = cos( l_angle / real( 2.0));
+	at( 0) = l_normalised[0] * l_result;
+	at( 1) = l_normalised[1] * l_result;
+	at( 2) = l_normalised[2] * l_result;
+	at( 3) = cos( l_angle / real( 2.0));
 	Normalise();
 }
 
-void Quaternion :: ToAxisAngle( Point3r & p_vector, Angle & p_angle)
+void Quaternion :: ToAxisAngle( Point3r & p_vector, Angle & p_angle)const
 {
-	Normalise();
-
-	real x = m_coords[0];
-	real y = m_coords[1];
-	real z = m_coords[2];
-	real w = m_coords[3];
+	real x = at( 0);
+	real y = at( 1);
+	real z = at( 2);
+	real w = at( 3);
 
 	p_angle = acos( w) * 2;
 
@@ -268,39 +267,39 @@ void Quaternion :: ToAxisAngle( Point3r & p_vector, Angle & p_angle)
 	p_vector.Normalise();
 }
 
-Angle Quaternion :: GetYaw()
+Angle Quaternion :: GetYaw()const
 {
-	real x = m_coords[0];
-	real y = m_coords[1];
-	real z = m_coords[2];
-	real w = m_coords[3];
+	real x = at( 0);
+	real y = at( 1);
+	real z = at( 2);
+	real w = at( 3);
 	return asin( -2 * (x * z - w * y));
 }
 
-Angle Quaternion :: GetPitch()
+Angle Quaternion :: GetPitch()const
 {
-	real x = m_coords[0];
-	real y = m_coords[1];
-	real z = m_coords[2];
-	real w = m_coords[3];
+	real x = at( 0);
+	real y = at( 1);
+	real z = at( 2);
+	real w = at( 3);
 	return atan2( 2 * (y * z + w * x), w * w - x * x - y * y + z * z);
 }
 
-Angle Quaternion :: GetRoll()
+Angle Quaternion :: GetRoll()const
 {
-	real x = m_coords[0];
-	real y = m_coords[1];
-	real z = m_coords[2];
-	real w = m_coords[3];
+	real x = at( 0);
+	real y = at( 1);
+	real z = at( 2);
+	real w = at( 3);
 	return atan2( 2 * (x * y + w * z), w * w + x * x - y * y - z * z);
 }
 
 Quaternion Quaternion :: operator +( const Quaternion & q) const
 {
-	real x = m_coords[0];
-	real y = m_coords[1];
-	real z = m_coords[2];
-	real w = m_coords[3];
+	real x = at( 0);
+	real y = at( 1);
+	real z = at( 2);
+	real w = at( 3);
 	real qx = q[0];
 	real qy = q[1];
 	real qz = q[2];
@@ -310,10 +309,10 @@ Quaternion Quaternion :: operator +( const Quaternion & q) const
 
 Quaternion Quaternion :: operator -( const Quaternion & q) const
 {
-	real x = m_coords[0];
-	real y = m_coords[1];
-	real z = m_coords[2];
-	real w = m_coords[3];
+	real x = at( 0);
+	real y = at( 1);
+	real z = at( 2);
+	real w = at( 3);
 	real qx = q[0];
 	real qy = q[1];
 	real qz = q[2];
@@ -323,19 +322,19 @@ Quaternion Quaternion :: operator -( const Quaternion & q) const
 
 Quaternion Quaternion :: operator *( real rScalar) const
 {
-	real x = m_coords[0];
-	real y = m_coords[1];
-	real z = m_coords[2];
-	real w = m_coords[3];
+	real x = at( 0);
+	real y = at( 1);
+	real z = at( 2);
+	real w = at( 3);
 	return Quaternion( rScalar * w, rScalar * x, rScalar * y, rScalar * z);
 }
 
 Quaternion Quaternion :: operator *( const Quaternion & q)const
 {
-	real x = m_coords[0];
-	real y = m_coords[1];
-	real z = m_coords[2];
-	real w = m_coords[3];
+	real x = at( 0);
+	real y = at( 1);
+	real z = at( 2);
+	real w = at( 3);
 	real qx = q[0];
 	real qy = q[1];
 	real qz = q[2];
@@ -351,10 +350,10 @@ Quaternion Quaternion :: operator *( const Quaternion & q)const
 
 void Quaternion :: operator *=( const Quaternion & q)
 {
-	real x = m_coords[0];
-	real y = m_coords[1];
-	real z = m_coords[2];
-	real w = m_coords[3];
+	real x = at( 0);
+	real y = at( 1);
+	real z = at( 2);
+	real w = at( 3);
 	real l_x = x;
 	real l_y = y;
 	real l_z = z;
@@ -369,10 +368,10 @@ void Quaternion :: operator *=( const Quaternion & q)
     y = l_w * qy + l_y * qw + l_z * qx - l_x * qz;
 	z = l_w * qz + l_z * qw + l_x * qy - l_y * qx;
 
-	m_coords[0] = x;
-	m_coords[1] = y;
-	m_coords[2] = z;
-	m_coords[3] = w;
+	at( 0) = x;
+	at( 1) = y;
+	at( 2) = z;
+	at( 3) = w;
 	Normalise();
 }
 
@@ -385,19 +384,19 @@ Quaternion & Quaternion :: operator =( const Quaternion & p_q)
 
 Quaternion Quaternion :: operator -() const
 {
-	real x = m_coords[0];
-	real y = m_coords[1];
-	real z = m_coords[2];
-	real w = m_coords[3];
+	real x = at( 0);
+	real y = at( 1);
+	real z = at( 2);
+	real w = at( 3);
     return Quaternion( -w, -x, -y, -z);
 }
 
 Point3r Quaternion::operator *( const Point3r & p_vector)const
 {
-	real x = m_coords[0];
-	real y = m_coords[1];
-	real z = m_coords[2];
-	real w = m_coords[3];
+	real x = at( 0);
+	real y = at( 1);
+	real z = at( 2);
+	real w = at( 3);
 
 	Point3r uv, uuv;
 	Point3r u( x, y, z);
@@ -409,12 +408,12 @@ Point3r Quaternion::operator *( const Point3r & p_vector)const
 	return p_vector + uv + uuv;
 }
 
-bool Quaternion :: Write( File & p_file)const
+bool Quaternion :: Save( File & p_file)const
 {
-	real x = m_coords[0];
-	real y = m_coords[1];
-	real z = m_coords[2];
-	real w = m_coords[3];
+	real x = at( 0);
+	real y = at( 1);
+	real z = at( 2);
+	real w = at( 3);
 
 	if ( ! p_file.Write<real>( x))
 	{
@@ -435,7 +434,7 @@ bool Quaternion :: Write( File & p_file)const
 	return true;
 }
 
-bool Quaternion :: Read( File & p_file)
+bool Quaternion :: Load( File & p_file)
 {
 	real x;
 	real y;
@@ -459,10 +458,10 @@ bool Quaternion :: Read( File & p_file)
 		return false;
 	}
 
-	m_coords[0] = x;
-	m_coords[1] = y;
-	m_coords[2] = z;
-	m_coords[3] = w;
+	at( 0) = x;
+	at( 1) = y;
+	at( 2) = z;
+	at( 3) = w;
 	Normalise();
 
 	return true;

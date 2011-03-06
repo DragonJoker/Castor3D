@@ -146,7 +146,7 @@ bool RenderEngine :: Draw()
 				} 
 				while ((coef > 0.0f) && (level < 10) && l_pNearestGeometry != NULL);
 
-				l_imageFile.put( std::min<unsigned char>( unsigned char( l_clrColour[2]*255.0f), 255)).put( std::min<unsigned char>( unsigned char( l_clrColour[1]*255.0f), 255)).put( std::min<unsigned char>( unsigned char( l_clrColour[0]*255.0f), 255));
+				l_imageFile.put( std::min<unsigned char>( static_cast<unsigned char>( l_clrColour[2]*255.0f), 255)).put( std::min<unsigned char>( static_cast<unsigned char>( l_clrColour[1]*255.0f), 255)).put( std::min<unsigned char>( static_cast<unsigned char>( l_clrColour[0]*255.0f), 255));
 			}
 		}
 

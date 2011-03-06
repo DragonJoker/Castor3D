@@ -22,6 +22,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "../light/Light.h"
 #include "../geometry/mesh/Mesh.h"
 #include "../camera/Viewport.h"
+#include "../light/PointLight.h"
+#include "../light/DirectionalLight.h"
+#include "../light/SpotLight.h"
+#include "../scene/SceneNode.h"
 
 namespace Castor3D
 {
@@ -32,10 +36,10 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class C3D_API Scene : public Managed<String, Scene, SceneManager>, public MemoryTraced<Scene>
+	class C3D_API Scene : public Serialisable, public Textable, public MemoryTraced<Scene>
 	{
 	private:
-		String m_name;									//!< The scene name
+		String m_strName;									//!< The scene name
 		CameraPtr m_rootCamera;							//!< The root camera, necessary for any render
 		SceneNodePtr m_rootNode;						//!< The root node
 
@@ -62,15 +66,16 @@ namespace Castor3D
 
 		Colour m_clAmbientLight;
 
-		Castor::MultiThreading::RecursiveMutex m_mutex;			//!< The mutex, to make the Scene threadsafe
+		Castor::MultiThreading::Mutex m_mutex;			//!< The mutex, to make the Scene threadsafe
 		AnimationManager * m_pAnimationManager;
+		Manager<Scene> * m_pManager;
 
 	public:
 		/**
 		 * Constructor
 		 *@param p_name : [in] The scene name
 		 */
-		Scene( SceneManager * p_pManager, const String & p_name);
+		Scene( Manager<Scene> * p_pManager, const String & p_name);
 		/**
 		 * Destructor
 		 */
@@ -84,13 +89,13 @@ namespace Castor3D
 		 *@param p_displayMode : [in] The mode in which the display must be made
 		 *@param p_tslf : [in] The time elapsed since the last frame was rendered
 		 */
-		void Render( eDRAW_TYPE p_displayMode, real p_tslf);
+		void Render( ePRIMITIVE_TYPE p_displayMode, real p_tslf);
 		/**
 		 * Creates a scene node in the scene, attached to the root node if th given parent is NULL
 		 *@param p_name : [in] The node name, default is empty
 		 *@param p_parent : [in] The parent node, if NULL, the created node will be attached to root
 		 */
-		SceneNodePtr CreateSceneNode( const String & p_name, SceneNodePtr p_parent=SceneNodePtr());
+		SceneNodePtr CreateSceneNode( const String & p_name, SceneNode * p_parent=NULL);
 		/**
 		 * Creates a primitive, given a MeshType and the primitive definitions
 		 *@param p_name : [in] The primitive name
@@ -99,9 +104,14 @@ namespace Castor3D
 		 *@param p_faces : [in] The faces numbers
 		 *@param p_size : [in] The geometry dimensions
 		 */
-		GeometryPtr CreatePrimitive( const String & p_name, Mesh::eTYPE p_type,
+		GeometryPtr CreatePrimitive( const String & p_name, eMESH_TYPE p_type,
 									const String & p_meshName, UIntArray p_faces,
 									FloatArray p_size);
+		/**
+		 * Creates a primitive, with no mesh
+		 *@param p_name : [in] The primitive name
+		 */
+		GeometryPtr CreatePrimitive( const String & p_name);
 		/**
 		 * Creates a camera
 		 *@param p_name : [in] The camera name
@@ -117,7 +127,26 @@ namespace Castor3D
 		*@param p_name : [in] The light name
 		*@param p_pNode : [in] The light's parent node
 		 */
-		LightPtr CreateLight( Light::eTYPE p_type, const String & p_name, SceneNodePtr p_pNode);
+		template <class LightClass>
+		LightPtr CreateLight( const String & p_name, SceneNodePtr p_pNode)
+		{
+			CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+			LightPtr l_pReturn;
+			LightPtrStrMap::iterator l_it = m_addedLights.find( p_name);
+
+			if (l_it != m_addedLights.end())
+			{
+				Logger::LogWarning( CU_T( "CreateLight - Can't create light %s - A light with that name already exists"), p_name.char_str());
+				l_pReturn = l_it->second;
+			}
+			else
+			{
+				l_pReturn = LightPtr( new LightClass( this, p_pNode, p_name));
+				m_addedLights.insert( LightPtrStrMap::value_type( p_name, l_pReturn));
+			}
+
+			return l_pReturn;
+		}
 		/**
 		 * Creates the vertex buffers in a given normals mode, and tells if the face's or vertex's normals are shown
 		 *@param p_nm : [in] The normals mode (face or vertex)
@@ -193,18 +222,6 @@ namespace Castor3D
 		 */
 		BoolStrMap GetGeometriesVisibility();
 		/**
-		 * Writes the scene in a file
-		 *@param p_file : [in] file to write in
-		 *@return true if successful, false if not
-		 */
-		bool Write( Castor::Utils::File & p_file)const;
-		/**
-		 * Reads the scene from a file
-		 *@param p_file : [in] file to read from
-		 *@return true if successful, false if not
-		 */
-		bool Read( Castor::Utils::File & p_file);
-		/**
 		* Imports a scene from an foreign file
 		*@param p_fileName : [in] file to read from
 		*@param p_importer : [in] The importer, which is in charge of loading the scene
@@ -226,9 +243,43 @@ namespace Castor3D
 		 */
 		void Merge( ScenePtr p_pScene);
 
+		/**@name Inherited methods from Textable */
+		//@{
+		virtual bool Write( File & p_file)const;
+		virtual bool Read( File & p_file) { return false; }
+		//@}
+
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
+
+		/**@name Accessors */
+		//@{
+		inline String									GetName						()const { return m_strName; }
+		inline SceneNodePtr								GetRootNode					()const { return m_rootNode; }
+		inline CameraPtr								GetRootCamera				()const { return m_rootCamera; }
+		inline size_t									GetNbGeometries				()const { return m_addedPrimitives.size(); }
+		inline bool										HasChanged					()const { return m_changed; }
+		inline LightPtrStrMap							GetLights					()const { return m_addedLights; }
+		inline Colour									GetAmbientLight				()const	{ return m_clAmbientLight; }
+		inline SceneNodePtrStrMap::iterator				GetNodesIterator			()		{ return m_addedNodes.begin(); }
+		inline SceneNodePtrStrMap::const_iterator		GetNodesEnd					()		{ return m_addedNodes.end(); }
+		inline LightPtrStrMap::iterator					GetLightsIterator			()		{ return m_addedLights.begin(); }
+		inline LightPtrStrMap::const_iterator			GetLightsEnd				()		{ return m_addedLights.end(); }
+		inline GeometryPtrStrMap::iterator				GetGeometriesIterator		()		{ return m_addedPrimitives.begin(); }
+		inline GeometryPtrStrMap::const_iterator		GetGeometriesEnd			()		{ return m_addedPrimitives.end(); }
+		inline void SetAmbientLight( const Colour & val) { m_clAmbientLight[0] = val[0];m_clAmbientLight[1] = val[1];m_clAmbientLight[2] = val[2];m_clAmbientLight[3] = val[3]; }
+		//@}
+
 	private:
 		bool _writeLights( Castor::Utils::File & p_pFile)const;
 		bool _writeGeometries( Castor::Utils::File & p_pFile)const;
+		bool _saveLights( Castor::Utils::File & p_pFile)const;
+		bool _saveGeometries( Castor::Utils::File & p_pFile)const;
+		bool _loadLights( Castor::Utils::File & p_pFile);
+		bool _loadGeometries( Castor::Utils::File & p_pFile);
 		void _deleteToDelete();
 
 		template <typename MapType>
@@ -236,7 +287,7 @@ namespace Castor3D
 		{
 			String l_strName;
 
-			for (MapType::iterator l_it = p_map.begin() ; l_it != p_map.end() ; ++l_it)
+			for (typename MapType::iterator l_it = p_map.begin() ; l_it != p_map.end() ; ++l_it)
 			{
 				if (l_it->second->GetParent()->GetName() == CU_T( "RootNode"))
 				{
@@ -252,7 +303,7 @@ namespace Castor3D
 				}
 
 				l_it->second->SetName( l_strName);
-				p_myMap.insert( MapType::value_type( l_strName, l_it->second));
+				p_myMap.insert( typename MapType::value_type( l_strName, l_it->second));
 			}
 
 			p_map.clear();
@@ -263,7 +314,7 @@ namespace Castor3D
 		{
 			Container<String>::Set l_setNodes;
 
-			for (MapType::iterator l_it = p_map.begin() ; l_it != p_map.end() ; ++l_it)
+			for (typename MapType::iterator l_it = p_map.begin() ; l_it != p_map.end() ; ++l_it)
 			{
 				if (l_it->second->GetParent() != NULL && l_setNodes.find( l_it->second->GetParent()->GetName()) == l_setNodes.end())
 				{
@@ -271,16 +322,23 @@ namespace Castor3D
 				}
 			}
 
-			for (SceneNodePtrStrMap::iterator l_it = m_addedNodes.begin() ; l_it != m_addedNodes.end() ; ++l_it)
+			SceneNodePtrStrMap::iterator l_itNode = m_addedNodes.begin();
+			while (l_itNode != m_addedNodes.end())
 			{
-				if (l_setNodes.find( l_it->first) == l_setNodes.end())
+				if (l_setNodes.find( l_itNode->first) == l_setNodes.end())
 				{
-					RemoveNode( l_it->second);
-					l_it = m_addedNodes.begin();
+					l_itNode->second->Detach();
+					l_itNode->second.reset();
+					m_addedNodes.erase( l_itNode);
+					l_itNode = m_addedNodes.begin();
+				}
+				else
+				{
+					++l_itNode;
 				}
 			}
 
-			for (MapType::iterator l_it = p_map.begin() ; l_it != p_map.end() ; ++l_it)
+			for (typename MapType::iterator l_it = p_map.begin() ; l_it != p_map.end() ; ++l_it)
 			{
 				if (l_it->second->GetParent() == NULL)
 				{
@@ -289,26 +347,6 @@ namespace Castor3D
 				}
 			}
 		}
-
-	public:
-		/**@name Accessors */
-		//@{
-		inline String									GetName						()const { return m_name; }
-		inline SceneNodePtr								GetRootNode					()const { return m_rootNode; }
-		inline CameraPtr								GetRootCamera				()const { return m_rootCamera; }
-		inline size_t									GetNbGeometries				()const { return m_addedPrimitives.size(); }
-		inline bool										HasChanged					()const { return m_changed; }
-		inline LightPtrStrMap							GetLights					()const { return m_addedLights; }
-		inline Colour									GetAmbientLight				()const	{ return m_clAmbientLight; }
-		inline SceneNodePtrStrMap::iterator				GetNodesIterator			()		{ return m_addedNodes.begin(); }
-		inline SceneNodePtrStrMap::const_iterator		GetNodesEnd					()		{ return m_addedNodes.end(); }
-		inline LightPtrStrMap::iterator					GetLightsIterator			()		{ return m_addedLights.begin(); }
-		inline LightPtrStrMap::const_iterator			GetLightsEnd				()		{ return m_addedLights.end(); }
-		inline GeometryPtrStrMap::iterator				GetGeometriesIterator		()		{ return m_addedPrimitives.begin(); }
-		inline GeometryPtrStrMap::const_iterator		GetGeometriesEnd			()		{ return m_addedPrimitives.end(); }
-
-		inline void SetAmbientLight( const Colour & val) { m_clAmbientLight[0] = val[0];m_clAmbientLight[1] = val[1];m_clAmbientLight[2] = val[2];m_clAmbientLight[3] = val[3]; }
-		//@}
 	};
 
 }

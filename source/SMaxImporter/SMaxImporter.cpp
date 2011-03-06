@@ -66,7 +66,7 @@ bool SMaxImporter :: _import()
 
 		if (m_fileName.find_last_of( CU_T( "/")) != String::npos)
 		{
-			l_uiSlashIndex = std::max( l_uiSlashIndex, m_fileName.find_last_of( CU_T( "/")) + 1);
+			l_uiSlashIndex = std::max<size_t>( l_uiSlashIndex, m_fileName.find_last_of( CU_T( "/")) + 1);
 		}
 
 		size_t l_uiDotIndex = m_fileName.find_last_of( CU_T( "."));
@@ -85,7 +85,7 @@ bool SMaxImporter :: _import()
 		}
 		else
 		{
-			l_pMesh = m_pManager->GetMeshManager()->CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom);
+			l_pMesh = m_pManager->GetMeshManager()->CreateMesh( l_meshName, l_faces, l_sizes, eCustom);
 			Logger::LogMessage( CU_T( "CreatePrimitive - Mesh %s created") + l_meshName);
 		}
 
@@ -104,7 +104,7 @@ bool SMaxImporter :: _import()
 		m_pScene = m_pManager->GetElementByName( "MainScene");
 		SceneNodePtr l_pNode = m_pScene->CreateSceneNode( l_name);
 
-		GeometryPtr l_pGeometry( new Geometry( l_pMesh, l_pNode, l_name));
+		GeometryPtr l_pGeometry( new Geometry( m_pScene.get(), l_pMesh, l_pNode, l_name));
 		Logger::LogMessage( CU_T( "PlyImporter::_import - Geometry %s created") + l_name);
 
 		m_geometries.insert( GeometryPtrStrMap::value_type( l_name, l_pGeometry));
@@ -215,9 +215,9 @@ void SMaxImporter :: _processNextMaterialChunk( SMaxChunk * p_previousChunk)
 {
 	SMaxChunk l_currentChunk = {0};
 	MaterialPtr l_pMaterial;
-	Colour l_crDiffuse( 0, 0, 0, 1);
-	Colour l_crAmbient( 0, 0, 0, 1);
-	Colour l_crSpecular( 0, 0, 0, 1);
+	Colour l_crDiffuse( 0.0f, 0.0f, 0.0f, 1.0f);
+	Colour l_crAmbient( 0.0f, 0.0f, 0.0f, 1.0f);
+	Colour l_crSpecular( 0.0f, 0.0f, 0.0f, 1.0f);
 	real l_fShininess = 0;
 	String l_strMatName;
 	String l_strTexture;
@@ -318,7 +318,7 @@ void SMaxImporter :: _readChunk( SMaxChunk * p_chunk)
 	p_chunk->m_bytesRead += m_pFile->Read<unsigned int>( p_chunk->m_length);
 }
 
-int SMaxImporter :: _getString( Char * p_pBuffer)
+int SMaxImporter :: _getString( xchar * p_pBuffer)
 {
 	char l_pBuffer[255];
 	int index = 0;
@@ -417,7 +417,7 @@ void SMaxImporter :: _readObjectMaterial( SubmeshPtr p_pSubmesh, SMaxChunk * p_c
 
 	MaterialPtr l_pMaterial = m_pManager->GetMaterialManager()->GetElementByName( l_materialName);
 
-	if ( ! l_pMaterial == NULL)
+	if (l_pMaterial != NULL)
 	{
 		p_pSubmesh->SetMaterial( l_pMaterial);
 	}

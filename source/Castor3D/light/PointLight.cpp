@@ -2,13 +2,14 @@
 
 #include "Castor3D/light/PointLight.h"
 #include "Castor3D/scene/SceneNode.h"
+#include "Castor3D/scene/SceneFileParser.h"
 #include "Castor3D/render_system/RenderSystem.h"
 #include "Castor3D/main/Root.h"
 
 using namespace Castor3D;
 
-PointLight :: PointLight( SceneNodePtr p_pNode, const String & p_name)
-	:	Light( p_pNode, p_name)
+PointLight :: PointLight( Scene * p_pScene, SceneNodePtr p_pNode, const String & p_name)
+	:	Light( p_pScene, p_pNode, p_name, ePoint)
 	,	m_attenuation( 1.0f, 0.2f, 0.0f)
 {
 }
@@ -45,28 +46,42 @@ void PointLight :: SetAttenuation( const Point3f & p_attenuation)
 	m_attenuation = p_attenuation;
 }
 
-bool PointLight :: Write( Castor::Utils::File & p_pFile)const
+bool PointLight :: Write( File & p_pFile)const
 {
-	bool l_bReturn = p_pFile.WriteLine( "light " + m_name + "\n{\n");
+	bool l_bReturn = Light::Write( p_pFile);
 
 	if (l_bReturn)
 	{
-		l_bReturn = p_pFile.WriteLine( "\ttype point_light\n");
+		l_bReturn = p_pFile.Print( 256, "\tattenuation %f %f %f %f\n", m_attenuation[0], m_attenuation[1], m_attenuation[2]) > 0;
 	}
 
 	if (l_bReturn)
 	{
-		l_bReturn = Light::Write( p_pFile);
+		l_bReturn = p_pFile.WriteLine( "}\n") > 0;
 	}
+
+	return l_bReturn;
+}
+
+bool PointLight :: Save( File & p_file)const
+{
+	bool l_bReturn = Light::Save( p_file);
 
 	if (l_bReturn)
 	{
-		l_bReturn = p_pFile.Print( 256, "\tattenuation %f %f %f %f\n", m_attenuation[0], m_attenuation[1], m_attenuation[2]);
+		l_bReturn = m_attenuation.Save( p_file);
 	}
+
+	return l_bReturn;
+}
+
+bool PointLight :: Load( File & p_file)
+{
+	bool l_bReturn = Light::Load( p_file);
 
 	if (l_bReturn)
 	{
-		l_bReturn = p_pFile.WriteLine( "}\n");
+		l_bReturn = m_attenuation.Load( p_file);
 	}
 
 	return l_bReturn;

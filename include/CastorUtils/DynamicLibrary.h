@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___Castor_DynamicLibrary___
 #define ___Castor_DynamicLibrary___
 
-#ifndef __GNUG__
+#ifdef _WIN32
 #	include <windows.h>
 #else
 #	include <dlfcn.h>
@@ -56,12 +56,12 @@ namespace Castor
 		/**
 		 * Opens a library from a path
 		 */
-		bool Open( const Char * p_name)throw();
+		bool Open( const xchar * p_name)throw();
 		bool Open( const String & p_name)throw();
 
 		/**@name Accessors */
 		//@{
-		void * GetFunction( const Char * p_name)throw();
+		void * GetFunction( const xchar * p_name)throw();
 		void * GetFunction( const String & p_name)throw();
 
 		inline bool IsOpen()const { return m_library != NULL; }

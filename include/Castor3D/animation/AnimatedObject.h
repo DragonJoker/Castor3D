@@ -31,34 +31,32 @@ namespace Castor3D
 	\todo Review all the animation system because it's not clear, not optimised, and not good enough to be validated.
 	\todo Write and Read functions.
 	*/
-	class C3D_API AnimatedObject : public MemoryTraced<AnimatedObject>
+	class C3D_API AnimatedObject : public Serialisable, public MemoryTraced<AnimatedObject>
 	{
 	protected:
 		AnimationPtrStrMap & m_mapAnimations;	//!< The animations list
 		MovableObjectPtr m_pObject;				//!< The object affected by the animations
+		Scene * m_pScene;
 
 	public:
+		/**@name Construction / Destruction */
+		//@{
+		/**
+		 * Constructor
+		 */
+		AnimatedObject( Scene * p_pScene, AnimationPtrStrMap & p_mapAnimations);
 		/**
 		 * Specified constructor, initialises the MovableObject and the animation list
 		 *@param p_pObject : the MovableObject to affect
 		 *@param p_mapAnimations : the animations list
 		 */
-		AnimatedObject( MovableObjectPtr p_pObject, 
+		AnimatedObject( Scene * p_pScene, MovableObjectPtr p_pObject, 
 						AnimationPtrStrMap & p_mapAnimations);
 		/**
 		 * Destructor, dummy, destroy everything yourself (as you created all by yourself :P)
 		 */
 		~AnimatedObject();
-		/**
-		 * Writes the animation in a file
-		 *@param p_file : the file to write in
-		 */
-		bool Write( Castor::Utils::File & p_file)const;
-		/**
-		 * Reads the animation from a file
-		 @param p_file : the file to read from
-		 */
-		bool Read( Castor::Utils::File & p_file);
+		//@}
 		/**
 		 * Updates the animations of the object, given the time since the last frame, the animation weight and the animation scale
 		 *@param p_rTslf : time elapsed since the last frame
@@ -90,13 +88,14 @@ namespace Castor3D
 		 */
 		void PauseAllAnimations();
 
-	public:
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
+
 		/**@name Accessors */
 		//@{
-		/**
-		 * Returns the MovableObject
-		 *@return the MovableObject affected
-		 */
 		inline MovableObjectPtr	GetObject		()const { return m_pObject; }
 		//@}
 	};

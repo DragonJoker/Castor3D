@@ -83,7 +83,7 @@ namespace Castor3D
 		/**
 		 * Destructor
 		 */
-		virtual ~FrameVariable()=0
+		virtual ~FrameVariable()
 		{
 			delete [] m_strValue;
 		}
@@ -98,7 +98,7 @@ namespace Castor3D
 		 * Gives the type of the variable (essentially bool, int or real)
 		 *@return The type of the variable
 		 */
-		virtual const type_info & GetSubType()=0;
+		virtual String GetSubType()=0;
 		/**
 		 * Gives the name of the variable, as it appears in the shader program
 		 *@return The variable name
@@ -120,7 +120,18 @@ namespace Castor3D
 		 *@param p_uiIndex : [in] The index of the value
 		 *@return The string containing the value of the variable
 		 */
-		inline String GetStrValue( size_t p_uiIndex=0)const { return m_strValue[p_uiIndex]; }
+		inline String GetStrValue( size_t p_uiIndex=0)const { CASTOR_ASSERT( p_uiIndex < m_uiOcc);return m_strValue[p_uiIndex]; }
+		/**
+		 * Defines the value of the variable, from a string
+		 *@param p_uiIndex : [in] The index of the value
+		 *@param p_strValue : [in] The string containing the value
+		 */
+		void SetStrValue( const String & p_strValue, size_t p_uiIndex=0)
+		{
+			CASTOR_ASSERT( p_uiIndex < m_uiOcc);
+			m_strValue[p_uiIndex] = p_strValue;
+		}
+		inline void SetChanged( bool p_bVal=true) { m_bChanged = p_bVal; }
 		//@}
 	};
 
@@ -135,7 +146,7 @@ namespace Castor3D
 	class TFrameVariable : public FrameVariable
 	{
 	protected:
-		typedef Policy<T> Policy;
+		typedef Policy<T> policy;
 
 	public:
 		/**
@@ -158,14 +169,19 @@ namespace Castor3D
 		/**
 		 * Destructor
 		 */
-		virtual ~TFrameVariable()=0
+		virtual ~TFrameVariable()
 		{}
 		/**@name Accessors */
 		//@{
 		/**
 		 *@return The type of the variable (int, bool, real)
 		 */
-		virtual const type_info & GetSubType() { return typeid( T); }
+		virtual String GetSubType() { return typeid( T).name(); }
+		void SetStrValue( const String & p_strValue, size_t p_uiIndex=0)
+		{
+			FrameVariable::SetStrValue( p_strValue, p_uiIndex);
+		}
+		inline void SetChanged( bool p_bVal=true) { FrameVariable::SetChanged( p_bVal); }
 		//@}
 	};
 
@@ -178,6 +194,9 @@ namespace Castor3D
 	template <typename T>
 	class OneFrameVariable : public TFrameVariable<T>
 	{
+	protected:
+		typedef Policy<T> policy;
+
 	public:
 		T * m_tValue;	//!< The single value of the variable
 
@@ -188,7 +207,7 @@ namespace Castor3D
 		OneFrameVariable( size_t p_uiOcc=1)
 			:	TFrameVariable<T>( p_uiOcc)
 		{
-			m_tValue = new T[m_uiOcc];
+			m_tValue = new T[p_uiOcc];
 		}
 		/**
 		 * Copy constructor
@@ -196,11 +215,11 @@ namespace Castor3D
 		OneFrameVariable( const OneFrameVariable & p_rVariable)
 			:	TFrameVariable<T>( p_rVariable)
 		{
-			m_tValue = new T[m_uiOcc];
+			m_tValue = new T[p_rVariable.m_uiOcc];
 
-			for (size_t i = 0 ; i < m_uiOcc ; i++)
+			for (size_t i = 0 ; i < p_rVariable.m_uiOcc ; i++)
 			{
-				Policy::assign( m_tValue[i], p_rVariable.m_tValue[i]);
+				policy::assign( m_tValue[i], p_rVariable.m_tValue[i]);
 			}
 		}
 		/**
@@ -220,7 +239,7 @@ namespace Castor3D
 		 * Gives the count type of the variable
 		 *@return The count type
 		 */
-		virtual eTYPE GetType() { return eOne; }
+		virtual FrameVariable::eTYPE GetType() { return FrameVariable::eOne; }
 		/**
 		 * Defines the value of the variable, from a string
 		 *@param p_strValue : [in] The string containing the value
@@ -228,15 +247,15 @@ namespace Castor3D
 		 */
 		virtual void SetValue( const String & p_strValue, size_t p_uiIndex=0)
 		{
-			m_strValue[p_uiIndex] = p_strValue;
-			Policy::assign<double>( m_tValue[p_uiIndex], atof( p_strValue.c_str()));
+			TFrameVariable<T>::SetStrValue( p_strValue, p_uiIndex);
+			policy::assign( m_tValue[p_uiIndex], atof( p_strValue.c_str()));
 		}
 		/**
 		 * Defines the value of the variable, from a single value
 		 *@param p_tValue : [in] The new value
 		 *@param p_uiIndex : [in] The index of the value
 		 */
-		inline void SetValue( const T & p_tValue, size_t p_uiIndex=0) { Policy::assign( m_tValue[p_uiIndex], p_tValue);m_bChanged = true; }
+		inline void SetValue( const T & p_tValue, size_t p_uiIndex=0) { policy::assign( m_tValue[p_uiIndex], p_tValue);TFrameVariable<T>::SetChanged(); }
 		//@}
 	};
 
@@ -249,6 +268,9 @@ namespace Castor3D
 	template <typename T, size_t Count>
 	class PointFrameVariable : public TFrameVariable<T>
 	{
+	protected:
+		typedef Policy<T> policy;
+
 	public:
 		T * m_pValues;
 		Point<T, Count> * m_ptValue;	//!< The value of the variable
@@ -260,8 +282,8 @@ namespace Castor3D
 		PointFrameVariable( size_t p_uiOcc=1)
 			:	TFrameVariable<T>( p_uiOcc)
 		{
-			m_pValues = new T[m_uiOcc * Count];
-			m_ptValue = new Point<T, Count>[m_uiOcc];
+			m_pValues = new T[p_uiOcc * Count];
+			m_ptValue = new Point<T, Count>[p_uiOcc];
 		}
 		/**
 		 * Copy constructor
@@ -269,15 +291,15 @@ namespace Castor3D
 		PointFrameVariable( const PointFrameVariable<T, Count> & p_rVariable)
 			:	TFrameVariable<T>( p_rVariable)
 		{
-			m_pValues = new T[m_uiOcc * Count];
-			m_ptValue = new Point<T, Count>[m_uiOcc];
+			m_pValues = new T[p_rVariable.m_uiOcc * Count];
+			m_ptValue = new Point<T, Count>[p_rVariable.m_uiOcc];
 
-			for (size_t i = 0 ; i < m_uiOcc * Count ; i++)
+			for (size_t i = 0 ; i < p_rVariable.m_uiOcc * Count ; i++)
 			{
-				Policy::assign( m_pValues[i], p_rVariable.m_pValues[i]);
+				policy::assign( m_pValues[i], p_rVariable.m_pValues[i]);
 			}
 
-			for (size_t i = 0 ; i < m_uiOcc ; i++)
+			for (size_t i = 0 ; i < p_rVariable.m_uiOcc ; i++)
 			{
 				m_ptValue[i].LinkCoords( & m_pValues[i * Count]);
 			}
@@ -299,7 +321,7 @@ namespace Castor3D
 		 * Gives the count type of the variable
 		 *@return The count type
 		 */
-		virtual eTYPE GetType();
+		virtual FrameVariable::eTYPE GetType();
 		/**
 		 * Defines the value of the variable, from a string
 		 *@param p_strValue : [in] The string containing the value
@@ -307,14 +329,14 @@ namespace Castor3D
 		 */
 		virtual void SetValue( const String & p_strValue, size_t p_uiIndex=0)
 		{
-			m_strValue[p_uiIndex] = p_strValue;
-			StringArray l_arraySplitted = p_strValue.Split( ", \t");
+			TFrameVariable<T>::SetStrValue( p_strValue, p_uiIndex);
+			StringArray l_arraySplitted = p_strValue.split( ", \t");
 
 			if (l_arraySplitted.size() == Count)
 			{
 				for (size_t i = 0 ; i < Count ; i++)
 				{
-					Policy::assign( m_ptValue[p_uiIndex][i], atof( l_arraySplitted[i].c_str()));
+					policy::assign( m_ptValue[p_uiIndex][i], atof( l_arraySplitted[i].c_str()));
 				}
 			}
 		}
@@ -323,11 +345,9 @@ namespace Castor3D
 		 *@param p_ptValue : [in] The new value
 		 *@param p_uiIndex : [in] The index of the value
 		 */
-		inline void SetValue( const Point<T, Count> & p_ptValue, size_t p_uiIndex=0) { m_ptValue[p_uiIndex] = p_ptValue;m_bChanged = true; }
+		inline void SetValue( const Point<T, Count> & p_ptValue, size_t p_uiIndex=0) { m_ptValue[p_uiIndex] = p_ptValue;TFrameVariable<T>::SetChanged(); }
 		//@}
 	};
-
-	template <size_t Count> struct PointVariableTyper;
 
 	//! N dimensions matrix of variable type variable
 	/*!
@@ -338,6 +358,9 @@ namespace Castor3D
 	template <typename T, size_t Rows, size_t Columns>
 	class MatrixFrameVariable : public TFrameVariable<T>
 	{
+	protected:
+		typedef Policy<T> policy;
+
 	public:
 		T * m_pValues;
 		Matrix <T, Rows, Columns> * m_mValue;	//!< The value of the variable
@@ -349,8 +372,8 @@ namespace Castor3D
 		MatrixFrameVariable( size_t p_uiOcc=1)
 			:	TFrameVariable<T>( p_uiOcc)
 		{
-			m_pValues = new T[Rows * Columns * m_uiOcc];
-			m_mValue = new Matrix <T, Rows, Columns>[m_uiOcc];
+			m_pValues = new T[Rows * Columns * p_uiOcc];
+			m_mValue = new Matrix <T, Rows, Columns>[p_uiOcc];
 		}
 		/**
 		 * Copy constructor
@@ -358,15 +381,15 @@ namespace Castor3D
 		MatrixFrameVariable( const MatrixFrameVariable & p_rVariable)
 			:	TFrameVariable<T>( p_rVariable)
 		{
-			m_pValues = new T[Rows * Columns * m_uiOcc];
-			m_mValue = new Matrix <T, Rows, Columns>[m_uiOcc];
+			m_pValues = new T[Rows * Columns * p_rVariable.m_uiOcc];
+			m_mValue = new Matrix <T, Rows, Columns>[p_rVariable.m_uiOcc];
 
-			for (size_t i = 0 ; i < Rows * Columns * m_uiOcc ; i++)
+			for (size_t i = 0 ; i < Rows * Columns * p_rVariable.m_uiOcc ; i++)
 			{
-				Policy::assign( m_pValues[i], p_rVariable.m_pValues[i]);
+				policy::assign( m_pValues[i], p_rVariable.m_pValues[i]);
 			}
 
-			for (size_t i = 0 ; i < m_uiOcc ; i++)
+			for (size_t i = 0 ; i < p_rVariable.m_uiOcc ; i++)
 			{
 				m_mValue[i].LinkCoords( & m_pValues[i * Rows * Columns]);
 			}
@@ -388,7 +411,7 @@ namespace Castor3D
 		 * Gives the count type of the variable
 		 *@return The count type
 		 */
-		virtual eTYPE GetType();
+		virtual FrameVariable::eTYPE GetType();
 		/**
 		 * Defines the value of the variable, from a string
 		 *@param p_strValue : [in] The string containing the value
@@ -396,8 +419,8 @@ namespace Castor3D
 		 */
 		virtual void SetValue( const String & p_strValue, size_t p_uiIndex=0)
 		{
-			m_strValue[p_uiIndex] = p_strValue;
-			StringArray l_arrayLines = p_strValue.Split( ";");
+			TFrameVariable<T>::SetStrValue( p_strValue, p_uiIndex);
+			StringArray l_arrayLines = p_strValue.split( ";");
 
 			if (l_arrayLines.size() == Rows)
 			{
@@ -406,7 +429,7 @@ namespace Castor3D
 				for (size_t i = 0 ; i < Rows && l_bOK ; i++)
 				{
 					l_bOK = false;
-					StringArray l_arraySplitted = l_arrayLines[i].Split( ", \t");
+					StringArray l_arraySplitted = l_arrayLines[i].split( ", \t");
 
 					if (l_arraySplitted.size() == Columns)
 					{
@@ -414,7 +437,7 @@ namespace Castor3D
 
 						for (size_t j = 0 ; j < Columns ; j++)
 						{
-							Policy::assign( m_mValue[p_uiIndex][j][i], atof( l_arraySplitted[j].c_str()));
+							policy::assign( m_mValue[p_uiIndex][j][i], atof( l_arraySplitted[j].c_str()));
 						}
 					}
 				}
@@ -425,13 +448,11 @@ namespace Castor3D
 		 *@param p_mValue : [in] The new value
 		 *@param p_uiIndex : [in] The index of the value
 		 */
-		inline void SetValue( const Matrix <T, Rows, Columns> & p_mValue, size_t p_uiIndex=0) { m_mValue[p_uiIndex] = p_mValue;m_bChanged = true; }
+		inline void SetValue( const Matrix <T, Rows, Columns> & p_mValue, size_t p_uiIndex=0) { m_mValue[p_uiIndex] = p_mValue;TFrameVariable<T>::SetChanged(); }
 		//@}
 	};
 
-	template <size_t Rows, size_t Columns> struct MatrixVariableTyper;
-}
-
 #include "FrameVariable.inl"
+}
 
 #endif

@@ -1,7 +1,7 @@
 #ifndef ___GC_MaterialsFrame___
 #define ___GC_MaterialsFrame___
 
-namespace GUICommon
+namespace GuiCommon
 {
 	class MaterialsListView;
 	class MaterialPanel;

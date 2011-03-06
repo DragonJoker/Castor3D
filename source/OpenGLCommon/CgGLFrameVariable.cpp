@@ -1,11 +1,10 @@
-#include "OpenGLCommon/PrecompiledHeader.h"
+#include "OpenGlCommon/PrecompiledHeader.h"
 
-#include "OpenGLCommon/CgGLFrameVariable.h"
+#include "OpenGlCommon/CgGlFrameVariable.h"
 
 using namespace Castor3D;
 
-void CgGLFrameVariableBase :: GetVariableLocation( const char * p_pVarName)
+void CgGlFrameVariableBase :: GetVariableLocation( const char * p_pVarName)
 {
-	m_cgParameter = cgGetNamedParameter( m_cgProgram, p_pVarName);
-	CheckCgError( CU_T( "CgGLFrameVariableBase :: GetVariableLocation - cgGetNamedParameter - ") + String( p_pVarName));
+	CheckCgError( m_cgParameter = cgGetNamedParameter( m_cgProgram, p_pVarName), CU_T( "CgGlFrameVariableBase :: GetVariableLocation - cgGetNamedParameter - ") + String( p_pVarName));
 }

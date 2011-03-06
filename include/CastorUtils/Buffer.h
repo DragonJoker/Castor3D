@@ -20,6 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Module_Resource.h"
 #include "Assertion.h"
+#include "FastMath.h"
 
 namespace Castor
 {	namespace Resources
@@ -66,6 +67,16 @@ namespace Castor
 				m_filled( p_uiFilled)
 		{
 			memcpy( m_buffer, p_pBuffer, p_uiFilled * sizeof( T));
+		}
+		/** 
+		* Constructor from a size
+		*/
+		Buffer( unsigned int p_uiSize)
+			:	m_buffer( new T[p_uiSize]),
+				m_totalSize( p_uiSize),
+				m_filled( 0)
+		{
+			memset( m_buffer, 0, p_uiSize * sizeof( T));
 		}
 		/**
 		* Destructor, cleans the buffer
@@ -133,14 +144,14 @@ namespace Castor
 		 */
 		void AddArray( const void * p_pArray, size_t p_uiNbElements)
 		{
-			CASTOR_ASSERT( m_filled + p_uiNbElements / sizeof( T) <= m_totalSize);
+			CASTOR_ASSERT( m_filled + (p_uiNbElements / sizeof( T)) <= m_totalSize);
 
 			if (p_pArray != NULL)
 			{
 				memcpy( & m_buffer[m_filled], p_pArray, p_uiNbElements);
 			}
 
-			m_filled += p_uiNbElements / sizeof( T);
+			m_filled += (p_uiNbElements / sizeof( T));
 		}
 		/**
 		 * Adds an array of elements to the buffer
@@ -220,7 +231,7 @@ namespace Castor
 		}
 		inline void Offset( int p_iOffset)
 		{
-			m_filled = unsigned int( Castor::Math::clamp( int( 0), int( m_filled) + p_iOffset, int( m_totalSize)));
+			m_filled = static_cast<unsigned int>( Castor::Math::clamp( int( 0), int( m_filled) + p_iOffset, int( m_totalSize)));
 		}
 		//@}
 		/**@name Operators */
@@ -232,7 +243,7 @@ namespace Castor
 		}
 		inline T & operator []( unsigned int p_uiIndex)
 		{
-			CASTOR_ASSERT( p_uiIndex < m_filled);
+			CASTOR_ASSERT( p_uiIndex < m_totalSize);
 			return m_buffer[p_uiIndex];
 		}
 		inline Buffer & operator =( const Buffer<T> & p_buffer)

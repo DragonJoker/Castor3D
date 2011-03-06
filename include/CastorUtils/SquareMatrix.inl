@@ -42,7 +42,7 @@ namespace Castor
 		for (size_t i = 0 ; i < Rows ; i++)
 		{
 			Templates::Policy<T>::assign( l_tCofactor, GetCofactor( i, 0));
-			Templates::Policy<T>::assign( l_tValue, m_matrix[0][i]);
+			Templates::Policy<T>::assign( l_tValue, matrix_type::m_matrix[0][i]);
 			Templates::Policy<T>::ass_add( l_tReturn, Templates::Policy<T>::multiply( l_tValue, l_tCofactor));
 		}
 
@@ -85,7 +85,7 @@ namespace Castor
 		{
 			for (size_t j = 0 ; j < Rows ; j++)
 			{
-				Templates::Policy<T>::assign( m_matrix[i][j], l_mResult[j][i]);
+				Templates::Policy<T>::assign( matrix_type::m_matrix[i][j], l_mResult[j][i]);
 			}
 		}
 	}
@@ -98,7 +98,7 @@ namespace Castor
 		{
 			for (size_t j = 0 ; j < Rows && l_bReturn ; j++)
 			{
-				l_bReturn = Templates::Policy<T>::equals( m_matrix[i][j], m_matrix[j][i]);
+				l_bReturn = Templates::Policy<T>::equals( matrix_type::m_matrix[i][j], matrix_type::m_matrix[j][i]);
 			}
 		}
 
@@ -113,7 +113,7 @@ namespace Castor
 		{
 			for (size_t j = 0 ; j < Rows && l_bReturn ; j++)
 			{
-				if ( ! Templates::Policy<T>::is_null( m_matrix[i][j] + m_matrix[j][i]))
+				if ( ! Templates::Policy<T>::is_null( matrix_type::m_matrix[i][j] + matrix_type::m_matrix[j][i]))
 				{
 					l_bReturn = false;
 				}
@@ -146,7 +146,7 @@ namespace Castor
 				{
 					if (j != y)
 					{
-						Templates::Policy<T>::assign( l_mReturn[l_j++][l_i], m_matrix[j][i]);
+						Templates::Policy<T>::assign( l_mReturn[l_j++][l_i], matrix_type::m_matrix[j][i]);
 					}
 				}
 
@@ -184,11 +184,11 @@ namespace Castor
 				{
 					if (Templates::Policy<T>::is_null( l_mTmp[j][i]))
 					{
-						Templates::Policy<T>::init( m_matrix[j][i]);
+						Templates::Policy<T>::init( matrix_type::m_matrix[j][i]);
 					}
 					else
 					{
-						Templates::Policy<T>::assign( m_matrix[j][i], l_mTmp[j][i]);
+						Templates::Policy<T>::assign( matrix_type::m_matrix[j][i], l_mTmp[j][i]);
 					}
 				}
 			}
@@ -301,7 +301,7 @@ namespace Castor
 		{
 			for (size_t j = 0 ; j < Rows ; j++)
 			{
-				l_mResult[i] += m_matrix[j] * p_matrix[i][j];
+				l_mResult[i] += matrix_type::m_matrix[j] * p_matrix[i][j];
 			}
 		}
 
@@ -398,7 +398,7 @@ namespace Castor
 			return Templates::Policy<T>::unit();
 		}
 	};
-	template <typename T, size_t Rows> struct CoFactorComputer<T, Rows>
+	template <typename T, size_t Rows> struct CoFactorComputer//<T, Rows>
 	{
 		static T Value( const SquareMatrix<T, Rows> & p_matrix, size_t p_uiRow, size_t p_uiColumn)
 		{

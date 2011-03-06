@@ -1,7 +1,7 @@
 #ifndef ___GC_TextPanel___
 #define ___GC_TextPanel___
 
-namespace GUICommon
+namespace GuiCommon
 {
 	struct SearchInfo
 	{
@@ -55,7 +55,7 @@ namespace GUICommon
 		bool Search( const wxString & p_search);
 		bool SearchNext();
 		bool SearchPrevious();
-		void Replace( const wxString & p_replacement);
+		void replace( const wxString & p_replacement);
 
 	public:
 		inline TextCtrl *	GetText()const { return m_text; }

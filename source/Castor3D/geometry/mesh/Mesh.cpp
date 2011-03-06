@@ -16,23 +16,8 @@ MeshPtr MeshLoader :: LoadFromFile( MeshManager * p_pManager, const String & p_f
 	bool l_bResult = false;
 
 	File l_file( p_file, File::eRead);
-	size_t l_nameLength = 0;
-	l_bResult = l_file.Read( l_nameLength) == sizeof( size_t);
 	String l_strName;
-
-	if (l_bResult)
-	{
-		Char * l_name = new Char[l_nameLength + 1];
-		l_bResult = l_file.ReadArray( l_name, l_nameLength) == l_nameLength * sizeof( Char);
-
-		if (l_bResult)
-		{
-			l_name[l_nameLength] = 0;
-			l_strName = l_name;
-		}
-
-		delete [] l_name;
-	}
+	l_bResult = l_file.Read( l_strName);
 
 	if (l_bResult)
 	{
@@ -40,28 +25,7 @@ MeshPtr MeshLoader :: LoadFromFile( MeshManager * p_pManager, const String & p_f
 		l_pReturn.reset( new Mesh( p_pManager, l_strName));
 	}
 
-	Mesh::eTYPE l_meshType;
-
-	if (l_bResult)
-	{
-		l_bResult = l_file.Read( l_meshType) == sizeof( Mesh::eTYPE);
-	}
-
-	size_t l_nbSubmeshes;
-
-	if (l_bResult)
-	{
-		l_pReturn->SetMeshType( l_meshType);
-		l_bResult = l_file.Read( l_nbSubmeshes) == sizeof( size_t);
-	}
-
-	if (l_bResult)
-	{
-		for (size_t i = 0 ; i < l_nbSubmeshes && l_bResult ; i++)
-		{
-			l_bResult = l_pReturn->CreateSubmesh( 0)->Read( l_file);
-		}
-	}
+	l_bResult = l_pReturn->Load( l_file);
 
 	if ( ! l_bResult)
 	{
@@ -74,46 +38,17 @@ MeshPtr MeshLoader :: LoadFromFile( MeshManager * p_pManager, const String & p_f
 bool MeshLoader :: SaveToFile( const String & p_file, MeshPtr p_mesh)
 {
 	File l_file( p_file + CU_T( "/") + p_mesh->GetName() + CU_T( ".cmsh"), File::eWrite);
-	bool l_bReturn = false;
-
-	//on écrit le nom du mesh
-	size_t l_nameLength = p_mesh->GetName().size();
-	l_bReturn = l_file.Write( l_nameLength) == sizeof( size_t);
-
-	if (l_bReturn)
-	{
-		l_bReturn = l_file.WriteArray( p_mesh->GetName().c_str(), l_nameLength) == l_nameLength * sizeof( Char);
-	}
-
-	if (l_bReturn)
-	{
-		Mesh::eTYPE l_meshType = p_mesh->GetMeshType();
-		l_bReturn = l_file.Write( l_meshType) == sizeof( Mesh::eTYPE);
-	}
-
-	size_t l_nbSubmeshes = p_mesh->GetNbSubmeshes();
-
-	if (l_bReturn)
-	{
-		l_bReturn = l_file.Write( l_nbSubmeshes) == sizeof( size_t);
-	}
-
-	for (size_t i = 0 ; i < l_nbSubmeshes && l_bReturn ; i++)
-	{
-		l_bReturn = p_mesh->GetSubmesh( i)->Write( l_file);
-	}
-
-	return l_bReturn;
+	return p_mesh->Save( l_file);
 }
 
 //*********************************************************************************************
 
-Mesh :: Mesh( MeshManager * p_pManager, const String & p_name)
-	:	Resource<Mesh, MeshManager>( p_pManager, p_name)
+Mesh :: Mesh( Manager<Mesh> * p_pManager, const String & p_name)
+	:	Resource<Mesh>( p_pManager, p_name)
 	,	m_modified( false)
 	,	m_bOK( false)
 {
-	m_meshType = Mesh::eCustom;
+	m_meshType = eCustom;
 }
 
 Mesh :: ~Mesh()
@@ -196,7 +131,7 @@ size_t Mesh :: GetNbVertex()const
 	return l_nbFaces;
 }
 
-SubmeshPtr Mesh :: GetSubmesh( unsigned int p_index)
+SubmeshPtr Mesh :: GetSubmesh( unsigned int p_index)const
 {
 	SubmeshPtr l_pReturn;
 
@@ -212,7 +147,7 @@ SubmeshPtr Mesh :: CreateSubmesh( unsigned int p_nbSmoothGroups)
 {
 	SubmeshPtr l_submesh( new Submesh( p_nbSmoothGroups));
 
-	if ( ! l_submesh == NULL)
+	if (l_submesh != NULL)
 	{
 		m_submeshes.push_back( l_submesh);
 	}
@@ -294,4 +229,63 @@ bool Mesh :: Subdivide( unsigned int p_index, SubdividerPtr p_pSubdivider, bool 
 	m_bOK = true;
 
 	return true;
+}
+
+bool Mesh :: Save( File & p_file)const
+{
+	bool l_bReturn = false;
+
+	//on écrit le nom du mesh
+	l_bReturn = p_file.Write( m_strName);
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_file.Write( GetMeshType()) == sizeof( eMESH_TYPE);
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_file.Write( GetNbSubmeshes()) == sizeof( size_t);
+	}
+
+	for (size_t i = 0 ; i < GetNbSubmeshes() && l_bReturn ; i++)
+	{
+		l_bReturn = GetSubmesh( i)->Save( p_file);
+	}
+
+	return l_bReturn;
+}
+
+bool Mesh :: Load( File & p_file)
+{
+	bool l_bReturn = true;
+	eMESH_TYPE l_eMeshType;
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_file.Read( m_strName);
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_file.Read( l_eMeshType) == sizeof( eMESH_TYPE);
+	}
+
+	size_t l_nbSubmeshes;
+
+	if (l_bReturn)
+	{
+		SetMeshType( l_eMeshType);
+		l_bReturn = p_file.Read( l_nbSubmeshes) == sizeof( size_t);
+	}
+
+	if (l_bReturn)
+	{
+		for (size_t i = 0 ; i < l_nbSubmeshes && l_bReturn ; i++)
+		{
+			l_bReturn = CreateSubmesh( 0)->Load( p_file);
+		}
+	}
+
+	return l_bReturn;
 }

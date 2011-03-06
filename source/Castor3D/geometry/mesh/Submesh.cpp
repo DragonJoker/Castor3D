@@ -9,6 +9,7 @@
 #include "Castor3D/material/Material.h"
 #include "Castor3D/render_system/Buffer.h"
 #include "Castor3D/render_system/RenderSystem.h"
+#include "Castor3D/render_system/BufferElement.h"
 #include "Castor3D/material/Pass.h"
 #include "Castor3D/main/Root.h"
 #include "Castor3D/scene/SceneManager.h"
@@ -19,7 +20,7 @@ using namespace Castor3D;
 
 SubmeshRenderer :: SubmeshRenderer( SceneManager * p_pManager)
 	:	Renderer<Submesh, SubmeshRenderer>( p_pManager)
-	,	m_eLastDrawType( eDRAW_TYPE( -1))
+	,	m_eLastDrawType( ePRIMITIVE_TYPE( -1))
 	,	m_eLastNormalsMode( eNORMALS_MODE( -1))
 {
 }
@@ -33,13 +34,13 @@ void SubmeshRenderer :: Cleanup()
 {
 	BufferManager::GetSingleton().DeleteBuffer<real>( m_vertex);
 
-	for (int i = 0 ; i < eNbDrawType ; i++)
+	for (int i = 0 ; i < eNbDrawTypes ; i++)
 	{
 		BufferManager::GetSingleton().DeleteBuffer<unsigned int>( m_indices[i]);
 	}
 }
 
-void SubmeshRenderer :: Draw( eDRAW_TYPE p_eMode, const Pass & p_pass)
+void SubmeshRenderer :: Draw( ePRIMITIVE_TYPE p_eMode, const Pass & p_pass)
 {
 	if (p_eMode != m_eLastDrawType)
 	{
@@ -51,13 +52,13 @@ void SubmeshRenderer :: Draw( eDRAW_TYPE p_eMode, const Pass & p_pass)
 	_drawBuffers( p_pass);
 }
 
-void SubmeshRenderer :: _createVBOs()
+void SubmeshRenderer :: _createVbo()
 {
-	m_vertex = RenderSystem::CreateBuffer<VertexInfosBuffer>();
+	m_vertex = RenderSystem::CreateVertexBuffer( Vertex::VertexDeclarationElements, 4);
 
-	for (int i = 0 ; i < eNbDrawType ; i++)
+	for (int i = 0 ; i < eNbDrawTypes ; i++)
 	{
-		m_indices[i] = RenderSystem::CreateBuffer<IndicesBuffer>();
+		m_indices[i] = RenderSystem::CreateIndexBuffer();
 	}
 }
 
@@ -68,9 +69,9 @@ Submesh :: Submesh( size_t p_sgNumber)
 {
 	m_vertex = m_pRenderer->GetVertex();
 
-	for (int i = 0 ; i < eNbDrawType ; i++)
+	for (int i = 0 ; i < eNbDrawTypes ; i++)
 	{
-		m_indices[i] = m_pRenderer->GetIndices( eDRAW_TYPE( i));
+		m_indices[i] = m_pRenderer->GetIndices( ePRIMITIVE_TYPE( i));
 	}
 
 	for (size_t i = 0 ; i < p_sgNumber ; i++)
@@ -294,6 +295,17 @@ FacePtr Submesh :: AddFace( size_t a, size_t b, size_t c, size_t p_sgIndex)
 	return m_smoothGroups[p_sgIndex]->GetFace( m_smoothGroups[p_sgIndex]->GetNbFaces() - 1);
 }
 
+FacePtr Submesh :: AddFace( size_t a, size_t b, size_t c, SmoothingGroup & p_group)
+{
+	CASTOR_ASSERT( a < m_points.size() && b < m_points.size() && c < m_points.size());
+
+	p_group.AddFace( FacePtr( new Face( * m_points[a], * m_points[b], * m_points[c])));
+
+	m_vertex->IncreaseSize( Vertex::Size * 3, false);
+
+	return p_group.GetFace( p_group.GetNbFaces() - 1);
+}
+
 void Submesh :: AddQuadFace( size_t a, size_t b, size_t c, size_t d, size_t p_sgIndex, const Point3r & p_ptMinUV, const Point3r & p_ptMaxUV)
 {
 	FacePtr l_face1 = AddFace( a, b, c, p_sgIndex);
@@ -309,7 +321,7 @@ void Submesh :: AddQuadFace( size_t a, size_t b, size_t c, size_t d, size_t p_sg
 
 SmoothingGroupPtr Submesh :: AddSmoothingGroup()
 {
-	SmoothingGroupPtr l_group( new SmoothingGroup( m_smoothGroups.size() + 1));
+	SmoothingGroupPtr l_group( new SmoothingGroup( this, m_smoothGroups.size() + 1));
 	m_smoothGroups.push_back( l_group);
 	return m_smoothGroups[m_smoothGroups.size() - 1];
 }
@@ -413,15 +425,15 @@ void Submesh :: Subdivide( SubdividerPtr p_pSubdivider, Point3r * p_center, bool
 	m_pRenderer->Cleanup();
 	m_vertex = m_pRenderer->GetVertex();
 
-	for (int i = 0 ; i < eNbDrawType ; i++)
+	for (int i = 0 ; i < eNbDrawTypes ; i++)
 	{
-		m_indices[i] = m_pRenderer->GetIndices( eDRAW_TYPE( i));
+		m_indices[i] = m_pRenderer->GetIndices( ePRIMITIVE_TYPE( i));
 	}
 
 	p_pSubdivider->Subdivide( * p_center, p_bGenerateBuffers, p_bThreaded);
 }
 
-void Submesh :: Render( eDRAW_TYPE p_displayMode)
+void Submesh :: Render( ePRIMITIVE_TYPE p_displayMode)
 {
 	MaterialPtr l_pMaterial = m_material.lock();
 	size_t l_uiCount = l_pMaterial->GetNbPasses();
@@ -435,18 +447,70 @@ void Submesh :: Render( eDRAW_TYPE p_displayMode)
 	}
 }
 
+void Submesh :: ComputeFacesFromPolygonVertex()
+{
+	int l_nbFaces = m_points.size() - 2;
+
+	unsigned int l_nbTrianglesCoords = 4 * l_nbFaces * 12 * 3;
+	m_vertex->InitialiseBuffer( l_nbTrianglesCoords, 0);
+
+	IdPoint3rPtr l_v1 = m_points[0];
+	IdPoint3rPtr l_v2 = m_points[1];
+	IdPoint3rPtr l_v3 = m_points[2];
+
+	FacePtr l_face = AddFace( 0, 1, 2, 0);
+	l_face->SetVertexTexCoords( 0, 0.0, 0.0);
+	l_face->SetVertexTexCoords( 1, 0.0, 0.0);
+	l_face->SetVertexTexCoords( 2, 0.0, 0.0);
+
+	m_vertex->AddElement( l_face->GetVertex( 0), false);
+	m_vertex->AddElement( l_face->GetVertex( 1), false);
+	m_vertex->AddElement( l_face->GetVertex( 2), false);
+
+	for (size_t i = 2 ; i < m_points.size() - 1 ; i++)
+	{
+		l_v2 = m_points[i];
+		l_v3 = m_points[i + 1];
+		FacePtr l_faceA = AddFace( 0, i, i + 1, 0);
+
+		l_faceA->SetVertexTexCoords( 0, 0.0, 0.0);
+		l_faceA->SetVertexTexCoords( 1, 0.0, 0.0);
+		l_faceA->SetVertexTexCoords( 2, 0.0, 0.0);
+
+		m_vertex->AddElement( l_faceA->GetVertex( 0), false);
+		m_vertex->AddElement( l_faceA->GetVertex( 1), false);
+		m_vertex->AddElement( l_faceA->GetVertex( 2), false);
+	}
+}
+
 bool Submesh :: Write( File & p_file)const
 {
+	bool l_bReturn = p_file.WriteLine( CU_T( "\t\tsubmesh\n\t\t{\n")) > 0;
+
+	if (l_bReturn && ! m_material.expired())
+	{
+		l_bReturn = p_file.WriteLine( CU_T( "material ") + m_material.lock()->GetName() + CU_T( "\n")) > 0;
+	}
+
+	for (size_t i = 0 ; i < m_points.size() && l_bReturn ; i++)
+	{
+		l_bReturn = p_file.Print( 1024, "vertex %f %f %f\n", (*m_points[i])[0], (*m_points[i])[1], (*m_points[i])[2]) > 0;
+	}
+
+	for (size_t i = 0 ; i < m_smoothGroups.size() ; i++)
+	{
+		l_bReturn = m_smoothGroups[i]->Write( p_file);
+	}
+
+	return l_bReturn;
+}
+
+bool Submesh :: Save( File & p_file)const
+{
 	size_t l_nbVertex;
-	size_t l_nbFaces;
 	size_t l_matNameLength = m_strMatName.size();
 
-	bool l_bReturn = p_file.Write( l_matNameLength) == sizeof( size_t);
-
-	if (l_bReturn)
-	{
-		l_bReturn = p_file.WriteArray( m_strMatName.c_str(), l_matNameLength) == l_matNameLength * sizeof( Char);
-	}
+	bool l_bReturn = p_file.Write( m_strMatName);
 
 	l_nbVertex = m_points.size();
 
@@ -459,7 +523,7 @@ bool Submesh :: Write( File & p_file)const
 	{
 		for (size_t i = 0; i < l_nbVertex && l_bReturn ; i++)
 		{
-			l_bReturn = m_points[i]->Write( p_file);
+			l_bReturn = m_points[i]->Save( p_file);
 		}
 	}
 
@@ -472,36 +536,14 @@ bool Submesh :: Write( File & p_file)const
 	{
 		for (size_t i = 0 ; i < m_smoothGroups.size() && l_bReturn ; i++)
 		{
-			l_nbFaces = m_smoothGroups[i]->GetNbFaces();
-
-			l_bReturn = p_file.Write( m_smoothGroups[i]->GetGroupID()) == sizeof( size_t);
-
-			if (l_bReturn)
-			{
-				l_bReturn = p_file.Write( l_nbFaces) == sizeof( size_t);
-			}
-
-			for (size_t j = 0 ; j < l_nbFaces && l_bReturn ; j++)
-			{
-				FacePtr l_face = m_smoothGroups[i]->GetFace( j);
-
-				for (size_t k = 0 ; k <  3 && l_bReturn ; k++)
-				{
-					l_bReturn = p_file.Write( l_face->GetVertex( k).GetIndex()) == sizeof( size_t);
-				}
-
-				if (l_bReturn)
-				{
-					l_bReturn = l_face->Write( p_file);
-				}
-			}// endloop on faces
-		}// endloop on smoothing groups
-	}// endif l_bReturn;
+			l_bReturn = m_smoothGroups[i]->Save( p_file);
+		}
+	}
 
 	return l_bReturn;
 }
 
-bool Submesh :: Read( File & p_file)
+bool Submesh :: Load( File & p_file)
 {
 	Cleanup();
 
@@ -510,23 +552,13 @@ bool Submesh :: Read( File & p_file)
 
 	size_t l_nbVertex;
 	size_t l_nbGroups;
-	size_t l_nbFaces;
-	size_t l_iV1, l_iV2, l_iV3;
-	size_t l_namelength;
-	Char l_name[256];
-	bool l_bReturn = p_file.Read( l_namelength) == sizeof( size_t);
+	bool l_bReturn = p_file.Read( m_strMatName);
 
 	if (l_bReturn)
 	{
-		l_bReturn = p_file.ReadArray( l_name, l_namelength) == l_namelength * sizeof( Char);
-	}
+		MaterialPtr l_material( Root::GetSingletonPtr()->GetSceneManager()->GetMaterialManager()->GetElementByName( m_strMatName));
 
-	if (l_bReturn)
-	{
-		l_name[l_namelength] = 0;
-		MaterialPtr l_material( Root::GetSingletonPtr()->GetSceneManager()->GetMaterialManager()->GetElementByName( l_name));
-
-		if ( ! l_material == NULL)
+		if (l_material != NULL)
 		{
 			m_material = l_material;
 		}
@@ -543,7 +575,7 @@ bool Submesh :: Read( File & p_file)
 		{
 			Point3r l_v;
 
-			l_bReturn = l_v.Read( p_file);
+			l_bReturn = l_v.Load( p_file);
 
 			if (l_bReturn)
 			{
@@ -564,43 +596,8 @@ bool Submesh :: Read( File & p_file)
 
 		for (size_t i = 0 ; i < l_nbGroups && l_bReturn ; i++)
 		{
-			SmoothingGroupPtr l_group = AddSmoothingGroup();
-			size_t l_uiID;
+			AddSmoothingGroup()->Load( p_file);
 
-			l_bReturn = p_file.Read( l_uiID) == sizeof( size_t);
-
-			if (l_bReturn)
-			{
-				l_group->SetGroupID( l_uiID);
-				l_bReturn = p_file.Read( l_nbFaces) == sizeof( size_t);
-			}
-
-			if (l_bReturn)
-			{
-				for (size_t j = 0 ; j < l_nbFaces && l_bReturn ; j++)
-				{
-					l_iV1 = 0;
-					l_iV2 = 0;
-					l_iV3 = 0;
-
-					l_bReturn = p_file.Read( l_iV1) == sizeof( size_t);
-
-					if (l_bReturn)
-					{
-						l_bReturn = p_file.Read( l_iV2) == sizeof( size_t);
-					}
-
-					if (l_bReturn)
-					{
-						l_bReturn = p_file.Read( l_iV3) == sizeof( size_t);
-					}
-
-					if (l_bReturn)
-					{
-						l_bReturn = AddFace( l_iV1, l_iV2, l_iV3, 0)->Read( p_file);
-					}
-				}
-			}
 		}
 	}
 
@@ -610,42 +607,6 @@ bool Submesh :: Read( File & p_file)
 	}
 
 	return l_bReturn;
-}
-
-void Submesh :: ComputeFacesFromPolygonVertex()
-{
-	int l_nbFaces = m_points.size() - 2;
-
-	unsigned int l_nbTrianglesCoords = 4 * l_nbFaces * 12 * 3;
-	m_vertex->InitialiseBuffer( l_nbTrianglesCoords, 0);
-
-	IdPoint3rPtr l_v1 = m_points[0];
-	IdPoint3rPtr l_v2 = m_points[1];
-	IdPoint3rPtr l_v3 = m_points[2];
-
-	FacePtr l_face = AddFace( 0, 1, 2, 0);
-	l_face->SetVertexTexCoords( 0, 0.0, 0.0);
-	l_face->SetVertexTexCoords( 1, 0.0, 0.0);
-	l_face->SetVertexTexCoords( 2, 0.0, 0.0);
-
-	m_vertex->AddVertex( l_face->GetVertex( 0), false);
-	m_vertex->AddVertex( l_face->GetVertex( 1), false);
-	m_vertex->AddVertex( l_face->GetVertex( 2), false);
-
-	for (size_t i = 2 ; i < m_points.size() - 1 ; i++)
-	{
-		l_v2 = m_points[i];
-		l_v3 = m_points[i + 1];
-		FacePtr l_faceA = AddFace( 0, i, i + 1, 0);
-
-		l_faceA->SetVertexTexCoords( 0, 0.0, 0.0);
-		l_faceA->SetVertexTexCoords( 1, 0.0, 0.0);
-		l_faceA->SetVertexTexCoords( 2, 0.0, 0.0);
-
-		m_vertex->AddVertex( l_faceA->GetVertex( 0), false);
-		m_vertex->AddVertex( l_faceA->GetVertex( 1), false);
-		m_vertex->AddVertex( l_faceA->GetVertex( 2), false);
-	}
 }
 
 void Submesh :: _generateVertex()
@@ -658,9 +619,9 @@ void Submesh :: _generateVertex()
 		for (size_t j = 0 ; j < m_smoothGroups[i]->GetNbFaces() ; j++)
 		{
 			FacePtr l_face = m_smoothGroups[i]->GetFace( j);
-			m_vertex->AddVertex( l_face->GetVertex( 0), false);
-			m_vertex->AddVertex( l_face->GetVertex( 1), false);
-			m_vertex->AddVertex( l_face->GetVertex( 2), false);
+			m_vertex->AddElement( l_face->GetVertex( 0), false);
+			m_vertex->AddElement( l_face->GetVertex( 1), false);
+			m_vertex->AddElement( l_face->GetVertex( 2), false);
 		}
 	}
 }

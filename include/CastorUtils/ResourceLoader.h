@@ -53,8 +53,8 @@ namespace Castor
 	class UnsupportedFormatError : public Castor::Utils::Exception
 	{
 	public:
-		UnsupportedFormatError(	const String & p_description, const Char * p_file,
-			const Char * p_function, unsigned int p_line)
+		UnsupportedFormatError(	const String & p_description, const xchar * p_file,
+			const xchar * p_function, unsigned int p_line)
 			:	Exception( p_description, p_file, p_function, p_line)
 		{}
 	};
@@ -69,21 +69,21 @@ namespace Castor
 	\version 0.6.1.0
 	\date 03/01/2011
 	*/
-	template <class T, class _ResourceManager>
+	template <class T>
 	class ResourceLoader
 	{
 	public:
 		/**
 		 * Loads a resource from a file
 		 */
-		typename SmartPtr<T>::Shared LoadFromFile( Templates::Manager<String, T, _ResourceManager > * p_pManager, const String & p_file)
+		shared_ptr<T> LoadFromFile( Templates::Manager<T> * p_pManager, const String & p_file)
 		{
 			LOADER_ERROR( "Le loader enregistré pour ce format ne prend pas en charge l'importation");
 		}
 		/**
 		 * Saves a resource to a file
 		 */
-		bool SaveToFile( const String & p_file, typename SmartPtr<T>::Shared p_resource)
+		bool SaveToFile( const String & p_file, shared_ptr<T> p_resource)
 		{
 			LOADER_ERROR( "Le loader enregistré pour ce format ne prend pas en charge l'exportation");
 		}

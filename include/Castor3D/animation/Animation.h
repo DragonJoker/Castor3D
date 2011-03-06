@@ -31,7 +31,7 @@ namespace Castor3D
 	\todo Review all the animation system because it's not clear, not optimised, and not good enough to be validated
 	\todo Write and Read functions.
 	*/
-	class C3D_API Animation : public MemoryTraced<Animation>
+	class C3D_API Animation : public Serialisable, public MemoryTraced<Animation>
 	{
 	public:
 		//! Animation State Enum
@@ -56,17 +56,22 @@ namespace Castor3D
 		real m_rWeight;									//!< The animation weight
 		real m_rScale;									//!< The animation scale
 		bool m_bLooped;									//!< Tells whether or not the animation is looped
+		Scene * m_pScene;
 
 	public:
+		/**@name Construction / Destruction */
+		//@{
 		/**
 		 * Constructor, initialises the animation with the name given in parameter
 		 *@param p_strName : [in] The name of the animation
 		 */
-		Animation( const String & p_strName);
+		Animation( Scene * p_pScene, const String & p_strName=C3DEmptyString);
 		/**
 		 * Destructor, deletes all the key frames
 		 */
 		~Animation();
+		//@}
+
 		/**
 		 * Creates a key frame and adds it to the list
 		 *@param p_rFrom : [in] The starting time
@@ -74,20 +79,16 @@ namespace Castor3D
 		 */
 		KeyFramePtr AddKeyFrame( real p_rFrom, real p_rTo);
 		/**
+		 * Creates a key frame and adds it to the list
+		 *@param p_rFrom : [in] The starting time
+		 *@param p_rTo : [in] The ending time
+		 */
+		KeyFramePtr AddKeyFrame( const KeyFrame & p_keyFrame);
+		/**
 		 * Deletes the key frame at time index p_time
 		 *@param p_rTime : [in] The time index
 		 */
 		void RemoveKeyFrame( real p_rTime);
-		/**
-		 * Writes the animation in a file
-		 *@param p_file : [in] The file to write in
-		 */
-		bool Write( Castor::Utils::File & p_file)const;
-		/**
-		 * Reads the animation from a file
-		 @param p_file : [in] The file to read from
-		 */
-		bool Read( Castor::Utils::File & p_file);
 		/**
 		 * Updates the animation, updates the key frame at the good time index
 		 *@param p_rTslf : [in] The time since the last frame
@@ -106,53 +107,22 @@ namespace Castor3D
 		 */
 		void Stop();
 
-	public:
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
+
 		/**@name Accessors */
 		//@{
-		/**
-		 * Returns the animation name
-		 *@return the animation name
-		 */
 		inline const String &	GetName		()const { return m_strName; }
-		/**
-		 * Returns the animation length
-		 *@return the animation length
-		 */
 		inline real				GetLength	()const { return m_rLength; }
-		/**
-		 * Returns the animation state
-		 *@return the animation state
-		 */
 		inline eSTATE			GetState	()const { return m_eState; }
-		/**
-		 * Returns the animation scale
-		 *@return the animation scale
-		 */
 		inline real				GetScale	()const { return m_rScale; }
-		/**
-		 * Returns the animation weight
-		 *@return the animation weight
-		 */
 		inline real				GetWeight	()const { return m_rWeight; }
-		/**
-		 * Returns whether or not the animation is looped
-		 *@return whether or not the animation is looped
-		 */
 		inline bool				IsLooped	()const { return m_bLooped; }
-		/**
-		 * Sets the animation scale
-		 *@param p_rScale : [in] The new animation scale
-		 */
 		inline void	SetScale	( real p_rScale)		{ m_rScale = p_rScale; }
-		/**
-		 * Sets the animation weight
-		 *@param p_rWeight : [in] The new animation weight
-		 */
 		inline void	SetWeight	( real p_rWeight)	{ m_rWeight = p_rWeight; }
-		/**
-		 * Sets the animation loop status
-		 *@param p_bLooped : [in] The new animation loop status
-		 */
 		inline void SetLooped	( bool p_bLooped)	{ m_bLooped = p_bLooped; }
 		//@}
 	};

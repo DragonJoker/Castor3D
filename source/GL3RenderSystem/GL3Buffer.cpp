@@ -1,103 +1,50 @@
-#include "GL3RenderSystem/PrecompiledHeader.h"
+#include "Gl3RenderSystem/PrecompiledHeader.h"
 
-#include "GL3RenderSystem/GL3Buffer.h"
-#include "GL3RenderSystem/GL3RenderSystem.h"
-#include "GL3RenderSystem/GL3ShaderProgram.h"
+#include "Gl3RenderSystem/Gl3Buffer.h"
+#include "Gl3RenderSystem/Gl3RenderSystem.h"
+#include "Gl3RenderSystem/Gl3ShaderProgram.h"
 
 using namespace Castor3D;
 using namespace Castor::Resources;
 
 //******************************************************************************
 
-GLVBOTextureBuffer :: GLVBOTextureBuffer()
+Gl3VboVertexBuffer :: Gl3VboVertexBuffer( const BufferElementDeclaration * p_pElements, size_t p_uiNbElements)
+	:	GlVboVertexBuffer( p_pElements, p_uiNbElements)
 {
 }
 
-GLVBOTextureBuffer :: ~GLVBOTextureBuffer()
+Gl3VboVertexBuffer :: ~Gl3VboVertexBuffer()
 {
 	Cleanup();
 }
 
-void GLVBOTextureBuffer :: CleanupBufferObject()
+void Gl3VboVertexBuffer :: Activate()
 {
-	for (unsigned int i = 0 ; i < m_arrayBuffers.size() ; i++)
+	if (m_bAssigned)
 	{
-		m_arrayBuffers[i]->CleanupBufferObject();
+		_activateBufferObject();
+		_activateAttribute();
 	}
 }
 
-void GLVBOTextureBuffer :: CleanupAttribute()
+void Gl3VboVertexBuffer :: Deactivate()
 {
-	for (unsigned int i = 0 ; i < m_arrayBuffers.size() ; i++)
+	if (m_bAssigned)
 	{
-		m_arrayBuffers[i]->CleanupAttribute();
+		_deactivateAttribute();
 	}
 }
 
-void GLVBOTextureBuffer :: Cleanup()
+void Gl3VboVertexBuffer :: _activateBufferObject()
 {
-	TextureBuffer::Cleanup();
-
-	for (unsigned int i = 0 ; i < m_arrayBuffers.size() ; i++)
-	{
-		m_arrayBuffers[i]->Cleanup();
-	}
-}
-
-void GLVBOTextureBuffer :: Initialise( PassPtr p_pass)
-{
-	for (unsigned int i = 0 ; i < m_arrayBuffers.size() ; i++)
-	{
-		m_arrayBuffers[i]->Cleanup();
-	}
-
-	unsigned int l_nbUnits = p_pass->GetNbTexUnits();
-	String l_strBase = "texture";
-	GLVertexAttribsBuffer2rPtr l_pBuffer;
-
-	for (unsigned int i = 0 ; i < l_nbUnits ; i++)
-	{
-		String l_strName = l_strBase;
-		l_strName << i;
-		l_pBuffer = BufferManager::CreateBuffer<real, GLVertexAttribsBuffer2r>( l_strName);
-		m_arrayBuffers.push_back( l_pBuffer);
-		l_pBuffer->InitialiseBuffer( * this);
-		l_pBuffer->Initialise();
-	}
-}
-
-void GLVBOTextureBuffer :: Activate( PassPtr p_pass)
-{
-	unsigned int l_nbUnits = p_pass->GetNbTexUnits();
-
-	if (l_nbUnits > 0)
-	{
-		for (unsigned int i = 0 ; i < m_arrayBuffers.size() ; i++)
-		{
-			m_arrayBuffers[i]->Activate();
-		}
-	}
-}
-
-void GLVBOTextureBuffer :: Deactivate()
-{
-	for (unsigned int i = 0 ; i < m_arrayBuffers.size() ; i++)
-	{
-		m_arrayBuffers[i]->Deactivate();
-	}
-}
-
-void GLVBOTextureBuffer :: SetShaderProgram( ShaderProgramPtr p_pProgram)
-{
-	for (unsigned int i = 0 ; i < m_arrayBuffers.size() ; i++)
-	{
-		m_arrayBuffers[i]->SetShaderProgram( p_pProgram);
-	}
+	CASTOR_ASSERT( ! m_pProgram.expired());
+	CheckGlError( glBindBuffer( GL_ARRAY_BUFFER, m_uiIndex), CU_T( "GlVboVertexBuffer :: Activate - glBindBuffer"));
 }
 
 //******************************************************************************
 
-GLUBOVariableBase :: GLUBOVariableBase( GLUniformBufferObject * p_pParent, const String & p_strName, size_t p_uiCount)
+GlUboVariableBase :: GlUboVariableBase( GlUniformBufferObject * p_pParent, const String & p_strName, size_t p_uiCount)
 	:	m_uiIndex( GL_INVALID_INDEX),
 		m_pBuffer( NULL),
 		m_strName( p_strName),
@@ -106,24 +53,23 @@ GLUBOVariableBase :: GLUBOVariableBase( GLUniformBufferObject * p_pParent, const
 {
 }
 
-GLUBOVariableBase :: ~GLUBOVariableBase()
+GlUboVariableBase :: ~GlUboVariableBase()
 {
 }
 
-void GLUBOVariableBase :: Activate()
+void GlUboVariableBase :: Activate()
 {
-	glBufferSubData( GL_UNIFORM_BUFFER_EXT, m_iOffset, m_iSize, m_pBuffer);
-	CheckGLError( CU_T( "UBOVariable :: Activate - glBufferSubData - ") + m_strName);
+	CheckGlError( glBufferSubData( GL_UNIFORM_BUFFER_EXT, m_iOffset, m_iSize, m_pBuffer), CU_T( "UBOVariable :: Activate - glBufferSubData - ") + m_strName);
 }
 
-void GLUBOVariableBase :: Deactivate()
+void GlUboVariableBase :: Deactivate()
 {
 }
 
 //******************************************************************************
 
-GLUniformBufferObject :: GLUniformBufferObject( const String & p_strUniformBlockName)
-	:	Buffer3D(),
+GlUniformBufferObject :: GlUniformBufferObject( const String & p_strUniformBlockName)
+	:	Buffer3D<unsigned char>(),
 		m_uiIndex( GL_INVALID_INDEX),
 		m_pProgram( NULL),
 		m_strUniformBlockName( p_strUniformBlockName),
@@ -132,28 +78,28 @@ GLUniformBufferObject :: GLUniformBufferObject( const String & p_strUniformBlock
 {
 }
 
-GLUniformBufferObject :: ~GLUniformBufferObject()
+GlUniformBufferObject :: ~GlUniformBufferObject()
 {
 	Cleanup();
 }
 
-void GLUniformBufferObject :: Cleanup()
+void GlUniformBufferObject :: Cleanup()
 {
 	if (m_uiIndex != GL_INVALID_INDEX)
 	{
 		BufferManager::UnassignBuffer<unsigned char>( m_uiIndex, this);
 
-		if (glIsBuffer( m_uiIndex))
+//		if (glIsBuffer( m_uiIndex))
 		{
 			glDeleteBuffers( 1, & m_uiIndex);
 			m_uiIndex = GL_INVALID_INDEX;
 		}
 	}
 
-	Buffer3D::Cleanup();
+	Buffer3D<unsigned char>::Cleanup();
 }
 
-void GLUniformBufferObject :: Initialise( GLShaderProgram * p_pProgram)
+void GlUniformBufferObject :: Initialise( GlShaderProgram * p_pProgram)
 {
 	m_pProgram = p_pProgram;
 
@@ -161,43 +107,35 @@ void GLUniformBufferObject :: Initialise( GLShaderProgram * p_pProgram)
 	{
 		if (m_uiIndex == GL_INVALID_INDEX)
 		{
-			glGenBuffers( 1, & m_uiIndex);
-			CheckGLError( CU_T( "GLUniformBufferObject :: Initialise - ") + m_strUniformBlockName + CU_T( " - glGenBuffers"));
+			CheckGlError( glGenBuffers( 1, & m_uiIndex), CU_T( "GlUniformBufferObject :: Initialise - ") + m_strUniformBlockName + CU_T( " - glGenBuffers"));
 		}
 
 		if (m_iUniformBlockIndex == GL_INVALID_INDEX && m_uiIndex != GL_INVALID_INDEX)
 		{
 			BufferManager::AssignBuffer<unsigned char>( m_uiIndex, this);
 
-			m_iUniformBlockIndex = glGetUniformBlockIndex( m_pProgram->GetProgramObject(), m_strUniformBlockName.char_str());
-			CheckGLError( CU_T( "GLUniformBufferObject :: Initialise - ") + m_strUniformBlockName + CU_T( " - glGetUniformBlockIndex"));
+			CheckGlError( m_iUniformBlockIndex = glGetUniformBlockIndex( m_pProgram->GetProgramObject(), m_strUniformBlockName.char_str()), CU_T( "GlUniformBufferObject :: Initialise - ") + m_strUniformBlockName + CU_T( " - glGetUniformBlockIndex"));
 
 			if (m_iUniformBlockIndex != GL_INVALID_INDEX)
 			{
-				glGetActiveUniformBlockiv( m_pProgram->GetProgramObject(), m_iUniformBlockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, & m_iUniformBlockSize);
-				CheckGLError( CU_T( "GLUniformBufferObject :: Initialise - ") + m_strUniformBlockName + CU_T( " - glGetActiveUniformBlockiv"));
+				CheckGlError( glGetActiveUniformBlockiv( m_pProgram->GetProgramObject(), m_iUniformBlockIndex, GL_UNIFORM_BLOCK_DATA_SIZE, & m_iUniformBlockSize), CU_T( "GlUniformBufferObject :: Initialise - ") + m_strUniformBlockName + CU_T( " - glGetActiveUniformBlockiv"));
 				InitialiseBuffer( m_iUniformBlockSize, 0);
-				glBindBuffer( GL_UNIFORM_BUFFER, m_uiIndex);
-				CheckGLError( CU_T( "GLUniformBufferObject :: Initialise - ") + m_strUniformBlockName + CU_T( " - glBindBuffer"));
-				glBufferData( GL_UNIFORM_BUFFER, m_iUniformBlockSize, NULL, GL_STREAM_DRAW);
-				CheckGLError( CU_T( "GLUniformBufferObject :: Initialise - ") + m_strUniformBlockName + CU_T( " - glBufferData"));
-				glBindBufferBase (GL_UNIFORM_BUFFER, 0, m_uiIndex);
-				CheckGLError( CU_T( "GLUniformBufferObject :: Initialise - ") + m_strUniformBlockName + CU_T( " - glBindBufferBase"));
-				glUniformBlockBinding( m_pProgram->GetProgramObject(), m_iUniformBlockIndex, 0);
-				CheckGLError( CU_T( "GLUniformBufferObject :: Initialise - ") + m_strUniformBlockName + CU_T( " - glUniformBlockBinding"));
+				CheckGlError( glBindBuffer( GL_UNIFORM_BUFFER, m_uiIndex), CU_T( "GlUniformBufferObject :: Initialise - ") + m_strUniformBlockName + CU_T( " - glBindBuffer"));
+				CheckGlError( glBufferData( GL_UNIFORM_BUFFER, m_iUniformBlockSize, NULL, GL_STREAM_DRAW), CU_T( "GlUniformBufferObject :: Initialise - ") + m_strUniformBlockName + CU_T( " - glBufferData"));
+				CheckGlError( glBindBufferBase (GL_UNIFORM_BUFFER, 0, m_uiIndex), CU_T( "GlUniformBufferObject :: Initialise - ") + m_strUniformBlockName + CU_T( " - glBindBufferBase"));
+				CheckGlError( glUniformBlockBinding( m_pProgram->GetProgramObject(), m_iUniformBlockIndex, 0), CU_T( "GlUniformBufferObject :: Initialise - ") + m_strUniformBlockName + CU_T( " - glUniformBlockBinding"));
 			}
 		}
 	}
 }
 
-void GLUniformBufferObject :: Activate()
+void GlUniformBufferObject :: Activate()
 {
 	if (m_iUniformBlockIndex != GL_INVALID_INDEX && m_bChanged)
 	{
-		glBindBuffer( GL_UNIFORM_BUFFER, m_uiIndex);
-		CheckGLError( CU_T( "GLUniformBufferObject :: Activate - ") + m_strUniformBlockName + CU_T( " - glBindBuffer"));
+		CheckGlError( glBindBuffer( GL_UNIFORM_BUFFER, m_uiIndex), CU_T( "GlUniformBufferObject :: Activate - ") + m_strUniformBlockName + CU_T( " - glBindBuffer"));
 
-		for (GLUBOVariablePtrStrMap::iterator l_it = m_mapVariables.begin() ; l_it != m_mapVariables.end() ; ++l_it)
+		for (GlUboVariablePtrStrMap::iterator l_it = m_mapVariables.begin() ; l_it != m_mapVariables.end() ; ++l_it)
 		{
 			l_it->second->Activate();
 		}
@@ -206,25 +144,34 @@ void GLUniformBufferObject :: Activate()
 	m_bChanged = false;
 }
 
-void GLUniformBufferObject :: Deactivate()
+void GlUniformBufferObject :: Deactivate()
 {
-	glBindBuffer(GL_UNIFORM_BUFFER, 0);
-	CheckGLError( CU_T( "GLUniformBufferObject :: Deactivate - ") + m_strUniformBlockName + CU_T( " - glBindBuffer"));
+	CheckGlError( glBindBuffer( GL_UNIFORM_BUFFER, 0), CU_T( "GlUniformBufferObject :: Deactivate - ") + m_strUniformBlockName + CU_T( " - glBindBuffer"));
 }
 
-bool GLUniformBufferObject :: AddVariable( GLUBOVariablePtr p_pVariable)
+void * GlUniformBufferObject :: Lock( size_t p_uiOffset, size_t p_uiSize, size_t p_uiFlags)
+{
+	CheckGlError( glBindBuffer( GL_UNIFORM_BUFFER, m_uiIndex), CU_T( "GlUniformBufferObject :: Lock - glBindBuffer"));
+	unsigned char * l_pBuffer;
+	CheckGlError( l_pBuffer = reinterpret_cast<unsigned char*>( glMapBuffer( GL_UNIFORM_BUFFER, GlEnum::GetLockFlags( p_uiFlags))), CU_T( "GlUniformBufferObject :: Lock - glMapBuffer"));
+	return l_pBuffer + p_uiOffset;
+}
+
+void GlUniformBufferObject :: Unlock()
+{
+	CheckGlError( glUnmapBuffer( GL_UNIFORM_BUFFER), CU_T( "GlUniformBufferObject :: Unlock - glUnmapBuffer"));
+}
+
+bool GlUniformBufferObject :: AddVariable( GlUboVariablePtr p_pVariable)
 {
 	bool l_bReturn = false;
 	const char * l_pChar = p_pVariable->m_strName.char_str();
-	glGetUniformIndices( m_pProgram->GetProgramObject(), 1, & l_pChar, & (p_pVariable->m_uiIndex));
-	CheckGLError( CU_T( "GLUniformBufferObject :: GetVariable - ") + m_strUniformBlockName + CU_T( " - glGetUniformIndices - " + p_pVariable->m_strName));
+	CheckGlError( glGetUniformIndices( m_pProgram->GetProgramObject(), 1, & l_pChar, & (p_pVariable->m_uiIndex)), CU_T( "GlUniformBufferObject :: GetVariable - ") + m_strUniformBlockName + CU_T( " - glGetUniformIndices - " + p_pVariable->m_strName));
 
 	if (p_pVariable->m_uiIndex != GL_INVALID_INDEX)
 	{
-		glGetActiveUniformsiv( m_pProgram->GetProgramObject(), 1, & p_pVariable->m_uiIndex, GL_UNIFORM_OFFSET, & (p_pVariable->m_iOffset));
-		CheckGLError( CU_T( "GLUniformBufferObject :: GetVariable - ") + m_strUniformBlockName + CU_T( " - glGetActiveUniformsiv GL_UNIFORM_OFFSET - " + p_pVariable->m_strName));
-		glGetActiveUniformsiv( m_pProgram->GetProgramObject(), 1, & p_pVariable->m_uiIndex, GL_UNIFORM_SIZE, & (p_pVariable->m_iSize));
-		CheckGLError( CU_T( "GLUniformBufferObject :: GetVariable - ") + m_strUniformBlockName + CU_T( " - glGetActiveUniformsiv GL_UNIFORM_SIZE - " + p_pVariable->m_strName));
+		CheckGlError( glGetActiveUniformsiv( m_pProgram->GetProgramObject(), 1, & p_pVariable->m_uiIndex, GL_UNIFORM_OFFSET, & (p_pVariable->m_iOffset)), CU_T( "GlUniformBufferObject :: GetVariable - ") + m_strUniformBlockName + CU_T( " - glGetActiveUniformsiv GL_UNIFORM_OFFSET - " + p_pVariable->m_strName));
+		CheckGlError( glGetActiveUniformsiv( m_pProgram->GetProgramObject(), 1, & p_pVariable->m_uiIndex, GL_UNIFORM_SIZE, & (p_pVariable->m_iSize)), CU_T( "GlUniformBufferObject :: GetVariable - ") + m_strUniformBlockName + CU_T( " - glGetActiveUniformsiv GL_UNIFORM_SIZE - " + p_pVariable->m_strName));
 
 		if (p_pVariable->m_iSize == 1)
 		{
@@ -233,7 +180,7 @@ bool GLUniformBufferObject :: AddVariable( GLUBOVariablePtr p_pVariable)
 
 		if (p_pVariable->GetSize() + p_pVariable->m_iOffset <= m_totalSize)
 		{
-			m_mapVariables.insert( GLUBOVariablePtrStrMap::value_type( p_pVariable->m_strName, p_pVariable));
+			m_mapVariables.insert( GlUboVariablePtrStrMap::value_type( p_pVariable->m_strName, p_pVariable));
 			l_bReturn = true;
 			m_bChanged = true;
 		}
@@ -244,96 +191,100 @@ bool GLUniformBufferObject :: AddVariable( GLUBOVariablePtr p_pVariable)
 
 //******************************************************************************
 
-GLVertexArrayObjects :: GLVertexArrayObjects()
+GlVertexArrayObjects :: GlVertexArrayObjects()
 	:	m_uiIndex( GL_INVALID_INDEX)
 {
 }
 
-GLVertexArrayObjects :: ~GLVertexArrayObjects()
+GlVertexArrayObjects :: ~GlVertexArrayObjects()
 {
 	Cleanup();
 }
 
-void GLVertexArrayObjects :: Cleanup()
+void GlVertexArrayObjects :: Cleanup()
 {
 	if (m_uiIndex != GL_INVALID_INDEX)
 	{
-		glDeleteVertexArrays( 1, & m_uiIndex);
-		CheckGLError( CU_T( "GLVertexArrayObjects :: Cleanup - glDeleteVertexArrays"));
+		CheckGlError( glDeleteVertexArrays( 1, & m_uiIndex), CU_T( "GlVertexArrayObjects :: Cleanup - glDeleteVertexArrays"));
 		m_uiIndex = GL_INVALID_INDEX;
 	}
 }
 
-void GLVertexArrayObjects :: Initialise()
+void GlVertexArrayObjects :: Initialise()
 {
 	if (m_uiIndex == GL_INVALID_INDEX)
 	{
-		glGenVertexArrays( 1, & m_uiIndex);
-		CheckGLError( CU_T( "GLVertexArrayObjects :: Initialise - glGenVertexArrays"));
+		CheckGlError( glGenVertexArrays( 1, & m_uiIndex), CU_T( "GlVertexArrayObjects :: Initialise - glGenVertexArrays"));
 	}
 }
 
-void GLVertexArrayObjects :: Activate()
+void GlVertexArrayObjects :: Activate()
 {
 	if (m_uiIndex != GL_INVALID_INDEX)
 	{
-		glBindVertexArray( m_uiIndex);
-		CheckGLError( CU_T( "GLVertexArrayObjects :: Activate - glBindVertexArray"));
+		CheckGlError( glBindVertexArray( m_uiIndex), CU_T( "GlVertexArrayObjects :: Activate - glBindVertexArray"));
 	}
 }
 
-void GLVertexArrayObjects :: Deactivate()
+void GlVertexArrayObjects :: Deactivate()
 {
-	glBindVertexArray( 0);
-	CheckGLError( CU_T( "GLVertexArrayObjects :: Deactivate - glBindVertexArray( 0)"));
+	CheckGlError( glBindVertexArray( 0), CU_T( "GlVertexArrayObjects :: Deactivate - glBindVertexArray( 0)"));
 }
 
 //******************************************************************************
 
-GLTextureBufferObject :: GLTextureBufferObject()
+GlTextureBufferObject :: GlTextureBufferObject()
 	:	TextureBufferObject(),
 		m_uiIndex( GL_INVALID_INDEX)
 {
 }
 
-GLTextureBufferObject :: ~GLTextureBufferObject()
+GlTextureBufferObject :: ~GlTextureBufferObject()
 {
 	Cleanup();
 }
 
-void GLTextureBufferObject :: Cleanup()
+void GlTextureBufferObject :: Cleanup()
 {
-	if (m_uiIndex != GL_INVALID_INDEX && glIsBuffer( m_uiIndex))
+	if (m_uiIndex != GL_INVALID_INDEX)// && glIsBuffer( m_uiIndex))
 	{
 		BufferManager::UnassignBuffer<unsigned char>( m_uiIndex, this);
-		glDeleteBuffers( 1, & m_uiIndex);
-		CheckGLError( CU_T( "GLTextureBufferObject :: Cleanup - glDeleteBuffers"));
+		CheckGlError( glDeleteBuffers( 1, & m_uiIndex), CU_T( "GlTextureBufferObject :: Cleanup - glDeleteBuffers"));
 	}
 
 	m_uiIndex = GL_INVALID_INDEX;
 }
 
-void GLTextureBufferObject :: Initialise( const PixelFormat & p_format, size_t p_uiSize, const unsigned char * p_pBytes)
+void GlTextureBufferObject :: Initialise( const ePIXEL_FORMAT & p_format, size_t p_uiSize, const unsigned char * p_pBytes)
 {
 	TextureBufferObject::Initialise( p_format, p_uiSize, p_pBytes);
 
-	glGenBuffers( 1, & m_uiIndex);
-	CheckGLError( CU_T( "GLTextureBufferObject :: Initialise - glGenBuffers"));
+	CheckGlError( glGenBuffers( 1, & m_uiIndex), CU_T( "GlTextureBufferObject :: Initialise - glGenBuffers"));
 
-	if (m_uiIndex != GL_INVALID_INDEX && glIsBuffer( m_uiIndex))
+	if (m_uiIndex != GL_INVALID_INDEX)// && glIsBuffer( m_uiIndex))
 	{
-		glBindBuffer( GL_TEXTURE_BUFFER, m_uiIndex);
-		CheckGLError( CU_T( "GLTextureBufferObject :: Initialise - glBindBuffer"));
-		glBufferData( GL_TEXTURE_BUFFER, m_uiSize * GetPixelFormatBits( m_pixelFormat) / 8, m_pBytes, GL_STREAM_DRAW);
-		CheckGLError( CU_T( "GLTextureBufferObject :: Initialise - glBufferData"));
-		glBindBuffer( GL_TEXTURE_BUFFER, 0);
-		CheckGLError( CU_T( "GLTextureBufferObject :: Initialise - glBindBuffer"));
+		CheckGlError( glBindBuffer( GL_TEXTURE_BUFFER, m_uiIndex), CU_T( "GlTextureBufferObject :: Initialise - glBindBuffer"));
+		CheckGlError( glBufferData( GL_TEXTURE_BUFFER, m_uiSize * Castor::Resources::GetBytesPerPixel( m_pixelFormat) / 8, m_pBytes, GL_STREAM_DRAW), CU_T( "GlTextureBufferObject :: Initialise - glBufferData"));
+		CheckGlError( glBindBuffer( GL_TEXTURE_BUFFER, 0), CU_T( "GlTextureBufferObject :: Initialise - glBindBuffer"));
 		BufferManager::AssignBuffer<unsigned char>( m_uiIndex, this);
 	}
 	else
 	{
 		m_uiIndex = GL_INVALID_INDEX;
 	}
+}
+
+void * GlTextureBufferObject :: Lock( size_t p_uiOffset, size_t p_uiSize, size_t p_uiFlags)
+{
+	CheckGlError( glBindBuffer( GL_TEXTURE_BUFFER, m_uiIndex), CU_T( "GlUniformBufferObject :: Lock - glBindBuffer"));
+	unsigned char * l_pBuffer;
+	CheckGlError( l_pBuffer = reinterpret_cast<unsigned char*>( glMapBuffer( GL_TEXTURE_BUFFER, GlEnum::GetLockFlags( p_uiFlags))), CU_T( "GlUniformBufferObject :: Lock - glMapBuffer"));
+	return l_pBuffer + p_uiOffset;
+}
+
+void GlTextureBufferObject :: Unlock()
+{
+	CheckGlError( glUnmapBuffer( GL_TEXTURE_BUFFER), CU_T( "GlUniformBufferObject :: Unlock - glUnmapBuffer"));
 }
 
 //******************************************************************************

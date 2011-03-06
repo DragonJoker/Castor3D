@@ -36,6 +36,8 @@ namespace Castor
 		static real RadiansToDegrees;
 		static real DegreesToRadians;
 		static real Pi;
+		static double PiDouble;
+		static float PiFloat;
 		static real PiMult2;
 		static real PiDiv2;
 

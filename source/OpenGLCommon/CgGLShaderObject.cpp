@@ -1,41 +1,39 @@
-#include "OpenGLCommon/PrecompiledHeader.h"
+#include "OpenGlCommon/PrecompiledHeader.h"
 
-#include "OpenGLCommon/CgGLShaderObject.h"
-#include "OpenGLCommon/CgGLShaderProgram.h"
-#include "OpenGLCommon/GLRenderSystem.h"
+#include "OpenGlCommon/CgGlShaderObject.h"
+#include "OpenGlCommon/CgGlShaderProgram.h"
+#include "OpenGlCommon/GlRenderSystem.h"
 
 using namespace Castor3D;
 
 //*************************************************************************************************
 
-CgGLShaderObject :: CgGLShaderObject()
-	:	CgShaderObject()
+CgGlShaderObject :: CgGlShaderObject( eSHADER_PROGRAM_TYPE p_eType)
+	:	CgShaderObject( p_eType)
 {
 }
 
-CgGLShaderObject :: ~CgGLShaderObject()
+CgGlShaderObject :: ~CgGlShaderObject()
 {
 	if (m_cgProgram != NULL && cgGLIsProgramLoaded( m_cgProgram))
 	{
-		cgGLUnloadProgram( m_cgProgram);
-		CheckCgError( "CgGLShaderObject :: ~GLShaderObject - cgGLUnloadProgram");
+		CheckCgError( cgGLUnloadProgram( m_cgProgram), "CgGlShaderObject :: ~GlShaderObject - cgGLUnloadProgram");
 		m_cgProgram = NULL;
 	}
 
 	DestroyProgram();
 }
 
-void CgGLShaderObject :: DestroyProgram()
+void CgGlShaderObject :: DestroyProgram()
 {
 	if (m_cgProfile != CG_PROFILE_UNKNOWN)
 	{
-		cgGLDisableProfile( m_cgProfile);
-		CheckCgError( "CgGLShaderObject :: ~GLShaderObject - cgGLDisableProfile");
+		CheckCgError( cgGLDisableProfile( m_cgProfile), "CgGlShaderObject :: ~GlShaderObject - cgGLDisableProfile");
 		m_cgProfile = CG_PROFILE_UNKNOWN;
 	}
 }
 
-bool CgGLShaderObject :: Compile()
+bool CgGlShaderObject :: Compile()
 {
 	bool l_bReturn = false;
 
@@ -55,21 +53,18 @@ bool CgGLShaderObject :: Compile()
 
 					if (m_cgProgram != NULL && cgGLIsProgramLoaded( m_cgProgram))
 					{
-						cgGLUnloadProgram( m_cgProgram);
-						CheckCgError( "CgGLShaderObject :: Compile - cgGLUnloadProgram");
+						CheckCgError( cgGLUnloadProgram( m_cgProgram), "CgGlShaderObject :: Compile - cgGLUnloadProgram");
 						m_cgProgram = NULL;
 					}
 
-					cgGLSetOptimalOptions( m_cgProfile);
-					CheckCgError( "CgGLShaderObject :: Compile - cgGLSetOptimalOptions");
-					m_cgProgram = cgCreateProgram( static_cast <CgShaderProgram *>(m_pParent)->GetContext(),
-												   CG_SOURCE, m_shaderSource.c_str(), m_cgProfile, NULL, NULL);
-					CheckCgError( "CgGLShaderObject :: Compile - cgCreateProgram");
+					CheckCgError( cgGLSetOptimalOptions( m_cgProfile), "CgGlShaderObject :: Compile - cgGLSetOptimalOptions");
+					CheckCgError( m_cgProgram = cgCreateProgram( static_cast <CgShaderProgram *>(m_pParent)->GetContext(),
+												   CG_SOURCE, m_shaderSource.c_str(), m_cgProfile, NULL, NULL),
+								  "CgGlShaderObject :: Compile - cgCreateProgram");
 
 					if (m_cgProgram != NULL)
 					{
-						cgGLLoadProgram( m_cgProgram);
-						CheckCgError( "CgGLShaderObject :: Compile - cgGLLoadProgram");
+						CheckCgError( cgGLLoadProgram( m_cgProgram), "CgGlShaderObject :: Compile - cgGLLoadProgram");
 
 						CgShaderObject::Compile();
 
@@ -89,88 +84,79 @@ bool CgGLShaderObject :: Compile()
 	return l_bReturn;
 }
 
-void CgGLShaderObject :: Bind()
+void CgGlShaderObject :: Bind()
 {
 	if (m_cgProgram != NULL && cgGLIsProgramLoaded( m_cgProgram) && m_cgProfile != CG_PROFILE_UNKNOWN)
 	{
-		cgGLBindProgram( m_cgProgram);
-		CheckCgError( "CgGLShaderObject :: Compile - cgGLBindProgram");
-		cgGLEnableProfile( m_cgProfile);
-		CheckCgError( "CgGLShaderObject :: Bind - cgGLEnableProfile");
+		CheckCgError( cgGLBindProgram( m_cgProgram), "CgGlShaderObject :: Compile - cgGLBindProgram");
+		CheckCgError( cgGLEnableProfile( m_cgProfile), "CgGlShaderObject :: Bind - cgGLEnableProfile");
 	}
 }
 
-void CgGLShaderObject :: Unbind()
+void CgGlShaderObject :: Unbind()
 {
 	if (m_cgProfile != CG_PROFILE_UNKNOWN)
 	{
-		cgGLDisableProfile( m_cgProfile);
-		CheckCgError( "CgGLShaderObject :: Bind - cgGLEnableProfile");
+		CheckCgError( cgGLDisableProfile( m_cgProfile), "CgGlShaderObject :: Bind - cgGLEnableProfile");
 	}
 }
 
 //*************************************************************************************************
 
-CgGLVertexShader :: CgGLVertexShader()
-	:	CgGLShaderObject()
-{
-	m_programType = eVertexShader; 
-}
-
-CgGLVertexShader :: ~CgGLVertexShader()
+CgGlVertexShader :: CgGlVertexShader()
+	:	CgGlShaderObject( eVertexShader)
 {
 }
 
-void CgGLVertexShader :: CreateProgram()
+CgGlVertexShader :: ~CgGlVertexShader()
+{
+}
+
+void CgGlVertexShader :: CreateProgram()
 {
 	if (RenderSystem::UseShaders() && m_cgProfile == CG_PROFILE_UNKNOWN)
 	{
-		m_cgProfile = cgGLGetLatestProfile( CG_GL_VERTEX);
-		CheckCgError( CU_T( "CgGLVertexShader :: CreateProgram - cgGLGetLatestProfile"));
+		CheckCgError( m_cgProfile = cgGLGetLatestProfile( CG_GL_VERTEX), CU_T( "CgGlVertexShader :: CreateProgram - cgGLGetLatestProfile"));
 		CASTOR_ASSERT( m_cgProfile != CG_PROFILE_UNKNOWN);
 	}
 }
 
 //*************************************************************************************************
 
-CgGLFragmentShader :: CgGLFragmentShader()
-	:	CgGLShaderObject()
-{
-	m_programType = ePixelShader;
-}
-
-CgGLFragmentShader :: ~CgGLFragmentShader()
+CgGlFragmentShader :: CgGlFragmentShader()
+	:	CgGlShaderObject( ePixelShader)
 {
 }
 
-void CgGLFragmentShader :: CreateProgram()
+CgGlFragmentShader :: ~CgGlFragmentShader()
+{
+}
+
+void CgGlFragmentShader :: CreateProgram()
 {
 	if (RenderSystem::UseShaders() && m_cgProfile == CG_PROFILE_UNKNOWN)
 	{
-		m_cgProfile = cgGLGetLatestProfile( CG_GL_FRAGMENT);
-		CheckCgError( CU_T( "CgGLFragmentShader :: CreateProgram - cgGLGetLatestProfile"));
+		CheckCgError( m_cgProfile = cgGLGetLatestProfile( CG_GL_FRAGMENT), CU_T( "CgGlFragmentShader :: CreateProgram - cgGLGetLatestProfile"));
 		CASTOR_ASSERT( m_cgProfile != CG_PROFILE_UNKNOWN);
 	}
 }
 
 //*************************************************************************************************
 
-CgGLGeometryShader :: CgGLGeometryShader()
-	:	CgGLShaderObject()
-{
-	m_programType = eGeometryShader; 
-}
-
-CgGLGeometryShader :: ~CgGLGeometryShader()
+CgGlGeometryShader :: CgGlGeometryShader()
+	:	CgGlShaderObject( eGeometryShader)
 {
 }
 
-void CgGLGeometryShader :: CreateProgram()
+CgGlGeometryShader :: ~CgGlGeometryShader()
+{
+}
+
+void CgGlGeometryShader :: CreateProgram()
 {
 	if (RenderSystem::UseShaders() && RenderSystem::HasGeometryShader() && m_cgProfile == CG_PROFILE_UNKNOWN)
 	{
-		m_cgProfile = cgGLGetLatestProfile( CG_GL_GEOMETRY);
-		CheckCgError( CU_T( "CgGLGeometryShader :: CreateProgram - cgGLGetLatestProfile"));
+		CheckCgError( m_cgProfile = cgGLGetLatestProfile( CG_GL_GEOMETRY), CU_T( "CgGlGeometryShader :: CreateProgram - cgGLGetLatestProfile"));
 		CASTOR_ASSERT( m_cgProfile != CG_PROFILE_UNKNOWN);
 	}
 }

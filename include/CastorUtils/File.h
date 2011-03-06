@@ -21,6 +21,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <fstream>
 #include "Module_Utils.h"
 #include "Path.h"
+#include "Exception.h"
+#include "Assertion.h"
 
 #pragma warning( push)
 #pragma warning( disable : 4996)
@@ -28,23 +30,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Castor
 {	namespace Utils
 {
-/*
-		Tests on linux : 
-		existence test x 100000:
-		not exists:
-
-		iostream 750 ms
-		fopen 419ms
-		boost 524 ms
-		stat 230 ms
-
-		exists
-
-		iostream 1.5 sec
-		fopen 900 msec
-		stat 450 ms
-		boost 870 msec
-*/
 	//! File class
 	/*!
 	User friendly File class. Adds some functions to check file/directory validity, file/directory creation...
@@ -59,10 +44,20 @@ namespace Castor
 		{
 			eRead	= 0x00000001,
 			eWrite	= 0x00000010,
-			eAdd	= 0x00000100,
+			eAppend	= 0x00000100,
 			eBinary = 0x00001000,
 		}
-		OpenMode;
+		eOPEN_MODE;
+
+		typedef enum
+		{
+			eAuto,
+			eASCII,
+			eUNICODE,
+			eUTF8,
+			eUTF16
+		}
+		eENCODING_MODE;
 
 		typedef enum
 		{
@@ -70,72 +65,66 @@ namespace Castor
 			eCurrent,
 			eEnd
 		}
-		OffsetMode;
+		eOFFSET_MODE;
 
 	private:
 		int m_iMode;
+		eENCODING_MODE m_eEncoding;
 		Path m_strFileFullPath;
-		typedef std::basic_fstream<char, std::char_traits<char> > stream_file;
-		stream_file m_file;
+		FILE * m_pFile;
 
 	public:
-		File( const String & p_fileName, int p_iMode);
-		virtual ~File();
-
-		void Seek( long p_lOffset, OffsetMode p_eOrigin);
-		void Seek( long p_lPosition);
-
-		/**@name Read and Write functions */
+		/**@name Construction / Destruction */
 		//@{
-		bool ReadLine( String & p_toRead, size_t p_size);
-		bool ReadWord( String & p_toRead);
-		bool WriteLine( const String & p_strLine);
-		void CopyToString( String & p_strOut);
-
-		bool Print( size_t p_uiMaxSize, const char * p_pFormat, ...);
-//		int Scanf( const char * p_pFormat, size_t p_uiCount, ...);
-
-		template <typename T> File & operator <<( const T & p_toWrite)
-		{
-			m_file << p_toWrite;
-			return *this;
-		}
-
-		template <typename T> File & operator >>( T & p_toRead)
-		{
-			m_file >> p_toWrite;
-			return *this;
-		}
-
-		template <typename T> int Write( const T & p_toWrite)
-		{
-			return _write( reinterpret_cast <const char *>( & p_toWrite), sizeof( T));
-		}
-
-		template <typename T> int Read( T & p_toRead)
-		{
-			return _read( reinterpret_cast <char *>( & p_toRead), sizeof( T));
-		}
-
-		template <typename T> int WriteArray( const T * p_toWrite, size_t p_count)
-		{
-			return _write( reinterpret_cast <const char *>( p_toWrite), sizeof( T) * p_count);
-		}
-
-		template <typename T> int ReadArray( T * p_toRead, size_t p_count)
-		{
-			return _read( reinterpret_cast <char *>( & p_toRead), sizeof( T) * p_count);
-		}
+		File( const Path & p_fileName, int p_iMode, eENCODING_MODE p_eEncoding=eASCII);
+		virtual ~File();
 		//@}
 
-	private:
-		int _write( const char * p_pBuffer, size_t p_uiSize);
-		int _read( char * p_pBuffer, size_t p_uiSize);
+		/**@name Seek functions */
+		//@{
+		void Seek( long long p_lOffset, eOFFSET_MODE p_eOrigin);
+		void Seek( long long p_lPosition);
+		//@}
+
+		/**@name OpenMode dependant read and write functions */
+		//@{
+		template <typename T> File & operator <<( const T & p_toWrite);
+		template <typename T> File & operator >>( T & p_toRead);
+		//@}
+
+		/**@name Text read and write functions */
+		//@{
+		size_t ReadLine( String & p_toRead, size_t p_size, String p_strSeparators=CU_T( "\r\n"));
+		size_t ReadWord( String & p_toRead);
+		size_t WriteLine( const String & p_strLine);
+		size_t CopyToString( String & p_strOut);
+		size_t Print( size_t p_uiMaxSize, const xchar * p_pFormat, ...);
+		//@}
+
+		/**@name Binary read and write functions */
+		//@{
+		bool Write( const String & p_strToWrite);
+		bool Read( String & p_strToRead);
+		template <typename T> size_t Write( const T & p_toWrite);
+		template <typename T> size_t Read( T & p_toRead);
+		template <typename T> size_t WriteArray( const T * p_toWrite, size_t p_count);
+		template <typename T> size_t ReadArray( T * p_toRead, size_t p_count);
+		//@}
+
+		/**@name Accessors */
+		//@{
+				long long			GetLength		();
+				bool 				IsOk			()const;
+				long long			Tell			();
+		inline 	const Path &		GetFileFullPath	()const { return m_strFileFullPath; }
+		inline 	Path				GetFilePath		()const { return m_strFileFullPath.GetPath(); }
+		inline 	Path				GetFileName		()const { return m_strFileFullPath.GetFullFileName(); }
+		//@}
 
 	public:
 		/**@name General File / Directory functions */
 		//@{
-		static bool FileExists( const Char * p_filename);
+		static bool FileExists( const xchar * p_filename);
 		static bool FileExists( const String & p_filename);
 		static bool DirectoryCreate( const String & p_filename);
 		static bool DirectoryExists( const String & p_filename);
@@ -143,16 +132,13 @@ namespace Castor
 		static bool FileDelete( const String & p_filename);
 		static bool ListDirectoryFiles( const String & p_folderPath, StringArray & p_files, bool p_recursive = false);
 		//@}
-		/**@name Accessors */
-		//@{
-				unsigned long long	GetLength		();
-				bool 				IsOk			()const;
-				long 				Tell			();
-		inline 	const Path &		GetFileFullPath	()const { return m_strFileFullPath; }
-		inline 	String				GetFilePath		()const { return m_strFileFullPath.GetPath(); }
-		inline 	String				GetFileName		()const { return m_strFileFullPath.GetLeaf(); }
-		//@}
+
+	private:
+		size_t _write( const unsigned char * p_pBuffer, size_t p_uiSize);
+		size_t _read( unsigned char * p_pBuffer, size_t p_uiSize);
 	};
+
+#	include "File.inl"
 }
 }
 

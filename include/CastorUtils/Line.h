@@ -71,7 +71,7 @@ namespace Castor
 	class Line3D : public MemoryTraced< Line3D<T> >
 	{
 	private:
-		typedef Templates::Policy<T> value;
+		typedef Templates::Policy<T> policy;
 
 	public:
 		Point<T, 3> m_slope;

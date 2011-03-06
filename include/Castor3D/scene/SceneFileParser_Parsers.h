@@ -29,6 +29,8 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootSceneNode)
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootMaterial)
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootObject)
+	DECLARE_ATTRIBUTE_PARSER( Parser_RootFont)
+	DECLARE_ATTRIBUTE_PARSER( Parser_RootTextOverlay)
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootAmbientLight)
 
 	// Light parsers
@@ -90,15 +92,23 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassAlpha)
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassBaseTexColour)
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassDoubleFace)
+	DECLARE_ATTRIBUTE_PARSER( Parser_PassBlendFunc)
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassTextureUnit)
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassGlShader)
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassCgShader)
+	DECLARE_ATTRIBUTE_PARSER( Parser_PassHlShader)
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassEnd)
 
 	// Texture Unit Parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_UnitImage)
 	DECLARE_ATTRIBUTE_PARSER( Parser_UnitColour)
 	DECLARE_ATTRIBUTE_PARSER( Parser_UnitMapType)
+	DECLARE_ATTRIBUTE_PARSER( Parser_UnitAlphaFunc)
+	DECLARE_ATTRIBUTE_PARSER( Parser_UnitBlendMode)
+	DECLARE_ATTRIBUTE_PARSER( Parser_UnitRGBCombination)
+	DECLARE_ATTRIBUTE_PARSER( Parser_UnitAlphaCombination)
+	DECLARE_ATTRIBUTE_PARSER( Parser_UnitRgbBlend)
+	DECLARE_ATTRIBUTE_PARSER( Parser_UnitAlphaBlend)
 	DECLARE_ATTRIBUTE_PARSER( Parser_UnitEnd)
 
 	// GLSL Shader Parsers
@@ -107,17 +117,35 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_GlGeometryShader)
 	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderEnd)
 
-	//GLSL Shader Program Parsers
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderProgramFile);
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderProgramText);
+	// GLSL Shader Program Parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderProgramFile)
+	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderProgramText)
 	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderProgramVariable)
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderProgramEnd);
+	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderProgramEnd)
 
 	// GLSL Shader Variables Parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderVariableType)
 	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderVariableName)
 	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderVariableValue)
 	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderVariableEnd)
+
+	// HLSL Shader Parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_HlVertexShader)
+	DECLARE_ATTRIBUTE_PARSER( Parser_HlPixelShader)
+	DECLARE_ATTRIBUTE_PARSER( Parser_HlGeometryShader)
+	DECLARE_ATTRIBUTE_PARSER( Parser_HlShaderEnd)
+
+	// HLSL Shader Program Parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_HlShaderProgramFile)
+	DECLARE_ATTRIBUTE_PARSER( Parser_HlShaderProgramText)
+	DECLARE_ATTRIBUTE_PARSER( Parser_HlShaderProgramVariable)
+	DECLARE_ATTRIBUTE_PARSER( Parser_HlShaderProgramEnd)
+
+	// HLSL Shader Variables Parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_HlShaderVariableType)
+	DECLARE_ATTRIBUTE_PARSER( Parser_HlShaderVariableName)
+	DECLARE_ATTRIBUTE_PARSER( Parser_HlShaderVariableValue)
+	DECLARE_ATTRIBUTE_PARSER( Parser_HlShaderVariableEnd)
 
 	// Cg Shader Parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_CgVertexShader)
@@ -126,16 +154,37 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_CgShaderEnd)
 
 	//Cg Shader Program Parsers
-	DECLARE_ATTRIBUTE_PARSER( Parser_CgShaderProgramFile);
-	DECLARE_ATTRIBUTE_PARSER( Parser_CgShaderProgramText);
-	DECLARE_ATTRIBUTE_PARSER( Parser_CgShaderProgramVariable);
-	DECLARE_ATTRIBUTE_PARSER( Parser_CgShaderProgramEnd);
+	DECLARE_ATTRIBUTE_PARSER( Parser_CgShaderProgramFile)
+	DECLARE_ATTRIBUTE_PARSER( Parser_CgShaderProgramText)
+	DECLARE_ATTRIBUTE_PARSER( Parser_CgShaderProgramVariable)
+	DECLARE_ATTRIBUTE_PARSER( Parser_CgShaderProgramEnd)
 
 	// Cg Shader Variables Parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_CgShaderVariableType)
 	DECLARE_ATTRIBUTE_PARSER( Parser_CgShaderVariableName)
 	DECLARE_ATTRIBUTE_PARSER( Parser_CgShaderVariableValue)
 	DECLARE_ATTRIBUTE_PARSER( Parser_CgShaderVariableEnd)
+
+	// Font Parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_FontFile)
+	DECLARE_ATTRIBUTE_PARSER( Parser_FontHeight)
+	DECLARE_ATTRIBUTE_PARSER( Parser_FontEnd)
+
+	//Overlay Parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_OverlayPosition)
+	DECLARE_ATTRIBUTE_PARSER( Parser_OverlaySize)
+	DECLARE_ATTRIBUTE_PARSER( Parser_OverlayMaterial)
+
+	// TextOverlay Parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_TextOverlayFont)
+	DECLARE_ATTRIBUTE_PARSER( Parser_TextOverlayText)
+	DECLARE_ATTRIBUTE_PARSER( Parser_TextOverlayEnd)
+
+	// Camera parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_CameraParent)
+	DECLARE_ATTRIBUTE_PARSER( Parser_CameraViewport)
+	DECLARE_ATTRIBUTE_PARSER( Parser_CameraEnd)
+
 }
 
 #endif

@@ -1,8 +1,8 @@
-#include "GUICommon/PrecompiledHeader.h"
+#include "GuiCommon/PrecompiledHeader.h"
 
-#include "GUICommon/TextLinesCtrl.h"
+#include "GuiCommon/TextLinesCtrl.h"
 
-using namespace GUICommon;
+using namespace GuiCommon;
 using namespace Castor3D;
 
 TextLinesCtrl :: TextLinesCtrl( wxWindow * parent, wxWindowID id, const wxPoint& pos,

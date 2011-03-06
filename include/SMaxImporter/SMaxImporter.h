@@ -20,11 +20,15 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Castor3D/importer/Importer.h>
 
+#ifndef _WIN32
+#	define C3D_SMax_API
+#else
 #	ifdef SMaxImporter_EXPORTS
 #		define C3D_SMax_API __declspec(dllexport)
 #	else
 #		define C3D_SMax_API __declspec(dllimport)
 #	endif
+#endif
 
 // Primary Chunk, at the beginning of each file
 #define SMAX_PRIMARY			0x4D4D
@@ -92,7 +96,7 @@ namespace Castor3D
 
 	private:
 		virtual bool _import();
-		int _getString( Char * p_pBuffer);
+		int _getString( xchar * p_pBuffer);
 		int _getString( String & p_strString);
 		void _readChunk( SMaxChunk * p_chunk);
 		void _processNextChunk( MeshPtr p_pMesh, SMaxChunk * p_chunk);

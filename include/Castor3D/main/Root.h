@@ -81,12 +81,8 @@ namespace Castor3D
 		 *@param p_pixelFormat : [in] The window's pixel format
 		 *@param p_look : [in] Where the render window's camera must look
 		 */
-		RenderWindowPtr CreateRenderWindow( ScenePtr p_mainScene,
-										   void * p_handle,
-										   int p_windowWidth,
-										   int p_windowHeight,
-										   Viewport::eTYPE p_type,
-										   Castor::Resources::PixelFormat p_pixelFormat=Castor::Resources::pxfR8G8B8A8,
+		RenderWindowPtr CreateRenderWindow( ScenePtr p_mainScene, void * p_handle, int p_windowWidth, int p_windowHeight,
+										   Viewport::eTYPE p_type, Castor::Resources::ePIXEL_FORMAT p_pixelFormat=Castor::Resources::eA8R8G8B8,
 										   ePROJECTION_DIRECTION p_look = pdLookToFront);
 		/**
 		 * Removes a render window, by index

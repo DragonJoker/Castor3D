@@ -1,6 +1,7 @@
 #include "Castor3D/PrecompiledHeader.h"
 
 #include "Castor3D/main/Root.h"
+#include "Castor3D/main/Plugin.h"
 #include "Castor3D/main/RenderWindow.h"
 #include "Castor3D/main/FrameListener.h"
 #include "Castor3D/render_system/RenderSystem.h"
@@ -13,6 +14,7 @@
 #include "Castor3D/material/MaterialManager.h"
 #include "Castor3D/geometry/mesh/Mesh.h"
 #include "Castor3D/geometry/mesh/MeshManager.h"
+#include "Castor3D/overlay/OverlayManager.h"
 #include "Castor3D/shader/ShaderManager.h"
 
 using namespace Castor3D;
@@ -34,6 +36,8 @@ Root :: Root( unsigned int p_wantedFPS)
 	,	m_pSceneManager			( new SceneManager)
 {
 	sm_singleton = this;
+
+	std::locale::global( std::locale());
 
 	m_windowsBegin = m_windows.begin();
 	m_windowsEnd = m_windows.end();
@@ -57,15 +61,11 @@ Root :: ~Root()
 	sm_singleton = NULL;
 }
 
-RenderWindowPtr Root :: CreateRenderWindow( ScenePtr p_mainScene,void * p_handle,
-										   int p_windowWidth, int p_windowHeight,
-										   Viewport::eTYPE p_type,
-										   PixelFormat p_pixelFormat,
-										   ePROJECTION_DIRECTION p_look)
+RenderWindowPtr Root :: CreateRenderWindow( ScenePtr p_mainScene, void * p_handle, int p_windowWidth, int p_windowHeight,
+										   Viewport::eTYPE p_type, ePIXEL_FORMAT p_pixelFormat, ePROJECTION_DIRECTION p_look)
 {
+	RenderWindowPtr l_res( new RenderWindow( this, p_mainScene, p_handle, p_windowWidth, p_windowHeight, p_type, p_pixelFormat, p_look));
 	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( sm_mutex);
-	RenderWindowPtr l_res( new RenderWindow( this, p_mainScene, p_handle, p_windowWidth,
-											 p_windowHeight, p_type, p_pixelFormat, p_look));
 	m_windows[l_res->GetIndex()] = l_res;
 	m_windowsNumber++;
 	m_windowsBegin = m_windows.begin();
@@ -95,7 +95,7 @@ bool Root :: RemoveRenderWindow( RenderWindowPtr p_window)
 {
 	bool l_bReturn = false;
 
-	if ( ! p_window == NULL)
+	if (p_window != NULL)
 	{
 		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( sm_mutex);
 		RenderWindowPtr l_pWindow;
@@ -124,23 +124,34 @@ void Root :: RemoveAllRenderWindows()
 PluginPtr Root :: LoadPlugin( PluginBase::eTYPE p_eType, const Path & p_filePath, const Path & p_strOptPath)
 {
 	PluginPtr l_pReturn;
+	Path l_strFilePath = p_filePath;
 
-	if (m_loadedPlugins.find( p_filePath) == m_loadedPlugins.end())
+#ifdef _WIN32
+#   ifndef __GNUG__
+	l_strFilePath += CU_T( ".dll");
+#   else
+    l_strFilePath = CU_T( "lib") + l_strFilePath + CU_T( ".dll");
+#   endif
+#else
+    l_strFilePath = CU_T( "lib") + l_strFilePath + CU_T( ".so");
+#endif
+
+	if (m_loadedPlugins.find( l_strFilePath) == m_loadedPlugins.end())
 	{
 		try
 		{
 			switch (p_eType)
 			{
 			case PluginBase::ePluginRenderer:
-				l_pReturn.reset( new RendererPlugin( p_filePath));
+				l_pReturn.reset( new RendererPlugin( l_strFilePath));
 				break;
 
 			case PluginBase::ePluginImporter:
-				l_pReturn.reset( new ImporterPlugin( p_filePath));
+				l_pReturn.reset( new ImporterPlugin( l_strFilePath));
 				break;
 
 			case PluginBase::ePluginDivider:
-				l_pReturn.reset( new DividerPlugin( p_filePath));
+				l_pReturn.reset( new DividerPlugin( l_strFilePath));
 				break;
 			}
 		}
@@ -149,21 +160,21 @@ PluginPtr Root :: LoadPlugin( PluginBase::eTYPE p_eType, const Path & p_filePath
 			l_pReturn.reset();
 
 			if ( ! p_strOptPath.empty())
-			{ 
+			{
 				try
 				{
 					switch (p_eType)
 					{
 					case PluginBase::ePluginRenderer:
-						l_pReturn.reset( new RendererPlugin( p_strOptPath));
+						l_pReturn.reset( new RendererPlugin( p_strOptPath / l_strFilePath));
 						break;
 
 					case PluginBase::ePluginImporter:
-						l_pReturn.reset( new ImporterPlugin( p_strOptPath));
+						l_pReturn.reset( new ImporterPlugin( p_strOptPath / l_strFilePath));
 						break;
 
 					case PluginBase::ePluginDivider:
-						l_pReturn.reset( new DividerPlugin( p_strOptPath));
+						l_pReturn.reset( new DividerPlugin( p_strOptPath / l_strFilePath));
 						break;
 					}
 				}
@@ -186,7 +197,7 @@ PluginPtr Root :: LoadPlugin( PluginBase::eTYPE p_eType, const Path & p_filePath
 
 				if (p_eType == PluginBase::ePluginRenderer)
 				{
-					static_pointer_cast<RendererPlugin>( l_pReturn)->RegisterPlugin( * this);
+					reinterpret_cast<RendererPlugin *>( l_pReturn.get())->RegisterPlugin( * this);
 				}
 			}
 			else
@@ -207,14 +218,14 @@ bool Root :: LoadRenderer( RendererDriver::eDRIVER_TYPE p_eType, const String & 
 {
 	bool l_bReturn = false;
 
-	l_bReturn = LoadPlugin( PluginBase::ePluginRenderer, GetRendererServer().GetRendererName( p_eType) + ".dll", p_strOptPath) != NULL;
+	l_bReturn = LoadPlugin( PluginBase::ePluginRenderer, GetRendererServer().GetRendererName( p_eType), p_strOptPath) != NULL;
 
 	if (l_bReturn)
 	{
 		l_bReturn = false;
 		RendererDriverPtr l_pRenderer = GetRendererServer().GetRenderer( p_eType);
 
-		if ( ! l_pRenderer == NULL)
+		if (l_pRenderer != NULL)
 		{
 			l_pRenderer->CreateRenderSystem( m_pSceneManager);
 			StartRendering();
@@ -246,6 +257,7 @@ void Root :: EndRendering()
 	if (m_mainLoopCreated)
 	{
 		m_pSceneManager->GetMaterialManager()->DeleteAll();
+		OverlayManager::GetSingleton().Cleanup();
 		m_pSceneManager->ClearScenes();
 		m_pSceneManager->GetMaterialManager()->GetShaderManager()->ClearShaders();
 		BufferManager::Cleanup();

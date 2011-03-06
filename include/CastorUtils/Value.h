@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___Castor_Value___
 
 #include <limits>
+#include <algorithm>
 
 namespace Castor
 { namespace Templates
@@ -79,6 +80,12 @@ namespace Castor
 		typedef typename CallTraitsImpl<T, (sizeof( T) > 8)>::Type ParamType;
 	};
 
+	template <typename T>
+	T abs( const T & a)
+	{
+		return a < 0 ? -a : a;
+	}
+
 	//! Policy for various types
 	/*!
 	Policy created to use various types in template classes such as Point, Matrix, and others.
@@ -101,13 +108,13 @@ namespace Castor
 		static char	ass_negate		( char & p_a)						{ return assign( p_a, negate( p_a)); }
 		static void	stick			( char & p_a)						{}
 		template <typename Ty> 
-		static char	convert			( const Ty & p_value)				{ return static_cast<char>( p_value);}
+		static char	convert			( const Ty & p_value)				{ return static_cast<char>( p_value);}/*
 		template <>
 		static char	convert<float>	( const float & p_value)			{ return static_cast<char>( int( p_value)); }
 		template <>
 		static char	convert<double>	( const double & p_value)			{ return static_cast<char>( int( p_value)); }
 		template <>
-		static char	convert<bool>	( const bool & p_value)				{ return (p_value ? 1 : 0); }
+		static char	convert<bool>	( const bool & p_value)				{ return (p_value ? 1 : 0); }*/
 		template <typename Ty> 
 		static bool	equals			( const char & p_a, const Ty & p_b)	{ return p_a == convert<Ty>( p_b); }
 		template <typename Ty> 
@@ -141,13 +148,13 @@ namespace Castor
 		static unsigned char	ass_negate		( unsigned char & p_a)							{ return assign( p_a, negate( p_a)); }
 		static unsigned char	stick			( unsigned char & p_a)							{}
 		template <typename Ty> 
-		static unsigned char	convert			( const Ty & p_value)							{ return static_cast<unsigned char>( p_value);}
+		static unsigned char	convert			( const Ty & p_value)							{ return static_cast<unsigned char>( p_value);}/*
 		template <> 
 		static unsigned char	convert<float>	( const float & p_value)						{ return static_cast<unsigned char>( unsigned int( p_value)); }
 		template <> 
 		static unsigned char	convert<double>	( const double & p_value)						{ return static_cast<unsigned char>( unsigned int( p_value)); }
 		template <> 
-		static unsigned char	convert<bool>	( const bool & p_value)							{ return (p_value ? 1 : 0); }
+		static unsigned char	convert<bool>	( const bool & p_value)							{ return (p_value ? 1 : 0); }*/
 		template <typename Ty> 
 		static bool				equals			( const unsigned char & p_a, const Ty & p_b)	{ return p_a == convert<Ty>( p_b); }
 		template <typename Ty> 
@@ -181,11 +188,11 @@ namespace Castor
 		static bool	ass_negate		( bool & p_a)						{ return assign( p_a, negate( p_a)); }
 		static void stick			( bool & p_a)						{}
 		template <typename Ty> 
-		static bool	convert			( const Ty & p_value)				{ return p_value != 0;}
+		static bool	convert			( const Ty & p_value)				{ return p_value != 0;}/*
 		template <>
 		static bool	convert<float>	( const float & p_value)			{ return int( p_value) != 0; }
 		template <>
-		static bool	convert<double>	( const double & p_value)			{ return int( p_value) != 0; }
+		static bool	convert<double>	( const double & p_value)			{ return int( p_value) != 0; }*/
 		template <typename Ty> 
 		static bool	equals			( const bool & p_a, const Ty & p_b)	{ return p_a == convert<Ty>( p_b); }
 		template <typename Ty> 
@@ -219,9 +226,9 @@ namespace Castor
 		static int	ass_negate		( int & p_a)						{ return assign( p_a, negate( p_a)); }
 		static void stick			( int & p_a)						{}
 		template <typename Ty> 
-		static int	convert			( const Ty & p_value)				{ return static_cast<int>( p_value);}
+		static int	convert			( const Ty & p_value)				{ return static_cast<int>( p_value);}/*
 		template <> 
-		static int	convert<bool>	( const bool & p_value)				{ return (p_value ? 1 : 0); }
+		static int	convert<bool>	( const bool & p_value)				{ return (p_value ? 1 : 0); }*/
 		template <typename Ty> 
 		static bool	equals			( const int & p_a, const Ty & p_b)	{ return p_a == convert<Ty>( p_b); }
 		template <typename Ty> 
@@ -255,9 +262,9 @@ namespace Castor
 		static unsigned int	ass_negate		( unsigned int & p_a)						{ return assign( p_a, negate( p_a)); }
 		static void			stick			( unsigned int & p_a)						{}
 		template <typename Ty> 
-		static unsigned int	convert			( const Ty & p_value)						{ return static_cast<unsigned int>( p_value);}
+		static unsigned int	convert			( const Ty & p_value)						{ return static_cast<unsigned int>( p_value);}/*
 		template <> 
-		static unsigned int	convert<bool>	( const bool & p_value)						{ return (p_value ? 1 : 0); }
+		static unsigned int	convert<bool>	( const bool & p_value)						{ return (p_value ? 1 : 0); }*/
 		template <typename Ty> 
 		static bool			equals			( const unsigned int & p_a, const Ty & p_b)	{ return p_a == convert<Ty>( p_b); }
 		template <typename Ty> 
@@ -291,9 +298,9 @@ namespace Castor
 		static long	ass_negate		( long & p_a)						{ return assign( p_a, negate( p_a)); }
 		static void stick			( long & p_a)						{}
 		template <typename Ty> 
-		static long	convert			( const Ty & p_value)				{ return static_cast<long>( p_value);}
+		static long	convert			( const Ty & p_value)				{ return static_cast<long>( p_value);}/*
 		template <> 
-		static long	convert<bool>	( const bool & p_value)				{ return (p_value ? 1 : 0); }
+		static long	convert<bool>	( const bool & p_value)				{ return (p_value ? 1 : 0); }*/
 		template <typename Ty> 
 		static bool	equals			( const long & p_a, const Ty & p_b)	{ return p_a == convert<Ty>( p_b); }
 		template <typename Ty> 
@@ -327,9 +334,9 @@ namespace Castor
 		static unsigned long	ass_negate		( unsigned long & p_a)							{ return assign( p_a, negate( p_a)); }
 		static void				stick			( unsigned long & p_a)							{}
 		template <typename Ty> 
-		static unsigned long	convert			( const Ty & p_value)							{ return static_cast<unsigned long>( p_value);}
+		static unsigned long	convert			( const Ty & p_value)							{ return static_cast<unsigned long>( p_value);}/*
 		template <> 
-		static unsigned long	convert<bool>	( const bool & p_value)							{ return (p_value ? 1 : 0); }
+		static unsigned long	convert<bool>	( const bool & p_value)							{ return (p_value ? 1 : 0); }*/
 		template <typename Ty> 
 		static bool				equals			( const unsigned long & p_a, const Ty & p_b)	{ return p_a == convert<Ty>( p_b); }
 		template <typename Ty> 
@@ -363,9 +370,9 @@ namespace Castor
 		static long long	ass_negate		( long long & p_a)							{ return assign( p_a, negate( p_a)); }
 		static void			stick			( long long & p_a)							{}
 		template <typename Ty> 
-		static long long	convert			( const Ty & p_value)						{ return static_cast<long long>( p_value);}
+		static long long	convert			( const Ty & p_value)						{ return static_cast<long long>( p_value);}/*
 		template <> 
-		static long long	convert<bool>	( const bool & p_value)						{ return (p_value ? 1 : 0); }
+		static long long	convert<bool>	( const bool & p_value)						{ return (p_value ? 1 : 0); }*/
 		template <typename Ty> 
 		static bool			equals			( const long long & p_a, const Ty & p_b)	{ return p_a == convert<Ty>( p_b); }
 		template <typename Ty> 
@@ -399,9 +406,9 @@ namespace Castor
 		static unsigned long long	ass_negate		( unsigned long long & p_a)							{ return assign( p_a, negate( p_a)); }
 		static void					stick			( unsigned long long & p_a)							{}
 		template <typename Ty> 
-		static unsigned long long	convert			( const Ty & p_value)								{ return static_cast<unsigned long long>( p_value);}
+		static unsigned long long	convert			( const Ty & p_value)								{ return static_cast<unsigned long long>( p_value);}/*
 		template <>
-		static unsigned long long	convert<bool>	( const bool & p_value)								{ return (p_value ? 1 : 0); }
+		static unsigned long long	convert<bool>	( const bool & p_value)								{ return (p_value ? 1 : 0); }*/
 		template <typename Ty> 
 		static bool					equals			( const unsigned long long & p_a, const Ty & p_b)	{ return p_a == convert<Ty>( p_b); }
 		template <typename Ty> 
@@ -455,11 +462,11 @@ namespace Castor
 			}
 		}
 		template <typename Ty> 
-		static float	convert			( const Ty & p_value)					{ return static_cast<float>( p_value);}
+		static float	convert			( const Ty & p_value)					{ return static_cast<float>( p_value);}/*
 		template <> 
-		static float	convert<bool>	( const bool & p_value)					{ return (p_value ? 1.0f : 0.0f); }
+		static float	convert<bool>	( const bool & p_value)					{ return (p_value ? 1.0f : 0.0f); }*/
 		template <typename Ty> 
-		static bool		equals			( const float & p_a, const Ty & p_b)	{ return std::abs( p_a - convert<float>( p_b)) < std::numeric_limits<float>::epsilon(); }
+		static bool		equals			( const float & p_a, const Ty & p_b)	{ return abs( p_a - convert<float>( p_b)) < std::numeric_limits<float>::epsilon(); }
 		template <typename Ty> 
 		static float	add				( const float & p_a, const Ty & p_b)	{ return p_a + convert<Ty>( p_b); }
 		template <typename Ty> 
@@ -511,11 +518,11 @@ namespace Castor
 			}
 		}
 		template <typename Ty> 
-		static double	convert			( const Ty & p_value)					{ return static_cast<double>( p_value);}
+		static double	convert			( const Ty & p_value)					{ return static_cast<double>( p_value);}/*
 		template <> 
-		static double	convert<bool>	( const bool & p_value)					{ return (p_value ? 1.0 : 0.0); }
+		static double	convert<bool>	( const bool & p_value)					{ return (p_value ? 1.0 : 0.0); }*/
 		template <typename Ty> 
-		static bool		equals			( const double & p_a, const Ty & p_b)	{ return std::abs( p_a - convert<double>( p_b)) < std::numeric_limits<double>::epsilon(); }
+		static bool		equals			( const double & p_a, const Ty & p_b)	{ return abs( p_a - convert<double>( p_b)) < std::numeric_limits<double>::epsilon(); }
 		template <typename Ty> 
 		static double	add				( const double & p_a, const Ty & p_b)	{ return p_a + convert<Ty>( p_b); }
 		template <typename Ty> 

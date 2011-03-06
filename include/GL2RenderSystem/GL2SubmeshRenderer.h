@@ -15,22 +15,22 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL2_SubmeshRenderer___
-#define ___GL2_SubmeshRenderer___
+#ifndef ___Gl2_SubmeshRenderer___
+#define ___Gl2_SubmeshRenderer___
 
-#include "Module_GLRender.h"
+#include "Module_Gl2Render.h"
 
 namespace Castor3D
 {
-	class C3D_GL2_API GL2SubmeshRenderer : public SubmeshRenderer
+	class C3D_Gl2_API Gl2SubmeshRenderer : public SubmeshRenderer
 	{
 	public:
-		GL2SubmeshRenderer( SceneManager * p_pSceneManager);
-		virtual ~GL2SubmeshRenderer();
+		Gl2SubmeshRenderer( SceneManager * p_pSceneManager);
+		virtual ~Gl2SubmeshRenderer();
 
 		virtual void Cleanup();
 		virtual void Initialise();
-		virtual VertexInfosBufferPtr CreateVertexBuffer();
+//		virtual VertexBufferPtr CreateVertexBuffer();
 
 	private:
 		virtual void _drawBuffers( const Pass & p_pass);

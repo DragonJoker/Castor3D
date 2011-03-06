@@ -1,7 +1,7 @@
 #ifndef ___GC_PassPanel___
 #define ___GC_PassPanel___
 
-namespace GUICommon
+namespace GuiCommon
 {
 	class PassPanel : public wxScrolledWindow
 	{

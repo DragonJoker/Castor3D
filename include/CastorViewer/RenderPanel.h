@@ -22,12 +22,12 @@ namespace CastorViewer
 		wxTimer * m_timer;
 		Castor3D::Viewport::eTYPE m_renderType;
 		Castor3D::ePROJECTION_DIRECTION m_lookAt;
-		Castor3D::RenderWindowPtr m_renderWindow;
+		weak_ptr<Castor3D::RenderWindow> m_renderWindow;
 		Castor3D::ScenePtr m_mainScene;
 		Castor3D::FrameListenerPtr m_listener;
 
-		SmartPtr<CameraRotateEvent>::Shared m_pRotateCamEvent;
-		SmartPtr<CameraTranslateEvent>::Shared m_pTranslateCamEvent;
+		shared_ptr<CameraRotateEvent> m_pRotateCamEvent;
+		shared_ptr<CameraTranslateEvent> m_pTranslateCamEvent;
 
 	public:
 		RenderPanel( wxWindow * parent, wxWindowID p_id,

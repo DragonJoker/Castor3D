@@ -21,11 +21,15 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Castor3D/importer/Importer.h>
 #include <Castor3D/geometry/basic/SmoothingGroup.h>
 
+#ifndef _WIN32
+#	define C3D_Obj_API
+#else
 #	ifdef ObjImporter_EXPORTS
 #		define C3D_Obj_API __declspec(dllexport)
 #	else
 #		define C3D_Obj_API __declspec(dllimport)
 #	endif
+#endif
 
 namespace Castor3D
 {

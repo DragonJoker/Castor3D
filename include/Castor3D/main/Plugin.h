@@ -46,7 +46,7 @@ namespace Castor3D
 		*/
 		typedef enum
 		{
-			ePluginRenderer,	//!< Renderer plugin (OpenGL2, 3 or Direct3D)
+			ePluginRenderer,	//!< Renderer plugin (OpenGl2, 3 or Direct3D)
 			ePluginImporter,	//!< Importer plugin
 			ePluginDivider,		//!< Mesh Divider plugin
 		}

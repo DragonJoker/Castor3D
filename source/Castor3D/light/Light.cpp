@@ -5,15 +5,15 @@
 
 using namespace Castor3D;
 
-Light :: Light( SceneNodePtr p_pNode, const String & p_name)
-	:	MovableObject( (SceneNode *)p_pNode.get(), p_name),
-		m_enabled( false),
-		m_ambient( 1, 1, 1, 1),
-		m_diffuse( 0, 0, 0, 1),
-		m_specular( 1, 1, 1, 1),
-		m_ptPositionType( m_pSceneNode->GetPosition()[0], m_pSceneNode->GetPosition()[1], m_pSceneNode->GetPosition()[2], 0)
+Light :: Light( Scene * p_pScene, SceneNodePtr p_pNode, const String & p_name, eLIGHT_TYPE p_eLightType)
+	:	MovableObject( p_pScene, p_pNode.get(), p_name, eLight)
+	,	m_enabled( false)
+	,	m_ambient( 1.0f, 1.0f, 1.0f, 1.0f)
+	,	m_diffuse( 0.0f, 0.0f, 0.0f, 1.0f)
+	,	m_specular( 1.0f, 1.0f, 1.0f, 1.0f)
+	,	m_ptPositionType( m_pSceneNode->GetPosition()[0], m_pSceneNode->GetPosition()[1], m_pSceneNode->GetPosition()[2], 0)
+	,	m_eLightType( p_eLightType)
 {
-	m_eType = eLight;
 	m_pSceneNode->GetPosition().LinkCoords( m_ptPositionType.ptr());
 }
 
@@ -31,7 +31,7 @@ void Light :: Disable()
 	m_pRenderer->Disable();
 }
 
-void Light :: Render( eDRAW_TYPE p_displayMode)
+void Light :: Render( ePRIMITIVE_TYPE p_displayMode)
 {
 	_apply();
 }
@@ -104,13 +104,112 @@ void Light :: SetSpecular( const Colour & p_specular)
 	m_specular[2] = p_specular[2];
 }
 
-bool Light :: Write( File & p_pFile)const
+bool Light :: Write( File & p_file)const
 {
-	bool l_bReturn = p_pFile.Print( 256, "\tdiffuse %f %f %f %f\n", m_diffuse[0], m_diffuse[1], m_diffuse[2], m_diffuse[3]);
+	Logger::LogMessage( CU_T( "Writing Light ") + m_strName);
+
+	bool l_bReturn = p_file.WriteLine( "light " + m_strName + "\n{\n") > 0;
 
 	if (l_bReturn)
 	{
-		l_bReturn = p_pFile.Print( 256, "\tspecular %f %f %f %f\n", m_specular[0], m_specular[1], m_specular[2], m_specular[3]);
+		switch (m_eLightType)
+		{
+		case eDirectional:
+			l_bReturn = p_file.WriteLine( "\ttype directional\n") > 0;
+			break;
+
+		case ePoint:
+			l_bReturn = p_file.WriteLine( "\ttype point_light\n") > 0;
+			break;
+
+		case eSpot:
+			l_bReturn = p_file.WriteLine( "\ttype spot_light\n") > 0;
+			break;
+		}
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_file.WriteLine( "\tambient ") > 0;
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = m_ambient.Write( p_file);
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_file.WriteLine( "\n\tdiffuse ") > 0;
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = m_diffuse.Write( p_file);
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_file.WriteLine( "\n\tspecular ") > 0;
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = m_specular.Write( p_file);
+	}
+
+	return l_bReturn;
+}
+
+bool Light :: Save( File & p_file)const
+{
+	bool l_bReturn = p_file.Write( m_eLightType) == sizeof( eLIGHT_TYPE);
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_file.Write( m_strName);
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = MovableObject::Save( p_file);
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = m_ambient.Save( p_file);
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = m_diffuse.Save( p_file);
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = m_specular.Save( p_file);
+	}
+
+	return l_bReturn;
+}
+
+bool Light :: Load( File & p_file)
+{
+	bool l_bReturn = MovableObject::Load( p_file);
+
+	if (l_bReturn)
+	{
+		l_bReturn = m_ambient.Load( p_file);
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = m_diffuse.Load( p_file);
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = m_specular.Load( p_file);
 	}
 
 	return l_bReturn;

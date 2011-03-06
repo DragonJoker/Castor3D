@@ -134,67 +134,67 @@ real Ray :: Intersects( const CubeBox & p_box)
 	if ((l_dist = Intersects( l_v2, l_v4, l_v3)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = std::min( l_min, l_dist);
+		l_min = std::min<real>( l_min, l_dist);
 	}
 
 	if ((l_dist = Intersects( l_v2, l_v6, l_v4)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = std::min( l_min, l_dist);
+		l_min = std::min<real>( l_min, l_dist);
 	}
 
 	if ((l_dist = Intersects( l_v6, l_v8, l_v4)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = std::min( l_min, l_dist);
+		l_min = std::min<real>( l_min, l_dist);
 	}
 
 	if ((l_dist = Intersects( l_v6, l_v5, l_v8)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = std::min( l_min, l_dist);
+		l_min = std::min<real>( l_min, l_dist);
 	}
 
 	if ((l_dist = Intersects( l_v5, l_v7, l_v8)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = std::min( l_min, l_dist);
+		l_min = std::min<real>( l_min, l_dist);
 	}
 
 	if ((l_dist = Intersects( l_v1, l_v7, l_v5)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = std::min( l_min, l_dist);
+		l_min = std::min<real>( l_min, l_dist);
 	}
 
 	if ((l_dist = Intersects( l_v1, l_v3, l_v7)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = std::min( l_min, l_dist);
+		l_min = std::min<real>( l_min, l_dist);
 	}
 
 	if ((l_dist = Intersects( l_v2, l_v1, l_v5)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = std::min( l_min, l_dist);
+		l_min = std::min<real>( l_min, l_dist);
 	}
 
 	if ((l_dist = Intersects( l_v2, l_v5, l_v6)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = std::min( l_min, l_dist);
+		l_min = std::min<real>( l_min, l_dist);
 	}
 
 	if ((l_dist = Intersects( l_v3, l_v4, l_v7)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = std::min( l_min, l_dist);
+		l_min = std::min<real>( l_min, l_dist);
 	}
 
 	if ((l_dist = Intersects( l_v4, l_v7, l_v8)) >= 0)
 	{
 		l_foundOne = true;
-		l_min = std::min( l_min, l_dist);
+		l_min = std::min<real>( l_min, l_dist);
 	}
 
 	if (l_foundOne)
@@ -235,7 +235,7 @@ real Ray :: Intersects( const SphereBox & p_sphere)
 
 real Ray :: Intersects( Geometry * p_pGeometry, FacePtr* p_ppFace, SubmeshPtr* p_ppSubmesh)
 {
-	Point3r l_vCenter = p_pGeometry->GetCenter()->operator +( p_pGeometry->GetParent()->GetPosition());
+	Point3r l_vCenter = p_pGeometry->GetParent()->GetPosition();
 	Quaternion l_qOrientation = p_pGeometry->GetParent()->GetOrientation();
 	Point3r l_vOrientedCenter = l_qOrientation * l_vCenter;
 

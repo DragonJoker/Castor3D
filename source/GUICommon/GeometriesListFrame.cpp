@@ -1,9 +1,22 @@
-#include "GUICommon/PrecompiledHeader.h"
+#include "GuiCommon/PrecompiledHeader.h"
 
-#include "GUICommon/GeometriesListFrame.h"
+#include "GuiCommon/GeometriesListFrame.h"
+#include "GuiCommon/ImagesLoader.h"
+
+#include "xpms/geo_visible.xpm"
+#include "xpms/geo_visible_sel.xpm"
+#include "xpms/geo_cachee.xpm"
+#include "xpms/geo_cachee_sel.xpm"
+#include "xpms/dossier.xpm"
+#include "xpms/dossier_sel.xpm"
+#include "xpms/dossier_ouv.xpm"
+#include "xpms/dossier_ouv_sel.xpm"
+#include "xpms/submesh.xpm"
+#include "xpms/submesh_sel.xpm"
+
 
 using namespace Castor3D;
-using namespace GUICommon;
+using namespace GuiCommon;
 
 //*************************************************************************************************************
 
@@ -24,7 +37,6 @@ GeometriesListFrame :: GeometriesListFrame( MaterialManager * p_pManager, wxWind
 											const wxSize & size)
 	:	wxFrame( parent, wxID_ANY, CU_T( "Geometries list"), pos, size, wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN | wxFRAME_FLOAT_ON_PARENT)
 	,	m_scene( p_scene)
-	,	m_items( NULL)
 	,	m_nbItems( 0)
 	,	m_pManager( p_pManager)
 {
@@ -45,53 +57,56 @@ GeometriesListFrame :: GeometriesListFrame( MaterialManager * p_pManager, wxWind
     m_pImages = new wxImageList( 32, 32, true);
 
 	wxBusyCursor l_wait;
-	wxBitmap l_icons[eNbImages];
-	l_icons[eGeoVisible]		= wxBITMAP( GeoVisible);
-	l_icons[eGeoVisibleSel]		= wxBITMAP( GeoVisibleSel);
-	l_icons[eGeoCachee]			= wxBITMAP( GeoCachee);
-	l_icons[eGeoCacheeSel]		= wxBITMAP( GeoCacheeSel);
-	l_icons[eGeometrie]			= wxBITMAP( Dossier);
-	l_icons[eGeometrieSel]		= wxBITMAP( DossierSel);
-	l_icons[eGeometrieOuv]		= wxBITMAP( DossierOuv);
-	l_icons[eGeometrieOuvSel]	= wxBITMAP( DossierOuvSel);
-	l_icons[eSubmesh]			= wxBITMAP( Submesh);
-	l_icons[eSubmeshSel]		= wxBITMAP( SubmeshSel);
+	wxBitmap * l_icons[eNbImages];
+	l_icons[eGeoVisible]		= ImagesLoader::AddBitmap( eBmpGeoVisible,		geo_visible_xpm);
+	l_icons[eGeoVisibleSel]		= ImagesLoader::AddBitmap( eBmpGeoVisibleSel,	geo_visible_sel_xpm);
+	l_icons[eGeoCachee]			= ImagesLoader::AddBitmap( eBmpGeoCachee,		geo_cachee_xpm);
+	l_icons[eGeoCacheeSel]		= ImagesLoader::AddBitmap( eBmpGeoCacheeSel,	geo_cachee_sel_xpm);
+	l_icons[eGeometrie]			= ImagesLoader::AddBitmap( eBmpGeometrie,		dossier_xpm);
+	l_icons[eGeometrieSel]		= ImagesLoader::AddBitmap( eBmpGeometrieSel,	dossier_sel_xpm);
+	l_icons[eGeometrieOuv]		= ImagesLoader::AddBitmap( eBmpGeometrieOuv,	dossier_ouv_xpm);
+	l_icons[eGeometrieOuvSel]	= ImagesLoader::AddBitmap( eBmpGeometrieOuvSel,	dossier_ouv_sel_xpm);
+	l_icons[eSubmesh]			= ImagesLoader::AddBitmap( eBmpSubmesh,			submesh_xpm);
+	l_icons[eSubmeshSel]		= ImagesLoader::AddBitmap( eBmpSubmeshSel,		submesh_sel_xpm);
 
     for (size_t i = 0; i < eNbImages ; i++)
 	{
-		int l_sizeOrig = l_icons[i].GetWidth();
+		int l_sizeOrig = l_icons[i]->GetWidth();
 
         if (l_sizeOrig == 32)
         {
-            m_pImages->Add( l_icons[i]);
+            m_pImages->Add( * l_icons[i]);
         }
         else
         {
-            m_pImages->Add( l_icons[i].ConvertToImage().Rescale( 32, 32, wxIMAGE_QUALITY_HIGH));
+            m_pImages->Add( l_icons[i]->ConvertToImage().Rescale( 32, 32, wxIMAGE_QUALITY_HIGH));
         }
     }
 
 	m_pTreeGeometries->AssignImageList( m_pImages);
 
-	for (GeometryPtrStrMap::iterator l_it = m_scene->GetGeometriesIterator() ; l_it != m_scene->GetGeometriesEnd() ; ++l_it)
-	{
-		l_iCount = 0;
-		l_pGeometry = l_it->second;
-		l_strName = l_pGeometry->GetName().c_str();
+    if (m_scene != NULL)
+    {
+        for (GeometryPtrStrMap::iterator l_it = m_scene->GetGeometriesIterator() ; l_it != m_scene->GetGeometriesEnd() ; ++l_it)
+        {
+            l_iCount = 0;
+            l_pGeometry = l_it->second;
+            l_strName = l_pGeometry->GetName().c_str();
 
-		m_items.push_back( l_strName);
-		l_idGeometry = m_pTreeGeometries->AppendItem( l_idRoot, l_strName, eGeometrie, eGeometrieSel, new GeometryTreeItemData( l_pGeometry));
-		m_pTreeGeometries->AppendItem( l_idGeometry, l_pGeometry->IsVisible() ? wxT( "Visible") : wxT( "Caché"), eGeoVisible, eGeoVisibleSel, new GeometryTreeItemData( l_pGeometry));
+            m_items.push_back( l_strName);
+            l_idGeometry = m_pTreeGeometries->AppendItem( l_idRoot, l_strName, eGeometrie, eGeometrieSel, new GeometryTreeItemData( l_pGeometry));
+            m_pTreeGeometries->AppendItem( l_idGeometry, l_pGeometry->IsVisible() ? wxT( "Visible") : wxT( "Caché"), eGeoVisible, eGeoVisibleSel, new GeometryTreeItemData( l_pGeometry));
 
-		for (size_t i = 0 ; i < l_pGeometry->GetMesh()->GetNbSubmeshes() ; i++)
-		{
-			wxString l_strSubmesh = wxT( "Submesh ");
-			l_strSubmesh << l_iCount++;
-			l_idSubmesh = m_pTreeGeometries->AppendItem( l_idGeometry, l_strSubmesh, eSubmesh, eSubmeshSel, new GeometryTreeItemData( l_pGeometry));
-		}
+            for (size_t i = 0 ; i < l_pGeometry->GetMesh()->GetNbSubmeshes() ; i++)
+            {
+                wxString l_strSubmesh = wxT( "Submesh ");
+                l_strSubmesh << l_iCount++;
+                l_idSubmesh = m_pTreeGeometries->AppendItem( l_idGeometry, l_strSubmesh, eSubmesh, eSubmeshSel, new GeometryTreeItemData( l_pGeometry));
+            }
 
-		m_setGeometriesInTree.insert( std::set <wxTreeItemId>::value_type( l_idGeometry));
-	}
+            m_setGeometriesInTree.insert( std::set <wxTreeItemId>::value_type( l_idGeometry));
+        }
+    }
 }
 
 GeometriesListFrame :: ~GeometriesListFrame()
@@ -155,7 +170,7 @@ void GeometriesListFrame :: OnActivateItem( wxTreeEvent & event)
 {
 	wxTreeItemId l_item = event.GetItem();
 	GeometryTreeItemData * l_pItemData = (GeometryTreeItemData *)m_pTreeGeometries->GetItemData( l_item);
-	String l_strText = m_pTreeGeometries->GetItemText( l_item);
+	String l_strText = m_pTreeGeometries->GetItemText( l_item).c_str();
 
 	if (l_strText == "Visible")
 	{

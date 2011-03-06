@@ -19,20 +19,22 @@ PluginBase :: PluginBase( const String & p_fileName)
 	,	m_library				( new DynamicLibrary)
 {
 
-	Cout( CU_T( "Plugin name [") << p_fileName << CU_T( "]") << std::endl);
+	Logger::LogMessage( CU_T( "Plugin name [%s]"), p_fileName.c_str());
 
 	if ( ! m_library->Open( p_fileName))
 	{
-		Cerr( CU_T( "Error encountered while loading plugin : ") << dlerror() << std::endl);
-		throw false;
+		String l_strError = String( CU_T( "Error encountered while loading plugin [")) + p_fileName.c_str() + CU_T( "] : ");
+	    l_strError << dlerror();
+		Logger::LogError( l_strError);
 	}
 
 	m_pfnGetRequiredVersion = reinterpret_cast <PGetRequiredVersionFunction> ( m_library->GetFunction( "GetRequiredVersion"));
 
 	if (m_pfnGetRequiredVersion == NULL)
 	{
-		Cerr( CU_T( "Error encountered while loading plugin version function : ") << dlerror() << std::endl);
-		throw false;
+		String l_strError = CU_T( "Error encountered while loading plugin version function : ");
+	    l_strError << dlerror();
+		Logger::LogError( l_strError);
 	}
 
 	m_pDLLRefCount = new size_t( 1);
@@ -80,8 +82,9 @@ RendererPlugin :: RendererPlugin( const String & p_fileName)
 
 	if (m_pfnRegisterPlugin == NULL)
 	{
-		Cerr( CU_T( "Error encountered while loading plugin register function : ") << dlerror() << std::endl);
-		throw false;
+		String l_strError = CU_T( "Error encountered while loading plugin register function : ");
+	    l_strError << dlerror();
+		Logger::LogError( l_strError);
 	}
 }
 
@@ -120,8 +123,9 @@ ImporterPlugin :: ImporterPlugin( const String & p_fileName)
 
 	if (m_pfnCreateImporterFunction == NULL)
 	{
-		Cerr( CU_T( "Error encountered while loading plugin importer creator function : ") << dlerror() << std::endl);
-		throw false;
+		String l_strError = CU_T( "Error encountered while loading plugin importer function : ");
+	    l_strError << dlerror();
+		Logger::LogError( l_strError);
 	}
 }
 
@@ -164,8 +168,9 @@ DividerPlugin :: DividerPlugin( const String & p_fileName)
 
 	if (m_pfnCreateDividerFunction == NULL)
 	{
-		Cerr( CU_T( "Error encountered while loading plugin divider creator function : ") << dlerror() << std::endl);
-		throw false;
+		String l_strError = CU_T( "Error encountered while loading plugin divider function : ");
+	    l_strError << dlerror();
+		Logger::LogError( l_strError);
 	}
 }
 

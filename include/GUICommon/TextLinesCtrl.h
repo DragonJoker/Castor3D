@@ -3,7 +3,7 @@
 
 class wxStaticText;
 
-namespace GUICommon
+namespace GuiCommon
 {
 	class TextCtrl;
 	class TextPanel;
@@ -15,7 +15,7 @@ namespace GUICommon
 		wxListBox * m_lines;
 
 	public:
-		TextLinesCtrl( wxWindow *parent, wxWindowID id, const wxPoint& pos, 
+		TextLinesCtrl( wxWindow *parent, wxWindowID id, const wxPoint& pos,
 					   const wxSize& size, long style);
 
 		void AddLines( unsigned int p_nbLines);

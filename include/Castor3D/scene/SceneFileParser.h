@@ -21,6 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "../Prerequisites.h"
 #include "../light/Light.h"
 #include "../geometry/mesh/Mesh.h"
+#include "../camera/Viewport.h"
 
 namespace Castor3D
 {
@@ -44,15 +45,20 @@ namespace Castor3D
 			eLight,				//!< Light section
 			eNode,				//!< SceneNode section
 			eObject,			//!< Geometry section
+			eFont,				//!< Font section
+			eTextOverlay,		//!< Text Overlay sections
 			eMesh,				//!< Mesh subsection of a geometry section
 			eSubmesh,			//!< Submesh subsection of a Mesh subsection
 			eSmoothingGroup,	//!< SmoothingGroup subsection of a Submesh subsection
 			eMaterial,			//!< Material section
 			ePass,				//!< Pass subsection of a material section
 			eTextureUnit,		//!< TextureUnit subsection of a pass subsection
-			eGlShader,			//!< GLSL Shader subsection of a pass subsection
-			eGlShaderProgram,	//!< GLSL Shader Program subsection of a shader subsection
-			eGlShaderVariable,	//!< GLSL Shader frame variable subsection of a shader subsection
+			eGlslShader,		//!< GLSL Shader subsection of a pass subsection
+			eGlslShaderProgram,	//!< GLSL Shader Program subsection of a shader subsection
+			eGlslShaderVariable,//!< GLSL Shader frame variable subsection of a shader subsection
+			eHlslShader,		//!< HLSL Shader subsection of a pass subsection
+			eHlslShaderProgram,	//!< HLSL Shader subsection of a pass subsection
+			eHlslShaderVariable,//!< HLSL Shader frame variable subsection of a shader subsection
 			eCgShader,			//!< Cg Shader subsection of a pass subsection
 			eCgShaderProgram,	//!< Cg Shader Program subsection of a shader subsection
 			eCgShaderVariable,	//!< Cg Shader frame variable subsection of a shader program subsection
@@ -76,26 +82,35 @@ namespace Castor3D
 		MaterialPtr						pMaterial;
 		size_t							uiPass;
 		TextureUnitPtr					pTextureUnit;
-		ShaderProgramPtr				pShaderProgram;
-		ShaderObjectPtr					pShaderObject;
+		GlslShaderProgramPtr			pGlslShaderProgram;
+		GlslShaderObjectPtr				pGlslShaderObject;
 		FrameVariablePtr				pFrameVariable;
 		CgShaderProgramPtr				pCgShaderProgram;
 		CgShaderObjectPtr				pCgShaderObject;
 		CgFrameVariablePtr				pCgFrameVariable;
+		HlslShaderProgramPtr			pHlslShaderProgram;
+		HlslShaderObjectPtr				pHlslShaderObject;
+		Overlay						*	pOverlay;
+		TextOverlayPtr					pTextOverlay;
 		int								iFace1;
 		int								iFace2;
 
-		Light::eTYPE					eLightType;
-		Mesh::eTYPE						eMeshType;
+		Light::eLIGHT_TYPE				eLightType;
+		eMESH_TYPE						eMeshType;
+		Viewport::eTYPE					eViewportType;
 
 		String							strName;
 		String							strName2;
+		size_t							uiUInt;
+
+		SceneNodePtr					m_pGeneralParentNode;
 
 		Castor::Utils::File	*	pFile;
 
 		unsigned long long				ui64Line;
 
 		eSECTION						eSection;
+		eSECTION						ePrevSection;
 
 	public:
 		/**
@@ -105,7 +120,7 @@ namespace Castor3D
 		/**
 		 * Initialises all variables
 		 */
-		void Initialise();
+		void Initialise( SceneNodePtr p_pNode);
 	};
 	//! ESCN file parser
 	/*!
@@ -130,9 +145,14 @@ namespace Castor3D
 		AttributeParserMap m_mapGlShaderParsers;
 		AttributeParserMap m_mapGlShaderProgramParsers;
 		AttributeParserMap m_mapGlShaderVariableParsers;
+		AttributeParserMap m_mapHlShaderParsers;
+		AttributeParserMap m_mapHlShaderProgramParsers;
+		AttributeParserMap m_mapHlShaderVariableParsers;
 		AttributeParserMap m_mapCgShaderParsers;
 		AttributeParserMap m_mapCgShaderProgramParsers;
 		AttributeParserMap m_mapCgShaderVariableParsers;
+		AttributeParserMap m_mapFontParsers;
+		AttributeParserMap m_mapTextOverlayParsers;
 
 		SceneFileContextPtr m_pContext;
 
@@ -152,7 +172,13 @@ namespace Castor3D
 		 *@param p_strFileName : [in] The file path
 		 *@return true if successful, false if not
 		 */
-		bool ParseFile( const String & p_strFileName);
+		bool ParseFile( const String & p_strFileName, SceneNodePtr p_pNode=SceneNodePtr());
+		/**
+		 * Parses the given file (expecting it to be in ESCN file format
+		 *@param p_strFileName : [in] The file path
+		 *@return true if successful, false if not
+		 */
+		bool ParseFile( File & p_file, SceneNodePtr p_pNode=SceneNodePtr());
 		/**
 		 * Logs an error in the log file
 		 */
@@ -169,13 +195,13 @@ namespace Castor3D
 		{
 			bool l_bReturn = false;
 
-			StringArray l_arrayValues = p_strParams.Split( " ");
+			StringArray l_arrayValues = p_strParams.split( " \t,;");
 
 			if (l_arrayValues.size() >= Count)
 			{
 				if (l_arrayValues.size() > Count)
 				{
-					PARSING_WARNING( "More arguments than needed");
+					PARSING_WARNING( "More arguments than needed, keeping only the first ones");
 				}
 
 				for (size_t i = 0 ; i < Count ; i++)
@@ -188,6 +214,42 @@ namespace Castor3D
 			else
 			{
 				PARSING_ERROR( "Wrong number of args");
+			}
+
+			return l_bReturn;
+		}
+		/**
+		 * Parses a Point
+		 */
+		template <typename T, size_t Count>
+		static bool ParseVector( String & p_strParams, Point<T, Count> & p_vResult)
+		{
+			bool l_bReturn = false;
+
+			StringArray l_arrayValues = p_strParams.split( " \t,;");
+
+			if (l_arrayValues.size() >= Count)
+			{
+				if (l_arrayValues.size() > Count)
+				{
+					Logger::LogWarning( "More arguments than needed, keeping only the last ones");
+
+					while (l_arrayValues.size() > Count)
+					{
+						l_arrayValues.erase( l_arrayValues.begin());
+					}
+				}
+
+				for (size_t i = 0 ; i < Count ; i++)
+				{
+					p_vResult[i] = T( atof( l_arrayValues[i].c_str()));
+				}
+
+				l_bReturn = true;
+			}
+			else
+			{
+				Logger::LogError( "Wrong number of args");
 			}
 
 			return l_bReturn;

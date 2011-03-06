@@ -1,42 +1,117 @@
-#include "OpenGLCommon/PrecompiledHeader.h"
+#include "OpenGlCommon/PrecompiledHeader.h"
 
-#include "OpenGLCommon/GLBuffer.h"
+#include "OpenGlCommon/GlBuffer.h"
 
 using namespace Castor3D;
 
 //******************************************************************************
 
-GLVBOIndicesBuffer :: GLVBOIndicesBuffer()
-	:	GLVertexBufferObject<unsigned int>( IndicesBuffer::m_filled, IndicesBuffer::m_buffer)
+GlAttribsBase :: GlAttribsBase( const String & p_strAttribName)
+	:	m_strAttribName( p_strAttribName)
+	,	m_iAttribLocation( GL_INVALID_INDEX)
 {
-	m_uiTarget = GL_ELEMENT_ARRAY_BUFFER;
 }
 
-GLVBOIndicesBuffer :: ~GLVBOIndicesBuffer()
+GlAttribsBase :: ~GlAttribsBase()
+{
+	CleanupAttribute();
+}
+
+void GlAttribsBase :: SetShaderProgram( ShaderProgramPtr p_pProgram)
+{
+	m_pProgram = static_pointer_cast<GlShaderProgram>( p_pProgram);
+}
+
+void GlAttribsBase :: CleanupAttribute()
+{
+	m_iAttribLocation = GL_INVALID_INDEX;
+	m_pProgram.reset();
+}
+
+bool GlAttribsBase :: InitialiseAttribute()
+{
+	bool l_bReturn = ! RenderSystem::UseShaders();
+
+	if ( ! m_pProgram.expired() && m_pProgram.lock()->IsLinked() && ! l_bReturn)
+	{
+		CheckGlError( m_iAttribLocation = glGetAttribLocation( m_pProgram.lock()->GetProgramObject(), m_strAttribName.char_str()), CU_T( "GlVertexAttribs :: Initialise - glGetAttribLocation"));
+
+		if (m_iAttribLocation >= 0 && m_iAttribLocation != GL_INVALID_INDEX)
+		{
+			l_bReturn = true;
+		}
+	}
+
+	return l_bReturn;
+}
+
+void GlAttribsBase :: ActivateAttribute( bool p_bNormalised)
+{
+	CheckGlError( glEnableVertexAttribArray( m_iAttribLocation), CU_T( "GlVertexAttribs :: Activate - ") + m_strAttribName + CU_T( " - glEnableVertexAttribArray"));
+	CheckGlError( glVertexAttribPointer( m_iAttribLocation, m_uiCount, m_iGlType, p_bNormalised, m_uiStride, BUFFER_OFFSET( m_uiOffset)), CU_T( "GlVertexAttribs :: Activate - ") + m_strAttribName + CU_T( " - glVertexAttribPointer"));
+}
+
+void GlAttribsBase :: DeactivateAttribute()
+{
+	CheckGlError( glDisableVertexAttribArray( m_iAttribLocation), CU_T( "GlVertexAttribs :: Deactivate - ") + m_strAttribName + CU_T( " - glDisableVertexAttribArray"));
+}
+
+//******************************************************************************
+
+GlIndexBuffer :: GlIndexBuffer()
+{
+}
+
+GlIndexBuffer :: ~GlIndexBuffer()
+{
+}
+
+//******************************************************************************
+
+GlVertexBuffer :: GlVertexBuffer( const BufferElementDeclaration * p_pElements, size_t p_uiNbElements)
+	:	VertexBuffer( p_pElements, p_uiNbElements)
+{
+}
+
+GlVertexBuffer :: ~GlVertexBuffer()
 {
 	Cleanup();
 }
 
-void GLVBOIndicesBuffer :: Cleanup()
+//******************************************************************************
+
+GlVboIndexBuffer :: GlVboIndexBuffer()
+	:	m_uiFilled( IndexBuffer::m_filled)
+	,	m_pBuffer( IndexBuffer::m_buffer)
 {
-	Buffer::Cleanup();
-	CleanupBufferObject();
 }
 
-void GLVBOIndicesBuffer :: CleanupBufferObject()
+GlVboIndexBuffer :: ~GlVboIndexBuffer()
 {
-	if (m_bAssigned)
+	Cleanup();
+}
+
+void GlVboIndexBuffer :: Cleanup()
+{
+	Buffer3D<unsigned int>::Cleanup();
+	_cleanupBufferObject();
+}
+
+void GlVboIndexBuffer :: Initialise( eBUFFER_MODE p_eMode)
+{
+	CheckGlError( glGenBuffers( 1, & m_uiIndex), CU_T( "GlIndexBuffer :: Initialise - glGenBuffers"));
+
+	if (m_uiIndex != GL_INVALID_INDEX)// && glIsBuffer( m_uiIndex))
 	{
-		BufferManager::UnassignBuffer<unsigned int>( m_uiIndex, this);
+		CheckGlError( glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_uiIndex), CU_T( "GlIndexBuffer :: Initialise - glBindBuffer"));
+		CheckGlError( glBufferData( GL_ELEMENT_ARRAY_BUFFER, m_uiFilled * sizeof( unsigned int), m_pBuffer, GlEnum::GetBufferFlags( p_eMode)), CU_T( "GlIndexBuffer :: Initialise - glBufferData"));
+		CheckGlError( glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, 0), CU_T( "GlIndexBuffer :: Initialise - glBindBuffer( NULL)"));
+	}
+	else
+	{
+		m_uiIndex = GL_INVALID_INDEX;
 	}
 
-	GLVertexBufferObject::CleanupBufferObject();
-	m_bAssigned = false;
-}
-
-void GLVBOIndicesBuffer :: Initialise()
-{
-	InitialiseBufferObject();
 	m_bAssigned = (m_uiIndex != GL_INVALID_INDEX);
 
 	if (m_bAssigned)
@@ -45,70 +120,107 @@ void GLVBOIndicesBuffer :: Initialise()
 	}
 }
 
-void GLVBOIndicesBuffer :: Activate()
+void GlVboIndexBuffer :: Activate()
 {
 	if (m_bAssigned)
 	{
-		ActivateBufferObject();
+		CheckGlError( glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_uiIndex), CU_T( "GlVboIndexBuffer :: Activate - glBindBuffer"));
 	}
 }
 
-void GLVBOIndicesBuffer :: Deactivate()
+void GlVboIndexBuffer :: Deactivate()
 {
-	if (m_bAssigned)
+}
+
+void * GlVboIndexBuffer :: Lock( size_t p_uiOffset, size_t p_uiSize, size_t p_uiFlags)
+{
+	CheckGlError( glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_uiIndex), CU_T( "GlVboIndexBuffer :: Lock - glBindBuffer"));
+	unsigned char * l_pBuffer;
+	CheckGlError( l_pBuffer = reinterpret_cast<unsigned char*>( glMapBuffer( GL_ELEMENT_ARRAY_BUFFER, GlEnum::GetLockFlags( p_uiFlags))), CU_T( "GlVboIndexBuffer :: Lock - glMapBuffer"));
+	return l_pBuffer + p_uiOffset;
+}
+
+void GlVboIndexBuffer :: Unlock()
+{
+	CheckGlError( glUnmapBuffer( GL_ELEMENT_ARRAY_BUFFER), CU_T( "GlVboIndexBuffer :: Unlock - glUnmapBuffer"));
+}
+
+void GlVboIndexBuffer :: CleanupVbo()
+{
+	_cleanupBufferObject();
+}
+
+void GlVboIndexBuffer :: _cleanupBufferObject()
+{
+	if (this->m_bAssigned)
 	{
+		BufferManager::UnassignBuffer<unsigned int>( m_uiIndex, this);
 	}
+
+	if (m_uiIndex != GL_INVALID_INDEX)// && glIsBuffer( m_uiIndex))
+	{
+		CheckGlError( glDeleteBuffers( 1, & m_uiIndex), CU_T( "GlIndexBuffer :: Cleanup - glDeleteBuffers"));
+	}
+
+	m_uiIndex = GL_INVALID_INDEX;
+	m_bAssigned = false;
 }
 
 //******************************************************************************
 
-GLVBOVertexBuffer :: GLVBOVertexBuffer()
-	:	GLVertexAttribs3r( "vertex"),
-		GLVertexBufferObject<real>( VertexBuffer::m_filled, VertexBuffer::m_buffer)
+GlVboVertexBuffer :: GlVboVertexBuffer( const BufferElementDeclaration * p_pElements, size_t p_uiNbElements)
+	:	GlVertexBuffer( p_pElements, p_uiNbElements)
+	,	GlVertexBufferObject<real>( VertexBuffer::m_filled, VertexBuffer::m_buffer, VertexBuffer::m_bufferDeclaration)
 {
+	GlVertexAttribsPtr l_pBuffer;
+
+	for (BufferDeclaration::const_iterator l_it = m_bufferDeclaration.Begin() ; l_it != m_bufferDeclaration.End() ; ++l_it)
+	{
+		switch (( * l_it).m_eUsage)
+		{
+		case eUsagePosition:
+			l_pBuffer.reset( new GlVertexAttribs3r( "vertex"));
+			break;
+
+		case eUsageNormal:
+			l_pBuffer.reset( new GlVertexAttribs3r( "normal"));
+			break;
+
+		case eUsageTangent:
+			l_pBuffer.reset( new GlVertexAttribs3r( "tangent"));
+			break;
+
+		case eUsageTexCoords0:
+		case eUsageTexCoords1:
+		case eUsageTexCoords2:
+		case eUsageTexCoords3:
+			l_pBuffer.reset( new GlVertexAttribs2r( "texture"));
+			break;
+		}
+
+		l_pBuffer->SetOffset( ( * l_it).m_uiOffset);
+		l_pBuffer->SetStride( m_bufferDeclaration.GetStride());
+		m_arrayAttribs.push_back( l_pBuffer);
+	}
 }
 
-GLVBOVertexBuffer :: ~GLVBOVertexBuffer()
+GlVboVertexBuffer :: ~GlVboVertexBuffer()
 {
 	Cleanup();
 }
 
-void GLVBOVertexBuffer :: Cleanup()
+void GlVboVertexBuffer :: Cleanup()
 {
-	Buffer::Cleanup();
-	CleanupBufferObject();
-	CleanupAttribute();
+	Buffer<real>::Cleanup();
+	_cleanupAttribute();
+	_cleanupBufferObject();
 }
 
-void GLVBOVertexBuffer :: CleanupBufferObject()
+void GlVboVertexBuffer :: Initialise( eBUFFER_MODE p_eMode)
 {
-	if (m_bAssigned)
+	if (m_pProgram.expired() || _initialiseAttribute())
 	{
-		BufferManager::UnassignBuffer<real>( m_uiIndex, this);
-	}
-
-	GLVertexBufferObject::CleanupBufferObject();
-	m_bAssigned = false;
-}
-
-void GLVBOVertexBuffer :: SetShaderProgram( ShaderProgramPtr p_pProgram)
-{
-	GLShaderProgramPtr l_pProgram = static_pointer_cast<GLShaderProgram>( p_pProgram);
-
-	if ((m_pProgram.expired() && ! l_pProgram == NULL) || (l_pProgram == NULL && ! m_pProgram.expired()) || m_pProgram.lock() != l_pProgram)
-	{
-		CleanupAttribute();
-		CleanupBufferObject();
-		m_pProgram = l_pProgram;
-		Initialise();
-	}
-}
-
-void GLVBOVertexBuffer :: Initialise()
-{
-	if (m_pProgram.expired() || InitialiseAttribute())
-	{
-		InitialiseBufferObject();
+		_initialiseBufferObject( p_eMode);
 		m_bAssigned = (m_uiIndex != GL_INVALID_INDEX);
 
 		if (m_bAssigned)
@@ -118,292 +230,127 @@ void GLVBOVertexBuffer :: Initialise()
 	}
 }
 
-void GLVBOVertexBuffer :: Activate()
+void GlVboVertexBuffer :: Activate()
 {
 	if (m_bAssigned)
 	{
-		ActivateBufferObject();
+		_activateBufferObject();
 
 		if (RenderSystem::UseShaders() && ! m_pProgram.expired())
 		{
-			ActivateAttribute();
-		}
-		else
-		{
-			glEnableClientState( GL_VERTEX_ARRAY);
-			CheckGLError( CU_T( "GLVBOVertexBuffer :: Activate - glEnableClientState"));
-			glVertexPointer( 3, GL_REAL, 0, NULL);
-			CheckGLError( CU_T( "GLVBOVertexBuffer :: Activate - glVertexPointer"));
+			_activateAttribute();
 		}
 	}
 }
 
-void GLVBOVertexBuffer :: Deactivate()
+void GlVboVertexBuffer :: Deactivate()
 {
 	if (m_bAssigned)
 	{
 		if (RenderSystem::UseShaders() && ! m_pProgram.expired())
 		{
-			DeactivateAttribute();
-		}
-		else
-		{
-			glDisableClientState( GL_VERTEX_ARRAY);
-			CheckGLError( CU_T( "GLVBOVertexBuffer :: Deactivate - glDisableClientState"));
+			_deactivateAttribute();
 		}
 	}
 }
 
-//******************************************************************************
-
-GLVBONormalsBuffer :: GLVBONormalsBuffer()
-	:	GLVertexAttribs3r( "normal"),
-		GLVertexBufferObject<real>( NormalsBuffer::m_filled, NormalsBuffer::m_buffer)
+void * GlVboVertexBuffer :: Lock( size_t p_uiOffset, size_t p_uiSize, size_t p_uiFlags)
 {
+	return GlVertexBufferObject<real>::Lock( p_uiOffset, p_uiSize, p_uiFlags);
 }
 
-GLVBONormalsBuffer :: ~GLVBONormalsBuffer()
+void GlVboVertexBuffer :: Unlock()
 {
-	Cleanup();
+	GlVertexBufferObject<real>::Unlock();
 }
 
-void GLVBONormalsBuffer :: Cleanup()
+void GlVboVertexBuffer :: SetShaderProgram( ShaderProgramPtr p_pProgram)
 {
-	Buffer::Cleanup();
-	CleanupBufferObject();
-	CleanupAttribute();
+	GlShaderProgramPtr l_pProgram = static_pointer_cast<GlShaderProgram>( p_pProgram);
+
+	if ((this->m_pProgram.expired() && l_pProgram != NULL) || (l_pProgram == NULL && ! this->m_pProgram.expired()) || this->m_pProgram.lock() != l_pProgram)
+	{
+		_cleanupBufferObject();
+		_cleanupAttribute();
+
+		for (size_t i = 0 ; i < m_arrayAttribs.size() ; i++)
+		{
+			m_arrayAttribs[i]->SetShaderProgram( l_pProgram);
+		}
+
+		m_pProgram = l_pProgram;
+		Initialise( eBufferDynamic);
+	}
 }
 
-void GLVBONormalsBuffer :: CleanupBufferObject()
+void GlVboVertexBuffer :: CleanupVbo()
 {
-	if (m_bAssigned)
+	_cleanupBufferObject();
+	_cleanupAttribute();
+}
+
+void GlVboVertexBuffer :: _cleanupBufferObject()
+{
+	if (this->m_bAssigned)
 	{
 		BufferManager::UnassignBuffer<real>( m_uiIndex, this);
 	}
 
-	GLVertexBufferObject::CleanupBufferObject();
+	GlVertexBufferObject<real>::_cleanupBufferObject();
 	m_bAssigned = false;
 }
 
-void GLVBONormalsBuffer :: SetShaderProgram( ShaderProgramPtr p_pProgram)
+void GlVboVertexBuffer :: _activateBufferObject()
 {
-	GLShaderProgramPtr l_pProgram = static_pointer_cast<GLShaderProgram>( p_pProgram);
-
-	if ((m_pProgram.expired() && ! l_pProgram == NULL) || (l_pProgram == NULL && ! m_pProgram.expired()) || m_pProgram.lock() != l_pProgram)
+	if (RenderSystem::UseShaders() && ! m_pProgram.expired())
 	{
-		CleanupAttribute();
-		CleanupBufferObject();
-		m_pProgram = l_pProgram;
-		Initialise();
+		CheckGlError( glBindBuffer( GL_ARRAY_BUFFER, m_uiIndex), CU_T( "GlVboVertexBuffer :: Activate - glBindBuffer"));
+	}
+	else
+	{
+		GlVertexBufferObject<real>::_activateBufferObject();
 	}
 }
 
-void GLVBONormalsBuffer :: Initialise()
+void GlVboVertexBuffer :: _cleanupAttribute()
 {
-	if (m_pProgram.expired() || InitialiseAttribute())
+	for (size_t i = 0 ; i < m_arrayAttribs.size() ; i++)
 	{
-		InitialiseBufferObject();
-		m_bAssigned = (m_uiIndex != GL_INVALID_INDEX);
-
-		if (m_bAssigned)
-		{
-			BufferManager::AssignBuffer<real>( m_uiIndex, this);
-		}
+		m_arrayAttribs[i]->CleanupAttribute();
 	}
 }
 
-void GLVBONormalsBuffer :: Activate()
-{
-	if (m_bAssigned)
-	{
-		ActivateBufferObject();
-
-		if (RenderSystem::UseShaders() && ! m_pProgram.expired())
-		{
-			ActivateAttribute();
-		}
-		else
-		{
-			CheckGLError( CU_T( "GLVBONormalsBuffer :: Activate - glBindBuffer"));
-			glEnableClientState( GL_NORMAL_ARRAY);
-			CheckGLError( CU_T( "GLVBONormalsBuffer :: Activate - glEnableClientState"));
-			glNormalPointer( GL_REAL, 0, NULL);
-			CheckGLError( CU_T( "GLVBONormalsBuffer :: Activate - glNormalPointer"));
-		}
-	}
-}
-
-void GLVBONormalsBuffer :: Deactivate()
-{
-	if (m_bAssigned)
-	{
-		if (RenderSystem::UseShaders() && ! m_pProgram.expired())
-		{
-			DeactivateAttribute();
-		}
-		else
-		{
-			glDisableClientState( GL_NORMAL_ARRAY);
-			CheckGLError( CU_T( "GLVBONormalsBuffer :: Deactivate - glDisableClientState"));
-		}
-	}
-}
-
-//******************************************************************************
-
-GLVertexInfosBufferObject :: GLVertexInfosBufferObject()
-	:	GLVertexBufferObject<real>( VertexInfosBuffer::m_filled, VertexInfosBuffer::m_buffer),
-		m_vertex( "vertex"),
-		m_normal( "normal"),
-		m_tangent( "tangent"),
-		m_texture( "texture")
-{
-}
-
-GLVertexInfosBufferObject :: ~GLVertexInfosBufferObject()
-{
-	Cleanup();
-}
-
-void GLVertexInfosBufferObject :: Cleanup()
-{
-	Buffer::Cleanup();
-	CleanupAttribute();
-	CleanupBufferObject();
-}
-
-void GLVertexInfosBufferObject :: CleanupBufferObject()
-{
-	if (m_bAssigned)
-	{
-		BufferManager::UnassignBuffer<real>( m_uiIndex, this);
-	}
-
-	GLVertexBufferObject::CleanupBufferObject();
-	m_bAssigned = false;
-}
-
-void GLVertexInfosBufferObject :: SetShaderProgram( ShaderProgramPtr p_pProgram)
-{
-	GLShaderProgramPtr l_pProgram = static_pointer_cast<GLShaderProgram>( p_pProgram);
-
-	if ((m_pProgram.expired() && ! l_pProgram == NULL) || (l_pProgram == NULL && ! m_pProgram.expired()) || m_pProgram.lock() != l_pProgram)
-	{
-		CleanupBufferObject();
-		CleanupAttribute();
-		m_vertex.SetShaderProgram( l_pProgram);
-		m_normal.SetShaderProgram( l_pProgram);
-		m_tangent.SetShaderProgram( l_pProgram);
-		m_texture.SetShaderProgram( l_pProgram);
-		m_pProgram = l_pProgram;
-		Initialise();
-	}
-}
-
-void GLVertexInfosBufferObject :: Initialise()
-{
-	if (m_pProgram.expired() || InitialiseAttribute())
-	{
-		InitialiseBufferObject();
-		m_bAssigned = (m_uiIndex != GL_INVALID_INDEX);
-
-		if (m_bAssigned)
-		{
-			BufferManager::AssignBuffer<real>( m_uiIndex, this);
-		}
-	}
-}
-
-void GLVertexInfosBufferObject :: Activate()
-{
-	if (m_bAssigned)
-	{
-		ActivateBufferObject();
-
-		if (RenderSystem::UseShaders() && ! m_pProgram.expired())
-		{
-			ActivateAttribute();
-		}
-		else
-		{
-			glInterleavedArrays( GL_T2F_N3F_V3F, Vertex::Size * sizeof( real), 0);
-			CheckGLError( CU_T( "GLVertexInfosBufferObject :: Activate - glNormalPointer"));
-		}
-	}
-}
-
-void GLVertexInfosBufferObject :: Deactivate()
-{
-	if (m_bAssigned)
-	{
-		if (RenderSystem::UseShaders() && ! m_pProgram.expired())
-		{
-			DeactivateAttribute();
-		}
-	}
-}
-
-void GLVertexInfosBufferObject :: CleanupAttribute()
-{
-	m_texture.CleanupAttribute();
-	m_normal.CleanupAttribute();
-	m_vertex.CleanupAttribute();
-	m_tangent.CleanupAttribute();
-}
-
-bool GLVertexInfosBufferObject :: InitialiseAttribute()
+bool GlVboVertexBuffer :: _initialiseAttribute()
 {
 	m_uiValid = 0;
-	m_uiValid += (m_texture.InitialiseAttribute() ? 1 : 0);
-	m_uiValid += (m_normal.InitialiseAttribute() ? 1 : 0);
-	m_uiValid += (m_vertex.InitialiseAttribute() ? 1 : 0);
-	m_uiValid += (m_tangent.InitialiseAttribute() ? 1 : 0);
+
+	for (size_t i = 0 ; i < m_arrayAttribs.size() ; i++)
+	{
+		m_uiValid += (m_arrayAttribs[i]->InitialiseAttribute() ? 1 : 0);
+	}
+
 	return m_uiValid > 0;
 }
 
-void GLVertexInfosBufferObject :: ActivateAttribute()
+void GlVboVertexBuffer :: _activateAttribute()
 {
-	if (m_texture.GetAttribLocation() != GL_INVALID_INDEX)
+	for (size_t i = 0 ; i < m_arrayAttribs.size() ; i++)
 	{
-		m_texture.ActivateAttribute( false, Vertex::Size * sizeof( real), 0 * sizeof( real));
-	}
-
-	if (m_normal.GetAttribLocation() != GL_INVALID_INDEX)
-	{
-		m_normal.ActivateAttribute( true, Vertex::Size * sizeof( real), 2 * sizeof( real));
-	}
-
-	if (m_vertex.GetAttribLocation() != GL_INVALID_INDEX)
-	{
-		m_vertex.ActivateAttribute( false, Vertex::Size * sizeof( real), 5 * sizeof( real));
-	}
-	
-	if (m_tangent.GetAttribLocation() != GL_INVALID_INDEX)
-	{
-		m_tangent.ActivateAttribute( true, Vertex::Size * sizeof( real), 8 * sizeof( real));
+		if (m_arrayAttribs[i]->GetAttribLocation() != GL_INVALID_INDEX)
+		{
+			m_arrayAttribs[i]->ActivateAttribute( false);
+		}
 	}
 }
 
-void GLVertexInfosBufferObject :: DeactivateAttribute()
+void GlVboVertexBuffer :: _deactivateAttribute()
 {
-	if (m_texture.GetAttribLocation() != GL_INVALID_INDEX)
+	for (size_t i = 0 ; i < m_arrayAttribs.size() ; i++)
 	{
-		m_texture.DeactivateAttribute();
-	}
-
-	if (m_normal.GetAttribLocation() != GL_INVALID_INDEX)
-	{
-		m_normal.DeactivateAttribute();
-	}
-
-	if (m_vertex.GetAttribLocation() != GL_INVALID_INDEX)
-	{
-		m_vertex.DeactivateAttribute();
-	}
-
-	if (m_tangent.GetAttribLocation() != GL_INVALID_INDEX)
-	{
-		m_tangent.DeactivateAttribute();
+		if (m_arrayAttribs[i]->GetAttribLocation() != GL_INVALID_INDEX)
+		{
+			m_arrayAttribs[i]->DeactivateAttribute();
+		}
 	}
 }
 

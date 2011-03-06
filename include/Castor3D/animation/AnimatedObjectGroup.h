@@ -31,20 +31,22 @@ namespace Castor3D
 	\todo Review all the animation system because it's not clear, not optimised, and not good enough to be validated.
 	\todo Write and Read functions.
 	*/
-	class C3D_API AnimatedObjectGroup : public Castor::Templates::Managed<String, AnimatedObjectGroup, AnimationManager>, public MemoryTraced<AnimatedObjectGroup>
+	class C3D_API AnimatedObjectGroup : public Textable, public Serialisable, public MemoryTraced<AnimatedObjectGroup>
 	{
 	protected:
 		real m_rCurrentTime;						//!< The current time index
+		String m_strName;							//!< The animated object group name
 		AnimationPtrStrMap m_mapAnimations;			//!< The list of animations
 		AnimatedObjectPtrStrMap m_mapObjects;		//!< The list of AnimatedObjects
 		AnimationPtrStrMap m_mapPlayingAnimations;	//!< The map of currently playing animations
+		Scene * m_pScene;
 
 	public:
 		/**
 		 * Constructor of the group, intialises it with the name given as a parameter
 		 *@param p_strName : the group name
 		 */
-		AnimatedObjectGroup( AnimationManager * p_pManager, const String & p_strName);
+		AnimatedObjectGroup( Scene * p_pScene, Manager<AnimatedObjectGroup> * p_pManager, const String & p_strName);
 		/**
 		 * Destructor, deletes the objects and the animations
 		 */
@@ -60,16 +62,6 @@ namespace Castor3D
 		 *@param p_pAnimation : the animation to add
 		 */
 		void AddAnimation( AnimationPtr p_pAnimation);
-		/**
-		 * Writes the group in a file
-		 *@param p_file : the file to write in
-		 */
-		bool Write( Castor::Utils::File & p_file)const;
-		/**
-		 * Reads the group from a file
-		 @param p_file : the file to read from
-		 */
-		bool Read( Castor::Utils::File & p_file);
 		/**
 		 * Update all the animations
 		 *@param p_rTslf : time since the last frame
@@ -102,6 +94,18 @@ namespace Castor3D
 		 * Pauses all the animations
 		 */
 		void PauseAllAnimations();
+
+		/**@name Inherited methods from Textable */
+		//@{
+		virtual bool Write( File & p_file)const;
+		virtual bool Read( File & p_file) { return false; }
+		//@}
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
+
 	public:
 		/**@name Accessors */
 		//@{
@@ -109,7 +113,7 @@ namespace Castor3D
 		 * Returns the name of the group
 		 *@return the name of the group
 		 */
-		inline const String & GetName() { return m_key; }
+		inline const String & GetName() { return m_strName; }
 		//@}
 	};
 }

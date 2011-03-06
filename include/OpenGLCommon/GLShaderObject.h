@@ -15,31 +15,31 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL_ShaderObject___
-#define ___GL_ShaderObject___
+#ifndef ___Gl_ShaderObject___
+#define ___Gl_ShaderObject___
 
-#include "Module_GLRender.h"
+#include "Module_GlRender.h"
 
 namespace Castor3D
 {
-	class GLShaderObject : public ShaderObject
+	class GlShaderObject : public GlslShaderObject
 	{
-		friend class GLShaderProgram;
+		friend class GlShaderProgram;
 
 	protected:
 		GLuint m_shaderObject;				//!< Shader Object
 		String m_compilerLog;
-		GLShaderProgram * m_pShaderProgram;
+		GlShaderProgram * m_pShaderProgram;
 
 	public:
 		/**
 		 * Constructor
 		 */
-		GLShaderObject();
+		GlShaderObject( eSHADER_PROGRAM_TYPE p_eType);
 		/**
 		 * Destructor
 		 */
-		virtual ~GLShaderObject();
+		virtual ~GlShaderObject();
 		/**
 		 * Compiles program
 		 */
@@ -55,7 +55,7 @@ namespace Castor3D
 		/**
 		 * Attaches this shader to the given program
 		 */
-		void AttachTo( GLShaderProgram * p_pProgram);
+		void AttachTo( GlShaderProgram * p_pProgram);
 		/**
 		 * Destroys the GL Shader Program
 		 */
@@ -63,17 +63,17 @@ namespace Castor3D
 	};
 
 	//! Class holding Vertex Shader
-	class GLVertexShader : public GLShaderObject
+	class GlVertexShader : public GlShaderObject
 	{
 	public:
 		/**
 		 * Constructor
 		 */
-		GLVertexShader();
+		GlVertexShader();
 		/**
 		 * Destructor
 		 */
-		virtual ~GLVertexShader();
+		virtual ~GlVertexShader();
 		/**
 		 * Creates the GL Shader program
 		 */
@@ -81,17 +81,17 @@ namespace Castor3D
 	};
 
 	//! Class holding Fragment Shader
-	class GLFragmentShader : public GLShaderObject
+	class GlFragmentShader : public GlShaderObject
 	{
 	public:
 		/**
 		 * Constructor
 		 */
-		GLFragmentShader();
+		GlFragmentShader();
 		/**
 		 * Destructor
 		 */
-		virtual ~GLFragmentShader();
+		virtual ~GlFragmentShader();
 		/**
 		 * Creates the GL Shader program
 		 */
@@ -100,17 +100,17 @@ namespace Castor3D
 	};
 
 	//! Class holding Geometry Shader
-	class GLGeometryShader : public GLShaderObject
+	class GlGeometryShader : public GlShaderObject
 	{
 	public:
 		/**
 		 * Constructor
 		 */
-		GLGeometryShader();
+		GlGeometryShader();
 		/**
 		 * Destructor
 		 */
-		virtual ~GLGeometryShader();
+		virtual ~GlGeometryShader();
 		/**
 		 * Creates the GL Shader program
 		 */

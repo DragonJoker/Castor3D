@@ -9,11 +9,14 @@ namespace CastorArchitect
 	{
 	private:
 		MainFrame * m_mainFrame;
+		SplashScreen * m_pSplash;
 
 	public:
 		virtual bool OnInit();
+		void DestroySplashScreen();
 
-		inline MainFrame * GetMainFrame() {return m_mainFrame;}
+		inline MainFrame	*	GetMainFrame	()const	{return m_mainFrame;}
+		inline SplashScreen *	GetSplashScreen	()const	{ return m_pSplash; }
 	};
 }
 

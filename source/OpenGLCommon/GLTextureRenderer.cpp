@@ -1,156 +1,167 @@
-#include "OpenGLCommon/PrecompiledHeader.h"
+#include "OpenGlCommon/PrecompiledHeader.h"
 
-#include "OpenGLCommon/GLTextureRenderer.h"
-#include "OpenGLCommon/GLRenderSystem.h"
+#include "OpenGlCommon/GlTextureRenderer.h"
+#include "OpenGlCommon/GlRenderSystem.h"
 
 using namespace Castor3D;
 
-void GLTextureRenderer :: Cleanup()
+void GlTextureRenderer :: Cleanup()
 {
 	(this->*m_pfnCleanup)();
 }
 
-bool GLTextureRenderer :: Initialise()
+bool GlTextureRenderer :: Initialise()
 {
-	m_pfnCleanup	= & GLTextureRenderer::_cleanup;
-	m_pfnInitialise	= & GLTextureRenderer::_initialise;
-	m_pfnRender		= & GLTextureRenderer::_render;
-	m_pfnEndRender	= & GLTextureRenderer::_endRender;
+	m_pfnCleanup	= & GlTextureRenderer::_cleanup;
+	m_pfnInitialise	= & GlTextureRenderer::_initialise;
+	m_pfnRender		= & GlTextureRenderer::_render;
+	m_pfnEndRender	= & GlTextureRenderer::_endRender;
 
 	return (this->*m_pfnInitialise)();
 }
 
-void GLTextureRenderer :: Render()
+void GlTextureRenderer :: Render()
 {
 	(this->*m_pfnRender)();
 }
 
-void GLTextureRenderer :: EndRender()
+void GlTextureRenderer :: EndRender()
 {
 	(this->*m_pfnEndRender)();
 }
 
-void  GLTextureRenderer :: _cleanup()
+void  GlTextureRenderer :: _cleanup()
 {
-	if (glIsTexture( m_texGLName))
+	if (glIsTexture( m_glTexName))
 	{
-		glDeleteTextures( 1, & m_texGLName);
-		CheckGLError( CU_T( "GLTextureRenderer :: Cleanup - glDeleteTextures"));
+		CheckGlError( glDeleteTextures( 1, & m_glTexName), CU_T( "GlTextureRenderer :: Cleanup - glDeleteTextures"));
 	}
 }
 
-bool GLTextureRenderer :: _initialise()
+bool GlTextureRenderer :: _initialise()
 {
-	glGenTextures( 1, & m_texGLName);
-	CheckGLError( CU_T( "GLTextureRenderer :: Initialise - glGenTextures"));
+	CheckGlError( glGenTextures( 1, & m_glTexName), CU_T( "GlTextureRenderer :: Initialise - glGenTextures"));
 
-	if (m_texGLName == 0)
+	if (m_glTexName == 0)
 	{
-		Logger::LogError( CU_T( "GLTextureRenderer :: Initialise - Not a valid texture name"));
+		Logger::LogError( CU_T( "GlTextureRenderer :: Initialise - Not a valid texture name"));
 		return false;
 	}
-	int l_textureType = GetTextureDimension( m_target->GetTextureType());
-	glBindTexture( l_textureType, m_texGLName);
-	CheckGLError( CU_T( "GLTextureRenderer :: Initialise - glBindTexture"));
+	int l_textureType = GlEnum::Get( m_target->GetTextureType());
+	CheckGlError( glBindTexture( l_textureType, m_glTexName), CU_T( "GlTextureRenderer :: Initialise - glBindTexture"));
 
-	glTexParameteri( l_textureType, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	CheckGLError( CU_T( "GLTextureRenderer :: Initialise - glTexParameteri - GL_TEXTURE_WRAP_S"));
-	glTexParameteri( l_textureType, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	CheckGLError( CU_T( "GLTextureRenderer :: Initialise - glTexParameteri - GL_TEXTURE_WRAP_T"));
+	CheckGlError( glTexParameteri( l_textureType, GL_TEXTURE_WRAP_S, GlEnum::Get( m_target->GetWrapMode( 0))), CU_T( "GlTextureRenderer :: Initialise - glTexParameteri - GL_TEXTURE_WRAP_S"));
+	CheckGlError( glTexParameteri( l_textureType, GL_TEXTURE_WRAP_T, GlEnum::Get( m_target->GetWrapMode( 1))), CU_T( "GlTextureRenderer :: Initialise - glTexParameteri - GL_TEXTURE_WRAP_T"));
 
-	glTexParameteri( l_textureType, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	CheckGLError( CU_T( "GLTextureRenderer :: Initialise - glTexParameteri - GL_TEXTURE_MIN_FILTER"));
-	glTexParameteri( l_textureType, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	CheckGLError( CU_T( "GLTextureRenderer :: Initialise - glTexParameteri - GL_TEXTURE_MAG_FILTER"));
+	CheckGlError( glTexParameteri( l_textureType, GL_TEXTURE_MIN_FILTER, GlEnum::Get( m_target->GetInterpolationMode( 0))), CU_T( "GlTextureRenderer :: Initialise - glTexParameteri - GL_TEXTURE_MIN_FILTER"));
+	CheckGlError( glTexParameteri( l_textureType, GL_TEXTURE_MAG_FILTER, GlEnum::Get( m_target->GetInterpolationMode( 1))), CU_T( "GlTextureRenderer :: Initialise - glTexParameteri - GL_TEXTURE_MAG_FILTER"));
 
-	glTexImage2D( l_textureType, 0, GL_RGBA8, m_target->GetWidth(),
-				  m_target->GetHeight(), 0, GL_RGBA, 
-				  GL_UNSIGNED_BYTE, m_target->GetImagePixels());
-	CheckGLError( CU_T( "GLTextureRenderer :: Initialise - glTexImage2D"));
+	CheckGlError( glTexImage2D( l_textureType, 0, GlEnum::Get( m_target->GetPixelFormat()).Internal, m_target->GetWidth(),
+								m_target->GetHeight(), 0, GlEnum::Get( m_target->GetPixelFormat()).Format,
+								GlEnum::Get( m_target->GetPixelFormat()).Type, m_target->GetImagePixels()),
+				  CU_T( "GlTextureRenderer :: Initialise - glTexImage2D"));
 
 	if (glGenerateMipmap == NULL)
 	{
-		gluBuild2DMipmaps( l_textureType, GL_RGBA8, m_target->GetWidth(), m_target->GetHeight(),
-							GL_RGBA, GL_UNSIGNED_BYTE, m_target->GetImagePixels());
+		CheckGlError( glGenerateMipmapEXT( l_textureType), CU_T( "GlTextureRenderer :: Initialise - glGenerateMipmapEXT"));
 	}
 	else
 	{
-		glGenerateMipmap( l_textureType);
+		CheckGlError( glGenerateMipmap( l_textureType), CU_T( "GlTextureRenderer :: Initialise - glGenerateMipmapEXT"));
 	}
 
-	CheckGLError( CU_T( "GLTextureRenderer :: Initialise - gluBuild2DMipmaps"));
 	return true;
 }
 
-void GLTextureRenderer :: _render()
+void GlTextureRenderer :: _render()
 {
 	if (RenderSystem::UseMultiTexturing())
 	{
-		glActiveTexture( GL_TEXTURE0 + m_target->GetIndex());
-		CheckGLError( CU_T( "GLTextureRenderer :: Apply - glActiveTexture"));
-		glTexEnvfv( GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, m_target->GetPrimaryColour());
-		CheckGLError( CU_T( "GLTextureRenderer :: Apply - glTexEnvfv"));
-		glBindTexture( GetTextureDimension( m_target->GetTextureType()), m_texGLName);
-		CheckGLError( CU_T( "GLTextureRenderer :: Apply - glBindTexture"));
-		m_target->GetEnvironment()->Render( eTriangles);
+		CheckGlError( glActiveTexture( GL_TEXTURE0 + m_target->GetIndex()), CU_T( "GlTextureRenderer :: Apply - glActiveTexture"));
+		CheckGlError( glBindTexture( GlEnum::Get( m_target->GetTextureType()), m_glTexName), CU_T( "GlTextureRenderer :: Apply - glBindTexture"));
+		CheckGlError( glTexEnvfv( GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, m_target->GetPrimaryColour().const_ptr()), CU_T( "GlTextureRenderer :: Apply - glTexEnvfv"));
+
+		if (m_target->GetRgbMode() != TextureUnit::eRgbModeNone || m_target->GetAlpMode() != TextureUnit::eAlphaModeNone)
+		{
+			CheckGlError( glTexEnvi( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE), CU_T( "GlTextureRenderer :: Apply - glTexEnvi GL_TEXTURE_ENV_MODE"));
+
+			if (m_target->GetRgbMode() != TextureUnit::eRgbModeNone)
+			{
+				CheckGlError( glTexEnvi( GL_TEXTURE_ENV, GL_COMBINE_RGB, GlEnum::Get( m_target->GetRgbMode())), CU_T( "GlTextureRenderer :: Apply - glTexEnvi RgbMode"));
+				CheckGlError( glTexEnvi( GL_TEXTURE_ENV, GL_SOURCE0_RGB, GlEnum::Get( m_target->GetRgbArgument( 0))), CU_T( "GlTextureRenderer :: Apply - glTexEnvi RgbArgument 0"));
+				CheckGlError( glTexEnvi( GL_TEXTURE_ENV, GL_SOURCE1_RGB, GlEnum::Get( m_target->GetRgbArgument( 1))), CU_T( "GlTextureRenderer :: Apply - glTexEnvi RgbArgument 1"));
+        		CheckGlError( glTexEnvi( GL_TEXTURE_ENV, GL_OPERAND0_RGB, GL_SRC_COLOR), CU_T( "GlTextureRenderer :: Apply - glTexEnvi GL_OPERAND0_RGB"));
+        		CheckGlError( glTexEnvi( GL_TEXTURE_ENV, GL_OPERAND1_RGB, GL_SRC_COLOR), CU_T( "GlTextureRenderer :: Apply - glTexEnvi GL_OPERAND1_RGB"));
+			}
+
+			if (m_target->GetAlpMode() != TextureUnit::eAlphaModeNone)
+			{
+				CheckGlError( glTexEnvi( GL_TEXTURE_ENV, GL_COMBINE_ALPHA, GlEnum::Get( m_target->GetAlpMode())), CU_T( "GlTextureRenderer :: Apply - glTexEnvi AlpMode"));
+				CheckGlError( glTexEnvi( GL_TEXTURE_ENV, GL_SOURCE0_ALPHA, GlEnum::Get( m_target->GetAlpArgument( 0))), CU_T( "GlTextureRenderer :: Apply - glTexEnvi AlpArgument 0"));
+				CheckGlError( glTexEnvi( GL_TEXTURE_ENV, GL_SOURCE1_ALPHA, GlEnum::Get( m_target->GetAlpArgument( 1))), CU_T( "GlTextureRenderer :: Apply - glTexEnvi AlpArgument 1"));
+        		CheckGlError( glTexEnvi( GL_TEXTURE_ENV, GL_OPERAND0_ALPHA, GL_SRC_ALPHA), CU_T( "GlTextureRenderer :: Apply - glTexEnvi GL_OPERAND0_ALPHA"));
+        		CheckGlError( glTexEnvi( GL_TEXTURE_ENV, GL_OPERAND1_ALPHA, GL_SRC_ALPHA), CU_T( "GlTextureRenderer :: Apply - glTexEnvi GL_OPERAND1_ALPHA"));
+			}
+		}
+		else
+		{
+			m_target->GetEnvironment()->Render( eTriangles);
+		}
 	}
 	else
 	{
-		glBindTexture( GetTextureDimension( m_target->GetTextureType()), m_texGLName);
-		CheckGLError( CU_T( "GLTextureRenderer :: Apply - glBindTexture"));
+		CheckGlError( glBindTexture( GlEnum::Get( m_target->GetTextureType()), m_glTexName), CU_T( "GlTextureRenderer :: Apply - glBindTexture"));
 	}
 
-	glEnable( GetTextureDimension( m_target->GetTextureType()));
-	CheckGLError( CU_T( "GLTextureRenderer :: Apply - glEnable"));
+	CheckGlError( glEnable( GlEnum::Get( m_target->GetTextureType())), CU_T( "GlTextureRenderer :: Apply - glEnable"));
 
-	switch(m_target->GetTextureMapMode())
+	if (m_target->GetTextureMapMode() != TextureUnit::eNone)
 	{
-	case TextureUnit::eReflexionMap:
-		glTexGeni( GL_S, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP);
-		CheckGLError( CU_T( "GLTextureRenderer :: Apply - glTexGeni( GL_S)"));
-		glTexGeni( GL_T, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP);
-		CheckGLError( CU_T( "GLTextureRenderer :: Apply - glTexGeni( GL_T)"));
-		glEnable( GL_TEXTURE_GEN_S);
-		CheckGLError( CU_T( "GLTextureRenderer :: Apply - glEnable( GL_TEXTURE_GEN_S)"));
-		glEnable( GL_TEXTURE_GEN_T);
-		CheckGLError( CU_T( "GLTextureRenderer :: Apply - glEnable( GL_TEXTURE_GEN_T)"));
-		break;
+		if (m_target->GetTextureMapMode() == TextureUnit::eReflexionMap)
+		{
+			CheckGlError( glTexGeni( GL_S, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP), CU_T( "GlTextureRenderer :: Apply - glTexGeni( GL_S)"));
+			CheckGlError( glTexGeni( GL_T, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP), CU_T( "GlTextureRenderer :: Apply - glTexGeni( GL_T)"));
+		}
+		else if (m_target->GetTextureMapMode() == TextureUnit::eSphereMap)
+		{
+			CheckGlError( glTexGeni( GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP), CU_T( "GlTextureRenderer :: Apply - glTexGeni( GL_S)"));
+			CheckGlError( glTexGeni( GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP), CU_T( "GlTextureRenderer :: Apply - glTexGeni( GL_T)"));
+		}
 
-	case TextureUnit::eSphereMap:
-		glTexGeni( GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
-		CheckGLError( CU_T( "GLTextureRenderer :: Apply - glTexGeni( GL_S)"));
-		glTexGeni( GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
-		CheckGLError( CU_T( "GLTextureRenderer :: Apply - glTexGeni( GL_T)"));
-		glEnable( GL_TEXTURE_GEN_S);
-		CheckGLError( CU_T( "GLTextureRenderer :: Apply - glEnable( GL_TEXTURE_GEN_S)"));
-		glEnable( GL_TEXTURE_GEN_T);
-		CheckGLError( CU_T( "GLTextureRenderer :: Apply - glEnable( GL_TEXTURE_GEN_T)"));
-		break;
+		CheckGlError( glEnable( GL_TEXTURE_GEN_S), CU_T( "GlTextureRenderer :: Apply - glEnable( GL_TEXTURE_GEN_S)"));
+		CheckGlError( glEnable( GL_TEXTURE_GEN_T), CU_T( "GlTextureRenderer :: Apply - glEnable( GL_TEXTURE_GEN_T)"));
 	}
 
-	Pipeline::MatrixMode( Pipeline::eTexture);
+	if (m_target->GetAlphaFunc() != TextureUnit::eAlphaAlways)
+	{
+		CheckGlError( glEnable( GL_ALPHA_TEST), CU_T( "GlTextureRenderer :: Apply - glEnable( GL_ALPHA_TEST)"));
+		CheckGlError( glAlphaFunc( GlEnum::Get( m_target->GetAlphaFunc()), m_target->GetAlphaValue()), CU_T( "GlTextureRenderer :: Apply - glAlphaFunc"));
+	}
+
+	Pipeline::MatrixMode( Pipeline::eMATRIX_MODE( Pipeline::eMatrixTexture0 + m_target->GetIndex()));
 	Pipeline::LoadIdentity();
 	//TODO : rotations de texture
 }
 
-void GLTextureRenderer :: _endRender()
+void GlTextureRenderer :: _endRender()
 {
-	Pipeline::MatrixMode( Pipeline::eModelView);
+	Pipeline::MatrixMode( Pipeline::eMatrixModelView);
 
-	if (m_target->IsTextured() && m_target->TextureInitialised())
+	if (m_target->GetAlphaFunc() != TextureUnit::eAlphaAlways)
 	{
-		if (RenderSystem::UseMultiTexturing())
-		{
-			glActiveTexture( GL_TEXTURE0 + m_target->GetIndex());
-			CheckGLError( CU_T( "GLTextureRenderer :: Remove - glActiveTexture"));
-		}
-
-		glDisable( GetTextureDimension( m_target->GetTextureType()));
-		CheckGLError( CU_T( "GLTextureRenderer :: Remove - glDisable"));
+		CheckGlError( glDisable( GL_ALPHA_TEST), CU_T( "GlTextureRenderer :: Remove - glDisable( GL_ALPHA_TEST)"));
 	}
 
-	glDisable( GL_TEXTURE_GEN_S);
-	CheckGLError( CU_T( "GLTextureRenderer :: Remove - glDisable( GL_TEXTURE_GEN_S)"));
-	glDisable( GL_TEXTURE_GEN_T);
-	CheckGLError( CU_T( "GLTextureRenderer :: Remove - glDisable( GL_TEXTURE_GEN_T)"));
+	if (RenderSystem::UseMultiTexturing())
+	{
+		CheckGlError( glActiveTexture( GL_TEXTURE0 + m_target->GetIndex()), CU_T( "GlTextureRenderer :: Remove - glActiveTexture"));
+	}
+
+	CheckGlError( glDisable( GlEnum::Get( m_target->GetTextureType())), CU_T( "GlTextureRenderer :: Remove - glDisable"));
+
+	if (m_target->GetTextureMapMode() != TextureUnit::eNone)
+	{
+		CheckGlError( glDisable( GL_TEXTURE_GEN_S), CU_T( "GlTextureRenderer :: Remove - glDisable( GL_TEXTURE_GEN_S)"));
+		CheckGlError( glDisable( GL_TEXTURE_GEN_T), CU_T( "GlTextureRenderer :: Remove - glDisable( GL_TEXTURE_GEN_T)"));
+	}
 }

@@ -1,30 +1,31 @@
-#include "GL3RenderSystem/PrecompiledHeader.h"
+#include "Gl3RenderSystem/PrecompiledHeader.h"
 
-#include "GL3RenderSystem/GL3RenderSystem.h"
-#include "GL3RenderSystem/GL3SubmeshRenderer.h"
-#include "GL3RenderSystem/GL3LightRenderer.h"
-#include "GL3RenderSystem/GL3MaterialRenderer.h"
-#include "GL3RenderSystem/GL3TextureRenderer.h"
-#include "GL3RenderSystem/GL3WindowRenderer.h"
-#include "GL3RenderSystem/GL3Context.h"
-#include "GL3RenderSystem/GL3ShaderProgram.h"
+#include "Gl3RenderSystem/Gl3RenderSystem.h"
+#include "Gl3RenderSystem/Gl3SubmeshRenderer.h"
+#include "Gl3RenderSystem/Gl3LightRenderer.h"
+#include "Gl3RenderSystem/Gl3MaterialRenderer.h"
+#include "Gl3RenderSystem/Gl3TextureRenderer.h"
+#include "Gl3RenderSystem/Gl3TextureEnvironmentRenderer.h"
+#include "Gl3RenderSystem/Gl3WindowRenderer.h"
+#include "Gl3RenderSystem/Gl3Context.h"
+#include "Gl3RenderSystem/Gl3ShaderProgram.h"
 
 using namespace Castor3D;
 
-GL3RenderSystem :: GL3RenderSystem( SceneManager * p_pSceneManager)
-	:	GLRenderSystem( p_pSceneManager)
+Gl3RenderSystem :: Gl3RenderSystem( SceneManager * p_pSceneManager)
+	:	GlRenderSystem( p_pSceneManager)
 {
-	Logger::LogMessage( CU_T( "GL3RenderSystem :: GL3RenderSystem"));
+	Logger::LogMessage( CU_T( "Gl3RenderSystem :: Gl3RenderSystem"));
 }
 
-GL3RenderSystem :: ~GL3RenderSystem()
+Gl3RenderSystem :: ~Gl3RenderSystem()
 {
 	Delete();
 }
 
-void GL3RenderSystem :: Initialise()
+void Gl3RenderSystem :: Initialise()
 {
-	Logger::LogMessage( CU_T( "GL3RenderSystem :: Initialise"));
+	Logger::LogMessage( CU_T( "Gl3RenderSystem :: Initialise"));
 	if (sm_initialised)
 	{
 		return;
@@ -33,25 +34,30 @@ void GL3RenderSystem :: Initialise()
 	Logger::LogMessage( CU_T( "****************************************"));
 	Logger::LogMessage( CU_T( "Initialising OpenGL"));
 
-	InitOpenGLExtensions();
+	InitOpenGlExtensions();
 
 	sm_useMultiTexturing = true;
-	sm_useVBO = true;
+	sm_useVertexBufferObjects = true;
 	sm_forceShaders = true;
 
 	Logger::LogMessage( CU_T( "OpenGL Initialisation Ended"));
 	Logger::LogMessage( CU_T( "****************************************"));
+
+	if ( ! GLEW_VERSION_3_0)
+	{
+		Logger::LogError( String( "No support of OpenGL 3.x or higher"));
+	}
 	sm_initialised = true;
 
-	GLPipeline::InitFunctions();
+	GlPipeline::InitFunctions();
 }
 
-void GL3RenderSystem :: SetCurrentShaderProgram( ShaderProgram * p_pShader)
+void Gl3RenderSystem :: SetCurrentShaderProgram( ShaderProgramBase * p_pShader)
 {
 	if (m_pCurrentProgram != p_pShader)
 	{
 		RenderSystem::SetCurrentShaderProgram( p_pShader);
-		GL3ShaderProgram * l_pCurrentProgram = (GL3ShaderProgram *)p_pShader;
+		Gl3ShaderProgram * l_pCurrentProgram = (Gl3ShaderProgram *)p_pShader;
 
 		if (m_pCurrentProgram != NULL)
 		{
@@ -61,11 +67,11 @@ void GL3RenderSystem :: SetCurrentShaderProgram( ShaderProgram * p_pShader)
 			}
 		}
 
-		GLPipeline::InitFunctions();
+		GlPipeline::InitFunctions();
 	}
 }
 
-int GL3RenderSystem :: LockLight()
+int Gl3RenderSystem :: LockLight()
 {
 	int l_iReturn = -1;
 
@@ -78,7 +84,7 @@ int GL3RenderSystem :: LockLight()
 	return l_iReturn;
 }
 
-void GL3RenderSystem :: UnlockLight( int p_iIndex)
+void Gl3RenderSystem :: UnlockLight( int p_iIndex)
 {
 	if (p_iIndex >= 0 && m_setAvailableIndexes.find( p_iIndex) == m_setAvailableIndexes.end())
 	{
@@ -86,94 +92,78 @@ void GL3RenderSystem :: UnlockLight( int p_iIndex)
 	}
 }
 
-ShaderProgram * GL3RenderSystem :: CreateShaderProgram( const String & p_vertexShaderFile, 
-													   const String & p_fragmentShaderFile,
-													   const String & p_geometryShaderFile)
-{
-	return new GL3ShaderProgram( p_vertexShaderFile, p_fragmentShaderFile, p_geometryShaderFile);
-}
-
-void GL3RenderSystem :: BeginOverlaysRendering()
+void Gl3RenderSystem :: BeginOverlaysRendering()
 {
 	RenderSystem::BeginOverlaysRendering();
-	glDisable( GL_DEPTH_TEST);
-	CheckGLError( CU_T( "GL3RenderSystem :: BeginOverlaysRendering - glDisable( GL_DEPTH_TEST)"));
+	CheckGlError( glDisable( GL_DEPTH_TEST), CU_T( "Gl3RenderSystem :: BeginOverlaysRendering - glDisable( GL_DEPTH_TEST)"));
 }
 
-void GL3RenderSystem :: RenderAmbientLight( const Colour & p_clColour)
+void Gl3RenderSystem :: RenderAmbientLight( const Colour & p_clColour)
 {
 	if (m_pCurrentProgram != NULL)
 	{
-		static_cast <GL3ShaderProgram *>( m_pCurrentProgram)->SetAmbientLight( p_clColour);
+		static_cast <Gl3ShaderProgram *>( m_pCurrentProgram)->SetAmbientLight( p_clColour);
 	}
 }
 
-SubmeshRendererPtr GL3RenderSystem :: _createSubmeshRenderer()
+GlslShaderProgramPtr Gl3RenderSystem :: _createGlslShaderProgram( const String & p_vertexShaderFile, 
+																 const String & p_fragmentShaderFile,
+																 const String & p_geometryShaderFile)
 {
-	return SubmeshRendererPtr( new GL3SubmeshRenderer( m_pSceneManager));
+	return GlslShaderProgramPtr( new Gl3ShaderProgram( p_vertexShaderFile, p_fragmentShaderFile, p_geometryShaderFile));
 }
 
-TextureEnvironmentRendererPtr GL3RenderSystem :: _createTexEnvRenderer()
+SubmeshRendererPtr Gl3RenderSystem :: _createSubmeshRenderer()
 {
-	return TextureEnvironmentRendererPtr( new GLTextureEnvironmentRenderer( m_pSceneManager));
+	return SubmeshRendererPtr( new Gl3SubmeshRenderer( m_pSceneManager));
 }
 
-TextureRendererPtr GL3RenderSystem :: _createTextureRenderer()
+TextureEnvironmentRendererPtr Gl3RenderSystem :: _createTexEnvRenderer()
 {
-	return TextureRendererPtr( new GL3TextureRenderer( m_pSceneManager));
+	return TextureEnvironmentRendererPtr( new Gl3TextureEnvironmentRenderer( m_pSceneManager));
 }
 
-PassRendererPtr GL3RenderSystem :: _createPassRenderer()
+TextureRendererPtr Gl3RenderSystem :: _createTextureRenderer()
 {
-	return PassRendererPtr( new GL3PassRenderer( m_pSceneManager));
+	return TextureRendererPtr( new Gl3TextureRenderer( m_pSceneManager));
 }
 
-CameraRendererPtr GL3RenderSystem :: _createCameraRenderer()
+PassRendererPtr Gl3RenderSystem :: _createPassRenderer()
 {
-	return CameraRendererPtr( new GLCameraRenderer( m_pSceneManager));
+	return PassRendererPtr( new Gl3PassRenderer( m_pSceneManager));
 }
 
-LightRendererPtr GL3RenderSystem :: _createLightRenderer()
+CameraRendererPtr Gl3RenderSystem :: _createCameraRenderer()
 {
-	return LightRendererPtr( new GL3LightRenderer( m_pSceneManager));
+	return CameraRendererPtr( new GlCameraRenderer( m_pSceneManager));
 }
 
-WindowRendererPtr GL3RenderSystem :: _createWindowRenderer()
+LightRendererPtr Gl3RenderSystem :: _createLightRenderer()
 {
-	return WindowRendererPtr( new GL3WindowRenderer( m_pSceneManager));
+	return LightRendererPtr( new Gl3LightRenderer( m_pSceneManager));
 }
 
-OverlayRendererPtr GL3RenderSystem :: _createOverlayRenderer()
+WindowRendererPtr Gl3RenderSystem :: _createWindowRenderer()
 {
-	return OverlayRendererPtr( new GLOverlayRenderer( m_pSceneManager));
+	return WindowRendererPtr( new Gl3WindowRenderer( m_pSceneManager));
 }
 
-IndicesBufferPtr GL3RenderSystem :: _createIndicesBuffer()
+OverlayRendererPtr Gl3RenderSystem :: _createOverlayRenderer()
 {
-	return BufferManager::CreateBuffer<unsigned int, GLVBOIndicesBuffer>();
+	return OverlayRendererPtr( new GlOverlayRenderer( m_pSceneManager));
 }
 
-VertexBufferPtr GL3RenderSystem :: _createVertexBuffer()
+IndexBufferPtr Gl3RenderSystem :: _createIndexBuffer()
 {
-	return BufferManager::CreateBuffer<real, GLVBOVertexBuffer>();
+	return BufferManager::CreateBuffer<unsigned int, GlVboIndexBuffer>();
 }
 
-NormalsBufferPtr GL3RenderSystem :: _createNormalsBuffer()
+VertexBufferPtr Gl3RenderSystem :: _createVertexBuffer( const BufferElementDeclaration * p_pElements, size_t p_uiNbElements)
 {
-	return BufferManager::CreateBuffer<real, GLVBONormalsBuffer>();
+	return BufferManager::CreateVertexBuffer<Gl3VboVertexBuffer>( p_pElements, p_uiNbElements);
 }
 
-TextureBufferPtr GL3RenderSystem :: _createTextureBuffer()
+TextureBufferObjectPtr Gl3RenderSystem :: _createTextureBuffer()
 {
-	return BufferManager::CreateBuffer<real, GLVBOTextureBuffer>();
-}
-
-VertexInfosBufferPtr GL3RenderSystem :: _createVertexInfosBuffer()
-{
-	return BufferManager::CreateBuffer<real, GLVertexInfosBufferObject>();
-}
-
-TextureBufferObjectPtr GL3RenderSystem :: _createTBOBuffer()
-{
-	return BufferManager::CreateBuffer<unsigned char, GLTextureBufferObject>();
+	return BufferManager::CreateBuffer<unsigned char, GlTextureBufferObject>();
 }

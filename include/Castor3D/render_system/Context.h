@@ -32,13 +32,13 @@ namespace Castor3D
 	class Context
 	{
 	protected:
-		RenderWindow *	m_window;	//!< RenderWindow associated to this context
+		RenderWindow *	m_pWindow;	//!< RenderWindow associated to this context
 
 	public:
 		Context( RenderWindow * p_window)
-			:	m_window( p_window)
+			:	m_pWindow( p_window)
 		{}
-		virtual ~Context()=0
+		virtual ~Context()
 		{}
 		/**
 		 * Defines this context to be the current rendering context
@@ -48,8 +48,12 @@ namespace Castor3D
 		 * Defines this context not to be the current rendering context
 		 */
 		virtual void EndCurrent()=0;
+		/**
+         * Swaps the buffers
+         */
+		virtual void SwapBuffers()=0;
 
-		inline RenderWindow *	GetWindow	()const { return m_window; }
+		inline RenderWindow *	GetWindow	()const { return m_pWindow; }
 	};
 }
 

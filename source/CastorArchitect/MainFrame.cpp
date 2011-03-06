@@ -3,18 +3,31 @@
 #include "CastorArchitect/RenderPanel3D.h"
 
 #include "CastorArchitect/MainFrame.h"
+#include "CastorArchitect/CastorArchitect.h"
+
+#include "xpms/geo_blanc.xpm"
+#include "xpms/scene_blanc.xpm"
+#include "xpms/mat_blanc.xpm"
+#include "xpms/castor_transparent.xpm"
 
 using namespace CastorArchitect;
 using namespace Castor3D;
 
+DECLARE_APP( CastorArchitectApp)
+
 MainFrame :: MainFrame( wxWindow * p_pParent, const wxString & p_strTitle)
-	:	wxFrame( p_pParent, wxID_ANY, p_strTitle, wxDefaultPosition, wxSize( 800, 600)),
-		m_p3dFrame( NULL),
-		m_pCastor3D( NULL)
+	:	wxFrame( p_pParent, wxID_ANY, p_strTitle, wxDefaultPosition, wxSize( 800, 600))
+	,	m_p3dFrame( NULL)
+	,	m_pCastor3D( NULL)
+	,	m_pImagesLoader( new ImagesLoader)
 {
+	wxGetApp().GetSplashScreen()->Step( "Initialisation des boutons", 0);
+	ImagesLoader::AddBitmap( CV_IMG_CASTOR, castor_transparent_xpm);
 	CreateStatusBar();
 	_populateToolbar();
+	wxGetApp().GetSplashScreen()->Step( "Initialisation de la vue", 1);
 	_initialise3D();
+	wxGetApp().DestroySplashScreen();
 }
 
 MainFrame :: ~MainFrame()
@@ -38,7 +51,11 @@ void MainFrame :: LoadScene( const String & p_strFileName)
 		Logger::LogMessage( CU_T( "Material manager cleared"));
 		Logger::LogMessage( m_strFilePath.c_str());
 
-		if (m_pCastor3D->GetSceneManager()->GetMaterialManager()->Read( m_strFilePath.c_str()))
+		Path l_matFilePath = m_strFilePath;
+		l_matFilePath.replace( CU_T( "cscn"), CU_T( "cmtl"));
+		File l_file( l_matFilePath, File::eRead);
+
+		if (m_pCastor3D->GetSceneManager()->GetMaterialManager()->Read( l_file))
 		{
 			Logger::LogMessage( CU_T( "Materials read"));
 		}
@@ -61,17 +78,34 @@ void MainFrame :: _initialise3D()
 
 	try
 	{
-		m_pCastor3D->LoadRenderer( RendererDriver::eOpenGL2);
-		m_pMainScene = m_pCastor3D->GetSceneManager()->CreateElement( CU_T( "MainScene"));
+		wxStandardPaths * l_paths = (wxStandardPaths *) & wxStandardPaths::Get();
+		wxString l_dataDir = l_paths->GetDataDir();
+		bool l_bRendererInit = false;
+		RendererSelector m_dialog( this, wxT( "Castor Architect"));
 
-		Logger::LogMessage( CU_T( "Castor3D Initialised"));
-		int l_width = GetClientSize().x;
-		int l_height = GetClientSize().y;
-		m_p3dFrame = new RenderPanel( this, wxID_ANY, Viewport::e3DView, m_pMainScene, wxPoint( 0, 0), wxSize( l_width, l_height));
-		m_p3dFrame->Show();
+		int l_iReturn = m_dialog.ShowModal();
+
+		if (l_iReturn != wxID_CANCEL)
+		{
+			l_bRendererInit = m_pCastor3D->LoadRenderer( RendererDriver::eDRIVER_TYPE( l_iReturn), l_dataDir.c_str());
+
+			if (l_bRendererInit)
+			{
+				m_pMainScene = ScenePtr( new Scene( m_pCastor3D->GetSceneManager(), "MainScene"));
+				m_pCastor3D->GetSceneManager()->AddElement( m_pMainScene);
+
+				Logger::LogMessage( CU_T( "Castor3D Initialised"));
+				int l_width = GetClientSize().x;
+				int l_height = GetClientSize().y;
+				m_p3dFrame = new RenderPanel( this, wxID_ANY, Viewport::e3DView, m_pMainScene, wxPoint( 0, 0), wxSize( l_width, l_height));
+				m_p3dFrame->Show();
+			}
+		}
 	}
 	catch ( ... )
 	{
+		wxMessageBox( CU_T( "Problème survenu lors de l'initialisation de Castor3D"), CU_T( "Exception"), wxOK | wxCENTRE | wxICON_ERROR);
+		Close( true);
 	}
 }
 
@@ -82,10 +116,13 @@ void MainFrame :: _populateToolbar()
 	l_pToolbar->SetBackgroundColour( * wxWHITE);
 	l_pToolbar->SetToolBitmapSize( wxSize( 32, 32));
 
-	l_pToolbar->AddTool( eLoadScene,	wxBITMAP( Scene).ConvertToImage().Rescale( 32, 32, wxIMAGE_QUALITY_HIGH),		wxT( "Scène"), wxT( "Ouvrir une nouvelle scène"));
+	l_pToolbar->AddTool( eLoadScene,	ImagesLoader::AddBitmap( eBmpScene, scene_blanc_xpm)->ConvertToImage().Rescale( 32, 32, wxIMAGE_QUALITY_HIGH),		wxT( "Scène"), wxT( "Ouvrir une nouvelle scène"));
+	wxGetApp().GetSplashScreen()->Step( 1);
 	l_pToolbar->AddSeparator();
-	l_pToolbar->AddTool( eGeometries,	wxBITMAP( Geometry).ConvertToImage().Rescale( 32, 32, wxIMAGE_QUALITY_HIGH),	wxT( "Géométries"), wxT( "Afficher les géométries"));
-	l_pToolbar->AddTool( eMaterials,	wxBITMAP( Material).ConvertToImage().Rescale( 32, 32, wxIMAGE_QUALITY_HIGH),	wxT( "Matériaux"), wxT( "Afficher les matériaux"));
+	l_pToolbar->AddTool( eGeometries,	ImagesLoader::AddBitmap( eBmpGeometries, geo_blanc_xpm)->ConvertToImage().Rescale( 32, 32, wxIMAGE_QUALITY_HIGH),	wxT( "Géométries"), wxT( "Afficher les géométries"));
+	wxGetApp().GetSplashScreen()->Step( 1);
+	l_pToolbar->AddTool( eMaterials,	ImagesLoader::AddBitmap( eBmpMaterials, mat_blanc_xpm)->ConvertToImage().Rescale( 32, 32, wxIMAGE_QUALITY_HIGH),	wxT( "Matériaux"), wxT( "Afficher les matériaux"));
+	wxGetApp().GetSplashScreen()->Step( 1);
 	l_pToolbar->AddSeparator();
 
 	l_pToolbar->Realize();
@@ -127,16 +164,7 @@ void MainFrame :: _onClose( wxCloseEvent & event)
 {
 	Hide();
 
-	if (m_p3dFrame != NULL)
-	{
-		m_p3dFrame->UnFocus();
-		m_p3dFrame->Close( true);
-		m_p3dFrame = NULL;
-	}
-
-	DestroyChildren();
-
-	if ( ! m_pMainScene == NULL)
+	if (m_pMainScene != NULL)
 	{
 		m_pMainScene.reset();
 	}
@@ -145,6 +173,15 @@ void MainFrame :: _onClose( wxCloseEvent & event)
 	{
 		m_pCastor3D->EndRendering();
 	}
+
+	if (m_p3dFrame != NULL)
+	{
+		m_p3dFrame->UnFocus();
+		m_p3dFrame->Close( true);
+		m_p3dFrame = NULL;
+	}
+
+	DestroyChildren();
 
 	if (m_pCastor3D != NULL)
 	{
@@ -190,7 +227,7 @@ void MainFrame :: _onLoadScene( wxCommandEvent & event)
 	if (l_fileDialog->ShowModal() == wxID_OK)
 	{
 		m_strFilePath = l_fileDialog->GetPath().c_str();
-		m_strFilePath.Replace( CU_T( "\\"), CU_T( "/"));
+		m_strFilePath.replace( CU_T( "\\"), CU_T( "/"));
 
 		LoadScene();
 	}

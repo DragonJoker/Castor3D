@@ -19,15 +19,14 @@
 
 using namespace Castor3D;
 
-Geometry :: Geometry ( MeshPtr p_mesh, SceneNodePtr p_sn, const String & p_name)
-	:	MovableObject( (SceneNode *)p_sn.get(), p_name),
+Geometry :: Geometry ( Scene * p_pScene, MeshPtr p_mesh, SceneNodePtr p_sn, const String & p_name)
+	:	MovableObject( p_pScene, (SceneNode *)p_sn.get(), p_name, eGeometry),
 		m_mesh( p_mesh),
 		m_changed( true),
 		m_listCreated( false),
 		m_visible( true),
 		m_dirty( false)
 {
-	m_eType = eGeometry;
 }
 
 Geometry :: ~Geometry()
@@ -46,7 +45,7 @@ void Geometry :: CreateBuffers( eNORMALS_MODE p_nm, size_t & p_nbFaces, size_t &
 	Logger::LogMessage( CU_T( "Geometry :: CreateBuffers - %d"), p_nm);
 	Cleanup();
 
-	if ( ! m_mesh == NULL)
+	if (m_mesh != NULL)
 	{
 		size_t l_nbFaces = m_mesh->GetNbFaces();
 		size_t l_nbVertex = m_mesh->GetNbVertex();
@@ -68,9 +67,7 @@ void Geometry :: CreateBuffers( eNORMALS_MODE p_nm, size_t & p_nbFaces, size_t &
 	}
 }
 
-
-
-void Geometry :: Render( eDRAW_TYPE p_displayMode)
+void Geometry :: Render( ePRIMITIVE_TYPE p_displayMode)
 {
 	if (m_dirty)
 	{
@@ -78,15 +75,12 @@ void Geometry :: Render( eDRAW_TYPE p_displayMode)
 		CreateBuffers( m_normalsMode, l_nbFaces, l_nbVertex);
 	}
 
-	if (m_visible && ! m_mesh == NULL && m_mesh->IsOk())
+	if (m_visible && m_mesh != NULL && m_mesh->IsOk())
 	{
 		if ( ! m_listCreated)
 		{
 			return;
 		}
-		m_orientation.ToRotationMatrix( m_matrix);
-
-		RenderSystem::GetSingletonPtr()->ApplyTransformations( m_center, m_matrix);
 
 		unsigned int l_nbSubmeshes = static_cast <unsigned int>( m_mesh->GetNbSubmeshes());
 		SubmeshPtr l_submesh;
@@ -95,49 +89,8 @@ void Geometry :: Render( eDRAW_TYPE p_displayMode)
 		{
 			l_submesh = m_mesh->GetSubmesh( i);
 			l_submesh->Render( p_displayMode);
-/*
-			l_submeshRenderer = l_submesh->GetRenderer();
-			l_passes = l_submesh->GetMaterial()->GetPasses();
-
-			for (size_t j = 0 ; j < l_passes.size() ; j++)
-			{
-				l_pass = l_passes[j];
-				l_textures = l_pass->GetTextureUnits();
-				l_pass->Apply( l_submesh, p_displayMode);
-				l_submeshRenderer->Draw( p_displayMode, l_pass);
-				l_pass->Remove();
-			}
-*/
 		}
-
-		RenderSystem::GetSingletonPtr()->RemoveTransformations();
 	}
-}
-
-
-
-bool Geometry :: Write( File & p_file)const
-{
-	Logger::LogMessage( CU_T( "Writing Geometry ") + m_strName);
-
-	bool l_bReturn = p_file.WriteLine( "object " + m_strName + "\n{\n");
-
-	if ( ! MovableObject::Write( p_file))
-	{
-		return false;
-	}
-
-	if (l_bReturn)
-	{
-		l_bReturn = p_file.WriteLine( "\tmesh\n\t{\n\t\ttype custom\n\t\tfile " + m_mesh->GetName() + ".cmsh\n\t}\n");
-	}
-
-	if (l_bReturn)
-	{
-		l_bReturn = p_file.WriteLine( "}\n");
-	}
-
-	return true;
 }
 
 void Geometry :: Subdivide( unsigned int p_index, SubdividerPtr p_pSubdivider, bool p_bThreaded)
@@ -147,8 +100,61 @@ void Geometry :: Subdivide( unsigned int p_index, SubdividerPtr p_pSubdivider, b
 	m_visible = true;
 }
 
-const Matrix4x4r & Geometry :: GetRotationMatrix()
+bool Geometry :: Write( File & p_file)const
 {
-	m_orientation.ToRotationMatrix( m_matrix);
-	return m_matrix;
+	Logger::LogMessage( CU_T( "Writing Geometry ") + m_strName);
+
+	bool l_bReturn = p_file.WriteLine( "object " + m_strName + "\n{\n") > 0;
+
+	if (l_bReturn)
+	{
+		l_bReturn = MovableObject::Write( p_file);
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_file.WriteLine( "\tmesh " + m_mesh->GetName() + "\n") > 0;
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_file.WriteLine( "}\n") > 0;
+	}
+
+	return l_bReturn;
+}
+
+bool Geometry :: Save( File & p_file)const
+{
+	bool l_bReturn = p_file.Write( m_strName);
+
+	if (l_bReturn)
+	{
+		l_bReturn = MovableObject::Save( p_file);
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_file.Write( m_mesh->GetName());
+	}
+
+	return l_bReturn;
+}
+
+bool Geometry :: Load( File & p_file)
+{
+	bool l_bReturn = MovableObject::Load( p_file);
+	String l_strName;
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_file.Read( l_strName);
+	}
+
+	if (l_bReturn)
+	{
+		m_mesh = RenderSystem::GetSingletonPtr()->GetSceneManager()->GetMeshManager()->GetElementByName( l_strName);
+	}
+
+	return l_bReturn;
 }

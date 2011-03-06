@@ -15,24 +15,24 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL2_MaterialRenderer___
-#define ___GL2_MaterialRenderer___
+#ifndef ___Gl2_MaterialRenderer___
+#define ___Gl2_MaterialRenderer___
 
-#include "Module_GLRender.h"
+#include "Module_Gl2Render.h"
 
 namespace Castor3D
 {
-	class C3D_GL2_API GL2PassRenderer : public GLPassRenderer
+	class C3D_Gl2_API Gl2PassRenderer : public GlPassRenderer
 	{
 	public:
-		GL2PassRenderer( SceneManager * p_pSceneManager);
-		virtual ~GL2PassRenderer(){ Cleanup(); }
+		Gl2PassRenderer( SceneManager * p_pSceneManager);
+		virtual ~Gl2PassRenderer(){ Cleanup(); }
 
 		virtual void Cleanup();
 		virtual void Initialise();
 
 	private:
-		void _apply( eDRAW_TYPE p_displayMode);
+		void _apply( ePRIMITIVE_TYPE p_displayMode);
 		void _apply2D();
 		void _remove();
 	};

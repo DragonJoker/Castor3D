@@ -1,19 +1,19 @@
-#include "GL2RenderSystem/PrecompiledHeader.h"
+#include "Gl2RenderSystem/PrecompiledHeader.h"
 
-#include "GL2RenderSystem/GL2TextureRenderer.h"
+#include "Gl2RenderSystem/Gl2TextureRenderer.h"
 
 using namespace Castor3D;
 
-GL2TextureRenderer :: GL2TextureRenderer( SceneManager * p_pSceneManager)
-	:	GLTextureRenderer( p_pSceneManager)
+Gl2TextureRenderer :: Gl2TextureRenderer( SceneManager * p_pSceneManager)
+	:	GlTextureRenderer( p_pSceneManager)
 {
 }
 
-GL2TextureRenderer :: ~GL2TextureRenderer()
+Gl2TextureRenderer :: ~Gl2TextureRenderer()
 {
 }
 
-bool GL2TextureRenderer :: Initialise()
+bool Gl2TextureRenderer :: Initialise()
 {
-	return GLTextureRenderer::Initialise();
+	return GlTextureRenderer::Initialise();
 }

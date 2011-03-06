@@ -56,9 +56,9 @@ namespace Castor3D
 		Submesh * m_submesh;				//!< The submesh being subdivided
 		IdPoint3rPtrArray m_points;			//!< All the vertices
 		SmoothGroupPtrArray m_smoothGroups;	//!< The submesh smoothing groups
-		VertexInfosBufferPtr m_vertex;		//!< Pointer over divided submesh vertex
+		VertexBufferPtr m_vertex;			//!< Pointer over divided submesh vertex
 		Point3r m_ptDivisionCenter;
-		SmartPtr<MultiThreading::Thread>::Shared m_pThread;
+		shared_ptr<MultiThreading::Thread> m_pThread;
 		bool m_bGenerateBuffers;
 		PSubdivisionEndFunction m_pfnSubdivisionEnd;
 		void * m_pArg;

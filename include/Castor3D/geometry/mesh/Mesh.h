@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_Mesh___
 
 #include "../../Prerequisites.h"
+#include "MeshManager.h"
 
 namespace Castor3D
 {
@@ -28,7 +29,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class C3D_API MeshLoader : public Castor::Resources::ResourceLoader<Mesh, MeshManager>, public MemoryTraced<MeshLoader>
+	class C3D_API MeshLoader : public ResourceLoader<Mesh>, public MemoryTraced<MeshLoader>
 	{
 	public:
 		/**
@@ -51,32 +52,15 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class C3D_API Mesh : public Castor::Resources::Resource<Mesh, MeshManager>, public MemoryTraced<Mesh>
+	class C3D_API Mesh : public Serialisable, public Resource<Mesh>, public MemoryTraced<Mesh>
 	{
 	public:
-		//! The mesh types enumerator
-		/*!
-		Actually, there are 8 mesh types defined : custom, cone, cylinder, sphere, cube, torus, plane and icosaedron
-		*/
-		typedef enum
-		{
-			eCustom,		//!< Custom mesh type => User defined vertex...
-			eCone,			//!< Cone mesh type
-			eCylinder,		//!< Cylinder mesh type
-			eSphere,		//!< Rectangular faces sphere mesh type
-			eCube,			//!< Cube mesh type
-			eTorus,			//!< Torus mesh type
-			ePlane,			//!< Plane mesh type
-			eIcosaedron,	//!< Triangular faces sphere mesh type
-			eProjection,	//!< Projection mesh type
-		}
-		eTYPE;
 
 	protected:
 		friend class MeshManager;
 		friend class MeshLoader;
 
-		eTYPE m_meshType;						//!< The mesh type
+		eMESH_TYPE m_meshType;						//!< The mesh type
 		bool m_modified;						//!< Tells whether or not the mesh is modified
 
 		CubeBox m_box;							//!< The combo box container
@@ -87,15 +71,19 @@ namespace Castor3D
 		bool m_bOK;
 
 	public :
+		/**@name Construction / Destruction */
+		//@{
 		/**
 		 * Constructor, only MeshManager can create a mesh
 		 *@param p_name : [in] This mesh name
 		 */
-		Mesh( MeshManager * p_pManager, const String & p_name=C3DEmptyString);
+		Mesh( Manager<Mesh> * p_pManager, const String & p_name=C3DEmptyString);
 		/**
 		 * Destructor, only MeshManager can destroy a mesh
 		 */
 		~Mesh();
+		//@}
+
 		/**
 		 * Cleans up all submeshes
 		 */
@@ -119,7 +107,7 @@ namespace Castor3D
 		*@param p_index : [in] The wanted submesh index
 		*@return The found submesh, NULL if not found
 		*/
-		SubmeshPtr GetSubmesh( unsigned int p_index);
+		SubmeshPtr GetSubmesh( unsigned int p_index)const;
 		/**
 		* Creates a submesh
 		*@param p_nbSmoothgroups : [in] The wanted number of smoothgroups
@@ -161,6 +149,26 @@ namespace Castor3D
 		 */
 		virtual bool Subdivide( unsigned int p_index, SubdividerPtr p_pSubdivider, bool p_bThreaded = false);
 
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
+
+		/**@name Accessors */
+		//@{
+		inline void SetModified		( bool p_modified)		{m_modified = p_modified;}
+		inline void SetMeshType		( eMESH_TYPE p_type)	{m_meshType = p_type;}
+		inline bool					IsOk					()const { return m_bOK; }
+		inline size_t				GetNbSubmeshes			()const { return m_submeshes.size(); }
+		inline eMESH_TYPE			GetMeshType				()const	{ return m_meshType;}
+		inline bool					IsModified				()const	{ return m_modified;}
+		inline const CubeBox	&	GetCubeBox				()const	{ return m_box; }
+		inline const SphereBox	&	GetSphere				()const	{ return m_sphere; }
+		inline CubeBox			&	GetCubeBox				()		{ return m_box; }
+		inline SphereBox		&	GetSphere				()		{ return m_sphere; }
+		//@}
+
 	public:
 		/**
 		 * Generates the vertex list, used for defined primitives, for custom meshes, dummy.
@@ -170,22 +178,6 @@ namespace Castor3D
 	private:
 		void _setVBsForFaceSmooth( FacePtr p_face, unsigned int & p_trianglesIndex);
 		void _setVBsForFaceFlat( FacePtr p_face, unsigned int & p_trianglesIndex);
-
-	public:
-		/**@name Accessors */
-		//@{
-		inline void SetModified		( bool p_modified)		{m_modified = p_modified;}
-		inline void SetMeshType		( eTYPE p_type)			{m_meshType = p_type;}
-
-		inline bool					IsOk					()const { return m_bOK; }
-		inline size_t				GetNbSubmeshes			()const { return m_submeshes.size(); }
-		inline eTYPE				GetMeshType				()const	{ return m_meshType;}
-		inline bool					IsModified				()const	{ return m_modified;}
-		inline const CubeBox	&	GetCubeBox				()const	{ return m_box; }
-		inline const SphereBox	&	GetSphere				()const	{ return m_sphere; }
-		inline CubeBox			&	GetCubeBox				()		{ return m_box; }
-		inline SphereBox		&	GetSphere				()		{ return m_sphere; }
-		//@}
 	};
 }
 

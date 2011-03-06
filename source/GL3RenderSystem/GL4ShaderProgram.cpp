@@ -1,15 +1,15 @@
-#include "GL3RenderSystem/PrecompiledHeader.h"
+#include "Gl3RenderSystem/PrecompiledHeader.h"
 
-#include "GL3RenderSystem/GL4ShaderProgram.h"
-#include "GL3RenderSystem/GL3RenderSystem.h"
-#include "GL3RenderSystem/GL3Context.h"
-#include "GL3RenderSystem/GL3Buffer.h"
-#include "GL3RenderSystem/GL4LightRenderer.h"
+#include "Gl3RenderSystem/Gl4ShaderProgram.h"
+#include "Gl3RenderSystem/Gl3RenderSystem.h"
+#include "Gl3RenderSystem/Gl3Context.h"
+#include "Gl3RenderSystem/Gl3Buffer.h"
+#include "Gl3RenderSystem/Gl4LightRenderer.h"
 
 using namespace Castor3D;
 
-GL4ShaderProgram :: GL4ShaderProgram()
-	:	GLShaderProgram()
+Gl4ShaderProgram :: Gl4ShaderProgram()
+	:	GlShaderProgram()
 {
 	m_setFreeLights.insert( std::set<int>::value_type( 0));
 	m_setFreeLights.insert( std::set<int>::value_type( 1));
@@ -21,8 +21,8 @@ GL4ShaderProgram :: GL4ShaderProgram()
 	m_setFreeLights.insert( std::set<int>::value_type( 7));
 }
 
-GL4ShaderProgram :: GL4ShaderProgram( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile)
-	:	GLShaderProgram( p_vertexShaderFile, p_fragmentShaderFile, p_geometryShaderFile)
+Gl4ShaderProgram :: Gl4ShaderProgram( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile)
+	:	GlShaderProgram( p_vertexShaderFile, p_fragmentShaderFile, p_geometryShaderFile)
 {
 	m_setFreeLights.insert( std::set<int>::value_type( 0));
 	m_setFreeLights.insert( std::set<int>::value_type( 1));
@@ -34,141 +34,139 @@ GL4ShaderProgram :: GL4ShaderProgram( const String & p_vertexShaderFile, const S
 	m_setFreeLights.insert( std::set<int>::value_type( 7));
 }
 
-GL4ShaderProgram :: ~GL4ShaderProgram()
+Gl4ShaderProgram :: ~Gl4ShaderProgram()
 {
 	m_mapUniformBuffers.clear();
 }
 
-bool GL4ShaderProgram :: Link()
+bool Gl4ShaderProgram :: Link()
 {
-	if ( ! GL3RenderSystem::UseShaders() || m_bError)
+	if ( ! Gl3RenderSystem::UseShaders() || m_bError)
 	{
 		return false;
 	}
 
 	if (m_isLinked)  // already linked, detach everything first
 	{
-		Logger::LogWarning( CU_T( "GL4ShaderProgram :: Link - Object is already linked, trying to link again"));
+		Logger::LogWarning( CU_T( "Gl4ShaderProgram :: Link - Object is already linked, trying to link again"));
 
-		static_pointer_cast<GLShaderObject>( m_pShaders[eVertexShader])->Detach();
-		static_pointer_cast<GLShaderObject>( m_pShaders[ePixelShader])->Detach();
+		static_pointer_cast<GlShaderObject>( m_pShaders[eVertexShader])->Detach();
+		static_pointer_cast<GlShaderObject>( m_pShaders[ePixelShader])->Detach();
 
-		if ( ! m_pShaders[eGeometryShader] == NULL)
+		if (m_pShaders[eGeometryShader] != NULL)
 		{
-			static_pointer_cast<GLShaderObject>( m_pShaders[eGeometryShader])->Detach();
+			static_pointer_cast<GlShaderObject>( m_pShaders[eGeometryShader])->Detach();
 		}
 	}
 
-	static_pointer_cast<GLShaderObject>( m_pShaders[eVertexShader])->AttachTo( this);
-	static_pointer_cast<GLShaderObject>( m_pShaders[ePixelShader])->AttachTo( this);
+	static_pointer_cast<GlShaderObject>( m_pShaders[eVertexShader])->AttachTo( this);
+	static_pointer_cast<GlShaderObject>( m_pShaders[ePixelShader])->AttachTo( this);
 
-	if ( ! m_pShaders[eGeometryShader] == NULL)
+	if (m_pShaders[eGeometryShader] != NULL)
 	{
-		static_pointer_cast<GLShaderObject>( m_pShaders[eGeometryShader])->AttachTo( this);
+		static_pointer_cast<GlShaderObject>( m_pShaders[eGeometryShader])->AttachTo( this);
 	}
 /*
 	glBindFragDataLocation( m_programObject, 1, "out_FragColor");
-	CheckGLError( CU_T( "GL4ShaderProgram :: Link - glBindFragDataLocation"));
+	CheckGlError( CU_T( "Gl4ShaderProgram :: Link - glBindFragDataLocation"));
 */
 	GLint linked = 0;
-	glLinkProgram( m_programObject);
-	CheckGLError( CU_T( "GL4ShaderProgram :: Link - glLinkProgram"));
-	glGetProgramiv( m_programObject, GL_LINK_STATUS, & linked);
-	CheckGLError( CU_T( "GL4ShaderProgram :: Link - glGetProgramiv"));
+	CheckGlError( glLinkProgram( m_programObject), CU_T( "Gl4ShaderProgram :: Link - glLinkProgram"));
+	CheckGlError( glGetProgramiv( m_programObject, GL_LINK_STATUS, & linked), CU_T( "Gl4ShaderProgram :: Link - glGetProgramiv"));
 
 	if (linked)
 	{
 		m_isLinked = true;
 
-		m_pLightsUniformBuffer = BufferManager::CreateBuffer<unsigned char, GLUniformBufferObject>( CU_T( "in_Lights"));
+		m_pLightsUniformBuffer = BufferManager::CreateBuffer<unsigned char, GlUniformBufferObject>( CU_T( "in_Lights"));
 		m_pLightsUniformBuffer->Initialise( this);
-		m_pAmbients			= m_pLightsUniformBuffer->CreateVariable<GLUBOPoint4fVariable>(		CU_T( "in_LightsAmbient"),		8);
-		m_pDiffuses			= m_pLightsUniformBuffer->CreateVariable<GLUBOPoint4fVariable>(		CU_T( "in_LightsDiffuse"),		8);
-		m_pSpeculars		= m_pLightsUniformBuffer->CreateVariable<GLUBOPoint4fVariable>(		CU_T( "in_LightsSpecular"),		8);
-		m_pPositions		= m_pLightsUniformBuffer->CreateVariable<GLUBOPoint4fVariable>(		CU_T( "in_LightsPosition"),		8);
-		m_pAttenuations		= m_pLightsUniformBuffer->CreateVariable<GLUBOPoint3fVariable>(		CU_T( "in_LightsAttenuation"),	8);
-		m_pOrientations		= m_pLightsUniformBuffer->CreateVariable<GLUBOMatrix4x4fVariable>(	CU_T( "in_LightsOrientation"),	8);
-		m_pExponents		= m_pLightsUniformBuffer->CreateVariable<GLUBOFloatVariable>(		CU_T( "in_LightsExponent"),		8);
-		m_pCutOffs			= m_pLightsUniformBuffer->CreateVariable<GLUBOFloatVariable>(		CU_T( "in_LightsCutOff"),		8);
+		m_pAmbients			= m_pLightsUniformBuffer->CreateVariable<GlUboPoint4fVariable>(		CU_T( "in_LightsAmbient"),		8);
+		m_pDiffuses			= m_pLightsUniformBuffer->CreateVariable<GlUboPoint4fVariable>(		CU_T( "in_LightsDiffuse"),		8);
+		m_pSpeculars		= m_pLightsUniformBuffer->CreateVariable<GlUboPoint4fVariable>(		CU_T( "in_LightsSpecular"),		8);
+		m_pPositions		= m_pLightsUniformBuffer->CreateVariable<GlUboPoint4fVariable>(		CU_T( "in_LightsPosition"),		8);
+		m_pAttenuations		= m_pLightsUniformBuffer->CreateVariable<GlUboPoint3fVariable>(		CU_T( "in_LightsAttenuation"),	8);
+		m_pOrientations		= m_pLightsUniformBuffer->CreateVariable<GlUboMatrix4x4fVariable>(	CU_T( "in_LightsOrientation"),	8);
+		m_pExponents		= m_pLightsUniformBuffer->CreateVariable<GlUboFloatVariable>(		CU_T( "in_LightsExponent"),		8);
+		m_pCutOffs			= m_pLightsUniformBuffer->CreateVariable<GlUboFloatVariable>(		CU_T( "in_LightsCutOff"),		8);
 
-		if ( ! m_pAmbients == NULL)
+		if (m_pAmbients != NULL)
 		{
 			m_pAmbients->SetValues(		m_vAmbients);
 		}
-		if ( ! m_pDiffuses == NULL)
+		if (m_pDiffuses != NULL)
 		{
 			m_pDiffuses->SetValues(		m_vDiffuses);
 		}
-		if ( ! m_pSpeculars == NULL)
+		if (m_pSpeculars != NULL)
 		{
 			m_pSpeculars->SetValues(	m_vSpeculars);
 		}
-		if ( ! m_pPositions == NULL)
+		if (m_pPositions != NULL)
 		{
 			m_pPositions->SetValues(	m_vPositions);
 		}
-		if ( ! m_pAttenuations == NULL)
+		if (m_pAttenuations != NULL)
 		{
 			m_pAttenuations->SetValues(	m_vAttenuations);
 		}
-		if ( ! m_pOrientations == NULL)
+		if (m_pOrientations != NULL)
 		{
 			m_pOrientations->SetValues(	m_mOrientations);
 		}
-		if ( ! m_pExponents == NULL)
+		if (m_pExponents != NULL)
 		{
 			m_pExponents->SetValues(	m_rExponents);
 		}
-		if ( ! m_pCutOffs == NULL)
+		if (m_pCutOffs != NULL)
 		{
 			m_pCutOffs->SetValues(		m_rCutOffs);
 		}
 
-		m_mapUniformBuffers.insert( GLUniformBufferObjectPtrStrMap::value_type(  CU_T( "in_Lights"), m_pLightsUniformBuffer));
+		m_mapUniformBuffers.insert( GlUniformBufferObjectPtrStrMap::value_type(  CU_T( "in_Lights"), m_pLightsUniformBuffer));
 
-		m_pMatsUniformBuffer = BufferManager::CreateBuffer<unsigned char, GLUniformBufferObject>( CU_T( "in_Material"));
+		m_pMatsUniformBuffer = BufferManager::CreateBuffer<unsigned char, GlUniformBufferObject>( CU_T( "in_Material"));
 		m_pMatsUniformBuffer->Initialise( this);
-		m_pAmbient		= m_pMatsUniformBuffer->CreateVariable<GLUBOPoint4fVariable>(	CU_T( "in_MatAmbient"),		1);
-		m_pDiffuse		= m_pMatsUniformBuffer->CreateVariable<GLUBOPoint4fVariable>(	CU_T( "in_MatDiffuse"),		1);
-		m_pEmissive		= m_pMatsUniformBuffer->CreateVariable<GLUBOPoint4fVariable>(	CU_T( "in_MatEmissive"),	1);
-		m_pSpecular		= m_pMatsUniformBuffer->CreateVariable<GLUBOPoint4fVariable>(	CU_T( "in_MatSpecular"),	1);
-		m_pShininess	= m_pMatsUniformBuffer->CreateVariable<GLUBOFloatVariable>(		CU_T( "in_MatShininess"),	1);
+		m_pAmbient		= m_pMatsUniformBuffer->CreateVariable<GlUboPoint4fVariable>(	CU_T( "in_MatAmbient"),		1);
+		m_pDiffuse		= m_pMatsUniformBuffer->CreateVariable<GlUboPoint4fVariable>(	CU_T( "in_MatDiffuse"),		1);
+		m_pEmissive		= m_pMatsUniformBuffer->CreateVariable<GlUboPoint4fVariable>(	CU_T( "in_MatEmissive"),	1);
+		m_pSpecular		= m_pMatsUniformBuffer->CreateVariable<GlUboPoint4fVariable>(	CU_T( "in_MatSpecular"),	1);
+		m_pShininess	= m_pMatsUniformBuffer->CreateVariable<GlUboFloatVariable>(		CU_T( "in_MatShininess"),	1);
 
-		if ( ! m_pAmbient == NULL)
+		if (m_pAmbient != NULL)
 		{
 			m_pAmbient->SetValues( & m_vAmbient);
 		}
-		if ( ! m_pDiffuse == NULL)
+		if (m_pDiffuse != NULL)
 		{
 			m_pDiffuse->SetValues( & m_vDiffuse);
 		}
-		if ( ! m_pEmissive == NULL)
+		if (m_pEmissive != NULL)
 		{
 			m_pEmissive->SetValues( & m_vEmissive);
 		}
-		if ( ! m_pSpecular == NULL)
+		if (m_pSpecular != NULL)
 		{
 			m_pSpecular->SetValues( & m_vSpecular);
 		}
-		if ( ! m_pShininess == NULL)
+		if (m_pShininess != NULL)
 		{
 			m_pShininess->SetValues( & m_rShininess);
 		}
 
-		m_mapUniformBuffers.insert( GLUniformBufferObjectPtrStrMap::value_type( CU_T( "in_Material"), m_pMatsUniformBuffer));
+		m_mapUniformBuffers.insert( GlUniformBufferObjectPtrStrMap::value_type( CU_T( "in_Material"), m_pMatsUniformBuffer));
 	}
 	else
 	{
 		m_bError = true;
 		String l_strLog;
 		RetrieveLinkerLog( l_strLog);
-		Logger::LogError( CU_T( "GL4ShaderProgram :: Link - Linker error"));
+		Logger::LogError( CU_T( "Gl4ShaderProgram :: Link - Linker error"));
 	}
 
 	return m_isLinked;
 }
 
-int GL4ShaderProgram :: AssignLight()
+int Gl4ShaderProgram :: AssignLight()
 {
 	int l_iReturn = GL_INVALID_INDEX;
 
@@ -182,7 +180,7 @@ int GL4ShaderProgram :: AssignLight()
 	return l_iReturn;
 }
 
-void GL4ShaderProgram :: FreeLight( int p_iIndex)
+void Gl4ShaderProgram :: FreeLight( int p_iIndex)
 {
 	if (p_iIndex != GL_INVALID_INDEX)
 	{
@@ -197,41 +195,40 @@ void GL4ShaderProgram :: FreeLight( int p_iIndex)
 	}
 }
 
-void GL4ShaderProgram :: Begin()
+void Gl4ShaderProgram :: Begin()
 {
-	GL3RenderSystem::GetSingletonPtr()->SetCurrentShaderProgram( this);
-	GLShaderProgram::Begin();
+	Gl3RenderSystem::GetSingletonPtr()->SetCurrentShaderProgram( this);
+	GlShaderProgram::Begin();
 }
 
-void GL4ShaderProgram :: ApplyAllVariables()
+void Gl4ShaderProgram :: ApplyAllVariables()
 {
-	GLShaderProgram::ApplyAllVariables();
+	GlShaderProgram::ApplyAllVariables();
 
-	for (GLUniformBufferObjectPtrStrMap::iterator l_it = m_mapUniformBuffers.begin() ; l_it != m_mapUniformBuffers.end() ; ++l_it)
+	for (GlUniformBufferObjectPtrStrMap::iterator l_it = m_mapUniformBuffers.begin() ; l_it != m_mapUniformBuffers.end() ; ++l_it)
 	{
 		l_it->second->Activate();
 	}
 }
 
-void GL4ShaderProgram :: End()
+void Gl4ShaderProgram :: End()
 {
-	if ( ! GL3RenderSystem::UseShaders() || ! m_enabled)
+	if ( ! Gl3RenderSystem::UseShaders() || ! m_enabled)
 	{
 		return;
 	}
 
-	for (GLUniformBufferObjectPtrStrMap::iterator l_it = m_mapUniformBuffers.begin() ; l_it != m_mapUniformBuffers.end() ; ++l_it)
+	for (GlUniformBufferObjectPtrStrMap::iterator l_it = m_mapUniformBuffers.begin() ; l_it != m_mapUniformBuffers.end() ; ++l_it)
 	{
 		l_it->second->Deactivate();
 	}
 
-	glUseProgram( 0);
-	CheckGLError( CU_T( "GL4ShaderProgram :: End - glUseProgram"));
+	CheckGlError( glUseProgram( 0), CU_T( "Gl4ShaderProgram :: End - glUseProgram"));
 }
 
-GLUniformBufferObjectPtr GL4ShaderProgram :: GetUniformBuffer( const String & p_strName)
+GlUniformBufferObjectPtr Gl4ShaderProgram :: GetUniformBuffer( const String & p_strName)
 {
-	GLUniformBufferObjectPtr l_pReturn;
+	GlUniformBufferObjectPtr l_pReturn;
 
 	if (m_mapUniformBuffers.find( p_strName) != m_mapUniformBuffers.end())
 	{
@@ -241,7 +238,7 @@ GLUniformBufferObjectPtr GL4ShaderProgram :: GetUniformBuffer( const String & p_
 	return l_pReturn;
 }
 
-void GL4ShaderProgram :: SetLightValues( int p_iIndex, GL4LightRenderer * p_pLightRenderer)
+void Gl4ShaderProgram :: SetLightValues( int p_iIndex, Gl4LightRenderer * p_pLightRenderer)
 {
 	if (p_iIndex >= 0 && p_iIndex < 8)
 	{

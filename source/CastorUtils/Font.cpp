@@ -9,10 +9,11 @@
 
 #if CHECK_MEMORYLEAKS
 #	include "CastorUtils/Memory.h"
-using namespace Castor::Utils;
 #endif
 
 using namespace Castor;
+using namespace Castor::Math;
+using namespace Castor::Utils;
 using namespace Castor::Resources;
 
 //*************************************************************************************************
@@ -26,28 +27,37 @@ inline int next_p2( int p_value)
 
 //*************************************************************************************************
 
-FontPtr FontLoader :: LoadFromFile( FontManager * p_pManager, const String & p_strName, const String & p_strPath, int p_uiHeight, ImageManager * p_pImageManager)
+FontPtr FontLoader :: LoadFromFile( Manager<Font> * p_pManager, const String & p_strName, const Path & p_strPath, int p_uiHeight, ImageManager * p_pImageManager)
 {
-	FontPtr l_pReturn( new Font( p_pManager, p_strName, p_strPath, p_uiHeight, p_pImageManager));
+	FontPtr l_pReturn;
+
+	try
+	{
+		l_pReturn = FontPtr( new Font( p_pManager, p_strName, p_strPath, p_uiHeight, p_pImageManager));
+	}
+	catch (std::runtime_error p_exc)
+	{
+	}
+
 	return l_pReturn;
 }
 
 //*********************************************************************************************
 
-Font :: Font( FontManager * p_pManager)
-	:	Resource( p_pManager, C3DEmptyString)
+Font :: Font( Manager<Font> * p_pManager)
+	:	Resource<Font>( p_pManager, C3DEmptyString)
 	,	m_uiHeight( 0)
 {
 }
 
-Font :: Font( FontManager * p_pManager, const String & p_strName, const String & p_strPath, size_t p_uiHeight, ImageManager * p_pImageManager)
-	:	Resource( p_pManager, p_strName)
-	,	m_uiHeight( 0)
+Font :: Font( Manager<Font> * p_pManager, const String & p_strName, const Path & p_strPath, size_t p_uiHeight, ImageManager * p_pImageManager)
+	:	Resource<Font>( p_pManager, p_strName)
+	,	m_uiHeight( p_uiHeight)
 {
 	Initialise( p_strPath, p_uiHeight, p_pImageManager);
 }
 
-void Font :: Initialise( const String & p_strPath, size_t p_uiHeight, ImageManager * p_pImageManager)
+void Font :: Initialise( const Path & p_strPath, size_t p_uiHeight, ImageManager * p_pImageManager)
 {
 	m_uiHeight = p_uiHeight;
 	m_strPath = p_strPath;
@@ -55,14 +65,14 @@ void Font :: Initialise( const String & p_strPath, size_t p_uiHeight, ImageManag
 
 	if (FT_Init_FreeType( & l_ftLibrary))
 	{
-		throw std::runtime_error( "FT_Init_FreeType failed");
+		LOADER_ERROR( "FT_Init_FreeType failed");
 	}
 
 	FT_Face l_ftFace;
 
 	if (FT_New_Face( l_ftLibrary, p_strPath.char_str(), 0, & l_ftFace))
 	{
-		throw std::runtime_error( "FT_New_Face failed (there is probably a problem with your font file)");
+		LOADER_ERROR( "FT_New_Face failed (there is probably a problem with your font file)");
 	}
 
 	FT_Set_Char_Size( l_ftFace, m_uiHeight << 6, m_uiHeight << 6, 96, 96);
@@ -75,7 +85,7 @@ void Font :: Initialise( const String & p_strPath, size_t p_uiHeight, ImageManag
 		_loadChar( l_ftFace, l_buffer, (char)c);
 	}
 
-	m_pImage = p_pImageManager->CreateImage( CU_T( "Font_") + GetName(), l_buffer, pxfL4A4);
+	m_pImage = p_pImageManager->CreateImage( CU_T( "Font_") + GetName(), Point2i( m_uiHeight, m_uiHeight), eA8L8, l_buffer);
 
 	FT_Done_Face( l_ftFace);
 	FT_Done_FreeType( l_ftLibrary);
@@ -105,18 +115,18 @@ unsigned char * Font :: operator []( unsigned char p_char)
 	return l_pReturn;
 }
 
-void Font :: _loadChar( FT_Face p_ftFace, Buffer<unsigned char> & p_buffer, char p_char)
+void Font :: _loadChar( FT_Face p_ftFace, Buffer<unsigned char> & p_buffer, unsigned char p_char)
 {
 	if (FT_Load_Glyph( p_ftFace, FT_Get_Char_Index( p_ftFace, p_char), FT_LOAD_DEFAULT))
 	{
-		throw std::runtime_error("FT_Load_Glyph failed");
+		LOADER_ERROR("FT_Load_Glyph failed");
 	}
 
 	FT_Glyph l_ftGlyph;
 
 	if (FT_Get_Glyph( p_ftFace->glyph, & l_ftGlyph))
 	{
-		throw std::runtime_error("FT_Get_Glyph failed");
+		LOADER_ERROR("FT_Get_Glyph failed");
 	}
 
 	FT_Glyph_To_Bitmap( & l_ftGlyph, ft_render_mode_normal, 0, 1);
@@ -137,7 +147,7 @@ void Font :: _loadChar( FT_Face p_ftFace, Buffer<unsigned char> & p_buffer, char
 
 //*********************************************************************************************
 
-FontPtr FontManager :: CreateFont( const String & p_strName, const String & p_strPath, size_t p_uiHeight, ImageManager * p_pImageManager)
+FontPtr FontManager :: LoadFont( const String & p_strName, const Path & p_strPath, size_t p_uiHeight, ImageManager * p_pImageManager)
 {
 	FontPtr l_pFont = GetElementByName( p_strName);
 

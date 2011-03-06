@@ -28,11 +28,15 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define MD2_MAX_SKINS			32
 #define MD2_MAX_FRAMESIZE		(MD2_MAX_VERTICES * 4 + 128)
 
+#ifndef _WIN32
+#	define C3D_Md2_API
+#else
 #	ifdef Md2Importer_EXPORTS
 #		define C3D_Md2_API __declspec(dllexport)
 #	else
 #		define C3D_Md2_API __declspec(dllimport)
 #	endif
+#endif
 
 namespace Castor3D
 {

@@ -15,21 +15,21 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL3_TextureRenderer___
-#define ___GL3_TextureRenderer___
+#ifndef ___Gl3_TextureRenderer___
+#define ___Gl3_TextureRenderer___
 
-#include "Module_GLRender.h"
+#include "Module_Gl3Render.h"
 
 namespace Castor3D
 {	
-	class C3D_GL3_API GL3TextureRenderer : public GLTextureRenderer
+	class C3D_Gl3_API Gl3TextureRenderer : public GlTextureRenderer
 	{
 	protected:
 		unsigned int m_uiIndex;
 
 	public:
-		GL3TextureRenderer( SceneManager * p_pSceneManager);
-		virtual ~GL3TextureRenderer();
+		Gl3TextureRenderer( SceneManager * p_pSceneManager);
+		virtual ~Gl3TextureRenderer();
 
 		virtual bool Initialise();
 

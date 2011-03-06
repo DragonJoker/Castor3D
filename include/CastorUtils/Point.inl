@@ -1,134 +1,342 @@
 namespace Castor
 {	namespace Math
 {
-	template <typename T, size_t Count>
-	Point <T, Count> :: Point( const T * p_pValues = NULL)
-		:	m_coords( new T[Count]),
-			m_bOwnCoords( true)
-	{
-		if (p_pValues == NULL)
-		{
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				Templates::Policy<T>::init( m_coords[i]);
-			}
-		}
-		else
-		{
-			for (size_t i = 0 ; i < Count ; i++)
-			{
-				Templates::Policy<T>::assign( m_coords[i], p_pValues[i]);
-			}
-		}
-	}
-	template <typename T, size_t Count>
-	Point <T, Count> :: Point( const T & p_vA)
-		:	m_coords( new T[Count]),
-			m_bOwnCoords( true)
-	{
-		if (Count > 0)
-		{
-			Templates::Policy<T>::assign( m_coords[0], p_vA);
+//*************************************************************************************************
 
-			for (size_t i = 1 ; i < Count ; i++)
-			{
-				Templates::Policy<T>::init( m_coords[i]);
-			}
+	template <typename T>
+	TPointBase<T> :: TPointBase( size_t p_uiCount)
+		:	m_coords( NULL)
+		,	m_bOwnCoords( true)
+		,	m_uiCount( p_uiCount)
+	{
+		if (m_uiCount > 0)
+		{
+			m_coords = new T[m_uiCount];
 		}
 	}
-	template <typename T, size_t Count>
-	Point <T, Count> :: Point( const T & p_vA, const T & p_vB)
-		:	m_coords( new T[Count]),
-			m_bOwnCoords( true)
+	template <typename T>
+	TPointBase<T> :: TPointBase( size_t p_uiCount, const T * p_pData)
+		:	m_coords( NULL)
+		,	m_bOwnCoords( true)
+		,	m_uiCount( p_uiCount)
 	{
-		if (Count > 0)
+		if (m_uiCount > 0)
 		{
-			Templates::Policy<T>::assign( m_coords[0], p_vA);
-		}
-		if (Count > 1)
-		{
-			Templates::Policy<T>::assign( m_coords[1], p_vB);
+			m_coords = new T[p_uiCount];
 
-			for (size_t i = 2 ; i < Count ; i++)
+			if (p_pData == NULL)
 			{
-				Templates::Policy<T>::init( m_coords[i]);
+				for (size_t i = 0 ; i < m_uiCount ; i++)
+				{
+					Templates::Policy<T>::init( m_coords[i]);
+				}
+			}
+			else
+			{
+				for (size_t i = 0 ; i < m_uiCount ; i++)
+				{
+					Templates::Policy<T>::assign( m_coords[i], p_pData[i]);
+				}
 			}
 		}
 	}
-	template <typename T, size_t Count>
-	Point <T, Count> :: Point( const T & p_vA, const T & p_vB, const T & p_vC)
-		:	m_coords( new T[Count]),
-			m_bOwnCoords( true)
-	{
-		if (Count > 0)
-		{
-			Templates::Policy<T>::assign( m_coords[0], p_vA);
-		}
-		if (Count > 1)
-		{
-			Templates::Policy<T>::assign( m_coords[1], p_vB);
-		}
-		if (Count > 2)
-		{
-			Templates::Policy<T>::assign( m_coords[2], p_vC);
-
-			for (size_t i = 3 ; i < Count ; i++)
-			{
-				Templates::Policy<T>::init( m_coords[i]);
-			}
-		}
-	}
-	template <typename T, size_t Count>
-	Point <T, Count> :: Point( const T & p_vA, const T & p_vB, const T & p_vC, const T & p_vD)
-		:	m_coords( new T[Count]),
-			m_bOwnCoords( true)
-	{
-		if (Count > 0)
-		{
-			Templates::Policy<T>::assign( m_coords[0], p_vA);
-		}
-		if (Count > 1)
-		{
-			Templates::Policy<T>::assign( m_coords[1], p_vB);
-		}
-		if (Count > 2)
-		{
-			Templates::Policy<T>::assign( m_coords[2], p_vC);
-		}
-		if (Count > 3)
-		{
-			Templates::Policy<T>::assign( m_coords[3], p_vD);
-
-			for (size_t i = 4 ; i < Count ; i++)
-			{
-				Templates::Policy<T>::init( m_coords[i]);
-			}
-		}
-	}
-	template <typename T, size_t Count>
-	Point <T, Count> :: Point( const Point<T, Count> & p_ptPoint)
-		:	m_coords( new T[Count]),
-			m_bOwnCoords( true)
-	{
-		for (size_t i = 0 ; i < Count ; i++)
-		{
-			Templates::Policy<T>::assign( m_coords[i], p_ptPoint[i]);
-		}
-	}
-	template <typename T, size_t Count>
-	inline Point <T, Count> :: ~Point()
+	template <typename T>
+	inline TPointBase <T> :: ~TPointBase()
 	{
 		if (m_bOwnCoords)
 		{
 			delete [] m_coords;
 		}
 	}
+	template <typename T>
+	inline void TPointBase <T> :: LinkCoords( const void * p_pCoords)
+	{
+		if (m_bOwnCoords)
+		{
+			delete [] m_coords;
+			m_coords = NULL;
+		}
+
+		m_coords = (T *)p_pCoords;
+		m_bOwnCoords = false;
+	}
+	template <typename T>
+	inline void TPointBase <T> :: UnlinkCoords()
+	{
+		if ( ! m_bOwnCoords)
+		{
+			m_coords = new T[m_uiCount];
+		}
+
+		m_bOwnCoords = true;
+	}
+	template <typename T>
+	inline void TPointBase <T> :: ToValues( T * p_pResult)const
+	{
+		if (m_coords != NULL)
+		{
+			Templates::Policy<T>::assign( p_pResult[0], m_coords[0]);
+
+			for (size_t i = 0 ; i < m_uiCount ; i++)
+			{
+				Templates::Policy<T>::assign( p_pResult[i], m_coords[i]);
+			}
+		}
+	}
+	template <typename T>
+	inline const T & TPointBase <T> :: operator[]( size_t p_pos)const
+	{
+		return m_coords[p_pos];
+	}
+	template <typename T>
+	inline T & TPointBase <T> :: operator[]( size_t p_pos)
+	{
+		return m_coords[p_pos];
+	}
+	template <typename T>
+	inline const T & TPointBase <T> :: at( size_t p_pos)const
+	{
+		return m_coords[p_pos];
+	}
+	template <typename T>
+	inline T & TPointBase <T> :: at( size_t p_pos)
+	{
+		return m_coords[p_pos];
+	}
+	template <typename T>
+	template <typename _Ty>
+	TPointBase <T> :: TPointBase( const TPointBase<_Ty> & p_ptBase)
+		:	m_coords( NULL)
+		,	m_uiCount( p_ptBase.m_uiCount)
+		,	m_bOwnCoords( true)
+	{
+		if (m_uiCount > 0)
+		{
+			m_coords = new T[m_uiCount];
+
+			for (size_t i = 0 ; i < m_uiCount ; i++)
+			{
+				Templates::Policy<T>::assign( m_coords[i], p_ptBase.m_coords[i]);
+			}
+		}
+	}
+	template <typename T>
+	template <typename _Ty>
+	TPointBase<T> & TPointBase <T> :: operator =( const TPointBase<_Ty> & p_ptBase)
+	{
+		for (size_t i = 0 ; i < m_uiCount && i < p_ptBase.m_uiCount ; i++)
+		{
+			Templates::Policy<T>::assign( m_coords[i], p_ptBase.m_coords[i]);
+		}
+		return * this;
+	}
+
+//*************************************************************************************************
+
+	template <typename T, size_t Count>
+	Point <T, Count> :: Point( const T * p_pValues)
+		:	TPointBase<T>( Count, p_pValues)
+	{
+	}
+	template <typename T, size_t Count>
+	Point <T, Count> :: Point( const T & p_vA)
+		:	TPointBase<T>( Count)
+	{
+		if (Count > 0)
+		{
+			Templates::Policy<T>::assign( TPointBase<T>::at( 0), p_vA);
+
+			for (size_t i = 1 ; i < Count ; i++)
+			{
+				Templates::Policy<T>::init( TPointBase<T>::at( i));
+			}
+		}
+	}
+	template <typename T, size_t Count>
+	Point <T, Count> :: Point( const T & p_vA, const T & p_vB)
+		:	TPointBase<T>( Count)
+	{
+		if (Count > 0)
+		{
+			Templates::Policy<T>::assign( TPointBase<T>::at( 0), p_vA);
+		}
+		if (Count > 1)
+		{
+			Templates::Policy<T>::assign( TPointBase<T>::at( 1), p_vB);
+
+			for (size_t i = 2 ; i < Count ; i++)
+			{
+				Templates::Policy<T>::init( TPointBase<T>::at( i));
+			}
+		}
+	}
+	template <typename T, size_t Count>
+	Point <T, Count> :: Point( const T & p_vA, const T & p_vB, const T & p_vC)
+		:	TPointBase<T>( Count)
+	{
+		if (Count > 0)
+		{
+			Templates::Policy<T>::assign( TPointBase<T>::at( 0), p_vA);
+		}
+		if (Count > 1)
+		{
+			Templates::Policy<T>::assign( TPointBase<T>::at( 1), p_vB);
+		}
+		if (Count > 2)
+		{
+			Templates::Policy<T>::assign( TPointBase<T>::at( 2), p_vC);
+
+			for (size_t i = 3 ; i < Count ; i++)
+			{
+				Templates::Policy<T>::init( TPointBase<T>::at( i));
+			}
+		}
+	}
+	template <typename T, size_t Count>
+	Point <T, Count> :: Point( const T & p_vA, const T & p_vB, const T & p_vC, const T & p_vD)
+		:	TPointBase<T>( Count)
+	{
+		if (Count > 0)
+		{
+			Templates::Policy<T>::assign( TPointBase<T>::at( 0), p_vA);
+		}
+		if (Count > 1)
+		{
+			Templates::Policy<T>::assign( TPointBase<T>::at( 1), p_vB);
+		}
+		if (Count > 2)
+		{
+			Templates::Policy<T>::assign( TPointBase<T>::at( 2), p_vC);
+		}
+		if (Count > 3)
+		{
+			Templates::Policy<T>::assign( TPointBase<T>::at( 3), p_vD);
+
+			for (size_t i = 4 ; i < Count ; i++)
+			{
+				Templates::Policy<T>::init( TPointBase<T>::at( i));
+			}
+		}
+	}
+	template <typename T, size_t Count>
+	Point <T, Count> :: Point( const Point<T, Count> & p_ptPoint)
+		:	TPointBase<T>( Count, p_ptPoint.const_ptr())
+	{
+	}
+	template <typename T, size_t Count>
+	template <typename _Ty>
+	Point <T, Count> :: Point( const _Ty * p_pValues)
+		:	TPointBase<T>( Count)
+	{
+		if (p_pValues == NULL)
+		{
+			for (size_t i = 0 ; i < Count ; i++)
+			{
+				Templates::Policy<T>::init( TPointBase<T>::at( i));
+			}
+		}
+		else
+		{
+			for (size_t i = 0 ; i < Count ; i++)
+			{
+				Templates::Policy<T>::assign( TPointBase<T>::at( i), p_pValues[i]);
+			}
+		}
+	}
+	template <typename T, size_t Count>
+	template <typename _Ty>
+	Point <T, Count> :: Point( const _Ty & p_vA, const _Ty & p_vB)
+		:	TPointBase<T>( Count)
+	{
+		if (Count > 0)
+		{
+			Templates::Policy<T>::assign( TPointBase<T>::at( 0), p_vA);
+		}
+		if (Count > 1)
+		{
+			Templates::Policy<T>::assign( TPointBase<T>::at( 1), p_vB);
+
+			for (size_t i = 2 ; i < Count ; i++)
+			{
+				Templates::Policy<T>::init( TPointBase<T>::at( i));
+			}
+		}
+	}
+	template <typename T, size_t Count>
+	template <typename _Ty>
+	Point <T, Count> :: Point( const _Ty & p_vA, const _Ty & p_vB, const _Ty & p_vC)
+		:	TPointBase<T>( Count)
+	{
+		if (Count > 0)
+		{
+			Templates::Policy<T>::assign( TPointBase<T>::at( 0), p_vA);
+		}
+		if (Count > 1)
+		{
+			Templates::Policy<T>::assign( TPointBase<T>::at( 1), p_vB);
+		}
+		if (Count > 2)
+		{
+			Templates::Policy<T>::assign( TPointBase<T>::at( 2), p_vC);
+
+			for (size_t i = 3 ; i < Count ; i++)
+			{
+				Templates::Policy<T>::init( TPointBase<T>::at( i));
+			}
+		}
+	}
+	template <typename T, size_t Count>
+	template <typename _Ty>
+	Point <T, Count> :: Point( const _Ty & p_vA, const _Ty & p_vB, const _Ty & p_vC, const _Ty & p_vD)
+		:	TPointBase<T>( Count)
+	{
+		if (Count > 0)
+		{
+			Templates::Policy<T>::assign( TPointBase<T>::at( 0), p_vA);
+		}
+		if (Count > 1)
+		{
+			Templates::Policy<T>::assign( TPointBase<T>::at( 1), p_vB);
+		}
+		if (Count > 2)
+		{
+			Templates::Policy<T>::assign( TPointBase<T>::at( 2), p_vC);
+		}
+		if (Count > 3)
+		{
+			Templates::Policy<T>::assign( TPointBase<T>::at( 3), p_vD);
+
+			for (size_t i = 4 ; i < Count ; i++)
+			{
+				Templates::Policy<T>::init( TPointBase<T>::at( i));
+			}
+		}
+	}
+	template <typename T, size_t Count>
+	template <typename _Ty, size_t _Count>
+	Point <T, Count> :: Point( const Point<_Ty, _Count> & p_ptPoint)
+		:	TPointBase<T>( Count)
+	{
+		for (size_t i = 0 ; i < std::min<size_t>( Count, _Count) ; i++)
+		{
+			Templates::Policy<T>::assign( TPointBase<T>::at( i), p_ptPoint[i]);
+		}
+
+		for (size_t i = _Count ; i < Count ; i++)
+		{
+			Templates::Policy<T>::init( TPointBase<T>::at( i));
+		}
+	}
+	template <typename T, size_t Count>
+	inline Point <T, Count> :: ~Point()
+	{
+	}
 	template <typename T, size_t Count>
 	inline Point <T, Count> & Point <T, Count> :: operator +=( const Point<T, Count> & p_pt)
 	{
 		for (size_t i = 0 ; i < Count ; i++)
 		{
-			Templates::Policy<T>::ass_add( m_coords[i], p_pt[i]);
+			Templates::Policy<T>::ass_add( TPointBase<T>::at( i), p_pt[i]);
 		}
 
 		return * this;
@@ -138,7 +346,7 @@ namespace Castor
 	{
 		for (size_t i = 0 ; i < Count ; i++)
 		{
-			Templates::Policy<T>::ass_add( m_coords[i], p_coords[i]);
+			Templates::Policy<T>::ass_add( TPointBase<T>::at( i), p_coords[i]);
 		}
 
 		return * this;
@@ -148,7 +356,7 @@ namespace Castor
 	{
 		for (size_t i = 0 ; i < Count ; i++)
 		{
-			Templates::Policy<T>::ass_substract( m_coords[i], p_pt[i]);
+			Templates::Policy<T>::ass_substract( TPointBase<T>::at( i), p_pt[i]);
 		}
 
 		return * this;
@@ -158,7 +366,7 @@ namespace Castor
 	{
 		for (size_t i = 0 ; i < Count ; i++)
 		{
-			Templates::Policy<T>::ass_substract( m_coords[i], p_coords[i]);
+			Templates::Policy<T>::ass_substract( TPointBase<T>::at( i), p_coords[i]);
 		}
 
 		return * this;
@@ -168,7 +376,7 @@ namespace Castor
 	{
 		for (size_t i = 0 ; i < Count ; i++)
 		{
-			Templates::Policy<T>::ass_multiply( m_coords[i], p_pt[i]);
+			Templates::Policy<T>::ass_multiply( TPointBase<T>::at( i), p_pt[i]);
 		}
 
 		return * this;
@@ -178,7 +386,7 @@ namespace Castor
 	{
 		for (size_t i = 0 ; i < Count ; i++)
 		{
-			Templates::Policy<T>::ass_multiply( m_coords[i], p_coords[i]);
+			Templates::Policy<T>::ass_multiply( TPointBase<T>::at( i), p_coords[i]);
 		}
 
 		return * this;
@@ -188,7 +396,7 @@ namespace Castor
 	{
 		for (size_t i = 0 ; i < Count ; i++)
 		{
-			Templates::Policy<T>::ass_multiply( m_coords[i], p_value);
+			Templates::Policy<T>::ass_multiply( TPointBase<T>::at( i), p_value);
 		}
 
 		return * this;
@@ -198,7 +406,7 @@ namespace Castor
 	{
 		for (size_t i = 0 ; i < Count ; i++)
 		{
-			Templates::Policy<T>::ass_divide( m_coords[i], p_pt[i]);
+			Templates::Policy<T>::ass_divide( TPointBase<T>::at( i), p_pt[i]);
 		}
 
 		return * this;
@@ -210,7 +418,7 @@ namespace Castor
 		{
 			for (size_t i = 0 ; i < Count ; i++)
 			{
-				Templates::Policy<T>::ass_divide( m_coords[i], p_value);
+				Templates::Policy<T>::ass_divide( TPointBase<T>::at( i), p_value);
 			}
 		}
 
@@ -221,7 +429,7 @@ namespace Castor
 	{
 		for (size_t i = 0 ; i < Count ; i++)
 		{
-			Templates::Policy<T>::assign( m_coords[i], p_pt[i]);
+			Templates::Policy<T>::assign( TPointBase<T>::at( i), p_pt[i]);
 		}
 
 		return * this;
@@ -233,7 +441,7 @@ namespace Castor
 
 		for (size_t i = 0 ; i < Count ; i++)
 		{
-			Templates::Policy<T>::assign( l_ptReturn[i], Templates::Policy<T>::add( m_coords[i], p_pt[i]));
+			Templates::Policy<T>::assign( l_ptReturn[i], Templates::Policy<T>::add( TPointBase<T>::at( i), p_pt[i]));
 		}
 
 		return l_ptReturn;
@@ -245,7 +453,7 @@ namespace Castor
 
 		for (size_t i = 0 ; i < Count ; i++)
 		{
-			Templates::Policy<T>::assign( l_ptReturn[i], Templates::Policy<T>::add( m_coords[i], p_value));
+			Templates::Policy<T>::assign( l_ptReturn[i], Templates::Policy<T>::add( TPointBase<T>::at( i), p_value));
 		}
 
 		return l_ptReturn;
@@ -257,7 +465,7 @@ namespace Castor
 
 		for (size_t i = 0 ; i < Count ; i++)
 		{
-			Templates::Policy<T>::assign( l_ptReturn[i], Templates::Policy<T>::substract( m_coords[i], p_pt[i]));
+			Templates::Policy<T>::assign( l_ptReturn[i], Templates::Policy<T>::substract( TPointBase<T>::at( i), p_pt[i]));
 		}
 
 		return l_ptReturn;
@@ -269,7 +477,7 @@ namespace Castor
 
 		for (size_t i = 0 ; i < Count ; i++)
 		{
-			Templates::Policy<T>::assign( l_ptReturn[i], Templates::Policy<T>::substract( m_coords[i], p_value));
+			Templates::Policy<T>::assign( l_ptReturn[i], Templates::Policy<T>::substract( TPointBase<T>::at( i), p_value));
 		}
 
 		return l_ptReturn;
@@ -281,7 +489,7 @@ namespace Castor
 
 		for (size_t i = 0 ; i < Count ; i++)
 		{
-			Templates::Policy<T>::assign( l_ptReturn[i], Templates::Policy<T>::multiply( m_coords[i], p_pt[i]));
+			Templates::Policy<T>::assign( l_ptReturn[i], Templates::Policy<T>::multiply( TPointBase<T>::at( i), p_pt[i]));
 		}
 
 		return l_ptReturn;
@@ -293,7 +501,7 @@ namespace Castor
 
 		for (size_t i = 0 ; i < Count ; i++)
 		{
-			Templates::Policy<T>::assign( l_ptReturn[i], Templates::Policy<T>::multiply( m_coords[i], p_value));
+			Templates::Policy<T>::assign( l_ptReturn[i], Templates::Policy<T>::multiply( TPointBase<T>::at( i), p_value));
 		}
 
 		return l_ptReturn;
@@ -305,7 +513,7 @@ namespace Castor
 
 		for (size_t i = 0 ; i < Count ; i++)
 		{
-			Templates::Policy<T>::assign( l_ptReturn[i], Templates::Policy<T>::divide( m_coords[i], p_pt[i]));
+			Templates::Policy<T>::assign( l_ptReturn[i], Templates::Policy<T>::divide( TPointBase<T>::at( i), p_pt[i]));
 		}
 
 		return l_ptReturn;
@@ -319,7 +527,7 @@ namespace Castor
 		{
 			for (size_t i = 0 ; i < Count ; i++)
 			{
-				Templates::Policy<T>::assign( l_ptReturn[i], Templates::Policy<T>::divide( m_coords[i], p_value));
+				Templates::Policy<T>::assign( l_ptReturn[i], Templates::Policy<T>::divide( TPointBase<T>::at( i), p_value));
 			}
 		}
 
@@ -332,7 +540,7 @@ namespace Castor
 
 		for (size_t i = 0 ; i < Count && l_bReturn ; i++)
 		{
-			l_bReturn = Templates::Policy<T>::equals( m_coords[i], p_pt[i]);
+			l_bReturn = Templates::Policy<T>::equals( TPointBase<T>::at( i), p_pt[i]);
 		}
 
 		return l_bReturn;
@@ -347,7 +555,7 @@ namespace Castor
 	{
 		for (size_t i = 0 ; i < Count ; i++)
 		{
-			l_streamOut << "\t" << m_coords[i];
+			l_streamOut << "\t" << TPointBase<T>::at( i);
 		}
 
 		l_streamOut << std::endl;
@@ -358,7 +566,7 @@ namespace Castor
 	{
 		for (size_t i = 0 ; i < Count ; i++)
 		{
-			l_streamIn >> m_coords[i];
+			l_streamIn >> TPointBase<T>::at( i);
 		}
 
 		return l_streamIn;
@@ -381,46 +589,93 @@ namespace Castor
 		return l_result;
 	}
 	template <typename T, size_t Count>
-	inline void Point <T, Count> :: LinkCoords( const void * p_pCoords)
+	template <typename _Ty>
+	inline Point <T, Count> Point <T, Count> :: operator +=( const Point<_Ty, Count> & p_pt)
 	{
-		if (m_bOwnCoords)
+		for (size_t i = 0 ; i < Count ; i++)
 		{
-			delete [] m_coords;
-			m_coords = NULL;
+			policy::ass_add( TPointBase<T>::at( i), p_pt[i]);
 		}
 
-		m_coords = (T *)p_pCoords;
-		m_bOwnCoords = false;
+		return * this;
 	}
 	template <typename T, size_t Count>
-	inline void Point <T, Count> :: UnlinkCoords()
+	template <size_t _Count>
+	inline Point <T, Count> Point <T, Count> :: operator +=( const Point<value_type, _Count> & p_pt)
 	{
-		if ( ! m_bOwnCoords)
+		for (size_t i = 0 ; i < std::min<size_t>( Count, _Count) ; i++)
 		{
-			m_coords = new T[Count];
+			policy::ass_add( TPointBase<T>::at( i), p_pt[i]);
 		}
 
-		m_bOwnCoords = true;
+		return * this;
 	}
 	template <typename T, size_t Count>
-	inline void Point <T, Count> :: ToValues( T * p_pResult)const
+	template <typename _Ty, size_t _Count>
+	inline Point <T, Count> Point <T, Count> :: operator +=( const Point<_Ty, _Count> & p_pt)
 	{
-		if (Count >= 1)
+		for (size_t i = 0 ; i < std::min<size_t>( Count, _Count) ; i++)
 		{
-			Templates::Policy<T>::assign( p_pResult[0], m_coords[0]);
+			policy::ass_add( TPointBase<T>::at( i), p_pt[i]);
+		}
 
-			for (size_t i = 0 ; i < Count ; i++)
+		return * this;
+	}
+	template <typename T, size_t Count>
+	template <typename _Ty>
+	inline Point <T, Count> Point <T, Count> :: operator =( const Point<_Ty, Count> & p_pt)
+	{
+		for (size_t i = 0 ; i < Count ; i++)
+		{
+			policy::assign( TPointBase<T>::at( i), p_pt[i]);
+		}
+
+		return * this;
+	}
+	template <typename T, size_t Count>
+	template <size_t _Count>
+	inline Point <T, Count> Point <T, Count> :: operator =( const Point<value_type, _Count> & p_pt)
+	{
+		for (size_t i = 0 ; i < std::min<size_t>( Count, _Count) ; i++)
+		{
+			policy::assign( TPointBase<T>::at( i), p_pt[i]);
+		}
+
+		if (Count > _Count)
+		{
+			for (size_t i = _Count ; i < Count ; i++)
 			{
-				Templates::Policy<T>::assign( p_pResult[i], m_coords[i]);
+				policy::init( TPointBase<T>::at( i));
 			}
 		}
+
+		return * this;
+	}
+	template <typename T, size_t Count>
+	template <typename _Ty, size_t _Count>
+	inline Point <T, Count> Point <T, Count> :: operator =( const Point<_Ty, _Count> & p_pt)
+	{
+		for (size_t i = 0 ; i < std::min<size_t>( Count, _Count) ; i++)
+		{
+			policy::assign( TPointBase<T>::at( i), p_pt[i]);
+		}
+
+		if (Count > _Count)
+		{
+			for (size_t i = _Count ; i < Count ; i++)
+			{
+				policy::init( TPointBase<T>::at( i));
+			}
+		}
+
+		return * this;
 	}
 	template <typename T, size_t Count>
 	inline void Point <T, Count> :: Reverse()
 	{
 		for (size_t i = 0 ; i < Count ; i++)
 		{
-			Templates::Policy<T>::ass_negate( m_coords[i]);
+			Templates::Policy<T>::ass_negate( TPointBase<T>::at( i));
 		}
 	}
 	template <typename T, size_t Count>
@@ -450,7 +705,7 @@ namespace Castor
 
 		for (size_t i = 0 ; i < Count ; i++)
 		{
-			Templates::Policy<T>::ass_add( l_tReturn, Templates::Policy<T>::multiply( m_coords[i], p_vertex[i]));
+			Templates::Policy<T>::ass_add( l_tReturn, Templates::Policy<T>::multiply( TPointBase<T>::at( i), p_vertex[i]));
 		}
 
 		return l_tReturn;
@@ -463,7 +718,7 @@ namespace Castor
 
 		for (size_t i = 0 ; i < Count ; i++)
 		{
-			Templates::Policy<T>::ass_add( l_tReturn, Templates::Policy<T>::multiply( m_coords[i], m_coords[i]));
+			Templates::Policy<T>::ass_add( l_tReturn, Templates::Policy<T>::multiply( TPointBase<T>::at( i), TPointBase<T>::at( i)));
 		}
 
 		return l_tReturn;
@@ -471,7 +726,7 @@ namespace Castor
 	template <typename T, size_t Count>
 	inline real Point <T, Count> :: GetLength()const
 	{
-		return sqrt( (real)GetSquaredLength());
+		return sqrt( (real)this->GetSquaredLength());
 	}
 	template <typename T, size_t Count>
 	inline real Point <T, Count> :: GetCosTheta( const Point<T, Count> & p_vector)const
@@ -479,34 +734,14 @@ namespace Castor
 		return Dot( p_vector) / (GetLength() * p_vector.GetLength());
 	}
 	template <typename T, size_t Count>
-	bool Point <T, Count> :: Write( Utils::File & p_file)const
+	bool Point <T, Count> :: Save( Utils::File & p_file)const
 	{
-		return (p_file.WriteArray( m_coords, Count) == Count * sizeof( T));
+		return (p_file.WriteArray( TPointBase<T>::const_ptr(), Count) == Count * sizeof( T));
 	}
 	template <typename T, size_t Count>
-	bool Point <T, Count> :: Read( Utils::File & p_file)
+	bool Point <T, Count> :: Load( Utils::File & p_file)
 	{
-		return (p_file.ReadArray( m_coords, Count) == Count * sizeof( T));
-	}
-	template <typename T, size_t Count>
-	inline const T & Point <T, Count> :: operator[]( size_t p_pos)const
-	{
-		return m_coords[p_pos];
-	}
-	template <typename T, size_t Count>
-	inline T & Point <T, Count> :: operator[]( size_t p_pos)
-	{
-		return m_coords[p_pos];
-	}
-	template <typename T, size_t Count>
-	inline T * Point <T, Count> :: ptr()
-	{
-		return m_coords;
-	}
-	template <typename T, size_t Count>
-	inline const T * Point <T, Count> :: const_ptr()const
-	{
-		return m_coords;
+		return (p_file.ReadArray( TPointBase<T>::ptr(), Count) == Count * sizeof( T));
 	}
 
 
@@ -609,5 +844,7 @@ namespace Castor
 
 		return l_ptReturn;
 	}
+
+//*************************************************************************************************
 }
 }

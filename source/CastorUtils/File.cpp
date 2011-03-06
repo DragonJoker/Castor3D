@@ -13,305 +13,274 @@ using namespace Castor::Utils;
 
 //******************************************************************************************************
 
-File :: File( const String & p_strFileName, int p_iMode)
-	:	m_iMode( p_iMode),
-		m_strFileFullPath( p_strFileName)
+File :: File( const Path & p_strFileName, int p_iMode, eENCODING_MODE p_eEncoding)
+	:	m_iMode( p_iMode)
+	,	m_eEncoding( p_eEncoding)
+	,	m_strFileFullPath( p_strFileName)
 {
-	if ( ! FileExists( m_strFileFullPath))
-	{
-		FILE * l_pFile;
-		fopen_s( & l_pFile, m_strFileFullPath.char_str(), "a+");
+	String l_strMode;
 
-		if (l_pFile != NULL)
-		{
-			fclose( l_pFile);
-		}
+	switch (p_iMode)
+	{
+	case eRead:
+		l_strMode = CU_T( "r");
+		break;
+
+	case eWrite:
+		l_strMode = CU_T( "w");
+		break;
+
+	case eAppend:
+		l_strMode = CU_T( "a");
+		break;
+
+	case eRead | eBinary:
+		l_strMode = CU_T( "rb");
+		break;
+
+	case eWrite | eBinary:
+		l_strMode = CU_T( "wb");
+		break;
+
+	case eAppend | eBinary:
+		l_strMode = CU_T( "ab");
+		break;
+
+	case eRead | eWrite:
+		l_strMode = CU_T( "r+");
+		break;
+
+	case eRead | eWrite | eAppend:
+		l_strMode = CU_T( "a+");
+		break;
 	}
 
-	int l_iBitMask = std::ios_base::in | std::ios_base::out;
-
-	if (p_iMode & eAdd)
+	switch (p_eEncoding)
 	{
-		l_iBitMask = l_iBitMask | std::ios_base::app;
+	case eAuto:
+#ifdef _UNICODE
+		l_strMode += CU_T( ", ccs=UTF-8");
+#endif
+		break;
+
+	case eUNICODE:
+		l_strMode += CU_T( ", ccs=ANSI");
+		break;
+
+	case eUTF8:
+		l_strMode += CU_T( ", ccs=UTF-8");
+		break;
+
+	case eUTF16:
+		l_strMode += CU_T( ", ccs=UTF-16LE");
 	}
 
-	if (p_iMode & eBinary)
-	{
-		l_iBitMask = l_iBitMask | std::ios_base::binary;
-	}
+	FOpen64( m_pFile, m_strFileFullPath.c_str(), l_strMode.c_str());
 
-	m_file.open( p_strFileName.c_str(), l_iBitMask);
+	if (m_pFile == NULL)
+	{
+		CASTOR_EXCEPTION( CU_T( "Impossible de charger le fichier ") + p_strFileName);
+	}
 }
 
 File :: ~File()
 {
-	m_file.close();
-}
-
-unsigned long long File :: GetLength()
-{
-	unsigned long long l_ullReturn = 0;
-
-	if (IsOk())
+	if (m_pFile != NULL)
 	{
-		long l_lPosition = Tell();
-		Seek( 0);
-		Seek( 0, eEnd);
-		l_ullReturn = Tell();
-		Seek( l_lPosition);
+		fclose( m_pFile);
 	}
-
-	return l_ullReturn;
 }
 
-bool File :: IsOk()const
+void File :: Seek( long long p_llOffset, eOFFSET_MODE p_eOrigin)
 {
-	return ! m_file.fail();
-}
-
-void File :: Seek( long p_lOffset, OffsetMode p_eOrigin)
-{
-	if ((m_iMode & eRead) && IsOk())
+	if (m_pFile != NULL)
 	{
 		switch (p_eOrigin)
 		{
 		case eBeginning:
-			m_file.seekg( p_lOffset, std::ios_base::beg);
+			FSeek( m_pFile, p_llOffset, SEEK_SET);
 			break;
 
 		case eCurrent:
-			m_file.seekg( p_lOffset, std::ios_base::cur);
+			FSeek( m_pFile, p_llOffset, SEEK_CUR);
 			break;
 
 		case eEnd:
-			m_file.seekg( p_lOffset, std::ios_base::end);
-			break;
-		}
-	}
-	else
-	{
-		switch (p_eOrigin)
-		{
-		case eBeginning:
-			m_file.seekp( p_lOffset, std::ios_base::beg);
-			break;
-
-		case eCurrent:
-			m_file.seekp( p_lOffset, std::ios_base::cur);
-			break;
-
-		case eEnd:
-			m_file.seekp( p_lOffset, std::ios_base::end);
+			FSeek( m_pFile, p_llOffset, SEEK_END);
 			break;
 		}
 	}
 }
 
-void File :: Seek( long p_lPosition)
+void File :: Seek( long long p_llPosition)
 {
-	Seek( p_lPosition, eBeginning);
+	Seek( p_llPosition, eBeginning);
 }
 
-long File :: Tell()
+size_t File :: ReadLine( String & p_toRead, size_t p_size, String p_strSeparators)
 {
-	if ((m_iMode & eRead) && IsOk())
-	{
-		return m_file.tellg();
-	}
-	else
-	{
-		return m_file.tellp();
-	}
-}
+	size_t l_uiReturn = 0;
+	p_toRead.clear();
 
-bool File :: ReadLine( String & p_toRead, size_t p_size)
-{
 	if ((m_iMode & eRead) && IsOk())
 	{
-		char * l_line = new char[p_size];
+		xchar l_cChar;
 		String l_strLine;
-		m_file.getline( l_line, p_size, '\n');
-		l_strLine = l_line;
+		bool l_bContinue = true;
 
-		if (l_strLine.size() > 0)
+		while (l_bContinue && l_uiReturn < p_size)
 		{
-			p_toRead = l_strLine;
+			if (m_eEncoding == eASCII)
+			{
+				l_cChar = String( char( getc( m_pFile)))[0];
+			}
+			else
+			{
+				l_cChar = String( wchar_t( getwc( m_pFile)))[0];
+			}
+
+			l_bContinue =  ! feof( m_pFile) && p_strSeparators.find( l_cChar) == String::npos;
+
+			if (l_bContinue)
+			{
+				p_toRead += l_cChar;
+			}
+
+			l_uiReturn++;
 		}
-		else
-		{
-			p_toRead.clear();
-		}
-
-		delete [] l_line;
-		return IsOk();
 	}
 
-	return false;
+	return l_uiReturn;
 }
 
-bool File :: ReadWord( String & p_toRead)
+size_t File :: ReadWord( String & p_toRead)
 {
-	if ((m_iMode & eRead) && IsOk())
+	return ReadLine( p_toRead, 1024, CU_T( " "));
+}
+
+size_t File :: WriteLine( const String & p_strLine)
+{
+	size_t l_uiReturn = 0;
+
+	if (((m_iMode & eWrite) || (m_iMode & eAppend)) && IsOk())
 	{
-		char l_word[256];
-		m_file >> l_word;
-		p_toRead = String( l_word);
-		return ! m_file.fail();
+		l_uiReturn = WriteArray( p_strLine.c_str(), p_strLine.size());
 	}
 
-	return false;
+	return l_uiReturn;
 }
 
-bool File :: WriteLine( const String & p_strLine)
+size_t File :: CopyToString( String & p_strOut)
 {
-	bool l_bReturn = false;
-
-	if (((m_iMode & eWrite) || (m_iMode & eAdd)) && IsOk())
-	{
-		l_bReturn = WriteArray( p_strLine.char_str(), p_strLine.size()) == p_strLine.size();
-	}
-
-	return l_bReturn;
-}
-
-void File :: CopyToString( String & p_strOut)
-{
+	size_t l_uiReturn = 0;
 	p_strOut.clear();
 	String l_strLine;
 
 	while (IsOk())
 	{
-		ReadLine( l_strLine, 1024);
+		l_uiReturn += ReadLine( l_strLine, 1024);
 
 		p_strOut += l_strLine + CU_T( "\n");
 	}
+
+	return l_uiReturn;
 }
 
-bool File :: Print( size_t p_uiMaxSize, const char * p_pFormat, ...)
+size_t File :: Print( size_t p_uiMaxSize, const xchar * p_pFormat, ...)
 {
-	bool l_bReturn = false;
-	char * l_pText = new char[p_uiMaxSize];
+	size_t l_uiReturn = 0;
+	xchar * l_pText = new xchar[p_uiMaxSize];
 	va_list l_vaList;
 
 	if (p_pFormat != NULL)
 	{
-		va_start( l_vaList, p_pFormat);	
-#ifdef WIN32
-        vsnprintf_s( l_pText, p_uiMaxSize, p_uiMaxSize, p_pFormat, l_vaList);  
-#else
-        vsnprintf( l_pText, 256, cFormat_p, ap_l);  
-#endif
+		va_start( l_vaList, p_pFormat);
+		Vsnprintf( l_pText, p_uiMaxSize, p_uiMaxSize, p_pFormat, l_vaList);
 		va_end( l_vaList);
 
-		WriteArray<char>( l_pText, strnlen( l_pText, p_uiMaxSize));
-		l_bReturn = true;
+		l_uiReturn = WriteArray<xchar>( l_pText, strlen( l_pText));
 	}
 
-	delete l_pText;
+	delete [] l_pText;
+
+	return l_uiReturn;
+}
+
+bool File :: Write( const String & p_strToWrite)
+{
+	bool l_bReturn = Write( p_strToWrite.size()) == sizeof( size_t);
+
+	if (l_bReturn && p_strToWrite.size() > 0)
+	{
+		l_bReturn = WriteArray<xchar>( p_strToWrite.c_str(), p_strToWrite.size()) ==  p_strToWrite.size() * sizeof( xchar);
+	}
 
 	return l_bReturn;
 }
-/*
-#ifdef _WIN32
-int __cdecl _input_l(_Inout_ FILE * _File, _In_z_ __format_string const unsigned char *, _In_opt_ _locale_t _Locale, va_list _ArgList);
-int __cdecl _winput_l(_Inout_ FILE * _File, _In_z_ __format_string const wchar_t *, _In_opt_ _locale_t _Locale, va_list _ArgList);
 
-#ifdef _UNICODE
-	typedef wchar_t tchar;
-#	define _tinput_l _winput_l
-#else
-	typedef unsigned char tchar;
-#	define _tinput_l _input_l
-#endif
-
-typedef int (*INPUTFN)(FILE *, const tchar *, _locale_t, va_list);
-
-int vscan_fn( const Char * string, size_t count, const tchar * format, _locale_t plocinfo, va_list arglist)
+bool File :: Read( String & p_strToRead)
 {
-        FILE str;
-        FILE * infile = & str;
-        int retval = 0;
+	p_strToRead.clear();
+	size_t l_uiSize = 0;
+	bool l_bReturn = Read( l_uiSize) == sizeof( size_t);
 
-		if (string != NULL && format != NULL)
-		{
-			infile->_flag = _IOREAD|_IOSTRG|_IOMYBUF;
-			infile->_ptr = infile->_base = (char *) string;
-
-			if(count>(INT_MAX/sizeof(Char)))
-			{
-				// old-style functions allow any large value to mean unbounded
-				infile->_cnt = INT_MAX;
-			}
-			else
-			{
-				infile->_cnt = (int)count*sizeof(Char);
-			}
-
-			retval = _tinput_l( infile, format, plocinfo, arglist);
-		}
-
-		return retval;
-}
-#endif
-
-int File :: Scanf( const char * p_pFormat, size_t p_uiCount, ...)
-{
-	va_list l_vaList;
-	va_start( l_vaList, p_pFormat);
-
-	String l_strLine;
-	ReadLine( l_strLine, p_uiCount);
-
-#ifdef _WIN32
-	return vscan_fn( l_strLine.c_str(), p_uiCount, (tchar *)p_pFormat, NULL, l_vaList);
-#else
-	return vscanf( l_strLine.c_str(), p_uiCount, (tchar *)p_pFormat, NULL, l_vaList);
-#endif
-}
-/**/
-int File :: _write( const char * p_pBuffer, size_t p_uiSize)
-{
-	int l_iReturn = 0;
-
-	if (((m_iMode & eWrite) || (m_iMode & eAdd)) && IsOk())
+	if (l_bReturn && l_uiSize > 0)
 	{
-		for (size_t i = 0 ; i < p_uiSize && IsOk() ; i++)
+		xchar * l_pTmp = new xchar[l_uiSize + 1];
+		memset( l_pTmp, 0, sizeof( xchar) * (l_uiSize + 1));
+		l_bReturn = ReadArray<xchar>( l_pTmp, l_uiSize) == l_uiSize * sizeof( xchar);
+
+		if (l_bReturn)
 		{
-			m_file.write( p_pBuffer + i, 1);
-			l_iReturn++;
+			p_strToRead = l_pTmp;
 		}
 
-		if (m_file.fail() && l_iReturn > 0)
-		{
-			l_iReturn--;
-		}
+		delete [] l_pTmp;
 	}
 
-	return l_iReturn;
+	return l_bReturn;
 }
 
-int File :: _read( char * p_pBuffer, size_t p_uiSize)
+long long File :: GetLength()
 {
-	int l_iReturn = 0;
+	long long l_llReturn = 0;
+	long long l_llPosition = Tell();
+	Seek( 0, eEnd);
+	l_llReturn = Tell();
+	Seek( l_llPosition);
+	return l_llReturn;
+}
 
-	if ((m_iMode & eRead) && IsOk())
+bool File :: IsOk()const
+{
+	return (m_pFile != NULL) && (ferror( m_pFile) == 0) && (feof( m_pFile) == 0);
+}
+
+long long File :: Tell()
+{
+	long long l_llReturn = 0;
+
+	if (m_pFile != NULL)
 	{
-		for (size_t i = 0 ; i < p_uiSize && IsOk() ; i++)
-		{
-			m_file.read( p_pBuffer + i, 1);
-			l_iReturn++;
-		}
-
-		if (m_file.fail() && l_iReturn > 0)
-		{
-			l_iReturn--;
-		}
+		l_llReturn = FTell( m_pFile);
 	}
 
-	return l_iReturn;
+	return l_llReturn;
 }
 
-bool File :: FileExists( const Char * p_filename)
+size_t File :: _write( const unsigned char * p_pBuffer, size_t p_uiSize)
+{
+	CASTOR_ASSERT( IsOk());
+	return fwrite( p_pBuffer, sizeof( unsigned char), p_uiSize, m_pFile);
+}
+
+size_t File :: _read( unsigned char * p_pBuffer, size_t p_uiSize)
+{
+	CASTOR_ASSERT( IsOk());
+	return fread( p_pBuffer, sizeof( unsigned char), p_uiSize, m_pFile);
+}
+
+bool File :: FileExists( const xchar * p_filename)
 {
 	struct stat l_stat;
 	return (stat( String( p_filename).char_str(), & l_stat) == 0);

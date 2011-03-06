@@ -33,8 +33,8 @@ namespace Castor3D
 	class C3D_API Importer
 	{
 	protected:
-		String m_fileName;
-		String m_filePath;
+		Path m_fileName;
+		Path m_filePath;
 		SceneNodePtrArray m_nodes;
 		ScenePtr m_pScene;
 		SceneManager * m_pManager;
@@ -56,7 +56,7 @@ namespace Castor3D
 		 *@param p_fileName : [in] The file path
 		 *@return true if successful, false if not
 		 */
-		bool Import( const String & p_fileName);
+		bool Import( const Path & p_fileName);
 
 		/**@name Accessors */
 		//@{

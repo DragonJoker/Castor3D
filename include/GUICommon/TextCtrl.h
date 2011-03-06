@@ -1,7 +1,7 @@
 #ifndef ___GC_ShaderEditor___
 #define ___GC_ShaderEditor___
 
-namespace GUICommon
+namespace GuiCommon
 {
 	class TextLinesCtrl;
 	class TextPanel;
@@ -11,7 +11,7 @@ namespace GUICommon
 	protected:
 		long m_posDeb;
 		long m_posFin;
-		POINT m_point;
+		wxPoint m_point;
 		wxString m_strFileName;
 		int m_linesNumber;
 		bool m_scrollByWheel;

@@ -453,8 +453,9 @@ namespace Castor
 				{
 					const_iterator it = _my_list::begin();
 					const_iterator iend = _my_list::end();
+					size_t iCount = 0;
 
-					for ( ; it != iend && iCount < p_index ; ++it);
+					for ( ; it != iend && iCount < p_index ; ++it, ++iCount);
 
 					tReturn = ( * it);
 				}
@@ -915,7 +916,7 @@ namespace Castor
 				if (listList.size() > 0)
 				{
 					bReturn = true;
-					std::list <T>::reverse_iterator i = listList.rbegin();
+					typename std::list <T>::reverse_iterator i = listList.rbegin();
 					tResult = * i;
 					i++;
 					listList.erase( i.base());
@@ -1031,8 +1032,9 @@ namespace Castor
 				{
 					typename std::list <T *>::const_iterator it = listList.begin();
 					typename std::list <T *>::const_iterator iend = listList.end();
+					size_t iCount = 0;
 
-					for ( ; it != iend && iCount < p_index ; ++it);
+					for ( ; it != iend && iCount < p_index ; ++it, ++iCount);
 
 					pReturn = ( * it);
 				}

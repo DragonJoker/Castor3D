@@ -201,7 +201,7 @@ namespace Castor
 				}
 			}
 
-			if ( ! Templates::Policy<T>is_null( m_matrix[i][l_uiMaxIndex]))
+			if ( ! Templates::Policy<T>::is_null( m_matrix[i][l_uiMaxIndex]))
 			{
 				for (size_t k = i ; k < Columns ; k++)
 				{
@@ -321,7 +321,7 @@ namespace Castor
 
 		for (size_t i = 0 ; i < Rows - 1 ; i++)
 		{
-			Templates::Policy<T>assign( m_matrix[i + 1][i], Templates::Policy<T>unit());
+			Templates::Policy<T>::assign( m_matrix[i + 1][i], Templates::Policy<T>::unit());
 		}
 	}
 	template <typename T, size_t Rows, size_t Columns>

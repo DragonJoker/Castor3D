@@ -59,7 +59,7 @@ bool PlyImporter :: _import()
 
 	if (m_fileName.find_last_of( CU_T( "/")) != String::npos)
 	{
-		l_uiSlashIndex = std::max( l_uiSlashIndex, m_fileName.find_last_of( CU_T( "/")) + 1);
+		l_uiSlashIndex = std::max<size_t>( l_uiSlashIndex, m_fileName.find_last_of( CU_T( "/")) + 1);
 	}
 
 	size_t l_uiDotIndex = m_fileName.find_last_of( CU_T( "."));
@@ -78,7 +78,7 @@ bool PlyImporter :: _import()
 	}
 	else
 	{
-		l_pMesh = m_pManager->GetMeshManager()->CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom);
+		l_pMesh = m_pManager->GetMeshManager()->CreateMesh( l_meshName, l_faces, l_sizes, eCustom);
 		Logger::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
 	}
 
@@ -257,7 +257,7 @@ bool PlyImporter :: _import()
 
 	SceneNodePtr l_pNode = m_pScene->CreateSceneNode( l_name);
 
-	GeometryPtr l_pGeometry( new Geometry( l_pMesh, l_pNode, l_name));
+	GeometryPtr l_pGeometry( new Geometry( m_pScene.get(), l_pMesh, l_pNode, l_name));
 	Logger::LogMessage( CU_T( "PlyImporter::_import - Geometry %s created"), l_name.c_str());
 
 	m_geometries.insert( GeometryPtrStrMap::value_type( l_name, l_pGeometry));

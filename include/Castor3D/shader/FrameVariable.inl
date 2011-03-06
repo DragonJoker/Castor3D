@@ -1,123 +1,123 @@
+template <size_t Rows, size_t Columns> struct MatrixVariableTyper
+{
+	enum
+	{
+		Value = FrameVariable::eMat1
+	};
+};
+
+template <> struct MatrixVariableTyper<2, 2>
+{
+	enum
+	{
+		Value = FrameVariable::eMat2x2
+	};
+};
+
+template <> struct MatrixVariableTyper<2, 3>
+{
+	enum
+	{
+		Value = FrameVariable::eMat2x3
+	};
+};
+
+template <> struct MatrixVariableTyper<2, 4>
+{
+	enum
+	{
+		Value = FrameVariable::eMat2x4
+	};
+};
+
+template <> struct MatrixVariableTyper<3, 2>
+{
+	enum
+	{
+		Value = FrameVariable::eMat3x2
+	};
+};
+
+template <> struct MatrixVariableTyper<3, 3>
+{
+	enum
+	{
+		Value = FrameVariable::eMat3x3
+	};
+};
+
+template <> struct MatrixVariableTyper<3, 4>
+{
+	enum
+	{
+		Value = FrameVariable::eMat3x4
+	};
+};
+
+template <> struct MatrixVariableTyper<4, 2>
+{
+	enum
+	{
+		Value = FrameVariable::eMat4x2
+	};
+};
+
+template <> struct MatrixVariableTyper<4, 3>
+{
+	enum
+	{
+		Value = FrameVariable::eMat4x3
+	};
+};
+
+template <> struct MatrixVariableTyper<4, 4>
+{
+	enum
+	{
+		Value = FrameVariable::eMat4x4
+	};
+};
+
+template <size_t Count> struct PointVariableTyper
+{
+	enum
+	{
+		Value = FrameVariable::eVec1
+	};
+};
+
+template <> struct PointVariableTyper<2>
+{
+	enum
+	{
+		Value = FrameVariable::eVec2
+	};
+};
+
+template <> struct PointVariableTyper<3>
+{
+	enum
+	{
+		Value = FrameVariable::eVec3
+	};
+};
+
+template <> struct PointVariableTyper<4>
+{
+	enum
+	{
+		Value = FrameVariable::eVec4
+	};
+};
+
 template <typename T, size_t Rows, size_t Columns>
-Castor3D::FrameVariable::eTYPE Castor3D::MatrixFrameVariable<T, Rows, Columns> :: GetType()
+FrameVariable::eTYPE MatrixFrameVariable<T, Rows, Columns> :: GetType()
 {
-	return Castor3D::FrameVariable::eTYPE( Castor3D::MatrixVariableTyper<Rows, Columns>::Value);
+	return FrameVariable::eTYPE( MatrixVariableTyper<Rows, Columns>::Value);
 }
-
-template <size_t Rows, size_t Columns> struct Castor3D::MatrixVariableTyper<Rows, Columns>
-{
-	enum
-	{
-		Value = Castor3D::FrameVariable::eMat1
-	};
-};
-
-template <> struct Castor3D::MatrixVariableTyper<2, 2>
-{
-	enum
-	{
-		Value = Castor3D::FrameVariable::eMat2x2
-	};
-};
-
-template <> struct Castor3D::MatrixVariableTyper<2, 3>
-{
-	enum
-	{
-		Value = Castor3D::FrameVariable::eMat2x3
-	};
-};
-
-template <> struct Castor3D::MatrixVariableTyper<2, 4>
-{
-	enum
-	{
-		Value = Castor3D::FrameVariable::eMat2x4
-	};
-};
-
-template <> struct Castor3D::MatrixVariableTyper<3, 2>
-{
-	enum
-	{
-		Value = Castor3D::FrameVariable::eMat3x2
-	};
-};
-
-template <> struct Castor3D::MatrixVariableTyper<3, 3>
-{
-	enum
-	{
-		Value = Castor3D::FrameVariable::eMat3x3
-	};
-};
-
-template <> struct Castor3D::MatrixVariableTyper<3, 4>
-{
-	enum
-	{
-		Value = Castor3D::FrameVariable::eMat3x4
-	};
-};
-
-template <> struct Castor3D::MatrixVariableTyper<4, 2>
-{
-	enum
-	{
-		Value = Castor3D::FrameVariable::eMat4x2
-	};
-};
-
-template <> struct Castor3D::MatrixVariableTyper<4, 3>
-{
-	enum
-	{
-		Value = Castor3D::FrameVariable::eMat4x3
-	};
-};
-
-template <> struct Castor3D::MatrixVariableTyper<4, 4>
-{
-	enum
-	{
-		Value = Castor3D::FrameVariable::eMat4x4
-	};
-};
 
 template <typename T, size_t Count>
-Castor3D::FrameVariable::eTYPE Castor3D::PointFrameVariable<T, Count> :: GetType()
+FrameVariable::eTYPE PointFrameVariable<T, Count> :: GetType()
 {
-	return Castor3D::FrameVariable::eTYPE( Castor3D::PointVariableTyper<Count>::Value);
+	return FrameVariable::eTYPE( PointVariableTyper<Count>::Value);
 }
-
-template <size_t Count> struct Castor3D::PointVariableTyper<Count>
-{
-	enum
-	{
-		Value = Castor3D::FrameVariable::eVec1
-	};
-};
-
-template <> struct Castor3D::PointVariableTyper<2>
-{
-	enum
-	{
-		Value = Castor3D::FrameVariable::eVec2
-	};
-};
-
-template <> struct Castor3D::PointVariableTyper<3>
-{
-	enum
-	{
-		Value = Castor3D::FrameVariable::eVec3
-	};
-};
-
-template <> struct Castor3D::PointVariableTyper<4>
-{
-	enum
-	{
-		Value = Castor3D::FrameVariable::eVec4
-	};
-};

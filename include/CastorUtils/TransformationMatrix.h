@@ -20,9 +20,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Matrix.h"
 #include "Point.h"
+#include "Angle.h"
+#include "Quaternion.h"
 
 namespace Castor
 {	namespace Math
+{	namespace MtxUtils
 {
 	template <typename TypeA, typename TypeB>
 	void rotate			( SquareMatrix<TypeA, 4> & p_matrix, const Angle & p_angle, const Point<TypeB, 3> & p_axis);
@@ -47,11 +50,16 @@ namespace Castor
 	template <typename TypeA, typename TypeB>
 	void ortho			( SquareMatrix<TypeA, 4> & p_matrix, TypeB left, TypeB right, TypeB bottom, TypeB top, TypeB zNear, TypeB zFar);
 	template <typename TypeA, typename TypeB>
+	void ortho			( SquareMatrix<TypeA, 4> & p_matrix, TypeB left, TypeB right, TypeB top, TypeB bottom);
+	template <typename TypeA, typename TypeB>
 	void frustum		( SquareMatrix<TypeA, 4> & p_matrix, TypeB left, TypeB right, TypeB bottom, TypeB top, TypeB nearVal, TypeB farVal);
 	template <typename TypeA, typename TypeB, size_t Count>
-	Point<TypeB, Count>		operator *( const SquareMatrix<TypeA, 4> & p_matrix, const Point<TypeB, Count> & p_vertex);
+	Point<TypeB, Count>		mult( const SquareMatrix<TypeA, 4> & p_matrix, const Point<TypeB, Count> & p_vertex);
 	template <typename TypeA, typename TypeB>
-	SquareMatrix<TypeA, 4>	operator *( const SquareMatrix<TypeA, 4> & p_matrixA, const SquareMatrix<TypeB, 4> & p_matrixB);
+	SquareMatrix<TypeA, 4>	mult( const SquareMatrix<TypeA, 4> & p_matrixA, const SquareMatrix<TypeB, 4> & p_matrixB);
+	template <typename TypeA>
+	SquareMatrix<TypeA, 4> switch_hand	( const SquareMatrix<TypeA, 4> & p_matrix);
+}
 }
 }
 

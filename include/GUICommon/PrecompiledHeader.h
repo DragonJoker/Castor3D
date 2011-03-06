@@ -9,12 +9,27 @@
 #	endif
 #endif
 
+#include <string>
+
 #if CHECK_MEMORYLEAKS
 #	pragma message( "********************************************************************")
-#	pragma message( "	GUICommon Checking Memory leaks")
+#	pragma message( "	GuiCommon Checking Memory leaks")
 #	pragma message( "********************************************************************")
 #endif
 #include <CastorUtils/Memory.h>
+
+#ifdef _WIN32
+#   ifdef CASTOR_GTK
+#       ifdef __WXGTK__
+#           undef __WXMSW__
+#       else
+#           define __WXMSW__
+#       endif
+#   else
+#       undef __WXGTK__
+#       define __WXMSW__
+#   endif
+#endif
 
 #include <wx/app.h>
 #include <wx/button.h>
@@ -28,6 +43,7 @@
 #include <wx/file.h>
 #include <wx/filedlg.h>
 #include <wx/frame.h>
+#include <wx/gauge.h>
 #include <wx/grid.h>
 #include <wx/icon.h>
 #include <wx/image.h>
@@ -43,6 +59,7 @@
 #include <wx/slider.h>
 #include <wx/statbox.h>
 #include <wx/stattext.h>
+#include <wx/statusbr.h>
 #include <wx/textctrl.h>
 #include <wx/timer.h>
 #include <wx/treectrl.h>
@@ -103,8 +120,6 @@ using namespace Castor::Templates;
 #include <Castor3D/shader/ShaderProgram.h>
 #include <Castor3D/shader/ShaderObject.h>
 #include <Castor3D/shader/FrameVariable.h>
-#include <Castor3D/shader/Cg/CgShaderProgram.h>
-#include <Castor3D/shader/Cg/CgShaderObject.h>
 #include <Castor3D/shader/Cg/CgFrameVariable.h>
 #include <Castor3D/overlay/OverlayManager.h>
 #include <Castor3D/overlay/Overlay.h>
@@ -120,11 +135,11 @@ using namespace Castor::Utils;
 
 #ifndef _UNICODE
 #	if CASTOR_UNICODE
-#		error "GUICommon compiling in ASCII mode while Castor3D is in UNICODE mode"
+#		error "GuiCommon compiling in ASCII mode while Castor3D is in UNICODE mode"
 #	endif
 #else
 #	if ! CASTOR_UNICODE
-#		error "GUICommon compiling in UNICODE mode while Castor3D is in ASCII mode"
+#		error "GuiCommon compiling in UNICODE mode while Castor3D is in ASCII mode"
 #	endif
 #endif
 

@@ -15,14 +15,14 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL2_LightRenderer___
-#define ___GL2_LightRenderer___
+#ifndef ___Gl2_LightRenderer___
+#define ___Gl2_LightRenderer___
 
-#include "Module_GLRender.h"
+#include "Module_Gl2Render.h"
 
 namespace Castor3D
 {
-	class C3D_GL2_API GL2LightRenderer : public GLLightRenderer
+	class C3D_Gl2_API Gl2LightRenderer : public GlLightRenderer
 	{
 	private:
 		Colour		m_pAmbient;
@@ -34,19 +34,19 @@ namespace Castor3D
 		float		m_pExponent;
 		float		m_pCutOff;
 		bool		m_bChanged;
-		int			m_iGLIndex;
-		int			m_iGLPreviousIndex;
+		int			m_iGlIndex;
+		int			m_iGlPreviousIndex;
 
 	public:
-		GL2LightRenderer( SceneManager * p_pSceneManager);
-		virtual ~GL2LightRenderer(){}
+		Gl2LightRenderer( SceneManager * p_pSceneManager);
+		virtual ~Gl2LightRenderer(){}
 
 		virtual void Initialise();
 
-		inline int GetGLIndex			()const { return m_iGLIndex; }
-		inline int GetGLPreviousIndex	()const { return m_iGLPreviousIndex; }
-		inline void SetGLIndex			( int p_iIndex) { m_iGLIndex = p_iIndex; }
-		inline void SetGLPreviousIndex	( int p_iIndex) { m_iGLPreviousIndex = p_iIndex; }
+		inline int GetGlIndex			()const { return m_iGlIndex; }
+		inline int GetGlPreviousIndex	()const { return m_iGlPreviousIndex; }
+		inline void SetGlIndex			( int p_iIndex) { m_iGlIndex = p_iIndex; }
+		inline void SetGlPreviousIndex	( int p_iIndex) { m_iGlPreviousIndex = p_iIndex; }
 
 	private:
 		void _enable			();

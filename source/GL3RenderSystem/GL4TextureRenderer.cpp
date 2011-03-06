@@ -1,82 +1,76 @@
-#include "GL3RenderSystem/PrecompiledHeader.h"
+#include "Gl3RenderSystem/PrecompiledHeader.h"
 
-#include "GL3RenderSystem/GL4TextureRenderer.h"
-#include "GL3RenderSystem/GL3RenderSystem.h"
-#include "GL3RenderSystem/GL3Buffer.h"
+#include "Gl3RenderSystem/Gl4TextureRenderer.h"
+#include "Gl3RenderSystem/Gl3RenderSystem.h"
+#include "Gl3RenderSystem/Gl3Buffer.h"
 
 using namespace Castor3D;
 using namespace Castor::Resources;
 
-GL4TextureRenderer :: GL4TextureRenderer( SceneManager * p_pSceneManager)
-	:	GL3TextureRenderer( p_pSceneManager)
+Gl4TextureRenderer :: Gl4TextureRenderer( SceneManager * p_pSceneManager)
+	:	Gl3TextureRenderer( p_pSceneManager)
 {
 }
 
-GL4TextureRenderer :: ~GL4TextureRenderer()
+Gl4TextureRenderer :: ~Gl4TextureRenderer()
 {
 }
 
-bool GL4TextureRenderer :: Initialise()
+bool Gl4TextureRenderer :: Initialise()
 {
 	bool l_bReturn;
 
 	if (glTexBuffer != NULL)
 	{
-		m_pfnCleanup	= PVoidFunction( & GL4TextureRenderer::_cleanup);
-		m_pfnInitialise	= PBoolFunction( & GL4TextureRenderer::_initialise);
-		m_pfnRender		= PVoidFunction( & GL4TextureRenderer::_render);
-		m_pfnEndRender	= PVoidFunction( & GL4TextureRenderer::_endRender);
+		m_pfnCleanup	= PVoidFunction( & Gl4TextureRenderer::_cleanup);
+		m_pfnInitialise	= PBoolFunction( & Gl4TextureRenderer::_initialise);
+		m_pfnRender		= PVoidFunction( & Gl4TextureRenderer::_render);
+		m_pfnEndRender	= PVoidFunction( & Gl4TextureRenderer::_endRender);
 		l_bReturn = (this->*m_pfnInitialise)();
 	}
 	else
 	{
-		GL3TextureRenderer::Initialise();
+		Gl3TextureRenderer::Initialise();
 	}
 
 	return l_bReturn;
 }
 
-void  GL4TextureRenderer :: _cleanup()
+void  Gl4TextureRenderer :: _cleanup()
 {
 }
 
-bool GL4TextureRenderer :: _initialise()
+bool Gl4TextureRenderer :: _initialise()
 {
-	m_pTextureBufferObject = BufferManager::CreateBuffer<unsigned char, GLTextureBufferObject>();
-	m_pTextureBufferObject->Initialise( pxfR8G8B8A8, m_target->GetWidth() * m_target->GetHeight(), m_target->GetImagePixels());
+	m_pTextureBufferObject = BufferManager::CreateBuffer<unsigned char, GlTextureBufferObject>();
+	m_pTextureBufferObject->Initialise( eA8R8G8B8, m_target->GetWidth() * m_target->GetHeight(), m_target->GetImagePixels());
 
 	if (m_pTextureBufferObject->GetIndex() != GL_INVALID_INDEX)
 	{
-		glGenTextures( 1, & m_texGLName);
+		CheckGlError( glGenTextures( 1, & m_glTexName), CU_T( "Gl4TextureRenderer :: _initialise - glGenTextures"))
 
-		if (m_texGLName != GL_INVALID_INDEX)
+		if (m_glTexName != GL_INVALID_INDEX)
 		{
-			CheckGLError( CU_T( "GL2TextureRenderer :: _initialise - glGenTextures"));
-			glBindTexture( GL_TEXTURE_BUFFER, m_texGLName);
-			CheckGLError( CU_T( "GL2TextureRenderer :: _initialise - glBindTexture"));
-			glTexBuffer( GL_TEXTURE_BUFFER, GL_RGBA8UI, m_pTextureBufferObject->GetIndex());
-			CheckGLError( CU_T( "GL2TextureRenderer :: _initialise - glTexBuffer"));
-			glBindTexture(GL_TEXTURE_BUFFER, 0);
-			CheckGLError( CU_T( "GL2TextureRenderer :: _initialise - glBindTexture( 0)"));
+			CheckGlError( glBindTexture( GL_TEXTURE_BUFFER, m_glTexName), CU_T( "Gl4TextureRenderer :: _initialise - glBindTexture"));
+			CheckGlError( glTexBuffer( GL_TEXTURE_BUFFER, GL_RGBA8UI, m_pTextureBufferObject->GetIndex()), CU_T( "Gl4TextureRenderer :: _initialise - glTexBuffer"));
+			CheckGlError( glBindTexture(GL_TEXTURE_BUFFER, 0), CU_T( "Gl4TextureRenderer :: _initialise - glBindTexture( 0)"));
 		}
 	}
 
-	return m_texGLName != GL_INVALID_INDEX;
+	return m_glTexName != GL_INVALID_INDEX;
 }
 
-void GL4TextureRenderer :: _render()
+void Gl4TextureRenderer :: _render()
 {
-	glActiveTexture( GL_TEXTURE0 + m_target->GetIndex());
-	CheckGLError( CU_T( "GL2TextureRenderer :: Apply - glActiveTexture"));
-	glBindTexture( GL_TEXTURE_BUFFER, m_texGLName);
-	CheckGLError( CU_T( "GL2TextureRenderer :: Apply - glBindTexture"));
+	CheckGlError( glActiveTexture( GL_TEXTURE0 + m_target->GetIndex()), CU_T( "Gl4TextureRenderer :: Apply - glActiveTexture"));
+	CheckGlError( glBindTexture( GL_TEXTURE_BUFFER, m_glTexName), CU_T( "Gl4TextureRenderer :: Apply - glBindTexture"));
 
-	Pipeline::MatrixMode( Pipeline::eTexture);
+	Pipeline::MatrixMode( Pipeline::eMATRIX_MODE( Pipeline::eMatrixTexture0 + m_target->GetIndex()));
 	Pipeline::LoadIdentity();
 	//TODO : rotations de texture
 }
 
-void GL4TextureRenderer :: _endRender()
+void Gl4TextureRenderer :: _endRender()
 {
-	Pipeline::MatrixMode( Pipeline::eModelView);
+	Pipeline::MatrixMode( Pipeline::eMatrixModelView);
 }

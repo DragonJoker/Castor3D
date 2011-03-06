@@ -31,11 +31,13 @@ namespace Castor3D
 	class C3D_API ShaderManager
 	{
 	private:
-		ShaderProgramPtrArray	m_shaderPrograms;	//!< The loaded shader programs
-		ShaderProgramPtrArray	m_arrayToDelete;	//!< The array of shaders to destroy
-		eDRAW_TYPE m_inputPrimitiveType;				//!< The input primitive type for the geometry shader (GL_TRIANGLES, ...)
-		eDRAW_TYPE m_outputPrimitiveType;				//!< The output primitive type for the geometry shader (GL_TRIANGLES, ...)
-		int m_nbVerticesOut;						//!< The maximal number of vertices the geometry shader can output
+		GlslShaderProgramPtrArray	m_arrayGLSLPrograms;	//!< The loaded GLSLshader programs
+		GlslShaderProgramPtrArray	m_arrayGLSLToDelete;	//!< The array of shaders to destroy
+		HlslShaderProgramPtrArray	m_arrayHLSLPrograms;	//!< The loaded HLSL shader programs
+		HlslShaderProgramPtrArray	m_arrayHLSLToDelete;	//!< The array of shaders to destroy
+		CgShaderProgramPtrArray		m_arrayCgPrograms;		//!< The loaded shader programs
+		CgShaderProgramPtrArray		m_arrayCgToDelete;		//!< The array of shaders to destroy
+		int m_nbVerticesOut;								//!< The maximal number of vertices the geometry shader can output
 
 	public:
 		/**
@@ -55,18 +57,29 @@ namespace Castor3D
 		 */
 		void ClearShaders();
 		/**
-		 * Creates and adds a shader program to the manager
-		 */
-		ShaderProgramPtr CreateShaderProgramFromFiles( const String & p_vertexFile, const String & p_fragmentFile, const String & p_geometryFile);
-		/**
-		 * Creates and adds a shader program to the manager
-		 */
-		CgShaderProgramPtr CreateCgShaderProgramFromFiles( const String & p_vertexFile, const String & p_fragmentFile, const String & p_geometryFile);
-//		void AddProgram( ShaderProgramPtr p_program);
-		/**
-		* Remove the shader from the active shaders list and add it to the array of shaders to destroy
+		* Adds a shader to the active GLSL shaders list
 		*/
-		bool RemoveProgram( ShaderProgramPtr p_program);
+		void AddGLSLProgram( GlslShaderProgramPtr p_program);
+		/**
+		* Adds a shader to the active GLSL shaders list
+		*/
+		void AddHLSLProgram( HlslShaderProgramPtr p_program);
+		/**
+		* Remove the shader from the active Cg shaders list
+		*/
+		void AddCgProgram( CgShaderProgramPtr p_program);
+		/**
+		* Remove the shader from the active GLSL shaders list and add it to the array of shaders to destroy
+		*/
+		bool RemoveGLSLProgram( GlslShaderProgramPtr p_program);
+		/**
+		* Remove the shader from the active HLSL shaders list and add it to the array of shaders to destroy
+		*/
+		bool RemoveHLSLProgram( HlslShaderProgramPtr p_program);
+		/**
+		* Remove the shader from the active Cg shaders list and add it to the array of shaders to destroy
+		*/
+		bool RemoveCgProgram( CgShaderProgramPtr p_program);
 	};
 }
 

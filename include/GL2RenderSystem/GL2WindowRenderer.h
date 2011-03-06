@@ -15,21 +15,21 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL2_WindowRenderer___
-#define ___GL2_WindowRenderer___
+#ifndef ___Gl2_WindowRenderer___
+#define ___Gl2_WindowRenderer___
 
-#include "Module_GLRender.h"
+#include "Module_Gl2Render.h"
 
 namespace Castor3D
 {
-	class C3D_GL2_API GL2WindowRenderer : public WindowRenderer
+	class C3D_Gl2_API Gl2WindowRenderer : public WindowRenderer
 	{
 	protected:
-		GLContext * m_context;
+		Context * m_context;
 
 	public:
-		GL2WindowRenderer( SceneManager * p_pSceneManager);
-		virtual ~GL2WindowRenderer();
+		Gl2WindowRenderer( SceneManager * p_pSceneManager);
+		virtual ~Gl2WindowRenderer();
 
 		virtual void Initialise();
 		virtual void StartRender();

@@ -43,6 +43,8 @@ namespace Castor3D
 		}
 		eTYPE;
 
+		static const String xstring_type[2];
+
 	private:
 		real m_rLeft;					//!< The left viewport extent
 		real m_rRight;					//!< The right viewport extent
@@ -72,27 +74,26 @@ namespace Castor3D
 		 * Asks the renderer to apply the viewport
 		 *@param p_eDisplayMode : [in] The display mode
 		 */
-		virtual void Render( eDRAW_TYPE p_eDisplayMode);
+		virtual void Render( ePRIMITIVE_TYPE p_eDisplayMode);
 		/**
 		 * Asks the direction from the renderer and returns it
 		 *@param p_ptMouse : [in] The in-screen position
 		 *@return The computed direction
 		 */
 		Point3r GetDirection( const Point2i & p_ptMouse);
-		/**
-		 * Writes the viewport in a file
-		 *@param p_file : [in] The file to write in
-		 *@return true if successful, false if not
-		 */
-		virtual bool Write( Castor::Utils::File & p_file)const;
-		/**
-		 * Reads the viewport from a file
-		 *@param p_file : [in] The file to read from
-		 *@return true if successful, false if not
-		 */
-		virtual bool Read( Castor::Utils::File & p_file);
 
-	public:
+		/**@name Inherited methods from Textable */
+		//@{
+		virtual bool Write( File & p_file)const;
+		virtual bool Read( File & p_file) { return false; }
+		//@}
+
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
+
 		/**@name Accessors */
 		//@{
 		inline eTYPE	GetType			()const { return m_eType; }
@@ -106,7 +107,6 @@ namespace Castor3D
 		inline real		GetBottom		()const { return m_rBottom; }
 		inline int		GetWindowWidth	()const { return m_uiWindowWidth; }
 		inline int		GetWindowHeight	()const { return m_uiWindowHeight; }
-		
 		inline void SetType			( eTYPE p_eType)			{ m_eType = p_eType; }
 		inline void SetRatio		( real p_rRatio)			{ m_rRatio = p_rRatio; }
 		inline void SetNearView		( real p_rNear)				{ m_rNearView = p_rNear; }

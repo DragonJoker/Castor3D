@@ -29,7 +29,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class C3D_API SmoothingGroup : public MemoryTraced<SmoothingGroup>
+	class C3D_API SmoothingGroup : public Textable, public Serialisable, public MemoryTraced<SmoothingGroup>
 	{
 	private:
 		class FaceAndAngle
@@ -49,19 +49,20 @@ namespace Castor3D
 			}
 		};
 
-		typedef SmartPtr<FaceAndAngle>::Shared		FaceAndAnglePtr;
+		typedef shared_ptr<FaceAndAngle>			FaceAndAnglePtr;
 		typedef Container<FaceAndAnglePtr>::Vector	FaceAndAnglePtrArray;
 
 	private:
 		size_t m_uiGroupID;		//!< The group ID
 		FacePtrArray m_arrayFaces;	//!< The faces in the group
+		Submesh * m_pSubmesh;
 
 	public:
 		/**
 		 * Constructor
 		 *@param p_uiID : [in] the group's id
 		 */
-		SmoothingGroup( size_t p_uiID=1);
+		SmoothingGroup( Submesh * p_pSubmesh, size_t p_uiID=1);
 		/**
 		 * Copy Constructor
 		 *@param p_toCopy : [in] the group to copy
@@ -86,7 +87,18 @@ namespace Castor3D
 		 */
 		void SetNormals( size_t p_uiNbVertex);
 
-	public:
+		/**@name Inherited methods from Textable */
+		//@{
+		virtual bool Write( File & p_file)const;
+		virtual bool Read( File & p_file) { return false; }
+		//@}
+
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
+
 		/**@name Operators */
 		//@{
 		inline FacePtr		operator []	( size_t p_uiIndex)const	{ CASTOR_ASSERT( p_uiIndex < m_arrayFaces.size());return m_arrayFaces[p_uiIndex]; }
@@ -99,8 +111,7 @@ namespace Castor3D
 		inline size_t				GetNbFaces	()const						{ return m_arrayFaces.size(); }
 		inline const FacePtrArray &	GetFaces	()const						{ return m_arrayFaces; }
 		inline FacePtrArray &		GetFaces	()							{ return m_arrayFaces; }
-		inline FacePtr				GetFace		( size_t p_uiIndex)			{ CASTOR_ASSERT( p_uiIndex < m_arrayFaces.size());return m_arrayFaces[p_uiIndex]; }
-
+		inline FacePtr				GetFace		( size_t p_uiIndex)const	{ CASTOR_ASSERT( p_uiIndex < m_arrayFaces.size());return m_arrayFaces[p_uiIndex]; }
 		inline void SetGroupID	( const size_t & val)		{ m_uiGroupID = val; }
 		//@}
 	};

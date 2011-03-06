@@ -3,7 +3,7 @@
 
 #include "FrameVariableDialog.h"
 
-namespace GUICommon
+namespace GuiCommon
 {
 	class TextPanel;
 
@@ -37,7 +37,7 @@ namespace GUICommon
 
 		wxString m_strShaders[Castor3D::eNbShaderTypes];
 
-		Castor3D::ShaderProgramPtr m_shaderProgram;
+		Castor3D::GlslShaderProgramPtr m_shaderProgram;
 		Castor3D::PassPtr m_pPass;
 		bool m_bCompiled;
 		bool m_bOwnShader;

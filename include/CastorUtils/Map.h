@@ -88,7 +88,7 @@ namespace Castor
 			{
 			}
 			template <class _Iter>
-			Map(_Iter p_itFirst, _Iter p_itLast, const key_compare & _Pred, const allocator_type & p_aAl)
+			Map( _Iter p_itFirst, _Iter p_itLast, const key_compare & p_cPred, const allocator_type & p_aAl)
 				:	_my_map( p_itFirst, p_itLast, p_cPred, p_aAl)
 			{
 			}
@@ -206,7 +206,7 @@ namespace Castor
 			void insert( _Iter p_itFirst, _Iter p_itLast)
 			{
 				CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-				_my_map::insert<_Iter>( p_itFirst, p_itLast);
+				_my_map::insert( p_itFirst, p_itLast);
 			}
 			iterator erase( const_iterator p_itWhere)
 			{
@@ -756,7 +756,7 @@ namespace Castor
 
 				if (p_map.size() > 0)
 				{
-					std::map <T, U>::reverse_iterator i = p_map.rbegin();
+					typename std::map <T, U>::reverse_iterator i = p_map.rbegin();
 					bReturn = true;
 					uResult = i->second;
 					i++;
@@ -915,10 +915,10 @@ namespace Castor
 			 * Applies a function without argument to each element of the map
 			 *
 			template <typename T, typename U>
-			static inline void cycle( std::map <T, Templates::SmartPtr<U> > & p_map, void( U::* p_func)( void))
+			static inline void cycle( std::map <T, Templates::shared_ptr<U> > & p_map, void( U::* p_func)( void))
 			{
-				typename std::map <T, Templates::SmartPtr<U> >::iterator i = p_map.begin();
-				typename std::map <T, Templates::SmartPtr<U> >::const_iterator iend = p_map.end();
+				typename std::map <T, Templates::shared_ptr<U> >::iterator i = p_map.begin();
+				typename std::map <T, Templates::shared_ptr<U> >::const_iterator iend = p_map.end();
 
 				for ( ; i != iend; ++ i)
 				{
@@ -943,10 +943,10 @@ namespace Castor
 			 * Applies a function with one [in] argument to each element of the map, pointer version
 			 *
 			template <typename T, typename U, typename Z>
-			static inline void cycle( std::map <T, Templates::SmartPtr<U> > & p_map, void( U::* p_func)( const Z &), const Z & p_param)
+			static inline void cycle( std::map <T, Templates::shared_ptr<U> > & p_map, void( U::* p_func)( const Z &), const Z & p_param)
 			{
-				typename std::map <T, Templates::SmartPtr<U> >::iterator i = p_map.begin();
-				typename std::map <T, Templates::SmartPtr<U> >::const_iterator iend = p_map.end();
+				typename std::map <T, Templates::shared_ptr<U> >::iterator i = p_map.begin();
+				typename std::map <T, Templates::shared_ptr<U> >::const_iterator iend = p_map.end();
 
 				for ( ; i != iend; ++ i)
 				{
@@ -985,10 +985,10 @@ namespace Castor
 			 * Applies a function with two [in] argument to each element of the map, pointer version
 			 *
 			template <typename T, typename U, typename V, typename W>
-			static inline void cycle( std::map <T, Templates::SmartPtr<U> > & p_map, void( U::* p_func)( const V &, const W &), const V & p_param, const W & p_param2)
+			static inline void cycle( std::map <T, Templates::shared_ptr<U> > & p_map, void( U::* p_func)( const V &, const W &), const V & p_param, const W & p_param2)
 			{
-				typename std::map <T, Templates::SmartPtr<U> >::iterator i = p_map.begin();
-				typename std::map <T, Templates::SmartPtr<U> >::const_iterator iend = p_map.end();
+				typename std::map <T, Templates::shared_ptr<U> >::iterator i = p_map.begin();
+				typename std::map <T, Templates::shared_ptr<U> >::const_iterator iend = p_map.end();
 
 				for ( ; i != iend; ++ i)
 				{
@@ -1027,10 +1027,10 @@ namespace Castor
 			 * Applies a function with one argument to each element of the map, pointer version
 			 *
 			template <typename T, typename U, typename Z>
-			static inline void cycle( std::map <T, Templates::SmartPtr<U> > & p_map, void( U::* p_func)( Z), const Z & p_param)
+			static inline void cycle( std::map <T, Templates::shared_ptr<U> > & p_map, void( U::* p_func)( Z), const Z & p_param)
 			{
-				typename std::map <T, Templates::SmartPtr<U> >::iterator i = p_map.begin();
-				typename std::map <T, Templates::SmartPtr<U> >::const_iterator iend = p_map.end();
+				typename std::map <T, Templates::shared_ptr<U> >::iterator i = p_map.begin();
+				typename std::map <T, Templates::shared_ptr<U> >::const_iterator iend = p_map.end();
 
 				for ( ; i != iend; ++ i)
 				{

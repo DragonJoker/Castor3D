@@ -33,40 +33,40 @@ namespace Castor3D
 	{
 	private:
 		friend class Scene;
+
+	public:
+		/**@name Construction / Destruction */
+		//@{
 		/**
 		 * Constructor, not to be used by the user, use Scene::CreateLight function instead
 		 *@param p_renderer : A light renderer, may be OpenGL or Direct3D
 		 *@param p_name : The light's name, default is void
 		 *@param p_index : The light's index (max 8 active lights at a time)
 		 */
-		DirectionalLight( SceneNodePtr p_pNode, const String & p_name=C3DEmptyString);
-	public:
+		DirectionalLight( Scene * p_pScene, SceneNodePtr p_pNode, const String & p_name=C3DEmptyString);
 		/**
 		 * Destructor
 		 */
 		~DirectionalLight();
+		//@}
+
+		/**@name Inherited methods from Textable */
+		//@{
+		virtual bool Write( File & p_file)const;
+		virtual bool Read( File & p_file) { return false; }
+		//@}
+
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
 
 	private:
 		/**
 		 * Initialisation function, makes renderer apply colour values
 		 */
 		virtual void _initialise();
-
-	public:
-		/**
-		 * Writes the directional light in a file
-		 *@param p_pFile : a pointer to file to write in
-		 */
-		virtual bool Write( Castor::Utils::File & p_pFile)const;
-
-	public:
-		/**@name Accessors */
-		//@{
-		/**
-		 *@return The light type (Directional, here), used for polymorphism
-		 */
-		virtual eTYPE	GetLightType()const {return eDirectional;}
-		//@}
 	};
 }
 

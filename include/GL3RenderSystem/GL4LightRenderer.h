@@ -15,14 +15,14 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL4_LightRenderer___
-#define ___GL4_LightRenderer___
+#ifndef ___Gl4_LightRenderer___
+#define ___Gl4_LightRenderer___
 
-#include "Module_GLRender.h"
+#include "Module_Gl3Render.h"
 
 namespace Castor3D
 {
-	class C3D_GL3_API GL4LightRenderer : public GLLightRenderer
+	class C3D_Gl3_API Gl4LightRenderer : public GlLightRenderer
 	{
 	protected:
 		bool		m_bInitialised;
@@ -38,19 +38,19 @@ namespace Castor3D
 		int			m_iGLIndex;
 		int			m_iGLPreviousIndex;
 
-		GLUBOPoint4fVariablePtr 	m_pAmbients;
-		GLUBOPoint4fVariablePtr 	m_pDiffuses;
-		GLUBOPoint4fVariablePtr 	m_pSpeculars;
-		GLUBOPoint4fVariablePtr 	m_pPositions;
-		GLUBOPoint3fVariablePtr 	m_pAttenuations;
-		GLUBOMatrix4x4fVariablePtr 	m_pOrientations;
-		GLUBOFloatVariablePtr 		m_pExponents;
-		GLUBOFloatVariablePtr 		m_pCutOffs;
-		GLUniformBufferObjectPtr	m_pUniformBuffer;
+		GlUboPoint4fVariablePtr 	m_pAmbients;
+		GlUboPoint4fVariablePtr 	m_pDiffuses;
+		GlUboPoint4fVariablePtr 	m_pSpeculars;
+		GlUboPoint4fVariablePtr 	m_pPositions;
+		GlUboPoint3fVariablePtr 	m_pAttenuations;
+		GlUboMatrix4x4fVariablePtr 	m_pOrientations;
+		GlUboFloatVariablePtr 		m_pExponents;
+		GlUboFloatVariablePtr 		m_pCutOffs;
+		GlUniformBufferObjectPtr	m_pUniformBuffer;
 
 	public:
-		GL4LightRenderer( SceneManager * p_pSceneManager);
-		virtual ~GL4LightRenderer();
+		Gl4LightRenderer( SceneManager * p_pSceneManager);
+		virtual ~Gl4LightRenderer();
 
 		virtual void Initialise();
 

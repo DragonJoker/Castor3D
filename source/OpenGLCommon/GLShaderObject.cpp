@@ -1,48 +1,45 @@
-#include "OpenGLCommon/PrecompiledHeader.h"
+#include "OpenGlCommon/PrecompiledHeader.h"
 
-#include "OpenGLCommon/GLShaderObject.h"
-#include "OpenGLCommon/GLShaderProgram.h"
+#include "OpenGlCommon/GlShaderObject.h"
+#include "OpenGlCommon/GlShaderProgram.h"
 
 using namespace Castor3D;
 
 //*************************************************************************************************
 
-GLShaderObject :: GLShaderObject()
-	:	ShaderObject(),
+GlShaderObject :: GlShaderObject( eSHADER_PROGRAM_TYPE p_eType)
+	:	GlslShaderObject( p_eType),
 		m_shaderObject( 0),
 		m_pShaderProgram( NULL)
 {
 }
 
-GLShaderObject :: ~GLShaderObject()
+GlShaderObject :: ~GlShaderObject()
 {
 	DestroyProgram();
 }
 
-void GLShaderObject :: DestroyProgram()
+void GlShaderObject :: DestroyProgram()
 {
 	Detach();
 
 	if (m_isCompiled)
 	{
-		glDeleteShader( m_shaderObject);
-		CheckGLError( CU_T( "GLShaderObject :: ~GLShaderObject - glDeleteShader"));
+		CheckGlError( glDeleteShader( m_shaderObject), CU_T( "GlShaderObject :: ~GlShaderObject - glDeleteShader"));
 		m_isCompiled = false;
 	}
 }
 
-void GLShaderObject :: RetrieveCompilerLog( String & p_strCompilerLog)
+void GlShaderObject :: RetrieveCompilerLog( String & p_strCompilerLog)
 {
 	int infologLength = 0;
 	int charsWritten  = 0;
-	glGetShaderiv( m_shaderObject, GL_INFO_LOG_LENGTH, & infologLength);
-	CheckGLError( CU_T( "GLShaderObject :: RetrieveCompilerLog - glGetShaderiv"));
+	CheckGlError( glGetShaderiv( m_shaderObject, GL_INFO_LOG_LENGTH, & infologLength), CU_T( "GlShaderObject :: RetrieveCompilerLog - glGetShaderiv"));
 
 	if (infologLength > 0)
 	{
 		char * infoLog = new char[infologLength];
-		glGetShaderInfoLog( m_shaderObject, infologLength, & charsWritten, infoLog);
-		CheckGLError( CU_T( "GLShaderObject :: RetrieveCompilerLog - glGetShaderInfoLog"));
+		CheckGlError( glGetShaderInfoLog( m_shaderObject, infologLength, & charsWritten, infoLog), CU_T( "GlShaderObject :: RetrieveCompilerLog - glGetShaderInfoLog"));
 		p_strCompilerLog = infoLog;
 		delete [] infoLog;
 	}
@@ -53,7 +50,7 @@ void GLShaderObject :: RetrieveCompilerLog( String & p_strCompilerLog)
 	}
 }
 
-bool GLShaderObject :: Compile()
+bool GlShaderObject :: Compile()
 {
 	bool l_bReturn = false;
 
@@ -65,14 +62,9 @@ bool GLShaderObject :: Compile()
 		GLint l_iLength = m_shaderSource.size();
 		const char * l_pTmp = m_shaderSource.char_str();
 
-		glShaderSource( m_shaderObject, 1, & l_pTmp, & l_iLength);
-		CheckGLError( CU_T( "GLShaderObject :: Compile - glShaderSource"));
-
-		glCompileShader( m_shaderObject); 
-		CheckGLError( CU_T( "GLShaderObject :: Compile - glCompileShader"));
-
-		glGetShaderiv( m_shaderObject, GL_COMPILE_STATUS, & l_iCompiled);
-		CheckGLError( CU_T( "GLShaderObject :: Compile - glGetShaderiv"));
+		CheckGlError( glShaderSource( m_shaderObject, 1, & l_pTmp, & l_iLength), CU_T( "GlShaderObject :: Compile - glShaderSource"));
+		CheckGlError( glCompileShader( m_shaderObject), CU_T( "GlShaderObject :: Compile - glCompileShader"));
+		CheckGlError( glGetShaderiv( m_shaderObject, GL_COMPILE_STATUS, & l_iCompiled), CU_T( "GlShaderObject :: Compile - glGetShaderiv"));
 
 		if (l_iCompiled != 0)
 		{
@@ -96,18 +88,17 @@ bool GLShaderObject :: Compile()
 	return l_bReturn;
 }
 
-void GLShaderObject :: Detach()
+void GlShaderObject :: Detach()
 {
 	if (m_isCompiled && m_pShaderProgram != NULL && ! m_bError)
 	{
 		try
 		{
-			glDetachShader( m_pShaderProgram->GetProgramObject(), m_shaderObject);
-			CheckGLError( CU_T( "GLShaderObject :: Detach - glDetachShader"));
+			CheckGlError( glDetachShader( m_pShaderProgram->GetProgramObject(), m_shaderObject), CU_T( "GlShaderObject :: Detach - glDetachShader"));
 		}
 		catch ( ... )
 		{
-			Logger::LogMessage( CU_T( "GLShaderObject :: Detach - glDetachShader - Exception"));
+			Logger::LogMessage( CU_T( "GlShaderObject :: Detach - glDetachShader - Exception"));
 		}
 
 		m_pShaderProgram = NULL;
@@ -116,78 +107,71 @@ void GLShaderObject :: Detach()
 	}
 }
 
-void GLShaderObject :: AttachTo( GLShaderProgram * p_pProgram)
+void GlShaderObject :: AttachTo( GlShaderProgram * p_pProgram)
 {
 	Detach();
 
 	if (m_isCompiled && ! m_bError)
 	{
 		m_pShaderProgram = p_pProgram;
-		glAttachShader( m_pShaderProgram->GetProgramObject(), m_shaderObject);
-		CheckGLError( CU_T( "GLShaderObject :: AttachTo - glAttachShader"));
+		CheckGlError( glAttachShader( m_pShaderProgram->GetProgramObject(), m_shaderObject), CU_T( "GlShaderObject :: AttachTo - glAttachShader"));
 	}
 }
 
 //*************************************************************************************************
 
-GLVertexShader :: GLVertexShader()
-	:	GLShaderObject()
-{
-	m_programType = eVertexShader; 
-}
-
-GLVertexShader :: ~GLVertexShader()
+GlVertexShader :: GlVertexShader()
+	:	GlShaderObject( eVertexShader)
 {
 }
 
-void GLVertexShader :: CreateProgram()
+GlVertexShader :: ~GlVertexShader()
+{
+}
+
+void GlVertexShader :: CreateProgram()
 {
 	if (RenderSystem::UseShaders())
 	{
-		m_shaderObject = glCreateShader( GL_VERTEX_SHADER);
-		CheckGLError( CU_T( "GLVertexShader :: GLVertexShader - glCreateShader"));
+		CheckGlError( m_shaderObject = glCreateShader( GL_VERTEX_SHADER), CU_T( "GlVertexShader :: GlVertexShader - glCreateShader"));
 	}
 }
 
 //*************************************************************************************************
 
-GLFragmentShader :: GLFragmentShader()
-	:	GLShaderObject()
-{
-	m_programType = ePixelShader;
-}
-
-GLFragmentShader :: ~GLFragmentShader()
+GlFragmentShader :: GlFragmentShader()
+	:	GlShaderObject( ePixelShader)
 {
 }
 
-void GLFragmentShader :: CreateProgram()
+GlFragmentShader :: ~GlFragmentShader()
+{
+}
+
+void GlFragmentShader :: CreateProgram()
 {
 	if (RenderSystem::UseShaders())
 	{
-		m_shaderObject = glCreateShader( GL_FRAGMENT_SHADER);
-		CheckGLError( CU_T( "GLFragmentShader :: GLFragmentShader - glCreateShader"));
+		CheckGlError( m_shaderObject = glCreateShader( GL_FRAGMENT_SHADER), CU_T( "GlFragmentShader :: GlFragmentShader - glCreateShader"));
 	}
 }
 
 //*************************************************************************************************
 
-GLGeometryShader :: GLGeometryShader()
-	:	GLShaderObject()
-{
-	m_programType = eGeometryShader; 
-}
-
-GLGeometryShader :: ~GLGeometryShader()
+GlGeometryShader :: GlGeometryShader()
+	:	GlShaderObject( eGeometryShader)
 {
 }
 
-void GLGeometryShader :: CreateProgram()
+GlGeometryShader :: ~GlGeometryShader()
+{
+}
+
+void GlGeometryShader :: CreateProgram()
 {
 	if (RenderSystem::UseShaders() && RenderSystem::HasGeometryShader())
 	{
-		m_shaderObject = glCreateShader( GL_GEOMETRY_SHADER);
-		CheckGLError( CU_T( "GLGeometryShader :: GLGeometryShader - glCreateShader"));
+		CheckGlError( m_shaderObject = glCreateShader( GL_GEOMETRY_SHADER), CU_T( "GlGeometryShader :: GlGeometryShader - glCreateShader"));
 	}
 }
 

@@ -58,7 +58,8 @@ namespace Castor
 	public:
 		/**@name Accessors */
 		//@{
-		inline Point3r	GetCenter	()const { return m_center; }
+		inline const Point3r &	GetCenter	()const { return m_center; }
+		inline Point3r &	    GetCenter	()      { return m_center; }
 		//@}
 	};
 
@@ -89,8 +90,8 @@ namespace Castor
 		 *@return true if the vertex is within the box, false if not
 		 */
 		virtual bool IsWithin( const Point3r & p_v)
-		{ 
-			return (p_v[0] > m_min[0] && p_v[0] < m_max[0]) 
+		{
+			return (p_v[0] > m_min[0] && p_v[0] < m_max[0])
 					&& (p_v[1] > m_min[1] && p_v[1] < m_max[1])
 					&& (p_v[2] > m_min[2] && p_v[2] < m_max[2]);
 		}
@@ -101,7 +102,7 @@ namespace Castor
 		 */
 		virtual bool IsOnLimits( const Point3r & p_v)
 		{
-			return ! IsWithin( p_v) 
+			return ! IsWithin( p_v)
 					&& (policy::equals( p_v[0], m_min[0])
 						|| policy::equals( p_v[0], m_max[0])
 						|| policy::equals( p_v[1], m_min[1])

@@ -15,10 +15,10 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL3_ShaderProgram___
-#define ___GL3_ShaderProgram___
+#ifndef ___Gl4_ShaderProgram___
+#define ___Gl4_ShaderProgram___
 
-#include "Module_GLRender.h"
+#include "Module_Gl3Render.h"
 
 namespace Castor3D
 {
@@ -30,7 +30,7 @@ namespace Castor3D
 	{
 	};
 
-	class C3D_GL3_API GL4ShaderProgram : public GLShaderProgram
+	class C3D_Gl3_API Gl4ShaderProgram : public GlShaderProgram
 	{
 	private:
 		Point4f						m_vAmbient;
@@ -38,12 +38,12 @@ namespace Castor3D
 		Point4f						m_vSpecular;
 		Point4f						m_vEmissive;
 		float						m_rShininess;
-		GLUBOPoint4fVariablePtr 	m_pAmbient;
-		GLUBOPoint4fVariablePtr 	m_pDiffuse;
-		GLUBOPoint4fVariablePtr 	m_pEmissive;
-		GLUBOPoint4fVariablePtr 	m_pSpecular;
-		GLUBOFloatVariablePtr 		m_pShininess;
-		GLUniformBufferObjectPtr	m_pMatsUniformBuffer;
+		GlUboPoint4fVariablePtr 	m_pAmbient;
+		GlUboPoint4fVariablePtr 	m_pDiffuse;
+		GlUboPoint4fVariablePtr 	m_pEmissive;
+		GlUboPoint4fVariablePtr 	m_pSpecular;
+		GlUboFloatVariablePtr 		m_pShininess;
+		GlUniformBufferObjectPtr	m_pMatsUniformBuffer;
 
 		Point4f							m_vAmbients[8];
 		Point4f							m_vDiffuses[8];
@@ -53,24 +53,24 @@ namespace Castor3D
 		Matrix4x4f						m_mOrientations[8];
 		float							m_rExponents[8];
 		float							m_rCutOffs[8];
-		GLUBOPoint4fVariablePtr 		m_pAmbients;
-		GLUBOPoint4fVariablePtr 		m_pDiffuses;
-		GLUBOPoint4fVariablePtr 		m_pSpeculars;
-		GLUBOPoint4fVariablePtr 		m_pPositions;
-		GLUBOPoint3fVariablePtr 		m_pAttenuations;
-		GLUBOMatrix4x4fVariablePtr 		m_pOrientations;
-		GLUBOFloatVariablePtr 			m_pExponents;
-		GLUBOFloatVariablePtr 			m_pCutOffs;
-		GLUniformBufferObjectPtr		m_pLightsUniformBuffer;
+		GlUboPoint4fVariablePtr 		m_pAmbients;
+		GlUboPoint4fVariablePtr 		m_pDiffuses;
+		GlUboPoint4fVariablePtr 		m_pSpeculars;
+		GlUboPoint4fVariablePtr 		m_pPositions;
+		GlUboPoint3fVariablePtr 		m_pAttenuations;
+		GlUboMatrix4x4fVariablePtr 		m_pOrientations;
+		GlUboFloatVariablePtr 			m_pExponents;
+		GlUboFloatVariablePtr 			m_pCutOffs;
+		GlUniformBufferObjectPtr		m_pLightsUniformBuffer;
 
 		std::set <int> m_setFreeLights;
 
-		GLUniformBufferObjectPtrStrMap m_mapUniformBuffers;
+		GlUniformBufferObjectPtrStrMap m_mapUniformBuffers;
 
 	public:
-		GL4ShaderProgram();
-		GL4ShaderProgram( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile);
-		virtual ~GL4ShaderProgram();
+		Gl4ShaderProgram();
+		Gl4ShaderProgram( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile);
+		virtual ~Gl4ShaderProgram();
 		/**
 		 * Link all Shaders
 		 */
@@ -91,8 +91,8 @@ namespace Castor3D
 		int AssignLight();
 		void FreeLight( int p_iIndex);
 
-		GLUniformBufferObjectPtr	GetUniformBuffer( const String & p_strName);
-		void						SetLightValues( int p_iIndex, GL4LightRenderer * p_pLightRenderer);
+		GlUniformBufferObjectPtr	GetUniformBuffer( const String & p_strName);
+		void						SetLightValues( int p_iIndex, Gl4LightRenderer * p_pLightRenderer);
 	};
 }
 

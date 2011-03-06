@@ -158,7 +158,7 @@ namespace Castor
 			{
 				for (size_t j = 0 ; j < Columns ; j++)
 				{
-					policy::assign<Type>( m_matrix[j][i], p_matrix[j][i]);
+					policy::assign( m_matrix[j][i], p_matrix[j][i]);
 				}
 			}
 
@@ -171,7 +171,7 @@ namespace Castor
 			{
 				for (size_t j = 0 ; j < Columns ; j++)
 				{
-					policy::assign<Type>( m_matrix[j][i], p_pMatrix[j * Rows + i]);
+					policy::assign( m_matrix[j][i], p_pMatrix[j * Rows + i]);
 				}
 			}
 
@@ -188,7 +188,7 @@ namespace Castor
 
 				for (size_t j = 0 ; j < Columns ; j++)
 				{
-					policy::ass_add( l_ptReturn[i], policy::multiply<Type>( m_matrix[j][i], p_ptVector[j]));
+					policy::ass_add( l_ptReturn[i], policy::multiply( m_matrix[j][i], p_ptVector[j]));
 				}
 			}
 
@@ -236,34 +236,41 @@ namespace Castor
 	class SquareMatrix : public Matrix<T, Rows, Rows>
 	{
 	protected:
+		typedef T									value_type;
 		typedef SquareMatrix<value_type, Rows>		my_square_type;
-		typedef Templates::Policy<value_type>		value;
+		typedef SquareMatrix<value_type, Rows>		my_transpose;
+		typedef Point<value_type, Rows>				my_row;
+		typedef Point<value_type, Rows>				my_column;
+		typedef Templates::Policy<value_type>		policy;
 
 	public:
-		typedef my_square_type	square_matrix_type;
-		typedef my_type			matrix_type;
+		typedef my_column 				col_type;
+		typedef my_row 					row_type;
+		typedef my_transpose 			transpose_type;
+		typedef my_square_type			square_matrix_type;
+		typedef Matrix<T, Rows, Rows>	matrix_type;
 
 	public:
 		/**@name Constructors */
 		//@{
 		SquareMatrix();
 		SquareMatrix( const my_square_type & p_matrix);
-		SquareMatrix( const my_type & p_matrix);
+		SquareMatrix( const matrix_type & p_matrix);
 		SquareMatrix( const value_type & p_value);
 		explicit SquareMatrix( const value_type * p_matrix);
 		template <typename Type>
 		SquareMatrix( const SquareMatrix<Type, Rows> & p_matrix)
-			:	my_type( p_matrix)
+			:	matrix_type( p_matrix)
 		{
 		}
 		template <typename Type>
 		SquareMatrix( const Matrix<Type, Rows, Rows> & p_matrix)
-			:	my_type( p_matrix)
+			:	matrix_type( p_matrix)
 		{
 		}
 		template <typename Type>
 		SquareMatrix( const Type * p_matrix)
-			:	my_type( p_matrix)
+			:	matrix_type( p_matrix)
 		{
 		}
 		virtual ~SquareMatrix();
@@ -289,7 +296,7 @@ namespace Castor
 			{
 				for (size_t j = 0 ; j < Rows ; j++)
 				{
-					l_mResult[i] += m_matrix[j] * policy::convert<Type>( p_matrix[i][j]);
+					l_mResult[i] += matrix_type::m_matrix[j] * policy::convert( p_matrix[i][j]);
 				}
 			}
 
@@ -304,7 +311,7 @@ namespace Castor
 			{
 				for (size_t j = 0 ; j < Rows ; j++)
 				{
-					l_mReturn[i] += m_matrix[j] * p_matrix[i][j];
+					l_mReturn[i] += matrix_type::m_matrix[j] * p_matrix[i][j];
 				}
 			}
 
@@ -316,7 +323,7 @@ namespace Castor
 		bool 				operator ==( const my_square_type & p_matrix)const;
 		bool 				operator !=( const my_square_type & p_matrix)const;
 		my_square_type &	operator = ( const my_square_type & p_matrix);
-		my_square_type &	operator = ( const my_type & p_matrix);
+		my_square_type &	operator = ( const matrix_type & p_matrix);
 		my_square_type &	operator = ( const value_type * p_matrix);
 		my_square_type		operator + ( const my_square_type & p_matrix)const;
 		my_square_type &	operator +=( const my_square_type & p_matrix);
@@ -334,19 +341,19 @@ namespace Castor
 		template <typename Type>
 		my_square_type &	operator = ( const SquareMatrix <Type, Rows> & p_matrix)
 		{
-			my_type::operator =( p_matrix);
+			matrix_type::operator =( p_matrix);
 			return * this;
 		}
 		template <typename Type>
 		my_square_type &	operator = ( const Matrix <Type, Rows, Rows> & p_matrix)
 		{
-			my_type::operator =( p_matrix);
+			matrix_type::operator =( p_matrix);
 			return * this;
 		}
 		template <typename Type>
 		my_square_type &	operator = ( const Type * p_matrix)
 		{
-			my_type::operator =( p_matrix);
+			matrix_type::operator =( p_matrix);
 			return * this;
 		}
 		//@}

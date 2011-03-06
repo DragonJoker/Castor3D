@@ -21,11 +21,15 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Castor3D/geometry/mesh/Subdivider.h>
 #include <Castor3D/main/FrameListener.h>
 
+#ifndef _WIN32
+#	define C3D_Loop_API
+#else
 #	ifdef LoopDivider_EXPORTS
 #		define C3D_Loop_API __declspec(dllexport)
 #	else
 #		define C3D_Loop_API __declspec(dllimport)
 #	endif
+#endif
 
 namespace Castor3D
 {
@@ -34,14 +38,14 @@ namespace Castor3D
 	class LoopEdge;
 	class FaceEdges;
 
-	typedef SmartPtr<LoopVertex>::Shared	LoopVertexPtr;
-	typedef SmartPtr<LoopEdge>::Shared		LoopEdgePtr;
-	typedef SmartPtr<FaceEdges>::Shared		FaceEdgesPtr;
+	typedef shared_ptr<	LoopVertex	>	LoopVertexPtr;
+	typedef shared_ptr<	LoopEdge	>	LoopEdgePtr;
+	typedef shared_ptr<	FaceEdges	>	FaceEdgesPtr;
 
-	typedef Container<FaceEdgesPtr>::Vector						FaceEdgesPtrArray;
-	typedef KeyedContainer<	size_t,	LoopEdgePtr>::Map			LoopEdgePtrUIntMap;			//!< Map of edges, ordered by IdPoint3r pointer
-	typedef KeyedContainer<	size_t,	LoopEdgePtrUIntMap>::Map	LoopEdgePtrUIntMapUIntMap;
-	typedef KeyedContainer< size_t,	LoopVertexPtr>::Map			LoopVertexPtrUIntMap;
+	typedef Container<		FaceEdgesPtr						>::Vector	FaceEdgesPtrArray;
+	typedef KeyedContainer<	size_t,			LoopEdgePtr			>::Map		LoopEdgePtrUIntMap;			//!< Map of edges, ordered by IdPoint3r pointer
+	typedef KeyedContainer<	size_t,			LoopEdgePtrUIntMap	>::Map		LoopEdgePtrUIntMapUIntMap;
+	typedef KeyedContainer< size_t,			LoopVertexPtr		>::Map		LoopVertexPtrUIntMap;
 
 	//! Edge representation
 	/*!

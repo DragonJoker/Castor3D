@@ -52,22 +52,13 @@ END
 // Version
 //
 
-VS_VERSION_INFO VERSIONINFO
+1 VERSIONINFO
  FILEVERSION 0,2,1,0
  PRODUCTVERSION 0,2,1,0
- FILEFLAGSMASK 0x17L
-#ifdef _DEBUG
- FILEFLAGS 0x1L
-#else
- FILEFLAGS 0x0L
-#endif
- FILEOS 0x4L
- FILETYPE 0x1L
- FILESUBTYPE 0x0L
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
-        BLOCK "040c04b0"
+        BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "DragonJoker"
             VALUE "FileDescription", "Modeleur Castor Shape"
@@ -81,7 +72,7 @@ BEGIN
     END
     BLOCK "VarFileInfo"
     BEGIN
-        VALUE "Translation", 0x40c, 1200
+        VALUE "Translation", 0x409, 1252
     END
 END
 
@@ -93,30 +84,12 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDR_MAINFRAME           ICON                    "..\\resource\\castor.ico"
+ID_ICON	ICON	"..\\resource\\castor.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Bitmap
 //
-
-Dossier                 BITMAP                  "..\\dossier.bmp"
-DossierOuv              BITMAP                  "..\\dossier_ouv.bmp"
-DossierSel              BITMAP                  "..\\dossier_sel.bmp"
-GeoCachee               BITMAP                  "..\\geo_cachee.bmp"
-GeoCacheeSel            BITMAP                  "..\\geo_cachee_sel.bmp"
-Geometry                BITMAP                  "..\\geo_blanc.bmp"
-GeoVisible              BITMAP                  "..\\geo_visible.bmp"
-GeoVisibleSel           BITMAP                  "..\\geo_visible_sel.bmp"
-Material                BITMAP                  "..\\mat_blanc.bmp"
-Scene                   BITMAP                  "..\\scene_blanc.bmp"
-Castor                  BITMAP                  "..\\castor.bmp"
-SubmeshSel              BITMAP                  "..\\submesh_sel.bmp"
-Submesh                 BITMAP                  "..\\submesh.bmp"
-Fichier                 BITMAP                  "..\\fichier.bmp"
-Parametres              BITMAP                  "..\\parametres.bmp"
-Ajouter                 BITMAP                  "..\\ajouter.bmp"
-DossierOuvSel           BITMAP                  "..\\dossier_ouv_sel.bmp"
 #endif    // Français (France) resources
 /////////////////////////////////////////////////////////////////////////////
 

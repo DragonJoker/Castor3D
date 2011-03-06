@@ -30,10 +30,10 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class C3D_API SceneManager : public Castor::Templates::Manager<String, Scene, SceneManager>
+	class C3D_API SceneManager : public Castor::Templates::Manager<Scene>
 	{
 	private:
-		friend class Castor::Templates::Manager<String, Scene, SceneManager>;
+		friend class Castor::Templates::Manager<Scene>;
 
 		MeshManager		*	m_pMeshManager;
 		MaterialManager	*	m_pMaterialManager;
@@ -53,6 +53,8 @@ namespace Castor3D
 		 * Clears all the scenes handled by the manager
 		 */
 		void ClearScenes();
+
+		ScenePtr CreateScene( const String & p_strName);
 
 		inline MeshManager		* 	GetMeshManager		()const { return m_pMeshManager; }
 		inline MaterialManager	* 	GetMaterialManager	()const { return m_pMaterialManager; }

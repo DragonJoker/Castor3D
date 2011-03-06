@@ -114,7 +114,7 @@ String NewGeometryDialog :: GetMaterialName()const
 		{
 			l_material = l_dialog->GetMaterial();
 
-			if ( ! l_material == NULL)
+			if (l_material != NULL)
 			{
 				l_res = l_material->GetName();
 			}

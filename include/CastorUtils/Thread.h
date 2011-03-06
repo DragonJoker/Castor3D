@@ -29,16 +29,7 @@ namespace Castor
 {
 	typedef enum
 	{
-		eCreatedRunning		= 0,
-#	if CASTOR_MT_USE_BOOST
 		eCreateSuspended	= 1,
-#	elif CASTOR_MT_USE_MFC
-		eCreateSuspended	= 4,
-#	elif CASTOR_MT_USE_WIN32
-		eCreateSuspended	= 4,
-#	else
-		eCreateSuspended	= 1,
-#	endif
 	}
 	eTHREAD_STATE;
 
@@ -58,7 +49,6 @@ namespace Castor
 		}
 		void operator()()const
 		{
-			CASTOR_THREAD_INIT();
 			(m_instance->* m_function)();
 		}
 	};
@@ -68,8 +58,44 @@ namespace Castor
 	typedef unsigned int UIThreadStartFunction( void *);
 	typedef UIThreadStartFunction * PUIThreadStartFunction;
 
-//! Creates a ClassFunctor
+	class ThreadFunctor
+	{
+	public:
+		PDWThreadStartFunction m_pDWThreadFunction;
+		PUIThreadStartFunction m_pUIThreadFunction;
+		void * m_pParameter;
+
+	public:
+		ThreadFunctor( PDWThreadStartFunction p_pFunction, void * p_pParameter)
+			:	m_pDWThreadFunction( p_pFunction)
+			,	m_pUIThreadFunction( NULL)
+			,	m_pParameter( p_pParameter)
+		{
+		}
+		ThreadFunctor( PUIThreadStartFunction p_pFunction, void * p_pParameter)
+			:	m_pDWThreadFunction( NULL)
+			,	m_pUIThreadFunction( p_pFunction)
+			,	m_pParameter( p_pParameter)
+		{
+		}
+		unsigned long operator()()const
+		{
+			if (m_pDWThreadFunction != NULL)
+			{
+				return m_pDWThreadFunction( m_pParameter);
+			}
+			else if (m_pUIThreadFunction != NULL)
+			{
+				return m_pUIThreadFunction( m_pParameter);
+			}
+
+			return 0;
+		}
+	};
+
+	//! Creates a ClassFunctor
 #define CASTOR_THREAD_CLASS_FUNCTOR( p_instance, p_class, p_function)		Castor::MultiThreading::ClassFunctor <p_class> ( p_instance, & p_class::p_function)
+#define CASTOR_THREAD_FUNCTOR( p_function, p_instance)						Castor::MultiThreading::ThreadFunctor( p_function, p_instance)
 
 	//! Thread class wrapper
 	/*!

@@ -6,8 +6,9 @@ using namespace Castor3D;
 
 RendererServer :: RendererServer()
 {
-	m_mapNames.insert( StrIntMap::value_type( RendererDriver::eOpenGL2, "GL2RenderSystem"));
-	m_mapNames.insert( StrIntMap::value_type( RendererDriver::eOpenGL3, "GL3RenderSystem"));
+	m_mapNames.insert( StrIntMap::value_type( RendererDriver::eOpenGl2,		"Gl2RenderSystem"));
+	m_mapNames.insert( StrIntMap::value_type( RendererDriver::eOpenGl3,		"Gl3RenderSystem"));
+	m_mapNames.insert( StrIntMap::value_type( RendererDriver::eDirect3D9,	"Dx9RenderSystem"));
 }
 
 RendererServer :: ~RendererServer()

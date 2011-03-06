@@ -31,22 +31,60 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class C3D_API Pass : public Renderable<Pass, PassRenderer>
+	class C3D_API Pass : public Serialisable, public Textable, public Renderable<Pass, PassRenderer>
 	{
+	public:
+		typedef enum
+		{
+			eSrcBlendNone,
+			eSrcBlendZero,
+			eSrcBlendOne,
+			eSrcBlendDstColour,
+			eSrcBlendOneMinusDstColour,
+			eSrcBlendSrcAlpha,
+			eSrcBlendOneMinusSrcAlpha,
+			eSrcBlendDstAlpha,
+			eSrcBlendOneMinusDstAlpha,
+			eSrcBlendSrcAlphaSaturate,
+			eNbSrcBlendFactors,
+		}
+		eSRC_BLEND_FACTOR;
+
+		typedef enum
+		{
+			eDstBlendNone,
+			eDstBlendZero,
+			eDstBlendOne,
+			eDstBlendSrcColour,
+			eDstBlendOneMinusSrcColour,
+			eDstBlendSrcAlpha,
+			eDstBlendOneMinusSrcAlpha,
+			eDstBlendDstAlpha,
+			eDstBlendOneMinusDstAlpha,
+			eNbDstBlendFactors,
+		}
+		eDST_BLEND_FACTOR;
+
+		static std::map<String, eSRC_BLEND_FACTOR> MapSrcBlendFactors;
+		static std::map<String, eDST_BLEND_FACTOR> MapDstBlendFactors;
+		static const String StringSrcBlendFactors[eNbSrcBlendFactors];
+		static const String StringDstBlendFactors[eNbDstBlendFactors];
+
 	protected:
 		friend class Material;
-		Colour									m_clrDiffuse;			//!< Diffuse material colour
-		Colour									m_clrAmbient;			//!< Ambient material colour
-		Colour									m_clrSpecular;			//!< Specular material colour
-		Colour									m_clrEmissive;			//!< Emissive material colour
-		float									m_fShininess;			//!< The shininess value
-		float									m_fAlpha;				//!< The alpha value
-		Colour									m_clrTexBaseColour;		//!< Texture basic colour, used for environment modes
-		bool									m_bDoubleFace;			//!< Tells if the pass is double face
-		SmartPtr<ShaderProgram>::Weak			m_pShaderProgram;		//!< The shader program, if any
-		TextureUnitPtrArray						m_arrayTextureUnits;	//!< Texture units
-		Material							*	m_pParent;				//!< The parent material
-
+		Colour							m_clrDiffuse;			//!< Diffuse material colour
+		Colour							m_clrAmbient;			//!< Ambient material colour
+		Colour							m_clrSpecular;			//!< Specular material colour
+		Colour							m_clrEmissive;			//!< Emissive material colour
+		float							m_fShininess;			//!< The shininess value
+		float							m_fAlpha;				//!< The alpha value
+		Colour							m_clrTexBaseColour;		//!< Texture basic colour, used for environment modes
+		bool							m_bDoubleFace;			//!< Tells if the pass is double face
+		weak_ptr<ShaderProgramBase>		m_pShaderProgram;		//!< The shader program, if any
+		TextureUnitPtrArray				m_arrayTextureUnits;	//!< Texture units
+		Material					*	m_pParent;				//!< The parent material
+		eSRC_BLEND_FACTOR				m_eSrcBlendFactor;
+		eDST_BLEND_FACTOR				m_eDstBlendFactor;
 
 	public:
 		/**
@@ -66,7 +104,7 @@ namespace Castor3D
 		/**
 		 * Applies the pass
 		 */
-		virtual void Render( eDRAW_TYPE p_eDisplayMode);
+		virtual void Render( ePRIMITIVE_TYPE p_eDisplayMode);
 		/**
 		 * Applies the pass
 		 */
@@ -105,18 +143,6 @@ namespace Castor3D
 		 */
 		void SetTexBaseColour( const Colour & p_clrColour);
 		/**
-		 * Writes the material in a file
-		 *@param p_file : [in] The file to write in
-		 *@return true if successful, false if not
-		 */
-		virtual bool Write( Castor::Utils::File & p_file)const;
-		/**
-		 * Reads the material from a file
-		 *@param p_file : [in] The file to read from
-		 *@return true if successful, false if not
-		 */
-		virtual bool Read( Castor::Utils::File & p_file);
-		/**
 		 * Defines the shader program
 		 *@param p_pProgram : [in] The shader program
 		 */
@@ -126,13 +152,13 @@ namespace Castor3D
 		 *@return The shader program, NULL if none
 		 */
 		template <typename T>
-		typename SmartPtr<T>::Shared GetShader()const
+		shared_ptr<T> GetShader()const
 		{
-			typename SmartPtr<T>::Shared l_pReturn;
+			shared_ptr<T> l_pReturn;
 
 			if ( ! m_pShaderProgram.expired())
 			{
-				l_pReturn = static_pointer_cast<T>( m_pShaderProgram.lock());
+				l_pReturn = static_pointer_cast<T, ShaderProgramBase>( m_pShaderProgram.lock());
 			}
 
 			return l_pReturn;
@@ -143,41 +169,58 @@ namespace Castor3D
 		 */
 		bool HasShader()const;
 
-	public:
+		/**@name Inherited methods from Textable */
+		//@{
+		virtual bool Write( File & p_file)const;
+		virtual bool Read( File & p_file) { return false; }
+		//@}
+
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
+
 		/**@name Accessors */
 		//@{
-		inline void SetDiffuse		( float p_fRed, float p_fGreen, float p_fBlue, float p_fAlpha)	{ m_clrDiffuse[0] = p_fRed;m_clrDiffuse[1] = p_fGreen;m_clrDiffuse[2] = p_fBlue;m_clrDiffuse[3] = p_fAlpha; }
-		inline void SetDiffuse		( const Colour & p_clrColour)									{ m_clrDiffuse = p_clrColour; }
-		inline void SetDiffuse		( float * p_pDiffuse)											{ m_clrDiffuse[0] = p_pDiffuse[0];m_clrDiffuse[1] = p_pDiffuse[1];m_clrDiffuse[2] = p_pDiffuse[2]; }
-		inline void SetAmbient		( float p_fRed, float p_fGreen, float p_fBlue, float p_fAlpha)	{ m_clrAmbient[0] = p_fRed;m_clrAmbient[1] = p_fGreen;m_clrAmbient[2] = p_fBlue;m_clrAmbient[3] = p_fAlpha; }
-		inline void SetAmbient		( const Colour & p_clrColour)									{ m_clrAmbient = p_clrColour; }
-		inline void SetAmbient		( float * p_pAmbient)											{ m_clrAmbient[0] = p_pAmbient[0];m_clrAmbient[1] = p_pAmbient[1];m_clrAmbient[2] = p_pAmbient[2]; }
-		inline void SetSpecular		( float p_fRed, float p_fGreen, float p_fBlue, float p_fAlpha)	{ m_clrSpecular[0] = p_fRed;m_clrSpecular[1] = p_fGreen;m_clrSpecular[2] = p_fBlue;m_clrSpecular[3] = p_fAlpha; }
-		inline void SetSpecular		( const Colour & p_clrColour)									{ m_clrSpecular = p_clrColour; }
-		inline void SetSpecular		( float * p_pSpecular)											{ m_clrSpecular[0] = p_pSpecular[0];m_clrSpecular[1] = p_pSpecular[1];m_clrSpecular[2] = p_pSpecular[2]; }
-		inline void SetEmissive		( float p_fRed, float p_fGreen, float p_fBlue, float p_fAlpha)	{ m_clrEmissive[0] = p_fRed;m_clrEmissive[1] = p_fGreen;m_clrEmissive[2] = p_fBlue;m_clrEmissive[3] = p_fAlpha; }
-		inline void SetEmissive		( const Colour & p_clrColour)									{ m_clrEmissive = p_clrColour; }
-		inline void SetEmissive		( float * p_pEmissive)											{ m_clrEmissive[0] = p_pEmissive[0];m_clrEmissive[1] = p_pEmissive[1];m_clrEmissive[2] = p_pEmissive[2]; }
-		inline void SetShininess	( float p_fShininess)											{ m_fShininess = p_fShininess; }
-		inline void SetDoubleFace	( bool p_bDouble)												{ m_bDoubleFace = p_bDouble; }
-		inline void SetAlpha		( float p_fAlpha)												{ m_fAlpha = p_fAlpha;m_clrDiffuse[3] = p_fAlpha;m_clrAmbient[3] = p_fAlpha;m_clrSpecular[3] = p_fAlpha;m_clrEmissive[3] = p_fAlpha; }
-
-		inline float			GetShininess		()const { return m_fShininess; }
-		inline size_t			GetNbTexUnits		()const { return m_arrayTextureUnits.size(); }
-		inline bool				IsDoubleFace		()const { return m_bDoubleFace; }
-		inline Material *		GetParent			()const { return m_pParent; }
-		inline float			GetAlpha			()const { return m_fAlpha; }
-		inline const Colour &	GetDiffuse			()const { return m_clrDiffuse; }
-		inline const Colour &	GetAmbient			()const { return m_clrAmbient; }
-		inline const Colour &	GetSpecular			()const { return m_clrSpecular; }
-		inline const Colour &	GetEmissive			()const { return m_clrEmissive; }
-		inline const Colour &	GetTexBaseColour	()const { return m_clrTexBaseColour; }
-		inline Colour &			GetDiffuse			()		{ return m_clrDiffuse; }
-		inline Colour &			GetAmbient			()		{ return m_clrAmbient; }
-		inline Colour &			GetSpecular			()		{ return m_clrSpecular; }
-		inline Colour &			GetEmissive			()		{ return m_clrEmissive; }
-		inline Colour &			GetTexBaseColour	()		{ return m_clrTexBaseColour; }
+		inline void SetDiffuse			( float p_fRed, float p_fGreen, float p_fBlue, float p_fAlpha)	{ m_clrDiffuse[0] = p_fRed;m_clrDiffuse[1] = p_fGreen;m_clrDiffuse[2] = p_fBlue;m_clrDiffuse[3] = p_fAlpha; }
+		inline void SetDiffuse			( const Colour & p_clrColour)									{ m_clrDiffuse = p_clrColour; }
+		inline void SetDiffuse			( float * p_pDiffuse)											{ m_clrDiffuse[0] = p_pDiffuse[0];m_clrDiffuse[1] = p_pDiffuse[1];m_clrDiffuse[2] = p_pDiffuse[2]; }
+		inline void SetAmbient			( float p_fRed, float p_fGreen, float p_fBlue, float p_fAlpha)	{ m_clrAmbient[0] = p_fRed;m_clrAmbient[1] = p_fGreen;m_clrAmbient[2] = p_fBlue;m_clrAmbient[3] = p_fAlpha; }
+		inline void SetAmbient			( const Colour & p_clrColour)									{ m_clrAmbient = p_clrColour; }
+		inline void SetAmbient			( float * p_pAmbient)											{ m_clrAmbient[0] = p_pAmbient[0];m_clrAmbient[1] = p_pAmbient[1];m_clrAmbient[2] = p_pAmbient[2]; }
+		inline void SetSpecular			( float p_fRed, float p_fGreen, float p_fBlue, float p_fAlpha)	{ m_clrSpecular[0] = p_fRed;m_clrSpecular[1] = p_fGreen;m_clrSpecular[2] = p_fBlue;m_clrSpecular[3] = p_fAlpha; }
+		inline void SetSpecular			( const Colour & p_clrColour)									{ m_clrSpecular = p_clrColour; }
+		inline void SetSpecular			( float * p_pSpecular)											{ m_clrSpecular[0] = p_pSpecular[0];m_clrSpecular[1] = p_pSpecular[1];m_clrSpecular[2] = p_pSpecular[2]; }
+		inline void SetEmissive			( float p_fRed, float p_fGreen, float p_fBlue, float p_fAlpha)	{ m_clrEmissive[0] = p_fRed;m_clrEmissive[1] = p_fGreen;m_clrEmissive[2] = p_fBlue;m_clrEmissive[3] = p_fAlpha; }
+		inline void SetEmissive			( const Colour & p_clrColour)									{ m_clrEmissive = p_clrColour; }
+		inline void SetEmissive			( float * p_pEmissive)											{ m_clrEmissive[0] = p_pEmissive[0];m_clrEmissive[1] = p_pEmissive[1];m_clrEmissive[2] = p_pEmissive[2]; }
+		inline void SetShininess		( float p_fShininess)											{ m_fShininess = p_fShininess; }
+		inline void SetDoubleFace		( bool p_bDouble)												{ m_bDoubleFace = p_bDouble; }
+		inline void SetAlpha			( float p_fAlpha)												{ m_fAlpha = p_fAlpha;m_clrDiffuse[3] = p_fAlpha;m_clrAmbient[3] = p_fAlpha;m_clrSpecular[3] = p_fAlpha;m_clrEmissive[3] = p_fAlpha; }
+		inline void SetDstBlendFactor	( eDST_BLEND_FACTOR val)										{ m_eDstBlendFactor = val; }
+		inline void SetSrcBlendFactor	( eSRC_BLEND_FACTOR val)										{ m_eSrcBlendFactor = val; }
+		inline eSRC_BLEND_FACTOR	GetSrcBlendFactor	()const { return m_eSrcBlendFactor; }
+		inline eDST_BLEND_FACTOR	GetDstBlendFactor	()const { return m_eDstBlendFactor; }
+		inline float				GetShininess		()const { return m_fShininess; }
+		inline size_t				GetNbTexUnits		()const { return m_arrayTextureUnits.size(); }
+		inline bool					IsDoubleFace		()const { return m_bDoubleFace; }
+		inline Material *			GetParent			()const { return m_pParent; }
+		inline float				GetAlpha			()const { return m_fAlpha; }
+		inline const Colour &		GetDiffuse			()const { return m_clrDiffuse; }
+		inline const Colour &		GetAmbient			()const { return m_clrAmbient; }
+		inline const Colour &		GetSpecular			()const { return m_clrSpecular; }
+		inline const Colour &		GetEmissive			()const { return m_clrEmissive; }
+		inline const Colour &		GetTexBaseColour	()const { return m_clrTexBaseColour; }
+		inline Colour &				GetDiffuse			()		{ return m_clrDiffuse; }
+		inline Colour &				GetAmbient			()		{ return m_clrAmbient; }
+		inline Colour &				GetSpecular			()		{ return m_clrSpecular; }
+		inline Colour &				GetEmissive			()		{ return m_clrEmissive; }
+		inline Colour &				GetTexBaseColour	()		{ return m_clrTexBaseColour; }
 		//@}
+
+	private:
+		void _initialiseMaps();
 	};
 	//! The Pass renderer
 	/*!
@@ -212,7 +255,7 @@ namespace Castor3D
 		/**
 		 * Applies the material
 		 */
-		virtual void Render( eDRAW_TYPE p_eDisplayMode) = 0;
+		virtual void Render( ePRIMITIVE_TYPE p_eDisplayMode) = 0;
 		/**
 		 * Applies the material
 		 */

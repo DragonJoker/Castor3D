@@ -20,6 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Mutex.h"
 #include <vector>
+#include <typeinfo>
 
 namespace Castor
 {
@@ -795,8 +796,8 @@ namespace Castor
 			template <typename T>
 			static inline void deleteAll( std::vector <T *> & arrayVector)
 			{
-				std::vector <T *>::iterator l_it;
-				std::vector <T *>::const_iterator l_itEnd = arrayVector.end();
+				typename std::vector <T *>::iterator l_it;
+				typename std::vector <T *>::const_iterator l_itEnd = arrayVector.end();
 
 				for (l_it = arrayVector.begin() ; l_it != l_itEnd ; ++l_it)
 				{

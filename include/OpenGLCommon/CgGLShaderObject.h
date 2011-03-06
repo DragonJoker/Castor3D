@@ -15,18 +15,18 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL_CgShaderObject___
-#define ___GL_CgShaderObject___
+#ifndef ___Gl_CgShaderObject___
+#define ___Gl_CgShaderObject___
 
-#include "Module_GLRender.h"
+#include "Module_GlRender.h"
 
-#include <Castor3D/shader/Cg/CgShaderObject.h>
+#include <Castor3D/shader/ShaderObject.h>
 
 namespace Castor3D
 {
-	class CgGLShaderObject : public CgShaderObject
+	class CgGlShaderObject : public CgShaderObject
 	{
-		friend class CgGLShaderProgram;
+		friend class CgGlShaderProgram;
 
 	protected:
 		String m_compilerLog;
@@ -35,11 +35,11 @@ namespace Castor3D
 		/**
 		 * Constructor
 		 */
-		CgGLShaderObject();
+		CgGlShaderObject( eSHADER_PROGRAM_TYPE p_eType);
 		/**
 		 * Destructor
 		 */
-		virtual ~CgGLShaderObject();
+		virtual ~CgGlShaderObject();
 		/**
 		 * Compiles program
 		 */
@@ -55,17 +55,17 @@ namespace Castor3D
 	};
 
 	//! Class holding Vertex Shader
-	class CgGLVertexShader : public CgGLShaderObject
+	class CgGlVertexShader : public CgGlShaderObject
 	{
 	public:
 		/**
 		 * Constructor
 		 */
-		CgGLVertexShader();
+		CgGlVertexShader();
 		/**
 		 * Destructor
 		 */
-		virtual ~CgGLVertexShader();
+		virtual ~CgGlVertexShader();
 		/**
 		 * Creates the program
 		 */
@@ -73,17 +73,17 @@ namespace Castor3D
 	};
 
 	//! Class holding Fragment Shader
-	class CgGLFragmentShader : public CgGLShaderObject
+	class CgGlFragmentShader : public CgGlShaderObject
 	{
 	public:
 		/**
 		 * Constructor
 		 */
-		CgGLFragmentShader();
+		CgGlFragmentShader();
 		/**
 		 * Destructor
 		 */
-		virtual ~CgGLFragmentShader();
+		virtual ~CgGlFragmentShader();
 		/**
 		 * Creates the program
 		 */
@@ -92,17 +92,17 @@ namespace Castor3D
 	};
 
 	//! Class holding Geometry Shader
-	class CgGLGeometryShader : public CgGLShaderObject
+	class CgGlGeometryShader : public CgGlShaderObject
 	{
 	public:
 		/**
 		 * Constructor
 		 */
-		CgGLGeometryShader();
+		CgGlGeometryShader();
 		/**
 		 * Destructor
 		 */
-		virtual ~CgGLGeometryShader();
+		virtual ~CgGlGeometryShader();
 		/**
 		 * Creates the program
 		 */

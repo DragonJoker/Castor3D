@@ -22,16 +22,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #if CASTOR_USE_MULTITHREADING
 
-//! Tells whether or not to use boost
-#	ifndef CASTOR_MT_USE_BOOST
-#		define CASTOR_MT_USE_BOOST 0
-#	endif
-
-//! Tells whether or not to use MFC
-#	ifndef CASTOR_MT_USE_MFC
-#		define CASTOR_MT_USE_MFC 0
-#	endif
-
 //! Tells whether or not to use a mutex manager (for debug only, it costs a lot of time, but is useful to detect locks or cross-locks)
 #	ifndef CASTOR_USE_MUTEX_MANAGER
 #		define CASTOR_USE_MUTEX_MANAGER 0
@@ -42,18 +32,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #		define CASTOR_BOOST_FUNCTION_MAX_ARGS 2
 #	endif
 
-//! If none is defined and under Win32, use Win32
-#	if ! CASTOR_MT_USE_WIN32 && ! CASTOR_MT_USE_BOOST && ! CASTOR_MT_USE_MFC && defined _WIN32
-#		define CASTOR_MT_USE_WIN32 1
-#	else
-#		define CASTOR_MT_USE_WIN32 0
-#	endif
-
-//! If both are defined there is an error
-#	if CASTOR_MT_USE_BOOST && CASTOR_MT_USE_MFC
-#		error Definition of CASTOR_MT_USE_MFC and CASTOR_MT_USE_BOOST. Choose only one
-#	endif
-
 #	define CASTOR_RECURSIVE_MUTEXES_AVAILABLE 1
 
 #	if CASTOR_USE_MUTEX_MANAGER
@@ -62,20 +40,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #else
 
-#	undef CASTOR_MT_USE_BOOST
-#	define CASTOR_MT_USE_BOOST 0
-
-#	undef CASTOR_MT_USE_MFC
-#	define CASTOR_MT_USE_MFC 0
-
 #	undef CASTOR_USE_MUTEX_MANAGER
 #	define CASTOR_USE_MUTEX_MANAGER 0
 
 #	undef CASTOR_BOOST_FUNCTION_MAX_ARGS
 #	define CASTOR_BOOST_FUNCTION_MAX_ARGS 2
-
-#	undef CASTOR_MT_USE_WIN32
-#	define CASTOR_MT_USE_WIN32 0
 
 #	define CASTOR_RECURSIVE_MUTEXES_AVAILABLE 0
 

@@ -15,11 +15,11 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL2_Buffer___
-#define ___GL2_Buffer___
+#ifndef ___Gl2_Buffer___
+#define ___Gl2_Buffer___
 
-#include "Module_GLRender.h"
-#include "GL2RenderSystem.h"
+#include "Module_Gl2Render.h"
+#include "Gl2RenderSystem.h"
 
 namespace Castor3D
 {
@@ -27,73 +27,32 @@ namespace Castor3D
 	// Vertex Arrays
 	//**************************************************************************
 
-	class C3D_GL2_API GLVBIndicesBuffer : public IndicesBuffer
+	class C3D_Gl2_API GlVbIndexBuffer : public IndexBuffer
 	{
 	public:
-		GLVBIndicesBuffer()
-			:	IndicesBuffer()
+		GlVbIndexBuffer()
+			:	IndexBuffer()
 		{
 		}
 
 		virtual void Activate();
 		virtual void Deactivate();
+		virtual void * Lock( size_t p_uiOffset, size_t p_uiSize, size_t p_uiFlags) { return m_buffer; }
+		virtual void Unlock(){}
 	};
 
-	class C3D_GL2_API GLVBVertexBuffer : public VertexBuffer
+	class C3D_Gl2_API GlVbVertexBuffer : public VertexBuffer
 	{
 	public:
-		GLVBVertexBuffer()
-			:	VertexBuffer()
+		GlVbVertexBuffer( const BufferElementDeclaration * p_pElements, size_t p_uiCount)
+			:	VertexBuffer( p_pElements, p_uiCount)
 		{
 		}
 
 		virtual void Activate();
 		virtual void Deactivate();
-	};
-
-	class C3D_GL2_API GLVBNormalsBuffer : public NormalsBuffer
-	{
-	public:
-		GLVBNormalsBuffer()
-			:	NormalsBuffer()
-		{
-		}
-
-		virtual void Activate();
-		virtual void Deactivate();
-	};
-
-	class C3D_GL2_API GLVBTextureBuffer : public TextureBuffer
-	{
-	public:
-		GLVBTextureBuffer()
-			:	TextureBuffer()
-		{
-		}
-
-		virtual void Activate( PassPtr p_pass);
-		virtual void Deactivate();
-	};
-
-	//**************************************************************************
-	// Vertex Buffer Objects / Vertex Attribs
-	//**************************************************************************
-
-	class C3D_GL2_API GLVBOTextureBuffer : public TextureBuffer
-	{
-	public:
-		unsigned int m_index;
-		std::vector <GLVertexAttribsBuffer2rPtr> m_arrayBuffers;
-
-	public:
-		GLVBOTextureBuffer();
-		virtual ~GLVBOTextureBuffer();
-
-		virtual void Cleanup();
-		virtual void Initialise( PassPtr p_pass);
-		virtual void Activate( PassPtr p_pass);
-		virtual void Deactivate();
-		void SetShaderProgram( ShaderProgramPtr p_pProgram);
+		virtual void * Lock( size_t p_uiOffset, size_t p_uiSize, size_t p_uiFlags) { return m_buffer; }
+		virtual void Unlock(){}
 	};
 }
 

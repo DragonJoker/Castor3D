@@ -1,7 +1,7 @@
 #ifndef ___GC_MaterialPanel___
 #define ___GC_MaterialPanel___
 
-namespace GUICommon
+namespace GuiCommon
 {
 	class PassPanel;
 
@@ -35,7 +35,7 @@ namespace GUICommon
 		int GetPassIndex()const;
 
 	private:
-		void _createMaterialPanel( const Char * p_materialName);
+		void _createMaterialPanel( const xchar * p_materialName);
 		void _createPassPanel();
 
 		DECLARE_EVENT_TABLE()

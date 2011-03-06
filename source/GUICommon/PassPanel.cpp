@@ -1,11 +1,11 @@
-#include "GUICommon/PrecompiledHeader.h"
+#include "GuiCommon/PrecompiledHeader.h"
 
-#include "GUICommon/PassPanel.h"
-#include "GUICommon/EnvironmentFrame.h"
-#include "GUICommon/ShaderDialog.h"
+#include "GuiCommon/PassPanel.h"
+#include "GuiCommon/EnvironmentFrame.h"
+#include "GuiCommon/ShaderDialog.h"
 
 using namespace Castor3D;
-using namespace GUICommon;
+using namespace GuiCommon;
 
 
 PassPanel :: PassPanel( Castor3D::MaterialManager * p_pManager, wxWindow * parent, const wxPoint & pos, const wxSize & size)
@@ -66,7 +66,7 @@ void PassPanel :: GetBlendColour( real & red, real & green, real & blue)const
 real PassPanel :: GetShininess()const
 {
 	wxString l_value = m_shininessText->GetValue();
-	
+
 	if (l_value.BeforeFirst( '.').IsNumber() && l_value.AfterFirst( '.').IsNumber())
 	{
 		real l_res = ator( l_value.c_str());
@@ -88,7 +88,7 @@ int PassPanel :: GetTextureUnitIndex()const
 {
 	wxString l_value = m_texturesCubeBox->GetValue();
 	Logger::LogMessage( CU_T( "PassPanel :: GetTextureUnitIndex - l_value : %s"), l_value.c_str());
-	
+
 	if (l_value.IsNumber())
 	{
 		int l_res = atoi( l_value.c_str());
@@ -128,7 +128,7 @@ void PassPanel :: _createBitmapFromBuffer( wxBitmap & p_bitmap, unsigned char * 
 	p_bitmap.Create( p_width, p_height, 24);
 	wxNativePixelData l_data( p_bitmap);
 
-	if (l_data != NULL && l_data.GetWidth() == p_width && l_data.GetHeight() == p_height)
+	if (l_data.GetWidth() == p_width && l_data.GetHeight() == p_height)
 	{
 		wxNativePixelData::Iterator l_it( l_data);
 		unsigned char * l_pBuffer = p_pBuffer;
@@ -215,7 +215,7 @@ void PassPanel :: _createPassPanel()
 	m_blendButton->SetBackgroundColour( wxColour( l_red, l_green, l_blue));
 
 	new wxStaticText( this, wxID_ANY, CU_T( "Exposant"), wxPoint( 20, 105));
-	Char * l_shTxt = new Char[255];
+	xchar * l_shTxt = new xchar[255];
 	Sprintf( l_shTxt, 255, CU_T( "%d"), m_pass->GetShininess());
 	m_shininessText = new wxTextCtrl( this, eShininess, l_shTxt, wxPoint( 80, 100), wxSize( 40, 20), wxTE_PROCESS_ENTER | wxBORDER_SIMPLE);
 	delete [] l_shTxt;
@@ -233,7 +233,7 @@ void PassPanel :: _createPassPanel()
 	{
 		l_names[i].clear();
 		l_names[i] << i;
-		std::cout << l_names[i].char_str() << "\n";
+//		std::cout << l_names[i].char_str() << "\n";
 	}
 
 	l_names[m_pass->GetNbTexUnits()] = CU_T( "New...");
@@ -302,7 +302,7 @@ void PassPanel :: _createTextureUnitPanel( int p_index)
 
 	wxString l_envModes[5];
 	l_envModes[0] = CU_T( "Modulate");
-	l_envModes[1] = CU_T( "Replace");
+	l_envModes[1] = CU_T( "replace");
 	l_envModes[2] = CU_T( "Blend");
 	l_envModes[3] = CU_T( "Add");
 	l_envModes[4] = CU_T( "Combine");
@@ -310,19 +310,19 @@ void PassPanel :: _createTextureUnitPanel( int p_index)
 
 	switch (m_selectedTextureUnit->GetEnvironment()->GetMode())
 	{
-	case TextureEnvironment::eMReplace:
-		l_value = CU_T( "Replace");
+	case TextureEnvironment::eModeReplace:
+		l_value = CU_T( "replace");
 		break;
-	
-	case TextureEnvironment::eMBlend:
+
+	case TextureEnvironment::eModeBlend:
 		l_value = CU_T( "Blend");
 		break;
-		
-	case TextureEnvironment::eMAdd:
+
+	case TextureEnvironment::eModeAdd:
 		l_value = CU_T( "Add");
 		break;
 
-	case TextureEnvironment::eMCombine:
+	case TextureEnvironment::eModeCombine:
 		l_value = CU_T( "Combine");
 		break;
 	}
@@ -333,7 +333,7 @@ void PassPanel :: _createTextureUnitPanel( int p_index)
 	wxString l_rgbCombination[8];
 	l_rgbCombination[0] = CU_T( "None");
 	l_rgbCombination[1] = CU_T( "Modulate");
-	l_rgbCombination[2] = CU_T( "Replace");
+	l_rgbCombination[2] = CU_T( "replace");
 	l_rgbCombination[3] = CU_T( "Add");
 	l_rgbCombination[4] = CU_T( "Add Signed");
 	l_rgbCombination[5] = CU_T( "Dot3 RGB");
@@ -341,33 +341,33 @@ void PassPanel :: _createTextureUnitPanel( int p_index)
 	l_rgbCombination[7] = CU_T( "Interpolate");
 	l_value = CU_T( "None");
 
-	switch (m_selectedTextureUnit->GetEnvironment()->GetRGBCombination())
+	switch (m_selectedTextureUnit->GetEnvironment()->GetRgbCombination())
 	{
-	case TextureEnvironment::eCCReplace:
-		l_value = CU_T( "Replace");
+	case TextureEnvironment::eRgbCombiReplace:
+		l_value = CU_T( "replace");
 		break;
 
-	case TextureEnvironment::eCCModulate:
+	case TextureEnvironment::eRgbCombiModulate:
 		l_value = CU_T( "Modulate");
 		break;
 
-	case TextureEnvironment::eCCAdd:
+	case TextureEnvironment::eRgbCombiAdd:
 		l_value = CU_T( "Add");
 		break;
 
-	case TextureEnvironment::eCCAddSigned:
+	case TextureEnvironment::eRgbCombiAddSigned:
 		l_value = CU_T( "Add Signed");
 		break;
 
-	case TextureEnvironment::eCCDot3RGB:
+	case TextureEnvironment::eRgbCombiDot3Rgb:
 		l_value = CU_T( "Dot3 RGB");
 		break;
 
-	case TextureEnvironment::eCCDot3RGBA:
+	case TextureEnvironment::eRgbCombiDot3Rgba:
 		l_value = CU_T( "Dot3 RGBA");
 		break;
 
-	case TextureEnvironment::eCCInterpolate:
+	case TextureEnvironment::eRgbCombiInterpolate:
 		l_value = CU_T( "Interpolate");
 		break;
 	}
@@ -375,7 +375,7 @@ void PassPanel :: _createTextureUnitPanel( int p_index)
 	m_rgbCombinationText = new wxStaticText( m_textureUnitPanel, wxID_ANY, CU_T( "RGB Combination"), wxPoint( 90, 36), wxSize( 90, 20));
 	m_textureRGBCombination = new wxComboBox( m_textureUnitPanel, eTextureRGBCombination, l_value, wxPoint( 190, 33), wxSize( 80, 20), 8, l_rgbCombination, wxBORDER_SIMPLE | wxCB_READONLY);
 
-	if (m_selectedTextureUnit->GetEnvironment()->GetMode() != TextureEnvironment::eMCombine)
+	if (m_selectedTextureUnit->GetEnvironment()->GetMode() != TextureEnvironment::eModeCombine)
 	{
 		m_rgbCombinationText->Hide();
 		m_textureRGBCombination->Hide();
@@ -384,7 +384,7 @@ void PassPanel :: _createTextureUnitPanel( int p_index)
 	wxString l_alphaCombination[6];
 	l_alphaCombination[0] = CU_T( "None");
 	l_alphaCombination[1] = CU_T( "Modulate");
-	l_alphaCombination[2] = CU_T( "Replace");
+	l_alphaCombination[2] = CU_T( "replace");
 	l_alphaCombination[3] = CU_T( "Add");
 	l_alphaCombination[4] = CU_T( "Add Signed");
 	l_alphaCombination[5] = CU_T( "Interpolate");
@@ -392,23 +392,23 @@ void PassPanel :: _createTextureUnitPanel( int p_index)
 
 	switch (m_selectedTextureUnit->GetEnvironment()->GetAlphaCombination())
 	{
-	case TextureEnvironment::eACReplace:
-		l_value = CU_T( "Replace");
+	case TextureEnvironment::eAlphaCombiReplace:
+		l_value = CU_T( "replace");
 		break;
 
-	case TextureEnvironment::eACModulate:
+	case TextureEnvironment::eAlphaCombiModulate:
 		l_value = CU_T( "Modulate");
 		break;
 
-	case TextureEnvironment::eACAdd:
+	case TextureEnvironment::eAlphaCombiAdd:
 		l_value = CU_T( "Add");
 		break;
 
-	case TextureEnvironment::eACAddSigned:
+	case TextureEnvironment::eAlphaCombiAddSigned:
 		l_value = CU_T( "Add Signed");
 		break;
 
-	case TextureEnvironment::eACInterpolate:
+	case TextureEnvironment::eAlphaCombiInterpolate:
 		l_value = CU_T( "Interpolate");
 		break;
 	}
@@ -417,7 +417,7 @@ void PassPanel :: _createTextureUnitPanel( int p_index)
 	m_textureAlphaCombination = new wxComboBox( m_textureUnitPanel, eTextureAlphaCombination, l_value, wxPoint( 190, 53), wxSize( 80, 20), 8, l_alphaCombination, wxBORDER_SIMPLE | wxCB_READONLY);
 	m_environmentConfigButton = new wxButton( m_textureUnitPanel, eEnvironmentConfig, CU_T( "Configure Environment"), wxPoint( 120, 73), wxSize( 140, 20), wxBORDER_SIMPLE);
 
-	if (m_selectedTextureUnit->GetEnvironment()->GetMode() != TextureEnvironment::eMCombine)
+	if (m_selectedTextureUnit->GetEnvironment()->GetMode() != TextureEnvironment::eModeCombine)
 	{
 		m_alphaCombinationText->Hide();
 		m_textureAlphaCombination->Hide();
@@ -457,7 +457,7 @@ END_EVENT_TABLE()
 
 void PassPanel :: _onDeleteTextureUnit( wxCommandEvent & event)
 {
-	if ( ! m_pass == NULL)
+	if (m_pass != NULL)
 	{
 		m_texturesCubeBox->Clear();
 		m_pass->DestroyTextureUnit( m_selectedUnitIndex);
@@ -624,7 +624,7 @@ void PassPanel :: _onTextureSelect( wxCommandEvent & event)
 void PassPanel :: _onTextureEnvModeSelect( wxCommandEvent & event)
 {
 	wxString l_value = event.GetString();
-	
+
 	if (l_value != CU_T( "Combine"))
 	{
 		m_rgbCombinationText->Hide();
@@ -635,24 +635,24 @@ void PassPanel :: _onTextureEnvModeSelect( wxCommandEvent & event)
 
 		if (l_value == CU_T( "Modulate"))
 		{
-			m_selectedTextureUnit->GetEnvironment()->SetMode( TextureEnvironment::eMModulate);
+			m_selectedTextureUnit->GetEnvironment()->SetMode( TextureEnvironment::eModeModulate);
 		}
-		else if (l_value == CU_T( "Replace"))
+		else if (l_value == CU_T( "replace"))
 		{
-			m_selectedTextureUnit->GetEnvironment()->SetMode( TextureEnvironment::eMReplace);
+			m_selectedTextureUnit->GetEnvironment()->SetMode( TextureEnvironment::eModeReplace);
 		}
 		else if (l_value == CU_T( "Blend"))
 		{
-			m_selectedTextureUnit->GetEnvironment()->SetMode( TextureEnvironment::eMBlend);
+			m_selectedTextureUnit->GetEnvironment()->SetMode( TextureEnvironment::eModeBlend);
 		}
 		else if (l_value == CU_T( "Add"))
 		{
-			m_selectedTextureUnit->GetEnvironment()->SetMode( TextureEnvironment::eMAdd);
+			m_selectedTextureUnit->GetEnvironment()->SetMode( TextureEnvironment::eModeAdd);
 		}
 	}
 	else
 	{
-		m_selectedTextureUnit->GetEnvironment()->SetMode( TextureEnvironment::eMCombine);
+		m_selectedTextureUnit->GetEnvironment()->SetMode( TextureEnvironment::eModeCombine);
 		m_rgbCombinationText->Show();
 		m_textureRGBCombination->Show();
 		m_alphaCombinationText->Show();
@@ -667,35 +667,35 @@ void PassPanel :: _onTextureRGBCombinationSelect( wxCommandEvent & event)
 
 	if (l_value == CU_T( "None"))
 	{
-		m_selectedTextureUnit->GetEnvironment()->SetRGBCombination( TextureEnvironment::eCCNone);
+		m_selectedTextureUnit->GetEnvironment()->SetRgbCombination( TextureEnvironment::eRgbCombiNone);
 	}
 	else if (l_value == CU_T( "Modulate"))
 	{
-		m_selectedTextureUnit->GetEnvironment()->SetRGBCombination( TextureEnvironment::eCCModulate);
+		m_selectedTextureUnit->GetEnvironment()->SetRgbCombination( TextureEnvironment::eRgbCombiModulate);
 	}
-	else if (l_value == CU_T( "Replace"))
+	else if (l_value == CU_T( "replace"))
 	{
-		m_selectedTextureUnit->GetEnvironment()->SetRGBCombination( TextureEnvironment::eCCReplace);
+		m_selectedTextureUnit->GetEnvironment()->SetRgbCombination( TextureEnvironment::eRgbCombiReplace);
 	}
 	else if (l_value == CU_T( "Add"))
 	{
-		m_selectedTextureUnit->GetEnvironment()->SetRGBCombination( TextureEnvironment::eCCAdd);
+		m_selectedTextureUnit->GetEnvironment()->SetRgbCombination( TextureEnvironment::eRgbCombiAdd);
 	}
 	else if (l_value == CU_T( "Add Signed"))
 	{
-		m_selectedTextureUnit->GetEnvironment()->SetRGBCombination( TextureEnvironment::eCCAddSigned);
+		m_selectedTextureUnit->GetEnvironment()->SetRgbCombination( TextureEnvironment::eRgbCombiAddSigned);
 	}
 	else if (l_value == CU_T( "Dot3 RGB"))
 	{
-		m_selectedTextureUnit->GetEnvironment()->SetRGBCombination( TextureEnvironment::eCCDot3RGB);
+		m_selectedTextureUnit->GetEnvironment()->SetRgbCombination( TextureEnvironment::eRgbCombiDot3Rgb);
 	}
 	else if (l_value == CU_T( "Dot3 RGBA"))
 	{
-		m_selectedTextureUnit->GetEnvironment()->SetRGBCombination( TextureEnvironment::eCCDot3RGBA);
+		m_selectedTextureUnit->GetEnvironment()->SetRgbCombination( TextureEnvironment::eRgbCombiDot3Rgba);
 	}
 	else if (l_value == CU_T( "Interpolate"))
 	{
-		m_selectedTextureUnit->GetEnvironment()->SetRGBCombination( TextureEnvironment::eCCInterpolate);
+		m_selectedTextureUnit->GetEnvironment()->SetRgbCombination( TextureEnvironment::eRgbCombiInterpolate);
 	}
 }
 
@@ -705,27 +705,27 @@ void PassPanel :: _onTextureAlphaCombinationSelect( wxCommandEvent & event)
 
 	if (l_value == CU_T( "None"))
 	{
-		m_selectedTextureUnit->GetEnvironment()->SetAlphaCombination( TextureEnvironment::eACNone);
+		m_selectedTextureUnit->GetEnvironment()->SetAlphaCombination( TextureEnvironment::eAlphaCombiNone);
 	}
 	else if (l_value == CU_T( "Modulate"))
 	{
-		m_selectedTextureUnit->GetEnvironment()->SetAlphaCombination( TextureEnvironment::eACModulate);
+		m_selectedTextureUnit->GetEnvironment()->SetAlphaCombination( TextureEnvironment::eAlphaCombiModulate);
 	}
-	else if (l_value == CU_T( "Replace"))
+	else if (l_value == CU_T( "replace"))
 	{
-		m_selectedTextureUnit->GetEnvironment()->SetAlphaCombination( TextureEnvironment::eACReplace);
+		m_selectedTextureUnit->GetEnvironment()->SetAlphaCombination( TextureEnvironment::eAlphaCombiReplace);
 	}
 	else if (l_value == CU_T( "Add"))
 	{
-		m_selectedTextureUnit->GetEnvironment()->SetAlphaCombination( TextureEnvironment::eACAdd);
+		m_selectedTextureUnit->GetEnvironment()->SetAlphaCombination( TextureEnvironment::eAlphaCombiAdd);
 	}
 	else if (l_value == CU_T( "Add Signed"))
 	{
-		m_selectedTextureUnit->GetEnvironment()->SetAlphaCombination( TextureEnvironment::eACAddSigned);
+		m_selectedTextureUnit->GetEnvironment()->SetAlphaCombination( TextureEnvironment::eAlphaCombiAddSigned);
 	}
 	else if (l_value == CU_T( "Interpolate"))
 	{
-		m_selectedTextureUnit->GetEnvironment()->SetAlphaCombination( TextureEnvironment::eACInterpolate);
+		m_selectedTextureUnit->GetEnvironment()->SetAlphaCombination( TextureEnvironment::eAlphaCombiInterpolate);
 	}
 }
 

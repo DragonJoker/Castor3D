@@ -15,20 +15,20 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL_TextureRenderer___
-#define ___GL_TextureRenderer___
+#ifndef ___Gl_TextureRenderer___
+#define ___Gl_TextureRenderer___
 
-#include "Module_GLRender.h"
+#include "Module_GlRender.h"
 
 namespace Castor3D
 {	
-	class GLTextureRenderer : public TextureRenderer
+	class GlTextureRenderer : public TextureRenderer
 	{
 	protected:
-		unsigned int m_texGLName;
+		unsigned int m_glTexName;
 
-		typedef void (GLTextureRenderer:: * VoidFunction)();
-		typedef bool (GLTextureRenderer:: * BoolFunction)();
+		typedef void (GlTextureRenderer:: * VoidFunction)();
+		typedef bool (GlTextureRenderer:: * BoolFunction)();
 		typedef VoidFunction PVoidFunction;
 		typedef BoolFunction PBoolFunction;
 
@@ -38,11 +38,11 @@ namespace Castor3D
 		PBoolFunction m_pfnInitialise;
 
 	public:
-		GLTextureRenderer( SceneManager * p_pSceneManager)
+		GlTextureRenderer( SceneManager * p_pSceneManager)
 			:	TextureRenderer( p_pSceneManager)
-			,	m_texGLName( GL_INVALID_INDEX)
+			,	m_glTexName( GL_INVALID_INDEX)
 		{}
-		virtual ~GLTextureRenderer(){ Cleanup(); }
+		virtual ~GlTextureRenderer(){ Cleanup(); }
 
 		virtual void Cleanup();
 		virtual bool Initialise();
@@ -51,7 +51,7 @@ namespace Castor3D
 		virtual void EndRender();
 
 	public:
-		inline unsigned int GetTexGLName()const { return m_texGLName; }
+		inline unsigned int GetGlTexName()const { return m_glTexName; }
 
 	protected:
 		void _cleanup		();

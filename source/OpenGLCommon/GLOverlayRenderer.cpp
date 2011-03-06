@@ -1,14 +1,15 @@
-#include "OpenGLCommon/PrecompiledHeader.h"
+#include "OpenGlCommon/PrecompiledHeader.h"
 
-#include "OpenGLCommon/GLOverlayRenderer.h"
+#include "OpenGlCommon/GlOverlayRenderer.h"
+#include "OpenGlCommon/GlBuffer.h"
 
 using namespace Castor3D;
 
-void GLOverlayRenderer :: DrawPanel()
+void GlOverlayRenderer :: DrawPanel()
 {
 	MaterialPtr l_pMaterial = ((PanelOverlay *)m_target)->GetMaterial();
 
-	if ( ! l_pMaterial == NULL)
+	if (l_pMaterial != NULL)
 	{
 		l_pMaterial->Render2D();
 
@@ -23,17 +24,18 @@ void GLOverlayRenderer :: DrawPanel()
 			glVertex2r( m_target->GetPosition()[0] + m_target->GetSize()[0], m_target->GetPosition()[1]);
 			glTexCoord2r( 1.0, 0.0);
 		}
-		glEnd();
-		CheckGLError( CU_T( "GLOverlayRenderer :: DrawPanel"));
+		CheckGlError( glEnd(), CU_T( "GlOverlayRenderer :: DrawPanel"));
 
 		l_pMaterial->EndRender();
 	}
 }
 
-void GLOverlayRenderer :: DrawBorderPanel()
+void GlOverlayRenderer :: DrawBorderPanel()
 {
 }
 
-void GLOverlayRenderer :: DrawText()
+void GlOverlayRenderer :: DrawText()
 {
+	TextOverlay * l_pText = static_cast<TextOverlay *>( m_target);
+	l_pText->GetFont()->DisplayText( l_pText->GetCaption(), l_pText->GetPosition(), l_pText->GetSize(), Colour::FullAlphaWhite);
 }

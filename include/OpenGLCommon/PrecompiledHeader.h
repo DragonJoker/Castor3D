@@ -15,8 +15,8 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL_PrecompiledHeader___
-#define ___GL_PrecompiledHeader___
+#ifndef ___Gl_PrecompiledHeader___
+#define ___Gl_PrecompiledHeader___
 
 #ifndef CHECK_MEMORYLEAKS
 #	ifdef _DEBUG
@@ -26,20 +26,28 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	endif
 #endif
 
-#pragma message( "********************************************************************")
-#pragma message( "	OpenGLCommon")
+//#pragma message( "********************************************************************")
+//#pragma message( "	OpenGlCommon")
 
+#include <string>
+/*
 #if CHECK_MEMORYLEAKS
 #	pragma message( "		Checking Memory leaks")
 #endif
+*/
 #include <CastorUtils/Memory.h>
 
-#include <GL/glew.h>
-#ifdef WIN32
-#	include <GL/wglew.h>
+#include "OpenGlCommon/glew.h"
+
+#ifdef _WIN32
+#	include "OpenGlCommon/wglew.h"
+#else
+#	ifdef __GNUG__
+#		include "OpenGlCommon/glxew.h"
+#	endif
 #endif
 
-#include <Cg/cggl.h>
+#include <Cg/cgGL.h>
 
 #include <CastorUtils/Module_Utils.h>
 using namespace Castor;
@@ -58,17 +66,17 @@ using namespace Castor::Math;
 #include <Castor3D/render_system/Buffer.h>
 #include <Castor3D/render_system/Context.h>
 #include <Castor3D/render_system/RenderSystem.h>
+#include <Castor3D/render_system/BufferElement.h>
 #include <Castor3D/scene/Scene.h>
 #include <Castor3D/scene/SceneNode.h>
 #include <Castor3D/shader/ShaderObject.h>
 #include <Castor3D/shader/ShaderProgram.h>
 #include <Castor3D/shader/FrameVariable.h>
-#include <Castor3D/shader/Cg/CgShaderProgram.h>
-#include <Castor3D/shader/Cg/CgShaderObject.h>
 #include <Castor3D/shader/Cg/CgFrameVariable.h>
+#include <Castor3D/text/Font.h>
 #include <Castor3D/Log.h>
 
-#pragma message( "********************************************************************")
+//#pragma message( "********************************************************************")
 
 using namespace Castor::Utils;
 

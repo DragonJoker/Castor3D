@@ -5,7 +5,7 @@
 #include "Castor3D/geometry/basic/Face.h"
 #include "Castor3D/geometry/basic/Vertex.h"
 #include "Castor3D/geometry/basic/SmoothingGroup.h"
-#include "Castor3D/geometry/mesh/PNTrianglesDivider.h"
+#include "Castor3D/geometry/mesh/PnTrianglesDivider.h"
 #include "Castor3D/main/Root.h"
 #include "Castor3D/render_system/RenderSystem.h"
 #include "Castor3D/render_system/Buffer.h"
@@ -20,7 +20,7 @@ Icosaedron :: Icosaedron( MeshManager * p_pManager, real radius_p, unsigned int 
 		m_radius	( radius_p),
 		m_nbFaces	( nbFaces_p)
 {
-	m_meshType = Mesh::eIcosaedron;
+	m_meshType = eIcosaedron;
 	GeneratePoints();
 }
 
@@ -84,7 +84,7 @@ void Icosaedron :: GeneratePoints ()
 	// Division des faces de l'icosèdre
 	for (unsigned int i = 1 ; i < m_nbFaces ; i++)
 	{
-		PNTrianglesDividerPtr l_pDivider( new PNTrianglesDivider( l_submesh.get()));
+		PnTrianglesDividerPtr l_pDivider( new PnTrianglesDivider( l_submesh.get()));
 		l_submesh->Subdivide( l_pDivider, & l_tmp, false);
 	}
 

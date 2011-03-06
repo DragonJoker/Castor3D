@@ -15,18 +15,18 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL_MaterialRenderer___
-#define ___GL_MaterialRenderer___
+#ifndef ___Gl_MaterialRenderer___
+#define ___Gl_MaterialRenderer___
 
-#include "Module_GLRender.h"
+#include "Module_GlRender.h"
 
 namespace Castor3D
 {
-	class GLPassRenderer : public PassRenderer
+	class GlPassRenderer : public PassRenderer
 	{
 	protected:
-		typedef void (GLPassRenderer:: * ApplyFunc)( eDRAW_TYPE);
-		typedef void (GLPassRenderer:: * VoidFunc)();
+		typedef void (GlPassRenderer:: * ApplyFunc)( ePRIMITIVE_TYPE);
+		typedef void (GlPassRenderer:: * VoidFunc)();
 		typedef ApplyFunc PApplyFunc;
 		typedef VoidFunc PVoidFunc;
 
@@ -35,18 +35,18 @@ namespace Castor3D
 		PVoidFunc	m_pfnRemove;
 
 	public:
-		GLPassRenderer( SceneManager * p_pSceneManager);
-		virtual ~GLPassRenderer(){ Cleanup(); }
+		GlPassRenderer( SceneManager * p_pSceneManager);
+		virtual ~GlPassRenderer(){ Cleanup(); }
 
 		virtual void Cleanup();
 		virtual void Initialise();
 
-		virtual void Render( eDRAW_TYPE p_displayMode);
+		virtual void Render( ePRIMITIVE_TYPE p_displayMode);
 		virtual void Render2D();
 		virtual void EndRender();
 
 	private:
-		void _apply( eDRAW_TYPE p_displayMode);
+		void _apply( ePRIMITIVE_TYPE p_displayMode);
 		void _apply2D();
 		void _remove();
 	};

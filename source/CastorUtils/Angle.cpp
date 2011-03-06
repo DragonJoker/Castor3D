@@ -11,6 +11,8 @@ using namespace Castor::Math;
 using namespace Castor::Utils;
 
 real Angle :: Pi = real( 3.1415926535897932384626433832795028841968);
+double Angle :: PiDouble = 3.1415926535897932384626433832795028841968;
+float Angle :: PiFloat = real( 3.1415926535897932384626433832795028841968);
 real Angle :: PiDiv2 = Angle::Pi / real( 2.0);
 real Angle :: PiMult2 = Angle::Pi * real( 2.0);
 

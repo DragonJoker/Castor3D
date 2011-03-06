@@ -9,9 +9,80 @@
 using namespace Castor;
 using namespace Castor::Utils;
 
+//*************************************************************************************************
+
 unsigned long long MemoryTracedBase::TotalAllocatedSize = 0;
 unsigned long long MemoryTracedBase::TotalAllocatedObjectCount = 0;
 unsigned long long MemoryTracedBase::TotalAllocatedArrayCount = 0;
+
+//*************************************************************************************************
+
+MemoryBlockBase :: MemoryBlockBase()
+	:	file		(NULL)
+	,	function	(NULL)
+	,	line		(0)
+	,	size		(0)
+	,	isArray		(false)
+{
+}
+
+MemoryBlockBase :: MemoryBlockBase(	const char * p_file, const char * p_function, unsigned int p_line)
+	:	file		(p_file)
+	,	function	(p_function)
+	,	line		(p_line)
+	,	size		(0)
+	,	isArray		(false)
+{
+}
+
+MemoryBlockBase :: MemoryBlockBase( size_t p_size, bool p_array)
+	:	file		(NULL)
+	,	function	(NULL)
+	,	line		(0)
+	,	size		(p_size)
+	,	isArray		(p_array)
+{
+}
+
+MemoryBlockBase :: ~MemoryBlockBase()
+{
+}
+
+void * MemoryBlockBase :: operator new( size_t p_size)
+{
+	void * l_pReturn = malloc( p_size);
+	return l_pReturn;
+}
+
+void MemoryBlockBase :: operator delete( void * p_pointer)
+{
+	free( p_pointer);
+}
+
+MemoryBlockBase & MemoryBlockBase :: operator =( const MemoryBlockBase & p_other)
+{
+	Assign( p_other);
+	return * this;
+}
+
+void MemoryBlockBase :: Clear()
+{
+	file = NULL;
+	function = NULL;
+	line = 0;
+	size = 0;
+	isArray = false;
+}
+
+void MemoryBlockBase :: Assign( const MemoryBlockBase & p_block)
+{
+	file = p_block.file;
+	function = p_block.function;
+	line = p_block.line;
+}
+
+//*************************************************************************************************
+
 unsigned int MemoryManager :: sm_initialised = 0;
 
 MemoryManager :: MemoryManager()
@@ -23,13 +94,13 @@ MemoryManager :: MemoryManager()
 		m_pMutex					( new Castor::MultiThreading::RecursiveMutex),
 		m_totalMemoryAllocated		( 0)
 {
-	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( * m_pMutex);
+//	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( * m_pMutex);
 	sm_initialised = 1;
 	FILE * l_file;
-	fopen_s( & l_file, ALLOG_LOCATION, "w");
+	FOpen( l_file, ALLOG_LOCATION, "w");
 	fclose( l_file);
 
-	fopen_s( & l_file, DEALLOG_LOCATION, "w");
+	FOpen( l_file, DEALLOG_LOCATION, "w");
 	fclose( l_file);
 }
 
@@ -49,14 +120,14 @@ MemoryManager :: ~MemoryManager()
 	delete m_pMutex;
 }
 
-MemoryManager & MemoryManager :: operator <<( const MemoryBlock & p_block)
+MemoryManager & MemoryManager :: operator <<( const MemoryBlockBase & p_block)
 {
 	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( * m_pMutex);
 	m_lastBlock = p_block;
 	return * this;
 }
 
-void MemoryManager :: _addMemoryBlock( void * p_pointer, MemoryBlock * p_pBlock)
+void MemoryManager :: _addMemoryBlock( void * p_pointer, MemoryBlockBase * p_pBlock)
 {
 	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( * m_pMutex);
 
@@ -100,7 +171,7 @@ bool MemoryManager :: RemoveLocation( void * p_pointer, bool p_isArray)
 
 	if (ifind != m_memoryMap.end())
 	{
-		MemoryBlock * p_block = ifind->second;
+		MemoryBlockBase * p_block = ifind->second;
 		RecordDeallocation( p_block->size);
 		m_memoryMap.erase( ifind);
 		delete p_block;
@@ -108,7 +179,7 @@ bool MemoryManager :: RemoveLocation( void * p_pointer, bool p_isArray)
 	}
 	else
 	{
-		m_failedDeletes.push_back( new MemoryBlock( "", "", 0));
+		m_failedDeletes.push_back( new MemoryBlockBase( "", "", 0));
 	}
 
 	return false;
@@ -117,7 +188,7 @@ bool MemoryManager :: RemoveLocation( void * p_pointer, bool p_isArray)
 void MemoryManager :: FailedAlloc( unsigned int p_size, bool p_isArray)
 {
 	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( * m_pMutex);
-	m_failedNews.push_back( new MemoryBlock( "", "", 0));
+	m_failedNews.push_back( new MemoryBlockBase( "", "", 0));
 }
 
 void MemoryManager :: RecordAllocation( unsigned int p_size)
@@ -142,20 +213,20 @@ void MemoryManager :: _finalReport()
 {
 	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( * m_pMutex);
 	FILE * l_file;
-	fopen_s( & l_file, LOG_LOCATION, "w");
+	FOpen( l_file, LOG_LOCATION, "w");
 
 	if (l_file != NULL)
 	{
 		time_t rawtime;
-		tm ti;
+		struct tm * ti = NULL;
 
 		time( & rawtime);
-		localtime_s( & ti, & rawtime);
+		Localtime( ti, & rawtime);
 
-		ti.tm_year += 1900;
-		ti.tm_mon ++;
+		ti->tm_year += 1900;
+		ti->tm_mon ++;
 
-		fprintf( l_file, "Memoryleak.log : %.2d/%.2d/%.4d @ %.2d:%.2d:%.2d\n", ti.tm_mday, ti.tm_mon, ti.tm_year, ti.tm_hour, ti.tm_min, ti.tm_sec);
+		fprintf( l_file, "Memoryleak.log : %.2d/%.2d/%.4d @ %.2d:%.2d:%.2d\n", ti->tm_mday, ti->tm_mon, ti->tm_year, ti->tm_hour, ti->tm_min, ti->tm_sec);
 
 		fprintf( l_file, "Total memory leaked : %d bytes\n", m_currentMemoryAllocated);
 		fprintf( l_file, "Maximum memory usage : %d bytes\n", m_maximumMemoryAllocated);
@@ -170,7 +241,7 @@ void MemoryManager :: _finalReport()
 
 			for ( ; iter != iend ; ++ iter)
 			{
-				MemoryBlock * l_block = iter->second;
+				MemoryBlockBase * l_block = iter->second;
 
 				if (l_block->file == NULL)
 				{
@@ -222,12 +293,12 @@ void MemoryManager :: MemoryLeaksReport( const String & p_filename)
 	}
 
 	time_t rawtime;
-	tm ti;
+	struct tm * ti = NULL;
 
 	time( & rawtime);
-	localtime_s( & ti, & rawtime);
-	
-	* out << "Memoryleak.log : " << ti.tm_mday << "/" << (ti.tm_mon + 1) << "/" << (ti.tm_year + 1900) << " @ " << ti.tm_hour << ":" << ti.tm_min << ":" << ti.tm_sec << std::endl << std::endl;
+	Localtime( ti, & rawtime);
+
+	* out << "Memoryleak.log : " << ti->tm_mday << "/" << (ti->tm_mon + 1) << "/" << (ti->tm_year + 1900) << " @ " << ti->tm_hour << ":" << ti->tm_min << ":" << ti->tm_sec << std::endl << std::endl;
 
 	* out << "Total memory leaked : " << m_currentMemoryAllocated << " bytes" << std::endl;
 	* out << "Maximum memory usage : " << m_maximumMemoryAllocated << " bytes" << std::endl;
@@ -242,7 +313,7 @@ void MemoryManager :: MemoryLeaksReport( const String & p_filename)
 
 		for ( ; iter != iend ; ++ iter)
 		{
-			MemoryBlock * l_block = iter->second;
+			MemoryBlockBase * l_block = iter->second;
 			* out << (l_block->isArray ? "Array" : "Object") << " leaked : " << l_block->size << " bytes, created in " << l_block->function << "() , line " << l_block->line << " of file " << l_block->file << std::endl;
 		}
 	}
@@ -259,7 +330,7 @@ void MemoryManager :: MemoryLeaksReport( const String & p_filename)
 
 		for (size_t i = 0 ; i < imax ; i++)
 		{
-			MemoryBlock * l_block = m_failedDeletes[i];
+			MemoryBlockBase * l_block = m_failedDeletes[i];
 			* out << "Deletion of an invalid " << (l_block->isArray ? "array" : "object") << " pointer @ " << l_block->function << "() , line " << l_block->line << " of file " << l_block->file << std::endl;
 		}
 	}
@@ -276,7 +347,7 @@ void MemoryManager :: MemoryLeaksReport( const String & p_filename)
 
 		for (size_t i = 0 ; i < imax ; i++)
 		{
-			MemoryBlock * l_block = m_failedNews[i];
+			MemoryBlockBase * l_block = m_failedNews[i];
 			* out << "Failed allocation of an " << (l_block->isArray ? "array" : "object") << " pointer @ " << l_block->function << "() , line " << l_block->line << " of file " << l_block->file << std::endl;
 		}
 	}
@@ -293,4 +364,122 @@ void MemoryManager :: MemoryLeaksReport( const String & p_filename)
 
 	MemoryManager::Unlock();
 }
+
+#undef new
+/*
+void * operator new( size_t p_size)
+{
+	void * l_ptr = malloc( p_size);
+
+	if (MemoryManager::Exists())
+	{
+		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( MemoryManager::GetSingleton().m_mutex);
+
+		if ( ! MemoryManager::IsLocked())
+		{
+			MemoryManager::Lock();
+
+			if (l_ptr != NULL)
+			{
+				MemoryManager::GetSingleton().AddLocation( p_size, l_ptr, false);
+			}
+			else
+			{
+				MemoryManager::GetSingleton().FailedAlloc( p_size, false);
+			}
+
+			MemoryManager::Unlock();
+		}
+	}
+
+	return l_ptr;
+}
+
+void operator delete( void * p_pointer)
+{
+	if (MemoryManager::Exists())
+	{
+		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( MemoryManager::GetSingleton().m_mutex);
+
+		if ( ! MemoryManager::IsLocked())
+		{
+			MemoryManager::Lock();
+
+			if (MemoryManager::GetSingleton().RemoveLocation( p_pointer, false))
+			{
+				free( p_pointer);
+			}
+
+			MemoryManager::Unlock();
+		}
+		else
+		{
+			free( p_pointer);
+		}
+	}
+	else
+	{
+		free( p_pointer);
+	}
+}
+/**/
+/*
+void * operator new[]( size_t p_size)
+{
+	void * l_ptr = malloc( p_size);
+
+	if (MemoryManager::Exists())
+	{
+		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( MemoryManager::GetSingleton().m_mutex);
+
+		if ( ! MemoryManager::IsLocked())
+		{
+			MemoryManager::Lock();
+
+			if (l_ptr != NULL)
+			{
+				MemoryManager::GetSingleton().AddLocation( p_size, l_ptr, true);
+			}
+			else
+			{
+				MemoryManager::GetSingleton().FailedAlloc( p_size, true);
+			}
+
+			MemoryManager::Unlock();
+		}
+	}
+
+	return l_ptr;
+}
+
+void operator delete[]( void * p_pointer)
+{
+	if (MemoryManager::Exists())
+	{
+		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( MemoryManager::GetSingleton().m_mutex);
+
+		if ( ! MemoryManager::IsLocked())
+		{
+			MemoryManager::Lock();
+
+			if (MemoryManager::GetSingleton().RemoveLocation( p_pointer, true))
+			{
+				free( p_pointer);
+			}
+
+			MemoryManager::Unlock();
+		}
+		else
+		{
+			free( p_pointer);
+		}
+	}
+	else
+	{
+		free( p_pointer);
+	}
+}
+/**/
+
+//*************************************************************************************************
 #endif

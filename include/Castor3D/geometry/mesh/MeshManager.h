@@ -29,14 +29,16 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class C3D_API MeshManager : public Castor::Templates::Manager<String, Mesh, MeshManager>
+	class C3D_API MeshManager : public Serialisable, public Castor::Templates::Manager<Mesh>
 	{
 	private:
-		friend class Castor::Templates::Manager<String, Mesh, MeshManager>;
+		friend class Castor::Templates::Manager<Mesh>;
 
 		SceneManager			*	m_pParent;
 
 	public:
+		/**@name Construction / Destruction */
+		//@{
 		/**
 		 * Constructor
 		 */
@@ -45,6 +47,8 @@ namespace Castor3D
 		 * Destructor
 		 */
 		~MeshManager();
+		//@}
+
 		/**
 		 * Flushes all the create meshes
 		 */
@@ -58,19 +62,13 @@ namespace Castor3D
 		 *@return The created mesh, NULL if unknown MeshType (but is it possible ?)
 		 */
 		MeshPtr CreateMesh( const String & p_name, const UIntArray & p_faces, 
-								   const FloatArray & p_size, Mesh::eTYPE p_type=Mesh::eCustom);
-		/**
-		 * Writes all the meshes in a file
-		 *@param p_path : [in] The path of the file to write in
-		 *@return true if successful, false if not
-		 */
-		bool Write( const String & p_path);
-		/**
-		 * Reads all the meshes from a file
-		 *@param p_path : [in] The path of the file to read from
-		 *@return true if successful, false if not
-		 */
-		bool Read( const String & p_path);
+			const FloatArray & p_size, eMESH_TYPE p_type=eCustom);
+
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
 
 	private:
 		bool _addElement( MeshPtr p_element);

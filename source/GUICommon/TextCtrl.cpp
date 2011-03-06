@@ -1,13 +1,13 @@
-#include "GUICommon/PrecompiledHeader.h"
+#include "GuiCommon/PrecompiledHeader.h"
 
-#include "GUICommon/TextCtrl.h"
-#include "GUICommon/TextPanel.h"
-#include "GUICommon/TextLinesCtrl.h"
+#include "GuiCommon/TextCtrl.h"
+#include "GuiCommon/TextPanel.h"
+#include "GuiCommon/TextLinesCtrl.h"
 
-using namespace GUICommon;
+using namespace GuiCommon;
 using namespace Castor3D;
 
-TextCtrl :: TextCtrl( wxWindow * parent, wxWindowID id, const wxString& value, 
+TextCtrl :: TextCtrl( wxWindow * parent, wxWindowID id, const wxString& value,
 					  const wxPoint& pos, const wxSize& size, long style)
 	:	wxTextCtrl( parent, id, value, pos, size, style),
 		m_posDeb		( 0),

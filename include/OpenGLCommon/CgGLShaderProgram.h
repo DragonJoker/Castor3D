@@ -15,46 +15,46 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL_CgShaderProgram___
-#define ___GL_CgShaderProgram___
+#ifndef ___Gl_CgShaderProgram___
+#define ___Gl_CgShaderProgram___
 
-#include "Module_GLRender.h"
+#include "Module_GlRender.h"
 
-#include <Castor3D/shader/Cg/CgShaderProgram.h>
+#include <Castor3D/shader/ShaderProgram.h>
 
 namespace Castor3D
 {
-	class CgGLShaderProgram : public CgShaderProgram
+	class CgGlShaderProgram : public CgShaderProgram
 	{
 	private:
-		SmartPtr < CgGLPointFrameVariable<float, 4> >::Shared		m_pAmbients;
-		SmartPtr < CgGLPointFrameVariable<float, 4> >::Shared		m_pDiffuses;
-		SmartPtr < CgGLPointFrameVariable<float, 4> >::Shared		m_pSpeculars;
-		SmartPtr < CgGLPointFrameVariable<float, 4> >::Shared		m_pPositions;
-		SmartPtr < CgGLPointFrameVariable<float, 3> >::Shared		m_pAttenuations;
-		SmartPtr < CgGLMatrixFrameVariable<float, 4, 4> >::Shared	m_pOrientations;
-		SmartPtr < CgGLOneFrameVariable<float> >::Shared			m_pExponents;
-		SmartPtr < CgGLOneFrameVariable<float> >::Shared			m_pCutOffs;
+		shared_ptr < CgGlPointFrameVariable<float, 4>		>	m_pAmbients;
+		shared_ptr < CgGlPointFrameVariable<float, 4>		>	m_pDiffuses;
+		shared_ptr < CgGlPointFrameVariable<float, 4>		>	m_pSpeculars;
+		shared_ptr < CgGlPointFrameVariable<float, 4>		>	m_pPositions;
+		shared_ptr < CgGlPointFrameVariable<float, 3>		>	m_pAttenuations;
+		shared_ptr < CgGlMatrixFrameVariable<float, 4, 4>	>	m_pOrientations;
+		shared_ptr < CgGlOneFrameVariable<float> 			>	m_pExponents;
+		shared_ptr < CgGlOneFrameVariable<float> 			>	m_pCutOffs;
 
 		std::set <int> m_setFreeLights;
 
-		SmartPtr < CgGLPointFrameVariable<float, 4> >::Shared 	m_pAmbient;
-		SmartPtr < CgGLPointFrameVariable<float, 4> >::Shared 	m_pDiffuse;
-		SmartPtr < CgGLPointFrameVariable<float, 4> >::Shared 	m_pEmissive;
-		SmartPtr < CgGLPointFrameVariable<float, 4> >::Shared 	m_pSpecular;
-		SmartPtr < CgGLOneFrameVariable<float> >::Shared 			m_pShininess;
+		shared_ptr < CgGlPointFrameVariable<float, 4>	> 	m_pAmbient;
+		shared_ptr < CgGlPointFrameVariable<float, 4>	> 	m_pDiffuse;
+		shared_ptr < CgGlPointFrameVariable<float, 4>	> 	m_pEmissive;
+		shared_ptr < CgGlPointFrameVariable<float, 4>	> 	m_pSpecular;
+		shared_ptr < CgGlOneFrameVariable<float>		> 	m_pShininess;
 		bool m_bMatChanged;
 
-		SmartPtr < CgGLPointFrameVariable<float, 4> >::Shared 	m_pAmbientLight;
+		shared_ptr < CgGlPointFrameVariable<float, 4>	> 	m_pAmbientLight;
 
 	protected:
 		String		m_linkerLog;
-		CgGLFrameVariablePtrStrMap m_mapCgGLFrameVariables;
+		CgGlFrameVariablePtrStrMap m_mapCgGlFrameVariables;
 
 	public:
-		CgGLShaderProgram();
-		CgGLShaderProgram( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile);
-		virtual ~CgGLShaderProgram();
+		CgGlShaderProgram();
+		CgGlShaderProgram( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile);
+		virtual ~CgGlShaderProgram();
 		virtual void Cleanup();
 		virtual void Initialise();
 		/**
@@ -92,57 +92,57 @@ namespace Castor3D
 		void SetMaterialEmissive( const Point4f & p_crColour);
 		void SetMaterialShininess( float p_fShine);
 
-		CgGLFrameVariablePtr GetCgGLFrameVariable( const String & p_strName);
+		CgGlFrameVariablePtr GetCgGlFrameVariable( const String & p_strName);
 
 		virtual void AddFrameVariable( CgFrameVariablePtr p_pVariable, CgShaderObjectPtr p_pObject);
 
 		template <typename T>
-		void AddFrameVariable( typename SmartPtr< CgOneFrameVariable<T> >::Shared p_pVariable, CgShaderObjectPtr p_pObject)
+		void AddFrameVariable( shared_ptr< CgOneFrameVariable<T> > p_pVariable, CgShaderObjectPtr p_pObject)
 		{
 			CgShaderProgram::AddFrameVariable( p_pVariable, p_pObject);
 
-			if ( ! p_pVariable == NULL)
+			if (p_pVariable != NULL)
 			{
-				if (m_mapCgGLFrameVariables.find( p_pVariable->GetName()) == m_mapCgGLFrameVariables.end())
+				if (m_mapCgGlFrameVariables.find( p_pVariable->GetName()) == m_mapCgGlFrameVariables.end())
 				{
-					typename SmartPtr< CgGLOneFrameVariable<T> >::Shared l_pGLVariable( new CgGLOneFrameVariable<T>( p_pVariable.get()));
-					m_mapCgGLFrameVariables.insert( CgGLFrameVariablePtrStrMap::value_type( p_pVariable->GetName(), static_pointer_cast<CgGLFrameVariableBase>( l_pGLVariable)));
+					shared_ptr< CgGlOneFrameVariable<T> > l_pGLVariable( new CgGlOneFrameVariable<T>( p_pVariable.get()));
+					m_mapCgGlFrameVariables.insert( CgGlFrameVariablePtrStrMap::value_type( p_pVariable->GetName(), static_pointer_cast<CgGlFrameVariableBase>( l_pGLVariable)));
 				}
 			}
 		}
 
 		template <typename T, size_t Count>
-		void AddFrameVariable( typename SmartPtr< CgPointFrameVariable<T, Count> >::Shared p_pVariable, CgShaderObjectPtr p_pObject)
+		void AddFrameVariable( shared_ptr< CgPointFrameVariable<T, Count> > p_pVariable, CgShaderObjectPtr p_pObject)
 		{
 			CgShaderProgram::AddFrameVariable( p_pVariable, p_pObject);
 
-			if ( ! p_pVariable == NULL)
+			if (p_pVariable != NULL)
 			{
-				if (m_mapCgGLFrameVariables.find( p_pVariable->GetName()) == m_mapCgGLFrameVariables.end())
+				if (m_mapCgGlFrameVariables.find( p_pVariable->GetName()) == m_mapCgGlFrameVariables.end())
 				{
-					typename SmartPtr< CgGLPointFrameVariable<T, Count> >::Shared l_pGLVariable( new CgGLPointFrameVariable<T, Count>( p_pVariable.get()));
-					m_mapCgGLFrameVariables.insert( CgGLFrameVariablePtrStrMap::value_type( p_pVariable->GetName(), static_pointer_cast<CgGLFrameVariableBase>( l_pGLVariable)));
+					shared_ptr< CgGlPointFrameVariable<T, Count> > l_pGLVariable( new CgGlPointFrameVariable<T, Count>( p_pVariable.get()));
+					m_mapCgGlFrameVariables.insert( CgGlFrameVariablePtrStrMap::value_type( p_pVariable->GetName(), static_pointer_cast<CgGlFrameVariableBase>( l_pGLVariable)));
 				}
 			}
 		}
 
 		template <typename T, size_t Rows, size_t Columns>
-		void AddFrameVariable( typename SmartPtr< CgMatrixFrameVariable<T, Rows, Columns> >::Shared p_pVariable, CgShaderObjectPtr p_pObject)
+		void AddFrameVariable( shared_ptr< CgMatrixFrameVariable<T, Rows, Columns> > p_pVariable, CgShaderObjectPtr p_pObject)
 		{
 			CgShaderProgram::AddFrameVariable( p_pVariable, p_pObject);
 
-			if ( ! p_pVariable == NULL)
+			if (p_pVariable != NULL)
 			{
-				if (m_mapCgGLFrameVariables.find( p_pVariable->GetName()) == m_mapCgGLFrameVariables.end())
+				if (m_mapCgGlFrameVariables.find( p_pVariable->GetName()) == m_mapCgGlFrameVariables.end())
 				{
-					typename SmartPtr< CgGLMatrixFrameVariable<T, Rows, Columns> >::Shared l_pGLVariable( new CgGLMatrixFrameVariable<T, Rows, Columns>( p_pVariable.get()));
-					m_mapCgGLFrameVariables.insert( CgGLFrameVariablePtrStrMap::value_type( p_pVariable->GetName(), static_pointer_cast<CgGLFrameVariableBase>( l_pGLVariable)));
+					 shared_ptr< CgGlMatrixFrameVariable<T, Rows, Columns> > l_pGLVariable( new CgGlMatrixFrameVariable<T, Rows, Columns>( p_pVariable.get()));
+					m_mapCgGlFrameVariables.insert( CgGlFrameVariablePtrStrMap::value_type( p_pVariable->GetName(), static_pointer_cast<CgGlFrameVariableBase>( l_pGLVariable)));
 				}
 			}
 		}
 
 	public:
-		inline const CgGLFrameVariablePtrStrMap &	GetCgGLFrameVariables	()const { return m_mapCgGLFrameVariables; }
+		inline const CgGlFrameVariablePtrStrMap &	GetCgGlFrameVariables	()const { return m_mapCgGlFrameVariables; }
 	};
 }
 

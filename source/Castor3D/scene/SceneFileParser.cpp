@@ -5,6 +5,7 @@
 #include "Castor3D/scene/SceneManager.h"
 #include "Castor3D/scene/Scene.h"
 #include "Castor3D/material/MaterialManager.h"
+#include "Castor3D/material/TextureUnit.h"
 
 using namespace Castor3D;
 using namespace Castor::Utils;
@@ -14,11 +15,12 @@ using namespace Castor::Utils;
 SceneFileContext :: SceneFileContext( SceneManager * p_pSceneManager)
 	:	m_pSceneManager(p_pSceneManager)
 {
-	Initialise();
+	Initialise( SceneNodePtr());
 }
 
-void SceneFileContext :: Initialise()
+void SceneFileContext :: Initialise( SceneNodePtr p_pNode)
 {
+	m_pGeneralParentNode = p_pNode;
 	m_pMaterialManager = m_pSceneManager->GetMaterialManager();
 	m_pMeshManager = m_pSceneManager->GetMeshManager();
 	m_pImageManager = m_pSceneManager->GetImageManager();
@@ -34,8 +36,12 @@ void SceneFileContext :: Initialise()
 	pMaterial.reset();
 	uiPass = -1;
 	pTextureUnit.reset();
-	pShaderProgram.reset();
+	pGlslShaderProgram.reset();
+	pGlslShaderObject.reset();
 	pFrameVariable.reset();
+	pCgShaderProgram.reset();
+	pCgShaderObject.reset();
+	pCgFrameVariable.reset();
 	iFace1 = -1;
 	iFace2 = -1;
 
@@ -43,6 +49,7 @@ void SceneFileContext :: Initialise()
 	strName2.clear();
 	
 	pFile				= NULL;
+	pOverlay			= NULL;
 
 	ui64Line			= 0;
 }
@@ -57,6 +64,8 @@ SceneFileParser :: SceneFileParser( SceneManager * p_pSceneManager)
 	m_mapRootParsers				["scene_node"]			= Parser_RootSceneNode;
 	m_mapRootParsers				["camera"]				= Parser_RootCamera;
 	m_mapRootParsers				["material"]			= Parser_RootMaterial;
+	m_mapRootParsers				["font"]				= Parser_RootFont;
+	m_mapRootParsers				["text_overlay"]		= Parser_RootTextOverlay;
 	m_mapRootParsers				["ambient_light"]		= Parser_RootAmbientLight;
 
 	m_mapLightParsers				["parent"]				= Parser_LightParent;
@@ -109,14 +118,22 @@ SceneFileParser :: SceneFileParser( SceneManager * p_pSceneManager)
 	m_mapPassParsers				["alpha"]				= Parser_PassAlpha;
 	m_mapPassParsers				["tex_base"]			= Parser_PassBaseTexColour;
 	m_mapPassParsers				["double_face"]			= Parser_PassDoubleFace;
+	m_mapPassParsers				["blend_func"]			= Parser_PassBlendFunc;
 	m_mapPassParsers				["texture_unit"]		= Parser_PassTextureUnit;
 	m_mapPassParsers				["gl_shader_program"]	= Parser_PassGlShader;
 	m_mapPassParsers				["cg_shader_program"]	= Parser_PassCgShader;
+	m_mapPassParsers				["hl_shader_program"]	= Parser_PassHlShader;
 	m_mapPassParsers				["}"]					= Parser_PassEnd;
 
 	m_mapTextureUnitParsers			["image"]				= Parser_UnitImage;
 	m_mapTextureUnitParsers			["colour"]				= Parser_UnitColour;
 	m_mapTextureUnitParsers			["map_type"]			= Parser_UnitMapType;
+	m_mapTextureUnitParsers			["alpha_func"]			= Parser_UnitAlphaFunc;
+	m_mapTextureUnitParsers			["blend_mode"]			= Parser_UnitBlendMode;
+	m_mapTextureUnitParsers			["rgb_combine"]			= Parser_UnitRGBCombination;
+	m_mapTextureUnitParsers			["alpha_combine"]		= Parser_UnitAlphaCombination;
+	m_mapTextureUnitParsers			["rgb_blend"]			= Parser_UnitRgbBlend;
+	m_mapTextureUnitParsers			["alpha_blend"]			= Parser_UnitAlphaBlend;
 	m_mapTextureUnitParsers			["}"]					= Parser_UnitEnd;
 
 	m_mapGlShaderParsers			["vertex_program"]		= Parser_GlVertexShader;
@@ -134,6 +151,21 @@ SceneFileParser :: SceneFileParser( SceneManager * p_pSceneManager)
 	m_mapGlShaderVariableParsers	["value"]				= Parser_GlShaderVariableValue;
 	m_mapGlShaderVariableParsers	["}"]					= Parser_GlShaderVariableEnd;
 
+	m_mapHlShaderParsers			["vertex_program"]		= Parser_HlVertexShader;
+	m_mapHlShaderParsers			["pixel_program"]		= Parser_HlPixelShader;
+	m_mapHlShaderParsers			["geometry_program"]	= Parser_HlGeometryShader;
+	m_mapHlShaderParsers			["}"]					= Parser_HlShaderEnd;
+
+	m_mapHlShaderProgramParsers		["file"]				= Parser_HlShaderProgramFile;
+	m_mapHlShaderProgramParsers		["text"]				= Parser_HlShaderProgramText;
+	m_mapHlShaderProgramParsers		["variable"]			= Parser_HlShaderProgramVariable;
+	m_mapHlShaderProgramParsers		["}"]					= Parser_HlShaderProgramEnd;
+
+	m_mapHlShaderVariableParsers	["type"]				= Parser_HlShaderVariableType;
+	m_mapHlShaderVariableParsers	["name"]				= Parser_HlShaderVariableName;
+	m_mapHlShaderVariableParsers	["value"]				= Parser_HlShaderVariableValue;
+	m_mapHlShaderVariableParsers	["}"]					= Parser_HlShaderVariableEnd;
+
 	m_mapCgShaderParsers			["vertex_program"]		= Parser_CgVertexShader;
 	m_mapCgShaderParsers			["pixel_program"]		= Parser_CgPixelShader;
 	m_mapCgShaderParsers			["geometry_program"]	= Parser_CgGeometryShader;
@@ -148,28 +180,43 @@ SceneFileParser :: SceneFileParser( SceneManager * p_pSceneManager)
 	m_mapCgShaderVariableParsers	["name"]				= Parser_CgShaderVariableName;
 	m_mapCgShaderVariableParsers	["value"]				= Parser_CgShaderVariableValue;
 	m_mapCgShaderVariableParsers	["}"]					= Parser_CgShaderVariableEnd;
+
+	m_mapFontParsers				["file"]				= Parser_FontFile;
+	m_mapFontParsers				["height"]				= Parser_FontHeight;
+	m_mapFontParsers				["}"]					= Parser_FontEnd;
+
+	m_mapTextOverlayParsers			["font"]				= Parser_TextOverlayFont;
+	m_mapTextOverlayParsers			["material"]			= Parser_OverlayMaterial;
+	m_mapTextOverlayParsers			["text"]				= Parser_TextOverlayText;
+	m_mapTextOverlayParsers			["position"]			= Parser_OverlayPosition;
+	m_mapTextOverlayParsers			["size"]				= Parser_OverlaySize;
+	m_mapTextOverlayParsers			["}"]					= Parser_TextOverlayEnd;
+
+	m_mapCameraParsers				["parent"]				= Parser_CameraParent;
+	m_mapCameraParsers				["viewport"]			= Parser_CameraViewport;
+	m_mapCameraParsers				["}"]					= Parser_CameraEnd;
 }
 
 SceneFileParser :: ~SceneFileParser()
 {
+	m_pContext.reset();
 }
 
-bool SceneFileParser :: ParseFile( const String & p_strFileName)
+bool SceneFileParser :: ParseFile( File & p_file, SceneNodePtr p_pNode)
 {
 	bool l_bReturn = false;
 
-	File l_file( p_strFileName, File::eRead);
-
-	if (l_file.IsOk())
+	if (p_file.IsOk())
 	{
-		m_pContext->Initialise();
-		m_pContext->pFile = & l_file;
-		m_pContext->pScene = m_pContext->m_pSceneManager->CreateElement( "TmpScene");
+		m_pContext->Initialise( p_pNode);
+		m_pContext->pFile = & p_file;
+		m_pContext->pScene = ScenePtr( new Scene( m_pContext->m_pSceneManager, "TmpScene"));
+		m_pContext->m_pSceneManager->AddElement( m_pContext->pScene);
 
 		bool l_bNextIsOpenBrace = false;
 		bool l_bCommented = false;
 
-		Logger::LogMessage( CU_T( "SceneFileParser : Parsing scene file [") + l_file.GetFileName() + CU_T( "]"));
+		Logger::LogMessage( CU_T( "SceneFileParser : Parsing scene file [") + p_file.GetFileName() + CU_T( "]"));
 
 		m_pContext->eSection = SceneFileContext::eNone;
 		m_pContext->ui64Line = 0;
@@ -180,11 +227,11 @@ bool SceneFileParser :: ParseFile( const String & p_strFileName)
 
 		String l_strLine;
 
-		while (l_file.IsOk())
+		while (p_file.IsOk())
 		{
 			if ( ! l_bReuse)
 			{
-				l_file.ReadLine( l_strLine, 1000);
+				p_file.ReadLine( l_strLine, 1000);
 				m_pContext->ui64Line++;
 			}
 			else
@@ -192,7 +239,7 @@ bool SceneFileParser :: ParseFile( const String & p_strFileName)
 				l_bReuse = false;
 			}
 
-			l_strLine.Trim();
+			l_strLine.trim();
 
 			if (l_strLine.empty())
 			{
@@ -245,7 +292,7 @@ bool SceneFileParser :: ParseFile( const String & p_strFileName)
 			ParseError( "Parsing Error : ParseScript -> unexpected end of file", m_pContext);
 		}
 
-		Logger::LogMessage( CU_T( "SceneFileParser : Finished parsing script [") + l_file.GetFileName() + CU_T( "]"));
+		Logger::LogMessage( CU_T( "SceneFileParser : Finished parsing script [") + p_file.GetFileName() + CU_T( "]"));
 
 		l_bReturn = true;
 
@@ -256,11 +303,19 @@ bool SceneFileParser :: ParseFile( const String & p_strFileName)
 	return l_bReturn;
 }
 
+bool SceneFileParser :: ParseFile( const String & p_strFileName, SceneNodePtr p_pNode)
+{
+	File l_file( p_strFileName, File::eRead, File::eASCII);
+	return ParseFile( l_file, p_pNode);
+}
+
 bool SceneFileParser::_parseScriptLine( String & p_line)
 {
 	switch (m_pContext->eSection)
 	{
 	case SceneFileContext::eNone:				return _invokeParser( p_line, m_mapRootParsers);				break;
+	case SceneFileContext::eFont:				return _invokeParser( p_line, m_mapFontParsers);				break;
+	case SceneFileContext::eTextOverlay:		return _invokeParser( p_line, m_mapTextOverlayParsers);			break;
 	case SceneFileContext::eObject:				return _invokeParser( p_line, m_mapObjectParsers);				break;
 	case SceneFileContext::eMesh:				return _invokeParser( p_line, m_mapMeshParsers);				break;
 	case SceneFileContext::eSubmesh:			return _invokeParser( p_line, m_mapSubmeshParsers);				break;
@@ -271,9 +326,12 @@ bool SceneFileParser::_parseScriptLine( String & p_line)
 	case SceneFileContext::eMaterial:			return _invokeParser( p_line, m_mapMaterialParsers);			break;
 	case SceneFileContext::ePass:				return _invokeParser( p_line, m_mapPassParsers);				break;
 	case SceneFileContext::eTextureUnit:		return _invokeParser( p_line, m_mapTextureUnitParsers);			break;
-	case SceneFileContext::eGlShader:			return _invokeParser( p_line, m_mapGlShaderParsers);			break;
-	case SceneFileContext::eGlShaderProgram:	return _invokeParser( p_line, m_mapGlShaderProgramParsers);		break;
-	case SceneFileContext::eGlShaderVariable:	return _invokeParser( p_line, m_mapGlShaderVariableParsers);	break;
+	case SceneFileContext::eGlslShader:			return _invokeParser( p_line, m_mapGlShaderParsers);			break;
+	case SceneFileContext::eGlslShaderProgram:	return _invokeParser( p_line, m_mapGlShaderProgramParsers);		break;
+	case SceneFileContext::eGlslShaderVariable:	return _invokeParser( p_line, m_mapGlShaderVariableParsers);	break;
+	case SceneFileContext::eHlslShader:			return _invokeParser( p_line, m_mapHlShaderParsers);			break;
+	case SceneFileContext::eHlslShaderProgram:	return _invokeParser( p_line, m_mapHlShaderProgramParsers);		break;
+	case SceneFileContext::eHlslShaderVariable:	return _invokeParser( p_line, m_mapHlShaderVariableParsers);	break;
 	case SceneFileContext::eCgShader:			return _invokeParser( p_line, m_mapCgShaderParsers);			break;
 	case SceneFileContext::eCgShaderProgram:	return _invokeParser( p_line, m_mapCgShaderProgramParsers);		break;
 	case SceneFileContext::eCgShaderVariable:	return _invokeParser( p_line, m_mapCgShaderVariableParsers);	break;
@@ -287,7 +345,7 @@ bool SceneFileParser::_invokeParser( String & p_line, const AttributeParserMap &
 {
 	bool l_bReturn = false;
 
-    StringArray splitCmd = p_line.Split( " \t", 1);
+    StringArray splitCmd = p_line.split( " \t", 1);
 	const AttributeParserMap::const_iterator & l_iter = p_parsers.find( splitCmd[0]);
 
     if (l_iter == p_parsers.end())
@@ -298,7 +356,7 @@ bool SceneFileParser::_invokeParser( String & p_line, const AttributeParserMap &
 	{
 		if (splitCmd.size() >= 2)
 		{
-			splitCmd[1].Trim();
+			splitCmd[1].trim();
 
 			l_bReturn = l_iter->second( splitCmd[1], m_pContext);
 		}

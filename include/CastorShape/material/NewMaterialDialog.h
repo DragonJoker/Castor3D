@@ -23,7 +23,7 @@ namespace CastorShape
 		};
 
 	private:
-		GUICommon::MaterialPanel * m_materialPanel;
+		GuiCommon::MaterialPanel * m_materialPanel;
 		wxButton * m_okButton;
 		wxButton * m_cancelButton;
 		Castor3D::MaterialPtr m_material;

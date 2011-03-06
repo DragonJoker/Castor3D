@@ -56,13 +56,8 @@ void RenderPanel :: DrawOneFrame()
 void RenderPanel :: _initialiseRenderWindow()
 {
 	Logger::LogMessage( CU_T( "Initialising RenderWindow"));
-	m_renderWindow = Root::GetSingletonPtr()->CreateRenderWindow( m_mainScene,
-																  (void *)GetHandle(),
-																  GetClientSize().x,
-																  GetClientSize().y,
-																  m_renderType,
-																  Castor::Resources::pxfR8G8B8A8,
-																  m_lookAt);
+	m_renderWindow = Root::GetSingletonPtr()->CreateRenderWindow( m_mainScene, (void *)GetHandle(), GetClientSize().x, GetClientSize().y,
+																  m_renderType, eA8R8G8B8, m_lookAt);
 	m_listener = m_renderWindow->GetListener();
 
 	if (m_timer == NULL)
@@ -84,7 +79,7 @@ BEGIN_EVENT_TABLE( RenderPanel, wxPanel)
 	EVT_ENTER_WINDOW(		RenderPanel::_onEnterWindow)
 	EVT_LEAVE_WINDOW(		RenderPanel::_onLeaveWindow)
 	EVT_ERASE_BACKGROUND(	RenderPanel::_onEraseBackground)
-	
+
 	EVT_SET_FOCUS(			RenderPanel::_onSetFocus)
 	EVT_KILL_FOCUS(			RenderPanel::_onKillFocus)
 

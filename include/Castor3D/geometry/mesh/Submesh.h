@@ -33,10 +33,10 @@ namespace Castor3D
 	class C3D_API SubmeshRenderer : public Renderer<Submesh, SubmeshRenderer>
 	{
 	protected:
-		VertexInfosBufferPtr	m_vertex;				//!< Pointer over geometry vertex buffer
-		IndicesBufferPtr		m_indices[eNbDrawType];	//!< Pointer over geometry indices buffer
-		eDRAW_TYPE				m_eLastDrawType;
-		eNORMALS_MODE			m_eLastNormalsMode;
+		VertexBufferPtr		m_vertex;					//!< Pointer over geometry vertex buffer
+		IndexBufferPtr		m_indices[eNbDrawTypes];	//!< Pointer over geometry indices buffer
+		ePRIMITIVE_TYPE			m_eLastDrawType;
+		eNORMALS_MODE		m_eLastNormalsMode;
 		/**
 		 * Constructor, only RenderSystem can use it
 		 */
@@ -54,26 +54,26 @@ namespace Castor3D
 		/**
 		* Initialises the geometry's buffers
 		*/
-		virtual void Draw( eDRAW_TYPE p_eMode, const Pass & p_pass);
+		virtual void Draw( ePRIMITIVE_TYPE p_eMode, const Pass & p_pass);
 		/**
 		* Initialises the geometry's buffers
 		*/
 		virtual void Initialise() = 0;
 
-		virtual VertexInfosBufferPtr CreateVertexBuffer()=0;
+//		virtual VertexBufferPtr CreateVertexBuffer( BufferDeclarationPtr p_pBufferDeclaration)=0;
 
 	public:
 		/**@name Accessors */
 		//@{
-		inline void	SetVertex( VertexInfosBufferPtr p_vertex)	{ m_vertex = p_vertex; }
+		inline void	SetVertex( VertexBufferPtr p_vertex)	{ m_vertex = p_vertex; }
 
-		inline VertexInfosBufferPtr			GetVertex		()const { return m_vertex; }
-		inline IndicesBufferPtr				GetIndices		( eDRAW_TYPE p_eType)const { CASTOR_ASSERT( p_eType < eNbDrawType);return m_indices[p_eType]; }
+		inline VertexBufferPtr	GetVertex		()const { return m_vertex; }
+		inline IndexBufferPtr	GetIndices		( ePRIMITIVE_TYPE p_eType)const { CASTOR_ASSERT( p_eType < eNbDrawTypes);return m_indices[p_eType]; }
 		//@}
 
 	protected:
 		virtual void _drawBuffers( const Pass & p_pass) = 0;
-		void _createVBOs();
+		void _createVbo();
 	};
 	//! The submesh representation
 	/*!
@@ -81,18 +81,18 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class C3D_API Submesh : public Renderable<Submesh, SubmeshRenderer>
+	class C3D_API Submesh : public Serialisable, public Textable, public Renderable<Submesh, SubmeshRenderer>
 	{
 	protected:
-		SmartPtr<Material>::Weak	m_material;				//!< The material
-		String						m_strMatName;			//!< The materialname
-		SmoothGroupPtrArray			m_smoothGroups;			//!< The smoothgroups (which hold the faces)
-		CubeBox						m_box;					//!< The combo box container
-		SphereBox					m_sphere;				//!< The spheric container
-		IdPoint3rPtrArray			m_points;				//!< The vertex pointer array
-		VertexInfosBufferPtr		m_vertex;				//!< Pointer over geometry vertex
-		IndicesBufferPtr			m_indices[eNbDrawType];	//!< Pointer over geometry indices buffer
-		eNORMALS_MODE				m_normalsMode;			//!< The current normal's mode
+		weak_ptr<Material>		m_material;				//!< The material
+		String					m_strMatName;			//!< The materialname
+		SmoothGroupPtrArray		m_smoothGroups;			//!< The smoothgroups (which hold the faces)
+		CubeBox					m_box;					//!< The combo box container
+		SphereBox				m_sphere;				//!< The spheric container
+		IdPoint3rPtrArray		m_points;				//!< The vertex pointer array
+		VertexBufferPtr			m_vertex;				//!< Pointer over geometry vertex
+		IndexBufferPtr			m_indices[eNbDrawTypes];//!< Pointer over geometry indices buffer
+		eNORMALS_MODE			m_normalsMode;			//!< The current normal's mode
 
 	public:
 		/**
@@ -178,6 +178,15 @@ namespace Castor3D
 		 */
 		FacePtr AddFace( size_t a, size_t b, size_t c, size_t p_sgIndex);
 		/**
+		 * Creates and adds a face to the wanted smoothgroup
+		 *@param a : [in] The first face's vertex index
+		 *@param b : [in] The second face's vertex index
+		 *@param c : [in] The third face's vertex index
+		 *@param p_sgIndex : [in] The wanted smoothing group index
+		 *@return The created face
+		 */
+		FacePtr AddFace( size_t a, size_t b, size_t c, SmoothingGroup & p_pGroup);
+		/**
 		 * Creates and adds a quad face to the wanted smoothgroup
 		 *@param a : [in] The first face's vertex index
 		 *@param b : [in] The second face's vertex index
@@ -209,18 +218,6 @@ namespace Castor3D
 		*/
 		void Subdivide( SubdividerPtr p_subdivider, Point3r * p_center=NULL, bool p_bGenerateBuffers=true, bool p_bThreaded=false);
 		/**
-		 * Writes the submesh in a file
-		 *@param p_file : [in] The file to write in
-		 *@return true if successful, false if not
-		 */
-		virtual bool Write( Castor::Utils::File & p_file)const;
-		/**
-		 * Reads the submesh from a file
-		 *@param p_file : [in] The file to read from
-		 *@return true if successful, false if not
-		 */
-		virtual bool Read( Castor::Utils::File & p_file);
-		/**
 		 * 
 		 */
 		void ComputeFacesFromPolygonVertex();
@@ -232,7 +229,42 @@ namespace Castor3D
 		 * Renders the submesh
 		 *@param p_displayMode : [in] The display mode
 		 */
-		virtual void Render( eDRAW_TYPE p_displayMode);
+		virtual void Render( ePRIMITIVE_TYPE p_displayMode);
+
+		/**@name Inherited methods from Textable */
+		//@{
+		virtual bool Write( File & p_file)const;
+		virtual bool Read( File & p_file) { return false; }
+		//@}
+
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
+
+		/**@name Accessors */
+		//@{
+		inline void SetMaterial		( MaterialPtr p_mat)					{ m_material = p_mat; }
+		inline void	SetVertex		( VertexBufferPtr p_vertex)				{ m_vertex = p_vertex;m_pRenderer->SetVertex( p_vertex); }
+		inline void	SetPoints		( const IdPoint3rPtrArray & p_points)	{ m_points = p_points; }
+		inline void	SetSmoothGroups	( const SmoothGroupPtrArray & p_groups)	{ m_smoothGroups = p_groups; }
+		inline size_t							GetNbSmoothGroups		()const				{ return m_smoothGroups.size(); }
+		inline size_t							GetNbPoints				()const				{ return m_points.size(); }
+		inline IdPoint3rPtr						operator []				( size_t i)const	{ CASTOR_ASSERT( i < m_points.size());return m_points[i]; }
+		inline IdPoint3rPtr						GetPoint				( size_t i)const	{ CASTOR_ASSERT( i < m_points.size());return m_points[i]; }
+		inline SmoothingGroupPtr				GetSmoothGroup			( size_t i)const	{ CASTOR_ASSERT( i < m_smoothGroups.size());return m_smoothGroups[i]; }
+		inline MaterialPtr						GetMaterial				()const				{ return m_material.expired() ? MaterialPtr() : m_material.lock(); }
+		inline eNORMALS_MODE					GetNormalsMode			()const				{ return m_normalsMode; }
+		inline const CubeBox				&	GetCubeBox				()const				{ return m_box; }
+		inline const SphereBox				&	GetSphere				()const				{ return m_sphere; }
+		inline const IdPoint3rPtrArray		&	GetPoints				()const				{ return m_points; }
+		inline const SmoothGroupPtrArray	&	GetSmoothGroups			()const				{ return m_smoothGroups; }
+		inline CubeBox						&	GetCubeBox				()					{ return m_box; }
+		inline SphereBox					&	GetSphere				()					{ return m_sphere; }
+		inline IdPoint3rPtrArray			&	GetPoints				()					{ return m_points; }
+		inline SmoothGroupPtrArray			&	GetSmoothGroups			()					{ return m_smoothGroups; }
+		//@}
 
 	private:
 		FacePtr _addFace( const FacePtr p_face, size_t p_sgIndex);
@@ -240,31 +272,6 @@ namespace Castor3D
 		void _generateTrianglesIndices();
 		void _generateLinesIndices();
 		void _generatePointsIndices();
-
-	public:
-		/**@name Accessors */
-		//@{
-		inline void SetMaterial		( MaterialPtr p_mat)					{ m_material = p_mat; }
-		inline void	SetVertex		( VertexInfosBufferPtr p_vertex)		{ m_vertex = p_vertex;m_pRenderer->SetVertex( p_vertex); }
-		inline void	SetPoints		( const IdPoint3rPtrArray & p_points)	{ m_points = p_points; }
-		inline void	SetSmoothGroups	( const SmoothGroupPtrArray & p_groups)	{ m_smoothGroups = p_groups; }
-
-		inline size_t							GetNbSmoothGroups		()const				{ return m_smoothGroups.size(); }
-		inline size_t							GetNbPoints				()const				{ return m_points.size(); }
-		inline IdPoint3rPtr						operator []				( size_t i)const	{ CASTOR_ASSERT( i < m_points.size());return m_points[i]; }
-		inline IdPoint3rPtr						GetPoint				( size_t i)const	{ CASTOR_ASSERT( i < m_points.size());return m_points[i]; }
-		inline MaterialPtr						GetMaterial				()const				{ return m_material.expired() ? MaterialPtr() : m_material.lock(); }
-		inline const CubeBox				&	GetCubeBox				()const				{ return m_box; }
-		inline const SphereBox				&	GetSphere				()const				{ return m_sphere; }
-		inline const IdPoint3rPtrArray		&	GetPoints				()const				{ return m_points; }
-		inline eNORMALS_MODE					GetNormalsMode			()const				{ return m_normalsMode; }
-		inline const SmoothGroupPtrArray	&	GetSmoothGroups			()const				{ return m_smoothGroups; }
-		inline SmoothingGroupPtr				GetSmoothGroup			( size_t i)const	{ CASTOR_ASSERT( i < m_smoothGroups.size());return m_smoothGroups[i]; }
-		inline CubeBox						&	GetCubeBox				()					{ return m_box; }
-		inline SphereBox					&	GetSphere				()					{ return m_sphere; }
-		inline IdPoint3rPtrArray			&	GetPoints				()					{ return m_points; }
-		inline SmoothGroupPtrArray			&	GetSmoothGroups			()					{ return m_smoothGroups; }
-		//@}
 	};
 }
 

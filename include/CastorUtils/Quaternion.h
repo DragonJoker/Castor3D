@@ -18,7 +18,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___Castor_Quaternion___
 #define ___Castor_Quaternion___
 
-#include "TransformationMatrix.h"
 #include "Point.h"
 
 namespace Castor
@@ -101,11 +100,11 @@ namespace Castor
 		void FromRotationMatrix( const Matrix4x4r & p_matrix);
 		void FromRotationMatrix( real * p_matrix);
 		void FromAxisAngle( const Point3r & p_vector, const Angle & p_angle);
-		void ToAxisAngle( Point3r & p_vector, Angle & p_angle);
+		void ToAxisAngle( Point3r & p_vector, Angle & p_angle)const;
 
-		Angle GetYaw();
-		Angle GetPitch();
-		Angle GetRoll();
+		Angle GetYaw()const;
+		Angle GetPitch()const;
+		Angle GetRoll()const;
 
 		void Conjugate();
 		QuaternionPtr GetConjugate();
@@ -113,8 +112,8 @@ namespace Castor
 		void Normalise();
 		Quaternion Slerp( const Quaternion & p_target, real p_percent, bool p_shortestPath);
 
-		bool Write( Utils::File & p_file)const;
-		bool Read( Utils::File & p_file);
+		virtual bool Save( Utils::File & p_file)const;
+		virtual bool Load( Utils::File & p_file);
 	};
 	/**
 	 * Multiplies a quaternion by a scalar

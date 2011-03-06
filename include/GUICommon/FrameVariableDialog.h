@@ -1,7 +1,7 @@
 #ifndef ___GC_FrameVariableDialog___
 #define ___GC_FrameVariableDialog___
 
-namespace GUICommon
+namespace GuiCommon
 {
 	class FrameVariableDialog : public wxDialog
 	{

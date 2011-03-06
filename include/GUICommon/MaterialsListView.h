@@ -3,7 +3,7 @@
 
 const static unsigned int c_materialIconSize = 40;
 
-namespace GUICommon
+namespace GuiCommon
 {
 	class MaterialsListView : public wxListCtrl
 	{

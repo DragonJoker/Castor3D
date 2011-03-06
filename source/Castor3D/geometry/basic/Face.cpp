@@ -1,6 +1,8 @@
 #include "Castor3D/PrecompiledHeader.h"
 
 #include "Castor3D/geometry/basic/Face.h"
+#include "Castor3D/scene/SceneFileParser.h"
+#include "Castor3D/geometry/mesh/Submesh.h"
 
 using namespace Castor3D;
 
@@ -177,60 +179,146 @@ void Face :: SetFlatTangent( const Point3r & p_ptNormal)
 
 bool Face :: Write( File & p_file)const
 {
-	// on écrit la normale de la face
-	if ( ! m_ptFaceNormal.Write( p_file))
+	bool l_bReturn = p_file.Print( 1024, "\t\t\t\tface %i %i %i\n", m_vertex[0].GetIndex(), m_vertex[1].GetIndex(), m_vertex[2].GetIndex()) > 0;
+
+	if (l_bReturn)
 	{
-		return false;
+		l_bReturn = p_file.Print( 1024, "\t\t\t\tuv %f %f %f %f %f %f\n", m_vertex[0].GetTexCoord()[0], m_vertex[0].GetTexCoord()[1], m_vertex[1].GetTexCoord()[0], m_vertex[1].GetTexCoord()[1], m_vertex[2].GetTexCoord()[0], m_vertex[2].GetTexCoord()[1]) > 0;
 	}
 
-	// on écrit les normales par vertex de la face
-	for (size_t i = 0 ; i < 3 ; i++)
+	if (l_bReturn)
 	{
-		if ( ! m_vertex[0].GetNormal().Write( p_file))
-		{
-			return false;
-		}
+		l_bReturn = p_file.Print( 1024, "\t\t\t\tnormals %f %f %f %f %f %f %f %f %f\n", m_vertex[0].GetNormal()[0], m_vertex[0].GetNormal()[1], m_vertex[0].GetNormal()[2], m_vertex[1].GetNormal()[0], m_vertex[1].GetNormal()[1], m_vertex[1].GetNormal()[2], m_vertex[2].GetNormal()[0], m_vertex[2].GetNormal()[1], m_vertex[2].GetNormal()[2]) > 0;
 	}
 
-	// on écrit les coordonnées de texture de la face
-	for (size_t i = 0 ; i < 3 ; i++)
+	if (l_bReturn)
 	{
-		if ( ! m_vertex[0].GetTexCoord().Write( p_file))
-		{
-			return false;
-		}
+		l_bReturn = p_file.Print( 1024, "\t\t\t\ttangents %f %f %f %f %f %f %f %f %f\n", m_vertex[0].GetTangent()[0], m_vertex[0].GetTangent()[1], m_vertex[0].GetTangent()[2], m_vertex[1].GetTangent()[0], m_vertex[1].GetTangent()[1], m_vertex[1].GetTangent()[2], m_vertex[2].GetTangent()[0], m_vertex[2].GetTangent()[1], m_vertex[2].GetTangent()[2]) > 0;
 	}
 
-	return true;
+	return l_bReturn;
 }
 
-bool Face :: Read( File & p_file)
+bool Face :: Read( File & p_file, Submesh * p_pSubmesh)
 {
-	// on lit la normale de la face
-	if ( ! m_ptFaceNormal.Read( p_file))
-	{
-		return false;
-	}
+	String l_strLine;
+	bool l_bReturn = p_file.ReadLine( l_strLine, 1024) > 0;
+	Point<real, 6> l_ptUVs;
+	Point<real, 9> l_ptCoords;
+	size_t l_uiCount;
 
-	// on lit les normales par vertex de la face
-	for (size_t i = 0 ; i < 3 ; i++)
+	if (l_bReturn)
 	{
-		if ( ! m_vertex[0].GetNormal().Read( p_file))
+		l_bReturn = SceneFileParser::ParseVector<real, 6>( l_strLine, l_ptUVs);
+		l_uiCount = 0;
+
+		for (size_t i = 0 ; i < 3 ; i++)
 		{
-			return false;
+			m_vertex[i].SetTexCoord( & l_ptUVs[l_uiCount * 2]);
+			l_uiCount++;
 		}
 	}
 
-	// on lit les coordonnées de texture par vertex de la face
+	if (l_bReturn)
+	{
+		l_bReturn = p_file.ReadLine( l_strLine, 1024) > 0;
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = SceneFileParser::ParseVector<real, 9>( l_strLine, l_ptCoords);
+		l_uiCount = 0;
+
+		for (size_t i = 0 ; i < 3 ; i++)
+		{
+			m_vertex[i].SetNormal( & l_ptCoords[l_uiCount * 3]);
+			m_ptSmoothNormals[i] = m_vertex[i].GetNormal();
+			l_uiCount++;
+		}
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_file.ReadLine( l_strLine, 1024) > 0;
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = SceneFileParser::ParseVector<real, 9>( l_strLine, l_ptCoords);
+		l_uiCount = 0;
+
+		for (size_t i = 0 ; i < 3 ; i++)
+		{
+			m_vertex[i].SetTangent( & l_ptCoords[l_uiCount * 3]);
+			m_ptSmoothTangents[i] = m_vertex[i].GetTangent();
+			l_uiCount++;
+		}
+	}
+
+	m_ptFaceNormal = Point3r( 0, 0, 0);
+	m_ptFaceTangent = Point3r( 0, 0, 0);
+
 	for (size_t i = 0 ; i < 3 ; i++)
 	{
-		if ( ! m_vertex[0].GetTexCoord().Read( p_file))
-		{
-			return false;
-		}
+		m_ptFaceNormal += m_ptSmoothNormals[i];
+		m_ptFaceTangent += m_ptSmoothTangents[i];
+	}
+
+	m_ptFaceNormal.Normalise();
+	m_ptFaceTangent.Normalise();
+
+	return l_bReturn;
+}
+
+bool Face :: Save( File & p_file)const
+{
+	bool l_bReturn = true;
+
+	for (size_t i = 0 ; i < 3 && l_bReturn ; i++)
+	{
+		l_bReturn = p_file.Write( m_vertex[i].GetIndex()) == sizeof( size_t);
+	}
+
+	for (size_t i = 0 ; i < 3 && l_bReturn ; i++)
+	{
+		l_bReturn = m_vertex[i].GetNormal().Save( p_file);
+	}
+
+	for (size_t i = 0 ; i < 3 && l_bReturn ; i++)
+	{
+		l_bReturn = m_vertex[i].GetTangent().Save( p_file);
+	}
+
+	for (size_t i = 0 ; i < 3 && l_bReturn ; i++)
+	{
+		l_bReturn = m_vertex[i].GetTexCoord().Save( p_file);
+	}
+
+	return l_bReturn;
+}
+
+bool Face :: Load( File & p_file, Submesh * p_pSubmesh)
+{
+	bool l_bReturn = true;
+
+	for (size_t i = 0 ; i < 3 && l_bReturn ; i++)
+	{
+		l_bReturn = m_vertex[i].GetNormal().Load( p_file);
+		m_ptSmoothNormals[i] = m_vertex[i].GetNormal();
+	}
+
+	for (size_t i = 0 ; i < 3 && l_bReturn ; i++)
+	{
+		l_bReturn = m_vertex[i].GetTangent().Load( p_file);
+		m_ptSmoothTangents[i] = m_vertex[i].GetTangent();
+	}
+
+	for (size_t i = 0 ; i < 3 && l_bReturn ; i++)
+	{
+		l_bReturn = m_vertex[0].GetTexCoord().Load( p_file);
 	}
 
 	m_bCenterComputed = false;
 
-	return true;
+	return l_bReturn;
 }

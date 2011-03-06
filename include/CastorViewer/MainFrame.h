@@ -16,11 +16,20 @@ namespace CastorViewer
 			eMaterials,
 		};
 
+		enum eBMPs
+		{
+			eBmpScene		= GeometriesListFrame::eNbBmps,
+			eBmpGeometries,
+			eBmpMaterials,
+		};
+
 	private:
 		RenderPanel			*	m_3dFrame;
 		Castor3D::ScenePtr		m_mainScene;
-		Castor3D::Root		*	m_castor3D;
+		Castor3D::Root		*	m_pCastor3D;
 		String					m_strFilePath;
+		ImagesLoader		*	m_pImagesLoader;
+		Castor3D::SceneNodePtr	m_pSceneNode;
 
 	public:
 		MainFrame( wxWindow * parent, const wxString & title);

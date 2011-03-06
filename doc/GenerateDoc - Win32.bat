@@ -1,0 +1,2 @@
+doxygen CastorUtils_Win32.Doxyfile
+doxygen Castor3D_Win32.Doxyfile

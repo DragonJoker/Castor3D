@@ -1,6 +1,7 @@
 #include "Castor3D/PrecompiledHeader.h"
 
 #include "Castor3D/render_system/Buffer.h"
+#include "Castor3D/render_system/BufferElement.h"
 
 #include "Castor3D/geometry/basic/Vertex.h"
 
@@ -8,15 +9,23 @@ using namespace Castor3D;
 
 //*************************************************************************************************
 
-void IndicesBuffer :: Activate()
+void IndexBuffer :: Activate()
 {
 }
 
-void IndicesBuffer :: Deactivate()
+void IndexBuffer :: Deactivate()
 {
 }
 
 //*************************************************************************************************
+VertexBuffer :: VertexBuffer( const BufferElementDeclaration * p_pElements, size_t p_uiNbElements)
+	:	m_bufferDeclaration( p_pElements, p_uiNbElements)
+{
+}
+
+VertexBuffer :: ~VertexBuffer()
+{
+}
 
 void VertexBuffer :: Activate()
 {
@@ -26,33 +35,7 @@ void VertexBuffer :: Deactivate()
 {
 }
 
-//*************************************************************************************************
-
-void NormalsBuffer :: Activate()
-{
-}
-
-void NormalsBuffer :: Deactivate()
-{
-}
-
-//*************************************************************************************************
-
-void TextureBuffer :: Activate()
-{
-}
-
-//*************************************************************************************************
-
-void VertexInfosBuffer :: Activate()
-{
-}
-
-void VertexInfosBuffer :: Deactivate()
-{
-}
-
-void VertexInfosBuffer :: AddVertex( Vertex & p_pVertex, bool p_bIncrease)
+void VertexBuffer :: AddElement( Vertex & p_pVertex, bool p_bIncrease)
 {
 	if (p_bIncrease)
 	{
@@ -66,7 +49,7 @@ void VertexInfosBuffer :: AddVertex( Vertex & p_pVertex, bool p_bIncrease)
 //*************************************************************************************************
 
 TextureBufferObject :: TextureBufferObject()
-	:	m_pixelFormat( Castor::Resources::pxfR8G8B8A8),
+	:	m_pixelFormat( Castor::Resources::eA8R8G8B8),
 		m_uiSize( 0),
 		m_pBytes( NULL)
 {
@@ -89,7 +72,7 @@ void TextureBufferObject :: Deactivate()
 {
 }
 
-void TextureBufferObject :: Initialise( const PixelFormat & p_format, size_t p_uiSize, const unsigned char * p_pBytes)
+void TextureBufferObject :: Initialise( const ePIXEL_FORMAT & p_format, size_t p_uiSize, const unsigned char * p_pBytes)
 {
 	m_pixelFormat = p_format;
 	m_uiSize = p_uiSize;
@@ -112,10 +95,6 @@ void BufferManager :: Cleanup()
 	l_pThis.m_stCharBuffers.Cleanup();
 	l_pThis.m_stUCharBuffers.Cleanup();
 	l_pThis.m_stUIntBuffers.Cleanup();
-	l_pThis.m_stLongBuffers.Cleanup();
-	l_pThis.m_stULongBuffers.Cleanup();
-	l_pThis.m_stLongLongBuffers.Cleanup();
-	l_pThis.m_stULongLongBuffers.Cleanup();
 }
 
 void BufferManager :: Update()
@@ -128,10 +107,6 @@ void BufferManager :: Update()
 	l_pThis.m_stCharBuffers.Update();
 	l_pThis.m_stUCharBuffers.Update();
 	l_pThis.m_stUIntBuffers.Update();
-	l_pThis.m_stLongBuffers.Update();
-	l_pThis.m_stULongBuffers.Update();
-	l_pThis.m_stLongLongBuffers.Update();
-	l_pThis.m_stULongLongBuffers.Update();
 }
 
 //*************************************************************************************************

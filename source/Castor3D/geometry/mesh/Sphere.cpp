@@ -20,7 +20,7 @@ Sphere :: Sphere( MeshManager * p_pManager, real radius_p, unsigned int nbFaces_
 	,	m_nbFaces( nbFaces_p)
 {
 //	m_preferredSubdivMode = smQuad;
-	m_meshType = Mesh::eSphere;
+	m_meshType = eSphere;
 	GeneratePoints();
 }
 

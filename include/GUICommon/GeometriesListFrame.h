@@ -1,7 +1,7 @@
 #ifndef ___GC_GeometriesFrame___
 #define ___GC_GeometriesFrame___
 
-namespace GUICommon
+namespace GuiCommon
 {
 	class GeometryTreeItemData : public wxTreeItemData
 	{
@@ -17,6 +17,22 @@ namespace GUICommon
 
 	class GeometriesListFrame : public wxFrame
 	{
+	public:
+		enum eBMPs
+		{
+			eBmpGeoVisible,
+			eBmpGeoVisibleSel,
+			eBmpGeoCachee,
+			eBmpGeoCacheeSel,
+			eBmpGeometrie,
+			eBmpGeometrieSel,
+			eBmpGeometrieOuv,
+			eBmpGeometrieOuvSel,
+			eBmpSubmesh,
+			eBmpSubmeshSel,
+			eNbBmps,
+		};
+
 	private:
 		enum eIDs
 		{

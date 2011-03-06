@@ -1,7 +1,7 @@
 #ifndef ___GC_EnvironmentFrame___
 #define ___GC_EnvironmentFrame___
 
-namespace GUICommon
+namespace GuiCommon
 {
 	class EnvironmentFrame : public wxFrame
 	{

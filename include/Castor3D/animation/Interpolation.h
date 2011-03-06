@@ -44,7 +44,7 @@ namespace Castor3D
 		 *@param p_tDest : [in] The end
 		 */
 		Interpolator( const T & p_tSrc, const T & p_tDest)
-			:	m_src( p_tSrc),
+			:	m_tSrc( p_tSrc),
 				m_tCurrent( p_tSrc),
 				m_tDest( p_tDest)
 		{

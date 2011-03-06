@@ -1,10 +1,10 @@
-#include "GUICommon/PrecompiledHeader.h"
+#include "GuiCommon/PrecompiledHeader.h"
 
-#include "GUICommon/TextPanel.h"
-#include "GUICommon/TextCtrl.h"
-#include "GUICommon/TextLinesCtrl.h"
+#include "GuiCommon/TextPanel.h"
+#include "GuiCommon/TextCtrl.h"
+#include "GuiCommon/TextLinesCtrl.h"
 
-using namespace GUICommon;
+using namespace GuiCommon;
 using namespace Castor3D;
 
 TextPanel :: TextPanel( wxWindow * parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
@@ -237,7 +237,7 @@ bool TextPanel :: SearchPrevious()
 	return false;
 }
 
-void TextPanel :: Replace( const wxString & p_replacement)
+void TextPanel :: replace( const wxString & p_replacement)
 {
 	if (m_searchPositions.size() == 0)
 	{

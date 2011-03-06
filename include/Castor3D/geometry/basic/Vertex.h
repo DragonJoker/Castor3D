@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_Vertex___
 
 #include "../../Prerequisites.h"
+#include "../../render_system/BufferElement.h"
 
 namespace Castor3D
 {
@@ -129,7 +130,7 @@ namespace Castor3D
 		/**@name Accessors */
 		//@{
 		inline size_t	GetIndex	()const { return m_uiIndex; }
-		inline void SetIndex	( const size_t & val)	{ m_uiIndex = val; }
+		inline void	SetIndex	( const size_t & val)	{ m_uiIndex = val; }
 		//@}
 	};
 
@@ -140,20 +141,16 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class C3D_API Vertex : public MemoryTraced<Vertex>
+	class C3D_API Vertex : public BufferElement, public MemoryTraced<Vertex>
 	{
 	public:
 		static size_t Size;					//!< Number of components of a Vertex (total of coordinates for coords, normal, tangent, texture coords).
 		static unsigned long long Count;	//!< Total number of created vertex
+		static BufferElementDeclaration VertexDeclarationElements[];
+		static BufferDeclaration VertexDeclaration;
 
 	private:
-		Point3r m_ptCoords;
-		Point3r m_ptNormal;
-		Point3r m_ptTangent;
-		Point2r m_ptTexCoord;
 		size_t m_uiIndex;
-		real * m_pBuffer;
-		bool m_bOwnBuffer;
 		bool m_bManual;
 
 	public:
@@ -207,44 +204,41 @@ namespace Castor3D
 		void SetTexCoord	( real x, real y, bool p_bManual = false);
 		void SetTexCoord	( const real * p_pCoords, bool p_bManual = false);
 
-		inline void SetTangent	( const Point3r & val, bool p_bManual = false);
-		inline void SetTangent	( real x, real y, real z, bool p_bManual = false);
-		inline void SetTangent	( const real * p_pCoords, bool p_bManual = false);
+		void SetTangent	( const Point3r & val, bool p_bManual = false);
+		void SetTangent	( real x, real y, real z, bool p_bManual = false);
+		void SetTangent	( const real * p_pCoords, bool p_bManual = false);
 		//@}
 
 		/**@name Operators */
 		//@{
-		inline real &			operator []( size_t p_uiIndex)		{ return m_ptCoords[p_uiIndex]; }
-		inline const real &		operator []( size_t p_uiIndex)const	{ return m_ptCoords[p_uiIndex]; }
+		inline real &			operator []( size_t p_uiIndex)		{ return GetElement<Point3r>( 0)[p_uiIndex]; }
+		inline const real &		operator []( size_t p_uiIndex)const	{ return GetElement<Point3r>( 0)[p_uiIndex]; }
 		virtual Vertex & 		operator =( const Vertex & p_vertex);
 		virtual Vertex & 		operator =( const IdPoint3r & p_idPoint);
 		//@}
 
 		/**@name Accessors */
 		//@{
-		inline Point3r &		GetCoords	()		{ return m_ptCoords; }
-		inline Point3r &		GetNormal	()		{ return m_ptNormal; }
-		inline Point3r &		GetTangent	()		{ return m_ptTangent; }
-		inline Point2r &		GetTexCoord	()		{ return m_ptTexCoord; }
-		inline real *			ptr			()		{ return m_pBuffer; }
-		inline const Point3r &	GetCoords	()const	{ return m_ptCoords; }
-		inline const Point3r &	GetNormal	()const	{ return m_ptNormal; }
-		inline const Point3r &	GetTangent	()const	{ return m_ptTangent; }
-		inline const Point2r &	GetTexCoord	()const	{ return m_ptTexCoord; }
-		inline bool				IsManual	()const	{ return m_bManual; }
-		inline const real *		const_ptr	()const	{ return m_pBuffer; }
+		inline Point3r &		GetCoords	()		{ return GetElement<Point3r>( 0); }
+		inline Point3r &		GetNormal	()		{ return GetElement<Point3r>( 1); }
+		inline Point3r &		GetTangent	()		{ return GetElement<Point3r>( 2); }
+		inline Point2r &		GetTexCoord	()		{ return GetElement<Point2r>( 3); }
+		inline const Point3r &	GetCoords	()const	{ return GetElement<Point3r>( 0); }
+		inline const Point3r &	GetNormal	()const	{ return GetElement<Point3r>( 1); }
+		inline const Point3r &	GetTangent	()const	{ return GetElement<Point3r>( 2); }
+		inline const Point2r &	GetTexCoord	()const	{ return GetElement<Point2r>( 3); }
+		inline const real *		const_ptr	()const	{ return (const real *)( BufferElement::const_ptr()); }
+		inline real *			ptr			()		{ return (real *)( BufferElement::ptr()); }
 		inline size_t			GetIndex	()const { return m_uiIndex; }
-
-		inline void SetCoords	( const Point3r & val)						{ m_ptCoords = val; }
-		inline void SetCoords	( real x, real y, real z)					{ m_ptCoords[0] = x;m_ptCoords[1] = y;m_ptCoords[2] = z; }
-		inline void SetCoords	( const real * p_pCoords)					{ m_ptCoords[0] = p_pCoords[0];m_ptCoords[1] = p_pCoords[1];m_ptCoords[2] = p_pCoords[2]; }
+		inline bool				IsManual	()const	{ return m_bManual; }
+		inline void SetCoords	( const Point3r & val)						{ GetElement<Point3r>( 0) = val; }
+		inline void SetCoords	( real x, real y, real z)					{ GetElement<Point3r>( 0)[0] = x;GetElement<Point3r>( 0)[1] = y;GetElement<Point3r>( 0)[2] = z; }
+		inline void SetCoords	( const real * p_pCoords)					{ GetElement<Point3r>( 0)[0] = GetElement<Point3r>( 0)[0];GetElement<Point3r>( 0)[1] = p_pCoords[1];GetElement<Point3r>( 0)[2] = p_pCoords[2]; }
 		inline void SetIndex	( const size_t & val)						{ m_uiIndex = val; }
 		//@}
 
 	private:
 		void _link();
-		void _assign( const Point3r & p_ptCoords, const Point3r & p_ptNormal, const Point3r & p_ptTangent, const Point2r & p_ptTexCoords);
-		void _link( const Point3r & p_ptCoords, const Point3r & p_ptNormal, const Point3r & p_ptTangent, const Point2r & p_ptTexCoords);
 		void _computeTangent();
 	};
 }

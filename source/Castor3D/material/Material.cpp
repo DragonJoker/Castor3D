@@ -23,7 +23,7 @@ MaterialPtr MaterialLoader :: LoadFromFile( MaterialManager * p_pManager, const 
 
 	if (l_bResult)
 	{
-		Char * l_name = new Char[l_nameLength+1];
+		xchar * l_name = new xchar[l_nameLength+1];
 		l_bResult = (l_file.ReadArray( l_name, l_nameLength) == l_nameLength);
 
 		if (l_bResult)
@@ -55,7 +55,7 @@ MaterialPtr MaterialLoader :: LoadFromFile( MaterialManager * p_pManager, const 
 		}
 	}
 
-	if ( ! l_bResult && ! l_pReturn == NULL)
+	if ( ! l_bResult && l_pReturn != NULL)
 	{
 		l_pReturn.reset();
 	}
@@ -63,44 +63,15 @@ MaterialPtr MaterialLoader :: LoadFromFile( MaterialManager * p_pManager, const 
 	return l_pReturn;
 }
 
-bool MaterialLoader :: SaveToFile( File & p_pFile, MaterialPtr p_material)
+bool MaterialLoader :: SaveToFile( File & p_file, MaterialPtr p_pMaterial)
 {
-	bool l_bReturn = p_pFile.WriteLine( "material " + p_material->GetName() + "\n");
-
-	if (l_bReturn)
-	{
-		l_bReturn = p_pFile.WriteLine( "{\n");
-	}
-
-	size_t l_nbPasses = p_material->GetNbPasses();
-	bool l_bFirst = true;
-
-	for (size_t i = 0 ; i < l_nbPasses && l_bReturn ; i++)
-	{
-		if (l_bFirst)
-		{
-			l_bFirst = false;
-		}
-		else
-		{
-			p_pFile.WriteLine( "\n");
-		}
-
-		l_bReturn = p_material->GetPass( i)->Write( p_pFile);
-	}
-
-	if (l_bReturn)
-	{
-		l_bReturn = p_pFile.WriteLine( "}\n");
-	}
-
-	return l_bReturn;
+	return p_pMaterial->Write( p_file);
 }
 
 //*********************************************************************************************
 
-Material :: Material( MaterialManager * p_pManager, const String & p_name, int p_iNbInitialPasses)
-	:	Resource<Material, MaterialManager>( p_pManager, p_name)
+Material :: Material( Manager<Material> * p_pManager, const String & p_name, int p_iNbInitialPasses)
+	:	Resource<Material>( p_pManager, p_name)
 {
 	for (int i = 0 ; i < p_iNbInitialPasses ; i++)
 	{
@@ -112,21 +83,6 @@ Material :: ~Material()
 {
 }
 
-bool Material :: SetName( const String & p_name)
-{
-	bool l_bReturn = false;
-
-	if ( ! m_pManager->HasElement( p_name))
-	{
-		MaterialPtr l_pThis = m_pManager->RemoveElement( m_key);
-		m_key = p_name;
-		m_pManager->AddElement( l_pThis);
-		l_bReturn = true;
-	}
-
-	return l_bReturn;
-}
-
 void Material :: Initialise()
 {
 	for (size_t i = 0 ; i < m_passes.size() ; i++)
@@ -135,7 +91,7 @@ void Material :: Initialise()
 	}
 }
 
-void Material :: Render( eDRAW_TYPE p_displayMode)
+void Material :: Render( ePRIMITIVE_TYPE p_displayMode)
 {
 	for (size_t i = 0 ; i < m_passes.size() ; i++)
 	{
@@ -182,4 +138,80 @@ void Material :: DestroyPass( unsigned int p_index)
 {
 	CASTOR_ASSERT( p_index < m_passes.size());
 	m_passes.erase( m_passes.begin() + p_index);
+}
+
+bool Material :: Write( File & p_file)const
+{
+	bool l_bReturn = p_file.WriteLine( "material " + m_strName + "\n") > 0;
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_file.WriteLine( "{\n") > 0;
+	}
+
+	size_t l_nbPasses = GetNbPasses();
+	bool l_bFirst = true;
+
+	for (size_t i = 0 ; i < l_nbPasses && l_bReturn ; i++)
+	{
+		if (l_bFirst)
+		{
+			l_bFirst = false;
+		}
+		else
+		{
+			p_file.WriteLine( "\n");
+		}
+
+		l_bReturn = GetPass( i)->Write( p_file);
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_file.WriteLine( "}\n") > 0;
+	}
+
+	return l_bReturn;
+}
+
+bool Material :: Save( File & p_file)const
+{
+	bool l_bReturn = p_file.Write( m_strName);
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_file.Write( m_passes.size()) == sizeof( size_t);
+	}
+
+	if (l_bReturn)
+	{
+		for (size_t i = 0 ; i < m_passes.size() && l_bReturn ; i++)
+		{
+			l_bReturn = m_passes[i]->Save( p_file);
+		}
+	}
+
+	return l_bReturn;
+}
+
+bool Material :: Load( File & p_file)
+{
+	bool l_bReturn = p_file.Read( m_strName);
+	size_t l_uiSize;
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_file.Write( l_uiSize) == sizeof( size_t);
+	}
+
+	if (l_bReturn)
+	{
+		for (size_t i = 0 ; i < l_uiSize && l_bReturn ; i++)
+		{
+			PassPtr l_pPass = CreatePass();
+			l_bReturn = l_pPass->Load( p_file);
+		}
+	}
+
+	return l_bReturn;
 }

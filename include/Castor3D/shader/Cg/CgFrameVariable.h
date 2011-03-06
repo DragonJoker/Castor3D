@@ -35,41 +35,46 @@ namespace Castor3D
 		CGprogram m_cgProgram;
 
 	public:
+		/**@name Construction / Destruction */
+		//@{
 		/**
 		 * Constructor
+		 *@param p_cgProgram : [in] The program holding this variable
+		 *@param p_uiOcc : [in] The number of table occurencies of this variable (if 1, then no table)
 		 */
 		CgFrameVariable( CGprogram p_cgProgram, size_t p_uiOcc)
-			:	FrameVariable( p_uiOcc),
-				m_cgParameter( NULL),
-				m_cgProgram( p_cgProgram)
+			:	FrameVariable( p_uiOcc)
+			,	m_cgParameter( NULL)
+			,	m_cgProgram( p_cgProgram)
 		{
 		}
 		/**
 		 * Copy constructor
 		 */
 		CgFrameVariable( const CgFrameVariable & p_rVariable)
-			:	FrameVariable( p_rVariable),
-				m_cgParameter( p_rVariable.m_cgParameter),
-				m_cgProgram( p_rVariable.m_cgProgram)
+			:	FrameVariable( p_rVariable)
+			,	m_cgParameter( p_rVariable.m_cgParameter)
+			,	m_cgProgram( p_rVariable.m_cgProgram)
 		{
 		}
 		/**
 		 * Destructor
 		 */
-		virtual ~CgFrameVariable()=0
+		virtual ~CgFrameVariable()
 		{
 		}
+		//@}
 
-	public:
 		/**@name Accessors */
 		//@{
 		inline CGparameter 	GetParameter	()const { return m_cgParameter; }
 		inline CGprogram 	GetProgram		()const { return m_cgProgram; }
-		inline void SetProgram		( CGprogram val)	{ m_cgProgram = val; }
-		inline void SetParameter	( CGparameter val)	{ m_cgParameter = val; }
+		inline void SetProgram		( CGprogram val)								{ m_cgProgram = val; }
+		inline void SetParameter	( CGparameter val)								{ m_cgParameter = val; }
+		inline void SetStrValue		( const String & p_strValue, size_t p_uiIndex) 	{ FrameVariable::SetStrValue( p_strValue, p_uiIndex); }
+		inline void SetChanged		( bool p_bVal=true)								{ FrameVariable::SetChanged( p_bVal); }
 		//@}
 	};
-
 	//! Cg Variable type shader variable representation
 	/*!
 	This is a variable which is given to a shader program during it's execution.
@@ -81,33 +86,32 @@ namespace Castor3D
 	class TCgFrameVariable : public CgFrameVariable
 	{
 	protected:
-		typedef Policy<T> Policy;
+		typedef Policy<T> policy;
 
 	public:
+		/**@name Construction / Destruction */
+		//@{
 		/**
 		 * Constructor
 		 */
-		TCgFrameVariable( CGprogram p_cgProgram, size_t p_uiOcc)
-			:	CgFrameVariable( p_cgProgram, p_uiOcc)
-		{}
+		TCgFrameVariable( CGprogram p_cgProgram, size_t p_uiOcc);
 		/**
 		 * Copy constructor
 		 */
-		TCgFrameVariable( const TCgFrameVariable & p_rVariable)
-			:	CgFrameVariable( p_rVariable)
-		{
-		}
+		TCgFrameVariable( const TCgFrameVariable & p_rVariable);
 		/**
 		 * Destructor
 		 */
-		virtual ~TCgFrameVariable()=0
-		{}
-		/**
-		 *@return The type of the variable (int, bool, real)
-		 */
-		virtual const type_info & GetSubType() { return typeid( T); }
-	};
+		virtual ~TCgFrameVariable();
+		//@}
 
+		/**@name Accessors */
+		//@{
+		virtual String GetSubType() { return typeid( T).name(); }
+		inline void SetStrValue		( const String & p_strValue, size_t p_uiIndex) 	{ CgFrameVariable::SetStrValue( p_strValue, p_uiIndex); }
+		inline void SetChanged		( bool p_bVal=true)								{ CgFrameVariable::SetChanged( p_bVal); }
+		//@}
+	};
 	//! Cg Single variable typed variable
 	/*!
 	This is a single variable with a variable type
@@ -117,72 +121,40 @@ namespace Castor3D
 	template <typename T>
 	class CgOneFrameVariable : public TCgFrameVariable<T>
 	{
+	protected:
+		typedef Policy<T> policy;
+
 	public:
 		T * m_tValue;	//!< The single value of the variable
 
 	public:
+		/**@name Construction / Destruction */
+		//@{
 		/**
 		 * Constructor
 		 */
-		CgOneFrameVariable( CGprogram p_cgProgram=NULL, size_t p_uiOcc=1)
-			:	TCgFrameVariable<T>( p_cgProgram, p_uiOcc)
-		{
-			m_tValue = new T[m_uiOcc];
-		}
+		CgOneFrameVariable( CGprogram p_cgProgram=NULL, size_t p_uiOcc=1);
 		/**
 		 * Copy constructor
 		 */
-		CgOneFrameVariable( const CgOneFrameVariable & p_rVariable)
-			:	TCgFrameVariable<T>( p_rVariable)
-		{
-			m_tValue = new T[m_uiOcc];
-
-			for (size_t i = 0 ; i < m_uiOcc ; i++)
-			{
-				Policy::assign( m_tValue[i], p_rVariable.m_tValue[i]);
-			}
-		}
+		CgOneFrameVariable( const CgOneFrameVariable & p_rVariable);
 		/**
 		 * Destructor
 		 */
-		virtual ~CgOneFrameVariable()
-		{
-			delete [] m_tValue;
-		}
+		virtual ~CgOneFrameVariable();
+		//@}
+
 		/**@name Accessors */
 		//@{
-		/**
-		 * Gives the value of the variable
-		 *@return The variable value
-		 */
 		inline T &			operator []( size_t p_uiIndex)		{ return m_tValue[p_uiIndex]; }
 		inline const T &	operator []( size_t p_uiIndex)const	{ return m_tValue[p_uiIndex]; }
 		inline T &			GetValue( size_t p_uiIndex=0)		{ return m_tValue[p_uiIndex]; }
 		inline const T &	GetValue( size_t p_uiIndex=0)const	{ return m_tValue[p_uiIndex]; }
-		/**
-		 * Gives the count type of the variable
-		 *@return The count type
-		 */
-		virtual eTYPE GetType() { return eOne; }
-		/**
-		 * Defines the value of the variable, from a string
-		 *@param p_strValue : [in] The string containing the value
-		 *@param p_uiIndex : [in] The index of the value
-		 */
-		virtual void SetValue( const String & p_strValue, size_t p_uiIndex=0)
-		{
-			m_strValue[p_uiIndex] = p_strValue;
-			Policy::assign<double>( m_tValue[p_uiIndex], atof( p_strValue.c_str()));
-		}
-		/**
-		 * Defines the value of the variable, from a single value
-		 *@param p_tValue : [in] The new value
-		 *@param p_uiIndex : [in] The index of the value
-		 */
-		inline void SetValue( const T & p_tValue, size_t p_uiIndex=0) { Policy::assign( m_tValue[p_uiIndex], p_tValue);m_bChanged = true; }
+		virtual FrameVariable::eTYPE GetType() { return FrameVariable::eOne; }
+		virtual void SetValue( const String & p_strValue, size_t p_uiIndex=0);
+		inline void SetValue( const T & p_tValue, size_t p_uiIndex=0) { policy::assign( m_tValue[p_uiIndex], p_tValue);TCgFrameVariable<T>::SetChanged(); }
 		//@}
 	};
-
 	//! Cg Array of N values variable typed variable
 	/*!
 	This is an array of N values variable with a variable type
@@ -192,86 +164,41 @@ namespace Castor3D
 	template <typename T, size_t Count>
 	class CgPointFrameVariable : public TCgFrameVariable<T>
 	{
+	protected:
+		typedef Policy<T> policy;
+
 	public:
 		T * m_pValues;
 		Point<T, Count> * m_ptValue;	//!< The value of the variable
 
 	public:
+		/**@name Construction / Destruction */
+		//@{
 		/**
 		 * Constructor
 		 */
-		CgPointFrameVariable( CGprogram p_cgProgram=NULL, size_t p_uiOcc=1)
-			:	TCgFrameVariable<T>( p_cgProgram, p_uiOcc)
-		{
-			m_pValues = new T[m_uiOcc * Count];
-			m_ptValue = new Point<T, Count>[m_uiOcc];
-		}
+		CgPointFrameVariable( CGprogram p_cgProgram=NULL, size_t p_uiOcc=1);
 		/**
 		 * Copy constructor
 		 */
-		CgPointFrameVariable( const CgPointFrameVariable<T, Count> & p_rVariable)
-			:	TCgFrameVariable<T>( p_rVariable)
-		{
-			m_pValues = new T[m_uiOcc * Count];
-			m_ptValue = new Point<T, Count>[m_uiOcc];
-
-			for (size_t i = 0 ; i < m_uiOcc * Count ; i++)
-			{
-				Policy::assign( m_pValues[i], p_rVariable.m_pValues[i]);
-			}
-
-			for (size_t i = 0 ; i < m_uiOcc ; i++)
-			{
-				m_ptValue[i].LinkCoords( & m_pValues[i * Count]);
-			}
-		}
+		CgPointFrameVariable( const CgPointFrameVariable<T, Count> & p_rVariable);
 		/**
 		 * Destructor
 		 */
-		virtual ~CgPointFrameVariable()
-		{
-			delete [] m_ptValue;
-		}
+		virtual ~CgPointFrameVariable();
+		//@}
+
 		/**@name Accessors */
 		//@{
 		inline Point<T, Count> &		operator []( size_t p_uiIndex)		{ return m_ptValue[p_uiIndex]; }
 		inline const Point<T, Count> &	operator []( size_t p_uiIndex)const	{ return m_ptValue[p_uiIndex]; }
 		inline Point<T, Count> &		GetValue( size_t p_uiIndex=0)		{ return m_ptValue[p_uiIndex]; }
 		inline const Point<T, Count> &	GetValue( size_t p_uiIndex=0)const	{ return m_ptValue[p_uiIndex]; }
-		/**
-		 * Gives the count type of the variable
-		 *@return The count type
-		 */
-		virtual eTYPE GetType();
-		/**
-		 * Defines the value of the variable, from a string
-		 *@param p_strValue : [in] The string containing the value
-		 *@param p_uiIndex : [in] The index of the value
-		 */
-		virtual void SetValue( const String & p_strValue, size_t p_uiIndex=0)
-		{
-			m_strValue[p_uiIndex] = p_strValue;
-			StringArray l_arraySplitted = p_strValue.Split( ", \t");
-
-			if (l_arraySplitted.size() == Count)
-			{
-				for (size_t i = 0 ; i < Count ; i++)
-				{
-					Policy::assign( m_ptValue[p_uiIndex][i], atof( l_arraySplitted[i].c_str()));
-				}
-			}
-		}
-		/**
-		 * Defines the value of the variable, from a Point2D
-		 *@param p_ptValue : [in] The new value
-		 *@param p_uiIndex : [in] The index of the value
-		 */
-		inline void SetValue( const Point<T, Count> & p_ptValue, size_t p_uiIndex=0) { m_ptValue[p_uiIndex] = p_ptValue;m_bChanged = true; }
+		virtual FrameVariable::eTYPE GetType();
+		virtual void SetValue( const String & p_strValue, size_t p_uiIndex=0);
+		inline void SetValue( const Point<T, Count> & p_ptValue, size_t p_uiIndex=0) { m_ptValue[p_uiIndex] = p_ptValue;TCgFrameVariable<T>::SetChanged(); }
 		//@}
 	};
-
-	template <size_t Count> struct CgPointVariableTyper;
-
 	//! Cg Array of MxN dimensions matrix of variable type variable
 	/*!
 	This is a N dimensions matrix variable with variable type
@@ -281,100 +208,43 @@ namespace Castor3D
 	template <typename T, size_t Rows, size_t Columns>
 	class CgMatrixFrameVariable : public TCgFrameVariable<T>
 	{
+	protected:
+		typedef Policy<T> policy;
+
 	public:
 		T * m_pValues;
 		Matrix <T, Rows, Columns> * m_mValue;	//!< The value of the variable
 
 	public:
+		/**@name Construction / Destruction */
+		//@{
 		/**
 		 * Constructor
 		 */
-		CgMatrixFrameVariable( CGprogram p_cgProgram=NULL, size_t p_uiOcc=1)
-			:	TCgFrameVariable<T>( p_cgProgram, p_uiOcc)
-		{
-			m_pValues = new T[Rows * Columns * m_uiOcc];
-			m_mValue = new Matrix <T, Rows, Columns>[m_uiOcc];
-		}
+		CgMatrixFrameVariable( CGprogram p_cgProgram=NULL, size_t p_uiOcc=1);
 		/**
 		 * Copy constructor
 		 */
-		CgMatrixFrameVariable( const CgMatrixFrameVariable & p_rVariable)
-			:	TCgFrameVariable<T>( p_rVariable)
-		{
-			m_pValues = new T[Rows * Columns * m_uiOcc];
-			m_mValue = new Matrix <T, Rows, Columns>[m_uiOcc];
-
-			for (size_t i = 0 ; i < Rows * Columns * m_uiOcc ; i++)
-			{
-				Policy::assign( m_pValues[i], p_rVariable.m_pValues[i]);
-			}
-
-			for (size_t i = 0 ; i < m_uiOcc ; i++)
-			{
-				m_mValue[i].LinkCoords( & m_pValues[i * Rows * Columns]);
-			}
-		}
+		CgMatrixFrameVariable( const CgMatrixFrameVariable & p_rVariable);
 		/**
 		 * Destructor
 		 */
-		virtual ~CgMatrixFrameVariable()
-		{
-			delete [] m_mValue;
-		}
+		virtual ~CgMatrixFrameVariable();
+		//@}
+
 		/**@name Accessors */
 		//@{
 		inline Matrix <T, Rows, Rows> &			operator []( size_t p_uiIndex)		{ return m_mValue[p_uiIndex]; }
 		inline const Matrix <T, Rows, Rows> &	operator []( size_t p_uiIndex)const	{ return m_mValue[p_uiIndex]; }
 		inline Matrix <T, Rows, Rows> &			GetValue( size_t p_uiIndex=0)		{ return m_mValue[p_uiIndex]; }
 		inline const Matrix <T, Rows, Rows> &	GetValue( size_t p_uiIndex=0)const	{ return m_mValue[p_uiIndex]; }
-		/**
-		 * Gives the count type of the variable
-		 *@return The count type
-		 */
-		virtual eTYPE GetType();
-		/**
-		 * Defines the value of the variable, from a string
-		 *@param p_strValue : [in] The string containing the value
-		 *@param p_uiIndex : [in] The index of the value
-		 */
-		virtual void SetValue( const String & p_strValue, size_t p_uiIndex=0)
-		{
-			m_strValue[p_uiIndex] = p_strValue;
-			StringArray l_arrayLines = p_strValue.Split( ";");
-
-			if (l_arrayLines.size() == Rows)
-			{
-				bool l_bOK = true;
-
-				for (size_t i = 0 ; i < Rows && l_bOK ; i++)
-				{
-					l_bOK = false;
-					StringArray l_arraySplitted = l_arrayLines[i].Split( ", \t");
-
-					if (l_arraySplitted.size() == Columns)
-					{
-						l_bOK = true;
-
-						for (size_t j = 0 ; j < Columns ; j++)
-						{
-							Policy::assign( m_mValue[p_uiIndex][j][i], atof( l_arraySplitted[j].c_str()));
-						}
-					}
-				}
-			}
-		}
-		/**
-		 * Defines the value of the variable, from a Matrix2
-		 *@param p_mValue : [in] The new value
-		 *@param p_uiIndex : [in] The index of the value
-		 */
-		inline void SetValue( const Matrix <T, Rows, Columns> & p_mValue, size_t p_uiIndex=0) { m_mValue[p_uiIndex] = p_mValue;m_bChanged = true; }
+		virtual FrameVariable::eTYPE GetType();
+		virtual void SetValue( const String & p_strValue, size_t p_uiIndex=0);
+		inline void SetValue( const Matrix <T, Rows, Columns> & p_mValue, size_t p_uiIndex=0) { m_mValue[p_uiIndex] = p_mValue;TCgFrameVariable<T>::SetChanged(); }
 		//@}
 	};
 
-	template <size_t Rows, size_t Columns> struct CgMatrixVariableTyper;
-}
-
 #include "CgFrameVariable.inl"
+}
 
 #endif

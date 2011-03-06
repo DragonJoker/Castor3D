@@ -5,6 +5,8 @@
 
 using namespace Castor3D;
 
+const String Viewport::xstring_type[2] = { "2d_view", "3d_view" };
+
 Viewport :: Viewport( unsigned int p_uiWidth, unsigned int p_uiHeight, Viewport::eTYPE p_eType)
 	:	m_eType				( p_eType),
 		m_uiWindowWidth		( p_uiWidth),
@@ -30,11 +32,11 @@ Viewport :: ~Viewport()
 {
 }
 
-void Viewport :: Render( eDRAW_TYPE p_eDisplayMode)
+void Viewport :: Render( ePRIMITIVE_TYPE p_eDisplayMode)
 {
-	Pipeline::ApplyViewport( m_uiWindowWidth, m_uiWindowHeight);
-	Pipeline::MatrixMode( Pipeline::eProjection);
+	Pipeline::MatrixMode( Pipeline::eMatrixProjection);
 	Pipeline::LoadIdentity();
+	Pipeline::ApplyViewport( m_uiWindowWidth, m_uiWindowHeight);
 
 	if (m_eType == Viewport::e3DView)
 	{
@@ -45,7 +47,7 @@ void Viewport :: Render( eDRAW_TYPE p_eDisplayMode)
 		Pipeline::Ortho( m_rLeft, m_rRight, m_rBottom / m_rRatio, m_rTop / m_rRatio, m_rNearView, m_rFarView);
 	}
 
-	Pipeline::MatrixMode( Pipeline::eModelView);
+	Pipeline::MatrixMode( Pipeline::eMatrixModelView);
 	Pipeline::LoadIdentity();
 }
 
@@ -57,61 +59,96 @@ Point3r Viewport :: GetDirection( const Point2i & p_ptMouse)
 	return l_ptReturn;
 }
 
-bool Viewport :: Write( Castor::Utils::File & p_file)const
+bool Viewport :: Write( File & p_file)const
 {
-	bool l_bReturn = (p_file.Write( m_eType) == sizeof( eTYPE));
+	bool l_bReturn = p_file.WriteLine( CU_T( "\tviewport\n\t{\n")) > 0;
 
 	if (l_bReturn)
 	{
-		if (m_eType == e2DView)
+		l_bReturn = p_file.WriteLine( CU_T( "\t\ttype ") + xstring_type[m_eType] + CU_T( "\n")) > 0;
+	}
+
+	if (m_eType == e2DView)
+	{
+		if (l_bReturn)
 		{
-			l_bReturn = p_file.Write( m_rFarView) == sizeof( real);
-
-			if (l_bReturn)
-			{
-				l_bReturn = p_file.Write( m_rNearView) == sizeof( real);
-			}
-
-			if (l_bReturn)
-			{
-				l_bReturn = p_file.Write( m_rLeft) == sizeof( real);
-			}
-
-			if (l_bReturn)
-			{
-				l_bReturn = p_file.Write( m_rRight) == sizeof( real);
-			}
-
-			if (l_bReturn)
-			{
-				l_bReturn = p_file.Write( m_rTop) == sizeof( real);
-			}
-
-			if (l_bReturn)
-			{
-				l_bReturn = p_file.Write( m_rBottom) == sizeof( real);
-			}
+			l_bReturn = p_file.Print( 256, "values %f %f %f %f %f %f\n", m_rNearView, m_rFarView, m_rLeft, m_rRight, m_rTop, m_rBottom) > 0;
 		}
-		else
+	}
+	else
+	{
+		if (l_bReturn)
+		{
+			l_bReturn = p_file.Print( 256, "values %f %f %f\n", m_rNearView, m_rFarView, m_rFovY) > 0;
+		}
+	}
+
+	if (l_bReturn)
+	{
+		l_bReturn = p_file.WriteLine( CU_T( "\t}\n")) > 0;
+	}
+
+	return l_bReturn;
+}
+
+bool Viewport :: Save( Castor::Utils::File & p_file)const
+{
+	bool l_bReturn = (p_file.Write( m_eType) == sizeof( eTYPE));
+
+	if (m_eType == e2DView)
+	{
+		if (l_bReturn)
 		{
 			l_bReturn = p_file.Write( m_rFarView) == sizeof( real);
+		}
 
-			if (l_bReturn)
-			{
-				l_bReturn = p_file.Write( m_rNearView) == sizeof( real);
-			}
+		if (l_bReturn)
+		{
+			l_bReturn = p_file.Write( m_rNearView) == sizeof( real);
+		}
 
-			if (l_bReturn)
-			{
-				l_bReturn = p_file.Write( m_rFovY) == sizeof( real);
-			}
+		if (l_bReturn)
+		{
+			l_bReturn = p_file.Write( m_rLeft) == sizeof( real);
+		}
+
+		if (l_bReturn)
+		{
+			l_bReturn = p_file.Write( m_rRight) == sizeof( real);
+		}
+
+		if (l_bReturn)
+		{
+			l_bReturn = p_file.Write( m_rTop) == sizeof( real);
+		}
+
+		if (l_bReturn)
+		{
+			l_bReturn = p_file.Write( m_rBottom) == sizeof( real);
+		}
+	}
+	else
+	{
+		if (l_bReturn)
+		{
+			l_bReturn = p_file.Write( m_rFarView) == sizeof( real);
+		}
+
+		if (l_bReturn)
+		{
+			l_bReturn = p_file.Write( m_rNearView) == sizeof( real);
+		}
+
+		if (l_bReturn)
+		{
+			l_bReturn = p_file.Write( m_rFovY) == sizeof( real);
 		}
 	}
 
 	return l_bReturn;
 }
 
-bool Viewport :: Read( Castor::Utils::File & p_file)
+bool Viewport :: Load( Castor::Utils::File & p_file)
 {
 	bool l_bReturn = (p_file.Read( m_eType) == sizeof( eTYPE));
 

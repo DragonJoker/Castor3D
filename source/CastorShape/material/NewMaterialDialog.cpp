@@ -4,7 +4,7 @@
 
 using namespace Castor3D;
 using namespace CastorShape;
-using namespace GUICommon;
+using namespace GuiCommon;
 
 NewMaterialDialog :: NewMaterialDialog( MaterialManager * p_pManager, wxWindow * parent, wxWindowID p_id,
 										    const wxString & p_name,
@@ -45,7 +45,7 @@ void NewMaterialDialog :: OnOk( wxCommandEvent& event)
 
 void NewMaterialDialog :: OnCancel( wxCommandEvent& event)
 {
-	if ( ! m_material == NULL)
+	if (m_material != NULL)
 	{
 		m_pManager->RemoveElement( m_material);
 	}

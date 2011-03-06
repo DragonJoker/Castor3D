@@ -37,7 +37,7 @@ namespace Castor
 		String			m_description;
 		String			m_filename;
 		String			m_functionName;
-		const Char *	m_typeDesc;
+		const xchar *	m_typeDesc;
 
 	public:
 		Exception(	const String & p_description, const String & p_file,

@@ -1,28 +1,26 @@
-#include "OpenGLCommon/PrecompiledHeader.h"
+#include "OpenGlCommon/PrecompiledHeader.h"
 
-#include "OpenGLCommon/GLShaderProgram.h"
-#include "OpenGLCommon/GLShaderObject.h"
-#include "OpenGLCommon/GLFrameVariable.h"
+#include "OpenGlCommon/GlShaderProgram.h"
+#include "OpenGlCommon/GlShaderObject.h"
+#include "OpenGlCommon/GlFrameVariable.h"
 
 using namespace Castor3D;
 
-GLShaderProgram :: GLShaderProgram()
-	:	ShaderProgram(),
+GlShaderProgram :: GlShaderProgram()
+	:	GlslShaderProgram(),
 		m_programObject( 0)
 {
-	m_eType = eGlShader;
 }
 
-GLShaderProgram :: GLShaderProgram( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile)
-	:	ShaderProgram( p_vertexShaderFile, p_fragmentShaderFile, p_geometryShaderFile),
+GlShaderProgram :: GlShaderProgram( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile)
+	:	GlslShaderProgram( p_vertexShaderFile, p_fragmentShaderFile, p_geometryShaderFile),
 		m_programObject( 0)
 {
-	m_eType = eGlShader;
 }
 
-GLShaderProgram :: ~GLShaderProgram()
+GlShaderProgram :: ~GlShaderProgram()
 {
-	m_mapGLFrameVariables.clear();
+	m_mapGlFrameVariables.clear();
 	Cleanup();
 
 	if (RenderSystem::UseShaders())
@@ -30,18 +28,17 @@ GLShaderProgram :: ~GLShaderProgram()
 
 		if (m_programObject != 0)
 		{
-			glDeleteProgram( m_programObject);
-			CheckGLError( CU_T( "GLShaderProgram :: ~GLShaderProgram - glDeleteShader"));
+			CheckGlError( glDeleteProgram( m_programObject), CU_T( "GlShaderProgram :: ~GlShaderProgram - glDeleteShader"));
 		}
 	}
 }
 
-void GLShaderProgram :: Cleanup()
+void GlShaderProgram :: Cleanup()
 {
-	ShaderProgram::Cleanup();
+	GlslShaderProgram::Cleanup();
 }
 
-void GLShaderProgram :: Initialise()
+void GlShaderProgram :: Initialise()
 {
 	if ( ! m_isLinked)
 	{
@@ -50,11 +47,11 @@ void GLShaderProgram :: Initialise()
 			m_programObject = glCreateProgram();
 		}
 
-		ShaderProgram::Initialise();
+		GlslShaderProgram::Initialise();
 	}
 }
 
-bool GLShaderProgram :: Link()
+bool GlShaderProgram :: Link()
 {
 	bool l_bReturn = false;
 
@@ -62,31 +59,29 @@ bool GLShaderProgram :: Link()
 	{
 		if (m_isLinked)  // already linked, detach everything first
 		{
-			Logger::LogWarning( CU_T( "GLShaderProgram :: Link - Object is already linked, trying to link again"));
+			Logger::LogWarning( CU_T( "GlShaderProgram :: Link - Object is already linked, trying to link again"));
 
-			static_pointer_cast<GLShaderObject>( m_pShaders[eVertexShader])->Detach();
-			static_pointer_cast<GLShaderObject>( m_pShaders[ePixelShader])->Detach();
+			static_pointer_cast<GlShaderObject>( m_pShaders[eVertexShader])->Detach();
+			static_pointer_cast<GlShaderObject>( m_pShaders[ePixelShader])->Detach();
 
-			if ( ! m_pShaders[eGeometryShader] == NULL)
+			if (m_pShaders[eGeometryShader] != NULL)
 			{
-				static_pointer_cast<GLShaderObject>( m_pShaders[eGeometryShader])->Detach();
+				static_pointer_cast<GlShaderObject>( m_pShaders[eGeometryShader])->Detach();
 			}
 		}
 
-		static_pointer_cast<GLShaderObject>( m_pShaders[eVertexShader])->AttachTo( this);
-		static_pointer_cast<GLShaderObject>( m_pShaders[ePixelShader])->AttachTo( this);
+		static_pointer_cast<GlShaderObject>( m_pShaders[eVertexShader])->AttachTo( this);
+		static_pointer_cast<GlShaderObject>( m_pShaders[ePixelShader])->AttachTo( this);
 
-		if ( ! m_pShaders[eGeometryShader] == NULL)
+		if (m_pShaders[eGeometryShader] != NULL)
 		{
-			static_pointer_cast<GLShaderObject>( m_pShaders[eGeometryShader])->AttachTo( this);
+			static_pointer_cast<GlShaderObject>( m_pShaders[eGeometryShader])->AttachTo( this);
 		}
 
 		GLint linked = 0;
-		glLinkProgram( m_programObject);
-		CheckGLError( CU_T( "GLShaderProgram :: Link - glLinkProgram"));
-		glGetProgramiv( m_programObject, GL_LINK_STATUS, & linked);
-		CheckGLError( CU_T( "GLShaderProgram :: Link - glGetProgramiv"));
-		glGetProgramiv( m_programObject, GL_VALIDATE_STATUS, & linked);
+		CheckGlError( glLinkProgram( m_programObject), CU_T( "GlShaderProgram :: Link - glLinkProgram"));
+		CheckGlError( glGetProgramiv( m_programObject, GL_LINK_STATUS, & linked), CU_T( "GlShaderProgram :: Link - glGetProgramiv( GL_LINK_STATUS)"));
+		CheckGlError( glGetProgramiv( m_programObject, GL_VALIDATE_STATUS, & linked), CU_T( "GlShaderProgram :: Link - glGetProgramiv( GL_VALIDATE_STATUS)"));
 
 		RetrieveLinkerLog( m_linkerLog);
 
@@ -110,11 +105,11 @@ bool GLShaderProgram :: Link()
 	return l_bReturn;
 }
 
-void GLShaderProgram :: RetrieveLinkerLog( String & strLog)
+void GlShaderProgram :: RetrieveLinkerLog( String & strLog)
 {
 	if ( ! RenderSystem::UseShaders())
 	{
-		strLog = GetGLSLErrorString( 0);
+		strLog = GlEnum::GetGlslErrorString( 0);
 		return;
 	}
 
@@ -123,206 +118,201 @@ void GLShaderProgram :: RetrieveLinkerLog( String & strLog)
 
 	if (m_programObject == 0)
 	{
-		strLog = GetGLSLErrorString( 2);
+		strLog = GlEnum::GetGlslErrorString( 2);
 		return;
 	}
 
-	glGetProgramiv(m_programObject, GL_INFO_LOG_LENGTH , & l_iLength);
-	CheckGLError( CU_T( "GLShaderProgram :: GetLinkerLog - glGetProgramiv"));
+	CheckGlError( glGetProgramiv(m_programObject, GL_INFO_LOG_LENGTH , & l_iLength), CU_T( "GlShaderProgram :: GetLinkerLog - glGetProgramiv"));
 
 	if (l_iLength > 1)
 	{
 		char * l_pTmp = new char[l_iLength];
-		glGetProgramInfoLog( m_programObject, l_iLength, & l_uiLength, l_pTmp);
-		CheckGLError( CU_T( "GLShaderProgram :: GetLinkerLog - glGetProgramInfoLog"));
+		CheckGlError( glGetProgramInfoLog( m_programObject, l_iLength, & l_uiLength, l_pTmp), CU_T( "GlShaderProgram :: GetLinkerLog - glGetProgramInfoLog"));
 		strLog = l_pTmp;
 		delete [] l_pTmp;
 	}
 }
 
-void GLShaderProgram :: Begin()
+void GlShaderProgram :: Begin()
 {
 	if ( ! RenderSystem::UseShaders() || m_programObject == 0 || ! m_enabled || ! m_isLinked || m_bError)
 	{
 		return;
 	}
 
-	glUseProgram( m_programObject);
-	CheckGLError( CU_T( "GLShaderProgram :: End - glUseProgram"));
-
+	CheckGlError( glUseProgram( m_programObject), CU_T( "GlShaderProgram :: End - glUseProgram"));
 	ApplyAllVariables();
 }
 
-void GLShaderProgram :: ApplyAllVariables()
+void GlShaderProgram :: ApplyAllVariables()
 {
-	for (GLFrameVariablePtrStrMap::iterator l_it = m_mapGLFrameVariables.begin() ; l_it != m_mapGLFrameVariables.end() ; ++l_it)
+	for (GlFrameVariablePtrStrMap::iterator l_it = m_mapGlFrameVariables.begin() ; l_it != m_mapGlFrameVariables.end() ; ++l_it)
 	{
 		l_it->second->Apply();
 	}
 }
 
-void GLShaderProgram :: End()
+void GlShaderProgram :: End()
 {
 	if ( ! RenderSystem::UseShaders() || ! m_enabled)
 	{
 		return;
 	}
 
-	glUseProgram( 0);
-	CheckGLError( CU_T( "GLShaderProgram :: End - glUseProgram"));
+	CheckGlError( glUseProgram( 0), CU_T( "GlShaderProgram :: End - glUseProgram"));
 }
 
-GLFrameVariablePtr GLShaderProgram :: GetGLFrameVariable( const String & p_strName)
+GlFrameVariablePtr GlShaderProgram :: GetGlFrameVariable( const String & p_strName)
 {
-	GLFrameVariablePtr l_pReturn;
+	GlFrameVariablePtr l_pReturn;
 
-	if (m_mapGLFrameVariables.find( p_strName) != m_mapGLFrameVariables.end())
+	if (m_mapGlFrameVariables.find( p_strName) != m_mapGlFrameVariables.end())
 	{
-		l_pReturn = m_mapGLFrameVariables.find( p_strName)->second;
+		l_pReturn = m_mapGlFrameVariables.find( p_strName)->second;
 	}
 
 	return l_pReturn;
 }
 
-void GLShaderProgram :: AddFrameVariable( FrameVariablePtr p_pVariable, ShaderObjectPtr p_pPobject)
+void GlShaderProgram :: AddFrameVariable( FrameVariablePtr p_pVariable, GlslShaderObjectPtr p_pPobject)
 {
-	if ( ! p_pVariable == NULL && m_mapGLFrameVariables.find( p_pVariable->GetName()) == m_mapGLFrameVariables.end())
+	if (p_pVariable != NULL && m_mapGlFrameVariables.find( p_pVariable->GetName()) == m_mapGlFrameVariables.end())
 	{
 		switch (p_pVariable->GetType())
 		{
 		case FrameVariable::eOne:
-			if (p_pVariable->GetSubType() == typeid( int))
+			if (p_pVariable->GetSubType() == typeid( int).name())
 			{
 				AddFrameVariable<int>( static_pointer_cast< OneFrameVariable<int> >( p_pVariable), p_pPobject);
 			}
-			else if (p_pVariable->GetSubType() == typeid( unsigned int))
+			else if (p_pVariable->GetSubType() == typeid( unsigned int).name())
 			{
 				AddFrameVariable<unsigned int>( static_pointer_cast< OneFrameVariable<unsigned int> >( p_pVariable), p_pPobject);
 			}
-			else if (p_pVariable->GetSubType() == typeid( float))
+			else if (p_pVariable->GetSubType() == typeid( float).name())
 			{
 				AddFrameVariable<float>( static_pointer_cast< OneFrameVariable<float> >( p_pVariable), p_pPobject);
 			}
 			break;
 
 		case FrameVariable::eVec1:
-			if (p_pVariable->GetSubType() == typeid( int))
+			if (p_pVariable->GetSubType() == typeid( int).name())
 			{
 				AddFrameVariable<int, 1>( static_pointer_cast< PointFrameVariable<int, 1> >( p_pVariable), p_pPobject);
 			}
-			else if (p_pVariable->GetSubType() == typeid( unsigned int))
+			else if (p_pVariable->GetSubType() == typeid( unsigned int).name())
 			{
 				AddFrameVariable<unsigned int, 1>( static_pointer_cast< PointFrameVariable<unsigned int, 1> >( p_pVariable), p_pPobject);
 			}
-			else if (p_pVariable->GetSubType() == typeid( float))
+			else if (p_pVariable->GetSubType() == typeid( float).name())
 			{
 				AddFrameVariable<float, 1>( static_pointer_cast< PointFrameVariable<float, 1> >( p_pVariable), p_pPobject);
 			}
 			break;
 
 		case FrameVariable::eVec2:
-			if (p_pVariable->GetSubType() == typeid( int))
+			if (p_pVariable->GetSubType() == typeid( int).name())
 			{
 				AddFrameVariable<int, 2>( static_pointer_cast< PointFrameVariable<int, 2> >( p_pVariable), p_pPobject);
 			}
-			else if (p_pVariable->GetSubType() == typeid( unsigned int))
+			else if (p_pVariable->GetSubType() == typeid( unsigned int).name())
 			{
 				AddFrameVariable<unsigned int, 2>( static_pointer_cast< PointFrameVariable<unsigned int, 2> >( p_pVariable), p_pPobject);
 			}
-			else if (p_pVariable->GetSubType() == typeid( float))
+			else if (p_pVariable->GetSubType() == typeid( float).name())
 			{
 				AddFrameVariable<float, 2>( static_pointer_cast< PointFrameVariable<float, 2> >( p_pVariable), p_pPobject);
 			}
 			break;
 
 		case FrameVariable::eVec3:
-			if (p_pVariable->GetSubType() == typeid( int))
+			if (p_pVariable->GetSubType() == typeid( int).name())
 			{
 				AddFrameVariable<int, 3>( static_pointer_cast< PointFrameVariable<int, 3> >( p_pVariable), p_pPobject);
 			}
-			else if (p_pVariable->GetSubType() == typeid( unsigned int))
+			else if (p_pVariable->GetSubType() == typeid( unsigned int).name())
 			{
 				AddFrameVariable<unsigned int, 3>( static_pointer_cast< PointFrameVariable<unsigned int, 3> >( p_pVariable), p_pPobject);
 			}
-			else if (p_pVariable->GetSubType() == typeid( float))
+			else if (p_pVariable->GetSubType() == typeid( float).name())
 			{
 				AddFrameVariable<float, 3>( static_pointer_cast< PointFrameVariable<float, 3> >( p_pVariable), p_pPobject);
 			}
 			break;
 
 		case FrameVariable::eVec4:
-			if (p_pVariable->GetSubType() == typeid( int))
+			if (p_pVariable->GetSubType() == typeid( int).name())
 			{
 				AddFrameVariable<int, 4>( static_pointer_cast< PointFrameVariable<int, 4> >( p_pVariable), p_pPobject);
 			}
-			else if (p_pVariable->GetSubType() == typeid( unsigned int))
+			else if (p_pVariable->GetSubType() == typeid( unsigned int).name())
 			{
 				AddFrameVariable<unsigned int, 4>( static_pointer_cast< PointFrameVariable<unsigned int, 4> >( p_pVariable), p_pPobject);
 			}
-			else if (p_pVariable->GetSubType() == typeid( float))
+			else if (p_pVariable->GetSubType() == typeid( float).name())
 			{
 				AddFrameVariable<float, 4>( static_pointer_cast< PointFrameVariable<float, 4> >( p_pVariable), p_pPobject);
 			}
 			break;
 
 		case FrameVariable::eMat2x2:
-			if (p_pVariable->GetSubType() == typeid( float))
+			if (p_pVariable->GetSubType() == typeid( float).name())
 			{
 				AddFrameVariable<float, 2, 2>( static_pointer_cast< MatrixFrameVariable<float, 2, 2> >( p_pVariable), p_pPobject);
 			}
 			break;
 
 		case FrameVariable::eMat2x3:
-			if (p_pVariable->GetSubType() == typeid( float))
+			if (p_pVariable->GetSubType() == typeid( float).name())
 			{
 				AddFrameVariable<float, 2, 3>( static_pointer_cast< MatrixFrameVariable<float, 2, 3> >( p_pVariable), p_pPobject);
 			}
 			break;
 
 		case FrameVariable::eMat2x4:
-			if (p_pVariable->GetSubType() == typeid( float))
+			if (p_pVariable->GetSubType() == typeid( float).name())
 			{
 				AddFrameVariable<float, 2, 4>( static_pointer_cast< MatrixFrameVariable<float, 2, 4> >( p_pVariable), p_pPobject);
 			}
 			break;
 
 		case FrameVariable::eMat3x2:
-			if (p_pVariable->GetSubType() == typeid( float))
+			if (p_pVariable->GetSubType() == typeid( float).name())
 			{
 				AddFrameVariable<float, 3, 2>( static_pointer_cast< MatrixFrameVariable<float, 3, 2> >( p_pVariable), p_pPobject);
 			}
 			break;
 
 		case FrameVariable::eMat3x3:
-			if (p_pVariable->GetSubType() == typeid( float))
+			if (p_pVariable->GetSubType() == typeid( float).name())
 			{
 				AddFrameVariable<float, 3, 3>( static_pointer_cast< MatrixFrameVariable<float, 3, 3> >( p_pVariable), p_pPobject);
 			}
 			break;
 
 		case FrameVariable::eMat3x4:
-			if (p_pVariable->GetSubType() == typeid( float))
+			if (p_pVariable->GetSubType() == typeid( float).name())
 			{
 				AddFrameVariable<float, 3, 4>( static_pointer_cast< MatrixFrameVariable<float, 3, 4> >( p_pVariable), p_pPobject);
 			}
 			break;
 
 		case FrameVariable::eMat4x2:
-			if (p_pVariable->GetSubType() == typeid( float))
+			if (p_pVariable->GetSubType() == typeid( float).name())
 			{
 				AddFrameVariable<float, 4, 2>( static_pointer_cast< MatrixFrameVariable<float, 4, 2> >( p_pVariable), p_pPobject);
 			}
 			break;
 
 		case FrameVariable::eMat4x3:
-			if (p_pVariable->GetSubType() == typeid( float))
+			if (p_pVariable->GetSubType() == typeid( float).name())
 			{
 				AddFrameVariable<float, 4, 3>( static_pointer_cast< MatrixFrameVariable<float, 4, 3> >( p_pVariable), p_pPobject);
 			}
 			break;
 
 		case FrameVariable::eMat4x4:
-			if (p_pVariable->GetSubType() == typeid( float))
+			if (p_pVariable->GetSubType() == typeid( float).name())
 			{
 				AddFrameVariable<float, 4, 4>( static_pointer_cast< MatrixFrameVariable<float, 4, 4> >( p_pVariable), p_pPobject);
 			}

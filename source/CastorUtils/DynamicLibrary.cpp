@@ -16,7 +16,7 @@ void DynamicLibrary :: _close()throw()
 	{
 		try
 		{
-#ifndef __GNUG__
+#ifdef _WIN32
 			UINT l_uiOldMode = SetErrorMode( SEM_FAILCRITICALERRORS);
 			FreeLibrary( static_cast <HMODULE> ( m_library));
 			SetErrorMode( l_uiOldMode);
@@ -30,13 +30,13 @@ void DynamicLibrary :: _close()throw()
 	}
 }
 
-bool DynamicLibrary :: Open( const Char * p_name)throw()
+bool DynamicLibrary :: Open( const xchar * p_name)throw()
 {
 	_close();
 
 	try
 	{
-#ifndef __GNUG__
+#ifdef _WIN32
 		UINT l_uiOldMode = SetErrorMode( SEM_FAILCRITICALERRORS);
 //		m_library = LoadLibraryEx( p_name, NULL, DONT_RESOLVE_DLL_REFERENCES | LOAD_IGNORE_CODE_AUTHZ_LEVEL);
 		m_library = LoadLibrary( p_name);
@@ -57,7 +57,7 @@ bool DynamicLibrary :: Open( const String & p_name)throw()
 	return Open( p_name.c_str());
 }
 
-void * DynamicLibrary :: GetFunction( const Char * p_name)throw()
+void * DynamicLibrary :: GetFunction( const xchar * p_name)throw()
 {
 	void * l_pReturn = NULL;
 
@@ -65,11 +65,11 @@ void * DynamicLibrary :: GetFunction( const Char * p_name)throw()
 	{
 		try
 		{
-#ifndef __GNUG__
+#ifdef _WIN32
 			UINT l_uiOldMode = SetErrorMode( SEM_FAILCRITICALERRORS);
 			std::string l_str;
 			l_str.assign( String( p_name).char_str());
-			l_pReturn = GetProcAddress( static_cast <HMODULE> ( m_library), l_str.c_str());
+			l_pReturn = (void *)( GetProcAddress( static_cast<HMODULE>( m_library), l_str.c_str()));
 			SetErrorMode( l_uiOldMode);
 #else
 			l_pReturn = dlsym( m_library, p_name);

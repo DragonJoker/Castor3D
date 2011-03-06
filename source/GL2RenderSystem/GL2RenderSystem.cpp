@@ -1,171 +1,127 @@
-#include "GL2RenderSystem/PrecompiledHeader.h"
+#include "Gl2RenderSystem/PrecompiledHeader.h"
 
-#include "GL2RenderSystem/GL2RenderSystem.h"
-#include "GL2RenderSystem/GL2SubmeshRenderer.h"
-#include "GL2RenderSystem/GL2LightRenderer.h"
-#include "GL2RenderSystem/GL2MaterialRenderer.h"
-#include "GL2RenderSystem/GL2TextureRenderer.h"
-#include "GL2RenderSystem/GL2WindowRenderer.h"
-#include "GL2RenderSystem/GL2ShaderProgram.h"
+#include "Gl2RenderSystem/Gl2RenderSystem.h"
+#include "Gl2RenderSystem/Gl2SubmeshRenderer.h"
+#include "Gl2RenderSystem/Gl2LightRenderer.h"
+#include "Gl2RenderSystem/Gl2MaterialRenderer.h"
+#include "Gl2RenderSystem/Gl2TextureRenderer.h"
+#include "Gl2RenderSystem/Gl2WindowRenderer.h"
+#include "Gl2RenderSystem/Gl2ShaderProgram.h"
 
 using namespace Castor3D;
 
-GL2RenderSystem :: GL2RenderSystem( SceneManager * p_pSceneManager)
-	:	GLRenderSystem( p_pSceneManager)
+Gl2RenderSystem :: Gl2RenderSystem( SceneManager * p_pSceneManager)
+	:	GlRenderSystem( p_pSceneManager)
 {
-	Logger::LogMessage( CU_T( "GL2RenderSystem :: GL2RenderSystem"));
+	Logger::LogMessage( CU_T( "Gl2RenderSystem :: Gl2RenderSystem"));
 }
 
-GL2RenderSystem :: ~GL2RenderSystem()
+Gl2RenderSystem :: ~Gl2RenderSystem()
 {
 }
 
-ShaderProgram * GL2RenderSystem :: CreateShaderProgram( const String & p_vertexShaderFile, 
-													   const String & p_fragmentShaderFile,
-													   const String & p_geometryShaderFile)
-{
-	return new GL2ShaderProgram( p_vertexShaderFile, p_fragmentShaderFile, p_geometryShaderFile);
-}
-
-void GL2RenderSystem :: RenderAmbientLight( const Colour & p_clColour)
+void Gl2RenderSystem :: RenderAmbientLight( const Colour & p_clColour)
 {
 	if (RenderSystem::UseShaders())
 	{
 		if (m_pCurrentProgram != NULL)
 		{
-			if (m_pCurrentProgram->GetType() == ShaderProgram::eGlShader)
+			if (m_pCurrentProgram->GetType() == ShaderProgramBase::eGlslShader)
 			{
-				static_cast <GL2ShaderProgram *>( m_pCurrentProgram)->SetAmbientLight( p_clColour);
+				static_cast <Gl2ShaderProgram *>( m_pCurrentProgram)->SetAmbientLight( p_clColour);
 			}
-			else if (m_pCurrentProgram->GetType() == ShaderProgram::eCgShader)
+			else if (m_pCurrentProgram->GetType() == ShaderProgramBase::eCgShader)
 			{
-				static_cast <CgGLShaderProgram *>( m_pCurrentProgram)->SetAmbientLight( p_clColour);
+				static_cast <CgGlShaderProgram *>( m_pCurrentProgram)->SetAmbientLight( p_clColour);
 			}
 		}
 	}
 	else
 	{
-		GLRenderSystem::RenderAmbientLight( p_clColour);
+		GlRenderSystem::RenderAmbientLight( p_clColour);
 	}
 }
 
-SubmeshRendererPtr GL2RenderSystem :: _createSubmeshRenderer()
+GlslShaderProgramPtr Gl2RenderSystem :: _createGlslShaderProgram( const String & p_vertexShaderFile, 
+																  const String & p_fragmentShaderFile,
+																  const String & p_geometryShaderFile)
 {
-	return SubmeshRendererPtr( new GL2SubmeshRenderer( m_pSceneManager));
+	return GlslShaderProgramPtr( new Gl2ShaderProgram( p_vertexShaderFile, p_fragmentShaderFile, p_geometryShaderFile));
 }
 
-TextureEnvironmentRendererPtr GL2RenderSystem :: _createTexEnvRenderer()
+SubmeshRendererPtr Gl2RenderSystem :: _createSubmeshRenderer()
 {
-	return TextureEnvironmentRendererPtr( new GLTextureEnvironmentRenderer( m_pSceneManager));
+	return SubmeshRendererPtr( new Gl2SubmeshRenderer( m_pSceneManager));
 }
 
-TextureRendererPtr GL2RenderSystem :: _createTextureRenderer()
+TextureEnvironmentRendererPtr Gl2RenderSystem :: _createTexEnvRenderer()
 {
-	return TextureRendererPtr( new GL2TextureRenderer( m_pSceneManager));
+	return TextureEnvironmentRendererPtr( new GlTextureEnvironmentRenderer( m_pSceneManager));
 }
 
-PassRendererPtr GL2RenderSystem :: _createPassRenderer()
+TextureRendererPtr Gl2RenderSystem :: _createTextureRenderer()
 {
-	return PassRendererPtr( new GL2PassRenderer( m_pSceneManager));
+	return TextureRendererPtr( new Gl2TextureRenderer( m_pSceneManager));
 }
 
-CameraRendererPtr GL2RenderSystem :: _createCameraRenderer()
+PassRendererPtr Gl2RenderSystem :: _createPassRenderer()
 {
-	return CameraRendererPtr( new GLCameraRenderer( m_pSceneManager));
+	return PassRendererPtr( new Gl2PassRenderer( m_pSceneManager));
 }
 
-LightRendererPtr GL2RenderSystem :: _createLightRenderer()
+CameraRendererPtr Gl2RenderSystem :: _createCameraRenderer()
 {
-	return LightRendererPtr( new GL2LightRenderer( m_pSceneManager));
+	return CameraRendererPtr( new GlCameraRenderer( m_pSceneManager));
 }
 
-WindowRendererPtr GL2RenderSystem :: _createWindowRenderer()
+LightRendererPtr Gl2RenderSystem :: _createLightRenderer()
 {
-	return WindowRendererPtr( new GL2WindowRenderer( m_pSceneManager));
+	return LightRendererPtr( new Gl2LightRenderer( m_pSceneManager));
 }
 
-OverlayRendererPtr GL2RenderSystem :: _createOverlayRenderer()
+WindowRendererPtr Gl2RenderSystem :: _createWindowRenderer()
 {
-	return OverlayRendererPtr( new GLOverlayRenderer( m_pSceneManager));
+	return WindowRendererPtr( new Gl2WindowRenderer( m_pSceneManager));
 }
 
-IndicesBufferPtr GL2RenderSystem :: _createIndicesBuffer()
+OverlayRendererPtr Gl2RenderSystem :: _createOverlayRenderer()
 {
-	IndicesBufferPtr l_pReturn;
+	return OverlayRendererPtr( new GlOverlayRenderer( m_pSceneManager));
+}
 
-	if (UseVBO())
+IndexBufferPtr Gl2RenderSystem :: _createIndexBuffer()
+{
+	IndexBufferPtr l_pReturn;
+
+	if (UseVertexBufferObjects())
 	{
-		l_pReturn = BufferManager::CreateBuffer<unsigned int, GLVBOIndicesBuffer>();
+		l_pReturn = BufferManager::CreateBuffer<unsigned int, GlVboIndexBuffer>();
 	}
 	else
 	{
-		l_pReturn = BufferManager::CreateBuffer<unsigned int, GLVBIndicesBuffer>();
+		l_pReturn = BufferManager::CreateBuffer<unsigned int, GlVbIndexBuffer>();
 	}
 
 	return l_pReturn;
 }
 
-VertexBufferPtr GL2RenderSystem :: _createVertexBuffer()
+VertexBufferPtr Gl2RenderSystem :: _createVertexBuffer( const BufferElementDeclaration * p_pElements, size_t p_uiCount)
 {
 	VertexBufferPtr l_pReturn;
 
-	if (UseVBO())
+	if (UseVertexBufferObjects())
 	{
-		l_pReturn = BufferManager::CreateBuffer<real, GLVBOVertexBuffer>();
+		l_pReturn = BufferManager::CreateVertexBuffer<GlVboVertexBuffer>( p_pElements, p_uiCount);
 	}
 	else
 	{
-		l_pReturn = BufferManager::CreateBuffer<real, GLVBVertexBuffer>();
+		l_pReturn = BufferManager::CreateVertexBuffer<GlVbVertexBuffer>( p_pElements, p_uiCount);
 	}
 
 	return l_pReturn;
 }
 
-NormalsBufferPtr GL2RenderSystem :: _createNormalsBuffer()
-{
-	NormalsBufferPtr l_pReturn;
-
-	if (UseVBO())
-	{
-		l_pReturn = BufferManager::CreateBuffer<real, GLVBONormalsBuffer>();
-	}
-	else
-	{
-		l_pReturn = BufferManager::CreateBuffer<real, GLVBNormalsBuffer>();
-	}
-
-	return l_pReturn;
-}
-
-TextureBufferPtr GL2RenderSystem :: _createTextureBuffer()
-{
-	TextureBufferPtr l_pReturn;
-
-	if (UseVBO())
-	{
-		l_pReturn = BufferManager::CreateBuffer<real, GLVBOTextureBuffer>();
-	}
-	else
-	{
-		l_pReturn = BufferManager::CreateBuffer<real, GLVBTextureBuffer>();
-	}
-
-	return l_pReturn;
-}
-
-VertexInfosBufferPtr GL2RenderSystem :: _createVertexInfosBuffer()
-{
-	VertexInfosBufferPtr l_pReturn;
-
-	if (UseVBO())
-	{
-		l_pReturn = BufferManager::CreateBuffer<real, GLVertexInfosBufferObject>();
-	}
-
-	return l_pReturn;
-}
-
-TextureBufferObjectPtr GL2RenderSystem :: _createTBOBuffer()
+TextureBufferObjectPtr Gl2RenderSystem :: _createTextureBuffer()
 {
 	TextureBufferObjectPtr l_pReturn;
 	return l_pReturn;

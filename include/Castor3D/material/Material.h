@@ -28,7 +28,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class C3D_API MaterialLoader : Castor::Resources::ResourceLoader <Material, MaterialManager>, public MemoryTraced<MaterialLoader>
+	class C3D_API MaterialLoader : Castor::Resources::ResourceLoader <Material>, public MemoryTraced<MaterialLoader>
 	{
 	public:
 		virtual MaterialPtr LoadFromFile( MaterialManager * p_pManager, const String & p_file);
@@ -41,7 +41,7 @@ namespace Castor3D
 	\version 0.1
 	\date 09/02/2010
 	*/
-	class C3D_API Material : public Castor::Resources::Resource<Material, MaterialManager>, public MemoryTraced<Material>
+	class C3D_API Material : public Serialisable, public Textable, public Castor::Resources::Resource<Material>, public MemoryTraced<Material>
 	{
 	protected:
 		friend class MaterialManager;			//!< The MaterialManager is a friend so it is the only one who can create a material :P
@@ -51,18 +51,22 @@ namespace Castor3D
 
 
 	public:
+		/**@name Construction / Destruction */
+		//@{
 		/**
 		 * Constructor, not be used by user, use MaterialManager::CreateMaterial() instead
 		 */
-		Material( MaterialManager * p_pManager, const String & p_name= C3DEmptyString, int p_iNbInitialPasses=1);
+		Material( Manager<Material> * p_pManager, const String & p_name= C3DEmptyString, int p_iNbInitialPasses=1);
 		/**
 		 * Destructor
 		 */
 		virtual ~Material();
+		//@}
+
 		/**
 		 * Applies the material
 		 */
-		void Render( eDRAW_TYPE p_displayMode);
+		void Render( ePRIMITIVE_TYPE p_displayMode);
 		/**
 		 * Applies the material
 		 */
@@ -71,12 +75,6 @@ namespace Castor3D
 		 * Removes the material (to avoid it from interfering with other materials)
 		 */
 		void EndRender();
-		/**
-		 * Sets my name, tells the MaterialManager my name has changed
-		 *@param p_name : [in] The wanted name
-		 *@return true if successful, false if not
-		 */
-		bool SetName( const String & p_name);
 		/**
 		 * Initialises the material and all it's passes
 		 */
@@ -97,10 +95,20 @@ namespace Castor3D
 		 */
 		void DestroyPass( unsigned int p_index);
 
-	public:
+		/**@name Inherited methods from Textable */
+		//@{
+		virtual bool Write( File & p_file)const;
+		virtual bool Read( File & p_file) { return false; }
+		//@}
+
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
+
 		/**@name Accessors */
 		//@{
-		inline const String	&		GetName				()const { return m_key; }
 		inline unsigned int			GetNbPasses			()const { return m_passes.size(); }
 		//@}
 	};

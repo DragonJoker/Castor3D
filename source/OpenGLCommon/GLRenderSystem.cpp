@@ -1,21 +1,21 @@
-#include "OpenGLCommon/PrecompiledHeader.h"
+#include "OpenGlCommon/PrecompiledHeader.h"
 
-#include "OpenGLCommon/GLRenderSystem.h"
-#include "OpenGLCommon/GLShaderProgram.h"
-#include "OpenGLCommon/GLShaderObject.h"
-#include "OpenGLCommon/CgGLShaderProgram.h"
-#include "OpenGLCommon/CgGLShaderObject.h"
+#include "OpenGlCommon/GlRenderSystem.h"
+#include "OpenGlCommon/GlShaderProgram.h"
+#include "OpenGlCommon/GlShaderObject.h"
+#include "OpenGlCommon/CgGlShaderProgram.h"
+#include "OpenGlCommon/CgGlShaderObject.h"
 
 using namespace Castor3D;
 
 #define GL_LIGHT_MODEL_COLOR_CONTROL	0x81F8
 #define GL_SEPARATE_SPECULAR_COLOR		0x81FA
 
-bool GLRenderSystem :: sm_useVBO = false;
-bool GLRenderSystem  :: sm_extensionsInit = false;
-bool GLRenderSystem  :: sm_gpuShader4 = false;
+bool GlRenderSystem :: sm_useVertexBufferObjects = false;
+bool GlRenderSystem  :: sm_extensionsInit = false;
+bool GlRenderSystem  :: sm_gpuShader4 = false;
 
-GLRenderSystem :: GLRenderSystem( SceneManager * p_pSceneManager)
+GlRenderSystem :: GlRenderSystem( SceneManager * p_pSceneManager)
 	:	RenderSystem( p_pSceneManager)
 {
 	m_setAvailableIndexes.insert( GL_LIGHT0);
@@ -28,14 +28,14 @@ GLRenderSystem :: GLRenderSystem( SceneManager * p_pSceneManager)
 	m_setAvailableIndexes.insert( GL_LIGHT7);
 }
 
-GLRenderSystem :: ~GLRenderSystem()
+GlRenderSystem :: ~GlRenderSystem()
 {
 	Delete();
 }
 
-void GLRenderSystem :: Initialise()
+void GlRenderSystem :: Initialise()
 {
-	Logger::LogMessage( CU_T( "GLRenderSystem :: Initialise"));
+	Logger::LogMessage( CU_T( "GlRenderSystem :: Initialise"));
 
 	if (sm_initialised)
 	{
@@ -45,7 +45,7 @@ void GLRenderSystem :: Initialise()
 	Logger::LogMessage( CU_T( "************************************************************************************************************************"));
 	Logger::LogMessage( CU_T( "Initialising OpenGL"));
 
-	InitOpenGLExtensions();
+	InitOpenGlExtensions();
 
 	sm_useMultiTexturing = false;
 
@@ -57,8 +57,8 @@ void GLRenderSystem :: Initialise()
 		sm_useMultiTexturing = true;
 	}
 
-	sm_useVBO = false;
-	if (glGenBuffers != NULL 
+	sm_useVertexBufferObjects = false;
+	if (glGenBuffers != NULL
 		&& glBindBuffer != NULL
 		&& glDeleteBuffers != NULL
 		&& glBufferData != NULL
@@ -66,23 +66,23 @@ void GLRenderSystem :: Initialise()
 		&& glMultiDrawArrays != NULL)
 	{
 		Logger::LogMessage( CU_T( "Using Vertex Buffer Objects"));
-		sm_useVBO = true;
+		sm_useVertexBufferObjects = true;
 	}
 
 	Logger::LogMessage( CU_T( "OpenGL Initialisation Ended"));
 	Logger::LogMessage( CU_T( "************************************************************************************************************************"));
 	sm_initialised = true;
 
-	GLPipeline::InitFunctions();
+	GlPipeline::InitFunctions();
 }
 
-void GLRenderSystem :: Delete()
+void GlRenderSystem :: Delete()
 {
 	Cleanup();
 	map::deleteAll( m_contextMap);
 }
 
-void GLRenderSystem :: Cleanup()
+void GlRenderSystem :: Cleanup()
 {
 	m_submeshesRenderers.clear();
 	m_texEnvRenderers.clear();
@@ -93,7 +93,7 @@ void GLRenderSystem :: Cleanup()
 	m_cameraRenderers.clear();
 }
 
-bool GLRenderSystem :: InitOpenGLExtensions()
+bool GlRenderSystem :: InitOpenGlExtensions()
 {
 	if ( ! sm_extensionsInit)
 	{
@@ -112,14 +112,14 @@ bool GLRenderSystem :: InitOpenGLExtensions()
 
 			sm_extensionsInit = true;
 
-			HasGLSLSupport();
+			HasGlslSupport();
 		}
 	}
 
 	return sm_extensionsInit;
 }
 
-bool GLRenderSystem :: HasGLSLSupport()
+bool GlRenderSystem :: HasGlslSupport()
 {
 	bool l_bReturn = false;
 
@@ -132,76 +132,76 @@ bool GLRenderSystem :: HasGLSLSupport()
 
 		if ( ! sm_extensionsInit)
 		{
-			InitOpenGLExtensions();
+			InitOpenGlExtensions();
 		}
 
-		m_iOpenGLMajor = 1;
-		m_iOpenGLMinor = 0;
+		m_iOpenGlMajor = 1;
+		m_iOpenGlMinor = 0;
 
 		if (GLEW_VERSION_4_0)
 		{
-			m_iOpenGLMajor = 4;
-			m_iOpenGLMinor = 0;
+			m_iOpenGlMajor = 4;
+			m_iOpenGlMinor = 0;
 			Logger::LogMessage( CU_T( "Using version 4.0 (or higher) core functions"));
 		}
 		else if (GLEW_VERSION_3_3)
 		{
-			m_iOpenGLMajor = 3;
-			m_iOpenGLMinor = 3;
+			m_iOpenGlMajor = 3;
+			m_iOpenGlMinor = 3;
 			Logger::LogMessage( CU_T( "Using version 3.3 core functions"));
 		}
 		else if (GLEW_VERSION_3_2)
 		{
-			m_iOpenGLMajor = 3;
-			m_iOpenGLMinor = 2;
+			m_iOpenGlMajor = 3;
+			m_iOpenGlMinor = 2;
 			Logger::LogMessage( CU_T( "Using version 3.2 core functions"));
 		}
 		else if (GLEW_VERSION_3_1)
 		{
-			m_iOpenGLMajor = 3;
-			m_iOpenGLMinor = 1;
+			m_iOpenGlMajor = 3;
+			m_iOpenGlMinor = 1;
 			Logger::LogMessage( CU_T( "Using version 3.1 core functions"));
 		}
 		else if (GLEW_VERSION_3_0)
 		{
-			m_iOpenGLMajor = 3;
-			m_iOpenGLMinor = 0;
+			m_iOpenGlMajor = 3;
+			m_iOpenGlMinor = 0;
 			Logger::LogMessage( CU_T( "Using version 3.0 core functions"));
 		}
 		else if (GLEW_VERSION_2_1)
 		{
-			m_iOpenGLMajor = 2;
-			m_iOpenGLMinor = 1;
+			m_iOpenGlMajor = 2;
+			m_iOpenGlMinor = 1;
 			Logger::LogMessage( CU_T( "Using version 2.1 core functions"));
 		}
 		else if (GLEW_VERSION_2_0)
 		{
-			m_iOpenGLMajor = 2;
-			m_iOpenGLMinor = 0;
+			m_iOpenGlMajor = 2;
+			m_iOpenGlMinor = 0;
 			Logger::LogMessage( CU_T( "Using version 2.0 core functions"));
 		}
 		else if (GLEW_VERSION_1_5)
 		{
-			m_iOpenGLMajor = 1;
-			m_iOpenGLMinor = 5;
+			m_iOpenGlMajor = 1;
+			m_iOpenGlMinor = 5;
 			Logger::LogMessage( CU_T( "Using version 1.5 core functions"));
 		}
 		else if (GLEW_VERSION_1_4)
 		{
-			m_iOpenGLMajor = 1;
-			m_iOpenGLMinor = 4;
+			m_iOpenGlMajor = 1;
+			m_iOpenGlMinor = 4;
 			Logger::LogMessage( CU_T( "Using version 1.4 core functions"));
 		}
 		else if (GLEW_VERSION_1_3)
 		{
-			m_iOpenGLMajor = 1;
-			m_iOpenGLMinor = 3;
+			m_iOpenGlMajor = 1;
+			m_iOpenGlMinor = 3;
 			Logger::LogMessage( CU_T( "Using version 1.3 core functions"));
 		}
 		else if (GLEW_VERSION_1_2)
 		{
-			m_iOpenGLMajor = 1;
-			m_iOpenGLMinor = 2;
+			m_iOpenGlMajor = 1;
+			m_iOpenGlMinor = 2;
 			Logger::LogMessage( CU_T( "Using version 1.2 core functions"));
 		}
 
@@ -232,17 +232,17 @@ bool GLRenderSystem :: HasGLSLSupport()
 	return UseShaders();
 }
 
-bool GLRenderSystem :: HasOpenGL2Support()
+bool GlRenderSystem :: HasOpenGl2Support()
 {
 	if ( ! sm_extensionsInit)
 	{
-		InitOpenGLExtensions();
+		InitOpenGlExtensions();
 	}
 
 	return (GLEW_VERSION_2_0 == GL_TRUE);
-} 
+}
 
-bool GLRenderSystem :: HasGeometryShaderSupport()
+bool GlRenderSystem :: HasGeometryShaderSupport()
 {
 	if (GL_TRUE != glewGetExtension( "GL_EXT_geometry_shader4"))
 	{
@@ -252,7 +252,7 @@ bool GLRenderSystem :: HasGeometryShaderSupport()
 	return true;
 }
 
-bool GLRenderSystem :: HasShaderModel4()
+bool GlRenderSystem :: HasShaderModel4()
 {
 	if (GL_TRUE != glewGetExtension( "GL_EXT_gpu_shader4"))
 	{
@@ -262,44 +262,58 @@ bool GLRenderSystem :: HasShaderModel4()
 	return true;
 }
 
-ShaderObject * GLRenderSystem :: CreateVertexShader()
+void GlRenderSystem :: DrawIndexedPrimitives( ePRIMITIVE_TYPE p_eType, size_t p_uiMinVertex, size_t p_uiVertexCount, size_t p_uiFirstIndex, size_t p_uiCount)
 {
-	return new GLVertexShader();
+	const void * l_pOffset = BUFFER_OFFSET( p_uiFirstIndex * 4);
+
+	switch (p_eType)
+	{
+	case eTriangles:		glDrawElements( GL_TRIANGLES,      p_uiCount * 3,	GL_UNSIGNED_INT,	l_pOffset); break;
+	case eTriangleStrips:	glDrawElements( GL_TRIANGLE_STRIP, p_uiCount + 2,	GL_UNSIGNED_INT,	l_pOffset); break;
+	case eTriangleFan:		glDrawElements( GL_TRIANGLE_FAN,   p_uiCount + 1,	GL_UNSIGNED_INT,	l_pOffset); break;
+	case eLines:			glDrawElements( GL_LINES,          p_uiCount * 2,	GL_UNSIGNED_INT,	l_pOffset); break; 
+	case ePoints:			glDrawElements( GL_POINTS,         p_uiCount,		GL_UNSIGNED_INT,	l_pOffset); break;
+	}
 }
 
-ShaderObject * GLRenderSystem :: CreateFragmentShader()
+GlslShaderObjectPtr GlRenderSystem :: _createGlslVertexShader()
 {
-	return new GLFragmentShader();
+	return GlslShaderObjectPtr( new GlVertexShader());
 }
 
-ShaderObject * GLRenderSystem :: CreateGeometryShader()
+GlslShaderObjectPtr GlRenderSystem :: _createGlslFragmentShader()
 {
-	return new GLGeometryShader();
+	return GlslShaderObjectPtr( new GlFragmentShader());
 }
 
-CgShaderObject * GLRenderSystem :: CreateCgVertexShader()
+GlslShaderObjectPtr GlRenderSystem :: _createGlslGeometryShader()
 {
-	return new CgGLVertexShader();
+	return GlslShaderObjectPtr( new GlGeometryShader());
 }
 
-CgShaderObject * GLRenderSystem :: CreateCgFragmentShader()
+CgShaderObjectPtr GlRenderSystem :: _createCgVertexShader()
 {
-	return new CgGLFragmentShader();
+	return CgShaderObjectPtr( new CgGlVertexShader());
 }
 
-CgShaderObject * GLRenderSystem :: CreateCgGeometryShader()
+CgShaderObjectPtr GlRenderSystem :: _createCgFragmentShader()
 {
-	return new CgGLGeometryShader();
+	return CgShaderObjectPtr( new CgGlFragmentShader());
 }
 
-CgShaderProgram * GLRenderSystem :: CreateCgShaderProgram( const String & p_vertexShaderFile, 
-														   const String & p_fragmentShaderFile,
-														   const String & p_geometryShaderFile)
+CgShaderObjectPtr GlRenderSystem :: _createCgGeometryShader()
 {
-	return new CgGLShaderProgram( p_vertexShaderFile, p_fragmentShaderFile, p_geometryShaderFile);
+	return CgShaderObjectPtr( new CgGlGeometryShader());
 }
 
-int GLRenderSystem :: LockLight()
+CgShaderProgramPtr GlRenderSystem :: _createCgShaderProgram( const String & p_vertexShaderFile,
+														    const String & p_fragmentShaderFile,
+														    const String & p_geometryShaderFile)
+{
+	return CgShaderProgramPtr( new CgGlShaderProgram( p_vertexShaderFile, p_fragmentShaderFile, p_geometryShaderFile));
+}
+
+int GlRenderSystem :: LockLight()
 {
 	int l_iReturn = -1;
 
@@ -312,7 +326,7 @@ int GLRenderSystem :: LockLight()
 	return l_iReturn;
 }
 
-void GLRenderSystem :: UnlockLight( int p_iIndex)
+void GlRenderSystem :: UnlockLight( int p_iIndex)
 {
 	if (p_iIndex >= 0 && m_setAvailableIndexes.find( p_iIndex) == m_setAvailableIndexes.end())
 	{
@@ -320,7 +334,7 @@ void GLRenderSystem :: UnlockLight( int p_iIndex)
 	}
 }
 
-void GLRenderSystem :: SetCurrentShaderProgram( ShaderProgram * p_pVal)
+void GlRenderSystem :: SetCurrentShaderProgram( ShaderProgramBase * p_pVal)
 {
 	if (m_pCurrentProgram != p_pVal)
 	{
@@ -331,121 +345,120 @@ void GLRenderSystem :: SetCurrentShaderProgram( ShaderProgram * p_pVal)
 			m_lightRenderers[i]->Initialise();
 		}
 
-		GLPipeline::InitFunctions();
+		GlPipeline::InitFunctions();
 	}
 }
 
-void GLRenderSystem :: BeginOverlaysRendering()
+void GlRenderSystem :: BeginOverlaysRendering()
 {
 	RenderSystem::BeginOverlaysRendering();/*
 	glDisable( GL_LIGHTING);
-	CheckGLError( CU_T( "GLRenderSystem :: BeginOverlaysRendering - glDisable( GL_LIGHTING)"));
+	CheckGlError( CU_T( "GlRenderSystem :: BeginOverlaysRendering - glDisable( GL_LIGHTING)"));
 	glDisable( GL_DEPTH_TEST);
-	CheckGLError( CU_T( "GLRenderSystem :: BeginOverlaysRendering - glDisable( GL_DEPTH_TEST)"));*/
+	CheckGlError( CU_T( "GlRenderSystem :: BeginOverlaysRendering - glDisable( GL_DEPTH_TEST)"));*/
 }
 
-void GLRenderSystem :: RenderAmbientLight( const Colour & p_clColour)
+void GlRenderSystem :: RenderAmbientLight( const Colour & p_clColour)
 {
-	glLightModelfv( GL_LIGHT_MODEL_AMBIENT, p_clColour.const_ptr());
-	CheckGLError( CU_T( "GLRenderSystem :: EndOverlaysRendering - Pipeline::LoadIdentity"));
+	CheckGlError( glLightModelfv( GL_LIGHT_MODEL_AMBIENT, p_clColour.const_ptr()), CU_T( "GlRenderSystem :: EndOverlaysRendering - Pipeline::LoadIdentity"));
 }
 
-VertexAttribsBufferBoolPtr GLRenderSystem :: _create1BoolVertexAttribsBuffer( const String & p_strArg)
+VertexAttribsBufferBoolPtr GlRenderSystem :: _create1BoolVertexAttribsBuffer( const String & p_strArg)
 {
 	return _createAttribsBuffer<bool, 1>( p_strArg);
 }
 
-VertexAttribsBufferIntPtr GLRenderSystem :: _create1IntVertexAttribsBuffer( const String & p_strArg)
+VertexAttribsBufferIntPtr GlRenderSystem :: _create1IntVertexAttribsBuffer( const String & p_strArg)
 {
 	return _createAttribsBuffer<int, 1>( p_strArg);
 }
 
-VertexAttribsBufferUIntPtr GLRenderSystem :: _create1UIntVertexAttribsBuffer( const String & p_strArg)
+VertexAttribsBufferUIntPtr GlRenderSystem :: _create1UIntVertexAttribsBuffer( const String & p_strArg)
 {
 	return _createAttribsBuffer<unsigned int, 1>( p_strArg);
 }
 
-VertexAttribsBufferFloatPtr GLRenderSystem :: _create1FloatVertexAttribsBuffer( const String & p_strArg)
+VertexAttribsBufferFloatPtr GlRenderSystem :: _create1FloatVertexAttribsBuffer( const String & p_strArg)
 {
 	return _createAttribsBuffer<float, 1>( p_strArg);
 }
 
-VertexAttribsBufferDoublePtr GLRenderSystem :: _create1DoubleVertexAttribsBuffer( const String & p_strArg)
+VertexAttribsBufferDoublePtr GlRenderSystem :: _create1DoubleVertexAttribsBuffer( const String & p_strArg)
 {
 	return _createAttribsBuffer<double, 1>( p_strArg);
 }
 
-VertexAttribsBufferBoolPtr GLRenderSystem :: _create2BoolVertexAttribsBuffer( const String & p_strArg)
+VertexAttribsBufferBoolPtr GlRenderSystem :: _create2BoolVertexAttribsBuffer( const String & p_strArg)
 {
 	return _createAttribsBuffer<bool, 2>( p_strArg);
 }
 
-VertexAttribsBufferIntPtr GLRenderSystem :: _create2IntVertexAttribsBuffer( const String & p_strArg)
+VertexAttribsBufferIntPtr GlRenderSystem :: _create2IntVertexAttribsBuffer( const String & p_strArg)
 {
 	return _createAttribsBuffer<int, 2>( p_strArg);
 }
 
-VertexAttribsBufferUIntPtr GLRenderSystem :: _create2UIntVertexAttribsBuffer( const String & p_strArg)
+VertexAttribsBufferUIntPtr GlRenderSystem :: _create2UIntVertexAttribsBuffer( const String & p_strArg)
 {
 	return _createAttribsBuffer<unsigned int, 2>( p_strArg);
 }
 
-VertexAttribsBufferFloatPtr GLRenderSystem :: _create2FloatVertexAttribsBuffer( const String & p_strArg)
+VertexAttribsBufferFloatPtr GlRenderSystem :: _create2FloatVertexAttribsBuffer( const String & p_strArg)
 {
 	return _createAttribsBuffer<float, 2>( p_strArg);
 }
 
-VertexAttribsBufferDoublePtr GLRenderSystem :: _create2DoubleVertexAttribsBuffer( const String & p_strArg)
+VertexAttribsBufferDoublePtr GlRenderSystem :: _create2DoubleVertexAttribsBuffer( const String & p_strArg)
 {
 	return _createAttribsBuffer<double, 2>( p_strArg);
 }
 
-VertexAttribsBufferBoolPtr GLRenderSystem :: _create3BoolVertexAttribsBuffer( const String & p_strArg)
+VertexAttribsBufferBoolPtr GlRenderSystem :: _create3BoolVertexAttribsBuffer( const String & p_strArg)
 {
 	return _createAttribsBuffer<bool, 3>( p_strArg);
 }
 
-VertexAttribsBufferIntPtr GLRenderSystem :: _create3IntVertexAttribsBuffer( const String & p_strArg)
+VertexAttribsBufferIntPtr GlRenderSystem :: _create3IntVertexAttribsBuffer( const String & p_strArg)
 {
 	return _createAttribsBuffer<int, 3>( p_strArg);
 }
 
-VertexAttribsBufferUIntPtr GLRenderSystem :: _create3UIntVertexAttribsBuffer( const String & p_strArg)
+VertexAttribsBufferUIntPtr GlRenderSystem :: _create3UIntVertexAttribsBuffer( const String & p_strArg)
 {
 	return _createAttribsBuffer<unsigned int, 3>( p_strArg);
 }
 
-VertexAttribsBufferFloatPtr GLRenderSystem :: _create3FloatVertexAttribsBuffer( const String & p_strArg)
+VertexAttribsBufferFloatPtr GlRenderSystem :: _create3FloatVertexAttribsBuffer( const String & p_strArg)
 {
 	return _createAttribsBuffer<float, 3>( p_strArg);
 }
 
-VertexAttribsBufferDoublePtr GLRenderSystem :: _create3DoubleVertexAttribsBuffer( const String & p_strArg)
+VertexAttribsBufferDoublePtr GlRenderSystem :: _create3DoubleVertexAttribsBuffer( const String & p_strArg)
 {
 	return _createAttribsBuffer<double, 3>( p_strArg);
 }
 
-VertexAttribsBufferBoolPtr GLRenderSystem :: _create4BoolVertexAttribsBuffer( const String & p_strArg)
+VertexAttribsBufferBoolPtr GlRenderSystem :: _create4BoolVertexAttribsBuffer( const String & p_strArg)
 {
 	return _createAttribsBuffer<bool, 4>( p_strArg);
 }
 
-VertexAttribsBufferIntPtr GLRenderSystem :: _create4IntVertexAttribsBuffer( const String & p_strArg)
+VertexAttribsBufferIntPtr GlRenderSystem :: _create4IntVertexAttribsBuffer( const String & p_strArg)
 {
 	return _createAttribsBuffer<int, 4>( p_strArg);
 }
 
-VertexAttribsBufferUIntPtr GLRenderSystem :: _create4UIntVertexAttribsBuffer( const String & p_strArg)
+VertexAttribsBufferUIntPtr GlRenderSystem :: _create4UIntVertexAttribsBuffer( const String & p_strArg)
 {
 	return _createAttribsBuffer<unsigned int, 4>( p_strArg);
 }
 
-VertexAttribsBufferFloatPtr GLRenderSystem :: _create4FloatVertexAttribsBuffer( const String & p_strArg)
+VertexAttribsBufferFloatPtr GlRenderSystem :: _create4FloatVertexAttribsBuffer( const String & p_strArg)
 {
 	return _createAttribsBuffer<float, 4>( p_strArg);
 }
 
-VertexAttribsBufferDoublePtr GLRenderSystem :: _create4DoubleVertexAttribsBuffer( const String & p_strArg)
+VertexAttribsBufferDoublePtr GlRenderSystem :: _create4DoubleVertexAttribsBuffer( const String & p_strArg)
 {
 	return _createAttribsBuffer<double, 4>( p_strArg);
 }

@@ -15,31 +15,31 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL3_SubmeshRenderer___
-#define ___GL3_SubmeshRenderer___
+#ifndef ___Gl3_SubmeshRenderer___
+#define ___Gl3_SubmeshRenderer___
 
-#include "Module_GLRender.h"
-#include "GL3Buffer.h"
+#include "Module_Gl3Render.h"
+#include "Gl3Buffer.h"
 
 namespace Castor3D
 {
-	class C3D_GL3_API GL3SubmeshRenderer : public SubmeshRenderer
+	class C3D_Gl3_API Gl3SubmeshRenderer : public SubmeshRenderer
 	{
 	protected:
-		eDRAW_TYPE m_eDrawType;
+		ePRIMITIVE_TYPE m_eDrawType;
 		eNORMALS_MODE m_eNormalsMode;
-		GLVertexArrayObjects m_vao;
+		GlVertexArrayObjects m_vao;
 
 	public:
-		GL3SubmeshRenderer( SceneManager * p_pSceneManager);
-		virtual ~GL3SubmeshRenderer();
+		Gl3SubmeshRenderer( SceneManager * p_pSceneManager);
+		virtual ~Gl3SubmeshRenderer();
 
 		virtual void Cleanup();
 		virtual void Initialise();
-		virtual VertexInfosBufferPtr CreateVertexBuffer();
+//		virtual VertexBufferPtr CreateVertexBuffer();
 
 	private:
-		void _createVAOs( GL3ShaderProgramPtr p_pProgram);
+		void _createVAOs( Gl3ShaderProgramPtr p_pProgram);
 
 		virtual void _drawBuffers( const Pass & p_pPass);
 	};

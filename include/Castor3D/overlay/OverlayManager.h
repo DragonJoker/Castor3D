@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_OverlayManager___
 
 #include "../Prerequisites.h"
+#include "Overlay.h"
 
 namespace Castor3D
 {
@@ -28,12 +29,13 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 25/08/2010
 	*/
-	class C3D_API OverlayManager : public Castor::Theory::AutoSingleton<OverlayManager>
+	class C3D_API OverlayManager : public Serialisable, public Textable, public Castor::Theory::AutoSingleton<OverlayManager>
 	{
 	private:
 		int m_iCurrentZIndex;
 		OverlayPtrIntMap m_mapOverlaysByZIndex;
 		OverlayPtrStrMap m_mapOverlaysByName;
+		MultiThreading::RecursiveMutex m_mutex;
 
 	public:
 		/**
@@ -44,6 +46,7 @@ namespace Castor3D
 		 * Destructor
 		 */
 		~OverlayManager();
+		void Cleanup();
 		/**
 		 * Creates an Overlay of the given type
 		 *@param p_strName : [in] The overlay name
@@ -54,28 +57,37 @@ namespace Castor3D
 		 *@return The created overlay
 		 */
 		template <class T>
-		Templates::SmartPtr<T> CreateOverlay( const String & p_strName, OverlayPtr p_pParent, const Point2r & p_ptPosition, const Point2r & p_ptSize, int p_iZIndex=0)
+		shared_ptr<T> CreateOverlay( const String & p_strName, Overlay * p_pParent, const Point2r & p_ptPosition=Point2r(), const Point2r & p_ptSize=Point2r(), int p_iZIndex=0)
 		{
-			Templates::SmartPtr<T>  l_pReturn;
+			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+			shared_ptr<T> l_pReturn;
 
 			if (m_mapOverlaysByName.find( p_strName) == m_mapOverlaysByName.end())
 			{
+				size_t l_uiZIndex = 0;
+
 				if (p_pParent == NULL)
 				{
+					l_pReturn = shared_ptr<T>( new T( this, p_strName, p_pParent));
+
 					if (p_iZIndex == 0)
 					{
-						l_pReturn = new T( p_strName, p_pParent);
-						m_mapOverlaysByZIndex.insert( OverlayPtrIntMap::value_type( m_iCurrentZIndex++, l_pReturn));
+						l_uiZIndex = m_iCurrentZIndex++;
 					}
 					else if (m_mapOverlaysByZIndex.find( p_iZIndex) == m_mapOverlaysByZIndex.end())
 					{
-						l_pReturn = new T( p_strName, p_pParent);
-						m_mapOverlaysByZIndex.insert( OverlayPtrIntMap::value_type( p_iZIndex, l_pReturn));
+						l_uiZIndex = p_iZIndex;
+					}
+
+					if (l_uiZIndex > 0)
+					{
+						m_mapOverlaysByZIndex.insert( OverlayPtrIntMap::value_type( l_uiZIndex, l_pReturn));
 					}
 				}
 				else
 				{
-					l_pReturn = new T( p_strName, p_pParent);
+					l_pReturn = shared_ptr<T>( new T( this, p_strName, p_pParent));
+
 					if ( ! p_pParent->AddChild( l_pReturn, p_iZIndex * 100))
 					{
 						l_pReturn.reset();
@@ -83,7 +95,7 @@ namespace Castor3D
 				}
 			}
 
-			if ( ! l_pReturn == NULL)
+			if (l_pReturn != NULL)
 			{
 				l_pReturn->SetPosition( p_ptPosition);
 				l_pReturn->SetSize( p_ptSize);
@@ -102,6 +114,18 @@ namespace Castor3D
 		 * Renders all visible overlays
 		 */
 		void RenderOverlays();
+
+		/**@name Inherited methods from Textable */
+		//@{
+		virtual bool Write( File & p_file)const;
+		virtual bool Read( File & p_file);
+		//@}
+
+		/**@name Inherited methods from Serialisable */
+		//@{
+		virtual bool Save( File & p_file)const;
+		virtual bool Load( File & p_file);
+		//@}
 	};
 }
 

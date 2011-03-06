@@ -21,7 +21,7 @@ Plane :: Plane( MeshManager * p_pManager, real width_p, real depth_p, unsigned i
 	,	m_subDivisionsW( p_subdivisionsWidth)
 	,	m_subDivisionsD( p_subdivisionsDepth)
 {
-	m_meshType = Mesh::ePlane;
+	m_meshType = ePlane;
 	GeneratePoints();
 }
 

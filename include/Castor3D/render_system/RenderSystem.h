@@ -24,6 +24,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
+	template <class Ty> struct RendererFunctor;
+	template <class Ty> struct BufferCreator;
+	template <class Ty> struct ShaderObjectCreator;
+	template <class Ty> struct ShaderProgramFunctor;
+	template <class Ty, typename T, size_t Count> struct VertexAttribCreator;
 	//! The render system representation
 	/*!
 	This is the class which is the link between Castor3D and the renderer driver (OpenGL or Direct3D)
@@ -35,6 +40,12 @@ namespace Castor3D
 	class C3D_API RenderSystem : public MemoryTraced<RenderSystem>
 	{
 	protected:
+		template <class Ty> friend struct RendererFunctor;
+		template <class Ty> friend struct BufferCreator;
+		template <class Ty> friend struct ShaderObjectCreator;
+		template <class Ty> friend struct ShaderProgramFunctor;
+		template <class Ty, typename T, size_t Count> friend struct VertexAttribCreator;
+
 		static Castor::MultiThreading::RecursiveMutex	m_mutex;
 		static RenderSystem	*	sm_singleton;
 		static bool				sm_useMultiTexturing;				//!< Tells whether or not we can use multitexturing
@@ -58,7 +69,7 @@ namespace Castor3D
 		ContextPtrMap							m_contextMap;
 		Context								*	m_mainContext;
 		Context								*	m_currentContext;
-		ShaderProgram						*	m_pCurrentProgram;
+		ShaderProgramBase					*	m_pCurrentProgram;
 
 		SceneManager						*	m_pSceneManager;
 
@@ -82,85 +93,46 @@ namespace Castor3D
 		/**
 		 * Creates a renderer
 		 */
-		template <class Ty> static typename SmartPtr<Ty>::Shared CreateRenderer()
+		template <class Ty> static shared_ptr<Ty> CreateRenderer();
+		/**
+		 * Creates a vertex buffer
+		 */
+		template <size_t N> static VertexBufferPtr CreateVertexBuffer( const BufferElementDeclaration (& p_elements)[N])
 		{
-			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			SmartPtr<Ty>::Shared l_pReturn;
-
-			if (sm_singleton != NULL)
-			{
-				l_pReturn = sm_singleton->_createRenderer<Ty>();
-
-				if (l_pReturn != NULL)
-				{
-					sm_singleton->_addRenderer<Ty>( l_pReturn);
-				}
-			}
-
-			return l_pReturn;
+			return CreateVertexBuffer( p_elements, N);
 		}
 		/**
-		 * Creates a buffer
+		* Creates a vertex buffer
 		 */
-		template <class Ty> static typename SmartPtr<Ty>::Shared CreateBuffer()
-		{
-			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			SmartPtr<Ty>::Shared l_pReturn;
-
-			if (sm_singleton != NULL)
-			{
-				l_pReturn = sm_singleton->_createBuffer<Ty>();
-			}
-
-			return l_pReturn;
-		}
+		static VertexBufferPtr CreateVertexBuffer( const BufferElementDeclaration * p_elements, size_t p_uiNbElements);
 		/**
-		 * Creates a buffer
+		 * Creates an index buffer
 		 */
-		template <class Ty, typename T, size_t Count> static typename SmartPtr<Ty>::Shared CreateBuffer( const String & p_strArg)
-		{
-			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			SmartPtr<Ty>::Shared l_pReturn;
-
-			if (sm_singleton != NULL)
-			{
-				l_pReturn = sm_singleton->_createBuffer<Ty, T, Count>( p_strArg);
-			}
-
-			return l_pReturn;
-		}
+		static IndexBufferPtr CreateIndexBuffer();
+		/**
+		 * Creates a texture buffer
+		 */
+		static TextureBufferObjectPtr CreateTextureBuffer();
+		/**
+		 * Creates an attributes buffer
+		 */
+		template <class Ty, typename T, size_t Count> static shared_ptr<Ty> CreateBuffer( const String & p_strArg);
 		/**
 		 * Creates a Vertex Shader, only the render system can do that
 		 */
-		virtual ShaderObject *		CreateVertexShader			() = 0;
+		template <class Ty> static shared_ptr<Ty> CreateVertexShader();
 		/**
 		 * Creates a Fragment Shader, only the render system can do that
 		 */
-		virtual ShaderObject *		CreateFragmentShader		() = 0;
+		template <class Ty> static shared_ptr<Ty> CreateFragmentShader();
 		/**
 		 * Creates a Geometry Shader, only the render system can do that
 		 */
-		virtual ShaderObject *		CreateGeometryShader		() = 0;
+		template <class Ty> static shared_ptr<Ty> CreateGeometryShader();
 		/**
 		 * Creates a ShaderProgram, only the render system can do that
 		 */
-		virtual ShaderProgram *		CreateShaderProgram			( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile) = 0;
-		/**
-		 * Creates a Vertex Shader, only the render system can do that
-		 */
-		virtual CgShaderObject *	CreateCgVertexShader		() = 0;
-		/**
-		 * Creates a Fragment Shader, only the render system can do that
-		 */
-		virtual CgShaderObject *	CreateCgFragmentShader		() = 0;
-		/**
-		 * Creates a Geometry Shader, only the render system can do that
-		 */
-		virtual CgShaderObject *	CreateCgGeometryShader		() = 0;
-		/**
-		 * Creates a CgShaderProgram, only the render system can do that
-		 */
-		virtual CgShaderProgram *	CreateCgShaderProgram		( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile) = 0;
+		template <class Ty> static shared_ptr<Ty> CreateShaderProgram( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile);
 		/**
 		 * Applies generic transformations (translation and rotation) from a position and an orientation
 		 */
@@ -192,6 +164,7 @@ namespace Castor3D
 
 		virtual int LockLight()=0;
 		virtual void UnlockLight( int p_iIndex)=0;
+		virtual void DrawIndexedPrimitives( ePRIMITIVE_TYPE p_eType, size_t p_uiMinVertex, size_t p_uiVertexCount, size_t p_uiFirstIndex, size_t p_uiCount)=0;
 
 		static RenderSystem * GetSingletonPtr() { return _getSingletonPtr<RenderSystem>(); }
 
@@ -203,19 +176,37 @@ namespace Castor3D
 		static inline bool		ForceShaders			()		{ return sm_forceShaders; }
 		static inline bool		HasGeometryShader		()		{ return sm_useGeometryShaders; }
 		static inline bool		IsInitialised			()		{ return sm_initialised; }
-		Context				*	GetCurrentContext		()const	{ return m_currentContext; }
-		Context				*	GetMainContext			()const	{ return m_mainContext; }
-		ShaderProgram		*	GetCurrentShaderProgram	()const	{ return m_pCurrentProgram; }
 
-		virtual void	SetCurrentShaderProgram	( ShaderProgram * p_pVal)	{ m_pCurrentProgram = p_pVal; }
-		inline void		SetMainContext			( Context * p_context)		{ m_mainContext = p_context; }
+		virtual void	SetCurrentShaderProgram	( ShaderProgramBase * p_pVal)	{ m_pCurrentProgram = p_pVal; }
+		inline void		SetMainContext			( Context * p_context)			{ m_mainContext = p_context; }
 		//@}
 
 	protected:
+		template <class Ty>	Ty	*	_getMainContext				()const	{ return static_cast <Ty *>( m_mainContext); }
+		template <class Ty>	Ty	*	_getCurrentContext			()const	{ return static_cast <Ty *>( m_currentContext); }
+		template <class Ty>	Ty	*	_getCurrentShaderProgram	()const	{ return static_cast <Ty *>( m_pCurrentProgram); }
+
 		template <class Ty> static Ty * _getSingletonPtr()
 		{
 			return static_cast <Ty *>( sm_singleton);
 		}
+		void	_addGlslShaderProgram	( GlslShaderProgramPtr p_pToAdd);
+		void	_addHlslShaderProgram	( HlslShaderProgramPtr p_pToAdd);
+		void	_addCgShaderProgram		( CgShaderProgramPtr p_pToAdd);
+
+		virtual GlslShaderObjectPtr		_createGlslVertexShader		() = 0;
+		virtual GlslShaderObjectPtr		_createGlslFragmentShader	() = 0;
+		virtual GlslShaderObjectPtr		_createGlslGeometryShader	() = 0;
+		virtual HlslShaderObjectPtr		_createHlslVertexShader		() = 0;
+		virtual HlslShaderObjectPtr		_createHlslFragmentShader	() = 0;
+		virtual HlslShaderObjectPtr		_createHlslGeometryShader	() = 0;
+		virtual CgShaderObjectPtr		_createCgVertexShader		() = 0;
+		virtual CgShaderObjectPtr		_createCgFragmentShader		() = 0;
+		virtual CgShaderObjectPtr		_createCgGeometryShader		() = 0;
+
+		virtual GlslShaderProgramPtr	_createGlslShaderProgram	( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile) = 0;
+		virtual HlslShaderProgramPtr	_createHlslShaderProgram	( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile) = 0;
+		virtual CgShaderProgramPtr		_createCgShaderProgram		( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile) = 0;
 
 		virtual SubmeshRendererPtr				_createSubmeshRenderer	()=0;
 		virtual TextureEnvironmentRendererPtr	_createTexEnvRenderer	()=0;
@@ -226,12 +217,9 @@ namespace Castor3D
 		virtual WindowRendererPtr				_createWindowRenderer	()=0;
 		virtual OverlayRendererPtr				_createOverlayRenderer	()=0;
 
-		virtual IndicesBufferPtr		_createIndicesBuffer		()=0;
-		virtual VertexBufferPtr			_createVertexBuffer			()=0;
-		virtual NormalsBufferPtr		_createNormalsBuffer		()=0;
-		virtual TextureBufferPtr		_createTextureBuffer		()=0;
-		virtual VertexInfosBufferPtr	_createVertexInfosBuffer	()=0;
-		virtual TextureBufferObjectPtr	_createTBOBuffer			()=0;
+		virtual IndexBufferPtr			_createIndexBuffer			()=0;
+		virtual VertexBufferPtr			_createVertexBuffer			( const BufferElementDeclaration * p_elements, size_t p_uiNbElements)=0;
+		virtual TextureBufferObjectPtr	_createTextureBuffer		()=0;
 
 		virtual VertexAttribsBufferBoolPtr		_create1BoolVertexAttribsBuffer		( const String & p_strArg);
 		virtual VertexAttribsBufferIntPtr		_create1IntVertexAttribsBuffer		( const String & p_strArg);
@@ -255,204 +243,13 @@ namespace Castor3D
 		virtual VertexAttribsBufferDoublePtr	_create4DoubleVertexAttribsBuffer	( const String & p_strArg);
 
 	private:
-		template <class Ty> typename SmartPtr<Ty>::Shared _createRenderer()
-		{
-			CASTOR_EXCEPTION( CU_T( "Can't create a renderer of unknown type"));
-		}
-		template <class Ty> void _addRenderer( typename SmartPtr<Ty>::Shared p_pRenderer)
-		{
-			CASTOR_EXCEPTION( CU_T( "Can't add a renderer of unknown type"));
-		}
-		template <class Ty> typename SmartPtr<Ty>::Shared _createBuffer()
-		{
-			CASTOR_EXCEPTION( CU_T( "Can't create a buffer of unknown type"));
-		}
-		template <class Ty, typename T, size_t Count> typename SmartPtr<Ty>::Shared _createBuffer( const String & p_strArg)
-		{
-			CASTOR_EXCEPTION( CU_T( "Can't create a buffer of unknown type"));
-		}
-
-
-		template <> SubmeshRendererPtr _createRenderer<SubmeshRenderer>()
-		{
-			return _createSubmeshRenderer();
-		}
-		template <> TextureEnvironmentRendererPtr _createRenderer<TextureEnvironmentRenderer>()
-		{
-			return _createTexEnvRenderer();
-		}
-		template <> TextureRendererPtr _createRenderer<TextureRenderer>()
-		{
-			return _createTextureRenderer();
-		}
-		template <> PassRendererPtr _createRenderer<PassRenderer>()
-		{
-			return _createPassRenderer();
-		}
-		template <> CameraRendererPtr _createRenderer<CameraRenderer>()
-		{
-			return _createCameraRenderer();
-		}
-		template <> LightRendererPtr _createRenderer<LightRenderer>()
-		{
-			return _createLightRenderer();
-		}
-		template <> WindowRendererPtr _createRenderer<WindowRenderer>()
-		{
-			return _createWindowRenderer();
-		}
-		template <> OverlayRendererPtr _createRenderer<OverlayRenderer>()
-		{
-			return _createOverlayRenderer();
-		}
-
-
-		template <> void _addRenderer<SubmeshRenderer>( SubmeshRendererPtr p_pRenderer)
-		{
-			m_submeshesRenderers.push_back( p_pRenderer);
-		}
-		template <> void _addRenderer<TextureEnvironmentRenderer>( TextureEnvironmentRendererPtr p_pRenderer)
-		{
-			m_texEnvRenderers.push_back( p_pRenderer);
-		}
-		template <> void _addRenderer<TextureRenderer>( TextureRendererPtr p_pRenderer)
-		{
-			m_textureRenderers.push_back( p_pRenderer);
-		}
-		template <> void _addRenderer<PassRenderer>( PassRendererPtr p_pRenderer)
-		{
-			m_passRenderers.push_back( p_pRenderer);
-		}
-		template <> void _addRenderer<LightRenderer>( LightRendererPtr p_pRenderer)
-		{
-			m_lightRenderers.push_back( p_pRenderer);
-		}
-		template <> void _addRenderer<CameraRenderer>( CameraRendererPtr p_pRenderer)
-		{
-			m_cameraRenderers.push_back( p_pRenderer);
-		}
-		template <> void _addRenderer<WindowRenderer>( WindowRendererPtr p_pRenderer)
-		{
-			m_windowRenderers.push_back( p_pRenderer);
-		}
-		template <> void _addRenderer<OverlayRenderer>( OverlayRendererPtr p_pRenderer)
-		{
-			m_overlayRenderers.push_back( p_pRenderer);
-		}
-
-
-		template <> IndicesBufferPtr _createBuffer<IndicesBuffer>()
-		{
-			return _createIndicesBuffer();
-		}
-		template <> VertexBufferPtr _createBuffer<VertexBuffer>()
-		{
-			return _createVertexBuffer();
-		}
-		template <> NormalsBufferPtr _createBuffer<NormalsBuffer>()
-		{
-			return _createNormalsBuffer();
-		}
-		template <> TextureBufferPtr _createBuffer<TextureBuffer>()
-		{
-			return _createTextureBuffer();
-		}
-		template <> VertexInfosBufferPtr _createBuffer<VertexInfosBuffer>()
-		{
-			return _createVertexInfosBuffer();
-		}
-		template <> TextureBufferObjectPtr _createBuffer<TextureBufferObject>()
-		{
-			return _createTBOBuffer();
-		}
-
-
-		template <> VertexAttribsBufferBoolPtr _createBuffer<VertexAttribsBufferBool, bool, 1>( const String & p_strArg)
-		{
-			return _create1BoolVertexAttribsBuffer( p_strArg);
-		}
-		template <> VertexAttribsBufferIntPtr _createBuffer<VertexAttribsBufferInt, int, 1>( const String & p_strArg)
-		{
-			return _create1IntVertexAttribsBuffer( p_strArg);
-		}
-		template <> VertexAttribsBufferUIntPtr _createBuffer<VertexAttribsBufferUInt, unsigned int, 1>( const String & p_strArg)
-		{
-			return _create1UIntVertexAttribsBuffer( p_strArg);
-		}
-		template <> VertexAttribsBufferFloatPtr _createBuffer<VertexAttribsBufferFloat, float, 1>( const String & p_strArg)
-		{
-			return _create1FloatVertexAttribsBuffer( p_strArg);
-		}
-		template <> VertexAttribsBufferDoublePtr _createBuffer<VertexAttribsBufferDouble, double, 1>( const String & p_strArg)
-		{
-			return _create1DoubleVertexAttribsBuffer( p_strArg);
-		}
-		template <> VertexAttribsBufferBoolPtr _createBuffer<VertexAttribsBufferBool, bool, 2>( const String & p_strArg)
-		{
-			return _create2BoolVertexAttribsBuffer( p_strArg);
-		}
-		template <> VertexAttribsBufferIntPtr _createBuffer<VertexAttribsBufferInt, int, 2>( const String & p_strArg)
-		{
-			return _create2IntVertexAttribsBuffer( p_strArg);
-		}
-		template <> VertexAttribsBufferUIntPtr _createBuffer<VertexAttribsBufferUInt, unsigned int, 2>( const String & p_strArg)
-		{
-			return _create2UIntVertexAttribsBuffer( p_strArg);
-		}
-		template <> VertexAttribsBufferFloatPtr _createBuffer<VertexAttribsBufferFloat, float, 2>( const String & p_strArg)
-		{
-			return _create2FloatVertexAttribsBuffer( p_strArg);
-		}
-		template <> VertexAttribsBufferDoublePtr _createBuffer<VertexAttribsBufferDouble, double, 2>( const String & p_strArg)
-		{
-			return _create2DoubleVertexAttribsBuffer( p_strArg);
-		}
-		template <> VertexAttribsBufferBoolPtr _createBuffer<VertexAttribsBufferBool, bool, 3>( const String & p_strArg)
-		{
-			return _create3BoolVertexAttribsBuffer( p_strArg);
-		}
-		template <> VertexAttribsBufferIntPtr _createBuffer<VertexAttribsBufferInt, int, 3>( const String & p_strArg)
-		{
-			return _create3IntVertexAttribsBuffer( p_strArg);
-		}
-		template <> VertexAttribsBufferUIntPtr _createBuffer<VertexAttribsBufferUInt, unsigned int, 3>( const String & p_strArg)
-		{
-			return _create3UIntVertexAttribsBuffer( p_strArg);
-		}
-		template <> VertexAttribsBufferFloatPtr _createBuffer<VertexAttribsBufferFloat, float, 3>( const String & p_strArg)
-		{
-			return _create3FloatVertexAttribsBuffer( p_strArg);
-		}
-		template <> VertexAttribsBufferDoublePtr _createBuffer<VertexAttribsBufferDouble, double, 3>( const String & p_strArg)
-		{
-			return _create3DoubleVertexAttribsBuffer( p_strArg);
-		}
-		template <> VertexAttribsBufferBoolPtr _createBuffer<VertexAttribsBufferBool, bool, 4>( const String & p_strArg)
-		{
-			return _create4BoolVertexAttribsBuffer( p_strArg);
-		}
-		template <> VertexAttribsBufferIntPtr _createBuffer<VertexAttribsBufferInt, int, 4>( const String & p_strArg)
-		{
-			return _create4IntVertexAttribsBuffer( p_strArg);
-		}
-		template <> VertexAttribsBufferUIntPtr _createBuffer<VertexAttribsBufferUInt, unsigned int, 4>( const String & p_strArg)
-		{
-			return _create4UIntVertexAttribsBuffer( p_strArg);
-		}
-		template <> VertexAttribsBufferFloatPtr _createBuffer<VertexAttribsBufferFloat, float, 4>( const String & p_strArg)
-		{
-			return _create4FloatVertexAttribsBuffer( p_strArg);
-		}
-		template <> VertexAttribsBufferDoublePtr _createBuffer<VertexAttribsBufferDouble, double, 4>( const String & p_strArg)
-		{
-			return _create4DoubleVertexAttribsBuffer( p_strArg);
-		}
-
-		template <typename T> typename SmartPtr< VertexAttribsBuffer<T> >::Shared _createAttribsBuffer( const String & p_strArg)
+		template <typename T> shared_ptr< VertexAttribsBuffer<T> > _createAttribsBuffer( const String & p_strArg)
 		{
 			return BufferManager::CreateBuffer< T, VertexAttribsBuffer<T> >( p_strArg);
 		}
 	};
+
+#include "RenderSystem.inl"
 }
 
 #endif

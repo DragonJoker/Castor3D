@@ -1,44 +1,44 @@
-#include "OpenGLCommon/PrecompiledHeader.h"
+#include "OpenGlCommon/PrecompiledHeader.h"
 
-#include "OpenGLCommon/GLLightRenderer.h"
+#include "OpenGlCommon/GlLightRenderer.h"
 
 using namespace Castor3D;
 
-GLLightRenderer :: GLLightRenderer( SceneManager * p_pSceneManager)
+GlLightRenderer :: GlLightRenderer( SceneManager * p_pSceneManager)
 	:	LightRenderer( p_pSceneManager)
 	,	m_iIndex( GL_INVALID_INDEX)
 {
-	m_pfnEnableFunction			= & GLLightRenderer::_enable;
-	m_pfnDisableFunction		= & GLLightRenderer::_disable;
-	m_pfnAmbientFunction		= & GLLightRenderer::_applyAmbient;
-	m_pfnDiffuseFunction		= & GLLightRenderer::_applyDiffuse;
-	m_pfnSpecularFunction		= & GLLightRenderer::_applySpecular;
-	m_pfnOrientationFunction	= & GLLightRenderer::_applyOrientation;
-	m_pfnPositionFunction		= & GLLightRenderer::_applyPosition;
-	m_pfnConstantAttFunction	= & GLLightRenderer::_applyConstantAtt;
-	m_pfnLinearAttFunction		= & GLLightRenderer::_applyLinearAtt;
-	m_pfnQuadraticAttFunction	= & GLLightRenderer::_applyQuadraticAtt;
-	m_pfnExponentFunction		= & GLLightRenderer::_applyExponent;
-	m_pfnCutOffFunction			= & GLLightRenderer::_applyCutOff;
+	m_pfnEnableFunction			= & GlLightRenderer::_enable;
+	m_pfnDisableFunction		= & GlLightRenderer::_disable;
+	m_pfnAmbientFunction		= & GlLightRenderer::_applyAmbient;
+	m_pfnDiffuseFunction		= & GlLightRenderer::_applyDiffuse;
+	m_pfnSpecularFunction		= & GlLightRenderer::_applySpecular;
+	m_pfnOrientationFunction	= & GlLightRenderer::_applyOrientation;
+	m_pfnPositionFunction		= & GlLightRenderer::_applyPosition;
+	m_pfnConstantAttFunction	= & GlLightRenderer::_applyConstantAtt;
+	m_pfnLinearAttFunction		= & GlLightRenderer::_applyLinearAtt;
+	m_pfnQuadraticAttFunction	= & GlLightRenderer::_applyQuadraticAtt;
+	m_pfnExponentFunction		= & GlLightRenderer::_applyExponent;
+	m_pfnCutOffFunction			= & GlLightRenderer::_applyCutOff;
 }
 
-void GLLightRenderer :: Initialise()
+void GlLightRenderer :: Initialise()
 {
-	m_pfnEnableFunction			= & GLLightRenderer::_enable;
-	m_pfnDisableFunction		= & GLLightRenderer::_disable;
-	m_pfnAmbientFunction		= & GLLightRenderer::_applyAmbient;
-	m_pfnDiffuseFunction		= & GLLightRenderer::_applyDiffuse;
-	m_pfnSpecularFunction		= & GLLightRenderer::_applySpecular;
-	m_pfnOrientationFunction	= & GLLightRenderer::_applyOrientation;
-	m_pfnPositionFunction		= & GLLightRenderer::_applyPosition;
-	m_pfnConstantAttFunction	= & GLLightRenderer::_applyConstantAtt;
-	m_pfnLinearAttFunction		= & GLLightRenderer::_applyLinearAtt;
-	m_pfnQuadraticAttFunction	= & GLLightRenderer::_applyQuadraticAtt;
-	m_pfnExponentFunction		= & GLLightRenderer::_applyExponent;
-	m_pfnCutOffFunction			= & GLLightRenderer::_applyCutOff;
+	m_pfnEnableFunction			= & GlLightRenderer::_enable;
+	m_pfnDisableFunction		= & GlLightRenderer::_disable;
+	m_pfnAmbientFunction		= & GlLightRenderer::_applyAmbient;
+	m_pfnDiffuseFunction		= & GlLightRenderer::_applyDiffuse;
+	m_pfnSpecularFunction		= & GlLightRenderer::_applySpecular;
+	m_pfnOrientationFunction	= & GlLightRenderer::_applyOrientation;
+	m_pfnPositionFunction		= & GlLightRenderer::_applyPosition;
+	m_pfnConstantAttFunction	= & GlLightRenderer::_applyConstantAtt;
+	m_pfnLinearAttFunction		= & GlLightRenderer::_applyLinearAtt;
+	m_pfnQuadraticAttFunction	= & GlLightRenderer::_applyQuadraticAtt;
+	m_pfnExponentFunction		= & GlLightRenderer::_applyExponent;
+	m_pfnCutOffFunction			= & GlLightRenderer::_applyCutOff;
 }
 
-void GLLightRenderer :: Enable()
+void GlLightRenderer :: Enable()
 {
 	m_iIndex = RenderSystem::GetSingletonPtr()->LockLight();
 
@@ -48,7 +48,7 @@ void GLLightRenderer :: Enable()
 	}
 }
 
-void GLLightRenderer :: Disable()
+void GlLightRenderer :: Disable()
 {
 	RenderSystem::GetSingletonPtr()->UnlockLight( m_iIndex);
 
@@ -58,7 +58,7 @@ void GLLightRenderer :: Disable()
 	}
 }
 
-void GLLightRenderer :: ApplyAmbient()
+void GlLightRenderer :: ApplyAmbient()
 {
 	if (m_iIndex >= 0)
 	{
@@ -66,7 +66,7 @@ void GLLightRenderer :: ApplyAmbient()
 	}
 }
 
-void GLLightRenderer :: ApplyDiffuse()
+void GlLightRenderer :: ApplyDiffuse()
 {
 	if (m_iIndex >= 0)
 	{
@@ -74,7 +74,7 @@ void GLLightRenderer :: ApplyDiffuse()
 	}
 }
 
-void GLLightRenderer :: ApplySpecular()
+void GlLightRenderer :: ApplySpecular()
 {
 	if (m_iIndex >= 0)
 	{
@@ -82,7 +82,7 @@ void GLLightRenderer :: ApplySpecular()
 	}
 }
 
-void GLLightRenderer :: ApplyPosition()
+void GlLightRenderer :: ApplyPosition()
 {
 	if (m_iIndex >= 0)
 	{
@@ -90,7 +90,7 @@ void GLLightRenderer :: ApplyPosition()
 	}
 }
 
-void GLLightRenderer :: ApplyOrientation()
+void GlLightRenderer :: ApplyOrientation()
 {
 	if (m_iIndex >= 0)
 	{
@@ -98,7 +98,7 @@ void GLLightRenderer :: ApplyOrientation()
 	}
 }
 
-void GLLightRenderer :: ApplyConstantAtt( float p_constant)
+void GlLightRenderer :: ApplyConstantAtt( float p_constant)
 {
 	if (m_iIndex >= 0)
 	{
@@ -106,7 +106,7 @@ void GLLightRenderer :: ApplyConstantAtt( float p_constant)
 	}
 }
 
-void GLLightRenderer :: ApplyLinearAtt( float p_linear)
+void GlLightRenderer :: ApplyLinearAtt( float p_linear)
 {
 	if (m_iIndex >= 0)
 	{
@@ -114,7 +114,7 @@ void GLLightRenderer :: ApplyLinearAtt( float p_linear)
 	}
 }
 
-void GLLightRenderer :: ApplyQuadraticAtt( float p_quadratic)
+void GlLightRenderer :: ApplyQuadraticAtt( float p_quadratic)
 {
 	if (m_iIndex >= 0)
 	{
@@ -122,7 +122,7 @@ void GLLightRenderer :: ApplyQuadraticAtt( float p_quadratic)
 	}
 }
 
-void GLLightRenderer :: ApplyExponent( float p_fExponent)
+void GlLightRenderer :: ApplyExponent( float p_fExponent)
 {
 	if (m_iIndex >= 0)
 	{
@@ -130,7 +130,7 @@ void GLLightRenderer :: ApplyExponent( float p_fExponent)
 	}
 }
 
-void GLLightRenderer :: ApplyCutOff( float p_fCutOff)
+void GlLightRenderer :: ApplyCutOff( float p_fCutOff)
 {
 	if (m_iIndex >= 0)
 	{
@@ -138,75 +138,63 @@ void GLLightRenderer :: ApplyCutOff( float p_fCutOff)
 	}
 }
 
-void GLLightRenderer :: _enable()
+void GlLightRenderer :: _enable()
 {
-	glEnable( m_iIndex);
-	CheckGLError( CU_T( "GLLightRenderer :: Enable - glEnable"));
+	CheckGlError( glEnable( m_iIndex), CU_T( "GlLightRenderer :: Enable - glEnable"));
 }
 
-void GLLightRenderer :: _disable()
+void GlLightRenderer :: _disable()
 {
-	glDisable( m_iIndex);
+	CheckGlError( glDisable( m_iIndex), CU_T( "GlLightRenderer :: Disable - glDisable"));
 	m_iIndex = -1;
-	CheckGLError( CU_T( "GLLightRenderer :: Disable - glDisable"));
 }
 
-void GLLightRenderer :: _applyAmbient( const Colour & p_ambient)
+void GlLightRenderer :: _applyAmbient( const Colour & p_ambient)
 {
-	glLightfv( m_iIndex, GL_AMBIENT, p_ambient.const_ptr());
-	CheckGLError( CU_T( "GLLightRenderer :: ApplyAmbient - glLightfv"));
+	CheckGlError( glLightfv( m_iIndex, GL_AMBIENT, p_ambient.const_ptr()), CU_T( "GlLightRenderer :: ApplyAmbient - glLightfv"));
 }
 
-void GLLightRenderer :: _applyDiffuse( const Colour & p_diffuse)
+void GlLightRenderer :: _applyDiffuse( const Colour & p_diffuse)
 {
-	glLightfv( m_iIndex, GL_DIFFUSE, p_diffuse.const_ptr());
-	CheckGLError( CU_T( "GLLightRenderer :: ApplyDiffuse - glLightfv"));
+	CheckGlError( glLightfv( m_iIndex, GL_DIFFUSE, p_diffuse.const_ptr()), CU_T( "GlLightRenderer :: ApplyDiffuse - glLightfv"));
 }
 
-void GLLightRenderer :: _applySpecular( const Colour & p_specular)
+void GlLightRenderer :: _applySpecular( const Colour & p_specular)
 {
-	glLightfv( m_iIndex, GL_SPECULAR, p_specular.const_ptr());
-	CheckGLError( CU_T( "GLLightRenderer :: ApplySpecular - glLightfv"));
+	CheckGlError( glLightfv( m_iIndex, GL_SPECULAR, p_specular.const_ptr()), CU_T( "GlLightRenderer :: ApplySpecular - glLightfv"));
 }
 
-void GLLightRenderer :: _applyPosition( const Point4f & p_position)
+void GlLightRenderer :: _applyPosition( const Point4f & p_position)
 {
-	glLightfv( m_iIndex, GL_POSITION, p_position.const_ptr());
-	CheckGLError( CU_T( "GLLightRenderer :: ApplyPosition - glLightfv"));
+	CheckGlError( glLightfv( m_iIndex, GL_POSITION, p_position.const_ptr()), CU_T( "GlLightRenderer :: ApplyPosition - glLightfv"));
 }
 
-void GLLightRenderer :: _applyOrientation( const Matrix4x4r & p_orientation)
+void GlLightRenderer :: _applyOrientation( const Matrix4x4r & p_orientation)
 {
-	glLightfv( m_iIndex, GL_SPOT_DIRECTION, Matrix4x4f( p_orientation).const_ptr());
-	CheckGLError( CU_T( "GLLightRenderer :: ApplyPosition - glLightfv"));
+	CheckGlError( glLightfv( m_iIndex, GL_SPOT_DIRECTION, Matrix4x4f( p_orientation).const_ptr()), CU_T( "GlLightRenderer :: ApplyPosition - glLightfv"));
 }
 
-void GLLightRenderer :: _applyConstantAtt( float p_constant)
+void GlLightRenderer :: _applyConstantAtt( float p_constant)
 {
-	glLightf( m_iIndex, GL_CONSTANT_ATTENUATION, p_constant);
-	CheckGLError( CU_T( "GLLightRenderer :: ApplyConstantAtt"));
+	CheckGlError( glLightf( m_iIndex, GL_CONSTANT_ATTENUATION, p_constant), CU_T( "GlLightRenderer :: ApplyConstantAtt"));
 }
 
-void GLLightRenderer :: _applyLinearAtt( float p_linear)
+void GlLightRenderer :: _applyLinearAtt( float p_linear)
 {
-	glLightf( m_iIndex, GL_LINEAR_ATTENUATION, p_linear);
-	CheckGLError( CU_T( "GLLightRenderer :: ApplyLinearAtt"));
+	CheckGlError( glLightf( m_iIndex, GL_LINEAR_ATTENUATION, p_linear), CU_T( "GlLightRenderer :: ApplyLinearAtt"));
 }
 
-void GLLightRenderer :: _applyQuadraticAtt( float p_quadratic)
+void GlLightRenderer :: _applyQuadraticAtt( float p_quadratic)
 {
-	glLightf( m_iIndex, GL_QUADRATIC_ATTENUATION, p_quadratic);
-	CheckGLError( CU_T( "GLLightRenderer :: ApplyQuadraticAtt"));
+	CheckGlError( glLightf( m_iIndex, GL_QUADRATIC_ATTENUATION, p_quadratic), CU_T( "GlLightRenderer :: ApplyQuadraticAtt"));
 }
 
-void GLLightRenderer :: _applyExponent( float p_exponent)
+void GlLightRenderer :: _applyExponent( float p_exponent)
 {
-	glLightf( m_iIndex, GL_SPOT_EXPONENT, p_exponent);
-	CheckGLError( CU_T( "GLLightRenderer :: ApplyExponent - glLightfv"));
+	CheckGlError( glLightf( m_iIndex, GL_SPOT_EXPONENT, p_exponent), CU_T( "GlLightRenderer :: ApplyExponent - glLightfv"));
 }
 
-void GLLightRenderer :: _applyCutOff( float p_cutOff)
+void GlLightRenderer :: _applyCutOff( float p_cutOff)
 {
-	glLightf( m_iIndex, GL_SPOT_CUTOFF, p_cutOff);
-	CheckGLError( CU_T( "GLLightRenderer :: ApplyCutOff - glLightf"));
+	CheckGlError( glLightf( m_iIndex, GL_SPOT_CUTOFF, p_cutOff), CU_T( "GlLightRenderer :: ApplyCutOff - glLightf"));
 }

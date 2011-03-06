@@ -39,49 +39,49 @@ void MeshManager :: Clear()
 }
 
 MeshPtr MeshManager :: CreateMesh( const String & p_name, const UIntArray & p_faces,
-								   const FloatArray & p_size, Mesh::eTYPE p_type)
+								   const FloatArray & p_size, eMESH_TYPE p_type)
 {
 	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 	MeshPtr l_mesh;
 
 	switch (p_type)
 	{
-	case Mesh::eCone:
+	case eCone:
 		l_mesh.reset( new Cone( this, p_size[0], p_size[1], p_faces[0], p_name));
 		AddElement( l_mesh);
 		break;
 
-	case Mesh::eCylinder:
+	case eCylinder:
 		l_mesh.reset( new Cylinder( this, p_size[0], p_size[1], p_faces[0], p_name));
 		AddElement( l_mesh);
 		break;
 
-	case Mesh::eSphere:
+	case eSphere:
 		l_mesh.reset( new Sphere( this, p_size[0], p_faces[0], p_name));
 		AddElement( l_mesh);
 		break;
 
-	case Mesh::eCube:
+	case eCube:
 		l_mesh.reset( new Cube( this, p_size[0], p_size[1], p_size[2], p_name));
 		AddElement( l_mesh);
 		break;
 
-	case Mesh::eTorus:
+	case eTorus:
 		l_mesh.reset( new Torus( this, p_size[0], p_size[1], p_faces[0], p_faces[1], p_name));
 		AddElement( l_mesh);
 		break;
 
-	case Mesh::ePlane:
+	case ePlane:
 		l_mesh.reset( new Plane( this, p_size[0], p_size[1], p_faces[1], p_faces[0], p_name));
 		AddElement( l_mesh);
 		break;
 
-	case Mesh::eIcosaedron:
+	case eIcosaedron:
 		l_mesh.reset( new Icosaedron( this, p_size[0], p_faces[0], p_name));
 		AddElement( l_mesh);
 		break;
 
-	case Mesh::eProjection:
+	case eProjection:
 		{
 			IdPoint3rPatternPtr l_pPattern( new IdPoint3rPattern);
 			l_pPattern->AddElement( IdPoint3r( 0.0, 0.0, 0.0), 0);
@@ -94,7 +94,7 @@ MeshPtr MeshManager :: CreateMesh( const String & p_name, const UIntArray & p_fa
 		}
 		break;
 
-	case Mesh::eCustom:
+	case eCustom:
 		l_mesh.reset( new Mesh( this, p_name));
 		AddElement( l_mesh);
 		break;
@@ -106,59 +106,59 @@ MeshPtr MeshManager :: CreateMesh( const String & p_name, const UIntArray & p_fa
 	return l_mesh;
 }
 
-bool MeshManager :: Write( const String & p_path)
+bool MeshManager :: Save( File & p_file)const
 {
 	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-	size_t l_slashIndex = p_path.find_last_of( CU_T( "//"));
-	String l_path = p_path.substr( 0, l_slashIndex);
+	Path l_path = p_file.GetFileFullPath();
+	bool l_bReturn = true;
 	TypeMap::const_iterator l_it = m_objectMap.begin();
-	MeshLoader l_loader;
 
-	while (l_it != m_objectMap.end())
+	if (l_path.GetExtension() == "cmsh")
 	{
-		if ( ! l_loader.SaveToFile( l_path, l_it->second))
+		l_bReturn = p_file.Write( m_objectMap.size()) == sizeof( size_t);
+
+		while (l_it != m_objectMap.end() && l_bReturn)
 		{
-			return false;
+			l_bReturn = l_it->second->Save( p_file);
+			++l_it;
 		}
-		++l_it;
+	}
+	else
+	{
+		l_path = l_path.GetPath() / l_path.GetFileName() + CU_T( ".cmsh");
+		File l_file( l_path, File::eWrite | File::eBinary);
+
+		l_bReturn = l_file.Write( m_objectMap.size()) == sizeof( size_t);
+
+		while (l_it != m_objectMap.end() && l_bReturn)
+		{
+			l_bReturn = l_it->second->Save( l_file);
+			++l_it;
+		}
 	}
 
-	return true;
+
+	return l_bReturn;
 }
 
-bool MeshManager :: Read( const String & p_path)
+bool MeshManager :: Load( File & p_file)
 {
 	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-	StringArray l_files;
+	size_t l_uiSize;
+	bool l_bReturn = p_file.Read( l_uiSize) == sizeof( size_t);
 
-	size_t l_slashIndex = p_path.find_last_of( CU_T( "//"));
-	String l_path = p_path.substr( 0, l_slashIndex);
-
-	File::ListDirectoryFiles( l_path, l_files);
-
-	String l_fileName;
-	String l_matName;
-	String l_dotIndex;
-	MeshLoader l_loader;
-	MeshPtr l_mesh;
-
-	for (size_t i = 0 ; i < l_files.size() ; i++)
+	for (size_t i = 0 ; i < l_uiSize && l_bReturn ; i++)
 	{
-		if (l_files[i].find( CU_T( ".cmsh")) != String::npos)
+		MeshPtr l_mesh = MeshPtr( new Mesh( this));
+		l_bReturn = l_mesh->Load( p_file);
+
+		if (l_bReturn)
 		{
-			l_mesh = MeshPtr( l_loader.LoadFromFile( this, l_files[i]));
-			if (l_mesh == NULL)
-			{
-				AddElement( l_mesh);
-			}
-			else
-			{
-				return false;
-			}
+			AddElement( l_mesh);
 		}
 	}
 
-	return true;
+	return l_bReturn;
 }
 
 bool MeshManager :: _addElement( MeshPtr p_element)

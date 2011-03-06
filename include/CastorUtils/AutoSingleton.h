@@ -1,7 +1,7 @@
 #ifndef ___AUTO_SINGLETON_H___
 #define ___AUTO_SINGLETON_H___
 
-#include "Noncopyable.h"
+#include "NonCopyable.h"
 
 /**
  * Autosingleton is very simple :

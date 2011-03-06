@@ -1,11 +1,10 @@
-#include "OpenGLCommon/PrecompiledHeader.h"
+#include "OpenGlCommon/PrecompiledHeader.h"
 
-#include "OpenGLCommon/GLFrameVariable.h"
+#include "OpenGlCommon/GlFrameVariable.h"
 
 using namespace Castor3D;
 
-void GLFrameVariableBase :: GetVariableLocation( const GLchar * p_pVarName)
+void GlFrameVariableBase :: GetVariableLocation( const GLchar * p_pVarName)
 {
-	m_glIndex = glGetUniformLocation( * m_uiParentProgram, p_pVarName);
-	CheckGLError( CU_T( "GLFrameVariableBase :: GetVariableLocation - glGetUniformLocation"));
+	CheckGlError( m_glIndex = glGetUniformLocation( * m_uiParentProgram, p_pVarName), CU_T( "GlFrameVariableBase :: GetVariableLocation - glGetUniformLocation"));
 }

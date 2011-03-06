@@ -1,11 +1,11 @@
-#include "GUICommon/PrecompiledHeader.h"
+#include "GuiCommon/PrecompiledHeader.h"
 
-#include "GUICommon/MaterialPanel.h"
-#include "GUICommon/PassPanel.h"
-#include "GUICommon/EnvironmentFrame.h"
+#include "GuiCommon/MaterialPanel.h"
+#include "GuiCommon/PassPanel.h"
+#include "GuiCommon/EnvironmentFrame.h"
 
 using namespace Castor3D;
-using namespace GUICommon;
+using namespace GuiCommon;
 
 MaterialPanel :: MaterialPanel( Castor3D::MaterialManager * p_pManager, wxWindow * parent, const wxPoint & pos, const wxSize & size)
 	:	wxPanel( parent, wxID_ANY, pos, size, 524288 | wxBORDER_NONE)
@@ -28,7 +28,7 @@ int MaterialPanel :: GetPassIndex()const
 {
 	wxString l_value = m_passSelector->GetValue();
 	Logger::LogMessage( CU_T( "GetPassIndex - l_value : %s"), l_value.c_str());
-	
+
 	if (l_value.IsNumber())
 	{
 		int l_res = atoi( l_value.c_str());
@@ -42,7 +42,7 @@ int MaterialPanel :: GetPassIndex()const
 	return -2;
 }
 
-void MaterialPanel :: _createMaterialPanel( const Char * p_materialName)
+void MaterialPanel :: _createMaterialPanel( const xchar * p_materialName)
 {
 	if (m_material != NULL)
 	{
@@ -113,7 +113,7 @@ END_EVENT_TABLE()
 
 void MaterialPanel :: _onDeletePass( wxCommandEvent & event)
 {
-	if ( ! m_material == NULL && m_material->GetNbPasses() > 1)
+	if (m_material != NULL && m_material->GetNbPasses() > 1)
 	{
 		m_passSelector->Clear();
 		m_material->DestroyPass( m_selectedPassIndex);

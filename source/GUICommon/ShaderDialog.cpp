@@ -1,11 +1,11 @@
-#include "GUICommon/PrecompiledHeader.h"
+#include "GuiCommon/PrecompiledHeader.h"
 
-#include "GUICommon/ShaderDialog.h"
-#include "GUICommon/EnvironmentFrame.h"
-#include "GUICommon/TextPanel.h"
+#include "GuiCommon/ShaderDialog.h"
+#include "GuiCommon/EnvironmentFrame.h"
+#include "GuiCommon/TextPanel.h"
 
 using namespace Castor3D;
-using namespace GUICommon;
+using namespace GuiCommon;
 
 ShaderDialog :: ShaderDialog( wxWindow * p_pParent, ShaderManager * p_pManager, PassPtr p_pPass, const wxPoint & p_ptPosition, const wxSize p_ptSize)
 	:	wxDialog( p_pParent, wxID_ANY, CU_T( "Shaders"), p_ptPosition, p_ptSize)
@@ -53,15 +53,15 @@ ShaderDialog :: ShaderDialog( wxWindow * p_pParent, ShaderManager * p_pManager, 
 		l_ptButtonPosition.y += 20;
 	}
 
-	if ( ! m_pPass->GetShader<ShaderProgram>() == NULL)
+	if (m_pPass->GetShader<GlslShaderProgram>() != NULL)
 	{
 		m_bOwnShader = false;
-		m_shaderProgram = m_pPass->GetShader<ShaderProgram>();
+		m_shaderProgram = m_pPass->GetShader<GlslShaderProgram>();
 	}
 
 	if (m_shaderProgram == NULL)
 	{
-		m_shaderProgram = m_pManager->CreateShaderProgramFromFiles( C3DEmptyString, C3DEmptyString, C3DEmptyString);
+		m_shaderProgram = RenderSystem::CreateShaderProgram<GlslShaderProgram>( C3DEmptyString, C3DEmptyString, C3DEmptyString);
 	}
 	else
 	{
@@ -79,7 +79,7 @@ ShaderDialog :: ShaderDialog( wxWindow * p_pParent, ShaderManager * p_pManager, 
 	}
 
 
-	if ( ! m_shaderProgram == NULL)
+	if (m_shaderProgram != NULL)
 	{
 		for (int i = 0 ; i < eNbShaderTypes ; i++)
 		{
@@ -97,10 +97,10 @@ ShaderDialog :: ~ShaderDialog()
 
 void ShaderDialog :: _cleanup()
 {
-	if (m_bOwnShader && ! m_shaderProgram == NULL)
+	if (m_bOwnShader && m_shaderProgram != NULL)
 	{
 		m_pPass->SetShader( ShaderProgramPtr());
-		m_pManager->RemoveProgram( m_shaderProgram);
+		m_pManager->RemoveGLSLProgram( m_shaderProgram);
 		m_shaderProgram.reset();
 	}
 }
@@ -130,7 +130,7 @@ void ShaderDialog :: _loadShader()
 
 	if (m_shaderProgram == NULL)
 	{
-		m_shaderProgram = m_pManager->CreateShaderProgramFromFiles( m_strShaders[eVertexShader].c_str(), m_strShaders[ePixelShader].c_str(), m_strShaders[eGeometryShader].c_str());
+		m_shaderProgram = RenderSystem::CreateShaderProgram<GlslShaderProgram>( m_strShaders[eVertexShader].c_str(), m_strShaders[ePixelShader].c_str(), m_strShaders[eGeometryShader].c_str());
 	}
 	else
 	{
@@ -186,7 +186,7 @@ void ShaderDialog :: _onGridCellChange( eSHADER_PROGRAM_TYPE p_eType, int p_iRow
 		{
 			l_pFrameVariable = l_dialog.GetFrameVariable();
 
-			if ( ! l_pFrameVariable == NULL)
+			if (l_pFrameVariable != NULL)
 			{
 				m_mapFrameVariables[p_eType].insert( KeyedContainer< int, Castor3D::FrameVariablePtr>::Map::value_type( l_iRow, l_pFrameVariable));
 				wxArrayString l_arrayString;

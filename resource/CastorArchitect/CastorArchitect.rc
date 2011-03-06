@@ -52,22 +52,13 @@ END
 // Version
 //
 
-VS_VERSION_INFO VERSIONINFO
+1 VERSIONINFO
  FILEVERSION 0,0,1,0
  PRODUCTVERSION 0,0,1,0
- FILEFLAGSMASK 0x17L
-#ifdef _DEBUG
- FILEFLAGS 0x1L
-#else
- FILEFLAGS 0x0L
-#endif
- FILEOS 0x4L
- FILETYPE 0x1L
- FILESUBTYPE 0x0L
 BEGIN
     BLOCK "StringFileInfo"
     BEGIN
-        BLOCK "040c04b0"
+        BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "DragonJoker"
             VALUE "FileDescription", "Application CastorArchitect"
@@ -81,7 +72,7 @@ BEGIN
     END
     BLOCK "VarFileInfo"
     BEGIN
-        VALUE "Translation", 0x40c, 1200
+        VALUE "Translation", 0x409, 1252
     END
 END
 
@@ -93,27 +84,12 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDR_MAINFRAME           ICON                    "..\\resource\\castor.ico"
+ID_ICON	ICON	"..\\resource\\castor.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Bitmap
 //
-
-SCENE                   BITMAP                  "..\\scene_blanc.bmp"
-DOSSIER                 BITMAP                  "..\\dossier.bmp"
-DOSSIEROUV              BITMAP                  "..\\dossier_ouv.bmp"
-DOSSIERSEL              BITMAP                  "..\\dossier_sel.bmp"
-GEOCACHEESEL            BITMAP                  "..\\geo_cachee_sel.bmp"
-GEOMETRY                BITMAP                  "..\\geo_blanc.bmp"
-GEOVISIBLE              BITMAP                  "..\\geo_visible.bmp"
-GEOVISIBLESEL           BITMAP                  "..\\geo_visible_sel.bmp"
-MATERIAL                BITMAP                  "..\\mat_blanc.bmp"
-Castor                  BITMAP                  "..\\castor.bmp"
-SubmeshSel              BITMAP                  "..\\submesh_sel.bmp"
-Submesh                 BITMAP                  "..\\submesh.bmp"
-GEOCACHEE               BITMAP                  "..\\geo_cachee.bmp"
-DOSSIEROUVSEL           BITMAP                  "..\\dossier_ouv_sel.bmp"
 #endif    // Français (France) resources
 /////////////////////////////////////////////////////////////////////////////
 
