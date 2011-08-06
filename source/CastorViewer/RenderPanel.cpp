@@ -1,9 +1,9 @@
-#include "CastorViewer/PrecompiledHeader.h"
+#include "CastorViewer/PrecompiledHeader.hpp"
 
-#include "CastorViewer/RenderPanel.h"
-#include "CastorViewer/CastorViewer.h"
-#include "CastorViewer/MainFrame.h"
-#include "CastorViewer/MouseEvent.h"
+#include "CastorViewer/RenderPanel.hpp"
+#include "CastorViewer/CastorViewer.hpp"
+#include "CastorViewer/MainFrame.hpp"
+#include "CastorViewer/MouseEvent.hpp"
 
 #define ID_NEW_WINDOW 10000
 
@@ -13,11 +13,10 @@ using namespace Castor3D;
 DECLARE_APP( CastorViewerApp)
 
 RenderPanel :: RenderPanel( wxWindow * parent, wxWindowID p_id,
-							    Viewport::eTYPE p_renderType, ScenePtr p_scene,
-								const wxPoint & pos, const wxSize & size,
-								ePROJECTION_DIRECTION p_look, long style)
+							eVIEWPORT_TYPE p_renderType, ScenePtr p_scene,
+							const wxPoint & pos, const wxSize & size,
+							ePROJECTION_DIRECTION p_look, long style)
 	:	wxPanel( parent, p_id, pos, size, style),
-		m_timer( NULL),
 		m_renderType( p_renderType),
 		m_lookAt( p_look),
 		m_mainScene( p_scene),
@@ -30,12 +29,6 @@ RenderPanel :: RenderPanel( wxWindow * parent, wxWindowID p_id,
 
 RenderPanel :: ~RenderPanel()
 {
-	if (m_timer != NULL)
-	{
-		m_timer->Stop();
-		delete m_timer;
-		m_timer = NULL;
-	}
 }
 
 void RenderPanel :: Focus()
@@ -66,25 +59,17 @@ void RenderPanel :: DrawOneFrame()
 
 void RenderPanel :: _initialiseRenderWindow()
 {
-	Logger::LogMessage( CU_T( "Initialising RenderWindow"));
-	m_renderWindow = Root::GetSingletonPtr()->CreateRenderWindow( m_mainScene, (void *)GetHandle(), GetClientSize().x, GetClientSize().y,
-																  m_renderType, eA8R8G8B8, m_lookAt);
+	Logger::LogMessage( wxT( "Initialising RenderWindow"));
+	m_renderWindow = Root::GetSingleton()->CreateRenderWindow( m_mainScene, this->GetHandle(), GetClientSize().x, GetClientSize().y,
+															   m_renderType, ePIXEL_FORMAT_A8R8G8B8, m_lookAt);
 	m_listener = m_renderWindow.lock()->GetListener();
 	m_pRotateCamEvent = shared_ptr<CameraRotateEvent>( new CameraRotateEvent( m_renderWindow.lock()->GetCamera(), 0, 0, 0));
 	m_pTranslateCamEvent = shared_ptr<CameraTranslateEvent>( new CameraTranslateEvent( m_renderWindow.lock()->GetCamera(), 0, 0, 0));
 
-	if (m_timer == NULL)
-	{
-		m_timer = new wxTimer( this, 1);
-		m_timer->Start( 40);
-	}
-
-	Logger::LogMessage( CU_T( "RenderWindow Initialised"));
+	Logger::LogMessage( wxT( "RenderWindow Initialised"));
 }
 
 BEGIN_EVENT_TABLE( RenderPanel, wxPanel)
-	EVT_TIMER(	1,			RenderPanel::_onTimer)
-
 	EVT_SIZE(				RenderPanel::_onSize)
 	EVT_MOVE(				RenderPanel::_onMove)
 	EVT_CLOSE(				RenderPanel::_onClose)
@@ -142,22 +127,7 @@ void RenderPanel :: _onPaint( wxPaintEvent & WXUNUSED(event))
 
 void RenderPanel :: _onClose( wxCloseEvent & event)
 {
-	if (m_timer != NULL)
-	{
-		m_timer->Stop();
-		delete m_timer;
-		m_timer = NULL;
-	}
-
 	Destroy();
-}
-
-void RenderPanel :: _onTimer( wxTimerEvent & WXUNUSED(event))
-{
-	if ( ! m_renderWindow.expired())
-	{
-		m_renderWindow.lock()->SetToUpdate();
-	}
 }
 
 void RenderPanel :: _onEnterWindow( wxMouseEvent & WXUNUSED(event))
@@ -216,22 +186,22 @@ void RenderPanel :: _onKeyDown(wxKeyEvent& event)
 		}
 		else if (l_keyCode == 83)// s
 		{
-			l_pWindow->SetNormalsMode( eNORMALS_MODE( eSmooth - l_pWindow->GetNormalsMode()));
+			l_pWindow->SetNormalsMode( eNORMALS_MODE( eNORMALS_MODE_SMOOTH - l_pWindow->GetNormalsMode()));
 		}
 		else if (l_keyCode == 87)// w
 		{
 			switch (l_pWindow->GetDrawType())
 			{
-			case eTriangles:
-				l_pWindow->SetDrawType( eLines);
+			case ePRIMITIVE_TYPE_TRIANGLES:
+				l_pWindow->SetDrawType( ePRIMITIVE_TYPE_LINES);
 				break;
 
-			case eLines:
-				l_pWindow->SetDrawType( ePoints);
+			case ePRIMITIVE_TYPE_LINES:
+				l_pWindow->SetDrawType( ePRIMITIVE_TYPE_POINTS);
 				break;
 
-			case ePoints:
-				l_pWindow->SetDrawType( eTriangles);
+			case ePRIMITIVE_TYPE_POINTS:
+				l_pWindow->SetDrawType( ePRIMITIVE_TYPE_TRIANGLES);
 				break;
 			}
 		}
@@ -297,13 +267,13 @@ void RenderPanel :: _onMouseMove( wxMouseEvent & event)
 	{
 		if (m_mouseLeftDown)
 		{
-			if (m_renderWindow.lock()->GetType() == Viewport::e3DView)
+			if (m_renderWindow.lock()->GetType() == eVIEWPORT_TYPE_3D)
 			{
-				MouseCameraEvent::Add( m_pRotateCamEvent, m_listener, m_deltaX * Math::Angle::DegreesToRadians, m_deltaY * Math::Angle::DegreesToRadians, 0);
+				MouseCameraEvent::Add( m_pRotateCamEvent, m_listener, m_deltaX, m_deltaY, 0);
 			}
 			else
 			{
-				MouseCameraEvent::Add( m_pRotateCamEvent, m_listener, 0, 0, m_deltaX * Math::Angle::DegreesToRadians);
+				MouseCameraEvent::Add( m_pRotateCamEvent, m_listener, 0, 0, m_deltaX);
 			}
 		}
 		else if (m_mouseRightDown)
@@ -315,10 +285,10 @@ void RenderPanel :: _onMouseMove( wxMouseEvent & event)
 
 void RenderPanel :: _onMouseWheel( wxMouseEvent & event)
 {
-	int l_wheelRotation = event.GetWheelRotation();
 	if ( ! m_renderWindow.expired())
 	{
-		const Point3r & l_cameraPos = m_renderWindow.lock()->GetCamera()->GetParent()->GetPosition();
+		int l_wheelRotation = event.GetWheelRotation();
+		Point3r const & l_cameraPos = m_renderWindow.lock()->GetCamera()->GetParent()->GetPosition();
 
 		if (l_wheelRotation < 0)
 		{

@@ -1,18 +1,18 @@
-#include "CastorShape/PrecompiledHeader.h"
+#include "CastorShape/PrecompiledHeader.hpp"
 
-#include "CastorShape/main/MainFrame.h"
-#include "CastorShape/main/CastorShape.h"
-#include "CastorShape/main/RenderPanel.h"
+#include "CastorShape/main/MainFrame.hpp"
+#include "CastorShape/main/CastorShape.hpp"
+#include "CastorShape/main/RenderPanel.hpp"
 
-#include "CastorShape/geometry/NewConeDialog.h"
-#include "CastorShape/geometry/NewCubeDialog.h"
-#include "CastorShape/geometry/NewCylinderDialog.h"
-#include "CastorShape/geometry/NewIcosaedronDialog.h"
-#include "CastorShape/geometry/NewPlaneDialog.h"
-#include "CastorShape/geometry/NewSphereDialog.h"
-#include "CastorShape/geometry/NewTorusDialog.h"
-#include "CastorShape/material/MaterialsFrame.h"
-#include "CastorShape/material/NewMaterialDialog.h"
+#include "CastorShape/geometry/NewConeDialog.hpp"
+#include "CastorShape/geometry/NewCubeDialog.hpp"
+#include "CastorShape/geometry/NewCylinderDialog.hpp"
+#include "CastorShape/geometry/NewIcosaedronDialog.hpp"
+#include "CastorShape/geometry/NewPlaneDialog.hpp"
+#include "CastorShape/geometry/NewSphereDialog.hpp"
+#include "CastorShape/geometry/NewTorusDialog.hpp"
+#include "CastorShape/material/MaterialsFrame.hpp"
+#include "CastorShape/material/NewMaterialDialog.hpp"
 
 #include "xpms/fichier.xpm"
 #include "xpms/ajouter.xpm"
@@ -35,17 +35,17 @@ MainFrame :: MainFrame( wxWindow * parent, const wxString & title,
 						    const wxPoint & pos, const wxSize & size,
 						    long style, wxString name)
 	:	wxFrame( parent, wxID_ANY, title, pos, size, style, name)
-	,	m_3dFrame			( NULL)
-	,	m_2dFrameHD			( NULL)
-	,	m_2dFrameBG			( NULL)
-	,	m_2dFrameBD			( NULL)
-	,	m_selectedFrame		( NULL)
-	,	m_pCastor3D			( NULL)
+	,	m_3dFrame			( nullptr)
+	,	m_2dFrameHD			( nullptr)
+	,	m_2dFrameBG			( nullptr)
+	,	m_2dFrameBD			( nullptr)
+	,	m_selectedFrame		( nullptr)
 	,	m_bWireFrame		( false)
-	,	m_bMultiFrames		( false)
+	,	m_bMultiFrames		( true)
 	,	m_pImagesLoader		( new ImagesLoader)
+	,	m_timer				( nullptr)
 {
-	wxGetApp().GetSplashScreen()->Step( "Initialisation des boutons", 0);
+	wxGetApp().GetSplashScreen()->Step( "Initialisation des images", 1);
 	ImagesLoader::AddBitmap( CV_IMG_CASTOR, castor_transparent_xpm);
 	m_selectedMaterial.m_ambient[0] = 0.2f;
 	m_selectedMaterial.m_ambient[1] = 0.0f;
@@ -59,7 +59,7 @@ MainFrame :: MainFrame( wxWindow * parent, const wxString & title,
 
 	CreateStatusBar();
 	_populateToolbar();
-	wxGetApp().GetSplashScreen()->Step( "Initialisation des vues", 0);
+	wxGetApp().GetSplashScreen()->Step( "Chargement des plugins", 1);
 	_initialise3D();
 	wxGetApp().DestroySplashScreen();
 }
@@ -75,22 +75,24 @@ void MainFrame :: SelectGeometry( GeometryPtr p_geometry)
 		return;
 	}
 
-	if (m_selectedGeometry != NULL)
+	if (m_selectedGeometry)
 	{
 		MeshPtr l_mesh = m_selectedGeometry->GetMesh();
 		MaterialInfos * l_infos;
+
 		for (size_t i = 0 ; i < l_mesh->GetNbSubmeshes() ; i++)
 		{
 			l_infos = m_selectedGeometryMaterials[i];
 			l_mesh->GetSubmesh( i)->GetMaterial()->GetPass( 0)->SetAmbient( l_infos->m_ambient);
 			l_mesh->GetSubmesh( i)->GetMaterial()->GetPass( 0)->SetEmissive( l_infos->m_emissive);
 		}
-		vector::deleteAll( m_selectedGeometryMaterials);
+
+		ClearContainer( m_selectedGeometryMaterials);
 	}
 
 	m_selectedGeometry = p_geometry;
 
-	if (m_selectedGeometry != NULL)
+	if (m_selectedGeometry)
 	{
 		MeshPtr l_mesh = m_selectedGeometry->GetMesh();
 		MaterialInfos * l_infos;
@@ -116,7 +118,7 @@ void MainFrame :: SelectVertex( Vertex * p_vertex)
 
 void MainFrame :: ShowPanels()
 {
-	if (m_3dFrame != NULL)
+	if (m_3dFrame)
 	{
 		m_3dFrame->DrawOneFrame();
 
@@ -135,7 +137,7 @@ void MainFrame :: SetCurrentPanel( RenderPanel * p_pCheck, RenderPanel * p_pValu
 	{
 		if (m_selectedFrame == p_pCheck)
 		{
-			m_selectedFrame = NULL;
+			m_selectedFrame = nullptr;
 		}
 	}
 	else
@@ -146,29 +148,46 @@ void MainFrame :: SetCurrentPanel( RenderPanel * p_pCheck, RenderPanel * p_pValu
 
 void MainFrame :: _initialise3D()
 {
-	Logger::LogMessage( CU_T( "Initialising Castor3D"));
+	Logger::LogMessage( cuT( "Initialising Castor3D"));
 
-	m_pCastor3D = new Root( 25);
+	m_castor3D.Initialise( 25);
+
+	StringArray l_arrayFiles;
+	File::ListDirectoryFiles( File::DirectoryGetCurrent(), l_arrayFiles);
+
+	if (l_arrayFiles.size() > 0)
+	{
+		for (size_t i = 0 ; i < l_arrayFiles.size() ; i++)
+		{
+			Path l_file = l_arrayFiles[i];
+
+			if (l_file.GetExtension() == CASTOR_DLL_EXT)
+			{
+				wxGetApp().GetSplashScreen()->SubStatus( l_file.GetFileName().c_str());
+				m_castor3D.LoadPlugin( l_file);
+			}
+		}
+	}
 
 	try
 	{
 		wxStandardPaths * l_paths = (wxStandardPaths *) & wxStandardPaths::Get();
 		wxString l_dataDir = l_paths->GetDataDir();
 		bool l_bRendererInit = false;
-		RendererSelector m_dialog( this, wxT( "Castor Shape"));
+		wxRendererSelector m_dialog( this, wxT( "Castor Shape"));
+		wxGetApp().GetSplashScreen()->Step( "Initialisation de la vue", 1);
 
 		int l_iReturn = m_dialog.ShowModal();
 
 		if (l_iReturn != wxID_CANCEL)
 		{
-			l_bRendererInit = m_pCastor3D->LoadRenderer( RendererDriver::eDRIVER_TYPE( l_iReturn), l_dataDir.c_str());
+			l_bRendererInit = m_castor3D.LoadRenderer( eRENDERER_TYPE( l_iReturn));
 
 			if (l_bRendererInit)
 			{
-				m_mainScene = ScenePtr( new Scene( m_pCastor3D->GetSceneManager(), "MainScene"));
-				m_pCastor3D->GetSceneManager()->AddElement( m_mainScene);
+				m_mainScene = Factory<Scene>::Create( "MainScene");
 
-				Logger::LogMessage( CU_T( "Castor3D Initialised"));
+				Logger::LogMessage( cuT( "Castor3D Initialised"));
 				int l_width = GetClientSize().x / 2;
 				int l_height = GetClientSize().y / 2;
 				m_3dFrame = new RenderPanel( this, wxID_ANY, Viewport::e3DView, m_mainScene,
@@ -203,7 +222,6 @@ void MainFrame :: _initialise3D()
 
 				m_3dFrame->Show();
 
-
 				if (m_bMultiFrames)
 				{
 					m_2dFrameHD->Show();
@@ -213,10 +231,8 @@ void MainFrame :: _initialise3D()
 
 				ShowPanels();
 
-				ScenePtr l_pScene = m_pCastor3D->GetSceneManager()->GetElementByName( "MainScene");
-
-				DirectionalLightPtr l_light1 = static_pointer_cast<DirectionalLight, Light>( l_pScene->CreateLight<DirectionalLight>( "Light1", l_pScene->CreateSceneNode( "Light1Node")));
-				if (l_light1 != NULL)
+				DirectionalLightPtr l_light1 = static_pointer_cast<DirectionalLight, Light>( m_mainScene->CreateLight<DirectionalLight>( "Light1", m_mainScene->CreateSceneNode( "Light1Node")));
+				if (l_light1)
 				{
 					l_light1->GetParent()->SetPosition( 0.0f, 0.0f, 1.0f);
 					l_light1->SetDiffuse( 1.0f, 1.0f, 1.0f);
@@ -224,8 +240,8 @@ void MainFrame :: _initialise3D()
 					l_light1->SetEnabled( true);
 				}
 
-				DirectionalLightPtr l_light2 = static_pointer_cast<DirectionalLight, Light>( l_pScene->CreateLight<DirectionalLight>( "Light2", l_pScene->CreateSceneNode( "Light2Node")));
-				if (l_light2 != NULL)
+				DirectionalLightPtr l_light2 = static_pointer_cast<DirectionalLight, Light>( m_mainScene->CreateLight<DirectionalLight>( "Light2", m_mainScene->CreateSceneNode( "Light2Node")));
+				if (l_light2)
 				{
 					l_light2->GetParent()->SetPosition( 0.0f, -1.0f, 1.0f);
 					l_light2->SetDiffuse( 1.0f, 1.0f, 1.0f);
@@ -233,8 +249,8 @@ void MainFrame :: _initialise3D()
 					l_light2->SetEnabled( true);
 				}
 
-				DirectionalLightPtr l_light3 = static_pointer_cast<DirectionalLight, Light>( l_pScene->CreateLight<DirectionalLight>( "Light3", l_pScene->CreateSceneNode( "Light3Node")));
-				if (l_light3 != NULL)
+				DirectionalLightPtr l_light3 = static_pointer_cast<DirectionalLight, Light>( m_mainScene->CreateLight<DirectionalLight>( "Light3", m_mainScene->CreateSceneNode( "Light3Node")));
+				if (l_light3)
 				{
 					l_light3->GetParent()->SetPosition( -1.0f, -1.0f, -1.0f);
 					l_light3->SetDiffuse( 1.0f, 1.0f, 1.0f);
@@ -242,12 +258,17 @@ void MainFrame :: _initialise3D()
 					l_light3->SetEnabled( true);
 				}
 
+				if (m_timer == NULL)
+				{
+					m_timer = new wxTimer( this, 1);
+					m_timer->Start( 40);
+				}
+
 /*
-            MaterialPtr l_pMaterial = MaterialManager::CreateMaterial( "Overlay");
-            PanelOverlayPtr l_pOverlay = OverlayManager::GetSingleton().CreateOverlay<PanelOverlay>( "FirstOverlay", NULL, Point2r( 0.25f, 0.25f), Point2r( 0.5f, 0.5f));
-            l_pOverlay->SetMaterial( l_pMaterial);
-            MaterialPtr l_pMaterial2 = MaterialManager::CreateMaterial( "Overlay2");
-            OverlayManager::GetSingleton().CreateOverlay<PanelOverlay>( "SecondOverlay", l_pOverlay, Point2r( 0.25f, 0.25f), Point2r( 0.5f, 0.5f))->SetMaterial( l_pMaterial2);
+				OverlayPtr l_pOverlay1 = Factory<Overlay>::Create( m_mainScene, "Overlay1", eOverlayPanel, nullptr, Point2r( 0.25f, 0.25f), Point2r( 0.5f, 0.5f));
+				l_pOverlay1->SetMaterial( Factory<Material>::Create( "Overlay1", 1));
+				OverlayPtr l_pOverlay2 = Factory<Overlay>::Create( m_mainScene, "Overlay2", eOverlayPanel, l_pOverlay, Point2r( 0.25f, 0.25f), Point2r( 0.5f, 0.5f));
+				l_pOverlay2->SetMaterial( Factory<Material>::Create( "Overlay2", 1));
 */
 			}
 		}
@@ -260,7 +281,7 @@ void MainFrame :: _initialise3D()
 	}
 	catch (...)
 	{
-		wxMessageBox( CU_T( "Problème survenu lors de l'initialisation de Castor3D"), "Exception", wxOK | wxCENTRE | wxICON_ERROR);
+		wxMessageBox( cuT( "Problème survenu lors de l'initialisation de Castor3D"), "Exception", wxOK | wxCENTRE | wxICON_ERROR);
 		Close( true);
 	}
 }
@@ -273,50 +294,50 @@ void MainFrame :: _populateToolbar()
 	l_pToolbar->SetToolBitmapSize( wxSize( 32, 32));
 
 	m_pFileMenu = new wxMenu();
-	m_pFileMenu->Append( eSaveScene,						CU_T( "&Sauver la Scene\tCTRL+F+S"));
-	m_pFileMenu->Append( eLoadScene,						CU_T( "&Ouvrir une Scene\tCTRL+F+O"));
-	m_pFileMenu->Append( eRender,							CU_T( "&Rendu de scène\tCTRL+F+R"));
+	m_pFileMenu->Append( eSaveScene,						cuT( "&Sauver la Scene\tCTRL+F+S"));
+	m_pFileMenu->Append( eLoadScene,						cuT( "&Ouvrir une Scene\tCTRL+F+O"));
+	m_pFileMenu->Append( eRender,							cuT( "&Rendu de scène\tCTRL+F+R"));
 	m_pFileMenu->AppendSeparator();
-	m_pFileMenu->Append( eExit,								CU_T( "&Quitter\tALT+F4"));
+	m_pFileMenu->Append( eExit,								cuT( "&Quitter\tALT+F4"));
 
 	m_pNewMenu = new wxMenu();
 	wxMenu * l_pSubMenu = new wxMenu();
-	l_pSubMenu->Append( eNewCone,							CU_T( "C&one"));
-	l_pSubMenu->Append( eNewCube,							CU_T( "C&ube"));
-	l_pSubMenu->Append( eNewCylinder,						CU_T( "C&ylindre"));
-	l_pSubMenu->Append( eNewIcosaedron,						CU_T( "&Icosaedre"));
-	l_pSubMenu->Append( eNewPlane,							CU_T( "&Plan"));
-	l_pSubMenu->Append( eNewSphere,							CU_T( "&Sphere"));
-	l_pSubMenu->Append( eNewTorus,							CU_T( "&Torre"));
-	l_pSubMenu->Append( eNewProjection,						CU_T( "&Projection"));
-	m_pNewMenu->AppendSubMenu( l_pSubMenu,					CU_T( "Nouvelle &Geometrie\tCTRL+N+G"));
-	m_pNewMenu->Append( eNewMaterial,						CU_T( "&Material\tCTRL+N+M"));
+	l_pSubMenu->Append( eNewCone,							cuT( "C&one"));
+	l_pSubMenu->Append( eNewCube,							cuT( "C&ube"));
+	l_pSubMenu->Append( eNewCylinder,						cuT( "C&ylindre"));
+	l_pSubMenu->Append( eNewIcosaedron,						cuT( "&Icosaedre"));
+	l_pSubMenu->Append( eNewPlane,							cuT( "&Plan"));
+	l_pSubMenu->Append( eNewSphere,							cuT( "&Sphere"));
+	l_pSubMenu->Append( eNewTorus,							cuT( "&Torre"));
+	l_pSubMenu->Append( eNewProjection,						cuT( "&Projection"));
+	m_pNewMenu->AppendSubMenu( l_pSubMenu,					cuT( "Nouvelle &Geometrie\tCTRL+N+G"));
+	m_pNewMenu->Append( eNewMaterial,						cuT( "&Material\tCTRL+N+M"));
 
 	m_pSettingsMenu = new wxMenu();
-	m_pSettingsMenu->AppendCheckItem( eSelect,				CU_T( "&Sélectionner\tCTRL+E+S"));
-	m_pSettingsMenu->AppendCheckItem( eModify,				CU_T( "&Modifier\tCTRL+E+M"));
-	m_pSettingsMenu->Append( eNone,							CU_T( "&Annuler\tCTRL+E+C"));
+	m_pSettingsMenu->AppendCheckItem( eSelect,				cuT( "&Sélectionner\tCTRL+E+S"));
+	m_pSettingsMenu->AppendCheckItem( eModify,				cuT( "&Modifier\tCTRL+E+M"));
+	m_pSettingsMenu->Append( eNone,							cuT( "&Annuler\tCTRL+E+C"));
 	m_pSettingsMenu->AppendSeparator();
-	m_pSettingsMenu->AppendRadioItem( eSelectGeometries,	CU_T( "&Géométrie\tCTRL+E+G"))->Enable( false);
-	m_pSettingsMenu->AppendRadioItem( eSelectPoints,		CU_T( "&Point\tCTRL+E+P"))->Enable( false);
+	m_pSettingsMenu->AppendRadioItem( eSelectGeometries,	cuT( "&Géométrie\tCTRL+E+G"))->Enable( false);
+	m_pSettingsMenu->AppendRadioItem( eSelectPoints,		cuT( "&Point\tCTRL+E+P"))->Enable( false);
 	m_pSettingsMenu->AppendSeparator();
-	m_pSettingsMenu->Append( eCloneSelection,				CU_T( "&Dupliquer\tCTRL+E+D"));
+	m_pSettingsMenu->Append( eCloneSelection,				cuT( "&Dupliquer\tCTRL+E+D"));
 	l_pSubMenu = new wxMenu();
-	l_pSubMenu->Append( eSubdividePNTriangles,				CU_T( "PN &Triangles\tCTRL+E+S+T"));
-	l_pSubMenu->Append( eSubdivideLoop,						CU_T( "&Loop\tCTRL+E+S+L"));
-	m_pSettingsMenu->AppendSubMenu( l_pSubMenu,				CU_T( "&Subdiviser"));
-	m_pSettingsMenu->Append( eSelectNone,					CU_T( "&Aucune\tCTRL+E+A"));
+	l_pSubMenu->Append( eSubdividePNTriangles,				cuT( "PN &Triangles\tCTRL+E+S+T"));
+	l_pSubMenu->Append( eSubdivideLoop,						cuT( "&Loop\tCTRL+E+S+L"));
+	m_pSettingsMenu->AppendSubMenu( l_pSubMenu,				cuT( "&Subdiviser"));
+	m_pSettingsMenu->Append( eSelectNone,					cuT( "&Aucune\tCTRL+E+A"));
 
-	l_pToolbar->AddTool( eFile,			ImagesLoader::AddBitmap( eBmpFichier, fichier_xpm)->ConvertToImage().Rescale( 32, 32, wxIMAGE_QUALITY_HIGH),		wxT( "Fichier"),	wxT( "Menu fichier"));
+	l_pToolbar->AddTool( eFile,			wxT( "Fichier"),	ImagesLoader::AddBitmap( eBmpFichier, fichier_xpm)->ConvertToImage().Rescale( 32, 32, wxIMAGE_QUALITY_HIGH),		wxT( "Menu fichier"));
 	wxGetApp().GetSplashScreen()->Step( 1);
-	l_pToolbar->AddTool( eNew,			ImagesLoader::AddBitmap( eBmpAjouter, ajouter_xpm)->ConvertToImage().Rescale( 32, 32, wxIMAGE_QUALITY_HIGH),		wxT( "Nouveau"),	wxT( "Nouvel élément"));
+	l_pToolbar->AddTool( eNew,			wxT( "Nouveau"),	ImagesLoader::AddBitmap( eBmpAjouter, ajouter_xpm)->ConvertToImage().Rescale( 32, 32, wxIMAGE_QUALITY_HIGH),		wxT( "Nouvel élément"));
 	wxGetApp().GetSplashScreen()->Step( 1);
-	l_pToolbar->AddTool( eSettings,		ImagesLoader::AddBitmap( eBmpParametres, parametres_xpm)->ConvertToImage().Rescale( 32, 32, wxIMAGE_QUALITY_HIGH),	wxT( "Paramètres"),	wxT( "Menu Paramètres"));
+	l_pToolbar->AddTool( eSettings,		wxT( "Paramètres"),	ImagesLoader::AddBitmap( eBmpParametres, parametres_xpm)->ConvertToImage().Rescale( 32, 32, wxIMAGE_QUALITY_HIGH),	wxT( "Menu Paramètres"));
 	wxGetApp().GetSplashScreen()->Step( 1);
 	l_pToolbar->AddSeparator();
-	l_pToolbar->AddTool( eGeometries,	ImagesLoader::AddBitmap( eBmpGeometries, geo_blanc_xpm)->ConvertToImage().Rescale( 32, 32, wxIMAGE_QUALITY_HIGH),	wxT( "Géométries"),	wxT( "Afficher les géométries"));
+	l_pToolbar->AddTool( eGeometries,	wxT( "Géométries"),	ImagesLoader::AddBitmap( eBmpGeometries, geo_blanc_xpm)->ConvertToImage().Rescale( 32, 32, wxIMAGE_QUALITY_HIGH),	wxT( "Afficher les géométries"));
 	wxGetApp().GetSplashScreen()->Step( 1);
-	l_pToolbar->AddTool( eMaterials,	ImagesLoader::AddBitmap( eBmpMaterials, mat_blanc_xpm)->ConvertToImage().Rescale( 32, 32, wxIMAGE_QUALITY_HIGH),	wxT( "Matériaux"),	wxT( "Afficher les matériaux"));
+	l_pToolbar->AddTool( eMaterials,	wxT( "Matériaux"),	ImagesLoader::AddBitmap( eBmpMaterials, mat_blanc_xpm)->ConvertToImage().Rescale( 32, 32, wxIMAGE_QUALITY_HIGH),	wxT( "Afficher les matériaux"));
 	wxGetApp().GetSplashScreen()->Step( 1);
 	l_pToolbar->AddSeparator();
 
@@ -329,16 +350,16 @@ void MainFrame :: _createGeometry( eMESH_TYPE p_meshType, String p_name,
 									 NewGeometryDialog * p_dialog, unsigned int i,
 									 unsigned int j, real a, real b, real c)
 {
-	if (p_name.empty() || p_name == CU_T( "Geometry Name"))
+	if (p_name.empty() || p_name == cuT( "Geometry Name"))
 	{
 		xchar l_buffer[256];
-		Sprintf( l_buffer, 255, CU_T( "%s%d"), p_baseName.c_str(), g_nbGeometries);
+		Sprintf( l_buffer, 255, cuT( "%s%d"), p_baseName.c_str(), g_nbGeometries);
 		p_name = l_buffer;
 	}
 
-	SceneNodePtr l_sceneNode = p_scene->CreateSceneNode( CU_T( "SN_") + p_name);
+	SceneNodePtr l_sceneNode = p_scene->CreateSceneNode( cuT( "SN_") + p_name);
 
-	if (l_sceneNode != NULL)
+	if (l_sceneNode)
 	{
 		UIntArray l_faces;
 		FloatArray l_dimensions;
@@ -347,16 +368,17 @@ void MainFrame :: _createGeometry( eMESH_TYPE p_meshType, String p_name,
 		l_dimensions.push_back( a);
 		l_dimensions.push_back( b);
 		l_dimensions.push_back( c);
-		GeometryPtr l_geometry = p_scene->CreatePrimitive( p_name, p_meshType, p_baseName + CU_T( "_") + p_meshStrVars, l_faces, l_dimensions);
+		GeometryPtr l_geometry = p_scene->CreatePrimitive( p_name, p_meshType, p_baseName + cuT( "_") + p_meshStrVars, l_faces, l_dimensions);
 
-		if (l_geometry != NULL)
+		if (l_geometry)
 		{
 			String l_materialName = p_dialog->GetMaterialName();
 			MeshPtr l_mesh = l_geometry->GetMesh();
+			Collection<Material, String> l_mtlCollection;
 
 			for (size_t i = 0 ; i < l_mesh->GetNbSubmeshes() ; i++)
 			{
-				l_mesh->GetSubmesh( i)->SetMaterial( m_pCastor3D->GetSceneManager()->GetMaterialManager()->GetElement( l_materialName));
+				l_mesh->GetSubmesh( i)->SetMaterial( l_mtlCollection.GetElement( l_materialName));
 			}
 
 			l_sceneNode->AttachObject( l_geometry.get());
@@ -390,6 +412,7 @@ void MainFrame :: _setActionType( ActionType p_eType)
 }
 
 BEGIN_EVENT_TABLE( MainFrame, wxFrame)
+	EVT_TIMER(	1,			MainFrame::_onTimer)
 	EVT_SIZE(				MainFrame::_onSize)
 	EVT_MOVE(				MainFrame::_onMove)
 	EVT_CLOSE(				MainFrame::_onClose)
@@ -441,7 +464,12 @@ END_EVENT_TABLE()
 void MainFrame :: _onPaint( wxPaintEvent & WXUNUSED(event))
 {
 	wxPaintDC l_dc( this);
-	Root::GetSingletonPtr()->RenderOneFrame();
+	m_castor3D.RenderOneFrame();
+}
+
+void MainFrame :: _onTimer( wxTimerEvent & WXUNUSED(event))
+{
+	m_castor3D.RenderOneFrame();
 }
 
 void MainFrame :: _onSize( wxSizeEvent & event)
@@ -451,7 +479,7 @@ void MainFrame :: _onSize( wxSizeEvent & event)
 	int l_width = GetClientSize().x / 2;
 	int l_height = GetClientSize().y / 2;
 
-	if (m_3dFrame != NULL)
+	if (m_3dFrame)
 	{
 		if ( ! m_bMultiFrames)
 		{
@@ -500,47 +528,47 @@ void MainFrame :: _onClose( wxCloseEvent & event)
 	m_mainScene.reset();
 
 	Hide();
+
+	if (m_timer)
+	{
+		m_timer->Stop();
+		delete m_timer;
+		m_timer = nullptr;
+	}
+
 	vector::deleteAll( m_selectedGeometryMaterials);
 
-	if (m_mainScene != NULL)
+	if (m_mainScene)
 	{
 		m_mainScene.reset();
 	}
 
-	if (m_pCastor3D != NULL)
-	{
-		m_pCastor3D->EndRendering();
-	}
+	m_castor3D.EndRendering();
 
-	if (m_3dFrame != NULL)
+	if (m_3dFrame)
 	{
 		m_3dFrame->UnFocus();
 		m_3dFrame->Close( true);
-		m_3dFrame = NULL;
+		m_3dFrame = nullptr;
 
 		if (m_bMultiFrames)
 		{
 			m_2dFrameHD->UnFocus();
 			m_2dFrameHD->Close( true);
-			m_2dFrameHD = NULL;
+			m_2dFrameHD = nullptr;
 
 			m_2dFrameBG->UnFocus();
 			m_2dFrameBG->Close( true);
-			m_2dFrameBG = NULL;
+			m_2dFrameBG = nullptr;
 
 			m_2dFrameBD->UnFocus();
 			m_2dFrameBD->Close( true);
-			m_2dFrameBD = NULL;
+			m_2dFrameBD = nullptr;
 		}
 	}
 
 	DestroyChildren();
-
-	if (m_pCastor3D != NULL)
-	{
-		delete m_pCastor3D;
-	}
-
+	m_castor3D.Clear();
 	Destroy();
 }
 
@@ -559,7 +587,7 @@ void MainFrame :: _onEraseBackground(wxEraseEvent& event)
 
 void MainFrame :: _onKeyDown( wxKeyEvent & event)
 {
-	if (m_selectedFrame != NULL)
+	if (m_selectedFrame)
 	{
 		m_selectedFrame->_onKeyDown( event);
 	}
@@ -567,7 +595,7 @@ void MainFrame :: _onKeyDown( wxKeyEvent & event)
 
 void MainFrame :: _onKeyUp( wxKeyEvent & event)
 {
-	if (m_selectedFrame != NULL)
+	if (m_selectedFrame)
 	{
 		m_selectedFrame->_onKeyUp( event);
 	}
@@ -575,7 +603,7 @@ void MainFrame :: _onKeyUp( wxKeyEvent & event)
 
 void MainFrame :: _onMouseLDown( wxMouseEvent & event)
 {
-	if (m_selectedFrame != NULL)
+	if (m_selectedFrame)
 	{
 		m_selectedFrame->_onMouseLDown( event);
 	}
@@ -583,7 +611,7 @@ void MainFrame :: _onMouseLDown( wxMouseEvent & event)
 
 void MainFrame :: _onMouseLUp( wxMouseEvent & event)
 {
-	if (m_selectedFrame != NULL)
+	if (m_selectedFrame)
 	{
 		m_selectedFrame->_onMouseLUp( event);
 	}
@@ -591,7 +619,7 @@ void MainFrame :: _onMouseLUp( wxMouseEvent & event)
 
 void MainFrame :: _onMouseMDown( wxMouseEvent & event)
 {
-	if (m_selectedFrame != NULL)
+	if (m_selectedFrame)
 	{
 		m_selectedFrame->_onMouseMDown( event);
 	}
@@ -599,7 +627,7 @@ void MainFrame :: _onMouseMDown( wxMouseEvent & event)
 
 void MainFrame :: _onMouseMUp( wxMouseEvent & event)
 {
-	if (m_selectedFrame != NULL)
+	if (m_selectedFrame)
 	{
 		m_selectedFrame->_onMouseMUp( event);
 	}
@@ -607,7 +635,7 @@ void MainFrame :: _onMouseMUp( wxMouseEvent & event)
 
 void MainFrame :: _onMouseRDown( wxMouseEvent & event)
 {
-	if (m_selectedFrame != NULL)
+	if (m_selectedFrame)
 	{
 		m_selectedFrame->_onMouseRDown( event);
 	}
@@ -615,7 +643,7 @@ void MainFrame :: _onMouseRDown( wxMouseEvent & event)
 
 void MainFrame :: _onMouseRUp( wxMouseEvent & event)
 {
-	if (m_selectedFrame != NULL)
+	if (m_selectedFrame)
 	{
 		m_selectedFrame->_onMouseRUp( event);
 	}
@@ -623,7 +651,7 @@ void MainFrame :: _onMouseRUp( wxMouseEvent & event)
 
 void MainFrame :: _onMouseMove( wxMouseEvent & event)
 {
-	if (m_selectedFrame != NULL)
+	if (m_selectedFrame)
 	{
 		m_selectedFrame->_onMouseMove( event);
 	}
@@ -631,7 +659,7 @@ void MainFrame :: _onMouseMove( wxMouseEvent & event)
 
 void MainFrame :: _onMouseWheel( wxMouseEvent & event)
 {
-	if (m_selectedFrame != NULL)
+	if (m_selectedFrame)
 	{
 		m_selectedFrame->_onMouseWheel( event);
 	}
@@ -644,143 +672,119 @@ void MainFrame :: _onMenuClose( wxCommandEvent & event)
 
 void MainFrame :: _onSaveScene( wxCommandEvent & event)
 {
-	wxFileDialog * l_fileDialog = new wxFileDialog( this, CU_T( "Enregistrer une scene"), wxEmptyString, wxEmptyString, CU_T( "Castor Shape files (*.cscn)|*.cscn"));
+	wxFileDialog * l_fileDialog = new wxFileDialog( this, cuT( "Enregistrer une scene"), wxEmptyString, wxEmptyString, cuT( "Castor Shape files (*.cscn)|*.cscn"));
+
 	if (l_fileDialog->ShowModal() == wxID_OK)
 	{
-		File l_file( l_fileDialog->GetPath().c_str(), File::eWrite);
-		Path l_filePath = l_fileDialog->GetPath().c_str();
+		File l_file( (const char *)l_fileDialog->GetPath().c_str(), File::eWrite);
+		Path l_filePath = (const char *)l_fileDialog->GetPath().c_str();
+		Collection<Scene, String> l_scnManager;
 
-		if (m_pCastor3D->GetSceneManager()->GetMaterialManager()->Write( l_file))
+		if (Root::GetSingleton()->WriteMaterials( l_file))
 		{
-			Logger::LogMessage( CU_T( "Materials written"));
+			Logger::LogMessage( cuT( "Materials written"));
 		}
 		else
 		{
-			Logger::LogMessage( CU_T( "Can't write materials"));
+			Logger::LogMessage( cuT( "Can't write materials"));
 			return;
 		}
 
-		if (m_pCastor3D->GetSceneManager()->GetMeshManager()->Save( l_file))
+		if (Root::GetSingleton()->SaveMeshes( l_file))
 		{
-			Logger::LogMessage( CU_T( "Meshes written"));
+			Logger::LogMessage( cuT( "Meshes written"));
 		}
 		else
 		{
-			Logger::LogMessage( CU_T( "Can't write meshes"));
+			Logger::LogMessage( cuT( "Can't write meshes"));
 			return;
 		}
-		if (m_pCastor3D->GetSceneManager()->GetElementByName( CU_T( "MainScene"))->Write( l_file))
+		if (Loader<Scene>::Write( * l_scnManager.GetElement( cuT( "MainScene")), l_file))
 		{
-			Logger::LogMessage( CU_T( "Save Successfull"));
+			Logger::LogMessage( cuT( "Save Successfull"));
 		}
 		else
 		{
-			Logger::LogMessage( CU_T( "Save Failed"));
+			Logger::LogMessage( cuT( "Save Failed"));
 		}
 	}
 }
 
 void MainFrame :: _onLoadScene( wxCommandEvent & event)
 {
-	wxString l_wildcard = CU_T( "Castor Shape files (*.cscn)|*.cscn|3DS files (*.3ds)|*.3ds|ASCII Scene Export files (*.ase)|*.ase|Quake 2 Model files (*.md2)|*.md2|Quake 3 Model files (*.md3)|*.md3|Obj files (*.obj)|*.obj|PLY files (*.ply)|*.ply");
-	wxFileDialog * l_fileDialog = new wxFileDialog( this, CU_T( "Ouvrir une scene"), wxEmptyString, wxEmptyString, l_wildcard);
+	wxString l_wildcard = wxT( "Castor3D scene files (*.cscn)|*.cscn");
+
+	for (PluginStrMap::iterator l_it = m_castor3D.PluginsBegin( ePluginImporter) ; l_it != m_castor3D.PluginsEnd( ePluginImporter) ; ++l_it)
+	{
+		ImporterPluginPtr l_pPlugin = static_pointer_cast< ImporterPlugin >( l_it->second);
+		l_wildcard += wxT( "|") + l_pPlugin->GetExtension().upper_case() + wxT( " files (*.") + l_pPlugin->GetExtension().lower_case() + wxT( ")|*.") + l_pPlugin->GetExtension().lower_case();
+	}
+
+	wxFileDialog * l_fileDialog = new wxFileDialog( this, cuT( "Ouvrir une scene"), wxEmptyString, wxEmptyString, l_wildcard);
 
 	if (l_fileDialog->ShowModal() == wxID_OK)
 	{
 		ImporterPluginPtr l_pPlugin;
 		Importer * l_pImporter;
+		Path l_file = (const char *)l_fileDialog->GetPath().c_str();
+		Collection<Material, String> l_mtlCollection;
+		Collection<Mesh, String> l_mshCollection;
 
-		if (l_fileDialog->GetPath().find( CU_T( ".3ds")) != String::npos || l_fileDialog->GetPath().find( CU_T( ".3DS")) != String::npos)
-		{
-			l_pPlugin = static_pointer_cast<ImporterPlugin, PluginBase>( m_pCastor3D->LoadPlugin( PluginBase::ePluginImporter, "SMaxImporter.dll", ""));
-			l_pImporter = l_pPlugin->CreateImporter( m_pCastor3D->GetSceneManager());
-			m_pCastor3D->GetSceneManager()->GetElementByName( CU_T( "MainScene"))->ImportExternal( l_fileDialog->GetPath().c_str(), l_pImporter);
-		}
-		else if (l_fileDialog->GetPath().find( CU_T( ".ase")) != String::npos || l_fileDialog->GetPath().find( CU_T( ".ASE")) != String::npos)
-		{
-			l_pPlugin = static_pointer_cast<ImporterPlugin, PluginBase>( m_pCastor3D->LoadPlugin( PluginBase::ePluginImporter, "AseImporter.dll", ""));
-			l_pImporter = l_pPlugin->CreateImporter( m_pCastor3D->GetSceneManager());
-			m_pCastor3D->GetSceneManager()->GetElementByName( CU_T( "MainScene"))->ImportExternal( l_fileDialog->GetPath().c_str(), l_pImporter);
-		}
-		else if (l_fileDialog->GetPath().find( CU_T( ".bsp")) != String::npos || l_fileDialog->GetPath().find( CU_T( ".BSP")) != String::npos)
-		{
-			l_pPlugin = static_pointer_cast<ImporterPlugin, PluginBase>( m_pCastor3D->LoadPlugin( PluginBase::ePluginImporter, "BspImporter.dll", ""));
-			l_pImporter = l_pPlugin->CreateImporter( m_pCastor3D->GetSceneManager());
-			m_pCastor3D->GetSceneManager()->GetElementByName( CU_T( "MainScene"))->ImportExternal( l_fileDialog->GetPath().c_str(), l_pImporter);
-		}
-		else if (l_fileDialog->GetPath().find( CU_T( ".ply")) != String::npos || l_fileDialog->GetPath().find( CU_T( ".PLY")) != String::npos)
-		{
-			l_pPlugin = static_pointer_cast<ImporterPlugin, PluginBase>( m_pCastor3D->LoadPlugin( PluginBase::ePluginImporter, "PlyImporter.dll", ""));
-			l_pImporter = l_pPlugin->CreateImporter( m_pCastor3D->GetSceneManager());
-			m_pCastor3D->GetSceneManager()->GetElementByName( CU_T( "MainScene"))->ImportExternal( l_fileDialog->GetPath().c_str(), l_pImporter);
-		}
-		else if (l_fileDialog->GetPath().find( CU_T( ".obj")) != String::npos || l_fileDialog->GetPath().find( CU_T( ".OBJ")) != String::npos)
-		{
-			l_pPlugin = static_pointer_cast<ImporterPlugin, PluginBase>( m_pCastor3D->LoadPlugin( PluginBase::ePluginImporter, "ObjImporter.dll", ""));
-			l_pImporter = l_pPlugin->CreateImporter( m_pCastor3D->GetSceneManager());
-			m_pCastor3D->GetSceneManager()->GetElementByName( CU_T( "MainScene"))->ImportExternal( l_fileDialog->GetPath().c_str(), l_pImporter);
-		}
-		else if (l_fileDialog->GetPath().find( CU_T( ".md2")) != String::npos || l_fileDialog->GetPath().find( CU_T( ".MD2")) != String::npos)
-		{
-			wxFileDialog l_dialog( this, CU_T( "Ouvrir une image"), wxEmptyString, wxEmptyString, CU_T( "Fichiers BMP (*.bmp)|*.bmp|Fichiers GIF (*.gif)|*.gif\
-																										  |Fichiers JPG (*.jpg)|*.jpg|Fichiers PNG (*.png)|*.png\
-																										  |Images (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg"));
-			if (l_dialog.ShowModal() == wxID_OK)
-			{
-				l_pPlugin = static_pointer_cast<ImporterPlugin, PluginBase>( m_pCastor3D->LoadPlugin( PluginBase::ePluginImporter, "Md2Importer.dll", ""));
-				l_pImporter = l_pPlugin->CreateImporter( m_pCastor3D->GetSceneManager());
-				m_pCastor3D->GetSceneManager()->GetElementByName( CU_T( "MainScene"))->ImportExternal( l_fileDialog->GetPath().c_str(), l_pImporter);
-			}
-		}
-		else if (l_fileDialog->GetPath().find( CU_T( ".md3")) != String::npos || l_fileDialog->GetPath().find( CU_T( ".MD3")) != String::npos)
-		{
-			l_pPlugin = static_pointer_cast<ImporterPlugin, PluginBase>( m_pCastor3D->LoadPlugin( PluginBase::ePluginImporter, "Md3Importer.dll", ""));
-			l_pImporter = l_pPlugin->CreateImporter( m_pCastor3D->GetSceneManager());
-			m_pCastor3D->GetSceneManager()->GetElementByName( CU_T( "MainScene"))->ImportExternal( l_fileDialog->GetPath().c_str(), l_pImporter);
-		}
-		else
+		if (l_file.GetExtension() == cuT( "CSCN"))
 		{
 			m_mainScene->ClearScene();
-			Logger::LogMessage( CU_T( "Scene cleared"));
-			m_pCastor3D->GetSceneManager()->GetMeshManager()->Clear();
-			Logger::LogMessage( CU_T( "Mesh manager cleared"));
-			m_pCastor3D->GetSceneManager()->GetMaterialManager()->Clear();
-			Logger::LogMessage( CU_T( "Material manager cleared"));
-			Logger::LogMessage( l_fileDialog->GetPath().c_str());
+			Logger::LogMessage( cuT( "Scene cleared"));
+			l_mshCollection.Clear();
+			Logger::LogMessage( cuT( "Mesh manager cleared"));
+			l_mtlCollection.Clear();
+			Logger::LogMessage( cuT( "Material manager cleared"));
+			Logger::LogMessage( (const char *)l_fileDialog->GetPath().c_str());
 
-			Path l_filePath = l_fileDialog->GetPath().c_str();
+			Path l_filePath = (const char *)l_fileDialog->GetPath().c_str();
 
 			Path l_matFilePath = l_filePath;
-			l_matFilePath.replace( CU_T( "cscn"), CU_T( "cmtl"));
+			l_matFilePath.replace( cuT( "cscn"), cuT( "cmtl"));
 			File l_file( l_matFilePath, File::eRead);
 
-			if (m_pCastor3D->GetSceneManager()->GetMaterialManager()->Read( l_file))
+			if (Root::GetSingleton()->ReadMaterials( l_file))
 			{
-				Logger::LogMessage( CU_T( "Materials read"));
+				Logger::LogMessage( cuT( "Materials read"));
 			}
 			else
 			{
-				Logger::LogMessage( CU_T( "Can't read materials"));
+				Logger::LogMessage( cuT( "Can't read materials"));
 				return;
 			}
 
-			SceneFileParser l_parser( m_pCastor3D->GetSceneManager());
+			SceneFileParser l_parser;
 			l_parser.ParseFile( l_filePath.c_str());
 		}
+		else
+		{
+			for (PluginStrMap::iterator l_it = m_castor3D.PluginsBegin( ePluginImporter) ; l_it != m_castor3D.PluginsEnd( ePluginImporter) ; ++l_it)
+			{
+				l_pPlugin = static_pointer_cast<ImporterPlugin, PluginBase>( l_it->second);
+
+				if (l_file.GetExtension().lower_case() == l_pPlugin->GetExtension().lower_case())
+				{
+					l_pImporter = l_pPlugin->CreateImporter();
+					m_mainScene->ImportExternal( l_file, l_pImporter);
+				}
+			}
+		}
 	}
+
 	ShowPanels();
 }
 
 void MainFrame :: _onNewCone( wxCommandEvent & event)
 {
-	NewConeDialog * l_dialog = new NewConeDialog( m_pCastor3D->GetSceneManager()->GetMaterialManager(), this, wxID_ANY);
+	NewConeDialog * l_dialog = new NewConeDialog( this, wxID_ANY);
 	l_dialog->Initialise();
 
 	if (l_dialog->ShowModal() == wxID_OK)
 	{
-		ScenePtr l_mainScene = m_pCastor3D->GetSceneManager()->GetElementByName( CU_T( "MainScene"));
-
-		if (l_mainScene != NULL)
+		if (m_mainScene)
 		{
 			real l_radius = l_dialog->GetConeRadius();
 			real l_height = l_dialog->GetConeHeight();
@@ -789,7 +793,7 @@ void MainFrame :: _onNewCone( wxCommandEvent & event)
 			if (l_radius != 0.0 && l_height != 0.0  && l_nbFaces >= 1)
 			{
 				_createGeometry( eCone, l_dialog->GetGeometryName(), l_dialog->GetFacesNumberStr(),
-								 String( CU_T( "Cone")), l_mainScene, static_cast<NewGeometryDialog *>( l_dialog), (unsigned int)l_nbFaces, (unsigned int)0, l_height, l_radius, real( 0));
+								 String( cuT( "Cone")), m_mainScene, static_cast<NewGeometryDialog *>( l_dialog), (unsigned int)l_nbFaces, (unsigned int)0, l_height, l_radius, real( 0));
 			}
 		}
 
@@ -801,14 +805,12 @@ void MainFrame :: _onNewCone( wxCommandEvent & event)
 
 void MainFrame :: _onNewCube( wxCommandEvent & event)
 {
-	NewCubeDialog * l_dialog = new NewCubeDialog( m_pCastor3D->GetSceneManager()->GetMaterialManager(), this, wxID_ANY);
+	NewCubeDialog * l_dialog = new NewCubeDialog( this, wxID_ANY);
 	l_dialog->Initialise();
 
 	if (l_dialog->ShowModal() == wxID_OK)
 	{
-		ScenePtr l_mainScene = m_pCastor3D->GetSceneManager()->GetElementByName( CU_T( "MainScene"));
-
-		if (l_mainScene != NULL)
+		if (m_mainScene)
 		{
 			real l_width = l_dialog->GetCubeWidth();
 			real l_height = l_dialog->GetCubeHeight();
@@ -816,8 +818,8 @@ void MainFrame :: _onNewCube( wxCommandEvent & event)
 
 			if (l_width != 0.0 && l_height != 0.0 && l_depth != 0.0)
 			{
-				_createGeometry( eCube, l_dialog->GetGeometryName(), C3DEmptyString,
-								 CU_T( "Cube"), l_mainScene, l_dialog, 0, 0, l_width, l_height, l_depth);
+				_createGeometry( eCube, l_dialog->GetGeometryName(), cuEmptyString,
+								 cuT( "Cube"), m_mainScene, l_dialog, 0, 0, l_width, l_height, l_depth);
 			}
 		}
 
@@ -829,14 +831,12 @@ void MainFrame :: _onNewCube( wxCommandEvent & event)
 
 void MainFrame :: _onNewCylinder( wxCommandEvent & event)
 {
-	NewCylinderDialog * l_dialog = new NewCylinderDialog( m_pCastor3D->GetSceneManager()->GetMaterialManager(), this, wxID_ANY);
+	NewCylinderDialog * l_dialog = new NewCylinderDialog( this, wxID_ANY);
 	l_dialog->Initialise();
 
 	if (l_dialog->ShowModal() == wxID_OK)
 	{
-		ScenePtr l_mainScene = m_pCastor3D->GetSceneManager()->GetElementByName( CU_T( "MainScene"));
-
-		if (l_mainScene != NULL)
+		if (m_mainScene)
 		{
 			real l_radius = l_dialog->GetCylinderRadius();
 			real l_height = l_dialog->GetCylinderHeight();
@@ -845,7 +845,7 @@ void MainFrame :: _onNewCylinder( wxCommandEvent & event)
 			if (l_radius != 0.0 && l_height != 0.0 && l_nbFaces >= 1)
 			{
 				_createGeometry( eCylinder, l_dialog->GetGeometryName(), l_dialog->GetFacesNumberStr(),
-								 CU_T( "Cylinder"), l_mainScene, l_dialog, l_nbFaces, 0, l_height, l_radius);
+								 cuT( "Cylinder"), m_mainScene, l_dialog, l_nbFaces, 0, l_height, l_radius);
 			}
 		}
 
@@ -857,14 +857,12 @@ void MainFrame :: _onNewCylinder( wxCommandEvent & event)
 
 void MainFrame :: _onNewIcosaedron( wxCommandEvent & event)
 {
-	NewIcosaedronDialog * l_dialog = new NewIcosaedronDialog( m_pCastor3D->GetSceneManager()->GetMaterialManager(), this, wxID_ANY);
+	NewIcosaedronDialog * l_dialog = new NewIcosaedronDialog( this, wxID_ANY);
 	l_dialog->Initialise();
 
 	if (l_dialog->ShowModal() == wxID_OK)
 	{
-		ScenePtr l_mainScene = m_pCastor3D->GetSceneManager()->GetElementByName( CU_T( "MainScene"));
-
-		if (l_mainScene != NULL)
+		if (m_mainScene)
 		{
 			real l_radius = l_dialog->GetIcosaedronRadius();
 			int l_nbFaces = l_dialog->GetNbSubdiv();
@@ -872,7 +870,7 @@ void MainFrame :: _onNewIcosaedron( wxCommandEvent & event)
 			if (l_radius != 0.0 && l_nbFaces >= 1)
 			{
 				_createGeometry( eIcosaedron, l_dialog->GetGeometryName(), l_dialog->GetNbSubdivStr(),
-								 CU_T( "Icosaedron"), l_mainScene, l_dialog, l_nbFaces, 0, l_radius);
+								 cuT( "Icosaedron"), m_mainScene, l_dialog, l_nbFaces, 0, l_radius);
 			}
 		}
 
@@ -884,14 +882,12 @@ void MainFrame :: _onNewIcosaedron( wxCommandEvent & event)
 
 void MainFrame :: _onNewPlane( wxCommandEvent & event)
 {
-	NewPlaneDialog * l_dialog = new NewPlaneDialog( m_pCastor3D->GetSceneManager()->GetMaterialManager(), this, wxID_ANY);
+	NewPlaneDialog * l_dialog = new NewPlaneDialog( this, wxID_ANY);
 	l_dialog->Initialise();
 
 	if (l_dialog->ShowModal() == wxID_OK)
 	{
-		ScenePtr l_mainScene = m_pCastor3D->GetSceneManager()->GetElementByName( CU_T( "MainScene"));
-
-		if (l_mainScene != NULL)
+		if (m_mainScene)
 		{
 			real l_width = l_dialog->GetGeometryWidth();
 			real l_depth = l_dialog->GetGeometryDepth();
@@ -900,8 +896,8 @@ void MainFrame :: _onNewPlane( wxCommandEvent & event)
 
 			if (l_width != 0.0 && l_depth != 0.0 && l_nbWidthSubdiv >= 0 && l_nbDepthSubdiv >= 0)
 			{
-				_createGeometry( ePlane, l_dialog->GetGeometryName(), l_dialog->GetNbDepthSubdivStr() + CU_T( "x") + l_dialog->GetNbWidthSubdivStr(),
-								 CU_T( "Plane"), l_mainScene, l_dialog, l_nbDepthSubdiv, l_nbWidthSubdiv, l_width, l_depth);
+				_createGeometry( ePlane, l_dialog->GetGeometryName(), l_dialog->GetNbDepthSubdivStr() + cuT( "x") + l_dialog->GetNbWidthSubdivStr(),
+								 cuT( "Plane"), m_mainScene, l_dialog, l_nbDepthSubdiv, l_nbWidthSubdiv, l_width, l_depth);
 			}
 		}
 
@@ -913,14 +909,12 @@ void MainFrame :: _onNewPlane( wxCommandEvent & event)
 
 void MainFrame :: _onNewSphere( wxCommandEvent & event)
 {
-	NewSphereDialog * l_dialog = new NewSphereDialog( m_pCastor3D->GetSceneManager()->GetMaterialManager(), this, wxID_ANY);
+	NewSphereDialog * l_dialog = new NewSphereDialog( this, wxID_ANY);
 	l_dialog->Initialise();
 
 	if (l_dialog->ShowModal() == wxID_OK)
 	{
-		ScenePtr l_mainScene = m_pCastor3D->GetSceneManager()->GetElementByName( CU_T( "MainScene"));
-
-		if (l_mainScene != NULL)
+		if (m_mainScene)
 		{
 			real l_radius = l_dialog->GetSphereRadius();
 			int l_nbFaces = l_dialog->GetFacesNumber();
@@ -928,7 +922,7 @@ void MainFrame :: _onNewSphere( wxCommandEvent & event)
 			if (l_radius != 0.0 && l_nbFaces >= 3)
 			{
 				_createGeometry( eSphere, l_dialog->GetGeometryName(), l_dialog->GetFacesNumberStr(),
-								 CU_T( "Sphere"), l_mainScene, l_dialog, l_nbFaces, 0, l_radius);
+								 cuT( "Sphere"), m_mainScene, l_dialog, l_nbFaces, 0, l_radius);
 			}
 		}
 
@@ -940,14 +934,12 @@ void MainFrame :: _onNewSphere( wxCommandEvent & event)
 
 void MainFrame :: _onNewTorus( wxCommandEvent & event)
 {
-	NewTorusDialog * l_dialog = new NewTorusDialog( m_pCastor3D->GetSceneManager()->GetMaterialManager(), this, wxID_ANY);
+	NewTorusDialog * l_dialog = new NewTorusDialog( this, wxID_ANY);
 	l_dialog->Initialise();
 
 	if (l_dialog->ShowModal() == wxID_OK)
 	{
-		ScenePtr l_mainScene = m_pCastor3D->GetSceneManager()->GetElementByName( CU_T( "MainScene"));
-
-		if (l_mainScene != NULL)
+		if (m_mainScene)
 		{
 			real l_width = l_dialog->GetInternalRadius();
 			real l_radius = l_dialog->GetExternalRadius();
@@ -956,8 +948,8 @@ void MainFrame :: _onNewTorus( wxCommandEvent & event)
 
 			if (l_width != 0.0 && l_radius != 0.0 && l_nbRadiusSubdiv >= 1 && l_nbWidthSubdiv >= 1)
 			{
-				_createGeometry( eTorus, l_dialog->GetGeometryName(), l_dialog->GetExternalNbFacesStr() + CU_T( "x") + l_dialog->GetInternalNbFacesStr(),
-								 CU_T( "Torus"), l_mainScene, l_dialog, l_nbWidthSubdiv, l_nbRadiusSubdiv, l_width, l_radius);
+				_createGeometry( eTorus, l_dialog->GetGeometryName(), l_dialog->GetExternalNbFacesStr() + cuT( "x") + l_dialog->GetInternalNbFacesStr(),
+								 cuT( "Torus"), m_mainScene, l_dialog, l_nbWidthSubdiv, l_nbRadiusSubdiv, l_width, l_radius);
 			}
 		}
 
@@ -969,14 +961,12 @@ void MainFrame :: _onNewTorus( wxCommandEvent & event)
 
 void MainFrame :: _onNewProjection( wxCommandEvent & event)
 {
-	NewSphereDialog * l_dialog = new NewSphereDialog( m_pCastor3D->GetSceneManager()->GetMaterialManager(), this, wxID_ANY);
+	NewSphereDialog * l_dialog = new NewSphereDialog( this, wxID_ANY);
 	l_dialog->Initialise();
 
 	if (l_dialog->ShowModal() == wxID_OK)
 	{
-		ScenePtr l_mainScene = m_pCastor3D->GetSceneManager()->GetElementByName( CU_T( "MainScene"));
-
-		if (l_mainScene != NULL)
+		if (m_mainScene)
 		{
 			real l_fDepth = l_dialog->GetSphereRadius();
 			int l_nbFaces = l_dialog->GetFacesNumber();
@@ -984,7 +974,7 @@ void MainFrame :: _onNewProjection( wxCommandEvent & event)
 			if (l_fDepth != 0.0 && l_nbFaces >= 1)
 			{
 				_createGeometry( eProjection, l_dialog->GetGeometryName(), l_dialog->GetFacesNumberStr(),
-								 CU_T( "Projection"), l_mainScene, l_dialog, l_nbFaces, 0, l_fDepth, 0.0);
+								 cuT( "Projection"), m_mainScene, l_dialog, l_nbFaces, 0, l_fDepth, 0.0);
 			}
 		}
 
@@ -996,11 +986,11 @@ void MainFrame :: _onNewProjection( wxCommandEvent & event)
 
 void MainFrame :: _onNewMaterial( wxCommandEvent & event)
 {
-	NewMaterialDialog * l_dialog = new NewMaterialDialog( m_pCastor3D->GetSceneManager()->GetMaterialManager(), this, wxID_ANY);
+	NewMaterialDialog * l_dialog = new NewMaterialDialog( this, wxID_ANY);
 
 	if (l_dialog->ShowModal() == wxID_OK)
 	{
-		Logger::LogMessage( CU_T( "Material Created"));
+		Logger::LogMessage( cuT( "Material Created"));
 	}
 
 	l_dialog->Destroy();
@@ -1008,18 +998,13 @@ void MainFrame :: _onNewMaterial( wxCommandEvent & event)
 
 void MainFrame :: _onShowGeometriesList( wxCommandEvent & event)
 {
-	ScenePtr l_scene = m_pCastor3D->GetSceneManager()->GetElementByName( CU_T( "MainScene"));
-	GeometriesListFrame * l_listFrame = new GeometriesListFrame( m_pCastor3D->GetSceneManager()->GetMaterialManager(), this,
-																	 CU_T( "Geometries"),
-																	 l_scene,
-																	 wxDefaultPosition,
-																	 wxSize( 200, 300));
+	wxGeometriesListFrame * l_listFrame = new wxGeometriesListFrame( this, cuT( "Geometries"), m_mainScene, wxDefaultPosition, wxSize( 200, 300));
 	l_listFrame->Show();
 }
 
 void MainFrame :: _onShowMaterialsList( wxCommandEvent & event)
 {
-	CastorShape::MaterialsFrame * l_listFrame = new CastorShape::MaterialsFrame( m_pCastor3D->GetSceneManager()->GetMaterialManager(), this, CU_T( "Materiaux"), wxDefaultPosition);
+	CastorShape::wxMaterialsFrame * l_listFrame = new CastorShape::wxMaterialsFrame( this, cuT( "Materiaux"), wxDefaultPosition);
 	l_listFrame->Show();
 }
 
@@ -1109,7 +1094,7 @@ void MainFrame :: _onNothing( wxCommandEvent & event)
 
 void MainFrame :: _onSubdivideAllPNTriangles( wxCommandEvent & event)
 {
-	if (m_selectedGeometry != NULL)
+	if (m_selectedGeometry)
 	{
 		size_t l_nbSubmeshes = m_selectedGeometry->GetMesh()->GetNbSubmeshes();
 
@@ -1117,9 +1102,8 @@ void MainFrame :: _onSubdivideAllPNTriangles( wxCommandEvent & event)
 		{
 			SubdividerPtr l_pDivider( new PnTrianglesDivider( m_selectedGeometry->GetMesh()->GetSubmesh( i).get()));
 			m_arraySubdividers.push_back( l_pDivider);
-			m_selectedGeometry->Subdivide( i, l_pDivider, true);
 			l_pDivider->SetThreadEndFunction( & _endSubdivision, this);
-			l_pDivider->StartThread();
+			m_selectedGeometry->Subdivide( i, l_pDivider, true);
 		}
 
 		m_pSettingsMenu->FindItem( eSubdividePNTriangles)->Enable( false);
@@ -1129,18 +1113,17 @@ void MainFrame :: _onSubdivideAllPNTriangles( wxCommandEvent & event)
 
 void MainFrame :: _onSubdivideAllLoop( wxCommandEvent & event)
 {
-	if (m_selectedGeometry != NULL)
+	if (m_selectedGeometry)
 	{
 		size_t l_nbSubmeshes = m_selectedGeometry->GetMesh()->GetNbSubmeshes();
-		DividerPluginPtr l_pPlugin = static_pointer_cast<DividerPlugin, PluginBase>( m_pCastor3D->LoadPlugin( PluginBase::ePluginDivider, "LoopDivider.dll", ""));
+		DividerPluginPtr l_pPlugin = static_pointer_cast<DividerPlugin, PluginBase>( m_castor3D.LoadPlugin( "LoopDivider.dll", ""));
 
 		for (size_t i = 0 ; i < l_nbSubmeshes ; i++)
 		{
 			SubdividerPtr l_pDivider( l_pPlugin->CreateDivider( m_selectedGeometry->GetMesh()->GetSubmesh( i).get()));
 			m_arraySubdividers.push_back( l_pDivider);
-			m_selectedGeometry->Subdivide( i, l_pDivider, true);
 			l_pDivider->SetThreadEndFunction( & _endSubdivision, this);
-			l_pDivider->StartThread();
+			m_selectedGeometry->Subdivide( i, l_pDivider, true);
 		}
 
 		m_pSettingsMenu->FindItem( eSubdividePNTriangles)->Enable( false);
@@ -1177,7 +1160,7 @@ void MainFrame :: _endSubdivision( void * p_pThis, Subdivider * p_pDivider)
 
 void MainFrame :: _onRender( wxCommandEvent & event)
 {
-	RenderEngine renderEngine( CU_T( "Scene.tga"), m_pCastor3D->GetSceneManager()->GetElementByName( CU_T( "MainScene")));
+	RenderEngine renderEngine( cuT( "Scene.tga"), m_mainScene);
 	renderEngine.Draw();
 }
 
@@ -1186,7 +1169,7 @@ void MainFrame :: _onFileMenu( wxCommandEvent & p_event)
 	wxToolBar * l_pToolbar = GetToolBar();
 	wxToolBarToolBase * l_pTool = l_pToolbar->FindById( eFile);
 
-	if (l_pTool != NULL)
+	if (l_pTool)
 	{
 		wxPoint l_ptMouse = wxGetMousePosition();
 		l_ptMouse = ScreenToClient( l_ptMouse);
@@ -1206,7 +1189,7 @@ void MainFrame :: _onNewMenu( wxCommandEvent & p_event)
 	wxToolBar * l_pToolbar = GetToolBar();
 	wxToolBarToolBase * l_pTool = l_pToolbar->FindById( eNew);
 
-	if (l_pTool != NULL)
+	if (l_pTool)
 	{
 		wxPoint l_ptMouse = wxGetMousePosition();
 		l_ptMouse = ScreenToClient( l_ptMouse);
@@ -1226,7 +1209,7 @@ void MainFrame :: _onSettingsMenu( wxCommandEvent & p_event)
 	wxToolBar * l_pToolbar = GetToolBar();
 	wxToolBarToolBase * l_pTool = l_pToolbar->FindById( eSettings);
 
-	if (l_pTool != NULL)
+	if (l_pTool)
 	{
 		wxPoint l_ptMouse = wxGetMousePosition();
 		l_ptMouse = ScreenToClient( l_ptMouse);

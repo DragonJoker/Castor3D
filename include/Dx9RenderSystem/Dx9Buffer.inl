@@ -1,24 +1,27 @@
 //*************************************************************************************************
 
 template <typename T, class D3dBufferObject>
-Dx9VertexBufferObject<T, D3dBufferObject> :: Dx9VertexBufferObject( unsigned int & p_uiFilled, T *& p_pBuffer, const BufferDeclaration & p_declaration)
+Dx9BufferObject<T, D3dBufferObject> :: Dx9BufferObject( unsigned int & p_uiFilled, T *& p_pBuffer)
 	:	m_uiIndex( BuffersCount)
 	,	m_uiFilled( p_uiFilled)
 	,	m_pBuffer( p_pBuffer)
 	,	m_pBufferObject( NULL)
-	,	m_declaration( p_declaration)
 {
 }
 
 template <typename T, class D3dBufferObject>
-Dx9VertexBufferObject<T, D3dBufferObject> :: ~Dx9VertexBufferObject()
+Dx9BufferObject<T, D3dBufferObject> :: ~Dx9BufferObject()
 {
-	CleanupBufferObject();
 }
 
 template <typename T, class D3dBufferObject>
-void Dx9VertexBufferObject<T, D3dBufferObject> :: CleanupBufferObject()
+void Dx9BufferObject<T, D3dBufferObject> :: BufferCleanup( bool p_bAssigned, Buffer3D<T> * p_pBuffer)
 {
+	if (p_bAssigned)
+	{
+		Root::GetSingleton()->GetBufferManager()->UnassignBuffer<T>( m_uiIndex, p_pBuffer);
+	}
+
 	if (m_pBufferObject != NULL)
 	{
 		m_pBufferObject->Release();
@@ -27,15 +30,17 @@ void Dx9VertexBufferObject<T, D3dBufferObject> :: CleanupBufferObject()
 }
 
 template <typename T, class D3dBufferObject>
-void Dx9VertexBufferObject<T, D3dBufferObject> :: InitialiseBufferObject()
+void * Dx9BufferObject<T, D3dBufferObject> :: BufferLock( size_t p_uiOffset, size_t p_uiSize, size_t p_uiFlags)
 {
-	CASTOR_ASSERT( FALSE);
+	void * l_pData = NULL;
+	CheckDxError( m_pBufferObject->Lock( p_uiOffset, p_uiSize, & l_pData, D3dEnum::GetLockFlags( p_uiFlags)), "Dx9BufferObject :: Lock", false);
+	return l_pData;
 }
 
 template <typename T, class D3dBufferObject>
-void Dx9VertexBufferObject<T, D3dBufferObject> :: ActivateBufferObject()
+void Dx9BufferObject<T, D3dBufferObject> :: BufferUnlock()
 {
-	CASTOR_ASSERT( FALSE);
+	CheckDxError( m_pBufferObject->Unlock(), "Dx9BufferObject :: Unlock", false);
 }
 
 //*************************************************************************************************

@@ -1,13 +1,16 @@
-#include "Dx9RenderSystem/PrecompiledHeader.h"
+#include "Dx9RenderSystem/PrecompiledHeader.hpp"
 
-#include "Dx9RenderSystem/Dx9LightRenderer.h"
-#include "Dx9RenderSystem/Dx9RenderSystem.h"
+#include "Dx9RenderSystem/Dx9LightRenderer.hpp"
+#include "Dx9RenderSystem/Dx9RenderSystem.hpp"
 
 using namespace Castor3D;
 
-Dx9LightRenderer :: Dx9LightRenderer( SceneManager * p_pSceneManager)
-	:	LightRenderer( p_pSceneManager)
-	,	m_iIndex( GL_INVALID_INDEX)
+Dx9LightRenderer :: Dx9LightRenderer()
+	:	LightRenderer()
+	,	m_bChanged( true)
+	,	m_iIndex( -1)
+	,	m_iD3dIndex( -1)
+	,	m_iD3dPreviousIndex( -1)
 {
 	m_pfnEnableFunction			= & Dx9LightRenderer::_enable;
 	m_pfnDisableFunction		= & Dx9LightRenderer::_disable;
@@ -144,39 +147,69 @@ void Dx9LightRenderer :: ApplyCutOff( float p_fCutOff)
 
 void Dx9LightRenderer :: _enable()
 {
-	CheckDxError( Dx9RenderSystem::GetDevice()->SetLight( m_iIndex, & m_dx9Light), CU_T( "Dx9LightRenderer :: _enable - SetLight"), false);
-	CheckDxError( Dx9RenderSystem::GetDevice()->LightEnable( m_iIndex, TRUE), CU_T( "Dx9LightRenderer :: _enable - LightEnable"), false);
+	CheckDxError( Dx9RenderSystem::GetDevice()->SetLight( m_iIndex, & m_dx9Light), cuT( "Dx9LightRenderer :: _enable - SetLight"), false);
+	CheckDxError( Dx9RenderSystem::GetDevice()->LightEnable( m_iIndex, TRUE), cuT( "Dx9LightRenderer :: _enable - LightEnable"), false);
+	Dx9ShaderProgram * l_pProgram = Dx9RenderSystem::GetSingletonPtr()->GetCurrentShaderProgram();
+
+	if (l_pProgram)
+	{
+		m_iD3dIndex = l_pProgram->AssignLight();
+
+		if (m_iD3dIndex != -1 && (m_bChanged || m_iD3dIndex != m_iD3dPreviousIndex))
+		{
+			l_pProgram->SetLightAmbient( m_iD3dIndex, m_pAmbient);
+			l_pProgram->SetLightDiffuse( m_iD3dIndex, m_pDiffuse);
+			l_pProgram->SetLightSpecular( m_iD3dIndex, m_pSpecular);
+			l_pProgram->SetLightPosition( m_iD3dIndex, m_pPosition);
+			l_pProgram->SetLightOrientation( m_iD3dIndex, m_pOrientation);
+			l_pProgram->SetLightAttenuation( m_iD3dIndex, m_pAttenuation);
+			l_pProgram->SetLightExponent( m_iD3dIndex, m_pExponent);
+			l_pProgram->SetLightCutOff( m_iD3dIndex, m_pCutOff);
+			m_iD3dPreviousIndex = m_iD3dIndex;
+		}
+	}
 }
 
 void Dx9LightRenderer :: _disable()
 {
-	CheckDxError( Dx9RenderSystem::GetDevice()->SetLight( m_iIndex, & m_dx9Light), CU_T( "Dx9LightRenderer :: _disable - SetLight"), false);
-	CheckDxError( Dx9RenderSystem::GetDevice()->LightEnable( m_iIndex, FALSE), CU_T( "Dx9LightRenderer :: _disable - LightEnable"), false);
+	CheckDxError( Dx9RenderSystem::GetDevice()->SetLight( m_iIndex, & m_dx9Light), cuT( "Dx9LightRenderer :: _disable - SetLight"), false);
+	CheckDxError( Dx9RenderSystem::GetDevice()->LightEnable( m_iIndex, FALSE), cuT( "Dx9LightRenderer :: _disable - LightEnable"), false);
 	m_iIndex = -1;
+
+	Dx9ShaderProgram * l_pProgram = Dx9RenderSystem::GetSingletonPtr()->GetCurrentShaderProgram();
+
+	if (m_iD3dIndex != -1 && l_pProgram)
+	{
+		l_pProgram->FreeLight( m_iD3dIndex);
+	}
 }
 
-void Dx9LightRenderer :: _applyAmbient( const Colour & p_ambient)
+void Dx9LightRenderer :: _applyAmbient( Colour const & p_ambient)
 {
+	m_pAmbient = p_ambient;
 	memcpy( & m_dx9Light.Ambient, p_ambient.const_ptr(), 4 * sizeof( float));
 }
 
-void Dx9LightRenderer :: _applyDiffuse( const Colour & p_diffuse)
+void Dx9LightRenderer :: _applyDiffuse( Colour const & p_diffuse)
 {
+	m_pDiffuse = p_diffuse;
 	memcpy( & m_dx9Light.Diffuse, p_diffuse.const_ptr(), 4 * sizeof( float));
 }
 
-void Dx9LightRenderer :: _applySpecular( const Colour & p_specular)
+void Dx9LightRenderer :: _applySpecular( Colour const & p_specular)
 {
+	m_pSpecular = p_specular;
 	memcpy( & m_dx9Light.Specular, p_specular.const_ptr(), 4 * sizeof( float));
 }
 
 void Dx9LightRenderer :: _applyPosition( const Point4f & p_position)
 {
+	m_pPosition = p_position;
 	m_dx9Light.Type = D3dEnum::Get( m_target->GetLightType());
 
-	if (m_target->GetLightType() == Light::eDirectional)
+	if (m_target->GetLightType() == eLIGHT_TYPE_DIRECTIONAL)
 	{
-		memcpy( & m_dx9Light.Direction, p_position.GetNormalised().const_ptr(), 3 * sizeof( float));
+		memcpy( & m_dx9Light.Direction, p_position.get_normalised().const_ptr(), 3 * sizeof( float));
 	}
 	else
 	{
@@ -184,8 +217,9 @@ void Dx9LightRenderer :: _applyPosition( const Point4f & p_position)
 	}
 }
 
-void Dx9LightRenderer :: _applyOrientation( const Matrix4x4r & p_orientation)
+void Dx9LightRenderer :: _applyOrientation( Matrix4x4r const & p_orientation)
 {
+	m_pOrientation = p_orientation;
 	Point3r l_ptDirection;
 	MtxUtils::mult( p_orientation, l_ptDirection);
 	memcpy( & m_dx9Light.Direction, l_ptDirection.const_ptr(), 3 * sizeof( float));
@@ -193,25 +227,30 @@ void Dx9LightRenderer :: _applyOrientation( const Matrix4x4r & p_orientation)
 
 void Dx9LightRenderer :: _applyConstantAtt( float p_constant)
 {
+	m_pAttenuation[0] = p_constant;
 	m_dx9Light.Attenuation0 = p_constant;
 }
 
 void Dx9LightRenderer :: _applyLinearAtt( float p_linear)
 {
+	m_pAttenuation[1] = p_linear;
 	m_dx9Light.Attenuation1 = p_linear;
 }
 
 void Dx9LightRenderer :: _applyQuadraticAtt( float p_quadratic)
 {
+	m_pAttenuation[2] = p_quadratic;
 	m_dx9Light.Attenuation2 = p_quadratic;
 }
 
 void Dx9LightRenderer :: _applyExponent( float p_exponent)
 {
+	m_pExponent = p_exponent;
 	m_dx9Light.Falloff = p_exponent;
 }
 
 void Dx9LightRenderer :: _applyCutOff( float p_cutOff)
 {
+	m_pCutOff = p_cutOff;
 	m_dx9Light.Theta = p_cutOff;
 }

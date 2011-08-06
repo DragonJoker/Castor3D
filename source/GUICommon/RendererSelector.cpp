@@ -1,94 +1,80 @@
-#include "GuiCommon/PrecompiledHeader.h"
+#include "GuiCommon/PrecompiledHeader.hpp"
 
-#include "GuiCommon/RendererSelector.h"
-#include "GuiCommon/ImagesLoader.h"
+#include "GuiCommon/RendererSelector.hpp"
+#include "GuiCommon/ImagesLoader.hpp"
 
 using namespace GuiCommon;
 using namespace Castor3D;
 
-RendererSelector :: RendererSelector( wxWindow * p_pParent, const wxString & p_strTitle)
-	:	wxDialog( p_pParent, wxID_ANY, p_strTitle + wxT( " - Select renderer"), wxDefaultPosition, wxSize( 500, 500))
+wxRendererSelector :: wxRendererSelector( wxWindow * p_pParent, const wxString & p_strTitle)
+	:	wxDialog( p_pParent, wxID_ANY, p_strTitle + wxT( " - Select renderer"), wxDefaultPosition, wxSize( 500, 500), wxDEFAULT_DIALOG_STYLE)
 	,	m_pBmpCastor( ImagesLoader::GetBitmap( CV_IMG_CASTOR))
 {
-	wxArrayString l_arrayStrings;
-#ifdef _WIN32
-	l_arrayStrings.push_back( wxT( "Direct3D 9 Renderer"));
-#endif
-	l_arrayStrings.push_back( wxT( "OpenGL 3.x Compatible Renderer"));
-	l_arrayStrings.push_back( wxT( "OpenGL 2.x Compatible Renderer"));
-
 	wxSize l_size = GetClientSize();
-	m_pPanel = new wxPanel( this, wxID_ANY, wxPoint( 0, 0), l_size);
-	m_pPanel->SetBackgroundColour( wxColour( 128, 128, 128));
-	wxStaticText * l_pTitle = new wxStaticText( m_pPanel, wxID_ANY, p_strTitle, wxPoint( 180, 0), wxDefaultSize, wxALIGN_CENTRE);
-	wxFont l_font( 30, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, "Arial");
+	SetBackgroundColour( wxColour( 128, 128, 128));
+	wxStaticText * l_pTitle = new wxStaticText( this, wxID_ANY, p_strTitle, wxPoint( 180, 0), wxDefaultSize, wxALIGN_CENTRE);
+	wxFont l_font( 30, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT( "Arial"));
 	l_pTitle->SetFont( l_font);
-	wxStaticText * l_pStatic = new wxStaticText( m_pPanel, wxID_ANY, wxT( "Select your renderer in the list below"), wxPoint( 180, 70));
-	m_pListRenderers = new wxListBox( m_pPanel, eList, wxPoint( 10, 160), wxSize( l_size.x - 20, l_size.y - 210), l_arrayStrings);
-	m_pBtnOk = new wxButton( m_pPanel, eOk, wxT( "OK"), wxPoint( 10, 435), wxSize( 100, 30));
-	m_pBtnCancel = new wxButton( m_pPanel, eCancel, wxT( "Cancel"), wxPoint( l_size.x - 110, 435), wxSize( 100, 30));
-	m_pListRenderers->Select( 0);
-	wxClientDC l_clientDC( m_pPanel);
+	wxStaticText * l_pStatic = new wxStaticText( this, wxID_ANY, wxT( "Select your renderer in the list below"), wxPoint( 180, 70));
+	m_pListRenderers = new wxListBox( this, eID_LIST_RENDERERS, wxPoint( 10, 160), wxSize( l_size.x - 20, 240));
+	m_pBtnOk = new wxButton( this, eID_BUTTON_OK, wxT( "OK"), wxPoint( 10, l_size.y - 40), wxSize( 100, 30));
+	m_pBtnCancel = new wxButton( this, eID_BUTTON_CANCEL, wxT( "Cancel"), wxPoint( l_size.x - 110, l_size.y - 40), wxSize( 100, 30));
+	int l_iCount = 0;
+
+	for (Root::RendererPtrArray::iterator l_it = Root::GetSingleton()->RenderersBegin() ; l_it != Root::GetSingleton()->RenderersEnd() ; ++l_it)
+	{
+		if ( * l_it)
+		{
+			m_pListRenderers->Insert( ( * l_it)->GetName(), l_iCount++, ( * l_it).get());
+		}
+	}
+
+	if (m_pListRenderers->GetCount() > 0)
+	{
+		m_pListRenderers->Select( 0);
+	}
+
+	wxClientDC l_clientDC( this);
 	_draw( & l_clientDC);
 }
 
-RendererSelector :: ~RendererSelector()
+wxRendererSelector :: ~wxRendererSelector()
 {
 }
 
-void RendererSelector :: _draw( wxDC * p_pDC)
+void wxRendererSelector :: _draw( wxDC * p_pDC)
 {
 	p_pDC->DrawBitmap( * m_pBmpCastor, wxPoint( 0, 0), true);
 }
 
-BEGIN_EVENT_TABLE( RendererSelector, wxDialog)
-	EVT_PAINT(				RendererSelector::_onPaint)
-	EVT_BUTTON( eOk,		RendererSelector::_onButtonOk)
-	EVT_BUTTON( eCancel,	RendererSelector::_onButtonCancel)
+BEGIN_EVENT_TABLE( wxRendererSelector, wxDialog)
+	EVT_PAINT(								wxRendererSelector::_onPaint)
+	EVT_BUTTON(			eID_BUTTON_OK,		wxRendererSelector::_onButtonOk)
+	EVT_BUTTON(			eID_BUTTON_CANCEL,	wxRendererSelector::_onButtonCancel)
+	EVT_LISTBOX_DCLICK( eID_LIST_RENDERERS,	wxRendererSelector::_onButtonOk)
 END_EVENT_TABLE()
 
-void RendererSelector :: _onPaint( wxPaintEvent & p_event)
+void wxRendererSelector :: _onPaint( wxPaintEvent & p_event)
 {
 	wxPaintDC l_paintDC( this);
-	wxClientDC l_clientDC( m_pPanel);
-	_draw( & l_clientDC);
+	_draw( & l_paintDC);
 	p_event.Skip();
 }
 
-void RendererSelector :: _onButtonOk( wxCommandEvent & p_event)
+void wxRendererSelector :: _onButtonOk( wxCommandEvent & p_event)
 {
-	int l_iReturn = m_pListRenderers->GetSelection();
-
-#ifdef _WIN32
-	switch (l_iReturn)
+	if (m_pListRenderers->GetCount() > 0)
 	{
-	case 0:
-		EndModal( RendererDriver::eDirect3D9);
-		break;
-
-	case 1:
-		EndModal( RendererDriver::eOpenGl3);
-		break;
-
-	case 2:
-		EndModal( RendererDriver::eOpenGl2);
-		break;
+		unsigned int l_uiReturn = m_pListRenderers->GetSelection();
+		EndModal( static_cast<RendererPlugin *>( m_pListRenderers->GetClientData( l_uiReturn))->GetRendererType());
 	}
-#else
-	switch (l_iReturn)
+	else
 	{
-	case 0:
-		EndModal( RendererDriver::eOpenGl3);
-		break;
-
-	case 1:
-		EndModal( RendererDriver::eOpenGl2);
-		break;
+		EndModal( wxID_CANCEL);
 	}
-#endif
 }
 
-void RendererSelector :: _onButtonCancel( wxCommandEvent & p_event)
+void wxRendererSelector :: _onButtonCancel( wxCommandEvent & p_event)
 {
 	EndModal( wxID_CANCEL);
 }

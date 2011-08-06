@@ -1,145 +1,24 @@
-#include "Dx9RenderSystem/PrecompiledHeader.h"
+#include "Dx9RenderSystem/PrecompiledHeader.hpp"
 
-#include "Dx9RenderSystem/Dx9ShaderProgram.h"
-#include "Dx9RenderSystem/Dx9ShaderObject.h"
-#include "Dx9RenderSystem/Dx9FrameVariable.h"
-#include "Dx9RenderSystem/Dx9RenderSystem.h"
+#include "Dx9RenderSystem/Dx9ShaderProgram.hpp"
+#include "Dx9RenderSystem/Dx9ShaderObject.hpp"
+#include "Dx9RenderSystem/Dx9FrameVariable.hpp"
+#include "Dx9RenderSystem/Dx9RenderSystem.hpp"
 
 using namespace Castor3D;
 
 Dx9ShaderProgram :: Dx9ShaderProgram()
 	:	HlslShaderProgram()
 {
-	m_setFreeLights.insert( std::set<int>::value_type( 0));
-	m_setFreeLights.insert( std::set<int>::value_type( 1));
-	m_setFreeLights.insert( std::set<int>::value_type( 2));
-	m_setFreeLights.insert( std::set<int>::value_type( 3));
-	m_setFreeLights.insert( std::set<int>::value_type( 4));
-	m_setFreeLights.insert( std::set<int>::value_type( 5));
-	m_setFreeLights.insert( std::set<int>::value_type( 6));
-	m_setFreeLights.insert( std::set<int>::value_type( 7));
 }
 
-Dx9ShaderProgram :: Dx9ShaderProgram( const String & p_vertexShaderFile, const String & p_fragmentShaderFile, const String & p_geometryShaderFile)
-	:	HlslShaderProgram( p_vertexShaderFile, p_fragmentShaderFile, p_geometryShaderFile)
+Dx9ShaderProgram :: Dx9ShaderProgram( const StringArray & p_shaderFiles)
+	:	HlslShaderProgram( p_shaderFiles)
 {
-	m_setFreeLights.insert( std::set<int>::value_type( 0));
-	m_setFreeLights.insert( std::set<int>::value_type( 1));
-	m_setFreeLights.insert( std::set<int>::value_type( 2));
-	m_setFreeLights.insert( std::set<int>::value_type( 3));
-	m_setFreeLights.insert( std::set<int>::value_type( 4));
-	m_setFreeLights.insert( std::set<int>::value_type( 5));
-	m_setFreeLights.insert( std::set<int>::value_type( 6));
-	m_setFreeLights.insert( std::set<int>::value_type( 7));
 }
 
 Dx9ShaderProgram :: ~Dx9ShaderProgram()
 {
-	Cleanup();
-}
-
-void Dx9ShaderProgram :: Cleanup()
-{
-	HlslShaderProgram::Cleanup();
-}
-
-void Dx9ShaderProgram :: Initialise()
-{
-	if ( ! m_isLinked)
-	{
-		HlslShaderProgram::Initialise();
-	}
-}
-
-bool Dx9ShaderProgram :: Link()
-{
-	bool l_bReturn = false;
-
-	if (RenderSystem::UseShaders() && ! m_bError)
-	{
-		m_isLinked = true;
-		l_bReturn = m_isLinked;
-	}
-
-	if (l_bReturn)
-	{
-		shared_ptr< OneFrameVariable<float> > l_fUniform;
-		shared_ptr< PointFrameVariable<float, 4> > l_pt4Uniform;
-		shared_ptr< PointFrameVariable<float, 3> > l_pt3Uniform;
-		shared_ptr< MatrixFrameVariable<float, 4, 4> > l_mtxUniform;
-
-		l_pt4Uniform = shared_ptr< PointFrameVariable<float, 4> >( new PointFrameVariable<float, 4>( 1));
-		l_pt4Uniform->SetName( CU_T( "in_AmbientLight"));
-		AddFrameVariable( l_pt4Uniform, m_pShaders[eVertexShader]);
-		m_pAmbientLight = static_pointer_cast< Dx9PointFrameVariable<float, 4> >( static_pointer_cast<Dx9ShaderObject>( m_pShaders[eVertexShader])->GetD3dFrameVariable( CU_T( "in_AmbientLight")));
-
-		l_pt4Uniform = shared_ptr< PointFrameVariable<float, 4> >( new PointFrameVariable<float, 4>( 8));
-		l_pt4Uniform->SetName( CU_T( "in_LightsAmbient"));
-		AddFrameVariable( l_pt4Uniform, m_pShaders[eVertexShader]);
-		m_pAmbients = static_pointer_cast< Dx9PointFrameVariable<float, 4> >( static_pointer_cast<Dx9ShaderObject>( m_pShaders[eVertexShader])->GetD3dFrameVariable( CU_T( "in_LightsAmbient")));
-
-		l_pt4Uniform = shared_ptr< PointFrameVariable<float, 4> >( new PointFrameVariable<float, 4>( 8));
-		l_pt4Uniform->SetName( CU_T( "in_LightsDiffuse"));
-		AddFrameVariable( l_pt4Uniform, m_pShaders[eVertexShader]);
-		m_pDiffuses = static_pointer_cast< Dx9PointFrameVariable<float, 4> >( static_pointer_cast<Dx9ShaderObject>( m_pShaders[eVertexShader])->GetD3dFrameVariable( CU_T( "in_LightsDiffuse")));
-
-		l_pt4Uniform = shared_ptr< PointFrameVariable<float, 4> >( new PointFrameVariable<float, 4>( 8));
-		l_pt4Uniform->SetName( CU_T( "in_LightsSpecular"));
-		AddFrameVariable( l_pt4Uniform, m_pShaders[eVertexShader]);
-		m_pSpeculars = static_pointer_cast< Dx9PointFrameVariable<float, 4> >( static_pointer_cast<Dx9ShaderObject>( m_pShaders[eVertexShader])->GetD3dFrameVariable( CU_T( "in_LightsSpecular")));
-
-		l_pt4Uniform = shared_ptr< PointFrameVariable<float, 4> >( new PointFrameVariable<float, 4>( 8));
-		l_pt4Uniform->SetName( CU_T( "in_LightsPosition"));
-		AddFrameVariable( l_pt4Uniform, m_pShaders[eVertexShader]);
-		m_pPositions = static_pointer_cast< Dx9PointFrameVariable<float, 4> >( static_pointer_cast<Dx9ShaderObject>( m_pShaders[eVertexShader])->GetD3dFrameVariable( CU_T( "in_LightsPosition")));
-
-		l_mtxUniform = shared_ptr< MatrixFrameVariable<float, 4, 4> >( new MatrixFrameVariable<float, 4, 4>( 8));
-		l_mtxUniform->SetName( CU_T( "in_LightsOrientation"));
-		AddFrameVariable( l_mtxUniform, m_pShaders[eVertexShader]);
-		m_pOrientations = static_pointer_cast< Dx9MatrixFrameVariable<float, 4, 4> >( static_pointer_cast<Dx9ShaderObject>( m_pShaders[eVertexShader])->GetD3dFrameVariable( CU_T( "in_LightsOrientation")));
-
-		l_pt3Uniform = shared_ptr< PointFrameVariable<float, 3> >( new PointFrameVariable<float, 3>( 8));
-		l_pt3Uniform->SetName( CU_T( "in_LightsAttenuation"));
-		AddFrameVariable( l_pt3Uniform, m_pShaders[eVertexShader]);
-		m_pAttenuations = static_pointer_cast< Dx9PointFrameVariable<float, 3> >( static_pointer_cast<Dx9ShaderObject>( m_pShaders[eVertexShader])->GetD3dFrameVariable( CU_T( "in_LightsAttenuation")));
-
-		l_fUniform = shared_ptr< OneFrameVariable<float> >( new OneFrameVariable<float>( 8));
-		l_fUniform->SetName( CU_T( "in_LightsExponent"));
-		AddFrameVariable( l_fUniform, m_pShaders[eVertexShader]);
-		m_pExponents = static_pointer_cast< Dx9OneFrameVariable<float> >( static_pointer_cast<Dx9ShaderObject>( m_pShaders[eVertexShader])->GetD3dFrameVariable( CU_T( "in_LightsExponent")));
-
-		l_fUniform = shared_ptr< OneFrameVariable<float> >( new OneFrameVariable<float>( 8));
-		l_fUniform->SetName( CU_T( "in_LightsCutOff"));
-		AddFrameVariable( l_fUniform, m_pShaders[eVertexShader]);
-		m_pCutOffs = static_pointer_cast< Dx9OneFrameVariable<float> >( static_pointer_cast<Dx9ShaderObject>( m_pShaders[eVertexShader])->GetD3dFrameVariable( CU_T( "in_LightsCutOff")));
-
-		l_pt4Uniform = shared_ptr< PointFrameVariable<float, 4> >( new PointFrameVariable<float, 4>( 1));
-		l_pt4Uniform->SetName( CU_T( "in_MatAmbient"));
-		AddFrameVariable( l_pt4Uniform, m_pShaders[eVertexShader]);
-		m_pAmbient = static_pointer_cast< Dx9PointFrameVariable<float, 4> >( static_pointer_cast<Dx9ShaderObject>( m_pShaders[eVertexShader])->GetD3dFrameVariable( CU_T( "in_MatAmbient")));
-
-		l_pt4Uniform = shared_ptr< PointFrameVariable<float, 4> >( new PointFrameVariable<float, 4>( 1));
-		l_pt4Uniform->SetName( CU_T( "in_MatDiffuse"));
-		AddFrameVariable( l_pt4Uniform, m_pShaders[eVertexShader]);
-		m_pDiffuse = static_pointer_cast< Dx9PointFrameVariable<float, 4> >( static_pointer_cast<Dx9ShaderObject>( m_pShaders[eVertexShader])->GetD3dFrameVariable( CU_T( "in_MatDiffuse")));
-
-		l_pt4Uniform = shared_ptr< PointFrameVariable<float, 4> >( new PointFrameVariable<float, 4>( 1));
-		l_pt4Uniform->SetName( CU_T( "in_MatEmissive"));
-		AddFrameVariable( l_pt4Uniform, m_pShaders[eVertexShader]);
-		m_pEmissive = static_pointer_cast< Dx9PointFrameVariable<float, 4> >( static_pointer_cast<Dx9ShaderObject>( m_pShaders[eVertexShader])->GetD3dFrameVariable( CU_T( "in_MatEmissive")));
-
-		l_pt4Uniform = shared_ptr< PointFrameVariable<float, 4> >( new PointFrameVariable<float, 4>( 1));
-		l_pt4Uniform->SetName( CU_T( "in_MatSpecular"));
-		AddFrameVariable( l_pt4Uniform, m_pShaders[eVertexShader]);
-		m_pSpecular = static_pointer_cast< Dx9PointFrameVariable<float, 4> >( static_pointer_cast<Dx9ShaderObject>( m_pShaders[eVertexShader])->GetD3dFrameVariable( CU_T( "in_MatSpecular")));
-
-		l_fUniform = shared_ptr< OneFrameVariable<float> >( new OneFrameVariable<float>( 1));
-		l_fUniform->SetName( CU_T( "in_MatShininess"));
-		AddFrameVariable( l_fUniform, m_pShaders[eVertexShader]);
-		m_pShininess = static_pointer_cast< Dx9OneFrameVariable<float> >( static_pointer_cast<Dx9ShaderObject>( m_pShaders[eVertexShader])->GetD3dFrameVariable( CU_T( "in_MatShininess")));
-	}
-
-	return l_bReturn;
 }
 
 void Dx9ShaderProgram :: RetrieveLinkerLog( String & strLog)
@@ -151,281 +30,356 @@ void Dx9ShaderProgram :: RetrieveLinkerLog( String & strLog)
 	}
 }
 
-void Dx9ShaderProgram :: Begin()
+ShaderObjectPtr Dx9ShaderProgram :: _createObject(eSHADER_TYPE p_eType)
 {
-	if ( ! RenderSystem::UseShaders() || ! m_enabled || m_bError)
+	ShaderObjectPtr l_pReturn;
+	switch (p_eType)
 	{
-		return;
-	}
+	case eSHADER_TYPE_VERTEX:
+		l_pReturn.reset( new Dx9VertexShader( this));
+		break;
 
-	Dx9RenderSystem::GetSingletonPtr()->SetCurrentShaderProgram( this);
-
-	for (size_t i = 0 ; i < eNbShaderTypes ; i++)
-	{
-		if (m_pShaders[i] != NULL)
-		{
-			static_pointer_cast<Dx9ShaderObject>( m_pShaders[i])->Begin();
-		}
+	case eSHADER_TYPE_PIXEL:
+		l_pReturn.reset( new Dx9FragmentShader( this));
+		break;
 	}
+	return l_pReturn;
 }
 
-void Dx9ShaderProgram :: ApplyAllVariables()
-{
-}
-
-void Dx9ShaderProgram :: End()
-{
-	if ( ! RenderSystem::UseShaders() || ! m_enabled)
-	{
-		return;
-	}
-
-	for (size_t i = 0 ; i < eNbShaderTypes ; i++)
-	{
-		if (m_pShaders[i] != NULL)
-		{
-			static_pointer_cast<Dx9ShaderObject>( m_pShaders[i])->End();
-		}
-	}
-}
-
-void Dx9ShaderProgram :: AddFrameVariable( FrameVariablePtr p_pVariable, HlslShaderObjectPtr p_pObject)
+shared_ptr<OneIntFrameVariable> Dx9ShaderProgram :: _create1IntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
 {
 	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
-
-	if (p_pVariable != NULL)
-	{
-		switch (p_pVariable->GetType())
-		{
-		case FrameVariable::eOne:
-			if (p_pVariable->GetSubType() == typeid( int).name())
-			{
-				l_pObject->AddFrameVariable<int>( static_pointer_cast< OneFrameVariable<int> >( p_pVariable));
-			}
-			else if (p_pVariable->GetSubType() == typeid( float).name())
-			{
-				l_pObject->AddFrameVariable<float>( static_pointer_cast< OneFrameVariable<float> >( p_pVariable));
-			}
-			else
-			{
-				CASTOR_EXCEPTION( "Unsupported variable subtype");
-			}
-			break;
-
-		case FrameVariable::eVec1:
-			if (p_pVariable->GetSubType() == typeid( int).name())
-			{
-				l_pObject->AddFrameVariable<int, 1>( static_pointer_cast< PointFrameVariable<int, 1> >( p_pVariable));
-			}
-			else if (p_pVariable->GetSubType() == typeid( float).name())
-			{
-				l_pObject->AddFrameVariable<float, 1>( static_pointer_cast< PointFrameVariable<float, 1> >( p_pVariable));
-			}
-			else
-			{
-				CASTOR_EXCEPTION( "Unsupported variable subtype");
-			}
-			break;
-
-		case FrameVariable::eVec2:
-			if (p_pVariable->GetSubType() == typeid( int).name())
-			{
-				l_pObject->AddFrameVariable<int, 2>( static_pointer_cast< PointFrameVariable<int, 2> >( p_pVariable));
-			}
-			else if (p_pVariable->GetSubType() == typeid( float).name())
-			{
-				l_pObject->AddFrameVariable<float, 2>( static_pointer_cast< PointFrameVariable<float, 2> >( p_pVariable));
-			}
-			else
-			{
-				CASTOR_EXCEPTION( "Unsupported variable subtype");
-			}
-			break;
-
-		case FrameVariable::eVec3:
-			if (p_pVariable->GetSubType() == typeid( int).name())
-			{
-				l_pObject->AddFrameVariable<int, 3>( static_pointer_cast< PointFrameVariable<int, 3> >( p_pVariable));
-			}
-			else if (p_pVariable->GetSubType() == typeid( float).name())
-			{
-				l_pObject->AddFrameVariable<float, 3>( static_pointer_cast< PointFrameVariable<float, 3> >( p_pVariable));
-			}
-			else
-			{
-				CASTOR_EXCEPTION( "Unsupported variable subtype");
-			}
-			break;
-
-		case FrameVariable::eVec4:
-			if (p_pVariable->GetSubType() == typeid( int).name())
-			{
-				l_pObject->AddFrameVariable<int, 4>( static_pointer_cast< PointFrameVariable<int, 4> >( p_pVariable));
-			}
-			else if (p_pVariable->GetSubType() == typeid( float).name())
-			{
-				l_pObject->AddFrameVariable<float, 4>( static_pointer_cast< PointFrameVariable<float, 4> >( p_pVariable));
-			}
-			else
-			{
-				CASTOR_EXCEPTION( "Unsupported variable subtype");
-			}
-			break;
-
-		case FrameVariable::eMat4x4:
-			if (p_pVariable->GetSubType() == typeid( float).name())
-			{
-				l_pObject->AddFrameVariable<float, 4, 4>( static_pointer_cast< MatrixFrameVariable<float, 4, 4> >( p_pVariable));
-			}
-			else
-			{
-				CASTOR_EXCEPTION( "Unsupported variable subtype");
-			}
-			break;
-
-		default:
-			CASTOR_EXCEPTION( "Unsupported variable type");
-		}
-	}
+	shared_ptr<OneIntFrameVariable> l_pReturn( new Dx9OneFrameVariable<int>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
 }
 
-int Dx9ShaderProgram :: AssignLight()
+shared_ptr<Point2iFrameVariable> Dx9ShaderProgram :: _create2IntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
 {
-	int l_iReturn = GL_INVALID_INDEX;
-
-	if (m_setFreeLights.size() > 0)
-	{
-		l_iReturn = (* m_setFreeLights.begin());
-		m_setFreeLights.erase( m_setFreeLights.begin());
-
-	}
-
-	return l_iReturn;
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Point2iFrameVariable> l_pReturn( new Dx9PointFrameVariable<int, 2>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
 }
 
-void Dx9ShaderProgram :: FreeLight( int p_iIndex)
+shared_ptr<Point3iFrameVariable> Dx9ShaderProgram :: _create3IntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
 {
-	if (p_iIndex != GL_INVALID_INDEX)
-	{
-		if (m_setFreeLights.find( p_iIndex) == m_setFreeLights.end())
-		{
-			m_setFreeLights.insert( std::set <int>::value_type( p_iIndex));
-		}
-	}
-	else
-	{
-		Logger::LogError( "coin");
-	}
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Point3iFrameVariable> l_pReturn( new Dx9PointFrameVariable<int, 3>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
 }
 
-void Dx9ShaderProgram :: SetAmbientLight( const Point4f & p_crColour)
+shared_ptr<Point4iFrameVariable> Dx9ShaderProgram :: _create4IntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
 {
-	if (m_isLinked)
-	{
-		m_pAmbientLight->SetValue( p_crColour, 0);
-	}
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Point4iFrameVariable> l_pReturn( new Dx9PointFrameVariable<int, 4>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
 }
 
-void Dx9ShaderProgram :: SetLightAmbient( int p_iIndex, const Point4f & p_crColour)
+shared_ptr<OneUIntFrameVariable> Dx9ShaderProgram :: _create1UIntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
 {
-	if (m_isLinked)
-	{
-		m_pAmbients->SetValue( p_crColour, p_iIndex);
-	}
+	return shared_ptr<OneUIntFrameVariable>();
 }
 
-void Dx9ShaderProgram :: SetLightDiffuse( int p_iIndex, const Point4f & p_crColour)
+shared_ptr<Point2uiFrameVariable> Dx9ShaderProgram :: _create2UIntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
 {
-	if (m_isLinked)
-	{
-		m_pDiffuses->SetValue( p_crColour, p_iIndex);
-	}
+	return shared_ptr<Point2uiFrameVariable>();
 }
 
-void Dx9ShaderProgram :: SetLightSpecular( int p_iIndex, const Point4f & p_crColour)
+shared_ptr<Point3uiFrameVariable> Dx9ShaderProgram :: _create3UIntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
 {
-	if (m_isLinked)
-	{
-		m_pSpeculars->SetValue( p_crColour, p_iIndex);
-	}
+	return shared_ptr<Point3uiFrameVariable>();
 }
 
-void Dx9ShaderProgram :: SetLightPosition( int p_iIndex, const Point4f & p_ptPosition)
+shared_ptr<Point4uiFrameVariable> Dx9ShaderProgram :: _create4UIntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
 {
-	if (m_isLinked)
-	{
-		m_pPositions->SetValue( p_ptPosition, p_iIndex);
-	}
+	return shared_ptr<Point4uiFrameVariable>();
 }
 
-void Dx9ShaderProgram :: SetLightOrientation( int p_iIndex, const Matrix4x4r & p_mtxOrientation)
+shared_ptr<OneFloatFrameVariable> Dx9ShaderProgram :: _create1FloatVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
 {
-	if (m_isLinked)
-	{
-		m_pOrientations->SetValue( Matrix<float, 4, 4>( p_mtxOrientation), p_iIndex);
-	}
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<OneFloatFrameVariable> l_pReturn( new Dx9OneFrameVariable<float>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
 }
 
-void Dx9ShaderProgram :: SetLightAttenuation( int p_iIndex, const Point3f & p_ptAtt)
+shared_ptr<Point2fFrameVariable> Dx9ShaderProgram :: _create2FloatVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
 {
-	if (m_isLinked)
-	{
-		m_pAttenuations->SetValue( p_ptAtt, p_iIndex);
-	}
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Point2fFrameVariable> l_pReturn( new Dx9PointFrameVariable<float, 2>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
 }
 
-void Dx9ShaderProgram :: SetLightExponent( int p_iIndex, float p_fExp)
+shared_ptr<Point3fFrameVariable> Dx9ShaderProgram :: _create3FloatVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
 {
-	if (m_isLinked)
-	{
-		m_pExponents->SetValue( p_fExp, p_iIndex);
-	}
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Point3fFrameVariable> l_pReturn( new Dx9PointFrameVariable<float, 3>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
 }
 
-void Dx9ShaderProgram :: SetLightCutOff( int p_iIndex, float p_fCut)
+shared_ptr<Point4fFrameVariable> Dx9ShaderProgram :: _create4FloatVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
 {
-	if (m_isLinked)
-	{
-		m_pCutOffs->SetValue( p_fCut, p_iIndex);
-	}
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Point4fFrameVariable> l_pReturn( new Dx9PointFrameVariable<float, 4>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
 }
 
-void Dx9ShaderProgram :: SetMaterialAmbient( const Point4f & p_crColour)
+shared_ptr<OneDoubleFrameVariable> Dx9ShaderProgram :: _create1DoubleVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
 {
-	if (m_isLinked && m_pAmbient->GetValue() != p_crColour)
-	{
-		m_pAmbient->SetValue( p_crColour);
-	}
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<OneDoubleFrameVariable> l_pReturn( new Dx9OneFrameVariable<double>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
 }
 
-void Dx9ShaderProgram :: SetMaterialDiffuse( const Point4f & p_crColour)
+shared_ptr<Point2dFrameVariable> Dx9ShaderProgram :: _create2DoubleVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
 {
-	if (m_isLinked && m_pDiffuse->GetValue() != p_crColour)
-	{
-		m_pDiffuse->SetValue( p_crColour);
-	}
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Point2dFrameVariable> l_pReturn( new Dx9PointFrameVariable<double, 2>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
 }
 
-void Dx9ShaderProgram :: SetMaterialSpecular( const Point4f & p_crColour)
+shared_ptr<Point3dFrameVariable> Dx9ShaderProgram :: _create3DoubleVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
 {
-	if (m_isLinked && m_pSpecular->GetValue() != p_crColour)
-	{
-		m_pSpecular->SetValue( p_crColour);
-	}
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Point3dFrameVariable> l_pReturn( new Dx9PointFrameVariable<double, 3>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
 }
 
-void Dx9ShaderProgram :: SetMaterialEmissive( const Point4f & p_crColour)
+shared_ptr<Point4dFrameVariable> Dx9ShaderProgram :: _create4DoubleVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
 {
-	if (m_isLinked && m_pEmissive->GetValue() != p_crColour)
-	{
-		m_pEmissive->SetValue( p_crColour);
-	}
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Point4dFrameVariable> l_pReturn( new Dx9PointFrameVariable<double, 4>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
 }
 
-void Dx9ShaderProgram :: SetMaterialShininess( float p_fShine)
+shared_ptr<Matrix2x2iFrameVariable> Dx9ShaderProgram :: _create2x2IntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
 {
-	if (m_isLinked && m_pShininess->GetValue() != p_fShine)
-	{
-		m_pShininess->SetValue( p_fShine);
-	}
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix2x2iFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<int, 2, 2>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix2x3iFrameVariable> Dx9ShaderProgram :: _create2x3IntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix2x3iFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<int, 2, 3>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix2x4iFrameVariable> Dx9ShaderProgram :: _create2x4IntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix2x4iFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<int, 2, 4>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix3x2iFrameVariable> Dx9ShaderProgram :: _create3x2IntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix3x2iFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<int, 3, 2>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix3x3iFrameVariable> Dx9ShaderProgram :: _create3x3IntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix3x3iFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<int, 3, 3>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix3x4iFrameVariable> Dx9ShaderProgram :: _create3x4IntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix3x4iFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<int, 3, 4>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix4x2iFrameVariable> Dx9ShaderProgram :: _create4x2IntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix4x2iFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<int, 4, 2>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix4x3iFrameVariable> Dx9ShaderProgram :: _create4x3IntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix4x3iFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<int, 4, 3>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix4x4iFrameVariable> Dx9ShaderProgram :: _create4x4IntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix4x4iFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<int, 4, 4>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix2x2uiFrameVariable> Dx9ShaderProgram :: _create2x2UIntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	return shared_ptr<Matrix2x2uiFrameVariable>();
+}
+
+shared_ptr<Matrix2x3uiFrameVariable> Dx9ShaderProgram :: _create2x3UIntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	return shared_ptr<Matrix2x3uiFrameVariable>();
+}
+
+shared_ptr<Matrix2x4uiFrameVariable> Dx9ShaderProgram :: _create2x4UIntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	return shared_ptr<Matrix2x4uiFrameVariable>();
+}
+
+shared_ptr<Matrix3x2uiFrameVariable> Dx9ShaderProgram :: _create3x2UIntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	return shared_ptr<Matrix3x2uiFrameVariable>();
+}
+
+shared_ptr<Matrix3x3uiFrameVariable> Dx9ShaderProgram :: _create3x3UIntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	return shared_ptr<Matrix3x3uiFrameVariable>();
+}
+
+shared_ptr<Matrix3x4uiFrameVariable> Dx9ShaderProgram :: _create3x4UIntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	return shared_ptr<Matrix3x4uiFrameVariable>();
+}
+
+shared_ptr<Matrix4x2uiFrameVariable> Dx9ShaderProgram :: _create4x2UIntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	return shared_ptr<Matrix4x2uiFrameVariable>();
+}
+
+shared_ptr<Matrix4x3uiFrameVariable> Dx9ShaderProgram :: _create4x3UIntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	return shared_ptr<Matrix4x3uiFrameVariable>();
+}
+
+shared_ptr<Matrix4x4uiFrameVariable> Dx9ShaderProgram :: _create4x4UIntVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	return shared_ptr<Matrix4x4uiFrameVariable>();
+}
+
+shared_ptr<Matrix2x2fFrameVariable> Dx9ShaderProgram :: _create2x2FloatVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix2x2fFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<float, 2, 2>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix2x3fFrameVariable> Dx9ShaderProgram :: _create2x3FloatVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix2x3fFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<float, 2, 3>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix2x4fFrameVariable> Dx9ShaderProgram :: _create2x4FloatVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix2x4fFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<float, 2, 4>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix3x2fFrameVariable> Dx9ShaderProgram :: _create3x2FloatVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix3x2fFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<float, 3, 2>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix3x3fFrameVariable> Dx9ShaderProgram :: _create3x3FloatVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix3x3fFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<float, 3, 3>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix3x4fFrameVariable> Dx9ShaderProgram :: _create3x4FloatVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix3x4fFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<float, 3, 4>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix4x2fFrameVariable> Dx9ShaderProgram :: _create4x2FloatVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix4x2fFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<float, 4, 2>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix4x3fFrameVariable> Dx9ShaderProgram :: _create4x3FloatVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix4x3fFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<float, 4, 3>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix4x4fFrameVariable> Dx9ShaderProgram :: _create4x4FloatVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix4x4fFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<float, 4, 4>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix2x2dFrameVariable> Dx9ShaderProgram :: _create2x2DoubleVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix2x2dFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<double, 2, 2>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix2x3dFrameVariable> Dx9ShaderProgram :: _create2x3DoubleVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix2x3dFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<double, 2, 3>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix2x4dFrameVariable> Dx9ShaderProgram :: _create2x4DoubleVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix2x4dFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<double, 2, 4>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix3x2dFrameVariable> Dx9ShaderProgram :: _create3x2DoubleVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix3x2dFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<double, 3, 2>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix3x3dFrameVariable> Dx9ShaderProgram :: _create3x3DoubleVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix3x3dFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<double, 3, 3>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix3x4dFrameVariable> Dx9ShaderProgram :: _create3x4DoubleVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix3x4dFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<double, 3, 4>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix4x2dFrameVariable> Dx9ShaderProgram :: _create4x2DoubleVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix4x2dFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<double, 4, 2>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix4x3dFrameVariable> Dx9ShaderProgram :: _create4x3DoubleVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix4x3dFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<double, 4, 3>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
+}
+
+shared_ptr<Matrix4x4dFrameVariable> Dx9ShaderProgram :: _create4x4DoubleVariable( int p_iNbOcc, ShaderObjectPtr p_pObject)
+{
+	Dx9ShaderObjectPtr l_pObject = static_pointer_cast<Dx9ShaderObject>( p_pObject);
+	shared_ptr<Matrix4x4dFrameVariable> l_pReturn( new Dx9MatrixFrameVariable<double, 4, 4>( this, l_pObject.get(), p_iNbOcc, l_pObject->GetInputConstantsPtr()));
+	return l_pReturn;
 }

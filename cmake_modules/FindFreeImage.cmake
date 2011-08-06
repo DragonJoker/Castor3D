@@ -23,7 +23,7 @@ FIND_PATH(FreeImage_INCLUDE_DIR FreeImage.h
   /usr/freeware/include
 )
 
-FIND_PATH(FreeImage_LIBRARY_DIR libFreeImage FreeImage.lib
+FIND_PATH(FreeImage_LIBRARY_DIR libfreeimage.so libFreeImage.so FreeImage.lib
   HINTS
   PATH_SUFFIXES Dist dist lib64 lib
   PATHS
@@ -36,7 +36,7 @@ FIND_PATH(FreeImage_LIBRARY_DIR libFreeImage FreeImage.lib
 )
 
 FIND_LIBRARY(FreeImage_LIBRARY
-  NAMES libFreeImage FreeImage.lib
+  NAMES libfreeimage.so libFreeImage.so FreeImage.lib
   HINTS
   PATH_SUFFIXES lib64 lib
   PATHS

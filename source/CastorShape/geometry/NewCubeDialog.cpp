@@ -1,12 +1,12 @@
-#include "CastorShape/PrecompiledHeader.h"
+#include "CastorShape/PrecompiledHeader.hpp"
 
-#include "CastorShape/geometry/NewCubeDialog.h"
+#include "CastorShape/geometry/NewCubeDialog.hpp"
 
 using namespace CastorShape;
 using namespace Castor3D;
 
-NewCubeDialog :: NewCubeDialog( MaterialManager * p_pManager, wxWindow * parent, wxWindowID p_id)
-	:	NewGeometryDialog( p_pManager, parent, p_id, CU_T( "New cube"))
+NewCubeDialog :: NewCubeDialog( wxWindow * parent, wxWindowID p_id)
+	:	NewGeometryDialog( parent, p_id, cuT( "New cube"))
 {
 }
 
@@ -17,15 +17,15 @@ NewCubeDialog :: ~NewCubeDialog()
 void NewCubeDialog :: _initialise()
 {
 	_defaultInit();
-	AddTextCtrl( CU_T( "Width"), CU_T( "1.0"), 40);
-	AddTextCtrl( CU_T( "Height"), CU_T( "1.0"), 40);
-	AddTextCtrl( CU_T( "Depth"), CU_T( "1.0"), 40);
+	AddTextCtrl( cuT( "Width"), cuT( "1.0"), 40);
+	AddTextCtrl( cuT( "Height"), cuT( "1.0"), 40);
+	AddTextCtrl( cuT( "Depth"), cuT( "1.0"), 40);
 	_endInit();
 }
 
 real NewCubeDialog :: GetCubeWidth()const
 {
-	wxString l_value = GetTextValue( CU_T( "Width"));
+	wxString l_value = GetTextValue( cuT( "Width"));
 	
 	if (l_value.BeforeFirst( '.').IsNumber() && l_value.AfterFirst( '.').IsNumber())
 	{
@@ -37,7 +37,7 @@ real NewCubeDialog :: GetCubeWidth()const
 
 real NewCubeDialog :: GetCubeHeight()const
 {
-	wxString l_value = GetTextValue( CU_T( "Height"));
+	wxString l_value = GetTextValue( cuT( "Height"));
 	
 	if (l_value.BeforeFirst( '.').IsNumber() && l_value.AfterFirst( '.').IsNumber())
 	{
@@ -49,7 +49,7 @@ real NewCubeDialog :: GetCubeHeight()const
 
 real NewCubeDialog :: GetCubeDepth()const
 {
-	wxString l_value = GetTextValue( CU_T( "Depth"));
+	wxString l_value = GetTextValue( cuT( "Depth"));
 	
 	if (l_value.BeforeFirst( '.').IsNumber() && l_value.AfterFirst( '.').IsNumber())
 	{

@@ -1,14 +1,13 @@
-#include "CastorUtils/PrecompiledHeader.h"
+#include "CastorUtils/PrecompiledHeader.hpp"
 
-#include "CastorUtils/Image.h"
-#include "CastorUtils/Path.h"
-#include "CastorUtils/PixelFormat.h"
-#include "CastorUtils/Rectangle.h"
+#include "CastorUtils/Image.hpp"
+#include "CastorUtils/Path.hpp"
+#include "CastorUtils/Rectangle.hpp"
 
 #include <FreeImage.h>
 
 #if CHECK_MEMORYLEAKS
-#	include "CastorUtils/Memory.h"
+#	include "CastorUtils/Memory.hpp"
 #endif
 
 using namespace Castor;
@@ -21,173 +20,245 @@ using namespace Castor::Resources;
 
 //*************************************************************************************************
 
-ImagePtr ImageLoader :: LoadFromFile( Manager<Image> * p_pManager, const String & p_file)
+unsigned int DLL_CALLCONV ReadProc( void * p_pBuffer, unsigned int p_uiSize, unsigned int p_uiCount, fi_handle p_fiHandle)
 {
-	ImagePtr l_pReturn;
-	String l_strPath = p_file;
-	l_strPath.replace( "\\", "/");
-	FIBITMAP * l_image = NULL;
-	FREE_IMAGE_FORMAT l_fif = FIF_UNKNOWN;
-
-	l_fif = FreeImage_GetFileType( l_strPath.char_str(), 0);
-
-	if (l_fif == FIF_UNKNOWN)
-	{
-		l_fif = FreeImage_GetFIFFromFilename( l_strPath.char_str());
-	}
-
-	if (l_fif != FIF_UNKNOWN && FreeImage_FIFSupportsReading( l_fif))
-	{
-		l_image = FreeImage_Load( l_fif, l_strPath.char_str(), BMP_DEFAULT);
-	}
-
-	if (l_image != NULL)
-	{
-//		FREE_IMAGE_TYPE l_fit = FreeImage_GetImageType( l_image);
-		FIBITMAP * l_dib32 = FreeImage_ConvertTo32Bits( l_image);
-		FreeImage_Unload( l_image);
-		l_image = l_dib32;
-
-		if (l_image != NULL)
-		{
-			unsigned int l_width = FreeImage_GetWidth( l_image);
-			unsigned int l_height = FreeImage_GetHeight( l_image);
-
-			Buffer <unsigned char> l_buffer;
-			l_buffer.InitialiseBuffer( l_width * l_height * 4, 0);
-			unsigned char * l_pixels = FreeImage_GetBits( l_image);
-
-			//0=Blue, 1=Green, 2=Red, 3=Alpha
-#if FREEIMAGE_COLORORDER == FREEIMAGE_COLORORDER_BGR
-			for (unsigned int l_pix = 0 ; l_pix < l_width * l_height ; l_pix++)
-			{
-				l_buffer.Add( l_pixels[l_pix * 4 + 0]);//Blue
-				l_buffer.Add( l_pixels[l_pix * 4 + 1]);//Green
-				l_buffer.Add( l_pixels[l_pix * 4 + 2]);//Red
-				l_buffer.Add( l_pixels[l_pix * 4 + 3]);//Alpha
-			}
-#else
-			for (unsigned int l_pix = 0 ; l_pix < l_width * l_height ; l_pix++)
-			{
-				l_buffer.Add( l_pixels[l_pix * 4 + 2]);
-				l_buffer.Add( l_pixels[l_pix * 4 + 1]);
-				l_buffer.Add( l_pixels[l_pix * 4 + 0]);
-				l_buffer.Add( l_pixels[l_pix * 4 + 3]);
-			}
-#endif
-			l_pReturn.reset( new Image( p_pManager, Point<size_t, 2>( l_width, l_height), eA8R8G8B8, l_buffer, p_file));
-
-			FreeImage_Unload( l_image);
-		}
-	}
-	else
-	{
-		LOADER_ERROR( CU_T( "Can't load image : ") + l_strPath);
-	}
-
-	return l_pReturn;
+	File * l_pFile = (File *)p_fiHandle;
+	return l_pFile->ReadArray<unsigned char>( (unsigned char *)p_pBuffer, p_uiSize * p_uiCount);
 }
 
-ImagePtr ImageLoader :: LoadFromBuffer( Manager<Image> * p_pManager, const Math::Point<size_t, 2> & p_ptSize, ePIXEL_FORMAT p_pixelFormat, const Buffer <unsigned char> & p_buffer)
+int DLL_CALLCONV SeekProc( fi_handle p_fiHandle, long p_lOffset, int p_iOrigin)
 {
-	ImagePtr l_pReturn( new Image( p_pManager, p_ptSize, p_pixelFormat, p_buffer));
-	return l_pReturn;
+	File * l_pFile = (File *)p_fiHandle;
+	return l_pFile->Seek( p_lOffset, File::eOFFSET_MODE( p_iOrigin));
+}
+
+long DLL_CALLCONV TellProc( fi_handle p_fiHandle)
+{
+	File * l_pFile = (File *)p_fiHandle;
+	return (long)l_pFile->Tell();
+}
+
+bool Loader<Image> :: Load( Image & p_image, Path const & p_path)
+{
+	bool l_bReturn = false;
+
+	if ( ! p_path.empty())
+	{
+		File l_file( p_path, File::eOPEN_MODE_READ | File::eOPEN_MODE_BINARY);
+		FIBITMAP * l_pImage = NULL;
+		FREE_IMAGE_FORMAT l_fif = FIF_UNKNOWN;
+
+		l_fif = FreeImage_GetFileType( p_path.char_str(), 0);
+
+		if (l_fif == FIF_UNKNOWN)
+		{
+			l_fif = FreeImage_GetFIFFromFilename( p_path.char_str());
+		}
+
+		if (l_fif != FIF_UNKNOWN && FreeImage_FIFSupportsReading( l_fif))
+		{
+			FreeImageIO l_fiIo;
+			l_fiIo.read_proc = ReadProc;
+			l_fiIo.write_proc = NULL;
+			l_fiIo.seek_proc = SeekProc;
+			l_fiIo.tell_proc = TellProc;
+
+			l_pImage = FreeImage_LoadFromHandle( l_fif, & l_fiIo, (fi_handle)( & l_file), BMP_DEFAULT);
+		}
+
+		if (l_pImage)
+		{
+			FIBITMAP * l_dib32 = FreeImage_ConvertTo32Bits( l_pImage);
+			FreeImage_Unload( l_pImage);
+			l_pImage = l_dib32;
+
+			if (l_pImage)
+			{
+				unsigned int l_width = FreeImage_GetWidth( l_pImage);
+				unsigned int l_height = FreeImage_GetHeight( l_pImage);
+				Size l_size( l_width, l_height);
+				unsigned char * l_pixels = FreeImage_GetBits( l_pImage);
+
+				//0=Blue, 1=Green, 2=Red, 3=Alpha
+#if FREEIMAGE_COLORORDER != FREEIMAGE_COLORORDER_BGR
+				unsigned char * l_pTmp = l_pixels;
+				size_t l_uiSize = l_width * l_height;
+
+				for (unsigned int i = 0 ; i < l_uiSize ; i++)
+				{
+					std::swap( l_pTmp[0], l_pTmp[2]);
+					l_pTmp += 4;
+				}
+#endif
+				p_image.Initialise<ePIXEL_FORMAT_A8R8G8B8, ePIXEL_FORMAT_A8R8G8B8>( l_size, l_pixels, p_path);
+
+				FreeImage_Unload( l_pImage);
+				l_bReturn = true;
+			}
+		}
+		else
+		{
+			LOADER_ERROR( cuT( "Can't load image : ") + p_path);
+		}
+	}
+
+	return l_bReturn;
 }
 
 //*********************************************************************************************
 
-Image :: Image( Manager<Image> * p_pManager, const Point<size_t, 2> & p_ptSize, ePIXEL_FORMAT p_ePixelFormat)
-	:	Resource<Image>( p_pManager, C3DEmptyString)
-	,	m_ePixelFormat( p_ePixelFormat)
-	,	m_ptSize( p_ptSize)
-	,	m_buffer( p_ptSize[0] * p_ptSize[1] * GetBytesPerPixel( p_ePixelFormat))
+Image :: Image( String const & p_strName)
+	:	Resource<Image>( p_strName)
+	,	m_ePixelFormat	( ePIXEL_FORMAT_A8R8G8B8)
+	,	m_pBuffer		( PxBufferBase::create( Point<size_t, 2>( 1, 1), m_ePixelFormat, NULL, ePIXEL_FORMAT_A8R8G8B8))
 {
 }
 
-Image :: Image( Manager<Image> * p_pManager, const Point<size_t, 2> & p_ptSize, ePIXEL_FORMAT p_ePixelFormat, const Buffer <unsigned char> & p_buffer)
-	:	Resource<Image>( p_pManager, C3DEmptyString)
-	,	m_buffer( p_buffer)
-	,	m_ePixelFormat( p_ePixelFormat)
-	,	m_ptSize( p_ptSize)
+Image :: Image( Image const & p_image)
+	:	Resource<Image>( p_image)
+	,	m_path			( p_image.m_path)
+	,	m_ePixelFormat	( p_image.m_ePixelFormat)
+	,	m_pBuffer		( p_image.m_pBuffer->clone())
 {
+	m_ptSize.copy( p_image.m_ptSize);
+	CHECK_INVARIANTS();
 }
 
-Image :: Image( Manager<Image> * p_pManager, const Point<size_t, 2> & p_ptSize, ePIXEL_FORMAT p_ePixelFormat, const Buffer <unsigned char> & p_buffer, const Path & p_path)
-	:	Resource<Image>( p_pManager, C3DEmptyString)
-	,	m_path( p_path)
-	,	m_buffer( p_buffer)
-	,	m_ePixelFormat( p_ePixelFormat)
-	,	m_ptSize( p_ptSize)
+Image & Image :: operator =( Image const & p_image)
 {
+	Resource<Image>::operator =( p_image);
+	m_path = p_image.m_path;
+	m_ePixelFormat = p_image.m_ePixelFormat;
+	m_pBuffer = p_image.m_pBuffer->clone();
+	m_ptSize.copy( p_image.m_ptSize);
+	CHECK_INVARIANTS();
+	return * this;
 }
 
 Image :: ~Image()
 {
+	delete m_pBuffer;
 }
 
-void Image :: Fill( const Colour & p_clrColour)
+BEGIN_INVARIANT_BLOCK( Image)
+	CHECK_INVARIANT( m_ePixelFormat >= 0 && m_ePixelFormat < ePIXEL_FORMAT_COUNT);
+	CHECK_INVARIANT( m_pBuffer->count() > 0);
+END_INVARIANT_BLOCK()
+
+BEGIN_SERIALISE_MAP( Image, Serialisable)
+	ADD_ELEMENT( m_pBuffer)
+	ADD_ELEMENT( m_ptSize)
+	ADD_ELEMENT( m_ePixelFormat)
+END_SERIALISE_MAP()
+
+void Image :: Initialise( Point<unsigned int, 2> const & p_ptSize, ePIXEL_FORMAT p_ePixelFormat, std::vector<unsigned char> const & p_buffer, ePIXEL_FORMAT p_eBufferFormat, Path const & p_path)
 {
+	Initialise( p_ptSize, p_ePixelFormat, & p_buffer[0], p_eBufferFormat, p_path);
+}
+
+void Image :: Initialise( Point<unsigned int, 2> const & p_ptSize, ePIXEL_FORMAT p_ePixelFormat, unsigned char const * p_pBuffer, ePIXEL_FORMAT p_eBufferFormat, Path const & p_path)
+{
+	m_path = p_path;
+	delete m_pBuffer;
+	m_pBuffer = PxBufferBase::create( p_ptSize, p_ePixelFormat, p_pBuffer, p_eBufferFormat);
+	m_ePixelFormat = p_ePixelFormat;
+	m_ptSize.copy( p_ptSize);
+	CHECK_INVARIANTS();
+}
+
+void Image :: Initialise( Point<unsigned int, 2> const & p_ptSize, PxBufferBase const & p_buffer, Path const & p_path)
+{
+	m_path = p_path;
+	delete m_pBuffer;
+	m_pBuffer = p_buffer.clone();
+	m_ePixelFormat = m_pBuffer->format();
+	m_ptSize.copy( p_ptSize);
+	CHECK_INVARIANTS();
+}
+void Image :: Fill( Colour const & p_clrColour)
+{
+	CHECK_INVARIANTS();
 	SetPixel( 0, 0, p_clrColour);
 	unsigned int l_uiBpp = GetBytesPerPixel( m_ePixelFormat);
 
-	for (size_t i = l_uiBpp ; i < m_buffer.GetSize() ; i += l_uiBpp)
+	for (size_t i = l_uiBpp ; i < m_pBuffer->count() ; i += l_uiBpp)
 	{
-		memcpy( & m_buffer[i], & m_buffer[0], l_uiBpp);
+		memcpy( & m_pBuffer[i], & m_pBuffer[0], l_uiBpp);
 	}
+	CHECK_INVARIANTS();
 }
 
-void Image :: SetPixel( int x, int y, const unsigned char * p_pPixel)
+void Image :: SetPixel( size_t x, size_t y, unsigned char const * p_pPixel)
 {
-	memcpy( & m_buffer[(x + y * m_ptSize[0]) * GetBytesPerPixel( m_ePixelFormat)], p_pPixel, GetBytesPerPixel( m_ePixelFormat));
+	CHECK_INVARIANTS();
+	REQUIRE( x < m_pBuffer->width() && y < m_pBuffer->height());
+	memcpy( & m_pBuffer[(x + y * m_ptSize[0]) * GetBytesPerPixel( m_ePixelFormat)], p_pPixel, GetBytesPerPixel( m_ePixelFormat));
+	CHECK_INVARIANTS();
 }
 
-void Image :: SetPixel( int x, int y, const Colour & p_clrColour)
+void Image :: SetPixel( size_t x, size_t y, Colour const & p_clrColour)
 {
-	unsigned char * l_pPixel = & m_buffer[(x + y * m_ptSize[0]) * GetBytesPerPixel( m_ePixelFormat)];
-	Point<unsigned char, 4> l_ptComponents;
-	p_clrColour.CharBGRA( l_ptComponents);
-	ConvertPixel( eA8R8G8B8, l_ptComponents.const_ptr(), m_ePixelFormat, l_pPixel);
+	CHECK_INVARIANTS();
+	REQUIRE( x < m_pBuffer->width() && y < m_pBuffer->height());
+	Point4ub l_ptComponents;
+	p_clrColour.BGRA( l_ptComponents);
+	ConvertPixel( ePIXEL_FORMAT_A8R8G8B8, l_ptComponents.const_ptr(), m_ePixelFormat, m_pBuffer->get_at( x, y));
+	CHECK_INVARIANTS();
 }
 
-void Image :: GetPixel( int x, int y, unsigned char * p_pPixel)const
+void Image :: SetPixel( size_t x, size_t y, UbPixel const & p_pixel)
 {
-	memcpy( p_pPixel, & m_buffer[(x + y * m_ptSize[0]) * GetBytesPerPixel( m_ePixelFormat)], GetBytesPerPixel( m_ePixelFormat));
+	CHECK_INVARIANTS();
+	REQUIRE( x < m_pBuffer->width() && y < m_pBuffer->height());
+	ConvertPixel( p_pixel.format(), p_pixel.const_ptr(), m_ePixelFormat, m_pBuffer->get_at( x, y));
+	CHECK_INVARIANTS();
 }
 
-Colour Image :: GetPixel( int x, int y)const
+void Image :: GetPixel( size_t x, size_t y, UbPixel & p_pixel)const
 {
-	Point<unsigned char, 4> l_ptComponents;
-	const unsigned char * l_pPixel = & m_buffer[(x + y * m_ptSize[0]) * GetBytesPerPixel( m_ePixelFormat)];
-	ConvertPixel( m_ePixelFormat, l_pPixel, eA8R8G8B8, l_ptComponents.ptr());
-	return Colour( l_ptComponents[1], l_ptComponents[2], l_ptComponents[3], l_ptComponents[0]);
+	CHECK_INVARIANTS();
+	REQUIRE( x < m_pBuffer->width() && y < m_pBuffer->height());
+	ConvertPixel( m_ePixelFormat, m_pBuffer->get_at( x, y), p_pixel.format(), p_pixel.ptr());
+	CHECK_INVARIANTS();
 }
 
-void Image :: CopyImage( const Image & p_src)
+void Image :: GetPixel( size_t x, size_t y, unsigned char * p_pPixel, ePIXEL_FORMAT p_eFormat)const
 {
+	CHECK_INVARIANTS();
+	REQUIRE( x < m_pBuffer->width() && y < m_pBuffer->height());
+	ConvertPixel( m_ePixelFormat, m_pBuffer->get_at( x, y), p_eFormat, p_pPixel);
+	CHECK_INVARIANTS();
+}
+
+Colour Image :: GetPixel( size_t x, size_t y)const
+{
+	CHECK_INVARIANTS();
+	REQUIRE( x < m_pBuffer->width() && y < m_pBuffer->height());
+	Point4ub l_ptComponents;
+	ConvertPixel( m_ePixelFormat, m_pBuffer->get_at( x, y), ePIXEL_FORMAT_A8R8G8B8, l_ptComponents.ptr());
+	return Colour::FromBGRA( l_ptComponents);
+	CHECK_INVARIANTS();
+}
+
+void Image :: CopyImage( Image const & p_src)
+{
+	CHECK_INVARIANTS();
 	// Si les dimensions ne sont pas les mêmes on effectue un filtrage, sinon on fait une simple copie
 	if (m_ptSize == p_src.m_ptSize)
 	{
 		// Si les formats sont les mêmes on copie simplement les pixels, sinon on effectue une conversion
 		if (m_ePixelFormat == p_src.m_ePixelFormat)
 		{
-			m_buffer = p_src.m_buffer;
+			m_pBuffer = p_src.m_pBuffer;
 		}
 		else
 		{
-			// Récupération des paramètres pour la copie (pointeurs sur les pixels et Bpps)
-			const unsigned char	*	l_pSrcPix  = & p_src.m_buffer[0];
-			unsigned char		*	l_pDestPix = & m_buffer[0];
-			unsigned int			l_uiSrcBpp  = GetBytesPerPixel( p_src.m_ePixelFormat);
-			unsigned int			l_uiDestBpp = GetBytesPerPixel( m_ePixelFormat);
-
 			// Parcours des pixels de l'image source et conversion / copie dans l'image courante
-			for (size_t i = 0 ; i < m_ptSize[0] ; ++i)
+			for (unsigned int i = 0 ; i < m_ptSize[0] ; ++i)
 			{
-				for (size_t j = 0 ; j < m_ptSize[1] ; ++j)
+				for (unsigned int j = 0 ; j < m_ptSize[1] ; ++j)
 				{
-					ConvertPixel( p_src.m_ePixelFormat, l_pSrcPix, m_ePixelFormat, l_pDestPix);
-					l_pSrcPix  += l_uiSrcBpp;
-					l_pDestPix += l_uiDestBpp;
+					ConvertPixel( p_src.m_ePixelFormat, p_src.m_pBuffer->get_at( i, j), m_ePixelFormat, m_pBuffer->get_at( i, j));
 				}
 			}
 		}
@@ -201,11 +272,11 @@ void Image :: CopyImage( const Image & p_src)
 		if (m_ePixelFormat == p_src.m_ePixelFormat)
 		{
 			// Copie des pixels
-			unsigned char l_pPixel[16];
+			UbPixel l_pPixel;
 
-			for (size_t i = 0 ; i < m_ptSize[0] ; ++i)
+			for (unsigned int i = 0 ; i < m_ptSize[0] ; ++i)
 			{
-				for (size_t j = 0 ; j < m_ptSize[1] ; ++j)
+				for (unsigned int j = 0 ; j < m_ptSize[1] ; ++j)
 				{
 					p_src.GetPixel( static_cast<int>( i * l_ptStep[0]), static_cast<int>( j * l_ptStep[1]), l_pPixel);
 					SetPixel( i, j, l_pPixel);
@@ -215,31 +286,39 @@ void Image :: CopyImage( const Image & p_src)
 		else
 		{
 			// Parcours des pixels de l'image source et conversion / copie dans l'image courante
-			unsigned char l_pSrcPix[16], l_pDestPix[16];
+			unsigned char * l_pSrcPix	= new unsigned char[GetBytesPerPixel( p_src.GetPixelFormat())];
+			unsigned char * l_pDestPix	= new unsigned char[GetBytesPerPixel( m_ePixelFormat)];
 
-			for (size_t i = 0 ; i < m_ptSize[0] ; ++i)
+			for (unsigned int i = 0 ; i < m_ptSize[0] ; ++i)
 			{
-				for (size_t j = 0; j < m_ptSize[1] ; ++j)
+				for (unsigned int j = 0; j < m_ptSize[1] ; ++j)
 				{
-					p_src.GetPixel( static_cast<int>( i * l_ptStep[0]), static_cast<int>( j * l_ptStep[1]), l_pSrcPix);
+					p_src.GetPixel( static_cast<int>( i * l_ptStep[0]), static_cast<int>( j * l_ptStep[1]), l_pSrcPix, p_src.GetPixelFormat());
 					ConvertPixel( p_src.m_ePixelFormat, l_pSrcPix, m_ePixelFormat, l_pDestPix);
 					SetPixel( i, j, l_pDestPix);
 				}
 			}
+
+			delete [] l_pSrcPix;
+			delete [] l_pDestPix;
 		}
 	}
+	CHECK_INVARIANTS();
 }
 
-Image Image :: SubImage( const Rectangle & l_rcRect)const
+Image Image :: SubImage( Rectangle const & l_rcRect)const
 {
-	CASTOR_ASSERT( Rectangle( 0, 0, m_ptSize[0], m_ptSize[1]).Intersects( l_rcRect) == eIntersectionIn);
+	CHECK_INVARIANTS();
+	REQUIRE( Rectangle( 0, 0, m_ptSize[0], m_ptSize[1]).Intersects( l_rcRect) == eINTERSECTION_IN);
+	Point<unsigned int, 2> l_ptSize( l_rcRect.Width(), l_rcRect.Height());
 
 	// Création de la sous-image à remplir
-	Image l_img( m_pManager, Point3i( l_rcRect.Width(), l_rcRect.Height()), m_ePixelFormat);
+	Image l_img( m_strName + String( "_Sub") << l_rcRect[0] << "x" << l_rcRect[1] << ":" << l_ptSize[0] << "x" << l_ptSize[1]);
+	l_img.Initialise( l_ptSize, m_ePixelFormat);
 
 	// Calcul de variables temporaires
-	const unsigned char	*	l_pSrc			= & m_buffer[(l_rcRect.Left() + l_rcRect.Top() * m_ptSize[0]) * GetBytesPerPixel( m_ePixelFormat)];
-	unsigned char		*	l_pDest			= & l_img.m_buffer[0];
+	const unsigned char	*	l_pSrc			= m_pBuffer->get_at( l_rcRect.Left(), l_rcRect.Top());
+	unsigned char		*	l_pDest			= l_img.m_pBuffer->get_at( 0, 0);
 	const unsigned int		l_uiSrcPitch	= m_ptSize[0] * GetBytesPerPixel( m_ePixelFormat);
 	const unsigned int		l_uiDestPitch	= l_img.m_ptSize[0] * GetBytesPerPixel( l_img.m_ePixelFormat);
 
@@ -251,84 +330,24 @@ Image Image :: SubImage( const Rectangle & l_rcRect)const
 		l_pDest += l_uiDestPitch;
 	}
 
+	CHECK_INVARIANTS();
 	return l_img;
 }
 
 void Image :: Flip()
 {
-	size_t l_uiBpp = GetBytesPerPixel( m_ePixelFormat);
-
-	for (size_t j = 0 ; j < m_ptSize[1] / 2 ; ++j)
-	{
-		std::swap_ranges(	& m_buffer[j * m_ptSize[0] * l_uiBpp],
-							& m_buffer[(j + 1) * m_ptSize[0] * l_uiBpp - 1],
-							& m_buffer[(m_ptSize[1] - j - 1) * m_ptSize[0] * l_uiBpp]);
-	}
+	CHECK_INVARIANTS();
+	m_pBuffer->flip();
+	CHECK_INVARIANTS();
 }
 
 void Image :: Mirror()
 {
-	size_t l_uiBpp = GetBytesPerPixel( m_ePixelFormat);
-
-	for (size_t i = 0 ; i < m_ptSize[0] / 2 ; ++i)
-	{
-		for (size_t j = 0 ; j < m_ptSize[1] ; ++j)
-		{
-			std::swap_ranges(	& m_buffer[(i + j * m_ptSize[0]) * l_uiBpp],
-								& m_buffer[(i + j * m_ptSize[0] + 1) * l_uiBpp],
-								& m_buffer[(m_ptSize[0] - i - 1 + j * m_ptSize[0]) * l_uiBpp]);
-		}
-	}
+	CHECK_INVARIANTS();
+	m_pBuffer->mirror();
+	CHECK_INVARIANTS();
 }
 
-//*********************************************************************************************
-
-ImagePtr ImageManager :: CreateImage( const String & p_name, const Path & p_path)
-{
-	ImagePtr l_image = GetElementByName( p_name);
-
-	if (l_image != NULL)
-	{
-		l_image->Ref();
-	}
-	else
-	{
-		ImageLoader l_loader;
-		l_image = l_loader.LoadFromFile( this, p_path);
-
-		if (l_image != NULL)
-		{
-			l_image->SetName( p_name);
-			AddElement( l_image);
-		}
-	}
-
-	return l_image;
-}
-
-ImagePtr ImageManager :: CreateImage( const String & p_name, const Point<size_t, 2> & p_ptSize, ePIXEL_FORMAT p_pixelFormat, const Buffer<unsigned char> & p_buffer)
-{
-	ImagePtr l_image = GetElementByName( p_name);
-
-	if (l_image != NULL)
-	{
-		l_image->Ref();
-	}
-	else
-	{
-		ImageLoader l_loader;
-		l_image = l_loader.LoadFromBuffer( this, p_ptSize, p_pixelFormat, p_buffer);
-
-		if (l_image != NULL)
-		{
-			l_image->SetName( p_name);
-			AddElement( l_image);
-		}
-	}
-
-	return l_image;
-}
-
-//*********************************************************************************************
+//*************************************************************************************************
 
 #pragma warning( pop)

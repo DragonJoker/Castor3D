@@ -1,18 +1,90 @@
-#include "CastorUtils/PrecompiledHeader.h"
+#include "CastorUtils/PrecompiledHeader.hpp"
 
-#include "CastorUtils/Quaternion.h"
-#include "CastorUtils/Point.h"
-#include "CastorUtils/Angle.h"
-#include "CastorUtils/Matrix.h"
-#include "CastorUtils/TransformationMatrix.h"
+#include "CastorUtils/Quaternion.hpp"
+#include "CastorUtils/Point.hpp"
+#include "CastorUtils/Angle.hpp"
+#include "CastorUtils/Matrix.hpp"
+#include "CastorUtils/TransformationMatrix.hpp"
 
 #if CHECK_MEMORYLEAKS
-#	include "CastorUtils/Memory.h"
+#	include "CastorUtils/Memory.hpp"
 using namespace Castor::Utils;
 #endif
 
+using namespace Castor;
 using namespace Castor::Math;
 using namespace Castor::Utils;
+using namespace Castor::Resources;
+
+//*************************************************************************************************
+
+bool Loader<Quaternion> :: Load( Quaternion & p_object, File & p_file)
+{
+	bool l_bReturn = true;
+
+	for (size_t i = 0 ; i < 4 && l_bReturn ; i++)
+	{
+		l_bReturn = p_file.Read( p_object[i]) == sizeof( real);
+	}
+
+	return l_bReturn;
+}
+
+bool Loader<Quaternion> :: Save( Quaternion const & p_object, File & p_file)
+{
+	bool l_bReturn = true;
+
+	for (size_t i = 0 ; i < 4 && l_bReturn ; i++)
+	{
+		l_bReturn = p_file.Write( p_object[i]) == sizeof( real);
+	}
+
+	return l_bReturn;
+}	
+
+bool Loader<Quaternion> :: Read( Quaternion & p_object, File & p_file)
+{
+	String l_strWord;
+	bool l_bReturn = p_file.ReadLine( l_strWord, 1024, cuT( " \r\n;\t")) > 0 && l_strWord.is_floating();
+	xchar l_cDump;
+
+	if (l_bReturn)
+	{
+		p_object[0] = l_strWord.to_float();
+		p_file.ReadChar( l_cDump);
+		l_bReturn = p_file.ReadLine( l_strWord, 1024, cuT( " \r\n;\t")) > 0 && l_strWord.is_floating();
+	}
+
+	if (l_bReturn)
+	{
+		p_object[1] = l_strWord.to_float();
+		p_file.ReadChar( l_cDump);
+		l_bReturn = p_file.ReadLine( l_strWord, 1024, cuT( " \r\n;\t")) > 0 && l_strWord.is_floating();
+	}
+
+	if (l_bReturn)
+	{
+		p_object[2] = l_strWord.to_float();
+		p_file.ReadChar( l_cDump);
+		l_bReturn = p_file.ReadLine( l_strWord, 1024, cuT( " \r\n;\t")) > 0 && l_strWord.is_floating();
+	}
+
+	if (l_bReturn)
+	{
+		p_object[3] = l_strWord.to_float();
+	}
+
+	return l_bReturn;
+}
+
+bool Loader<Quaternion> :: Write( Quaternion const & p_object, File & p_file)
+{
+	String l_strWord;
+	bool l_bReturn = p_file.Print( 1024, cuT( "%f %f %f %f"), p_object[0], p_object[1], p_object[2]) > 0;
+	return l_bReturn;
+}
+
+//*************************************************************************************************
 
 const Quaternion Quaternion :: Identity = Quaternion();
 const Quaternion Quaternion :: Null = Quaternion( 0.0, 0.0, 0.0, 0.0);
@@ -22,13 +94,13 @@ Quaternion :: Quaternion()
 {
 }
 
-Quaternion :: Quaternion( const Quaternion & p_q)
-	:	Point4r( p_q)
+Quaternion :: Quaternion( Quaternion const & p_q)
+	:	Point4r( p_q[0], p_q[1], p_q[2], p_q[3])
 {
 }
 
-Quaternion :: Quaternion( const Point4r & p_q)
-	:	Point4r( p_q)
+Quaternion :: Quaternion( Point4r const & p_q)
+	:	Point4r( p_q[0], p_q[1], p_q[2], p_q[3])
 {
 }
 
@@ -38,7 +110,7 @@ Quaternion :: ~Quaternion()
 
 void Quaternion :: Conjugate()
 {
-	Reverse();
+	negate();
 	Normalise();
 }
 
@@ -46,24 +118,24 @@ QuaternionPtr Quaternion :: GetConjugate()
 {
 	Normalise();
 	QuaternionPtr q( new Quaternion( * this));
-	q->Reverse();
+	q->negate();
 	q->at( 3) = at( 3);
 	return q;
 }
 
 real Quaternion :: GetMagnitude()
 {
-	return Point4r::GetLength();
+	return float( Point4r::length());
 }
 
 void Quaternion :: Normalise()
 {
-	Point4r::Normalise();
+	Point4r::normalise();
 }
 
 void Quaternion :: ToRotationMatrix( Matrix4x4r & p_matrix)const
 {
-	p_matrix.Identity();
+	p_matrix.SetIdentity();
 	MtxUtils::rotate( p_matrix, * this);
 }
 
@@ -125,7 +197,7 @@ void Quaternion :: ToRotationMatrix( real * p_matrix)const
 /**/
 }
 
-void Quaternion :: FromRotationMatrix( const Matrix4x4r & p_matrix)
+void Quaternion :: FromRotationMatrix( Matrix4x4r const & p_matrix)
 {
 	real x = at( 0);
 	real y = at( 1);
@@ -239,9 +311,10 @@ void Quaternion :: FromRotationMatrix( real * p_matrix)
 	Normalise();
 }
 
-void Quaternion :: FromAxisAngle( const Point3r & p_vector, const Angle & p_angle)
+void Quaternion :: FromAxisAngle( Point3r const & p_vector, Angle const & p_angle)
 {
-	Point3r l_normalised = p_vector.GetNormalised();
+	Point3r l_normalised;
+	l_normalised.copy( p_vector.get_normalised());
 	real l_angle = p_angle.Radians();
 	real l_result = sin( l_angle / real( 2.0));
 	// Calculate the x, y and z of the quaternion
@@ -259,12 +332,12 @@ void Quaternion :: ToAxisAngle( Point3r & p_vector, Angle & p_angle)const
 	real z = at( 2);
 	real w = at( 3);
 
-	p_angle = acos( w) * 2;
+	p_angle = Angle::FromRadians( acos( w) * 2);
 
 	p_vector[0] = x;
 	p_vector[1] = y;
 	p_vector[2] = z;
-	p_vector.Normalise();
+	p_vector.normalise();
 }
 
 Angle Quaternion :: GetYaw()const
@@ -273,7 +346,7 @@ Angle Quaternion :: GetYaw()const
 	real y = at( 1);
 	real z = at( 2);
 	real w = at( 3);
-	return asin( -2 * (x * z - w * y));
+	return Angle::FromRadians( asin( -2 * (x * z - w * y)));
 }
 
 Angle Quaternion :: GetPitch()const
@@ -282,7 +355,7 @@ Angle Quaternion :: GetPitch()const
 	real y = at( 1);
 	real z = at( 2);
 	real w = at( 3);
-	return atan2( 2 * (y * z + w * x), w * w - x * x - y * y + z * z);
+	return Angle::FromRadians( atan2( 2 * (y * z + w * x), w * w - x * x - y * y + z * z));
 }
 
 Angle Quaternion :: GetRoll()const
@@ -291,64 +364,37 @@ Angle Quaternion :: GetRoll()const
 	real y = at( 1);
 	real z = at( 2);
 	real w = at( 3);
-	return atan2( 2 * (x * y + w * z), w * w + x * x - y * y - z * z);
+	return Angle::FromRadians( atan2( 2 * (x * y + w * z), w * w + x * x - y * y - z * z));
 }
 
-Quaternion Quaternion :: operator +( const Quaternion & q) const
+Quaternion & Quaternion :: operator =( Quaternion const & p_q)
 {
-	real x = at( 0);
-	real y = at( 1);
-	real z = at( 2);
-	real w = at( 3);
-	real qx = q[0];
-	real qy = q[1];
-	real qz = q[2];
-	real qw = q[3];
-    return Quaternion( w + qw, x + qx, y + qy, z + qz);
+	copy( p_q);
+	Normalise();
+	return *this;
 }
 
-Quaternion Quaternion :: operator -( const Quaternion & q) const
+Quaternion & Quaternion :: operator +=( Quaternion const & p_q)
 {
-	real x = at( 0);
-	real y = at( 1);
-	real z = at( 2);
-	real w = at( 3);
-	real qx = q[0];
-	real qy = q[1];
-	real qz = q[2];
-	real qw = q[3];
-    return Quaternion( w - qw, x - qx, y - qy, z - qz);
+	at( 0) += p_q[0];
+	at( 1) += p_q[1];
+	at( 2) += p_q[2];
+	at( 3) += p_q[3];
+	Normalise();
+    return * this;
 }
 
-Quaternion Quaternion :: operator *( real rScalar) const
+Quaternion & Quaternion :: operator -=( Quaternion const & p_q)
 {
-	real x = at( 0);
-	real y = at( 1);
-	real z = at( 2);
-	real w = at( 3);
-	return Quaternion( rScalar * w, rScalar * x, rScalar * y, rScalar * z);
+	at( 0) -= p_q[0];
+	at( 1) -= p_q[1];
+	at( 2) -= p_q[2];
+	at( 3) -= p_q[3];
+	Normalise();
+    return * this;
 }
 
-Quaternion Quaternion :: operator *( const Quaternion & q)const
-{
-	real x = at( 0);
-	real y = at( 1);
-	real z = at( 2);
-	real w = at( 3);
-	real qx = q[0];
-	real qy = q[1];
-	real qz = q[2];
-	real qw = q[3];
-
-    Quaternion r;
-    r[3] = w * qw - x * qx - y * qy - z * qz;
-    r[0] = w * qx + x * qw + y * qz - z * qy;
-    r[1] = w * qy + y * qw + z * qx - x * qz;
-    r[2] = w * qz + z * qw + x * qy - y * qx;
-    return r;
-}
-
-void Quaternion :: operator *=( const Quaternion & q)
+Quaternion & Quaternion :: operator *=( Quaternion const & p_q)
 {
 	real x = at( 0);
 	real y = at( 1);
@@ -358,10 +404,10 @@ void Quaternion :: operator *=( const Quaternion & q)
 	real l_y = y;
 	real l_z = z;
 	real l_w = w;
-	real qx = q[0];
-	real qy = q[1];
-	real qz = q[2];
-	real qw = q[3];
+	real qx = p_q[0];
+	real qy = p_q[1];
+	real qz = p_q[2];
+	real qw = p_q[3];
 
     w = l_w * qw - l_x * qx - l_y * qy - l_z * qz;
     x = l_w * qx + l_x * qw + l_y * qz - l_z * qy;
@@ -373,25 +419,26 @@ void Quaternion :: operator *=( const Quaternion & q)
 	at( 2) = z;
 	at( 3) = w;
 	Normalise();
+
+	return * this;
 }
 
-Quaternion & Quaternion :: operator =( const Quaternion & p_q)
+Quaternion & Quaternion :: operator *=( real p_rScalar)
 {
-	Point4r::operator =( p_q);
+	at( 0) *= p_rScalar;
+	at( 1) *= p_rScalar;
+	at( 2) *= p_rScalar;
+	at( 3) *= p_rScalar;
 	Normalise();
-	return *this;
+	return * this;
 }
 
-Quaternion Quaternion :: operator -() const
+real Quaternion :: Dot( Quaternion const & p_quat) const
 {
-	real x = at( 0);
-	real y = at( 1);
-	real z = at( 2);
-	real w = at( 3);
-    return Quaternion( -w, -x, -y, -z);
+	return Point4r::dot( p_quat);
 }
 
-Point3r Quaternion::operator *( const Point3r & p_vector)const
+void Quaternion :: Transform( Point3r const & p_vector, Point3r & p_ptResult)
 {
 	real x = at( 0);
 	real y = at( 1);
@@ -400,12 +447,12 @@ Point3r Quaternion::operator *( const Point3r & p_vector)const
 
 	Point3r uv, uuv;
 	Point3r u( x, y, z);
-	uv = u ^ p_vector;
-	uuv = u ^ uv;
+	uv.copy( u ^ p_vector);
+	uuv.copy( u ^ uv);
 	uv *= (2.0f * w);
 	uuv *= 2.0f;
 
-	return p_vector + uv + uuv;
+	p_ptResult.copy( p_vector + uv + uuv);
 }
 
 bool Quaternion :: Save( File & p_file)const
@@ -415,19 +462,19 @@ bool Quaternion :: Save( File & p_file)const
 	real z = at( 2);
 	real w = at( 3);
 
-	if ( ! p_file.Write<real>( x))
+	if ( ! p_file.Write( x))
 	{
 		return false;
 	}
-	if ( ! p_file.Write<real>( y))
+	if ( ! p_file.Write( y))
 	{
 		return false;
 	}
-	if ( ! p_file.Write<real>( z))
+	if ( ! p_file.Write( z))
 	{
 		return false;
 	}
-	if ( ! p_file.Write<real>( w))
+	if ( ! p_file.Write( w))
 	{
 		return false;
 	}
@@ -441,19 +488,19 @@ bool Quaternion :: Load( File & p_file)
 	real z;
 	real w;
 
-	if ( ! p_file.Read<real>( x))
+	if ( ! p_file.Read( x))
 	{
 		return false;
 	}
-	if ( ! p_file.Read<real>( y))
+	if ( ! p_file.Read( y))
 	{
 		return false;
 	}
-	if ( ! p_file.Read<real>( z))
+	if ( ! p_file.Read( z))
 	{
 		return false;
 	}
-	if ( ! p_file.Read<real>( w))
+	if ( ! p_file.Read( w))
 	{
 		return false;
 	}
@@ -467,12 +514,7 @@ bool Quaternion :: Load( File & p_file)
 	return true;
 }
 
-real Quaternion :: Dot( const Quaternion & p_quat) const
-{
-	return Point4r::Dot( p_quat);
-}
-
-Quaternion Quaternion :: Slerp( const Quaternion & p_target, real p_percent, bool p_shortestPath)
+Quaternion Quaternion :: Slerp( Quaternion const & p_target, real p_percent, bool p_shortestPath)
 {
 //	Slerp = q1((q1^-1)q2)^t;
     real fCos = Dot( p_target);
@@ -515,8 +557,46 @@ Quaternion Quaternion :: Slerp( const Quaternion & p_target, real p_percent, boo
     }
 }
 
-Quaternion Castor::Math :: operator *( real rScalar, const Quaternion & rkQ)
+Quaternion Castor::Math :: operator	+( Quaternion const & p_qA, Quaternion const & p_qB)
 {
-	Quaternion l_qReturn = rkQ * rScalar;
-    return l_qReturn;
+	Quaternion l_qReturn( p_qA);
+	l_qReturn += p_qB;
+	return l_qReturn;
 }
+
+Quaternion Castor::Math :: operator	-( Quaternion const & p_qA, Quaternion const & p_qB)
+{
+	Quaternion l_qReturn( p_qA);
+	l_qReturn -= p_qB;
+	return l_qReturn;
+}
+
+Quaternion Castor::Math :: operator	*( Quaternion const & p_qA, Quaternion const & p_qB)
+{
+	Quaternion l_qReturn( p_qA);
+	l_qReturn *= p_qB;
+	return l_qReturn;
+}
+
+Quaternion Castor::Math :: operator	*( Quaternion const & p_q, real p_rScalar)
+{
+	Quaternion l_qReturn( p_q);
+	l_qReturn *= p_rScalar;
+	return l_qReturn;
+}
+
+Quaternion Castor::Math :: operator *( real p_rScalar, Quaternion const & p_q)
+{
+	Quaternion l_qReturn( p_q);
+	l_qReturn *= p_rScalar;
+	return l_qReturn;
+}
+
+Quaternion Castor::Math :: operator	-( Quaternion const & p_q)
+{
+	Quaternion l_qReturn( p_q);
+	l_qReturn.negate();
+	return l_qReturn;
+}
+
+//*************************************************************************************************

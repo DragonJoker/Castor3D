@@ -1,35 +1,37 @@
-#include "GuiCommon/PrecompiledHeader.h"
+#include "GuiCommon/PrecompiledHeader.hpp"
 
-#include "GuiCommon/FrameVariableDialog.h"
+#include "GuiCommon/FrameVariableDialog.hpp"
 
 using namespace Castor3D;
 using namespace GuiCommon;
 
-FrameVariableDialog :: FrameVariableDialog( wxWindow * p_pParent, FrameVariablePtr p_pFrameVariable)
-	:	wxDialog( p_pParent, wxID_ANY, CU_T( "Uniform Variable"), wxDefaultPosition, wxSize( 200, 200)),
-		m_pFrameVariable( p_pFrameVariable),
-		m_bOwn( p_pFrameVariable == NULL)
+wxFrameVariableDialog :: wxFrameVariableDialog( wxWindow * p_pParent, ShaderProgramPtr p_pProgram, ShaderObjectPtr p_pObject, FrameVariablePtr p_pFrameVariable)
+	:	wxDialog( p_pParent, wxID_ANY, wxT( "Frame Variable"), wxDefaultPosition, wxSize( 200, 200))
+	,	m_pFrameVariable( p_pFrameVariable)
+	,	m_pProgram( p_pProgram)
+	,	m_pObject( p_pObject)
+	,	m_bOwn( p_pFrameVariable.use_count() == 0)
 {
 	wxArrayString l_arrayChoices;
-	l_arrayChoices.push_back( CU_T( "int"));
-	l_arrayChoices.push_back( CU_T( "real"));
-	l_arrayChoices.push_back( CU_T( "ivec2"));
-	l_arrayChoices.push_back( CU_T( "ivec3"));
-	l_arrayChoices.push_back( CU_T( "ivec4"));
-	l_arrayChoices.push_back( CU_T( "vec2"));
-	l_arrayChoices.push_back( CU_T( "vec3"));
-	l_arrayChoices.push_back( CU_T( "vec4"));
-	l_arrayChoices.push_back( CU_T( "mat2"));
-	l_arrayChoices.push_back( CU_T( "mat3"));
-	l_arrayChoices.push_back( CU_T( "mat4"));
+	l_arrayChoices.push_back( wxT( "int"));
+	l_arrayChoices.push_back( wxT( "real"));
+	l_arrayChoices.push_back( wxT( "ivec2"));
+	l_arrayChoices.push_back( wxT( "ivec3"));
+	l_arrayChoices.push_back( wxT( "ivec4"));
+	l_arrayChoices.push_back( wxT( "vec2"));
+	l_arrayChoices.push_back( wxT( "vec3"));
+	l_arrayChoices.push_back( wxT( "vec4"));
+	l_arrayChoices.push_back( wxT( "mat2"));
+	l_arrayChoices.push_back( wxT( "mat3"));
+	l_arrayChoices.push_back( wxT( "mat4"));
 
-	new wxStaticText( this, wxID_ANY, CU_T( "Type"), wxPoint( 10, 10), wxSize( 90, 20));
-	m_pComboType = new wxComboBox( this, eType, CU_T( "int"), wxPoint( 100, 10), wxSize( 90, 20), l_arrayChoices, wxCB_READONLY);
+	new wxStaticText( this, wxID_ANY, wxT( "Type"), wxPoint( 10, 10), wxSize( 90, 20));
+	m_pComboType = new wxComboBox( this, eID_COMBO_TYPE, cuT( "int"), wxPoint( 100, 10), wxSize( 90, 20), l_arrayChoices, wxCB_READONLY);
 
-	new wxStaticText( this, wxID_ANY, CU_T( "Nom"), wxPoint( 10, 40), wxSize( 90, 20));
+	new wxStaticText( this, wxID_ANY, wxT( "Name"), wxPoint( 10, 40), wxSize( 90, 20));
 	m_pEditName = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxPoint( 100, 40), wxSize( 90, 20), wxBORDER_SIMPLE);
 
-	new wxStaticText( this, wxID_ANY, CU_T( "Valeur"), wxPoint( 10, 70), wxSize( 90, 20));
+	new wxStaticText( this, wxID_ANY, wxT( "Value"), wxPoint( 10, 70), wxSize( 90, 20));
 	m_pEditValue = new wxTextCtrl( this, wxID_ANY, wxEmptyString, wxPoint( 100, 70), wxSize( 90, 20), wxBORDER_SIMPLE);
 
 	if (m_bOwn)
@@ -45,106 +47,102 @@ FrameVariableDialog :: FrameVariableDialog( wxWindow * p_pParent, FrameVariableP
 	}
 
 	wxSize l_size = GetClientSize();
-	new wxButton( this, eOK, CU_T( "Valider"), wxPoint( 20, l_size.y - 30), wxSize( 70, 20));
-	new wxButton( this, eCancel, CU_T( "Annuler"), wxPoint( l_size.x - 90, l_size.y - 30), wxSize( 70, 20));
+	new wxButton( this, eID_BUTTON_OK, wxT( "OK"), wxPoint( 20, l_size.y - 30), wxSize( 70, 20));
+	new wxButton( this, eID_BUTTON_CANCEL, wxT( "Cancel"), wxPoint( l_size.x - 90, l_size.y - 30), wxSize( 70, 20));
 }
 
-FrameVariableDialog :: ~FrameVariableDialog()
+wxFrameVariableDialog :: ~wxFrameVariableDialog()
 {
 }
 
-BEGIN_EVENT_TABLE( FrameVariableDialog, wxDialog)
-	EVT_CLOSE(					FrameVariableDialog::_onClose)
-	EVT_BUTTON(		eOK,		FrameVariableDialog::_onOk)
-	EVT_BUTTON(		eCancel,	FrameVariableDialog::_onCancel)
-	EVT_COMBOBOX(	eType,		FrameVariableDialog::_onSelectType)
+BEGIN_EVENT_TABLE( wxFrameVariableDialog, wxDialog)
+	EVT_CLOSE(							wxFrameVariableDialog::_onClose)
+	EVT_BUTTON(		eID_BUTTON_OK,		wxFrameVariableDialog::_onOk)
+	EVT_BUTTON(		eID_BUTTON_CANCEL,	wxFrameVariableDialog::_onCancel)
+	EVT_COMBOBOX(	eID_COMBO_TYPE,		wxFrameVariableDialog::_onSelectType)
 END_EVENT_TABLE()
 
-void FrameVariableDialog :: _onClose( wxCloseEvent & event)
+void wxFrameVariableDialog :: _onClose( wxCloseEvent & event)
 {
 	EndDialog( wxID_CANCEL);
 }
 
-void FrameVariableDialog :: _onOk( wxCommandEvent & event)
+void wxFrameVariableDialog :: _onOk( wxCommandEvent & event)
 {
-	if (m_pFrameVariable != NULL)
+	if (m_pFrameVariable)
 	{
-		m_pFrameVariable->SetName( m_pEditName->GetValue().c_str());
-		m_pFrameVariable->SetValue( m_pEditValue->GetValue().c_str());
+		m_pFrameVariable->SetName( (const wxChar *)m_pEditName->GetValue().c_str());
+		m_pFrameVariable->SetValue( (const wxChar *)m_pEditValue->GetValue().c_str());
 	}
 
 	EndDialog( wxID_OK);
 }
 
-void FrameVariableDialog :: _onCancel( wxCommandEvent & event)
+void wxFrameVariableDialog :: _onCancel( wxCommandEvent & event)
 {
-	if (m_bOwn && m_pFrameVariable != NULL)
+	if (m_bOwn && m_pFrameVariable)
 	{
 		m_pFrameVariable.reset();
-//		delete m_pFrameVariable;
-//		m_pFrameVariable = NULL;
 	}
 
 	EndDialog( wxID_CANCEL);
 }
 
-void FrameVariableDialog :: _onSelectType( wxCommandEvent & event)
+void wxFrameVariableDialog :: _onSelectType( wxCommandEvent & event)
 {
 	m_pFrameVariable.reset();
-//	delete m_pFrameVariable;
-//	m_pFrameVariable = NULL;
 
 	switch (event.GetInt())
 	{
 	case 0:
-		m_pFrameVariable = FrameVariablePtr( new OneFrameVariable<int>());
+		m_pFrameVariable = m_pProgram->CreateFrameVariable<OneIntFrameVariable>( 1, m_pObject);
 		break;
 
 	case 1:
-		m_pFrameVariable = FrameVariablePtr( new OneFrameVariable<float>());
+		m_pFrameVariable = m_pProgram->CreateFrameVariable<OneFloatFrameVariable>( 1, m_pObject);
 		break;
 
 	case 2:
-		m_pFrameVariable = FrameVariablePtr( new PointFrameVariable<int, 2>());
+		m_pFrameVariable = m_pProgram->CreateFrameVariable<Point2iFrameVariable>( 1, m_pObject);
 		break;
 
 	case 3:
-		m_pFrameVariable = FrameVariablePtr( new PointFrameVariable<int, 3>());
+		m_pFrameVariable = m_pProgram->CreateFrameVariable<Point3iFrameVariable>( 1, m_pObject);
 		break;
 
 	case 4:
-		m_pFrameVariable = FrameVariablePtr( new PointFrameVariable<int, 4>());
+		m_pFrameVariable = m_pProgram->CreateFrameVariable<Point4iFrameVariable>( 1, m_pObject);
 		break;
 
 	case 5:
-		m_pFrameVariable = FrameVariablePtr( new PointFrameVariable<float, 2>());
+		m_pFrameVariable = m_pProgram->CreateFrameVariable<Point2fFrameVariable>( 1, m_pObject);
 		break;
 
 	case 6:
-		m_pFrameVariable = FrameVariablePtr( new PointFrameVariable<float, 3>());
+		m_pFrameVariable = m_pProgram->CreateFrameVariable<Point3fFrameVariable>( 1, m_pObject);
 		break;
 
 	case 7:
-		m_pFrameVariable = FrameVariablePtr( new PointFrameVariable<float, 4>());
+		m_pFrameVariable = m_pProgram->CreateFrameVariable<Point4fFrameVariable>( 1, m_pObject);
 		break;
 
 	case 8:
-		m_pFrameVariable = FrameVariablePtr( new MatrixFrameVariable<float, 2, 2>());
+		m_pFrameVariable = m_pProgram->CreateFrameVariable<Matrix2x2fFrameVariable>( 1, m_pObject);
 		break;
 
 	case 9:
-		m_pFrameVariable = FrameVariablePtr( new MatrixFrameVariable<float, 3, 3>());
+		m_pFrameVariable = m_pProgram->CreateFrameVariable<Matrix3x3fFrameVariable>( 1, m_pObject);
 		break;
 
 	case 10:
-		m_pFrameVariable = FrameVariablePtr( new MatrixFrameVariable<float, 4, 4>());
+		m_pFrameVariable = m_pProgram->CreateFrameVariable<Matrix4x4fFrameVariable>( 1, m_pObject);
 		break;
 
 	default:
 		break;
 	}
 
-	if (m_pFrameVariable != NULL)
+	if (m_pFrameVariable)
 	{
 		m_pEditName->Show();
 		m_pEditValue->Show();

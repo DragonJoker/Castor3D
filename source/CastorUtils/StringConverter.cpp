@@ -1,8 +1,8 @@
-#include "CastorUtils/PrecompiledHeader.h"
+#include "CastorUtils/PrecompiledHeader.hpp"
 
-#include "CastorUtils/StringConverter.h"
+#include "CastorUtils/StringConverter.hpp"
 
 #if CHECK_MEMORYLEAKS
-#	include "Memory.h"
+#	include "CastorUtils/Memory.hpp"
 using namespace Castor::Utils;
 #endif

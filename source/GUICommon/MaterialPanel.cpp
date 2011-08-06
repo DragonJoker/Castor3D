@@ -1,72 +1,74 @@
-#include "GuiCommon/PrecompiledHeader.h"
+#include "GuiCommon/PrecompiledHeader.hpp"
 
-#include "GuiCommon/MaterialPanel.h"
-#include "GuiCommon/PassPanel.h"
-#include "GuiCommon/EnvironmentFrame.h"
+#include "GuiCommon/MaterialPanel.hpp"
+#include "GuiCommon/PassPanel.hpp"
 
 using namespace Castor3D;
 using namespace GuiCommon;
 
-MaterialPanel :: MaterialPanel( Castor3D::MaterialManager * p_pManager, wxWindow * parent, const wxPoint & pos, const wxSize & size)
+wxMaterialPanel :: wxMaterialPanel( wxWindow * parent, const wxPoint & pos, const wxSize & size)
 	:	wxPanel( parent, wxID_ANY, pos, size, 524288 | wxBORDER_NONE)
 	,	m_selectedPassIndex( -1)
 	,	m_selectedPassPanel( NULL)
-	,	m_pManager( p_pManager)
 {
 }
 
-MaterialPanel :: ~MaterialPanel()
+wxMaterialPanel :: ~wxMaterialPanel()
 {
 }
 
-void MaterialPanel :: CreateMaterialPanel( const String & p_materialName)
+void wxMaterialPanel :: CreateMaterialPanel( String const & p_materialName)
 {
-	_createMaterialPanel( (p_materialName.size() > 0 ? p_materialName.c_str() : NULL));
+	_createMaterialPanel( p_materialName);
 }
 
-int MaterialPanel :: GetPassIndex()const
+int wxMaterialPanel :: GetPassIndex()const
 {
 	wxString l_value = m_passSelector->GetValue();
-	Logger::LogMessage( CU_T( "GetPassIndex - l_value : %s"), l_value.c_str());
+	Logger::LogMessage( cuT( "GetPassIndex - l_value : %s"), (const wxChar *)l_value.c_str());
+	int l_iReturn = -2;
 
 	if (l_value.IsNumber())
 	{
-		int l_res = atoi( l_value.c_str());
-		Logger::LogMessage( CU_T( "GetPassIndex - l_res : %d"), l_res);
-		return l_res;
+		long l_res;
+		l_value.ToLong( & l_res);
+		Logger::LogMessage( cuT( "GetPassIndex - l_res : %i"), l_res);
+		l_iReturn = l_res;
 	}
-	if (l_value == CU_T( "New..."))
+	else if (l_value == wxT( "New..."))
 	{
-		return -1;
+		l_iReturn = -1;
 	}
-	return -2;
+
+	return l_iReturn;
 }
 
-void MaterialPanel :: _createMaterialPanel( const xchar * p_materialName)
+void wxMaterialPanel :: _createMaterialPanel( const wxString & p_materialName)
 {
-	if (m_material != NULL)
+	if (m_material)
 	{
 		m_material->Initialise();
 		m_material.reset();
 	}
 
 	m_selectedPass.reset();
-	m_material = m_pManager->GetElementByName( (p_materialName != NULL ? p_materialName : C3DEmptyString));
+	Root::MaterialManager * l_pManager = Root::GetSingleton()->GetMaterialManager();
+	m_material = l_pManager->GetElement( (const wxChar *)p_materialName.c_str());
 
-	if ( ! DestroyChildren() || m_material == NULL)
+	if ( ! DestroyChildren() || ! m_material)
 	{
 		return;
 	}
 
 	m_selectedPass = m_material->GetPass( 0);
 	m_selectedPassIndex = 0;
-	new wxStaticText( this, wxID_ANY, CU_T( "Nom : "), wxPoint( 10, 5));
-	m_materialName = new wxTextCtrl( this, eMaterialName, String( p_materialName), wxPoint( 50, 2), wxSize( 100, 20), wxTE_PROCESS_ENTER | wxBORDER_SIMPLE);
+	new wxStaticText( this, wxID_ANY, wxT( "Name : "), wxPoint( 10, 5));
+	m_materialName = new wxTextCtrl( this, eID_EDIT_MATERIAL_NAME, p_materialName, wxPoint( 50, 2), wxSize( 100, 20), wxTE_PROCESS_ENTER | wxBORDER_SIMPLE);
 	wxSize l_size = GetClientSize();
 
 	l_size.x -= 20;
 	l_size.y -= 30;
-	wxStaticBox * l_passBox = new wxStaticBox( this, wxID_ANY, CU_T( "Passes"), wxPoint( 10, 30), l_size);
+	wxStaticBox * l_passBox = new wxStaticBox( this, wxID_ANY, wxT( "Passes"), wxPoint( 10, 30), l_size);
 
 	wxArrayString l_names;
 	wxString l_name;
@@ -78,15 +80,15 @@ void MaterialPanel :: _createMaterialPanel( const xchar * p_materialName)
 		l_names.push_back( l_name);
 	}
 
-	l_names.push_back( CU_T( "New..."));
-	m_passSelector = new wxComboBox( this, ePass, CU_T( "0"), wxPoint( 20, 45), wxSize( 50, 20), l_names, wxBORDER_SIMPLE | wxCB_READONLY);
-	m_deletePass = new wxButton( this, eDeletePass, CU_T( "Supprimer"), wxPoint( 80, 44), wxSize( 80, 23), wxBORDER_SIMPLE);
+	l_names.push_back( wxT( "New..."));
+	m_passSelector = new wxComboBox( this, eID_COMBO_PASS, wxT( "0"), wxPoint( 20, 45), wxSize( 50, 20), l_names, wxBORDER_SIMPLE | wxCB_READONLY);
+	m_deletePass = new wxButton( this, eID_BUTTON_DELETE, wxT( "Delete"), wxPoint( 80, 44), wxSize( 80, 23), wxBORDER_SIMPLE);
 	m_passesPanel = new wxPanel( this, wxID_ANY, wxPoint( 15, 70), wxSize( l_passBox->GetClientSize().x - 10, l_passBox->GetClientSize().y - 30));
-	m_selectedPassPanel = new PassPanel( m_pManager, m_passesPanel, wxPoint( 0, 0), m_passesPanel->GetClientSize());
+	m_selectedPassPanel = new wxPassPanel( m_passesPanel, wxPoint( 0, 0), m_passesPanel->GetClientSize());
 	_createPassPanel();
 }
 
-void MaterialPanel :: _createPassPanel()
+void wxMaterialPanel :: _createPassPanel()
 {
 	if (m_selectedPassIndex == -1)
 	{
@@ -105,15 +107,15 @@ void MaterialPanel :: _createPassPanel()
 	m_selectedPassPanel->CreatePassPanel( m_selectedPass);
 }
 
-BEGIN_EVENT_TABLE( MaterialPanel, wxPanel)
-	EVT_BUTTON(		eDeletePass,		MaterialPanel::_onDeletePass)
-	EVT_TEXT_ENTER( eMaterialName,		MaterialPanel::_onMaterialName)
-	EVT_COMBOBOX(	ePass,				MaterialPanel::_onPassSelect)
+BEGIN_EVENT_TABLE( wxMaterialPanel, wxPanel)
+	EVT_BUTTON(		eID_BUTTON_DELETE,			wxMaterialPanel::_onDeletePass)
+	EVT_TEXT_ENTER( eID_EDIT_MATERIAL_NAME,		wxMaterialPanel::_onMaterialName)
+	EVT_COMBOBOX(	eID_COMBO_PASS,				wxMaterialPanel::_onPassSelect)
 END_EVENT_TABLE()
 
-void MaterialPanel :: _onDeletePass( wxCommandEvent & event)
+void wxMaterialPanel :: _onDeletePass( wxCommandEvent & event)
 {
-	if (m_material != NULL && m_material->GetNbPasses() > 1)
+	if (m_material && m_material->GetNbPasses() > 1)
 	{
 		m_passSelector->Clear();
 		m_material->DestroyPass( m_selectedPassIndex);
@@ -128,9 +130,9 @@ void MaterialPanel :: _onDeletePass( wxCommandEvent & event)
 			m_passSelector->Insert( l_name, i);
 		}
 
-		l_name = CU_T( "New...");
+		l_name = wxT( "New...");
 		m_passSelector->Insert( l_name, i);
-		m_passSelector->SetValue( CU_T( "New..."));
+		m_passSelector->SetValue( wxT( "New..."));
 		m_passSelector->Update();
 		this->RemoveChild( m_selectedPassPanel);
 
@@ -141,14 +143,14 @@ void MaterialPanel :: _onDeletePass( wxCommandEvent & event)
 	}
 }
 
-void MaterialPanel :: _onMaterialName( wxCommandEvent & event)
+void wxMaterialPanel :: _onMaterialName( wxCommandEvent & event)
 {
-	String l_name = m_materialName->GetValue().c_str();
+	String l_name = (char const *)m_materialName->GetValue().c_str();
 	m_material->SetName( l_name);
 	m_material->Initialise();
 }
 
-void MaterialPanel :: _onPassSelect( wxCommandEvent & event)
+void wxMaterialPanel :: _onPassSelect( wxCommandEvent & event)
 {
 	m_selectedPassIndex = GetPassIndex();
 	_createPassPanel();

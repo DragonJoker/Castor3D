@@ -1,7 +1,7 @@
-#include "CastorShape/PrecompiledHeader.h"
+#include "CastorShape/PrecompiledHeader.hpp"
 
-#include "CastorShape/main/FrameListener.h"
-#include "CastorShape/main/RenderPanel.h"
+#include "CastorShape/main/FrameListener.hpp"
+#include "CastorShape/main/RenderPanel.hpp"
 
 using namespace Castor3D;
 using namespace CastorShape;
@@ -20,7 +20,8 @@ SelectObjectFrameEvent :: SelectObjectFrameEvent( ScenePtr p_scene, GeometryPtr 
 		m_panel( p_panel),
 		m_x( p_x),
 		m_y( p_y)
-{}
+{
+}
 
 SelectObjectFrameEvent :: ~SelectObjectFrameEvent()
 {
@@ -29,9 +30,9 @@ SelectObjectFrameEvent :: ~SelectObjectFrameEvent()
 bool SelectObjectFrameEvent :: Apply()
 {
 	Ray l_ray( m_x, m_y, * m_camera);
-	bool l_wantGeo = m_geometry != NULL;
-	bool l_wantSubmesh = m_submesh != NULL;
-	bool l_wantFace = m_face != NULL;
+	bool l_wantGeo = m_geometry.use_count() > 0;
+	bool l_wantSubmesh = m_submesh.use_count() > 0;
+	bool l_wantFace = m_face.use_count() > 0;
 	bool l_wantVertex = m_vertex != NULL;
 	m_scene->Select( & l_ray, m_geometry, m_submesh, & m_face, m_vertex);
 

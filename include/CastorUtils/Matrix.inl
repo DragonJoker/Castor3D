@@ -1,40 +1,67 @@
 namespace Castor
 {	namespace Math
 {
+//*************************************************************************************************
+
 	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix<T, Rows, Columns> :: Matrix( const T & p_value)
-		:	m_pPointer( new T[Rows * Columns]),
-			m_bOwnCoords( true)
+	inline Matrix<T, Rows, Columns> :: Matrix()
+		:	m_pPointer( new T[Rows * Columns])
+		,	m_bOwnCoords( true)
+	{
+		Init();
+	}
+	template <typename T, size_t Rows, size_t Columns>
+	inline Matrix<T, Rows, Columns> :: Matrix( T const & p_value)
+		:	m_pPointer( new T[Rows * Columns])
+		,	m_bOwnCoords( true)
 	{
 		Init( p_value);
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix<T, Rows, Columns> :: Matrix( const Matrix<T, Rows, Columns> & matrix)
-		:	m_pPointer( new T[Rows * Columns]),
-			m_bOwnCoords( true)
+	template <typename Type>
+	inline Matrix<T, Rows, Columns> :: Matrix( Type const * p_pMatrix)
+		:	m_pPointer( new T[Rows * Columns])
+		,	m_bOwnCoords( true)
 	{
+		Init();
 		for (size_t i = 0 ; i < Columns ; i++)
 		{
-			m_matrix[i].LinkCoords( & m_pPointer[i * Rows]);
-
 			for (size_t j = 0 ; j < Rows ; j++)
 			{
-				Templates::Policy<T>::assign( m_matrix[i][j], matrix[i][j]);
+				Templates::Policy<T>::assign( m_matrix[i][j], p_pMatrix[i * Rows + j]);
 			}
 		}
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix<T, Rows, Columns> :: Matrix( const T * p_pMatrix)
-		:	m_pPointer( new T[Rows * Columns]),
-			m_bOwnCoords( true)
+	Matrix<T, Rows, Columns> :: Matrix( Matrix<T, Columns, Rows> const & p_matrix)
+		:	m_pPointer( new T[Rows * Columns])
+		,	m_bOwnCoords( true)
 	{
-		for (size_t i = 0 ; i < Columns ; i++)
+		Init();
+		for (size_t i = 0 ; i < Columns && i < Rows ; i++)
 		{
-			m_matrix[i].LinkCoords( & m_pPointer[i * Rows]);
+			m_matrix[i].link( & m_pPointer[i * Rows]);
 
-			for (size_t j = 0 ; j < Rows ; j++)
+			for (size_t j = 0 ; j < Rows && i < Columns ; j++)
 			{
-				Templates::Policy<T>::assign( m_matrix[i][j], p_pMatrix[i * Rows + j]);
+				Templates::Policy<T>::assign( m_matrix[i][j], p_matrix[i][j]);
+			}
+		}
+	}
+	template <typename T, size_t Rows, size_t Columns>
+	template <typename Type>
+	inline Matrix<T, Rows, Columns> :: Matrix( Matrix<Type, Columns, Rows> const & p_matrix)
+		:	m_pPointer( new T[Rows * Columns])
+		,	m_bOwnCoords( true)
+	{
+		Init();
+		for (size_t i = 0 ; i < Columns && i < Rows ; i++)
+		{
+			m_matrix[i].link( & m_pPointer[i * Rows]);
+
+			for (size_t j = 0 ; j < Rows && i < Columns ; j++)
+			{
+				Templates::Policy<T>::assign( m_matrix[i][j], p_matrix[i][j]);
 			}
 		}
 	}
@@ -47,11 +74,11 @@ namespace Castor
 		}
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline void Matrix<T, Rows, Columns> :: Init( const T & p_value)
+	inline void Matrix<T, Rows, Columns> :: Init( T const & p_value)
 	{
 		for (size_t i = 0 ; i < Columns ; i++)
 		{
-			m_matrix[i].LinkCoords( & m_pPointer[i * Rows]);
+			m_matrix[i].link( & m_pPointer[i * Rows]);
 
 			for (size_t j = 0 ; j < Rows ; j++)
 			{
@@ -67,7 +94,7 @@ namespace Castor
 		}
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline void Matrix<T, Rows, Columns> :: SetRow( size_t p_uiRow, const T * p_row)
+	inline void Matrix<T, Rows, Columns> :: SetRow( size_t p_uiRow, T const * p_row)
 	{
 		if (Columns >= 1 && p_uiRow < Rows)
 		{
@@ -78,7 +105,7 @@ namespace Castor
 		}
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline void Matrix<T, Rows, Columns> :: SetRow( size_t p_uiRow, const Point<T, Columns> & p_row)
+	inline void Matrix<T, Rows, Columns> :: SetRow( size_t p_uiRow, Point<T, Columns> const & p_row)
 	{
 		if (Columns >= 1 && p_uiRow < Rows)
 		{
@@ -112,7 +139,7 @@ namespace Castor
 		}
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline void Matrix<T, Rows, Columns> :: SetColumn( size_t p_uiColumn, const T * p_col)
+	inline void Matrix<T, Rows, Columns> :: SetColumn( size_t p_uiColumn, T const * p_col)
 	{
 		if (Rows >= 1 && p_uiColumn < Columns)
 		{
@@ -120,7 +147,7 @@ namespace Castor
 		}
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline void Matrix<T, Rows, Columns> :: SetColumn( size_t p_uiColumn, const Point<T, Rows> & p_col)
+	inline void Matrix<T, Rows, Columns> :: SetColumn( size_t p_uiColumn, Point<T, Rows> const & p_col)
 	{
 		if (Rows >= 1 && p_uiColumn < Columns)
 		{
@@ -178,11 +205,11 @@ namespace Castor
 	inline Matrix<T, Rows, Columns> Matrix<T, Rows, Columns> :: GetTriangle()const
 	{
 		Matrix<T, Rows, Columns> l_mReturn( * this);
-		l_mReturn.Triangle();
+		l_mReturn.SetTriangle();
 		return l_mReturn;
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline void Matrix<T, Rows, Columns> :: Triangle()
+	inline void Matrix<T, Rows, Columns> :: SetTriangle()
 	{
 		size_t l_uiMinDim = std::min<size_t>( Rows, Columns);
 		bool l_bContinue = true;
@@ -282,25 +309,7 @@ namespace Castor
 		return l_tSum;
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline void Matrix<T, Rows, Columns> :: Identity()
-	{
-		for (size_t i = 0 ; i < Rows ; i++)
-		{
-			for (size_t j = 0 ; j < Columns ; j++)
-			{
-				if (i == j)
-				{
-					Templates::Policy<T>::assign( m_matrix[j][i], Templates::Policy<T>::unit());
-				}
-				else
-				{
-					Templates::Policy<T>::init( m_matrix[j][i]);
-				}
-			}
-		}
-	}
-	template <typename T, size_t Rows, size_t Columns>
-	inline void Matrix<T, Rows, Columns> :: Jordan( T p_tLambda)
+	inline void Matrix<T, Rows, Columns> :: SetJordan( T p_tLambda)
 	{
 		for (size_t i = 0 ; i < Rows ; i++)
 		{
@@ -325,39 +334,53 @@ namespace Castor
 		}
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix<T, Rows, Columns> Matrix<T, Rows, Columns> :: GetIdentity()const
-	{
-		Matrix<T, Rows, Columns> l_mReturn( * this);
-		l_mReturn.Identity();
-	}
-	template <typename T, size_t Rows, size_t Columns>
 	inline Matrix<T, Rows, Columns> Matrix<T, Rows, Columns> :: GetJordan( T p_tLambda)const
 	{
 		Matrix<T, Rows, Columns> l_mReturn( * this);
-		l_mReturn.Jordan();
+		l_mReturn.SetJordan();
+		return l_mReturn;
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline bool Matrix<T, Rows, Columns> :: operator ==( const Matrix<T, Rows, Columns> & p_matrix)const
+	inline void Matrix<T, Rows, Columns> :: SetIdentity()
 	{
-		bool l_bReturn = true;
-
-		for (size_t i = 0 ; i < Rows && l_bReturn ; i++)
+		for (size_t i = 0 ; i < Rows ; i++)
 		{
-			for (size_t j = 0 ; j < Columns && l_bReturn ; j++)
+			for (size_t j = 0 ; j < Columns ; j++)
 			{
-				l_bReturn = Templates::Policy<T>::equals( m_matrix[j][i], p_matrix[j][i]);
+				if (i == j)
+				{
+					Templates::Policy<T>::assign( m_matrix[i][i], Templates::Policy<T>::unit());
+				}
+				else
+				{
+					Templates::Policy<T>::init( m_matrix[j][i]);
+				}
+			}
+		}
+	}
+	template <typename T, size_t Rows, size_t Columns>
+	inline Matrix<T, Rows, Columns> Matrix<T, Rows, Columns> :: GetIdentity()const
+	{
+		Matrix<T, Rows, Columns> l_mReturn( * this);
+		l_mReturn.SetIdentity();
+		return l_mReturn;
+	}
+	template <typename T, size_t Rows, size_t Columns>
+	inline Matrix<T, Rows, Columns> & Matrix<T, Rows, Columns> :: operator = ( Matrix<T, Rows, Columns> const & p_matrix)
+	{
+		for (size_t i = 0 ; i < Rows ; i++)
+		{
+			for (size_t j = 0 ; j < Columns ; j++)
+			{
+				m_matrix[j][i] = p_matrix[j][i];
 			}
 		}
 
-		return l_bReturn;
+		return * this;
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline bool Matrix<T, Rows, Columns> :: operator !=( const Matrix<T, Rows, Columns> & p_matrix)const
-	{
-		return ! operator ==( p_matrix);
-	}
-	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix<T, Rows, Columns> & Matrix<T, Rows, Columns> :: operator =( const Matrix<T, Rows, Columns> & p_matrix)
+	template <typename Type>
+	inline Matrix<T, Rows, Columns> & Matrix<T, Rows, Columns> :: operator = ( Matrix<Type, Rows, Columns> const & p_matrix)
 	{
 		for (size_t i = 0 ; i < Rows ; i++)
 		{
@@ -370,50 +393,8 @@ namespace Castor
 		return * this;
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix<T, Rows, Columns> & Matrix<T, Rows, Columns> :: operator =( const T * p_matrix)
-	{
-		for (size_t i = 0 ; i < Rows ; i++)
-		{
-			for (size_t j = 0 ; j < Columns ; j++)
-			{
-				Templates::Policy<T>::assign( m_matrix[j][i], p_matrix[j * Rows + i]);
-			}
-		}
-
-		return * this;
-	}
-	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix<T, Rows, Columns> Matrix<T, Rows, Columns> :: operator + ( const Matrix<T, Rows, Columns> & p_matrix)const
-	{
-		Matrix<T, Rows, Columns> l_mReturn;
-
-		for(size_t i = 0 ; i < Rows ; i++)
-		{
-			for (size_t j = 0 ; j < Columns ; j++)
-			{
-				Templates::Policy<T>::assign( l_mReturn[j][i], Templates::Policy<T>::add( m_matrix[j][i], p_matrix[j][i]));
-			}
-		}
-
-		return l_mReturn;
-	}
-	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix<T, Rows, Columns> Matrix<T, Rows, Columns> :: operator + ( T p_value)const
-	{
-		Matrix<T, Rows, Columns> l_mReturn( * this);
-
-		for(size_t i = 0 ; i < Rows ; i++)
-		{
-			for (size_t j = 0 ; j < Columns ; j++)
-			{
-				Templates::Policy<T>::ass_add( l_mReturn[j][i], p_value);
-			}
-		}
-
-		return l_mReturn;
-	}
-	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix<T, Rows, Columns> & Matrix<T, Rows, Columns> :: operator += ( const Matrix<T, Rows, Columns> & p_matrix)
+	template <typename Type>
+	inline Matrix<T, Rows, Columns> & Matrix<T, Rows, Columns> :: operator += ( Matrix<Type, Rows, Columns> const & p_matrix)
 	{
 		for (size_t i = 0 ; i < Rows ; i++)
 		{
@@ -426,53 +407,11 @@ namespace Castor
 			}
 		}
 
-		return  *this;
+		return * this;
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix<T, Rows, Columns> & Matrix<T, Rows, Columns> :: operator += ( T p_value)
-	{
-		for (size_t i = 0 ; i < Rows ; i++)
-		{
-			for (size_t j = 0 ; j < Columns ; j++)
-			{
-				Templates::Policy<T>::ass_add( m_matrix[j][i], p_value);
-			}
-		}
-
-		return  *this;
-	}
-	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix<T, Rows, Columns> Matrix<T, Rows, Columns> :: operator - ( const Matrix<T, Rows, Columns> & p_matrix)const
-	{
-		Matrix<T, Rows, Columns> l_mReturn;
-
-		for (size_t i = 0 ; i < Rows ; i++)
-		{
-			for (size_t j = 0 ; j < Columns ; j++)
-			{
-				Templates::Policy<T>::assign( l_mReturn[j][i], Templates::Policy<T>::substract( m_matrix[j][i], p_matrix[j][i]));
-			}
-		}
-
-		return l_mReturn;
-	}
-	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix<T, Rows, Columns> Matrix<T, Rows, Columns> :: operator - ( T p_value)const
-	{
-		Matrix<T, Rows, Columns> l_mReturn( * this);
-
-		for (size_t i = 0 ; i < Rows ; i++)
-		{
-			for (size_t j = 0 ; j < Columns ; j++)
-			{
-				Templates::Policy<T>::ass_substract( l_mReturn[j][i], p_value);
-			}
-		}
-
-		return l_mReturn;
-	}
-	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix<T, Rows, Columns> & Matrix<T, Rows, Columns> :: operator -= ( const Matrix<T, Rows, Columns> & p_matrix)
+	template <typename Type>
+	inline Matrix<T, Rows, Columns> & Matrix<T, Rows, Columns> :: operator -= ( Matrix<Type, Rows, Columns> const & p_matrix)
 	{
 		for (size_t i = 0 ; i < Rows ; i++)
 		{
@@ -485,61 +424,64 @@ namespace Castor
 			}
 		}
 
-		return  *this;
+		return * this;
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix<T, Rows, Columns> & Matrix<T, Rows, Columns> :: operator -= ( T p_value)
+	template <typename Type>
+	inline Matrix<T, Rows, Columns> & Matrix<T, Rows, Columns> :: operator = ( Type const * p_pMatrix)
 	{
 		for (size_t i = 0 ; i < Rows ; i++)
 		{
 			for (size_t j = 0 ; j < Columns ; j++)
 			{
-				Templates::Policy<T>::ass_substract( m_matrix[j][i], p_value);
+				Templates::Policy<T>::assign( m_matrix[j][i], p_pMatrix[j * Rows + i]);
 			}
 		}
 
-		return  *this;
+		return * this;
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline Point<T, Rows> Matrix<T, Rows, Columns> :: operator * ( const Point<T, Columns> & p_ptVector)const
+	template <typename Type>
+	inline Matrix<T, Rows, Columns> & Matrix<T, Rows, Columns> :: operator += ( Type const * p_pMatrix)
 	{
-		Point<T, Rows> l_ptReturn;
-
 		for (size_t i = 0 ; i < Rows ; i++)
 		{
-			Templates::Policy<T>::init( l_ptReturn[i]);
-
 			for (size_t j = 0 ; j < Columns ; j++)
 			{
-				Templates::Policy<T>::ass_add( l_ptReturn[i], Templates::Policy<T>::multiply( m_matrix[j][i], p_ptVector[j]));
+				if ( ! Templates::Policy<T>::is_null( p_pMatrix[j * Rows + i]))
+				{
+					Templates::Policy<T>::ass_add( m_matrix[j][i], p_pMatrix[j * Rows + i]);
+				}
 			}
 		}
 
-		return l_ptReturn;
+		return * this;
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix<T, Rows, Columns> Matrix<T, Rows, Columns> :: operator * ( T p_value)const
+	template <typename Type>
+	inline Matrix<T, Rows, Columns> & Matrix<T, Rows, Columns> :: operator -= ( Type const * p_pMatrix)
 	{
-		Matrix<T, Rows, Columns> l_mReturn;
-
 		for (size_t i = 0 ; i < Rows ; i++)
 		{
 			for (size_t j = 0 ; j < Columns ; j++)
 			{
-				Templates::Policy<T>::assign( l_mReturn[j][i], m_matrix[j][i] * p_value);
+				if ( ! Templates::Policy<T>::is_null( p_pMatrix[j * Rows + i]))
+				{
+					Templates::Policy<T>::ass_substract( m_matrix[j][i], p_pMatrix[j * Rows + i]);
+				}
 			}
 		}
 
-		return l_mReturn;
+		return * this;
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix<T, Rows, Columns> & Matrix<T, Rows, Columns> :: operator *= ( T p_value)
+	inline Matrix<T, Rows, Columns> & Matrix<T, Rows, Columns> :: operator += ( T const & p_tValue)
 	{
 		for (size_t i = 0 ; i < Rows ; i++)
 		{
 			for (size_t j = 0 ; j < Columns ; j++)
 			{
-				Templates::Policy<T>::ass_multiply( m_matrix[j][i], p_value);
+				Templates::Policy<T>::ass_add( m_matrix[j][i], p_tValue);
 
 				if (Templates::Policy<T>::is_null( m_matrix[j][i]))
 				{
@@ -548,36 +490,16 @@ namespace Castor
 			}
 		}
 
-		return  *this;
+		return * this;
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix<T, Rows, Columns> Matrix<T, Rows, Columns> :: operator / ( T p_value)const
-	{
-		Matrix<T, Rows, Columns> l_mReturn( * this);
-
-		for (size_t i = 0 ; i < Rows ; i++)
-		{
-			for (size_t j = 0 ; j < Columns ; j++)
-			{
-				Templates::Policy<T>::ass_divide( l_mReturn[j][i], p_value);
-
-				if (Templates::Policy<T>::is_null( l_mReturn[j][i]))
-				{
-					Templates::Policy<T>::init( l_mReturn[j][i]);
-				}
-			}
-		}
-
-		return l_mReturn;
-	}
-	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix<T, Rows, Columns> & Matrix<T, Rows, Columns> :: operator /= ( T p_value)
+	inline Matrix<T, Rows, Columns> & Matrix<T, Rows, Columns> :: operator -= ( T const & p_tValue)
 	{
 		for (size_t i = 0 ; i < Rows ; i++)
 		{
 			for (size_t j = 0 ; j < Columns ; j++)
 			{
-				Templates::Policy<T>::ass_divide( m_matrix[j][i], p_value);
+				Templates::Policy<T>::ass_substract( m_matrix[j][i], p_tValue);
 
 				if (Templates::Policy<T>::is_null( m_matrix[j][i]))
 				{
@@ -586,10 +508,53 @@ namespace Castor
 			}
 		}
 
-		return  *this;
+		return * this;
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline const Point<T, Rows> & Matrix<T, Rows, Columns> :: operator []( size_t i)const
+	inline Matrix<T, Rows, Columns> & Matrix<T, Rows, Columns> :: operator *= ( T const & p_tValue)
+	{
+		for (size_t i = 0 ; i < Rows ; i++)
+		{
+			for (size_t j = 0 ; j < Columns ; j++)
+			{
+				Templates::Policy<T>::ass_multiply( m_matrix[j][i], p_tValue);
+
+				if (Templates::Policy<T>::is_null( m_matrix[j][i]))
+				{
+					Templates::Policy<T>::init( m_matrix[j][i]);
+				}
+			}
+		}
+
+		return * this;
+	}
+	template <typename T, size_t Rows, size_t Columns>
+	inline Matrix<T, Rows, Columns> & Matrix<T, Rows, Columns> :: operator /= ( T const & p_tValue)
+	{
+		for (size_t i = 0 ; i < Rows ; i++)
+		{
+			for (size_t j = 0 ; j < Columns ; j++)
+			{
+				if (Templates::Policy<T>::is_null( p_tValue))
+				{
+					Templates::Policy<T>::init( m_matrix[j][i]);
+				}
+				else
+				{
+					Templates::Policy<T>::ass_divide( m_matrix[j][i], p_tValue);
+
+					if (Templates::Policy<T>::is_null( m_matrix[j][i]))
+					{
+						Templates::Policy<T>::init( m_matrix[j][i]);
+					}
+				}
+			}
+		}
+
+		return * this;
+	}
+	template <typename T, size_t Rows, size_t Columns>
+	inline Point<T, Rows> const & Matrix<T, Rows, Columns> :: operator []( size_t i)const
 	{
 		CASTOR_ASSERT( i < Rows * Columns);
 		return m_matrix[i];
@@ -607,7 +572,7 @@ namespace Castor
 		return & m_matrix[0][0];
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline const T * Matrix<T, Rows, Columns> :: const_ptr()const
+	inline T const * Matrix<T, Rows, Columns> :: const_ptr()const
 	{
 		CASTOR_ASSERT( Rows > 0 && Columns > 0);
 		return & m_matrix[0][0];
@@ -618,7 +583,7 @@ namespace Castor
 		if (m_bOwnCoords)
 		{
 			delete [] m_pPointer;
-			m_pPointer = NULL;
+			m_pPointer = nullptr;
 		}
 
 		m_pPointer = (T *)p_pCoords;
@@ -626,37 +591,8 @@ namespace Castor
 
 		for (size_t i = 0 ; i < Columns ; i++)
 		{
-			m_matrix[i].LinkCoords( & m_pPointer[i * Rows]);
+			m_matrix[i].link( & m_pPointer[i * Rows]);
 		}
-	}
-
-
-	template <typename T, size_t Rows, size_t Columns>
-	inline std::ostream & Matrix<T, Rows, Columns> :: operator << ( std::ostream & l_streamOut)const
-	{
-		for (size_t i = 0 ; i < Rows ; i++)
-		{
-			for (size_t j = 0 ; j < Columns ; j++)
-			{
-				l_streamOut << "\t" << m_matrix[j][i];
-			}
-
-			l_streamOut << std::endl;
-		}
-		return l_streamOut;
-	}
-	template <typename T, size_t Rows, size_t Columns>
-	inline std::istream & Matrix<T, Rows, Columns> :: operator >> ( std::istream & l_streamIn)
-	{
-		for (size_t i = 0 ; i < Rows ; i++)
-		{
-			for (size_t j = 0 ; j < Columns ; j++)
-			{
-				l_streamIn >> m_matrix[j][i];
-			}
-		}
-
-		return l_streamIn;
 	}
 	template <typename T, size_t Rows, size_t Columns>
 	inline void Matrix<T, Rows, Columns> :: _recheck()
@@ -669,84 +605,43 @@ namespace Castor
 			}
 		}
 	}
-
-
-
-
 	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix <T, Rows, Columns> operator + ( int p_scalar, const Matrix <T, Rows, Columns> & p_matrix)
+	template <typename Type>
+	inline void Matrix<T, Rows, Columns> :: _assign( Matrix<Type, Rows, Columns> const & p_matrix)
 	{
-		return p_matrix.operator +( p_scalar);
-	}
-	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix <T, Rows, Columns> operator + ( real p_scalar, const Matrix <T, Rows, Columns> & p_matrix)
-	{
-		return p_matrix.operator +( p_scalar);
-	}
-	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix <T, Rows, Columns> operator - ( int p_scalar, const Matrix <T, Rows, Columns> & p_matrix)
-	{
-		return p_matrix.operator -( p_scalar);
-	}
-	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix <T, Rows, Columns> operator - ( real p_scalar, const Matrix <T, Rows, Columns> & p_matrix)
-	{
-		return p_matrix.operator -( p_scalar);
-	}
-	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix <T, Rows, Columns> operator * ( int p_scalar, const Matrix <T, Rows, Columns> & p_matrix)
-	{
-		return p_matrix.operator *( p_scalar);
-	}
-	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix <T, Rows, Columns> operator * ( real p_scalar, const Matrix <T, Rows, Columns> & p_matrix)
-	{
-		return p_matrix.operator *( p_scalar);
-	}
-	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix <T, Rows, Columns> operator / ( int p_scalar, const Matrix <T, Rows, Columns> & p_matrix)
-	{
-		return p_matrix.operator /( p_scalar);
-	}
-	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix <T, Rows, Columns> operator / ( real p_scalar, const Matrix <T, Rows, Columns> & p_matrix)
-	{
-		return p_matrix.operator /( p_scalar);
-	}
-	template <typename T, size_t Rows, size_t Columns>
-	inline Point <T, Rows> operator * ( const Matrix <T, Rows, Columns> & p_matrix, const Point<T, Columns> & p_ptVector)
-	{
-		Point<T, Rows> l_ptReturn;
-
-		for (size_t i = 0 ; i < Rows ; i++)
-		{
-			Templates::Policy<T>::init( l_ptReturn[i]);
-
-			for (size_t j = 0 ; j < Columns ; j++)
-			{
-				Templates::Policy<T>::ass_add( l_ptReturn[i], Templates::Policy<T>::multiply( p_matrix[j][i], p_ptVector[j]));
-			}
-		}
-
-		return l_ptReturn;
-	}
-	template <typename T, size_t Rows, size_t Columns>
-	inline Matrix <T, Rows, Columns> operator - ( const Matrix <T, Rows, Columns> & p_matrix)
-	{
-		Matrix<T, Rows, Columns> l_mReturn;
-
 		for (size_t i = 0 ; i < Rows ; i++)
 		{
 			for (size_t j = 0 ; j < Columns ; j++)
 			{
-				Templates::Policy<T>::assign( l_mReturn[j][i], Templates::Policy<T>::negate( p_matrix[j][i]));
+				Templates::Policy<T>::assign( m_matrix[i][j], Templates::Policy<T>::convert( p_matrix[i][j]));
+			}
+		}
+	}
+
+//*************************************************************************************************
+
+	template <typename T, size_t Rows, size_t Columns>
+	inline bool operator ==( Matrix<T, Rows, Columns> const & p_mtxA, Matrix<T, Rows, Columns> const & p_mtxB)
+	{
+		bool l_bReturn = true;
+
+		for (size_t i = 0 ; i < Rows && l_bReturn ; i++)
+		{
+			for (size_t j = 0 ; j < Columns && l_bReturn ; j++)
+			{
+				l_bReturn = Templates::Policy<T>::equals( p_mtxA[j][i], p_mtxB[j][i]);
 			}
 		}
 
-		return l_mReturn;
+		return l_bReturn;
 	}
 	template <typename T, size_t Rows, size_t Columns>
-	inline std::ostream & operator << ( std::ostream & l_streamOut, const Matrix <T, Rows, Columns> & p_matrix)
+	inline bool operator !=( Matrix<T, Rows, Columns> const & p_mtxA, Matrix<T, Rows, Columns> const & p_mtxB)
+	{
+		return ! operator ==( p_mtxA, p_mtxB);
+	}
+	template <typename T, size_t Rows, size_t Columns>
+	inline std::ostream & operator << ( std::ostream & l_streamOut, Matrix<T, Rows, Columns> const & p_matrix)
 	{
 		for (size_t i = 0 ; i < Rows ; i++)
 		{
@@ -773,5 +668,130 @@ namespace Castor
 
 		return l_streamIn;
 	}
+	template <typename T, size_t Rows, size_t Columns, typename U>
+	Matrix <T, Rows, Columns> operator + ( Matrix<T, Rows, Columns> const & p_mtxA, Matrix<U, Rows, Columns> const & p_mtxB)
+	{
+		Matrix<T, Rows, Columns> l_mtx( p_mtxA);
+		l_mtx += p_mtxB;
+		return l_mtx;
+	}
+	template <typename T, size_t Rows, size_t Columns, typename U>
+	Matrix <T, Rows, Columns> operator - ( Matrix<T, Rows, Columns> const & p_mtxA, Matrix<U, Rows, Columns> const & p_mtxB)
+	{
+		Matrix<T, Rows, Columns> l_mtx( p_mtxA);
+		l_mtx -= p_mtxB;
+		return l_mtx;
+	}
+	template <typename T, size_t Rows, size_t Columns, typename U, size_t _Columns>
+	Matrix<T, Rows, _Columns>	operator * ( Matrix<T, Rows, Columns> const & p_mtxA, Matrix<U, Columns, _Columns> const & p_mtxB)
+	{
+		Matrix<T, Rows, _Columns> l_mtxReturn;
+
+		for (size_t i = 0 ; i < Rows ; i++)
+		{
+			for (size_t j = 0 ; j < _Columns ; j++)
+			{
+				Templates::Policy<T>::init( l_mtxReturn[j][i]);
+
+				for (size_t k = 0 ; k < Columns ; k++)
+				{
+					Templates::Policy<T>::ass_add( l_mtxReturn[j][i], Templates::Policy<T>::multiply( p_mtxA[k][i], Templates::Policy<T>::convert( p_mtxB[j][k])));
+				}
+			}
+		}
+
+		return l_mtxReturn;
+	}
+	template <typename T, size_t Rows, size_t Columns, typename U>
+	inline Point <T, Rows> operator * ( Matrix<T, Rows, Columns> const & p_matrix, Point<U, Columns> const & p_ptVector)
+	{
+		Point<T, Rows> l_ptReturn;
+
+		for (size_t i = 0 ; i < Rows ; i++)
+		{
+			Templates::Policy<T>::init( l_ptReturn[i]);
+
+			for (size_t j = 0 ; j < Columns ; j++)
+			{
+				Templates::Policy<T>::ass_add( l_ptReturn[i], Templates::Policy<T>::multiply( p_matrix[j][i], p_ptVector[j]));
+			}
+		}
+
+		return l_ptReturn;
+	}
+	template <typename T, size_t Rows, size_t Columns, typename U>
+	Matrix <T, Rows, Columns> operator + ( Matrix<T, Rows, Columns> const & p_mtxA, U const * p_mtxB)
+	{
+		Matrix<T, Rows, Columns> l_mtx( p_mtxA);
+		l_mtx += p_mtxB;
+		return l_mtx;
+	}
+	template <typename T, size_t Rows, size_t Columns, typename U>
+	Matrix <T, Rows, Columns> operator - ( Matrix<T, Rows, Columns> const & p_mtxA, U const * p_mtxB)
+	{
+		Matrix<T, Rows, Columns> l_mtx( p_mtxA);
+		l_mtx -= p_mtxB;
+		return l_mtx;
+	}
+	template <typename T, size_t Rows, size_t Columns>
+	Matrix <T, Rows, Columns> operator + ( Matrix<T, Rows, Columns> const & p_matrix, T const & p_uValue)
+	{
+		Matrix<T, Rows, Columns> l_mtx( p_matrix);
+		l_mtx += p_uValue;
+		return l_mtx;
+	}
+	template <typename T, size_t Rows, size_t Columns>
+	Matrix <T, Rows, Columns> operator - ( Matrix<T, Rows, Columns> const & p_matrix, T const & p_uValue)
+	{
+		Matrix<T, Rows, Columns> l_mtx( p_matrix);
+		l_mtx -= p_uValue;
+		return l_mtx;
+	}
+	template <typename T, size_t Rows, size_t Columns>
+	Matrix <T, Rows, Columns> operator * ( Matrix<T, Rows, Columns> const & p_matrix, T const & p_uValue)
+	{
+		Matrix<T, Rows, Columns> l_mtx( p_matrix);
+		l_mtx *= p_uValue;
+		return l_mtx;
+	}
+	template <typename T, size_t Rows, size_t Columns>
+	Matrix <T, Rows, Columns> operator / ( Matrix<T, Rows, Columns> const & p_matrix, T const & p_uValue)
+	{
+		Matrix<T, Rows, Columns> l_mtx( p_matrix);
+		l_mtx /= p_uValue;
+		return l_mtx;
+	}
+	template <typename T, size_t Rows, size_t Columns>
+	inline Matrix <T, Rows, Columns> operator + ( T const & p_scalar, Matrix<T, Rows, Columns> const & p_matrix)
+	{
+		return operator +( p_matrix, p_scalar);
+	}
+	template <typename T, size_t Rows, size_t Columns>
+	inline Matrix <T, Rows, Columns> operator - ( T const & p_scalar, Matrix<T, Rows, Columns> const & p_matrix)
+	{
+		return operator -( p_matrix, p_scalar);
+	}
+	template <typename T, size_t Rows, size_t Columns>
+	inline Matrix <T, Rows, Columns> operator * ( T const & p_scalar, Matrix<T, Rows, Columns> const & p_matrix)
+	{
+		return operator *( p_matrix, p_scalar);
+	}
+	template <typename T, size_t Rows, size_t Columns>
+	inline Matrix <T, Rows, Columns> operator - ( Matrix<T, Rows, Columns> const & p_matrix)
+	{
+		Matrix<T, Rows, Columns> l_mReturn;
+
+		for (size_t i = 0 ; i < Rows ; i++)
+		{
+			for (size_t j = 0 ; j < Columns ; j++)
+			{
+				Templates::Policy<T>::assign( l_mReturn[j][i], Templates::Policy<T>::negate( p_matrix[j][i]));
+			}
+		}
+
+		return l_mReturn;
+	}
+
+//*************************************************************************************************
 }
 }

@@ -1,6 +1,7 @@
-#include "Dx9RenderSystem/PrecompiledHeader.h"
+#include "Dx9RenderSystem/PrecompiledHeader.hpp"
 
-#include "Dx9RenderSystem/Dx9CameraRenderer.h"
+#include "Dx9RenderSystem/Dx9CameraRenderer.hpp"
+#include "Dx9RenderSystem/Dx9RenderSystem.hpp"
 
 using namespace Castor3D;
 
@@ -12,18 +13,18 @@ bool Dx9CameraRenderer :: Select( ScenePtr p_scene, Camera::eSELECTION_MODE p_mo
 	unsigned int l_selectBuffer[32] = {0};
 
 	glSelectBuffer( 32, l_selectBuffer);
-	CheckDxError( CU_T( "Dx9CameraRenderer :: Select - glSelectBuffer"));
+	CheckDxError( cuT( "Dx9CameraRenderer :: Select - glSelectBuffer"));
 	glGetIntegerv( GL_VIEWPORT, l_viewportCoords);
-	CheckDxError( CU_T( "Dx9CameraRenderer :: Select - glGetIntegerv"));
+	CheckDxError( cuT( "Dx9CameraRenderer :: Select - glGetIntegerv"));
 	Pipeline::MatrixMode( Pipeline::eMatrixProjection);
 	Pipeline::PushMatrix();
 
 	glRenderMode( GL_SELECT);
-	CheckDxError( CU_T( "Dx9CameraRenderer :: Select - glRenderMode"));
+	CheckDxError( cuT( "Dx9CameraRenderer :: Select - glRenderMode"));
 	Pipeline::LoadIdentity();
 
 	Pipeline::PickMatrix( real( x), real( l_viewportCoords[3] - y), real( 2), real( 2), l_viewportCoords);
-	CheckDxError( CU_T( "Dx9CameraRenderer :: Select - gluPickMatrix"));
+	CheckDxError( cuT( "Dx9CameraRenderer :: Select - gluPickMatrix"));
 	Pipeline::Perspective( m_target->GetViewport()->GetFOVY(), m_target->GetViewport()->GetRatio(),
 		m_target->GetViewport()->GetNearView(), m_target->GetViewport()->GetFarView());
 	Pipeline::MatrixMode( Pipeline::eMatrixModelView);
@@ -58,6 +59,12 @@ bool Dx9CameraRenderer :: Select( ScenePtr p_scene, Camera::eSELECTION_MODE p_mo
 
 void Dx9CameraRenderer :: Render( ePRIMITIVE_TYPE p_displayMode)
 {
+	m_target->GetViewport()->Render( p_displayMode);
+
+	if (m_bResize)
+	{
+		m_bResize = false;
+	}
 }
 
 void Dx9CameraRenderer :: EndRender()

@@ -1,17 +1,17 @@
-#include "CastorUtils/PrecompiledHeader.h"
+#include "CastorUtils/PrecompiledHeader.hpp"
 
-#include "CastorUtils/PreciseTimer.h"
+#include "CastorUtils/PreciseTimer.hpp"
 
-#include "CastorUtils/Module_Utils.h"
+#include "CastorUtils/CastorUtils.hpp"
 
 #if CHECK_MEMORYLEAKS
-#	include "CastorUtils/Memory.h"
+#	include "CastorUtils/Memory.hpp"
 using namespace Castor::Utils;
 #endif
 
 #ifndef __GNUG__
-#	include "CastorUtils/Utils.h"
-#	include "CastorUtils/Exception.h"
+#	include "CastorUtils/Utils.hpp"
+#	include "CastorUtils/Exception.hpp"
 
 using namespace Castor::Utils;
 
@@ -20,7 +20,7 @@ long long RepeatTimer :: sm_frequency = 0;
 
 #else
 #	include <sys/time.h>
-//#	define NULL 0
+//#	define nullptr 0
 
 using namespace Castor::Utils;
 
@@ -49,7 +49,7 @@ PreciseTimer :: PreciseTimer()
 	m_previousTime = l_i64CurrentTime;//l_liCurrentTime.QuadPart;
 #else
 	timeval l_time;
-	gettimeofday( & l_time, NULL);
+	gettimeofday( & l_time, nullptr);
 	m_previousTime = l_time.tv_sec * 1000000 + l_time.tv_usec;
 #endif
 }
@@ -67,7 +67,7 @@ double PreciseTimer :: Time()
 	l_currentTime = l_i64CurrentTime;//l_liCurrentTime.QuadPart;
 #else
 	timeval l_time;
-	gettimeofday( & l_time, NULL);
+	gettimeofday( & l_time, nullptr);
 	l_currentTime = l_time.tv_sec * 1000000 + l_time.tv_usec;
 #endif
 	double l_diff = static_cast <double> ( l_currentTime - m_previousTime) / static_cast <double> ( sm_frequency);
@@ -104,7 +104,7 @@ RepeatTimer :: RepeatTimer( double p_time)
 	m_previousTime = l_i64CurrentTime;//l_liCurrentTime.QuadPart;
 #else
 	timeval l_time;
-	gettimeofday( & l_time, NULL);
+	gettimeofday( & l_time, nullptr);
 	m_previousTime = l_time.tv_sec * 1000000 + l_time.tv_usec;
 #endif
 }
@@ -122,7 +122,7 @@ bool RepeatTimer :: Time()
 	l_currentTime = l_i64CurrentTime;//l_liCurrentTime.QuadPart;
 #else
 	timeval l_time;
-	gettimeofday( & l_time, NULL);
+	gettimeofday( & l_time, nullptr);
 	l_currentTime = l_time.tv_sec * 1000000 + l_time.tv_usec;
 #endif
 	double l_diff = static_cast <double> ( l_currentTime - m_previousTime) / static_cast <double> ( sm_frequency);

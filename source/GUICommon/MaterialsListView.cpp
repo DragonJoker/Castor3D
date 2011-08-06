@@ -1,83 +1,71 @@
-#include "GuiCommon/PrecompiledHeader.h"
+#include "GuiCommon/PrecompiledHeader.hpp"
 
-#include "GuiCommon/MaterialsListView.h"
+#include "GuiCommon/MaterialsListView.hpp"
 
 #ifdef LoadImage
 #	undef LoadImage
 #	define LoadImage wxBitmap::LoadImage
 #endif
 
-using Castor::Templates::Manager;
+using Castor::Templates::Collection;
 using namespace Castor3D;
 using namespace GuiCommon;
 
-MaterialsListView :: MaterialsListView( Castor3D::MaterialManager * p_pManager, wxWindow * parent, wxWindowID id, const wxPoint & pos, const wxSize & size)
+wxMaterialsListView :: wxMaterialsListView( wxWindow * parent, wxWindowID id, const wxPoint & pos, const wxSize & size)
 	:	wxListCtrl( parent, id, pos, size, wxLC_ICON | wxLC_SINGLE_SEL | wxLC_SORT_ASCENDING | wxBORDER_SIMPLE)
-	,	m_images( NULL)
+	,	m_images( nullptr)
 	,	m_nbItems( 0)
-	,	m_pManager( p_pManager)
 {
 	SetColumnWidth( -1, c_columnWidth);
 	CreateList();
 }
 
-MaterialsListView :: ~MaterialsListView()
+wxMaterialsListView :: ~wxMaterialsListView()
 {
 	if (m_images)
 	{
 		m_images->RemoveAll();
 		delete m_images;
-		m_images = NULL;
+		m_images = nullptr;
 	}
-	vector::deleteAll( m_imagesArray);
+
+	ClearContainer( m_imagesArray);
 	m_nbItems = 0;
 }
 
-void MaterialsListView :: CreateList()
+void wxMaterialsListView :: CreateList()
 {
 	ClearAll();
 
-	if (m_images != NULL)
+	if (m_images)
 	{
 		m_images->RemoveAll();
 		delete m_images;
-		m_images = NULL;
+		m_images = nullptr;
 	}
 
-	m_nbItems = 0;
-
-	m_nbItems = static_cast <unsigned int>( m_pManager->m_objectMap.size());
 	m_images = new wxImageList( c_materialIconSize, c_materialIconSize, false);
 	StringArray l_materialsNames;
-	m_pManager->GetMaterialNames( l_materialsNames);
+	Root::GetSingleton()->GetMaterialManager()->GetNames( l_materialsNames);
+//	Root::GetSingletonPtr()->GetMaterialManager()->GetMaterialNames( l_materialsNames);
 
     SetImageList( m_images, wxIMAGE_LIST_NORMAL);
 
 	String l_materialName;
 	vector::deleteAll( m_imagesArray);
 
-	for (unsigned int i = 0 ; i < m_nbItems ; i++)
+	for (size_t i = 0 ; i < l_materialsNames.size() ; i++)
 	{
 		l_materialName = l_materialsNames[i];
 		AddItem( l_materialName);
 	}
 }
 
-void MaterialsListView :: AddItem( const String & p_materialName)
+void wxMaterialsListView :: AddItem( String const & p_materialName)
 {
-	real l_col0;
-	real l_col1;
-	real l_col2;
-	unsigned char l_ccol0;
-	unsigned char l_ccol1;
-	unsigned char l_ccol2;
-	const float * l_colour = m_pManager->GetElementByName( p_materialName)->GetPass( 0)->GetAmbient().const_ptr();
-	l_col0 = l_colour[0] * 255.0;
-	l_col1 = l_colour[1] * 255.0;
-	l_col2 = l_colour[2] * 255.0;
-	l_ccol0 = (unsigned char)l_col0;
-	l_ccol1 = (unsigned char)l_col1;
-	l_ccol2 = (unsigned char)l_col2;
+	Collection<Material, String> l_mtlCollection;
+	Point<byte, 3> l_colour;
+	l_mtlCollection.GetElement( p_materialName)->GetPass( 0)->GetAmbient().RGB( l_colour);
 
 	wxListItem l_item;
 	int l_index = m_images->GetImageCount();
@@ -90,26 +78,26 @@ void MaterialsListView :: AddItem( const String & p_materialName)
 	if (l_pImage == NULL)
 	{
 		l_pImage = new wxImage( c_materialIconSize, c_materialIconSize);
-		l_pImage->SetRGB( wxRect( 0, 0, c_materialIconSize, c_materialIconSize), l_ccol0, l_ccol1, l_ccol2);
-		Logger::LogMessage( CU_T( "MaterialsListView :: AddItem - No texture for index %d"), l_index);
+		l_pImage->SetRGB( wxRect( 0, 0, c_materialIconSize, c_materialIconSize), l_colour[0], l_colour[1], l_colour[2]);
 	}
 
 	wxBitmap l_bitmap( * l_pImage);
 	m_images->Add( l_bitmap);
 	m_imagesArray.push_back( l_pImage);
 
-	if (InsertItem( l_index, p_materialName.c_str(), l_index) == -1)
+	if (InsertItem( l_index, p_materialName, l_index) == -1)
 	{
-		Logger::LogWarning( CU_T( "MaterialsListView :: AddItem - Item not inserted"));
+		Logger::LogWarning( cuT( "wxMaterialsListView :: AddItem - Item not inserted"));
 	}
 }
 
-wxImage * MaterialsListView :: GetMaterialImage( const String & p_materialName, unsigned int p_index, unsigned int p_width, unsigned int p_height)
+wxImage * wxMaterialsListView :: GetMaterialImage( String const & p_materialName, unsigned int p_index, unsigned int p_width, unsigned int p_height)
 {
 	wxImage * l_pReturn = NULL;
-	MaterialPtr l_material = m_pManager->GetElementByName( p_materialName);
+	Collection<Material, String> l_mtlCollection;
+	MaterialPtr l_material = l_mtlCollection.GetElement( p_materialName);
 
-	if (l_material != NULL && p_index < l_material->GetPass( 0)->GetNbTexUnits())
+	if (l_material && p_index < l_material->GetPass( 0)->GetNbTexUnits())
 	{
 		int l_iWidth = l_material->GetPass( 0)->GetTextureUnit( p_index)->GetWidth();
 		int l_iHeight = l_material->GetPass( 0)->GetTextureUnit( p_index)->GetHeight();
@@ -117,13 +105,13 @@ wxImage * MaterialsListView :: GetMaterialImage( const String & p_materialName, 
 		wxBitmap l_bmp;
 		_createBitmapFromBuffer( l_bmp, l_pData, l_iWidth, l_iHeight);
 		l_pReturn = new wxImage( l_bmp.ConvertToImage());
-		l_pReturn->Rescale( p_width, p_height, wxIMAGE_QUALITY_HIGH);
+		l_pReturn->Rescale( p_width, p_height, wxIMAGE_QUALITY_HIGHEST);
 	}
 
 	return l_pReturn;
 }
 
-void MaterialsListView :: _createBitmapFromBuffer( wxBitmap & p_bitmap, unsigned char * p_pBuffer, wxCoord p_width, wxCoord p_height)
+void wxMaterialsListView :: _createBitmapFromBuffer( wxBitmap & p_bitmap, unsigned char * p_pBuffer, wxCoord p_width, wxCoord p_height)
 {
 	p_bitmap.Create( p_width, p_height, 24);
 	wxNativePixelData l_data( p_bitmap);
@@ -154,7 +142,7 @@ void MaterialsListView :: _createBitmapFromBuffer( wxBitmap & p_bitmap, unsigned
 		}
 		catch ( ... )
 		{
-			Logger::LogError( "coin");
+			Logger::LogError( cuT( "coin"));
 		}
 	}
 }

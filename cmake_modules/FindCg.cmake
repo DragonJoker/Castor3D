@@ -1,4 +1,4 @@
-FIND_PATH(Cg_ROOT_DIR include/cg.h 
+FIND_PATH(Cg_ROOT_DIR include/Cg/cg.h 
   HINTS
   PATH_SUFFIXES Cg include
   PATHS
@@ -10,7 +10,7 @@ FIND_PATH(Cg_ROOT_DIR include/cg.h
   /usr/freeware/include
 )
 
-FIND_PATH(Cg_INCLUDE_DIR cg/Cg.h 
+FIND_PATH(Cg_INCLUDE_DIR Cg/cg.h 
   HINTS
   PATH_SUFFIXES include
   PATHS
@@ -23,7 +23,7 @@ FIND_PATH(Cg_INCLUDE_DIR cg/Cg.h
   /usr/freeware/include
 )
 
-FIND_PATH(Cg_LIBRARY_DIR cg libcg cg.lib
+FIND_PATH(Cg_LIBRARY_DIR cg.lib Cg.lib libcg.so libCg.so
   HINTS
   PATH_SUFFIXES lib64 lib
   PATHS
@@ -36,7 +36,7 @@ FIND_PATH(Cg_LIBRARY_DIR cg libcg cg.lib
 )
 
 FIND_LIBRARY(Cg_LIBRARY
-  NAMES cg libcg cg.lib
+  NAMES cg.lib Cg.lib libcg.so libCg.so
   HINTS
   PATH_SUFFIXES lib64 lib
   PATHS
@@ -49,7 +49,7 @@ FIND_LIBRARY(Cg_LIBRARY
 )
 
 FIND_LIBRARY(Cg_GL_LIBRARY
-  NAMES cgGL CgGL CgGl libcgGL libCgGl libCgGL
+  NAMES cgGL.lib CgGL.lib CgGl.lib libcgGL.so libCgGl.so libCgGL.so
   HINTS
   PATH_SUFFIXES lib64 lib
   PATHS
@@ -63,7 +63,7 @@ FIND_LIBRARY(Cg_GL_LIBRARY
 
 if (WIN32)
 	FIND_LIBRARY(Cg_D3D9_LIBRARY
-	  NAMES cgD3D9
+	  NAMES cgD3D9.lib
 	  HINTS
 	  PATH_SUFFIXES lib64 lib
 	  PATHS

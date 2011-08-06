@@ -1,48 +1,62 @@
-#include <Castor3D/Prerequisites.h>
+#include <Castor3D/Prerequisites.hpp>
 
 using namespace Castor::Templates;
 
-#include <Castor3D/render_system/RenderSystem.h>
-#include <Castor3D/render_system/Buffer.h>
-#include <Castor3D/scene/SceneNode.h>
-#include <Castor3D/scene/SceneManager.h>
-#include <Castor3D/scene/Scene.h>
-#include <Castor3D/camera/Camera.h>
-#include <Castor3D/camera/Viewport.h>
-#include <Castor3D/material/MaterialManager.h>
-#include <Castor3D/material/Material.h>
-#include <Castor3D/material/Pass.h>
-#include <Castor3D/material/TextureUnit.h>
-#include <Castor3D/main/Version.h>
-#include <Castor3D/geometry/primitives/Geometry.h>
-#include <Castor3D/geometry/mesh/MeshManager.h>
-#include <Castor3D/geometry/mesh/Mesh.h>
-#include <Castor3D/geometry/mesh/Submesh.h>
-#include <Castor3D/geometry/basic/SmoothingGroup.h>
-#include <Castor3D/geometry/basic/Face.h>
+#include <Castor3D/RenderSystem.hpp>
+#include <Castor3D/Buffer.hpp>
+#include <Castor3D/SceneNode.hpp>
+#include <Castor3D/Scene.hpp>
+#include <Castor3D/Camera.hpp>
+#include <Castor3D/Viewport.hpp>
+#include <Castor3D/Material.hpp>
+#include <Castor3D/Pass.hpp>
+#include <Castor3D/TextureUnit.hpp>
+#include <Castor3D/Version.hpp>
+#include <Castor3D/Geometry.hpp>
+#include <Castor3D/Mesh.hpp>
+#include <Castor3D/Root.hpp>
+#include <Castor3D/Submesh.hpp>
+#include <Castor3D/SmoothingGroup.hpp>
+#include <Castor3D/Plugin.hpp>
+#include <Castor3D/Face.hpp>
 
-#include "AseImporter/AseImporter.h"
+#include "AseImporter/AseImporter.hpp"
 
 using namespace Castor3D;
 
 //*************************************************************************************************
 
-extern "C" C3D_Ase_API void GetRequiredVersion( Version & p_version)
+C3D_Ase_API void GetRequiredVersion( Version & p_version)
 {
-	p_version = Version( 0, 6);
+	p_version = Version();
 }
 
-extern "C" C3D_Ase_API Importer * CreateImporter( SceneManager * p_pManager)
+C3D_Ase_API ePLUGIN_TYPE GetType()
 {
-	Importer * l_pReturn( new AseImporter( p_pManager));
+	return ePLUGIN_TYPE_IMPORTER;
+}
+
+C3D_Ase_API String GetName()
+{
+	return cuT( "ASE Importer Plugin");
+}
+
+C3D_Ase_API String GetExtension()
+{
+	return cuT( "ASE");
+}
+
+C3D_Ase_API Importer * CreateImporter()
+{
+	Importer * l_pReturn( new AseImporter());
 
 	return l_pReturn;
 }
 
 //*************************************************************************************************
 
-AseImporter :: AseImporter( SceneManager * p_pManager)
-	:	Importer( p_pManager)
+AseImporter :: AseImporter()
+	:	Importer()
 {
 }
 
@@ -52,7 +66,7 @@ AseImporter :: ~AseImporter()
 
 bool AseImporter :: _import()
 {
-	m_pFile = new File( m_fileName, File::eRead);
+	m_pFile = new File( m_fileName, File::eOPEN_MODE_READ);
 
 	_readAseFile();
 
@@ -81,11 +95,13 @@ bool AseImporter :: _import()
 
 void AseImporter :: _readAseFile()
 {
-	m_pScene = m_pManager->GetElementByName( "MainScene");
+	Collection<Scene, String> l_sceneManager;
+	m_pScene = l_sceneManager.GetElement( "MainScene");
 
 	while (m_pFile->IsOk())
 	{
 		m_pFile->ReadWord( m_currentWord);
+		Logger::LogMessage( m_currentWord);
 
 		if (m_currentWord == SCENE)
 		{
@@ -189,11 +205,27 @@ MaterialPtr AseImporter :: _readMaterialInfos()
 
 			if (File::FileExists( l_texPath))
 			{
-				l_unit->SetTexture2D( m_pManager->GetImageManager()->CreateImage( l_texPath, l_texPath));
+				Collection<Image, String> l_imgCollection;
+				ImagePtr l_pImage = l_imgCollection.GetElement( l_texPath);
+				if ( ! l_pImage)
+				{
+					l_pImage = ImagePtr( new Image( l_texPath));
+					l_imgCollection.AddElement( l_texPath, l_pImage);
+				}
+				Loader<Image>::Load( * l_pImage, l_texPath);
+				l_unit->SetTexture( eTEXTURE_TYPE_2D, l_pImage);
 			}
 			else if (File::FileExists( l_filePath + l_texPath))
 			{
-				l_unit->SetTexture2D( m_pManager->GetImageManager()->CreateImage( l_filePath + l_texPath, l_filePath + l_texPath));
+				Collection<Image, String> l_imgCollection;
+				ImagePtr l_pImage = l_imgCollection.GetElement( l_filePath + l_texPath);
+				if ( ! l_pImage)
+				{
+					l_pImage = ImagePtr( new Image( l_filePath + l_texPath));
+					l_imgCollection.AddElement( l_filePath + l_texPath, l_pImage);
+				}
+				Loader<Image>::Load( * l_pImage, l_filePath + l_texPath);
+				l_unit->SetTexture( eTEXTURE_TYPE_2D, l_pImage);
 			}
 			else
 			{
@@ -202,7 +234,14 @@ MaterialPtr AseImporter :: _readMaterialInfos()
 		}
 		else if (m_currentWord == MATERIAL_NAME)
 		{
-			l_material = m_pManager->GetMaterialManager()->CreateMaterial( _retrieveString());
+			Collection<Material, String> l_mtlCollection;
+			String l_strName = _retrieveString();
+			l_material = l_mtlCollection.GetElement( l_strName);
+			if ( ! l_material)
+			{
+				l_material = MaterialPtr( new Material( l_strName, 1));
+				l_mtlCollection.AddElement( l_strName, l_material);
+			}
 			l_material->GetPass( 0)->SetDoubleFace( true);
 		}
 	}
@@ -243,7 +282,7 @@ void AseImporter :: _readCameraInfos()
 		else if (m_currentWord == NODE_NAME)
 		{
 			l_nodeName = _retrieveString();
-			l_camera = m_pScene->CreateCamera( l_nodeName, 800, 600, m_pScene->CreateSceneNode( l_nodeName), Viewport::e3DView);
+			l_camera = m_pScene->CreateCamera( l_nodeName, 800, 600, m_pScene->CreateSceneNode( l_nodeName), eVIEWPORT_TYPE_3D);
 		}
 		else if (m_currentWord == CAMERA_SETTINGS)
 		{
@@ -267,25 +306,25 @@ void AseImporter :: _readCameraSettings( CameraPtr p_camera)
 		else if (m_currentWord == CAMERA_NEAR)
 		{
 			m_pFile->ReadWord( m_currentWord);
-			l_near = ator( m_currentWord.c_str());
+			l_near = m_currentWord.to_real();
 			p_camera->GetViewport()->SetNearView( l_near);
 		}
 		else if (m_currentWord == CAMERA_FAR)
 		{
 			m_pFile->ReadWord( m_currentWord);
-			l_far = ator( m_currentWord.c_str());
+			l_far = m_currentWord.to_real();
 			p_camera->GetViewport()->SetFarView( l_far);
 		}
 		else if (m_currentWord == CAMERA_FOV)
 		{
 			m_pFile->ReadWord( m_currentWord);
-			l_fov = ator( m_currentWord.c_str());
-			p_camera->GetViewport()->SetFOVY( l_fov);
+			l_fov = m_currentWord.to_real();
+			p_camera->GetViewport()->SetFovY( Angle::FromDegrees( l_fov));
 		}
 	}
 }
 
-SceneNodePtr AseImporter :: _readNodeInfos( const String & p_name)
+SceneNodePtr AseImporter :: _readNodeInfos( String const & p_name)
 {
 	SceneNodePtr l_node = m_pScene->CreateSceneNode( p_name);
 	real l_angle;
@@ -304,47 +343,47 @@ SceneNodePtr AseImporter :: _readNodeInfos( const String & p_name)
 		else if (m_currentWord == NODE_POSITION)
 		{
 			m_pFile->ReadWord( m_currentWord);
-			l_position[0] = ator( m_currentWord.c_str());
+			l_position[0] = m_currentWord.to_real();
 			m_pFile->ReadWord( m_currentWord);
-			l_position[1] = ator( m_currentWord.c_str());
+			l_position[1] = m_currentWord.to_real();
 			m_pFile->ReadWord( m_currentWord);
-			l_position[2] = ator( m_currentWord.c_str());
+			l_position[2] = m_currentWord.to_real();
 			l_node->SetPosition( l_position);
 		}
 		else if (m_currentWord == NODE_AXIS)
 		{
 			m_pFile->ReadWord( m_currentWord);
-			l_axis[0] = ator( m_currentWord.c_str());
+			l_axis[0] = m_currentWord.to_real();
 			m_pFile->ReadWord( m_currentWord);
-			l_axis[1] = ator( m_currentWord.c_str());
+			l_axis[1] = m_currentWord.to_real();
 			m_pFile->ReadWord( m_currentWord);
-			l_axis[2] = ator( m_currentWord.c_str());
+			l_axis[2] = m_currentWord.to_real();
 			l_gotAxis = true;
 
 			if (l_gotAngle)
 			{
-				l_node->SetOrientation( Quaternion( l_axis, l_angle));
+				l_node->SetOrientation( Quaternion( l_axis, Angle::FromRadians( l_angle)));
 			}
 		}
 		else if (m_currentWord == NODE_ANGLE)
 		{
 			m_pFile->ReadWord( m_currentWord);
-			l_angle = ator( m_currentWord.c_str());
+			l_angle = m_currentWord.to_real();
 			l_gotAngle = true;
 
 			if (l_gotAxis)
 			{
-				l_node->SetOrientation( Quaternion( l_axis, l_angle));
+				l_node->SetOrientation( Quaternion( l_axis, Angle::FromRadians( l_angle)));
 			}
 		}
 		else if (m_currentWord == NODE_SCALE)
 		{
 			m_pFile->ReadWord( m_currentWord);
-			l_scale[0] = ator( m_currentWord.c_str());
+			l_scale[0] = m_currentWord.to_real();
 			m_pFile->ReadWord( m_currentWord);
-			l_scale[1] = ator( m_currentWord.c_str());
+			l_scale[1] = m_currentWord.to_real();
 			m_pFile->ReadWord( m_currentWord);
-			l_scale[2] = ator( m_currentWord.c_str());
+			l_scale[2] = m_currentWord.to_real();
 			l_node->SetScale( l_scale);
 		}
 	}
@@ -354,8 +393,8 @@ SceneNodePtr AseImporter :: _readNodeInfos( const String & p_name)
 
 void AseImporter :: _readObjectInfos()
 {
-	GeometryPtr l_geometry;// = NULL;
-	SceneNodePtr l_node;// = NULL;
+	GeometryPtr l_geometry;// = nullptr;
+	SceneNodePtr l_node;// = nullptr;
 	String l_nodeName;
 
 	while (m_pFile->IsOk())
@@ -382,13 +421,16 @@ void AseImporter :: _readObjectInfos()
 		{
 			UIntArray l_faces;
 			FloatArray l_sizes;
-			MeshPtr l_mesh;
 
-			if ( ! m_pManager->GetMeshManager()->HasElement( l_nodeName))
+			Collection<Mesh, String> l_mshCollection;
+			MeshPtr l_mesh = l_mshCollection.GetElement( l_nodeName);
+			if ( ! l_mesh)
 			{
-				l_mesh = m_pManager->GetMeshManager()->CreateMesh( l_nodeName, l_faces, l_sizes, eCustom);
+				l_mesh = MeshPtr( new Mesh( l_nodeName, eMESH_TYPE_CUSTOM));
+				l_mesh->Initialise( l_faces, l_sizes);
+				l_mshCollection.AddElement( l_nodeName, l_mesh);
+				Logger::LogMessage( cuT( "CreatePrimitive - Mesh ") + l_nodeName + cuT( " created"));
 				l_geometry = GeometryPtr( new Geometry( m_pScene.get(), l_mesh, l_node, l_nodeName));
-				Logger::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_nodeName.c_str());
 				_readMeshInfos( l_mesh);
 				m_geometries.insert( GeometryPtrStrMap::value_type( l_nodeName, l_geometry));
 				m_nodes.insert( SceneNodePtrStrMap::value_type( l_nodeName, l_node));
@@ -589,13 +631,13 @@ String AseImporter :: _retrieveString()
 	if (m_pFile->IsOk())
 	{
 		String l_string( m_currentWord);
-		size_t l_index = l_string.find_first_of( CU_T( "\""));
+		size_t l_index = l_string.find_first_of( cuT( "\""));
 		l_string = l_string.substr( l_index+1, String::npos);
-		l_index = l_string.find_last_of( CU_T( "\""));
+		l_index = l_string.find_last_of( cuT( "\""));
 		l_string = l_string.substr( 0, l_index);
 		return l_string;
 	}
-	return C3DEmptyString;
+	return cuEmptyString;
 }
 
 void AseImporter :: _retrieveVertex( real * p_position)
@@ -605,7 +647,7 @@ void AseImporter :: _retrieveVertex( real * p_position)
 
 	if (m_pFile->ReadLine( l_tmp, 256))
 	{
-		Sscanf( l_tmp.char_str(), "%d %f %f %f", & l_index, & p_position[0], & p_position[1], & p_position[2]);
+		Sscanf( l_tmp.c_str(), cuT( "%d %f %f %f"), & l_index, & p_position[0], & p_position[1], & p_position[2]);
 	}
 }
 
@@ -616,7 +658,7 @@ void AseImporter :: _retrieveFace( int * p_indices)
 
 	if (m_pFile->ReadLine( l_tmp, 256))
 	{
-		Sscanf( l_tmp.char_str(), "%d:\tA:\t%d B:\t%d C:\t%d", & l_index, & p_indices[0], & p_indices[1], & p_indices[2]);
+		Sscanf( l_tmp.c_str(), cuT( "%d:\tA:\t%d B:\t%d C:\t%d"), & l_index, & p_indices[0], & p_indices[1], & p_indices[2]);
 	}
 }
 
@@ -627,7 +669,7 @@ void AseImporter :: _retrieveTextureVertex( real * p_position)
 
 	if (m_pFile->ReadLine( l_tmp, 256))
 	{
-		Sscanf( l_tmp.char_str(), "%d %f %f %f", & l_index, & p_position[0], & p_position[1], & p_position[2]);
+		Sscanf( l_tmp.c_str(), cuT( "%d %f %f %f"), & l_index, & p_position[0], & p_position[1], & p_position[2]);
 	}
 }
 
@@ -637,6 +679,6 @@ void AseImporter :: _retrieveTextureFace( int * p_indices)
 
 	if (m_pFile->ReadLine( l_tmp, 256))
 	{
-		Sscanf( l_tmp.char_str(), "%d %d %d %d", & p_indices[0], & p_indices[1], & p_indices[2], & p_indices[3]);
+		Sscanf( l_tmp.c_str(), cuT( "%d %d %d %d"), & p_indices[0], & p_indices[1], & p_indices[2], & p_indices[3]);
 	}
 }

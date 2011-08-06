@@ -1,8 +1,9 @@
-#include "CastorUtils/PrecompiledHeader.h"
+#include "CastorUtils/PrecompiledHeader.hpp"
 
-#include "CastorUtils/Memory.h"
+#include "CastorUtils/Memory.hpp"
 
 #ifndef ____CASTOR_NO_MEMORY_DEBUG____
+
 #	undef new
 #	undef delete
 
@@ -11,22 +12,22 @@ using namespace Castor::Utils;
 
 //*************************************************************************************************
 
-unsigned long long MemoryTracedBase::TotalAllocatedSize = 0;
-unsigned long long MemoryTracedBase::TotalAllocatedObjectCount = 0;
-unsigned long long MemoryTracedBase::TotalAllocatedArrayCount = 0;
+unsigned long long	MemoryTracedBase::TotalAllocatedSize = 0;
+unsigned long long	MemoryTracedBase::TotalAllocatedObjectCount = 0;
+unsigned long long	MemoryTracedBase::TotalAllocatedArrayCount = 0;
 
 //*************************************************************************************************
 
 MemoryBlockBase :: MemoryBlockBase()
-	:	file		(NULL)
-	,	function	(NULL)
+	:	file		(nullptr)
+	,	function	(nullptr)
 	,	line		(0)
 	,	size		(0)
 	,	isArray		(false)
 {
 }
 
-MemoryBlockBase :: MemoryBlockBase(	const char * p_file, const char * p_function, unsigned int p_line)
+MemoryBlockBase :: MemoryBlockBase(	char const * p_file, char const * p_function, unsigned int p_line)
 	:	file		(p_file)
 	,	function	(p_function)
 	,	line		(p_line)
@@ -36,8 +37,8 @@ MemoryBlockBase :: MemoryBlockBase(	const char * p_file, const char * p_function
 }
 
 MemoryBlockBase :: MemoryBlockBase( size_t p_size, bool p_array)
-	:	file		(NULL)
-	,	function	(NULL)
+	:	file		(nullptr)
+	,	function	(nullptr)
 	,	line		(0)
 	,	size		(p_size)
 	,	isArray		(p_array)
@@ -59,7 +60,7 @@ void MemoryBlockBase :: operator delete( void * p_pointer)
 	free( p_pointer);
 }
 
-MemoryBlockBase & MemoryBlockBase :: operator =( const MemoryBlockBase & p_other)
+MemoryBlockBase & MemoryBlockBase :: operator =( MemoryBlockBase const & p_other)
 {
 	Assign( p_other);
 	return * this;
@@ -67,14 +68,14 @@ MemoryBlockBase & MemoryBlockBase :: operator =( const MemoryBlockBase & p_other
 
 void MemoryBlockBase :: Clear()
 {
-	file = NULL;
-	function = NULL;
+	file = nullptr;
+	function = nullptr;
 	line = 0;
 	size = 0;
 	isArray = false;
 }
 
-void MemoryBlockBase :: Assign( const MemoryBlockBase & p_block)
+void MemoryBlockBase :: Assign( MemoryBlockBase const & p_block)
 {
 	file = p_block.file;
 	function = p_block.function;
@@ -82,6 +83,14 @@ void MemoryBlockBase :: Assign( const MemoryBlockBase & p_block)
 }
 
 //*************************************************************************************************
+
+#ifdef _MSC_VER
+#	define _CRTDBG_MAP_ALLOC
+#	include <stdlib.h>
+#	include <crtdbg.h>
+#endif
+
+#include <fstream>
 
 unsigned int MemoryManager :: sm_initialised = 0;
 
@@ -94,14 +103,9 @@ MemoryManager :: MemoryManager()
 		m_pMutex					( new Castor::MultiThreading::RecursiveMutex),
 		m_totalMemoryAllocated		( 0)
 {
-//	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( * m_pMutex);
+	File::FileDelete( LOG_LOCATION);
+	File l_file( LOG_LOCATION, File::eOPEN_MODE_WRITE);
 	sm_initialised = 1;
-	FILE * l_file;
-	FOpen( l_file, ALLOG_LOCATION, "w");
-	fclose( l_file);
-
-	FOpen( l_file, DEALLOG_LOCATION, "w");
-	fclose( l_file);
 }
 
 MemoryManager :: ~MemoryManager()
@@ -118,9 +122,15 @@ MemoryManager :: ~MemoryManager()
 	m_memoryMap.clear();
 	m_pMutex->Unlock();
 	delete m_pMutex;
+/*
+#ifdef _MSC_VER
+	_CrtDumpMemoryLeaks();
+	_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+#endif
+*/
 }
 
-MemoryManager & MemoryManager :: operator <<( const MemoryBlockBase & p_block)
+MemoryManager & MemoryManager :: operator <<( MemoryBlockBase const & p_block)
 {
 	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( * m_pMutex);
 	m_lastBlock = p_block;
@@ -185,13 +195,13 @@ bool MemoryManager :: RemoveLocation( void * p_pointer, bool p_isArray)
 	return false;
 }
 
-void MemoryManager :: FailedAlloc( unsigned int p_size, bool p_isArray)
+void MemoryManager :: FailedAlloc( size_t p_size, bool p_isArray)
 {
 	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( * m_pMutex);
 	m_failedNews.push_back( new MemoryBlockBase( "", "", 0));
 }
 
-void MemoryManager :: RecordAllocation( unsigned int p_size)
+void MemoryManager :: RecordAllocation( size_t p_size)
 {
 	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( * m_pMutex);
 	m_currentMemoryAllocated += p_size;
@@ -203,7 +213,7 @@ void MemoryManager :: RecordAllocation( unsigned int p_size)
 	}
 }
 
-void MemoryManager :: RecordDeallocation( unsigned int p_size)
+void MemoryManager :: RecordDeallocation( size_t p_size)
 {
 	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( * m_pMutex);
 	m_currentMemoryAllocated -= p_size;
@@ -212,13 +222,12 @@ void MemoryManager :: RecordDeallocation( unsigned int p_size)
 void MemoryManager :: _finalReport()
 {
 	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( * m_pMutex);
-	FILE * l_file;
-	FOpen( l_file, LOG_LOCATION, "w");
+	std::fstream l_file( LOG_LOCATION, std::ios_base::in | std::ios_base::app);
 
-	if (l_file != NULL)
+	if (l_file)
 	{
 		time_t rawtime;
-		struct tm * ti = NULL;
+		struct tm * ti = nullptr;
 
 		time( & rawtime);
 		Localtime( ti, & rawtime);
@@ -226,12 +235,13 @@ void MemoryManager :: _finalReport()
 		ti->tm_year += 1900;
 		ti->tm_mon ++;
 
-		fprintf( l_file, "Memoryleak.log : %.2d/%.2d/%.4d @ %.2d:%.2d:%.2d\n", ti->tm_mday, ti->tm_mon, ti->tm_year, ti->tm_hour, ti->tm_min, ti->tm_sec);
+		l_file.precision( 2);
+		l_file << "Memoryleak.log : " << ti->tm_mday << "/" << ti->tm_mon << "/" << ti->tm_year << "@" << ti->tm_hour << ":" << ti->tm_min << ":" << ti->tm_sec << std::endl;
 
-		fprintf( l_file, "Total memory leaked : %d bytes\n", m_currentMemoryAllocated);
-		fprintf( l_file, "Maximum memory usage : %d bytes\n", m_maximumMemoryAllocated);
-		fprintf( l_file, "Total memory allocated : %lld bytes on %d objects and %d arrays\n", m_totalMemoryAllocated, m_totalObjectsAllocated, m_totalArraysAllocated);
-		fprintf( l_file, "Total memory allocated through MemoryTraced : %lld bytes on %d objects and %d arrays\n", MemoryTracedBase::TotalAllocatedSize, MemoryTracedBase::TotalAllocatedObjectCount, MemoryTracedBase::TotalAllocatedArrayCount);
+		l_file << "Total memory leaked : " << m_currentMemoryAllocated << " bytes" << std::endl;
+		l_file << "Maximum memory usage : " << m_maximumMemoryAllocated << " bytes" << std::endl;
+		l_file << "Total memory allocated : " << m_totalMemoryAllocated << " bytes on " << m_totalObjectsAllocated << " objects and " << m_totalArraysAllocated << " arrays" << std::endl;
+		l_file << "Total memory allocated through MemoryTraced : " << MemoryTracedBase::TotalAllocatedSize << " bytes on " << MemoryTracedBase::TotalAllocatedObjectCount << " objects and " << MemoryTracedBase::TotalAllocatedArrayCount << " arrays" << std::endl;
 
 
 		if ( ! m_memoryMap.empty())
@@ -245,28 +255,26 @@ void MemoryManager :: _finalReport()
 
 				if (l_block->file == NULL)
 				{
-					fprintf( l_file, "Outside object leaked : %s, %d bytes\n", l_block->GetBlockType(), l_block->size);
+					l_file << "Outside object leaked : " << l_block->GetBlockType() << ", " << l_block->size << " bytes" << std::endl;
 				}
 				else
 				{
-					fprintf( l_file, "%s leaked : %d bytes, created in %s(), line %d of file %s\n", (l_block->isArray ? "Array" : "Object"), l_block->size, l_block->function, l_block->line, l_block->file);
+					l_file << (l_block->isArray ? "Array" : "Object") << " leaked : " << l_block->size << " bytes, created in " << l_block->function << "(), line " << l_block->line << " of file " << l_block->file << std::endl;
 				}
 			}
 		}
 		else
 		{
-			fprintf( l_file, "No memory leaks\n");
+			l_file << "No memory leaks ;) You're too strong :D !" << std::endl;
 		}
-
-		fclose( l_file);
 	}
 }
 
-void MemoryManager :: MemoryLeaksReport( const String & p_filename)
+void MemoryManager :: MemoryLeaksReport( String const & p_filename)
 {
 	CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( * m_pMutex);
 	MemoryManager::Lock();
-	std::ostream  * out;
+	std::ostream * out;
 	std::ofstream * fout;
 
 	if ( ! p_filename.empty())
@@ -293,7 +301,7 @@ void MemoryManager :: MemoryLeaksReport( const String & p_filename)
 	}
 
 	time_t rawtime;
-	struct tm * ti = NULL;
+	struct tm * ti = nullptr;
 
 	time( & rawtime);
 	Localtime( ti, & rawtime);
@@ -364,122 +372,6 @@ void MemoryManager :: MemoryLeaksReport( const String & p_filename)
 
 	MemoryManager::Unlock();
 }
-
-#undef new
-/*
-void * operator new( size_t p_size)
-{
-	void * l_ptr = malloc( p_size);
-
-	if (MemoryManager::Exists())
-	{
-		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( MemoryManager::GetSingleton().m_mutex);
-
-		if ( ! MemoryManager::IsLocked())
-		{
-			MemoryManager::Lock();
-
-			if (l_ptr != NULL)
-			{
-				MemoryManager::GetSingleton().AddLocation( p_size, l_ptr, false);
-			}
-			else
-			{
-				MemoryManager::GetSingleton().FailedAlloc( p_size, false);
-			}
-
-			MemoryManager::Unlock();
-		}
-	}
-
-	return l_ptr;
-}
-
-void operator delete( void * p_pointer)
-{
-	if (MemoryManager::Exists())
-	{
-		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( MemoryManager::GetSingleton().m_mutex);
-
-		if ( ! MemoryManager::IsLocked())
-		{
-			MemoryManager::Lock();
-
-			if (MemoryManager::GetSingleton().RemoveLocation( p_pointer, false))
-			{
-				free( p_pointer);
-			}
-
-			MemoryManager::Unlock();
-		}
-		else
-		{
-			free( p_pointer);
-		}
-	}
-	else
-	{
-		free( p_pointer);
-	}
-}
-/**/
-/*
-void * operator new[]( size_t p_size)
-{
-	void * l_ptr = malloc( p_size);
-
-	if (MemoryManager::Exists())
-	{
-		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( MemoryManager::GetSingleton().m_mutex);
-
-		if ( ! MemoryManager::IsLocked())
-		{
-			MemoryManager::Lock();
-
-			if (l_ptr != NULL)
-			{
-				MemoryManager::GetSingleton().AddLocation( p_size, l_ptr, true);
-			}
-			else
-			{
-				MemoryManager::GetSingleton().FailedAlloc( p_size, true);
-			}
-
-			MemoryManager::Unlock();
-		}
-	}
-
-	return l_ptr;
-}
-
-void operator delete[]( void * p_pointer)
-{
-	if (MemoryManager::Exists())
-	{
-		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( MemoryManager::GetSingleton().m_mutex);
-
-		if ( ! MemoryManager::IsLocked())
-		{
-			MemoryManager::Lock();
-
-			if (MemoryManager::GetSingleton().RemoveLocation( p_pointer, true))
-			{
-				free( p_pointer);
-			}
-
-			MemoryManager::Unlock();
-		}
-		else
-		{
-			free( p_pointer);
-		}
-	}
-	else
-	{
-		free( p_pointer);
-	}
-}
-/**/
 
 //*************************************************************************************************
 #endif

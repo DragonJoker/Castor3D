@@ -1,68 +1,84 @@
-#include <Castor3D/Prerequisites.h>
+#include <Castor3D/Prerequisites.hpp>
 
 using namespace Castor::Templates;
 
-#include <Castor3D/render_system/RenderSystem.h>
-#include <Castor3D/render_system/Buffer.h>
-#include <Castor3D/scene/SceneNode.h>
-#include <Castor3D/scene/SceneManager.h>
-#include <Castor3D/scene/Scene.h>
-#include <Castor3D/camera/Camera.h>
-#include <Castor3D/camera/Viewport.h>
-#include <Castor3D/material/MaterialManager.h>
-#include <Castor3D/material/Material.h>
-#include <Castor3D/material/Pass.h>
-#include <Castor3D/material/TextureUnit.h>
-#include <Castor3D/geometry/primitives/Geometry.h>
-#include <Castor3D/geometry/mesh/MeshManager.h>
-#include <Castor3D/geometry/mesh/Mesh.h>
-#include <Castor3D/geometry/mesh/Submesh.h>
-#include <Castor3D/geometry/basic/SmoothingGroup.h>
-#include <Castor3D/geometry/basic/Face.h>
-#include <Castor3D/main/Version.h>
+#include <Castor3D/RenderSystem.hpp>
+#include <Castor3D/Buffer.hpp>
+#include <Castor3D/SceneNode.hpp>
+#include <Castor3D/Scene.hpp>
+#include <Castor3D/Camera.hpp>
+#include <Castor3D/Viewport.hpp>
+#include <Castor3D/Material.hpp>
+#include <Castor3D/Pass.hpp>
+#include <Castor3D/TextureUnit.hpp>
+#include <Castor3D/Geometry.hpp>
+#include <Castor3D/Mesh.hpp>
+#include <Castor3D/Submesh.hpp>
+#include <Castor3D/SmoothingGroup.hpp>
+#include <Castor3D/Face.hpp>
+#include <Castor3D/Version.hpp>
+#include <Castor3D/Plugin.hpp>
+#include <Castor3D/Root.hpp>
 
-#include "PlyImporter/PlyImporter.h"
+#include "PlyImporter/PlyImporter.hpp"
 
 using namespace Castor3D;
 
 //*************************************************************************************************
 
-extern "C" C3D_Ply_API void GetRequiredVersion( Version & p_version)
+C3D_Ply_API void GetRequiredVersion( Version & p_version)
 {
-	p_version = Version( 0, 6);
+	p_version = Version();
 }
 
-extern "C" C3D_Ply_API Importer * CreateImporter( SceneManager * p_pManager)
+C3D_Ply_API ePLUGIN_TYPE GetType()
 {
-	Importer * l_pReturn( new PlyImporter( p_pManager));
+	return ePLUGIN_TYPE_IMPORTER;
+}
+
+C3D_Ply_API String GetName()
+{
+	return cuT( "PLY Importer Plugin");
+}
+
+C3D_Ply_API String GetExtension()
+{
+	return cuT( "PLY");
+}
+
+C3D_Ply_API Importer * CreateImporter()
+{
+	Importer * l_pReturn( new PlyImporter());
 
 	return l_pReturn;
 }
 
 //*************************************************************************************************
 
-PlyImporter :: PlyImporter( SceneManager * p_pManager)
-	:	Importer( p_pManager)
+PlyImporter :: PlyImporter()
+	:	Importer()
 {
 }
 
 bool PlyImporter :: _import()
 {
-	m_pScene = m_pManager->GetElementByName( "MainScene");
+	Collection<Scene, String> l_scnCollection;
+
+	m_pScene = l_scnCollection.GetElement( "MainScene");
 
 	size_t l_uiSlashIndex = 0;
 
-	if (m_fileName.find_last_of( CU_T( "\\")) != String::npos)
+	if (m_fileName.find_last_of( cuT( "\\")) != String::npos)
 	{
-		l_uiSlashIndex = m_fileName.find_last_of( CU_T( "\\")) + 1;
+		l_uiSlashIndex = m_fileName.find_last_of( cuT( "\\")) + 1;
 	}
 
-	if (m_fileName.find_last_of( CU_T( "/")) != String::npos)
+	if (m_fileName.find_last_of( cuT( "/")) != String::npos)
 	{
-		l_uiSlashIndex = std::max<size_t>( l_uiSlashIndex, m_fileName.find_last_of( CU_T( "/")) + 1);
+		l_uiSlashIndex = std::max<size_t>( l_uiSlashIndex, m_fileName.find_last_of( cuT( "/")) + 1);
 	}
 
-	size_t l_uiDotIndex = m_fileName.find_last_of( CU_T( "."));
+	size_t l_uiDotIndex = m_fileName.find_last_of( cuT( "."));
 
 	UIntArray l_faces;
 	FloatArray l_sizes;
@@ -70,29 +86,34 @@ bool PlyImporter :: _import()
 	String l_meshName = m_fileName.substr( l_uiSlashIndex, l_uiDotIndex - l_uiSlashIndex);
 	String l_materialName = m_fileName.substr( l_uiSlashIndex, l_uiDotIndex - l_uiSlashIndex);
 
-	MeshPtr l_pMesh;
-
-	if (m_pManager->GetMeshManager()->HasElement( l_meshName))
+	Collection<Mesh, String> l_mshCollection;
+	MeshPtr l_pMesh = l_mshCollection.GetElement( l_meshName);
+	if ( ! l_pMesh)
 	{
-		l_pMesh = m_pManager->GetMeshManager()->GetElementByName( l_meshName);
-	}
-	else
-	{
-		l_pMesh = m_pManager->GetMeshManager()->CreateMesh( l_meshName, l_faces, l_sizes, eCustom);
-		Logger::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
+		l_pMesh = MeshPtr( new Mesh( l_meshName, eMESH_TYPE_CUSTOM));
+		l_pMesh->Initialise( l_faces, l_sizes);
+		l_mshCollection.AddElement( l_meshName, l_pMesh);
+		Logger::LogMessage( cuT( "CreatePrimitive - Mesh ") + l_meshName + cuT( " created"));
 	}
 
 	std::ifstream l_isFile;
-	l_isFile.open( m_fileName.c_str(), std::ios::in);
+	l_isFile.open( m_fileName.char_str(), std::ios::in);
 
 	std::string l_strLine;
 	std::istringstream l_ssToken;
 	String::size_type l_stIndex;
-	real * l_pfNormals = NULL;
-	real * l_pfTexcoords = NULL;
+	real * l_pfNormals = nullptr;
+	real * l_pfTexcoords = nullptr;
 
 	SubmeshPtr l_pSubmesh = l_pMesh->CreateSubmesh( 1);
-	MaterialPtr l_pMaterial = m_pManager->GetMaterialManager()->CreateMaterial( l_materialName);
+	Collection<Material, String> l_mtlCollection;
+	MaterialPtr l_pMaterial = l_mtlCollection.GetElement( l_materialName);
+	if ( ! l_pMaterial)
+	{
+		l_pMaterial = MaterialPtr( new Material( l_materialName, 1));
+		l_mtlCollection.AddElement( l_materialName, l_pMaterial);
+	}
+
 	l_pSubmesh->SetMaterial( l_pMaterial);
 
 	// Parsing the ply identification line
@@ -118,7 +139,7 @@ bool PlyImporter :: _import()
 				{
 					continue;
 				}
-				else 
+				else
 				{
 					l_ssToken.str( l_strLine.substr( String( "element vertex ").length()) );
 					l_ssToken >> l_iNbVertex;
@@ -258,7 +279,7 @@ bool PlyImporter :: _import()
 	SceneNodePtr l_pNode = m_pScene->CreateSceneNode( l_name);
 
 	GeometryPtr l_pGeometry( new Geometry( m_pScene.get(), l_pMesh, l_pNode, l_name));
-	Logger::LogMessage( CU_T( "PlyImporter::_import - Geometry %s created"), l_name.c_str());
+	Logger::LogMessage( cuT( "PlyImporter::_import - Geometry %s created"), l_name.c_str());
 
 	m_geometries.insert( GeometryPtrStrMap::value_type( l_name, l_pGeometry));
 

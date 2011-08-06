@@ -1,35 +1,49 @@
 /*
-#include <Castor3D/Prerequisites.h>
+#include <Castor3D/Prerequisites.hpp>
 
 using namespace Castor::Templates;
 
-#include <Castor3D/geometry/mesh/MeshManager.h>
-#include <Castor3D/geometry/mesh/Mesh.h>
-#include <Castor3D/geometry/mesh/Submesh.h>
-#include <Castor3D/geometry/basic/Face.h>
-#include <Castor3D/material/MaterialManager.h>
-#include <Castor3D/material/TextureUnit.h>
-#include <Castor3D/material/Material.h>
-#include <Castor3D/material/Pass.h>
-#include <Castor3D/main/Version.h>
-#include <Castor3D/render_system/Buffer.h>
-#include <Castor3D/render_system/MeshRenderer.h>
-#include <Castor3D/render_system/RenderSystem.h>
+#include <Castor3D/Mesh.hpp>
+#include <Castor3D/Submesh.hpp>
+#include <Castor3D/Face.hpp>
+#include <Castor3D/TextureUnit.hpp>
+#include <Castor3D/Material.hpp>
+#include <Castor3D/Pass.hpp>
+#include <Castor3D/Version.hpp>
+#include <Castor3D/Buffer.hpp>
+#include <Castor3D/MeshRenderer.hpp>
+#include <Castor3D/RenderSystem.hpp>
+#include <Castor3D/Plugin.hpp>
 
-#include "BspImporter/BspImporter.h"
+#include "BspImporter/BspImporter.hpp"
 
 using namespace Castor3D;
 
 //*************************************************************************************************
 
-extern "C" C3D_Bsp_API void GetRequiredVersion( Version & p_version)
+C3D_Bsp_API void GetRequiredVersion( Version & p_version)
 {
-	p_version = Version( 0, 6);
+	p_version = Version();
 }
 
-extern "C" C3D_Bsp_API Importer * CreateImporter( SceneManager * p_pManager)
+C3D_Bsp_API ePLUGIN_TYPE GetType()
 {
-	Importer * l_pReturn( new BspImporter( p_pManager));
+	return ePluginImporter;
+}
+
+C3D_Bsp_API String GetName()
+{
+	return cuT( "BSP Importer Plugin");
+}
+
+C3D_Bsp_API String GetExtension()
+{
+	return cuT( "BSP");
+}
+
+C3D_Bsp_API Importer * CreateImporter()
+{
+	Importer * l_pReturn( new BspImporter);
 
 	return l_pReturn;
 }
@@ -38,17 +52,17 @@ extern "C" C3D_Bsp_API Importer * CreateImporter( SceneManager * p_pManager)
 
 extern bool g_textures;
 
-BspImporter :: BspImporter( SceneManager * p_pManager)
-	:	Importer( p_pManager)
+BspImporter :: BspImporter()
+	:	Importer()
 {
 	m_numOfVerts    = 0;	
 	m_numOfFaces    = 0;
 	m_numOfIndices  = 0;
 	m_numOfTextures = 0;
 
-	m_verts = NULL;
-	m_faces = NULL;
-	m_indices = NULL;
+	m_verts = nullptr;
+	m_faces = nullptr;
+	m_indices = nullptr;
 }
 
 bool BspImporter :: _import()
@@ -56,17 +70,17 @@ bool BspImporter :: _import()
 	m_pFile = new File( m_fileName, File::eRead);
 	size_t l_uiSlashIndex = 0;
 
-	if (m_fileName.find_last_of( CU_T( "\\")) != String::npos)
+	if (m_fileName.find_last_of( cuT( "\\")) != String::npos)
 	{
-		l_uiSlashIndex = m_fileName.find_last_of( CU_T( "\\")) + 1;
+		l_uiSlashIndex = m_fileName.find_last_of( cuT( "\\")) + 1;
 	}
 
-	if (m_fileName.find_last_of( CU_T( "/")) != String::npos)
+	if (m_fileName.find_last_of( cuT( "/")) != String::npos)
 	{
-		l_uiSlashIndex = max( l_uiSlashIndex, m_fileName.find_last_of( CU_T( "/")) + 1);
+		l_uiSlashIndex = max( l_uiSlashIndex, m_fileName.find_last_of( cuT( "/")) + 1);
 	}
 
-	size_t l_uiDotIndex = m_fileName.find_last_of( CU_T( "."));
+	size_t l_uiDotIndex = m_fileName.find_last_of( cuT( "."));
 
 	UIntArray l_faces;
 	FloatArray l_sizes;
@@ -74,16 +88,17 @@ bool BspImporter :: _import()
 	String l_meshName = m_fileName.substr( l_uiSlashIndex, l_uiDotIndex - l_uiSlashIndex);
 	String l_materialName = m_fileName.substr( l_uiSlashIndex, l_uiDotIndex - l_uiSlashIndex);
 
-	MeshPtr l_pMesh = NULL;
+	MeshPtr l_pMesh = nullptr;
+	Collection<Mesh, String> l_collection;
 
-	if (MeshManager::HasElement( l_meshName))
+	if (l_collection.HasElement( l_meshName))
 	{
-		l_pMesh = MeshManager::GetElementByName( l_meshName);
+		l_pMesh = l_collection.GetElement( l_meshName);
 	}
 	else
 	{
-		l_pMesh = MeshManager::CreateMesh( l_meshName, l_faces, l_sizes, Mesh::eCustom);
-		Logger::LogMessage( CU_T( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
+		l_pMesh = Factory<Mesh>::Create( l_meshName, l_faces, l_sizes, Mesh::eCustom);
+		Logger::LogMessage( cuT( "CreatePrimitive - Mesh %s created"), l_meshName.c_str());
 	}
 
 	int i = 0;
@@ -153,7 +168,7 @@ BspImporter :: ~BspImporter()
 
 void BspImporter::_convertToMesh( MeshPtr p_mesh, BSPTexture * p_textures)
 {
-	size_t l_i = min( m_fileName.find_last_of( CU_T( "/")), m_fileName.find_last_of( CU_T( "\\")));
+	size_t l_i = min( m_fileName.find_last_of( cuT( "/")), m_fileName.find_last_of( cuT( "\\")));
 	String l_filePath = m_fileName.substr( 0, l_i + 1);
 
 	MaterialPtrArray l_materials;
@@ -163,14 +178,14 @@ void BspImporter::_convertToMesh( MeshPtr p_mesh, BSPTexture * p_textures)
 	for( int i = 0; i < m_numOfTextures; i++)
 	{
 		String l_strName;
-		l_strName = p_mesh->GetName() + CU_T( "Material_") + l_strName;
+		l_strName = p_mesh->GetName() + cuT( "Material_") + l_strName;
 		l_strName << i;
-		l_material = MaterialManager::CreateMaterial( l_strName);
+		l_material = Factory<Material>::Create( l_strName, 1);
 		l_pass = l_material->GetPass( 0);
 		l_pass->SetAmbient( 0.0f, 0.0f, 0.0f, 1.0f);
 		l_pass->SetEmissive( 0.5f, 0.5f, 0.5f, 1.0f);
 		l_unit = new TextureUnit( RenderSystem::GetSingletonPtr()->CreateTextureRenderer());
-		l_unit->SetTexture2D( l_filePath + CU_T( "../") + String( p_textures[i].m_strName) + CU_T( ".jpg"));
+		l_unit->SetTexture2D( l_filePath + cuT( "../") + String( p_textures[i].m_strName) + cuT( ".jpg"));
 		l_pass->AddTextureUnit( l_unit);
 		l_materials.push_back( l_material);
 	}

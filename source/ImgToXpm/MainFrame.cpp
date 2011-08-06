@@ -1,19 +1,19 @@
-#include "ImgToXpm/PrecompiledHeader.h"
+#include "ImgToXpm/PrecompiledHeader.hpp"
 
-#include "ImgToXpm/MainFrame.h"
-#include "ImgToXpm/ImgToXpm.h"
+#include "ImgToXpm/MainFrame.hpp"
+#include "ImgToXpm/ImgToXpm.hpp"
 
 using namespace ImgToXpm;
 
 DECLARE_APP( ImgToXpmApp)
 
 MainFrame :: MainFrame()
-	:	wxFrame( NULL, wxID_ANY, "Image To XPM Converter", wxPoint( 0, 0), wxSize( 400, 300), wxSYSTEM_MENU | wxCLOSE_BOX | wxCAPTION)
+	:	wxFrame( NULL, wxID_ANY, wxT( "Image To XPM Converter"), wxPoint( 0, 0), wxSize( 400, 300), wxSYSTEM_MENU | wxCLOSE_BOX | wxCAPTION)
 {
 	CreateStatusBar();
 
 	wxSize l_size = GetClientSize();
-	wxPanel * l_pPanel = new wxPanel( this, 0, 0, l_size.x, l_size.y);
+	wxPanel * l_pPanel = new wxPanel( this, wxID_ANY, wxPoint( 0, 0), l_size);
 	m_pListImages = new wxListBox( l_pPanel, wxID_ANY, wxPoint( 0, 0), wxSize( l_size.x, l_size.y - 45));
 	m_pButtonBrowse = new wxButton( l_pPanel, eBrowse, wxT( "Browse"), wxPoint( 10, l_size.y - 35), wxSize( 100, 25));
 	m_pButtonProcess = new wxButton( l_pPanel, eProcess, wxT( "Process"), wxPoint( (l_size.x - 100) / 2, l_size.y - 35), wxSize( 100, 25));

@@ -1,25 +1,36 @@
-#include <Castor3D/Prerequisites.h>
+#include <Castor3D/Prerequisites.hpp>
 
 using namespace Castor::Templates;
 
-#include <Castor3D/geometry/mesh/Submesh.h>
-#include <Castor3D/geometry/basic/Vertex.h>
-#include <Castor3D/geometry/basic/Face.h>
-#include <Castor3D/geometry/basic/SmoothingGroup.h>
-#include <Castor3D/main/Version.h>
+#include <Castor3D/Submesh.hpp>
+#include <Castor3D/Vertex.hpp>
+#include <Castor3D/Face.hpp>
+#include <Castor3D/SmoothingGroup.hpp>
+#include <Castor3D/Version.hpp>
+#include <Castor3D/Plugin.hpp>
 
-#include "LoopDivider/LoopDivider.h"
+#include "LoopDivider/LoopDivider.hpp"
 
 using namespace Castor3D;
 
 //*************************************************************************************************
 
-extern "C" C3D_Loop_API void GetRequiredVersion( Version & p_version)
+C3D_Loop_API void GetRequiredVersion( Version & p_version)
 {
-	p_version = Version( 0, 6);
+	p_version = Version();
 }
 
-extern "C" C3D_Loop_API Subdivider * CreateDivider( Submesh * p_pSubmesh)
+C3D_Loop_API ePLUGIN_TYPE GetType()
+{
+	return ePLUGIN_TYPE_DIVIDER;
+}
+
+C3D_Loop_API String GetName()
+{
+	return cuT( "Loop Algorithm");
+}
+
+C3D_Loop_API Subdivider * CreateDivider( Submesh * p_pSubmesh)
 {
 	Subdivider * l_pReturn( new LoopSubdivider( p_pSubmesh));
 
@@ -80,11 +91,11 @@ LoopEdge :: ~LoopEdge()
 
 void LoopEdge :: AddFace( FacePtr p_face)
 {
-	if (m_firstFace == NULL)
+	if ( ! m_firstFace)
 	{
 		m_firstFace = p_face;
 	}
-	else if (m_secondFace == NULL)
+	else if ( ! m_secondFace)
 	{
 		m_secondFace = p_face;
 	}
@@ -190,11 +201,11 @@ LoopEdgePtr FaceEdges :: _addEdge( LoopVertexPtr p_v1, LoopVertexPtr p_v2, bool 
 	LoopEdgePtr l_pReturn = p_v1->GetEdge( p_v2->GetIndex());
 	bool l_bCreated = false;
 
-	if (l_pReturn == NULL)
+	if ( ! l_pReturn)
 	{
 		l_pReturn = p_v2->GetEdge( p_v1->GetIndex());
 
-		if (l_pReturn == NULL)
+		if ( ! l_pReturn)
 		{
 			l_pReturn = LoopEdgePtr( new LoopEdge( p_v1, p_v2, m_face, p_toDivide));
 			l_bCreated = true;
@@ -328,7 +339,7 @@ LoopVertexPtr LoopSubdivider :: AddPoint( real x, real y, real z)
 	return l_pReturn;
 }
 
-LoopVertexPtr LoopSubdivider :: AddPoint( const Point3r & p_v)
+LoopVertexPtr LoopSubdivider :: AddPoint( Point3r const & p_v)
 {
 	LoopVertexPtr l_pReturn( new LoopVertex( Subdivider::AddPoint( p_v)));
 	m_mapVertex.insert( LoopVertexPtrUIntMap::value_type( l_pReturn->GetIndex(), l_pReturn));
@@ -367,7 +378,7 @@ void LoopSubdivider :: _divide()
 	}
 }
 
-void LoopSubdivider :: _average( const Point3r & p_center)
+void LoopSubdivider :: _average( Point3r const & p_center)
 {
 	VertexPtrUIntMap::iterator l_origIt;
 	int l_nb;
@@ -418,7 +429,7 @@ void LoopSubdivider :: _average( const Point3r & p_center)
 
 String & Castor3D::operator << ( String & p_stream, const LoopVertex & p_vertex)
 {
-	p_stream << CU_T( "LoopVertex[") << p_vertex.GetIndex() << CU_T( "] - Buffer : [") << p_vertex.GetPoint()->const_ptr() << CU_T( "] - (") << (*p_vertex.GetPoint())[0] << CU_T( ",") << (*p_vertex.GetPoint())[1] << CU_T( ",") << (*p_vertex.GetPoint())[2] << CU_T( ")");
+	p_stream << cuT( "LoopVertex[") << p_vertex.GetIndex() << cuT( "] - Buffer : [") << p_vertex.GetPoint()->const_ptr() << cuT( "] - (") << (*p_vertex.GetPoint())[0] << cuT( ",") << (*p_vertex.GetPoint())[1] << cuT( ",") << (*p_vertex.GetPoint())[2] << cuT( ")");
 	return p_stream;
 }
 

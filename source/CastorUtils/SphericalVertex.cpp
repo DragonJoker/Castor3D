@@ -1,9 +1,9 @@
-#include "CastorUtils/PrecompiledHeader.h"
+#include "CastorUtils/PrecompiledHeader.hpp"
 
-#include "CastorUtils/SphericalVertex.h"
+#include "CastorUtils/SphericalVertex.hpp"
 
 #if CHECK_MEMORYLEAKS
-#	include "CastorUtils/Memory.h"
+#	include "CastorUtils/Memory.hpp"
 using namespace Castor::Utils;
 #endif
 
@@ -16,16 +16,16 @@ SphericalVertex :: SphericalVertex( real p_radius, real p_phi, real p_theta)
 {
 }
 
-SphericalVertex :: SphericalVertex( const SphericalVertex & p_pSphericalVertex3f)
+SphericalVertex :: SphericalVertex( SphericalVertex const & p_pSphericalVertex3f)
 {
 	m_radius = p_pSphericalVertex3f.m_radius;
 	m_phi    = p_pSphericalVertex3f.m_phi;
 	m_theta  = p_pSphericalVertex3f.m_theta;
 }
 
-SphericalVertex :: SphericalVertex( const Point3r & p_vertex)
+SphericalVertex :: SphericalVertex( Point3r const & p_vertex)
 {
-	m_radius = p_vertex.GetLength();
+	m_radius = real( p_vertex.length());
 	m_phi = acos( p_vertex[2] / m_radius);
 	real l_dTmp = m_radius * sin( m_phi);
 

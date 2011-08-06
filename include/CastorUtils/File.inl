@@ -1,7 +1,7 @@
 template <typename T>
-File & File :: operator <<( const T & p_toWrite)
+File & File :: operator <<( T const & p_toWrite)
 {
-	if (m_iMode & eBinary)
+	if (m_iMode & eOPEN_MODE_BINARY)
 	{
 		Write( p_toWrite);
 	}
@@ -17,7 +17,7 @@ File & File :: operator <<( const T & p_toWrite)
 template <typename T>
 File & File :: operator >>( T & p_toRead)
 {
-	if (m_iMode & eBinary)
+	if (m_iMode & eOPEN_MODE_BINARY)
 	{
 		Read( p_toRead);
 	}
@@ -31,26 +31,22 @@ File & File :: operator >>( T & p_toRead)
 	return *this;
 }
 template <typename T>
-size_t File :: Write( const T & p_toWrite)
+size_t File :: Write( T const & p_toWrite)
 {
-	CASTOR_ASSERT( (m_iMode | eWrite) && IsOk());
-	return _write( reinterpret_cast<const unsigned char *>( & p_toWrite), sizeof( T));
+	return _write( reinterpret_cast<unsigned char const *>( & p_toWrite), sizeof( T));
 }
 template <typename T>
 size_t File :: Read( T & p_toRead)
 {
-	CASTOR_ASSERT( (m_iMode | eRead) && IsOk());
 	return _read( reinterpret_cast <unsigned char *>( & p_toRead), sizeof( T));
 }
 template <typename T>
-size_t File :: WriteArray( const T * p_toWrite, size_t p_count)
+size_t File :: WriteArray( T const * p_toWrite, size_t p_count)
 {
-	CASTOR_ASSERT( (m_iMode | eWrite) && IsOk());
-	return _write( reinterpret_cast <const unsigned char *>( p_toWrite), sizeof( T) * p_count);
+	return _write( reinterpret_cast <unsigned char const *>( p_toWrite), sizeof( T) * p_count);
 }
 template <typename T>
 size_t File :: ReadArray( T * p_toRead, size_t p_count)
 {
-	CASTOR_ASSERT( (m_iMode | eRead) && IsOk());
-	return _read( reinterpret_cast <unsigned char *>( & p_toRead), sizeof( T) * p_count);
+	return _read( reinterpret_cast <unsigned char *>( p_toRead), sizeof( T) * p_count);
 }

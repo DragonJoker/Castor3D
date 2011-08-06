@@ -1,21 +1,20 @@
-#include "GuiCommon/PrecompiledHeader.h"
+#include "GuiCommon/PrecompiledHeader.hpp"
 
-#include "GuiCommon/TextLinesCtrl.h"
+#include "GuiCommon/TextLinesCtrl.hpp"
 
 using namespace GuiCommon;
 using namespace Castor3D;
 
-TextLinesCtrl :: TextLinesCtrl( wxWindow * parent, wxWindowID id, const wxPoint& pos,
+wxTextLinesCtrl :: wxTextLinesCtrl( wxWindow * parent, wxWindowID id, const wxPoint& pos,
 							    const wxSize& size, long style)
 	:	wxPanel( parent, id, pos, size, style),
 		m_nbLines( 0)
 {
-	m_lines = new wxListBox( this, wxID_ANY, wxPoint( 0, 0), GetClientSize(), 0, NULL,
-							 wxBORDER_NONE | wxLB_SINGLE | wxLB_NEEDED_SB);
-	m_lines->SetFont( wxFont( 10, wxFONTFAMILY_SCRIPT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, CU_T( "Lucida Console")));
+	m_lines = new wxListBox( this, wxID_ANY, wxPoint( 0, 0), GetClientSize(), 0, nullptr, wxBORDER_NONE | wxLB_SINGLE | wxLB_NEEDED_SB);
+	m_lines->SetFont( wxFont( 10, wxFONTFAMILY_SCRIPT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false, wxT( "Lucida Console")));
 }
 
-void TextLinesCtrl :: AddLines( unsigned int p_nbLines)
+void wxTextLinesCtrl :: AddLines( unsigned int p_nbLines)
 {
 	wxString l_caption;
 	int l_deltaY = 0;
@@ -30,7 +29,7 @@ void TextLinesCtrl :: AddLines( unsigned int p_nbLines)
 	m_lines->SetSize( GetClientSize());
 }
 
-void TextLinesCtrl :: RemoveLine()
+void wxTextLinesCtrl :: RemoveLine()
 {
 	if (m_nbLines > 0)
 	{
@@ -41,7 +40,7 @@ void TextLinesCtrl :: RemoveLine()
 	}
 }
 
-void TextLinesCtrl :: GoToLine( int p_line)
+void wxTextLinesCtrl :: GoToLine( int p_line)
 {
 	if (p_line <= static_cast <int>( m_lines->GetCount()))
 	{
@@ -49,11 +48,11 @@ void TextLinesCtrl :: GoToLine( int p_line)
 	}
 }
 
-BEGIN_EVENT_TABLE( TextLinesCtrl, wxPanel)
-	EVT_LEFT_DCLICK(	TextLinesCtrl::_onDoubleClick)
+BEGIN_EVENT_TABLE( wxTextLinesCtrl, wxPanel)
+	EVT_LEFT_DCLICK(	wxTextLinesCtrl::_onDoubleClick)
 END_EVENT_TABLE()
 
-void TextLinesCtrl :: _onDoubleClick( wxMouseEvent & p_event)
+void wxTextLinesCtrl :: _onDoubleClick( wxMouseEvent & p_event)
 {
 	p_event.Skip();
 }

@@ -1,8 +1,6 @@
-#include "CastorUtils/PrecompiledHeader.h"
+#include "CastorUtils/PrecompiledHeader.hpp"
 
-#include "CastorUtils/Memory_Impl.h"
-
-#include "CastorUtils/MemoryEffective.h"
+#include "CastorUtils/Memory.hpp"
 
 using namespace Castor::Theory;
 using namespace Castor::Utils;
@@ -21,7 +19,7 @@ void * operator new( size_t p_size)
 		{
 			MemoryManager::Lock();
 
-			if (l_ptr != NULL)
+			if (l_ptr)
 			{
 				MemoryManager::GetSingleton().AddLocation( p_size, l_ptr, false);
 			}
@@ -78,7 +76,7 @@ void * operator new[]( size_t p_size)
 		{
 			MemoryManager::Lock();
 
-			if (l_ptr != NULL)
+			if (l_ptr)
 			{
 				MemoryManager::GetSingleton().AddLocation( p_size, l_ptr, true);
 			}

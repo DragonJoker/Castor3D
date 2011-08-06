@@ -1,6 +1,6 @@
-#include "CastorViewer/PrecompiledHeader.h"
+#include "CastorViewer/PrecompiledHeader.hpp"
 
-#include "CastorViewer/MouseEvent.h"
+#include "CastorViewer/MouseEvent.hpp"
 
 using namespace CastorViewer;
 using namespace Castor3D;
@@ -8,7 +8,7 @@ using namespace Castor3D;
 //********************************************************************************************
 
 MouseCameraEvent :: MouseCameraEvent( CameraPtr p_camera, real p_deltaX, real p_deltaY, real p_deltaZ)
-	:	FrameEvent( FrameEvent::ePreRender),
+	:	FrameEvent( eEVENT_TYPE_PRE_RENDER),
 		m_camera( p_camera),
 		m_deltaX( p_deltaX),
 		m_deltaY( p_deltaY),
@@ -48,9 +48,9 @@ CameraRotateEvent :: ~CameraRotateEvent()
 
 bool CameraRotateEvent :: Apply()
 {
-	m_camera->GetParent()->Yaw( m_deltaX);
-	m_camera->GetParent()->Pitch( m_deltaY);
-	m_camera->GetParent()->Roll( m_deltaZ);
+	m_camera->GetParent()->Yaw( Angle::FromDegrees( m_deltaX));
+	m_camera->GetParent()->Pitch( Angle::FromDegrees( m_deltaY));
+	m_camera->GetParent()->Roll( Angle::FromDegrees( m_deltaZ));
 	m_deltaX = 0;
 	m_deltaY = 0;
 	m_deltaZ = 0;

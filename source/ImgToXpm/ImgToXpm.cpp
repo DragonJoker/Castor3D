@@ -1,7 +1,7 @@
-#include "ImgToXpm/PrecompiledHeader.h"
+#include "ImgToXpm/PrecompiledHeader.hpp"
 
-#include "ImgToXpm/ImgToXpm.h"
-#include "ImgToXpm/MainFrame.h"
+#include "ImgToXpm/ImgToXpm.hpp"
+#include "ImgToXpm/MainFrame.hpp"
 
 using namespace ImgToXpm;
 
@@ -14,6 +14,12 @@ bool ImgToXpmApp :: OnInit()
 	SetTopWindow( m_mainFrame);
 	wxInitAllImageHandlers();
 	return true;
+}
+
+int ImgToXpmApp :: OnExit()
+{
+	wxImage::CleanUpHandlers();
+	return wxApp::OnExit();
 }
 
 //******************************************************************************

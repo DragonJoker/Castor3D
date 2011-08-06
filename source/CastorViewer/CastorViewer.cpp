@@ -1,9 +1,7 @@
-#include "CastorViewer/PrecompiledHeader.h"
+#include "CastorViewer/PrecompiledHeader.hpp"
 
-#include "CastorViewer/CastorViewer.h"
-
-#include "CastorViewer/MainFrame.h"
-#include "xpms/castor.xpm"
+#include "CastorViewer/CastorViewer.hpp"
+#include "CastorViewer/MainFrame.hpp"
 
 using namespace CastorViewer;
 
@@ -11,27 +9,20 @@ IMPLEMENT_APP( CastorViewerApp)
 
 bool CastorViewerApp :: OnInit()
 {
-	wxDisplay l_display;
-	wxRect l_rect = l_display.GetClientArea();
-	m_pSplash = new SplashScreen( "Castor Viewer", "2010 ® DragonJoker, All rights reserved", wxPoint( (l_rect.width - 512) / 2, (l_rect.height - 384) / 2), 4);
-	Castor3D::Logger::SetFileName( "CastorViewer.log");
 	bool l_bReturn = true;
+	Castor3D::Logger::SetFileName( wxT( "CastorViewer.log"));
 
 	if (l_bReturn)
 	{
 		wxInitAllImageHandlers();
-		wxIcon l_icon = wxIcon( castor_xpm);
+		m_pMainFrame = new MainFrame( NULL, wxT( "Castor Viewer"));
 
-		m_mainFrame = new MainFrame( NULL, CU_T( "Castor Viewer"));
-		m_mainFrame->SetIcon( l_icon);
-		m_mainFrame->Show();
-
-		SetTopWindow( m_mainFrame);
+		SetTopWindow( m_pMainFrame);
 
  		if (argc > 1)
  		{
- 			String l_strFileName = argv[1];
- 			m_mainFrame->LoadScene( l_strFileName);
+ 			wxString l_strFileName = argv[1];
+ 			m_pMainFrame->LoadScene( l_strFileName);
  		}
 	}
 
@@ -40,11 +31,6 @@ bool CastorViewerApp :: OnInit()
 
 int CastorViewerApp :: OnExit()
 {
+	wxImage::CleanUpHandlers();
 	return wxApp::OnExit();
-}
-
-void CastorViewerApp :: DestroySplashScreen()
-{
-	m_pSplash->Destroy();
-	m_pSplash = NULL;
 }

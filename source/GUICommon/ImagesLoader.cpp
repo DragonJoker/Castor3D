@@ -1,6 +1,6 @@
-#include "GuiCommon/PrecompiledHeader.h"
+#include "GuiCommon/PrecompiledHeader.hpp"
 
-#include "GuiCommon/ImagesLoader.h"
+#include "GuiCommon/ImagesLoader.hpp"
 
 using namespace GuiCommon;
 
@@ -22,7 +22,7 @@ ImagesLoader :: ~ImagesLoader()
 
 wxBitmap * ImagesLoader :: GetBitmap( unsigned int p_uiID)
 {
-	wxBitmap * l_pReturn = NULL;
+	wxBitmap * l_pReturn = nullptr;
 	std::map <unsigned int, wxBitmap *>::iterator l_it = m_mapBitmaps.find( p_uiID);
 
 	if (l_it != m_mapBitmaps.end())
@@ -35,7 +35,7 @@ wxBitmap * ImagesLoader :: GetBitmap( unsigned int p_uiID)
 
 wxBitmap * ImagesLoader :: AddBitmap( unsigned int p_uiID, const char* const* p_bits)
 {
-	wxBitmap * l_pReturn = NULL;
+	wxBitmap * l_pReturn = nullptr;
 	std::map <unsigned int, wxBitmap *>::iterator l_it = m_mapBitmaps.find( p_uiID);
 
 	if (l_it != m_mapBitmaps.end())

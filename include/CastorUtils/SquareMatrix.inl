@@ -1,28 +1,38 @@
 namespace Castor
 {	namespace Math
 {
+//*************************************************************************************************
+
 	template <typename T, size_t Rows>
 	inline SquareMatrix<T, Rows> :: SquareMatrix()
-		:	Matrix<T, Rows, Rows>()
+		:	Matrix<T, Rows, Rows>( Templates::Policy<T>::zero())
 	{
 	}
 	template <typename T, size_t Rows>
-	inline SquareMatrix<T, Rows> :: SquareMatrix( const SquareMatrix<T, Rows> & p_matrix)
+	inline SquareMatrix<T, Rows> :: SquareMatrix( T const & p_tValue)
+		:	Matrix<T, Rows, Rows>( p_tValue)
+	{
+	}
+	template <typename T, size_t Rows>
+	inline SquareMatrix<T, Rows> :: SquareMatrix( SquareMatrix<T, Rows> const & p_matrix)
 		:	Matrix<T, Rows, Rows>( p_matrix)
 	{
 	}
 	template <typename T, size_t Rows>
-	inline SquareMatrix<T, Rows> :: SquareMatrix( const typename SquareMatrix<T, Rows>::matrix_type & p_matrix)
+	template <typename Type>
+	inline SquareMatrix<T, Rows> :: SquareMatrix( SquareMatrix<Type, Rows> const & p_matrix)
 		:	Matrix<T, Rows, Rows>( p_matrix)
 	{
 	}
 	template <typename T, size_t Rows>
-	inline SquareMatrix<T, Rows> :: SquareMatrix( const T & p_value)
-		:	Matrix<T, Rows, Rows>( p_value)
+	template <typename Type>
+	inline SquareMatrix<T, Rows> :: SquareMatrix( Matrix<Type, Rows, Rows> const & p_matrix)
+		:	Matrix<T, Rows, Rows>( p_matrix)
 	{
 	}
 	template <typename T, size_t Rows>
-	inline SquareMatrix<T, Rows> :: SquareMatrix( const T * p_matrix)
+	template <typename Type>
+	inline SquareMatrix<T, Rows> :: SquareMatrix( Type const * p_matrix)
 		:	Matrix<T, Rows, Rows>( p_matrix)
 	{
 	}
@@ -133,7 +143,7 @@ namespace Castor
 	inline SquareMatrix<T, Rows-1> SquareMatrix<T, Rows> :: GetMinor( size_t x, size_t y)const
 	{
 		SquareMatrix<T, Rows-1> l_mReturn;
-		l_mReturn.Identity();
+		l_mReturn.SetIdentity();
 		size_t l_i = 0, l_j = 0;
 
 		for (size_t i = 0 ; i < Rows ; i++)
@@ -195,105 +205,7 @@ namespace Castor
 		}
 	}
 	template <typename T, size_t Rows>
-	inline bool SquareMatrix<T, Rows> :: operator ==( const SquareMatrix<T, Rows> & p_matrix)const
-	{
-		return Matrix<T, Rows, Rows>::operator ==( Matrix<T, Rows, Rows>( p_matrix));
-	}
-	template <typename T, size_t Rows>
-	inline bool SquareMatrix<T, Rows> :: operator !=( const SquareMatrix<T, Rows> & p_matrix)const
-	{
-		return ! operator ==( p_matrix);
-	}
-	template <typename T, size_t Rows>
-	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator =( const SquareMatrix<T, Rows> & p_matrix)
-	{
-		Matrix<T, Rows, Rows>::operator =( p_matrix);
-		return * this;
-	}
-	template <typename T, size_t Rows>
-	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator =( const typename SquareMatrix<T, Rows>::matrix_type & p_matrix)
-	{
-		Matrix<T, Rows, Rows>::operator =( p_matrix);
-		return * this;
-	}
-	template <typename T, size_t Rows>
-	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator =( const T * p_matrix)
-	{
-		Matrix<T, Rows, Rows>::operator =( p_matrix);
-		return * this;
-	}
-	template <typename T, size_t Rows>
-	inline SquareMatrix<T, Rows> SquareMatrix<T, Rows> :: operator + ( const SquareMatrix<T, Rows> & p_matrix)const
-	{
-		return Matrix<T, Rows, Rows>::operator +( p_matrix);
-	}
-	template <typename T, size_t Rows>
-	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator += ( const SquareMatrix<T, Rows> & p_matrix)
-	{
-		Matrix<T, Rows, Rows>::operator +=( p_matrix);
-		return * this;
-	}
-	template <typename T, size_t Rows>
-	inline SquareMatrix<T, Rows> SquareMatrix<T, Rows> :: operator - ( const SquareMatrix<T, Rows> & p_matrix)const
-	{
-		return Matrix<T, Rows, Rows>::operator -( p_matrix);
-	}
-	template <typename T, size_t Rows>
-	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator -= ( const SquareMatrix<T, Rows> & p_matrix)
-	{
-		Matrix<T, Rows, Rows>::operator -=( p_matrix);
-		return * this;
-	}
-	template <typename T, size_t Rows>
-	inline SquareMatrix<T, Rows> SquareMatrix<T, Rows> :: operator * ( T p_scalar)const
-	{
-		return SquareMatrix<T, Rows>( Matrix<T, Rows, Rows>::operator *( p_scalar));
-	}
-	template <typename T, size_t Rows>
-	inline Point<T, Rows> SquareMatrix<T, Rows> :: operator * ( const Point<T, Rows> & p_ptVector)const
-	{
-		return Matrix<T, Rows, Rows>::operator *( p_ptVector);
-	}
-	template <typename T, size_t Rows>
-	inline SquareMatrix<T, Rows> SquareMatrix<T, Rows> :: operator * ( const SquareMatrix<T, Rows> & p_matrix)const
-	{
-		return Multiply( p_matrix);
-	}
-	template <typename T, size_t Rows>
-	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator *= ( T p_scalar)
-	{
-		Matrix<T, Rows, Rows>::operator *=( p_scalar);
-		return * this;
-	}
-	template <typename T, size_t Rows>
-	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator *= ( const SquareMatrix<T, Rows> & p_matrix)
-	{
-		* this = Multiply( p_matrix);
-		return * this;
-	}
-	template <typename T, size_t Rows>
-	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator /= ( T p_scalar)
-	{
-		Matrix<T, Rows, Rows>::operator /=( p_scalar);
-		return * this;
-	}
-	template <typename T, size_t Rows>
-	inline SquareMatrix<T, Rows> SquareMatrix<T, Rows> :: operator / ( T p_scalar)const
-	{
-		return SquareMatrix<T, Rows>( Matrix<T, Rows, Rows>::operator /( p_scalar));
-	}
-	template <typename T, size_t Rows>
-	inline std::ostream & SquareMatrix<T, Rows> :: operator << ( std::ostream & l_streamOut)const
-	{
-		return Matrix<T, Rows, Rows>::operator <<( l_streamOut);
-	}
-	template <typename T, size_t Rows>
-	inline std::istream & SquareMatrix<T, Rows> :: operator >> ( std::istream & l_streamIn)
-	{
-		return Matrix<T, Rows, Rows>::operator >>( l_streamIn);
-	}
-	template <typename T, size_t Rows>
-	inline SquareMatrix<T, Rows> SquareMatrix<T, Rows> :: Multiply( const SquareMatrix<T, Rows> & p_matrix)const
+	inline SquareMatrix<T, Rows> SquareMatrix<T, Rows> :: Multiply( SquareMatrix<T, Rows> const & p_matrix)const
 	{
 		SquareMatrix<T, Rows> l_mResult;
 
@@ -307,64 +219,178 @@ namespace Castor
 
 		return l_mResult;
 	}
-
-
-
-
 	template <typename T, size_t Rows>
-	inline SquareMatrix <T, Rows> operator * ( T p_tScalar, const SquareMatrix <T, Rows> & p_matrix)
+	template <typename Type>
+	inline SquareMatrix<T, Rows> SquareMatrix<T, Rows> :: Multiply( SquareMatrix<Type, Rows> const & p_matrix)const
 	{
-		SquareMatrix <T, Rows> l_mReturn;
+		SquareMatrix<T, Rows> l_mResult;
 
 		for (size_t i = 0 ; i < Rows ; i++)
 		{
 			for (size_t j = 0 ; j < Rows ; j++)
 			{
-				Templates::Policy<T>::assign( l_mReturn[i][j], Templates::Policy<T>::multiply( p_tScalar, p_matrix[i][j]));
+				l_mResult[i] += matrix_type::m_matrix[j] * policy::convert( p_matrix[i][j]);
+			}
+		}
 
-				if (Templates::Policy<T>::is_null( l_mReturn[i][j]))
-				{
-					Templates::Policy<T>::init( l_mReturn[i][j]);
-				}
+		return l_mResult;
+	}
+	template <typename T, size_t Rows>
+	template <size_t _Columns>
+	inline Matrix <T, Rows, _Columns> SquareMatrix<T, Rows> :: Multiply( Matrix <value_type, Rows, _Columns> const & p_matrix)const
+	{
+		Matrix <T, Rows, _Columns> l_mReturn;
+
+		for (size_t i = 0 ; i < _Columns ; i++)
+		{
+			for (size_t j = 0 ; j < Rows ; j++)
+			{
+				l_mReturn[i] += matrix_type::m_matrix[j] * p_matrix[i][j];
 			}
 		}
 
 		return l_mReturn;
 	}
 	template <typename T, size_t Rows>
-	inline Point <T, Rows> operator * ( const SquareMatrix <T, Rows> & p_matrix, const Point<T, Rows> & p_ptVector)
+	template <typename Type>
+	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator =( Matrix<Type, Rows, Rows> const & p_matrix)
 	{
-		Point<T, Rows> l_ptReturn;
+		Matrix<T, Rows, Rows>::operator =( p_matrix);
+		return * this;
+	}
+	template <typename T, size_t Rows>
+	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator =( SquareMatrix<T, Rows> const & p_matrix)
+	{
+		Matrix<T, Rows, Rows>::operator =( p_matrix);
+		return * this;
+	}
+	template <typename T, size_t Rows>
+	template <typename Type>
+	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator =( SquareMatrix<Type, Rows> const & p_matrix)
+	{
+		Matrix<T, Rows, Rows>::operator =( p_matrix);
+		return * this;
+	}
+	template <typename T, size_t Rows>
+	template <typename Type>
+	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator += ( SquareMatrix<Type, Rows> const & p_matrix)
+	{
+		Matrix<T, Rows, Rows>::operator +=( p_matrix);
+		return * this;
+	}
+	template <typename T, size_t Rows>
+	template <typename Type>
+	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator -= ( SquareMatrix<Type, Rows> const & p_matrix)
+	{
+		Matrix<T, Rows, Rows>::operator -=( p_matrix);
+		return * this;
+	}
+	template <typename T, size_t Rows>
+	template <typename Type>
+	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator *= ( SquareMatrix<Type, Rows> const & p_matrix)
+	{
+		SquareMatrix<T, Rows> l_mResult;
+
+//		std::cout << "this before : \n" << (* this) << "\n";
+//		std::cout << "l_mResult before : \n" << l_mResult << "\n";
 
 		for (size_t i = 0 ; i < Rows ; i++)
 		{
-			Templates::Policy<T>::init( l_ptReturn[i]);
+//			std::cout << "l_mResult[" << i << "] before : " << l_mResult[i];
 
 			for (size_t j = 0 ; j < Rows ; j++)
 			{
-				Templates::Policy<T>::ass_add( l_ptReturn[i], Templates::Policy<T>::multiply( p_matrix[j][i], p_ptVector[j]));
+//				std::cout << "p_matrix[" << i << "][" << j << "] : " << p_matrix[i][j] << "\tm_matrix[" << j << "] : " << m_matrix[j];
+				l_mResult[i] += (this->m_matrix[j] * policy::convert( p_matrix[i][j]));
 			}
+
+//			std::cout << "l_mResult[" << i << "] after : " << l_mResult[i];
 		}
 
-		return l_ptReturn;
+//		std::cout << "l_mResult after : \n" << l_mResult << "\n";
+
+		operator =( l_mResult);
+
+//		std::cout << "this after : \n" << (* this) << "\n";
+		return * this;
 	}
 	template <typename T, size_t Rows>
-	inline SquareMatrix <T, Rows> operator - ( const SquareMatrix <T, Rows> & p_matrix)
+	template <typename Type>
+	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator =( Type const * p_pMatrix)
 	{
-		Matrix<T, Rows, Rows> l_mReturn;
+		Matrix<T, Rows, Rows>::operator =( p_pMatrix);
+		return * this;
+	}
+	template <typename T, size_t Rows>
+	template <typename Type>
+	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator += ( Type const * p_pMatrix)
+	{
+		Matrix<T, Rows, Rows>::operator +=( p_pMatrix);
+		return * this;
+	}
+	template <typename T, size_t Rows>
+	template <typename Type>
+	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator -= ( Type const * p_pMatrix)
+	{
+		Matrix<T, Rows, Rows>::operator -=( p_pMatrix);
+		return * this;
+	}
+	template <typename T, size_t Rows>
+	template <typename Type>
+	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator *= ( Type const * p_pMatrix)
+	{
+		* this = Multiply( p_pMatrix);
+		return * this;
+	}
+	template <typename T, size_t Rows>
+	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator += ( T const & p_tValue)
+	{
+		Matrix<T, Rows, Rows>::operator +=( p_tValue);
+		return * this;
+	}
+	template <typename T, size_t Rows>
+	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator -= ( T const & p_tValue)
+	{
+		Matrix<T, Rows, Rows>::operator -=( p_tValue);
+		return * this;
+	}
+	template <typename T, size_t Rows>
+	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator *= ( T const & p_tValue)
+	{
+		Matrix<T, Rows, Rows>::operator *=( p_tValue);
+		return * this;
+	}
+	template <typename T, size_t Rows>
+	inline SquareMatrix<T, Rows> & SquareMatrix<T, Rows> :: operator /= ( T const & p_tValue)
+	{
+		Matrix<T, Rows, Rows>::operator /=( p_tValue);
+		return * this;
+	}
 
-		for (size_t i = 0 ; i < Rows ; i++)
+//*************************************************************************************************
+
+	template <typename T, size_t Rows>
+	inline bool operator ==( SquareMatrix<T, Rows> const & p_mtxA, SquareMatrix<T, Rows> const & p_mtxB)
+	{
+		bool l_bReturn = true;
+
+		for (size_t i = 0 ; i < Rows && l_bReturn ; i++)
 		{
-			for (size_t j = 0 ; j < Rows ; j++)
+			for (size_t j = 0 ; j < Rows && l_bReturn ; j++)
 			{
-				Templates::Policy<T>::assign( l_mReturn[i][j], Templates::Policy<T>::negate( p_matrix[i][j]));
+				l_bReturn = Templates::Policy<T>::equals( p_mtxA[j][i], p_mtxB[j][i]);
 			}
 		}
 
-		return l_mReturn;
+		return l_bReturn;
 	}
 	template <typename T, size_t Rows>
-	inline std::ostream & operator << ( std::ostream & l_streamOut, const SquareMatrix <T, Rows> & p_matrix)
+	inline bool operator !=( SquareMatrix<T, Rows> const & p_mtxA, SquareMatrix<T, Rows> const & p_mtxB)
+	{
+		return ! operator ==( p_mtxA, p_mtxB);
+	}
+	template <typename T, size_t Rows>
+	inline std::ostream & operator << ( std::ostream & l_streamOut, SquareMatrix <T, Rows> const & p_matrix)
 	{
 		for (size_t i = 0 ; i < Rows ; i++)
 		{
@@ -391,16 +417,136 @@ namespace Castor
 
 		return l_streamIn;
 	}
+	template <typename T, size_t Rows, typename U>
+	SquareMatrix <T, Rows> operator + ( SquareMatrix <T, Rows> const & p_mtxA, SquareMatrix <U, Rows> const & p_mtxB)
+	{
+		SquareMatrix <T, Rows> l_mtxReturn( p_mtxA);
+		l_mtxReturn += p_mtxB;
+		return l_mtxReturn;
+	}
+	template <typename T, size_t Rows, typename U>
+	SquareMatrix <T, Rows> operator - ( SquareMatrix <T, Rows> const & p_mtxA, SquareMatrix <U, Rows> const & p_mtxB)
+	{
+		SquareMatrix <T, Rows> l_mtxReturn( p_mtxA);
+		l_mtxReturn -= p_mtxB;
+		return l_mtxReturn;
+	}
+	template <typename T, size_t Rows, typename U>
+	SquareMatrix <T, Rows> operator * ( SquareMatrix <T, Rows> const & p_mtxA, SquareMatrix <U, Rows> const & p_mtxB)
+	{
+		SquareMatrix <T, Rows> l_mtxReturn( p_mtxA);
+		l_mtxReturn *= p_mtxB;
+		return l_mtxReturn;
+	}
+	template <typename T, size_t Rows, typename U>
+	SquareMatrix <T, Rows> operator + ( SquareMatrix <T, Rows> const & p_matrix, U const * p_pMatrix)
+	{
+		SquareMatrix <T, Rows> l_mtxReturn( p_matrix);
+		l_mtxReturn += p_pMatrix;
+		return l_mtxReturn;
+	}
+	template <typename T, size_t Rows, typename U>
+	SquareMatrix <T, Rows> operator - ( SquareMatrix <T, Rows> const & p_matrix, U const * p_pMatrix)
+	{
+		SquareMatrix <T, Rows> l_mtxReturn( p_matrix);
+		l_mtxReturn -= p_pMatrix;
+		return l_mtxReturn;
+	}
+	template <typename T, size_t Rows, typename U>
+	SquareMatrix <T, Rows> operator * ( SquareMatrix <T, Rows> const & p_matrix, U const * p_pMatrix)
+	{
+		SquareMatrix <T, Rows> l_mtxReturn( p_matrix);
+		l_mtxReturn *= p_pMatrix;
+		return l_mtxReturn;
+	}
+	template <typename T, size_t Rows, typename U>
+	SquareMatrix <T, Rows> operator + ( SquareMatrix <T, Rows> const & p_matrix, T const & p_tValue)
+	{
+		SquareMatrix <T, Rows> l_mtxReturn( p_matrix);
+		l_mtxReturn += p_tValue;
+		return l_mtxReturn;
+	}
+	template <typename T, size_t Rows, typename U>
+	SquareMatrix <T, Rows> operator - ( SquareMatrix <T, Rows> const & p_matrix, T const & p_tValue)
+	{
+		SquareMatrix <T, Rows> l_mtxReturn( p_matrix);
+		l_mtxReturn -= p_tValue;
+		return l_mtxReturn;
+	}
+	template <typename T, size_t Rows, typename U>
+	SquareMatrix <T, Rows> operator * ( SquareMatrix <T, Rows> const & p_matrix, T const & p_tValue)
+	{
+		SquareMatrix <T, Rows> l_mtxReturn( p_matrix);
+		l_mtxReturn *= p_tValue;
+		return l_mtxReturn;
+	}
+	template <typename T, size_t Rows, typename U>
+	SquareMatrix <T, Rows> operator / ( SquareMatrix <T, Rows> const & p_matrix, T const & p_tValue)
+	{
+		SquareMatrix <T, Rows> l_mtxReturn( p_matrix);
+		l_mtxReturn /= p_tValue;
+		return l_mtxReturn;
+	}
+	template <typename T, size_t Rows, typename U>
+	inline Point <T, Rows> operator * ( SquareMatrix <T, Rows> const & p_matrix, const Point<U, Rows> & p_ptVector)
+	{
+		Point<T, Rows> l_ptReturn;
+
+		for (size_t i = 0 ; i < Rows ; i++)
+		{
+			Templates::Policy<T>::init( l_ptReturn[i]);
+
+			for (size_t j = 0 ; j < Rows ; j++)
+			{
+				Templates::Policy<T>::ass_add( l_ptReturn[i], Templates::Policy<T>::multiply( p_matrix[j][i], p_ptVector[j]));
+			}
+		}
+
+		return l_ptReturn;
+	}
+	template <typename T, size_t Rows>
+	inline SquareMatrix <T, Rows> operator + ( T p_tValue, SquareMatrix <T, Rows> const & p_matrix)
+	{
+		return operator +( p_matrix, p_tValue);
+	}
+	template <typename T, size_t Rows>
+	inline SquareMatrix <T, Rows> operator - ( T p_tValue, SquareMatrix <T, Rows> const & p_matrix)
+	{
+		return operator -( p_matrix, p_tValue);
+	}
+	template <typename T, size_t Rows>
+	inline SquareMatrix <T, Rows> operator * ( T p_tValue, SquareMatrix <T, Rows> const & p_matrix)
+	{
+		return operator *( p_matrix, p_tValue);
+	}
+	template <typename T, size_t Rows>
+	inline SquareMatrix <T, Rows> operator - ( SquareMatrix <T, Rows> const & p_matrix)
+	{
+		Matrix<T, Rows, Rows> l_mReturn;
+
+		for (size_t i = 0 ; i < Rows ; i++)
+		{
+			for (size_t j = 0 ; j < Rows ; j++)
+			{
+				Templates::Policy<T>::assign( l_mReturn[i][j], Templates::Policy<T>::negate( p_matrix[i][j]));
+			}
+		}
+
+		return l_mReturn;
+	}
+
+//*************************************************************************************************
+
 	template <typename T> struct CoFactorComputer<T, 1>
 	{
-		static T Value( const SquareMatrix<T, 1> & p_matrix, size_t p_uiRow, size_t p_uiColumn)
+		static T Value( SquareMatrix<T, 1> const & p_matrix, size_t p_uiRow, size_t p_uiColumn)
 		{
 			return Templates::Policy<T>::unit();
 		}
 	};
 	template <typename T, size_t Rows> struct CoFactorComputer//<T, Rows>
 	{
-		static T Value( const SquareMatrix<T, Rows> & p_matrix, size_t p_uiRow, size_t p_uiColumn)
+		static T Value( SquareMatrix<T, Rows> const & p_matrix, size_t p_uiRow, size_t p_uiColumn)
 		{
 			T l_tReturn;
 			Templates::Policy<T>::init( l_tReturn);
@@ -418,5 +564,7 @@ namespace Castor
 			return l_tReturn;
 		}
 	};
+
+//*************************************************************************************************
 }
 }

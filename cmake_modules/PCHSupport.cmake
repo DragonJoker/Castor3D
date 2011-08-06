@@ -24,7 +24,7 @@ IF (CMAKE_COMPILER_IS_GNUCXX)
 
 	SET(_PCH_include_prefix -I)
 ELSE()
-	IF(WIN32)   
+	IF(MSVC)
 		SET(PCHSupport_FOUND TRUE) # for experimental msvc support
 		SET(_PCH_include_prefix /I)
 	ELSE()

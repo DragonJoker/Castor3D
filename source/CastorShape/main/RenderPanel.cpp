@@ -1,9 +1,9 @@
-#include "CastorShape/PrecompiledHeader.h"
+#include "CastorShape/PrecompiledHeader.hpp"
 
-#include "CastorShape/main/RenderPanel.h"
-#include "CastorShape/main/MainFrame.h"
-#include "CastorShape/main/FrameListener.h"
-#include "CastorShape/main/MouseEvent.h"
+#include "CastorShape/main/RenderPanel.hpp"
+#include "CastorShape/main/MainFrame.hpp"
+#include "CastorShape/main/FrameListener.hpp"
+#include "CastorShape/main/MouseEvent.hpp"
 
 using namespace Castor3D;
 using namespace CastorShape;
@@ -19,7 +19,7 @@ RenderPanel :: RenderPanel( wxWindow * parent, wxWindowID p_id,
 	:	wxPanel( parent, p_id, pos, size, style),
 		m_actionType( atNone),
 		m_selectionType( stNone),
-		m_timer( NULL),
+		m_timer( nullptr),
 		m_renderType( p_renderType),
 		m_lookAt( p_look),
 		m_mainScene( p_scene),
@@ -32,28 +32,38 @@ RenderPanel :: RenderPanel( wxWindow * parent, wxWindowID p_id,
 
 RenderPanel :: ~RenderPanel()
 {
-	if (m_timer != NULL)
+	if (m_timer)
 	{
 		m_timer->Stop();
 		delete m_timer;
-		m_timer = NULL;
+		m_timer = nullptr;
 	}
 }
 
 void RenderPanel :: Focus()
 {
-	m_renderWindow->Focus();
+	if ( ! m_renderWindow.expired())
+	{
+		m_renderWindow.lock()->Focus();
+	}
 }
 
 void RenderPanel :: UnFocus()
 {
-	m_renderWindow->UnFocus();
+	if ( ! m_renderWindow.expired())
+	{
+		m_renderWindow.lock()->UnFocus();
+	}
 }
 
 void RenderPanel :: DrawOneFrame()
 {
 	wxClientDC l_dc( this);
-	m_renderWindow->SetToUpdate();
+
+	if ( ! m_renderWindow.expired())
+	{
+		m_renderWindow.lock()->SetToUpdate();
+	}
 }
 
 void RenderPanel :: SelectGeometry( GeometryPtr p_geometry)
@@ -68,12 +78,12 @@ void RenderPanel :: SelectVertex( Vertex * p_vertex)
 
 void RenderPanel :: _initialiseRenderWindow()
 {
-	Logger::LogMessage( CU_T( "Initialising RenderWindow"));
-	m_renderWindow = Root::GetSingletonPtr()->CreateRenderWindow( m_mainScene, (void *)GetHandle(), GetClientSize().x, GetClientSize().y,
-																  m_renderType, eA8R8G8B8, m_lookAt);
-	m_listener = m_renderWindow->GetListener();
-	m_pRotateCamEvent = shared_ptr<CameraRotateEvent>( new CameraRotateEvent( m_renderWindow->GetCamera(), 0, 0, 0));
-	m_pTranslateCamEvent = shared_ptr<CameraTranslateEvent>( new CameraTranslateEvent( m_renderWindow->GetCamera(), 0, 0, 0));
+	Logger::LogMessage( cuT( "Initialising RenderWindow"));
+	m_renderWindow = Root::GetSingleton()->CreateRenderWindow( m_mainScene, this->GetHandle(), GetClientSize().x, GetClientSize().y,
+															   m_renderType, eA8R8G8B8, m_lookAt);
+	m_listener = m_renderWindow.lock()->GetListener();
+	m_pRotateCamEvent = shared_ptr<CameraRotateEvent>( new CameraRotateEvent( m_renderWindow.lock()->GetCamera(), 0, 0, 0));
+	m_pTranslateCamEvent = shared_ptr<CameraTranslateEvent>( new CameraTranslateEvent( m_renderWindow.lock()->GetCamera(), 0, 0, 0));
 
 	if (m_timer == NULL)
 	{
@@ -81,7 +91,7 @@ void RenderPanel :: _initialiseRenderWindow()
 		m_timer->Start( 40);
 	}
 
-	Logger::LogMessage( CU_T( "RenderWindow Initialised"));
+	Logger::LogMessage( cuT( "RenderWindow Initialised"));
 }
 
 BEGIN_EVENT_TABLE( RenderPanel, wxPanel)
@@ -114,35 +124,35 @@ END_EVENT_TABLE()
 
 void RenderPanel :: _onSize( wxSizeEvent & event)
 {
-	wxClientDC l_dc( this);
-	m_renderWindow->Resize( GetClientSize().x, GetClientSize().y);
+	if ( ! m_renderWindow.expired())
+	{
+		m_renderWindow.lock()->Resize( GetClientSize().x, GetClientSize().y);
+	}
 }
 
 void RenderPanel :: _onMove( wxMoveEvent & event)
 {
-	wxClientDC l_dc( this);
-	m_renderWindow->SetToUpdate();
+	if ( ! m_renderWindow.expired())
+	{
+		m_renderWindow.lock()->SetToUpdate();
+	}
 }
 
 void RenderPanel :: _onPaint( wxPaintEvent & WXUNUSED(event))
 {
-	wxPaintDC l_dc( this);
-	m_renderWindow->SetToUpdate();
+	if ( ! m_renderWindow.expired())
+	{
+		m_renderWindow.lock()->SetToUpdate();
+	}
 }
 
 void RenderPanel :: _onClose( wxCloseEvent & event)
 {
-	m_renderWindow.reset();
-	m_mainScene.reset();
-	m_listener.reset();
-	m_material.reset();
-	m_materialNoTex.reset();
-
-	if (m_timer != NULL)
+	if (m_timer)
 	{
 		m_timer->Stop();
 		delete m_timer;
-		m_timer = NULL;
+		m_timer = nullptr;
 	}
 
 	Destroy();
@@ -150,19 +160,30 @@ void RenderPanel :: _onClose( wxCloseEvent & event)
 
 void RenderPanel :: _onTimer( wxTimerEvent & WXUNUSED(event))
 {
-	m_renderWindow->SetToUpdate();
+	if ( ! m_renderWindow.expired())
+	{
+		m_renderWindow.lock()->SetToUpdate();
+	}
 }
 
 void RenderPanel :: _onEnterWindow( wxMouseEvent & WXUNUSED(event))
 {
 	g_mainFrame->SetCurrentPanel( this, this);
-	m_renderWindow->Focus();
+
+	if ( ! m_renderWindow.expired())
+	{
+		m_renderWindow.lock()->Focus();
+	}
 }
 
 void RenderPanel :: _onLeaveWindow( wxMouseEvent & WXUNUSED(event))
 {
-	g_mainFrame->SetCurrentPanel( this, NULL);
-	m_renderWindow->UnFocus();
+	g_mainFrame->SetCurrentPanel( this, nullptr);
+
+	if ( ! m_renderWindow.expired())
+	{
+		m_renderWindow.lock()->UnFocus();
+	}
 }
 
 void RenderPanel :: _onEraseBackground(wxEraseEvent& event)
@@ -172,37 +193,51 @@ void RenderPanel :: _onEraseBackground(wxEraseEvent& event)
 void RenderPanel :: _onSetFocus( wxFocusEvent & event)
 {
 	g_mainFrame->SetCurrentPanel( this, this);
-	m_renderWindow->Focus();
+
+	if ( ! m_renderWindow.expired())
+	{
+		m_renderWindow.lock()->Focus();
+	}
 }
 
 void RenderPanel :: _onKillFocus( wxFocusEvent & event)
 {
-	g_mainFrame->SetCurrentPanel( this, NULL);
-	m_renderWindow->UnFocus();
+	g_mainFrame->SetCurrentPanel( this, nullptr);
+
+	if ( ! m_renderWindow.expired())
+	{
+		m_renderWindow.lock()->UnFocus();
+	}
 }
 
 void RenderPanel :: _onKeyDown(wxKeyEvent& event)
 {
 	int l_keyCode = event.GetKeyCode();
-	if (l_keyCode == 78)// n
+
+	if ( ! m_renderWindow.expired())
 	{
-		m_renderWindow->SetNormalsVisibility( m_renderWindow->IsNormalsVisible());
-	}
-	else if (l_keyCode == 82)// r
-	{
-		m_renderWindow->GetCamera()->ResetPosition();
-		m_renderWindow->GetCamera()->ResetOrientation();
-		m_renderWindow->GetCamera()->GetParent()->Translate( 0.0f, 0.0f, -5.0f);
-	}
-	else if (l_keyCode == 83)// s
-	{
-		if (m_renderWindow->GetNormalsMode() == eFace)
+		RenderWindowPtr l_pWindow = m_renderWindow.lock();
+
+		if (l_keyCode == 78)// n
 		{
-			m_renderWindow->SetNormalsMode( eSmooth);
+			l_pWindow->SetNormalsVisibility( l_pWindow->IsNormalsVisible());
 		}
-		else if (m_renderWindow->GetNormalsMode() == eSmooth)
+		else if (l_keyCode == 82)// r
 		{
-			m_renderWindow->SetNormalsMode( eFace);
+			l_pWindow->GetCamera()->ResetPosition();
+			l_pWindow->GetCamera()->ResetOrientation();
+			l_pWindow->GetCamera()->GetParent()->Translate( 0.0f, 0.0f, -5.0f);
+		}
+		else if (l_keyCode == 83)// s
+		{
+			if (l_pWindow->GetNormalsMode() == eFace)
+			{
+				l_pWindow->SetNormalsMode( eSmooth);
+			}
+			else if (l_pWindow->GetNormalsMode() == eSmooth)
+			{
+				l_pWindow->SetNormalsMode( eFace);
+			}
 		}
 	}
 }
@@ -278,35 +313,41 @@ void RenderPanel :: _onMouseMove( wxMouseEvent & event)
 	m_oldX = m_x;
 	m_oldY = m_y;
 
-	if (m_mouseLeftDown)
+	if ( ! m_renderWindow.expired())
 	{
-		if (m_renderWindow->GetType() == Viewport::e3DView)
+		if (m_mouseLeftDown)
 		{
-			MouseCameraEvent::Add( m_pRotateCamEvent, m_listener, m_deltaX * Math::Angle::DegreesToRadians, m_deltaY * Math::Angle::DegreesToRadians, 0);
+			if (m_renderWindow.lock()->GetType() == Viewport::e3DView)
+			{
+				MouseCameraEvent::Add( m_pRotateCamEvent, m_listener, m_deltaX, m_deltaY, 0);
+			}
+			else
+			{
+				MouseCameraEvent::Add( m_pRotateCamEvent, m_listener, 0, 0, m_deltaX);
+			}
 		}
-		else
+		else if (m_mouseRightDown)
 		{
-			MouseCameraEvent::Add( m_pRotateCamEvent, m_listener, 0, 0, m_deltaX * Math::Angle::DegreesToRadians);
+			MouseCameraEvent::Add( m_pTranslateCamEvent, m_listener, -m_deltaX / real( 40), m_deltaY / real( 40), 0);
 		}
-	}
-	else if (m_mouseRightDown)
-	{
-		MouseCameraEvent::Add( m_pTranslateCamEvent, m_listener, -m_deltaX / real( 40), m_deltaY / real( 40), 0);
 	}
 }
 
 void RenderPanel :: _onMouseWheel( wxMouseEvent & event)
 {
-	int l_wheelRotation = event.GetWheelRotation();
-	const Point3r & l_cameraPos = m_renderWindow->GetCamera()->GetParent()->GetPosition();
+	if ( ! m_renderWindow.expired())
+	{
+		int l_wheelRotation = event.GetWheelRotation();
+		const Point3r & l_cameraPos = m_renderWindow.lock()->GetCamera()->GetParent()->GetPosition();
 
-	if (l_wheelRotation < 0)
-	{
-		MouseCameraEvent::Add( m_pTranslateCamEvent, m_listener, 0, 0, (l_cameraPos[2] - real( 1.0)) / 10);
-	}
-	else if (l_wheelRotation > 0)
-	{
-		MouseCameraEvent::Add( m_pTranslateCamEvent, m_listener, 0, 0, (real( 1.0) - l_cameraPos[2]) / 10);
+		if (l_wheelRotation < 0)
+		{
+			MouseCameraEvent::Add( m_pTranslateCamEvent, m_listener, 0, 0, (l_cameraPos[2] - real( 1.0)) / 10);
+		}
+		else if (l_wheelRotation > 0)
+		{
+			MouseCameraEvent::Add( m_pTranslateCamEvent, m_listener, 0, 0, (real( 1.0) - l_cameraPos[2]) / 10);
+		}
 	}
 }
 
@@ -318,13 +359,21 @@ void RenderPanel :: _onMenuClose( wxCommandEvent & event)
 void RenderPanel :: _selectGeometry( int p_x, int p_y)
 {
 	GeometryPtr l_geo( new Geometry( m_mainScene.get()));
-	m_listener->PostEvent( FrameEventPtr( new SelectObjectFrameEvent( m_mainScene, l_geo, SubmeshPtr(), FacePtr(), VertexPtr(), m_renderWindow->GetCamera(), this, p_x, p_y)));
+
+	if ( ! m_renderWindow.expired())
+	{
+		m_listener->PostEvent( FrameEventPtr( new SelectObjectFrameEvent( m_mainScene, l_geo, SubmeshPtr(), FacePtr(), VertexPtr(), m_renderWindow.lock()->GetCamera(), this, p_x, p_y)));
+	}
 }
 
 void RenderPanel :: _selectVertex( int p_x, int p_y)
 {
 	VertexPtr l_vertex( new Vertex);
-	m_listener->PostEvent( FrameEventPtr( new SelectObjectFrameEvent( m_mainScene, GeometryPtr(), SubmeshPtr(), FacePtr(), l_vertex, m_renderWindow->GetCamera(), this, p_x, p_y)));
+
+	if ( ! m_renderWindow.expired())
+	{
+		m_listener->PostEvent( FrameEventPtr( new SelectObjectFrameEvent( m_mainScene, GeometryPtr(), SubmeshPtr(), FacePtr(), l_vertex, m_renderWindow.lock()->GetCamera(), this, p_x, p_y)));
+	}
 }
 
 void RenderPanel :: _selectAll()

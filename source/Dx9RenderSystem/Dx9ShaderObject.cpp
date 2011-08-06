@@ -1,22 +1,31 @@
-#include "Dx9RenderSystem/PrecompiledHeader.h"
+#include "Dx9RenderSystem/PrecompiledHeader.hpp"
 
-#include "Dx9RenderSystem/Dx9ShaderObject.h"
-#include "Dx9RenderSystem/Dx9ShaderProgram.h"
-#include "Dx9RenderSystem/Dx9Context.h"
-#include "Dx9RenderSystem/Dx9RenderSystem.h"
-#include "Dx9RenderSystem/Dx9FrameVariable.h"
+#include "Dx9RenderSystem/Dx9ShaderObject.hpp"
+#include "Dx9RenderSystem/Dx9ShaderProgram.hpp"
+#include "Dx9RenderSystem/Dx9Context.hpp"
+#include "Dx9RenderSystem/Dx9RenderSystem.hpp"
+#include "Dx9RenderSystem/Dx9FrameVariable.hpp"
 
 using namespace Castor3D;
 
 //*************************************************************************************************
 
-Dx9ShaderObject :: Dx9ShaderObject( eSHADER_PROGRAM_TYPE p_eType, const String & p_strMainFunction)
-	:	HlslShaderObject( p_eType)
-	,	m_pShaderProgram( NULL)
-	,	m_pErrors( NULL)
-	,	m_pInputConstants( NULL)
-	,	m_pCompiledShader( NULL)
-	,	m_strMainFunction( p_strMainFunction)
+struct VariableApply
+{
+	template <class T> void operator()(T & p) const
+	{
+		p->Apply();
+	}
+};
+
+//*************************************************************************************************
+
+Dx9ShaderObject :: Dx9ShaderObject( Dx9ShaderProgram * p_pParent, eSHADER_TYPE p_eType)
+	:	HlslShaderObject( p_pParent, p_eType)
+	,	m_pShaderProgram( nullptr)
+	,	m_pErrors( nullptr)
+	,	m_pInputConstants( nullptr)
+	,	m_pCompiledShader( nullptr)
 {
 }
 
@@ -29,9 +38,9 @@ void Dx9ShaderObject :: DestroyProgram()
 {
 	Detach();
 
-	if (m_isCompiled)
+	if (m_bCompiled)
 	{
-		m_isCompiled = false;
+		m_bCompiled = false;
 	}
 }
 
@@ -57,31 +66,38 @@ bool Dx9ShaderObject :: Compile()
 {
 	bool l_bReturn = false;
 
-	if (RenderSystem::UseShaders() && ! m_bError && ! m_shaderSource.empty())
+	if (RenderSystem::UseShaders() && ! m_bError && ! m_strSource.empty())
 	{
-		m_isCompiled = false;
+		m_bCompiled = false;
 
-		size_t l_uiLength = m_shaderSource.size();
-		const char * l_pTmp = m_shaderSource.char_str();
+		size_t l_uiLength = m_strSource.size();
+		char * l_pTmp = new char[l_uiLength + 1];
+		memcpy( l_pTmp, m_strSource.char_str(), l_uiLength);
+		l_pTmp[l_uiLength] = 0;
 
-		if (CheckDxError( D3DXCompileShader( l_pTmp, l_uiLength, NULL, NULL, m_strMainFunction.char_str(), m_strProfile.char_str(), 0, & m_pCompiledShader, & m_pErrors, & m_pInputConstants), "Dx9ShaderObject :: Compile - D3DXCompileShader", false))
+		try
 		{
-			m_isCompiled = true;
-
-			for (Dx9FrameVariablePtrStrMap::iterator l_it = m_mapDx9Variables.begin() ; l_it != m_mapDx9Variables.end() ; ++l_it)
+			if (CheckDxError( D3DXCompileShader( l_pTmp, l_uiLength, nullptr, nullptr, m_strEntryPoint.char_str(), m_strProfile.char_str(), 0, & m_pCompiledShader, & m_pErrors, & m_pInputConstants), "Dx9ShaderObject :: Compile - D3DXCompileShader", false))
 			{
-				l_it->second->SetConstants( m_pInputConstants);
+				m_bCompiled = true;
 			}
 		}
-		else if (m_pErrors != NULL)
+		catch ( ... )
 		{
-			Logger::LogError( String( (xchar *)m_pErrors->GetBufferPointer()), false);
+			m_bCompiled = false;
+		}
+
+		delete [] l_pTmp;
+
+		if (m_pErrors)
+		{
+			Logger::LogMessage( String( (xchar *)m_pErrors->GetBufferPointer()));
 			m_pErrors->Release();
-			m_pErrors = NULL;
+			m_pErrors = nullptr;
 			m_bError = true;
 		}
 
-		l_bReturn = m_isCompiled;
+		l_bReturn = m_bCompiled;
 	}
 
 	return l_bReturn;
@@ -89,9 +105,9 @@ bool Dx9ShaderObject :: Compile()
 
 void Dx9ShaderObject :: Detach()
 {
-	if (m_isCompiled && m_pShaderProgram != NULL && ! m_bError)
+	if (m_bCompiled && m_pShaderProgram && ! m_bError)
 	{
-		m_pShaderProgram = NULL;
+		m_pShaderProgram = nullptr;
 	}
 }
 
@@ -99,39 +115,26 @@ void Dx9ShaderObject :: AttachTo( Dx9ShaderProgram * p_pProgram)
 {
 	Detach();
 
-	if (m_isCompiled && ! m_bError)
+	if (m_bCompiled && ! m_bError)
 	{
 		m_pShaderProgram = p_pProgram;
 	}
 }
 
-Dx9FrameVariablePtr Dx9ShaderObject :: GetD3dFrameVariable( const String & p_strName)
-{
-	Dx9FrameVariablePtr l_pReturn;
-	Dx9FrameVariablePtrStrMap::iterator l_it = m_mapDx9Variables.find( p_strName);
-
-	if (l_it != m_mapDx9Variables.end())
-	{
-		l_pReturn = l_it->second;
-	}
-
-	return l_pReturn;
-}
-
 //*************************************************************************************************
 
-Dx9VertexShader :: Dx9VertexShader()
-	:	Dx9ShaderObject( eVertexShader, "mainVS")
-	,	m_pVertexShader( NULL)
+Dx9VertexShader :: Dx9VertexShader( Dx9ShaderProgram * p_pParent)
+	:	Dx9ShaderObject( p_pParent, eSHADER_TYPE_VERTEX)
+	,	m_pVertexShader( nullptr)
 {
 }
 
 Dx9VertexShader :: ~Dx9VertexShader()
 {
-	if( m_pVertexShader != NULL )
+	if( m_pVertexShader )
 	{
-		m_pVertexShader->Release(); 
-		m_pVertexShader = NULL;
+		m_pVertexShader->Release();
+		m_pVertexShader = nullptr;
 	}
 }
 
@@ -146,47 +149,42 @@ bool Dx9VertexShader :: Compile()
 
 	if (l_bReturn)
 	{
+		Logger::LogMessage( "Vertex shader compiled successfully");
 		CheckDxError( Dx9RenderSystem::GetDevice()->CreateVertexShader( (DWORD*)m_pCompiledShader->GetBufferPointer(), & m_pVertexShader), "Dx9FragmentShader :: Compile - CreateVertexShader", false);
 		m_pCompiledShader->Release();
-		m_pCompiledShader = NULL;
+		m_pCompiledShader = nullptr;
 	}
 
 	return l_bReturn;
 }
 
-void Dx9VertexShader :: Begin()
+void Dx9VertexShader :: Bind()
 {
-	if (m_isCompiled)
+	if (m_bCompiled)
 	{
-		CheckDxError( Dx9RenderSystem::GetDevice()->SetVertexShader( m_pVertexShader), CU_T( "Dx9VertexShader :: Begin"), false);
-
-		for (Dx9FrameVariablePtrStrMap::iterator l_it = m_mapDx9Variables.begin() ; l_it != m_mapDx9Variables.end() ; ++l_it)
-		{
-			l_it->second->Apply();
-		}
+		CheckDxError( Dx9RenderSystem::GetDevice()->SetVertexShader( m_pVertexShader), cuT( "Dx9VertexShader :: Begin"), false);
 	}
 }
 
-void Dx9VertexShader :: End()
+void Dx9VertexShader :: Unbind()
 {
-	CheckDxError( Dx9RenderSystem::GetDevice()->SetVertexShader( NULL), CU_T( "Dx9VertexShader :: End"), false);
+	CheckDxError( Dx9RenderSystem::GetDevice()->SetVertexShader( nullptr), cuT( "Dx9VertexShader :: End"), false);
 }
 
 //*************************************************************************************************
 
-Dx9FragmentShader :: Dx9FragmentShader()
-	:	Dx9ShaderObject( ePixelShader, "mainPS")
-	,	m_pPixelShader( NULL)
+Dx9FragmentShader :: Dx9FragmentShader( Dx9ShaderProgram * p_pParent)
+	:	Dx9ShaderObject( p_pParent, eSHADER_TYPE_PIXEL)
+	,	m_pPixelShader( nullptr)
 {
-	m_programType = ePixelShader;
 }
 
 Dx9FragmentShader :: ~Dx9FragmentShader()
 {
-	if( m_pPixelShader != NULL )
+	if( m_pPixelShader )
 	{
-		m_pPixelShader->Release(); 
-		m_pPixelShader = NULL;
+		m_pPixelShader->Release();
+		m_pPixelShader = nullptr;
 	}
 }
 
@@ -201,30 +199,26 @@ bool Dx9FragmentShader :: Compile()
 
 	if (l_bReturn)
 	{
+		Logger::LogMessage( "Pixel shader compiled successfully");
 		CheckDxError( Dx9RenderSystem::GetDevice()->CreatePixelShader( (DWORD*)m_pCompiledShader->GetBufferPointer(), & m_pPixelShader), "Dx9FragmentShader :: Compile - CreatePixelShader", false);
 		m_pCompiledShader->Release();
-		m_pCompiledShader = NULL;
+		m_pCompiledShader = nullptr;
 	}
 
 	return l_bReturn;
 }
 
-void Dx9FragmentShader :: Begin()
+void Dx9FragmentShader :: Bind()
 {
-	if (m_isCompiled)
+	if (m_bCompiled)
 	{
-		CheckDxError( Dx9RenderSystem::GetDevice()->SetPixelShader( m_pPixelShader), CU_T( "Dx9FragmentShader :: Begin"), false);
-
-		for (Dx9FrameVariablePtrStrMap::iterator l_it = m_mapDx9Variables.begin() ; l_it != m_mapDx9Variables.end() ; ++l_it)
-		{
-			l_it->second->Apply();
-		}
+		CheckDxError( Dx9RenderSystem::GetDevice()->SetPixelShader( m_pPixelShader), cuT( "Dx9FragmentShader :: Begin"), false);
 	}
 }
 
-void Dx9FragmentShader :: End()
+void Dx9FragmentShader :: Unbind()
 {
-	CheckDxError( Dx9RenderSystem::GetDevice()->SetPixelShader( NULL), CU_T( "Dx9FragmentShader :: End"), false);
+	CheckDxError( Dx9RenderSystem::GetDevice()->SetPixelShader( nullptr), cuT( "Dx9FragmentShader :: End"), false);
 }
 
 //*************************************************************************************************

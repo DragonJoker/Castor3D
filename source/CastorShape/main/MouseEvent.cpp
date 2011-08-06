@@ -1,6 +1,6 @@
-#include "CastorShape/PrecompiledHeader.h"
+#include "CastorShape/PrecompiledHeader.hpp"
 
-#include "CastorShape/main/MouseEvent.h"
+#include "CastorShape/main/MouseEvent.hpp"
 
 using namespace CastorShape;
 using namespace Castor3D;
@@ -48,9 +48,9 @@ CameraRotateEvent :: ~CameraRotateEvent()
 
 bool CameraRotateEvent :: Apply()
 {
-	m_camera->GetParent()->Yaw( m_deltaX);
-	m_camera->GetParent()->Pitch( m_deltaY);
-	m_camera->GetParent()->Roll( m_deltaZ);
+	m_camera->GetParent()->Yaw( Angle::FromDegrees( m_deltaX));
+	m_camera->GetParent()->Pitch( Angle::FromDegrees( m_deltaY));
+	m_camera->GetParent()->Roll( Angle::FromDegrees( m_deltaZ));
 	m_deltaX = 0;
 	m_deltaY = 0;
 	m_deltaZ = 0;

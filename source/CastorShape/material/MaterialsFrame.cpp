@@ -1,18 +1,18 @@
-#include "CastorShape/PrecompiledHeader.h"
+#include "CastorShape/PrecompiledHeader.hpp"
 
-#include "CastorShape/material/MaterialsFrame.h"
+#include "CastorShape/material/MaterialsFrame.hpp"
 
 using namespace Castor3D;
 using namespace CastorShape;
 
-MaterialsFrame :: MaterialsFrame( MaterialManager * p_pManager, wxWindow * parent, const wxString & title,
+wxMaterialsFrame :: wxMaterialsFrame( wxWindow * parent, const wxString & title,
 									  const wxPoint & pos, const wxSize & size)
-	:	GuiCommon::MaterialsFrame( p_pManager, parent, title, pos, size)
+	:	GuiCommon::wxMaterialsFrame( parent, title, pos, size)
 {
 	wxSize l_size = GetClientSize();
 
-	m_newMaterial = new wxButton( this, mlfNewMaterial, CU_T( "Nouveau"), wxPoint( 10, 3), wxSize( 50, 20), wxBORDER_SIMPLE);
-	m_deleteMaterial = new wxButton( this, mlfDeleteMaterial, CU_T( "Supprimer"), wxPoint( 180, 3), wxSize( 80, 20), wxBORDER_SIMPLE);
+	m_newMaterial = new wxButton( this, mlfNewMaterial, cuT( "Nouveau"), wxPoint( 10, 3), wxSize( 50, 20), wxBORDER_SIMPLE);
+	m_deleteMaterial = new wxButton( this, mlfDeleteMaterial, cuT( "Supprimer"), wxPoint( 180, 3), wxSize( 80, 20), wxBORDER_SIMPLE);
 	m_deleteMaterial->Hide();
 	m_newMaterialName = new wxTextCtrl( this, mlfNewMaterialName,
 										wxEmptyString, wxPoint( 70, 3), wxSize( 100, 20),
@@ -20,43 +20,45 @@ MaterialsFrame :: MaterialsFrame( MaterialManager * p_pManager, wxWindow * paren
 	m_newMaterialName->Hide();
 }
 
-MaterialsFrame :: ~MaterialsFrame()
+wxMaterialsFrame :: ~wxMaterialsFrame()
 {
 }
 
-void MaterialsFrame :: CreateMaterialPanel( const String & p_materialName)
+void wxMaterialsFrame :: CreateMaterialPanel( const String & p_materialName)
 {
-	GuiCommon::MaterialsFrame::CreateMaterialPanel( p_materialName);
+	GuiCommon::wxMaterialsFrame::CreateMaterialPanel( p_materialName);
 	m_deleteMaterial->Show();
 }
 
-BEGIN_EVENT_TABLE( MaterialsFrame, GuiCommon::MaterialsFrame)
-	EVT_LIST_ITEM_SELECTED(		mlfMaterialsList, 	MaterialsFrame::_onSelected)
-	EVT_LIST_ITEM_DESELECTED(	mlfMaterialsList, 	MaterialsFrame::_onDeselected)
-	EVT_BUTTON(	mlfNewMaterial,						MaterialsFrame::_onNewMaterial)
-	EVT_BUTTON(	mlfDeleteMaterial,					MaterialsFrame::_onDeleteMaterial)
-	EVT_TEXT_ENTER( mlfNewMaterialName,				MaterialsFrame::_onNewMaterialName)
+BEGIN_EVENT_TABLE( wxMaterialsFrame, GuiCommon::wxMaterialsFrame)
+	EVT_LIST_ITEM_SELECTED(		mlfMaterialsList, 	wxMaterialsFrame::_onSelected)
+	EVT_LIST_ITEM_DESELECTED(	mlfMaterialsList, 	wxMaterialsFrame::_onDeselected)
+	EVT_BUTTON(	mlfNewMaterial,						wxMaterialsFrame::_onNewMaterial)
+	EVT_BUTTON(	mlfDeleteMaterial,					wxMaterialsFrame::_onDeleteMaterial)
+	EVT_TEXT_ENTER( mlfNewMaterialName,				wxMaterialsFrame::_onNewMaterialName)
 END_EVENT_TABLE()
 
-void MaterialsFrame :: _onNewMaterial( wxCommandEvent & event)
+void wxMaterialsFrame :: _onNewMaterial( wxCommandEvent & event)
 {
 	m_newMaterialName->Show();
 	m_newMaterialName->SetFocus();
 }
 
-void MaterialsFrame :: _onNewMaterialName ( wxCommandEvent & event)
+void wxMaterialsFrame :: _onNewMaterialName ( wxCommandEvent & event)
 {
-	String l_name = m_newMaterialName->GetValue().c_str();
-	m_selectedMaterial = m_pManager->CreateMaterial( l_name);
+	String l_name = (const char *)m_newMaterialName->GetValue().c_str();
+	m_selectedMaterial = Factory<Material>::Create( l_name, 1);
 	m_materialsList->AddItem( l_name);
 	CreateMaterialPanel( l_name);
 	m_newMaterialName->Hide();
-	m_newMaterialName->SetValue( C3DEmptyString);
+	m_newMaterialName->SetValue( cuEmptyString);
 }
 
-void MaterialsFrame :: _onDeleteMaterial( wxCommandEvent & event)
+void wxMaterialsFrame :: _onDeleteMaterial( wxCommandEvent & event)
 {
-	ScenePtr l_scene = m_pManager->GetParent()->GetElementByName( CU_T( "MainScene"));
+	Collection<Material, String> l_mtlCollection;
+	Collection<Scene, String> l_scnCollection;
+	ScenePtr l_scene = l_scnCollection.GetElement( cuT( "MainScene"));
 	BoolStrMap l_geometries = l_scene->GetGeometriesVisibility();
 	BoolStrMap::iterator l_it = l_geometries.begin();
 	GeometryPtr l_geometry;
@@ -72,13 +74,13 @@ void MaterialsFrame :: _onDeleteMaterial( wxCommandEvent & event)
 			l_submesh = l_mesh->GetSubmesh( i);
 			if (l_submesh->GetMaterialName() == m_selectedMaterial->GetName())
 			{
-				l_submesh->SetMaterial( m_pManager->GetDefaultMaterial());
+				l_submesh->SetMaterial( Root::GetSingleton()->GetDefaultMaterial());
 			}
 		}
 	}
 
-	m_pManager->RemoveElement( m_selectedMaterial);
+	l_mtlCollection.RemoveElement( m_selectedMaterial->GetName());
 	m_selectedMaterial.reset();
-	CreateMaterialPanel( C3DEmptyString);
+	CreateMaterialPanel( cuEmptyString);
 	m_materialsList->CreateList();
 }

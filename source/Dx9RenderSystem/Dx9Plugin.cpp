@@ -1,33 +1,35 @@
-#include "Dx9RenderSystem/PrecompiledHeader.h"
+#include "Dx9RenderSystem/PrecompiledHeader.hpp"
 
-#include "Dx9RenderSystem/Dx9Plugin.h"
-#include "Dx9RenderSystem/Dx9RenderSystem.h"
+#include "Dx9RenderSystem/Dx9Plugin.hpp"
+#include "Dx9RenderSystem/Dx9RenderSystem.hpp"
 
 using namespace Castor3D;
 
 //******************************************************************************
 
-extern "C" C3D_Dx9_API void GetRequiredVersion( Version & p_version)
+C3D_Dx9_API void GetRequiredVersion( Version & p_version)
 {
-	p_version = Version( 0, 5);
+	p_version = Version();
 }
 
-extern "C" C3D_Dx9_API void RegisterPlugin( Root & p_root)
+C3D_Dx9_API ePLUGIN_TYPE GetType()
 {
-	p_root.GetRendererServer().AddRenderer( RendererDriver::eDirect3D9, RendererDriverPtr( new Dx9RendererDriver()));
+	return ePLUGIN_TYPE_RENDERER;
 }
 
-//******************************************************************************
-
-const String & Dx9RendererDriver :: GetName() const
+C3D_Dx9_API eRENDERER_TYPE GetRendererType()
 {
-	static String l_name( "Direct3D 9 graphics renderer");
-	return l_name;
+	return eRENDERER_TYPE_DIRECT3D;
 }
 
-void Dx9RendererDriver :: CreateRenderSystem( SceneManager * p_pSceneManager)
+C3D_Dx9_API String GetName()
 {
-	new Dx9RenderSystem( p_pSceneManager);
+	return cuT( "Direct3D Renderer");
+}
+
+C3D_Dx9_API RenderSystem * CreateRenderSystem()
+{
+	return new Dx9RenderSystem();
 }
 
 //******************************************************************************

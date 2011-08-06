@@ -1,27 +1,26 @@
-#include "Dx9RenderSystem/PrecompiledHeader.h"
+#include "Dx9RenderSystem/PrecompiledHeader.hpp"
 
-#include "Dx9RenderSystem/Dx9RenderSystem.h"
-#include "Dx9RenderSystem/Dx9SubmeshRenderer.h"
-#include "Dx9RenderSystem/Dx9CameraRenderer.h"
-#include "Dx9RenderSystem/Dx9LightRenderer.h"
-#include "Dx9RenderSystem/Dx9OverlayRenderer.h"
-#include "Dx9RenderSystem/Dx9MaterialRenderer.h"
-#include "Dx9RenderSystem/Dx9TextureRenderer.h"
-#include "Dx9RenderSystem/Dx9TextureEnvironmentRenderer.h"
-#include "Dx9RenderSystem/Dx9WindowRenderer.h"
-#include "Dx9RenderSystem/Dx9ShaderProgram.h"
-#include "Dx9RenderSystem/Dx9ShaderObject.h"
-#include "Dx9RenderSystem/CgDx9ShaderProgram.h"
-#include "Dx9RenderSystem/CgDx9ShaderObject.h"
+#include "Dx9RenderSystem/Dx9RenderSystem.hpp"
+#include "Dx9RenderSystem/Dx9SubmeshRenderer.hpp"
+#include "Dx9RenderSystem/Dx9CameraRenderer.hpp"
+#include "Dx9RenderSystem/Dx9LightRenderer.hpp"
+#include "Dx9RenderSystem/Dx9OverlayRenderer.hpp"
+#include "Dx9RenderSystem/Dx9MaterialRenderer.hpp"
+#include "Dx9RenderSystem/Dx9TextureRenderer.hpp"
+#include "Dx9RenderSystem/Dx9WindowRenderer.hpp"
+#include "Dx9RenderSystem/Dx9ShaderProgram.hpp"
+#include "Dx9RenderSystem/Dx9ShaderObject.hpp"
+#include "Dx9RenderSystem/CgDx9ShaderProgram.hpp"
+#include "Dx9RenderSystem/CgDx9ShaderObject.hpp"
 
 using namespace Castor3D;
 
-Dx9RenderSystem :: Dx9RenderSystem( SceneManager * p_pSceneManager)
-	:	RenderSystem( p_pSceneManager)
-	,	m_pDirect3D( NULL)
-	,	m_pDevice( NULL)
+Dx9RenderSystem :: Dx9RenderSystem()
+	:	RenderSystem()
+	,	m_pDirect3D( nullptr)
+	,	m_pDevice( nullptr)
 {
-	Logger::LogMessage( CU_T( "Dx9RenderSystem :: Dx9RenderSystem"));
+	Logger::LogMessage( cuT( "Dx9RenderSystem :: Dx9RenderSystem"));
 	m_setAvailableIndexes.insert( 0);
 	m_setAvailableIndexes.insert( 1);
 	m_setAvailableIndexes.insert( 2);
@@ -39,15 +38,15 @@ Dx9RenderSystem :: ~Dx9RenderSystem()
 
 void Dx9RenderSystem :: Initialise()
 {
-	Logger::LogMessage( CU_T( "Dx9RenderSystem :: Initialise"));
+	Logger::LogMessage( cuT( "Dx9RenderSystem :: Initialise"));
 
 	if (sm_initialised)
 	{
 		return;
 	}
 
-	Logger::LogMessage( CU_T( "************************************************************************************************************************"));
-	Logger::LogMessage( CU_T( "Initialising Direct3D"));
+	Logger::LogMessage( cuT( "************************************************************************************************************************"));
+	Logger::LogMessage( cuT( "Initialising Direct3D"));
 
 	if ((m_pDirect3D = Direct3DCreate9( D3D_SDK_VERSION)) == NULL)
 	{
@@ -56,36 +55,97 @@ void Dx9RenderSystem :: Initialise()
 
 
 	sm_useMultiTexturing = true;
-
-	Logger::LogMessage( CU_T( "Direct3D Initialisation Ended"));
-	Logger::LogMessage( CU_T( "************************************************************************************************************************"));
 	sm_initialised = true;
 
+	m_cgContext = cgCreateContext();
+	CheckShaderSupport();
+	_checkCgAvailableProfiles();
+
 	Dx9Pipeline::InitFunctions();
+
+	Logger::LogMessage( cuT( "Direct3D Initialisation Ended"));
+	Logger::LogMessage( cuT( "************************************************************************************************************************"));
+}
+
+void Dx9RenderSystem :: _isCgProfileSupported( eSHADER_TYPE p_eType, char const * p_szName)
+{
+	CGprofile l_cgProfile = cgGetProfile( p_szName);
+	bool l_bSupported = cgIsProfileSupported( l_cgProfile) != 0 && cgD3D9IsProfileSupported( l_cgProfile) != 0;
+	Logger::LogMessage( String( "RenderSystem :: CheckCgProfileSupport - Profile : ") + p_szName + String( " - Support : ") + (l_bSupported ? cuT( "true") : cuT( "false")));
+
+	if (l_bSupported)
+	{
+		if (m_mapSupportedProfiles[p_eType] == CG_PROFILE_UNKNOWN)
+		{
+			m_mapSupportedProfiles[p_eType] = l_cgProfile;
+		}
+	}
+}
+
+void Dx9RenderSystem :: _checkCgAvailableProfiles()
+{
+	for (int i = 0 ; i < eSHADER_TYPE_COUNT ; i++)
+	{
+		m_mapSupportedProfiles[i] = CG_PROFILE_UNKNOWN;
+	}
+
+	_isCgProfileSupported( eSHADER_TYPE_VERTEX,		"vp40"		);
+	_isCgProfileSupported( eSHADER_TYPE_PIXEL,		"fp40"		);
+	_isCgProfileSupported( eSHADER_TYPE_VERTEX,		"vp30"		);
+	_isCgProfileSupported( eSHADER_TYPE_PIXEL,		"fp30"		);
+	_isCgProfileSupported( eSHADER_TYPE_VERTEX,		"vp20"		);
+	_isCgProfileSupported( eSHADER_TYPE_PIXEL,		"fp20"		);
+	_isCgProfileSupported( eSHADER_TYPE_DOMAIN,		"ds_5_0"	);
+	_isCgProfileSupported( eSHADER_TYPE_HULL,		"hs_5_0"	);
+	_isCgProfileSupported( eSHADER_TYPE_VERTEX,		"vs_5_0"	);
+	_isCgProfileSupported( eSHADER_TYPE_GEOMETRY,	"gs_5_0"	);
+	_isCgProfileSupported( eSHADER_TYPE_PIXEL,		"ps_5_0"	);
+	_isCgProfileSupported( eSHADER_TYPE_VERTEX,		"vs_4_0"	);
+	_isCgProfileSupported( eSHADER_TYPE_GEOMETRY,	"gs_4_0"	);
+	_isCgProfileSupported( eSHADER_TYPE_PIXEL,		"ps_4_0"	);
+	_isCgProfileSupported( eSHADER_TYPE_VERTEX,		"hlslv"		);
+	_isCgProfileSupported( eSHADER_TYPE_PIXEL,		"hlslf"		);
+	_isCgProfileSupported( eSHADER_TYPE_VERTEX,		"vs_3_0"	);
+	_isCgProfileSupported( eSHADER_TYPE_PIXEL,		"ps_3_0"	);
+	_isCgProfileSupported( eSHADER_TYPE_VERTEX,		"vs_2_x"	);
+	_isCgProfileSupported( eSHADER_TYPE_PIXEL,		"ps_2_x"	);
+	_isCgProfileSupported( eSHADER_TYPE_VERTEX,		"vs_2_sw"	);
+	_isCgProfileSupported( eSHADER_TYPE_PIXEL,		"ps_2_sw"	);
+	_isCgProfileSupported( eSHADER_TYPE_VERTEX,		"vs_2_0"	);
+	_isCgProfileSupported( eSHADER_TYPE_PIXEL,		"ps_2_0"	);
+	_isCgProfileSupported( eSHADER_TYPE_VERTEX,		"vs_1_1"	);
+	_isCgProfileSupported( eSHADER_TYPE_PIXEL,		"ps_1_3"	);
+	_isCgProfileSupported( eSHADER_TYPE_PIXEL,		"ps_1_2"	);
+	_isCgProfileSupported( eSHADER_TYPE_PIXEL,		"ps_1_1"	);
 }
 
 void Dx9RenderSystem :: Delete()
 {
+	if (m_cgContext)
+	{
+		cgDestroyContext( m_cgContext);
+		m_cgContext = nullptr;
+	}
+
 	Cleanup();
 	map::deleteAll( m_contextMap);
 
-	if (m_pDevice != NULL)
+	if (m_pDevice)
 	{
 		m_pDevice->Release();
-		m_pDevice = NULL;
+		m_pDevice = nullptr;
 	}
 
-	if (m_pDirect3D != NULL)
+	if (m_pDirect3D)
 	{
 		m_pDirect3D->Release();
-		m_pDirect3D = NULL;
+		m_pDirect3D = nullptr;
 	}
 }
 
 void Dx9RenderSystem :: Cleanup()
 {
 	m_submeshesRenderers.clear();
-	m_texEnvRenderers.clear();
 	m_textureRenderers.clear();
 	m_passRenderers.clear();
 	m_lightRenderers.clear();
@@ -93,17 +153,26 @@ void Dx9RenderSystem :: Cleanup()
 	m_cameraRenderers.clear();
 }
 
-void Dx9RenderSystem :: RenderAmbientLight( const Colour & p_clColour)
+void Dx9RenderSystem :: CheckShaderSupport()
+{
+	sm_useShader[eSHADER_TYPE_VERTEX] = true;
+	sm_useShader[eSHADER_TYPE_PIXEL] = true;
+	sm_useShader[eSHADER_TYPE_GEOMETRY] = false;
+	sm_useShader[eSHADER_TYPE_HULL] = false;
+	sm_useShader[eSHADER_TYPE_DOMAIN] = false;
+}
+
+void Dx9RenderSystem :: RenderAmbientLight( Colour const & p_clColour)
 {
 	if (RenderSystem::UseShaders())
 	{
-		if (m_pCurrentProgram != NULL)
+		if (m_pCurrentProgram)
 		{
-			if (m_pCurrentProgram->GetType() == ShaderProgramBase::eHlslShader)
+			if (m_pCurrentProgram->GetType() == ShaderProgramBase::eSHADER_LANGUAGE_HLSL)
 			{
 				static_cast <Dx9ShaderProgram *>( m_pCurrentProgram)->SetAmbientLight( p_clColour);
 			}
-			else if (m_pCurrentProgram->GetType() == ShaderProgramBase::eCgShader)
+			else if (m_pCurrentProgram->GetType() == ShaderProgramBase::eSHADER_LANGUAGE_CG)
 			{
 				static_cast <CgDx9ShaderProgram *>( m_pCurrentProgram)->SetAmbientLight( p_clColour);
 			}
@@ -111,29 +180,29 @@ void Dx9RenderSystem :: RenderAmbientLight( const Colour & p_clColour)
 	}
 	else
 	{
-		CheckDxError( m_pDevice->SetRenderState( D3DRS_AMBIENT, D3DCOLOR_COLORVALUE( p_clColour.Red(), p_clColour.Green(), p_clColour.Blue(), p_clColour.Alpha())), CU_T( "Dx9RenderSystem :: RenderAmbientLight - SetRenderState"), false);
+		CheckDxError( m_pDevice->SetRenderState( D3DRS_AMBIENT, D3DCOLOR_COLORVALUE( p_clColour.Red(), p_clColour.Green(), p_clColour.Blue(), p_clColour.Alpha())), cuT( "Dx9RenderSystem :: RenderAmbientLight - SetRenderState"), false);
 	}
 }
 
 void Dx9RenderSystem :: InitialiseDevice( HWND p_hWnd, D3DPRESENT_PARAMETERS * p_presentParameters)
 {
-	if (m_pDevice != NULL)
+	if (m_pDevice)
 	{
 		return;
 	}
 
-	if (m_pDirect3D != NULL)
+	if (m_pDirect3D)
 	{
-		if (CheckDxError( m_pDirect3D->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, p_hWnd, D3DCREATE_HARDWARE_VERTEXPROCESSING, p_presentParameters, & m_pDevice), CU_T( "Dx9RenderSystem :: InitialiseDevice - CreateDevice"), false))
+		if (CheckDxError( m_pDirect3D->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, p_hWnd, D3DCREATE_HARDWARE_VERTEXPROCESSING, p_presentParameters, & m_pDevice), cuT( "Dx9RenderSystem :: InitialiseDevice - CreateDevice"), false))
 		{
-			CheckDxError( m_pDevice->SetRenderState( D3DRS_DITHERENABLE,     	TRUE),			CU_T( "Dx9RenderSystem :: InitialiseDevice - SetRenderState - D3DRS_DITHERENABLE"),		false);
-			CheckDxError( m_pDevice->SetRenderState( D3DRS_LIGHTING,         	TRUE),			CU_T( "Dx9RenderSystem :: InitialiseDevice - SetRenderState - D3DRS_LIGHTING"),			false);
-			CheckDxError( m_pDevice->SetRenderState( D3DRS_SPECULARENABLE,     	TRUE),			CU_T( "Dx9RenderSystem :: InitialiseDevice - SetRenderState - D3DRS_SPECULARENABLE"),	false);
-			CheckDxError( m_pDevice->SetRenderState( D3DRS_ZENABLE,          	TRUE),			CU_T( "Dx9RenderSystem :: InitialiseDevice - SetRenderState - D3DRS_ZENABLE"),			false);
-			CheckDxError( m_pDevice->SetRenderState( D3DRS_FOGENABLE,        	FALSE), 		CU_T( "Dx9RenderSystem :: InitialiseDevice - SetRenderState - D3DRS_FOGENABLE "),		false);
-			CheckDxError( m_pDevice->SetRenderState( D3DRS_STENCILMASK,      	0xFF), 			CU_T( "Dx9RenderSystem :: InitialiseDevice - SetRenderState - D3DRS_STENCILMASK"),		false);
-			CheckDxError( m_pDevice->SetRenderState( D3DRS_STENCILWRITEMASK, 	0xFF), 			CU_T( "Dx9RenderSystem :: InitialiseDevice - SetRenderState - D3DRS_STENCILWRITEMASK"),	false);
-			CheckDxError( m_pDevice->SetRenderState( D3DRS_ALPHABLENDENABLE,	TRUE),			CU_T( "Dx9RenderSystem :: InitialiseDevice - SetRenderState - D3DRS_ALPHABLENDENABLE"), false);
+			CheckDxError( m_pDevice->SetRenderState( D3DRS_DITHERENABLE,     	TRUE),			cuT( "Dx9RenderSystem :: InitialiseDevice - SetRenderState - D3DRS_DITHERENABLE"),		false);
+			CheckDxError( m_pDevice->SetRenderState( D3DRS_LIGHTING,         	TRUE),			cuT( "Dx9RenderSystem :: InitialiseDevice - SetRenderState - D3DRS_LIGHTING"),			false);
+			CheckDxError( m_pDevice->SetRenderState( D3DRS_SPECULARENABLE,     	TRUE),			cuT( "Dx9RenderSystem :: InitialiseDevice - SetRenderState - D3DRS_SPECULARENABLE"),	false);
+			CheckDxError( m_pDevice->SetRenderState( D3DRS_ZENABLE,          	TRUE),			cuT( "Dx9RenderSystem :: InitialiseDevice - SetRenderState - D3DRS_ZENABLE"),			false);
+			CheckDxError( m_pDevice->SetRenderState( D3DRS_FOGENABLE,        	FALSE), 		cuT( "Dx9RenderSystem :: InitialiseDevice - SetRenderState - D3DRS_FOGENABLE "),		false);
+			CheckDxError( m_pDevice->SetRenderState( D3DRS_STENCILMASK,      	0xFF), 			cuT( "Dx9RenderSystem :: InitialiseDevice - SetRenderState - D3DRS_STENCILMASK"),		false);
+			CheckDxError( m_pDevice->SetRenderState( D3DRS_STENCILWRITEMASK, 	0xFF), 			cuT( "Dx9RenderSystem :: InitialiseDevice - SetRenderState - D3DRS_STENCILWRITEMASK"),	false);
+			CheckDxError( m_pDevice->SetRenderState( D3DRS_ALPHABLENDENABLE,	TRUE),			cuT( "Dx9RenderSystem :: InitialiseDevice - SetRenderState - D3DRS_ALPHABLENDENABLE"), false);
 		}
 		else
 		{
@@ -149,48 +218,18 @@ void Dx9RenderSystem :: DrawIndexedPrimitives( ePRIMITIVE_TYPE p_eType, size_t p
 	m_pDevice->DrawIndexedPrimitive( D3dEnum::Get( p_eType), 0, p_uiMinVertex, p_uiVertexCount, p_uiFirstIndex, p_uiCount);
 }
 
-HlslShaderProgramPtr Dx9RenderSystem :: _createHlslShaderProgram( const String & p_vertexShaderFile, 
-																  const String & p_fragmentShaderFile,
-																  const String & p_geometryShaderFile)
+HlslShaderProgramPtr Dx9RenderSystem :: _createHlslShaderProgram()
 {
-	return HlslShaderProgramPtr( new Dx9ShaderProgram( p_vertexShaderFile, p_fragmentShaderFile, p_geometryShaderFile));
+	HlslShaderProgramPtr l_pReturn;
+	l_pReturn = HlslShaderProgramPtr( new Dx9ShaderProgram);
+	return l_pReturn;
 }
 
-HlslShaderObjectPtr Dx9RenderSystem :: _createHlslVertexShader()
+CgShaderProgramPtr Dx9RenderSystem :: _createCgShaderProgram()
 {
-	return HlslShaderObjectPtr( new Dx9VertexShader());
-}
-
-HlslShaderObjectPtr Dx9RenderSystem :: _createHlslFragmentShader()
-{
-	return HlslShaderObjectPtr( new Dx9FragmentShader());
-}
-
-HlslShaderObjectPtr Dx9RenderSystem :: _createHlslGeometryShader()
-{
-	CASTOR_EXCEPTION( "Direct3D 9 doesn't support Geometry shader");
-}
-
-CgShaderObjectPtr Dx9RenderSystem :: _createCgVertexShader()
-{
-	return CgShaderObjectPtr( new CgDx9VertexShader());
-}
-
-CgShaderObjectPtr Dx9RenderSystem :: _createCgFragmentShader()
-{
-	return CgShaderObjectPtr( new CgDx9FragmentShader());
-}
-
-CgShaderObjectPtr Dx9RenderSystem :: _createCgGeometryShader()
-{
-	return CgShaderObjectPtr( new CgDx9GeometryShader());
-}
-
-CgShaderProgramPtr Dx9RenderSystem :: _createCgShaderProgram( const String & p_vertexShaderFile, 
-														    const String & p_fragmentShaderFile,
-														    const String & p_geometryShaderFile)
-{
-	return CgShaderProgramPtr( new CgDx9ShaderProgram( p_vertexShaderFile, p_fragmentShaderFile, p_geometryShaderFile));
+	CgShaderProgramPtr l_pReturn;
+	l_pReturn = CgShaderProgramPtr( new CgDx9ShaderProgram);
+	return l_pReturn;
 }
 
 int Dx9RenderSystem :: LockLight()
@@ -234,161 +273,53 @@ void Dx9RenderSystem :: BeginOverlaysRendering()
 	RenderSystem::BeginOverlaysRendering();
 }
 
-VertexAttribsBufferBoolPtr Dx9RenderSystem :: _create1BoolVertexAttribsBuffer( const String & p_strArg)
-{
-	return _createAttribsBuffer<bool, 1>( p_strArg);
-}
-
-VertexAttribsBufferIntPtr Dx9RenderSystem :: _create1IntVertexAttribsBuffer( const String & p_strArg)
-{
-	return _createAttribsBuffer<int, 1>( p_strArg);
-}
-
-VertexAttribsBufferUIntPtr Dx9RenderSystem :: _create1UIntVertexAttribsBuffer( const String & p_strArg)
-{
-	return _createAttribsBuffer<unsigned int, 1>( p_strArg);
-}
-
-VertexAttribsBufferFloatPtr Dx9RenderSystem :: _create1FloatVertexAttribsBuffer( const String & p_strArg)
-{
-	return _createAttribsBuffer<float, 1>( p_strArg);
-}
-
-VertexAttribsBufferDoublePtr Dx9RenderSystem :: _create1DoubleVertexAttribsBuffer( const String & p_strArg)
-{
-	return _createAttribsBuffer<double, 1>( p_strArg);
-}
-
-VertexAttribsBufferBoolPtr Dx9RenderSystem :: _create2BoolVertexAttribsBuffer( const String & p_strArg)
-{
-	return _createAttribsBuffer<bool, 2>( p_strArg);
-}
-
-VertexAttribsBufferIntPtr Dx9RenderSystem :: _create2IntVertexAttribsBuffer( const String & p_strArg)
-{
-	return _createAttribsBuffer<int, 2>( p_strArg);
-}
-
-VertexAttribsBufferUIntPtr Dx9RenderSystem :: _create2UIntVertexAttribsBuffer( const String & p_strArg)
-{
-	return _createAttribsBuffer<unsigned int, 2>( p_strArg);
-}
-
-VertexAttribsBufferFloatPtr Dx9RenderSystem :: _create2FloatVertexAttribsBuffer( const String & p_strArg)
-{
-	return _createAttribsBuffer<float, 2>( p_strArg);
-}
-
-VertexAttribsBufferDoublePtr Dx9RenderSystem :: _create2DoubleVertexAttribsBuffer( const String & p_strArg)
-{
-	return _createAttribsBuffer<double, 2>( p_strArg);
-}
-
-VertexAttribsBufferBoolPtr Dx9RenderSystem :: _create3BoolVertexAttribsBuffer( const String & p_strArg)
-{
-	return _createAttribsBuffer<bool, 3>( p_strArg);
-}
-
-VertexAttribsBufferIntPtr Dx9RenderSystem :: _create3IntVertexAttribsBuffer( const String & p_strArg)
-{
-	return _createAttribsBuffer<int, 3>( p_strArg);
-}
-
-VertexAttribsBufferUIntPtr Dx9RenderSystem :: _create3UIntVertexAttribsBuffer( const String & p_strArg)
-{
-	return _createAttribsBuffer<unsigned int, 3>( p_strArg);
-}
-
-VertexAttribsBufferFloatPtr Dx9RenderSystem :: _create3FloatVertexAttribsBuffer( const String & p_strArg)
-{
-	return _createAttribsBuffer<float, 3>( p_strArg);
-}
-
-VertexAttribsBufferDoublePtr Dx9RenderSystem :: _create3DoubleVertexAttribsBuffer( const String & p_strArg)
-{
-	return _createAttribsBuffer<double, 3>( p_strArg);
-}
-
-VertexAttribsBufferBoolPtr Dx9RenderSystem :: _create4BoolVertexAttribsBuffer( const String & p_strArg)
-{
-	return _createAttribsBuffer<bool, 4>( p_strArg);
-}
-
-VertexAttribsBufferIntPtr Dx9RenderSystem :: _create4IntVertexAttribsBuffer( const String & p_strArg)
-{
-	return _createAttribsBuffer<int, 4>( p_strArg);
-}
-
-VertexAttribsBufferUIntPtr Dx9RenderSystem :: _create4UIntVertexAttribsBuffer( const String & p_strArg)
-{
-	return _createAttribsBuffer<unsigned int, 4>( p_strArg);
-}
-
-VertexAttribsBufferFloatPtr Dx9RenderSystem :: _create4FloatVertexAttribsBuffer( const String & p_strArg)
-{
-	return _createAttribsBuffer<float, 4>( p_strArg);
-}
-
-VertexAttribsBufferDoublePtr Dx9RenderSystem :: _create4DoubleVertexAttribsBuffer( const String & p_strArg)
-{
-	return _createAttribsBuffer<double, 4>( p_strArg);
-}
-
 SubmeshRendererPtr Dx9RenderSystem :: _createSubmeshRenderer()
 {
-	return SubmeshRendererPtr( new Dx9SubmeshRenderer( m_pSceneManager));
-}
-
-TextureEnvironmentRendererPtr Dx9RenderSystem :: _createTexEnvRenderer()
-{
-	return TextureEnvironmentRendererPtr( new Dx9TextureEnvironmentRenderer( m_pSceneManager));
+	return SubmeshRendererPtr( new Dx9SubmeshRenderer());
 }
 
 TextureRendererPtr Dx9RenderSystem :: _createTextureRenderer()
 {
-	return TextureRendererPtr( new Dx9TextureRenderer( m_pSceneManager));
+	return TextureRendererPtr( new Dx9TextureRenderer());
 }
 
 PassRendererPtr Dx9RenderSystem :: _createPassRenderer()
 {
-	return PassRendererPtr( new Dx9PassRenderer( m_pSceneManager));
+	return PassRendererPtr( new Dx9PassRenderer());
 }
 
 CameraRendererPtr Dx9RenderSystem :: _createCameraRenderer()
 {
-	return CameraRendererPtr( new Dx9CameraRenderer( m_pSceneManager));
+	return CameraRendererPtr( new Dx9CameraRenderer());
 }
 
 LightRendererPtr Dx9RenderSystem :: _createLightRenderer()
 {
-	return LightRendererPtr( new Dx9LightRenderer( m_pSceneManager));
+	return LightRendererPtr( new Dx9LightRenderer());
 }
 
 WindowRendererPtr Dx9RenderSystem :: _createWindowRenderer()
 {
-	return WindowRendererPtr( new Dx9WindowRenderer( m_pSceneManager));
+	return WindowRendererPtr( new Dx9WindowRenderer());
 }
 
 OverlayRendererPtr Dx9RenderSystem :: _createOverlayRenderer()
 {
-	return OverlayRendererPtr( new Dx9OverlayRenderer( m_pSceneManager));
+	return OverlayRendererPtr( new Dx9OverlayRenderer());
 }
 
 IndexBufferPtr Dx9RenderSystem :: _createIndexBuffer()
 {
 	IndexBufferPtr l_pReturn;
 
-	l_pReturn = BufferManager::CreateBuffer<unsigned int, Dx9IndexBuffer>();
-
+	l_pReturn = Root::GetSingleton()->GetBufferManager()->CreateBuffer<unsigned int, Dx9IndexBuffer>();
 	return l_pReturn;
 }
 
 VertexBufferPtr Dx9RenderSystem :: _createVertexBuffer( const BufferElementDeclaration * p_pElements, size_t p_uiNbElements)
 {
 	VertexBufferPtr l_pReturn;
-
-	l_pReturn = BufferManager::CreateVertexBuffer<Dx9VertexBuffer>( p_pElements, p_uiNbElements);
-
+	l_pReturn = Root::GetSingleton()->GetBufferManager()->CreateVertexBuffer<Dx9VertexBuffer>( p_pElements, p_uiNbElements);
 	return l_pReturn;
 }
 

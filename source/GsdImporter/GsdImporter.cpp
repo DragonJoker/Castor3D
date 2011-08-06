@@ -1,57 +1,70 @@
 /*
-#include <Castor3D/Prerequisites.h>
+#include <Castor3D/Prerequisites.hpp>
 
 using namespace Castor::Templates;
 
-#include <Castor3D/render_system/RenderSystem.h>
-#include <Castor3D/render_system/Buffer.h>
-#include <Castor3D/scene/SceneNode.h>
-#include <Castor3D/scene/SceneManager.h>
-#include <Castor3D/scene/Scene.h>
-#include <Castor3D/camera/Camera.h>
-#include <Castor3D/camera/Viewport.h>
-#include <Castor3D/material/MaterialManager.h>
-#include <Castor3D/material/Material.h>
-#include <Castor3D/material/Pass.h>
-#include <Castor3D/material/TextureUnit.h>
-#include <Castor3D/main/Version.h>
-#include <Castor3D/geometry/primitives/Geometry.h>
-#include <Castor3D/geometry/mesh/MeshManager.h>
-#include <Castor3D/geometry/mesh/Mesh.h>
-#include <Castor3D/geometry/mesh/Submesh.h>
-#include <Castor3D/geometry/basic/SmoothingGroup.h>
-#include <Castor3D/geometry/basic/Face.h>
+#include <Castor3D/RenderSystem.hpp>
+#include <Castor3D/Buffer.hpp>
+#include <Castor3D/SceneNode.hpp>
+#include <Castor3D/Scene.hpp>
+#include <Castor3D/Camera.hpp>
+#include <Castor3D/Viewport.hpp>
+#include <Castor3D/Material.hpp>
+#include <Castor3D/Pass.hpp>
+#include <Castor3D/TextureUnit.hpp>
+#include <Castor3D/Version.hpp>
+#include <Castor3D/Geometry.hpp>
+#include <Castor3D/Mesh.hpp>
+#include <Castor3D/Submesh.hpp>
+#include <Castor3D/SmoothingGroup.hpp>
+#include <Castor3D/Face.hpp>
+#include <Castor3D/Plugin.hpp>
 
-#include "GsdImporter/GSDImporter.h"
+#include "GsdImporter/GsdImporter.hpp"
 
 using namespace Castor3D;
 
 //*************************************************************************************************
 
-extern "C" C3D_Gsd_API void GetRequiredVersion( Version & p_version)
+C3D_Gsd_API void GetRequiredVersion( Version & p_version)
 {
-	p_version = Version( 0, 6);
+	p_version = Version();
 }
 
-extern "C" C3D_Gsd_API Importer * CreateImporter( SceneManager * p_pManager)
+C3D_Gsd_API ePLUGIN_TYPE GetType()
 {
-	Importer * l_pReturn( new GSDImporter( p_pManager));
+	return ePluginImporter;
+}
+
+C3D_Gsd_API String GetName()
+{
+	return cuT( "GSD Importer Plugin");
+}
+
+C3D_Gsd_API String GetExtension()
+{
+	return cuT( "GSD");
+}
+
+C3D_Gsd_API Importer * CreateImporter()
+{
+	Importer * l_pReturn( new GsdImporter());
 
 	return l_pReturn;
 }
 
 //*************************************************************************************************
 
-GSDImporter :: GSDImporter( SceneManager * p_pManager)
-	:	Importer( p_pManager)
+GsdImporter :: GsdImporter()
+	:	Importer()
 {
 }
 
-GSDImporter :: ~GSDImporter()
+GsdImporter :: ~GsdImporter()
 {
 }
 
-bool GSDImporter :: _import()
+bool GsdImporter :: _import()
 {
 	bool l_bReturn = false;
 	GSDHeader header;
@@ -67,15 +80,15 @@ bool GSDImporter :: _import()
 		GSDHeader header;
 
 		FOpen( m_f, m_FileName, "rb");
-		if(m_f==NULL)
-		return NULL;
+		if(m_f==nullptr)
+		return nullptr;
 		fread(&header,sizeof(GSDHeader),1,m_f);
 		int i;
 		//===========================================
 		//        READING GROUPS
 		//===========================================
-		DummieData *dummie=NULL;
-		treeData *node=NULL;
+		DummieData *dummie=nullptr;
+		treeData *node=nullptr;
 		dummie = new DummieData;
 		fread(dummie,sizeof(DummieData),1,m_f);
 		dummieList.push_back(dummie);
@@ -91,8 +104,8 @@ bool GSDImporter :: _import()
 		//===========================================
 		//        READING MESHES
 		//===========================================
-		GenericObjectData *o=NULL;
-		CBasicMeshPtrobj=NULL;
+		GenericObjectData *o=nullptr;
+		CBasicMeshPtrobj=nullptr;
 		for(i=0;i<header.numberOfObjects;++i)
 		{
 			o = new GenericObjectData;
@@ -160,8 +173,8 @@ bool GSDImporter :: _import()
 		//===========================================
 		//            BUILDING MODEL
 		//===========================================
-		CBasicDummie *Model=NULL,*findedModel=NULL,*child=NULL;
-		DummieData *d=(*dummieList.begin()),*p=NULL;
+		CBasicDummie *Model=nullptr,*findedModel=nullptr,*child=nullptr;
+		DummieData *d=(*dummieList.begin()),*p=nullptr;
 		Model = new CBasicDummie(*d);
 		dummieList.erase( (dummieList.begin()) );
 		if(d) delete d;
@@ -260,11 +273,11 @@ bool GSDImporter :: _import()
 	return l_bReturn;
 }
 
-void GSDImporter :: _buildTreeData( treeData *dummie)
+void GsdImporter :: _buildTreeData( treeData *dummie)
 {
 	int size=(int)m_tree.size();
 	int i;
-	standardString *d=NULL;
+	standardString *d=nullptr;
 
 	for(i=0;i<size;++i)
 	{

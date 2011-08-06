@@ -1,4 +1,4 @@
-template <> inline void ApplyVariable<int>( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, const int * p_pValue, size_t p_uiOcc)
+template <> inline void ApplyVariable<int, 1>( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, int const * p_pValue, size_t p_uiOcc)
 {
 	if (p_uiOcc <= 1)
 	{
@@ -10,27 +10,22 @@ template <> inline void ApplyVariable<int>( ID3DXConstantTable * p_pConstants, D
 	}
 }
 
-template <> inline void ApplyVariable<int, 1>( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, const int * p_pValue, size_t p_uiOcc)
-{
-	p_pConstants->SetIntArray( Dx9RenderSystem::GetDevice(), p_hDx9Handle, p_pValue, p_uiOcc * 1);
-}
-
-template <> inline void ApplyVariable<int, 2>( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, const int * p_pValue, size_t p_uiOcc)
+template <> inline void ApplyVariable<int, 2>( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, int const * p_pValue, size_t p_uiOcc)
 {
 	p_pConstants->SetIntArray( Dx9RenderSystem::GetDevice(), p_hDx9Handle, p_pValue, p_uiOcc * 2);
 }
 
-template <> inline void ApplyVariable<int, 3>( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, const int * p_pValue, size_t p_uiOcc)
+template <> inline void ApplyVariable<int, 3>( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, int const * p_pValue, size_t p_uiOcc)
 {
 	p_pConstants->SetIntArray( Dx9RenderSystem::GetDevice(), p_hDx9Handle, p_pValue, p_uiOcc * 3);
 }
 
-template <> inline void ApplyVariable<int, 4>( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, const int * p_pValue, size_t p_uiOcc)
+template <> inline void ApplyVariable<int, 4>( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, int const * p_pValue, size_t p_uiOcc)
 {
 	p_pConstants->SetIntArray( Dx9RenderSystem::GetDevice(), p_hDx9Handle, p_pValue, p_uiOcc * 4);
 }
 
-template <> inline void ApplyVariable<float>( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, const float * p_pValue, size_t p_uiOcc)
+template <> inline void ApplyVariable<float, 1>( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, float const * p_pValue, size_t p_uiOcc)
 {
 	if (p_uiOcc <= 1)
 	{
@@ -42,22 +37,17 @@ template <> inline void ApplyVariable<float>( ID3DXConstantTable * p_pConstants,
 	}
 }
 
-template <> inline void ApplyVariable<float, 1>( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, const float * p_pValue, size_t p_uiOcc)
-{
-	p_pConstants->SetFloatArray( Dx9RenderSystem::GetDevice(), p_hDx9Handle, p_pValue, p_uiOcc * 1);
-}
-
-template <> inline void ApplyVariable<float, 2>( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, const float * p_pValue, size_t p_uiOcc)
+template <> inline void ApplyVariable<float, 2>( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, float const * p_pValue, size_t p_uiOcc)
 {
 	p_pConstants->SetFloatArray( Dx9RenderSystem::GetDevice(), p_hDx9Handle, p_pValue, p_uiOcc * 2);
 }
 
-template <> inline void ApplyVariable<float, 3>( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, const float * p_pValue, size_t p_uiOcc)
+template <> inline void ApplyVariable<float, 3>( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, float const * p_pValue, size_t p_uiOcc)
 {
 	p_pConstants->SetFloatArray( Dx9RenderSystem::GetDevice(), p_hDx9Handle, p_pValue, p_uiOcc * 3);
 }
 
-template <> inline void ApplyVariable<float, 4>( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, const float * p_pValue, size_t p_uiOcc)
+template <> inline void ApplyVariable<float, 4>( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, float const * p_pValue, size_t p_uiOcc)
 {
 	if (p_uiOcc <= 1)
 	{
@@ -77,7 +67,7 @@ template <> inline void ApplyVariable<float, 4>( ID3DXConstantTable * p_pConstan
 	}
 }
 
-template <> inline void ApplyVariable<float, 4, 4>( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, const float * p_pValue, size_t p_uiOcc)
+template <> inline void ApplyVariable<float, 4, 4>( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, float const * p_pValue, size_t p_uiOcc)
 {
 	if (p_uiOcc <= 1)
 	{
@@ -97,10 +87,25 @@ template <> inline void ApplyVariable<float, 4, 4>( ID3DXConstantTable * p_pCons
 	}
 }
 
+template <typename T> inline void ApplyVariable( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, T const * p_pValue, size_t p_uiOcc)
+{
+	CASTOR_EXCEPTION( "ApplyVariable - Unsupported arguments");
+}
+
+template <typename T, size_t Count> inline void ApplyVariable( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, T const * p_pValue, size_t p_uiOcc)
+{
+	CASTOR_EXCEPTION( "ApplyVariable - Unsupported arguments");
+}
+
+template <typename T, size_t Rows, size_t Columns> inline void ApplyVariable( ID3DXConstantTable * p_pConstants, D3DXHANDLE p_hDx9Handle, T const * p_pValue, size_t p_uiOcc)
+{
+	CASTOR_EXCEPTION( "ApplyVariable - Unsupported arguments");
+}
+
 //***********************************************************************************************************************
 
-template <typename Type> 
-inline void Dx9FrameVariableBase :: _apply( const String & p_strName, const Type * p_pValue, size_t p_uiOcc)
+template <typename Type>
+inline void Dx9FrameVariableBase :: _apply( String const & p_strName, Type const * p_pValue, size_t p_uiOcc)
 {
 	if (m_bPresentInProgram)
 	{
@@ -108,9 +113,9 @@ inline void Dx9FrameVariableBase :: _apply( const String & p_strName, const Type
 		{
 			GetVariableLocation( p_strName.char_str());
 		}
-		if (m_hDx9Handle != NULL) 
+		if (m_hDx9Handle)
 		{
-			ApplyVariable<Type>( m_pConstants, m_hDx9Handle, p_pValue, p_uiOcc);
+			ApplyVariable<Type, 1>( * m_pConstants, m_hDx9Handle, p_pValue, p_uiOcc);
 		}
 		else
 		{
@@ -119,7 +124,7 @@ inline void Dx9FrameVariableBase :: _apply( const String & p_strName, const Type
 	}
 }
 template <typename Type, int Count>
-inline void Dx9FrameVariableBase :: _apply( const String & p_strName, const Type * p_pValue, size_t p_uiOcc)
+inline void Dx9FrameVariableBase :: _apply( String const & p_strName, Type const * p_pValue, size_t p_uiOcc)
 {
 	if (m_bPresentInProgram)
 	{
@@ -127,9 +132,9 @@ inline void Dx9FrameVariableBase :: _apply( const String & p_strName, const Type
 		{
 			GetVariableLocation( p_strName.char_str());
 		}
-		if (m_hDx9Handle != NULL) 
+		if (m_hDx9Handle)
 		{
-			ApplyVariable<Type, Count>( m_pConstants, m_hDx9Handle, p_pValue, p_uiOcc);
+			ApplyVariable<Type, Count>( * m_pConstants, m_hDx9Handle, p_pValue, p_uiOcc);
 		}
 		else
 		{
@@ -138,7 +143,7 @@ inline void Dx9FrameVariableBase :: _apply( const String & p_strName, const Type
 	}
 }
 template <typename Type, int Rows, int Columns>
-inline void Dx9FrameVariableBase :: _apply( const String & p_strName, const Type * p_pValue, size_t p_uiOcc)
+inline void Dx9FrameVariableBase :: _apply( String const & p_strName, Type const * p_pValue, size_t p_uiOcc)
 {
 	if (m_bPresentInProgram)
 	{
@@ -146,9 +151,9 @@ inline void Dx9FrameVariableBase :: _apply( const String & p_strName, const Type
 		{
 			GetVariableLocation( p_strName.char_str());
 		}
-		if (m_hDx9Handle != NULL) 
+		if (m_hDx9Handle)
 		{
-			ApplyVariable<Type, Rows, Columns>( m_pConstants, m_hDx9Handle, p_pValue, p_uiOcc);
+			ApplyVariable<Type, Rows, Columns>( * m_pConstants, m_hDx9Handle, p_pValue, p_uiOcc);
 		}
 		else
 		{

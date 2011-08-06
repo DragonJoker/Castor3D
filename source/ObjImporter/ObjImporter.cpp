@@ -1,106 +1,110 @@
-#include <Castor3D/Prerequisites.h>
+#include <Castor3D/Prerequisites.hpp>
 
 using namespace Castor::Templates;
 
-#include <Castor3D/material/MaterialManager.h>
-#include <Castor3D/material/Material.h>
-#include <Castor3D/material/Pass.h>
-#include <Castor3D/material/TextureUnit.h>
+#include <Castor3D/Material.hpp>
+#include <Castor3D/Pass.hpp>
+#include <Castor3D/TextureUnit.hpp>
+#include <Castor3D/Mesh.hpp>
+#include <Castor3D/Submesh.hpp>
+#include <Castor3D/Vertex.hpp>
+#include <Castor3D/SmoothingGroup.hpp>
+#include <Castor3D/Buffer.hpp>
+#include <Castor3D/Geometry.hpp>
+#include <Castor3D/Face.hpp>
+#include <Castor3D/Scene.hpp>
+#include <Castor3D/SceneNode.hpp>
+#include <Castor3D/Version.hpp>
+#include <Castor3D/Plugin.hpp>
+#include <Castor3D/Root.hpp>
 
-#include <Castor3D/geometry/mesh/MeshManager.h>
-#include <Castor3D/geometry/mesh/Mesh.h>
-#include <Castor3D/geometry/mesh/Submesh.h>
-#include <Castor3D/geometry/basic/Vertex.h>
-#include <Castor3D/geometry/basic/SmoothingGroup.h>
-#include <Castor3D/render_system/Buffer.h>
-#include <Castor3D/geometry/primitives/Geometry.h>
-#include <Castor3D/geometry/basic/Face.h>
-#include <Castor3D/scene/SceneManager.h>
-#include <Castor3D/scene/Scene.h>
-#include <Castor3D/scene/SceneNode.h>
-#include <Castor3D/main/Version.h>
-
-#include "ObjImporter/ObjImporter.h"
+#include "ObjImporter/ObjImporter.hpp"
 
 using namespace Castor3D;
 
 //*************************************************************************************************
 
-extern "C" C3D_Obj_API void GetRequiredVersion( Version & p_version)
+C3D_Obj_API void GetRequiredVersion( Version & p_version)
 {
-	p_version = Version( 0, 6);
+	p_version = Version();
 }
 
-extern "C" C3D_Obj_API Importer * CreateImporter( SceneManager * p_pManager)
+C3D_Obj_API ePLUGIN_TYPE GetType()
 {
-	Importer * l_pReturn( new ObjImporter( p_pManager));
+	return ePLUGIN_TYPE_IMPORTER;
+}
+
+C3D_Obj_API String GetName()
+{
+	return cuT( "OBJ Importer Plugin");
+}
+
+C3D_Obj_API String GetExtension()
+{
+	return cuT( "OBJ");
+}
+
+C3D_Obj_API Importer * CreateImporter()
+{
+	Importer * l_pReturn( new ObjImporter());
 
 	return l_pReturn;
 }
 
 //*************************************************************************************************
 
-ObjImporter :: ObjImporter( SceneManager * p_pManager)
-	:	Importer( p_pManager)
-	,	m_pFile( NULL)
+ObjImporter :: ObjImporter()
+	:	Importer()
+	,	m_pFile( nullptr)
 	,	m_objectHasUV( false)
 	,	m_bReadingFaces( false)
 	,	m_bReadingVertex( true)
 	,	m_iNbTexCoords( 0)
 	,	m_iGroup( -1)
+	,	m_pMatFile( nullptr)
 {
 }
 
 bool ObjImporter :: _import()
 {
-	m_pFile = new File( m_fileName, File::eRead);
-
-	m_pScene = m_pManager->GetElementByName( "MainScene");
-
-	size_t l_uiSlashIndex = 0;
-	size_t l_uiIndex = 0;
-
-	if ((l_uiIndex = m_fileName.find_last_of( "\\")) != String::npos)
-	{
-		l_uiSlashIndex = l_uiIndex + 1;
-	}
-
-	if ((l_uiIndex = m_fileName.find_last_of( "/")) != String::npos)
-	{
-		l_uiSlashIndex = std::max<size_t>( l_uiSlashIndex, l_uiIndex + 1);
-	}
-
-	size_t l_uiDotIndex = m_fileName.find_last_of( ".");
+	m_pFile = new File( m_fileName, File::eOPEN_MODE_READ);
+	Collection<Scene, String> l_scnCollection;
+	m_pScene = l_scnCollection.GetElement( "MainScene");
 
 	UIntArray l_faces;
 	FloatArray l_sizes;
-	String l_name = m_fileName.substr( l_uiSlashIndex, l_uiDotIndex - l_uiSlashIndex);
-	String l_meshName = m_fileName.substr( l_uiSlashIndex, l_uiDotIndex - l_uiSlashIndex);
-	String l_materialName = m_fileName.substr( l_uiSlashIndex, l_uiDotIndex - l_uiSlashIndex);
+	String l_name = m_fileName.GetFileName();
+	String l_meshName = l_name.substr( 0, l_name.find_last_of( '.'));
+	String l_materialName = l_meshName;
 
-	if (m_pManager->GetMeshManager()->HasElement( l_meshName))
+	Collection<Mesh, String> l_mshCollection;
+	m_pMesh = l_mshCollection.GetElement( l_meshName);
+	if ( ! m_pMesh)
 	{
-		m_pMesh = m_pManager->GetMeshManager()->GetElementByName( l_meshName);
-	}
-	else
-	{
-		m_pMesh = m_pManager->GetMeshManager()->CreateMesh( l_meshName, l_faces, l_sizes, eCustom);
-		Logger::LogMessage( CU_T( "CreatePrimitive - Mesh ") + l_meshName + CU_T( " created"));
+		m_pMesh = MeshPtr( new Mesh( l_meshName, eMESH_TYPE_CUSTOM));
+		m_pMesh->Initialise( l_faces, l_sizes);
+		l_mshCollection.AddElement( l_meshName, m_pMesh);
+		Logger::LogMessage( cuT( "CreatePrimitive - Mesh ") + l_meshName + cuT( " created"));
 	}
 
 	_readObjFile();
 
-	bool l_bHasMaterial = m_pCurrentMaterial != NULL;
+	bool l_bHasMaterial = m_pCurrentMaterial.use_count() > 0;
 
 	if ( ! l_bHasMaterial)
 	{
-		m_pCurrentMaterial = m_pManager->GetMaterialManager()->CreateMaterial( l_materialName);
+		Collection<Material, String> l_mtlCollection;
+		m_pCurrentMaterial = l_mtlCollection.GetElement( l_materialName);
+		if ( ! m_pCurrentMaterial)
+		{
+			m_pCurrentMaterial = MaterialPtr( new Material( l_materialName, 1));
+			l_mtlCollection.AddElement( l_materialName, m_pCurrentMaterial);
+		}
 	}
 
 	for (size_t i = 0 ; i < m_pMesh->GetNbSubmeshes() ; i++)
 	{
 		m_pCurrentSubmesh = m_pMesh->GetSubmesh( i);
-
 		m_pCurrentSubmesh->ComputeContainers();
 		m_pCurrentSubmesh->GenerateBuffers();
 
@@ -115,7 +119,7 @@ bool ObjImporter :: _import()
 	SceneNodePtr l_pNode = m_pScene->CreateSceneNode( l_name);
 
 	GeometryPtr l_pGeometry( new Geometry( m_pScene.get(), m_pMesh, l_pNode, l_name));
-	Logger::LogMessage( CU_T( "PlyImporter::_import - Geometry ") + l_name + CU_T( " created"));
+	Logger::LogMessage( cuT( "PlyImporter::_import - Geometry ") + l_name + cuT( " created"));
 
 	m_geometries.insert( GeometryPtrStrMap::value_type( l_name, l_pGeometry));
 
@@ -145,22 +149,22 @@ void ObjImporter :: _readObjFile()
 			l_strSection = l_strLine.substr( 0, l_strLine.find_first_of( ' '));
 			l_strValue = l_strLine.substr( l_strLine.find_first_of( ' ') + 1, String::npos);
 
-			if (l_strSection == CU_T( "mtllib"))
+			if (l_strSection == cuT( "mtllib"))
 			{
 				_readMatFile( l_strValue);
 			}
-			else if (l_strSection == CU_T( "usemtl"))
+			else if (l_strSection == cuT( "usemtl"))
 			{
 				_applyMaterial( l_strValue);
 			}
-			else if (l_strSection == CU_T( "group"))
+			else if (l_strSection == cuT( "group"))
 			{
 				_selectSubmesh( l_strValue);
 			}
 			else
 			{
 				l_char = l_strSection.at( 0);
-				String l_strLine = l_strSection + CU_T( " ") + l_strValue;
+				String l_strLine = l_strSection + cuT( " ") + l_strValue;
 
 				switch( l_char)
 				{
@@ -196,14 +200,14 @@ void ObjImporter :: _readObjFile()
 			m_bReadingVertex = false;
 			m_bReadingFaces = true;
 
-			m_pFile = new File( m_fileName, File::eRead);
+			m_pFile = new File( m_fileName, File::eOPEN_MODE_READ);
 		}
 	}
 
-//	Logger::LogMessage( CU_T( "LastLine : " + l_strSection + " " + l_strValue);
+//	Logger::LogMessage( cuT( "LastLine : " + l_strSection + " " + l_strValue);
 }
 
-void ObjImporter :: _selectSubmesh( const String & p_strName)
+void ObjImporter :: _selectSubmesh( String const & p_strName)
 {
 	if (m_bReadingFaces)
 	{
@@ -214,82 +218,100 @@ void ObjImporter :: _selectSubmesh( const String & p_strName)
 	}
 }
 
-void ObjImporter :: _applyMaterial( const String & p_strMaterialName)
+void ObjImporter :: _applyMaterial( String const & p_strMaterialName)
 {
 	if (m_bReadingFaces)
 	{
-		if (m_pCurrentSubmesh != NULL && m_pManager->GetMaterialManager()->HasElement( p_strMaterialName))
+		Root::MaterialManager * l_pMtlManager = Root::GetSingleton()->GetMaterialManager();
+
+		if (m_pCurrentSubmesh && l_pMtlManager->HasElement( p_strMaterialName))
 		{
-			m_pCurrentSubmesh->SetMaterial( m_pManager->GetMaterialManager()->GetElementByName( p_strMaterialName));
+			m_pCurrentSubmesh->SetMaterial( l_pMtlManager->GetElement( p_strMaterialName));
 		}
 	}
 }
 
-void ObjImporter :: _readMatFile( const String & p_strFileName)
+void ObjImporter :: _readMatFile( String const & p_strFileName)
 {
 	if ( ! m_bReadingFaces)
 	{
-		m_pMatFile = new File( m_filePath + p_strFileName, File::eRead);
-
-		String l_strLine;
-		xchar l_char = 0;
-
-		while (m_pMatFile->IsOk())
+		try
 		{
-			m_pMatFile->ReadLine( l_strLine, 1000);
+			m_pMatFile = new File( m_filePath + p_strFileName, File::eOPEN_MODE_READ);
 
-			if ( ! l_strLine.empty())
+			String l_strLine;
+			xchar l_char = 0;
+			Root::MaterialManager * l_pMtlManager = Root::GetSingleton()->GetMaterialManager();
+
+			while (m_pMatFile->IsOk())
 			{
-				if (l_strLine.find( CU_T( "newmtl")) != String::npos)
-				{
-					StringArray l_arraySplitted = l_strLine.split( CU_T( " "));
+				m_pMatFile->ReadLine( l_strLine, 1000);
 
-					if (l_arraySplitted.size() > 1)
+				if ( ! l_strLine.empty())
+				{
+					if (l_strLine.find( cuT( "newmtl")) != String::npos)
 					{
-						if (m_pManager->GetMaterialManager()->HasElement( l_arraySplitted[1]))
+						StringArray l_arraySplitted = l_strLine.split( cuT( " "));
+
+						if (l_arraySplitted.size() > 1)
 						{
-							m_pCurrentMaterial = m_pManager->GetMaterialManager()->GetElementByName( l_arraySplitted[1]);
+							if (l_pMtlManager->HasElement( l_arraySplitted[1]))
+							{
+								m_pCurrentMaterial = l_pMtlManager->GetElement( l_arraySplitted[1]);
+							}
+							else
+							{
+								Collection<Material, String> l_mtlCollection;
+								m_pCurrentMaterial = l_mtlCollection.GetElement( l_arraySplitted[1]);
+								if ( ! m_pCurrentMaterial)
+								{
+									m_pCurrentMaterial = MaterialPtr( new Material( l_arraySplitted[1], 1));
+									l_mtlCollection.AddElement( l_arraySplitted[1], m_pCurrentMaterial);
+								}
+							}
+
+							m_fAlpha = 1.0f;
 						}
-						else
+					}
+					else if (l_strLine.find( cuT( "illum")) != String::npos)
+					{
+					}
+					else
+					{
+						l_char = l_strLine.at( 0);
+
+						if (l_char == cuT( 'K'))
 						{
-							m_pCurrentMaterial = m_pManager->GetMaterialManager()->CreateMaterial( l_arraySplitted[1]);
+							_readMatLightComponent( l_strLine.substr( 1, String::npos));
 						}
-
-						m_fAlpha = 1.0f;
-					}
-				}
-				else if (l_strLine.find( CU_T( "illum")) != String::npos)
-				{
-				}
-				else
-				{
-					l_char = l_strLine.at( 0);
-
-					if (l_char == CU_T( 'K'))
-					{
-						_readMatLightComponent( l_strLine.substr( 1, String::npos));
-					}
-					else if (l_char == CU_T( 'T') && l_strLine.at( 1) == CU_T( 'r'))
-					{
-						_readMatTransparency( l_strLine.substr( 3, String::npos));
-					}
-					else if (l_char == CU_T( 'd'))
-					{
-						_readMatTransparency( l_strLine.substr( 2, String::npos));
-					}
-					else if (l_char == CU_T( 'N'))
-					{
-						_readMatLightRefDifExp( l_strLine.substr( 1, String::npos));
+						else if (l_char == cuT( 'T') && l_strLine.at( 1) == cuT( 'r'))
+						{
+							_readMatTransparency( l_strLine.substr( 3, String::npos));
+						}
+						else if (l_char == cuT( 'd'))
+						{
+							_readMatTransparency( l_strLine.substr( 2, String::npos));
+						}
+						else if (l_char == cuT( 'N'))
+						{
+							_readMatLightRefDifExp( l_strLine.substr( 1, String::npos));
+						}
 					}
 				}
 			}
-		}
 
-		delete m_pMatFile;
+			delete m_pMatFile;
+			m_pMatFile = nullptr;
+		}
+		catch (...)
+		{
+			delete m_pMatFile;
+			m_pMatFile = nullptr;
+		}
 	}
 }
 
-void ObjImporter :: _readMatLightComponent( const String & p_strLine)
+void ObjImporter :: _readMatLightComponent( String const & p_strLine)
 {
 	if ( ! m_bReadingFaces)
 	{
@@ -299,7 +321,7 @@ void ObjImporter :: _readMatLightComponent( const String & p_strLine)
 
 		l_char = p_strLine.at( 0);
 		l_line = p_strLine.substr( 2, String::npos);
-		StringArray l_arraySplitted = l_line.split( CU_T( " "));
+		StringArray l_arraySplitted = l_line.split( cuT( " "));
 
 		if (l_arraySplitted.size() >= 3)
 		{
@@ -308,15 +330,15 @@ void ObjImporter :: _readMatLightComponent( const String & p_strLine)
 			l_fG = l_arraySplitted[1].to_float();
 			l_fB = l_arraySplitted[2].to_float();
 
-			if (l_char == CU_T( 'a'))
+			if (l_char == cuT( 'a'))
 			{
 				m_pCurrentMaterial->GetPass( 0)->SetAmbient( l_fR, l_fG, l_fB, m_fAlpha);
 			}
-			else if (l_char == CU_T( 'd'))
+			else if (l_char == cuT( 'd'))
 			{
 				m_pCurrentMaterial->GetPass( 0)->SetDiffuse( l_fR, l_fG, l_fB, m_fAlpha);
 			}
-			else if (l_char == CU_T( 's'))
+			else if (l_char == cuT( 's'))
 			{
 				m_pCurrentMaterial->GetPass( 0)->SetSpecular( l_fR, l_fG, l_fB, m_fAlpha);
 			}
@@ -324,15 +346,15 @@ void ObjImporter :: _readMatLightComponent( const String & p_strLine)
 	}
 }
 
-void ObjImporter :: _readMatTransparency( const String & p_strLine)
+void ObjImporter :: _readMatTransparency( String const & p_strLine)
 {
 	if ( ! m_bReadingFaces)
 	{
 		m_fAlpha = p_strLine.to_float();
-		const float * l_pfAmbient = m_pCurrentMaterial->GetPass( 0)->GetAmbient().const_ptr();
-		const float * l_pfDiffuse = m_pCurrentMaterial->GetPass( 0)->GetDiffuse().const_ptr();
-		const float * l_pfSpecular = m_pCurrentMaterial->GetPass( 0)->GetSpecular().const_ptr();
-		const float * l_pfemissive = m_pCurrentMaterial->GetPass( 0)->GetEmissive().const_ptr();
+		float const * l_pfAmbient = m_pCurrentMaterial->GetPass( 0)->GetAmbient().const_ptr();
+		float const * l_pfDiffuse = m_pCurrentMaterial->GetPass( 0)->GetDiffuse().const_ptr();
+		float const * l_pfSpecular = m_pCurrentMaterial->GetPass( 0)->GetSpecular().const_ptr();
+		float const * l_pfemissive = m_pCurrentMaterial->GetPass( 0)->GetEmissive().const_ptr();
 		m_pCurrentMaterial->GetPass( 0)->SetAmbient( l_pfAmbient[0], l_pfAmbient[1], l_pfAmbient[2], m_fAlpha);
 		m_pCurrentMaterial->GetPass( 0)->SetDiffuse( l_pfDiffuse[0], l_pfDiffuse[1], l_pfDiffuse[2], m_fAlpha);
 		m_pCurrentMaterial->GetPass( 0)->SetSpecular( l_pfSpecular[0], l_pfSpecular[1], l_pfSpecular[2], m_fAlpha);
@@ -340,7 +362,7 @@ void ObjImporter :: _readMatTransparency( const String & p_strLine)
 	}
 }
 
-void ObjImporter :: _readMatLightRefDifExp( const String & p_strLine)
+void ObjImporter :: _readMatLightRefDifExp( String const & p_strLine)
 {
 	if ( ! m_bReadingFaces)
 	{
@@ -352,18 +374,18 @@ void ObjImporter :: _readMatLightRefDifExp( const String & p_strLine)
 
 		float l_fValue = l_line.to_float();
 
-		if (l_char == CU_T( 's'))
+		if (l_char == cuT( 's'))
 		{
 			m_pCurrentMaterial->GetPass( 0)->SetShininess( l_fValue);
 		}
 	}
 }
 
-void ObjImporter :: _readSubmeshInfo( const String & p_strLine)
+void ObjImporter :: _readSubmeshInfo( String const & p_strLine)
 {
 	if (m_bReadingFaces)
 	{
-		StringArray l_arraySplitted = p_strLine.split( CU_T( " "));
+		StringArray l_arraySplitted = p_strLine.split( cuT( " "));
 
 		if (l_arraySplitted.size() > 1)
 		{
@@ -382,17 +404,17 @@ void ObjImporter :: _readSubmeshInfo( const String & p_strLine)
 	}
 }
 
-void ObjImporter :: _readGroupInfo( const String & p_strLine)
+void ObjImporter :: _readGroupInfo( String const & p_strLine)
 {
 	if (m_bReadingFaces)
 	{
-		StringArray l_arraySplitted = p_strLine.split( CU_T( " "));
+		StringArray l_arraySplitted = p_strLine.split( cuT( " "));
 
 		if (l_arraySplitted.size() > 1)
 		{
 			if (m_mapSmoothGroups.find( l_arraySplitted[1]) == m_mapSmoothGroups.end())
 			{
-				if (m_pCurrentSubmesh == NULL)
+				if ( ! m_pCurrentSubmesh)
 				{
 					_createSubmesh();
 				}
@@ -411,7 +433,7 @@ void ObjImporter :: _readGroupInfo( const String & p_strLine)
 	}
 }
 
-void ObjImporter :: _readVertexInfo( const String & p_strLine)
+void ObjImporter :: _readVertexInfo( String const & p_strLine)
 {
 	if ( ! m_bReadingFaces)
 	{
@@ -424,28 +446,28 @@ void ObjImporter :: _readVertexInfo( const String & p_strLine)
 		l_char = p_strLine.at( 0);
 		l_line = p_strLine.substr( 1, String::npos);
 
-		if (l_char == CU_T( ' '))
+		if (l_char == cuT( ' '))
 		{
 			StringArray l_arraySplitted;
-			Sscanf( l_line.char_str(), "%f %f %f", & l_vertex[0], & l_vertex[1], & l_vertex[2]);
+			Sscanf( l_line.c_str(), cuT( "%f %f %f"), & l_vertex[0], & l_vertex[1], & l_vertex[2]);
 			m_arrayVertex.push_back( Point3r( l_vertex[0], l_vertex[1], l_vertex[2]));
 		}
-		else if (l_char == CU_T( 't'))
+		else if (l_char == cuT( 't'))
 		{
 			m_iNbTexCoords++;
-			Sscanf( l_line.char_str(), "%f %f", & l_coords[0], & l_coords[1]);
+			Sscanf( l_line.c_str(), cuT( "%f %f"), & l_coords[0], & l_coords[1]);
 			m_textureCoords.push_back( l_coords);
 			m_objectHasUV = true;
 		}
-		else if (l_char != CU_T( 'n'))
+		else if (l_char != cuT( 'n'))
 		{
-			Logger::LogMessage( CU_T( "Unknown vertex info : [%c]"), l_char);
+			Logger::LogMessage( cuT( "Unknown vertex info : [%c]"), l_char);
 		}
 	}
 }
 
 
-void ObjImporter :: _readFaceInfo( const String & p_strLine)
+void ObjImporter :: _readFaceInfo( String const & p_strLine)
 {
 	if ( ! m_bReadingFaces)
 	{
@@ -454,6 +476,12 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 
 	if (m_iGroup == -1)
 	{
+		if ( ! m_pCurrentSubmesh)
+		{
+			_createSubmesh();
+			m_mapSubmeshes.insert( SubmeshPtrStrMap::value_type( "", m_pCurrentSubmesh));
+		}
+
 		SmoothingGroupPtr l_group = m_pCurrentSubmesh->AddSmoothingGroup();
 		m_iGroup = l_group->GetGroupID() - 1;
 		m_mapSmoothGroups.insert( IntStrMap::value_type( "-1", m_iGroup));
@@ -466,11 +494,11 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 
 	String l_line;
 
-//	Logger::LogMessage( CU_T( "Line : " + p_strLine);
+//	Logger::LogMessage( cuT( "Line : " + p_strLine);
 
 	l_line = p_strLine.substr( 1, String::npos);
 
-	StringArray l_arraySplitted = l_line.split( CU_T( " "));
+	StringArray l_arraySplitted = l_line.split( cuT( " \n\r\t"));
 
 	if (l_arraySplitted.size() >= 3)
 	{
@@ -481,53 +509,61 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 
 		for (size_t i = 0 ; i < l_arraySplitted.size() ; i++)
 		{
-			l_arrayVertex.push_back( 0);
+			if ( ! l_arraySplitted[i].empty())
+			{
+				l_arrayVertex.push_back( 0);
 
-			if (m_objectHasUV)
-			{
-				StringArray l_arraySlashSplitted = l_arraySplitted[i].split( CU_T( "/"));
-				l_arrayCoords.push_back( 0);
-				l_arrayVertex[i] = l_arraySlashSplitted[0].to_int();
-				l_arrayCoords[i] = l_arraySlashSplitted[1].to_int();
-			}
-			else
-			{
-				if (l_arraySplitted[i].find( "/") != String::npos)
+				if (m_objectHasUV)
 				{
-					StringArray l_arraySlashSplitted = l_arraySplitted[i].split( CU_T( "/"));
+					StringArray l_arraySlashSplitted = l_arraySplitted[i].split( cuT( "/"));
+					l_arrayCoords.push_back( 0);
 					l_arrayVertex[i] = l_arraySlashSplitted[0].to_int();
+					l_arrayCoords[i] = l_arraySlashSplitted[1].to_int();
 				}
 				else
 				{
-					Sscanf( l_arraySplitted[i].char_str(), "%d", & l_arrayVertex[i]);
+					if (l_arraySplitted[i].find( "/") != String::npos)
+					{
+						StringArray l_arraySlashSplitted = l_arraySplitted[i].split( cuT( "/"));
+						l_arrayVertex[i] = l_arraySlashSplitted[0].to_int();
+					}
+					else
+					{
+						Sscanf( l_arraySplitted[i].c_str(), cuT( "%d"), & l_arrayVertex[i]);
+					}
 				}
 			}
 		}
 
 		int l_iIndex;
 		IdPoint3rPtr l_pV1, l_pV2, l_pV3;
+		int l_iVertexIndex = abs( l_arrayVertex[1]) - 1;
 
-		if ((l_iIndex = m_pCurrentSubmesh->IsInMyPoints( m_arrayVertex[l_arrayVertex[1] - 1])) == -1)
+		if ((l_iIndex = m_pCurrentSubmesh->IsInMyPoints( m_arrayVertex[l_iVertexIndex])) == -1)
 		{
-			l_pV1 = m_pCurrentSubmesh->AddPoint( m_arrayVertex[l_arrayVertex[1] - 1]);
+			l_pV1 = m_pCurrentSubmesh->AddPoint( m_arrayVertex[l_iVertexIndex]);
 		}
 		else
 		{
 			l_pV1 = m_pCurrentSubmesh->GetPoint( l_iIndex);
 		}
 
-		if ((l_iIndex = m_pCurrentSubmesh->IsInMyPoints( m_arrayVertex[l_arrayVertex[0] - 1])) == -1)
+		l_iVertexIndex = abs( l_arrayVertex[0]) - 1;
+
+		if ((l_iIndex = m_pCurrentSubmesh->IsInMyPoints( m_arrayVertex[l_iVertexIndex])) == -1)
 		{
-			l_pV2 = m_pCurrentSubmesh->AddPoint( m_arrayVertex[l_arrayVertex[0] - 1]);
+			l_pV2 = m_pCurrentSubmesh->AddPoint( m_arrayVertex[l_iVertexIndex]);
 		}
 		else
 		{
 			l_pV2 = m_pCurrentSubmesh->GetPoint( l_iIndex);
 		}
 
-		if ((l_iIndex = m_pCurrentSubmesh->IsInMyPoints( m_arrayVertex[l_arrayVertex[l_arrayVertex.size() - 1] - 1])) == -1)
+		l_iVertexIndex = abs( l_arrayVertex[l_arrayVertex.size() - 1]) - 1;
+
+		if ((l_iIndex = m_pCurrentSubmesh->IsInMyPoints( m_arrayVertex[l_iVertexIndex])) == -1)
 		{
-			l_pV3 = m_pCurrentSubmesh->AddPoint( m_arrayVertex[l_arrayVertex[l_arrayVertex.size() - 1] - 1]);
+			l_pV3 = m_pCurrentSubmesh->AddPoint( m_arrayVertex[l_iVertexIndex]);
 		}
 		else
 		{
@@ -538,16 +574,16 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 
 		if (m_objectHasUV)
 		{
-			l_face->SetVertexTexCoords( 0, m_textureCoords[l_arrayCoords[1] - 1][0], 						m_textureCoords[l_arrayCoords[1] - 1][1]);
-			l_face->SetVertexTexCoords( 1, m_textureCoords[l_arrayCoords[0] - 1][0], 						m_textureCoords[l_arrayCoords[0] - 1][1]);
-			l_face->SetVertexTexCoords( 2, m_textureCoords[l_arrayCoords[l_arrayCoords.size() - 1] - 1][0],	m_textureCoords[l_arrayCoords[l_arrayCoords.size() - 1] - 1][1]);
+			l_face->SetVertexTexCoords( 0, m_textureCoords[abs( l_arrayCoords[1]) - 1][0], 							m_textureCoords[abs( l_arrayCoords[1]) - 1][1]);
+			l_face->SetVertexTexCoords( 1, m_textureCoords[abs( l_arrayCoords[0]) - 1][0], 							m_textureCoords[abs( l_arrayCoords[0]) - 1][1]);
+			l_face->SetVertexTexCoords( 2, m_textureCoords[abs( l_arrayCoords[l_arrayCoords.size() - 1]) - 1][0],	m_textureCoords[abs( l_arrayCoords[l_arrayCoords.size() - 1]) - 1][1]);
 		}
 
 		if (l_iNbAdditionalFaces > 0)
 		{
-			int l_iPreviousVertexIndex = l_arrayVertex[1];
+			int l_iPreviousVertexIndex = abs( l_arrayVertex[1]);
 			int l_iCurrentVertexIndex;
-			int l_iLastVertexIndex = l_arrayVertex[l_arrayVertex.size() - 1];
+			int l_iLastVertexIndex = abs( l_arrayVertex[l_arrayVertex.size() - 1]);
 
 			int l_iPreviousCoordIndex;
 			int l_iCurrentCoordIndex;
@@ -555,13 +591,13 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 
 			if (m_objectHasUV)
 			{
-				l_iPreviousCoordIndex = l_arrayCoords[1];
-				l_iLastCoordIndex = l_arrayCoords[l_arrayCoords.size() - 1];
+				l_iPreviousCoordIndex = abs( l_arrayCoords[1]);
+				l_iLastCoordIndex = abs( l_arrayCoords[l_arrayCoords.size() - 1]);
 			}
 
 			for (int i = 0 ; i < l_iNbAdditionalFaces ; i++)
 			{
-				l_iCurrentVertexIndex = l_arrayVertex[i + 2];
+				l_iCurrentVertexIndex = abs( l_arrayVertex[i + 2]);
 
 				if ((l_iIndex = m_pCurrentSubmesh->IsInMyPoints( m_arrayVertex[l_iCurrentVertexIndex - 1])) == -1)
 				{
@@ -594,7 +630,7 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 
 				if (m_objectHasUV)
 				{
-					l_iCurrentCoordIndex = l_arrayCoords[i + 2];
+					l_iCurrentCoordIndex = abs( l_arrayCoords[i + 2]);
 					l_faceB->SetVertexTexCoords( 0, m_textureCoords[l_iCurrentCoordIndex - 1][0],	m_textureCoords[l_iCurrentCoordIndex - 1][1]);
 					l_faceB->SetVertexTexCoords( 1, m_textureCoords[l_iPreviousCoordIndex - 1][0],	m_textureCoords[l_iPreviousCoordIndex - 1][1]);
 					l_faceB->SetVertexTexCoords( 2, m_textureCoords[l_iLastCoordIndex - 1][0],		m_textureCoords[l_iLastCoordIndex - 1][1]);
@@ -607,10 +643,10 @@ void ObjImporter :: _readFaceInfo( const String & p_strLine)
 	}
 	else if (l_arraySplitted.size() > 0)
 	{
-		Logger::LogMessage( CU_T( "Too few vertices %d"), l_arraySplitted.size());
+		Logger::LogMessage( cuT( "Too few vertices %d"), l_arraySplitted.size());
 	}
 
-//	Logger::LogMessage( CU_T( "Line : " + p_strLine + " End");
+//	Logger::LogMessage( cuT( "Line : " + p_strLine + " End");
 }
 
 //*************************************************************************************************

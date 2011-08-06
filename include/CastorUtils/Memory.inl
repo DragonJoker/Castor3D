@@ -32,10 +32,14 @@ template <class T>
 void * TAlloc( size_t p_size)
 {
 	T * l_ptr = (T *)malloc( p_size);
-	Castor::Utils::File l_file( ALLOG_LOCATION, Castor::Utils::File::eAppend);
 	MemoryTracedBase::TotalAllocatedSize += p_size;
 	MemoryTracedBase::TotalAllocatedObjectCount++;
-	l_file << "TAlloc" << " - " << l_ptr << " - " << p_size << " -\t" << typeid( T).name() << "\n";
+
+	std::fstream l_file( ALLOG_LOCATION, std::ios_base::in | std::ios_base::app);
+	if (l_file)
+	{
+		l_file << "TAlloc - " << l_ptr << " - " << p_size << " -\t" << typeid( T).name() << "\n";
+	}
 
 	if (Castor::MemoryManager::Exists())
 	{
@@ -43,7 +47,7 @@ void * TAlloc( size_t p_size)
 		{
 			Castor::MemoryManager::Lock();
 
-			if (l_ptr != NULL)
+			if (l_ptr)
 			{
 				Castor::MemoryManager::GetSingleton().AddLocation( p_size, l_ptr, false);
 			}
@@ -62,10 +66,13 @@ void * TAlloc( size_t p_size)
 template <class T>
 void TDealloc( void * p_pointer)
 {
-	Castor::Utils::File l_file( DEALLOG_LOCATION, Castor::Utils::File::eAppend);
-	l_file << "TDealloc" << " - " << p_pointer << " - " << sizeof( T) << " -\t" << typeid( T).name() << "\n";
+	std::fstream l_file( ALLOG_LOCATION, std::ios_base::in | std::ios_base::app);
+	if (l_file)
+	{
+		l_file << "TDealloc - " << p_pointer << " - " << sizeof( T) << " -\t" << typeid( T).name() << "\n";
+	}
 
-	if (MemoryManager::Exists())
+	if (Castor::MemoryManager::Exists())
 	{
 		if ( ! Castor::MemoryManager::IsLocked())
 		{
@@ -98,25 +105,29 @@ void * TAllocArray( size_t p_size)
 	MemoryTracedBase::TotalAllocatedSize += p_size;
 	MemoryTracedBase::TotalAllocatedArrayCount++;
 	T * l_ptr = (T *)malloc( p_size);
-	Castor::Utils::File l_file( ALLOG_LOCATION, Castor::Utils::File::eAppend);
-	l_file << "TAllocArray" << " - " << l_ptr << " - " << p_size << " - " << typeid( T).name() << "\n";
 
-	if (MemoryManager::Exists())
+	std::fstream l_file( ALLOG_LOCATION, std::ios_base::in | std::ios_base::app);
+	if (l_file)
 	{
-		if ( ! MemoryManager::IsLocked())
-		{
-			MemoryManager::Lock();
+		l_file << "TAllocArray - " << l_ptr << " - " << p_size << " -\t" << typeid( T).name() << "\n";
+	}
 
-			if (l_ptr != NULL)
+	if (Castor::MemoryManager::Exists())
+	{
+		if ( ! Castor::MemoryManager::IsLocked())
+		{
+			Castor::MemoryManager::Lock();
+
+			if (l_ptr)
 			{
-				MemoryManager::GetSingleton().AddLocation( p_size, l_ptr, true);
+				Castor::MemoryManager::GetSingleton().AddLocation( p_size, l_ptr, true);
 			}
 			else
 			{
-				MemoryManager::GetSingleton().FailedAlloc( p_size, true);
+				Castor::MemoryManager::GetSingleton().FailedAlloc( p_size, true);
 			}
 
-			MemoryManager::Unlock();
+			Castor::MemoryManager::Unlock();
 		}
 	}
 
@@ -126,16 +137,19 @@ void * TAllocArray( size_t p_size)
 template <class T>
 void TDeallocArray( void * p_pointer)
 {
-	Castor::Utils::File l_file( DEALLOG_LOCATION, Castor::Utils::File::eAppend);
-	l_file << "TDeallocArray" << " - " << p_pointer << " - " << typeid( T).name() << "\n";
-
-	if (MemoryManager::Exists())
+	std::fstream l_file( ALLOG_LOCATION, std::ios_base::in | std::ios_base::app);
+	if (l_file)
 	{
-		if ( ! MemoryManager::IsLocked())
-		{
-			MemoryManager::Lock();
+		l_file << "TDeallocArray - " << p_pointer << " -\t" << typeid( T).name() << "\n";
+	}
 
-			if (MemoryManager::GetSingleton().RemoveLocation( p_pointer, true))
+	if (Castor::MemoryManager::Exists())
+	{
+		if ( ! Castor::MemoryManager::IsLocked())
+		{
+			Castor::MemoryManager::Lock();
+
+			if (Castor::MemoryManager::GetSingleton().RemoveLocation( p_pointer, true))
 			{
 				free( p_pointer);
 			}
@@ -143,7 +157,7 @@ void TDeallocArray( void * p_pointer)
 			{
 			}
 
-			MemoryManager::Unlock();
+			Castor::MemoryManager::Unlock();
 		}
 		else
 		{
@@ -160,14 +174,14 @@ void TDeallocArray( void * p_pointer)
 
 template <class T>
 Castor::MemoryBlockImpl<T> :: MemoryBlockImpl()
-	:	ptr( NULL)
+	:	ptr( nullptr)
 {
 }
 
 template <class T>
-Castor::MemoryBlockImpl<T> :: MemoryBlockImpl( const char * p_file, const char * p_function, unsigned int p_line)
+Castor::MemoryBlockImpl<T> :: MemoryBlockImpl( char const * p_file, char const * p_function, unsigned int p_line)
 	:	MemoryBlockBase( p_file, p_function, p_line)
-	,	ptr( NULL)
+	,	ptr( nullptr)
 {
 }
 
@@ -179,7 +193,7 @@ Castor::MemoryBlockImpl<T> :: MemoryBlockImpl( T * p_ptr, size_t p_size, bool p_
 }
 
 template <class T>
-const char * Castor::MemoryBlockImpl<T> :: GetBlockType()const
+char const * Castor::MemoryBlockImpl<T> :: GetBlockType()const
 {
 	return typeid( T).name();
 }
@@ -188,7 +202,7 @@ template <class T>
 void Castor::MemoryBlockImpl<T> :: Clear()
 {
 	MemoryBlockBase::Clear();
-	ptr = NULL;
+	ptr = nullptr;
 }
 
 //*************************************************************************************************
