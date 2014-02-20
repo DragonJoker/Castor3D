@@ -1,3 +1,55 @@
+2013-02-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Great change : Now all projects are managed using GIT.
+
+2013-02-20  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Added Animable class, base class for Mesh, MovableObject and
+	*   Skeleton. It holds the animation map and the functions related to it.
+	*   It also allows to ease the animations copy in AnimatedObject.
+	* Castor3D : Still need to discover the transformation problem related to
+	*   animations.
+
+2013-02-14  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Reviewing animation system to finish that
+
+2013-02-05  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Taking care of render API support for non power of two 
+	*  textures.
+
+2013-01-30  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Overlays now functional.
+	* Castor3D : Need to make TextOverlays work (don't need a lot, I think).
+	* CastorUtils : Font file loading functional
+
+2013-01-17  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Repaired a matrix trouble when rendering overlays.
+
+2013-01-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* GlRenderSystem : Beginning to take care of EXT_direct_access_state
+	* Castor3D : Correcting overlay rendering and especially TextFont.
+
+2013-12-09  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Nearly fully functional skeletal animation system. Needs a
+	*   compliance test with instancing, and I have to see if I can optimize it
+	*   and how.
+	
+2013-11-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Casotr3D : Reviewing Overlay system
+
+2013-11-26  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* CastorUtils : Reviewed a bit the transformations computations
+	* Castor3D : Nearly functional animation system, still needs debugging to
+	*   understand why it doesn't work correctly.
+
 2013-11-07  Sylvain Doremus  <dragonjoker59@hotmail.com>
 
 	* Castor3D : Nearly working billboards.
