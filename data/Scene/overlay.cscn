@@ -1,0 +1,153 @@
+font "Arial"
+{
+	file	"arial.ttf"
+	height	20
+}
+
+sampler "Default"
+{
+	min_filter		linear
+	mag_filter		linear
+	min_lod			-500.0
+	max_lod			500.0
+	lod_bias		0.0
+	u_wrap_mode		repeat
+	v_wrap_mode		repeat
+	w_wrap_mode		repeat
+	border_colour	0.0 0.0 0.0 0.0
+}
+
+material "Silver"
+{
+	pass
+	{
+		ambient 0.0745	0.0745	0.0745 1.0
+		diffuse 0.75164	0.75164	0.75164 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 0.628281 0.628281 0.628281 1.0
+		shininess 51.2
+	}
+}
+
+material "Gray"
+{
+	pass
+	{
+		ambient 0.5 0.5 0.5 1.0
+	}
+}
+
+material "Black"
+{
+	pass
+	{
+		ambient 0.0 0.0 0.0 1.0
+	}
+}
+
+material "BlackBlend"
+{
+	pass
+	{
+		ambient 0.0 0.0 0.0
+		alpha 0.8
+	}
+}
+
+material "Yellow"
+{
+	pass
+	{
+		ambient 1.0 1.0 0.0
+	}
+}
+
+material "TextureBlend"
+{
+	pass
+	{
+		ambient 1.0 1.0 0.0 0.5
+
+		texture_unit
+		{
+			image "NoShader/AlphaRejection.png"
+			colour 1.0 1.0 0.0 1.0
+			channel colour
+			sampler	"Default"
+		}
+	}
+}
+
+material "YellowBlend"
+{
+	pass
+	{
+		ambient 1.0 1.0 0.0
+		alpha 0.6
+	}
+}
+
+scene "Scene"
+{
+	background_colour 0.5 0.5 0.5 1.0
+	scene_node "SunLightNode1"
+	{
+		position  0.0 -1.0 -1.0
+	}
+	light "SunLight1"
+	{
+		parent		"SunLightNode1"
+		type		directional
+		diffuse		0.8 0.8 0.8
+		specular	1.0 1.0 1.0
+	}
+
+	scene_node "FinalNode"
+	{
+	}
+	object "FinalPrimitive"
+	{
+		parent "FinalNode"
+		mesh "Mesh"
+		{
+			type torus 10 10 5.0 10.0
+			material "Gray"
+		}
+	}
+
+	panel_overlay "MainPanel"
+	{
+		size 0.5 0.5
+		position 0.25 0.25
+		material "YellowBlend"
+
+		panel_overlay "ChildPanel"
+		{
+			size 0.5 0.5
+			position 0.25 0.25
+			material "BlackBlend"
+		}
+	}
+	
+	text_overlay "MainText"
+	{
+		size 0.5 0.5
+		position 0.0 0.0
+		material "Gray"
+		font "Arial"
+		text "Coucou !!"
+	}
+}
+
+window "Window"
+{
+	render_target
+	{
+		format		argb32
+		depth		depth24s8
+		size		screen_size
+		scene		"Scene"
+	}
+	fullscreen	false
+	vsync		true
+}

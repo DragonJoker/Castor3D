@@ -1,0 +1,37 @@
+uniform float4x4 	c3d_mtxProjection;
+uniform float4x4 	c3d_mtxModelView;
+uniform float4x4 	c3d_mtxNormal;
+
+struct VtxInput
+{
+	float4 vertex	:	POSITION0;
+	float3 normal	:	NORMAL0;
+	float3 tangent	:	TANGENT0;
+	float2 Texture	:	TEXCOORD0;
+};
+
+struct VtxOutput
+{
+	float4 Position		:	SV_POSITION;
+	float2 Texture		:	TEXCOORD0;
+	float3 vertex		:	POSITION0;
+	float3 tangent		:	TANGENT0;
+	float3 binormal		:	BINORMAL0;
+	float3 normal		:	NORMAL0;
+};
+
+VtxOutput mainVx( in VtxInput p_input)
+{
+	VtxOutput l_output;
+	float3 binormal = cross( p_input.tangent, p_input.normal );
+	float3x3 l_normalMatrix = (float3x3)c3d_mtxNormal;
+
+	l_output.tangent	= mul( p_input.tangent,	l_normalMatrix );
+	l_output.binormal	= mul( binormal,		l_normalMatrix );
+	l_output.normal		= mul( p_input.normal,	l_normalMatrix );
+	l_output.vertex		= mul( p_input.vertex,	c3d_mtxModelView ).xyz;
+	l_output.Texture	= p_input.Texture;
+	l_output.Position	= mul( p_input.vertex,	c3d_mtxProjection * c3d_mtxModelView );
+	
+	return l_output;
+}

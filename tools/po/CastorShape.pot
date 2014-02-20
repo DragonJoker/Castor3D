@@ -1,0 +1,564 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-11-28 11:44+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ..\source\GuiCommon\RendererSelector.cpp:10
+msgid " - Select renderer"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:82
+msgid " DragonJoker, All rights shared"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:824
+#, c-format
+msgid "%S|%S file format (*.%S)|*.%S"
+msgstr ""
+
+#: ..\source\CastorShape\material\MaterialsFrame.cpp:79
+msgid "A material with this name already exists"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:26
+msgid "Ambient"
+msgstr ""
+
+#: ..\source\GuiCommon\StcTextEditor.cpp:119
+#: ..\source\GuiCommon\StcTextEditor.cpp:170
+msgid "Any file (*)|*"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:547
+msgid ""
+"BITMAP images (*.bmp)|*.bmp|GIF images (*.gif)|*.gif|JPEG images (*.jpg)|*."
+"jpg|PNG images (*.png)|*.png|TARGA images (*.tga)|*.tga|All images (*.bmp;*."
+"gif;*.png;*.jpg;*.tga)|*.bmp;*.gif;*.png;*.jpg;*.tga"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:30
+msgid "Blend"
+msgstr ""
+
+#: ..\source\GuiCommon\FrameVariableDialog.cpp:77
+#: ..\source\GuiCommon\RendererSelector.cpp:21
+#: ..\source\GuiCommon\ShaderDialog.cpp:164
+#: ..\source\CastorShape\material\NewMaterialDialog.cpp:21
+msgid "Cancel"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:421
+msgid "Cancel\tCTRL+E+C"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:779
+msgid "Castor Shape files (*.cscn)|*.cscn"
+msgstr ""
+
+#: ..\source\GuiCommon\SplashScreen.cpp:18
+msgid "Castor3D Version "
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:819
+msgid "Castor3D scene files (*.cscn)|*.cscn"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:548
+msgid "Choose an image"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:426
+msgid "Clone\tCTRL+E+D"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:89
+msgid "Compute"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:407
+#: ..\source\CastorShape\main\MainFrame.cpp:855
+msgid "Cone"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:408
+#: ..\source\CastorShape\main\MainFrame.cpp:878
+msgid "Cube"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:409
+#: ..\source\CastorShape\main\MainFrame.cpp:901
+msgid "Cylinder"
+msgstr ""
+
+#: ..\source\CastorShape\main\CastorShape.cpp:57
+msgid "Defines initial scene file"
+msgstr ""
+
+#: ..\source\CastorShape\main\CastorShape.cpp:56
+msgid "Defines log level"
+msgstr ""
+
+#: ..\source\CastorShape\main\CastorShape.cpp:59
+msgid "Defines the renderer to DirectX"
+msgstr ""
+
+#: ..\source\CastorShape\main\CastorShape.cpp:58
+msgid "Defines the renderer to OpenGl"
+msgstr ""
+
+#: ..\source\GuiCommon\GeometriesListFrame.cpp:46
+#: ..\source\GuiCommon\MaterialPanel.cpp:27
+#: ..\source\GuiCommon\PassPanel.cpp:42
+#: ..\source\CastorShape\material\MaterialsFrame.cpp:24
+msgid "Delete"
+msgstr ""
+
+#: ..\source\CastorShape\geometry\NewCubeDialog.cpp:22
+#: ..\source\CastorShape\geometry\NewCubeDialog.cpp:59
+#: ..\source\CastorShape\geometry\NewPlaneDialog.cpp:22
+#: ..\source\CastorShape\geometry\NewPlaneDialog.cpp:49
+msgid "Depth"
+msgstr ""
+
+#: ..\source\CastorShape\geometry\NewPlaneDialog.cpp:24
+#: ..\source\CastorShape\geometry\NewPlaneDialog.cpp:74
+#: ..\source\CastorShape\geometry\NewPlaneDialog.cpp:91
+msgid "Depth subdivisions"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:27
+msgid "Diffuse"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:437
+msgid "Display geometries"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:438
+msgid "Display materials"
+msgstr ""
+
+#: ..\source\CastorShape\main\CastorShape.cpp:55
+msgid "Displays this help"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:86
+msgid "Domain"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:38
+msgid "Double face"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:220
+#: ..\source\GuiCommon\ShaderDialog.cpp:226
+msgid "ERROR"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:44
+msgid "Edit shaders"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:29
+msgid "Emissive"
+msgstr ""
+
+#: ..\source\CastorShape\material\MaterialsFrame.cpp:79
+msgid "Error"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:355
+#: ..\source\CastorShape\main\MainFrame.cpp:361
+msgid "Exception"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:36
+msgid "Exponent"
+msgstr ""
+
+#: ..\source\CastorShape\geometry\NewConeDialog.cpp:23
+#: ..\source\CastorShape\geometry\NewConeDialog.cpp:60
+#: ..\source\CastorShape\geometry\NewConeDialog.cpp:72
+#: ..\source\CastorShape\geometry\NewCylinderDialog.cpp:23
+#: ..\source\CastorShape\geometry\NewCylinderDialog.cpp:60
+#: ..\source\CastorShape\geometry\NewCylinderDialog.cpp:72
+msgid "Face count"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:433
+msgid "File"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:433
+msgid "File menu"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:226
+msgid "Fill the fragment file name"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:220
+msgid "Fill the vertex shader file name"
+msgstr ""
+
+#: ..\source\GuiCommon\FrameVariableDialog.cpp:9
+msgid "Frame Variable"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:25
+msgid "General"
+msgstr ""
+
+#: ..\source\GuiCommon\GeometriesListFrame.cpp:48
+#: ..\source\CastorShape\main\MainFrame.cpp:437
+#: ..\source\CastorShape\main\MainFrame.cpp:1035
+msgid "Geometries"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:87
+msgid "Geometry"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:423
+msgid "Geometry\tCTRL+E+G"
+msgstr ""
+
+#: ..\source\CastorShape\geometry\NewGeometryDialog.cpp:164
+#: ..\source\CastorShape\main\MainFrame.cpp:446
+msgid "Geometry Name"
+msgstr ""
+
+#: ..\source\CastorShape\geometry\NewConeDialog.cpp:22
+#: ..\source\CastorShape\geometry\NewConeDialog.cpp:47
+#: ..\source\CastorShape\geometry\NewCubeDialog.cpp:21
+#: ..\source\CastorShape\geometry\NewCubeDialog.cpp:46
+#: ..\source\CastorShape\geometry\NewCylinderDialog.cpp:22
+#: ..\source\CastorShape\geometry\NewCylinderDialog.cpp:47
+msgid "Height"
+msgstr ""
+
+#: ..\source\GuiCommon\GeometriesListFrame.cpp:97
+#: ..\source\GuiCommon\GeometriesListFrame.cpp:178
+#: ..\source\GuiCommon\GeometriesListFrame.cpp:182
+msgid "Hidden"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:85
+msgid "Hull"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:410
+#: ..\source\CastorShape\main\MainFrame.cpp:923
+msgid "Icosahedron"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:45
+msgid "Image path : "
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:294
+msgid "Initialising main window"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:162
+msgid "Load"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:370
+msgid "Loading images"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:260
+msgid "Loading plugins"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:392
+msgid "Loading toolbar"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:429
+msgid "Loop\tCTRL+E+S+L"
+msgstr ""
+
+#: ..\source\CastorShape\geometry\NewGeometryDialog.cpp:113
+#: ..\source\CastorShape\geometry\NewGeometryDialog.cpp:165
+msgid "Material"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:416
+msgid "Material\tCTRL+N+M"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:438
+#: ..\source\CastorShape\main\MainFrame.cpp:1041
+msgid "Materials"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:420
+msgid "Modify\tCTRL+E+M"
+msgstr ""
+
+#: ..\source\GuiCommon\FrameVariableDialog.cpp:39
+#: ..\source\CastorShape\geometry\NewGeometryDialog.cpp:108
+#: ..\source\CastorShape\geometry\NewGeometryDialog.cpp:164
+msgid "Name"
+msgstr ""
+
+#: ..\source\GuiCommon\MaterialPanel.cpp:24
+msgid "Name : "
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:434
+#: ..\source\CastorShape\material\MaterialsFrame.cpp:23
+msgid "New"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:415
+msgid "New Geometry\tCTRL+N+G"
+msgstr ""
+
+#: ..\source\CastorShape\geometry\NewConeDialog.cpp:10
+msgid "New cone"
+msgstr ""
+
+#: ..\source\CastorShape\geometry\NewCubeDialog.cpp:9
+msgid "New cube"
+msgstr ""
+
+#: ..\source\CastorShape\geometry\NewCylinderDialog.cpp:10
+msgid "New cylinder"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:434
+msgid "New element"
+msgstr ""
+
+#: ..\source\CastorShape\geometry\NewIcosahedronDialog.cpp:10
+msgid "New icosaedron"
+msgstr ""
+
+#: ..\source\CastorShape\geometry\NewPlaneDialog.cpp:10
+msgid "New plane"
+msgstr ""
+
+#: ..\source\CastorShape\geometry\NewSphereDialog.cpp:10
+msgid "New sphere"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:41
+#: ..\source\CastorShape\geometry\NewGeometryDialog.cpp:118
+#: ..\source\CastorShape\geometry\NewGeometryDialog.cpp:157
+#: ..\source\CastorShape\geometry\NewGeometryDialog.cpp:165
+msgid "New..."
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:431
+msgid "No action\tCTRL+E+A"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:21
+msgid "Normal"
+msgstr ""
+
+#: ..\source\GuiCommon\FrameVariableDialog.cpp:71
+msgid "Null shader object"
+msgstr ""
+
+#: ..\source\GuiCommon\FrameVariableDialog.cpp:75
+#: ..\source\GuiCommon\RendererSelector.cpp:20
+#: ..\source\GuiCommon\ShaderDialog.cpp:163
+#: ..\source\CastorShape\geometry\NewGeometryDialog.cpp:145
+#: ..\source\CastorShape\material\NewMaterialDialog.cpp:20
+msgid "OK"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:828
+msgid "Open a scene"
+msgstr ""
+
+#: ..\source\GuiCommon\StcTextEditor.cpp:119
+msgid "Open file"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:400
+msgid "Open scene\tCTRL+F+O"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:428
+msgid "PN Triangles\tCTRL+E+S+T"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:435
+msgid "Parameters"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:435
+msgid "Parameters menu"
+msgstr ""
+
+#: ..\source\GuiCommon\MaterialPanel.cpp:26
+msgid "Passes"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:88
+msgid "Pixel"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:411
+#: ..\source\CastorShape\main\MainFrame.cpp:947
+msgid "Plane"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:424
+msgid "Point\tCTRL+E+P"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:361
+msgid "Problem occured during Castor3D initialisation"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:414
+#: ..\source\CastorShape\main\MainFrame.cpp:1015
+msgid "Projection"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:403
+msgid "Quit\tALT+F4"
+msgstr ""
+
+#: ..\source\CastorShape\geometry\NewConeDialog.cpp:21
+#: ..\source\CastorShape\geometry\NewConeDialog.cpp:34
+#: ..\source\CastorShape\geometry\NewCylinderDialog.cpp:21
+#: ..\source\CastorShape\geometry\NewCylinderDialog.cpp:34
+#: ..\source\CastorShape\geometry\NewIcosahedronDialog.cpp:21
+#: ..\source\CastorShape\geometry\NewIcosahedronDialog.cpp:32
+#: ..\source\CastorShape\geometry\NewSphereDialog.cpp:21
+#: ..\source\CastorShape\geometry\NewSphereDialog.cpp:32
+msgid "Radius"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:22
+msgid "Reflexion map"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:401
+msgid "Render scene\tCTRL+F+R"
+msgstr ""
+
+#: ..\source\GuiCommon\StcTextEditor.cpp:170
+msgid "Save file"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:779
+msgid "Save scene"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:399
+msgid "Save scene\tCTRL+F+S"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:419
+msgid "Select\tCTRL+E+S"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:254
+msgid "Select a shader program file"
+msgstr ""
+
+#: ..\source\GuiCommon\RendererSelector.cpp:19
+msgid "Select your renderer in the list below"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:11
+msgid "Shaders"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:28
+msgid "Specular"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:412
+#: ..\source\CastorShape\main\MainFrame.cpp:969
+msgid "Sphere"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:23
+msgid "Sphere map"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:430
+msgid "Subdivide"
+msgstr ""
+
+#: ..\source\CastorShape\geometry\NewIcosahedronDialog.cpp:22
+#: ..\source\CastorShape\geometry\NewIcosahedronDialog.cpp:45
+#: ..\source\CastorShape\geometry\NewIcosahedronDialog.cpp:57
+msgid "Subdivision count"
+msgstr ""
+
+#: ..\source\CastorShape\geometry\NewSphereDialog.cpp:22
+#: ..\source\CastorShape\geometry\NewSphereDialog.cpp:45
+#: ..\source\CastorShape\geometry\NewSphereDialog.cpp:57
+msgid "Subdivisions"
+msgstr ""
+
+#: ..\source\GuiCommon\GeometriesListFrame.cpp:101
+msgid "Submesh "
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:40
+msgid "Texture Units"
+msgstr ""
+
+#: ..\source\CastorShape\main\MainFrame.cpp:413
+#: ..\source\CastorShape\main\MainFrame.cpp:993
+msgid "Torus"
+msgstr ""
+
+#: ..\source\GuiCommon\FrameVariableDialog.cpp:36
+msgid "Type"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:48
+msgid "UV mapping mode"
+msgstr ""
+
+#: ..\source\GuiCommon\FrameVariableDialog.cpp:42
+msgid "Value"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:84
+msgid "Vertex"
+msgstr ""
+
+#: ..\source\GuiCommon\GeometriesListFrame.cpp:97
+#: ..\source\GuiCommon\GeometriesListFrame.cpp:174
+#: ..\source\GuiCommon\GeometriesListFrame.cpp:186
+msgid "Visible"
+msgstr ""
+
+#: ..\source\CastorShape\geometry\NewCubeDialog.cpp:20
+#: ..\source\CastorShape\geometry\NewCubeDialog.cpp:33
+#: ..\source\CastorShape\geometry\NewPlaneDialog.cpp:21
+#: ..\source\CastorShape\geometry\NewPlaneDialog.cpp:36
+msgid "Width"
+msgstr ""
+
+#: ..\source\CastorShape\geometry\NewPlaneDialog.cpp:23
+#: ..\source\CastorShape\geometry\NewPlaneDialog.cpp:62
+#: ..\source\CastorShape\geometry\NewPlaneDialog.cpp:86
+msgid "Width subdivisions"
+msgstr ""

@@ -1,0 +1,188 @@
+float4x4 ProjectionModelViewMatrix;
+float4x4 ProjectionMatrix;
+float4x4 ModelViewMatrix;
+float3x3 NormalMatrix;
+
+float4 c3d_LightsPosition[8];
+float4 c3d_LightsSpecular[8];
+float4 c3d_LightsDiffuse[8];
+float4 c3d_LightsAmbient[8];
+float4 in_AmbientLight;
+float4 c3d_MatAmbient;
+float4 c3d_MatDiffuse;
+float4 c3d_MatSpecular;
+float c3d_MatShininess;
+
+float Depth;
+float Tile;
+int LinearSearchSteps;
+int BinarySearchSteps;
+
+sampler2D DiffuseMap;
+sampler2D NormalMap;
+
+struct VtxInput
+{
+	float3 tangent	:	TANGENT;
+	float4 vertex	:	POSITION0;
+	float3 normal	:	NORMAL0;
+	float2 Texture	:	TEXCOORD0;
+};
+
+struct VtxOutput
+{
+	float4 Position		:	POSITION0;
+	float3 vertex		:	POSITION1;
+	float3 tangent		:	NORMAL0;
+	float3 binormal		:	NORMAL1;
+	float3 normal		:	NORMAL2;
+	float2 Texture		:	TEXCOORD0;
+};
+
+float RayIntersectRM( in float2 dp, in float2 ds);
+
+float length( float3 p_vector)
+{
+	return sqrt( p_vector.x * p_vector.x + p_vector.y * p_vector.y + p_vector.z * p_vector.z);
+}
+
+VtxOutput mainVx( in VtxInput p_input)
+{
+	VtxOutput l_output;
+	float3 binormal = cross( p_input.tangent, p_input.normal);
+	float3x3 l_normalMatrix = (float3x3)NormalMatrix;
+
+	l_output.tangent = mul( p_input.tangent, l_normalMatrix);
+	l_output.binormal = mul( binormal, l_normalMatrix);
+	l_output.normal = mul( p_input.normal, l_normalMatrix);
+	l_output.vertex = mul( p_input.vertex, ModelViewMatrix).xyz;
+	l_output.Texture = p_input.Texture;
+	l_output.Position = mul( p_input.vertex, ProjectionModelViewMatrix);
+	
+	return l_output;
+}
+
+float4 mainPx( in VtxOutput p_input) : COLOR0
+{
+	float4 l_vAmbient = c3d_LightsAmbient[0] * c3d_MatAmbient;
+	float3 l_vLight = mul( c3d_LightsPosition[0], ModelViewMatrix).xyz;
+	float4 l_vSpecular = float4( 0, 0, 0, 0);
+	float4 l_vDiffuse = float4( 0, 0, 0, 0);
+	float l_fShine = c3d_MatShininess;
+
+	l_vAmbient += c3d_MatAmbient * c3d_LightsAmbient[0];
+	l_vSpecular += c3d_MatSpecular * c3d_LightsSpecular[0];
+	l_vDiffuse += c3d_MatDiffuse * c3d_LightsDiffuse[0];
+
+	float4 l_vTextureRelief;
+	float4 l_vTextureColour;
+	float3 l_vTmp1;
+	float3 l_vTmp2;
+	float3 l_eyeSpaceVertex;
+	float3 l_vLightDirection;
+	float2 l_vUV;
+	float l_fDot;
+	float d;
+	float2 dp, ds;
+
+	// ray intersect in view direction
+	l_vTmp2  = p_input.vertex;
+	l_eyeSpaceVertex = normalize( l_vTmp2);
+	l_fDot  = dot( p_input.normal, -l_eyeSpaceVertex);
+	l_vTmp1  = normalize( float3( dot( l_eyeSpaceVertex, p_input.tangent), dot( l_eyeSpaceVertex, p_input.binormal), l_fDot));
+	l_vTmp1  *= Depth / l_fDot;
+	dp = p_input.Texture * Tile;
+	ds = l_vTmp1.xy;
+	d  = RayIntersectRM( dp, ds);
+
+	// get rm and color texture points
+	l_vUV = dp + ds * d;
+	l_vTextureRelief = tex2D( NormalMap, l_vUV);
+	l_vTextureColour = tex2D( DiffuseMap, l_vUV);
+
+	// expand normal from normal map in local polygon space
+	l_vTextureRelief.xy = l_vTextureRelief.xy * 2.0 - 1.0;
+	l_vTextureRelief.z = sqrt( 1.0 - dot( l_vTextureRelief.xy, l_vTextureRelief.xy));
+	l_vTextureRelief.rgb = normalize( l_vTextureRelief.x * p_input.tangent + l_vTextureRelief.y * p_input.binormal + l_vTextureRelief.z * p_input.normal);
+
+	// compute light direction
+	l_vTmp2 += l_eyeSpaceVertex * d * l_fDot;
+	l_vLightDirection = normalize( l_vTmp2 - l_vLight.xyz);
+   
+	// ray intersect in light direction
+	dp += ds * d;
+	l_fDot  = dot( p_input.normal, -l_vLightDirection);
+	l_vTmp1  = normalize( float3( dot( l_vLightDirection, p_input.tangent), dot( l_vLightDirection, p_input.normal), l_fDot));
+	l_vTmp1 *= Depth / l_fDot;
+	ds = l_vTmp1.xy;
+	dp -= ds * d;
+	float dl = RayIntersectRM( dp, l_vTmp1.xy);
+	float l_fShadow = 1.0;
+	float3 l_vSpecularShadow = l_vSpecular.rgb;
+
+	if (dl < d - 0.05) // if pixel in shadow
+	{
+		l_fShadow = dot( l_vAmbient.rgb, float3( 1, 1, 1)) * 0.333333;
+		l_vSpecularShadow = float3( 0, 0, 0);
+	}
+
+	// compute diffuse and specular terms
+	float l_fAttenuation = max( 0.0, dot( -l_vLightDirection, p_input.normal));
+	float l_fDiffuseTerm = l_fShadow * max( 0.0, dot( -l_vLightDirection, l_vTextureRelief.rgb));
+	float l_fSpecularTerm = max( 0.0, dot( normalize( -l_vLightDirection - l_eyeSpaceVertex), l_vTextureRelief.rgb));
+
+	// compute final color
+	float4 l_vFinalColour;
+	l_vFinalColour.rgb = l_vAmbient.rgb * l_vTextureColour.rgb + l_fAttenuation * (l_vTextureColour.rgb * l_vDiffuse.rgb * l_fDiffuseTerm + l_vSpecularShadow * pow( l_fSpecularTerm, l_fShine));
+	l_vFinalColour.a = 1;
+	return l_vFinalColour;
+}
+
+
+float RayIntersectRM( in float2 p_vDP, in float2 p_vDS)
+{
+	float l_fDepthStep = 1.0 / float( LinearSearchSteps);
+
+	// current size of search window
+	float l_fSize = l_fDepthStep;
+	// current depth position
+	float l_fDepth = 0.0;
+	// best match found (starts with last position 1.0)
+	float l_fDepthReturn = 1.0;
+	float4 l_vTexColour;
+	int i;
+
+	// search front to back for first point inside object
+	for (i = 0 ; i < LinearSearchSteps - 1 ; i++)
+	{
+		l_fDepth += l_fSize;
+		l_vTexColour = tex2Dlod( NormalMap, float4( p_vDP + p_vDS * l_fDepth, 0, 0));
+
+		if (l_fDepthReturn > 0.996)   // if no depth found yet
+		{
+			if (l_fDepth >= l_vTexColour.w)
+			{
+				l_fDepthReturn = l_fDepth;   // store best depth
+			}
+		}
+	}
+
+	l_fDepth = l_fDepthReturn;
+
+	// recurse around first point (l_fDepth) for closest match
+	for (i = 0 ; i < BinarySearchSteps ; i++)
+	{
+		l_fSize *= 0.5;
+		l_vTexColour = tex2Dlod( NormalMap, float4( p_vDP + p_vDS * l_fDepth, 0, 0));
+
+		if (l_fDepth >= l_vTexColour.w)
+		{
+			l_fDepthReturn = l_fDepth;
+			l_fDepth -= 2.0 * l_fSize;
+		}
+
+		l_fDepth += l_fSize;
+	}
+
+	return l_fDepthReturn;
+}

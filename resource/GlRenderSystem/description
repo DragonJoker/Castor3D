@@ -1,0 +1,3 @@
+	Castor3D plugin : GlRenderSystem
+	This plugin is a renderer using OpenGL.
+	According to the configuration of the system, OpenGL 3.x/4.x will be used

@@ -1,0 +1,760 @@
+2013-11-07  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Nearly working billboards.
+
+2013-11-03  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Implemented mesh instanciation on hardware, needs little more
+	*   tests to make it fully usable.
+
+2013-10-29  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Repairing Deferred rendering, need to correct lights but it
+	*   re-renders (other than black).
+	* CastorViewer : Need to debug a crash when the application is closed.
+
+2013-10-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Compiled it on Debian Wheezy through VMWare => Doesn't work
+	*   really but no more errors (sampler objects and shaders) in direct
+	*   rendering. Need to work MSAA, still.
+
+2013-10-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Few corrections to compile on linux.
+
+2013-10-04  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Repaired alpha submeshes that were not displayed.
+
+2013-10-02  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* LoopDivider : Repaired.
+	* PNTrianglesDivider : Repaired.
+
+2013-07-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* CastorUtilsTest : Trying OpenCL.
+
+2013-07-15  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Linux and wxWidgets 2.8 compatibility improved.
+
+2013-07-10  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Nearly the end of the exporter and the cscn reader. Still UV
+	*   artifacts.
+
+2013-07-08  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Finishing Exporter
+	* Castor3D : Improving cscn submesh reader.
+
+2013-07-05  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Just need to export UV maps and exporter will be finished.
+
+2013-07-04  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Began a Blender cscn exporter.
+
+2013-06-26  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Preparing to add bones informations for skeleton animations.
+	* GlRenderSystem : Removing static instance of OpenGl class, now
+	*   GlRenderSystem owns the instance.
+
+2013-06-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Removed most of std::size_t from the projects, only left some
+	*   in CastorUtils.
+
+2013-06-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Dx11RenderSystem : Few corrections.
+	* CastorUtilsTest : Now optional.
+	* CastorUtils : Optimising Point and Matrix operations.
+
+2013-06-13  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* GlRenderSystem : Modified a bit GLSL default shader.
+	* GuiCommon : corrected few bugs in images loading.
+
+2013-06-07  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Implementing Frustum View Culling
+
+2013-06-06  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Cleaned up a bit FrameBuffer, GlFrameBuffer and Dx11FrameBuffer
+	* Castor3D : Now Render to buffer works !!
+	* Castor3D : Removed SetPolygonMode from Context.
+	* Castor3D : Moved Render to buffer common code (from FrameBuffer and
+	*   RenderWindow) into Context::BtoBRender.
+	* GlRenderSystem : Corrected a bug in DoGetDeferredShaderSource.
+	* GlRenderSystem : Corrected mipmaps generation in GlStaticTexture and
+	*   GlDynamicTexture.
+	* Dx11RenderSystem : makes driver hang and crash !
+
+2013-06-05  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Removed Context::Enable and Context::Disable, removed
+	*   RenderState class.
+	* Dx11RenderSystem : Now need to make it work !
+
+2013-06-03  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Added DepthStencilState class to manage those buffers states
+	*   like Direct3D 11 (who does it well).
+	* Castor3D : Added blend state, implemented raster state.
+	* Castor3D : Put a BlendState instance in Pass and removed rgb/alpha
+	*   blending from the pass.
+
+2013-05-30  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Modified FrameBuffer binding in order to allow automatic or
+	*   manual definition of draw buffers.
+	* Castor3D : Created SSAA RenderTechnique, limited to 4 samples.
+
+2013-05-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Added interpolation mode for mip filter in Sampler.
+	* Castor3D : Added Automatic mipmaps generation in TextureUnit.
+
+2013-05-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* CastorUtils : Kind of finalized Pixel conversion system simplification in
+	*   order to be able to add or remove formats in an easier way.
+	* Castor3D : Removed auto mipmap generation, now if user wants it, he does
+	*   it with DynamicTexture::GenerateMipmaps.
+	* GlRenderSystem : Retrieved WGL extensions via wglGetExtensionsStringEXT.
+	* GlRenderSystem : Corrected few pixel formats in OpenGL (for
+	*   ePIXEL_FORMAT_L8, ePIXEL_FORMAT_RGB16F32F and ePIXEL_FORMAT_RGB32F).
+
+2013-05-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* CastorViewer : Corrected rendering.
+	* OceanLighting : Debugging it to make work.
+
+2013-05-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Implemented Alpha to Coverage when MSAA is activated.
+
+2013-05-03  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : It was a bad idea to put BtoB objects (ShaderProgram,
+	*   GeometryBuffers, Viewport) in the RenderSystem, I moved it in the
+	*   Context so no moreproblems from it.
+
+2013-05-02  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Implementing FrameBuffer::RenderToBuffer function.
+	* Castor3D : Moved RenderWindow's ShaderProgram, Viewport and
+	*   GeometryBuffers into RenderSystem to make it available to FrameBuffer.
+
+2013-04-30  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Removed dependencies from the SVN, as Dx9RenderSystem and 
+	*   Dx10RenderSystem.
+	* Castor3D : Merged GpuBuffer::Initialise and GpuBuffer::SetShaderProgram
+	*   functions to ease their use.
+	* Castor3D : Corrected ExtractAlpha and ReduceToAlpha, they now take
+	*   reference to pointer because the type is modified in addition to the
+	*   data.
+	* GlRenderSystem : Improved shader GLSL source generation in
+	*   GlShaderProgram.cpp. It takes less lines and is more precisely bound to
+	*   the currently loaded OpenGl context.
+
+2013-04-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Correcting lighting in auto-generated shaders, added Fresnel
+	*   factor.
+	* Castor3D : Corrected Sphere faces direction.
+	* GlRenderSystem : Removed GLEW dependency.
+	* CastorViewer : Implementing first-person camera switch.
+	* GlRenderSystem : Corrected GlLightRenderer::Disable (shader version)
+
+2013-04-26  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Correcting face directions (CCW).
+
+2013-04-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Implementing initialisation and cleanup of GPU side objects in
+	*   two events : InitialiseEvent and CleanupEvent.
+	* Castor3D : It works with Material, implementing it for SubmeshRenderer.
+
+2013-04-23  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* CastorUtils : Modified Image to make FreeImage load images by path and no
+	*   more by handle (caused trouble with some formats).
+	* Castor3D : Defined a default sampler and set it to texture unite that
+	*   don't have sampler.
+	* GlRenderSystem : I've got some meshes that can't load due to textures, I
+	*   must investigate on the reasons.
+
+2013-04-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Reduced number of shaders by generating shaders only when
+	*   texture flags are new.
+	* Dx11RenderSystem : Advanced rendering to be nearly functional.
+	* GlRenderSystem : Render to texture is functional but faces seem to be
+	*   invertedso I still have to investigate a bit to make it work.
+
+2013-04-18  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Introducing FrameVariableBuffer to manage frame variables with
+	*   OpenGl UBO or DirectX 11 Constants buffer. Great changes coming.
+
+
+2013-04-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Modified Submesh::AddPoints so it takes a stVERTEX_GROUP
+	*   structure as a parameter.
+	* ASSIMPImporter : Modified it to use Submesh::AddPoints in order for it to
+	*   be faster.
+	* PLYImporter : Modified it to make it use the new Submesh::AddPoints.
+	* CastorViewer : Added an "Export" button. OBJ export is implemented.
+
+2013-04-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Modified a bit FrameVariable in order to take care of 
+	*   eFRAME_VARIABLE_TYPE previously defined for SceneFileParser.
+	* GlRenderSystem : Corrected a bit GlX11Context.cpp.
+	* ObjImporter : Corrected.
+
+2013-04-14  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Rehabilitated PLY importer due to a bug from ASSIMP when 
+	*   importing large meshes like dragon.ply.
+	* CastorUtils : Castor::Point now holds a static array as it's members
+	*   instead of a dynamic one.
+	* Castor3D : Reviewed sorting function and render loop for alpha blended
+	*   meshes : now I enable blending, disable depth writing then I render
+	*   back face then front faces. It works but I've still got artifacts in
+	*   meshes like FFXIII Lightning (hair)
+
+2013-04-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Splitted eBUFFER_MODE in eBUFFER_ACCESS_TYPE and eBUFFER_ACCESS_NATURE.
+
+2013-04-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Added depth format configuration in SceneFileParser.
+	* CastorUtils : Removed Stencil 4 and 8, a4l4, l4.
+	* Castor3D : Added depth write tweaks and cull modes.
+
+2013-04-09  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* CastorUtils : Removed Castor::Serialisable class.
+	* CastorUtils : Added 545RGB and DEPTH24S8 pixel formats.
+	* GlRenderSystem : Implemented OpenGL debug output so I have more verbose
+	*   debug outputs for OpenGL too.
+	* Castor3D : Added few directives in SceneFileParser.
+
+2013-03-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Reviewed sizes a bit : Viewport holds the internal size,
+	*   RenderTarget and RenderWindow hold external size. Modified 
+	*   SceneFileParser, added <size> directive for viewport.
+
+2013-03-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* CastorUtils : Improved FileParser, now functions have parameters and not
+	*   only parameters types, and parameters parse themselves.
+	* Castor3D : Reviewed frame buffers : RenderTargets' can be resized but
+	*   not RenderTechniques' so supersampling should be possible
+
+2013-03-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Dx9RenderSystem : I found how to use Direct3D 9 debug device so using it
+	*   to debug Dx9RenderSystem.
+	* Castor3D : Introducing SamplerState class to group calls to 
+	*   SetSamplerState and all relative stuff in OpenGl.
+	* Dx10RenderSystem : Corrected an implemented lot of things in
+	*   Dx10RenderSystem
+
+2013-03-15  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* DirectX : Added Dx10RenderSystem, I try to implement this one before
+	*   Dx11RenderSystem.
+
+2013-03-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* CastorUtils : Removed macro DECLARE_SHARED_PTR, now using 
+	*   DECLARE_SMART_PTR, so I replaced each XXxPtr by it's equivalent
+	*   XxxSPtr, done in CastorUtils, Castor3D and ASSIMPImporter.
+
+2013-02-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* CMake : Modified the CMakeLists to be able to use Visual Leaks Detector
+	*   with MSVC.
+	* CastorUtils : MemoryManager modified to take care of Visual Leaks 
+	*   Detector.
+	* ShaderProgramCg : Can now be compiled using only DirectX.
+
+2013-02-20  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Dx9Renderer : Correcting to frame buffers work with it.
+	* CastorUtils : Corrected warning for FileParser with MSVC.
+	* CastorUtils : Created two classes Size and Position instead of just
+	*   having a typedef for these.
+	* Castor3D : Created TechniqueParameters class to be able to pass generic
+	*   parameters instead of, for example, the samples count.
+	* Castor3D : Split RenderTechnique in 3 classes : RenderTechniqueBase,
+	*   DirectRenderTechnique and MsaaRenderTechnique.
+
+2013-02-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Added possibility to activate or deactivate deferred
+	*   rendering, this is also possible from cscn files.
+
+2013-02-18  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* GlRenderSystem : Geometry shader work in OpenGL, created a shader to show
+	*   wireframe models with Normals, Tangents and Bitangents.
+
+2013-02-15  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Removed all includes to ShaderObject.hpp except for
+	*   ShaderProgram, ShaderObject is no more used out of ShaderProgram.
+	* GuiCommon : Modifying wxShaderDialog to make it more sexy and usable.
+
+2013-02-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* CMake : Modified FindASSIMP.cmake to find x64 binaries
+	* Castor3D : Added comments for Material.
+	* General : Added compilation flag /Wp64 for MSVC in 32 bits in order to
+	*   see x64 warnings even in 32 bits.
+	* General : Finished 64bits support, still needs testing, though.
+	* ASSIMPImporter : Corrected a bug that implied a crash when loading a mesh
+	*   without tangent space.
+	* ASSIMPImporter : Still need to retrieve normals correctly because they
+	*   are flat even if the mesh has it smooth.
+
+2013-02-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Introducing 64 bits compilation support (replacing most 
+	*   std::size_t by uint32_t), modified CMakeLists.txt to be able to compile
+	*   in 64 bits (at least with VC11).
+	* Castor3D : Added Material functions Begin and End to retrieve passes in
+	*   standard way.
+
+2013-02-07  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Modified Scene, added template functions to add, remove or get
+	*   an object whatever it's type may be (Light, Geometry, Camera, 
+	*   SceneNode).
+	* Castor3D : Corrected Scene alpha sorting of submeshes.
+	* Castor3D : Added a function HasAlphaBlending in Material class so Passes
+	*   are no more parsed by the scene when alpha sorting submeshes.
+	* Castor3D : Added functions Begin and End in Mesh class to be able to
+	*   iterate through submeshes without using GetSubmesh and GetSubmeshCount.
+	* GuiCommon : Added possibility to change the material used by a submesh in
+	*   wxGeometriesListFrame.
+	* LwoImporter : Corrected CHAN chunk processing, as it can also be met in
+	*   block header.
+	* LwoImporter : Corrected logging.
+
+2013-02-04  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* CastorUtils : Modified FileParser to take care of parsers parameters.
+	* CastorViewer : Now loads plugins in a thread.
+
+2013-02-01  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* CMake : Added possibility to change binaries directory and also MSVC
+	*   temporary binaries directory, through PROJECTS_BINARIES_OUTPUT_PATH and
+	*   PROJECTS_BINTEMP_OUTPUT_PATH.
+	* CMake : Added possibility to activate code profiling with MSVC through
+	*   PROJECTS_PROFILING boolean value.
+	* CastorUtils : Modified Colour class, it doesn't extend Point4f anymore.
+
+2013-01-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* CastorUtils : Splitted File class in two classes : TextFile and
+	*   BinaryFile.
+	* CastorUtils : Modified Loader class to take a new template parameter :
+	*   the file class.
+
+2013-01-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Corrected GlRenderSystem to make it usable on configurations running with
+	*   OpenGL 2.1 and before.
+	* Replaced macros for cstrnlen, cstrftime, cstrncpy, cfopen, cfopen64,
+	*   cfseek and cftell by functions in namespace Castor.
+	
+
+2012-12-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Stereoscopic rendering just needs testing for now.
+	* Modified Importers so no more memory leaks are detected with Visual
+	*   Studio.
+	* Reintegrated threaded render loop, the context is created in this thread
+	*   if it is activated, else it is created in main thread.
+	* Overlays are no more Renderable, there is one instance of OverlayRenderer
+	*   class in the OverlayManager. All overlays will be rendered through this
+	*   instance by the OverlayManager.
+	* Modified a bit CMakeLists.txt and FindASSIMP.cmake in order to link debug
+	*   or release libs using Visual Studio (using "optimized" and "debug"
+	*   keywords).
+
+2012-12-17  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Implementing move assignment in CastorUtils classes.
+
+2012-12-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Compiled Dx9RenderSystem with latest modifications, but still buggy.
+	* Modified a bit FindASSIMP.cmake in order to find compiled libs on Windows
+	*   (selects x86 one)
+
+2012-12-10  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Added ASSIMP importer plugin to import actually unsupported file types,
+	*   modified ImporterPlugin::GetExtensions to be able to retrieve an array
+	*   of pairs <extension, file type>.
+	* Removing calls to ShaderObject in order to make it more internal to
+	*   Castor3D.
+	* Reintegrated LWO importer (ASSIMP explodes when I try to import some LWO
+	*   files).
+
+2012-11-30  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Added binormals to Vertex class, and so in vertex buffers.
+
+2012-11-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Reviewed includes in Castor3D.
+	* Removed GLEW from sources, now users must include theirs.
+
+2012-11-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Submeshes sorted by Material's alpha in order to render submeshes without
+	*   alpha before others.
+
+2012-11-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Moved RenderTechnique basic frame buffer, texture and depth buffer into
+	*   RenderTarget.
+	* Moved TargetRenderer::PostRender code into RenderWindow.
+	* Created WindowRenderer::EndScene function to prepare the render of the
+	*   RenderTarget's frame buffer into the window.
+
+2012-11-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Created GeometryBuffers class which holds a Vertex buffer and an Index
+	*	buffer, they are created by the RenderSystem.
+	* It allows the implementations to use API specific optimisations, like
+	*	OpenGL Vertex Array Objects.
+
+2012-11-14  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Frame buffers implemented in Castor3D.
+	* GlRenderSystem and Dx9RenderSystem bindings Frame buffers are made.
+	* RenderTarget now uses RenderTechnique to make its rendering.
+	* Multisampled frame buffers working with OpenGL.
+
+2012-11-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Created TextureBase class, StaticTexture and DynamicTexture to help
+	*	implementing render targets.
+	* Implemented RenderTarget in OpenGL.
+
+2012-11-09  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Removed all default glsl and hlsl files.
+	* Modified CMakeLists.txt in order to stop copying glsl and hlsl files
+
+2012-11-08  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Implemented OpenGL Frame Buffer Objects correctly.
+	* Changed RenderTarget : now it only holds frame buffer and all needed for
+	*	that.
+	* It is now a Renderable so TargetRenderer has been created.
+	* RenderWindow no longer extends RenderTarget, but now it has a
+	*	RenderTarget as a private class member.
+
+2012-11-07  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Better support of Texture Buffer Objects (still experimental though)
+	* Reviewed Vertex Array Objects, they now hold their buffers so the choice
+	*	of using it or not is wrapped into it
+
+2012-11-06  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Modified default sources in GlShaderProgram and Dx9ShaderProgram, they
+	*	are now computed and no more external shader file is needed.
+	* Created files for GlUniformBuffer, GlPixelBufferObjet and GlVertexArrayObject.
+	* Reduced xpm files in order to fasten their loading.
+	* Passes now initialise their shaders in Pass::Initialiser instead of
+	*	trying to do it at each frame
+
+2012-11-01  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Implemented multisampling, tested and working on GLX.
+
+2012-10-31  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Correcting HLSL shaders, done diff, diff-bump, diff-bump-spec,
+	*	diff-bump-alph and diff-bump-alph-spec.
+	* When initialising Pass, the texture units are re-ordered so the ones with
+	*	a defined channel come first.
+	* Corrected a bug in SMaxImporter, replaced eTEXTURE_CHANNEL_COUNT by
+	*	eTEXTURE_CHANNEL_ALL which is more correct since the channels are flags
+	*	and not indices.
+
+2012-10-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Implemented intersection function in Line3D. 
+	* That class now has to named constructors : FromPointAndSlope and 
+	*	FromPoints, to avoid confusion between them.
+	* Subdivider::DoComputeCenterFrom now uses Line3D::Intersects between the
+	*	lines formed by the 2 points and their normals.
+	* SMaxImporter now also imports bump, opacity and specular maps.
+	* Scene::Render now takes a Camera in parameter to be able to sort nodes
+	*	according to their distance to the camera (to have correct alpha
+	*	blending).
+
+2012-10-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Replace "unsigned char" by "uint8_t".
+	* Allowed view of shaders source (not only files) in CastorViewer
+
+2012-10-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Renamed Buffer3D to HardwareBuffer
+	* Submesh now flushes its vertex and face arrays after GenerateBuffers.
+	* In OpenGL, HardwareBuffer is cleared after its data is passed to gpu.
+	* Corrected Direct3D render, now must implement shaders to render properly.
+
+2012-10-23  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Removed Point::link, Point::copy/clopy/clone functions.
+	* Modified BufferElementGroup so it can't hold anymore its buffer
+
+2012-10-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Modified Submesh::ComputeTangents to take care of each vertex normal
+	* PnTrianglesDivider, PlyImporter, Md2Importer, Md3Importer, ObjImporter
+	*	checked, still Tangent space troubles...
+
+2012-10-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Repaired Cone, Plane, Cube, nearly repaired Cylinder
+
+2012-10-18  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Nearly corrected sphere, replaced unsigned short by uint16_t and unsigned
+	*	int by uint32_t in all project
+
+2012-10-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Merged Submesh and SmoothingGroup classes
+
+2012-10-15  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Reduced images memory occupation
+
+2012-10-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Reduced memory size of vertex buffers
+
+2012-10-05  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Merged ImgToIco and ImgToXpm to ImgConverter, which now supports
+	*	internationalisation.
+	* Added .bat files to generate .pot files
+
+2012-10-04  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Corrected MD2 and MD3 importers (texture coordinates and textures)
+
+2012-09-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Recompiling CastorShape. Integrated internationalisation
+
+2012-09-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Added channel for textures (colour, ambient, diffuse, specular, normal, 
+	*	height).
+	* Lwo Importer loads polygons
+
+2012-09-13  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Implementing LWOImporter
+
+2012-09-12  Sylvain Doremus  <dragonjoker59@hotmail.com>	
+
+	* Corrected ObjImporter.
+	* Beginning LwoImporter
+
+2012-09-09  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Corrected LoopDivider.
+	* Added directive "primitive" for cameras in SceneFileParser
+
+2012-09-08  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* GlRenderSystem : Corrected GLSL shaders
+
+2012-09-06  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Written install script to generate .deb files for each project
+
+2012-08-31  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Removed ApplyXXXMatrix from IPipelineImpl, now the Pipeline
+	*   applies matrices itself.
+	* Castor3D : Added HasParameter and SetParameter functions in ShaderObject,
+	*   to apply matrices from Pipeline.
+	* Dx9RenderSystem : Implemented Lights in texture for HLSL.
+
+2012-08-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* GlRenderSystem : Implemented Lights in texture for GLSL.
+
+2012-08-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Added .rc file for each project. Now each shared library has a
+	*   version number under MS Windows.
+	* GuiCommon : Materials windows now use wxSizer classes to place and resize
+	*   elements
+	* CastorUtils : Added log level support for Logger.
+	* CastorViewer : Added command line options : 
+	*   -f/--file to load a scene on startup
+	*   -h/--help to display help
+	*   -l/--level to define log level : - 0 for debug to errors
+	*                                    - 1 for release to errors
+	*                                    - 2 for warnings to errors
+	*                                    - 3 for errors only
+
+2012-08-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Removed *.aps files in resources from SVN.
+	* GuiCommon : Added GLSL.lang and HLSL.lang files in GuiCommon resources.
+	* Data : Moved *.glsl into GlRenderSystem resources.
+	* CastorViewer : Now MainFrame also use wxSizers.
+	* GuiCommon : Now ShaderDialog also use wxSizers.
+	* GuiCommon : Rehabilitated wxStcEditor, now it works !!
+
+2012-08-23  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Added Destroy functions for each Create function in plugins, so
+	*   creation and deletion is made in DLL memory space (for Windows).
+	* CastorUtils : Modified DynamicLibrary::GetFunction, added a template
+	*   parameter that is the function type, and a method parameter that is the
+	*   pointer to the function to retrieve so no more casts when using
+	*   DynamicLibrary::GetFunction
+
+2012-08-02  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Modified Subdivision, now only in Subdivider, no more in
+	*   Geometry, Mesh or Submesh.
+	* Data : Changed models for testing
+
+2012-07-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Improved memory occupation, limited overhead of Vertex (152 to
+	*   24 bytes) and Face (140 to 16 bytes).
+	* ObjImporter : Corrected, materials and textures are now imported
+	*   correctly (taken care of UV parameters).
+
+2012-07-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* SMaxImporter : Corrected, with materials and textures
+	* Castor3D : Modified normals generation, now ComputeNormals take an
+	*   additional parameter that is the normal's type (flat or smooth)
+	* ObjImporter : Correcting materials and textures import.
+
+2012-07-20  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* AseImporter : Corrected, it now uses FileParser as it is a brace text
+	*   file format.
+
+2012-07-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* CastorUtils : Modified FileParser in order to be able to ignore complete
+	*   sections without commenting it (HLSL shader blocks in 
+	*   GlRenderSystem...)
+	* SMaxImporter : Correcting.
+
+2012-07-18  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Modified shaders, they now take care of the shader model, they
+	*   hold all defined files and sources for each model, the choice of the
+	*   source is  made at compile time, taking the source of the highest
+	*   supported model (from 1 to 5).
+	* Castor3D : Modified SceneFileParser, "file" functions for shaders now
+	*   take an additional parameter that is the shader model.
+	* MD2Importer : Corrected.
+	* MD3Importer : Corrected.
+	* Castor3D : Corrected SceneNode transformation matrix.
+	* CastorViewer : Rotating no longer rotates camera but RootObjectNode.
+
+2012-07-17  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Corrected lights and pipeline.
+	* Castor3D : Now the functions that need a shader take it in parameter.
+	* Dx9RenderSystem : Corrected.
+	
+2012-07-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* GlRenderSystem : Finished corrections.
+	* GlRenderSystem : Beginning to implement FBOs.
+	
+2012-07-14  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* GlRenderSystem : Corrected lights rendering, not tested with shaders yet.
+	* General : Removed CASTOR_TRACK calls. Still debugging shaders support.
+
+2012-07-13  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* CMake : Modified CMakeLists (put project creation function in 
+	*   Project.cmake).
+	* Dx9RenderSystem : Created class DirectX that calls D3D functions and
+	*   performs checks, so no more dirty "CheckDxError" in the renderer code.
+	* Castor3D : Still need to know why lights don't seem to be applied.
+	
+2012-07-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Castor3D : Corrected a buffer's bug => it rerenders !!
+	
+2012-07-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* GlRenderSystem : Modified a bit GlContext (MSW and X11) to initialise it
+	*   using 2.1 In debug mode
+	* Castor3D : Started to update documentation
+
+2012-07-10  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* CastorUtils : Ended documentation
+	* CastorUtils : Modified a bit Point, relocated functions that shouldn't be
+	*   in that class in a small helper class : point. It holds : normalise,
+	*   get_normalised, dot, all distance functions, cos_theta, negate.
+
+2012-07-09  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Compiled on Linux with GCC 4.7.
+	* CastorUtils : Removed mostly all Boost dependencies (only left
+	*   boost::thread for compilers that do not support std::thread).
+	* CastorUtils : Comments ... Comments
+
+2012-07-06  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* CMake : Added MINGW GCC4.7 support in CMakeLists.txt
+	* General : Corrected few compile time errors with GCC
+	* Castor3D : Removed Engine threaded main loop
+	* CastorViewer : Relocated m_pCastor3D destruction and ImageLoader::Cleanup
+	*   call in the OnDestroy event handler
+	* CastorUtils : Continued documentation
+	* CMake : Finished modifications
+
+2012-06-29  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* CastorUtils : Removed String, created StrUtils
+	* CastorUtils : Still documenting
+
+2012-05-13  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Completed NEW, README, ChangeLog and AUTHORS.
+	* Removed std::move (it was a great mistake)

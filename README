@@ -1,0 +1,94 @@
+#
+#   **-----------------------------------------------------------------------**
+#   **                               Castor3D                                **
+#   **-----------------------------------------------------------------------**
+#   **                Multi-OS and Multi-Renderer 3D engine                  **
+#   **-----------------------------------------------------------------------**
+#   **              First version of this file: may 10th 2012                **
+#   **-----------------------------------------------------------------------**
+#
+
+Overview :
+I.   Description 
+II.  Building Castor3D
+III. Options
+IV.  Running Castor3D
+V.   General Questions
+
+
+#   **-----------------------------------------------------------------------**
+#   **                          I. Description                               **
+#   **-----------------------------------------------------------------------**
+
+Castor3D is a 3D engine written in C++.
+It works on Windows and also on GNU/Linux.
+It uses OpenGL (with GLSL) or Direct3D 9 (with HLSL).
+Cg shader language is also supported.
+
+
+#   **-----------------------------------------------------------------------**
+#   **                       II. Building Castor3D                           **
+#   **-----------------------------------------------------------------------**
+
+Castor3D uses CMake to build project files.
+You just need to launch cmake to build your preferential projet file.
+Tested compilers are :
+- Visual Studio 2010
+- gcc 4.6.2
+- gcc 4.7.0
+CastorUtils depends on boost thread, FreeImage and FreeType.
+Castor3D is based on CastorUtils and also uses NVidia's Cg Toolkit.
+GlRenderSystem depends on OpenGL (not GLU).
+Dx9RenderSystem uses Direct3D 9.
+GuiCommon depends on wxWidgets (from 2.8.11, currently on 2.9.3).
+Last (but not least) CastorViewer depends on GuiCommon, Castor3D and wxWidgets.
+Few plugins are also built : importers (ASE, 3DS, OBJ, PLY, MD2, MD3) and
+one divider (Loop algorithm).
+Two additional projects are also generated : ImgToXPM and ImgToICO.
+Documentation for CastorUtils and Castor3D can be generated using Doxygen.
+
+
+#   **-----------------------------------------------------------------------**
+#   **                           III. Options                                **
+#   **-----------------------------------------------------------------------**
+
+On GNU/linux the default install directory is in /usr/local.
+You can change this directory by changing the CMAKE_INSTALL_PREFIX value.
+The main application is installed in <install_dir>/bin/
+The library LibGenerator (used to build your own plugins) is installed in
+<install_dir>/lib/
+The plugins are installed in <install_dir>/shared/Castor3D/
+
+
+#   **-----------------------------------------------------------------------**
+#   **                        IV. Running Castor3D                           **
+#   **-----------------------------------------------------------------------**
+
+To run Castor Viewer, simply type 'CastorViewer' in your preferred
+command-line.
+
+
+#   **-----------------------------------------------------------------------**
+#   **                        V. General Questions                           **
+#   **-----------------------------------------------------------------------**
+
+1. I need a feature that Castor3D do not implement, what should I do ?
+
+There are two ways.
+First, Castor3D is a LGPL software and library, so you are welcome to improve
+it yourself ;-) !
+Second, just ask the author :-) ! 
+
+2. I implemented a cool feature, can I commit it ?
+
+Obviously you are welcome to send the author any improvement. But obviously
+the author is quite careful with readability, correctness and stability, 
+and will read and check any contribution before including it.
+Thus, it can take time... There are few basic rules to write contributions:
+- (1) Do never change the indentation of any part of the code that's not yours.
+- (2) Do never send codes without a lot of comments in (bad or good) english.
+- (3) Do never send codes with obscure and/or non-english variable names.
+
+3. How can I ask the author ?
+
+Just send a mail to dragonjoker59@hotmail.com !

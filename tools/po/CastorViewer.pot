@@ -1,0 +1,317 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-11-28 11:44+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ..\source\GuiCommon\RendererSelector.cpp:10
+msgid " - Select renderer"
+msgstr ""
+
+#: ..\source\CastorViewer\MainFrame.cpp:51
+msgid " DragonJoker, All rights shared"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:26
+msgid "Ambient"
+msgstr ""
+
+#: ..\source\GuiCommon\StcTextEditor.cpp:119
+#: ..\source\GuiCommon\StcTextEditor.cpp:170
+msgid "Any file (*)|*"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:547
+msgid ""
+"BITMAP images (*.bmp)|*.bmp|GIF images (*.gif)|*.gif|JPEG images (*.jpg)|*."
+"jpg|PNG images (*.png)|*.png|TARGA images (*.tga)|*.tga|All images (*.bmp;*."
+"gif;*.png;*.jpg;*.tga)|*.bmp;*.gif;*.png;*.jpg;*.tga"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:30
+msgid "Blend"
+msgstr ""
+
+#: ..\source\GuiCommon\FrameVariableDialog.cpp:77
+#: ..\source\GuiCommon\RendererSelector.cpp:21
+#: ..\source\GuiCommon\ShaderDialog.cpp:164
+msgid "Cancel"
+msgstr ""
+
+#: ..\source\GuiCommon\SplashScreen.cpp:18
+msgid "Castor3D Version "
+msgstr ""
+
+#: ..\source\CastorViewer\MainFrame.cpp:399
+msgid "Castor3D scene files (*.cscn)|*.cscn"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:548
+msgid "Choose an image"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:89
+msgid "Compute"
+msgstr ""
+
+#: ..\source\CastorViewer\CastorViewer.cpp:58
+msgid "Defines initial scene file"
+msgstr ""
+
+#: ..\source\CastorViewer\CastorViewer.cpp:57
+msgid "Defines log level"
+msgstr ""
+
+#: ..\source\CastorViewer\CastorViewer.cpp:60
+msgid "Defines the renderer to DirectX"
+msgstr ""
+
+#: ..\source\CastorViewer\CastorViewer.cpp:59
+msgid "Defines the renderer to OpenGl"
+msgstr ""
+
+#: ..\source\GuiCommon\GeometriesListFrame.cpp:46
+#: ..\source\GuiCommon\MaterialPanel.cpp:27
+#: ..\source\GuiCommon\PassPanel.cpp:42
+msgid "Delete"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:27
+msgid "Diffuse"
+msgstr ""
+
+#: ..\source\CastorViewer\MainFrame.cpp:293
+msgid "Display geometries"
+msgstr ""
+
+#: ..\source\CastorViewer\MainFrame.cpp:294
+msgid "Display materials"
+msgstr ""
+
+#: ..\source\CastorViewer\CastorViewer.cpp:56
+msgid "Displays this help"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:86
+msgid "Domain"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:38
+msgid "Double face"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:220
+#: ..\source\GuiCommon\ShaderDialog.cpp:226
+msgid "ERROR"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:44
+msgid "Edit shaders"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:29
+msgid "Emissive"
+msgstr ""
+
+#: ..\source\CastorViewer\MainFrame.cpp:256
+msgid "Exception"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:36
+msgid "Exponent"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:226
+msgid "Fill the fragment file name"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:220
+msgid "Fill the vertex shader file name"
+msgstr ""
+
+#: ..\source\GuiCommon\FrameVariableDialog.cpp:9
+msgid "Frame Variable"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:25
+msgid "General"
+msgstr ""
+
+#: ..\source\GuiCommon\GeometriesListFrame.cpp:48
+#: ..\source\CastorViewer\MainFrame.cpp:293
+#: ..\source\CastorViewer\MainFrame.cpp:412
+msgid "Geometries"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:87
+msgid "Geometry"
+msgstr ""
+
+#: ..\source\GuiCommon\GeometriesListFrame.cpp:97
+#: ..\source\GuiCommon\GeometriesListFrame.cpp:178
+#: ..\source\GuiCommon\GeometriesListFrame.cpp:182
+msgid "Hidden"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:85
+msgid "Hull"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:45
+msgid "Image path : "
+msgstr ""
+
+#: ..\source\CastorViewer\MainFrame.cpp:198
+msgid "Initialising main window"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:162
+msgid "Load"
+msgstr ""
+
+#: ..\source\CastorViewer\MainFrame.cpp:265
+msgid "Loading images"
+msgstr ""
+
+#: ..\source\CastorViewer\MainFrame.cpp:161
+msgid "Loading plugins"
+msgstr ""
+
+#: ..\source\CastorViewer\MainFrame.cpp:285
+msgid "Loading toolbar"
+msgstr ""
+
+#: ..\source\CastorViewer\MainFrame.cpp:230
+msgid "Log"
+msgstr ""
+
+#: ..\source\CastorViewer\MainFrame.cpp:294
+#: ..\source\CastorViewer\MainFrame.cpp:418
+msgid "Materials"
+msgstr ""
+
+#: ..\source\GuiCommon\FrameVariableDialog.cpp:39
+msgid "Name"
+msgstr ""
+
+#: ..\source\GuiCommon\MaterialPanel.cpp:24
+msgid "Name : "
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:41
+msgid "New..."
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:21
+msgid "Normal"
+msgstr ""
+
+#: ..\source\GuiCommon\FrameVariableDialog.cpp:71
+msgid "Null shader object"
+msgstr ""
+
+#: ..\source\GuiCommon\FrameVariableDialog.cpp:75
+#: ..\source\GuiCommon\RendererSelector.cpp:20
+#: ..\source\GuiCommon\ShaderDialog.cpp:163
+msgid "OK"
+msgstr ""
+
+#: ..\source\CastorViewer\MainFrame.cpp:291
+msgid "Open a new scene"
+msgstr ""
+
+#: ..\source\CastorViewer\MainFrame.cpp:401
+msgid "Open a scene"
+msgstr ""
+
+#: ..\source\GuiCommon\StcTextEditor.cpp:119
+msgid "Open file"
+msgstr ""
+
+#: ..\source\GuiCommon\MaterialPanel.cpp:26
+msgid "Passes"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:88
+msgid "Pixel"
+msgstr ""
+
+#: ..\source\CastorViewer\MainFrame.cpp:256
+msgid ""
+"Problem occured while initialising Castor3D.\n"
+"Look at CastorViewer.log for more details"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:22
+msgid "Reflexion map"
+msgstr ""
+
+#: ..\source\GuiCommon\StcTextEditor.cpp:170
+msgid "Save file"
+msgstr ""
+
+#: ..\source\CastorViewer\MainFrame.cpp:291
+msgid "Scene"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:254
+msgid "Select a shader program file"
+msgstr ""
+
+#: ..\source\GuiCommon\RendererSelector.cpp:19
+msgid "Select your renderer in the list below"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:11
+msgid "Shaders"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:28
+msgid "Specular"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:23
+msgid "Sphere map"
+msgstr ""
+
+#: ..\source\GuiCommon\GeometriesListFrame.cpp:101
+msgid "Submesh "
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:40
+msgid "Texture Units"
+msgstr ""
+
+#: ..\source\GuiCommon\FrameVariableDialog.cpp:36
+msgid "Type"
+msgstr ""
+
+#: ..\source\GuiCommon\PassPanel.cpp:48
+msgid "UV mapping mode"
+msgstr ""
+
+#: ..\source\GuiCommon\FrameVariableDialog.cpp:42
+msgid "Value"
+msgstr ""
+
+#: ..\source\GuiCommon\ShaderDialog.cpp:84
+msgid "Vertex"
+msgstr ""
+
+#: ..\source\GuiCommon\GeometriesListFrame.cpp:97
+#: ..\source\GuiCommon\GeometriesListFrame.cpp:174
+#: ..\source\GuiCommon\GeometriesListFrame.cpp:186
+msgid "Visible"
+msgstr ""
