@@ -100,51 +100,6 @@ namespace Castor
 			return l_pReturn;
 		}
 	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
-	\~english
-	\brief		Clonable interface
-	\remark		Base class for classes that must be created by a factory
-	\see		Factory
-	\~french
-	\brief		Interface de clonables
-	\remark		Classe de base pour les classes devant être créées par une fabrique
-	\see		Factory
-	*/
-	template< class Obj, class Key=String >
-	class IClonable : CuNonCopyable
-	{
-	public:
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_pFactory	The Factory that was used to build this instance
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_pFactory	La Factory ayant créé cette instance
-		 */
-		IClonable(){}
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		virtual ~IClonable(){}
-		/**
-		 *\~english
-		 *\brief		Clone function
-		 *\remark		Must be implemented in derived classes
-		 *\return		A clone of this object
-		 *\~french
-		 *\brief		Fonction de clonage
-		 *\remark		Doit être implémentée dans les classes dérivées
-		 *\return		Un clône de cet objet
-		 */
-		virtual std::shared_ptr< Obj > Clone()=0;
-	};
 }
 
 #endif

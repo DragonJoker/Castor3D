@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -61,7 +61,7 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the first animation
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re un it�rateur sur la premi�re animation
+		 *\brief		Récupère un itérateur sur la première animation
 		 *\return		La valeur
 		 */
 		inline AnimationPtrStrMapIt AnimationsBegin() { return m_mapAnimations.begin(); }
@@ -70,7 +70,7 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the first animation
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re un it�rateur sur la premi�re animation
+		 *\brief		Récupère un itérateur sur la première animation
 		 *\return		La valeur
 		 */
 		inline AnimationPtrStrMapConstIt AnimationsBegin()const { return m_mapAnimations.begin(); }
@@ -79,7 +79,7 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the end of the animations map
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re un it�rateur sur la fin de la map d'animations
+		 *\brief		Récupère un itérateur sur la fin de la map d'animations
 		 *\return		La valeur
 		 */
 		inline AnimationPtrStrMapIt AnimationsEnd() { return m_mapAnimations.end(); }
@@ -88,7 +88,7 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the end of the animations map
 		 *\return		The value
 		 *\~french
-		 *\brief		R�cup�re un it�rateur sur la fin de la map d'animations
+		 *\brief		Récupère un itérateur sur la fin de la map d'animations
 		 *\return		La valeur
 		 */
 		inline AnimationPtrStrMapConstIt AnimationsEnd()const { return m_mapAnimations.end(); }
@@ -98,7 +98,7 @@ namespace Castor3D
 		 *\param[in]	p_strName	The animation name
 		 *\return		The animation
 		 *\~french
-		 *\brief		Cr�e une animation
+		 *\brief		Crée une animation
 		 *\param[in]	p_strName	Le nom de l'animation
 		 *\return		l'animation
 		 */
@@ -109,7 +109,7 @@ namespace Castor3D
 		 *\param[in]	p_strName	The animation name
 		 *\return		The animation
 		 *\~french
-		 *\brief		R�cup�re une animation
+		 *\brief		Récupère une animation
 		 *\param[in]	p_strName	Le nom de l'animation
 		 *\return		L'animation
 		 */
