@@ -106,12 +106,10 @@ namespace Castor
 	\date		03/01/2011
 	\~english
 	\brief		Clonable interface
-	\remark		Base class for classes that must be created by a factory
-	\see		Factory
+	\remark		Base class for clonable objects
 	\~french
 	\brief		Interface de clonables
-	\remark		Classe de base pour les classes devant être créées par une fabrique
-	\see		Factory
+	\remark		Classe de base pour les objets clonables
 	*/
 	template< class Obj, class Key=String >
 	class IClonable : CuNonCopyable
@@ -120,10 +118,8 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pFactory	The Factory that was used to build this instance
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pFactory	La Factory ayant créé cette instance
 		 */
 		IClonable(){}
 		/**
