@@ -1,0 +1,78 @@
+float4x4 ProjectionMatrix;
+float4x4 ModelViewMatrix;
+float4x4 ProjectionModelViewMatrix;
+float4x4 NormalMatrix;
+float4 c3d_LightsPosition[8];
+float4 c3d_LightsAmbient[8];
+float4 c3d_LightsDiffuse[8];
+float4 c3d_LightsSpecular[8];
+float4 c3d_MatAmbient;
+float4 c3d_MatDiffuse;
+float4 c3d_MatSpecular;
+float c3d_MatShininess;
+sampler2D DiffuseMap;
+sampler2D NormalMap;
+
+struct VtxInput
+{
+	float4 Position	:	POSITION0;
+	float3 Normal	:	NORMAL0;
+	float3 Tangent	:	TANGENT0;
+	float2 Texture	:	TEXCOORD0;
+};
+
+struct VtxOutput
+{
+	float4 Position	:	POSITION0;
+	float2 Texture	:	TEXCOORD0;
+	float3 Light	:	NORMAL0;
+	float3 Eye		:	NORMAL1;
+};
+
+
+VtxOutput mainVx( in VtxInput p_input)
+{
+	VtxOutput l_output;
+	l_output.Texture = p_input.Texture;
+	float3x3 l_normalMatrix = (float3x3)NormalMatrix;
+
+	float3 n = mul( p_input.Normal, l_normalMatrix);
+	float3 t = mul( p_input.Tangent, l_normalMatrix);
+	float3 b = cross( n, t);
+
+	float3 light = normalize( mul(c3d_LightsPosition[0], ModelViewMatrix).xyz);
+
+	l_output.Light.x = dot( light, t);
+	l_output.Light.y = dot( light, b);
+	l_output.Light.z = dot( light, n);
+	
+	float3 eye = mul( p_input.Position, ModelViewMatrix).xyz;
+	eye = normalize(-eye);
+	
+	l_output.Eye.x = dot( eye, t);
+	l_output.Eye.y = dot( eye, b);
+	l_output.Eye.z = dot( eye, n);
+
+	l_output.Position = mul( p_input.Position, ProjectionModelViewMatrix);
+	
+	return l_output;
+}
+
+float4 mainPx( in VtxOutput p_input)	:	COLOR0
+{
+	float diffuseIntensity;
+	float specularItensity;
+	float3 light;
+	float3 normal;
+	float3 eye;
+	float3 reflection;
+
+	light = normalize( p_input.Light);
+	normal = normalize( tex2D( NormalMap, p_input.Texture).xyz * 2.0 - 1.0 );
+	normal.y = -normal.y;	// Left handed to right handed space (Most normal maps are generated for DirectX)
+	eye = normalize( p_input.Eye);
+	diffuseIntensity = clamp(max(dot(normal, light), 0.0), 0.0, 1.0);
+	reflection = normalize(reflect(-light, normal));
+	specularItensity = pow(clamp(max(dot(reflection, eye), 0.0), 0.0, 1.0), 0.0 );
+	return float4(0.0, 0.0, 0.0, 1.0) + tex2D( DiffuseMap, p_input.Texture) * diffuseIntensity * specularItensity;
+}

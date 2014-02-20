@@ -1,0 +1,578 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: CastorShape\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-10-26 12:18+0100\n"
+"PO-Revision-Date: \n"
+"Last-Translator: Sylvain Doremus <dragonjoker59@hotmail.com>\n"
+"Language-Team: Sylvain Doremus <dragonjoker59@hotmail.com>\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-Basepath: Y:\\projets\\Castor3D\\tools\\source\\CastorViewer\n"
+"X-Poedit-SearchPath-0: Y:\\projets\\Castor3D\\tools\\source\\CastorViewer\n"
+"X-Poedit-SearchPath-1: Y:\\projets\\Castor3D\\tools\\include\\CastorViewer\n"
+"X-Poedit-SearchPath-2: Y:\\projets\\Castor3D\\tools\\source\\GuiCommon\n"
+"X-Poedit-SearchPath-3: Y:\\projets\\Castor3D\\tools\\include\\GuiCommon\n"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/CastorViewer.cpp:60
+msgid "Displays this help"
+msgstr "Affiche cette aide"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/CastorViewer.cpp:61
+msgid "Defines log level"
+msgstr "Définit le niveau de log"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/CastorViewer.cpp:62
+msgid "Defines initial scene file"
+msgstr "Définit le fichier de scène initial"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/CastorViewer.cpp:63
+msgid "Defines the renderer to OpenGl"
+msgstr "Définit l'API de rendu à OpenGl"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/CastorViewer.cpp:64
+#, fuzzy
+msgid "Defines the renderer to Direct3D9"
+msgstr "Définit l'API de rendu à DirectX"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/CastorViewer.cpp:65
+#, fuzzy
+msgid "Defines the renderer to Direct3D10"
+msgstr "Définit l'API de rendu à DirectX"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/CastorViewer.cpp:66
+#, fuzzy
+msgid "Defines the renderer to Direct3D11"
+msgstr "Définit l'API de rendu à DirectX"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:89
+msgid " DragonJoker, All rights shared"
+msgstr " DragonJoker, Tous droits partagés"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:102
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:103
+msgid "Log"
+msgstr "Log"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:207
+msgid "Can't initialise the render window"
+msgstr "Impossible d'initialiser la fenêtre de rendu"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:221
+msgid "Scene file doesn't exist :"
+msgstr "Le fichier de scène n'existe pas :"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:227
+msgid "Can't open a scene file : no engine loaded"
+msgstr "Impossible d'ouvrir une scène : pas de moteur chargé"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:234
+msgid "Loading plugins"
+msgstr "Chargement des plugins"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:301
+msgid "Initialising main window"
+msgstr "Initialisation de la fenêtre principale"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:356
+msgid ""
+"Problem occured while initialising Castor3D.\n"
+"Look at CastorViewer.log for more details"
+msgstr ""
+"Un problème a été rencontré pendant l'initialisation de Castor3D.\n"
+"Consultez CastorViewer.log pour plus de détails."
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:356
+msgid "Exception"
+msgstr "Exception"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:365
+msgid "Loading images"
+msgstr "Chargement des images"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:387
+msgid "Loading toolbar"
+msgstr "Chargement de la toolbar"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:393
+#, fuzzy
+msgid "Load Scene"
+msgstr "Enregistrer la scène"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:393
+#, fuzzy
+msgid "Open a new scene"
+msgstr "Ouvrir une scène"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:394
+#, fuzzy
+msgid "Export Scene"
+msgstr "Exposant"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:394
+msgid "Export the current scene"
+msgstr "Exporter la scène courante"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:396
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:770
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:771
+#: Y:\projets\Castor3D\tools\source\GuiCommon/GeometriesListFrame.cpp:62
+msgid "Geometries"
+msgstr "Géométries"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:396
+msgid "Display geometries"
+msgstr "Afficher géométries"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:397
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:790
+msgid "Materials"
+msgstr "Matériaux"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:397
+msgid "Display materials"
+msgstr "Affiche les matériaux"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:739
+msgid "Castor3D scene files (*.cscn)|*.cscn"
+msgstr "Fichiers de scène Castor3D (*.cscn)|*.cscn"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:741
+msgid "Open a scene"
+msgstr "Ouvrir une scène"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:754
+msgid ""
+"Castor3D text scene (*.cscn)|*.cscn|Castor3D binary scene (*.cbsn)|*.cbsn|"
+"Wavefront OBJ (*.obj)|*.obj"
+msgstr ""
+"Scène texte Castor3D (*.cscn)|*.cscn|Scène binaire Castor3D (*.cbsn)|*.cbsn|"
+"Wavefront OBJ (*.obj)|*.obj"
+
+#: Y:\projets\Castor3D\tools\source\CastorViewer/MainFrame.cpp:756
+msgid "Export the scene"
+msgstr "Exporter la scène"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/FrameVariableDialog.cpp:9
+msgid "Frame Variable"
+msgstr "Variable uniforme"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/FrameVariableDialog.cpp:34
+msgid "Type"
+msgstr "Type"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/FrameVariableDialog.cpp:37
+msgid "Name"
+msgstr "Nom"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/FrameVariableDialog.cpp:40
+msgid "Value"
+msgstr "Valeur"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/FrameVariableDialog.cpp:68
+#: Y:\projets\Castor3D\tools\source\GuiCommon/RendererSelector.cpp:20
+msgid "OK"
+msgstr "Valider"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/FrameVariableDialog.cpp:70
+#: Y:\projets\Castor3D\tools\source\GuiCommon/RendererSelector.cpp:21
+msgid "Cancel"
+msgstr "Annuler"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/GeometriesListFrame.cpp:60
+#: Y:\projets\Castor3D\tools\source\GuiCommon/MaterialPanel.cpp:27
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:52
+msgid "Delete"
+msgstr "Supprimer"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/GeometriesListFrame.cpp:121
+#: Y:\projets\Castor3D\tools\source\GuiCommon/GeometriesListFrame.cpp:219
+#: Y:\projets\Castor3D\tools\source\GuiCommon/GeometriesListFrame.cpp:234
+msgid "Visible"
+msgstr "Visible"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/GeometriesListFrame.cpp:121
+#: Y:\projets\Castor3D\tools\source\GuiCommon/GeometriesListFrame.cpp:224
+#: Y:\projets\Castor3D\tools\source\GuiCommon/GeometriesListFrame.cpp:229
+msgid "Hidden"
+msgstr "Cachée"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/GeometriesListFrame.cpp:125
+msgid "Submesh "
+msgstr "Sous-objet"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/MaterialPanel.cpp:24
+msgid "Name : "
+msgstr "Nom :"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/MaterialPanel.cpp:26
+msgid "Passes"
+msgstr "Passes"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:23
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:30
+msgid "Normal"
+msgstr "Normal"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:24
+msgid "Reflexion map"
+msgstr "Map de réflexion"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:25
+msgid "Sphere map"
+msgstr "Map sphérique"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:28
+msgid "Colour"
+msgstr "Couleur"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:29
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:39
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:59
+msgid "Diffuse"
+msgstr "Diffuse"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:31
+msgid "Opacity"
+msgstr "Opacité"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:32
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:40
+msgid "Specular"
+msgstr "Spéculaire"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:33
+msgid "Height"
+msgstr "Hauteur"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:34
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:38
+msgid "Ambient"
+msgstr "Ambiante"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:35
+msgid "Gloss"
+msgstr "Gloss"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:37
+msgid "General"
+msgstr "Général"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:41
+msgid "Emissive"
+msgstr "Emission"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:46
+msgid "Exponent"
+msgstr "Exposant"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:48
+msgid "Two sided"
+msgstr "Deux faces"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:50
+msgid "Texture Units"
+msgstr "Unités de texture"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:51
+msgid "New..."
+msgstr "Nouveau ..."
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:54
+msgid "Edit shaders"
+msgstr "Edition des shaders"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:55
+msgid "Image path : "
+msgstr "Chemin de l'image"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:58
+msgid "Channel"
+msgstr "Canal"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:573
+msgid ""
+"BITMAP images (*.bmp)|*.bmp|GIF images (*.gif)|*.gif|JPEG images (*.jpg)|*."
+"jpg|PNG images (*.png)|*.png|TARGA images (*.tga)|*.tga|All images (*.bmp;*."
+"gif;*.png;*.jpg;*.tga)|*.bmp;*.gif;*.png;*.jpg;*.tga"
+msgstr ""
+"images BITMAP (*.bmp)|*.bmp|images GIF (*.gif)|*.gif|images JPEG (*.jpg)|*."
+"jpg|images PNG (*.png)|*.png|images TARGA (*.tga)|*.tga|Toutes images (*.bmp;"
+"*.gif;*.png;*.jpg;*.tga)|*.bmp;*.gif;*.png;*.jpg;*.tga"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/PassPanel.cpp:574
+msgid "Choose an image"
+msgstr "Choisissez une image"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/RendererSelector.cpp:10
+msgid " - Select renderer"
+msgstr " - Choix de l'API de rendu"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/RendererSelector.cpp:19
+msgid "Select your renderer in the list below"
+msgstr ""
+"Choisir l'API de rendu\n"
+"dans la liste ci-dessous."
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/ShaderDialog.cpp:25
+msgid "Shaders"
+msgstr "Shaders"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/ShaderDialog.cpp:103
+msgid "Vertex"
+msgstr "Vertex"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/ShaderDialog.cpp:104
+msgid "Hull"
+msgstr "Hull"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/ShaderDialog.cpp:105
+msgid "Domain"
+msgstr "Domain"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/ShaderDialog.cpp:106
+msgid "Geometry"
+msgstr "Géométrie"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/ShaderDialog.cpp:107
+msgid "Pixel"
+msgstr "Pixel"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/ShaderDialog.cpp:108
+msgid "Compute"
+msgstr "Compute"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/ShaderDialog.cpp:164
+#, fuzzy
+msgid "Frame variables"
+msgstr "Variable uniforme"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/ShaderDialog.cpp:227
+#, fuzzy
+msgid "&Open file\tCTRL+O"
+msgstr "Ouvrir une scène\tCTRL+F+O"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/ShaderDialog.cpp:228
+#, fuzzy
+msgid "Save &current file\tCTRL+S"
+msgstr "Enregistrer la scène\tCTRL+F+S"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/ShaderDialog.cpp:229
+#, fuzzy
+msgid "Save &all files\tCTRL+SHIFT+S"
+msgstr "Enregistrer la scène\tCTRL+F+S"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/ShaderDialog.cpp:233
+#, fuzzy
+msgid "&Quit\tCTRL+Q"
+msgstr "Point\tCTRL+E+P"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/ShaderDialog.cpp:236
+msgid "&Edit preferences ...\tCTRL+E"
+msgstr "&Editer les préférences ...\tCTRL+E"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/ShaderDialog.cpp:256
+msgid "Fill the vertex shader file name"
+msgstr "Choisissez un fichier de vertex shader"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/ShaderDialog.cpp:256
+#: Y:\projets\Castor3D\tools\source\GuiCommon/ShaderDialog.cpp:262
+msgid "ERROR"
+msgstr "ERREUR"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/ShaderDialog.cpp:262
+msgid "Fill the fragment file name"
+msgstr "Choisissez un fichier de pixel shader"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/ShaderDialog.cpp:290
+msgid "Select a shader program file"
+msgstr "Choisissez un fichier de shader"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/ShaderDialog.cpp:308
+msgid ""
+"Can't save a raw source.\n"
+"It must be put in then loaded from a file first."
+msgstr ""
+"Impossible d'enregistrer la source brute.\n"
+"Il faut d'abord la placer dans un fichier puis charger le shader à partir de "
+"ce fichier."
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/SplashScreen.cpp:18
+msgid "Castor3D Version "
+msgstr "Version de Castor3D "
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/StcTextEditor.cpp:120
+msgid "Open file"
+msgstr "Ouvrir un fichier"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/StcTextEditor.cpp:120
+#: Y:\projets\Castor3D\tools\source\GuiCommon/StcTextEditor.cpp:170
+msgid "Any file (*)|*"
+msgstr "Tous (*)|*"
+
+#: Y:\projets\Castor3D\tools\source\GuiCommon/StcTextEditor.cpp:170
+msgid "Save file"
+msgstr "Enregistrer fichier"
+
+#~ msgid "%S|%S file format (*.%S)|*.%S"
+#~ msgstr "%S|Fichiers au format %S (*.%S)|*.%S"
+
+#~ msgid "A material with this name already exists"
+#~ msgstr "Un matériau avec ce nom exite déjà"
+
+#~ msgid "Blend"
+#~ msgstr "Mélange"
+
+#~ msgid "Cancel\tCTRL+E+C"
+#~ msgstr "Annuler\tCTRL+E+C"
+
+#~ msgid "Castor Shape files (*.cscn)|*.cscn"
+#~ msgstr "Fichiers de scène Castor3D"
+
+#~ msgid "Clone\tCTRL+E+D"
+#~ msgstr "Dupliquer\tCTRL+E+D"
+
+#~ msgid "Cone"
+#~ msgstr "Cône"
+
+#~ msgid "Cube"
+#~ msgstr "Cube"
+
+#~ msgid "Cylinder"
+#~ msgstr "Cylindre"
+
+#~ msgid "Depth"
+#~ msgstr "Profondeur"
+
+#~ msgid "Depth subdivisions"
+#~ msgstr "Subdivisions profondeur"
+
+#~ msgid "Double face"
+#~ msgstr "Deux côtés"
+
+#~ msgid "Error"
+#~ msgstr "Erreur"
+
+#~ msgid "Face count"
+#~ msgstr "Faces"
+
+#~ msgid "File"
+#~ msgstr "Fichier"
+
+#~ msgid "File menu"
+#~ msgstr "Menu fichier"
+
+#~ msgid "Geometry\tCTRL+E+G"
+#~ msgstr "Géométrie\tCTRL+E+G"
+
+#~ msgid "Geometry Name"
+#~ msgstr "Nom de la géométrie"
+
+#~ msgid "Icosahedron"
+#~ msgstr "Icosaèdre"
+
+#~ msgid "Load"
+#~ msgstr "Charger"
+
+#~ msgid "Loop\tCTRL+E+S+L"
+#~ msgstr "Loop\tCTRL+E+S+L"
+
+#~ msgid "Material"
+#~ msgstr "Matériau"
+
+#~ msgid "Material\tCTRL+N+M"
+#~ msgstr "Matériau\tCTRL+N+M"
+
+#~ msgid "Modify\tCTRL+E+M"
+#~ msgstr "Modifier\tCTRL+E+M"
+
+#~ msgid "New"
+#~ msgstr "Nouveau"
+
+#~ msgid "New Geometry\tCTRL+N+G"
+#~ msgstr "Nouvelle Géometrie\tCTRL+N+G"
+
+#~ msgid "New cone"
+#~ msgstr "Nouveau cône"
+
+#~ msgid "New cube"
+#~ msgstr "Nouveau cube"
+
+#~ msgid "New cylinder"
+#~ msgstr "Nouveau cylindre"
+
+#~ msgid "New element"
+#~ msgstr "Nouvel élément"
+
+#~ msgid "New icosaedron"
+#~ msgstr "Nouvel icosaèdre"
+
+#~ msgid "New plane"
+#~ msgstr "Nouveau plan"
+
+#~ msgid "New sphere"
+#~ msgstr "Nouvelle sphère"
+
+#~ msgid "No action\tCTRL+E+A"
+#~ msgstr "Aucune action\tCTRL+E+A"
+
+#~ msgid "Null shader object"
+#~ msgstr "Shader nul"
+
+#~ msgid "PN Triangles\tCTRL+E+S+T"
+#~ msgstr "PN Triangles\tCTRL+E+S+T"
+
+#~ msgid "Parameters"
+#~ msgstr "Paramètres"
+
+#~ msgid "Parameters menu"
+#~ msgstr "Menu paramètres"
+
+#~ msgid "Plane"
+#~ msgstr "Plan"
+
+#~ msgid "Problem occured during Castor3D initialisation"
+#~ msgstr "Problème rencontré pendant l'initialisation de Castor3D"
+
+#~ msgid "Projection"
+#~ msgstr "Projection"
+
+#~ msgid "Quit\tALT+F4"
+#~ msgstr "Quitter\tALT+F4"
+
+#~ msgid "Radius"
+#~ msgstr "Rayon"
+
+#~ msgid "Render scene\tCTRL+F+R"
+#~ msgstr "Rendu de la scène\tCTRL+F+R"
+
+#~ msgid "Select\tCTRL+E+S"
+#~ msgstr "Selectionner\tCTRL+E+S"
+
+#~ msgid "Sphere"
+#~ msgstr "sphére"
+
+#~ msgid "Subdivide"
+#~ msgstr "Subdiviser"
+
+#~ msgid "Subdivision count"
+#~ msgstr "Compte des subdivisions"
+
+#~ msgid "Subdivisions"
+#~ msgstr "Subdivisions"
+
+#~ msgid "Torus"
+#~ msgstr "Torre"
+
+#~ msgid "UV mapping mode"
+#~ msgstr "Mode de mappage des UV"
+
+#~ msgid "Width"
+#~ msgstr "Largeur"
+
+#~ msgid "Width subdivisions"
+#~ msgstr "Subdivisions largeur"

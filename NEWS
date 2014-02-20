@@ -1,0 +1,14 @@
+Copyright 2011, 2012 dragonjoker
+
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved.
+
+
+Changes between version 0.7.0.0 and 0.6.5.0
+
+  BUGS FIXED
+
+  FEATURES
+
+  MISC
+  * Removed all static members and globals

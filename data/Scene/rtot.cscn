@@ -1,0 +1,165 @@
+/*
+material Gold
+{
+	pass
+	{
+		ambient 0.24725	0.1995	0.0745 1.0
+		diffuse 0.75164	0.60648	0.22648 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 0.628281 0.555802 0.366065 1.0
+		shininess 51.2
+		double_face true
+	}
+}
+/**/
+scene TextureScene
+{
+	background_colour 0.5 0.5 0.5 1.0
+	ambient_light 0.5 0.5 0.5 1.0
+
+	camera_node TextureCameraNode
+	{
+		position 0.0 0.0 -550.0
+	}
+
+	scene_node TextureGeometryNode
+	{
+	}
+
+	scene_node TextureSunLightNode
+	{
+		scale 	0.01 0.01 0.01
+	}
+
+	scene_node TextureSunLightNode2
+	{
+		position  0.0 0.0 -1.0
+	}
+
+	light TextureSunLight
+	{
+		parent		TextureSunLightNode
+		type		directional
+		diffuse		0.8 0.8 0.8
+		specular	1.0 1.0 1.0
+	}
+
+	light TextureSunLight2
+	{
+		parent		TextureSunLightNode2
+		type		directional
+		diffuse		0.8 0.8 0.8
+		specular	1.0 1.0 1.0
+	}
+
+	camera TextureCamera
+	{
+		parent TextureCameraNode
+		primitive triangles
+		viewport
+		{
+			type			3d
+			fov_y			45.0
+			near			0.2
+			far				20000
+			size			1024 1024
+			aspect_ratio	1
+		}
+	}
+
+	object TextureGeometry
+	{
+		parent TextureGeometryNode
+		mesh Mesh
+		{
+			import Models/The Lion King/Nala/Nala.obj
+		}
+	}
+}
+/**/
+material RToTMaterial
+{
+	pass
+	{
+		ambient 0.0	0.0	0.0 1.0
+		diffuse 1.0	1.0	1.0 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 0.0 0.0 0.0 1.0
+		shininess 51.2
+		double_face true
+		
+		texture_unit
+		{
+			render_target
+			{
+				format		rgb24
+				size		1024 1024
+				msaa 		8
+				scene		TextureScene
+				camera		TextureCamera
+			}
+			colour 1.0 1.0 1.0 1.0
+			channel diffuse
+		}
+	}
+}
+
+scene FinalScene
+{
+	background_colour 1.0 1.0 1.0 1.0
+	ambient_light 0.5 0.5 0.5 1.0
+
+	scene_node FinalGeometryNode
+	{
+	}
+
+	scene_node FinalSunLightNode
+	{
+		position  0.0 0.0 1.0
+	}
+
+	scene_node FinalSunLightNode2
+	{
+		position  0.0 0.0 -1.0
+	}
+
+	light FinalSunLight
+	{
+		parent		FinalSunLightNode
+		type		directional
+		diffuse		0.8 0.8 0.8
+		specular	1.0 1.0 1.0
+	}
+
+	light FinalSunLight2
+	{
+		parent		FinalSunLightNode2
+		type		directional
+		diffuse		0.8 0.8 0.8
+		specular	1.0 1.0 1.0
+	}
+
+	object FinalGeometry
+	{
+		parent FinalGeometryNode
+		mesh FinalMesh
+		{
+			type cube 1.0 1.0 1.0
+			material RToTMaterial
+		}
+	}
+}
+/**/
+window MyWindow
+{
+	render_target
+	{
+		format		argb32
+		depth		depth24s8
+		size		1125 600
+//		msaa 		8
+		scene		FinalScene
+	}
+//	fullscreen	true
+//	vsync		true
+}

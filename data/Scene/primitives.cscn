@@ -1,0 +1,149 @@
+material "Silver"
+{
+	pass
+	{
+		ambient 0.0745	0.0745	0.0745 1.0
+		diffuse 0.75164	0.75164	0.75164 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 0.628281 0.628281 0.628281 1.0
+		shininess 51.2
+	}
+}
+
+scene "Scene"
+{
+	background_colour 0.5 0.5 0.5 1.0
+	ambient_light 0.5 0.5 0.5 1.0
+
+	scene_node "SunLightNode1"
+	{
+		position  0.0 -1.0 -1.0
+	}
+	light "SunLight1"
+	{
+		parent		"SunLightNode1"
+		type		directional
+		diffuse		0.8 0.8 0.8
+		specular	1.0 1.0 1.0
+	}
+
+	scene_node "FinalNode"
+	{
+	}
+	object "FinalPrimitive"
+	{
+		parent "FinalNode"
+		mesh "Mesh"
+		{
+			type torus 10 10 25.0 50.0
+			material "Silver"
+		}
+	}
+
+	scene_node "FinalNode1"
+	{
+		position 100 0 100
+	}
+	object "FinalPrimitive1"
+	{
+		parent "FinalNode1"
+		mesh "Mesh"
+	}
+
+	scene_node "FinalNode2"
+	{
+		position 200 0 200
+	}
+	object "FinalPrimitive2"
+	{
+		parent "FinalNode2"
+		mesh "Mesh"
+	}
+
+	scene_node "FinalNode3"
+	{
+		position 300 0 300
+	}
+	object "FinalPrimitive3"
+	{
+		parent "FinalNode3"
+		mesh "Mesh"
+	}
+
+	scene_node "FinalNode4"
+	{
+		position 400 0 400
+	}
+	object "FinalPrimitive4"
+	{
+		parent "FinalNode4"
+		mesh "Mesh"
+	}
+
+	scene_node "FinalNode5"
+	{
+		position 500 0 500
+	}
+	object "FinalPrimitive5"
+	{
+		parent "FinalNode5"
+		mesh "Mesh"
+	}
+
+	scene_node "FinalNode6"
+	{
+		position 600 0 600
+	}
+	object "FinalPrimitive6"
+	{
+		parent "FinalNode6"
+		mesh "Mesh"
+	}
+
+	scene_node "FinalNode7"
+	{
+		position 700 0 700
+	}
+	object "FinalPrimitive7"
+	{
+		parent "FinalNode7"
+		mesh "Mesh"
+	}
+
+	scene_node "FinalNode8"
+	{
+		position 800 0 800
+	}
+	object "FinalPrimitive8"
+	{
+		parent "FinalNode8"
+		mesh "Mesh"
+	}
+
+	scene_node "FinalNode9"
+	{
+		position 900 0 900
+	}
+	object "FinalPrimitive9"
+	{
+		parent "FinalNode9"
+		mesh "Mesh"
+	}
+/**/
+}
+
+window "Window"
+{
+	render_target
+	{
+		format		argb32
+		depth		depth24s8
+		size		screen_size
+//		deferred	true
+//		msaa 		8
+//		ssaa		4
+		scene		"Scene"
+	}
+	fullscreen	false
+	vsync		true
+}

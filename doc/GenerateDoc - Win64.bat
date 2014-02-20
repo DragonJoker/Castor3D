@@ -1,0 +1,4 @@
+doxygen CastorUtils_en_Win64.Doxyfile
+doxygen Castor3D_en_Win64.Doxyfile
+doxygen CastorUtils_fr_Win64.Doxyfile
+doxygen Castor3D_fr_Win64.Doxyfile

@@ -1,0 +1,570 @@
+﻿/*
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU Lesser General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License along with
+the program; if not, write to the Free Software Foundation, Inc., 59 Temple
+Place - Suite 330, Boston, MA 02111-1307, USA, or go to
+http://www.gnu.org/copyleft/lesser.txt.
+*/
+#ifndef ___Castor_FileParser___
+#define ___Castor_FileParser___
+
+#include <map>
+#include <stack>
+#include <limits>
+#include "Logger.hpp"
+#include "File.hpp"
+#include "Point.hpp"
+#include "Colour.hpp"
+#include "Pixel.hpp"
+#include "Exception.hpp"
+
+#if defined( min )
+#	undef min
+#endif
+#if defined( max )
+#	undef max
+#endif
+#if defined( abs )
+#	undef abs
+#endif
+
+namespace Castor
+{
+	class Colour;
+	class FileParser;
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.6.1.0
+	\date		19/10/2011
+	\~english
+	\brief		The context used into file parsing functions
+	\remark		While parsing a "brace file", the context holds the important data retrieved
+	\~french
+	\brief		Contexte utilisé dans les fonctions d'analyse
+	\remark		Lorsqu'on analyse un fichier, le contexte contient les informations importantes qui ont été récupérées.
+	*/
+	class FileParserContext
+	{
+	public:
+		//!\~english The file currently parsed	\~french Le fichier en cours d'analyse
+		TextFile *			pFile;
+		//!\~english The current line			\~french La ligne en cours d'analyse
+		unsigned long long	ui64Line;
+		//!\~english The sections stack			\~french La pile de sections
+		std::stack< int >	stackSections;
+		//!\~english The current function name	\~french Le nom de la fonction actuelle
+		String				strFunctionName;
+
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	p_pFile	The file in parse
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	p_pFile	Le fichier en cours de traitement
+		 */
+		FileParserContext( TextFile * p_pFile );
+		/**
+		 *\~english
+		 *\brief		Destructor
+		 *\~french
+		 *\brief		Destructeur
+		 */
+		virtual ~FileParserContext();
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.7.0.0
+	\date		04/02/2013
+	\~english
+	\brief		Parser function parameter types enumeration
+	\~french
+	\brief		Enumération des types de paramètres pour une fonction d'analyse
+	*/
+	typedef enum ePARAMETER_TYPE CASTOR_TYPE( uint8_t )
+	{	ePARAMETER_TYPE_TEXT
+	,	ePARAMETER_TYPE_NAME
+	,	ePARAMETER_TYPE_PATH
+	,	ePARAMETER_TYPE_CHECKED_TEXT
+	,	ePARAMETER_TYPE_BOOL
+	,	ePARAMETER_TYPE_INT8
+	,	ePARAMETER_TYPE_INT16
+	,	ePARAMETER_TYPE_INT32
+	,	ePARAMETER_TYPE_INT64
+	,	ePARAMETER_TYPE_UINT8
+	,	ePARAMETER_TYPE_UINT16
+	,	ePARAMETER_TYPE_UINT32
+	,	ePARAMETER_TYPE_UINT64
+	,	ePARAMETER_TYPE_FLOAT
+	,	ePARAMETER_TYPE_DOUBLE
+	,	ePARAMETER_TYPE_LONGDOUBLE
+	,	ePARAMETER_TYPE_PIXELFORMAT
+	,	ePARAMETER_TYPE_POINT2I
+	,	ePARAMETER_TYPE_POINT3I
+	,	ePARAMETER_TYPE_POINT4I
+	,	ePARAMETER_TYPE_POINT2F
+	,	ePARAMETER_TYPE_POINT3F
+	,	ePARAMETER_TYPE_POINT4F
+	,	ePARAMETER_TYPE_POINT2D
+	,	ePARAMETER_TYPE_POINT3D
+	,	ePARAMETER_TYPE_POINT4D
+	,	ePARAMETER_TYPE_SIZE
+	,	ePARAMETER_TYPE_COLOUR
+	,	ePARAMETER_TYPE_COUNT
+	}	ePARAMETER_TYPE;
+	//!\~english Typedef over a pointer to a FileParserContext	\~french Typedef d'un pointeur sur un FileParserContextPtr
+	DECLARE_SMART_PTR( FileParserContext );
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		26/03/2013
+	\version	0.7.0
+	\~english
+	\brief		Retrieves the value of a specified parser parameter
+	\~french
+	\brief		Récupère la valeur d'un paramètre de parseur spécifié
+	\remark		
+	*/
+	template< typename T > struct ParserValueGetter;
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		
+	\~english
+	\brief		Exception thrown when the user tries to retrieve a parameter of a wrong type
+	\~french
+	\brief		Exception lancée lorsque l'utilisateur se trompe de type de paramètre
+	*/
+	class ParserParameterTypeException : public Castor::Exception
+	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	p_eGivenType	The type asked by the user
+		 *\param[in]	p_eExpectedType	The real parameter type
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	p_eGivenType	Le type demandé par l'utilisateur
+		 *\param[in]	p_eExpectedType	Le type réel du paramètre
+		 */
+		ParserParameterTypeException( ePARAMETER_TYPE p_eGivenType, ePARAMETER_TYPE p_eExpectedType );
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		26/03/2013
+	\version	0.7.0
+	\~english
+	\brief		Template structure holding parameter specific data
+	\~french
+	\brief		Structure template contenant les données spécifiques du paramètre
+	*/
+	class ParserParameterBase
+	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Retrieves the parameter type
+		 *\return		The type
+		 *\~french
+		 *\brief		Récupère le type du paramètre
+		 *\return		Le type
+		 */
+		virtual ePARAMETER_TYPE GetType()=0;
+		/**
+		 *\~english
+		 *\brief		Retrieves the parameter base type (like ePARAMETER_TYPE_TEXT for ePARAMETER_TYPE_NAME)
+		 *\return		The type
+		 *\~french
+		 *\brief		Récupère le type de base du paramètre (comme ePARAMETER_TYPE_TEXT pour ePARAMETER_TYPE_NAME)
+		 *\return		Le type
+		 */
+		virtual ePARAMETER_TYPE GetBaseType() { return GetType(); }
+		/**
+		 *\~english
+		 *\brief		Retrieves the parameter string type
+		 *\return		The type
+		 *\~french
+		 *\brief		Récupère le type du chaîne paramètre
+		 *\return		Le type
+		 */
+		virtual xchar const * GetStrType()=0;
+		/**
+		 *\~english
+		 *\brief			Checks the parameter
+		 *\param[in,out]	p_strParams	The text containing the parameter value
+		 *\return			\p false if any error occured
+		 *\~french
+		 *\brief			Vérifie le paramètre
+		 *\param[in,out]	p_strParams	Le texte contenant la valeur du paramètre
+		 *\return			\p si un problème quelconque est arrivé
+		 */
+		virtual bool Parse( String & p_strParams )=0;
+		/**
+		 *\~english
+		 *\brief		Retrieves the parameter value
+		 *\param[out]	p_value	Receives the value
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la valeur du paramètre
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\return		La valeur
+		 */
+		template< typename T > T const & Get( T & p_value );
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		26/03/2013
+	\version	0.7.0
+	\~english
+	\brief		Specified parser parameter
+	\~french
+	\brief		Parmètre de parseur spécifié
+	\remark		
+	*/
+	template< ePARAMETER_TYPE Type > class ParserParameter : public ParserParameterBase
+	{
+	public:
+		virtual ePARAMETER_TYPE GetType() { return ePARAMETER_TYPE_COUNT; }
+		virtual xchar const * GetStrType() { return cuT( "unknown parameter type" ); }
+		virtual bool Parse( String & CU_PARAM_UNUSED( p_strParam ) ) { return false; }
+	};
+	//!\~english Typedef over a pointer to a ParserParameterBase	\~french Typedef d'un pointeur sur un ParserParameterBase
+	DECLARE_SMART_PTR( ParserParameterBase );
+	//!\~english Typedef over a dynamic array of ePARAMETER_TYPE	\~french Typedef sur un tableau dynamique de ePARAMETER_TYPE
+	DECLARE_VECTOR( ParserParameterBaseSPtr, ParserParameter );
+	/**
+	 *\~english
+	 *\brief		Parser function definition
+	 *\param[in]	p_arrayParams	The params contained in the line
+	 *\param[in]	p_pContext		The parsing context
+	 *\return		\p true if a brace is to be opened on next line
+	 *\~french
+	 *\brief		Définition d'une fonction d'analyse
+	 *\param[in]	p_arrayParams	Les paramètres contenus dans la ligne
+	 *\param[in]	p_pContext		Le contexte d'analyse
+	 *\return		\p true si une accolade doit être ouverte à la ligne suivante
+	 */
+	typedef bool (ParserFunction)( Castor::FileParser * p_pParser, ParserParameterArray const & p_arrayParams );
+	//!\~english Pointer over a parser function	\~french Pointeur sur une fonction d'analyse
+	typedef ParserFunction * PParserFunction;
+	//!\~english Define to ease the declaration of a parser	\~french Un define pour faciliter la déclaration d'un analyseur
+#	define DECLARE_ATTRIBUTE_PARSER( X ) bool X( Castor::FileParser * p_pParser, Castor::ParserParameterArray const & p_arrayParams );
+	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
+#	define IMPLEMENT_ATTRIBUTE_PARSER( nmspc, X )	bool nmspc :: X( Castor::FileParser * p_pParser, Castor::ParserParameterArray const & p_arrayParams )	\
+													{																										\
+														bool l_bReturn = false;																				\
+														FileParserContextSPtr p_pContext = p_pParser->GetContext();											\
+														try																									\
+														{																									\
+															if( !p_pParser->IsIgnored() )
+
+	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
+#	define ATTRIBUTE_END_PUSH( x )		}												\
+									}													\
+									catch( ParserParameterTypeException p_exc )			\
+									{													\
+										PARSING_ERROR( str_utils::from_str( p_exc.what() ) );	\
+									}													\
+									l_bReturn = true;									\
+									p_pContext->stackSections.push( x );				\
+									return l_bReturn
+	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
+#	define ATTRIBUTE_END()		}												\
+							}													\
+							catch( ParserParameterTypeException p_exc )			\
+							{													\
+								PARSING_ERROR( str_utils::from_str( p_exc.what() ) );	\
+							}													\
+							l_bReturn = false;									\
+							return l_bReturn
+	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
+#	define ATTRIBUTE_END_POP()		}												\
+								}													\
+								catch( ParserParameterTypeException p_exc )			\
+								{													\
+									PARSING_ERROR( str_utils::from_str( p_exc.what() ) );	\
+								}													\
+								l_bReturn = false;									\
+								p_pContext->stackSections.pop();					\
+								return l_bReturn
+	//!\~english Define to ease the call to FileParser::ParseError	\~french Un define pour faciliter l'appel de FileParser::ParseError
+#	define PARSING_ERROR( p_strError) p_pParser->ParseError( (p_strError) )
+	//!\~english Define to ease the call to FileParser::ParseWarning	\~french Un define pour faciliter l'appel de FileParser::ParseWarning
+#	define PARSING_WARNING( p_strWarning) p_pParser->ParseWarning( (p_strWarning) )
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.6.1.0
+	\date		19/10/2011
+	\~english
+	\brief		"Brace file" parser base class
+	\~french
+	\brief		Classe de base pour les analyseurs de fichier à accolades
+	*/
+	class FileParser
+	{
+	private:
+		typedef std::pair< PParserFunction, ParserParameterArray > ParserFunctionAndParams;
+#if defined( _MSC_VER )
+		/*!
+		\author		Sylvain DOREMUS
+		\version	0.7.0.0
+		\date		20/02/2013
+		\~english
+		\brief		Helper class used with MSVC to avoid warning 4503
+		\remark		It forwards few functions and typedefs of the original map 
+		\~french
+		\brief		Classe d'aide à la disparition du warning 4503 pour MSVC
+		\remark		Elle expose quelques fonctions et types de la map originale
+		*/
+		class AttributeParserMap
+		{
+		private:
+			DECLARE_MAP( String, ParserFunctionAndParams,  );
+			Map m_map;
+
+		public:
+			typedef MapIt iterator;
+			typedef MapConstIt const_iterator;
+			
+			ParserFunctionAndParams & operator []( String const & p_strName )
+			{
+				MapIt l_it = m_map.find( p_strName );
+
+				if( l_it == m_map.end() )
+				{
+					m_map.insert( std::make_pair( p_strName, ParserFunctionAndParams() ) );
+					l_it = m_map.find( p_strName );
+				}
+
+				return l_it->second;
+			}
+
+			iterator find( String const & p_strName )
+			{
+				return m_map.find( p_strName );
+			}
+
+			const_iterator find( String const & p_strName )const
+			{
+				return m_map.find( p_strName );
+			}
+
+			iterator begin()
+			{
+				return m_map.begin();
+			}
+
+			const_iterator begin()const
+			{
+				return m_map.begin();
+			}
+
+			iterator end()
+			{
+				return m_map.end();
+			}
+
+			const_iterator end()const
+			{
+				return m_map.end();
+			}
+		};
+#else
+		DECLARE_MAP( String, ParserFunctionAndParams, AttributeParser );
+#endif
+
+	private:
+		int									m_iRootSectionNumber;
+		int									m_iSectionCount;
+		int									m_iIgnoreLevel;
+
+	protected:
+		//!\~english	The map holding the parsers, sorted by section	\~french	La map de parseurs, triés par section
+		std::map< int, AttributeParserMap >	m_mapParsers;
+		//!\~english	Th parser context								\~french	Le contexte du parseur
+		FileParserContextSPtr				m_pParsingContext;
+		//!\~english	Tells the lines parsed are to be ignored		\~french	Dit que les ligne slues sont ignorées
+		bool								m_bIgnored;
+
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	p_iRootSectionNumber	The root section id
+		 *\param[in]	p_iSectionCount			The sections count
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	p_iRootSectionNumber	L'id de la section de root
+		 *\param[in]	p_iSectionCount			Le nombre de sections
+		 */
+		FileParser( int p_iRootSectionNumber, int p_iSectionCount );
+		/**
+		 *\~english
+		 *\brief		Destructor
+		 *\~french
+		 *\brief		Destructeur
+		 */
+		virtual ~FileParser();
+		/**
+		 *\~english
+		 *\brief		Parsing function
+		 *\param[in]	p_strFileName	The file name
+		 *\return		\p true if OK
+		 *\~french
+		 *\brief		Fonction de traitement
+		 *\param[in]	p_strFileName	Le nom du fichier
+		 *\return		\p true si tout s'est bien passé
+		 */
+		bool ParseFile	( String const & p_strFileName );
+		/**
+		 *\~english
+		 *\brief		Parsing function
+		 *\param[in]	p_file	The file
+		 *\return		\p true if OK
+		 *\~french
+		 *\brief		Fonction de traitement
+		 *\param[in]	p_file	Le fichier
+		 *\return		\p true si tout s'est bien passé
+		 */
+		bool ParseFile	( TextFile & p_file );
+		/**
+		 *\~english
+		 *\brief		Logs an error in the log file
+		 *\param[in]	p_strError	The error text
+		 *\param[in]	p_pContext	The current parsing context
+		 *\~french
+		 *\brief		Log une erreur dans le fichier de log
+		 *\param[in]	p_strError	Le texte de l'erreur
+		 *\param[in]	p_pContext	Le context d'analyse
+		 */
+		void ParseError( String const & p_strError );
+		/**
+		 *\~english
+		 *\brief		Logs a warning in the log file
+		 *\param[in]	p_strWarning	The warning text
+		 *\param[in]	p_pContext		The current parsing context
+		 *\~french
+		 *\brief		Log un avertissement dans le fichier de log
+		 *\param[in]	p_strWarning	Le texte de l'avertissement
+		 *\param[in]	p_pContext		Le context d'analyse
+		 */
+		void ParseWarning( String const & p_strWarning );
+		/**
+		 *\~english
+		 *\brief		Tells if the read lines are to be ignored
+		 *\~french
+		 *\brief		Dit si les lignes suivantes doivent être ignorées
+		 */
+		 bool IsIgnored()const { return m_bIgnored; }
+		/**
+		 *\~english
+		 *\brief		Increments ignore level
+		 *\~french
+		 *\brief		Incrémente le niveau d'ignorés
+		 */
+		 void Ignore()	{ m_bIgnored = true; }
+		/**
+		 *\~english
+		 *\brief		Tests if the params given to the function will be appropriate
+		 *\param[in]	p_strParams		The given parameters
+		 *\param[in]	p_itBegin		An iterator to the first expected parameter
+		 *\param[in]	p_itEnd			An iterator to the end of the expected parameters
+		 *\return		\p false if \p p_strParams doesn't contain all expected parameters types
+		 *\~french
+		 *\brief		Vérifie si les paramètres donnés à la fonction correspondent à ceux qu'elle attend
+		 *\param[in]	p_strParams		Les paramètres donnés
+		 *\param[in]	p_itBegin		Un itérateur sur le premier des paramètres attendus
+		 *\param[in]	p_itEnd			Un itérateur sur la fin des paramètres attendus
+		 *\return		\p false si \p p_strParams ne contient pas tous les types de paramètres attendus par la fonction
+		 */
+		bool CheckParams( String const & p_strParams, ParserParameterArrayConstIt p_itBegin, ParserParameterArrayConstIt p_itEnd );
+		/**
+		 *\~english
+		 *\brief		Adds a parser function to the parsers list
+		 *\param[in]	p_iSection		The parser section
+		 *\param[in]	p_strName		The parser name
+		 *\param[in]	p_pfnFunction	The parser function
+		 *\param[in]	p_iCount		The expected parameters list count
+		 *\param[in]	...				The expected parameters list
+		 *\~french
+		 *\brief		Ajoute une foncction d'analyse à la liste
+		 *\param[in]	p_iSection		La section
+		 *\param[in]	p_strName		Le nom
+		 *\param[in]	p_pfnFunction	La fonction d'analyse
+		 *\param[in]	p_iCount		Le compte des paramètres attendus
+		 *\param[in]	...				La liste des paramètres attendus
+		 */
+		void AddParser( int p_iSection, String const & p_strName, PParserFunction p_pfnFunction, int p_iCount=0, ... );
+		/**
+		 *\~english
+		 *\brief		Retrieves the parser pontext
+		 *\return		The context
+		 *\~french
+		 *\brief		Récupère le contexte d'analyse
+		 *\return		Le contexte
+		 */
+		inline FileParserContextSPtr GetContext() { return m_pParsingContext; }
+
+	protected:
+		/**
+		 *\~english
+		 *\brief		Specific initialisation function
+		 *\~french
+		 *\brief		Initialisation spécifique
+		 */
+		virtual void DoInitialiseParser( Castor::TextFile & p_file )=0;
+		/**
+		 *\~english
+		 *\brief		Specific cleanup
+		 *\~french
+		 *\brief		Nettoyage spécifique
+		 */
+		virtual void DoCleanupParser()=0;
+		/**
+		 *\~english
+		 *\brief		Function called when \p m_iSection is out of bounds
+		 *\param[in]	p_strLine	The current line
+		 *\return		\p true if a brace is opened after this line, \false if not
+		 *\~french
+		 *\brief		Fonction appelée lorsque \p m_iSection est hors limites
+		 *\param[in]	p_strLine	La ligne en cours d'analyse
+		 *\return		\p true si une accolade doit être ouverte à la ligne suivant, \p false sinon
+		 */
+		virtual bool DoDelegateParser( String const & p_strLine )=0;
+		/**
+		 *\~english
+		 *\brief		Function called when no parser is found for the line
+		 *\param[in]	p_strLine	The current line
+		 *\~french
+		 *\brief		Fonction appelée si aucun analyseur n'est trouvé pour traiter la ligne
+		 *\param[in]	p_strLine	La ligne en cours d'analyse
+		 */
+		virtual void DoDiscardParser( String const & p_strLine )=0;
+		/**
+		 *\~english
+		 *\brief		Function called when file parsing is completed with no error
+		 *\~french
+		 *\brief		Fonction appelée si l'analyse est complétée sans erreurs
+		 */
+		virtual void DoValidate()=0;
+
+	private:
+		bool DoParseScriptLine( String & p_strLine );
+		bool DoParseScriptBlockEnd();
+		bool DoInvokeParser( Castor::String & p_line, AttributeParserMap const & p_parsers );
+	};
+
+#include "FileParser.inl"
+}
+
+#endif

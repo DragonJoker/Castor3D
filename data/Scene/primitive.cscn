@@ -1,0 +1,55 @@
+material "Silver"
+{
+	pass
+	{
+		ambient 0.0745	0.0745	0.0745 1.0
+		diffuse 0.75164	0.75164	0.75164 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 0.628281 0.628281 0.628281 1.0
+		shininess 51.2
+	}
+}
+
+scene "Scene"
+{
+	background_colour 0.5 0.5 0.5 1.0
+	ambient_light 0.5 0.5 0.5 1.0
+
+	scene_node "SunLightNode1"
+	{
+		position  0.0 -1.0 -1.0
+	}
+	light "SunLight1"
+	{
+		parent		"SunLightNode1"
+		type		directional
+		diffuse		0.8 0.8 0.8
+		specular	1.0 1.0 1.0
+	}
+
+	scene_node "FinalNode"
+	{
+	}
+	object "FinalPrimitive"
+	{
+		parent "FinalNode"
+		mesh "Mesh"
+		{
+			type torus 10 10 10.0 20.0
+			material "Silver"
+		}
+	}
+}
+
+window "Window"
+{
+	render_target
+	{
+		format		argb32
+		depth		depth24s8
+		size		screen_size
+		scene		"Scene"
+	}
+	fullscreen	false
+	vsync		true
+}

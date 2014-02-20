@@ -1,0 +1,45 @@
+float4x4 ProjectionModelViewMatrix;
+float4x4 ProjectionMatrix;
+float4x4 ModelViewMatrix;
+
+struct VtxInput
+{
+	float4 Position	:	POSITION0;
+	float2 Texture	:	TEXCOORD0;
+};
+
+struct VtxOutput
+{
+	float4 Position	: 	POSITION0;
+	float2 Texture	:	TEXCOORD0;
+};
+
+texture diffuseTexture : DiffuseMap;
+sampler DiffuseTextureSampler = sampler_state
+{
+	texture = <diffuseTexture>;
+    AddressU  = WRAP;
+	AddressV  = WRAP;
+    AddressW  = WRAP;
+    MIPFILTER = LINEAR;
+    MINFILTER = LINEAR;
+    MAGFILTER = LINEAR;
+};
+//sampler2D DiffuseMap;
+
+VtxOutput mainVx( in VtxInput p_input)
+{
+	VtxOutput l_output;
+	l_output.Position = mul( p_input.Position, ProjectionModelViewMatrix);
+	l_output.Texture = p_input.Texture;
+	return l_output;
+}
+
+float4 mainPx( in VtxOutput p_input) : COLOR
+{
+	float4 l_output = float4( 0.0, 0.0, 0.0, 1.0);
+//	l_output = tex2D( DiffuseMap, p_input.Texture);
+	l_output = tex2D( DiffuseTextureSampler, p_input.Texture);
+	l_output.a = 1.0;
+	return l_output;
+};
