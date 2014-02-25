@@ -53,63 +53,6 @@ public:
 	void operator()( std::pair< int, LightSPtr > p_pair ) { p_pair.second->EndRender(); }
 };
 
-class SubmeshAnimUpdater
-{
-private:
-	real m_rAnimationTime;
-
-public:
-	SubmeshAnimUpdater( real p_rAnimationTime )
-		:	m_rAnimationTime	( p_rAnimationTime	)
-	{
-	}
-	void operator()( SubmeshSPtr p_pSubmesh/*, const aiNode* pNode, const Matrix4f& ParentTransform*/ )
-	{/*
-		String l_strNodeName( pNode->mName.data );
-
-		const aiAnimation* pAnimation = m_pScene->mAnimations[0];
-
-		Matrix4f NodeTransformation(pNode->mTransformation);
-
-		const aiNodeAnim* pNodeAnim = FindNodeAnim(pAnimation, NodeName);
-
-		if (pNodeAnim) {
-			// Interpolate scaling and generate scaling transformation matrix
-			aiVector3D Scaling;
-			CalcInterpolatedScaling(Scaling, m_rAnimationTime, pNodeAnim);
-			Matrix4f ScalingM;
-			ScalingM.InitScaleTransform(Scaling.x, Scaling.y, Scaling.z);
-
-			// Interpolate rotation and generate rotation transformation matrix
-			aiQuaternion RotationQ;
-			CalcInterpolatedRotation(RotationQ, m_rAnimationTime, pNodeAnim);
-			Matrix4f RotationM = Matrix4f(RotationQ.GetMatrix());
-
-			// Interpolate translation and generate translation transformation matrix
-			aiVector3D Translation;
-			CalcInterpolatedPosition(Translation, m_rAnimationTime, pNodeAnim);
-			Matrix4f TranslationM;
-			TranslationM.InitTranslationTransform(Translation.x, Translation.y, Translation.z);
-
-			// Combine the above transformations
-			NodeTransformation = TranslationM * RotationM * ScalingM;
-		}
-
-		Matrix4f GlobalTransformation = ParentTransform * NodeTransformation;
-
-		if (m_BoneMapping.find(NodeName) != m_BoneMapping.end())
-		{
-			uint BoneIndex = m_BoneMapping[NodeName];
-			m_BoneInfo[BoneIndex].FinalTransformation = m_GlobalInverseTransform * GlobalTransformation * m_BoneInfo[BoneIndex].BoneOffset;
-		}
-
-		for (uint i = 0 ; i < pNode->mNumChildren ; i++)
-		{
-			ReadNodeHeirarchy( m_rAnimationTime, pNode->mChildren[i], GlobalTransformation);
-		}*/
-	}
-};
-
 //*************************************************************************************************
 
 Scene::TextLoader :: TextLoader( File::eENCODING_MODE p_eEncodingMode )

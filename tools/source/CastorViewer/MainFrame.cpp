@@ -614,8 +614,14 @@ String MainFrame :: DoObjExport( MeshSPtr p_pMesh, uint32_t & p_uiOffset, uint32
 	return l_strReturn;
 }
 
-void MainFrame :: DoCscnExportScene( Path const & WXUNUSED( p_pathFile ) )
+void MainFrame :: DoCscnExportScene( Path const & p_pathFile )
 {
+	SceneSPtr l_pScene = m_pMainScene.lock();
+
+	if( l_pScene )
+	{
+		Scene::TextLoader()( *l_pScene, p_pathFile );
+	}
 }
 
 void MainFrame :: DoBinaryExportScene( Path const & WXUNUSED( p_pathFile ) )
