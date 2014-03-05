@@ -1,4 +1,4 @@
-material Gold
+material "Gold"
 {
 	pass
 	{
@@ -10,54 +10,54 @@ material Gold
 	}
 }
 
-scene MyScene
+scene "MyScene"
 {
 	ambient_light 0.5 0.5 0.5 1.0
 
-	scene_node SunLightNode
+	scene_node "SunLightNode"
 	{
 		position  0.0 -1.0 1.0
 	}
 	
-	scene_node SunLightNode2
+	scene_node "SunLightNode2"
 	{
 		position  1.0 1.0 -1.0
 	}
 
-	light SunLight
+	light "SunLight"
 	{
-		parent		SunLightNode
+		parent		"SunLightNode"
 		type		directional
 		diffuse		0.8 0.8 0.8
 		specular	1.0 1.0 1.0
 	}
 	
-	light SunLight2
+	light "SunLight2"
 	{
-		parent		SunLightNode2
+		parent		"SunLightNode2"
 		type		directional
 		diffuse		0.8 0.8 0.8
 		specular	1.0 1.0 1.0
 	}
 	
-	scene_node BuddahNode
+	scene_node "BuddahNode"
 	{
 		scale 5 5 5
 	}
-	object Buddah
+	object "Buddah"
 	{
-		parent BuddahNode
-		mesh Mesh
+		parent "BuddahNode"
+		mesh "BuddahMesh"
 		{
-			import Models/PLY/happy.ply
-			material Gold
+			import "PlyModels/happy.ply"
+			material "Gold"
 		}
 	}
 }
 
-window MyWindow
+window "MyWindow"
 {
-	format rgba8
+	format argb32
 	size 1024 768
-	scene MyScene
+	scene "MyScene"
 }

@@ -12,49 +12,49 @@ material Gold
 	}
 }
 /**/
-scene TextureScene
+scene "TextureScene"
 {
 	background_colour 0.5 0.5 0.5 1.0
 	ambient_light 0.5 0.5 0.5 1.0
 
-	camera_node TextureCameraNode
+	camera_node "TextureCameraNode"
 	{
 		position 0.0 0.0 -550.0
 	}
 
-	scene_node TextureGeometryNode
+	scene_node "TextureGeometryNode"
 	{
 	}
 
-	scene_node TextureSunLightNode
+	scene_node "TextureSunLightNode"
 	{
 		scale 	0.01 0.01 0.01
 	}
 
-	scene_node TextureSunLightNode2
+	scene_node "TextureSunLightNode2"
 	{
 		position  0.0 0.0 -1.0
 	}
 
-	light TextureSunLight
+	light "TextureSunLight"
 	{
-		parent		TextureSunLightNode
+		parent		"TextureSunLightNode"
 		type		directional
 		diffuse		0.8 0.8 0.8
 		specular	1.0 1.0 1.0
 	}
 
-	light TextureSunLight2
+	light "TextureSunLight2"
 	{
-		parent		TextureSunLightNode2
+		parent		"TextureSunLightNode2"
 		type		directional
 		diffuse		0.8 0.8 0.8
 		specular	1.0 1.0 1.0
 	}
 
-	camera TextureCamera
+	camera "TextureCamera"
 	{
-		parent TextureCameraNode
+		parent "TextureCameraNode"
 		primitive triangles
 		viewport
 		{
@@ -67,17 +67,18 @@ scene TextureScene
 		}
 	}
 
-	object TextureGeometry
+	object "TextureGeometry"
 	{
-		parent TextureGeometryNode
-		mesh Mesh
+		parent "TextureGeometryNode"
+		mesh "TextureMesh"
 		{
-			import Models/The Lion King/Nala/Nala.obj
+			type torus 10 10 10.0 20.0
+			material "RToTMaterial"
 		}
 	}
 }
 /**/
-material RToTMaterial
+material "RToTMaterial"
 {
 	pass
 	{
@@ -95,8 +96,8 @@ material RToTMaterial
 				format		rgb24
 				size		1024 1024
 				msaa 		8
-				scene		TextureScene
-				camera		TextureCamera
+				scene		"TextureScene"
+				camera		"TextureCamera"
 			}
 			colour 1.0 1.0 1.0 1.0
 			channel diffuse
@@ -104,53 +105,53 @@ material RToTMaterial
 	}
 }
 
-scene FinalScene
+scene "FinalScene"
 {
 	background_colour 1.0 1.0 1.0 1.0
 	ambient_light 0.5 0.5 0.5 1.0
 
-	scene_node FinalGeometryNode
+	scene_node "FinalGeometryNode"
 	{
 	}
 
-	scene_node FinalSunLightNode
+	scene_node "FinalSunLightNode"
 	{
 		position  0.0 0.0 1.0
 	}
 
-	scene_node FinalSunLightNode2
+	scene_node "FinalSunLightNode2"
 	{
 		position  0.0 0.0 -1.0
 	}
 
-	light FinalSunLight
+	light "FinalSunLight"
 	{
-		parent		FinalSunLightNode
+		parent		"FinalSunLightNode"
 		type		directional
 		diffuse		0.8 0.8 0.8
 		specular	1.0 1.0 1.0
 	}
 
-	light FinalSunLight2
+	light "FinalSunLight2"
 	{
-		parent		FinalSunLightNode2
+		parent		"FinalSunLightNode2"
 		type		directional
 		diffuse		0.8 0.8 0.8
 		specular	1.0 1.0 1.0
 	}
 
-	object FinalGeometry
+	object "FinalGeometry"
 	{
-		parent FinalGeometryNode
-		mesh FinalMesh
+		parent "FinalGeometryNode"
+		mesh "FinalMesh"
 		{
 			type cube 1.0 1.0 1.0
-			material RToTMaterial
+			material "RToTMaterial"
 		}
 	}
 }
 /**/
-window MyWindow
+window "MyWindow"
 {
 	render_target
 	{
@@ -158,7 +159,7 @@ window MyWindow
 		depth		depth24s8
 		size		1125 600
 //		msaa 		8
-		scene		FinalScene
+		scene		"FinalScene"
 	}
 //	fullscreen	true
 //	vsync		true
