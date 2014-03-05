@@ -711,121 +711,187 @@ void Submesh :: ComputeNormals( bool p_bReverted )
 {
 	if( !m_bHasNormals )
 	{
-		std::vector< FaceAndAnglePtrArray > l_arrayFaces;
-		Point3rArray l_arrayNormals;
-		Point3rArray l_arrayTangents;
-		FaceAndAnglePtr	l_pFaceAndAngle;
-		Point3r l_vec1m2;
-		Point3r l_vec1m3;
 		Point3r l_vec2m1;
-		Point3r l_vec2m3;
 		Point3r l_vec3m1;
-		Point3r l_vec3m2;
 		Point3r l_tex2m1;
 		Point3r l_tex3m1;
-		Point3r l_vFaceNormal;
-		Point3r l_vFaceTangent;
-		FaceAndAnglePtr l_faa1;
-		FaceAndAnglePtr l_faa2;
-		FaceAndAnglePtr l_faa3;
-		uint32_t l_uiIndex = 0;
 		Point3r l_pt1;
 		Point3r l_pt2;
 		Point3r l_pt3;
-		Point3r l_uv1;
-		Point3r l_uv2;
-		Point3r l_uv3;
 		BufferElementGroupSPtr l_pVtx1;
 		BufferElementGroupSPtr l_pVtx2;
 		BufferElementGroupSPtr l_pVtx3;
+		Point3r l_vFaceNormal;
+		Point3r l_vFaceTangent;
 
-		//creation d'un vecteur de liste (chaque point contient la liste des faces auxquelles il appartient)
-		l_arrayFaces.resize(	m_points.size() );
+//		std::vector< FaceAndAnglePtrArray > l_arrayFaces;
+//		FaceAndAnglePtr	l_pFaceAndAngle;
+//		FaceAndAnglePtr l_faa1;
+//		FaceAndAnglePtr l_faa2;
+//		FaceAndAnglePtr l_faa3;
+//		uint32_t l_uiIndex = 0;
+//		Point3r l_vec1m2;
+//		Point3r l_vec1m3;
+//		Point3r l_vec2m3;
+//		Point3r l_vec3m2;
+//		Point3r l_uv1;
+//		Point3r l_uv2;
+//		Point3r l_uv3;
+//
+//		//creation d'un vecteur de liste (chaque point contient la liste des faces auxquelles il appartient)
+//		l_arrayFaces.resize(	m_points.size() );
+//
+//		//Pour chaque vertex, on stocke la liste des faces auxquelles il appartient
+//		for( FacePtrArray::iterator l_it = m_arrayFaces.begin(); l_it != m_arrayFaces.end(); ++l_it )
+//		{
+//			FaceSPtr l_pFace = (*l_it);
+//
+//			l_pVtx1 = m_points[l_pFace->GetVertexIndex( 0 )];
+//			l_pVtx2 = m_points[l_pFace->GetVertexIndex( 1 )];
+//			l_pVtx3 = m_points[l_pFace->GetVertexIndex( 2 )];
+//
+//			Vertex::GetPosition( l_pVtx1, l_pt1 );
+//			Vertex::GetPosition( l_pVtx2, l_pt2 );
+//			Vertex::GetPosition( l_pVtx3, l_pt3 );
+//
+//			Vertex::GetTexCoord( l_pVtx1, l_uv1 );
+//			Vertex::GetTexCoord( l_pVtx2, l_uv2 );
+//			Vertex::GetTexCoord( l_pVtx3, l_uv3 );
+//
+//			l_vec1m2 = l_pt1 - l_pt2;
+//			l_vec1m3 = l_pt1 - l_pt3;
+//			l_vec2m1 = l_pt2 - l_pt1;
+//			l_vec2m3 = l_pt2 - l_pt3;
+//			l_vec3m1 = l_pt3 - l_pt1;
+//			l_vec3m2 = l_pt3 - l_pt2;
+//
+//			l_tex2m1 = l_uv2 - l_uv1;
+//			l_tex3m1 = l_uv3 - l_uv1;
+//
+//			l_vFaceNormal	= point::get_normalised( l_vec3m1 ^ l_vec2m1 );
+//			l_vFaceTangent	= point::get_normalised( (l_vec3m1 * l_tex2m1[1]) - (l_vec2m1 * l_tex3m1[1]) );
+//
+//			l_faa1 = std::make_shared< FaceAndAngle >();
+//			l_faa1->m_rAngle = real( std::abs( acos( point::cos_theta( l_vec3m1, l_vec2m1 ) ) ) );
+//			l_faa1->m_ptNormal = l_vFaceNormal * l_faa1->m_rAngle;
+//			l_faa1->m_ptTangent = l_vFaceTangent * l_faa1->m_rAngle;
+//
+//			l_faa2 = std::make_shared< FaceAndAngle >();
+//			l_faa2->m_rAngle = real( std::abs( acos( point::cos_theta( l_vec1m2, l_vec3m2 ) ) ) );
+//			l_faa2->m_ptNormal = l_vFaceNormal * l_faa2->m_rAngle;
+//			l_faa2->m_ptTangent = l_vFaceTangent * l_faa2->m_rAngle;
+//
+//			l_faa3 = std::make_shared< FaceAndAngle >();
+//			l_faa3->m_rAngle = real( std::abs( acos( point::cos_theta( l_vec1m3, l_vec2m3 ) ) ) );
+//			l_faa3->m_ptNormal = l_vFaceNormal * l_faa3->m_rAngle;
+//			l_faa3->m_ptTangent = l_vFaceTangent * l_faa3->m_rAngle;
+//
+//			l_arrayFaces[l_pFace->GetVertexIndex( 0 )].push_back( l_faa1 );
+//			l_arrayFaces[l_pFace->GetVertexIndex( 1 )].push_back( l_faa2 );
+//			l_arrayFaces[l_pFace->GetVertexIndex( 2 )].push_back( l_faa3 );
+//		}
+//
+//		//On effectue la moyennes des normales
+//		for( std::vector< FaceAndAnglePtrArray >::iterator l_itFaa = l_arrayFaces.begin(); l_itFaa != l_arrayFaces.end(); ++l_itFaa )
+//		{
+//			Point3r l_normal, l_tangent;
+//
+//			for( FaceAndAnglePtrArray::const_iterator l_it = l_itFaa->begin(); l_it != l_itFaa->end(); ++l_it )
+//			{
+//				l_pFaceAndAngle	 = (*l_it);
+//				l_normal		+= l_pFaceAndAngle->m_ptNormal;
+//				l_tangent		+= l_pFaceAndAngle->m_ptTangent;
+//			}
+//
+//			point::normalise( l_normal );
+//			point::normalise( l_tangent );
+//			if( p_bReverted )
+//			{
+//				Vertex::SetNormal( m_points[l_uiIndex], -l_normal[0], -l_normal[1], -l_normal[2] );
+//				Vertex::SetTangent( m_points[l_uiIndex], -l_tangent[0], -l_tangent[1], -l_tangent[2] );
+//			}
+//			else
+//			{
+//				Vertex::SetNormal( m_points[l_uiIndex], l_normal );
+//				Vertex::SetTangent( m_points[l_uiIndex], l_tangent );
+//			}
+//
+//			l_uiIndex++;
+//		}
+//
+//		clear_container( l_arrayFaces );
 
-
-		//Pour chaque vertex, on stocke la liste des faces auxquelles il appartient
-		for( FacePtrArray::iterator l_it = m_arrayFaces.begin(); l_it != m_arrayFaces.end(); ++l_it )
+		// First we flush normals and tangents
+		for( VertexPtrArray::iterator l_it = m_points.begin(); l_it != m_points.end(); ++l_it )
 		{
-			FaceSPtr l_pFace = (*l_it);
-
-			l_pVtx1 = m_points[l_pFace->GetVertexIndex( 0 )];
-			l_pVtx2 = m_points[l_pFace->GetVertexIndex( 1 )];
-			l_pVtx3 = m_points[l_pFace->GetVertexIndex( 2 )];
-
-			Vertex::GetPosition( l_pVtx1, l_pt1 );
-			Vertex::GetPosition( l_pVtx2, l_pt2 );
-			Vertex::GetPosition( l_pVtx3, l_pt3 );
-
-			Vertex::GetTexCoord( l_pVtx1, l_uv1 );
-			Vertex::GetTexCoord( l_pVtx2, l_uv2 );
-			Vertex::GetTexCoord( l_pVtx3, l_uv3 );
-
-			l_vec1m2 = l_pt1 - l_pt2;
-			l_vec1m3 = l_pt1 - l_pt3;
-			l_vec2m1 = l_pt2 - l_pt1;
-			l_vec2m3 = l_pt2 - l_pt3;
-			l_vec3m1 = l_pt3 - l_pt1;
-			l_vec3m2 = l_pt3 - l_pt2;
-
-			l_tex2m1 = l_uv2 - l_uv1;
-			l_tex3m1 = l_uv3 - l_uv1;
-
-			l_vFaceNormal	= point::get_normalised( l_vec3m1 ^ l_vec2m1 );
-			l_vFaceTangent	= point::get_normalised( (l_vec3m1 * l_tex2m1[1]) - (l_vec2m1 * l_tex3m1[1]) );
-
-			l_faa1 = std::make_shared< FaceAndAngle >();
-			l_faa1->m_rAngle = real( std::abs( acos( point::cos_theta( l_vec3m1, l_vec2m1 ) ) ) );
-			l_faa1->m_ptNormal = l_vFaceNormal * l_faa1->m_rAngle;
-			l_faa1->m_ptTangent = l_vFaceTangent * l_faa1->m_rAngle;
-
-			l_faa2 = std::make_shared< FaceAndAngle >();
-			l_faa2->m_rAngle = real( std::abs( acos( point::cos_theta( l_vec1m2, l_vec3m2 ) ) ) );
-			l_faa2->m_ptNormal = l_vFaceNormal * l_faa2->m_rAngle;
-			l_faa2->m_ptTangent = l_vFaceTangent * l_faa2->m_rAngle;
-
-			l_faa3 = std::make_shared< FaceAndAngle >();
-			l_faa3->m_rAngle = real( std::abs( acos( point::cos_theta( l_vec1m3, l_vec2m3 ) ) ) );
-			l_faa3->m_ptNormal = l_vFaceNormal * l_faa3->m_rAngle;
-			l_faa3->m_ptTangent = l_vFaceTangent * l_faa3->m_rAngle;
-
-			l_arrayFaces[l_pFace->GetVertexIndex( 0 )].push_back( l_faa1 );
-			l_arrayFaces[l_pFace->GetVertexIndex( 1 )].push_back( l_faa2 );
-			l_arrayFaces[l_pFace->GetVertexIndex( 2 )].push_back( l_faa3 );
+			l_pVtx1 = *l_it;
+			Vertex::SetNormal( l_pVtx1, l_pt1 );
+			Vertex::SetTangent( l_pVtx1, l_pt1 );
 		}
 
-		//On effectue la moyennes des normales
-		for( std::vector< FaceAndAnglePtrArray >::iterator l_itFaa = l_arrayFaces.begin(); l_itFaa != l_arrayFaces.end(); ++l_itFaa )
+		Coords3r l_coord;
+		// Then we compute normals and tangents
+		if( p_bReverted )
 		{
-			Point3r l_normal, l_tangent;
-
-			for( FaceAndAnglePtrArray::const_iterator l_it = l_itFaa->begin(); l_it != l_itFaa->end(); ++l_it )
+			for( FacePtrArray::iterator l_it = m_arrayFaces.begin(); l_it != m_arrayFaces.end(); ++l_it )
 			{
-				l_pFaceAndAngle	 = (*l_it);
-				l_normal		+= l_pFaceAndAngle->m_ptNormal;
-				l_tangent		+= l_pFaceAndAngle->m_ptTangent;
-			}
+				FaceSPtr l_pFace = (*l_it);
 
-			point::normalise( l_normal );
-			point::normalise( l_tangent );
-			if( p_bReverted )
-			{
-				Vertex::SetNormal( m_points[l_uiIndex], -l_normal[0], -l_normal[1], -l_normal[2] );
-				Vertex::SetTangent( m_points[l_uiIndex], -l_tangent[0], -l_tangent[1], -l_tangent[2] );
-			}
-			else
-			{
-				Vertex::SetNormal( m_points[l_uiIndex], l_normal );
-				Vertex::SetTangent( m_points[l_uiIndex], l_tangent );
-			}
+				l_pVtx1 = m_points[l_pFace->GetVertexIndex( 0 )];
+				l_pVtx2 = m_points[l_pFace->GetVertexIndex( 1 )];
+				l_pVtx3 = m_points[l_pFace->GetVertexIndex( 2 )];
 
-			l_uiIndex++;
+				l_vec2m1 = l_pt2 - l_pt1;
+				l_vec3m1 = l_pt3 - l_pt1;
+
+				l_tex2m1 = l_uv2 - l_uv1;
+				l_tex3m1 = l_uv3 - l_uv1;
+
+				l_vFaceNormal	= -(l_vec3m1 ^ l_vec2m1);
+				l_vFaceTangent	= -((l_vec3m1 * l_tex2m1[1]) - (l_vec2m1 * l_tex3m1[1]));
+
+				Vertex::GetNormal( l_pVtx1, l_coord ) += l_vFaceNormal );
+				Vertex::GetNormal( l_pVtx2, l_coord ) += l_vFaceNormal );
+				Vertex::GetNormal( l_pVtx3, l_coord ) += l_vFaceNormal );
+
+				Vertex::GetTangent( l_pVtx1, l_coord ) += l_vFaceTangent );
+				Vertex::GetTangent( l_pVtx2, l_coord ) += l_vFaceTangent );
+				Vertex::GetTangent( l_pVtx3, l_coord ) += l_vFaceTangent );
+			}
+		}
+		else
+		{
+			for( FacePtrArray::iterator l_it = m_arrayFaces.begin(); l_it != m_arrayFaces.end(); ++l_it )
+			{
+				FaceSPtr l_pFace = (*l_it);
+
+				l_pVtx1 = m_points[l_pFace->GetVertexIndex( 0 )];
+				l_pVtx2 = m_points[l_pFace->GetVertexIndex( 1 )];
+				l_pVtx3 = m_points[l_pFace->GetVertexIndex( 2 )];
+
+				l_vec2m1 = l_pt2 - l_pt1;
+				l_vec3m1 = l_pt3 - l_pt1;
+
+				l_tex2m1 = l_uv2 - l_uv1;
+				l_tex3m1 = l_uv3 - l_uv1;
+
+				l_vFaceNormal	= l_vec3m1 ^ l_vec2m1;
+				l_vFaceTangent	= (l_vec3m1 * l_tex2m1[1]) - (l_vec2m1 * l_tex3m1[1]);
+
+				Vertex::GetNormal( l_pVtx1, l_coord ) += l_vFaceNormal );
+				Vertex::GetNormal( l_pVtx2, l_coord ) += l_vFaceNormal );
+				Vertex::GetNormal( l_pVtx3, l_coord ) += l_vFaceNormal );
+
+				Vertex::GetTangent( l_pVtx1, l_coord ) += l_vFaceTangent );
+				Vertex::GetTangent( l_pVtx2, l_coord ) += l_vFaceTangent );
+				Vertex::GetTangent( l_pVtx3, l_coord ) += l_vFaceTangent );
+			}
 		}
 
-		clear_container( l_arrayFaces );
-		m_bHasNormals = true;
-	}
+        m_bHasNormals = true;
+    }
 }
-
+		
 void Submesh :: ComputeNormals( FaceSPtr p_pFace )
 {
 	BufferElementGroupSPtr l_pVtx1, l_pVtx2, l_pVtx3;
