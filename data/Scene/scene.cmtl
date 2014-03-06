@@ -318,12 +318,14 @@ material "Relief"
 		{
 			vertex_program
 			{
+				file sm_4 "Relief/Relief-4.x.vert"
 				file sm_3 "Relief/Relief-3.x.vert"
 				file sm_2 "Relief/Relief.vert"
 			}
 			
 			pixel_program
 			{
+				file sm_4 "Relief/Relief-4.x.frag"
 				file sm_3 "Relief/Relief-3.x.frag"
 				file sm_2 "Relief/Relief.frag"
 

@@ -12,6 +12,7 @@ material "Gold"
 
 scene "MyScene"
 {
+	background_colour 0.5 0.5 0.5 1.0
 	ambient_light 0.5 0.5 0.5 1.0
 
 	scene_node "SunLightNode"
@@ -57,7 +58,14 @@ scene "MyScene"
 
 window "MyWindow"
 {
-	format argb32
-	size 1024 768
-	scene "MyScene"
+	render_target
+	{
+		format		argb32
+		depth		depth24s8
+//		msaa		8
+		size		screen_size
+        scene "MyScene"
+	}
+	fullscreen	false
+	vsync		true
 }
