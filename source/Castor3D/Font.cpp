@@ -204,12 +204,18 @@ void TextFont :: DisplayText( String const & p_strText, Colour const & p_clrColo
 					tt = real( l_it->second.second );
 					tr = tl + w;
 					tb = tt + h;
-					l_arrayVtx[n++] = { { x2 + 0, -y2 - 0 }, { tl / l_texDim.width(), tt / l_texDim.height() }, l_uiColour };
-					l_arrayVtx[n++] = { { x2 + w, -y2 - 0 }, { tr / l_texDim.width(), tt / l_texDim.height() }, l_uiColour };
-					l_arrayVtx[n++] = { { x2 + 0, -y2 - h }, { tl / l_texDim.width(), tb / l_texDim.height() }, l_uiColour };
-					l_arrayVtx[n++] = { { x2 + w, -y2 - 0 }, { tr / l_texDim.width(), tt / l_texDim.height() }, l_uiColour };
-					l_arrayVtx[n++] = { { x2 + 0, -y2 - h }, { tl / l_texDim.width(), tb / l_texDim.height() }, l_uiColour };
-					l_arrayVtx[n++] = { { x2 + w, -y2 - h }, { tr / l_texDim.width(), tb / l_texDim.height() }, l_uiColour };
+                    TextVertex l_vtx0 = { { x2 + 0, -y2 - 0 }, { tl / l_texDim.width(), tt / l_texDim.height() }, l_uiColour };
+					l_arrayVtx[n++] = l_vtx0;
+                    TextVertex l_vtx1 = { { x2 + w, -y2 - 0 }, { tr / l_texDim.width(), tt / l_texDim.height() }, l_uiColour };
+					l_arrayVtx[n++] = l_vtx1;
+                    TextVertex l_vtx2 = { { x2 + 0, -y2 - h }, { tl / l_texDim.width(), tb / l_texDim.height() }, l_uiColour };
+					l_arrayVtx[n++] = l_vtx2;
+                    TextVertex l_vtx3 = { { x2 + w, -y2 - 0 }, { tr / l_texDim.width(), tt / l_texDim.height() }, l_uiColour };
+					l_arrayVtx[n++] = l_vtx3;
+                    TextVertex l_vtx4 = { { x2 + 0, -y2 - h }, { tl / l_texDim.width(), tb / l_texDim.height() }, l_uiColour };
+					l_arrayVtx[n++] = l_vtx4;
+                    TextVertex l_vtx5 = { { x2 + w, -y2 - h }, { tr / l_texDim.width(), tb / l_texDim.height() }, l_uiColour };
+					l_arrayVtx[n++] = l_vtx5;
 				}
     		}
 

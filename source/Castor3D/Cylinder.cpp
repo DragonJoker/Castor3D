@@ -35,18 +35,17 @@ void Cylinder :: Generate()
 		//CALCUL DE LA POSITION DES POINTS
 		real angleRotation = Angle::PiMult2 / m_nbFaces;
 		uint32_t i = 0;
+        real l_rCosRot = cos( angleRotation );
+        real l_rSinRot = sin( angleRotation );
 
 		BufferElementGroupSPtr l_pVertex;
-		real l_rCos, l_rSin;
-		real l_rCosT, l_rSinT;
+		real l_rCos = real( 1 );
+        real l_rSin = real( 0 );
+		real l_rCosT = real( 1 );
+        real l_rSinT = real( 0 );
 
 		for( real dAlphaI = 0; i <= m_nbFaces; dAlphaI += angleRotation )
 		{
-			l_rCos = cos( dAlphaI );
-			l_rSin = sin( dAlphaI );
-			l_rCosT = cos( Angle::PiMult2 - dAlphaI );
-			l_rSinT = sin( Angle::PiMult2 - dAlphaI );
-
 			if( i < m_nbFaces )
 			{
 				l_pVertex = l_submeshBase.AddPoint(	m_radius * l_rCos,	-m_height / 2,	m_radius * l_rSin );
@@ -60,6 +59,12 @@ void Cylinder :: Generate()
 			l_pVertex = l_submeshSide.AddPoint(	m_radius * l_rCos,	 m_height / 2,	m_radius * l_rSin );
 			Vertex::SetTexCoord( l_pVertex,	real( 1.0 ) - real( i ) / m_nbFaces,	real( 1.0 )			);
 			i++;
+            const real l_newCos = l_rCosRot * l_rCos - l_rSinRot * l_rSin;
+            const real l_newSin = l_rSinRot * l_rCos + l_rCosRot * l_rSin;
+			l_rCos = l_newCos;
+			l_rSin = l_newSin;
+			l_rCosT = l_newCos;
+			l_rSinT = -l_newSin;
 		}
 
 		FaceSPtr l_pFace;

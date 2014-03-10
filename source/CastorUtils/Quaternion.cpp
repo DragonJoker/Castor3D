@@ -10,6 +10,122 @@ using namespace Castor;
 
 //*************************************************************************************************
 
+namespace
+{
+    template< typename T >
+    void QuaternionToRotationMatrix( Quaternion const & p_quat, T * p_matrix )
+    {
+	    double const x = double( p_quat.x() );
+	    double const y = double( p_quat.y() );
+	    double const z = double( p_quat.z() );
+	    double const w = double( p_quat.w() );
+
+        double fTx  = x + x;
+        double fTy  = y + y;
+        double fTz  = z + z;
+        double fTwx = fTx * w;
+        double fTwy = fTy * w;
+        double fTwz = fTz * w;
+        double fTxx = fTx * x;
+        double fTxy = fTy * x;
+        double fTxz = fTz * x;
+        double fTyy = fTy * y;
+        double fTyz = fTz * y;
+        double fTzz = fTz * z;
+
+        p_matrix[ 0] = T( 1 -(fTyy + fTzz) );
+        p_matrix[ 1] = T( fTxy - fTwz );
+        p_matrix[ 2] = T( fTxz + fTwy );
+        p_matrix[ 3] = T( 0 );
+
+        p_matrix[ 4] = T( fTxy + fTwz );
+        p_matrix[ 5] = T( 1 - (fTxx + fTzz) );
+        p_matrix[ 6] = T( fTyz - fTwx );
+        p_matrix[ 7] = T( 0 );
+
+        p_matrix[ 8] = T( fTxz - fTwy );
+        p_matrix[ 9] = T( fTyz + fTwx );
+        p_matrix[10] = T( 1 - (fTxx + fTyy) );
+        p_matrix[11] = T( 0 );
+
+	    p_matrix[12] = 0;
+	    p_matrix[13] = 0;
+	    p_matrix[14] = 0;
+	    p_matrix[15] = 1;
+    }
+    template< typename T >
+    void RotationMatrixToQuaternion( Quaternion & p_quat, SquareMatrix< T, 4 > const & p_matrix )
+    {
+        double l_dTrace = real( p_matrix[0][0] + p_matrix[1][1] + p_matrix[2][2] );
+        double l_dRoot;
+
+        if( l_dTrace > 0 )
+        {
+            // |w| > 1/2, may as well choose w > 1/2
+            l_dRoot = std::sqrt( l_dTrace + 1 );  // 2w
+            p_quat[3] = real( 0.5 * l_dRoot );
+            l_dRoot = 0.5 / l_dRoot;  // 1/(4w)
+            p_quat[0] = real( double( p_matrix[2][1] - p_matrix[1][2] ) * l_dRoot );
+            p_quat[1] = real( double( p_matrix[0][2] - p_matrix[2][0] ) * l_dRoot );
+            p_quat[2] = real( double( p_matrix[1][0] - p_matrix[0][1] ) * l_dRoot );
+        }
+        else
+        {
+            // |w| <= 1/2
+            static uint32_t s_iNext[3] = { 1, 2, 0 };
+            uint32_t i = 0;
+
+            if( p_matrix[1][1] > p_matrix[0][0] )
+		    {
+                i = 1;
+		    }
+
+            if( p_matrix[2][2] > p_matrix[i][i] )
+		    {
+                i = 2;
+		    }
+
+            uint32_t j = s_iNext[i];
+            uint32_t k = s_iNext[j];
+
+            l_dRoot = std::sqrt( double( p_matrix[i][i] - p_matrix[j][j] - p_matrix[k][k] + 1 ) );
+            real * l_apkQuat[3] = { &p_quat[0], &p_quat[1], &p_quat[2] };
+            *l_apkQuat[i] = real( 0.5 * l_dRoot );
+            l_dRoot = 0.5 / l_dRoot;
+		    p_quat[3] = real( double( p_matrix[k][j] - p_matrix[j][k] ) * l_dRoot );
+            *l_apkQuat[j] = real( double( p_matrix[j][i] + p_matrix[i][j] ) * l_dRoot );
+            *l_apkQuat[k] = real( double( p_matrix[k][i] + p_matrix[i][k] ) * l_dRoot );
+        }
+
+	    point::normalise( p_quat );
+    }
+#if defined( CASTOR_USE_RSQRT )
+    float rsqrt( float number )
+    {
+	    long i;
+	    float x2, y;
+	    const float threehalfs = 1.5F;
+	
+	    x2 = number * 0.5F;
+	    y  = number;
+	    i  = * ( long * ) &y;                       // evil floating point bit level hacking
+	    i  = 0x5f3759df - ( i >> 1 );               // what the fuck?
+	    y  = * ( float * ) &i;
+	    y  = y * ( threehalfs - ( x2 * y * y ) );   // 1st iteration
+	    y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed
+	
+	    return y;
+    }
+#else
+    inline float rsqrt( float number )
+    {
+        return 1 / sqrt( number );
+    }
+#endif
+}
+
+//*************************************************************************************************
+
 Quaternion :: Quaternion( real p_x, real p_y, real p_z, real p_w )
 	:	Coords4r( m_data.buffer )
 {
@@ -211,204 +327,35 @@ Point3r & Quaternion :: Transform( Point3r const & p_vector, Point3r & p_ptResul
 
 void Quaternion :: ToRotationMatrix( double * p_matrix )const
 {
-	real const & x = m_data.quaternion.x;
-	real const & y = m_data.quaternion.y;
-	real const & z = m_data.quaternion.z;
-	real const & w = m_data.quaternion.w;
-
-    real fTx  = x + x;
-    real fTy  = y + y;
-    real fTz  = z + z;
-    real fTwx = fTx * w;
-    real fTwy = fTy * w;
-    real fTwz = fTz * w;
-    real fTxx = fTx * x;
-    real fTxy = fTy * x;
-    real fTxz = fTz * x;
-    real fTyy = fTy * y;
-    real fTyz = fTz * y;
-    real fTzz = fTz * z;
-
-    p_matrix[ 0] = double( 1 -(fTyy + fTzz) );
-    p_matrix[ 1] = double( fTxy - fTwz );
-    p_matrix[ 2] = double( fTxz + fTwy );
-    p_matrix[ 3] = double( 0 );
-
-    p_matrix[ 4] = double( fTxy + fTwz );
-    p_matrix[ 5] = double( 1 - (fTxx + fTzz) );
-    p_matrix[ 6] = double( fTyz - fTwx );
-    p_matrix[ 7] = double( 0 );
-
-    p_matrix[ 8] = double( fTxz - fTwy );
-    p_matrix[ 9] = double( fTyz + fTwx );
-    p_matrix[10] = double( 1 - (fTxx + fTyy) );
-    p_matrix[11] = double( 0 );
-
-	p_matrix[12] = 0;
-	p_matrix[13] = 0;
-	p_matrix[14] = 0;
-	p_matrix[15] = 1;
+    QuaternionToRotationMatrix( *this, p_matrix );
 }
 
 void Quaternion :: ToRotationMatrix( float * p_matrix )const
 {
-	real const & x = m_data.quaternion.x;
-	real const & y = m_data.quaternion.y;
-	real const & z = m_data.quaternion.z;
-	real const & w = m_data.quaternion.w;
-
-    real fTx  = x + x;
-    real fTy  = y + y;
-    real fTz  = z + z;
-    real fTwx = fTx * w;
-    real fTwy = fTy * w;
-    real fTwz = fTz * w;
-    real fTxx = fTx * x;
-    real fTxy = fTy * x;
-    real fTxz = fTz * x;
-    real fTyy = fTy * y;
-    real fTyz = fTz * y;
-    real fTzz = fTz * z;
-
-    p_matrix[ 0] = float( 1 -(fTyy + fTzz) );
-    p_matrix[ 1] = float( fTxy - fTwz );
-    p_matrix[ 2] = float( fTxz + fTwy );
-    p_matrix[ 3] = float( 0 );
-
-    p_matrix[ 4] = float( fTxy + fTwz );
-    p_matrix[ 5] = float( 1 - (fTxx + fTzz) );
-    p_matrix[ 6] = float( fTyz - fTwx );
-    p_matrix[ 7] = float( 0 );
-
-    p_matrix[ 8] = float( fTxz - fTwy );
-    p_matrix[ 9] = float( fTyz + fTwx );
-    p_matrix[10] = float( 1 - (fTxx + fTyy) );
-    p_matrix[11] = float( 0 );
-
-	p_matrix[12] = 0;
-	p_matrix[13] = 0;
-	p_matrix[14] = 0;
-	p_matrix[15] = 1;
+    QuaternionToRotationMatrix( *this, p_matrix );
 }
 
 void Quaternion :: FromRotationMatrix( Matrix4x4f const & p_matrix )
 {
-    real l_rTrace = real( p_matrix[0][0] + p_matrix[1][1] + p_matrix[2][2] );
-    real l_rRoot;
-
-    if( l_rTrace > 0 )
-    {
-        // |w| > 1/2, may as well choose w > 1/2
-        l_rRoot = std::sqrt( l_rTrace + 1 );  // 2w
-        at( 3 ) = real( 0.5 ) * l_rRoot;
-        l_rRoot = real( 0.5 ) / l_rRoot;  // 1/(4w)
-        at( 0 ) = real( p_matrix[2][1] - p_matrix[1][2] ) * l_rRoot;
-        at( 1 ) = real( p_matrix[0][2] - p_matrix[2][0] ) * l_rRoot;
-        at( 2 ) = real( p_matrix[1][0] - p_matrix[0][1] ) * l_rRoot;
-    }
-    else
-    {
-        // |w| <= 1/2
-        static uint32_t s_iNext[3] = { 1, 2, 0 };
-        uint32_t i = 0;
-
-        if( p_matrix[1][1] > p_matrix[0][0] )
-		{
-            i = 1;
-		}
-
-        if( p_matrix[2][2] > p_matrix[i][i] )
-		{
-            i = 2;
-		}
-
-        uint32_t j = s_iNext[i];
-        uint32_t k = s_iNext[j];
-
-        l_rRoot = real( std::sqrt( p_matrix[i][i] - p_matrix[j][j] - p_matrix[k][k] + 1 ) );
-        real * l_apkQuat[3] = { &at( 0 ), &at( 1 ), &at( 2 ) };
-        *l_apkQuat[i] = real( 0.5 ) * l_rRoot;
-        l_rRoot = real( 0.5 ) / l_rRoot;
-		at( 3 ) = ( p_matrix[k][j] - p_matrix[j][k] ) * l_rRoot;
-        *l_apkQuat[j] = real( p_matrix[j][i] + p_matrix[i][j] ) * l_rRoot;
-        *l_apkQuat[k] = real( p_matrix[k][i] + p_matrix[i][k] ) * l_rRoot;
-    }
-
-	point::normalise( *this );
+    RotationMatrixToQuaternion( *this, p_matrix );
 }
 
 void Quaternion :: FromRotationMatrix( Matrix4x4d const & p_matrix )
 {
-    real l_rTrace = real( p_matrix[0][0] + p_matrix[1][1] + p_matrix[2][2] );
-    real l_rRoot;
-
-    if( l_rTrace > 0 )
-    {
-        // |w| > 1/2, may as well choose w > 1/2
-        l_rRoot = std::sqrt( l_rTrace + 1 );  // 2w
-        at( 3 ) = real( 0.5 ) * l_rRoot;
-        l_rRoot = real( 0.5 ) / l_rRoot;  // 1/(4w)
-        at( 0 ) = real( p_matrix[2][1] - p_matrix[1][2] ) * l_rRoot;
-        at( 1 ) = real( p_matrix[0][2] - p_matrix[2][0] ) * l_rRoot;
-        at( 2 ) = real( p_matrix[1][0] - p_matrix[0][1] ) * l_rRoot;
-    }
-    else
-    {
-        // |w| <= 1/2
-        static uint32_t s_iNext[3] = { 1, 2, 0 };
-        uint32_t i = 0;
-
-        if( p_matrix[1][1] > p_matrix[0][0] )
-		{
-            i = 1;
-		}
-
-        if( p_matrix[2][2] > p_matrix[i][i] )
-		{
-            i = 2;
-		}
-
-        uint32_t j = s_iNext[i];
-        uint32_t k = s_iNext[j];
-
-        l_rRoot = real( std::sqrt( p_matrix[i][i] - p_matrix[j][j] - p_matrix[k][k] + 1 ) );
-        real * l_apkQuat[3] = { &at( 0 ), &at( 1 ), &at( 2 ) };
-        *l_apkQuat[i] = real( 0.5 ) * l_rRoot;
-        l_rRoot = real( 0.5 ) / l_rRoot;
-		at( 3 ) = real( p_matrix[k][j] - p_matrix[j][k] ) * l_rRoot;
-        *l_apkQuat[j] = real( p_matrix[j][i] + p_matrix[i][j] ) * l_rRoot;
-        *l_apkQuat[k] = real( p_matrix[k][i] + p_matrix[i][k] ) * l_rRoot;
-    }
+    RotationMatrixToQuaternion( *this, p_matrix );
 }
 
 void Quaternion :: FromAxisAngle( Point3r const & p_vector, Angle const & p_angle )
 {
 	Angle l_halfAngle = p_angle * real( 0.5 );
-	real l_rSin = l_halfAngle.Sin();
-	m_data.quaternion.x = l_rSin * p_vector[0];
-	m_data.quaternion.y = l_rSin * p_vector[1];
-	m_data.quaternion.z = l_rSin * p_vector[2];
+    Point3r l_norm = point::get_normalised( p_vector ) * l_halfAngle.Sin();
+
+	m_data.quaternion.x = l_norm[0];
+	m_data.quaternion.y = l_norm[1];
+	m_data.quaternion.z = l_norm[2];
 	m_data.quaternion.w = l_halfAngle.Cos();
-	point::normalise( *this );
 }
-/*
-float rsqrt( float number )
-{
-	long i;
-	float x2, y;
-	const float threehalfs = 1.5F;
-	
-	x2 = number * 0.5F;
-	y  = number;
-	i  = * ( long * ) &y;                       // evil floating point bit level hacking
-	i  = 0x5f3759df - ( i >> 1 );               // what the fuck?
-	y  = * ( float * ) &i;
-	y  = y * ( threehalfs - ( x2 * y * y ) );   // 1st iteration
-	y  = y * ( threehalfs - ( x2 * y * y ) );   // 2nd iteration, this can be removed
-	
-	return y;
-}
-*/
+
 void Quaternion :: ToAxisAngle( Point3r & p_vector, Angle & p_angle )const
 {
 	real const & x = m_data.quaternion.x;
@@ -420,11 +367,10 @@ void Quaternion :: ToAxisAngle( Point3r & p_vector, Angle & p_angle )const
     if ( l_rSqrLength > 0.0 )
     {
         p_angle = Angle::FromRadians( real( 2.0 ) * acos( w ) );
-        real l_rInvLength = 1 / sqrt( l_rSqrLength );
-//        real l_rInvLength = rsqrt( float( l_rSqrLength ) );
-        p_vector[0] = x * l_rInvLength;
-        p_vector[1] = y * l_rInvLength;
-        p_vector[2] = z * l_rInvLength;
+        real l_rSin = p_angle.Sin();
+        p_vector[0] = x / l_rSin;
+        p_vector[1] = y / l_rSin;
+        p_vector[2] = z / l_rSin;
     }
     else
     {
@@ -525,7 +471,7 @@ real Quaternion :: GetMagnitude()const
 Quaternion Quaternion :: Slerp( Quaternion const & p_target, real p_percent, bool p_shortestPath )const
 {
 //	Slerp = q1((q1^-1)q2)^t;
-    real fCos = point::dot( *this, p_target);
+    real fCos = point::dot( *this, p_target );
     Quaternion rkT;
 
     // Do we need to invert rotation?
