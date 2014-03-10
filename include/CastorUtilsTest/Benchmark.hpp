@@ -19,7 +19,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CUT_CastorUtilsTest___
 
 #if defined( _WIN32 )
+#	pragma warning( push )
+#	pragma warning( disable:4311 )
+#	pragma warning( disable:4312 )
 #	include <process.h>
+#	pragma warning( pop )
 #else
 #	include <sys/types.h>
 #	include <unistd.h>
@@ -31,10 +35,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace CastorUtilsTest
 {
-#	define BENCHMARK_CLASS_NAME( Name ) Benchmark_##Name
-#	define CODE_CLASS_NAME( Name ) Code_##Name
+#	define BENCH_CLASS_NAME( Name ) BenchCase_##Name
+#	define TEST_CLASS_NAME( Name ) TestCase_##Name
 
-	class BenchmarkBase
+	class BenchCase
 	{
 	private:
 		std::string				m_strName;
@@ -43,8 +47,8 @@ namespace CastorUtilsTest
 		uint64_t				m_uiTotalExecutions;
 
 	public:
-		BenchmarkBase( std::string const & p_strName );
-		virtual ~BenchmarkBase();
+		BenchCase( std::string const & p_strName );
+		virtual ~BenchCase();
 		void Bench();
 		inline std::string const & GetName()const { return m_strName; }
 		inline double GetCumulativeTime()const { return m_dCumulativeTimes; }
@@ -54,68 +58,68 @@ namespace CastorUtilsTest
 		virtual void DoBench()=0;
 	};
 
-	class CodeBase
+	class TestCase
 	{
 	private:
 		std::string	m_strName;
 
 	public:
-		CodeBase( std::string const & p_strName );
-		virtual ~CodeBase();
-		virtual void Execute()=0;
+		TestCase( std::string const & p_strName );
+		virtual ~TestCase();
+		virtual void Execute( uint32_t & p_errCount, uint32_t & p_testCount )=0;
 		inline std::string const & GetName()const { return m_strName; }
 	};
 	
-	DECLARE_SMART_PTR( BenchmarkBase );
-	DECLARE_SMART_PTR( CodeBase );
+	DECLARE_SMART_PTR( BenchCase );
+	DECLARE_SMART_PTR( TestCase );
 
 	class BenchFactory
 	{
 	private:
-		static std::vector< std::pair< uint64_t, BenchmarkBaseSPtr > > m_arrayBenchs;
-		static std::vector< CodeBaseSPtr > m_arrayCodes;
+		static std::vector< std::pair< uint64_t, BenchCaseSPtr > > m_arrayBenchs;
+		static std::vector< TestCaseSPtr > m_arrayTests;
 
 	public:
 		BenchFactory();
 		~BenchFactory();
-		static void Register( uint64_t p_ui64Calls, BenchmarkBaseSPtr p_pBench );
-		static void Register( CodeBaseSPtr p_pCode );
+		static void Register( uint64_t p_ui64Calls, BenchCaseSPtr p_pBench );
+		static void Register( TestCaseSPtr p_pTest );
 		static void ExecuteBenchs();
 		static void BenchsSummary();
-		static void ExecuteCodes();
+		static void ExecuteTests();
 	};
 	
-	bool RegisterBenchmark( uint64_t p_ui64Calls, BenchmarkBaseSPtr p_pBenchmark );
-	bool RegisterCode( CodeBaseSPtr p_pCode );
+	bool RegisterBench( uint64_t p_ui64Calls, BenchCaseSPtr p_pBench );
+	bool RegisterTest( TestCaseSPtr p_pCode );
 	
-#	define	BENCHMARK( Name, Calls )																												\
-		class BENCHMARK_CLASS_NAME( Name ) : public BenchmarkBase																					\
-		{																																			\
-		public:																																		\
-			static const bool m_bRegistered;																										\
-			BENCHMARK_CLASS_NAME( Name )()																											\
-				:	BenchmarkBase( #Name )																											\
-			{																																		\
-			}																																		\
-		private:																																	\
-			virtual void DoBench();																													\
-		};																																			\
-		const bool BENCHMARK_CLASS_NAME( Name )::m_bRegistered = RegisterBenchmark( Calls, std::make_shared< BENCHMARK_CLASS_NAME( Name ) >() );	\
-		void BENCHMARK_CLASS_NAME( Name )::DoBench()
+#	define	BENCHMARK( Name, Calls )																									\
+		class BENCH_CLASS_NAME( Name ) : public BenchCase																				\
+		{																																\
+		public:																															\
+			static const bool m_bRegistered;																							\
+			BENCH_CLASS_NAME( Name )()																									\
+				:	BenchCase( #Name )																									\
+			{																															\
+			}																															\
+		private:																														\
+			virtual void DoBench();																										\
+		};																																\
+		const bool BENCH_CLASS_NAME( Name )::m_bRegistered = RegisterBench( Calls, std::make_shared< BENCH_CLASS_NAME( Name ) >() );	\
+		void BENCH_CLASS_NAME( Name )::DoBench()
 	
-#	define	CODE( Name )																									\
-		class CODE_CLASS_NAME( Name ) : public CodeBase																		\
+#	define	UNITTEST( Name )																								\
+		class TEST_CLASS_NAME( Name ) : public TestCase																		\
 		{																													\
 		public:																												\
 			static const bool m_bRegistered;																				\
-			CODE_CLASS_NAME( Name )()																						\
-				:	CodeBase( #Name )																						\
+			TEST_CLASS_NAME( Name )()																						\
+				:	TestCase( #Name )																						\
 			{																												\
 			}																												\
-			virtual void Execute();																							\
+			virtual void Execute( uint32_t & p_errCount, uint32_t & p_testCount );											\
 		};																													\
-		const bool CODE_CLASS_NAME( Name )::m_bRegistered = RegisterCode( std::make_shared< CODE_CLASS_NAME( Name ) >() );	\
-		void CODE_CLASS_NAME( Name )::Execute()
+		const bool TEST_CLASS_NAME( Name )::m_bRegistered = RegisterTest( std::make_shared< TEST_CLASS_NAME( Name ) >() );	\
+		void TEST_CLASS_NAME( Name )::Execute(  uint32_t & p_errCount, uint32_t & p_testCount )
 
 	
 	///
@@ -136,7 +140,8 @@ namespace CastorUtilsTest
 		}
 	}
 
-#	define BENCHLOOP( p_iMax )				\
+#define BENCHLOOP( p_iMax )					\
+		BenchFactory::ExecuteTests();		\
 		for( int i = 0; i < p_iMax; ++i )	\
 		{									\
 			BenchFactory::ExecuteBenchs();	\
@@ -144,8 +149,10 @@ namespace CastorUtilsTest
 		if( p_iMax > 1 )					\
 		{									\
 			BenchFactory::BenchsSummary();	\
-		}									\
-		BenchFactory::ExecuteCodes()
+		}
+	
+#define TEST_CHECK( x ) p_testCount++;if( !(x) ) { Logger::LogWarning( "Test "#x" failed" );p_errCount++; }
+#define TEST_REQUIRE( x ) p_testCount++;if( !(x) ) { throw std::exception( #x ); }
 }
 
 #endif

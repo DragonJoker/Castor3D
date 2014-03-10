@@ -18,6 +18,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___Castor_Prerequisites___
 #define ___Castor_Prerequisites___
 
+#pragma warning( push )
+#pragma warning( disable:4311 )
+#pragma warning( disable:4312 )
+
 #include <vector>
 #include <list>
 #include <map>
@@ -30,6 +34,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <memory.h>
 #include <memory>
 #include <cstdint>
+
+#pragma warning( pop )
 
 #include "Macros.hpp"
 #include "Memory.hpp"

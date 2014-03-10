@@ -18,8 +18,14 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___Testing_Point___
 #define ___Testing_Point___
 
+#pragma warning( push )
+#pragma warning( disable:4311 )
+#pragma warning( disable:4312 )
+
 #include <cmath>
 #include <CL/cl.h>
+
+#pragma warning( pop )
 
 namespace Testing
 {
