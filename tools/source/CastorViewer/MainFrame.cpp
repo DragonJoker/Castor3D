@@ -620,7 +620,7 @@ void MainFrame :: DoCscnExportScene( Path const & p_pathFile )
 
 	if( l_pScene )
 	{
-		Scene::TextLoader()( *l_pScene, p_pathFile );
+		Scene::TextLoader()( *l_pScene, TextFile( p_pathFile, File::eOPEN_MODE_WRITE, File::eENCODING_MODE_ASCII ) );
 	}
 }
 

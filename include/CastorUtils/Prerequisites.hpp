@@ -267,6 +267,7 @@ namespace Castor
 	template< std::size_t N > int StrnCpy( xchar (& p_pszDst)[N], xchar const * p_pszSrc ) { return cstrncpy( p_pszDst, N, p_pszSrc ); }
 
 	bool GetScreenSize( Castor::Size & p_size );
+	String GetSystemError();
 }
 
 #endif

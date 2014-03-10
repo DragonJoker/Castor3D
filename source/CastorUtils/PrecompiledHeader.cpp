@@ -308,11 +308,14 @@ extern "C" void tss_cleanup_implemented() { }
 
 #if defined( _WIN32 )
 #	include <Windows.h>
-	BOOL CALLBACK MonitorEnum( _In_ HMONITOR hMonitor, _In_ HDC hdcMonitor, _In_ LPRECT lprcMonitor, _In_ LPARAM dwData )
+	namespace
 	{
-		Castor::Size * l_pSize = reinterpret_cast< Castor::Size* >( dwData );
-		l_pSize->set( lprcMonitor->right - lprcMonitor->left, lprcMonitor->bottom - lprcMonitor->top );
-		return FALSE;
+		BOOL CALLBACK MonitorEnum( _In_ HMONITOR hMonitor, _In_ HDC hdcMonitor, _In_ LPRECT lprcMonitor, _In_ LPARAM dwData )
+		{
+			Castor::Size * l_pSize = reinterpret_cast< Castor::Size* >( dwData );
+			l_pSize->set( lprcMonitor->right - lprcMonitor->left, lprcMonitor->bottom - lprcMonitor->top );
+			return FALSE;
+		}
 	}
 
 	bool Castor::GetScreenSize( Castor::Size & p_size )
@@ -320,8 +323,27 @@ extern "C" void tss_cleanup_implemented() { }
 		BOOL bRet = ::EnumDisplayMonitors( NULL, NULL, MonitorEnum, WPARAM( &p_size ) );
 		return true;
 	}
+
+	Castor::String Castor::GetSystemError()
+	{
+		String l_strReturn;
+		DWORD l_dwError = GetLastError();
+		LPTSTR l_szError = NULL;
+
+		if( l_dwError != ERROR_SUCCESS && ::FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, l_dwError, 0, LPTSTR( &l_szError ), 0, NULL ) != 0 )
+		{
+			l_strReturn = str_utils::to_string( l_dwError ) + cuT( " (" ) + l_szError + cuT( ")" );
+			str_utils::replace( l_strReturn, cuT( "\r" ), cuT( "" ) );
+			str_utils::replace( l_strReturn, cuT( "\n" ), cuT( "" ) );
+			LocalFree( l_szError );
+		}
+
+		return l_strReturn;
+	}
 #elif defined( __linux__ )
 #	include <X11/Xlib.h>
+#	include <cerrno>
+
 	bool Castor::GetScreenSize( Castor::Size & p_size )
 	{
 		bool l_bReturn = false;
@@ -352,6 +374,22 @@ extern "C" void tss_cleanup_implemented() { }
 		}
 
 		return l_bReturn;
+	}
+
+	Castor::String Castor::GetSystemError()
+	{
+		String l_strReturn;
+		errno_t l_error = errno;
+		char l_szError = NULL;
+
+		if (l_error != 0 && (l_szError = strerror( l_error )) != NULL )
+		{
+			l_strReturn = str_utils::to_string( l_error ) + cuT( " (" ) + l_szError + cuT( ")" );
+			str_utils::replace( l_strReturn, cuT( "\n" ), cuT( "" ) );
+			LocalFree( l_szError );
+		}
+
+		return l_strReturn;
 	}
 #else
 #	error "Yet unsupported OS"

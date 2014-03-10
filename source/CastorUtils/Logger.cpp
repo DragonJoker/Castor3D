@@ -502,19 +502,26 @@ void ILoggerImpl :: DoLogMessage( String const & p_strToLog, eLOG_TYPE p_eLogTyp
 	m_pConsole->BeginLog( p_eLogType );
 	m_pConsole->Print( p_strToLog, true );
 
-	TextFile l_logFile( m_logFilePath[p_eLogType], File::eOPEN_MODE_APPEND, File::eENCODING_MODE_ASCII );
-
-	if( l_logFile.IsOk() )
+	try
 	{
-		String l_strLog = l_strToLog.str();
-		l_logFile.WriteText( l_strLog );
-		l_logFile.Print( 2 * sizeof( xchar ), cuT( "\n" ) );
-		l_it = m_mapCallbacks.find( std::this_thread::get_id() );
+		TextFile l_logFile( m_logFilePath[p_eLogType], File::eOPEN_MODE_APPEND, File::eENCODING_MODE_ASCII );
 
-		if( l_it != m_mapCallbacks.end() && l_it->second.m_pfnCallback )
+		if( l_logFile.IsOk() )
 		{
-			l_it->second.m_pfnCallback( l_it->second.m_pCaller, l_strLog, p_eLogType );
+			String l_strLog = l_strToLog.str();
+			l_logFile.WriteText( l_strLog );
+			l_logFile.Print( 2 * sizeof( xchar ), cuT( "\n" ) );
+			l_it = m_mapCallbacks.find( std::this_thread::get_id() );
+
+			if( l_it != m_mapCallbacks.end() && l_it->second.m_pfnCallback )
+			{
+				l_it->second.m_pfnCallback( l_it->second.m_pCaller, l_strLog, p_eLogType );
+			}
 		}
+	}
+	catch( std::exception & exc )
+	{
+		m_pConsole->Print( cuT( "Couldn't open log file : " ) + str_utils::from_str( exc.what() ), true );
 	}
 }
 
