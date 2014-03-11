@@ -1,0 +1,50 @@
+//mtl_file "alpha.cmtl"
+
+scene "MainScene"
+{
+	background_colour 0.5 0.5 0.5 1.0
+	ambient_light 0.5 0.5 0.5 1.0
+
+	scene_node "SunLightNode"
+	{
+		position  0.0 0.0 -1.0
+	}
+	light "SunLight"
+	{
+		parent		"SunLightNode"
+		type		directional
+		diffuse		0.8 0.8 0.8
+		specular	1.0 1.0 1.0
+	}
+
+	scene_node "GeomNode"
+	{
+	}
+	object "GeomObject"
+	{
+		parent "GeomNode"
+		mesh "GeomMesh"
+		{
+			import "Models/Final Fantasy XIII/Lightning/lightning_obj.obj"
+//			import "ModelsTest/Vehicles/STI 11/sub_wrxsti_11.obj"
+//			import "ModelsTest/Vehicles/Maybach Exelero/Maybach Exelero.obj"
+//			import "ModelsTest/Vehicles/Light Cycle/HQ_Movie cycle.obj"
+//			import "ModelsTest/Vehicles/SCI_FRS_13_HD/SCI_FRS_13_HD.obj"
+		}
+	}
+}
+
+window "MainWindow"
+{
+	render_target
+	{
+		format		argb32
+		depth		depth24s8
+//		msaa		8
+//		deferred	true
+		size		screen_size
+		scene		"MainScene"
+	}
+	fullscreen	false
+	vsync		true
+}
