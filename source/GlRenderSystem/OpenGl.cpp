@@ -3543,27 +3543,15 @@ bool OpenGl :: GlCheckError( std::wstring const & p_text, bool p_bThrows)const
 bool OpenGl :: DoGlCheckError( String const & p_text, bool p_bThrows)const
 {
 	bool l_bReturn = true;
-#if defined( _WIN32) && CASTOR_DBG_WIN32
-	String l_strWinError;
-	DWORD l_dwError = GetLastError();
-	LPTSTR l_szError = 0;
-
-	if (l_dwError != ERROR_SUCCESS && ::FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, nullptr, l_dwError, 0, (LPTSTR)& l_szError, 0, nullptr) != 0)
-	{
-		l_strWinError = l_szError;
-		LocalFree( l_szError);
-	}
-#endif
 	uint32_t l_errorCode = GetError();
 
-	if (l_errorCode != GL_NO_ERROR)
+	if( l_errorCode != GL_NO_ERROR )
 	{
+		String l_strSysError = GetSystemError();
 		l_errorCode -= GL_INVALID_ENUM;
 		String l_strError = p_text + cuT( " - " ) + GlslErrors[l_errorCode];
-#	if defined( _WIN32) && CASTOR_DBG_WIN32
-		l_strError += cuT( " - ") + l_strWinError;
-#	endif
-		Logger::LogError( l_strError, p_bThrows);
+		l_strError += cuT( " - ") + l_strSysError;
+		Logger::LogError( l_strError, p_bThrows );
 		l_bReturn = false;
 	}
 

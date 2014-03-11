@@ -114,6 +114,10 @@ File :: File( Path const & p_strFileName, int p_iMode, eENCODING_MODE p_eEncodin
 		m_ullLength = Castor::FTell( m_pFile );
 		Castor::FSeek( m_pFile, 0, SEEK_SET );
 	}
+	else
+	{
+		std::exception( str_utils::to_str( GetSystemError() ).c_str() );
+	}
 
 	CHECK_INVARIANTS();
 }

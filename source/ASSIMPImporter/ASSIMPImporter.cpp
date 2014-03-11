@@ -250,13 +250,13 @@ MeshSPtr AssimpImporter :: DoImportMesh()
 		{
 			SkeletonSPtr l_pSkeleton;
 
- 			if( l_pScene->HasAnimations() )
- 			{
- 				l_pSkeleton = std::make_shared< Skeleton >( m_pMesh );
- 				m_pMesh->SetSkeleton( l_pSkeleton );
- 				aiMatrix4x4 l_mtxGlobal = l_pScene->mRootNode->mTransformation;
- 				l_pSkeleton->SetGlobalInverseTransform( Matrix4x4r( &l_mtxGlobal.Transpose().Inverse().a1 ) );
- 			}
+ 			//if( l_pScene->HasAnimations() )
+ 			//{
+ 			//	l_pSkeleton = std::make_shared< Skeleton >( m_pMesh );
+ 			//	m_pMesh->SetSkeleton( l_pSkeleton );
+ 			//	aiMatrix4x4 l_mtxGlobal = l_pScene->mRootNode->mTransformation;
+ 			//	l_pSkeleton->SetGlobalInverseTransform( Matrix4x4r().get_identity() );// &l_mtxGlobal.Transpose().Inverse().a1 ) );
+ 			//}
 
 			if( l_pScene->HasMeshes() )
 			{
@@ -521,7 +521,7 @@ void AssimpImporter :: DoProcessAnimationNodes( AnimationSPtr p_pAnimation, real
 {
 	String l_strName = str_utils::from_str( p_pNode->mName.data );
 	const aiNodeAnim * l_pNodeAnim = FindNodeAnim( p_paiAnimation, l_strName );
-	Matrix4x4r l_mtxNode( &p_pNode->mTransformation/*.Transpose()*/.a1 );
+	Matrix4x4r l_mtxNode( &p_pNode->mTransformation.Transpose().a1 );
 	MovingObjectBaseSPtr l_pObject;
 
 	if( l_pNodeAnim )

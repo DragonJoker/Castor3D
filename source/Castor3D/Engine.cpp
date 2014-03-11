@@ -834,30 +834,7 @@ PluginBaseSPtr Engine :: InternalLoadPlugin( Path const & p_pathFile )
 			if( !l_pLibrary->Open( p_pathFile ) )
 			{
 				String l_strError = cuT( "Error encountered while loading file [" ) + p_pathFile + cuT( "] : " );
-#if defined( _WIN32 )
-				uint32_t l_uiError = dlerror();
-				l_strError += str_utils::to_string( l_uiError );
-				xchar * l_szBuffer = NULL;
-
-				if( FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER 
-								| FORMAT_MESSAGE_FROM_SYSTEM 
-								| FORMAT_MESSAGE_IGNORE_INSERTS,
-								NULL,
-								l_uiError,
-								MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ),
-								(LPTSTR)&l_szBuffer,
-								0,
-								NULL ) )
-				{
-					l_strError += cuT( " (" ) + String( l_szBuffer ) + cuT( ")" );
-					str_utils::replace( l_strError, cuT( "\r" ), cuT( "" ) );
-					str_utils::replace( l_strError, cuT( "\n" ), cuT( "" ) );
-					str_utils::replace( l_strError, cuT( "%1" ), p_pathFile.GetFileName() );
-					LocalFree( l_szBuffer );
-				}
-#else
-				l_strError += str_utils::to_string( dlerror() );
-#endif
+				l_strError += GetSystemError();
 				CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ) );
 			}
 
