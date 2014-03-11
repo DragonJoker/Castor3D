@@ -250,13 +250,13 @@ MeshSPtr AssimpImporter :: DoImportMesh()
 		{
 			SkeletonSPtr l_pSkeleton;
 
- 			if( l_pScene->HasAnimations() )
- 			{
- 				l_pSkeleton = std::make_shared< Skeleton >( m_pMesh );
- 				m_pMesh->SetSkeleton( l_pSkeleton );
- 				aiMatrix4x4 l_mtxGlobal = l_pScene->mRootNode->mTransformation;
- 				l_pSkeleton->SetGlobalInverseTransform( Matrix4x4r( &l_mtxGlobal.Transpose().Inverse().a1 ) );
- 			}
+ 			//if( l_pScene->HasAnimations() )
+ 			//{
+ 			//	l_pSkeleton = std::make_shared< Skeleton >( m_pMesh );
+ 			//	m_pMesh->SetSkeleton( l_pSkeleton );
+ 			//	aiMatrix4x4 l_mtxGlobal = l_pScene->mRootNode->mTransformation;
+ 			//	l_pSkeleton->SetGlobalInverseTransform( Matrix4x4r().get_identity() );// &l_mtxGlobal.Transpose().Inverse().a1 ) );
+ 			//}
 
 			if( l_pScene->HasMeshes() )
 			{

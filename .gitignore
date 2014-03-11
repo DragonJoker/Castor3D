@@ -57,3 +57,12 @@
 /data/Scene/mat.cscn
 /data/Scene/medieval-city.cscn
 /data/Scene/overlays.cscn
+
+/build/vc11_x86
+
+/resource/AseImporter/AseImporter.rc
+/resource/LwoImporter/LwoImporter.rc
+/resource/Md2Importer/Md2Importer.rc
+/resource/Md3Importer/Md3Importer.rc
+/resource/ObjImporter/ObjImporter.rc
+/resource/SMaxImporter/SMaxImporter.rc
