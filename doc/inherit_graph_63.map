@@ -1,0 +1,6 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$d9/dc5/a01705.html" title="Class which represents the moving things." alt="" coords="5,56,197,83"/>
+<area shape="rect" id="node2" href="$dd/db4/a01693.html" title="Implementation of MovingObjectBase for Bones." alt="" coords="249,5,404,32"/>
+<area shape="rect" id="node3" href="$d6/d15/a01697.html" title="Implementation of MovingObjectBase for abstract nodes." alt="" coords="249,56,404,83"/>
+<area shape="rect" id="node4" href="$d1/db5/a01701.html" title="Implementation of MovingObjectBase for MovableObject." alt="" coords="245,107,408,133"/>
+</map>

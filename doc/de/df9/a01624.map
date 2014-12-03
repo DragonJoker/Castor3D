@@ -1,0 +1,8 @@
+<map id="Castor3D::LightCategory::TextLoader" name="Castor3D::LightCategory::TextLoader">
+<area shape="rect" id="node1" title="LightCategory loader." alt="" coords="256,71,420,112"/>
+<area shape="rect" id="node4" href="$d2/dac/a01489.html" title="DirectionalLight loader." alt="" coords="468,5,641,47"/>
+<area shape="rect" id="node5" href="$de/d3c/a01809.html" title="PointLight loader." alt="" coords="483,71,626,112"/>
+<area shape="rect" id="node6" href="$d3/d48/a02069.html" title="SpotLight loader." alt="" coords="485,136,624,177"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,30,208,86"/>
+<area shape="rect" id="node3" title=" " alt="" coords="57,110,156,137"/>
+</map>

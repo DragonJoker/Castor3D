@@ -1,0 +1,8 @@
+<map id="Castor3D::BufferElementGroup::const_ptr" name="Castor3D::BufferElementGroup::const_ptr">
+<area shape="rect" id="node1" title="Retrieves a constant pointer on the data buffer." alt="" coords="260,99,460,141"/>
+<area shape="rect" id="node2" href="$d3/d90/a02177.html#a6e5442ad2ebd9ad829b80fd772515708" title="Retrieves the group bitangent." alt="" coords="5,5,212,32"/>
+<area shape="rect" id="node3" href="$d3/d90/a02177.html#a41bc4a35e2bdc916be07eccc89dcb07e" title="Retrieves the group normal." alt="" coords="13,56,205,83"/>
+<area shape="rect" id="node4" href="$d3/d90/a02177.html#a8a0dbeb8e1c638f638c88c3b98c67f33" title="Retrieves the group position." alt="" coords="9,107,208,133"/>
+<area shape="rect" id="node5" href="$d3/d90/a02177.html#a0f255129b88659ea494a8f94c07b6db5" title="Retrieves the group tangent." alt="" coords="10,157,207,184"/>
+<area shape="rect" id="node6" href="$d3/d90/a02177.html#a2155dbb3e477f47e09e3b5a1d37f80be" title="Retrieves the group texture coordinates." alt="" coords="23,209,195,250"/>
+</map>

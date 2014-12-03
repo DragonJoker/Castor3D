@@ -1,0 +1,13 @@
+<map id="Castor3D::ShaderObjectBase" name="Castor3D::ShaderObjectBase">
+<area shape="rect" id="node1" title="Base shader class." alt="" coords="1021,83,1215,109"/>
+<area shape="rect" id="node2" title=" " alt="" coords="678,133,865,189"/>
+<area shape="rect" id="node3" title=" " alt="" coords="323,5,501,61"/>
+<area shape="rect" id="node4" href="$d7/d13/a02045.html" title="Base shader program implementation, used to share functions through the supported shader languages." alt="" coords="669,83,873,109"/>
+<area shape="rect" id="node5" href="$d6/d56/a01861.html" title="The render system representation." alt="" coords="327,183,497,209"/>
+<area shape="rect" id="node6" href="$d7/d10/a01785.html" title="Implementation of the rendering pipeline." alt="" coords="706,253,837,280"/>
+<area shape="rect" id="node9" href="$d6/d53/a01789.html" title=" " alt="" coords="1039,236,1197,263"/>
+<area shape="rect" id="node7" title=" " alt="" coords="331,273,493,300"/>
+<area shape="rect" id="node8" title=" " alt="" coords="319,355,505,397"/>
+<area shape="rect" id="node10" title=" " alt="" coords="5,183,172,209"/>
+<area shape="rect" id="node11" title=" " alt="" coords="360,92,464,119"/>
+</map>

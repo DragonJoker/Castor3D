@@ -1,0 +1,6 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$dd/dda/a01621.html" title="Holds light components." alt="" coords="5,56,169,83"/>
+<area shape="rect" id="node2" href="$d4/d39/a01485.html" title="Class which represents a Directional Light." alt="" coords="217,5,391,32"/>
+<area shape="rect" id="node3" href="$d7/d62/a01805.html" title="Class which represents a PointLight." alt="" coords="233,56,375,83"/>
+<area shape="rect" id="node4" href="$d0/d67/a02065.html" title="Class which represents a SpotLight." alt="" coords="235,107,373,133"/>
+</map>

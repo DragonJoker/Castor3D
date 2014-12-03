@@ -1,0 +1,7 @@
+<map id="Castor3D::FrameEvent" name="Castor3D::FrameEvent">
+<area shape="rect" id="node1" title="The interface which represents a frame event." alt="" coords="5,81,159,108"/>
+<area shape="rect" id="node2" href="$d9/d6f/a01445.html" title="Cleaner event." alt="" coords="211,5,405,32"/>
+<area shape="rect" id="node3" href="$d3/da1/a01613.html" title="Initialiser event." alt="" coords="211,56,405,83"/>
+<area shape="rect" id="node4" href="$d2/d23/a01961.html" title="Event used to resize a RenderWindow before rendering it." alt="" coords="207,107,409,133"/>
+<area shape="rect" id="node5" href="$db/ddd/a02089.html" title="Threaded Subdivision Frame event." alt="" coords="215,158,401,199"/>
+</map>

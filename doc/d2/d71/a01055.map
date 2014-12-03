@@ -1,0 +1,20 @@
+<map id="Castor3D::BorderPanelOverlay" name="Castor3D::BorderPanelOverlay">
+<area shape="rect" id="node1" title="A rectangular overlay with a border." alt="" coords="1265,439,1464,465"/>
+<area shape="rect" id="node2" href="$d3/d5e/a01725.html" title="Holds specific members for an overlay category." alt="" coords="1037,408,1216,435"/>
+<area shape="rect" id="node3" href="$d2/d0c/a01713.html" title="The overlay class." alt="" coords="735,343,861,369"/>
+<area shape="rect" id="node4" title=" " alt="" coords="375,299,524,341"/>
+<area shape="rect" id="node5" title=" " alt="" coords="400,365,499,392"/>
+<area shape="rect" id="node6" href="$d6/d56/a01861.html" title="The render system representation." alt="" coords="364,185,535,212"/>
+<area shape="rect" id="node7" href="$d7/d10/a01785.html" title="Implementation of the rendering pipeline." alt="" coords="733,117,863,144"/>
+<area shape="rect" id="node10" href="$d6/d53/a01789.html" title=" " alt="" coords="1048,117,1205,144"/>
+<area shape="rect" id="node8" title=" " alt="" coords="369,5,530,32"/>
+<area shape="rect" id="node9" title=" " alt="" coords="356,87,543,129"/>
+<area shape="rect" id="node11" title=" " alt="" coords="24,185,191,212"/>
+<area shape="rect" id="node12" href="$d0/d4e/a01741.html" title="The mesh factory." alt="" coords="364,416,535,443"/>
+<area shape="rect" id="node13" title=" " alt="" coords="5,409,209,450"/>
+<area shape="rect" id="node14" href="$db/d06/a01509.html" title="Main System." alt="" coords="387,248,511,275"/>
+<area shape="rect" id="node15" title=" " alt="" coords="21,248,193,275"/>
+<area shape="rect" id="node16" title=" " alt="" coords="707,453,889,494"/>
+<area shape="rect" id="node17" href="$d2/d70/a01729.html" title="Holds specific vertex data for an Overlay." alt="" coords="360,467,539,509"/>
+<area shape="rect" id="node18" title=" " alt="" coords="86,475,129,501"/>
+</map>

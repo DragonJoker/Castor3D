@@ -1,0 +1,13 @@
+<map id="Castor3D::BufferElementGroup::ptr" name="Castor3D::BufferElementGroup::ptr">
+<area shape="rect" id="node1" title="Retrieves a pointer on the data buffer." alt="" coords="260,245,483,272"/>
+<area shape="rect" id="node2" href="$d3/d90/a02177.html#afb7d03d0b464ba99307b597428e76bb1" title="Retrieves the group bitangent." alt="" coords="5,5,212,32"/>
+<area shape="rect" id="node3" href="$d3/d90/a02177.html#aee1b3f772a0c574278e7c40c7fa183bd" title="Retrieves the group normal." alt="" coords="13,56,205,83"/>
+<area shape="rect" id="node4" href="$d3/d90/a02177.html#acd99a6e6250c27161fe4985dae0af18e" title="Retrieves the group position." alt="" coords="9,107,208,133"/>
+<area shape="rect" id="node5" href="$d3/d90/a02177.html#a127ee38d3991e3f2f55b65b4ed25294e" title="Retrieves the group tangent." alt="" coords="10,157,207,184"/>
+<area shape="rect" id="node6" href="$d3/d90/a02177.html#a6da339a0a8af28a7216b4968073ea675" title="Retrieves the group texture coordinates." alt="" coords="23,209,195,250"/>
+<area shape="rect" id="node7" href="$d3/d90/a02177.html#afb919503d53bea1481044658f08cc43c" title="Sets the group bitangent." alt="" coords="6,275,211,301"/>
+<area shape="rect" id="node8" href="$d3/d90/a02177.html#a9a4c699f46589618c23dbb7c60330e31" title="Sets the group normal." alt="" coords="13,325,204,352"/>
+<area shape="rect" id="node9" href="$d3/d90/a02177.html#a183f67083a269835cd8becbc0ec8bf42" title="Sets the group position." alt="" coords="10,376,207,403"/>
+<area shape="rect" id="node10" href="$d3/d90/a02177.html#a52bb3558a9745ab18b4f4ec994f6404f" title="Sets the group tangent." alt="" coords="11,427,207,453"/>
+<area shape="rect" id="node11" href="$d3/d90/a02177.html#a2cf6c4a5d05f8dddbbffab4c10651751" title="Sets the group texture coordinates." alt="" coords="23,478,194,519"/>
+</map>

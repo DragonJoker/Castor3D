@@ -1,0 +1,10 @@
+<map id="Castor3D::PluginBase" name="Castor3D::PluginBase">
+<area shape="rect" id="node1" title="Plugin Base class." alt="" coords="5,157,156,184"/>
+<area shape="rect" id="node2" href="$db/d2c/a01501.html" title="Divider Plugin class." alt="" coords="214,5,373,32"/>
+<area shape="rect" id="node3" href="$d3/daa/a01577.html" title="Generator Plugin class." alt="" coords="205,56,382,83"/>
+<area shape="rect" id="node4" href="$d5/d75/a01605.html" title="Importer Plugin class." alt="" coords="210,107,377,133"/>
+<area shape="rect" id="node5" href="$de/d3d/a01821.html" title="Post effect plugin class." alt="" coords="212,157,375,184"/>
+<area shape="rect" id="node6" href="$db/dd4/a01849.html" title="Renderer Plugin class." alt="" coords="207,208,379,235"/>
+<area shape="rect" id="node7" href="$d6/d94/a02033.html" title="Shader program Plugin class." alt="" coords="213,259,374,285"/>
+<area shape="rect" id="node8" href="$d6/d3b/a02121.html" title="Render technique plugin class." alt="" coords="204,309,383,336"/>
+</map>

@@ -1,0 +1,11 @@
+<map id="Castor3D::MeshCategory" name="Castor3D::MeshCategory">
+<area shape="rect" id="node1" title="Mesh category is used to create a mesh&#39;s vertices, it is created by MeshFactory." alt="" coords="5,183,173,209"/>
+<area shape="rect" id="node2" href="$d9/dae/a01453.html" title="The cone is a basic primitive, with a parametrable number of faces." alt="" coords="241,5,356,32"/>
+<area shape="rect" id="node3" href="$dc/d60/a01461.html" title="The cube representation." alt="" coords="241,56,356,83"/>
+<area shape="rect" id="node4" href="$d4/dfd/a01465.html" title="The cylinder representation." alt="" coords="233,107,364,133"/>
+<area shape="rect" id="node5" href="$d0/d1d/a01597.html" title="The icosahedron representation." alt="" coords="221,157,376,184"/>
+<area shape="rect" id="node6" href="$d4/dc6/a01793.html" title="The plane representation." alt="" coords="240,208,357,235"/>
+<area shape="rect" id="node7" href="$df/dee/a01825.html" title="Projection mesh representation." alt="" coords="227,259,370,285"/>
+<area shape="rect" id="node8" href="$d8/de6/a02061.html" title="The sphere primitive." alt="" coords="236,309,361,336"/>
+<area shape="rect" id="node9" href="$d7/d4c/a02165.html" title="The torus representation." alt="" coords="241,360,357,387"/>
+</map>

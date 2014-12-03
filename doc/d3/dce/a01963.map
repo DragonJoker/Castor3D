@@ -1,0 +1,15 @@
+<map id="Castor3D::Sampler" name="Castor3D::Sampler">
+<area shape="rect" id="node1" title="Defines a sampler for a texture." alt="" coords="5,102,137,129"/>
+<area shape="rect" id="node5" href="$d8/ded/a01113.html" title=" " alt="" coords="81,243,283,284"/>
+<area shape="rect" id="node2" href="$d6/d8b/a01117.html" title=" " alt="" coords="90,525,293,567"/>
+<area shape="rect" id="node3" title=" " alt="" coords="79,436,303,463"/>
+<area shape="rect" id="node4" href="$d5/d92/a01977.html" title="Sampler renderer." alt="" coords="94,347,278,373"/>
+<area shape="rect" id="node6" href="$d6/d56/a01861.html" title="The render system representation." alt="" coords="243,102,414,129"/>
+<area shape="rect" id="node7" href="$d7/d10/a01785.html" title="Implementation of the rendering pipeline." alt="" coords="503,250,634,277"/>
+<area shape="rect" id="node10" href="$d6/d53/a01789.html" title=" " alt="" coords="513,347,670,373"/>
+<area shape="rect" id="node8" title=" " alt="" coords="501,102,663,129"/>
+<area shape="rect" id="node9" title=" " alt="" coords="687,95,874,136"/>
+<area shape="rect" id="node11" title=" " alt="" coords="245,5,412,32"/>
+<area shape="rect" id="node12" href="$db/d06/a01509.html" title="Main System." alt="" coords="328,436,452,463"/>
+<area shape="rect" id="node13" title=" " alt="" coords="304,347,476,373"/>
+</map>
