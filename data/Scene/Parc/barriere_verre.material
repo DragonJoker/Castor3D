@@ -1,0 +1,59 @@
+
+material barriere_verre/metal
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.486 0.486 0.486 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture barriere_metal.jpg
+			}
+		}
+
+	}
+
+}
+
+material barriere_verre/verre
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.882353 0.882353 0.882353 1 10
+			scene_blend alpha_blend
+			depth_write off
+
+			texture_unit
+			{
+				texture_alias 0
+				texture barriere_verre.png
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material coll_pf_barriere_verre_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}

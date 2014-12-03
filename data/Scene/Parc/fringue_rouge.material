@@ -1,0 +1,22 @@
+
+material fringue_rouge
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0 0 0 1 10
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture fringues_2.jpg
+			}
+		}
+
+	}
+
+}

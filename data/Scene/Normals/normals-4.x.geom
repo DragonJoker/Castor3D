@@ -10,6 +10,7 @@ uniform mat4 c3d_mtxProjectionModelView;
 uniform int p_bShowNormals;
 uniform int p_bShowTangents;
 uniform int p_bShowBitangents;
+uniform int p_iSize;
 uniform vec3 c3d_v3CameraPosition;
 
 in vec4 vtx_normal[3];
@@ -48,7 +49,7 @@ void main()
 			geo_color.a /= distance(c3d_v3CameraPosition, gl_Position.xyz);
 			EmitVertex();
 
-			gl_Position = c3d_mtxProjectionModelView * (gl_PositionIn[i] + (vtx_normal[i] * 5.0));
+			gl_Position = c3d_mtxProjectionModelView * (gl_PositionIn[i] + (vtx_normal[i] * p_iSize));
 			geo_color = vec4( 1.0, 0.0, 0.0, 1.0 );
 			geo_color /= (distance(c3d_v3CameraPosition, gl_Position.xyz)/2);
 			geo_color.a /= distance(c3d_v3CameraPosition, gl_Position.xyz);
@@ -68,7 +69,7 @@ void main()
 			geo_color /= (distance(c3d_v3CameraPosition, gl_Position.xyz)/2);
 			EmitVertex();
 
-			gl_Position = c3d_mtxProjectionModelView * (gl_PositionIn[i] + (vtx_tangent[i] * 5.0));
+			gl_Position = c3d_mtxProjectionModelView * (gl_PositionIn[i] + (vtx_tangent[i] * p_iSize));
 			geo_color = vec4( 0.0, 1.0, 0.0, 1.0 );
 			geo_color /= (distance(c3d_v3CameraPosition, gl_Position.xyz)/2);
 			geo_color.a /= distance(c3d_v3CameraPosition, gl_Position.xyz);
@@ -89,7 +90,7 @@ void main()
 			geo_color.a /= distance(c3d_v3CameraPosition, gl_Position.xyz);
 			EmitVertex();
 
-			gl_Position = c3d_mtxProjectionModelView * (gl_PositionIn[i] + (vtx_bitangent[i] * 5.0));
+			gl_Position = c3d_mtxProjectionModelView * (gl_PositionIn[i] + (vtx_bitangent[i] * p_iSize));
 			geo_color = vec4( 0.0, 0.0, 1.0, 1.0 );
 			geo_color /= (distance(c3d_v3CameraPosition, gl_Position.xyz)/2);
 			geo_color.a /= distance(c3d_v3CameraPosition, gl_Position.xyz);

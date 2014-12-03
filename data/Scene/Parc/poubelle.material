@@ -1,0 +1,76 @@
+
+material poubelle/plastique_gris
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.0784314 0.0784314 0.0784314 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture poubelle_plastik_gris.jpg
+			}
+		}
+
+	}
+
+}
+
+material poubelle/plastique_vert
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.0784314 0.0784314 0.0784314 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture poubelle_plastik_vert.jpg
+			}
+		}
+
+	}
+
+}
+
+material poubelle/plastique_noir
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.0784314 0.0784314 0.0784314 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture poubelle_plastik_noir.jpg
+			}
+		}
+
+	}
+
+}
+
+material coll_pf_poubelle_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}

@@ -34,17 +34,30 @@ Castor3D uses CMake to build project files.
 You just need to launch cmake to build your preferential projet file.
 Tested compilers are :
 - Visual Studio 2010
+- Visual Studio 2012
+- Visual Studio 2013
 - gcc 4.6.2
 - gcc 4.7.0
 CastorUtils depends on boost thread, FreeImage and FreeType.
-Castor3D is based on CastorUtils and also uses NVidia's Cg Toolkit.
-GlRenderSystem depends on OpenGL (not GLU).
-Dx9RenderSystem uses Direct3D 9.
+Castor3D is based on CastorUtils.
 GuiCommon depends on wxWidgets (from 2.8.11, currently on 2.9.3).
 Last (but not least) CastorViewer depends on GuiCommon, Castor3D and wxWidgets.
-Few plugins are also built : importers (ASE, 3DS, OBJ, PLY, MD2, MD3) and
-one divider (Loop algorithm).
-Two additional projects are also generated : ImgToXPM and ImgToICO.
+
+Some plugins are also built :
+Renderers
+- GlRenderSystem depends on OpenGL (not GLU).
+- Dx9RenderSystem uses Direct3D 9.
+- Dx10RenderSystem uses Direct3D 10.
+- Dx11RenderSystem uses Direct3D 11.
+
+Importers : ASE, 3DS, LWO, OBJ, PLY, MD2, MD3. If you have Assimp installed,
+			you can build ASSIMPImporter which replaces the previous ones
+Dividers : Loop and PN-Triangles.
+
+Two additional projects are also generated :
+- ImgConverter : Allows you to convert any image file type to XPM or ICO.
+- CastorUtilsTest : Allows you to run unit and performance tests for CastorUtils.
+
 Documentation for CastorUtils and Castor3D can be generated using Doxygen.
 
 
@@ -64,8 +77,8 @@ The plugins are installed in <install_dir>/shared/Castor3D/
 #   **                        IV. Running Castor3D                           **
 #   **-----------------------------------------------------------------------**
 
-To run Castor Viewer, simply type 'CastorViewer' in your preferred
-command-line.
+To run Castor Viewer, just type 'CastorViewer' in your preferred command-line
+tool.
 
 
 #   **-----------------------------------------------------------------------**

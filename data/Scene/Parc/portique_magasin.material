@@ -1,0 +1,110 @@
+
+material portique/metal
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.196078 0.196078 0.196078 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture metal.jpg
+			}
+		}
+
+	}
+
+}
+
+material portique/gond
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.196078 0.196078 0.196078 1 10
+			cull_hardware none
+			cull_software none
+		}
+
+	}
+
+}
+
+material portique/sens_interdit
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.0392157 0.0392157 0.0392157 1 10
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture sens_interdit.jpg
+			}
+		}
+
+	}
+
+}
+
+material portique/sens_obli
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.0392157 0.0392157 0.0392157 1 10
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture sens_obli.jpg
+			}
+		}
+
+	}
+
+}
+
+material coll_pf_portique_magasin_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}
+
+material coll_pf_portique_magasin_01_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}

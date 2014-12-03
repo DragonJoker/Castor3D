@@ -1,7 +1,13 @@
-font "Arial"
+font "Arial100"
 {
-	file	"arial.ttf"
-	height	20
+	file		"Overlay/arial.ttf"
+	height		100
+}
+
+font "Arial60"
+{
+	file		"Overlay/arial.ttf"
+	height		60
 }
 
 sampler "Default"
@@ -37,6 +43,15 @@ material "Gray"
 	}
 }
 
+material "DarkRed"
+{
+	pass
+	{
+		ambient 0.5 0.0 0.0 1.0
+		alpha 1.0
+	}
+}
+
 material "Black"
 {
 	pass
@@ -62,7 +77,24 @@ material "Yellow"
 	}
 }
 
-material "TextureBlend"
+material "OpaqueTexture"
+{
+	pass
+	{
+		ambient 1.0 1.0 0.0 0.5
+		alpha 0.8
+
+		texture_unit
+		{
+			image "Texturing/Diffuse.bmp"
+			colour 1.0 1.0 0.0 1.0
+			channel colour
+			sampler	"Default"
+		}
+	}
+}
+
+material "BlendTexture"
 {
 	pass
 	{
@@ -70,7 +102,7 @@ material "TextureBlend"
 
 		texture_unit
 		{
-			image "NoShader/AlphaRejection.png"
+			image "NoShader/AlphaBlend.png"
 			colour 1.0 1.0 0.0 1.0
 			channel colour
 			sampler	"Default"
@@ -90,6 +122,8 @@ material "YellowBlend"
 scene "Scene"
 {
 	background_colour 0.5 0.5 0.5 1.0
+	background_image "Texturing/background.jpg"
+
 	scene_node "SunLightNode1"
 	{
 		position  0.0 -1.0 -1.0
@@ -105,37 +139,61 @@ scene "Scene"
 	scene_node "FinalNode"
 	{
 	}
+
 	object "FinalPrimitive"
 	{
 		parent "FinalNode"
 		mesh "Mesh"
 		{
 			type torus 10 10 5.0 10.0
-			material "Gray"
 		}
+		material "Gray"
 	}
 
 	panel_overlay "MainPanel"
 	{
 		size 0.5 0.5
 		position 0.25 0.25
-		material "YellowBlend"
+		material "OpaqueTexture"
 
-		panel_overlay "ChildPanel"
+		border_panel_overlay "ChildPanel"
 		{
-			size 0.5 0.5
+			pxl_size 480 270
 			position 0.25 0.25
-			material "BlackBlend"
+			center_uv 0.125 0.125 0.875 0.875
+			material "BlendTexture"
+			border_pxl_size 32 32 32 32
+			border_position external
+			border_material "BlendTexture"
+			border_inner_uv 0.125 0.125 0.875 0.875
+
+			text_overlay "ChildChildText"
+			{
+				size 1.0 1.0
+				position 0.0 0.0
+				material "DarkRed"
+				font "Arial60"
+				text "Je ne	sais pas trop..."
+				text_wrapping break_words
+			}
 		}
 	}
-	
-	text_overlay "MainText"
+
+	panel_overlay "MainTextPanel"
 	{
-		size 0.5 0.5
+		pxl_size 1070 150
 		position 0.0 0.0
-		material "Gray"
-		font "Arial"
-		text "Coucou !!"
+		material "YellowBlend"
+
+		text_overlay "ChildText"
+		{
+			size 1.0 1.0
+			position 0.0 0.0
+			material "DarkRed"
+			font "Arial100"
+			text "Coucou !! La vie est belle?"
+            text_wrapping break
+		}
 	}
 }
 
@@ -146,6 +204,7 @@ window "Window"
 		format		argb32
 		depth		depth24s8
 		size		screen_size
+		msaa		8
 		scene		"Scene"
 	}
 	fullscreen	false

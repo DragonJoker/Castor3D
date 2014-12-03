@@ -1,0 +1,294 @@
+
+material sol_parc/route
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.137255 0.137255 0.137255 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture sol_route_beton.jpg
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material sol_parc/rigole
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.0392157 0.0392157 0.0392157 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture sol_rigole.jpg
+			}
+		}
+
+	}
+
+}
+
+material sol_parc/trottoir
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.137255 0.137255 0.137255 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture sol_trottoir_beton.jpg
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material sol_parc/sol_sable
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.081 0.081 0.081 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture sol_parc_sable.jpg
+			}
+		}
+
+	}
+
+}
+
+material sol_parc/sol_herbe
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0.0784314 0.0784314 0.0784314 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture test_herbe.jpg
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material sol_parc/passage_pieton
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+			scene_blend alpha_blend
+			alpha_rejection greater 128
+
+			texture_unit
+			{
+				texture_alias 0
+				texture sol_passage_pieton.png
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material sol_parc/arret_bus
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+			scene_blend alpha_blend
+			alpha_rejection greater 128
+			depth_write off
+
+			texture_unit
+			{
+				texture_alias 0
+				texture sol_passage_bus.png
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material sol_parc/sable_canalisations
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture sol_sable_tranchee.jpg
+			}
+		}
+
+	}
+
+}
+
+material sol_parc/egout
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.137255 0.137255 0.137255 1 10
+			scene_blend alpha_blend
+			alpha_rejection greater 128
+
+			texture_unit
+			{
+				texture_alias 0
+				texture sol_bouche_egout.png
+			}
+		}
+
+	}
+
+}
+
+material sol_parc/egout_ouvert
+{
+	technique
+	{
+		pass
+		{
+			ambient 0 0 0 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+			scene_blend alpha_blend
+			alpha_rejection greater 128
+			depth_write off
+
+			texture_unit
+			{
+				texture_alias 0
+				texture sol_bouche_egout_ouverte.png
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material sol_parc/metal_cana
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.198 0.198 0.198 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture sol_metal_cana.jpg
+			}
+		}
+
+	}
+
+}
+
+material sol_parc/bord_herbe
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0.153 0.153 0.153 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture bord_herbe.jpg
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material sol_parc/terre
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture buisson_terre.jpg
+			}
+		}
+
+	}
+
+}

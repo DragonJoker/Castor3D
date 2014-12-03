@@ -1,0 +1,548 @@
+language hlsl
+{
+	pattern		*.ps_1_0 *.ps_1_1 *.ps_1_4 *.ps_2_0 *.vs_1_1 *.vs_2_0 *.fx *.hlsl *.hl
+	lexer		C/C++
+	fold_flags	compact
+	section
+	{
+		type	delimiter
+		list
+		{
+			'
+            "
+		}
+	}
+	section
+	{
+		type	operator
+		list
+		{
+			-
+            !
+            %
+            &
+            (
+            )
+            *
+            ,
+            .
+            :
+            ;
+            ?
+            [
+            ]
+            ^
+            |
+            ~
+            +
+            <
+            =
+            >
+		}
+	}
+	section
+	{
+		type	comment
+		list
+		{
+			\/*
+            */
+		}
+	}
+	section
+	{
+		type	comment_line
+		list
+		{
+			//
+		}
+	}
+	section
+	{
+		type	word1
+		list
+		{
+			POSITION
+			BLENDWEIGHTS
+			BLENDINDICES
+			NORMAL
+			PSIZE
+			DIFFUSE
+			SPECULAR
+			TEXCOORD
+			TANGENT
+			BINORMAL
+			TESSFACTOR
+			POSITION0
+			BLENDWEIGHTS0
+			BLENDINDICES0
+			NORMAL0
+			PSIZE0
+			DIFFUSE0
+			SPECULAR0
+			TEXCOORD0
+			TANGENT0
+			BINORMAL0
+			TESSFACTOR0
+			POSITION1
+			BLENDWEIGHTS1
+			BLENDINDICES1
+			NORMAL1
+			PSIZE1
+			DIFFUSE1
+			SPECULAR1
+			TEXCOORD1
+			TANGENT1
+			BINORMAL1
+			TESSFACTOR1
+			POSITION2
+			BLENDWEIGHTS2
+			BLENDINDICES2
+			NORMAL2
+			PSIZE2
+			DIFFUSE2
+			SPECULAR2
+			TEXCOORD2
+			TANGENT2
+			BINORMAL2
+			TESSFACTOR2
+			POSITION3
+			BLENDWEIGHTS3
+			BLENDINDICES3
+			NORMAL3
+			PSIZE3
+			DIFFUSE3
+			SPECULAR3
+			TEXCOORD3
+			TANGENT3
+			BINORMAL3
+			TESSFACTOR3
+			POSITION4
+			BLENDWEIGHTS4
+			BLENDINDICES4
+			NORMAL4
+			PSIZE4
+			DIFFUSE4
+			SPECULAR4
+			TEXCOORD4
+			TANGENT4
+			BINORMAL4
+			TESSFACTOR4
+			POSITION5
+			BLENDWEIGHTS5
+			BLENDINDICES5
+			NORMAL5
+			PSIZE5
+			DIFFUSE5
+			SPECULAR5
+			TEXCOORD5
+			TANGENT5
+			BINORMAL5
+			TESSFACTOR5
+			POSITION6
+			BLENDWEIGHTS6
+			BLENDINDICES6
+			NORMAL6
+			PSIZE6
+			DIFFUSE6
+			SPECULAR6
+			TEXCOORD6
+			TANGENT6
+			BINORMAL6
+			TESSFACTOR6
+			POSITION7
+			BLENDWEIGHTS7
+			BLENDINDICES7
+			NORMAL7
+			PSIZE7
+			DIFFUSE7
+			SPECULAR7
+			TEXCOORD7
+			TANGENT7
+			BINORMAL7
+			TESSFACTOR7
+			POSITION8
+			BLENDWEIGHTS8
+			BLENDINDICES8
+			NORMAL8
+			PSIZE8
+			DIFFUSE8
+			SPECULAR8
+			TEXCOORD8
+			TANGENT8
+			BINORMAL8
+			TESSFACTOR8POSITION9
+			BLENDWEIGHTS9
+			BLENDINDICES9
+			NORMAL9
+			PSIZE9
+			DIFFUSE9
+			SPECULAR9
+			TEXCOORD9
+			TANGENT9
+			BINORMAL9
+			TESSFACTOR9
+			POSITION10
+			BLENDWEIGHTS10
+			BLENDINDICES10
+			NORMAL10
+			PSIZE10
+			DIFFUSE10
+			SPECULAR10
+			TEXCOORD10
+			TANGENT10
+			BINORMAL10
+			TESSFACTOR10
+			POSITION11
+			BLENDWEIGHTS11
+			BLENDINDICES11
+			NORMAL11
+			PSIZE11
+			DIFFUSE11
+			SPECULAR11
+			TEXCOORD11
+			TANGENT11
+			BINORMAL11
+			TESSFACTOR11
+			POSITION19
+			BLENDWEIGHTS19
+			BLENDINDICES19
+			NORMAL19
+			PSIZE19
+			DIFFUSE19
+			SPECULAR19
+			TEXCOORD19
+			TANGENT19
+			BINORMAL19
+			TESSFACTOR19
+			POSITION110
+			BLENDWEIGHTS110
+			BLENDINDICES110
+			NORMAL110
+			PSIZE110
+			DIFFUSE110
+			SPECULAR110
+			TEXCOORD110
+			TANGENT110
+			BINORMAL110
+			TESSFACTOR110
+			POSITION111
+			BLENDWEIGHTS111
+			BLENDINDICES111
+			NORMAL111
+			PSIZE111
+			DIFFUSE111
+			SPECULAR111
+			TEXCOORD111
+			TANGENT111
+			BINORMAL111
+			TESSFACTOR111
+			POSITION119
+			BLENDWEIGHTS119
+			BLENDINDICES119
+			NORMAL119
+			PSIZE119
+			DIFFUSE119
+			SPECULAR119
+			TEXCOORD119
+			TANGENT119
+			BINORMAL119
+			TESSFACTOR15
+			FOG
+			COLOR0
+			COLOR1
+			COLOR2
+			COLOR3
+			COLOR4
+			COLOR5
+			COLOR6
+			COLOR7
+			COLOR8
+			COLOR9
+			COLOR10
+			COLOR11
+			COLOR12
+			COLOR13
+			COLOR14
+			COLOR15
+			TEXCOORD0
+			TEXCOORD1
+			TEXCOORD2
+			TEXCOORD3
+			TEXCOORD4
+			TEXCOORD5
+			TEXCOORD6
+			TEXCOORD7
+			TEXCOORD8
+			TEXCOORD9
+			TEXCOORD10
+			TEXCOORD11
+			TEXCOORD12
+			TEXCOORD13
+			TEXCOORD14
+			TEXCOORD15
+			c3d_mapDiffuse
+			c3d_mapNormal
+			c3d_v4AmbientLight
+			c3d_v4MatAmbient
+			c3d_v4MatEmissive
+			c3d_v4MatDiffuse
+			c3d_v4MatEmissive
+			c3d_v4MatSpecular
+			c3d_fMatShininess
+			c3d_sLights
+			c3d_iLightsCount
+			bitangent
+			tangent
+			vertex
+			normal
+			texture
+			c3d_mtxProjection
+			c3d_mtxModel
+			c3d_mtxView
+			c3d_mtxModelView
+			c3d_mtxProjectionView
+			c3d_mtxProjectionModelView
+			c3d_mtxNormal
+		}
+	}
+	section
+	{
+		type	word2
+		list
+		{
+			bool
+            int
+            half
+            float
+            int2
+            int3
+            int4
+            float2
+            float3
+            float4
+            double
+            string
+            vector
+            matrix
+            float2x2
+            float3x3
+            float4x4
+            float2x4
+            int2x2
+            int3x3
+            int4x4
+            int2x4
+            struct
+            typedef
+            const
+            static
+            uniform
+            extern
+            shared
+            volatile
+            asm
+            compile
+            decl
+            do
+            if
+            else
+            true
+            false
+            for
+            in
+            inline
+            inout
+            out
+            pass
+            pixelshader
+            vertexshader
+            return
+            sampler
+            texture
+            technique
+            while
+            auto
+            break
+            case
+            catch
+            char
+            class
+            const_cast
+            continue
+            default
+            delete
+            dynamic_cast
+            enum
+            explicit
+            friend
+            goto
+            long
+            mutable
+            namespace
+            new
+            operator
+            private
+            protected
+            public
+            register
+            reinterpret_cast
+            short
+            signed
+            sizeof
+            static_cast
+            switch
+            template
+            this
+            throw
+            try
+            typename
+            union
+            unsigned
+            using
+            virtual
+            Light
+		}
+	}
+	section
+	{
+		type	word4
+		list
+		{
+			abs
+			ceil
+			clamp
+			cos
+			cross
+			degrees
+			determinant
+			distance
+			dot
+			floor
+			length
+			lerp
+			log
+			log10
+			log2
+			max
+			min
+			mul
+			normalize
+			pow
+			radians
+			reflect
+			refract
+			rsqrt
+			saturate
+			sin
+			sincos
+			sqrt
+			tan
+			transpose
+		}
+	}
+	style
+	{
+		type		default
+		fg_colour	#DCDCDC
+		bg_colour	#1E1E1E
+		font_name	Consolas
+		font_size	10
+	}
+	style
+	{
+		type		word1
+		fg_colour	#B8D7A3
+		bg_colour	#1E1E1E
+		font_name	Consolas
+		font_size	10
+	}
+	style
+	{
+		type		word2
+		fg_colour	#569CD6
+		bg_colour	#1E1E1E
+		font_name	Consolas
+		font_size	10
+	}
+	style
+	{
+		type		word3
+		fg_colour	#FF0000
+		bg_colour	#1E1E1E
+		font_name	Consolas
+		font_size	10
+	}
+	style
+	{
+		type		word4
+		fg_colour	#FF8000
+		bg_colour	#1E1E1E
+		font_name	Consolas
+		font_size	10
+	}
+	style
+	{
+		type		comment
+		fg_colour	#608B4E
+		bg_colour	#1E1E1E
+		font_name	Consolas
+		font_size	10
+	}
+	style
+	{
+		type		comment_line
+		fg_colour	#608B4E
+		bg_colour	#1E1E1E
+		font_name	Consolas
+		font_size	10
+	}
+	style
+	{
+		type		number
+		fg_colour	#B5CEA8
+		bg_colour	#1E1E1E
+		font_name	Consolas
+		font_size	10
+	}
+	style
+	{
+		type		operator
+		fg_colour	#B4B4B4
+		bg_colour	#1E1E1E
+		font_name	Consolas
+		font_size	10
+	}
+	style
+	{
+		type		delimiter
+		fg_colour	#D69D85
+		bg_colour	#1E1E1E
+		font_name	Consolas
+		font_size	10
+	}
+	style
+	{
+		type		preprocessor
+		fg_colour	#BD63C5
+		bg_colour	#1E1E1E
+		font_name	Consolas
+		font_size	10
+	}
+	style
+	{
+		type		identifier
+		fg_colour	#DCDCDC
+		bg_colour	#1E1E1E
+		font_name	Consolas
+		font_size	10
+	}
+	style
+	{
+		type		undefined
+		fg_colour	#DCDCDC
+		bg_colour	#1E1E1E
+		font_name	Consolas
+		font_size	10
+	}
+}

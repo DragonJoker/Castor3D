@@ -51,8 +51,8 @@ scene "MyScene"
 		mesh "BuddahMesh"
 		{
 			import "PlyModels/happy.ply"
-			material "Gold"
 		}
+		material "Gold"
 	}
 }
 

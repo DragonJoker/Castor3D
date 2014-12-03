@@ -1,0 +1,21 @@
+
+material panneau_pub
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.392157 0.392157 0.392157 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture panneau_pub_metal.jpg
+			}
+		}
+
+	}
+
+}

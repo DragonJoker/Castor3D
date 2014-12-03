@@ -1,0 +1,47 @@
+
+material fauteuil
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.0392157 0.0392157 0.0392157 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture canape_bar.jpg
+			}
+		}
+
+	}
+
+}
+
+material coll_pf_fauteuil_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}
+
+material coll_sd_fauteuil_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}

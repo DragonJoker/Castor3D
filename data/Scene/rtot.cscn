@@ -1,4 +1,3 @@
-/*
 material Gold
 {
 	pass
@@ -8,13 +7,13 @@ material Gold
 		emissive 0.0 0.0 0.0 1.0
 		specular 0.628281 0.555802 0.366065 1.0
 		shininess 51.2
-		double_face true
+		two_sided true
 	}
 }
-/**/
+
 scene "TextureScene"
 {
-	background_colour 0.5 0.5 0.5 1.0
+	background_colour 0.5 0.0 0.0 1.0
 	ambient_light 0.5 0.5 0.5 1.0
 
 	camera_node "TextureCameraNode"
@@ -33,7 +32,7 @@ scene "TextureScene"
 
 	scene_node "TextureSunLightNode2"
 	{
-		position  0.0 0.0 -1.0
+		position  0.0 1.0 1.0
 	}
 
 	light "TextureSunLight"
@@ -72,12 +71,25 @@ scene "TextureScene"
 		parent "TextureGeometryNode"
 		mesh "TextureMesh"
 		{
-			type torus 10 10 10.0 20.0
-			material "RToTMaterial"
+			type torus 40 40 30.0 60.0
 		}
+		material "Gold"
 	}
 }
-/**/
+
+sampler "Linear"
+{
+	min_filter		linear
+	mag_filter		linear
+	min_lod			-500.0
+	max_lod			500.0
+	lod_bias		0.0
+	u_wrap_mode		clamp_to_edge
+	v_wrap_mode		clamp_to_edge
+	w_wrap_mode		clamp_to_edge
+	border_colour	0.0 0.0 0.0 0.0
+}
+
 material "RToTMaterial"
 {
 	pass
@@ -87,7 +99,7 @@ material "RToTMaterial"
 		emissive 0.0 0.0 0.0 1.0
 		specular 0.0 0.0 0.0 1.0
 		shininess 51.2
-		double_face true
+		two_sided true
 		
 		texture_unit
 		{
@@ -101,13 +113,14 @@ material "RToTMaterial"
 			}
 			colour 1.0 1.0 1.0 1.0
 			channel diffuse
+			sampler	"Linear"
 		}
 	}
 }
 
 scene "FinalScene"
 {
-	background_colour 1.0 1.0 1.0 1.0
+	background_colour 0.5 0.5 0.5 1.0
 	ambient_light 0.5 0.5 0.5 1.0
 
 	scene_node "FinalGeometryNode"
@@ -146,8 +159,8 @@ scene "FinalScene"
 		mesh "FinalMesh"
 		{
 			type cube 1.0 1.0 1.0
-			material "RToTMaterial"
 		}
+		material "RToTMaterial"
 	}
 }
 /**/

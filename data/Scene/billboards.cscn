@@ -20,7 +20,7 @@ material "Billboards"
 		emissive 0.0 0.0 0.0 1.0
 		specular 1.0 1.0 1.0 1.0
 		shininess 50.0
-		double_face true
+		two_sided true
 
 		texture_unit
 		{
@@ -41,7 +41,7 @@ material "Billboard"
 		emissive 0.0 0.0 0.0 1.0
 		specular 1.0 1.0 1.0 1.0
 		shininess 50.0
-		double_face true
+		two_sided true
 
 		texture_unit
 		{

@@ -1,0 +1,23 @@
+#ifndef ___C3D_OCEAN_LIGHTING_APPLICATION_H___
+#define ___C3D_OCEAN_LIGHTING_APPLICATION_H___
+
+#include "Technique.hpp"
+
+namespace OceanLighting
+{
+	class Application : public wxApp
+	{
+	private:
+		MainFrame *	m_pMainFrame;
+		wxLocale *	m_pLocale;
+
+	public:
+		Application() {}
+		virtual ~Application() {}
+
+		virtual bool OnInit();
+		virtual int OnExit();
+	};
+}
+
+#endif

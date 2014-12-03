@@ -1,0 +1,8 @@
+<oe_scene>
+    <sceneManager type="1" />
+    <bkgcolor r="0" g="0" b="0" />
+    <lightColor r="0" g="0" b="0" />
+    <shadowTechnique type="0" tex_size="512" tex_count="1">
+        <color r="0" g="0" b="0" />
+    </shadowTechnique>
+</oe_scene>

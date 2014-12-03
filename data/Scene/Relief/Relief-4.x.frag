@@ -1,4 +1,4 @@
-#version 140
+#version 400
 
 layout( std140 ) uniform Matrices
 {

@@ -1,0 +1,41 @@
+<mesh>
+    <submeshes>
+        <submesh material="plasma_pub" usesharedvertices="false" use32bitindexes="false" operationtype="triangle_list">
+            <faces count="2">
+                <face v1="0" v2="1" v3="2" />
+                <face v1="2" v2="3" v3="0" />
+            </faces>
+            <geometry vertexcount="4">
+                <vertexbuffer positions="true" normals="true" colours_diffuse="true" texture_coord_dimensions_0="float2" texture_coords="1">
+                    <vertex>
+                        <position x="-190" y="-102.5" z="10.7472" />
+                        <normal x="-1.63128e-007" y="0" z="1" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.000499517" v="0.9995" />
+                    </vertex>
+                    <vertex>
+                        <position x="190" y="-102.5" z="10.7472" />
+                        <normal x="-1.63129e-007" y="0" z="1" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.999501" v="0.9995" />
+                    </vertex>
+                    <vertex>
+                        <position x="190" y="102.5" z="10.7472" />
+                        <normal x="-1.63128e-007" y="0" z="1" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.999501" v="0.000499606" />
+                    </vertex>
+                    <vertex>
+                        <position x="-190" y="102.5" z="10.7472" />
+                        <normal x="-1.63129e-007" y="-0" z="1" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.000499517" v="0.000499606" />
+                    </vertex>
+                </vertexbuffer>
+            </geometry>
+        </submesh>
+    </submeshes>
+    <submeshnames>
+        <submeshname name="plasma_pub" index="0" />
+    </submeshnames>
+</mesh>

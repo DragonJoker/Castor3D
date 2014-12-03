@@ -1,8 +1,297 @@
-2013-02-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
+2014-12-02  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Castor3D : BorderPanelOverlay renders correctly. Need to test it with
+	*	textures and to allow the UV customisation by the user in the scene
+	*	files.
+	* Castor3D : Overlays are rendered using a vertex buffer with integer
+	*	components for positions, so no problems with 1 pixel borders.
+	* Castor3D : Text is rendered correctly, words can be cut or not,
+	*	using the appropriate word wrapping mode.
+	* Castor3D : The border panels allow UV customisation.
+
+2014-12-01  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Castor3D : Implementing BorderPanelOverlay rendering.
+
+2014-11-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Castor3D : Eventually, there is text in the Castor! But now need to take
+	*	care of the position adjusments, and to optimise the font atlas texture
+	*	dimensions.
+	* Castor3D : Taking care of the glyphs advance and dimensions to place it
+	*	correctly.
+	* Castor3D : Added a new enumeration allowing to handle the text overflow.
+
+2014-11-27  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Castor3D : Trying to render text. Need first to correct overlays
+	*	rendering, because they don't render...
+	* Castor3D : Implemented background image, need to debug it with deferred
+	*	shading (like every background type).
+
+2014-11-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* CastorUtils : Corrected the image saving, integrated the 16 bits
+	*	alignment.
+	* CastorUtils : The font loads correctly.
+	* Castor3D : Corrected the vertex attributes generation in order to be
+	*	able to create 2D positions and other special attributes.
+
+2014-11-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* General : Corrected few CppCheck remarks.
+	* CMake Now the plugins are generated in lib/Castor, on every platform.
+	*	Idem for the installation.
+	* Castor3D : Added factory classes instead of typedefs, for LightCategory,
+	*	MeshCategory, OverlayCategory and RenderTechnique.
+	* GlRenderSystem : Added few corrections to make it more compliant with
+	*	Intel GPUs (still needs some work, though).
+
+2014-11-15  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Data : Corrected 2 bitmaps to make them readable with FreeImage on Linux.
+	* CastorViewer : Modified few lines to make it compilable with
+	*	wxWidgets 2.8.x.
+
+2014-11-02  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Setup : Finalising installers (WiX and Deb).
+	* Data : Corrected RenderToTexture, need to analyse the impact on other
+	*	scenes.
+
+2014-10-30  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Castor3D : Corrected SceneFileParser::CameraEnd.
+	* Castor3D : Removing GenerateMipmaps when it is useless.
+	* CastorUtils : Added a stream manipulator to change the way numbers are
+	*	displayed.
+	* Data : Debugging render to texture.
+
+2014-10-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Castor3D : Corrected the black screen render with deferred rendering.
+	* CMake : Added setup with CPack, WIX generator.
+
+2014-10-22  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Castor3D : Reviewed the TechniqueFactory that was still old fashioned.
+
+2014-10-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* General : Now compiles on Linux with GCC without precompiled headers.
+
+2014-10-17  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* General : Updated files to compile without precompiled headers.
+
+2014-10-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* CMake : Corrected FreeImage.cmake
+	* General : Now using non intrusive PCH with both Visual Studio and GCC,
+	*	so I removed all includes to the precompiled header file.
+
+2014-10-13  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* GCC : Compliance update
+	* General : Cleaning up includes.
+
+2014-10-10  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* GlRenderSystem : Black render with new AMD driver ... Bug from me?
+	*	I think yes, because on NVidia driver I also have a black render.
+	* CMake : Added a flag to use or not precompiled headers.
+	* MinGW : Trying to implement precompiled headers.
+
+2014-10-07  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Castor3D : Nearly corrected Deferred Rendering lights.
+	* CastorUtils : Corrected Colour and ColourComponent.
+	* ComCastor3D : Added eWRITING_MASK ad Colour mask.
+	* PyCastor3D : Added eWRITING_MASK ad Colour mask.
+	* GuiCommon : Corrected memory leaks.
+
+2014-10-03  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* GlRenderSystem : Added support for glColorMask in GlRenderSystem and
+	*	DepthStencilState.
+
+2014-10-02  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* DataModified pn_tri.cscn to make it a test of Loop and PN-Triangles
+	*	algorithms.
+	* ASSIMPImporter : Modified it a bit to make it load height maps if a
+	*	normal map is found.
+	* Castor3D : Modifying DeferredShadingRenderTechnique to be able to have
+	*	a background colour or image.
+	* Castor3D : Corrected normals generation in Submesh.cpp.
+	* GuiCommon : Improved StcTextEditor in order to have a better syntactic
+	*	coloration.
+
+2014-09-30  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* PyCastor3D : Completing it.
+
+2014-09-26  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* CastorViewer : Splitted files (events) in order to see how I may
+	*	implement COM binding for Castor3D::FrameEvent...
+
+2014-09-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* General : Updated importers.
+
+2014-09-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* CMake : Reviewed Find files, to generate _LIBRARIES only when they are
+	*	found.
+	* CastorViewerSharp : Implementing.
+	* ComCastor3D : Corrected interfaces putters.
+
+2014-09-23  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* ComCastor3D : Implemented Camera and Geometry COM bindings.
+	* ComCastor3D : Completed a bit Engine COM binding.
+	* ComCastor3D : Implemented Scene and RenderWindow COM bindings.
+	* ComCastor3D : Finished Engine COM binding.
+	* CastorViewerSharp : Completing it to test ComCastor3D.
+
+2014-09-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* ComCastor3D : COM bindng is advancing : LightCategory, DirectionalLight,
+	*	PointLight, SpotLight, Mesh, Submesh, SceneNode, Material, Pass,
+	*	TextureUnit and MovableObject. 
+
+2014-09-19  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* ComCastor3D : Updated the IDL file.
+	* ComCastor3D : Implemented IPixelBuffer interface.
+	* ComCastor3D : Improved the implementation of COM interfaces easeness.
+	* ComCastor3D : Improved the implementation of COM interfaces easeness.
+	* ComCastor3D : Finished CastorUtils COM interfaces implementation.
+	* ComCastor3D : Moved COM interfacesfiles in folders (CastorUtils and
+	*	Castor3D).
+
+2014-09-17  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* ComCastor3D : Updated IDL file to reflect Python binding.
+	* PyCastor3D : Added most useful classes : Material, Pass, TextureUnit,
+	*	TextureBase, StaticTexture, DynamicTexture, Sampler, BlendState,
+	*	RasteriserState, DepthStencilState.
+	* PyCastor3D : Splitted Classes.cpp into PyCastorUtils and PyCastor3D,
+	*	there are now two modules for Python : Castor and Castor3D.
+	* ComCastor3D : Corrected the last commit for COM binding : Vector3D and
+	*	Vector2D.
+	* ComCastor3D : Removed the tlb file from the sources, it is now copied in
+	*	binary dir, the import is made between angle brackets to look for it
+	*	into the /I paths.
+	* ComCastor3D : Added iterator access to the TextureUnits in Pass.
+
+2014-09-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* ComCastor3D : Added Colour, Image and Engine interfaces to COM binding.
+	* ComCastor3DTest : Added this project to test and debug ComCastor3D
+	* PyCastor3D : Added eLIGHT_TYPE, eMOVABLE_TYPE, Angle, Quaternion,
+	*	Geometry, OverlayCategory, PanelOverlay, BorderPanelOverlay,
+	*	TextOverlay, Overlay.
+	
+2014-09-15  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* PyCastor3D : Continuing binding.
+
+2014-09-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* CastorCom : Now RGS files are generated with CMake.
+
+2014-09-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* CastorCom : COM binding is now functional, just need to be completed...
+
+2014-09-10  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* PyCastor3D : Began the binding.
+	* ComCastor3D : Began the binding.
+
+2014-09-07  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Data : Finished a sample scene demonstrating the texture channels.
+
+2014-09-05  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Castor3D : Modified submeshes instance count, to make it specific to
+	*	the materials used by the submesh instances.
+	* Corrections for Linux.
+	* Finished AStyle modifications to make it portable.
+
+2014-09-04  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* CMake : Modified AStyleUtils.cmake to make the function want a file
+	*	extension list.
+
+2014-09-03  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* CMake : Added AStyle support.
+	* Castor3D : Moved materials from Submesh to Geometry.
+
+2014-09-02  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* CastorUtils : Added stream indentation support.
+	* CastorUtils : Removed Unicode file encoding.
+	* GlRenderSystem :  Added GL_MIRRORED_REPEAT.
+	* GlRenderSystem : Added GL_TEXTURE_MAX_ANISOTROPY.
+	* Data : Modified sampler.cscn to show differences between filters and
+	*	wrappings.
+	* CMake : Reviewed a bit the CMakeLists.txt files, to add versions.
+
+2014-08-28  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* Importers : Finished files split
+	* Dividers : Finished files split
+	* Castor3D : Finished files split
+	* Renderers : Finished files split
+
+2014-08-26  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* CastorUtils : Added a basic implementation of make_unique
+	* GlRenderSystem : Corrected mipmap generation
+	* Castor3D : Corrected recursive transformations
+
+2014-08-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
+	* LoopDivider : Splitted file to have one class per file.
+	* OceanLighting : Idem.
+	* Castor3D : CpuBuffer now extends std::enable_shared_from_this
+	* CMake : Modified it to throw away bin_temp folder
+
+2014-03-26  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* CastorUitls : Removed AutoSingleton.hpp since it's no more used.
+    * CMake : Corrected the /Zm flag replacement with MSVC
+    * General : Few corrections to build with MSVC x64.
+    * GlRenderSystem : Corrected the gloss map in GLSL computed programs.
+
+2014-03-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Renderers : Modified FrameVariableBuffer PassColour name to Pass
+    * Samples : Created a Common folder to put wx resource files into.
+    * Tools : Updated UnitTest integration, Enabled CTest.
+    * Castor3D : Correcting Scene export in CSCN format, nearly functional.
+
+2014-03-24  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* ASSIMPImporter : Modified FindASSIMP.cmake to make it look for x64
+    *   libraries when needed, under MSVC.
+
+2014-03-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Still updating CSCN scene saving
+
+2014-03-18  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* Castor3D : Reviewing text file scene saving
+
+2014-03-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Modified the file system
+
+2014-03-12  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Modified the file system
+    * General : Modified the scene file wiki docs
+
+2014-03-11  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* CastorUtils : Modified Prerequisites.hpp to be able to include it without
+    *   any warning.
+    * CastorUtilsTest : Modified to make it able to run unit test (it already
+    *   was, but now CodeBase is renamed TestCase.)
+
+2014-03-10  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* CastorUtils : Added GetSystemError function.
+
+2014-03-07  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Optimised a bit Quaternion and Cylinder.
+
+2014-03-06  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* GlRenderSystem : Added OpenGL 4.x shaders for Relief.
+
+2014-03-05  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Modified FindAssimp.cmake
+    * Castor3D : Modified Font.cpp to make it compliant with VS2012.
+    * Castor3D : Modified Submesh normals generation.
+
+2014-02-25  Sylvain Doremus  <dragonjoker59@hotmail.com>
+
+	* General : Code cleanup + Beginning to export scenes in cscn file format
+
+2014-02-21  Sylvain Doremus  <dragonjoker59@hotmail.com>
 
 	* Great change : Now all projects are managed using GIT.
 
-2013-02-20  Sylvain Doremus  <dragonjoker59@hotmail.com>
+2014-02-20  Sylvain Doremus  <dragonjoker59@hotmail.com>
 
 	* Castor3D : Added Animable class, base class for Mesh, MovableObject and
 	*   Skeleton. It holds the animation map and the functions related to it.
@@ -10,26 +299,26 @@
 	* Castor3D : Still need to discover the transformation problem related to
 	*   animations.
 
-2013-02-14  Sylvain Doremus  <dragonjoker59@hotmail.com>
+2014-02-14  Sylvain Doremus  <dragonjoker59@hotmail.com>
 
 	* Castor3D : Reviewing animation system to finish that
 
-2013-02-05  Sylvain Doremus  <dragonjoker59@hotmail.com>
+2014-02-05  Sylvain Doremus  <dragonjoker59@hotmail.com>
 
 	* Castor3D : Taking care of render API support for non power of two 
 	*  textures.
 
-2013-01-30  Sylvain Doremus  <dragonjoker59@hotmail.com>
+2014-01-30  Sylvain Doremus  <dragonjoker59@hotmail.com>
 
 	* Castor3D : Overlays now functional.
 	* Castor3D : Need to make TextOverlays work (don't need a lot, I think).
 	* CastorUtils : Font file loading functional
 
-2013-01-17  Sylvain Doremus  <dragonjoker59@hotmail.com>
+2014-01-17  Sylvain Doremus  <dragonjoker59@hotmail.com>
 
 	* Castor3D : Repaired a matrix trouble when rendering overlays.
 
-2013-01-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
+2014-01-16  Sylvain Doremus  <dragonjoker59@hotmail.com>
 
 	* GlRenderSystem : Beginning to take care of EXT_direct_access_state
 	* Castor3D : Correcting overlay rendering and especially TextFont.
@@ -130,7 +419,7 @@
 2013-06-13  Sylvain Doremus  <dragonjoker59@hotmail.com>
 
 	* GlRenderSystem : Modified a bit GLSL default shader.
-	* GuiCommon : corrected few bugs in images loading.
+	* GuiCommon : Corrected few bugs in images loading.
 
 2013-06-07  Sylvain Doremus  <dragonjoker59@hotmail.com>
 

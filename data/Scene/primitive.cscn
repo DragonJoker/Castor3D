@@ -35,9 +35,9 @@ scene "Scene"
 		parent "FinalNode"
 		mesh "Mesh"
 		{
-			type torus 10 10 10.0 20.0
-			material "Silver"
+			type torus 40 40 25.0 50.0
 		}
+		material "Silver"
 	}
 }
 
@@ -48,6 +48,7 @@ window "Window"
 		format		argb32
 		depth		depth24s8
 		size		screen_size
+		msaa 		8
 		scene		"Scene"
 	}
 	fullscreen	false

@@ -7,7 +7,7 @@ scene "MainScene"
 
 	scene_node "SunLightNode"
 	{
-		position  0.0 0.0 -1.0
+		position  0.0 0.0 1.0
 	}
 	light "SunLight"
 	{
@@ -25,11 +25,7 @@ scene "MainScene"
 		parent "GeomNode"
 		mesh "GeomMesh"
 		{
-			import "Models/Final Fantasy XIII/Lightning/lightning_obj.obj"
-//			import "ModelsTest/Vehicles/STI 11/sub_wrxsti_11.obj"
-//			import "ModelsTest/Vehicles/Maybach Exelero/Maybach Exelero.obj"
-//			import "ModelsTest/Vehicles/Light Cycle/HQ_Movie cycle.obj"
-//			import "ModelsTest/Vehicles/SCI_FRS_13_HD/SCI_FRS_13_HD.obj"
+			import "ObjModels/lightning_obj.obj"
 		}
 	}
 }
@@ -40,7 +36,7 @@ window "MainWindow"
 	{
 		format		argb32
 		depth		depth24s8
-//		msaa		8
+		msaa		8
 //		deferred	true
 		size		screen_size
 		scene		"MainScene"

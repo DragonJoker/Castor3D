@@ -105,7 +105,7 @@ material "Gold"
 		emissive 0.0 0.0 0.0 1.0
 		specular 0.628281 0.555802 0.366065 1.0
 		shininess 51.2
-		double_face true
+		two_sided true
 	}
 }
 
@@ -121,7 +121,7 @@ material "GoldTransp"
 //		blend_func one_minus_dst_alpha dst_alpha
 		blend_func src_alpha inv_src_alpha
 		alpha 0.6
-		double_face true
+		two_sided true
 	}
 }
 
@@ -602,7 +602,7 @@ material "CgTexture"
 		emissive 0.0 0.0 0.0 1.0
 		specular 1.0 1.0 1.0 1.0
 		shininess 50.0
-		double_face true
+		two_sided true
 
 		texture_unit
 		{

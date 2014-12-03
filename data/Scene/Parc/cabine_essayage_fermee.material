@@ -1,0 +1,77 @@
+
+material coll_pf_cabine_essayage_fermee_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}
+
+material cabine_essayage_fermee/metal
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0.684 0.684 0.684 1 10
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture metal.jpg
+			}
+		}
+
+	}
+
+}
+
+material cabine_essayage_fermee/wood
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0.196078 0.196078 0.196078 1 10
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture bois.jpg
+			}
+		}
+
+	}
+
+}
+
+material cabine_essayage_fermee/rido
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0.0392157 0.0392157 0.0392157 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture rido.jpg
+			}
+		}
+
+	}
+
+}

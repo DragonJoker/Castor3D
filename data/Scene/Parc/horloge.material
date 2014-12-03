@@ -1,0 +1,21 @@
+
+material horloge
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.108 0.108 0.108 1 27
+
+			texture_unit
+			{
+				texture_alias 0
+				texture horloge.jpg
+			}
+		}
+
+	}
+
+}

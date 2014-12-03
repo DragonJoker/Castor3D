@@ -1,0 +1,53 @@
+<mesh>
+    <submeshes>
+        <submesh material="tv_bar_pub" usesharedvertices="false" use32bitindexes="false" operationtype="triangle_list">
+            <faces count="2">
+                <face v1="0" v2="1" v3="2" />
+                <face v1="3" v2="4" v3="5" />
+            </faces>
+            <geometry vertexcount="6">
+                <vertexbuffer positions="true" normals="true" colours_diffuse="true" texture_coord_dimensions_0="float2" texture_coords="1">
+                    <vertex>
+                        <position x="55.6518" y="25.209" z="35.9817" />
+                        <normal x="-1.74396e-007" y="-0.258819" z="0.965926" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.526624" v="0.458602" />
+                    </vertex>
+                    <vertex>
+                        <position x="-55.6518" y="25.209" z="35.9817" />
+                        <normal x="-1.74396e-007" y="-0.258819" z="0.965926" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.572151" v="0.590418" />
+                    </vertex>
+                    <vertex>
+                        <position x="-55.6518" y="-32.7904" z="20.4408" />
+                        <normal x="-1.74396e-007" y="-0.258819" z="0.965926" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.436629" v="0.632242" />
+                    </vertex>
+                    <vertex>
+                        <position x="-55.6518" y="-32.7904" z="20.4408" />
+                        <normal x="-1.57843e-007" y="-0.258819" z="0.965926" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.436629" v="0.632242" />
+                    </vertex>
+                    <vertex>
+                        <position x="55.6518" y="-32.7904" z="20.4408" />
+                        <normal x="-1.57843e-007" y="-0.258819" z="0.965926" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.572151" v="0.59042" />
+                    </vertex>
+                    <vertex>
+                        <position x="55.6518" y="25.209" z="35.9817" />
+                        <normal x="-1.57843e-007" y="-0.258819" z="0.965926" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.526624" v="0.458602" />
+                    </vertex>
+                </vertexbuffer>
+            </geometry>
+        </submesh>
+    </submeshes>
+    <submeshnames>
+        <submeshname name="tv_bar_pub" index="0" />
+    </submeshnames>
+</mesh>

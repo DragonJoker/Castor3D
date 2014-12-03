@@ -1,1 +1,0 @@
-#include "ImgConverter/PrecompiledHeader.hpp"

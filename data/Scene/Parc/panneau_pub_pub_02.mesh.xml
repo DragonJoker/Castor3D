@@ -1,0 +1,125 @@
+<mesh>
+    <submeshes>
+        <submesh material="panneau_pub_pub_01" usesharedvertices="false" use32bitindexes="false" operationtype="triangle_list">
+            <faces count="14">
+                <face v1="0" v2="1" v3="2" />
+                <face v1="0" v2="2" v3="3" />
+                <face v1="3" v2="4" v3="5" />
+                <face v1="5" v2="6" v3="7" />
+                <face v1="3" v2="5" v3="7" />
+                <face v1="7" v2="8" v3="9" />
+                <face v1="3" v2="7" v3="9" />
+                <face v1="9" v2="10" v3="11" />
+                <face v1="3" v2="9" v3="11" />
+                <face v1="3" v2="11" v3="12" />
+                <face v1="12" v2="13" v3="14" />
+                <face v1="3" v2="12" v3="14" />
+                <face v1="0" v2="3" v3="14" />
+                <face v1="0" v2="14" v3="15" />
+            </faces>
+            <geometry vertexcount="16">
+                <vertexbuffer positions="true" normals="true" colours_diffuse="true" texture_coord_dimensions_0="float2" texture_coords="1">
+                    <vertex>
+                        <position x="-57.1602" y="212.927" z="-9.77242" />
+                        <normal x="-3.38498e-007" y="2.92223e-008" z="-1" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.9995" v="0.028598" />
+                    </vertex>
+                    <vertex>
+                        <position x="-55.8077" y="215.542" z="-9.77242" />
+                        <normal x="-9.28657e-007" y="4.80359e-007" z="-1" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.987678" v="0.014197" />
+                    </vertex>
+                    <vertex>
+                        <position x="-54.0546" y="216.946" z="-9.77242" />
+                        <normal x="-3.41629e-007" y="2.66957e-008" z="-1" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.972353" v="0.00646472" />
+                    </vertex>
+                    <vertex>
+                        <position x="-50.7894" y="218.029" z="-9.77242" />
+                        <normal x="-2.99712e-007" y="-4.70662e-009" z="-1" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.94381" v="0.000499487" />
+                    </vertex>
+                    <vertex>
+                        <position x="50.7504" y="218.029" z="-9.77246" />
+                        <normal x="-3.0994e-007" y="-5.38553e-008" z="-1" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.0561899" v="0.000499487" />
+                    </vertex>
+                    <vertex>
+                        <position x="54.0156" y="216.946" z="-9.77246" />
+                        <normal x="-2.85064e-007" y="-1.9965e-007" z="-1" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.0276472" v="0.0064646" />
+                    </vertex>
+                    <vertex>
+                        <position x="55.7687" y="215.542" z="-9.77246" />
+                        <normal x="0" y="0" z="-1" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.0123223" v="0.0141969" />
+                    </vertex>
+                    <vertex>
+                        <position x="57.1211" y="212.927" z="-9.77246" />
+                        <normal x="-2.8287e-007" y="-7.68951e-008" z="-1" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.000499696" v="0.028598" />
+                    </vertex>
+                    <vertex>
+                        <position x="57.1211" y="41.7526" z="-9.77246" />
+                        <normal x="0" y="0" z="-1" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.000499547" v="0.971402" />
+                    </vertex>
+                    <vertex>
+                        <position x="55.7687" y="39.1379" z="-9.77246" />
+                        <normal x="-2.18009e-007" y="7.84705e-008" z="-1" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.0123221" v="0.985803" />
+                    </vertex>
+                    <vertex>
+                        <position x="54.0156" y="37.7341" z="-9.77246" />
+                        <normal x="-4.98609e-007" y="6.22654e-007" z="-1" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.0276471" v="0.993535" />
+                    </vertex>
+                    <vertex>
+                        <position x="50.7504" y="36.651" z="-9.77246" />
+                        <normal x="-2.65361e-007" y="6.10488e-008" z="-1" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.0561897" v="0.9995" />
+                    </vertex>
+                    <vertex>
+                        <position x="-50.7894" y="36.651" z="-9.77242" />
+                        <normal x="-3.27841e-007" y="2.66145e-008" z="-1" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.94381" v="0.9995" />
+                    </vertex>
+                    <vertex>
+                        <position x="-54.0546" y="37.7341" z="-9.77242" />
+                        <normal x="-1.13947e-007" y="5.3703e-007" z="-1" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.972353" v="0.993535" />
+                    </vertex>
+                    <vertex>
+                        <position x="-55.8077" y="39.1379" z="-9.77242" />
+                        <normal x="-2.92439e-007" y="4.23898e-008" z="-1" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.987678" v="0.985803" />
+                    </vertex>
+                    <vertex>
+                        <position x="-57.1601" y="41.7526" z="-9.77242" />
+                        <normal x="0" y="0" z="-1" />
+                        <colour_diffuse value="1 1 1 1" />
+                        <texcoord u="0.9995" v="0.971402" />
+                    </vertex>
+                </vertexbuffer>
+            </geometry>
+        </submesh>
+    </submeshes>
+    <submeshnames>
+        <submeshname name="panneau_pub_pub_01" index="0" />
+    </submeshnames>
+</mesh>
