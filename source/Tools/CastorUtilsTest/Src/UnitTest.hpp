@@ -23,10 +23,17 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Testing
 {
 	template< typename T >
-	static inline std::string to_string( T const & p_value )
+	inline std::string to_string( T const & p_value )
 	{
 		std::stringstream l_stream;
 		l_stream << p_value;
+		return l_stream.str();
+	}
+	template<>
+	inline std::string to_string< Castor::String >( Castor::String const & p_value )
+	{
+		std::stringstream l_stream;
+		l_stream << Castor::str_utils::to_str( p_value );
 		return l_stream.str();
 	}
 

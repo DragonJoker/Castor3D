@@ -2,7 +2,7 @@ project( Castor3D )
 
 set( C3D_VERSION_MAJOR	0 )
 set( C3D_VERSION_MINOR	7 )
-set( C3D_VERSION_BUILD	0 )
+set( C3D_VERSION_BUILD	1 )
 
 configure_file(
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/RequiredVersion.hpp.in

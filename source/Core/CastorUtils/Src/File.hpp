@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -136,12 +136,12 @@ namespace Castor
 		typedef enum eOPEN_MODE
 		CASTOR_TYPE( uint32_t )
 		{
-			eOPEN_MODE_DUMMY	= 0x00000000	//!<\~english Dummy open mode, not to be used	\~french Mode d'ouverture 'dummy', à ne pas utiliser
-								  ,	eOPEN_MODE_READ		= 0x00000001	//!<\~english Read open mode					\~french Mode d'ouverture en lecture
-										  ,	eOPEN_MODE_WRITE	= 0x00000002	//!<\~english Write open mode					\~french Mode d'ouverture en création / écriture
-												  ,	eOPEN_MODE_APPEND	= 0x00000004	//!<\~english Append open mode					\~french Mode d'ouverture en écriture en fin de fichier
-														  ,	eOPEN_MODE_BINARY	= 0x00000008	//!<\~english Binary open mode					\~french Mode d'ouverture en binaire
-																  ,	eOPEN_MODE_COUNT
+			eOPEN_MODE_DUMMY = 0x00000000,	//!<\~english Dummy open mode, not to be used	\~french Mode d'ouverture 'dummy', à ne pas utiliser
+			eOPEN_MODE_READ = 0x00000001,	//!<\~english Read open mode					\~french Mode d'ouverture en lecture
+			eOPEN_MODE_WRITE = 0x00000002,	//!<\~english Write open mode					\~french Mode d'ouverture en création / écriture
+			eOPEN_MODE_APPEND = 0x00000004,	//!<\~english Append open mode					\~french Mode d'ouverture en écriture en fin de fichier
+			eOPEN_MODE_BINARY = 0x00000008,	//!<\~english Binary open mode					\~french Mode d'ouverture en binaire
+			eOPEN_MODE_COUNT
 		}	eOPEN_MODE;
 		/*!
 		\~english
@@ -152,9 +152,9 @@ namespace Castor
 		typedef enum eOFFSET_MODE
 		CASTOR_TYPE( uint8_t )
 		{
-			eOFFSET_MODE_BEGINNING	//!<\~english The offset is set from the beginning of the file	\~french L'offset est défini par rapport au début du fichier
-			,	eOFFSET_MODE_CURRENT	//!<\~english The offset is set from the current position		\~french L'offset est défini par rapport à la position actuelle
-			,	eOFFSET_MODE_END		//!<\~english The offset is set from the end of the file		\~french L'offset est défini par rapport à la fin du fichier
+			eOFFSET_MODE_BEGINNING,	//!<\~english The offset is set from the beginning of the file	\~french L'offset est défini par rapport au début du fichier
+			eOFFSET_MODE_CURRENT,	//!<\~english The offset is set from the current position		\~french L'offset est défini par rapport à la position actuelle
+			eOFFSET_MODE_END,		//!<\~english The offset is set from the end of the file		\~french L'offset est défini par rapport à la fin du fichier
 		}	eOFFSET_MODE;
 		/*!
 		\~english
@@ -165,10 +165,10 @@ namespace Castor
 		typedef enum eENCODING_MODE
 		CASTOR_TYPE( uint8_t )
 		{
-			eENCODING_MODE_AUTO		//!<\~english Auto select text encoding	\~french Encodage de texte en sélection automatique
-			,	eENCODING_MODE_ASCII	//!<\~english ASCII text encoding		\~french Encodage de texte en ASCII
-			,	eENCODING_MODE_UTF8		//!<\~english UTF8 text encoding		\~french Encodage de texte en UTF8
-			,	eENCODING_MODE_UTF16	//!<\~english UTF16 text encoding		\~french Encodage de texte en UTF16
+			eENCODING_MODE_AUTO,	//!<\~english Auto select text encoding	\~french Encodage de texte en sélection automatique
+			eENCODING_MODE_ASCII,	//!<\~english ASCII text encoding		\~french Encodage de texte en ASCII
+			eENCODING_MODE_UTF8,	//!<\~english UTF8 text encoding		\~french Encodage de texte en UTF8
+			eENCODING_MODE_UTF16,	//!<\~english UTF16 text encoding		\~french Encodage de texte en UTF16
 		}	eENCODING_MODE;
 
 	protected:
@@ -279,23 +279,38 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Tests directory existence
-		 *\param[in]	p_pathFile	Directory path
+		 *\param[in]	p_path	Directory path
 		 *\return		\p true if directory is found
 		 *\~french
 		 *\brief		Teste l'existence d'un dossier
-		 *\param[in]	p_pathFile	Le chemin du dossier
+		 *\param[in]	p_path	Le chemin du dossier
 		 *\return		\p true si le dossier existe
 		 */
 		static bool	DirectoryExists( Path const & p_path );
 		/**
 		 *\~english
 		 *\brief		Creates a directory
-		 *\return		The directory
+		 *\param[in]	p_path	Directory path
+		 *\param[in]	p_flags	User rights
+		 *\return		\p true if the directory has been created
 		 *\~french
 		 *\brief		Crée un dossier
-		 *\return		Le dossier
+		 *\param[in]	p_path	Le chemin du dossier
+		 *\param[in]	p_flags	Les droits d'utilisation
+		 *\return		\p true si le dossier a été créé
 		 */
-		static bool DirectoryCreate( Path const & p_file );
+		static bool DirectoryCreate( Path const & p_path, uint32_t p_flags=777 );
+		/**
+		 *\~english
+		 *\brief		Deletes an empty directory
+		 *\param[in]	p_path	Directory path
+		 *\return		\p true if the directory has been deleted
+		 *\~french
+		 *\brief		Supprime un dossier vide
+		 *\param[in]	p_path	Le chemin du dossier
+		 *\return		\p true si le dossier a été supprimé
+		 */
+		static bool DirectoryDelete( Path const & p_path );
 		/**
 		 *\~english
 		 *\brief		Tests file existence

@@ -4,9 +4,19 @@ function( CoreInit )
 endfunction( CoreInit )
 
 function( CoreBuild )
+	set( Error FALSE )
 	set( Build ${Cutils} )
 	add_subdirectory( Core/CastorUtils )
 	set( Cutils ${Build} PARENT_SCOPE )
+	
+	if ( Error )
+		message( SEND_ERROR "CastorUtils : ${Build}" )
+	endif ()
+
+	set( CastorMinLibraries
+		${CastorMinLibraries}
+		PARENT_SCOPE
+	)
 
 	set( Build ${C3D} )
 	add_subdirectory( Core/Castor3D )

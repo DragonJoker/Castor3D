@@ -8,7 +8,7 @@ set( ProjectName "Castor" )
 # Set project version numbers
 set( VERSION_MAJOR	0		)
 set( VERSION_MINOR	7		)
-set( VERSION_BUILD	0		)
+set( VERSION_BUILD	1		)
 set( VERSION_YEAR	2014	)
 
 # Used to look for external modules

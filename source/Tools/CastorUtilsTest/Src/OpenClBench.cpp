@@ -2,6 +2,7 @@
 
 #include "Point.hpp"
 
+#if defined( CASTOR_USE_OCL )
 #undef max
 
 namespace
@@ -266,3 +267,5 @@ namespace Testing
 		}
 	}
 }
+
+#endif

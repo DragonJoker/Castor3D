@@ -187,7 +187,7 @@ namespace Castor
 		}
 		else
 		{
-			CASTOR_EXCEPTION( str_utils::to_str( System::GetLastErrorText() ) );
+			CASTOR_EXCEPTION( "Couldn't open file " + str_utils::to_str( m_strFileFullPath ) + " : " + str_utils::to_str( System::GetLastErrorText() ) );
 		}
 
 		CHECK_INVARIANTS();
@@ -560,14 +560,23 @@ namespace Castor
 		return ( status.st_mode & S_IFDIR ) == S_IFDIR;
 	}
 
-	bool File::DirectoryCreate( Path const & p_file )
+	bool File::DirectoryCreate( Path const & p_path, uint32_t p_flags )
 	{
 #if defined( _MSC_VER )
-		return _tmkdir( p_file.c_str() ) == 0;
+		return _tmkdir( p_path.c_str() ) == 0;
 #elif defined( _WIN32 )
-		return mkdir( str_utils::to_str( p_file ).c_str() ) == 0;
+		return mkdir( str_utils::to_str( p_path ).c_str() ) == 0;
 #else
-		return mkdir( str_utils::to_str( p_file ).c_str(), 777 ) == 0;
+		return mkdir( str_utils::to_str( p_path ).c_str(), p_flags ) == 0;
+#endif
+	}
+
+	bool File::DirectoryDelete( Path const & p_path )
+	{
+#if defined( _MSC_VER )
+		return _trmdir( p_path.c_str() ) == 0;
+#else
+		return rmdir( str_utils::to_str( p_path ).c_str() ) == 0;
 #endif
 	}
 

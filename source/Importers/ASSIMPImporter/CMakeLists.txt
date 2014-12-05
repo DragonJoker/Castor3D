@@ -42,35 +42,52 @@ if( ASSIMP_FOUND )
 
 	if ( WIN32 )
 		# Preparing ASSIMP dll installation
+		set( ASSIMP_RELEASE_DIR )
 		if ( EXISTS ${ASSIMP_LIBRARY_RELEASE_DIR}/assimp.dll )
-			install(
-				FILES ${ASSIMP_LIBRARY_RELEASE_DIR}/assimp.dll
-				DESTINATION bin
-				CONFIGURATIONS Release
-				COMPONENT ASSIMPImporter
-			)
+			set( ASSIMP_RELEASE_DIR ${ASSIMP_LIBRARY_RELEASE_DIR} )
 		elseif ( EXISTS ${ASSIMP_LIBRARY_RELEASE_DIR}/../../bin/${PROJECTS_PLATFORM}/assimp.dll )
-			install(
-				FILES ${ASSIMP_LIBRARY_RELEASE_DIR}/../../bin/${PROJECTS_PLATFORM}/assimp.dll
-				DESTINATION bin
-				CONFIGURATIONS Release
-				COMPONENT ASSIMPImporter
-			)
+			get_filename_component( ASSIMP_RELEASE_DIR ${ASSIMP_LIBRARY_RELEASE_DIR} PATH )
+			get_filename_component( ASSIMP_RELEASE_DIR ${ASSIMP_RELEASE_DIR} PATH )
+			set( ASSIMP_RELEASE_DIR ${ASSIMP_RELEASE_DIR}/bin/${PROJECTS_PLATFORM} )
 		endif ()
+		install(
+			FILES ${ASSIMP_RELEASE_DIR}/assimp.dll
+			DESTINATION bin
+			CONFIGURATIONS Release
+			COMPONENT ASSIMPImporter
+		)
+		add_custom_command(
+			TARGET ASSIMPImporter
+			POST_BUILD
+			COMMAND if 1==$<CONFIG:Release>
+				${CMAKE_COMMAND} -E
+					copy_if_different
+					${ASSIMP_RELEASE_DIR}/assimp.dll
+					${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
+		)
+		set( ASSIMP_DEBUG_DIR )
 		if ( EXISTS ${ASSIMP_LIBRARY_DEBUG_DIR}/assimpD.dll )
-			install(
-				FILES ${ASSIMP_LIBRARY_DEBUG_DIR}/assimpD.dll
-				DESTINATION bin
-				CONFIGURATIONS Debug
-				COMPONENT ASSIMPImporter
-			)
+			set( ASSIMP_DEBUG_DIR ${ASSIMP_LIBRARY_DEBUG_DIR} )
 		elseif ( EXISTS ${ASSIMP_LIBRARY_DEBUG_DIR}/../../bin/${PROJECTS_PLATFORM}/assimpD.dll )
-			install( FILES ${ASSIMP_LIBRARY_DEBUG_DIR}/../../bin/${PROJECTS_PLATFORM}/assimpD.dll
-				DESTINATION bin
-				CONFIGURATIONS Debug
-				COMPONENT ASSIMPImporter
-			)
+			get_filename_component( ASSIMP_DEBUG_DIR ${ASSIMP_LIBRARY_DEBUG_DIR} PATH )
+			get_filename_component( ASSIMP_DEBUG_DIR ${ASSIMP_DEBUG_DIR} PATH )
+			set( ASSIMP_DEBUG_DIR ${ASSIMP_DEBUG_DIR}/bin/${PROJECTS_PLATFORM} )
 		endif ()
+		install(
+			FILES ${ASSIMP_DEBUG_DIR}/assimpD.dll
+			DESTINATION bin
+			CONFIGURATIONS Debug
+			COMPONENT ASSIMPImporter
+		)
+		add_custom_command(
+			TARGET ASSIMPImporter
+			POST_BUILD
+			COMMAND if 1==$<CONFIG:Debug>
+				${CMAKE_COMMAND} -E
+					copy_if_different
+					${ASSIMP_DEBUG_DIR}/assimpD.dll
+					${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
+		)
 	elseif ( {${CASTOR_PACKAGE_DEB} )
 		set( CPACK_DEBIAN_PACKAGE_DEPENDS "libassimp3-dev, ${CPACK_DEBIAN_PACKAGE_DEPENDS}" )
 	endif ()

@@ -22,7 +22,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Matrix.hpp>
 #include <TransformationMatrix.hpp>
-#include <glm/glm.hpp>
+#if defined( CASTOR_USE_GLM )
+#	include <glm/glm.hpp>
+#endif
 
 namespace Testing
 {
@@ -48,8 +50,10 @@ namespace Testing
 
 		Castor::Matrix4x4r m_mtx1;
 		Castor::Matrix4x4r m_mtx2;
+#if defined( CASTOR_USE_GLM )
 		glm::mat4 m_mtx1glm;
 		glm::mat4 m_mtx2glm;
+#endif
 		std::string m_strIn;
 		std::wstring m_wstrIn;
 		std::wstring m_wstrOut;

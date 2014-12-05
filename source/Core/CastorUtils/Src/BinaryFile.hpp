@@ -33,7 +33,8 @@ namespace Castor
 	\brief Classe de gestion de fichier
 	\remark Ajoute quelques fonctions statiques de vérification d'existence, suppression, ...
 	*/
-	class BinaryFile : public File
+	class BinaryFile
+		: public File
 	{
 	public:
 		/**
