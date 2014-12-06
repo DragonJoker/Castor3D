@@ -1,2 +1,0 @@
-doxygen CastorUtils_Win64.Doxyfile
-doxygen Castor3D_Win64.Doxyfile

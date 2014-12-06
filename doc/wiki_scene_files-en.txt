@@ -1,0 +1,649 @@
+CSCN files are easily editable text files (since the syntax is understood)
+
+
+### **Data types**
+
+The data types used in scene files are these ones :
+* int : a simple integer
+* real : a floating point number, using dot (.) as the decimals separator
+* 2, 3, 4 ints : 2, 3 or 4 integers, separated by commas (,) or spaces ( )
+* 2, 3, 4 reals : 2, 3 or 4 floating point numbers, separated by commas (,) or spaces ( )
+* size : 2 integers greater than or equal to 0
+* 2x2, 3x3, 4x4 reals matrix : 2, 3 or 4 groups separated by semi colons (;) of 2, 3 or 4 floating point numbers separated by commas (,) or spaces ( )
+* colour : the four (RGBA) components of colour, expressed in floating point numbers between 0.0 et 1.0
+* value : a string corresponding to a predefined value
+* name : a string, wrapped into double quotes (")
+* file : a string, wrapped into double quotes ("), containing a file name and path
+* folder : a string, wrapped into double quotes ("), containing a folder path
+
+
+### **Sections**
+
+### **Description**
+
+The file is split into sections, defined as follows :
+<pre>
+[section_type : _value_] [section_name : _name_]
+{
+	// section description
+}
+</pre>
+Example:
+<pre>
+light "Light0"
+{
+	type directional
+	position 0.0 0.0 1.0
+}
+</pre>
+
+Some sections can have child subsections :
+<pre>
+material "Bronze"
+{
+	pass
+	{
+		ambient 0.2125 0.1275 0.054 1.0
+		diffuse 0.714 0.4284 0.12144 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 0.393548 0.271906 0.166721 1.0
+		shininess 25.6
+	}
+}
+</pre>
+
+
+### **Sections list**
+
+1. 'sampler'
+    Defines a texture sampler object
+2. 'material'
+    Defines a material
+3. 'font'
+    Defines a font used in text overlays
+4. 'window'
+    Defines a render window
+5. 'panel_overlay'
+    Defines a simple panel overlay
+6. 'border_panel_overlay'
+    Defines a panel overlay with a border
+7. 'text_overlay'
+    Defines a panel overlay with a text
+8. 'scene'
+    Defines a whole scene
+
+
+### A - 'sampler' section
+
+1. 'min_filter' : _value_
+    Value used into minification function
+2. 'mag_filter' : _value_
+    Value used into magnification function
+3. 'min_lod' : _real_
+    Defines minimum level of detail value
+4. 'max_lod' : _real_
+    Defines maximum level of detail value
+5. 'lod_bias' : _real_
+    Defines the MIP-Level
+6. 'u_wrap_mode' : _value_
+    Defines the wrapping mode of the texture, for the U component. The possible values are :
+    * repeat : The texture is repeated
+    * mirrored_repeat : The texture is repeated, each instance of 2 being the mirror of the other one
+    * clamp_to_border : The texture is stretched, the object edge colour is defined as the texture edge colour
+    * clamp_to_edge : The texture is stretched, the object edge colour is defined as the average of the texture edge colour and the border colour
+7. 'v_wrap_mode' : _value_
+    Defines the wrapping mode of the texture, for the V component. The possible values are :
+    * repeat : The texture is repeated
+    * mirrored_repeat : The texture is repeated, each instance of 2 being the mirror of the other one
+    * clamp_to_border : The texture is stretched, the object edge colour is defined as the texture edge colour
+    * clamp_to_edge : The texture is stretched, the object edge colour is defined as the average of the texture edge colour and the border colour
+8. 'w_wrap_mode' : _value_
+    Defines the wrapping mode of the texture, for the W component. The possible values are :
+    * repeat : The texture is repeated
+    * mirrored_repeat : The texture is repeated, each instance of 2 being the mirror of the other one
+    * clamp_to_border : The texture is stretched, the object edge colour is defined as the texture edge colour
+    * clamp_to_edge : The texture is stretched, the object edge colour is defined as the average of the texture edge colour and the border colour
+9. 'border_colour' : _colour_
+    Defines the non textured border colour
+10. 'max_anisotropy' : _real_
+    Defines the maximum degree of anisotropy
+
+### B - Section 'material'
+
+Materials can be multi-pass, so you can declare more than one pass subsection.
+
+1. 'pass' : _new section_
+    Defines a new section describing a texture
+
+
+### C - 'pass' section
+
+1. 'ambient' : _colour_
+    Defines ambient colour of the pass
+2. 'diffuse' : _colour_
+    Defines diffuse colour of the pass
+3. 'emissive' : _colour_
+    Defines emissive colour of the pass
+4. 'specular' : _colour_
+    Defines specular colour of the pass
+5. 'shininess' : _1 real_
+    Defines the the specular exponent of the pass
+6. 'alpha' : _1 real_
+    Defines the global alpha value for the pass
+7. 'double_face' : _boolean_
+    Tells the pass is double sided (true) or not (false)
+8. 'blend_func' : src : _value_, dst : _value_
+    The two functions (source and destination) used during alpha blending :
+    * zero : The target (src or dst) won't be used during alpha blending
+    * one : The target (src or dst) will be the only one used
+    * src_colour : The target colour will be the source colour (dst only)
+    * inv_src_colour : The target colour will be one minus the source colour (dst only)
+    * dst_colour : The target colour will be the destination colour (src only)
+    * inv_dst_colour : The target colour will be one minus the destination colour (src only)
+    * src_alpha : The target alpha will be the source alpha (dst only)
+    * inv_src_alpha : The target alpha will be one minus the source alpha (dst only)
+    * dst_alpha : The target alpha will be the destination alpha (src only)
+    * inv_dst_alpha : The target alpha will be one minus the destination alpha (src only)
+    * constant : 
+    * inv_constant : 
+    * src_alpha_sat : Sets source alpha to 1
+    * src1_colour : 
+    * inv_src1_colour : 
+    * src1_alpha : 
+    * inv_src1_alpha : 
+9. 'texture_unit' : _new section_
+    Defines a new section describing a texture unit
+10. 'gl_shader_program' : _new section_
+    Defines a new section describing a GLSL shader program
+11. 'hl_shader_program' : _new section_
+    Defines a new section describing a HLSL shader program
+12. 'cg_shader_program' : _new section_
+    Defines a new section describing a Cg shader program
+
+
+### D - 'texture_unit' section
+
+1. 'image' : _file_
+    Defines the image file name
+2. 'render_target' : _new section_
+    Defines a new section describing a render target
+3. 'colour' : _colour_
+    Defines the base blending colour
+4. 'map_type' : _value_
+    Defines the way the texture is mapped to the object :
+    * none : No effect
+    * reflection : reflection mapping
+    * sphere : sphere mapping
+5. 'alpha_func' : func : _value_ ref-val: _real_
+    Defines the way alpha rejection is applied to the texture.
+    The second parameter is the reference value used in alpha rejection function
+    The first parameter values can be :
+    * always : The sample colour is always applied
+    * less : The sample colour is applied if its alpha component is less than the second parameter
+    * less_or_equal : The sample colour is applied if its alpha component is less than or equal to the second parameter
+    * equal : The sample colour is applied if its alpha component is equal to the second parameter
+    * not_equal : The sample colour is applied if its alpha component is different from the second parameter
+    * greater_or_equal : The sample colour is applied if its alpha component is greater than or equal to the second parameter
+    * greater : The sample colour is applied if its alpha component is greater than the second parameter
+    * never : The sample colour is never applied
+6. 'rgb_blend' : func : _value_ Arg0 : _value_ Arg1 : _value_
+    Defines the texture behaviour during colour blending
+    The first parameter is the blending function, the two other ones are the operands (Arg0 and Arg1) of this function
+    The firs parameter can take one of the following values :
+    * none : None of the two operands is used
+    * first_arg : Returns Arg0
+    * add : Returns Arg0 + Arg1
+    * add_signed : Returns Arg0 + Arg1 - 0.5
+    * modulate : Returns Arg0 x Arg1
+    * subtract : Returns Arg0 - Arg1
+    * dot3_rgb : Returns 4 x [((Arg0r - 0.5) x (Arg1r - 0.5)) + ((Arg0g - 0.5) x (Arg1g - 0.5)) + ((Arg0b - 0.5) x (Arg1b - 0.5))]
+    * dot3_rgba : Returns 4 x [((Arg0r - 0.5) x (Arg1r - 0.5)) + ((Arg0g - 0.5) x (Arg1g - 0.5)) + ((Arg0b - 0.5) x (Arg1b - 0.5))]
+The two operands can be one of the following values :
+    * texture : 
+    * texture0 : 
+    * texture1 : 
+    * texture2 : 
+    * texture3 : 
+    * constant : 
+    * diffuse : 
+    * previous : 
+7. 'alpha_blend' : func : _value_ Arg0 : _value_ Arg1 : _value_
+    Defines the texture behaviour during alpha blending
+    The first parameter is the blending function, the two other ones are the operands (Arg0 and Arg1) of this function
+    The first parameter can take one of the following values :
+    * none : None of the two operands is used
+    * first_arg : Returns Arg0
+    * add : Returns Arg0 + Arg1
+    * add_signed : Returns Arg0 + Arg1 - 0.5
+    * modulate : Returns Arg0 x Arg1
+    * subtract : Returns Arg0 - Arg1
+The two operands can be one of the following values :
+    * texture : 
+    * texture0 : 
+    * texture1 : 
+    * texture2 : 
+    * texture3 : 
+    * constant : 
+    * diffuse : 
+    * previous : 
+8. 'channel' : _value_
+    The channel at which the texture is bound. Can be one of the following :
+    * colour : Base colour
+    * ambient : Ambient lighting colour
+    * diffuse : Diffuse lighting colour
+    * normal : Normals
+    * specular : Specular lighting colour
+    * opacity : Opacity
+    * gloss : Specular exponent
+9. 'sampler' : _name_
+    Defines the sampler object used by the texture
+
+
+### E - 'gl/hl/cg_shader_program' section
+
+1. 'vertex_program' : _new section_
+    Defines a new section describing the vertex program
+2. 'pixel_program' : _new section_
+    Defines a new section describing the pixel program
+3. 'geometry_program' : _new section_
+    Defines a new section describing the geometry program
+4. 'hull_program' : _new section_
+    Defines a new section describing the hull (tessellation control) program
+5. 'domain_program' : _new section_
+    Defines a new section describing the domain (tessellation evaluation) program
+
+
+### F - 'vertex/pixel/geometry/hull/domain_program' section
+
+1. 'file' : _file_
+    Shader file name
+2. 'entry' : _name_
+    Name of the shader entry function, only for HLSL or Cg.
+3. 'input_type' : _value_
+    Defines the input faces data type, for geometry shader. Can be one of the following :
+    * points : Points
+    * lines : Disjoint lines
+    * line_loop : Joint lines loop
+    * line_strip : Joint lines
+    * triangles : Disjoint triangles
+    * triangle_strip : Joint triangles
+    * triangle_fan : Triangles joint using the first point
+    * quads : Disjoint quads
+    * quad_strip : Joint quads
+    * polygon : Polygons
+4. 'output_type' : _value_
+    Defines the geometry chader output data type. Can be one of the following :
+    * points : Points
+    * line_strip : Joint lines
+    * triangle_strip : Joint triangles
+    * quad_strip : Joint quads
+5. 'output_vtx_count' : _int_
+    Defines the geometry shader output vertices.
+6. 'variable' : _new section_
+    Defines a new section describing a uniform variable.
+
+
+### G - 'variable' section
+
+1. 'type' : _value_
+    Variable type name, can be :
+    * int : 1 signed integer
+    * uint : 1 unsigned integer
+    * float : 1 simple precision floating point number
+    * double : 1 double precision floating point number
+    * vec2i : 2 signed integers
+    * vec3i : 3 signed integers
+    * vec4i : 4 signed integers
+    * vec2f : 2 simple precision floating point numbers
+    * vec3f : 3 simple precision floating point numbers
+    * vec4f : 4 simple precision floating point numbers
+    * vec2d : 2 double precision floating point numbers
+    * vec3d : 3 double precision floating point numbers
+    * vec4d : 4 double precision floating point numbers
+    * mat2x2i : 2x2 signed integers matrix
+    * mat2x3i : 2x3 signed integers matrix
+    * mat2x4i : 2x4 signed integers matrix
+    * mat3x2i : 3x2 signed integers matrix
+    * mat3x3i : 3x3 signed integers matrix
+    * mat3x4i : 3x4 signed integers matrix
+    * mat4x2i : 4x2 signed integers matrix
+    * mat4x3i : 4x3 signed integers matrix
+    * mat4x4i : 4x4 signed integers matrix
+    * mat2x2f : 2x2 simple precision floating point numbers matrix
+    * mat2x3f : 2x3 simple precision floating point numbers matrix
+    * mat2x4f : 2x4 simple precision floating point numbers matrix
+    * mat3x2f : 3x2 simple precision floating point numbers matrix
+    * mat3x3f : 3x3 simple precision floating point numbers matrix
+    * mat3x4f : 3x4 simple precision floating point numbers matrix
+    * mat4x2f : 4x2 simple precision floating point numbers matrix
+    * mat4x3f : 4x3 simple precision floating point numbers matrix
+    * mat4x4f : 4x4 simple precision floating point numbers matrix
+    * mat2x2d : 2x2 double precision floating point numbers matrix
+    * mat2x3d : 2x3 double precision floating point numbers matrix
+    * mat2x4d : 2x4 double precision floating point numbers matrix
+    * mat3x2d : 3x2 double precision floating point numbers matrix
+    * mat3x3d : 3x3 double precision floating point numbers matrix
+    * mat3x4d : 3x4 double precision floating point numbers matrix
+    * mat4x2d : 4x2 double precision floating point numbers matrix
+    * mat4x3d : 4x3 double precision floating point numbers matrix
+    * mat4x4d : 4x4 double precision floating point numbers matrix
+2. 'name' : _name_
+    Variable name, as it appears in the shader.
+3. 'value' :
+    Variable value, depends on the chosen type
+
+
+### H - 'font' section
+
+1. 'file' : _file_
+    Defines the file holding the font.
+2. 'height' : _int_
+    Defines the height (precision) of the font
+
+### I - 'scene' section
+
+1. 'ambient_light' : _colour_
+    Defines ambient lighting colour
+2. 'background_colour' : _colour_
+    Defines background colour
+3. 'import' : _file_
+    Allows scene import from a CSCN file or another file format supported by Castor3D importer plug-ins.
+4. 'scene_node' : _new section_
+    Defines new section describing a scene node for objects, lights or billboards
+5. 'camera_node' : _new section_
+    Defines new section describing a scene node for cameras
+6. 'light' : _new section_
+    Defines new section describing a light source
+7. 'object' : _new section_
+    Defines new section describing an object
+8. 'billboard' : _new section_
+    Defines new section describing a billboards list
+9. 'camera' : _new section_
+    Defines new section describing a camera
+10. 'panel_overlay' : _new section_
+    Defines new section describing a simple panel overlay
+11. 'border_panel_overlay' : _new section_
+    Defines new section describing a simple panel overlay with a border
+12. 'text_overlay' : _new section_
+    Defines new section describing a simple panel overlay with text
+13. 'animated_object_group' : _new section_
+    Defines new section describing an animated object group, with common animations
+
+
+### J - 'scene_node' and 'camera_node' sections
+
+1. 'parent' : _name_
+    Defines this node's parent. The default parent node is the root node.
+2. 'position' : _3 reals_
+    Node position relative to its parent.
+3. 'orientation' : _4 reals_
+    A quaternion holding node orientation relative to its parent.
+4. 'scale' : _3 reals_
+    Node scale relative to its parent.
+
+
+### K - 'light' section
+
+1. 'type' : _value_
+    Three light source types exist in Castor3D :
+    * directional : directional light (like the sun).
+    * point_light : a positioned source which emits in all directions.
+    * spot_light : a positioned source which emits in an oriented cone.
+2. 'ambient' : _3 reals_
+    Defines the ambient RGB components for this source
+3. 'diffuse' : _3 reals_
+    Defines the diffuse RGB components for this source
+4. 'specular' : _3 reals_
+    Defines the specular RGB components for this source
+5. 'attenuation' : _3 reals_
+    Defines the three attenuation components : constant, linear and quadratic. This attenuation is computed from the distance to the light source. Only for spot_light and point_light.
+6. 'cut_off' : _real_
+    Defines the angle of the emission cone. Only for spot_light.
+7. 'exponent' : _real_
+    Defines the attenuation computed with the distance from the emission cone centre. Only for spot_light.
+8. 'parent' : _name_
+    Defines the node which this light source is attached to.
+
+
+### L - 'object' section
+
+1. 'parent' : _name_
+    Defines the node which this object is attached to.
+2. 'mesh' : _name_ _new section_
+    Defines a new section describing a mesh with the given name
+
+
+### M - 'mesh' section
+
+1. 'type' : _name_
+    Mesh type name, one of :
+    * custom : manually defined mesh or imported mesh
+    * cube : a cube, user must then define its three dimensions
+    * cone : a cone, user must then define its radius and height
+    * cylinder : a cylinder, user must then define its radius and height
+    * sphere : a sphere with quad faces, user must then define the subdivisions count and the radius
+    * icosahedron : a sphere with triangular faces, user must then define the subdivisions count and the radius
+    * torus : a torus, user must then define the internal and external subdivisions count and the internal and external radius.
+    * plane : a plane, user must then define the width and depth subdivisions count and the width and depth.
+2. 'normals' : _value_
+    The mesh normals type :
+    * flat : normals per face
+    * smooth : normals per vertex
+3. 'material' : _name_
+    Defines the material applied to all submeshes.
+4. 'submesh' : _new section_
+    Defines a new section describing a submesh. Only if the mesh type is custom.
+5. 'import' : _file_ <_options_>
+    Allows import of mesh data from a file, in CMSH file format or any format supported by Castor3D import plug-ins.
+    Only if the mesh type is custom.
+    This directive can accept few optional parameters :
+    * smooth_normals : Computes normals per vertex during import.
+    * flat_normals : Computes normals per face during the import.
+    * tangent_space : Computes tangent space informations (tangent and bi-tangent) during import.
+6. 'division' : _name_ _int_
+    Allows the mesh subdivision, using a supported Castor3D divider plug-in algorithm.
+    The two implemented plug-ins define Loop (loop) algorithm and PN-Triangles (pn_tri) algorithm.
+    The second parameter is the application count of the algorithm (its applied recursively).
+
+
+### N - 'submesh' section
+
+1. 'material' : _name_
+    Defines the material used by this submesh
+2. 'vertex' : _3 reals_
+    Defines a vertex position.
+3. 'uv' : _2 reals_
+    Defines the UV texture coordinates for the previously declared vertex
+4. 'uvw' : _3 reals_
+    Defines the UVW texture coordinates for the previously declared vertex
+5. 'normal' : _3 reals_
+    Defines the normal coordinates for the previously declared vertex
+6. 'tangent' : _3 reals_
+    Defines the tangent coordinates for the previously declared vertex
+7. ' face' : _3 or 4 integers_
+    Defines a face using the three or four vertices whose indices are given.
+    If more than three indices are given, creates the appropriate count of triangular faces.
+8. 'face_uv' : _as much uv as the face indices_
+    Defines the UV coordinates for each vertex of the previously declared face.
+9. 'face_uvw' : _as much uvw as the face indices_
+    Defines the UVW coordinates for each vertex of the previously declared face.
+10. 'face_normals' : _as much 3 reals groups as the face indices_
+    Defines the normals coordinates for each vertex of the previously declared face.
+11. 'face_tangents' : _as much 3 reals groups as the face indices_
+    Defines the tangents coordinates for each vertex of the previously declared face.
+
+
+### O - 'billboard' section
+
+Allows the definition of billboards that share the same material and dimensions.
+
+1. 'parent' : _name_
+    Defines the parent scene node.
+2. 'positions' : _new section_
+    Defines a new section describing each billboard position.
+3. 'material' : _name_
+    Defines the material used by every billboard of this list
+4. 'dimensions' : _size_
+    Defines billboards dimensions
+
+
+### P - 'positions' section
+
+1. 'pos' : _3 reals_
+    Defines the relative position of a billboard
+
+
+### Q - 'camera' section
+
+1. 'parent' : _name_
+    Defines the parent CameraNode.
+2. 'primitive' : _value_
+    Defines the display type. Can be one of :
+    * points : Points
+    * lines : Disjointed lines
+    * line_loop : Jointed lines loop
+    * line_strip : Joined lines
+    * triangles : Disjointed triangles
+    * triangle_strip : Jointed triangles
+    * triangle_fan : Triangles jointed using the first point
+    * quads : Disjointed quads
+    * quad_strip : Jointed quads
+    * polygon : Polygons
+3. 'viewport' : _new section_
+    Defines the camera view port
+
+
+### R - 'viewport' section
+
+1. 'type' : _value_
+    Window display type, 2d or 3d
+2. 'left' : _real_
+    Defines the minimum displayed X coordinate
+3. 'right' : _real_
+    Defines the maximum displayed X coordinate
+4. 'top' : _real_
+    Defines the minimum displayed Y coordinate
+5. 'bottom' : _real_
+    Defines the maximum displayed Y coordinate
+6. 'near' : _real_
+    Defines the minimum displayed Z coordinate
+7. 'far' : _real_
+    Defines the maximum displayed Z coordinate
+8. 'size' : _size_
+    Defines the window display size (in pixels)
+9. 'fov_y' : _real_
+    Defines the vertical field of view angle, in radians
+10. 'aspect_ratio' : _real_
+    Defines the global window aspect ratio (1.33333 for 4/3, 1.77777 for 16/9 ... )
+
+
+### S - 'animated_object_group' section
+
+1. 'animated_object' : _name_
+    Adds the object with the given name to the group
+2. 'animation' : _name_
+    Adds the animation with the given name to the group's common animations list
+
+
+### T - 'panel_overlay' section
+
+1. 'material' : _name_
+    Defines the material used by the panel
+2. 'position' : _2 reals_
+    Defines the overlay position, relative to its parent (or to screen, if no parent)
+3. 'size' : _2 reals_
+    Defines the overlay size, relative to its parent (or to screen, if no parent)
+4. 'panel_overlay' : _name_ _new section_
+    Defines a new section describing a simple panel children overlay
+5. 'border_panel_overlay' : _name_ _new section_
+    Defines a new section describing a border panel children overlay
+6. 'text_overlay' : _name_ _new section_
+    Defines a new section describing a text panel children overlay
+
+### U - 'border_panel_overlay' section
+
+1. 'material' : _name_
+    Defines the material used by the panel
+2. 'position' : _2 reals_
+    Defines the overlay position, relative to its parent (or to screen, if no parent)
+3. 'size' : _2 reals_
+    Defines the overlay size, relative to its parent (or to screen, if no parent)
+4. 'border_size' : _4 reals_
+    Defines the borders sizes (left right, top, bottom)
+5. 'panel_overlay' : _name_ _new section_
+    Defines a new section describing a simple panel children overlay
+6. 'border_panel_overlay' : _name_ _new section_
+    Defines a new section describing a border panel children overlay
+7. 'text_overlay' : _name_ _new section_
+    Defines a new section describing a text panel children overlay
+
+### V - 'text_overlay' section
+
+1. 'material' : _name_
+    Defines the material used by the panel
+2. 'position' : _2 reals_
+    Defines the overlay position, relative to its parent (or to screen, if no parent)
+3. 'size' : _2 reals_
+    Defines the overlay size, relative to its parent (or to screen, if no parent)
+4. 'font' : _name_
+    Defines the font used to display the text
+5. 'text' : _texte_
+    Defines the displayed text
+6. 'panel_overlay' : _name_ _new section_
+    Defines a new section describing a simple panel children overlay
+7. 'border_panel_overlay' : _name_ _new section_
+    Defines a new section describing a border panel children overlay
+8. 'text_overlay' : _name_ _new section_
+    Defines a new section describing a text panel children overlay
+
+
+### W - Section 'window'
+
+1. 'render_target' : _nouvelle section_
+    Defines a new section describing the render target
+2. 'vsync' : _booléen_
+    Defines the activation or deactivation of vertical synchronisation
+3. 'fullscreen' : _booléen_
+    Defines the activation or deactivation of full-screen display
+
+
+### X - Section 'render_target'
+
+1. 'scene' : _nom_
+    Defines the scene rendered in this target
+2. 'camera' : _nom_
+    Defines the camera used to render the scene
+3. 'size' : _taille_
+    Defines the internal buffer dimensions
+4. 'format' : _valeur_
+    Defines the colour buffer pixel format. Can be one of :
+    * l8 : Luminance 8 bits, one 8 bits integral number
+    * l16f : Luminance 16 bits, one 16 bits floating point number (half float)
+    * l32f : Luminance 32 bits, one 32 bits floating point number(float)
+    * al16 : Alpha + Luminance, two 8 bits integral number
+    * al16f : Alpha + Luminance, two 16 bits floating point number (half float)
+    * al32f : Alpha + Luminance, two 32 bits floating point number (float)
+    * argb1555 : ARGB 16 bits, 1 bit for alpha and each other component on a 5 bits integer
+    * rgb565 : RGB 16 bits, R and B on a 5 bits integer, G on a 6 bits integer
+    * argb16 : ARGB 16 bits, each component on a 4 bits integer
+    * rgb24 : RGB 24 bits, each component on a 8 bits integer
+    * argb32 : ARGB 32 bits, each component on a 8 bits integer
+    * argb16f : ARGB 64 bits, each component on a 16 bits floating point number (half float)
+    * rgb32f : RGB 96 bits, each component on a 32 bits floating point number (half float)
+    * argb32f : ARGB 128 bits, each component on a 32 bits floating point number (half float)
+5. 'depth' : _valeur_
+    Defines the depth/stencil buffer pixel format. Can be one of :
+    * depth16 : Depth on a 16 bits integer
+    * depth24 : Depth on a 24 bits integer
+    * depth24s8 : Depth on a 24 bits integer, Stencil on a 8 bits integer
+    * depth32 : Depth on a 32 bits integer
+    * stencil1 : Stencil on 1 bit
+    * stencil8 : Stencil on a 8 bits integer
+6. 'msaa' : _valeur_
+    Activates the multisample antialiasing, can be one of 2x, 4x or 8x
+7. 'ssaa' : _valeur_
+    Activates the supersample antialiasing, can be one of 2x, 4x or 8x
+8. 'stereo' : _booléen_
+    Tells if we use stereoscopic display mode
+9. 'deferred' : _booléen_
+    Tells if we activate deferred rendering (deferred lighting)

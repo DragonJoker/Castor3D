@@ -1,0 +1,65 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: ImgConverter\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-10-05 15:32+0200\n"
+"PO-Revision-Date: 2012-10-05 15:37+0100\n"
+"Last-Translator: \n"
+"Language-Team: Sylvain Doremus <dragonjoker59@hotmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.3\n"
+"Language: french\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+
+#: ..\source\ImgConverter\MainFrame.cpp:50
+msgid ""
+"BITMAP Images (*.bmp)|*.bmp|GIF Images (*.gif)|*.gif|JPEG Images (*.jpg)|*."
+"jpg|PNG Images (*.png)|*.png|TARGA Images (*.tga)|*.tga|All Images (*.bmp;*."
+"gif;*.png;*.jpg;*.tga)|*.bmp;*.gif;*.png;*.jpg"
+msgstr ""
+"Images BITMAP (*.bmp)|*.bmp|Images GIF (*.gif)|*.gif|Images JPEG (*.jpg)|*."
+"jpg|Images PNG (*.png)|*.png|Images TARGA (*.tga)|*.tga|Toutes Images (*.bmp;"
+"*.gif;*.png;*.jpg;*.tga)|*.bmp;*.gif;*.png;*.jpg"
+
+#: ..\source\ImgConverter\MainFrame.cpp:18
+msgid "Browse"
+msgstr "Parcourir"
+
+#: ..\source\ImgConverter\MainFrame.cpp:50
+msgid "Choose an image"
+msgstr "Choisissez une image"
+
+#: ..\source\ImgConverter\MainFrame.cpp:91
+msgid "Done"
+msgstr "Fait"
+
+#: ..\source\ImgConverter\MainFrame.cpp:20
+msgid "Exit"
+msgstr "Quitter"
+
+#: ..\source\ImgConverter\MainFrame.cpp:11
+msgid "Image To ICO/XPM Converter"
+msgstr "Convertisseur d'images vers  ICO/XPM"
+
+#: ..\source\ImgConverter\MainFrame.cpp:69
+msgid "Image format"
+msgstr "Format d'image"
+
+#: ..\source\ImgConverter\MainFrame.cpp:19
+msgid "Process"
+msgstr "Convertir"
+
+#: ..\source\ImgConverter\MainFrame.cpp:78
+msgid "Processing : "
+msgstr "Conversion : "
+
+#: ..\source\ImgConverter\MainFrame.cpp:69
+msgid "Select output image format"
+msgstr "Choisissez le format de sortie"

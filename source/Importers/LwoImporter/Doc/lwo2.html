@@ -1,0 +1,1346 @@
+<html>
+
+<head>
+<title>Object Files</title>
+<style type="text/css"><!--tt { font-size: 10pt } pre { font-size: 10pt }--></style>
+</head>
+
+<body bgcolor="#ffffff" text="#000000" link="#000080" vlink="#800000" alink="#0000ff">
+
+<table border="0" cellpadding="0" cellspacing="0" bgcolor="#d0d0d0">
+  <tr>
+    <td width="120" align="left"><a href="lwsc.html"><img width="96" height="20" border="0"
+    src="../images/navlt.gif" alt="Scene Files"></a></td>
+    <td width="96" align="left"><a href="RigFileFormat.html"><img width="64" height="20" border="0"
+    src="../images/navrt.gif" alt="Rig File Format"></a></td>
+    <td width="96" align="left"><a href="../filefmts.html"><img width="56" height="20"
+    border="0" src="../images/navup.gif" alt="File Formats"></a></td>
+    <td width="288" align="right"><a href="../index.html"><img width="230" height="20"
+    border="0" src="../images/proglw.gif" alt="Table of Contents"></a></td>
+  </tr>
+</table>
+
+<table border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="600"><br>
+    <h3>Object Files</h3>
+    <p><small>November 9, 2001</small></p>
+    <p>This document describes the LWO2 file format for 3D objects used by LightWave&reg;. The LWO2
+    format is new for LightWave&reg; 6.0. Also see the <a href="lwo2ex/lwo2ex.html">Object File
+    Examples</a> supplement.<ul>
+      <li><a href="#H_intr">Introduction</a> </li>
+      <li><a href="#H_type">Data Types</a> </li>
+      <li><a href="#H_file">Chunks</a> </li>
+      <li><a href="#H_envl">Envelope Subchunks</a> </li>
+      <li><a href="#H_clip">Clip Subchunks</a> </li>
+      <li><a href="#H_surf">Surface Subchunks</a> <ul>
+          <li><a href="#Hs_base">Basic Surface Parameters</a> </li>
+          <li><a href="#Hs_blok">Surface Blocks</a> <ul>
+              <li><a href="#Hs_Ord">Ordinal Strings</a></li>
+              <li><a href="#Hs_blokhd">Block Headers</a></li>
+              <li><a href="#Hs_tmap">Texture Mapping</a> </li>
+              <li><a href="#Hs_imap">Image Maps</a> </li>
+              <li><a href="#Hs_proc">Procedurals</a> </li>
+              <li><a href="#Hs_grad">Gradients</a> </li>
+              <li><a href="#Hs_shdr">Shaders</a> </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#H_indx">Chunk Index</a></li>
+    </ul>
+    <a name="H_intr"></a><strong><p>Introduction</p></strong>
+    <p>The data in LightWave 3D&reg; object files comprise the points, polygons and surfaces that
+    describe the geometry and appearance of an object. &quot;Polygons&quot; here means any of
+    several geometric elements (faces, curves or patches, for example) defined by an ordered
+    list of points, and &quot;surfaces&quot; refers to the collection of attributes, sometimes
+    called materials, that define the visual surface properties of polygons.</p>
+    <p>Object files can contain multiple layers, or parts, and each part can be a single
+    connected mesh or several disjoint meshes. They may also contain one or more surface
+    definitions with no points or polygons at all. Surface definitions can include references
+    to other files (images, for example), plug-ins, and envelopes containing parameter values
+    that vary over time. </p>
+    <p>This document outlines the object file format and provides a detailed reference for
+    each of the components. The component descriptions include both a regular expression
+    defining the syntax and a discussion of the contents. See also the <a
+    href="lwo2ex/lwo2ex.html">Examples</a> supplement, a more conversational introduction to
+    the format that includes annotated listings of file contents as well as several sample
+    files.</p>
+    <p><a name="H_type"><strong>Data Types</strong></a></p>
+    <p>The atomic, or lowest-level, types used in object files are listed below. All of these
+    are written in a byte order variously called big-endian, Motorola, or network order, with
+    the most significant byte written first. The shorthand names (<strong>I2</strong>, <strong>F4</strong>,
+    etc.) will be used throughout this document. <dl>
+      <dt><a name="t_ID4"><em>ID Tag</em></a></dt>
+      <dd>
+      <tt><strong>ID4</strong><br>
+        </tt>An ID tag is a sequence of 4 bytes containing 7-bit ASCII values, usually upper-case
+        printable characters. These tags are used to identify the data that follows. <tt>FORM</tt>,
+        <tt>SURF</tt>, <tt>POLS</tt>, and <tt>LWO2</tt> are all examples of ID tags. ID tags can
+        be interpreted as unsigned integers for comparison purposes.</dd>
+      <dt><em><br>
+        <a name="t_I">Signed Integer</a></em></dt>
+      <tt>
+      <dd><strong>I1, I2, I4</strong></dd></tt>
+      <dt><em>Unsigned Integer</em></dt><strong>
+      </strong><dd>
+      <tt><strong>U1, U2, U4</strong></tt><tt><br>
+        </tt>Integers can be signed or unsigned and 1, 2 or 4 bytes in length. Signed integers are
+        two's complement.</dd>
+      <dt><em><br>
+        <a name="t_F4">Float</a></em></dt>
+      <dd>
+      <tt><strong>F4</strong><br>
+        </tt>4-byte IEEE floating-point values. </dd>
+      <dt><em><br>
+        <a name="t_S0">String</a></em></dt>
+      <dd>
+      <tt><strong>S0</strong></tt><br>
+        Names or other character strings are written as a series of ASCII character values
+        followed by a zero (or null) byte. If the length of the string including the null
+        terminating byte is odd, an extra null is added so that the data that follows will begin
+        on an even byte boundary.</dd>
+    </dl>
+    <p>Several useful composite datatypes are built from these fundamental types. <dl>
+      <dt><a name="t_VX"><em>Variable-length Index</em></a></dt>
+      <dd><tt><strong>VX ::= index<a href="#t_I">[U2]</a> | (index + 0xFF000000)<a href="#t_I">[U4]</a></strong><br>
+        </tt>This is an index into an array of items (points or polygons), or a collection of
+        items each uniquely identified by an integer (clips or envelopes). A VX is written as a
+        variable length 2- or 4-byte element. If the index value is less than 65,280 (0xFF00),
+        then the index is written as an unsigned two-byte integer. Otherwise the index is written
+        as an unsigned four byte integer with bits 24-31 set. When reading an index, if the first
+        byte encountered is 255 (0xFF), then the four-byte form is being used and the first byte
+        should be discarded or masked out.</dd>
+      <dt><em><br>
+        <a name="t_COL12">Color</a></em></dt>
+      <dd><tt><strong>COL12 ::= red<a href="#t_F4">[F4]</a>, green<a href="#t_F4">[F4]</a>, blue<a
+        href="#t_F4">[F4]</a></strong><br>
+        </tt>A color is written as a triple of floats representing the levels of red, green and
+        blue. The nominal level range is [0.0, 1.0], but values outside this range are also
+        possible. </dd>
+      <dt><em><br>
+        <a name="t_VEC12">Coordinate</a></em></dt>
+      <dd><tt><strong>VEC12 ::= X<a href="#t_F4">[F4]</a>, Y<a href="#t_F4">[F4]</a>, Z<a
+        href="#t_F4">[F4]</a></strong><br>
+        </tt>3D coordinates are written as an XYZ vector in floating point format. The values are
+        distances along the X, Y, and Z axes. </dd>
+      <dt><em><br>
+        <a name="t_FP4">Percentage</a></em></dt>
+      <dd><tt><strong>FP4 ::= fraction<a href="#t_F4">[F4]</a></strong><br>
+        </tt>Percentages are written as floats, with 1.0 representing 100%. </dd>
+      <dt><em><br>
+        <a name="t_ANG4">Angle</a></em></dt>
+      <dd><tt><strong>ANG4 ::= radians<a href="#t_F4">[F4]</a></strong><br>
+        </tt>Angles are specified as floating point values in radians. </dd>
+      <dt><em><br>
+        <a name="t_FNAM0">Filename</a></em></dt>
+      <dd><tt><strong>FNAM0 ::= name<a href="#t_S0">[S0]</a></strong><br>
+        </tt>Filenames are written as strings in a platform-neutral format. For absolute (fully
+        qualified) paths, the first node represents a disk or similar storage device, and its name
+        is separated from the rest of the path by a colon. Other nodes in the path are separated
+        by forward slashes. <tt>disk:path/file</tt> is an absolute path, and <tt>path/subpath/file</tt>
+        is a relative path.</dd>
+    </dl>
+    <p><strong><a name="H_file">Chunks</a></strong></p>
+    <p>The object file format is derived from the metaformat for binary files described in
+    &quot;<a href="eaiff85.html">EA IFF 85 Standard for Interchange Format Files</a>.&quot; <a
+    name="t_CHUNK">The basic structural element</a> in an IFF file is the <em>chunk</em>. A
+    chunk consists of an ID tag, a size, and <em>size</em> bytes of data. If the size is odd,
+    the chunk is followed by a 0 pad byte, so that the next chunk begins on an even byte
+    boundary. (The pad byte isn't counted in the size.)</p>
+    <blockquote>
+      <strong><tt><p>CHUNK ::= tag<a href="#t_ID4">[ID4]</a>, length<a href="#t_I">[U4]</a>,
+      data[...], pad<a href="#t_I">[U1]</a> ? </p></tt></strong>
+    </blockquote>
+    <p><a name="t_SUBCH">Within some chunks, object files use <em>subchunks</em></a>, which
+    are just like chunks except that the size is a 2-byte integer. </p>
+    <blockquote>
+      <strong><tt><p>SUB-CHUNK ::= tag<a href="#t_ID4">[ID4]</a>, length<a href="#t_I">[U2]</a>,
+      data[...], pad<a href="#t_I">[U1]</a> ?</p></tt></strong>
+    </blockquote>
+    <p><a name="t_FORM">In this document</a>, chunks will be written as a chunk ID followed by
+    a data description inside curly brackets: <strong><tt>ID-tag { data }</tt></strong>. Given
+    this notation, we can say formally that an object file is a <tt>FORM</tt> chunk of type <tt>LWO2</tt>.
+    </p>
+    <blockquote>
+      <tt><strong><p>file ::= FORM { 'LWO2'<a href="#t_ID4">[ID4]</a>, data<a href="#t_CHUNK">[CHUNK]</a>
+      * }</p></strong> </tt>
+    </blockquote>
+    <p>Informally, object files start with the four bytes &quot;<tt>FORM</tt>&quot; followed
+    by a four-byte integer giving the length of the file (minus 8) and the four byte ID &quot;<tt>LWO2</tt>&quot;.
+    The remainder of the data is a collection of chunks, some of which will contain subchunks.</p>
+    <p>To be read, IFF files must be <em>parsed</em>. The order in which chunks can occur in a
+    file isn't fixed. Some chunks, however, contain data that depends on the contents of other
+    chunks, and this fixes a <em>relative</em> order for the chunks involved. Chunks and
+    subchunks also depend on context for their meaning. The <tt>CHAN</tt> subchunk in an
+    envelope chunk isn't the same thing as the <tt>CHAN</tt> subchunk in a surface block. And
+    you may encounter chunks that aren't defined here, which you should be prepared to skip
+    gracefully if you don't understand them. You can do this by using the chunk size to seek
+    to the next chunk.</p>
+    <p>The following is a list of the defined chunks that can be found in an object file. Full
+    descriptions of the contents of <tt>ENVL</tt>, <tt>CLIP</tt> and <tt>SURF</tt> chunks are
+    deferred to sections that follow the chunk list and comprise the remainder of this
+    document.
+      <dl> 
+        <dt><a name="c_LAYR"><em>Layer</em></a></dt>
+        <dd><tt><strong>LAYR { number<a href="#t_I">[U2]</a>, flags<a href="#t_I">[U2]</a>, 
+          pivot<a
+        href="#t_VEC12">[VEC12]</a>, name<a href="#t_S0">[S0]</a>, parent<a href="#t_I">[U2]</a> 
+          ? }</strong></tt>
+          <p>Signals the start of a new layer. All the data chunks which follow 
+            will be included in this layer until another layer chunk is encountered. 
+            If data is encountered before a layer chunk, it goes into an arbitrary 
+            layer. If the least significant bit of <tt>flags</tt> is set, the 
+            layer is hidden. The parent index indicates the default parent for 
+            this layer and can be -1 or missing to indicate no parent. </p>
+        </dd>
+        <dt><a name="c_PNTS"><em>Point List</em></a></dt>
+        <dd><tt><strong>PNTS { point-location<a href="#t_VEC12">[VEC12]</a> * 
+          }</strong></tt>
+          <p>Lists (<em>x</em>, <em>y</em>, <em>z</em>) coordinate triples for 
+            a set of points. The number of points in the chunk is just the chunk 
+            size divided by 12. The <tt>PNTS</tt> chunk must precede the <a href="#c_POLS"><tt>POLS</tt></a>, 
+            <a href="#c_VMAP"><tt>VMAP</tt></a> and <a
+        href="#c_VMAD"><tt>VMAD</tt></a> chunks that refer to it. These chunks 
+            list points using a 0-based index into <tt>PNTS</tt>. </p>
+          <p>The LightWave&reg; coordinate system is left-handed, with +X to the 
+            right or east, +Y upward, and +Z forward or north. Object files don't 
+            contain explicit units, but by convention the unit is meters. Coordinates 
+            in <tt>PNTS</tt> are relative to the pivot point of the layer.</p>
+        </dd>
+        <dt><a name="c_VMAP"><em>Vertex Mapping</em></a></dt>
+        <dd><tt><strong>VMAP { type<a href="#t_ID4">[ID4]</a>, dimension<a href="#t_I">[U2]</a>, 
+          name<a href="#t_S0">[S0]</a>,<br>
+          ( vert<a href="#t_VX">[VX]</a>, value<a href="#t_F4">[F4]</a> # dimension 
+          )* }</strong></tt>
+          <p>Associates a set of floating-point vectors with a set of points. 
+            <tt>VMAP</tt>s begin with a type, a dimension (vector length) and 
+            a name. These are followed by a list of vertex/vector pairs. The vertex 
+            is given as an index into the most recent <a href="#c_PNTS"><tt>PNTS</tt></a> 
+            chunk, in <a href="#t_VX">VX</a> format. The vector contains <tt>dimension</tt> 
+            floating-point values. There can be any number of these chunks, but 
+            they should all have different types or names. </p>
+          <p>Some common type codes are</p>
+          <blockquote> 
+            <dl> <tt> 
+              <dt><strong>PICK</strong></dt>
+              </tt> 
+              <dd>Selection set. This is a <tt>VMAP</tt> of dimension 0 that marks 
+                points for quick selection by name during modeling. It has no 
+                effect on the geometry of the object.</dd>
+              <tt> 
+              <dt><strong>WGHT</strong></dt></tt> 
+              <dd>Weight maps have a dimension of 1 and are generally used to 
+                alter the influence of deformers such as bones. Weights can be 
+                positive or negative, and the default weight for unmapped vertices 
+                is 0.0.</dd>
+              <tt> 
+              <dt><strong>MNVW</strong></dt></tt> 
+              <dd>Subpatch weight maps affect the shape of geometry created by 
+                subdivision patching.</dd>
+              <tt> 
+              <dt><strong>TXUV</strong></dt></tt> 
+              <dd>UV texture maps have a dimension of 2.</dd>
+              <dt><tt><strong>RGB</strong>, <strong>RGBA</strong></tt></dt>
+              <dd>Color maps, with a dimension of 3 or 4.</dd>
+              <tt> 
+              <dt><strong>MORF</strong></dt></tt> 
+              <dd>These contain vertex displacement deltas.</dd>
+              <tt> 
+              <dt><strong>SPOT</strong></dt></tt> 
+              <dd>These contain absolute vertex displacements (alternative vertex 
+                positions).</dd>
+            </dl>
+          </blockquote>
+          <p>Other widely used map types will almost certainly appear in the future.</p>
+        </dd>
+        <dt><a name="c_POLS"><em>Polygon List</em></a></dt>
+        <dd><tt><strong>POLS { type<a href="#t_ID4">[ID4]</a>, ( numvert+flags<a href="#t_I">[U2]</a>, 
+          vert<a href="#t_VX">[VX]</a> # numvert )* }</strong></tt>
+          <p>A list of polygons for the current layer. Possible polygon types 
+            include:</p>
+          <blockquote> 
+            <dl> <tt> 
+              <dt><strong>FACE</strong></dt>
+              </tt> 
+              <dd>&quot;Regular&quot; polygons, the most common.</dd>
+              <tt> 
+              <dt><strong>CURV</strong></dt></tt> 
+              <dd>Catmull-Rom splines. These are used during modeling and are 
+                currently ignored by the renderer.</dd>
+              <tt> 
+              <dt><strong>PTCH</strong></dt></tt> 
+              <dd>Subdivision patches. The <tt>POLS</tt> chunk contains the definition 
+                of the control cage polygons, and the patch is created by subdividing 
+                these polygons. The renderable geometry that results from subdivision 
+                is determined interactively by the user through settings within 
+                LightWave&reg;. The subdivision method is undocumented.</dd>
+              <tt> 
+              <dt><strong>MBAL</strong></dt></tt> 
+              <dd>Metaballs. These are single-point polygons. The points are associated 
+                with a <a
+              href="#c_VMAP"><tt>VMAP</tt></a> of type <tt>MBAL</tt> that contains 
+                the radius of influence of each metaball. The renderable polygonal 
+                surface constructed from a set of metaballs is inferred as an 
+                isosurface on a scalar field derived from the sum of the influences 
+                of all of the metaball points.</dd>
+              <tt> 
+              <dt><strong>BONE</strong></dt></tt> 
+              <dd>Line segments representing the object's skeleton. These are 
+                converted to bones for deformation during rendering.</dd>
+            </dl>
+          </blockquote>
+          <p>Each polygon is defined by a vertex count followed by a list of indexes 
+            into the most recent <a href="#c_PNTS"><tt>PNTS</tt></a> chunk. The 
+            maximum number of vertices is 1023. The 6 high-order bits of the vertex 
+            count are flag bits with different meanings for each polygon type. 
+            When reading <tt>POLS</tt>, remember to mask out the <tt>flags</tt> 
+            to obtain <tt>numverts</tt>. (For <tt>CURV</tt> polygon: The two low 
+            order flags are for continuity control point toggles. The four remaining 
+            high order flag bits are additional vertex count bits; this brings 
+            the maximum number of vertices for <tt>CURV</tt> polygons to 2^14 
+            = 16383.) </p>
+          <p>When writing <tt>POLS</tt>, the vertex list for each polygon should 
+            begin at a convex vertex and proceed clockwise as seen from the visible 
+            side of the polygon. LightWave&reg; polygons are single-sided (although 
+            <a href="#s_SIDE">double-sidedness</a> is a possible surface property), 
+            and the normal is defined as the cross product of the first and last 
+            edges. </p>
+        </dd>
+        <dt><a name="c_TAGS"><em>Tag Strings</em></a></dt>
+        <dd><tt><strong>TAGS { tag-string<a href="#t_S0">[S0]</a> * }</strong></tt>
+          <p>Lists the tag strings that can be associated with polygons by the 
+            <a href="#c_PTAG"><tt>PTAG</tt></a> chunk. </p>
+        </dd>
+        <dt><a name="c_PTAG"><em>Polygon Tag Mapping</em></a></dt>
+        <dd><tt><strong>PTAG { type<a href="#t_ID4">[ID4]</a>, ( poly<a href="#t_VX">[VX]</a>, 
+          tag<a
+        href="#t_I">[U2]</a> )* }</strong></tt>
+          <p>Associates tags of a given type with polygons in the most recent 
+            <a href="#c_POLS"><tt>POLS</tt></a> chunk. The most common polygon 
+            tag types are</p>
+          <blockquote> 
+            <dl> <tt> 
+              <dt><strong>SURF</strong></dt>
+              </tt> 
+              <dd>The surface assigned to the polygon. The actual surface attributes 
+                are found by matching the name in the <a href="#c_TAGS"><tt>TAGS</tt></a> 
+                chunk with the name in a <a
+              href="#c_SURF"><tt>SURF</tt></a> chunk.</dd>
+              <tt> 
+              <dt><strong>PART</strong></dt></tt> 
+              <dd>The part the polygon belongs to. Parts are named groups of polygons 
+                analogous to point selection sets (but a polygon can belong to 
+                only one part).</dd>
+              <tt> 
+              <dt><strong>SMGP</strong></dt></tt> 
+              <dd>The smoothing group the polygon belongs to. Shading is only 
+                interpolated within a smoothing group, not across groups.</dd>
+            </dl>
+          </blockquote>
+          <p>The polygon is identified by an index into the previous <a href="#c_POLS"><tt>POLS</tt></a> 
+            chunk, and the tag is given by an index into the previous <a href="#c_TAGS"><tt>TAGS</tt></a> 
+            chunk. Not all polygons will have a value for every tag type. The 
+            behavior for polygons lacking a given tag depends on the type.</p>
+        </dd>
+        <dt><a name="c_VMAD"><em>Discontinuous Vertex Mapping</em></a></dt>
+        <dd><tt><strong>VMAD { type<a href="#t_ID4">[ID4]</a>, dimension<a href="#t_I">[U2]</a>, 
+          name<a href="#t_S0">[S0]</a>,<br>
+          ( vert<a href="#t_VX">[VX]</a>, poly<a href="#t_VX">[VX]</a>, value<a href="#t_F4">[F4]</a> 
+          # dimension )* }</strong></tt> 
+          <p>(Introduced with LightWave&reg; 6.5.) Associates a set of floating-point 
+            vectors with the vertices of specific polygons. <tt>VMAD</tt>s are 
+            similar to <a href="#c_VMAP"><tt>VMAP</tt></a>s, but they assign vectors 
+            to polygon vertices rather than points. For a given mapping, a <a href="#c_VMAP"><tt>VMAP</tt></a> 
+            always assigns only one vector to a point, while a <tt>VMAD</tt> can 
+            assign as many vectors to a point as there are polygons sharing the 
+            point.</p>
+          <p>The motivation for <tt>VMAD</tt>s is the problem of seams in UV texture 
+            mapping. If a UV map is topologically equivalent to a cylinder or 
+            a sphere, a seam is formed where the opposite edges of the map meet. 
+            Interpolation of UV coordinates across this discontinuity is aesthetically 
+            and mathematically incorrect. The <tt>VMAD</tt> substitutes an equivalent 
+            mapping that interpolates correctly. It only needs to do this for 
+            polygons in which the seam lies.</p>
+          <p><tt>VMAD</tt> chunks are paired with <a href="#c_VMAP"><tt>VMAP</tt></a>s 
+            of the same name, if they exist. The vector values in the <tt>VMAD</tt> 
+            will then replace those in the corresponding <a href="#c_VMAP"><tt>VMAP</tt></a>, 
+            but only for calculations involving the specified polygons. When the 
+            same points are used for calculations on polygons not specified in 
+            the <tt>VMAD</tt>, the <a href="#c_VMAP"><tt>VMAP</tt></a> values 
+            are used.</p>
+          <p><tt>VMAD</tt>s need not be associated with a <a href="#c_VMAP"><tt>VMAP</tt></a>. 
+            They can also be used simply to define a (discontinuous) per-polygon 
+            mapping. But not all mapping types are valid for <tt>VMAD</tt>s, since 
+            for some types it makes no sense for points to have more than one 
+            map value. <tt>TXUV</tt>, <tt>RGB</tt>, <tt>RGBA</tt> and <tt>WGHT</tt> 
+            types are supported for <tt>VMAD</tt>s, for example, while <tt>MORF</tt> 
+            and <tt>SPOT</tt> are not. <tt>VMAD</tt>s of unsupported types are 
+            preserved but never evaluated.</p>
+        </dd>
+        <dt><em>Vertex Map Parameter</em> </dt>
+        <dd><tt><strong>VMPA { UV subdivision type<a href="#t_I">[I4]</a>, sketch color<a href="#t_I">[I4]</a>
+            }</strong></tt> 
+          <p>
+              Describes special properties of VMAPs.
+              <br />
+              The UV subdivision type ids are:
+              <br />
+			<code>0 - linear<br>
+			1 - subpatch<br>
+			2 - subpatch linear corners<br>
+			3 - subpatch linear edges<br>
+			4 - subpatch disco edges
+			</code>  
+			</p>            
+        </dd>        
+        <dt><a name="c_ENVL"><em>Envelope Definition</em></a></dt>
+        <dd><tt><strong><a href="#H_envl">ENVL</a> { index<a href="#t_VX">[VX]</a>, 
+          attributes<a
+        href="#t_SUBCH">[SUB-CHUNK]</a> * }</strong></tt>
+          <p>An array of keys. Each <tt>ENVL</tt> chunk defines the value of a 
+            single parameter channel as a function of time. The index is used 
+            to identify this envelope uniquely and can have any non-zero value 
+            less than 0x1000000. Following the index is a collection of subchunks 
+            that describe the envelope. These are documented below, in the <a href="#H_envl">Envelope 
+            Subchunks</a> section.</p>
+        </dd>
+        <dt><a name="c_CLIP"><em>Image or Image Sequence</em></a></dt>
+        <dd><tt><strong><a href="#H_clip">CLIP</a> { index<a href="#t_I">[U4]</a>, 
+          attributes<a
+        href="#t_SUBCH">[SUB-CHUNK]</a> * }</strong></tt>
+          <p>Describes an image or a sequence of images. Surface definitions specify 
+            images by referring to <tt>CLIP</tt> chunks. The term &quot;clip&quot; 
+            is used to describe these because they can be numbered sequences or 
+            animations as well as stills. The index identifies this clip uniquely 
+            and may be any non-zero value less than 0x1000000. The filename and 
+            any image processing modifiers follow as a variable list of subchunks, 
+            which are documented below in the <a href="#H_clip">Clip Subchunks</a> 
+            section.</p>
+        </dd>
+        <dt><a name="c_SURF"><em>Surface Definition</em></a></dt>
+        <dd><tt><strong><a href="#H_surf">SURF</a> { name<a href="#t_S0">[S0]</a>, 
+          source<a
+        href="#t_S0">[S0]</a>, attributes<a href="#t_SUBCH">[SUB-CHUNK]</a> * 
+          }</strong></tt>
+          <p>Describes the shading attributes of a surface. The name uniquely 
+            identifies the surface. This is the string that's stored in <a href="#c_TAGS"><tt>TAGS</tt></a> 
+            and referenced by tag index in <a href="#c_PTAG"><tt>PTAG</tt></a>. 
+            If the source name is non-null, then this surface is derived from, 
+            or composed with, the source surface. The base attributes of the source 
+            surface can be overridden by this surface, and texture blocks can 
+            be added to the source surface. The material attributes follow as 
+            a variable list of subchunks documented below in the <a href="#H_surf">Surface 
+            Subchunks</a> section.</p>
+        </dd>
+        <dt><a name="c_BBOX"><em>Bounding Box</em></a></dt>
+        <dd><tt><strong>BBOX { min<a href="#t_VEC12">[VEC12]</a>, max<a href="#t_VEC12">[VEC12]</a> 
+          }</strong></tt>
+          <p>Store the bounding box for the vertex data in a layer. Optional. 
+            The <tt>min</tt> and <tt>max</tt> vectors are the lower and upper 
+            corners of the bounding box. </p>
+        </dd>
+        <dt><a name="c_DESC"><em>Description Line</em></a></dt>
+        <dd><tt><strong>DESC { description-line<a href="#t_S0">[S0]</a> }</strong></tt>
+          <p>Store an object description. Optional. This should be a simple line 
+            of upper and lowercase characters, punctuation and spaces which describes 
+            the contents of the object file. There should be no control characters 
+            in this text string and it should generally be kept short. </p>
+        </dd>
+        <dt><a name="c_TEXT"><em>Commentary Text</em></a></dt>
+        <dd><tt><strong>TEXT { comment<a href="#t_S0">[S0]</a> }</strong></tt>
+          <p>Store comments about the object. Optional. The text is just like 
+            the <a href="#c_DESC"><tt>DESC</tt></a> chunk, but it can be about 
+            any subject, it may contain newline characters and it does not need 
+            to be particularly short. </p>
+        </dd>
+        <dt><a name="c_ICON"><em>Thumbnail Icon Image</em></a></dt>
+        <dd><tt><strong>ICON { encoding<a href="#t_I">[U2]</a>, width<a href="#t_I">[U2]</a>, 
+          data<a
+        href="#t_I">[U1]</a> * }</strong></tt>
+          <p>An iconic or thumbnail image for the object which can be used when 
+            viewing the file in a browser. Currently the only suported <tt>encoding</tt> 
+            is 0, meaning uncompressed RGB byte triples. The <tt>width</tt> is 
+            the number of pixels in each row of the image, and the height (number 
+            of rows) is <tt>(chunkSize - 4)/width</tt>. This chunk is optional.</p>
+        </dd>
+      </dl>
+    <p><strong><a name="H_envl">Envelope Subchunks</a></strong></p>
+    <p>The <a href="#c_ENVL"><tt>ENVL</tt></a> chunk contains a series of subchunks describing
+    the keyframes, intervals and global attributes of a single envelope. Note that the <tt>PRE</tt>,
+    <tt>KEY</tt> and <tt>TCB</tt> IDs each include a trailing space when written in the file.<dl>
+      <dt><a name="e_TYPE"></a><em>Envelope Type</em></dt>
+      <dd><strong><tt>TYPE { user-format<a href="#t_I">[U1]</a>, type<a href="#t_I">[U1]</a> }
+        </tt></strong><p>The type subchunk records the format in which the envelope is displayed
+        to the user and a type code that identifies the components of certain predefined envelope
+        triples. The user format has no effect on the actual values, only the way they're
+        presented in LightWave&reg;'s interface.</p>
+        <blockquote>
+          <dl>
+            <dt><strong><tt>02</tt></strong> - Float</dt>
+            <dt><strong><tt>03</tt></strong> - Distance</dt>
+            <dt><strong><tt>04</tt></strong> - Percent</dt>
+            <dt><strong><tt>05</tt></strong> - Angle</dt>
+          </dl>
+        </blockquote>
+        <p>The predefined envelope types include the following.</p>
+        <blockquote>
+          <dl>
+            <dt><strong><tt>01, 02, 03</tt></strong> - Position: X, Y, Z</dt>
+            <dt><strong><tt>04, 05, 06</tt></strong> - Rotation: Heading, Pitch, Bank</dt>
+            <dt><strong><tt>07, 08, 09</tt></strong> - Scale: X, Y, Z</dt>
+            <dt><strong><tt>0A, 0B, 0C</tt></strong> - Color: R, G, B</dt>
+            <dt><strong><tt>0D, 0E, 0F</tt></strong> - Falloff: X, Y, Z</dt>
+          </dl>
+        </blockquote>
+      </dd>
+      <dt><a name="e_PRE"></a><em>Pre-Behavior </em></dt>
+      <dd><strong><tt>PRE { type<a href="#t_I">[U2]</a> } </tt></strong><p>The pre-behavior
+        for an envelope defines the signal value for times before the first key. The type code
+        selects one of several predefined behaviors.</p>
+        <blockquote>
+          <dl>
+            <dt><strong>0 - Reset</strong></dt>
+            <dd>Sets the value to 0.0.</dd>
+            <dt><strong>1 - Constant</strong></dt>
+            <dd>Sets the value to the value at the nearest key.</dd>
+            <dt><strong>2 - Repeat</strong></dt>
+            <dd>Repeats the interval between the first and last keys (the primary interval).</dd>
+            <dt><strong>3 - Oscillate</strong></dt>
+            <dd>Like Repeat, but alternating copies of the primary interval are time-reversed.</dd>
+            <dt><strong>4 - Offset Repeat</strong></dt>
+            <dd>Like Repeat, but offset by the difference between the values of the first and last keys.</dd>
+            <dt><strong>5 - Linear</strong></dt>
+            <dd>Linearly extrapolates the value based on the tangent at the nearest key.</dd>
+          </dl>
+        </blockquote>
+      </dd>
+      <dt><a name="e_POST"></a><em>Post-Behavior </em></dt>
+      <dd><strong><tt>POST { type<a href="#t_I">[U2]</a> } </tt></strong><p>The post-behavior
+        determines the signal value for times after the last key. The type codes are the same as
+        for pre-behaviors. </p>
+      </dd>
+      <dt><a name="e_KEY"></a><em>Keyframe Time and Value </em></dt>
+      <dd><strong><tt>KEY { time<a href="#t_F4">[F4]</a>, value<a href="#t_F4">[F4]</a> } </tt></strong><p>The
+        value of the envelope at the specified time in seconds. The signal value between keyframes
+        is interpolated. The time of a keyframe isn't restricted to integer frames. </p>
+      </dd>
+      <dt><a name="e_SPAN"></a><em>Interval Interpolation </em></dt>
+      <dd><strong><tt>SPAN { type<a href="#t_ID4">[ID4]</a>, parameters<a href="#t_F4">[F4]</a>
+        * } </tt></strong><p>Defines the interpolation between the most recent <tt>KEY</tt> chunk
+        and the <tt>KEY</tt> immediately before it in time. The <tt>type</tt> identifies the
+        interpolation algorithm and can be <tt>STEP</tt>, <tt>LINE</tt>, <tt>TCB</tt>
+        (Kochanek-Bartels), <tt>HERM</tt> (Hermite), <tt>BEZI</tt> (1D Bezier) or <tt>BEZ2</tt>
+        (2D Bezier). Different parameters are stored for each of these.</p>
+      </dd>
+      <dt><a name="e_CHAN"></a><em>Plug-in Channel Modifiers </em></dt>
+      <dd><strong><tt>CHAN { server-name<a href="#t_S0">[S0]</a>, flags<a href="#t_I">[U2]</a>,
+        data[...] } </tt></strong><p><a href="../classes/channel.html">Channel modifiers</a> can
+        be associated with an envelope. Each channel chunk contains the name of the plug-in and
+        some flag bits. Only the first flag bit is defined; if set, the plug-in is disabled. The
+        data that follows this, if any, is owned by the plug-in.</p>
+      </dd>
+      <dt><a name="e_NAME"></a><em>Channel Name </em></dt>
+      <dd><strong><tt>NAME { channel-name<a href="#t_S0">[S0]</a> } </tt></strong><p>An
+        optional name for the envelope. LightWave&reg; itself ignores the names of surface envelopes,
+        but plug-ins can browse the envelope database by name.</p>
+      </dd>
+    </dl>
+    <p>The source code in the <a href="../../sample/Layout/ChannelFilter/envelope/">sample/envelope</a> directory
+    of the LightWave&reg; plug-in SDK demonstrates interpolation and extrapolation of envelopes and
+    shows how the contents of the <tt>SPAN</tt> subchunks define TCB, Bezier and Hermite
+    curves.</p>
+    <p><strong><a name="H_clip">Clip Subchunks</a></strong></p>
+    <p>The <a href="#c_CLIP"><tt>CLIP</tt></a> chunk contains a series of subchunks describing
+    a single, possibly time-varying image. The first subchunk has to be one of the source
+    chunks: <tt>STIL</tt>, <tt>ISEQ</tt>, <tt>ANIM</tt>, <tt>XREF</tt> or <tt>STCC</tt>. <dl>
+      <dt><a name="i_STIL"></a><em>Still Image </em></dt>
+      <dd><strong><tt>STIL { name<a href="#t_FNAM0">[FNAM0]</a> } </tt></strong><p>The source
+        is a single still image referenced by a filename in neutral path format. </p>
+      </dd>
+      <dt><a name="i_ISEQ"></a><em>Image Sequence </em></dt>
+      <dd><strong><tt>ISEQ { num-digits<a href="#t_I">[U1]</a>, flags<a href="#t_I">[U1]</a>,
+        offset<a href="#t_I">[I2]</a>, reserved<a href="#t_I">[U2]</a>, start<a href="#t_I">[I2]</a>,
+        end<a href="#t_I">[I2]</a>, prefix<a href="#t_FNAM0">[FNAM0]</a>, suffix<a href="#t_S0">[S0]</a>
+        } </tt></strong><p>The source is a numbered sequence of still image files. Each filename
+        contains a fixed number of decimal digits that specify a frame number, along with a prefix
+        (the part before the frame number, which includes the path) and a suffix (the part after
+        the number, typically a PC-style extension that identifies the file format). The prefix
+        and suffix are the same for all files in the sequence.</p>
+        <p>The flags include bits for looping and interlace. The offset is added to the current
+        frame number to obtain the digits of the filename for the current frame. The start and end
+        values define the range of frames in the sequence.</p>
+      </dd>
+      <dt><a name="i_ANIM"></a><em>Plug-in Animation </em></dt>
+      <dd><strong><tt>ANIM { filename<a href="#t_FNAM0">[FNAM0]</a>, server-name<a
+        href="#t_S0">[S0]</a>, flags<a href="#t_I">[U2]</a>, data[...] } </tt></strong><p>This
+        chunk indicates that the source imagery comes from a plug-in animation loader. The loader
+        is defined by the server name, a flags value, and the server's data. </p>
+      </dd>
+      <dt><a name="i_XREF"><em>Reference (Clone)</em></a></dt>
+      <dd><strong><tt>XREF { index<a href="#t_I">[U4]</a>, string<a href="#t_S0">[S0]</a> }</tt></strong>
+        <p>The source is a copy, or instance, of another clip, given by the index. The string is a
+        unique name for this instance of the clip.</p>
+      </dd>
+      <dt><a name="i_STCC"><em>Color-cycling Still</em></a></dt>
+      <dd><strong><tt>STCC { lo<a href="#t_I">[I2]</a>, hi<a href="#t_I">[I2]</a>, name<a
+        href="#t_FNAM0">[FNAM0]</a> } </tt></strong><p>A still image with color-cycling is a
+        source defined by a neutral-format name and cycling parameters. <tt>lo</tt> and <tt>hi</tt>
+        are indexes into the image's color table. Within this range, the color table entries are
+        shifted over time to cycle the colors in the image. If <tt>lo</tt> is less than <tt>hi</tt>,
+        the colors cycle forward, and if <tt>hi</tt> is less than <tt>lo</tt>, they go backwards. </p>
+      </dd>
+    </dl>
+    <p>Except for the <tt>TIME</tt> subchunk, the subchunks after the source subchunk modify
+    the source image and are applied as filters layered on top of the source image.<dl>
+      <dt><a name="i_TIME"><em>Time</em></a></dt>
+      <dd><strong><tt>TIME { start-time<a href="#t_FP4">[FP4]</a>, duration<a href="#t_FP4">[FP4]</a>,
+        frame-rate<a href="#t_FP4">[FP4]</a> } </tt></strong><p>Defines source times for an
+        animated clip.</p>
+      </dd>
+
+      <dt><a name="i_CLRS"></a><em>Color Space RGB </em></dt>
+      <dd><strong><tt>CLRS { flags<a href="#t_I4">[U2]</a>, colorspace<a href="#t_I4">[U2]</a>, filename<a href="#t_FNAM0">[FNAM0]</a> }
+        </tt></strong><p>Contains the color space of the texture.  If the flag is 0, then the color space is
+        contained in the following 2 bytes.  That color space is defined by the LWCOLORSPACE enum.  If the flag
+        is set to 1, then the file name of the color space is save as a local string.</p>
+      </dd>
+
+      <dt><a name="i_CLRA"></a><em>Color Space Alpha </em></dt>
+      <dd><strong><tt>CLRA { flags<a href="#t_I4">[U2]</a>, colorspace<a href="#t_I4">[U2]</a>, filename<a href="#t_FNAM0">[FNAM0]</a> }
+        </tt></strong><p>Contains the color space of the texture alpha.  If the flag is 0, then the color space is
+        contained in the following 2 bytes.  That color space is defined by the LWCOLORSPACE enum.  If the flag
+        is set to 1, then the file name of the color space is save as a local string.</p>
+      </dd>
+
+      <dt><a name="i_FILT"></a><em>Image Filtering </em></dt>
+      <dd><strong><tt>FILT { flags<a href="#t_I4">[U2]</a> }
+        </tt></strong><p>Contains the index to the current image filtering.</p>
+      </dd>
+
+      <dt><a name="i_DITH"></a><em>Image Dithering </em></dt>
+      <dd><strong><tt>DITH { flags<a href="#t_I4">[U2]</a> }
+        </tt></strong><p>Contains the index to the current image dithering.</p>
+      </dd>
+
+      <dt><a name="i_CONT"></a><em>Contrast </em></dt>
+      <dd><strong><tt>CONT { contrast-delta<a href="#t_FP4">[FP4]</a>, envelope<a href="#t_VX">[VX]</a>
+        } </tt></strong><p>RGB levels are altered in proportion to their distance from 0.5.
+        Positive deltas move the levels toward one of the extremes (0.0 or 1.0), while negative
+        deltas move them toward 0.5. The default is 0. </p>
+      </dd>
+
+      <dt><a name="i_BRIT"></a><em>Brightness </em></dt>
+      <dd><strong><tt>BRIT { brightness-delta<a href="#t_FP4">[FP4]</a>, envelope<a
+        href="#t_VX">[VX]</a> } </tt></strong><p>The delta is added to the RGB levels. The default
+        is 0.</p>
+      </dd>
+      <dt><a name="i_SATR"></a><em>Saturation </em></dt>
+      <dd><strong><tt>SATR { saturation-delta<a href="#t_FP4">[FP4]</a>, envelope<a
+        href="#t_VX">[VX]</a> } </tt></strong><p>The saturation of an RGB color is defined as <tt>(max
+        - min)/max</tt>, where <tt>max</tt> and <tt>min</tt> are the maximum and minimum of the
+        three RGB levels. This is a measure of the intensity or purity of a color. Positive deltas
+        turn up the saturation by increasing the <tt>max</tt> component and decreasing the <tt>min</tt>
+        one, and negative deltas have the opposite effect. The default is 0.</p>
+      </dd>
+      <dt><a name="i_HUE"></a><em>Hue </em></dt>
+      <dd><strong><tt>HUE { hue-rotation<a href="#t_FP4">[FP4]</a>, envelope<a href="#t_VX">[VX]</a>
+        } </tt></strong><p>The hue of an RGB color is an angle defined as</p>
+        <blockquote>
+          <tt><p>r is max: 1/3 (g - b)/(r - min)<br>
+          g is max: 1/3 (b - r)/(g - min) + 1/3<br>
+          b is max: 1/3 (r - g)/(b - min) + 2/3</p>
+          </tt>
+        </blockquote>
+        <p>with values shifted into the [0, 1] interval when necessary. The levels between 0 and 1
+        correspond to angles between 0 and 360 degrees. The hue delta rotates the hue. The default
+        is 0.</p>
+      </dd>
+      <dt><a name="i_GAMM"></a><em>Gamma Correction </em></dt>
+      <dd><strong><tt>GAMM { gamma<a href="#t_F4">[F4]</a>, envelope<a href="#t_VX">[VX]</a> }
+        </tt></strong><p>Gamma correction alters the distribution of light and dark in an image by
+        raising the RGB levels to a small power. By convention, the gamma is stored as the inverse
+        of this power. A gamma of 0.0 forces all RGB levels to 0.0. The default is 1.0.</p>
+      </dd>
+      <dt><a name="i_NEGA"></a><em>Negative </em></dt>
+      <dd><strong><tt>NEGA { enable<a href="#t_I">[U2]</a> } </tt></strong><p>If non-zero, the
+        RGB values are inverted, (1.0 - r, 1.0 - g, 1.0 - b), to form a negative of the image.</p>
+      </dd>
+      <dt><a name="i_IFLT"></a><em>Plug-in Image Filters </em></dt>
+      <dd><strong><tt>IFLT { server-name<a href="#t_S0">[S0]</a>, flags<a href="#t_I">[U2]</a>,
+        data[...] } </tt></strong><p>Plug-in image filters can be used to pre-filter an image
+        before rendering. The filter has to be able to exist outside of the special environment of
+        rendering in order to work here (it can't depend on functions or data that are only
+        available during rendering). Filters are given by a server name, an enable flag, and data
+        bytes that belong to the plug-in. </p>
+      </dd>
+      <dt><a name="i_PFLT"></a><em>Plug-in Pixel Filters </em></dt>
+      <dd><strong><tt>PFLT { server-name<a href="#t_S0">[S0]</a>, flags<a href="#t_I">[U2]</a>,
+        data[...] } </tt></strong><p>Pixel filters may also be used as clip modifiers, and they
+        are stored and used in a way that is exactly like image filters.</p>
+      </dd>
+    </dl>
+    <p><strong><a name="H_surf">Surface Sub-chunks</a></strong></p>
+    <p>The subchunks found in <a href="#c_SURF"><tt>SURF</tt></a> chunks can be divided into
+    two types. Basic surface parameters are stored in simple subchunks with no nested
+    subchunks, while texture and shader data is stored in surface blocks containing nested
+    subchunks.&nbsp; </p>
+    <p><strong><a name="Hs_base">Basic Surface Parameters</a></strong></p>
+    <p>The following surface subchunks define the base characteristics of a surface. These are
+    the &quot;start&quot; values for the surface, prior to texturing and plug-in shading, and
+    correspond to the options on the main window of the LightWave&reg; Surface Editor. Even if
+    textures and shaders completely obscure the base appearance of the surface in final
+    rendering, these settings are still used for previewing and real-time rendering. <dl>
+      <dt><a name="s_COLR"></a><em>Base Color </em></dt>
+      <dd><strong><tt>COLR { base-color<a href="#t_COL12">[COL12]</a>, envelope<a href="#t_VX">[VX]</a>
+        } </tt></strong><p>The base color of the surface, which is the color that lies under all
+        the other texturing attributes. </p>
+      </dd>
+      <dt><a name="s_Shad"></a><em>Base Shading Values </em></dt>
+      <dd><strong><tt>DIFF, LUMI, SPEC, REFL, TRAN, TRNL { intensity<a href="#t_FP4">[FP4]</a>,
+        envelope<a href="#t_VX">[VX]</a> } </tt></strong><p>The base level of the surface's
+        diffuse, luminosity, specular, reflection, transparency, or translucency settings. Except
+        for diffuse, if any of these subchunks is absent for a surface, a value of zero is
+        assumed. The default diffuse value is 1.0. </p>
+      </dd>
+      <dt><a name="s_GLOS"></a><em>Specular Glossiness </em></dt>
+      <dd><strong><tt>GLOS { glossiness<a href="#t_FP4">[FP4]</a>, envelope<a href="#t_VX">[VX]</a>
+        } </tt></strong><p>Glossiness controls the falloff of specular highlights. The intensity
+        of a specular highlight is calculated as cos<em><sup>n</sup></em> <em>a</em>, where <em>a</em>
+        is the angle between the reflection and view vectors. The power <em>n</em> is the specular
+        exponent. The <tt>GLOS</tt> chunk stores a glossiness <em>g</em> as a floating point
+        fraction related to <em>n</em> by: <em>n</em> = 2<sup>(10<em>g</em> + 2)</sup>. A
+        glossiness of 20% (0.2) gives a specular exponent of 2<sup>4</sup>, or 16, equivalent to
+        the &quot;Low&quot; glossiness preset in versions of LightWave&reg; prior to 6.0. Likewise 40%
+        is 64 or &quot;Medium,&quot; 60% is 256 or &quot;High,&quot; and 80% is 1024 or
+        &quot;Maximum.&quot; The <tt>GLOS</tt> subchunk is only meaningful when the specularity in
+        <a href="s_Shad"><tt>SPEC</tt></a> is non-zero. If <tt>GLOS</tt> is missing, a value of
+        40% is assumed. </p>
+      </dd>
+      <dt><a name="s_SHRP"></a><em>Diffuse Sharpness </em></dt>
+      <dd><strong><tt>SHRP { sharpness<a href="#t_FP4">[FP4]</a>, envelope<a href="#t_VX">[VX]</a>
+        } </tt></strong><p>Diffuse sharpness models non-Lambertian surfaces. The sharpness refers
+        to the transition from lit to unlit portions of the surface, where the difference in
+        diffuse shading is most obvious. For a sharpness of 0.0, diffuse shading of a sphere
+        produces a linear gradient. A sharpness of 50% (0.5) corresponds to the fixed &quot;Sharp
+        Terminator&quot; switch in versions of LightWave&reg; prior to 6.0. It produces planet-like
+        shading on a sphere, with a brightly lit day side and a rapid falloff near the day/night
+        line (the terminator). 100% sharpness is more like the Moon, with no falloff until just
+        before the terminator. </p>
+      </dd>
+      <dt><a name="s_BUMP"></a><em>Bump Intensity </em></dt>
+      <dd><strong><tt>BUMP { strength<a href="#t_FP4">[FP4]</a>, envelope<a href="#t_VX">[VX]</a>
+        } </tt></strong><p>Bump strength scales the height of the bumps in the gradient
+        calculation. Higher values have the effect of increasing the contrast of the bump shading.
+        The default value is 1.0. </p>
+      </dd>
+      <dt><a name="s_SIDE"></a><em>Polygon Sidedness </em></dt>
+      <dd><strong><tt>SIDE { sidedness[U2] } </tt></strong><p>The sidedness of a polygon can
+        be 1 for front-only, or 3 for front and back. If missing, single-sided polygons are
+        assumed. </p>
+      </dd>
+      <dt><a name="s_SMAN"></a><em>Max Smoothing Angle </em></dt>
+      <dd><strong><tt>SMAN { max-smoothing-angle<a href="#t_ANG4">[ANG4]</a> } </tt></strong><p>The
+        maximum angle between adjacent polygons that will be smooth shaded. Shading across edges
+        at higher angles won't be interpolated (the polygons will appear to meet at a sharp seam).
+        If this chunk is missing, or if the value is &lt;= 0, then the polygons are not smoothed. </p>
+      </dd>
+      <dt><a name="s_RFOP"></a><em>Reflection Options </em></dt>
+      <dd><strong><tt>RFOP { reflection-options<a href="#t_I">[U2]</a> } </tt></strong><p>Reflection
+        options is a numeric code that describes how reflections are handled for this surface and
+        is only meaningful if the reflectivity in <a href="#s_Shad"><tt>REFL</tt></a> is non-zero.</p>
+        <blockquote>
+          <dl>
+            <dt><strong>0 - Backdrop Only</strong></dt>
+            <dd>Only the backdrop is reflected.</dd>
+            <dt><strong>1 - Raytracing + Backdrop</strong></dt>
+            <dd>Objects in the scene are reflected when raytracing is enabled. Rays that don't intercept
+              an object are assigned the backdrop color.</dd>
+            <dt><strong>2 - Spherical Map</strong></dt>
+            <dd>If an image is provided in an <a href="#s_RIMG"><tt>RIMG</tt></a> subchunk, the image is
+              reflected as if it were spherically wrapped around the scene.</dd>
+            <dt><strong>3 - Raytracing + Spherical Map</strong></dt>
+            <dd>Objects in the scene are reflected when raytracing is enabled. Rays that don't intercept
+              an object are assigned a color from the image map.</dd>
+          </dl>
+        </blockquote>
+        <p>If there is no <tt>RFOP</tt> subchunk, a value of 0 is assumed. </p>
+      </dd>
+      <dt><a name="s_RIMG"></a><em>Reflection Map Image </em></dt>
+      <dd><strong><tt>RIMG { image<a href="#t_VX">[VX]</a> } </tt></strong><p>A surface
+        reflects this image as if it were spherically wrapped around the scene. The <tt>RIMG</tt>
+        is only used if the reflection options in <a href="#s_RFOP"><tt>RFOP</tt></a> are set to
+        use an image and the reflectivity of the surface in <a href="#s_Shad"><tt>REFL</tt></a> is
+        non-zero. The image is the index of a <a href="#c_CLIP"><tt>CLIP</tt></a> chunk, or zero
+        to indicate no image. </p>
+      </dd>
+      <dt><a name="s_RSAN"></a><em>Reflection Map Image Seam Angle </em></dt>
+      <dd><strong><tt>RSAN { seam-angle<a href="#t_ANG4">[ANG4]</a>, envelope<a href="#t_VX">[VX]</a>
+        } </tt></strong><p>This angle is the heading angle of the reflection map seam. If missing,
+        a value of zero is assumed. </p>
+      </dd>
+      <dt><a name="s_RBLR"></a><em>Reflection Blurring </em></dt>
+      <dd><strong><tt>RBLR { blur-percentage<a href="#t_FP4">[FP4]</a>, envelope<a
+        href="#t_VX">[VX]</a> } </tt></strong><p>The amount of blurring of reflections. The
+        default is zero.</p>
+      </dd>
+      <dt><a name="s_RIND"></a><em>Refractive Index </em></dt>
+      <dd><strong><tt>RIND { refractive-index<a href="#t_F4">[F4]</a>, envelope<a href="#t_VX">[VX]</a>
+        } </tt></strong><p>The surface's index of refraction. This is used to bend refraction rays
+        when raytraced refraction is enabled in the scene. The value is the ratio of the speed of
+        light in a vacuum to the speed of light in the material (always &gt;= 1.0 in the real
+        world). The default is 1.0. </p>
+      </dd>
+      <dt><a name="s_TROP"></a><em>Transparency Options </em></dt>
+      <dd><strong><tt>TROP { transparency-options<a href="#t_I">[U2]</a> } </tt></strong><p>The
+        transparency options are the same as the reflection options in <a href="#s_RFOP"><tt>RFOP</tt></a>,
+        but for refraction.</p>
+      </dd>
+      <dt><a name="s_TIMG"></a><em>Refraction Map Image </em></dt>
+      <dd><strong><tt>TIMG { image<a href="#t_VX">[VX]</a> } </tt></strong><p>Like <a
+        href="#s_RIMG"><tt>RIMG</tt></a>, but for refraction. </p>
+      </dd>
+      <dt><a name="s_TBLR"></a><em>Refraction Blurring </em></dt>
+      <dd><strong><tt>TBLR { blur-percentage<a href="#t_FP4">[FP4]</a>, envelope<a
+        href="#t_VX">[VX]</a> } </tt></strong><p>The amount of refraction blurring. The default is
+        zero.</p>
+      </dd>
+      <dt><a name="s_CLRH"></a><em>Color Highlights </em></dt>
+      <dd><strong><tt>CLRH { color-highlights<a href="#t_FP4">[FP4]</a>, envelope<a
+        href="#t_VX">[VX]</a> } </tt></strong><p>Specular highlights are ordinarily the color of
+        the incident light. Color highlights models the behavior of dialectric and conducting
+        materials, in which the color of the specular highlight tends to be closer to the color of
+        the material. A higher color highlight value blends more of the surface color and less of
+        the incident light color. </p>
+      </dd>
+      <dt><a name="s_CLRF"></a><em>Color Filter </em></dt>
+      <dd><strong><tt>CLRF { color-filter<a href="#t_FP4">[FP4]</a>, envelope<a href="#t_VX">[VX]</a>
+        } </tt></strong><p>The color filter percentage determines the amount by which rays passing
+        through a transparent surface are tinted by the color of the surface. </p>
+      </dd>
+      <dt><a name="s_ADTR"></a><em>Additive Transparency </em></dt>
+      <dd><strong><tt>ADTR { additive<a href="#t_FP4">[FP4]</a>, envelope<a href="#t_VX">[VX]</a>
+        } </tt></strong><p>Additive transparency is a simple rendering trick that works
+        independently of the mechanism associated with the <a href="#s_TRAN"><tt>TRAN</tt></a> and
+        related settings. The color of the surface is added to the color of the scene elements
+        behind it in a proportion controlled by the additive value.</p>
+      </dd>
+      <dt><a name="s_GLOW"></a><em>Glow Effect </em></dt>
+      <dd><strong><tt>GLOW { type<a href="#t_I">[U2]</a>, intensity<a href="#t_F4">[F4]</a>,
+        intensity-envelope<a href="#t_VX">[VX]</a>, size<a href="#t_F4">[F4]</a>, size-envelope<a
+        href="#t_VX">[VX]</a> } </tt></strong><p>The glow effect causes a surface to spread and
+        affect neighboring areas of the image. The type can be 0 for Hastings glow, and 1 for
+        image convolution. The size and intensity define how large and how strong the effect is.</p>
+        <p>You may also encounter glow information written in a <tt>GVAL</tt> subchunk containing
+        only the intensity and its envelope (the subchunk length is 6).</p>
+      </dd>
+      <dt><a name="s_LINE"></a><em>Render Outlines </em></dt>
+      <dd><strong><tt>LINE { flags<a href="#t_I">[U2]</a>, ( size<a href="#t_F4">[F4]</a>,
+        size-envelope<a href="#t_VX">[VX]</a>, ( color<a href="#t_COL12">[COL12]</a>,
+        color-envelope<a href="#t_VX">[VX]</a> )? )? }</tt></strong><p>The line effect draws the
+        surface as a wireframe of the polygon edges. Currently the only flag defined is an enable
+        switch in the low bit. The size is the thickness of the lines in pixels, and the color, if
+        not given, is the base color of the surface. Note that you may encounter <tt>LINE</tt>
+        subchunks with no color information (these will have a subchunk length of 8 bytes) and
+        possibly without size information (subchunk length 2).</p>
+      </dd>
+      <dt><a name="s_ALPH"></a><em>Alpha Mode </em></dt>
+      <dd><strong><tt>ALPH { mode<a href="#t_U2">[U2]</a>, value<a href="#t_FP4">[FP4]</a> } </tt></strong><p>The
+        alpha mode defines the alpha channel output options for the surface.</p>
+        <blockquote>
+          <dl>
+            <dt><strong>0 - Unaffected by Surface</strong></dt>
+            <dd>The surface has no effect on the alpha channel when rendered.</dd>
+            <dt><strong>1 - Constant Value</strong></dt>
+            <dd>The alpha channel will be written with the constant value following the mode in the
+              subchunk.</dd>
+            <dt><strong>2 - Surface Opacity</strong></dt>
+            <dd>The alpha value is derived from surface opacity, which is the default if the <tt>ALPH</tt>
+              chunk is missing.</dd>
+            <dt><strong>3 - Shadow Density</strong></dt>
+            <dd>The alpha value comes from the shadow density. </dd>
+          </dl>
+        </blockquote>
+      </dd>
+      <dt><a name="s_VCOL"></a><em>Vertex Color Map</em></dt>
+      <dd><strong><tt>VCOL { intensity<a href="#t_FP4">[FP4]</a>, envelope<a href="#t_VX">[VX]</a>,
+        vmap-type<a href="#t_ID4">[ID4]</a>, name<a href="#t_S0">[S0]</a> } </tt></strong><p>The
+        vertex color map subchunk identifies an <tt>RGB</tt> or <tt>RGBA</tt> <a href="#c_VMAP"><tt>VMAP</tt></a>
+        that will be used to color the surface.</p>
+      </dd>
+    </dl>
+    <p><strong><a name="Hs_blok">Surface Blocks</a></strong></p>
+    <p>A surface may contain any number of <em>blocks</em> which hold texture layers or
+    shaders. Each block is defined by a subchunk with the following format.</p>
+    <blockquote>
+      <strong><tt><a name="c_BLOK"></a><p>BLOK { header<a href="#t_SUBCH">[SUB-CHUNK]</a>,
+      attributes<a href="#t_SUBCH">[SUB-CHUNK]</a> * } </p></tt></strong>
+    </blockquote>
+    <p>Since this regular expression hides much of the structure of a block, it may be helpful
+    to visualize a typical texture block in outline form. <ul>
+      <li>block<ul>
+          <li>header<ul>
+              <li>ordinal string</li>
+              <li>channel</li>
+              <li>enable flag</li>
+              <li>opacity...</li>
+            </ul>
+          </li>
+          <li>texture mapping<ul>
+              <li>center</li>
+              <li>size...</li>
+            </ul>
+          </li>
+          <li>other attributes...</li>
+        </ul>
+      </li>
+    </ul>
+    <p>The first subchunk is the header. The subchunk ID specifies the block type, and the
+    subchunks within the header subchunk define properties that are common to all block types.
+    The ordinal string defines the sorting order of the block relative to other blocks. The
+    header is followed by other subchunks specific to each type. For some texture layers, one
+    of these will be a texture mapping subchunk that defines the mapping from object to
+    texture space. All of these components are explained in the following sections.</p>
+    <p><a name="Hs_Ord"><strong>Ordinal Strings</strong></a></p>
+    <p>Each <tt>BLOK</tt> represents a texture layer applied to one of the surface channels,
+    or a shader plug-in applied to the surface. If more than one layer is applied to a
+    channel, or more than one shader is applied to the surface, we need to know the evaluation
+    order of the layers or shaders, or in what order they are &quot;stacked.&quot; The ordinal
+    string defines this order.</p>
+    <p>Readers can simply compare ordinal strings using the C <tt>strcmp</tt> function to sort
+    the <tt>BLOK</tt>s into the correct order. Writers of <tt>LWO2</tt> files need to generate
+    valid ordinal strings that put the texture layers and shaders in the right order. See the <a
+    href="lwo2ex/lwo2ex.html#imap">Object Examples</a> supplement for an example function that
+    generates ordinal strings.</p>
+    <p>To understand how LightWave&reg; uses these, imagine that instead of strings, it used
+    floating-point fractions as the ordinals. Whenever LightWave&reg; needed to insert a new block
+    between two existing blocks, it would find the new ordinal for the inserted block as the
+    average of the other two, so that a block inserted between ordinals 0.5 and 0.6 would have
+    an ordinal of 0.55.</p>
+    <p>But floating-point ordinals would limit the number of insertions to the (fixed) number
+    of bits used to represent the mantissa. Ordinal strings are infinite-precision fractions
+    written in base 255, using the ASCII values 1 to 255 as the digits (0 isn't used, since
+    it's the special character that marks the end of the string).</p>
+    <p>Ordinals can't end on a 1, since that would prevent arbitrary insertion of other
+    blocks. A trailing 1 in this system is like a trailing 0 in decimal, which can lead to
+    situations like this, </p>
+    <pre>   0.5    &quot;\x80&quot;
+   0.50   &quot;\x80\x01&quot;</pre>
+    <p>where there's no daylight between the two ordinals for inserting another block.</p>
+    <p><a name="Hs_blokhd"><strong>Block Headers</strong></a></p>
+    <p>Every block contains a header subchunk.</p>
+    <blockquote>
+      <strong><tt><p>block-header { ordinal<a href="#t_S0">[S0]</a>, block-attributes<a
+      href="#t_SUBCH">[SUB-CHUNK]</a> * } </p></tt></strong>
+    </blockquote>
+    <p>The ID of the header subchunk identifies the block type and can be one of the
+    following.</p>
+    <blockquote>
+      <p><strong><tt>IMAP</tt></strong> - an image map texture<br>
+      <strong><tt>PROC</tt></strong> - a procedural texture<br>
+      <strong><tt>GRAD</tt></strong> - a gradient texture<br>
+      <strong><tt>SHDR</tt></strong> - a shader plug-in</p>
+    </blockquote>
+    <p>The header contains an ordinal string (described above) and subchunks that are common
+    to all block types. <dl>
+      <dt><a name="bh_CHAN"><em>Channel</em></a></dt>
+      <dd><strong><tt>CHAN { texture-channel<a href="#t_ID4">[ID4]</a> } </tt></strong><p>This is
+        required in all texture layer blocks and can have a value of <a href="#s_COLR"><tt>COLR</tt></a>,
+        <a href="#s_Shad"><tt>DIFF</tt></a>, <a href="#s_Shad"><tt>LUMI</tt></a>, <a
+        href="#s_Shad"><tt>SPEC</tt></a>, <a href="#s_GLOS"><tt>GLOS</tt></a>, <a href="#s_Shad"><tt>REFL</tt></a>,
+        <a href="#s_Shad"><tt>TRAN</tt></a>, <a href="#s_RIND"><tt>RIND</tt></a>, <a
+        href="#s_Shad"><tt>TRNL</tt></a>, or <a href="#s_BUMP"><tt>BUMP</tt></a>, The texture
+        layer is applied to the corresponding surface attribute. If present in a shader block,
+        this value is ignored. </p>
+      </dd>
+      <dt><a name="bh_ENAB"></a><em>Enable State</em></dt>
+      <dd><strong><tt>ENAB { enable<a href="#t_I">[U2]</a> } </tt></strong><p>True if the
+        texture layer or shader should be evaluated during rendering. If <tt>ENAB</tt> is missing,
+        the block is assumed to be enabled. </p>
+      </dd>
+      <dt><a name="bh_OPAC"></a><em>Opacity </em></dt>
+      <dd><strong><tt>OPAC { type<a href="#t_I">[U2]</a>, opacity<a href="#t_FP4">[FP4]</a>,
+        envelope<a href="#t_VX">[VX]</a> } </tt></strong><p>Opacity is valid only for texture
+        layers. It specifies how opaque the layer is with respect to the layers before it (beneath
+        it) on the same channel, or how the layer is combined with the previous layers. The types
+        can be </p>
+        <blockquote>
+          <p>0 - Normal<br>
+          1 - Subtractive<br>
+          2 - Difference<br>
+          3 - Multiply<br>
+          4 - Divide<br>
+          5 - Alpha<br>
+          6 - Texture Displacement<br>
+          7 - Additive</p>
+        </blockquote>
+        <p>Alpha opacity uses the current layer as an alpha channel. The previous layers are
+        visible where the current layer is white and transparent where the current layer is black.
+        Texture Displacement distorts the underlying layers. If <tt>OPAC</tt> is missing, 100%
+        Additive opacity is assumed. </p>
+      </dd>
+      <dt><a name="bh_AXIS"></a><em>Displacement Axis</em></dt>
+      <dd><strong><tt>AXIS { displacement-axis<a href="#t_I">[U2]</a> } </tt></strong><p>For
+        displacement mapping, defines the plane from which displacements will occur. The value is
+        0, 1 or 2 for the X, Y or Z axis. </p>
+      </dd>
+    </dl>
+    <p><strong><a name="Hs_tmap">Texture Mapping</a></strong></p>
+    <p>Image map and procedural textures employ the <tt>TMAP</tt> subchunk to define the
+    mapping they use to get from object or world coordinate space to texture space. </p>
+    <blockquote>
+      <strong><tt><a name="c_TMAP"></a><p>TMAP { attributes<a href="#t_SUBCH">[SUB-CHUNK]</a> *
+      } </p></tt></strong>
+    </blockquote>
+    <p>The <tt>TMAP</tt> subchunk contains a set of attribute chunks which describe the
+    different aspects of this mapping. <dl>
+      <dt><a name="bt_SIZE"></a><em>Position, Orientation and Size </em></dt>
+      <dd><strong><tt>CNTR, SIZE, ROTA { vector<a href="#t_VEC12">[VEC12]</a>, envelope<a
+        href="#t_VX">[VX]</a> } </tt></strong><p>These subchunks each consist of a vector for the
+        texture's size, center and rotation. The size and center are normal positional vectors in
+        meters, and the rotation is a vector of heading, pitch and bank in radians. If missing,
+        the center and rotation are assumed to be zero. The size should always be specified if it
+        si to be used for any given mapping. </p>
+      </dd>
+      <dt><a name="bt_OREF"></a><em>Reference Object </em></dt>
+      <dd><strong><tt>OREF { object-name<a href="#t_S0">[S0]</a> } </tt></strong><p>Specifies
+        a reference object for the texture. The reference object is given by name, and the scene
+        position, rotation and scale of the object are combined with the previous chunks to
+        compute the texture mapping. If the object name is &quot;(none)&quot; or <tt>OREF</tt> is
+        missing, no reference object is used.</p>
+      </dd>
+      <dt><a name="bt_FALL"></a><em>Falloff </em></dt>
+      <dd><strong><tt>FALL { type<a href="#t_I">[U2]</a>, vector<a href="#t_VEC12">[VEC12]</a>,
+        envelope<a href="#t_VX">[VX]</a> } </tt></strong><p>Texture effects may fall off with
+        distance from the texture center if this subchunk is present. The vector represents a rate
+        per unit distance along each axis. The type can be</p>
+        <blockquote>
+          <dl>
+            <dt><strong>0 - Cubic</strong></dt>
+            <dd>Falloff is linear along all three axes independently.</dd>
+            <dt><strong>1 - Spherical</strong></dt>
+            <dd>Falloff is proportional to the Euclidean distance from the center.</dd>
+            <dt><strong>2 - Linear X<br>
+              3 - Linear Y<br>
+              4 - Linear Z</strong></dt>
+            <dd>Falloff is linear only along the specified axis. The other two vector components are
+              ignored.</dd>
+          </dl>
+        </blockquote>
+      </dd>
+      <dt><a name="bt_CSYS"></a><em>Coordinate System </em></dt>
+      <dd><strong><tt>CSYS { type<a href="#t_I">[U2]</a> } </tt></strong><p>The coordinate
+        system can be 0 for object coordinates (the default if the chunk is missing) or 1 for
+        world coordinates. </p>
+      </dd>
+    </dl>
+    <p><strong><a name="Hs_imap">Image Maps</a></strong></p>
+    <p>Texture blocks with a header type of <tt>IMAP</tt> are image maps. These use an image
+    to modulate one of the surface channels. In addition to the basic parameters listed below,
+    the block may also contain a <a href="#Hs_TMAP"><tt>TMAP</tt></a> chunk. <dl>
+      <dt><a name="bi_PROJ"></a><em>Projection Mode </em></dt>
+      <dd><strong><tt>PROJ { projection-mode<a href="#t_I">[U2]</a> } </tt></strong><p>The
+        projection defines how 2D coordinates in the image are transformed into 3D coordinates in
+        the scene. In the following list of projections, image coordinates are called <em>r</em>
+        (horizontal) and <em>s</em> (vertical).</p>
+        <blockquote>
+          <dl>
+            <dt><strong>0 - Planar</strong></dt>
+            <dd>The image is projected on a plane along the major axis (specified in the <a
+              href="#bi_AXIS"><tt>AXIS</tt></a> subchunk). <em>r</em> and <em>s</em> map to the other
+              two axes.</dd>
+            <dt><strong>1 - Cylindrical</strong></dt>
+            <dd>The image is wrapped cylindrically around the major axis. <em>r</em> maps to longitude
+              (angle around the major axis).</dd>
+            <dt><strong>2 - Spherical</strong></dt>
+            <dd>The image is wrapped spherically around the major axis. <em>r</em> and <em>s</em> map to
+              longitude and latitude.</dd>
+            <dt><strong>3 - Cubic</strong></dt>
+            <dd>Like Planar, but projected along all three axes. The dominant axis of the geometric
+              normal selects the projection axis for a given surface spot.</dd>
+            <dt><strong>4 - Front Projection</strong></dt>
+            <dd>The image is projected on the current camera's viewplane. <em>r</em> and <em>s</em> map
+              to points on the viewplane.</dd>
+            <dt><strong>5 - UV</strong></dt>
+            <dd><em>r</em> and <em>s</em> map to points (<em>u</em>, <em>v</em>) defined for the
+              geometry using a vertex map (identified in the <tt>BLOK</tt>'s <a href="#bi_VMAP"><tt>VMAP</tt></a>
+              subchunk).</dd>
+          </dl>
+        </blockquote>
+      </dd>
+      <dt><a name="bi_AXIS"></a><em>Major Axis</em></dt>
+      <dd><strong><tt>AXIS { texture-axis<a href="#t_I">[U2]</a> } </tt></strong><p>The major
+        axis used for planar, cylindrical and spherical projections. The value is 0, 1 or 2 for
+        the X, Y or Z axis. </p>
+      </dd>
+      <dt><a name="bi_IMAG"></a><em>Image Map </em></dt>
+      <dd><strong><tt>IMAG { texture-image<a href="#t_VX">[VX]</a> } </tt></strong><p>The <tt>CLIP</tt>
+        index of the mapped image. </p>
+      </dd>
+      <dt><a name="bi_WRAP"></a><em>Image Wrap Options </em></dt>
+      <dd><strong><tt>WRAP { width-wrap<a href="#t_I">[U2]</a>, height-wrap<a href="#t_I">[U2]</a>
+        } </tt></strong><p>Specifies how the color of the texture is derived for areas outside the
+        image.</p>
+        <blockquote>
+          <dl>
+            <dt><strong>0 - Reset</strong></dt>
+            <dd>Areas outside the image are assumed to be black. The ultimate effect of this depends on
+              the opacity settings. For an additive texture layer on the color channel, the final color
+              will come from the preceding layers or from the base color of the surface.</dd>
+            <dt><strong>1 - Repeat</strong></dt>
+            <dd>The image is repeated or tiled.</dd>
+            <dt><strong>2 - Mirror</strong></dt>
+            <dd>Like repeat, but alternate tiles are mirror-reversed.</dd>
+            <dt><strong>3 - Edge</strong></dt>
+            <dd>The color is taken from the image's nearest edge pixel.</dd>
+          </dl>
+        </blockquote>
+        <p>If no wrap options are specified, 1 is assumed.</p>
+      </dd>
+      <dt><a name="bi_WRPx"></a><em>Image Wrap Amount </em></dt>
+      <dd><strong><tt>WRPW, WRPH { cycles<a href="#t_FP4">[FP4]</a>, envelope<a href="#t_VX">[VX]</a>
+        } </tt></strong><p>For cylindrical and spherical projections, these parameters control how
+        many times the image repeats over each full interval. </p>
+      </dd>
+      <dt><a name="bi_VMAP"></a><em>UV Vertex Map </em></dt>
+      <dd><strong><tt>VMAP { txuv-map-name<a href="#t_S0">[S0]</a> } </tt></strong><p>For UV
+        projection, which depends on texture coordinates at each vertex, this selects the name of
+        the <tt>TXUV</tt> <a href="#c_VMAP">vertex map</a> that contains those coordinates. </p>
+      </dd>
+      <dt><a name="bi_AAST"></a><em>Antialiasing Strength </em></dt>
+      <dd><strong><tt>AAST { flags<a href="#t_I">[U2]</a>, antialising-strength<a
+        href="#t_FP4">[FP4]</a> } </tt></strong><p>The low bit of the flags word is an enable flag
+        for texture antialiasing. The antialiasing strength is proportional to the width of the
+        sample filter, so larger values sample a larger area of the image.</p>
+      </dd>
+      <dt><a name="bi_PIXB"></a><em>Pixel Blending </em></dt>
+      <dd><strong><tt>PIXB { flags<a href="#t_I">[U2]</a> } </tt></strong><p>Pixel blending
+        enlarges the sample filter when it would otherwise be smaller than a single image map
+        pixel. If the low-order flag bit is set, then pixel blending is enabled.</p>
+      </dd>
+      <dt><a name="bi_STCK"></a><em>Sticky Projection</em></dt>
+      <dd><strong><tt>STCK { on-off<a href="#t_I">[U2]</a>, time<a href="#t_FP4">[FP4]</a> } </tt></strong><p>The
+        &quot;sticky&quot; or fixed projection time for front projection image maps. When on,
+        front projections will be fixed at the given time.</p>
+      </dd>
+      <dt><a name="bi_TAMP"><em>Texture Amplitude</em></a></dt>
+      <dd><strong><tt>TAMP { amplitude<a href="#t_FP4">[FP4]</a>, envelope<a href="#t_VX">[VX]</a>
+        } </tt></strong><p>Appears in image texture layers applied to the bump channel. Texture
+        amplitude scales the bump height derived from the pixel values. The default is 1.0.</p>
+      </dd>
+    </dl>
+    <p><strong><a name="Hs_proc">Procedural Textures</a></strong></p>
+    <p>Texture blocks of type <tt>PROC</tt> are procedural textures that modulate the value of
+    a surface channel algorithmically. <dl>
+      <dt><a name="bp_AXIS"></a><em>Axis </em></dt>
+      <dd><strong><tt>AXIS { axis<a href="#t_I">[U2]</a> } </tt></strong><p>If the procedural
+        has an axis, it may be defined with this chunk using a value of 0, 1 or 2. </p>
+      </dd>
+      <dt><a name="bp_VALU"></a><em>Basic Value </em></dt>
+      <dd><strong><tt>VALU { value<a href="#t_FP4">[FP4]</a> # (1, 3) } </tt></strong><p>Procedurals
+        are often modulations between the current channel value and another value, given here.
+        This may be a scalar or a vector. </p>
+      </dd>
+      <dt><a name="bp_FUNC"></a><em>Algorithm and Parameters </em></dt>
+      <dd><strong><tt>FUNC { algorithm-name<a href="#t_S0">[S0]</a>, data[...] } </tt></strong><p>The
+        <tt>FUNC</tt> subchunk names the procedural and stores its parameters. The name will often
+        map to a plug-in name. The variable-length data following the name belongs to the
+        procedural.</p>
+      </dd>
+    </dl>
+    <p><strong><a name="Hs_grad">Gradient Textures</a></strong></p>
+    <p>Texture blocks of type <tt>GRAD</tt> are gradient textures that modify a surface
+    channel by mapping an input parameter through an arbitrary transfer function. Gradients
+    are represented to the user as a line containing keys. Each key is a color, and the
+    gradient function is an interpolation of the keys in RGB space. The input parameter
+    selects a point on the line, and the output of the texture is the value of the gradient at
+    that point. <dl>
+      <dt><a name="bg_PNAM"></a><em>Parameter Name </em></dt>
+      <dd><strong><tt>PNAM { parameter<a href="#t_S0">[S0]</a> } </tt></strong><p>The input
+        parameter. Possible values include</p>
+        <blockquote>
+          <p>&quot;Previous Layer&quot;<br>
+          &quot;Bump&quot;<br>
+          &quot;Slope&quot;<br>
+          &quot;Incidence Angle&quot;<br>
+          &quot;Light Incidence&quot;<br>
+          &quot;Distance to Camera&quot;<br>
+          &quot;Distance to Object&quot;<br>
+          &quot;X Distance to Object&quot;<br>
+          &quot;Y Distance to Object&quot;<br>
+          &quot;Z Distance to Object&quot;<br>
+          &quot;Weight Map&quot;</p>
+        </blockquote>
+      </dd>
+      <dt><a name="bg_INAM"></a><em>Item Name </em></dt>
+      <dd><strong><tt>INAM { item-name<a href="#t_S0">[S0]</a> } </tt></strong><p>The name of
+        a scene item. This is used when the input parameter is derived from a property of an item
+        in the scene.</p>
+      </dd>
+      <dt><a name="bg_GRxx"></a><em>Gradient Range </em></dt>
+      <dd><strong><tt>GRST, GREN { input-range<a href="#t_FP4">[FP4]</a> } </tt></strong><p>The
+        start and end of the input range. These values only affect the display of the gradient in
+        the user interface. They don't affect rendering.</p>
+      </dd>
+      <dt><a name="bg_GRPT"></a><em>Repeat Mode </em></dt>
+      <dd><strong><tt>GRPT { repeat-mode<a href="#t_I">[U2]</a> } </tt></strong><p>The repeat
+        mode. This is currently undefined.</p>
+      </dd>
+      <dt><a name="bg_FKEY"></a><em>Key Values </em></dt>
+      <dd><strong><tt>FKEY { ( input<a href="#t_FP4">[FP4]</a>, output<a href="#t_FP4">[FP4]</a>
+        # 4 )* } </tt></strong><p>The transfer function is defined by an array of keys, each with
+        an input value and an RGBA output vector. Given an input value, the gradient can be
+        evaluated by selecting the keys whose positions bracket the value and interpolating
+        between their outputs. If the input value is lower than the first key or higher than the
+        last key, the gradient value is the value of the closest key.</p>
+      </dd>
+      <dt><a name="bg_IKEY"></a><em>Key Parameters </em></dt>
+      <dd><strong><tt>IKEY { interpolation<a href="#t_I">[U2]</a> * } </tt></strong><p>An
+        array of integers defining the interpolation for the span preceding each key. Possible
+        values include</p>
+        <blockquote>
+          <p>0 - Linear<br>
+          1 - Spline<br>
+          2 - Step</p>
+        </blockquote>
+      </dd>
+    </dl>
+    <p><strong><a name="Hs_shdr">Shaders</a></strong></p>
+    <p>Shaders are <a href="#c_BLOK"><tt>BLOK</tt></a> subchunks with a header type of <tt>SHDR</tt>.
+    They are applied to a surface after all basic channels and texture layers are evaluated,
+    and in the order specified by the ordinal sequence. The only header chunk they support is <tt>ENAB</tt>
+    and they need only one data chunk to describe them. <dl>
+      <dt><a name="bs_FUNC"></a><em>Shader Algorithm </em></dt>
+      <dd><strong><tt>FUNC { algorithm-name<a href="#t_S0">[S0]</a>, data[...] } </tt></strong><p>Just
+        like a procedural texture layer, a shader is defined by an algorithm name (often a
+        plug-in), followed by data owned by the shader.</p>
+      </dd>
+    </dl>
+    <p><a name="H_indx"><strong>Chunk Index</strong></a></p>
+    <blockquote>
+      <p><a href="#bi_AAST"><tt>AAST</tt></a> Image Map Antialiasing Strength<br>
+      <a href="#s_ADTR"><tt>ADTR</tt></a> Surface Additive Transparency<br>
+      <a href="#s_ALPH"><tt>ALPH</tt></a> Surface Alpha Mode<br>
+      <a href="#i_ANIM"><tt>ANIM</tt></a> Clip Animation<br>
+      <a href="#bh_AXIS"><tt>AXIS</tt></a> Displacement Axis<br>
+      <a href="#bi_AXIS"><tt>AXIS</tt></a> Image Map Major Axis<br>
+      <a href="#bp_AXIS"><tt>AXIS</tt></a> Procedural Texture Axis<br>
+      <br>
+      <a href="#c_BBOX"><tt>BBOX</tt></a> Bounding Box<br>
+      <a href="#c_BLOK"><tt>BLOK</tt></a> Surface Block<br>
+      <a href="#i_BRIT"><tt>BRIT</tt></a> Clip Brightness<br>
+      <a href="#s_BUMP"><tt>BUMP</tt></a> Surface Bump Intensity<br>
+      <br>
+      <a href="#e_CHAN"><tt>CHAN</tt></a> Channel Plug-in<br>
+      <a href="#bh_CHAN"><tt>CHAN</tt></a> Texture Layer Channel<br>
+      <a href="#c_CLIP"><tt>CLIP</tt></a> Image, Image Sequence<br>
+      <a href="#i_CLRA"><tt>CLRA</tt></a> Color Space Alpha<br>
+      <a href="#s_CLRF"><tt>CLRF</tt></a> Surface Color Filter<br>
+      <a href="#s_CLRH"><tt>CLRH</tt></a> Surface Color Highlights<br>
+      <a href="#i_CLRS"><tt>CLRS</tt></a> Color Space RGB<br>
+      <a href="#bt_SIZE"><tt>CNTR</tt></a> Texture Center<br>
+      <a href="#s_COLR"><tt>COLR</tt></a> Surface Base Color<br>
+      <a href="#i_CONT"><tt>CONT</tt></a> Clip Contrast<br>
+      <a href="#bt_CSYS"><tt>CSYS</tt></a> Texture Coordinate System<br>
+      <br>
+      <a href="#c_DESC"><tt>DESC</tt></a> Description Line<br>
+      <a href="#s_Shad"><tt>DIFF</tt></a> Surface Diffuse<br>
+      <a href="#i_DITH"><tt>DITH</tt></a> Image Dithering<br>
+      <br>
+      <a href="#bh_ENAB"><tt>ENAB</tt></a> Surface Block Enable<br>
+      <a href="#c_ENVL"><tt>ENVL</tt></a> Envelope<br>
+      <br>
+      <a href="#bt_FALL"><tt>FALL</tt></a> Texture Falloff<br>
+      <a href="#i_FILT"><tt>FILT</tt></a> Image Filtering<br>
+      <a href="#bg_FKEY"><tt>FKEY</tt></a> Gradient Key Values<br>
+      <a href="#t_FORM"><tt>FORM</tt></a> IFF Format File<br>
+      <a href="#bp_FUNC"><tt>FUNC</tt></a> Procedural Texture Algorithm<br>
+      <a href="#bs_FUNC"><tt>FUNC</tt></a> Surface Shader Algorithm<br>
+      <br>
+      <a href="#i_GAMM"><tt>GAMM</tt></a> Clip Gamma Correction<br>
+      <a href="#s_GLOS"><tt>GLOS</tt></a> Surface Specular Glossiness<br>
+      <a href="#s_GLOW"><tt>GLOW</tt></a> Surface Glow Effect<br>
+      <a href="#bg_GRxx"><tt>GREN</tt></a> Gradient End<br>
+      <a href="#bg_GRPT"><tt>GRPT</tt></a> Gradient Repeat Mode<br>
+      <a href="#bg_GRxx"><tt>GRST</tt></a> Gradient Start<br>
+      <br>
+      <a href="#i_HUE"><tt>HUE </tt></a>Clip Hue<br>
+      <br>
+      <a href="#c_ICON"><tt>ICON</tt></a> Thumbnail Icon Image<br>
+      <a href="#i_IFLT"><tt>IFLT</tt></a> Clip Image Filter<br>
+      <a href="#bg_IKEY"><tt>IKEY</tt></a> Gradient Key Parameters<br>
+      <a href="#bi_IMAG"><tt>IMAG</tt></a> Image Map Image<br>
+      <a href="#bg_INAM"><tt>INAM</tt></a> Gradient Item Name<br>
+      <a href="#i_ISEQ"><tt>ISEQ</tt></a> Clip Image Sequence<br>
+      <br>
+      <a href="#e_KEY"><tt>KEY </tt></a>Keyframe Time and Value<br>
+      <br>
+      <a href="#c_LAYR"><tt>LAYR</tt></a> Layer<br>
+      <a href="#s_LINE"><tt>LINE</tt></a> Surface Render Outlines<br>
+      <a href="#s_Shad"><tt>LUMI</tt></a> Surface Luminosity<br>
+      <br>
+      <a href="#e_NAME"><tt>NAME</tt></a> Envelope Channel Name<br>
+      <a href="#i_NEGA"><tt>NEGA</tt></a> Clip Negative<br>
+      <br>
+      <a href="#bh_OPAC"><tt>OPAC</tt></a> Texture Layer Opacity<br>
+      <a href="#bt_OREF"><tt>OREF</tt></a> Texture Reference Object<br>
+      <a href="#i_PFLT"><tt>PFLT</tt></a> Clip Pixel Filter<br>
+      <a href="#bi_PIXB"><tt>PIXB</tt></a> Image Map Pixel Blending<br>
+      <a href="#bg_PNAM"><tt>PNAM</tt></a> Gradient Parameter Name<br>
+      <a href="#c_PNTS"><tt>PNTS</tt></a> Point List<br>
+      <a href="#c_POLS"><tt>POLS</tt></a> Polygon List<br>
+      <a href="#e_POST"><tt>POST</tt></a> Envelope Post-Behavior<br>
+      <a href="#e_PRE"><tt>PRE </tt></a>Envelope Pre-Behavior<br>
+      <a href="#bi_PROJ"><tt>PROJ</tt></a> Image Map Projection Mode<br>
+      <a href="#c_PTAG"><tt>PTAG</tt></a> Polygon Tag Mapping<br>
+      <br>
+      <a href="#s_RBLR"><tt>RBLR</tt></a> Reflection Blurring<br>
+      <a href="#s_Shad"><tt>REFL</tt></a> Surface Reflectivity<br>
+      <a href="#s_RFOP"><tt>RFOP</tt></a> Surface Reflection Options<br>
+      <a href="#s_RIMG"><tt>RIMG</tt></a> Surface Reflection Map Image<br>
+      <a href="#s_RIND"><tt>RIND</tt></a> Surface Refractive Index<br>
+      <a href="#bt_SIZE"><tt>ROTA</tt></a> Texture Rotation<br>
+      <a href="#s_RSAN"><tt>RSAN</tt></a> Surface Reflection Map Image Seam Angle<br>
+      <br>
+      <a href="#e_SPAN"><tt>SPAN</tt></a> Envelope Interval Interpolation<br>
+      <a href="#i_SATR"><tt>SATR</tt></a> Clip Saturation<br>
+      <a href="#s_SHRP"><tt>SHRP</tt></a> Surface Diffuse Sharpness<br>
+      <a href="#s_SIDE"><tt>SIDE</tt></a> Surface Polygon Sidedness<br>
+      <a href="#bt_SIZE"><tt>SIZE</tt></a> Texture Size<br>
+      <a href="#s_SMAN"><tt>SMAN</tt></a> Surface Max Smoothing Angle<br>
+      <a href="#s_Shad"><tt>SPEC</tt></a> Surface Specularity<br>
+      <a href="#i_STCC"><tt>STCC</tt></a> Clip Color-cycling Still<br>
+      <a href="#bi_STCK"><tt>STCK</tt></a> Sticky Projection<br>
+      <a href="#i_STIL"><tt>STIL</tt></a> Clip Still Image<br>
+      <a href="#c_SURF"><tt>SURF</tt></a> Surface Definition<br>
+      <br>
+      <a href="#c_TAGS"><tt>TAGS</tt></a> Tag Strings<br>
+      <a href="#bi_TAMP"><tt>TAMP</tt></a> Image Map Texture Amplitude<br>
+      <a href="#s_TBLR"><tt>TBLR</tt></a> Refraction Blurring<br>
+      <a href="#c_TEXT"><tt>TEXT</tt></a> Commentary Text<br>
+      <a href="#i_TIME"><tt>TIME</tt></a> Clip Time<br>
+      <a href="#s_TIMG"><tt>TIMG</tt></a> Surface Refraction Map Image<br>
+      <a href="#c_TMAP"><tt>TMAP</tt></a> Texture Mapping<br>
+      <a href="#s_Shad"><tt>TRAN</tt></a> Surface Transparency<br>
+      <a href="#s_Shad"><tt>TRNL</tt></a> Surface Translucency<br>
+      <a href="#s_TROP"><tt>TROP</tt></a> Surface Transparency Options<br>
+      <a href="#e_TYPE"><tt>TYPE</tt></a> Envelope Type<br>
+      <br>
+      <a href="#bp_VALU"><tt>VALU</tt></a> Procedural Texture Value<br>
+      <a href="#s_VCOL"><tt>VCOL</tt></a> Surface Vertex Color Map<br>
+      <a href="#c_VMAD"><tt>VMAD</tt></a> Discontinuous Vertex Map<br>
+      <a href="#c_VMAP"><tt>VMAP</tt></a> Vertex Map<br>
+      <a href="#bi_VMAP"><tt>VMAP</tt></a> Image Map UV Vertex Map<br>
+      <br>
+      <a href="#bi_WRAP"><tt>WRAP</tt></a> Image Map Wrap Options<br>
+      <a href="#bi_WRPx"><tt>WRPW</tt></a> Image Map Width Wrap Amount<br>
+      <a href="#bi_WRPx"><tt>WRPH</tt></a> Image Map Height Wrap Amount<br>
+      <br>
+      <a href="#i_XREF"><tt>XREF</tt></a> Clip Reference (Clone)<br>
+      </p>
+    </blockquote>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

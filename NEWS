@@ -1,0 +1,232 @@
+Copyright 2011, 2012, 2013, 2014 dragonjoker
+
+Verbatim copying and distribution of this entire article is permitted in any
+medium, provided this notice is preserved.
+
+
+Changes between version 0.7.0.0 and 0.6.5.0
+
+  BUGS FIXED
+  * General
+  *     Added Destroy functions for each Create function in plugins, so
+  *         creation and deletion is made in DLL memory space (for Windows).
+  *     Added ASSIMP importer plugin to import actually unsupported file types,
+  *         modified ImporterPlugin::GetExtensions to be able to retrieve an
+  *         array of pairs <extension, file type>.
+  *     Modified Importers so no more memory leaks are detected with Visual
+  *         Studio.
+  *
+  * CMake
+  *     Added possibility to change binaries directory and also MSVC
+  *         temporary binaries directory, through PROJECTS_BINARIES_OUTPUT_PATH
+  *         and PROJECTS_BINTEMP_OUTPUT_PATH.
+  *     Added possibility to activate code profiling with MSVC through
+  *         PROJECTS_PROFILING boolean value.
+  *
+  * CastorUtils
+  *     Modified Image to make FreeImage load images by path and no more by
+  *         handle (caused trouble with some formats).
+  *     Repaired a matrix trouble when rendering overlays.
+  *     Corrected recursive transformations.
+  *
+  * Castor3D
+  *     Repaired alpha submeshes that were not displayed.
+  *     Corrected mipmaps generation.
+  *
+  * CastorViewer
+  *     Moved m_pCastor3D destruction and ImageLoader::Cleanup in the OnDestroy
+  *         event handler.
+  *
+  * GlRenderSystem
+  *     Corrected a bug in DoGetDeferredShaderSource.
+  *     Corrected mipmaps generation in GlStaticTexture and GlDynamicTexture.
+  *     Corrected the gloss map in GLSL computed programs.
+  *
+  * ObjImporter
+  *     Corrected materials and textures import.
+  *
+  FEATURES
+  * General
+  *     Supports x64 compilation
+  *     Cleaned up a FrameBuffer, GlFrameBuffer and Dx11FrameBuffer.
+  *     Linux and wxWidgets 2.8 compatibility improved.
+  *     Added AStyle support.
+  *
+  * CastorUtils
+  *     Modified DynamicLibrary::GetFunction, added a template parameter that
+  *         is the function type, and a method parameter that is the pointer
+  *         to the function to retrieve so no more casts when using
+  *         DynamicLibrary::GetFunction.
+  *     Added log level support for Logger.
+  *     Implemented intersection function in Line3D.
+  *     That class now has to named constructors : FromPointAndSlope and 
+  *         FromPoints, to avoid confusion between them.
+  *     Created two classes Size and Position instead of just having a typedef
+  *         for these.
+  *     Improved FileParser, now functions have parameters and not only
+  *         parameters types, and parameters parse themselves.
+  *     Castor::Point now holds a static array as it's members instead of a
+  *         dynamic one.
+  *     Removed Unicode file encoding.
+  *     Added stream indentation support.
+  *
+  * Castor3D
+  *     Modified shaders, they now take care of the shader model, they hold all
+  *         defined files and sources for each model. The choice of the source
+  *         is made at compile time, taking the source with the highest
+  *         supported model.
+  *     Improved memory occupation, limited overhead of Vertex (152 to
+  *         24 bytes) and Face (140 to 16 bytes).
+  *     Modified Subdivision, now only in Subdivider, no more in Geometry, mesh
+  *         or Submesh.
+  *     Implemented Implemented Lights in texture.
+  *     Added HasParameter and SetParameter functions in ShaderObject, to apply
+  *         matrices from Pipeline.
+  *     Removed ApplyXXXMatrix from IPipelineImpl, now the Pipeline applies
+  *         matrices itself.
+  *     Added channel for textures (colour, ambient, diffuse, specular, normal,
+  *	        height).
+  *     Implemented MSAA.
+  *     Implemented Alpha to Coverage when MSAA is activated.
+  *     Modified default sources in GlShaderProgram and Dx9ShaderProgram, they
+  *	        are now computed and no more external shader file is needed.
+  *     Implemented Frame buffers.
+  *     Submeshes are sorted by Material's alpha in order to render submeshes
+  *         without alpha before others.
+  *     Added functions Begin and End in Mesh class to be able to
+  *         iterate through submeshes without using GetSubmesh and
+  *         GetSubmeshCount.
+  *     Added Material functions Begin and End to retrieve passes in standard
+  *         way.
+  *     Added possibility to activate or deactivate deferred rendering, this is
+  *         also possible from cscn files.
+  *     Created TechniqueParameters class to be able to pass generic parameters
+  *         instead of, for example, the samples count.
+  *     Introducing SamplerState class to group calls to SetSamplerState and
+  *         all relative stuff.
+  *     Reviewed sizes a bit : Viewport holds the internal size, RenderTarget
+  *         and RenderWindow hold external size. Modified  SceneFileParser,
+  *         added <size> directive for viewport.
+  *     Splitted eBUFFER_MODE in eBUFFER_ACCESS_TYPE and eBUFFER_ACCESS_NATURE.
+  *     Modified a bit FrameVariable in order to take care of 
+  *         eFRAME_VARIABLE_TYPE previously defined for SceneFileParser.
+  *     Modified Submesh::AddPoints so it takes a stVERTEX_GROUP structure as a
+  *         parameter.
+  *     Introducing FrameVariableBuffer to manage frame variables with OpenGl
+  *         UBO or DirectX 11 Constants buffer.
+  *     Implemented initialisation and cleanup of GPU side objects in two
+  *         events : InitialiseEvent and CleanupEvent.
+  *     Merged GpuBuffer::Initialise and GpuBuffer::SetShaderProgram functions
+  *         to ease their use.
+  *     Removed auto mipmap generation, now if user wants it, he does it with
+  *         DynamicTexture::GenerateMipmaps function.
+  *     Added DepthStencilState class to manage those buffers states like
+  *         Direct3D 11 (who does it well).
+  *     Added blend state, implemented raster state.
+  *     Put a BlendState instance in Pass and removed rgb/alpha blending from
+  *         the pass.
+  *     Removed Context::Enable and Context::Disable, removed RenderState
+  *         class.
+  *     Removed SetPolygonMode from Context.
+  *     Moved Render to buffer common code (from FrameBuffer and
+  *         RenderWindow) into Context::BtoBRender.
+  *     Implemented mesh instantiation on hardware.
+  *     Modified Submesh normals generation.
+  *     Moved materials from Submesh to Geometry.
+  *     Modified submeshes instance count, to make it specific to
+  *         the materials used by the submesh instances.
+  *
+  * GuiCommon
+  *     Now ShaderDialog uses wxSizers.
+  *     Using wxStcEditor to view and edit shaders.
+  *     Materials windows now use wxSizer classes to place and resize elements.
+  *     Added possibility to change the material used by a submesh in
+  *         wxGeometriesListFrame.
+  *     Corrected few bugs in images loading.
+  *     Improved StcTextEditor in order to have a better syntactic
+  *         coloration.
+  *
+  * CastorViewer
+  *     Now MainFrame uses wxSizers.
+  *     Added command line options : 
+  *         -f/--file to load a scene on startup
+  *         -h/--help to display help
+  *         -l/--level to define log level : - 0 for debug to errors
+  *                                          - 1 for release to errors
+  *                                          - 2 for warnings to errors
+  *                                          - 3 for errors only.
+  *     Now loads plugins in a thread.
+  *     Added an "Export" button.
+  *
+  * GlRenderSystem
+  *     Removed GLEW dependency.
+  *     Implemented OpenGL debug output so I have more verbose debug outputs
+  *         for OpenGL too.
+  *     Added GL_MIRRORED_REPEAT.
+  *     Added GL_TEXTURE_MAX_ANISOTROPY.
+
+  MISC
+  * General
+  *     Splitted file to have one class per file.
+  *
+  * CMake
+  *     Updated UnitTest integration, Enabled CTest.
+  *
+  * CastorUtils
+  *     Removed all static members and globals.
+  *     Removed String class, added str_utils.
+  *     Removed all dependencies to boost, except for thread, for non C++11
+  *         compilers.
+  *     Modified Point, moved functions that shouldn't be in that class in a
+  *         small helper class : point. It holds normalise, get_normalised,
+  *         dot, all distance functions, cos_theta, negate.
+  *     Modified FileParser in order to be able to ignore complete sections
+  *         without commenting it (such as HLSL shader blocks in
+  *         GlRenderSystem...).
+  *     Modified FileParser to take care of parsers parameters.
+  *     Reduced images memory occupation.
+  *     Removed Point::link, Point::copy/clopy/clone functions.
+  *     Replaced macros for cstrnlen, cstrftime, cstrncpy, cfopen, cfopen64,
+  *         cfseek and cftell by functions in namespace Castor.
+  *     Modified Colour class, it doesn't extend Point4f anymore.
+  *     Removed macro DECLARE_SHARED_PTR, now using  DECLARE_SMART_PTR, so I
+  *         replaced each XXxPtr by it's equivalent XxxSPtr.
+  *
+  * Castor3D
+  *     Merged Submesh and SmoothingGroup classes.
+  *     Reduced memory size of vertex buffers.
+  *     Modified Submesh::ComputeTangents to take care of each vertex normal.
+  *     Modified BufferElementGroup so it can't hold anymore its buffer.
+  *     When initialising Pass, the texture units are re-ordered so the ones 
+  *         with a defined channel come first.
+  *     Passes now initialise their shaders in Pass::Initialiser instead of
+  *	        trying to do it at each frame.
+  *     Changed RenderTarget : now it only holds frame buffer and all needed
+  *         for that. It is now a Renderable so TargetRenderer has been
+  *         created.
+  *     RenderWindow no longer extends RenderTarget, but now it has a
+  *	        RenderTarget as a private class member.
+  *     Created TextureBase class, StaticTexture and DynamicTexture to help
+  *	        implementing render targets.
+  *     RenderTarget now uses RenderTechnique to make its rendering.
+  *     Created GeometryBuffers class which holds a Vertex buffer and an Index
+  *	        buffer, they are created by the RenderSystem.
+  *     Moved RenderTechnique basic frame buffer, texture and depth buffer into
+  *         RenderTarget.
+  *     Moved TargetRenderer::PostRender code into RenderWindow.
+  *     Created WindowRenderer::EndScene function to prepare the render of the
+  *         RenderTarget's frame buffer into the window.
+  *     Removed calls to ShaderObject in order to make it more internal to
+  *         Castor3D.
+  *     Overlays are no more Renderable, there is one instance of OverlayRenderer
+  *         class in the OverlayManager. All overlays will be rendered through
+  *         this instance by the OverlayManager.
+  *     Modified Scene, added template functions to add, remove or get
+  *         an object whatever it's type may be (Light, Geometry, Camera, 
+  *         SceneNode).
+  *
+  * GlRenderSystem
+  *     Reviewed Vertex Array Objects, they now hold their buffers so the
+  *         choice of using it or not is wrapped into it.
+  *     Geometry shader work in OpenGL, created a shader to show wireframe
+  *         models with Normals, Tangents and Bitangents.
