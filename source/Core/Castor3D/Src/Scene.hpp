@@ -982,7 +982,7 @@ namespace Castor3D
 		void DoRenderSubmeshes( Camera const & p_camera, Pipeline & p_pipeline, eTOPOLOGY p_displayMode, RenderNodeArrayConstIt p_begin, RenderNodeArrayConstIt p_end );
 		void DoRenderSubmeshes( Camera const & p_camera, Pipeline & p_pipeline, eTOPOLOGY p_displayMode, SubmeshNodesByMaterialMapConstIt p_begin, SubmeshNodesByMaterialMapConstIt p_end );
 		void DoRenderSubmeshes( Pipeline & p_pipeline, eTOPOLOGY p_displayMode, RenderNodeByDistanceMMapConstIt p_begin, RenderNodeByDistanceMMapConstIt p_end );
-		void DoResortAlpha( Camera const & p_camera, RenderNodeArrayIt p_begin, RenderNodeArrayIt p_end, RenderNodeByDistanceMMap p_map, int p_sign );
+		void DoResortAlpha( Camera const & p_camera, RenderNodeArrayIt p_begin, RenderNodeArrayIt p_end, RenderNodeByDistanceMMap & p_map, int p_sign );
 		void DoRenderSubmesh( Pipeline & p_pipeline, stRENDER_NODE p_node, eTOPOLOGY p_eTopology );
 		void DoRenderBillboards( Pipeline & p_pipeline, BillboardListStrMapIt p_itBegin, BillboardListStrMapIt p_itEnd );
 

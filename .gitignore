@@ -5,8 +5,9 @@
 /doc/x86
 /doc/x64
 /source/Samples/CastorViewerSharp/Src/obj
+/.gitattributes
+/data/Ignored
+/data/Scene/Tests
 *.csproj
 *.suo
-/.gitattributes
 *.gch
-/data/Ignored

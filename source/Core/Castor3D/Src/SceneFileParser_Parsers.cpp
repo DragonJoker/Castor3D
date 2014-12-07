@@ -3188,7 +3188,24 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_OverlayPixelSize )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <overlay::size> : Overlay not initialised" ) );
+		PARSING_ERROR( cuT( "Directive <overlay::pxl_size> : Overlay not initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_OverlayPixelPosition )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
+
+	if ( l_pContext->pOverlay )
+	{
+		Position l_position;
+		p_arrayParams[0]->Get( l_position );
+		l_pContext->pOverlay->SetPixelPosition( l_position );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <overlay::pxl_position> : Overlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -3295,7 +3312,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BorderPanelOverlayPixelSizes )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <border_panel_overlay::border_size> : Overlay not initialised" ) );
+		PARSING_ERROR( cuT( "Directive <border_panel_overlay::pxl_border_size> : Overlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()

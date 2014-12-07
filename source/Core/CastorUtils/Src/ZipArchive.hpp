@@ -56,6 +56,8 @@ namespace Castor
 		{
 			virtual void Open( Path const & p_path, File::eOPEN_MODE p_mode ) = 0;
 			virtual void Close() = 0;
+			virtual bool FindFolder( String const & p_folder ) = 0;
+			virtual bool FindFile( String const & p_file ) = 0;
 			virtual void Deflate( Folder const & p_files ) = 0;
 			virtual void Inflate( Path const & p_outFolder, Folder & p_folder ) = 0;
 		};
@@ -115,6 +117,24 @@ namespace Castor
 		 *\param[in]	p_fileName	Le chemin du fichier
 		 */
 		void RemoveFile( Path const & p_file );
+		/**
+		 *\~english
+		 *\brief		Looks for a folder into the archive
+		 *\param[in]	p_folder	The folder name
+		 *\~french
+		 *\brief		Recherche un dossier dans l'archive
+		 *\param[in]	p_folder	Le nom du dossier
+		 */
+		bool FindFolder( String const & p_folder );
+		/**
+		 *\~english
+		 *\brief		Looks for a file into the archive
+		 *\param[in]	p_file	The file name
+		 *\~french
+		 *\brief		Recherche un fichier dans l'archive
+		 *\param[in]	p_file	Le nom du fichier
+		 */
+		bool FindFile( String const & p_file );
 
 	private:
 		std::unique_ptr< ZipImpl > m_impl;

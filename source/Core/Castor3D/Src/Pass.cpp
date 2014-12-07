@@ -460,9 +460,6 @@ namespace Castor3D
 		if ( l_pOpacityMap )
 		{
 			l_pOpacityMap->SetIndex( l_uiIndex++ );
-			//l_pOpacityMap->SetAlpFunction( eALPHA_BLEND_FUNC_MODULATE );
-			//l_pOpacityMap->SetAlpArgument( eBLEND_SRC_INDEX_0, eBLEND_SOURCE_PREVIOUS );
-			//l_pOpacityMap->SetAlpArgument( eBLEND_SRC_INDEX_1, eBLEND_SOURCE_TEXTURE );
 			Logger::LogDebug( cuT( "	Opacity map at index %d" ), l_pOpacityMap->GetIndex() );
 			m_uiTextureFlags |= eTEXTURE_CHANNEL_OPACITY;
 			l_pOpacityMap->Initialise();

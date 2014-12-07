@@ -89,6 +89,52 @@ namespace Castor
 				m_zip = NULL;
 			}
 
+			virtual bool FindFolder( String const & p_folder )
+			{
+				bool l_return = false;
+				std::string l_folder = str_utils::to_str( p_folder );
+				
+				//Search for the folder
+				struct zip_stat l_stat = { 0 };
+
+				if ( zip_stat( m_zip, l_folder.c_str(), 0, &l_stat ) == -1 )
+				{
+					int l_zep, l_sep;
+					zip_error_get( m_zip, &l_zep, &l_sep );
+					std::string l_error = libzip::GetError( l_zep ) + " - " + libzip::GetError( l_sep );
+					Logger::LogError( "Couldn't retrieve ZIP archive file informations : " + l_error );
+				}
+				else
+				{
+					l_return = true;
+				}
+
+				return l_return;
+			}
+
+			virtual bool FindFile( String const & p_file )
+			{
+				bool l_return = false;
+				std::string l_file = str_utils::to_str( p_file );
+				
+				//Search for the folder
+				struct zip_stat l_stat = { 0 };
+
+				if ( zip_stat( m_zip, l_file.c_str(), 0, &l_stat ) == -1 )
+				{
+					int l_zep, l_sep;
+					zip_error_get( m_zip, &l_zep, &l_sep );
+					std::string l_error = libzip::GetError( l_zep ) + " - " + libzip::GetError( l_sep );
+					Logger::LogError( "Couldn't retrieve ZIP archive file informations : " + l_error );
+				}
+				else
+				{
+					l_return = true;
+				}
+
+				return l_return;
+			}
+
 			virtual void Deflate( ZipArchive::Folder const & p_folder )
 			{
 				for ( ZipArchive::FolderList::const_iterator l_it = p_folder.folders.begin(); l_it != p_folder.folders.end(); ++l_it )
@@ -101,6 +147,11 @@ namespace Castor
 
 			virtual void Inflate( Path const & p_outFolder, ZipArchive::Folder & p_folder )
 			{
+				if ( !File::DirectoryExists( p_outFolder ) )
+				{
+					File::DirectoryCreate( p_outFolder );
+				}
+
 				int l_count = zip_get_num_files( m_zip );
 
 				if ( l_count == -1 )
@@ -437,5 +488,15 @@ namespace Castor
 		{
 			l_folder->RemoveFile( p_fileName );
 		}
+	}
+
+	bool ZipArchive::FindFolder( String const & p_folder )
+	{
+		return m_impl->FindFolder( p_folder );
+	}
+
+	bool ZipArchive::FindFile( String const & p_file )
+	{
+		return m_impl->FindFile( p_file );
 	}
 }

@@ -1398,7 +1398,7 @@ namespace Castor3D
 		}
 	}
 
-	void Scene::DoResortAlpha( Camera const & p_camera, RenderNodeArrayIt p_begin, RenderNodeArrayIt p_end, RenderNodeByDistanceMMap p_map, int p_sign )
+	void Scene::DoResortAlpha( Camera const & p_camera, RenderNodeArrayIt p_begin, RenderNodeArrayIt p_end, RenderNodeByDistanceMMap & p_map, int p_sign )
 	{
 		p_map.clear();
 

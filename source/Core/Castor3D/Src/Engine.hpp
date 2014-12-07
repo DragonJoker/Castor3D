@@ -341,7 +341,16 @@ namespace Castor3D
 		 *\brief		Récupère le chemin des plugins
 		 *\return		Le chemin des plugins
 		 */
-		static Castor::Path GetPluginsPath();
+		static Castor::Path GetPluginsDirectory();
+		/**
+		 *\~english
+		 *\brief		Gives the Castor directory
+		 *\return		The directory
+		 *\~french
+		 *\brief		Donne le répertoire du Castor
+		 *\return		Le répertoire
+		 */
+		static Castor::Path GetEngineDirectory();
 		/**
 		 *\~english
 		 *\brief		Retrieves data path
@@ -350,7 +359,7 @@ namespace Castor3D
 		 *\brief		Récupère le chemin des données
 		 *\return		Le chemin des données
 		 */
-		static Castor::Path GetDataPath();
+		static Castor::Path GetDataDirectory();
 		/**
 		 *\~english
 		 *\brief		Posts a frame event

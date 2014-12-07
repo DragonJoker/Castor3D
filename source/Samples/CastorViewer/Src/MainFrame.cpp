@@ -316,7 +316,7 @@ namespace CastorViewer
 				m_pCastor3D->Cleanup();
 				Logger::LogDebug( cuT( "MainFrame::LoadScene - Engine cleared" ) );
 
-				if ( m_strFilePath.GetExtension() != cuT( "cbsn" ) )
+				if ( m_strFilePath.GetExtension() != cuT( "cbsn" ) && m_strFilePath.GetExtension() != cuT( "zip" ) )
 				{
 					Path l_meshFilePath = m_strFilePath;
 					str_utils::replace( l_meshFilePath, cuT( "cscn" ), cuT( "cmsh" ) );
@@ -344,7 +344,7 @@ namespace CastorViewer
 					{
 						Logger::LogMessage( cuT( "Loading scene file : " ) + m_strFilePath );
 
-						if ( m_strFilePath.GetExtension() == cuT( "cscn" ) )
+						if ( m_strFilePath.GetExtension() == cuT( "cscn" ) || m_strFilePath.GetExtension() == cuT( "zip" ) )
 						{
 							SceneFileParser l_parser( m_pCastor3D );
 
@@ -422,7 +422,7 @@ namespace CastorViewer
 		StringArray l_arrayFailed;
 		std::mutex l_mutex;
 		ThreadPtrArray l_arrayThreads;
-		File::ListDirectoryFiles( Engine::GetPluginsPath(), l_arrayFiles );
+		File::ListDirectoryFiles( Engine::GetPluginsDirectory(), l_arrayFiles );
 
 		if ( l_arrayFiles.size() > 0 )
 		{
@@ -983,7 +983,9 @@ namespace CastorViewer
 		l_wildcard += _( "Castor3D text scene file" );
 		l_wildcard += wxT( " (*.cscn)|*.cscn|" );
 		l_wildcard += _( "Castor3D binary scene file" );
-		l_wildcard += wxT( " (*.cbsn)|*.cbsn" );
+		l_wildcard += wxT( " (*.cbsn)|*.cbsn|" );
+		l_wildcard += _( "Zip archive" );
+		l_wildcard += wxT( " (*.zip)|*.zip" );
 		wxFileDialog l_fileDialog( this, _( "Open a scene" ), wxEmptyString, wxEmptyString, l_wildcard );
 
 		if ( l_fileDialog.ShowModal() == wxID_OK )

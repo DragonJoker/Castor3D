@@ -176,6 +176,12 @@ namespace Castor3D
 		,	m_bDefaultInitialised( false )
 	{
 		CASTOR_INIT_UNIQUE_INSTANCE();
+
+		if ( !File::DirectoryExists( GetEngineDirectory() ) )
+		{
+			File::DirectoryCreate( GetEngineDirectory() );
+		}
+
 		CreateFrameListener();
 
 		if ( p_pLogger )
@@ -766,7 +772,7 @@ namespace Castor3D
 		}
 	}
 
-	Path Engine::GetPluginsPath()
+	Path Engine::GetPluginsDirectory()
 	{
 		Path l_pathReturn;
 		Path l_pathBin = File::DirectoryGetCurrent();
@@ -774,8 +780,13 @@ namespace Castor3D
 		l_pathReturn = l_pathUsr / cuT( "lib" ) / cuT( "Castor" );
 		return l_pathReturn;
 	}
+	
+	Castor::Path Engine::GetEngineDirectory()
+	{
+		return File::GetUserDirectory() / cuT( ".Castor3D" );
+	}
 
-	Path Engine::GetDataPath()
+	Path Engine::GetDataDirectory()
 	{
 		Path l_pathReturn;
 		Path l_pathBin = File::DirectoryGetCurrent();

@@ -562,6 +562,13 @@ namespace Castor
 
 	bool File::DirectoryCreate( Path const & p_path, uint32_t p_flags )
 	{
+		Path l_path = p_path.GetPath();
+
+		if ( !l_path.empty() && !DirectoryExists( l_path ) )
+		{
+			DirectoryCreate( l_path, p_flags );
+		}
+
 #if defined( _MSC_VER )
 		return _tmkdir( p_path.c_str() ) == 0;
 #elif defined( _WIN32 )

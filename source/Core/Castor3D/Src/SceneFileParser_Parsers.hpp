@@ -210,6 +210,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_OverlayPosition )
 	DECLARE_ATTRIBUTE_PARSER( Parser_OverlaySize )
 	DECLARE_ATTRIBUTE_PARSER( Parser_OverlayPixelSize )
+	DECLARE_ATTRIBUTE_PARSER( Parser_OverlayPixelPosition )
 	DECLARE_ATTRIBUTE_PARSER( Parser_OverlayMaterial )
 	DECLARE_ATTRIBUTE_PARSER( Parser_OverlayEnd )
 	DECLARE_ATTRIBUTE_PARSER( Parser_OverlayPanelOverlay )

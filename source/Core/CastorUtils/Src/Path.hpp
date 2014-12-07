@@ -43,11 +43,8 @@ namespace Castor
 	{
 	public:
 		//!\~english Path separator (OS dependant)	\~french Séparateur de chemin (dépendant de l'OS)
-#if defined( _WIN32 )
-		static const xchar Separator = cuT( '\\' );
-#else
-		static const xchar Separator = cuT( '/' );
-#endif
+		static const xchar Separator;
+
 	public:
 		Path();
 		/**

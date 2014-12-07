@@ -116,8 +116,13 @@ namespace CastorViewer
 					l_eRenderer	 = eRENDERER_TYPE_UNDEFINED;
 				}
 
+				if ( !File::DirectoryExists( Castor3D::Engine::GetEngineDirectory() ) )
+				{
+					File::DirectoryCreate( Castor3D::Engine::GetEngineDirectory() );
+				}
+
 				Logger::Initialise( l_eLogLevel );
-				Logger::SetFileName( File::GetUserDirectory() / cuT( "CastorViewer.log" ) );
+				Logger::SetFileName( Castor3D::Engine::GetEngineDirectory() / cuT( "CastorViewer.log" ) );
 				Logger::LogMessage( cuT( "CastorViewer - Start" ) );
 				wxInitAllImageHandlers();
 				m_pMainFrame = new MainFrame( NULL, wxT( "CastorViewer" ), l_eRenderer );
