@@ -133,6 +133,31 @@ namespace Castor
 		\~french
 		\brief Enumérateur des modes d'ouverture
 		*/
+		typedef enum eCREATE_MODE
+		CASTOR_TYPE( uint32_t )
+		{
+			eCREATE_MODE_USER_READ = 0x00000001,	//!<\~english Owner can read	\~french Le propriétaire peut lire
+			eCREATE_MODE_USER_WRITE = 0x00000002,	//!<\~english Owner can write	\~french Le propriétaire peut écrire
+			eCREATE_MODE_USER_EXEC = 0x00000004,	//!<\~english Owner can execute	\~french Le propriétaire peut exécuter
+			eCREATE_MODE_GROUP_READ = 0x00000010,	//!<\~english Owner group can read	\~french Le groupe du propriétaire peut lire
+			eCREATE_MODE_GROUP_WRITE = 0x00000020,	//!<\~english Owner group can write	\~french Le groupe du propriétaire peut écrire
+			eCREATE_MODE_GROUP_EXEC = 0x00000040,	//!<\~english Owner group can execute	\~french Le groupe du propriétaire peut exécuter
+			eCREATE_MODE_OTHERS_READ = 0x00000100,	//!<\~english Others can read	\~french Les autres peuvent lire
+			eCREATE_MODE_OTHERS_WRITE = 0x00000200,	//!<\~english Others can write	\~french Les autres peuvent écrire
+			eCREATE_MODE_OTHERS_EXEC = 0x00000400,	//!<\~english Others can execute	\~french Les autres peuvent exécuter
+		}	eCREATE_MODE;
+		//!\~english Read, write and execution rights for owner	\~french Droits en lecture, écriture et exécution pour le propriétaire
+		static const uint32_t eCREATE_MODE_USER_RWX = eCREATE_MODE_USER_READ | eCREATE_MODE_USER_WRITE | eCREATE_MODE_USER_EXEC;
+		//!\~english Read, write and execution rights for owner group	\~french Droits en lecture, écriture et exécution pour le groupe du propriétaire
+		static const uint32_t eCREATE_MODE_GROUP_RWX = eCREATE_MODE_GROUP_READ | eCREATE_MODE_GROUP_WRITE | eCREATE_MODE_GROUP_EXEC;
+		//!\~english Read, write and execution rights for others	\~french Droits en lecture, écriture et exécution pour les autres
+		static const uint32_t eCREATE_MODE_OTHERS_RWX = eCREATE_MODE_OTHERS_READ | eCREATE_MODE_OTHERS_WRITE | eCREATE_MODE_OTHERS_EXEC;
+		/*!
+		\~english
+		\brief Open modes enumerator
+		\~french
+		\brief Enumérateur des modes d'ouverture
+		*/
 		typedef enum eOPEN_MODE
 		CASTOR_TYPE( uint32_t )
 		{
@@ -299,7 +324,7 @@ namespace Castor
 		 *\param[in]	p_flags	Les droits d'utilisation
 		 *\return		\p true si le dossier a été créé
 		 */
-		static bool DirectoryCreate( Path const & p_path, uint32_t p_flags=777 );
+		static bool DirectoryCreate( Path const & p_path, uint32_t p_flags = eCREATE_MODE_USER_RWX | eCREATE_MODE_GROUP_RWX | eCREATE_MODE_OTHERS_RWX );
 		/**
 		 *\~english
 		 *\brief		Deletes an empty directory

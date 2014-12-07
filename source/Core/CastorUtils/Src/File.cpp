@@ -567,7 +567,54 @@ namespace Castor
 #elif defined( _WIN32 )
 		return mkdir( str_utils::to_str( p_path ).c_str() ) == 0;
 #else
-		return mkdir( str_utils::to_str( p_path ).c_str(), p_flags ) == 0;
+		mode_t l_mode = 0;
+
+		if ( ( p_flags & eCREATE_MODE_USER_READ ) == eCREATE_MODE_USER_READ )
+		{
+			l_mode |= S_IRUSR;
+		}
+
+		if ( ( p_flags & eCREATE_MODE_USER_WRITE ) == eCREATE_MODE_USER_WRITE )
+		{
+			l_mode |= S_IWUSR;
+		}
+
+		if ( ( p_flags & eCREATE_MODE_USER_EXEC ) == eCREATE_MODE_USER_EXEC )
+		{
+			l_mode |= S_IXUSR;
+		}
+
+		if ( ( p_flags & eCREATE_MODE_GROUP_READ ) == eCREATE_MODE_GROUP_READ )
+		{
+			l_mode |= S_IRGRP;
+		}
+
+		if ( ( p_flags & eCREATE_MODE_GROUP_WRITE ) == eCREATE_MODE_GROUP_WRITE )
+		{
+			l_mode |= S_IWGRP;
+		}
+
+		if ( ( p_flags & eCREATE_MODE_GROUP_EXEC ) == eCREATE_MODE_GROUP_EXEC )
+		{
+			l_mode |= S_IXGRP;
+		}
+
+		if ( ( p_flags & eCREATE_MODE_OTHERS_READ ) == eCREATE_MODE_OTHERS_READ )
+		{
+			l_mode |= S_IROTH;
+		}
+
+		if ( ( p_flags & eCREATE_MODE_OTHERS_WRITE ) == eCREATE_MODE_OTHERS_WRITE )
+		{
+			l_mode |= S_IWOTH;
+		}
+
+		if ( ( p_flags & eCREATE_MODE_OTHERS_EXEC ) == eCREATE_MODE_OTHERS_EXEC )
+		{
+			l_mode |= S_IXOTH;
+		}
+
+		return mkdir( str_utils::to_str( p_path ).c_str(), l_mode ) == 0;
 #endif
 	}
 
