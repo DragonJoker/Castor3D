@@ -28,11 +28,9 @@ if (CMAKE_CL_64 OR CMAKE_GENERATOR MATCHES Win64)
                 lib/Release/x64
             PATHS
                 ${ASSIMP_ROOT_DIR}
-                /usr/local
-                /usr
 		)
 
-		FIND_PATH(ASSIMP_LIBRARY_DEBUG_DIR assimpD.lib
+		FIND_PATH(ASSIMP_LIBRARY_DEBUG_DIR assimpD.lib assimpd.lib
             HINTS
             PATH_SUFFIXES
                 lib/x64
@@ -41,8 +39,7 @@ if (CMAKE_CL_64 OR CMAKE_GENERATOR MATCHES Win64)
                 lib/Debug/x64
             PATHS
                 ${ASSIMP_ROOT_DIR}
-                /usr/local
-                /usr
+				${ASSIMP_LIBRARY_RELEASE_DIR}
 		)
 
         FIND_LIBRARY(ASSIMP_LIBRARY_RELEASE
@@ -56,9 +53,11 @@ if (CMAKE_CL_64 OR CMAKE_GENERATOR MATCHES Win64)
         FIND_LIBRARY(ASSIMP_LIBRARY_DEBUG
             NAMES
                 assimpD.lib
+				assimpd.lib
             HINTS
             PATHS
                 ${ASSIMP_LIBRARY_DEBUG_DIR}
+                ${ASSIMP_LIBRARY_RELEASE_DIR}
         )
 	else()
 		FIND_PATH(ASSIMP_LIBRARY_RELEASE_DIR libassimp.so libassimp.lib

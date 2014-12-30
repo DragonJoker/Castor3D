@@ -6,7 +6,7 @@ include( Logging )
 # 	Function which computes the extended library name, with compiler version and debug flag
 #--------------------------------------------------------------------------------------------------
 function( compute_abi_name ABI_Name ABI_Name_Debug )
-    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel" OR "${CMAKE_CXX_COMPILER}" MATCHES "icl" OR "${CMAKE_CXX_COMPILER}" MATCHES "icpc")
+    if ( ${CMAKE_CXX_COMPILER_ID} STREQUAL "Intel" OR ${CMAKE_CXX_COMPILER} MATCHES "icl" OR ${CMAKE_CXX_COMPILER} MATCHES "icpc" )
         #Intel compiler
         if(WIN32)
             set( _ABI_Name "-iw")

@@ -331,30 +331,58 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		get_filename_component( LibZipPath ${LibZipPath} PATH)
 		install(
 			FILES
-				${FreeTypePath}/bin/freetype6.dll
-				${ZlibPath}/bin/zlib1.dll
 				${FreeImage_LIBRARY_DIR}/FreeImage.dll
+				${LibZipPath}/bin/zip.dll
 			DESTINATION bin
 			COMPONENT CastorUtils
 		)
-		add_custom_command(
-			TARGET CastorUtils
-			POST_BUILD
-			COMMAND
-				${CMAKE_COMMAND} -E
-					copy_if_different
-					${FreeTypePath}/bin/freetype6.dll
-					${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-		)
-		add_custom_command(
-			TARGET CastorUtils
-			POST_BUILD
-			COMMAND
-				${CMAKE_COMMAND} -E
-					copy_if_different
-					${ZlibPath}/bin/zlib1.dll
-					${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-		)
+		if ( EXISTS ${FreeTypePath}/bin/freetype6.dll )
+			add_custom_command(
+				TARGET CastorUtils
+				POST_BUILD
+				COMMAND
+					${CMAKE_COMMAND} -E
+						copy_if_different
+						${FreeTypePath}/bin/freetype6.dll
+						${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
+			)
+			install(
+				FILES ${FreeTypePath}/bin/freetype6.dll
+				DESTINATION bin
+				COMPONENT CastorUtils
+			)
+		endif ()
+		if ( EXISTS ${ZlibPath}/bin/zlib1.dll )
+			add_custom_command(
+				TARGET CastorUtils
+				POST_BUILD
+				COMMAND
+					${CMAKE_COMMAND} -E
+						copy_if_different
+						${ZlibPath}/bin/zlib1.dll
+						${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
+			)
+			install(
+				FILES ${FreeTypePath}/bin/zlib1.dll
+				DESTINATION bin
+				COMPONENT CastorUtils
+			)
+		elseif ( EXISTS ${ZlibPath}/bin/zlibwapi.dll )
+			add_custom_command(
+				TARGET CastorUtils
+				POST_BUILD
+				COMMAND
+					${CMAKE_COMMAND} -E
+						copy_if_different
+						${ZlibPath}/bin/zlibwapi.dll
+						${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
+			)
+			install(
+				FILES ${ZlibPath}/bin/zlibwapi.dll
+				DESTINATION bin
+				COMPONENT CastorUtils
+			)
+		endif ()
 		add_custom_command(
 			TARGET CastorUtils
 			POST_BUILD

@@ -58,7 +58,7 @@ function( compute_compilation_flags TARGET_NAME TARGET_TYPE OPT_C_FLAGS OPT_CXX_
 				set( _CXX_FLAGS "${_CXX_FLAGS} -fPIC -std=c++11" )
 			endif ()
 		endif ()
-	elseif ( "${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" )
+	elseif ( ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang" )
 		DumpCompilerVersion( COMPILER_VERSION )
 		set( _C_FLAGS "${_C_FLAGS} -fPIC" )
 		set( _CXX_FLAGS "${_CXX_FLAGS} -fPIC -std=c++11" )

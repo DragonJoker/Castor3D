@@ -49,6 +49,9 @@ if( ASSIMP_FOUND )
 			get_filename_component( ASSIMP_RELEASE_DIR ${ASSIMP_LIBRARY_RELEASE_DIR} PATH )
 			get_filename_component( ASSIMP_RELEASE_DIR ${ASSIMP_RELEASE_DIR} PATH )
 			set( ASSIMP_RELEASE_DIR ${ASSIMP_RELEASE_DIR}/bin/${PROJECTS_PLATFORM} )
+		elseif ( EXISTS ${ASSIMP_LIBRARY_RELEASE_DIR}/../bin/assimp.dll )
+			get_filename_component( ASSIMP_RELEASE_DIR ${ASSIMP_LIBRARY_RELEASE_DIR} PATH )
+			set( ASSIMP_RELEASE_DIR ${ASSIMP_RELEASE_DIR}/bin )
 		endif ()
 		install(
 			FILES ${ASSIMP_RELEASE_DIR}/assimp.dll
@@ -72,6 +75,9 @@ if( ASSIMP_FOUND )
 			get_filename_component( ASSIMP_DEBUG_DIR ${ASSIMP_LIBRARY_DEBUG_DIR} PATH )
 			get_filename_component( ASSIMP_DEBUG_DIR ${ASSIMP_DEBUG_DIR} PATH )
 			set( ASSIMP_DEBUG_DIR ${ASSIMP_DEBUG_DIR}/bin/${PROJECTS_PLATFORM} )
+		elseif ( EXISTS ${ASSIMP_LIBRARY_DEBUG_DIR}/../bin/assimpD.dll )
+			get_filename_component( ASSIMP_DEBUG_DIR ${ASSIMP_LIBRARY_DEBUG_DIR} PATH )
+			set( ASSIMP_DEBUG_DIR ${ASSIMP_DEBUG_DIR}/bin )
 		endif ()
 		install(
 			FILES ${ASSIMP_DEBUG_DIR}/assimpD.dll

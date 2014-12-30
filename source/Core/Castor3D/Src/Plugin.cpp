@@ -37,6 +37,7 @@ namespace Castor3D
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] plugin name function : " );
 			l_strError += str_utils::to_string( dlerror() );
+			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), true );
 		}
 

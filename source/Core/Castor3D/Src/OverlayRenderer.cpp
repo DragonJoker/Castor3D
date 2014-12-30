@@ -137,7 +137,7 @@ namespace Castor3D
 		if ( l_pMaterial )
 		{
 			std::vector< OverlayCategory::Vertex > const & l_arrayVtx = p_panelOverlay.GetVertexBuffer();
-			size_t l_count = l_arrayVtx.size();
+			uint32_t l_count = uint32_t( l_arrayVtx.size() );
 
 			if ( m_previousPanelZIndex != iZIndex )
 			{
@@ -175,7 +175,7 @@ namespace Castor3D
 		if ( l_pMaterial )
 		{
 			std::vector< OverlayCategory::Vertex > const & l_arrayVtx = p_borderPanelOverlay.GetVertexBuffer();
-			size_t l_count = l_arrayVtx.size();
+			uint32_t l_count = uint32_t( l_arrayVtx.size() );
 
 			if ( m_previousPanelZIndex != iZIndex )
 			{
@@ -209,7 +209,7 @@ namespace Castor3D
 		if ( l_pMaterial )
 		{
 			std::vector< OverlayCategory::Vertex > const & l_arrayVtx = p_borderPanelOverlay.GetBorderVertexBuffer();
-			size_t l_count = l_arrayVtx.size();
+			uint32_t l_count = uint32_t( l_arrayVtx.size() );
 
 			if ( m_previousBorderZIndex != iZIndex )
 			{
@@ -253,7 +253,7 @@ namespace Castor3D
 			if ( l_pMaterial )
 			{
 				std::vector< OverlayCategory::Vertex > const & l_arrayVtx = p_textOverlay.GetVertexBuffer();
-				size_t l_count = l_arrayVtx.size();
+				uint32_t l_count = uint32_t( l_arrayVtx.size() );
 
 				if ( m_previousCaption != p_textOverlay.GetCaption() || m_previousTextZIndex != iZIndex )
 				{
