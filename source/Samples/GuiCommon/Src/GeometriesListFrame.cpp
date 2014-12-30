@@ -160,7 +160,7 @@ namespace GuiCommon
 		} );
 		m_pTreeGeometries->Refresh();
 		Refresh();
-		m_selItem = NULL;
+		m_selItem = wxTreeItemId();
 		p_event.Skip();
 	}
 

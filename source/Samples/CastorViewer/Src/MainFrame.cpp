@@ -979,7 +979,7 @@ namespace CastorViewer
 	void MainFrame::OnLoadScene( wxCommandEvent & p_event )
 	{
 		wxString l_wildcard = _( "Castor3D scene files" );
-		l_wildcard += wxT( " (*.cscn;*.cbsn)|*.cscn;*.cbsn|" );
+		l_wildcard += wxT( " (*.cscn;*.cbsn;*.zip)|*.cscn;*.cbsn;*.zip|" );
 		l_wildcard += _( "Castor3D text scene file" );
 		l_wildcard += wxT( " (*.cscn)|*.cscn|" );
 		l_wildcard += _( "Castor3D binary scene file" );

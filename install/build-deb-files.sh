@@ -15,15 +15,15 @@ cd Debian
 mkdir -p ./Castor3D/DEBIAN
 mkdir -p ./Castor3D/usr/lib/
 mkdir -p ./ASSIMPImporter/DEBIAN
-mkdir -p ./ASSIMPImporter/usr/share/Castor3D/
+mkdir -p ./ASSIMPImporter/usr/lib/Castor3D/
 mkdir -p ./PlyImporter/DEBIAN
-mkdir -p ./PlyImporter/usr/share/Castor3D/
+mkdir -p ./PlyImporter/usr/lib/Castor3D/
 mkdir -p ./LoopDivider/DEBIAN
-mkdir -p ./LoopDivider/usr/share/Castor3D/
+mkdir -p ./LoopDivider/usr/lib/Castor3D/
 mkdir -p ./PnTrianglesDivider/DEBIAN
-mkdir -p ./PnTrianglesDivider/usr/share/Castor3D/
+mkdir -p ./PnTrianglesDivider/usr/lib/Castor3D/
 mkdir -p ./GlRenderSystem/DEBIAN
-mkdir -p ./GlRenderSystem/usr/share/Castor3D/GlRenderSystem
+mkdir -p ./GlRenderSystem/usr/lib/Castor3D/
 mkdir -p ./CastorViewer/DEBIAN
 mkdir -p ./CastorViewer/usr/bin
 mkdir -p ./CastorViewer/usr/share/applications/
@@ -38,12 +38,11 @@ mkdir -p ./GuiCommon/usr/lib
 mkdir -p ./Castor3D-dev/DEBIAN
 mkdir -p ./Castor3D-dev/usr/include/Castor3D
 echo "Retrieving built binaries"
-cp $BIN_DIR/share/Castor3D/libASSIMPImporter.so				./libASSIMPImporter/usr/share/Castor3D/
-cp $BIN_DIR/share/Castor3D/libPlyImporter.so				./PlyImporter/usr/share/Castor3D/
-cp $BIN_DIR/share/Castor3D/libLoopDivider.so				./LoopDivider/usr/share/Castor3D/
-cp $BIN_DIR/share/Castor3D/libPnTrianglesDivider.so			./PnTrianglesDivider/usr/share/Castor3D/
-cp $BIN_DIR/share/Castor3D/libGlRenderSystem.so				./GlRenderSystem/usr/share/Castor3D/
-cp $BIN_DIR/share/Castor3D/GlRenderSystem/*.*				./GlRenderSystem/usr/share/Castor3D/GlRenderSystem
+cp $BIN_DIR/lib/Castor3D/libASSIMPImporter.so				./libASSIMPImporter/usr/lib/Castor3D/
+cp $BIN_DIR/lib/Castor3D/libPlyImporter.so					./PlyImporter/usr/lib/Castor3D/
+cp $BIN_DIR/lib/Castor3D/libLoopDivider.so					./LoopDivider/usr/lib/Castor3D/
+cp $BIN_DIR/lib/Castor3D/libPnTrianglesDivider.so			./PnTrianglesDivider/usr/lib/Castor3D/
+cp $BIN_DIR/lib/Castor3D/libGlRenderSystem.so				./GlRenderSystem/usr/lib/Castor3D/
 cp $BIN_DIR/bin/libCastor3D*.so								./Castor3D/usr/lib/
 cp $BIN_DIR/bin/CastorViewer								./CastorViewer/usr/bin/
 cp $BIN_DIR/bin/languages/*.*								./CastorViewer/usr/share/CastorViewer/languages/
@@ -59,7 +58,7 @@ for i in *
 do
 	if [ -d $i ];
 	then
-		echo "Package: `echo $i | tr '[A-Z]' '[a-z]'`\nVersion: $VERSION\nSection: graphics\nPriority: optional\nArchitecture: i386\nEssential: no\nInstalled-Size: `du -s $i | cut -f 1`\nDepends: `cat $RESOURCE/$i/dependencies`\nMaintainer: Sylvain Doremus (dragonjoker59@hotmail.com)\nProvides: $i\nDescription: `cat $RESOURCE/$i/description`\n" > ./$i/DEBIAN/control
+		echo "Package: `echo $i | tr '[A-Z]' '[a-z]'`\nVersion: $VERSION\nSection: graphics\nPriority: optional\nArchitecture: $ARCHITECTURE\nEssential: no\nInstalled-Size: `du -s $i | cut -f 1`\nDepends: `cat $RESOURCE/$i/dependencies`\nMaintainer: Sylvain Doremus (dragonjoker59@hotmail.com)\nProvides: $i\nDescription: `cat $RESOURCE/$i/description`\n" > ./$i/DEBIAN/control
 		conv=`echo "$i" | tr '[A-Z]' '[a-z]'`
 		dpkg-deb --build $i "$conv"_"$VERSION"-"$REVISION"_"$ARCHITECTURE".deb > /dev/null
 	fi

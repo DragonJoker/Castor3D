@@ -38,7 +38,7 @@ namespace Castor3D
 		friend class PluginBase;
 		typedef PostEffectSPtr	CreateEffectFunction( RenderSystem * p_pRenderSystem );
 
-		typedef CreateEffectFunction		*	PCreateEffectFunction;
+		typedef CreateEffectFunction * PCreateEffectFunction;
 
 	public:
 		/**

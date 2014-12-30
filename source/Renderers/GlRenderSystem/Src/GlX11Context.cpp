@@ -363,7 +363,7 @@ bool GlContextImpl::DoCreateGl3Context( Castor3D::RenderWindow * p_pWindow )
 
 	if ( m_gl.HasCreateContextAttribs() )
 	{
-		Logger::LogMessage( cuT( "GlXContext::Create - Using OpenGL %i.%i" ), l_pRenderSystem->GetOpenGlMajor(), l_pRenderSystem->GetOpenGlMinor() );
+		Logger::LogMessage( cuT( "GlXContext::Create - Using OpenGL %i.%i" ), m_gl.GetVersion() / 10, m_gl.GetVersion() % 10 );
 		IntArray l_arrayAttribs;
 		l_arrayAttribs.push_back( GLX_CONTEXT_MAJOR_VERSION_ARB	);
 		l_arrayAttribs.push_back( m_gl.GetVersion() / 10 );

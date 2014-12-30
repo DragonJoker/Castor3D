@@ -97,6 +97,7 @@ bool GlBillboardList::DoInitialise()
 	l_strVtxShader += l_pKeywords->GetVersion();
 	l_strVtxShader += l_pKeywords->GetAttribute( 0 )	+	cuT( "	vec4	vertex;\n" );
 	l_strVtxShader += BillboardVS;
+	str_utils::replace( l_strVtxShader, cuT( "<layout>" ), l_pKeywords->GetLayout() );
 	GLSL::ConstantsBase::Replace( l_strVtxShader );
 
 	String l_strGeoShader;
@@ -105,13 +106,15 @@ bool GlBillboardList::DoInitialise()
 	str_utils::replace( l_strGeoShader, cuT( "<matrix_buffer>"	), l_pConstants->Matrices() );
 	str_utils::replace( l_strGeoShader, cuT( "<scene_buffer>"	), l_pConstants->Scene() );
 	str_utils::replace( l_strGeoShader, cuT( "<user_buffer>"	), l_pConstants->User() );
+	str_utils::replace( l_strGeoShader, cuT( "<layout>" ), l_pKeywords->GetLayout() );
 	GLSL::ConstantsBase::Replace( l_strGeoShader );
 
 	String l_strPxlShader;
 	l_strPxlShader += l_pKeywords->GetVersion();
 	l_strPxlShader += BillboardPS;
-	GLSL::ConstantsBase::Replace( l_strPxlShader );
 	str_utils::replace( l_strPxlShader, cuT( "<texture2D>" ), l_pKeywords->GetTexture2D() );
+	str_utils::replace( l_strPxlShader, cuT( "<layout>" ), l_pKeywords->GetLayout() );
+	GLSL::ConstantsBase::Replace( l_strPxlShader );
 
 	ShaderProgramBaseSPtr l_pProgram = m_wpProgram.lock();
 	m_pDimensionsUniform = std::static_pointer_cast< Point2iFrameVariable >( l_pProgram->GetUserBuffer()->CreateVariable( *l_pProgram.get(), eFRAME_VARIABLE_TYPE_VEC2I, cuT( "c3d_v2iDimensions" ) ) );

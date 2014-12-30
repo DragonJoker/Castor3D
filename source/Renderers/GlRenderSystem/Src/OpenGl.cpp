@@ -1652,7 +1652,7 @@ bool OpenGl::Initialise()
 
 			if ( HasExtension( ARB_uniform_buffer_object ) )
 			{
-				m_bHasUbo = true;
+				m_bHasUbo = m_iGlslVersion >= 140;
 				GL_GET_FUNC( this,	GetUniformBlockIndex,	);
 				GL_GET_FUNC( this,	BindBufferBase,			EXT	);
 				GL_GET_FUNC( this,	UniformBlockBinding,	);

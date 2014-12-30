@@ -78,7 +78,7 @@ namespace GlRender
 		String ConstantsUbo::Matrices()
 		{
 			return
-				cuT( "layout( std140 ) uniform Matrices\n" )
+				cuT( "<layout>uniform Matrices\n" )
 				cuT( "{\n" )
 				cuT( "    <mat4>   c3d_mtxProjection;\n" )
 				cuT( "    <mat4>   c3d_mtxModel;\n" )
@@ -98,7 +98,7 @@ namespace GlRender
 		String ConstantsUbo::Scene()
 		{
 			return
-				cuT( "layout( std140 ) uniform Scene\n" )
+				cuT( "<layout>uniform Scene\n" )
 				cuT( "{\n" )
 				cuT( "    int     c3d_iLightsCount;\n" )
 				cuT( "    vec4    c3d_v4AmbientLight;\n" )
@@ -110,7 +110,7 @@ namespace GlRender
 		String ConstantsUbo::Pass()
 		{
 			return
-				cuT( "layout( std140 ) uniform Pass\n" )
+				cuT( "<layout>uniform Pass\n" )
 				cuT( "{\n" )
 				cuT( "    vec4    c3d_v4MatAmbient;\n" )
 				cuT( "    vec4    c3d_v4MatDiffuse;\n" )
@@ -124,7 +124,7 @@ namespace GlRender
 		String ConstantsUbo::User()
 		{
 			return
-				cuT( "layout( std140 ) uniform User\n" )
+				cuT( "<layout>uniform User\n" )
 				cuT( "{\n" )
 				cuT( "    ivec2   c3d_v2iDimensions;\n" )
 				cuT( "};\n" );

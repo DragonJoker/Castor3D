@@ -71,6 +71,7 @@ ShaderProgramBaseSPtr GlOverlayRenderer::DoGetProgram( uint32_t p_uiFlags )
 	l_strVs += l_strOut			+ cuT( "	<vec2> 	vtx_texture;\n"	);
 	l_strVs += l_pConstants->Matrices();
 	l_strVs += OverlayVS;
+	str_utils::replace( l_strVs, cuT( "<layout>" ), l_pKeywords->GetLayout() );
 	GLSL::ConstantsBase::Replace( l_strVs );
 
 	// Pixel shader
@@ -102,6 +103,7 @@ ShaderProgramBaseSPtr GlOverlayRenderer::DoGetProgram( uint32_t p_uiFlags )
 	l_strPs += PanelPSEnd;
 	str_utils::replace( l_strPs, cuT( "<pass_buffer>" ), l_pConstants->Pass() );
 	str_utils::replace( l_strPs, cuT( "<texture2D>" ), l_pKeywords->GetTexture2D() );
+	str_utils::replace( l_strPs, cuT( "<layout>" ), l_pKeywords->GetLayout() );
 	GLSL::ConstantsBase::Replace( l_strPs );
 
 	// Shader program

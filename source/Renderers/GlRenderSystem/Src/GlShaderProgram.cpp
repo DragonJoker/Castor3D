@@ -267,6 +267,7 @@ namespace GlRender
 		l_strReturn += cuT( "    vtx_bitangent   = normalize( l_v4Bitangent.xyz );\n" );
 		l_strReturn += cuT( "    gl_Position     = c3d_mtxProjection * l_v4Vertex;\n" );
 		l_strReturn += cuT( "}\n" );
+		str_utils::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetLayout() );
 		GLSL::ConstantsBase::Replace( l_strReturn );
 		return l_strReturn;
 	}
@@ -371,12 +372,13 @@ namespace GlRender
 			}
 		}
 
-		l_strPixelMainLightsLoopEnd	+= cuT( "	" ) + l_strPixelOutput + cuT( " = vec4( (l_v4Emissive + l_v4Ambient + l_v4Diffuse + l_v4Specular).xyz, l_fAlpha );\n" );
+		l_strPixelMainLightsLoopEnd	+= cuT( "	" ) + l_strPixelOutput + cuT( " = vec4( l_v4Specular/*(l_v4Emissive + l_v4Ambient + l_v4Diffuse + l_v4Specular)*/.xyz, l_fAlpha );\n" );
 		l_strReturn += l_strPixelLights + l_strPixelMainDeclarations + l_strPixelMainLightsLoop + l_strPixelMainLightsLoopAfterLightDir + l_strPixelMainLightsLoopEnd + l_strPixelMainEnd;
 		str_utils::replace( l_strReturn, cuT( "<pxlin_mtxModelView>" ), l_strPixelMtxModelView );
 		str_utils::replace( l_strReturn, cuT( "<texture1D>" ), l_strTexture1D );
 		str_utils::replace( l_strReturn, cuT( "<texture2D>" ), l_strTexture2D );
 		str_utils::replace( l_strReturn, cuT( "<texture3D>" ), l_strTexture3D );
+		str_utils::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetLayout() );
 		GLSL::ConstantsBase::Replace( l_strReturn );
 		return l_strReturn;
 	}
@@ -469,6 +471,7 @@ namespace GlRender
 			l_strReturn += cuT( "}\n" );
 		}
 
+		str_utils::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetLayout() );
 		GLSL::ConstantsBase::Replace( l_strReturn );
 		return l_strReturn;
 	}
@@ -606,6 +609,7 @@ namespace GlRender
 		str_utils::replace( l_strReturn, cuT( "<texture1D>" ), l_strTexture1D );
 		str_utils::replace( l_strReturn, cuT( "<texture2D>" ), l_strTexture2D );
 		str_utils::replace( l_strReturn, cuT( "<texture3D>" ), l_strTexture3D );
+		str_utils::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetLayout() );
 		GLSL::ConstantsBase::Replace( l_strReturn );
 		return l_strReturn;
 	}

@@ -80,6 +80,8 @@ namespace GlRender
 			GLSL::ConstantsBase::Replace( l_strVtxShader );
 			GLSL::ConstantsBase::Replace( l_strPxlShader );
 			str_utils::replace( l_strPxlShader, cuT( "<texture2D>" ), l_pKeywords->GetTexture2D() );
+			str_utils::replace( l_strVtxShader, cuT( "<layout>" ), l_pKeywords->GetLayout() );
+			str_utils::replace( l_strPxlShader, cuT( "<layout>" ), l_pKeywords->GetLayout() );
 			ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
 			l_pProgram->CreateFrameVariable( cuT( "c3d_mapDiffuse" ), eSHADER_TYPE_PIXEL );
 			l_pProgram->SetSource( eSHADER_TYPE_VERTEX,	eSHADER_MODEL_2, l_strVtxShader );
