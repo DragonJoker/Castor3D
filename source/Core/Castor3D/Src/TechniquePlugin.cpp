@@ -44,41 +44,8 @@ namespace Castor3D
 		}
 	}
 
-	TechniquePlugin::TechniquePlugin( TechniquePlugin const & p_plugin )
-		:	PluginBase( p_plugin )
-		,	m_pfnCreateTechnique( p_plugin.m_pfnCreateTechnique )
-	{
-	}
-
-	TechniquePlugin::TechniquePlugin( TechniquePlugin && p_plugin )
-		:	PluginBase( std::move( p_plugin ) )
-		,	m_pfnCreateTechnique( std::move( p_plugin.m_pfnCreateTechnique ) )
-	{
-		p_plugin.m_pfnCreateTechnique	= NULL;
-	}
-
 	TechniquePlugin::~TechniquePlugin()
 	{
-	}
-
-	TechniquePlugin & TechniquePlugin::operator =( TechniquePlugin const & p_plugin )
-	{
-		PluginBase::operator =( p_plugin );
-		m_pfnCreateTechnique		= p_plugin.m_pfnCreateTechnique;
-		return * this;
-	}
-
-	TechniquePlugin & TechniquePlugin::operator =( TechniquePlugin && p_plugin )
-	{
-		PluginBase::operator =( std::move( p_plugin ) );
-
-		if ( this != & p_plugin )
-		{
-			m_pfnCreateTechnique			= std::move( p_plugin.m_pfnCreateTechnique );
-			p_plugin.m_pfnCreateTechnique	= NULL;
-		}
-
-		return * this;
 	}
 
 	RenderTechniqueBaseSPtr TechniquePlugin::CreateTechnique( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )

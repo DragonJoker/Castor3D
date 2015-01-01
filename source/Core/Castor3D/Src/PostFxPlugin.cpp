@@ -44,41 +44,8 @@ namespace Castor3D
 		}
 	}
 
-	PostFxPlugin::PostFxPlugin( PostFxPlugin const & p_plugin )
-		:	PluginBase( p_plugin )
-		,	m_pfnCreateEffect( p_plugin.m_pfnCreateEffect )
-	{
-	}
-
-	PostFxPlugin::PostFxPlugin( PostFxPlugin && p_plugin )
-		:	PluginBase( std::move( p_plugin ) )
-		,	m_pfnCreateEffect( std::move( p_plugin.m_pfnCreateEffect ) )
-	{
-		p_plugin.m_pfnCreateEffect	= NULL;
-	}
-
 	PostFxPlugin::~PostFxPlugin()
 	{
-	}
-
-	PostFxPlugin & PostFxPlugin::operator =( PostFxPlugin const & p_plugin )
-	{
-		PluginBase::operator =( p_plugin );
-		m_pfnCreateEffect		= p_plugin.m_pfnCreateEffect;
-		return * this;
-	}
-
-	PostFxPlugin & PostFxPlugin::operator =( PostFxPlugin && p_plugin )
-	{
-		PluginBase::operator =( std::move( p_plugin ) );
-
-		if ( this != & p_plugin )
-		{
-			m_pfnCreateEffect			= std::move( p_plugin.m_pfnCreateEffect );
-			p_plugin.m_pfnCreateEffect	= NULL;
-		}
-
-		return * this;
 	}
 
 	PostEffectSPtr PostFxPlugin::CreateEffect( RenderSystem * p_pRenderSystem )

@@ -145,12 +145,12 @@ typedef char ychar;
 #endif
 
 #if CASTOR_HAS_DEFAULTED_FUNC
-#	define d_default = default
+#	define CASTOR_DEFAULT = default
 #else
 #	define d_default
 #endif
 #if CASTOR_HAS_DELETED_FUNC
-#	define d_deleted = delete
+#	define CASTOR_DELETED = delete
 #else
 #	define d_deleted
 #endif

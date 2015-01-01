@@ -73,59 +73,8 @@ namespace Castor3D
 		}
 	}
 
-	ShaderPlugin::ShaderPlugin( ShaderPlugin const & p_plugin )
-		:	PluginBase( p_plugin )
-		,	m_pfnCreateShader( p_plugin.m_pfnCreateShader )
-		,	m_pfnCreatePipeline( p_plugin.m_pfnCreatePipeline )
-		,	m_pfnDestroyPipeline( p_plugin.m_pfnDestroyPipeline )
-		,	m_pfnGetShaderLanguage( p_plugin.m_pfnGetShaderLanguage )
-	{
-	}
-
-	ShaderPlugin::ShaderPlugin( ShaderPlugin && p_plugin )
-		:	PluginBase( std::move( p_plugin ) )
-		,	m_pfnCreateShader( std::move( p_plugin.m_pfnCreateShader ) )
-		,	m_pfnCreatePipeline( std::move( p_plugin.m_pfnCreatePipeline ) )
-		,	m_pfnDestroyPipeline( std::move( p_plugin.m_pfnDestroyPipeline ) )
-		,	m_pfnGetShaderLanguage( std::move( p_plugin.m_pfnGetShaderLanguage ) )
-	{
-		p_plugin.m_pfnCreateShader		= NULL;
-		p_plugin.m_pfnCreatePipeline	= NULL;
-		p_plugin.m_pfnDestroyPipeline	= NULL;
-		p_plugin.m_pfnGetShaderLanguage	= NULL;
-	}
-
 	ShaderPlugin::~ShaderPlugin()
 	{
-	}
-
-	ShaderPlugin & ShaderPlugin::operator =( ShaderPlugin const & p_plugin )
-	{
-		PluginBase::operator =( p_plugin );
-		m_pfnCreateShader		= p_plugin.m_pfnCreateShader;
-		m_pfnGetShaderLanguage	= p_plugin.m_pfnGetShaderLanguage;
-		m_pfnCreatePipeline		= p_plugin.m_pfnCreatePipeline;
-		m_pfnDestroyPipeline	= p_plugin.m_pfnDestroyPipeline;
-		return * this;
-	}
-
-	ShaderPlugin & ShaderPlugin::operator =( ShaderPlugin && p_plugin )
-	{
-		PluginBase::operator =( std::move( p_plugin ) );
-
-		if ( this != & p_plugin )
-		{
-			m_pfnCreateShader		= std::move( p_plugin.m_pfnCreateShader );
-			m_pfnGetShaderLanguage	= std::move( p_plugin.m_pfnGetShaderLanguage );
-			m_pfnCreatePipeline		= std::move( p_plugin.m_pfnCreatePipeline );
-			m_pfnDestroyPipeline	= std::move( p_plugin.m_pfnDestroyPipeline );
-			p_plugin.m_pfnCreateShader		= NULL;
-			p_plugin.m_pfnCreatePipeline	= NULL;
-			p_plugin.m_pfnDestroyPipeline	= NULL;
-			p_plugin.m_pfnGetShaderLanguage	= NULL;
-		}
-
-		return * this;
 	}
 
 	ShaderProgramBaseSPtr ShaderPlugin::CreateShader( RenderSystem * p_pRenderSystem )

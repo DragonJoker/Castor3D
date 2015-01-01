@@ -40,47 +40,8 @@ namespace Castor3D
 		}
 	}
 
-	GeneratorPlugin::GeneratorPlugin( GeneratorPlugin const & p_plugin )
-		:	PluginBase( p_plugin )
-		,	m_pfnCreateGenerator( p_plugin.m_pfnCreateGenerator )
-		,	m_pfnDestroyGenerator( p_plugin.m_pfnDestroyGenerator )
-	{
-	}
-
-	GeneratorPlugin::GeneratorPlugin( GeneratorPlugin && p_plugin )
-		:	PluginBase( std::move( p_plugin ) )
-		,	m_pfnCreateGenerator( std::move( p_plugin.m_pfnCreateGenerator ) )
-		,	m_pfnDestroyGenerator( std::move( p_plugin.m_pfnDestroyGenerator ) )
-	{
-		p_plugin.m_pfnCreateGenerator	= NULL;
-		p_plugin.m_pfnDestroyGenerator	= NULL;
-	}
-
 	GeneratorPlugin::~GeneratorPlugin()
 	{
-	}
-
-	GeneratorPlugin & GeneratorPlugin::operator =( GeneratorPlugin const & p_plugin )
-	{
-		PluginBase::operator =( p_plugin );
-		m_pfnCreateGenerator	= p_plugin.m_pfnCreateGenerator;
-		m_pfnDestroyGenerator	= p_plugin.m_pfnDestroyGenerator;
-		return * this;
-	}
-
-	GeneratorPlugin & GeneratorPlugin::operator =( GeneratorPlugin && p_plugin )
-	{
-		PluginBase::operator =( std::move( p_plugin ) );
-
-		if ( this != & p_plugin )
-		{
-			m_pfnCreateGenerator	= std::move( p_plugin.m_pfnCreateGenerator );
-			m_pfnDestroyGenerator	= std::move( p_plugin.m_pfnDestroyGenerator );
-			p_plugin.m_pfnCreateGenerator	= NULL;
-			p_plugin.m_pfnDestroyGenerator	= NULL;
-		}
-
-		return * this;
 	}
 
 	Subdivider * GeneratorPlugin::CreateGenerator( TextureUnit * p_pTexture )

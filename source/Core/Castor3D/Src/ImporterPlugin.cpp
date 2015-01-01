@@ -57,57 +57,6 @@ namespace Castor3D
 		m_pfnCreateImporter( p_pEngine, this );
 	}
 
-	ImporterPlugin::ImporterPlugin( ImporterPlugin const & p_plugin )
-		:	PluginBase( p_plugin )
-		,	m_pfnCreateImporter( p_plugin.m_pfnCreateImporter )
-		,	m_pfnDestroyImporter( p_plugin.m_pfnDestroyImporter )
-		,	m_pfnGetExtension( p_plugin.m_pfnGetExtension )
-		,	m_pImporter( p_plugin.m_pImporter )
-	{
-	}
-
-	ImporterPlugin::ImporterPlugin( ImporterPlugin && p_plugin )
-		:	PluginBase( std::move( p_plugin ) )
-		,	m_pfnCreateImporter( std::move( p_plugin.m_pfnCreateImporter ) )
-		,	m_pfnDestroyImporter( std::move( p_plugin.m_pfnDestroyImporter ) )
-		,	m_pfnGetExtension( std::move( p_plugin.m_pfnGetExtension ) )
-		,	m_pImporter( std::move( p_plugin.m_pImporter ) )
-	{
-		p_plugin.m_pfnCreateImporter	= NULL;
-		p_plugin.m_pfnDestroyImporter	= NULL;
-		p_plugin.m_pfnGetExtension		= NULL;
-		p_plugin.m_pImporter			.reset();
-	}
-
-	ImporterPlugin & ImporterPlugin::operator =( ImporterPlugin const & p_plugin )
-	{
-		PluginBase::operator =( p_plugin );
-		m_pfnCreateImporter		= p_plugin.m_pfnCreateImporter;
-		m_pfnDestroyImporter	= p_plugin.m_pfnDestroyImporter;
-		m_pfnGetExtension		= p_plugin.m_pfnGetExtension;
-		m_pImporter				= p_plugin.m_pImporter;
-		return * this;
-	}
-
-	ImporterPlugin & ImporterPlugin::operator =( ImporterPlugin && p_plugin )
-	{
-		PluginBase::operator =( std::move( p_plugin ) );
-
-		if ( this != & p_plugin )
-		{
-			m_pfnCreateImporter		= std::move( p_plugin.m_pfnCreateImporter );
-			m_pfnDestroyImporter	= std::move( p_plugin.m_pfnDestroyImporter );
-			m_pfnGetExtension		= std::move( p_plugin.m_pfnGetExtension );
-			m_pImporter				= std::move( p_plugin.m_pImporter );
-			p_plugin.m_pfnCreateImporter	= NULL;
-			p_plugin.m_pfnDestroyImporter	= NULL;
-			p_plugin.m_pfnGetExtension		= NULL;
-			p_plugin.m_pImporter			.reset();
-		}
-
-		return * this;
-	}
-
 	ImporterPlugin::~ImporterPlugin()
 	{
 		m_pfnDestroyImporter( this );

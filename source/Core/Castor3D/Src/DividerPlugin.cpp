@@ -50,53 +50,8 @@ namespace Castor3D
 		}
 	}
 
-	DividerPlugin::DividerPlugin( DividerPlugin const & p_plugin )
-		:	PluginBase( p_plugin )
-		,	m_pfnCreateDivider( p_plugin.m_pfnCreateDivider )
-		,	m_pfnDestroyDivider( p_plugin.m_pfnDestroyDivider )
-		,	m_pfnGetDividerType( p_plugin.m_pfnGetDividerType )
-	{
-	}
-
-	DividerPlugin::DividerPlugin( DividerPlugin && p_plugin )
-		:	PluginBase( std::move( p_plugin ) )
-		,	m_pfnCreateDivider( std::move( p_plugin.m_pfnCreateDivider ) )
-		,	m_pfnDestroyDivider( std::move( p_plugin.m_pfnDestroyDivider ) )
-		,	m_pfnGetDividerType( std::move( p_plugin.m_pfnGetDividerType ) )
-	{
-		p_plugin.m_pfnCreateDivider		= NULL;
-		p_plugin.m_pfnDestroyDivider	= NULL;
-		p_plugin.m_pfnGetDividerType	= NULL;
-	}
-
 	DividerPlugin::~DividerPlugin()
 	{
-	}
-
-	DividerPlugin & DividerPlugin::operator =( DividerPlugin const & p_plugin )
-	{
-		PluginBase::operator =( p_plugin );
-		m_pfnCreateDivider	= p_plugin.m_pfnCreateDivider;
-		m_pfnDestroyDivider	= p_plugin.m_pfnDestroyDivider;
-		m_pfnGetDividerType	= p_plugin.m_pfnGetDividerType;
-		return * this;
-	}
-
-	DividerPlugin & DividerPlugin::operator =( DividerPlugin && p_plugin )
-	{
-		PluginBase::operator =( std::move( p_plugin ) );
-
-		if ( this != & p_plugin )
-		{
-			m_pfnCreateDivider	= std::move( p_plugin.m_pfnCreateDivider );
-			m_pfnDestroyDivider	= std::move( p_plugin.m_pfnDestroyDivider );
-			m_pfnGetDividerType	= std::move( p_plugin.m_pfnGetDividerType );
-			p_plugin.m_pfnCreateDivider		= NULL;
-			p_plugin.m_pfnDestroyDivider	= NULL;
-			p_plugin.m_pfnGetDividerType	= NULL;
-		}
-
-		return * this;
 	}
 
 	Subdivider * DividerPlugin::CreateDivider()

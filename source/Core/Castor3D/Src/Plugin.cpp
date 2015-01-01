@@ -49,48 +49,8 @@ namespace Castor3D
 		}
 	}
 
-	PluginBase::PluginBase( PluginBase const & p_plugin )
-		:	m_pfnGetRequiredVersion( p_plugin.m_pfnGetRequiredVersion )
-		,	m_pfnGetName( p_plugin.m_pfnGetName )
-		,	m_eType( p_plugin.m_eType )
-	{
-	}
-
-	PluginBase::PluginBase( PluginBase && p_plugin )
-		:	m_pfnGetRequiredVersion( std::move( p_plugin.m_pfnGetRequiredVersion ) )
-		,	m_pfnGetName( std::move( p_plugin.m_pfnGetName ) )
-		,	m_eType( std::move( p_plugin.m_eType ) )
-	{
-		p_plugin.m_pfnGetRequiredVersion	= NULL;
-		p_plugin.m_pfnGetName				= NULL;
-		p_plugin.m_eType					= ePLUGIN_TYPE_COUNT;
-	}
-
 	PluginBase::~PluginBase()
 	{
-	}
-
-	PluginBase & PluginBase::operator =( PluginBase const & p_plugin )
-	{
-		m_pfnGetRequiredVersion	= p_plugin.m_pfnGetRequiredVersion;
-		m_pfnGetName			= p_plugin.m_pfnGetName;
-		m_eType					= p_plugin.m_eType;
-		return *this;
-	}
-
-	PluginBase & PluginBase::operator =( PluginBase && p_plugin )
-	{
-		if ( this != & p_plugin )
-		{
-			m_pfnGetRequiredVersion	= std::move( p_plugin.m_pfnGetRequiredVersion );
-			m_pfnGetName			= std::move( p_plugin.m_pfnGetName );
-			m_eType					= std::move( p_plugin.m_eType );
-			p_plugin.m_pfnGetRequiredVersion	= NULL;
-			p_plugin.m_pfnGetName				= NULL;
-			p_plugin.m_eType					= ePLUGIN_TYPE_COUNT;
-		}
-
-		return *this;
 	}
 
 	void PluginBase::GetRequiredVersion( Version & p_version )const

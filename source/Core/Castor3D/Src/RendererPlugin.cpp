@@ -55,53 +55,8 @@ namespace Castor3D
 		}
 	}
 
-	RendererPlugin::RendererPlugin( RendererPlugin const & p_plugin )
-		:	PluginBase( p_plugin )
-		,	m_pfnCreateRenderSystem( p_plugin.m_pfnCreateRenderSystem )
-		,	m_pfnDestroyRenderSystem( p_plugin.m_pfnDestroyRenderSystem )
-		,	m_pfnGetRendererType( p_plugin.m_pfnGetRendererType )
-	{
-	}
-
-	RendererPlugin::RendererPlugin( RendererPlugin && p_plugin )
-		:	PluginBase( std::move( p_plugin ) )
-		,	m_pfnCreateRenderSystem( std::move( p_plugin.m_pfnCreateRenderSystem ) )
-		,	m_pfnDestroyRenderSystem( std::move( p_plugin.m_pfnDestroyRenderSystem ) )
-		,	m_pfnGetRendererType( std::move( p_plugin.m_pfnGetRendererType ) )
-	{
-		p_plugin.m_pfnCreateRenderSystem	= NULL;
-		p_plugin.m_pfnDestroyRenderSystem	= NULL;
-		p_plugin.m_pfnGetRendererType		= NULL;
-	}
-
 	RendererPlugin::~RendererPlugin()
 	{
-	}
-
-	RendererPlugin & RendererPlugin::operator =( RendererPlugin const & p_plugin )
-	{
-		PluginBase::operator =( p_plugin );
-		m_pfnCreateRenderSystem		= p_plugin.m_pfnCreateRenderSystem;
-		m_pfnDestroyRenderSystem	= p_plugin.m_pfnDestroyRenderSystem;
-		m_pfnGetRendererType		= p_plugin.m_pfnGetRendererType;
-		return * this;
-	}
-
-	RendererPlugin & RendererPlugin::operator =( RendererPlugin && p_plugin )
-	{
-		PluginBase::operator =( std::move( p_plugin ) );
-
-		if ( this != &p_plugin )
-		{
-			m_pfnCreateRenderSystem		= std::move( p_plugin.m_pfnCreateRenderSystem );
-			m_pfnDestroyRenderSystem	= std::move( p_plugin.m_pfnDestroyRenderSystem );
-			m_pfnGetRendererType		= std::move( p_plugin.m_pfnGetRendererType );
-			p_plugin.m_pfnCreateRenderSystem	= NULL;
-			p_plugin.m_pfnDestroyRenderSystem	= NULL;
-			p_plugin.m_pfnGetRendererType		= NULL;
-		}
-
-		return * this;
 	}
 
 	RenderSystem * RendererPlugin::CreateRenderSystem( Engine * p_pEngine, Logger * p_pLogger )

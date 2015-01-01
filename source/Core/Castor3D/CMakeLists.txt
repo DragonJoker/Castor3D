@@ -29,6 +29,16 @@ add_target(
 	"Castor3DPch.cpp"
 )
 
+file( GLOB CASTOR3D_Plugin_HEADER_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Plugin*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Plugin*.inl
+)
+file( GLOB CASTOR3D_Plugin_SOURCE_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Plugin*.cpp
+)
+source_group( "Header Files\\Plugin" FILES ${CASTOR3D_Plugin_HEADER_FILES} )
+source_group( "Source Files\\Plugin" FILES ${CASTOR3D_Plugin_SOURCE_FILES} )
+
 file( GLOB CASTOR3D_Animation_HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/Anim*.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/Anim*.inl
@@ -179,16 +189,6 @@ file( GLOB CASTOR3D_Shader_SOURCE_FILES
 )
 source_group( "Header Files\\Shader" FILES ${CASTOR3D_Shader_HEADER_FILES} )
 source_group( "Source Files\\Shader" FILES ${CASTOR3D_Shader_SOURCE_FILES} )
-
-file( GLOB CASTOR3D_Plugin_HEADER_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Plugin*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Plugin*.inl
-)
-file( GLOB CASTOR3D_Plugin_SOURCE_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Plugin*.cpp
-)
-source_group( "Header Files\\Plugin" FILES ${CASTOR3D_Plugin_HEADER_FILES} )
-source_group( "Source Files\\Plugin" FILES ${CASTOR3D_Plugin_SOURCE_FILES} )
 
 file( GLOB CASTOR3D_Technique_HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Technique*.hpp
