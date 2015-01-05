@@ -1,4 +1,4 @@
-#include "FileParser.hpp"
+﻿#include "FileParser.hpp"
 #include "FileParserContext.hpp"
 #include "Colour.hpp"
 #include "Pixel.hpp"

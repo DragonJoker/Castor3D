@@ -1,4 +1,4 @@
-#include "TechniquePlugin.hpp"
+﻿#include "TechniquePlugin.hpp"
 
 #if defined( _WIN32 )
 #	include <Windows.h>

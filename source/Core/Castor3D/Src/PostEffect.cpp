@@ -1,4 +1,4 @@
-#include "PostEffect.hpp"
+﻿#include "PostEffect.hpp"
 
 using namespace Castor;
 using namespace Castor3D;

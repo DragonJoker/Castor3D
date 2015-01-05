@@ -1,4 +1,4 @@
-#include "File.hpp"
+﻿#include "File.hpp"
 
 #if defined _WIN32
 #	if defined( _MSC_VER )

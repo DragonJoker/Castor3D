@@ -1,4 +1,4 @@
-#include "TextFile.hpp"
+﻿#include "TextFile.hpp"
 
 namespace Castor
 {

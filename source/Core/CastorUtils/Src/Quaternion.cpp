@@ -1,4 +1,4 @@
-#include "Quaternion.hpp"
+﻿#include "Quaternion.hpp"
 #include "Point.hpp"
 #include "Angle.hpp"
 #include "Matrix.hpp"

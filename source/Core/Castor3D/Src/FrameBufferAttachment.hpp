@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -56,17 +56,17 @@ namespace Castor3D
 		 *\param[in]	p_pFrameBuffer	The frame buffer
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Attache le tampon de rendu au tampon d'image donné, au point d'attache voulu
+		 *\brief		Attache le tampon de rendu au tampon d'image donnÃ©, au point d'attache voulu
 		 *\param[in]	p_eAttachment	Le point d'attache
 		 *\param[in]	p_pFrameBuffer	Le tampon d'image
-		 *\return		\p true si tout s'est bien passé
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool Attach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer );
 		/**
 		 *\~english
 		 *\brief		Detaches the render buffer from the frame buffer
 		 *\~french
-		 *\brief		Détache le tampon de rendu du tampon d'image
+		 *\brief		DÃ©tache le tampon de rendu du tampon d'image
 		 */
 		virtual void Detach();
 		/**
@@ -75,16 +75,16 @@ namespace Castor3D
 		 *\param[out]	p_pBuffer	Receives the buffer
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Récupère les données du tampon
-		 *\param[out]	p_pBuffer	Reçoit les données
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		RÃ©cupÃ¨re les donnÃ©es du tampon
+		 *\param[out]	p_pBuffer	ReÃ§oit les donnÃ©es
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool DownloadBuffer( Castor::PxBufferBaseSPtr p_pBuffer ) = 0;
 		/**
 		 *\~english
 		 *\return		\p true if the attachment has been made
 		 *\~french
-		 *\return		\p true si la liaison a été faite
+		 *\return		\p true si la liaison a Ã©tÃ© faite
 		 */
 		inline bool HasFrameBuffer()const
 		{
@@ -95,7 +95,7 @@ namespace Castor3D
 		 *\brief		Retrieves the frame buffer
 		 *\return		The frame buffer
 		 *\~french
-		 *\brief		Récupère le tampon d'image
+		 *\brief		RÃ©cupÃ¨re le tampon d'image
 		 *\return		Le tampon d'image
 		 */
 		inline FrameBufferSPtr GetFrameBuffer()const
@@ -122,13 +122,13 @@ namespace Castor3D
 		 *\param[in]	p_eInterpolation	The interpolation to apply if the image is stretched
 		 *\return		\p true if successful
 		 *\~french
-		 *\brief		Blitte le tampon de cette attache dans celui donné
-		 *\remark		L'interpolation pour un tampon stencil ou profondeur doit être eINTERPOLATION_MODE_NEAREST
+		 *\brief		Blitte le tampon de cette attache dans celui donnÃ©
+		 *\remark		L'interpolation pour un tampon stencil ou profondeur doit Ãªtre eINTERPOLATION_MODE_NEAREST
 		 *\param[in]	p_pBuffer			Le tampon destination
 		 *\param[in]	p_rectSrc			Le rectangle source
 		 *\param[in]	p_rectDst			Le rectangle destination
-		 *\param[in]	p_eInterpolation	L'interpolation à appliquer si l'image est redimensionnée
-		 *\return		\p true si tout s'est bien passé
+		 *\param[in]	p_eInterpolation	L'interpolation Ã  appliquer si l'image est redimensionnÃ©e
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool Blit( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, eINTERPOLATION_MODE p_eInterpolation ) = 0;
 
@@ -140,17 +140,17 @@ namespace Castor3D
 		 *\param[in]	p_pFrameBuffer	The frame buffer
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Attache le tampon de rendu au tampon d'image donné, au point d'attache voulu
+		 *\brief		Attache le tampon de rendu au tampon d'image donnÃ©, au point d'attache voulu
 		 *\param[in]	p_eAttachment	Le point d'attache
 		 *\param[in]	p_pFrameBuffer	Le tampon d'image
-		 *\return		\p true si tout s'est bien passé
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool DoAttach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer ) = 0;
 		/**
 		 *\~english
 		 *\brief		Detaches the render buffer from the frame buffer
 		 *\~french
-		 *\brief		Détache le tampon de rendu du tampon d'image
+		 *\brief		DÃ©tache le tampon de rendu du tampon d'image
 		 */
 		virtual void DoDetach() = 0;
 

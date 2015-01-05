@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -29,7 +29,7 @@ namespace Castor
 	\~english
 	\brief		Parser function parameter types enumeration
 	\~french
-	\brief		Enumération des types de paramètres pour une fonction d'analyse
+	\brief		EnumÃ©ration des types de paramÃ¨tres pour une fonction d'analyse
 	*/
 	typedef enum ePARAMETER_TYPE
 	CASTOR_TYPE( uint8_t )
@@ -73,7 +73,7 @@ namespace Castor
 	\~english
 	\brief		Template structure holding parameter specific data
 	\~french
-	\brief		Structure template contenant les données spécifiques du paramètre
+	\brief		Structure template contenant les donnÃ©es spÃ©cifiques du paramÃ¨tre
 	*/
 	class ParserParameterBase
 	{
@@ -83,7 +83,7 @@ namespace Castor
 		 *\brief		Retrieves the parameter type
 		 *\return		The type
 		 *\~french
-		 *\brief		Récupère le type du paramètre
+		 *\brief		RÃ©cupÃ¨re le type du paramÃ¨tre
 		 *\return		Le type
 		 */
 		virtual ePARAMETER_TYPE GetType() = 0;
@@ -92,7 +92,7 @@ namespace Castor
 		 *\brief		Retrieves the parameter base type (like ePARAMETER_TYPE_TEXT for ePARAMETER_TYPE_NAME)
 		 *\return		The type
 		 *\~french
-		 *\brief		Récupère le type de base du paramètre (comme ePARAMETER_TYPE_TEXT pour ePARAMETER_TYPE_NAME)
+		 *\brief		RÃ©cupÃ¨re le type de base du paramÃ¨tre (comme ePARAMETER_TYPE_TEXT pour ePARAMETER_TYPE_NAME)
 		 *\return		Le type
 		 */
 		virtual ePARAMETER_TYPE GetBaseType()
@@ -104,7 +104,7 @@ namespace Castor
 		 *\brief		Retrieves the parameter string type
 		 *\return		The type
 		 *\~french
-		 *\brief		Récupère le type du chaîne paramètre
+		 *\brief		RÃ©cupÃ¨re le type du chaÃ®ne paramÃ¨tre
 		 *\return		Le type
 		 */
 		virtual xchar const * GetStrType() = 0;
@@ -114,9 +114,9 @@ namespace Castor
 		 *\param[in,out]	p_strParams	The text containing the parameter value
 		 *\return			\p false if any error occured
 		 *\~french
-		 *\brief			Vérifie le paramètre
-		 *\param[in,out]	p_strParams	Le texte contenant la valeur du paramètre
-		 *\return			\p si un problème quelconque est arrivé
+		 *\brief			VÃ©rifie le paramÃ¨tre
+		 *\param[in,out]	p_strParams	Le texte contenant la valeur du paramÃ¨tre
+		 *\return			\p si un problÃ¨me quelconque est arrivÃ©
 		 */
 		virtual bool Parse( String & p_strParams ) = 0;
 		/**
@@ -125,8 +125,8 @@ namespace Castor
 		 *\param[out]	p_value	Receives the value
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la valeur du paramètre
-		 *\param[out]	p_value	Reçoit la valeur
+		 *\brief		RÃ©cupÃ¨re la valeur du paramÃ¨tre
+		 *\param[out]	p_value	ReÃ§oit la valeur
 		 *\return		La valeur
 		 */
 		template< typename T > T const & Get( T & p_value );

@@ -1,4 +1,4 @@
-#include "WindowRenderer.hpp"
+﻿#include "WindowRenderer.hpp"
 #include "RenderWindow.hpp"
 #include "Context.hpp"
 #include "RenderTarget.hpp"

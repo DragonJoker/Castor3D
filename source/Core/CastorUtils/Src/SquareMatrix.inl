@@ -1,4 +1,4 @@
-namespace
+﻿namespace
 {
 	template< typename Type, uint32_t Rows > struct SqrMtxOperators;
 

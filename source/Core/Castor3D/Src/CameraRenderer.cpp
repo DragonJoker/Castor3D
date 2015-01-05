@@ -1,4 +1,4 @@
-#include "CameraRenderer.hpp"
+﻿#include "CameraRenderer.hpp"
 
 using namespace Castor;
 

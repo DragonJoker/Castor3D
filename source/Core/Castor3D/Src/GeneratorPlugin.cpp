@@ -1,4 +1,4 @@
-#include "GeneratorPlugin.hpp"
+﻿#include "GeneratorPlugin.hpp"
 
 #if defined( _WIN32 )
 #	include <Windows.h>

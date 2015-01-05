@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -63,7 +63,7 @@ namespace Castor3D
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Initialise le sampler
-		 *\return		\p true si tout s'est bien passé
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool Initialise() = 0;
 		/**
@@ -83,14 +83,14 @@ namespace Castor3D
 		 *\brief		Applique le sampler
 		 *\param[in]	p_eDimension	La dimension de la texture
 		 *\param[in]	p_uiIndex		L'index du sampler
-		 *\return		\p true si tout s'est bien passé
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool Bind( eTEXTURE_DIMENSION p_eDimension, uint32_t p_uiIndex ) = 0;
 		/**
 		 *\~english
 		 *\brief		Removes the sampler
 		 *\~french
-		 *\brief		Enlève le sampler
+		 *\brief		EnlÃ¨ve le sampler
 		 */
 		virtual void Unbind() = 0;
 	};

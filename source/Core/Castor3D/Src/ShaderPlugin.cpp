@@ -1,4 +1,4 @@
-#include "ShaderPlugin.hpp"
+﻿#include "ShaderPlugin.hpp"
 
 #if defined( _WIN32 )
 #	include <Windows.h>

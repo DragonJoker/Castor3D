@@ -1,4 +1,4 @@
-#include "TextOverlay.hpp"
+﻿#include "TextOverlay.hpp"
 #include "InitialiseEvent.hpp"
 #include "Overlay.hpp"
 #include "OverlayRenderer.hpp"

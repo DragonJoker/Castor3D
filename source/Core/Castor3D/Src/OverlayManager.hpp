@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -33,7 +33,7 @@ namespace Castor3D
 	\~english
 	\brief		Overlay collection, with additional add and remove functions to manage Z-Index
 	\~french
-	\brief		Collection d'incrustations, avec des fonctions additionnelles d'ajout et de suppression pour gérer les Z-Index
+	\brief		Collection d'incrustations, avec des fonctions additionnelles d'ajout et de suppression pour gÃ©rer les Z-Index
 	*/
 	class C3D_API OverlayManager
 		:	private OverlayCollection
@@ -94,9 +94,9 @@ namespace Castor3D
 		 *\param[in]	p_iZIndex	The z-index
 		 *\return		\p true if an overlay is defined at the given z-index
 		 *\~french
-		 *\brief		Vérifie si une incrustation existe au z-index donné
+		 *\brief		VÃ©rifie si une incrustation existe au z-index donnÃ©
 		 *\param[in]	p_iZIndex	Le z-index
-		 *\return		\p true si un overlayest défini au z-index donné
+		 *\return		\p true si un overlayest dÃ©fini au z-index donnÃ©
 		 */
 		bool HasOverlay( int p_iZIndex );
 		/**
@@ -105,9 +105,9 @@ namespace Castor3D
 		 *\param[in]	p_strName	The name
 		 *\return		The overlay, \p nullptr if not found
 		 *\~french
-		 *\brief		Récupère l'incrustation avec le nom donné
+		 *\brief		RÃ©cupÃ¨re l'incrustation avec le nom donnÃ©
 		 *\param[in]	p_strName	Le nom
-		 *\return		L'incrustation, \p nullptr si non trouvée
+		 *\return		L'incrustation, \p nullptr si non trouvÃ©e
 		 */
 		OverlaySPtr GetOverlay( Castor::String const & p_strName );
 		/**
@@ -116,9 +116,9 @@ namespace Castor3D
 		 *\param[in]	p_iZIndex	The z-index
 		 *\return		The overlay, \p nullptr if not found
 		 *\~french
-		 *\brief		Récupère l'incrustation au z-index donné
+		 *\brief		RÃ©cupÃ¨re l'incrustation au z-index donnÃ©
 		 *\param[in]	p_iZIndex	Le z-index
-		 *\return		L'incrustation, \p nullptr si non trouvée
+		 *\return		L'incrustation, \p nullptr si non trouvÃ©e
 		 */
 		OverlaySPtr GetOverlay( int p_iZIndex );
 		/**
@@ -127,9 +127,9 @@ namespace Castor3D
 		 *\param[in]	p_strName	The name
 		 *\return		\p true if an overlay is defined with given name
 		 *\~french
-		 *\brief		Vérifie si une incrustation avec le nom donné existe
+		 *\brief		VÃ©rifie si une incrustation avec le nom donnÃ© existe
 		 *\param[in]	p_strName	Le nom
-		 *\return		\p true Si une incrustation est défini avec le nom donné
+		 *\return		\p true Si une incrustation est dÃ©fini avec le nom donnÃ©
 		 */
 		bool HasOverlay( Castor::String const & p_strName );
 		/**
@@ -140,7 +140,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Ecrit les overlays dans un fichier texte
 		 *\param[out]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passé
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		bool WriteOverlays( Castor::TextFile & p_file )const;
 		/**
@@ -149,9 +149,9 @@ namespace Castor3D
 		 *\param[in]	p_file	The file
 		 *\return		\p true if ok
 		 *\~french
-		 *\brief		Lit les overlays à partir d'un fichier texte
+		 *\brief		Lit les overlays Ã  partir d'un fichier texte
 		 *\param[in]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passé
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		bool ReadOverlays( Castor::TextFile & p_file );
 		/**
@@ -162,7 +162,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Ecrit les overlays dans un fichier binaire
 		 *\param[out]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passé
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		bool SaveOverlays( Castor::BinaryFile & p_file )const;
 		/**
@@ -171,9 +171,9 @@ namespace Castor3D
 		 *\param[in]	p_file	The file
 		 *\return		\p true if ok
 		 *\~french
-		 *\brief		Lit les overlays à partir d'un fichier binaire
+		 *\brief		Lit les overlays Ã  partir d'un fichier binaire
 		 *\param[in]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passé
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		bool LoadOverlays( Castor::BinaryFile & p_file );
 		/**
@@ -188,7 +188,7 @@ namespace Castor3D
 		 *\brief		Retrieves the overlay renderer
 		 *\return		The overlay renderer
 		 *\~french
-		 *\brief		Récupère le renderer d'incrustation
+		 *\brief		RÃ©cupÃ¨re le renderer d'incrustation
 		 *\return		Le renderer d'incrustation
 		 */
 		OverlayRendererSPtr GetRenderer()const
@@ -200,7 +200,7 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the first overlay
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère un itérateur sur la première incrustation
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur la premiÃ¨re incrustation
 		 *\return		La valeur
 		 */
 		inline OverlayPtrIntMap::iterator Begin()
@@ -212,7 +212,7 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the first overlay
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère un itérateur sur la première incrustation
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur la premiÃ¨re incrustation
 		 *\return		La valeur
 		 */
 		inline OverlayPtrIntMap::const_iterator Begin()const
@@ -224,7 +224,7 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the first overlay
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère un itérateur sur la première incrustation
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur la premiÃ¨re incrustation
 		 *\return		La valeur
 		 */
 		inline OverlayPtrIntMap::reverse_iterator RBegin()
@@ -236,7 +236,7 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the first overlay
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère un itérateur sur la première incrustation
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur la premiÃ¨re incrustation
 		 *\return		La valeur
 		 */
 		inline OverlayPtrIntMap::const_reverse_iterator RBegin()const
@@ -248,7 +248,7 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to after the last overlay
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère un itérateur sur après la dernière incrustation
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur aprÃ¨s la derniÃ¨re incrustation
 		 *\return		La valeur
 		 */
 		inline OverlayPtrIntMap::iterator End()
@@ -260,7 +260,7 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to after the last overlay
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère un itérateur sur après la dernière incrustation
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur aprÃ¨s la derniÃ¨re incrustation
 		 *\return		La valeur
 		 */
 		inline OverlayPtrIntMap::const_iterator End()const
@@ -272,7 +272,7 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to after the last overlay
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère un itérateur sur après la dernière incrustation
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur aprÃ¨s la derniÃ¨re incrustation
 		 *\return		La valeur
 		 */
 		inline OverlayPtrIntMap::reverse_iterator REnd()
@@ -284,7 +284,7 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to after the last overlay
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère un itérateur sur après la dernière incrustation
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur aprÃ¨s la derniÃ¨re incrustation
 		 *\return		La valeur
 		 */
 		inline OverlayPtrIntMap::const_reverse_iterator REnd()const
@@ -297,7 +297,7 @@ namespace Castor3D
 		 *\param[in]	p_size	The render window size
 		 *\~french
 		 *\brief		Commence le rendu des incrustations
-		 *\param[in]	p_size	La taille de la fenêtre de rendu
+		 *\param[in]	p_size	La taille de la fenÃªtre de rendu
 		 */
 		void BeginRendering( Castor::Size const & p_size );
 		/**
@@ -314,7 +314,7 @@ namespace Castor3D
 	private:
 		//!\~english Current available Z index	\~french Z index disponible
 		int m_iCurrentZIndex;
-		//!\~english The overlays, sorted by Z index	\~french Les incrustations, triées par Z index
+		//!\~english The overlays, sorted by Z index	\~french Les incrustations, triÃ©es par Z index
 		OverlayPtrIntMap m_mapOverlaysByZIndex;
 		//!\~english The engine	\~french Le moteur
 		Engine * m_pEngine;

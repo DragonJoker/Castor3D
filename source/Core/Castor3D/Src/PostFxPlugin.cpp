@@ -1,4 +1,4 @@
-#include "PostFxPlugin.hpp"
+﻿#include "PostFxPlugin.hpp"
 
 #if defined( _WIN32 )
 #	include <Windows.h>

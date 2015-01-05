@@ -1,4 +1,4 @@
-#if defined _WIN32
+﻿#if defined _WIN32
 #	if defined( _MSC_VER )
 #		pragma warning( push )
 #		pragma warning( disable:4311 )

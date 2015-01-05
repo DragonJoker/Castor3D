@@ -1,4 +1,4 @@
-#include "LightCategory.hpp"
+﻿#include "LightCategory.hpp"
 #include "Light.hpp"
 
 #include <Logger.hpp>

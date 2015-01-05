@@ -1,4 +1,4 @@
-#include "Icosahedron.hpp"
+﻿#include "Icosahedron.hpp"
 #include "Submesh.hpp"
 #include "Vertex.hpp"
 #include "Face.hpp"

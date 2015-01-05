@@ -1,4 +1,4 @@
-#include "Subdivider.hpp"
+﻿#include "Subdivider.hpp"
 #include "SubdivisionFrameEvent.hpp"
 #include "Submesh.hpp"
 #include "Face.hpp"

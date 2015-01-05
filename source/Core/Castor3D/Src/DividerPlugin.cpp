@@ -1,4 +1,4 @@
-#include "DividerPlugin.hpp"
+﻿#include "DividerPlugin.hpp"
 
 #if defined( _WIN32 )
 #	include <Windows.h>

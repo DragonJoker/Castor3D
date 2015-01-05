@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -33,7 +33,7 @@ namespace Castor3D
 	\~english
 	\brief		Implementation of MovingObjectBase for MovableObject
 	\~french
-	\brief		Implémentation de MovingObjectBase pour les MovableObject
+	\brief		ImplÃ©mentation de MovingObjectBase pour les MovableObject
 	*/
 	class C3D_API MovingObject
 		: public MovingObjectBase
@@ -58,7 +58,7 @@ namespace Castor3D
 		 *\brief		Defines the movable object
 		 *\param[in]	p_pObject	The object
 		 *\~french
-		 *\brief		Définit l'objet mouvant
+		 *\brief		DÃ©finit l'objet mouvant
 		 *\param[in]	p_pObject	L'objet
 		 */
 		inline void SetObject( MovableObjectSPtr p_pObject )
@@ -70,7 +70,7 @@ namespace Castor3D
 		 *\brief		Retrieves the moving object
 		 *\return		The moving object
 		 *\~french
-		 *\brief		Récupère l'objet mouvant
+		 *\brief		RÃ©cupÃ¨re l'objet mouvant
 		 *\return		L'objet mouvant
 		 */
 		inline MovableObjectSPtr GetObject()const
@@ -82,7 +82,7 @@ namespace Castor3D
 		 *\brief		Retrieves the object name
 		 *\return		The name
 		 *\~french
-		 *\brief		Récupère le nom de l'objet
+		 *\brief		RÃ©cupÃ¨re le nom de l'objet
 		 *\return		Le nom
 		 */
 		virtual Castor::String const & GetName()const;
@@ -92,7 +92,7 @@ namespace Castor3D
 		virtual MovingObjectBaseSPtr DoClone();
 
 	private:
-		//!\~english The object affected by the animations	\~french L'objet affecté par les animations
+		//!\~english The object affected by the animations	\~french L'objet affectÃ© par les animations
 		MovableObjectWPtr m_pObject;
 	};
 }

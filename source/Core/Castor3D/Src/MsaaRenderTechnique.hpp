@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -36,28 +36,28 @@ namespace Castor3D
 				<br />it renders to the singlesampled frame buffer
 				<br />then it blits this singlesampled frame buffer to the main one with appropriate resize
 	\~french
-	\brief		Classe de technique de rendu implémentant le MSAA
-	\remark		On crée un tampon d'image supportant le multisampling avec les attaches nécessaires
-				<br />on fait le rendu dans le tampon d'image singlesamplé
-				<br />puis on blitte ce tampon d'image singlesamplé dans le principal avec le redimensionnement approprié
+	\brief		Classe de technique de rendu implÃ©mentant le MSAA
+	\remark		On crÃ©e un tampon d'image supportant le multisampling avec les attaches nÃ©cessaires
+				<br />on fait le rendu dans le tampon d'image singlesamplÃ©
+				<br />puis on blitte ce tampon d'image singlesamplÃ© dans le principal avec le redimensionnement appropriÃ©
 	*/
 	class C3D_API MsaaRenderTechnique
 		:	public RenderTechniqueBase
 	{
 	protected:
-		//!\~english The multisampled frame buffer	\~french Le tampon d'image multisamplé
+		//!\~english The multisampled frame buffer	\~french Le tampon d'image multisamplÃ©
 		FrameBufferSPtr m_pMsFrameBuffer;
-		//!\~english The buffer receiving the multisampled color render	\~french Le tampon recevant le rendu couleur multisamplé
+		//!\~english The buffer receiving the multisampled color render	\~french Le tampon recevant le rendu couleur multisamplÃ©
 		ColourRenderBufferSPtr m_pMsColorBuffer;
-		//!\~english The buffer receiving the multisampled depth render	\~french Le tampon recevant le rendu profondeur multisamplé
+		//!\~english The buffer receiving the multisampled depth render	\~french Le tampon recevant le rendu profondeur multisamplÃ©
 		DepthStencilRenderBufferSPtr m_pMsDepthBuffer;
-		//!\~english The attach between multisampled colour buffer and multisampled frame buffer	\~french L'attache entre le tampon couleur multisamplé et le tampon multisamplé
+		//!\~english The attach between multisampled colour buffer and multisampled frame buffer	\~french L'attache entre le tampon couleur multisamplÃ© et le tampon multisamplÃ©
 		RenderBufferAttachmentSPtr m_pMsColorAttach;
-		//!\~english The attach between multisampled depth buffer and multisampled frame buffer	\~french L'attache entre le tampon profondeur multisamplé et le tampon multisamplé
+		//!\~english The attach between multisampled depth buffer and multisampled frame buffer	\~french L'attache entre le tampon profondeur multisamplÃ© et le tampon multisamplÃ©
 		RenderBufferAttachmentSPtr m_pMsDepthAttach;
 		//!\~english The samples count	\~french Le nombre de samples
 		int m_iSamplesCount;
-		//!\~english The bound frame buffer, depends on m_iSamplesCount	\~french Le tampon d'image lié, dépend de m_iSamplesCount
+		//!\~english The bound frame buffer, depends on m_iSamplesCount	\~french Le tampon d'image liÃ©, dÃ©pend de m_iSamplesCount
 		FrameBufferSPtr m_pBoundFrameBuffer;
 		//!\~english Multisampled rasteriser states	\~french Etats du rasteriser pour le multisample
 		RasteriserStateWPtr m_wpMsRasteriserState;
@@ -80,7 +80,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_renderTarget	La render target pour cette technique
 		 *\param[in]	p_pRenderSystem	Le render system
-		 *\param[in]	p_params		Les paramètres de la technique
+		 *\param[in]	p_params		Les paramÃ¨tres de la technique
 		 */
 		MsaaRenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params );
 
@@ -100,11 +100,11 @@ namespace Castor3D
 		 *\param[in]	p_iSamplesCount	The wanted samples count
 		 *\return		A clone of this object
 		 *\~french
-		 *\brief		Fonction d'instanciation, utilisée par la fabrique pour créer des objets d'un type donné
+		 *\brief		Fonction d'instanciation, utilisÃ©e par la fabrique pour crÃ©er des objets d'un type donnÃ©
 		 *\param[in]	p_renderTarget	La cible de rendu de la technique
 		 *\param[in]	p_pRenderSystem	Le render system
-		 *\param[in]	p_params		Les paramètres de la technique
-		 *\return		Un clône de cet objet
+		 *\param[in]	p_params		Les paramÃ¨tres de la technique
+		 *\return		Un clÃ´ne de cet objet
 		 */
 		static RenderTechniqueBaseSPtr CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params );
 
@@ -114,8 +114,8 @@ namespace Castor3D
 		 *\brief		Creation function
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Fonction de création
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Fonction de crÃ©ation
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool DoCreate();
 		/**
@@ -148,8 +148,8 @@ namespace Castor3D
 		 *\brief		Render begin function
 		 *\return		\p true if ok
 		 *\~french
-		 *\brief		Fonction de début de rendu
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Fonction de dÃ©but de rendu
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool DoBeginRender();
 		/**
@@ -162,11 +162,11 @@ namespace Castor3D
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Fonction de rendu
-		 *\param[in]	p_scene			La scène à rendre
-		 *\param[in]	p_camera		La caméra à travers laquelle la scène est vue
+		 *\param[in]	p_scene			La scÃ¨ne Ã  rendre
+		 *\param[in]	p_camera		La camÃ©ra Ã  travers laquelle la scÃ¨ne est vue
 		 *\param[in]	p_ePrimitives	Le mode d'affichage
-		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la dernière frame
-		 *\return		\p true si tout s'est bien passé
+		 *\param[in]	p_dFrameTime	Le temps Ã©coulÃ© depuis le rendu de la derniÃ¨re frame
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime );
 		/**

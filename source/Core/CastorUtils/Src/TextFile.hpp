@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -42,7 +42,7 @@ namespace Castor
 		 *\param[in]	p_iMode		The opening mode, combination of one or more eOPEN_MODE
 		 *\param[in]	p_eEncoding	The text encoding mode
 		 *\~french
-		 *\brief		Ouvre le fichier situé au chemin donné, avec le mode et l'encodage donnés
+		 *\brief		Ouvre le fichier situÃ© au chemin donnÃ©, avec le mode et l'encodage donnÃ©s
 		 *\param[in]	p_fileName	Le chemin du fichier
 		 *\param[in]	p_iMode		Le mode d'ouverture, combinaison d'un ou plusieurs eOPEN_MODE
 		 *\param[in]	p_eEncoding	L'encodage pour un fichier en mode texte
@@ -59,7 +59,7 @@ namespace Castor
 		 *\~english
 		 *\brief		Move constructor
 		 *\~french
-		 *\brief		Constructeur par déplacement
+		 *\brief		Constructeur par dÃ©placement
 		 */
 		TextFile( TextFile && p_file );
 		/**
@@ -75,9 +75,9 @@ namespace Castor
 		 *\param[in]	p_toWrite	The data to write in this file
 		 *\return		A reference to this file
 		 *\~french
-		 *\brief		Fonction d'écriture dépendant du mode d'ouverture
-		 *\param[in]	p_toWrite	La donnée à écrire dans le fichier
-		 *\return		Une référence sur ce fichier
+		 *\brief		Fonction d'Ã©criture dÃ©pendant du mode d'ouverture
+		 *\param[in]	p_toWrite	La donnÃ©e Ã  Ã©crire dans le fichier
+		 *\return		Une rÃ©fÃ©rence sur ce fichier
 		 */
 		template< typename T > TextFile & operator <<( T const & p_toWrite );
 		/**
@@ -86,9 +86,9 @@ namespace Castor
 		 *\param[out]	p_toRead	The data to read from this file
 		 *\return		A reference to this file
 		 *\~french
-		 *\brief		Fonction de lecture dépendant du mode d'ouverture
-		 *\param[out]	p_toRead	La donnée à lire à partir du fichier
-		 *\return		Une référence sur ce fichier
+		 *\brief		Fonction de lecture dÃ©pendant du mode d'ouverture
+		 *\param[out]	p_toRead	La donnÃ©e Ã  lire Ã  partir du fichier
+		 *\return		Une rÃ©fÃ©rence sur ce fichier
 		 */
 		template< typename T > TextFile & operator >>( T & p_toRead );
 		/**
@@ -99,10 +99,10 @@ namespace Castor
 		 *\param[in]	p_strSeparators	The list of line separators
 		 *\return		The bytes read
 		 *\~french
-		 *\brief		Lit une ligne à partir du fichier (s'arrête au premier séparateur rencontré ou quand la taille est atteinte)
-		 *\param[out]	p_toRead		Reçoit la ligne lue
+		 *\brief		Lit une ligne Ã  partir du fichier (s'arrÃªte au premier sÃ©parateur rencontrÃ© ou quand la taille est atteinte)
+		 *\param[out]	p_toRead		ReÃ§oit la ligne lue
 		 *\param[in]	p_size			La taille maximale de la ligne
-		 *\param[in]	p_strSeparators	La liste des séparateurs de ligne
+		 *\param[in]	p_strSeparators	La liste des sÃ©parateurs de ligne
 		 *\return		Le nombre d'octets lus
 		 */
 		uint64_t ReadLine( String & p_toRead, uint64_t p_size, String p_strSeparators = cuT( "\r\n" ) );
@@ -112,8 +112,8 @@ namespace Castor
 		 *\param[out]	p_toRead	Receives the read word
 		 *\return		The bytes read
 		 *\~french
-		 *\brief		Lit un mot à partir du fichier (s'arrête au premier ' ' rencontré)
-		 *\param[out]	p_toRead	Reçoit le mot lu
+		 *\brief		Lit un mot Ã  partir du fichier (s'arrÃªte au premier ' ' rencontrÃ©)
+		 *\param[out]	p_toRead	ReÃ§oit le mot lu
 		 *\return		Le nombre d'octets lus
 		 */
 		uint64_t ReadWord( String & p_toRead );
@@ -123,8 +123,8 @@ namespace Castor
 		 *\param[out]	p_toRead	Receives the read char
 		 *\return		The bytes read
 		 *\~french
-		 *\brief		Lit un caractère à partir du fichier
-		 *\param[out]	p_toRead	Reçoit le caractère lu
+		 *\brief		Lit un caractÃ¨re Ã  partir du fichier
+		 *\param[out]	p_toRead	ReÃ§oit le caractÃ¨re lu
 		 *\return		Le nombre d'octets lus
 		 */
 		uint64_t ReadChar( xchar & p_toRead );
@@ -134,8 +134,8 @@ namespace Castor
 		 *\param[out]	p_strOut	Receives thge content
 		 *\return		The bytes read
 		 *\~french
-		 *\brief		Copie tout le contenu de ce fichier dans une chaîne de caractères
-		 *\param[out]	p_strOut	Reçoit le contenu
+		 *\brief		Copie tout le contenu de ce fichier dans une chaÃ®ne de caractÃ¨res
+		 *\param[out]	p_strOut	ReÃ§oit le contenu
 		 *\return		Le nombre d'octets lus
 		 */
 		uint64_t CopyToString( String & p_strOut );
@@ -147,7 +147,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Ecrit une texte dans le fichier
 		 *\param[in]	p_strText	Le texte
-		 *\return		Le nombre d'octets écrits
+		 *\return		Le nombre d'octets Ã©crits
 		 */
 		uint64_t WriteText( String const & p_strText );
 		/**
@@ -158,11 +158,11 @@ namespace Castor
 		 *\param[in]	...			POD arguments (cf. printf)
 		 *\return		The bytes written
 		 *\~french
-		 *\brief		Ecrit un texte formaté dans le fichier
+		 *\brief		Ecrit un texte formatÃ© dans le fichier
 		 *\param[in]	p_uiMaxSize	La taille maximale du texte
 		 *\param[in]	p_pFormat	Le format du texte
-		 *\param[in]	...			Paramètres POD (cf. printf)
-		 *\return		Le nombre d'octets écrits
+		 *\param[in]	...			ParamÃ¨tres POD (cf. printf)
+		 *\return		Le nombre d'octets Ã©crits
 		 */
 		uint64_t Print( uint64_t p_uiMaxSize, xchar const * p_pFormat, ... );
 		/**
@@ -171,9 +171,9 @@ namespace Castor
 		 *\param[in]	p_file	The file to copy
 		 *\return		A reference to this file
 		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_file	Le fichier à copier
-		 *\return		Une référence sur ce fichier
+		 *\brief		OpÃ©rateur d'affectation par copie
+		 *\param[in]	p_file	Le fichier Ã  copier
+		 *\return		Une rÃ©fÃ©rence sur ce fichier
 		 */
 		TextFile & operator =( TextFile const & p_file );
 		/**
@@ -182,9 +182,9 @@ namespace Castor
 		 *\param[in]	p_file	The file to move
 		 *\return		A reference to this file
 		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_file	Le fichier à déplacer
-		 *\return		Une référence sur ce fichier
+		 *\brief		OpÃ©rateur d'affectation par dÃ©placement
+		 *\param[in]	p_file	Le fichier Ã  dÃ©placer
+		 *\return		Une rÃ©fÃ©rence sur ce fichier
 		 */
 		TextFile & operator =( TextFile && p_file );
 	};

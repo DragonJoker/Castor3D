@@ -1,4 +1,4 @@
-#include "PreciseTimer.hpp"
+﻿#include "PreciseTimer.hpp"
 #include "CastorUtils.hpp"
 
 #if defined( _WIN32 )

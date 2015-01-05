@@ -1,4 +1,4 @@
-#include "ShaderObject.hpp"
+﻿#include "ShaderObject.hpp"
 #include "ShaderProgram.hpp"
 #include "FrameVariable.hpp"
 #include "OneFrameVariable.hpp"

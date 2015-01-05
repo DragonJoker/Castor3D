@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -34,7 +34,7 @@ namespace Castor3D
 	\~english
 	\brief		Binary data chunk writer/reader base class
 	\~french
-	\brief		Classe de base de lecture/écriture d'un chunk de données binaires
+	\brief		Classe de base de lecture/Ã©criture d'un chunk de donnÃ©es binaires
 	*/
 	template< class TParsed >
 	class C3D_API BinaryParser
@@ -46,7 +46,7 @@ namespace Castor3D
 		 *\param[in]	p_path	The current folder path
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_path	Le chemin d'accès au dossier courant
+		 *\param[in]	p_path	Le chemin d'accÃ¨s au dossier courant
 		 */
 		BinaryParser( Castor::Path const & p_path )
 			:	m_path( p_path )
@@ -59,10 +59,10 @@ namespace Castor3D
 		 *\param[in]	p_file	The file
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		Fonction d'écriture dans un fichier
-		 *\param[in]	p_obj	L'objet à écrire
+		 *\brief		Fonction d'Ã©criture dans un fichier
+		 *\param[in]	p_obj	L'objet Ã  Ã©crire
 		 *\param[in]	p_file	Le fichier
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		virtual bool Fill( TParsed const & p_obj, Castor::BinaryFile & p_file )const
 		{
@@ -83,10 +83,10 @@ namespace Castor3D
 		 *\param[in]	p_file	The file containing the chunk
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		Fonction de lecture à partir d'un fichier
-		 *\param[out]	p_obj	L'objet à lire
+		 *\brief		Fonction de lecture Ã  partir d'un fichier
+		 *\param[out]	p_obj	L'objet Ã  lire
 		 *\param[in]	p_file	Le fichier qui contient le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		virtual bool Parse( TParsed & p_obj, Castor::BinaryFile & p_file )const
 		{
@@ -107,10 +107,10 @@ namespace Castor3D
 		 *\param[in]	p_chunk	The chunk
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		Fonction d'écriture dans un chunk
-		 *\param[in]	p_obj	L'objet à écrire
+		 *\brief		Fonction d'Ã©criture dans un chunk
+		 *\param[in]	p_obj	L'objet Ã  Ã©crire
 		 *\param[in]	p_chunk	Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		virtual bool Fill( TParsed const & p_obj, BinaryChunk & p_chunk )const = 0;
 		/**
@@ -120,10 +120,10 @@ namespace Castor3D
 		 *\param[in]	p_chunk	The chunk
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		Fonction de lecture à partir d'un chunk
-		 *\param[out]	p_obj	L'objet à lire
+		 *\brief		Fonction de lecture Ã  partir d'un chunk
+		 *\param[out]	p_obj	L'objet Ã  lire
 		 *\param[in]	p_chunk	Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		virtual bool Parse( TParsed & p_obj, BinaryChunk & p_chunk )const = 0;
 
@@ -136,11 +136,11 @@ namespace Castor3D
 		 *\param[in]	p_chunk		The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
-		 *\param[out]	p_pValues	Reçoit les valeurs
+		 *\brief		RÃ©cupÃ¨re un tableau de valeurs Ã  partir d'un chunk
+		 *\param[out]	p_pValues	ReÃ§oit les valeurs
 		 *\param[out]	p_uiCount	Le compte des valeurs
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		template< typename T >
 		bool DoParseChunk( T * p_pValues, uint32_t p_uiCount, BinaryChunk & p_chunk )const
@@ -154,10 +154,10 @@ namespace Castor3D
 		 *\param[in]	p_chunk		The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
-		 *\param[out]	p_tValue	Reçoit les valeurs
+		 *\brief		RÃ©cupÃ¨re un tableau de valeurs Ã  partir d'un chunk
+		 *\param[out]	p_tValue	ReÃ§oit les valeurs
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		template< typename T, uint32_t Count >
 		bool DoParseChunk( T( & p_tValue )[Count], BinaryChunk & p_chunk )const
@@ -171,10 +171,10 @@ namespace Castor3D
 		 *\param[in]	p_chunk		The chunk containing the value
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		Récupère une valeur à partir d'un chunk
-		 *\param[out]	p_tValue	Reçoit la valeur
+		 *\brief		RÃ©cupÃ¨re une valeur Ã  partir d'un chunk
+		 *\param[out]	p_tValue	ReÃ§oit la valeur
 		 *\param[in]	p_chunk		Le chunk contenant la valeur
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		template< typename T >
 		bool DoParseChunk( T & p_tValue, BinaryChunk & p_chunk )const
@@ -195,7 +195,7 @@ namespace Castor3D
 		 *\param[in]	p_uiCount		Le nombre de valeurs
 		 *\param[in]	p_eChunkType	Le type du subchunk
 		 *\param[in]	p_chunk			Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		template< typename T >
 		bool DoFillChunk( T const * p_pValues, uint32_t p_uiCount, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )const
@@ -214,7 +214,7 @@ namespace Castor3D
 		 *\param[in]	p_tValue		Les valeurs
 		 *\param[in]	p_eChunkType	Le type du subchunk
 		 *\param[in]	p_chunk			Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		template< typename T, uint32_t Count >
 		bool DoFillChunk( T const( & p_tValue )[Count], eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )const
@@ -233,7 +233,7 @@ namespace Castor3D
 		 *\param[in]	p_tValue		La valeur
 		 *\param[in]	p_eChunkType	Le type du subchunk
 		 *\param[in]	p_chunk			Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		template< typename T >
 		bool DoFillChunk( T const & p_tValue, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )const
@@ -241,7 +241,7 @@ namespace Castor3D
 			return ChunkFiller< T >()( p_tValue, p_eChunkType, p_chunk );
 		}
 
-		//!\~english The current folder path	\~french Le chemin d'accès au dossiercourant
+		//!\~english The current folder path	\~french Le chemin d'accÃ¨s au dossiercourant
 		Castor::Path m_path;
 	};
 }

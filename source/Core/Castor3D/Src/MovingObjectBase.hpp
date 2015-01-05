@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -36,8 +36,8 @@ namespace Castor3D
 	\brief		Class which represents the moving things
 	\remark		Manages translation, scaling, rotation of the thing
 	\~french
-	\brief		Classe de représentation de choses mouvantes
-	\remark		Gère les translations, mises à l'échelle, rotations de la chose
+	\brief		Classe de reprÃ©sentation de choses mouvantes
+	\remark		GÃ¨re les translations, mises Ã  l'Ã©chelle, rotations de la chose
 	*/
 	typedef enum eMOVING_OBJECT_TYPE CASTOR_TYPE( uint8_t )
 	{
@@ -53,8 +53,8 @@ namespace Castor3D
 	\brief		Class which represents the moving things
 	\remark		Manages translation, scaling, rotation of the thing
 	\~french
-	\brief		Classe de représentation de choses mouvantes
-	\remark		Gère les translations, mises à l'échelle, rotations de la chose
+	\brief		Classe de reprÃ©sentation de choses mouvantes
+	\remark		GÃ¨re les translations, mises Ã  l'Ã©chelle, rotations de la chose
 	*/
 	class C3D_API MovingObjectBase
 	{
@@ -81,8 +81,8 @@ namespace Castor3D
 		 *\remark		The child's transformations are affected by this object's ones
 		 *\param[in]	p_Object	The child
 		 *\~french
-		 *\brief		Ajoute un objet enfant à celui-ci
-		 *\remark		Les transformations de l'enfant sont affectées par celles de cet objet
+		 *\brief		Ajoute un objet enfant Ã  celui-ci
+		 *\remark		Les transformations de l'enfant sont affectÃ©es par celles de cet objet
 		 *\param[in]	p_pObject	L'enfant
 		 */
 		void AddChild( MovingObjectBaseSPtr p_pObject );
@@ -91,12 +91,12 @@ namespace Castor3D
 		 *\brief		Updates the object, applies the transformations at given time
 		 *\param[in]	p_rTime					Current time index
 		 *\param[in]	p_bLooped				Tells if the animation is looped
-		 *\param[în]	p_mtxTransformations	The current transformation matrix
+		 *\param[Ã®n]	p_mtxTransformations	The current transformation matrix
 		 *\~french
-		 *\brief		Met à jour les transformations appliquées à l'objet, l'index de temps donné
+		 *\brief		Met Ã  jour les transformations appliquÃ©es Ã  l'objet, l'index de temps donnÃ©
 		 *\param[in]	p_rTime					Index de temps courant
-		 *\param[in]	p_bLooped				Dit si l'animation est bouclée
-		 *\param[în]	p_mtxTransformations	La matrice de transformation courante
+		 *\param[in]	p_bLooped				Dit si l'animation est bouclÃ©e
+		 *\param[Ã®n]	p_mtxTransformations	La matrice de transformation courante
 		 */
 		void Update( real p_rTime, bool p_bLooped, Castor::Matrix4x4r const & p_mtxTransformations );
 		/**
@@ -104,7 +104,7 @@ namespace Castor3D
 		 *\brief		Retrieves the object name
 		 *\return		The name
 		 *\~french
-		 *\brief		Récupère le nom de l'objet
+		 *\brief		RÃ©cupÃ¨re le nom de l'objet
 		 *\return		Le nom
 		 */
 		virtual Castor::String const & GetName()const = 0;
@@ -114,9 +114,9 @@ namespace Castor3D
 		 *\remark		If a key frame with the same starting time already exists, it is returned, but not modified
 		 *\param[in]	p_rFrom	The starting time
 		 *\~french
-		 *\brief		Crée une key frame et l'ajoute à la liste
-		 *\remark		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée
-		 *\param[in]	p_rFrom	L'index de temps de début
+		 *\brief		CrÃ©e une key frame et l'ajoute Ã  la liste
+		 *\remark		Si une key frame avec le mÃªme index de temps de dÃ©but existe, elle est retournÃ©e sans Ãªtre modifiÃ©e
+		 *\param[in]	p_rFrom	L'index de temps de dÃ©but
 		 */
 		ScaleKeyFrameSPtr AddScaleKeyFrame( real p_rFrom );
 		/**
@@ -125,9 +125,9 @@ namespace Castor3D
 		 *\remark		If a key frame with the same starting time already exists, it is returned, but not modified
 		 *\param[in]	p_rFrom	The starting time
 		 *\~french
-		 *\brief		Crée une key frame et l'ajoute à la liste
-		 *\remark		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée
-		 *\param[in]	p_rFrom	L'index de temps de début
+		 *\brief		CrÃ©e une key frame et l'ajoute Ã  la liste
+		 *\remark		Si une key frame avec le mÃªme index de temps de dÃ©but existe, elle est retournÃ©e sans Ãªtre modifiÃ©e
+		 *\param[in]	p_rFrom	L'index de temps de dÃ©but
 		 */
 		TranslateKeyFrameSPtr AddTranslateKeyFrame( real p_rFrom );
 		/**
@@ -136,9 +136,9 @@ namespace Castor3D
 		 *\remark		If a key frame with the same starting time already exists, it is returned, but not modified
 		 *\param[in]	p_rFrom	The starting time
 		 *\~french
-		 *\brief		Crée une key frame et l'ajoute à la liste
-		 *\remark		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée
-		 *\param[in]	p_rFrom	L'index de temps de début
+		 *\brief		CrÃ©e une key frame et l'ajoute Ã  la liste
+		 *\remark		Si une key frame avec le mÃªme index de temps de dÃ©but existe, elle est retournÃ©e sans Ãªtre modifiÃ©e
+		 *\param[in]	p_rFrom	L'index de temps de dÃ©but
 		 */
 		RotateKeyFrameSPtr AddRotateKeyFrame( real p_rFrom );
 		/**
@@ -146,7 +146,7 @@ namespace Castor3D
 		 *\brief		Deletes the key frame at time index p_time
 		 *\param[in]	p_rTime	The time index
 		 *\~french
-		 *\brief		Supprime la key frame à l'index de temps donné
+		 *\brief		Supprime la key frame Ã  l'index de temps donnÃ©
 		 *\param[in]	p_rTime	L'index de temps
 		 */
 		void RemoveScaleKeyFrame( real p_rTime );
@@ -155,7 +155,7 @@ namespace Castor3D
 		 *\brief		Deletes the key frame at time index p_time
 		 *\param[in]	p_rTime	The time index
 		 *\~french
-		 *\brief		Supprime la key frame à l'index de temps donné
+		 *\brief		Supprime la key frame Ã  l'index de temps donnÃ©
 		 *\param[in]	p_rTime	L'index de temps
 		 */
 		void RemoveTranslateKeyFrame( real p_rTime );
@@ -164,7 +164,7 @@ namespace Castor3D
 		 *\brief		Deletes the key frame at time index p_time
 		 *\param[in]	p_rTime	The time index
 		 *\~french
-		 *\brief		Supprime la key frame à l'index de temps donné
+		 *\brief		Supprime la key frame Ã  l'index de temps donnÃ©
 		 *\param[in]	p_rTime	L'index de temps
 		 */
 		void RemoveRotateKeyFrame( real p_rTime );
@@ -175,7 +175,7 @@ namespace Castor3D
 		 *\return		The clone
 		 *\~french
 		 *\brief		Clone cet objet animable
-		 *\param[out]	p_map	Reçoit les enfants clonés en plus de l'objet cloné
+		 *\param[out]	p_map	ReÃ§oit les enfants clonÃ©s en plus de l'objet clonÃ©
 		 *\return		Le clone
 		 */
 		MovingObjectBaseSPtr Clone( MovingObjectPtrStrMap & p_map );
@@ -184,8 +184,8 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the begin of the keyframes map
 		 *\return		Iterator to the begin of the keyframes map
 		 *\~french
-		 *\brief		Récupère un itérateur sur le début de la map de keyframes
-		 *\return		Itérateur sur le début de la map de keyframes
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur le dÃ©but de la map de keyframes
+		 *\return		ItÃ©rateur sur le dÃ©but de la map de keyframes
 		 */
 		inline ScaleKeyFramePtrRealMapIt ScalesBegin()
 		{
@@ -196,8 +196,8 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the begin of the keyframes map
 		 *\return		Constant iterator to the begin of the keyframes map
 		 *\~french
-		 *\brief		Récupère un itérateur sur le début de la map de keyframes
-		 *\return		Itérateur constant sur le début de la map de keyframes
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur le dÃ©but de la map de keyframes
+		 *\return		ItÃ©rateur constant sur le dÃ©but de la map de keyframes
 		 */
 		inline ScaleKeyFramePtrRealMapConstIt ScalesBegin()const
 		{
@@ -208,8 +208,8 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the begin of the keyframes map
 		 *\return		Iterator to the begin of the keyframes map
 		 *\~french
-		 *\brief		Récupère un itérateur sur le début de la map de keyframes
-		 *\return		Itérateur sur le début de la map de keyframes
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur le dÃ©but de la map de keyframes
+		 *\return		ItÃ©rateur sur le dÃ©but de la map de keyframes
 		 */
 		inline ScaleKeyFramePtrRealMapIt ScalesEnd()
 		{
@@ -220,8 +220,8 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the end of the keyframes map
 		 *\return		Constant iterator to the end of the keyframes map
 		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map de keyframes
-		 *\return		Itérateur constant sur la fin de la map de keyframes
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur la fin de la map de keyframes
+		 *\return		ItÃ©rateur constant sur la fin de la map de keyframes
 		 */
 		inline ScaleKeyFramePtrRealMapConstIt ScalesEnd()const
 		{
@@ -232,8 +232,8 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the begin of the keyframes map
 		 *\return		Iterator to the begin of the keyframes map
 		 *\~french
-		 *\brief		Récupère un itérateur sur le début de la map de keyframes
-		 *\return		Itérateur sur le début de la map de keyframes
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur le dÃ©but de la map de keyframes
+		 *\return		ItÃ©rateur sur le dÃ©but de la map de keyframes
 		 */
 		inline TranslateKeyFramePtrRealMapIt TranslatesBegin()
 		{
@@ -244,8 +244,8 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the begin of the keyframes map
 		 *\return		Constant iterator to the begin of the keyframes map
 		 *\~french
-		 *\brief		Récupère un itérateur sur le début de la map de keyframes
-		 *\return		Itérateur constant sur le début de la map de keyframes
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur le dÃ©but de la map de keyframes
+		 *\return		ItÃ©rateur constant sur le dÃ©but de la map de keyframes
 		 */
 		inline TranslateKeyFramePtrRealMapConstIt TranslatesBegin()const
 		{
@@ -256,8 +256,8 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the begin of the keyframes map
 		 *\return		Iterator to the begin of the keyframes map
 		 *\~french
-		 *\brief		Récupère un itérateur sur le début de la map de keyframes
-		 *\return		Itérateur sur le début de la map de keyframes
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur le dÃ©but de la map de keyframes
+		 *\return		ItÃ©rateur sur le dÃ©but de la map de keyframes
 		 */
 		inline TranslateKeyFramePtrRealMapIt TranslatesEnd()
 		{
@@ -268,8 +268,8 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the end of the keyframes map
 		 *\return		Constant iterator to the end of the keyframes map
 		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map de keyframes
-		 *\return		Itérateur constant sur la fin de la map de keyframes
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur la fin de la map de keyframes
+		 *\return		ItÃ©rateur constant sur la fin de la map de keyframes
 		 */
 		inline TranslateKeyFramePtrRealMapConstIt TranslatesEnd()const
 		{
@@ -280,8 +280,8 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the begin of the keyframes map
 		 *\return		Iterator to the begin of the keyframes map
 		 *\~french
-		 *\brief		Récupère un itérateur sur le début de la map de keyframes
-		 *\return		Itérateur sur le début de la map de keyframes
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur le dÃ©but de la map de keyframes
+		 *\return		ItÃ©rateur sur le dÃ©but de la map de keyframes
 		 */
 		inline RotateKeyFramePtrRealMapIt RotatesBegin()
 		{
@@ -292,8 +292,8 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the begin of the keyframes map
 		 *\return		Constant iterator to the begin of the keyframes map
 		 *\~french
-		 *\brief		Récupère un itérateur sur le début de la map de keyframes
-		 *\return		Itérateur constant sur le début de la map de keyframes
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur le dÃ©but de la map de keyframes
+		 *\return		ItÃ©rateur constant sur le dÃ©but de la map de keyframes
 		 */
 		inline RotateKeyFramePtrRealMapConstIt RotatesBegin()const
 		{
@@ -304,8 +304,8 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the begin of the keyframes map
 		 *\return		Iterator to the begin of the keyframes map
 		 *\~french
-		 *\brief		Récupère un itérateur sur le début de la map de keyframes
-		 *\return		Itérateur sur le début de la map de keyframes
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur le dÃ©but de la map de keyframes
+		 *\return		ItÃ©rateur sur le dÃ©but de la map de keyframes
 		 */
 		inline RotateKeyFramePtrRealMapIt RotatesEnd()
 		{
@@ -316,8 +316,8 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the end of the keyframes map
 		 *\return		Constant iterator to the end of the keyframes map
 		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map de keyframes
-		 *\return		Itérateur constant sur la fin de la map de keyframes
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur la fin de la map de keyframes
+		 *\return		ItÃ©rateur constant sur la fin de la map de keyframes
 		 */
 		inline RotateKeyFramePtrRealMapConstIt RotatesEnd()const
 		{
@@ -328,8 +328,8 @@ namespace Castor3D
 		 *\brief		Retrieves the animation length
 		 *\return		The animation length
 		 *\~french
-		 *\brief		Récupère la durée de l'animation
-		 *\return		La durée de l'animation
+		 *\brief		RÃ©cupÃ¨re la durÃ©e de l'animation
+		 *\return		La durÃ©e de l'animation
 		 */
 		inline real GetLength()const
 		{
@@ -340,7 +340,7 @@ namespace Castor3D
 		 *\brief		Sets the animation length
 		 *\param[in]	p_rLength	The new value
 		 *\~french
-		 *\brief		Définit la durée de l'animation
+		 *\brief		DÃ©finit la durÃ©e de l'animation
 		 *\param[in]	p_rLength	La nouvelle valeur
 		 */
 		inline void	SetLength( real p_rLength )
@@ -352,7 +352,7 @@ namespace Castor3D
 		 *\brief		Retrieves the animation node transformation
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère les animations du noeud de transformation
+		 *\brief		RÃ©cupÃ¨re les animations du noeud de transformation
 		 *\return		La valeur
 		 */
 		inline Castor::Matrix4x4r const & GetNodeTransform()const
@@ -364,7 +364,7 @@ namespace Castor3D
 		 *\brief		Sets the animation node transformation
 		 *\param[in]	p_mtxTransform	The new value
 		 *\~french
-		 *\brief		Définit les animations du noeud de transformation
+		 *\brief		DÃ©finit les animations du noeud de transformation
 		 *\param[in]	p_mtxTransform	La nouvelle valeur
 		 */
 		inline void SetNodeTransform( Castor::Matrix4x4r const & p_mtxTransform )
@@ -388,7 +388,7 @@ namespace Castor3D
 		 *\brief		Retrieves the moving thuing type
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le type du machin mouvant
+		 *\brief		RÃ©cupÃ¨re le type du machin mouvant
 		 *\return		La valeur
 		 */
 		inline eMOVING_OBJECT_TYPE GetType()const
@@ -400,7 +400,7 @@ namespace Castor3D
 		 *\brief		Retrieves final transformation matrix for current animation time
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la matrice finale de transformation du bone pour le temps courant de l'animation
+		 *\brief		RÃ©cupÃ¨re la matrice finale de transformation du bone pour le temps courant de l'animation
 		 *\return		La valeur
 		 */
 		inline const Castor::Matrix4x4r & GetFinalTransformation()const
@@ -412,7 +412,7 @@ namespace Castor3D
 		 *\brief		Sets final transformation for current animation time
 		 *\param[in]	p_mtx	The new value
 		 *\~french
-		 *\brief		Définit la matrice finale de transformation du bone pour le temps courant de l'animation
+		 *\brief		DÃ©finit la matrice finale de transformation du bone pour le temps courant de l'animation
 		 *\param[in]	p_mtx	La nouvelle valeur
 		 */
 		inline void SetFinalTransformation( const Castor::Matrix4x4r & p_mtx )
@@ -424,8 +424,8 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the begin of the children array
 		 *\return		Iterator to the begin of the children array
 		 *\~french
-		 *\brief		Récupère un itérateur sur le début du tableau d'enfants
-		 *\return		Itérateur sur le début du tableau d'enfants
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur le dÃ©but du tableau d'enfants
+		 *\return		ItÃ©rateur sur le dÃ©but du tableau d'enfants
 		 */
 		inline MovingObjectPtrArrayIt ChildsBegin()
 		{
@@ -436,8 +436,8 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the begin of the children array
 		 *\return		Constant iterator to the begin of the children array
 		 *\~french
-		 *\brief		Récupère un itérateur sur le début du tableau d'enfants
-		 *\return		Itérateur constant sur le début du tableau d'enfants
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur le dÃ©but du tableau d'enfants
+		 *\return		ItÃ©rateur constant sur le dÃ©but du tableau d'enfants
 		 */
 		inline MovingObjectPtrArrayConstIt ChildsBegin()const
 		{
@@ -448,8 +448,8 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the begin of the children array
 		 *\return		Iterator to the begin of the children array
 		 *\~french
-		 *\brief		Récupère un itérateur sur le début du tableau d'enfants
-		 *\return		Itérateur sur le début du tableau d'enfants
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur le dÃ©but du tableau d'enfants
+		 *\return		ItÃ©rateur sur le dÃ©but du tableau d'enfants
 		 */
 		inline MovingObjectPtrArrayIt ChildsEnd()
 		{
@@ -460,8 +460,8 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the end of the children array
 		 *\return		Constant iterator to the end of the children array
 		 *\~french
-		 *\brief		Récupère un itérateur sur la fin du tableau d'enfants
-		 *\return		Itérateur constant sur la fin du tableau d'enfants
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur la fin du tableau d'enfants
+		 *\return		ItÃ©rateur constant sur la fin du tableau d'enfants
 		 */
 		inline MovingObjectPtrArrayConstIt ChildsEnd()const
 		{
@@ -473,7 +473,7 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Updates the object, applies the transformations matrix
 		 *\~french
-		 *\brief		Met à jour les transformations appliquées à l'objet
+		 *\brief		Met Ã  jour les transformations appliquÃ©es Ã  l'objet
 		 */
 		virtual void DoApply() = 0;
 		/**
@@ -502,15 +502,15 @@ namespace Castor3D
 		ValueType DoCompute( real p_time, std::map< real, std::shared_ptr< KeyFrameType > > const & p_map, ValueType const & p_default );
 
 	protected:
-		//!\~english The key frames sorted by start time	\~french Les keyframes, triées par index de temps de début
+		//!\~english The key frames sorted by start time	\~french Les keyframes, triÃ©es par index de temps de dÃ©but
 		ScaleKeyFramePtrRealMap m_mapScales;
-		//!\~english The key frames sorted by start time	\~french Les keyframes, triées par index de temps de début
+		//!\~english The key frames sorted by start time	\~french Les keyframes, triÃ©es par index de temps de dÃ©but
 		TranslateKeyFramePtrRealMap m_mapTranslates;
-		//!\~english The key frames sorted by start time	\~french Les keyframes, triées par index de temps de début
+		//!\~english The key frames sorted by start time	\~french Les keyframes, triÃ©es par index de temps de dÃ©but
 		RotateKeyFramePtrRealMap m_mapRotates;
-		//!\~english The animation length	\~french La durée de l'animation
+		//!\~english The animation length	\~french La durÃ©e de l'animation
 		real m_rLength;
-		//!\~english The objects depending on this one	\~french Les objets dépendant de celui-ci
+		//!\~english The objects depending on this one	\~french Les objets dÃ©pendant de celui-ci
 		MovingObjectPtrArray m_arrayChildren;
 		//!\~english Animation node transformations	\~french Transformations du noeud d'animation
 		Castor::Matrix4x4r m_mtxNodeTransform;
@@ -518,7 +518,7 @@ namespace Castor3D
 		Castor::Matrix4x4r m_mtxTransformations;
 		//!\~english The moving thing type	\~french Le type du machin mouvant
 		eMOVING_OBJECT_TYPE m_eType;
-		//!\~english The matrix holding transformation at current time	\~french La matrice de transformation complète au temps courant de l'animation
+		//!\~english The matrix holding transformation at current time	\~french La matrice de transformation complÃ¨te au temps courant de l'animation
 		Castor::Matrix4x4r m_mtxFinalTransformation;
 	};
 }

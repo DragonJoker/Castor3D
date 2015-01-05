@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -30,7 +30,7 @@ namespace Castor3D
 	\brief		Index buffer representation
 	\remark		Holds the index of the submesh vertices
 	\~french
-	\brief		Repr�sentation d'un tampon d'indices
+	\brief		Représentation d'un tampon d'indices
 	\remark		Contient les indices des vertex d'un submesh
 	*/
 	class C3D_API IndexBuffer : public CpuBuffer< uint32_t >

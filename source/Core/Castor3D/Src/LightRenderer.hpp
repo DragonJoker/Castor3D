@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -29,7 +29,7 @@ namespace Castor3D
 	\~english
 	\brief		Renders a light, applies it's colours values...
 	\~french
-	\brief		Rend une lumière, ses couleurs, positions, ...
+	\brief		Rend une lumiÃ¨re, ses couleurs, positions, ...
 	*/
 	class C3D_API LightRenderer : public Renderer<Light, LightRenderer>
 	{
@@ -71,8 +71,8 @@ namespace Castor3D
 		 *\brief		Enables the light
 		 *\remark		Fixed pipeline implementation
 		 *\~french
-		 *\brief		Active la lumière
-		 *\remark		Implémentation passant par le pipeline fixe
+		 *\brief		Active la lumiÃ¨re
+		 *\remark		ImplÃ©mentation passant par le pipeline fixe
 		 */
 		virtual void Enable() = 0;
 		/**
@@ -80,8 +80,8 @@ namespace Castor3D
 		 *\brief		Disables the light
 		 *\remark		Fixed pipeline implementation
 		 *\~french
-		 *\brief		Désactive la lumière
-		 *\remark		Implémentation passant par le pipeline fixe
+		 *\brief		DÃ©sactive la lumiÃ¨re
+		 *\remark		ImplÃ©mentation passant par le pipeline fixe
 		 */
 		virtual void Disable() = 0;
 		/**
@@ -89,8 +89,8 @@ namespace Castor3D
 		 *\brief		Enables the light
 		 *\remark		Fixed pipeline implementation
 		 *\~french
-		 *\brief		Active la lumière
-		 *\remark		Implémentation passant par le pipeline fixe
+		 *\brief		Active la lumiÃ¨re
+		 *\remark		ImplÃ©mentation passant par le pipeline fixe
 		 */
 		virtual void Bind() {}
 		/**
@@ -98,8 +98,8 @@ namespace Castor3D
 		 *\brief		Disables the light
 		 *\remark		Fixed pipeline implementation
 		 *\~french
-		 *\brief		Désactive la lumière
-		 *\remark		Implémentation passant par le pipeline fixe
+		 *\brief		DÃ©sactive la lumiÃ¨re
+		 *\remark		ImplÃ©mentation passant par le pipeline fixe
 		 */
 		virtual void Unbind() {}
 		/**
@@ -108,7 +108,7 @@ namespace Castor3D
 		 *\remark		Fixed pipeline implementation
 		 *\~french
 		 *\brief		Applique la couleur ambiante
-		 *\remark		Implémentation passant par le pipeline fixe
+		 *\remark		ImplÃ©mentation passant par le pipeline fixe
 		 */
 		virtual void ApplyAmbient() = 0;
 		/**
@@ -117,7 +117,7 @@ namespace Castor3D
 		 *\remark		Fixed pipeline implementation
 		 *\~french
 		 *\brief		Applique la couleur diffuse
-		 *\remark		Implémentation passant par le pipeline fixe
+		 *\remark		ImplÃ©mentation passant par le pipeline fixe
 		 */
 		virtual void ApplyDiffuse() = 0;
 		/**
@@ -126,7 +126,7 @@ namespace Castor3D
 		 *\remark		Fixed pipeline implementation
 		 *\~french
 		 *\brief		Applique la couleur speculaire
-		 *\remark		Implémentation passant par le pipeline fixe
+		 *\remark		ImplÃ©mentation passant par le pipeline fixe
 		 */
 		virtual void ApplySpecular() = 0;
 		/**
@@ -135,7 +135,7 @@ namespace Castor3D
 		 *\remark		Fixed pipeline implementation
 		 *\~french
 		 *\brief		Applique la position de la source
-		 *\remark		Implémentation passant par le pipeline fixe
+		 *\remark		ImplÃ©mentation passant par le pipeline fixe
 		 */
 		virtual void ApplyPosition() = 0;
 		/**
@@ -143,8 +143,8 @@ namespace Castor3D
 		 *\brief		Applies light orientation
 		 *\remark		Fixed pipeline implementation
 		 *\~french
-		 *\brief		Applique l'orientation de la lumière
-		 *\remark		Implémentation passant par le pipeline fixe
+		 *\brief		Applique l'orientation de la lumiÃ¨re
+		 *\remark		ImplÃ©mentation passant par le pipeline fixe
 		 */
 		virtual void ApplyOrientation() = 0;
 		/**
@@ -153,7 +153,7 @@ namespace Castor3D
 		 *\remark		Fixed pipeline implementation
 		 *\~french
 		 *\brief		Applique l'attenuation constante de la source
-		 *\remark		Implémentation passant par le pipeline fixe
+		 *\remark		ImplÃ©mentation passant par le pipeline fixe
 		 */
 		virtual void ApplyConstantAtt( float p_fConstant ) = 0;
 		/**
@@ -161,8 +161,8 @@ namespace Castor3D
 		 *\brief		Applies light linear attenuation
 		 *\remark		Fixed pipeline implementation
 		 *\~french
-		 *\brief		Applique l'attenuation linéaire de la source
-		 *\remark		Implémentation passant par le pipeline fixe
+		 *\brief		Applique l'attenuation linÃ©aire de la source
+		 *\remark		ImplÃ©mentation passant par le pipeline fixe
 		 */
 		virtual void ApplyLinearAtt( float p_fLinear ) = 0;
 		/**
@@ -171,7 +171,7 @@ namespace Castor3D
 		 *\remark		Fixed pipeline implementation
 		 *\~french
 		 *\brief		Applique l'attenuation quadratique de la source
-		 *\remark		Implémentation passant par le pipeline fixe
+		 *\remark		ImplÃ©mentation passant par le pipeline fixe
 		 */
 		virtual void ApplyQuadraticAtt( float p_fQuadratic ) = 0;
 		/**
@@ -180,7 +180,7 @@ namespace Castor3D
 		 *\remark		Fixed pipeline implementation
 		 *\~french
 		 *\brief		Applique l'exposant de la source
-		 *\remark		Implémentation passant par le pipeline fixe
+		 *\remark		ImplÃ©mentation passant par le pipeline fixe
 		 */
 		virtual void ApplyExponent( float p_fExponent ) = 0;
 		/**
@@ -188,8 +188,8 @@ namespace Castor3D
 		 *\brief		Applies light cut off
 		 *\remark		Fixed pipeline implementation
 		 *\~french
-		 *\brief		Applique l'angle du cône de la source
-		 *\remark		Implémentation passant par le pipeline fixe
+		 *\brief		Applique l'angle du cÃ´ne de la source
+		 *\remark		ImplÃ©mentation passant par le pipeline fixe
 		 */
 		virtual void ApplyCutOff( float p_fCutOff ) = 0;
 		/**
@@ -197,8 +197,8 @@ namespace Castor3D
 		 *\brief		Enables the light
 		 *\remark		Shader implementation
 		 *\~french
-		 *\brief		Active la lumière
-		 *\remark		Implémentation passant par les shaders
+		 *\brief		Active la lumiÃ¨re
+		 *\remark		ImplÃ©mentation passant par les shaders
 		 */
 		virtual void EnableShader( ShaderProgramBase * p_pProgram ) = 0;
 		/**
@@ -206,8 +206,8 @@ namespace Castor3D
 		 *\brief		Disables the light
 		 *\remark		Shader implementation
 		 *\~french
-		 *\brief		désactive la lumière
-		 *\remark		Implémentation passant par les shaders
+		 *\brief		dÃ©sactive la lumiÃ¨re
+		 *\remark		ImplÃ©mentation passant par les shaders
 		 */
 		virtual void DisableShader( ShaderProgramBase * p_pProgram ) = 0;
 		/**
@@ -216,7 +216,7 @@ namespace Castor3D
 		 *\remark		Shader implementation
 		 *\~french
 		 *\brief		Applique la couleur ambiante
-		 *\remark		Implémentation passant par les shaders
+		 *\remark		ImplÃ©mentation passant par les shaders
 		 */
 		virtual void ApplyAmbientShader() = 0;
 		/**
@@ -225,7 +225,7 @@ namespace Castor3D
 		 *\remark		Shader implementation
 		 *\~french
 		 *\brief		Applique la couleur diffuse
-		 *\remark		Implémentation passant par les shaders
+		 *\remark		ImplÃ©mentation passant par les shaders
 		 */
 		virtual void ApplyDiffuseShader() = 0;
 		/**
@@ -234,7 +234,7 @@ namespace Castor3D
 		 *\remark		Shader implementation
 		 *\~french
 		 *\brief		Applique la couleur speculaire
-		 *\remark		Implémentation passant par les shaders
+		 *\remark		ImplÃ©mentation passant par les shaders
 		 */
 		virtual void ApplySpecularShader() = 0;
 		/**
@@ -243,7 +243,7 @@ namespace Castor3D
 		 *\remark		Shader implementation
 		 *\~french
 		 *\brief		Applique la position de la source
-		 *\remark		Implémentation passant par les shaders
+		 *\remark		ImplÃ©mentation passant par les shaders
 		 */
 		virtual void ApplyPositionShader() = 0;
 		/**
@@ -251,8 +251,8 @@ namespace Castor3D
 		 *\brief		Applies light orientation
 		 *\remark		Shader implementation
 		 *\~french
-		 *\brief		Applique l'orientation de la lumière
-		 *\remark		Implémentation passant par les shaders
+		 *\brief		Applique l'orientation de la lumiÃ¨re
+		 *\remark		ImplÃ©mentation passant par les shaders
 		 */
 		virtual void ApplyOrientationShader() = 0;
 		/**
@@ -261,7 +261,7 @@ namespace Castor3D
 		 *\remark		Shader implementation
 		 *\~french
 		 *\brief		Applique l'attenuation constante de la source
-		 *\remark		Implémentation passant par les shaders
+		 *\remark		ImplÃ©mentation passant par les shaders
 		 */
 		virtual void ApplyConstantAttShader( float p_fConstant ) = 0;
 		/**
@@ -269,8 +269,8 @@ namespace Castor3D
 		 *\brief		Applies light linear attenuation
 		 *\remark		Shader implementation
 		 *\~french
-		 *\brief		Applique l'attenuation linéaire de la source
-		 *\remark		Implémentation passant par les shaders
+		 *\brief		Applique l'attenuation linÃ©aire de la source
+		 *\remark		ImplÃ©mentation passant par les shaders
 		 */
 		virtual void ApplyLinearAttShader( float p_fLinear ) = 0;
 		/**
@@ -279,7 +279,7 @@ namespace Castor3D
 		 *\remark		Shader implementation
 		 *\~french
 		 *\brief		Applique l'attenuation quadratique de la source
-		 *\remark		Implémentation passant par les shaders
+		 *\remark		ImplÃ©mentation passant par les shaders
 		 */
 		virtual void ApplyQuadraticAttShader( float p_fQuadratic ) = 0;
 		/**
@@ -288,7 +288,7 @@ namespace Castor3D
 		 *\remark		Shader implementation
 		 *\~french
 		 *\brief		Applique l'exposant de la source
-		 *\remark		Implémentation passant par les shaders
+		 *\remark		ImplÃ©mentation passant par les shaders
 		 */
 		virtual void ApplyExponentShader( float p_fExponent ) = 0;
 		/**
@@ -296,8 +296,8 @@ namespace Castor3D
 		 *\brief		Applies light cut off
 		 *\remark		Shader implementation
 		 *\~french
-		 *\brief		Applique l'angle du cône de la source
-		 *\remark		Implémentation passant par les shaders
+		 *\brief		Applique l'angle du cÃ´ne de la source
+		 *\remark		ImplÃ©mentation passant par les shaders
 		 */
 		virtual void ApplyCutOffShader( float p_fCutOff ) = 0;
 	};

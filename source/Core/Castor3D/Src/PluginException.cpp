@@ -1,4 +1,4 @@
-#include "PluginException.hpp"
+﻿#include "PluginException.hpp"
 
 #include <Logger.hpp>
 

@@ -1,4 +1,4 @@
-#include "Sampler.hpp"
+﻿#include "Sampler.hpp"
 #include "RenderTarget.hpp"
 
 using namespace Castor;

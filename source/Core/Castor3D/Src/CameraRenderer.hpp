@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -31,7 +31,7 @@ namespace Castor3D
 	\remark		Applies the camera transformations, also removes it
 	\~french
 	\brief		Renderer de camera
-	\remark		Applique les transformations d'une caméra, et les annule aussi
+	\remark		Applique les transformations d'une camÃ©ra, et les annule aussi
 	*/
 	class C3D_API CameraRenderer
 		:	public Renderer<Camera, CameraRenderer>
@@ -64,12 +64,12 @@ namespace Castor3D
 		 *\param[out]	p_stFound	The selection result
 		 *\return		\p true if something was found, false if not
 		 *\~french
-		 *\brief		Récupère l'objet le plus proche aux coordonnées souris x et y
-		 *\param[in]	p_pScene	La scène où on doit sélectionner un objet
-		 *\param[in]	p_eMode		Le mode de sélection (vertex, face, submesh, geometry)
-		 *\param[in]	p_iX, p_iY	Les coordonnées de la souris
-		 *\param[out]	p_stFound	Le résultat de la sélection
-		 *\return		\p false si aucun objet n'a été trouvé
+		 *\brief		RÃ©cupÃ¨re l'objet le plus proche aux coordonnÃ©es souris x et y
+		 *\param[in]	p_pScene	La scÃ¨ne oÃ¹ on doit sÃ©lectionner un objet
+		 *\param[in]	p_eMode		Le mode de sÃ©lection (vertex, face, submesh, geometry)
+		 *\param[in]	p_iX, p_iY	Les coordonnÃ©es de la souris
+		 *\param[out]	p_stFound	Le rÃ©sultat de la sÃ©lection
+		 *\return		\p false si aucun objet n'a Ã©tÃ© trouvÃ©
 		*/
 		virtual bool Select( SceneSPtr p_pScene, eSELECTION_MODE p_eMode, int p_iX, int p_iY, stSELECT_RESULT & p_stFound ) = 0;
 		/**

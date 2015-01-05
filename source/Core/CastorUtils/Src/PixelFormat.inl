@@ -1,4 +1,4 @@
-#include <emmintrin.h>
+﻿#include <emmintrin.h>
 #include <cstring>
 #include "UnsupportedFormatException.hpp"
 #include "StringUtils.hpp"

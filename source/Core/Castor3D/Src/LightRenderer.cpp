@@ -1,4 +1,4 @@
-#include "LightRenderer.hpp"
+﻿#include "LightRenderer.hpp"
 #include "Light.hpp"
 
 using namespace Castor;

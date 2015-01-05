@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -37,7 +37,7 @@ namespace Castor3D
 	\~english
 	\brief		Defines a sampler for a texture
 	\~french
-	\brief		Définit un sampler pour une texture
+	\brief		DÃ©finit un sampler pour une texture
 	*/
 	class C3D_API Sampler
 		:	public Renderable< Sampler, SamplerRenderer >
@@ -71,8 +71,8 @@ namespace Castor3D
 			 *\param[in]		p_sampler	The sampler to save
 			 *\param[in,out]	p_file		The file where to save the sampler
 			 *\~french
-			 *\brief			Ecrit un échantillonneur dans un fichier texte
-			 *\param[in]		p_sampler	L'échantillonneur
+			 *\brief			Ecrit un Ã©chantillonneur dans un fichier texte
+			 *\param[in]		p_sampler	L'Ã©chantillonneur
 			 *\param[in,out]	p_file		Le fichier
 			 */
 			virtual bool operator()( Sampler const & p_sampler, Castor::TextFile & p_file );
@@ -95,7 +95,7 @@ namespace Castor3D
 			 *\param[in]	p_path	The current folder path
 			 *\~french
 			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
+			 *\param[in]	p_path	Le chemin d'accÃ¨s au dossier courant
 			 */
 			BinaryParser( Castor::Path const & p_path );
 			/**
@@ -105,10 +105,10 @@ namespace Castor3D
 			 *\param[out]	p_chunk	The chunk to fill
 			 *\return		\p false if any error occured
 			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
+			 *\brief		Fonction utilisÃ©e afin de remplir le chunk de donnÃ©es spÃ©cifiques
+			 *\param[in]	p_obj	L'objet Ã  Ã©crire
+			 *\param[out]	p_chunk	Le chunk Ã  remplir
+			 *\return		\p false si une erreur quelconque est arrivÃ©e
 			 */
 			virtual bool Fill( Sampler const & p_obj, BinaryChunk & p_chunk )const;
 			/**
@@ -118,10 +118,10 @@ namespace Castor3D
 			 *\param[in]	p_chunk	The chunk containing data
 			 *\return		\p false if any error occured
 			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
+			 *\brief		Fonction utilisÃ©e afin de rÃ©cupÃ©rer des donnÃ©es spÃ©cifiques Ã  partir d'un chunk
+			 *\param[out]	p_obj	L'objet Ã  lire
+			 *\param[in]	p_chunk	Le chunk contenant les donnÃ©es
+			 *\return		\p false si une erreur quelconque est arrivÃ©e
 			 */
 			virtual bool Parse( Sampler & p_obj, BinaryChunk & p_chunk )const;
 		};
@@ -151,7 +151,7 @@ namespace Castor3D
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Initialise le sampler
-		 *\return		\p true si tout s'est bien passé
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool Initialise();
 		/**
@@ -171,14 +171,14 @@ namespace Castor3D
 		 *\brief		Applique le sampler
 		 *\param[in]	p_eDimension	La dimension de la texture
 		 *\param[in]	p_uiIndex		L'index du sampler
-		 *\return		\p true si tout s'est bien passé
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool Bind( eTEXTURE_DIMENSION p_eDimension, uint32_t p_uiIndex );
 		/**
 		 *\~english
 		 *\brief		Removes the sampler
 		 *\~french
-		 *\brief		Enlève le sampler
+		 *\brief		EnlÃ¨ve le sampler
 		 */
 		virtual void Unbind();
 		/**
@@ -187,8 +187,8 @@ namespace Castor3D
 		 *\param[in]	p_eFilter	The concerned filter
 		 *\return		The interpolation mode
 		 *\~french
-		 *\brief		Récupère le mode d'interpolation pour le filtre donné
-		 *\param[in]	p_eFilter	Le filtre concerné
+		 *\brief		RÃ©cupÃ¨re le mode d'interpolation pour le filtre donnÃ©
+		 *\param[in]	p_eFilter	Le filtre concernÃ©
 		 *\return		Le mode d'interpolation
 		 */
 		inline eINTERPOLATION_MODE GetInterpolationMode( eINTERPOLATION_FILTER p_eFilter )const
@@ -201,9 +201,9 @@ namespace Castor3D
 		 *\param[in]	p_eFilter	The concerned filter
 		 *\param[in]	p_eMode		The wanted mode
 		 *\~french
-		 *\brief		Définit le mode d'interpolation pour le filtre donné
-		 *\param[in]	p_eFilter	Le filtre concerné
-		 *\param[in]	p_eMode		Le mode souhaité
+		 *\brief		DÃ©finit le mode d'interpolation pour le filtre donnÃ©
+		 *\param[in]	p_eFilter	Le filtre concernÃ©
+		 *\param[in]	p_eMode		Le mode souhaitÃ©
 		 */
 		inline void SetInterpolationMode( eINTERPOLATION_FILTER p_eFilter, eINTERPOLATION_MODE p_eMode )
 		{
@@ -215,7 +215,7 @@ namespace Castor3D
 		 *\param[in]	p_eUVW	The dimension
 		 *\return		The wrapping mode
 		 *\~french
-		 *\brief		Récupère le mode de wrap pour la dimension donnée
+		 *\brief		RÃ©cupÃ¨re le mode de wrap pour la dimension donnÃ©e
 		 *\param[in]	p_eUVW	La dimension
 		 *\return		Le mode de wrap
 		 */
@@ -229,7 +229,7 @@ namespace Castor3D
 		 *\param[in]	p_eUVW	The dimension
 		 *\param[in]	p_eMode	The wrapping mode
 		 *\~french
-		 *\brief		Définit le mode de wrap pour la dimension donnée
+		 *\brief		DÃ©finit le mode de wrap pour la dimension donnÃ©e
 		 *\param[in]	p_eUVW	La dimension
 		 *\param[in]	p_eMode	Le mode de wrap
 		 */
@@ -242,7 +242,7 @@ namespace Castor3D
 		 *\brief		Retrieves the maximal anisotropy filtering value
 		 \return		The value
 		 *\~french
-		 *\brief		Récupère la valeur maximale de filtrage anisotropique
+		 *\brief		RÃ©cupÃ¨re la valeur maximale de filtrage anisotropique
 		 *\return		La valeur
 		 */
 		inline real GetMaxAnisotropy()const
@@ -254,7 +254,7 @@ namespace Castor3D
 		 *\brief		Defines the maximal anisotropy filtering value
 		 *\param[in]	p_rValue	The new value
 		 *\~french
-		 *\brief		Définit la valeur maximale de filtrage anisotropique
+		 *\brief		DÃ©finit la valeur maximale de filtrage anisotropique
 		 *\param[in]	p_rValue	La nouvelle valeur
 		 */
 		inline void SetMaxAnisotropy( real p_rValue )
@@ -266,7 +266,7 @@ namespace Castor3D
 		 *\brief		Retrieves the minimal LOD level
 		 \return		The level
 		 *\~french
-		 *\brief		Récupère le niveau minimal pour le LOD
+		 *\brief		RÃ©cupÃ¨re le niveau minimal pour le LOD
 		 *\return		Le niveau
 		 */
 		inline real GetMinLod()const
@@ -278,7 +278,7 @@ namespace Castor3D
 		 *\brief		Defines the minimal LOD level
 		 *\param[in]	p_rLod	The new value
 		 *\~french
-		 *\brief		Définit le niveau minimal pour le LOD
+		 *\brief		DÃ©finit le niveau minimal pour le LOD
 		 *\param[in]	p_rLod	La nouvelle valeur
 		 */
 		inline void SetMinLod( real p_rLod )
@@ -290,7 +290,7 @@ namespace Castor3D
 		 *\brief		Retrieves the maximal LOD level
 		 \return		The level
 		 *\~french
-		 *\brief		Récupère le niveau maximal pour le LOD
+		 *\brief		RÃ©cupÃ¨re le niveau maximal pour le LOD
 		 *\return		Le niveau
 		 */
 		inline real GetMaxLod()const
@@ -302,7 +302,7 @@ namespace Castor3D
 		 *\brief		Defines the maximal LOD level
 		 *\param[in]	p_rLod	The new value
 		 *\~french
-		 *\brief		Définit le niveau maximal pour le LOD
+		 *\brief		DÃ©finit le niveau maximal pour le LOD
 		 *\param[in]	p_rLod	La nouvelle valeur
 		 */
 		inline void SetMaxLod( real p_rLod )
@@ -314,7 +314,7 @@ namespace Castor3D
 		 *\brief		Retrieves the LOD bias
 		 \return		The level
 		 *\~french
-		 *\brief		Récupère le LOD bias
+		 *\brief		RÃ©cupÃ¨re le LOD bias
 		 *\return		Le niveau
 		 */
 		inline real GetLodBias()const
@@ -326,7 +326,7 @@ namespace Castor3D
 		 *\brief		Defines the LOD bias
 		 *\param[in]	p_rLod	The new value
 		 *\~french
-		 *\brief		Définit le LOD bias
+		 *\brief		DÃ©finit le LOD bias
 		 *\param[in]	p_rLod	La nouvelle valeur
 		 */
 		inline void SetLodBias( real p_rLod )
@@ -338,7 +338,7 @@ namespace Castor3D
 		 *\brief		Retrieves the texture border colour
 		 *\return		The colour
 		 *\~french
-		 *\brief		Récupère la couleur de bord de la texture
+		 *\brief		RÃ©cupÃ¨re la couleur de bord de la texture
 		 *\return		La couleur
 		 */
 		inline	Castor::Colour const & GetBorderColour()const
@@ -350,7 +350,7 @@ namespace Castor3D
 		 *\brief		Defines the texture border colour
 		 *\param[in]	p_crColour	The new value
 		 *\~french
-		 *\brief		Définit la couleur de bord de la texture
+		 *\brief		DÃ©finit la couleur de bord de la texture
 		 *\param[in]	p_crColour	La nouvelle valeur
 		 */
 		inline	void SetBorderColour( Castor::Colour const & p_crColour )
@@ -362,7 +362,7 @@ namespace Castor3D
 		 *\brief		Retrieves the sampler name
 		 \return		The name
 		 *\~french
-		 *\brief		Récupère le nom de l'échantillonneur
+		 *\brief		RÃ©cupÃ¨re le nom de l'Ã©chantillonneur
 		 *\return		Le nom
 		 */
 		inline Castor::String const & GetName()const
@@ -374,7 +374,7 @@ namespace Castor3D
 		 *\brief		Defines the sampler name
 		 *\param[in]	p_name	The name
 		 *\~french
-		 *\brief		Récupère le nom de l'échantillonneur
+		 *\brief		RÃ©cupÃ¨re le nom de l'Ã©chantillonneur
 		 *\param[in]	p_name	Le nom
 		 */
 		inline void SetName( Castor::String const & p_name )
@@ -391,13 +391,13 @@ namespace Castor3D
 		real m_rMinLod;
 		//!\~english Maximal LOD Level	\~french Niveau de LOD maximal
 		real m_rMaxLod;
-		//!\~english The texture LOD offset	\~french Le décalage de Lod de la texture
+		//!\~english The texture LOD offset	\~french Le dÃ©calage de Lod de la texture
 		real m_rLodBias;
 		//!\~english Texture border colour	\~french Couleur des bords de la texture
 		Castor::Colour m_clrBorderColour;
 		//!\~english Maximal anisotropic filtering value	\~french Valeur maximale pour le filtrage anisotropique
 		real m_rMaxAnisotropy;
-		//!\~english The sampler name	\~french Le nom de l'échantillonneur
+		//!\~english The sampler name	\~french Le nom de l'Ã©chantillonneur
 		Castor::String m_name;
 	};
 }

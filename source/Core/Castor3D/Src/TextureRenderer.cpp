@@ -1,4 +1,4 @@
-#include "TextureRenderer.hpp"
+﻿#include "TextureRenderer.hpp"
 
 using namespace Castor;
 

@@ -1,4 +1,4 @@
-#include "PointLight.hpp"
+﻿#include "PointLight.hpp"
 #include "Vertex.hpp"
 
 using namespace Castor;

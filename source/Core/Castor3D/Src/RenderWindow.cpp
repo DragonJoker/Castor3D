@@ -1,4 +1,4 @@
-#include "RenderWindow.hpp"
+﻿#include "RenderWindow.hpp"
 #include "WindowRenderer.hpp"
 #include "ResizeWindowEvent.hpp"
 #include "InitialiseEvent.hpp"

@@ -1,4 +1,4 @@
-#include "StaticTexture.hpp"
+﻿#include "StaticTexture.hpp"
 #include "Sampler.hpp"
 
 #include <Logger.hpp>

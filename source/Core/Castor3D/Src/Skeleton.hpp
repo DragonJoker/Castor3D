@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -78,7 +78,7 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the first bone
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère un itérateur sur le premier os
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur le premier os
 		 *\return		La valeur
 		 */
 		inline BonePtrArrayIt Begin()
@@ -90,7 +90,7 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the first bone
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère un itérateur sur le premier os
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur le premier os
 		 *\return		La valeur
 		 */
 		inline BonePtrArrayConstIt Begin()const
@@ -102,7 +102,7 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the end of the bones array
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère un itérateur sur la fin du tableau d'os
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur la fin du tableau d'os
 		 *\return		La valeur
 		 */
 		inline BonePtrArrayIt End()
@@ -114,7 +114,7 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the end of the bones array
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère un itérateur sur la fin du tableau d'os
+		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur la fin du tableau d'os
 		 *\return		La valeur
 		 */
 		inline BonePtrArrayConstIt End()const
@@ -126,7 +126,7 @@ namespace Castor3D
 		 *\brief		Retrieves the global inverse transform
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la transformation globale inversée
+		 *\brief		RÃ©cupÃ¨re la transformation globale inversÃ©e
 		 *\return		La valeur
 		 */
 		inline Castor::Matrix4x4r const & GetGlobalInverseTransform()const
@@ -138,7 +138,7 @@ namespace Castor3D
 		 *\brief		Sets the global inverse transform
 		 *\param[in]	p_mtxTransform	The new value
 		 *\~french
-		 *\brief		Définit la transformation globale inversée
+		 *\brief		DÃ©finit la transformation globale inversÃ©e
 		 *\param[in]	p_mtxTransform	La nouvelle valeur
 		 */
 		inline void SetGlobalInverseTransform( Castor::Matrix4x4r const & p_mtxTransform )
@@ -150,7 +150,7 @@ namespace Castor3D
 		 *\brief		Retrieves the mesh name
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le nom du maillage
+		 *\brief		RÃ©cupÃ¨re le nom du maillage
 		 *\return		La valeur
 		 */
 		inline Castor::String const & GetMeshName()const

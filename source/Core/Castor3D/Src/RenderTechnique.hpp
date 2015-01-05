@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -42,7 +42,7 @@ namespace Castor3D
 	\remark		A render technique is the description of a way to render a render target
 	\~french
 	\brief		Classe de base d'une technique de rendu
-	\remark		Une technique de rendu est la description d'une manière de rendre une cible de rendu
+	\remark		Une technique de rendu est la description d'une maniÃ¨re de rendre une cible de rendu
 	*/
 	class C3D_API RenderTechniqueBase
 	{
@@ -68,7 +68,7 @@ namespace Castor3D
 		 *\param[in]	p_name			Le nom de la technique
 		 *\param[in]	p_renderTarget	La render target pour cette technique
 		 *\param[in]	p_pRenderSystem	Le render system
-		 *\param[in]	p_params		Les paramètres de la technique
+		 *\param[in]	p_params		Les paramÃ¨tres de la technique
 		 */
 		RenderTechniqueBase( Castor::String const & p_name, RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params );
 
@@ -85,8 +85,8 @@ namespace Castor3D
 		 *\brief		Creation function
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Fonction de création
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Fonction de crÃ©ation
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		bool Create();
 		/**
@@ -119,8 +119,8 @@ namespace Castor3D
 		 *\brief		Render begin function
 		 *\return		\p true if ok
 		 *\~french
-		 *\brief		Fonction de début de rendu
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Fonction de dÃ©but de rendu
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		bool BeginRender();
 		/**
@@ -133,11 +133,11 @@ namespace Castor3D
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Fonction de rendu
-		 *\param[in]	p_scene			La scène à rendre
-		 *\param[in]	p_camera		La caméra à travers laquelle la scène est vue
+		 *\param[in]	p_scene			La scÃ¨ne Ã  rendre
+		 *\param[in]	p_camera		La camÃ©ra Ã  travers laquelle la scÃ¨ne est vue
 		 *\param[in]	p_ePrimitives	Le mode d'affichage
-		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la dernière frame
-		 *\return		\p true si tout s'est bien passé
+		 *\param[in]	p_dFrameTime	Le temps Ã©coulÃ© depuis le rendu de la derniÃ¨re frame
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		bool Render( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime );
 		/**
@@ -152,7 +152,7 @@ namespace Castor3D
 		 *\brief		Retrieves the technique name
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le nom de la technique
+		 *\brief		RÃ©cupÃ¨re le nom de la technique
 		 *\return		La valeur
 		 */
 		inline Castor::String const & GetName()const
@@ -166,8 +166,8 @@ namespace Castor3D
 		 *\brief		Creation function
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Fonction de création
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Fonction de crÃ©ation
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool DoCreate() = 0;
 		/**
@@ -200,8 +200,8 @@ namespace Castor3D
 		 *\brief		Render begin function
 		 *\return		\p true if ok
 		 *\~french
-		 *\brief		Fonction de début de rendu
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Fonction de dÃ©but de rendu
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool DoBeginRender() = 0;
 		/**
@@ -214,11 +214,11 @@ namespace Castor3D
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Fonction de rendu
-		 *\param[in]	p_scene			La scène à rendre
-		 *\param[in]	p_camera		La caméra à travers laquelle la scène est vue
+		 *\param[in]	p_scene			La scÃ¨ne Ã  rendre
+		 *\param[in]	p_camera		La camÃ©ra Ã  travers laquelle la scÃ¨ne est vue
 		 *\param[in]	p_ePrimitives	Le mode d'affichage
-		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la dernière frame
-		 *\return		\p true si tout s'est bien passé
+		 *\param[in]	p_dFrameTime	Le temps Ã©coulÃ© depuis le rendu de la derniÃ¨re frame
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime );
 		/**
@@ -238,15 +238,15 @@ namespace Castor3D
 		Engine * m_pEngine;
 		//!\~english The	render system	\~french Le render system
 		RenderSystem * m_pRenderSystem;
-		//!\~english The	overlays blend state	\~french L'état de mélange pour les overlays
+		//!\~english The	overlays blend state	\~french L'Ã©tat de mÃ©lange pour les overlays
 		BlendStateWPtr m_wp2DBlendState;
-		//!\~english The	overlays depth stencil state	\~french L'état de profoundeur et stenxil pour les overlays
+		//!\~english The	overlays depth stencil state	\~french L'Ã©tat de profoundeur et stenxil pour les overlays
 		DepthStencilStateWPtr m_wp2DDepthStencilState;
 		//!\~english The	technique buffers size	\~french Les dimensions des tampons de la technique
 		Castor::Size m_size;
 		//!\~english The	technique blit rectangle	\~french Le rectangle de blit de la technique
 		Castor::Rectangle m_rect;
-		//!\~english The sampler used by the textures	\~french L'échantillonneur utilisé par les textures
+		//!\~english The sampler used by the textures	\~french L'Ã©chantillonneur utilisÃ© par les textures
 		SamplerSPtr m_sampler;
 		//!\~english The frame buffer	\~french Le tampon d'image
 		FrameBufferSPtr m_pFrameBuffer;

@@ -1,4 +1,4 @@
-#include "RendererPlugin.hpp"
+﻿#include "RendererPlugin.hpp"
 
 #if defined( _WIN32 )
 #	include <Windows.h>

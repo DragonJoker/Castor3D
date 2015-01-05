@@ -1,4 +1,4 @@
-#include "BinaryChunk.hpp"
+﻿#include "BinaryChunk.hpp"
 
 #include <numeric>
 

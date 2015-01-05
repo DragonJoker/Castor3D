@@ -1,4 +1,4 @@
-#include "BinaryFile.hpp"
+﻿#include "BinaryFile.hpp"
 
 namespace Castor
 {

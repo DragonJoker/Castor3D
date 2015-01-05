@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of ProceduralGenerator (https://sourceforge.net/projects/proceduralgene/)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -48,7 +48,7 @@ namespace Castor
 		 *\brief		Function to retrieve Pixel size without templates
 		 *\param[in]	p_pfFormat	The pixel format
 		 *\~french
-		 *\brief		Fonction de récuperation de la taille d'un pixel sans templates
+		 *\brief		Fonction de rÃ©cuperation de la taille d'un pixel sans templates
 		 *\param[in]	p_pfFormat	Le format de pixels
 		 */
 		uint8_t GetBytesPerPixel( ePIXEL_FORMAT p_pfFormat );
@@ -57,7 +57,7 @@ namespace Castor
 		 *\brief		Function to retrieve pixel format from a name
 		 *\param[in]	p_strFormat	The pixel format name
 		 *\~french
-		 *\brief		Fonction de récuperation d'un format de pixel par son nom
+		 *\brief		Fonction de rÃ©cuperation d'un format de pixel par son nom
 		 *\param[in]	p_strFormat	Le nom du format de pixels
 		 */
 		ePIXEL_FORMAT GetFormatByName( String const & p_strFormat );
@@ -66,7 +66,7 @@ namespace Castor
 		 *\brief		Function to retrieve pixel format name
 		 *\param[in]	p_eFormat	The pixel format
 		 *\~french
-		 *\brief		Fonction de récuperation du nom d'un format de pixel
+		 *\brief		Fonction de rÃ©cuperation du nom d'un format de pixel
 		 *\param[in]	p_eFormat	Le format de pixels
 		 */
 		String GetFormatName( ePIXEL_FORMAT p_eFormat );
@@ -111,8 +111,8 @@ namespace Castor
 		 *\param[in]	p_pSrc	The source buffer
 		 *\return		The destination buffer, \p nullptr if source didn't have alpha
 		 *\~french
-		 *\brief		Extrait les valeurs alpha d'un buffer source pour les mettre dans un buffer à part
-		 *\remark		Le buffer contenant les valeurs alpha sera au format L8 et le canal alpha du buffer source sera supprimé
+		 *\brief		Extrait les valeurs alpha d'un buffer source pour les mettre dans un buffer Ã  part
+		 *\remark		Le buffer contenant les valeurs alpha sera au format L8 et le canal alpha du buffer source sera supprimÃ©
 		 *\param[in]	p_pSrc	Le buffer source
 		 *\return		Le buffer alpha, \p nullptr si la source n'avait pas d'alpha
 		 */
@@ -123,7 +123,7 @@ namespace Castor
 		 *\brief		Checks the alpha component support for given pixel format
 		 *\return		\p false if format is depth, stencil or one without alpha
 		 *\~french
-		 *\brief		Vérifie si le format donné possède une composante alpha
+		 *\brief		VÃ©rifie si le format donnÃ© possÃ¨de une composante alpha
 		 *\return		\p false si le format est depth, stencil ou un format sans alpha
 		 */
 		bool HasAlpha( ePIXEL_FORMAT p_ePf );
@@ -133,7 +133,7 @@ namespace Castor
 		 *\brief		Checks if the given pixel format is a compressed one
 		 *\return		The value
 		 *\~french
-		 *\brief		Vérifie si le format donné est un format compressé
+		 *\brief		VÃ©rifie si le format donnÃ© est un format compressÃ©
 		 *\return		La valeur
 		 */
 		bool IsCompressed( ePIXEL_FORMAT p_ePf );
@@ -143,9 +143,9 @@ namespace Castor
 		 *\param[in]	p_ePixelFmt	The pixel format
 		 *\return		The given pixel format if none found
 		 *\~french
-		 *\brief		Récupère le format de pixel sans alpha le plus proche de celui donné
+		 *\brief		RÃ©cupÃ¨re le format de pixel sans alpha le plus proche de celui donnÃ©
 		 *\param[in]	p_ePixelFmt	Le format de pixel
-		 *\return		Le format de pixels donné si non trouvé
+		 *\return		Le format de pixels donnÃ© si non trouvÃ©
 		 */
 		ePIXEL_FORMAT GetPFWithoutAlpha( ePIXEL_FORMAT p_ePixelFmt );
 		/**
@@ -153,8 +153,8 @@ namespace Castor
 		 *\brief			Reduces an image to it's alpha channel, stored in a L8 format buffer
 		 *\param[in,out]	p_pSrc	The buffer to reduce
 		 *\~english
-		 *\brief			Réduit une image à son canal alpha stocké dans un buffer au format L8
-		 *\param[in,out]	p_pSrc	Le buffer à réduire
+		 *\brief			RÃ©duit une image Ã  son canal alpha stockÃ© dans un buffer au format L8
+		 *\param[in,out]	p_pSrc	Le buffer Ã  rÃ©duire
 		 */
 		void ReduceToAlpha( PxBufferBaseSPtr & p_pSrc );
 	}

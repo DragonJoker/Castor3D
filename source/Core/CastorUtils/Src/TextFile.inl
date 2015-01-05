@@ -1,4 +1,4 @@
-namespace Castor
+﻿namespace Castor
 {
 	template< typename T >
 	TextFile & TextFile::operator <<( T const & p_toWrite )

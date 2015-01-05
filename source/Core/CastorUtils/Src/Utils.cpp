@@ -1,4 +1,4 @@
-#include "Utils.hpp"
+﻿#include "Utils.hpp"
 #include "Size.hpp"
 
 #if defined( _WIN32 )

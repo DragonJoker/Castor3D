@@ -1,4 +1,4 @@
-#include "ImporterPlugin.hpp"
+﻿#include "ImporterPlugin.hpp"
 
 #if defined( _WIN32 )
 #	include <Windows.h>

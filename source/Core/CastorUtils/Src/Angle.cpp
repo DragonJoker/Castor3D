@@ -1,4 +1,4 @@
-#include "Angle.hpp"
+﻿#include "Angle.hpp"
 
 namespace Castor
 {

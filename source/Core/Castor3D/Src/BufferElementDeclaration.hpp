@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -30,8 +30,8 @@ namespace Castor3D
 	\brief		Buffer element description
 	\remark		Describes usage and type of an element in a vertex buffer
 	\~french
-	\brief		Description d'un élément de tampon
-	\remark		Décrit l'utilisation et le type d'un élément de tampon de sommets
+	\brief		Description d'un Ã©lÃ©ment de tampon
+	\remark		DÃ©crit l'utilisation et le type d'un Ã©lÃ©ment de tampon de sommets
 	*/
 	struct BufferElementDeclaration
 	{
@@ -58,8 +58,8 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_uiStream	Index du flux
-		 *\param[in]	p_eUsage	Utilisation de l'élément
-		 *\param[in]	p_eType		Type de l'élément
+		 *\param[in]	p_eUsage	Utilisation de l'Ã©lÃ©ment
+		 *\param[in]	p_eType		Type de l'Ã©lÃ©ment
 		 *\param[in]	p_uiOffset	Offset dans le tampon
 		 */
 		BufferElementDeclaration( uint32_t p_uiStream, eELEMENT_USAGE p_eUsage, eELEMENT_TYPE p_eType, uint32_t p_uiOffset = 0 )
@@ -71,9 +71,9 @@ namespace Castor3D
 		}
 		//!\~english Stream index	\~french Index du flux
 		uint32_t m_uiStream;
-		//!\~english Element usage	\~french Utilisation de l'élément
+		//!\~english Element usage	\~french Utilisation de l'Ã©lÃ©ment
 		eELEMENT_USAGE m_eUsage;
-		//!\~english Element type	\~french Type de l'élément
+		//!\~english Element type	\~french Type de l'Ã©lÃ©ment
 		eELEMENT_TYPE m_eDataType;
 		//!\~english Offset in stream	\~french Offset dans le tampon
 		uint32_t m_uiOffset;

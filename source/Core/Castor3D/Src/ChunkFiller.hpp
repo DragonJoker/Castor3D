@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -47,7 +47,7 @@ namespace Castor3D
 		 *\param[in]	p_uiSize		La taille des valeurs
 		 *\param[in]	p_eChunkType	Le type du subchunk
 		 *\param[in]	p_chunk			Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		bool operator()( uint8_t const * p_pValues, uint32_t p_uiSize, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
@@ -93,7 +93,7 @@ namespace Castor3D
 		 *\param[in]	p_uiCount		Le nombre de valeurs
 		 *\param[in]	p_eChunkType	Le type du subchunk
 		 *\param[in]	p_chunk			Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		bool operator()( T const * p_pValues, uint32_t p_uiCount, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
@@ -111,7 +111,7 @@ namespace Castor3D
 		 *\param[in]	p_tValue		Les valeurs
 		 *\param[in]	p_eChunkType	Le type du subchunk
 		 *\param[in]	p_chunk			Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		template< uint32_t Count >
 		bool operator()( T const( & p_tValue )[Count], eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
@@ -130,7 +130,7 @@ namespace Castor3D
 		 *\param[in]	p_tValue		La valeur
 		 *\param[in]	p_eChunkType	Le type du subchunk
 		 *\param[in]	p_chunk			Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		bool operator()( T const & p_tValue, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{

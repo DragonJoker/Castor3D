@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -34,7 +34,7 @@ namespace Castor
 	 *\~french
 	 *\brief		Fonction de callback de log
 	 *\param[in]	p_pCaller	Pointeur sur l'appelant
-	 *\param[in]	p_strLog	Le texte écrit
+	 *\param[in]	p_strLog	Le texte Ã©crit
 	 *\param[in]	p_eLogType	Le type de log
 	 */
 	typedef void ( LogCallback )( void * p_pCaller, String const & p_strLog, eLOG_TYPE p_eLogType );
@@ -52,7 +52,7 @@ namespace Castor
 	\~english
 	\brief		Helper class for Logger, level dependant
 	\~french
-	\brief		Classe d'aide pour Logger, dépendante du niveau de log
+	\brief		Classe d'aide pour Logger, dÃ©pendante du niveau de log
 	*/
 	class ILoggerImpl
 	{

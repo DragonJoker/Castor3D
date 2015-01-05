@@ -1,4 +1,4 @@
-#include "OverlayCategory.hpp"
+﻿#include "OverlayCategory.hpp"
 #include "Overlay.hpp"
 #include "OverlayRenderer.hpp"
 #include "PanelOverlay.hpp"

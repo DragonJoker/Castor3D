@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of ProceduralGenerator (https://sourceforge.net/projects/proceduralgene/)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -68,7 +68,7 @@ namespace Castor
 	\~english
 	\brief		english Helper macro to use UnsupportedFormatException
 	\~french
-	\brief		Macro �crite pour faciliter l'utilisation de UnsupportedFormatException
+	\brief		Macro écrite pour faciliter l'utilisation de UnsupportedFormatException
 	*/
 #	define UNSUPPORTED_ERROR( p_text) throw UnsupportedFormatException( p_text, __FILE__, __FUNCTION__, __LINE__)
 }

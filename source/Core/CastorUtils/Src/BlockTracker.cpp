@@ -1,4 +1,4 @@
-#include "BlockTracker.hpp"
+﻿#include "BlockTracker.hpp"
 #include "Logger.hpp"
 
 namespace Castor

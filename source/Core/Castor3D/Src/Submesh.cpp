@@ -1,4 +1,4 @@
-#include "Submesh.hpp"
+ï»¿#include "Submesh.hpp"
 #include "InitialiseEvent.hpp"
 #include "BonedVertex.hpp"
 #include "Buffer.hpp"
@@ -806,7 +806,7 @@ namespace Castor3D
 	{
 		Point3rArray l_arrayTangents( m_points.size() );
 
-		// Pour chaque vertex, on stocke la somme des tangentes qui peuvent lui être affectées
+		// Pour chaque vertex, on stocke la somme des tangentes qui peuvent lui Ãªtre affectÃ©es
 		for ( FacePtrArray::iterator l_it = m_arrayFaces.begin(); l_it != m_arrayFaces.end(); ++l_it )
 		{
 			FaceSPtr l_pFace = ( *l_it );

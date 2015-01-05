@@ -1,4 +1,4 @@
-#include "Plugin.hpp"
+﻿#include "Plugin.hpp"
 #include "Version.hpp"
 
 #if defined( _WIN32 )

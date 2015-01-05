@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -46,11 +46,11 @@ namespace Castor3D
 		 *\param[in]	p_chunk		The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
-		 *\param[out]	p_pValues	Reçoit les valeurs
+		 *\brief		RÃ©cupÃ¨re un tableau de valeurs Ã  partir d'un chunk
+		 *\param[out]	p_pValues	ReÃ§oit les valeurs
 		 *\param[out]	p_uiSize	La taille des valeurs
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		bool operator()( uint8_t * p_pValues, uint32_t p_uiSize, BinaryChunk & p_chunk )
 		{
@@ -84,11 +84,11 @@ namespace Castor3D
 		 *\param[in]	p_chunk		The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
-		 *\param[out]	p_pValues	Reçoit les valeurs
+		 *\brief		RÃ©cupÃ¨re un tableau de valeurs Ã  partir d'un chunk
+		 *\param[out]	p_pValues	ReÃ§oit les valeurs
 		 *\param[out]	p_uiCount	Le compte des valeurs
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		bool operator()( T * p_pValues, uint32_t p_uiCount, BinaryChunk & p_chunk )
 		{
@@ -101,10 +101,10 @@ namespace Castor3D
 		 *\param[in]	p_chunk		The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
-		 *\param[out]	p_tValue	Reçoit les valeurs
+		 *\brief		RÃ©cupÃ¨re un tableau de valeurs Ã  partir d'un chunk
+		 *\param[out]	p_tValue	ReÃ§oit les valeurs
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		template< uint32_t Count >
 		bool operator()( T( & p_tValue )[Count], BinaryChunk & p_chunk )
@@ -118,10 +118,10 @@ namespace Castor3D
 		 *\param[in]	p_chunk		The chunk containing the value
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		Récupère une valeur à partir d'un chunk
-		 *\param[out]	p_tValue	Reçoit la valeur
+		 *\brief		RÃ©cupÃ¨re une valeur Ã  partir d'un chunk
+		 *\param[out]	p_tValue	ReÃ§oit la valeur
 		 *\param[in]	p_chunk		Le chunk contenant la valeur
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		bool operator()( T & p_tValue, BinaryChunk & p_chunk )
 		{

@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -30,7 +30,7 @@ namespace Castor3D
 	\brief		Matrix buffer representation
 	\remark		Holds the matrices of a submesh instance
 	\~french
-	\brief		Représentation d'un tampon de matrices
+	\brief		ReprÃ©sentation d'un tampon de matrices
 	\remark		Contient les matrices d'une instance de submesh
 	*/
 	class C3D_API MatrixBuffer : public CpuBuffer< real >
@@ -59,10 +59,10 @@ namespace Castor3D
 		 *\param[in]	p_uiCount	Instances count
 		 *\return		\p true if successful
 		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
-		 *\remark		Utilisé pour l'instanciation
+		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activÃ©
+		 *\remark		UtilisÃ© pour l'instanciation
 		 *\param[in]	p_uiCount	Nombre d'instances
-		 *\return		\p true si tout s'est bien passé
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool Bind( uint32_t p_uiCount );
 

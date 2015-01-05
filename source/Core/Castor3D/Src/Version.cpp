@@ -1,4 +1,4 @@
-#include "Version.hpp"
+﻿#include "Version.hpp"
 
 using namespace Castor;
 

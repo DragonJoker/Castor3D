@@ -1,4 +1,4 @@
-#include "AnimatedObjectGroup.hpp"
+﻿#include "AnimatedObjectGroup.hpp"
 #include "AnimatedObject.hpp"
 #include "Animation.hpp"
 #include "MovableObject.hpp"

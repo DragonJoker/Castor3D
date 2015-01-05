@@ -1,4 +1,4 @@
-#include "PixelFormat.hpp"
+﻿#include "PixelFormat.hpp"
 #include "PixelBuffer.hpp"
 
 namespace Castor

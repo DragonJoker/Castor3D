@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -97,7 +97,7 @@ namespace Castor3D
 		 *\param[in]	p_size	The render window size
 		 *\~french
 		 *\brief		Commence le rendu des incrustations
-		 *\param[in]	p_size	La taille de la fenêtre de rendu
+		 *\param[in]	p_size	La taille de la fenÃªtre de rendu
 		 */
 		void BeginRender( Castor::Size const & p_size );
 		/**
@@ -111,7 +111,7 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Retrieves the current render target size
 		 *\~french
-		 *\brief		Récupère les dimensions de la cible du rendu courant
+		 *\brief		RÃ©cupÃ¨re les dimensions de la cible du rendu courant
 		 */
 		Castor::Size const & GetSize()const
 		{
@@ -125,7 +125,7 @@ namespace Castor3D
 		 *\param[in]	p_uiFlags	Bitwise ORed eTEXTURE_CHANNEL
 		 *\return		The program
 		 *\~french
-		 *\brief		Récupère un programme compilé en utilisant les indicateurs donnés
+		 *\brief		RÃ©cupÃ¨re un programme compilÃ© en utilisant les indicateurs donnÃ©s
 		 *\param[in]	p_uiFlags	Combinaison de eTEXTURE_CHANNEL
 		 *\return		Le programme
 		 */
@@ -150,7 +150,7 @@ namespace Castor3D
 		 *\param[in]	p_uiFlags	Bitwise ORed eTEXTURE_CHANNEL
 		 *\return		The program
 		 *\~french
-		 *\brief		Récupère un programme de panneau compilé en utilisant les indicateurs donnés
+		 *\brief		RÃ©cupÃ¨re un programme de panneau compilÃ© en utilisant les indicateurs donnÃ©s
 		 *\param[in]	p_uiFlags	Combinaison de eTEXTURE_CHANNEL
 		 *\return		Le programme
 		 */
@@ -161,7 +161,7 @@ namespace Castor3D
 		 *\param[in]	p_uiFlags	Bitwise ORed eTEXTURE_CHANNEL
 		 *\return		The program
 		 *\~french
-		 *\brief		Récupère un programme de texte compilé en utilisant les indicateurs donnés
+		 *\brief		RÃ©cupÃ¨re un programme de texte compilÃ© en utilisant les indicateurs donnÃ©s
 		 *\param[in]	p_uiFlags	Combinaison de eTEXTURE_CHANNEL
 		 *\return		Le programme
 		 */
@@ -172,31 +172,31 @@ namespace Castor3D
 		VertexBufferWPtr m_pVertexBuffer;
 		//!\~english Geometry indices buffer	\~french Le tampon de sommets
 		IndexBufferWPtr m_pIndexBuffer;
-		//!\~english Geometry buffers for panels	\~french Tampons de géometrie pour les panneaux
+		//!\~english Geometry buffers for panels	\~french Tampons de gÃ©ometrie pour les panneaux
 		GeometryBuffersSPtr m_pPanelGeometryBuffer;
-		//!\~english Geometry buffers for borders	\~french Tampons de géometrie pour les bordures
+		//!\~english Geometry buffers for borders	\~french Tampons de gÃ©ometrie pour les bordures
 		GeometryBuffersSPtr m_pBorderGeometryBuffer;
-		//!\~english The GeometryBuffers used to render one character	\~french Le GeometryBuffers utilisé pour rendre un caractère
+		//!\~english The GeometryBuffers used to render one character	\~french Le GeometryBuffers utilisÃ© pour rendre un caractÃ¨re
 		GeometryBuffersSPtr m_pTextGeometryBuffers;
-		//!\~english The buffer elements declaration	\~french La déclaration des éléments du tampon
+		//!\~english The buffer elements declaration	\~french La dÃ©claration des Ã©lÃ©ments du tampon
 		BufferDeclarationSPtr m_pDeclaration;
 		//!\~english The render system	\~french Le render system
 		RenderSystem * m_pRenderSystem;
 		//!\~english The current render target size	\~french Les dimensions de la cible du rendu courant
 		Castor::Size m_size;
-		//!\~english The shader programs used to render a panel (used for borders too)	\~french Les programmes de shader utilisés pour rendre un panneau (utilisé pour les bords aussi)
+		//!\~english The shader programs used to render a panel (used for borders too)	\~french Les programmes de shader utilisÃ©s pour rendre un panneau (utilisÃ© pour les bords aussi)
 		std::map< uint32_t, ShaderProgramBaseSPtr > m_mapPanelPrograms;
-		//!\~english The shader programs used to render texts	\~french Les programmes de shader utilisés pour rendre les textes
+		//!\~english The shader programs used to render texts	\~french Les programmes de shader utilisÃ©s pour rendre les textes
 		std::map< uint32_t, ShaderProgramBaseSPtr > m_mapTextPrograms;
 		//!\~english Text texture sampler	\~french Echantillonneur de la texture de texte
 		OneTextureFrameVariableSPtr m_mapText;
-		//!\~english The previously rendered BorderPanelOverlay z-index	\~french Le z-index du précedent BorderPanelOverlay rendu
+		//!\~english The previously rendered BorderPanelOverlay z-index	\~french Le z-index du prÃ©cedent BorderPanelOverlay rendu
 		int m_previousBorderZIndex;
-		//!\~english The previously rendered PanelOverlay z-index	\~french Le z-index du précedent PanelOverlay rendu
+		//!\~english The previously rendered PanelOverlay z-index	\~french Le z-index du prÃ©cedent PanelOverlay rendu
 		int m_previousPanelZIndex;
-		//!\~english The previously rendered TextOverlay z-index	\~french Le z-index du précedent TextOverlay rendu
+		//!\~english The previously rendered TextOverlay z-index	\~french Le z-index du prÃ©cedent TextOverlay rendu
 		int m_previousTextZIndex;
-		//!\~english The previously rendered text	\~french Le texte rendu précédemment
+		//!\~english The previously rendered text	\~french Le texte rendu prÃ©cÃ©demment
 		Castor::String m_previousCaption;
 	};
 }

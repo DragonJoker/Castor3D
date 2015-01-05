@@ -1,4 +1,4 @@
-#include "DynamicTexture.hpp"
+﻿#include "DynamicTexture.hpp"
 #include "Sampler.hpp"
 
 #include <Image.hpp>

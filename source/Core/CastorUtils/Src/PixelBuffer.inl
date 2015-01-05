@@ -1,4 +1,4 @@
-namespace Castor
+﻿namespace Castor
 {
 	template< ePIXEL_FORMAT FT >
 	PxBuffer< FT >::PxBuffer( Size const & p_size, uint8_t const * p_pBuffer, ePIXEL_FORMAT p_eBufferFormat )

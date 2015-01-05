@@ -1,4 +1,4 @@
-#include "Font.hpp"
+﻿#include "Font.hpp"
 #include "Image.hpp"
 
 #include <ft2build.h>

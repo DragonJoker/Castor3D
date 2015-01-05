@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -34,8 +34,8 @@ namespace Castor3D
 	\brief		Holds light components
 	\remark		Derived into DirectionalLight, PointLight and SpotLight
 	\~french
-	\brief		Contient les composantes d'une lumière
-	\remark		Dérivée en DirectionalLight, PointLight et SpotLight
+	\brief		Contient les composantes d'une lumiÃ¨re
+	\remark		DÃ©rivÃ©e en DirectionalLight, PointLight et SpotLight
 	*/
 	class C3D_API LightCategory
 	{
@@ -66,9 +66,9 @@ namespace Castor3D
 			 *\param[in]	p_file	The file to save the cameras in
 			 *\param[in]	p_light	The light to save
 			 *\~french
-			 *\brief		Ecrit une lumière dans un fichier texte
+			 *\brief		Ecrit une lumiÃ¨re dans un fichier texte
 			 *\param[in]	p_file	Le fichier
-			 *\param[in]	p_light	La lumière
+			 *\param[in]	p_light	La lumiÃ¨re
 			 */
 			virtual bool operator()( LightCategory const & p_light, Castor::TextFile & p_file );
 		};
@@ -90,7 +90,7 @@ namespace Castor3D
 			 *\param[in]	p_path	The current folder path
 			 *\~french
 			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
+			 *\param[in]	p_path	Le chemin d'accÃ¨s au dossier courant
 			 */
 			BinaryParser( Castor::Path const & p_path );
 			/**
@@ -100,10 +100,10 @@ namespace Castor3D
 			 *\param[out]	p_chunk	The chunk to fill
 			 *\return		\p false if any error occured
 			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
+			 *\brief		Fonction utilisÃ©e afin de remplir le chunk de donnÃ©es spÃ©cifiques
+			 *\param[in]	p_obj	L'objet Ã  Ã©crire
+			 *\param[out]	p_chunk	Le chunk Ã  remplir
+			 *\return		\p false si une erreur quelconque est arrivÃ©e
 			 */
 			virtual bool Fill( LightCategory const & p_obj, BinaryChunk & p_chunk )const;
 			/**
@@ -113,10 +113,10 @@ namespace Castor3D
 			 *\param[in]	p_chunk	The chunk containing data
 			 *\return		\p false if any error occured
 			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
+			 *\brief		Fonction utilisÃ©e afin de rÃ©cupÃ©rer des donnÃ©es spÃ©cifiques Ã  partir d'un chunk
+			 *\param[out]	p_obj	L'objet Ã  lire
+			 *\param[in]	p_chunk	Le chunk contenant les donnÃ©es
+			 *\return		\p false si une erreur quelconque est arrivÃ©e
 			 */
 			virtual bool Parse( LightCategory & p_obj, BinaryChunk & p_chunk )const;
 		};
@@ -131,8 +131,8 @@ namespace Castor3D
 		 *\brief		The constructor, used by clone function
 		 *\param[in]	p_eLightType	The light category type
 		 *\~french
-		 *\brief		Le constructeur utilisé par la fonction de clonage
-		 *\param[in]	p_eLightType	Le type de catégorie de lumière
+		 *\brief		Le constructeur utilisÃ© par la fonction de clonage
+		 *\param[in]	p_eLightType	Le type de catÃ©gorie de lumiÃ¨re
 		 */
 		LightCategory( eLIGHT_TYPE p_eLightType );
 		/**
@@ -146,14 +146,14 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Renders the light => Applies it's position
 		 *\~french
-		 *\brief		Rend cette lumière => Applique sa position
+		 *\brief		Rend cette lumiÃ¨re => Applique sa position
 		 */
 		virtual void Render( LightRendererSPtr p_pRenderer ) = 0;
 		/**
 		 *\~english
 		 *\brief		Renders the light => Applies it's position
 		 *\~french
-		 *\brief		Rend cette lumière => Applique sa position
+		 *\brief		Rend cette lumiÃ¨re => Applique sa position
 		 */
 		virtual void Render( LightRendererSPtr p_pRenderer, ShaderProgramBase * p_pProgram ) = 0;
 		/**
@@ -161,7 +161,7 @@ namespace Castor3D
 		 *\brief		Sets the light's ambient colour
 		 *\param[in]	p_ambient	The new value
 		 *\~french
-		 *\brief		Définit la couleur ambiante
+		 *\brief		DÃ©finit la couleur ambiante
 		 *\param[in]	p_ambient	La nouvelle valeur
 		 */
 		void SetAmbient( Castor::Colour const & p_ambient );
@@ -170,7 +170,7 @@ namespace Castor3D
 		 *\brief		Sets the light's diffuse colour
 		 *\param[in]	p_diffuse	The new value
 		 *\~french
-		 *\brief		Définit la couleur diffuse
+		 *\brief		DÃ©finit la couleur diffuse
 		 *\param[in]	p_diffuse	La nouvelle valeur
 		 */
 		void SetDiffuse( Castor::Colour const & p_diffuse );
@@ -179,7 +179,7 @@ namespace Castor3D
 		 *\brief		Sets the light's specular colour
 		 *\param[in]	p_specular	The new value
 		 *\~french
-		 *\brief		Définit la couleur spéculaire
+		 *\brief		DÃ©finit la couleur spÃ©culaire
 		 *\param[in]	p_specular	La nouvelle valeur
 		 */
 		void SetSpecular( Castor::Colour const & p_specular );
@@ -188,7 +188,7 @@ namespace Castor3D
 		 *\brief		Retrieves the light type
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le type de lumière
+		 *\brief		RÃ©cupÃ¨re le type de lumiÃ¨re
 		 *\return		La valeur
 		 */
 		inline eLIGHT_TYPE GetLightType()const
@@ -200,7 +200,7 @@ namespace Castor3D
 		 *\brief		Retrieves the ambient colour
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la couleur ambiante
+		 *\brief		RÃ©cupÃ¨re la couleur ambiante
 		 *\return		La valeur
 		 */
 		inline Castor::Colour const & GetAmbient()const
@@ -212,7 +212,7 @@ namespace Castor3D
 		 *\brief		Retrieves the diffuse colour
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la couleur diffuse
+		 *\brief		RÃ©cupÃ¨re la couleur diffuse
 		 *\return		La valeur
 		 */
 		inline Castor::Colour const & GetDiffuse()const
@@ -224,7 +224,7 @@ namespace Castor3D
 		 *\brief		Retrieves the specular colour
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la couleur spéculaire
+		 *\brief		RÃ©cupÃ¨re la couleur spÃ©culaire
 		 *\return		La valeur
 		 */
 		inline Castor::Colour const & GetSpecular()const
@@ -236,7 +236,7 @@ namespace Castor3D
 		 *\brief		Retrieves the ambient colour
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la couleur ambiante
+		 *\brief		RÃ©cupÃ¨re la couleur ambiante
 		 *\return		La valeur
 		 */
 		inline Castor::Colour & GetAmbient()
@@ -248,7 +248,7 @@ namespace Castor3D
 		 *\brief		Retrieves the diffuse colour
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la couleur diffuse
+		 *\brief		RÃ©cupÃ¨re la couleur diffuse
 		 *\return		La valeur
 		 */
 		inline Castor::Colour & GetDiffuse()
@@ -260,7 +260,7 @@ namespace Castor3D
 		 *\brief		Retrieves the specular colour
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la couleur spéculaire
+		 *\brief		RÃ©cupÃ¨re la couleur spÃ©culaire
 		 *\return		La valeur
 		 */
 		inline Castor::Colour & GetSpecular()
@@ -272,7 +272,7 @@ namespace Castor3D
 		 *\brief		Retrieves the parent light
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la lumière parente
+		 *\brief		RÃ©cupÃ¨re la lumiÃ¨re parente
 		 *\return		La valeur
 		 */
 		inline Light * GetLight()const
@@ -284,7 +284,7 @@ namespace Castor3D
 		 *\brief		Sets the parent light
 		 *\return		The value
 		 *\~french
-		 *\brief		Définit la lumière parente
+		 *\brief		DÃ©finit la lumiÃ¨re parente
 		 *\return		La valeur
 		 */
 		inline void SetLight( Light * val )
@@ -298,7 +298,7 @@ namespace Castor3D
 		 *\brief		Retrieves the light position and type
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le type et la position de la lumière
+		 *\brief		RÃ©cupÃ¨re le type et la position de la lumiÃ¨re
 		 *\return		La valeur
 		 */
 		inline Castor::Point4f const & GetPositionType()const
@@ -310,7 +310,7 @@ namespace Castor3D
 		 *\brief		Sets the light's type and position
 		 *\param[in]	The new value
 		 *\~french
-		 *\brief		Définit le type de la lumière et sa position
+		 *\brief		DÃ©finit le type de la lumiÃ¨re et sa position
 		 *\param[in]	La nouvelle valeur
 		 */
 		virtual void SetPositionType( Castor::Point4f const & p_ptPosition )
@@ -322,7 +322,7 @@ namespace Castor3D
 		 *\brief		Sets the light's type and position
 		 *\param[in]	The new value
 		 *\~french
-		 *\brief		Définit le type de la lumière et sa position
+		 *\brief		DÃ©finit le type de la lumiÃ¨re et sa position
 		 *\param[in]	La nouvelle valeur
 		 */
 		virtual void SetPositionType( Castor::Point4d const & p_ptPosition )
@@ -334,17 +334,17 @@ namespace Castor3D
 		}
 
 	private:
-		//!\~english The light type	\~french Le type de lumière
+		//!\~english The light type	\~french Le type de lumiÃ¨re
 		eLIGHT_TYPE m_eLightType;
-		//!\~english The parent light	\~french La lumière parente
+		//!\~english The parent light	\~french La lumiÃ¨re parente
 		Light * m_pLight;
 		//!\~english The ambient colour values	\~french La couleur ambiante
 		Castor::Colour m_ambient;
 		//!\~english The diffuse colour values	\~french La couleur diffuse
 		Castor::Colour m_diffuse;
-		//!\~english The specular colour values	\~french La couleur spéculaire
+		//!\~english The specular colour values	\~french La couleur spÃ©culaire
 		Castor::Colour m_specular;
-		//!\~english The position and type of the light (type is in 4th coordinate)	\~french La position et le type de la lumière (le type est dans la 4ème coordonnée)
+		//!\~english The position and type of the light (type is in 4th coordinate)	\~french La position et le type de la lumiÃ¨re (le type est dans la 4Ã¨me coordonnÃ©e)
 		Castor::Point4f m_ptPositionType;
 	};
 }

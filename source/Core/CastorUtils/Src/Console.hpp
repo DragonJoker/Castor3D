@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -33,7 +33,7 @@ namespace Castor
 	\~english
 	\brief		Defines the various log types
 	\~french
-	\brief		Définit les différents types de log
+	\brief		DÃ©finit les diffÃ©rents types de log
 	*/
 	typedef enum eLOG_TYPE
 	CASTOR_TYPE( uint8_t )
@@ -53,7 +53,7 @@ namespace Castor
 	\remark		Platform dependent
 	\~french
 	\brief		Classe contenant les informations de la console
-	\remark		Dépend de l'OS
+	\remark		DÃ©pend de l'OS
 	*/
 	class IConsoleInfo
 	{
@@ -77,8 +77,8 @@ namespace Castor
 		 *\brief		Configures console info for the given log type
 		 *\param[in]	p_eLogType	The log type
 		 *\~french
-		 *\brief		Configure les informationss de la console en fonction du type donné
-		 *\param[in]	p_eLogType	Le type de log donné
+		 *\brief		Configure les informationss de la console en fonction du type donnÃ©
+		 *\param[in]	p_eLogType	Le type de log donnÃ©
 		 */
 		virtual void BeginLog( eLOG_TYPE p_eLogType ) = 0;
 		/**
@@ -87,9 +87,9 @@ namespace Castor
 		 *\param[in]	p_strToLog	The text to log
 		 *\param[in]	p_bNewLine	Tells if the line end character must be added
 		 *\~french
-		 *\brief		Ecrit un texte dans la console, ajoute le caractère de fin de ligne si demandé
-		 *\param[in]	p_strToLog	Le texte à écrire
-		 *\param[in]	p_bNewLine	Dit si on doit ajouter le caractère de fin de ligne
+		 *\brief		Ecrit un texte dans la console, ajoute le caractÃ¨re de fin de ligne si demandÃ©
+		 *\param[in]	p_strToLog	Le texte Ã  Ã©crire
+		 *\param[in]	p_bNewLine	Dit si on doit ajouter le caractÃ¨re de fin de ligne
 		 */
 		virtual void Print( String const & p_strToLog, bool p_bNewLine ) = 0;
 	};
@@ -124,8 +124,8 @@ namespace Castor
 		 *\brief		Configures console info for the given log type
 		 *\param[in]	p_eLogType	The log type
 		 *\~french
-		 * Configure les informationss de la console en fonction du type donné
-		 *\param[in]	p_eLogType	Le type de log donné
+		 * Configure les informationss de la console en fonction du type donnÃ©
+		 *\param[in]	p_eLogType	Le type de log donnÃ©
 		 */
 		virtual void BeginLog( eLOG_TYPE p_eLogType ) = 0;
 		/**
@@ -134,9 +134,9 @@ namespace Castor
 		 *\param[in]	p_strToLog	The text to log
 		 *\param[in]	p_bNewLine	Tells if the line end character must be added
 		 *\~french
-		 *\brief		Ecrit un texte dans la console, ajoute le caractère de fin de ligne si demandé
-		 *\param[in]	p_strToLog	Le texte à écrire
-		 *\param[in]	p_bNewLine	Dit si on doit ajouter le caractère de fin de ligne
+		 *\brief		Ecrit un texte dans la console, ajoute le caractÃ¨re de fin de ligne si demandÃ©
+		 *\param[in]	p_strToLog	Le texte Ã  Ã©crire
+		 *\param[in]	p_bNewLine	Dit si on doit ajouter le caractÃ¨re de fin de ligne
 		 */
 		virtual void Print( String const & p_strToLog, bool p_bNewLine ) = 0;
 	};
@@ -172,8 +172,8 @@ namespace Castor
 		 *\brief		Configures console info for the given log type
 		 *\param[in]	p_eLogType	The log type
 		 *\~french
-		 * Configure les informationss de la console en fonction du type donné
-		 *\param[in]	p_eLogType	Le type de log donné
+		 * Configure les informationss de la console en fonction du type donnÃ©
+		 *\param[in]	p_eLogType	Le type de log donnÃ©
 		 */
 		virtual void BeginLog( eLOG_TYPE ) {}
 		/**
@@ -182,9 +182,9 @@ namespace Castor
 		 *\param[in]	p_strToLog	The text to log
 		 *\param[in]	p_bNewLine	Tells if the line end character must be added
 		 *\~french
-		 *\brief		Ecrit un texte dans la console, ajoute le caractère de fin de ligne si demandé
-		 *\param[in]	p_strToLog	Le texte à écrire
-		 *\param[in]	p_bNewLine	Dit si on doit ajouter le caractère de fin de ligne
+		 *\brief		Ecrit un texte dans la console, ajoute le caractÃ¨re de fin de ligne si demandÃ©
+		 *\param[in]	p_strToLog	Le texte Ã  Ã©crire
+		 *\param[in]	p_bNewLine	Dit si on doit ajouter le caractÃ¨re de fin de ligne
 		 */
 		virtual void Print( String const &, bool ) {}
 	};
@@ -223,8 +223,8 @@ namespace Castor
 		 *\brief		Configures console info for the given log type
 		 *\param[in]	p_eLogType	The log type
 		 *\~french
-		 * Configure les informationss de la console en fonction du type donné
-		 *\param[in]	p_eLogType	Le type de log donné
+		 * Configure les informationss de la console en fonction du type donnÃ©
+		 *\param[in]	p_eLogType	Le type de log donnÃ©
 		 */
 		virtual void BeginLog( eLOG_TYPE p_eLogType );
 		/**
@@ -233,9 +233,9 @@ namespace Castor
 		 *\param[in]	p_strToLog	The text to log
 		 *\param[in]	p_bNewLine	Tells if the line end character must be added
 		 *\~french
-		 *\brief		Ecrit un texte dans la console, ajoute le caractère de fin de ligne si demandé
-		 *\param[in]	p_strToLog	Le texte à écrire
-		 *\param[in]	p_bNewLine	Dit si on doit ajouter le caractère de fin de ligne
+		 *\brief		Ecrit un texte dans la console, ajoute le caractÃ¨re de fin de ligne si demandÃ©
+		 *\param[in]	p_strToLog	Le texte Ã  Ã©crire
+		 *\param[in]	p_bNewLine	Dit si on doit ajouter le caractÃ¨re de fin de ligne
 		 */
 		virtual void Print( String const & p_strToLog, bool p_bNewLine );
 	};

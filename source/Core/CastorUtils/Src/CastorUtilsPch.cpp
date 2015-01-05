@@ -1,4 +1,4 @@
-#include "CastorUtilsPch.hpp"
+﻿#include "CastorUtilsPch.hpp"
 
 #if defined( __BORLANDC__)
 #	pragma message( "Compiler : Borland C++")

@@ -1,4 +1,4 @@
-#include "TechniqueFactory.hpp"
+﻿#include "TechniqueFactory.hpp"
 
 #include "DeferredShadingRenderTechnique.hpp"
 #include "DirectRenderTechnique.hpp"

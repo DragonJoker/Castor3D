@@ -1,4 +1,4 @@
-#include "Material.hpp"
+﻿#include "Material.hpp"
 #include "Pass.hpp"
 #include "SceneFileParser.hpp"
 #include "Sampler.hpp"

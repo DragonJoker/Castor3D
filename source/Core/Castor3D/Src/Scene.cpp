@@ -1,4 +1,4 @@
-#include "Scene.hpp"
+﻿#include "Scene.hpp"
 #include "CleanupEvent.hpp"
 #include "DepthStencilState.hpp"
 #include "FrameVariableBuffer.hpp"

@@ -1,4 +1,4 @@
-#include "SpotLight.hpp"
+﻿#include "SpotLight.hpp"
 #include "Vertex.hpp"
 
 using namespace Castor;

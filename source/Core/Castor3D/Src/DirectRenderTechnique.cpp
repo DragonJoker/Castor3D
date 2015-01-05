@@ -1,4 +1,4 @@
-#include "DirectRenderTechnique.hpp"
+﻿#include "DirectRenderTechnique.hpp"
 #include "RenderTarget.hpp"
 #include "FrameBuffer.hpp"
 #include "DepthStencilState.hpp"

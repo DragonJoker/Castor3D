@@ -1,4 +1,4 @@
-#include "RenderSystem.hpp"
+﻿#include "RenderSystem.hpp"
 #include "CleanupEvent.hpp"
 #include "FrameVariableBuffer.hpp"
 #include "PointFrameVariable.hpp"

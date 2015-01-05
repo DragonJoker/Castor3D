@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -31,7 +31,7 @@ namespace Castor
 	\remark Adds some static functions to check file/directory validity, file/directory creation...
 	\~french
 	\brief Classe de gestion de fichier
-	\remark Ajoute quelques fonctions statiques de vérification d'existence, suppression, ...
+	\remark Ajoute quelques fonctions statiques de vÃ©rification d'existence, suppression, ...
 	*/
 	class BinaryFile
 		: public File
@@ -43,7 +43,7 @@ namespace Castor
 		 *\param[in]	p_fileName	The file path
 		 *\param[in]	p_iMode		The opening mode, combination of one or more eOPEN_MODE
 		 *\~french
-		 *\brief		Ouvre le fichier situé au chemin donné, avec le mode et l'encodage donnés
+		 *\brief		Ouvre le fichier situÃ© au chemin donnÃ©, avec le mode et l'encodage donnÃ©s
 		 *\param[in]	p_fileName	Le chemin du fichier
 		 *\param[in]	p_iMode		Le mode d'ouverture, combinaison d'un ou plusieurs eOPEN_MODE
 		 */
@@ -59,7 +59,7 @@ namespace Castor
 		 *\~english
 		 *\brief		Move constructor
 		 *\~french
-		 *\brief		Constructeur par déplacement
+		 *\brief		Constructeur par dÃ©placement
 		 */
 		BinaryFile( BinaryFile && p_file );
 		/**
@@ -75,9 +75,9 @@ namespace Castor
 		 *\param[in]	p_toWrite	The data to write in this file
 		 *\return		A reference to this file
 		 *\~french
-		 *\brief		Fonction d'écriture dépendant du mode d'ouverture
-		 *\param[in]	p_toWrite	La donnée à écrire dans le fichier
-		 *\return		Une référence sur ce fichier
+		 *\brief		Fonction d'Ã©criture dÃ©pendant du mode d'ouverture
+		 *\param[in]	p_toWrite	La donnÃ©e Ã  Ã©crire dans le fichier
+		 *\return		Une rÃ©fÃ©rence sur ce fichier
 		 */
 		template< typename T > BinaryFile & operator <<( T const & p_toWrite );
 		/**
@@ -86,9 +86,9 @@ namespace Castor
 		 *\param[out]	p_toRead	The data to read from this file
 		 *\return		A reference to this file
 		 *\~french
-		 *\brief		Fonction de lecture dépendant du mode d'ouverture
-		 *\param[out]	p_toRead	La donnée à lire à partir du fichier
-		 *\return		Une référence sur ce fichier
+		 *\brief		Fonction de lecture dÃ©pendant du mode d'ouverture
+		 *\param[out]	p_toRead	La donnÃ©e Ã  lire Ã  partir du fichier
+		 *\return		Une rÃ©fÃ©rence sur ce fichier
 		 */
 		template< typename T > BinaryFile & operator >>( T & p_toRead );
 		/**
@@ -97,9 +97,9 @@ namespace Castor
 		 *\param[in]	p_strToWrite	The string
 		 *\return		\p true if written correctly
 		 *\~french
-		 *\brief		Ecrit une chaîne de caractères dans le fichier (en binaire, donc écrit d'abord la taille puis le contenu, sans le '\0')
-		 *\param[in]	p_strToWrite	La chaîne
-		 *\return		\p true si l'écriture s'est bien déroulée
+		 *\brief		Ecrit une chaÃ®ne de caractÃ¨res dans le fichier (en binaire, donc Ã©crit d'abord la taille puis le contenu, sans le '\0')
+		 *\param[in]	p_strToWrite	La chaÃ®ne
+		 *\return		\p true si l'Ã©criture s'est bien dÃ©roulÃ©e
 		 */
 		bool Write( String const & p_strToWrite );
 		/**
@@ -108,9 +108,9 @@ namespace Castor
 		 *\param[out]	p_strToRead	The string
 		 *\return		\p true if read correctly
 		 *\~french
-		 *\brief		Lit une chaîne de caractères à partir du fichier (en binaire, donc lit d'abord la taille puis le contenu)
-		 *\param[out]	p_strToRead	La chaîne
-		 *\return		\p true si la lecture s'est bien déroulée
+		 *\brief		Lit une chaÃ®ne de caractÃ¨res Ã  partir du fichier (en binaire, donc lit d'abord la taille puis le contenu)
+		 *\param[out]	p_strToRead	La chaÃ®ne
+		 *\return		\p true si la lecture s'est bien dÃ©roulÃ©e
 		 */
 		bool Read( String & p_strToRead );
 		/**
@@ -121,7 +121,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Ecrit un objet dans le fichier
 		 *\param[in]	p_toWrite	L'objet
-		 *\return		Le nombre d'octets écrits
+		 *\return		Le nombre d'octets Ã©crits
 		 */
 		template< typename T > uint64_t Write( T const & p_toWrite );
 		/**
@@ -130,7 +130,7 @@ namespace Castor
 		 *\param[out]	p_toRead	The object
 		 *\return		The bytes read
 		 *\~french
-		 *\brief		Lit un objet à partir du fichier
+		 *\brief		Lit un objet Ã  partir du fichier
 		 *\param[out]	p_toRead	L'objet
 		 *\return		Le nombre d'octets lus
 		 */
@@ -145,7 +145,7 @@ namespace Castor
 		 *\brief		Ecrit un tableau dynamique d'objets dans du fichier
 		 *\param[in]	p_toWrite	Le tableau d'objets
 		 *\param[in]	p_count		La taille du tableau
-		 *\return		Le nombre d'octets écrits
+		 *\return		Le nombre d'octets Ã©crits
 		 */
 		template< typename T > uint64_t WriteArray( T const * p_toWrite, uint64_t p_count );
 		/**
@@ -156,9 +156,9 @@ namespace Castor
 		 *\return		The bytes written
 		 *\~french
 		 *\brief		Ecrit un tableau statique d'objets dans du fichier
-		 *\remark		La taille du tableau est déduite à partir du paramètre
+		 *\remark		La taille du tableau est dÃ©duite Ã  partir du paramÃ¨tre
 		 *\param[in]	p_toWrite	Le tableau d'objets
-		 *\return		Le nombre d'octets écrits
+		 *\return		Le nombre d'octets Ã©crits
 		 */
 		template< typename T, uint64_t N > uint64_t WriteArray( T const( & p_toWrite )[N] );
 		/**
@@ -168,8 +168,8 @@ namespace Castor
 		 *\param[in]	p_count		The array size
 		 *\return		The bytes read
 		 *\~french
-		 *\brief		Lit un tableau dynamique d'objets à partir du fichier
-		 *\param[out]	p_toRead	Le tableau d'objets (doit être alloué avant l'appel)
+		 *\brief		Lit un tableau dynamique d'objets Ã  partir du fichier
+		 *\param[out]	p_toRead	Le tableau d'objets (doit Ãªtre allouÃ© avant l'appel)
 		 *\param[in]	p_count		La taille du tableau
 		 *\return		Le nombre d'octets lus
 		 */
@@ -181,9 +181,9 @@ namespace Castor
 		 *\remark		Array size is deduced from parameter
 		 *\return		The bytes read
 		 *\~french
-		 *\brief		Lit un tableau statique d'objets à partir du fichier
+		 *\brief		Lit un tableau statique d'objets Ã  partir du fichier
 		 *\param[out]	p_toRead	Le tableau d'objets
-		 *\remark		La taille du tableau est déduite à partir du paramètre
+		 *\remark		La taille du tableau est dÃ©duite Ã  partir du paramÃ¨tre
 		 *\return		Le nombre d'octets lus
 		 */
 		template< typename T, uint64_t N > uint64_t ReadArray( T( & p_toRead )[N] );
@@ -193,9 +193,9 @@ namespace Castor
 		 *\param[in]	p_file	The file to copy
 		 *\return		A reference to this file
 		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_file	Le fichier à copier
-		 *\return		Une référence sur ce fichier
+		 *\brief		OpÃ©rateur d'affectation par copie
+		 *\param[in]	p_file	Le fichier Ã  copier
+		 *\return		Une rÃ©fÃ©rence sur ce fichier
 		 */
 		BinaryFile & operator =( BinaryFile const & p_file );
 		/**
@@ -204,9 +204,9 @@ namespace Castor
 		 *\param[in]	p_file	The file to move
 		 *\return		A reference to this file
 		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_file	Le fichier à déplacer
-		 *\return		Une référence sur ce fichier
+		 *\brief		OpÃ©rateur d'affectation par dÃ©placement
+		 *\param[in]	p_file	Le fichier Ã  dÃ©placer
+		 *\return		Une rÃ©fÃ©rence sur ce fichier
 		 */
 		BinaryFile & operator =( BinaryFile && p_file );
 	};

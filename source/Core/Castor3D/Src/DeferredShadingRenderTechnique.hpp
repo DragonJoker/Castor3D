@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -36,10 +36,10 @@ namespace Castor3D
 				<br />it renders to these buffers (Geometry Pass)
 				<br />then renders these buffers into the final one, adding the lights (Light Pass)
 	\~french
-	\brief		Classe de technique de rendu implémentant le Deferred lighting
-	\remark		On crée jusqu'à 6 tampons de rendu (position, diffuse, normales, tangentes, bitangentes, spéculaire)
+	\brief		Classe de technique de rendu implÃ©mentant le Deferred lighting
+	\remark		On crÃ©e jusqu'Ã  6 tampons de rendu (position, diffuse, normales, tangentes, bitangentes, spÃ©culaire)
 				<br />on fait le rendu dans ces tampons (Geometry Pass)
-				<br />puis on fait un rendu de ces tampons en ajoutant les lumières (Light Pass)
+				<br />puis on fait un rendu de ces tampons en ajoutant les lumiÃ¨res (Light Pass)
 	*/
 	class C3D_API DeferredShadingRenderTechnique
 		:	public RenderTechniqueBase
@@ -65,7 +65,7 @@ namespace Castor3D
 		 *\remark		Used only by TechniqueFactory
 		 *\~french
 		 *\brief		Constructeur
-		 *\remark		Utilisé uniquement par TechniqueFactory
+		 *\remark		UtilisÃ© uniquement par TechniqueFactory
 		 */
 		DeferredShadingRenderTechnique();
 		/**
@@ -78,7 +78,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_renderTarget	La render target pour cette technique
 		 *\param[in]	p_pRenderSystem	Le render system
-		 *\param[in]	p_params		Les paramètres de la technique
+		 *\param[in]	p_params		Les paramÃ¨tres de la technique
 		 */
 		DeferredShadingRenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params );
 
@@ -98,11 +98,11 @@ namespace Castor3D
 		 *\param[in]	p_params		The technique parameters
 		 *\return		A clone of this object
 		 *\~french
-		 *\brief		Fonction d'instanciation, utilisée par la fabrique pour créer des objets d'un type donné
+		 *\brief		Fonction d'instanciation, utilisÃ©e par la fabrique pour crÃ©er des objets d'un type donnÃ©
 		 *\param[in]	p_renderTarget	La cible de rendu de la technique
 		 *\param[in]	p_pRenderSystem	Le render system
-		 *\param[in]	p_params		Les paramètres de la technique
-		 *\return		Un clône de cet objet
+		 *\param[in]	p_params		Les paramÃ¨tres de la technique
+		 *\return		Un clÃ´ne de cet objet
 		 */
 		static RenderTechniqueBaseSPtr CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params );
 
@@ -112,8 +112,8 @@ namespace Castor3D
 		 *\brief		Creation function
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Fonction de création
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Fonction de crÃ©ation
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool DoCreate();
 		/**
@@ -146,8 +146,8 @@ namespace Castor3D
 		 *\brief		Render begin function
 		 *\return		\p true if ok
 		 *\~french
-		 *\brief		Fonction de début de rendu
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Fonction de dÃ©but de rendu
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool DoBeginRender();
 		/**
@@ -160,11 +160,11 @@ namespace Castor3D
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Fonction de rendu
-		 *\param[in]	p_scene			La scène à rendre
-		 *\param[in]	p_camera		La caméra à travers laquelle la scène est vue
+		 *\param[in]	p_scene			La scÃ¨ne Ã  rendre
+		 *\param[in]	p_camera		La camÃ©ra Ã  travers laquelle la scÃ¨ne est vue
 		 *\param[in]	p_ePrimitives	Le mode d'affichage
-		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la dernière frame
-		 *\return		\p true si tout s'est bien passé
+		 *\param[in]	p_dFrameTime	Le temps Ã©coulÃ© depuis le rendu de la derniÃ¨re frame
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime );
 		/**
@@ -186,23 +186,23 @@ namespace Castor3D
 		TextureAttachmentSPtr m_pDsTexAttachs[eDS_TEXTURE_COUNT];
 		//!\~english The attach between depth texture and deferred shading frame buffer	\~french L'attache entre la texture profondeur et le tampon deferred shading
 		RenderBufferAttachmentSPtr m_pDsDepthAttach;
-		//!\~english The shader program used to render lights	\~french Le shader utilisé pour rendre les lumières
+		//!\~english The shader program used to render lights	\~french Le shader utilisÃ© pour rendre les lumiÃ¨res
 		ShaderProgramBaseSPtr m_pDsShaderProgram;
-		//!\~english Buffer elements declaration	\~french Déclaration des éléments d'un vertex
+		//!\~english Buffer elements declaration	\~french DÃ©claration des Ã©lÃ©ments d'un vertex
 		BufferDeclarationSPtr m_pDeclaration;
-		//!\~english Vertex array (quad definition)	\~french Tableau de vertex (définition du quad)
+		//!\~english Vertex array (quad definition)	\~french Tableau de vertex (dÃ©finition du quad)
 		std::array< BufferElementGroupSPtr, 4 > m_arrayVertex;
-		//!\~english Geometry buffers holder	\~french Conteneur de buffers de géométries
+		//!\~english Geometry buffers holder	\~french Conteneur de buffers de gÃ©omÃ©tries
 		GeometryBuffersSPtr m_pGeometryBuffers;
 		//!	4 * [3(vertex position) 2(texture coordinates)]
 		Castor::real m_pBuffer[20];
-		//!\~english The viewport used when rendering is done	\~french Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture)
+		//!\~english The viewport used when rendering is done	\~french Le viewport utilisÃ© pour rendre la cible sur sa cible (fenÃªtre ou texture)
 		ViewportSPtr m_pViewport;
-		//!\~english The shader variable containing the camera position	\~french La variable de shader contenant la position de la caméra
+		//!\~english The shader variable containing the camera position	\~french La variable de shader contenant la position de la camÃ©ra
 		Point3rFrameVariableSPtr m_pShaderCamera;
-		//!\~english The depth stencil state used by the geometric pass	\~french Le DepthStencilState utilisé par la passe géométrique
+		//!\~english The depth stencil state used by the geometric pass	\~french Le DepthStencilState utilisÃ© par la passe gÃ©omÃ©trique
 		DepthStencilStateSPtr m_pDsGeometricState;
-		//!\~english The depth stencil state used byt he lights pass	\~french Le DepthStencilState utilisé par la passe lumières
+		//!\~english The depth stencil state used byt he lights pass	\~french Le DepthStencilState utilisÃ© par la passe lumiÃ¨res
 		DepthStencilStateSPtr m_pDsLightsState;
 	};
 }

@@ -1,4 +1,4 @@
-#include "ZipArchive.hpp"
+﻿#include "ZipArchive.hpp"
 
 #include "Assertion.hpp"
 #include "Logger.hpp"

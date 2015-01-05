@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -69,7 +69,7 @@ namespace Castor
 		 *\param[in]	p_path	The archive path name
 		 *\param[in]	p_mode	The open mode
 		 *\~french
-		 *\brief		Constructeur par défaut
+		 *\brief		Constructeur par dÃ©faut
 		 *\param[in]	p_path	Le chemin de l' archive
 		 *\param[in]	p_mode	Le mode d'ouverture
 		 */
@@ -95,7 +95,7 @@ namespace Castor
 		 *\brief		Inflates the archive
 		 *\param[in]	p_folder	The archive output folder
 		 *\~french
-		 *\brief		Décompresse l'archive
+		 *\brief		DÃ©compresse l'archive
 		 *\param[in]	p_folder	Le dossier de sortie de l'archive
 		 */
 		bool Inflate( Path const & p_folder );
@@ -104,7 +104,7 @@ namespace Castor
 		 *\brief		Adds a file to the archive
 		 *\param[in]	p_file	The file path
 		 *\~french
-		 *\brief		Ajoute un fichier à l'archive
+		 *\brief		Ajoute un fichier Ã  l'archive
 		 *\param[in]	p_file	Le chemin du fichier
 		 */
 		void AddFile( Path const & p_file );

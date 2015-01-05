@@ -1,4 +1,4 @@
-#include "LoggerImpl.hpp"
+﻿#include "LoggerImpl.hpp"
 #include "Logger.hpp"
 #include "TextFile.hpp"
 #include "Utils.hpp"
