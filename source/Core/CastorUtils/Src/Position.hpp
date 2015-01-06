@@ -48,7 +48,7 @@ namespace Castor
 		 *\brief		Constructeur
 		 *\param[in]	p_x, p_y	La position
 		 */
-		Position( int32_t p_x = 0, int32_t p_y = 0 );
+		CU_API Position( int32_t p_x = 0, int32_t p_y = 0 );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -57,7 +57,7 @@ namespace Castor
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_obj	L'objet à copier
 		 */
-		Position( Position const & p_obj );
+		CU_API Position( Position const & p_obj );
 		/**
 		 *\~english
 		 *\brief		Move assignment Constructor
@@ -66,14 +66,14 @@ namespace Castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	p_obj	L'objet à déplacer
 		 */
-		Position( Position && p_obj );
+		CU_API Position( Position && p_obj );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Position();
+		CU_API ~Position();
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -84,7 +84,7 @@ namespace Castor
 		 *\param[in]	p_obj	L'objet à copier
 		 *\return		Une référence sur cet objet
 		 */
-		Position & operator =( Position const & p_obj );
+		CU_API Position & operator =( Position const & p_obj );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -95,7 +95,7 @@ namespace Castor
 		 *\param[in]	p_obj	L'objet à déplacer
 		 *\return		Une référence sur cet objet
 		 */
-		Position & operator =( Position && p_obj );
+		CU_API Position & operator =( Position && p_obj );
 		/**
 		 *\~english
 		 *\brief		Sets the position values
@@ -104,7 +104,7 @@ namespace Castor
 		 *\brief		Définit la position
 		 *\param[in]	p_x, p_y	La position
 		 */
-		void set( int32_t p_x, int32_t p_y );
+		CU_API void set( int32_t p_x, int32_t p_y );
 		/**
 		 *\~english
 		 *\brief		Offsets the position values
@@ -113,7 +113,7 @@ namespace Castor
 		 *\brief		Déplace la position
 		 *\param[in]	p_x, p_y	Les valeurs de déplacement
 		 */
-		void offset( int32_t p_x, int32_t p_y );
+		CU_API void offset( int32_t p_x, int32_t p_y );
 		/**
 		 *\~english
 		 *\brief		Retrieves the left coordinate
@@ -187,7 +187,7 @@ namespace Castor
 	 *\param[in]	p_a, p_b	Les positions à comparer
 	 *\return		\p true si les positions ont les mêmes coordonnées
 	 */
-	bool operator ==( Position const & p_a, Position const & p_b );
+	CU_API bool operator ==( Position const & p_a, Position const & p_b );
 	/**
 	 *\~english
 	 *\brief		Difference operator
@@ -198,7 +198,7 @@ namespace Castor
 	 *\param[in]	p_a, p_b	Les positions à comparer
 	 *\return		\p false si les positions ont les mêmes coordonnées
 	 */
-	bool operator !=( Position const & p_a, Position const & p_b );
+	CU_API bool operator !=( Position const & p_a, Position const & p_b );
 }
 
 #endif

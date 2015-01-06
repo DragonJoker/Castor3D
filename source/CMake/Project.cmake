@@ -20,14 +20,6 @@ else ()
 	set( PROJECTS_USE_VLD FALSE )
 endif ()
 
-option( PROJECTS_USE_PRECOMPILED_HEADERS "Use precompiled headers" TRUE )
-
-if ( WIN32 )
-	option( PROJECTS_PACKAGE_WIX "Build WiX setup" TRUE )
-else()
-	option( PROJECTS_PACKAGE_DEB "Build Debian pckqge" TRUE )
-endif()
-
 set( PROJECTS_VERSION "" )
 set( PROJECTS_SOVERSION "" )
 if( (NOT "${VERSION_MAJOR}" STREQUAL "") AND (NOT "${VERSION_MINOR}" STREQUAL "") AND (NOT "${VERSION_BUILD}" STREQUAL "") )
@@ -37,14 +29,12 @@ endif()
 #--------------------------------------------------------------------------------------------------
 #	Defining output paths for each project configuration
 #--------------------------------------------------------------------------------------------------
-if(MSVC)
+if ( MSVC )
 	option( PROJECTS_PROFILING "Activate code profiling or not" FALSE )
 endif()
 
-option( PROJECTS_GENERATE_DOC "Generate Doxygen documentation" FALSE )
-
 set( PROJECTS_PLATFORM "x86" )
-if(MSVC)
+if ( MSVC )
 	if( (CMAKE_CL_64 OR CMAKE_GENERATOR MATCHES Win64) )
 		set( PROJECTS_PLATFORM_FLAGS "/MACHINE:X64" )
 		set( PROJECTS_PLATFORM "x64" )
@@ -54,13 +44,19 @@ if(MSVC)
 else()
 	if( (${CMAKE_SIZEOF_VOID_P} EQUAL 8) AND NOT MINGW )
 		set( PROJECTS_PLATFORM_FLAGS "-m64" )
-		set( PROJECTS_PLATFORM "x64" )
+		if ( WIN32 )
+			set( PROJECTS_PLATFORM "x64" )
+		else ()
+			set( PROJECTS_PLATFORM "amd64" )
+		endif ()
 	else()
 		set( PROJECTS_PLATFORM_FLAGS "-m32" )
 	endif()
 endif()
 
 get_filename_component( CMAKE_PARENT_DIR ${CMAKE_CURRENT_SOURCE_DIR} PATH )
+
+set( PROJECTS_TEMPLATES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/CMake/Templates )
 
 if("${PROJECTS_BINARIES_OUTPUT_DIR}" STREQUAL "")
     set( PROJECTS_BINARIES_OUTPUT_DIR "${CMAKE_PARENT_DIR}/binaries/${PROJECTS_PLATFORM}" CACHE PATH "The path to the built binaries" )
@@ -182,6 +178,8 @@ function( add_target TARGET_NAME TARGET_TYPE TARGET_DEPENDENCIES TARGET_LINKS )#
         set( TARGET_CXX_FLAGS "" )
         set( TARGET_LINK_FLAGS "" )
         compute_compilation_flags( ${TARGET_NAME} ${TARGET_TYPE} "${OPT_C_FLAGS}" "${OPT_CXX_FLAGS}" "${OPT_LINK_FLAGS}" TARGET_C_FLAGS TARGET_CXX_FLAGS TARGET_LINK_FLAGS )
+		# set( CPACK_SOURCE_OUTPUT_CONFIG_FILE "${CMAKE_CURRENT_BINARY_DIR}/CPackSourceConfig.cmake" )
+		# set( CPACK_OUTPUT_CONFIG_FILE "${CMAKE_CURRENT_BINARY_DIR}/CPackConfig.cmake" )
 		#We now effectively create the target
 		if ( IS_API_DLL )
 			set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/" )
@@ -195,29 +193,31 @@ function( add_target TARGET_NAME TARGET_TYPE TARGET_DEPENDENCIES TARGET_LINKS )#
             set_target_properties( ${TARGET_NAME} PROPERTIES LINK_FLAGS "${TARGET_LINK_FLAGS}" )
 			#We now build the install script
 			if ( WIN32 )
-				#We copy each .dll in <install_dir>/bin folder
-        	    install(
+				#We install each .dll in <install_dir>/bin folder
+				install(
 					TARGETS	${TARGET_NAME}
-					ARCHIVE DESTINATION lib
-					LIBRARY DESTINATION lib
 					RUNTIME DESTINATION bin
-					COMPONENT "${TARGET_NAME}_SDK"
-        	    )
-			else ()
-				#We copy each .so in <install_dir>/lib folder
-        	    install(
+					COMPONENT ${TARGET_NAME}
+				)
+				install(
 					TARGETS	${TARGET_NAME}
 					ARCHIVE DESTINATION lib
 					LIBRARY DESTINATION lib
-					RUNTIME DESTINATION lib
-					COMPONENT "${TARGET_NAME}_SDK"
-        	    )
+					COMPONENT ${TARGET_NAME}_dev
+				)
+			else ()
+				#We install each .so in <install_dir>/lib folder
+				install(
+					TARGETS	${TARGET_NAME}
+					LIBRARY DESTINATION lib
+					COMPONENT ${TARGET_NAME}
+				)
 			endif()
 			#For API DLLs, we install headers to <install_dir>/include/${TARGET_NAME}
 			install(
 				FILES ${TARGET_SOURCE_H_ONLY}
 				DESTINATION include/${TARGET_NAME}
-				COMPONENT ${TARGET_NAME}
+				COMPONENT ${TARGET_NAME}_dev
 			)
 		elseif ( IS_DLL )
 			set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/" )
@@ -241,41 +241,35 @@ function( add_target TARGET_NAME TARGET_TYPE TARGET_DEPENDENCIES TARGET_LINKS )#
 				#We copy each .so in <install_dir>/lib folder
 				install(
 					TARGETS	${TARGET_NAME}
-					ARCHIVE DESTINATION lib
 					LIBRARY DESTINATION lib
-					RUNTIME DESTINATION lib
 					COMPONENT ${TARGET_NAME}
 				)
 			endif()
 		elseif ( IS_PLUGIN )
-			set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/${ProjectName}/" )
-			set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/${ProjectName}/" )
-			set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/${ProjectName}/" )
-			set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/${ProjectName}/" )
-			set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE "${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/${ProjectName}/" )
-			set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/${ProjectName}/" )
+			set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/${MAIN_PROJECT_NAME}/" )
+			set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/${MAIN_PROJECT_NAME}/" )
+			set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/${MAIN_PROJECT_NAME}/" )
+			set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/${MAIN_PROJECT_NAME}/" )
+			set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE "${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/${MAIN_PROJECT_NAME}/" )
+			set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/${MAIN_PROJECT_NAME}/" )
 			add_library( ${TARGET_NAME} MODULE ${TARGET_SOURCE_CPP} ${TARGET_SOURCE_C} ${TARGET_SOURCE_H} ${OPT_FILES} )
 			set_target_properties( ${TARGET_NAME} PROPERTIES VERSION ${PROJECTS_VERSION} SOVERSION ${PROJECTS_SOVERSION} )
             set_target_properties( ${TARGET_NAME} PROPERTIES LINK_FLAGS "${TARGET_LINK_FLAGS}" )
 			if ( WIN32 )
 				#We install each plugin .dll in <install_dir>/lib/<project_name> folder
 				install(
-					TARGETS	${TARGET_NAME}
-					ARCHIVE DESTINATION lib/${ProjectName}
-					LIBRARY DESTINATION lib/${ProjectName}
-					RUNTIME DESTINATION lib/${ProjectName}
+					FILES ${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIG>/lib/${MAIN_PROJECT_NAME}/${TARGET_NAME}.dll
+					DESTINATION lib/${MAIN_PROJECT_NAME}
 					COMPONENT ${TARGET_NAME}
 				)
 			else ()
-				#We install each plugin .so in <install_dir>/lib/<project_name> folder
+				#We install each plugin .dll in <install_dir>/lib/<project_name> folder
 				install(
 					TARGETS	${TARGET_NAME}
-					ARCHIVE DESTINATION lib/${ProjectName}
-					LIBRARY DESTINATION lib/${ProjectName}
-					RUNTIME DESTINATION lib/${ProjectName}
+					LIBRARY DESTINATION lib/${MAIN_PROJECT_NAME}
 					COMPONENT ${TARGET_NAME}
 				)
-			endif()
+			endif ()
 		elseif ( IS_BIN )
 			set( CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/" )
 			set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/lib/" )
@@ -319,6 +313,7 @@ function( add_target TARGET_NAME TARGET_TYPE TARGET_DEPENDENCIES TARGET_LINKS )#
 			set( CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE "${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/lib/" )
 			set( CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/bin/" )
 			add_library( ${TARGET_NAME} STATIC ${TARGET_SOURCE_CPP} ${TARGET_SOURCE_C} ${TARGET_SOURCE_H} ${OPT_FILES} )
+			add_target_compilation_flags( ${TARGET_NAME} "-D${TARGET_NAME}_STATIC" )
 			if ( MSVC )
 	            set_target_properties( ${TARGET_NAME} PROPERTIES STATIC_LIBRARY_FLAGS "${TARGET_LINK_FLAGS}" )
 	        endif()
@@ -327,13 +322,13 @@ function( add_target TARGET_NAME TARGET_TYPE TARGET_DEPENDENCIES TARGET_LINKS )#
 			install(
 				TARGETS	${TARGET_NAME}
 				ARCHIVE DESTINATION lib
-				COMPONENT ${TARGET_NAME}
+				COMPONENT ${TARGET_NAME}_dev
         	)
 			#For libs, we install headers to <install_dir>/include/${TARGET_NAME}
 			install(
 				FILES ${TARGET_SOURCE_H_ONLY}
 				DESTINATION include/${TARGET_NAME}
-				COMPONENT "${TARGET_NAME}_SDK"
+				COMPONENT ${TARGET_NAME}_dev
 			)
         else()
             message( FATAL_ERROR " Unknown target type : [${TARGET_TYPE}]" )

@@ -66,18 +66,18 @@ namespace Castor
 		DECLARE_MAP( std::thread::id, stLOGGER_CALLBACK, LoggerCallback );
 
 	public:
-		ILoggerImpl( eLOG_TYPE p_eLogLevel );
-		virtual ~ILoggerImpl();
+		CU_API ILoggerImpl( eLOG_TYPE p_eLogLevel );
+		CU_API virtual ~ILoggerImpl();
 
-		void Initialise( Logger * p_pLogger );
-		void SetCallback( PLogCallback p_pfnCallback, void * p_pCaller );
+		CU_API void Initialise( Logger * p_pLogger );
+		CU_API void SetCallback( PLogCallback p_pfnCallback, void * p_pCaller );
 
-		void SetFileName( String const & p_logFilePath, eLOG_TYPE p_eLogType );
+		CU_API void SetFileName( String const & p_logFilePath, eLOG_TYPE p_eLogType );
 
-		virtual void LogDebug( String const & p_strToLog );
-		virtual void LogMessage( String const & p_strToLog );
-		virtual void LogWarning( String const & p_strToLog );
-		virtual bool LogError( String const & p_strToLog );
+		CU_API virtual void LogDebug( String const & p_strToLog );
+		CU_API virtual void LogMessage( String const & p_strToLog );
+		CU_API virtual void LogWarning( String const & p_strToLog );
+		CU_API virtual bool LogError( String const & p_strToLog );
 
 		inline eLOG_TYPE GetLogLevel()const
 		{

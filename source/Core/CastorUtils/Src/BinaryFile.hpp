@@ -47,50 +47,28 @@ namespace Castor
 		 *\param[in]	p_fileName	Le chemin du fichier
 		 *\param[in]	p_iMode		Le mode d'ouverture, combinaison d'un ou plusieurs eOPEN_MODE
 		 */
-		BinaryFile( Path const & p_fileName, int p_iMode, eENCODING_MODE p_eEncodingMode = eENCODING_MODE_ASCII );
+		CU_API BinaryFile( Path const & p_fileName, int p_iMode, eENCODING_MODE p_eEncodingMode = eENCODING_MODE_ASCII );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
 		 *\~french
 		 *\brief		Constructeur par copie
 		 */
-		BinaryFile( BinaryFile const & p_file );
+		CU_API BinaryFile( BinaryFile const & p_file );
 		/**
 		 *\~english
 		 *\brief		Move constructor
 		 *\~french
 		 *\brief		Constructeur par déplacement
 		 */
-		BinaryFile( BinaryFile && p_file );
+		CU_API BinaryFile( BinaryFile && p_file );
 		/**
 		 *\~english
 		 *\brief		Destructor, closes the file
 		 *\~french
 		 *\brief		Destructeur, ferme le fichier
 		 */
-		virtual ~BinaryFile();
-		/**
-		 *\~english
-		 *\brief		Open mode dependant write function
-		 *\param[in]	p_toWrite	The data to write in this file
-		 *\return		A reference to this file
-		 *\~french
-		 *\brief		Fonction d'écriture dépendant du mode d'ouverture
-		 *\param[in]	p_toWrite	La donnée à écrire dans le fichier
-		 *\return		Une référence sur ce fichier
-		 */
-		template< typename T > BinaryFile & operator <<( T const & p_toWrite );
-		/**
-		 *\~english
-		 *\brief		Open mode dependant read function
-		 *\param[out]	p_toRead	The data to read from this file
-		 *\return		A reference to this file
-		 *\~french
-		 *\brief		Fonction de lecture dépendant du mode d'ouverture
-		 *\param[out]	p_toRead	La donnée à lire à partir du fichier
-		 *\return		Une référence sur ce fichier
-		 */
-		template< typename T > BinaryFile & operator >>( T & p_toRead );
+		CU_API virtual ~BinaryFile();
 		/**
 		 *\~english
 		 *\brief		Writes a string into the file (binary, so writes size then content, without '\0')
@@ -101,7 +79,7 @@ namespace Castor
 		 *\param[in]	p_strToWrite	La chaîne
 		 *\return		\p true si l'écriture s'est bien déroulée
 		 */
-		bool Write( String const & p_strToWrite );
+		CU_API bool Write( String const & p_strToWrite );
 		/**
 		 *\~english
 		 *\brief		Reads a string from the file (binary, so reads size then content)
@@ -112,7 +90,7 @@ namespace Castor
 		 *\param[out]	p_strToRead	La chaîne
 		 *\return		\p true si la lecture s'est bien déroulée
 		 */
-		bool Read( String & p_strToRead );
+		CU_API bool Read( String & p_strToRead );
 		/**
 		 *\~english
 		 *\brief		Writes an object into the file
@@ -197,7 +175,7 @@ namespace Castor
 		 *\param[in]	p_file	Le fichier à copier
 		 *\return		Une référence sur ce fichier
 		 */
-		BinaryFile & operator =( BinaryFile const & p_file );
+		CU_API BinaryFile & operator =( BinaryFile const & p_file );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -208,8 +186,30 @@ namespace Castor
 		 *\param[in]	p_file	Le fichier à déplacer
 		 *\return		Une référence sur ce fichier
 		 */
-		BinaryFile & operator =( BinaryFile && p_file );
+		CU_API BinaryFile & operator =( BinaryFile && p_file );
 	};
+	/**
+	 *\~english
+	 *\brief		Open mode dependant write function
+	 *\param[in]	p_toWrite	The data to write in this file
+	 *\return		A reference to this file
+	 *\~french
+	 *\brief		Fonction d'écriture dépendant du mode d'ouverture
+	 *\param[in]	p_toWrite	La donnée à écrire dans le fichier
+	 *\return		Une référence sur ce fichier
+	 */
+	template< typename T > BinaryFile & operator <<( BinaryFile & p_file, T const & p_toWrite );
+	/**
+	 *\~english
+	 *\brief		Open mode dependant read function
+	 *\param[out]	p_toRead	The data to read from this file
+	 *\return		A reference to this file
+	 *\~french
+	 *\brief		Fonction de lecture dépendant du mode d'ouverture
+	 *\param[out]	p_toRead	La donnée à lire à partir du fichier
+	 *\return		Une référence sur ce fichier
+	 */
+	template< typename T > BinaryFile & operator >>( BinaryFile & p_file, T & p_toRead );
 }
 
 #include "BinaryFile.inl"

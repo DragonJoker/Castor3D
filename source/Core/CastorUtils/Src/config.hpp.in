@@ -32,6 +32,16 @@ http://www.gnu.org/copyleft/lesser.txt.
 #undef CASTOR_USE_LOG_TRACK
 #define CASTOR_USE_LOG_TRACK 1
 
+#if defined( __linux__ )
+#	define CU_API
+#elif defined( _WIN32 )
+#	if defined( CastorUtils_EXPORTS )
+#		define CU_API __declspec(dllexport)
+#	else
+#		define CU_API __declspec(dllimport)
+#	endif
+#endif
+
 #undef CASTOR_UNICODE
 #undef CASTOR_HAS_NULLPTR
 #undef CASTOR_HAS_STDSMARTPTR
@@ -149,8 +159,22 @@ http://www.gnu.org/copyleft/lesser.txt.
 #			define CASTOR_HAS_TR1FUNCTIONAL			1
 #			define CASTOR_HAS_VARIADIC_TEMPLATES	1
 #			define CASTOR_HAS_MAKE_UNIQUE			1
-#		else
+#		elif GCC_VERSION >= 40500
 #			define CASTOR_TYPE( x )					: x
+#			define CASTOR_HAS_STDTHREAD				1
+#			define CASTOR_HAS_NULLPTR				1
+#			define CASTOR_HAS_STDSMARTPTR			1
+#			define CASTOR_HAS_STDARRAY				1
+#			define CASTOR_HAS_DEFAULTED_FUNC		1
+#			define CASTOR_HAS_DELETED_FUNC			1
+#			define CASTOR_HAS_TR1SMARTPTR			1
+#			define CASTOR_HAS_TR1ARRAY				1
+#			define CASTOR_HAS_STDFUNCTIONAL			1
+#			define CASTOR_HAS_TR1FUNCTIONAL			1
+#			define CASTOR_HAS_VARIADIC_TEMPLATES	1
+#			define CASTOR_HAS_MAKE_UNIQUE			1
+#		else
+#			define CASTOR_TYPE( x )
 #			define CASTOR_HAS_STDTHREAD				1
 #			define CASTOR_HAS_NULLPTR				1
 #			define CASTOR_HAS_STDSMARTPTR			1

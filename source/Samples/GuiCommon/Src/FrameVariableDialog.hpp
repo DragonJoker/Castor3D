@@ -25,24 +25,24 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GuiCommon
 {
 	class wxFrameVariableDialog
-		:	public wxDialog
+		: public wxDialog
 	{
 	private:
 		typedef enum eID
 		{
-			eID_BUTTON_OK
-			,	eID_BUTTON_CANCEL
-			,	eID_COMBO_TYPE
+			eID_BUTTON_OK,
+			eID_BUTTON_CANCEL,
+			eID_COMBO_TYPE,
 		}	eID;
 
 	protected:
-		Castor3D::FrameVariableWPtr		m_pFrameVariable;
-		Castor3D::ShaderProgramBaseWPtr	m_pProgram;
-		bool							m_bOwn;
-		wxComboBox 		*			m_pComboType;
-		wxTextCtrl 		*			m_pEditName;
-		wxTextCtrl 		*			m_pEditValue;
-		Castor3D::eSHADER_TYPE			m_eTargetStage;
+		Castor3D::FrameVariableWPtr m_pFrameVariable;
+		Castor3D::ShaderProgramBaseWPtr m_pProgram;
+		bool m_bOwn;
+		wxComboBox * m_pComboType;
+		wxTextCtrl * m_pEditName;
+		wxTextCtrl * m_pEditValue;
+		Castor3D::eSHADER_TYPE m_eTargetStage;
 
 	public:
 		wxFrameVariableDialog( wxWindow * p_pParent, Castor3D::ShaderProgramBaseSPtr p_pProgram, Castor3D::eSHADER_TYPE p_eTargetStage, Castor3D::FrameVariableSPtr p_pFrameVariable = nullptr );

@@ -41,7 +41,7 @@ namespace Castor
 	 *\param[in]	p_valist	La liste d'arguments
 	 *\return		Le nombre de caractères qui auraient été écrits si p_count avait été suffisamment grand, sans compter le caractère de terminaison
 	*/
-	int Vsnprintf( char * p_text, size_t p_count, const char * p_format, va_list p_valist );
+	CU_API int Vsnprintf( char * p_text, size_t p_count, const char * p_format, va_list p_valist );
 	/**
 	 *\~english
 	 *\brief		Write formatted data from variable argument list to sized buffer
@@ -77,7 +77,7 @@ namespace Castor
 	 *\param[in]	p_valist	La liste d'arguments
 	 *\return		Le nombre de caractères qui auraient été écrits si p_count avait été suffisamment grand, sans compter le caractère de terminaison
 	*/
-	int Vswprintf( wchar_t * p_text, size_t p_count, const wchar_t * p_format, va_list p_valist );
+	CU_API int Vswprintf( wchar_t * p_text, size_t p_count, const wchar_t * p_format, va_list p_valist );
 	/**
 	 *\~english
 	 *\brief		Write formatted data from variable argument list to sized buffer
@@ -117,14 +117,14 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		Logger();
+		CU_API Logger();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Logger();
+		CU_API ~Logger();
 
 	public:
 		/**
@@ -135,7 +135,7 @@ namespace Castor
 		 *\brief		Initialise l'instance de ce Logger à une autre
 		 *\param[in]	p_pLogger	Le logger
 		 */
-		static void Initialise( Logger * p_pLogger );
+		CU_API static void Initialise( Logger * p_pLogger );
 		/**
 		 *\~english
 		 *\brief		Initialises this logger instance level
@@ -144,14 +144,14 @@ namespace Castor
 		 *\brief		Initialise l'instance du logger avec le niveau donné
 		 *\param[in]	p_eLogLevel		Le niveau de log
 		 */
-		static void Initialise( eLOG_TYPE p_eLogLevel );
+		CU_API static void Initialise( eLOG_TYPE p_eLogLevel );
 		/**
 		 *\~english
 		 *\brief		Destroys the Logger instance
 		 *\~french
 		 *\brief		Détruit l'instance du Logger
 		 */
-		static void Cleanup();
+		CU_API static void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Defines the logging callback
@@ -162,7 +162,7 @@ namespace Castor
 		 *\param[in]	p_pfnCallback	La callback
 		 *\param[in]	p_pCaller		Pointeur sur des données utilisateur
 		 */
-		static void SetCallback( PLogCallback p_pfnCallback, void * p_pCaller );
+		CU_API static void SetCallback( PLogCallback p_pfnCallback, void * p_pCaller );
 		/**
 		 *\~english
 		 *\brief		Sets the log file address
@@ -173,7 +173,7 @@ namespace Castor
 		 *\param[in]	p_logFilePath	Le chemin du fichier
 		 *\param[in]	p_eLogType		Le type de log concerné
 		 */
-		static void SetFileName( String const & p_logFilePath, eLOG_TYPE p_eLogType = eLOG_TYPE_COUNT );
+		CU_API static void SetFileName( String const & p_logFilePath, eLOG_TYPE p_eLogType = eLOG_TYPE_COUNT );
 		/**
 		 *\~english
 		 *\brief		Logs a debug message in the log file, using va_args
@@ -184,7 +184,7 @@ namespace Castor
 		 *\param[in]	p_format	Le format de la ligne
 		 *\param[in]	...			Paramètres POD, utilise le format de printf
 		 */
-		static void LogDebug( char const * p_format, ... );
+		CU_API static void LogDebug( char const * p_format, ... );
 		/**
 		 *\~english
 		 *\brief		Logs a debug message, from a std::string
@@ -193,7 +193,7 @@ namespace Castor
 		 *\brief		Log un message debug, à partir d'un std::string
 		 *\param[in]	p_msg	The line to log
 		 */
-		static void LogDebug( std::string const & p_msg );
+		CU_API static void LogDebug( std::string const & p_msg );
 		/**
 		 *\~english
 		 *\brief		Logs a unicode debug message in the log file, using va_args
@@ -204,7 +204,7 @@ namespace Castor
 		 *\param[in]	p_format	Le format de la ligne
 		 *\param[in]	...			Paramètres POD, utilise le format de printf
 		 */
-		static void LogDebug( wchar_t const * p_format , ... );
+		CU_API static void LogDebug( wchar_t const * p_format , ... );
 		/**
 		 *\~english
 		 *\brief		Logs a unicode debug message, from a std::wstring
@@ -213,7 +213,7 @@ namespace Castor
 		 *\brief		Log un message debug, à partir d'un std::wstring
 		 *\param[in]	p_msg	The line to log
 		 */
-		static void LogDebug( std::wstring const & p_msg );
+		CU_API static void LogDebug( std::wstring const & p_msg );
 		/**
 		 *\~english
 		 *\brief		Logs a message in the log file, using va_args
@@ -224,7 +224,7 @@ namespace Castor
 		 *\param[in]	p_format	Le format de la ligne
 		 *\param[in]	...			Paramètres POD, utilise le format de printf
 		 */
-		static void LogMessage( char const * p_format, ... );
+		CU_API static void LogMessage( char const * p_format, ... );
 		/**
 		 *\~english
 		 *\brief		Logs a message, from a std::string
@@ -233,7 +233,7 @@ namespace Castor
 		 *\brief		Log un message, à partir d'un std::string
 		 *\param[in]	p_msg	The line to log
 		 */
-		static void LogMessage( std::string const & p_msg );
+		CU_API static void LogMessage( std::string const & p_msg );
 		/**
 		 *\~english
 		 *\brief		Logs a unicode line in the log file, using va_args
@@ -244,7 +244,7 @@ namespace Castor
 		 *\param[in]	p_format	Le format de la ligne
 		 *\param[in]	...			Paramètres POD, utilise le format de printf
 		 */
-		static void LogMessage( wchar_t const * p_format , ... );
+		CU_API static void LogMessage( wchar_t const * p_format , ... );
 		/**
 		 *\~english
 		 *\brief		Logs a message, from a std::wstring
@@ -253,7 +253,7 @@ namespace Castor
 		 *\brief		Log un message, à partir d'un std::wstring
 		 *\param[in]	p_msg	The line to log
 		 */
-		static void LogMessage( std::wstring const & p_msg );
+		CU_API static void LogMessage( std::wstring const & p_msg );
 		/**
 		 *\~english
 		 *\brief		Logs a warning in the log file, using va_args
@@ -264,7 +264,7 @@ namespace Castor
 		 *\param[in]	p_format	Le format de la ligne
 		 *\param[in]	...			Paramètres POD, utilise le format de printf
 		 */
-		static void LogWarning( char const * p_format, ... );
+		CU_API static void LogWarning( char const * p_format, ... );
 		/**
 		 *\~english
 		 *\brief		Logs a warning, from a std::string
@@ -273,7 +273,7 @@ namespace Castor
 		 *\brief		Log un avertissement, à partir d'un std::string
 		 *\param[in]	p_msg	The line to log
 		 */
-		static void LogWarning( std::string const & p_msg );
+		CU_API static void LogWarning( std::string const & p_msg );
 		/**
 		 *\~english
 		 *\brief		Logs a unicode warning in the log file, using va_args
@@ -284,7 +284,7 @@ namespace Castor
 		 *\param[in]	p_format	Le format de la ligne
 		 *\param[in]	...			Paramètres POD, utilise le format de printf
 		 */
-		static void LogWarning( wchar_t const * p_format , ... );
+		CU_API static void LogWarning( wchar_t const * p_format , ... );
 		/**
 		 *\~english
 		 *\brief		Logs a warning, from a std::wstring
@@ -293,7 +293,7 @@ namespace Castor
 		 *\brief		Log un avertissement, à partir d'un std::wstring
 		 *\param[in]	p_msg	The line to log
 		 */
-		static void LogWarning( std::wstring const & p_msg );
+		CU_API static void LogWarning( std::wstring const & p_msg );
 		/**
 		 *\~english
 		 *\brief		Logs an error in the log file, using va_args
@@ -304,7 +304,7 @@ namespace Castor
 		 *\param[in]	p_format	Le format de la ligne
 		 *\param[in]	...			Paramètres POD, utilise le format de printf
 		 */
-		static void LogError( char const * p_format, ... );
+		CU_API static void LogError( char const * p_format, ... );
 		/**
 		 *\~english
 		 *\brief		Logs an error, from a std::string
@@ -313,7 +313,7 @@ namespace Castor
 		 *\brief		Log une erreur, à partir d'un std::string
 		 *\param[in]	p_msg		The line to log
 		 */
-		static void LogError( std::string const & p_msg );
+		CU_API static void LogError( std::string const & p_msg );
 		/**
 		 *\~english
 		 *\brief		Logs a unicode error in the log file, using va_args
@@ -324,7 +324,7 @@ namespace Castor
 		 *\param[in]	p_format	Le format de la ligne
 		 *\param[in]	...			Paramètres POD, utilise le format de printf
 		 */
-		static void LogError( wchar_t const * p_format , ... );
+		CU_API static void LogError( wchar_t const * p_format , ... );
 		/**
 		 *\~english
 		 *\brief		Logs an error, from a std::wstring
@@ -333,7 +333,7 @@ namespace Castor
 		 *\brief		Log une erreur, à partir d'un std::wstring
 		 *\param[in]	p_msg		The line to log
 		 */
-		static void LogError( std::wstring const & p_msg );
+		CU_API static void LogError( std::wstring const & p_msg );
 		/**
 		 *\~english
 		 *\brief		Returns a reference over the instance
@@ -342,7 +342,7 @@ namespace Castor
 		 *\brief		Retourne une référence sur l'instance
 		 *\return		L'instance
 		 */
-		static Logger & GetSingleton();
+		CU_API static Logger & GetSingleton();
 		/**
 		 *\~english
 		 *\brief		Returns a pointer over the instance
@@ -351,7 +351,7 @@ namespace Castor
 		 *\brief		Retourne un pointeur sur l'instance
 		 *\return		L'instance
 		 */
-		static Logger * GetSingletonPtr();
+		CU_API static Logger * GetSingletonPtr();
 
 	private:
 		void DoSetCallback( PLogCallback p_pfnCallback, void * p_pCaller );

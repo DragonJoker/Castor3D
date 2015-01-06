@@ -46,7 +46,7 @@ namespace Castor
 		 *\param[in]	p_eGivenType	Le type demandé par l'utilisateur
 		 *\param[in]	p_eExpectedType	Le type réel du paramètre
 		 */
-		ParserParameterTypeException( ePARAMETER_TYPE p_eGivenType, ePARAMETER_TYPE p_eExpectedType );
+		CU_API ParserParameterTypeException( ePARAMETER_TYPE p_eGivenType, ePARAMETER_TYPE p_eExpectedType );
 	};
 }
 

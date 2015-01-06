@@ -382,6 +382,7 @@ namespace CastorViewer
 			break;
 
 		case WXK_LEFT:
+
 			if ( m_eCameraMode == eCAMERA_MODE_FIXED )
 			{
 				MouseCameraEvent::Add( m_pRotateCamEvent, m_pListener, 90.0, 0, 0 );
@@ -394,6 +395,7 @@ namespace CastorViewer
 			break;
 
 		case WXK_RIGHT:
+
 			if ( m_eCameraMode == eCAMERA_MODE_FIXED )
 			{
 				MouseCameraEvent::Add( m_pRotateCamEvent, m_pListener, -90.0, 0, 0 );
@@ -406,6 +408,7 @@ namespace CastorViewer
 			break;
 
 		case WXK_UP:
+
 			if ( m_eCameraMode == eCAMERA_MODE_MOBILE )
 			{
 				DoStopTimer( eTIMER_ID_FORWARD );
@@ -414,6 +417,7 @@ namespace CastorViewer
 			break;
 
 		case WXK_DOWN:
+
 			if ( m_eCameraMode == eCAMERA_MODE_MOBILE )
 			{
 				DoStopTimer( eTIMER_ID_BACK );
@@ -422,6 +426,7 @@ namespace CastorViewer
 			break;
 
 		case WXK_PAGEUP:
+
 			if ( m_eCameraMode == eCAMERA_MODE_MOBILE )
 			{
 				DoStopTimer( eTIMER_ID_UP );
@@ -430,6 +435,7 @@ namespace CastorViewer
 			break;
 
 		case WXK_PAGEDOWN:
+
 			if ( m_eCameraMode == eCAMERA_MODE_MOBILE )
 			{
 				DoStopTimer( eTIMER_ID_DOWN );

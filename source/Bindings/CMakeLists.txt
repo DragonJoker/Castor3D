@@ -46,3 +46,27 @@ function( BindingsSummary msg )
 	set( msg_tmp "${msg_tmp}\n    COM Test            ${ComC3DTest}" )
 	SET( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 endfunction( BindingsSummary )
+
+function( BindingsSetup )
+	cpack_add_component_group( Bindings
+		DESCRIPTION "Bindings to use Castor3D in other languages (C# and Python yet)"
+	)
+
+	if( ${CASTOR_BUILD_BINDING_PYTHON} )
+		cpack_add_component( PyCastor3D
+			DISPLAY_NAME "PyCastor3D library"
+			DESCRIPTION "Python binding for Castor3D"
+			GROUP Bindings
+			INSTALL_TYPES Full
+		)
+	endif()
+
+	if( ${CASTOR_BUILD_BINDING_COM} )
+		cpack_add_component( ComCastor3D
+			DISPLAY_NAME "ComCastor3D library"
+			DESCRIPTION "COM binding for Castor3D"
+			GROUP Bindings
+			INSTALL_TYPES Full
+		)
+	endif()
+endfunction( BindingsSetup )

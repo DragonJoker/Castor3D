@@ -64,14 +64,14 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		IConsoleInfo() {}
+		CU_API IConsoleInfo() {}
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~IConsoleInfo() {}
+		CU_API virtual ~IConsoleInfo() {}
 		/**
 		 *\~english
 		 *\brief		Configures console info for the given log type
@@ -80,7 +80,7 @@ namespace Castor
 		 *\brief		Configure les informationss de la console en fonction du type donné
 		 *\param[in]	p_eLogType	Le type de log donné
 		 */
-		virtual void BeginLog( eLOG_TYPE p_eLogType ) = 0;
+		CU_API virtual void BeginLog( eLOG_TYPE p_eLogType ) = 0;
 		/**
 		 *\~english
 		 *\brief		Prints a text in the console, adds the line end character if asked
@@ -91,7 +91,7 @@ namespace Castor
 		 *\param[in]	p_strToLog	Le texte à écrire
 		 *\param[in]	p_bNewLine	Dit si on doit ajouter le caractère de fin de ligne
 		 */
-		virtual void Print( String const & p_strToLog, bool p_bNewLine ) = 0;
+		CU_API virtual void Print( String const & p_strToLog, bool p_bNewLine ) = 0;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -111,14 +111,14 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		ProgramConsole() {}
+		CU_API ProgramConsole() {}
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~ProgramConsole() {}
+		CU_API virtual ~ProgramConsole() {}
 		/**
 		 *\~english
 		 *\brief		Configures console info for the given log type
@@ -127,7 +127,7 @@ namespace Castor
 		 * Configure les informationss de la console en fonction du type donné
 		 *\param[in]	p_eLogType	Le type de log donné
 		 */
-		virtual void BeginLog( eLOG_TYPE p_eLogType ) = 0;
+		CU_API virtual void BeginLog( eLOG_TYPE p_eLogType ) = 0;
 		/**
 		 *\~english
 		 *\brief		Prints a text in the console, adds the line end character if asked
@@ -138,7 +138,7 @@ namespace Castor
 		 *\param[in]	p_strToLog	Le texte à écrire
 		 *\param[in]	p_bNewLine	Dit si on doit ajouter le caractère de fin de ligne
 		 */
-		virtual void Print( String const & p_strToLog, bool p_bNewLine ) = 0;
+		CU_API virtual void Print( String const & p_strToLog, bool p_bNewLine ) = 0;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -159,14 +159,14 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		DummyConsole() {}
+		CU_API DummyConsole() {}
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~DummyConsole() {}
+		CU_API virtual ~DummyConsole() {}
 		/**
 		 *\~english
 		 *\brief		Configures console info for the given log type
@@ -175,7 +175,7 @@ namespace Castor
 		 * Configure les informationss de la console en fonction du type donné
 		 *\param[in]	p_eLogType	Le type de log donné
 		 */
-		virtual void BeginLog( eLOG_TYPE ) {}
+		CU_API virtual void BeginLog( eLOG_TYPE ) {}
 		/**
 		 *\~english
 		 *\brief		Prints a text in the console, adds the line end character if asked
@@ -186,7 +186,7 @@ namespace Castor
 		 *\param[in]	p_strToLog	Le texte à écrire
 		 *\param[in]	p_bNewLine	Dit si on doit ajouter le caractère de fin de ligne
 		 */
-		virtual void Print( String const &, bool ) {}
+		CU_API virtual void Print( String const &, bool ) {}
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -210,14 +210,14 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		DebugConsole();
+		CU_API DebugConsole();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~DebugConsole();
+		CU_API virtual ~DebugConsole();
 		/**
 		 *\~english
 		 *\brief		Configures console info for the given log type
@@ -226,7 +226,7 @@ namespace Castor
 		 * Configure les informationss de la console en fonction du type donné
 		 *\param[in]	p_eLogType	Le type de log donné
 		 */
-		virtual void BeginLog( eLOG_TYPE p_eLogType );
+		CU_API virtual void BeginLog( eLOG_TYPE p_eLogType );
 		/**
 		 *\~english
 		 *\brief		Prints a text in the console, adds the line end character if asked
@@ -237,7 +237,7 @@ namespace Castor
 		 *\param[in]	p_strToLog	Le texte à écrire
 		 *\param[in]	p_bNewLine	Dit si on doit ajouter le caractère de fin de ligne
 		 */
-		virtual void Print( String const & p_strToLog, bool p_bNewLine );
+		CU_API virtual void Print( String const & p_strToLog, bool p_bNewLine );
 	};
 }
 

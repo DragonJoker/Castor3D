@@ -1,3 +1,6 @@
+option( PROJECTS_USE_PRECOMPILED_HEADERS "Use precompiled headers" TRUE )
+
+#--------------------------------------------------------------------------------------------------
 # - Try to find precompiled headers support for GCC 3.4 and 4.x
 # Once done this will define:
 #
@@ -6,7 +9,7 @@
 #
 # Macro:
 #   add_target_precompiled_header  targetName pchHeader pchSource targetCxxFlags cppFiles
-
+#--------------------------------------------------------------------------------------------------
 set( CMAKE_ALLOW_LOOSE_LOOP_CONSTRUCTS true )
 
 if ( CMAKE_COMPILER_IS_GNUCXX )
@@ -29,11 +32,11 @@ else ()
 		set( PCHSupport_FOUND FALSE )
 	endif ()     
 endif ()
-
+#--------------------------------------------------------------------------------------------------
 #
 # Ensures the compile flags for the pch are the same that the regular compile flags
 #
-
+#--------------------------------------------------------------------------------------------------
 macro( pch_get_compile_flags IN_COMPILE_FLAGS OUT_COMPILE_FLAGS )
 	set( ${OUT_COMPILE_FLAGS} ${IN_COMPILE_FLAGS} )
 
@@ -85,11 +88,11 @@ macro( pch_get_compile_flags IN_COMPILE_FLAGS OUT_COMPILE_FLAGS )
 
 	separate_arguments( ${OUT_COMPILE_FLAGS} )
 endmacro( pch_get_compile_flags )
-
+#--------------------------------------------------------------------------------------------------
 #
 # Computes GCH compilation command, for GCC
 #
-
+#--------------------------------------------------------------------------------------------------
 macro( pch_get_compile_command OUT_COMMAND input output )
 	file( TO_NATIVE_PATH ${input} NATIVE_INPUT )
 	file( TO_NATIVE_PATH ${output} NATIVE_OUTPUT )
@@ -102,11 +105,11 @@ macro( pch_get_compile_command OUT_COMMAND input output )
 	endif ()
 	set( ${OUT_COMMAND} ${CMAKE_CXX_COMPILER} ${PCHSUPPORT_COMPILER_CXX_ARG1} ${PCH_COMPILE_FLAGS} -x c++-header -o ${output} ${input} )
 endmacro( pch_get_compile_command )
-
+#--------------------------------------------------------------------------------------------------
 #
 # Adds the precompiled headers to the given target
 #
-
+#--------------------------------------------------------------------------------------------------
 MACRO( add_target_precompiled_header TARGET_NAME PCH_HEADER PCH_SOURCE TARGET_CXX_FLAGS )
 	set( PCH_CURRENT_TARGET ${TARGET_NAME} )
 

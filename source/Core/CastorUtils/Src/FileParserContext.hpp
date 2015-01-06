@@ -56,14 +56,14 @@ namespace Castor
 		 *\brief		Constructeur
 		 *\param[in]	p_pFile	Le fichier en cours de traitement
 		 */
-		FileParserContext( TextFile * p_pFile );
+		CU_API FileParserContext( TextFile * p_pFile );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~FileParserContext();
+		CU_API virtual ~FileParserContext();
 
 	public:
 		//!\~english The file currently parsed	\~french Le fichier en cours d'analyse

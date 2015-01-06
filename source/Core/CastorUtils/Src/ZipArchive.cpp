@@ -31,7 +31,7 @@ namespace Castor
 		}
 
 		struct ZipImpl
-			: public ZipArchive::ZipImpl
+				: public ZipArchive::ZipImpl
 		{
 			ZipImpl()
 				: m_zip( NULL )
@@ -46,7 +46,7 @@ namespace Castor
 			virtual void Open( Path const & p_path, File::eOPEN_MODE p_mode )
 			{
 				int l_mode = 0;
-				
+
 				if ( ( p_mode & File::eOPEN_MODE_READ ) == File::eOPEN_MODE_READ )
 				{
 					l_mode |= ZIP_CHECKCONS;
@@ -62,7 +62,7 @@ namespace Castor
 				{
 					l_mode |= ZIP_CREATE;
 				}
-				
+
 				int l_result = 0;
 				m_zip = zip_open( str_utils::to_str( p_path ).c_str(), l_mode, &l_result );
 
@@ -70,7 +70,7 @@ namespace Castor
 				{
 					CASTOR_EXCEPTION( "Couldn't create archive file " + str_utils::to_str( libzip::GetError( l_result ) ) );
 				}
-				else if( l_result != ZIP_ER_OK )
+				else if ( l_result != ZIP_ER_OK )
 				{
 					CASTOR_EXCEPTION( "Couldn't create archive file " + str_utils::to_str( libzip::GetError( l_result ) ) );
 				}
@@ -93,7 +93,7 @@ namespace Castor
 			{
 				bool l_return = false;
 				std::string l_folder = str_utils::to_str( p_folder );
-				
+
 				//Search for the folder
 				struct zip_stat l_stat = { 0 };
 
@@ -116,7 +116,7 @@ namespace Castor
 			{
 				bool l_return = false;
 				std::string l_file = str_utils::to_str( p_file );
-				
+
 				//Search for the folder
 				struct zip_stat l_stat = { 0 };
 
@@ -242,7 +242,7 @@ namespace Castor
 			virtual void DoDeflate( String const & p_path, ZipArchive::Folder const & p_folder )
 			{
 				String l_path;
-				
+
 				if ( p_path.empty() )
 				{
 					l_path = str_utils::from_str( p_folder.name );
@@ -438,7 +438,7 @@ namespace Castor
 				m_impl->Deflate( m_uncompressed );
 				l_return = true;
 			}
-			catch( std::exception & exc )
+			catch ( std::exception & exc )
 			{
 				Logger::LogError( exc.what() );
 			}
@@ -456,7 +456,7 @@ namespace Castor
 			m_impl->Inflate( p_folder, m_uncompressed );
 			l_return = true;
 		}
-		catch( std::exception & exc )
+		catch ( std::exception & exc )
 		{
 			Logger::LogError( exc.what() );
 		}

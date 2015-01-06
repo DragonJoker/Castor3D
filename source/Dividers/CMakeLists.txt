@@ -36,3 +36,28 @@ function( DividersSummary msg )
 	set( msg_tmp "${msg_tmp}\n    Loop                ${Loop}" )
 	SET( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 endfunction( DividersSummary )
+
+function( DividersSetup )
+	cpack_add_component_group( Dividers
+		DESCRIPTION "Divider plugins usable in Castor3D"
+	)
+
+	if( ${CASTOR_BUILD_DIVIDER_LOOP} )
+		cpack_add_component( LoopDivider
+			DISPLAY_NAME "LoopDivider plugin"
+			DESCRIPTION "Allows the mesh subdivision using Loop subdivision surfaces"
+			GROUP Dividers
+			DEPENDS Castor3D
+			INSTALL_TYPES Full
+		)
+	endif()
+	if( ${CASTOR_BUILD_DIVIDER_PNTRIANGLES} )
+		cpack_add_component( PnTrianglesDivider
+			DISPLAY_NAME "PnTrianglesDivider plugin"
+			DESCRIPTION "Allows the mesh subdivision using PN triangles algorithm"
+			GROUP Dividers
+			DEPENDS Castor3D
+			INSTALL_TYPES Full
+		)
+	endif()
+endfunction( DividersSetup )

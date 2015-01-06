@@ -368,28 +368,12 @@ file(
 		SampleSceneFiles
 		${CMAKE_SOURCE_DIR}/../data/Scene/*.cscn
 		${CMAKE_SOURCE_DIR}/../data/Scene/*.cmtl
+		${CMAKE_SOURCE_DIR}/../data/Scene/*.zip
 )
 install(
 	FILES ${SampleSceneFiles}
 	DESTINATION share/Castor3D/samples
 	COMPONENT Castor3D_Samples
 )
-# And their data
-file( GLOB SUB_DIRS ${CMAKE_SOURCE_DIR}/../data/Scene/* )
-foreach( DIR ${SUB_DIRS} )
-	if( IS_DIRECTORY ${DIR} )
-		get_filename_component( DIR ${DIR} NAME )
-		file(
-			GLOB
-				DataFiles
-				${CMAKE_SOURCE_DIR}/../data/Scene/${DIR}/*.*
-	 )
-		install(
-			FILES ${DataFiles}
-			DESTINATION share/Castor3D/samples/${DIR}
-			COMPONENT Castor3D_Samples
-	 )
-	endif()
-endforeach()
 
 set( Build "yes (version ${C3D_VERSION_MAJOR}.${C3D_VERSION_MINOR}.${C3D_VERSION_BUILD})" PARENT_SCOPE )

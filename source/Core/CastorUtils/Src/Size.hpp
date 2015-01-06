@@ -48,7 +48,7 @@ namespace Castor
 		 *\brief		Constructeur
 		 *\param[in]	p_uiWidth, p_uiHeight	Les dimensions
 		 */
-		Size( uint32_t p_uiWidth = 0, uint32_t p_uiHeight = 0 );
+		CU_API Size( uint32_t p_uiWidth = 0, uint32_t p_uiHeight = 0 );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -57,7 +57,7 @@ namespace Castor
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_obj	L'objet à copier
 		 */
-		Size( Size const & p_obj );
+		CU_API Size( Size const & p_obj );
 		/**
 		 *\~english
 		 *\brief		Move assignment Constructor
@@ -66,14 +66,14 @@ namespace Castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	p_obj	L'objet à déplacer
 		 */
-		Size( Size && p_obj );
+		CU_API Size( Size && p_obj );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Size();
+		CU_API ~Size();
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -84,7 +84,7 @@ namespace Castor
 		 *\param[in]	p_obj	L'objet à copier
 		 *\return		Une référence sur cet objet
 		 */
-		Size & operator =( Size const & p_obj );
+		CU_API Size & operator =( Size const & p_obj );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -95,7 +95,7 @@ namespace Castor
 		 *\param[in]	p_obj	L'objet à déplacer
 		 *\return		Une référence sur cet objet
 		 */
-		Size & operator =( Size && p_obj );
+		CU_API Size & operator =( Size && p_obj );
 		/**
 		 *\~english
 		 *\brief		Sets the size values
@@ -104,7 +104,7 @@ namespace Castor
 		 *\brief		Définit la taille
 		 *\param[in]	p_uiWidth, p_uiHeight	Les dimensions
 		 */
-		void set( uint32_t p_uiWidth, uint32_t p_uiHeight );
+		CU_API void set( uint32_t p_uiWidth, uint32_t p_uiHeight );
 		/**
 		 *\~english
 		 *\brief		Retrieves the width
@@ -163,7 +163,7 @@ namespace Castor
 		 *\remark		Si width+cx < 0 (ou height+cy < 0) alors width=0 (respectivement height=0)
 		 *\param[in]	p_cx, p_cy	Les valeurs de modification
 		 */
-		void grow( int32_t p_cx, int32_t p_cy );
+		CU_API void grow( int32_t p_cx, int32_t p_cy );
 
 		using BaseType::ptr;
 		using BaseType::const_ptr;
@@ -189,7 +189,7 @@ namespace Castor
 	 *\param[in]	p_a, p_b	Les tailles à comparer
 	 *\return		\p true si les tailles ont les mêmes dimensions
 	 */
-	bool operator ==( Size const & p_a, Size const & p_b );
+	CU_API bool operator ==( Size const & p_a, Size const & p_b );
 	/**
 	 *\~english
 	 *\brief		Difference operator
@@ -200,7 +200,7 @@ namespace Castor
 	 *\param[in]	p_a, p_b	Les tailles à comparer
 	 *\return		\p false si les tailles ont les mêmes dimensions
 	 */
-	bool operator !=( Size const & p_a, Size const & p_b );
+	CU_API bool operator !=( Size const & p_a, Size const & p_b );
 }
 
 #endif

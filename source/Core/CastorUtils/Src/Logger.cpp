@@ -120,7 +120,8 @@ namespace Castor
 
 		if ( m_pSingleton )
 		{
-			throw "Logger instance already initialised";
+			m_uiCounter--;
+			Logger::LogWarning( cuT( "Logger instance already initialised" ) );
 		}
 		else
 		{

@@ -51,7 +51,7 @@ namespace Castor
 		 *\brief		Fonction de récuperation de la taille d'un pixel sans templates
 		 *\param[in]	p_pfFormat	Le format de pixels
 		 */
-		uint8_t GetBytesPerPixel( ePIXEL_FORMAT p_pfFormat );
+		CU_API uint8_t GetBytesPerPixel( ePIXEL_FORMAT p_pfFormat );
 		/**
 		 *\~english
 		 *\brief		Function to retrieve pixel format from a name
@@ -60,7 +60,7 @@ namespace Castor
 		 *\brief		Fonction de récuperation d'un format de pixel par son nom
 		 *\param[in]	p_strFormat	Le nom du format de pixels
 		 */
-		ePIXEL_FORMAT GetFormatByName( String const & p_strFormat );
+		CU_API ePIXEL_FORMAT GetFormatByName( String const & p_strFormat );
 		/**
 		 *\~english
 		 *\brief		Function to retrieve pixel format name
@@ -69,7 +69,7 @@ namespace Castor
 		 *\brief		Fonction de récuperation du nom d'un format de pixel
 		 *\param[in]	p_eFormat	Le format de pixels
 		 */
-		String GetFormatName( ePIXEL_FORMAT p_eFormat );
+		CU_API String GetFormatName( ePIXEL_FORMAT p_eFormat );
 		/**
 		 *\~english
 		 *\brief		Function to perform convertion without templates
@@ -84,7 +84,7 @@ namespace Castor
 		 *\param[in]		p_eDestFmt	Le format de la destination
 		 *\param[in/out]	p_pDest		Le pixel destination
 		 */
-		void ConvertPixel( ePIXEL_FORMAT p_eSrcFmt, uint8_t const *& p_pSrc, ePIXEL_FORMAT p_eDestFmt, uint8_t *& p_pDest );
+		CU_API void ConvertPixel( ePIXEL_FORMAT p_eSrcFmt, uint8_t const *& p_pSrc, ePIXEL_FORMAT p_eDestFmt, uint8_t *& p_pDest );
 		/**
 		 *\~english
 		 *\brief		Function to perform convertion without templates
@@ -103,7 +103,7 @@ namespace Castor
 		 *\param[in]	p_pDstBuffer	Le buffer destination
 		 *\param[in]	p_uiDstSize		La taille de la destination
 		 */
-		void ConvertBuffer( ePIXEL_FORMAT p_eSrcFormat, uint8_t const * p_pSrcBuffer, uint32_t p_uiSrcSize, ePIXEL_FORMAT p_eDstFormat, uint8_t * p_pDstBuffer, uint32_t p_uiDstSize );
+		CU_API void ConvertBuffer( ePIXEL_FORMAT p_eSrcFormat, uint8_t const * p_pSrcBuffer, uint32_t p_uiSrcSize, ePIXEL_FORMAT p_eDstFormat, uint8_t * p_pDstBuffer, uint32_t p_uiDstSize );
 		/**
 		 *\~english
 		 *\brief		Extracts alpha values from a source buffer holding alpha and puts it in a destination buffer
@@ -116,7 +116,7 @@ namespace Castor
 		 *\param[in]	p_pSrc	Le buffer source
 		 *\return		Le buffer alpha, \p nullptr si la source n'avait pas d'alpha
 		 */
-		PxBufferBaseSPtr ExtractAlpha( PxBufferBaseSPtr & p_pSrc );
+		CU_API PxBufferBaseSPtr ExtractAlpha( PxBufferBaseSPtr & p_pSrc );
 		/**
 		 *\see			ePIXEL_FORMAT
 		 *\~english
@@ -126,7 +126,7 @@ namespace Castor
 		 *\brief		Vérifie si le format donné possède une composante alpha
 		 *\return		\p false si le format est depth, stencil ou un format sans alpha
 		 */
-		bool HasAlpha( ePIXEL_FORMAT p_ePf );
+		CU_API bool HasAlpha( ePIXEL_FORMAT p_ePf );
 		/**
 		 *\see			ePIXEL_FORMAT
 		 *\~english
@@ -136,7 +136,7 @@ namespace Castor
 		 *\brief		Vérifie si le format donné est un format compressé
 		 *\return		La valeur
 		 */
-		bool IsCompressed( ePIXEL_FORMAT p_ePf );
+		CU_API bool IsCompressed( ePIXEL_FORMAT p_ePf );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel format without alpha that is near from the one given
@@ -147,7 +147,7 @@ namespace Castor
 		 *\param[in]	p_ePixelFmt	Le format de pixel
 		 *\return		Le format de pixels donné si non trouvé
 		 */
-		ePIXEL_FORMAT GetPFWithoutAlpha( ePIXEL_FORMAT p_ePixelFmt );
+		CU_API ePIXEL_FORMAT GetPFWithoutAlpha( ePIXEL_FORMAT p_ePixelFmt );
 		/**
 		 *\~english
 		 *\brief			Reduces an image to it's alpha channel, stored in a L8 format buffer
@@ -156,7 +156,7 @@ namespace Castor
 		 *\brief			Réduit une image à son canal alpha stocké dans un buffer au format L8
 		 *\param[in,out]	p_pSrc	Le buffer à réduire
 		 */
-		void ReduceToAlpha( PxBufferBaseSPtr & p_pSrc );
+		CU_API void ReduceToAlpha( PxBufferBaseSPtr & p_pSrc );
 	}
 }
 

@@ -119,7 +119,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 	
 	add_target(
 		CastorUtils
-		lib
+		api_dll
 		""
 		"${CastorMinLibraries};${x11Libraries}"
 		"CastorUtilsPch.hpp"
@@ -317,7 +317,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 	install(
 		FILES ${CMAKE_CURRENT_BINARY_DIR}/Src/config.hpp
 		DESTINATION include/CastorUtils
-		COMPONENT CastorUtils
+		COMPONENT CastorUtils_dev
 	)
 	
 	if ( WIN32 )

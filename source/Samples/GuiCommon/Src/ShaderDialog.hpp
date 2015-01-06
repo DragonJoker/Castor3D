@@ -29,20 +29,20 @@ namespace GuiCommon
 		:	public wxFrame
 	{
 	protected:
-		wxNotebook 		*			m_pNotebookEditors;
-		StcContext 		*			m_pStcContext;
-		wxStcTextEditor 		*		m_pStcEditors[Castor3D::eSHADER_TYPE_COUNT];
-		wxListBox 			*			m_pListFrameVariables[Castor3D::eSHADER_TYPE_COUNT];
-		wxString						m_strShaderFiles[Castor3D::eSHADER_TYPE_COUNT];
-		wxString						m_strShaderSources[Castor3D::eSHADER_TYPE_COUNT];
-		Castor3D::ShaderProgramBaseWPtr	m_pShaderProgram;
-		Castor3D::ShaderObjectBaseWPtr	m_pShaderObject;
-		Castor3D::PassWPtr				m_pPass;
-		bool							m_bCompiled;
-		bool							m_bOwnShader;
-		FrameVariableMap				m_mapFrameVariables[Castor3D::eSHADER_TYPE_COUNT];
-		bool							m_bCanEdit;
-		Castor3D::Engine 		*		m_pEngine;
+		wxNotebook * m_pNotebookEditors;
+		StcContext * m_pStcContext;
+		wxStcTextEditor * m_pStcEditors[Castor3D::eSHADER_TYPE_COUNT];
+		wxListBox * m_pListFrameVariables[Castor3D::eSHADER_TYPE_COUNT];
+		wxString m_strShaderFiles[Castor3D::eSHADER_TYPE_COUNT];
+		wxString m_strShaderSources[Castor3D::eSHADER_TYPE_COUNT];
+		Castor3D::ShaderProgramBaseWPtr m_pShaderProgram;
+		Castor3D::ShaderObjectBaseWPtr m_pShaderObject;
+		Castor3D::PassWPtr m_pPass;
+		bool m_bCompiled;
+		bool m_bOwnShader;
+		FrameVariableMap m_mapFrameVariables[Castor3D::eSHADER_TYPE_COUNT];
+		bool m_bCanEdit;
+		Castor3D::Engine * m_pEngine;
 
 	public:
 		wxShaderDialog( Castor3D::Engine * p_pEngine, bool p_bCanEdit, wxWindow * p_pParent, Castor3D::PassSPtr p_pPass, wxPoint const & p_ptPosition = wxDefaultPosition, const wxSize p_ptSize = wxSize( 800, 600 ) );

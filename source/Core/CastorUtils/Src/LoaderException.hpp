@@ -40,7 +40,10 @@ namespace Castor
 		: public Castor::Exception
 	{
 	public:
-		LoaderException( std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line ) : Exception( p_description, p_file, p_function, p_line ) {}
+		LoaderException( std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line )
+			: Exception( p_description, p_file, p_function, p_line )
+		{
+		}
 	};
 	//!\~english Helper macro to use LoaderException	\~french Macro pour faciliter l'utilisation de LoaderException
 #	define LOADER_ERROR( p_text) throw LoaderException( p_text, __FILE__, __FUNCTION__, __LINE__)

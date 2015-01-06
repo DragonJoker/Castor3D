@@ -777,10 +777,10 @@ namespace Castor3D
 		Path l_pathReturn;
 		Path l_pathBin = File::DirectoryGetCurrent();
 		Path l_pathUsr = l_pathBin.GetPath();
-		l_pathReturn = l_pathUsr / cuT( "lib" ) / cuT( "Castor" );
+		l_pathReturn = l_pathUsr / cuT( "lib" ) / cuT( "Castor3D" );
 		return l_pathReturn;
 	}
-	
+
 	Castor::Path Engine::GetEngineDirectory()
 	{
 		return File::GetUserDirectory() / cuT( ".Castor3D" );

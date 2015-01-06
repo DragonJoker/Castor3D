@@ -1,3 +1,6 @@
+# Enable CTest
+enable_testing()
+
 macro( add_target_test TARGET_NAME ) # inputArgs
 	if( NOT TARGET ${TARGET_NAME} )
 	    message( FATAL_ERROR "AddUnitTest was given a target name that does not exist: '${TARGET_NAME}'!" )

@@ -65,3 +65,49 @@ function( RenderersSummary msg )
 	set( msg_tmp "${msg_tmp}\n    Direct3D 11         ${D3d11}" )
 	SET( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 endfunction( RenderersSummary )
+
+function( RenderersSetup )
+	cpack_add_component_group( Renderers
+		DESCRIPTION "Renderer plugins usable in Castor3D"
+	)
+
+	if( ${CASTOR_BUILD_RENDERER_OGL} )
+		cpack_add_component( GlRenderSystem
+			DISPLAY_NAME "GlRenderSystem plugin"
+			DESCRIPTION "Enables OpenGL rendering API in Castor3D"
+			REQUIRED
+			GROUP Renderers
+			DEPENDS Castor3D
+			INSTALL_TYPES Minimal Full
+		)
+	endif ()
+	if( WIN32 )
+		if( ${CASTOR_BUILD_RENDERER_D3D9} )
+			cpack_add_component( Dx9RenderSystem
+				DISPLAY_NAME "Dx9RenderSystem plugin"
+				DESCRIPTION "Enables Direct3D9 rendering API in Castor3D"
+				GROUP Renderers
+				DEPENDS Castor3D
+				INSTALL_TYPES Full
+			)
+		endif ()
+		if( ${CASTOR_BUILD_RENDERER_D3D10} )
+			cpack_add_component( Dx10RenderSystem
+				DISPLAY_NAME "Dx10RenderSystem plugin"
+				DESCRIPTION "Enables Direct3D10 rendering API in Castor3D"
+				GROUP Renderers
+				DEPENDS Castor3D
+				INSTALL_TYPES Full
+			)
+		endif ()
+		if( ${CASTOR_BUILD_RENDERER_D3D11} )
+			cpack_add_component( Dx11RenderSystem
+				DISPLAY_NAME "Dx11RenderSystem plugin"
+				DESCRIPTION "Enables Direct3D11 rendering API in Castor3D"
+				GROUP Renderers
+				DEPENDS Castor3D
+				INSTALL_TYPES Full
+			)
+		endif ()
+	endif ()
+endfunction( RenderersSetup )

@@ -54,14 +54,14 @@ namespace Castor
 		 *\param[in]	p_advance	Nombre de pixels pour placer le caractère suivant
 		 *\param[in]	p_bitmap	L'image de la glyphe
 		 */
-		Glyph( wchar_t p_wcChar = 0, Size const & p_size = Size(), Position const & p_position = Position(), Size const & p_advance = Size(), ByteArray const & p_bitmap = ByteArray() );
+		CU_API Glyph( wchar_t p_wcChar = 0, Size const & p_size = Size(), Position const & p_position = Position(), Size const & p_advance = Size(), ByteArray const & p_bitmap = ByteArray() );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Glyph();
+		CU_API ~Glyph();
 		/**
 		 *\~english
 		 *\brief		Retrieves the glyph character

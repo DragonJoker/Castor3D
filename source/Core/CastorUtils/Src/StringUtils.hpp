@@ -50,7 +50,7 @@ namespace Castor
 		 *\param[in]	p_locale	La locale (inutilisée)
 		 *\return		\p false si p_strToTest contient n'importe quel caractère autre que '0123456789'
 		 */
-		static bool is_integer( String const & p_strToTest, std::locale const & p_locale = std::locale() );
+		CU_API static bool is_integer( String const & p_strToTest, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Tests if the given String represents a floating number
@@ -63,7 +63,7 @@ namespace Castor
 		 *\param[in]	p_locale	La locale utilisée pour déterminer le format du séparateur '.'
 		 *\return		\p false si p_strToTest contient n'importe quel caractère autre que '0123456789.,' ou plus d'un '.'/','
 		 */
-		static bool is_floating( String const & p_strToTest, std::locale const & p_locale = std::locale() );
+		CU_API static bool is_floating( String const & p_strToTest, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Tests if the given String represents a date
@@ -78,7 +78,7 @@ namespace Castor
 		 *\param[in]	p_locale	La locale permettant de déterminer quel format de date est utilisé
 		 *\return		\p false si p_strToTest contient n'importe quel caractère autre que '0123456789'
 		 */
-		static bool is_date( String const & p_strToTest, std::locale const & p_locale = std::locale() );
+		CU_API static bool is_date( String const & p_strToTest, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Tests if the given String is upper case
@@ -89,7 +89,7 @@ namespace Castor
 		 *\param[in]	p_strToTest	Le String à tester
 		 *\return		\p true si p_strToTest est en majuscules
 		 */
-		static bool is_upper_case( String const & p_strToTest );
+		CU_API static bool is_upper_case( String const & p_strToTest );
 		/**
 		 *\~english
 		 *\brief		Tests if the given String is lower case
@@ -100,7 +100,7 @@ namespace Castor
 		 *\param[in]	p_strToTest	Le String à tester
 		 *\return		\p true si p_strToTest est en minuscules
 		 */
-		static bool is_lower_case( String const & p_strToTest );
+		CU_API static bool is_lower_case( String const & p_strToTest );
 		/**
 		 *\~english
 		 *\brief		Retrieves a short from a given String
@@ -113,7 +113,7 @@ namespace Castor
 		 *\param[in]	p_locale	La locale utilisée dans la conversion
 		 *\return		Le short contenu dans le String
 		 */
-		static short to_short( String const & p_str, std::locale const & p_locale = std::locale() );
+		CU_API static short to_short( String const & p_str, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Retrieves an int from a given String
@@ -126,7 +126,7 @@ namespace Castor
 		 *\param[in]	p_locale	La locale utilisée dans la conversion
 		 *\return		L'int contenu dans le String
 		 */
-		static int to_int( String const & p_str, std::locale const & p_locale = std::locale() );
+		CU_API static int to_int( String const & p_str, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Retrieves a long from a given String
@@ -139,7 +139,7 @@ namespace Castor
 		 *\param[in]	p_locale	La locale utilisée dans la conversion
 		 *\return		Le long contenu dans le String
 		 */
-		static long to_long( String const & p_str, std::locale const & p_locale = std::locale() );
+		CU_API static long to_long( String const & p_str, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Retrieves a long long from a given String
@@ -152,7 +152,7 @@ namespace Castor
 		 *\param[in]	p_locale	La locale utilisée dans la conversion
 		 *\return		Le long long contenu dans le String
 		 */
-		static long long to_long_long( String const & p_str, std::locale const & p_locale = std::locale() );
+		CU_API static long long to_long_long( String const & p_str, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Retrieves a float from a given String
@@ -165,7 +165,7 @@ namespace Castor
 		 *\param[in]	p_locale	La locale utilisée dans la conversion
 		 *\return		Le float contenu dans le String
 		 */
-		static float to_float( String const & p_str, std::locale const & p_locale = std::locale() );
+		CU_API static float to_float( String const & p_str, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Retrieves a double from a given String
@@ -178,7 +178,7 @@ namespace Castor
 		 *\param[in]	p_locale	La locale utilisée dans la conversion
 		 *\return		Le double contenu dans le String
 		 */
-		static double to_double( String const & p_str, std::locale const & p_locale = std::locale() );
+		CU_API static double to_double( String const & p_str, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Retrieves a double from a given String
@@ -191,7 +191,7 @@ namespace Castor
 		 *\param[in]	p_locale	La locale utilisée dans la conversion
 		 *\return		Le double contenu dans le String
 		 */
-		static long double to_long_double( String const & p_str, std::locale const & p_locale = std::locale() );
+		CU_API static long double to_long_double( String const & p_str, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Retrieves a short from a given String
@@ -204,7 +204,7 @@ namespace Castor
 		 *\param[in]	p_locale	La locale utilisée dans la conversion
 		 *\return		Le short contenu dans le String
 		 */
-		static real to_real( String const & p_str, std::locale const & p_locale = std::locale() );
+		CU_API static real to_real( String const & p_str, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Sets all characters in a String to upper case
@@ -215,7 +215,7 @@ namespace Castor
 		 *\param[in]	p_str	Le String à modifier, reçoit le String modifié
 		 *\return		Le String modifié
 		 */
-		static String upper_case( String const & p_str );
+		CU_API static String upper_case( String const & p_str );
 		/**
 		 *\~english
 		 *\brief		Sets all characters in a String to lower case
@@ -226,7 +226,7 @@ namespace Castor
 		 *\param[in]	p_str	Le String à modifier, reçoit le String modifié
 		 *\return		Le String modifié
 		 */
-		static String lower_case( String const & p_str );
+		CU_API static String lower_case( String const & p_str );
 		/**
 		 *\~english
 		 *\brief		Retrieves a std::string from a String
@@ -237,7 +237,7 @@ namespace Castor
 		 *\param[in]	p_str		Le String
 		 *\return		Le std::wstring
 		 */
-		static std::string to_str( std::wstring const & p_str );
+		CU_API static std::string to_str( std::wstring const & p_str );
 		/**
 		 *\~english
 		 *\brief		Retrieves a std::string from a String
@@ -262,7 +262,7 @@ namespace Castor
 		 *\param[in]	p_str		Le String
 		 *\return		Le std::wstring
 		 */
-		static std::wstring to_wstr( std::string const & p_str );
+		CU_API static std::wstring to_wstr( std::string const & p_str );
 		/**
 		 *\~english
 		 *\brief		Retrieves a std::wstring from a String
@@ -293,7 +293,7 @@ namespace Castor
 		 *\param[in]	p_bKeepVoid	Dit si la fonction garde les sous-chaînes vides ou pas
 		 *\return		Le tableau contenant les sous-chaînes
 		 */
-		static StringArray split( String const & p_str, String const & p_delims, uint32_t p_maxSplits = 10, bool p_bKeepVoid = true );
+		CU_API static StringArray split( String const & p_str, String const & p_delims, uint32_t p_maxSplits = 10, bool p_bKeepVoid = true );
 		/**
 		 *\~english
 		 *\brief		Retrieves a value from the given String
@@ -347,7 +347,7 @@ namespace Castor
 		 *\param[in,out]	p_str	Le String à modifier, reçoit le String modifié
 		 *\return			Le String modifié
 		 */
-		static String & to_upper_case( String & p_str );
+		CU_API static String & to_upper_case( String & p_str );
 		/**
 		 *\~english
 		 *\brief			Sets all characters in a String to lower case
@@ -358,7 +358,7 @@ namespace Castor
 		 *\param[in,out]	p_str	Le String à modifier, reçoit le String modifié
 		 *\return			Le String modifié
 		 */
-		static String & to_lower_case( String & p_str );
+		CU_API static String & to_lower_case( String & p_str );
 		/**
 		 *\~english
 		 *\brief			Replaces all occurences of a xchar by another one in a String
@@ -373,7 +373,7 @@ namespace Castor
 		 *\param[in]		p_replacement	Le xchar de remplacement
 		 *\return			Une référence sur la chaîne modifiée
 		 */
-		static String & replace( String & p_str, xchar p_find, xchar p_replacement );
+		CU_API static String & replace( String & p_str, xchar p_find, xchar p_replacement );
 		/**
 		 *\~english
 		 *\brief			Replaces all occurences of a String by a xchar in a String
@@ -388,7 +388,7 @@ namespace Castor
 		 *\param[in]		p_replacement	Le xchar de remplacement
 		 *\return			Une référence sur la chaîne modifiée
 		 */
-		static String & replace( String & p_str, String const & p_find, xchar p_replacement );
+		CU_API static String & replace( String & p_str, String const & p_find, xchar p_replacement );
 		/**
 		 *\~english
 		 *\brief			Replaces all occurences of a xchar by a String in a String
@@ -403,7 +403,7 @@ namespace Castor
 		 *\param[in]		p_replacement	Le String de remplacement
 		 *\return			Une référence sur la chaîne modifiée
 		 */
-		static String & replace( String & p_str, xchar p_find, String const & p_replacement );
+		CU_API static String & replace( String & p_str, xchar p_find, String const & p_replacement );
 		/**
 		 *\~english
 		 *\brief			Replaces all occurences of a String in another one by a third one
@@ -418,7 +418,7 @@ namespace Castor
 		 *\param[in]		p_replacement	Le String de remplacement
 		 *\return			Une référence sur la chaîne modifiée
 		 */
-		static String & replace( String & p_str, String const & p_find, String const & p_replacement );
+		CU_API static String & replace( String & p_str, String const & p_find, String const & p_replacement );
 		/**
 		 *\~english
 		 *\brief		Sets the String value to the given std::string
@@ -429,7 +429,7 @@ namespace Castor
 		 *\param[in]	p_strText	Le std::string
 		 *\return		Le String
 		 */
-		static String from_str( std::string const & p_strText );
+		CU_API static String from_str( std::string const & p_strText );
 		/**
 		 *\~english
 		 *\brief		Sets the String value to the given std::wstring
@@ -440,7 +440,7 @@ namespace Castor
 		 *\param[in]	p_strText	Le std::wstring
 		 *\return		Le String
 		 */
-		static String from_wstr( std::wstring const & p_strText );
+		CU_API static String from_wstr( std::wstring const & p_strText );
 		/**
 		 *\~english
 		 *\brief		Sets the String value to the given char
@@ -451,7 +451,7 @@ namespace Castor
 		 *\param[in]	p_char	Le char
 		 *\return		Le String
 		 */
-		static String from_char( char p_char );
+		CU_API static String from_char( char p_char );
 		/**
 		 *\~english
 		 *\brief		Sets the String value to the given wchar_t
@@ -462,7 +462,7 @@ namespace Castor
 		 *\param[in]	p_wchar	Le wchar_t
 		 *\return		Le String
 		 */
-		static String from_wchar( wchar_t p_wchar );
+		CU_API static String from_wchar( wchar_t p_wchar );
 		/**
 		 *\~english
 		 *\brief			Removes spaces on the left and/or on the right of the given String
@@ -477,7 +477,7 @@ namespace Castor
 		 *\param[in]		p_bRight	Dit si on enlève les espaces à droite
 		 *\return			La chaîne sans espaces
 		 */
-		static String & trim( String & p_str, bool p_bLeft = true, bool p_bRight = true );
+		CU_API static String & trim( String & p_str, bool p_bLeft = true, bool p_bRight = true );
 		/**
 		 *\~english
 		 *\brief		Puts a value into a String

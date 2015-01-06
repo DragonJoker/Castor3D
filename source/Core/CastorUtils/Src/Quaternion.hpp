@@ -51,7 +51,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		Quaternion();
+		CU_API Quaternion();
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -60,7 +60,7 @@ namespace Castor
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_q	L'objet Quaternion à copier
 		 */
-		Quaternion( Quaternion const & p_q );
+		CU_API Quaternion( Quaternion const & p_q );
 		/**
 		 *\~english
 		 *\brief		Move Constructor
@@ -69,7 +69,7 @@ namespace Castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	p_q	L'objet Quaternion à déplacer
 		 */
-		Quaternion( Quaternion && p_q );
+		CU_API Quaternion( Quaternion && p_q );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -78,7 +78,7 @@ namespace Castor
 		 *\brief		Constructeur
 		 *\param[in]	p_q	Les valeurs du Quaternion
 		 */
-		Quaternion( real const * p_q );
+		CU_API Quaternion( real const * p_q );
 		/**
 		 *\~english
 		 *\brief		Constructor from axis and angle
@@ -89,7 +89,7 @@ namespace Castor
 		 *\param[in]	p_vector	Un point contenant les valeurs de l'axe
 		 *\param[in]	p_angle		L'angle
 		 */
-		Quaternion( Point3r const & p_vector, Angle const & p_angle );
+		CU_API Quaternion( Point3r const & p_vector, Angle const & p_angle );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -98,14 +98,14 @@ namespace Castor
 		 *\brief		Constructeur
 		 *\param[in]	p_ptValues	Les valeurs du quaternion
 		 */
-		Quaternion( Point4r const & p_ptValues );
+		CU_API Quaternion( Point4r const & p_ptValues );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Quaternion();
+		CU_API virtual ~Quaternion();
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -116,7 +116,7 @@ namespace Castor
 		 *\param[in]	p_q	L'objet Quaternion à copier
 		 *\return		Une référence sur cet objet Quaternion
 		 */
-		Quaternion & operator =( Quaternion const & p_q );
+		CU_API Quaternion & operator =( Quaternion const & p_q );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -127,7 +127,7 @@ namespace Castor
 		 *\param[in]	p_q	L'objet Quaternion à déplacer
 		 *\return		Une référence sur cet objet Quaternion
 		 */
-		Quaternion & operator =( Quaternion && p_q );
+		CU_API Quaternion & operator =( Quaternion && p_q );
 		/**
 		 *\~english
 		 *\brief		Addition assignment operator
@@ -138,7 +138,7 @@ namespace Castor
 		 *\param[in]	p_q	L'objet Quaternion à ajouter
 		 *\return		Une référence sur cet objet Quaternion
 		 */
-		Quaternion & operator +=( Quaternion const & p_q );
+		CU_API Quaternion & operator +=( Quaternion const & p_q );
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
@@ -149,7 +149,7 @@ namespace Castor
 		 *\param[in]	p_q	L'objet Quaternion à soustraire
 		 *\return		Une référence sur cet objet Quaternion
 		 */
-		Quaternion & operator -=( Quaternion const & p_q );
+		CU_API Quaternion & operator -=( Quaternion const & p_q );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
@@ -160,7 +160,7 @@ namespace Castor
 		 *\param[in]	p_q	L'objet Quaternion à multiplier
 		 *\return		Une référence sur cet objet Quaternion
 		 */
-		Quaternion & operator *=( Quaternion const & p_q );
+		CU_API Quaternion & operator *=( Quaternion const & p_q );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
@@ -171,7 +171,7 @@ namespace Castor
 		 *\param[in]	p_fScalar	Le scalaire à multiplier
 		 *\return		Une référence sur cet objet Quaternion
 		 */
-		Quaternion & operator *=( real p_fScalar );
+		CU_API Quaternion & operator *=( real p_fScalar );
 		/**
 		 *\~english
 		 *\brief		Transforms a vector and gives the result
@@ -184,7 +184,7 @@ namespace Castor
 		 *\param[out]	p_ptResult	Reçoit le résultat
 		 *\return		Une référence sur p_ptResult
 		 */
-		Point3r & Transform( Point3r const & p_vector, Point3r & p_ptResult )const;
+		CU_API Point3r & Transform( Point3r const & p_vector, Point3r & p_ptResult )const;
 		/**
 		 *\~english
 		 *\brief		Fills a rotation matrix from this Quaternion
@@ -193,7 +193,7 @@ namespace Castor
 		 *\brief		Remplit une matrice de rotation à partir de ce Quaternion
 		 *\param[out]	p_matrix	La matrice à remplir
 		 */
-		void ToRotationMatrix( float * p_matrix )const;
+		CU_API void ToRotationMatrix( float * p_matrix )const;
 		/**
 		 *\~english
 		 *\brief		Fills a rotation matrix from this Quaternion
@@ -214,7 +214,7 @@ namespace Castor
 		 *\brief		Remplit une matrice de rotation à partir de ce Quaternion
 		 *\param[out]	p_matrix	La matrice à remplir
 		 */
-		void ToRotationMatrix( double * p_matrix )const;
+		CU_API void ToRotationMatrix( double * p_matrix )const;
 		/**
 		 *\~english
 		 *\brief		Fills a rotation matrix from this Quaternion
@@ -235,7 +235,7 @@ namespace Castor
 		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
 		 *\param[in]	p_matrix	La matrice de rotation
 		 */
-		void FromRotationMatrix( Matrix4x4f const & p_matrix );
+		CU_API void FromRotationMatrix( Matrix4x4f const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from a rotation matrix
@@ -256,7 +256,7 @@ namespace Castor
 		 *\brief		Met à jour ce Quaternion à partir d'une matrice de rotation
 		 *\param[in]	p_matrix	La matrice de rotation
 		 */
-		void FromRotationMatrix( Matrix4x4d const & p_matrix );
+		CU_API void FromRotationMatrix( Matrix4x4d const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from a rotation matrix
@@ -279,7 +279,7 @@ namespace Castor
 		 *\param[in]	p_vector	L'axe
 		 *\param[in]	p_angle		L'angle
 		 */
-		void FromAxisAngle( Point3r const & p_vector, Angle const & p_angle );
+		CU_API void FromAxisAngle( Point3r const & p_vector, Angle const & p_angle );
 		/**
 		 *\~english
 		 *\brief		Gives the axis and the angle from this Quaternion
@@ -290,7 +290,7 @@ namespace Castor
 		 *\param[out]	p_vector	Reçoit l'axe
 		 *\param[out]	p_angle		Reçoit l'angle
 		 */
-		void ToAxisAngle( Point3r & p_vector, Angle & p_angle )const;
+		CU_API void ToAxisAngle( Point3r & p_vector, Angle & p_angle )const;
 		/**
 		 *\~english
 		 *\brief		Updates this Quaternion from 3 axes
@@ -300,7 +300,7 @@ namespace Castor
 		 *\param[in]	p_vector	L'axe
 		 *\param[in]	p_angle		L'angle
 		 */
-		void FromAxes( Point3r const & p_x, Point3r const & p_y, Point3r const & p_z );
+		CU_API void FromAxes( Point3r const & p_x, Point3r const & p_y, Point3r const & p_z );
 		/**
 		 *\~english
 		 *\brief		Computes 3 axes from this quaternion
@@ -309,7 +309,7 @@ namespace Castor
 		 *\brief		Calcule 3 axes à partir de ce quaternion
 		 *\param[out]	p_x, p_y, p_z	Les axes
 		 */
-		void ToAxes( Point3r & p_x, Point3r & p_y, Point3r & p_z )const;
+		CU_API void ToAxes( Point3r & p_x, Point3r & p_y, Point3r & p_z )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the Y axis rotation value
@@ -318,7 +318,7 @@ namespace Castor
 		 *\brief		Récupère la valeur de la rotation sur l'axe Y
 		 *\return		La valeur de la rotation autour de l'axe Y
 		 */
-		Angle GetYaw()const;
+		CU_API Angle GetYaw()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the Y axis rotation value
@@ -327,7 +327,7 @@ namespace Castor
 		 *\brief		Récupère la valeur de la rotation sur l'axe Y
 		 *\return		La valeur de la rotation autour de l'axe Y
 		 */
-		Angle GetPitch()const;
+		CU_API Angle GetPitch()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the Y axis rotation value
@@ -336,14 +336,14 @@ namespace Castor
 		 *\brief		Récupère la valeur de la rotation sur l'axe Y
 		 *\return		La valeur de la rotation autour de l'axe Y
 		 */
-		Angle GetRoll()const;
+		CU_API Angle GetRoll()const;
 		/**
 		 *\~english
 		 *\brief		Sets this Quaternion to its conjugate
 		 *\~french
 		 *\brief		Définit ce Quaternion à son conjugué
 		 */
-		void Conjugate();
+		CU_API void Conjugate();
 		/**
 		 *\~english
 		 *\brief		Retrieves the conjugate of this Quaternion
@@ -352,7 +352,7 @@ namespace Castor
 		 *\brief		Récupère le conjugué de ce Quaternion
 		 *\return		Le conjugué
 		 */
-		Quaternion GetConjugate()const;
+		CU_API Quaternion GetConjugate()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the magnitude of this Quaternion
@@ -361,7 +361,7 @@ namespace Castor
 		 *\brief		Récupère la magnitude de ce Quaternion
 		 *\return		La magnitude
 		 */
-		real GetMagnitude()const;
+		CU_API real GetMagnitude()const;
 		/**
 		 *\~english
 		 *\brief		Computes interpolation between this quaternion and another one
@@ -378,7 +378,7 @@ namespace Castor
 		 *\param[in]	p_shortestPath	Dit si on inverse la rotation quand q1.q2 < 0
 		 *\return		Le résultat de l'interpolation
 		 */
-		Quaternion Slerp( Quaternion const & p_target, real p_percent, bool p_shortestPath )const;
+		CU_API Quaternion Slerp( Quaternion const & p_target, real p_percent, bool p_shortestPath )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the x component
@@ -433,14 +433,14 @@ namespace Castor
 		 *\~french
 		 *\brief		Récupère le Quaternion identité
 		 */
-		static Quaternion Identity();
+		CU_API static Quaternion Identity();
 		/**
 		 *\~english
 		 *\brief		Retrieves the null Quaternion
 		 *\~french
 		 *\brief		Récupère le Quaternion nul
 		 */
-		static Quaternion Null();
+		CU_API static Quaternion Null();
 
 	private:
 		union
@@ -467,7 +467,7 @@ namespace Castor
 	 *\param[in]	p_qB	Le second objet Quaternion à ajouter
 	 *\return		Le résultat de l'addtion
 	 */
-	Quaternion	operator +( Quaternion const & p_qA, Quaternion const & p_qB );
+	CU_API Quaternion	operator +( Quaternion const & p_qA, Quaternion const & p_qB );
 	/**
 	 *\~english
 	 *\brief		Substraction operator
@@ -480,7 +480,7 @@ namespace Castor
 	 *\param[in]	p_qB	Le second objet Quaternion à soustraire
 	 *\return		Le résultat de la soustraction
 	 */
-	Quaternion	operator -( Quaternion const & p_qA, Quaternion const & p_qB );
+	CU_API Quaternion	operator -( Quaternion const & p_qA, Quaternion const & p_qB );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
@@ -493,7 +493,7 @@ namespace Castor
 	 *\param[in]	p_qB	Le second objet Quaternion à multiplier
 	 *\return		Le résultat de la multiplication
 	 */
-	Quaternion	operator *( Quaternion const & p_qA, Quaternion const & p_qB );
+	CU_API Quaternion	operator *( Quaternion const & p_qA, Quaternion const & p_qB );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
@@ -506,7 +506,7 @@ namespace Castor
 	 *\param[in]	p_fScalar	Le scalaire à multiplier
 	 *\return		Le résultat de la multiplication
 	 */
-	Quaternion	operator *( Quaternion const & p_quat, real p_fScalar );
+	CU_API Quaternion	operator *( Quaternion const & p_quat, real p_fScalar );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
@@ -519,7 +519,7 @@ namespace Castor
 	 *\param[in]	p_quat		L'objet Quaternion à multiplier
 	 *\return		Le résultat de la multiplication
 	 */
-	Quaternion	operator *( real p_fScalar, Quaternion const & p_quat );
+	CU_API Quaternion	operator *( real p_fScalar, Quaternion const & p_quat );
 	/**
 	 *\~english
 	 *\brief		Negation operator
@@ -530,7 +530,7 @@ namespace Castor
 	 *\param[in]	p_quat		L'objet Quaternion à négativer
 	 *\return		Le résultat de la négation
 	 */
-	Quaternion	operator -( Quaternion const & p_quat );
+	CU_API Quaternion	operator -( Quaternion const & p_quat );
 }
 
 #endif

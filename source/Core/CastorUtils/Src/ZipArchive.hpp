@@ -43,7 +43,7 @@ namespace Castor
 			std::string name;
 			FolderList folders;
 			std::list< std::string > files;
-			
+
 			Folder();
 			Folder( std::string const & p_name, Path const & p_path );
 			Folder * FindFolder( Path const & p_path );
@@ -73,14 +73,14 @@ namespace Castor
 		 *\param[in]	p_path	Le chemin de l' archive
 		 *\param[in]	p_mode	Le mode d'ouverture
 		 */
-		ZipArchive( Path const & p_path, File::eOPEN_MODE p_mode );
+		CU_API ZipArchive( Path const & p_path, File::eOPEN_MODE p_mode );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~ZipArchive();
+		CU_API virtual ~ZipArchive();
 		/**
 		 *\~english
 		 *\brief		Deflates an archive
@@ -89,7 +89,7 @@ namespace Castor
 		 *\brief		Compresse une archive
 		 *\param[in]	p_archive	Le chemin de l'archive
 		 */
-		bool Deflate()const;
+		CU_API bool Deflate()const;
 		/**
 		 *\~english
 		 *\brief		Inflates the archive
@@ -98,7 +98,7 @@ namespace Castor
 		 *\brief		Décompresse l'archive
 		 *\param[in]	p_folder	Le dossier de sortie de l'archive
 		 */
-		bool Inflate( Path const & p_folder );
+		CU_API bool Inflate( Path const & p_folder );
 		/**
 		 *\~english
 		 *\brief		Adds a file to the archive
@@ -107,7 +107,7 @@ namespace Castor
 		 *\brief		Ajoute un fichier à l'archive
 		 *\param[in]	p_file	Le chemin du fichier
 		 */
-		void AddFile( Path const & p_file );
+		CU_API void AddFile( Path const & p_file );
 		/**
 		 *\~english
 		 *\brief		Removes a file for the archive
@@ -116,7 +116,7 @@ namespace Castor
 		 *\brief		Retire un fichier de l'archive
 		 *\param[in]	p_fileName	Le chemin du fichier
 		 */
-		void RemoveFile( Path const & p_file );
+		CU_API void RemoveFile( Path const & p_file );
 		/**
 		 *\~english
 		 *\brief		Looks for a folder into the archive
@@ -125,7 +125,7 @@ namespace Castor
 		 *\brief		Recherche un dossier dans l'archive
 		 *\param[in]	p_folder	Le nom du dossier
 		 */
-		bool FindFolder( String const & p_folder );
+		CU_API bool FindFolder( String const & p_folder );
 		/**
 		 *\~english
 		 *\brief		Looks for a file into the archive
@@ -134,7 +134,7 @@ namespace Castor
 		 *\brief		Recherche un fichier dans l'archive
 		 *\param[in]	p_file	Le nom du fichier
 		 */
-		bool FindFile( String const & p_file );
+		CU_API bool FindFile( String const & p_file );
 
 	private:
 		std::unique_ptr< ZipImpl > m_impl;

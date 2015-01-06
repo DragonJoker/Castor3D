@@ -1,3 +1,5 @@
+option( PROJECTS_GENERATE_DOC "Generate Doxygen documentation" FALSE )
+
 #--------------------------------------------------------------------------------------------------
 #	Function :	add_target_doc
 #	Generates doc for given target
@@ -22,11 +24,13 @@ function( add_target_doc TARGET_NAME LANGUAGE EXT_LIST )
 			COMMENT "Building Doxygen ${LANGUAGE} documentation for ${TARGET_NAME}" VERBATIM
 		)
 		set_property( TARGET ${DOXYGEN_TARGET_NAME} PROPERTY FOLDER "Documentation/${TARGET_NAME}" )
-		file( GLOB _DOC_FILES ${PROJECTS_DOCUMENTATION_OUTPUT_DIR}/${TARGET_NAME}/${LANGUAGE}/${CHM_NAME} )
-		install(
-			FILES ${_DOC_FILES}
-			DESTINATION share/doc/${TARGET_NAME}
-			COMPONENT ${TARGET_NAME}_Doc
-		)
+		set( _DOC_FILE ${PROJECTS_DOCUMENTATION_OUTPUT_DIR}/${TARGET_NAME}/${LANGUAGE}/${CHM_NAME} )
+		if ( EXISTS ${_DOC_FILE} )
+			install(
+				FILES ${_DOC_FILE}
+				DESTINATION share/doc/${TARGET_NAME}
+				COMPONENT ${TARGET_NAME}_doc
+			)
+		endif ()
 	endif ()
 endfunction( add_target_doc )

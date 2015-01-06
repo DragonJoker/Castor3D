@@ -576,7 +576,7 @@ namespace Castor
 	 *\brief		Opérateur d'égalité
 	 *\param[in]	p_cpnA,p_cpnB	Les composantes à comparer
 	 */
-	bool operator ==( ColourComponent const & p_cpnA, ColourComponent const & p_cpnB );
+	CU_API bool operator ==( ColourComponent const & p_cpnA, ColourComponent const & p_cpnB );
 	/**
 	 *\~english
 	 *\brief		Inequality operator
@@ -585,7 +585,7 @@ namespace Castor
 	 *\brief		Opérateur de différence
 	 *\param[in]	p_cpnA,p_cpnB	Les composantes à comparer
 	 */
-	bool operator !=( ColourComponent const & p_cpnA, ColourComponent const & p_cpnB );
+	CU_API bool operator !=( ColourComponent const & p_cpnA, ColourComponent const & p_cpnB );
 	/**
 	 *\~english
 	 *\brief		Addition assignment operator
@@ -672,7 +672,7 @@ namespace Castor
 	 *\param[in]	p_scalar	La valeur à soustraire
 	 *\return		Resultat de this - p_scalar
 	 */
-	float operator -( ColourComponent const & p_cpnt, ColourComponent const & p_scalar );
+	CU_API float operator -( ColourComponent const & p_cpnt, ColourComponent const & p_scalar );
 	/**
 	 *\~english
 	 *\brief		Addition assignment operator
@@ -683,7 +683,7 @@ namespace Castor
 	 *\param[in]	p_scalar	La valeur à ajouter
 	 *\return		Resultat de this + p_scalar
 	 */
-	float operator +( ColourComponent const & p_cpnt, ColourComponent const & p_scalar );
+	CU_API float operator +( ColourComponent const & p_cpnt, ColourComponent const & p_scalar );
 	/**
 	 *\~english
 	 *\brief		Multiplication assignment operator
@@ -694,7 +694,7 @@ namespace Castor
 	 *\param[in]	p_scalar	La valeur à multiplier
 	 *\return		Resultat de this * p_scalar
 	 */
-	float operator *( ColourComponent const & p_cpnt, ColourComponent const & p_scalar );
+	CU_API float operator *( ColourComponent const & p_cpnt, ColourComponent const & p_scalar );
 	/**
 	 *\~english
 	 *\brief		Division assignment operator
@@ -705,7 +705,7 @@ namespace Castor
 	 *\param[in]	p_scalar	La valeur à diviser
 	 *\return		Resultat de this / p_scalar
 	 */
-	float operator /( ColourComponent const & p_cpnt, ColourComponent const & p_scalar );
+	CU_API float operator /( ColourComponent const & p_cpnt, ColourComponent const & p_scalar );
 }
 
 #endif

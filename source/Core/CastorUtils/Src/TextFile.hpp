@@ -47,50 +47,28 @@ namespace Castor
 		 *\param[in]	p_iMode		Le mode d'ouverture, combinaison d'un ou plusieurs eOPEN_MODE
 		 *\param[in]	p_eEncoding	L'encodage pour un fichier en mode texte
 		 */
-		TextFile( Path const & p_fileName, int p_iMode, eENCODING_MODE p_eEncoding = eENCODING_MODE_ASCII );
+		CU_API TextFile( Path const & p_fileName, int p_iMode, eENCODING_MODE p_eEncoding = eENCODING_MODE_ASCII );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
 		 *\~french
 		 *\brief		Constructeur par copie
 		 */
-		TextFile( TextFile const & p_file );
+		CU_API TextFile( TextFile const & p_file );
 		/**
 		 *\~english
 		 *\brief		Move constructor
 		 *\~french
 		 *\brief		Constructeur par déplacement
 		 */
-		TextFile( TextFile && p_file );
+		CU_API TextFile( TextFile && p_file );
 		/**
 		 *\~english
 		 *\brief		Destructor, closes the file
 		 *\~french
 		 *\brief		Destructeur, ferme le fichier
 		 */
-		virtual ~TextFile();
-		/**
-		 *\~english
-		 *\brief		Open mode dependant write function
-		 *\param[in]	p_toWrite	The data to write in this file
-		 *\return		A reference to this file
-		 *\~french
-		 *\brief		Fonction d'écriture dépendant du mode d'ouverture
-		 *\param[in]	p_toWrite	La donnée à écrire dans le fichier
-		 *\return		Une référence sur ce fichier
-		 */
-		template< typename T > TextFile & operator <<( T const & p_toWrite );
-		/**
-		 *\~english
-		 *\brief		Open mode dependant read function
-		 *\param[out]	p_toRead	The data to read from this file
-		 *\return		A reference to this file
-		 *\~french
-		 *\brief		Fonction de lecture dépendant du mode d'ouverture
-		 *\param[out]	p_toRead	La donnée à lire à partir du fichier
-		 *\return		Une référence sur ce fichier
-		 */
-		template< typename T > TextFile & operator >>( T & p_toRead );
+		CU_API virtual ~TextFile();
 		/**
 		 *\~english
 		 *\brief		Reads one line from the file (stops at first separator met or when size is read)
@@ -105,7 +83,7 @@ namespace Castor
 		 *\param[in]	p_strSeparators	La liste des séparateurs de ligne
 		 *\return		Le nombre d'octets lus
 		 */
-		uint64_t ReadLine( String & p_toRead, uint64_t p_size, String p_strSeparators = cuT( "\r\n" ) );
+		CU_API uint64_t ReadLine( String & p_toRead, uint64_t p_size, String p_strSeparators = cuT( "\r\n" ) );
 		/**
 		 *\~english
 		 *\brief		Reads one word from the file (stops at first ' ' met)
@@ -116,7 +94,7 @@ namespace Castor
 		 *\param[out]	p_toRead	Reçoit le mot lu
 		 *\return		Le nombre d'octets lus
 		 */
-		uint64_t ReadWord( String & p_toRead );
+		CU_API uint64_t ReadWord( String & p_toRead );
 		/**
 		 *\~english
 		 *\brief		Reads one char from the file
@@ -127,7 +105,7 @@ namespace Castor
 		 *\param[out]	p_toRead	Reçoit le caractère lu
 		 *\return		Le nombre d'octets lus
 		 */
-		uint64_t ReadChar( xchar & p_toRead );
+		CU_API uint64_t ReadChar( xchar & p_toRead );
 		/**
 		 *\~english
 		 *\brief		Copies all this file's content into a string
@@ -138,7 +116,7 @@ namespace Castor
 		 *\param[out]	p_strOut	Reçoit le contenu
 		 *\return		Le nombre d'octets lus
 		 */
-		uint64_t CopyToString( String & p_strOut );
+		CU_API uint64_t CopyToString( String & p_strOut );
 		/**
 		 *\~english
 		 *\brief		Writes a text into the file
@@ -149,7 +127,7 @@ namespace Castor
 		 *\param[in]	p_strText	Le texte
 		 *\return		Le nombre d'octets écrits
 		 */
-		uint64_t WriteText( String const & p_strText );
+		CU_API uint64_t WriteText( String const & p_strText );
 		/**
 		 *\~english
 		 *\brief		Writes a formatted text into the file
@@ -164,7 +142,7 @@ namespace Castor
 		 *\param[in]	...			Paramètres POD (cf. printf)
 		 *\return		Le nombre d'octets écrits
 		 */
-		uint64_t Print( uint64_t p_uiMaxSize, xchar const * p_pFormat, ... );
+		CU_API uint64_t Print( uint64_t p_uiMaxSize, xchar const * p_pFormat, ... );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -175,7 +153,7 @@ namespace Castor
 		 *\param[in]	p_file	Le fichier à copier
 		 *\return		Une référence sur ce fichier
 		 */
-		TextFile & operator =( TextFile const & p_file );
+		CU_API TextFile & operator =( TextFile const & p_file );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -186,8 +164,30 @@ namespace Castor
 		 *\param[in]	p_file	Le fichier à déplacer
 		 *\return		Une référence sur ce fichier
 		 */
-		TextFile & operator =( TextFile && p_file );
+		CU_API TextFile & operator =( TextFile && p_file );
 	};
+	/**
+	 *\~english
+	 *\brief		Open mode dependant write function
+	 *\param[in]	p_toWrite	The data to write in this file
+	 *\return		A reference to this file
+	 *\~french
+	 *\brief		Fonction d'écriture dépendant du mode d'ouverture
+	 *\param[in]	p_toWrite	La donnée à écrire dans le fichier
+	 *\return		Une référence sur ce fichier
+	 */
+	template< typename T > TextFile & operator <<( TextFile & p_file, T const & p_toWrite );
+	/**
+	 *\~english
+	 *\brief		Open mode dependant read function
+	 *\param[out]	p_toRead	The data to read from this file
+	 *\return		A reference to this file
+	 *\~french
+	 *\brief		Fonction de lecture dépendant du mode d'ouverture
+	 *\param[out]	p_toRead	La donnée à lire à partir du fichier
+	 *\return		Une référence sur ce fichier
+	 */
+	template< typename T > TextFile & operator >>( TextFile & p_file, T & p_toRead );
 }
 
 #include "TextFile.inl"

@@ -86,7 +86,7 @@ namespace Castor
 		 *\brief		Récupère le type du paramètre
 		 *\return		Le type
 		 */
-		virtual ePARAMETER_TYPE GetType() = 0;
+		CU_API virtual ePARAMETER_TYPE GetType() = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the parameter base type (like ePARAMETER_TYPE_TEXT for ePARAMETER_TYPE_NAME)
@@ -95,7 +95,7 @@ namespace Castor
 		 *\brief		Récupère le type de base du paramètre (comme ePARAMETER_TYPE_TEXT pour ePARAMETER_TYPE_NAME)
 		 *\return		Le type
 		 */
-		virtual ePARAMETER_TYPE GetBaseType()
+		CU_API virtual ePARAMETER_TYPE GetBaseType()
 		{
 			return GetType();
 		}
@@ -107,7 +107,7 @@ namespace Castor
 		 *\brief		Récupère le type du chaîne paramètre
 		 *\return		Le type
 		 */
-		virtual xchar const * GetStrType() = 0;
+		CU_API virtual xchar const * GetStrType() = 0;
 		/**
 		 *\~english
 		 *\brief			Checks the parameter
@@ -118,7 +118,7 @@ namespace Castor
 		 *\param[in,out]	p_strParams	Le texte contenant la valeur du paramètre
 		 *\return			\p si un problème quelconque est arrivé
 		 */
-		virtual bool Parse( String & p_strParams ) = 0;
+		CU_API virtual bool Parse( String & p_strParams ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the parameter value
