@@ -979,11 +979,14 @@ namespace Castor3D
 		void DoDeleteToDelete();
 		void DoUpdateAnimations();
 		void DoSortByAlpha();
-		void DoRenderSubmeshes( Camera const & p_camera, Pipeline & p_pipeline, eTOPOLOGY p_displayMode, RenderNodeArrayConstIt p_begin, RenderNodeArrayConstIt p_end );
-		void DoRenderSubmeshes( Camera const & p_camera, Pipeline & p_pipeline, eTOPOLOGY p_displayMode, SubmeshNodesByMaterialMapConstIt p_begin, SubmeshNodesByMaterialMapConstIt p_end );
-		void DoRenderSubmeshes( Pipeline & p_pipeline, eTOPOLOGY p_displayMode, RenderNodeByDistanceMMapConstIt p_begin, RenderNodeByDistanceMMapConstIt p_end );
+		void DoRenderSubmeshesNonInstanced( Camera const & p_camera, Pipeline & p_pipeline, eTOPOLOGY p_displayMode, RenderNodeArrayConstIt p_begin, RenderNodeArrayConstIt p_end );
+		void DoRenderSubmeshesInstanced( Camera const & p_camera, Pipeline & p_pipeline, eTOPOLOGY p_displayMode, SubmeshNodesByMaterialMapConstIt p_begin, SubmeshNodesByMaterialMapConstIt p_end );
+		void DoRenderAlphaSortedSubmeshes( Pipeline & p_pipeline, eTOPOLOGY p_displayMode, RenderNodeByDistanceMMapConstIt p_begin, RenderNodeByDistanceMMapConstIt p_end );
 		void DoResortAlpha( Camera const & p_camera, RenderNodeArrayIt p_begin, RenderNodeArrayIt p_end, RenderNodeByDistanceMMap & p_map, int p_sign );
-		void DoRenderSubmesh( Pipeline & p_pipeline, stRENDER_NODE p_node, eTOPOLOGY p_eTopology );
+		void DoRenderSubmeshInstancedMultiple( Pipeline & p_pipeline, RenderNodeArray const & p_nodes, eTOPOLOGY p_eTopology );
+		void DoRenderSubmeshInstancedSingle( Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
+		void DoRenderSubmeshNonInstanced( Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
+		void DoRenderSubmesh( Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
 		void DoRenderBillboards( Pipeline & p_pipeline, BillboardListStrMapIt p_itBegin, BillboardListStrMapIt p_itEnd );
 
 		template< typename MapType >
@@ -1209,12 +1212,14 @@ namespace Castor3D
 		Engine * m_pEngine;
 		//!\~english Lights map, ordered by index	\~french Map de lumières, triées par index
 		std::map< int, LightSPtr > m_mapLights;
-		//!\~english The geometries with no alpha blending	\~french Les géométries n'ayant pas d'alpha blend
+		//!\~english The geometries with no alpha blending, sorted by material	\~french Les géométries n'ayant pas d'alpha blend, triées par matériau
 		SubmeshNodesByMaterialMap m_mapSubmeshesNoAlpha;
 		//!\~english The geometries without alpha blending, unsorted	\~french Les géométries sans alpha blend, non triées
 		RenderNodeArray m_arraySubmeshesNoAlpha;
+		//!\~english The geometries with alpha blending, sorted by material	\~french Les géométries avec de l'alpha blend, triées par matériau
+		SubmeshNodesByMaterialMap m_mapSubmeshesAlpha;
 		//!\~english The geometries with alpha blending, sorted by distance to the camera	\~french Les géométries avec de l'alpha blend, triées par distance à la caméra
-		RenderNodeByDistanceMMap m_mapSubmeshesAlpha;
+		RenderNodeByDistanceMMap m_mapSubmeshesAlphaSorted;
 		//!\~english The geometries with alpha blending, unsorted	\~french Les géométries avec de l'alpha blend, non triées
 		RenderNodeArray m_arraySubmeshesAlpha;
 		//!\~english The scene background colour	\~french La couleur de fond de la scène
