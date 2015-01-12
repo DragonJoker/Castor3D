@@ -34,23 +34,27 @@ void Subdivider::DoSubdivide()
 	}
 
 	m_submesh->ClearFaces();
+	std::map< uint32_t, std::pair< Point3r, Point3r > > l_posnml;
+
+	for ( uint32_t i = 0; i < m_submesh->GetPointsCount(); ++i )
+	{
+		Point3r l_position, l_normal;
+		Castor3D::BufferElementGroup const & l_point = *GetPoint( i );
+		Castor3D::Vertex::GetPosition( l_point, l_position );
+		Castor3D::Vertex::GetPosition( l_point, l_normal );
+		l_posnml.insert( std::make_pair( i, std::make_pair( l_position, l_normal ) ) );
+	}
 
 	for ( uint32_t i = 0; i < l_facesArray.size(); i++ )
 	{
 		Castor3D::FaceSPtr l_face = l_facesArray[i];
-		Castor3D::BufferElementGroup const & l_pt1 = *GetPoint( l_face->GetVertexIndex( 0 ) );
-		Castor3D::BufferElementGroup const & l_pt2 = *GetPoint( l_face->GetVertexIndex( 1 ) );
-		Castor3D::BufferElementGroup const & l_pt3 = *GetPoint( l_face->GetVertexIndex( 2 ) );
-		Castor3D::Vertex::GetPosition( l_pt1, l_ptPos1 );
-		Castor3D::Vertex::GetPosition( l_pt2, l_ptPos2 );
-		Castor3D::Vertex::GetPosition( l_pt3, l_ptPos3 );
-		Castor3D::Vertex::GetNormal( l_pt1, l_ptNml1 );
-		Castor3D::Vertex::GetNormal( l_pt2, l_ptNml2 );
-		Castor3D::Vertex::GetNormal( l_pt3, l_ptNml3 );
-		Castor3D::BufferElementGroupSPtr l_ptD = DoComputePointFrom( l_ptPos1, l_ptPos2, l_ptNml1, l_ptNml2, m_ptDivisionCenter );
-		Castor3D::BufferElementGroupSPtr l_ptE = DoComputePointFrom( l_ptPos2, l_ptPos3, l_ptNml2, l_ptNml3, m_ptDivisionCenter );
-		Castor3D::BufferElementGroupSPtr l_ptF = DoComputePointFrom( l_ptPos1, l_ptPos3, l_ptNml1, l_ptNml3, m_ptDivisionCenter );
-		DoSetTextCoords( l_face, l_pt1, l_pt2, l_pt3, *l_ptD, *l_ptE, *l_ptF );
+		std::pair< Point3r, Point3r > const & l_v1 = l_posnml[l_face->GetVertexIndex( 0 )];
+		std::pair< Point3r, Point3r > const & l_v2 = l_posnml[l_face->GetVertexIndex( 1 )];
+		std::pair< Point3r, Point3r > const & l_v3 = l_posnml[l_face->GetVertexIndex( 2 )];
+		Castor3D::BufferElementGroupSPtr l_ptD = DoComputePointFrom( l_v1.first, l_v2.first, l_v1.second, l_v2.second, m_ptDivisionCenter );
+		Castor3D::BufferElementGroupSPtr l_ptE = DoComputePointFrom( l_v2.first, l_v3.first, l_v2.second, l_v3.second, m_ptDivisionCenter );
+		Castor3D::BufferElementGroupSPtr l_ptF = DoComputePointFrom( l_v1.first, l_v3.first, l_v1.second, l_v3.second, m_ptDivisionCenter );
+		DoSetTextCoords( l_face, *GetPoint( l_face->GetVertexIndex( 0 ) ), *GetPoint( l_face->GetVertexIndex( 1 ) ), *GetPoint( l_face->GetVertexIndex( 2 ) ), *l_ptD, *l_ptE, *l_ptF );
 	}
 
 	l_facesArray.clear();
