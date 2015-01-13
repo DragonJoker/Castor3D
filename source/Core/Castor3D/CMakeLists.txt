@@ -334,6 +334,34 @@ add_target_astyle( Castor3D ".h;.hpp;.inl;.cpp" )
 add_target_doc( Castor3D "French" "*.h *.hpp" )
 add_target_doc( Castor3D "English" "*.h *.hpp" )
 	
+# Copying core zip data files
+file(
+	GLOB
+		CoreZipFiles
+		${CMAKE_SOURCE_DIR}/../data/Core/*.zip
+)
+
+file(
+	COPY
+		${CoreZipFiles}
+	DESTINATION
+		${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/share/Castor3D
+)
+
+file(
+	COPY
+		${CoreZipFiles}
+	DESTINATION
+		${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/share/Castor3D
+)
+
+# Preparing core zip data files installation
+install(
+	FILES ${CoreZipFiles}
+	DESTINATION share/Castor3D
+	COMPONENT Castor3D
+)
+	
 # Copying shader languages files
 file(
 	GLOB

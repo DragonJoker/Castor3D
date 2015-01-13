@@ -18,6 +18,7 @@
 #include "DepthStencilState.hpp"
 #include "RasteriserState.hpp"
 #include "RendererPlugin.hpp"
+#include "SceneFileParser.hpp"
 #include "ShaderPlugin.hpp"
 #include "DividerPlugin.hpp"
 #include "ImporterPlugin.hpp"
@@ -25,10 +26,12 @@
 #include "LightFactory.hpp"
 #include "OverlayFactory.hpp"
 #include "TechniqueFactory.hpp"
+#include "TextOverlay.hpp"
 #include "VersionException.hpp"
 
 #include <Logger.hpp>
 #include <Factory.hpp>
+#include <File.hpp>
 #include <Utils.hpp>
 #include <DynamicLibrary.hpp>
 #include <PreciseTimer.hpp>
@@ -147,33 +150,37 @@ namespace Castor3D
 	CASTOR_DECLARE_UNIQUE_INSTANCE( Engine );
 
 	Engine::Engine( Castor::Logger * p_pLogger )
-		:	m_bEnded( false )
-		,	m_uiWantedFPS( 100 )
-		,	m_dFrameTime( 0.01 )
-		,	m_pAnimationManager( new AnimationCollection )
-		,	m_pMeshManager( new MeshCollection )
-		,	m_pFontManager( new FontCollection )
-		,	m_pImageManager( new ImageCollection )
-		,	m_pSceneManager( new SceneCollection )
-		,	m_pShaderManager( new ShaderManager )
-		,	m_pLightFactory( new LightFactory )
-		,	m_pMeshFactory( new MeshFactory )
-		,	m_pOverlayFactory( new OverlayFactory )
-		,	m_pSamplerManager( new SamplerCollection )
-		,	m_pDepthStencilStateManager( new DepthStencilStateCollection )
-		,	m_pRasteriserStateManager( new RasteriserStateCollection )
-		,	m_pBlendStateManager( new BlendStateCollection )
-		,	m_pRenderSystem( NULL )
-		,	m_pThreadMainLoop( nullptr )
-		,	m_bStarted( false )
-		,	m_bCreateContext( false )
-		,	m_bCreated( false )
-		,	m_bCleaned( false )
-		,	m_pTechniqueFactory( new TechniqueFactory )
-		,	m_pMaterialManager( new MaterialManager( this ) )
-		,	m_pOverlayManager( new OverlayManager( this ) )
-		,	m_pMainWindow( NULL )
-		,	m_bDefaultInitialised( false )
+		: m_bEnded( false )
+		, m_uiWantedFPS( 100 )
+		, m_dFrameTime( 0.01 )
+		, m_pAnimationManager( new AnimationCollection )
+		, m_pMeshManager( new MeshCollection )
+		, m_pFontManager( new FontCollection )
+		, m_pImageManager( new ImageCollection )
+		, m_pSceneManager( new SceneCollection )
+		, m_pShaderManager( new ShaderManager )
+		, m_pLightFactory( new LightFactory )
+		, m_pMeshFactory( new MeshFactory )
+		, m_pOverlayFactory( new OverlayFactory )
+		, m_pSamplerManager( new SamplerCollection )
+		, m_pDepthStencilStateManager( new DepthStencilStateCollection )
+		, m_pRasteriserStateManager( new RasteriserStateCollection )
+		, m_pBlendStateManager( new BlendStateCollection )
+		, m_pRenderSystem( NULL )
+		, m_pThreadMainLoop( nullptr )
+		, m_bStarted( false )
+		, m_bCreateContext( false )
+		, m_bCreated( false )
+		, m_bCleaned( false )
+		, m_pTechniqueFactory( new TechniqueFactory )
+		, m_pMaterialManager( new MaterialManager( this ) )
+		, m_pOverlayManager( new OverlayManager( this ) )
+		, m_pMainWindow( NULL )
+		, m_bDefaultInitialised( false )
+		, m_vertexCount( 0 )
+		, m_faceCount( 0 )
+		, m_objectCount( 0 )
+		, m_showDebug( false )
 	{
 		CASTOR_INIT_UNIQUE_INSTANCE();
 
@@ -271,6 +278,7 @@ namespace Castor3D
 			m_uiWantedFPS = p_wantedFPS;
 			m_bThreaded = p_bThreaded;
 			m_dFrameTime = 1.0 / m_uiWantedFPS;
+			DoLoadCoreData();
 
 			if ( m_bThreaded )
 			{
@@ -729,7 +737,6 @@ namespace Castor3D
 			m_pDefaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
 			m_pDefaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIP, eINTERPOLATION_MODE_LINEAR );
 			m_pShaderManager->SetRenderSystem( m_pRenderSystem );
-			//		StartRendering();
 			l_bReturn = true;
 		}
 
@@ -1142,6 +1149,17 @@ namespace Castor3D
 		return l_pReturn;
 	}
 
+	void Engine::ShowDebugOverlays( bool p_show )
+	{
+		m_showDebug = p_show;
+		OverlaySPtr l_panel = m_debugPanel.lock();
+
+		if ( l_panel )
+		{
+			l_panel->SetVisible( p_show );
+		}
+	}
+
 	void Engine::DoUpdate( bool p_bForce )
 	{
 		ContextSPtr l_pContext = m_pRenderSystem->GetMainContext();
@@ -1149,6 +1167,14 @@ namespace Castor3D
 		if ( l_pContext )
 		{
 			l_pContext->SetCurrent();
+			double l_cpuTime = 0;
+			double l_gpuTime = 0;
+			double l_totalTime = 0;
+			uint32_t l_vertices = 0;
+			uint32_t l_faces = 0;
+			uint32_t l_objects = 0;
+			PreciseTimer l_timer;
+			PreciseTimer l_timerTotal;
 
 			for ( FrameListenerPtrArrayIt l_it = m_arrayListeners.begin(); l_it != m_arrayListeners.end(); ++l_it )
 			{
@@ -1167,13 +1193,18 @@ namespace Castor3D
 			}
 
 #if !DX_DEBUG
+			l_cpuTime += l_timer.TimeMs();
 
 			// Reverse iterator because we want to render textures before windows
 			for ( RenderTargetMMapRIt l_rit = m_mapRenderTargets.rbegin(); l_rit != m_mapRenderTargets.rend(); ++l_rit )
 			{
+				l_objects += l_rit->second->GetScene()->GetGeometriesCount();
+				l_vertices += l_rit->second->GetScene()->GetVertexCount();
+				l_faces += l_rit->second->GetScene()->GetFaceCount();
 				l_rit->second->Render( m_dFrameTime );
 			}
 
+			l_gpuTime += l_timer.TimeMs();
 #endif
 
 			for ( FrameListenerPtrArrayIt l_it = m_arrayListeners.begin(); l_it != m_arrayListeners.end(); ++l_it )
@@ -1184,10 +1215,14 @@ namespace Castor3D
 #if !DX_DEBUG
 			l_pContext->EndCurrent();
 #endif
+			l_cpuTime += l_timer.TimeMs();
+
 			std::for_each( m_mapWindows.begin(), m_mapWindows.end(), [&]( std::pair< uint32_t, RenderWindowSPtr > p_pair )
 			{
 				p_pair.second->RenderOneFrame( p_bForce );
 			} );
+
+			l_gpuTime += l_timer.TimeMs();
 #if DX_DEBUG
 			l_pContext->EndCurrent();
 #endif
@@ -1195,6 +1230,54 @@ namespace Castor3D
 			for ( FrameListenerPtrArrayIt l_it = m_arrayListeners.begin(); l_it != m_arrayListeners.end(); ++l_it )
 			{
 				( *l_it )->FireEvents( eEVENT_TYPE_POST_RENDER );
+			}
+
+			if ( m_showDebug )
+			{
+				l_cpuTime += l_timer.TimeMs();
+				l_totalTime += l_timerTotal.TimeMs();
+
+				TextOverlaySPtr l_txt = m_debugCpuTime.lock();
+
+				if ( l_txt )
+				{
+					l_txt->SetCaption( str_utils::to_string( l_cpuTime ) + cuT( " ms" ) );
+				}
+
+				l_txt = m_debugGpuTime.lock();
+
+				if ( l_txt )
+				{
+					l_txt->SetCaption( str_utils::to_string( l_gpuTime ) + cuT( " ms" ) );
+				}
+
+				l_txt = m_debugTotalTime.lock();
+
+				if ( l_txt )
+				{
+					l_txt->SetCaption( str_utils::to_string( l_totalTime ) + cuT( " ms" ) );
+				}
+
+				l_txt = m_debugVertexCount.lock();
+
+				if ( l_txt )
+				{
+					l_txt->SetCaption( str_utils::to_string( l_vertices ) );
+				}
+
+				l_txt = m_debugFaceCount.lock();
+
+				if ( l_txt )
+				{
+					l_txt->SetCaption( str_utils::to_string( l_faces ) );
+				}
+
+				l_txt = m_debugObjectCount.lock();
+
+				if ( l_txt )
+				{
+					l_txt->SetCaption( str_utils::to_string( l_objects ) );
+				}
 			}
 		}
 	}
@@ -1285,5 +1368,36 @@ namespace Castor3D
 	uint32_t Engine::DoStMainLoop( Engine * p_pThis )
 	{
 		return p_pThis->DoMainLoop();
+	}
+
+	void Engine::DoLoadCoreData()
+	{
+		Path l_path = Engine::GetDataDirectory() / cuT( "Castor3D" );
+
+		if ( File::FileExists( l_path / cuT( "Core.zip" ) ) )
+		{
+			SceneFileParser l_parser( this );
+
+			if ( !l_parser.ParseFile( l_path / cuT( "Core.zip" ) ) )
+			{
+				Logger::LogError( cuT( "Can't read Core.zip data file" ) );
+			}
+			else
+			{
+				OverlaySPtr l_panel = m_pOverlayManager->GetOverlay( cuT( "DebugPanel" ) );
+				m_debugPanel = l_panel;
+				m_debugCpuTime = std::static_pointer_cast< TextOverlay >( m_pOverlayManager->GetOverlay( cuT( "DebugPanel-CpuTime-Value" ) )->GetOverlayCategory() );
+				m_debugGpuTime = std::static_pointer_cast< TextOverlay >( m_pOverlayManager->GetOverlay( cuT( "DebugPanel-GpuTime-Value" ) )->GetOverlayCategory() );
+				m_debugTotalTime = std::static_pointer_cast< TextOverlay >( m_pOverlayManager->GetOverlay( cuT( "DebugPanel-TotalTime-Value" ) )->GetOverlayCategory() );
+				m_debugVertexCount = std::static_pointer_cast< TextOverlay >( m_pOverlayManager->GetOverlay( cuT( "DebugPanel-VertexCount-Value" ) )->GetOverlayCategory() );
+				m_debugFaceCount = std::static_pointer_cast< TextOverlay >( m_pOverlayManager->GetOverlay( cuT( "DebugPanel-FaceCount-Value" ) )->GetOverlayCategory() );
+				m_debugObjectCount = std::static_pointer_cast< TextOverlay >( m_pOverlayManager->GetOverlay( cuT( "DebugPanel-ObjectCount-Value" ) )->GetOverlayCategory() );
+
+				if ( l_panel )
+				{
+					l_panel->SetVisible( m_showDebug );
+				}
+			}
+		}
 	}
 }

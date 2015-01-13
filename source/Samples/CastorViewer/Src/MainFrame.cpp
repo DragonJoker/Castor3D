@@ -417,7 +417,6 @@ namespace CastorViewer
 		m_pSplashScreen->Step( _( "Loading plugins" ), 1 );
 		Logger::LogMessage( cuT( "Initialising Castor3D" ) );
 		m_pCastor3D = new Engine( Logger::GetSingletonPtr() );
-		m_pCastor3D->Initialise( CASTOR_WANTED_FPS, CASTOR3D_THREADED );
 		StringArray l_arrayFiles;
 		StringArray l_arrayFailed;
 		std::mutex l_mutex;

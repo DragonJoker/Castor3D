@@ -102,7 +102,7 @@ namespace Castor
 					int l_zep, l_sep;
 					zip_error_get( m_zip, &l_zep, &l_sep );
 					std::string l_error = libzip::GetError( l_zep ) + " - " + libzip::GetError( l_sep );
-					Logger::LogError( "Couldn't retrieve ZIP archive file informations : " + l_error );
+					Logger::LogWarning( "Couldn't retrieve ZIP archive file informations : " + l_error );
 				}
 				else
 				{
@@ -125,7 +125,7 @@ namespace Castor
 					int l_zep, l_sep;
 					zip_error_get( m_zip, &l_zep, &l_sep );
 					std::string l_error = libzip::GetError( l_zep ) + " - " + libzip::GetError( l_sep );
-					Logger::LogError( "Couldn't retrieve ZIP archive file informations : " + l_error );
+					Logger::LogWarning( "Couldn't retrieve ZIP archive file informations : " + l_error );
 				}
 				else
 				{

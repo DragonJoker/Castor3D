@@ -155,6 +155,14 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootSamplerState )
 }
 END_ATTRIBUTE_PUSH( eSECTION_SAMPLER )
 
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootDebugOverlays )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
+	bool l_value;
+	l_pContext->m_pParser->GetEngine()->ShowDebugOverlays( p_arrayParams[0]->Get( l_value ) );
+}
+END_ATTRIBUTE_PUSH( eSECTION_SCENE )
+
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_WindowRenderTarget )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );

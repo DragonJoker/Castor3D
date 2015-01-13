@@ -44,7 +44,8 @@ namespace Castor3D
 	\remark		Contient les fenêtres de rendu, les plugins, drivers de rendu...
 	*/
 	class C3D_API Engine
-		:	Castor::Unique< Engine >
+		: Castor::Unique< Engine >
+		, std::enable_shared_from_this< Engine >
 	{
 	public:
 		/**
@@ -1183,6 +1184,15 @@ namespace Castor3D
 		BlendStateSPtr CreateBlendState( Castor::String const & p_strName );
 		/**
 		 *\~english
+		 *\brief		Show or hide debug overlays
+		 *\param[in]	p_show	The status
+		 *\~french
+		 *\brief		Affiche ou cache les incrustations de débogage
+		 *\param[in]	p_show	Le statut
+		 */
+		void ShowDebugOverlays( bool p_show );
+		/**
+		 *\~english
 		 *\brief		Retrieves the default BlendState (no blend)
 		 *\return		The value
 		 *\~french
@@ -1214,6 +1224,7 @@ namespace Castor3D
 		PluginBaseSPtr InternalLoadPlugin( Castor::Path const & p_pathFile );
 		void DoRenderOneFrame();
 		void DoRenderFlushFrame();
+		void DoLoadCoreData();
 
 		static uint32_t	DoStMainLoop( Engine * p_pThis );
 
@@ -1313,6 +1324,28 @@ namespace Castor3D
 		SamplerSPtr m_pDefaultSampler;
 		//!\~english Tells default sampler and default blend state are initialised	\~french Dit si le sampler et le blend state par défaut sont initialisés
 		bool m_bDefaultInitialised;
+		//!\~english The base debug panel overlay	\~french Le panneau d'incrustations de débogage
+		OverlayWPtr m_debugPanel;
+		//!\~english The CPU time value overlay	\~french L'incrustation contenant la valeur de temps CPU
+		TextOverlayWPtr m_debugCpuTime;
+		//!\~english The GPU time value overlay	\~french L'incrustation contenant la valeur de temps GPU
+		TextOverlayWPtr m_debugGpuTime;
+		//!\~english The total time value overlay	\~french L'incrustation contenant la valeur de temps total
+		TextOverlayWPtr m_debugTotalTime;
+		//!\~english The vertex count value overlay	\~french L'incrustation contenant la valeur de nombre de sommets
+		TextOverlayWPtr m_debugVertexCount;
+		//!\~english The face count value overlay	\~french L'incrustation contenant la valeur de nombre de faces
+		TextOverlayWPtr m_debugFaceCount;
+		//!\~english The object count value overlay	\~french L'incrustation contenant la valeur de combre d'objets
+		TextOverlayWPtr m_debugObjectCount;
+		//!\~english The vertex count value	\~french La valeur de nombre de sommets
+		uint32_t m_vertexCount;
+		//!\~english The face count value	\~french La valeur de nombre de faces
+		uint32_t m_faceCount;
+		//!\~english The object count value	\~french La valeur de combre d'objets
+		uint32_t m_objectCount;
+		//!\~english Defines if the debug overlays are shown	\~french Définit si les incrustations de débogage sont affichées ou cachées
+		bool m_showDebug;
 	};
 }
 

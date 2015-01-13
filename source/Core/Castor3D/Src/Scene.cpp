@@ -1187,6 +1187,30 @@ namespace Castor3D
 		m_arrayOverlays.push_back( p_pOverlay );
 	}
 
+	uint32_t Scene::GetVertexCount()const
+	{
+		uint32_t l_return = 0;
+
+		for ( GeometryPtrStrMap::const_iterator l_it = m_addedPrimitives.begin(); l_it != m_addedPrimitives.end(); ++l_it )
+		{
+			l_return += l_it->second->GetMesh()->GetVertexCount();
+		}
+
+		return l_return;
+	}
+
+	uint32_t Scene::GetFaceCount()const
+	{
+		uint32_t l_return = 0;
+
+		for ( GeometryPtrStrMap::const_iterator l_it = m_addedPrimitives.begin(); l_it != m_addedPrimitives.end(); ++l_it )
+		{
+			l_return += l_it->second->GetMesh()->GetFaceCount();
+		}
+
+		return l_return;
+	}
+
 	void Scene::DoDeleteToDelete()
 	{
 		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();

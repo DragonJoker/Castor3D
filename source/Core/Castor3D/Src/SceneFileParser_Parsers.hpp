@@ -37,6 +37,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootPanelOverlay )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootBorderPanelOverlay )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootTextOverlay )
+	DECLARE_ATTRIBUTE_PARSER( Parser_RootDebugOverlays )
 
 	//Window parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_WindowRenderTarget )

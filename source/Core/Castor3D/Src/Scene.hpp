@@ -591,6 +591,24 @@ namespace Castor3D
 		void AddOverlay( OverlaySPtr p_pOverlay );
 		/**
 		 *\~english
+		 *\brief		Retrieves the vertices count
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le nombre de sommets
+		 *\return		La valeur
+		 */
+		uint32_t GetVertexCount()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the faces count
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le nombre de faces
+		 *\return		La valeur
+		 */
+		uint32_t GetFaceCount()const;
+		/**
+		 *\~english
 		 *\brief		Sets the background colour
 		 *\param[in]	p_clrNew	The new colour
 		 *\~french
