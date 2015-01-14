@@ -109,16 +109,6 @@ namespace Castor3D
 		{
 			return m_radius;
 		}
-		/**
-		 *\~english
-		 *\brief		Stream operator
-		 *\~french
-		 *\brief		Operateur de flux
-		 */
-		inline friend std::ostream & operator <<( std::ostream & o, Cone const & c )
-		{
-			return o << "Cone(" << c.m_nbFaces << "," << c.m_height << "," << c.m_radius << ")";
-		}
 
 	private:
 		//!\~english The number of faces	\~french Nombre de faces
@@ -127,7 +117,18 @@ namespace Castor3D
 		real m_height;
 		//!\~english  The cone radius	\~french Le rayon de la base
 		real m_radius;
+		friend std::ostream & operator <<( std::ostream & o, Cone const & c );
 	};
+	/**
+	 *\~english
+	 *\brief		Stream operator
+	 *\~french
+	 *\brief		Operateur de flux
+	 */
+	inline std::ostream & operator <<( std::ostream & o, Cone const & c )
+	{
+		return o << "Cone(" << c.m_nbFaces << "," << c.m_height << "," << c.m_radius << ")";
+	}
 }
 
 #pragma warning( pop )

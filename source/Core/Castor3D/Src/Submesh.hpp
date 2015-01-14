@@ -43,7 +43,8 @@ namespace Castor3D
 	\brief		Representation d'un submesh
 	\remark		Un submesh est sous partie d'un mesh. Il possede ses propres tampons (vertex, normales et texture coords) ses smoothgroups et ses combobox
 	*/
-	class C3D_API Submesh : public Renderable<Submesh, SubmeshRenderer>
+	class C3D_API Submesh
+		: public Renderable< Submesh, SubmeshRenderer >
 	{
 	public:
 		/*!
@@ -54,7 +55,9 @@ namespace Castor3D
 		\~french
 		\brief		Loader texte de Submesh
 		*/
-		class C3D_API TextLoader : public Castor::Loader< Submesh, Castor::eFILE_TYPE_TEXT, Castor::TextFile >, public Castor::NonCopyable
+		class C3D_API TextLoader
+			: public Castor::Loader< Submesh, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -129,21 +132,6 @@ namespace Castor3D
 
 	private:
 		DECLARE_LIST( Castor::ByteArray, BytePtr );
-		class C3D_API FaceAndAngle
-		{
-		public:
-			real			m_rAngle;
-			Castor::Point3r	m_ptNormal;
-			Castor::Point3r	m_ptTangent;
-
-			FaceAndAngle()
-				:	m_rAngle( 0 )
-			{
-			}
-		};
-
-		typedef std::shared_ptr<FaceAndAngle>	FaceAndAnglePtr;
-		typedef std::vector<FaceAndAnglePtr>	FaceAndAnglePtrArray;
 
 	public:
 		/**
@@ -198,13 +186,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Tests if the given Point3r is in mine
 		 *\param[in]	p_vertex	The vertex to test
+		 *\param[in]	p_precision	The comparison precision
 		 *\return		The index of the vertex equal to parameter, -1 if not found
 		 *\~french
 		 *\brief		Teste si le point donné fait partie de ceux de ce submesh
 		 *\param[in]	p_vertex	Le point à tester
+		 *\param[in]	p_precision	La précision de comparaison
 		 *\return		L'index du point s'il a été trouvé, -1 sinon
 		 */
-		int IsInMyPoints( Castor::Point3r const & p_vertex );
+		int IsInMyPoints( Castor::Point3r const & p_vertex, double p_precision );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a vertex to my list

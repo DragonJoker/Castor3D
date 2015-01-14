@@ -538,7 +538,7 @@ namespace Castor3D
 			return m_strName;
 		}
 
-	protected:
+	private:
 		Castor::String DoGetName();
 		void DoRender( eBUFFER p_eTargetBuffer, DynamicTextureSPtr p_pTexture );
 		void DoUpdateSize();

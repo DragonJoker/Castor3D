@@ -15,7 +15,7 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Light::Light( Scene * p_pScene, LightFactory & p_factory, eLIGHT_TYPE p_eLightType )
+	Light::Light( SceneSPtr p_pScene, LightFactory & p_factory, eLIGHT_TYPE p_eLightType )
 		:	MovableObject( p_pScene, eMOVABLE_TYPE_LIGHT )
 		,	Renderable< Light, LightRenderer >( p_pScene->GetEngine() )
 		,	m_enabled( false )
@@ -25,14 +25,14 @@ namespace Castor3D
 		GetRenderer()->Initialise();
 	}
 
-	Light::Light( LightFactory & p_factory, Scene * p_pScene, SceneNodeSPtr p_pNode, String const & p_name, eLIGHT_TYPE p_eLightType )
-		:	MovableObject( p_pScene, p_pNode.get(), p_name, eMOVABLE_TYPE_LIGHT )
+	Light::Light( LightFactory & p_factory, SceneSPtr p_pScene, SceneNodeSPtr p_pNode, String const & p_name, eLIGHT_TYPE p_eLightType )
+		:	MovableObject( p_pScene, p_pNode, p_name, eMOVABLE_TYPE_LIGHT )
 		,	Renderable< Light, LightRenderer >( p_pScene->GetEngine() )
 		,	m_enabled( false )
 	{
 		m_pCategory = p_factory.Create( p_eLightType );
 		m_pCategory->SetLight( this );
-		m_pCategory->SetPositionType( Point4f( m_pSceneNode->GetPosition()[0], m_pSceneNode->GetPosition()[1], m_pSceneNode->GetPosition()[2], real( 0.0 ) ) );
+		m_pCategory->SetPositionType( Point4f( p_pNode->GetPosition()[0], p_pNode->GetPosition()[1], p_pNode->GetPosition()[2], real( 0.0 ) ) );
 		GetRenderer()->Initialise();
 	}
 
@@ -76,9 +76,9 @@ namespace Castor3D
 	{
 		if ( ! m_pRenderer.expired() )
 		{
-			if ( m_pSceneNode )
+			if ( GetParent() )
 			{
-				Point3r l_position = m_pSceneNode->GetPosition();
+				Point3r l_position = GetParent()->GetPosition();
 
 				switch ( m_pCategory->GetLightType() )
 				{
@@ -109,9 +109,9 @@ namespace Castor3D
 	{
 		if ( ! m_pRenderer.expired() )
 		{
-			if ( m_pSceneNode )
+			if ( GetParent() )
 			{
-				Point3r l_position = m_pSceneNode->GetDerivedPosition();
+				Point3r l_position = GetParent()->GetDerivedPosition();
 //				l_position = GetEngine()->GetRenderSystem()->GetPipeline()->GetMatrix( eMTXMODE_VIEW ) * l_position;
 
 				switch ( m_pCategory->GetLightType() )
@@ -139,22 +139,22 @@ namespace Castor3D
 		Disable( p_pProgram );
 	}
 
-	void Light::AttachTo( SceneNode * p_pNode )
+	void Light::AttachTo( SceneNodeSPtr p_pNode )
 	{
 		Point4f l_ptPosType = GetPositionType();
 
-		if ( m_pSceneNode )
+		if ( GetParent() )
 		{
-			m_pSceneNode->SetPosition( Point3r( l_ptPosType[0], l_ptPosType[1], l_ptPosType[2] ) );
+			GetParent()->SetPosition( Point3r( l_ptPosType[0], l_ptPosType[1], l_ptPosType[2] ) );
 		}
 
 		MovableObject::AttachTo( p_pNode );
 
-		if ( m_pSceneNode )
+		if ( p_pNode )
 		{
-			l_ptPosType[0] = float( m_pSceneNode->GetPosition()[0] );
-			l_ptPosType[1] = float( m_pSceneNode->GetPosition()[1] );
-			l_ptPosType[2] = float( m_pSceneNode->GetPosition()[2] );
+			l_ptPosType[0] = float( p_pNode->GetPosition()[0] );
+			l_ptPosType[1] = float( p_pNode->GetPosition()[1] );
+			l_ptPosType[2] = float( p_pNode->GetPosition()[2] );
 		}
 		else
 		{

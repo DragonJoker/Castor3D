@@ -38,7 +38,7 @@ namespace Castor3D
 		friend class PluginBase;
 		typedef RenderTechniqueBaseSPtr	CreateTechniqueFunction( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params );
 
-		typedef CreateTechniqueFunction		*	PCreateTechniqueFunction;
+		typedef CreateTechniqueFunction * PCreateTechniqueFunction;
 
 	public:
 		/**

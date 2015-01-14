@@ -212,7 +212,7 @@ FrameVariableBufferSPtr GlRenderSystem::CreateFrameVariableBuffer( Castor::Strin
 	return std::make_shared< GlFrameVariableBuffer >( m_gl, p_strName, this );
 }
 
-BillboardListSPtr GlRenderSystem::CreateBillboardsList( Castor3D::SceneRPtr p_pScene )
+BillboardListSPtr GlRenderSystem::CreateBillboardsList( Castor3D::SceneSPtr p_pScene )
 {
 	return std::make_shared< GlBillboardList >( p_pScene, this, m_gl );
 }

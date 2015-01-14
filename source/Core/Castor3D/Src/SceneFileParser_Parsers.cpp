@@ -3,6 +3,7 @@
 #include "FrameVariableBuffer.hpp"
 #include "Engine.hpp"
 #include "Material.hpp"
+#include "MaterialManager.hpp"
 #include "Overlay.hpp"
 #include "PanelOverlay.hpp"
 #include "BorderPanelOverlay.hpp"
@@ -77,9 +78,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootScene )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
 	String l_strName;
-	l_pContext->spScene = l_pContext->m_pParser->GetEngine()->CreateScene( p_arrayParams[0]->Get( l_strName ) );
-	l_pContext->pScene = l_pContext->spScene.get();
-	l_pContext->mapScenes.insert( std::make_pair( l_strName, l_pContext->spScene ) );
+	l_pContext->pScene = l_pContext->m_pParser->GetEngine()->CreateScene( p_arrayParams[0]->Get( l_strName ) );
+	l_pContext->mapScenes.insert( std::make_pair( l_strName, l_pContext->pScene ) );
 }
 END_ATTRIBUTE_PUSH( eSECTION_SCENE )
 
@@ -864,7 +864,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ScenePanelOverlay )
 	if ( l_pContext->pScene )
 	{
 		String l_strName;
-		l_pContext->pOverlay = l_pContext->m_pParser->GetEngine()->CreateOverlay( eOVERLAY_TYPE_PANEL, p_arrayParams[0]->Get( l_strName ), l_pContext->pOverlay, l_pContext->spScene );
+		l_pContext->pOverlay = l_pContext->m_pParser->GetEngine()->CreateOverlay( eOVERLAY_TYPE_PANEL, p_arrayParams[0]->Get( l_strName ), l_pContext->pOverlay, l_pContext->pScene );
 		l_pContext->pOverlay->SetVisible( false );
 	}
 	else
@@ -881,7 +881,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneBorderPanelOverlay )
 	if ( l_pContext->pScene )
 	{
 		String l_strName;
-		l_pContext->pOverlay = l_pContext->m_pParser->GetEngine()->CreateOverlay( eOVERLAY_TYPE_BORDER_PANEL, p_arrayParams[0]->Get( l_strName ), l_pContext->pOverlay, l_pContext->spScene );
+		l_pContext->pOverlay = l_pContext->m_pParser->GetEngine()->CreateOverlay( eOVERLAY_TYPE_BORDER_PANEL, p_arrayParams[0]->Get( l_strName ), l_pContext->pOverlay, l_pContext->pScene );
 		l_pContext->pOverlay->SetVisible( false );
 	}
 	else
@@ -898,7 +898,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneTextOverlay )
 	if ( l_pContext->pScene )
 	{
 		String l_strName;
-		l_pContext->pOverlay = l_pContext->m_pParser->GetEngine()->CreateOverlay( eOVERLAY_TYPE_TEXT, p_arrayParams[0]->Get( l_strName ), l_pContext->pOverlay, l_pContext->spScene );
+		l_pContext->pOverlay = l_pContext->m_pParser->GetEngine()->CreateOverlay( eOVERLAY_TYPE_TEXT, p_arrayParams[0]->Get( l_strName ), l_pContext->pOverlay, l_pContext->pScene );
 		l_pContext->pOverlay->SetVisible( false );
 	}
 	else
@@ -927,7 +927,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightParent )
 	if ( l_pContext->pLight )
 	{
 		l_pContext->pLight->Detach();
-		l_pContext->pSceneNode->AttachObject( l_pContext->pLight.get() );
+		l_pContext->pSceneNode->AttachObject( l_pContext->pLight );
 	}
 }
 END_ATTRIBUTE()
@@ -1080,7 +1080,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_NodeParent )
 
 		if ( l_pParent )
 		{
-			l_pContext->pSceneNode->AttachTo( l_pParent.get() );
+			l_pContext->pSceneNode->AttachTo( l_pParent );
 		}
 		else
 		{
@@ -1159,7 +1159,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ObjectParent )
 
 		if ( l_pParent )
 		{
-			l_pParent->AttachObject( l_pContext->pGeometry.get() );
+			l_pParent->AttachObject( l_pContext->pGeometry );
 		}
 		else
 		{
@@ -1527,10 +1527,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshDivide )
 			Point3r l_ptCenter = l_pContext->pMesh->GetCollisionBox().GetCenter();
 			std::for_each( l_pContext->pMesh->Begin(), l_pContext->pMesh->End(), [&]( SubmeshSPtr p_pSubmesh )
 			{
-				for ( uint8_t i = 0; i < l_uiCount; i++ )
-				{
-					l_pDivider->Subdivide( p_pSubmesh, &l_ptCenter, false );
-				}
+				l_pDivider->Subdivide( p_pSubmesh, l_uiCount, false );
 			} );
 			l_pPlugin->DestroyDivider( l_pDivider );
 		}
@@ -3625,7 +3622,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BillboardParent )
 
 		if ( l_pParent )
 		{
-			l_pParent->AttachObject( l_pContext->pBillboards.get() );
+			l_pParent->AttachObject( l_pContext->pBillboards );
 		}
 		else
 		{

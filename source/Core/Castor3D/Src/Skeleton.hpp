@@ -38,14 +38,6 @@ namespace Castor3D
 	class C3D_API Skeleton
 		:	public Animable
 	{
-	private:
-		//!\~english The mesh	\~french Le maillage
-		MeshWPtr m_wpMesh;
-		//!\~english The bones	\~french Les bones
-		BonePtrArray m_arrayBones;
-		//!\~english The global skeleton transform	\~french La transformation globale du squelette
-		Castor::Matrix4x4r m_mtxGlobalInverse;
-
 	public:
 		/**
 		 *\~english
@@ -157,6 +149,14 @@ namespace Castor3D
 		{
 			return m_wpMesh.lock()->GetName();
 		}
+
+	private:
+		//!\~english The mesh	\~french Le maillage
+		MeshWPtr m_wpMesh;
+		//!\~english The bones	\~french Les bones
+		BonePtrArray m_arrayBones;
+		//!\~english The global skeleton transform	\~french La transformation globale du squelette
+		Castor::Matrix4x4r m_mtxGlobalInverse;
 	};
 }
 

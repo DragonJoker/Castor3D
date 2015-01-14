@@ -20,6 +20,7 @@
 #include <Geometry.hpp>
 #include <Engine.hpp>
 #include <Material.hpp>
+#include <MaterialManager.hpp>
 #include <Mesh.hpp>
 #include <Scene.hpp>
 

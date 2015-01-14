@@ -7,6 +7,7 @@
 #include "ShaderProgram.hpp"
 #include "ShaderObject.hpp"
 #include "Material.hpp"
+#include "MaterialManager.hpp"
 #include "Pass.hpp"
 #include "PassRenderer.hpp"
 #include "Pipeline.hpp"
@@ -146,7 +147,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	BillboardList::BillboardList( Scene * p_pScene, RenderSystem * p_pRenderSystem )
+	BillboardList::BillboardList( SceneSPtr p_pScene, RenderSystem * p_pRenderSystem )
 		:	MovableObject( p_pScene, eMOVABLE_TYPE_BILLBOARD )
 		,	m_pRenderSystem( p_pRenderSystem )
 		,	m_bNeedUpdate( false )

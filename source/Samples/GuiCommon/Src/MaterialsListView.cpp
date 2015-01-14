@@ -3,6 +3,7 @@
 
 #include <Engine.hpp>
 #include <Material.hpp>
+#include <MaterialManager.hpp>
 #include <Pass.hpp>
 #include <Logger.hpp>
 

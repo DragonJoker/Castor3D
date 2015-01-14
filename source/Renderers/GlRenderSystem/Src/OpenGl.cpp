@@ -3655,80 +3655,83 @@ void OpenGl::StDebugLogAMD( uint32_t id, eGL_DEBUG_CATEGORY category, eGL_DEBUG_
 
 void OpenGl::DebugLog( eGL_DEBUG_SOURCE source, eGL_DEBUG_TYPE type, uint32_t id, eGL_DEBUG_SEVERITY severity, int CU_PARAM_UNUSED( length ), const char * message )
 {
-	String l_strToLog = cuT( "OpenGl Debug - " );
-
-	switch ( source )
+	if ( id != 131185 )
 	{
-	case eGL_DEBUG_SOURCE_API:
-		l_strToLog += cuT( "Source:OpenGL\t" );
-		break;
+		String l_strToLog = cuT( "OpenGl Debug - " );
 
-	case eGL_DEBUG_SOURCE_WINDOW_SYSTEM:
-		l_strToLog += cuT( "Source:Windows\t" );
-		break;
+		switch ( source )
+		{
+		case eGL_DEBUG_SOURCE_API:
+			l_strToLog += cuT( "Source:OpenGL\t" );
+			break;
 
-	case eGL_DEBUG_SOURCE_SHADER_COMPILER:
-		l_strToLog += cuT( "Source:Shader compiler\t" );
-		break;
+		case eGL_DEBUG_SOURCE_WINDOW_SYSTEM:
+			l_strToLog += cuT( "Source:Windows\t" );
+			break;
 
-	case eGL_DEBUG_SOURCE_THIRD_PARTY:
-		l_strToLog += cuT( "Source:Third party\t" );
-		break;
+		case eGL_DEBUG_SOURCE_SHADER_COMPILER:
+			l_strToLog += cuT( "Source:Shader compiler\t" );
+			break;
 
-	case eGL_DEBUG_SOURCE_APPLICATION:
-		l_strToLog += cuT( "Source:Application\t" );
-		break;
+		case eGL_DEBUG_SOURCE_THIRD_PARTY:
+			l_strToLog += cuT( "Source:Third party\t" );
+			break;
 
-	case eGL_DEBUG_SOURCE_OTHER:
-		l_strToLog += cuT( "Source:Other\t" );
-		break;
+		case eGL_DEBUG_SOURCE_APPLICATION:
+			l_strToLog += cuT( "Source:Application\t" );
+			break;
+
+		case eGL_DEBUG_SOURCE_OTHER:
+			l_strToLog += cuT( "Source:Other\t" );
+			break;
+		}
+
+		switch ( type )
+		{
+		case eGL_DEBUG_TYPE_ERROR:
+			l_strToLog += cuT( "Type:Error\t" );
+			break;
+
+		case eGL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+			l_strToLog += cuT( "Type:Deprecated behavior\t" );
+			break;
+
+		case eGL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+			l_strToLog += cuT( "Type:Undefined behavior\t" );
+			break;
+
+		case eGL_DEBUG_TYPE_PORTABILITY:
+			l_strToLog += cuT( "Type:Portability\t" );
+			break;
+
+		case eGL_DEBUG_TYPE_PERFORMANCE:
+			l_strToLog += cuT( "Type:Performance\t" );
+			break;
+
+		case eGL_DEBUG_TYPE_OTHER:
+			l_strToLog += cuT( "Type:Other\t" );
+			break;
+		}
+
+		l_strToLog += cuT( "ID:" ) + str_utils::to_string( id ) + cuT( "\t" );
+
+		switch ( severity )
+		{
+		case eGL_DEBUG_SEVERITY_HIGH:
+			l_strToLog += cuT( "Severity:High\t" );
+			break;
+
+		case eGL_DEBUG_SEVERITY_MEDIUM:
+			l_strToLog += cuT( "Severity:Medium\t" );
+			break;
+
+		case eGL_DEBUG_SEVERITY_LOW:
+			l_strToLog += cuT( "Severity:Low\t" );
+			break;
+		}
+
+		Logger::LogWarning(	l_strToLog + cuT( "Message:" ) + str_utils::from_str( message ) );
 	}
-
-	switch ( type )
-	{
-	case eGL_DEBUG_TYPE_ERROR:
-		l_strToLog += cuT( "Type:Error\t" );
-		break;
-
-	case eGL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
-		l_strToLog += cuT( "Type:Deprecated behavior\t" );
-		break;
-
-	case eGL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
-		l_strToLog += cuT( "Type:Undefined behavior\t" );
-		break;
-
-	case eGL_DEBUG_TYPE_PORTABILITY:
-		l_strToLog += cuT( "Type:Portability\t" );
-		break;
-
-	case eGL_DEBUG_TYPE_PERFORMANCE:
-		l_strToLog += cuT( "Type:Performance\t" );
-		break;
-
-	case eGL_DEBUG_TYPE_OTHER:
-		l_strToLog += cuT( "Type:Other\t" );
-		break;
-	}
-
-	l_strToLog += cuT( "ID:" ) + str_utils::to_string( id ) + cuT( "\t" );
-
-	switch ( severity )
-	{
-	case eGL_DEBUG_SEVERITY_HIGH:
-		l_strToLog += cuT( "Severity:High\t" );
-		break;
-
-	case eGL_DEBUG_SEVERITY_MEDIUM:
-		l_strToLog += cuT( "Severity:Medium\t" );
-		break;
-
-	case eGL_DEBUG_SEVERITY_LOW:
-		l_strToLog += cuT( "Severity:Low\t" );
-		break;
-	}
-
-	Logger::LogWarning(	l_strToLog + cuT( "Message:" ) + str_utils::from_str( message ) );
 }
 
 void OpenGl::DebugLogAMD( uint32_t id, eGL_DEBUG_CATEGORY category, eGL_DEBUG_SEVERITY severity, int CU_PARAM_UNUSED( length ), const char * message )

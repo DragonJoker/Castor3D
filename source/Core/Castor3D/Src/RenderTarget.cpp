@@ -513,7 +513,7 @@ namespace Castor3D
 
 	void RenderTarget::SetCamera( CameraSPtr p_pCamera )
 	{
-		SceneNode 	*	l_pCamNode;
+		SceneNodeSPtr	l_pCamNode;
 		SceneNodeSPtr	l_pLECamNode;
 		SceneNodeSPtr	l_pRECamNode;
 		String			l_strLENodeName;
@@ -573,8 +573,8 @@ namespace Castor3D
 	{
 		if ( GetCameraLEye() && GetCameraREye() )
 		{
-			SceneNode * l_pLECamNode = GetCameraLEye()->GetParent();
-			SceneNode * l_pRECamNode = GetCameraREye()->GetParent();
+			SceneNodeSPtr l_pLECamNode = GetCameraLEye()->GetParent();
+			SceneNodeSPtr l_pRECamNode = GetCameraREye()->GetParent();
 			l_pLECamNode->Translate( Point3r( m_rIntraOcularDistance / 2, 0, 0 ) );
 			l_pRECamNode->Translate( Point3r( -m_rIntraOcularDistance / 2, 0, 0 ) );
 			l_pLECamNode->Translate( Point3r( -p_rIod / 2, 0, 0 ) );

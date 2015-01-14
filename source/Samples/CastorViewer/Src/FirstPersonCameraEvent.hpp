@@ -9,13 +9,13 @@ namespace CastorViewer
 		: public MouseCameraEvent
 	{
 	protected:
-		Castor3D::SceneNode * m_pNodeYaw;
-		Castor3D::SceneNode * m_pNodePitch;
-		Castor3D::SceneNode * m_pNodeRoll;
+		Castor3D::SceneNodeSPtr m_pNodeYaw;
+		Castor3D::SceneNodeSPtr m_pNodePitch;
+		Castor3D::SceneNodeSPtr m_pNodeRoll;
 		bool m_bOK;
 
 	public:
-		FirstPersonCameraEvent( Castor3D::SceneNode * p_pNode, Castor::real p_rDeltaX, Castor::real p_rDeltaY, Castor::real p_rDeltaZ );
+		FirstPersonCameraEvent( Castor3D::SceneNodeSPtr p_pNode, Castor::real p_rDeltaX, Castor::real p_rDeltaY, Castor::real p_rDeltaZ );
 		virtual ~FirstPersonCameraEvent();
 
 	private:

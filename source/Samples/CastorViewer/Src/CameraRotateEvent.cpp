@@ -9,11 +9,6 @@ using namespace Castor;
 namespace CastorViewer
 {
 	CameraRotateEvent::CameraRotateEvent( SceneNodeSPtr p_pNode, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
-		:	MouseCameraEvent( p_pNode.get(), p_rDeltaX, p_rDeltaY, p_rDeltaZ )
-	{
-	}
-
-	CameraRotateEvent::CameraRotateEvent( SceneNode * p_pNode, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
 		:	MouseCameraEvent( p_pNode, p_rDeltaX, p_rDeltaY, p_rDeltaZ )
 	{
 	}

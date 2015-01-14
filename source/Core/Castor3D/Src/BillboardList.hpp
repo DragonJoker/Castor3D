@@ -126,7 +126,7 @@ namespace Castor3D
 		 *\param[in]	p_pScene		La scï¿½ne parente
 		 *\param[in]	p_pRenderSystem	Le RenderSystem
 		 */
-		BillboardList( Scene * p_pScene, RenderSystem * p_pRenderSystem );
+		BillboardList( SceneSPtr p_pScene, RenderSystem * p_pRenderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor

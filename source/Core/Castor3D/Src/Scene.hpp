@@ -43,6 +43,7 @@ namespace Castor3D
 				<br />Elle a au moins une caméra permettant son rendu
 	*/
 	class C3D_API Scene
+		: public std::enable_shared_from_this< Scene >
 	{
 	public:
 		/*!
@@ -139,7 +140,7 @@ namespace Castor3D
 		struct stRENDER_NODE
 		{
 			//!\~english The parent mesh node	\~french Le node du mesh parent
-			SceneNodeRPtr m_pNode;
+			SceneNodeSPtr m_pNode;
 			//!\~english The geometry instanciating the submesh	\~french La géométrie instanciant le submesh
 			GeometrySPtr m_pGeometry;
 			//!\~english The submesh	\~french Le sous-maillage
@@ -181,6 +182,13 @@ namespace Castor3D
 		~Scene();
 		/**
 		 *\~english
+		 *\brief		Initialises the scene
+		 *\~french
+		 *\brief		Initialise la scène
+		 */
+		void Initialise();
+		/**
+		 *\~english
 		 *\brief		Clears the maps, leaves the root nodes
 		 *\~french
 		 *\brief		Vide les maps, laisse les noeuds pères
@@ -219,16 +227,14 @@ namespace Castor3D
 		bool SetBackgroundImage( Castor::Path const & p_pathFile );
 		/**
 		 *\~english
-		 *\brief		Creates a scene node in the scene, attached to the root node if th given parent is nullptr
+		 *\brief		Creates a scene node in the scene, attached to the root node
 		 *\param[in]	p_name		The node name, default is empty
-		 *\param[in]	p_parent	The parent node, if nullptr, the created node will be attached to root
 		 *\~french
 		 *\brief		Crée un SceneNode
-		 *\remark		Si le parent donné est nul, le SceneNode créé sera attaché au root node
+		 *\remark		Le SceneNode créé sera attaché au root node
 		 *\param[in]	p_name		Le nom du node
-		 *\param[in]	p_parent	Le parent du node
 		 */
-		SceneNodeSPtr CreateSceneNode( Castor::String const & p_name, SceneNode * p_parent = NULL );
+		SceneNodeSPtr CreateSceneNode( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Creates a scene node in the scene, attached to the root node if th given parent is nullptr
@@ -1017,12 +1023,12 @@ namespace Castor3D
 				if ( l_it->second->GetParent()->GetName() == cuT( "CameraRootNode" ) )
 				{
 					l_it->second->Detach();
-					l_it->second->AttachTo( m_rootCameraNode.get() );
+					l_it->second->AttachTo( m_rootCameraNode );
 				}
 				else if ( l_it->second->GetParent()->GetName() == cuT( "ObjectRootNode" ) )
 				{
 					l_it->second->Detach();
-					l_it->second->AttachTo( m_rootObjectNode.get() );
+					l_it->second->AttachTo( m_rootObjectNode );
 				}
 
 				l_strName = l_it->first;

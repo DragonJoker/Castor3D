@@ -7,11 +7,8 @@ using namespace Castor;
 
 namespace CastorViewer
 {
-	FirstPersonCameraEvent::FirstPersonCameraEvent( SceneNode * p_pNode, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
+	FirstPersonCameraEvent::FirstPersonCameraEvent( SceneNodeSPtr p_pNode, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
 		:	MouseCameraEvent( p_pNode, p_rDeltaX, p_rDeltaY, p_rDeltaZ	)
-		,	m_pNodeRoll( NULL	)
-		,	m_pNodePitch( NULL	)
-		,	m_pNodeYaw( NULL	)
 		,	m_bOK( false	)
 	{
 		DoInitialise();

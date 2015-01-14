@@ -40,8 +40,8 @@ namespace Castor3D
 		typedef Subdivider * CreateGeneratorFunction( TextureUnit * p_pTexture );
 		typedef Subdivider * DestroyGeneratorFunction( Subdivider * p_pGenerator );
 
-		typedef CreateGeneratorFunction *	PCreateGeneratorFunction;
-		typedef DestroyGeneratorFunction *	PDestroyGeneratorFunction;
+		typedef CreateGeneratorFunction * PCreateGeneratorFunction;
+		typedef DestroyGeneratorFunction * PDestroyGeneratorFunction;
 
 	public:
 		/**

@@ -2,6 +2,7 @@
 #include "PassPanel.hpp"
 
 #include <Material.hpp>
+#include <MaterialManager.hpp>
 #include <Engine.hpp>
 
 using namespace Castor3D;

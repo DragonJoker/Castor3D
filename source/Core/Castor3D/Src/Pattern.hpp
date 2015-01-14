@@ -221,10 +221,10 @@ namespace Castor3D
 		}
 
 	private:
-		typedef T							TObj;
-		typedef T 			&				TObjRef;
-		typedef T const 		&			TObjConstRef;
-		typedef typename std::list< TObj >	TObjList;
+		typedef T TObj;
+		typedef T & TObjRef;
+		typedef T const & TObjConstRef;
+		typedef typename std::list< TObj > TObjList;
 		//!\~english The elements	\~french Les éléments
 		TObjList m_listElements;
 	};

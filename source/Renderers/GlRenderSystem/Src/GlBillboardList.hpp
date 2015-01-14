@@ -27,7 +27,7 @@ namespace GlRender
 		:	public Castor3D::BillboardList
 	{
 	public:
-		GlBillboardList( Castor3D::SceneRPtr p_pScene, GlRenderSystem * p_pRenderSystem, OpenGl & p_gl );
+		GlBillboardList( Castor3D::SceneSPtr p_pScene, GlRenderSystem * p_pRenderSystem, OpenGl & p_gl );
 		virtual ~GlBillboardList();
 
 	private:

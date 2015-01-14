@@ -38,13 +38,13 @@ namespace Castor3D
 		friend class PluginBase;
 		friend class Engine;
 
-		typedef RenderSystem *	CreateRenderSystemFunction( Engine * p_pEngine, Castor::Logger * p_pLogger );
-		typedef void			DestroyRenderSystemFunction( RenderSystem * p_pRenderSystem );
-		typedef eRENDERER_TYPE	GetRendererTypeFunction();
+		typedef RenderSystem * CreateRenderSystemFunction( Engine * p_pEngine, Castor::Logger * p_pLogger );
+		typedef void DestroyRenderSystemFunction( RenderSystem * p_pRenderSystem );
+		typedef eRENDERER_TYPE GetRendererTypeFunction();
 
-		typedef CreateRenderSystemFunction	*	PCreateRenderSystemFunction;
-		typedef DestroyRenderSystemFunction	*	PDestroyRenderSystemFunction;
-		typedef GetRendererTypeFunction		*	PGetRendererTypeFunction;
+		typedef CreateRenderSystemFunction * PCreateRenderSystemFunction;
+		typedef DestroyRenderSystemFunction * PDestroyRenderSystemFunction;
+		typedef GetRendererTypeFunction * PGetRendererTypeFunction;
 
 	public:
 		/**

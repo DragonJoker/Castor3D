@@ -5,6 +5,7 @@
 #include "SceneNode.hpp"
 #include "Engine.hpp"
 #include "Material.hpp"
+#include "MaterialManager.hpp"
 #include "Pass.hpp"
 #include "ShaderManager.hpp"
 #include "ShaderProgram.hpp"
@@ -156,8 +157,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Geometry::Geometry( Scene * p_pScene, MeshSPtr p_mesh, SceneNodeSPtr p_sn, String const & p_name )
-		:	MovableObject( p_pScene, ( SceneNode * )p_sn.get(), p_name, eMOVABLE_TYPE_GEOMETRY )
+	Geometry::Geometry( SceneSPtr p_pScene, MeshSPtr p_mesh, SceneNodeSPtr p_sn, String const & p_name )
+		:	MovableObject( p_pScene, p_sn, p_name, eMOVABLE_TYPE_GEOMETRY )
 		,	m_mesh( p_mesh )
 		,	m_changed( true )
 		,	m_listCreated( false )

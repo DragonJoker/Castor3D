@@ -114,7 +114,7 @@ namespace Castor3D
 
 			while ( l_bReturn && l_it != p_scene.CamerasEnd() )
 			{
-				l_bReturn = Camera::TextLoader()( * l_it->second, p_file );
+				l_bReturn = Camera::TextLoader()( *l_it->second, p_file );
 				++l_it;
 			}
 		}
@@ -155,7 +155,7 @@ namespace Castor3D
 
 			while ( l_bReturn && l_it != p_scene.GeometriesEnd() )
 			{
-				l_bReturn = Geometry::TextLoader()( * l_it->second, p_file );
+				l_bReturn = Geometry::TextLoader()( *l_it->second, p_file );
 				++l_it;
 			}
 		}
@@ -478,12 +478,6 @@ namespace Castor3D
 		,	m_lightFactory( p_lightFactory )
 		,	m_pEngine( p_pEngine )
 	{
-		m_rootNode = std::make_shared< SceneNode >( this, cuT( "RootNode" ) );
-		m_rootCameraNode = std::make_shared< SceneNode >( this, cuT( "CameraRootNode" ) );
-		m_rootObjectNode = std::make_shared< SceneNode >( this, cuT( "ObjectRootNode" ) );
-		m_rootCameraNode->AttachTo( m_rootNode.get() );
-		m_rootObjectNode->AttachTo( m_rootNode.get() );
-		m_addedNodes.insert( std::make_pair( cuT( "ObjectRootNode" ), m_rootObjectNode ) );
 	}
 
 	Scene::~Scene()
@@ -496,6 +490,16 @@ namespace Castor3D
 		m_rootNode.reset();
 		m_rootCameraNode.reset();
 		m_rootObjectNode.reset();
+	}
+
+	void Scene::Initialise()
+	{
+		m_rootNode = std::make_shared< SceneNode >( shared_from_this(), cuT( "RootNode" ) );
+		m_rootCameraNode = std::make_shared< SceneNode >( shared_from_this(), cuT( "CameraRootNode" ) );
+		m_rootObjectNode = std::make_shared< SceneNode >( shared_from_this(), cuT( "ObjectRootNode" ) );
+		m_rootCameraNode->AttachTo( m_rootNode );
+		m_rootObjectNode->AttachTo( m_rootNode );
+		m_addedNodes.insert( std::make_pair( cuT( "ObjectRootNode" ), m_rootObjectNode ) );
 	}
 
 	void Scene::ClearScene()
@@ -671,7 +675,7 @@ namespace Castor3D
 		m_changed = false;
 	}
 
-	SceneNodeSPtr Scene::CreateSceneNode( String const & p_name, SceneNode * p_parent )
+	SceneNodeSPtr Scene::CreateSceneNode( String const & p_name )
 	{
 		SceneNodeSPtr l_pReturn;
 
@@ -680,18 +684,9 @@ namespace Castor3D
 			if ( DoCheckObject( p_name, m_addedNodes, cuT( "SceneNode" ) ) )
 			{
 				CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-				l_pReturn = std::make_shared< SceneNode >( this, p_name );
+				l_pReturn = std::make_shared< SceneNode >( shared_from_this(), p_name );
 				Logger::LogMessage( cuT( "Scene::CreateSceneNode - SceneNode [" ) + p_name + cuT( "] - Created" ) );
-
-				if ( p_parent )
-				{
-					l_pReturn->AttachTo( p_parent );
-				}
-				else
-				{
-					l_pReturn->AttachTo( m_rootNode.get() );
-				}
-
+				l_pReturn->AttachTo( m_rootNode );
 				m_addedNodes[p_name] = l_pReturn;
 			}
 			else
@@ -710,7 +705,39 @@ namespace Castor3D
 
 	SceneNodeSPtr Scene::CreateSceneNode( String const & p_name, SceneNodeSPtr p_parent )
 	{
-		return CreateSceneNode( p_name, p_parent.get() );
+		SceneNodeSPtr l_pReturn;
+
+		if ( p_name != cuT( "RootNode" ) )
+		{
+			if ( DoCheckObject( p_name, m_addedNodes, cuT( "SceneNode" ) ) )
+			{
+				CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+				l_pReturn = std::make_shared< SceneNode >( shared_from_this(), p_name );
+				Logger::LogMessage( cuT( "Scene::CreateSceneNode - SceneNode [" ) + p_name + cuT( "] - Created" ) );
+
+				if ( p_parent )
+				{
+					l_pReturn->AttachTo( p_parent );
+				}
+				else
+				{
+					l_pReturn->AttachTo( m_rootNode );
+				}
+
+				m_addedNodes[p_name] = l_pReturn;
+			}
+			else
+			{
+				l_pReturn = m_addedNodes.find( p_name )->second;
+			}
+		}
+		else
+		{
+			Logger::LogWarning( cuT( "Scene::CreateSceneNode - Can't create scene node [RootNode] - Another scene node with the same name already exists" ) );
+			l_pReturn = m_addedNodes.find( p_name )->second;
+		}
+
+		return l_pReturn;
 	}
 
 	GeometrySPtr Scene::CreateGeometry( String const & p_name, eMESH_TYPE p_type, String const & p_meshName, UIntArray p_faces, RealArray p_size )
@@ -724,7 +751,7 @@ namespace Castor3D
 
 			if ( l_pMesh )
 			{
-				l_pReturn = std::make_shared< Geometry >( this, l_pMesh, nullptr, p_name );
+				l_pReturn = std::make_shared< Geometry >( shared_from_this(), l_pMesh, nullptr, p_name );
 				Logger::LogMessage( cuT( "Scene::CreatePrimitive - Geometry [" ) + p_name + cuT( "] - Created" ) );
 				m_addedPrimitives[p_name] = l_pReturn;
 				m_newlyAddedPrimitives[p_name] = l_pReturn;
@@ -750,7 +777,8 @@ namespace Castor3D
 		if ( DoCheckObject( p_name, m_addedPrimitives, cuT( "Geometry" ) ) )
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			l_pReturn = std::make_shared< Geometry >( this, nullptr, m_rootObjectNode, p_name );
+			l_pReturn = std::make_shared< Geometry >( shared_from_this(), nullptr, m_rootObjectNode, p_name );
+			m_rootObjectNode->AttachObject( l_pReturn );
 			Logger::LogMessage( cuT( "Scene::CreatePrimitive - Geometry [" ) + p_name + cuT( "] - Created" ) );
 		}
 		else
@@ -768,7 +796,13 @@ namespace Castor3D
 		if ( DoCheckObject( p_name, m_addedCameras, cuT( "Camera" ) ) )
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			l_pReturn = std::make_shared< Camera >( this, p_name, Size( p_ww, p_wh ), p_pNode, p_type );
+			l_pReturn = std::make_shared< Camera >( shared_from_this(), p_name, Size( p_ww, p_wh ), p_pNode, p_type );
+
+			if ( p_pNode )
+			{
+				p_pNode->AttachObject( l_pReturn );
+			}
+
 			m_addedCameras[p_name] = l_pReturn;
 			Logger::LogMessage( cuT( "Scene::CreateCamera - Camera [" ) + p_name + cuT( "] created" ) );
 		}
@@ -783,7 +817,13 @@ namespace Castor3D
 		if ( DoCheckObject( p_name, m_addedCameras, cuT( "Camera" ) ) )
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			l_pReturn = std::make_shared< Camera >( this, p_name, p_pNode, p_pViewport );
+			l_pReturn = std::make_shared< Camera >( shared_from_this(), p_name, p_pNode, p_pViewport );
+
+			if ( p_pNode )
+			{
+				p_pNode->AttachObject( l_pReturn );
+			}
+
 			m_addedCameras[p_name] = l_pReturn;
 			Logger::LogMessage( cuT( "Scene::CreateCamera - Camera [" ) + p_name + cuT( "] created" ) );
 		}
@@ -798,7 +838,13 @@ namespace Castor3D
 		if ( DoCheckObject( p_name, m_addedLights, cuT( "Light" ) ) )
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			l_pReturn = std::make_shared< Light >( m_lightFactory, this, p_pNode, p_name, p_eLightType );
+			l_pReturn = std::make_shared< Light >( m_lightFactory, shared_from_this(), p_pNode, p_name, p_eLightType );
+
+			if ( p_pNode )
+			{
+				p_pNode->AttachObject( l_pReturn );
+			}
+
 			AddLight( l_pReturn );
 			Logger::LogMessage( cuT( "Scene::CreateLight - Light [" ) + p_name + cuT( "] created" ) );
 		}
@@ -817,7 +863,7 @@ namespace Castor3D
 		if ( DoCheckObject( p_name, m_addedGroups, cuT( "AnimatedObjectGroup" ) ) )
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			l_pReturn = std::make_shared< AnimatedObjectGroup >( this, p_name );
+			l_pReturn = std::make_shared< AnimatedObjectGroup >( shared_from_this(), p_name );
 			AddAnimatedObjectGroup( l_pReturn );
 			Logger::LogMessage( cuT( "Scene::CreateAnimatedObjectGroup - AnimatedObjectGroup [" ) + p_name + cuT( "] created" ) );
 		}
@@ -1240,7 +1286,7 @@ namespace Castor3D
 		for ( GeometryPtrStrMapIt l_itPrimitives = m_addedPrimitives.begin(); l_itPrimitives != m_addedPrimitives.end(); ++l_itPrimitives )
 		{
 			MeshSPtr l_pMesh = l_itPrimitives->second->GetMesh();
-			SceneNode *	l_pNode = l_itPrimitives->second->GetParent();
+			SceneNodeSPtr l_pNode = l_itPrimitives->second->GetParent();
 
 			if ( l_pMesh )
 			{
@@ -1351,7 +1397,7 @@ namespace Castor3D
 		{
 			stRENDER_NODE const & l_renderNode = l_it->second;
 			SubmeshSPtr l_pSubmesh = l_renderNode.m_pSubmesh;
-			SceneNodeRPtr l_pNode = l_renderNode.m_pNode;
+			SceneNodeSPtr l_pNode = l_renderNode.m_pNode;
 
 			if ( l_pRenderSystem->HasInstancing() && l_pSubmesh->GetRefCount( l_renderNode.m_pMaterial ) > 1 )
 			{
@@ -1388,7 +1434,7 @@ namespace Castor3D
 	void Scene::DoRenderSubmeshInstancedMultiple( Pipeline & p_pipeline, RenderNodeArray const & p_nodes, eTOPOLOGY p_eTopology )
 	{
 		SubmeshSPtr l_pSubmesh = p_nodes[0].m_pSubmesh;
-		SceneNodeRPtr l_pNode = p_nodes[0].m_pNode;
+		SceneNodeSPtr l_pNode = p_nodes[0].m_pNode;
 		MaterialSPtr l_pMaterial = p_nodes[0].m_pMaterial;
 		SubmeshRendererSPtr l_pRenderer = l_pSubmesh->GetRenderer();
 
@@ -1420,7 +1466,7 @@ namespace Castor3D
 	void Scene::DoRenderSubmeshInstancedSingle( Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology )
 	{
 		SubmeshSPtr l_pSubmesh = p_node.m_pSubmesh;
-		SceneNodeRPtr l_pNode = p_node.m_pNode;
+		SceneNodeSPtr l_pNode = p_node.m_pNode;
 		SubmeshRendererSPtr l_pRenderer = l_pSubmesh->GetRenderer();
 
 		if ( l_pRenderer->GetGeometryBuffers()->HasMatrixBuffer() )
@@ -1445,7 +1491,7 @@ namespace Castor3D
 	void Scene::DoRenderSubmeshNonInstanced( Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology )
 	{
 		SubmeshSPtr l_pSubmesh = p_node.m_pSubmesh;
-		SceneNodeRPtr l_pNode = p_node.m_pNode;
+		SceneNodeSPtr l_pNode = p_node.m_pNode;
 		p_pipeline.PushMatrix();
 
 		if ( ( l_pSubmesh->GetProgramFlags() & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )

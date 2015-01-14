@@ -109,12 +109,23 @@ namespace Castor3D
 		}
 
 	private:
-		Point3rPatternSPtr	m_pPattern;
-		Castor::Point3r		m_vAxis;
-		real				m_fDepth;
-		bool				m_bClosed;
-		uint32_t			m_uiNbFaces;
+		Point3rPatternSPtr m_pPattern;
+		Castor::Point3r m_vAxis;
+		real m_fDepth;
+		bool m_bClosed;
+		uint32_t m_uiNbFaces;
+		friend std::ostream & operator <<( std::ostream & o, Projection const & c );
 	};
+	/**
+	 *\~english
+	 *\brief		Stream operator
+	 *\~french
+	 *\brief		Operateur de flux
+	 */
+	inline std::ostream & operator <<( std::ostream & o, Projection const & c )
+	{
+		return o << "Projection( (" << c.m_vAxis[0] << "," << c.m_vAxis[1] << "," << c.m_vAxis[2] << ")," << c.m_fDepth << "," << c.m_bClosed << "," << c.m_uiNbFaces << ")";
+	}
 }
 
 #pragma warning( pop )

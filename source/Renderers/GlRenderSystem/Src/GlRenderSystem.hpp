@@ -94,7 +94,7 @@ namespace GlRender
 			return true;
 		}
 		virtual Castor3D::FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_strName );
-		virtual Castor3D::BillboardListSPtr CreateBillboardsList( Castor3D::SceneRPtr p_pScene );
+		virtual Castor3D::BillboardListSPtr CreateBillboardsList( Castor3D::SceneSPtr p_pScene );
 
 	private:
 		virtual void DoInitialise();

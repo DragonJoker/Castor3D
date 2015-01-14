@@ -56,7 +56,7 @@ namespace Castor3D
 		 *\param[in]	p_pFactory		La fabrique de LightCategory
 		 *\param[in]	p_eLightType	Le type de lumière
 		 */
-		Light( Scene * p_pScene, LightFactory & p_factory, eLIGHT_TYPE p_eLightType );
+		Light( SceneSPtr p_pScene, LightFactory & p_factory, eLIGHT_TYPE p_eLightType );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -71,7 +71,7 @@ namespace Castor3D
 		 *\param[in]	p_pFactory		La fabrique de LightCategory
 		 *\param[in]	p_eLightType	Le type de lumière
 		 */
-		Light( LightFactory & p_factory, Scene * p_pScene, SceneNodeSPtr p_pNode, Castor::String const & p_name, eLIGHT_TYPE p_eLightType );
+		Light( LightFactory & p_factory, SceneSPtr p_pScene, SceneNodeSPtr p_pNode, Castor::String const & p_name, eLIGHT_TYPE p_eLightType );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -155,7 +155,7 @@ namespace Castor3D
 		 *\brief		Attache cette lumière au node donné
 		 *\param[in]	p_pNode	Le nouveau node parent de cette lumière
 		 */
-		virtual void AttachTo( SceneNode * p_pNode );
+		virtual void AttachTo( SceneNodeSPtr p_pNode );
 		/**
 		 *\~english
 		 *\brief		Retrieves the light type

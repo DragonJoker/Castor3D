@@ -4,6 +4,7 @@
 #include "ShaderManager.hpp"
 #include "RenderTechnique.hpp"
 #include "Material.hpp"
+#include "MaterialManager.hpp"
 #include "OverlayManager.hpp"
 #include "Overlay.hpp"
 #include "Mesh.hpp"
@@ -473,6 +474,7 @@ namespace Castor3D
 		if ( ! l_pReturn )
 		{
 			l_pReturn = std::make_shared< Scene >( this, *m_pLightFactory, p_strName );
+			l_pReturn->Initialise();
 			m_pSceneManager->insert( p_strName, l_pReturn );
 		}
 

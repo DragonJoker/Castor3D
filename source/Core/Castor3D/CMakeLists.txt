@@ -97,10 +97,13 @@ file( GLOB CASTOR3D_FBO_HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameBuffer*.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderBuffer*.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderBuffer*.inl
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Attachment*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Attachment*.inl
 )
 file( GLOB CASTOR3D_FBO_SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameBuffer*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderBuffer*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Attachment*.cpp
 )
 source_group( "Header Files\\FrameBuffer" FILES ${CASTOR3D_FBO_HEADER_FILES} )
 source_group( "Source Files\\FrameBuffer" FILES ${CASTOR3D_FBO_SOURCE_FILES} )

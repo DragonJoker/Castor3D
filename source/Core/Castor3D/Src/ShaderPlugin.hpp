@@ -38,15 +38,15 @@ namespace Castor3D
 	private:
 		friend class PluginBase;
 		friend class Engine;
-		typedef ShaderProgramBaseSPtr	CreateShaderFunction( RenderSystem * p_pRenderSystem );
-		typedef IPipelineImpl 	*		CreatePipelineFunction( Pipeline * p_pPipeline, RenderSystem * p_pRenderSystem );
-		typedef void					DestroyPipelineFunction( IPipelineImpl * p_pPipeline );
-		typedef eSHADER_LANGUAGE		GetShaderLanguageFunction();
+		typedef ShaderProgramBaseSPtr CreateShaderFunction( RenderSystem * p_pRenderSystem );
+		typedef IPipelineImpl * CreatePipelineFunction( Pipeline * p_pPipeline, RenderSystem * p_pRenderSystem );
+		typedef void DestroyPipelineFunction( IPipelineImpl * p_pPipeline );
+		typedef eSHADER_LANGUAGE GetShaderLanguageFunction();
 
-		typedef CreateShaderFunction		*	PCreateShaderFunction;
-		typedef CreatePipelineFunction		*	PCreatePipelineFunction;
-		typedef DestroyPipelineFunction		*	PDestroyPipelineFunction;
-		typedef GetShaderLanguageFunction	*	PGetShaderLanguageFunction;
+		typedef CreateShaderFunction * PCreateShaderFunction;
+		typedef CreatePipelineFunction * PCreatePipelineFunction;
+		typedef DestroyPipelineFunction * PDestroyPipelineFunction;
+		typedef GetShaderLanguageFunction * PGetShaderLanguageFunction;
 
 	public:
 		/**

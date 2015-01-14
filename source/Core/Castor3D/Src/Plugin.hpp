@@ -40,16 +40,16 @@ namespace Castor3D
 	{
 	private:
 		//!< Signature for the plugin's type retrieval function
-		typedef ePLUGIN_TYPE	GetTypeFunction();
+		typedef ePLUGIN_TYPE GetTypeFunction();
 		//!< Signature for the plugin's version checking function
-		typedef void			GetRequiredVersionFunction( Version & p_version );
+		typedef void GetRequiredVersionFunction( Version & p_version );
 		//!< Signature for the plugin's name retrieval function
-		typedef Castor::String	GetNameFunction();
+		typedef Castor::String GetNameFunction();
 
 	public:
-		typedef GetTypeFunction			*		PGetTypeFunction;
-		typedef GetRequiredVersionFunction	*	PGetRequiredVersionFunction;
-		typedef GetNameFunction			*		PGetNameFunction;
+		typedef GetTypeFunction * PGetTypeFunction;
+		typedef GetRequiredVersionFunction * PGetRequiredVersionFunction;
+		typedef GetNameFunction * PGetNameFunction;
 
 	protected:
 		/**

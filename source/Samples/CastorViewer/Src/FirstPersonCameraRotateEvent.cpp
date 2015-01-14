@@ -9,11 +9,6 @@ using namespace Castor;
 namespace CastorViewer
 {
 	FirstPersonCameraRotateEvent::FirstPersonCameraRotateEvent( SceneNodeSPtr p_pNode, real p_rYaw, real p_rPitch )
-		:	FirstPersonCameraEvent( p_pNode.get(), p_rYaw, p_rPitch, 0	)
-	{
-	}
-
-	FirstPersonCameraRotateEvent::FirstPersonCameraRotateEvent( SceneNode * p_pNode, real p_rYaw, real p_rPitch )
 		:	FirstPersonCameraEvent( p_pNode, p_rYaw, p_rPitch, 0 )
 	{
 	}

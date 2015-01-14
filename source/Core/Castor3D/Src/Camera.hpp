@@ -174,7 +174,7 @@ namespace Castor3D
 		 *\param[in]	p_pNode		SceneNode parent
 		 *\param[in]	p_eType		Type de projection
 		 */
-		Camera( Scene * p_pScene, Castor::String const & p_strName, Castor::Size const & p_size, const SceneNodeSPtr p_pNode, eVIEWPORT_TYPE p_eType, eTOPOLOGY p_ePrimitiveType = eTOPOLOGY_TRIANGLES, ePROJECTION_DIRECTION p_eProjectionDirection = ePROJECTION_DIRECTION_FRONT );
+		Camera( SceneSPtr p_pScene, Castor::String const & p_strName, Castor::Size const & p_size, const SceneNodeSPtr p_pNode, eVIEWPORT_TYPE p_eType, eTOPOLOGY p_ePrimitiveType = eTOPOLOGY_TRIANGLES, ePROJECTION_DIRECTION p_eProjectionDirection = ePROJECTION_DIRECTION_FRONT );
 		/**
 		 *\~english
 		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
@@ -189,7 +189,7 @@ namespace Castor3D
 		 *\param[in]	p_pNode		SceneNode parent
 		 *\param[in]	p_pViewport	Viewport à copier
 		 */
-		Camera( Scene * p_pScene, Castor::String const & p_strName, const SceneNodeSPtr p_pNode, ViewportSPtr p_pViewport );
+		Camera( SceneSPtr p_pScene, Castor::String const & p_strName, const SceneNodeSPtr p_pNode, ViewportSPtr p_pViewport );
 		/**
 		 *\~english
 		 *\brief		Copy constructor

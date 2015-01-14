@@ -39,10 +39,10 @@ namespace Loop
 		Vertex( Castor3D::BufferElementGroupSPtr p_ptPoint );
 		~Vertex();
 
-		bool	HasEdge( uint32_t p_uiIndex );
-		EdgePtr	GetEdge( uint32_t p_uiIndex );
-		void	AddEdge( EdgePtr p_pEdge, uint32_t p_uiIndex );
-		void	RemoveEdge( uint32_t p_uiIndex );
+		bool HasEdge( uint32_t p_uiIndex );
+		EdgeSPtr GetEdge( uint32_t p_uiIndex );
+		void AddEdge( EdgeSPtr p_pEdge, uint32_t p_uiIndex );
+		void RemoveEdge( uint32_t p_uiIndex );
 
 		/**@name Accessors */
 		//@{

@@ -77,8 +77,7 @@ namespace Castor3D
 		: public Castor::FileParserContext
 	{
 	public:
-		Scene 		*			pScene;
-		SceneSPtr				spScene;
+		SceneSPtr				pScene;
 		RenderWindowSPtr		pWindow;
 		SceneNodeSPtr			pSceneNode;
 		GeometrySPtr			pGeometry;

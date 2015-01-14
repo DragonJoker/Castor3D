@@ -16,7 +16,6 @@ using namespace Castor;
 
 SceneFileContext::SceneFileContext( SceneFileParser * p_pParser,  TextFile * p_pFile )
 	:	FileParserContext( p_pFile )
-	, pScene( NULL )
 	, pWindow()
 	, pSceneNode()
 	, pGeometry()
@@ -248,7 +247,7 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser,  TextFile * p_p
 
 void SceneFileContext::Initialise()
 {
-	pScene = NULL;
+	pScene.reset();
 	uiPass = 0;
 	pOverlay = NULL;
 	iFace1 = -1;

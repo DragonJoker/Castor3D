@@ -8,11 +8,6 @@ using namespace Castor;
 namespace CastorViewer
 {
 	FirstPersonCameraTranslateEvent::FirstPersonCameraTranslateEvent( SceneNodeSPtr p_pNode, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
-		:	FirstPersonCameraEvent( p_pNode.get(), p_rDeltaX, p_rDeltaY, p_rDeltaZ	)
-	{
-	}
-
-	FirstPersonCameraTranslateEvent::FirstPersonCameraTranslateEvent( SceneNode * p_pNode, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
 		:	FirstPersonCameraEvent( p_pNode, p_rDeltaX, p_rDeltaY, p_rDeltaZ	)
 	{
 	}

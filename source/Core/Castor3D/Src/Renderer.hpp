@@ -107,8 +107,10 @@ namespace Castor3D
 		}
 
 	protected:
-		target_ptr		m_target;
-		RenderSystem *	m_pRenderSystem;
+		//!~english The Renderable	\~french Le Renderable
+		target_ptr m_target;
+		//!~english The RenderSystem	\~french Le RenderSystem
+		RenderSystem * m_pRenderSystem;
 	};
 }
 

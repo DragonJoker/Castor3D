@@ -4,6 +4,7 @@
 
 #include <Engine.hpp>
 #include <Material.hpp>
+#include <MaterialManager.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

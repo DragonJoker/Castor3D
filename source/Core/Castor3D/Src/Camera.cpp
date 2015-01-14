@@ -163,8 +163,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Camera::Camera( Scene * p_pScene, String const & p_strName, Size const & p_size, SceneNodeSPtr p_pNode, eVIEWPORT_TYPE p_eType, eTOPOLOGY p_ePrimitiveType, ePROJECTION_DIRECTION p_eProjectionDirection )
-		:	MovableObject( p_pScene, p_pNode.get(), p_strName, eMOVABLE_TYPE_CAMERA )
+	Camera::Camera( SceneSPtr p_pScene, String const & p_strName, Size const & p_size, SceneNodeSPtr p_pNode, eVIEWPORT_TYPE p_eType, eTOPOLOGY p_ePrimitiveType, ePROJECTION_DIRECTION p_eProjectionDirection )
+		:	MovableObject( p_pScene, p_pNode, p_strName, eMOVABLE_TYPE_CAMERA )
 		,	Renderable< Camera, CameraRenderer >( p_pScene->GetEngine() )
 		,	m_pViewport( std::make_shared< Viewport >( p_pScene->GetEngine(), p_size, p_eType ) )
 		,	m_ePrimitiveType( p_ePrimitiveType )
@@ -172,8 +172,8 @@ namespace Castor3D
 	{
 	}
 
-	Camera::Camera( Scene * p_pScene, String const & p_strName, SceneNodeSPtr p_pNode, ViewportSPtr p_pViewport )
-		:	MovableObject( p_pScene, p_pNode.get(), p_strName, eMOVABLE_TYPE_CAMERA )
+	Camera::Camera( SceneSPtr p_pScene, String const & p_strName, SceneNodeSPtr p_pNode, ViewportSPtr p_pViewport )
+		:	MovableObject( p_pScene, p_pNode, p_strName, eMOVABLE_TYPE_CAMERA )
 		,	Renderable< Camera, CameraRenderer >( p_pScene->GetEngine() )
 		,	m_pViewport( std::make_shared< Viewport >( *p_pViewport ) )
 		,	m_ePrimitiveType( eTOPOLOGY_TRIANGLES )
@@ -230,21 +230,21 @@ namespace Castor3D
 
 	void Camera::ResetOrientation()
 	{
-		m_pSceneNode->SetOrientation( Quaternion::Identity() );
+		GetParent()->SetOrientation( Quaternion::Identity() );
 	}
 
 	void Camera::ResetPosition()
 	{
-		m_pSceneNode->SetPosition( Point3r( 0, 0, 0 ) );
+		GetParent()->SetPosition( Point3r( 0, 0, 0 ) );
 	}
 
 	void Camera::Render()
 	{
 		Pipeline * l_pPipeline = m_pEngine->GetRenderSystem()->GetPipeline();
 		bool l_bModified = m_pViewport->Render();
-		Matrix4x4r const & l_mtx = m_pSceneNode->GetDerivedTransformationMatrix();
+		Matrix4x4r const & l_mtx = GetParent()->GetDerivedTransformationMatrix();
 
-		if ( l_bModified || m_pSceneNode->IsModified() )
+		if ( l_bModified || GetParent()->IsModified() )
 		{
 			// Express frustum view in world coordinates
 			Point3r l_position;

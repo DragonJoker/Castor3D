@@ -233,7 +233,7 @@ real Ray::Intersects( SphereBox const & p_sphere )
 	return l_fReturn;
 }
 
-real Ray::Intersects( Geometry * p_pGeometry, FaceSPtr * CU_PARAM_UNUSED( p_ppFace ), SubmeshSPtr * p_ppSubmesh )
+real Ray::Intersects( GeometrySPtr p_pGeometry, FaceSPtr * CU_PARAM_UNUSED( p_ppFace ), SubmeshSPtr * p_ppSubmesh )
 {
 	Point3r l_vCenter( p_pGeometry->GetParent()->GetPosition() );
 	Quaternion l_qOrientation = p_pGeometry->GetParent()->GetOrientation();

@@ -5,6 +5,7 @@
 #include "BorderPanelOverlay.hpp"
 #include "TextOverlay.hpp"
 #include "Material.hpp"
+#include "MaterialManager.hpp"
 #include "Engine.hpp"
 
 using namespace Castor;

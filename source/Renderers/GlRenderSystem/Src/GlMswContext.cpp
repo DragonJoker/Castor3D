@@ -12,6 +12,8 @@
 #include <PixelFormat.hpp>
 #include <Utils.hpp>
 
+#include <MaterialManager.hpp>
+
 using namespace GlRender;
 using namespace Castor3D;
 using namespace Castor;

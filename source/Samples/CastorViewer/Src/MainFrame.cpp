@@ -32,6 +32,7 @@
 #include <GeometryBuffers.hpp>
 #include <IndexBuffer.hpp>
 #include <Material.hpp>
+#include <MaterialManager.hpp>
 #include <Mesh.hpp>
 #include <Pass.hpp>
 #include <RenderWindow.hpp>

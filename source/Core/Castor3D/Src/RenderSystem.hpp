@@ -652,7 +652,7 @@ namespace Castor3D
 		 *\param[in]	p_pScene		La scène parente
 		 *\return		L'objet
 		 */
-		virtual BillboardListSPtr CreateBillboardsList( SceneRPtr p_pScene ) = 0;
+		virtual BillboardListSPtr CreateBillboardsList( SceneSPtr p_pScene ) = 0;
 
 	protected:
 		/**

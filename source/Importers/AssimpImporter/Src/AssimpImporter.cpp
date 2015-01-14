@@ -201,7 +201,7 @@ SceneSPtr AssimpImporter::DoImportScene()
 		l_pScene = m_pEngine->CreateScene( cuT( "Scene_ASSIMP" ) );
 		SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( m_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 		GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( m_pMesh->GetName() );
-		l_pGeometry->AttachTo( l_pNode.get() );
+		l_pGeometry->AttachTo( l_pNode );
 		l_pGeometry->SetMesh( m_pMesh );
 		m_pMesh.reset();
 	}

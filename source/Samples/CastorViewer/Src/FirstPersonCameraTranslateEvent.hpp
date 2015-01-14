@@ -10,7 +10,6 @@ namespace CastorViewer
 	{
 	public:
 		FirstPersonCameraTranslateEvent( Castor3D::SceneNodeSPtr p_pNode, Castor::real p_rDeltaX, Castor::real p_rDeltaY, Castor::real p_rDeltaZ );
-		FirstPersonCameraTranslateEvent( Castor3D::SceneNode * p_pNode, Castor::real p_rDeltaX, Castor::real p_rDeltaY, Castor::real p_rDeltaZ );
 		virtual ~FirstPersonCameraTranslateEvent();
 
 		virtual bool Apply();
