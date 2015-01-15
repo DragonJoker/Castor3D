@@ -38,7 +38,7 @@ namespace Castor3D
 		friend class PluginBase;
 		friend class Engine;
 
-		typedef RenderSystem * CreateRenderSystemFunction( Engine * p_pEngine, Castor::Logger * p_pLogger );
+		typedef RenderSystem * CreateRenderSystemFunction( Engine * p_pEngine );
 		typedef void DestroyRenderSystemFunction( RenderSystem * p_pRenderSystem );
 		typedef eRENDERER_TYPE GetRendererTypeFunction();
 
@@ -51,11 +51,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_pLibrary	The shared library holding the plugin
+		 *\param[in]	p_engine	The engine
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
+		 *\param[in]	p_engine	Le moteur
 		 */
-		RendererPlugin( Castor::DynamicLibrarySPtr p_pLibrary );
+		RendererPlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -75,7 +77,7 @@ namespace Castor3D
 		 *\param[in]	p_pLogger	L'instance de logger
 		 *\return		L'instance de RenderSystem créée
 		 */
-		RenderSystem * CreateRenderSystem( Engine * p_pEngine, Castor::Logger * p_pLogger );
+		RenderSystem * CreateRenderSystem( Engine * p_pEngine );
 		/**
 		 *\~english
 		 *\brief		Destroys the given RenderSystem

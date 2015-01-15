@@ -14,7 +14,11 @@ namespace Castor3D
 {
 #pragma warning( disable:4290 )
 #if defined( _MSC_VER)
+#	if defined( _UNICODE )
 	static const String GetDividerTypeFunctionABIName		= cuT( "?GetDividerType@@YA?AV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@XZ" );
+#	else
+	static const String GetDividerTypeFunctionABIName		= cuT( "?GetDividerType@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ" );
+#	endif
 	static const String CreateDividerFunctionABIName		= cuT( "?CreateDivider@@YAPAVSubdivider@Castor3D@@XZ" );
 	static const String DestroyDividerFunctionABIName		= cuT( "?DestroyDivider@@YAXPAVSubdivider@Castor3D@@@Z" );
 #elif defined( __GNUG__)
@@ -25,8 +29,8 @@ namespace Castor3D
 #	error "Implement ABI names for this compiler"
 #endif
 
-	DividerPlugin::DividerPlugin( DynamicLibrarySPtr p_pLibrary )
-		:	PluginBase( ePLUGIN_TYPE_DIVIDER, p_pLibrary )
+	DividerPlugin::DividerPlugin( DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
+		:	PluginBase( ePLUGIN_TYPE_DIVIDER, p_pLibrary, p_engine )
 	{
 		if ( !p_pLibrary->GetFunction( m_pfnGetDividerType, GetDividerTypeFunctionABIName ) )
 		{
@@ -48,10 +52,19 @@ namespace Castor3D
 			l_strError += str_utils::to_string( dlerror() );
 			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
 		}
+
+		if ( m_pfnOnLoad )
+		{
+			m_pfnOnLoad( m_engine );
+		}
 	}
 
 	DividerPlugin::~DividerPlugin()
 	{
+		if ( m_pfnOnUnload )
+		{
+			m_pfnOnUnload( m_engine );
+		}
 	}
 
 	Subdivider * DividerPlugin::CreateDivider()

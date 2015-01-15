@@ -33,8 +33,8 @@ namespace Castor3D
 #	error "Implement ABI names for this compiler"
 #endif
 
-	PostFxPlugin::PostFxPlugin( DynamicLibrarySPtr p_pLibrary )
-		:	PluginBase( ePLUGIN_TYPE_POSTFX, p_pLibrary )
+	PostFxPlugin::PostFxPlugin( DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
+		:	PluginBase( ePLUGIN_TYPE_POSTFX, p_pLibrary, p_engine )
 	{
 		if ( !p_pLibrary->GetFunction( m_pfnCreateEffect, CreateEffectFunctionABIName ) )
 		{
@@ -42,10 +42,19 @@ namespace Castor3D
 			l_strError += str_utils::to_string( dlerror() );
 			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
 		}
+
+		if ( m_pfnOnLoad )
+		{
+			m_pfnOnLoad( m_engine );
+		}
 	}
 
 	PostFxPlugin::~PostFxPlugin()
 	{
+		if ( m_pfnOnUnload )
+		{
+			m_pfnOnUnload( m_engine );
+		}
 	}
 
 	PostEffectSPtr PostFxPlugin::CreateEffect( RenderSystem * p_pRenderSystem )

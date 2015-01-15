@@ -35,7 +35,7 @@ using namespace GlRender;
 using namespace Castor3D;
 using namespace Castor;
 
-GlRenderSystem::GlRenderSystem( Engine * p_pEngine, Logger * p_pLogger )
+GlRenderSystem::GlRenderSystem( Engine * p_pEngine )
 	:	RenderSystem( p_pEngine, eRENDERER_TYPE_OPENGL )
 	,	m_iOpenGlMajor( 0	)
 	,	m_iOpenGlMinor( 0	)
@@ -44,20 +44,6 @@ GlRenderSystem::GlRenderSystem( Engine * p_pEngine, Logger * p_pLogger )
 {
 	m_bAccumBuffer = true;
 	m_pPipeline = new GlPipeline( m_gl, this );
-
-	if ( p_pLogger )
-	{
-		Logger::Initialise( p_pLogger );
-	}
-	else
-	{
-#if defined( NDEBUG )
-		Logger::Initialise( eLOG_TYPE_MESSAGE );
-#else
-		Logger::Initialise( eLOG_TYPE_DEBUG );
-#endif
-		Logger::SetFileName( File::DirectoryGetCurrent() / cuT( "GlRenderSystem.log" ) );
-	}
 
 	Logger::LogMessage( cuT( "GlRenderSystem::GlRenderSystem" ) );
 	m_setAvailableIndexes.insert( GL_LIGHT0 );

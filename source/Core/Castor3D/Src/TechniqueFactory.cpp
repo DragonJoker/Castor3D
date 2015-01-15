@@ -1,9 +1,6 @@
 ﻿#include "TechniqueFactory.hpp"
 
-#include "DeferredShadingRenderTechnique.hpp"
 #include "DirectRenderTechnique.hpp"
-#include "MsaaRenderTechnique.hpp"
-#include "SsaaRenderTechnique.hpp"
 
 using namespace Castor;
 
@@ -21,9 +18,6 @@ namespace Castor3D
 
 	void TechniqueFactory::Initialise()
 	{
-		Register( cuT( "deferred" ), &DeferredShadingRenderTechnique::CreateInstance );
 		Register( cuT( "direct" ), &DirectRenderTechnique::CreateInstance );
-		Register( cuT( "msaa" ), &MsaaRenderTechnique::CreateInstance );
-		Register( cuT( "ssaa" ), &SsaaRenderTechnique::CreateInstance );
 	}
 }

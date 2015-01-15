@@ -1221,6 +1221,9 @@ namespace Castor3D
 		void DoUpdate( bool p_bForce );
 		void DoLock();
 		void DoUnlock();
+		PluginBaseSPtr LoadRendererPlugin( Castor::DynamicLibrarySPtr p_pLibrary );
+		PluginBaseSPtr LoadProgramPlugin( Castor::DynamicLibrarySPtr p_pLibrary );
+		PluginBaseSPtr LoadTechniquePlugin( Castor::DynamicLibrarySPtr p_pLibrary );
 		PluginBaseSPtr InternalLoadPlugin( Castor::Path const & p_pathFile );
 		void DoRenderOneFrame();
 		void DoRenderFlushFrame();

@@ -22,8 +22,8 @@ namespace Castor3D
 #	error "Implement ABI names for this compiler"
 #endif
 
-	GeneratorPlugin::GeneratorPlugin( DynamicLibrarySPtr p_pLibrary )
-		:	PluginBase( ePLUGIN_TYPE_DIVIDER, p_pLibrary )
+	GeneratorPlugin::GeneratorPlugin( DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
+		:	PluginBase( ePLUGIN_TYPE_DIVIDER, p_pLibrary, p_engine )
 	{
 		if ( !p_pLibrary->GetFunction( m_pfnCreateGenerator, CreateGeneratorFunctionABIName ) )
 		{
@@ -38,10 +38,19 @@ namespace Castor3D
 			l_strError += str_utils::to_string( dlerror() );
 			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
 		}
+
+		if ( m_pfnOnLoad )
+		{
+			m_pfnOnLoad( m_engine );
+		}
 	}
 
 	GeneratorPlugin::~GeneratorPlugin()
 	{
+		if ( m_pfnOnUnload )
+		{
+			m_pfnOnUnload( m_engine );
+		}
 	}
 
 	Subdivider * GeneratorPlugin::CreateGenerator( TextureUnit * p_pTexture )

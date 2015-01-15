@@ -82,6 +82,23 @@ namespace Castor
 		{
 			m_registered.insert( std::make_pair( p_key, p_creator ) );
 		}
+		/**
+		 *\~english
+		 *\brief		Unregisters an object type
+		 *\param[in]	p_key		The object type
+		 *\~french
+		 *\brief		Désenregistre un type d'objet
+		 *\param[in]	p_key		Le type d'objet
+		 */
+		void Unregister( Key const & p_key )
+		{
+			typename ObjMap::iterator l_it = m_registered.find( p_key );
+
+			if ( l_it != m_registered.end() )
+			{
+				m_registered.erase( p_key );
+			}
+		}
 #if CASTOR_HAS_VARIADIC_TEMPLATES
 		/**
 		 *\~english

@@ -39,6 +39,10 @@ namespace Castor3D
 		: public Castor::NonCopyable
 	{
 	private:
+		//!< Signature for the plugin's loading function
+		typedef void OnLoadFunction( Engine * );
+		//!< Signature for the plugin's unloading function
+		typedef void OnUnloadFunction( Engine * );
 		//!< Signature for the plugin's type retrieval function
 		typedef ePLUGIN_TYPE GetTypeFunction();
 		//!< Signature for the plugin's version checking function
@@ -47,6 +51,8 @@ namespace Castor3D
 		typedef Castor::String GetNameFunction();
 
 	public:
+		typedef OnLoadFunction * POnLoadFunction;
+		typedef OnUnloadFunction * POnUnloadFunction;
 		typedef GetTypeFunction * PGetTypeFunction;
 		typedef GetRequiredVersionFunction * PGetRequiredVersionFunction;
 		typedef GetNameFunction * PGetNameFunction;
@@ -57,12 +63,14 @@ namespace Castor3D
 		 *\brief		Constructor
 		 *\param[in]	p_eType		The plugin type
 		 *\param[in]	p_pLibrary	The shared library holding the plugin
+		 *\param[in]	p_engine	The engine
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_eType		Le type du plugin
 		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
+		 *\param[in]	p_engine	Le moteur
 		 */
-		PluginBase( ePLUGIN_TYPE p_eType, Castor::DynamicLibrarySPtr p_pLibrary );
+		PluginBase( ePLUGIN_TYPE p_eType, Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
 
 	public:
 		/**
@@ -104,12 +112,18 @@ namespace Castor3D
 		}
 
 	protected:
-		//!< The plugin's version checking function
+		//!\~english The plugin's version checking function	\~french La fonction de récupération de la version requise
 		PGetRequiredVersionFunction m_pfnGetRequiredVersion;
-		//!< The plugin's name retrieval function
+		//!\~english The plugin's name retrieval function	\~french La fonction de récupération du nom du plugin
 		PGetNameFunction m_pfnGetName;
-		//!< The plugin type
+		//!\~english The plugin's loading function	\~french La fonction de chargement du plugin
+		POnLoadFunction m_pfnOnLoad;
+		//!\~english The plugin's unloading function	\~french La fonction de déchargement du plugin
+		POnUnloadFunction m_pfnOnUnload;
+		//!\~english The plugin type	\~french Le type du plugin
 		ePLUGIN_TYPE m_eType;
+		//!\~english The engine	\~french Le moteur
+		Engine * m_engine;
 	};
 }
 

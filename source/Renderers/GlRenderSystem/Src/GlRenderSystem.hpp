@@ -35,7 +35,7 @@ namespace GlRender
 		typedef LightRendererPtrSet::const_iterator const_iterator;
 
 	public:
-		GlRenderSystem( Castor3D::Engine * p_pEngine, Castor::Logger * p_pLogger );
+		GlRenderSystem( Castor3D::Engine * p_pEngine );
 		virtual ~GlRenderSystem();
 
 		virtual void Initialise( Castor::String const & p_strExtensions );

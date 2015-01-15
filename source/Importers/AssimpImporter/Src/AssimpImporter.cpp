@@ -2,6 +2,7 @@
 
 #include <InitialiseEvent.hpp>
 #include <ImporterPlugin.hpp>
+#include <MaterialManager.hpp>
 #include <Bone.hpp>
 
 using namespace Castor3D;
@@ -167,7 +168,6 @@ C3D_Assimp_API ImporterPlugin::ExtensionArray GetExtensions()
 
 C3D_Assimp_API void Create( Engine * p_pEngine, ImporterPlugin * p_pPlugin )
 {
-	Logger::Initialise( p_pEngine->GetLoggerInstance() );
 	ImporterSPtr l_pImporter = std::make_shared< AssimpImporter >( p_pEngine );
 	p_pPlugin->AttachImporter( l_pImporter );
 }
@@ -175,7 +175,16 @@ C3D_Assimp_API void Create( Engine * p_pEngine, ImporterPlugin * p_pPlugin )
 C3D_Assimp_API void Destroy( ImporterPlugin * p_pPlugin )
 {
 	p_pPlugin->DetachImporter();
-	Logger::Cleanup();
+}
+
+C3D_Assimp_API void OnLoad( Castor3D::Engine * p_engine )
+{
+	Castor::Logger::Initialise( p_engine->GetLoggerInstance() );
+}
+
+C3D_Assimp_API void OnUnload( Castor3D::Engine * p_engine )
+{
+	Castor::Logger::Cleanup();
 }
 
 //*************************************************************************************************

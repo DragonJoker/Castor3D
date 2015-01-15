@@ -36,20 +36,19 @@ namespace Castor3D
 	{
 	private:
 		friend class PluginBase;
-		typedef RenderTechniqueBaseSPtr	CreateTechniqueFunction( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params );
-
-		typedef CreateTechniqueFunction * PCreateTechniqueFunction;
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_pLibrary	The shared library holding the plugin
+		 *\param[in]	p_engine	The engine
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
+		 *\param[in]	p_engine	Le moteur
 		 */
-		TechniquePlugin( Castor::DynamicLibrarySPtr p_pLibrary );
+		TechniquePlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -57,24 +56,6 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		virtual ~TechniquePlugin();
-		/**
-		 *\~english
-		 *\brief		Creates a RenderTechnique object
-		 *\param[in]	p_renderTarget	The render target for this technique
-		 *\param[in]	p_pRenderSystem	The render system
-		 *\param[in]	p_params		The technique parameters
-		 *\return		The created RenderTechnique instance
-		 *\~french
-		 *\brief		Crée un objet RenderTechnique
-		 *\param[in]	p_renderTarget	La render target pour cette technique
-		 *\param[in]	p_pRenderSystem	Le render system
-		 *\param[in]	p_params		Les paramètres de la technique
-		 *\return		L'instance de RenderTechnique créée
-		 */
-		RenderTechniqueBaseSPtr CreateTechnique( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params );
-
-	private:
-		PCreateTechniqueFunction m_pfnCreateTechnique;
 	};
 }
 

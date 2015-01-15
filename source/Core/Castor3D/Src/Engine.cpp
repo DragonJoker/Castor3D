@@ -27,6 +27,7 @@
 #include "LightFactory.hpp"
 #include "OverlayFactory.hpp"
 #include "TechniqueFactory.hpp"
+#include "TechniquePlugin.hpp"
 #include "TextOverlay.hpp"
 #include "VersionException.hpp"
 
@@ -222,6 +223,7 @@ namespace Castor3D
 		{
 			m_mutexRenderers.lock();
 			RendererPluginSPtr l_pPlugin = m_arrayRenderers[m_pRenderSystem->GetRendererType()];
+			m_arrayRenderers[m_pRenderSystem->GetRendererType()].reset();
 			m_mutexRenderers.unlock();
 
 			if ( l_pPlugin )
@@ -732,7 +734,7 @@ namespace Castor3D
 
 		if ( l_pPlugin )
 		{
-			m_pRenderSystem = l_pPlugin->CreateRenderSystem( this, Logger::GetSingletonPtr() );
+			m_pRenderSystem = l_pPlugin->CreateRenderSystem( this );
 			m_pDefaultBlendState = CreateBlendState( cuT( "Default" ) );
 			m_pDefaultSampler = CreateSampler( cuT( "Default" ) );
 			m_pDefaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
@@ -804,6 +806,52 @@ namespace Castor3D
 		return l_pathReturn;
 	}
 
+	PluginBaseSPtr Engine::LoadRendererPlugin( DynamicLibrarySPtr p_pLibrary )
+	{
+		RendererPluginSPtr l_pRenderer = std::make_shared< RendererPlugin >( p_pLibrary, this );
+		PluginBaseSPtr l_pReturn = std::static_pointer_cast<PluginBase, RendererPlugin>( l_pRenderer );
+		eRENDERER_TYPE l_eRendererType = l_pRenderer->GetRendererType();
+
+		if ( l_eRendererType == eRENDERER_TYPE_UNDEFINED )
+		{
+			l_pReturn.reset();
+		}
+		else
+		{
+			m_mutexRenderers.lock();
+			m_arrayRenderers[l_eRendererType] = l_pRenderer;
+			m_mutexRenderers.unlock();
+		}
+
+		return l_pReturn;
+	}
+
+	PluginBaseSPtr Engine::LoadProgramPlugin( DynamicLibrarySPtr p_pLibrary )
+	{
+		ShaderPluginSPtr l_pShader = std::make_shared< ShaderPlugin >( p_pLibrary, this );
+		PluginBaseSPtr l_pReturn = std::static_pointer_cast< PluginBase, ShaderPlugin >( l_pShader );
+		eSHADER_LANGUAGE l_eLanguage = l_pShader->GetShaderLanguage();
+		m_mutexShaderPlugins.lock();
+		ShaderPluginMap::iterator l_it = m_mapShaderPlugins.find( l_eLanguage );
+
+		if ( l_it == m_mapShaderPlugins.end() )
+		{
+			m_mapShaderPlugins.insert( std::make_pair( l_eLanguage, l_pShader ) );
+		}
+		else
+		{
+			l_pReturn.reset();
+		}
+
+		m_mutexShaderPlugins.unlock();
+		return l_pReturn;
+	}
+
+	PluginBaseSPtr Engine::LoadTechniquePlugin( DynamicLibrarySPtr p_pLibrary )
+	{
+		return std::make_shared< TechniquePlugin >( p_pLibrary, this );
+	}
+
 	PluginBaseSPtr Engine::InternalLoadPlugin( Path const & p_pathFile )
 	{
 		PluginBaseSPtr l_pReturn;
@@ -839,50 +887,28 @@ namespace Castor3D
 				switch ( l_eType )
 				{
 				case ePLUGIN_TYPE_DIVIDER:
-					l_pReturn = std::make_shared< DividerPlugin >( l_pLibrary );
+					l_pReturn = std::make_shared< DividerPlugin >( l_pLibrary, this );
 					break;
 
 				case ePLUGIN_TYPE_IMPORTER:
-					l_pReturn = std::make_shared< ImporterPlugin >( this, l_pLibrary );
+					l_pReturn = std::make_shared< ImporterPlugin >( l_pLibrary, this );
 					break;
 
 				case ePLUGIN_TYPE_RENDERER:
 				{
-					RendererPluginSPtr l_pRenderer = std::make_shared< RendererPlugin >( l_pLibrary );
-					l_pReturn = std::static_pointer_cast<PluginBase, RendererPlugin>( l_pRenderer );
-					eRENDERER_TYPE l_eRendererType = l_pRenderer->GetRendererType();
-
-					if ( l_eRendererType == eRENDERER_TYPE_UNDEFINED )
-					{
-						l_pReturn.reset();
-					}
-					else
-					{
-						m_mutexRenderers.lock();
-						m_arrayRenderers[l_eRendererType] = l_pRenderer;
-						m_mutexRenderers.unlock();
-					}
+					l_pReturn = LoadRendererPlugin( l_pLibrary );
 				}
 				break;
 
 				case ePLUGIN_TYPE_PROGRAM:
 				{
-					ShaderPluginSPtr l_pShader = std::make_shared< ShaderPlugin >( l_pLibrary );
-					l_pReturn = std::static_pointer_cast< PluginBase, ShaderPlugin >( l_pShader );
-					eSHADER_LANGUAGE l_eLanguage = l_pShader->GetShaderLanguage();
-					m_mutexShaderPlugins.lock();
-					ShaderPluginMap::iterator l_it = m_mapShaderPlugins.find( l_eLanguage );
+					l_pReturn = LoadProgramPlugin( l_pLibrary );
+				}
+				break;
 
-					if ( l_it == m_mapShaderPlugins.end() )
-					{
-						m_mapShaderPlugins.insert( std::make_pair( l_eLanguage, l_pShader ) );
-					}
-					else
-					{
-						l_pReturn.reset();
-					}
-
-					m_mutexShaderPlugins.unlock();
+				case ePLUGIN_TYPE_TECHNIQUE:
+				{
+					l_pReturn = LoadTechniquePlugin( l_pLibrary );
 				}
 				break;
 

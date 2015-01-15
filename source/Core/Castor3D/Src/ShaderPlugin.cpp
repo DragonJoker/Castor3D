@@ -41,8 +41,8 @@ namespace Castor3D
 #	error "Implement ABI names for this compiler"
 #endif
 
-	ShaderPlugin::ShaderPlugin( DynamicLibrarySPtr p_pLibrary )
-		:	PluginBase( ePLUGIN_TYPE_PROGRAM, p_pLibrary )
+	ShaderPlugin::ShaderPlugin( DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
+		:	PluginBase( ePLUGIN_TYPE_PROGRAM, p_pLibrary, p_engine )
 	{
 		if ( !p_pLibrary->GetFunction( m_pfnGetShaderLanguage, GetShaderLanguageFunctionABIName ) )
 		{
@@ -71,10 +71,19 @@ namespace Castor3D
 			l_strError += str_utils::to_string( dlerror() );
 			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
 		}
+
+		if ( m_pfnOnLoad )
+		{
+			m_pfnOnLoad( m_engine );
+		}
 	}
 
 	ShaderPlugin::~ShaderPlugin()
 	{
+		if ( m_pfnOnUnload )
+		{
+			m_pfnOnUnload( m_engine );
+		}
 	}
 
 	ShaderProgramBaseSPtr ShaderPlugin::CreateShader( RenderSystem * p_pRenderSystem )

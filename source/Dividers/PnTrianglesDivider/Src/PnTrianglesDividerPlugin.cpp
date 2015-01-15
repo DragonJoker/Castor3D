@@ -1,5 +1,8 @@
 #include "PnTrianglesDivider.hpp"
 
+#include <Engine.hpp>
+#include <Logger.hpp>
+
 using namespace Castor;
 using namespace PnTriangles;
 
@@ -32,4 +35,14 @@ C3D_PnTriangles_API void DestroyDivider( Castor3D::Subdivider * p_pDivider )
 C3D_PnTriangles_API String GetDividerType()
 {
 	return cuT( "pn_tri" );
+}
+
+C3D_PnTriangles_API void OnLoad( Castor3D::Engine * p_engine )
+{
+	Castor::Logger::Initialise( p_engine->GetLoggerInstance() );
+}
+
+C3D_PnTriangles_API void OnUnload( Castor3D::Engine * p_engine )
+{
+	Castor::Logger::Cleanup();
 }

@@ -30,8 +30,8 @@ namespace Castor3D
 #	error "Implement ABI names for this compiler"
 #endif
 
-	ImporterPlugin::ImporterPlugin( Engine * p_pEngine, DynamicLibrarySPtr p_pLibrary )
-		:	PluginBase( ePLUGIN_TYPE_IMPORTER, p_pLibrary )
+	ImporterPlugin::ImporterPlugin( DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
+		:	PluginBase( ePLUGIN_TYPE_IMPORTER, p_pLibrary, p_engine )
 	{
 		if ( !p_pLibrary->GetFunction( m_pfnCreateImporter, CreateImporterFunctionABIName ) )
 		{
@@ -54,12 +54,22 @@ namespace Castor3D
 			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
 		}
 
-		m_pfnCreateImporter( p_pEngine, this );
+		if ( m_pfnOnLoad )
+		{
+			m_pfnOnLoad( m_engine );
+		}
+
+		m_pfnCreateImporter( p_engine, this );
 	}
 
 	ImporterPlugin::~ImporterPlugin()
 	{
 		m_pfnDestroyImporter( this );
+
+		if ( m_pfnOnUnload )
+		{
+			m_pfnOnUnload( m_engine );
+		}
 	}
 
 	ImporterPlugin::ExtensionArray ImporterPlugin::GetExtensions()
