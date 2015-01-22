@@ -2172,6 +2172,40 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassHlShader )
 }
 END_ATTRIBUTE_PUSH( eSECTION_HLSL_SHADER )
 
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassAlphaBlendMode )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
+
+	if ( l_pContext->uiPass >= 0 )
+	{
+		uint32_t l_mode = 0;
+		p_arrayParams[0]->Get( l_mode );
+		l_pContext->pMaterial->GetPass( l_pContext->uiPass )->SetAlphaBlendMode( eBLEND_MODE( l_mode ) );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <pass::alpha_blend_mode> : Pass not initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassColourBlendMode )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
+
+	if ( l_pContext->uiPass >= 0 )
+	{
+		uint32_t l_mode = 0;
+		p_arrayParams[0]->Get( l_mode );
+		l_pContext->pMaterial->GetPass( l_pContext->uiPass )->SetColourBlendMode( eBLEND_MODE( l_mode ) );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <pass::colour_blend_mode> : Pass not initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitImage )
 {
 	SceneFileContextSPtr	l_pContext		= std::static_pointer_cast< SceneFileContext >( p_pContext );

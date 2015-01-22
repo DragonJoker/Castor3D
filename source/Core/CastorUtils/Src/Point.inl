@@ -1167,6 +1167,12 @@ namespace Castor
 	}
 
 	template< typename T, uint32_t Count >
+	Point< T, Count >::Point( Point< T, Count > const & p_pt )
+	{
+		std::memcpy( m_coords, p_pt.m_coords, binary_size );
+	}
+
+	template< typename T, uint32_t Count >
 	Point< T, Count >::Point( Point< T, Count > && p_pt )
 	{
 		std::memcpy( m_coords, p_pt.m_coords, binary_size );

@@ -74,7 +74,7 @@ namespace Castor3D
 	\brief		Videur de chunk
 	*/
 	template< typename T > struct C3D_API ChunkParser
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\~english
@@ -132,7 +132,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::String >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -160,7 +160,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Path >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -188,7 +188,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Point2f >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -202,7 +202,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Point3f >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -216,7 +216,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Point4f >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -230,7 +230,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Point2d >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -244,7 +244,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Point3d >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -258,7 +258,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Point4d >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -272,7 +272,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Point2i >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -286,7 +286,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Point3i >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -300,7 +300,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Point4i >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -314,7 +314,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Point2ui >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -328,7 +328,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Point3ui >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -342,7 +342,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Point4ui >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -356,7 +356,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Coords2f >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -370,7 +370,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Coords3f >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -384,7 +384,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Coords4f >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -398,7 +398,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Coords2d >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -412,7 +412,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Coords3d >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -426,7 +426,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Coords4d >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -440,7 +440,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Coords2i >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -454,7 +454,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Coords3i >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -468,7 +468,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Coords4i >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -482,7 +482,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Coords2ui >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -496,7 +496,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Coords3ui >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -510,7 +510,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Coords4ui >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -524,7 +524,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Matrix2x2f >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -538,7 +538,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Matrix3x3f >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -552,7 +552,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Matrix4x4f >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -566,7 +566,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Matrix2x2d >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -580,7 +580,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Matrix3x3d >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -594,7 +594,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Matrix4x4d >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -608,7 +608,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Colour >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -622,7 +622,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Size >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -636,7 +636,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkParser
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Position >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
@@ -650,7 +650,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkParser< Castor::Quaternion >
-			:	public ChunkParserBase
+		:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()

@@ -243,6 +243,10 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser,  TextFile * p_p
 	m_mapBorderPositions[cuT( "internal" )] = eBORDER_POSITION_INTERNAL;
 	m_mapBorderPositions[cuT( "middle" )] = eBORDER_POSITION_MIDDLE;
 	m_mapBorderPositions[cuT( "external" )] = eBORDER_POSITION_EXTERNAL;
+
+	m_mapBlendModes[cuT( "none" )] = eBLEND_MODE_NONE;
+	m_mapBlendModes[cuT( "additive" )] = eBLEND_MODE_ADDITIVE;
+	m_mapBlendModes[cuT( "multiplicative" )] = eBLEND_MODE_MULTIPLICATIVE;
 }
 
 void SceneFileContext::Initialise()
@@ -463,6 +467,8 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_PASS, cuT( "texture_unit" ), Parser_PassTextureUnit );
 	AddParser( eSECTION_PASS, cuT( "gl_shader_program" ), Parser_PassGlShader );
 	AddParser( eSECTION_PASS, cuT( "hl_shader_program" ), Parser_PassHlShader );
+	AddParser(	eSECTION_PASS, cuT( "alpha_blend_mode" ), Parser_PassAlphaBlendMode, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapBlendModes );
+	AddParser(	eSECTION_PASS, cuT( "colour_blend_mode" ), Parser_PassColourBlendMode, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapBlendModes );
 
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "image" ), Parser_UnitImage, 1, ePARAMETER_TYPE_PATH );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "render_target" ), Parser_UnitRenderTarget );

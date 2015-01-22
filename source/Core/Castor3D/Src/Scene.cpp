@@ -485,6 +485,7 @@ namespace Castor3D
 		ClearScene();
 		DoRemoveAll( m_addedCameras, m_arrayCamerasToDelete );
 		DoRemoveAll( m_addedNodes, m_arrayNodesToDelete );
+		m_alphaDepthState.reset();
 		m_arrayCamerasToDelete.clear();
 		m_arrayNodesToDelete.clear();
 		m_rootNode.reset();
@@ -497,9 +498,12 @@ namespace Castor3D
 		m_rootNode = std::make_shared< SceneNode >( shared_from_this(), cuT( "RootNode" ) );
 		m_rootCameraNode = std::make_shared< SceneNode >( shared_from_this(), cuT( "CameraRootNode" ) );
 		m_rootObjectNode = std::make_shared< SceneNode >( shared_from_this(), cuT( "ObjectRootNode" ) );
+		m_alphaDepthState = m_pEngine->CreateDepthStencilState( m_strName + cuT( "_AlphaDepthState" ) );
 		m_rootCameraNode->AttachTo( m_rootNode );
 		m_rootObjectNode->AttachTo( m_rootNode );
 		m_addedNodes.insert( std::make_pair( cuT( "ObjectRootNode" ), m_rootObjectNode ) );
+
+		m_alphaDepthState.lock()->SetDepthMask( eWRITING_MASK_ZERO );
 	}
 
 	void Scene::ClearScene()
@@ -511,6 +515,13 @@ namespace Castor3D
 		DoRemoveAll( m_addedLights, m_arrayLightsToDelete );
 		DoRemoveAll( m_addedPrimitives, m_arrayPrimitivesToDelete );
 		DoRemoveAll( m_mapBillboardsLists, m_arrayBillboardsToDelete );
+
+		DepthStencilStateSPtr state = m_alphaDepthState.lock();
+
+		if ( state )
+		{
+			state->Cleanup();
+		}
 
 		if ( m_pBackgroundImage )
 		{
@@ -577,7 +588,7 @@ namespace Castor3D
 				}
 			}
 
-			if ( !m_mapSubmeshesAlpha.empty() || !m_mapSubmeshesAlphaSorted.empty() || !m_arraySubmeshesAlpha.empty() )
+			if ( !m_mapSubmeshesAlpha.empty() || !m_arraySubmeshesAlpha.empty() )
 			{
 				if ( l_pContext->IsMultiSampling() )
 				{
@@ -598,6 +609,13 @@ namespace Castor3D
 				}
 				else
 				{
+					DepthStencilStateSPtr state = m_alphaDepthState.lock();
+
+					if ( state )
+					{
+						state->Apply();
+					}
+
 					DoResortAlpha( p_camera, m_arraySubmeshesAlpha.begin(), m_arraySubmeshesAlpha.end(), m_mapSubmeshesAlphaSorted, 1 );
 					l_pContext->CullFace( eFACE_FRONT );
 					DoRenderAlphaSortedSubmeshes( *l_pPipeline, p_eTopology, m_mapSubmeshesAlphaSorted.begin(), m_mapSubmeshesAlphaSorted.end() );
@@ -672,6 +690,13 @@ namespace Castor3D
 		String l_strToLog = cuT( "Scene::CreateList - [" ) + m_strName + cuT( "] - NbVertex : %d - NbFaces : %d" );
 		Logger::LogMessage( l_strToLog.c_str(), m_nbVertex, m_nbFaces );
 		DoSortByAlpha();
+		DepthStencilStateSPtr state = m_alphaDepthState.lock();
+
+		if ( state )
+		{
+			state->Initialise();
+		}
+
 		m_changed = false;
 	}
 

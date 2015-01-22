@@ -125,7 +125,7 @@ namespace Castor
 		}
 
 		struct SFreeTypeFontImpl
-				: public Font::SFontImpl
+			: public Font::SFontImpl
 		{
 			SFreeTypeFontImpl( Path const & p_pathFile, uint32_t p_height )
 				: m_height( p_height )

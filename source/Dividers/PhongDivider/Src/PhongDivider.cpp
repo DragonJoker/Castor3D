@@ -70,7 +70,7 @@ namespace Phong
 
 		m_submesh->ClearFaces();
 		std::map< uint32_t, Castor::PlaneEquation< double > > l_posnml;
-		size_t i = 0;
+		uint32_t i = 0;
 
 		for ( VertexPtrArrayConstIt l_it = m_submesh->VerticesBegin(); l_it != m_submesh->VerticesEnd(); ++l_it )
 		{

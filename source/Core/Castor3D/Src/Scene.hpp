@@ -1254,6 +1254,8 @@ namespace Castor3D
 		BillboardListArray m_arrayBillboardsToDelete;
 		//!\~english The background image	\~french L'image de fond
 		TextureBaseSPtr m_pBackgroundImage;
+		//!\~english The DepthStencilState for alpha render	\~french Le DepthStencilState utilisé pour le rendu de la transparence
+		DepthStencilStateWPtr m_alphaDepthState;
 	};
 }
 

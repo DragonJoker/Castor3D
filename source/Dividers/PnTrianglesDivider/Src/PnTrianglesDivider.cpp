@@ -78,7 +78,7 @@ namespace PnTriangles
 
 		m_submesh->ClearFaces();
 		std::map< uint32_t, Castor::PlaneEquation< double > > l_posnml;
-		size_t i = 0;
+		uint32_t i = 0;
 
 		for ( VertexPtrArrayConstIt l_it = m_submesh->VerticesBegin(); l_it != m_submesh->VerticesEnd(); ++l_it )
 		{
@@ -132,7 +132,7 @@ namespace PnTriangles
 		double v3 = double( v2 * v );
 		double w3 = double( w2 * w );
 
-		Point3r l_point = p_patch.b300 * w3
+		Point3r l_point = Point3r( p_patch.b300 * w3
 			+ p_patch.b030 * u3
 			+ p_patch.b003 * v3
 			+ p_patch.b210 * 3.0 * w2 * u
@@ -141,7 +141,7 @@ namespace PnTriangles
 			+ p_patch.b021 * 3.0 * u2 * v
 			+ p_patch.b102 * 3.0 * w * v2
 			+ p_patch.b012 * 3.0 * u * v2
-			+ p_patch.b111 * 6.0 * w * u * v;
+			+ p_patch.b111 * 6.0 * w * u * v );
 
 		return DoTryAddPoint( l_point );
 	}

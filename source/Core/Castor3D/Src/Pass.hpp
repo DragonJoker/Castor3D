@@ -411,6 +411,30 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Sets the alpha blend mode
+		 *\param[in]	p_value	The value
+		 *\~french
+		 *\brief		Définit le mode de mélange alpha
+		 *\param[in]	p_value	La valeur
+		 */
+		inline void SetAlphaBlendMode( eBLEND_MODE p_value )
+		{
+			m_alphaBlendMode = p_value;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the colour blend mode
+		 *\param[in]	p_value	The value
+		 *\~french
+		 *\brief		Définit le mode de mélange couleur
+		 *\param[in]	p_value	La valeur
+		 */
+		inline void SetColourBlendMode( eBLEND_MODE p_value )
+		{
+			m_colourBlendMode = p_value;
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the blend state
 		 *\return		The value
 		 *\~french
@@ -479,6 +503,30 @@ namespace Castor3D
 		inline float GetAlpha()const
 		{
 			return m_fAlpha;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the alpha blend mode
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le mode de mélange alpha
+		 *\return		La valeur
+		 */
+		inline eBLEND_MODE GetAlphaBlendMode()const
+		{
+			return m_alphaBlendMode;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the colour blend mode
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le mode de mélange couleur
+		 *\return		La valeur
+		 */
+		inline eBLEND_MODE GetColourBlendMode()const
+		{
+			return m_colourBlendMode;
 		}
 		/**
 		 *\~english
@@ -705,6 +753,10 @@ namespace Castor3D
 		uint32_t m_uiTextureFlags;
 		//!\~english Tells the pass shader is an automatically generated one	\~french Dit que le shader de la passe a été généré automatiquement
 		bool m_bAutomaticShader;
+		//!\~english The alpha blend mode \~french Le mode de mélange alpha
+		eBLEND_MODE m_alphaBlendMode;
+		//!\~english The colour blend mode \~french Le mode de mélange couleur
+		eBLEND_MODE m_colourBlendMode;
 	};
 }
 

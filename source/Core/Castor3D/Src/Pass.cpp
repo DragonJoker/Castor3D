@@ -353,18 +353,20 @@ namespace Castor3D
 	//*********************************************************************************************
 
 	Pass::Pass( Engine * p_pEngine, MaterialSPtr p_parent )
-		:	Renderable< Pass, PassRenderer >( p_pEngine )
-		,	m_fShininess( 50.0 )
-		,	m_bDoubleFace( false )
-		,	m_pParent( p_parent )
-		,	m_clrDiffuse( Colour::from_rgba( 0xFFFFFFFF ) )
-		,	m_clrAmbient( Colour::from_rgba( 0x000000FF ) )
-		,	m_clrSpecular( Colour::from_rgba( 0xFFFFFFFF ) )
-		,	m_clrEmissive( Colour::from_rgba( 0x000000FF ) )
-		,	m_fAlpha( 1.0f )
-		,	m_pBlendState( p_pEngine->GetRenderSystem()->CreateBlendState() )
-		,	m_uiTextureFlags( 0 )
-		,	m_bAutomaticShader( true )
+		: Renderable< Pass, PassRenderer >( p_pEngine )
+		, m_fShininess( 50.0 )
+		, m_bDoubleFace( false )
+		, m_pParent( p_parent )
+		, m_clrDiffuse( Colour::from_rgba( 0xFFFFFFFF ) )
+		, m_clrAmbient( Colour::from_rgba( 0x000000FF ) )
+		, m_clrSpecular( Colour::from_rgba( 0xFFFFFFFF ) )
+		, m_clrEmissive( Colour::from_rgba( 0x000000FF ) )
+		, m_fAlpha( 1.0f )
+		, m_pBlendState( p_pEngine->GetRenderSystem()->CreateBlendState() )
+		, m_uiTextureFlags( 0 )
+		, m_bAutomaticShader( true )
+		, m_alphaBlendMode( eBLEND_MODE_ADDITIVE )
+		, m_colourBlendMode( eBLEND_MODE_ADDITIVE )
 	{
 		if ( TEXTURE_CHANNEL_NAME.empty() )
 		{
@@ -426,9 +428,9 @@ namespace Castor3D
 		l_pGlossMap		= GetTextureUnit( eTEXTURE_CHANNEL_GLOSS );
 		l_pHeightMap	= GetTextureUnit( eTEXTURE_CHANNEL_HEIGHT );
 
-		l_bHasAlpha = DoPrepareTexture( eTEXTURE_CHANNEL_AMBIENT, l_pAmbientMap, l_uiIndex, l_pOpaSrc, l_pImageOpa );
-		l_bHasAlpha = DoPrepareTexture( eTEXTURE_CHANNEL_COLOUR, l_pColourMap, l_uiIndex, l_pOpaSrc, l_pImageOpa );
-		l_bHasAlpha = DoPrepareTexture( eTEXTURE_CHANNEL_DIFFUSE, l_pDiffuseMap, l_uiIndex, l_pOpaSrc, l_pImageOpa );
+		l_bHasAlpha |= DoPrepareTexture( eTEXTURE_CHANNEL_AMBIENT, l_pAmbientMap, l_uiIndex, l_pOpaSrc, l_pImageOpa );
+		l_bHasAlpha |= DoPrepareTexture( eTEXTURE_CHANNEL_COLOUR, l_pColourMap, l_uiIndex, l_pOpaSrc, l_pImageOpa );
+		l_bHasAlpha |= DoPrepareTexture( eTEXTURE_CHANNEL_DIFFUSE, l_pDiffuseMap, l_uiIndex, l_pOpaSrc, l_pImageOpa );
 
 		DoPrepareTexture( eTEXTURE_CHANNEL_NORMAL, l_pNormalMap, l_uiIndex );
 		DoPrepareTexture( eTEXTURE_CHANNEL_SPECULAR, l_pSpecularMap, l_uiIndex );
@@ -469,14 +471,37 @@ namespace Castor3D
 		if ( l_bHasAlpha && !m_pBlendState->IsBlendEnabled() )
 		{
 			m_pBlendState->EnableBlend( true );
-			m_pBlendState->SetRgbSrcBlend( eBLEND_SRC_ALPHA );
-			m_pBlendState->SetRgbDstBlend( eBLEND_INV_SRC_ALPHA );
-			m_pBlendState->SetAlphaSrcBlend( eBLEND_SRC_ALPHA );
-			m_pBlendState->SetAlphaDstBlend( eBLEND_INV_SRC_ALPHA );
 
 			if ( m_pEngine->GetRenderSystem()->GetCurrentContext()->IsMultiSampling() )
 			{
 				m_pBlendState->EnableAlphaToCoverage( true );
+				m_pBlendState->SetAlphaSrcBlend( eBLEND_SRC_ALPHA );
+				m_pBlendState->SetAlphaDstBlend( eBLEND_INV_SRC_ALPHA );
+				m_pBlendState->SetRgbSrcBlend( eBLEND_SRC_ALPHA );
+				m_pBlendState->SetRgbDstBlend( eBLEND_INV_SRC_ALPHA );
+			}
+			else
+			{
+				switch ( m_alphaBlendMode )
+				{
+				case eBLEND_MODE_ADDITIVE:
+					m_pBlendState->SetAlphaSrcBlend( eBLEND_ONE );
+					m_pBlendState->SetAlphaDstBlend( eBLEND_ONE );
+					break;
+
+				case eBLEND_MODE_MULTIPLICATIVE:
+					m_pBlendState->SetAlphaSrcBlend( eBLEND_ZERO );
+					m_pBlendState->SetAlphaDstBlend( eBLEND_SRC_COLOUR );
+					break;
+
+				default:
+					m_pBlendState->SetAlphaSrcBlend( eBLEND_SRC_ALPHA );
+					m_pBlendState->SetAlphaDstBlend( eBLEND_INV_SRC_ALPHA );
+					break;
+				}
+
+				m_pBlendState->SetRgbSrcBlend( eBLEND_SRC_ALPHA );
+				m_pBlendState->SetRgbDstBlend( eBLEND_INV_SRC_ALPHA );
 			}
 		}
 

@@ -19,8 +19,13 @@ namespace Castor3D
 #	else
 	static const String GetDividerTypeFunctionABIName		= cuT( "?GetDividerType@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ" );
 #	endif
+#	if defined( _WIN64 )
+	static const String CreateDividerFunctionABIName		= cuT( "?CreateDivider@@YAPEAVSubdivider@Castor3D@@XZ" );
+	static const String DestroyDividerFunctionABIName		= cuT( "?DestroyDivider@@YAXPEAVSubdivider@Castor3D@@@Z" );
+# else
 	static const String CreateDividerFunctionABIName		= cuT( "?CreateDivider@@YAPAVSubdivider@Castor3D@@XZ" );
 	static const String DestroyDividerFunctionABIName		= cuT( "?DestroyDivider@@YAXPAVSubdivider@Castor3D@@@Z" );
+# endif
 #elif defined( __GNUG__)
 	static const String GetDividerTypeFunctionABIName		= cuT( "_Z14GetDividerTypev" );
 	static const String CreateDividerFunctionABIName		= cuT( "_Z13CreateDividerv" );
