@@ -1100,7 +1100,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_NodePosition )
 
 	if ( l_pContext->pSceneNode )
 	{
-		Point3r l_vVector;
+		Point3f l_vVector;
 		p_arrayParams[0]->Get( l_vVector );
 		l_pContext->pSceneNode->SetPosition( l_vVector );
 	}

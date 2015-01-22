@@ -186,6 +186,17 @@ namespace Castor3D
 		uint32_t DoSubdivideThreaded();
 		/**
 		 *\~english
+		 *\brief		Checks if the given point is in my list and if not creates and adds it
+		 *\param[in]	p_v	The vertex coordinates
+		 *\return		The created vertex
+		 *\~french
+		 *\brief		Vérifie si le point donnée est déjà dans la liste, et sinon le crée et l'ajoute
+		 *\param[in]	p_v	Les coordonnées de la position du sommet à ajouter
+		 *\return		Le sommet créé
+		 */
+		Castor3D::BufferElementGroupSPtr DoTryAddPoint( Castor::Point3r const & p_point );
+		/**
+		 *\~english
 		 *\brief		Main subdivision function
 		 *\param[in]	p_submesh			The submesh to subdivide
 		 *\param[in]	p_bGenerateBuffers	Tells if the buffers must be generated after subdivision
@@ -220,15 +231,26 @@ namespace Castor3D
 		virtual void DoSubdivide() = 0;
 		/**
 		 *\~english
-		 *\brief		Computes the texture coordinates for given vertices, creates the faces
+		 *\brief		Computes the texture coordinates for the new vertices, creates the faces
 		 *\param[in]	p_a, p_b, p_c	The source vertices
 		 *\param[in]	p_d, p_e, p_f	The new vertices
 		 *\~french
-		 *\brief		Calcule les coordonnées de texture des sommets donnés, crée les faces
-		 *\param[in]	p_a, p_b, p_c	Les sommets source
+		 *\brief		Calcule les coordonnées de texture des nouveaux sommets, crée les faces
+		 *\param[in]	p_a, p_b, p_c	Les sommets sources
 		 *\param[in]	p_d, p_e, p_f	Les nouveaux sommets
 		 */
 		void DoSetTextCoords( BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_d, BufferElementGroup & p_e, BufferElementGroup & p_f );
+		/**
+		 *\~english
+		 *\brief		Computes the texture coordinates for the new vertex, creates the faces
+		 *\param[in]	p_a, p_b, p_c	The source vertices
+		 *\param[in]	p_p				The new vertex
+		 *\~french
+		 *\brief		Calcule les coordonnées de texture du nouveau sommet, crée les faces
+		 *\param[in]	p_a, p_b, p_c	Les sommets sources
+		 *\param[in]	p_p				Le nouveau sommet
+		 */
+		void DoSetTextCoords( BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_p );
 
 	protected:
 		//!\~english The submesh being subdivided	\~french Le sous-maillage à diviser

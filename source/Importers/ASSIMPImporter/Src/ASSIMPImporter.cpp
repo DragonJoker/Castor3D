@@ -129,7 +129,7 @@ C3D_Assimp_API ImporterPlugin::ExtensionArray GetExtensions()
 	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "3DS" ), cuT( "3D Studio Max 3DS" ) ) );
 	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "ASE" ), cuT( "3D Studio Max ASE" ) ) );
 	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "OBJ" ), cuT( "Wavefront Object" ) ) );
-//	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "PLY" ), cuT( "Stanford Polygon Library" ) ) );
+	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "PLY" ), cuT( "Stanford Polygon Library" ) ) );
 	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "MD2" ), cuT( "Quake II" ) ) );
 	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "MD3" ), cuT( "Quake III" ) ) );
 	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "LWO" ), cuT( "LightWave Model" ) ) );
@@ -323,6 +323,79 @@ bool AssimpImporter::DoProcessMesh( SkeletonSPtr p_pSkeleton, aiMesh const * p_p
 		p_pSubmesh->Ref( l_pMaterial );
 		stVERTEX_GROUP l_stVertices = { 0 };
 		l_stVertices.m_uiCount = p_pAiMesh->mNumVertices;
+#if CASTOR_USE_DOUBLE
+		std::vector< real > vtx;
+		std::vector< real > nml;
+		std::vector< real > tan;
+		std::vector< real > bin;
+		std::vector< real > tex;
+		vtx.reserve( p_pAiMesh->mNumVertices * 3 );
+
+		for ( unsigned int i = 0; i < p_pAiMesh->mNumVertices; ++i )
+		{
+			vtx.push_back( p_pAiMesh->mVertices[i].x );
+			vtx.push_back( p_pAiMesh->mVertices[i].y );
+			vtx.push_back( p_pAiMesh->mVertices[i].z );
+		}
+
+		l_stVertices.m_pVtx = vtx.data();
+
+		if ( p_pAiMesh->mNormals )
+		{
+			nml.reserve( p_pAiMesh->mNumVertices * 3 );
+
+			for ( unsigned int i = 0; i < p_pAiMesh->mNumVertices; ++i )
+			{
+				nml.push_back( p_pAiMesh->mNormals[i].x );
+				nml.push_back( p_pAiMesh->mNormals[i].y );
+				nml.push_back( p_pAiMesh->mNormals[i].z );
+			}
+
+			l_stVertices.m_pNml = nml.data();
+		}
+		
+		if ( p_pAiMesh->mTangents )
+		{
+			tan.reserve( p_pAiMesh->mNumVertices * 3 );
+
+			for ( unsigned int i = 0; i < p_pAiMesh->mNumVertices; ++i )
+			{
+				tan.push_back( p_pAiMesh->mTangents[i].x );
+				tan.push_back( p_pAiMesh->mTangents[i].y );
+				tan.push_back( p_pAiMesh->mTangents[i].z );
+			}
+
+			l_stVertices.m_pTan = tan.data();
+		}
+		
+		if ( p_pAiMesh->mBitangents )
+		{
+			bin.reserve( p_pAiMesh->mNumVertices * 3 );
+
+			for ( unsigned int i = 0; i < p_pAiMesh->mNumVertices; ++i )
+			{
+				bin.push_back( p_pAiMesh->mBitangents[i].x );
+				bin.push_back( p_pAiMesh->mBitangents[i].y );
+				bin.push_back( p_pAiMesh->mBitangents[i].z );
+			}
+
+			l_stVertices.m_pBin = bin.data();
+		}
+
+		if ( p_pAiMesh->HasTextureCoords( 0 ) )
+		{
+			tex.reserve( p_pAiMesh->mNumVertices * 3 );
+
+			for ( unsigned int i = 0; i < p_pAiMesh->mNumVertices; ++i )
+			{
+				tex.push_back( p_pAiMesh->mTextureCoords[0][i].x );
+				tex.push_back( p_pAiMesh->mTextureCoords[0][i].y );
+				tex.push_back( p_pAiMesh->mTextureCoords[0][i].z );
+			}
+
+			l_stVertices.m_pTex = tex.data();
+		}
+#else
 		l_stVertices.m_pVtx = ( real * )p_pAiMesh->mVertices;
 		l_stVertices.m_pNml = ( real * )p_pAiMesh->mNormals;
 		l_stVertices.m_pTan = ( real * )p_pAiMesh->mTangents;
@@ -332,6 +405,7 @@ bool AssimpImporter::DoProcessMesh( SkeletonSPtr p_pSkeleton, aiMesh const * p_p
 		{
 			l_stVertices.m_pTex = ( real * )p_pAiMesh->mTextureCoords[0];
 		}
+#endif
 
 		std::vector< stVERTEX_BONE_DATA > l_arrayBones( p_pAiMesh->mNumVertices );
 

@@ -1150,15 +1150,20 @@ namespace Castor
 	}
 #endif
 	template< typename T, uint32_t Count >
-	Point< T, Count >::Point( Point< T, Count > const & p_pt )
+	template< typename U >
+	Point< T, Count >::Point( Point< U, Count > const & p_pt )
 	{
-		std::memcpy( m_coords, p_pt.m_coords, binary_size );
-		/*
-				for( uint32_t i = 0; i < Count; i++ )
-				{
-					m_coords[i] = p_pt.m_coords[i];
-				}
-		*/
+		if ( std::is_same< T, U >::value )
+		{
+			std::memcpy( m_coords, p_pt.m_coords, binary_size );
+		}
+		else
+		{
+			for( uint32_t i = 0; i < Count; i++ )
+			{
+				m_coords[i] = static_cast< T >( p_pt.m_coords[i] );
+			}
+		}
 	}
 
 	template< typename T, uint32_t Count >

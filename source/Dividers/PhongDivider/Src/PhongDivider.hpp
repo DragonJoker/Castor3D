@@ -15,8 +15,8 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_PnTrianglesDivider___
-#define ___C3D_PnTrianglesDivider___
+#ifndef ___C3D_PHONG_DIVIDER___
+#define ___C3D_PHONG_DIVIDER___
 
 #pragma warning( push )
 #pragma warning( disable:4311 )
@@ -33,16 +33,16 @@ http://www.gnu.org/copyleft/lesser.txt.
 #pragma warning( pop )
 
 #ifndef _WIN32
-#	define C3D_PnTriangles_API
+#	define C3D_Phong_API
 #else
-#	ifdef PnTrianglesDivider_EXPORTS
-#		define C3D_PnTriangles_API __declspec(dllexport)
+#	ifdef PhongDivider_EXPORTS
+#		define C3D_Phong_API __declspec(dllexport)
 #	else
-#		define C3D_PnTriangles_API __declspec(dllimport)
+#		define C3D_Phong_API __declspec(dllimport)
 #	endif
 #endif
 
-namespace PnTriangles
+namespace Phong
 {
 	/*!
 	\author 	Sylvain DOREMUS
@@ -54,16 +54,9 @@ namespace PnTriangles
 	{
 		Patch( Castor::PlaneEquation< double > const & p_p1, Castor::PlaneEquation< double > const & p_p2, Castor::PlaneEquation< double > const & p_p3 );
 
-		Castor::Point3d b300;
-		Castor::Point3d b030;
-		Castor::Point3d b003;
-		Castor::Point3d b201;
-		Castor::Point3d b210;
-		Castor::Point3d b120;
-		Castor::Point3d b021;
-		Castor::Point3d b102;
-		Castor::Point3d b012;
-		Castor::Point3d b111;
+		Castor::PlaneEquation< double > const & pi;
+		Castor::PlaneEquation< double > const & pj;
+		Castor::PlaneEquation< double > const & pk;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -71,7 +64,8 @@ namespace PnTriangles
 	\~english
 	\brief		Subdivider using PN Triangles subdivision algorithm
 	*/
-	class Subdivider : public Castor3D::Subdivider
+	class Subdivider
+		: public Castor3D::Subdivider
 	{
 	public:
 		Subdivider();

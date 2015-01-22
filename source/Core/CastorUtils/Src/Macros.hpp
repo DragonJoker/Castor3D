@@ -19,6 +19,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___Castor_Macros___
 
 #include "config.hpp"
+#include "PlatformConfig.hpp"
+#include "CompilerConfig.hpp"
 
 #if !defined( __FUNCTION__ )
 //! Defines this macro if not in debug

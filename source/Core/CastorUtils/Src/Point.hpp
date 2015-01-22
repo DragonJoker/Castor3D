@@ -294,7 +294,8 @@ namespace Castor
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_ptPoint	L'objet Point à copier
 		 */
-		Point( Point< T, Count > const & p_ptPoint );
+		template< typename U >
+		Point( Point< U, Count > const & p_ptPoint );
 		/**
 		 *\~english
 		 *\brief		Move assignment Constructor

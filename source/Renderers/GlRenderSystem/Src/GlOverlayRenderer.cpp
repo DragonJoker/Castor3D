@@ -16,7 +16,8 @@ static String OverlayVS =
 	cuT(	"void main()\n"	)
 	cuT(	"{\n"	)
 	cuT(	"	vtx_texture = texture;\n" )
-	cuT(	"	gl_Position = c3d_mtxProjection * vec4( vertex.xyz, 1.0 );\n" )
+	cuT(	"	<vec4> position = c3d_mtxProjection * vec4( vertex.xyz, 1.0 );\n" )
+	cuT(	"	gl_Position = vec4( position.x, position.y, position.z, position.w );\n" )
 	cuT(	"}\n"	);
 
 static String PanelPSDecl =
@@ -84,19 +85,19 @@ ShaderProgramBaseSPtr GlOverlayRenderer::DoGetProgram( uint32_t p_uiFlags )
 	if ( ( p_uiFlags & eTEXTURE_CHANNEL_TEXT ) == eTEXTURE_CHANNEL_TEXT )
 	{
 		l_strPs		+= cuT( "uniform sampler2D 	c3d_mapText;\n" );
-		l_strPsMain	+= cuT( "	l_fAlpha		*= <texture2D>( c3d_mapText, vtx_texture.xy ).r;\n" );
+		l_strPsMain	+= cuT( "	l_fAlpha		*= <texture2D>( c3d_mapText, vec2( vtx_texture.x, vtx_texture.y ) ).r;\n" );
 	}
 
 	if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
 	{
 		l_strPs		+= cuT( "uniform sampler2D 	c3d_mapColour;\n" );
-		l_strPsMain	+= cuT( "	l_v4Ambient		= <texture2D>( c3d_mapColour, vtx_texture.xy );\n" );
+		l_strPsMain	+= cuT( "	l_v4Ambient		= <texture2D>( c3d_mapColour, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
 	}
 
 	if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
 	{
 		l_strPs		+= cuT( "uniform sampler2D 	c3d_mapOpacity;\n" );
-		l_strPsMain	+= cuT( "	l_fAlpha		*= <texture2D>( c3d_mapOpacity, vtx_texture.xy ).r;\n" );
+		l_strPsMain	+= cuT( "	l_fAlpha		*= <texture2D>( c3d_mapOpacity, vec2( vtx_texture.x, vtx_texture.y ) ).r;\n" );
 	}
 
 	l_strPs += l_strPsMain;

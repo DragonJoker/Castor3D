@@ -85,6 +85,31 @@ namespace Castor3D
 		return m_submesh->GetPoint( i );
 	}
 
+	Castor3D::BufferElementGroupSPtr Subdivider::DoTryAddPoint( Point3r const & p_point )
+	{
+		std::unique_lock< std::recursive_mutex > l_lock( m_mutex );
+		int l_index = -1;
+		Castor3D::BufferElementGroupSPtr l_return;
+
+		if ( ( l_index = IsInMyPoints( p_point, 0.001 ) ) < 0 )
+		{
+			l_return = AddPoint( p_point );
+		}
+		else
+		{
+			l_return = GetPoint( l_index );
+			Coords3r l_coords;
+			Castor3D::Vertex::GetPosition( *l_return, l_coords );
+
+			if ( l_coords != p_point )
+			{
+				Castor3D::Vertex::SetPosition( *l_return, ( l_coords + p_point ) / real( 2 ) );
+			}
+		}
+
+		return l_return;
+	}
+
 	void Subdivider::DoSubdivide( SubmeshSPtr p_pSubmesh, bool p_bGenerateBuffers, bool p_bThreaded )
 	{
 		m_submesh = p_pSubmesh;
@@ -168,6 +193,20 @@ namespace Castor3D
 		AddFace( p_b.GetIndex(), p_e.GetIndex(), p_d.GetIndex() );
 		AddFace( p_c.GetIndex(), p_f.GetIndex(), p_e.GetIndex() );
 		AddFace( p_d.GetIndex(), p_e.GetIndex(), p_f.GetIndex() );
+	}
+
+	void Subdivider::DoSetTextCoords( BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_p )
+	{
+		Point3r l_aTex;
+		Point3r l_bTex;
+		Point3r l_cTex;
+		Vertex::GetTexCoord( p_a, l_aTex );
+		Vertex::GetTexCoord( p_b, l_bTex );
+		Vertex::GetTexCoord( p_c, l_cTex );
+		Vertex::SetTexCoord( p_p, ( l_aTex + l_bTex + l_cTex ) / real( 3.0 ) );
+		AddFace( p_a.GetIndex(), p_b.GetIndex(), p_p.GetIndex() );
+		AddFace( p_b.GetIndex(), p_c.GetIndex(), p_p.GetIndex() );
+		AddFace( p_c.GetIndex(), p_a.GetIndex(), p_p.GetIndex() );
 	}
 }
 

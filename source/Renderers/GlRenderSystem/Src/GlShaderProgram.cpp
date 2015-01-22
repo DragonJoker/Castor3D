@@ -265,7 +265,8 @@ namespace GlRender
 		l_strReturn += cuT( "    vtx_normal      = normalize( l_v4Normal.xyz );\n" );
 		l_strReturn += cuT( "    vtx_tangent     = normalize( l_v4Tangent.xyz );\n" );
 		l_strReturn += cuT( "    vtx_bitangent   = normalize( l_v4Bitangent.xyz );\n" );
-		l_strReturn += cuT( "    gl_Position     = c3d_mtxProjection * l_v4Vertex;\n" );
+		l_strReturn += cuT( "    <vec4>  position = c3d_mtxProjection * l_v4Vertex;\n" );
+		l_strReturn += cuT( "    gl_Position     = vec4( position.x, position.y, position.z, position.w );\n" );
 		l_strReturn += cuT( "}\n" );
 		str_utils::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetLayout() );
 		GLSL::ConstantsBase::Replace( l_strReturn );
@@ -415,7 +416,8 @@ namespace GlRender
 			l_strReturn += cuT( "void main( void )\n" );
 			l_strReturn += cuT( "{\n" );
 			l_strReturn +=			l_strVertexMatrixCopy;
-			l_strReturn += cuT( "    gl_Position = c3d_mtxProjectionModelView * vertex;\n" );
+			l_strReturn += cuT( "    <vec4>  position = c3d_mtxProjectionModelView * vertex;\n" );
+			l_strReturn += cuT( "    gl_Position     = vec4( position.x, position.y, position.z, position.w );\n" );
 			l_strReturn += cuT( "    vtx_texture = texture;\n" );
 			l_strReturn += cuT( "}\n" );
 		}
@@ -540,28 +542,28 @@ namespace GlRender
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
 				{
 					l_strReturn						+= cuT( "uniform sampler2D  c3d_mapColour;\n" );
-					l_strPixelMainDeclarations		+= cuT( "    vec4    l_v4MapColour       = <texture2D>( c3d_mapColour, vtx_texture.xy );\n" );
+					l_strPixelMainDeclarations		+= cuT( "    vec4    l_v4MapColour       = <texture2D>( c3d_mapColour, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
 					l_strPixelMainLightsLoopEnd		+= cuT( "    l_v4Diffuse     *= l_v4MapColour;\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
 				{
 					l_strReturn						+= cuT( "uniform sampler2D  c3d_mapAmbient;\n" );
-					l_strPixelMainDeclarations		+= cuT( "    vec4    l_v4MapAmbient      = <texture2D>( c3d_mapAmbient, vtx_texture.xy );\n" );
+					l_strPixelMainDeclarations		+= cuT( "    vec4    l_v4MapAmbient      = <texture2D>( c3d_mapAmbient, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
 					l_strPixelMainLightsLoopEnd		+= cuT( "    l_v4Diffuse     *= l_v4MapAmbient;\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
 				{
 					l_strReturn						+= cuT( "uniform sampler2D  c3d_mapDiffuse;\n" );
-					l_strPixelMainDeclarations		+= cuT( "    vec4    l_v4MapDiffuse      = <texture2D>( c3d_mapDiffuse, vtx_texture.xy );\n" );
+					l_strPixelMainDeclarations		+= cuT( "    vec4    l_v4MapDiffuse      = <texture2D>( c3d_mapDiffuse, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
 					l_strPixelMainLightsLoopEnd		+= cuT( "    l_v4Diffuse     *= l_v4MapDiffuse;\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
 				{
 					l_strReturn						+= cuT( "uniform sampler2D  c3d_mapNormal;\n" );
-					l_strPixelMainDeclarations		+= cuT( "    vec4    l_v4MapNormal       = <texture2D>( c3d_mapNormal, vtx_texture.xy );\n" );
+					l_strPixelMainDeclarations		+= cuT( "    vec4    l_v4MapNormal       = <texture2D>( c3d_mapNormal, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
 					l_strPixelMainDeclarations		+= cuT( "    l_v4Normal                  += vec4( normalize( (l_v4MapNormal.xyz * 2.0 - 1.0) ), 0 );\n" );
 					l_strPixelMainDeclarations		+= cuT( "    l_v4Tangent                 -= vec4( l_v4Normal.xyz * dot( l_v4Tangent.xyz, l_v4Normal.xyz ), 0 );\n" );
 					l_strPixelMainDeclarations		+= cuT( "    l_v4Bitangent               = vec4( cross( l_v4Normal.xyz, l_v4Tangent.xyz ), 1 );\n" );
@@ -570,27 +572,27 @@ namespace GlRender
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
 				{
 					l_strReturn						+= cuT( "uniform sampler2D  c3d_mapOpacity;\n" );
-					l_strPixelMainDeclarations		+= cuT( "    vec4    l_v4MapOpacity      = <texture2D>( c3d_mapOpacity, vtx_texture.xy );\n" );
+					l_strPixelMainDeclarations		+= cuT( "    vec4    l_v4MapOpacity      = <texture2D>( c3d_mapOpacity, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
 					l_strPixelMainLightsLoopEnd		+= cuT( "    l_fAlpha    = l_v4MapOpacity.r * c3d_fMatOpacity;\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
 				{
 					l_strReturn						+= cuT( "uniform sampler2D  c3d_mapSpecular;\n" );
-					l_strPixelMainDeclarations		+= cuT( "    vec4    l_v4MapSpecular     = <texture2D>( c3d_mapSpecular, vtx_texture.xy );\n" );
+					l_strPixelMainDeclarations		+= cuT( "    vec4    l_v4MapSpecular     = <texture2D>( c3d_mapSpecular, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
 					l_strPixelMainLightsLoopEnd		+= cuT( "    l_v4Specular.xyz    *= l_v4MapSpecular.xyz;\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
 				{
 					l_strReturn						+= cuT( "uniform sampler2D  c3d_mapHeight;\n" );
-					l_strPixelMainDeclarations		+= cuT( "    vec4    l_v4MapHeight       = <texture2D>( c3d_mapHeight, vtx_texture.xy );\n" );
+					l_strPixelMainDeclarations		+= cuT( "    vec4    l_v4MapHeight       = <texture2D>( c3d_mapHeight, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
 				{
 					l_strReturn						+= cuT( "uniform sampler2D  c3d_mapGloss;\n" );
-					l_strPixelMainDeclarations		+= cuT( "    vec4    l_v4MapGloss        = <texture2D>( c3d_mapGloss, vtx_texture.xy );\n" );
+					l_strPixelMainDeclarations		+= cuT( "    vec4    l_v4MapGloss        = <texture2D>( c3d_mapGloss, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
 					l_strPixelMainLightsLoopEnd		+= cuT( "    l_v4Specular.w  *= l_v4MapGloss.x;\n" );
 				}
 			}
