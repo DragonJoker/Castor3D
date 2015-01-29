@@ -23,11 +23,6 @@ namespace Castor3D
 		{
 			m_uiIndex = p_uiIndex;
 			m_bInitialised = DoInitialise();
-
-			if ( m_bInitialised )
-			{
-				m_pPixelBuffer->clear();
-			}
 		}
 		else
 		{
