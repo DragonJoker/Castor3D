@@ -84,7 +84,10 @@ namespace Castor3D
 #if DX_DEBUG
 			m_size.set( m_pRenderTarget->GetSize().width(), m_pRenderTarget->GetSize().height() );
 #else
-			m_size.set( m_pRenderTarget->GetCamera()->GetWidth(), m_pRenderTarget->GetCamera()->GetHeight() );
+			if ( m_pRenderTarget->GetCamera() )
+			{
+				m_size.set( m_pRenderTarget->GetCamera()->GetWidth(), m_pRenderTarget->GetCamera()->GetHeight() );
+			}
 #endif
 			m_pColorBuffer->SetDimension( eTEXTURE_DIMENSION_2D );
 			m_pColorBuffer->SetImage( m_size, ePIXEL_FORMAT_A8R8G8B8 );

@@ -188,7 +188,7 @@ namespace Castor
 				{
 					uint8_t * l_dst = l_bitmap.data() + l_uiSize - l_pitch;
 					uint8_t const * l_src = l_ftBitmap.buffer;
-					
+
 					for ( uint32_t i = 0; i < uint32_t( l_ftBitmap.rows ); i++ )
 					{
 						memcpy( l_dst, l_src, l_ftBitmap.width );

@@ -34,7 +34,99 @@ namespace Castor
 	{
 		for ( int i = 0; i < eLOG_TYPE_COUNT; i++ )
 		{
-			m_strHeaders[i]		= p_pLogger->m_strHeaders[i];
+			m_strHeaders[i] = p_pLogger->m_strHeaders[i];
+		}
+
+		m_outThread = std::thread( [&]()
+		{
+			std::string l_line;
+			std::wstring l_wline;
+			bool ended = false;
+
+			while ( !ended )
+			{
+				std::unique_lock< std::mutex > lock( m_outMutex );
+
+				while ( !m_cout.eof() )
+				{
+					std::getline( m_cout, l_line );
+
+					if ( !l_line.empty() )
+					{
+						DoLogMessage( str_utils::from_str( l_line ), eLOG_TYPE_MESSAGE );
+					}
+				}
+
+				while ( !m_wcout.eof() )
+				{
+					std::getline( m_wcout, l_wline );
+					
+					if ( !l_wline.empty() )
+					{
+						DoLogMessage( str_utils::from_wstr( l_wline ), eLOG_TYPE_MESSAGE );
+					}
+				}
+				
+				m_cout.clear();
+				m_wcout.clear();
+
+				while ( !m_cerr.eof() )
+				{
+					std::getline( m_cerr, l_line );
+					
+					if ( !l_line.empty() )
+					{
+						DoLogMessage( str_utils::from_str( l_line ), eLOG_TYPE_ERROR );
+					}
+				}
+
+				while ( !m_wcerr.eof() )
+				{
+					std::getline( m_wcerr, l_wline );
+					
+					if ( !l_wline.empty() )
+					{
+						DoLogMessage( str_utils::from_wstr( l_wline ), eLOG_TYPE_ERROR );
+					}
+				}
+				
+				m_cerr.clear();
+				m_wcerr.clear();
+
+				while ( !m_clog.eof() )
+				{
+					std::getline( m_clog, l_line );
+
+					if ( !l_line.empty() )
+					{
+						DoLogMessage( str_utils::from_str( l_line ), eLOG_TYPE_DEBUG );
+					}
+				}
+
+				while ( !m_wclog.eof() )
+				{
+					std::getline( m_wclog, l_wline );
+
+					if ( !l_wline.empty() )
+					{
+						DoLogMessage( str_utils::from_wstr( l_wline ), eLOG_TYPE_DEBUG );
+					}
+				}
+				
+				m_clog.clear();
+				m_wclog.clear();
+
+				ended = m_end.wait_for( lock, std::chrono::milliseconds( 5 ) ) != std::cv_status::timeout;
+			}
+		} );
+	}
+
+	void ILoggerImpl::Cleanup()
+	{
+		if ( m_outThread.joinable() )
+		{
+			m_end.notify_one();
+			m_outThread.join();
 		}
 	}
 
@@ -63,11 +155,43 @@ namespace Castor
 			for ( int i = 0; i < eLOG_TYPE_COUNT; i++ )
 			{
 				m_logFilePath[i] = p_logFilePath;
+
+				if ( i == eLOG_TYPE_MESSAGE )
+				{
+					std::cout.rdbuf( m_cout.rdbuf() );
+					std::wcout.rdbuf( m_wcout.rdbuf() );
+				}
+				else if ( i == eLOG_TYPE_DEBUG )
+				{
+					std::clog.rdbuf( m_clog.rdbuf() );
+					std::wclog.rdbuf( m_wclog.rdbuf() );
+				}
+				else if ( i == eLOG_TYPE_ERROR )
+				{
+					std::cerr.rdbuf( m_cerr.rdbuf() );
+					std::wcerr.rdbuf( m_wcerr.rdbuf() );
+				}
 			}
 		}
 		else
 		{
 			m_logFilePath[p_eLogType] = p_logFilePath;
+
+			if ( p_eLogType == eLOG_TYPE_MESSAGE )
+			{
+				std::cout.rdbuf( m_cout.rdbuf() );
+				std::wcout.rdbuf( m_wcout.rdbuf() );
+			}
+			else if ( p_eLogType == eLOG_TYPE_DEBUG )
+			{
+				std::clog.rdbuf( m_clog.rdbuf() );
+				std::wclog.rdbuf( m_wclog.rdbuf() );
+			}
+			else if ( p_eLogType == eLOG_TYPE_ERROR )
+			{
+				std::cerr.rdbuf( m_cerr.rdbuf() );
+				std::wcerr.rdbuf( m_wcerr.rdbuf() );
+			}
 		}
 
 		FILE * l_pFile;
@@ -81,22 +205,23 @@ namespace Castor
 
 	void ILoggerImpl::LogDebug( String const & p_strToLog )
 	{
-		DoLogMessage( p_strToLog,  eLOG_TYPE_DEBUG );
+		std::xlog << p_strToLog << std::endl;
 	}
 
 	void ILoggerImpl::LogMessage( String const & p_strToLog )
 	{
-		DoLogMessage( p_strToLog,  eLOG_TYPE_MESSAGE );
+		std::xout << p_strToLog << std::endl;
 	}
 
 	void ILoggerImpl::LogWarning( String const & p_strToLog )
 	{
-		DoLogMessage( p_strToLog,  eLOG_TYPE_WARNING );
+		std::unique_lock< std::mutex > lock( m_outMutex );
+		DoLogMessage( p_strToLog, eLOG_TYPE_WARNING );
 	}
 
 	bool ILoggerImpl::LogError( String const & p_strToLog )
 	{
-		DoLogMessage( p_strToLog,  eLOG_TYPE_ERROR );
+		std::xerr << p_strToLog << std::endl;
 		return true;
 	}
 
@@ -136,7 +261,7 @@ namespace Castor
 		}
 		catch ( std::exception & exc )
 		{
-			m_pConsole->Print( cuT( "Couldn't open log file [" ) + m_logFilePath[p_eLogType] + cuT( "] : " ) + str_utils::from_str( exc.what() ), true );
+			//m_pConsole->Print( cuT( "Couldn't open log file [" ) + m_logFilePath[p_eLogType] + cuT( "] : " ) + str_utils::from_str( exc.what() ), true );
 		}
 	}
 }

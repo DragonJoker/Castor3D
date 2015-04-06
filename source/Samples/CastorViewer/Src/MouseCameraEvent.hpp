@@ -11,7 +11,7 @@ namespace CastorViewer
 		:	public Castor3D::FrameEvent
 	{
 	protected:
-		Castor3D::SceneNodeSPtr m_pNode;
+		Castor3D::SceneNodeWPtr m_pNode;
 		RenderPanel * m_pPanel;
 		Castor::real m_rDeltaX;
 		Castor::real m_rDeltaY;

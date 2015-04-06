@@ -18,7 +18,13 @@ namespace CastorViewer
 
 	bool CameraTranslateEvent::Apply()
 	{
-		m_pNode->Translate( Point3r( m_rDeltaX, m_rDeltaY, m_rDeltaZ ) );
+		SceneNodeSPtr l_node = m_pNode.lock();
+
+		if ( l_node )
+		{
+			l_node->Translate( Point3r( m_rDeltaX, m_rDeltaY, m_rDeltaZ ) );
+		}
+
 		m_rDeltaX = 0;
 		m_rDeltaY = 0;
 		m_rDeltaZ = 0;

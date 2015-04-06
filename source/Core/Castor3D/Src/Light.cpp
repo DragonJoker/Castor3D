@@ -76,9 +76,11 @@ namespace Castor3D
 	{
 		if ( ! m_pRenderer.expired() )
 		{
-			if ( GetParent() )
+			SceneNodeSPtr l_node = GetParent();
+
+			if ( l_node )
 			{
-				Point3r l_position = GetParent()->GetPosition();
+				Point3r l_position = l_node->GetDerivedPosition();
 
 				switch ( m_pCategory->GetLightType() )
 				{
@@ -109,18 +111,19 @@ namespace Castor3D
 	{
 		if ( ! m_pRenderer.expired() )
 		{
-			if ( GetParent() )
+			SceneNodeSPtr l_node = GetParent();
+
+			if ( l_node )
 			{
-				Point3r l_position = GetParent()->GetDerivedPosition();
-//				l_position = GetEngine()->GetRenderSystem()->GetPipeline()->GetMatrix( eMTXMODE_VIEW ) * l_position;
+				Point3r l_position = l_node->GetDerivedPosition();
 
 				switch ( m_pCategory->GetLightType() )
 				{
 				case eLIGHT_TYPE_DIRECTIONAL:
-					std::static_pointer_cast< DirectionalLight >( m_pCategory )->SetDirection( l_position );
+					std::static_pointer_cast< DirectionalLight >( m_pCategory )->SetDirection( point::get_normalised( l_position ) );
 					break;
 
-				case eLIGHT_TYPE_POINT:
+				default:
 					std::static_pointer_cast< PointLight >( m_pCategory )->SetPosition( l_position );
 					break;
 
@@ -142,19 +145,21 @@ namespace Castor3D
 	void Light::AttachTo( SceneNodeSPtr p_pNode )
 	{
 		Point4f l_ptPosType = GetPositionType();
+		SceneNodeSPtr l_node = GetParent();
 
-		if ( GetParent() )
+		if ( l_node )
 		{
-			GetParent()->SetPosition( Point3r( l_ptPosType[0], l_ptPosType[1], l_ptPosType[2] ) );
+			l_node->SetPosition( Point3r( l_ptPosType[0], l_ptPosType[1], l_ptPosType[2] ) );
 		}
 
 		MovableObject::AttachTo( p_pNode );
+		l_node = GetParent();
 
-		if ( p_pNode )
+		if ( l_node )
 		{
-			l_ptPosType[0] = float( p_pNode->GetPosition()[0] );
-			l_ptPosType[1] = float( p_pNode->GetPosition()[1] );
-			l_ptPosType[2] = float( p_pNode->GetPosition()[2] );
+			l_ptPosType[0] = float( l_node->GetPosition()[0] );
+			l_ptPosType[1] = float( l_node->GetPosition()[1] );
+			l_ptPosType[2] = float( l_node->GetPosition()[2] );
 		}
 		else
 		{

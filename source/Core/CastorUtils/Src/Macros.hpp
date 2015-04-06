@@ -41,6 +41,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	define Cerr( x) std::cerr << x
 typedef char xchar;
 typedef wchar_t ychar;
+#	define xout cout
+#	define xerr cerr
+#	define xlog clog
 #else
 //!\~english Tells CastorUtils was compiled in Unicode mode	\~french Dit que CastorUtils a été compilé en Unicode
 #	define CASTOR_UNICODE 1
@@ -52,6 +55,9 @@ typedef wchar_t ychar;
 #	define Cerr( x) std::wcerr << x
 typedef wchar_t xchar;
 typedef char ychar;
+#	define xout wcout
+#	define xerr wcerr
+#	define xlog wclog
 #endif
 
 //@}

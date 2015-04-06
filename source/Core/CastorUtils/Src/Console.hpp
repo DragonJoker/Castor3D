@@ -31,24 +31,6 @@ namespace Castor
 	\version	0.6.1.0
 	\date		19/10/2011
 	\~english
-	\brief		Defines the various log types
-	\~french
-	\brief		Définit les différents types de log
-	*/
-	typedef enum eLOG_TYPE
-	CASTOR_TYPE( uint8_t )
-	{
-		eLOG_TYPE_DEBUG,	//!<\~english Debug type log		\~french Log de type debug
-		eLOG_TYPE_MESSAGE,	//!<\~english Message type log		\~french Log de type message
-		eLOG_TYPE_WARNING,	//!<\~english Warning type log		\~french Log de type avertissement
-		eLOG_TYPE_ERROR,	//!<\~english Error type log		\~french Log de type erreur
-		eLOG_TYPE_COUNT,	//!<\~english Number of log types	\~french Compte des logs
-	}	eLOG_TYPE;
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
 	\brief		Console info class
 	\remark		Platform dependent
 	\~french

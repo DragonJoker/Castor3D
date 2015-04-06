@@ -231,12 +231,12 @@ namespace Castor3D
 		virtual void DoSubdivide() = 0;
 		/**
 		 *\~english
-		 *\brief		Computes the texture coordinates for the new vertices, creates the faces
+		 *\brief		Computes the texture coordinates for given vertices, creates the faces
 		 *\param[in]	p_a, p_b, p_c	The source vertices
 		 *\param[in]	p_d, p_e, p_f	The new vertices
 		 *\~french
-		 *\brief		Calcule les coordonnées de texture des nouveaux sommets, crée les faces
-		 *\param[in]	p_a, p_b, p_c	Les sommets sources
+		 *\brief		Calcule les coordonnées de texture des sommets donnés, crée les faces
+		 *\param[in]	p_a, p_b, p_c	Les sommets source
 		 *\param[in]	p_d, p_e, p_f	Les nouveaux sommets
 		 */
 		void DoSetTextCoords( BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_d, BufferElementGroup & p_e, BufferElementGroup & p_f );

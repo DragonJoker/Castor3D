@@ -1,4 +1,5 @@
-﻿#include "File.hpp"
+#include "File.hpp"
+#include "LoggerImpl.hpp"
 
 #if defined _WIN32
 #	if defined( _MSC_VER )
@@ -196,6 +197,16 @@ namespace Castor
 		}
 
 #else
+		if ( m_bOwnInstance )
+		{
+			Logger & l_logger = GetSingleton();
+
+			if ( l_logger.m_pImpl )
+			{
+				l_logger.m_pImpl->Cleanup();
+			}
+		}
+
 		delete m_pSingleton;
 		m_pSingleton = NULL;
 #endif

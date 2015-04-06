@@ -493,7 +493,7 @@ namespace Castor
 		{
 			StringStream l_return;
 			l_return.imbue( p_locale );
-			l_return <<  manip::xbase( p_base ) << p_value;
+			l_return << manip::xbase( p_base ) << p_value;
 			return l_return.str();
 		}
 		/**

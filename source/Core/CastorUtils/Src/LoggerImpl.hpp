@@ -70,6 +70,7 @@ namespace Castor
 		CU_API virtual ~ILoggerImpl();
 
 		CU_API void Initialise( Logger * p_pLogger );
+		CU_API void Cleanup();
 		CU_API void SetCallback( PLogCallback p_pfnCallback, void * p_pCaller );
 
 		CU_API void SetFileName( String const & p_logFilePath, eLOG_TYPE p_eLogType );
@@ -94,6 +95,16 @@ namespace Castor
 		eLOG_TYPE m_eLogLevel;
 		LoggerCallbackMap m_mapCallbacks;
 		std::mutex m_mutex;
+		
+		std::stringstream m_cout;
+		std::stringstream m_cerr;
+		std::stringstream m_clog;
+		std::wstringstream m_wcout;
+		std::wstringstream m_wcerr;
+		std::wstringstream m_wclog;
+		std::thread m_outThread;
+		std::mutex m_outMutex;
+		std::condition_variable m_end;
 	};
 }
 

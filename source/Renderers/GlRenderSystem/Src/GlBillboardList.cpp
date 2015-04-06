@@ -79,8 +79,8 @@ static String BillboardPS =
 //*************************************************************************************************
 
 GlBillboardList::GlBillboardList( Castor3D::SceneSPtr p_pScene, GlRenderSystem * p_pRenderSystem, OpenGl & p_gl )
-	:	BillboardList( p_pScene, p_pRenderSystem )
-	,	m_gl( p_gl	)
+	: BillboardList( p_pScene, p_pRenderSystem )
+	, m_gl( p_gl )
 {
 }
 

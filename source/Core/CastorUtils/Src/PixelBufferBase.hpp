@@ -38,12 +38,6 @@ namespace Castor
 	class PxBufferBase
 	{
 	public:
-		//!\~english Typedef over a pointer to uint8_t	\~french Typedef d'un pointeur sur uint8_t
-		typedef uint8_t * iterator;
-		//!\~english Typedef over a constant pointer to uint8_t	\~french Typedef d'un pointeur constant sur uint8_t
-		typedef uint8_t const * const_iterator;
-
-	public:
 		/**
 		 *\~english
 		 *\brief		Constructor from another buffer
@@ -70,15 +64,6 @@ namespace Castor
 		CU_API PxBufferBase( PxBufferBase const & p_pixelBuffer );
 		/**
 		 *\~english
-		 *\brief		Move Constructor
-		 *\param[in]	p_pixelBuffer	The PxBufferBase object to move
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_pixelBuffer	L'objet PxBufferBase à déplacer
-		 */
-		CU_API PxBufferBase( PxBufferBase && p_pixelBuffer );
-		/**
-		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
@@ -96,21 +81,9 @@ namespace Castor
 		 */
 		CU_API PxBufferBase & operator =( PxBufferBase const & p_pixelBuffer );
 		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	p_pixelBuffer	The PxBufferBase object to move
-		 *\return		A reference to this PxBufferBase object
-		 *\~french
-		 *\brief		Opérateur d'affectation  par déplacement
-		 *\param[in]	p_pixelBuffer	L'objet PxBufferBase à déplacer
-		 *\return		Une référence sur cet objet PxBufferBase
-		 */
-		CU_API PxBufferBase & operator =( PxBufferBase && p_pixelBuffer );
-		/**
-		 *\~english
 		 *\brief		Deletes the data buffer
 		 *\~french
-		 *\brief		Détruit le buffer de données
+		 *\brief		Détruit le tampon de données
 		 */
 		CU_API virtual void clear();
 		/**
@@ -318,54 +291,6 @@ namespace Castor
 		inline uint8_t const * get_at( Position const & p_position )const
 		{
 			return get_at( p_position.x(), p_position.y() );
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first element
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur le premier élément
-		 *\return		L'itérateur
-		 */
-		inline iterator begin()
-		{
-			return & m_pBuffer[0];
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves a constant iterator to the first element
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur constant sur le premier élément
-		 *\return		L'itérateur
-		 */
-		inline const_iterator begin()const
-		{
-			return & m_pBuffer[0];
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the last element
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur le dernier élément
-		 *\return		L'itérateur
-		 */
-		inline iterator end()
-		{
-			return m_pBuffer + size();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves a constant iterator to the last element
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur constant sur le dernier élément
-		 *\return		L'itérateur
-		 */
-		inline const_iterator end()const
-		{
-			return m_pBuffer + size();
 		}
 		/**
 		 *\~english

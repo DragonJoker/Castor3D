@@ -3521,6 +3521,16 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_CameraParent )
 	if ( l_pParent )
 	{
 		l_pContext->pSceneNode = l_pParent;
+
+		while ( l_pParent->GetParent() && l_pParent->GetParent() != l_pContext->pScene->GetObjectRootNode() && l_pParent->GetParent() != l_pContext->pScene->GetCameraRootNode() )
+		{
+			l_pParent = l_pParent->GetParent();
+		}
+
+		if ( !l_pParent->GetParent() || l_pParent->GetParent() == l_pContext->pScene->GetObjectRootNode() )
+		{
+			l_pParent->AttachTo( l_pContext->pScene->GetCameraRootNode() );
+		}
 	}
 	else
 	{

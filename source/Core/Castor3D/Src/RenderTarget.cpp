@@ -513,13 +513,13 @@ namespace Castor3D
 
 	void RenderTarget::SetCamera( CameraSPtr p_pCamera )
 	{
-		SceneNodeSPtr	l_pCamNode;
-		SceneNodeSPtr	l_pLECamNode;
-		SceneNodeSPtr	l_pRECamNode;
-		String			l_strLENodeName;
-		String			l_strRENodeName;
-		String			l_strIndex = cuT( "_RT" ) + str_utils::to_string( m_uiIndex );
-		SceneSPtr		l_pScene = GetScene();
+		SceneNodeSPtr l_pCamNode;
+		SceneNodeSPtr l_pLECamNode;
+		SceneNodeSPtr l_pRECamNode;
+		String l_strLENodeName;
+		String l_strRENodeName;
+		String l_strIndex = cuT( "_RT" ) + str_utils::to_string( m_uiIndex );
+		SceneSPtr l_pScene = GetScene();
 
 		if ( l_pScene )
 		{
@@ -536,9 +536,9 @@ namespace Castor3D
 
 		if ( GetCamera() )
 		{
-			l_pCamNode		= GetCamera()->GetParent();
-			l_strLENodeName	= l_pCamNode->GetName() + l_strIndex + cuT( "_LEye" );
-			l_strRENodeName	= l_pCamNode->GetName() + l_strIndex + cuT( "_REye" );
+			l_pCamNode = GetCamera()->GetParent();
+			l_strLENodeName = l_pCamNode->GetName() + l_strIndex + cuT( "_LEye" );
+			l_strRENodeName = l_pCamNode->GetName() + l_strIndex + cuT( "_REye" );
 			l_pCamNode->DetachChild( l_pCamNode->GetChild( l_strLENodeName ) );
 			l_pCamNode->DetachChild( l_pCamNode->GetChild( l_strRENodeName ) );
 
@@ -604,11 +604,11 @@ namespace Castor3D
 
 	void RenderTarget::DoRender( RenderTarget::stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, double p_dFrameTime )
 	{
-		Engine 		*		l_pEngine		= GetEngine();
-		SceneSPtr			l_pScene		= GetScene();
-		TargetRendererSPtr	l_pRenderer		= GetRenderer();
-		RenderSystem 	*	l_pRenderSystem	= l_pEngine->GetRenderSystem();
-		ContextRPtr			l_pContext		= l_pRenderSystem->GetCurrentContext();
+		Engine * l_pEngine = GetEngine();
+		SceneSPtr l_pScene = GetScene();
+		TargetRendererSPtr l_pRenderer = GetRenderer();
+		RenderSystem * l_pRenderSystem = l_pEngine->GetRenderSystem();
+		ContextRPtr l_pContext = l_pRenderSystem->GetCurrentContext();
 		m_pCurrentFrameBuffer = p_fb.m_pFrameBuffer;
 		m_pCurrentCamera = p_pCamera;
 		l_pRenderer->BeginScene();

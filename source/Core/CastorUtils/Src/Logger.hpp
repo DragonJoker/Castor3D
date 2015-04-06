@@ -19,7 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_LOGGER_H___
 
 #include "CastorUtilsPrerequisites.hpp"
-#include "LoggerImpl.hpp"
+#include "MultiThreadConfig.hpp"
 
 #include <cstdarg>
 

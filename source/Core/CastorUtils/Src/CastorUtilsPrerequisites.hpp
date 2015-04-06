@@ -51,8 +51,32 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	undef abs
 #endif
 
+#if defined( _MSC_VER )
+#	define TPL_PIXEL_FORMAT	uint32_t
+#else
+#	define TPL_PIXEL_FORMAT	ePIXEL_FORMAT
+#endif
+
 namespace Castor
 {
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.6.1.0
+	\date		19/10/2011
+	\~english
+	\brief		Defines the various log types
+	\~french
+	\brief		Définit les différents types de log
+	*/
+	typedef enum eLOG_TYPE
+	CASTOR_TYPE( uint8_t )
+	{
+		eLOG_TYPE_DEBUG,	//!<\~english Debug type log		\~french Log de type debug
+		eLOG_TYPE_MESSAGE,	//!<\~english Message type log		\~french Log de type message
+		eLOG_TYPE_WARNING,	//!<\~english Warning type log		\~french Log de type avertissement
+		eLOG_TYPE_ERROR,	//!<\~english Error type log		\~french Log de type erreur
+		eLOG_TYPE_COUNT,	//!<\~english Number of log types	\~french Compte des logs
+	}	eLOG_TYPE;
 	/*!
 	\author Sylvain DOREMUS
 	\version 0.6.1.0
@@ -149,7 +173,7 @@ namespace Castor
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	class Matrix;
 	class ParserParameterBase;
-	template< ePIXEL_FORMAT PF >
+	template< TPL_PIXEL_FORMAT FT >
 	class Pixel;
 	template< typename T >
 	class PlaneEquation;
@@ -157,7 +181,7 @@ namespace Castor
 	class Point;
 	class Position;
 	class PxBufferBase;
-	template < ePIXEL_FORMAT PF >
+	template < TPL_PIXEL_FORMAT FT >
 	class PxBuffer;
 	class Quaternion;
 	class Rectangle;
@@ -302,6 +326,26 @@ namespace Castor
 	DECLARE_MAP( String, bool, BoolStr );
 	DECLARE_MAP( String, String, StrStr );
 	DECLARE_SET( String, Str );
+	/**
+	 *\~english
+	 *\brief		Logging callback function
+	 *\param[in]	p_pCaller	Pointer to the caller
+	 *\param[in]	p_strLog	The logged text
+	 *\param[in]	p_eLogType	The log type
+	 *\~french
+	 *\brief		Fonction de callback de log
+	 *\param[in]	p_pCaller	Pointeur sur l'appelant
+	 *\param[in]	p_strLog	Le texte écrit
+	 *\param[in]	p_eLogType	Le type de log
+	 */
+	typedef void ( LogCallback )( void * p_pCaller, String const & p_strLog, eLOG_TYPE p_eLogType );
+	/**
+	 *\~english
+	 *\brief		Typedef over a pointer to the logging callback function
+	 *\~french
+	 *\brief		Typedef d'un pointeur sur la fonction de callback de log
+	 */
+	typedef LogCallback * PLogCallback;
 }
 
 #endif

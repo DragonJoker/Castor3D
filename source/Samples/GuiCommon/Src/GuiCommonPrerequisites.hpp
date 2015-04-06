@@ -106,9 +106,9 @@ namespace GuiCommon
 	 *\param[in]	p_window	The window
 	 *\return		The created WindowHandle
 	 *\~french
-	 *\brief		Cr�e un WindowHandle � partir d'un wxWindow
-	 *\param[in]	p_window	La fen�tre
-	 *\return		Le WindowHandle cr��
+	 *\brief		Crée un WindowHandle à partir d'un wxWindow
+	 *\param[in]	p_window	La fenêtre
+	 *\return		Le WindowHandle créé
 	 */
 	Castor3D::WindowHandle wxMakeWindowHandle( wxWindow * p_window );
 	/**
@@ -120,8 +120,8 @@ namespace GuiCommon
 	 *\param[in]	p_uiHeight	The buffer image's height
 	 *\param[out]	p_bitmap	Receives the generated bitmap
 	 *\~french
-	 *\brief		Copie le buffer donn� dans un bitmap
-	 *\remark		Le buffer doit �tre en format BGRA 32bits
+	 *\brief		Copie le buffer donné dans un bitmap
+	 *\remark		Le buffer doit être en format BGRA 32bits
 	 *\param[in]	p_pBuffer	Le buffer
 	 *\param[in]	p_uiWidth	La largeur de l'image
 	 *\param[in]	p_uiHeight	La hauteur de l'image
@@ -135,10 +135,10 @@ namespace GuiCommon
 	 *\param[in]	p_pUnit		The unit
 	 *\param[out]	p_bitmap	Receives the generated bitmap
 	 *\~french
-	 *\brief		Copie la texture de l'unit� dans un bitmap
-	 *\remark		Le buffer de l'image va �tre copi� dans un buffer BGRA 32bits
-	 *\param[in]	p_pUnit		L'unit�
-	 *\param[out]	p_bitmap	Re�oit le bitmap g�n�r�
+	 *\brief		Copie la texture de l'unité dans un bitmap
+	 *\remark		Le buffer de l'image va être copié dans un buffer BGRA 32bits
+	 *\param[in]	p_pUnit		L'unité
+	 *\param[out]	p_bitmap	Reçoit le bitmap généré
 	 */
 	void wxCreateBitmapFromBuffer( Castor3D::TextureUnitSPtr p_pUnit, wxBitmap & p_bitmap );
 

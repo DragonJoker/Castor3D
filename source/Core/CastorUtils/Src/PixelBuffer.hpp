@@ -31,7 +31,7 @@ namespace Castor
 	\~french
 	\brief		Buffer de pixels avec le format de pixel en argument template
 	*/
-	template< ePIXEL_FORMAT PF >
+	template< TPL_PIXEL_FORMAT PF >
 	class PxBuffer
 		: public PxBufferBase
 	{
@@ -114,7 +114,7 @@ namespace Castor
 		 *\param[in]	p_uiIndex	L'index
 		 *\return		Une référence constante sur la colonne à l'index voulu
 		 */
-		inline	column const & operator []( uint32_t p_uiIndex )const
+		inline column const & operator []( uint32_t p_uiIndex )const
 		{
 			do_init_column( p_uiIndex );
 			return m_column;
@@ -131,7 +131,7 @@ namespace Castor
 		 *\param[in]	p_uiIndex	L'index
 		 *\return		Une référence sur la colonne à l'index voulu
 		 */
-		inline	column & operator []( uint32_t p_uiIndex )
+		inline column & operator []( uint32_t p_uiIndex )
 		{
 			do_init_column( p_uiIndex );
 			return m_column;
@@ -166,10 +166,7 @@ namespace Castor
 		 *\brief		Récupère le pointeur sur les données constantes
 		 *\return		Les données
 		 */
-		virtual uint8_t const * const_ptr()const
-		{
-			return m_pBuffer;
-		}
+		virtual uint8_t const * const_ptr()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pointer on datas
@@ -178,10 +175,7 @@ namespace Castor
 		 *\brief		Récupère le pointeur sur les données
 		 *\return		Les données
 		 */
-		virtual uint8_t * ptr()
-		{
-			return m_pBuffer;
-		}
+		virtual uint8_t * ptr();
 		/**
 		 *\~english
 		 *\brief		Retrieves the total size of the buffer
@@ -190,10 +184,7 @@ namespace Castor
 		 *\brief		Récupère la taille totale du buffer
 		 *\return		count() * pixel_definitions< PF >::Size
 		 */
-		virtual uint32_t size()const
-		{
-			return count() * pixel_definitions< PF >::Size;
-		}
+		virtual uint32_t size()const;
 		/**
 		 *\~english
 		 *\brief		Creates a new buffer with same values as this one
@@ -241,11 +232,11 @@ namespace Castor
 		virtual void mirror();
 
 	private:
-		virtual void do_init_column( uint32_t p_uiColumn );
+		virtual void do_init_column( uint32_t p_uiColumn )const;
 
 	private:
 		pixel m_pixel;
-		column m_column;
+		mutable column m_column;
 	};
 }
 

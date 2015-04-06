@@ -203,9 +203,9 @@ namespace Castor3D
 	{
 		MovableObject::operator =( p_camera );
 		Renderable< Camera, CameraRenderer >::operator =( p_camera );
-		m_ePrimitiveType		= p_camera.m_ePrimitiveType								;
-		m_eProjectionDirection	= p_camera.m_eProjectionDirection						;
-		m_pViewport				= std::make_shared< Viewport >( *p_camera.m_pViewport )	;
+		m_ePrimitiveType = p_camera.m_ePrimitiveType;
+		m_eProjectionDirection = p_camera.m_eProjectionDirection;
+		m_pViewport = std::make_shared< Viewport >( *p_camera.m_pViewport );
 		return *this;
 	}
 
@@ -216,9 +216,9 @@ namespace Castor3D
 
 		if ( this != &p_camera )
 		{
-			m_ePrimitiveType		= std::move( p_camera.m_ePrimitiveType );
-			m_eProjectionDirection	= std::move( p_camera.m_eProjectionDirection );
-			m_pViewport				= std::move( p_camera.m_pViewport );
+			m_ePrimitiveType = std::move( p_camera.m_ePrimitiveType );
+			m_eProjectionDirection = std::move( p_camera.m_eProjectionDirection );
+			m_pViewport = std::move( p_camera.m_pViewport );
 		}
 
 		return *this;
@@ -230,36 +230,52 @@ namespace Castor3D
 
 	void Camera::ResetOrientation()
 	{
-		GetParent()->SetOrientation( Quaternion::Identity() );
+		SceneNodeSPtr l_node = GetParent();
+
+		if ( l_node )
+		{
+			l_node->SetOrientation( Quaternion::Identity() );
+		}
 	}
 
 	void Camera::ResetPosition()
 	{
-		GetParent()->SetPosition( Point3r( 0, 0, 0 ) );
+		SceneNodeSPtr l_node = GetParent();
+
+		if ( l_node )
+		{
+			l_node->SetPosition( Point3r( 0, 0, 0 ) );
+		}
 	}
 
 	void Camera::Render()
 	{
 		Pipeline * l_pPipeline = m_pEngine->GetRenderSystem()->GetPipeline();
 		bool l_bModified = m_pViewport->Render();
-		Matrix4x4r const & l_mtx = GetParent()->GetDerivedTransformationMatrix();
+		SceneNodeSPtr l_node = GetParent();
 
-		if ( l_bModified || GetParent()->IsModified() )
+		if ( l_node )
 		{
-			// Express frustum view in world coordinates
-			Point3r l_position;
-			MtxUtils::get_translate( l_mtx, l_position );
+			Matrix4x4r const & l_mtx = l_node->GetDerivedTransformationMatrix();
 
-			for ( int i = 0; i < eFRUSTUM_PLANE_COUNT; ++i )
+			if ( l_bModified || l_node->IsModified() )
 			{
-				m_planes[i].Set( l_mtx * m_pViewport->GetFrustumPlane( eFRUSTUM_PLANE( i ) ).GetNormal(), l_position );
+				// Express frustum view in world coordinates
+				Point3r l_position;
+				MtxUtils::get_translate( l_mtx, l_position );
+
+				for ( int i = 0; i < eFRUSTUM_PLANE_COUNT; ++i )
+				{
+					m_planes[i].Set( l_mtx * m_pViewport->GetFrustumPlane( eFRUSTUM_PLANE( i ) ).GetNormal(), l_position );
+				}
 			}
+
+			l_pPipeline->MatrixMode( eMTXMODE_VIEW );
+			l_pPipeline->LoadIdentity();
+			l_pPipeline->PushMatrix();
+			l_pPipeline->MultMatrix( l_mtx );
 		}
 
-		l_pPipeline->MatrixMode( eMTXMODE_VIEW );
-		l_pPipeline->LoadIdentity();
-		l_pPipeline->PushMatrix();
-		l_pPipeline->MultMatrix( l_mtx );
 		m_pEngine->GetRenderSystem()->SetCurrentCamera( this );
 	}
 

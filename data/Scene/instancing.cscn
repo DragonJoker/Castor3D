@@ -261,6 +261,23 @@ scene "Scene"
 		mesh "Mesh"
 		material "Gold"
 	}
+
+	scene_node "MainCameraNode"
+	{
+		position 0.0 0.0 -100.0
+	}
+	camera "MainCamera"
+	{
+		parent "MainCameraNode"
+		primitive triangles
+		viewport "MainViewport"
+		{
+			type			3d
+			size			screen_size
+			fov_y			45.0
+			aspect_ratio	1.778
+		}
+	}
 /**/
 }
 
@@ -273,6 +290,7 @@ window "Window"
 		size		screen_size
 		msaa 		8
 		scene		"Scene"
+		camera		"MainCamera"
 	}
 	fullscreen	false
 	vsync		true

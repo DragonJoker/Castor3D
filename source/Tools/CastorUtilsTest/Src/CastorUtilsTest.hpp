@@ -35,6 +35,8 @@ namespace Testing
 		void MatrixInversion( uint32_t & p_errCount, uint32_t & p_testCount );
 		void MatrixInversionComparison( uint32_t & p_errCount, uint32_t & p_testCount );
 		void ZipFile( uint32_t & p_errCount, uint32_t & p_testCount );
+		void TestPixelConversions( uint32_t & p_errCount, uint32_t & p_testCount );
+		void TestBufferConversions( uint32_t & p_errCount, uint32_t & p_testCount );
 	};
 }
 

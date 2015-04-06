@@ -276,7 +276,7 @@ namespace Castor3D
 
 		if ( m_mapChilds.size() > 0 )
 		{
-			SceneNodeSPtrStrMap::iterator l_it = m_mapChilds.begin();
+			SceneNodePtrStrMap::iterator l_it = m_mapChilds.begin();
 
 			while ( l_it != m_mapChilds.end() )
 			{
@@ -359,7 +359,7 @@ namespace Castor3D
 
 		if ( m_mapChilds.find( p_name ) == m_mapChilds.end() )
 		{
-			SceneNodeSPtrStrMap::iterator l_it = m_mapChilds.begin();
+			SceneNodePtrStrMap::iterator l_it = m_mapChilds.begin();
 
 			while ( l_it != m_mapChilds.end() && ! l_bFound )
 			{
@@ -393,7 +393,6 @@ namespace Castor3D
 
 	void SceneNode::DetachChild( SceneNodeSPtr p_child )
 	{
-		String l_name = p_child->GetName();
 
 		if ( p_child )
 		{
@@ -401,13 +400,13 @@ namespace Castor3D
 		}
 		else
 		{
-			//Logger::LogMessage( m_strName + cuT( " - Can't remove SceneNode ") + l_name + cuT( " - Not in childs"));
+			Logger::LogMessage( m_strName + cuT( " - Can't remove SceneNode - Null pointer given"));
 		}
 	}
 
 	void SceneNode::DetachChild( String const & p_childName )
 	{
-		SceneNodeSPtrStrMap::iterator l_it = m_mapChilds.find( p_childName );
+		SceneNodePtrStrMap::iterator l_it = m_mapChilds.find( p_childName );
 
 		if ( l_it != m_mapChilds.end() )
 		{
@@ -427,7 +426,7 @@ namespace Castor3D
 
 	void SceneNode::DetachAllChilds()
 	{
-		SceneNodeSPtrStrMap::iterator l_it = m_mapChilds.begin();
+		SceneNodePtrStrMap::iterator l_it = m_mapChilds.begin();
 
 		while ( l_it != m_mapChilds.end() )
 		{
@@ -508,7 +507,7 @@ namespace Castor3D
 			}
 		}
 
-		for ( SceneNodeSPtrStrMap::const_iterator l_it = m_mapChilds.begin(); l_it != m_mapChilds.end(); ++l_it )
+		for ( SceneNodePtrStrMap::const_iterator l_it = m_mapChilds.begin(); l_it != m_mapChilds.end(); ++l_it )
 		{
 			SceneNodeSPtr l_current = l_it->second.lock();
 
@@ -540,7 +539,7 @@ namespace Castor3D
 
 		GeometrySPtr l_pTmp;
 
-		for ( SceneNodeSPtrStrMap::iterator l_it = m_mapChilds.begin(); l_it != m_mapChilds.end(); ++l_it )
+		for ( SceneNodePtrStrMap::iterator l_it = m_mapChilds.begin(); l_it != m_mapChilds.end(); ++l_it )
 		{
 			SceneNodeSPtr l_current = l_it->second.lock();
 

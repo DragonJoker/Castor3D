@@ -473,24 +473,26 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 	{
 		float l_fOpacity = 1;
 		float l_fShininess = 0.5f;
+		float l_fShininessStrength = 1.0f;
 		int l_iTwoSided = 0;
 		l_pReturn = std::make_shared< Material >( m_pEngine, l_strName );
 		l_pReturn->CreatePass();
 		l_pPass = l_pReturn->GetPass( 0 );
-		p_pAiMaterial->Get( AI_MATKEY_COLOR_AMBIENT,	l_clrAmbient );
-		p_pAiMaterial->Get( AI_MATKEY_COLOR_DIFFUSE,	l_clrDiffuse );
-		p_pAiMaterial->Get( AI_MATKEY_COLOR_SPECULAR,	l_clrSpecular );
-		p_pAiMaterial->Get( AI_MATKEY_COLOR_EMISSIVE,	l_clrEmissive );
-		p_pAiMaterial->Get( AI_MATKEY_OPACITY,			l_fOpacity );
-		p_pAiMaterial->Get( AI_MATKEY_SHININESS,		l_fShininess );
-		p_pAiMaterial->Get( AI_MATKEY_TWOSIDED,			l_iTwoSided );
-		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_AMBIENT,	0 ), l_ambTexName );
-		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_DIFFUSE,	0 ), l_difTexName );
-		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_NORMALS,	0 ), l_nmlTexName );
-		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_HEIGHT,	0 ), l_hgtTexName );
-		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_OPACITY,	0 ), l_opaTexName );
-		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_SHININESS,	0 ), l_shnTexName );
-		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_SPECULAR,	0 ), l_spcTexName );
+		p_pAiMaterial->Get( AI_MATKEY_COLOR_AMBIENT, l_clrAmbient );
+		p_pAiMaterial->Get( AI_MATKEY_COLOR_DIFFUSE, l_clrDiffuse );
+		p_pAiMaterial->Get( AI_MATKEY_COLOR_SPECULAR, l_clrSpecular );
+		p_pAiMaterial->Get( AI_MATKEY_COLOR_EMISSIVE, l_clrEmissive );
+		p_pAiMaterial->Get( AI_MATKEY_OPACITY, l_fOpacity );
+		p_pAiMaterial->Get( AI_MATKEY_SHININESS, l_fShininess );
+		p_pAiMaterial->Get( AI_MATKEY_SHININESS_STRENGTH, l_fShininessStrength );
+		p_pAiMaterial->Get( AI_MATKEY_TWOSIDED, l_iTwoSided );
+		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_AMBIENT, 0 ), l_ambTexName );
+		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_DIFFUSE, 0 ), l_difTexName );
+		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_NORMALS, 0 ), l_nmlTexName );
+		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_HEIGHT, 0 ), l_hgtTexName );
+		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_OPACITY, 0 ), l_opaTexName );
+		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_SHININESS, 0 ), l_shnTexName );
+		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_SPECULAR, 0 ), l_spcTexName );
 
 		if ( l_clrAmbient.IsBlack() && l_clrDiffuse.IsBlack() && l_clrSpecular.IsBlack() && l_clrEmissive.IsBlack() )
 		{
@@ -501,12 +503,12 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 
 		l_pPass->SetAmbient( Colour::from_components( l_clrAmbient.r, l_clrAmbient.g, l_clrAmbient.b, 1 ) );
 		l_pPass->SetDiffuse( Colour::from_components( l_clrDiffuse.r, l_clrDiffuse.g, l_clrDiffuse.b, 1 ) );
-		l_pPass->SetSpecular( Colour::from_components( l_clrSpecular.r, l_clrSpecular.g, l_clrSpecular.b, 1 ) );
+		l_pPass->SetSpecular( Colour::from_components( l_clrSpecular.r * l_fShininessStrength, l_clrSpecular.g * l_fShininessStrength, l_clrSpecular.b * l_fShininessStrength, 1 ) );
 		l_pPass->SetEmissive( Colour::from_components( l_clrEmissive.r, l_clrEmissive.g, l_clrEmissive.b, 1 ) );
 
 		if ( l_fShininess > 0 )
 		{
-			l_pPass->SetShininess( l_fShininess * 128.0f );
+			l_pPass->SetShininess( l_fShininess );
 		}
 
 		l_pPass->SetAlpha( l_fOpacity );

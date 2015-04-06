@@ -131,12 +131,12 @@ namespace Castor3D
 		};
 
 	protected:
-		typedef std::map< Castor::String, SceneNodeWPtr > SceneNodeSPtrStrMap;
+		typedef std::map< Castor::String, SceneNodeWPtr > SceneNodePtrStrMap;
 		typedef std::map< Castor::String, MovableObjectWPtr > MovableObjectPtrStrMap;
 
 	public:
-		typedef SceneNodeSPtrStrMap::iterator node_iterator;
-		typedef SceneNodeSPtrStrMap::const_iterator node_const_iterator;
+		typedef SceneNodePtrStrMap::iterator node_iterator;
+		typedef SceneNodePtrStrMap::const_iterator node_const_iterator;
 		typedef MovableObjectPtrStrMap::iterator object_iterator;
 		typedef MovableObjectPtrStrMap::const_iterator object_const_iterator;
 
@@ -690,7 +690,7 @@ namespace Castor3D
 		//!\~english  This node's parent	\~french Le noeud parent
 		SceneNodeWPtr m_pParent;
 		//!\~english  This node's childs	\~french Les enfants de ce noeud
-		SceneNodeSPtrStrMap m_mapChilds;
+		SceneNodePtrStrMap m_mapChilds;
 		//!\~english  This node's attached objects	\~french Les objets attachés à ce noeud
 		MovableObjectPtrStrMap m_mapAttachedObjects;
 		//!\~english The parent scene	\~french La scène parente

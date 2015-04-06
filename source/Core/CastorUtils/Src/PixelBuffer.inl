@@ -1,43 +1,43 @@
 ﻿namespace Castor
 {
-	template< ePIXEL_FORMAT FT >
+	template< TPL_PIXEL_FORMAT FT >
 	PxBuffer< FT >::PxBuffer( Size const & p_size, uint8_t const * p_pBuffer, ePIXEL_FORMAT p_eBufferFormat )
-		:	PxBufferBase( p_size, FT, p_pBuffer, p_eBufferFormat	)
-		,	m_column( p_size.width()	)
+		: PxBufferBase( p_size, ePIXEL_FORMAT( FT ), p_pBuffer, p_eBufferFormat )
+		, m_column( p_size.width() )
 	{
 		init( p_pBuffer, p_eBufferFormat );
 	}
 
-	template< ePIXEL_FORMAT FT >
+	template< TPL_PIXEL_FORMAT FT >
 	PxBuffer< FT >::PxBuffer( PxBuffer< FT > const & p_pixelBuffer )
-		:	PxBufferBase( p_pixelBuffer.dimensions(), FT	)
-		,	m_column( p_pixelBuffer.width()	)
+		: PxBufferBase( p_pixelBuffer )
+		, m_column( p_pixelBuffer.width() )
 	{
-		init( p_pixelBuffer.begin(), p_pixelBuffer.format() );
+		init( p_pixelBuffer.const_ptr(), p_pixelBuffer.format() );
 	}
 
-	template< ePIXEL_FORMAT FT >
+	template< TPL_PIXEL_FORMAT FT >
 	PxBuffer< FT >::PxBuffer( PxBuffer< FT > && p_pixelBuffer )
-		:	PxBufferBase( std::move( p_pixelBuffer	)	)
-		,	m_column( std::move( p_pixelBuffer.m_column	)	)
+		: PxBufferBase( std::move( p_pixelBuffer ) )
+		, m_column( std::move( p_pixelBuffer.m_column ) )
 	{
 		p_pixelBuffer.m_column.clear();
 	}
 
-	template< ePIXEL_FORMAT FT >
+	template< TPL_PIXEL_FORMAT FT >
 	PxBuffer< FT >::~PxBuffer()
 	{
 		clear();
 	}
 
-	template< ePIXEL_FORMAT FT >
+	template< TPL_PIXEL_FORMAT FT >
 	PxBuffer< FT > & PxBuffer< FT >::operator =( PxBuffer< FT > const & p_pixelBuffer )
 	{
 		PxBufferBase::operator=( p_pixelBuffer );
 		return * this;
 	}
 
-	template< ePIXEL_FORMAT FT >
+	template< TPL_PIXEL_FORMAT FT >
 	PxBuffer< FT > & PxBuffer< FT >::operator =( PxBuffer< FT > && p_pixelBuffer )
 	{
 		PxBufferBase::operator=( p_pixelBuffer );
@@ -46,13 +46,13 @@
 		return * this;
 	}
 
-	template< ePIXEL_FORMAT FT >
+	template< TPL_PIXEL_FORMAT FT >
 	void PxBuffer< FT >::swap( PxBuffer< FT > & p_pixelBuffer )
 	{
 		PxBufferBase::swap( p_pixelBuffer );
 	}
 
-	template< ePIXEL_FORMAT FT >
+	template< TPL_PIXEL_FORMAT FT >
 	void PxBuffer< FT >::assign( std::vector< uint8_t > const & p_pBuffer, ePIXEL_FORMAT p_eBufferFormat )
 	{
 		uint8_t l_uiSize = PF::GetBytesPerPixel( p_eBufferFormat );
@@ -65,27 +65,45 @@
 		}
 	}
 
-	template< ePIXEL_FORMAT FT >
+	template< TPL_PIXEL_FORMAT FT >
+	uint8_t const * PxBuffer< FT >::const_ptr()const
+	{
+		return m_pBuffer;
+	}
+
+	template< TPL_PIXEL_FORMAT FT >
+	uint8_t * PxBuffer< FT >::ptr()
+	{
+		return m_pBuffer;
+	}
+
+	template< TPL_PIXEL_FORMAT FT >
+	uint32_t PxBuffer< FT >::size()const
+	{
+		return count() * pixel_definitions< FT >::Size;
+	}
+
+	template< TPL_PIXEL_FORMAT FT >
 	std::shared_ptr< PxBufferBase > PxBuffer< FT >::clone()const
 	{
 		return std::make_shared< PxBuffer >( *this );
 	}
 
-	template< ePIXEL_FORMAT FT >
+	template< TPL_PIXEL_FORMAT FT >
 	uint8_t * PxBuffer< FT >::get_at( uint32_t x, uint32_t y )
 	{
 		CASTOR_ASSERT( x < width() && y < height() );
 		return &m_pBuffer[( x * height() + y ) * pixel_definitions< FT >::Size];
 	}
 
-	template< ePIXEL_FORMAT FT >
+	template< TPL_PIXEL_FORMAT FT >
 	uint8_t const * PxBuffer< FT >::get_at( uint32_t x, uint32_t y )const
 	{
 		CASTOR_ASSERT( x < width() && y < height() );
 		return &m_pBuffer[( x * height() + y ) * pixel_definitions< FT >::Size];
 	}
 
-	template< ePIXEL_FORMAT FT >
+	template< TPL_PIXEL_FORMAT FT >
 	void PxBuffer< FT >::flip()
 	{
 		uint32_t 	l_uiWidth		= width() * pixel_definitions< FT >::Size;
@@ -105,7 +123,7 @@
 		}
 	}
 
-	template< ePIXEL_FORMAT FT >
+	template< TPL_PIXEL_FORMAT FT >
 	void PxBuffer< FT >::mirror()
 	{
 		uint32_t 	l_uiWidth		= width() * pixel_definitions< FT >::Size;
@@ -130,8 +148,8 @@
 		}
 	}
 
-	template< ePIXEL_FORMAT FT >
-	void PxBuffer< FT >::do_init_column( uint32_t p_uiColumn )
+	template< TPL_PIXEL_FORMAT FT >
+	void PxBuffer< FT >::do_init_column( uint32_t p_uiColumn )const
 	{
 		if ( p_uiColumn < width() )
 		{
