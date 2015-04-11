@@ -79,6 +79,7 @@ namespace GlRender
 					cuT(	"    float   l_fShininess        = c3d_fMatShininess;\n" )
 					cuT(	"    vec4    l_v4MatSpecular     = c3d_v4MatSpecular;\n" )
 					cuT(	"    vec4    l_v4Emissive        = c3d_v4MatEmissive;\n" );
+
 				m_strPixelMainLightsLoop =
 					cuT(	"    for( int i = 0; i < c3d_iLightsCount; i++ )\n" )
 					cuT(	"    {\n" )
@@ -98,7 +99,8 @@ namespace GlRender
 					cuT(	"        l_v4Ambient     += l_v4TmpAmbient;\n" )
 					cuT(	"        l_v4Diffuse     += l_v4TmpDiffuse;\n" )
 					cuT(	"        l_v4Specular    += l_v4TmpSpecular;\n" )
-					cuT(	"	}\n" );
+					cuT(	"    }\n" );
+
 				m_strPixelMainEnd =
 					cuT(	"}\n" );
 			}

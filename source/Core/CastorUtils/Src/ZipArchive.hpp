@@ -40,12 +40,12 @@ namespace Castor
 
 		struct Folder
 		{
-			std::string name;
+			String name;
 			FolderList folders;
-			std::list< std::string > files;
+			std::list< String > files;
 
 			Folder();
-			Folder( std::string const & p_name, Path const & p_path );
+			Folder( String const & p_name, Path const & p_path );
 			Folder * FindFolder( Path const & p_path );
 			void AddFile( Path const & p_path );
 			void RemoveFile( Path const & p_path );
@@ -56,10 +56,10 @@ namespace Castor
 		{
 			virtual void Open( Path const & p_path, File::eOPEN_MODE p_mode ) = 0;
 			virtual void Close() = 0;
+			virtual void Deflate( Folder const & p_files ) = 0;
+			virtual StringArray Inflate( Path const & p_outFolder, Folder & p_folder ) = 0;
 			virtual bool FindFolder( String const & p_folder ) = 0;
 			virtual bool FindFile( String const & p_file ) = 0;
-			virtual void Deflate( Folder const & p_files ) = 0;
-			virtual void Inflate( Path const & p_outFolder, Folder & p_folder ) = 0;
 		};
 
 	public:
@@ -139,6 +139,7 @@ namespace Castor
 	private:
 		std::unique_ptr< ZipImpl > m_impl;
 		Folder m_uncompressed;
+		Path m_rootFolder;
 	};
 }
 

@@ -1,3 +1,17 @@
+# FindASSIMP
+# ------------
+#
+# Locate assimp library
+#
+# This module defines
+#
+# ::
+#
+#   ASSIMP_LIBRARIES, the libraries to link against
+#   ASSIMP_FOUND, if false, do not try to link to assimp
+#   ASSIMP_INCLUDE_DIR, where to find headers.
+#
+
 FIND_PATH(ASSIMP_ROOT_DIR include/assimp/ai_assert.h 
     HINTS
     PATH_SUFFIXES

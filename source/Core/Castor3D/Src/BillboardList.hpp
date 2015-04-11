@@ -326,6 +326,17 @@ namespace Castor3D
 		 *\return		\p true si tout s'est bien passÃ¯Â¿Â½
 		 */
 		virtual bool DoInitialise() = 0;
+		/**
+		 *\~english
+		 *\brief		Retrieves the appropriate shader program
+		 *\param[in]	p_flags	The texture channels flags, to create the right program
+		 *\return		\p true if all is OK
+		 *\~french
+		 *\brief		Récupère le shader approprié
+		 *\param[in]	p_flags	Les indicateurs de canaux de textures, pour créer le bon programme
+		 *\return		\p true si tout s'est bien passé
+		 */
+		virtual ShaderProgramBaseSPtr DoGetProgram( uint32_t p_flags ) = 0;
 
 	protected:
 		//!\~english  The RenderSystem	\~french La RenderSystem

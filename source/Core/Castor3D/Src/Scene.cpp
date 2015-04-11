@@ -626,6 +626,8 @@ namespace Castor3D
 
 			if ( !m_mapBillboardsLists.empty() )
 			{
+				l_pContext->CullFace( eFACE_FRONT );
+				DoRenderBillboards( *l_pPipeline, m_mapBillboardsLists.begin(), m_mapBillboardsLists.end() );
 				l_pContext->CullFace( eFACE_BACK );
 				DoRenderBillboards( *l_pPipeline, m_mapBillboardsLists.begin(), m_mapBillboardsLists.end() );
 			}

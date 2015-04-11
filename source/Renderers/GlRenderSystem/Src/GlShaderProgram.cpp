@@ -237,7 +237,7 @@ namespace GlRender
 			l_strReturn += cuT( "    l_mtxBoneTransform             += c3d_mtxBones[bone_ids[1]] * weights[1];\n" );
 			l_strReturn += cuT( "    l_mtxBoneTransform             += c3d_mtxBones[bone_ids[2]] * weights[2];\n" );
 			l_strReturn += cuT( "    l_mtxBoneTransform             += c3d_mtxBones[bone_ids[3]] * weights[3];\n" );
-			//		l_strReturn += cuT( "    l_mtxBoneTransform = transpose( l_mtxBoneTransform );" );
+			//l_strReturn += cuT( "    l_mtxBoneTransform = transpose( l_mtxBoneTransform );" );
 			l_strReturn += cuT( "    l_v4Vertex                      = l_mtxBoneTransform * l_v4Vertex;\n" );
 			l_strReturn += cuT( "    l_v4Normal                      = l_mtxBoneTransform * l_v4Normal;\n" );
 			l_strReturn += cuT( "    l_v4Tangent                     = l_mtxBoneTransform * l_v4Tangent;\n" );

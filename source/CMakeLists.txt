@@ -80,7 +80,7 @@ if( Boost_FOUND AND Boost_NEEDED )
 	message( STATUS "+ Found Boost" )
 endif()
 if( DOXYGEN_FOUND )
-	message( STATUS "+ Found Doxygen" )
+	message( STATUS "+ Found Doxygen (version ${DOXYGEN_VERSION})" )
 endif ()
 
 #--------------------------------------------------------------------------------------------------

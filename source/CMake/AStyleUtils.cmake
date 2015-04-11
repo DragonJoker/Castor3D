@@ -61,7 +61,7 @@ function( add_target_astyle TARGET_NAME EXT_LIST )
 	    endif()
         add_test(
             NAME ${TARGET_NAME}_AStyle
-            COMMAND ${ASTYLE_BINARY} ${ASTYLE_ARGS} ${PROJECT_FILES}
+            COMMAND ${ASTYLE_EXECUTABLE} ${ASTYLE_ARGS} ${PROJECT_FILES}
         )
     endif()
 endfunction( add_target_astyle )

@@ -321,12 +321,7 @@ bool SceneFileParser::ParseFile( Path const & p_pathFile )
 	if ( l_path.GetExtension() == cuT( "zip" ) )
 	{
 		Castor::ZipArchive l_archive( l_path, File::eOPEN_MODE_READ );
-		l_path = Engine::GetEngineDirectory();
-
-		if ( !l_archive.FindFolder( p_pathFile.GetFileName() ) )
-		{
-			l_path /= p_pathFile.GetFileName();
-		}
+		l_path = Engine::GetEngineDirectory() / p_pathFile.GetFileName();
 
 		if ( l_archive.Inflate( l_path ) )
 		{
@@ -342,6 +337,11 @@ bool SceneFileParser::ParseFile( Path const & p_pathFile )
 					Path l_pathTmp = *l_it;
 
 					if ( l_pathTmp.GetExtension() == cuT( "cscn" ) )
+					{
+						l_path = l_pathTmp;
+						l_found = true;
+					}
+					else if ( l_pathTmp.GetExtension() == cuT( "cbsn" ) )
 					{
 						l_path = l_pathTmp;
 						l_found = true;

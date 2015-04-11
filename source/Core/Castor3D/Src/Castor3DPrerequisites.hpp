@@ -1224,6 +1224,7 @@ namespace Castor3D
 		ePROGRAM_FLAG_DEFERRED		= 0x01,	//!<\~english Program used in deferred rendering	\~french Programme utilisé lors d'un rendu différé
 		ePROGRAM_FLAG_INSTANCIATION	= 0x02,	//!<\~english Program using instanciation	\~french Programme utilisant l'instanciation
 		ePROGRAM_FLAG_SKINNING		= 0x04,	//!<\~english Program using skeleton animations	\~french Programme utilisant les animations par squelette
+		ePROGRAM_FLAG_BILLBOARDS	= 0x08,	//!<\~english Program used by billboards	\~french Programme utilisé par des billboards
 	}	ePROGRAM_FLAG;
 	/*!
 	\author 	Sylvain DOREMUS

@@ -205,12 +205,14 @@ namespace Castor
 
 	void ILoggerImpl::LogDebug( String const & p_strToLog )
 	{
-		std::xlog << p_strToLog << std::endl;
+		std::unique_lock< std::mutex > lock( m_outMutex );
+		DoLogMessage( p_strToLog, eLOG_TYPE_DEBUG );
 	}
 
 	void ILoggerImpl::LogMessage( String const & p_strToLog )
 	{
-		std::xout << p_strToLog << std::endl;
+		std::unique_lock< std::mutex > lock( m_outMutex );
+		DoLogMessage( p_strToLog, eLOG_TYPE_MESSAGE );
 	}
 
 	void ILoggerImpl::LogWarning( String const & p_strToLog )
@@ -221,7 +223,8 @@ namespace Castor
 
 	bool ILoggerImpl::LogError( String const & p_strToLog )
 	{
-		std::xerr << p_strToLog << std::endl;
+		std::unique_lock< std::mutex > lock( m_outMutex );
+		DoLogMessage( p_strToLog, eLOG_TYPE_ERROR );
 		return true;
 	}
 

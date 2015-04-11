@@ -145,13 +145,14 @@ namespace Castor
 				DoDeflateFiles( cuT( "" ), p_folder.files );
 			}
 
-			virtual void Inflate( Path const & p_outFolder, ZipArchive::Folder & p_folder )
+			virtual StringArray Inflate( Path const & p_outFolder, ZipArchive::Folder & p_folder )
 			{
 				if ( !File::DirectoryExists( p_outFolder ) )
 				{
 					File::DirectoryCreate( p_outFolder );
 				}
 
+				StringArray l_result;
 				int l_count = zip_get_num_files( m_zip );
 
 				if ( l_count == -1 )
@@ -233,9 +234,13 @@ namespace Castor
 							}
 						}
 
+						l_result.push_back( p_outFolder / l_name );
+
 						zip_fclose( l_zipfile );
 					}
 				}
+
+				return l_result;
 			}
 
 		private:
@@ -245,11 +250,11 @@ namespace Castor
 
 				if ( p_path.empty() )
 				{
-					l_path = str_utils::from_str( p_folder.name );
+					l_path = p_folder.name;
 				}
 				else
 				{
-					l_path = p_path + cuT( "/" ) + str_utils::from_str( p_folder.name );
+					l_path = p_path + cuT( "/" ) + p_folder.name;
 				}
 
 				for ( ZipArchive::FolderList::const_iterator l_it = p_folder.folders.begin(); l_it != p_folder.folders.end(); ++l_it )
@@ -260,11 +265,11 @@ namespace Castor
 				DoDeflateFiles( l_path, p_folder.files );
 			}
 
-			virtual void DoDeflateFiles( String const & p_path, std::list< std::string > const & p_files )
+			virtual void DoDeflateFiles( String const & p_path, std::list< String > const & p_files )
 			{
-				for ( std::list< std::string >::const_iterator l_it = p_files.begin(); l_it != p_files.end(); ++l_it )
+				for ( std::list< String >::const_iterator l_it = p_files.begin(); l_it != p_files.end(); ++l_it )
 				{
-					std::string l_file = str_utils::to_str( p_path + cuT( "/" ) + str_utils::from_str( *l_it ) );
+					std::string l_file = str_utils::to_str( p_path + cuT( "/" ) + ( *l_it ) );
 
 					if ( !File::FileExists( str_utils::from_str( l_file ) ) )
 					{
@@ -312,7 +317,7 @@ namespace Castor
 	{
 	}
 
-	ZipArchive::Folder::Folder( std::string const & p_name, Path const & p_path )
+	ZipArchive::Folder::Folder( String const & p_name, Path const & p_path )
 		: name( p_name )
 	{
 		AddFile( p_path );
@@ -336,7 +341,12 @@ namespace Castor
 				l_return = &l_folder;
 			}
 		}
-		else if ( p_path.find( str_utils::from_str( name ) + Path::Separator ) == 0 )
+		else if ( p_path == name )
+		{
+			// The file path is this one
+			l_return = this;
+		}
+		else if ( p_path.find( name + Path::Separator ) == 0 )
 		{
 			// The file is inside this folder or inside a subfolder
 			Path l_path = p_path.substr( name.size() + 1 );
@@ -369,42 +379,41 @@ namespace Castor
 		if ( l_path.empty() )
 		{
 			// File path name is just a file name, add it to current folder.
-			std::string l_file = str_utils::to_str( p_path );
-			std::list< std::string >::iterator l_it = std::find( files.begin(), files.end(), l_file );
+			std::list< String >::iterator l_it = std::find( files.begin(), files.end(), p_path );
 
 			if ( l_it == files.end() )
 			{
-				files.push_back( l_file );
+				files.push_back( p_path );
 			}
 		}
 		else if ( name.empty() )
 		{
 			// The current folder is the root one, add each file path's folder, recursively.
-			folders.push_back( Folder( str_utils::to_str( p_path.substr( 0, p_path.find( Path::Separator ) ) ), p_path ) );
+			folders.push_back( Folder( p_path.substr( 0, p_path.find( Path::Separator ) ), p_path ) );
 		}
 		else
 		{
 			// Try to match file path's folders to this one
-			if ( p_path.find( str_utils::from_str( name ) + Path::Separator ) == 0 )
+			if ( p_path.find( name + Path::Separator ) == 0 )
 			{
 				// First file folder is this one, complete this folder with the file's ones
 				Path l_path = p_path.substr( name.size() + 1 );
 
 				if ( l_path == p_path.GetFileName() + cuT( "." ) + p_path.GetExtension() )
 				{
-					files.push_back( str_utils::to_str( l_path ) );
+					files.push_back( l_path );
 				}
 				else
 				{
 					size_t l_found = l_path.find( Path::Separator );
-					folders.push_back( Folder( str_utils::to_str( l_path.substr( 0, l_found ) ), l_path.substr( l_found + 1 ) ) );
+					folders.push_back( Folder( l_path.substr( 0, l_found ), l_path.substr( l_found + 1 ) ) );
 				}
 			}
 			else
 			{
 				// This file is in a subfolder
 				size_t l_found = p_path.find( Path::Separator );
-				folders.push_back( Folder( str_utils::to_str( p_path.substr( 0, l_found ) ), p_path.substr( l_found + 1 ) ) );
+				folders.push_back( Folder( p_path.substr( 0, l_found ), p_path.substr( l_found + 1 ) ) );
 			}
 		}
 	}
@@ -453,7 +462,15 @@ namespace Castor
 
 		try
 		{
-			m_impl->Inflate( p_folder, m_uncompressed );
+			m_rootFolder = p_folder;
+			StringArray l_entries = m_impl->Inflate( p_folder, m_uncompressed );
+
+			for ( StringArray::iterator l_it = l_entries.begin(); l_it != l_entries.end(); ++l_it )
+			{
+				str_utils::replace( *l_it, m_rootFolder + Path::Separator, String() );
+				AddFile( *l_it );
+			}
+
 			l_return = true;
 		}
 		catch ( std::exception & exc )

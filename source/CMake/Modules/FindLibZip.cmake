@@ -1,3 +1,17 @@
+# FindLibZip
+# ------------
+#
+# Locate libzip library
+#
+# This module defines
+#
+# ::
+#
+#   LIBZIP_LIBRARY, the library to link against
+#   LIBZIP_FOUND, if false, do not try to link to libzip
+#   LIBZIP_INCLUDE_DIR, where to find headers.
+#
+
 FIND_PATH( LIBZIP_ROOT_DIR include/zip.h 
 	HINTS
 	PATHS

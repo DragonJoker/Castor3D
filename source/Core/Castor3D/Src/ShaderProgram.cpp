@@ -433,8 +433,8 @@ namespace Castor3D
 
 				if ( m_pRenderSystem->GetMainContext()->IsDeferredShadingSet() )
 				{
-					m_pCameraPos->SetValue( Castor::MtxUtils::mult( m_pRenderSystem->GetPipeline()->GetMatrix( eMTXMODE_VIEW ), l_position ) );
-//					m_pCameraPos->SetValue( l_position );
+					//m_pCameraPos->SetValue( Castor::MtxUtils::mult( m_pRenderSystem->GetPipeline()->GetMatrix( eMTXMODE_VIEW ), l_position ) );
+					m_pCameraPos->SetValue( l_position );
 				}
 				else
 				{

@@ -3,7 +3,7 @@ project( CastorUtils )
 include( Doxygen )
 
 find_package( Freetype )
-find_package( ZLIB )
+find_package( ZLIB 1.2.7 )
 find_package( FreeImage )
 find_package( LibZip )
 
@@ -12,15 +12,15 @@ if( NOT WIN32 )
 endif()
 
 if( FREETYPE_FOUND )
-	message( STATUS "+ Found FreeType" )
+	message( STATUS "+ Found FreeType (version ${FREETYPE_VERSION_STRING})" )
 endif()
 
 if( ZLIB_FOUND )
-	message( STATUS "+ Found Zlib" )
+	message( STATUS "+ Found Zlib (version ${ZLIB_VERSION_STRING})" )
 endif()
 
 if( FREEIMAGE_FOUND )
-	message( STATUS "+ Found FreeImage" )
+	message( STATUS "+ Found FreeImage (version ${FreeImage_VERSION_STRING})" )
 endif()
 
 if( LIBZIP_FOUND )

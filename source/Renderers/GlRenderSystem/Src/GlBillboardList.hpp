@@ -32,6 +32,7 @@ namespace GlRender
 
 	private:
 		virtual bool DoInitialise();
+		virtual Castor3D::ShaderProgramBaseSPtr DoGetProgram( uint32_t p_flags );
 
 	private:
 		OpenGl & m_gl;
