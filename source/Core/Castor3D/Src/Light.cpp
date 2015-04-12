@@ -15,25 +15,26 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Light::Light( SceneSPtr p_pScene, LightFactory & p_factory, eLIGHT_TYPE p_eLightType )
-		:	MovableObject( p_pScene, eMOVABLE_TYPE_LIGHT )
-		,	Renderable< Light, LightRenderer >( p_pScene->GetEngine() )
-		,	m_enabled( false )
-	{
-		m_pCategory = p_factory.Create( p_eLightType );
-		m_pCategory->SetLight( this );
-		GetRenderer()->Initialise();
-	}
-
-	Light::Light( LightFactory & p_factory, SceneSPtr p_pScene, SceneNodeSPtr p_pNode, String const & p_name, eLIGHT_TYPE p_eLightType )
+	Light::Light( LightFactory & p_factory, SceneSPtr p_pScene, eLIGHT_TYPE p_eLightType, SceneNodeSPtr p_pNode, String const & p_name )
 		:	MovableObject( p_pScene, p_pNode, p_name, eMOVABLE_TYPE_LIGHT )
 		,	Renderable< Light, LightRenderer >( p_pScene->GetEngine() )
 		,	m_enabled( false )
 	{
+		DoCreateRenderer( this );
 		m_pCategory = p_factory.Create( p_eLightType );
 		m_pCategory->SetLight( this );
-		m_pCategory->SetPositionType( Point4f( p_pNode->GetPosition()[0], p_pNode->GetPosition()[1], p_pNode->GetPosition()[2], real( 0.0 ) ) );
+
+		if ( p_pNode )
+		{
+			m_pCategory->SetPositionType( Point4f( p_pNode->GetPosition()[0], p_pNode->GetPosition()[1], p_pNode->GetPosition()[2], real( 0.0 ) ) );
+		}
+
 		GetRenderer()->Initialise();
+	}
+
+	Light::Light( LightFactory & p_factory, SceneSPtr p_pScene, eLIGHT_TYPE p_eLightType )
+		:	Light( p_factory, p_pScene, p_eLightType, nullptr, String() )
+	{
 	}
 
 	Light::~Light()
@@ -42,39 +43,49 @@ namespace Castor3D
 
 	void Light::Enable()
 	{
-		if ( ! m_pRenderer.expired() )
+		LightRendererSPtr l_renderer = GetRenderer();
+
+		if ( !l_renderer )
 		{
-			m_pRenderer.lock()->Enable();
+			l_renderer->Enable();
 		}
 	}
 
 	void Light::Disable()
 	{
-		if ( ! m_pRenderer.expired() )
+		LightRendererSPtr l_renderer = GetRenderer();
+
+		if ( !l_renderer )
 		{
-			m_pRenderer.lock()->Disable();
+			l_renderer->Disable();
 		}
 	}
 
 	void Light::Enable( ShaderProgramBase * p_pProgram )
 	{
-		if ( ! m_pRenderer.expired() )
+		LightRendererSPtr l_renderer = GetRenderer();
+
+		if ( !l_renderer )
 		{
-			m_pRenderer.lock()->EnableShader( p_pProgram );
+			l_renderer->EnableShader( p_pProgram );
 		}
 	}
 
 	void Light::Disable( ShaderProgramBase * p_pProgram )
 	{
-		if ( ! m_pRenderer.expired() )
+		LightRendererSPtr l_renderer = GetRenderer();
+
+		if ( !l_renderer )
 		{
-			m_pRenderer.lock()->DisableShader( p_pProgram );
+			l_renderer->DisableShader( p_pProgram );
 		}
 	}
 
 	void Light::Render()
 	{
-		if ( ! m_pRenderer.expired() )
+		LightRendererSPtr l_renderer = GetRenderer();
+
+		if ( l_renderer )
 		{
 			SceneNodeSPtr l_node = GetParent();
 
@@ -98,7 +109,7 @@ namespace Castor3D
 				}
 			}
 
-			m_pCategory->Render( m_pRenderer.lock() );
+			m_pCategory->Render( l_renderer );
 		}
 	}
 
@@ -109,7 +120,9 @@ namespace Castor3D
 
 	void Light::Render( ShaderProgramBase * p_pProgram )
 	{
-		if ( ! m_pRenderer.expired() )
+		LightRendererSPtr l_renderer = GetRenderer();
+
+		if ( l_renderer )
 		{
 			SceneNodeSPtr l_node = GetParent();
 
@@ -133,7 +146,7 @@ namespace Castor3D
 				}
 			}
 
-			m_pCategory->Render( m_pRenderer.lock(), p_pProgram );
+			m_pCategory->Render( l_renderer, p_pProgram );
 		}
 	}
 

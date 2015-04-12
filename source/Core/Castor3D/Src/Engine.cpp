@@ -510,7 +510,7 @@ namespace Castor3D
 
 		if ( !l_pReturn )
 		{
-			l_pReturn = std::make_shared< Mesh >( this, p_strMeshName, p_eType );
+			l_pReturn = std::make_shared< Mesh >( this, p_eType, p_strMeshName );
 			l_pReturn->Initialise( p_arrayFaces, p_arraySizes );
 			m_pMeshManager->insert( p_strMeshName, l_pReturn );
 			Logger::LogMessage( cuT( "Engine::CreateMesh - Mesh [" ) + p_strMeshName + cuT( "] - Created" ) );
@@ -568,7 +568,7 @@ namespace Castor3D
 
 			if ( ! l_pMesh )
 			{
-				l_pMesh = std::make_shared< Mesh >( this, cuEmptyString, eMESH_TYPE_CUSTOM );
+				l_pMesh = std::make_shared< Mesh >( this, eMESH_TYPE_CUSTOM, cuEmptyString );
 				m_pMeshManager->insert( cuEmptyString, l_pMesh );
 			}
 

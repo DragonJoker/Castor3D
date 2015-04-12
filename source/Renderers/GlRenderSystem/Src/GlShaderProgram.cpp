@@ -310,7 +310,7 @@ namespace GlRender
 		l_strReturn += l_strIn	+ cuT( "    <vec3>   vtx_texture;\n" );
 		l_strReturn += l_pKeywords->GetLayout( 0 ) + l_strFragOutput;
 		l_strReturn += cuT( "uniform    sampler1D   c3d_sLights;\n" );
-		l_strPixelMainDeclarations += cuT( "	" ) + l_strPixelOutput + cuT( " = vec4( 0.0, 0.0, 0.0, 0.0 );\n" );
+		l_strPixelMainDeclarations += cuT( "    " ) + l_strPixelOutput + cuT( " = vec4( 0.0, 0.0, 0.0, 0.0 );\n" );
 
 		if ( p_uiFlags != 0 )
 		{
@@ -356,7 +356,7 @@ namespace GlRender
 			{
 				l_strReturn									+= cuT( "uniform sampler2D  c3d_mapSpecular;\n" );
 				l_strPixelMainDeclarations					+= cuT( "    vec4    l_v4MapSpecular     = <texture2D>( c3d_mapSpecular, vtx_texture.xy );\n" );
-				l_strPixelMainLightsLoopAfterLightDir		+= cuT( "    l_v4TmpSpecular = l_fAttenuation * l_light.m_v4Specular * l_v4MapSpecular * l_fSpecular;\n" );
+				l_strPixelMainLightsLoopAfterLightDir		+= cuT( "        l_v4TmpSpecular = l_fAttenuation * l_light.m_v4Specular * l_v4MapSpecular * l_fSpecular;\n" );
 			}
 
 			if ( ( p_uiFlags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
@@ -373,7 +373,8 @@ namespace GlRender
 			}
 		}
 
-		l_strPixelMainLightsLoopEnd	+= cuT( "	" ) + l_strPixelOutput + cuT( " = vec4( l_v4Diffuse/*( l_v4Emissive + l_v4Ambient + l_v4Diffuse + l_v4Specular )*/.xyz, l_fAlpha );\n" );
+		//l_strPixelMainLightsLoopEnd	+= cuT( "    " ) + l_strPixelOutput + cuT( " = vec4( ( l_v4Emissive + l_v4Ambient + l_v4Diffuse + l_v4Specular ).xyz, l_fAlpha );\n" );
+		l_strPixelMainLightsLoopEnd	+= cuT( "    " ) + l_strPixelOutput + cuT( " = vec4( l_v4Diffuse/*( l_v4Emissive + l_v4Ambient + l_v4Diffuse + l_v4Specular )*/.xyz, l_fAlpha );\n" );
 		l_strReturn += l_strPixelLights + l_strPixelMainDeclarations + l_strPixelMainLightsLoop + l_strPixelMainLightsLoopAfterLightDir + l_strPixelMainLightsLoopEnd + l_strPixelMainEnd;
 		str_utils::replace( l_strReturn, cuT( "<pxlin_mtxModelView>" ), l_strPixelMtxModelView );
 		str_utils::replace( l_strReturn, cuT( "<texture1D>" ), l_strTexture1D );

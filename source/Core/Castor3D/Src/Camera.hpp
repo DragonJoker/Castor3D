@@ -158,78 +158,42 @@ namespace Castor3D
 			 */
 			virtual bool Parse( Camera & p_obj, BinaryChunk & p_chunk )const;
 		};
-		/*!
-		 *\~english
-		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
-		 *\remark		Not to be used by the user, use Scene::CreateCamera instead
-		 *\param[in]	p_strName	The camera name
-		 *\param[in]	p_size		The viewport render size
-		 *\param[in]	p_pNode		The parent camera node
-		 *\param[in]	p_eType		Projection type
-		 *\~french
-		 *\brief		Constructeur
-		 *\remark		L'utilisateur ne devrait pas s'en servir, préférer l'utilisation de Scene::CreateCamera
-		 *\param[in]	p_strName	Le nom de la caméra
-		 *\param[in]	p_size		Les dimensions de rendu du viewport
-		 *\param[in]	p_pNode		SceneNode parent
-		 *\param[in]	p_eType		Type de projection
-		 */
-		Camera( SceneSPtr p_pScene, Castor::String const & p_strName, Castor::Size const & p_size, const SceneNodeSPtr p_pNode, eVIEWPORT_TYPE p_eType, eTOPOLOGY p_ePrimitiveType = eTOPOLOGY_TRIANGLES, ePROJECTION_DIRECTION p_eProjectionDirection = ePROJECTION_DIRECTION_FRONT );
 		/**
 		 *\~english
 		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
 		 *\remark		Not to be used by the user, use Scene::CreateCamera instead
-		 *\param[in]	p_strName	The camera name
-		 *\param[in]	p_pNode		The parent camera node
-		 *\param[in]	p_pViewport	Viewport to copy
+		 *\param[in]	p_strName			The camera name
+		 *\param[in]	p_pNode				The parent camera node
+		 *\param[in]	p_pViewport			Viewport to copy
+		 *\param[in]	p_ePrimitiveType	The camera display mode
 		 *\~french
 		 *\brief		Constructeur
 		 *\remark		L'utilisateur ne devrait pas s'en servir, préférer l'utilisation de Scene::CreateCamera
-		 *\param[in]	p_strName	Le nom de la caméra
-		 *\param[in]	p_pNode		SceneNode parent
-		 *\param[in]	p_pViewport	Viewport à copier
+		 *\param[in]	p_strName			Le nom de la caméra
+		 *\param[in]	p_pNode				SceneNode parent
+		 *\param[in]	p_pViewport			Viewport à copier
+		 *\param[in]	p_ePrimitiveType	Mode d'affichage de la caméra
 		 */
-		Camera( SceneSPtr p_pScene, Castor::String const & p_strName, const SceneNodeSPtr p_pNode, ViewportSPtr p_pViewport );
+		Camera( SceneSPtr p_pScene, Castor::String const & p_strName, const SceneNodeSPtr p_pNode, ViewportSPtr p_pViewport, eTOPOLOGY p_ePrimitiveType = eTOPOLOGY_TRIANGLES );
 		/**
 		 *\~english
-		 *\brief		Copy constructor
-		 *\param[in]	p_object	The object to copy
+		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
+		 *\remark		Not to be used by the user, use Scene::CreateCamera instead
+		 *\param[in]	p_strName			The camera name
+		 *\param[in]	p_pNode				The parent camera node
+		 *\param[in]	p_size				The viewport render size
+		 *\param[in]	p_eType				Projection type
+		 *\param[in]	p_ePrimitiveType	The camera display mode
 		 *\~french
-		 *\brief		Constructeur par copie
-		 *\param[in]	p_object	L'objet à copier
+		 *\brief		Constructeur
+		 *\remark		L'utilisateur ne devrait pas s'en servir, préférer l'utilisation de Scene::CreateCamera
+		 *\param[in]	p_strName			Le nom de la caméra
+		 *\param[in]	p_pNode				SceneNode parent
+		 *\param[in]	p_size				Les dimensions de rendu du viewport
+		 *\param[in]	p_eType				Type de projection
+		 *\param[in]	p_ePrimitiveType	Mode d'affichage de la caméra
 		 */
-		Camera( Camera const & p_object );
-		/**
-		 *\~english
-		 *\brief		Move constructor
-		 *\param[in]	p_object	The object to move
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_object	L'objet à déplacer
-		 */
-		Camera( Camera && p_object );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	p_object	The object to copy
-		 *\return		A reference to this object
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_object	L'objet à copier
-		 *\return		Une référence sur cet objet
-		 */
-		Camera & operator =( Camera const & p_object );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	p_object	The object to move
-		 *\return		A reference to this object
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_object	L'objet à déplacer
-		 *\return		Une référence sur cet objet
-		 */
-		Camera & operator =( Camera && p_object );
+		Camera( SceneSPtr p_pScene, Castor::String const & p_strName, const SceneNodeSPtr p_pNode, Castor::Size const & p_size, eVIEWPORT_TYPE p_eType, eTOPOLOGY p_ePrimitiveType = eTOPOLOGY_TRIANGLES );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -407,8 +371,6 @@ namespace Castor3D
 		ViewportSPtr m_pViewport;
 		//!\~english Primitive display type	\~french Type des primitives d'affichage
 		eTOPOLOGY m_ePrimitiveType;
-		//!\~english Defines where the camera looks at on 2D mode	\~french Définit où la caméra regarde en mode 2D
-		ePROJECTION_DIRECTION m_eProjectionDirection;
 		//!\~english The view frustum's planes	\~french Les plans du frustum de vue
 		Castor::PlaneEquation< real > m_planes[eFRUSTUM_PLANE_COUNT];
 	};

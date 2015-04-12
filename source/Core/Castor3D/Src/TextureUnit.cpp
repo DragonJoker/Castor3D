@@ -454,17 +454,18 @@ namespace Castor3D
 	//*********************************************************************************************
 
 	TextureUnit::TextureUnit( Engine * p_pEngine )
-		:	Renderable< TextureUnit, TextureRenderer >( p_pEngine )
-		,	m_uiIndex( 0 )
-		,	m_clrBlend( Colour::from_rgba( 0xFFFFFFFF ) )
-		,	m_eChannel( eTEXTURE_CHANNEL_DIFFUSE )
-		,	m_eAlphaFunc( eALPHA_FUNC_ALWAYS )
-		,	m_fAlphaValue( 0 )
-		,	m_eRgbFunction( eRGB_BLEND_FUNC_NONE )
-		,	m_eAlpFunction( eALPHA_BLEND_FUNC_NONE )
-		,	m_bAutoMipmaps( false )
-		,	m_bChanged( false )
+		: Renderable< TextureUnit, TextureRenderer >( p_pEngine )
+		, m_uiIndex( 0 )
+		, m_clrBlend( Colour::from_rgba( 0xFFFFFFFF ) )
+		, m_eChannel( eTEXTURE_CHANNEL_DIFFUSE )
+		, m_eAlphaFunc( eALPHA_FUNC_ALWAYS )
+		, m_fAlphaValue( 0 )
+		, m_eRgbFunction( eRGB_BLEND_FUNC_NONE )
+		, m_eAlpFunction( eALPHA_BLEND_FUNC_NONE )
+		, m_bAutoMipmaps( false )
+		, m_bChanged( false )
 	{
+		DoCreateRenderer( this );
 		m_mtxTransformations.set_identity();
 		m_eRgbArguments[0] = eBLEND_SOURCE_COUNT;
 		m_eRgbArguments[1] = eBLEND_SOURCE_COUNT;

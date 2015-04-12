@@ -1045,7 +1045,7 @@ namespace CastorViewer
 
 	void MainFrame::OnShowMaterialsList( wxCommandEvent & p_event )
 	{
-		wxMaterialsFrame * l_pFrame = new wxMaterialsFrame( m_pCastor3D, true, this, _( "Materials" ), wxDefaultPosition );
+		wxMaterialsFrame * l_pFrame = new wxMaterialsFrame( m_pCastor3D, false, this, _( "Materials" ), wxDefaultPosition );
 		l_pFrame->Initialise();
 		l_pFrame->Show();
 		p_event.Skip();

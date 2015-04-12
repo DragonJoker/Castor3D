@@ -7,30 +7,8 @@ namespace Castor
 	{
 	}
 
-	TextFile::TextFile( TextFile const & p_file )
-		:	File( p_file	)
-	{
-	}
-
-	TextFile::TextFile( TextFile && p_file )
-		:	File( std::move( p_file )	)
-	{
-	}
-
 	TextFile::~TextFile()
 	{
-	}
-
-	TextFile & TextFile::operator =( TextFile const & p_file )
-	{
-		File::operator =( p_file );
-		return *this;
-	}
-
-	TextFile & TextFile::operator =( TextFile && p_file )
-	{
-		File::operator =( std::move( p_file ) );
-		return *this;
 	}
 
 	uint64_t TextFile::ReadLine( String & p_toRead, uint64_t p_size, String p_strSeparators )
@@ -65,19 +43,18 @@ namespace Castor
 				if ( l_bContinue )
 				{
 					l_bContinue = p_strSeparators.find( l_cChar ) == String::npos;
-					/*
-										if ( ! l_bContinue)
-										{
-											if (m_eEncoding == eASCII)
-											{
-												ungetc( int( String( l_cChar).char_str()[0]), m_pFile);
-											}
-											else
-											{
-												ungetwc( wint_t( String( l_cChar).wchar_str()[0]), m_pFile);
-											}
-										}
-					*/
+
+					//if ( ! l_bContinue)
+					//{
+					//	if (m_eEncoding == eASCII)
+					//	{
+					//		ungetc( int( String( l_cChar).char_str()[0]), m_pFile);
+					//	}
+					//	else
+					//	{
+					//		ungetwc( wint_t( String( l_cChar).wchar_str()[0]), m_pFile);
+					//	}
+					//}
 				}
 
 				if ( l_bContinue )

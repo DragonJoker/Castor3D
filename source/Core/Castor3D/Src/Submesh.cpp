@@ -200,12 +200,13 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	Submesh::Submesh( MeshRPtr p_pMesh, Engine * p_pEngine, uint32_t p_uiId )
-		:	Renderable< Submesh, SubmeshRenderer >( p_pEngine )
-		,	m_defaultMaterial( p_pEngine->GetMaterialManager().GetDefaultMaterial() )
-		,	m_uiID( p_uiId )
-		,	m_pParentMesh( p_pMesh )
-		,	m_uiProgramFlags( 0 )
+		: Renderable< Submesh, SubmeshRenderer >( p_pEngine )
+		, m_defaultMaterial( p_pEngine->GetMaterialManager().GetDefaultMaterial() )
+		, m_uiID( p_uiId )
+		, m_pParentMesh( p_pMesh )
+		, m_uiProgramFlags( 0 )
 	{
+		DoCreateRenderer( this );
 	}
 
 	Submesh::~Submesh()

@@ -229,10 +229,12 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Creates a scene node in the scene, attached to the root node
 		 *\param[in]	p_name		The node name, default is empty
+		 *\return		The created node
 		 *\~french
 		 *\brief		Crée un SceneNode
 		 *\remark		Le SceneNode créé sera attaché au root node
 		 *\param[in]	p_name		Le nom du node
+		 *\return		Le noeud créé
 		 */
 		SceneNodeSPtr CreateSceneNode( Castor::String const & p_name );
 		/**

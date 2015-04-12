@@ -339,21 +339,22 @@ namespace Castor3D
 	const Castor::String RenderTarget::DefaultSamplerName = cuT( "DefaultRTSampler" );
 
 	RenderTarget::RenderTarget( Engine * p_pRoot, eTARGET_TYPE p_eTargetType )
-		:	Renderable< RenderTarget, TargetRenderer >( p_pRoot )
-		,	m_eTargetType( p_eTargetType )
-		,	m_ePixelFormat( ePIXEL_FORMAT_A8R8G8B8 )
-		,	m_eDepthFormat( ePIXEL_FORMAT_DEPTH24S8 )
-		,	m_bInitialised( false )
-		,	m_size( Size( 100, 100 ) )
-		,	m_pRenderTechnique( )
-		,	m_bMultisampling( false )
-		,	m_iSamplesCount( 0 )
-		,	m_bStereo( false )
-		,	m_rIntraOcularDistance( 0 )
-		,	m_bDeferredRendering( false )
-		,	m_uiIndex( ++sm_uiCount )
-		,	m_strTechniqueName( cuT( "direct" ) )
+		: Renderable< RenderTarget, TargetRenderer >( p_pRoot )
+		, m_eTargetType( p_eTargetType )
+		, m_ePixelFormat( ePIXEL_FORMAT_A8R8G8B8 )
+		, m_eDepthFormat( ePIXEL_FORMAT_DEPTH24S8 )
+		, m_bInitialised( false )
+		, m_size( Size( 100, 100 ) )
+		, m_pRenderTechnique( )
+		, m_bMultisampling( false )
+		, m_iSamplesCount( 0 )
+		, m_bStereo( false )
+		, m_rIntraOcularDistance( 0 )
+		, m_bDeferredRendering( false )
+		, m_uiIndex( ++sm_uiCount )
+		, m_strTechniqueName( cuT( "direct" ) )
 	{
+		DoCreateRenderer( this );
 		m_wpDepthStencilState	= p_pRoot->CreateDepthStencilState( cuT( "RenderTargetState_" ) + str_utils::to_string( m_uiIndex ) );
 		m_wpRasteriserState		= p_pRoot->CreateRasteriserState( cuT( "RenderTargetState_" ) + str_utils::to_string( m_uiIndex ) );
 	}

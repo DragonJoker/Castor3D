@@ -368,6 +368,7 @@ namespace Castor3D
 		, m_alphaBlendMode( eBLEND_MODE_ADDITIVE )
 		, m_colourBlendMode( eBLEND_MODE_ADDITIVE )
 	{
+		DoCreateRenderer( this );
 		if ( TEXTURE_CHANNEL_NAME.empty() )
 		{
 			TEXTURE_CHANNEL_NAME[eTEXTURE_CHANNEL_COLOUR] = cuT( "Colour" );
@@ -389,20 +390,20 @@ namespace Castor3D
 
 	void Pass::Initialise()
 	{
-		TextureUnitSPtr		l_pColourMap;
-		TextureUnitSPtr		l_pAmbientMap;
-		TextureUnitSPtr		l_pDiffuseMap;
-		TextureUnitSPtr		l_pNormalMap;
-		TextureUnitSPtr		l_pOpacityMap;
-		TextureUnitSPtr		l_pSpecularMap;
-		TextureUnitSPtr		l_pGlossMap;
-		TextureUnitSPtr		l_pHeightMap;
-		TextureUnitSPtr		l_pTexture;
-		TextureUnitSPtr		l_pOpaSrc;
-		PxBufferBaseSPtr	l_pImageOpa;
-		bool				l_bHasAlpha = m_fAlpha < 1;
-		String				l_strOpaName;
-		String				l_strIndex;
+		TextureUnitSPtr l_pColourMap;
+		TextureUnitSPtr l_pAmbientMap;
+		TextureUnitSPtr l_pDiffuseMap;
+		TextureUnitSPtr l_pNormalMap;
+		TextureUnitSPtr l_pOpacityMap;
+		TextureUnitSPtr l_pSpecularMap;
+		TextureUnitSPtr l_pGlossMap;
+		TextureUnitSPtr l_pHeightMap;
+		TextureUnitSPtr l_pTexture;
+		TextureUnitSPtr l_pOpaSrc;
+		PxBufferBaseSPtr l_pImageOpa;
+		bool l_bHasAlpha = m_fAlpha < 1;
+		String l_strOpaName;
+		String l_strIndex;
 		m_uiTextureFlags = 0;
 
 		for ( uint32_t i = 0; i < GetParent()->GetPassCount() && l_strIndex.empty(); i++ )

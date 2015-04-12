@@ -262,7 +262,7 @@ namespace Castor
 				}
 			}
 		}
-		catch ( std::exception & exc )
+		catch ( std::exception & )
 		{
 			//m_pConsole->Print( cuT( "Couldn't open log file [" ) + m_logFilePath[p_eLogType] + cuT( "] : " ) + str_utils::from_str( exc.what() ), true );
 		}

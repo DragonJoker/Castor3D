@@ -163,65 +163,18 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Camera::Camera( SceneSPtr p_pScene, String const & p_strName, Size const & p_size, SceneNodeSPtr p_pNode, eVIEWPORT_TYPE p_eType, eTOPOLOGY p_ePrimitiveType, ePROJECTION_DIRECTION p_eProjectionDirection )
-		:	MovableObject( p_pScene, p_pNode, p_strName, eMOVABLE_TYPE_CAMERA )
-		,	Renderable< Camera, CameraRenderer >( p_pScene->GetEngine() )
-		,	m_pViewport( std::make_shared< Viewport >( p_pScene->GetEngine(), p_size, p_eType ) )
-		,	m_ePrimitiveType( p_ePrimitiveType )
-		,	m_eProjectionDirection( p_eProjectionDirection )
-	{
-	}
-
-	Camera::Camera( SceneSPtr p_pScene, String const & p_strName, SceneNodeSPtr p_pNode, ViewportSPtr p_pViewport )
+	Camera::Camera( SceneSPtr p_pScene, String const & p_strName, SceneNodeSPtr p_pNode, ViewportSPtr p_pViewport, eTOPOLOGY p_ePrimitiveType )
 		:	MovableObject( p_pScene, p_pNode, p_strName, eMOVABLE_TYPE_CAMERA )
 		,	Renderable< Camera, CameraRenderer >( p_pScene->GetEngine() )
 		,	m_pViewport( std::make_shared< Viewport >( *p_pViewport ) )
 		,	m_ePrimitiveType( eTOPOLOGY_TRIANGLES )
-		,	m_eProjectionDirection( ePROJECTION_DIRECTION_FRONT )
 	{
+		DoCreateRenderer( this );
 	}
 
-	Camera::Camera( Camera const & p_camera )
-		:	MovableObject( p_camera )
-		,	Renderable< Camera, CameraRenderer >( p_camera )
-		,	m_ePrimitiveType( p_camera.m_ePrimitiveType )
-		,	m_eProjectionDirection( p_camera.m_eProjectionDirection )
-		,	m_pViewport( std::make_shared< Viewport >( *p_camera.m_pViewport ) )
+	Camera::Camera( SceneSPtr p_pScene, String const & p_strName, SceneNodeSPtr p_pNode, Size const & p_size, eVIEWPORT_TYPE p_eType, eTOPOLOGY p_ePrimitiveType )
+		: Camera( p_pScene, p_strName, p_pNode, std::make_shared< Viewport >( p_pScene->GetEngine(), p_size, p_eType ), p_ePrimitiveType )
 	{
-	}
-
-	Camera::Camera( Camera && p_camera )
-		:	MovableObject( std::move( p_camera ) )
-		,	Renderable< Camera, CameraRenderer >( std::move( p_camera ) )
-		,	m_ePrimitiveType( std::move( p_camera.m_ePrimitiveType ) )
-		,	m_eProjectionDirection( std::move( p_camera.m_eProjectionDirection ) )
-		,	m_pViewport( std::move( p_camera.m_pViewport ) )
-	{
-	}
-
-	Camera & Camera::operator =( Camera const & p_camera )
-	{
-		MovableObject::operator =( p_camera );
-		Renderable< Camera, CameraRenderer >::operator =( p_camera );
-		m_ePrimitiveType = p_camera.m_ePrimitiveType;
-		m_eProjectionDirection = p_camera.m_eProjectionDirection;
-		m_pViewport = std::make_shared< Viewport >( *p_camera.m_pViewport );
-		return *this;
-	}
-
-	Camera & Camera::operator =( Camera && p_camera )
-	{
-		MovableObject::operator =( std::move( p_camera ) );
-		Renderable< Camera, CameraRenderer >::operator =( std::move( p_camera ) );
-
-		if ( this != &p_camera )
-		{
-			m_ePrimitiveType = std::move( p_camera.m_ePrimitiveType );
-			m_eProjectionDirection = std::move( p_camera.m_eProjectionDirection );
-			m_pViewport = std::move( p_camera.m_pViewport );
-		}
-
-		return *this;
 	}
 
 	Camera::~Camera()
@@ -331,45 +284,44 @@ namespace Castor3D
 	bool Camera::IsVisible( CubeBox const & p_box, Matrix4x4r const & p_transformations )const
 	{
 		bool l_bReturn = true;
-		/*
-			Point3r l_ptCorners[8];
-			l_ptCorners[0] = p_box.GetMin();
-			l_ptCorners[1] = p_box.GetMax();
+		//Point3r l_ptCorners[8];
+		//l_ptCorners[0] = p_box.GetMin();
+		//l_ptCorners[1] = p_box.GetMax();
 
-			// Express object box in world coordinates
-			l_ptCorners[2] = p_transformations * Point3r( l_ptCorners[0][0], l_ptCorners[1][1], l_ptCorners[0][2] );
-			l_ptCorners[3] = p_transformations * Point3r( l_ptCorners[1][0], l_ptCorners[1][1], l_ptCorners[0][2] );
-			l_ptCorners[4] = p_transformations * Point3r( l_ptCorners[1][0], l_ptCorners[0][1], l_ptCorners[0][2] );
-			l_ptCorners[5] = p_transformations * Point3r( l_ptCorners[0][0], l_ptCorners[1][1], l_ptCorners[1][2] );
-			l_ptCorners[6] = p_transformations * Point3r( l_ptCorners[0][0], l_ptCorners[0][1], l_ptCorners[1][2] );
-			l_ptCorners[7] = p_transformations * Point3r( l_ptCorners[1][0], l_ptCorners[0][1], l_ptCorners[1][2] );
-			l_ptCorners[0] = p_transformations * l_ptCorners[0];
-			l_ptCorners[1] = p_transformations * l_ptCorners[1];
+		//// Express object box in world coordinates
+		//l_ptCorners[2] = p_transformations * Point3r( l_ptCorners[0][0], l_ptCorners[1][1], l_ptCorners[0][2] );
+		//l_ptCorners[3] = p_transformations * Point3r( l_ptCorners[1][0], l_ptCorners[1][1], l_ptCorners[0][2] );
+		//l_ptCorners[4] = p_transformations * Point3r( l_ptCorners[1][0], l_ptCorners[0][1], l_ptCorners[0][2] );
+		//l_ptCorners[5] = p_transformations * Point3r( l_ptCorners[0][0], l_ptCorners[1][1], l_ptCorners[1][2] );
+		//l_ptCorners[6] = p_transformations * Point3r( l_ptCorners[0][0], l_ptCorners[0][1], l_ptCorners[1][2] );
+		//l_ptCorners[7] = p_transformations * Point3r( l_ptCorners[1][0], l_ptCorners[0][1], l_ptCorners[1][2] );
+		//l_ptCorners[0] = p_transformations * l_ptCorners[0];
+		//l_ptCorners[1] = p_transformations * l_ptCorners[1];
 
-			// Retrieve axis aligned box boundaries
-			Point3r l_ptMin( l_ptCorners[0] );
-			Point3r l_ptMax( l_ptCorners[1] );
+		//// Retrieve axis aligned box boundaries
+		//Point3r l_ptMin( l_ptCorners[0] );
+		//Point3r l_ptMax( l_ptCorners[1] );
 
-			for( int j = 0; j < 8; ++j )
-			{
-				l_ptMin[0] = std::min( l_ptCorners[j][0], l_ptMin[0] );
-				l_ptMin[1] = std::min( l_ptCorners[j][1], l_ptMin[1] );
-				l_ptMin[2] = std::min( l_ptCorners[j][2], l_ptMin[2] );
+		//for( int j = 0; j < 8; ++j )
+		//{
+		//	l_ptMin[0] = std::min( l_ptCorners[j][0], l_ptMin[0] );
+		//	l_ptMin[1] = std::min( l_ptCorners[j][1], l_ptMin[1] );
+		//	l_ptMin[2] = std::min( l_ptCorners[j][2], l_ptMin[2] );
 
-				l_ptMax[0] = std::max( l_ptCorners[j][0], l_ptMax[0] );
-				l_ptMax[1] = std::max( l_ptCorners[j][1], l_ptMax[1] );
-				l_ptMax[2] = std::max( l_ptCorners[j][2], l_ptMax[2] );
-			}
+		//	l_ptMax[0] = std::max( l_ptCorners[j][0], l_ptMax[0] );
+		//	l_ptMax[1] = std::max( l_ptCorners[j][1], l_ptMax[1] );
+		//	l_ptMax[2] = std::max( l_ptCorners[j][2], l_ptMax[2] );
+		//}
 
-			// Test positive vertex from the axis aligned box to be inside the frustum view.
-			for( int i = 0; i < eFRUSTUM_PLANE_COUNT && l_bReturn; ++i )
-			{
-				if( m_planes[i].Distance( GetVertexP( l_ptMin, l_ptMax, m_planes[i].GetNormal() ) ) < 0 )
-				{
-					l_bReturn = false;
-				}
-			}
-		*/
+		//// Test positive vertex from the axis aligned box to be inside the frustum view.
+		//for( int i = 0; i < eFRUSTUM_PLANE_COUNT && l_bReturn; ++i )
+		//{
+		//	if( m_planes[i].Distance( GetVertexP( l_ptMin, l_ptMax, m_planes[i].GetNormal() ) ) < 0 )
+		//	{
+		//		l_bReturn = false;
+		//	}
+		//}
+
 		return l_bReturn;
 	}
 

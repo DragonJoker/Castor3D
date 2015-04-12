@@ -50,20 +50,6 @@ namespace Castor
 		CU_API BinaryFile( Path const & p_fileName, int p_iMode, eENCODING_MODE p_eEncodingMode = eENCODING_MODE_ASCII );
 		/**
 		 *\~english
-		 *\brief		Copy constructor
-		 *\~french
-		 *\brief		Constructeur par copie
-		 */
-		CU_API BinaryFile( BinaryFile const & p_file );
-		/**
-		 *\~english
-		 *\brief		Move constructor
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 */
-		CU_API BinaryFile( BinaryFile && p_file );
-		/**
-		 *\~english
 		 *\brief		Destructor, closes the file
 		 *\~french
 		 *\brief		Destructeur, ferme le fichier
@@ -165,28 +151,6 @@ namespace Castor
 		 *\return		Le nombre d'octets lus
 		 */
 		template< typename T, uint64_t N > uint64_t ReadArray( T( & p_toRead )[N] );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	p_file	The file to copy
-		 *\return		A reference to this file
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_file	Le fichier à copier
-		 *\return		Une référence sur ce fichier
-		 */
-		CU_API BinaryFile & operator =( BinaryFile const & p_file );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	p_file	The file to move
-		 *\return		A reference to this file
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_file	Le fichier à déplacer
-		 *\return		Une référence sur ce fichier
-		 */
-		CU_API BinaryFile & operator =( BinaryFile && p_file );
 	};
 	/**
 	 *\~english

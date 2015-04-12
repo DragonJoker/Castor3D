@@ -152,15 +152,16 @@ namespace Castor3D
 	uint32_t	RenderWindow::s_nbRenderWindows	= 0;
 
 	RenderWindow::RenderWindow( Engine * p_pRoot )
-		:   Renderable< RenderWindow, WindowRenderer >( p_pRoot )
-		,	m_strName( DoGetName() )
-		,	m_index( s_nbRenderWindows )
-		,	m_wpListener( p_pRoot->CreateFrameListener() )
-		,	m_bInitialised( false )
-		,	m_bVSync( false )
-		,	m_bFullscreen( false )
-		,	m_bResized( true )
+		: Renderable< RenderWindow, WindowRenderer >( p_pRoot )
+		, m_strName( DoGetName() )
+		, m_index( s_nbRenderWindows )
+		, m_wpListener( p_pRoot->CreateFrameListener() )
+		, m_bInitialised( false )
+		, m_bVSync( false )
+		, m_bFullscreen( false )
+		, m_bResized( true )
 	{
+		DoCreateRenderer( this );
 		m_wpDepthStencilState	= p_pRoot->CreateDepthStencilState( cuT( "RenderWindowState_" ) + str_utils::to_string( m_index ) );
 		m_wpRasteriserState		= p_pRoot->CreateRasteriserState( cuT( "RenderWindowState_" ) + str_utils::to_string( m_index ) );
 	}

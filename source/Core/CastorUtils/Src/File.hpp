@@ -214,20 +214,6 @@ namespace Castor
 	public:
 		/**
 		 *\~english
-		 *\brief		Copy constructor
-		 *\~french
-		 *\brief		Constructeur par copie
-		 */
-		CU_API File( File const & p_file );
-		/**
-		 *\~english
-		 *\brief		Move constructor
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 */
-		CU_API File( File && p_file );
-		/**
-		 *\~english
 		 *\brief		Destructor, closes the file
 		 *\~french
 		 *\brief		Destructeur, ferme le fichier
@@ -246,28 +232,6 @@ namespace Castor
 		 *\return		\p 0 si réussi
 		 */
 		CU_API int Seek( long long p_i64Offset, eOFFSET_MODE p_eOrigin = eOFFSET_MODE_BEGINNING );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	p_file	The file to copy
-		 *\return		A reference to this file
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_file	Le fichier à copier
-		 *\return		Une référence sur ce fichier
-		 */
-		CU_API File & operator =( File const & p_file );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	p_file	The file to move
-		 *\return		A reference to this file
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_file	Le fichier à déplacer
-		 *\return		Une référence sur ce fichier
-		 */
-		CU_API File & operator =( File && p_file );
 		/**
 		 *\~english
 		 *\brief		List all files in a directory, recursively or not

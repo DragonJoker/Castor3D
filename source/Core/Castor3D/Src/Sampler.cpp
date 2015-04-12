@@ -343,14 +343,15 @@ namespace Castor3D
 	//*********************************************************************************************
 
 	Sampler::Sampler( Engine * p_pEngine, String const & p_name )
-		:	Renderable< Sampler, SamplerRenderer >( p_pEngine )
-		,	m_rMinLod( -1000 )
-		,	m_rMaxLod( 1000 )
-		,	m_clrBorderColour( Colour::from_components( 0, 0, 0, 0 ) )
-		,	m_rMaxAnisotropy( 1.0 )
-		,	m_name( p_name )
-		,	m_rLodBias( 0.0 )
+		: Renderable< Sampler, SamplerRenderer >( p_pEngine )
+		, m_rMinLod( -1000 )
+		, m_rMaxLod( 1000 )
+		, m_clrBorderColour( Colour::from_components( 0, 0, 0, 0 ) )
+		, m_rMaxAnisotropy( 1.0 )
+		, m_name( p_name )
+		, m_rLodBias( 0.0 )
 	{
+		DoCreateRenderer( this );
 		m_eWrapModes[eTEXTURE_UVW_U] = eWRAP_MODE_REPEAT;
 		m_eWrapModes[eTEXTURE_UVW_V] = eWRAP_MODE_REPEAT;
 		m_eWrapModes[eTEXTURE_UVW_W] = eWRAP_MODE_REPEAT;

@@ -58,116 +58,35 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\remark		Constructor, cannot be used 'as if'. You must derivate a class from this one to be able to create a Renderable
+		 *\param[in]	p_pEngine	The engine
 		 *\~french
 		 *\brief		Constructeur
 		 *\remark		Protégé afin de ne pouvoir instancier cette classe qu'au travers d'une classe fille
+		 *\param[in]	p_pEngine	Le moteur
 		 */
 		Renderable( Engine * p_pEngine )
 			:	m_pEngine( p_pEngine )
 		{
-			renderer_sptr l_pRenderer = m_pEngine->GetRenderSystem()->CreateRenderer< TRenderer >();
-
-			if ( l_pRenderer )
-			{
-				l_pRenderer->SetTarget( ( TRenderable * )this );
-				m_pRenderer = l_pRenderer;
-			}
 		}
 		/**
 		 *\~english
-		 *\brief		Copy constructor
-		 *\param[in]	p_copy	The object to copy
+		 *\brief		Creates the given renderable's renderer
+		 *\param[in]	p_this	The renderable
 		 *\~french
-		 *\brief		Constructeur par copie
-		 *\param[in]	p_copy	L'objet à copier
+		 *\brief		Crée le renderer du renderable donné
+		 *\param[in]	p_this	Le renderable
 		 */
-		Renderable( Renderable< TRenderable, TRenderer > const & p_copy )
-			:	m_pEngine( p_copy.m_pEngine )
+		void DoCreateRenderer( TRenderable * p_this )
 		{
 			renderer_sptr l_pRenderer = m_pEngine->GetRenderSystem()->CreateRenderer< TRenderer >();
 
 			if ( l_pRenderer )
 			{
-				l_pRenderer->SetTarget( ( TRenderable * )this );
+				l_pRenderer->SetTarget( p_this );
 				m_pRenderer = l_pRenderer;
 			}
 		}
-		/**
-		 *\~english
-		 *\brief		Move constructor
-		 *\param[in]	p_copy	The object to move
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_copy	L'objet à déplacer
-		 */
-		Renderable( Renderable<TRenderable, TRenderer > && p_copy )
-			:	m_pRenderer( std::move( p_copy.m_pRenderer ) )
-			,	m_pEngine( std::move( p_copy.m_pEngine ) )
-		{
-			renderer_sptr l_pRenderer = m_pRenderer.lock();
 
-			if ( l_pRenderer )
-			{
-				l_pRenderer->SetTarget( ( TRenderable * )this );
-			}
-
-			p_copy.m_pRenderer.reset();
-			p_copy.m_pEngine = NULL;
-		}
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	p_copy	The object to copy
-		 *\return		A reference to this object
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_copy	L'objet à copier
-		 *\return		Une référence sur cet objet
-		 */
-		Renderable & operator =( Renderable<TRenderable, TRenderer > const & p_copy )
-		{
-			m_pEngine	= p_copy.m_pEngine;
-			renderer_sptr l_pRenderer = m_pEngine->GetRenderSystem()->CreateRenderer< TRenderer >();
-
-			if ( l_pRenderer )
-			{
-				l_pRenderer->SetTarget( ( TRenderable * )this );
-				m_pRenderer = l_pRenderer;
-			}
-
-			return * this;
-		}
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	p_copy	The object to move
-		 *\return		A reference to this object
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_copy	L'objet à déplacer
-		 *\return		Une référence sur cet objet
-		 */
-		Renderable & operator =( Renderable< TRenderable, TRenderer > && p_copy )
-		{
-			if ( this != &p_copy )
-			{
-				m_pRenderer.reset();
-				m_pEngine = NULL;
-				m_pRenderer = std::move( p_copy.m_pRenderer );
-				m_pEngine	= std::move( p_copy.m_pEngine );
-				renderer_sptr l_pRenderer = m_pRenderer.lock();
-
-				if ( l_pRenderer )
-				{
-					l_pRenderer->SetTarget( ( TRenderable * )this );
-				}
-
-				p_copy.m_pRenderer.reset();
-				p_copy.m_pEngine = NULL;
-			}
-
-			return * this;
-		}
 	public:
 		/**
 		 *\~english
@@ -184,7 +103,9 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Fonction de rendu, à implémenter par les classes filles
 		 */
-		virtual void Render() {}
+		virtual void Render()
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Remove from render function.
@@ -193,7 +114,9 @@ namespace Castor3D
 		 *\brief		Fonction de fin de rendu.
 		 *\remark		L'implémentation de base ne fait rien, ainsi les classes filles peuvent ne pas l'implémenter
 		 */
-		virtual void EndRender() {}
+		virtual void EndRender()
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		2D render function
@@ -202,7 +125,9 @@ namespace Castor3D
 		 *\brief		Fonction de rendu 2D
 		 *\remark		L'implémentation de base ne fait rien, ainsi les classes filles peuvent ne pas l'implémenter
 		 */
-		virtual void Render2D() {}
+		virtual void Render2D()
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the Renderer

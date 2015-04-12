@@ -7,30 +7,8 @@ namespace Castor
 	{
 	}
 
-	BinaryFile::BinaryFile( BinaryFile const & p_file )
-		:	File( p_file	)
-	{
-	}
-
-	BinaryFile::BinaryFile( BinaryFile && p_file )
-		:	File( std::move( p_file )	)
-	{
-	}
-
 	BinaryFile::~BinaryFile()
 	{
-	}
-
-	BinaryFile & BinaryFile::operator =( BinaryFile const & p_file )
-	{
-		File::operator =( p_file );
-		return *this;
-	}
-
-	BinaryFile & BinaryFile::operator =( BinaryFile && p_file )
-	{
-		File::operator =( std::move( p_file ) );
-		return *this;
 	}
 
 	bool BinaryFile::Write( String const & p_strToWrite )

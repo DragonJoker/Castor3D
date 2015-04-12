@@ -532,7 +532,7 @@ namespace Castor3D
 				if ( ( l_fDistance = p_pRay->Intersects( std::static_pointer_cast< Geometry >( l_current ), p_ppFace, p_ppSubmesh ) ) >= 0.0 && l_fDistance < p_fDistance )
 				{
 					p_fDistance = l_fDistance;
-					l_pReturn = std::static_pointer_cast< Geometry >( l_current );
+					l_pReturn = std::static_pointer_cast< Geometry >( l_it->second.lock() );
 				}
 			}
 		}

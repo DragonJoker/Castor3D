@@ -823,7 +823,7 @@ namespace Castor3D
 		if ( DoCheckObject( p_name, m_addedCameras, cuT( "Camera" ) ) )
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			l_pReturn = std::make_shared< Camera >( shared_from_this(), p_name, Size( p_ww, p_wh ), p_pNode, p_type );
+			l_pReturn = std::make_shared< Camera >( shared_from_this(), p_name, p_pNode, Size( p_ww, p_wh ), p_type );
 
 			if ( p_pNode )
 			{
@@ -865,7 +865,7 @@ namespace Castor3D
 		if ( DoCheckObject( p_name, m_addedLights, cuT( "Light" ) ) )
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			l_pReturn = std::make_shared< Light >( m_lightFactory, shared_from_this(), p_pNode, p_name, p_eLightType );
+			l_pReturn = std::make_shared< Light >( m_lightFactory, shared_from_this(), p_eLightType, p_pNode, p_name );
 
 			if ( p_pNode )
 			{

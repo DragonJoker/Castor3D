@@ -50,20 +50,6 @@ namespace Castor
 		CU_API TextFile( Path const & p_fileName, int p_iMode, eENCODING_MODE p_eEncoding = eENCODING_MODE_ASCII );
 		/**
 		 *\~english
-		 *\brief		Copy constructor
-		 *\~french
-		 *\brief		Constructeur par copie
-		 */
-		CU_API TextFile( TextFile const & p_file );
-		/**
-		 *\~english
-		 *\brief		Move constructor
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 */
-		CU_API TextFile( TextFile && p_file );
-		/**
-		 *\~english
 		 *\brief		Destructor, closes the file
 		 *\~french
 		 *\brief		Destructeur, ferme le fichier
@@ -143,28 +129,6 @@ namespace Castor
 		 *\return		Le nombre d'octets écrits
 		 */
 		CU_API uint64_t Print( uint64_t p_uiMaxSize, xchar const * p_pFormat, ... );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	p_file	The file to copy
-		 *\return		A reference to this file
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_file	Le fichier à copier
-		 *\return		Une référence sur ce fichier
-		 */
-		CU_API TextFile & operator =( TextFile const & p_file );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	p_file	The file to move
-		 *\return		A reference to this file
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_file	Le fichier à déplacer
-		 *\return		Une référence sur ce fichier
-		 */
-		CU_API TextFile & operator =( TextFile && p_file );
 	};
 	/**
 	 *\~english

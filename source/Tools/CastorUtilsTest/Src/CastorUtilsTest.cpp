@@ -799,6 +799,9 @@ namespace Testing
 		}
 	}
 
+		Logger::LogMessage(	"End test case : ZipFile" );
+	}
+
 	void CastorUtilsTest::TestPixelConversions( uint32_t & p_errCount, uint32_t & p_testCount )
 	{
 		CheckPixelConversions< ePIXEL_FORMAT_L8 >();

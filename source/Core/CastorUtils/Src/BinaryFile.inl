@@ -3,13 +3,13 @@
 	template< typename T >
 	uint64_t BinaryFile::Write( T const & p_toWrite )
 	{
-		return DoWrite( reinterpret_cast< uint8_t const * >( & p_toWrite ), sizeof( T ) );
+		return DoWrite( reinterpret_cast< uint8_t const * >( &p_toWrite ), sizeof( T ) );
 	}
 
 	template< typename T >
 	uint64_t BinaryFile::Read( T & p_toRead )
 	{
-		return DoRead( reinterpret_cast< uint8_t * >( & p_toRead ), sizeof( T ) );
+		return DoRead( reinterpret_cast< uint8_t * >( &p_toRead ), sizeof( T ) );
 	}
 
 	template< typename T >

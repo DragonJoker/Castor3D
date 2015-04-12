@@ -48,19 +48,6 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_pScene		Parent scene
-		 *\param[in]	p_pFactory		Factory used to create the LightCategory
-		 *\param[in]	p_eLightType	The light type
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_pScene		La scène parente
-		 *\param[in]	p_pFactory		La fabrique de LightCategory
-		 *\param[in]	p_eLightType	Le type de lumière
-		 */
-		Light( SceneSPtr p_pScene, LightFactory & p_factory, eLIGHT_TYPE p_eLightType );
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_pScene		Parent scene
 		 *\param[in]	p_pNode			The parent scene node
 		 *\param[in]	p_pFactory		Factory used to create the LightCategory
 		 *\param[in]	p_eLightType	The light type
@@ -71,7 +58,20 @@ namespace Castor3D
 		 *\param[in]	p_pFactory		La fabrique de LightCategory
 		 *\param[in]	p_eLightType	Le type de lumière
 		 */
-		Light( LightFactory & p_factory, SceneSPtr p_pScene, SceneNodeSPtr p_pNode, Castor::String const & p_name, eLIGHT_TYPE p_eLightType );
+		Light( LightFactory & p_factory, SceneSPtr p_pScene, eLIGHT_TYPE p_eLightType, SceneNodeSPtr p_pNode, Castor::String const & p_name );
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	p_pScene		Parent scene
+		 *\param[in]	p_pFactory		Factory used to create the LightCategory
+		 *\param[in]	p_eLightType	The light type
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	p_pScene		La scène parente
+		 *\param[in]	p_pFactory		La fabrique de LightCategory
+		 *\param[in]	p_eLightType	Le type de lumière
+		 */
+		Light( LightFactory & p_factory, SceneSPtr p_pScene, eLIGHT_TYPE p_eLightType );
 		/**
 		 *\~english
 		 *\brief		Destructor

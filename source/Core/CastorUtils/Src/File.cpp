@@ -193,42 +193,6 @@ namespace Castor
 		CHECK_INVARIANTS();
 	}
 
-	File::File( File const & p_file )
-		:	m_iMode( p_file.m_iMode	)
-		,	m_eEncoding( p_file.m_eEncoding	)
-		,	m_strFileFullPath( p_file.m_strFileFullPath	)
-		,	m_ullCursor( p_file.m_ullCursor	)
-		,	m_ullLength( p_file.m_ullLength	)
-		,	m_pFile( p_file.m_pFile	)
-		,	m_bOwnFile( false	)
-	{
-	}
-
-	File::File( File && p_file )
-		:	m_iMode( 0	)
-		,	m_eEncoding( eENCODING_MODE_AUTO	)
-		,	m_strFileFullPath(	)
-		,	m_ullCursor( 0	)
-		,	m_ullLength( 0	)
-		,	m_pFile( NULL	)
-		,	m_bOwnFile( true	)
-	{
-		m_iMode				= std::move( p_file.m_iMode	);
-		m_eEncoding			= std::move( p_file.m_eEncoding	);
-		m_strFileFullPath	= std::move( p_file.m_strFileFullPath	);
-		m_ullCursor			= std::move( p_file.m_ullCursor	);
-		m_ullLength			= std::move( p_file.m_ullLength	);
-		m_pFile				= std::move( p_file.m_pFile	);
-		m_bOwnFile			= std::move( p_file.m_bOwnFile	);
-		p_file.m_iMode				= 0;
-		p_file.m_eEncoding			= eENCODING_MODE_AUTO;
-		p_file.m_strFileFullPath.clear();
-		p_file.m_ullCursor			= 0;
-		p_file.m_ullLength			= 0;
-		p_file.m_pFile				= NULL;
-		p_file.m_bOwnFile			= true;
-	}
-
 	File::~File()
 	{
 		if ( m_pFile != NULL && m_bOwnFile )
@@ -309,41 +273,6 @@ namespace Castor
 
 		CHECK_INVARIANTS();
 		return l_llReturn;
-	}
-
-	File & File::operator =( File const & p_file )
-	{
-		m_iMode				= p_file.m_iMode;
-		m_eEncoding			= p_file.m_eEncoding;
-		m_strFileFullPath	= p_file.m_strFileFullPath;
-		m_ullCursor			= p_file.m_ullCursor;
-		m_ullLength			= p_file.m_ullLength;
-		m_pFile				= p_file.m_pFile;
-		m_bOwnFile			= false;
-		return * this;
-	}
-
-	File & File::operator =( File && p_file )
-	{
-		if ( this != & p_file )
-		{
-			m_iMode				= std::move( p_file.m_iMode	);
-			m_eEncoding			= std::move( p_file.m_eEncoding	);
-			m_strFileFullPath	= std::move( p_file.m_strFileFullPath	);
-			m_ullCursor			= std::move( p_file.m_ullCursor	);
-			m_ullLength			= std::move( p_file.m_ullLength	);
-			m_pFile				= std::move( p_file.m_pFile	);
-			m_bOwnFile			= std::move( p_file.m_bOwnFile	);
-			p_file.m_iMode				= 0;
-			p_file.m_eEncoding			= eENCODING_MODE_AUTO;
-			p_file.m_strFileFullPath.clear();
-			p_file.m_ullCursor			= 0;
-			p_file.m_ullLength			= 0;
-			p_file.m_pFile				= NULL;
-			p_file.m_bOwnFile			= true;
-		}
-
-		return * this;
 	}
 
 	BEGIN_INVARIANT_BLOCK( File )
