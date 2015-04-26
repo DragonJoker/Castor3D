@@ -92,9 +92,10 @@ namespace Castor
 		virtual void LogWarning( String const & CU_PARAM_UNUSED( p_strToLog ) ) {}
 	};
 
-	Logger *	Logger::m_pSingleton		= NULL;
-	bool		Logger::m_bOwnInstance	= true;
-	uint32_t	Logger::m_uiCounter		= 0;
+	Logger * Logger::m_pSingleton = NULL;
+	bool Logger::m_bOwnInstance = true;
+	uint32_t Logger::m_uiCounter = 0;
+	std::mutex Logger::m_mutex;
 
 	Logger::Logger()
 		:	m_pImpl( NULL	)
@@ -108,9 +109,12 @@ namespace Castor
 
 	Logger::~Logger()
 	{
+		CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+
 		if ( m_bOwnInstance )
 		{
 			delete m_pImpl;
+			m_pImpl = NULL;
 		}
 	}
 
@@ -126,8 +130,9 @@ namespace Castor
 		}
 		else
 		{
-			m_bOwnInstance = false;
 			Logger & l_logger = GetSingleton();
+			CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+			m_bOwnInstance = false;
 			delete l_logger.m_pImpl;
 			l_logger.m_pImpl = p_pLogger->m_pImpl;
 
@@ -150,8 +155,9 @@ namespace Castor
 		}
 		else
 		{
-			m_bOwnInstance = true;
 			Logger & l_logger = GetSingleton();
+			CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+			m_bOwnInstance = true;
 			delete l_logger.m_pImpl;
 			l_logger.m_pImpl = NULL;
 
@@ -200,6 +206,7 @@ namespace Castor
 		if ( m_bOwnInstance )
 		{
 			Logger & l_logger = GetSingleton();
+			CASTOR_MUTEX_AUTO_SCOPED_LOCK();
 
 			if ( l_logger.m_pImpl )
 			{
@@ -219,10 +226,7 @@ namespace Castor
 
 	void Logger::SetFileName( String const & p_logFilePath, eLOG_TYPE p_eLogType )
 	{
-		if ( GetSingleton().m_pImpl )
-		{
-			GetSingleton().DoSetFileName( p_logFilePath, p_eLogType );
-		}
+		GetSingleton().DoSetFileName( p_logFilePath, p_eLogType );
 	}
 
 	void Logger::LogDebug( char const * p_pFormat, ... )
@@ -236,6 +240,8 @@ namespace Castor
 			Vsnprintf( l_pText, l_strFormat.c_str(), l_vaList );
 			va_end( l_vaList );
 
+			CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+
 			if ( GetSingleton().m_pImpl )
 			{
 				GetSingleton().m_pImpl->LogDebug( str_utils::from_str( l_pText ) );
@@ -245,6 +251,8 @@ namespace Castor
 
 	void Logger::LogDebug( std::string const & p_msg )
 	{
+		CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+
 		if ( GetSingleton().m_pImpl )
 		{
 			GetSingleton().m_pImpl->LogDebug( str_utils::from_str( p_msg ) );
@@ -262,6 +270,8 @@ namespace Castor
 			Vswprintf( l_pText, l_strFormat.c_str(), l_vaList );
 			va_end( l_vaList );
 
+			CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+
 			if ( GetSingleton().m_pImpl )
 			{
 				GetSingleton().m_pImpl->LogDebug( str_utils::from_wstr( l_pText ) );
@@ -271,6 +281,8 @@ namespace Castor
 
 	void Logger::LogDebug( std::wstring const & p_msg )
 	{
+		CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+
 		if ( GetSingleton().m_pImpl )
 		{
 			GetSingleton().m_pImpl->LogDebug( str_utils::from_wstr( p_msg ) );
@@ -288,6 +300,8 @@ namespace Castor
 			Vsnprintf( l_pText, l_strFormat.c_str(), l_vaList );
 			va_end( l_vaList );
 
+			CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+
 			if ( GetSingleton().m_pImpl )
 			{
 				GetSingleton().m_pImpl->LogMessage( str_utils::from_str( l_pText ) );
@@ -297,6 +311,8 @@ namespace Castor
 
 	void Logger::LogMessage( std::string const & p_msg )
 	{
+		CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+
 		if ( GetSingleton().m_pImpl )
 		{
 			GetSingleton().m_pImpl->LogMessage( str_utils::from_str( p_msg ) );
@@ -314,6 +330,8 @@ namespace Castor
 			Vswprintf( l_pText, l_strFormat.c_str(), l_vaList );
 			va_end( l_vaList );
 
+			CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+
 			if ( GetSingleton().m_pImpl )
 			{
 				GetSingleton().m_pImpl->LogMessage( str_utils::from_wstr( l_pText ) );
@@ -323,6 +341,8 @@ namespace Castor
 
 	void Logger::LogMessage( std::wstring const & p_msg )
 	{
+		CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+
 		if ( GetSingleton().m_pImpl )
 		{
 			GetSingleton().m_pImpl->LogMessage( str_utils::from_wstr( p_msg ) );
@@ -340,6 +360,8 @@ namespace Castor
 			Vsnprintf( l_pText, l_strFormat.c_str(), l_vaList );
 			va_end( l_vaList );
 
+			CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+
 			if ( GetSingleton().m_pImpl )
 			{
 				GetSingleton().m_pImpl->LogWarning( str_utils::from_str( l_pText ) );
@@ -349,6 +371,8 @@ namespace Castor
 
 	void Logger::LogWarning( std::string const & p_msg )
 	{
+		CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+
 		if ( GetSingleton().m_pImpl )
 		{
 			GetSingleton().m_pImpl->LogWarning( str_utils::from_str( p_msg ) );
@@ -366,6 +390,8 @@ namespace Castor
 			Vswprintf( l_pText, l_strFormat.c_str(), l_vaList );
 			va_end( l_vaList );
 
+			CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+
 			if ( GetSingleton().m_pImpl )
 			{
 				GetSingleton().m_pImpl->LogWarning( str_utils::from_wstr( l_pText ) );
@@ -375,6 +401,8 @@ namespace Castor
 
 	void Logger::LogWarning( std::wstring const & p_msg )
 	{
+		CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+
 		if ( GetSingleton().m_pImpl )
 		{
 			GetSingleton().m_pImpl->LogWarning( str_utils::from_wstr( p_msg ) );
@@ -393,6 +421,8 @@ namespace Castor
 			Vsnprintf( l_pText, l_strFormat.c_str(), l_vaList );
 			va_end( l_vaList );
 
+			CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+
 			if ( GetSingleton().m_pImpl )
 			{
 				GetSingleton().m_pImpl->LogError( str_utils::from_str( l_pText ) );
@@ -402,6 +432,8 @@ namespace Castor
 
 	void Logger::LogError( std::string const & p_msg )
 	{
+		CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+
 		if ( GetSingleton().m_pImpl )
 		{
 			GetSingleton().m_pImpl->LogError( str_utils::from_str( p_msg ) );
@@ -419,6 +451,8 @@ namespace Castor
 			Vswprintf( l_pText, l_strFormat.c_str(), l_vaList );
 			va_end( l_vaList );
 
+			CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+
 			if ( GetSingleton().m_pImpl )
 			{
 				GetSingleton().m_pImpl->LogError( str_utils::from_wstr( l_pText ) );
@@ -428,6 +462,8 @@ namespace Castor
 
 	void Logger::LogError( std::wstring const & p_msg )
 	{
+		CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+
 		if ( GetSingleton().m_pImpl )
 		{
 			GetSingleton().m_pImpl->LogError( str_utils::from_wstr( p_msg ) );
@@ -451,12 +487,21 @@ namespace Castor
 
 	void Logger::DoSetCallback( PLogCallback p_pfnCallback, void * p_pCaller )
 	{
-		m_pImpl->SetCallback( p_pfnCallback, p_pCaller );
+		CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+
+		if ( m_pImpl )
+		{
+			m_pImpl->SetCallback( p_pfnCallback, p_pCaller );
+		}
 	}
 
 	void Logger::DoSetFileName( String const & p_logFilePath, eLOG_TYPE p_eLogType )
 	{
 		CASTOR_MUTEX_AUTO_SCOPED_LOCK();
-		m_pImpl->SetFileName( p_logFilePath, p_eLogType );
+
+		if ( m_pImpl )
+		{
+			m_pImpl->SetFileName( p_logFilePath, p_eLogType );
+		}
 	}
 }

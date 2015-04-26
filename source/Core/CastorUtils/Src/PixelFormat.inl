@@ -2721,7 +2721,7 @@ namespace Castor
 			switch( p_component )
 			{
 			case ePIXEL_COMPONENT_DEPTH:
-				component< PF >::D32F( p_pixel.ptr(), value );
+				component< PF >::D32F( p_pixel.ptr(), p_value );
 				break;
 
 			case ePIXEL_COMPONENT_STENCIL:

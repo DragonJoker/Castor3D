@@ -11,6 +11,9 @@
 #	if defined( _MSC_VER )
 #		pragma warning( pop )
 #	endif
+#else
+#	include <cstdio>
+#	include <cwchar>
 #endif
 
 #include "Console.hpp"
@@ -402,11 +405,21 @@ namespace Castor
 
 		void Print( String const & p_strToLog, bool p_bNewLine )
 		{
-			Cout( p_strToLog );
-
 			if ( p_bNewLine )
 			{
-				Cout( std::endl );
+#if !defined( _UNICODE )
+				printf( "%s\n", p_strToLog.c_str() );
+#else
+				wprintf( L"%ls\n", p_strToLog.c_str() );
+#endif
+			}
+			else
+			{
+#if !defined( _UNICODE )
+				printf( "%s", p_strToLog.c_str() );
+#else
+				wprintf( L"%ls", p_strToLog.c_str() );
+#endif
 			}
 		}
 	};

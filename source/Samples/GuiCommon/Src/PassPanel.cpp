@@ -61,7 +61,7 @@ wxPassPanel::wxPassPanel( wxWindow * p_pParent, Engine * p_pEngine, bool p_bCanE
 	m_pButtonDeleteTextureUnit = new wxButton( this, eID_BUTTON_DELETE, _( "Delete" ) );
 	m_pPanelTextureUnit = new wxPanel( this, wxID_ANY );
 	m_pButtonShader = new wxButton( this, eID_BUTTON_HAS_SHADER, _( "Edit shaders" ) );
-	m_pStaticPathLabel = new wxStaticText( m_pPanelTextureUnit, wxID_ANY, _( "Image path:" ) + wxT( " " ) );
+	m_pStaticPathLabel = new wxStaticText( m_pPanelTextureUnit, wxID_ANY, _( "Image path:" ) + wxString( wxT( " " ) ) );
 	m_pStaticPath = new wxStaticText( m_pPanelTextureUnit, wxID_ANY, wxEmptyString );
 	m_pButtonTextureImage = new wxBitmapButton( m_pPanelTextureUnit, eID_BUTTON_TEXTURE_IMAGE, wxBitmap( m_sizeImage.x, m_sizeImage.y ) );
 	m_pStaticTexChannel = new wxStaticText( m_pPanelTextureUnit, wxID_ANY, _( "Channel" ) );
