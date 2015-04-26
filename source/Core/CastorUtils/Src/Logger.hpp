@@ -362,8 +362,8 @@ namespace Castor
 		static bool m_bOwnInstance;
 		static Logger * m_pSingleton;
 		static uint32_t m_uiCounter;
+		static std::mutex m_mutex;
 		ILoggerImpl * m_pImpl;
-		std::mutex m_mutex;
 		String m_strHeaders[eLOG_TYPE_COUNT];
 	};
 }

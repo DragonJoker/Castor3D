@@ -24,6 +24,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <vector>
 #include <algorithm>
 #include <numeric>
+#include <type_traits>
 
 namespace Castor
 {
@@ -153,7 +154,7 @@ namespace Castor
 		template< TPL_PIXEL_FORMAT PF >
 		float GetFloatComponent( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
 		{
-			return PixelComponent< PF >::GetFloat( p_pixel, p_component );
+			return component< PF >::GetFloat( p_pixel, p_component );
 		}
 		/**
 		 *\~english
@@ -170,7 +171,7 @@ namespace Castor
 		template< TPL_PIXEL_FORMAT PF >
 		void SetFloatComponent( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, float p_value )
 		{
-			return PixelComponent< PF >::SetFloat( p_pixel, p_component, p_value );
+			return component< PF >::SetFloat( p_pixel, p_component, p_value );
 		}
 		/**
 		 *\~english
@@ -187,7 +188,7 @@ namespace Castor
 		template< TPL_PIXEL_FORMAT PF >
 		uint8_t GetByteComponent( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
 		{
-			return PixelComponent< PF >::GetByte( p_pixel, p_component );
+			return component< PF >::GetByte( p_pixel, p_component );
 		}
 		/**
 		 *\~english
@@ -204,7 +205,7 @@ namespace Castor
 		template< TPL_PIXEL_FORMAT PF >
 		void SetByteComponent( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint8_t p_value )
 		{
-			return PixelComponent< PF >::SetByte( p_pixel, p_component, p_value );
+			return component< PF >::SetByte( p_pixel, p_component, p_value );
 		}
 		/**
 		 *\~english
@@ -221,7 +222,7 @@ namespace Castor
 		template< TPL_PIXEL_FORMAT PF >
 		uint16_t GetUInt16Component( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
 		{
-			return PixelComponent< PF >::GetUInt16( p_pixel, p_component );
+			return component< PF >::GetUInt16( p_pixel, p_component );
 		}
 		/**
 		 *\~english
@@ -238,7 +239,7 @@ namespace Castor
 		template< TPL_PIXEL_FORMAT PF >
 		void SetUInt16Component( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint16_t p_value )
 		{
-			return PixelComponent< PF >::SetUInt16( p_pixel, p_component, p_value );
+			return component< PF >::SetUInt16( p_pixel, p_component, p_value );
 		}
 		/**
 		 *\~english
@@ -255,7 +256,7 @@ namespace Castor
 		template< TPL_PIXEL_FORMAT PF >
 		uint32_t GetUInt24Component( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
 		{
-			return PixelComponent< PF >::GetUInt24( p_pixel, p_component );
+			return component< PF >::GetUInt24( p_pixel, p_component );
 		}
 		/**
 		 *\~english
@@ -272,7 +273,7 @@ namespace Castor
 		template< TPL_PIXEL_FORMAT PF >
 		void SetUInt24Component( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint32_t p_value )
 		{
-			return PixelComponent< PF >::SetUInt24( p_pixel, p_component, p_value );
+			return component< PF >::SetUInt24( p_pixel, p_component, p_value );
 		}
 		/**
 		 *\~english
@@ -289,7 +290,7 @@ namespace Castor
 		template< TPL_PIXEL_FORMAT PF >
 		uint32_t GetUInt32Component( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
 		{
-			return PixelComponent< PF >::GetUInt32( p_pixel, p_component );
+			return component< PF >::GetUInt32( p_pixel, p_component );
 		}
 		/**
 		 *\~english
@@ -306,7 +307,7 @@ namespace Castor
 		template< TPL_PIXEL_FORMAT PF >
 		void SetUInt32Component( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint32_t p_value )
 		{
-			return PixelComponent< PF >::SetUInt32( p_pixel, p_component, p_value );
+			return component< PF >::SetUInt32( p_pixel, p_component, p_value );
 		}
 		/**
 		 *\~english

@@ -9,6 +9,7 @@ namespace Castor
 		:	m_eLogLevel( p_eLogLevel	)
 		,	m_pConsole( NULL	)
 	{
+		CASTOR_MUTEX_AUTO_SCOPED_LOCK();
 #if defined( NDEBUG )
 
 		if ( p_eLogLevel == eLOG_TYPE_DEBUG )
@@ -27,6 +28,7 @@ namespace Castor
 
 	ILoggerImpl::~ILoggerImpl()
 	{
+		CASTOR_MUTEX_AUTO_SCOPED_LOCK();
 		delete m_pConsole;
 	}
 
@@ -37,15 +39,15 @@ namespace Castor
 			m_strHeaders[i] = p_pLogger->m_strHeaders[i];
 		}
 
-		m_outThread = std::thread( [&]()
+		m_outThread = std::thread( [this]()
 		{
 			std::string l_line;
 			std::wstring l_wline;
-			bool ended = false;
+			bool l_ended = false;
 
-			while ( !ended )
+			while ( !l_ended )
 			{
-				std::unique_lock< std::mutex > lock( m_outMutex );
+				std::unique_lock< std::mutex > l_lock( m_outMutex );
 
 				while ( !m_cout.eof() )
 				{
@@ -57,6 +59,8 @@ namespace Castor
 					}
 				}
 
+				m_cout.clear();
+
 				while ( !m_wcout.eof() )
 				{
 					std::getline( m_wcout, l_wline );
@@ -67,7 +71,6 @@ namespace Castor
 					}
 				}
 				
-				m_cout.clear();
 				m_wcout.clear();
 
 				while ( !m_cerr.eof() )
@@ -80,6 +83,8 @@ namespace Castor
 					}
 				}
 
+				m_cerr.clear();
+
 				while ( !m_wcerr.eof() )
 				{
 					std::getline( m_wcerr, l_wline );
@@ -90,7 +95,6 @@ namespace Castor
 					}
 				}
 				
-				m_cerr.clear();
 				m_wcerr.clear();
 
 				while ( !m_clog.eof() )
@@ -103,6 +107,8 @@ namespace Castor
 					}
 				}
 
+				m_clog.clear();
+
 				while ( !m_wclog.eof() )
 				{
 					std::getline( m_wclog, l_wline );
@@ -113,10 +119,8 @@ namespace Castor
 					}
 				}
 				
-				m_clog.clear();
 				m_wclog.clear();
-
-				ended = m_end.wait_for( lock, std::chrono::milliseconds( 5 ) ) != std::cv_status::timeout;
+				l_ended = m_end.wait_for( l_lock, std::chrono::milliseconds( 5 ) ) != std::cv_status::timeout;
 			}
 		} );
 	}
@@ -205,25 +209,21 @@ namespace Castor
 
 	void ILoggerImpl::LogDebug( String const & p_strToLog )
 	{
-		std::unique_lock< std::mutex > lock( m_outMutex );
 		DoLogMessage( p_strToLog, eLOG_TYPE_DEBUG );
 	}
 
 	void ILoggerImpl::LogMessage( String const & p_strToLog )
 	{
-		std::unique_lock< std::mutex > lock( m_outMutex );
 		DoLogMessage( p_strToLog, eLOG_TYPE_MESSAGE );
 	}
 
 	void ILoggerImpl::LogWarning( String const & p_strToLog )
 	{
-		std::unique_lock< std::mutex > lock( m_outMutex );
 		DoLogMessage( p_strToLog, eLOG_TYPE_WARNING );
 	}
 
 	bool ILoggerImpl::LogError( String const & p_strToLog )
 	{
-		std::unique_lock< std::mutex > lock( m_outMutex );
 		DoLogMessage( p_strToLog, eLOG_TYPE_ERROR );
 		return true;
 	}
@@ -231,40 +231,44 @@ namespace Castor
 	void ILoggerImpl::DoLogMessage( String const & p_strToLog, eLOG_TYPE p_eLogType )
 	{
 		CASTOR_MUTEX_AUTO_SCOPED_LOCK();
-		StringStream l_strToLog;
-		LoggerCallbackMapConstIt l_it;
-		std::tm l_dtToday = { 0 };
-		time_t l_tTime;
-		time( &l_tTime );
-		Castor::Localtime( &l_dtToday, &l_tTime );
-		l_strToLog << ( l_dtToday.tm_year + 1900 ) << cuT( "-" );
-		l_strToLog << ( l_dtToday.tm_mon + 1 < 10 ? cuT( "0" ) : cuT( "" ) ) << ( l_dtToday.tm_mon + 1 ) << cuT( "-" ) << ( l_dtToday.tm_mday < 10 ? cuT( "0" ) : cuT( "" ) ) << l_dtToday.tm_mday;
-		l_strToLog << cuT( " - " ) << ( l_dtToday.tm_hour < 10 ? cuT( "0" ) : cuT( "" ) ) << l_dtToday.tm_hour << cuT( ":" ) << ( l_dtToday.tm_min < 10 ? cuT( "0" ) : cuT( "" ) ) << l_dtToday.tm_min << cuT( ":" ) << ( l_dtToday.tm_sec < 10 ? cuT( "0" ) : cuT( "" ) ) << l_dtToday.tm_sec << cuT( "s" );
-		l_strToLog << cuT( " - " ) << m_strHeaders[p_eLogType];
-		l_strToLog << p_strToLog;
-		m_pConsole->BeginLog( p_eLogType );
-		m_pConsole->Print( p_strToLog, true );
-
-		try
+		
+		if ( m_pConsole )
 		{
-			TextFile l_logFile( m_logFilePath[p_eLogType], File::eOPEN_MODE_APPEND, File::eENCODING_MODE_ASCII );
+			StringStream l_strToLog;
+			LoggerCallbackMapConstIt l_it;
+			std::tm l_dtToday = { 0 };
+			time_t l_tTime;
+			time( &l_tTime );
+			Castor::Localtime( &l_dtToday, &l_tTime );
+			l_strToLog << ( l_dtToday.tm_year + 1900 ) << cuT( "-" );
+			l_strToLog << ( l_dtToday.tm_mon + 1 < 10 ? cuT( "0" ) : cuT( "" ) ) << ( l_dtToday.tm_mon + 1 ) << cuT( "-" ) << ( l_dtToday.tm_mday < 10 ? cuT( "0" ) : cuT( "" ) ) << l_dtToday.tm_mday;
+			l_strToLog << cuT( " - " ) << ( l_dtToday.tm_hour < 10 ? cuT( "0" ) : cuT( "" ) ) << l_dtToday.tm_hour << cuT( ":" ) << ( l_dtToday.tm_min < 10 ? cuT( "0" ) : cuT( "" ) ) << l_dtToday.tm_min << cuT( ":" ) << ( l_dtToday.tm_sec < 10 ? cuT( "0" ) : cuT( "" ) ) << l_dtToday.tm_sec << cuT( "s" );
+			l_strToLog << cuT( " - " ) << m_strHeaders[p_eLogType];
+			l_strToLog << p_strToLog;
+			m_pConsole->BeginLog( p_eLogType );
+			m_pConsole->Print( p_strToLog, true );
 
-			if ( l_logFile.IsOk() )
+			try
 			{
-				String l_strLog = l_strToLog.str();
-				l_logFile.WriteText( l_strLog );
-				l_logFile.Print( 2 * sizeof( xchar ), cuT( "\n" ) );
-				l_it = m_mapCallbacks.find( std::this_thread::get_id() );
+				TextFile l_logFile( m_logFilePath[p_eLogType], File::eOPEN_MODE_APPEND, File::eENCODING_MODE_ASCII );
 
-				if ( l_it != m_mapCallbacks.end() && l_it->second.m_pfnCallback )
+				if ( l_logFile.IsOk() )
 				{
-					l_it->second.m_pfnCallback( l_it->second.m_pCaller, l_strLog, p_eLogType );
+					String l_strLog = l_strToLog.str();
+					l_logFile.WriteText( l_strLog );
+					l_logFile.Print( 2 * sizeof( xchar ), cuT( "\n" ) );
+					l_it = m_mapCallbacks.find( std::this_thread::get_id() );
+
+					if ( l_it != m_mapCallbacks.end() && l_it->second.m_pfnCallback )
+					{
+						l_it->second.m_pfnCallback( l_it->second.m_pCaller, l_strLog, p_eLogType );
+					}
 				}
 			}
-		}
-		catch ( std::exception & )
-		{
-			//m_pConsole->Print( cuT( "Couldn't open log file [" ) + m_logFilePath[p_eLogType] + cuT( "] : " ) + str_utils::from_str( exc.what() ), true );
+			catch ( std::exception & )
+			{
+				//m_pConsole->Print( cuT( "Couldn't open log file [" ) + m_logFilePath[p_eLogType] + cuT( "] : " ) + str_utils::from_str( exc.what() ), true );
+			}
 		}
 	}
 }
