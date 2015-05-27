@@ -40,16 +40,19 @@ namespace Dx9Render
 			l_bReturn = DoCreateLayout();
 
 			// Création du vertex buffer
-			if ( l_bReturn )
+			if ( l_uiSize )
 			{
-				l_bReturn = dxCheckError( m_pDevice->CreateVertexBuffer( l_uiSize * sizeof( uint8_t ), DirectX9::GetBufferFlags( p_eType | p_eNature ), 0, D3DPOOL_DEFAULT, &m_pBufferObject, NULL ), "IDirect3DDevice9::CreateVertexBuffer" );
-			}
+				if ( l_bReturn )
+				{
+					l_bReturn = dxCheckError( m_pDevice->CreateVertexBuffer( l_uiSize * sizeof( uint8_t ), DirectX9::GetBufferFlags( p_eType | p_eNature ), 0, D3DPOOL_DEFAULT, &m_pBufferObject, NULL ), "IDirect3DDevice9::CreateVertexBuffer" );
+				}
 
-			if ( l_bReturn && l_uiSize )
-			{
-				DxBufferObject< uint8_t, IDirect3DVertexBuffer9 >::DoFill( m_pBuffer->data(), m_pBuffer->GetSize() );
-				m_pBuffer->Assign();
-				l_bReturn = true;
+				if ( l_bReturn )
+				{
+					DxBufferObject< uint8_t, IDirect3DVertexBuffer9 >::DoFill( m_pBuffer->data(), m_pBuffer->GetSize() );
+					m_pBuffer->Assign();
+					l_bReturn = true;
+				}
 			}
 		}
 
@@ -151,6 +154,10 @@ namespace Dx9Render
 				l_dx9CurrentElement.Usage = D3DDECLUSAGE_TEXCOORD;
 				l_dx9CurrentElement.UsageIndex = 3;
 				break;
+
+			default:
+				CASTOR_EXCEPTION( "Unsupported element usage type" );
+				break;
 			}
 
 			switch ( l_it->m_eDataType )
@@ -170,9 +177,29 @@ namespace Dx9Render
 			case eELEMENT_TYPE_4FLOATS:
 				l_dx9CurrentElement.Type = D3DDECLTYPE_FLOAT4;
 				break;
+				
+			case eELEMENT_TYPE_1INT:
+				l_dx9CurrentElement.Type = D3DDECLTYPE_FLOAT1;
+				break;
+
+			case eELEMENT_TYPE_2INTS:
+				l_dx9CurrentElement.Type = D3DDECLTYPE_FLOAT2;
+				break;
+
+			case eELEMENT_TYPE_3INTS:
+				l_dx9CurrentElement.Type = D3DDECLTYPE_FLOAT3;
+				break;
+
+			case eELEMENT_TYPE_4INTS:
+				l_dx9CurrentElement.Type = D3DDECLTYPE_FLOAT4;
+				break;
 
 			case eELEMENT_TYPE_COLOUR:
 				l_dx9CurrentElement.Type = D3DDECLTYPE_D3DCOLOR;
+				break;
+
+			default:
+				CASTOR_EXCEPTION( "Unsupported element data type" );
 				break;
 			}
 

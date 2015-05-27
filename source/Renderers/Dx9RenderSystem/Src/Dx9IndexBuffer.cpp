@@ -4,6 +4,7 @@
 #include <CpuBuffer.hpp>
 
 using namespace Castor3D;
+
 namespace Dx9Render
 {
 	DxIndexBuffer::DxIndexBuffer( HardwareBufferPtr p_pBuffer )

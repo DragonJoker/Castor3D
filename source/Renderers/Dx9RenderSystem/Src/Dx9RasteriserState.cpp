@@ -9,8 +9,8 @@ namespace Dx9Render
 	Castor3D::RasteriserStateSPtr DxRasteriserState::sm_pCurrent;
 
 	DxRasteriserState::DxRasteriserState( DxRenderSystem * p_pRenderSystem )
-		:	RasteriserState(	)
-		,	m_pRenderSystem( p_pRenderSystem	)
+		:	RasteriserState()
+		,	m_pRenderSystem( p_pRenderSystem )
 	{
 	}
 

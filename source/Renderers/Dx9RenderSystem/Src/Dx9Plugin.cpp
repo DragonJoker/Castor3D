@@ -26,13 +26,23 @@ C3D_Dx9_API String GetName()
 	return cuT( "Direct3D9 Renderer" );
 }
 
-C3D_Dx9_API RenderSystem * CreateRenderSystem( Engine * p_pEngine, Logger * p_pLogger )
+C3D_Dx9_API RenderSystem * CreateRenderSystem( Engine * p_pEngine )
 {
-	return new DxRenderSystem( p_pEngine, p_pLogger );
+	return new DxRenderSystem( p_pEngine );
 }
 
 C3D_Dx9_API void DestroyRenderSystem( RenderSystem * p_pRenderSystem )
 {
 	delete p_pRenderSystem;
+}
+
+C3D_Dx9_API void OnLoad( Castor3D::Engine * p_engine )
+{
+	Castor::Logger::Initialise( p_engine->GetLoggerInstance() );
+}
+
+C3D_Dx9_API void OnUnload( Castor3D::Engine * p_engine )
+{
+	Castor::Logger::Cleanup();
 }
 

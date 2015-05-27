@@ -3,6 +3,7 @@
 
 using namespace Castor3D;
 using namespace Castor;
+
 namespace Dx9Render
 {
 	Castor3D::BlendStateSPtr DxBlendState::sm_pCurrent;

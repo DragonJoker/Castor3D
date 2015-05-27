@@ -239,13 +239,20 @@ namespace Castor3D
 
 		m_mutexLoadedPlugins.lock();
 		m_mutexLibraries.lock();
+		m_mapLoadedPluginTypes.clear();
+		std::swap( m_arrayRenderers, RendererPtrArray() );
 
-		for ( int i = 0; i < ePLUGIN_TYPE_COUNT; i++ )
+		for ( auto & l_it : m_arrayLoadedPlugins )
 		{
-			clear_container( m_arrayLoadedPlugins[i] );
-			clear_pair_container( m_librariesMap[i] );
+			l_it.clear();
 		}
 
+		for ( auto & l_it : m_librariesMap )
+		{
+			l_it.clear();
+		}
+		
+		m_mapLoadedPluginTypes.clear();
 		m_mutexLibraries.unlock();
 		m_mutexLoadedPlugins.unlock();
 		m_pAnimationManager.reset();
@@ -264,6 +271,7 @@ namespace Castor3D
 		m_pDepthStencilStateManager.reset();
 		m_pRasteriserStateManager.reset();
 		m_pBlendStateManager.reset();
+		m_arrayListeners.clear();
 		Logger::Cleanup();
 		CASTOR_CLEANUP_UNIQUE_INSTANCE();
 	}
@@ -536,7 +544,7 @@ namespace Castor3D
 
 			while ( l_it != m_pMeshManager->end() && l_bReturn )
 			{
-				//			l_bReturn = Mesh::BinaryLoader()( * l_it->second, p_file);
+				//l_bReturn = Mesh::BinaryLoader()( * l_it->second, p_file);
 				++l_it;
 			}
 		}

@@ -12,7 +12,7 @@ namespace CastorViewer
 	{
 	private:
 		MainFrame *	m_pMainFrame;
-		wxLocale *	m_pLocale;
+		std::unique_ptr< wxLocale > m_pLocale;
 
 	public:
 		virtual bool OnInit();

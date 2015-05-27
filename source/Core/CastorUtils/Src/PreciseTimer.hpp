@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_PRECISE_TIMER_H___
 
 #include "NonCopyable.hpp"
+#include "PlatformConfig.hpp"
 #include <cstdint>
 
 namespace Castor

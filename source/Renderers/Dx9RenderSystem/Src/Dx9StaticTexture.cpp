@@ -66,19 +66,19 @@ namespace Dx9Render
 
 		if ( l_ePixelFormat == ePIXEL_FORMAT_R8G8B8 )
 		{
-			// f****ing Direct3D that doesn't support RGB24...
+			// f****ing Direct3D9 that doesn't support RGB24...
 			m_pPixelBuffer = PxBufferBase::create( m_pPixelBuffer->dimensions(), ePIXEL_FORMAT_A8R8G8B8, m_pPixelBuffer->const_ptr(), l_ePixelFormat );
 			l_ePixelFormat = ePIXEL_FORMAT_A8R8G8B8;
 		}
 		else if ( l_ePixelFormat == ePIXEL_FORMAT_A4R4G4B4 )
 		{
-			// f****ing Direct3D that doesn't support ARGB16...
+			// f****ing Direct3D9 that doesn't support ARGB16...
 			m_pPixelBuffer = PxBufferBase::create( m_pPixelBuffer->dimensions(), ePIXEL_FORMAT_A8R8G8B8, m_pPixelBuffer->const_ptr(), l_ePixelFormat );
 			l_ePixelFormat = ePIXEL_FORMAT_A8R8G8B8;
 		}
 		else if ( l_ePixelFormat == ePIXEL_FORMAT_STENCIL1 )
 		{
-			// f****ing Direct3D that doesn't support STENCIL1...
+			// f****ing Direct3D9 that doesn't support STENCIL1...
 			m_pPixelBuffer = PxBufferBase::create( m_pPixelBuffer->dimensions(), ePIXEL_FORMAT_STENCIL8, m_pPixelBuffer->const_ptr(), l_ePixelFormat );
 			l_ePixelFormat = ePIXEL_FORMAT_STENCIL8;
 		}

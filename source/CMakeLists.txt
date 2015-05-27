@@ -13,9 +13,10 @@ set( VERSION_YEAR	2014	)
 
 # Used to look for external modules
 set( CMAKE_MODULE_PATH
-	"${CMAKE_SOURCE_DIR}/CMake"
-	"${CMAKE_SOURCE_DIR}/CMake/Modules"
+	${CMAKE_SOURCE_DIR}/CMake
+	${CMAKE_SOURCE_DIR}/CMake/Modules
 )
+set( CMAKE_TEMPLATES_DIR ${CMAKE_SOURCE_DIR}/CMake/Templates )
 # Experimental Precompiled headers support for GCC
 include( PCHSupport )
 # Force Unicode projects (MBCS is past :P)

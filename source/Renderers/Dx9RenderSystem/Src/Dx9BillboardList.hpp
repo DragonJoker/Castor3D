@@ -24,14 +24,15 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Dx9Render
 {
 	class DxBillboardList
-		:	public Castor3D::BillboardList
+		: public Castor3D::BillboardList
 	{
 	public:
-		DxBillboardList( Castor3D::SceneRPtr p_pScene, DxRenderSystem * p_pRenderSystem );
+		DxBillboardList( Castor3D::SceneSPtr p_pScene, DxRenderSystem * p_pRenderSystem );
 		virtual ~DxBillboardList();
 
 	private:
 		virtual bool DoInitialise();
+		virtual Castor3D::ShaderProgramBaseSPtr DoGetProgram( uint32_t p_flags );
 	};
 }
 

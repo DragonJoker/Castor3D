@@ -317,8 +317,12 @@ namespace Castor3D
 		else
 		{
 			l_pReturn = DoGetProgram( p_uiFlags );
-			l_pReturn->Initialise();
-			m_mapPanelPrograms.insert( std::make_pair( p_uiFlags, l_pReturn ) );
+
+			if ( l_pReturn )
+			{
+				l_pReturn->Initialise();
+				m_mapPanelPrograms.insert( std::make_pair( p_uiFlags, l_pReturn ) );
+			}
 		}
 
 		return l_pReturn;
@@ -344,9 +348,13 @@ namespace Castor3D
 		else
 		{
 			l_pReturn = DoGetProgram( p_uiFlags );
-			m_mapText = l_pReturn->CreateFrameVariable( cuT( "c3d_mapText" ), eSHADER_TYPE_PIXEL );
-			l_pReturn->Initialise();
-			m_mapTextPrograms.insert( std::make_pair( p_uiFlags, l_pReturn ) );
+
+			if ( l_pReturn )
+			{
+				m_mapText = l_pReturn->CreateFrameVariable( cuT( "c3d_mapText" ), eSHADER_TYPE_PIXEL );
+				l_pReturn->Initialise();
+				m_mapTextPrograms.insert( std::make_pair( p_uiFlags, l_pReturn ) );
+			}
 		}
 
 		return l_pReturn;

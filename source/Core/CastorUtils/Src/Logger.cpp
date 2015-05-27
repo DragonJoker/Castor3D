@@ -97,7 +97,7 @@ namespace Castor
 	uint32_t	Logger::m_uiCounter		= 0;
 
 	Logger::Logger()
-		:	m_pImpl( NULL	)
+		:	m_pImpl( NULL )
 	{
 		CASTOR_MUTEX_AUTO_SCOPED_LOCK();
 		m_strHeaders[eLOG_TYPE_DEBUG	] = cuT( "***DEBUG*** "	);
@@ -110,7 +110,9 @@ namespace Castor
 	{
 		if ( m_bOwnInstance )
 		{
+			m_pImpl->Cleanup();
 			delete m_pImpl;
+			m_pImpl = NULL;
 		}
 	}
 
@@ -187,29 +189,12 @@ namespace Castor
 
 	void Logger::Cleanup()
 	{
-		m_uiCounter--;
-#if !defined( _WIN32 )
-
-		if ( m_uiCounter <= 0 )
+		if ( m_uiCounter > 0 )
 		{
+			m_uiCounter--;
 			delete m_pSingleton;
 			m_pSingleton = NULL;
 		}
-
-#else
-		if ( m_bOwnInstance )
-		{
-			Logger & l_logger = GetSingleton();
-
-			if ( l_logger.m_pImpl )
-			{
-				l_logger.m_pImpl->Cleanup();
-			}
-		}
-
-		delete m_pSingleton;
-		m_pSingleton = NULL;
-#endif
 	}
 
 	void Logger::SetCallback( PLogCallback p_pfnCallback, void * p_pCaller )

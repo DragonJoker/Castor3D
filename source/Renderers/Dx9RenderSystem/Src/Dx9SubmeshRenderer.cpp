@@ -2,13 +2,15 @@
 #include "Dx9RenderSystem.hpp"
 
 using namespace Castor3D;
-using namespace Dx9Render;
 
-DxSubmeshRenderer::DxSubmeshRenderer( DxRenderSystem * p_pRenderSystem )
-	:	SubmeshRenderer( p_pRenderSystem )
+namespace Dx9Render
 {
-}
+	DxSubmeshRenderer::DxSubmeshRenderer( DxRenderSystem * p_pRenderSystem )
+		:	SubmeshRenderer( p_pRenderSystem )
+	{
+	}
 
-DxSubmeshRenderer::~DxSubmeshRenderer()
-{
+	DxSubmeshRenderer::~DxSubmeshRenderer()
+	{
+	}
 }

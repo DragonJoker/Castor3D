@@ -2,6 +2,7 @@
 #include "Dx9RenderSystem.hpp"
 
 #include <Material.hpp>
+#include <MaterialManager.hpp>
 #include <GeometryBuffers.hpp>
 #include <IndexBuffer.hpp>
 #include <VertexBuffer.hpp>
