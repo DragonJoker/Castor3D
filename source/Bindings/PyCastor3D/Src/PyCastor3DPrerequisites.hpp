@@ -18,9 +18,47 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3DPY_PREREQUISITES_H___
 #define ___C3DPY_PREREQUISITES_H___
 
-#include <boost/python.hpp>
+#include <Logger.hpp>
+#include <Angle.hpp>
+#include <Glyph.hpp>
+#include <Font.hpp>
+#include <Quaternion.hpp>
+#include <Position.hpp>
+#include <Size.hpp>
+#include <Rectangle.hpp>
+#include <Image.hpp>
+#include <PixelBufferBase.hpp>
+#include <SquareMatrix.hpp>
+#include <Quaternion.hpp>
 
-namespace py = boost::python;
+#include <Animable.hpp>
+#include <AnimatedObject.hpp>
+#include <AnimatedObjectGroup.hpp>
+#include <Engine.hpp>
+#include <Scene.hpp>
+#include <Camera.hpp>
+#include <Mesh.hpp>
+#include <Submesh.hpp>
+#include <Light.hpp>
+#include <DirectionalLight.hpp>
+#include <SpotLight.hpp>
+#include <PointLight.hpp>
+#include <Material.hpp>
+#include <Pass.hpp>
+#include <TextureUnit.hpp>
+#include <StaticTexture.hpp>
+#include <DynamicTexture.hpp>
+#include <ShaderProgram.hpp>
+#include <Sampler.hpp>
+#include <Geometry.hpp>
+#include <RenderWindow.hpp>
+#include <Overlay.hpp>
+#include <PanelOverlay.hpp>
+#include <BorderPanelOverlay.hpp>
+#include <TextOverlay.hpp>
+#include <BlendState.hpp>
+#include <DepthStencilState.hpp>
+#include <RasteriserState.hpp>
 
 namespace cpy
 {
@@ -183,7 +221,120 @@ namespace cpy
 			( p_instance->*( this->m_function ) )() = p_value;
 		}
 	};
+	
+	struct VectorNormaliser
+	{
+		void operator()( Castor::Point3r * p_arg )
+		{
+			Castor::point::normalise( *p_arg );
+		}
+	};
+	
+	struct VectorNegater
+	{
+		void operator()( Castor::Point3r * p_arg )
+		{
+			Castor::point::negate( *p_arg );
+		}
+	};
+	
+	struct VectorLengther
+	{
+		void operator()( Castor::Point3r * p_arg )
+		{
+			Castor::point::distance( *p_arg );
+		}
+	};
+	
+	struct VectorDotter
+	{
+		Castor::real operator()( Castor::Point3r const & p_1, Castor::Point3r const & p_2 )
+		{
+			return Castor::point::dot( p_1, p_2 );
+		}
+	};
+	
+	struct VectorCrosser
+	{
+		Castor::Point3r operator()( Castor::Point3r const & p_1, Castor::Point3r const & p_2 )
+		{
+			return p_1 ^ p_2;
+		}
+	};
+	
+	struct PxBufferCreator
+	{
+		Castor::PxBufferBaseSPtr operator()( Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_ePixelFormat )
+		{
+			return Castor::PxBufferBase::create( p_size, p_ePixelFormat );
+		}
+	};
+	struct PointAdder
+	{
+		void operator()( Castor3D::Submesh * p_submesh, Castor::Point3r const & p_point )
+		{
+			p_submesh->AddPoint( p_point );
+		}
+	};
+
+	struct FaceAdder
+	{
+		void operator()( Castor3D::Submesh * p_submesh, uint32_t a, uint32_t b, uint32_t c )
+		{
+			p_submesh->AddFace( a, b, c );
+		}
+	};
+
+	struct Texture3DResizer
+	{
+		void operator()( Castor3D::DynamicTexture * texture, Castor::Size const & size, uint32_t depth )
+		{
+			texture->Resize( Castor::Point3ui( size.width(), size.height(), depth ) );
+		}
+	};
+
+	template< class Texture, typename Param >
+	struct Texture3DImageSetter
+	{
+		void operator()( Texture * texture, Castor::Size const & size, uint32_t depth, Param param )
+		{
+			texture->SetImage( Castor::Point3ui( size.width(), size.height(), depth ), param );
+		}
+	};
+
+	template< typename Blend >
+	struct BlendSetter
+	{
+		typedef void ( Castor3D::BlendState::*Function )( Blend, uint8_t );
+		Function m_function;
+		uint8_t m_index;
+		BlendSetter( Function function, uint8_t index )
+			:	m_function( function )
+			,	m_index( index )
+		{
+		}
+		void operator()( Castor3D::BlendState * state, Blend blend )
+		{
+			( state->*( this->m_function ) )( blend, m_index );
+		}
+	};
+
+	template< class Texture, typename Param >
+	Texture3DImageSetter< Texture, Param >
+	make_image_setter( void ( Texture::* )( Castor::Point3ui const & sizes, Param param ) )
+	{
+		return Texture3DImageSetter< Texture, Param >();
+	}
+
+	template< typename Blend >
+	BlendSetter< Blend >
+	make_blend_setter( void ( Castor3D::BlendState::*function )( Blend, uint8_t ), uint8_t index )
+	{
+		return BlendSetter< Blend >( function, index );
+	}
 }
+
+#include <boost/mpl/vector.hpp>
 
 namespace boost
 {
@@ -251,9 +402,119 @@ namespace boost
 			{
 				return boost::mpl::vector< void, Class *, Value >();
 			}
+			inline boost::mpl::vector< void, Castor::Point3r * >
+			get_signature( cpy::VectorNormaliser, void * = 0 )
+			{
+				return boost::mpl::vector< void, Castor::Point3r * >();
+			}
+			inline boost::mpl::vector< void, Castor::Point3r * >
+			get_signature( cpy::VectorNegater, void * = 0 )
+			{
+				return boost::mpl::vector< void, Castor::Point3r * >();
+			}
+			inline boost::mpl::vector< void, Castor::Point3r * >
+			get_signature( cpy::VectorLengther, void * = 0 )
+			{
+				return boost::mpl::vector< void, Castor::Point3r * >();
+			}
+			inline boost::mpl::vector< Castor::real, Castor::Point3r const &, Castor::Point3r const & >
+			get_signature( cpy::VectorDotter, void * = 0 )
+			{
+				return boost::mpl::vector< Castor::real, Castor::Point3r const &, Castor::Point3r const & >();
+			}
+			inline boost::mpl::vector< Castor::Point3r, Castor::Point3r const &, Castor::Point3r const & >
+			get_signature( cpy::VectorCrosser, void * = 0 )
+			{
+				return boost::mpl::vector< Castor::Point3r, Castor::Point3r const &, Castor::Point3r const & >();
+			}
+			inline boost::mpl::vector< Castor::PxBufferBaseSPtr, Castor::Size const &, Castor::ePIXEL_FORMAT >
+			get_signature( cpy::PxBufferCreator, void * = 0 )
+			{
+				return boost::mpl::vector< Castor::PxBufferBaseSPtr, Castor::Size const &, Castor::ePIXEL_FORMAT >();
+			}
+			inline boost::mpl::vector< Castor3D::PluginBaseSPtr, Castor3D::Engine *, Castor::Path const & >
+			get_signature( Castor3D::PluginBaseSPtr( Castor3D::Engine::* )( Castor::Path const & ), void * = 0 )
+			{
+				return boost::mpl::vector< Castor3D::PluginBaseSPtr, Castor3D::Engine *, Castor::Path const & >();
+			}
+			inline boost::mpl::vector< Castor3D::MeshSPtr, Castor3D::Engine *, Castor3D::eMESH_TYPE, Castor::String const & >
+			get_signature( Castor3D::MeshSPtr( Castor3D::Engine::* )( Castor3D::eMESH_TYPE, Castor::String const & ), void * = 0 )
+			{
+				return boost::mpl::vector< Castor3D::MeshSPtr, Castor3D::Engine *, Castor3D::eMESH_TYPE, Castor::String const & >();
+			}
+			inline boost::mpl::vector< Castor3D::MeshSPtr, Castor3D::Engine *, Castor3D::eMESH_TYPE, Castor::String const &, Castor3D::UIntArray const & >
+			get_signature( Castor3D::MeshSPtr( Castor3D::Engine::* )( Castor3D::eMESH_TYPE, Castor::String const &, Castor3D::UIntArray const & ), void * = 0 )
+			{
+				return boost::mpl::vector< Castor3D::MeshSPtr, Castor3D::Engine *, Castor3D::eMESH_TYPE, Castor::String const &, Castor3D::UIntArray const & >();
+			}
+			inline boost::mpl::vector< Castor3D::MeshSPtr, Castor3D::Engine *, Castor3D::eMESH_TYPE, Castor::String const &, Castor3D::UIntArray const &, Castor3D::RealArray const & >
+			get_signature( Castor3D::MeshSPtr( Castor3D::Engine::* )( Castor3D::eMESH_TYPE, Castor::String const &, Castor3D::UIntArray const &, Castor3D::RealArray const & ), void * = 0 )
+			{
+				return boost::mpl::vector< Castor3D::MeshSPtr, Castor3D::Engine *, Castor3D::eMESH_TYPE, Castor::String const &, Castor3D::UIntArray const &, Castor3D::RealArray const & >();
+			}
+			inline boost::mpl::vector< bool, Castor3D::Engine *, Castor3D::RenderWindowSPtr >
+			get_signature( bool ( Castor3D::Engine::* )( Castor3D::RenderWindowSPtr ), void * = 0 )
+			{
+				return boost::mpl::vector< bool, Castor3D::Engine *, Castor3D::RenderWindowSPtr >();
+			}
+			inline boost::mpl::vector< Castor3D::OverlaySPtr, Castor3D::Engine *, Castor3D::eOVERLAY_TYPE, Castor::String const &, Castor3D::OverlaySPtr, Castor3D::SceneSPtr >
+			get_signature( Castor3D::OverlaySPtr( Castor3D::Engine::* )( Castor3D::eOVERLAY_TYPE, Castor::String const &, Castor3D::OverlaySPtr, Castor3D::SceneSPtr ), void * = 0 )
+			{
+				return boost::mpl::vector< Castor3D::OverlaySPtr, Castor3D::Engine *, Castor3D::eOVERLAY_TYPE, Castor::String const &, Castor3D::OverlaySPtr, Castor3D::SceneSPtr >();
+			}
+			inline boost::mpl::vector< Castor3D::RenderWindowSPtr, Castor3D::Engine * >
+			get_signature( Castor3D::RenderWindowSPtr( Castor3D::Engine::* )(), void * = 0 )
+			{
+				return boost::mpl::vector< Castor3D::RenderWindowSPtr, Castor3D::Engine * >();
+			}
+			inline boost::mpl::vector< Castor3D::SceneSPtr, Castor3D::Engine *, Castor::String const & >
+			get_signature( Castor3D::SceneSPtr( Castor3D::Engine::* )( Castor::String const & ), void * = 0 )
+			{
+				return boost::mpl::vector< Castor3D::SceneSPtr, Castor3D::Engine *, Castor::String const & >();
+			}
+			inline boost::mpl::vector< void, Castor3D::Submesh *, Castor::Point3r const & >
+			get_signature( cpy::PointAdder, void * = 0 )
+			{
+				return boost::mpl::vector< void, Castor3D::Submesh *, Castor::Point3r const & >();
+			}
+			inline boost::mpl::vector< void, Castor3D::Submesh *, uint32_t, uint32_t, uint32_t >
+			get_signature( cpy::FaceAdder, void * = 0 )
+			{
+				return boost::mpl::vector< void, Castor3D::Submesh *, uint32_t, uint32_t, uint32_t >();
+			}
+			inline boost::mpl::vector< Castor3D::MaterialSPtr, Castor3D::Geometry *, Castor3D::SubmeshSPtr >
+			get_signature( Castor3D::MaterialSPtr( Castor3D::Geometry::* )( Castor3D::SubmeshSPtr ), void * = 0 )
+			{
+				return boost::mpl::vector< Castor3D::MaterialSPtr, Castor3D::Geometry *, Castor3D::SubmeshSPtr >();
+			}
+			inline boost::mpl::vector< void, Castor3D::Geometry *, Castor3D::SubmeshSPtr, Castor3D::MaterialSPtr >
+			get_signature( void ( Castor3D::Geometry::* )( Castor3D::SubmeshSPtr, Castor3D::MaterialSPtr ), void * = 0 )
+			{
+				return boost::mpl::vector< void, Castor3D::Geometry *, Castor3D::SubmeshSPtr, Castor3D::MaterialSPtr >();
+			}
+			inline boost::mpl::vector< void, Castor3D::DynamicTexture *, Castor::Size const &, uint32_t >
+			get_signature( cpy::Texture3DResizer, void * = 0 )
+			{
+				return boost::mpl::vector< void, Castor3D::DynamicTexture *, Castor::Size const &, uint32_t >();
+			}
+			template< class Texture, typename Param >
+			inline boost::mpl::vector< void, Texture *, Castor::Size const &, uint32_t, Param >
+			get_signature( cpy::Texture3DImageSetter< Texture, Param >, void * = 0 )
+			{
+				return boost::mpl::vector< void, Texture *, Castor::Size const &, uint32_t, Param >();
+			}
+			template< typename Blend >
+			inline boost::mpl::vector< void, Castor3D::BlendState *, Blend >
+			get_signature( cpy::BlendSetter< Blend >, void * = 0 )
+			{
+				return boost::mpl::vector< void, Castor3D::BlendState *, Blend >();
+			}
 		}
 	}
 }
+
+#include <boost/python.hpp>
+namespace py = boost::python;
 
 namespace cpy
 {
@@ -318,5 +579,7 @@ namespace cpy
 		return MemberRetValueSetter< Value, Class >( p_function );
 	}
 }
+
+
 
 #endif
