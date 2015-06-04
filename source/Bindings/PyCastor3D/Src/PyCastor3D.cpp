@@ -22,8 +22,15 @@ http://www.gnu.org/copyleft/lesser.txt.
 using namespace Castor;
 using namespace Castor3D;
 
-BOOST_PYTHON_MODULE( Castor3D )
+void ExportCastor3D()
 {
+	// Make "from castor.gfx import <whatever>" work
+	py::object l_module( py::handle<>( py::borrowed( PyImport_AddModule( "castor.gfx" ) ) ) );
+	// Make "from castor import gfx" work
+	py::scope().attr( "gfx" ) = l_module;
+	// Set the current scope to the new sub-module
+	py::scope l_scope = l_module;
+	
 	/**@group_name eRENDERER_TYPE	*/
 	//@{
 	py::enum_< eRENDERER_TYPE >( "RendererType" )

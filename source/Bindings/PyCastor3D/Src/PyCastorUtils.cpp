@@ -15,15 +15,20 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#include "PyCastor3DPch.hpp"
-
 #include "PyCastor3DPrerequisites.hpp"
 
 using namespace Castor;
 using namespace Castor3D;
 
-BOOST_PYTHON_MODULE( Castor )
+void ExportCastorUtils()
 {
+	// Make "from castor.gfx import <whatever>" work
+	py::object l_module( py::handle<>( py::borrowed( PyImport_AddModule( "castor.utils" ) ) ) );
+	// Make "from castor import gfx" work
+	py::scope().attr( "utils" ) = l_module;
+	// Set the current scope to the new sub-module
+	py::scope l_scope = l_module;
+	
 	/**@group_name ePIXEL_FORMAT	*/
 	//@{
 	py::enum_< ePIXEL_FORMAT >( "PixelFormat" )
@@ -277,3 +282,4 @@ BOOST_PYTHON_MODULE( Castor )
 	.staticmethod( "log_error" );
 	//@}
 }
+

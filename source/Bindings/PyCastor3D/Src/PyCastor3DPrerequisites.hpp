@@ -580,6 +580,8 @@ namespace cpy
 	}
 }
 
-
+extern void ExportCastorUtils();
+extern void ExportCastor3D();
 
 #endif
+
