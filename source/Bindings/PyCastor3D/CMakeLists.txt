@@ -44,7 +44,19 @@ if ( PYTHONLIBS_FOUND )
 			"PyCastor3DPch.cpp"
 		)
 
-		set_property( TARGET PyCastor3D PROPERTY FOLDER "Bindings" )
+    set_target_properties( PyCastor3D
+      PROPERTIES
+        PREFIX ""
+        POSTFIX ""
+        LIBRARY_OUTPUT_NAME_DEBUG castor
+        RUNTIME_OUTPUT_NAME_DEBUG castor
+        ARCHIVE_OUTPUT_NAME_DEBUG castor
+        LIBRARY_OUTPUT_NAME_RELEASE castor
+        RUNTIME_OUTPUT_NAME_RELEASE castor
+        ARCHIVE_OUTPUT_NAME_RELEASE castor
+        FOLDER "Bindings"
+    )
+
 		add_target_astyle( PyCastor3D ".h;.hpp;.inl;.cpp" )
 		set( Build "yes (version ${PYC_VERSION_MAJOR}.${PYC_VERSION_MINOR}.${PYC_VERSION_BUILD})" PARENT_SCOPE )
 	else ()
