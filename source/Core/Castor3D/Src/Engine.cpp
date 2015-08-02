@@ -151,7 +151,7 @@ namespace Castor3D
 
 	CASTOR_DECLARE_UNIQUE_INSTANCE( Engine );
 
-	Engine::Engine( Castor::Logger * p_pLogger )
+	Engine::Engine()
 		: m_bEnded( false )
 		, m_uiWantedFPS( 100 )
 		, m_dFrameTime( 0.01 )
@@ -193,24 +193,9 @@ namespace Castor3D
 
 		CreateFrameListener();
 
-		if ( p_pLogger )
-		{
-			Logger::Initialise( p_pLogger );
-		}
-		else
-		{
-#if defined( NDEBUG )
-			Logger::Initialise( eLOG_TYPE_MESSAGE );
-#else
-			Logger::Initialise( eLOG_TYPE_DEBUG );
-#endif
-			Logger::SetFileName( File::DirectoryGetCurrent() / cuT( "Castor3D.log" ) );
-		}
-
-		m_pLoggerInstance = Logger::GetSingletonPtr();
 		Version l_version;
 		String l_strVersion;
-		Logger::LogMessage( l_strVersion + cuT( "Castor3D - Core engine version : " ) + str_utils::to_string( l_version.m_iMajor ) + cuT( "." ) + str_utils::to_string( l_version.m_iMinor ) + cuT( "." ) + str_utils::to_string( l_version.m_iBuild ) );
+		Logger::LogInfo( l_strVersion + cuT( "Castor3D - Core engine version : " ) + str_utils::to_string( l_version.m_iMajor ) + cuT( "." ) + str_utils::to_string( l_version.m_iMinor ) + cuT( "." ) + str_utils::to_string( l_version.m_iBuild ) );
 		std::locale::global( std::locale() );
 	}
 
@@ -240,7 +225,11 @@ namespace Castor3D
 		m_mutexLoadedPlugins.lock();
 		m_mutexLibraries.lock();
 		m_mapLoadedPluginTypes.clear();
-		std::swap( m_arrayRenderers, RendererPtrArray() );
+
+		for ( auto & l_it : m_arrayRenderers )
+		{
+			l_it.reset();
+		}
 
 		for ( auto & l_it : m_arrayLoadedPlugins )
 		{
@@ -272,7 +261,6 @@ namespace Castor3D
 		m_pRasteriserStateManager.reset();
 		m_pBlendStateManager.reset();
 		m_arrayListeners.clear();
-		Logger::Cleanup();
 		CASTOR_CLEANUP_UNIQUE_INSTANCE();
 	}
 
@@ -293,7 +281,7 @@ namespace Castor3D
 
 			if ( m_bThreaded )
 			{
-				m_pThreadMainLoop.reset( new std::thread( DoStMainLoop, this ) );
+				m_pThreadMainLoop.reset( new std::thread( std::bind( &Engine::DoMainLoop, this ) ) );
 			}
 		}
 	}
@@ -521,7 +509,7 @@ namespace Castor3D
 			l_pReturn = std::make_shared< Mesh >( this, p_eType, p_strMeshName );
 			l_pReturn->Initialise( p_arrayFaces, p_arraySizes );
 			m_pMeshManager->insert( p_strMeshName, l_pReturn );
-			Logger::LogMessage( cuT( "Engine::CreateMesh - Mesh [" ) + p_strMeshName + cuT( "] - Created" ) );
+			Logger::LogInfo( cuT( "Engine::CreateMesh - Mesh [" ) + p_strMeshName + cuT( "] - Created" ) );
 		}
 		else
 		{
@@ -601,7 +589,7 @@ namespace Castor3D
 			}
 
 			m_pOverlayManager->AddOverlay( p_strName, l_pReturn, p_pParent );
-			Logger::LogMessage( cuT( "Scene::CreateOverlay - Overlay [" ) + p_strName + cuT( "] - Created" ) );
+			Logger::LogInfo( cuT( "Scene::CreateOverlay - Overlay [" ) + p_strName + cuT( "] - Created" ) );
 		}
 		else
 		{
@@ -774,7 +762,7 @@ namespace Castor3D
 					}
 					catch ( ... )
 					{
-						Logger::LogMessage( cuT( "Can't load plugin : " ) + l_file );
+						Logger::LogInfo( cuT( "Can't load plugin : " ) + l_file );
 					}
 				}
 			}
@@ -929,7 +917,7 @@ namespace Castor3D
 					Version l_toCheck( 0, 0 );
 					l_pReturn->GetRequiredVersion( l_toCheck );
 					String l_strToLog( cuT( "LoadPlugin - Plugin [" ) );
-					Logger::LogMessage( l_strToLog + l_pReturn->GetName() + cuT( "] - Required engine version : " ) + str_utils::to_string( l_toCheck.m_iMajor ) + cuT( "." ) + str_utils::to_string( l_toCheck.m_iMinor ) + cuT( "." ) + str_utils::to_string( l_toCheck.m_iBuild ) );
+					Logger::LogInfo( l_strToLog + l_pReturn->GetName() + cuT( "] - Required engine version : " ) + str_utils::to_string( l_toCheck.m_iMajor ) + cuT( "." ) + str_utils::to_string( l_toCheck.m_iMinor ) + cuT( "." ) + str_utils::to_string( l_toCheck.m_iBuild ) );
 
 					if ( l_toCheck <= m_version )
 					{
@@ -943,7 +931,7 @@ namespace Castor3D
 						m_librariesMap[l_eType].insert( std::make_pair( p_pathFile, l_pLibrary ) );
 						m_mutexLibraries.unlock();
 						l_strToLog = cuT( "LoadPlugin - Plugin [" );
-						Logger::LogMessage( l_strToLog + l_pReturn->GetName() + cuT( "] loaded" ) );
+						Logger::LogInfo( l_strToLog + l_pReturn->GetName() + cuT( "] loaded" ) );
 					}
 					else
 					{
@@ -1196,124 +1184,102 @@ namespace Castor3D
 		}
 	}
 
+	void Engine::DoPreRender( double & p_cpuTime, double & p_gpuTime )
+	{
+		PreciseTimer l_timer;
+		m_pRenderSystem->GetMainContext()->SetCurrent();
+		p_gpuTime += l_timer.TimeMs();
+
+		for ( auto && l_listener : m_arrayListeners )
+		{
+			l_listener->FireEvents( eEVENT_TYPE_PRE_RENDER );
+		}
+
+		UpdateOverlayManager();
+		UpdateShaderManager();
+		m_pRenderSystem->CleanupRenderers();
+
+		if ( !m_bDefaultInitialised )
+		{
+			m_pDefaultBlendState->Initialise();
+			m_pDefaultSampler->Initialise();
+			m_bDefaultInitialised = true;
+		}
+
+		p_cpuTime += l_timer.TimeMs();
+	}
+
+	void Engine::DoRender( bool p_bForce, double & p_cpuTime, double & p_gpuTime, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount )
+	{
+		PreciseTimer l_timer;
+
+		// Reverse iterator because we want to render textures before windows
+		for ( auto l_rit = m_mapRenderTargets.rbegin(); l_rit != m_mapRenderTargets.rend(); ++l_rit )
+		{
+			p_objCount += l_rit->second->GetScene()->GetGeometriesCount();
+			p_fceCount += l_rit->second->GetScene()->GetFaceCount();
+			p_vtxCount += l_rit->second->GetScene()->GetVertexCount();
+			l_rit->second->Render( m_dFrameTime );
+		}
+
+		p_gpuTime += l_timer.TimeMs();
+
+		for ( auto && l_listener : m_arrayListeners )
+		{
+			l_listener->FireEvents( eEVENT_TYPE_QUEUE_RENDER );
+		}
+
+		p_cpuTime += l_timer.TimeMs();
+		m_pRenderSystem->GetMainContext()->EndCurrent();
+
+		for ( auto && l_it : m_mapWindows )
+		{
+			l_it.second->RenderOneFrame( p_bForce );
+		}
+
+		p_gpuTime += l_timer.TimeMs();
+		
+		for ( auto && l_listener : m_arrayListeners )
+		{
+			l_listener->FireEvents( eEVENT_TYPE_QUEUE_RENDER );
+		}
+
+		p_cpuTime += l_timer.TimeMs();
+		m_pRenderSystem->GetMainContext()->EndCurrent();
+		p_gpuTime += l_timer.TimeMs();
+	}
+
+	void Engine::DoPostRender( double & p_cpuTime, double & p_gpuTime )
+	{
+		PreciseTimer l_timer;
+		p_gpuTime += l_timer.TimeMs();
+
+		for ( auto && l_listener : m_arrayListeners )
+		{
+			l_listener->FireEvents( eEVENT_TYPE_POST_RENDER );
+		}
+
+		p_cpuTime += l_timer.TimeMs();
+	}
+
 	void Engine::DoUpdate( bool p_bForce )
 	{
-		ContextSPtr l_pContext = m_pRenderSystem->GetMainContext();
-
-		if ( l_pContext )
+		if ( m_pRenderSystem->GetMainContext() )
 		{
-			l_pContext->SetCurrent();
-			double l_cpuTime = 0;
-			double l_gpuTime = 0;
-			double l_totalTime = 0;
 			uint32_t l_vertices = 0;
 			uint32_t l_faces = 0;
 			uint32_t l_objects = 0;
+			double l_cpuTime = 0;
+			double l_gpuTime = 0;
 			PreciseTimer l_timer;
-			PreciseTimer l_timerTotal;
 
-			for ( FrameListenerPtrArrayIt l_it = m_arrayListeners.begin(); l_it != m_arrayListeners.end(); ++l_it )
-			{
-				( *l_it )->FireEvents( eEVENT_TYPE_PRE_RENDER );
-			}
-
-			UpdateOverlayManager();
-			UpdateShaderManager();
-			m_pRenderSystem->CleanupRenderers();
-
-			if ( !m_bDefaultInitialised )
-			{
-				m_pDefaultBlendState->Initialise();
-				m_pDefaultSampler->Initialise();
-				m_bDefaultInitialised = true;
-			}
-
-#if !DX_DEBUG
-			l_cpuTime += l_timer.TimeMs();
-
-			// Reverse iterator because we want to render textures before windows
-			for ( RenderTargetMMapRIt l_rit = m_mapRenderTargets.rbegin(); l_rit != m_mapRenderTargets.rend(); ++l_rit )
-			{
-				l_objects += l_rit->second->GetScene()->GetGeometriesCount();
-				l_vertices += l_rit->second->GetScene()->GetVertexCount();
-				l_faces += l_rit->second->GetScene()->GetFaceCount();
-				l_rit->second->Render( m_dFrameTime );
-			}
-
-			l_gpuTime += l_timer.TimeMs();
-#endif
-
-			for ( FrameListenerPtrArrayIt l_it = m_arrayListeners.begin(); l_it != m_arrayListeners.end(); ++l_it )
-			{
-				( *l_it )->FireEvents( eEVENT_TYPE_QUEUE_RENDER );
-			}
-
-#if !DX_DEBUG
-			l_pContext->EndCurrent();
-#endif
-			l_cpuTime += l_timer.TimeMs();
-
-			std::for_each( m_mapWindows.begin(), m_mapWindows.end(), [&]( std::pair< uint32_t, RenderWindowSPtr > p_pair )
-			{
-				p_pair.second->RenderOneFrame( p_bForce );
-			} );
-
-			l_gpuTime += l_timer.TimeMs();
-#if DX_DEBUG
-			l_pContext->EndCurrent();
-#endif
-
-			for ( FrameListenerPtrArrayIt l_it = m_arrayListeners.begin(); l_it != m_arrayListeners.end(); ++l_it )
-			{
-				( *l_it )->FireEvents( eEVENT_TYPE_POST_RENDER );
-			}
+			DoPreRender( l_cpuTime, l_gpuTime );
+			DoRender( p_bForce, l_cpuTime, l_gpuTime, l_vertices, l_faces, l_objects );
+			DoPostRender( l_cpuTime, l_gpuTime );
 
 			if ( m_showDebug )
 			{
-				l_cpuTime += l_timer.TimeMs();
-				l_totalTime += l_timerTotal.TimeMs();
-
-				TextOverlaySPtr l_txt = m_debugCpuTime.lock();
-
-				if ( l_txt )
-				{
-					l_txt->SetCaption( str_utils::to_string( l_cpuTime ) + cuT( " ms" ) );
-				}
-
-				l_txt = m_debugGpuTime.lock();
-
-				if ( l_txt )
-				{
-					l_txt->SetCaption( str_utils::to_string( l_gpuTime ) + cuT( " ms" ) );
-				}
-
-				l_txt = m_debugTotalTime.lock();
-
-				if ( l_txt )
-				{
-					l_txt->SetCaption( str_utils::to_string( l_totalTime ) + cuT( " ms" ) );
-				}
-
-				l_txt = m_debugVertexCount.lock();
-
-				if ( l_txt )
-				{
-					l_txt->SetCaption( str_utils::to_string( l_vertices ) );
-				}
-
-				l_txt = m_debugFaceCount.lock();
-
-				if ( l_txt )
-				{
-					l_txt->SetCaption( str_utils::to_string( l_faces ) );
-				}
-
-				l_txt = m_debugObjectCount.lock();
-
-				if ( l_txt )
-				{
-					l_txt->SetCaption( str_utils::to_string( l_objects ) );
-				}
+				DoDisplayDebugOverlays( l_cpuTime, l_gpuTime, l_timer.TimeMs(), l_vertices, l_faces, l_objects );
 			}
 		}
 	}
@@ -1381,7 +1347,7 @@ namespace Castor3D
 	{
 		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexResources );
 
-		if ( m_mapWindows.size() )
+		if ( !m_mapWindows.empty() )
 		{
 			DoUpdate( true );
 		}
@@ -1395,15 +1361,10 @@ namespace Castor3D
 	{
 		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexResources );
 
-		if ( m_mapWindows.size() )
+		if ( !m_mapWindows.empty() )
 		{
 			DoUpdate( true );
 		}
-	}
-
-	uint32_t Engine::DoStMainLoop( Engine * p_pThis )
-	{
-		return p_pThis->DoMainLoop();
 	}
 
 	void Engine::DoLoadCoreData()
@@ -1434,6 +1395,51 @@ namespace Castor3D
 					l_panel->SetVisible( m_showDebug );
 				}
 			}
+		}
+	}
+
+	void Engine::DoDisplayDebugOverlays( double p_cpuTime, double p_gpuTime, double p_totalTime, uint32_t p_vertices, uint32_t p_faces, uint32_t p_objects )
+	{
+		TextOverlaySPtr l_txt = m_debugCpuTime.lock();
+
+		if ( l_txt )
+		{
+			l_txt->SetCaption( str_utils::to_string( p_cpuTime ) + cuT( " ms" ) );
+		}
+
+		l_txt = m_debugGpuTime.lock();
+
+		if ( l_txt )
+		{
+			l_txt->SetCaption( str_utils::to_string( p_gpuTime ) + cuT( " ms" ) );
+		}
+
+		l_txt = m_debugTotalTime.lock();
+
+		if ( l_txt )
+		{
+			l_txt->SetCaption( str_utils::to_string( p_totalTime ) + cuT( " ms" ) );
+		}
+
+		l_txt = m_debugVertexCount.lock();
+
+		if ( l_txt )
+		{
+			l_txt->SetCaption( str_utils::to_string( p_vertices ) );
+		}
+
+		l_txt = m_debugFaceCount.lock();
+
+		if ( l_txt )
+		{
+			l_txt->SetCaption( str_utils::to_string( p_faces ) );
+		}
+
+		l_txt = m_debugObjectCount.lock();
+
+		if ( l_txt )
+		{
+			l_txt->SetCaption( str_utils::to_string( p_objects ) );
 		}
 	}
 }

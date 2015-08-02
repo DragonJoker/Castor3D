@@ -33,7 +33,7 @@ namespace Castor3D
 
 	bool RenderWindow::TextLoader::operator()( RenderWindow const & p_window, TextFile & p_file )
 	{
-		Logger::LogMessage( cuT( "RenderWindow::Write - Window Name" ) );
+		Logger::LogInfo( cuT( "RenderWindow::Write - Window Name" ) );
 		bool l_bReturn = p_file.WriteText( cuT( "window \"" ) + p_window.GetName() + cuT( "\"\n{\n" ) ) > 0;
 
 		if ( l_bReturn && p_window.GetVSync() )
@@ -215,15 +215,6 @@ namespace Castor3D
 				{
 					if ( l_pTarget )
 					{
-#if DX_DEBUG
-						m_pContext->Bind( eBUFFER_BACK, eFRAMEBUFFER_TARGET_DRAW );
-						m_wpDepthStencilState.lock( )->Apply( );
-						m_wpRasteriserState.lock( )->Apply( );
-						GetEngine( )->GetDefaultBlendState( )->Apply( );
-						l_pTarget->Render( 0 );
-						l_pRenderer->EndScene();
-#else
-
 						if ( l_pRenderer->EndScene() && l_pTarget->IsInitialised() )
 						{
 							GetEngine()->GetDefaultBlendState()->Apply();
@@ -238,8 +229,6 @@ namespace Castor3D
 								DoRender( eBUFFER_BACK, l_pTarget->GetTexture() );
 							}
 						}
-
-#endif
 					}
 
 					l_pRenderer->EndRender();

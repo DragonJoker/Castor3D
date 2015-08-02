@@ -10,7 +10,7 @@ using namespace Castor3D;
 namespace Dx11Render
 {
 	DxTextureRenderer::DxTextureRenderer( DxRenderSystem * p_pRenderSystem )
-		:	TextureRenderer( p_pRenderSystem )
+		: TextureRenderer( p_pRenderSystem )
 	{
 	}
 

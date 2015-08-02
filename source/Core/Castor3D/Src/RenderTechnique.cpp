@@ -81,14 +81,11 @@ namespace Castor3D
 
 		if ( l_bReturn )
 		{
-#if DX_DEBUG
-			m_size.set( m_pRenderTarget->GetSize().width(), m_pRenderTarget->GetSize().height() );
-#else
 			if ( m_pRenderTarget->GetCamera() )
 			{
 				m_size.set( m_pRenderTarget->GetCamera()->GetWidth(), m_pRenderTarget->GetCamera()->GetHeight() );
 			}
-#endif
+
 			m_pColorBuffer->SetDimension( eTEXTURE_DIMENSION_2D );
 			m_pColorBuffer->SetImage( m_size, ePIXEL_FORMAT_A8R8G8B8 );
 			m_pColorBuffer->SetSampler( m_sampler );
@@ -174,7 +171,6 @@ namespace Castor3D
 	void RenderTechniqueBase::EndRender()
 	{
 		DoEndRender();
-#if !DX_DEBUG
 		BlendStateSPtr l_pBlendState = m_wp2DBlendState.lock();
 		DepthStencilStateSPtr l_pDepthStencilState = m_wp2DDepthStencilState.lock();
 		m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
@@ -184,7 +180,6 @@ namespace Castor3D
 		m_pFrameBuffer->Unbind();
 		m_pRenderSystem->PopScene();
 		m_pFrameBuffer->RenderToBuffer( m_pRenderTarget->GetFrameBuffer(), m_pRenderTarget->GetSize(), eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH, m_pRenderTarget->GetDepthStencilState(), m_pRenderTarget->GetRasteriserState() );
-#endif
 	}
 
 	bool RenderTechniqueBase::DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime )

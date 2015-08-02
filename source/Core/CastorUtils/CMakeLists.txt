@@ -78,12 +78,12 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 	endforeach()
 	
 	#X11 Libs
-	set( x11Libraries "" )
+	set( X11Libraries "" )
 	foreach( Lib ${X11_LIBRARIES} )
-		if( x11Libraries )
-			set( x11Libraries "${x11Libraries}|${Lib}" )
+		if( X11Libraries )
+			set( X11Libraries "${X11Libraries}|${Lib}" )
 		else()
-			set( x11Libraries "${Lib}" )
+			set( X11Libraries "${Lib}" )
 		endif()
 	endforeach()
 	

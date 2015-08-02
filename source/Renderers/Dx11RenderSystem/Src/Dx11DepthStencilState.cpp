@@ -9,9 +9,9 @@ using namespace Castor;
 namespace Dx11Render
 {
 	DxDepthStencilState::DxDepthStencilState( DxRenderSystem * p_pRenderSystem )
-		:	DepthStencilState()
-		,	m_pRenderSystem( p_pRenderSystem )
-		,	m_pDepthStencilState( NULL )
+		: DepthStencilState()
+		, m_pRenderSystem( p_pRenderSystem )
+		, m_pDepthStencilState( NULL )
 	{
 	}
 

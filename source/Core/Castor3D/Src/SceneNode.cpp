@@ -24,7 +24,7 @@ namespace Castor3D
 	bool SceneNode::TextLoader::operator()( SceneNode const & p_node, TextFile & p_file )
 	{
 		bool l_bReturn = false;
-		Logger::LogMessage( cuT( "Writing Node " ) + p_node.GetName() );
+		Logger::LogInfo( cuT( "Writing Node " ) + p_node.GetName() );
 
 		if ( p_node.GetName() != cuT( "RootNode" ) )
 		{
@@ -58,7 +58,7 @@ namespace Castor3D
 
 		if ( l_bReturn )
 		{
-			Logger::LogMessage( cuT( "Writing Childs" ) );
+			Logger::LogInfo( cuT( "Writing Childs" ) );
 
 			for ( SceneNode::node_const_iterator l_it = p_node.ChildsBegin(); l_it != p_node.ChildsEnd() && l_bReturn; ++l_it )
 			{
@@ -73,7 +73,7 @@ namespace Castor3D
 
 		if ( l_bReturn )
 		{
-			Logger::LogMessage( cuT( "Childs Written" ) );
+			Logger::LogInfo( cuT( "Childs Written" ) );
 		}
 
 		return l_bReturn;
@@ -387,7 +387,7 @@ namespace Castor3D
 		}
 		else
 		{
-			//Logger::LogMessage( m_strName + cuT( " - Can't add SceneNode ") + l_name + cuT( " - Already in childs"));
+			//Logger::LogInfo( m_strName + cuT( " - Can't add SceneNode ") + l_name + cuT( " - Already in childs"));
 		}
 	}
 
@@ -400,7 +400,7 @@ namespace Castor3D
 		}
 		else
 		{
-			Logger::LogMessage( m_strName + cuT( " - Can't remove SceneNode - Null pointer given"));
+			Logger::LogInfo( m_strName + cuT( " - Can't remove SceneNode - Null pointer given"));
 		}
 	}
 
@@ -420,7 +420,7 @@ namespace Castor3D
 		}
 		else
 		{
-			Logger::LogMessage( m_strName + cuT( " - Can't remove SceneNode " ) + p_childName + cuT( " - Not in childs" ) );
+			Logger::LogInfo( m_strName + cuT( " - Can't remove SceneNode " ) + p_childName + cuT( " - Not in childs" ) );
 		}
 	}
 

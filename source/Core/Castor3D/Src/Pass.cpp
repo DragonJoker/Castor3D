@@ -668,7 +668,7 @@ namespace Castor3D
 	{
 		CASTOR_ASSERT( p_uiIndex < m_arrayTextureUnits.size() );
 		bool l_bReturn = false;
-		Logger::LogMessage( cuT( "Destroying TextureUnit %d" ), p_uiIndex );
+		Logger::LogInfo( cuT( "Destroying TextureUnit %d" ), p_uiIndex );
 		TextureUnitPtrArray::iterator l_it = m_arrayTextureUnits.begin();
 		m_arrayTextureUnits.erase( l_it + p_uiIndex );
 		uint32_t i = 0;

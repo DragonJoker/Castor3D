@@ -9,11 +9,11 @@ using namespace Castor;
 namespace Dx11Render
 {
 	DxTextureAttachment::DxTextureAttachment( DxRenderSystem * p_pRenderSystem, DynamicTextureSPtr p_pTexture )
-		:	TextureAttachment( p_pTexture )
-		,	m_pOldSurface( NULL )
-		,	m_dwAttachment( 0xFFFFFFFF )
-		,	m_pRenderSystem( p_pRenderSystem )
-		,	m_pDxTexture( std::static_pointer_cast< DxDynamicTexture >( p_pTexture ) )
+		: TextureAttachment( p_pTexture )
+		, m_pOldSurface( NULL )
+		, m_dwAttachment( 0xFFFFFFFF )
+		, m_pRenderSystem( p_pRenderSystem )
+		, m_pDxTexture( std::static_pointer_cast< DxDynamicTexture >( p_pTexture ) )
 	{
 	}
 
@@ -25,17 +25,17 @@ namespace Dx11Render
 	bool DxTextureAttachment::DownloadBuffer( PxBufferBaseSPtr p_pBuffer )
 	{
 		bool l_bReturn = false;
-		// 	D3D11_MAPPED_SUBRESOURCE l_mappedResource;
-		// 	ID3D11Resource * l_pResource;
-		// 	ID3D11RenderTargetView * l_pSurface = m_pDxTexture.lock()->GetRenderTargetView();
-		// 	l_pSurface->GetResource( &l_pResource );
-		// 	HRESULT l_hr = m_pRenderSystem->GetDeviceContext()->Map( l_pResource, 0, D3D11_MAP_READ, 0, &l_mappedResource );
+		//D3D11_MAPPED_SUBRESOURCE l_mappedResource;
+		//ID3D11Resource * l_pResource;
+		//ID3D11RenderTargetView * l_pSurface = m_pDxTexture.lock()->GetRenderTargetView();
+		//l_pSurface->GetResource( &l_pResource );
+		//HRESULT l_hr = m_pRenderSystem->GetDeviceContext()->Map( l_pResource, 0, D3D11_MAP_READ, 0, &l_mappedResource );
 		//
-		// 	if( l_hr == S_OK && l_mappedResource.pData != NULL )
-		// 	{
-		// 		l_bReturn = true;
-		// 		std::memcpy( p_pBuffer->ptr(), l_mappedResource.pData, p_pBuffer->size() );
-		// 	}
+		//if( l_hr == S_OK && l_mappedResource.pData != NULL )
+		//{
+		//	l_bReturn = true;
+		//	std::memcpy( p_pBuffer->ptr(), l_mappedResource.pData, p_pBuffer->size() );
+		//}
 		return l_bReturn;
 	}
 
@@ -50,7 +50,7 @@ namespace Dx11Render
 		l_pBuffer->GetSurface( GetAttachmentPoint() )->GetResource( &l_pDstSurface );
 		m_pDxTexture.lock()->GetShaderResourceView()->GetResource( &l_pSrcSurface );
 
-		if ( l_pDstSurface )
+		if ( l_pDstSurface && l_pSrcSurface )
 		{
 			D3D11_BOX l_box = { 0 };
 			l_box.front = 0;

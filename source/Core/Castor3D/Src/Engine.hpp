@@ -51,12 +51,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pLogger	The logger instance
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pLogger	L'instance du logger
 		 */
-		Engine( Castor::Logger * p_pLogger );
+		Engine();
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -912,18 +910,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the logger instance
-		 *\return		The logger instance
-		 *\~french
-		 *\brief		Récupère l'instance du logger
-		 *\return		L'instance du logger
-		 */
-		inline Castor::Logger * GetLoggerInstance()const
-		{
-			return m_pLoggerInstance;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the end status
 		 *\remark		Thread-safe
 		 *\return		\p true if ended
@@ -1218,6 +1204,9 @@ namespace Castor3D
 
 	private:
 		uint32_t DoMainLoop();
+		void DoPreRender( double & p_cpuTime, double & p_gpuTime );
+		void DoRender( bool p_bForce, double & p_cpuTime, double & p_gpuTime, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount );
+		void DoPostRender( double & p_cpuTime, double & p_gpuTime );
 		void DoUpdate( bool p_bForce );
 		void DoLock();
 		void DoUnlock();
@@ -1228,8 +1217,7 @@ namespace Castor3D
 		void DoRenderOneFrame();
 		void DoRenderFlushFrame();
 		void DoLoadCoreData();
-
-		static uint32_t	DoStMainLoop( Engine * p_pThis );
+		void DoDisplayDebugOverlays( double p_cpuTime, double p_gpuTime, double p_totalTime, uint32_t p_vertices, uint32_t p_faces, uint32_t p_objects );
 
 	private:
 		DECLARE_MULTIMAP( eTARGET_TYPE, RenderTargetSPtr, RenderTarget );
@@ -1305,8 +1293,6 @@ namespace Castor3D
 		BlendStateCollectionUPtr m_pBlendStateManager;
 		//!\~english  The current RenderSystem	\~french Le RenderSystem courant
 		RenderSystem * m_pRenderSystem;
-		//!\~english  The logger instance	\~french L'instance du logger
-		Castor::Logger * m_pLoggerInstance;
 		//!\~english  If \p false, the render can't be threaded	\~french Si \p false, le rendu ne peut pas être threadé
 		bool m_bThreaded;
 		//!\~english Tells if render is running	\~french Dit si le rendu est en cours

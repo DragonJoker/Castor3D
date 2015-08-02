@@ -144,14 +144,14 @@ void DxLightRenderer::EnableShader( ShaderProgramBase * p_pProgram )
 
 			if ( m_iD3dIndex != -1 && ( m_bChanged || m_iD3dIndex != m_iD3dPreviousIndex ) )
 			{
-				l_pProgram->SetLightAmbient(	m_iD3dIndex, m_pAmbient	);
-				l_pProgram->SetLightDiffuse(	m_iD3dIndex, m_pDiffuse	);
-				l_pProgram->SetLightSpecular(	m_iD3dIndex, m_pSpecular	);
-				l_pProgram->SetLightPosition(	m_iD3dIndex, m_pPosition	);
-				l_pProgram->SetLightOrientation(	m_iD3dIndex, m_pOrientation	);
-				l_pProgram->SetLightAttenuation(	m_iD3dIndex, m_pAttenuation	);
-				l_pProgram->SetLightExponent(	m_iD3dIndex, m_pExponent	);
-				l_pProgram->SetLightCutOff(	m_iD3dIndex, m_pCutOff	);
+				l_pProgram->SetLightAmbient( m_iD3dIndex, m_pAmbient );
+				l_pProgram->SetLightDiffuse( m_iD3dIndex, m_pDiffuse );
+				l_pProgram->SetLightSpecular( m_iD3dIndex, m_pSpecular );
+				l_pProgram->SetLightPosition( m_iD3dIndex, m_pPosition );
+				l_pProgram->SetLightOrientation( m_iD3dIndex, m_pOrientation );
+				l_pProgram->SetLightAttenuation( m_iD3dIndex, m_pAttenuation );
+				l_pProgram->SetLightExponent( m_iD3dIndex, m_pExponent );
+				l_pProgram->SetLightCutOff( m_iD3dIndex, m_pCutOff );
 				m_iD3dPreviousIndex = m_iD3dIndex;
 			}
 		}

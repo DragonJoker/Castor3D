@@ -12,9 +12,9 @@ using namespace Castor;
 namespace Dx11Render
 {
 	DxFrameBuffer::DxFrameBuffer( DxRenderSystem * p_pRenderSystem )
-		:	FrameBuffer( p_pRenderSystem->GetEngine() )
-		,	m_pRenderSystem( p_pRenderSystem )
-		,	m_pOldDepthStencilView( NULL )
+		: FrameBuffer( p_pRenderSystem->GetEngine() )
+		, m_pRenderSystem( p_pRenderSystem )
+		, m_pOldDepthStencilView( NULL )
 	{
 	}
 
@@ -47,25 +47,25 @@ namespace Dx11Render
 			m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
 			D3D11RenderTargetViewArray l_arraySurfaces;
 			ID3D11DepthStencilView * l_pView = NULL;
-			l_arraySurfaces.reserve( 10 );
+			l_arraySurfaces.reserve( m_mapTex.size() + m_mapRbo.size() );
 
-			for ( TexAttachMapIt l_it = m_mapTex.begin(); l_it != m_mapTex.end(); ++l_it )
+			for ( auto && l_it : m_mapTex )
 			{
-				if ( l_it->first != eATTACHMENT_POINT_DEPTH && l_it->first != eATTACHMENT_POINT_STENCIL && l_it->first != eATTACHMENT_POINT_NONE )
+				if ( l_it.first != eATTACHMENT_POINT_DEPTH && l_it.first != eATTACHMENT_POINT_STENCIL && l_it.first != eATTACHMENT_POINT_NONE )
 				{
-					l_arraySurfaces.push_back( std::static_pointer_cast< DxDynamicTexture >( l_it->second )->GetRenderTargetView() );
+					l_arraySurfaces.push_back( std::static_pointer_cast< DxDynamicTexture >( l_it.second )->GetRenderTargetView() );
 				}
 			}
 
-			for ( RboAttachMapIt l_it = m_mapRbo.begin(); l_it != m_mapRbo.end(); ++l_it )
+			for ( auto && l_it : m_mapRbo )
 			{
-				if ( l_it->first == eATTACHMENT_POINT_DEPTH || l_it->first == eATTACHMENT_POINT_STENCIL )
+				if ( l_it.first == eATTACHMENT_POINT_DEPTH || l_it.first == eATTACHMENT_POINT_STENCIL )
 				{
-					l_pView = reinterpret_cast< ID3D11DepthStencilView * >( std::static_pointer_cast< DxDepthStencilRenderBuffer >( l_it->second )->GetDxRenderBuffer().GetSurface() );
+					l_pView = reinterpret_cast< ID3D11DepthStencilView * >( std::static_pointer_cast< DxDepthStencilRenderBuffer >( l_it.second )->GetDxRenderBuffer().GetSurface() );
 				}
-				else if ( l_it->first != eATTACHMENT_POINT_NONE )
+				else if ( l_it.first != eATTACHMENT_POINT_NONE )
 				{
-					l_arraySurfaces.push_back( reinterpret_cast< ID3D11RenderTargetView * >( std::static_pointer_cast< DxColourRenderBuffer >( l_it->second )->GetDxRenderBuffer().GetSurface() ) );
+					l_arraySurfaces.push_back( reinterpret_cast< ID3D11RenderTargetView * >( std::static_pointer_cast< DxColourRenderBuffer >( l_it.second )->GetDxRenderBuffer().GetSurface() ) );
 				}
 			}
 
@@ -106,24 +106,34 @@ namespace Dx11Render
 		{
 			if ( p_eAttach != eATTACHMENT_POINT_STENCIL && p_eAttach != eATTACHMENT_POINT_DEPTH )
 			{
-				for ( TexAttachMapIt l_it = m_mapTex.begin(); l_it != m_mapTex.end() && !l_pReturn; ++l_it )
+				auto && l_it = std::find_if( m_mapTex.begin(), m_mapTex.end(), [&p_eAttach]( TexAttachMap::value_type const & p_pair )
 				{
-					if ( l_it->first == p_eAttach )
-					{
-						l_pReturn = std::static_pointer_cast< DxDynamicTexture >( l_it->second )->GetRenderTargetView();
-					}
+					return p_pair.first == p_eAttach;
+				} );
+
+				if ( l_it != m_mapTex.end() )
+				{
+					l_pReturn = std::static_pointer_cast< DxDynamicTexture >( l_it->second )->GetRenderTargetView();
 				}
 			}
 
-			for ( RboAttachMapIt l_it = m_mapRbo.begin(); l_it != m_mapRbo.end() && !l_pReturn; ++l_it )
+			if ( !l_pReturn )
 			{
-				if ( l_it->first == eATTACHMENT_POINT_DEPTH || l_it->first == eATTACHMENT_POINT_STENCIL )
+				auto && l_it = std::find_if( m_mapRbo.begin(), m_mapRbo.end(), [&p_eAttach]( RboAttachMap::value_type const & p_pair )
 				{
-					l_pReturn = std::static_pointer_cast< DxDepthStencilRenderBuffer >( l_it->second )->GetDxRenderBuffer().GetSurface();
-				}
-				else
+					return p_pair.first == p_eAttach;
+				} );
+
+				if ( l_it != m_mapRbo.end() )
 				{
-					l_pReturn = std::static_pointer_cast< DxColourRenderBuffer >( l_it->second )->GetDxRenderBuffer().GetSurface();
+					if ( l_it->first == eATTACHMENT_POINT_DEPTH || l_it->first == eATTACHMENT_POINT_STENCIL )
+					{
+						l_pReturn = std::static_pointer_cast< DxDepthStencilRenderBuffer >( l_it->second )->GetDxRenderBuffer().GetSurface();
+					}
+					else
+					{
+						l_pReturn = std::static_pointer_cast< DxColourRenderBuffer >( l_it->second )->GetDxRenderBuffer().GetSurface();
+					}
 				}
 			}
 		}
@@ -143,11 +153,11 @@ namespace Dx11Render
 		D3D11RenderTargetViewArray l_arraySurfaces;
 		ID3D11DepthStencilView * l_pView = m_pOldDepthStencilView;
 
-		for ( std::size_t i = 0; i < m_arrayOldRenderTargets.size(); ++i )
+		for ( auto && l_old : m_arrayOldRenderTargets )
 		{
-			if ( m_arrayOldRenderTargets[i] )
+			if ( l_old )
 			{
-				l_arraySurfaces.push_back( m_arrayOldRenderTargets[i] );
+				l_arraySurfaces.push_back( l_old );
 			}
 		}
 
@@ -155,10 +165,10 @@ namespace Dx11Render
 		{
 			l_pDeviceContext->OMSetRenderTargets( UINT( l_arraySurfaces.size() ), l_arraySurfaces.empty() ? NULL : l_arraySurfaces.data(), l_pView );
 		}
-
-		for ( std::size_t i = 0; i < l_arraySurfaces.size(); ++i )
+		
+		for ( auto && l_old : l_arraySurfaces )
 		{
-			SafeRelease( l_arraySurfaces[i] );
+			SafeRelease( l_old );
 		}
 
 		l_pDeviceContext->Release();
@@ -195,16 +205,14 @@ namespace Dx11Render
 		bool l_bStencil = ( p_uiComponents & eBUFFER_COMPONENT_STENCIL ) == eBUFFER_COMPONENT_STENCIL;
 		bool l_bColour = ( p_uiComponents & eBUFFER_COMPONENT_COLOUR ) == eBUFFER_COMPONENT_COLOUR;
 
-		for ( AttachArrayConstIt l_it = m_arrayAttaches.begin(); l_it != m_arrayAttaches.end(); ++l_it )
+		for ( auto && l_eAttach : m_arrayAttaches )
 		{
-			eATTACHMENT_POINT l_eAttach = *l_it;
-
 			if ( ( l_eAttach != eATTACHMENT_POINT_DEPTH && l_eAttach != eATTACHMENT_POINT_STENCIL ) || m_pRenderSystem->GetFeatureLevel() > D3D_FEATURE_LEVEL_10_1 )
 			{
 				if ( ( l_bDepth && l_eAttach == eATTACHMENT_POINT_DEPTH ) || ( l_bStencil && l_eAttach == eATTACHMENT_POINT_STENCIL ) || ( l_bColour && l_eAttach != eATTACHMENT_POINT_DEPTH && l_eAttach != eATTACHMENT_POINT_STENCIL ) )
 				{
-					ID3D11View * l_pSrc = GetSurface( *l_it );
-					ID3D11View * l_pDst = l_pBuffer->GetSurface( *l_it );
+					ID3D11View * l_pSrc = GetSurface( l_eAttach );
+					ID3D11View * l_pDst = l_pBuffer->GetSurface( l_eAttach );
 
 					if ( l_pSrc && l_pDst )
 					{
@@ -218,14 +226,14 @@ namespace Dx11Render
 		ID3D11DeviceContext * l_pDeviceContext;
 		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
 
-		for ( SrcDstPairArrayIt l_itArray = l_arrayPairs.begin(); l_itArray != l_arrayPairs.end() && l_hr == S_OK; ++l_itArray )
+		for ( auto l_itArray : l_arrayPairs )
 		{
 			try
 			{
 				ID3D11Resource * l_pDstSurface;
 				ID3D11Resource * l_pSrcSurface;
-				l_itArray->first->GetResource( &l_pDstSurface );
-				l_itArray->second->GetResource( &l_pSrcSurface );
+				l_itArray.first->GetResource( &l_pDstSurface );
+				l_itArray.second->GetResource( &l_pSrcSurface );
 
 				if ( l_pDstSurface && l_pSrcSurface )
 				{

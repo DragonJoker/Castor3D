@@ -5,7 +5,7 @@ using namespace Castor3D;
 using namespace Dx11Render;
 
 DxSubmeshRenderer::DxSubmeshRenderer( DxRenderSystem * p_pRenderSystem )
-	:	SubmeshRenderer( p_pRenderSystem )
+	: SubmeshRenderer( p_pRenderSystem )
 {
 }
 

@@ -27,6 +27,5 @@ C3D_Ssao_API String GetName()
 
 C3D_Ssao_API PostEffectSPtr CreateEffect( RenderSystem * p_renderSystem )
 {
-	Logger::Initialise( p_renderSystem->GetEngine()->GetLoggerInstance() );
 	 return std::make_shared< SsaoPostEffect >( p_renderSystem );
 }

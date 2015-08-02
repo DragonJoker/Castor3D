@@ -45,7 +45,7 @@ namespace Castor3D
 	{
 		LightRendererSPtr l_renderer = GetRenderer();
 
-		if ( !l_renderer )
+		if ( l_renderer )
 		{
 			l_renderer->Enable();
 		}
@@ -55,7 +55,7 @@ namespace Castor3D
 	{
 		LightRendererSPtr l_renderer = GetRenderer();
 
-		if ( !l_renderer )
+		if ( l_renderer )
 		{
 			l_renderer->Disable();
 		}
@@ -65,7 +65,7 @@ namespace Castor3D
 	{
 		LightRendererSPtr l_renderer = GetRenderer();
 
-		if ( !l_renderer )
+		if ( l_renderer )
 		{
 			l_renderer->EnableShader( p_pProgram );
 		}
@@ -75,7 +75,7 @@ namespace Castor3D
 	{
 		LightRendererSPtr l_renderer = GetRenderer();
 
-		if ( !l_renderer )
+		if ( l_renderer )
 		{
 			l_renderer->DisableShader( p_pProgram );
 		}

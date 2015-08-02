@@ -9,8 +9,8 @@ using namespace Castor3D;
 namespace Dx11Render
 {
 	DxGeometryBuffers::DxGeometryBuffers( DxRenderSystem * p_pRenderSystem, VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer )
-		:	GeometryBuffers( std::move( p_pVertexBuffer ), std::move( p_pIndexBuffer ), std::move( p_pMatrixBuffer ) )
-		,	m_pRenderSystem( p_pRenderSystem )
+		: GeometryBuffers( std::move( p_pVertexBuffer ), std::move( p_pIndexBuffer ), std::move( p_pMatrixBuffer ) )
+		, m_pRenderSystem( p_pRenderSystem )
 	{
 	}
 

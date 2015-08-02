@@ -52,6 +52,11 @@ Pipeline::matrix4x4 & Pipeline::GetMatrix( eMTXMODE p_eMode )
 	return m_matrix[p_eMode].top();
 }
 
+bool Pipeline::HasMatrix( eMTXMODE p_eMode )const
+{
+	return !m_matrix[p_eMode].empty();
+}
+
 eMTXMODE Pipeline::MatrixMode( eMTXMODE p_eMode )
 {
 	return m_pPipelineImpl->MatrixMode( p_eMode );
@@ -151,8 +156,11 @@ void Pipeline::ApplyNormal( ShaderProgramBase & p_program )
 void Pipeline::ApplyModelView( ShaderProgramBase & p_program )
 {
 	// Model view must always be computed because normal and projection model view are computed from it
-	m_mtxModelView = GetMatrix( eMTXMODE_VIEW ) * GetMatrix( eMTXMODE_MODEL );
-	DoApplyMatrix( m_mtxModelView, MtxModelView, p_program );
+	if ( HasMatrix( eMTXMODE_VIEW ) && HasMatrix( eMTXMODE_MODEL ) )
+	{
+		m_mtxModelView = GetMatrix( eMTXMODE_VIEW ) * GetMatrix( eMTXMODE_MODEL );
+		DoApplyMatrix( m_mtxModelView, MtxModelView, p_program );
+	}
 }
 
 void Pipeline::ApplyProjectionModelView( ShaderProgramBase & p_program )
@@ -163,8 +171,11 @@ void Pipeline::ApplyProjectionModelView( ShaderProgramBase & p_program )
 
 void Pipeline::ApplyProjectionView( ShaderProgramBase & p_program )
 {
-	m_mtxProjectionView = GetMatrix( eMTXMODE_PROJECTION ) * GetMatrix( eMTXMODE_VIEW );
-	DoApplyMatrix( m_mtxProjectionView, MtxProjectionView, p_program );
+	if ( HasMatrix( eMTXMODE_VIEW ) && HasMatrix( eMTXMODE_PROJECTION ) )
+	{
+		m_mtxProjectionView = GetMatrix( eMTXMODE_PROJECTION ) * GetMatrix( eMTXMODE_VIEW );
+		DoApplyMatrix( m_mtxProjectionView, MtxProjectionView, p_program );
+	}
 }
 
 void Pipeline::ApplyTexture0( ShaderProgramBase & p_program )
@@ -210,7 +221,10 @@ void Pipeline::ApplyViewport( int p_iWindowWidth, int p_iWindowHeight )
 
 void Pipeline::DoApplyMatrix( eMTXMODE p_eMatrix, String const & p_strName, ShaderProgramBase & p_program )
 {
-	DoApplyMatrix( m_matrix[p_eMatrix].top(), p_strName, p_program );
+	if ( !m_matrix[p_eMatrix].empty() )
+	{
+		DoApplyMatrix( m_matrix[p_eMatrix].top(), p_strName, p_program );
+	}
 }
 
 void Pipeline::DoApplyMatrix( matrix4x4 const & p_mtxMatrix, String const & p_strName, ShaderProgramBase & p_program )

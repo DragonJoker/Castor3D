@@ -14,8 +14,8 @@ using namespace Castor3D;
 using namespace Dx11Render;
 
 DxTargetRenderer::DxTargetRenderer( DxRenderSystem * p_pRenderSystem )
-	:	TargetRenderer( p_pRenderSystem	)
-	,	m_bInitialised( false	)
+	: TargetRenderer( p_pRenderSystem	)
+	, m_bInitialised( false	)
 {
 }
 
@@ -62,18 +62,18 @@ void DxTargetRenderer::BeginScene()
 
 void DxTargetRenderer::EndScene()
 {
-// 	HRESULT l_hr = S_OK;
-//
-// 	if( m_bInitialised )
-// 	{
-// 		l_hr = reinterpret_cast< Dx11RenderSystem* >( m_pRenderSystem )->GetDevice()->EndScene();
-// 	}
+	//HRESULT l_hr = S_OK;
+	//
+	//if( m_bInitialised )
+	//{
+	//	l_hr = reinterpret_cast< Dx11RenderSystem* >( m_pRenderSystem )->GetDevice()->EndScene();
+	//}
 }
 
 void DxTargetRenderer::DoUpdateSize()
 {
-//	Size l_size( ::GetSystemMetrics( SM_CXFULLSCREEN ), ::GetSystemMetrics( SM_CYFULLSCREEN ) );
-//	m_target->SetSize( l_size );
+	//Size l_size( ::GetSystemMetrics( SM_CXFULLSCREEN ), ::GetSystemMetrics( SM_CYFULLSCREEN ) );
+	//m_target->SetSize( l_size );
 }
 
 RenderBufferAttachmentSPtr DxTargetRenderer::CreateAttachment( RenderBufferSPtr p_pRenderBuffer )const

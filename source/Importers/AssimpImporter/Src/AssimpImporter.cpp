@@ -179,12 +179,10 @@ C3D_Assimp_API void Destroy( ImporterPlugin * p_pPlugin )
 
 C3D_Assimp_API void OnLoad( Castor3D::Engine * p_engine )
 {
-	Castor::Logger::Initialise( p_engine->GetLoggerInstance() );
 }
 
 C3D_Assimp_API void OnUnload( Castor3D::Engine * p_engine )
 {
-	Castor::Logger::Cleanup();
 }
 
 //*************************************************************************************************

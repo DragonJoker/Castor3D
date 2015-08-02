@@ -28,6 +28,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <D3DX9.h>
 #include <D3DX9Effect.h>
 
+#if !defined( NDEBUG )
+#	include <DxErr.h>
+#endif
+
 #include <cstdint>
 
 #ifdef _WIN32

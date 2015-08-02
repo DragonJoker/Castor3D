@@ -113,11 +113,11 @@ namespace GlRender
 
 				if ( m_compilerLog.size() > 0 )
 				{
-					Logger::LogMessage( m_compilerLog );
+					Logger::LogInfo( m_compilerLog );
 
 					if ( m_eStatus == eSHADER_STATUS_ERROR )
 					{
-						Logger::LogMessage( m_strLoadedSource );
+						Logger::LogInfo( m_strLoadedSource );
 						m_strLoadedSource.clear();
 					}
 				}

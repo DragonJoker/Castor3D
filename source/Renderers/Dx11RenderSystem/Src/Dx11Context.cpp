@@ -63,10 +63,10 @@ namespace ShaderModel1_2_3_4
 namespace Dx11Render
 {
 	DxContext::DxContext()
-		:	Context()
-		,	m_pSwapChain( NULL )
-		,	m_pRenderTargetView( NULL )
-		,	m_pDepthStencilView( NULL )
+		: Context()
+		, m_pSwapChain( NULL )
+		, m_pRenderTargetView( NULL )
+		, m_pDepthStencilView( NULL )
 	{
 	}
 
@@ -92,13 +92,13 @@ namespace Dx11Render
 		{
 			DxRenderSystem * l_pRenderSystem = static_cast< DxRenderSystem * >( m_pRenderSystem );
 			m_hWnd = m_pWindow->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd();
-			//		m_size.set( ::GetSystemMetrics( SM_CXFULLSCREEN ), ::GetSystemMetrics( SM_CYFULLSCREEN ) );
+			//m_size.set( ::GetSystemMetrics( SM_CXFULLSCREEN ), ::GetSystemMetrics( SM_CYFULLSCREEN ) );
 			m_size = m_pWindow->GetSize();
 
 			if ( DoInitPresentParameters() == S_OK &&  l_pRenderSystem->InitialiseDevice( m_hWnd, m_deviceParams ) )
 			{
 				DoInitVolatileResources();
-				Logger::LogMessage( cuT( "Dx11Context::DoInitialise - Context for window 0x%X initialised" ), m_hWnd );
+				Logger::LogInfo( cuT( "Dx11Context::DoInitialise - Context for window 0x%X initialised" ), m_hWnd );
 				m_bInitialised = true;
 			}
 
@@ -242,18 +242,18 @@ namespace Dx11Render
 			if ( l_bContinue )
 			{
 				// Create depth stencil texture
-				D3D11_TEXTURE2D_DESC l_descDepth	= { 0 };
-				l_descDepth.Width					= m_deviceParams.BufferDesc.Width;
-				l_descDepth.Height					= m_deviceParams.BufferDesc.Height;
-				l_descDepth.MipLevels				= 1;
-				l_descDepth.ArraySize				= 1;
-				l_descDepth.Format					= DXGI_FORMAT_D24_UNORM_S8_UINT;
-				l_descDepth.SampleDesc.Count		= 1;
-				l_descDepth.SampleDesc.Quality		= 0;
-				l_descDepth.Usage					= D3D11_USAGE_DEFAULT;
-				l_descDepth.BindFlags				= D3D11_BIND_DEPTH_STENCIL;
-				l_descDepth.CPUAccessFlags			= 0;
-				l_descDepth.MiscFlags				= 0;
+				D3D11_TEXTURE2D_DESC l_descDepth = { 0 };
+				l_descDepth.Width = m_deviceParams.BufferDesc.Width;
+				l_descDepth.Height = m_deviceParams.BufferDesc.Height;
+				l_descDepth.MipLevels = 1;
+				l_descDepth.ArraySize = 1;
+				l_descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+				l_descDepth.SampleDesc.Count = 1;
+				l_descDepth.SampleDesc.Quality = 0;
+				l_descDepth.Usage = D3D11_USAGE_DEFAULT;
+				l_descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+				l_descDepth.CPUAccessFlags = 0;
+				l_descDepth.MiscFlags = 0;
 				l_hr = l_pRenderSystem->GetDevice()->CreateTexture2D( &l_descDepth, NULL, &l_pDSTex );
 				l_bContinue = dxCheckError( l_hr, "CreateTexture2D" );
 			}
@@ -262,9 +262,9 @@ namespace Dx11Render
 			{
 				// Create the depth stencil view
 				D3D11_DEPTH_STENCIL_VIEW_DESC l_descDSV = D3D11_DEPTH_STENCIL_VIEW_DESC();
-				l_descDSV.Format              = DXGI_FORMAT_D24_UNORM_S8_UINT;
-				l_descDSV.ViewDimension       = D3D11_DSV_DIMENSION_TEXTURE2D;
-				l_descDSV.Texture2D.MipSlice  = 0;
+				l_descDSV.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+				l_descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+				l_descDSV.Texture2D.MipSlice = 0;
 				l_hr = l_pRenderSystem->GetDevice()->CreateDepthStencilView( l_pDSTex, &l_descDSV, &m_pDepthStencilView );
 				dxDebugName( m_pDepthStencilView, ContextDSView );
 				l_bContinue = dxCheckError( l_hr, "CreateDepthStencilView" );
@@ -299,28 +299,28 @@ namespace Dx11Render
 	{
 		HRESULT l_hr = E_FAIL;
 		std::memset( &m_deviceParams, 0, sizeof( m_deviceParams ) );
-		m_deviceParams.Windowed								= TRUE;
-		m_deviceParams.BufferCount							= 1;
-		m_deviceParams.BufferDesc.Width						= ::GetSystemMetrics( SM_CXFULLSCREEN );
-		m_deviceParams.BufferDesc.Height					= ::GetSystemMetrics( SM_CYFULLSCREEN );
-		m_deviceParams.BufferDesc.Format					= DXGI_FORMAT_R8G8B8A8_UNORM;
-		m_deviceParams.BufferDesc.RefreshRate.Numerator		= 60;
-		m_deviceParams.BufferDesc.RefreshRate.Denominator	= 1;
-		m_deviceParams.BufferDesc.ScanlineOrdering			= DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-		m_deviceParams.BufferDesc.Scaling					= DXGI_MODE_SCALING_UNSPECIFIED;
-		m_deviceParams.SampleDesc.Count						= 1;
-		m_deviceParams.SampleDesc.Quality					= 0;
-		m_deviceParams.BufferUsage							= DXGI_USAGE_RENDER_TARGET_OUTPUT;
-		m_deviceParams.OutputWindow							= m_hWnd;
-		m_deviceParams.SwapEffect							= DXGI_SWAP_EFFECT_DISCARD;
+		m_deviceParams.Windowed = TRUE;
+		m_deviceParams.BufferCount = 1;
+		m_deviceParams.BufferDesc.Width = ::GetSystemMetrics( SM_CXFULLSCREEN );
+		m_deviceParams.BufferDesc.Height = ::GetSystemMetrics( SM_CYFULLSCREEN );
+		m_deviceParams.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		m_deviceParams.BufferDesc.RefreshRate.Numerator = 60;
+		m_deviceParams.BufferDesc.RefreshRate.Denominator = 1;
+		m_deviceParams.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+		m_deviceParams.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
+		m_deviceParams.SampleDesc.Count = 1;
+		m_deviceParams.SampleDesc.Quality = 0;
+		m_deviceParams.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		m_deviceParams.OutputWindow = m_hWnd;
+		m_deviceParams.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
 		if ( m_pWindow->IsFullscreen() )
 		{
-			m_deviceParams.Windowed							= FALSE;
+			m_deviceParams.Windowed = FALSE;
 		}
 		else
 		{
-			m_deviceParams.Windowed							= TRUE;
+			m_deviceParams.Windowed = TRUE;
 		}
 
 		l_hr = S_OK;

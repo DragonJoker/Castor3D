@@ -10,18 +10,18 @@ using namespace Castor;
 namespace Dx11Render
 {
 	DxRenderBufferAttachment::DxRenderBufferAttachment( DxRenderSystem * p_pRenderSystem, DxColourRenderBufferSPtr p_pRenderBuffer )
-		:	RenderBufferAttachment( p_pRenderBuffer )
-		,	m_dxRenderBuffer( p_pRenderBuffer->GetDxRenderBuffer() )
-		,	m_dwAttachment( 0xFFFFFFFF )
-		,	m_pRenderSystem( p_pRenderSystem )
+		: RenderBufferAttachment( p_pRenderBuffer )
+		, m_dxRenderBuffer( p_pRenderBuffer->GetDxRenderBuffer() )
+		, m_dwAttachment( 0xFFFFFFFF )
+		, m_pRenderSystem( p_pRenderSystem )
 	{
 	}
 
 	DxRenderBufferAttachment::DxRenderBufferAttachment( DxRenderSystem * p_pRenderSystem, DxDepthStencilRenderBufferSPtr p_pRenderBuffer )
-		:	RenderBufferAttachment( p_pRenderBuffer )
-		,	m_dxRenderBuffer( p_pRenderBuffer->GetDxRenderBuffer() )
-		,	m_dwAttachment( 0xFFFFFFFF )
-		,	m_pRenderSystem( p_pRenderSystem )
+		: RenderBufferAttachment( p_pRenderBuffer )
+		, m_dxRenderBuffer( p_pRenderBuffer->GetDxRenderBuffer() )
+		, m_dwAttachment( 0xFFFFFFFF )
+		, m_pRenderSystem( p_pRenderSystem )
 	{
 	}
 
@@ -36,9 +36,6 @@ namespace Dx11Render
 
 	bool DxRenderBufferAttachment::Blit( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, eINTERPOLATION_MODE CU_PARAM_UNUSED( p_eInterpolation ) )
 	{
-#if 1
-		return true;
-#else
 		bool l_bReturn = false;
 		DxFrameBufferSPtr l_pBuffer = std::static_pointer_cast< DxFrameBuffer >( p_pBuffer );
 		RECT l_rcSrc = { p_rectSrc.left(), p_rectSrc.top(), p_rectSrc.right(), p_rectSrc.bottom() };
@@ -66,7 +63,6 @@ namespace Dx11Render
 		SafeRelease( l_pSrcSurface );
 		SafeRelease( l_pDstSurface );
 		return l_bReturn;
-#endif
 	}
 
 	ID3D11View * DxRenderBufferAttachment::GetSurface()const

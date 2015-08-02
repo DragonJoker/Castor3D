@@ -1858,6 +1858,7 @@ namespace Castor3D
 		eFILL_MODE_POINT,	//!<\~english Polygon vertices that are marked as the start of a boundary edge are drawn as points	\~french Les vertices marquant les arêtes sont dessinés en tant que points
 		eFILL_MODE_LINE,	//!<\~english Boundary edges of the polygon are drawn as line segments	\~french Les arêtes du polygone sont dessinées en tant que segments
 		eFILL_MODE_SOLID,	//!<\~english The interior of the polygon is filled	\~french L'intérieur du polygone est rempli
+		eFILL_MODE_COUNT,	//!<\~english Fill modes count	\~french Compte des modes de rastérisation
 	}   eFILL_MODE;
 
 	class WindowHandle;

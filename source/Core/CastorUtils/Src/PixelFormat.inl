@@ -2559,312 +2559,378 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	template< TPL_PIXEL_FORMAT PF, typename Enable=void > struct PixelComponent;
-
-	template< TPL_PIXEL_FORMAT PF >
-	struct PixelComponent< PF, typename std::enable_if< is_colour_format< PF >::value >::type >
+	namespace PF
 	{
-		static float GetFloat( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
+		namespace
 		{
-			float l_return = 0.0f;
-
-			switch( p_component )
+			template< TPL_PIXEL_FORMAT PF, typename Enable=void > struct PixelComponent;
+			
+			template< TPL_PIXEL_FORMAT PF >
+			struct PixelComponent< PF, typename std::enable_if< is_colour_format< PF >::value >::type >
 			{
-			case ePIXEL_COMPONENT_RED:
-				l_return = component< PF >::R32F( p_pixel.const_ptr() );
-				break;
+				static float GetFloat( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
+				{
+					float l_return = 0.0f;
 
-			case ePIXEL_COMPONENT_GREEN:
-				l_return = component< PF >::G32F( p_pixel.const_ptr() );
-				break;
+					switch( p_component )
+					{
+					case ePIXEL_COMPONENT_RED:
+						l_return = component< PF >::R32F( p_pixel.const_ptr() );
+						break;
 
-			case ePIXEL_COMPONENT_BLUE:
-				l_return = component< PF >::B32F( p_pixel.const_ptr() );
-				break;
+					case ePIXEL_COMPONENT_GREEN:
+						l_return = component< PF >::G32F( p_pixel.const_ptr() );
+						break;
 
-			case ePIXEL_COMPONENT_ALPHA:
-				l_return = component< PF >::A32F( p_pixel.const_ptr() );
-				break;
+					case ePIXEL_COMPONENT_BLUE:
+						l_return = component< PF >::B32F( p_pixel.const_ptr() );
+						break;
 
-			case ePIXEL_COMPONENT_LUMINANCE:
-				l_return = component< PF >::L32F( p_pixel.const_ptr() );
-				break;
+					case ePIXEL_COMPONENT_ALPHA:
+						l_return = component< PF >::A32F( p_pixel.const_ptr() );
+						break;
 
-			default:
-				l_return = 0;
-				break;
-			}
+					case ePIXEL_COMPONENT_LUMINANCE:
+						l_return = component< PF >::L32F( p_pixel.const_ptr() );
+						break;
 
-			return l_return;
+					default:
+						l_return = 0;
+						break;
+					}
+
+					return l_return;
+				}
+
+				static void SetFloat( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, float p_value )
+				{
+					switch( p_component )
+					{
+					case ePIXEL_COMPONENT_RED:
+						component< PF >::R8( p_pixel.ptr(), p_value );
+						break;
+
+					case ePIXEL_COMPONENT_GREEN:
+						component< PF >::G8( p_pixel.ptr(), p_value );
+						break;
+
+					case ePIXEL_COMPONENT_BLUE:
+						component< PF >::B8( p_pixel.ptr(), p_value );
+						break;
+
+					case ePIXEL_COMPONENT_ALPHA:
+						component< PF >::A8( p_pixel.ptr(), p_value );
+						break;
+
+					case ePIXEL_COMPONENT_LUMINANCE:
+						component< PF >::L8( p_pixel.ptr(), p_value );
+						break;
+
+					default:
+						break;
+					}
+				}
+
+				static uint8_t GetByte( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
+				{
+					uint8_t l_return = 0;
+
+					switch( p_component )
+					{
+					case ePIXEL_COMPONENT_RED:
+						l_return = component< PF >::R8( p_pixel.const_ptr() );
+						break;
+
+					case ePIXEL_COMPONENT_GREEN:
+						l_return = component< PF >::G8( p_pixel.const_ptr() );
+						break;
+
+					case ePIXEL_COMPONENT_BLUE:
+						l_return = component< PF >::B8( p_pixel.const_ptr() );
+						break;
+
+					case ePIXEL_COMPONENT_ALPHA:
+						l_return = component< PF >::A8( p_pixel.const_ptr() );
+						break;
+
+					case ePIXEL_COMPONENT_LUMINANCE:
+						l_return = component< PF >::L8( p_pixel.const_ptr() );
+						break;
+
+					default:
+						l_return = 0;
+						break;
+					}
+
+					return l_return;
+				}
+
+				static void SetByte( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint8_t p_value )
+				{
+					switch( p_component )
+					{
+					case ePIXEL_COMPONENT_RED:
+						component< PF >::R8( p_pixel.ptr(), p_value );
+						break;
+
+					case ePIXEL_COMPONENT_GREEN:
+						component< PF >::G8( p_pixel.ptr(), p_value );
+						break;
+
+					case ePIXEL_COMPONENT_BLUE:
+						component< PF >::B8( p_pixel.ptr(), p_value );
+						break;
+
+					case ePIXEL_COMPONENT_ALPHA:
+						component< PF >::A8( p_pixel.ptr(), p_value );
+						break;
+
+					case ePIXEL_COMPONENT_LUMINANCE:
+						component< PF >::L8( p_pixel.ptr(), p_value );
+						break;
+
+					default:
+						break;
+					}
+				}
+			};
+
+			template< TPL_PIXEL_FORMAT PF >
+			struct PixelComponent< PF, typename std::enable_if< is_depth_stencil_format< PF >::value >::type >
+			{
+				static float GetFloat( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
+				{
+					float l_return = 0.0f;
+
+					switch( p_component )
+					{
+					case ePIXEL_COMPONENT_DEPTH:
+						l_return = float( component< PF >::D32F( p_pixel.const_ptr() ) );
+						break;
+
+					case ePIXEL_COMPONENT_STENCIL:
+						l_return = float( component< PF >::S32F( p_pixel.const_ptr() ) );
+						break;
+
+					default:
+						l_return = 0;
+						break;
+					}
+
+					return l_return;
+				}
+
+				static void SetFloat( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, float p_value )
+				{
+					switch( p_component )
+					{
+					case ePIXEL_COMPONENT_DEPTH:
+						component< PF >::D32F( p_pixel.ptr(), p_value );
+						break;
+
+					case ePIXEL_COMPONENT_STENCIL:
+						component< PF >::S32F( p_pixel.ptr(), p_value );
+						break;
+
+					default:
+						break;
+					}
+				}
+
+				static uint8_t GetByte( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
+				{
+					uint8_t l_return = 0;
+
+					switch( p_component )
+					{
+					case ePIXEL_COMPONENT_DEPTH:
+						l_return = uint8_t( component< PF >::D32( p_pixel.const_ptr() ) >> 24 );
+						break;
+
+					case ePIXEL_COMPONENT_STENCIL:
+						l_return = uint8_t( component< PF >::S8( p_pixel.const_ptr() ) );
+						break;
+
+					default:
+						l_return = 0;
+						break;
+					}
+
+					return l_return;
+				}
+
+				static void SetByte( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint8_t p_value )
+				{
+					switch( p_component )
+					{
+					case ePIXEL_COMPONENT_DEPTH:
+						component< PF >::D32( p_pixel.ptr(), uint32_t( p_value ) << 24 );
+						break;
+
+					case ePIXEL_COMPONENT_STENCIL:
+						component< PF >::S8( p_pixel.ptr(), p_value );
+						break;
+
+					default:
+						break;
+					}
+				}
+
+				static uint16_t GetUInt16( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
+				{
+					uint32_t l_return = 0;
+
+					switch( p_component )
+					{
+					case ePIXEL_COMPONENT_DEPTH:
+						l_return = component< PF >::D16( p_pixel.const_ptr() );
+						break;
+
+					default:
+						l_return = 0;
+						break;
+					}
+
+					return l_return;
+				}
+
+				static void SetUInt16( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint16_t p_value )
+				{
+					switch( p_component )
+					{
+					case ePIXEL_COMPONENT_DEPTH:
+						component< PF >::D16( p_pixel.ptr(), p_value );
+						break;
+
+					default:
+						break;
+					}
+				}
+
+				static uint32_t GetUInt24( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
+				{
+					uint32_t l_return = 0;
+
+					switch( p_component )
+					{
+					case ePIXEL_COMPONENT_DEPTH:
+						l_return = component< PF >::D24( p_pixel.const_ptr() );
+						break;
+
+					default:
+						l_return = 0;
+						break;
+					}
+
+					return l_return;
+				}
+
+				static void SetUInt24( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint32_t p_value )
+				{
+					switch( p_component )
+					{
+					case ePIXEL_COMPONENT_DEPTH:
+						component< PF >::D24( p_pixel.ptr(), p_value );
+						break;
+
+					default:
+						break;
+					}
+				}
+
+				static uint32_t GetUInt32( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
+				{
+					uint32_t l_return = 0;
+
+					switch( p_component )
+					{
+					case ePIXEL_COMPONENT_DEPTH:
+						l_return = component< PF >::D32( p_pixel.const_ptr() );
+						break;
+
+					default:
+						l_return = 0;
+						break;
+					}
+
+					return l_return;
+				}
+
+				static void SetUInt32( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint32_t p_value )
+				{
+					switch( p_component )
+					{
+					case ePIXEL_COMPONENT_DEPTH:
+						component< PF >::D32( p_pixel.ptr(), p_value );
+						break;
+
+					default:
+						break;
+					}
+				}
+			};
 		}
-
-		static void SetFloat( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, float p_value )
+	
+		template< TPL_PIXEL_FORMAT PF >
+		float GetFloatComponent( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
 		{
-			switch( p_component )
-			{
-			case ePIXEL_COMPONENT_RED:
-				component< PF >::R8( p_pixel.ptr(), p_value );
-				break;
-
-			case ePIXEL_COMPONENT_GREEN:
-				component< PF >::G8( p_pixel.ptr(), p_value );
-				break;
-
-			case ePIXEL_COMPONENT_BLUE:
-				component< PF >::B8( p_pixel.ptr(), p_value );
-				break;
-
-			case ePIXEL_COMPONENT_ALPHA:
-				component< PF >::A8( p_pixel.ptr(), p_value );
-				break;
-
-			case ePIXEL_COMPONENT_LUMINANCE:
-				component< PF >::L8( p_pixel.ptr(), p_value );
-				break;
-
-			default:
-				break;
-			}
+			return PixelComponent< PF >::GetFloat( p_pixel, p_component );
 		}
-
-		static uint8_t GetByte( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
+		
+		template< TPL_PIXEL_FORMAT PF >
+		void SetFloatComponent( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, float p_value )
 		{
-			uint8_t l_return = 0;
-
-			switch( p_component )
-			{
-			case ePIXEL_COMPONENT_RED:
-				l_return = component< PF >::R8( p_pixel.const_ptr() );
-				break;
-
-			case ePIXEL_COMPONENT_GREEN:
-				l_return = component< PF >::G8( p_pixel.const_ptr() );
-				break;
-
-			case ePIXEL_COMPONENT_BLUE:
-				l_return = component< PF >::B8( p_pixel.const_ptr() );
-				break;
-
-			case ePIXEL_COMPONENT_ALPHA:
-				l_return = component< PF >::A8( p_pixel.const_ptr() );
-				break;
-
-			case ePIXEL_COMPONENT_LUMINANCE:
-				l_return = component< PF >::L8( p_pixel.const_ptr() );
-				break;
-
-			default:
-				l_return = 0;
-				break;
-			}
-
-			return l_return;
+			return PixelComponent< PF >::SetFloat( p_pixel, p_component, p_value );
 		}
-
-		static void SetByte( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint8_t p_value )
+		
+		template< TPL_PIXEL_FORMAT PF >
+		uint8_t GetByteComponent( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
 		{
-			switch( p_component )
-			{
-			case ePIXEL_COMPONENT_RED:
-				component< PF >::R8( p_pixel.ptr(), p_value );
-				break;
-
-			case ePIXEL_COMPONENT_GREEN:
-				component< PF >::G8( p_pixel.ptr(), p_value );
-				break;
-
-			case ePIXEL_COMPONENT_BLUE:
-				component< PF >::B8( p_pixel.ptr(), p_value );
-				break;
-
-			case ePIXEL_COMPONENT_ALPHA:
-				component< PF >::A8( p_pixel.ptr(), p_value );
-				break;
-
-			case ePIXEL_COMPONENT_LUMINANCE:
-				component< PF >::L8( p_pixel.ptr(), p_value );
-				break;
-
-			default:
-				break;
-			}
+			return PixelComponent< PF >::GetByte( p_pixel, p_component );
 		}
-	};
-
-	template< TPL_PIXEL_FORMAT PF >
-	struct PixelComponent< PF, typename std::enable_if< is_depth_stencil_format< PF >::value >::type >
-	{
-		static float GetFloat( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
+		
+		template< TPL_PIXEL_FORMAT PF >
+		void SetByteComponent( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint8_t p_value )
 		{
-			float l_return = 0.0f;
-
-			switch( p_component )
-			{
-			case ePIXEL_COMPONENT_DEPTH:
-				l_return = float( component< PF >::D32F( p_pixel.const_ptr() ) );
-				break;
-
-			case ePIXEL_COMPONENT_STENCIL:
-				l_return = float( component< PF >::S32F( p_pixel.const_ptr() ) );
-				break;
-
-			default:
-				l_return = 0;
-				break;
-			}
-
-			return l_return;
+			return PixelComponent< PF >::SetByte( p_pixel, p_component, p_value );
 		}
-
-		static void SetFloat( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, float p_value )
+		
+		template< TPL_PIXEL_FORMAT PF >
+		uint16_t GetUInt16Component( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
 		{
-			switch( p_component )
-			{
-			case ePIXEL_COMPONENT_DEPTH:
-				component< PF >::D32F( p_pixel.ptr(), value );
-				break;
-
-			case ePIXEL_COMPONENT_STENCIL:
-				component< PF >::S32F( p_pixel.ptr(), p_value );
-				break;
-
-			default:
-				break;
-			}
+			return PixelComponent< PF >::GetUInt16( p_pixel, p_component );
 		}
-
-		static uint8_t GetByte( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
+		
+		template< TPL_PIXEL_FORMAT PF >
+		void SetUInt16Component( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint16_t p_value )
 		{
-			uint8_t l_return = 0;
-
-			switch( p_component )
-			{
-			case ePIXEL_COMPONENT_DEPTH:
-				l_return = uint8_t( component< PF >::D32( p_pixel.const_ptr() ) >> 24 );
-				break;
-
-			case ePIXEL_COMPONENT_STENCIL:
-				l_return = uint8_t( component< PF >::S8( p_pixel.const_ptr() ) );
-				break;
-
-			default:
-				l_return = 0;
-				break;
-			}
-
-			return l_return;
+			return PixelComponent< PF >::SetUInt16( p_pixel, p_component, p_value );
 		}
-
-		static void SetByte( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint8_t p_value )
+		
+		template< TPL_PIXEL_FORMAT PF >
+		uint32_t GetUInt24Component( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
 		{
-			switch( p_component )
-			{
-			case ePIXEL_COMPONENT_DEPTH:
-				component< PF >::D32( p_pixel.ptr(), uint32_t( p_value ) << 24 );
-				break;
-
-			case ePIXEL_COMPONENT_STENCIL:
-				component< PF >::S8( p_pixel.ptr(), p_value );
-				break;
-
-			default:
-				break;
-			}
+			return PixelComponent< PF >::GetUInt24( p_pixel, p_component );
 		}
-
-		static uint16_t GetUInt16( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
+		
+		template< TPL_PIXEL_FORMAT PF >
+		void SetUInt24Component( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint32_t p_value )
 		{
-			uint32_t l_return = 0;
-
-			switch( p_component )
-			{
-			case ePIXEL_COMPONENT_DEPTH:
-				l_return = component< PF >::D16( p_pixel.const_ptr() );
-				break;
-
-			default:
-				l_return = 0;
-				break;
-			}
-
-			return l_return;
+			return PixelComponent< PF >::SetUInt24( p_pixel, p_component, p_value );
 		}
-
-		static void SetUInt16( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint16_t p_value )
+		
+		template< TPL_PIXEL_FORMAT PF >
+		uint32_t GetUInt32Component( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
 		{
-			switch( p_component )
-			{
-			case ePIXEL_COMPONENT_DEPTH:
-				component< PF >::D16( p_pixel.ptr(), p_value );
-				break;
-
-			default:
-				break;
-			}
+			return PixelComponent< PF >::GetUInt32( p_pixel, p_component );
 		}
-
-		static uint32_t GetUInt24( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
+		
+		template< TPL_PIXEL_FORMAT PF >
+		void SetUInt32Component( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint32_t p_value )
 		{
-			uint32_t l_return = 0;
-
-			switch( p_component )
-			{
-			case ePIXEL_COMPONENT_DEPTH:
-				l_return = component< PF >::D24( p_pixel.const_ptr() );
-				break;
-
-			default:
-				l_return = 0;
-				break;
-			}
-
-			return l_return;
+			return PixelComponent< PF >::SetUInt32( p_pixel, p_component, p_value );
 		}
-
-		static void SetUInt24( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint32_t p_value )
-		{
-			switch( p_component )
-			{
-			case ePIXEL_COMPONENT_DEPTH:
-				component< PF >::D24( p_pixel.ptr(), p_value );
-				break;
-
-			default:
-				break;
-			}
-		}
-
-		static uint32_t GetUInt32( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
-		{
-			uint32_t l_return = 0;
-
-			switch( p_component )
-			{
-			case ePIXEL_COMPONENT_DEPTH:
-				l_return = component< PF >::D32( p_pixel.const_ptr() );
-				break;
-
-			default:
-				l_return = 0;
-				break;
-			}
-
-			return l_return;
-		}
-
-		static void SetUInt32( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint32_t p_value )
-		{
-			switch( p_component )
-			{
-			case ePIXEL_COMPONENT_DEPTH:
-				component< PF >::D32( p_pixel.ptr(), p_value );
-				break;
-
-			default:
-				break;
-			}
-		}
-	};
+	}
 
 	//*************************************************************************************************
 

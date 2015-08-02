@@ -55,6 +55,10 @@ namespace Dx9Render
 	{
 		HRESULT l_hr = S_FALSE;
 
+#if DX_DEBUG
+		l_hr = S_OK;
+#else
+
 		if ( m_pDxTexture && m_pDxTexture->GetDxSurface() )
 		{
 			l_hr = m_pDevice->GetRenderTarget( m_dwAttachment, &m_pOldSurface );
@@ -65,16 +69,22 @@ namespace Dx9Render
 			}
 		}
 
+#endif
+
 		return l_hr == S_OK;
 	}
 
 	void DxTextureAttachment::Unbind()
 	{
+#if !DX_DEBUG
+
 		if ( m_pOldSurface )
 		{
 			m_pDevice->SetRenderTarget( m_dwAttachment, m_pOldSurface );
 			SafeRelease( m_pOldSurface );
 		}
+
+#endif
 	}
 
 	bool DxTextureAttachment::DoAttach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer )

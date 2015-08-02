@@ -81,7 +81,7 @@ namespace Dx9Render
 	bool DxPipelineImplHlsl::LoadIdentity()
 	{
 		GetCurrentMatrix().set_identity();
-		DoApplyMatrix();
+		//DoApplyMatrix();
 #if C3D_DIRECTX_MTX
 		D3DXMatrixIdentity( &m_d3dMatrix[GetCurrentMode()].top() );
 		m_pDxPipeline->GetDxRenderSystem()->GetDevice()->SetTransform( m_matrixTypes[GetCurrentMode()], &m_d3dMatrix[GetCurrentMode()].top() );
@@ -92,7 +92,7 @@ namespace Dx9Render
 	bool DxPipelineImplHlsl::PushMatrix()
 	{
 		IPipelineImpl::PushMatrix();
-		DoApplyMatrix();
+		//DoApplyMatrix();
 #if C3D_DIRECTX_MTX
 		m_d3dMatrix[GetCurrentMode()].push( m_d3dMatrix[GetCurrentMode()].top() );
 #endif
@@ -102,7 +102,7 @@ namespace Dx9Render
 	bool DxPipelineImplHlsl::PopMatrix()
 	{
 		IPipelineImpl::PopMatrix();
-		DoApplyMatrix();
+		//DoApplyMatrix();
 #if C3D_DIRECTX_MTX
 		m_d3dMatrix[GetCurrentMode()].pop();
 #endif
@@ -172,8 +172,8 @@ namespace Dx9Render
 
 	bool DxPipelineImplHlsl::Perspective( Angle const & p_aFOVY, real p_rRatio, real p_rNear, real p_rFar )
 	{
-	//	MtxUtils::perspective_dx( m_pPipeline->GetMatrix( eMTXMODE_PROJECTION ), p_aFOVY, p_rRatio, p_rNear, p_rFar );
-		IPipelineImpl::Perspective( p_aFOVY, p_rRatio, p_rNear, p_rFar );
+		MtxUtils::perspective_dx( m_pPipeline->GetMatrix( eMTXMODE_PROJECTION ), p_aFOVY, p_rRatio, p_rNear, p_rFar );
+		//IPipelineImpl::Perspective( p_aFOVY, p_rRatio, p_rNear, p_rFar );
 		DoApplyMatrix();
 #if C3D_DIRECTX_MTX
 		D3DXMatrixPerspectiveFovRH( &m_d3dMtx, p_aFOVY.Radians(), p_rRatio, p_rNear, p_rFar );
@@ -224,7 +224,7 @@ namespace Dx9Render
 		//m_viewport.Width	= GetSystemMetrics(	SM_CXFULLSCREEN );
 		//m_viewport.Height	= GetSystemMetrics(	SM_CYFULLSCREEN );
 		HRESULT l_hr = m_pDxPipeline->GetDxRenderSystem()->GetDevice()->SetViewport( &m_viewport );
-		Logger::LogDebug( L"Setting viewport to origin %ix%ix%f, size %ix%ix%f", m_viewport.X, m_viewport.Y, m_viewport.MinZ, m_viewport.Width, m_viewport.Height, ( m_viewport.MaxZ - m_viewport.MinZ ) );
+		//Logger::LogDebug( L"Setting viewport to origin %ix%ix%f, size %ix%ix%f", m_viewport.X, m_viewport.Y, m_viewport.MinZ, m_viewport.Width, m_viewport.Height, ( m_viewport.MaxZ - m_viewport.MinZ ) );
 		dxCheckError( l_hr, "ApplyViewport" );
 	}
 

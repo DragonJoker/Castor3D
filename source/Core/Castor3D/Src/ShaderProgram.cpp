@@ -270,7 +270,7 @@ namespace Castor3D
 					else
 					{
 						m_pLightsTexture->Initialise();
-						Logger::LogMessage( cuT( "ShaderProgram::Initialise - Program Linked successfully" ) );
+						Logger::LogInfo( cuT( "ShaderProgram::Initialise - Program Linked successfully" ) );
 					}
 				}
 			}

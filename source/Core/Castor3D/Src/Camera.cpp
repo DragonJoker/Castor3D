@@ -203,12 +203,12 @@ namespace Castor3D
 
 	void Camera::Render()
 	{
-		Pipeline * l_pPipeline = m_pEngine->GetRenderSystem()->GetPipeline();
 		bool l_bModified = m_pViewport->Render();
 		SceneNodeSPtr l_node = GetParent();
 
 		if ( l_node )
 		{
+			Pipeline * l_pPipeline = m_pEngine->GetRenderSystem()->GetPipeline();
 			Matrix4x4r const & l_mtx = l_node->GetDerivedTransformationMatrix();
 
 			if ( l_bModified || l_node->IsModified() )
@@ -235,6 +235,7 @@ namespace Castor3D
 	void Camera::EndRender()
 	{
 		m_pEngine->GetRenderSystem()->SetCurrentCamera( NULL );
+		m_pEngine->GetRenderSystem()->GetPipeline()->MatrixMode( eMTXMODE_VIEW );
 		m_pEngine->GetRenderSystem()->GetPipeline()->PopMatrix();
 	}
 

@@ -5,7 +5,7 @@ using namespace Castor3D;
 using namespace Dx11Render;
 
 DxCameraRenderer::DxCameraRenderer( DxRenderSystem * p_pRenderSystem )
-	:	CameraRenderer( p_pRenderSystem )
+	: CameraRenderer( p_pRenderSystem )
 {
 }
 

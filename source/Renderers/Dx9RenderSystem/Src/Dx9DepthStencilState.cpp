@@ -23,6 +23,17 @@ namespace Dx9Render
 		if ( !sm_pCurrent )
 		{
 			sm_pCurrent = std::make_shared< DxDepthStencilState >( m_pRenderSystem );
+			sm_pCurrent->SetDepthTest( true );
+			sm_pCurrent->SetDepthFunc( eDEPTH_FUNC_COUNT );
+			sm_pCurrent->SetDepthMask( eWRITING_MASK_ALL );
+			sm_pCurrent->SetStencilTest( !GetStencilTest() );
+			sm_pCurrent->SetStencilReadMask( 0xFFFFFFFF );
+			sm_pCurrent->SetStencilWriteMask( 0xFFFFFFFF );
+			sm_pCurrent->SetStencilFrontPassOp( eSTENCIL_OP_KEEP );
+			sm_pCurrent->SetStencilFrontFailOp( eSTENCIL_OP_KEEP );
+			sm_pCurrent->SetStencilFrontDepthFailOp( eSTENCIL_OP_COUNT );
+			sm_pCurrent->SetStencilFrontRef( 0 );
+			sm_pCurrent->SetStencilFrontFunc( eSTENCIL_FUNC_ALWAYS );
 		}
 
 		m_bChanged = false;

@@ -57,7 +57,7 @@ namespace Deferred
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
 		:	RenderTechniqueBase( cuT( "deferred" ), p_renderTarget, p_pRenderSystem, p_params )
 	{
-		Logger::LogMessage( cuT( "Using deferred shading" ) );
+		Logger::LogInfo( cuT( "Using deferred shading" ) );
 		m_pDsFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )

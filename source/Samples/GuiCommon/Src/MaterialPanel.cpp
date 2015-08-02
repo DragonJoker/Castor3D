@@ -24,7 +24,7 @@ wxMaterialPanel::wxMaterialPanel( Engine * p_pEngine, bool p_bCanEdit, wxWindow 
 	, m_pEngine( p_pEngine )
 {
 	// Initialise material panel
-	m_pStaticName = new wxStaticText( this, wxID_ANY, _( "Name :" ) + wxT( " " ) );
+	m_pStaticName = new wxStaticText( this, wxID_ANY, _( "Name :" ) + wxString( wxT( " " ) ) );
 	m_pEditMaterialName = new wxTextCtrl( this, eID_EDIT_MATERIAL_NAME, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER | wxBORDER_SIMPLE );
 	m_pEditMaterialName->Enable( m_bCanEdit );
 	wxBoxSizer * l_pSizerName = new wxBoxSizer( wxHORIZONTAL );

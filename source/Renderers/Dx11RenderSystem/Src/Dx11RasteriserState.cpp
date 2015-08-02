@@ -9,9 +9,9 @@ using namespace Castor;
 namespace Dx11Render
 {
 	DxRasteriserState::DxRasteriserState( DxRenderSystem * p_pRenderSystem )
-		:	RasteriserState()
-		,	m_pRenderSystem( p_pRenderSystem )
-		,	m_pRasteriserState( NULL )
+		: RasteriserState()
+		, m_pRenderSystem( p_pRenderSystem )
+		, m_pRasteriserState( NULL )
 	{
 	}
 

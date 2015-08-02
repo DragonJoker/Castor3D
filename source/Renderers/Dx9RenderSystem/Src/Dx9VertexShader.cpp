@@ -6,6 +6,8 @@ using namespace Castor;
 
 namespace Dx9Render
 {
+	static xchar const * const WARNING_VERTEX_SHADER = cuT( "Couldn't retrieve a VertexShader from the D3DXEffect: 0x%x (%s)" );
+
 	DxVertexShader::DxVertexShader( DxShaderProgram * p_pParent )
 		:	DxShaderObject( p_pParent, eSHADER_TYPE_VERTEX )
 		,	m_pVertexShader( NULL )
@@ -25,28 +27,11 @@ namespace Dx9Render
 	{
 	}
 
-	bool DxVertexShader::Compile()
-	{
-		bool l_bReturn = DxShaderObject::Compile();
-
-		if ( l_bReturn )
-		{
-			DoRetrieveShader( static_cast< DxShaderProgram * >( m_pParent )->GetShaderEffect() );
-		}
-
-		return l_bReturn;
-	}
-
 	void DxVertexShader::Bind()
 	{
 	}
 
 	void DxVertexShader::Unbind()
 	{
-	}
-
-	void DxVertexShader::DoRetrieveShader( ID3DXEffect * p_pEffect )
-	{
-		p_pEffect->GetVertexShader( "mainVx", &m_pVertexShader );
 	}
 }

@@ -31,14 +31,14 @@ namespace Dx11Render
 		:	public Castor3D::RenderSystem
 	{
 	public:
-		DxRenderSystem( Castor3D::Engine * p_pEngine, Castor::Logger * p_pLogger );
+		DxRenderSystem( Castor3D::Engine * p_pEngine );
 		virtual ~DxRenderSystem();
 
 		virtual void Delete();
 		virtual bool CheckSupport( Castor3D::eSHADER_MODEL p_eProfile );
 		virtual int LockLight();
 		virtual void UnlockLight( int p_iIndex );
-		virtual void BeginOverlaysRendering();
+		virtual void BeginOverlaysRendering( Castor::Size const & p_size );
 		virtual void EndOverlaysRendering();
 		virtual Castor3D::ContextSPtr CreateContext();
 		virtual Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::VertexBufferUPtr p_pVertexBuffer, Castor3D::IndexBufferUPtr p_pIndexBuffer, Castor3D::MatrixBufferUPtr p_pMatrixBuffer );
@@ -55,7 +55,7 @@ namespace Dx11Render
 			return true;
 		}
 		virtual Castor3D::FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_strName );
-		virtual Castor3D::BillboardListSPtr CreateBillboardsList( Castor3D::SceneRPtr p_pScene );
+		virtual Castor3D::BillboardListSPtr CreateBillboardsList( Castor3D::SceneSPtr p_pScene );
 
 		void Resize( Castor::Point2i const & p_ptNewSize );
 		bool InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swapChainDesc );

@@ -6,7 +6,7 @@ using namespace Castor;
 using namespace Dx11Render;
 
 DxOverlayRenderer::DxOverlayRenderer( DxRenderSystem * p_pRenderSystem )
-	:	OverlayRenderer( p_pRenderSystem )
+	: OverlayRenderer( p_pRenderSystem )
 {
 }
 

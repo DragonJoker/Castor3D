@@ -396,12 +396,7 @@ namespace Castor3D
 		}
 
 		Pipeline * l_pPipeline = m_pEngine->GetRenderSystem()->GetPipeline();
-#if DX_DEBUG
-		Size l_size = m_pEngine->GetRenderSystem()->GetCurrentContext()->GetMaxSize( m_size );
-		l_pPipeline->ApplyViewport( l_size.width(), l_size.height() );
-#else
 		l_pPipeline->ApplyViewport( m_size.width(), m_size.height() );
-#endif
 		l_pPipeline->MatrixMode( eMTXMODE_PROJECTION );
 		l_pPipeline->LoadIdentity();
 

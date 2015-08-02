@@ -18,7 +18,7 @@ namespace Castor3D
 {
 	bool Geometry::TextLoader::operator()( Geometry const & p_geometry, TextFile & p_file )
 	{
-		Logger::LogMessage( cuT( "Writing Geometry " ) + p_geometry.GetName() );
+		Logger::LogInfo( cuT( "Writing Geometry " ) + p_geometry.GetName() );
 		bool l_bReturn = p_file.WriteText( cuT( "\tobject \"" ) + p_geometry.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
 
 		if ( l_bReturn )
@@ -189,17 +189,15 @@ namespace Castor3D
 				p_nbFaces += l_nbFaces;
 				p_nbVertex += l_nbVertex;
 				l_pMesh->ComputeContainers();
-				uint32_t l_nbSubmeshes = l_pMesh->GetSubmeshCount();
-				m_listCreated = l_nbSubmeshes > 0;
-				Logger::LogMessage( cuT( "Geometry::CreateBuffers - NbVertex : %d, NbFaces : %d" ), l_nbVertex, l_nbFaces );
+				Logger::LogInfo( cuT( "Geometry::CreateBuffers - NbVertex : %d, NbFaces : %d" ), l_nbVertex, l_nbFaces );
 				m_listCreated = l_pMesh->GetSubmeshCount() > 0;
 			}
 
-			std::for_each( m_submeshesMaterials.begin(), m_submeshesMaterials.end(), [&]( std::pair< SubmeshSPtr, MaterialSPtr > p_pair )
+			for ( auto && l_pair : m_submeshesMaterials )
 			{
-				uint32_t l_uiProgramFlags = p_pair.first->GetProgramFlags();
+				uint32_t l_uiProgramFlags = l_pair.first->GetProgramFlags();
 
-				if ( p_pair.first->GetRefCount( p_pair.second ) > 1 )
+				if ( l_pair.first->GetRefCount( l_pair.second ) > 1 )
 				{
 					l_uiProgramFlags |= ePROGRAM_FLAG_INSTANCIATION;
 				}
@@ -209,11 +207,9 @@ namespace Castor3D
 					l_uiProgramFlags |= ePROGRAM_FLAG_DEFERRED;
 				}
 
-				SkeletonSPtr l_pSkeleton = p_pair.first->GetSkeleton();
-
-				if ( p_pair.second )
+				if ( l_pair.second )
 				{
-					std::for_each( p_pair.second->Begin(), p_pair.second->End(), [&]( PassSPtr p_pPass )
+					std::for_each( l_pair.second->Begin(), l_pair.second->End(), [&]( PassSPtr p_pPass )
 					{
 						if ( !p_pPass->HasShader() )
 						{
@@ -222,7 +218,7 @@ namespace Castor3D
 						}
 					} );
 				}
-			} );
+			}
 		}
 	}
 

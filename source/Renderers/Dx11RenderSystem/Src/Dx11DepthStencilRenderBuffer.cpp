@@ -6,8 +6,8 @@ using namespace Castor;
 namespace Dx11Render
 {
 	DxDepthStencilRenderBuffer::DxDepthStencilRenderBuffer( DxRenderSystem * p_pRenderSystem, ePIXEL_FORMAT p_eFormat )
-		:	DepthStencilRenderBuffer( p_eFormat )
-		,	m_dxRenderBuffer( p_pRenderSystem, DirectX11::Get( p_eFormat ), eBUFFER_COMPONENT_DEPTH, *this )
+		: DepthStencilRenderBuffer( p_eFormat )
+		, m_dxRenderBuffer( p_pRenderSystem, DirectX11::Get( p_eFormat ), eBUFFER_COMPONENT_DEPTH, *this )
 	{
 	}
 

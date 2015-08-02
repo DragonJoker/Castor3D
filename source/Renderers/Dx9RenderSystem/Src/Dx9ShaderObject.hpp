@@ -123,9 +123,6 @@ namespace Dx9Render
 		}
 
 	protected:
-		virtual void DoRetrieveShader( ID3DXEffect * p_pEffect ) = 0;
-
-	protected:
 		Castor::String m_strEntryPoint;
 		Castor::String m_compilerLog;
 		DxShaderProgram * m_pShaderProgram;

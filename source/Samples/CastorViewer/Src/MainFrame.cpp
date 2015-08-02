@@ -257,14 +257,14 @@ namespace CastorViewer
 			wxIcon l_icon = wxIcon( castor_xpm );
 			SetIcon( l_icon );
 			m_pListLog = new wxListView( this, wxID_ANY, wxDefaultPosition, wxSize( 200, m_iListHeight ) );
-			m_pListLog->InsertColumn( 0, _( "Log"	), 0 );
+			m_pListLog->InsertColumn( 0, _( "Log" ), 0 );
 			m_pAuiManager->AddPane( m_pListLog, wxAuiPaneInfo().CloseButton().Caption( _( "Log" ) ).Direction( wxBOTTOM ).Dock().Bottom().BottomDockable().TopDockable().Movable().PinButton() );
 #if defined( NDEBUG )
 			m_pListLog->Hide();
 #else
 			m_pListLog->Hide();
 #endif
-			Logger::SetCallback( Castor::PLogCallback( DoLogCallback ), this );
+			Logger::RegisterCallback( std::bind( &MainFrame::DoLogCallback, this, std::placeholders::_1, std::placeholders::_2 ), this );
 			l_bReturn = DoInitialise3D();
 		}
 
@@ -325,15 +325,15 @@ namespace CastorViewer
 					if ( File::FileExists( l_meshFilePath ) )
 					{
 						BinaryFile l_fileMesh( l_meshFilePath, File::eOPEN_MODE_READ );
-						Logger::LogMessage( cuT( "Loading meshes file : " ) + l_meshFilePath );
+						Logger::LogInfo( cuT( "Loading meshes file : " ) + l_meshFilePath );
 
 						if ( m_pCastor3D->LoadMeshes( l_fileMesh ) )
 						{
-							Logger::LogMessage( cuT( "Meshes read" ) );
+							Logger::LogInfo( cuT( "Meshes read" ) );
 						}
 						else
 						{
-							Logger::LogMessage( cuT( "Can't read meshes" ) );
+							Logger::LogInfo( cuT( "Can't read meshes" ) );
 							return;
 						}
 					}
@@ -343,7 +343,7 @@ namespace CastorViewer
 				{
 					if ( File::FileExists( m_strFilePath ) )
 					{
-						Logger::LogMessage( cuT( "Loading scene file : " ) + m_strFilePath );
+						Logger::LogInfo( cuT( "Loading scene file : " ) + m_strFilePath );
 
 						if ( m_strFilePath.GetExtension() == cuT( "cscn" ) || m_strFilePath.GetExtension() == cuT( "zip" ) )
 						{
@@ -367,7 +367,7 @@ namespace CastorViewer
 											ShowFullScreen( true, wxFULLSCREEN_ALL );
 										}
 
-										Logger::LogMessage( cuT( "Scene file read" ) );
+										Logger::LogInfo( cuT( "Scene file read" ) );
 									}
 									else
 									{
@@ -416,8 +416,8 @@ namespace CastorViewer
 	{
 		bool l_bReturn = true;
 		m_pSplashScreen->Step( _( "Loading plugins" ), 1 );
-		Logger::LogMessage( cuT( "Initialising Castor3D" ) );
-		m_pCastor3D = new Engine( Logger::GetSingletonPtr() );
+		Logger::LogInfo( cuT( "Initialising Castor3D" ) );
+		m_pCastor3D = new Engine();
 		StringArray l_arrayFiles;
 		StringArray l_arrayFailed;
 		std::mutex l_mutex;
@@ -465,7 +465,7 @@ namespace CastorViewer
 			l_arrayFailed.clear();
 		}
 
-		Logger::LogMessage( cuT( "Plugins loaded" ) );
+		Logger::LogInfo( cuT( "Plugins loaded" ) );
 
 		try
 		{
@@ -496,7 +496,7 @@ namespace CastorViewer
 
 			if ( l_bReturn )
 			{
-				Logger::LogMessage( cuT( "Castor3D Initialised" ) );
+				Logger::LogInfo( cuT( "Castor3D Initialised" ) );
 				SetClientSize( 800, 600 + m_iListHeight );
 				int l_width = GetClientSize().x;
 				int l_height = GetClientSize().y;
@@ -576,7 +576,7 @@ namespace CastorViewer
 		l_pToolbar->Realize();
 	}
 
-	void MainFrame::DoLog( String const & p_strLog, eLOG_TYPE p_eLogType )
+	void MainFrame::DoLog( String const & p_strLog, ELogType p_eLogType )
 	{
 		if ( m_pListLog )
 		{
@@ -584,9 +584,9 @@ namespace CastorViewer
 		}
 	}
 
-	void MainFrame::DoLogCallback( MainFrame * p_pThis, String const & p_strLog, eLOG_TYPE p_eLogType )
+	void MainFrame::DoLogCallback( String const & p_strLog, ELogType p_eLogType )
 	{
-		p_pThis->DoLog( p_strLog, p_eLogType );
+		DoLog( p_strLog, p_eLogType );
 	}
 
 	void MainFrame::DoExportScene( Castor::Path const & p_pathFile )const
@@ -898,7 +898,7 @@ namespace CastorViewer
 	void MainFrame::OnClose( wxCloseEvent & p_event )
 	{
 		m_pListLog = NULL;
-		Logger::SetCallback( NULL, NULL );
+		Logger::UnregisterCallback( this );
 		Hide();
 
 		if ( m_pGeometriesFrame && m_pAuiManager )

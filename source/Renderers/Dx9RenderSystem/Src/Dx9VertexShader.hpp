@@ -41,12 +41,8 @@ namespace Dx9Render
 		 * Creates the HLSL Shader program
 		 */
 		virtual void CreateProgram();
-		virtual bool Compile();
 		virtual void Bind();
 		virtual void Unbind();
-
-	private:
-		virtual void DoRetrieveShader( ID3DXEffect * p_pEffect );
 	};
 }
 

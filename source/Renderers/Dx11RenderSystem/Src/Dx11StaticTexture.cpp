@@ -13,9 +13,9 @@ using namespace Castor3D;
 namespace Dx11Render
 {
 	DxStaticTexture::DxStaticTexture( DxRenderSystem * p_pRenderSystem )
-		:	StaticTexture( p_pRenderSystem )
-		,	m_pShaderResourceView( NULL )
-		,	m_pRenderSystem( p_pRenderSystem )
+		: StaticTexture( p_pRenderSystem )
+		, m_pShaderResourceView( NULL )
+		, m_pRenderSystem( p_pRenderSystem )
 	{
 	}
 
@@ -71,11 +71,11 @@ namespace Dx11Render
 
 	bool DxStaticTexture::DoInitialise()
 	{
-		ID3D11Device 	*		l_pDevice		= m_pRenderSystem->GetDevice();
-		D3D11_TEXTURE2D_DESC	l_tex2dDesc		= { 0 };
-		D3D11_SUBRESOURCE_DATA	l_tex2dData		= { 0 };
-		HRESULT					l_hr			= S_OK;
-		ID3D11Texture2D 	*	l_pTexture		= NULL;
+		ID3D11Device * l_pDevice = m_pRenderSystem->GetDevice();
+		D3D11_TEXTURE2D_DESC l_tex2dDesc = { 0 };
+		D3D11_SUBRESOURCE_DATA l_tex2dData = { 0 };
+		HRESULT l_hr = S_OK;
+		ID3D11Texture2D * l_pTexture = NULL;
 		DoInitTex2DDesc( l_tex2dDesc );
 		DoInitTex2DData( l_tex2dData );
 
@@ -87,10 +87,10 @@ namespace Dx11Render
 		if ( l_hr == S_OK )
 		{
 			D3D10_SHADER_RESOURCE_VIEW_DESC l_desc;
-			l_desc.Format						= DirectX11::Get( m_pPixelBuffer->format() );
-			l_desc.ViewDimension				= D3D11_SRV_DIMENSION_TEXTURE2D;
-			l_desc.Texture2D.MipLevels			= 2;
-			l_desc.Texture2D.MostDetailedMip	= 0;
+			l_desc.Format = DirectX11::Get( m_pPixelBuffer->format() );
+			l_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+			l_desc.Texture2D.MipLevels = 2;
+			l_desc.Texture2D.MostDetailedMip = 0;
 			l_hr = l_pDevice->CreateShaderResourceView( l_pTexture, NULL, &m_pShaderResourceView );
 			dxDebugName( m_pShaderResourceView, StaticSRView );
 		}
@@ -115,16 +115,16 @@ namespace Dx11Render
 
 	void DxStaticTexture::DoInitTex2DDesc( D3D11_TEXTURE2D_DESC & p_tex2dDesc )
 	{
-		p_tex2dDesc.Width				= m_pPixelBuffer->width();
-		p_tex2dDesc.Height				= m_pPixelBuffer->height();
-		p_tex2dDesc.Format				= DirectX11::Get( m_pPixelBuffer->format() );
-		p_tex2dDesc.ArraySize			= 1;
-		p_tex2dDesc.Usage				= D3D11_USAGE_IMMUTABLE;
-		p_tex2dDesc.CPUAccessFlags		= 0;
-		p_tex2dDesc.MipLevels			= 1;
-		p_tex2dDesc.SampleDesc.Count	= 1;
-		p_tex2dDesc.SampleDesc.Quality	= 0;
-		p_tex2dDesc.BindFlags			= D3D11_BIND_SHADER_RESOURCE;
+		p_tex2dDesc.Width = m_pPixelBuffer->width();
+		p_tex2dDesc.Height = m_pPixelBuffer->height();
+		p_tex2dDesc.Format = DirectX11::Get( m_pPixelBuffer->format() );
+		p_tex2dDesc.ArraySize = 1;
+		p_tex2dDesc.Usage = D3D11_USAGE_IMMUTABLE;
+		p_tex2dDesc.CPUAccessFlags = 0;
+		p_tex2dDesc.MipLevels = 1;
+		p_tex2dDesc.SampleDesc.Count = 1;
+		p_tex2dDesc.SampleDesc.Quality = 0;
+		p_tex2dDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 
 		if ( p_tex2dDesc.Format == DXGI_FORMAT_UNKNOWN )
 		{
@@ -149,8 +149,8 @@ namespace Dx11Render
 
 	void DxStaticTexture::DoInitTex2DData( D3D11_SUBRESOURCE_DATA & p_tex2dData )
 	{
-		p_tex2dData.pSysMem			= m_pPixelBuffer->const_ptr();
-		p_tex2dData.SysMemPitch		= UINT( m_pPixelBuffer->size() / m_pPixelBuffer->height() );
+		p_tex2dData.pSysMem = m_pPixelBuffer->const_ptr();
+		p_tex2dData.SysMemPitch = UINT( m_pPixelBuffer->size() / m_pPixelBuffer->height() );
 	}
 }
 

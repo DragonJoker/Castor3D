@@ -13,10 +13,10 @@ using namespace Castor3D;
 namespace Dx11Render
 {
 	DxDynamicTexture::DxDynamicTexture( DxRenderSystem * p_pRenderSystem )
-		:	DynamicTexture( p_pRenderSystem )
-		,	m_pRenderTargetView( NULL )
-		,	m_pShaderResourceView( NULL )
-		,	m_pRenderSystem( p_pRenderSystem )
+		: DynamicTexture( p_pRenderSystem )
+		, m_pRenderTargetView( NULL )
+		, m_pShaderResourceView( NULL )
+		, m_pRenderSystem( p_pRenderSystem )
 	{
 	}
 
@@ -73,10 +73,10 @@ namespace Dx11Render
 
 	bool DxDynamicTexture::DoInitialise()
 	{
-		ID3D11Device 	*		l_pDevice		= m_pRenderSystem->GetDevice();
-		D3D11_TEXTURE2D_DESC	l_tex2dDesc		= { 0 };
-		D3D11_SUBRESOURCE_DATA	l_tex2dData		= { 0 };
-		ID3D11Texture2D 	*	l_pTexture		= NULL;
+		ID3D11Device * l_pDevice = m_pRenderSystem->GetDevice();
+		D3D11_TEXTURE2D_DESC l_tex2dDesc = { 0 };
+		D3D11_SUBRESOURCE_DATA l_tex2dData = { 0 };
+		ID3D11Texture2D * l_pTexture = NULL;
 		DoInitTex2DDesc( l_tex2dDesc );
 		DoInitTex2DData( l_tex2dData );
 		HRESULT l_hr = l_pDevice->CreateTexture2D( &l_tex2dDesc, &l_tex2dData, &l_pTexture );
@@ -84,10 +84,10 @@ namespace Dx11Render
 		if ( l_hr == S_OK )
 		{
 			D3D11_SHADER_RESOURCE_VIEW_DESC l_desc;
-			l_desc.Format						= DirectX11::Get( m_pPixelBuffer->format() );
-			l_desc.ViewDimension				= D3D11_SRV_DIMENSION_TEXTURE2D;
-			l_desc.Texture2D.MipLevels			= 2;
-			l_desc.Texture2D.MostDetailedMip	= 0;
+			l_desc.Format = DirectX11::Get( m_pPixelBuffer->format() );
+			l_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+			l_desc.Texture2D.MipLevels = 2;
+			l_desc.Texture2D.MostDetailedMip = 0;
 
 			if ( IsRenderTarget() )
 			{
@@ -119,18 +119,18 @@ namespace Dx11Render
 
 	void DxDynamicTexture::DoInitTex2DDesc( D3D11_TEXTURE2D_DESC & p_tex2dDesc )
 	{
-		ePIXEL_FORMAT	l_ePixelFormat	= m_pPixelBuffer->format();
-		ID3D11Device *	l_pDevice		= m_pRenderSystem->GetDevice();
-		p_tex2dDesc.Width				= m_pPixelBuffer->width();
-		p_tex2dDesc.Height				= m_pPixelBuffer->height();
-		p_tex2dDesc.Format				= DirectX11::Get( l_ePixelFormat );
-		p_tex2dDesc.ArraySize			= 1;
-		p_tex2dDesc.Usage				= D3D11_USAGE_DYNAMIC;
-		p_tex2dDesc.CPUAccessFlags		= D3D11_CPU_ACCESS_WRITE;
-		p_tex2dDesc.MipLevels			= 1;
-		p_tex2dDesc.SampleDesc.Count	= 1;
-		p_tex2dDesc.SampleDesc.Quality	= 0;
-		p_tex2dDesc.BindFlags			= D3D11_BIND_SHADER_RESOURCE;
+		ePIXEL_FORMAT l_ePixelFormat = m_pPixelBuffer->format();
+		ID3D11Device * l_pDevice = m_pRenderSystem->GetDevice();
+		p_tex2dDesc.Width = m_pPixelBuffer->width();
+		p_tex2dDesc.Height = m_pPixelBuffer->height();
+		p_tex2dDesc.Format = DirectX11::Get( l_ePixelFormat );
+		p_tex2dDesc.ArraySize = 1;
+		p_tex2dDesc.Usage = D3D11_USAGE_DYNAMIC;
+		p_tex2dDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		p_tex2dDesc.MipLevels = 1;
+		p_tex2dDesc.SampleDesc.Count = 1;
+		p_tex2dDesc.SampleDesc.Quality = 0;
+		p_tex2dDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 
 		if ( p_tex2dDesc.Format == DXGI_FORMAT_UNKNOWN )
 		{
@@ -165,17 +165,17 @@ namespace Dx11Render
 
 		if ( IsRenderTarget() )
 		{
-			p_tex2dDesc.CPUAccessFlags	= 0;
-			p_tex2dDesc.Usage			= D3D11_USAGE_DEFAULT;
-			p_tex2dDesc.BindFlags		|= D3D11_BIND_RENDER_TARGET;
-			p_tex2dDesc.MiscFlags		= D3D11_RESOURCE_MISC_GENERATE_MIPS;
+			p_tex2dDesc.CPUAccessFlags = 0;
+			p_tex2dDesc.Usage = D3D11_USAGE_DEFAULT;
+			p_tex2dDesc.BindFlags |= D3D11_BIND_RENDER_TARGET;
+			p_tex2dDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
 		}
 	}
 
 	void DxDynamicTexture::DoInitTex2DData( D3D11_SUBRESOURCE_DATA & p_tex2dData )
 	{
-		p_tex2dData.pSysMem			= m_pPixelBuffer->const_ptr();
-		p_tex2dData.SysMemPitch		= UINT( m_pPixelBuffer->size() / m_pPixelBuffer->height() );
+		p_tex2dData.pSysMem = m_pPixelBuffer->const_ptr();
+		p_tex2dData.SysMemPitch = UINT( m_pPixelBuffer->size() / m_pPixelBuffer->height() );
 	}
 }
 

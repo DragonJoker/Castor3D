@@ -76,6 +76,7 @@ namespace Castor3D
 		}
 		matrix4x4 const & GetMatrix( eMTXMODE p_eMode )const;
 		matrix4x4 & GetMatrix( eMTXMODE p_eMode );
+		bool HasMatrix( eMTXMODE p_eMode )const;
 		eMTXMODE MatrixMode( eMTXMODE p_eMode );
 		bool LoadIdentity();
 		bool PushMatrix();

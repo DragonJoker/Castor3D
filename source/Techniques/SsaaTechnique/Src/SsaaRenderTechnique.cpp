@@ -29,7 +29,7 @@ namespace Ssaa
 	{
 		if ( p_params.Get( cuT( "samples_count" ), m_iSamplesCount ) && m_iSamplesCount > 1 )
 		{
-			Logger::LogMessage( "Using SSAA, %d samples", m_iSamplesCount );
+			Logger::LogInfo( "Using SSAA, %d samples", m_iSamplesCount );
 			m_pSsFrameBuffer	= m_pRenderTarget->CreateFrameBuffer();
 			m_pSsColorBuffer	= m_pSsFrameBuffer->CreateColourRenderBuffer( ePIXEL_FORMAT_A8R8G8B8 );
 			m_pSsColorAttach	= m_pRenderTarget->CreateAttachment( m_pSsColorBuffer );

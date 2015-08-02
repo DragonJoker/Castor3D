@@ -33,11 +33,11 @@ namespace Castor3D
 
 		if ( ! l_bResult || l_collection.has( p_group.GetName() ) )
 		{
-			Logger::LogMessage( cuT( "Can't add AnimatedObjectGroup [" ) + p_group.GetName() + cuT( "]" ) );
+			Logger::LogInfo( cuT( "Can't add AnimatedObjectGroup [" ) + p_group.GetName() + cuT( "]" ) );
 		}
 		else
 		{
-			Logger::LogMessage( cuT( "AnimatedObjectGroup [" ) + p_group.GetName() +  + cuT( "] added" ) );
+			Logger::LogInfo( cuT( "AnimatedObjectGroup [" ) + p_group.GetName() +  + cuT( "] added" ) );
 		}
 
 		return l_bResult;

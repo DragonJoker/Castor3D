@@ -37,7 +37,7 @@ namespace Castor
 		{
 			bool l_bNextIsOpenBrace = false;
 			bool l_bCommented = false;
-			Logger::LogMessage( cuT( "FileParser : Parsing file [" ) + p_file.GetFileName() + cuT( "]" ) );
+			Logger::LogInfo( cuT( "FileParser : Parsing file [" ) + p_file.GetFileName() + cuT( "]" ) );
 			DoInitialiseParser( p_file );
 			m_pParsingContext->stackSections.push( m_iRootSectionNumber );
 			m_pParsingContext->ui64Line = 0;
@@ -190,7 +190,7 @@ namespace Castor
 				l_bReturn = true;
 			}
 
-			Logger::LogMessage( cuT( "FileParser : Finished parsing file [" ) + p_file.GetFileName() + cuT( "]" ) );
+			Logger::LogInfo( cuT( "FileParser : Finished parsing file [" ) + p_file.GetFileName() + cuT( "]" ) );
 		}
 
 		DoCleanupParser();
@@ -201,14 +201,14 @@ namespace Castor
 	{
 		StringStream l_strError;
 		l_strError << cuT( "Error Line #" ) << m_pParsingContext->ui64Line << cuT( " / " ) << p_strError;
-		Logger::LogMessage( l_strError.str() );
+		Logger::LogInfo( l_strError.str() );
 	}
 
 	void FileParser::ParseWarning( String const & p_strWarning )
 	{
 		StringStream l_strError;
 		l_strError << cuT( "Warning Line #" ) << m_pParsingContext->ui64Line << cuT( " / " ) << p_strWarning;
-		Logger::LogMessage( l_strError.str() );
+		Logger::LogInfo( l_strError.str() );
 	}
 
 	bool FileParser::CheckParams( String const & p_strParams, ParserParameterArrayConstIt p_itBegin, ParserParameterArrayConstIt p_itEnd )

@@ -2,6 +2,8 @@
 #include "Dx11Context.hpp"
 #include "Dx11RenderSystem.hpp"
 
+#include <MaterialManager.hpp>
+
 #include <Logger.hpp>
 #include <Material.hpp>
 
@@ -10,7 +12,7 @@ using namespace Castor;
 using namespace Dx11Render;
 
 DxWindowRenderer::DxWindowRenderer( DxRenderSystem * p_pRenderSystem )
-	:	WindowRenderer( p_pRenderSystem	)
+	: WindowRenderer( p_pRenderSystem	)
 {
 }
 
@@ -56,7 +58,7 @@ void DxWindowRenderer::EndRender()
 bool DxWindowRenderer::DoInitialise()
 {
 	m_context = std::static_pointer_cast< DxContext >( m_target->GetContext() );
-	Logger::LogMessage( cuT( "Dx11WindowRenderer::StartRender - Initialisation" ) );
+	Logger::LogInfo( cuT( "Dx11WindowRenderer::StartRender - Initialisation" ) );
 
 	if ( !m_pRenderSystem->IsInitialised() )
 	{

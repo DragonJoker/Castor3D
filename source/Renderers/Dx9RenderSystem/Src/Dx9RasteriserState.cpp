@@ -23,6 +23,13 @@ namespace Dx9Render
 		if ( !sm_pCurrent )
 		{
 			sm_pCurrent = std::make_shared< DxRasteriserState >( m_pRenderSystem );
+			sm_pCurrent->SetAntialiasedLines( false );
+			sm_pCurrent->SetDepthBias( 0.0f );
+			sm_pCurrent->SetCulledFaces( eFACE_COUNT );
+			sm_pCurrent->SetFillMode( eFILL_MODE_SOLID );
+			sm_pCurrent->SetMultisample( !GetMultisample() );
+			sm_pCurrent->SetDepthClipping( !GetDepthClipping() );
+			sm_pCurrent->SetScissor( false );
 		}
 
 		m_bChanged = false;

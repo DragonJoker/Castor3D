@@ -36,10 +36,8 @@ C3D_Loop_API Castor::String GetDividerType()
 
 C3D_Loop_API void OnLoad( Castor3D::Engine * p_engine )
 {
-	Castor::Logger::Initialise( p_engine->GetLoggerInstance() );
 }
 
 C3D_Loop_API void OnUnload( Castor3D::Engine * p_engine )
 {
-	Castor::Logger::Cleanup();
 }

@@ -39,6 +39,9 @@ namespace Dx9Render
 		virtual bool Initialise();
 		virtual void Cleanup();
 		virtual bool Apply();
+
+	private:
+		uint32_t m_coloursMask;
 	};
 }
 #endif

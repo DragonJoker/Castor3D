@@ -65,7 +65,7 @@ void GlWindowRenderer::EndRender()
 
 bool GlWindowRenderer::DoInitialise()
 {
-	Logger::LogMessage( cuT( "GlWindowRenderer::Initialise" ) );
+	Logger::LogInfo( cuT( "GlWindowRenderer::Initialise" ) );
 
 	if ( m_gl.GetVersion() < 30 )
 	{

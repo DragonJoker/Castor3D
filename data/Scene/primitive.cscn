@@ -35,7 +35,7 @@ scene "Scene"
 		parent "FinalNode"
 		mesh "Mesh"
 		{
-			type torus 40 40 25.0 50.0
+			type torus 40 40 0.5 1.0
 		}
 		material "Silver"
 	}
@@ -51,7 +51,7 @@ scene "Scene"
 		viewport "MainViewport"
 		{
 			type			3d
-			size			screen_size
+			size			1024 768
 			fov_y			45.0
 			aspect_ratio	1.778
 		}
@@ -64,8 +64,8 @@ window "Window"
 	{
 		format		argb32
 		depth		depth24s8
-		size		screen_size
-		msaa 		8
+		size		1024 768
+		//msaa 		8
 		scene		"Scene"
 		camera		"MainCamera"
 	}

@@ -30,7 +30,7 @@ bool GlTargetRenderer::Initialise()
 {
 	if ( !m_target->IsInitialised() )
 	{
-		Logger::LogMessage( cuT( "GlTargetRenderer::Initialise" ) );
+		Logger::LogInfo( cuT( "GlTargetRenderer::Initialise" ) );
 	}
 
 	if ( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGlMajor() < 3 )

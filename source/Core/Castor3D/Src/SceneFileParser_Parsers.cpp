@@ -60,15 +60,15 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootMtlFile )
 	if ( File::FileExists( l_path ) )
 	{
 		TextFile l_fileMat( l_path, File::eOPEN_MODE_READ, File::eENCODING_MODE_ASCII );
-		Logger::LogMessage( cuT( "Loading materials file : " ) + l_path );
+		Logger::LogInfo( cuT( "Loading materials file : " ) + l_path );
 
 		if ( l_pContext->m_pParser->GetEngine()->GetMaterialManager().Read( l_fileMat ) )
 		{
-			Logger::LogMessage( cuT( "Materials read" ) );
+			Logger::LogInfo( cuT( "Materials read" ) );
 		}
 		else
 		{
-			Logger::LogMessage( cuT( "Can't read materials" ) );
+			Logger::LogInfo( cuT( "Can't read materials" ) );
 		}
 	}
 }

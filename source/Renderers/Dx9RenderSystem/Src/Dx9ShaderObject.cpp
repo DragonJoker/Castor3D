@@ -71,15 +71,8 @@ namespace Dx9Render
 			if ( l_pProgram->GetShaderEffect() )
 			{
 				m_eStatus = eSHADER_STATUS_COMPILED;
+				l_bReturn = true;
 			}
-
-			if ( m_eStatus == eSHADER_STATUS_ERROR )
-			{
-				Logger::LogMessage( m_strLoadedSource );
-				m_strLoadedSource.clear();
-			}
-
-			l_bReturn = m_eStatus == eSHADER_STATUS_COMPILED;
 		}
 
 		return l_bReturn;

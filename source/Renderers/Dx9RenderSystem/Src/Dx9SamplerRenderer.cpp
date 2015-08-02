@@ -26,6 +26,11 @@ namespace Dx9Render
 		if ( !sm_pCurrent )
 		{
 			sm_pCurrent = std::make_shared< Sampler >( m_pRenderSystem->GetEngine(), cuT( "Dx9DefaultSampler" ) );
+			sm_pCurrent->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_REPEAT );
+			sm_pCurrent->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_REPEAT );
+			sm_pCurrent->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_NEAREST );
+			sm_pCurrent->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_NEAREST );
+			sm_pCurrent->SetBorderColour( Colour::from_bgra( 0 ) );
 		}
 
 		return true;
@@ -48,7 +53,7 @@ namespace Dx9Render
 
 		if ( sm_pCurrent->GetWrappingMode( eTEXTURE_UVW_V ) != m_target->GetWrappingMode( eTEXTURE_UVW_V ) )
 		{
-			sm_pCurrent->SetWrappingMode( eTEXTURE_UVW_U, m_target->GetWrappingMode( eTEXTURE_UVW_V ) );
+			sm_pCurrent->SetWrappingMode( eTEXTURE_UVW_V, m_target->GetWrappingMode( eTEXTURE_UVW_V ) );
 			l_pDevice->SetSamplerState( p_uiIndex,	D3DSAMP_ADDRESSV, DirectX9::Get( m_target->GetWrappingMode( eTEXTURE_UVW_V ) ) );
 		}
 

@@ -13,142 +13,193 @@
 using namespace Castor3D;
 using namespace Castor;
 
-namespace ShaderModel1_2_3_4
+namespace Dx9Render
 {
-	static const String VtxShader =
-		cuT( "uniform	float4x4	c3d_mtxProjection;\n"	)
-		cuT( "uniform	float4x4	c3d_mtxModel;\n"	)
-		cuT( "uniform	float4x4	c3d_mtxView;\n"	)
-		cuT( "uniform	float4x4	c3d_mtxModelView;\n"	)
-		cuT( "uniform	float4x4	c3d_mtxProjectionModelView;\n"	)
-		cuT( "uniform	float4x4	c3d_mtxNormal;\n"	)
-		cuT( "uniform	float4x4	c3d_mtxTexture0;\n"	)
-		cuT( "uniform	float4x4	c3d_mtxTexture1;\n"	)
-		cuT( "uniform	float4x4	c3d_mtxTexture2;\n"	)
-		cuT( "uniform	float4x4	c3d_mtxTexture3;\n"	)
-		cuT( "struct VtxInput\n"	)
-		cuT( "{\n"	)
-		cuT( "	float4	Position	:	POSITION;\n"	)
-		cuT( "	float2	TextureUV	:	TEXCOORD0;\n"	)
-		cuT( "};\n"	)
-		cuT( "struct VtxOutput\n"	)
-		cuT( "{\n"	)
-		cuT( "	float4	Position	:	POSITION0;\n"	)
-		cuT( "	float2	TextureUV	:	TEXCOORD0;\n"	)
-		cuT( "};\n"	)
-		cuT( "VtxOutput mainVx( in VtxInput p_input )\n"	)
-		cuT( "{\n"	)
-		cuT( "	VtxOutput l_output;\n"	)
-		cuT( "	l_output.Position		= mul( p_input.Position, c3d_mtxProjectionModelView );\n"	)
-		cuT( "	l_output.TextureUV		= p_input.TextureUV;\n"	)
-		cuT( "	return l_output;\n"	)
-		cuT( "}\n"	)
-		cuT( "struct PxlInput\n"	)
-		cuT( "{\n"	)
-		cuT( "	float4	Position	:	POSITION0;\n"	)
-		cuT( "	float2	TextureUV	:	TEXCOORD0;\n"	)
-		cuT( "};\n"	)
-		cuT( "texture diffuseTexture : register( t0 );\n"	)
-		cuT( "sampler DiffuseSampler\n"	)
-		cuT( "{\n"	)
-		cuT( "	Texture = < diffuseTexture >;\n"	)
-		cuT( "};\n"	)
-		cuT( "float4 mainPx( in PxlInput p_input ) : COLOR0\n"	)
-		cuT( "{\n"	)
-		cuT( "	return tex2D( DiffuseSampler, p_input.TextureUV );\n"	)
-		cuT( "}\n"	)
-		cuT( "technique RenderPass\n"	)
-		cuT( "{\n"	)
-		cuT( "	pass p0\n"	)
-		cuT( "	{\n"	)
-		cuT( "		CullMode=none;\n"	)
-		cuT( "		PixelShader = compile ps_3_0 mainPx();\n"	)
-		cuT( "		VertexShader = compile vs_3_0 mainVx();\n"	)
-		cuT( "	}\n"	)
-		cuT( "};\n"	);
-}
-
-namespace
-{
-	HRESULT LookUpDisplayMode( IDirect3D9 * p_pD3D9, D3DFORMAT p_eFormat, UINT p_uiCount, Size const & p_sizeWanted, D3DDISPLAYMODE & p_mode )
+	namespace ShaderModel1_2_3_4
 	{
-		HRESULT l_hr = S_FALSE;
-		D3DDISPLAYMODE l_selDisplayMode = { 0 };
-		UINT l_uiMode = 0;
+		static const String VtxShader =
+			cuT( "uniform	float4x4	c3d_mtxProjection;\n"	)
+			cuT( "uniform	float4x4	c3d_mtxModel;\n"	)
+			cuT( "uniform	float4x4	c3d_mtxView;\n"	)
+			cuT( "uniform	float4x4	c3d_mtxModelView;\n"	)
+			cuT( "uniform	float4x4	c3d_mtxProjectionModelView;\n"	)
+			cuT( "uniform	float4x4	c3d_mtxNormal;\n"	)
+			cuT( "uniform	float4x4	c3d_mtxTexture0;\n"	)
+			cuT( "uniform	float4x4	c3d_mtxTexture1;\n"	)
+			cuT( "uniform	float4x4	c3d_mtxTexture2;\n"	)
+			cuT( "uniform	float4x4	c3d_mtxTexture3;\n"	)
+			cuT( "struct VtxInput\n"	)
+			cuT( "{\n"	)
+			cuT( "	float4	Position	:	POSITION;\n"	)
+			cuT( "	float2	TextureUV	:	TEXCOORD0;\n"	)
+			cuT( "};\n"	)
+			cuT( "struct VtxOutput\n"	)
+			cuT( "{\n"	)
+			cuT( "	float4	Position	:	POSITION0;\n"	)
+			cuT( "	float2	TextureUV	:	TEXCOORD0;\n"	)
+			cuT( "};\n"	)
+			cuT( "VtxOutput mainVx( in VtxInput p_input )\n"	)
+			cuT( "{\n"	)
+			cuT( "	VtxOutput l_output;\n"	)
+			cuT( "	l_output.Position		= mul( p_input.Position, c3d_mtxProjectionModelView );\n"	)
+			cuT( "	l_output.TextureUV		= p_input.TextureUV;\n"	)
+			cuT( "	return l_output;\n"	)
+			cuT( "}\n"	)
+			cuT( "struct PxlInput\n"	)
+			cuT( "{\n"	)
+			cuT( "	float4	Position	:	POSITION0;\n"	)
+			cuT( "	float2	TextureUV	:	TEXCOORD0;\n"	)
+			cuT( "};\n"	)
+			cuT( "texture diffuseTexture : register( t0 );\n"	)
+			cuT( "sampler DiffuseSampler\n"	)
+			cuT( "{\n"	)
+			cuT( "	Texture = < diffuseTexture >;\n"	)
+			cuT( "};\n"	)
+			cuT( "float4 mainPx( in PxlInput p_input ) : COLOR0\n"	)
+			cuT( "{\n"	)
+			cuT( "	return tex2D( DiffuseSampler, p_input.TextureUV );\n"	)
+			cuT( "}\n"	)
+			cuT( "technique RenderPass\n"	)
+			cuT( "{\n"	)
+			cuT( "	pass p0\n"	)
+			cuT( "	{\n"	)
+			cuT( "		CullMode=none;\n"	)
+			cuT( "		PixelShader = compile ps_3_0 mainPx();\n"	)
+			cuT( "		VertexShader = compile vs_3_0 mainVx();\n"	)
+			cuT( "	}\n"	)
+			cuT( "};\n"	);
+	}
 
-		while ( l_hr != S_OK && l_uiMode < p_uiCount )
+	namespace
+	{
+		HRESULT LookUpDisplayMode( IDirect3D9 * p_pD3D9, D3DFORMAT p_eFormat, UINT p_uiCount, Size const & p_sizeWanted, D3DDISPLAYMODE & p_mode )
 		{
-			l_hr = p_pD3D9->EnumAdapterModes( D3DADAPTER_DEFAULT, p_eFormat, l_uiMode++, &l_selDisplayMode );
+			HRESULT l_hr = S_FALSE;
+			D3DDISPLAYMODE l_selDisplayMode = { 0 };
+			UINT l_uiMode = 0;
 
-			if ( l_selDisplayMode.Width < p_sizeWanted.width() || l_selDisplayMode.Height < p_sizeWanted.height() )
+			while ( l_hr != S_OK && l_uiMode < p_uiCount )
 			{
-				// The display format isn't large enough for the window
-				l_hr = S_FALSE;
+				l_hr = p_pD3D9->EnumAdapterModes( D3DADAPTER_DEFAULT, p_eFormat, l_uiMode++, &l_selDisplayMode );
 
-				if ( p_mode.Width < l_selDisplayMode.Width && p_mode.Height < l_selDisplayMode.Height )
+				if ( l_selDisplayMode.Width < p_sizeWanted.width() || l_selDisplayMode.Height < p_sizeWanted.height() )
 				{
-					// we store it if the dimensions are greater to the ones already stored
+					// The display format isn't large enough for the window
+					l_hr = S_FALSE;
+
+					if ( p_mode.Width < l_selDisplayMode.Width && p_mode.Height < l_selDisplayMode.Height )
+					{
+						// we store it if the dimensions are greater to the ones already stored
+						p_mode = l_selDisplayMode;
+					}
+				}
+				else
+				{
 					p_mode = l_selDisplayMode;
 				}
 			}
+
+			return l_hr;
 		}
 
-		return l_hr;
-	}
-
-	bool InitialisePresentParameters( D3DDISPLAYMODE const & p_selDisplayMode, HWND p_hWnd, RenderWindowRPtr p_pWindow, Dx9Render::DxRenderSystem * p_pRenderSystem, D3DPRESENT_PARAMETERS & p_presentParameters )
-	{
-		bool l_bReturn = false;
-		bool l_bFullscreen = false;
-		// Initialising the device present parameters
-		p_presentParameters.BackBufferCount					= 1;
-		p_presentParameters.BackBufferWidth					= p_selDisplayMode.Width;
-		p_presentParameters.BackBufferHeight				= p_selDisplayMode.Height;
-		p_presentParameters.BackBufferFormat				= p_selDisplayMode.Format;
-		p_presentParameters.AutoDepthStencilFormat			= D3DFMT_D24S8;
-		p_presentParameters.EnableAutoDepthStencil			= TRUE;
-		p_presentParameters.hDeviceWindow					= p_hWnd;
-
-		if ( p_pWindow->IsFullscreen() )
+		HRESULT FindDisplayMode( DxRenderSystem * p_renderSystem, RenderWindow const & p_window, D3DDISPLAYMODE & p_displayMode )
 		{
-			p_presentParameters.Windowed					= FALSE;
-			p_presentParameters.SwapEffect					= D3DSWAPEFFECT_FLIP;
-			p_presentParameters.FullScreen_RefreshRateInHz	= p_selDisplayMode.RefreshRate;
+			IDirect3D9 * l_d3d = p_renderSystem->GetD3dObject();
+			UINT l_uiCount = l_d3d->GetAdapterModeCount( D3DADAPTER_DEFAULT, DirectX9::Get( p_window.GetPixelFormat() ) );
+			D3DDISPLAYMODE l_defDisplayMode = { 0 };
+			HRESULT l_hr = E_FAIL;
 
-			if ( p_pWindow->GetVSync() )
+			if ( l_uiCount > 0 )
 			{
-				p_presentParameters.PresentationInterval	= D3DPRESENT_INTERVAL_DEFAULT;
+				// We first try to find a device format (size and pixel format) corresponding to the one asked
+				l_hr = LookUpDisplayMode( l_d3d, DirectX9::Get( p_window.GetPixelFormat() ), l_uiCount, p_window.GetSize(), l_defDisplayMode );
+			}
+
+			if ( l_hr != S_OK && l_defDisplayMode.Width == 0 && l_defDisplayMode.Height == 0 )
+			{
+				D3DDISPLAYMODE l_d3dDisplayMode = { 0 };
+				// Failed to find the device format corresponding to the asked pixel format, we try with current screen pixel format
+				l_hr = l_d3d->GetAdapterDisplayMode( D3DADAPTER_DEFAULT, &l_d3dDisplayMode );
+				l_uiCount = l_d3d->GetAdapterModeCount( D3DADAPTER_DEFAULT, l_d3dDisplayMode.Format );
+
+				if ( l_uiCount > 0 )
+				{
+					l_hr = LookUpDisplayMode( l_d3d, l_d3dDisplayMode.Format, l_uiCount, p_window.GetSize(), l_defDisplayMode );
+				}
+			}
+
+			if ( l_defDisplayMode.Width != 0 && l_defDisplayMode.Height != 0 )
+			{
+				p_displayMode = l_defDisplayMode;
+				l_hr = S_OK;
+			}
+
+			return l_hr;
+		}
+
+		bool InitialisePresentParameters( D3DDISPLAYMODE const & p_selDisplayMode, HWND p_hWnd, RenderWindowRPtr p_pWindow, DxRenderSystem * p_pRenderSystem, D3DPRESENT_PARAMETERS & p_presentParameters )
+		{
+			bool l_bReturn = false;
+			bool l_bFullscreen = false;
+
+			p_presentParameters.BackBufferCount = 1;
+			p_presentParameters.BackBufferFormat = p_selDisplayMode.Format;
+			p_presentParameters.EnableAutoDepthStencil = FALSE;
+			p_presentParameters.hDeviceWindow = p_hWnd;
+
+			if ( p_pRenderSystem->GetD3dObject()->CheckDeviceFormat( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, p_selDisplayMode.Format, D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_SURFACE, D3DFMT_D24S8 ) == S_OK )
+			{
+				p_presentParameters.AutoDepthStencilFormat = D3DFMT_D24S8;
+			}
+			else if ( p_pRenderSystem->GetD3dObject()->CheckDeviceFormat( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, p_selDisplayMode.Format, D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_SURFACE, D3DFMT_D24X8 ) == S_OK )
+			{
+				p_presentParameters.AutoDepthStencilFormat = D3DFMT_D24X8;
+			}
+			else if ( p_pRenderSystem->GetD3dObject()->CheckDeviceFormat( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, p_selDisplayMode.Format, D3DUSAGE_DEPTHSTENCIL, D3DRTYPE_SURFACE, D3DFMT_D16 ) == S_OK )
+			{
+				p_presentParameters.AutoDepthStencilFormat = D3DFMT_D16;
+			}
+
+			if ( p_pWindow->IsFullscreen() )
+			{
+				p_presentParameters.Windowed = FALSE;
+				p_presentParameters.BackBufferWidth = p_selDisplayMode.Width;
+				p_presentParameters.BackBufferHeight = p_selDisplayMode.Height;
+				p_presentParameters.SwapEffect = D3DSWAPEFFECT_FLIP;
+				p_presentParameters.FullScreen_RefreshRateInHz = p_selDisplayMode.RefreshRate;
+
+				if ( p_pWindow->GetVSync() )
+				{
+					p_presentParameters.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
+				}
+				else
+				{
+					p_presentParameters.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+				}
+
+				l_bFullscreen = p_pRenderSystem->InitialiseDevice( p_hWnd, &p_presentParameters );
+				l_bReturn = l_bFullscreen;
 			}
 			else
 			{
-				p_presentParameters.PresentationInterval	= D3DPRESENT_INTERVAL_IMMEDIATE;
+				l_bFullscreen = false;
 			}
 
-			l_bFullscreen = p_pRenderSystem->InitialiseDevice( p_hWnd, &p_presentParameters );
-			l_bReturn = l_bFullscreen;
-		}
-		else
-		{
-			l_bFullscreen = false;
-		}
+			if ( !l_bFullscreen )
+			{
+				p_pWindow->SetFullscreen( false );
+				p_presentParameters.SwapEffect = D3DSWAPEFFECT_DISCARD;
+				p_presentParameters.Windowed = TRUE;
+				p_presentParameters.FullScreen_RefreshRateInHz= 0;
+				p_presentParameters.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
+				l_bReturn = p_pRenderSystem->InitialiseDevice( p_hWnd, &p_presentParameters );
+			}
 
-		if ( !l_bFullscreen )
-		{
-			p_pWindow->SetFullscreen( false );
-			p_presentParameters.SwapEffect					= D3DSWAPEFFECT_DISCARD;
-			p_presentParameters.PresentationInterval		= D3DPRESENT_INTERVAL_IMMEDIATE;
-			p_presentParameters.Windowed					= TRUE;
-			p_presentParameters.FullScreen_RefreshRateInHz	= 0;
-			l_bReturn = p_pRenderSystem->InitialiseDevice( p_hWnd, &p_presentParameters );
+			return l_bReturn;
 		}
-
-		return l_bReturn;
 	}
-}
 
-namespace Dx9Render
-{
-	eFACE DxContext::sm_eCullFace = eFACE_FRONT;
+	eFACE DxContext::sm_eCullFace = eFACE_BACK;
 
 	DxContext::DxContext()
 		: Context()
@@ -173,8 +224,8 @@ namespace Dx9Render
 	{
 		if ( !m_bInitialised )
 		{
-			DxRenderSystem *	l_pRenderSystem		= static_cast< DxRenderSystem * >( m_pRenderSystem );
-			HRESULT				l_hr				= E_FAIL;
+			DxRenderSystem * l_pRenderSystem = static_cast< DxRenderSystem * >( m_pRenderSystem );
+			HRESULT l_hr = E_FAIL;
 
 			if ( !l_pRenderSystem->IsInitialised() )
 			{
@@ -183,38 +234,9 @@ namespace Dx9Render
 			}
 
 			m_hWnd = m_pWindow->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd();
-			m_size = Size( GetSystemMetrics( SM_CXFULLSCREEN ), GetSystemMetrics( SM_CYFULLSCREEN ) );
 			m_size = m_pWindow->GetSize();
-			UINT l_uiCount = l_pRenderSystem->GetD3dObject()->GetAdapterModeCount( D3DADAPTER_DEFAULT, DirectX9::Get( m_pWindow->GetPixelFormat() ) );
-			D3DDISPLAYMODE l_defDisplayMode = { 0 };
-
-			if ( l_uiCount > 0 )
-			{
-				// We first try to find a device format (size and pixel format) corresponding to the one asked
-				l_hr = LookUpDisplayMode( l_pRenderSystem->GetD3dObject(), DirectX9::Get( m_pWindow->GetPixelFormat() ), l_uiCount, m_size, l_defDisplayMode );
-			}
-
-			if ( l_hr != S_OK && l_defDisplayMode.Width == 0 && l_defDisplayMode.Height == 0 )
-			{
-				D3DDISPLAYMODE l_d3dDisplayMode = { 0 };
-				// Failed to find the device format corresponding to the asked pixel format, we try with current screen pixel format
-				l_hr = l_pRenderSystem->GetD3dObject()->GetAdapterDisplayMode( D3DADAPTER_DEFAULT, &l_d3dDisplayMode );
-				l_uiCount = l_pRenderSystem->GetD3dObject()->GetAdapterModeCount( D3DADAPTER_DEFAULT, l_d3dDisplayMode.Format );
-
-				if ( l_uiCount > 0 )
-				{
-					l_hr = LookUpDisplayMode( l_pRenderSystem->GetD3dObject(), l_d3dDisplayMode.Format, l_uiCount, m_size, l_defDisplayMode );
-				}
-			}
-
 			D3DDISPLAYMODE l_selDisplayMode = { 0 };
-
-			if ( l_defDisplayMode.Width != 0 && l_defDisplayMode.Height != 0 )
-			{
-				// No exact display mode but an approximate one, we then select it
-				l_hr = S_OK;
-				l_selDisplayMode = l_defDisplayMode;
-			}
+			l_hr = FindDisplayMode( l_pRenderSystem, *m_pWindow, l_selDisplayMode );
 
 			if ( l_hr == S_OK )
 			{
@@ -223,8 +245,8 @@ namespace Dx9Render
 
 				if ( l_bInitialised )
 				{
-					DxContextSPtr l_pMainContext = std::static_pointer_cast< DxContext >( l_pRenderSystem->GetMainContext() );
 					m_pDevice = l_pRenderSystem->GetDevice();
+					DxContextSPtr l_pMainContext = std::static_pointer_cast< DxContext >( l_pRenderSystem->GetMainContext() );
 
 					if ( !l_pMainContext )
 					{
@@ -240,11 +262,11 @@ namespace Dx9Render
 
 					if ( SUCCEEDED( m_pBackBuffer->GetDesc( &desc ) ) )
 					{
-						Logger::LogMessage( cuT( "DxContext::DoInitialise - Back buffer dimensions : %dx%d" ), desc.Width, desc.Height );
+						Logger::LogInfo( cuT( "DxContext::DoInitialise - Back buffer dimensions : %dx%d" ), desc.Width, desc.Height );
 						m_size.set( desc.Width, desc.Height );
 					}
 
-					Logger::LogMessage( cuT( "DxContext::DoInitialise - Context for window 0x%X initialised" ), m_hWnd );
+					Logger::LogInfo( cuT( "DxContext::DoInitialise - Context for window 0x%X initialised" ), m_hWnd );
 					m_bInitialised = true;
 				}
 
@@ -291,7 +313,6 @@ namespace Dx9Render
 	{
 		if ( m_pSwapChain )
 		{
-			//		m_pDevice->SetRenderTarget( 0, m_pBackBuffer );
 			m_pSwapChain->Present( NULL, NULL, m_hWnd, NULL, 0 );
 		}
 	}

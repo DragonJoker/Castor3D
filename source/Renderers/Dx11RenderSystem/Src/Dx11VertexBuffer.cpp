@@ -10,9 +10,9 @@ using namespace Castor3D;
 namespace Dx11Render
 {
 	DxVertexBuffer::DxVertexBuffer( BufferDeclaration const & p_declaration, HardwareBufferPtr p_pBuffer )
-		:	DxBufferObject< uint8_t, ID3D11Buffer >( p_pBuffer )
-		,	m_pDxDeclaration( NULL )
-		,	m_declaration( p_declaration )
+		: DxBufferObject< uint8_t, ID3D11Buffer >( p_pBuffer )
+		, m_pDxDeclaration( NULL )
+		, m_declaration( p_declaration )
 	{
 	}
 
@@ -127,72 +127,72 @@ namespace Dx11Render
 			UINT l_uiColour = 0;
 			UINT l_uiOffset = 0;
 
-			for ( BufferDeclaration::BufferElementDeclarationArrayConstIt l_it = m_declaration.Begin(); l_it != m_declaration.End(); ++l_it )
+			for ( auto && l_it = m_declaration.Begin(); l_it != m_declaration.End(); ++l_it )
 			{
 				bool l_bAdd = true;
 				D3D11_INPUT_ELEMENT_DESC l_d3dCurrentElement = { 0 };
 				l_d3dCurrentElement.Format;
-				l_d3dCurrentElement.InputSlot				= l_it->m_uiStream;
-				l_d3dCurrentElement.AlignedByteOffset		= l_uiOffset;//l_it->m_uiOffset;
-				l_d3dCurrentElement.InputSlotClass			= D3D11_INPUT_PER_VERTEX_DATA;
-				l_d3dCurrentElement.InstanceDataStepRate	= 0;
+				l_d3dCurrentElement.InputSlot = l_it->m_uiStream;
+				l_d3dCurrentElement.AlignedByteOffset = l_uiOffset;//l_it->m_uiOffset;
+				l_d3dCurrentElement.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+				l_d3dCurrentElement.InstanceDataStepRate = 0;
 				l_uiOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 
 				switch ( l_it->m_eUsage )
 				{
 				case eELEMENT_USAGE_POSITION:
-					l_d3dCurrentElement.SemanticName	= "POSITION";
-					l_d3dCurrentElement.SemanticIndex	= l_uiPosition++;
+					l_d3dCurrentElement.SemanticName = "POSITION";
+					l_d3dCurrentElement.SemanticIndex = l_uiPosition++;
 					break;
 
 				case eELEMENT_USAGE_NORMAL:
-					l_d3dCurrentElement.SemanticName	= "NORMAL";
-					l_d3dCurrentElement.SemanticIndex	= l_uiNormal++;
+					l_d3dCurrentElement.SemanticName = "NORMAL";
+					l_d3dCurrentElement.SemanticIndex = l_uiNormal++;
 					break;
 
 				case eELEMENT_USAGE_TANGENT:
-					l_d3dCurrentElement.SemanticName	= "TANGENT";
-					l_d3dCurrentElement.SemanticIndex	= l_uiTangent++;
+					l_d3dCurrentElement.SemanticName = "TANGENT";
+					l_d3dCurrentElement.SemanticIndex = l_uiTangent++;
 					break;
 
 				case eELEMENT_USAGE_BITANGENT:
-					l_d3dCurrentElement.SemanticName	= "BINORMAL";
-					l_d3dCurrentElement.SemanticIndex	= l_uiBinormal++;
+					l_d3dCurrentElement.SemanticName = "BINORMAL";
+					l_d3dCurrentElement.SemanticIndex = l_uiBinormal++;
 					break;
 
 				case eELEMENT_USAGE_DIFFUSE:
-					l_d3dCurrentElement.SemanticName	= "COLOR";
-					l_d3dCurrentElement.SemanticIndex	= l_uiColour++;
+					l_d3dCurrentElement.SemanticName = "COLOR";
+					l_d3dCurrentElement.SemanticIndex = l_uiColour++;
 					break;
 
 				case eELEMENT_USAGE_TEXCOORDS0:
-					l_d3dCurrentElement.SemanticName	= "TEXCOORD";
-					l_d3dCurrentElement.SemanticIndex	= 0;
+					l_d3dCurrentElement.SemanticName = "TEXCOORD";
+					l_d3dCurrentElement.SemanticIndex = 0;
 					break;
 
 				case eELEMENT_USAGE_TEXCOORDS1:
-					l_d3dCurrentElement.SemanticName	= "TEXCOORD";
-					l_d3dCurrentElement.SemanticIndex	= 1;
+					l_d3dCurrentElement.SemanticName = "TEXCOORD";
+					l_d3dCurrentElement.SemanticIndex = 1;
 					break;
 
 				case eELEMENT_USAGE_TEXCOORDS2:
-					l_d3dCurrentElement.SemanticName	= "TEXCOORD";
-					l_d3dCurrentElement.SemanticIndex	= 2;
+					l_d3dCurrentElement.SemanticName = "TEXCOORD";
+					l_d3dCurrentElement.SemanticIndex = 2;
 					break;
 
 				case eELEMENT_USAGE_TEXCOORDS3:
-					l_d3dCurrentElement.SemanticName	= "TEXCOORD";
-					l_d3dCurrentElement.SemanticIndex	= 3;
+					l_d3dCurrentElement.SemanticName = "TEXCOORD";
+					l_d3dCurrentElement.SemanticIndex = 3;
 					break;
 
 				//case eELEMENT_USAGE_BONE_IDS:
-				//	l_d3dCurrentElement.SemanticName	= "BLENDINDICES";
-				//	l_d3dCurrentElement.SemanticIndex	= 0;
+				//	l_d3dCurrentElement.SemanticName = "BLENDINDICES";
+				//	l_d3dCurrentElement.SemanticIndex = 0;
 				//	break;
 
 				//case eELEMENT_USAGE_BONE_WEIGHTS:
-				//	l_d3dCurrentElement.SemanticName	= "BLENDWEIGHT";
-				//	l_d3dCurrentElement.SemanticIndex	= 0;
+				//	l_d3dCurrentElement.SemanticName = "BLENDWEIGHT";
+				//	l_d3dCurrentElement.SemanticIndex = 0;
 				//	break;
 
 				default:
@@ -260,14 +260,14 @@ namespace Dx11Render
 	bool DxVertexBuffer::DoCreateBuffer( eBUFFER_ACCESS_TYPE p_eType, eBUFFER_ACCESS_NATURE p_eNature )
 	{
 		HRESULT l_hr;
-		UINT l_uiSize				= UINT( m_pBuffer->GetSize() );
-		D3D11_BUFFER_DESC l_desc	= { 0 };
-		l_desc.ByteWidth			= l_uiSize * sizeof( uint8_t );
-		l_desc.Usage				= DirectX11::Get( p_eType );
-		l_desc.BindFlags			= D3D11_BIND_VERTEX_BUFFER;
-		l_desc.CPUAccessFlags		= DirectX11::GetCpuAccessFlags( p_eType | p_eNature );
-		l_desc.MiscFlags			= 0;
-		l_desc.StructureByteStride	= 0;//m_declaration.GetStride();
+		UINT l_uiSize = UINT( m_pBuffer->GetSize() );
+		D3D11_BUFFER_DESC l_desc = { 0 };
+		l_desc.ByteWidth = l_uiSize * sizeof( uint8_t );
+		l_desc.Usage = DirectX11::Get( p_eType );
+		l_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		l_desc.CPUAccessFlags = DirectX11::GetCpuAccessFlags( p_eType | p_eNature );
+		l_desc.MiscFlags = 0;
+		l_desc.StructureByteStride = 0;//m_declaration.GetStride();
 
 		if ( p_eType == eBUFFER_ACCESS_TYPE_STATIC )
 		{

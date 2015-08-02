@@ -8,7 +8,7 @@ using namespace Castor3D;
 namespace Dx11Render
 {
 	DxIndexBuffer::DxIndexBuffer( HardwareBufferPtr p_pBuffer )
-		:	DxBufferObject< uint32_t, ID3D11Buffer >( p_pBuffer )
+		: DxBufferObject< uint32_t, ID3D11Buffer >( p_pBuffer )
 	{
 	}
 
@@ -43,13 +43,13 @@ namespace Dx11Render
 			if ( l_uiSize > 0 )
 			{
 				HRESULT l_hr;
-				D3D11_BUFFER_DESC l_desc	= { 0 };
-				l_desc.ByteWidth			= l_uiSize * UINT( sizeof( uint32_t ) );
-				l_desc.Usage				= DirectX11::Get( p_eType );
-				l_desc.BindFlags			= D3D11_BIND_INDEX_BUFFER;
-				l_desc.CPUAccessFlags		= DirectX11::GetCpuAccessFlags( p_eType | p_eNature );
-				l_desc.MiscFlags			= 0;
-				l_desc.StructureByteStride	= 0;//sizeof( uint32_t );
+				D3D11_BUFFER_DESC l_desc = { 0 };
+				l_desc.ByteWidth = l_uiSize * UINT( sizeof( uint32_t ) );
+				l_desc.Usage = DirectX11::Get( p_eType );
+				l_desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+				l_desc.CPUAccessFlags = DirectX11::GetCpuAccessFlags( p_eType | p_eNature );
+				l_desc.MiscFlags = 0;
+				l_desc.StructureByteStride = 0;//sizeof( uint32_t );
 
 				if ( p_eType == eBUFFER_ACCESS_TYPE_STATIC )
 				{

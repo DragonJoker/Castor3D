@@ -49,9 +49,9 @@ namespace
 //*************************************************************************************************
 
 DxPipelineImplHlsl::DxPipelineImplHlsl( DxPipeline * p_pPipeline )
-	:	IPipelineImpl( p_pPipeline	)
-	,	m_pDxPipeline( p_pPipeline	)
-	,	m_viewport(	)
+	: IPipelineImpl( p_pPipeline )
+	, m_pDxPipeline( p_pPipeline )
+	, m_viewport()
 {
 	m_viewport.MaxDepth = 1.0f;
 #if C3D_DIRECTX_MTX
@@ -149,8 +149,8 @@ bool DxPipelineImplHlsl::MultMatrix( Matrix4x4r const & p_matrix )
 	g_d3dMtx = g_d3dMatrix[GetCurrentMode()].top();
 	g_d3dMtx *= D3DXMATRIX( p_matrix.get_transposed().const_ptr() );
 	/*	Ok	*/
-	PrintMatrix( "MultMatrix\nDirect3D : ",	&g_d3dMtx._11	);
-	PrintMatrix( "Internal : ",				GetCurrentMatrix().const_ptr()	);
+	PrintMatrix( "MultMatrix\nDirect3D : ", &g_d3dMtx._11 );
+	PrintMatrix( "Internal : ", GetCurrentMatrix().const_ptr() );
 	/**/
 #endif
 	return true;
@@ -169,8 +169,8 @@ bool DxPipelineImplHlsl::Perspective( Angle const & p_aFOVY, real p_rRatio, real
 #if C3D_DIRECTX_MTX
 	D3DXMatrixPerspectiveFovRH( &g_d3dMtx, p_aFOVY.Radians(), p_rRatio, p_rNear, p_rFar );
 	/*	Ok	*/
-	PrintMatrix( "Perspective\nDirect3D : ",	&g_d3dMtx._11	);
-	PrintMatrix( "Internal : ",					m_pPipeline->GetMatrix( eMTXMODE_PROJECTION ).const_ptr()	);
+	PrintMatrix( "Perspective\nDirect3D : ", &g_d3dMtx._11 );
+	PrintMatrix( "Internal : ", m_pPipeline->GetMatrix( eMTXMODE_PROJECTION ).const_ptr() );
 	/**/
 #endif
 	return true;
@@ -183,8 +183,8 @@ bool DxPipelineImplHlsl::Frustum( real p_rLeft, real p_rRight, real p_rBottom, r
 #if C3D_DIRECTX_MTX
 	D3DXMatrixPerspectiveOffCenterRH( &g_d3dMtx, p_rLeft, p_rRight, p_rBottom, p_rTop, p_rNear, p_rFar );
 	/*	Ok	*/
-	PrintMatrix( "Frustum\nDirect3D : ",	&g_d3dMtx._11	);
-	PrintMatrix( "Internal : ",				m_pPipeline->GetMatrix( eMTXMODE_PROJECTION ).const_ptr()	);
+	PrintMatrix( "Frustum\nDirect3D : ", &g_d3dMtx._11 );
+	PrintMatrix( "Internal : ", m_pPipeline->GetMatrix( eMTXMODE_PROJECTION ).const_ptr() );
 	/**/
 #endif
 	return true;
@@ -198,8 +198,8 @@ bool DxPipelineImplHlsl::Ortho( real p_rLeft, real p_rRight, real p_rBottom, rea
 #if C3D_DIRECTX_MTX
 	D3DXMatrixOrthoOffCenterRH( &g_d3dMtx, p_rLeft, p_rRight, p_rBottom, p_rTop, p_rNear, p_rFar );
 	/*	Ok	*/
-	PrintMatrix( "Ortho\nDirect3D : ",	&g_d3dMtx._11	);
-	PrintMatrix( "Internal : ",			m_pPipeline->GetMatrix( eMTXMODE_PROJECTION ).const_ptr()	);
+	PrintMatrix( "Ortho\nDirect3D : ", &g_d3dMtx._11 );
+	PrintMatrix( "Internal : ", m_pPipeline->GetMatrix( eMTXMODE_PROJECTION ).const_ptr() );
 	/**/
 #endif
 	return true;
@@ -234,10 +234,10 @@ void DxPipelineImplHlsl::DoApplyMatrix()
 //*************************************************************************************************
 
 DxPipeline::DxPipeline( DxRenderSystem * p_pRenderSystem )
-	:	Pipeline( p_pRenderSystem	)
-	,	m_pDxRenderSystem( p_pRenderSystem	)
+	: Pipeline( p_pRenderSystem	)
+	, m_pDxRenderSystem( p_pRenderSystem	)
 {
-	m_pPipelineImplHlsl	= new DxPipelineImplHlsl(	this );
+	m_pPipelineImplHlsl	= new DxPipelineImplHlsl( this );
 }
 
 DxPipeline::~DxPipeline()

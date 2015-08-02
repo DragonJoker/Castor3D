@@ -9,9 +9,9 @@ using namespace Castor;
 namespace Dx11Render
 {
 	DxBlendState::DxBlendState( DxRenderSystem * p_pRenderSystem )
-		:	BlendState()
-		,	m_pRenderSystem( p_pRenderSystem )
-		,	m_pBlendState( NULL )
+		: BlendState()
+		, m_pRenderSystem( p_pRenderSystem )
+		, m_pBlendState( NULL )
 	{
 	}
 
@@ -32,14 +32,14 @@ namespace Dx11Render
 
 		for ( uint8_t i = 0; i < 8; i++ )
 		{
-			l_blendDesc.RenderTarget[i].BlendEnable				= m_rtStates[i].m_bEnableBlend;
-			l_blendDesc.RenderTarget[i].SrcBlend				= DirectX11::Get( m_rtStates[i].m_eRgbSrcBlend );
-			l_blendDesc.RenderTarget[i].DestBlend				= DirectX11::Get( m_rtStates[i].m_eRgbDstBlend );
-			l_blendDesc.RenderTarget[i].BlendOp					= DirectX11::Get( m_rtStates[i].m_eRgbBlendOp );
-			l_blendDesc.RenderTarget[i].SrcBlendAlpha			= DirectX11::Get( m_rtStates[i].m_eAlphaSrcBlend );
-			l_blendDesc.RenderTarget[i].DestBlendAlpha			= DirectX11::Get( m_rtStates[i].m_eAlphaDstBlend );
-			l_blendDesc.RenderTarget[i].BlendOpAlpha			= DirectX11::Get( m_rtStates[i].m_eAlphaBlendOp );
-			l_blendDesc.RenderTarget[i].RenderTargetWriteMask	= l_writeMask;
+			l_blendDesc.RenderTarget[i].BlendEnable = m_rtStates[i].m_bEnableBlend;
+			l_blendDesc.RenderTarget[i].SrcBlend = DirectX11::Get( m_rtStates[i].m_eRgbSrcBlend );
+			l_blendDesc.RenderTarget[i].DestBlend = DirectX11::Get( m_rtStates[i].m_eRgbDstBlend );
+			l_blendDesc.RenderTarget[i].BlendOp = DirectX11::Get( m_rtStates[i].m_eRgbBlendOp );
+			l_blendDesc.RenderTarget[i].SrcBlendAlpha = DirectX11::Get( m_rtStates[i].m_eAlphaSrcBlend );
+			l_blendDesc.RenderTarget[i].DestBlendAlpha = DirectX11::Get( m_rtStates[i].m_eAlphaDstBlend );
+			l_blendDesc.RenderTarget[i].BlendOpAlpha = DirectX11::Get( m_rtStates[i].m_eAlphaBlendOp );
+			l_blendDesc.RenderTarget[i].RenderTargetWriteMask = l_writeMask;
 		}
 
 		HRESULT l_hr = m_pRenderSystem->GetDevice()->CreateBlendState( &l_blendDesc, &m_pBlendState );

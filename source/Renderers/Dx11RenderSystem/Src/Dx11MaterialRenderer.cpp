@@ -6,7 +6,7 @@ using namespace Castor;
 using namespace Dx11Render;
 
 DxPassRenderer::DxPassRenderer( DxRenderSystem * p_pRenderSystem )
-	:	PassRenderer( p_pRenderSystem )
+	: PassRenderer( p_pRenderSystem )
 {
 }
 

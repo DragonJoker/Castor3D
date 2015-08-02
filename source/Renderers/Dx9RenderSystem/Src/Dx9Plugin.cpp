@@ -38,11 +38,9 @@ C3D_Dx9_API void DestroyRenderSystem( RenderSystem * p_pRenderSystem )
 
 C3D_Dx9_API void OnLoad( Castor3D::Engine * p_engine )
 {
-	Castor::Logger::Initialise( p_engine->GetLoggerInstance() );
 }
 
 C3D_Dx9_API void OnUnload( Castor3D::Engine * p_engine )
 {
-	Castor::Logger::Cleanup();
 }
 

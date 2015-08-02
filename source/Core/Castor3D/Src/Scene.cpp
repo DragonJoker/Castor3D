@@ -82,7 +82,7 @@ namespace Castor3D
 
 	bool Scene::TextLoader::operator()( Scene const & p_scene, TextFile & p_file )
 	{
-		Logger::LogMessage( cuT( "Scene::Write - Scene Name" ) );
+		Logger::LogInfo( cuT( "Scene::Write - Scene Name" ) );
 		bool l_bReturn = p_file.WriteText( cuT( "scene \"" ) + p_scene.GetName() + cuT( "\"\n{\n" ) ) > 0;
 
 		if ( l_bReturn )
@@ -97,19 +97,19 @@ namespace Castor3D
 
 		if ( l_bReturn )
 		{
-			Logger::LogMessage( cuT( "Scene::Write - Camera Nodes" ) );
+			Logger::LogInfo( cuT( "Scene::Write - Camera Nodes" ) );
 			l_bReturn = SceneNode::TextLoader()( *p_scene.GetCameraRootNode(), p_file );
 		}
 
 		if ( l_bReturn )
 		{
-			Logger::LogMessage( cuT( "Scene::Write - Object Nodes" ) );
+			Logger::LogInfo( cuT( "Scene::Write - Object Nodes" ) );
 			l_bReturn = SceneNode::TextLoader()( *p_scene.GetObjectRootNode(), p_file );
 		}
 
 		if ( l_bReturn )
 		{
-			Logger::LogMessage( cuT( "Scene::Write - Cameras" ) );
+			Logger::LogInfo( cuT( "Scene::Write - Cameras" ) );
 			CameraPtrStrMapConstIt l_it = p_scene.CamerasBegin();
 
 			while ( l_bReturn && l_it != p_scene.CamerasEnd() )
@@ -121,7 +121,7 @@ namespace Castor3D
 
 		if ( l_bReturn )
 		{
-			Logger::LogMessage( cuT( "Scene::Write - Lights" ) );
+			Logger::LogInfo( cuT( "Scene::Write - Lights" ) );
 			LightPtrIntMapConstIt l_it = p_scene.LightsBegin();
 
 			while ( l_bReturn && l_it != p_scene.LightsEnd() )
@@ -150,7 +150,7 @@ namespace Castor3D
 
 		if ( l_bReturn )
 		{
-			Logger::LogMessage( cuT( "Scene::Write - Geometries" ) );
+			Logger::LogInfo( cuT( "Scene::Write - Geometries" ) );
 			GeometryPtrStrMapConstIt l_it = p_scene.GeometriesBegin();
 
 			while ( l_bReturn && l_it != p_scene.GeometriesEnd() )
@@ -632,8 +632,6 @@ namespace Castor3D
 				DoRenderBillboards( *l_pPipeline, m_mapBillboardsLists.begin(), m_mapBillboardsLists.end() );
 			}
 
-			l_pPipeline->MatrixMode( eMTXMODE_VIEW );
-
 			if ( !l_pRenderSystem->ForceShaders() )
 			{
 				std::for_each( m_mapLights.begin(), m_mapLights.end(), LghtUnrenderer() );
@@ -690,7 +688,7 @@ namespace Castor3D
 		}
 
 		String l_strToLog = cuT( "Scene::CreateList - [" ) + m_strName + cuT( "] - NbVertex : %d - NbFaces : %d" );
-		Logger::LogMessage( l_strToLog.c_str(), m_nbVertex, m_nbFaces );
+		Logger::LogInfo( l_strToLog.c_str(), m_nbVertex, m_nbFaces );
 		DoSortByAlpha();
 		DepthStencilStateSPtr state = m_alphaDepthState.lock();
 
@@ -712,7 +710,7 @@ namespace Castor3D
 			{
 				CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 				l_pReturn = std::make_shared< SceneNode >( shared_from_this(), p_name );
-				Logger::LogMessage( cuT( "Scene::CreateSceneNode - SceneNode [" ) + p_name + cuT( "] - Created" ) );
+				Logger::LogInfo( cuT( "Scene::CreateSceneNode - SceneNode [" ) + p_name + cuT( "] - Created" ) );
 				l_pReturn->AttachTo( m_rootNode );
 				m_addedNodes[p_name] = l_pReturn;
 			}
@@ -740,7 +738,7 @@ namespace Castor3D
 			{
 				CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 				l_pReturn = std::make_shared< SceneNode >( shared_from_this(), p_name );
-				Logger::LogMessage( cuT( "Scene::CreateSceneNode - SceneNode [" ) + p_name + cuT( "] - Created" ) );
+				Logger::LogInfo( cuT( "Scene::CreateSceneNode - SceneNode [" ) + p_name + cuT( "] - Created" ) );
 
 				if ( p_parent )
 				{
@@ -779,7 +777,7 @@ namespace Castor3D
 			if ( l_pMesh )
 			{
 				l_pReturn = std::make_shared< Geometry >( shared_from_this(), l_pMesh, nullptr, p_name );
-				Logger::LogMessage( cuT( "Scene::CreatePrimitive - Geometry [" ) + p_name + cuT( "] - Created" ) );
+				Logger::LogInfo( cuT( "Scene::CreatePrimitive - Geometry [" ) + p_name + cuT( "] - Created" ) );
 				m_addedPrimitives[p_name] = l_pReturn;
 				m_newlyAddedPrimitives[p_name] = l_pReturn;
 				m_changed = true;
@@ -806,7 +804,7 @@ namespace Castor3D
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 			l_pReturn = std::make_shared< Geometry >( shared_from_this(), nullptr, m_rootObjectNode, p_name );
 			m_rootObjectNode->AttachObject( l_pReturn );
-			Logger::LogMessage( cuT( "Scene::CreatePrimitive - Geometry [" ) + p_name + cuT( "] - Created" ) );
+			Logger::LogInfo( cuT( "Scene::CreatePrimitive - Geometry [" ) + p_name + cuT( "] - Created" ) );
 		}
 		else
 		{
@@ -831,7 +829,7 @@ namespace Castor3D
 			}
 
 			m_addedCameras[p_name] = l_pReturn;
-			Logger::LogMessage( cuT( "Scene::CreateCamera - Camera [" ) + p_name + cuT( "] created" ) );
+			Logger::LogInfo( cuT( "Scene::CreateCamera - Camera [" ) + p_name + cuT( "] created" ) );
 		}
 
 		return l_pReturn;
@@ -852,7 +850,7 @@ namespace Castor3D
 			}
 
 			m_addedCameras[p_name] = l_pReturn;
-			Logger::LogMessage( cuT( "Scene::CreateCamera - Camera [" ) + p_name + cuT( "] created" ) );
+			Logger::LogInfo( cuT( "Scene::CreateCamera - Camera [" ) + p_name + cuT( "] created" ) );
 		}
 
 		return l_pReturn;
@@ -873,7 +871,7 @@ namespace Castor3D
 			}
 
 			AddLight( l_pReturn );
-			Logger::LogMessage( cuT( "Scene::CreateLight - Light [" ) + p_name + cuT( "] created" ) );
+			Logger::LogInfo( cuT( "Scene::CreateLight - Light [" ) + p_name + cuT( "] created" ) );
 		}
 		else
 		{
@@ -892,7 +890,7 @@ namespace Castor3D
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 			l_pReturn = std::make_shared< AnimatedObjectGroup >( shared_from_this(), p_name );
 			AddAnimatedObjectGroup( l_pReturn );
-			Logger::LogMessage( cuT( "Scene::CreateAnimatedObjectGroup - AnimatedObjectGroup [" ) + p_name + cuT( "] created" ) );
+			Logger::LogInfo( cuT( "Scene::CreateAnimatedObjectGroup - AnimatedObjectGroup [" ) + p_name + cuT( "] created" ) );
 		}
 		else
 		{

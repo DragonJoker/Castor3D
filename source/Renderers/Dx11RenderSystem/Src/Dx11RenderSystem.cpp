@@ -25,35 +25,22 @@
 
 #include <Logger.hpp>
 #include <Material.hpp>
+#include <MaterialManager.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
 using namespace Dx11Render;
 
-DxRenderSystem::DxRenderSystem( Engine * p_pEngine, Logger * p_pLogger )
-	:	RenderSystem( p_pEngine, eRENDERER_TYPE_DIRECT3D11	)
-	,	m_pDevice( NULL	)
-	,	m_pFactory( NULL	)
+DxRenderSystem::DxRenderSystem( Engine * p_pEngine )
+	: RenderSystem( p_pEngine, eRENDERER_TYPE_DIRECT3D11 )
+	, m_pDevice( NULL )
+	, m_pFactory( NULL )
 {
 	DirectX11::Initialise();
 	m_pPipeline = new DxPipeline( this );
 	m_bInstancing = true;
 
-	if ( p_pLogger )
-	{
-		Logger::Initialise( p_pLogger );
-	}
-	else
-	{
-#if defined( NDEBUG )
-		Logger::Initialise( eLOG_TYPE_MESSAGE );
-#else
-		Logger::Initialise( eLOG_TYPE_DEBUG );
-#endif
-		Logger::SetFileName( File::DirectoryGetCurrent() / cuT( "Dx11RenderSystem.log" ) );
-	}
-
-	Logger::LogMessage( cuT( "Dx11RenderSystem::Dx11RenderSystem" ) );
+	Logger::LogInfo( cuT( "Dx11RenderSystem::Dx11RenderSystem" ) );
 	m_setAvailableIndexes.insert( 0 );
 	m_setAvailableIndexes.insert( 1 );
 	m_setAvailableIndexes.insert( 2 );
@@ -82,7 +69,6 @@ void DxRenderSystem::Delete()
 #endif
 	SafeRelease( m_pDevice );
 	SafeRelease( m_pFactory );
-	Logger::Cleanup();
 }
 
 bool DxRenderSystem::CheckSupport( eSHADER_MODEL p_eProfile )
@@ -108,12 +94,12 @@ bool DxRenderSystem::CheckSupport( eSHADER_MODEL p_eProfile )
 
 void DxRenderSystem::CheckShaderSupport()
 {
-	m_useShader[eSHADER_TYPE_VERTEX		] = true;
-	m_useShader[eSHADER_TYPE_PIXEL		] = true;
-	m_useShader[eSHADER_TYPE_GEOMETRY	] = true;
-	m_useShader[eSHADER_TYPE_HULL		] = true;
-	m_useShader[eSHADER_TYPE_DOMAIN		] = true;
-	m_useShader[eSHADER_TYPE_COMPUTE	] = false;
+	m_useShader[eSHADER_TYPE_VERTEX] = true;
+	m_useShader[eSHADER_TYPE_PIXEL] = true;
+	m_useShader[eSHADER_TYPE_GEOMETRY] = true;
+	m_useShader[eSHADER_TYPE_HULL] = true;
+	m_useShader[eSHADER_TYPE_DOMAIN] = true;
+	m_useShader[eSHADER_TYPE_COMPUTE] = false;
 }
 
 bool DxRenderSystem::InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swapChainDesc )
@@ -133,13 +119,13 @@ bool DxRenderSystem::InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swa
 
 	if ( StrFeatureLevel.empty() )
 	{
-//		StrFeatureLevel[D3D_FEATURE_LEVEL_11_1]	= cuT( "Direct3D 11.1" );
-		StrFeatureLevel[D3D_FEATURE_LEVEL_11_0]	= cuT( "Direct3D 11.0" );
-		StrFeatureLevel[D3D_FEATURE_LEVEL_10_1]	= cuT( "Direct3D 10.1" );
-		StrFeatureLevel[D3D_FEATURE_LEVEL_10_0]	= cuT( "Direct3D 10.0" );
-		StrFeatureLevel[D3D_FEATURE_LEVEL_9_3]	= cuT( "Direct3D 9.3" );
-		StrFeatureLevel[D3D_FEATURE_LEVEL_9_2]	= cuT( "Direct3D 9.2" );
-		StrFeatureLevel[D3D_FEATURE_LEVEL_9_1]	= cuT( "Direct3D 9.1" );
+//		StrFeatureLevel[D3D_FEATURE_LEVEL_11_1] = cuT( "Direct3D 11.1" );
+		StrFeatureLevel[D3D_FEATURE_LEVEL_11_0] = cuT( "Direct3D 11.0" );
+		StrFeatureLevel[D3D_FEATURE_LEVEL_10_1] = cuT( "Direct3D 10.1" );
+		StrFeatureLevel[D3D_FEATURE_LEVEL_10_0] = cuT( "Direct3D 10.0" );
+		StrFeatureLevel[D3D_FEATURE_LEVEL_9_3] = cuT( "Direct3D 9.3" );
+		StrFeatureLevel[D3D_FEATURE_LEVEL_9_2] = cuT( "Direct3D 9.2" );
+		StrFeatureLevel[D3D_FEATURE_LEVEL_9_1] = cuT( "Direct3D 9.1" );
 	}
 
 	if ( !m_pDevice )
@@ -152,9 +138,9 @@ bool DxRenderSystem::InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swa
 		arrayD3dFeatureLevelsRequested.push_back( D3D_FEATURE_LEVEL_9_3 );
 		arrayD3dFeatureLevelsRequested.push_back( D3D_FEATURE_LEVEL_9_2 );
 		arrayD3dFeatureLevelsRequested.push_back( D3D_FEATURE_LEVEL_9_1 );
-		D3D_FEATURE_LEVEL	d3dFeatureLevelsSupported;
-		HRESULT				l_hr;
-		HWND				l_hWnd;
+		D3D_FEATURE_LEVEL d3dFeatureLevelsSupported;
+		HRESULT l_hr;
+		HWND l_hWnd;
 		l_hr = m_pFactory->MakeWindowAssociation( p_hWnd, 0 );
 
 		if ( SUCCEEDED( l_hr ) )
@@ -248,8 +234,8 @@ bool DxRenderSystem::InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swa
 								int l_videoCardMemory = int( l_adapterDesc.DedicatedVideoMemory / 1024 / 1024 );
 								// Convert the name of the video card to a character array and store it.
 								String l_strVideoCardDescription = str_utils::from_wstr( l_adapterDesc.Description );
-								Logger::LogMessage( cuT( "Video card name : " ) + l_strVideoCardDescription );
-								Logger::LogMessage( cuT( "Video card memory : %d" ), l_videoCardMemory );
+								Logger::LogInfo( cuT( "Video card name : " ) + l_strVideoCardDescription );
+								Logger::LogInfo( cuT( "Video card memory : %d" ), l_videoCardMemory );
 							}
 						}
 						else
@@ -273,8 +259,8 @@ bool DxRenderSystem::InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swa
 									int l_videoCardMemory = int( l_adapterDesc.DedicatedVideoMemory / 1024 / 1024 );
 									// Convert the name of the video card to a character array and store it.
 									String l_strVideoCardDescription = str_utils::from_wstr( l_adapterDesc.Description );
-									Logger::LogMessage( cuT( "Video card name : " ) + l_strVideoCardDescription );
-									Logger::LogMessage( cuT( "Video card memory : %d" ), l_videoCardMemory );
+									Logger::LogInfo( cuT( "Video card name : " ) + l_strVideoCardDescription );
+									Logger::LogInfo( cuT( "Video card memory : %d" ), l_videoCardMemory );
 								}
 							}
 						}
@@ -309,7 +295,7 @@ bool DxRenderSystem::InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swa
 		if ( m_pDevice )
 		{
 			m_useShaders = true;
-			Logger::LogMessage( cuT( "Dx11Context::InitialiseDevice - Loaded " ) + StrFeatureLevel[m_featureLevel] + cuT( " compliant device" ) );
+			Logger::LogInfo( cuT( "Dx11Context::InitialiseDevice - Loaded " ) + StrFeatureLevel[m_featureLevel] + cuT( " compliant device" ) );
 		}
 		else
 		{
@@ -351,28 +337,28 @@ FrameVariableBufferSPtr DxRenderSystem::CreateFrameVariableBuffer( Castor::Strin
 	return std::make_shared< DxFrameVariableBuffer >( p_strName, this );
 }
 
-BillboardListSPtr DxRenderSystem::CreateBillboardsList( Castor3D::SceneRPtr p_pScene )
+BillboardListSPtr DxRenderSystem::CreateBillboardsList( Castor3D::SceneSPtr p_pScene )
 {
 	return std::make_shared< DxBillboardList >( p_pScene, this );
 }
 
 void DxRenderSystem::DoInitialise()
 {
-	Logger::LogMessage( cuT( "Dx11RenderSystem::Initialise" ) );
+	Logger::LogInfo( cuT( "Dx11RenderSystem::Initialise" ) );
 
 	if ( m_bInitialised )
 	{
 		return;
 	}
 
-	Logger::LogMessage( cuT( "************************************************************************************************************************" ) );
-	Logger::LogMessage( cuT( "Initialising Direct3D" ) );
+	Logger::LogInfo( cuT( "************************************************************************************************************************" ) );
+	Logger::LogInfo( cuT( "Initialising Direct3D" ) );
 	m_useMultiTexturing = true;
 	m_bInitialised = true;
 	CheckShaderSupport();
 	m_pPipeline->Initialise();
-	Logger::LogMessage( cuT( "Direct3D Initialisation Ended" ) );
-	Logger::LogMessage( cuT( "************************************************************************************************************************" ) );
+	Logger::LogInfo( cuT( "Direct3D Initialisation Ended" ) );
+	Logger::LogInfo( cuT( "************************************************************************************************************************" ) );
 }
 
 void DxRenderSystem::DoCleanup()
@@ -414,9 +400,9 @@ void DxRenderSystem::UnlockLight( int p_iIndex )
 	}
 }
 
-void DxRenderSystem::BeginOverlaysRendering()
+void DxRenderSystem::BeginOverlaysRendering( Size const & p_size )
 {
-	RenderSystem::BeginOverlaysRendering();
+	RenderSystem::BeginOverlaysRendering( p_size );
 }
 
 void DxRenderSystem::EndOverlaysRendering()

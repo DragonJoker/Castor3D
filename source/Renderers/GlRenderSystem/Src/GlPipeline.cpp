@@ -30,7 +30,7 @@ void _printMatrixN( float const * p_mtx, uint32_t p_uiSize )
 	}
 
 	l_ostream << std::endl;
-	Logger::LogMessage( l_ostream.str() );
+	Logger::LogInfo( l_ostream.str() );
 }
 
 void _printMatrix4( float const * p_mtx )
@@ -60,7 +60,7 @@ void _printMatrixN( double const * p_mtx, uint32_t p_uiSize )
 	}
 
 	l_ostream << std::endl;
-	Logger::LogMessage( l_ostream.str() );
+	Logger::LogInfo( l_ostream.str() );
 }
 
 void _printMatrix4( double const * p_mtx )
@@ -165,11 +165,11 @@ GlPipelineImplNoShader::~GlPipelineImplNoShader()
 
 void GlPipelineImplNoShader::ShowMatrices( String const & p_strText )
 {
-	Logger::LogMessage( p_strText );
-	Logger::LogMessage( cuT( "OpenGL : " ) );
+	Logger::LogInfo( p_strText );
+	Logger::LogInfo( cuT( "OpenGL : " ) );
 	GetMatrix( GetCurrentMode() );
 	_printMatrix4( g_tmpMatrix );
-	Logger::LogMessage( cuT( "Internal : " ) );
+	Logger::LogInfo( cuT( "Internal : " ) );
 	_printMatrix4( GetCurrentMatrix().const_ptr() );
 }
 

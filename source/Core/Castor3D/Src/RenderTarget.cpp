@@ -34,7 +34,7 @@ namespace Castor3D
 
 	bool RenderTarget::TextLoader::operator()( RenderTarget const & p_target, TextFile & p_file )
 	{
-		Logger::LogMessage( cuT( "RenderTarget::Write" ) );
+		Logger::LogInfo( cuT( "RenderTarget::Write" ) );
 		bool l_bReturn = p_file.WriteText( m_tabs + cuT( "render_target\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_bReturn && p_target.GetScene() )
@@ -414,9 +414,7 @@ namespace Castor3D
 
 	void RenderTarget::Render( double p_dFrameTime )
 	{
-		Engine 	*		l_pEngine		= GetEngine();
-		SceneSPtr			l_pScene		= GetScene();
-		RenderSystem 	*	l_pRenderSystem	= l_pEngine->GetRenderSystem();
+		SceneSPtr l_pScene = GetScene();
 
 		if ( l_pScene && l_pScene->HasChanged() )
 		{
@@ -425,19 +423,31 @@ namespace Castor3D
 
 		if ( m_bInitialised && l_pScene )
 		{
-			CameraSPtr l_pCamera = GetCamera();
-
-			if ( m_bStereo && m_rIntraOcularDistance > 0 && l_pRenderSystem->IsStereoAvailable() )
+			if ( m_bStereo && m_rIntraOcularDistance > 0 && GetEngine()->GetRenderSystem()->IsStereoAvailable() )
 			{
 				if ( GetCameraLEye() && GetCameraREye() )
 				{
 					DoRender( m_fbLeftEye, GetCameraLEye(), p_dFrameTime );
 					DoRender( m_fbRightEye, GetCameraREye(), p_dFrameTime );
 				}
+				else
+				{
+					CameraSPtr l_pCamera = GetCamera();
+
+					if ( l_pCamera )
+					{
+						DoRender( m_fbLeftEye, GetCamera(), p_dFrameTime );
+					}
+				}
 			}
-			else if ( l_pCamera )
+			else
 			{
-				DoRender( m_fbLeftEye, l_pCamera, p_dFrameTime );
+				CameraSPtr l_pCamera = GetCamera();
+
+				if ( l_pCamera )
+				{
+					DoRender( m_fbLeftEye, GetCamera(), p_dFrameTime );
+				}
 			}
 		}
 	}
@@ -605,18 +615,15 @@ namespace Castor3D
 
 	void RenderTarget::DoRender( RenderTarget::stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, double p_dFrameTime )
 	{
-		Engine * l_pEngine = GetEngine();
-		SceneSPtr l_pScene = GetScene();
 		TargetRendererSPtr l_pRenderer = GetRenderer();
-		RenderSystem * l_pRenderSystem = l_pEngine->GetRenderSystem();
-		ContextRPtr l_pContext = l_pRenderSystem->GetCurrentContext();
 		m_pCurrentFrameBuffer = p_fb.m_pFrameBuffer;
 		m_pCurrentCamera = p_pCamera;
 		l_pRenderer->BeginScene();
 
 		if ( m_pRenderTechnique->BeginRender() )
 		{
-			l_pContext->Clear( eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL );
+			SceneSPtr l_pScene = GetScene();
+			GetEngine()->GetRenderSystem()->GetCurrentContext()->Clear( eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL );
 			p_pCamera->Render();
 			l_pScene->RenderBackground( *p_pCamera );
 			p_pCamera->EndRender();

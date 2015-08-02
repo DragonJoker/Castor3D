@@ -295,7 +295,7 @@ namespace Castor
 						}
 						else
 						{
-							Logger::LogMessage( "Added file " + l_file );
+							Logger::LogInfo( "Added file " + l_file );
 						}
 					}
 					else

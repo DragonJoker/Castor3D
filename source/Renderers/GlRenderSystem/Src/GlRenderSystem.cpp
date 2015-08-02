@@ -45,7 +45,7 @@ GlRenderSystem::GlRenderSystem( Engine * p_pEngine )
 	m_bAccumBuffer = true;
 	m_pPipeline = new GlPipeline( m_gl, this );
 
-	Logger::LogMessage( cuT( "GlRenderSystem::GlRenderSystem" ) );
+	Logger::LogInfo( cuT( "GlRenderSystem::GlRenderSystem" ) );
 	m_setAvailableIndexes.insert( GL_LIGHT0 );
 	m_setAvailableIndexes.insert( GL_LIGHT1 );
 	m_setAvailableIndexes.insert( GL_LIGHT2 );
@@ -72,7 +72,6 @@ void GlRenderSystem::Delete()
 {
 	Cleanup();
 	m_gl.Cleanup();
-	Logger::Cleanup();
 }
 
 bool GlRenderSystem::CheckSupport( eSHADER_MODEL p_eProfile )
@@ -118,9 +117,9 @@ bool GlRenderSystem::InitOpenGlExtensions()
 		}
 		else
 		{
-			Logger::LogMessage( cuT( "Vendor : "	) + m_gl.GetVendor()	);
-			Logger::LogMessage( cuT( "Renderer : "	) + m_gl.GetRenderer()	);
-			Logger::LogMessage( cuT( "OpenGL Version : "	) + m_gl.GetStrVersion()	);
+			Logger::LogInfo( cuT( "Vendor : "	) + m_gl.GetVendor()	);
+			Logger::LogInfo( cuT( "Renderer : "	) + m_gl.GetRenderer()	);
+			Logger::LogInfo( cuT( "OpenGL Version : "	) + m_gl.GetStrVersion()	);
 			m_extensionsInit = true;
 			m_bInstancing = m_gl.HasInstancing();
 
@@ -133,7 +132,7 @@ bool GlRenderSystem::InitOpenGlExtensions()
 				m_iOpenGlMajor = 2;
 				m_iOpenGlMinor = 1;
 #endif
-				Logger::LogMessage( cuT( "Using version %d.%d core functions" ), m_iOpenGlMajor, m_iOpenGlMinor );
+				Logger::LogInfo( cuT( "Using version %d.%d core functions" ), m_iOpenGlMajor, m_iOpenGlMinor );
 				m_useShader[eSHADER_TYPE_COMPUTE]	= m_gl.HasCSh();
 				m_useShader[eSHADER_TYPE_HULL]		= m_gl.HasTSh();
 				m_useShader[eSHADER_TYPE_DOMAIN]	= m_gl.HasTSh();
@@ -149,7 +148,7 @@ bool GlRenderSystem::InitOpenGlExtensions()
 
 				if ( !UseShaders() )
 				{
-					Logger::LogMessage( cuT( "Not using OpenGL Shading Language" ) );
+					Logger::LogInfo( cuT( "Not using OpenGL Shading Language" ) );
 				}
 			}
 		}
@@ -253,14 +252,14 @@ void GlRenderSystem::DoInitialise()
 		return;
 	}
 
-	Logger::LogMessage( cuT( "***********************************************************************************************************************" ) );
-	Logger::LogMessage( cuT( "Initialising OpenGL" ) );
+	Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
+	Logger::LogInfo( cuT( "Initialising OpenGL" ) );
 	InitOpenGlExtensions();
 	m_useMultiTexturing = false;
 
 	if ( m_gl.HasMultiTexturing() )
 	{
-		Logger::LogMessage( cuT( "Using Multitexturing" ) );
+		Logger::LogInfo( cuT( "Using Multitexturing" ) );
 		m_useMultiTexturing = true;
 	}
 
@@ -268,7 +267,7 @@ void GlRenderSystem::DoInitialise()
 
 	if ( m_gl.HasVbo() )
 	{
-		Logger::LogMessage( cuT( "Using Vertex Buffer Objects" ) );
+		Logger::LogInfo( cuT( "Using Vertex Buffer Objects" ) );
 		m_useVertexBufferObjects = true;
 	}
 
@@ -276,8 +275,8 @@ void GlRenderSystem::DoInitialise()
 	m_forceShaders = m_iOpenGlMajor >= 3;
 	CheckShaderSupport();
 	m_pPipeline->Initialise();
-	Logger::LogMessage( cuT( "OpenGL Initialisation Ended" ) );
-	Logger::LogMessage( cuT( "***********************************************************************************************************************" ) );
+	Logger::LogInfo( cuT( "OpenGL Initialisation Ended" ) );
+	Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
 }
 
 void GlRenderSystem::DoCleanup()

@@ -26,12 +26,10 @@ C3D_MsaaTechnique_API Castor::String GetName()
 
 C3D_MsaaTechnique_API void OnLoad( Castor3D::Engine * p_engine )
 {
-	Castor::Logger::Initialise( p_engine->GetLoggerInstance() );
 	p_engine->GetTechniqueFactory().Register( NAME, &RenderTechnique::CreateInstance );
 }
 
 C3D_MsaaTechnique_API void OnUnload( Castor3D::Engine * p_engine )
 {
 	p_engine->GetTechniqueFactory().Unregister( NAME );
-	Castor::Logger::Cleanup();
 }

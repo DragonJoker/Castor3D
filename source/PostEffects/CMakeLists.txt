@@ -5,7 +5,7 @@ function( PostEffectsInit )
 endfunction( PostEffectsInit )
 
 function( PostEffectsBuild )
-	if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
+	if( ${CASTOR_BUILD_POSTFX_SSAO} )
 		set( Build ${Ssao} )
 		add_subdirectory( PostEffects/SsaoPostEffect )
 		set( Ssao ${Build} PARENT_SCOPE )

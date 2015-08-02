@@ -212,7 +212,7 @@ bool GlContextImpl::DoCreateGl3Context( RenderWindow * p_window )
 
 			EndCurrent();
 			m_gl.DeleteContext( l_hContext );
-			Logger::LogMessage( cuT( "GlContext::GlContext - OpenGL 3.x context created" ) );
+			Logger::LogInfo( cuT( "GlContext::GlContext - OpenGL 3.x context created" ) );
 			l_bReturn = m_hContext != NULL;
 		}
 		else

@@ -14,7 +14,7 @@ namespace Castor3D
 
 	bool LightCategory::TextLoader::operator()( LightCategory const & p_light, TextFile & p_file )
 	{
-		Logger::LogMessage( cuT( "Writing Light " ) + p_light.GetLight()->GetName() );
+		Logger::LogInfo( cuT( "Writing Light " ) + p_light.GetLight()->GetName() );
 		bool l_bReturn = p_file.WriteText( cuT( "\tlight \"" ) + p_light.GetLight()->GetName() + cuT( "\"\n\t{\n" ) ) > 0;
 
 		if ( l_bReturn )

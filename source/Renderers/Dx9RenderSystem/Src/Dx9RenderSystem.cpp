@@ -37,7 +37,7 @@ namespace Dx9Render
 	{
 		m_pPipeline = new DxPipeline( this );
 
-		Logger::LogMessage( cuT( "DxRenderSystem::DxRenderSystem" ) );
+		Logger::LogInfo( cuT( "DxRenderSystem::DxRenderSystem" ) );
 		m_setAvailableIndexes.insert( 0 );
 		m_setAvailableIndexes.insert( 1 );
 		m_setAvailableIndexes.insert( 2 );
@@ -58,7 +58,6 @@ namespace Dx9Render
 	void DxRenderSystem::Delete()
 	{
 		Cleanup();
-		Logger::Cleanup();
 	}
 
 	bool DxRenderSystem::CheckSupport( eSHADER_MODEL p_eProfile )
@@ -98,7 +97,25 @@ namespace Dx9Render
 		{
 			if ( m_pDirect3D )
 			{
-				HRESULT l_hr = m_pDirect3D->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, p_hWnd, D3DCREATE_HARDWARE_VERTEXPROCESSING, p_presentParameters, &m_pDevice );
+				DWORD l_vertexProcessing = 0;
+				D3DCAPS9 l_d3dCaps;
+				m_pDirect3D->GetDeviceCaps( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, &l_d3dCaps );
+
+				if ( l_d3dCaps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT )
+				{
+					l_vertexProcessing = D3DCREATE_HARDWARE_VERTEXPROCESSING;
+					// Check for pure device 
+					if ( l_d3dCaps.DevCaps & D3DDEVCAPS_PUREDEVICE )
+					{
+						l_vertexProcessing |= D3DCREATE_PUREDEVICE;
+					}
+				}
+				else
+				{
+					l_vertexProcessing = D3DCREATE_SOFTWARE_VERTEXPROCESSING;
+				}
+ 
+				HRESULT l_hr = m_pDirect3D->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, p_hWnd, l_vertexProcessing, p_presentParameters, &m_pDevice );
 
 				if ( l_hr == S_OK )
 				{
@@ -166,15 +183,15 @@ namespace Dx9Render
 
 	void DxRenderSystem::DoInitialise()
 	{
-		Logger::LogMessage( cuT( "DxRenderSystem::Initialise" ) );
+		Logger::LogInfo( cuT( "DxRenderSystem::Initialise" ) );
 
 		if ( m_bInitialised )
 		{
 			return;
 		}
 
-		Logger::LogMessage( cuT( "************************************************************************************************************************" ) );
-		Logger::LogMessage( cuT( "Initialising Direct3D" ) );
+		Logger::LogInfo( cuT( "************************************************************************************************************************" ) );
+		Logger::LogInfo( cuT( "Initialising Direct3D" ) );
 
 		if ( ( m_pDirect3D = Direct3DCreate9( D3D_SDK_VERSION ) ) == NULL )
 		{
@@ -185,8 +202,8 @@ namespace Dx9Render
 		m_bInitialised = true;
 		CheckShaderSupport();
 		m_pPipeline->Initialise();
-		Logger::LogMessage( cuT( "Direct3D Initialisation Ended" ) );
-		Logger::LogMessage( cuT( "************************************************************************************************************************" ) );
+		Logger::LogInfo( cuT( "Direct3D Initialisation Ended" ) );
+		Logger::LogInfo( cuT( "************************************************************************************************************************" ) );
 	}
 
 	void DxRenderSystem::DoCleanup()

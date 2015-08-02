@@ -80,16 +80,16 @@ namespace CastorViewer
 		{
 			try
 			{
-				eLOG_TYPE		l_eLogLevel;
+				ELogType		l_eLogLevel;
 				eRENDERER_TYPE	l_eRenderer;
 				wxString		l_strRenderer;
 
 				if ( !l_parser.Found( wxT( 'l' ), reinterpret_cast< long * >( &l_eLogLevel ) ) )
 				{
 #if defined( NDEBUG )
-					l_eLogLevel = eLOG_TYPE_MESSAGE;
+					l_eLogLevel = ELogType_MESSAGE;
 #else
-					l_eLogLevel = eLOG_TYPE_DEBUG;
+					l_eLogLevel = ELogType_DEBUG;
 #endif
 				}
 
@@ -121,7 +121,7 @@ namespace CastorViewer
 
 				Logger::Initialise( l_eLogLevel );
 				Logger::SetFileName( Castor3D::Engine::GetEngineDirectory() / cuT( "CastorViewer.log" ) );
-				Logger::LogMessage( cuT( "CastorViewer - Start" ) );
+				Logger::LogInfo( cuT( "CastorViewer - Start" ) );
 				wxInitAllImageHandlers();
 				m_pMainFrame = new MainFrame( NULL, wxT( "CastorViewer" ), l_eRenderer );
 				l_bReturn = m_pMainFrame->Initialise();
@@ -160,7 +160,7 @@ namespace CastorViewer
 	int CastorViewerApp::OnExit()
 	{
 		m_pLocale.reset();
-		Logger::LogMessage( cuT( "CastorViewer - Exit" ) );
+		Logger::LogInfo( cuT( "CastorViewer - Exit" ) );
 		Logger::Cleanup();
 		wxImage::CleanUpHandlers();
 		return wxApp::OnExit();

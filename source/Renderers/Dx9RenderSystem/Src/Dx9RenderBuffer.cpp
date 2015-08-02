@@ -38,6 +38,9 @@ namespace Dx9Render
 	{
 		bool l_bReturn = m_size == p_size && m_pSurface != NULL;
 
+#if DX_DEBUG
+		l_bReturn = true;
+#else
 		if ( !l_bReturn )
 		{
 			m_size = p_size;
@@ -93,6 +96,7 @@ namespace Dx9Render
 			}
 		}
 
+#endif
 		return l_bReturn;
 	}
 
@@ -105,6 +109,10 @@ namespace Dx9Render
 	bool DxRenderBuffer::Bind( DWORD dwIndex )
 	{
 		HRESULT l_hr = S_FALSE;
+
+#if DX_DEBUG
+		l_hr = S_OK;
+#else
 
 		if ( m_pSurface )
 		{
@@ -120,11 +128,16 @@ namespace Dx9Render
 			}
 		}
 
+#endif
+
 		return l_hr == S_OK;
 	}
 
 	void DxRenderBuffer::Unbind( DWORD dwIndex )
 	{
+#if DX_DEBUG
+#else
+
 		if ( m_pOldSurface )
 		{
 			if ( m_eComponent == eBUFFER_COMPONENT_COLOUR )
@@ -138,6 +151,8 @@ namespace Dx9Render
 
 			SafeRelease( m_pOldSurface );
 		}
+
+#endif
 	}
 
 	bool DxRenderBuffer::Resize( Size const & p_size )

@@ -629,14 +629,14 @@ namespace Dx9Render
 					{
 						if ( l_pErrors )
 						{
-							Logger::LogMessage( str_utils::from_str( reinterpret_cast< char * >( l_pErrors->GetBufferPointer() ) ) );
+							Logger::LogInfo( str_utils::from_str( reinterpret_cast< char * >( l_pErrors->GetBufferPointer() ) ) );
 							SafeRelease( l_pErrors );
 							l_bResult = false;
 						}
 					}
 					else
 					{
-						Logger::LogMessage( cuT( "Shader compiled successfully" ) );
+						Logger::LogInfo( cuT( "Shader compiled successfully" ) );
 					}
 				}
 				else
@@ -684,7 +684,7 @@ namespace Dx9Render
 					else
 					{
 						m_pLightsTexture->Initialise();
-						Logger::LogMessage( cuT( "ShaderProgram::Initialise - Program Linked successfully" ) );
+						Logger::LogInfo( cuT( "ShaderProgram::Initialise - Program Linked successfully" ) );
 					}
 				}
 			}
