@@ -150,6 +150,12 @@ namespace Castor3D
 
 	void Engine::Initialise( uint32_t p_wantedFPS, bool p_bThreaded )
 	{
+		if ( !m_pRenderSystem )
+		{
+			CASTOR_ASSERT( false );
+			CASTOR_EXCEPTION( C3D_NO_RENDERSYSTEM );
+		}
+
 		if ( m_pThreadMainLoop )
 		{
 			CASTOR_ASSERT( false );

@@ -51,9 +51,24 @@ namespace CastorCom
 		return FromBstr( value );
 	}
 	template<>
+	inline BSTR parameter_cast< BSTR, Castor::Path >( Castor::Path const & value )
+	{
+		return ToBstr( value );
+	}
+	template<>
+	inline Castor::Path parameter_cast< Castor::Path, BSTR >( BSTR const & value )
+	{
+		return FromBstr( value );
+	}
+	template<>
 	inline FLOAT parameter_cast< FLOAT, Castor::ColourComponent >( Castor::ColourComponent const & value )
 	{
 		return (FLOAT)value;
+	}
+	template<>
+	inline IScene * parameter_cast< IScene *, Castor3D::SceneSPtr >( Castor3D::SceneSPtr const & value )
+	{
+		return reinterpret_cast< IScene *>( value.get() );
 	}
 }
 

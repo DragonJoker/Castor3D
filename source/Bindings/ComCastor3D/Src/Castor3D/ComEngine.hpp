@@ -55,6 +55,10 @@ namespace CastorCom
 		{
 			return m_internal;
 		}
+
+		COM_PROPERTY_GET( PluginsDirectory, BSTR, make_static_getter( &Castor3D::Engine::GetPluginsDirectory ) );
+		COM_PROPERTY_GET( EngineDirectory, BSTR, make_static_getter( &Castor3D::Engine::GetEngineDirectory ) );
+		COM_PROPERTY_GET( DataDirectory, BSTR, make_static_getter( &Castor3D::Engine::GetDataDirectory ) );
 		
 		STDMETHOD( Create )( /* [in] */ ILogger * logger );
 		STDMETHOD( Destroy )();

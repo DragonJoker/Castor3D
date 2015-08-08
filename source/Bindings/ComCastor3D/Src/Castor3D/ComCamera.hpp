@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define __COMC3D_COM_CAMERA_H__
 
 #include "ComAtlObject.hpp"
+#include "ComScene.hpp"
 
 #include <Camera.hpp>
 

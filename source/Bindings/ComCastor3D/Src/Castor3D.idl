@@ -1564,25 +1564,28 @@ interface IAnimatedObjectGroup
 interface IEngine
 	:	IDispatch
 {
-	[id( 1), helpstring( "Creates the endgine" )] HRESULT Create( [in] ILogger * logger );
-	[id( 2), helpstring( "Destroys the engine" )] HRESULT Destroy();
-	[id( 3), helpstring( "Initialises the endgine" )] HRESULT Initialise( [in] int fps );
-	[id( 4), helpstring( "Cleans up the engine" )] HRESULT Cleanup();
-	[id( 5), helpstring( "Creates a scene" )] HRESULT CreateScene( [in] BSTR name, [out, retval] IScene ** pVal );
-	[id( 6), helpstring( "Cleans up the scenes" )] HRESULT ClearScenes();
-	[id( 7), helpstring( "Loads a renderer" )] HRESULT LoadRenderer( [in] eRENDERER_TYPE type );
-	[id( 8), helpstring( "Renders a frame" )] HRESULT RenderOneFrame();
-	[id( 9), helpstring( "Loads a plugin from its path" )] HRESULT LoadPlugin( [in] BSTR path );
-	[id(10), helpstring( "Creates a mesh" )] HRESULT CreateMesh( [in] eMESH_TYPE type, [in] BSTR name, [out, retval] IMesh ** pVal );
-	[id(11), helpstring( "Creates an overlay" )] HRESULT CreateOverlay( [in] eOVERLAY_TYPE type, [in] BSTR name, [in] IOverlay * parent, [in] IScene * scene, [out, retval] IOverlay ** pVal );
-	[id(12), helpstring( "Creates a render window" )] HRESULT CreateRenderWindow( [out, retval] IRenderWindow ** pVal );
-	[id(13), helpstring( "Removes a render window" )] HRESULT RemoveWindow( [in] IRenderWindow * val );
-	[id(14), helpstring( "Creates a sampler" )] HRESULT CreateSampler( [in] BSTR name, [out, retval] ISampler ** pVal );
-	[id(15), helpstring( "Creates a blend state" )] HRESULT CreateBlendState( [in] BSTR name, [out, retval] IBlendState ** pVal );
-	[id(16), helpstring( "Creates a depth stencil state" )] HRESULT CreateDepthStencilState( [in] BSTR name, [out, retval] IDepthStencilState ** pVal );
-	[id(17), helpstring( "Creates a rasteriser state" )] HRESULT CreateRasteriserState( [in] BSTR name, [out, retval] IRasteriserState ** pVal );
-	[id(18), helpstring( "Removes the scene with the given name" )] HRESULT RemoveScene( [in] BSTR name );
-	[id(19), helpstring( "Loads a scene file" )] HRESULT LoadScene( [in] BSTR name, [out, retval] IRenderWindow ** window );
+	[propget, id(1), helpstring( "Retrieves the plugins directory" )] HRESULT PluginsDirectory( [out, retval] BSTR * path );
+	[propget, id(2), helpstring( "Retrieves engine directory" )] HRESULT EngineDirectory( [out, retval] BSTR * path );
+	[propget, id(3), helpstring( "Retrieves data directory" )] HRESULT DataDirectory( [out, retval] BSTR * path );
+	[id(11), helpstring( "Creates the endgine" )] HRESULT Create( [in] ILogger * logger );
+	[id(12), helpstring( "Destroys the engine" )] HRESULT Destroy();
+	[id(13), helpstring( "Initialises the endgine" )] HRESULT Initialise( [in] int fps );
+	[id(14), helpstring( "Cleans up the engine" )] HRESULT Cleanup();
+	[id(15), helpstring( "Creates a scene" )] HRESULT CreateScene( [in] BSTR name, [out, retval] IScene ** pVal );
+	[id(16), helpstring( "Cleans up the scenes" )] HRESULT ClearScenes();
+	[id(17), helpstring( "Loads a renderer" )] HRESULT LoadRenderer( [in] eRENDERER_TYPE type );
+	[id(18), helpstring( "Renders a frame" )] HRESULT RenderOneFrame();
+	[id(19), helpstring( "Loads a plugin from its path" )] HRESULT LoadPlugin( [in] BSTR path );
+	[id(20), helpstring( "Creates a mesh" )] HRESULT CreateMesh( [in] eMESH_TYPE type, [in] BSTR name, [out, retval] IMesh ** pVal );
+	[id(21), helpstring( "Creates an overlay" )] HRESULT CreateOverlay( [in] eOVERLAY_TYPE type, [in] BSTR name, [in] IOverlay * parent, [in] IScene * scene, [out, retval] IOverlay ** pVal );
+	[id(22), helpstring( "Creates a render window" )] HRESULT CreateRenderWindow( [out, retval] IRenderWindow ** pVal );
+	[id(23), helpstring( "Removes a render window" )] HRESULT RemoveWindow( [in] IRenderWindow * val );
+	[id(24), helpstring( "Creates a sampler" )] HRESULT CreateSampler( [in] BSTR name, [out, retval] ISampler ** pVal );
+	[id(25), helpstring( "Creates a blend state" )] HRESULT CreateBlendState( [in] BSTR name, [out, retval] IBlendState ** pVal );
+	[id(26), helpstring( "Creates a depth stencil state" )] HRESULT CreateDepthStencilState( [in] BSTR name, [out, retval] IDepthStencilState ** pVal );
+	[id(27), helpstring( "Creates a rasteriser state" )] HRESULT CreateRasteriserState( [in] BSTR name, [out, retval] IRasteriserState ** pVal );
+	[id(28), helpstring( "Removes the scene with the given name" )] HRESULT RemoveScene( [in] BSTR name );
+	[id(29), helpstring( "Loads a scene file" )] HRESULT LoadScene( [in] BSTR name, [out, retval] IRenderWindow ** window );
 };
 
 // Castor3DLib

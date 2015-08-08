@@ -70,6 +70,39 @@ namespace CastorCom
 		return VariableGetter< Class, Value >( ( Class * )instance, function );
 	}
 
+	template< typename Value >
+	struct StaticGetter
+	{
+		typedef std::function< Value() > Function;
+		StaticGetter( Function function )
+			: m_function( function )
+		{
+		}
+		template< typename _Value >
+		HRESULT operator()( _Value * value )
+		{
+			HRESULT hr = E_POINTER;
+
+			if ( value )
+			{
+				*value = parameter_cast< _Value >( m_function() );
+				hr = S_OK;
+			}
+
+			return hr;
+		}
+
+	private:
+		Function m_function;
+	};
+
+	template< typename Value >
+	StaticGetter< Value >
+	make_static_getter( Value ( *function )() )
+	{
+		return StaticGetter< Value >( function );
+	}
+
 	template< typename Class, typename Value >
 	struct VariableRefGetter
 	{

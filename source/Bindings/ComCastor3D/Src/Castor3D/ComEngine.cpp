@@ -90,7 +90,7 @@ namespace CastorCom
 	{
 		HRESULT hr = E_POINTER;
 
-		if ( !m_internal )
+		if ( m_internal )
 		{
 			m_internal->Initialise( fps );
 			hr = S_OK;
@@ -101,7 +101,7 @@ namespace CastorCom
 					 E_FAIL,							// This represents the error
 					 IID_IEngine,						// This is the GUID of component throwing error
 					 cuT( "Initialise" ),				// This is generally displayed as the title
-					 ERROR_INITIALISED_ENGINE.c_str(),	// This is the description
+					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
 					 0,									// This is the context in the help file
 					 NULL );
 		}

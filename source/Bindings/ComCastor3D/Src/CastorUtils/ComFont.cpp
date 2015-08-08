@@ -32,7 +32,7 @@ namespace CastorCom
 
 			if ( !Castor::File::FileExists( l_pathFont ) )
 			{
-				l_pathFont = l_engine->GetDataPath() / l_path;
+				l_pathFont = l_engine->GetDataDirectory() / l_path;
 			}
 
 			if ( Castor::File::FileExists( l_pathFont ) )

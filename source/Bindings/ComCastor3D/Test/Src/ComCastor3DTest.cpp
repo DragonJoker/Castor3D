@@ -25,8 +25,8 @@ int _tmain( int argc, TCHAR * argv[] )
 			{
 				logger->LogMessage( _T( "ComCastor3DTest - Start" ) );
 				Castor3D::IEnginePtr engine = Castor3D::IEnginePtr( __uuidof( Castor3D::engine ) );
-				engine->Initialise( logger );
-				engine->Cleanup();
+				engine->Create( logger );
+				engine->Destroy();
 				logger->LogMessage( _T( "ComCastor3DTest - Finish" ) );
 			}
 			catch ( _com_error & exc )
