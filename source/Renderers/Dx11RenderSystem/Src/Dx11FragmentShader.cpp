@@ -19,7 +19,7 @@ namespace Dx11Render
 		SafeRelease( m_pPixelShader );
 	}
 
-	void DxFragmentShader::Bind()
+	void DxFragmentShader::DoBind()
 	{
 		ID3D11DeviceContext * l_pDeviceContext;
 		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
@@ -27,7 +27,7 @@ namespace Dx11Render
 		l_pDeviceContext->Release();
 	}
 
-	void DxFragmentShader::Unbind()
+	void DxFragmentShader::DoUnbind()
 	{
 		ID3D11DeviceContext * l_pDeviceContext;
 		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );

@@ -141,7 +141,7 @@ namespace Dx11Render
 		return l_pReturn;
 	}
 
-	bool DxFrameBuffer::DoBind( eFRAMEBUFFER_TARGET CU_PARAM_UNUSED( p_eTarget ) )
+	bool DxFrameBuffer::DoBind( eFRAMEBUFFER_TARGET p_eTarget )
 	{
 		return true;
 	}

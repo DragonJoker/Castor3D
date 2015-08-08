@@ -324,23 +324,27 @@ namespace Castor3D
 
 	bool ShaderObjectBase::Compile()
 	{
-		std::for_each( m_listFrameVariables.begin(), m_listFrameVariables.end(), [&]( FrameVariableSPtr p_pVariable )
-		{
-			p_pVariable->Bind();
-		} );
 		return true;
 	}
 
 	void ShaderObjectBase::Bind()
 	{
-		std::for_each( m_listFrameVariables.begin(), m_listFrameVariables.end(), [&]( FrameVariableSPtr p_pVariable )
+		DoBind();
+
+		for ( auto && l_variable : m_listFrameVariables )
 		{
-			p_pVariable->Apply();
-		} );
+			l_variable->Bind();
+		}
 	}
 
 	void ShaderObjectBase::Unbind()
 	{
+		for ( auto && l_variable : m_listFrameVariables )
+		{
+			l_variable->Unbind();
+		}
+
+		DoUnbind();
 	}
 
 	void ShaderObjectBase::SetFile( eSHADER_MODEL p_eModel, Path const & p_filename )

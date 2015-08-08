@@ -41,7 +41,7 @@ namespace Castor3D
 
 		if ( l_pTarget )
 		{
-			l_pTarget->Initialise( 0 );
+			l_pTarget->Initialise( 1 );
 		}
 
 		m_target->SetInitialised();

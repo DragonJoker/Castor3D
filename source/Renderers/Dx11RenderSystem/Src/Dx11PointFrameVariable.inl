@@ -22,20 +22,13 @@ namespace Dx11Render
 	template< typename T, uint32_t Count >
 	void DxPointFrameVariable< T, Count >::Bind()
 	{
+		DxFrameVariableBase::DoBind< T, Count >( *static_cast< DxShaderProgram * >( Castor3D::FrameVariable::GetProgram() ), Castor3D::PointFrameVariable< T, Count >::m_pValues );
+		Castor3D::FrameVariable::m_bChanged = false;
 	}
 
 	template< typename T, uint32_t Count >
 	void DxPointFrameVariable< T, Count >::Unbind()
 	{
-	}
-
-	template< typename T, uint32_t Count >
-	void DxPointFrameVariable< T, Count >::Apply()
-	{
-		if ( Castor3D::FrameVariable::m_bChanged )
-		{
-			DxFrameVariableBase::DoApply< T, Count >( *static_cast< DxShaderProgram * >( Castor3D::FrameVariable::GetProgram() ), Castor3D::PointFrameVariable< T, Count >::m_pValues );
-			Castor3D::FrameVariable::m_bChanged = false;
-		}
+		DxFrameVariableBase::DoUnbind< T, Count >( *static_cast< DxShaderProgram * >( Castor3D::FrameVariable::GetProgram() ), Castor3D::PointFrameVariable< T, Count >::m_pValues );
 	}
 }

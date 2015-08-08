@@ -687,25 +687,14 @@ void DxShaderProgram::Begin( uint8_t p_byIndex, uint8_t p_byCount )
 	m_wpDxSceneBuffer.lock()->Bind( 1 );
 	m_wpDxPassBuffer.lock()->Bind( 2 );
 	m_wpDxConstantsBuffer.lock()->Bind( 3 );
-
-	for ( int i = eSHADER_TYPE_VERTEX; i < eSHADER_TYPE_COUNT; i++ )
-	{
-		if ( m_pShaders[i] )
-		{
-			for ( FrameVariablePtrStrMapIt l_it = m_pShaders[i]->GetFrameVariablesBegin(); l_it != m_pShaders[i]->GetFrameVariablesEnd(); ++l_it )
-			{
-				l_it->second.lock()->Apply();
-			}
-		}
-	}
 }
 
 void DxShaderProgram::End()
 {
-	m_wpDxMatrixBuffer.lock()->Bind( 0 );
-	m_wpDxSceneBuffer.lock()->Bind( 1 );
-	m_wpDxPassBuffer.lock()->Bind( 2 );
-	m_wpDxConstantsBuffer.lock()->Bind( 3 );
+	m_wpDxMatrixBuffer.lock()->Unbind( 0 );
+	m_wpDxSceneBuffer.lock()->Unbind( 1 );
+	m_wpDxPassBuffer.lock()->Unbind( 2 );
+	m_wpDxConstantsBuffer.lock()->Unbind( 3 );
 	ShaderProgramBase::End();
 }
 

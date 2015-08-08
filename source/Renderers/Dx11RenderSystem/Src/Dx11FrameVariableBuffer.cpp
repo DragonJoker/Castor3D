@@ -220,30 +220,31 @@ namespace Dx11Render
 		{
 			ID3D11DeviceContext * l_pDeviceContext;
 			m_pDxRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+			ID3D11Buffer * buffer[] = { NULL };
 
 			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_VERTEX ) )
 			{
-				l_pDeviceContext->VSSetConstantBuffers( p_uiIndex, 0, NULL );
+				l_pDeviceContext->VSSetConstantBuffers( p_uiIndex, 1, buffer );
 			}
 
 			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_PIXEL ) )
 			{
-				l_pDeviceContext->PSSetConstantBuffers( p_uiIndex, 0, NULL );
+				l_pDeviceContext->PSSetConstantBuffers( p_uiIndex, 1, buffer );
 			}
 
 			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_GEOMETRY ) )
 			{
-				l_pDeviceContext->GSSetConstantBuffers( p_uiIndex, 0, NULL );
+				l_pDeviceContext->GSSetConstantBuffers( p_uiIndex, 1, buffer );
 			}
 
 			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_HULL ) )
 			{
-				l_pDeviceContext->HSSetConstantBuffers( p_uiIndex, 0, NULL );
+				l_pDeviceContext->HSSetConstantBuffers( p_uiIndex, 1, buffer );
 			}
 
 			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_DOMAIN ) )
 			{
-				l_pDeviceContext->DSSetConstantBuffers( p_uiIndex, 0, NULL );
+				l_pDeviceContext->DSSetConstantBuffers( p_uiIndex, 1, buffer );
 			}
 
 			l_pDeviceContext->Release();

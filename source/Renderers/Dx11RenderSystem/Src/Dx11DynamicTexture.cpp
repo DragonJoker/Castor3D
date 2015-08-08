@@ -106,15 +106,16 @@ namespace Dx11Render
 
 	bool DxDynamicTexture::DoBind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext;
-		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
-		l_pDeviceContext->PSSetShaderResources( m_uiIndex, 1, &m_pShaderResourceView );
-		l_pDeviceContext->Release();
 		return true;
 	}
 
 	void DxDynamicTexture::DoUnbind()
 	{
+		ID3D11DeviceContext * l_pDeviceContext;
+		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+		ID3D11ShaderResourceView * l_views[] = { NULL };
+		l_pDeviceContext->PSSetShaderResources( m_uiIndex, 1, l_views );
+		l_pDeviceContext->Release();
 	}
 
 	void DxDynamicTexture::DoInitTex2DDesc( D3D11_TEXTURE2D_DESC & p_tex2dDesc )

@@ -102,10 +102,6 @@ namespace Dx11Render
 
 	bool DxStaticTexture::DoBind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext;
-		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
-		l_pDeviceContext->PSSetShaderResources( m_uiIndex, 1, &m_pShaderResourceView );
-		l_pDeviceContext->Release();
 		return true;
 	}
 

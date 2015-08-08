@@ -971,7 +971,7 @@ namespace GlRender
 		{
 			for ( FrameVariablePtrListIt l_it = m_listInitialised.begin(); l_it != m_listInitialised.end(); ++l_it )
 			{
-				( *l_it )->Apply();
+				( *l_it )->Bind();
 			}
 		}
 

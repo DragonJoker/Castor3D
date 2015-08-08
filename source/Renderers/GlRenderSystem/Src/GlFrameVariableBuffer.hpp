@@ -34,9 +34,9 @@ namespace GlRender
 	{
 	public:
 		UboVariableInfos()
-			:	m_uiIndex( 0	)
-			,	m_iOffset( 0	)
-			,	m_iSize( 0	)
+			: m_uiIndex( 0 )
+			, m_iOffset( 0 )
+			, m_iSize( 0 )
 		{
 		}
 
@@ -54,7 +54,7 @@ namespace GlRender
 	DECLARE_MAP( Castor3D::FrameVariableSPtr, GlVariableApplyerBaseSPtr, VariableApplyer );
 
 	class GlFrameVariableBuffer
-		:	public Castor3D::FrameVariableBuffer
+		: public Castor3D::FrameVariableBuffer
 	{
 	public:
 		GlFrameVariableBuffer( OpenGl & p_gl, Castor::String const & p_strName, GlRenderSystem * p_pRenderSystem );

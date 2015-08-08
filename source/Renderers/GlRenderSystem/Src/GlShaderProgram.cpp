@@ -139,18 +139,6 @@ namespace GlRender
 			m_pUserBuffer->Bind();
 			m_pSceneBuffer->Bind();
 			m_pMatrixBuffer->Bind();
-			m_gl.UseProgram( m_programObject );
-
-			for ( int i = eSHADER_TYPE_VERTEX; i < eSHADER_TYPE_COUNT; i++ )
-			{
-				if ( m_pShaders[i] )
-				{
-					for ( FrameVariablePtrStrMapIt l_it = m_pShaders[i]->GetFrameVariablesBegin(); l_it != m_pShaders[i]->GetFrameVariablesEnd(); ++l_it )
-					{
-						l_it->second.lock()->Apply();
-					}
-				}
-			}
 		}
 	}
 
@@ -161,6 +149,7 @@ namespace GlRender
 		m_pMatrixBuffer->Unbind();
 		m_pUserBuffer->Unbind();
 		ShaderProgramBase::End();
+		m_gl.UseProgram( 0 );
 	}
 
 	int GlShaderProgram::GetAttributeLocation( String const & p_strName )const

@@ -273,12 +273,12 @@ namespace Castor3D
 
 	bool RenderTarget::stFRAME_BUFFER::Create( RenderTarget * p_renderTarget )
 	{
-		m_pRenderTarget	= p_renderTarget;
-		m_pFrameBuffer	= m_pRenderTarget->CreateFrameBuffer();
-		m_pColorTexture	= m_pRenderTarget->CreateDynamicTexture();
-		m_pColorAttach	= m_pRenderTarget->CreateAttachment( m_pColorTexture );
-		m_pDepthBuffer	= m_pFrameBuffer->CreateDepthStencilRenderBuffer( m_pRenderTarget->GetDepthFormat() );
-		m_pDepthAttach	= m_pRenderTarget->CreateAttachment( m_pDepthBuffer );
+		m_pRenderTarget = p_renderTarget;
+		m_pFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
+		m_pColorTexture = m_pRenderTarget->CreateDynamicTexture();
+		m_pColorAttach = m_pRenderTarget->CreateAttachment( m_pColorTexture );
+		m_pDepthBuffer = m_pFrameBuffer->CreateDepthStencilRenderBuffer( m_pRenderTarget->GetDepthFormat() );
+		m_pDepthAttach = m_pRenderTarget->CreateAttachment( m_pDepthBuffer );
 		SamplerSPtr l_pSampler = m_pRenderTarget->GetEngine()->CreateSampler( RenderTarget::DefaultSamplerName );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_ANISOTROPIC );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_ANISOTROPIC );
@@ -394,7 +394,7 @@ namespace Castor3D
 		m_size = m_fbLeftEye.m_pColorTexture->GetDimensions();
 		m_fbRightEye.Initialise( p_index, m_size );
 		m_pRenderTechnique->Create();
-		uint32_t l_index = p_index + 1;
+		uint32_t l_index = p_index;
 		m_pRenderTechnique->Initialise( l_index );
 		m_bInitialised = true;
 	}

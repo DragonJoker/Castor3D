@@ -25,8 +25,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GlRender
 {
 	class GlShaderProgram
-		:	public Castor3D::ShaderProgramBase
-		,	public Castor::NonCopyable
+		: public Castor3D::ShaderProgramBase
+		, public Castor::NonCopyable
 	{
 	public:
 		GlShaderProgram( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem );

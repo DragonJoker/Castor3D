@@ -5,42 +5,53 @@
 
 namespace Dx11Render
 {
-	template< typename T > struct OneVariableApplier
+	template< typename T > struct OneVariableBinder
 	{
-		inline void operator()( DxShaderProgram & p_program, T const * CU_PARAM_UNUSED( p_pValue ) )
+		static void Bind( DxShaderProgram & p_program, T const * CU_PARAM_UNUSED( p_pValue ) )
 		{
-			CASTOR_EXCEPTION( "OneVariableApplier - Unsupported arguments" );
+			CASTOR_EXCEPTION( "OneVariableBinder - Unsupported arguments" );
+		}
+		static void Unbind( DxShaderProgram & p_program, T const * CU_PARAM_UNUSED( p_pValue ) )
+		{
+			CASTOR_EXCEPTION( "OneVariableBinder - Unsupported arguments" );
 		}
 	};
 
-	template< typename T, uint32_t Count > struct PointVariableApplier
+	template< typename T, uint32_t Count > struct PointVariableBinder
 	{
-		inline void operator()( DxShaderProgram & p_program, T const * CU_PARAM_UNUSED( p_pValue ) )
+		static void Bind( DxShaderProgram & p_program, T const * CU_PARAM_UNUSED( p_pValue ) )
 		{
-			CASTOR_EXCEPTION( "PointVariableApplier - Unsupported arguments" );
+			CASTOR_EXCEPTION( "PointVariableBinder - Unsupported arguments" );
+		}
+		static void Unbind( DxShaderProgram & p_program, T const * CU_PARAM_UNUSED( p_pValue ) )
+		{
+			CASTOR_EXCEPTION( "PointVariableBinder - Unsupported arguments" );
 		}
 	};
 
-	template< typename T, uint32_t Rows, uint32_t Columns > struct MatrixVariableApplier
+	template< typename T, uint32_t Rows, uint32_t Columns > struct MatrixVariableBinder
 	{
-		inline void operator()( DxShaderProgram & p_program, T const * CU_PARAM_UNUSED( p_pValue ) )
+		static void Bind( DxShaderProgram & p_program, T const * CU_PARAM_UNUSED( p_pValue ) )
 		{
-			CASTOR_EXCEPTION( "MatrixVariableApplier - Unsupported arguments" );
+			CASTOR_EXCEPTION( "MatrixVariableBinder - Unsupported arguments" );
+		}
+		static void Unbind( DxShaderProgram & p_program, T const * CU_PARAM_UNUSED( p_pValue ) )
+		{
+			CASTOR_EXCEPTION( "MatrixVariableBinder - Unsupported arguments" );
 		}
 	};
 
-	template <> struct OneVariableApplier< Castor3D::TextureBaseRPtr >
+	template <> struct OneVariableBinder< Castor3D::TextureBaseRPtr >
 	{
-		inline void operator()( DxShaderProgram & p_program, Castor3D::TextureBaseRPtr const * p_pValue )
+		static void Bind( DxShaderProgram & p_program, Castor3D::TextureBaseRPtr const * p_pValue )
 		{
 			HRESULT l_hr = E_NOTIMPL;
 
 			if ( p_program.GetStatus() == Castor3D::ePROGRAM_STATUS_LINKED && *p_pValue )
 			{
 				Castor3D::TextureBaseRPtr l_pTexture = ( *p_pValue );
-				l_pTexture->Bind();
 				ID3D11ShaderResourceView * l_pResourceView = NULL;
-				DxRenderSystem * l_pDxRS = reinterpret_cast< DxRenderSystem * >( p_program.GetRenderSystem() );
+				DxRenderSystem * l_pDxRS = static_cast< DxRenderSystem * >( p_program.GetRenderSystem() );
 
 				if ( l_pTexture )
 				{
@@ -67,21 +78,59 @@ namespace Dx11Render
 
 			dxCheckError( l_hr, "ApplyVariable texture" );
 		}
+
+		static void Unbind( DxShaderProgram & p_program, Castor3D::TextureBaseRPtr const * p_pValue )
+		{
+			HRESULT l_hr = E_NOTIMPL;
+
+			if ( p_program.GetStatus() == Castor3D::ePROGRAM_STATUS_LINKED && *p_pValue )
+			{
+				Castor3D::TextureBaseRPtr l_pTexture = ( *p_pValue );
+				ID3D11ShaderResourceView * l_pResourceView = NULL;
+				ID3D11DeviceContext * l_pDeviceContext;
+				static_cast< DxRenderSystem * >( p_program.GetRenderSystem() )->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+				l_pDeviceContext->PSSetShaderResources( l_pTexture->GetIndex(), 1, &l_pResourceView );
+				l_pDeviceContext->Release();
+				l_hr = S_OK;
+			}
+			else if ( !( *p_pValue ) )
+			{
+				l_hr = S_OK;
+			}
+
+			dxCheckError( l_hr, "ApplyVariable texture" );
+		}
 	};
 
 	template< typename Type >
-	inline void DxFrameVariableBase::DoApply( DxShaderProgram & p_program, Type * p_pValue )
+	inline void DxFrameVariableBase::DoBind( DxShaderProgram & p_program, Type * p_pValue )
 	{
-		OneVariableApplier< Type >()( p_program, p_pValue );
+		OneVariableBinder< Type >::Bind( p_program, p_pValue );
 	}
 	template< typename Type, uint32_t Count >
-	inline void DxFrameVariableBase::DoApply( DxShaderProgram & p_program, Type * p_pValue )
+	inline void DxFrameVariableBase::DoBind( DxShaderProgram & p_program, Type * p_pValue )
 	{
-		PointVariableApplier< Type, Count >()( p_program, p_pValue );
+		PointVariableBinder< Type, Count >::Bind( p_program, p_pValue );
 	}
 	template< typename Type, uint32_t Rows, uint32_t Columns >
-	inline void DxFrameVariableBase::DoApply( DxShaderProgram & p_program, Type * p_pValue )
+	inline void DxFrameVariableBase::DoBind( DxShaderProgram & p_program, Type * p_pValue )
 	{
-		MatrixVariableApplier< Type, Rows, Columns >()( p_program, p_pValue );
+		MatrixVariableBinder< Type, Rows, Columns >::Bind( p_program, p_pValue );
+	}
+
+	template< typename Type >
+	inline void DxFrameVariableBase::DoUnbind( DxShaderProgram & p_program, Type * p_pValue )
+	{
+		OneVariableBinder< Type >::Unbind( p_program, p_pValue );
+	}
+	template< typename Type, uint32_t Count >
+	inline void DxFrameVariableBase::DoUnbind( DxShaderProgram & p_program, Type * p_pValue )
+	{
+		PointVariableBinder< Type, Count >::Unbind( p_program, p_pValue );
+	}
+	template< typename Type, uint32_t Rows, uint32_t Columns >
+	inline void DxFrameVariableBase::DoUnbind( DxShaderProgram & p_program, Type * p_pValue )
+	{
+		MatrixVariableBinder< Type, Rows, Columns >::Unbind( p_program, p_pValue );
 	}
 }
