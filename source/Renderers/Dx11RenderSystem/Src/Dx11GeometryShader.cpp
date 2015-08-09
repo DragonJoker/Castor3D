@@ -21,18 +21,14 @@ namespace Dx11Render
 
 	void DxGeometryShader::DoBind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext;
-		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->GSSetShader( m_pGeometryShader, NULL, 0 );
-		l_pDeviceContext->Release();
 	}
 
 	void DxGeometryShader::DoUnbind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext;
-		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->GSSetShader( NULL, NULL, 0 );
-		l_pDeviceContext->Release();
 	}
 
 	void DxGeometryShader::DoRetrieveShader()

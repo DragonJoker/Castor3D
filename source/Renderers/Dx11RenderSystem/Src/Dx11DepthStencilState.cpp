@@ -62,13 +62,11 @@ namespace Dx11Render
 
 		if ( l_bReturn && m_pDepthStencilState )
 		{
-			ID3D11DeviceContext * l_pDC;
-			m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDC );
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 
-			if ( l_pDC )
+			if ( l_pDeviceContext )
 			{
-				l_pDC->OMSetDepthStencilState( m_pDepthStencilState, 1 );
-				SafeRelease( l_pDC );
+				l_pDeviceContext->OMSetDepthStencilState( m_pDepthStencilState, 1 );
 			}
 		}
 

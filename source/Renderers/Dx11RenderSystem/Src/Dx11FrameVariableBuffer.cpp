@@ -172,8 +172,7 @@ namespace Dx11Render
 	{
 		if ( m_pDxBuffer )
 		{
-			ID3D11DeviceContext * l_pDeviceContext;
-			m_pDxRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 			D3D11_MAPPED_SUBRESOURCE l_mapped = { 0 };
 			HRESULT l_hr = l_pDeviceContext->Map( m_pDxBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &l_mapped );
 
@@ -207,8 +206,6 @@ namespace Dx11Render
 			{
 				l_pDeviceContext->DSSetConstantBuffers( p_uiIndex, 1, &m_pDxBuffer );
 			}
-
-			l_pDeviceContext->Release();
 		}
 
 		return true;
@@ -218,8 +215,7 @@ namespace Dx11Render
 	{
 		if ( m_pDxBuffer )
 		{
-			ID3D11DeviceContext * l_pDeviceContext;
-			m_pDxRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 			ID3D11Buffer * buffer[] = { NULL };
 
 			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_VERTEX ) )
@@ -246,8 +242,6 @@ namespace Dx11Render
 			{
 				l_pDeviceContext->DSSetConstantBuffers( p_uiIndex, 1, buffer );
 			}
-
-			l_pDeviceContext->Release();
 		}
 	}
 

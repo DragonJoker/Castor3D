@@ -81,18 +81,16 @@ namespace Dx11Render
 
 	bool DxVertexBuffer::Bind()
 	{
-		bool l_bReturn = m_pBuffer && m_pBuffer->IsAssigned();
+		bool l_bReturn = m_pBuffer && m_pBuffer->IsAssigned() && m_pBufferObject;
 
 		if ( l_bReturn )
 		{
-			ID3D11DeviceContext * l_pDeviceContext;
-			reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() )->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pBuffer->GetRenderSystem()->GetCurrentContext() )->GetDeviceContext();
 			UINT l_uiStrides[1] = { m_declaration.GetStride() };
 			UINT l_uiOffsets[1] = { 0 };
 			ID3D11Buffer * l_pBuffers[1] = { m_pBufferObject };
 			l_pDeviceContext->IASetVertexBuffers( 0, 1, l_pBuffers, l_uiStrides, l_uiOffsets );
 			l_pDeviceContext->IASetInputLayout( m_pDxDeclaration );
-			l_pDeviceContext->Release();
 		}
 
 		return l_bReturn;
@@ -259,29 +257,38 @@ namespace Dx11Render
 
 	bool DxVertexBuffer::DoCreateBuffer( eBUFFER_ACCESS_TYPE p_eType, eBUFFER_ACCESS_NATURE p_eNature )
 	{
-		HRESULT l_hr;
+		bool l_return = true;
 		UINT l_uiSize = UINT( m_pBuffer->GetSize() );
-		D3D11_BUFFER_DESC l_desc = { 0 };
-		l_desc.ByteWidth = l_uiSize * sizeof( uint8_t );
-		l_desc.Usage = DirectX11::Get( p_eType );
-		l_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		l_desc.CPUAccessFlags = DirectX11::GetCpuAccessFlags( p_eType | p_eNature );
-		l_desc.MiscFlags = 0;
-		l_desc.StructureByteStride = 0;//m_declaration.GetStride();
+		m_eType = p_eType;
+		m_eNature = p_eNature;
 
-		if ( p_eType == eBUFFER_ACCESS_TYPE_STATIC )
+		if ( l_uiSize )
 		{
-			D3D11_SUBRESOURCE_DATA l_data = { 0 };
-			l_data.pSysMem = m_pBuffer->data();
-			l_hr = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() )->GetDevice()->CreateBuffer( &l_desc, &l_data, &m_pBufferObject );
-			dxDebugName( m_pBufferObject, VertexBuffer );
-		}
-		else
-		{
-			l_hr = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() )->GetDevice()->CreateBuffer( &l_desc, NULL, &m_pBufferObject );
-			dxDebugName( m_pBufferObject, VertexBuffer );
+			HRESULT l_hr;
+			D3D11_BUFFER_DESC l_desc = { 0 };
+			l_desc.ByteWidth = l_uiSize * sizeof( uint8_t );
+			l_desc.Usage = DirectX11::Get( p_eType );
+			l_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+			l_desc.CPUAccessFlags = DirectX11::GetCpuAccessFlags( p_eType | p_eNature );
+			l_desc.MiscFlags = 0;
+			l_desc.StructureByteStride = 0;//m_declaration.GetStride();
+
+			if ( p_eType == eBUFFER_ACCESS_TYPE_STATIC )
+			{
+				D3D11_SUBRESOURCE_DATA l_data = { 0 };
+				l_data.pSysMem = m_pBuffer->data();
+				l_hr = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() )->GetDevice()->CreateBuffer( &l_desc, &l_data, &m_pBufferObject );
+				dxDebugName( m_pBufferObject, VertexBuffer );
+			}
+			else
+			{
+				l_hr = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() )->GetDevice()->CreateBuffer( &l_desc, NULL, &m_pBufferObject );
+				dxDebugName( m_pBufferObject, VertexBuffer );
+			}
+
+			l_return = dxCheckError( l_hr, "ID3D11Device::CreateBuffer" );
 		}
 
-		return dxCheckError( l_hr, "ID3D11Device::CreateBuffer" );
+		return l_return;
 	}
 }

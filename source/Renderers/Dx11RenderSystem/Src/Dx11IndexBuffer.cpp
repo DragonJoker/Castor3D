@@ -103,10 +103,8 @@ namespace Dx11Render
 
 		if ( m_pBuffer && m_pBuffer->IsAssigned() )
 		{
-			ID3D11DeviceContext * l_pDeviceContext;
-			reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() )->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pBuffer->GetRenderSystem()->GetCurrentContext() )->GetDeviceContext();
 			l_pDeviceContext->IASetIndexBuffer( m_pBufferObject, DXGI_FORMAT_R32_UINT, 0 );
-			l_pDeviceContext->Release();
 		}
 
 		return l_bReturn;

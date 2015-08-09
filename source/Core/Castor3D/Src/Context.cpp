@@ -61,10 +61,8 @@ namespace Castor3D
 		m_bDeferredShadingSet = p_window->IsUsingDeferredRendering();
 		m_pBtoBShaderProgram = m_pRenderSystem->GetEngine()->GetShaderManager().GetNewProgram();
 		m_bMultiSampling = p_window->IsMultisampling();
-		VertexBufferUPtr l_pVtxBuffer;
-		IndexBufferUPtr l_pIdxBuffer;
-		l_pVtxBuffer = std::make_unique< VertexBuffer >( m_pRenderSystem, &( *m_pDeclaration )[0], m_pDeclaration->Size() );
-		l_pIdxBuffer = std::make_unique< IndexBuffer >( m_pRenderSystem );
+		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( m_pRenderSystem, &( *m_pDeclaration )[0], m_pDeclaration->Size() );
+		IndexBufferUPtr l_pIdxBuffer = std::make_unique< IndexBuffer >( m_pRenderSystem );
 		uint32_t l_uiStride = m_pDeclaration->GetStride();
 		l_pVtxBuffer->Resize( 4 * l_uiStride );
 		m_arrayVertex[0]->LinkCoords( &l_pVtxBuffer->data()[0 * l_uiStride], l_uiStride );
@@ -136,6 +134,7 @@ namespace Castor3D
 
 	void Context::SetClearColour( Castor::Colour const & p_clrClear )
 	{
+		m_clearColour = p_clrClear;
 		DoSetClearColour( p_clrClear );
 	}
 

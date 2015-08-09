@@ -59,10 +59,8 @@ namespace Dx11Render
 			l_box.right = l_rcSrc.right;
 			l_box.top = l_rcSrc.top;
 			l_box.bottom = l_rcSrc.bottom;
-			ID3D11DeviceContext * l_pDeviceContext;
-			m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 			l_pDeviceContext->CopySubresourceRegion( l_pDstSurface, 0, l_rcDst.left, l_rcDst.top, 0, l_pSrcSurface, 0, &l_box );
-			l_pDeviceContext->Release();
 		}
 
 		SafeRelease( l_pSrcSurface );
@@ -78,14 +76,12 @@ namespace Dx11Render
 
 	bool DxTextureAttachment::Bind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext;
-		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 		ID3D11DepthStencilView * l_pView;
 		ID3D11RenderTargetView * l_pSurface = m_pDxTexture.lock()->GetRenderTargetView();
 		l_pDeviceContext->OMGetRenderTargets( 1, &m_pOldSurface, &l_pView );
 		l_pDeviceContext->OMSetRenderTargets( 1, &l_pSurface, l_pView );
 		SafeRelease( l_pView );
-		l_pDeviceContext->Release();
 		return true;
 	}
 
@@ -93,14 +89,12 @@ namespace Dx11Render
 	{
 		if ( m_pOldSurface )
 		{
-			ID3D11DeviceContext * l_pDeviceContext;
-			m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 			ID3D11DepthStencilView * l_pView;
 			l_pDeviceContext->OMGetRenderTargets( 1, NULL, &l_pView );
 			l_pDeviceContext->OMSetRenderTargets( 1, &m_pOldSurface, l_pView );
 			SafeRelease( l_pView );
 			SafeRelease( m_pOldSurface );
-			l_pDeviceContext->Release();
 		}
 	}
 

@@ -43,7 +43,7 @@ namespace Dx11Render
 
 		if ( m_mapRbo.size() || m_mapTex.size() )
 		{
-			ID3D11DeviceContext * l_pDeviceContext;
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 			m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
 			D3D11RenderTargetViewArray l_arraySurfaces;
 			ID3D11DepthStencilView * l_pView = NULL;
@@ -81,8 +81,6 @@ namespace Dx11Render
 				l_pDeviceContext->OMGetRenderTargets( 0, NULL, &m_pOldDepthStencilView );
 				l_pDeviceContext->OMSetRenderTargets( 0, NULL, l_pView );
 			}
-
-			l_pDeviceContext->Release();
 		}
 
 		return l_bReturn;
@@ -148,8 +146,7 @@ namespace Dx11Render
 
 	void DxFrameBuffer::DoUnbind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext;
-		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 		D3D11RenderTargetViewArray l_arraySurfaces;
 		ID3D11DepthStencilView * l_pView = m_pOldDepthStencilView;
 
@@ -171,7 +168,6 @@ namespace Dx11Render
 			SafeRelease( l_old );
 		}
 
-		l_pDeviceContext->Release();
 		SafeRelease( m_pOldDepthStencilView );
 	}
 
@@ -223,8 +219,7 @@ namespace Dx11Render
 		}
 
 		HRESULT l_hr = S_OK;
-		ID3D11DeviceContext * l_pDeviceContext;
-		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 
 		for ( auto l_itArray : l_arrayPairs )
 		{
@@ -257,7 +252,6 @@ namespace Dx11Render
 			}
 		}
 
-		l_pDeviceContext->Release();
 		return l_hr == S_OK;
 	}
 }

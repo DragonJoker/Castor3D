@@ -14,50 +14,50 @@ using namespace Castor;
 namespace ShaderModel1_2_3_4
 {
 	static const String VtxShader =
-		cuT( "cbuffer matrices : register( cb0 )\n"	)
-		cuT( "{\n"	)
-		cuT( "	matrix	c3d_mtxProjection;\n"	)
-		cuT( "	matrix	c3d_mtxModel;\n"	)
-		cuT( "	matrix	c3d_mtxView;\n"	)
-		cuT( "	matrix	c3d_mtxModelView;\n"	)
-		cuT( "	matrix	c3d_mtxProjectionModelView;\n"	)
-		cuT( "	matrix	c3d_mtxNormal;\n"	)
-		cuT( "	matrix	c3d_mtxTexture0;\n"	)
-		cuT( "	matrix	c3d_mtxTexture1;\n"	)
-		cuT( "	matrix	c3d_mtxTexture2;\n"	)
-		cuT( "	matrix	c3d_mtxTexture3;\n"	)
-		cuT( "};\n"	)
-		cuT( "struct VtxInput\n"	)
-		cuT( "{\n"	)
-		cuT( "	float4	Position	:	POSITION;\n"	)
-		cuT( "	float2	TextureUV	:	TEXCOORD0;\n"	)
-		cuT( "};\n"	)
-		cuT( "struct VtxOutput\n"	)
-		cuT( "{\n"	)
-		cuT( "	float4	Position	:	SV_POSITION;\n"	)
-		cuT( "	float2	TextureUV	:	TEXCOORD0;\n"	)
-		cuT( "};\n"	)
-		cuT( "VtxOutput mainVx( in VtxInput p_input )\n"	)
-		cuT( "{\n"	)
-		cuT( "	VtxOutput l_output;\n"	)
-		cuT( "	p_input.Position.w = 1.0f;\n"	)
-		cuT( "	l_output.Position		= mul( p_input.Position, c3d_mtxProjectionModelView );\n"	)
-		cuT( "	l_output.TextureUV		= p_input.TextureUV;\n"	)
-		cuT( "	return l_output;\n"	)
-		cuT( "}\n"	);
+		cuT( "cbuffer matrices : register( cb0 )\n" )
+		cuT( "{\n" )
+		cuT( "	matrix	c3d_mtxProjection;\n" )
+		cuT( "	matrix	c3d_mtxModel;\n" )
+		cuT( "	matrix	c3d_mtxView;\n" )
+		cuT( "	matrix	c3d_mtxModelView;\n" )
+		cuT( "	matrix	c3d_mtxProjectionModelView;\n" )
+		cuT( "	matrix	c3d_mtxNormal;\n" )
+		cuT( "	matrix	c3d_mtxTexture0;\n" )
+		cuT( "	matrix	c3d_mtxTexture1;\n" )
+		cuT( "	matrix	c3d_mtxTexture2;\n" )
+		cuT( "	matrix	c3d_mtxTexture3;\n" )
+		cuT( "}\n" )
+		cuT( "struct VtxInput\n" )
+		cuT( "{\n" )
+		cuT( "	float4 Position: POSITION;\n" )
+		cuT( "	float2 TextureUV: TEXCOORD0;\n" )
+		cuT( "};\n" )
+		cuT( "struct VtxOutput\n" )
+		cuT( "{\n" )
+		cuT( "	float4 Position: SV_POSITION;\n" )
+		cuT( "	float2 TextureUV: TEXCOORD0;\n" )
+		cuT( "};\n" )
+		cuT( "VtxOutput mainVx( in VtxInput p_input )\n" )
+		cuT( "{\n" )
+		cuT( "	VtxOutput l_output;\n" )
+		cuT( "	p_input.Position.w = 1.0f;\n" )
+		cuT( "	l_output.Position = mul( p_input.Position, c3d_mtxProjectionModelView );\n" )
+		cuT( "	l_output.TextureUV = p_input.TextureUV;\n" )
+		cuT( "	return l_output;\n" )
+		cuT( "}\n" );
 
 	static const String PxlShader =
-		cuT( "struct PxlInput\n"	)
-		cuT( "{\n"	)
-		cuT( "	float4	Position	:	SV_POSITION;\n"	)
-		cuT( "	float2	TextureUV	:	TEXCOORD0;\n"	)
-		cuT( "};\n"	)
-		cuT( "Texture2D diffuseTexture : register( t1 );\n"	)
-		cuT( "SamplerState DiffuseSampler : register( s1 );\n"	)
-		cuT( "float4 mainPx( in PxlInput p_input ) : SV_Target\n"	)
-		cuT( "{\n"	)
-		cuT( "	return diffuseTexture.Sample( DiffuseSampler, p_input.TextureUV );\n"	)
-		cuT( "}\n"	);
+		cuT( "struct PxlInput\n" )
+		cuT( "{\n" )
+		cuT( "	float4 Position: SV_POSITION;\n" )
+		cuT( "	float2 TextureUV: TEXCOORD0;\n" )
+		cuT( "};\n" )
+		cuT( "Texture2D diffuseTexture : register( t0 );\n" )
+		cuT( "SamplerState DiffuseSampler : register( s0 );\n" )
+		cuT( "float4 mainPx( in PxlInput p_input ) : SV_Target\n" )
+		cuT( "{\n" )
+		cuT( "	return diffuseTexture.Sample( DiffuseSampler, p_input.TextureUV );\n" )
+		cuT( "}\n" );
 }
 
 namespace Dx11Render
@@ -67,6 +67,7 @@ namespace Dx11Render
 		, m_pSwapChain( NULL )
 		, m_pRenderTargetView( NULL )
 		, m_pDepthStencilView( NULL )
+		, m_pDeviceContext( NULL )
 	{
 	}
 
@@ -129,10 +130,13 @@ namespace Dx11Render
 
 	void DxContext::DoSetCurrent()
 	{
+		static_cast< DxRenderSystem * >( m_pRenderSystem )->GetDevice()->GetImmediateContext( &m_pDeviceContext );
 	}
 
 	void DxContext::DoEndCurrent()
 	{
+		m_pDeviceContext->Release();
+		m_pDeviceContext = NULL;
 	}
 
 	void DxContext::DoSwapBuffers()
@@ -160,32 +164,29 @@ namespace Dx11Render
 
 	void DxContext::DoClear( uint32_t p_uiTargets )
 	{
-		ID3D11DeviceContext * l_pDeviceContext;
-		reinterpret_cast< DxRenderSystem * >( m_pRenderSystem )->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+		ID3D11DeviceContext * l_pDeviceContext = GetDeviceContext();
 
 		if ( p_uiTargets & eBUFFER_COMPONENT_COLOUR )
 		{
 			l_pDeviceContext->ClearRenderTargetView( m_pRenderTargetView, m_fClearColour );
 		}
 
-		if ( ( p_uiTargets & eBUFFER_COMPONENT_DEPTH ) || ( p_uiTargets & eBUFFER_COMPONENT_STENCIL ) )
+		UINT l_uiFlags = 0;
+
+		if ( p_uiTargets & eBUFFER_COMPONENT_DEPTH )
 		{
-			UINT l_uiFlags = 0;
-
-			if ( p_uiTargets & eBUFFER_COMPONENT_DEPTH )
-			{
-				l_uiFlags |= D3D11_CLEAR_DEPTH;
-			}
-
-			if ( p_uiTargets & eBUFFER_COMPONENT_STENCIL )
-			{
-				l_uiFlags |= D3D11_CLEAR_STENCIL;
-			}
-
-			l_pDeviceContext->ClearDepthStencilView( m_pDepthStencilView, l_uiFlags, 0, 0 );
+			l_uiFlags |= D3D11_CLEAR_DEPTH;
 		}
 
-		l_pDeviceContext->Release();
+		if ( p_uiTargets & eBUFFER_COMPONENT_STENCIL )
+		{
+			l_uiFlags |= D3D11_CLEAR_STENCIL;
+		}
+
+		if ( l_uiFlags )
+		{
+			l_pDeviceContext->ClearDepthStencilView( m_pDepthStencilView, l_uiFlags, 0, 0 );
+		}
 	}
 
 	void DxContext::DoBind( Castor3D::eBUFFER p_eBuffer, Castor3D::eFRAMEBUFFER_TARGET p_eTarget )
@@ -194,10 +195,8 @@ namespace Dx11Render
 		{
 			if ( p_eBuffer == eBUFFER_BACK || p_eBuffer == eBUFFER_BACK_LEFT || p_eBuffer == eBUFFER_BACK_RIGHT )
 			{
-				ID3D11DeviceContext * l_pDeviceContext;
-				reinterpret_cast< DxRenderSystem * >( m_pRenderSystem )->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+				ID3D11DeviceContext * l_pDeviceContext = GetDeviceContext();
 				l_pDeviceContext->OMSetRenderTargets( 1, &m_pRenderTargetView, m_pDepthStencilView );
-				l_pDeviceContext->Release();
 			}
 		}
 		else if ( p_eTarget == eFRAMEBUFFER_TARGET_READ )
@@ -212,6 +211,7 @@ namespace Dx11Render
 
 	void DxContext::DoInitVolatileResources()
 	{
+		DoSetCurrent();
 		DxRenderSystem * l_pRenderSystem = static_cast< DxRenderSystem * >( m_pRenderSystem );
 		DxContextSPtr l_pMainContext = std::static_pointer_cast< DxContext >( l_pRenderSystem->GetMainContext() );
 		IDXGIFactory * l_pFactory = l_pRenderSystem->GetDXGIFactory();
@@ -274,13 +274,14 @@ namespace Dx11Render
 
 			if ( l_bContinue )
 			{
-				ID3D11DeviceContext * l_pDeviceContext;
-				reinterpret_cast< DxRenderSystem * >( m_pRenderSystem )->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+				ID3D11DeviceContext * l_pDeviceContext = GetDeviceContext();
 				l_pDeviceContext->OMSetRenderTargets( 1, &m_pRenderTargetView, m_pDepthStencilView );
 				l_pDeviceContext->Release();
 				dxCheckError( l_hr, "OMSetRenderTargets" );
 			}
 		}
+
+		DoEndCurrent();
 	}
 
 	void DxContext::DoFreeVolatileResources()

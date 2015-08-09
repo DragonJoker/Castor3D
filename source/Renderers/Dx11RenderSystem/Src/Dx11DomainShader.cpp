@@ -21,18 +21,14 @@ namespace Dx11Render
 
 	void DxDomainShader::DoBind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext;
-		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->DSSetShader( m_pDomainShader, NULL, 0 );
-		l_pDeviceContext->Release();
 	}
 
 	void DxDomainShader::DoUnbind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext;
-		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->DSSetShader( NULL, NULL, 0 );
-		l_pDeviceContext->Release();
 	}
 
 	void DxDomainShader::DoRetrieveShader()

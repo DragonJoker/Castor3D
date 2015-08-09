@@ -198,6 +198,12 @@ namespace Castor3D
 		int m_previousTextZIndex;
 		//!\~english The previously rendered text	\~french Le texte rendu précédemment
 		Castor::String m_previousCaption;
+		//!\~english Panel overlays vertex array (quad definition)	\~french Tableau de vertex (définition du quad) pour les increustations panneau
+		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_panelVertex;
+		//!	6 * [3 uint (vertex position) + 2 float (texture coordinates)]
+		uint8_t m_panelBuffer[120];
+		//!	6 * [3 uint (vertex position) + 2 float (texture coordinates)]
+		uint8_t m_borderBuffer[60];
 	};
 }
 

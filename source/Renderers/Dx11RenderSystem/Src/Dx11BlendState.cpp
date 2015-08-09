@@ -65,13 +65,11 @@ namespace Dx11Render
 
 		if ( l_bReturn && m_pBlendState )
 		{
-			ID3D11DeviceContext * l_pDC;
-			m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDC );
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 
-			if ( l_pDC )
+			if ( l_pDeviceContext )
 			{
-				l_pDC->OMSetBlendState( m_pBlendState, m_blendFactors.const_ptr(), m_uiSampleMask );
-				SafeRelease( l_pDC );
+				l_pDeviceContext->OMSetBlendState( m_pBlendState, m_blendFactors.const_ptr(), m_uiSampleMask );
 			}
 		}
 

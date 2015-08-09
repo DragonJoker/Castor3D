@@ -143,8 +143,7 @@ namespace Dx11Render
 
 		if ( m_pSurface )
 		{
-			ID3D11DeviceContext * l_pDeviceContext;
-			m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 
 			if ( m_eComponent == eBUFFER_COMPONENT_COLOUR )
 			{
@@ -161,7 +160,6 @@ namespace Dx11Render
 				SafeRelease( l_pView );
 			}
 
-			l_pDeviceContext->Release();
 			return true;
 		}
 
@@ -176,8 +174,7 @@ namespace Dx11Render
 #else
 		if ( m_pOldSurface )
 		{
-			ID3D11DeviceContext * l_pDeviceContext;
-			m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 
 			if ( m_eComponent == eBUFFER_COMPONENT_COLOUR )
 			{
@@ -194,7 +191,6 @@ namespace Dx11Render
 				SafeRelease( l_pView );
 			}
 
-			l_pDeviceContext->Release();
 			SafeRelease( m_pOldSurface );
 		}
 #endif

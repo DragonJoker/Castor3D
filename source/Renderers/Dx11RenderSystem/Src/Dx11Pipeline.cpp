@@ -213,10 +213,8 @@ void DxPipelineImplHlsl::ApplyViewport( int p_iWindowWidth, int p_iWindowHeight 
 	m_viewport.MaxDepth = 1.0f;
 	m_viewport.TopLeftX = 0.0f;
 	m_viewport.TopLeftY = 0.0f;
-	ID3D11DeviceContext * l_pDeviceContext;
-	m_pDxPipeline->GetDxRenderSystem()->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+	ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pDxPipeline->GetDxRenderSystem()->GetCurrentContext() )->GetDeviceContext();
 	l_pDeviceContext->RSSetViewports( 1, &m_viewport );
-	l_pDeviceContext->Release();
 }
 
 void DxPipelineImplHlsl::DoApplyMatrix()

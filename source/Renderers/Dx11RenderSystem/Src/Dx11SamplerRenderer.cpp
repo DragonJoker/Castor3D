@@ -113,10 +113,8 @@ namespace Dx11Render
 
 	bool DxSamplerRenderer::Bind( eTEXTURE_DIMENSION CU_PARAM_UNUSED( p_eDimension ), uint32_t p_uiIndex )
 	{
-		ID3D11DeviceContext * l_pDeviceContext;
-		m_pDxRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->PSSetSamplers( p_uiIndex, 1, &m_pSamplerState );
-		l_pDeviceContext->Release();
 		return true;
 	}
 

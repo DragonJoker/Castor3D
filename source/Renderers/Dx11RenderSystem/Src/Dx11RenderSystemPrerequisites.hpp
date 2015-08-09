@@ -153,7 +153,10 @@ DECLARE_GUID( IID_IDXGIFactory,					0x7b7166ec, 0x21c7, 0x44ae, 0xb2, 0x1a, 0xc9
 				{\
 					char l_szName[1024] = { 0 };\
 					uint64_t l_ui64Address = (uint64_t)obj;\
-					sprintf_s( l_szName, "%20s [0x%016X]", #type, l_ui64Address );\
+					std::stringstream type;\
+					type.width( 20 );\
+					type << std::left << #type;\
+					sprintf_s( l_szName, "%s [0x%016X]", type.str().c_str(), l_ui64Address );\
 					obj->SetPrivateData( WKPDID_D3DDebugObjectName, UINT( strlen( l_szName ) - 1 ), l_szName );\
 					Castor::Logger::LogDebug( l_szName );\
 				}
@@ -163,7 +166,10 @@ DECLARE_GUID( IID_IDXGIFactory,					0x7b7166ec, 0x21c7, 0x44ae, 0xb2, 0x1a, 0xc9
 				{\
 					char l_szName[1024] = { 0 };\
 					uint64_t l_ui64Address = (uint64_t)obj;\
-					sprintf( l_szName, "%20s [0x%016X]", #type, l_ui64Address );\
+					std::stringstream type;\
+					type.width( 20 );\
+					type << std::width( 20 ) << std::left << "type";\
+					sprintf_s( l_szName, "%s [0x%016X]", type.str().c_str(), l_ui64Address );\
 					obj->SetPrivateData( WKPDID_D3DDebugObjectName, UINT( strlen( l_szName ) - 1 ), l_szName );\
 					Castor::Logger::LogDebug( l_szName );\
 				}
@@ -415,6 +421,21 @@ namespace Dx11Render
 			}
 
 			return l_uiReturn;
+		}
+		static inline D3D11_MAP GetBufferMapMode( Castor3D::eBUFFER_ACCESS_NATURE eNature )
+		{
+			D3D11_MAP l_eReturn;
+
+			if ( eNature == Castor3D::eBUFFER_ACCESS_NATURE_READ )
+			{
+				l_eReturn = D3D11_MAP_READ;
+			}
+			else
+			{
+				l_eReturn = D3D11_MAP_WRITE;
+			}
+
+			return l_eReturn;
 		}
 	};
 

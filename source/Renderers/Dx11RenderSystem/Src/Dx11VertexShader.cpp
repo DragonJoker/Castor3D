@@ -21,18 +21,14 @@ namespace Dx11Render
 
 	void DxVertexShader::DoBind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext;
-		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->VSSetShader( m_pVertexShader, NULL, 0 );
-		l_pDeviceContext->Release();
 	}
 
 	void DxVertexShader::DoUnbind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext;
-		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->VSSetShader( NULL, NULL, 0 );
-		l_pDeviceContext->Release();
 	}
 
 	void DxVertexShader::DoRetrieveShader()

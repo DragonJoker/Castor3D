@@ -186,6 +186,16 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Retrieves the background colour
+		 *\~french
+		 *\brief		Récupère la couleur de fond
+		 */
+		inline Castor::Colour GetClearColour()const
+		{
+			return m_clearColour;
+		}
+		/**
+		 *\~english
 		 *\brief		Binds given system frame buffer to given mode
 		 *\param[in]	p_eBuffer	The buffer
 		 *\param[in]	p_eTarget	The target
@@ -352,9 +362,11 @@ namespace Castor3D
 		//!\~english Vertex array (quad definition)	\~french Tableau de vertex (définition du quad)
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
 		//!	6 * [2(vertex position) 2(texture coordinates)]
-		Castor::real m_pBuffer[16];
+		Castor::real m_pBuffer[24];
 		//!\~english DepthStencilState used while rendering background image	\~french DepthStencilState utilisé pour le rendu de l'image de fond
 		DepthStencilStateSPtr m_pDsStateBackground;
+		//!\~english La couleur de fond	\french La couleur de fond
+		Castor::Colour m_clearColour;
 	};
 }
 

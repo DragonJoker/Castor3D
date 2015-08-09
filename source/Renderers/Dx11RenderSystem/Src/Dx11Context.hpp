@@ -46,6 +46,10 @@ namespace Dx11Render
 		{
 			return m_pDepthStencilView;
 		}
+		ID3D11DeviceContext * GetDeviceContext()const
+		{
+			return m_pDeviceContext;
+		}
 
 	private:
 		virtual bool DoInitialise();
@@ -67,6 +71,7 @@ namespace Dx11Render
 		IDXGISwapChain * m_pSwapChain;
 		ID3D11RenderTargetView * m_pRenderTargetView;
 		ID3D11DepthStencilView * m_pDepthStencilView;
+		ID3D11DeviceContext * m_pDeviceContext;
 		HWND m_hWnd;
 		Castor::Size m_size;
 		DXGI_SWAP_CHAIN_DESC m_deviceParams;

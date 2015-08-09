@@ -39,9 +39,8 @@ void DxTargetRenderer::BeginScene()
 	if ( m_bInitialised )
 	{
 		DoUpdateSize();
-		ID3D11DeviceContext * l_pDeviceContext;
-		reinterpret_cast< DxRenderSystem * >( m_pRenderSystem )->GetDevice()->GetImmediateContext( &l_pDeviceContext );
 		DxContextRPtr l_pContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() );
+		ID3D11DeviceContext * l_pDeviceContext = l_pContext->GetDeviceContext();
 
 		// Clear the back buffer.
 		if ( m_target->GetScene() )
@@ -56,7 +55,6 @@ void DxTargetRenderer::BeginScene()
 
 		// Clear the depth buffer.
 		l_pDeviceContext->ClearDepthStencilView( l_pContext->GetDepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f,  0 );
-		l_pDeviceContext->Release();
 	}
 }
 

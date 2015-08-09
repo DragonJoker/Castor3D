@@ -21,18 +21,14 @@ namespace Dx11Render
 
 	void DxFragmentShader::DoBind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext;
-		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->PSSetShader( m_pPixelShader, NULL, 0 );
-		l_pDeviceContext->Release();
 	}
 
 	void DxFragmentShader::DoUnbind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext;
-		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->PSSetShader( NULL, NULL, 0 );
-		l_pDeviceContext->Release();
 	}
 
 	void DxFragmentShader::DoRetrieveShader()

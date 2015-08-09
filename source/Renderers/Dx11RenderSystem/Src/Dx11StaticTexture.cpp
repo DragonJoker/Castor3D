@@ -44,10 +44,8 @@ namespace Dx11Render
 		D3D11_MAPPED_SUBRESOURCE l_mappedResource;
 		ID3D11Resource * l_pResource;
 		m_pShaderResourceView->GetResource( &l_pResource );
-		ID3D11DeviceContext * l_pDeviceContext;
-		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 		HRESULT l_hr = l_pDeviceContext->Map( l_pResource, 0, D3D11_MAP( DirectX11::GetLockFlags( p_uiMode ) ), 0, &l_mappedResource );
-		l_pDeviceContext->Release();
 		l_pResource->Release();
 
 		if ( l_hr == S_OK )
@@ -62,10 +60,8 @@ namespace Dx11Render
 	{
 		ID3D11Resource * l_pResource;
 		m_pShaderResourceView->GetResource( &l_pResource );
-		ID3D11DeviceContext * l_pDeviceContext;
-		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->Unmap( l_pResource, 0 );
-		l_pDeviceContext->Release();
 		l_pResource->Release();
 	}
 
@@ -102,6 +98,17 @@ namespace Dx11Render
 
 	bool DxStaticTexture::DoBind()
 	{
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+
+		if ( m_pShaderResourceView )
+		{
+			ID3D11Resource * l_pResource;
+			m_pShaderResourceView->GetResource( &l_pResource );
+			StringStream l_name;
+			l_name << cuT( "StaticTexture_" ) << ( void * )this << cuT( "_SRV.png" );
+			D3DX11SaveTextureToFile( l_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
+		}
+
 		return true;
 	}
 

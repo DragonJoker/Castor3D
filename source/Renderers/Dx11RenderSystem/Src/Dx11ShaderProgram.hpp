@@ -24,6 +24,244 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Dx11Render
 {
+	class UniformsBase
+	{
+	protected:
+		Castor::String m_strVertexInMatrices;
+		Castor::String m_strPixelInMatrices;
+		Castor::String m_strPixelPass;
+		Castor::String m_strPixelScene;
+
+	public:
+		inline Castor::String const & GetVertexInMatrices()const
+		{
+			return m_strVertexInMatrices;
+		}
+		inline Castor::String const & GetPixelInMatrices()const
+		{
+			return m_strPixelInMatrices;
+		}
+		inline Castor::String const & GetPixelPass()const
+		{
+			return m_strPixelPass;
+		}
+		inline Castor::String const & GetPixelScene()const
+		{
+			return m_strPixelScene;
+		}
+		static std::unique_ptr< UniformsBase > Get( DxRenderSystem const & p_renderSystem );
+	};
+
+	class UniformsBuf : public UniformsBase
+	{
+	public:
+		UniformsBuf()
+		{
+			m_strVertexInMatrices =
+				cuT( "cbuffer Matrices : register( cb0 )\n" )
+				cuT( "{\n" )
+				cuT( "	matrix	c3d_mtxProjection;\n" )
+				cuT( "	matrix	c3d_mtxModel;\n" )
+				cuT( "	matrix	c3d_mtxView;\n" )
+				cuT( "	matrix	c3d_mtxModelView;\n" )
+				cuT( "	matrix	c3d_mtxProjectionModelView;\n" )
+				cuT( "	matrix	c3d_mtxNormal;\n" )
+				cuT( "	matrix	c3d_mtxTexture0;\n" )
+				cuT( "	matrix	c3d_mtxTexture1;\n" )
+				cuT( "	matrix	c3d_mtxTexture2;\n" )
+				cuT( "	matrix	c3d_mtxTexture3;\n" )
+				cuT( "};\n" );
+			m_strPixelInMatrices =
+				cuT( "cbuffer Matrices : register( cb0 )\n" )
+				cuT( "{\n" )
+				cuT( "	matrix	c3d_mtxProjection;\n" )
+				cuT( "	matrix	c3d_mtxModel;\n" )
+				cuT( "	matrix	c3d_mtxView;\n" )
+				cuT( "	matrix	c3d_mtxModelView;\n" )
+				cuT( "	matrix	c3d_mtxProjectionModelView;\n" )
+				cuT( "	matrix	c3d_mtxNormal;\n" )
+				cuT( "	matrix	c3d_mtxTexture0;\n" )
+				cuT( "	matrix	c3d_mtxTexture1;\n" )
+				cuT( "	matrix	c3d_mtxTexture2;\n" )
+				cuT( "	matrix	c3d_mtxTexture3;\n" )
+				cuT( "};\n" );
+			m_strPixelScene =
+				cuT( "cbuffer Scene : register( cb1 )\n" )
+				cuT( "{\n" )
+				cuT( "	int		c3d_iLightsCount;\n" )
+				cuT( "	float4	c3d_v4AmbientLight;\n" )
+				cuT( "	float4	c3d_v4BackgroundColour;\n" )
+				cuT( "	float3	c3d_v3CameraPosition;\n" )
+				cuT( "};\n" );
+			m_strPixelPass =
+				cuT( "cbuffer PassBuffer : register( cb3 )\n" )
+				cuT( "{\n" )
+				cuT( "	float4	c3d_v4MatAmbient;\n" )
+				cuT( "	float4	c3d_v4MatDiffuse;\n" )
+				cuT( "	float4	c3d_v4MatEmissive;\n" )
+				cuT( "	float4	c3d_v4MatSpecular;\n" )
+				cuT( "	float	c3d_fMatShininess;\n" )
+				cuT( "	float	c3d_fMatOpacity;\n" )
+				cuT( "};\n" );
+		}
+	};
+
+	class UniformsStd : public UniformsBase
+	{
+	public:
+		UniformsStd()
+		{
+			m_strVertexInMatrices =
+				cuT( "uniform	float4x4	c3d_mtxProjection;\n" )
+				cuT( "uniform	float4x4	c3d_mtxModel;\n" )
+				cuT( "uniform	float4x4	c3d_mtxView;\n" )
+				cuT( "uniform	float4x4	c3d_mtxModelView;\n" )
+				cuT( "uniform	float4x4	c3d_mtxProjectionModelView;\n" )
+				cuT( "uniform	float4x4	c3d_mtxNormal;\n" )
+				cuT( "uniform	float4x4	c3d_mtxTexture0;\n" )
+				cuT( "uniform	float4x4	c3d_mtxTexture1;\n" )
+				cuT( "uniform	float4x4	c3d_mtxTexture2;\n" )
+				cuT( "uniform	float4x4	c3d_mtxTexture3;\n" );
+			m_strPixelInMatrices =
+				cuT( "uniform	float4x4	c3d_mtxProjection;\n" )
+				cuT( "uniform	float4x4	c3d_mtxModel;\n" )
+				cuT( "uniform	float4x4	c3d_mtxView;\n" )
+				cuT( "uniform	float4x4	c3d_mtxModelView;\n" )
+				cuT( "uniform	float4x4	c3d_mtxProjectionModelView;\n" )
+				cuT( "uniform	float4x4	c3d_mtxNormal;\n" )
+				cuT( "uniform	float4x4	c3d_mtxTexture0;\n" )
+				cuT( "uniform	float4x4	c3d_mtxTexture1;\n" )
+				cuT( "uniform	float4x4	c3d_mtxTexture2;\n" )
+				cuT( "uniform	float4x4	c3d_mtxTexture3;\n" );
+			m_strPixelScene =
+				cuT( "uniform	int 		c3d_iLightsCount;\n" )
+				cuT( "uniform	float4 		c3d_v4AmbientLight;\n" )
+				cuT( "uniform	float4 		c3d_v4BackgroundColour;\n" )
+				cuT( "uniform	float3 		c3d_v3CameraPosition;\n" );
+			m_strPixelPass =
+				cuT( "uniform	float4 		c3d_v4MatAmbient;\n" )
+				cuT( "uniform	float4 		c3d_v4MatDiffuse;\n" )
+				cuT( "uniform	float4 		c3d_v4MatEmissive;\n" )
+				cuT( "uniform	float4 		c3d_v4MatSpecular;\n" )
+				cuT( "uniform	float 		c3d_fMatShininess;\n" )
+				cuT( "uniform	float		c3d_fMatOpacity;\n" );
+		}
+	};
+
+	class InOutsBase
+	{
+	protected:
+		Castor::String	m_strVtxInput;
+		Castor::String	m_strVtxOutput;
+		Castor::String	m_strPxlInput;
+		Castor::String	m_strPxlOutput;
+
+	public:
+		Castor::String const & GetVtxInput()const
+		{
+			return m_strVtxInput;
+		}
+		Castor::String const & GetVtxOutput()const
+		{
+			return m_strVtxOutput;
+		}
+		Castor::String const & GetPxlInput()const
+		{
+			return m_strPxlInput;
+		}
+		Castor::String const & GetPxlOutput()const
+		{
+			return m_strPxlOutput;
+		}
+		static std::unique_ptr< InOutsBase > Get( DxRenderSystem const & p_renderSystem );
+	};
+
+	class InOutsOld : public InOutsBase
+	{
+	public:
+		InOutsOld()
+		{
+			m_strVtxInput =
+				cuT( "struct VtxInput\n" )
+				cuT( "{\n" )
+				cuT( "	float4		Position	:	POSITION0;\n" )
+				cuT( "	float3		Normal		:	NORMAL0;\n" )
+				cuT( "	float3		Tangent		:	TANGENT0;\n" )
+				cuT( "	float3		Binormal	:	BINORMAL0;\n" )
+				cuT( "	float3		TextureUV	:	TEXCOORD0;\n" )
+ 				//cuT( "	int4		BoneIDs		:	BLENDINDICES;\n")
+ 				//cuT( "	float4		Weights		:	BLENDWEIGHT;\n" )
+ 				//cuT( "	float4x4	Matrix		:	MATRIX;\n"	 )
+				cuT( "};\n" );
+			m_strVtxOutput =
+				cuT( "struct VtxOutput\n" )
+				cuT( "{\n" )
+				cuT( "	float4		Position	:	POSITION0;\n" )
+				cuT( "	float3		Vertex		:	POSITION1;\n" )
+				cuT( "	float3		Normal		:	NORMAL0;\n" )
+				cuT( "	float3		Tangent		:	TANGENT0;\n" )
+				cuT( "	float3		Binormal	:	BINORMAL0;\n" )
+				cuT( "	float3		TextureUV	:	TEXCOORD0;\n" )
+				cuT( "	float3		Eye			:	POSITION2;\n" )
+				cuT( "};\n" );
+			m_strPxlInput =
+				cuT( "struct PxInput\n" )
+				cuT( "{\n" )
+				cuT( "	float4		Position	:	POSITION0;\n" )
+				cuT( "	float3		Vertex		:	POSITION1;\n" )
+				cuT( "	float3		Normal		:	NORMAL0;\n" )
+				cuT( "	float3		Tangent		:	TANGENT0;\n" )
+				cuT( "	float3		Binormal	:	BINORMAL0;\n" )
+				cuT( "	float3		TextureUV	:	TEXCOORD0;\n" )
+				cuT( "	float3		Eye			:	POSITION2;\n" )
+				cuT( "};\n" );
+			m_strPxlOutput = cuT( "COLOR0" );
+		}
+	};
+
+	class InOutsNew : public InOutsBase
+	{
+	public:
+		InOutsNew()
+		{
+			m_strVtxInput =
+				cuT( "struct VtxInput\n" )
+				cuT( "{\n" )
+				cuT( "	float4		Position	:	POSITION0;\n" )
+				cuT( "	float3		Normal		:	NORMAL0;\n" )
+				cuT( "	float3		Tangent		:	TANGENT0;\n" )
+				cuT( "	float3		Binormal	:	BINORMAL0;\n" )
+				cuT( "	float3		TextureUV	:	TEXCOORD0;\n" )
+ 				//cuT( "	int4		BoneIDs		:	BLENDINDICES;\n")
+ 				//cuT( "	float4		Weights		:	BLENDWEIGHT;\n" )
+ 				//cuT( "	float4x4	Matrix		:	MATRIX;\n"	 )
+				cuT( "};\n" );
+			m_strVtxOutput =
+				cuT( "struct VtxOutput\n" )
+				cuT( "{\n" )
+				cuT( "	float4		Position	:	SV_POSITION;\n" )
+				cuT( "	float3		Vertex		:	POSITION0;\n" )
+				cuT( "	float3		Normal		:	NORMAL0;\n" )
+				cuT( "	float3		Tangent		:	TANGENT0;\n" )
+				cuT( "	float3		Binormal	:	BINORMAL0;\n" )
+				cuT( "	float3		TextureUV	:	TEXCOORD0;\n" )
+				cuT( "	float3		Eye			:	POSITION1;\n" )
+				cuT( "};\n" );
+			m_strPxlInput =
+				cuT( "struct PxInput\n" )
+				cuT( "{\n" )
+				cuT( "	float4		Position	:	SV_POSITION;\n" )
+				cuT( "	float3		Vertex		:	POSITION0;\n" )
+				cuT( "	float3		Normal		:	NORMAL0;\n" )
+				cuT( "	float3		Tangent		:	TANGENT0;\n" )
+				cuT( "	float3		Binormal	:	BINORMAL0;\n" )
+				cuT( "	float3		TextureUV	:	TEXCOORD0;\n" )
+				cuT( "	float3		Eye			:	POSITION1;\n" )
+				cuT( "};\n" );
+			m_strPxlOutput = cuT( "SV_TARGET" );
+		}
+	};
+
 	class DxShaderProgram
 		:	public Castor3D::ShaderProgramBase
 	{
