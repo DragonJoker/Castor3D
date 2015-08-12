@@ -178,9 +178,11 @@ namespace Castor3D
 			m_pGeometryBuffers->Initialise();
 		}
 
-		if ( l_bUseShader )
+		auto l_matrixBuffer = p_pass.GetMatrixBuffer();
+
+		if ( l_bUseShader && l_matrixBuffer )
 		{
-			m_pRenderSystem->GetPipeline()->ApplyMatrices( *l_pProgram );
+			m_pRenderSystem->GetPipeline()->ApplyMatrices( *l_matrixBuffer );
 		}
 		else
 		{

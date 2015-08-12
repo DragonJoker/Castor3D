@@ -61,26 +61,6 @@ namespace Castor3D
 		}
 	}
 
-	void Light::Enable( ShaderProgramBase * p_pProgram )
-	{
-		LightRendererSPtr l_renderer = GetRenderer();
-
-		if ( l_renderer )
-		{
-			l_renderer->EnableShader( p_pProgram );
-		}
-	}
-
-	void Light::Disable( ShaderProgramBase * p_pProgram )
-	{
-		LightRendererSPtr l_renderer = GetRenderer();
-
-		if ( l_renderer )
-		{
-			l_renderer->DisableShader( p_pProgram );
-		}
-	}
-
 	void Light::Render()
 	{
 		LightRendererSPtr l_renderer = GetRenderer();
@@ -116,43 +96,6 @@ namespace Castor3D
 	void Light::EndRender()
 	{
 		Disable();
-	}
-
-	void Light::Render( ShaderProgramBase * p_pProgram )
-	{
-		LightRendererSPtr l_renderer = GetRenderer();
-
-		if ( l_renderer )
-		{
-			SceneNodeSPtr l_node = GetParent();
-
-			if ( l_node )
-			{
-				Point3r l_position = l_node->GetDerivedPosition();
-
-				switch ( m_pCategory->GetLightType() )
-				{
-				case eLIGHT_TYPE_DIRECTIONAL:
-					std::static_pointer_cast< DirectionalLight >( m_pCategory )->SetDirection( point::get_normalised( l_position ) );
-					break;
-
-				default:
-					std::static_pointer_cast< PointLight >( m_pCategory )->SetPosition( l_position );
-					break;
-
-				case eLIGHT_TYPE_SPOT:
-					std::static_pointer_cast< SpotLight >( m_pCategory )->SetPosition( l_position );
-					break;
-				}
-			}
-
-			m_pCategory->Render( l_renderer, p_pProgram );
-		}
-	}
-
-	void Light::EndRender( ShaderProgramBase * p_pProgram )
-	{
-		Disable( p_pProgram );
 	}
 
 	void Light::AttachTo( SceneNodeSPtr p_pNode )

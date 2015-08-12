@@ -62,15 +62,15 @@ namespace Castor3D
 
 		if ( l_pProgram )
 		{
-			FrameVariableBufferSPtr		l_pPassBuffer	= l_pProgram->GetPassBuffer();
-			FrameVariableBufferSPtr		l_pSceneBuffer	= l_pProgram->GetSceneBuffer();
-			Point4fFrameVariableSPtr	l_pAmbient		= RetrieveVariable( m_pAmbient, ShaderProgramBase::MatAmbient, m_pProgram, l_pProgram, l_pPassBuffer );
-			Point4fFrameVariableSPtr	l_pDiffuse		= RetrieveVariable( m_pDiffuse, ShaderProgramBase::MatDiffuse, m_pProgram, l_pProgram, l_pPassBuffer );
-			Point4fFrameVariableSPtr	l_pSpecular		= RetrieveVariable( m_pSpecular, ShaderProgramBase::MatSpecular, m_pProgram, l_pProgram, l_pPassBuffer );
-			Point4fFrameVariableSPtr	l_pEmissive		= RetrieveVariable( m_pEmissive, ShaderProgramBase::MatEmissive, m_pProgram, l_pProgram, l_pPassBuffer );
-			OneFloatFrameVariableSPtr	l_pShininess	= RetrieveVariable( m_pShininess, ShaderProgramBase::MatShininess, m_pProgram, l_pProgram, l_pPassBuffer );
-			OneFloatFrameVariableSPtr	l_pOpacity		= RetrieveVariable( m_pOpacity, ShaderProgramBase::MatOpacity, m_pProgram, l_pProgram, l_pPassBuffer );
-			Point3rFrameVariableSPtr	l_pCameraPos	= RetrieveVariable( m_pCameraPos, ShaderProgramBase::CameraPos, m_pProgram, l_pProgram, l_pSceneBuffer );
+			FrameVariableBufferSPtr l_pPassBuffer = m_target->GetPassBuffer();
+			FrameVariableBufferSPtr l_pSceneBuffer = m_target->GetSceneBuffer();
+			Point4fFrameVariableSPtr l_pAmbient = RetrieveVariable( m_pAmbient, ShaderProgramBase::MatAmbient, m_pProgram, l_pProgram, l_pPassBuffer );
+			Point4fFrameVariableSPtr l_pDiffuse = RetrieveVariable( m_pDiffuse, ShaderProgramBase::MatDiffuse, m_pProgram, l_pProgram, l_pPassBuffer );
+			Point4fFrameVariableSPtr l_pSpecular = RetrieveVariable( m_pSpecular, ShaderProgramBase::MatSpecular, m_pProgram, l_pProgram, l_pPassBuffer );
+			Point4fFrameVariableSPtr l_pEmissive = RetrieveVariable( m_pEmissive, ShaderProgramBase::MatEmissive, m_pProgram, l_pProgram, l_pPassBuffer );
+			OneFloatFrameVariableSPtr l_pShininess = RetrieveVariable( m_pShininess, ShaderProgramBase::MatShininess, m_pProgram, l_pProgram, l_pPassBuffer );
+			OneFloatFrameVariableSPtr l_pOpacity = RetrieveVariable( m_pOpacity, ShaderProgramBase::MatOpacity, m_pProgram, l_pProgram, l_pPassBuffer );
+			Point3rFrameVariableSPtr l_pCameraPos = RetrieveVariable( m_pCameraPos, ShaderProgramBase::CameraPos, m_pProgram, l_pProgram, l_pSceneBuffer );
 
 			if ( l_pProgram != m_pProgram.lock() )
 			{

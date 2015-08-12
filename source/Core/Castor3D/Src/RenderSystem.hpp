@@ -319,14 +319,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders the scene ambient lighting
-		 *\param[in]	p_clColour	The light colour
-		 *\param[in]	p_pProgram	The ShaderProgram, if any
+		 *\param[in]	p_clColour			The light colour
+		 *\param[in]	p_variableBuffer	The variable buffer that receives the ambient light
 		 *\~french
 		 *\brief		Rend la lumière ambiante de la scène
-		 *\param[in]	p_clColour	La couleur de la lumière
-		 *\param[in]	p_pProgram	Le ShaderProgram, le cas échéant
+		 *\param[in]	p_clColour			La couleur de la lumière
+		 *\param[in]	p_variableBuffer	Le buffer the variables, qui reçoit la lumière ambient
 		 */
-		void RenderAmbientLight( Castor::Colour const & p_clColour, ShaderProgramBase * p_pProgram );
+		void RenderAmbientLight( Castor::Colour const & p_clColour, FrameVariableBuffer & p_variableBuffer );
 		/**
 		 *\~english
 		 *\brief		Locks a light index

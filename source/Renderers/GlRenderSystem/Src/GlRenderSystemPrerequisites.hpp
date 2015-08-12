@@ -420,7 +420,7 @@ namespace GlRender
 			virtual Castor::String Matrices() = 0;
 			virtual Castor::String Scene() = 0;
 			virtual Castor::String Pass() = 0;
-			virtual Castor::String User() = 0;
+			virtual Castor::String Billboard() = 0;
 			static void Replace( Castor::String & p_strSource );
 		};
 
@@ -430,7 +430,7 @@ namespace GlRender
 			virtual Castor::String Matrices();
 			virtual Castor::String Scene();
 			virtual Castor::String Pass();
-			virtual Castor::String User();
+			virtual Castor::String Billboard();
 		};
 
 		class ConstantsUbo : public ConstantsBase
@@ -439,7 +439,7 @@ namespace GlRender
 			virtual Castor::String Matrices();
 			virtual Castor::String Scene();
 			virtual Castor::String Pass();
-			virtual Castor::String User();
+			virtual Castor::String Billboard();
 		};
 
 		static ConstantsStd	constantsStd;

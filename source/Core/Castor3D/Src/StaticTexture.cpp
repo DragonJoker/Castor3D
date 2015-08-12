@@ -9,7 +9,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	StaticTexture::StaticTexture( RenderSystem * p_pRenderSystem )
-		:	TextureBase( eTEXTURE_TYPE_STATIC, p_pRenderSystem )
+		: TextureBase( eTEXTURE_TYPE_STATIC, p_pRenderSystem )
 	{
 	}
 

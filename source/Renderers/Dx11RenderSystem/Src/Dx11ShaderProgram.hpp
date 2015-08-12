@@ -276,8 +276,8 @@ namespace Dx11Render
 
 		virtual void Initialise();
 		virtual void Cleanup();
-		virtual void Begin( uint8_t p_byIndex, uint8_t p_byCount );
-		virtual void End();
+		virtual void Bind( uint8_t p_byIndex, uint8_t p_byCount );
+		virtual void Unbind();
 
 		int GetAttributeLocation( Castor::String const & CU_PARAM_UNUSED( p_strName ) )const
 		{
@@ -296,10 +296,6 @@ namespace Dx11Render
 	protected:
 		Castor::String m_linkerLog;
 		DxRenderSystem * m_pDxRenderSystem;
-		DxFrameVariableBufferWPtr m_wpDxMatrixBuffer;
-		DxFrameVariableBufferWPtr m_wpDxSceneBuffer;
-		DxFrameVariableBufferWPtr m_wpDxPassBuffer;
-		DxFrameVariableBufferWPtr m_wpDxConstantsBuffer;
 	};
 }
 

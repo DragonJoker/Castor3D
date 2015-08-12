@@ -81,6 +81,7 @@ bool DxRenderSystem::CheckSupport( eSHADER_MODEL p_eProfile )
 	case eSHADER_MODEL_2:
 	case eSHADER_MODEL_3:
 	case eSHADER_MODEL_4:
+	case eSHADER_MODEL_5:
 		l_bReturn = true;
 		break;
 

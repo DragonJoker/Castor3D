@@ -96,18 +96,6 @@ namespace Castor3D
 		}
 	}
 
-	void DirectionalLight::Render( LightRendererSPtr p_pRenderer, ShaderProgramBase * p_pProgram )
-	{
-		if ( p_pRenderer )
-		{
-			p_pRenderer->ApplyPositionShader();
-			p_pRenderer->ApplyAmbientShader();
-			p_pRenderer->ApplyDiffuseShader();
-			p_pRenderer->ApplySpecularShader();
-			p_pRenderer->EnableShader( p_pProgram );
-		}
-	}
-
 	void DirectionalLight::SetDirection( Castor::Point3f const & p_ptPosition )
 	{
 		LightCategory::SetPositionType( Castor::Point4f( p_ptPosition[0], p_ptPosition[1], p_ptPosition[2], 0.0f ) );

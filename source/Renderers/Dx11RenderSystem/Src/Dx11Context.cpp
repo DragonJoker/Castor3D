@@ -14,19 +14,6 @@ using namespace Castor;
 namespace ShaderModel1_2_3_4
 {
 	static const String VtxShader =
-		cuT( "cbuffer matrices : register( cb0 )\n" )
-		cuT( "{\n" )
-		cuT( "	matrix	c3d_mtxProjection;\n" )
-		cuT( "	matrix	c3d_mtxModel;\n" )
-		cuT( "	matrix	c3d_mtxView;\n" )
-		cuT( "	matrix	c3d_mtxModelView;\n" )
-		cuT( "	matrix	c3d_mtxProjectionModelView;\n" )
-		cuT( "	matrix	c3d_mtxNormal;\n" )
-		cuT( "	matrix	c3d_mtxTexture0;\n" )
-		cuT( "	matrix	c3d_mtxTexture1;\n" )
-		cuT( "	matrix	c3d_mtxTexture2;\n" )
-		cuT( "	matrix	c3d_mtxTexture3;\n" )
-		cuT( "}\n" )
 		cuT( "struct VtxInput\n" )
 		cuT( "{\n" )
 		cuT( "	float4 Position: POSITION;\n" )
@@ -37,24 +24,24 @@ namespace ShaderModel1_2_3_4
 		cuT( "	float4 Position: SV_POSITION;\n" )
 		cuT( "	float2 TextureUV: TEXCOORD0;\n" )
 		cuT( "};\n" )
-		cuT( "VtxOutput mainVx( in VtxInput p_input )\n" )
+		cuT( "VtxOutput mainVx( VtxInput p_input )\n" )
 		cuT( "{\n" )
 		cuT( "	VtxOutput l_output;\n" )
 		cuT( "	p_input.Position.w = 1.0f;\n" )
-		cuT( "	l_output.Position = mul( p_input.Position, c3d_mtxProjectionModelView );\n" )
+		cuT( "	l_output.Position = p_input.Position;\n" )
 		cuT( "	l_output.TextureUV = p_input.TextureUV;\n" )
 		cuT( "	return l_output;\n" )
 		cuT( "}\n" );
 
 	static const String PxlShader =
+		cuT( "Texture2D diffuseTexture: register( t0 );\n" )
+		cuT( "SamplerState DiffuseSampler: register( s0 );\n" )
 		cuT( "struct PxlInput\n" )
 		cuT( "{\n" )
 		cuT( "	float4 Position: SV_POSITION;\n" )
 		cuT( "	float2 TextureUV: TEXCOORD0;\n" )
 		cuT( "};\n" )
-		cuT( "Texture2D diffuseTexture : register( t0 );\n" )
-		cuT( "SamplerState DiffuseSampler : register( s0 );\n" )
-		cuT( "float4 mainPx( in PxlInput p_input ) : SV_Target\n" )
+		cuT( "float4 mainPx( PxlInput p_input ): SV_TARGET\n" )
 		cuT( "{\n" )
 		cuT( "	return diffuseTexture.Sample( DiffuseSampler, p_input.TextureUV );\n" )
 		cuT( "}\n" );
@@ -93,7 +80,6 @@ namespace Dx11Render
 		{
 			DxRenderSystem * l_pRenderSystem = static_cast< DxRenderSystem * >( m_pRenderSystem );
 			m_hWnd = m_pWindow->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd();
-			//m_size.set( ::GetSystemMetrics( SM_CXFULLSCREEN ), ::GetSystemMetrics( SM_CYFULLSCREEN ) );
 			m_size = m_pWindow->GetSize();
 
 			if ( DoInitPresentParameters() == S_OK &&  l_pRenderSystem->InitialiseDevice( m_hWnd, m_deviceParams ) )
@@ -106,15 +92,12 @@ namespace Dx11Render
 			if ( m_bInitialised )
 			{
 				ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
-				OneTextureFrameVariableSPtr l_pVariable = l_pProgram->CreateFrameVariable( cuT( "c3d_mapDiffuse" ), eSHADER_TYPE_PIXEL );
-				l_pProgram->SetEntryPoint( eSHADER_TYPE_VERTEX,	cuT( "mainVx" ) );
-				l_pProgram->SetEntryPoint( eSHADER_TYPE_PIXEL,	cuT( "mainPx" ) );
-				l_pProgram->SetSource( eSHADER_TYPE_VERTEX,	eSHADER_MODEL_4, ShaderModel1_2_3_4::VtxShader	);
-				l_pProgram->SetSource( eSHADER_TYPE_PIXEL,	eSHADER_MODEL_4, ShaderModel1_2_3_4::PxlShader	);
+				l_pProgram->SetEntryPoint( eSHADER_TYPE_VERTEX, cuT( "mainVx" ) );
+				l_pProgram->SetEntryPoint( eSHADER_TYPE_PIXEL, cuT( "mainPx" ) );
+				l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_5, ShaderModel1_2_3_4::VtxShader );
+				l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_5, ShaderModel1_2_3_4::PxlShader );
 				l_pProgram->Initialise();
-				m_pGeometryBuffers->GetIndexBuffer().Create();
 				m_pGeometryBuffers->GetVertexBuffer().Create();
-				m_pGeometryBuffers->GetIndexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 				m_pGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, l_pProgram );
 				m_pGeometryBuffers->Initialise();
 			}

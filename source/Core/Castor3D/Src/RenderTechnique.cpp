@@ -159,17 +159,29 @@ namespace Castor3D
 
 	bool RenderTechniqueBase::BeginRender()
 	{
+#if 0
 		return DoBeginRender();
+#else
+		return true;
+#endif
 	}
 
 	bool RenderTechniqueBase::Render( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime )
 	{
 		m_pRenderSystem->PushScene( &p_scene );
+#if 0
 		return DoRender( p_scene, p_camera, p_ePrimitives, p_dFrameTime );
+#else
+		p_camera.Render();
+		p_scene.Render( p_ePrimitives, p_dFrameTime, p_camera );
+		p_camera.EndRender();
+		return true;
+#endif
 	}
 
 	void RenderTechniqueBase::EndRender()
 	{
+#if 0
 		DoEndRender();
 		BlendStateSPtr l_pBlendState = m_wp2DBlendState.lock();
 		DepthStencilStateSPtr l_pDepthStencilState = m_wp2DDepthStencilState.lock();
@@ -180,6 +192,7 @@ namespace Castor3D
 		m_pFrameBuffer->Unbind();
 		m_pRenderSystem->PopScene();
 		m_pFrameBuffer->RenderToBuffer( m_pRenderTarget->GetFrameBuffer(), m_pRenderTarget->GetSize(), eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH, m_pRenderTarget->GetDepthStencilState(), m_pRenderTarget->GetRasteriserState() );
+#endif
 	}
 
 	bool RenderTechniqueBase::DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime )

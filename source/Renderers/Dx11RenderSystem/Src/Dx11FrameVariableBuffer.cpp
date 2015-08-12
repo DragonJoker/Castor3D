@@ -168,83 +168,6 @@ namespace Dx11Render
 	{
 	}
 
-	bool DxFrameVariableBuffer::Bind( uint32_t p_uiIndex )
-	{
-		if ( m_pDxBuffer )
-		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
-			D3D11_MAPPED_SUBRESOURCE l_mapped = { 0 };
-			HRESULT l_hr = l_pDeviceContext->Map( m_pDxBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &l_mapped );
-
-			if ( l_hr == S_OK )
-			{
-				memcpy( l_mapped.pData, &m_buffer[0], m_buffer.size() );
-				l_pDeviceContext->Unmap( m_pDxBuffer, 0 );
-			}
-
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_VERTEX ) )
-			{
-				l_pDeviceContext->VSSetConstantBuffers( p_uiIndex, 1, &m_pDxBuffer );
-			}
-
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_PIXEL ) )
-			{
-				l_pDeviceContext->PSSetConstantBuffers( p_uiIndex, 1, &m_pDxBuffer );
-			}
-
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_GEOMETRY ) )
-			{
-				l_pDeviceContext->GSSetConstantBuffers( p_uiIndex, 1, &m_pDxBuffer );
-			}
-
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_HULL ) )
-			{
-				l_pDeviceContext->HSSetConstantBuffers( p_uiIndex, 1, &m_pDxBuffer );
-			}
-
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_DOMAIN ) )
-			{
-				l_pDeviceContext->DSSetConstantBuffers( p_uiIndex, 1, &m_pDxBuffer );
-			}
-		}
-
-		return true;
-	}
-
-	void DxFrameVariableBuffer::Unbind( uint32_t p_uiIndex )
-	{
-		if ( m_pDxBuffer )
-		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
-			ID3D11Buffer * buffer[] = { NULL };
-
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_VERTEX ) )
-			{
-				l_pDeviceContext->VSSetConstantBuffers( p_uiIndex, 1, buffer );
-			}
-
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_PIXEL ) )
-			{
-				l_pDeviceContext->PSSetConstantBuffers( p_uiIndex, 1, buffer );
-			}
-
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_GEOMETRY ) )
-			{
-				l_pDeviceContext->GSSetConstantBuffers( p_uiIndex, 1, buffer );
-			}
-
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_HULL ) )
-			{
-				l_pDeviceContext->HSSetConstantBuffers( p_uiIndex, 1, buffer );
-			}
-
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_DOMAIN ) )
-			{
-				l_pDeviceContext->DSSetConstantBuffers( p_uiIndex, 1, buffer );
-			}
-		}
-	}
-
 	FrameVariableSPtr DxFrameVariableBuffer::DoCreateVariable( ShaderProgramBase * p_pProgram, eFRAME_VARIABLE_TYPE p_eType, Castor::String const & p_strName, uint32_t p_uiNbOcc )
 	{
 		FrameVariableSPtr l_pReturn;
@@ -406,7 +329,7 @@ namespace Dx11Render
 		HRESULT l_hr = S_OK;
 		m_pShaderProgram = reinterpret_cast< DxShaderProgram * >( p_pProgram );
 
-		if ( m_listVariables.size() )
+		if ( !m_listVariables.empty() )
 		{
 			ID3D11Device * l_pDevice = m_pDxRenderSystem->GetDevice();
 			D3D11_BUFFER_DESC l_d3dBufferDesc = { 0 };
@@ -456,12 +379,80 @@ namespace Dx11Render
 		SafeRelease( m_pDxBuffer );
 	}
 
-	bool DxFrameVariableBuffer::DoBind()
+	bool DxFrameVariableBuffer::DoBind( uint32_t p_uiIndex )
 	{
+		if ( m_pDxBuffer )
+		{
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+			D3D11_MAPPED_SUBRESOURCE l_mapped = { 0 };
+			HRESULT l_hr = l_pDeviceContext->Map( m_pDxBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &l_mapped );
+
+			if ( l_hr == S_OK )
+			{
+				memcpy( l_mapped.pData, &m_buffer[0], m_buffer.size() );
+				l_pDeviceContext->Unmap( m_pDxBuffer, 0 );
+			}
+
+			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_VERTEX ) )
+			{
+				l_pDeviceContext->VSSetConstantBuffers( p_uiIndex, 1, &m_pDxBuffer );
+			}
+
+			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_PIXEL ) )
+			{
+				l_pDeviceContext->PSSetConstantBuffers( p_uiIndex, 1, &m_pDxBuffer );
+			}
+
+			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_GEOMETRY ) )
+			{
+				l_pDeviceContext->GSSetConstantBuffers( p_uiIndex, 1, &m_pDxBuffer );
+			}
+
+			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_HULL ) )
+			{
+				l_pDeviceContext->HSSetConstantBuffers( p_uiIndex, 1, &m_pDxBuffer );
+			}
+
+			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_DOMAIN ) )
+			{
+				l_pDeviceContext->DSSetConstantBuffers( p_uiIndex, 1, &m_pDxBuffer );
+			}
+		}
+
 		return true;
 	}
 
-	void DxFrameVariableBuffer::DoUnbind()
+	void DxFrameVariableBuffer::DoUnbind( uint32_t p_uiIndex )
 	{
+		if ( m_pDxBuffer )
+		{
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+			ID3D11Buffer * buffer[] = { NULL };
+
+			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_VERTEX ) )
+			{
+				l_pDeviceContext->VSSetConstantBuffers( p_uiIndex, 1, buffer );
+			}
+
+			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_PIXEL ) )
+			{
+				l_pDeviceContext->PSSetConstantBuffers( p_uiIndex, 1, buffer );
+			}
+
+			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_GEOMETRY ) )
+			{
+				l_pDeviceContext->GSSetConstantBuffers( p_uiIndex, 1, buffer );
+			}
+
+			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_HULL ) )
+			{
+				l_pDeviceContext->HSSetConstantBuffers( p_uiIndex, 1, buffer );
+			}
+
+			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_DOMAIN ) )
+			{
+				l_pDeviceContext->DSSetConstantBuffers( p_uiIndex, 1, buffer );
+			}
+		}
 	}
 }

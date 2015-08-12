@@ -353,6 +353,8 @@ namespace Castor3D
 		bool m_bMultiSampling;
 		//!\~english The ShaderProgram used when rendering from a buffer to another one	\~french Le ShaderProgram utilisé lors du rendu d'un tampon vers un autre
 		ShaderProgramBaseWPtr m_pBtoBShaderProgram;
+		//!\~english The diffuse map frame variable, in the buffer-to-buffer shader program	\french La frame variable de l'image diffuse, dans le shader buffer-to-buffer
+		OneTextureFrameVariableSPtr m_mapDiffuse;
 		//!\~english The GeometryBuffers used when rendering from a buffer to another one	\~french Le GeometryBuffers utilisé lors du rendu d'un tampon vers un autre
 		GeometryBuffersSPtr m_pGeometryBuffers;
 		//!\~english The Viewport used when rendering from a buffer to another one	\~french Le Viewport utilisé lors du rendu d'un tampon vers un autre
@@ -365,7 +367,7 @@ namespace Castor3D
 		Castor::real m_pBuffer[24];
 		//!\~english DepthStencilState used while rendering background image	\~french DepthStencilState utilisé pour le rendu de l'image de fond
 		DepthStencilStateSPtr m_pDsStateBackground;
-		//!\~english La couleur de fond	\french La couleur de fond
+		//!\~english The background colour	\french La couleur de fond
 		Castor::Colour m_clearColour;
 	};
 }

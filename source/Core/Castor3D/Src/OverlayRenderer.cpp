@@ -187,7 +187,13 @@ namespace Castor3D
 				if ( l_pProgram )
 				{
 					p_pPass->BindToProgram( l_pProgram );
-					m_pRenderSystem->GetPipeline()->ApplyMatrices( *l_pProgram );
+					auto l_matrixBuffer = p_pPass->GetMatrixBuffer();
+
+					if ( l_matrixBuffer )
+					{
+						m_pRenderSystem->GetPipeline()->ApplyMatrices( *l_matrixBuffer );
+					}
+
 					p_pPass->Render2D( l_byIndex++, l_byCount );
 					m_pPanelGeometryBuffer->Draw( eTOPOLOGY_TRIANGLES, l_pProgram, l_count, 0 );
 					p_pPass->EndRender();
@@ -228,7 +234,13 @@ namespace Castor3D
 				if ( l_pProgram )
 				{
 					p_pPass->BindToProgram( l_pProgram );
-					m_pRenderSystem->GetPipeline()->ApplyMatrices( *l_pProgram );
+					auto l_matrixBuffer = p_pPass->GetMatrixBuffer();
+
+					if ( l_matrixBuffer )
+					{
+						m_pRenderSystem->GetPipeline()->ApplyMatrices( *l_matrixBuffer );
+					}
+
 					p_pPass->Render2D( l_byIndex++, l_byCount );
 					m_pPanelGeometryBuffer->Draw( eTOPOLOGY_TRIANGLES, l_pProgram, l_count, 0 );
 					p_pPass->EndRender();
@@ -265,7 +277,13 @@ namespace Castor3D
 				if ( l_pProgram )
 				{
 					p_pPass->BindToProgram( l_pProgram );
-					m_pRenderSystem->GetPipeline()->ApplyMatrices( *l_pProgram );
+					auto l_matrixBuffer = p_pPass->GetMatrixBuffer();
+
+					if ( l_matrixBuffer )
+					{
+						m_pRenderSystem->GetPipeline()->ApplyMatrices( *l_matrixBuffer );
+					}
+
 					p_pPass->Render2D( l_byIndex++, l_byCount );
 					m_pBorderGeometryBuffer->Draw( eTOPOLOGY_TRIANGLES, l_pProgram, l_count, 0 );
 					p_pPass->EndRender();
@@ -316,7 +334,13 @@ namespace Castor3D
 							l_vtxBuffer.Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, l_pProgram );
 							l_vtxBuffer.Unbind();
 							p_pPass->BindToProgram( l_pProgram );
-							m_pRenderSystem->GetPipeline()->ApplyMatrices( *l_pProgram );
+							auto l_matrixBuffer = p_pPass->GetMatrixBuffer();
+
+							if ( l_matrixBuffer )
+							{
+								m_pRenderSystem->GetPipeline()->ApplyMatrices( *l_matrixBuffer );
+							}
+
 							p_pPass->Render2D( l_byIndex++, l_byCount );
 							l_texture->Bind();
 							m_pTextGeometryBuffers->Draw( eTOPOLOGY_TRIANGLES, l_pProgram, l_count, 0 );
@@ -391,7 +415,6 @@ namespace Castor3D
 
 			if ( l_pReturn )
 			{
-				m_mapText = l_pReturn->CreateFrameVariable( cuT( "c3d_mapText" ), eSHADER_TYPE_PIXEL );
 				l_pReturn->Initialise();
 				m_mapTextPrograms.insert( std::make_pair( p_uiFlags, l_pReturn ) );
 			}

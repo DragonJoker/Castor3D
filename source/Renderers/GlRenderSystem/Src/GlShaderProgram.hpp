@@ -46,12 +46,12 @@ namespace GlRender
 		 *\~english
 		 *\brief		Use Shader. OpenGL calls will go through vertex, geometry and/or fragment shaders.
 		 */
-		virtual void Begin( uint8_t p_byIndex, uint8_t p_byCount );
+		virtual void Bind( uint8_t p_byIndex, uint8_t p_byCount );
 		/**
 		 *\~english
 		 *\brief		Stop using this shader. OpenGL calls will go through regular pipeline.
 		 */
-		virtual void End();
+		virtual void Unbind();
 		virtual int GetAttributeLocation( Castor::String const & p_strName )const;
 		inline uint32_t & GetGlProgram()
 		{

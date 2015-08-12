@@ -164,24 +164,6 @@ namespace Castor3D
 		}
 	}
 
-	void SpotLight::Render( LightRendererSPtr p_pRenderer, ShaderProgramBase * p_pProgram )
-	{
-		if ( p_pRenderer )
-		{
-			p_pRenderer->EnableShader( p_pProgram );
-			p_pRenderer->ApplyPositionShader();
-			p_pRenderer->ApplyOrientationShader();
-			p_pRenderer->ApplyAmbientShader();
-			p_pRenderer->ApplyDiffuseShader();
-			p_pRenderer->ApplySpecularShader();
-			p_pRenderer->ApplyConstantAttShader( m_attenuation[0] );
-			p_pRenderer->ApplyLinearAttShader( m_attenuation[1] );
-			p_pRenderer->ApplyQuadraticAttShader( m_attenuation[2] );
-			p_pRenderer->ApplyExponentShader( m_exponent );
-			p_pRenderer->ApplyCutOffShader( m_cutOff );
-		}
-	}
-
 	void SpotLight::SetPosition( Castor::Point3r const & p_ptPosition )
 	{
 		LightCategory::SetPositionType( Castor::Point4f( p_ptPosition[0], p_ptPosition[1], p_ptPosition[2], 2.0f ) );

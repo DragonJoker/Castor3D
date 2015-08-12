@@ -176,14 +176,14 @@ namespace Castor3D
 						break;
 					}
 
-					if ( l_bReturn && !l_pVariable )
-					{
-						if ( l_uiCount && l_eType != eFRAME_VARIABLE_TYPE( -1 ) && !l_strText.empty() )
-						{
-							FrameVariableBufferSPtr l_buffer = p_object.GetParent()->GetUserBuffer();
-							l_pVariable = l_buffer->CreateVariable( *p_object.GetParent(), l_eType, l_strText, l_uiCount );
-						}
-					}
+					//if ( l_bReturn && !l_pVariable )
+					//{
+					//	if ( l_uiCount && l_eType != eFRAME_VARIABLE_TYPE( -1 ) && !l_strText.empty() )
+					//	{
+					//		FrameVariableBufferSPtr l_buffer = p_object.GetParent()->GetUserBuffer();
+					//		l_pVariable = l_buffer->CreateVariable( *p_object.GetParent(), l_eType, l_strText, l_uiCount );
+					//	}
+					//}
 
 					if ( !l_bReturn )
 					{
@@ -331,7 +331,7 @@ namespace Castor3D
 	{
 		DoBind();
 
-		for ( auto && l_variable : m_listFrameVariables )
+		for ( auto && l_variable: m_listFrameVariables )
 		{
 			l_variable->Bind();
 		}
@@ -339,7 +339,7 @@ namespace Castor3D
 
 	void ShaderObjectBase::Unbind()
 	{
-		for ( auto && l_variable : m_listFrameVariables )
+		for ( auto && l_variable: m_listFrameVariables )
 		{
 			l_variable->Unbind();
 		}

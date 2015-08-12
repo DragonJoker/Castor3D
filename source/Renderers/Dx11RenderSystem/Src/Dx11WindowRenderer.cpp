@@ -40,7 +40,6 @@ void DxWindowRenderer::EndCurrent()
 
 bool DxWindowRenderer::BeginScene()
 {
-	m_context->SetCurrent();
 	return true;
 }
 
@@ -52,7 +51,6 @@ bool DxWindowRenderer::EndScene()
 void DxWindowRenderer::EndRender()
 {
 	m_context->SwapBuffers();
-	m_context->EndCurrent();
 }
 
 bool DxWindowRenderer::DoInitialise()

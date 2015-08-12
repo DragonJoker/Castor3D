@@ -35,9 +35,6 @@ namespace Dx11Render
 		virtual bool LoadIdentity();
 		virtual bool PushMatrix();
 		virtual bool PopMatrix();
-		virtual bool Translate( Castor::Point3r const & p_translate );
-		virtual bool Rotate( Castor::Quaternion const & p_rotate );
-		virtual bool Scale( Castor::Point3r const & p_scale );
 		virtual bool MultMatrix( Castor::Matrix4x4r const & p_matrix );
 		virtual bool MultMatrix( real const * p_matrix );
 		virtual bool Perspective( Castor::Angle const & p_aFOVY, real p_rRatio, real p_rNear, real p_rFar );

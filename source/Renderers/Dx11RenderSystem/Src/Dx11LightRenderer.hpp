@@ -49,19 +49,6 @@ namespace Dx11Render
 		virtual void ApplyExponent( float p_exponent );
 		virtual void ApplyCutOff( float p_cutOff );
 
-		virtual void EnableShader( Castor3D::ShaderProgramBase * p_pProgram );
-		virtual void DisableShader( Castor3D::ShaderProgramBase * p_pProgram );
-		virtual void ApplyAmbientShader();
-		virtual void ApplyDiffuseShader();
-		virtual void ApplySpecularShader();
-		virtual void ApplyPositionShader();
-		virtual void ApplyOrientationShader();
-		virtual void ApplyConstantAttShader( float p_constant );
-		virtual void ApplyLinearAttShader( float p_linear );
-		virtual void ApplyQuadraticAttShader( float p_quadratic );
-		virtual void ApplyExponentShader( float p_exponent );
-		virtual void ApplyCutOffShader( float p_cutOff );
-
 		inline void SetIndex( int p_iIndex )
 		{
 			m_iIndex = p_iIndex;
@@ -74,16 +61,6 @@ namespace Dx11Render
 	protected:
 		void _enable();
 		void _disable();
-		void DoApplyAmbient( Castor::Colour const & p_ambient );
-		void DoApplyDiffuse( Castor::Colour const & p_diffuse );
-		void DoApplySpecular( Castor::Colour const & p_specular );
-		void DoApplyPosition( Castor::Point4f const & p_position );
-		void DoApplyOrientation( Castor::Matrix4x4r const & p_matrix );
-		void DoApplyConstantAtt( float p_constant );
-		void DoApplyLinearAtt( float p_linear );
-		void DoApplyQuadraticAtt( float p_quadratic );
-		void DoApplyExponent( float p_exponent );
-		void DoApplyCutOff( float p_cutOff );
 
 	protected:
 		int m_iIndex;

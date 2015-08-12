@@ -529,10 +529,17 @@ namespace Castor
 
 	protected:
 		my_type rec_get_minor( uint32_t x, uint32_t y, uint32_t p_uiRows, uint32_t p_uiCols )const;
+		
+#if !defined( NDEBUG )
+		void do_update_debug()const;
+#endif
 
 	protected:
 		bool m_bOwnCoords;
 		value_type * m_pPointer;
+#if !defined( NDEBUG )
+		mutable value_type m_debugData[Rows * Columns];
+#endif
 	};
 	/**
 	 *\~english

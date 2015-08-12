@@ -1540,12 +1540,14 @@ namespace Castor3D
 	DECLARE_SMART_PTR(	ShaderObjectBase );
 	DECLARE_SMART_PTR(	ShaderProgramBase );
 
-	DECLARE_LIST(	FrameVariableLinkSPtr,						VariableLinkPtr );
-	DECLARE_MAP(	ShaderProgramBase *,	ProgramLinksSPtr,	LinksPtrListProgram );
-	DECLARE_VECTOR(	ShaderProgramBaseSPtr,						ShaderProgramPtr );
-	DECLARE_VECTOR(	ShaderObjectBaseSPtr,						ShaderObjectPtr );
-	DECLARE_LIST(	FrameVariableSPtr,							FrameVariablePtr );
-	DECLARE_MAP(	Castor::String,			FrameVariableWPtr,	FrameVariablePtrStr );
+	DECLARE_LIST( FrameVariableLinkSPtr, VariableLinkPtr );
+	DECLARE_MAP( ShaderProgramBase *, ProgramLinksSPtr,	LinksPtrListProgram );
+	DECLARE_VECTOR(	ShaderProgramBaseSPtr, ShaderProgramPtr );
+	DECLARE_VECTOR(	ShaderObjectBaseSPtr, ShaderObjectPtr );
+	DECLARE_LIST( FrameVariableSPtr, FrameVariablePtr );
+	DECLARE_LIST( FrameVariableBufferSPtr, FrameVariableBufferPtr );
+	DECLARE_MAP( Castor::String, FrameVariableWPtr,	FrameVariablePtrStr );
+	DECLARE_MAP( Castor::String, FrameVariableBufferWPtr, FrameVariableBufferPtrStr );
 
 	//@}
 	/**@name General */

@@ -63,6 +63,11 @@ ShaderProgramBaseSPtr DxOverlayRenderer::DoGetProgram( uint32_t p_uiFlags )
 {
 	std::unique_ptr< UniformsBase > l_pUniforms = UniformsBase::Get( static_cast< const DxRenderSystem & >( *m_pRenderSystem ) );
 
+	// Shader program
+	ShaderManager & l_manager = m_pRenderSystem->GetEngine()->GetShaderManager();
+	ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
+	l_manager.CreateMatrixBuffer( *l_program );
+
 	// Vertex shader
 	String l_strVs;
 	l_strVs += l_pUniforms->GetVertexInMatrices();
@@ -77,38 +82,38 @@ ShaderProgramBaseSPtr DxOverlayRenderer::DoGetProgram( uint32_t p_uiFlags )
 
 	if ( ( p_uiFlags & eTEXTURE_CHANNEL_TEXT ) == eTEXTURE_CHANNEL_TEXT )
 	{
-		l_strPs += cuT( "Texture2D testTexture: register( t0 );\n" );
+		l_strPs += cuT( "Texture2D c3d_mapText: register( t0 );\n" );
 		l_strPs += cuT( "SamplerState textSampler: register( s0 );\n" );
-		l_strPsMain	+= cuT( "	l_fAlpha *= testTexture.Sample( textSampler, p_input.TextureUV ).r;\n" );
+		l_strPsMain += cuT( "	l_fAlpha *= c3d_mapText.Sample( textSampler, p_input.TextureUV ).r;\n" );
+		l_program->CreateFrameVariable( ShaderProgramBase::MapText, eSHADER_TYPE_PIXEL );
 	}
 
 	if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
 	{
-		l_strPs += cuT( "Texture2D colourTexture: register( t1 );\n" );
+		l_strPs += cuT( "Texture2D c3d_mapColour: register( t1 );\n" );
 		l_strPs += cuT( "SamplerState colourSampler: register( s1 );\n" );
-		l_strPsMain	+= cuT( "	l_v4Ambient = colourTexture.Sample( colourSampler, p_input.TextureUV );\n" );
+		l_strPsMain += cuT( "	l_v4Ambient = c3d_mapColour.Sample( colourSampler, p_input.TextureUV );\n" );
+		l_program->CreateFrameVariable( ShaderProgramBase::MapColour, eSHADER_TYPE_PIXEL );
 	}
 
 	if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
 	{
-		l_strPs += cuT( "Texture2D opacityTexture: register( t2 );\n" );
+		l_strPs += cuT( "Texture2D c3d_mapOpacity: register( t2 );\n" );
 		l_strPs += cuT( "SamplerState opacitySampler: register( s2 );\n" );
-		l_strPsMain	+= cuT( "	l_fAlpha *= opacityTexture.Sample( opacitySampler, p_input.TextureUV ).r;\n" );
+		l_strPsMain += cuT( "	l_fAlpha *= c3d_mapOpacity.Sample( opacitySampler, p_input.TextureUV ).r;\n" );
+		l_program->CreateFrameVariable( ShaderProgramBase::MapOpacity, eSHADER_TYPE_PIXEL );
 	}
 
 	l_strPs += l_strPsMain;
 	l_strPs += PanelPSEnd;
 
-	// Shader program
-	ShaderProgramBaseSPtr l_pProgram = m_pRenderSystem->GetEngine()->GetShaderManager().GetNewProgram();
-
 	for ( int i = 0; i < eSHADER_MODEL_COUNT; ++i )
 	{
-		l_pProgram->SetSource( eSHADER_TYPE_VERTEX,	eSHADER_MODEL( i ), l_strVs );
-		l_pProgram->SetSource( eSHADER_TYPE_PIXEL,	eSHADER_MODEL( i ), l_strPs );
+		l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL( i ), l_strVs );
+		l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL( i ), l_strPs );
 	}
 
-	return l_pProgram;
+	return l_program;
 }
 
 void DxOverlayRenderer::DoInitialise()

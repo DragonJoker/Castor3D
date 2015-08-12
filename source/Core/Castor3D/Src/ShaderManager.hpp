@@ -101,6 +101,50 @@ namespace Castor3D
 		ShaderProgramBaseSPtr GetAutomaticProgram( uint32_t p_uiTextureFlags, uint32_t p_uiProgramFlags );
 		/**
 		 *\~english
+		 *\brief		Creates a matrix frame variaable buffer
+		 *\param[in]	The shader to which the buffer is bound
+		 *\return		The frame variable buffer
+		 *\~french
+		 *\brief		Crée un frame variable buffer pour les matrices
+		 *\param[in]	Le shader auquel le buffer est lié
+		 *\return		Le frame variable buffer
+		 */
+		FrameVariableBufferSPtr CreateMatrixBuffer( ShaderProgramBase & p_shader );
+		/**
+		 *\~english
+		 *\brief		Creates a scene frame variaable buffer
+		 *\param[in]	The shader to which the buffer is bound
+		 *\return		The frame variable buffer
+		 *\~french
+		 *\brief		Crée un frame variable buffer pour les données de scène
+		 *\param[in]	Le shader auquel le buffer est lié
+		 *\return		Le frame variable buffer
+		 */
+		FrameVariableBufferSPtr CreateSceneBuffer( ShaderProgramBase & p_shader );
+		/**
+		 *\~english
+		 *\brief		Creates a pass frame variaable buffer
+		 *\param[in]	p_shader	The shader to which the buffer is bound
+		 *\return		The frame variable buffer
+		 *\~french
+		 *\brief		Crée un frame variable buffer pour les données de passe
+		 *\param[in]	p_shader	Le shader auquel le buffer est lié
+		 *\return		Le frame variable buffer
+		 */
+		FrameVariableBufferSPtr CreatePassBuffer( ShaderProgramBase & p_shader );
+		/**
+		 *\~english
+		 *\brief		Creates the textures related frame variables
+		 *\param[in]	p_uiTextureFlags	Bitwise ORed eTEXTURE_CHANNEL
+		 *\param[in]	p_shader			The shader to which the buffer is bound
+		 *\~french
+		 *\brief		Crée les frame variables relatives aux textures
+		 *\param[in]	p_uiTextureFlags	Une combinaison de eTEXTURE_CHANNEL
+		 *\param[in]	p_shader			Le shader auquel le buffer est lié
+		 */
+		void CreateTextureVariables( uint32_t p_uiTextureFlags, ShaderProgramBase & p_shader );
+		/**
+		 *\~english
 		 *\brief		Sets the RenderSystem
 		 *\param[in]	p_pRenderSystem	The new value
 		 *\~french

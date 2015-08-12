@@ -108,13 +108,13 @@ void RenderSystem::EndOverlaysRendering()
 	m_pPipeline->MatrixMode( m_ePreviousMtxMode );
 }
 
-void RenderSystem::RenderAmbientLight( Castor::Colour const & p_clColour, ShaderProgramBase * p_pProgram )
+void RenderSystem::RenderAmbientLight( Castor::Colour const & p_clColour, FrameVariableBuffer & p_variableBuffer )
 {
-	if ( RenderSystem::UseShaders() && p_pProgram )
+	if ( RenderSystem::UseShaders() )
 	{
 		Point4fFrameVariableSPtr l_pVariable;
+		p_variableBuffer.GetVariable( ShaderProgramBase::AmbientLight, l_pVariable );
 		Point4f l_ptColour;
-		p_pProgram->GetSceneBuffer()->GetVariable( ShaderProgramBase::AmbientLight, l_pVariable );
 		p_clColour.to_rgba( l_ptColour );
 		l_pVariable->SetValue( l_ptColour );
 	}

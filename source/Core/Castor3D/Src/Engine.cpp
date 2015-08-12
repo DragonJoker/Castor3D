@@ -202,6 +202,7 @@ namespace Castor3D
 	Engine::~Engine()
 	{
 		m_pDefaultBlendState.reset();
+		m_pLightsSampler.reset();
 		m_pDefaultSampler.reset();
 
 		if ( m_pRenderSystem )
@@ -300,6 +301,7 @@ namespace Castor3D
 		}
 
 		m_arrayListeners[0]->PostEvent( std::make_shared< CleanupEvent< BlendState > >( *m_pDefaultBlendState ) );
+		m_arrayListeners[0]->PostEvent( std::make_shared< CleanupEvent< Sampler > >( *m_pLightsSampler ) );
 		m_arrayListeners[0]->PostEvent( std::make_shared< CleanupEvent< Sampler > >( *m_pDefaultSampler ) );
 		{
 			CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexResources );
@@ -736,6 +738,10 @@ namespace Castor3D
 			m_pDefaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
 			m_pDefaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
 			m_pDefaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIP, eINTERPOLATION_MODE_LINEAR );
+			m_pLightsSampler = CreateSampler( cuT( "LightsSampler" ) );
+			m_pLightsSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_NEAREST );
+			m_pLightsSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_NEAREST );
+
 			m_pShaderManager->SetRenderSystem( m_pRenderSystem );
 			l_bReturn = true;
 		}
@@ -1203,16 +1209,19 @@ namespace Castor3D
 		{
 			m_pDefaultBlendState->Initialise();
 			m_pDefaultSampler->Initialise();
+			m_pLightsSampler->Initialise();
 			m_bDefaultInitialised = true;
 		}
 
 		p_cpuTime += l_timer.TimeMs();
+		m_pRenderSystem->GetMainContext()->EndCurrent();
 	}
 
 	void Engine::DoRender( bool p_bForce, double & p_cpuTime, double & p_gpuTime, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount )
 	{
 		PreciseTimer l_timer;
-
+		m_pRenderSystem->GetMainContext()->SetCurrent();
+#if 0
 		// Reverse iterator because we want to render textures before windows
 		for ( auto l_rit = m_mapRenderTargets.rbegin(); l_rit != m_mapRenderTargets.rend(); ++l_rit )
 		{
@@ -1221,7 +1230,7 @@ namespace Castor3D
 			p_vtxCount += l_rit->second->GetScene()->GetVertexCount();
 			l_rit->second->Render( m_dFrameTime );
 		}
-
+#endif
 		p_gpuTime += l_timer.TimeMs();
 
 		for ( auto && l_listener : m_arrayListeners )
@@ -1230,21 +1239,12 @@ namespace Castor3D
 		}
 
 		p_cpuTime += l_timer.TimeMs();
-		m_pRenderSystem->GetMainContext()->EndCurrent();
 
 		for ( auto && l_it : m_mapWindows )
 		{
 			l_it.second->RenderOneFrame( p_bForce );
 		}
 
-		p_gpuTime += l_timer.TimeMs();
-		
-		for ( auto && l_listener : m_arrayListeners )
-		{
-			l_listener->FireEvents( eEVENT_TYPE_QUEUE_RENDER );
-		}
-
-		p_cpuTime += l_timer.TimeMs();
 		m_pRenderSystem->GetMainContext()->EndCurrent();
 		p_gpuTime += l_timer.TimeMs();
 	}

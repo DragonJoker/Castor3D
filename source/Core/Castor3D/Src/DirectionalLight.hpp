@@ -152,17 +152,6 @@ namespace Castor3D
 		virtual void Render( LightRendererSPtr p_pRenderer );
 		/**
 		 *\~english
-		 *\brief		Renders the light
-		 *\param[in]	p_pRenderer		The renderer used to ... render this light
-		 *\param[in]	p_pProgram		The shader program that will receive the light's components
-		 *\~french
-		 *\brief		Fonction de rendu avec shader
-		 *\param[in]	p_pRenderer		Le renderer
-		 *\param[in]	p_pProgram		Le shader qui va recevoir les informations de la lumière
-		 */
-		virtual void Render( LightRendererSPtr p_pRenderer, ShaderProgramBase * p_pProgram );
-		/**
-		 *\~english
 		 *\brief		Sets the light source direction
 		 *\param[in]	p_position	The new value
 		 *\~french

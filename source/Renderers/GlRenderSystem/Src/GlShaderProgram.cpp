@@ -128,27 +128,19 @@ namespace GlRender
 		}
 	}
 
-	void GlShaderProgram::Begin( uint8_t p_byIndex, uint8_t p_byCount )
+	void GlShaderProgram::Bind( uint8_t p_byIndex, uint8_t p_byCount )
 	{
 		if ( m_pRenderSystem->UseShaders() && m_programObject != 0 && m_bEnabled && m_eStatus == ePROGRAM_STATUS_LINKED )
 		{
 			m_gl.UseProgram( m_programObject );
 			m_pRenderSystem->GetPipeline()->UpdateFunctions( this );
-			ShaderProgramBase::Begin( p_byIndex, p_byCount );
-			m_pPassBuffer->Bind();
-			m_pUserBuffer->Bind();
-			m_pSceneBuffer->Bind();
-			m_pMatrixBuffer->Bind();
+			ShaderProgramBase::Bind( p_byIndex, p_byCount );
 		}
 	}
 
-	void GlShaderProgram::End()
+	void GlShaderProgram::Unbind()
 	{
-		m_pPassBuffer->Unbind();
-		m_pSceneBuffer->Unbind();
-		m_pMatrixBuffer->Unbind();
-		m_pUserBuffer->Unbind();
-		ShaderProgramBase::End();
+		ShaderProgramBase::Unbind();
 		m_gl.UseProgram( 0 );
 	}
 

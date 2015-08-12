@@ -44,7 +44,6 @@ void GlWindowRenderer::EndCurrent()
 
 bool GlWindowRenderer::BeginScene()
 {
-	SetCurrent();
 	return m_pfnBeginScene();
 }
 
@@ -59,8 +58,6 @@ void GlWindowRenderer::EndRender()
 	{
 		m_target->GetContext()->SwapBuffers();
 	}
-
-	EndCurrent();
 }
 
 bool GlWindowRenderer::DoInitialise()

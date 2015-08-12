@@ -67,7 +67,7 @@ namespace GlRender
 				cuT( "uniform   float   c3d_fMatOpacity;\n" );
 		}
 
-		String ConstantsStd::User()
+		String ConstantsStd::Billboard()
 		{
 			return
 				cuT( "uniform   ivec2   c3d_v2iDimensions;" );
@@ -121,7 +121,7 @@ namespace GlRender
 				cuT( "};\n" );
 		}
 
-		String ConstantsUbo::User()
+		String ConstantsUbo::Billboard()
 		{
 			return
 				cuT( "<layout>uniform User\n" )

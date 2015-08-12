@@ -151,13 +151,6 @@ namespace Castor3D
 		virtual void Render( LightRendererSPtr p_pRenderer ) = 0;
 		/**
 		 *\~english
-		 *\brief		Renders the light => Applies it's position
-		 *\~french
-		 *\brief		Rend cette lumière => Applique sa position
-		 */
-		virtual void Render( LightRendererSPtr p_pRenderer, ShaderProgramBase * p_pProgram ) = 0;
-		/**
-		 *\~english
 		 *\brief		Sets the light's ambient colour
 		 *\param[in]	p_ambient	The new value
 		 *\~french

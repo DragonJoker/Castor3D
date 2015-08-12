@@ -259,6 +259,9 @@ namespace Castor
 		{
 			this->operator[]( i )[i] = Castor::Policy< T >::unit();
 		}
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 	}
 	template< typename T, uint32_t Rows >
 	template< typename Type >
@@ -285,6 +288,9 @@ namespace Castor
 	template< typename T, uint32_t Rows >
 	inline T SquareMatrix< T, Rows >::get_determinant()const
 	{
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		T l_tReturn(	Castor::Policy< T >::zero() );
 
 		for ( uint32_t i = 0; i < Rows; i++ )
@@ -302,6 +308,9 @@ namespace Castor
 	template< typename T, uint32_t Rows >
 	inline bool SquareMatrix< T, Rows >::is_orthogonal()const
 	{
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		bool l_bReturn = false;
 		Matrix< T, Rows, Rows > l_mTmp( * this );
 		SquareMatrix< T, Rows > l_mId1;
@@ -325,11 +334,17 @@ namespace Castor
 	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::transpose()
 	{
 		*this = my_matrix_type::get_transposed();
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		return *this;
 	}
 	template< typename T, uint32_t Rows >
 	inline bool SquareMatrix< T, Rows >::is_symmetrical()const
 	{
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		bool l_bReturn = true;
 
 		for ( uint32_t i = 0; i < Rows && l_bReturn; i++ )
@@ -345,6 +360,9 @@ namespace Castor
 	template< typename T, uint32_t Rows >
 	inline bool SquareMatrix< T, Rows >::is_anti_symmetrical()const
 	{
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		bool l_bReturn = true;
 
 		for ( uint32_t i = 0; i < Rows && l_bReturn; i++ )
@@ -363,9 +381,9 @@ namespace Castor
 	template< typename T, uint32_t Rows >
 	inline SquareMatrix< T, Rows > SquareMatrix< T, Rows >::get_inverse()const
 	{
-//  		SquareMatrix< T, Rows > l_mtxReturn( *this );
-//  		l_mtxReturn.invert();
-//  		return l_mtxReturn;
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		return SqrMtxOperators< T, Rows >::inverse( *this );
 	}
 	template< typename T, uint32_t Rows >
@@ -398,6 +416,9 @@ namespace Castor
 	template< typename T, uint32_t Rows >
 	inline T SquareMatrix< T, Rows >::get_cofactor( uint32_t p_uiRow, uint32_t p_uiColumn )const
 	{
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		return CoFactorComputer< T, Rows >()( *this, p_uiRow, p_uiColumn );
 	}
 	template< typename T, uint32_t Rows >
@@ -433,11 +454,17 @@ namespace Castor
 			}
 		}
 
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		return *this;
 	}
 	template< typename T, uint32_t Rows >
 	inline SquareMatrix< T, Rows > SquareMatrix< T, Rows >::multiply( SquareMatrix< T, Rows > const & p_matrix )const
 	{
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		SquareMatrix< T, Rows > l_mtxReturn;
 
 		for ( uint32_t i = 0; i < Rows; i++ )
@@ -454,6 +481,9 @@ namespace Castor
 	template< typename Type >
 	inline SquareMatrix< T, Rows > SquareMatrix< T, Rows >::multiply( SquareMatrix< Type, Rows > const & p_matrix )const
 	{
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		SquareMatrix< T, Rows > l_mtxReturn;
 
 		for ( uint32_t i = 0; i < Rows; i++ )
@@ -470,6 +500,9 @@ namespace Castor
 	template <uint32_t _Columns>
 	inline Matrix< T, Rows, _Columns > SquareMatrix< T, Rows >::multiply( Matrix< T, Rows, _Columns > const & p_matrix )const
 	{
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		Matrix< T, Rows, _Columns > l_mtxReturn;
 
 		for ( uint32_t i = 0; i < _Columns; i++ )
@@ -526,6 +559,9 @@ namespace Castor
 	template< typename Type >
 	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::operator *= ( SquareMatrix< Type, Rows > const & p_matrix )
 	{
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		*this = SqrMtxOperators< T, Rows >::mul( *this, p_matrix );
 		return * this;
 	}
@@ -554,6 +590,9 @@ namespace Castor
 	template< typename Type >
 	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::operator *= ( Type const * p_pMatrix )
 	{
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		*this = multiply( p_pMatrix );
 		return * this;
 	}

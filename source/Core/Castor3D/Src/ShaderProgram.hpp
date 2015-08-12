@@ -156,6 +156,8 @@ namespace Castor3D
 		static const Castor::String MatShininess;
 		//!\~english Name of the material opacity frame variable	\~french Nom de la frame variable contenant l'opacité du matériau
 		static const Castor::String MatOpacity;
+		//!\~english Name of the overlay text image frame variable	\~french Nom de la frame variable contenant l'image de texte pour les overlays
+		static const Castor::String MapText;
 
 		//@}
 		/**@name Textures */
@@ -177,6 +179,17 @@ namespace Castor3D
 		static const Castor::String MapGloss;
 		//!\~english Name of the height texture frame variable	\~french Nom de la frame variable contenant texture de hauteur
 		static const Castor::String MapHeight;
+
+		//@}
+		/**@name Frame Variable Buffers */
+		//@{
+
+		//!\~english Name of the matrix frame variable buffer	\~french Nom du frame variable buffer contenant les matrices
+		static const Castor::String BufferMatrix;
+		//!\~english Name of the scene frame variable buffer	\~french Nom du frame variable buffer contenant les données de scène
+		static const Castor::String BufferScene;
+		//!\~english Name of the pass frame variable buffer	\~french Nom du frame variable buffer contenant les données de passe
+		static const Castor::String BufferPass;
 
 		//@}
 
@@ -252,14 +265,14 @@ namespace Castor3D
 		 *\param[in]	p_byIndex	L'index de la passe courante
 		 *\param[in]	p_byCount	Le compte des passes du material
 		 */
-		virtual void Begin( uint8_t p_byIndex, uint8_t p_byCount );
+		virtual void Bind( uint8_t p_byIndex, uint8_t p_byCount );
 		/**
 		 *\~english
 		 *\brief		Deactivates the program
 		 *\~french
 		 *\brief		Désactive le programme
 		 */
-		virtual void End();
+		virtual void Unbind();
 		/**
 		 *\~english
 		 *\brief		Sets all objects file
@@ -280,62 +293,22 @@ namespace Castor3D
 		virtual bool Link();
 		/**
 		 *\~english
-		 *\brief		Returns a free light index and assigns it
-		 *\return		The assigned light index, -1 if no more available.
+		 *\brief		Adds a variable buffer to add
+		 *\param[in]	p_pVariableBuffer	The variable buffer
 		 *\~french
-		 *\brief		Assigne une lumière et retourne son index
-		 *\return		L'index de la lumière assignée, -1 si plus aucune disponible.
+		 *\brief		Crée une buffer de variables uniformes à ajouter.
+		 *\param[in]	p_pVariableBuffer	La variable buffer
 		 */
-		virtual int AssignLight();
+		void AddFrameVariableBuffer( FrameVariableBufferSPtr p_pVariableBuffer );
 		/**
 		 *\~english
-		 *\brief		Frees a given light index
-		 *\param[in]	The light index
+		 *\brief		Finds a variable
+		 *\return		The found variable, nullptr if failed
 		 *\~french
-		 *\brief		Libère une lumière
-		 *\param[in]	L'index de la lumière
+		 *\brief		Trouve une variable
+		 *\return		La variable trouvé, nullptr en cas d'échec
 		 */
-		virtual void FreeLight( int p_iIndex );
-		/**
-		 *\~english
-		 *\brief		Sets ambient component of the light at given index
-		 */
-		virtual void SetLightAmbient( int p_iIndex, Castor::Colour const & p_crColour );
-		/**
-		 *\~english
-		 *\brief		Sets diffuse component of the light at given index
-		 */
-		virtual void SetLightDiffuse( int p_iIndex, Castor::Colour const & p_crColour );
-		/**
-		 *\~english
-		 *\brief		Sets specular component of the light at given index
-		 */
-		virtual void SetLightSpecular( int p_iIndex, Castor::Colour const & p_crColour );
-		/**
-		 *\~english
-		 *\brief		Sets the position of the light at given index
-		 */
-		virtual void SetLightPosition( int p_iIndex, Castor::Point4f const & p_ptPosition );
-		/**
-		 *\~english
-		 *\brief		Sets the orientation of the light at given index
-		 */
-		virtual void SetLightOrientation( int p_iIndex, Castor::Matrix4x4r const & p_mtxOrientation );
-		/**
-		 *\~english
-		 *\brief		Sets the attenuation components of the light at given index (spot and point lights only)
-		 */
-		virtual void SetLightAttenuation( int p_iIndex, Castor::Point3f const & p_fAtt );
-		/**
-		 *\~english
-		 *\brief		Sets the exponent of the light at given index (spotlight only)
-		 */
-		virtual void SetLightExponent( int p_iIndex, float p_fExp );
-		/**
-		 *\~english
-		 *\brief		Sets the cutoff angle of the light at given index (spotlight only)
-		 */
-		virtual void SetLightCutOff( int p_iIndex, float p_fCut );
+		FrameVariableBufferSPtr FindFrameVariableBuffer( Castor::String const & p_strName )const;
 		/**
 		 *\~english
 		 *\brief		Resets compilation variables to be able to compile again
@@ -354,54 +327,6 @@ namespace Castor3D
 		 *\return		L'index, -1 si indisponible
 		 */
 		virtual int GetAttributeLocation( Castor::String const & p_strName )const = 0;
-		/**
-		 *\~english
-		 *\brief		Retrieves the matrices variables buffer
-		 *\return		The buffer
-		 *\~french
-		 *\brief		Récupère le tampon de variables de matrices
-		 *\return		Le tampon
-		 */
-		inline FrameVariableBufferSPtr GetMatrixBuffer()const
-		{
-			return m_pMatrixBuffer;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the pass variables buffer
-		 *\return		The buffer
-		 *\~french
-		 *\brief		Récupère le tampon de variables de passe
-		 *\return		Le tampon
-		 */
-		FrameVariableBufferSPtr GetPassBuffer()const
-		{
-			return m_pPassBuffer;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the scene variables buffer
-		 *\return		The buffer
-		 *\~french
-		 *\brief		Récupère le tampon de variables de scène
-		 *\return		Le tampon
-		 */
-		FrameVariableBufferSPtr GetSceneBuffer()const
-		{
-			return m_pSceneBuffer;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the constant variables buffer
-		 *\return		The buffer
-		 *\~french
-		 *\brief		Récupère le tampon de variables constantes
-		 *\return		Le tampon
-		 */
-		FrameVariableBufferSPtr GetUserBuffer()const
-		{
-			return m_pUserBuffer;
-		}
 		/**
 		 *\~english
 		 *\brief		Sets the input primitives type
@@ -668,33 +593,17 @@ namespace Castor3D
 		//!<\~english Tells whether the shader is enabled or not	\~french Dit si le shader est activé ou pas
 		bool m_bEnabled;
 		//!\~english The shaders array	\~french Le tableau de shaders
-		ShaderObjectBaseSPtr m_pShaders[eSHADER_TYPE_COUNT];
+		std::array< ShaderObjectBaseSPtr, eSHADER_TYPE_COUNT > m_pShaders;
+		//!\~english The active shaders array	\~french Le tableau de shaders actifs
+		std::vector< ShaderObjectBaseSPtr > m_activeShaders;
 		//!\~english Array of files path, sorted by shader model	\~french Tableau des chemins de fichiers, triés par modèle de shader
 		std::array< Castor::Path, eSHADER_MODEL_COUNT > m_arrayFiles;
 		//!\~english The RenderSystem instance	\~french L'instance du RenderSystem
 		RenderSystem * m_pRenderSystem;
-		//!\~english Tells if at least one light has changed since last frame	\~french Dit si une lumière au moins a changé depuis la dernière frame
-		bool m_bLightsChanged;
-		//!\~english Holds the number of active lights	\~french Contient le nombre de lumières actives
-		OneIntFrameVariableSPtr m_pLightsCount;
-		//!\~english Holds lights	\~french Contient les lumières
-		OneTextureFrameVariableSPtr m_pLights;
-		//!\~english Holds the camera position	\~french Contient la position de la caméra
-		Point3rFrameVariableSPtr m_pCameraPos;
-		//!\~english The image containing lights data	\~french L'image contenant les données des lumières
-		Castor::PxBufferBaseSPtr m_pLightsData;
-		//!\~english The lights texture	\~french La texture contenant les lumières
-		TextureUnitSPtr m_pLightsTexture;
-		//!\~english The set of available images	indices	\~french Le set contenant les indices des lumières disponibles
-		std::set <int> m_setFreeLights;
-		//!\~english The matrix variables buffer	\~french Le tampon de variables de matrices
-		FrameVariableBufferSPtr m_pMatrixBuffer;
-		//!\~english The pass variables buffer	\~french Le tampon de variables de passe
-		FrameVariableBufferSPtr m_pPassBuffer;
-		//!\~english The scene variables buffer	\~french Le tampon de variables de scène
-		FrameVariableBufferSPtr m_pSceneBuffer;
-		//!\~english The user variables buffer	\~french Le tampon de variables utilisateur
-		FrameVariableBufferSPtr m_pUserBuffer;
+		//!\~english The frame variable buffers map, ordered by name	\~french La liste des buffers de variable de frame
+		FrameVariableBufferPtrStrMap m_mapFrameVariableBuffers;
+		//!\~english The frame variable buffers map	\~french La liste des buffer de variables de frame
+		FrameVariableBufferPtrList m_listFrameVariableBuffers;
 	};
 }
 

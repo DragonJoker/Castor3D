@@ -681,9 +681,46 @@ namespace Castor3D
 		{
 			return m_arrayTextureUnits.end();
 		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the pass variable buffer
+		 *\return		The variable buffer
+		 *\~french
+		 *\brief		Récupère le buffer de variables pour pass
+		 *\return		Le buffer de variables
+		 */
+		inline FrameVariableBufferSPtr GetPassBuffer()const
+		{
+			return m_passBuffer.lock();
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the scene variable buffer
+		 *\return		The variable buffer
+		 *\~french
+		 *\brief		Récupère le buffer de variables pour la scène
+		 *\return		Le buffer de variables
+		 */
+		inline FrameVariableBufferSPtr GetSceneBuffer()const
+		{
+			return m_sceneBuffer.lock();
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the matrices variable buffer
+		 *\return		The variable buffer
+		 *\~french
+		 *\brief		Récupère le buffer de variables pour les matrices
+		 *\return		Le buffer de variables
+		 */
+		inline FrameVariableBufferSPtr GetMatrixBuffer()const
+		{
+			return m_matrixBuffer.lock();
+		}
 
 	private:
 		void DoBindTextures();
+		void DoBindBuffers();
 		/**
 		 *\~english
 		 *\brief		Prepares a texture to be integrated to the pass.
@@ -757,6 +794,12 @@ namespace Castor3D
 		eBLEND_MODE m_alphaBlendMode;
 		//!\~english The colour blend mode \~french Le mode de mélange couleur
 		eBLEND_MODE m_colourBlendMode;
+		//!\~english Holds The scene frame variables buffer	\~french Le buffer de variables, pour la scène
+		FrameVariableBufferWPtr m_sceneBuffer;
+		//!\~english Holds The pass frame variables buffer	\~french Le buffer de variables, pour la passe
+		FrameVariableBufferWPtr m_passBuffer;
+		//!\~english Holds The matrix frame variables buffer	\~french Le buffer de variables, pour les matrices
+		FrameVariableBufferWPtr m_matrixBuffer;
 	};
 }
 

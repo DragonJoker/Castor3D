@@ -63,19 +63,6 @@ namespace GlRender
 		virtual void ApplyExponent( float p_exponent );
 		virtual void ApplyCutOff( float p_cutOff );
 
-		virtual void EnableShader( Castor3D::ShaderProgramBase * p_pProgram );
-		virtual void DisableShader( Castor3D::ShaderProgramBase * p_pProgram );
-		virtual void ApplyAmbientShader();
-		virtual void ApplyDiffuseShader();
-		virtual void ApplySpecularShader();
-		virtual void ApplyPositionShader();
-		virtual void ApplyOrientationShader();
-		virtual void ApplyConstantAttShader( float p_constant );
-		virtual void ApplyLinearAttShader( float p_linear );
-		virtual void ApplyQuadraticAttShader( float p_quadratic );
-		virtual void ApplyExponentShader( float p_exponent );
-		virtual void ApplyCutOffShader( float p_cutOff );
-
 		inline int GetGlIndex()const
 		{
 			return m_iGlIndex;

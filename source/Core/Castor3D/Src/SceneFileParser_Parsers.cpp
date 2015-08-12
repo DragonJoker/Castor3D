@@ -2670,7 +2670,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlShaderVariableType )
 	{
 		if ( !l_pContext->pFrameVariable )
 		{
-			l_pContext->pFrameVariable = l_pContext->pShaderProgram->GetUserBuffer()->CreateVariable( *l_pContext->pShaderProgram.get(), eFRAME_VARIABLE_TYPE( l_uiType ), l_pContext->strName2 );
+//			l_pContext->pFrameVariable = l_pContext->pShaderProgram->GetUserBuffer()->CreateVariable( *l_pContext->pShaderProgram.get(), eFRAME_VARIABLE_TYPE( l_uiType ), l_pContext->strName2 );
 		}
 		else
 		{
@@ -3086,7 +3086,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_HlShaderVariableType )
 	{
 		if ( ! l_pContext->pFrameVariable )
 		{
-			l_pContext->pFrameVariable = l_pContext->pShaderProgram->GetUserBuffer()->CreateVariable( *l_pContext->pShaderProgram.get(), eFRAME_VARIABLE_TYPE( l_uiType ), l_pContext->strName2 );
+//			l_pContext->pFrameVariable = l_pContext->pShaderProgram->GetUserBuffer()->CreateVariable( *l_pContext->pShaderProgram.get(), eFRAME_VARIABLE_TYPE( l_uiType ), l_pContext->strName2 );
 		}
 		else
 		{

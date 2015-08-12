@@ -1,20 +1,12 @@
 ﻿#include "Pass.hpp"
 #include "PassRenderer.hpp"
-#include "OneFrameVariable.hpp"
-#include "PointFrameVariable.hpp"
-#include "FrameVariableBuffer.hpp"
-#include "TextureUnit.hpp"
-#include "Material.hpp"
-#include "ShaderProgram.hpp"
-#include "FrameVariable.hpp"
-#include "Engine.hpp"
-#include "ShaderManager.hpp"
-#include "RenderSystem.hpp"
-#include "Scene.hpp"
-#include "Camera.hpp"
-#include "Pipeline.hpp"
 #include "BlendState.hpp"
+#include "ShaderProgram.hpp"
+#include "TextureUnit.hpp"
+#include "ShaderManager.hpp"
+#include "Material.hpp"
 #include "StaticTexture.hpp"
+#include "OneFrameVariable.hpp"
 
 #include <Logger.hpp>
 
@@ -419,6 +411,7 @@ namespace Castor3D
 			( *l_it )->SetIndex( 0 );
 		}
 
+		// Lights texture is at index 0, so start at index 1
 		uint32_t l_uiIndex = 1;
 		l_pAmbientMap	= GetTextureUnit( eTEXTURE_CHANNEL_AMBIENT );
 		l_pColourMap	= GetTextureUnit( eTEXTURE_CHANNEL_COLOUR );
@@ -540,6 +533,7 @@ namespace Castor3D
 		{
 			m_pShaderProgram = p_pProgram;
 			DoBindTextures();
+			DoBindBuffers();
 		}
 	}
 
@@ -573,7 +567,7 @@ namespace Castor3D
 				l_it->second.second.lock()->SetValue( l_it->second.first.lock()->GetTexture().get() );
 			}
 
-			l_pProgram->Begin( p_uiIndex, p_uiCount );
+			l_pProgram->Bind( p_uiIndex, p_uiCount );
 		}
 
 		for ( TextureUnitPtrArrayIt l_it = m_arrayTextureUnits.begin(); l_it != m_arrayTextureUnits.end(); ++l_it )
@@ -605,7 +599,7 @@ namespace Castor3D
 				};
 			}
 
-			l_pProgram->Begin( p_uiIndex, p_uiCount );
+			l_pProgram->Bind( p_uiIndex, p_uiCount );
 		}
 
 		for ( TextureUnitPtrArrayIt l_it = m_arrayTextureUnits.begin(); l_it != m_arrayTextureUnits.end(); ++l_it )
@@ -626,7 +620,7 @@ namespace Castor3D
 
 		if ( l_pShader )
 		{
-			l_pShader->End();
+			l_pShader->Unbind();
 		}
 
 		if ( l_pRenderer )
@@ -704,6 +698,8 @@ namespace Castor3D
 		{
 			m_pRenderer.lock()->Initialise();
 		}
+
+		DoBindBuffers();
 	}
 
 	bool Pass::HasShader()const
@@ -720,14 +716,14 @@ namespace Castor3D
 	{
 		ShaderProgramBaseSPtr l_pProgram = m_pShaderProgram.lock();
 		m_mapUnits.clear();
-		TextureUnitSPtr l_pAmbientMap	= GetTextureUnit( eTEXTURE_CHANNEL_AMBIENT );
-		TextureUnitSPtr l_pColourMap	= GetTextureUnit( eTEXTURE_CHANNEL_COLOUR );
-		TextureUnitSPtr l_pDiffuseMap	= GetTextureUnit( eTEXTURE_CHANNEL_DIFFUSE );
-		TextureUnitSPtr l_pNormalMap	= GetTextureUnit( eTEXTURE_CHANNEL_NORMAL );
-		TextureUnitSPtr l_pSpecularMap	= GetTextureUnit( eTEXTURE_CHANNEL_SPECULAR );
-		TextureUnitSPtr l_pOpacityMap	= GetTextureUnit( eTEXTURE_CHANNEL_OPACITY );
-		TextureUnitSPtr l_pGlossMap		= GetTextureUnit( eTEXTURE_CHANNEL_GLOSS );
-		TextureUnitSPtr l_pHeightMap	= GetTextureUnit( eTEXTURE_CHANNEL_HEIGHT );
+		TextureUnitSPtr l_pAmbientMap = GetTextureUnit( eTEXTURE_CHANNEL_AMBIENT );
+		TextureUnitSPtr l_pColourMap = GetTextureUnit( eTEXTURE_CHANNEL_COLOUR );
+		TextureUnitSPtr l_pDiffuseMap = GetTextureUnit( eTEXTURE_CHANNEL_DIFFUSE );
+		TextureUnitSPtr l_pNormalMap = GetTextureUnit( eTEXTURE_CHANNEL_NORMAL );
+		TextureUnitSPtr l_pSpecularMap = GetTextureUnit( eTEXTURE_CHANNEL_SPECULAR );
+		TextureUnitSPtr l_pOpacityMap = GetTextureUnit( eTEXTURE_CHANNEL_OPACITY );
+		TextureUnitSPtr l_pGlossMap = GetTextureUnit( eTEXTURE_CHANNEL_GLOSS );
+		TextureUnitSPtr l_pHeightMap = GetTextureUnit( eTEXTURE_CHANNEL_HEIGHT );
 
 		if ( l_pAmbientMap )
 		{
@@ -783,6 +779,18 @@ namespace Castor3D
 			OneTextureFrameVariableSPtr l_pVariable = l_pProgram->FindFrameVariable( ShaderProgramBase::MapHeight, eSHADER_TYPE_PIXEL );
 			l_pVariable->SetValue( l_pHeightMap->GetTexture().get() );
 			m_mapUnits.insert( std::make_pair( eTEXTURE_CHANNEL_HEIGHT, std::make_pair( l_pHeightMap, l_pVariable ) ) );
+		}
+	}
+
+	void Pass::DoBindBuffers()
+	{
+		ShaderProgramBaseSPtr l_pProgram = m_pShaderProgram.lock();
+
+		if ( l_pProgram )
+		{
+			m_sceneBuffer = l_pProgram->FindFrameVariableBuffer( ShaderProgramBase::BufferScene );
+			m_passBuffer = l_pProgram->FindFrameVariableBuffer( ShaderProgramBase::BufferPass );
+			m_matrixBuffer = l_pProgram->FindFrameVariableBuffer(ShaderProgramBase::BufferMatrix );
 		}
 	}
 

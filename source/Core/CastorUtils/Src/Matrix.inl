@@ -8,6 +8,9 @@
 		,	m_bOwnCoords( true )
 	{
 		initialise();
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline Matrix< T, Rows, Columns >::Matrix( T const & p_value )
@@ -15,6 +18,9 @@
 		,	m_bOwnCoords( true )
 	{
 		initialise( p_value );
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	template< typename Type >
@@ -29,6 +35,9 @@
 		{
 			m_pPointer[i] = T( p_pMatrix[i] );
 		}
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	Matrix< T, Rows, Columns >::Matrix( Matrix< T, Rows, Columns > const & p_matrix )
@@ -37,6 +46,9 @@
 	{
 		initialise();
 		std::memcpy( m_pPointer, p_matrix.const_ptr(), my_type::size );
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	Matrix< T, Rows, Columns >::Matrix( Matrix< T, Rows, Columns > && p_matrix )
@@ -47,6 +59,9 @@
 		m_bOwnCoords	= std::move( p_matrix.m_bOwnCoords	);
 		p_matrix.m_pPointer = NULL;
 		p_matrix.m_bOwnCoords = true;
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	template< typename Type >
@@ -61,6 +76,9 @@
 		{
 			m_pPointer[i] = T( p_matrix.m_pPointer[i] );
 		}
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline Matrix< T, Rows, Columns >::~Matrix()
@@ -93,6 +111,9 @@
 				this->operator[]( i )[p_uiRow] = T( p_row[i] );
 			}
 		}
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline void Matrix< T, Rows, Columns >::set_row( uint32_t p_uiRow, Point<T, Columns> const & p_row )
@@ -104,6 +125,9 @@
 				this->operator[]( i )[p_uiRow] = T( p_row[i] );
 			}
 		}
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline Point<T, Columns> Matrix< T, Rows, Columns >::get_row( uint32_t p_uiRow )const
@@ -135,6 +159,9 @@
 		{
 			std::memcpy( this->operator[]( p_uiColumn ), p_col, Rows * sizeof( T ) );
 		}
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline void Matrix< T, Rows, Columns >::set_column( uint32_t p_uiColumn, Point< T, Rows > const & p_col )
@@ -143,22 +170,34 @@
 		{
 			std::memcpy( this->operator[]( p_uiColumn ), p_col.const_ptr(), Rows * sizeof( T ) );
 		}
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline Point< T, Rows > Matrix< T, Rows, Columns >::get_column( uint32_t p_uiColumn )const
 	{
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		CASTOR_ASSERT( p_uiColumn < Columns );
 		return Point< T, Rows >( this->operator[]( p_uiColumn ) );
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline Coords< T, Rows > Matrix< T, Rows, Columns >::get_column( uint32_t p_uiColumn )
 	{
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		CASTOR_ASSERT( p_uiColumn < Columns );
 		return Coords< T, Rows >( this->operator[]( p_uiColumn ) );
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline void Matrix< T, Rows, Columns >::get_column( uint32_t p_uiColumn, Point< T, Rows > & p_mResult )const
 	{
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		CASTOR_ASSERT( p_uiColumn < Columns );
 		p_mResult = Point< T, Rows >( this->operator[]( p_uiColumn ) );
 	}
@@ -172,6 +211,9 @@
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline Matrix< T, Columns, Rows > Matrix< T, Rows, Columns >::get_transposed()const
 	{
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		Matrix< T, Columns, Rows > l_mtxReturn;
 
 		for ( uint32_t i = 0; i < Columns; i++ )
@@ -187,6 +229,9 @@
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline void Matrix< T, Rows, Columns >::get_transposed( Matrix< T, Columns, Rows > & p_mtxResult )const
 	{
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		for ( uint32_t i = 0; i < Columns; i++ )
 		{
 			for ( uint32_t j = 0; j < Rows; j++ )
@@ -198,6 +243,9 @@
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline Matrix< T, Rows, Columns > Matrix< T, Rows, Columns >::get_triangle()const
 	{
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		Matrix< T, Rows, Columns > l_mReturn( *this );
 		l_mReturn.set_triangle();
 		return l_mReturn;
@@ -261,6 +309,9 @@
 				}
 			}
 		}
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline Matrix< T, Rows, Columns > Matrix< T, Rows, Columns >::rec_get_minor( uint32_t x, uint32_t y, uint32_t p_uiRows, uint32_t p_uiCols )const
@@ -292,6 +343,9 @@
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline T Matrix< T, Rows, Columns >::get_trace()const
 	{
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		T l_tSum = T();
 
 		for ( int i = 0; i < Rows; i++ )
@@ -328,6 +382,9 @@
 		{
 			this->operator[]( i + 1 )[i] = Castor::Policy< T >::unit();
 		}
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline Matrix< T, Rows, Columns > Matrix< T, Rows, Columns >::get_jordan( T p_tLambda )const
@@ -353,6 +410,9 @@
 				}
 			}
 		}
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline Matrix< T, Rows, Columns > Matrix< T, Rows, Columns >::get_identity()const
@@ -365,6 +425,9 @@
 	inline Matrix< T, Rows, Columns > & Matrix< T, Rows, Columns >::operator =( Matrix< T, Rows, Columns > const & p_matrix )
 	{
 		std::memcpy( m_pPointer, p_matrix.m_pPointer, my_type::size );
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		return *this;
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
@@ -382,7 +445,10 @@
 			p_matrix.m_pPointer = NULL;
 			p_matrix.m_bOwnCoords = true;
 		}
-
+		
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		return *this;
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
@@ -397,6 +463,9 @@
 			}
 		}
 
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		return *this;
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
@@ -411,6 +480,9 @@
 			}
 		}
 
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		return *this;
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
@@ -425,6 +497,9 @@
 			}
 		}
 
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		return *this;
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
@@ -439,6 +514,9 @@
 			}
 		}
 
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		return *this;
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
@@ -453,6 +531,9 @@
 			}
 		}
 
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		return *this;
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
@@ -467,6 +548,9 @@
 			}
 		}
 
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		return *this;
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
@@ -485,6 +569,9 @@
 			}
 		}
 
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		return *this;
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
@@ -503,6 +590,9 @@
 			}
 		}
 
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		return *this;
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
@@ -521,6 +611,9 @@
 			}
 		}
 
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		return *this;
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
@@ -539,38 +632,59 @@
 			}
 		}
 
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		return *this;
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline T const * Matrix< T, Rows, Columns >::operator []( uint32_t i )const
 	{
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		CASTOR_ASSERT( i < Columns );
 		return &m_pPointer[i * Rows];
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline T * Matrix< T, Rows, Columns >::operator []( uint32_t i )
 	{
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		CASTOR_ASSERT( i < Columns );
 		return &m_pPointer[i * Rows];
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline T & Matrix< T, Rows, Columns >::operator()( uint32_t p_row, uint32_t p_col )
 	{
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		return this->operator[]( p_col )[p_row];
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline T const & Matrix< T, Rows, Columns >::operator()( uint32_t p_row, uint32_t p_col )const
 	{
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		return this->operator[]( p_col )[p_row];
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline T * Matrix< T, Rows, Columns >::ptr()
 	{
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		return m_pPointer;
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline T const * Matrix< T, Rows, Columns >::const_ptr()const
 	{
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		return m_pPointer;
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
@@ -584,6 +698,15 @@
 
 		m_pPointer = p_pCoords;
 		m_bOwnCoords = false;
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
+	}
+
+	template< typename T, uint32_t Rows, uint32_t Columns >
+	inline void Matrix< T, Rows, Columns >::do_update_debug()const
+	{
+		memcpy( m_debugData, m_pPointer, sizeof( m_debugData ) );
 	}
 
 //*************************************************************************************************

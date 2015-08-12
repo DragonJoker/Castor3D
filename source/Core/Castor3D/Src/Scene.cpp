@@ -31,6 +31,11 @@
 #include "BillboardList.hpp"
 #include "ShaderManager.hpp"
 #include "StaticTexture.hpp"
+#include "DynamicTexture.hpp"
+#include "TextureUnit.hpp"
+#include "InitialiseEvent.hpp"
+#include "OneFrameVariable.hpp"
+#include "PointFrameVariable.hpp"
 
 #include <Image.hpp>
 #include <Logger.hpp>
@@ -39,6 +44,72 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	namespace
+	{
+		void ApplyLightComponent( float p_exp, float p_cut, int p_index, int & p_offset, PxBufferBase & p_data )
+		{
+			Pixel< ePIXEL_FORMAT_ARGB32F > l_px( true );
+			uint8_t const * l_pSrc = p_data.get_at( p_index * 10 + p_offset, 0 );
+			uint8_t * l_pDst = l_px.ptr();
+			PF::ConvertPixel( p_data.format(), l_pSrc, ePIXEL_FORMAT_ARGB32F, l_pDst );
+			reinterpret_cast< float * >( l_px.ptr() )[0] = p_exp;
+			reinterpret_cast< float * >( l_px.ptr() )[1] = p_cut;
+			l_pSrc = l_px.const_ptr();
+			l_pDst = p_data.get_at( p_index * 10 + p_offset++, 0 );
+			PF::ConvertPixel( ePIXEL_FORMAT_ARGB32F, l_pSrc, p_data.format(), l_pDst );
+		}
+
+		void ApplyLightComponent( Colour const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
+		{
+			Point4ub l_components;
+			p_component.to_bgra( l_components );
+			uint8_t const * l_pSrc = l_components.const_ptr();
+			uint8_t * l_pDst = p_data.get_at( p_index * 10 + p_offset++, 0 );
+			PF::ConvertPixel( ePIXEL_FORMAT_A8R8G8B8, l_pSrc, p_data.format(), l_pDst );
+		}
+
+		void ApplyLightComponent( Point3f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
+		{
+			Point4f l_ptAtt( p_component[0], p_component[1], p_component[2] );
+			Pixel< ePIXEL_FORMAT_ARGB32F > l_px( true );
+			l_px.set< ePIXEL_FORMAT_ARGB32F >( reinterpret_cast< uint8_t const * >( l_ptAtt.const_ptr() ) );
+			uint8_t const * l_pSrc = l_px.const_ptr();
+			uint8_t * l_pDst = p_data.get_at( p_index * 10 + p_offset++, 0 );
+			PF::ConvertPixel( ePIXEL_FORMAT_ARGB32F, l_pSrc, p_data.format(), l_pDst );
+		}
+
+		void ApplyLightComponent( Point4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
+		{
+			Pixel< ePIXEL_FORMAT_ARGB32F > l_px( true );
+			l_px.set< ePIXEL_FORMAT_ARGB32F >( reinterpret_cast< uint8_t const * >( p_component.const_ptr() ) );
+			uint8_t const * l_pSrc = l_px.const_ptr();
+			uint8_t * l_pDst = p_data.get_at( p_index * 10 + p_offset++, 0 );
+			PF::ConvertPixel( ePIXEL_FORMAT_A8R8G8B8, l_pSrc, p_data.format(), l_pDst );
+		}
+
+		void ApplyLightMtxComponent( float const * p_component, int p_index, int & p_offset, PxBufferBase & p_data )
+		{
+			Pixel< ePIXEL_FORMAT_ARGB32F > l_px( true );
+			l_px.set< ePIXEL_FORMAT_ARGB32F >( reinterpret_cast< uint8_t const * >( p_component ) );
+			uint8_t const * l_pSrc = l_px.const_ptr();
+			uint8_t * l_pDst = p_data.get_at( p_index * 10 + p_offset++ + 1, 0 );
+			PF::ConvertPixel( ePIXEL_FORMAT_ARGB32F, l_pSrc, p_data.format(), l_pDst );
+		}
+
+		void ApplyLightComponent( Matrix4x4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
+		{
+			ApplyLightMtxComponent( p_component[0], p_index, p_offset, p_data );
+			ApplyLightMtxComponent( p_component[1], p_index, p_offset, p_data );
+			ApplyLightMtxComponent( p_component[2], p_index, p_offset, p_data );
+			ApplyLightMtxComponent( p_component[3], p_index, p_offset, p_data );
+		}
+
+		void ApplyLightComponent( Matrix4x4d const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
+		{
+			ApplyLightComponent( Matrix4x4f( p_component.const_ptr() ), p_index, p_offset, p_data );
+		}
+	}
+
 	struct AnmObjGrpUpdater
 	{
 		void operator()( std::pair< String, AnimatedObjectGroupSPtr > p_pair )
@@ -469,15 +540,32 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	Scene::Scene( Engine * p_pEngine, LightFactory & p_lightFactory, String const & p_name )
-		:	m_strName( p_name )
-		,	m_rootCameraNode()
-		,	m_rootObjectNode()
-		,	m_nbFaces( 0 )
-		,	m_nbVertex( 0 )
-		,	m_changed( false )
-		,	m_lightFactory( p_lightFactory )
-		,	m_pEngine( p_pEngine )
+		: m_strName( p_name )
+		, m_rootCameraNode()
+		, m_rootObjectNode()
+		, m_nbFaces( 0 )
+		, m_nbVertex( 0 )
+		, m_changed( false )
+		, m_lightFactory( p_lightFactory )
+		, m_pEngine( p_pEngine )
+		, m_pLightsTexture( std::make_shared< TextureUnit >( p_pEngine ) )
+		, m_bLightsChanged( true )
 	{
+		m_pLightsData = PxBufferBase::create( Size( 1000, 1 ), ePIXEL_FORMAT_ARGB32F );
+		DynamicTextureSPtr l_pTexture = GetEngine()->GetRenderSystem()->CreateDynamicTexture();
+		l_pTexture->SetDimension( eTEXTURE_DIMENSION_1D );
+		l_pTexture->SetImage( m_pLightsData );
+		SamplerSPtr l_pSampler = GetEngine()->GetLightsSampler();
+		m_pLightsTexture->SetAutoMipmaps( true );
+		m_pLightsTexture->SetSampler( l_pSampler );
+		m_pLightsTexture->SetTexture( l_pTexture );
+
+		for ( int i = 0; i < 100; i++ )
+		{
+			m_setFreeLights.insert( i );
+		}
+
+		m_pEngine->PostEvent( std::make_shared< InitialiseEvent< TextureUnit > >( *m_pLightsTexture) );
 	}
 
 	Scene::~Scene()
@@ -540,6 +628,9 @@ namespace Castor3D
 			{
 				m_pBackgroundImage->Create();
 				m_pBackgroundImage->Initialise( 0 );
+				m_pBackgroundImage->Bind();
+				m_pBackgroundImage->GenerateMipmaps();
+				m_pBackgroundImage->Unbind();
 			}
 
 			if ( m_pBackgroundImage->IsInitialised() )
@@ -547,7 +638,14 @@ namespace Castor3D
 				RenderSystem * l_pRenderSystem = m_pEngine->GetRenderSystem();
 				ContextRPtr l_pContext = l_pRenderSystem->GetCurrentContext();
 				l_pContext->GetBackgroundDSState()->Apply();
+#if !defined( NDEBUG )
+				Colour l_save = GetEngine()->GetRenderSystem()->GetCurrentContext()->GetClearColour();
+				l_pContext->SetClearColour( Colour::from_predef( Colour::ePREDEFINED_FULLALPHA_DARKBLUE ) );
+#endif
 				l_pContext->BToBRender( Size( p_camera.GetWidth(), p_camera.GetHeight() ), m_pBackgroundImage, eBUFFER_COMPONENT_COLOUR );
+#if !defined( NDEBUG )
+				l_pContext->SetClearColour( l_save );
+#endif
 			}
 		}
 	}
@@ -1565,46 +1663,55 @@ namespace Castor3D
 				l_pProgram = l_pPass->GetShader< ShaderProgramBase >();
 			}
 
-			p_pipeline.ApplyMatrices( *l_pProgram );
-			AnimatedObjectSPtr l_pAnimObject = p_node.m_pGeometry->GetAnimatedObject();
+			auto l_matrixBuffer = l_pPass->GetMatrixBuffer();
 
-			if ( l_pAnimObject )
+			if ( l_matrixBuffer )
 			{
-				SkeletonSPtr l_pSkeleton = l_pAnimObject->GetSkeleton();
+				p_pipeline.ApplyMatrices( *l_matrixBuffer );
+				AnimatedObjectSPtr l_pAnimObject = p_node.m_pGeometry->GetAnimatedObject();
 
-				if ( l_pSkeleton )
+				if ( l_pAnimObject )
 				{
-					int i = 0;
-					Matrix4x4rFrameVariableSPtr l_pVariable;
-					l_pProgram->GetMatrixBuffer()->GetVariable( Pipeline::MtxBones, l_pVariable );
+					SkeletonSPtr l_pSkeleton = l_pAnimObject->GetSkeleton();
 
-					if ( l_pVariable )
+					if ( l_pSkeleton )
 					{
-						Matrix4x4r l_mtxFinal;
+						int i = 0;
+						Matrix4x4rFrameVariableSPtr l_pVariable;
+						l_matrixBuffer->GetVariable( Pipeline::MtxBones, l_pVariable );
 
-						for ( AnimationPtrStrMapIt l_it = l_pAnimObject->AnimationsBegin(); l_it != l_pAnimObject->AnimationsEnd(); ++l_it )
+						if ( l_pVariable )
 						{
-							l_mtxFinal.set_identity();
+							Matrix4x4r l_mtxFinal;
 
-							for ( BonePtrArrayIt l_itBones = l_pSkeleton->Begin(); l_itBones != l_pSkeleton->End(); ++l_itBones )
+							for ( AnimationPtrStrMapIt l_it = l_pAnimObject->AnimationsBegin(); l_it != l_pAnimObject->AnimationsEnd(); ++l_it )
 							{
-								MovingObjectBaseSPtr l_pMoving = l_it->second->GetMovingObject( *l_itBones );
+								l_mtxFinal.set_identity();
 
-								if ( l_pMoving )
+								for ( BonePtrArrayIt l_itBones = l_pSkeleton->Begin(); l_itBones != l_pSkeleton->End(); ++l_itBones )
 								{
-									l_mtxFinal *= l_pMoving->GetFinalTransformation();
-								}
-							}
+									MovingObjectBaseSPtr l_pMoving = l_it->second->GetMovingObject( *l_itBones );
 
-							l_pVariable->SetValue( l_mtxFinal.const_ptr(), i++ );
+									if ( l_pMoving )
+									{
+										l_mtxFinal *= l_pMoving->GetFinalTransformation();
+									}
+								}
+
+								l_pVariable->SetValue( l_mtxFinal.const_ptr(), i++ );
+							}
 						}
 					}
 				}
 			}
 
+			FrameVariableBufferSPtr l_sceneBuffer = l_pPass->GetSceneBuffer();
+			DoBindLights( *l_pProgram, *l_sceneBuffer );
+			DoBindCamera( *l_sceneBuffer );
 			l_pPass->Render( l_uiCount++, l_uiSize );
 			p_node.m_pSubmesh->GetRenderer()->Draw( p_eTopology, *l_pPass );
 			l_pPass->EndRender();
+			DoUnbindLights( *l_pProgram, *l_sceneBuffer );
 		}
 	}
 
@@ -1618,6 +1725,136 @@ namespace Castor3D
 			p_pipeline.MultMatrix( l_it->second->GetParent()->GetDerivedTransformationMatrix() );
 			l_it->second->Render();
 			p_pipeline.PopMatrix();
+		}
+	}
+
+	void Scene::DoBindLight( LightSPtr p_light, int p_index, ShaderProgramBase & p_program )
+	{
+		int l_offset = 0;
+		ApplyLightComponent( p_light->GetAmbient(), p_index, l_offset, *m_pLightsData );
+		ApplyLightComponent( p_light->GetDiffuse(), p_index, l_offset, *m_pLightsData );
+		ApplyLightComponent( p_light->GetSpecular(), p_index, l_offset, *m_pLightsData );
+
+		if ( p_light->GetLightType() == eLIGHT_TYPE_DIRECTIONAL )
+		{
+			DirectionalLightSPtr l_light = std::static_pointer_cast< DirectionalLight >( p_light->GetLightCategory() );
+			ApplyLightComponent( l_light->GetPositionType(), p_index, l_offset, *m_pLightsData );
+			l_offset += 4;
+		}
+		else if ( p_light->GetLightType() == eLIGHT_TYPE_POINT )
+		{
+			PointLightSPtr l_light = std::static_pointer_cast< PointLight >( p_light->GetLightCategory() );
+			ApplyLightComponent( l_light->GetPositionType(), p_index, l_offset, *m_pLightsData );
+			l_offset += 4; // To match the matrix for spot lights
+			ApplyLightComponent( l_light->GetAttenuation(), p_index, l_offset, *m_pLightsData );
+		}
+		else
+		{
+			SpotLightSPtr l_light = std::static_pointer_cast< SpotLight >( p_light->GetLightCategory() );
+			ApplyLightComponent( l_light->GetPositionType(), p_index, l_offset, *m_pLightsData );
+			Matrix4x4r l_orientation;
+			p_light->GetParent()->GetOrientation().ToRotationMatrix( l_orientation );
+			ApplyLightComponent( l_orientation, p_index, l_offset, *m_pLightsData );
+			ApplyLightComponent( l_light->GetAttenuation(), p_index, l_offset, *m_pLightsData );
+			ApplyLightComponent( l_light->GetExponent(), l_light->GetCutOff(), p_index, l_offset, *m_pLightsData );
+		}
+	}
+
+	void Scene::DoUnbindLight( LightSPtr p_light, int p_index, ShaderProgramBase & p_program )
+	{
+	}
+
+	void Scene::DoBindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer )
+	{
+		RenderSystem * l_renderSystem = m_pEngine->GetRenderSystem();
+		l_renderSystem->RenderAmbientLight( GetAmbientLight(), p_sceneBuffer );
+
+		OneTextureFrameVariableSPtr l_lights = p_program.FindFrameVariable( ShaderProgramBase::Lights, eSHADER_TYPE_PIXEL );
+
+		if ( l_lights )
+		{
+			l_lights->SetValue( m_pLightsTexture->GetTexture().get() );
+		}
+
+		OneIntFrameVariableSPtr l_lightsCount;
+		p_sceneBuffer.GetVariable< int >( ShaderProgramBase::LightsCount, l_lightsCount );
+
+		if ( l_lightsCount )
+		{
+			int l_index = 0;
+
+			for ( auto && l_it: m_addedLights )
+			{
+				DoBindLight( l_it.second, l_index, p_program );
+				l_lightsCount->GetValue( 0 )++;
+			}
+		}
+		else
+		{
+			for ( auto && l_it: m_addedLights )
+			{
+				l_it.second->Render();
+			}
+		}
+
+		m_pLightsTexture->Render();
+
+		if ( m_bLightsChanged )
+		{
+			m_pLightsTexture->UploadImage( false );
+			m_bLightsChanged = false;
+		}
+	}
+
+	void Scene::DoUnbindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer )
+	{
+		m_pLightsTexture->EndRender();
+
+		OneIntFrameVariableSPtr l_lightsCount;
+		p_sceneBuffer.GetVariable< int >( ShaderProgramBase::LightsCount, l_lightsCount );
+
+		if ( l_lightsCount )
+		{
+			int l_index = 0;
+
+			for ( auto && l_it: m_addedLights )
+			{
+				DoUnbindLight( l_it.second, l_index, p_program );
+				l_lightsCount->GetValue( 0 )--;
+			}
+		}
+		else
+		{
+			for ( auto && l_it: m_addedLights )
+			{
+				l_it.second->EndRender();
+			}
+		}
+	}
+
+	void Scene::DoBindCamera( FrameVariableBuffer & p_sceneBuffer )
+	{
+		RenderSystem * l_renderSystem = m_pEngine->GetRenderSystem();
+		Camera * l_pCamera = l_renderSystem->GetCurrentCamera();
+
+		if ( l_pCamera )
+		{
+			Point3r l_position = l_pCamera->GetParent()->GetDerivedPosition();
+			Point3rFrameVariableSPtr l_cameraPos;
+			p_sceneBuffer.GetVariable( ShaderProgramBase::CameraPos, l_cameraPos );
+
+			if ( l_cameraPos )
+			{
+				if ( l_renderSystem->GetMainContext()->IsDeferredShadingSet() )
+				{
+					//m_pCameraPos->SetValue( Castor::MtxUtils::mult( m_pRenderSystem->GetPipeline()->GetMatrix( eMTXMODE_VIEW ), l_position ) );
+					l_cameraPos->SetValue( l_position );
+				}
+				else
+				{
+					l_cameraPos->SetValue( l_position );
+				}
+			}
 		}
 	}
 }

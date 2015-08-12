@@ -98,16 +98,16 @@ namespace Dx11Render
 
 	bool DxStaticTexture::DoBind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		//ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 
-		if ( m_pShaderResourceView )
-		{
-			ID3D11Resource * l_pResource;
-			m_pShaderResourceView->GetResource( &l_pResource );
-			StringStream l_name;
-			l_name << cuT( "StaticTexture_" ) << ( void * )this << cuT( "_SRV.png" );
-			D3DX11SaveTextureToFile( l_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
-		}
+		//if ( m_pShaderResourceView )
+		//{
+		//	ID3D11Resource * l_pResource;
+		//	m_pShaderResourceView->GetResource( &l_pResource );
+		//	StringStream l_name;
+		//	l_name << cuT( "StaticTexture_" ) << ( void * )this << cuT( "_SRV.png" );
+		//	D3DX11SaveTextureToFile( l_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
+		//}
 
 		return true;
 	}
@@ -134,12 +134,12 @@ namespace Dx11Render
 			if ( m_pPixelBuffer->format() == ePIXEL_FORMAT_R8G8B8 )
 			{
 				// f****ing Direct3D that doesn't support RGB24...
-				m_pPixelBuffer = PxBufferBase::create( m_pPixelBuffer->dimensions(), ePIXEL_FORMAT_A8R8G8B8, m_pPixelBuffer->const_ptr(), m_pPixelBuffer->format() );
+				m_pPixelBuffer = PxBufferBase::create( m_pPixelBuffer->dimensions(), ePIXEL_FORMAT_A8B8G8R8, m_pPixelBuffer->const_ptr(), m_pPixelBuffer->format() );
 				p_tex2dDesc.Format = DirectX11::Get( m_pPixelBuffer->format() );
 			}
 			else if ( m_pPixelBuffer->format() == ePIXEL_FORMAT_A4R4G4B4 )
 			{
-				m_pPixelBuffer = PxBufferBase::create( m_pPixelBuffer->dimensions(), ePIXEL_FORMAT_A8R8G8B8, m_pPixelBuffer->const_ptr(), m_pPixelBuffer->format() );
+				m_pPixelBuffer = PxBufferBase::create( m_pPixelBuffer->dimensions(), ePIXEL_FORMAT_A8B8G8R8, m_pPixelBuffer->const_ptr(), m_pPixelBuffer->format() );
 				p_tex2dDesc.Format = DirectX11::Get( m_pPixelBuffer->format() );
 			}
 			else if ( m_pPixelBuffer->format() == ePIXEL_FORMAT_STENCIL1 )

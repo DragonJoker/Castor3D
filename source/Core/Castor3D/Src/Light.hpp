@@ -95,24 +95,6 @@ namespace Castor3D
 		void Disable();
 		/**
 		 *\~english
-		 *\brief		Enables the light
-		 *\param[in]	p_pProgram	The program receiving light's data
-		 *\~french
-		 *\brief		Active la lumière
-		 *\param[in]	p_pProgram	Le programme recevant les données de la lumière
-		 */
-		void Enable( ShaderProgramBase * p_pProgram );
-		/**
-		 *\~english
-		 *\brief		Disables the light
-		 *\param[in]	p_pProgram	The program receiving light's data
-		 *\~french
-		 *\brief		Désactive la lumière
-		 *\param[in]	p_pProgram	Le programme recevant les données de la lumière
-		 */
-		void Disable( ShaderProgramBase * p_pProgram );
-		/**
-		 *\~english
 		 *\brief		Renders the light
 		 *\remark		Fixed pipeline implementation
 		 *\~french
@@ -129,24 +111,6 @@ namespace Castor3D
 		 *\remark		Implémentation passant par le pipeline fixe
 		 */
 		void EndRender();
-		/**
-		 *\~english
-		 *\brief		Renders the light
-		 *\remark		Shader implementation
-		 *\~french
-		 *\brief		Rend la lumière
-		 *\remark		Implémentation passant par les shaders
-		 */
-		void Render( ShaderProgramBase * p_pProgram );
-		/**
-		 *\~english
-		 *\brief		Ends light rendering
-		 *\remark		Shader implementation
-		 *\~french
-		 *\brief		Fin du rendu de la lumière
-		 *\remark		Implémentation passant par les shaders
-		 */
-		void EndRender( ShaderProgramBase * p_pProgram );
 		/**
 		 *\~english
 		 *\brief		Attaches this light to a Node

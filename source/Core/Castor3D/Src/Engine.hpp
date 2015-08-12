@@ -1192,14 +1192,26 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the default Sampler
-		 *\return		The value
+		 *\return		The Sampler
 		 *\~french
 		 *\brief		Récupère le Sampler par défault
-		 *\return		La valeur
+		 *\return		Le Sampler
 		 */
 		inline SamplerSPtr GetDefaultSampler()const
 		{
 			return m_pDefaultSampler;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the lights Sampler
+		 *\return		The Sampler
+		 *\~french
+		 *\brief		Récupère le Sampler pour les textures de lumières
+		 *\return		Le Sampler
+		 */
+		inline SamplerSPtr GetLightsSampler()const
+		{
+			return m_pLightsSampler;
 		}
 
 	private:
@@ -1311,6 +1323,8 @@ namespace Castor3D
 		BlendStateSPtr m_pDefaultBlendState;
 		//!\~english Default sampler	\~french Le sampler par défaut
 		SamplerSPtr m_pDefaultSampler;
+		//!\~english Lights textures sampler	\~french Le sampler utilisé pour les textures de lumières
+		SamplerSPtr m_pLightsSampler;
 		//!\~english Tells default sampler and default blend state are initialised	\~french Dit si le sampler et le blend state par défaut sont initialisés
 		bool m_bDefaultInitialised;
 		//!\~english The base debug panel overlay	\~french Le panneau d'incrustations de débogage

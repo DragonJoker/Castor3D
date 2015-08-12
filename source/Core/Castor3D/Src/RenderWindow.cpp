@@ -524,7 +524,18 @@ namespace Castor3D
 		m_pContext->Bind( p_eTargetBuffer, eFRAMEBUFFER_TARGET_DRAW );
 		m_wpDepthStencilState.lock()->Apply();
 		m_wpRasteriserState.lock()->Apply();
+#if 0
+#if !defined( NDEBUG )
+		Colour l_save = GetEngine()->GetRenderSystem()->GetCurrentContext()->GetClearColour();
+		GetEngine()->GetRenderSystem()->GetCurrentContext()->SetClearColour( Colour::from_predef( Colour::ePREDEFINED_FULLALPHA_RED ) );
+#endif
 		m_pContext->BToBRender( GetRenderTarget()->GetSize(), p_pTexture, eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL );
+#if !defined( NDEBUG )
+		GetEngine()->GetRenderSystem()->GetCurrentContext()->SetClearColour( l_save );
+#endif
+#else
+		GetRenderTarget()->Render( 0.0 );
+#endif
 	}
 
 	void RenderWindow::DoUpdateSize()

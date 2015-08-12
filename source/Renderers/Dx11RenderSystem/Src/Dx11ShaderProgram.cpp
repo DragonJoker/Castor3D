@@ -450,18 +450,10 @@ namespace Dx11Render
 	{
 		CreateObject( eSHADER_TYPE_VERTEX )->SetEntryPoint( cuT( "mainVx" ) );
 		CreateObject( eSHADER_TYPE_PIXEL )->SetEntryPoint( cuT( "mainPx" ) );
-		m_wpDxMatrixBuffer = std::static_pointer_cast< DxFrameVariableBuffer >( m_pMatrixBuffer );
-		m_wpDxSceneBuffer = std::static_pointer_cast< DxFrameVariableBuffer >( m_pSceneBuffer );
-		m_wpDxPassBuffer = std::static_pointer_cast< DxFrameVariableBuffer >( m_pPassBuffer );
-		m_wpDxConstantsBuffer = std::static_pointer_cast< DxFrameVariableBuffer >( m_pUserBuffer );
 	}
 
 	DxShaderProgram::~DxShaderProgram()
 	{
-		m_wpDxMatrixBuffer.reset();
-		m_wpDxSceneBuffer.reset();
-		m_wpDxPassBuffer.reset();
-		m_wpDxConstantsBuffer.reset();
 		Cleanup();
 	}
 
@@ -483,23 +475,15 @@ namespace Dx11Render
 		ShaderProgramBase::Cleanup();
 	}
 
-	void DxShaderProgram::Begin( uint8_t p_byIndex, uint8_t p_byCount )
+	void DxShaderProgram::Bind( uint8_t p_byIndex, uint8_t p_byCount )
 	{
 		m_pRenderSystem->GetPipeline()->UpdateFunctions( this );
-		ShaderProgramBase::Begin( p_byIndex, p_byCount );
-		m_wpDxMatrixBuffer.lock()->Bind( 0 );
-		m_wpDxSceneBuffer.lock()->Bind( 1 );
-		m_wpDxPassBuffer.lock()->Bind( 2 );
-		m_wpDxConstantsBuffer.lock()->Bind( 3 );
+		ShaderProgramBase::Bind( p_byIndex, p_byCount );
 	}
 
-	void DxShaderProgram::End()
+	void DxShaderProgram::Unbind()
 	{
-		m_wpDxMatrixBuffer.lock()->Unbind( 0 );
-		m_wpDxSceneBuffer.lock()->Unbind( 1 );
-		m_wpDxPassBuffer.lock()->Unbind( 2 );
-		m_wpDxConstantsBuffer.lock()->Unbind( 3 );
-		ShaderProgramBase::End();
+		ShaderProgramBase::Unbind();
 	}
 
 	ID3DBlob * DxShaderProgram::GetCompiled( Castor3D::eSHADER_TYPE p_eType )
