@@ -78,10 +78,10 @@ namespace OceanLighting
 
 	void AddTextCtrl( wxWindow * p_pParent, wxString const & p_strCaption, wxWindowID p_id, float p_fValue, void * p_pClientData, wxSizer * p_pSizer, wxValidator const & p_validator = wxDefaultValidator )
 	{
-		String l_strValue;
+		StringStream l_strValue;
 		l_strValue << p_fValue;
 		wxStaticText * l_pStaticText = new wxStaticText( p_pParent, wxID_ANY, p_strCaption );
-		wxTextCtrl * l_pTextCtrl = new wxTextCtrl( p_pParent, p_id, l_strValue );
+		wxTextCtrl * l_pTextCtrl = new wxTextCtrl( p_pParent, p_id, l_strValue.str() );
 		l_pTextCtrl->SetValidator( p_validator );
 		l_pTextCtrl->SetClientData( &p_pClientData );
 		AddElemToSizer( l_pStaticText, l_pTextCtrl, p_pSizer );
@@ -258,14 +258,13 @@ namespace OceanLighting
 		typedef std::shared_ptr< std::thread > thread_sptr;
 		DECLARE_VECTOR( thread_sptr, ThreadPtr );
 		bool l_bReturn = true;
-		Logger::LogMessage( cuT( "Initialising Castor3D" ) );
-		m_pCastor3D->Initialise( 30, false );
-		m_pCastor3D->GetTechniqueFactory().Register< RenderTechnique >( cuT( "ocean lighting" ) );
 		StringArray l_arrayFiles;
 		StringArray l_arrayFailed;
 		std::mutex l_mutex;
 		ThreadPtrArray l_arrayThreads;
-		File::ListDirectoryFiles( Engine::GetPluginsPath(), l_arrayFiles );
+		Logger::LogMessage( cuT( "Loading plugins" ) );
+
+		File::ListDirectoryFiles( Engine::GetPluginsDirectory(), l_arrayFiles );
 
 		if ( l_arrayFiles.size() > 0 )
 		{
@@ -322,6 +321,10 @@ namespace OceanLighting
 			wxMessageBox( _( "Problem occured while initialising Castor3D.\nLook at OceanLighting.log for more details" ), _( "Exception" ), wxOK | wxCENTRE | wxICON_ERROR );
 			l_bReturn = false;
 		}
+
+		Logger::LogMessage( cuT( "Initialising Castor3D" ) );
+		m_pCastor3D->Initialise( 30, false );
+		m_pCastor3D->GetTechniqueFactory().Register( cuT( "ocean lighting" ), &RenderTechnique::CreateInstance );
 
 		if ( l_bReturn )
 		{

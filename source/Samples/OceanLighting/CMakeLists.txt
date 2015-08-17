@@ -8,11 +8,14 @@ include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
 include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D/Src )
 include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
 
+message( STATUS "[${CastorBinsDependencies}]" )
+message( STATUS "[${CastorMinLibraries}]" )
+
 add_target(
 	OceanLighting
 	bin
 	"${CastorBinsDependencies}"
-	"${CastorBinLibraries}"
+	"${CastorMinLibraries};${wxWidgetsLibraries}"
 	"OceanLightingPch.hpp"
 	"OceanLightingPch.cpp"
 	"${wxWidgets_CFLAGS}"
@@ -30,14 +33,14 @@ file(
     COPY
         ${OceanLighting_datas1}
     DESTINATION
-        ${PROJECTS_BINARIES_OUTPUT_PATH_RELEASE}/share/OceanLighting
+        ${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/share/OceanLighting
 )
 
 file(
     COPY
         ${OceanLighting_datas1}
     DESTINATION
-        ${PROJECTS_BINARIES_OUTPUT_PATH_DEBUG}/share/OceanLighting
+        ${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/share/OceanLighting
 )
 
 install(
@@ -56,14 +59,14 @@ file(
     COPY
         ${OceanLighting_datas2}
     DESTINATION
-        ${PROJECTS_BINARIES_OUTPUT_PATH_RELEASE}/share/OceanLighting/data
+        ${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/share/OceanLighting/data
 )
 
 file(
     COPY
         ${OceanLighting_datas2}
     DESTINATION
-        ${PROJECTS_BINARIES_OUTPUT_PATH_DEBUG}/share/OceanLighting/data
+        ${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/share/OceanLighting/data
 )
 
 install(

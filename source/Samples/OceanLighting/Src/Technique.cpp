@@ -22,7 +22,7 @@
 
 #include "Technique.hpp"
 
-#include <RasterState.hpp>
+#include <RasteriserState.hpp>
 #include <DepthStencilState.hpp>
 #include <DepthStencilRenderBuffer.hpp>
 #include <TextureAttachment.hpp>
@@ -33,6 +33,9 @@
 #include <MatrixFrameVariable.hpp>
 #include <StaticTexture.hpp>
 #include <DynamicTexture.hpp>
+
+#include <Image.hpp>
+#include <TransformationMatrix.hpp>
 
 #if defined( min )
 #	undef min
@@ -437,7 +440,7 @@ RenderTechnique::~RenderTechnique()
 	m_pSamplerAnisotropicRepeat	.reset();
 }
 
-RenderTechniqueBaseSPtr RenderTechnique::Clone( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
+RenderTechniqueBaseSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
 {
 	// No make_shared because ctor is protected;
 	return RenderTechniqueBaseSPtr( new RenderTechnique( p_renderTarget, p_pRenderSystem, p_params ) );
@@ -469,7 +472,7 @@ void RenderTechnique::loadPrograms( bool all )
 	char options[512];
 	sprintf( options, "#version 130\n#define %sSEA_CONTRIB\n#define %sSUN_CONTRIB\n#define %sSKY_CONTRIB\n#define %sCLOUDS\n#define %sHARDWARE_ANISTROPIC_FILTERING\n", m_seaContrib ? "" : "NO_", m_sunContrib ? "" : "NO_", m_skyContrib ? "" : "NO_", m_cloudLayer ? "" : "NO_", m_manualFilter ? "NO_" : "" );
 	l_strOpt = str_utils::from_str( options );
-	Path l_pathShare = Engine::GetDataPath();
+	Path l_pathShare = Engine::GetDataDirectory();
 	TextFile( l_pathShare / cuT( "OceanLighting/atmosphere.frag"	), File::eOPEN_MODE_READ ).CopyToString( l_strAtmF );
 	TextFile( l_pathShare / cuT( "OceanLighting/atmosphere.vert"	), File::eOPEN_MODE_READ ).CopyToString( l_strAtmV );
 #if ENABLE_FFT
@@ -899,7 +902,7 @@ void RenderTechnique::DoDestroy()
 #endif
 }
 
-bool RenderTechnique::DoInitialise()
+bool RenderTechnique::DoInitialise( uint32_t & p_index )
 {
 	bool l_bReturn = m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
 	PxBufferBaseSPtr buffer;
@@ -915,7 +918,7 @@ bool RenderTechnique::DoInitialise()
 	m_pTexIrradiance->SetDimension( eTEXTURE_DIMENSION_2D );
 	buffer = PxBufferBase::create( Size( 64, 16 ), ePIXEL_FORMAT_RGB16F32F );
 
-	if ( Castor::FOpen( f, str_utils::to_str( Engine::GetDataPath() / cuT( "OceanLighting/data/irradiance.raw" ) ).c_str(), "rb" ) )
+	if ( Castor::FOpen( f, str_utils::to_str( Engine::GetDataDirectory() / cuT( "OceanLighting/data/irradiance.raw" ) ).c_str(), "rb" ) )
 	{
 		fread( buffer->ptr(), 1, 16 * 64 * 3 * sizeof( float ), f );
 		fclose( f );
@@ -932,19 +935,19 @@ bool RenderTechnique::DoInitialise()
 	m_pTexInscatter->SetDimension( eTEXTURE_DIMENSION_3D );
 	buffer = PxBufferBase::create( Size( na * nb, nv * nr ), ePIXEL_FORMAT_RGB16F32F );
 
-	if ( Castor::FOpen( f, str_utils::to_str( Engine::GetDataPath() / cuT( "OceanLighting/data/inscatter.raw" ) ).c_str(), "rb" ) )
+	if ( Castor::FOpen( f, str_utils::to_str( Engine::GetDataDirectory() / cuT( "OceanLighting/data/inscatter.raw" ) ).c_str(), "rb" ) )
 	{
 		fread( buffer->ptr(), 1, nr * nv * nb * na * 4 * sizeof( float ), f );
 		fclose( f );
 	}
 
-	m_pTexInscatter->Set3DImage( Point3ui( na * nb, nv, nr ), buffer );
+	m_pTexInscatter->SetImage( Point3ui( na * nb, nv, nr ), buffer );
 	m_pTexInscatter->Initialise( INSCATTER_UNIT );
 	m_pTexInscatter->SetSampler( m_pSamplerLinearClamp );
 	m_pTexTransmittance->SetDimension( eTEXTURE_DIMENSION_2D );
 	buffer = PxBufferBase::create( Size( 256, 64 ), ePIXEL_FORMAT_RGB16F32F );
 
-	if ( Castor::FOpen( f, str_utils::to_str( Engine::GetDataPath() / cuT( "OceanLighting/data/transmittance.raw" ) ).c_str(), "rb" ) )
+	if ( Castor::FOpen( f, str_utils::to_str( Engine::GetDataDirectory() / cuT( "OceanLighting/data/transmittance.raw" ) ).c_str(), "rb" ) )
 	{
 		fread( buffer->ptr(), 1, 256 * 64 * 3 * sizeof( float ), f );
 		fclose( f );
@@ -956,7 +959,7 @@ bool RenderTechnique::DoInitialise()
 	m_pTexNoise->SetDimension( eTEXTURE_DIMENSION_2D );
 	m_pTexNoise->SetImage( Size( 512, 512 ), ePIXEL_FORMAT_L8 );
 
-	if ( Castor::FOpen( f, str_utils::to_str( Engine::GetDataPath() / cuT( "OceanLighting/data/noise.pgm" ) ).c_str(), "rb" ) )
+	if ( Castor::FOpen( f, str_utils::to_str( Engine::GetDataDirectory() / cuT( "OceanLighting/data/noise.pgm" ) ).c_str(), "rb" ) )
 	{
 		unsigned char * img = new unsigned char[512 * 512 + 38];
 		fread( img, 1, 512 * 512 + 38, f );
