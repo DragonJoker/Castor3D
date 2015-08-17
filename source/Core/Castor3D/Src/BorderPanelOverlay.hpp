@@ -159,6 +159,18 @@ namespace Castor3D
 		virtual void UpdatePositionAndSize();
 		/**
 		 *\~english
+		 *\brief		Retrieves the panel vertex buffer
+		 *\return		The buffer
+		 *\~french
+		 *\brief		Récupère le tampon de sommets du panneau
+		 *\return		Le tampon
+		 */
+		inline OverlayCategory::VertexArray const & GetPanelVertex()const
+		{
+			return m_arrayVtx;
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the left border thickness
 		 *\return		The value
 		 *\~french
@@ -477,7 +489,7 @@ namespace Castor3D
 		 *\brief		Récupère le tampon de sommets de la bordure
 		 *\return		Le tampon
 		 */
-		std::vector< OverlayCategory::Vertex > const & GetBorderVertexBuffer()const
+		inline OverlayCategory::VertexArray const & GetBorderVertex()const
 		{
 			return m_arrayVtxBorder;
 		}

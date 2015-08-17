@@ -8,7 +8,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	LightCategory::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< LightCategory, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+		: Loader< LightCategory, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
 	{
 	}
 
@@ -61,7 +61,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	LightCategory::BinaryParser::BinaryParser( Path const & p_path )
-		:	Castor3D::BinaryParser< LightCategory >( p_path )
+		: Castor3D::BinaryParser< LightCategory >( p_path )
 	{
 	}
 
@@ -150,11 +150,11 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	LightCategory::LightCategory( eLIGHT_TYPE p_eLightType )
-		:	m_eLightType( p_eLightType )
-		,	m_ambient( Colour::from_rgba( 0x000000FF ) )
-		,	m_diffuse( Colour::from_rgba( 0x000000FF ) )
-		,	m_specular( Colour::from_rgba( 0xFFFFFFFF ) )
-		,	m_ptPositionType( 0.0f, 0.0f, 1.0f, 0.0f )
+		: m_eLightType( p_eLightType )
+		, m_ambient( Colour::from_rgba( 0x000000FF ) )
+		, m_diffuse( Colour::from_rgba( 0x000000FF ) )
+		, m_specular( Colour::from_rgba( 0xFFFFFFFF ) )
+		, m_ptPositionType( 0.0f, 0.0f, 1.0f, 0.0f )
 	{
 		switch ( p_eLightType )
 		{
@@ -172,22 +172,22 @@ namespace Castor3D
 
 	void LightCategory::SetAmbient( Colour const & p_ambient )
 	{
-		m_ambient.red()		= p_ambient.red()	;
-		m_ambient.green()	= p_ambient.green()	;
-		m_ambient.blue()	= p_ambient.blue()	;
+		m_ambient.red() = p_ambient.red();
+		m_ambient.green() = p_ambient.green();
+		m_ambient.blue() = p_ambient.blue();
 	}
 
 	void LightCategory::SetDiffuse( Colour const & p_diffuse )
 	{
-		m_diffuse.red()		= p_diffuse.red()	;
-		m_diffuse.green()	= p_diffuse.green()	;
-		m_diffuse.blue()	= p_diffuse.blue()	;
+		m_diffuse.red() = p_diffuse.red();
+		m_diffuse.green() = p_diffuse.green();
+		m_diffuse.blue() = p_diffuse.blue();
 	}
 
 	void LightCategory::SetSpecular( Colour const & p_specular )
 	{
-		m_specular.red()	= p_specular.red()		;
-		m_specular.green()	= p_specular.green()	;
-		m_specular.blue()	= p_specular.blue()		;
+		m_specular.red() = p_specular.red();
+		m_specular.green() = p_specular.green();
+		m_specular.blue() = p_specular.blue();
 	}
 }

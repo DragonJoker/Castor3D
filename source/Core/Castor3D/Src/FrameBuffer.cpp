@@ -99,14 +99,15 @@ namespace Castor3D
 
 	void FrameBuffer::Resize( Castor::Size const & p_size )
 	{
-		std::for_each( m_mapRbo.begin(), m_mapRbo.end(), [&]( std::pair< eATTACHMENT_POINT, RenderBufferSPtr > p_pair )
+		for ( auto && l_pair: m_mapRbo )
 		{
-			p_pair.second->Resize( p_size );
-		} );
-		std::for_each( m_mapTex.begin(), m_mapTex.end(), [&]( std::pair< eATTACHMENT_POINT, DynamicTextureSPtr > p_pair )
+			l_pair.second->Resize( p_size );
+		}
+
+		for ( auto && l_pair: m_mapTex )
 		{
-			p_pair.second->Resize( p_size );
-		} );
+			l_pair.second->Resize( p_size );
+		}
 	}
 
 	bool FrameBuffer::BlitInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrcDst, uint32_t p_uiComponents )

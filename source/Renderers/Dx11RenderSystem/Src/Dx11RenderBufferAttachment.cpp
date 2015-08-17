@@ -45,7 +45,7 @@ namespace Dx11Render
 		l_pBuffer->GetSurface( GetAttachmentPoint() )->GetResource( &l_pDstSurface );
 		m_dxRenderBuffer.GetSurface()->GetResource( &l_pSrcSurface );
 
-		if ( l_pDstSurface )
+		if ( l_pDstSurface && l_pSrcSurface )
 		{
 			D3D11_BOX l_box = { 0 };
 			l_box.front = 0;
@@ -56,6 +56,7 @@ namespace Dx11Render
 			l_box.bottom = l_rcSrc.bottom;
 			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 			l_pDeviceContext->CopySubresourceRegion( l_pDstSurface, 0, l_rcDst.left, l_rcDst.top, 0, l_pSrcSurface, 0, &l_box );
+			l_pDstSurface->Release();
 		}
 
 		SafeRelease( l_pSrcSurface );
@@ -68,16 +69,6 @@ namespace Dx11Render
 		return m_dxRenderBuffer.GetSurface();
 	}
 
-	bool DxRenderBufferAttachment::Bind()
-	{
-		return m_dxRenderBuffer.Bind();
-	}
-
-	void DxRenderBufferAttachment::Unbind()
-	{
-		m_dxRenderBuffer.Unbind();
-	}
-
 	bool DxRenderBufferAttachment::DoAttach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer )
 	{
 		m_dwAttachment = DirectX11::Get( p_eAttachment );
@@ -87,6 +78,7 @@ namespace Dx11Render
 
 	void DxRenderBufferAttachment::DoDetach()
 	{
-		Unbind();
+		m_pFrameBuffer.reset();
+		m_dwAttachment = 0;
 	}
 }

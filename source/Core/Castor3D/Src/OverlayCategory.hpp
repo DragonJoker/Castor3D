@@ -50,9 +50,10 @@ namespace Castor3D
 		*/
 		struct Vertex
 		{
-			int32_t coords[3];
-			real texture[2];
+			int32_t coords[2];
+			float texture[2];
 		};
+		DECLARE_VECTOR( Vertex, Vertex );
 		/*!
 		\author 	Sylvain DOREMUS
 		\date 		14/02/2010
@@ -386,15 +387,27 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the Z index
+		 *\brief		Retrieves the index
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le Z index
+		 *\brief		Récupère l'indice
 		 *\return		La valeur
 		 */
-		inline int GetZIndex()const
+		inline int GetIndex()const
 		{
-			return m_iCurrentZIndex;
+			return m_index;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the level
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le niveau
+		 *\return		La valeur
+		 */
+		inline int GetLevel()const
+		{
+			return m_level;
 		}
 		/**
 		 *\~english
@@ -470,40 +483,19 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the Z index
-		 *\param[in]	p_iZIndex	The new value
+		 *\brief		Sets the overlay order
+		 *\param[in]	p_index	The new index
+		 *\param[in]	p_level	The new level
 		 *\~french
-		 *\brief		Définit le Z index
-		 *\param[in]	p_iZIndex	La nouvelle valeur
+		 *\brief		Définit l'ordre de l'incrustation
+		 *\param[in]	p_index	Le nouvel indice
+		 *\param[in]	p_level	Le nouveau niveau
 		 */
-		inline void SetZIndex( int p_iZIndex )
+		inline void SetOrder( int p_index, int p_level )
 		{
-			m_iCurrentZIndex = p_iZIndex;
+			m_index = p_index;
+			m_level = p_level;
 			m_changed = true;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the overlay renderer
-		 *\param[in]	p_pRenderer	The new value
-		 *\~french
-		 *\brief		Définit le renderer d'incrustations
-		 *\param[in]	p_pRenderer	La nouvelle valeur
-		 */
-		inline void SetRenderer( OverlayRendererSPtr p_pRenderer )
-		{
-			m_pRenderer = p_pRenderer;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the vertex buffer
-		 *\return		The buffer
-		 *\~french
-		 *\brief		Récupère le tampon de sommets
-		 *\return		Le tampon
-		 */
-		std::vector< OverlayCategory::Vertex > const & GetVertexBuffer()const
-		{
-			return m_arrayVtx;
 		}
 		/**
 		 *\~english
@@ -565,16 +557,16 @@ namespace Castor3D
 		bool m_bVisible;
 		//!\~english The material used by the overlay	\~french Le matériau utilisé par l'incrustation
 		MaterialWPtr m_pMaterial;
-		//!\~english The overlay z index	\~french Le Z index de l'overlay
-		int m_iCurrentZIndex;
+		//!\~english The overlay index	\~french L'index de l'overlay
+		int m_index;
+		//!\~english The overlay level	\~french Le niveau de l'overlay
+		int m_level;
 		//!\~english The material name	\~french Le nom du matériau
 		Castor::String m_strMatName;
 		//!\~english The overlay type	\~french Le type de l'incrustation
 		eOVERLAY_TYPE m_eType;
-		//!\~english The overlay renderer	\~french Le renderer d'incrustation
-		OverlayRendererWPtr m_pRenderer;
 		//!\~english The vertex buffer data	\~french Les données du tampon de sommets
-		std::vector< OverlayCategory::Vertex > m_arrayVtx;
+		VertexArray m_arrayVtx;
 		//!\~english Tells the overlay has changed and must be updated	\~french Dit que l'incrustation a changé et doit être mise à jour
 		bool m_changed;
 		//!\~english The UV for the panel	\~french Les UV du panneau

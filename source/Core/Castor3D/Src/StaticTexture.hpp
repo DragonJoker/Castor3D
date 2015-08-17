@@ -88,23 +88,23 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
-		 *\param[in]	p_uiIndex	The texture index
+		 *\param[in]	p_index	The texture index
 		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
-		 *\param[in]	p_uiIndex	L'index de texture
+		 *\param[in]	p_index	L'index de texture
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Bind();
+		virtual bool BindAt( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
-		 *\param[in]	p_uiIndex	The texture index
+		 *\param[in]	p_index	The texture index
 		 *\~french
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
-		 *\param[in]	p_uiIndex	L'index de texture
+		 *\param[in]	p_index	L'index de texture
 		 */
-		virtual void Unbind();
+		virtual void UnbindFrom( uint32_t p_index );
 
 		using TextureBase::SetImage;
 	};

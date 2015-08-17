@@ -29,7 +29,7 @@ namespace Dx11Render
 
 	void DxFrameBuffer::Destroy()
 	{
-		SafeRelease( m_pOldDepthStencilView );
+		DoCleanupOld();
 	}
 
 	bool DxFrameBuffer::SetDrawBuffers( uint32_t CU_PARAM_UNUSED( p_uiSize ), eATTACHMENT_POINT const * CU_PARAM_UNUSED( p_eAttaches ) )
@@ -44,7 +44,6 @@ namespace Dx11Render
 		if ( m_mapRbo.size() || m_mapTex.size() )
 		{
 			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
-			m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
 			D3D11RenderTargetViewArray l_arraySurfaces;
 			ID3D11DepthStencilView * l_pView = NULL;
 			l_arraySurfaces.reserve( m_mapTex.size() + m_mapRbo.size() );
@@ -150,7 +149,7 @@ namespace Dx11Render
 		D3D11RenderTargetViewArray l_arraySurfaces;
 		ID3D11DepthStencilView * l_pView = m_pOldDepthStencilView;
 
-		for ( auto && l_old : m_arrayOldRenderTargets )
+		for ( auto && l_old: m_arrayOldRenderTargets )
 		{
 			if ( l_old )
 			{
@@ -162,13 +161,8 @@ namespace Dx11Render
 		{
 			l_pDeviceContext->OMSetRenderTargets( UINT( l_arraySurfaces.size() ), l_arraySurfaces.empty() ? NULL : l_arraySurfaces.data(), l_pView );
 		}
-		
-		for ( auto && l_old : l_arraySurfaces )
-		{
-			SafeRelease( l_old );
-		}
 
-		SafeRelease( m_pOldDepthStencilView );
+		DoCleanupOld();
 	}
 
 	void DxFrameBuffer::DoAttachFba( Castor3D::FrameBufferAttachmentRPtr CU_PARAM_UNUSED( p_pAttach ) )
@@ -253,5 +247,15 @@ namespace Dx11Render
 		}
 
 		return l_hr == S_OK;
+	}
+
+	void DxFrameBuffer::DoCleanupOld()
+	{
+		for ( auto && l_old: m_arrayOldRenderTargets )
+		{
+			SafeRelease( l_old );
+		}
+
+		SafeRelease( m_pOldDepthStencilView );
 	}
 }

@@ -182,20 +182,73 @@ void Pipeline::ApplyTexture3( FrameVariableBuffer & p_matrixBuffer )
 	DoApplyMatrix( eMTXMODE_TEXTURE3, MtxTexture3, p_matrixBuffer );
 }
 
-void Pipeline::ApplyMatrices( FrameVariableBuffer & p_matrixBuffer )
+void Pipeline::ApplyMatrices( FrameVariableBuffer & p_matrixBuffer, uint64_t p_matrices )
 {
-	ApplyProjection( p_matrixBuffer );
-	ApplyModel( p_matrixBuffer );
-	ApplyView( p_matrixBuffer );
-	ApplyModelView( p_matrixBuffer );
-	ApplyProjectionView( p_matrixBuffer );
-	ApplyTexture0( p_matrixBuffer );
-	ApplyTexture1( p_matrixBuffer );
-	ApplyTexture2( p_matrixBuffer );
-	ApplyTexture3( p_matrixBuffer );
-	// Those 2 ones must be applied after model view because they're computed from it
-	ApplyNormal( p_matrixBuffer );
-	ApplyProjectionModelView( p_matrixBuffer );
+	if ( p_matrices & MASK_MTXMODE_PROJECTION )
+	{
+		ApplyProjection( p_matrixBuffer );
+
+		if ( ( p_matrices & MASK_MTXMODE_MODEL ) || ( p_matrices & MASK_MTXMODE_VIEW ) )
+		{
+			ApplyProjectionModelView( p_matrixBuffer );
+		}
+		else if ( ( p_matrices & MASK_MTXMODE_VIEW ) )
+		{
+			ApplyProjectionView( p_matrixBuffer );
+		}
+	}
+	else if ( p_matrices & MASK_MTXMODE_MODEL )
+	{
+		ApplyModel( p_matrixBuffer );
+
+		if ( ( p_matrices & MASK_MTXMODE_PROJECTION ) || ( p_matrices & MASK_MTXMODE_VIEW ) )
+		{
+			ApplyProjectionModelView( p_matrixBuffer );
+		}
+		else if ( ( p_matrices & MASK_MTXMODE_VIEW ) )
+		{
+			ApplyModelView( p_matrixBuffer );
+			ApplyNormal( p_matrixBuffer );
+		}
+	}
+	else if ( p_matrices & MASK_MTXMODE_VIEW )
+	{
+		ApplyView( p_matrixBuffer );
+
+		if ( ( p_matrices & MASK_MTXMODE_PROJECTION ) || ( p_matrices & MASK_MTXMODE_MODEL ) )
+		{
+			ApplyProjectionModelView( p_matrixBuffer );
+		}
+		else if ( ( p_matrices & MASK_MTXMODE_MODEL ) )
+		{
+			ApplyModelView( p_matrixBuffer );
+			ApplyNormal( p_matrixBuffer );
+		}
+		else if ( ( p_matrices & MASK_MTXMODE_PROJECTION ) )
+		{
+			ApplyProjectionView( p_matrixBuffer );
+		}
+	}
+
+	if ( p_matrices & MASK_MTXMODE_TEXTURE0 )
+	{
+		ApplyTexture0( p_matrixBuffer );
+	}
+
+	if ( p_matrices & MASK_MTXMODE_TEXTURE1 )
+	{
+		ApplyTexture1( p_matrixBuffer );
+	}
+
+	if ( p_matrices & MASK_MTXMODE_TEXTURE2 )
+	{
+		ApplyTexture2( p_matrixBuffer );
+	}
+
+	if ( p_matrices & MASK_MTXMODE_TEXTURE3 )
+	{
+		ApplyTexture3( p_matrixBuffer );
+	}
 }
 
 void Pipeline::ApplyViewport( int p_iWindowWidth, int p_iWindowHeight )
@@ -247,16 +300,13 @@ void IPipelineImpl::Initialise()
 eMTXMODE IPipelineImpl::MatrixMode( eMTXMODE p_eMode )
 {
 	eMTXMODE l_eReturn = eMTXMODE_COUNT;
+	CASTOR_ASSERT( p_eMode >= 0 && p_eMode < eMTXMODE_COUNT );
 
-	if ( p_eMode < eMTXMODE_COUNT )
+	if ( p_eMode >= 0 && p_eMode < eMTXMODE_COUNT )
 	{
 		l_eReturn = m_pPipeline->m_eCurrentMode;
 		m_pPipeline->m_eCurrentMode = p_eMode;
 		l_eReturn = ( m_pPipeline->m_pRenderSystem->UseShaders() ? l_eReturn : eMTXMODE_COUNT );
-	}
-	else
-	{
-		throw std::range_error( "Pipeline::MatrixMode - Invalid pipeline mode given" );
 	}
 
 	return l_eReturn;
@@ -265,18 +315,12 @@ eMTXMODE IPipelineImpl::MatrixMode( eMTXMODE p_eMode )
 bool IPipelineImpl::LoadIdentity()
 {
 	bool l_bReturn = false;
+	CASTOR_ASSERT( m_pPipeline->m_eCurrentMode >= 0 && m_pPipeline->m_eCurrentMode < eMTXMODE_COUNT );
 
-	if ( m_pPipeline->m_eCurrentMode < eMTXMODE_COUNT )
+	if ( m_pPipeline->m_pRenderSystem->UseShaders() )
 	{
-		if ( m_pPipeline->m_pRenderSystem->UseShaders() )
-		{
-			m_pPipeline->m_matrix[m_pPipeline->m_eCurrentMode].top().set_identity();
-			l_bReturn = true;
-		}
-	}
-	else
-	{
-		throw std::range_error( "Pipeline::LoadIdentity - Invalid pipeline current mode" );
+		GetCurrentMatrix().set_identity();
+		l_bReturn = true;
 	}
 
 	return l_bReturn;
@@ -285,18 +329,12 @@ bool IPipelineImpl::LoadIdentity()
 bool IPipelineImpl::PushMatrix()
 {
 	bool l_bReturn = false;
+	CASTOR_ASSERT( m_pPipeline->m_eCurrentMode >= 0 && m_pPipeline->m_eCurrentMode < eMTXMODE_COUNT );
 
-	if ( m_pPipeline->m_eCurrentMode < eMTXMODE_COUNT )
+	if ( m_pPipeline->m_pRenderSystem->UseShaders() )
 	{
-		if ( m_pPipeline->m_pRenderSystem->UseShaders() )
-		{
-			m_pPipeline->m_matrix[m_pPipeline->m_eCurrentMode].push( m_pPipeline->m_matrix[m_pPipeline->m_eCurrentMode].top() );
-			l_bReturn = true;
-		}
-	}
-	else
-	{
-		throw std::range_error( "Pipeline::PushMatrix - Invalid pipeline current mode" );
+		m_pPipeline->m_matrix[m_pPipeline->m_eCurrentMode].push( GetCurrentMatrix() );
+		l_bReturn = true;
 	}
 
 	return l_bReturn;
@@ -305,18 +343,12 @@ bool IPipelineImpl::PushMatrix()
 bool IPipelineImpl::PopMatrix()
 {
 	bool l_bReturn = false;
+	CASTOR_ASSERT( m_pPipeline->m_eCurrentMode >= 0 && m_pPipeline->m_eCurrentMode < eMTXMODE_COUNT );
 
-	if ( m_pPipeline->m_eCurrentMode < eMTXMODE_COUNT )
+	if ( m_pPipeline->m_pRenderSystem->UseShaders() )
 	{
-		if ( m_pPipeline->m_pRenderSystem->UseShaders() )
-		{
-			m_pPipeline->m_matrix[m_pPipeline->m_eCurrentMode].pop();
-			l_bReturn = true;
-		}
-	}
-	else
-	{
-		throw std::range_error( "Pipeline::PopMatrix - Invalid pipeline current mode" );
+		m_pPipeline->m_matrix[m_pPipeline->m_eCurrentMode].pop();
+		l_bReturn = true;
 	}
 
 	return l_bReturn;
@@ -325,18 +357,12 @@ bool IPipelineImpl::PopMatrix()
 bool IPipelineImpl::MultMatrix( Matrix4x4r const & p_matrix )
 {
 	bool l_bReturn = false;
+	CASTOR_ASSERT( m_pPipeline->m_eCurrentMode >= 0 && m_pPipeline->m_eCurrentMode < eMTXMODE_COUNT );
 
-	if ( m_pPipeline->m_eCurrentMode < eMTXMODE_COUNT )
+	if ( m_pPipeline->m_pRenderSystem->UseShaders() )
 	{
-		if ( m_pPipeline->m_pRenderSystem->UseShaders() )
-		{
-			m_pPipeline->m_matrix[m_pPipeline->m_eCurrentMode].top() = m_pPipeline->m_matrix[m_pPipeline->m_eCurrentMode].top() * p_matrix;
-			l_bReturn = true;
-		}
-	}
-	else
-	{
-		throw std::range_error( "Pipeline::MultMatrix - Invalid pipeline current mode" );
+		GetCurrentMatrix() = GetCurrentMatrix() * p_matrix;
+		l_bReturn = true;
 	}
 
 	return l_bReturn;
@@ -353,7 +379,7 @@ bool IPipelineImpl::Perspective( Angle const & p_aFOVY, real p_rRatio, real p_rN
 
 	if ( m_pPipeline->m_pRenderSystem->UseShaders() )
 	{
-		MtxUtils::perspective( m_pPipeline->m_matrix[eMTXMODE_PROJECTION].top(), p_aFOVY, p_rRatio, p_rNear, p_rFar );
+		MtxUtils::perspective_rh( GetCurrentMatrix(), p_aFOVY, p_rRatio, p_rNear, p_rFar );
 		l_bReturn = true;
 	}
 
@@ -366,7 +392,7 @@ bool IPipelineImpl::Frustum( real p_rLeft, real p_rRight, real p_rBottom, real p
 
 	if ( m_pPipeline->m_pRenderSystem->UseShaders() )
 	{
-		MtxUtils::frustum( m_pPipeline->m_matrix[eMTXMODE_PROJECTION].top(), p_rLeft, p_rRight, p_rBottom, p_rTop, p_rNear, p_rFar );
+		MtxUtils::frustum_rh( GetCurrentMatrix(), p_rLeft, p_rRight, p_rBottom, p_rTop, p_rNear, p_rFar );
 		l_bReturn = true;
 	}
 
@@ -379,7 +405,7 @@ bool IPipelineImpl::Ortho( real p_rLeft, real p_rRight, real p_rBottom, real p_r
 
 	if ( m_pPipeline->m_pRenderSystem->UseShaders() )
 	{
-		MtxUtils::ortho( m_pPipeline->m_matrix[eMTXMODE_PROJECTION].top(), p_rLeft, p_rRight, p_rBottom, p_rTop, p_rNear, p_rFar );
+		MtxUtils::ortho_rh( GetCurrentMatrix(), p_rLeft, p_rRight, p_rBottom, p_rTop, p_rNear, p_rFar );
 		l_bReturn = true;
 	}
 

@@ -20,8 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include "Renderable.hpp"
-#include "SamplerRenderer.hpp"
 #include "BinaryParser.hpp"
 
 #pragma warning( push )
@@ -40,7 +38,6 @@ namespace Castor3D
 	\brief		Définit un sampler pour une texture
 	*/
 	class C3D_API Sampler
-		:	public Renderable< Sampler, SamplerRenderer >
 	{
 	public:
 		/*!
@@ -153,14 +150,14 @@ namespace Castor3D
 		 *\brief		Initialise le sampler
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Initialise();
+		virtual bool Initialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanups the sampler
 		 *\~french
 		 *\brief		Nettoie le sampler
 		 */
-		virtual void Cleanup();
+		virtual void Cleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Applies the sampler
@@ -173,14 +170,14 @@ namespace Castor3D
 		 *\param[in]	p_uiIndex		L'index du sampler
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Bind( eTEXTURE_DIMENSION p_eDimension, uint32_t p_uiIndex );
+		virtual bool Bind( eTEXTURE_DIMENSION p_eDimension, uint32_t p_uiIndex ) = 0;
 		/**
 		 *\~english
 		 *\brief		Removes the sampler
 		 *\~french
 		 *\brief		Enlève le sampler
 		 */
-		virtual void Unbind();
+		virtual void Unbind() = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the interpolation mode for given filter
@@ -381,8 +378,20 @@ namespace Castor3D
 		{
 			m_name = p_name;
 		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the Engine
+		 *\~french
+		 *\brief		Récupère l'Engine
+		 */
+		virtual Engine * GetEngine()const
+		{
+			return m_pEngine;
+		}
 
 	private:
+		//!\~english The core engine	\~french Le moteur
+		Engine * m_pEngine;
 		//!\~english Sampler interpolation modes	\~french Modes d'interpolation du sampler
 		eINTERPOLATION_MODE m_eInterpolationModes[eINTERPOLATION_FILTER_COUNT];
 		//!\~english Sampler wrapping modes	\~french Modes de wrapping du sampler

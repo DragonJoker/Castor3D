@@ -15,29 +15,30 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___DX11_MATERIAL_RENDERER_H___
-#define ___DX11_MATERIAL_RENDERER_H___
+#ifndef ___DX11_TARGET_RENDERER_H___
+#define ___DX11_TARGET_RENDERER_H___
 
 #include "Dx11RenderSystemPrerequisites.hpp"
 
-#include <PassRenderer.hpp>
+#include <RenderTarget.hpp>
 
 namespace Dx11Render
 {
-	class DxPassRenderer
-		:	public Castor3D::PassRenderer
+	class DxRenderTarget
+		:	public Castor3D::RenderTarget
 	{
 	public:
-		DxPassRenderer( DxRenderSystem * p_pRenderSystem );
-		virtual ~DxPassRenderer()
-		{
-			Cleanup();
-		}
+		DxRenderTarget( DxRenderSystem * p_pRenderSystem, Castor3D::eTARGET_TYPE p_type );
+		virtual ~DxRenderTarget();
 
-		virtual void Cleanup();
-		virtual void Initialise();
+		virtual void Clear();
+		virtual Castor3D::RenderBufferAttachmentSPtr CreateAttachment( Castor3D::RenderBufferSPtr p_pRenderBuffer )const;
+		virtual Castor3D::TextureAttachmentSPtr CreateAttachment( Castor3D::DynamicTextureSPtr p_pTexture )const;
+		virtual Castor3D::FrameBufferSPtr CreateFrameBuffer()const;
 
-		virtual void EndRender();
+	private:
+		bool m_bInitialised;
+		DxRenderSystem * m_pRenderSystem;
 	};
 }
 

@@ -1,4 +1,6 @@
 ﻿#include "StaticTexture.hpp"
+
+#include "RenderSystem.hpp"
 #include "Sampler.hpp"
 
 #include <Logger.hpp>
@@ -57,7 +59,7 @@ namespace Castor3D
 		}
 	}
 
-	bool StaticTexture::Bind()
+	bool StaticTexture::BindAt( uint32_t p_index )
 	{
 		bool l_bReturn = false;
 
@@ -71,24 +73,24 @@ namespace Castor3D
 				m_pPixelBuffer.reset();
 			}
 
-			l_bReturn = DoBind();
+			l_bReturn = DoBind( p_index );
 
 			if ( l_bReturn && GetSampler() )
 			{
-				l_bReturn = GetSampler()->Bind( m_eDimension, m_uiIndex );
+				l_bReturn = GetSampler()->Bind( m_eDimension, p_index );
 			}
 		}
 
 		return l_bReturn;
 	}
 
-	void StaticTexture::Unbind()
+	void StaticTexture::UnbindFrom( uint32_t p_index )
 	{
 		if ( GetSampler() )
 		{
 			GetSampler()->Unbind();
 		}
 
-		DoUnbind();
+		DoUnbind( p_index );
 	}
 }

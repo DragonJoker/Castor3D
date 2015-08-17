@@ -1,44 +1,46 @@
 ﻿#include "SceneFileParser_Parsers.hpp"
-#include "InitialiseEvent.hpp"
-#include "FrameVariableBuffer.hpp"
-#include "Engine.hpp"
-#include "Material.hpp"
-#include "MaterialManager.hpp"
-#include "Overlay.hpp"
-#include "PanelOverlay.hpp"
-#include "BorderPanelOverlay.hpp"
-#include "TextOverlay.hpp"
-#include "RenderWindow.hpp"
-#include "RenderTarget.hpp"
-#include "Scene.hpp"
-#include "ImporterPlugin.hpp"
-#include "DividerPlugin.hpp"
-#include "SceneNode.hpp"
-#include "Mesh.hpp"
-#include "Light.hpp"
-#include "DirectionalLight.hpp"
-#include "PointLight.hpp"
-#include "SpotLight.hpp"
-#include "Geometry.hpp"
-#include "Importer.hpp"
-#include "Submesh.hpp"
-#include "Subdivider.hpp"
-#include "Vertex.hpp"
-#include "Face.hpp"
-#include "Pass.hpp"
-#include "Texture.hpp"
-#include "TextureUnit.hpp"
-#include "ShaderProgram.hpp"
-#include "FrameVariable.hpp"
-#include "Viewport.hpp"
-#include "Camera.hpp"
-#include "Sampler.hpp"
-#include "BlendState.hpp"
-#include "BillboardList.hpp"
+
 #include "AnimatedObjectGroup.hpp"
 #include "AnimatedObject.hpp"
 #include "Animation.hpp"
+#include "BillboardList.hpp"
+#include "BlendState.hpp"
+#include "BorderPanelOverlay.hpp"
+#include "Camera.hpp"
+#include "DirectionalLight.hpp"
+#include "DividerPlugin.hpp"
+#include "Engine.hpp"
+#include "Face.hpp"
+#include "FrameVariable.hpp"
+#include "Geometry.hpp"
+#include "Importer.hpp"
+#include "ImporterPlugin.hpp"
+#include "InitialiseEvent.hpp"
+#include "FrameVariableBuffer.hpp"
+#include "Light.hpp"
+#include "Material.hpp"
+#include "MaterialManager.hpp"
+#include "Mesh.hpp"
+#include "Overlay.hpp"
+#include "PanelOverlay.hpp"
+#include "Pass.hpp"
+#include "PointLight.hpp"
+#include "RenderSystem.hpp"
+#include "RenderTarget.hpp"
+#include "RenderWindow.hpp"
+#include "Sampler.hpp"
+#include "Scene.hpp"
+#include "SceneNode.hpp"
 #include "ShaderManager.hpp"
+#include "ShaderProgram.hpp"
+#include "SpotLight.hpp"
+#include "Subdivider.hpp"
+#include "Submesh.hpp"
+#include "TextOverlay.hpp"
+#include "Texture.hpp"
+#include "TextureUnit.hpp"
+#include "Vertex.hpp"
+#include "Viewport.hpp"
 
 #include <Font.hpp>
 #include <Logger.hpp>
@@ -1962,7 +1964,7 @@ END_ATTRIBUTE_PUSH( eSECTION_PASS )
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MaterialEnd )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-	l_pContext->m_pParser->GetEngine()->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_pContext->pMaterial ) );
+	l_pContext->m_pParser->GetEngine()->PostEvent( MakeInitialiseEvent( *l_pContext->pMaterial ) );
 }
 END_ATTRIBUTE_POP()
 
@@ -3723,7 +3725,7 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BillboardEnd )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-	l_pContext->m_pParser->GetEngine()->PostEvent( std::make_shared< InitialiseEvent< BillboardList > >( *l_pContext->pBillboards ) );
+	l_pContext->m_pParser->GetEngine()->PostEvent( MakeInitialiseEvent( *l_pContext->pBillboards ) );
 	l_pContext->pBillboards = nullptr;
 }
 END_ATTRIBUTE_POP()

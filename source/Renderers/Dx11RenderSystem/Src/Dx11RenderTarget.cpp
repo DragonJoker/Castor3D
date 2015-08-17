@@ -1,4 +1,5 @@
-#include "Dx11TargetRenderer.hpp"
+#include "Dx11RenderTarget.hpp"
+
 #include "Dx11RenderSystem.hpp"
 #include "Dx11FrameBuffer.hpp"
 #include "Dx11ColourRenderBuffer.hpp"
@@ -13,39 +14,29 @@ using namespace Castor;
 using namespace Castor3D;
 using namespace Dx11Render;
 
-DxTargetRenderer::DxTargetRenderer( DxRenderSystem * p_pRenderSystem )
-	: TargetRenderer( p_pRenderSystem	)
-	, m_bInitialised( false	)
+DxRenderTarget::DxRenderTarget( DxRenderSystem * p_pRenderSystem, eTARGET_TYPE p_type )
+	: RenderTarget( p_pRenderSystem->GetEngine(), p_type)
+	, m_bInitialised( false )
+	, m_pRenderSystem( p_pRenderSystem )
 {
 }
 
-DxTargetRenderer::~DxTargetRenderer()
+DxRenderTarget::~DxRenderTarget()
 {
 }
 
-bool DxTargetRenderer::Initialise()
-{
-	m_bInitialised = true;
-	return m_bInitialised;
-}
-
-void DxTargetRenderer::Cleanup()
-{
-	m_bInitialised = false;
-}
-
-void DxTargetRenderer::BeginScene()
+void DxRenderTarget::Clear()
 {
 	if ( m_bInitialised )
 	{
-		DoUpdateSize();
 		DxContextRPtr l_pContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() );
 		ID3D11DeviceContext * l_pDeviceContext = l_pContext->GetDeviceContext();
+		SceneSPtr l_scene = GetScene();
 
 		// Clear the back buffer.
-		if ( m_target->GetScene() )
+		if ( l_scene )
 		{
-			l_pDeviceContext->ClearRenderTargetView( l_pContext->GetRenderTargetView(), m_target->GetScene()->GetBackgroundColour().const_ptr() );
+			l_pDeviceContext->ClearRenderTargetView( l_pContext->GetRenderTargetView(), l_scene->GetBackgroundColour().const_ptr() );
 		}
 		else
 		{
@@ -58,23 +49,7 @@ void DxTargetRenderer::BeginScene()
 	}
 }
 
-void DxTargetRenderer::EndScene()
-{
-	//HRESULT l_hr = S_OK;
-	//
-	//if( m_bInitialised )
-	//{
-	//	l_hr = reinterpret_cast< Dx11RenderSystem* >( m_pRenderSystem )->GetDevice()->EndScene();
-	//}
-}
-
-void DxTargetRenderer::DoUpdateSize()
-{
-	//Size l_size( ::GetSystemMetrics( SM_CXFULLSCREEN ), ::GetSystemMetrics( SM_CYFULLSCREEN ) );
-	//m_target->SetSize( l_size );
-}
-
-RenderBufferAttachmentSPtr DxTargetRenderer::CreateAttachment( RenderBufferSPtr p_pRenderBuffer )const
+RenderBufferAttachmentSPtr DxRenderTarget::CreateAttachment( RenderBufferSPtr p_pRenderBuffer )const
 {
 	RenderBufferAttachmentSPtr l_pReturn;
 
@@ -90,12 +65,12 @@ RenderBufferAttachmentSPtr DxTargetRenderer::CreateAttachment( RenderBufferSPtr 
 	return l_pReturn;
 }
 
-TextureAttachmentSPtr DxTargetRenderer::CreateAttachment( DynamicTextureSPtr p_pTexture )const
+TextureAttachmentSPtr DxRenderTarget::CreateAttachment( DynamicTextureSPtr p_pTexture )const
 {
 	return std::make_shared< DxTextureAttachment >( static_cast< DxRenderSystem * >( m_pRenderSystem ), p_pTexture );
 }
 
-FrameBufferSPtr DxTargetRenderer::CreateFrameBuffer()const
+FrameBufferSPtr DxRenderTarget::CreateFrameBuffer()const
 {
 	return std::make_shared< DxFrameBuffer >( static_cast< DxRenderSystem * >( m_pRenderSystem ) );
 }

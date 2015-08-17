@@ -2,7 +2,6 @@
 #include "DepthStencilState.hpp"
 #include "OneFrameVariable.hpp"
 #include "RenderWindow.hpp"
-#include "WindowRenderer.hpp"
 #include "RenderSystem.hpp"
 #include "Texture.hpp"
 #include "Buffer.hpp"
@@ -31,11 +30,11 @@ namespace Castor3D
 		};
 		real l_pBuffer[] =
 		{
-			-1, -1, 0, 0,
+			 0,  0, 0, 0,
 			 1,  1, 1, 1,
-			-1,  1, 0, 1,
-			-1, -1, 0, 0,
-			 1, -1, 1, 0,
+			 0,  1, 0, 1,
+			 0,  0, 0, 0,
+			 1,  0, 1, 0,
 			 1,  1, 1, 1,
 		};
 		std::memcpy( m_pBuffer, l_pBuffer, sizeof( l_pBuffer ) );
@@ -59,12 +58,13 @@ namespace Castor3D
 	bool Context::Initialise( RenderWindow * p_window )
 	{
 		m_pWindow = p_window;
-		m_pRenderSystem	= m_pWindow->GetRenderer()->GetRenderSystem();
+		m_pRenderSystem	= m_pWindow->GetEngine()->GetRenderSystem();
 		m_bDeferredShadingSet = p_window->IsUsingDeferredRendering();
 		ShaderManager & l_manager = m_pRenderSystem->GetEngine()->GetShaderManager();
 		ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
 		m_pBtoBShaderProgram = l_program;
 		m_mapDiffuse = l_program->CreateFrameVariable( ShaderProgramBase::MapDiffuse, eSHADER_TYPE_PIXEL );
+		l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 		m_bMultiSampling = p_window->IsMultisampling();
 		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( m_pRenderSystem, &( *m_pDeclaration )[0], m_pDeclaration->Size() );
 		IndexBufferUPtr l_pIdxBuffer = std::make_unique< IndexBuffer >( m_pRenderSystem );
@@ -78,10 +78,10 @@ namespace Castor3D
 		m_arrayVertex[5]->LinkCoords( &l_pVtxBuffer->data()[5 * l_uiStride], l_uiStride );
 		m_pGeometryBuffers = m_pRenderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
 		m_pViewport = std::make_shared< Viewport >( m_pRenderSystem->GetEngine(), Size( 10, 10 ), eVIEWPORT_TYPE_2D );
-		m_pViewport->SetLeft( real( -1.0 ) );
+		m_pViewport->SetLeft( real( 0.0 ) );
 		m_pViewport->SetRight( real( 1.0 ) );
 		m_pViewport->SetTop( real( 1.0 ) );
-		m_pViewport->SetBottom( real( -1.0 ) );
+		m_pViewport->SetBottom( real( 0.0 ) );
 		m_pViewport->SetNear( real( 0.0 ) );
 		m_pViewport->SetFar( real( 1.0 ) );
 		m_pDsStateBackground = m_pRenderSystem->GetEngine()->CreateDepthStencilState( cuT( "ContextBackgroundDSState" ) );
@@ -160,22 +160,32 @@ namespace Castor3D
 		Clear( p_uiComponents );
 		m_pViewport->Render();
 		CullFace( eFACE_BACK );
+		uint32_t l_id = p_pTexture->GetIndex();
+		p_pTexture->SetIndex( 0 );
 
 		if ( l_pProgram && l_pProgram->GetStatus() == ePROGRAM_STATUS_LINKED )
 		{
 			m_mapDiffuse->SetValue( p_pTexture.get() );
 			l_pProgram->Bind( 0, 1 );
+			FrameVariableBufferSPtr l_matrices = l_pProgram->FindFrameVariableBuffer( ShaderProgramBase::BufferMatrix );
+
+			if ( l_matrices )
+			{
+				m_pRenderSystem->GetPipeline()->ApplyProjection( *l_matrices );
+			}
 		}
 
-		if ( p_pTexture->Bind() )
+		if ( p_pTexture->BindAt( 0 ) )
 		{
 			m_pGeometryBuffers->Draw( eTOPOLOGY_TRIANGLES, l_pProgram, m_arrayVertex.size(), 0 );
-			p_pTexture->Unbind();
+			p_pTexture->UnbindFrom( 0 );
 		}
 
 		if ( l_pProgram && l_pProgram->GetStatus() == ePROGRAM_STATUS_LINKED )
 		{
 			l_pProgram->Unbind();
 		}
+		
+		p_pTexture->SetIndex( l_id );
 	}
 }

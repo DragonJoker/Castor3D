@@ -585,7 +585,7 @@ namespace Castor3D
 		if ( m_bMtxChanged )
 		{
 			m_bDerivedMtxChanged = true;
-			MtxUtils::set_transform( m_mtxMatrix, m_ptPosition, m_ptScale, m_qOrientation );
+			MtxUtils::set_transform_rh( m_mtxMatrix, m_ptPosition, m_ptScale, m_qOrientation );
 			m_bMtxChanged = false;
 		}
 

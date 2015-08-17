@@ -185,6 +185,18 @@ namespace Castor3D
 		Castor::String const & GetFontName()const;
 		/**
 		 *\~english
+		 *\brief		Retrieves the panel vertex buffer
+		 *\return		The buffer
+		 *\~french
+		 *\brief		Récupère le tampon de sommets du panneau
+		 *\return		Le tampon
+		 */
+		inline OverlayCategory::VertexArray const & GetTextVertex()const
+		{
+			return m_arrayVtx;
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the font
 		 *\return		The value
 		 *\~french

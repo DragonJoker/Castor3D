@@ -38,7 +38,7 @@ namespace Castor3D
 	\remark		Une lumière directionnelle illumine à partir d'un point infini dans une direction donnée
 	*/
 	class C3D_API DirectionalLight
-		:	public LightCategory
+		: public LightCategory
 	{
 	public:
 		/*!
@@ -49,7 +49,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de DirectionalLight
 		*/
-		class C3D_API TextLoader : public LightCategory::TextLoader
+		class C3D_API TextLoader
+			: public LightCategory::TextLoader
 		{
 		public:
 			/**
@@ -72,7 +73,8 @@ namespace Castor3D
 		\~english
 		\brief		Loader de DirectionalLight
 		*/
-		class C3D_API BinaryParser : public LightCategory::BinaryParser
+		class C3D_API BinaryParser
+			: public LightCategory::BinaryParser
 		{
 		public:
 			/**
@@ -141,15 +143,6 @@ namespace Castor3D
 		 *\return		La lumière
 		 */
 		static LightCategorySPtr Create();
-		/**
-		 *\~english
-		 *\brief		Renders the light
-		 *\param[in]	p_pRenderer		The renderer used to ... render this light
-		 *\~french
-		 *\brief		Fonction de rendu sans shader
-		 *\param[in]	p_pRenderer		Le renderer
-		 */
-		virtual void Render( LightRendererSPtr p_pRenderer );
 		/**
 		 *\~english
 		 *\brief		Sets the light source direction

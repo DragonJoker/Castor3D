@@ -15,21 +15,25 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___DX11_SAMPLER_RENDERER_H___
-#define ___DX11_SAMPLER_RENDERER_H___
+#ifndef ___GL_SAMPLER_H___
+#define ___GL_SAMPLER_H___
 
-#include "Dx11RenderSystemPrerequisites.hpp"
+#include "GlRenderSystemPrerequisites.hpp"
 
 #include <Sampler.hpp>
 
-namespace Dx11Render
+namespace GlRender
 {
-	class DxSamplerRenderer
-		:	public Castor3D::SamplerRenderer
+	class GlSampler
+		: public Castor3D::Sampler
 	{
+	private:
+		typedef std::function< void() > PUnbindFunction;
+		typedef std::function< bool( eGL_TEXDIM p_eDimension, uint32_t p_uiIndex ) > PBindFunction;
+
 	public:
-		DxSamplerRenderer( DxRenderSystem * p_pRenderSystem );
-		virtual ~DxSamplerRenderer();
+		GlSampler( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem, Castor::String const & p_name );
+		virtual ~GlSampler();
 
 		virtual bool Initialise();
 		virtual void Cleanup();
@@ -37,9 +41,10 @@ namespace Dx11Render
 		virtual void Unbind();
 
 	private:
-		DxRenderSystem * m_pDxRenderSystem;
-		D3D11_SAMPLER_DESC m_tex2dSampler;
-		ID3D11SamplerState * m_pSamplerState;
+		PBindFunction m_pfnBind;
+		PUnbindFunction m_pfnUnbind;
+		uint32_t m_uiSamplerId;
+		OpenGl & m_gl;
 	};
 }
 

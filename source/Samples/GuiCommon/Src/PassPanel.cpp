@@ -62,7 +62,7 @@ wxPassPanel::wxPassPanel( wxWindow * p_pParent, Engine * p_pEngine, bool p_bCanE
 	m_pPanelTextureUnit = new wxPanel( this, wxID_ANY );
 	m_pButtonShader = new wxButton( this, eID_BUTTON_HAS_SHADER, _( "Edit shaders" ) );
 	m_pStaticPathLabel = new wxStaticText( m_pPanelTextureUnit, wxID_ANY, _( "Image path:" ) + wxString( wxT( " " ) ) );
-	m_pStaticPath = new wxStaticText( m_pPanelTextureUnit, wxID_ANY, wxEmptyString );
+	m_pStaticPath = new wxStaticText( m_pPanelTextureUnit, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_START );
 	m_pButtonTextureImage = new wxBitmapButton( m_pPanelTextureUnit, eID_BUTTON_TEXTURE_IMAGE, wxBitmap( m_sizeImage.x, m_sizeImage.y ) );
 	m_pStaticTexChannel = new wxStaticText( m_pPanelTextureUnit, wxID_ANY, _( "Channel" ) );
 	m_pComboTextureChannel = new wxComboBox( m_pPanelTextureUnit, eID_COMBO_TEXTURE_CHANNEL, _( "Diffuse" ), wxDefaultPosition, wxDefaultSize, l_arrayChannels, wxBORDER_SIMPLE | wxCB_READONLY );
@@ -580,7 +580,7 @@ void wxPassPanel::OnTextureImage( wxCommandEvent & p_event )
 				l_pTexture->SetImage( l_pImage->GetPixels() );
 				m_pTextureUnit.lock()->SetTexture( l_pTexture );
 				SetMaterialImage( m_pTextureUnit.lock(), 78, 78 );
-				m_pEngine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_pPass->GetParent() ) );
+				m_pEngine->PostEvent( MakeInitialiseEvent( *l_pPass->GetParent() ) );
 			}
 		}
 	}

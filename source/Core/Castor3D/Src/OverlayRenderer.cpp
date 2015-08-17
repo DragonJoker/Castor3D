@@ -27,6 +27,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	static const int32_t C3D_MAX_CHARS_PER_BUFFER = 6000;
+
 	namespace
 	{
 		template< typename T >
@@ -43,26 +45,38 @@ namespace Castor3D
 	{
 		BufferElementDeclaration l_vertexDeclarationElements[] =
 		{
-			BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3INTS ),
+			BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2INTS ),
 			BufferElementDeclaration( 0, eELEMENT_USAGE_TEXCOORDS0, eELEMENT_TYPE_2FLOATS ),
 		};
 
 		m_pDeclaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
 		
-		std::memset( m_panelBuffer, 0, 60 );
-		uint32_t i = 0;
-		std::for_each( m_panelVertex.begin(), m_panelVertex.end(), [&]( BufferElementGroupSPtr & p_vertex )
+		std::memset( m_panelBuffer, 0, sizeof( m_panelBuffer ) );
+		uint8_t * l_buffer = reinterpret_cast< uint8_t * >( m_panelBuffer );
+
+		for ( auto & l_vertex: m_panelVertex )
 		{
-			p_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_panelBuffer )[i++ * m_pDeclaration->GetStride()] );
-		} );
+			l_vertex = std::make_shared< BufferElementGroup >( l_buffer );
+			l_buffer += m_pDeclaration->GetStride();
+		}
+		
+		std::memset( m_borderBuffer, 0, sizeof( m_borderBuffer ) );
+		l_buffer = reinterpret_cast< uint8_t * >( m_borderBuffer );
+
+		for ( auto & l_vertex: m_borderVertex )
+		{
+			l_vertex = std::make_shared< BufferElementGroup >( l_buffer );
+			l_buffer += m_pDeclaration->GetStride();
+		}
 	}
 
 	OverlayRenderer::~OverlayRenderer()
 	{
-		std::for_each( m_panelVertex.begin(), m_panelVertex.end(), [&]( BufferElementGroupSPtr & p_vertex )
+		for ( auto & l_vertex: m_panelVertex )
 		{
-			p_vertex.reset();
-		} );
+			l_vertex.reset();
+		}
+
 		m_pDeclaration.reset();
 	}
 
@@ -70,65 +84,68 @@ namespace Castor3D
 	{
 		if ( !m_pPanelGeometryBuffer )
 		{
-			// Panel Overlays
+			// Panel Overlays buffers
 			VertexBufferUPtr l_pPanelVtxBuffer = std::make_unique< VertexBuffer >( m_pRenderSystem, &( *m_pDeclaration )[0], m_pDeclaration->Size() );
 			uint32_t l_uiStride = m_pDeclaration->GetStride();
-			l_pPanelVtxBuffer->Resize( 6 * l_uiStride );
-			m_panelVertex[0]->LinkCoords( &l_pPanelVtxBuffer->data()[0 * l_uiStride], l_uiStride );
-			m_panelVertex[1]->LinkCoords( &l_pPanelVtxBuffer->data()[1 * l_uiStride], l_uiStride );
-			m_panelVertex[2]->LinkCoords( &l_pPanelVtxBuffer->data()[2 * l_uiStride], l_uiStride );
-			m_panelVertex[3]->LinkCoords( &l_pPanelVtxBuffer->data()[3 * l_uiStride], l_uiStride );
-			m_panelVertex[4]->LinkCoords( &l_pPanelVtxBuffer->data()[4 * l_uiStride], l_uiStride );
-			m_panelVertex[5]->LinkCoords( &l_pPanelVtxBuffer->data()[5 * l_uiStride], l_uiStride );
+			l_pPanelVtxBuffer->Resize( m_panelVertex.size() * l_uiStride );
+			uint32_t l_index = 0;
+
+			for ( auto && l_vertex: m_panelVertex )
+			{
+				l_vertex->LinkCoords( &l_pPanelVtxBuffer->data()[l_index++ * l_uiStride], l_uiStride );
+			}
+
 			l_pPanelVtxBuffer->Create();
-			l_pPanelVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, GetPanelProgram( eTEXTURE_CHANNEL_COLOUR ) );
+			l_pPanelVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, DoGetPanelProgram( eTEXTURE_CHANNEL_COLOUR ) );
 			m_pPanelGeometryBuffer = m_pRenderSystem->CreateGeometryBuffers( std::move( l_pPanelVtxBuffer ), nullptr, nullptr );
 			m_pPanelGeometryBuffer->Initialise();
 		}
 
 		if ( !m_pBorderGeometryBuffer )
 		{
-			// Border Overlays
+			// Border Overlays buffers
 			VertexBufferUPtr l_pBorderVtxBuffer = std::make_unique< VertexBuffer >( m_pRenderSystem, &( *m_pDeclaration )[0], m_pDeclaration->Size() );
+			uint32_t l_uiStride = m_pDeclaration->GetStride();
+			l_pBorderVtxBuffer->Resize( m_borderVertex.size() * l_uiStride );
+			uint32_t l_index = 0;
+
+			for ( auto && l_vertex: m_borderVertex )
+			{
+				l_vertex->LinkCoords( &l_pBorderVtxBuffer->data()[l_index++ * l_uiStride], l_uiStride );
+			}
+
+			l_pBorderVtxBuffer->Create();
+			l_pBorderVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, DoGetPanelProgram( eTEXTURE_CHANNEL_COLOUR ) );
 			m_pBorderGeometryBuffer = m_pRenderSystem->CreateGeometryBuffers( std::move( l_pBorderVtxBuffer ), nullptr, nullptr );
-			m_pBorderGeometryBuffer->GetVertexBuffer().Create();
-			m_pBorderGeometryBuffer->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, GetPanelProgram( eTEXTURE_CHANNEL_COLOUR ) );
 			m_pBorderGeometryBuffer->Initialise();
 		}
 
-		if ( !m_pTextGeometryBuffers )
-		{
-			// Text Overlays
-			VertexBufferUPtr l_pTextVtxBuffer = std::make_unique< VertexBuffer >( m_pRenderSystem, &( *m_pDeclaration )[0], m_pDeclaration->Size() );
-			m_pTextGeometryBuffers = m_pRenderSystem->CreateGeometryBuffers( std::move( l_pTextVtxBuffer ), nullptr, nullptr );
-			m_pTextGeometryBuffers->GetVertexBuffer().Create();
-			m_pTextGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, GetTextProgram( eTEXTURE_CHANNEL_COLOUR ) );
-			m_pTextGeometryBuffers->Initialise();
+		// Create one text overlays buffer
+		DoCreateTextGeometryBuffers();
 
-			// Driver specific
-			DoInitialise();
-		}
+		// Driver specific
+		DoInitialise();
 	}
 
 	void OverlayRenderer::Cleanup()
 	{
 		DoCleanup();
 
-		std::for_each( m_mapPanelPrograms.begin(), m_mapPanelPrograms.end(), [&]( std::pair< uint32_t, ShaderProgramBaseSPtr > p_pair )
+		for ( auto && l_pair: m_mapPanelPrograms )
 		{
-			if ( p_pair.second )
+			if ( l_pair.second )
 			{
-				p_pair.second->Cleanup();
+				l_pair.second->Cleanup();
 			}
-		} );
+		}
 
-		std::for_each( m_mapTextPrograms.begin(), m_mapTextPrograms.end(), [&]( std::pair< uint32_t, ShaderProgramBaseSPtr > p_pair )
+		for ( auto && l_pair: m_mapTextPrograms )
 		{
-			if ( p_pair.second )
+			if ( l_pair.second )
 			{
-				p_pair.second->Cleanup();
+				l_pair.second->Cleanup();
 			}
-		} );
+		}
 
 		m_mapPanelPrograms.clear();
 		m_mapTextPrograms.clear();
@@ -147,208 +164,92 @@ namespace Castor3D
 			m_pBorderGeometryBuffer.reset();
 		}
 
-		if ( m_pTextGeometryBuffers )
+		for ( auto && l_geometryBuffers: m_pTextsGeometryBuffers )
 		{
-			m_pTextGeometryBuffers->GetVertexBuffer().Cleanup();
-			m_pTextGeometryBuffers->Cleanup();
-			m_pTextGeometryBuffers.reset();
+			l_geometryBuffers->GetVertexBuffer().Cleanup();
+			l_geometryBuffers->Cleanup();
+			l_geometryBuffers.reset();
 		}
+
+		m_pTextsGeometryBuffers.clear();
 	}
 
-	void OverlayRenderer::DrawPanel( PanelOverlay & p_panelOverlay )
+	uint32_t FillBuffers( OverlayCategory::VertexArray::const_iterator p_begin, size_t p_count, GeometryBuffers & p_buffers )
 	{
-		MaterialSPtr l_pMaterial = p_panelOverlay.GetMaterial();
-		int iZIndex = 1000 - p_panelOverlay.GetOverlay().GetZIndex();
+		VertexBuffer & l_vtxBuffer = p_buffers.GetVertexBuffer();
+
+		if ( l_vtxBuffer.Bind() )
+		{
+			OverlayCategory::Vertex const & l_vertex = *p_begin;
+			l_vtxBuffer.Fill( reinterpret_cast< uint8_t const * >( &l_vertex ), p_count * sizeof( OverlayCategory::Vertex ), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+			l_vtxBuffer.Unbind();
+		}
+
+		return p_count;
+	}
+
+	void OverlayRenderer::DrawPanel( PanelOverlay & p_overlay )
+	{
+		MaterialSPtr l_pMaterial = p_overlay.GetMaterial();
 
 		if ( l_pMaterial )
 		{
-			std::vector< OverlayCategory::Vertex > const & l_arrayVtx = p_panelOverlay.GetVertexBuffer();
-			uint32_t l_count = uint32_t( l_arrayVtx.size() );
-
-			if ( m_previousPanelZIndex != iZIndex )
-			{
-				m_previousPanelZIndex = iZIndex;
-				VertexBuffer & l_vtxBuffer = m_pPanelGeometryBuffer->GetVertexBuffer();
-
-				if ( l_vtxBuffer.Bind() )
-				{
-					l_vtxBuffer.Fill( reinterpret_cast< uint8_t const * >( l_arrayVtx.data() ), l_count * sizeof( OverlayCategory::Vertex ), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
-					l_vtxBuffer.Unbind();
-				}
-			}
-
-			uint8_t l_byIndex = 0;
-			uint8_t l_byCount = uint8_t( l_pMaterial->GetPassCount() );
-
-			std::for_each( l_pMaterial->Begin(), l_pMaterial->End(), [&]( PassSPtr p_pPass )
-			{
-				ShaderProgramBaseSPtr l_pProgram = GetPanelProgram( p_pPass->GetTextureFlags() );
-
-				if ( l_pProgram )
-				{
-					p_pPass->BindToProgram( l_pProgram );
-					auto l_matrixBuffer = p_pPass->GetMatrixBuffer();
-
-					if ( l_matrixBuffer )
-					{
-						m_pRenderSystem->GetPipeline()->ApplyMatrices( *l_matrixBuffer );
-					}
-
-					p_pPass->Render2D( l_byIndex++, l_byCount );
-					m_pPanelGeometryBuffer->Draw( eTOPOLOGY_TRIANGLES, l_pProgram, l_count, 0 );
-					p_pPass->EndRender();
-				}
-			} );
+			DoDrawItem( *l_pMaterial, *m_pRenderSystem->GetPipeline(), m_pPanelGeometryBuffer, nullptr, FillBuffers( p_overlay.GetPanelVertex().begin(), p_overlay.GetPanelVertex().size(), *m_pPanelGeometryBuffer ) );
 		}
 	}
 
-	void OverlayRenderer::DrawBorderPanel( BorderPanelOverlay & p_borderPanelOverlay )
+	void OverlayRenderer::DrawBorderPanel( BorderPanelOverlay & p_overlay )
 	{
-		MaterialSPtr l_pMaterial = p_borderPanelOverlay.GetMaterial();
-		int iZIndex = 1000 - p_borderPanelOverlay.GetOverlay().GetZIndex();
+		MaterialSPtr l_pMaterial = p_overlay.GetMaterial();
 
 		if ( l_pMaterial )
 		{
-			std::vector< OverlayCategory::Vertex > const & l_arrayVtx = p_borderPanelOverlay.GetVertexBuffer();
-			uint32_t l_count = uint32_t( l_arrayVtx.size() );
-
-			if ( m_previousPanelZIndex != iZIndex )
-			{
-				m_previousPanelZIndex = iZIndex;
-				VertexBuffer & l_vtxBuffer = m_pPanelGeometryBuffer->GetVertexBuffer();
-
-				if ( l_vtxBuffer.Bind() )
-				{
-					l_vtxBuffer.Fill( reinterpret_cast< uint8_t const * >( l_arrayVtx.data() ), l_count * sizeof( OverlayCategory::Vertex ), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
-					l_vtxBuffer.Unbind();
-				}
-			}
-
-			uint8_t l_byIndex = 0;
-			uint8_t l_byCount = uint8_t( l_pMaterial->GetPassCount() );
-
-			std::for_each( l_pMaterial->Begin(), l_pMaterial->End(), [&]( PassSPtr p_pPass )
-			{
-				ShaderProgramBaseSPtr l_pProgram = GetPanelProgram( p_pPass->GetTextureFlags() );
-
-				if ( l_pProgram )
-				{
-					p_pPass->BindToProgram( l_pProgram );
-					auto l_matrixBuffer = p_pPass->GetMatrixBuffer();
-
-					if ( l_matrixBuffer )
-					{
-						m_pRenderSystem->GetPipeline()->ApplyMatrices( *l_matrixBuffer );
-					}
-
-					p_pPass->Render2D( l_byIndex++, l_byCount );
-					m_pPanelGeometryBuffer->Draw( eTOPOLOGY_TRIANGLES, l_pProgram, l_count, 0 );
-					p_pPass->EndRender();
-				}
-			} );
+			DoDrawItem( *l_pMaterial, *m_pRenderSystem->GetPipeline(), m_pPanelGeometryBuffer, nullptr, FillBuffers( p_overlay.GetPanelVertex().begin(), p_overlay.GetPanelVertex().size(), *m_pPanelGeometryBuffer ) );
 		}
 
-		l_pMaterial = p_borderPanelOverlay.GetBorderMaterial();
+		l_pMaterial = p_overlay.GetBorderMaterial();
 
 		if ( l_pMaterial )
 		{
-			std::vector< OverlayCategory::Vertex > const & l_arrayVtx = p_borderPanelOverlay.GetBorderVertexBuffer();
-			uint32_t l_count = uint32_t( l_arrayVtx.size() );
-
-			if ( m_previousBorderZIndex != iZIndex )
-			{
-				m_previousBorderZIndex = iZIndex;
-				VertexBuffer & l_vtxBuffer = m_pBorderGeometryBuffer->GetVertexBuffer();
-
-				if ( l_vtxBuffer.Bind() )
-				{
-					l_vtxBuffer.Fill( reinterpret_cast< uint8_t const * >( l_arrayVtx.data() ), l_count * sizeof( OverlayCategory::Vertex ), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
-					l_vtxBuffer.Unbind();
-				}
-			}
-
-			uint8_t l_byIndex = 0;
-			uint8_t l_byCount = uint8_t( l_pMaterial->GetPassCount() );
-
-			std::for_each( l_pMaterial->Begin(), l_pMaterial->End(), [&]( PassSPtr p_pPass )
-			{
-				ShaderProgramBaseSPtr l_pProgram = GetPanelProgram( p_pPass->GetTextureFlags() );
-
-				if ( l_pProgram )
-				{
-					p_pPass->BindToProgram( l_pProgram );
-					auto l_matrixBuffer = p_pPass->GetMatrixBuffer();
-
-					if ( l_matrixBuffer )
-					{
-						m_pRenderSystem->GetPipeline()->ApplyMatrices( *l_matrixBuffer );
-					}
-
-					p_pPass->Render2D( l_byIndex++, l_byCount );
-					m_pBorderGeometryBuffer->Draw( eTOPOLOGY_TRIANGLES, l_pProgram, l_count, 0 );
-					p_pPass->EndRender();
-				}
-			} );
+			DoDrawItem( *l_pMaterial, *m_pRenderSystem->GetPipeline(), m_pBorderGeometryBuffer, nullptr, FillBuffers( p_overlay.GetBorderVertex().begin(), p_overlay.GetBorderVertex().size(), *m_pBorderGeometryBuffer ) );
 		}
 	}
 
-	void OverlayRenderer::DrawText( TextOverlay & p_textOverlay )
+	void OverlayRenderer::DrawText( TextOverlay & p_overlay )
 	{
-		FontSPtr l_pFont = p_textOverlay.GetFont();
-		int iZIndex = 1000 - p_textOverlay.GetOverlay().GetZIndex();
+		FontSPtr l_pFont = p_overlay.GetFont();
 
 		if ( l_pFont )
 		{
-			MaterialSPtr l_pMaterial = p_textOverlay.GetMaterial();
-			VertexBuffer & l_vtxBuffer = m_pTextGeometryBuffers->GetVertexBuffer();
-			DynamicTextureSPtr l_texture = p_textOverlay.GetTexture();
+			MaterialSPtr l_pMaterial = p_overlay.GetMaterial();
 
 			if ( l_pMaterial )
 			{
-				std::vector< OverlayCategory::Vertex > const & l_arrayVtx = p_textOverlay.GetVertexBuffer();
-				uint32_t l_count = uint32_t( l_arrayVtx.size() );
+				OverlayCategory::VertexArray l_arrayVtx = p_overlay.GetTextVertex();
+				int32_t l_count = l_arrayVtx.size();
+				uint32_t l_index = 0;
+				std::vector< GeometryBuffersSPtr > l_geometryBuffers;
+				auto l_it = l_arrayVtx.begin();
 
-				if ( m_previousCaption != p_textOverlay.GetCaption() || m_previousTextZIndex != iZIndex )
+				while ( l_count > C3D_MAX_CHARS_PER_BUFFER )
 				{
-					m_previousTextZIndex = iZIndex;
-					m_previousCaption = p_textOverlay.GetCaption();
-
-					if ( l_vtxBuffer.Bind() )
-					{
-						l_vtxBuffer.Fill( reinterpret_cast< uint8_t const * >( l_arrayVtx.data() ), l_count * sizeof( OverlayCategory::Vertex ), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
-						l_vtxBuffer.Unbind();
-					}
+					l_geometryBuffers.push_back( DoFillTextPart( l_count, l_it, l_index ) );
+					l_count -= C3D_MAX_CHARS_PER_BUFFER;
 				}
 
-				uint8_t l_byIndex = 0;
-				uint8_t l_byCount = uint8_t( l_pMaterial->GetPassCount() );
-
-				std::for_each( l_pMaterial->Begin(), l_pMaterial->End(), [&]( PassSPtr p_pPass )
+				if ( l_count > 0 )
 				{
-					ShaderProgramBaseSPtr l_pProgram = GetTextProgram( p_pPass->GetTextureFlags() );
+					l_geometryBuffers.push_back( DoFillTextPart( l_count, l_it, l_index ) );
+				}
 
-					if ( l_pProgram )
-					{
-						if ( l_vtxBuffer.Bind() )
-						{
-							l_vtxBuffer.Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, l_pProgram );
-							l_vtxBuffer.Unbind();
-							p_pPass->BindToProgram( l_pProgram );
-							auto l_matrixBuffer = p_pPass->GetMatrixBuffer();
+				DynamicTextureSPtr l_texture = p_overlay.GetTexture();
+				l_count = l_arrayVtx.size();
 
-							if ( l_matrixBuffer )
-							{
-								m_pRenderSystem->GetPipeline()->ApplyMatrices( *l_matrixBuffer );
-							}
-
-							p_pPass->Render2D( l_byIndex++, l_byCount );
-							l_texture->Bind();
-							m_pTextGeometryBuffers->Draw( eTOPOLOGY_TRIANGLES, l_pProgram, l_count, 0 );
-							l_texture->Unbind();
-							p_pPass->EndRender();
-						}
-					}
-				} );
+				for ( auto l_vtxBuffer: l_geometryBuffers )
+				{
+					DoDrawItem( *l_pMaterial, *m_pRenderSystem->GetPipeline(), l_vtxBuffer, l_texture, std::min( l_count, C3D_MAX_CHARS_PER_BUFFER ) );
+					l_count -= C3D_MAX_CHARS_PER_BUFFER;
+				}
 			}
 		}
 	}
@@ -362,7 +263,7 @@ namespace Castor3D
 	{
 	}
 
-	ShaderProgramBaseSPtr OverlayRenderer::GetPanelProgram( uint32_t p_uiFlags )
+	ShaderProgramBaseSPtr OverlayRenderer::DoGetPanelProgram( uint32_t p_uiFlags )
 	{
 		p_uiFlags &= ~eTEXTURE_CHANNEL_AMBIENT;
 		p_uiFlags &= ~eTEXTURE_CHANNEL_DIFFUSE;
@@ -392,7 +293,7 @@ namespace Castor3D
 		return l_pReturn;
 	}
 
-	ShaderProgramBaseSPtr OverlayRenderer::GetTextProgram( uint32_t p_uiFlags )
+	ShaderProgramBaseSPtr OverlayRenderer::DoGetTextProgram( uint32_t p_uiFlags )
 	{
 		p_uiFlags &= ~eTEXTURE_CHANNEL_AMBIENT;
 		p_uiFlags &= ~eTEXTURE_CHANNEL_DIFFUSE;
@@ -421,5 +322,89 @@ namespace Castor3D
 		}
 
 		return l_pReturn;
+	}
+
+	GeometryBuffersSPtr OverlayRenderer::DoCreateTextGeometryBuffers()
+	{
+		VertexBufferUPtr l_pTextVtxBuffer = std::make_unique< VertexBuffer >( m_pRenderSystem, &( *m_pDeclaration )[0], m_pDeclaration->Size() );
+		l_pTextVtxBuffer->Resize( C3D_MAX_CHARS_PER_BUFFER * sizeof( OverlayCategory::Vertex ) );
+		l_pTextVtxBuffer->Create();
+		l_pTextVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, DoGetTextProgram( eTEXTURE_CHANNEL_COLOUR ) );
+		GeometryBuffersSPtr l_geometryBuffers = m_pRenderSystem->CreateGeometryBuffers( std::move( l_pTextVtxBuffer ), nullptr, nullptr );
+		l_geometryBuffers->Initialise();
+		m_pTextsGeometryBuffers.push_back( l_geometryBuffers );
+		return l_geometryBuffers;
+	}
+
+	void OverlayRenderer::DoDrawItem( Material & p_material, Pipeline & p_pipeline, GeometryBuffersSPtr p_geometryBuffers, DynamicTextureSPtr p_texture, uint32_t p_count )
+	{
+		uint8_t l_byIndex = 0;
+		uint8_t l_byCount = uint8_t( p_material.GetPassCount() );
+
+		for ( auto && l_pass: p_material )
+		{
+			ShaderProgramBaseSPtr l_program;
+			
+			if ( p_texture )
+			{
+				l_program = DoGetTextProgram( l_pass->GetTextureFlags() );
+			}
+			else
+			{
+				l_program = DoGetPanelProgram( l_pass->GetTextureFlags() );
+			}
+
+			if ( l_program )
+			{
+				l_pass->BindToProgram( l_program );
+				auto l_matrixBuffer = l_pass->GetMatrixBuffer();
+
+				if ( l_matrixBuffer )
+				{
+					p_pipeline.ApplyProjection( *l_matrixBuffer );
+				}
+
+				OneTextureFrameVariableSPtr l_textureVariable = l_program->FindFrameVariable( ShaderProgramBase::MapText, eSHADER_TYPE_PIXEL );
+
+				if ( l_textureVariable )
+				{
+					l_textureVariable->SetValue( p_texture.get() );
+				}
+
+				l_pass->Render2D( l_byIndex++, l_byCount );
+
+				if ( p_texture )
+				{
+					p_texture->BindAt( 0 );
+					p_geometryBuffers->Draw( eTOPOLOGY_TRIANGLES, l_program, p_count, 0 );
+					p_texture->UnbindFrom( 0 );
+				}
+				else
+				{
+					p_geometryBuffers->Draw( eTOPOLOGY_TRIANGLES, l_program, p_count, 0 );
+				}
+
+				l_pass->EndRender();
+			}
+		}
+	}
+
+	GeometryBuffersSPtr OverlayRenderer::DoFillTextPart( int32_t p_count, OverlayCategory::VertexArray::const_iterator & p_it, uint32_t & p_index )
+	{
+		GeometryBuffersSPtr l_geometryBuffers;
+
+		if ( m_pTextsGeometryBuffers.size() <= p_index )
+		{
+			l_geometryBuffers = DoCreateTextGeometryBuffers();
+		}
+		else
+		{
+			l_geometryBuffers = m_pTextsGeometryBuffers[p_index++];
+		}
+
+		p_count = std::min( p_count, C3D_MAX_CHARS_PER_BUFFER );
+		FillBuffers( p_it, p_count, *l_geometryBuffers );
+		p_it += p_count;
+		return l_geometryBuffers;
 	}
 }

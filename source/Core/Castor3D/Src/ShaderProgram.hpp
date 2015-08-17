@@ -294,12 +294,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Adds a variable buffer to add
-		 *\param[in]	p_pVariableBuffer	The variable buffer
+		 *\param[in]	p_pVariableBuffer	The GPU variables buffer
+		 *\param[in]	p_shaderMask		MASK_SHADER_TYPE combination, to set at what shaders it is to be bound
 		 *\~french
 		 *\brief		Crée une buffer de variables uniformes à ajouter.
-		 *\param[in]	p_pVariableBuffer	La variable buffer
+		 *\param[in]	p_pVariableBuffer	Le tampon de variables GPU
+		 *\param[in]	p_shaderMask		Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié
 		 */
-		void AddFrameVariableBuffer( FrameVariableBufferSPtr p_pVariableBuffer );
+		void AddFrameVariableBuffer( FrameVariableBufferSPtr p_pVariableBuffer, uint32_t p_shaderMask );
 		/**
 		 *\~english
 		 *\brief		Finds a variable
@@ -309,6 +311,34 @@ namespace Castor3D
 		 *\return		La variable trouvé, nullptr en cas d'échec
 		 */
 		FrameVariableBufferSPtr FindFrameVariableBuffer( Castor::String const & p_strName )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the frame variable buffers bound to one shader type
+		 *\parma[in]	p_type	The shader type
+		 *\return		The list
+		 *\~french
+		 *\brief		Récupère les tampons de variable de frames liés à un type de shader particulier
+		 *\parma[in]	p_type	The shader type
+		 *\return		La liste
+		 */
+		inline FrameVariableBufferPtrList & GetFrameVariableBuffers( eSHADER_TYPE p_type )
+		{
+			return m_frameVariableBuffers[p_type];
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the frame variable buffers bound to one shader type
+		 *\parma[in]	p_type	The shader type
+		 *\return		The list
+		 *\~french
+		 *\brief		Récupère les tampons de variable de frames liés à un type de shader particulier
+		 *\parma[in]	p_type	The shader type
+		 *\return		La liste
+		 */
+		inline const FrameVariableBufferPtrList & GetFrameVariableBuffers( eSHADER_TYPE p_type )const
+		{
+			return m_frameVariableBuffers[p_type];
+		}
 		/**
 		 *\~english
 		 *\brief		Resets compilation variables to be able to compile again
@@ -600,8 +630,10 @@ namespace Castor3D
 		std::array< Castor::Path, eSHADER_MODEL_COUNT > m_arrayFiles;
 		//!\~english The RenderSystem instance	\~french L'instance du RenderSystem
 		RenderSystem * m_pRenderSystem;
-		//!\~english The frame variable buffers map, ordered by name	\~french La liste des buffers de variable de frame
-		FrameVariableBufferPtrStrMap m_mapFrameVariableBuffers;
+		//!\~english The frame variable buffers map, ordered by name	\~french La liste des buffers de variable de frame, triés par nom
+		FrameVariableBufferPtrStrMap m_frameVariableBuffersByName;
+		//!\~english The frame variable buffers map, ordered by shader type	\~french La liste des buffers de variable de frame, triés par type de shader
+		std::array< FrameVariableBufferPtrList, eSHADER_TYPE_COUNT > m_frameVariableBuffers;
 		//!\~english The frame variable buffers map	\~french La liste des buffer de variables de frame
 		FrameVariableBufferPtrList m_listFrameVariableBuffers;
 	};

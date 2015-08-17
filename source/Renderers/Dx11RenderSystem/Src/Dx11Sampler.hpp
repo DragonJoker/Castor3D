@@ -15,45 +15,31 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___DX11_STATIC_TEXTURE_H___
-#define ___DX11_STATIC_TEXTURE_H___
+#ifndef ___DX11_SAMPLER_H___
+#define ___DX11_SAMPLER_H___
 
 #include "Dx11RenderSystemPrerequisites.hpp"
 
-#include <StaticTexture.hpp>
+#include <Sampler.hpp>
 
 namespace Dx11Render
 {
-	class DxStaticTexture
-		:	public Castor3D::StaticTexture
+	class DxSampler
+		:	public Castor3D::Sampler
 	{
 	public:
-		DxStaticTexture( DxRenderSystem * p_pRenderSystem );
-		virtual ~DxStaticTexture();
+		DxSampler( DxRenderSystem * p_pRenderSystem, Castor::String const & p_name );
+		virtual ~DxSampler();
 
-		virtual bool Create();
-		virtual void Destroy();
+		virtual bool Initialise();
 		virtual void Cleanup();
-		virtual uint8_t * Lock( uint32_t p_uiLock );
-		virtual void Unlock( bool p_bModified );
-		virtual void GenerateMipmaps() {}
-
-		inline ID3D11ShaderResourceView * GetShaderResourceView()const
-		{
-			return m_pShaderResourceView;
-		}
+		virtual bool Bind( Castor3D::eTEXTURE_DIMENSION p_eDimension, uint32_t p_uiIndex );
+		virtual void Unbind();
 
 	private:
-		virtual bool DoInitialise();
-		virtual bool DoBind( uint32_t p_index );
-		virtual void DoUnbind( uint32_t p_index );
-
-		void DoInitTex2DDesc( D3D11_TEXTURE2D_DESC & p_tex2dDesc );
-		void DoInitTex2DData( D3D11_SUBRESOURCE_DATA & p_tex2dData );
-
-	private:
-		ID3D11ShaderResourceView * m_pShaderResourceView;
-		DxRenderSystem * m_pRenderSystem;
+		DxRenderSystem * m_pDxRenderSystem;
+		D3D11_SAMPLER_DESC m_tex2dSampler;
+		ID3D11SamplerState * m_pSamplerState;
 	};
 }
 

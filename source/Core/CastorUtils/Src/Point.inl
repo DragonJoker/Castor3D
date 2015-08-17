@@ -1457,15 +1457,15 @@ namespace Castor
 	{
 		return PtOperators< T, U, Count, Count >::div( p_pt, p_coords );
 	}
-	template< typename T, uint32_t Count >
-	inline Point< T, Count > operator *( Point< T, Count > const & p_pt, T const & p_coord )
+	template< typename T, uint32_t Count, typename U >
+	inline Point< T, Count > operator *( Point< T, Count > const & p_pt, U const & p_coord )
 	{
-		return PtOperators< T, T, Count, Count >::mul( p_pt, p_coord );
+		return PtOperators< T, U, Count, Count >::mul( p_pt, p_coord );
 	}
-	template< typename T, uint32_t Count >
-	inline Point< T, Count > operator /( Point< T, Count > const & p_pt, T const & p_coord )
+	template< typename T, uint32_t Count, typename U >
+	inline Point< T, Count > operator /( Point< T, Count > const & p_pt, U const & p_coord )
 	{
-		return PtOperators< T, T, Count, Count >::div( p_pt, p_coord );
+		return PtOperators< T, U, Count, Count >::div( p_pt, p_coord );
 	}
 
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >

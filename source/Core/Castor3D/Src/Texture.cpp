@@ -25,4 +25,14 @@ namespace Castor3D
 	{
 		m_pPixelBuffer = p_pBuffer;
 	}
+
+	bool TextureBase::Bind()
+	{
+		return BindAt( m_uiIndex );
+	}
+
+	void TextureBase::Unbind()
+	{
+		UnbindFrom( m_uiIndex );
+	}
 }

@@ -507,7 +507,7 @@ namespace Dx11Render
 
 		if ( l_pUniforms && l_pInputs )
 		{
-			l_strReturn += l_pUniforms->GetVertexInMatrices();
+			l_strReturn += l_pUniforms->GetVertexInMatrices( 0 );
 			l_strReturn += l_pInputs->GetVtxInput();
 			l_strReturn += l_pInputs->GetVtxOutput();
 			l_strReturn +=
@@ -550,9 +550,9 @@ namespace Dx11Render
 			String	l_strMainLightsLoopEnd = g_ps.GetMainLightsLoopEnd();
 			String	l_strMainEnd = g_ps.GetMainEnd();
 			String	l_strMainLightsLoopAfterLightDir = g_ps.GetMainLightsLoopAfterLightDir();
-			l_strDeclarations += l_pUniforms->GetPixelInMatrices();
-			l_strDeclarations += l_pUniforms->GetPixelScene();
-			l_strDeclarations += l_pUniforms->GetPixelPass();
+			l_strDeclarations += l_pUniforms->GetPixelInMatrices( 0 );
+			l_strDeclarations += l_pUniforms->GetPixelScene( 1 );
+			l_strDeclarations += l_pUniforms->GetPixelPass( 2 );
 			l_strDeclarations += l_pInputs->GetPxlInput();
 			l_strMainDeclarations = str_utils::replace( l_strMainDeclarations, cuT( "[PxlOutput]" ), l_pInputs->GetPxlOutput() );
 
@@ -564,82 +564,82 @@ namespace Dx11Render
 				{
 					l_strIndex.clear();
 					l_strIndex << l_iIndex++;
-					l_strDeclarations += cuT( "Texture2D			c3d_mapColour : register( t" ) + l_strIndex + cuT( " );\n" );
-					l_strMainDeclarations += cuT( "	float4	l_v4MapColour		= c3d_mapColour.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
-					l_strMainLightsLoopEnd += cuT( "	l_v4Ambient		*= l_v4MapColour;\n" );
+					l_strDeclarations += cuT( "Texture2D c3d_mapColour: register( t" ) + l_strIndex + cuT( " );\n" );
+					l_strMainDeclarations += cuT( "	float4 l_v4MapColour = c3d_mapColour.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
+					l_strMainLightsLoopEnd += cuT( "	l_v4Ambient *= l_v4MapColour;\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
 				{
 					l_strIndex.clear();
 					l_strIndex << l_iIndex++;
-					l_strDeclarations += cuT( "Texture2D			c3d_mapAmbient : register( t" ) + l_strIndex + cuT( " );\n" );
-					l_strMainDeclarations += cuT( "	float4	l_v4MapAmbient		= c3d_mapAmbient.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
-					l_strMainLightsLoopEnd += cuT( "	l_v4Ambient		*= l_v4MapAmbient;\n" );
+					l_strDeclarations += cuT( "Texture2D c3d_mapAmbient: register( t" ) + l_strIndex + cuT( " );\n" );
+					l_strMainDeclarations += cuT( "	float4 l_v4MapAmbient = c3d_mapAmbient.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
+					l_strMainLightsLoopEnd += cuT( "	l_v4Ambient *= l_v4MapAmbient;\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
 				{
 					l_strIndex.clear();
 					l_strIndex << l_iIndex++;
-					l_strDeclarations += cuT( "Texture2D			c3d_mapDiffuse : register( t" ) + l_strIndex + cuT( " );\n" );
-					l_strMainDeclarations += cuT( "	float4	l_v4MapDiffuse		= c3d_mapDiffuse.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
-					l_strMainLightsLoopEnd += cuT( "	l_v4Ambient		*= l_v4MapDiffuse;\n" );
-					l_strMainLightsLoopEnd += cuT( "	l_v4Diffuse		*= l_v4MapDiffuse;\n" );
+					l_strDeclarations += cuT( "Texture2D c3d_mapDiffuse: register( t" ) + l_strIndex + cuT( " );\n" );
+					l_strMainDeclarations += cuT( "	float4 l_v4MapDiffuse = c3d_mapDiffuse.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
+					l_strMainLightsLoopEnd += cuT( "	l_v4Ambient *= l_v4MapDiffuse;\n" );
+					l_strMainLightsLoopEnd += cuT( "	l_v4Diffuse *= l_v4MapDiffuse;\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
 				{
 					l_strIndex.clear();
 					l_strIndex << l_iIndex++;
-					l_strDeclarations += cuT( "Texture2D			c3d_mapNormal : register( t" ) + l_strIndex + cuT( " );\n" );
-					l_strMainDeclarations += cuT( "	float4	l_v4MapNormal		= c3d_mapNormal.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
-					l_strMainDeclarations += cuT( "	float 	l_fSqrLength;\n" );
-					l_strMainDeclarations += cuT( "	float 	l_fAttenuation;\n" );
-					l_strMainDeclarations += cuT( "	float	l_fInvRadius		= 0.02;\n" );
-					l_strMainDeclarations += cuT( "	l_v3Normal					= normalize( l_v4MapNormal.xyz * 2.0 - 1.0 );\n" );
-					//l_strMainLightsLoop += cuT( "		l_v3LightDir 	= (vtx_mtxView * vec4( l_v3LightDir, 1 )).xyz;\n" );
-					l_strMainLightsLoop += cuT( "		l_v3LightDir 	= float3( dot( l_v3LightDir, p_input.Tangent ), dot( l_v3LightDir, p_input.Binormal ), dot( l_v3LightDir, p_input.Normal ) );\n" );
-					l_strMainLightsLoop += cuT( "		l_fSqrLength	= dot( l_v3LightDir, l_v3LightDir );\n" );
-					l_strMainLightsLoop += cuT( "		l_v3LightDir	= l_v3LightDir * rsqrt( l_fSqrLength );\n" );
-					l_strMainLightsLoop += cuT( "		l_fAttenuation	= clamp( 1.0 - l_fInvRadius * sqrt( l_fSqrLength ), 0.0, 1.0 );\n" );
-					l_strMainLightsLoopAfterLightDir += cuT( "		l_v4Ambient		*= l_fAttenuation;\n" );
-					l_strMainLightsLoopAfterLightDir += cuT( "		l_v4Diffuse		*= l_fAttenuation;\n" );
-					l_strMainLightsLoopAfterLightDir += cuT( "		l_v4Specular	*= l_fAttenuation;\n" );
+					l_strDeclarations += cuT( "Texture2D c3d_mapNormal: register( t" ) + l_strIndex + cuT( " );\n" );
+					l_strMainDeclarations += cuT( "	float4 l_v4MapNormal = c3d_mapNormal.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
+					l_strMainDeclarations += cuT( "	float l_fSqrLength;\n" );
+					l_strMainDeclarations += cuT( "	float l_fAttenuation;\n" );
+					l_strMainDeclarations += cuT( "	float l_fInvRadius = 0.02;\n" );
+					l_strMainDeclarations += cuT( "	l_v3Normal = normalize( l_v4MapNormal.xyz * 2.0 - 1.0 );\n" );
+					//l_strMainLightsLoop += cuT( "		l_v3LightDir = (vtx_mtxView * vec4( l_v3LightDir, 1 )).xyz;\n" );
+					l_strMainLightsLoop += cuT( "		l_v3LightDir = float3( dot( l_v3LightDir, p_input.Tangent ), dot( l_v3LightDir, p_input.Binormal ), dot( l_v3LightDir, p_input.Normal ) );\n" );
+					l_strMainLightsLoop += cuT( "		l_fSqrLength = dot( l_v3LightDir, l_v3LightDir );\n" );
+					l_strMainLightsLoop += cuT( "		l_v3LightDir = l_v3LightDir * rsqrt( l_fSqrLength );\n" );
+					l_strMainLightsLoop += cuT( "		l_fAttenuation = clamp( 1.0 - l_fInvRadius * sqrt( l_fSqrLength ), 0.0, 1.0 );\n" );
+					l_strMainLightsLoopAfterLightDir += cuT( "		l_v4Ambient *= l_fAttenuation;\n" );
+					l_strMainLightsLoopAfterLightDir += cuT( "		l_v4Diffuse *= l_fAttenuation;\n" );
+					l_strMainLightsLoopAfterLightDir += cuT( "		l_v4Specular *= l_fAttenuation;\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
 				{
 					l_strIndex.clear();
 					l_strIndex << l_iIndex++;
-					l_strDeclarations += cuT( "Texture2D			c3d_mapOpacity : register( t" ) + l_strIndex + cuT( " );\n" );
-					l_strMainDeclarations += cuT( "	float4	l_v4MapOpacity		= c3d_mapOpacity.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
-					l_strMainLightsLoopEnd += cuT( "	l_fAlpha		= l_v4MapOpacity.r * c3d_fMatOpacity;\n" );
+					l_strDeclarations += cuT( "Texture2D c3d_mapOpacity: register( t" ) + l_strIndex + cuT( " );\n" );
+					l_strMainDeclarations += cuT( "	float4 l_v4MapOpacity = c3d_mapOpacity.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
+					l_strMainLightsLoopEnd += cuT( "	l_fAlpha = l_v4MapOpacity.r * c3d_fMatOpacity;\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
 				{
 					l_strIndex.clear();
 					l_strIndex << l_iIndex++;
-					l_strDeclarations += cuT( "Texture2D			c3d_mapSpecular : register( t" ) + l_strIndex + cuT( " );\n" );
-					l_strMainDeclarations += cuT( "	float4	l_v4MapSpecular		= c3d_mapSpecular.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
-					l_strMainLightsLoopEnd += cuT( "	l_v4Specular	*= l_v4MapSpecular;\n" );
+					l_strDeclarations += cuT( "Texture2D c3d_mapSpecular: register( t" ) + l_strIndex + cuT( " );\n" );
+					l_strMainDeclarations += cuT( "	float4 l_v4MapSpecular = c3d_mapSpecular.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
+					l_strMainLightsLoopEnd += cuT( "	l_v4Specular *= l_v4MapSpecular;\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
 				{
 					l_strIndex.clear();
 					l_strIndex << l_iIndex++;
-					l_strDeclarations += cuT( "Texture2D			c3d_mapHeight : register( t" ) + l_strIndex + cuT( " );\n" );
-					l_strMainDeclarations += cuT( "	float4	l_v4MapHeight		= c3d_mapHeight.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
+					l_strDeclarations += cuT( "Texture2D c3d_mapHeight: register( t" ) + l_strIndex + cuT( " );\n" );
+					l_strMainDeclarations += cuT( "	float4 l_v4MapHeight = c3d_mapHeight.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
 				{
 					l_strIndex.clear();
 					l_strIndex << l_iIndex++;
-					l_strDeclarations += cuT( "Texture2D			c3d_mapGloss : register( t" ) + l_strIndex + cuT( " );\n" );
-					l_strMainDeclarations += cuT( "	float4	l_v4MapGloss		= c3d_mapGloss.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
+					l_strDeclarations += cuT( "Texture2D c3d_mapGloss: register( t" ) + l_strIndex + cuT( " );\n" );
+					l_strMainDeclarations += cuT( "	float4 l_v4MapGloss = c3d_mapGloss.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
 				}
 			}
 

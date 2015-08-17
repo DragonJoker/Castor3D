@@ -19,8 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_LIGHT_H___
 
 #include "MovableObject.hpp"
-#include "LightRenderer.hpp"
-#include "Renderable.hpp"
 #include "LightCategory.hpp"
 
 #pragma warning( push )
@@ -40,8 +38,7 @@ namespace Castor3D
 	\remark
 	*/
 	class C3D_API Light
-		:	public MovableObject
-		,	public Renderable< Light, LightRenderer >
+		: public MovableObject
 	{
 	public:
 		/**
@@ -79,20 +76,6 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		~Light();
-		/**
-		 *\~english
-		 *\brief		Enables the light
-		 *\~french
-		 *\brief		Active la lumière
-		 */
-		void Enable();
-		/**
-		 *\~english
-		 *\brief		Disables the light
-		 *\~french
-		 *\brief		Désactive la lumière
-		 */
-		void Disable();
 		/**
 		 *\~english
 		 *\brief		Renders the light
@@ -384,8 +367,40 @@ namespace Castor3D
 		{
 			m_enabled = p_enabled;
 		}
+		/**
+		 *\~english
+		 *\brief		Enables the light
+		 *\~french
+		 *\brief		Active la lumière
+		 */
+		inline void Enable()
+		{
+			SetEnabled( true );
+		}
+		/**
+		 *\~english
+		 *\brief		Disables the light
+		 *\~french
+		 *\brief		Désactive la lumière
+		 */
+		inline void Disable()
+		{
+			SetEnabled( false );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the Engine
+		 *\~french
+		 *\brief		Récupère l'Engine
+		 */
+		virtual Engine * GetEngine()const
+		{
+			return m_pEngine;
+		}
 
 	protected:
+		//!\~english The core engine	\~french Le moteur
+		Engine * m_pEngine;
 		//!\~english Tells the light is enabled	\~french Dit si la lumière est active ou pas
 		bool m_enabled;
 		//!\~english The Light category that effectively holds light data	\~french la light category contenant les données de la lumière

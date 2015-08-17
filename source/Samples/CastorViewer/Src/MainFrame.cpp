@@ -40,7 +40,6 @@
 #include <Scene.hpp>
 #include <SceneFileParser.hpp>
 #include <Submesh.hpp>
-#include <SubmeshRenderer.hpp>
 #include <TextureUnit.hpp>
 #include <Vertex.hpp>
 #include <VertexBuffer.hpp>
@@ -107,7 +106,30 @@ namespace CastorViewer
 				if ( !p_collection.has( l_obj->GetName() ) )
 				{
 					p_collection.insert( l_obj->GetName(), l_obj );
-					p_engine->PostEvent( std::make_shared< InitialiseEvent< TObj > >( *l_obj ) );
+					p_engine->PostEvent( MakeInitialiseEvent( *l_obj ) );
+				}
+				else
+				{
+					Logger::LogWarning( cuT( "Duplicate object found with name " ) + l_obj->GetName() );
+					l_return = false;
+				}
+			}
+
+			return l_return;
+		}
+
+		template<>
+		bool FillCollection< Sampler, Castor::String >( Engine * p_engine, Castor::Collection< Sampler, Castor::String > & p_collection, BinaryChunk & p_chunk, Sampler::BinaryParser p_parser )
+		{
+			std::shared_ptr< Sampler > l_obj = p_engine->CreateSampler( Castor::String() );
+			bool l_return = p_parser.Parse( *l_obj, p_chunk );
+
+			if ( l_return )
+			{
+				if ( !p_collection.has( l_obj->GetName() ) )
+				{
+					p_collection.insert( l_obj->GetName(), l_obj );
+					p_engine->PostEvent( MakeInitialiseEvent( *l_obj ) );
 				}
 				else
 				{
@@ -341,6 +363,8 @@ namespace CastorViewer
 
 				try
 				{
+					m_pCastor3D->Initialise( CASTOR_WANTED_FPS, CASTOR3D_THREADED );
+
 					if ( File::FileExists( m_strFilePath ) )
 					{
 						Logger::LogInfo( cuT( "Loading scene file : " ) + m_strFilePath );
@@ -351,7 +375,6 @@ namespace CastorViewer
 
 							if ( l_parser.ParseFile( m_strFilePath ) )
 							{
-								m_pCastor3D->Initialise( CASTOR_WANTED_FPS, CASTOR3D_THREADED );
 								RenderWindowSPtr l_pRenderWindow = l_parser.GetRenderWindow();
 
 								if ( l_pRenderWindow )
@@ -733,9 +756,8 @@ namespace CastorViewer
 			StringStream l_strVT;
 			StringStream l_strVN;
 			StringStream l_strF;
-			SubmeshRendererSPtr l_pRenderer = p_pSubmesh->GetRenderer();
-			VertexBuffer & l_vtxBuffer = l_pRenderer->GetGeometryBuffers()->GetVertexBuffer();
-			IndexBuffer & l_idxBuffer = l_pRenderer->GetGeometryBuffers()->GetIndexBuffer();
+			VertexBuffer & l_vtxBuffer = p_pSubmesh->GetGeometryBuffers()->GetVertexBuffer();
+			IndexBuffer & l_idxBuffer = p_pSubmesh->GetGeometryBuffers()->GetIndexBuffer();
 			uint32_t l_uiStride = l_vtxBuffer.GetDeclaration().GetStride();
 			uint32_t l_uiNbPoints = l_vtxBuffer.GetSize() / l_uiStride;
 			uint32_t l_uiNbFaces = l_idxBuffer.GetSize() / 3;
@@ -748,9 +770,9 @@ namespace CastorViewer
 			for ( uint32_t j = 0; j < l_uiNbPoints; j++ )
 			{
 				real * l_pVertex = reinterpret_cast< real * >( &l_pVtx[j * l_uiStride] );
-				Vertex::GetPosition(	l_pVertex, l_ptPos );
-				Vertex::GetNormal(	l_pVertex, l_ptNml );
-				Vertex::GetTexCoord(	l_pVertex, l_ptTex );
+				Vertex::GetPosition( l_pVertex, l_ptPos );
+				Vertex::GetNormal( l_pVertex, l_ptNml );
+				Vertex::GetTexCoord( l_pVertex, l_ptTex );
 				l_strV  << cuT( "v " ) << l_ptPos[0] << " " << l_ptPos[1] << " " << l_ptPos[2] << cuT( "\n" );
 				l_strVN << cuT( "vn " ) << l_ptNml[0] << " " << l_ptNml[1] << " " << l_ptNml[2] << cuT( "\n" );
 				l_strVT << cuT( "vt " ) << l_ptTex[0] << " " << l_ptTex[1] << cuT( "\n" );

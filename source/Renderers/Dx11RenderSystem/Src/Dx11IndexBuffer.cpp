@@ -37,7 +37,8 @@ namespace Dx11Render
 
 		if ( m_pBuffer )
 		{
-			ID3D11Device * l_pDevice = static_cast< DxRenderSystem *>( m_pBuffer->GetRenderSystem() )->GetDevice();
+			DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem *>( m_pBuffer->GetRenderSystem() );
+			ID3D11Device * l_pDevice = l_renderSystem->GetDevice();
 			UINT l_uiSize = UINT( m_pBuffer->GetSize() );
 
 			if ( l_uiSize > 0 )
@@ -56,12 +57,12 @@ namespace Dx11Render
 					D3D11_SUBRESOURCE_DATA l_data = { 0 };
 					l_data.pSysMem = &m_pBuffer->data()[0];
 					l_hr = l_pDevice->CreateBuffer( &l_desc, &l_data, &m_pBufferObject );
-					dxDebugName( m_pBufferObject, IndexBuffer );
+					dxDebugName( l_renderSystem, m_pBufferObject, IndexBuffer );
 				}
 				else
 				{
 					l_hr = l_pDevice->CreateBuffer( &l_desc, NULL, &m_pBufferObject );
-					dxDebugName( m_pBufferObject, IndexBuffer );
+					dxDebugName( l_renderSystem, m_pBufferObject, IndexBuffer );
 				}
 
 				l_bReturn = dxCheckError( l_hr, "ID3D11Device::CreateIndexBuffer" );

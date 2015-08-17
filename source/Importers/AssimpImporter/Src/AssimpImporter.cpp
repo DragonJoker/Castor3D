@@ -568,7 +568,7 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 		}
 
 		l_mtlManager.insert( l_strName, l_pReturn );
-		m_pEngine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_pReturn ) );
+		m_pEngine->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
 	}
 
 	return l_pReturn;

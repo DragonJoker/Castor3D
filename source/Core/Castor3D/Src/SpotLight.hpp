@@ -38,7 +38,7 @@ namespace Castor3D
 	\remark		Une spot light est une source de lumière à un point donné qui illumine dans une direction donnée en suivant une forme cônique
 	*/
 	class C3D_API SpotLight
-		:	public LightCategory
+		: public LightCategory
 	{
 	public:
 		/*!
@@ -73,7 +73,7 @@ namespace Castor3D
 		\brief		Loader de SpotLight
 		*/
 		class C3D_API BinaryParser
-			:	public LightCategory::BinaryParser
+			: public LightCategory::BinaryParser
 		{
 		public:
 			/**
@@ -142,15 +142,6 @@ namespace Castor3D
 		 *\return		Une source lumineuse
 		 */
 		static LightCategorySPtr Create();
-		/**
-		 *\~english
-		 *\brief		Renders the light
-		 *\param[in]	p_pRenderer		The renderer used to ... render this light
-		 *\~french
-		 *\brief		Fonction de rendu sans shader
-		 *\param[in]	p_pRenderer		Le renderer
-		 */
-		virtual void Render( LightRendererSPtr p_pRenderer );
 		/**
 		 *\~english
 		 *\brief		Sets the light source position

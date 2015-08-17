@@ -52,20 +52,32 @@ namespace Dx11Render
 				Castor3D::TextureBaseRPtr l_pTexture = ( *p_pValue );
 				ID3D11ShaderResourceView * l_pResourceView = NULL;
 				DxContext * l_pDxContext = static_cast< DxContext * >( p_program.GetRenderSystem()->GetCurrentContext() );
+				ID3D11DeviceContext * l_pDeviceContext = l_pDxContext->GetDeviceContext();
 
 				if ( l_pTexture )
 				{
 					if ( l_pTexture->GetType() == Castor3D::eTEXTURE_TYPE_STATIC )
 					{
 						l_pResourceView = static_cast< DxStaticTexture * >( l_pTexture )->GetShaderResourceView();
+						ID3D11Resource * l_pResource;
+						l_pResourceView->GetResource( &l_pResource );
+						Castor::StringStream l_name;
+						l_name << cuT( "StaticTexture_" ) << ( void * )*p_pValue << cuT( "_SRV.png" );
+						D3DX11SaveTextureToFile( l_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
+						l_pResource->Release();
 					}
 					else
 					{
 						l_pResourceView = static_cast< DxDynamicTexture * >( l_pTexture )->GetShaderResourceView();
+						ID3D11Resource * l_pResource;
+						l_pResourceView->GetResource( &l_pResource );
+						Castor::StringStream l_name;
+						l_name << cuT( "DynamicTexture_" ) << ( void * )*p_pValue << cuT( "_SRV.png" );
+						D3DX11SaveTextureToFile( l_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
+						l_pResource->Release();
 					}
 				}
 
-				ID3D11DeviceContext * l_pDeviceContext = l_pDxContext->GetDeviceContext();
 				l_pDeviceContext->PSSetShaderResources( l_pTexture->GetIndex(), 1, &l_pResourceView );
 				l_hr = S_OK;
 			}

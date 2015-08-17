@@ -961,7 +961,6 @@ namespace GlRender
 	{
 		if ( m_iUniformBlockIndex != eGL_INVALID_INDEX )
 		{
-			//m_gl.BindBufferBase( eGL_BUFFER_TARGET_UNIFORM, m_uiIndex, m_glBuffer.GetGlIndex() );
 			m_glBuffer.Bind();
 			m_glBuffer.Fill( &m_buffer[0], m_iUniformBlockSize, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 		}

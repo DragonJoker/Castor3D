@@ -20,7 +20,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	DirectionalLight::BinaryParser::BinaryParser( Path const & p_path )
-		:	LightCategory::BinaryParser( p_path )
+		: LightCategory::BinaryParser( p_path )
 	{
 	}
 
@@ -70,7 +70,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	DirectionalLight::DirectionalLight()
-		:	LightCategory( eLIGHT_TYPE_DIRECTIONAL )
+		: LightCategory( eLIGHT_TYPE_DIRECTIONAL )
 	{
 	}
 
@@ -81,19 +81,6 @@ namespace Castor3D
 	LightCategorySPtr DirectionalLight::Create()
 	{
 		return std::make_shared< DirectionalLight >();
-	}
-
-	void DirectionalLight::Render( LightRendererSPtr p_pRenderer )
-	{
-		if ( p_pRenderer )
-		{
-			p_pRenderer->Enable();
-			p_pRenderer->ApplyPosition();
-			p_pRenderer->ApplyAmbient();
-			p_pRenderer->ApplyDiffuse();
-			p_pRenderer->ApplySpecular();
-			p_pRenderer->Bind();
-		}
 	}
 
 	void DirectionalLight::SetDirection( Castor::Point3f const & p_ptPosition )

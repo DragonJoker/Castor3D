@@ -14,11 +14,10 @@ using namespace Castor;
 
 static String OverlayVS =
 	cuT(	"void main()\n"	)
-	cuT(	"{\n"	)
+	cuT(	"{\n" )
 	cuT(	"	vtx_texture = texture;\n" )
-	cuT(	"	<vec4> position = c3d_mtxProjection * vec4( vertex.xyz, 1.0 );\n" )
-	cuT(	"	gl_Position = vec4( position.x, position.y, position.z, position.w );\n" )
-	cuT(	"}\n"	);
+	cuT(	"	gl_Position = c3d_mtxProjection * vec4( vertex.x, vertex.y, vertex.z, 1.0 );\n" )
+	cuT(	"}\n" );
 
 static String PanelPSDecl =
 	cuT(	"<pass_buffer>\n" )
@@ -67,14 +66,15 @@ ShaderProgramBaseSPtr GlOverlayRenderer::DoGetProgram( uint32_t p_uiFlags )
 	// Shader program
 	ShaderManager & l_manager = m_pRenderSystem->GetEngine()->GetShaderManager();
 	ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
-	l_manager.CreateMatrixBuffer( *l_program );
+	l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
+	l_manager.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
 
 	// Vertex shader
 	String l_strVs;
 	l_strVs += l_strVersion;
-	l_strVs += l_strAttribute0 + cuT( "	ivec3 	vertex;\n"	);
-	l_strVs += l_strAttribute1 + cuT( "	<vec2> 	texture;\n"	);
-	l_strVs += l_strOut + cuT( "	<vec2> 	vtx_texture;\n"	);
+	l_strVs += l_strAttribute0 + cuT( " ivec4 vertex;\n" );
+	l_strVs += l_strAttribute1 + cuT( " <vec2> texture;\n" );
+	l_strVs += l_strOut + cuT( " <vec2> vtx_texture;\n" );
 	l_strVs += l_pConstants->Matrices();
 	l_strVs += OverlayVS;
 	str_utils::replace( l_strVs, cuT( "<layout>" ), l_pKeywords->GetLayout() );
@@ -83,28 +83,28 @@ ShaderProgramBaseSPtr GlOverlayRenderer::DoGetProgram( uint32_t p_uiFlags )
 	// Pixel shader
 	String l_strPs, l_strPsMain;
 	l_strPs += l_strVersion;
-	l_strPs += l_strIn + cuT( "	<vec2> 	vtx_texture;\n"	);
+	l_strPs += l_strIn + cuT( " <vec2> vtx_texture;\n" );
 	l_strPs	+= PanelPSDecl;
 	l_strPsMain += PanelPSMain;
 
 	if ( ( p_uiFlags & eTEXTURE_CHANNEL_TEXT ) == eTEXTURE_CHANNEL_TEXT )
 	{
-		l_strPs += cuT( "uniform sampler2D 	c3d_mapText;\n" );
-		l_strPsMain += cuT( "	l_fAlpha		*= <texture2D>( c3d_mapText, vec2( vtx_texture.x, vtx_texture.y ) ).r;\n" );
+		l_strPs += cuT( "uniform sampler2D c3d_mapText;\n" );
+		l_strPsMain += cuT( "	l_fAlpha *= <texture2D>( c3d_mapText, vec2( vtx_texture.x, vtx_texture.y ) ).r;\n" );
 		l_program->CreateFrameVariable( ShaderProgramBase::MapText, eSHADER_TYPE_PIXEL );
 	}
 
 	if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
 	{
-		l_strPs += cuT( "uniform sampler2D 	c3d_mapColour;\n" );
-		l_strPsMain += cuT( "	l_v4Ambient		= <texture2D>( c3d_mapColour, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
+		l_strPs += cuT( "uniform sampler2D c3d_mapColour;\n" );
+		l_strPsMain += cuT( "	l_v4Ambient = <texture2D>( c3d_mapColour, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
 		l_program->CreateFrameVariable( ShaderProgramBase::MapColour, eSHADER_TYPE_PIXEL );
 	}
 
 	if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
 	{
-		l_strPs += cuT( "uniform sampler2D 	c3d_mapOpacity;\n" );
-		l_strPsMain += cuT( "	l_fAlpha		*= <texture2D>( c3d_mapOpacity, vec2( vtx_texture.x, vtx_texture.y ) ).r;\n" );
+		l_strPs += cuT( "uniform sampler2D c3d_mapOpacity;\n" );
+		l_strPsMain += cuT( "	l_fAlpha *= <texture2D>( c3d_mapOpacity, vec2( vtx_texture.x, vtx_texture.y ) ).r;\n" );
 		l_program->CreateFrameVariable( ShaderProgramBase::MapOpacity, eSHADER_TYPE_PIXEL );
 	}
 

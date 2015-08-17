@@ -1,4 +1,5 @@
 #include "Dx11DynamicTexture.hpp"
+
 #include "Dx11RenderSystem.hpp"
 
 #include <Pixel.hpp>
@@ -12,11 +13,11 @@ using namespace Castor3D;
 
 namespace Dx11Render
 {
-	DxDynamicTexture::DxDynamicTexture( DxRenderSystem * p_pRenderSystem )
-		: DynamicTexture( p_pRenderSystem )
-		, m_pRenderTargetView( NULL )
-		, m_pShaderResourceView( NULL )
-		, m_pRenderSystem( p_pRenderSystem )
+	DxDynamicTexture::DxDynamicTexture( DxRenderSystem * p_renderSystem )
+		: DynamicTexture( p_renderSystem )
+		, m_renderTargetView( NULL )
+		, m_shaderResourceView( NULL )
+		, m_renderSystem( p_renderSystem )
 	{
 	}
 
@@ -36,32 +37,32 @@ namespace Dx11Render
 	void DxDynamicTexture::Cleanup()
 	{
 		DynamicTexture::Cleanup();
-		SafeRelease( m_pRenderTargetView );
-		SafeRelease( m_pShaderResourceView );
+		ReleaseTracked( m_renderSystem, m_renderTargetView );
+		ReleaseTracked( m_renderSystem, m_shaderResourceView );
 	}
 
-	uint8_t * DxDynamicTexture::Lock( uint32_t p_uiMode )
+	uint8_t * DxDynamicTexture::Lock( uint32_t p_mode )
 	{
-		uint8_t * l_pReturn = NULL;
+		uint8_t * l_return = NULL;
 		D3D11_MAPPED_SUBRESOURCE l_mappedResource;
 		ID3D11Resource * l_pResource;
-		m_pShaderResourceView->GetResource( &l_pResource );
+		m_shaderResourceView->GetResource( &l_pResource );
 		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
-		HRESULT l_hr = l_pDeviceContext->Map( l_pResource, 0, D3D11_MAP( DirectX11::GetLockFlags( p_uiMode ) ), 0, &l_mappedResource );
+		HRESULT l_hr = l_pDeviceContext->Map( l_pResource, 0, D3D11_MAP( DirectX11::GetLockFlags( p_mode ) ), 0, &l_mappedResource );
 		l_pResource->Release();
 
 		if ( l_hr == S_OK )
 		{
-			l_pReturn = static_cast< uint8_t * >( l_mappedResource.pData );
+			l_return = static_cast< uint8_t * >( l_mappedResource.pData );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
-	void DxDynamicTexture::Unlock( bool CU_PARAM_UNUSED( p_bModified ) )
+	void DxDynamicTexture::Unlock( bool CU_PARAM_UNUSED( p_modified ) )
 	{
 		ID3D11Resource * l_pResource;
-		m_pShaderResourceView->GetResource( &l_pResource );
+		m_shaderResourceView->GetResource( &l_pResource );
 		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->Unmap( l_pResource, 0 );
 		l_pResource->Release();
@@ -69,7 +70,7 @@ namespace Dx11Render
 
 	bool DxDynamicTexture::DoInitialise()
 	{
-		ID3D11Device * l_pDevice = m_pRenderSystem->GetDevice();
+		ID3D11Device * l_pDevice = m_renderSystem->GetDevice();
 		D3D11_TEXTURE2D_DESC l_tex2dDesc = { 0 };
 		D3D11_SUBRESOURCE_DATA l_tex2dData = { 0 };
 		ID3D11Texture2D * l_pTexture = NULL;
@@ -79,63 +80,55 @@ namespace Dx11Render
 
 		if ( l_hr == S_OK )
 		{
-			D3D11_SHADER_RESOURCE_VIEW_DESC l_desc;
-			l_desc.Format = DirectX11::Get( m_pPixelBuffer->format() );
-			l_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-			l_desc.Texture2D.MipLevels = 2;
-			l_desc.Texture2D.MostDetailedMip = 0;
-
 			if ( IsRenderTarget() )
 			{
-				l_hr = l_pDevice->CreateRenderTargetView( l_pTexture, NULL, &m_pRenderTargetView );
-				dxDebugName( m_pRenderTargetView, DynamicRTView );
+				D3D11_RENDER_TARGET_VIEW_DESC l_desc = {};
+				l_desc.Format = DirectX11::Get( m_pPixelBuffer->format() );
+				l_desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+				l_desc.Texture2D.MipSlice = 0;
+				l_hr = l_pDevice->CreateRenderTargetView( l_pTexture, NULL, &m_renderTargetView );
+				dxDebugName( m_renderSystem, m_renderTargetView, DynamicRTView );
 			}
 
-			l_hr = l_pDevice->CreateShaderResourceView( l_pTexture, NULL, &m_pShaderResourceView );
-			dxDebugName( m_pShaderResourceView, DynamicSRView );
+			D3D11_SHADER_RESOURCE_VIEW_DESC l_desc = {};
+			l_desc.Format = DirectX11::Get( m_pPixelBuffer->format() );
+			l_desc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+			l_desc.Texture2D.MipLevels = 1;
+			l_desc.Texture2D.MostDetailedMip = 0;
+			l_hr = l_pDevice->CreateShaderResourceView( l_pTexture, &l_desc, &m_shaderResourceView );
+			dxDebugName( m_renderSystem, m_shaderResourceView, DynamicSRView );
+			l_pTexture->Release();
 		}
 
-		SafeRelease( l_pTexture );
 		CASTOR_ASSERT( l_hr == S_OK || m_pPixelBuffer->width() == 0 );
 		return l_hr == S_OK;
 	}
 
-	bool DxDynamicTexture::DoBind()
+	bool DxDynamicTexture::DoBind( uint32_t p_index )
 	{
-		//ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 
-		//if ( m_pShaderResourceView )
-		//{
-		//	ID3D11Resource * l_pResource;
-		//	m_pShaderResourceView->GetResource( &l_pResource );
-		//	StringStream l_name;
-		//	l_name << cuT( "DynamicTexture_" ) << ( void * )this << cuT( "_SRV.png" );
-		//	D3DX11SaveTextureToFile( l_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
-		//}
-
-		//if ( m_pRenderTargetView )
-		//{
-		//	ID3D11Resource * l_pResource;
-		//	m_pRenderTargetView->GetResource( &l_pResource );
-		//	StringStream l_name;
-		//	l_name << cuT( "DynamicTexture_" ) << ( void * )this << cuT( "_RTV.png" );
-		//	D3DX11SaveTextureToFile( l_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
-		//}
+		if ( m_renderTargetView )
+		{
+			ID3D11Resource * l_pResource;
+			m_renderTargetView->GetResource( &l_pResource );
+			StringStream l_name;
+			l_name << cuT( "DynamicTexture_" ) << ( void * )this << cuT( "_RTV.png" );
+			D3DX11SaveTextureToFile( l_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
+			l_pResource->Release();
+		}
 
 		return true;
 	}
 
-	void DxDynamicTexture::DoUnbind()
+	void DxDynamicTexture::DoUnbind( uint32_t p_index )
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
-		ID3D11ShaderResourceView * l_views[] = { NULL };
-		l_pDeviceContext->PSSetShaderResources( m_uiIndex, 1, l_views );
 	}
 
 	void DxDynamicTexture::DoInitTex2DDesc( D3D11_TEXTURE2D_DESC & p_tex2dDesc )
 	{
 		ePIXEL_FORMAT l_ePixelFormat = m_pPixelBuffer->format();
-		ID3D11Device * l_pDevice = m_pRenderSystem->GetDevice();
+		ID3D11Device * l_pDevice = m_renderSystem->GetDevice();
 		p_tex2dDesc.Width = m_pPixelBuffer->width();
 		p_tex2dDesc.Height = m_pPixelBuffer->height();
 		p_tex2dDesc.Format = DirectX11::Get( l_ePixelFormat );
@@ -183,7 +176,7 @@ namespace Dx11Render
 			p_tex2dDesc.CPUAccessFlags = 0;
 			p_tex2dDesc.Usage = D3D11_USAGE_DEFAULT;
 			p_tex2dDesc.BindFlags |= D3D11_BIND_RENDER_TARGET;
-			p_tex2dDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
+			//p_tex2dDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
 		}
 	}
 

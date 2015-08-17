@@ -35,7 +35,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	SpotLight::BinaryParser::BinaryParser( Path const & p_path )
-		:	LightCategory::BinaryParser( p_path )
+		: LightCategory::BinaryParser( p_path )
 	{
 	}
 
@@ -129,10 +129,10 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	SpotLight::SpotLight()
-		:	LightCategory( eLIGHT_TYPE_SPOT )
-		,	m_attenuation( 1, 0, 0 )
-		,	m_exponent( 0 )
-		,	m_cutOff( 180 )
+		: LightCategory( eLIGHT_TYPE_SPOT )
+		, m_attenuation( 1, 0, 0 )
+		, m_exponent( 0 )
+		, m_cutOff( 180 )
 	{
 	}
 
@@ -143,25 +143,6 @@ namespace Castor3D
 	LightCategorySPtr SpotLight::Create()
 	{
 		return std::make_shared< SpotLight >();
-	}
-
-	void SpotLight::Render( LightRendererSPtr p_pRenderer )
-	{
-		if ( p_pRenderer )
-		{
-			p_pRenderer->Enable();
-			p_pRenderer->ApplyPosition();
-			p_pRenderer->ApplyOrientation();
-			p_pRenderer->ApplyAmbient();
-			p_pRenderer->ApplyDiffuse();
-			p_pRenderer->ApplySpecular();
-			p_pRenderer->ApplyConstantAtt(	m_attenuation[0] );
-			p_pRenderer->ApplyLinearAtt(	m_attenuation[1] );
-			p_pRenderer->ApplyQuadraticAtt(	m_attenuation[2] );
-			p_pRenderer->ApplyExponent(	m_exponent );
-			p_pRenderer->ApplyCutOff(	m_cutOff );
-			p_pRenderer->Bind();
-		}
 	}
 
 	void SpotLight::SetPosition( Castor::Point3r const & p_ptPosition )

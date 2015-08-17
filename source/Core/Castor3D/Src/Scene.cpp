@@ -1,7 +1,10 @@
 ﻿#include "Scene.hpp"
+
+#include "Engine.hpp"
 #include "CleanupEvent.hpp"
 #include "DepthStencilState.hpp"
 #include "FrameVariableBuffer.hpp"
+#include "FunctorEvent.hpp"
 #include "MatrixFrameVariable.hpp"
 #include "Buffer.hpp"
 #include "Animation.hpp"
@@ -19,6 +22,7 @@
 #include "Camera.hpp"
 #include "Ray.hpp"
 #include "Importer.hpp"
+#include "InitialiseEvent.hpp"
 #include "Face.hpp"
 #include "Vertex.hpp"
 #include "PointLight.hpp"
@@ -33,9 +37,9 @@
 #include "StaticTexture.hpp"
 #include "DynamicTexture.hpp"
 #include "TextureUnit.hpp"
-#include "InitialiseEvent.hpp"
 #include "OneFrameVariable.hpp"
 #include "PointFrameVariable.hpp"
+#include "RenderSystem.hpp"
 
 #include <Image.hpp>
 #include <Logger.hpp>
@@ -565,7 +569,7 @@ namespace Castor3D
 			m_setFreeLights.insert( i );
 		}
 
-		m_pEngine->PostEvent( std::make_shared< InitialiseEvent< TextureUnit > >( *m_pLightsTexture) );
+		m_pEngine->PostEvent( MakeInitialiseEvent( *m_pLightsTexture ) );
 	}
 
 	Scene::~Scene()
@@ -600,6 +604,7 @@ namespace Castor3D
 		m_mapSubmeshesAlphaSorted.clear();
 		m_mapSubmeshesNoAlpha.clear();
 		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+		m_arrayOverlays.clear();
 		DoRemoveAll( m_addedLights, m_arrayLightsToDelete );
 		DoRemoveAll( m_addedPrimitives, m_arrayPrimitivesToDelete );
 		DoRemoveAll( m_mapBillboardsLists, m_arrayBillboardsToDelete );
@@ -613,26 +618,19 @@ namespace Castor3D
 
 		if ( m_pBackgroundImage )
 		{
-			m_pEngine->PostEvent( std::make_shared< CleanupEvent< TextureBase > >( *m_pBackgroundImage ) );
+			m_pEngine->PostEvent( MakeCleanupEvent( *m_pBackgroundImage ) );
 		}
 
 		m_arrayLightsToDelete.clear();
 		m_arrayPrimitivesToDelete.clear();
+
+		m_pEngine->PostEvent( MakeCleanupEvent( *m_pLightsTexture ) );
 	}
 
 	void Scene::RenderBackground( Camera const & p_camera )
 	{
 		if ( m_pBackgroundImage )
 		{
-			if ( !m_pBackgroundImage->IsInitialised() )
-			{
-				m_pBackgroundImage->Create();
-				m_pBackgroundImage->Initialise( 0 );
-				m_pBackgroundImage->Bind();
-				m_pBackgroundImage->GenerateMipmaps();
-				m_pBackgroundImage->Unbind();
-			}
-
 			if ( m_pBackgroundImage->IsInitialised() )
 			{
 				RenderSystem * l_pRenderSystem = m_pEngine->GetRenderSystem();
@@ -657,7 +655,6 @@ namespace Castor3D
 		ContextRPtr l_pContext = l_pRenderSystem->GetCurrentContext();
 		PassSPtr l_pPass;
 		MaterialSPtr l_pMaterial;
-		SubmeshRendererSPtr l_pRenderer;
 		DoDeleteToDelete();
 		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 		DoUpdateAnimations();
@@ -759,6 +756,14 @@ namespace Castor3D
 			l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
 			l_pStaTexture->SetImage( l_pImage->GetPixels() );
 			m_pBackgroundImage = l_pStaTexture;
+			m_pEngine->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
+			{
+				m_pBackgroundImage->Create();
+				m_pBackgroundImage->Initialise( 0 );
+				m_pBackgroundImage->Bind();
+				m_pBackgroundImage->GenerateMipmaps();
+				m_pBackgroundImage->Unbind();
+			} ) );
 			l_bReturn = true;
 		}
 
@@ -1199,24 +1204,24 @@ namespace Castor3D
 			DoMerge( p_pScene, p_pScene->m_newlyAddedPrimitives, m_newlyAddedPrimitives );
 			DoMerge( p_pScene, p_pScene->m_mapBillboardsLists, m_mapBillboardsLists );
 			//DoMerge( p_pScene, p_pScene->m_addedGroups, m_addedGroups );
-			/*
-					Castor::String l_strName;
 
-					for( BillboardListStrMapIt l_it = p_pScene->m_mapBillboardsLists.begin(); l_it != p_pScene->m_mapBillboardsLists.end(); ++l_it )
-					{
-						l_strName = l_it->first;
 
-						while( m_mapBillboardsLists.find( l_strName ) != m_mapBillboardsLists.end() )
-						{
-							l_strName = p_pScene->GetName() + cuT( "_" ) + l_strName;
-						}
+			//Castor::String l_strName;
 
-			//			l_it->second->SetName( l_strName );
-						m_mapBillboardsLists.insert( std::make_pair( l_strName, l_it->second ) );
-					}
+			//for( BillboardListStrMapIt l_it = p_pScene->m_mapBillboardsLists.begin(); l_it != p_pScene->m_mapBillboardsLists.end(); ++l_it )
+			//{
+			//	l_strName = l_it->first;
 
-					p_pScene->m_mapBillboardsLists.clear();
-			*/
+			//	while( m_mapBillboardsLists.find( l_strName ) != m_mapBillboardsLists.end() )
+			//	{
+			//		l_strName = p_pScene->GetName() + cuT( "_" ) + l_strName;
+			//	}
+
+			//	//l_it->second->SetName( l_strName );
+			//	m_mapBillboardsLists.insert( std::make_pair( l_strName, l_it->second ) );
+			//}
+
+			//p_pScene->m_mapBillboardsLists.clear();
 			m_changed = true;
 			m_clAmbientLight = p_pScene->GetAmbientLight();
 		}
@@ -1295,7 +1300,7 @@ namespace Castor3D
 												l_selectedGeo = l_geo;
 												l_selectedSubmesh = l_submesh;
 												l_selectedFace = l_face;
-												//											l_pSelectedVertex = p_pSubmesh->GetPoint( l_face->GetVertexIndex( 0 ) );
+												//l_pSelectedVertex = p_pSubmesh->GetPoint( l_face->GetVertexIndex( 0 ) );
 											}
 
 											if ( ( l_curvertexDist = p_ray->Intersects( Vertex::GetPosition( p_pSubmesh->GetPoint( l_face->GetVertexIndex( 1 ) ), l_ptCoords ) ) ) < l_vertexDist )
@@ -1306,7 +1311,7 @@ namespace Castor3D
 												l_selectedGeo = l_geo;
 												l_selectedSubmesh = l_submesh;
 												l_selectedFace = l_face;
-												//											l_pSelectedVertex = p_pSubmesh->GetPoint( l_face->GetVertexIndex( 1 ) );
+												//l_pSelectedVertex = p_pSubmesh->GetPoint( l_face->GetVertexIndex( 1 ) );
 											}
 
 											if ( ( l_curvertexDist = p_ray->Intersects( Vertex::GetPosition( p_pSubmesh->GetPoint( l_face->GetVertexIndex( 2 ) ), l_ptCoords ) ) ) < l_vertexDist )
@@ -1317,7 +1322,7 @@ namespace Castor3D
 												l_selectedGeo = l_geo;
 												l_selectedSubmesh = l_submesh;
 												l_selectedFace = l_face;
-												//											l_pSelectedVertex = p_pSubmesh->GetPoint( l_face->GetVertexIndex( 2 ) );
+												//l_pSelectedVertex = p_pSubmesh->GetPoint( l_face->GetVertexIndex( 2 ) );
 											}
 										}
 									}
@@ -1559,11 +1564,10 @@ namespace Castor3D
 		SubmeshSPtr l_pSubmesh = p_nodes[0].m_pSubmesh;
 		SceneNodeSPtr l_pNode = p_nodes[0].m_pNode;
 		MaterialSPtr l_pMaterial = p_nodes[0].m_pMaterial;
-		SubmeshRendererSPtr l_pRenderer = l_pSubmesh->GetRenderer();
 
-		if ( l_pRenderer->GetGeometryBuffers()->HasMatrixBuffer() )
+		if ( l_pSubmesh->GetGeometryBuffers()->HasMatrixBuffer() )
 		{
-			MatrixBuffer & l_mtxBuffer = l_pRenderer->GetGeometryBuffers()->GetMatrixBuffer();
+			MatrixBuffer & l_mtxBuffer = l_pSubmesh->GetGeometryBuffers()->GetMatrixBuffer();
 			uint32_t l_uiSize = l_mtxBuffer.GetSize();
 			real * l_pBuffer = l_mtxBuffer.data();
 			uint32_t l_count = l_pSubmesh->GetRefCount( l_pMaterial );
@@ -1590,11 +1594,10 @@ namespace Castor3D
 	{
 		SubmeshSPtr l_pSubmesh = p_node.m_pSubmesh;
 		SceneNodeSPtr l_pNode = p_node.m_pNode;
-		SubmeshRendererSPtr l_pRenderer = l_pSubmesh->GetRenderer();
 
-		if ( l_pRenderer->GetGeometryBuffers()->HasMatrixBuffer() )
+		if ( l_pSubmesh->GetGeometryBuffers()->HasMatrixBuffer() )
 		{
-			MatrixBuffer & l_mtxBuffer = l_pRenderer->GetGeometryBuffers()->GetMatrixBuffer();
+			MatrixBuffer & l_mtxBuffer = l_pSubmesh->GetGeometryBuffers()->GetMatrixBuffer();
 			uint32_t l_uiSize = l_mtxBuffer.GetSize();
 			real * l_pBuffer = l_mtxBuffer.data();
 
@@ -1635,13 +1638,11 @@ namespace Castor3D
 		ShaderProgramBaseSPtr l_pProgram;
 		uint32_t l_uiCount = 0;
 		uint32_t l_uiSize = p_node.m_pMaterial->GetPassCount();
-		PassPtrArrayConstIt l_itEnd = p_node.m_pMaterial->End();
+		auto l_itEnd = p_node.m_pMaterial->end();
 
-		for ( PassPtrArrayIt l_it = p_node.m_pMaterial->Begin(); l_it != l_itEnd; ++l_it )
+		for ( auto l_pass: *p_node.m_pMaterial )
 		{
-			PassSPtr l_pPass = *l_it;
-
-			if ( l_pPass->HasAutomaticShader() )
+			if ( l_pass->HasAutomaticShader() )
 			{
 				uint32_t l_uiProgramFlags = p_node.m_pSubmesh->GetProgramFlags();
 
@@ -1655,63 +1656,66 @@ namespace Castor3D
 					l_uiProgramFlags |= ePROGRAM_FLAG_DEFERRED;
 				}
 
-				l_pProgram = m_pEngine->GetShaderManager().GetAutomaticProgram( l_pPass->GetTextureFlags(), l_uiProgramFlags );
-				l_pPass->BindToProgram( l_pProgram );
+				l_pProgram = m_pEngine->GetShaderManager().GetAutomaticProgram( l_pass->GetTextureFlags(), l_uiProgramFlags );
+				l_pass->BindToProgram( l_pProgram );
 			}
 			else
 			{
-				l_pProgram = l_pPass->GetShader< ShaderProgramBase >();
+				l_pProgram = l_pass->GetShader< ShaderProgramBase >();
 			}
 
-			auto l_matrixBuffer = l_pPass->GetMatrixBuffer();
+			FrameVariableBufferSPtr l_frameBuffer = l_pass->GetMatrixBuffer();
 
-			if ( l_matrixBuffer )
+			if ( l_frameBuffer )
 			{
-				p_pipeline.ApplyMatrices( *l_matrixBuffer );
-				AnimatedObjectSPtr l_pAnimObject = p_node.m_pGeometry->GetAnimatedObject();
+				p_pipeline.ApplyMatrices( *l_frameBuffer, 0xFFFFFFFFFFFFFFFF );
+				DoApplySkeleton( *l_frameBuffer, p_node.m_pGeometry->GetAnimatedObject() );
+			}
 
-				if ( l_pAnimObject )
+			FrameVariableBufferSPtr l_sceneBuffer = l_pass->GetSceneBuffer();
+			DoBindLights( *l_pProgram, *l_sceneBuffer );
+			DoBindCamera( *l_sceneBuffer );
+			l_pass->Render( l_uiCount++, l_uiSize );
+			p_node.m_pSubmesh->Draw( p_eTopology, *l_pass );
+			l_pass->EndRender();
+			DoUnbindLights( *l_pProgram, *l_sceneBuffer );
+		}
+	}
+
+	void Scene::DoApplySkeleton( FrameVariableBuffer const & p_matrixBuffer, AnimatedObjectSPtr p_object )
+	{
+		if ( p_object )
+		{
+			SkeletonSPtr l_pSkeleton = p_object->GetSkeleton();
+
+			if ( l_pSkeleton )
+			{
+				int i = 0;
+				Matrix4x4rFrameVariableSPtr l_pVariable;
+				p_matrixBuffer.GetVariable( Pipeline::MtxBones, l_pVariable );
+
+				if ( l_pVariable )
 				{
-					SkeletonSPtr l_pSkeleton = l_pAnimObject->GetSkeleton();
+					Matrix4x4r l_mtxFinal;
 
-					if ( l_pSkeleton )
+					for ( auto && l_it = p_object->AnimationsBegin(); l_it != p_object->AnimationsEnd(); ++l_it )
 					{
-						int i = 0;
-						Matrix4x4rFrameVariableSPtr l_pVariable;
-						l_matrixBuffer->GetVariable( Pipeline::MtxBones, l_pVariable );
+						l_mtxFinal.set_identity();
 
-						if ( l_pVariable )
+						for ( BonePtrArrayIt l_itBones = l_pSkeleton->Begin(); l_itBones != l_pSkeleton->End(); ++l_itBones )
 						{
-							Matrix4x4r l_mtxFinal;
+							MovingObjectBaseSPtr l_pMoving = l_it->second->GetMovingObject( *l_itBones );
 
-							for ( AnimationPtrStrMapIt l_it = l_pAnimObject->AnimationsBegin(); l_it != l_pAnimObject->AnimationsEnd(); ++l_it )
+							if ( l_pMoving )
 							{
-								l_mtxFinal.set_identity();
-
-								for ( BonePtrArrayIt l_itBones = l_pSkeleton->Begin(); l_itBones != l_pSkeleton->End(); ++l_itBones )
-								{
-									MovingObjectBaseSPtr l_pMoving = l_it->second->GetMovingObject( *l_itBones );
-
-									if ( l_pMoving )
-									{
-										l_mtxFinal *= l_pMoving->GetFinalTransformation();
-									}
-								}
-
-								l_pVariable->SetValue( l_mtxFinal.const_ptr(), i++ );
+								l_mtxFinal *= l_pMoving->GetFinalTransformation();
 							}
 						}
+
+						l_pVariable->SetValue( l_mtxFinal.const_ptr(), i++ );
 					}
 				}
 			}
-
-			FrameVariableBufferSPtr l_sceneBuffer = l_pPass->GetSceneBuffer();
-			DoBindLights( *l_pProgram, *l_sceneBuffer );
-			DoBindCamera( *l_sceneBuffer );
-			l_pPass->Render( l_uiCount++, l_uiSize );
-			p_node.m_pSubmesh->GetRenderer()->Draw( p_eTopology, *l_pPass );
-			l_pPass->EndRender();
-			DoUnbindLights( *l_pProgram, *l_sceneBuffer );
 		}
 	}
 
@@ -1797,7 +1801,7 @@ namespace Castor3D
 			}
 		}
 
-		m_pLightsTexture->Render();
+		m_pLightsTexture->Bind();
 
 		if ( m_bLightsChanged )
 		{
@@ -1808,7 +1812,7 @@ namespace Castor3D
 
 	void Scene::DoUnbindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer )
 	{
-		m_pLightsTexture->EndRender();
+		m_pLightsTexture->Unbind();
 
 		OneIntFrameVariableSPtr l_lightsCount;
 		p_sceneBuffer.GetVariable< int >( ShaderProgramBase::LightsCount, l_lightsCount );

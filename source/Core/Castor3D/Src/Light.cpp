@@ -1,13 +1,14 @@
 ﻿#include "Light.hpp"
+
+#include "DirectionalLight.hpp"
+#include "Engine.hpp"
 #include "LightFactory.hpp"
+#include "Pipeline.hpp"
+#include "PointLight.hpp"
+#include "RenderSystem.hpp"
 #include "Scene.hpp"
 #include "SceneNode.hpp"
-#include "DirectionalLight.hpp"
-#include "PointLight.hpp"
 #include "SpotLight.hpp"
-#include "Engine.hpp"
-#include "RenderSystem.hpp"
-#include "Pipeline.hpp"
 
 #include <Factory.hpp>
 
@@ -16,11 +17,10 @@ using namespace Castor;
 namespace Castor3D
 {
 	Light::Light( LightFactory & p_factory, SceneSPtr p_pScene, eLIGHT_TYPE p_eLightType, SceneNodeSPtr p_pNode, String const & p_name )
-		:	MovableObject( p_pScene, p_pNode, p_name, eMOVABLE_TYPE_LIGHT )
-		,	Renderable< Light, LightRenderer >( p_pScene->GetEngine() )
-		,	m_enabled( false )
+		: MovableObject( p_pScene, p_pNode, p_name, eMOVABLE_TYPE_LIGHT )
+		, m_pEngine( p_pScene->GetEngine() )
+		, m_enabled( false )
 	{
-		DoCreateRenderer( this );
 		m_pCategory = p_factory.Create( p_eLightType );
 		m_pCategory->SetLight( this );
 
@@ -28,8 +28,6 @@ namespace Castor3D
 		{
 			m_pCategory->SetPositionType( Point4f( p_pNode->GetPosition()[0], p_pNode->GetPosition()[1], p_pNode->GetPosition()[2], real( 0.0 ) ) );
 		}
-
-		GetRenderer()->Initialise();
 	}
 
 	Light::Light( LightFactory & p_factory, SceneSPtr p_pScene, eLIGHT_TYPE p_eLightType )
@@ -41,61 +39,33 @@ namespace Castor3D
 	{
 	}
 
-	void Light::Enable()
-	{
-		LightRendererSPtr l_renderer = GetRenderer();
-
-		if ( l_renderer )
-		{
-			l_renderer->Enable();
-		}
-	}
-
-	void Light::Disable()
-	{
-		LightRendererSPtr l_renderer = GetRenderer();
-
-		if ( l_renderer )
-		{
-			l_renderer->Disable();
-		}
-	}
-
 	void Light::Render()
 	{
-		LightRendererSPtr l_renderer = GetRenderer();
+		SceneNodeSPtr l_node = GetParent();
 
-		if ( l_renderer )
+		if ( l_node )
 		{
-			SceneNodeSPtr l_node = GetParent();
+			Point3r l_position = l_node->GetDerivedPosition();
 
-			if ( l_node )
+			switch ( m_pCategory->GetLightType() )
 			{
-				Point3r l_position = l_node->GetDerivedPosition();
+			case eLIGHT_TYPE_DIRECTIONAL:
+				std::static_pointer_cast< DirectionalLight >( m_pCategory )->SetDirection( l_position );
+				break;
 
-				switch ( m_pCategory->GetLightType() )
-				{
-				case eLIGHT_TYPE_DIRECTIONAL:
-					std::static_pointer_cast< DirectionalLight >( m_pCategory )->SetDirection( l_position );
-					break;
+			case eLIGHT_TYPE_POINT:
+				std::static_pointer_cast< PointLight >( m_pCategory )->SetPosition( l_position );
+				break;
 
-				case eLIGHT_TYPE_POINT:
-					std::static_pointer_cast< PointLight >( m_pCategory )->SetPosition( l_position );
-					break;
-
-				case eLIGHT_TYPE_SPOT:
-					std::static_pointer_cast< SpotLight >( m_pCategory )->SetPosition( l_position );
-					break;
-				}
+			case eLIGHT_TYPE_SPOT:
+				std::static_pointer_cast< SpotLight >( m_pCategory )->SetPosition( l_position );
+				break;
 			}
-
-			m_pCategory->Render( l_renderer );
 		}
 	}
 
 	void Light::EndRender()
 	{
-		Disable();
 	}
 
 	void Light::AttachTo( SceneNodeSPtr p_pNode )

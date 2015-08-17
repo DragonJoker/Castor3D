@@ -1,12 +1,14 @@
 ﻿#include "OverlayCategory.hpp"
-#include "Overlay.hpp"
-#include "OverlayRenderer.hpp"
-#include "PanelOverlay.hpp"
+
 #include "BorderPanelOverlay.hpp"
-#include "TextOverlay.hpp"
+#include "Engine.hpp"
 #include "Material.hpp"
 #include "MaterialManager.hpp"
-#include "Engine.hpp"
+#include "Overlay.hpp"
+#include "OverlayManager.hpp"
+#include "OverlayRenderer.hpp"
+#include "PanelOverlay.hpp"
+#include "TextOverlay.hpp"
 
 using namespace Castor;
 
@@ -50,30 +52,25 @@ namespace Castor3D
 			l_bReturn = p_file.WriteText( l_strTabs + cuT( "\tvisible " ) + ( p_overlay.IsVisible() ? String( cuT( "true" ) ) : String( cuT( "false" ) ) ) ) > 0;
 		}
 
-		if ( l_bReturn )
-		{
-			l_bReturn = p_file.Print( 1024, cuT( "%S\tzindex %i" ), l_strTabs.c_str(), p_overlay.GetZIndex() ) > 0;
-		}
-
 		if ( l_bReturn && p_overlay.GetMaterial() )
 		{
 			l_bReturn = p_file.WriteText( l_strTabs + cuT( "\tmaterial " ) + p_overlay.GetMaterial()->GetName() ) > 0;
 		}
 
-		for ( OverlayPtrIntMapConstIt l_it = p_overlay.GetOverlay().Begin(); l_it != p_overlay.GetOverlay().End(); ++l_it )
+		for ( auto && l_overlay: p_overlay.GetOverlay() )
 		{
-			switch ( l_it->second->GetType() )
+			switch ( l_overlay->GetType() )
 			{
 			case eOVERLAY_TYPE_PANEL:
-				l_bReturn = PanelOverlay::TextLoader()( *std::static_pointer_cast<PanelOverlay>( l_it->second->GetOverlayCategory() ), p_file );
+				l_bReturn = PanelOverlay::TextLoader()( *std::static_pointer_cast<PanelOverlay>( l_overlay->GetOverlayCategory() ), p_file );
 				break;
 
 			case eOVERLAY_TYPE_BORDER_PANEL:
-				l_bReturn = BorderPanelOverlay::TextLoader()( *std::static_pointer_cast<BorderPanelOverlay>( l_it->second->GetOverlayCategory() ), p_file );
+				l_bReturn = BorderPanelOverlay::TextLoader()( *std::static_pointer_cast<BorderPanelOverlay>( l_overlay->GetOverlayCategory() ), p_file );
 				break;
 
 			case eOVERLAY_TYPE_TEXT:
-				l_bReturn = TextOverlay::TextLoader()( *std::static_pointer_cast<TextOverlay>( l_it->second->GetOverlayCategory() ), p_file );
+				l_bReturn = TextOverlay::TextLoader()( *std::static_pointer_cast<TextOverlay>( l_overlay->GetOverlayCategory() ), p_file );
 				break;
 
 			default:
@@ -120,11 +117,6 @@ namespace Castor3D
 			l_bReturn = DoFillChunk( p_obj.IsVisible(), eCHUNK_TYPE_OVERLAY_VISIBLE, p_chunk );
 		}
 
-		if ( l_bReturn )
-		{
-			l_bReturn = DoFillChunk( p_obj.GetZIndex(), eCHUNK_TYPE_OVERLAY_ZINDEX, p_chunk );
-		}
-
 		return l_bReturn;
 	}
 
@@ -132,7 +124,6 @@ namespace Castor3D
 	{
 		bool l_bReturn = true;
 		bool l_visible;
-		int l_zindex;
 		String l_name;
 
 		switch ( p_chunk.GetChunkType() )
@@ -161,16 +152,6 @@ namespace Castor3D
 			if ( l_bReturn )
 			{
 				p_obj.SetVisible( l_visible );
-			}
-
-			break;
-
-		case eCHUNK_TYPE_OVERLAY_ZINDEX:
-			l_bReturn = DoParseChunk( l_zindex, p_chunk );
-
-			if ( l_bReturn )
-			{
-				p_obj.SetZIndex( l_zindex );
 			}
 
 			break;
@@ -208,11 +189,12 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	OverlayCategory::OverlayCategory( eOVERLAY_TYPE p_eType )
-		:	m_eType( p_eType )
-		,	m_bVisible( true )
-		,	m_iCurrentZIndex( 1 )
-		,	m_changed( true )
-		,	m_uv( 0, 0, 1, 1 )
+		: m_eType( p_eType )
+		, m_bVisible( true )
+		, m_changed( true )
+		, m_uv( 0, 0, 1, 1 )
+		, m_index( 0 )
+		, m_level( 0 )
 	{
 	}
 
@@ -222,17 +204,17 @@ namespace Castor3D
 
 	void OverlayCategory::Render()
 	{
-		OverlayRendererSPtr l_pRenderer = m_pRenderer.lock();
+		OverlayRendererSPtr l_renderer = GetOverlay().GetOverlayManager().GetRenderer();
 
-		if ( l_pRenderer )
+		if ( l_renderer )
 		{
 			if ( m_changed )
 			{
-				DoUpdate( l_pRenderer );
+				DoUpdate( l_renderer );
 				m_changed = false;
 			}
 
-			DoRender( l_pRenderer );
+			DoRender( l_renderer );
 		}
 	}
 
@@ -258,7 +240,7 @@ namespace Castor3D
 
 	void OverlayCategory::UpdatePositionAndSize()
 	{
-		OverlayRendererSPtr l_renderer = m_pRenderer.lock();
+		OverlayRendererSPtr l_renderer = GetOverlay().GetOverlayManager().GetRenderer();
 
 		if ( l_renderer )
 		{

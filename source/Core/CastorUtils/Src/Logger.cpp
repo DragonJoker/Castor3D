@@ -250,8 +250,7 @@ namespace Castor
 			char l_pText[256];
 			va_list l_vaList;
 			va_start( l_vaList, p_pFormat );
-			std::string l_strFormat( p_pFormat );
-			Vsnprintf( l_pText, l_strFormat.c_str(), l_vaList );
+			Vsnprintf( l_pText, p_pFormat, l_vaList );
 			va_end( l_vaList );
 			LogDebug( std::string( l_pText ) );
 		}
@@ -276,8 +275,7 @@ namespace Castor
 			wchar_t l_pText[256];
 			va_list l_vaList;
 			va_start( l_vaList, p_pFormat );
-			std::wstring l_strFormat( p_pFormat );
-			Vswprintf( l_pText, l_strFormat.c_str(), l_vaList );
+			Vswprintf( l_pText, p_pFormat, l_vaList );
 			va_end( l_vaList );
 			LogDebug( std::wstring( l_pText ) );
 		}
@@ -302,8 +300,7 @@ namespace Castor
 			char l_pText[256];
 			va_list l_vaList;
 			va_start( l_vaList, p_pFormat );
-			std::string l_strFormat( p_pFormat );
-			Vsnprintf( l_pText, l_strFormat.c_str(), l_vaList );
+			Vsnprintf( l_pText, p_pFormat, l_vaList );
 			va_end( l_vaList );
 			LogInfo( std::string( l_pText ) );
 		}
@@ -328,8 +325,7 @@ namespace Castor
 			wchar_t l_pText[256];
 			va_list l_vaList;
 			va_start( l_vaList, p_pFormat );
-			std::wstring l_strFormat( p_pFormat );
-			Vswprintf( l_pText, l_strFormat.c_str(), l_vaList );
+			Vswprintf( l_pText, p_pFormat, l_vaList );
 			va_end( l_vaList );
 			LogInfo( std::wstring( l_pText ) );
 		}
@@ -354,8 +350,7 @@ namespace Castor
 			char l_pText[256];
 			va_list l_vaList;
 			va_start( l_vaList, p_pFormat );
-			std::string l_strFormat( p_pFormat );
-			Vsnprintf( l_pText, l_strFormat.c_str(), l_vaList );
+			Vsnprintf( l_pText, p_pFormat, l_vaList );
 			va_end( l_vaList );
 			LogWarning( std::string( l_pText ) );
 		}
@@ -380,8 +375,7 @@ namespace Castor
 			wchar_t l_pText[256];
 			va_list l_vaList;
 			va_start( l_vaList, p_pFormat );
-			std::wstring l_strFormat( p_pFormat );
-			Vswprintf( l_pText, l_strFormat.c_str(), l_vaList );
+			Vswprintf( l_pText, p_pFormat, l_vaList );
 			va_end( l_vaList );
 			LogWarning( std::wstring( l_pText ) );
 		}
@@ -406,8 +400,7 @@ namespace Castor
 			char l_pText[256];
 			va_list l_vaList;
 			va_start( l_vaList, p_pFormat );
-			std::string l_strFormat( p_pFormat );
-			Vsnprintf( l_pText, l_strFormat.c_str(), l_vaList );
+			Vsnprintf( l_pText, p_pFormat, l_vaList );
 			va_end( l_vaList );
 			LogError( std::string( l_pText ) );
 		}
@@ -432,8 +425,7 @@ namespace Castor
 			wchar_t l_pText[256];
 			va_list l_vaList;
 			va_start( l_vaList, p_pFormat );
-			std::wstring l_strFormat( p_pFormat );
-			Vswprintf( l_pText, l_strFormat.c_str(), l_vaList );
+			Vswprintf( l_pText, p_pFormat, l_vaList );
 			va_end( l_vaList );
 			LogError( std::wstring( l_pText ) );
 		}

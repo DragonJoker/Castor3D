@@ -35,7 +35,7 @@ namespace Dx11Render
 	void DxStaticTexture::Cleanup()
 	{
 		StaticTexture::Cleanup();
-		SafeRelease( m_pShaderResourceView );
+		ReleaseTracked( m_pRenderSystem, m_pShaderResourceView );
 	}
 
 	uint8_t * DxStaticTexture::Lock( uint32_t p_uiMode )
@@ -88,15 +88,15 @@ namespace Dx11Render
 			l_desc.Texture2D.MipLevels = 2;
 			l_desc.Texture2D.MostDetailedMip = 0;
 			l_hr = l_pDevice->CreateShaderResourceView( l_pTexture, NULL, &m_pShaderResourceView );
-			dxDebugName( m_pShaderResourceView, StaticSRView );
+			dxDebugName( m_pRenderSystem, m_pShaderResourceView, StaticSRView );
+			l_pTexture->Release();
 		}
 
-		SafeRelease( l_pTexture );
 		CASTOR_ASSERT( l_hr == S_OK || m_pPixelBuffer->width() == 0 );
 		return l_hr == S_OK;
 	}
 
-	bool DxStaticTexture::DoBind()
+	bool DxStaticTexture::DoBind( uint32_t p_index )
 	{
 		//ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 
@@ -107,12 +107,13 @@ namespace Dx11Render
 		//	StringStream l_name;
 		//	l_name << cuT( "StaticTexture_" ) << ( void * )this << cuT( "_SRV.png" );
 		//	D3DX11SaveTextureToFile( l_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
+		//	l_pResource->Release();
 		//}
 
 		return true;
 	}
 
-	void DxStaticTexture::DoUnbind()
+	void DxStaticTexture::DoUnbind( uint32_t p_index )
 	{
 	}
 

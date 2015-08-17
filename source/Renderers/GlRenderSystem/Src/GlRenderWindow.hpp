@@ -15,37 +15,29 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL_SAMPLER_RENDERER_H___
-#define ___GL_SAMPLER_RENDERER_H___
+#ifndef ___GL_WINDOW_RENDERER_H___
+#define ___GL_WINDOW_RENDERER_H___
 
 #include "GlRenderSystemPrerequisites.hpp"
 
-#include <Sampler.hpp>
+#include <RenderWindow.hpp>
 
 namespace GlRender
 {
-	class GlSamplerRenderer
-		:	public Castor3D::SamplerRenderer
-		,	public Castor::NonCopyable
+	class GlRenderWindow
+		: public Castor3D::RenderWindow
 	{
-	private:
-		typedef std::function< void() > PUnbindFunction;
-		typedef std::function< bool( eGL_TEXDIM p_eDimension, uint32_t p_uiIndex ) > PBindFunction;
-
 	public:
-		GlSamplerRenderer( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem );
-		virtual ~GlSamplerRenderer();
-
-		virtual bool Initialise();
-		virtual void Cleanup();
-		virtual bool Bind( Castor3D::eTEXTURE_DIMENSION p_eDimension, uint32_t p_uiIndex );
-		virtual void Unbind();
+		GlRenderWindow( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem );
+		virtual ~GlRenderWindow();
 
 	private:
-		PBindFunction m_pfnBind;
-		PUnbindFunction m_pfnUnbind;
-		uint32_t m_uiSamplerId;
+		virtual void DoBeginScene();
+		virtual void DoEndScene();
+
+	protected:
 		OpenGl & m_gl;
+		GlRenderSystem * m_pRenderSystem;
 	};
 }
 

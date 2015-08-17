@@ -20,29 +20,20 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Dx11RenderSystemPrerequisites.hpp"
 
-#include <WindowRenderer.hpp>
+#include <RenderWindow.hpp>
 
 namespace Dx11Render
 {
-	class DxWindowRenderer
-		:	public Castor3D::WindowRenderer
+	class DxRenderWindow
+		: public Castor3D::RenderWindow
 	{
 	public:
-		DxWindowRenderer( DxRenderSystem * p_pRenderSystem );
-		virtual ~DxWindowRenderer();
-
-		virtual bool BeginScene();
-		virtual bool EndScene();
-		virtual void EndRender();
-		virtual bool SetCurrent();
-		virtual void EndCurrent();
+		DxRenderWindow( DxRenderSystem * p_pRenderSystem );
+		virtual ~DxRenderWindow();
 
 	private:
-		virtual bool DoInitialise();
-		virtual void DoCleanup();
-
-	protected:
-		DxContextSPtr m_context;
+		virtual void DoBeginScene();
+		virtual void DoEndScene();
 	};
 }
 

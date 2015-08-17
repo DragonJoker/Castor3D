@@ -15,29 +15,40 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL_SUBMESH_RENDERER_H___
-#define ___GL_SUBMESH_RENDERER_H___
+#ifndef ___GL_TARGET_RENDERER_H___
+#define ___GL_TARGET_RENDERER_H___
 
 #include "GlRenderSystemPrerequisites.hpp"
 #include "GlBuffer.hpp"
+#include "GlFrameBuffer.hpp"
 
-#include <Submesh.hpp>
+#include <RenderTarget.hpp>
 
 namespace GlRender
 {
-	class GlSubmeshRenderer
-		:	public Castor3D::SubmeshRenderer
-		,	public Castor::NonCopyable
+	class GlRenderTarget
+		: public Castor3D::RenderTarget
+		, public Castor::NonCopyable
 	{
-	public:
-		GlSubmeshRenderer( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem );
-		virtual ~GlSubmeshRenderer();
-
 	private:
-		virtual bool DoPrepareBuffers( Castor3D::Pass const & p_pass );
+		typedef bool ( GlRenderTarget:: * BeginSceneFunction )();
+		typedef BeginSceneFunction PBeginSceneFunction;
+		typedef void ( GlRenderTarget:: * EndSceneFunction )();
+		typedef EndSceneFunction PEndSceneFunction;
+
+	public:
+		GlRenderTarget( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem, Castor3D::eTARGET_TYPE p_type );
+		virtual ~GlRenderTarget();
+
+		virtual void Clear();
+		virtual Castor3D::RenderBufferAttachmentSPtr CreateAttachment( Castor3D::RenderBufferSPtr p_pRenderBuffer )const;
+		virtual Castor3D::TextureAttachmentSPtr CreateAttachment( Castor3D::DynamicTextureSPtr p_pTexture )const;
+		virtual Castor3D::FrameBufferSPtr CreateFrameBuffer()const;
 
 	protected:
+		bool m_bCleaned;
 		OpenGl & m_gl;
+		GlRenderSystem * m_pRenderSystem;
 	};
 }
 

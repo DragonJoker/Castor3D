@@ -1013,6 +1013,7 @@ namespace Castor3D
 		void DoRenderSubmeshInstancedSingle( Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
 		void DoRenderSubmeshNonInstanced( Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
 		void DoRenderSubmesh( Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
+		void DoApplySkeleton( FrameVariableBuffer const & p_matrixBuffer, AnimatedObjectSPtr p_object );
 		void DoRenderBillboards( Pipeline & p_pipeline, BillboardListStrMapIt p_itBegin, BillboardListStrMapIt p_itEnd );
 		void DoBindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer );
 		void DoBindLight( LightSPtr p_light, int p_index, ShaderProgramBase & p_program );

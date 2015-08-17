@@ -374,11 +374,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Puts all the matrices in the given frame variables buffer
 		 *\param[in]	p_matrixBuffer	The matrix variables buffer
+		 *\param[in]	p_matricesMask	A bitwise OR combination of MASK_MTXMODE, to select the matrices to apply
 		 *\~french
 		 *\brief		Met toutes les matrices dans le buffer de variables donné
 		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices
+		 *\param[in]	p_matricesMask	Une combinaison en OU binaire de MASK_MTXMODE, pour filtrer les matrices à appliquer
 		 */
-		void ApplyMatrices( FrameVariableBuffer & p_matrixBuffer );
+		void ApplyMatrices( FrameVariableBuffer & p_matrixBuffer, uint64_t p_matricesMask );
 		/**
 		 *\~english
 		 *\brief		Applies the given viewport dimension
@@ -646,6 +648,7 @@ namespace Castor3D
 		 */
 		inline matrix4x4 & GetCurrentMatrix()
 		{
+			CASTOR_ASSERT( m_pPipeline->m_eCurrentMode >= 0 && m_pPipeline->m_eCurrentMode < eMTXMODE_COUNT );
 			return m_pPipeline->m_matrix[m_pPipeline->m_eCurrentMode].top();
 		}
 		/**
@@ -658,6 +661,7 @@ namespace Castor3D
 		 */
 		inline matrix4x4 const & GetCurrentMatrix()const
 		{
+			CASTOR_ASSERT( m_pPipeline->m_eCurrentMode >= 0 && m_pPipeline->m_eCurrentMode < eMTXMODE_COUNT );
 			return m_pPipeline->m_matrix[m_pPipeline->m_eCurrentMode].top();
 		}
 

@@ -28,7 +28,7 @@ namespace ShaderModel1_2_3_4
 		cuT( "{\n" )
 		cuT( "	VtxOutput l_output;\n" )
 		cuT( "	p_input.Position.w = 1.0f;\n" )
-		cuT( "	l_output.Position = p_input.Position;\n" )
+		cuT( "	l_output.Position = mul( p_input.Position, c3d_mtxProjection );\n" )
 		cuT( "	l_output.TextureUV = p_input.TextureUV;\n" )
 		cuT( "	return l_output;\n" )
 		cuT( "}\n" );
@@ -91,10 +91,14 @@ namespace Dx11Render
 
 			if ( m_bInitialised )
 			{
+				auto l_uniforms = UniformsBase::Get( *l_pRenderSystem );
+				StringStream l_vtxShader;
+				l_vtxShader << l_uniforms->GetVertexInMatrices( 0 ) << std::endl;
+				l_vtxShader << ShaderModel1_2_3_4::VtxShader;
 				ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
 				l_pProgram->SetEntryPoint( eSHADER_TYPE_VERTEX, cuT( "mainVx" ) );
 				l_pProgram->SetEntryPoint( eSHADER_TYPE_PIXEL, cuT( "mainPx" ) );
-				l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_5, ShaderModel1_2_3_4::VtxShader );
+				l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_5, l_vtxShader.str() );
 				l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_5, ShaderModel1_2_3_4::PxlShader );
 				l_pProgram->Initialise();
 				m_pGeometryBuffers->GetVertexBuffer().Create();
@@ -108,6 +112,7 @@ namespace Dx11Render
 
 	void DxContext::DoCleanup()
 	{
+		SafeRelease( m_pDeviceContext );
 		DoFreeVolatileResources();
 	}
 
@@ -118,8 +123,7 @@ namespace Dx11Render
 
 	void DxContext::DoEndCurrent()
 	{
-		m_pDeviceContext->Release();
-		m_pDeviceContext = NULL;
+		SafeRelease( m_pDeviceContext );
 	}
 
 	void DxContext::DoSwapBuffers()
@@ -197,14 +201,17 @@ namespace Dx11Render
 		DoSetCurrent();
 		DxRenderSystem * l_pRenderSystem = static_cast< DxRenderSystem * >( m_pRenderSystem );
 		DxContextSPtr l_pMainContext = std::static_pointer_cast< DxContext >( l_pRenderSystem->GetMainContext() );
-		IDXGIFactory * l_pFactory = l_pRenderSystem->GetDXGIFactory();
+		IDXGIFactory * l_factory = NULL;
+		HRESULT l_hr = CreateDXGIFactory( __uuidof( IDXGIFactory ) , reinterpret_cast< void ** >( &l_factory ) );
+		//IDXGIFactory * l_pFactory = l_pRenderSystem->GetDXGIFactory();
 		ID3D11Texture2D * l_pDSTex = NULL;
 		ID3D11Texture2D * l_pRTTex = NULL;
 
-		if ( l_pFactory )
+		if ( l_factory )
 		{
-			HRESULT l_hr = l_pFactory->CreateSwapChain( l_pRenderSystem->GetDevice(), &m_deviceParams, &m_pSwapChain );
-			dxDebugName( m_pSwapChain, SwapChain );
+			HRESULT l_hr = l_factory->CreateSwapChain( l_pRenderSystem->GetDevice(), &m_deviceParams, &m_pSwapChain );
+			dxDebugName( l_pRenderSystem, m_pSwapChain, SwapChain );
+			l_factory->Release();
 			bool l_bContinue = dxCheckError( l_hr, "CreateSwapChain" );
 
 			if ( l_bContinue )
@@ -216,11 +223,10 @@ namespace Dx11Render
 			if ( l_bContinue )
 			{
 				l_hr = l_pRenderSystem->GetDevice()->CreateRenderTargetView( l_pRTTex, NULL, &m_pRenderTargetView );
-				dxDebugName( m_pRenderTargetView, ContextRTView );
+				dxDebugName( l_pRenderSystem, m_pRenderTargetView, ContextRTView );
 				l_bContinue = dxCheckError( l_hr, "CreateRenderTargetView" );
+				l_pRTTex->Release();
 			}
-
-			SafeRelease( l_pRTTex );
 
 			if ( l_bContinue )
 			{
@@ -249,11 +255,10 @@ namespace Dx11Render
 				l_descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 				l_descDSV.Texture2D.MipSlice = 0;
 				l_hr = l_pRenderSystem->GetDevice()->CreateDepthStencilView( l_pDSTex, &l_descDSV, &m_pDepthStencilView );
-				dxDebugName( m_pDepthStencilView, ContextDSView );
+				dxDebugName( l_pRenderSystem, m_pDepthStencilView, ContextDSView );
 				l_bContinue = dxCheckError( l_hr, "CreateDepthStencilView" );
+				l_pDSTex->Release();
 			}
-
-			SafeRelease( l_pDSTex );
 
 			if ( l_bContinue )
 			{
@@ -274,9 +279,9 @@ namespace Dx11Render
 			m_pSwapChain->SetFullscreenState( false, NULL );
 		}
 
-		SafeRelease( m_pDepthStencilView );
-		SafeRelease( m_pRenderTargetView );
-		SafeRelease( m_pSwapChain );
+		ReleaseTracked( m_pRenderSystem, m_pDepthStencilView );
+		ReleaseTracked( m_pRenderSystem, m_pRenderTargetView );
+		ReleaseTracked( m_pRenderSystem, m_pSwapChain );
 	}
 
 	HRESULT DxContext::DoInitPresentParameters()

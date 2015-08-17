@@ -74,30 +74,6 @@ namespace Dx11Render
 		//	return m_pDxTexture.lock()->GetDxSurface();
 	}
 
-	bool DxTextureAttachment::Bind()
-	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
-		ID3D11DepthStencilView * l_pView;
-		ID3D11RenderTargetView * l_pSurface = m_pDxTexture.lock()->GetRenderTargetView();
-		l_pDeviceContext->OMGetRenderTargets( 1, &m_pOldSurface, &l_pView );
-		l_pDeviceContext->OMSetRenderTargets( 1, &l_pSurface, l_pView );
-		SafeRelease( l_pView );
-		return true;
-	}
-
-	void DxTextureAttachment::Unbind()
-	{
-		if ( m_pOldSurface )
-		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
-			ID3D11DepthStencilView * l_pView;
-			l_pDeviceContext->OMGetRenderTargets( 1, NULL, &l_pView );
-			l_pDeviceContext->OMSetRenderTargets( 1, &m_pOldSurface, l_pView );
-			SafeRelease( l_pView );
-			SafeRelease( m_pOldSurface );
-		}
-	}
-
 	bool DxTextureAttachment::DoAttach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer )
 	{
 		m_dwAttachment = DirectX11::Get( p_eAttachment );
@@ -107,6 +83,7 @@ namespace Dx11Render
 
 	void DxTextureAttachment::DoDetach()
 	{
-		Unbind();
+		m_pFrameBuffer.reset();
+		m_dwAttachment = 0;
 	}
 }

@@ -324,6 +324,19 @@ namespace Dx11Render
 		return l_pReturn;
 	}
 
+	uint32_t GetNextIndex( uint32_t p_current, uint32_t p_size )
+	{
+		uint32_t l_mod = p_current % 16;
+
+		if ( l_mod && p_size > 16 - l_mod )
+		{
+			p_current += 16 - l_mod;
+		}
+
+		p_current += p_size;
+		return p_current;
+	}
+
 	bool DxFrameVariableBuffer::DoInitialise( ShaderProgramBase * p_pProgram )
 	{
 		HRESULT l_hr = S_OK;
@@ -332,18 +345,11 @@ namespace Dx11Render
 		if ( !m_listVariables.empty() )
 		{
 			ID3D11Device * l_pDevice = m_pDxRenderSystem->GetDevice();
-			D3D11_BUFFER_DESC l_d3dBufferDesc = { 0 };
 			uint32_t l_uiTotalSize = 0;
 
 			for ( auto && l_variable : m_listVariables )
 			{
-				l_uiTotalSize += l_variable->size();
-
-				if ( l_uiTotalSize % 16 )
-				{
-					// We must align on 16 bytes...
-					l_uiTotalSize += 16 - ( l_uiTotalSize % 16 );
-				}
+				l_uiTotalSize = GetNextIndex( l_uiTotalSize, l_variable->size() );
 			}
 
 			m_buffer.resize( l_uiTotalSize );
@@ -352,23 +358,31 @@ namespace Dx11Render
 			for ( auto && l_variable : m_listVariables )
 			{
 				l_variable->link( &m_buffer[l_uiTotalSize] );
-				l_uiTotalSize += l_variable->size();
-
-				if ( l_uiTotalSize % 16 )
-				{
-					// We must align on 16 bytes...
-					l_uiTotalSize += 16 - ( l_uiTotalSize % 16 );
-				}
+				l_uiTotalSize = GetNextIndex( l_uiTotalSize, l_variable->size() );
 			}
 
+			uint32_t l_mod = l_uiTotalSize % 16;
+
+			if ( l_mod )
+			{
+				l_uiTotalSize += 16 - l_mod;
+			}
+
+			D3D11_BUFFER_DESC l_d3dBufferDesc = { 0 };
 			l_d3dBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 			l_d3dBufferDesc.ByteWidth = l_uiTotalSize;
 			l_d3dBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 			l_d3dBufferDesc.MiscFlags = 0;
 			l_d3dBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
 			l_d3dBufferDesc.StructureByteStride = 0;
-			l_hr = l_pDevice->CreateBuffer( &l_d3dBufferDesc, NULL, &m_pDxBuffer );
-			dxDebugName( m_pDxBuffer, ConstantBuffer );
+
+			D3D11_SUBRESOURCE_DATA l_d3dInitData;
+			l_d3dInitData.pSysMem = m_buffer.data();
+			l_d3dInitData.SysMemPitch = 0;
+			l_d3dInitData.SysMemSlicePitch = 0;
+
+			l_hr = l_pDevice->CreateBuffer( &l_d3dBufferDesc, &l_d3dInitData, &m_pDxBuffer );
+			dxDebugName( static_cast< DxRenderSystem * >( m_pRenderSystem ), m_pDxBuffer, ConstantBuffer );
 		}
 
 		return l_hr == S_OK;
@@ -376,12 +390,14 @@ namespace Dx11Render
 
 	void DxFrameVariableBuffer::DoCleanup()
 	{
-		SafeRelease( m_pDxBuffer );
+		ReleaseTracked( m_pRenderSystem, m_pDxBuffer );
 	}
 
 	bool DxFrameVariableBuffer::DoBind( uint32_t p_uiIndex )
 	{
-		if ( m_pDxBuffer )
+		bool l_return = !m_pDxBuffer;
+
+		if ( !l_return )
 		{
 			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 			D3D11_MAPPED_SUBRESOURCE l_mapped = { 0 };
@@ -391,68 +407,14 @@ namespace Dx11Render
 			{
 				memcpy( l_mapped.pData, &m_buffer[0], m_buffer.size() );
 				l_pDeviceContext->Unmap( m_pDxBuffer, 0 );
-			}
-
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_VERTEX ) )
-			{
-				l_pDeviceContext->VSSetConstantBuffers( p_uiIndex, 1, &m_pDxBuffer );
-			}
-
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_PIXEL ) )
-			{
-				l_pDeviceContext->PSSetConstantBuffers( p_uiIndex, 1, &m_pDxBuffer );
-			}
-
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_GEOMETRY ) )
-			{
-				l_pDeviceContext->GSSetConstantBuffers( p_uiIndex, 1, &m_pDxBuffer );
-			}
-
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_HULL ) )
-			{
-				l_pDeviceContext->HSSetConstantBuffers( p_uiIndex, 1, &m_pDxBuffer );
-			}
-
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_DOMAIN ) )
-			{
-				l_pDeviceContext->DSSetConstantBuffers( p_uiIndex, 1, &m_pDxBuffer );
+				l_return = true;
 			}
 		}
 
-		return true;
+		return l_return;
 	}
 
 	void DxFrameVariableBuffer::DoUnbind( uint32_t p_uiIndex )
 	{
-		if ( m_pDxBuffer )
-		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
-			ID3D11Buffer * buffer[] = { NULL };
-
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_VERTEX ) )
-			{
-				l_pDeviceContext->VSSetConstantBuffers( p_uiIndex, 1, buffer );
-			}
-
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_PIXEL ) )
-			{
-				l_pDeviceContext->PSSetConstantBuffers( p_uiIndex, 1, buffer );
-			}
-
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_GEOMETRY ) )
-			{
-				l_pDeviceContext->GSSetConstantBuffers( p_uiIndex, 1, buffer );
-			}
-
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_HULL ) )
-			{
-				l_pDeviceContext->HSSetConstantBuffers( p_uiIndex, 1, buffer );
-			}
-
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_DOMAIN ) )
-			{
-				l_pDeviceContext->DSSetConstantBuffers( p_uiIndex, 1, buffer );
-			}
-		}
 	}
 }

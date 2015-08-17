@@ -2,8 +2,6 @@
 #include "Pass.hpp"
 #include "SceneFileParser.hpp"
 #include "Sampler.hpp"
-#include "InitialiseEvent.hpp"
-#include "CleanupEvent.hpp"
 
 #include <Logger.hpp>
 
@@ -70,11 +68,12 @@ namespace Castor3D
 
 		if ( l_bReturn )
 		{
-			PassPtrArrayConstIt l_it = p_obj.Begin();
+			auto l_it = p_obj.begin();
+			Pass::BinaryParser l_parser( m_path );
 
-			while ( l_bReturn && l_it != p_obj.End() )
+			while ( l_bReturn && l_it != p_obj.end() )
 			{
-				l_bReturn = Pass::BinaryParser( m_path ).Fill( const_cast< Pass const & >( *( *l_it ) ), l_chunk );
+				l_bReturn = l_parser.Fill( const_cast< Pass const & >( *( *l_it ) ), l_chunk );
 				++l_it;
 			}
 		}
@@ -106,7 +105,7 @@ namespace Castor3D
 
 		bool l_bFirst = true;
 
-		for ( PassPtrArrayConstIt l_it = p_material.Begin(); l_it != p_material.End(); ++l_it )
+		for ( auto && l_pass: p_material )
 		{
 			if ( l_bFirst )
 			{
@@ -117,7 +116,7 @@ namespace Castor3D
 				p_file.WriteText( cuT( "\n" ) );
 			}
 
-			l_bReturn = Pass::TextLoader()( *( *l_it ), p_file );
+			l_bReturn = Pass::TextLoader()( *l_pass, p_file );
 		}
 
 		if ( l_bReturn )

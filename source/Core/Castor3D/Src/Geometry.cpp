@@ -9,6 +9,7 @@
 #include "Pass.hpp"
 #include "ShaderManager.hpp"
 #include "ShaderProgram.hpp"
+#include "RenderSystem.hpp"
 
 #include <Logger.hpp>
 
@@ -193,6 +194,8 @@ namespace Castor3D
 				m_listCreated = l_pMesh->GetSubmeshCount() > 0;
 			}
 
+			Engine * l_engine = GetScene()->GetEngine();
+
 			for ( auto && l_pair : m_submeshesMaterials )
 			{
 				uint32_t l_uiProgramFlags = l_pair.first->GetProgramFlags();
@@ -202,21 +205,20 @@ namespace Castor3D
 					l_uiProgramFlags |= ePROGRAM_FLAG_INSTANCIATION;
 				}
 
-				if ( GetScene()->GetEngine()->GetRenderSystem()->GetCurrentContext()->IsDeferredShadingSet() )
+				if ( l_engine->GetRenderSystem()->GetCurrentContext()->IsDeferredShadingSet() )
 				{
 					l_uiProgramFlags |= ePROGRAM_FLAG_DEFERRED;
 				}
 
 				if ( l_pair.second )
 				{
-					std::for_each( l_pair.second->Begin(), l_pair.second->End(), [&]( PassSPtr p_pPass )
+					for( auto && l_pass: *l_pair.second )
 					{
-						if ( !p_pPass->HasShader() )
+						if ( !l_pass->HasShader() )
 						{
-							ShaderProgramBaseSPtr l_pProgram = GetScene()->GetEngine()->GetShaderManager().GetAutomaticProgram( p_pPass->GetTextureFlags(), l_uiProgramFlags );
-							l_pProgram->Initialise();
+							l_engine->GetShaderManager().GetAutomaticProgram( l_pass->GetTextureFlags(), l_uiProgramFlags )->Initialise();
 						}
-					} );
+					}
 				}
 			}
 		}
@@ -224,23 +226,10 @@ namespace Castor3D
 
 	void Geometry::Render()
 	{
-		uint32_t l_nbSubmeshes;
-		SubmeshSPtr l_submesh;
-		MeshSPtr l_pMesh = GetMesh();
-
 		if ( !m_listCreated )
 		{
 			uint32_t l_nbFaces = 0, l_nbVertex = 0;
 			CreateBuffers( l_nbFaces, l_nbVertex );
-		}
-
-		if ( m_visible && l_pMesh && m_listCreated )
-		{
-			l_nbSubmeshes = static_cast< uint32_t >( l_pMesh->GetSubmeshCount() );
-			std::for_each( l_pMesh->Begin(), l_pMesh->End(), [&]( SubmeshSPtr p_pSubmesh )
-			{
-				p_pSubmesh->Render();
-			} );
 		}
 	}
 

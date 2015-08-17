@@ -1,4 +1,5 @@
 ﻿#include "BillboardList.hpp"
+
 #include "PointFrameVariable.hpp"
 #include "Buffer.hpp"
 #include "RenderSystem.hpp"
@@ -9,7 +10,7 @@
 #include "Material.hpp"
 #include "MaterialManager.hpp"
 #include "Pass.hpp"
-#include "PassRenderer.hpp"
+#include "Engine.hpp"
 #include "Pipeline.hpp"
 #include "ShaderManager.hpp"
 
@@ -245,15 +246,14 @@ namespace Castor3D
 				uint8_t l_index = 0;
 				uint8_t l_count = l_pMaterial->GetPassCount();
 
-				for ( PassPtrArrayConstIt l_it = l_pMaterial->Begin(); l_it != l_pMaterial->End(); ++l_it )
+				for ( auto && l_pass: *l_pMaterial )
 				{
-					PassSPtr l_pass = *l_it;
 					l_pass->BindToProgram( l_pProgram );
 					auto l_matrixBuffer = l_pass->GetMatrixBuffer();
 
 					if ( l_matrixBuffer )
 					{
-						l_pPipeline->ApplyMatrices( *l_matrixBuffer );
+						l_pPipeline->ApplyMatrices( *l_matrixBuffer, 0xFFFFFFFFFFFFFFFF );
 					}
 
 					l_pass->Render( l_index++, l_count );

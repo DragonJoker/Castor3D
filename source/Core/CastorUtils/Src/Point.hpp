@@ -915,7 +915,7 @@ namespace Castor
 	 *\param[in]	p_coord	La valeur
 	 *\return		Le résultat de la multiplication
 	 */
-	template< typename T, uint32_t Count > Point< T, Count > operator *( Point< T, Count > const & p_pt, T const & p_coord );
+	template< typename T, uint32_t Count, typename U > Point< T, Count > operator *( Point< T, Count > const & p_pt, U const & p_coord );
 	/**
 	 *\~english
 	 *\brief		Division operator
@@ -928,7 +928,7 @@ namespace Castor
 	 *\param[in]	p_coord	La valeur
 	 *\return		Le résultat de la division
 	 */
-	template< typename T, uint32_t Count > Point< T, Count > operator /( Point< T, Count > const & p_pt, T const & p_coord );
+	template< typename T, uint32_t Count, typename U > Point< T, Count > operator /( Point< T, Count > const & p_pt, U const & p_coord );
 	/**
 	 *\~english
 	 *\brief		Equality operator

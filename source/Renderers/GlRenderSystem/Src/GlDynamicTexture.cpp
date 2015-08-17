@@ -112,9 +112,9 @@ namespace GlRender
 		}
 	}
 
-	bool GlDynamicTexture::DoBind()
+	bool GlDynamicTexture::DoBind( uint32_t p_index )
 	{
-		bool l_bReturn = m_gl.ActiveTexture( m_eIndex );
+		bool l_bReturn = m_gl.ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + m_uiIndex ) );
 
 		if ( l_bReturn )
 		{
@@ -124,20 +124,20 @@ namespace GlRender
 		return l_bReturn;
 	}
 
-	void GlDynamicTexture::DoUnbind()
+	void GlDynamicTexture::DoUnbind( uint32_t p_index )
 	{
-		m_gl.ActiveTexture( m_eIndex );
+		m_gl.ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + p_index ) );
 		m_gl.BindTexture( m_eGlDimension, 0 );
 	}
 
 	bool GlDynamicTexture::DoInitialise()
 	{
-		OpenGl::PixelFmt	l_glPixelFmt;
-		bool				l_bReturn;
-		m_eIndex		= eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + m_uiIndex );
-		m_eGlDimension	= m_gl.Get( m_eDimension );
-		l_glPixelFmt	= m_gl.Get( m_pPixelBuffer->format() );
-		l_bReturn		= DoBind();
+		OpenGl::PixelFmt l_glPixelFmt;
+		bool l_bReturn;
+		m_eIndex = eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + m_uiIndex );
+		m_eGlDimension = m_gl.Get( m_eDimension );
+		l_glPixelFmt = m_gl.Get( m_pPixelBuffer->format() );
+		l_bReturn = DoBind( m_uiIndex );
 
 		switch ( m_eGlDimension )
 		{
@@ -162,7 +162,7 @@ namespace GlRender
 			break;
 		}
 
-		DoUnbind();
+		DoUnbind( m_uiIndex );
 		return l_bReturn;
 	}
 }

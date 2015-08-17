@@ -130,12 +130,12 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( uint32_t p_flags )
 
 	ShaderManager & l_manager = m_pRenderSystem->GetEngine()->GetShaderManager();
 	ShaderProgramBaseSPtr l_pProgram = l_manager.GetNewProgram();
-	l_manager.CreateMatrixBuffer( *l_pProgram );
-	l_manager.CreateSceneBuffer( *l_pProgram );
-	l_manager.CreatePassBuffer( *l_pProgram );
-	l_manager.CreateTextureVariables( p_flags, *l_pProgram );
+	l_manager.CreateMatrixBuffer( *l_pProgram, MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
+	l_manager.CreateSceneBuffer( *l_pProgram, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
+	l_manager.CreatePassBuffer( *l_pProgram, MASK_SHADER_TYPE_PIXEL );
+	l_manager.CreateTextureVariables( *l_pProgram, p_flags );
 	FrameVariableBufferSPtr l_billboardUbo = m_pRenderSystem->CreateFrameVariableBuffer( cuT( "Billboard" ) );
-	l_pProgram->AddFrameVariableBuffer( l_billboardUbo );
+	l_pProgram->AddFrameVariableBuffer( l_billboardUbo, MASK_SHADER_TYPE_GEOMETRY );
 
 	ShaderObjectBaseSPtr l_pObject = l_pProgram->CreateObject( eSHADER_TYPE_GEOMETRY );
 	l_pObject->SetInputType( eTOPOLOGY_POINTS );

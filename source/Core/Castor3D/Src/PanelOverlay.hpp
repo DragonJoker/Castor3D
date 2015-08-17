@@ -143,6 +143,18 @@ namespace Castor3D
 		 *\return		Un overlay
 		 */
 		static OverlayCategorySPtr Create();
+		/**
+		 *\~english
+		 *\brief		Retrieves the panel vertex buffer
+		 *\return		The buffer
+		 *\~french
+		 *\brief		Récupère le tampon de sommets du panneau
+		 *\return		Le tampon
+		 */
+		inline OverlayCategory::VertexArray const & GetPanelVertex()const
+		{
+			return m_arrayVtx;
+		}
 
 	protected:
 		/**

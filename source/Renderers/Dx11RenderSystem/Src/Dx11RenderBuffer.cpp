@@ -88,12 +88,12 @@ namespace Dx11Render
 					l_descTex.CPUAccessFlags = 0;
 					l_descTex.MiscFlags = 0;
 					l_hr = m_pRenderSystem->GetDevice()->CreateTexture2D( &l_descTex, NULL, &m_pTexture );
-					dxDebugName( m_pTexture, RTTexture );
+					dxDebugName( m_pRenderSystem, m_pTexture, RTTexture );
 
 					if ( l_hr == S_OK )
 					{
 						l_hr = m_pRenderSystem->GetDevice()->CreateRenderTargetView( m_pTexture, NULL, reinterpret_cast< ID3D11RenderTargetView ** >( &m_pSurface ) );
-						dxDebugName( m_pSurface, RTView );
+						dxDebugName( m_pRenderSystem, m_pSurface, RTView );
 					}
 				}
 				else
@@ -111,12 +111,12 @@ namespace Dx11Render
 					l_descDepth.CPUAccessFlags = 0;
 					l_descDepth.MiscFlags = 0;
 					l_hr = m_pRenderSystem->GetDevice()->CreateTexture2D( &l_descDepth, NULL, &m_pTexture );
-					dxDebugName( m_pTexture, DSTexture );
+					dxDebugName( m_pRenderSystem, m_pTexture, DSTexture );
 
 					if ( l_hr == S_OK )
 					{
 						l_hr = m_pRenderSystem->GetDevice()->CreateDepthStencilView( m_pTexture, NULL, reinterpret_cast< ID3D11DepthStencilView ** >( &m_pSurface ) );
-						dxDebugName( m_pSurface, DSView );
+						dxDebugName( m_pRenderSystem, m_pSurface, DSView );
 					}
 				}
 
@@ -129,71 +129,9 @@ namespace Dx11Render
 
 	void DxRenderBuffer::Cleanup()
 	{
-		SafeRelease( m_pSurface );
-		SafeRelease( m_pTexture );
+		ReleaseTracked( m_pRenderSystem, m_pSurface );
+		ReleaseTracked( m_pRenderSystem, m_pTexture );
 		SafeRelease( m_pOldSurface );
-	}
-
-	bool DxRenderBuffer::Bind()
-	{
-#if 1
-		return true;
-#else
-		HRESULT l_hr = S_FALSE;
-
-		if ( m_pSurface )
-		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
-
-			if ( m_eComponent == eBUFFER_COMPONENT_COLOUR )
-			{
-				ID3D11DepthStencilView * l_pView;
-				l_pDeviceContext->OMGetRenderTargets( 1, reinterpret_cast< ID3D11RenderTargetView ** >( &m_pOldSurface ), &l_pView );
-				l_pDeviceContext->OMSetRenderTargets( 1, reinterpret_cast< ID3D11RenderTargetView ** >( &m_pSurface ), l_pView );
-				SafeRelease( l_pView );
-			}
-			else
-			{
-				ID3D11RenderTargetView * l_pView;
-				l_pDeviceContext->OMGetRenderTargets( 1, &l_pView, reinterpret_cast< ID3D11DepthStencilView ** >( &m_pSurface ) );
-				l_pDeviceContext->OMSetRenderTargets( 1, &l_pView, reinterpret_cast< ID3D11DepthStencilView * >( m_pOldSurface ) );
-				SafeRelease( l_pView );
-			}
-
-			return true;
-		}
-
-		return l_hr == S_OK;
-#endif
-	}
-
-	void DxRenderBuffer::Unbind()
-	{
-#if 1
-		return;
-#else
-		if ( m_pOldSurface )
-		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
-
-			if ( m_eComponent == eBUFFER_COMPONENT_COLOUR )
-			{
-				ID3D11DepthStencilView * l_pView;
-				l_pDeviceContext->OMGetRenderTargets( 1, NULL, &l_pView );
-				l_pDeviceContext->OMSetRenderTargets( 1, reinterpret_cast< ID3D11RenderTargetView ** >( &m_pOldSurface ), l_pView );
-				SafeRelease( l_pView );
-			}
-			else
-			{
-				ID3D11RenderTargetView * l_pView;
-				l_pDeviceContext->OMGetRenderTargets( 1, &l_pView, NULL );
-				l_pDeviceContext->OMSetRenderTargets( 1, &l_pView, reinterpret_cast< ID3D11DepthStencilView * >( m_pOldSurface ) );
-				SafeRelease( l_pView );
-			}
-
-			SafeRelease( m_pOldSurface );
-		}
-#endif
 	}
 
 	bool DxRenderBuffer::Resize( Size const & p_size )

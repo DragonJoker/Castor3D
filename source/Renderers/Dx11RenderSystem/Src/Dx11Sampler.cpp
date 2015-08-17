@@ -1,4 +1,4 @@
-#include "Dx11SamplerRenderer.hpp"
+#include "Dx11Sampler.hpp"
 #include "Dx11RenderSystem.hpp"
 
 #include <Logger.hpp>
@@ -11,27 +11,27 @@ using namespace Castor3D;
 
 namespace Dx11Render
 {
-	DxSamplerRenderer::DxSamplerRenderer( DxRenderSystem * p_pRenderSystem )
-		: SamplerRenderer( p_pRenderSystem )
+	DxSampler::DxSampler( DxRenderSystem * p_pRenderSystem, Castor::String const & p_name )
+		: Sampler( p_pRenderSystem->GetEngine(), p_name )
 		, m_pDxRenderSystem( p_pRenderSystem )
 		, m_pSamplerState( NULL )
 	{
 	}
 
-	DxSamplerRenderer::~DxSamplerRenderer()
+	DxSampler::~DxSampler()
 	{
 	}
 
-	bool DxSamplerRenderer::Initialise()
+	bool DxSampler::Initialise()
 	{
 		HRESULT l_hr = S_OK;
 
 		if ( !m_pSamplerState )
 		{
 			ID3D11Device * l_pDevice = m_pDxRenderSystem->GetDevice();
-			m_tex2dSampler.AddressU = DirectX11::Get( m_target->GetWrappingMode( eTEXTURE_UVW_U ) );
-			m_tex2dSampler.AddressV = DirectX11::Get( m_target->GetWrappingMode( eTEXTURE_UVW_V ) );
-			m_tex2dSampler.AddressW = DirectX11::Get( m_target->GetWrappingMode( eTEXTURE_UVW_W ) );
+			m_tex2dSampler.AddressU = DirectX11::Get( GetWrappingMode( eTEXTURE_UVW_U ) );
+			m_tex2dSampler.AddressV = DirectX11::Get( GetWrappingMode( eTEXTURE_UVW_V ) );
+			m_tex2dSampler.AddressW = DirectX11::Get( GetWrappingMode( eTEXTURE_UVW_W ) );
 			m_tex2dSampler.BorderColor[0] = 0;
 			m_tex2dSampler.BorderColor[1] = 0;
 			m_tex2dSampler.BorderColor[2] = 0;
@@ -41,9 +41,9 @@ namespace Dx11Render
 			m_tex2dSampler.MaxLOD = 6;
 			m_tex2dSampler.MinLOD = 0;
 			m_tex2dSampler.MipLODBias = 2;
-			eINTERPOLATION_MODE l_eMinMode = m_target->GetInterpolationMode( eINTERPOLATION_FILTER_MIN );
-			eINTERPOLATION_MODE l_eMagMode = m_target->GetInterpolationMode( eINTERPOLATION_FILTER_MAG );
-			eINTERPOLATION_MODE l_eMipMode = m_target->GetInterpolationMode( eINTERPOLATION_FILTER_MIP );
+			eINTERPOLATION_MODE l_eMinMode = GetInterpolationMode( eINTERPOLATION_FILTER_MIN );
+			eINTERPOLATION_MODE l_eMagMode = GetInterpolationMode( eINTERPOLATION_FILTER_MAG );
+			eINTERPOLATION_MODE l_eMipMode = GetInterpolationMode( eINTERPOLATION_FILTER_MIP );
 
 			if ( l_eMinMode == l_eMipMode && l_eMipMode == l_eMagMode )
 			{
@@ -58,7 +58,7 @@ namespace Dx11Render
 				else
 				{
 					m_tex2dSampler.Filter = D3D11_FILTER_ANISOTROPIC;
-					m_tex2dSampler.MaxAnisotropy = UINT( m_target->GetMaxAnisotropy() );
+					m_tex2dSampler.MaxAnisotropy = UINT( GetMaxAnisotropy() );
 				}
 			}
 			else if ( l_eMinMode == eINTERPOLATION_MODE_NEAREST )
@@ -74,7 +74,7 @@ namespace Dx11Render
 				else
 				{
 					m_tex2dSampler.Filter = D3D11_FILTER_ANISOTROPIC;
-					m_tex2dSampler.MaxAnisotropy = UINT( m_target->GetMaxAnisotropy() );
+					m_tex2dSampler.MaxAnisotropy = UINT( GetMaxAnisotropy() );
 				}
 			}
 			else if ( l_eMinMode == eINTERPOLATION_MODE_LINEAR )
@@ -90,35 +90,35 @@ namespace Dx11Render
 				else
 				{
 					m_tex2dSampler.Filter = D3D11_FILTER_ANISOTROPIC;
-					m_tex2dSampler.MaxAnisotropy = UINT( m_target->GetMaxAnisotropy() );
+					m_tex2dSampler.MaxAnisotropy = UINT( GetMaxAnisotropy() );
 				}
 			}
 			else
 			{
 				m_tex2dSampler.Filter = D3D11_FILTER_ANISOTROPIC;
-				m_tex2dSampler.MaxAnisotropy = UINT( m_target->GetMaxAnisotropy() );
+				m_tex2dSampler.MaxAnisotropy = UINT( GetMaxAnisotropy() );
 			}
 
 			l_hr = l_pDevice->CreateSamplerState( &m_tex2dSampler, &m_pSamplerState );
-			dxDebugName( m_pSamplerState, SamplerState );
+			dxDebugName( static_cast< DxRenderSystem * >( GetEngine()->GetRenderSystem() ), m_pSamplerState, SamplerState );
 		}
 
 		return l_hr == S_OK;
 	}
 
-	void DxSamplerRenderer::Cleanup()
+	void DxSampler::Cleanup()
 	{
-		SafeRelease( m_pSamplerState );
+		ReleaseTracked( GetEngine()->GetRenderSystem(), m_pSamplerState );
 	}
 
-	bool DxSamplerRenderer::Bind( eTEXTURE_DIMENSION CU_PARAM_UNUSED( p_eDimension ), uint32_t p_uiIndex )
+	bool DxSampler::Bind( eTEXTURE_DIMENSION CU_PARAM_UNUSED( p_eDimension ), uint32_t p_uiIndex )
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( GetEngine()->GetRenderSystem()->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->PSSetSamplers( p_uiIndex, 1, &m_pSamplerState );
 		return true;
 	}
 
-	void DxSamplerRenderer::Unbind()
+	void DxSampler::Unbind()
 	{
 	}
 }

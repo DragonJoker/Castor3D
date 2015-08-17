@@ -145,8 +145,8 @@ namespace Castor3D
 		 *\return		\p false if any problem occured
 		 *\~french
 		 *\brief		Active toutes les variables, au travers du tampon GPU si supporté (OpenGL UBO, Direct3D Constants buffers)
-		 *\param[in]	p_pProgram	L'index du tampon GPU
-		 *\return		\p false if any problem occured
+		 *\param[in]	p_index	L'index du tampon GPU
+		 *\return		\p false en cas de problème
 		 */
 		bool Bind( uint32_t p_index );
 		/**

@@ -1,5 +1,7 @@
 #include "Dx11FragmentShader.hpp"
+
 #include "Dx11RenderSystem.hpp"
+#include "Dx11FrameVariableBuffer.hpp"
 
 #include <Logger.hpp>
 
@@ -16,18 +18,46 @@ namespace Dx11Render
 
 	DxFragmentShader::~DxFragmentShader()
 	{
-		SafeRelease( m_pPixelShader );
+		ReleaseTracked( m_pRenderSystem, m_pPixelShader );
 	}
 
 	void DxFragmentShader::DoBind()
 	{
 		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->PSSetShader( m_pPixelShader, NULL, 0 );
+		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_PIXEL );
+
+		if ( !l_ubos.empty() )
+		{
+			std::vector< ID3D11Buffer * > l_buffers;
+			l_buffers.reserve( l_ubos.size() );
+
+			for ( auto l_variableBuffer: m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_PIXEL ) )
+			{
+				l_buffers.push_back( std::static_pointer_cast< DxFrameVariableBuffer >( l_variableBuffer )->GetDxBuffer() );
+			}
+
+			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_PIXEL ) )
+			{
+				l_pDeviceContext->PSSetConstantBuffers( 0, l_buffers.size(), l_buffers.data() );
+			}
+		}
 	}
 
 	void DxFragmentShader::DoUnbind()
 	{
 		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_PIXEL );
+
+		if ( !l_ubos.empty() )
+		{
+			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_PIXEL ) )
+			{
+				ID3D11Buffer * l_buffer = NULL;
+				l_pDeviceContext->PSSetConstantBuffers( 0, 1, &l_buffer );
+			}
+		}
+
 		l_pDeviceContext->PSSetShader( NULL, NULL, 0 );
 	}
 
@@ -40,7 +70,7 @@ namespace Dx11Render
 			if ( l_pDevice )
 			{
 				HRESULT l_hr = l_pDevice->CreatePixelShader( reinterpret_cast< DWORD * >( m_pCompiled->GetBufferPointer() ), m_pCompiled->GetBufferSize(), NULL, &m_pPixelShader );
-				dxDebugName( m_pPixelShader, PSShader );
+				dxDebugName( m_pRenderSystem, m_pPixelShader, PSShader );
 
 				if ( l_hr == S_OK )
 				{

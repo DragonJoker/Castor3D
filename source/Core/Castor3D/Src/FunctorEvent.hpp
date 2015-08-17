@@ -15,8 +15,8 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_INITIALISE_EVENT_H___
-#define ___C3D_INITIALISE_EVENT_H___
+#ifndef ___C3D_FUNCTOR_EVENT_H___
+#define ___C3D_FUNCTOR_EVENT_H___
 
 #include "Castor3DPrerequisites.hpp"
 #include "Version.hpp"
@@ -31,14 +31,14 @@ namespace Castor3D
 	\date 		24/04/2013
 	\version	0.7.0
 	\~english
-	\brief		Initialiser event
-	\remark		Initialises the member given when constructed.
+	\brief		Functor event
+	\remark		Executes a function when processed
 	\~french
-	\brief		Evènement d'initialisation
-	\remark		Initialise le membre donné lors de la construction.
+	\brief		Evènement foncteur
+	\remark		Excécute une fonction lorsqu'il est traité
 	*/
-	template< class T >
-	class C3D_API InitialiseEvent
+	template< class Functor >
+	class C3D_API FunctorEvent
 		: public FrameEvent
 	{
 	private:
@@ -50,9 +50,9 @@ namespace Castor3D
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_copy	L'objet à copier
 		 */
-		InitialiseEvent( InitialiseEvent const & p_copy )
+		FunctorEvent( FunctorEvent const & p_copy )
 			: FrameEvent( p_copy )
-			, m_object( p_copy.m_object )
+			, m_functor( p_copy.m_functor )
 		{
 		}
 		/**
@@ -63,10 +63,10 @@ namespace Castor3D
 		 *\brief		Opérateur d'affectation par copie
 		 *\param[in]	p_copy	L'objet à copier
 		 */
-		InitialiseEvent & operator=( InitialiseEvent const & p_copy )
+		FunctorEvent & operator=( FunctorEvent const & p_copy )
 		{
-			InitialiseEvent l_evt( p_copy );
-			std::swap( m_object, l_evt.m_object );
+			FunctorEvent l_evt( p_copy );
+			std::swap( m_functor, l_evt.m_functor );
 			std::swap( m_eType, l_evt.m_eType );
 			return *this;
 		}
@@ -75,14 +75,16 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_object	The object to initialise
+		 *\param[in]	p_type		The event type
+		 *\param[in]	p_functor	The functor to execute
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_object	L'objet à initialiser
+		 *\param[in]	p_type		Le type d'évènement
+		 *\param[in]	p_functor	Le foncteur à exécuter
 		 */
-		InitialiseEvent( T & p_object )
-			: FrameEvent( eEVENT_TYPE_PRE_RENDER )
-			, m_object( p_object )
+		FunctorEvent( eEVENT_TYPE p_type, Functor p_functor )
+			: FrameEvent( p_type )
+			, m_functor( p_functor )
 		{
 		}
 		/**
@@ -91,41 +93,43 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~InitialiseEvent()
+		~FunctorEvent()
 		{
 		}
 		/**
 		 *\~english
 		 *\brief		Applies the event
-		 *\remark		Initialises the object
+		 *\remark		Executes the function
 		 *\return		\p true if the event was applied successfully
 		 *\~french
 		 *\brief		Traite l'évènement
-		 *\remark		Initialise l'objet
+		 *\remark		Exécute la fonction
 		 *\return		\p true si l'évènement a été traité avec succès
 		 */
 		virtual bool Apply()
 		{
-			m_object.Initialise();
+			m_functor();
 			return true;
 		}
 
 	private:
-		//!\~english The object to initialise	\~french L'objet à initialiser
-		T & m_object;
+		//!\~english The functor to execute	\~french Le foncteur à exécuter
+		Functor m_functor;
 	};
 	/**
 	 *\~english
-	 *\brief		Helper function to create an initialise event
-	 *\param[in]	p_object	The object to initialise
+	 *\brief		Helper function to create a functor event
+	 *\param[in]	p_type		The event type
+	 *\param[in]	p_functor	The functor to execute
 	 *\~french
-	 *\brief		Fonction d'aide pour créer un éveènement d'initialisation
-	 *\param[in]	p_object	L'objet à initialiser
+	 *\brief		Constructeur
+	 *\param[in]	p_type		Le type d'évènement
+	 *\param[in]	p_functor	Le foncteur à exécuter
 	 */
-	template< typename T >
-	std::shared_ptr< InitialiseEvent< T > > MakeInitialiseEvent( T & p_object )
+	template< typename Functor >
+	std::shared_ptr< FunctorEvent< Functor > > MakeFunctorEvent( eEVENT_TYPE p_type, Functor p_functor )
 	{
-		return std::make_shared< InitialiseEvent< T > >( p_object );
+		return std::make_shared< FunctorEvent< Functor > >( p_type, p_functor );
 	}
 }
 

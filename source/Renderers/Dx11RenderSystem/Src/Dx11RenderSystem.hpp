@@ -33,86 +33,91 @@ namespace Dx11Render
 	public:
 		DxRenderSystem( Castor3D::Engine * p_pEngine );
 		virtual ~DxRenderSystem();
+		
+		void CheckShaderSupport();
+		bool InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swapChainDesc );
 
 		virtual void Delete();
 		virtual bool CheckSupport( Castor3D::eSHADER_MODEL p_eProfile );
-		virtual int LockLight();
-		virtual void UnlockLight( int p_iIndex );
-		virtual void BeginOverlaysRendering( Castor::Size const & p_size );
-		virtual void EndOverlaysRendering();
 		virtual Castor3D::ContextSPtr CreateContext();
 		virtual Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::VertexBufferUPtr p_pVertexBuffer, Castor3D::IndexBufferUPtr p_pIndexBuffer, Castor3D::MatrixBufferUPtr p_pMatrixBuffer );
 		virtual Castor3D::DepthStencilStateSPtr CreateDepthStencilState();
 		virtual Castor3D::RasteriserStateSPtr CreateRasteriserState();
 		virtual Castor3D::BlendStateSPtr CreateBlendState();
-		void CheckShaderSupport();
+		virtual Castor3D::SamplerSPtr CreateSampler( Castor::String const & p_name );
+		virtual Castor3D::RenderTargetSPtr CreateRenderTarget( Castor3D::eTARGET_TYPE p_eType );
+		virtual Castor3D::RenderWindowSPtr CreateRenderWindow();
+		virtual Castor3D::ShaderProgramBaseSPtr CreateHlslShaderProgram();
+		virtual Castor3D::ShaderProgramBaseSPtr CreateShaderProgram();
+		virtual Castor3D::OverlayRendererSPtr CreateOverlayRenderer();
+		virtual std::shared_ptr< Castor3D::GpuBuffer< uint32_t > > CreateIndexBuffer( Castor3D::CpuBuffer<uint32_t> * p_pBuffer );
+		virtual std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > CreateVertexBuffer( Castor3D::BufferDeclaration const & p_declaration, Castor3D::CpuBuffer< uint8_t > * p_pBuffer );
+		virtual std::shared_ptr< Castor3D::GpuBuffer< real > > CreateMatrixBuffer( Castor3D::CpuBuffer< real > * p_pBuffer );
+		virtual std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > CreateTextureBuffer( Castor3D::CpuBuffer<uint8_t > * p_pBuffer );
+		virtual Castor3D::StaticTextureSPtr CreateStaticTexture();
+		virtual Castor3D::DynamicTextureSPtr CreateDynamicTexture();
+		virtual Castor3D::FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_strName );
+		virtual Castor3D::BillboardListSPtr CreateBillboardsList( Castor3D::SceneSPtr p_pScene );
+
+		virtual Castor3D::ShaderProgramBaseSPtr CreateGlslShaderProgram()
+		{
+			return nullptr;
+		}
+
 		virtual	bool NeedsMatrixTransposition()const
 		{
-			return false;
+			return true;
 		}
+
 		virtual bool SupportsDepthBuffer()const
 		{
 			return true;
 		}
-		virtual Castor3D::FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_strName );
-		virtual Castor3D::BillboardListSPtr CreateBillboardsList( Castor3D::SceneSPtr p_pScene );
 
-		void Resize( Castor::Point2i const & p_ptNewSize );
-		bool InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swapChainDesc );
-
-		inline IDXGIFactory * GetDXGIFactory()const
-		{
-			return m_pFactory;
-		}
 		inline ID3D11Device * GetDevice()
 		{
 			return m_pDevice;
 		}
+
 		inline D3D_FEATURE_LEVEL GetFeatureLevel()const
 		{
 			return m_featureLevel;
 		}
+
 #if !defined( NDEBUG )
 		inline ID3D11Debug * GetDebug()
 		{
 			return m_pDebug;
 		}
+		
+		void SetDxDebugName( ID3D11Device * p_object, std::string const & p_name, std::string const & p_file, int line );
+		void SetDxDebugName( ID3D11DeviceChild * p_object, std::string const & p_name, std::string const & p_file, int line );
+		void SetDxDebugName( IDXGIDeviceSubObject * p_object, std::string const & p_name, std::string const & p_file, int line );
+		void UnsetDxDebugName( ID3D11Device * p_object );
+		void UnsetDxDebugName( ID3D11DeviceChild * p_object );
+		void UnsetDxDebugName( IDXGIDeviceSubObject * p_object );
 #endif
 
 	private:
 		virtual void DoInitialise();
 		virtual void DoCleanup();
-		virtual void DoRenderAmbientLight( Castor::Colour const & p_clColour );
-		virtual Castor3D::ShaderProgramBaseSPtr DoCreateGlslShaderProgram()
-		{
-			return nullptr;
-		}
-		virtual Castor3D::ShaderProgramBaseSPtr DoCreateHlslShaderProgram();
-		virtual Castor3D::ShaderProgramBaseSPtr DoCreateShaderProgram();
-		virtual Castor3D::SubmeshRendererSPtr DoCreateSubmeshRenderer();
-		virtual Castor3D::TextureRendererSPtr DoCreateTextureRenderer();
-		virtual Castor3D::PassRendererSPtr DoCreatePassRenderer();
-		virtual Castor3D::CameraRendererSPtr DoCreateCameraRenderer();
-		virtual Castor3D::LightRendererSPtr DoCreateLightRenderer();
-		virtual Castor3D::WindowRendererSPtr DoCreateWindowRenderer();
-		virtual Castor3D::OverlayRendererSPtr DoCreateOverlayRenderer();
-		virtual Castor3D::TargetRendererSPtr DoCreateTargetRenderer();
-		virtual Castor3D::SamplerRendererSPtr DoCreateSamplerRenderer();
-		virtual std::shared_ptr< Castor3D::GpuBuffer< uint32_t > > DoCreateIndexBuffer( Castor3D::CpuBuffer<uint32_t> * p_pBuffer );
-		virtual std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > DoCreateVertexBuffer( Castor3D::BufferDeclaration const & p_declaration, Castor3D::CpuBuffer< uint8_t > * p_pBuffer );
-		virtual std::shared_ptr< Castor3D::GpuBuffer< real > > DoCreateMatrixBuffer( Castor3D::CpuBuffer< real > * p_pBuffer );
-		virtual std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > DoCreateTextureBuffer( Castor3D::CpuBuffer<uint8_t > * p_pBuffer );
-		virtual Castor3D::StaticTextureSPtr DoCreateStaticTexture();
-		virtual Castor3D::DynamicTextureSPtr DoCreateDynamicTexture();
 
 	protected:
-		std::set< int > m_setAvailableIndexes;
-		std::set< Castor3D::LightRendererSPtr > m_setLightRenderers;
-		IDXGIFactory * m_pFactory;
 		ID3D11Device * m_pDevice;
 		D3D_FEATURE_LEVEL m_featureLevel;
 #if !defined( NDEBUG )
+		struct ObjectDeclaration
+		{
+			uint32_t m_id;
+			std::string m_name;
+			void * m_object;
+			std::string m_file;
+			int m_line;
+			int m_ref;
+		};
 		ID3D11Debug * m_pDebug;
+		uint32_t m_id = 0;
+		std::list< ObjectDeclaration > m_allocated;
 #endif
 	};
 }

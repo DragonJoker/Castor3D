@@ -25,7 +25,9 @@ namespace Castor3D
 	ResizeWindowEvent & ResizeWindowEvent::operator=( ResizeWindowEvent const & p_copy )
 	{
 		ResizeWindowEvent l_evt( p_copy );
-		std::swap( this->m_window, l_evt.m_window );
+		RenderWindow & l_window = this->m_window;
+		this->m_window = l_evt.m_window;
+		l_evt.m_window = l_window;
 		std::swap( this->m_eType, l_evt.m_eType );
 		return *this;
 	}

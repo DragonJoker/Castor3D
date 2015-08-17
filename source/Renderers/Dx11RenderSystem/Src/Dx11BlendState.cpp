@@ -21,9 +21,10 @@ namespace Dx11Render
 
 	bool DxBlendState::Initialise()
 	{
-		D3D11_BLEND_DESC l_blendDesc		= { 0 };
-		l_blendDesc.AlphaToCoverageEnable	= FALSE;
-		l_blendDesc.IndependentBlendEnable	= TRUE;
+		Cleanup(); 
+		D3D11_BLEND_DESC l_blendDesc = { 0 };
+		l_blendDesc.AlphaToCoverageEnable = FALSE;
+		l_blendDesc.IndependentBlendEnable = TRUE;
 
 		UINT8 l_writeMask = ( GetColourMaskR() == eWRITING_MASK_ALL ? D3D11_COLOR_WRITE_ENABLE_RED : 0 )
 			| ( GetColourMaskG() == eWRITING_MASK_ALL ? D3D11_COLOR_WRITE_ENABLE_GREEN : 0 )
@@ -43,14 +44,14 @@ namespace Dx11Render
 		}
 
 		HRESULT l_hr = m_pRenderSystem->GetDevice()->CreateBlendState( &l_blendDesc, &m_pBlendState );
-		dxDebugName( m_pBlendState, BlendState );
+		dxDebugName( m_pRenderSystem, m_pBlendState, BlendState );
 		m_bChanged = false;
 		return dxCheckError( l_hr, "CreateBlendState" );
 	}
 
 	void DxBlendState::Cleanup()
 	{
-		SafeRelease( m_pBlendState );
+		ReleaseTracked( m_pRenderSystem, m_pBlendState );
 	}
 
 	bool DxBlendState::Apply()

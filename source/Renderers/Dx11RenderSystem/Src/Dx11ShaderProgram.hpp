@@ -33,21 +33,45 @@ namespace Dx11Render
 		Castor::String m_strPixelScene;
 
 	public:
-		inline Castor::String const & GetVertexInMatrices()const
+		inline Castor::String GetVertexInMatrices( int32_t p_index )const
 		{
-			return m_strVertexInMatrices;
+			xchar l_buffer[1024];
+#if !defined( _UNICODE )
+			sprintf( l_buffer, m_strVertexInMatrices.c_str(), p_index );
+#else
+			wsprintf( l_buffer, m_strVertexInMatrices.c_str(), p_index );
+#endif
+			return l_buffer;
 		}
-		inline Castor::String const & GetPixelInMatrices()const
+		inline Castor::String GetPixelInMatrices( int32_t p_index )const
 		{
-			return m_strPixelInMatrices;
+			xchar l_buffer[1024];
+#if !defined( _UNICODE )
+			sprintf( l_buffer, m_strPixelInMatrices.c_str(), p_index );
+#else
+			wsprintf( l_buffer, m_strPixelInMatrices.c_str(), p_index );
+#endif
+			return l_buffer;
 		}
-		inline Castor::String const & GetPixelPass()const
+		inline Castor::String GetPixelPass( int32_t p_index )const
 		{
-			return m_strPixelPass;
+			xchar l_buffer[1024];
+#if !defined( _UNICODE )
+			sprintf( l_buffer, m_strPixelPass.c_str(), p_index );
+#else
+			wsprintf( l_buffer, m_strPixelPass.c_str(), p_index );
+#endif
+			return l_buffer;
 		}
-		inline Castor::String const & GetPixelScene()const
+		inline Castor::String GetPixelScene( int32_t p_index )const
 		{
-			return m_strPixelScene;
+			xchar l_buffer[1024];
+#if !defined( _UNICODE )
+			sprintf( l_buffer, m_strPixelScene.c_str(), p_index );
+#else
+			wsprintf( l_buffer, m_strPixelScene.c_str(), p_index );
+#endif
+			return l_buffer;
 		}
 		static std::unique_ptr< UniformsBase > Get( DxRenderSystem const & p_renderSystem );
 	};
@@ -58,50 +82,52 @@ namespace Dx11Render
 		UniformsBuf()
 		{
 			m_strVertexInMatrices =
-				cuT( "cbuffer Matrices : register( cb0 )\n" )
+				cuT( "cbuffer Matrices : register( cb%d )\n" )
 				cuT( "{\n" )
-				cuT( "	matrix	c3d_mtxProjection;\n" )
-				cuT( "	matrix	c3d_mtxModel;\n" )
-				cuT( "	matrix	c3d_mtxView;\n" )
-				cuT( "	matrix	c3d_mtxModelView;\n" )
-				cuT( "	matrix	c3d_mtxProjectionModelView;\n" )
-				cuT( "	matrix	c3d_mtxNormal;\n" )
-				cuT( "	matrix	c3d_mtxTexture0;\n" )
-				cuT( "	matrix	c3d_mtxTexture1;\n" )
-				cuT( "	matrix	c3d_mtxTexture2;\n" )
-				cuT( "	matrix	c3d_mtxTexture3;\n" )
+				cuT( "	matrix c3d_mtxProjection;\n" )
+				cuT( "	matrix c3d_mtxModel;\n" )
+				cuT( "	matrix c3d_mtxView;\n" )
+				cuT( "	matrix c3d_mtxModelView;\n" )
+				cuT( "	matrix c3d_mtxProjectionModelView;\n" )
+				cuT( "	matrix c3d_mtxNormal;\n" )
+				cuT( "	matrix c3d_mtxTexture0;\n" )
+				cuT( "	matrix c3d_mtxTexture1;\n" )
+				cuT( "	matrix c3d_mtxTexture2;\n" )
+				cuT( "	matrix c3d_mtxTexture3;\n" )
 				cuT( "};\n" );
 			m_strPixelInMatrices =
-				cuT( "cbuffer Matrices : register( cb0 )\n" )
+				cuT( "cbuffer Matrices : register( cb%d )\n" )
 				cuT( "{\n" )
-				cuT( "	matrix	c3d_mtxProjection;\n" )
-				cuT( "	matrix	c3d_mtxModel;\n" )
-				cuT( "	matrix	c3d_mtxView;\n" )
-				cuT( "	matrix	c3d_mtxModelView;\n" )
-				cuT( "	matrix	c3d_mtxProjectionModelView;\n" )
-				cuT( "	matrix	c3d_mtxNormal;\n" )
-				cuT( "	matrix	c3d_mtxTexture0;\n" )
-				cuT( "	matrix	c3d_mtxTexture1;\n" )
-				cuT( "	matrix	c3d_mtxTexture2;\n" )
-				cuT( "	matrix	c3d_mtxTexture3;\n" )
+				cuT( "	matrix c3d_mtxProjection;\n" )
+				cuT( "	matrix c3d_mtxModel;\n" )
+				cuT( "	matrix c3d_mtxView;\n" )
+				cuT( "	matrix c3d_mtxModelView;\n" )
+				cuT( "	matrix c3d_mtxProjectionModelView;\n" )
+				cuT( "	matrix c3d_mtxNormal;\n" )
+				cuT( "	matrix c3d_mtxTexture0;\n" )
+				cuT( "	matrix c3d_mtxTexture1;\n" )
+				cuT( "	matrix c3d_mtxTexture2;\n" )
+				cuT( "	matrix c3d_mtxTexture3;\n" )
 				cuT( "};\n" );
 			m_strPixelScene =
-				cuT( "cbuffer Scene : register( cb1 )\n" )
+				cuT( "cbuffer Scene : register( cb%d )\n" )
 				cuT( "{\n" )
-				cuT( "	int		c3d_iLightsCount;\n" )
-				cuT( "	float4	c3d_v4AmbientLight;\n" )
-				cuT( "	float4	c3d_v4BackgroundColour;\n" )
-				cuT( "	float3	c3d_v3CameraPosition;\n" )
+				cuT( "	int c3d_iLightsCount;\n" )
+				cuT( "	float4 c3d_v4AmbientLight;\n" )
+				cuT( "	float4 c3d_v4BackgroundColour;\n" )
+				cuT( "	float3 c3d_v3CameraPosition;\n" )
 				cuT( "};\n" );
 			m_strPixelPass =
-				cuT( "cbuffer PassBuffer : register( cb3 )\n" )
+				cuT( "cbuffer PassBuffer : register( cb%d )\n" )
 				cuT( "{\n" )
-				cuT( "	float4	c3d_v4MatAmbient;\n" )
-				cuT( "	float4	c3d_v4MatDiffuse;\n" )
-				cuT( "	float4	c3d_v4MatEmissive;\n" )
-				cuT( "	float4	c3d_v4MatSpecular;\n" )
-				cuT( "	float	c3d_fMatShininess;\n" )
-				cuT( "	float	c3d_fMatOpacity;\n" )
+				cuT( "	float4 c3d_v4MatAmbient;\n" )
+				cuT( "	float4 c3d_v4MatDiffuse;\n" )
+				cuT( "	float4 c3d_v4MatEmissive;\n" )
+				cuT( "	float4 c3d_v4MatSpecular;\n" )
+				cuT( "	float c3d_fMatShininess;\n" )
+				cuT( "	float c3d_fMatOpacity;\n" )
+				cuT( "	float c3d_fMatFill0;\n" )
+				cuT( "	float c3d_fMatFill1;\n" )
 				cuT( "};\n" );
 		}
 	};
@@ -112,39 +138,39 @@ namespace Dx11Render
 		UniformsStd()
 		{
 			m_strVertexInMatrices =
-				cuT( "uniform	float4x4	c3d_mtxProjection;\n" )
-				cuT( "uniform	float4x4	c3d_mtxModel;\n" )
-				cuT( "uniform	float4x4	c3d_mtxView;\n" )
-				cuT( "uniform	float4x4	c3d_mtxModelView;\n" )
-				cuT( "uniform	float4x4	c3d_mtxProjectionModelView;\n" )
-				cuT( "uniform	float4x4	c3d_mtxNormal;\n" )
-				cuT( "uniform	float4x4	c3d_mtxTexture0;\n" )
-				cuT( "uniform	float4x4	c3d_mtxTexture1;\n" )
-				cuT( "uniform	float4x4	c3d_mtxTexture2;\n" )
-				cuT( "uniform	float4x4	c3d_mtxTexture3;\n" );
+				cuT( "uniform float4x4 c3d_mtxProjection;\n" )
+				cuT( "uniform float4x4 c3d_mtxModel;\n" )
+				cuT( "uniform float4x4 c3d_mtxView;\n" )
+				cuT( "uniform float4x4 c3d_mtxModelView;\n" )
+				cuT( "uniform float4x4 c3d_mtxProjectionModelView;\n" )
+				cuT( "uniform float4x4 c3d_mtxNormal;\n" )
+				cuT( "uniform float4x4 c3d_mtxTexture0;\n" )
+				cuT( "uniform float4x4 c3d_mtxTexture1;\n" )
+				cuT( "uniform float4x4 c3d_mtxTexture2;\n" )
+				cuT( "uniform float4x4 c3d_mtxTexture3;\n" );
 			m_strPixelInMatrices =
-				cuT( "uniform	float4x4	c3d_mtxProjection;\n" )
-				cuT( "uniform	float4x4	c3d_mtxModel;\n" )
-				cuT( "uniform	float4x4	c3d_mtxView;\n" )
-				cuT( "uniform	float4x4	c3d_mtxModelView;\n" )
-				cuT( "uniform	float4x4	c3d_mtxProjectionModelView;\n" )
-				cuT( "uniform	float4x4	c3d_mtxNormal;\n" )
-				cuT( "uniform	float4x4	c3d_mtxTexture0;\n" )
-				cuT( "uniform	float4x4	c3d_mtxTexture1;\n" )
-				cuT( "uniform	float4x4	c3d_mtxTexture2;\n" )
-				cuT( "uniform	float4x4	c3d_mtxTexture3;\n" );
+				cuT( "uniform float4x4 c3d_mtxProjection;\n" )
+				cuT( "uniform float4x4 c3d_mtxModel;\n" )
+				cuT( "uniform float4x4 c3d_mtxView;\n" )
+				cuT( "uniform float4x4 c3d_mtxModelView;\n" )
+				cuT( "uniform float4x4 c3d_mtxProjectionModelView;\n" )
+				cuT( "uniform float4x4 c3d_mtxNormal;\n" )
+				cuT( "uniform float4x4 c3d_mtxTexture0;\n" )
+				cuT( "uniform float4x4 c3d_mtxTexture1;\n" )
+				cuT( "uniform float4x4 c3d_mtxTexture2;\n" )
+				cuT( "uniform float4x4 c3d_mtxTexture3;\n" );
 			m_strPixelScene =
-				cuT( "uniform	int 		c3d_iLightsCount;\n" )
-				cuT( "uniform	float4 		c3d_v4AmbientLight;\n" )
-				cuT( "uniform	float4 		c3d_v4BackgroundColour;\n" )
-				cuT( "uniform	float3 		c3d_v3CameraPosition;\n" );
+				cuT( "uniform int c3d_iLightsCount;\n" )
+				cuT( "uniform float4 c3d_v4AmbientLight;\n" )
+				cuT( "uniform float4 c3d_v4BackgroundColour;\n" )
+				cuT( "uniform float3 c3d_v3CameraPosition;\n" );
 			m_strPixelPass =
-				cuT( "uniform	float4 		c3d_v4MatAmbient;\n" )
-				cuT( "uniform	float4 		c3d_v4MatDiffuse;\n" )
-				cuT( "uniform	float4 		c3d_v4MatEmissive;\n" )
-				cuT( "uniform	float4 		c3d_v4MatSpecular;\n" )
-				cuT( "uniform	float 		c3d_fMatShininess;\n" )
-				cuT( "uniform	float		c3d_fMatOpacity;\n" );
+				cuT( "uniform float4 c3d_v4MatAmbient;\n" )
+				cuT( "uniform float4 c3d_v4MatDiffuse;\n" )
+				cuT( "uniform float4 c3d_v4MatEmissive;\n" )
+				cuT( "uniform float4 c3d_v4MatSpecular;\n" )
+				cuT( "uniform float c3d_fMatShininess;\n" )
+				cuT( "uniform float c3d_fMatOpacity;\n" );
 		}
 	};
 
@@ -184,36 +210,36 @@ namespace Dx11Render
 			m_strVtxInput =
 				cuT( "struct VtxInput\n" )
 				cuT( "{\n" )
-				cuT( "	float4		Position	:	POSITION0;\n" )
-				cuT( "	float3		Normal		:	NORMAL0;\n" )
-				cuT( "	float3		Tangent		:	TANGENT0;\n" )
-				cuT( "	float3		Binormal	:	BINORMAL0;\n" )
-				cuT( "	float3		TextureUV	:	TEXCOORD0;\n" )
- 				//cuT( "	int4		BoneIDs		:	BLENDINDICES;\n")
- 				//cuT( "	float4		Weights		:	BLENDWEIGHT;\n" )
- 				//cuT( "	float4x4	Matrix		:	MATRIX;\n"	 )
+				cuT( "	float4 Position: POSITION0;\n" )
+				cuT( "	float3 Normal: NORMAL0;\n" )
+				cuT( "	float3 Tangent: TANGENT0;\n" )
+				cuT( "	float3 Binormal: BINORMAL0;\n" )
+				cuT( "	float3 TextureUV: TEXCOORD0;\n" )
+ 				//cuT( "	int4 BoneIDs: BLENDINDICES;\n")
+ 				//cuT( "	float4 Weights: BLENDWEIGHT;\n" )
+ 				//cuT( "	float4x4 Matrix: MATRIX;\n" )
 				cuT( "};\n" );
 			m_strVtxOutput =
 				cuT( "struct VtxOutput\n" )
 				cuT( "{\n" )
-				cuT( "	float4		Position	:	POSITION0;\n" )
-				cuT( "	float3		Vertex		:	POSITION1;\n" )
-				cuT( "	float3		Normal		:	NORMAL0;\n" )
-				cuT( "	float3		Tangent		:	TANGENT0;\n" )
-				cuT( "	float3		Binormal	:	BINORMAL0;\n" )
-				cuT( "	float3		TextureUV	:	TEXCOORD0;\n" )
-				cuT( "	float3		Eye			:	POSITION2;\n" )
+				cuT( "	float4 Position: POSITION0;\n" )
+				cuT( "	float3 Vertex: POSITION1;\n" )
+				cuT( "	float3 Normal: NORMAL0;\n" )
+				cuT( "	float3 Tangent: TANGENT0;\n" )
+				cuT( "	float3 Binormal: BINORMAL0;\n" )
+				cuT( "	float3 TextureUV: TEXCOORD0;\n" )
+				cuT( "	float3 Eye: POSITION2;\n" )
 				cuT( "};\n" );
 			m_strPxlInput =
 				cuT( "struct PxInput\n" )
 				cuT( "{\n" )
-				cuT( "	float4		Position	:	POSITION0;\n" )
-				cuT( "	float3		Vertex		:	POSITION1;\n" )
-				cuT( "	float3		Normal		:	NORMAL0;\n" )
-				cuT( "	float3		Tangent		:	TANGENT0;\n" )
-				cuT( "	float3		Binormal	:	BINORMAL0;\n" )
-				cuT( "	float3		TextureUV	:	TEXCOORD0;\n" )
-				cuT( "	float3		Eye			:	POSITION2;\n" )
+				cuT( "	float4 Position: POSITION0;\n" )
+				cuT( "	float3 Vertex: POSITION1;\n" )
+				cuT( "	float3 Normal: NORMAL0;\n" )
+				cuT( "	float3 Tangent: TANGENT0;\n" )
+				cuT( "	float3 Binormal: BINORMAL0;\n" )
+				cuT( "	float3 TextureUV: TEXCOORD0;\n" )
+				cuT( "	float3 Eye: POSITION2;\n" )
 				cuT( "};\n" );
 			m_strPxlOutput = cuT( "COLOR0" );
 		}
@@ -227,36 +253,36 @@ namespace Dx11Render
 			m_strVtxInput =
 				cuT( "struct VtxInput\n" )
 				cuT( "{\n" )
-				cuT( "	float4		Position	:	POSITION0;\n" )
-				cuT( "	float3		Normal		:	NORMAL0;\n" )
-				cuT( "	float3		Tangent		:	TANGENT0;\n" )
-				cuT( "	float3		Binormal	:	BINORMAL0;\n" )
-				cuT( "	float3		TextureUV	:	TEXCOORD0;\n" )
- 				//cuT( "	int4		BoneIDs		:	BLENDINDICES;\n")
- 				//cuT( "	float4		Weights		:	BLENDWEIGHT;\n" )
- 				//cuT( "	float4x4	Matrix		:	MATRIX;\n"	 )
+				cuT( "	float4 Position: POSITION0;\n" )
+				cuT( "	float3 Normal: NORMAL0;\n" )
+				cuT( "	float3 Tangent: TANGENT0;\n" )
+				cuT( "	float3 Binormal: BINORMAL0;\n" )
+				cuT( "	float3 TextureUV: TEXCOORD0;\n" )
+ 				//cuT( "	int4 BoneIDs: BLENDINDICES;\n")
+ 				//cuT( "	float4 Weights: BLENDWEIGHT;\n" )
+ 				//cuT( "	float4x4 Matrix: MATRIX;\n"	 )
 				cuT( "};\n" );
 			m_strVtxOutput =
 				cuT( "struct VtxOutput\n" )
 				cuT( "{\n" )
-				cuT( "	float4		Position	:	SV_POSITION;\n" )
-				cuT( "	float3		Vertex		:	POSITION0;\n" )
-				cuT( "	float3		Normal		:	NORMAL0;\n" )
-				cuT( "	float3		Tangent		:	TANGENT0;\n" )
-				cuT( "	float3		Binormal	:	BINORMAL0;\n" )
-				cuT( "	float3		TextureUV	:	TEXCOORD0;\n" )
-				cuT( "	float3		Eye			:	POSITION1;\n" )
+				cuT( "	float4 Position: SV_POSITION;\n" )
+				cuT( "	float3 Vertex: POSITION0;\n" )
+				cuT( "	float3 Normal: NORMAL0;\n" )
+				cuT( "	float3 Tangent: TANGENT0;\n" )
+				cuT( "	float3 Binormal: BINORMAL0;\n" )
+				cuT( "	float3 TextureUV: TEXCOORD0;\n" )
+				cuT( "	float3 Eye: POSITION1;\n" )
 				cuT( "};\n" );
 			m_strPxlInput =
 				cuT( "struct PxInput\n" )
 				cuT( "{\n" )
-				cuT( "	float4		Position	:	SV_POSITION;\n" )
-				cuT( "	float3		Vertex		:	POSITION0;\n" )
-				cuT( "	float3		Normal		:	NORMAL0;\n" )
-				cuT( "	float3		Tangent		:	TANGENT0;\n" )
-				cuT( "	float3		Binormal	:	BINORMAL0;\n" )
-				cuT( "	float3		TextureUV	:	TEXCOORD0;\n" )
-				cuT( "	float3		Eye			:	POSITION1;\n" )
+				cuT( "	float4 Position: SV_POSITION;\n" )
+				cuT( "	float3 Vertex: POSITION0;\n" )
+				cuT( "	float3 Normal: NORMAL0;\n" )
+				cuT( "	float3 Tangent: TANGENT0;\n" )
+				cuT( "	float3 Binormal: BINORMAL0;\n" )
+				cuT( "	float3 TextureUV: TEXCOORD0;\n" )
+				cuT( "	float3 Eye: POSITION1;\n" )
 				cuT( "};\n" );
 			m_strPxlOutput = cuT( "SV_TARGET" );
 		}

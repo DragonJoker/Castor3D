@@ -32,7 +32,7 @@ namespace Dx11Render
 
 	void DxVertexBuffer::Cleanup()
 	{
-		SafeRelease( m_pDxDeclaration );
+		ReleaseTracked( m_pBuffer->GetRenderSystem(), m_pDxDeclaration );
 		DxBufferObject< uint8_t, ID3D11Buffer >::DoCleanup();
 	}
 
@@ -246,8 +246,9 @@ namespace Dx11Render
 
 			if ( l_pBlob )
 			{
-				HRESULT l_hr = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() )->GetDevice()->CreateInputLayout( &l_arrayDxElements[0], UINT( l_arrayDxElements.size() ), reinterpret_cast< DWORD const * >( l_pBlob->GetBufferPointer() ), l_pBlob->GetBufferSize(), &m_pDxDeclaration );
-				dxDebugName( m_pDxDeclaration, VtxInputLayout );
+				DxRenderSystem * l_renderSystem = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() );
+				HRESULT l_hr = l_renderSystem->GetDevice()->CreateInputLayout( &l_arrayDxElements[0], UINT( l_arrayDxElements.size() ), reinterpret_cast< DWORD const * >( l_pBlob->GetBufferPointer() ), l_pBlob->GetBufferSize(), &m_pDxDeclaration );
+				dxDebugName( l_renderSystem, m_pDxDeclaration, VtxInputLayout );
 				l_bReturn = dxCheckError( l_hr, "ID3D11Device::CreateInputLayout" );
 			}
 		}
@@ -272,18 +273,19 @@ namespace Dx11Render
 			l_desc.CPUAccessFlags = DirectX11::GetCpuAccessFlags( p_eType | p_eNature );
 			l_desc.MiscFlags = 0;
 			l_desc.StructureByteStride = 0;//m_declaration.GetStride();
+			DxRenderSystem * l_renderSystem = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() );
 
 			if ( p_eType == eBUFFER_ACCESS_TYPE_STATIC )
 			{
 				D3D11_SUBRESOURCE_DATA l_data = { 0 };
 				l_data.pSysMem = m_pBuffer->data();
-				l_hr = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() )->GetDevice()->CreateBuffer( &l_desc, &l_data, &m_pBufferObject );
-				dxDebugName( m_pBufferObject, VertexBuffer );
+				l_hr = l_renderSystem->GetDevice()->CreateBuffer( &l_desc, &l_data, &m_pBufferObject );
+				dxDebugName( l_renderSystem, m_pBufferObject, VertexBuffer );
 			}
 			else
 			{
-				l_hr = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() )->GetDevice()->CreateBuffer( &l_desc, NULL, &m_pBufferObject );
-				dxDebugName( m_pBufferObject, VertexBuffer );
+				l_hr = l_renderSystem->GetDevice()->CreateBuffer( &l_desc, NULL, &m_pBufferObject );
+				dxDebugName( l_renderSystem, m_pBufferObject, VertexBuffer );
 			}
 
 			l_return = dxCheckError( l_hr, "ID3D11Device::CreateBuffer" );

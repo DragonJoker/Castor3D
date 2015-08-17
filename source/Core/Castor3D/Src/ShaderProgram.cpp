@@ -188,8 +188,13 @@ namespace Castor3D
 		}
 
 		clear_container( m_arrayFiles );
+		
+		m_frameVariableBuffersByName.clear();
 
-		m_mapFrameVariableBuffers.clear();
+		for ( auto && l_list: m_frameVariableBuffers )
+		{
+			l_list.clear();
+		}
 
 		for ( auto l_buffer: m_listFrameVariableBuffers )
 		{
@@ -355,10 +360,7 @@ namespace Castor3D
 		{
 			for ( auto && l_shader: m_activeShaders )
 			{
-				if ( l_shader )
-				{
-					l_shader->Bind();
-				}
+				l_shader->Bind();
 			}
 
 			uint32_t l_index = 0;
@@ -383,10 +385,7 @@ namespace Castor3D
 
 			for ( auto && l_shader: m_activeShaders )
 			{
-				if ( l_shader )
-				{
-					l_shader->Unbind();
-				}
+				l_shader->Unbind();
 			}
 		}
 	}
@@ -575,23 +574,31 @@ namespace Castor3D
 		return l_pReturn;
 	}
 
-	void ShaderProgramBase::AddFrameVariableBuffer( FrameVariableBufferSPtr p_pVariableBuffer )
+	void ShaderProgramBase::AddFrameVariableBuffer( FrameVariableBufferSPtr p_pVariableBuffer, uint32_t p_shaderMask )
 	{
-		auto l_it = m_mapFrameVariableBuffers.find( p_pVariableBuffer->GetName() );
+		auto l_it = m_frameVariableBuffersByName.find( p_pVariableBuffer->GetName() );
 
-		if ( l_it == m_mapFrameVariableBuffers.end() )
+		if ( l_it == m_frameVariableBuffersByName.end() )
 		{
 			m_listFrameVariableBuffers.push_back( p_pVariableBuffer );
-			m_mapFrameVariableBuffers.insert( std::make_pair( p_pVariableBuffer->GetName(), p_pVariableBuffer ) );
+			m_frameVariableBuffersByName.insert( std::make_pair( p_pVariableBuffer->GetName(), p_pVariableBuffer ) );
+
+			for ( int i = 0; i < eSHADER_TYPE_COUNT; ++i )
+			{
+				if ( p_shaderMask & ( 0x1 << i ) )
+				{
+					m_frameVariableBuffers[i].push_back( p_pVariableBuffer );
+				}
+			}
 		}
 	}
 
 	FrameVariableBufferSPtr ShaderProgramBase::FindFrameVariableBuffer( Castor::String const & p_strName )const
 	{
 		FrameVariableBufferSPtr l_buffer;
-		auto l_it = m_mapFrameVariableBuffers.find( p_strName );
+		auto l_it = m_frameVariableBuffersByName.find( p_strName );
 
-		if ( l_it != m_mapFrameVariableBuffers.end() )
+		if ( l_it != m_frameVariableBuffersByName.end() )
 		{
 			l_buffer = l_it->second.lock();
 		}
