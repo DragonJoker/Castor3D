@@ -168,13 +168,8 @@ namespace Castor3D
 
 	bool RenderTechniqueBase::Render( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime )
 	{
-#if DX_DEBUG
 		m_pRenderSystem->PushScene( &p_scene );
 		return DoRender( p_scene, p_camera, p_ePrimitives, p_dFrameTime );
-#else
-		m_pRenderSystem->PushScene( &p_scene );
-		return true;
-#endif
 	}
 
 	void RenderTechniqueBase::EndRender()

@@ -188,24 +188,29 @@ void Pipeline::ApplyMatrices( FrameVariableBuffer & p_matrixBuffer, uint64_t p_m
 	{
 		ApplyProjection( p_matrixBuffer );
 
-		if ( ( p_matrices & MASK_MTXMODE_MODEL ) || ( p_matrices & MASK_MTXMODE_VIEW ) )
+		if ( ( p_matrices & MASK_MTXMODE_MODEL ) )
 		{
-			ApplyProjectionModelView( p_matrixBuffer );
+			ApplyModel( p_matrixBuffer );
 		}
-		else if ( ( p_matrices & MASK_MTXMODE_VIEW ) )
+
+		if ( ( p_matrices & MASK_MTXMODE_VIEW ) )
 		{
+			ApplyView( p_matrixBuffer );
 			ApplyProjectionView( p_matrixBuffer );
+			
+			if ( ( p_matrices & MASK_MTXMODE_MODEL ) )
+			{
+				ApplyProjectionModelView( p_matrixBuffer );
+				ApplyModelView( p_matrixBuffer );
+				ApplyNormal( p_matrixBuffer );
+			}
 		}
 	}
 	else if ( p_matrices & MASK_MTXMODE_MODEL )
 	{
 		ApplyModel( p_matrixBuffer );
 
-		if ( ( p_matrices & MASK_MTXMODE_PROJECTION ) || ( p_matrices & MASK_MTXMODE_VIEW ) )
-		{
-			ApplyProjectionModelView( p_matrixBuffer );
-		}
-		else if ( ( p_matrices & MASK_MTXMODE_VIEW ) )
+		if ( ( p_matrices & MASK_MTXMODE_VIEW ) )
 		{
 			ApplyModelView( p_matrixBuffer );
 			ApplyNormal( p_matrixBuffer );
@@ -214,20 +219,6 @@ void Pipeline::ApplyMatrices( FrameVariableBuffer & p_matrixBuffer, uint64_t p_m
 	else if ( p_matrices & MASK_MTXMODE_VIEW )
 	{
 		ApplyView( p_matrixBuffer );
-
-		if ( ( p_matrices & MASK_MTXMODE_PROJECTION ) || ( p_matrices & MASK_MTXMODE_MODEL ) )
-		{
-			ApplyProjectionModelView( p_matrixBuffer );
-		}
-		else if ( ( p_matrices & MASK_MTXMODE_MODEL ) )
-		{
-			ApplyModelView( p_matrixBuffer );
-			ApplyNormal( p_matrixBuffer );
-		}
-		else if ( ( p_matrices & MASK_MTXMODE_PROJECTION ) )
-		{
-			ApplyProjectionView( p_matrixBuffer );
-		}
 	}
 
 	if ( p_matrices & MASK_MTXMODE_TEXTURE0 )
@@ -361,7 +352,7 @@ bool IPipelineImpl::MultMatrix( Matrix4x4r const & p_matrix )
 
 	if ( m_pPipeline->m_pRenderSystem->UseShaders() )
 	{
-		GetCurrentMatrix() = GetCurrentMatrix() * p_matrix;
+		GetCurrentMatrix() *= p_matrix;
 		l_bReturn = true;
 	}
 

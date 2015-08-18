@@ -361,7 +361,7 @@ namespace GlRender
 				l_strPixelMainDeclarations += cuT( "	l_fShininess = l_v4MapGloss.r;\n" );
 			}
 		}
-
+		
 		//l_strPixelMainLightsLoopEnd	+= cuT( "	" ) + l_strPixelOutput + cuT( " = vec4( ( l_v4Emissive + l_v4Ambient + l_v4Diffuse + l_v4Specular ).xyz, l_fAlpha );\n" );
 		l_strPixelMainLightsLoopEnd	+= cuT( "	" ) + l_strPixelOutput + cuT( " = vec4( l_v4Diffuse/*( l_v4Emissive + l_v4Ambient + l_v4Diffuse + l_v4Specular )*/.xyz, l_fAlpha );\n" );
 		l_strReturn += l_strPixelLights + l_strPixelMainDeclarations + l_strPixelMainLightsLoop + l_strPixelMainLightsLoopAfterLightDir + l_strPixelMainLightsLoopEnd + l_strPixelMainEnd;

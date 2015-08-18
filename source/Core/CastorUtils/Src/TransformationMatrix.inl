@@ -139,13 +139,13 @@
 	template< typename TypeA, typename TypeB >
 	SquareMatrix< TypeA, 4 > & MtxUtils::set_transform_rh( SquareMatrix< TypeA, 4 > & p_matrix, Point< TypeB, 3 > const & p_ptPosition, Point< TypeB, 3 > const & p_ptScale, Quaternion const & p_qOrientation )
 	{
-		// Ordering:
-		//    1. Scale
-		//    2. Rotate
-		//    3. Translate
-		MtxUtils::set_scale( p_matrix, p_ptScale );
-		MtxUtils::rotate( p_matrix, p_qOrientation );
-		MtxUtils::translate( p_matrix, p_ptPosition );
+		SquareMatrix< TypeA, 4 > l_scale;
+		SquareMatrix< TypeA, 4 > l_rotate;
+		SquareMatrix< TypeA, 4 > l_translate;
+		MtxUtils::set_scale( l_scale, p_ptScale );
+		MtxUtils::set_rotate( l_rotate, p_qOrientation );
+		MtxUtils::set_translate( l_translate, p_ptPosition );
+		p_matrix = l_translate * l_rotate * l_scale;
 		return p_matrix;
 	}
 

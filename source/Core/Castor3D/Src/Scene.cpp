@@ -66,7 +66,7 @@ namespace Castor3D
 		void ApplyLightComponent( Colour const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
 		{
 			Point4ub l_components;
-			p_component.to_bgra( l_components );
+			p_component.to_argb( l_components );
 			uint8_t const * l_pSrc = l_components.const_ptr();
 			uint8_t * l_pDst = p_data.get_at( p_index * 10 + p_offset++, 0 );
 			PF::ConvertPixel( ePIXEL_FORMAT_A8R8G8B8, l_pSrc, p_data.format(), l_pDst );
@@ -113,40 +113,6 @@ namespace Castor3D
 			ApplyLightComponent( Matrix4x4f( p_component.const_ptr() ), p_index, p_offset, p_data );
 		}
 	}
-
-	struct AnmObjGrpUpdater
-	{
-		void operator()( std::pair< String, AnimatedObjectGroupSPtr > p_pair )
-		{
-			p_pair.second->Update();
-		}
-	};
-
-	class LghtRenderer
-	{
-	public:
-		void operator()( LightSPtr p_pLight )
-		{
-			p_pLight->Render();
-		}
-		void operator()( std::pair< int, LightSPtr > p_pair )
-		{
-			p_pair.second->Render();
-		}
-	};
-
-	class LghtUnrenderer
-	{
-	public:
-		void operator()( LightSPtr p_pLight )
-		{
-			p_pLight->EndRender();
-		}
-		void operator()( std::pair< int, LightSPtr > p_pair )
-		{
-			p_pair.second->EndRender();
-		}
-	};
 
 	//*************************************************************************************************
 
@@ -661,11 +627,6 @@ namespace Castor3D
 
 		if ( !m_arraySubmeshesNoAlpha.empty() || !m_arraySubmeshesAlpha.empty() || !m_mapBillboardsLists.empty() )
 		{
-			if ( !l_pRenderSystem->ForceShaders() )
-			{
-				std::for_each( m_mapLights.begin(), m_mapLights.end(), LghtRenderer() );
-			}
-
 			l_pPipeline->MatrixMode( eMTXMODE_MODEL );
 			l_pPipeline->LoadIdentity();
 
@@ -726,18 +687,13 @@ namespace Castor3D
 				l_pContext->CullFace( eFACE_BACK );
 				DoRenderBillboards( *l_pPipeline, m_mapBillboardsLists.begin(), m_mapBillboardsLists.end() );
 			}
-
-			if ( !l_pRenderSystem->ForceShaders() )
-			{
-				std::for_each( m_mapLights.begin(), m_mapLights.end(), LghtUnrenderer() );
-			}
 		}
 	}
 
 	bool Scene::SetBackgroundImage( Path const & p_pathFile )
 	{
-		bool		l_bReturn = false;
-		ImageSPtr	l_pImage;
+		bool l_bReturn = false;
+		ImageSPtr l_pImage;
 
 		if ( !p_pathFile.empty() )
 		{
@@ -778,9 +734,9 @@ namespace Castor3D
 
 		if ( m_newlyAddedPrimitives.size() > 0 )
 		{
-			for ( GeometryPtrStrMapIt l_it = m_newlyAddedPrimitives.begin(); l_it != m_newlyAddedPrimitives.end(); ++l_it )
+			for ( auto && l_pair: m_newlyAddedPrimitives )
 			{
-				l_it->second->CreateBuffers( m_nbFaces, m_nbVertex );
+				l_pair.second->CreateBuffers( m_nbFaces, m_nbVertex );
 			}
 
 			m_newlyAddedPrimitives.clear();
@@ -1208,17 +1164,17 @@ namespace Castor3D
 
 			//Castor::String l_strName;
 
-			//for( BillboardListStrMapIt l_it = p_pScene->m_mapBillboardsLists.begin(); l_it != p_pScene->m_mapBillboardsLists.end(); ++l_it )
+			//for( auto && l_pair: p_pScene->m_mapBillboardsLists )
 			//{
-			//	l_strName = l_it->first;
+			//	l_strName = l_pair.first;
 
 			//	while( m_mapBillboardsLists.find( l_strName ) != m_mapBillboardsLists.end() )
 			//	{
 			//		l_strName = p_pScene->GetName() + cuT( "_" ) + l_strName;
 			//	}
 
-			//	//l_it->second->SetName( l_strName );
-			//	m_mapBillboardsLists.insert( std::make_pair( l_strName, l_it->second ) );
+			//	//l_pair.second->SetName( l_strName );
+			//	m_mapBillboardsLists.insert( std::make_pair( l_strName, l_pair.second ) );
 			//}
 
 			//p_pScene->m_mapBillboardsLists.clear();
@@ -1260,9 +1216,9 @@ namespace Castor3D
 		SphereBox l_sphere;
 		Point3r l_ptCoords;
 
-		for ( GeometryPtrStrMap::iterator l_it = m_addedPrimitives.begin(); l_it != m_addedPrimitives.end(); ++l_it )
+		for ( auto && l_pair: m_addedPrimitives )
 		{
-			l_geo = l_it->second;
+			l_geo = l_pair.second;
 
 			if ( l_geo->IsVisible() )
 			{
@@ -1365,9 +1321,9 @@ namespace Castor3D
 	{
 		uint32_t l_return = 0;
 
-		for ( GeometryPtrStrMap::const_iterator l_it = m_addedPrimitives.begin(); l_it != m_addedPrimitives.end(); ++l_it )
+		for ( auto && l_pair: m_addedPrimitives )
 		{
-			l_return += l_it->second->GetMesh()->GetVertexCount();
+			l_return += l_pair.second->GetMesh()->GetVertexCount();
 		}
 
 		return l_return;
@@ -1377,9 +1333,9 @@ namespace Castor3D
 	{
 		uint32_t l_return = 0;
 
-		for ( GeometryPtrStrMap::const_iterator l_it = m_addedPrimitives.begin(); l_it != m_addedPrimitives.end(); ++l_it )
+		for ( auto && l_pair: m_addedPrimitives )
 		{
-			l_return += l_it->second->GetMesh()->GetFaceCount();
+			l_return += l_pair.second->GetMesh()->GetFaceCount();
 		}
 
 		return l_return;
@@ -1388,10 +1344,12 @@ namespace Castor3D
 	void Scene::DoDeleteToDelete()
 	{
 		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-		std::for_each( m_arrayPrimitivesToDelete.begin(), m_arrayPrimitivesToDelete.end(), [&]( GeometrySPtr p_pGeometry )
+
+		for ( auto l_geometry: m_arrayPrimitivesToDelete )
 		{
-			p_pGeometry->Detach();
-		} );
+			l_geometry->Detach();
+		}
+
 		m_arrayBillboardsToDelete.clear();
 		m_arrayLightsToDelete.clear();
 		m_arrayPrimitivesToDelete.clear();
@@ -1401,7 +1359,10 @@ namespace Castor3D
 
 	void Scene::DoUpdateAnimations()
 	{
-		std::for_each( m_addedGroups.begin(), m_addedGroups.end(), AnmObjGrpUpdater() );
+		for ( auto && l_pair: m_addedGroups )
+		{
+			l_pair.second->Update();
+		}
 	}
 
 	void Scene::DoSortByAlpha()
@@ -1411,17 +1372,17 @@ namespace Castor3D
 		m_mapSubmeshesAlpha.clear();
 		m_arraySubmeshesAlpha.clear();
 
-		for ( GeometryPtrStrMapIt l_itPrimitives = m_addedPrimitives.begin(); l_itPrimitives != m_addedPrimitives.end(); ++l_itPrimitives )
+		for ( auto && l_primitive: m_addedPrimitives )
 		{
-			MeshSPtr l_pMesh = l_itPrimitives->second->GetMesh();
-			SceneNodeSPtr l_pNode = l_itPrimitives->second->GetParent();
+			MeshSPtr l_pMesh = l_primitive.second->GetMesh();
+			SceneNodeSPtr l_pNode = l_primitive.second->GetParent();
 
 			if ( l_pMesh )
 			{
 				for ( SubmeshPtrArrayIt l_it = l_pMesh->Begin(); l_it != l_pMesh->End(); ++l_it )
 				{
-					MaterialSPtr l_pMaterial( l_itPrimitives->second->GetMaterial( *l_it ) );
-					stRENDER_NODE l_renderNode = { l_pNode, l_itPrimitives->second, *l_it, l_pMaterial };
+					MaterialSPtr l_pMaterial( l_primitive.second->GetMaterial( *l_it ) );
+					stRENDER_NODE l_renderNode = { l_pNode, l_primitive.second, *l_it, l_pMaterial };
 
 					if ( l_pMaterial->HasAlphaBlending() )
 					{
@@ -1572,15 +1533,15 @@ namespace Castor3D
 			real * l_pBuffer = l_mtxBuffer.data();
 			uint32_t l_count = l_pSubmesh->GetRefCount( l_pMaterial );
 
-			for ( RenderNodeArray::const_iterator it = p_nodes.begin(); it != p_nodes.end(); ++it )
+			for ( auto && l_it: p_nodes )
 			{
 				if ( ( l_pSubmesh->GetProgramFlags() & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
 				{
-					std::memcpy( l_pBuffer, it->m_pNode->GetDerivedTransformationMatrix().get_inverse().const_ptr(), 16 * sizeof( real ) );
+					std::memcpy( l_pBuffer, l_it.m_pNode->GetDerivedTransformationMatrix().get_inverse().const_ptr(), 16 * sizeof( real ) );
 				}
 				else
 				{
-					std::memcpy( l_pBuffer, it->m_pNode->GetDerivedTransformationMatrix().const_ptr(), 16 * sizeof( real ) );
+					std::memcpy( l_pBuffer, l_it.m_pNode->GetDerivedTransformationMatrix().const_ptr(), 16 * sizeof( real ) );
 				}
 
 				l_pBuffer += 16;

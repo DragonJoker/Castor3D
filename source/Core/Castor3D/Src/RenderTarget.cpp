@@ -583,14 +583,7 @@ namespace Castor3D
 		if ( m_pRenderTechnique->BeginRender() )
 		{
 			SceneSPtr l_pScene = GetScene();
-#if !defined( NDEBUG )
-			Colour l_save = GetEngine()->GetRenderSystem()->GetCurrentContext()->GetClearColour();
-			GetEngine()->GetRenderSystem()->GetCurrentContext()->SetClearColour( Colour::from_predef( Colour::ePREDEFINED_FULLALPHA_GREEN ) );
-#endif
 			GetEngine()->GetRenderSystem()->GetCurrentContext()->Clear( eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL );
-#if !defined( NDEBUG )
-			GetEngine()->GetRenderSystem()->GetCurrentContext()->SetClearColour( l_save );
-#endif
 			l_pScene->RenderBackground( *p_pCamera );
 			m_pRenderTechnique->Render( *l_pScene, *p_pCamera, GetPrimitiveType(), p_dFrameTime );
 			m_pRenderTechnique->EndRender();
