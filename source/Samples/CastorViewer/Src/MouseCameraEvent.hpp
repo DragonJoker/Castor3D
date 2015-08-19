@@ -21,7 +21,7 @@ namespace CastorViewer
 		MouseCameraEvent( Castor3D::SceneNodeSPtr p_pNode, Castor::real p_rDeltaX, Castor::real p_rDeltaY, Castor::real p_rDeltaZ );
 		virtual ~MouseCameraEvent();
 
-		static void Add( Castor3D::FrameEventSPtr p_pThis, Castor3D::FrameListenerSPtr p_pListener, Castor::real p_rDeltaX, Castor::real p_rDeltaY, Castor::real p_rDeltaZ );
+		static void Add( MouseCameraEventSPtr p_pThis, Castor3D::FrameListenerSPtr p_pListener, Castor::real p_rDeltaX, Castor::real p_rDeltaY, Castor::real p_rDeltaZ );
 	};
 }
 

@@ -8,7 +8,7 @@ using namespace Castor;
 namespace CastorViewer
 {
 	CameraTranslateEvent::CameraTranslateEvent( SceneNodeSPtr p_pNode, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
-		:	MouseCameraEvent( p_pNode, p_rDeltaX, p_rDeltaY, p_rDeltaZ )
+		: MouseCameraEvent( p_pNode, p_rDeltaX, p_rDeltaY, p_rDeltaZ )
 	{
 	}
 

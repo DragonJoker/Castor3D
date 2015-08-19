@@ -37,8 +37,8 @@ namespace Castor3D
 	typedef enum eSECTION CASTOR_TYPE( uint32_t )
 	{
 		eSECTION_ROOT,					//!< No section id est root
-		eSECTION_SCENE,				//!< Scene section
-		eSECTION_WINDOW,					//!< Window section
+		eSECTION_SCENE,					//!< Scene section
+		eSECTION_WINDOW,				//!< Window section
 		eSECTION_SAMPLER,				//!< Sampler state section
 		eSECTION_CAMERA,				//!< Camera section
 		eSECTION_VIEWPORT,				//!< Viewport section
@@ -57,11 +57,11 @@ namespace Castor3D
 		eSECTION_TEXTURE_UNIT,			//!< TextureUnit subsection of a pass subsection
 		eSECTION_RENDER_TARGET,			//!< RenderTarget subsection of a texture unit or window subsection
 		eSECTION_GLSL_SHADER,			//!< GLSL Shader subsection of a pass subsection
-		eSECTION_GLSL_SHADER_PROGRAM,	//!< GLSL Shader Program subsection of a shader subsection
-		eSECTION_GLSL_SHADER_VARIABLE,	//!< GLSL Shader frame variable subsection of a shader subsection
 		eSECTION_HLSL_SHADER,			//!< HLSL Shader subsection of a pass subsection
-		eSECTION_HLSL_SHADER_PROGRAM,	//!< HLSL Shader subsection of a pass subsection
-		eSECTION_HLSL_SHADER_VARIABLE,	//!< HLSL Shader frame variable subsection of a shader subsection
+		eSECTION_SHADER_PROGRAM,		//!< Shader Program subsection of a shader subsection
+		eSECTION_SHADER_SAMPLER,		//!< Sampler shader variable subsection of a shader program subsection
+		eSECTION_SHADER_UBO,			//!< UBO subsection of a shader subsection
+		eSECTION_SHADER_UBO_VARIABLE,	//!< Variable subsection of a UBO subsection
 		eSECTION_BILLBOARD,				//!< Billboards list section
 		eSECTION_BILLBOARD_LIST,		//!< Billboards points list subsection
 		eSECTION_ANIMGROUP,				//!< Animated Objects Groups section
@@ -92,7 +92,9 @@ namespace Castor3D
 		TextureUnitSPtr pTextureUnit;
 		ShaderProgramBaseSPtr pShaderProgram;
 		eSHADER_TYPE eShaderObject;
+		FrameVariableBufferSPtr pFrameVariableBuffer;
 		FrameVariableSPtr pFrameVariable;
+		OneTextureFrameVariableSPtr pSamplerFrameVariable;
 		OverlaySPtr pOverlay;
 		BillboardListSPtr pBillboards;
 		int iFace1;
@@ -141,9 +143,8 @@ namespace Castor3D
 		UIntStrMap m_mapViewportModes;
 		UIntStrMap m_mapInterpolationModes;
 		UIntStrMap m_mapWrappingModes;
-		UIntStrMap m_mapGlslVariableTypes;
-		UIntStrMap m_mapHlslVariableTypes;
-		UIntStrMap m_mapCgVariableTypes;
+		UIntStrMap m_mapShaderTypes;
+		UIntStrMap m_mapVariableTypes;
 		UIntStrMap m_mapMovables;
 		UIntStrMap m_mapTextWrappingModes;
 		UIntStrMap m_mapBorderPositions;
