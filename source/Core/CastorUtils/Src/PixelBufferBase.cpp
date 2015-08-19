@@ -118,8 +118,16 @@ namespace Castor
 			l_pReturn = std::make_shared< PxBuffer<	ePIXEL_FORMAT_R8G8B8		> >( p_size, p_pBuffer, p_eBufferFormat );
 			break;
 
+		case ePIXEL_FORMAT_B8G8R8:
+			l_pReturn = std::make_shared< PxBuffer<	ePIXEL_FORMAT_B8G8R8		> >( p_size, p_pBuffer, p_eBufferFormat );
+			break;
+
 		case ePIXEL_FORMAT_A8R8G8B8:
 			l_pReturn = std::make_shared< PxBuffer<	ePIXEL_FORMAT_A8R8G8B8		> >( p_size, p_pBuffer, p_eBufferFormat );
+			break;
+
+		case ePIXEL_FORMAT_A8B8G8R8:
+			l_pReturn = std::make_shared< PxBuffer<	ePIXEL_FORMAT_A8B8G8R8		> >( p_size, p_pBuffer, p_eBufferFormat );
 			break;
 
 		case ePIXEL_FORMAT_RGB16F32F:

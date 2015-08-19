@@ -51,12 +51,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pLogger	The logger instance
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pLogger	L'instance du logger
 		 */
-		Engine( Castor::Logger * p_pLogger );
+		Engine();
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -336,6 +334,274 @@ namespace Castor3D
 		void LoadAllPlugins( Castor::Path const & p_strFolder );
 		/**
 		 *\~english
+		 *\brief		Posts a frame event
+		 *\param[in]	p_pEvent	The event to add
+		 *\~french
+		 *\brief		Ajoute un évènement de frame à la queue
+		 *\param[in]	p_pEvent	L'évènement
+		 */
+		void PostEvent( FrameEventSPtr p_pEvent );
+		/**
+		 *\~english
+		 *\brief		Retrieves the end status
+		 *\remark		Thread-safe
+		 *\return		\p true if ended
+		 *\~french
+		 *\brief		Récupère le statut de fin
+		 *\remark		Thread-safe
+		 *\return		\p true si arrêté
+		 */
+		bool IsEnded();
+		/**
+		 *\~english
+		 *\brief		Tells the engine the render is ended
+		 *\remark		Thread-safe
+		 *\~french
+		 *\brief		Dit que le rendu est stoppé
+		 *\remark		Thread-safe
+		 */
+		void SetEnded();
+		/**
+		 *\~english
+		 *\brief		Retrieves the render start status
+		 *\remark		Thread-safe
+		 *\return		\p true if started
+		 *\~french
+		 *\brief		Récupère le statut de début de rendu
+		 *\remark		Thread-safe
+		 *\return		\p true si démarré
+		 */
+		bool IsStarted();
+		/**
+		 *\~english
+		 *\brief		Tells the engine the render is started
+		 *\remark		Thread-safe
+		 *\~french
+		 *\brief		Dit que le rendu est démarré
+		 *\remark		Thread-safe
+		 */
+		void SetStarted();
+		/**
+		 *\~english
+		 *\brief		Retrieves the context creation status
+		 *\remark		Thread-safe
+		 *\return		\p true if created
+		 *\~french
+		 *\brief		Récupère le statut de création du contexte de rendu
+		 *\remark		Thread-safe
+		 *\return		\p true si créé
+		 */
+		bool IsCreated();
+		/**
+		 *\~english
+		 *\brief		Tells the engine the render context is created
+		 *\remark		Thread-safe
+		 *\~french
+		 *\brief		Dit que le contexte de rendu est créé
+		 *\remark		Thread-safe
+		 */
+		void SetCreated();
+		/**
+		 *\~english
+		 *\brief		Retrieves the render to-create status
+		 *\remark		Thread-safe
+		 *\return		\p true if the render context is to create
+		 *\~french
+		 *\brief		Récupère le statut de demande de création du contexte
+		 *\remark		Thread-safe
+		 *\return		\p true si à créer
+		 */
+		bool IsToCreate();
+		/**
+		 *\~english
+		 *\brief		Tells the engine the render context is to create
+		 *\remark		Thread-safe
+		 *\~french
+		 *\brief		Dit que le contexte de rendu est à créer
+		 *\remark		Thread-safe
+		 */
+		void SetToCreate();
+		/**
+		 *\~english
+		 *\brief		Retrieves the cleanup status
+		 *\remark		Thread-safe
+		 *\return		\p true if cleaned up
+		 *\~french
+		 *\brief		Récupère le statut de nettoyage
+		 *\remark		Thread-safe
+		 *\return		\p true si nettoyé
+		 */
+		bool IsCleaned();
+		/**
+		 *\~english
+		 *\brief		Tells the engine is cleaned up
+		 *\remark		Thread-safe
+		 *\~french
+		 *\brief		Dit que le moteur est nettoyé
+		 *\remark		Thread-safe
+		 */
+		void SetCleaned();
+		/**
+		 *\~english
+		 *\brief		Retrieves the wanted frame time
+		 *\remark		Thread-safe
+		 *\return		The time, in seconds
+		 *\~french
+		 *\brief		Récupère le temps voulu pour une frame
+		 *\remark		Thread-safe
+		 *\return		Le temps, en secondes
+		 */
+		double GetFrameTime();
+		/**
+		 *\~english
+		 *\brief		Updates the overlays collection
+		 *\~french
+		 *\brief		Met à jour la collection d'overlays
+		 */
+		void UpdateOverlayManager();
+		/**
+		 *\~english
+		 *\brief		Updates the shaders collection
+		 *\~french
+		 *\brief		Met à jour la collection de shaders
+		 */
+		void UpdateShaderManager();
+		/**
+		 *\~english
+		 *\brief		Creates an RenderTechnique from a technique name
+		 *\param[in]	p_strName		The technique name
+		 *\param[in]	p_renderTarget	The technique render target
+		 *\param[in]	p_params		The technique parameters
+		 *\return		The created RenderTechnique
+		 *\~french
+		 *\brief		Crée une RenderTechnique à partir d'un nom de technique
+		 *\param[in]	p_key			Le type d'objet
+		 *\param[in]	p_renderTarget	La cible de rendu de la technique
+		 *\param[in]	p_params		Les paramètres de la technique
+		 *\return		La RenderTechnique créée
+		 */
+		RenderTechniqueBaseSPtr CreateTechnique( Castor::String const & p_strName, RenderTarget & p_renderTarget, Parameters const & p_params );
+		/**
+		 *\~english
+		 *\brief		Checks the current support for given shader model
+		 *\param[in]	p_eShaderModel	The shader model
+		 *\return		\p true if the shader model is supported in actual configuration
+		 *\~french
+		 *\brief		Vérifie le support du shader model donné
+		 *\param[in]	p_eShaderModel	le shader model
+		 *\return		\p true si le shader model est supporté dans la configuration actuelle
+		 */
+		bool SupportsShaderModel( eSHADER_MODEL p_eShaderModel );
+		/**
+		 *\~english
+		 *\brief		Tells if the renderer API supports depth buffer for main FBO
+		 *\return		The support status
+		 *\~french
+		 *\brief		Dit si l'API de rendu supporte les tampons de profondeur pour le FBO principal
+		 *\return		Le statut du support
+		 */
+		bool SupportsDepthBuffer()const;
+		/**
+		 *\~english
+		 *\brief		Creates a render target of given type
+		 *\param[in]	p_eType	The render target type
+		 *\return		The render target
+		 *\~french
+		 *\brief		Crée une cible de rendu du type voulu
+		 *\param[in]	p_eType	Le type de cible de rendu
+		 *\return		La cible de rendu
+		 */
+		RenderTargetSPtr CreateRenderTarget( eTARGET_TYPE p_eType );
+		/**
+		 *\~english
+		 *\brief		Removes a render target from the render loop
+		 *\param[in]	p_pRenderTarget	The render target
+		 *\~french
+		 *\brief		Enlève une cible de rendu de la boucle de rendu
+		 *\param[in]	p_pRenderTarget	La cible de rendu
+		 */
+		void RemoveRenderTarget( RenderTargetSPtr && p_pRenderTarget );
+		/**
+		 *\~english
+		 *\brief		Creates a FrameListener
+		 *\return		The created FrameListener
+		 *\~french
+		 *\brief		Crée un FrameListener
+		 *\return		Le FrameListener créé
+		 */
+		FrameListenerSPtr CreateFrameListener();
+		/**
+		 *\~english
+		 *\brief		Destroys a FrameListener
+		 *\param[in]	p_pListener	The FrameListener
+		 *\~french
+		 *\brief		Détruit un FrameListener
+		 *\param[in]	p_pListener	Le FrameListener
+		 */
+		void DestroyFrameListener( FrameListenerSPtr & p_pListener );
+		/**
+		 *\~english
+		 *\brief		Creates and returns a Sampler, given a name
+		 *\remark		If a Sampler with the same name exists, none is created
+		 *\param[in]	p_strName	The Sampler name
+		 *\return		The created or existing Sampler
+		 *\~french
+		 *\brief		Crée et renvoie un Sampler, avec le nom donné
+		 *\remark		Si un Sampler avec le même nom existe, aucun n'est créé
+		 *\param[in]	p_strName	Le nom du Sampler
+		 *\return		Le Sampler créé ou existant
+		 */
+		SamplerSPtr CreateSampler( Castor::String const & p_strName );
+		/**
+		 *\~english
+		 *\brief		Creates and returns a DepthStencilState, given a name
+		 *\remark		If a DepthStencilState with the same name exists, none is created
+		 *\param[in]	p_strName	The DepthStencilState name
+		 *\return		The created or existing DepthStencilState
+		 *\~french
+		 *\brief		Crée et renvoie un DepthStencilState, avec le nom donné
+		 *\remark		Si un DepthStencilState avec le même nom existe, aucun n'est créé
+		 *\param[in]	p_strName	Le nom du DepthStencilState
+		 *\return		Le DepthStencilState créé ou existant
+		 */
+		DepthStencilStateSPtr CreateDepthStencilState( Castor::String const & p_strName );
+		/**
+		 *\~english
+		 *\brief		Creates and returns a RasteriserState, given a name
+		 *\remark		If a RasteriserState with the same name exists, none is created
+		 *\param[in]	p_strName	The RasteriserState name
+		 *\return		The created or existing RasteriserState
+		 *\~french
+		 *\brief		Crée et renvoie un RasteriserState, avec le nom donné
+		 *\remark		Si un RasteriserState avec le même nom existe, aucun n'est créé
+		 *\param[in]	p_strName	Le nom du RasteriserState
+		 *\return		Le RasteriserState créé ou existant
+		 */
+		RasteriserStateSPtr CreateRasteriserState( Castor::String const & p_strName );
+		/**
+		 *\~english
+		 *\brief		Creates and returns a BlendState, given a name
+		 *\remark		If a BlendState with the same name exists, none is created
+		 *\param[in]	p_strName	The BlendState name
+		 *\return		The created or existing BlendState
+		 *\~french
+		 *\brief		Crée et renvoie un BlendState, avec le nom donné
+		 *\remark		Si un BlendState avec le même nom existe, aucun n'est créé
+		 *\param[in]	p_strName	Le nom du BlendState
+		 *\return		Le BlendState créé ou existant
+		 */
+		BlendStateSPtr CreateBlendState( Castor::String const & p_strName );
+		/**
+		 *\~english
+		 *\brief		Show or hide debug overlays
+		 *\param[in]	p_show	The status
+		 *\~french
+		 *\brief		Affiche ou cache les incrustations de débogage
+		 *\param[in]	p_show	Le statut
+		 */
+		void ShowDebugOverlays( bool p_show );
+		/**
+		 *\~english
 		 *\brief		Retrieves plugins path
 		 *\return		The plugins path
 		 *\~french
@@ -361,15 +627,6 @@ namespace Castor3D
 		 *\return		Le chemin des données
 		 */
 		static Castor::Path GetDataDirectory();
-		/**
-		 *\~english
-		 *\brief		Posts a frame event
-		 *\param[in]	p_pEvent	The event to add
-		 *\~french
-		 *\brief		Ajoute un évènement de frame à la queue
-		 *\param[in]	p_pEvent	L'évènement
-		 */
-		void PostEvent( FrameEventSPtr p_pEvent );
 		/**
 		 *\~english
 		 *\brief		Retrieves the RenderTechnique factory
@@ -912,129 +1169,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the logger instance
-		 *\return		The logger instance
-		 *\~french
-		 *\brief		Récupère l'instance du logger
-		 *\return		L'instance du logger
-		 */
-		inline Castor::Logger * GetLoggerInstance()const
-		{
-			return m_pLoggerInstance;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the end status
-		 *\remark		Thread-safe
-		 *\return		\p true if ended
-		 *\~french
-		 *\brief		Récupère le statut de fin
-		 *\remark		Thread-safe
-		 *\return		\p true si arrêté
-		 */
-		bool IsEnded();
-		/**
-		 *\~english
-		 *\brief		Tells the engine the render is ended
-		 *\remark		Thread-safe
-		 *\~french
-		 *\brief		Dit que le rendu est stoppé
-		 *\remark		Thread-safe
-		 */
-		void SetEnded();
-		/**
-		 *\~english
-		 *\brief		Retrieves the render start status
-		 *\remark		Thread-safe
-		 *\return		\p true if started
-		 *\~french
-		 *\brief		Récupère le statut de début de rendu
-		 *\remark		Thread-safe
-		 *\return		\p true si démarré
-		 */
-		bool IsStarted();
-		/**
-		 *\~english
-		 *\brief		Tells the engine the render is started
-		 *\remark		Thread-safe
-		 *\~french
-		 *\brief		Dit que le rendu est démarré
-		 *\remark		Thread-safe
-		 */
-		void SetStarted();
-		/**
-		 *\~english
-		 *\brief		Retrieves the context creation status
-		 *\remark		Thread-safe
-		 *\return		\p true if created
-		 *\~french
-		 *\brief		Récupère le statut de création du contexte de rendu
-		 *\remark		Thread-safe
-		 *\return		\p true si créé
-		 */
-		bool IsCreated();
-		/**
-		 *\~english
-		 *\brief		Tells the engine the render context is created
-		 *\remark		Thread-safe
-		 *\~french
-		 *\brief		Dit que le contexte de rendu est créé
-		 *\remark		Thread-safe
-		 */
-		void SetCreated();
-		/**
-		 *\~english
-		 *\brief		Retrieves the render to-create status
-		 *\remark		Thread-safe
-		 *\return		\p true if the render context is to create
-		 *\~french
-		 *\brief		Récupère le statut de demande de création du contexte
-		 *\remark		Thread-safe
-		 *\return		\p true si à créer
-		 */
-		bool IsToCreate();
-		/**
-		 *\~english
-		 *\brief		Tells the engine the render context is to create
-		 *\remark		Thread-safe
-		 *\~french
-		 *\brief		Dit que le contexte de rendu est à créer
-		 *\remark		Thread-safe
-		 */
-		void SetToCreate();
-		/**
-		 *\~english
-		 *\brief		Retrieves the cleanup status
-		 *\remark		Thread-safe
-		 *\return		\p true if cleaned up
-		 *\~french
-		 *\brief		Récupère le statut de nettoyage
-		 *\remark		Thread-safe
-		 *\return		\p true si nettoyé
-		 */
-		bool IsCleaned();
-		/**
-		 *\~english
-		 *\brief		Tells the engine is cleaned up
-		 *\remark		Thread-safe
-		 *\~french
-		 *\brief		Dit que le moteur est nettoyé
-		 *\remark		Thread-safe
-		 */
-		void SetCleaned();
-		/**
-		 *\~english
-		 *\brief		Retrieves the wanted frame time
-		 *\remark		Thread-safe
-		 *\return		The time, in seconds
-		 *\~french
-		 *\brief		Récupère le temps voulu pour une frame
-		 *\remark		Thread-safe
-		 *\return		Le temps, en secondes
-		 */
-		double GetFrameTime();
-		/**
-		 *\~english
 		 *\brief		Tells the engine the render may be threaded or not
 		 *\~french
 		 *\brief		Dit si le rendu peut être threadé
@@ -1043,154 +1177,6 @@ namespace Castor3D
 		{
 			return m_bThreaded;
 		}
-		/**
-		 *\~english
-		 *\brief		Updates the overlays collection
-		 *\~french
-		 *\brief		Met à jour la collection d'overlays
-		 */
-		void UpdateOverlayManager();
-		/**
-		 *\~english
-		 *\brief		Updates the shaders collection
-		 *\~french
-		 *\brief		Met à jour la collection de shaders
-		 */
-		void UpdateShaderManager();
-		/**
-		 *\~english
-		 *\brief		Creates an RenderTechnique from a technique name
-		 *\param[in]	p_strName		The technique name
-		 *\param[in]	p_renderTarget	The technique render target
-		 *\param[in]	p_params		The technique parameters
-		 *\return		The created RenderTechnique
-		 *\~french
-		 *\brief		Crée une RenderTechnique à partir d'un nom de technique
-		 *\param[in]	p_key			Le type d'objet
-		 *\param[in]	p_renderTarget	La cible de rendu de la technique
-		 *\param[in]	p_params		Les paramètres de la technique
-		 *\return		La RenderTechnique créée
-		 */
-		RenderTechniqueBaseSPtr CreateTechnique( Castor::String const & p_strName, RenderTarget & p_renderTarget, Parameters const & p_params );
-		/**
-		 *\~english
-		 *\brief		Checks the current support for given shader model
-		 *\param[in]	p_eShaderModel	The shader model
-		 *\return		\p true if the shader model is supported in actual configuration
-		 *\~french
-		 *\brief		Vérifie le support du shader model donné
-		 *\param[in]	p_eShaderModel	le shader model
-		 *\return		\p true si le shader model est supporté dans la configuration actuelle
-		 */
-		bool SupportsShaderModel( eSHADER_MODEL p_eShaderModel );
-		/**
-		 *\~english
-		 *\brief		Tells if the renderer API supports depth buffer for main FBO
-		 *\return		The support status
-		 *\~french
-		 *\brief		Dit si l'API de rendu supporte les tampons de profondeur pour le FBO principal
-		 *\return		Le statut du support
-		 */
-		bool SupportsDepthBuffer()const;
-		/**
-		 *\~english
-		 *\brief		Creates a render target of given type
-		 *\param[in]	p_eType	The render target type
-		 *\return		The render target
-		 *\~french
-		 *\brief		Crée une cible de rendu du type voulu
-		 *\param[in]	p_eType	Le type
-		 *\return		La cible de rendu
-		 */
-		RenderTargetSPtr CreateRenderTarget( eTARGET_TYPE p_eType );
-		/**
-		 *\~english
-		 *\brief		Removes a render target from the render loop
-		 *\param[in]	p_pRenderTarget	The render target
-		 *\~french
-		 *\brief		Enlève une cible de rendu de la boucle de rendu
-		 *\param[in]	p_pRenderTarget	La cible de rendu
-		 */
-		void RemoveRenderTarget( RenderTargetSPtr && p_pRenderTarget );
-		/**
-		 *\~english
-		 *\brief		Creates a FrameListener
-		 *\return		The created FrameListener
-		 *\~french
-		 *\brief		Crée un FrameListener
-		 *\return		Le FrameListener créé
-		 */
-		FrameListenerSPtr CreateFrameListener();
-		/**
-		 *\~english
-		 *\brief		Destroys a FrameListener
-		 *\param[in]	p_pListener	The FrameListener
-		 *\~french
-		 *\brief		Détruit un FrameListener
-		 *\param[in]	p_pListener	Le FrameListener
-		 */
-		void DestroyFrameListener( FrameListenerSPtr & p_pListener );
-		/**
-		 *\~english
-		 *\brief		Creates and returns a Sampler, given a name
-		 *\remark		If a Sampler with the same name exists, none is created
-		 *\param[in]	p_strName	The Sampler name
-		 *\return		The created or existing Sampler
-		 *\~french
-		 *\brief		Crée et renvoie un Sampler, avec le nom donné
-		 *\remark		Si un Sampler avec le même nom existe, aucun n'est créé
-		 *\param[in]	p_strName	Le nom du Sampler
-		 *\return		Le Sampler créé ou existant
-		 */
-		SamplerSPtr CreateSampler( Castor::String const & p_strName );
-		/**
-		 *\~english
-		 *\brief		Creates and returns a DepthStencilState, given a name
-		 *\remark		If a DepthStencilState with the same name exists, none is created
-		 *\param[in]	p_strName	The DepthStencilState name
-		 *\return		The created or existing DepthStencilState
-		 *\~french
-		 *\brief		Crée et renvoie un DepthStencilState, avec le nom donné
-		 *\remark		Si un DepthStencilState avec le même nom existe, aucun n'est créé
-		 *\param[in]	p_strName	Le nom du DepthStencilState
-		 *\return		Le DepthStencilState créé ou existant
-		 */
-		DepthStencilStateSPtr CreateDepthStencilState( Castor::String const & p_strName );
-		/**
-		 *\~english
-		 *\brief		Creates and returns a RasteriserState, given a name
-		 *\remark		If a RasteriserState with the same name exists, none is created
-		 *\param[in]	p_strName	The RasteriserState name
-		 *\return		The created or existing RasteriserState
-		 *\~french
-		 *\brief		Crée et renvoie un RasteriserState, avec le nom donné
-		 *\remark		Si un RasteriserState avec le même nom existe, aucun n'est créé
-		 *\param[in]	p_strName	Le nom du RasteriserState
-		 *\return		Le RasteriserState créé ou existant
-		 */
-		RasteriserStateSPtr CreateRasteriserState( Castor::String const & p_strName );
-		/**
-		 *\~english
-		 *\brief		Creates and returns a BlendState, given a name
-		 *\remark		If a BlendState with the same name exists, none is created
-		 *\param[in]	p_strName	The BlendState name
-		 *\return		The created or existing BlendState
-		 *\~french
-		 *\brief		Crée et renvoie un BlendState, avec le nom donné
-		 *\remark		Si un BlendState avec le même nom existe, aucun n'est créé
-		 *\param[in]	p_strName	Le nom du BlendState
-		 *\return		Le BlendState créé ou existant
-		 */
-		BlendStateSPtr CreateBlendState( Castor::String const & p_strName );
-		/**
-		 *\~english
-		 *\brief		Show or hide debug overlays
-		 *\param[in]	p_show	The status
-		 *\~french
-		 *\brief		Affiche ou cache les incrustations de débogage
-		 *\param[in]	p_show	Le statut
-		 */
-		void ShowDebugOverlays( bool p_show );
 		/**
 		 *\~english
 		 *\brief		Retrieves the default BlendState (no blend)
@@ -1206,18 +1192,33 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the default Sampler
-		 *\return		The value
+		 *\return		The Sampler
 		 *\~french
 		 *\brief		Récupère le Sampler par défault
-		 *\return		La valeur
+		 *\return		Le Sampler
 		 */
 		inline SamplerSPtr GetDefaultSampler()const
 		{
 			return m_pDefaultSampler;
 		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the lights Sampler
+		 *\return		The Sampler
+		 *\~french
+		 *\brief		Récupère le Sampler pour les textures de lumières
+		 *\return		Le Sampler
+		 */
+		inline SamplerSPtr GetLightsSampler()const
+		{
+			return m_pLightsSampler;
+		}
 
 	private:
 		uint32_t DoMainLoop();
+		void DoPreRender( double & p_cpuTime, double & p_gpuTime );
+		void DoRender( bool p_bForce, double & p_cpuTime, double & p_gpuTime, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount );
+		void DoPostRender( double & p_cpuTime, double & p_gpuTime );
 		void DoUpdate( bool p_bForce );
 		void DoLock();
 		void DoUnlock();
@@ -1228,8 +1229,7 @@ namespace Castor3D
 		void DoRenderOneFrame();
 		void DoRenderFlushFrame();
 		void DoLoadCoreData();
-
-		static uint32_t	DoStMainLoop( Engine * p_pThis );
+		void DoUpdateDebugOverlays( double p_cpuTime, double p_gpuTime, double p_totalTime, uint32_t p_vertices, uint32_t p_faces, uint32_t p_objects );
 
 	private:
 		DECLARE_MULTIMAP( eTARGET_TYPE, RenderTargetSPtr, RenderTarget );
@@ -1305,8 +1305,6 @@ namespace Castor3D
 		BlendStateCollectionUPtr m_pBlendStateManager;
 		//!\~english  The current RenderSystem	\~french Le RenderSystem courant
 		RenderSystem * m_pRenderSystem;
-		//!\~english  The logger instance	\~french L'instance du logger
-		Castor::Logger * m_pLoggerInstance;
 		//!\~english  If \p false, the render can't be threaded	\~french Si \p false, le rendu ne peut pas être threadé
 		bool m_bThreaded;
 		//!\~english Tells if render is running	\~french Dit si le rendu est en cours
@@ -1325,6 +1323,8 @@ namespace Castor3D
 		BlendStateSPtr m_pDefaultBlendState;
 		//!\~english Default sampler	\~french Le sampler par défaut
 		SamplerSPtr m_pDefaultSampler;
+		//!\~english Lights textures sampler	\~french Le sampler utilisé pour les textures de lumières
+		SamplerSPtr m_pLightsSampler;
 		//!\~english Tells default sampler and default blend state are initialised	\~french Dit si le sampler et le blend state par défaut sont initialisés
 		bool m_bDefaultInitialised;
 		//!\~english The base debug panel overlay	\~french Le panneau d'incrustations de débogage

@@ -125,10 +125,11 @@ namespace GlRender
 
 		if ( l_pOldProgram != l_pNewProgram )
 		{
-			std::for_each( m_arrayAttributes.begin(), m_arrayAttributes.end(), [&]( GlAttributeBaseSPtr p_pAttribute )
+			for ( auto l_attribute: m_arrayAttributes )
 			{
-				p_pAttribute->SetShader( l_pNewProgram );
-			} );
+				l_attribute->SetShader( l_pNewProgram );
+			}
+
 			m_pProgram = l_pNewProgram;
 
 			if ( l_pNewProgram )
@@ -305,9 +306,9 @@ namespace GlRender
 
 	void GlVertexBufferObject::DoAttributesCleanup()
 	{
-		for ( GlAttributePtrArrayIt l_it = m_arrayAttributes.begin(); l_it != m_arrayAttributes.end(); ++l_it )
+		for ( auto && l_attribute: m_arrayAttributes )
 		{
-			( *l_it )->Cleanup();
+			l_attribute->Cleanup();
 		}
 	}
 
@@ -315,9 +316,9 @@ namespace GlRender
 	{
 		m_uiValid = 0;
 
-		for ( GlAttributePtrArrayIt l_it = m_arrayAttributes.begin(); l_it != m_arrayAttributes.end(); ++l_it )
+		for ( auto && l_attribute: m_arrayAttributes )
 		{
-			m_uiValid += ( ( *l_it )->Initialise() ? 1 : 0 );
+			m_uiValid += ( l_attribute->Initialise() ? 1 : 0 );
 		}
 
 		return m_uiValid > 0;
@@ -327,7 +328,7 @@ namespace GlRender
 	{
 		bool l_bReturn = true;
 
-		for ( GlAttributePtrArrayIt l_it = m_arrayAttributes.begin(); l_it != m_arrayAttributes.end() && l_bReturn; ++l_it )
+		for ( auto && l_it = m_arrayAttributes.begin(); l_it != m_arrayAttributes.end() && l_bReturn; ++l_it )
 		{
 			if ( ( *l_it )->GetLocation() != eGL_INVALID_INDEX )
 			{
@@ -340,11 +341,11 @@ namespace GlRender
 
 	void GlVertexBufferObject::DoAttributesUnbind()
 	{
-		for ( GlAttributePtrArrayIt l_it = m_arrayAttributes.begin(); l_it != m_arrayAttributes.end(); ++l_it )
+		for ( auto && l_attribute: m_arrayAttributes )
 		{
-			if ( ( *l_it )->GetLocation() != eGL_INVALID_INDEX )
+			if ( l_attribute->GetLocation() != eGL_INVALID_INDEX )
 			{
-				( *l_it )->Unbind();
+				l_attribute->Unbind();
 			}
 		}
 	}

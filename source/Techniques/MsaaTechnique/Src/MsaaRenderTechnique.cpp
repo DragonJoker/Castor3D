@@ -32,7 +32,7 @@ namespace Msaa
 	{
 		if ( p_params.Get( cuT( "samples_count" ), m_iSamplesCount ) && m_iSamplesCount > 1 )
 		{
-			Logger::LogMessage( "Using MSAA, %d samples", m_iSamplesCount );
+			Logger::LogInfo( "Using MSAA, %d samples", m_iSamplesCount );
 			m_pMsFrameBuffer	= m_pRenderTarget->CreateFrameBuffer();
 			m_pMsColorBuffer	= m_pFrameBuffer->CreateColourRenderBuffer(	ePIXEL_FORMAT_A8R8G8B8 );
 			m_pMsDepthBuffer	= m_pFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24 );
@@ -140,31 +140,11 @@ namespace Msaa
 
 	bool RenderTechnique::DoBeginRender()
 	{
-#if DX_DEBUG
-		bool l_bReturn = true;
-
-		if ( m_iSamplesCount )
-		{
-			return m_pMsFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
-		}
-
-		return l_bReturn;
-#else
 		return m_pBoundFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
-#endif
 	}
 
 	bool RenderTechnique::DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime )
 	{
-#if DX_DEBUG
-
-		if ( m_iSamplesCount )
-		{
-			m_pRenderTarget->GetDepthStencilState()->Apply();
-			m_wpMsRasteriserState.lock()->Apply();
-		}
-
-#else
 		m_pRenderTarget->GetDepthStencilState()->Apply();
 
 		if ( !m_iSamplesCount )
@@ -176,22 +156,11 @@ namespace Msaa
 			m_wpMsRasteriserState.lock()->Apply();
 		}
 
-#endif
 		return RenderTechniqueBase::DoRender( p_scene, p_camera, p_ePrimitives, p_dFrameTime );
 	}
 
 	void RenderTechnique::DoEndRender()
 	{
-#if DX_DEBUG
-
-		if ( m_iSamplesCount )
-		{
-			m_pMsFrameBuffer->Unbind();
-			m_pMsFrameBuffer->BlitInto( m_pFrameBuffer, m_rect, eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH );
-			m_pRenderSystem->GetCurrentContext()->BToBRender( m_size, m_pColorBuffer, eBUFFER_COMPONENT_COLOUR );
-		}
-
-#else
 		m_pBoundFrameBuffer->Unbind();
 
 		if ( m_iSamplesCount )
@@ -203,7 +172,5 @@ namespace Msaa
 			Image::BinaryLoader()( l_image, File::GetUserDirectory() / cuT( "MsaaImage.bmp" ) );
 #	endif
 		}
-
-#endif
 	}
 }

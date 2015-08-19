@@ -177,7 +177,7 @@ namespace Castor3D
 		l_pSubmesh5->ComputeTangentsFromNormals();
 		l_pSubmesh6->ComputeTangentsFromNormals();
 		GetMesh()->ComputeContainers();
-		Logger::LogMessage( cuT( "Cube - NbVertex : %d" ), ( l_pSubmesh1->GetPointsCount() + l_pSubmesh2->GetPointsCount() + l_pSubmesh3->GetPointsCount() + l_pSubmesh4->GetPointsCount() + l_pSubmesh5->GetPointsCount() + l_pSubmesh6->GetPointsCount() ) );
+		Logger::LogInfo( cuT( "Cube - NbVertex : %d" ), ( l_pSubmesh1->GetPointsCount() + l_pSubmesh2->GetPointsCount() + l_pSubmesh3->GetPointsCount() + l_pSubmesh4->GetPointsCount() + l_pSubmesh5->GetPointsCount() + l_pSubmesh6->GetPointsCount() ) );
 	}
 
 	void Cube::Initialise( UIntArray const & CU_PARAM_UNUSED( p_arrayFaces ), RealArray const & p_arrayDimensions )

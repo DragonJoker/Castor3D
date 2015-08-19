@@ -1,9 +1,11 @@
 ﻿#include "Camera.hpp"
-#include "CameraRenderer.hpp"
+
+#include "Engine.hpp"
+#include "Pipeline.hpp"
+#include "RenderSystem.hpp"
 #include "Scene.hpp"
 #include "SceneNode.hpp"
 #include "Viewport.hpp"
-#include "Pipeline.hpp"
 
 #include <TransformationMatrix.hpp>
 
@@ -164,12 +166,11 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	Camera::Camera( SceneSPtr p_pScene, String const & p_strName, SceneNodeSPtr p_pNode, ViewportSPtr p_pViewport, eTOPOLOGY p_ePrimitiveType )
-		:	MovableObject( p_pScene, p_pNode, p_strName, eMOVABLE_TYPE_CAMERA )
-		,	Renderable< Camera, CameraRenderer >( p_pScene->GetEngine() )
-		,	m_pViewport( std::make_shared< Viewport >( *p_pViewport ) )
-		,	m_ePrimitiveType( eTOPOLOGY_TRIANGLES )
+		: MovableObject( p_pScene, p_pNode, p_strName, eMOVABLE_TYPE_CAMERA )
+		, m_pEngine( p_pScene->GetEngine() )
+		, m_pViewport( std::make_shared< Viewport >( *p_pViewport ) )
+		, m_ePrimitiveType( eTOPOLOGY_TRIANGLES )
 	{
-		DoCreateRenderer( this );
 	}
 
 	Camera::Camera( SceneSPtr p_pScene, String const & p_strName, SceneNodeSPtr p_pNode, Size const & p_size, eVIEWPORT_TYPE p_eType, eTOPOLOGY p_ePrimitiveType )
@@ -203,12 +204,12 @@ namespace Castor3D
 
 	void Camera::Render()
 	{
-		Pipeline * l_pPipeline = m_pEngine->GetRenderSystem()->GetPipeline();
 		bool l_bModified = m_pViewport->Render();
 		SceneNodeSPtr l_node = GetParent();
 
 		if ( l_node )
 		{
+			Pipeline * l_pPipeline = m_pEngine->GetRenderSystem()->GetPipeline();
 			Matrix4x4r const & l_mtx = l_node->GetDerivedTransformationMatrix();
 
 			if ( l_bModified || l_node->IsModified() )
@@ -235,6 +236,7 @@ namespace Castor3D
 	void Camera::EndRender()
 	{
 		m_pEngine->GetRenderSystem()->SetCurrentCamera( NULL );
+		m_pEngine->GetRenderSystem()->GetPipeline()->MatrixMode( eMTXMODE_VIEW );
 		m_pEngine->GetRenderSystem()->GetPipeline()->PopMatrix();
 	}
 
@@ -251,12 +253,6 @@ namespace Castor3D
 	bool Camera::Select( SceneSPtr p_pScene, eSELECTION_MODE p_eMode, int p_iX, int p_iY, stSELECT_RESULT & p_stFound )
 	{
 		bool l_bReturn = false;
-		CameraRendererSPtr l_pRenderer = GetRenderer();
-
-		if ( l_pRenderer )
-		{
-			l_bReturn = l_pRenderer->Select( p_pScene, p_eMode, p_iX, p_iY, p_stFound );
-		}
 
 		return l_bReturn;
 	}

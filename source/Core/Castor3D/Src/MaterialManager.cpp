@@ -5,6 +5,7 @@
 #include "Sampler.hpp"
 #include "InitialiseEvent.hpp"
 #include "CleanupEvent.hpp"
+#include "Engine.hpp"
 
 #include <Logger.hpp>
 
@@ -34,7 +35,7 @@ namespace Castor3D
 			MaterialCollection::insert( Material::DefaultMaterialName, m_defaultMaterial );
 		}
 
-		m_pEngine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *m_defaultMaterial ) );
+		m_pEngine->PostEvent( MakeInitialiseEvent( *m_defaultMaterial ) );
 	}
 
 	void MaterialManager::Cleanup()
@@ -43,7 +44,7 @@ namespace Castor3D
 
 		std::for_each( begin(), end(), [&]( std::pair< String, MaterialSPtr > p_pair )
 		{
-			m_pEngine->PostEvent( std::make_shared< CleanupEvent< Material > >( *p_pair.second ) );
+			m_pEngine->PostEvent( MakeCleanupEvent( *p_pair.second ) );
 		} );
 
 		MaterialCollection::unlock();

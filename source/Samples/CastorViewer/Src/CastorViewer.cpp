@@ -28,7 +28,7 @@ namespace CastorViewer
 		// load language if possible, fall back to english otherwise
 		if ( wxLocale::IsAvailable( l_lLanguage ) )
 		{
-			m_pLocale = new wxLocale( l_lLanguage, wxLOCALE_LOAD_DEFAULT );
+			m_pLocale = std::make_unique< wxLocale >( l_lLanguage, wxLOCALE_LOAD_DEFAULT );
 			// add locale search paths
 			m_pLocale->AddCatalogLookupPathPrefix( l_pathCurrent / cuT( "share" ) / cuT( "CastorViewer" ) );
 #if defined( _MSC_VER )
@@ -43,9 +43,8 @@ namespace CastorViewer
 			if ( !m_pLocale->IsOk() )
 			{
 				std::cerr << "Selected language is wrong" << std::endl;
-				delete m_pLocale;
 				l_lLanguage = wxLANGUAGE_ENGLISH;
-				m_pLocale = new wxLocale( l_lLanguage );
+				m_pLocale = std::make_unique< wxLocale >( l_lLanguage );
 			}
 		}
 		else
@@ -53,7 +52,7 @@ namespace CastorViewer
 			std::cout << "The selected language is not supported by your system."
 					  << "Try installing support for this language." << std::endl;
 			l_lLanguage = wxLANGUAGE_ENGLISH;
-			m_pLocale = new wxLocale( l_lLanguage );
+			m_pLocale = std::make_unique< wxLocale >( l_lLanguage );
 		}
 
 //		wxAppConsole::SetAppDisplayName(	wxT( "Castor Viewer"	) );
@@ -74,7 +73,6 @@ namespace CastorViewer
 		if ( !l_bReturn || l_parser.Found( wxT( 'h' ) ) )
 		{
 			l_parser.Usage();
-			delete m_pLocale;
 			l_bReturn = false;
 		}
 
@@ -82,16 +80,16 @@ namespace CastorViewer
 		{
 			try
 			{
-				eLOG_TYPE		l_eLogLevel;
-				eRENDERER_TYPE	l_eRenderer;
-				wxString		l_strRenderer;
+				ELogType l_eLogLevel;
+				eRENDERER_TYPE l_eRenderer;
+				wxString l_strRenderer;
 
 				if ( !l_parser.Found( wxT( 'l' ), reinterpret_cast< long * >( &l_eLogLevel ) ) )
 				{
 #if defined( NDEBUG )
-					l_eLogLevel = eLOG_TYPE_MESSAGE;
+					l_eLogLevel = ELogType_MESSAGE;
 #else
-					l_eLogLevel = eLOG_TYPE_DEBUG;
+					l_eLogLevel = ELogType_DEBUG;
 #endif
 				}
 
@@ -123,7 +121,7 @@ namespace CastorViewer
 
 				Logger::Initialise( l_eLogLevel );
 				Logger::SetFileName( Castor3D::Engine::GetEngineDirectory() / cuT( "CastorViewer.log" ) );
-				Logger::LogMessage( cuT( "CastorViewer - Start" ) );
+				Logger::LogInfo( cuT( "CastorViewer - Start" ) );
 				wxInitAllImageHandlers();
 				m_pMainFrame = new MainFrame( NULL, wxT( "CastorViewer" ), l_eRenderer );
 				l_bReturn = m_pMainFrame->Initialise();
@@ -161,8 +159,8 @@ namespace CastorViewer
 
 	int CastorViewerApp::OnExit()
 	{
-		delete m_pLocale;
-		Logger::LogMessage( cuT( "CastorViewer - Exit" ) );
+		m_pLocale.reset();
+		Logger::LogInfo( cuT( "CastorViewer - Exit" ) );
 		Logger::Cleanup();
 		wxImage::CleanUpHandlers();
 		return wxApp::OnExit();

@@ -24,7 +24,7 @@ wxMaterialPanel::wxMaterialPanel( Engine * p_pEngine, bool p_bCanEdit, wxWindow 
 	, m_pEngine( p_pEngine )
 {
 	// Initialise material panel
-	m_pStaticName = new wxStaticText( this, wxID_ANY, _( "Name :" ) + wxT( " " ) );
+	m_pStaticName = new wxStaticText( this, wxID_ANY, _( "Name :" ) + wxString( wxT( " " ) ) );
 	m_pEditMaterialName = new wxTextCtrl( this, eID_EDIT_MATERIAL_NAME, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER | wxBORDER_SIMPLE );
 	m_pEditMaterialName->Enable( m_bCanEdit );
 	wxBoxSizer * l_pSizerName = new wxBoxSizer( wxHORIZONTAL );
@@ -115,13 +115,12 @@ void wxMaterialPanel::SetMaterialName( String const & p_strMaterialName )
 	if ( l_pMaterial )
 	{
 		m_pEditMaterialName->SetValue( p_strMaterialName );
+		m_pBoxPass->SetLabel( _( "Passes" ) + wxString() << wxT( " (" ) << l_pMaterial->GetPassCount() << wxT( ")" ) );
 		m_pComboPass->Clear();
 
 		for ( uint32_t i = 0; i < l_pMaterial->GetPassCount(); i++ )
 		{
-			wxString l_strName;
-			l_strName << i;
-			m_pComboPass->Append( l_strName );
+			m_pComboPass->Append( wxString() << i );
 		}
 
 		if ( m_bCanEdit )

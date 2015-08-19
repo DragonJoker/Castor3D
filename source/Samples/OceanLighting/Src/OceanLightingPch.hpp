@@ -29,7 +29,7 @@
 #	include <FrameBuffer.hpp>
 #	include <Parameter.hpp>
 #	include <Pipeline.hpp>
-#	include <RasterState.hpp>
+#	include <RasteriserState.hpp>
 #	include <RenderTarget.hpp>
 #	include <RenderTechnique.hpp>
 #	include <RenderWindow.hpp>

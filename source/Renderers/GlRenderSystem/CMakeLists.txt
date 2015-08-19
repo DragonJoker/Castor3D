@@ -14,20 +14,20 @@ if( OPENGL_FOUND )
 	
 	SET( CastorBinsDependencies 
 		${CastorBinsDependencies}
-		GlRenderSystem
+		${PROJECT_NAME}
 		PARENT_SCOPE
 	)
 	
-	set( GL_VERSION_MAJOR	0 )
-	set( GL_VERSION_MINOR	7 )
-	set( GL_VERSION_BUILD	0 )
+	set( GL_VERSION_MAJOR 0 )
+	set( GL_VERSION_MINOR 7 )
+	set( GL_VERSION_BUILD 0 )
 	
 	include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
 	include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D/Src )
 	include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
 	
 	add_target(
-		GlRenderSystem
+		${PROJECT_NAME}
 		plugin
 		"Castor3D"
 		"${CastorMinLibraries};${OpenGlLibraries}"
@@ -35,7 +35,7 @@ if( OPENGL_FOUND )
 		"GlRenderSystemPch.cpp"
 	)
 
-	file( GLOB GLRenderSystem_FBO_HEADER_FILES
+	file( GLOB ${PROJECT_NAME}_FBO_HEADER_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameBuffer*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameBuffer*.inl
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderBuffer*.hpp
@@ -43,15 +43,15 @@ if( OPENGL_FOUND )
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Attachment*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Attachment*.inl
 	)
-	file( GLOB GLRenderSystem_FBO_SOURCE_FILES
+	file( GLOB ${PROJECT_NAME}_FBO_SOURCE_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameBuffer*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderBuffer*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Attachment*.cpp
 	)
-	source_group( "Header Files\\FrameBuffer" FILES ${GLRenderSystem_FBO_HEADER_FILES} )
-	source_group( "Source Files\\FrameBuffer" FILES ${GLRenderSystem_FBO_SOURCE_FILES} )
+	source_group( "Header Files\\FrameBuffer" FILES ${${PROJECT_NAME}_FBO_HEADER_FILES} )
+	source_group( "Source Files\\FrameBuffer" FILES ${${PROJECT_NAME}_FBO_SOURCE_FILES} )
 
-	file( GLOB GLRenderSystem_VBO_HEADER_FILES
+	file( GLOB ${PROJECT_NAME}_VBO_HEADER_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*BufferObject*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*BufferObject*.inl
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*GeometryBuffer*.hpp
@@ -61,85 +61,105 @@ if( OPENGL_FOUND )
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Attribute*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Attribute*.inl
 	)
-	file( GLOB GLRenderSystem_VBO_SOURCE_FILES
+	file( GLOB ${PROJECT_NAME}_VBO_SOURCE_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*BufferObject*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*GeometryBuffer*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Array*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Attribute*.cpp
 	)
-	source_group( "Header Files\\VertexBuffer" FILES ${GLRenderSystem_VBO_HEADER_FILES} )
-	source_group( "Source Files\\VertexBuffer" FILES ${GLRenderSystem_VBO_SOURCE_FILES} )
+	source_group( "Header Files\\VertexBuffer" FILES ${${PROJECT_NAME}_VBO_HEADER_FILES} )
+	source_group( "Source Files\\VertexBuffer" FILES ${${PROJECT_NAME}_VBO_SOURCE_FILES} )
 
-	file( GLOB GLRenderSystem_Render_HEADER_FILES
+	file( GLOB ${PROJECT_NAME}_Overlay_HEADER_FILES
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Overlay*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Overlay*.inl
+	)
+	file( GLOB ${PROJECT_NAME}_Overlay_SOURCE_FILES
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Overlay*.cpp
+	)
+	source_group( "Header Files\\Overlay" FILES ${${PROJECT_NAME}_Overlay_HEADER_FILES} )
+	source_group( "Source Files\\Overlay" FILES ${${PROJECT_NAME}_Overlay_SOURCE_FILES} )
+
+	file( GLOB ${PROJECT_NAME}_Render_HEADER_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderSystem.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderSystem.inl
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderTarget.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderTarget.inl
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderWindow.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderWindow.inl
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pipeline*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pipeline*.inl
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Context*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Context*.inl
 	)
-	file( GLOB GLRenderSystem_Render_SOURCE_FILES
+	file( GLOB ${PROJECT_NAME}_Render_SOURCE_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderSystem.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderTarget.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderWindow.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pipeline*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Context*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Ray*.cpp
 	)
-	source_group( "Header Files\\Render" FILES ${GLRenderSystem_Render_HEADER_FILES} )
-	source_group( "Source Files\\Render" FILES ${GLRenderSystem_Render_SOURCE_FILES} )
+	source_group( "Header Files\\Render" FILES ${${PROJECT_NAME}_Render_HEADER_FILES} )
+	source_group( "Source Files\\Render" FILES ${${PROJECT_NAME}_Render_SOURCE_FILES} )
 
-	file( GLOB GLRenderSystem_Renderer_HEADER_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Renderer*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Renderer*.inl
-	)
-	file( GLOB GLRenderSystem_Renderer_SOURCE_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Renderer*.cpp
-	)
-	source_group( "Header Files\\Render\\Renderer" FILES ${GLRenderSystem_Renderer_HEADER_FILES} )
-	source_group( "Source Files\\Render\\Renderer" FILES ${GLRenderSystem_Renderer_SOURCE_FILES} )
-
-	file( GLOB GLRenderSystem_Shader_HEADER_FILES
+	file( GLOB ${PROJECT_NAME}_Shader_HEADER_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Shader*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Shader*.inl
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Variable*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Variable*.inl
 	)
-	file( GLOB GLRenderSystem_Shader_SOURCE_FILES
+	file( GLOB ${PROJECT_NAME}_Shader_SOURCE_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Shader*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Variable*.cpp
 	)
-	source_group( "Header Files\\Shader" FILES ${GLRenderSystem_Shader_HEADER_FILES} )
-	source_group( "Source Files\\Shader" FILES ${GLRenderSystem_Shader_SOURCE_FILES} )
+	source_group( "Header Files\\Shader" FILES ${${PROJECT_NAME}_Shader_HEADER_FILES} )
+	source_group( "Source Files\\Shader" FILES ${${PROJECT_NAME}_Shader_SOURCE_FILES} )
 
-	file( GLOB GLRenderSystem_Texture_HEADER_FILES
+	file( GLOB ${PROJECT_NAME}_Texture_HEADER_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Texture*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Texture*.inl
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Sampler*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Sampler*.inl
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pixel*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pixel*.inl
 	)
-	file( GLOB GLRenderSystem_Texture_SOURCE_FILES
+	file( GLOB ${PROJECT_NAME}_Texture_SOURCE_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Texture*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Sampler*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pixel*.cpp
 	)
-	source_group( "Header Files\\Texture" FILES ${GLRenderSystem_Texture_HEADER_FILES} )
-	source_group( "Source Files\\Texture" FILES ${GLRenderSystem_Texture_SOURCE_FILES} )
+	source_group( "Header Files\\Texture" FILES ${${PROJECT_NAME}_Texture_HEADER_FILES} )
+	source_group( "Source Files\\Texture" FILES ${${PROJECT_NAME}_Texture_SOURCE_FILES} )
 
-	file( GLOB GLRenderSystem_State_HEADER_FILES
+	file( GLOB ${PROJECT_NAME}_State_HEADER_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*State*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*State*.inl
 	)
-	file( GLOB GLRenderSystem_State_SOURCE_FILES
+	file( GLOB ${PROJECT_NAME}_State_SOURCE_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*State*.cpp
 	)
-	source_group( "Header Files\\State" FILES ${GLRenderSystem_State_HEADER_FILES} )
-	source_group( "Source Files\\State" FILES ${GLRenderSystem_State_SOURCE_FILES} )
+	source_group( "Header Files\\State" FILES ${${PROJECT_NAME}_State_HEADER_FILES} )
+	source_group( "Source Files\\State" FILES ${${PROJECT_NAME}_State_SOURCE_FILES} )
 
-	file( GLOB GLRenderSystem_Buffer_HEADER_FILES
+	file( GLOB ${PROJECT_NAME}_Scene_HEADER_FILES
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Billboard*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Billboard*.inl
+	)
+	file( GLOB ${PROJECT_NAME}_Scene_SOURCE_FILES
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Billboard*.cpp
+	)
+	source_group( "Header Files\\Scene" FILES ${${PROJECT_NAME}_Scene_HEADER_FILES} )
+	source_group( "Source Files\\Scene" FILES ${${PROJECT_NAME}_Scene_SOURCE_FILES} )
+
+	file( GLOB ${PROJECT_NAME}_Buffer_HEADER_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Buffer*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Buffer*.inl
 	)
-	file( GLOB GLRenderSystem_Buffer_SOURCE_FILES
+	file( GLOB ${PROJECT_NAME}_Buffer_SOURCE_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Buffer*.cpp
 	)
-	source_group( "Header Files\\Buffer" FILES ${GLRenderSystem_Buffer_HEADER_FILES} )
-	source_group( "Source Files\\Buffer" FILES ${GLRenderSystem_Buffer_SOURCE_FILES} )
+	source_group( "Header Files\\Buffer" FILES ${${PROJECT_NAME}_Buffer_HEADER_FILES} )
+	source_group( "Source Files\\Buffer" FILES ${${PROJECT_NAME}_Buffer_SOURCE_FILES} )
 	
 	set( Ogl "yes" PARENT_SCOPE )
 	

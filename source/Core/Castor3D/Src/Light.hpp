@@ -19,8 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_LIGHT_H___
 
 #include "MovableObject.hpp"
-#include "LightRenderer.hpp"
-#include "Renderable.hpp"
 #include "LightCategory.hpp"
 
 #pragma warning( push )
@@ -40,8 +38,7 @@ namespace Castor3D
 	\remark
 	*/
 	class C3D_API Light
-		:	public MovableObject
-		,	public Renderable< Light, LightRenderer >
+		: public MovableObject
 	{
 	public:
 		/**
@@ -81,38 +78,6 @@ namespace Castor3D
 		~Light();
 		/**
 		 *\~english
-		 *\brief		Enables the light
-		 *\~french
-		 *\brief		Active la lumière
-		 */
-		void Enable();
-		/**
-		 *\~english
-		 *\brief		Disables the light
-		 *\~french
-		 *\brief		Désactive la lumière
-		 */
-		void Disable();
-		/**
-		 *\~english
-		 *\brief		Enables the light
-		 *\param[in]	p_pProgram	The program receiving light's data
-		 *\~french
-		 *\brief		Active la lumière
-		 *\param[in]	p_pProgram	Le programme recevant les données de la lumière
-		 */
-		void Enable( ShaderProgramBase * p_pProgram );
-		/**
-		 *\~english
-		 *\brief		Disables the light
-		 *\param[in]	p_pProgram	The program receiving light's data
-		 *\~french
-		 *\brief		Désactive la lumière
-		 *\param[in]	p_pProgram	Le programme recevant les données de la lumière
-		 */
-		void Disable( ShaderProgramBase * p_pProgram );
-		/**
-		 *\~english
 		 *\brief		Renders the light
 		 *\remark		Fixed pipeline implementation
 		 *\~french
@@ -129,24 +94,6 @@ namespace Castor3D
 		 *\remark		Implémentation passant par le pipeline fixe
 		 */
 		void EndRender();
-		/**
-		 *\~english
-		 *\brief		Renders the light
-		 *\remark		Shader implementation
-		 *\~french
-		 *\brief		Rend la lumière
-		 *\remark		Implémentation passant par les shaders
-		 */
-		void Render( ShaderProgramBase * p_pProgram );
-		/**
-		 *\~english
-		 *\brief		Ends light rendering
-		 *\remark		Shader implementation
-		 *\~french
-		 *\brief		Fin du rendu de la lumière
-		 *\remark		Implémentation passant par les shaders
-		 */
-		void EndRender( ShaderProgramBase * p_pProgram );
 		/**
 		 *\~english
 		 *\brief		Attaches this light to a Node
@@ -420,8 +367,40 @@ namespace Castor3D
 		{
 			m_enabled = p_enabled;
 		}
+		/**
+		 *\~english
+		 *\brief		Enables the light
+		 *\~french
+		 *\brief		Active la lumière
+		 */
+		inline void Enable()
+		{
+			SetEnabled( true );
+		}
+		/**
+		 *\~english
+		 *\brief		Disables the light
+		 *\~french
+		 *\brief		Désactive la lumière
+		 */
+		inline void Disable()
+		{
+			SetEnabled( false );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the Engine
+		 *\~french
+		 *\brief		Récupère l'Engine
+		 */
+		virtual Engine * GetEngine()const
+		{
+			return m_pEngine;
+		}
 
 	protected:
+		//!\~english The core engine	\~french Le moteur
+		Engine * m_pEngine;
 		//!\~english Tells the light is enabled	\~french Dit si la lumière est active ou pas
 		bool m_enabled;
 		//!\~english The Light category that effectively holds light data	\~french la light category contenant les données de la lumière

@@ -247,7 +247,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur constant sur le début du tableau de passes
 		 *\return		L'itérateur
 		 */
-		inline PassPtrArrayConstIt Begin()const
+		inline PassPtrArrayConstIt begin()const
 		{
 			return m_passes.begin();
 		}
@@ -259,7 +259,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur le début du tableau de passes
 		 *\return		L'itérateur
 		 */
-		inline PassPtrArrayIt Begin()
+		inline PassPtrArrayIt begin()
 		{
 			return m_passes.begin();
 		}
@@ -271,7 +271,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur constant sur la fin du tableau de passes
 		 *\return		L'itérateur
 		 */
-		inline PassPtrArrayConstIt End()const
+		inline PassPtrArrayConstIt end()const
 		{
 			return m_passes.end();
 		}
@@ -283,7 +283,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur la fin du tableau de passes
 		 *\return		L'itérateur
 		 */
-		inline PassPtrArrayIt End()
+		inline PassPtrArrayIt end()
 		{
 			return m_passes.end();
 		}

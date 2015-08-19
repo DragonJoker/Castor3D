@@ -61,45 +61,45 @@ namespace GlRender
 				m_strPixelMainDeclarations =
 					cuT(	"void main()\n" )
 					cuT(	"{\n" )
-					cuT(	"    Light   l_light;\n" )
-					cuT(	"    vec3    l_v3LightDir;\n" )
-					cuT(	"    float   l_fAttenuation;\n" )
-					cuT(	"    float   l_fLambert;\n" )
-					cuT(	"    float   l_fSpecular;\n" )
-					cuT(	"    vec3    l_v3Normal          = normalize( vec3( vtx_normal.x, vtx_normal.y, vtx_normal.z ) );\n" )
-					cuT(	"    vec4    l_v4Ambient         = vec4( 0, 0, 0, 0 );\n" )
-					cuT(	"    vec4    l_v4Diffuse         = vec4( 0, 0, 0, 0 );\n" )
-					cuT(	"    vec4    l_v4Specular        = vec4( 0, 0, 0, 0 );\n" )
-					cuT(	"    vec4    l_v4TmpAmbient      = vec4( 0, 0, 0, 0 );\n" )
-					cuT(	"    vec4    l_v4TmpDiffuse      = vec4( 0, 0, 0, 0 );\n" )
-					cuT(	"    vec4    l_v4TmpSpecular     = vec4( 0, 0, 0, 0 );\n" )
-					//cuT(	"    vec3    l_v3EyeVec          = normalize( vec3( vtx_vertex.x, vtx_vertex.y, vtx_vertex.z ) );\n" )
-					cuT(	"    vec3    l_v3EyeVec          = normalize( c3d_v3CameraPosition - vec3( vtx_vertex.x, vtx_vertex.y, vtx_vertex.z ) );\n" )
-					cuT(	"    float   l_fAlpha            = c3d_fMatOpacity;\n" )
-					cuT(	"    float   l_fShininess        = c3d_fMatShininess;\n" )
-					cuT(	"    vec4    l_v4MatSpecular     = c3d_v4MatSpecular;\n" )
-					cuT(	"    vec4    l_v4Emissive        = c3d_v4MatEmissive;\n" );
+					cuT(	"	Light l_light;\n" )
+					cuT(	"	vec3 l_v3LightDir;\n" )
+					cuT(	"	float l_fAttenuation;\n" )
+					cuT(	"	float l_fLambert;\n" )
+					cuT(	"	float l_fSpecular;\n" )
+					cuT(	"	vec3 l_v3Normal = normalize( vec3( vtx_normal.x, vtx_normal.y, vtx_normal.z ) );\n" )
+					cuT(	"	vec4 l_v4Ambient = vec4( 0, 0, 0, 0 );\n" )
+					cuT(	"	vec4 l_v4Diffuse = vec4( 0, 0, 0, 0 );\n" )
+					cuT(	"	vec4 l_v4Specular = vec4( 0, 0, 0, 0 );\n" )
+					cuT(	"	vec4 l_v4TmpAmbient = vec4( 0, 0, 0, 0 );\n" )
+					cuT(	"	vec4 l_v4TmpDiffuse = vec4( 0, 0, 0, 0 );\n" )
+					cuT(	"	vec4 l_v4TmpSpecular = vec4( 0, 0, 0, 0 );\n" )
+					//cuT(	"	vec3 l_v3EyeVec = normalize( vec3( vtx_vertex.x, vtx_vertex.y, vtx_vertex.z ) );\n" )
+					cuT(	"	vec3 l_v3EyeVec = normalize( c3d_v3CameraPosition - vec3( vtx_vertex.x, vtx_vertex.y, vtx_vertex.z ) );\n" )
+					cuT(	"	float l_fAlpha = c3d_fMatOpacity;\n" )
+					cuT(	"	float l_fShininess = c3d_fMatShininess;\n" )
+					cuT(	"	vec4 l_v4MatSpecular = c3d_v4MatSpecular;\n" )
+					cuT(	"	vec4 l_v4Emissive = c3d_v4MatEmissive;\n" );
 
 				m_strPixelMainLightsLoop =
-					cuT(	"    for( int i = 0; i < c3d_iLightsCount; i++ )\n" )
-					cuT(	"    {\n" )
-					cuT(	"        l_light = GetLight( i );\n" )
-					cuT(	"        vec4 l_v4LightDir = ComputeLightDirection( l_light, vtx_vertex, <pxlin_mtxModelView> );\n" )
-					cuT(	"        l_v3LightDir = l_v4LightDir.xyz;\n" )
-					cuT(	"        l_fAttenuation = l_v4LightDir.w;\n" );
+					cuT(	"	for( int i = 0; i < c3d_iLightsCount; i++ )\n" )
+					cuT(	"	{\n" )
+					cuT(	"		l_light = GetLight( i );\n" )
+					cuT(	"		vec4 l_v4LightDir = ComputeLightDirection( l_light, vtx_vertex, <pxlin_mtxModelView> );\n" )
+					cuT(	"		l_v3LightDir = l_v4LightDir.xyz;\n" )
+					cuT(	"		l_fAttenuation = l_v4LightDir.w;\n" );
 				m_strPixelMainLightsLoopAfterLightDir =
-					//cuT(	"        l_fLambert = max( 0.0, dot( l_v3Normal, l_v3LightDir ) );\n" )
-					cuT(	"        l_fLambert = dot( l_v3Normal, -l_v3LightDir );\n" )
-					cuT(	"        l_v4MatSpecular = c3d_v4MatSpecular;\n" )
-					cuT(	"        float l_fFresnel = ComputeFresnel( l_fLambert, l_v3LightDir, l_v3Normal, l_v3EyeVec, l_fShininess, l_v4MatSpecular );\n" )
-					cuT(	"        l_v4TmpAmbient  = l_light.m_v4Ambient * c3d_v4MatAmbient;\n" )
-					cuT(	"        l_v4TmpDiffuse  = ( l_light.m_v4Diffuse * c3d_v4MatDiffuse * l_fLambert ) / l_fAttenuation;\n" )
-					cuT(	"        l_v4TmpSpecular = ( l_light.m_v4Specular * l_v4MatSpecular * l_fFresnel ) / l_fAttenuation;\n" );
+					//cuT(	"		l_fLambert = max( 0.0, dot( l_v3Normal, l_v3LightDir ) );\n" )
+					cuT(	"		l_fLambert = dot( l_v3Normal, -l_v3LightDir );\n" )
+					cuT(	"		l_v4MatSpecular = c3d_v4MatSpecular;\n" )
+					cuT(	"		float l_fFresnel = ComputeFresnel( l_fLambert, l_v3LightDir, l_v3Normal, l_v3EyeVec, l_fShininess, l_v4MatSpecular );\n" )
+					cuT(	"		l_v4TmpAmbient = l_light.m_v4Ambient * c3d_v4MatAmbient;\n" )
+					cuT(	"		l_v4TmpDiffuse = ( l_light.m_v4Diffuse * c3d_v4MatDiffuse * l_fLambert ) / l_fAttenuation;\n" )
+					cuT(	"		l_v4TmpSpecular = ( l_light.m_v4Specular * l_v4MatSpecular * l_fFresnel ) / l_fAttenuation;\n" );
 				m_strPixelMainLightsLoopEnd =
-					cuT(	"        l_v4Ambient     += l_v4TmpAmbient;\n" )
-					cuT(	"        l_v4Diffuse     += l_v4TmpDiffuse;\n" )
-					cuT(	"        l_v4Specular    += l_v4TmpSpecular;\n" )
-					cuT(	"    }\n" );
+					cuT(	"		l_v4Ambient += l_v4TmpAmbient;\n" )
+					cuT(	"		l_v4Diffuse += l_v4TmpDiffuse;\n" )
+					cuT(	"		l_v4Specular += l_v4TmpSpecular;\n" )
+					cuT(	"	}\n" );
 
 				m_strPixelMainEnd =
 					cuT(	"}\n" );

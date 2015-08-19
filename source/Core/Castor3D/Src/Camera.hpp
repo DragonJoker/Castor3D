@@ -18,7 +18,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_CAMERA_H___
 #define ___C3D_CAMERA_H___
 
-#include "Renderable.hpp"
 #include "MovableObject.hpp"
 #include "BinaryParser.hpp"
 
@@ -81,8 +80,7 @@ namespace Castor3D
 	\remark		Donne la position, orientation, viewport ...
 	*/
 	class C3D_API Camera
-		:	public MovableObject
-		,	public Renderable< Camera, CameraRenderer >
+		: public MovableObject
 	{
 	public:
 		/*!
@@ -95,7 +93,7 @@ namespace Castor3D
 		\brief		Loader de Camera
 		*/
 		class C3D_API TextLoader
-			:	public MovableObject::TextLoader
+			: public MovableObject::TextLoader
 		{
 		public:
 			/**
@@ -119,7 +117,7 @@ namespace Castor3D
 		\brief		Loader de Camera
 		*/
 		class C3D_API BinaryParser
-			:	public MovableObject::BinaryParser
+			: public MovableObject::BinaryParser
 		{
 		public:
 			/**
@@ -363,10 +361,22 @@ namespace Castor3D
 		 *\return		\p false si le point en dehors du frustum de vue
 		 */
 		bool IsVisible( Castor::Point3r const & p_point )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the Engine
+		 *\~french
+		 *\brief		Récupère l'Engine
+		 */
+		virtual Engine * GetEngine()const
+		{
+			return m_pEngine;
+		}
 
 	private:
 		friend class Scene;
 		friend class CameraRenderer;
+		//!\~english The core engine	\~french Le moteur
+		Engine * m_pEngine;
 		//!\~english The viewport of the camera	\~french Le viewport de la caméra
 		ViewportSPtr m_pViewport;
 		//!\~english Primitive display type	\~french Type des primitives d'affichage

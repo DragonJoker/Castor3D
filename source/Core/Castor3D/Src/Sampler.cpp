@@ -22,17 +22,17 @@ namespace Castor3D
 
 			if ( l_mapInterpolationModes.empty() )
 			{
-				l_mapInterpolationModes[ eINTERPOLATION_MODE_NEAREST		]	=	cuT( "nearest" );
-				l_mapInterpolationModes[ eINTERPOLATION_MODE_LINEAR			]	=	cuT( "linear" );
-				l_mapInterpolationModes[ eINTERPOLATION_MODE_ANISOTROPIC	]	=	cuT( "anisotropic" );
+				l_mapInterpolationModes[ eINTERPOLATION_MODE_NEAREST] = cuT( "nearest" );
+				l_mapInterpolationModes[ eINTERPOLATION_MODE_LINEAR] = cuT( "linear" );
+				l_mapInterpolationModes[ eINTERPOLATION_MODE_ANISOTROPIC] = cuT( "anisotropic" );
 			}
 
 			if ( l_mapWrappingModes.empty() )
 			{
-				l_mapWrappingModes[ eWRAP_MODE_REPEAT			]	=	cuT( "repeat" );
-				l_mapWrappingModes[ eWRAP_MODE_MIRRORED_REPEAT	]	=	cuT( "mirrored_repeat" );
-				l_mapWrappingModes[ eWRAP_MODE_CLAMP_TO_BORDER	]	=	cuT( "clamp_to_border" );
-				l_mapWrappingModes[ eWRAP_MODE_CLAMP_TO_EDGE	]	=	cuT( "clamp_to_edge" );
+				l_mapWrappingModes[ eWRAP_MODE_REPEAT] = cuT( "repeat" );
+				l_mapWrappingModes[ eWRAP_MODE_MIRRORED_REPEAT] = cuT( "mirrored_repeat" );
+				l_mapWrappingModes[ eWRAP_MODE_CLAMP_TO_BORDER] = cuT( "clamp_to_border" );
+				l_mapWrappingModes[ eWRAP_MODE_CLAMP_TO_EDGE] = cuT( "clamp_to_edge" );
 			}
 
 			l_return = p_file.WriteText( cuT( "sampler \"" ) + p_sampler.GetName() + cuT( "\"\n{\n" ) ) > 0;
@@ -343,7 +343,7 @@ namespace Castor3D
 	//*********************************************************************************************
 
 	Sampler::Sampler( Engine * p_pEngine, String const & p_name )
-		: Renderable< Sampler, SamplerRenderer >( p_pEngine )
+		: m_pEngine( p_pEngine )
 		, m_rMinLod( -1000 )
 		, m_rMaxLod( 1000 )
 		, m_clrBorderColour( Colour::from_components( 0, 0, 0, 0 ) )
@@ -351,7 +351,6 @@ namespace Castor3D
 		, m_name( p_name )
 		, m_rLodBias( 0.0 )
 	{
-		DoCreateRenderer( this );
 		m_eWrapModes[eTEXTURE_UVW_U] = eWRAP_MODE_REPEAT;
 		m_eWrapModes[eTEXTURE_UVW_V] = eWRAP_MODE_REPEAT;
 		m_eWrapModes[eTEXTURE_UVW_W] = eWRAP_MODE_REPEAT;
@@ -362,25 +361,5 @@ namespace Castor3D
 
 	Sampler::~Sampler()
 	{
-	}
-
-	bool Sampler::Initialise()
-	{
-		return GetRenderer()->Initialise();
-	}
-
-	void Sampler::Cleanup()
-	{
-		GetRenderer()->Cleanup();
-	}
-
-	bool Sampler::Bind( eTEXTURE_DIMENSION p_eDimension, uint32_t p_uiIndex )
-	{
-		return GetRenderer()->Bind( p_eDimension, p_uiIndex );
-	}
-
-	void Sampler::Unbind()
-	{
-		GetRenderer()->Unbind();
 	}
 }

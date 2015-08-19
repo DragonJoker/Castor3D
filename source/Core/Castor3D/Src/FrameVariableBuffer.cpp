@@ -51,22 +51,22 @@ namespace Castor3D
 		{
 			uint32_t l_uiTotalSize = 0;
 
-			for ( FrameVariablePtrListIt l_it = m_listVariables.begin(); l_it != m_listVariables.end(); ++l_it )
+			for ( auto && l_variable: m_listVariables )
 			{
-				if ( ( *l_it )->Initialise() )
+				if ( l_variable->Initialise() )
 				{
-					l_uiTotalSize += ( *l_it )->size();
-					m_listInitialised.push_back( *l_it );
+					l_uiTotalSize += l_variable->size();
+					m_listInitialised.push_back( l_variable );
 				}
 			}
 
 			m_buffer.resize( l_uiTotalSize );
-			l_uiTotalSize = 0;
+			uint8_t * l_buffer = m_buffer.data();
 
-			for ( FrameVariablePtrListIt l_it = m_listInitialised.begin(); l_it != m_listInitialised.end(); ++l_it )
+			for ( auto && l_variable: m_listInitialised )
 			{
-				( *l_it )->link( &m_buffer[l_uiTotalSize] );
-				l_uiTotalSize += ( *l_it )->size();
+				l_variable->link( &m_buffer[l_uiTotalSize] );
+				l_buffer += l_uiTotalSize;
 			}
 		}
 
@@ -80,13 +80,13 @@ namespace Castor3D
 		m_listVariables.clear();
 	}
 
-	bool FrameVariableBuffer::Bind()
+	bool FrameVariableBuffer::Bind( uint32_t p_index )
 	{
-		return DoBind();
+		return DoBind( p_index );
 	}
 
-	void FrameVariableBuffer::Unbind()
+	void FrameVariableBuffer::Unbind( uint32_t p_index )
 	{
-		DoUnbind();
+		DoUnbind( p_index );
 	}
 }

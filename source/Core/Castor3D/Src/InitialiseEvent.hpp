@@ -42,8 +42,6 @@ namespace Castor3D
 		: public FrameEvent
 	{
 	private:
-		//!\~english The object to initialise	\~french L'objet à initialiser
-		T & m_tObject;
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -53,8 +51,8 @@ namespace Castor3D
 		 *\param[in]	p_copy	L'objet à copier
 		 */
 		InitialiseEvent( InitialiseEvent const & p_copy )
-			:	FrameEvent( p_copy )
-			,	m_tObject( p_copy.m_tObject )
+			: FrameEvent( p_copy )
+			, m_object( p_copy.m_object )
 		{
 		}
 		/**
@@ -68,7 +66,7 @@ namespace Castor3D
 		InitialiseEvent & operator=( InitialiseEvent const & p_copy )
 		{
 			InitialiseEvent l_evt( p_copy );
-			std::swap( m_tObject, l_evt.m_tObject );
+			std::swap( m_object, l_evt.m_object );
 			std::swap( m_eType, l_evt.m_eType );
 			return *this;
 		}
@@ -83,8 +81,8 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet à initialiser
 		 */
 		InitialiseEvent( T & p_object )
-			:	FrameEvent( eEVENT_TYPE_PRE_RENDER )
-			,	m_tObject( p_object )
+			: FrameEvent( eEVENT_TYPE_PRE_RENDER )
+			, m_object( p_object )
 		{
 		}
 		/**
@@ -108,34 +106,27 @@ namespace Castor3D
 		 */
 		virtual bool Apply()
 		{
-			bool l_bReturn = true;
-
-			try
-			{
-				m_tObject.Initialise();
-			}
-			catch ( Castor::Exception & p_exc )
-			{
-				Castor::String l_strText = cuT( "Encountered exception while initialising object : " ) + Castor::str_utils::from_str( p_exc.GetFullDescription() );
-				Castor::Logger::LogError( l_strText );
-				l_bReturn = false;
-			}
-			catch ( std::exception & p_exc )
-			{
-				Castor::String l_strText = cuT( "Encountered exception while initialising object : " ) + Castor::str_utils::from_str( p_exc.what() );
-				Castor::Logger::LogError( l_strText );
-				l_bReturn = false;
-			}
-			catch ( ... )
-			{
-				Castor::String l_strText = cuT( "Encountered unknown exception while initialising object" );
-				Castor::Logger::LogError( l_strText );
-				l_bReturn = false;
-			}
-
-			return l_bReturn;
+			m_object.Initialise();
+			return true;
 		}
+
+	private:
+		//!\~english The object to initialise	\~french L'objet à initialiser
+		T & m_object;
 	};
+	/**
+	 *\~english
+	 *\brief		Helper function to create an initialise event
+	 *\param[in]	p_object	The object to initialise
+	 *\~french
+	 *\brief		Fonction d'aide pour créer un éveènement d'initialisation
+	 *\param[in]	p_object	L'objet à initialiser
+	 */
+	template< typename T >
+	std::shared_ptr< InitialiseEvent< T > > MakeInitialiseEvent( T & p_object )
+	{
+		return std::make_shared< InitialiseEvent< T > >( p_object );
+	}
 }
 
 #endif

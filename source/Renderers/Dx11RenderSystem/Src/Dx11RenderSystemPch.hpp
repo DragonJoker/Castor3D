@@ -42,7 +42,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	include <Castor3DPrerequisites.hpp>
 #	include <BlendState.hpp>
 #	include <Buffer.hpp>
-#	include <CameraRenderer.hpp>
 #	include <ColourRenderBuffer.hpp>
 #	include <Context.hpp>
 #	include <DepthStencilRenderBuffer.hpp>

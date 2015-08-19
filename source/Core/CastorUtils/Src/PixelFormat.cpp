@@ -63,6 +63,10 @@ namespace Castor
 				l_eReturn = pixel_definitions< ePIXEL_FORMAT_A8R8G8B8 >::NoAlphaPF;
 				break;
 
+			case ePIXEL_FORMAT_A8B8G8R8:
+				l_eReturn = pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::NoAlphaPF;
+				break;
+
 			case ePIXEL_FORMAT_ARGB16F32F:
 				l_eReturn = pixel_definitions< ePIXEL_FORMAT_ARGB16F32F >::NoAlphaPF;
 				break;
@@ -133,8 +137,16 @@ namespace Castor
 				l_bReturn = pixel_definitions< ePIXEL_FORMAT_R8G8B8 >::Alpha;
 				break;
 
+			case ePIXEL_FORMAT_B8G8R8:
+				l_bReturn = pixel_definitions< ePIXEL_FORMAT_B8G8R8 >::Alpha;
+				break;
+
 			case ePIXEL_FORMAT_A8R8G8B8:
 				l_bReturn = pixel_definitions< ePIXEL_FORMAT_A8R8G8B8 >::Alpha;
+				break;
+
+			case ePIXEL_FORMAT_A8B8G8R8:
+				l_bReturn = pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::Alpha;
 				break;
 
 			case ePIXEL_FORMAT_RGB16F32F:
@@ -247,8 +259,16 @@ namespace Castor
 				l_bReturn = pixel_definitions< ePIXEL_FORMAT_R8G8B8 >::Compressed;
 				break;
 
+			case ePIXEL_FORMAT_B8G8R8:
+				l_bReturn = pixel_definitions< ePIXEL_FORMAT_B8G8R8 >::Compressed;
+				break;
+
 			case ePIXEL_FORMAT_A8R8G8B8:
 				l_bReturn = pixel_definitions< ePIXEL_FORMAT_A8R8G8B8 >::Compressed;
+				break;
+
+			case ePIXEL_FORMAT_A8B8G8R8:
+				l_bReturn = pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::Compressed;
 				break;
 
 			case ePIXEL_FORMAT_RGB16F32F:
@@ -406,8 +426,16 @@ namespace Castor
 				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_R8G8B8 >::Size;
 				break;
 
+			case ePIXEL_FORMAT_B8G8R8:
+				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_B8G8R8 >::Size;
+				break;
+
 			case ePIXEL_FORMAT_A8R8G8B8:
 				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_A8R8G8B8 >::Size;
+				break;
+
+			case ePIXEL_FORMAT_A8B8G8R8:
+				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::Size;
 				break;
 
 			case ePIXEL_FORMAT_RGB16F32F:
@@ -514,8 +542,16 @@ namespace Castor
 				pixel_definitions< ePIXEL_FORMAT_R8G8B8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
+			case ePIXEL_FORMAT_B8G8R8:
+				pixel_definitions< ePIXEL_FORMAT_B8G8R8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+				break;
+
 			case ePIXEL_FORMAT_A8R8G8B8:
 				pixel_definitions< ePIXEL_FORMAT_A8R8G8B8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
+				break;
+
+			case ePIXEL_FORMAT_A8B8G8R8:
+				pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
 			case ePIXEL_FORMAT_RGB16F32F:
@@ -620,8 +656,16 @@ namespace Castor
 				pixel_definitions< ePIXEL_FORMAT_R8G8B8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
+			case ePIXEL_FORMAT_B8G8R8:
+				pixel_definitions< ePIXEL_FORMAT_B8G8R8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+				break;
+
 			case ePIXEL_FORMAT_A8R8G8B8:
 				pixel_definitions< ePIXEL_FORMAT_A8R8G8B8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+				break;
+
+			case ePIXEL_FORMAT_A8B8G8R8:
+				pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case ePIXEL_FORMAT_RGB16F32F:
@@ -730,8 +774,16 @@ namespace Castor
 					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_R8G8B8 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
 					break;
 
+				case ePIXEL_FORMAT_B8G8R8:
+					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_B8G8R8 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+					break;
+
 				case ePIXEL_FORMAT_A8R8G8B8:
 					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_A8R8G8B8 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+					break;
+
+				case ePIXEL_FORMAT_A8B8G8R8:
+					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
 					break;
 
 				case ePIXEL_FORMAT_RGB16F32F	:
@@ -841,8 +893,16 @@ namespace Castor
 				l_strReturn = pixel_definitions< ePIXEL_FORMAT_R8G8B8 >::to_str();
 				break;
 
+			case ePIXEL_FORMAT_B8G8R8:
+				l_strReturn = pixel_definitions< ePIXEL_FORMAT_B8G8R8 >::to_str();
+				break;
+
 			case ePIXEL_FORMAT_A8R8G8B8:
 				l_strReturn = pixel_definitions< ePIXEL_FORMAT_A8R8G8B8 >::to_str();
+				break;
+
+			case ePIXEL_FORMAT_A8B8G8R8:
+				l_strReturn = pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::to_str();
 				break;
 
 			case ePIXEL_FORMAT_RGB16F32F:

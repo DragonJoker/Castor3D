@@ -49,8 +49,8 @@ namespace Castor3D
 		\brief		Loader de LightCategory
 		*/
 		class C3D_API TextLoader
-			:	public Castor::Loader< LightCategory, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			,	public Castor::NonCopyable
+			: public Castor::Loader< LightCategory, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -81,7 +81,7 @@ namespace Castor3D
 		\brief		Loader de LightCategory
 		*/
 		class C3D_API BinaryParser
-			:	public Castor3D::BinaryParser< LightCategory >
+			: public Castor3D::BinaryParser< LightCategory >
 		{
 		public:
 			/**
@@ -142,20 +142,6 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		virtual ~LightCategory();
-		/**
-		 *\~english
-		 *\brief		Renders the light => Applies it's position
-		 *\~french
-		 *\brief		Rend cette lumière => Applique sa position
-		 */
-		virtual void Render( LightRendererSPtr p_pRenderer ) = 0;
-		/**
-		 *\~english
-		 *\brief		Renders the light => Applies it's position
-		 *\~french
-		 *\brief		Rend cette lumière => Applique sa position
-		 */
-		virtual void Render( LightRendererSPtr p_pRenderer, ShaderProgramBase * p_pProgram ) = 0;
 		/**
 		 *\~english
 		 *\brief		Sets the light's ambient colour

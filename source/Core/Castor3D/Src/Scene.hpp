@@ -1013,7 +1013,13 @@ namespace Castor3D
 		void DoRenderSubmeshInstancedSingle( Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
 		void DoRenderSubmeshNonInstanced( Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
 		void DoRenderSubmesh( Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
+		void DoApplySkeleton( FrameVariableBuffer const & p_matrixBuffer, AnimatedObjectSPtr p_object );
 		void DoRenderBillboards( Pipeline & p_pipeline, BillboardListStrMapIt p_itBegin, BillboardListStrMapIt p_itEnd );
+		void DoBindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer );
+		void DoBindLight( LightSPtr p_light, int p_index, ShaderProgramBase & p_program );
+		void DoUnbindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer );
+		void DoUnbindLight( LightSPtr p_light, int p_index, ShaderProgramBase & p_program );
+		void DoBindCamera( FrameVariableBuffer & p_sceneBuffer );
 
 		template< typename MapType >
 		void DoMerge( SceneSPtr p_pScene, MapType & p_map, MapType & p_myMap )
@@ -1258,6 +1264,14 @@ namespace Castor3D
 		TextureBaseSPtr m_pBackgroundImage;
 		//!\~english The DepthStencilState for alpha render	\~french Le DepthStencilState utilisé pour le rendu de la transparence
 		DepthStencilStateWPtr m_alphaDepthState;
+		//!\~english Tells if at least one light has changed since last frame	\~french Dit si une lumière au moins a changé depuis la dernière frame
+		bool m_bLightsChanged;
+		//!\~english The image containing lights data	\~french L'image contenant les données des lumières
+		Castor::PxBufferBaseSPtr m_pLightsData;
+		//!\~english The lights texture	\~french La texture contenant les lumières
+		TextureUnitSPtr m_pLightsTexture;
+		//!\~english The set of available images	indices	\~french Le set contenant les indices des lumières disponibles
+		std::set< int > m_setFreeLights;
 	};
 }
 

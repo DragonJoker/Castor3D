@@ -1,10 +1,13 @@
 ﻿#include "SceneFileParser.hpp"
+
+#include "Engine.hpp"
 #include "SceneFileParser_Parsers.hpp"
 #include "SceneNode.hpp"
 #include "Pass.hpp"
 #include "Overlay.hpp"
 #include "Viewport.hpp"
 #include "MovableObject.hpp"
+#include "RenderSystem.hpp"
 
 #include <Logger.hpp>
 #include <ZipArchive.hpp>

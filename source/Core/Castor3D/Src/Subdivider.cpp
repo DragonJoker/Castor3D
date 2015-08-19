@@ -1,7 +1,9 @@
 ﻿#include "Subdivider.hpp"
+
+#include "Engine.hpp"
+#include "Face.hpp"
 #include "SubdivisionFrameEvent.hpp"
 #include "Submesh.hpp"
-#include "Face.hpp"
 #include "Vertex.hpp"
 
 #include <Line3D.hpp>
@@ -153,7 +155,7 @@ namespace Castor3D
 		if ( m_bGenerateBuffers && !m_bThreaded )
 		{
 			m_submesh->GenerateBuffers();
-			m_submesh->GetRenderer()->Initialise();
+			m_submesh->Initialise();
 		}
 
 		Cleanup();

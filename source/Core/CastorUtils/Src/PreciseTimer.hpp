@@ -19,7 +19,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_PRECISE_TIMER_H___
 
 #include "NonCopyable.hpp"
+#include "PlatformConfig.hpp"
 #include <cstdint>
+#include <chrono>
 
 namespace Castor
 {
@@ -35,6 +37,8 @@ namespace Castor
 	class PreciseTimer
 		: public Castor::NonCopyable
 	{
+		typedef std::chrono::high_resolution_clock clock;
+
 	public:
 		/**
 		 *\~english
@@ -64,30 +68,12 @@ namespace Castor
 		 *\return		Le temps écoulé depuis le dernier appel, en millisecondes
 		 */
 		CU_API double TimeMs();
-		/**
-		 *\~english
-		 *\return		The time elapsed since the last call, in microseconds
-		 *\~french
-		 *\return		Le temps écoulé depuis le dernier appel, en microsecondes
-		 */
-		CU_API double TimeUs();
-		/**
-		 *\~english
-		 *\return		The last call time
-		 *\~french
-		 *\return		Le temps du dernier appel
-		 */
-		inline int64_t SaveTime()const
-		{
-			return m_i64PreviousTime;
-		}
 
 	private:
-		long long DoGetTime()const;
+		clock::time_point DoGetTime()const;
 
 	private:
-		static int64_t sm_i64Frequency;
-		int64_t m_i64PreviousTime;
+		clock::time_point m_savedTime;
 	};
 }
 

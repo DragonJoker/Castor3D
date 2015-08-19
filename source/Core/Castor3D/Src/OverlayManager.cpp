@@ -7,6 +7,8 @@
 #include "Engine.hpp"
 #include "SceneFileParser.hpp"
 #include "RenderSystem.hpp"
+#include "Scene.hpp"
+#include "Pipeline.hpp"
 
 using namespace Castor;
 
@@ -27,8 +29,8 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	OverlayManager::OverlayManager( Engine * p_pEngine )
-		:	m_iCurrentZIndex( 0 )
-		,	m_pEngine( p_pEngine )
+		: m_pEngine( p_pEngine )
+		, m_overlayCountPerLevel( 1000, 0 )
 	{
 	}
 
@@ -40,54 +42,36 @@ namespace Castor3D
 	{
 		OverlayCollection::lock();
 		OverlayCollection::clear();
-		clear_pair_container( m_mapOverlaysByZIndex );
-		m_iCurrentZIndex = 1;
+		m_overlays.clear();
 		OverlayCollection::unlock();
 	}
 
 	void OverlayManager::AddOverlay( Castor::String const & p_strName, OverlaySPtr p_pOverlay, OverlaySPtr p_pParent )
 	{
 		OverlayCollection::insert( p_strName, p_pOverlay );
+		int l_level = 0;
 
 		if ( !p_pParent )
 		{
-			AddOverlay( m_iCurrentZIndex, p_pOverlay );
+			m_overlays.push_back( p_pOverlay );
 		}
 		else
 		{
-			p_pParent->AddChild( p_pOverlay, m_iCurrentZIndex );
+			l_level = p_pParent->GetLevel() + 1;
+			p_pParent->AddChild( p_pOverlay );
 		}
 
-		m_iCurrentZIndex++;
-	}
+		if ( l_level > int( m_overlayCountPerLevel.size() ) )
+		{
+			m_overlayCountPerLevel.resize( m_overlayCountPerLevel.size() * 2 );
+		}
 
-	void OverlayManager::AddOverlay( int p_iZIndex, OverlaySPtr p_pOverlay )
-	{
-		p_pOverlay->SetZIndex( p_iZIndex );
-		m_mapOverlaysByZIndex.insert( std::make_pair( p_iZIndex, p_pOverlay ) );
-	}
-
-	bool OverlayManager::HasOverlay( int p_iZIndex )
-	{
-		return m_mapOverlaysByZIndex.find( p_iZIndex ) != m_mapOverlaysByZIndex.end();
+		m_overlayCountPerLevel[l_level]++;
 	}
 
 	bool OverlayManager::HasOverlay( Castor::String const & p_strName )
 	{
 		return OverlayCollection::has( p_strName );
-	}
-
-	OverlaySPtr OverlayManager::GetOverlay( int p_iZIndex )
-	{
-		OverlaySPtr l_pReturn;
-		OverlayPtrIntMapIt l_it = m_mapOverlaysByZIndex.find( p_iZIndex );
-
-		if ( l_it != m_mapOverlaysByZIndex.end() )
-		{
-			l_pReturn = l_it->second;
-		}
-
-		return l_pReturn;
 	}
 
 	OverlaySPtr OverlayManager::GetOverlay( Castor::String const & p_strName )
@@ -99,11 +83,13 @@ namespace Castor3D
 	{
 		OverlayCollection::lock();
 		bool l_bReturn = true;
-		OverlayPtrIntMap::const_iterator l_it = m_mapOverlaysByZIndex.begin();
+		auto && l_it = m_overlays.begin();
 		bool l_bFirst = true;
 
-		while ( l_bReturn && l_it != m_mapOverlaysByZIndex.end() )
+		while ( l_bReturn && l_it != m_overlays.end() )
 		{
+			OverlaySPtr l_overlay = *l_it;
+
 			if ( l_bFirst )
 			{
 				l_bFirst = false;
@@ -113,18 +99,18 @@ namespace Castor3D
 				p_file.WriteText( cuT( "\n" ) );
 			}
 
-			switch ( l_it->second->GetType() )
+			switch ( l_overlay->GetType() )
 			{
 			case eOVERLAY_TYPE_PANEL:
-				l_bReturn = PanelOverlay::TextLoader()(	* std::static_pointer_cast< PanelOverlay >(	l_it->second->GetOverlayCategory() ), p_file );
+				l_bReturn = PanelOverlay::TextLoader()( *std::static_pointer_cast< PanelOverlay >( l_overlay->GetOverlayCategory() ), p_file );
 				break;
 
 			case eOVERLAY_TYPE_BORDER_PANEL:
-				l_bReturn = BorderPanelOverlay::TextLoader()(	* std::static_pointer_cast< BorderPanelOverlay >(	l_it->second->GetOverlayCategory() ), p_file );
+				l_bReturn = BorderPanelOverlay::TextLoader()( *std::static_pointer_cast< BorderPanelOverlay >( l_overlay->GetOverlayCategory() ), p_file );
 				break;
 
 			case eOVERLAY_TYPE_TEXT:
-				l_bReturn = TextOverlay::TextLoader()(	* std::static_pointer_cast< TextOverlay >(	l_it->second->GetOverlayCategory() ), p_file );
+				l_bReturn = TextOverlay::TextLoader()( *std::static_pointer_cast< TextOverlay >( l_overlay->GetOverlayCategory() ), p_file );
 				break;
 
 			default:
@@ -147,12 +133,13 @@ namespace Castor3D
 	bool OverlayManager::SaveOverlays( Castor::BinaryFile & p_file )const
 	{
 		OverlayCollection::lock();
-		bool l_bReturn = p_file.Write( uint32_t( m_mapOverlaysByZIndex.size() ) ) == sizeof( uint32_t );
-		OverlayPtrIntMap::const_iterator l_it = m_mapOverlaysByZIndex.begin();
+		bool l_bReturn = p_file.Write( uint32_t( m_overlays.size() ) ) == sizeof( uint32_t );
+		auto && l_it = m_overlays.begin();
 
-		while ( l_bReturn && l_it != m_mapOverlaysByZIndex.end() )
+		while ( l_bReturn && l_it != m_overlays.end() )
 		{
-			l_bReturn = BinaryLoader< Overlay >()( *l_it->second, p_file );
+			OverlaySPtr l_overlay = *l_it;
+			l_bReturn = BinaryLoader< Overlay >()( *l_overlay, p_file );
 			++l_it;
 		}
 
@@ -182,14 +169,14 @@ namespace Castor3D
 			{
 				l_pOverlay = OverlayCollection::find( l_strName ) ;
 
-				if ( ! l_pOverlay )
+				if ( !l_pOverlay )
 				{
 					l_pOverlay = std::make_shared< Overlay >( m_pEngine, l_eType );
 					l_pOverlay->SetName( l_strName );
-					OverlayCollection::insert( l_strName, l_pOverlay );
+					AddOverlay( l_strName, l_pOverlay, nullptr );
 				}
 
-				l_bReturn = l_pOverlay.use_count() > 0;
+				l_bReturn = l_pOverlay != nullptr;
 			}
 
 			if ( l_bReturn )
@@ -217,30 +204,49 @@ namespace Castor3D
 			if ( !m_pRenderer )
 			{
 				m_pRenderer = m_pEngine->GetRenderSystem()->CreateOverlayRenderer();
-				lock();
-				std::for_each( begin(), end(), [&]( std::pair< String, OverlaySPtr > pair )
-				{
-					pair.second->GetOverlayCategory()->SetRenderer( m_pRenderer );
-				} );
-				unlock();
 				m_pRenderer->Initialise();
 			}
 		}
 	}
 
-	void OverlayManager::BeginRendering( Size const & p_size )
+	void OverlayManager::RenderOverlays( Scene const & p_scene, Castor::Size const & p_size )
 	{
-		if ( m_pRenderer )
-		{
-			m_pRenderer->BeginRender( p_size );
-		}
-	}
+		lock();
+		Update();
+		RenderSystem * l_prenderSystem = m_pEngine->GetRenderSystem();
+		Context * l_context = l_prenderSystem->GetCurrentContext();
 
-	void OverlayManager::EndRendering()
-	{
-		if ( m_pRenderer )
+		if ( l_context && m_pRenderer )
 		{
-			m_pRenderer->EndRender();
+			Pipeline * l_pipeline = l_prenderSystem->GetPipeline();
+			l_context->CullFace( eFACE_BACK );
+
+			eMTXMODE l_oldMode = l_pipeline->MatrixMode( eMTXMODE_PROJECTION );
+			l_pipeline->PushMatrix();
+			l_pipeline->Ortho( 0.0, real( p_size.width() ), real( p_size.height() ), 0.0, 0.0, 1000.0 );
+			Matrix4x4r l_mtxTransform;
+			MtxUtils::set_transform_rh(
+				l_mtxTransform,
+				Point3r( 0, 0, 0 ),
+				Point3r( 1, 1, 0 ),
+				Quaternion::Identity()
+			);
+			l_pipeline->MultMatrix( l_mtxTransform );
+			m_pRenderer->BeginRender( p_size );
+
+			for( auto l_overlay: m_overlays )
+			{
+				SceneSPtr l_scene = l_overlay->GetScene();
+
+				if ( !l_scene || l_scene->GetName() == p_scene.GetName() )
+				{
+					l_overlay->Render( p_size );
+				}
+			}
+
+			l_pipeline->PopMatrix();
+			l_pipeline->MatrixMode( l_oldMode );
+			unlock();
 		}
 	}
 }

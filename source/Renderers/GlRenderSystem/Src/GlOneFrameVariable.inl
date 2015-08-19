@@ -5,15 +5,15 @@ namespace GlRender
 {
 	template< typename T >
 	GlOneFrameVariable< T >::GlOneFrameVariable( OpenGl & p_gl, uint32_t p_uiOcc, GlShaderProgram * p_pProgram )
-		:	Castor3D::OneFrameVariable< T >( p_pProgram, p_uiOcc )
-		,	GlFrameVariableBase( p_gl, &p_pProgram->GetGlProgram() )
+		: Castor3D::OneFrameVariable< T >( p_pProgram, p_uiOcc )
+		, GlFrameVariableBase( p_gl, &p_pProgram->GetGlProgram() )
 	{
 	}
 
 	template< typename T >
 	GlOneFrameVariable< T >::GlOneFrameVariable( OpenGl & p_gl, Castor3D::OneFrameVariable< T > * p_pVariable )
-		:	Castor3D::OneFrameVariable< T >( *p_pVariable )
-		,	GlFrameVariableBase( p_gl, &static_cast< GlShaderProgram * >( &p_pVariable->GetProgram() )->GetGlProgram() )
+		: Castor3D::OneFrameVariable< T >( *p_pVariable )
+		, GlFrameVariableBase( p_gl, &static_cast< GlShaderProgram * >( &p_pVariable->GetProgram() )->GetGlProgram() )
 	{
 	}
 
@@ -40,11 +40,11 @@ namespace GlRender
 	}
 
 	template< typename T >
-	void GlOneFrameVariable< T >::Apply()
+	void GlOneFrameVariable< T >::Bind()
 	{
 		if ( Castor3D::FrameVariable::m_bChanged )
 		{
-			GlFrameVariableBase::DoApply< T >( Castor3D::OneFrameVariable< T >::m_pValues, Castor3D::FrameVariable::m_uiOcc );
+			GlFrameVariableBase::DoBind< T >( Castor3D::OneFrameVariable< T >::m_pValues, Castor3D::FrameVariable::m_uiOcc );
 			Castor3D::FrameVariable::m_bChanged = false;
 		}
 	}

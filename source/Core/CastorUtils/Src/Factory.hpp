@@ -25,6 +25,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor
 {
+	static const std::string ERROR_UNKNOWN_OBJECT = "Unknown object type";
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
@@ -92,7 +93,7 @@ namespace Castor
 		 */
 		void Unregister( Key const & p_key )
 		{
-			typename ObjMap::iterator l_it = m_registered.find( p_key );
+			auto l_it = m_registered.find( p_key );
 
 			if ( l_it != m_registered.end() )
 			{
@@ -116,11 +117,15 @@ namespace Castor
 		ObjPtr Create( Key const & p_key, Parameters && ... p_params )
 		{
 			ObjPtr l_return;
-			typename ObjMap::iterator l_it = m_registered.find( p_key );
+			auto l_it = m_registered.find( p_key );
 
 			if ( l_it != m_registered.end() )
 			{
 				l_return = l_it->second( std::forward< Parameters >( p_params )... );
+			}
+			else
+			{
+				CASTOR_EXCEPTION( ERROR_UNKNOWN_OBJECT );
 			}
 
 			return l_return;

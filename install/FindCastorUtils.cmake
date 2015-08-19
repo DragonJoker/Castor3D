@@ -13,7 +13,7 @@ function( Castor_COMPILER_DUMPVERSION OUTPUT_VERSION )
 	set(${OUTPUT_VERSION} ${Castor_COMPILER_VERSION} PARENT_SCOPE)
 endfunction()
 
-FIND_PATH(CastorUtils_ROOT_DIR CastorUtils/CastorUtils.hpp
+FIND_PATH(CastorUtils_ROOT_DIR include/CastorUtils/CastorUtils.hpp
   HINTS
   PATHS
   C: D: E: F: G: H: I: J: K: L: M: N: O: P: Q: R: S: T: U: V: W: X: Y: Z:

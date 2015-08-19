@@ -1,4 +1,6 @@
 ﻿#include "Mesh.hpp"
+
+#include "Engine.hpp"
 #include "MeshFactory.hpp"
 #include "Submesh.hpp"
 #include "Cone.hpp"
@@ -25,7 +27,7 @@ namespace Castor3D
 
 	bool Mesh::TextLoader::operator()( Mesh const & p_mesh, TextFile & p_file )
 	{
-		Logger::LogMessage( cuT( "Writing Mesh " ) + p_mesh.GetName() );
+		Logger::LogInfo( cuT( "Writing Mesh " ) + p_mesh.GetName() );
 		bool l_return = p_file.WriteText( cuT( "\t\tmesh \"" ) + p_mesh.GetName() + cuT( "\"\n\t\t{\n" ) ) > 0;
 
 		if ( l_return )

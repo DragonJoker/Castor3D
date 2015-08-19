@@ -28,7 +28,7 @@ static String BillboardGS =
 	cuT( "\n" )
 	cuT( "<matrix_buffer>" )
 	cuT( "<scene_buffer>" )
-	cuT( "<user_buffer>" )
+	cuT( "<billboard_buffer>" )
 	cuT( "\n" )
 	cuT( "out vec3 vtx_normal;\n" )
 	cuT( "out vec3 vtx_tangent;\n" )
@@ -128,16 +128,14 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( uint32_t p_flags )
 		cuT( "polygon" ),//eTOPOLOGY_POLYGON
 	};
 
-	ShaderProgramBaseSPtr l_pProgram = m_pRenderSystem->GetEngine()->GetShaderManager().GetNewProgram();
-
-	l_pProgram->CreateFrameVariable( ShaderProgramBase::MapAmbient, eSHADER_TYPE_PIXEL );
-	l_pProgram->CreateFrameVariable( ShaderProgramBase::MapColour, eSHADER_TYPE_PIXEL );
-	l_pProgram->CreateFrameVariable( ShaderProgramBase::MapDiffuse, eSHADER_TYPE_PIXEL );
-	l_pProgram->CreateFrameVariable( ShaderProgramBase::MapNormal, eSHADER_TYPE_PIXEL );
-	l_pProgram->CreateFrameVariable( ShaderProgramBase::MapSpecular, eSHADER_TYPE_PIXEL );
-	l_pProgram->CreateFrameVariable( ShaderProgramBase::MapOpacity, eSHADER_TYPE_PIXEL );
-	l_pProgram->CreateFrameVariable( ShaderProgramBase::MapGloss, eSHADER_TYPE_PIXEL );
-	l_pProgram->CreateFrameVariable( ShaderProgramBase::MapHeight, eSHADER_TYPE_PIXEL );
+	ShaderManager & l_manager = m_pRenderSystem->GetEngine()->GetShaderManager();
+	ShaderProgramBaseSPtr l_pProgram = l_manager.GetNewProgram();
+	l_manager.CreateMatrixBuffer( *l_pProgram, MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
+	l_manager.CreateSceneBuffer( *l_pProgram, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
+	l_manager.CreatePassBuffer( *l_pProgram, MASK_SHADER_TYPE_PIXEL );
+	l_manager.CreateTextureVariables( *l_pProgram, p_flags );
+	FrameVariableBufferSPtr l_billboardUbo = m_pRenderSystem->CreateFrameVariableBuffer( cuT( "Billboard" ) );
+	l_pProgram->AddFrameVariableBuffer( l_billboardUbo, MASK_SHADER_TYPE_GEOMETRY );
 
 	ShaderObjectBaseSPtr l_pObject = l_pProgram->CreateObject( eSHADER_TYPE_GEOMETRY );
 	l_pObject->SetInputType( eTOPOLOGY_POINTS );
@@ -161,7 +159,7 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( uint32_t p_flags )
 
 	String l_strVtxShader;
 	l_strVtxShader += l_strVersion;
-	l_strVtxShader += l_strAttribute0 + cuT( "    <vec4>   vertex;\n" );
+	l_strVtxShader += l_strAttribute0 + cuT( "	<vec4> vertex;\n" );
 	l_strVtxShader += BillboardVS;
 	str_utils::replace( l_strVtxShader, cuT( "<layout>" ), l_pKeywords->GetLayout() );
 	GLSL::ConstantsBase::Replace( l_strVtxShader );
@@ -171,7 +169,7 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( uint32_t p_flags )
 	l_strGeoShader += BillboardGS;
 	str_utils::replace( l_strGeoShader, cuT( "<matrix_buffer>" ), l_pConstants->Matrices() );
 	str_utils::replace( l_strGeoShader, cuT( "<scene_buffer>" ), l_pConstants->Scene() );
-	str_utils::replace( l_strGeoShader, cuT( "<user_buffer>" ), l_pConstants->User() );
+	str_utils::replace( l_strGeoShader, cuT( "<billboard_buffer>" ), l_pConstants->Billboard() );
 	str_utils::replace( l_strGeoShader, cuT( "<in_primitives>" ), PRIMITIVES[l_pObject->GetInputType()] );
 	str_utils::replace( l_strGeoShader, cuT( "<out_primitives>" ), PRIMITIVES[l_pObject->GetOutputType()] );
 	str_utils::replace( l_strGeoShader, cuT( "<max_vertices>" ), str_utils::to_string( l_pObject->GetOutputVtxCount() ) );
@@ -180,7 +178,7 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( uint32_t p_flags )
 
 	String l_strPxlShader = l_pProgram->GetPixelShaderSource( p_flags );
 
-	m_pDimensionsUniform = std::static_pointer_cast< Point2iFrameVariable >( l_pProgram->GetUserBuffer()->CreateVariable( *l_pProgram.get(), eFRAME_VARIABLE_TYPE_VEC2I, cuT( "c3d_v2iDimensions" ) ) );
+	m_pDimensionsUniform = std::static_pointer_cast< Point2iFrameVariable >( l_billboardUbo->CreateVariable( *l_pProgram.get(), eFRAME_VARIABLE_TYPE_VEC2I, cuT( "c3d_v2iDimensions" ) ) );
 	l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_3, l_strVtxShader );
 	l_pProgram->SetSource( eSHADER_TYPE_GEOMETRY, eSHADER_MODEL_3, l_strGeoShader );
 	l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_3, l_strPxlShader );

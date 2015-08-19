@@ -12,7 +12,7 @@ namespace Castor
 #if CASTOR_USE_TRACK
 #	if CASTOR_USE_LOG_TRACK
 		String l_strToLog;
-		Logger::LogMessage( l_strToLog + cuT( "BlockTracker::Entered Block : " ) + m_strFunction + cuT( " in " ) + m_strFile + cuT( ", line " ) + str_utils::to_string( m_uiLine ) );
+		Logger::LogInfo( l_strToLog + cuT( "BlockTracker::Entered Block : " ) + m_strFunction + cuT( " in " ) + m_strFile + cuT( ", line " ) + str_utils::to_string( m_uiLine ) );
 #	else
 		std::cout << "BlockTracker::Entered Block : " << m_strFunction << " in " << m_strFile << ", line " << m_uiLine << std::endl;
 #	endif
@@ -24,7 +24,7 @@ namespace Castor
 #if CASTOR_USE_TRACK
 #	if CASTOR_USE_LOG_TRACK
 		String l_strToLog;
-		Logger::LogMessage( l_strToLog + cuT( "BlockTracker::Exited Block : " ) + m_strFunction + cuT( " in " ) + m_strFile + cuT( ", line " ) + str_utils::to_string( m_uiLine ) );
+		Logger::LogInfo( l_strToLog + cuT( "BlockTracker::Exited Block : " ) + m_strFunction + cuT( " in " ) + m_strFile + cuT( ", line " ) + str_utils::to_string( m_uiLine ) );
 #	else
 		std::cout << "BlockTracker::Exited Block : " << m_strFunction << " in " << m_strFile << ", line " << m_uiLine << std::endl;
 #	endif

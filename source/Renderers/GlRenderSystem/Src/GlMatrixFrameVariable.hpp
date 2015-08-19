@@ -24,10 +24,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GlRender
 {
-	template <typename T, uint32_t Rows, uint32_t Columns>
+	template< typename T, uint32_t Rows, uint32_t Columns >
 	class GlMatrixFrameVariable
-		:	public Castor3D::MatrixFrameVariable<T, Rows, Columns>
-		,	public GlFrameVariableBase
+		: public Castor3D::MatrixFrameVariable<T, Rows, Columns>
+		, public GlFrameVariableBase
 	{
 	public:
 		GlMatrixFrameVariable( OpenGl & p_gl, uint32_t p_uiOcc, GlShaderProgram * p_pProgram = NULL );
@@ -36,8 +36,8 @@ namespace GlRender
 
 		virtual bool Initialise();
 		virtual void Cleanup();
-		virtual void Bind() {}
-		virtual void Apply();
+		virtual void Bind();
+		virtual void Unbind() {}
 	};
 }
 

@@ -18,7 +18,7 @@ namespace Dx11Render
 	{
 		bool l_bReturn = false;
 		T * l_pReturn = NULL;
-		DirectX11::LockBuffer( l_pReturn, m_pBufferObject, 0, uint32_t( p_iSize * sizeof( T ) ), DirectX11::GetCpuAccessFlags( p_eType | p_eNature ) );
+		DirectX11::LockBuffer( l_pReturn, m_pBufferObject, 0, p_iSize, DirectX11::GetBufferMapMode( p_eNature ) );
 
 		if ( l_pReturn )
 		{
@@ -43,7 +43,7 @@ namespace Dx11Render
 			m_pBuffer->Unassign();
 		}
 
-		SafeRelease( m_pBufferObject );
+		ReleaseTracked( m_pBuffer->GetRenderSystem(), m_pBufferObject );
 	}
 
 	template< typename T, class D3dBufferObject >

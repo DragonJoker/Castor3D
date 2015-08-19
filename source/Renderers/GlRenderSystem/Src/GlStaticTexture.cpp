@@ -125,9 +125,9 @@ namespace GlRender
 		}
 	}
 
-	bool GlStaticTexture::DoBind()
+	bool GlStaticTexture::DoBind( uint32_t p_index )
 	{
-		bool l_bReturn = m_gl.ActiveTexture( m_eIndex );
+		bool l_bReturn = m_gl.ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + p_index ) );
 
 		if ( l_bReturn )
 		{
@@ -137,41 +137,42 @@ namespace GlRender
 		return l_bReturn;
 	}
 
-	void GlStaticTexture::DoUnbind()
+	void GlStaticTexture::DoUnbind( uint32_t p_index )
 	{
-		m_gl.ActiveTexture( m_eIndex );
+		m_gl.ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + p_index ) );
 		m_gl.BindTexture( m_eGlDimension, 0 );
 	}
 
 	bool GlStaticTexture::DoInitialise()
 	{
-		OpenGl::PixelFmt	l_glPixelFmt;
-		bool				l_bReturn;
+		OpenGl::PixelFmt l_glPixelFmt;
+		bool l_bReturn;
 		DoInitialisePbos();
-		m_eIndex			= eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + m_uiIndex );
-		m_eGlDimension		= m_gl.Get( m_eDimension );
-		l_glPixelFmt		= m_gl.Get( m_pPixelBuffer->format() );
-		l_bReturn			= m_gl.BindTexture( m_eGlDimension, m_uiGlName );
+		m_eIndex = eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + m_uiIndex );
+		m_eGlDimension = m_gl.Get( m_eDimension );
+		l_glPixelFmt = m_gl.Get( m_pPixelBuffer->format() );
+		l_bReturn = DoBind( m_uiIndex );
 
 		switch ( m_eGlDimension )
 		{
 		case eGL_TEXDIM_1D:
-			l_bReturn &= m_gl.TexImage1D(	m_eGlDimension, 0, l_glPixelFmt.Internal, m_pPixelBuffer->width(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, m_pPixelBuffer->const_ptr() );
+			l_bReturn &= m_gl.TexImage1D( m_eGlDimension, 0, l_glPixelFmt.Internal, m_pPixelBuffer->width(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, m_pPixelBuffer->const_ptr() );
 			break;
 
 		case eGL_TEXDIM_2D:
-			l_bReturn &= m_gl.TexImage2D(	m_eGlDimension, 0, l_glPixelFmt.Internal, m_pPixelBuffer->width(), m_pPixelBuffer->height(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, m_pPixelBuffer->const_ptr() );
+			l_bReturn &= m_gl.TexImage2D( m_eGlDimension, 0, l_glPixelFmt.Internal, m_pPixelBuffer->width(), m_pPixelBuffer->height(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, m_pPixelBuffer->const_ptr() );
 			break;
 
 		case eGL_TEXDIM_3D:
-			l_bReturn &= m_gl.TexImage3D(	m_eGlDimension, 0, l_glPixelFmt.Internal, m_pPixelBuffer->width(), m_pPixelBuffer->height() / m_uiDepth, m_uiDepth, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, m_pPixelBuffer->const_ptr() );
+			l_bReturn &= m_gl.TexImage3D( m_eGlDimension, 0, l_glPixelFmt.Internal, m_pPixelBuffer->width(), m_pPixelBuffer->height() / m_uiDepth, m_uiDepth, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, m_pPixelBuffer->const_ptr() );
 			break;
 
 		case eGL_TEXDIM_2D_ARRAY:
-			l_bReturn &= m_gl.TexImage3D(	m_eGlDimension, 0, l_glPixelFmt.Internal, m_pPixelBuffer->width(), m_pPixelBuffer->height() / m_uiDepth, m_uiDepth, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, m_pPixelBuffer->const_ptr() );
+			l_bReturn &= m_gl.TexImage3D( m_eGlDimension, 0, l_glPixelFmt.Internal, m_pPixelBuffer->width(), m_pPixelBuffer->height() / m_uiDepth, m_uiDepth, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, m_pPixelBuffer->const_ptr() );
 			break;
 		}
 
+		DoUnbind( m_uiIndex );
 		return l_bReturn;
 	}
 

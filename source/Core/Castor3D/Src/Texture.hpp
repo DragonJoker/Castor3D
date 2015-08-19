@@ -59,6 +59,22 @@ namespace Castor3D
 		virtual ~TextureBase();
 		/**
 		 *\~english
+		 *\brief		Activation function, to tell the GPU it is active
+		 *\return		\p true if successful
+		 *\~french
+		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
+		 *\return		\p true si tout s'est bien passé
+		 */
+		bool Bind();
+		/**
+		 *\~english
+		 *\brief		Deactivation function, to tell the GPU it is inactive
+		 *\~french
+		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
+		 */
+		void Unbind();
+		/**
+		 *\~english
 		 *\brief		Creation function
 		 *\return		\p true if OK
 		 *\~french
@@ -114,23 +130,23 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
-		 *\param[in]	p_uiIndex	The texture index
+		 *\param[in]	p_index	The texture index
 		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
-		 *\param[in]	p_uiIndex	L'index de texture
+		 *\param[in]	p_index	L'index de texture
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Bind() = 0;
+		virtual bool BindAt( uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
-		 *\param[in]	p_uiIndex	The texture index
+		 *\param[in]	p_index	The texture index
 		 *\~french
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
-		 *\param[in]	p_uiIndex	L'index de texture
+		 *\param[in]	p_index	L'index de texture
 		 */
-		virtual void Unbind() = 0;
+		virtual void UnbindFrom( uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Generate texture mipmaps
@@ -305,6 +321,18 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Sets the texture index
+		 *\param[in]	p_index	The index
+		 *\~french
+		 *\brief		Définit l'index de la texture
+		 *\param[in]	p_index	L'index
+		 */
+		inline void SetIndex( uint32_t p_index )
+		{
+			m_uiIndex = p_index;
+		}
+		/**
+		 *\~english
 		 *\brief		Defines the texture sampler
 		 *\param[in]	p_pSampler	The sampler
 		 *\~french
@@ -346,14 +374,14 @@ namespace Castor3D
 		 *\brief		Activation spécifique selon l'API
 		 *\return		\p si tout s'est bien passé
 		 */
-		virtual bool DoBind() = 0;
+		virtual bool DoBind( uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		API specific unbinding function
 		 *\~french
 		 *\brief		Désactivation spécifique selon l'API
 		 */
-		virtual void DoUnbind() = 0;
+		virtual void DoUnbind( uint32_t p_index ) = 0;
 
 	protected:
 		DECLARE_VECTOR( Castor::PxBufferBaseSPtr, PxBuffer );

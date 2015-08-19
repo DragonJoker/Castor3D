@@ -38,8 +38,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <set>
 #include <string>
 #include <cstdint>
+#include <deque>
 
 #include "SmartPtr.hpp"
+#include "ELogType.hpp"
 
 #if defined( min )
 #	undef min
@@ -59,24 +61,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor
 {
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		Defines the various log types
-	\~french
-	\brief		Définit les différents types de log
-	*/
-	typedef enum eLOG_TYPE
-	CASTOR_TYPE( uint8_t )
-	{
-		eLOG_TYPE_DEBUG,	//!<\~english Debug type log		\~french Log de type debug
-		eLOG_TYPE_MESSAGE,	//!<\~english Message type log		\~french Log de type message
-		eLOG_TYPE_WARNING,	//!<\~english Warning type log		\~french Log de type avertissement
-		eLOG_TYPE_ERROR,	//!<\~english Error type log		\~french Log de type erreur
-		eLOG_TYPE_COUNT,	//!<\~english Number of log types	\~french Compte des logs
-	}	eLOG_TYPE;
 	/*!
 	\author Sylvain DOREMUS
 	\version 0.6.1.0
@@ -111,7 +95,9 @@ namespace Castor
 		ePIXEL_FORMAT_A4R4G4B4,		//!< 16 bits 4444 ARGB
 		ePIXEL_FORMAT_R5G6B5,		//!< 16 bits 565 RGB
 		ePIXEL_FORMAT_R8G8B8,		//!< 24 bits 888 RGB
+		ePIXEL_FORMAT_B8G8R8,		//!< 24 bits 888 BGR
 		ePIXEL_FORMAT_A8R8G8B8,		//!< 32 bits 8888 ARGB
+		ePIXEL_FORMAT_A8B8G8R8,		//!< 32 bits 8888 ABGR
 		ePIXEL_FORMAT_RGB16F32F,	//!< Half float RGB on GPU, Float RGB on CPU
 		ePIXEL_FORMAT_ARGB16F32F,	//!< Half float ARGB on GPU, Float ARGB on CPU
 		ePIXEL_FORMAT_RGB32F,		//!< Float RGB
@@ -199,6 +185,11 @@ namespace Castor
 	class Factory;
 	class Path;
 	class DynamicLibrary;
+
+	struct MessageBase;
+	class Logger;
+	class LoggerImpl;
+	class ProgramConsole;
 
 	/*!
 	\author 	Sylvain DOREMUS
@@ -326,6 +317,8 @@ namespace Castor
 	DECLARE_MAP( String, bool, BoolStr );
 	DECLARE_MAP( String, String, StrStr );
 	DECLARE_SET( String, Str );
+
+	typedef std::deque< std::unique_ptr< MessageBase > > MessageQueue;
 	/**
 	 *\~english
 	 *\brief		Logging callback function
@@ -338,14 +331,7 @@ namespace Castor
 	 *\param[in]	p_strLog	Le texte écrit
 	 *\param[in]	p_eLogType	Le type de log
 	 */
-	typedef void ( LogCallback )( void * p_pCaller, String const & p_strLog, eLOG_TYPE p_eLogType );
-	/**
-	 *\~english
-	 *\brief		Typedef over a pointer to the logging callback function
-	 *\~french
-	 *\brief		Typedef d'un pointeur sur la fonction de callback de log
-	 */
-	typedef LogCallback * PLogCallback;
+	typedef std::function< void ( String const & p_strLog, ELogType p_eLogType ) > LogCallback;
 }
 
 #endif

@@ -212,7 +212,7 @@ bool GlContextImpl::DoCreateGl3Context( RenderWindow * p_window )
 
 			EndCurrent();
 			m_gl.DeleteContext( l_hContext );
-			Logger::LogMessage( cuT( "GlContext::GlContext - OpenGL 3.x context created" ) );
+			Logger::LogInfo( cuT( "GlContext::GlContext - OpenGL 3.x context created" ) );
 			l_bReturn = m_hContext != NULL;
 		}
 		else
@@ -254,28 +254,28 @@ bool GlContextImpl::DoSelectPixelFormat( RenderWindow * p_window )
 	l_pfd.iLayerType = PFD_MAIN_PLANE;
 	l_pfd.cColorBits = PF::GetBytesPerPixel( p_window->GetPixelFormat() ) * 8;
 
-	if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_DEPTH16 )
+	if ( p_window->GetDepthFormat() == ePIXEL_FORMAT_DEPTH16 )
 	{
 		l_pfd.cDepthBits = 16;
 	}
-	else if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_DEPTH32 )
+	else if ( p_window->GetDepthFormat() == ePIXEL_FORMAT_DEPTH32 )
 	{
 		l_pfd.cDepthBits = 32;
 	}
-	else if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_DEPTH24 )
+	else if ( p_window->GetDepthFormat() == ePIXEL_FORMAT_DEPTH24 )
 	{
 		l_pfd.cDepthBits = 24;
 	}
-	else if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_DEPTH24S8 )
+	else if ( p_window->GetDepthFormat() == ePIXEL_FORMAT_DEPTH24S8 )
 	{
 		l_pfd.cDepthBits = 24;
 		l_pfd.cStencilBits = 8;
 	}
-	else if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_STENCIL8 )
+	else if ( p_window->GetDepthFormat() == ePIXEL_FORMAT_STENCIL8 )
 	{
 		l_pfd.cStencilBits = 8;
 	}
-	else if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_STENCIL1 )
+	else if ( p_window->GetDepthFormat() == ePIXEL_FORMAT_STENCIL1 )
 	{
 		l_pfd.cStencilBits = 1;
 	}

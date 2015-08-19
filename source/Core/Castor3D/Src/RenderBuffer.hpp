@@ -202,11 +202,13 @@ namespace Castor3D
 			return m_iSamplesCount;
 		}
 
+	protected:
+		//!\~english The buffer dimensions	\~french Les dimensions du buffer
+		Castor::Size m_size;
+
 	private:
 		//!\~english The component to which this buffer is bound	\~french La composante à laquelle ce tampon est associé
 		eBUFFER_COMPONENT m_eComponent;
-		//!\~english The buffer dimensions	\~french Les dimensions du buffer
-		Castor::Size m_size;
 		//!\~english The buffer pixel format	\~french Le format des pixels du tampon
 		Castor::ePIXEL_FORMAT m_ePixelFormat;
 		//!\~english The samples count, if multisampling is enabled	\~french Le nombre d'échantillons, en cas de multisampling
