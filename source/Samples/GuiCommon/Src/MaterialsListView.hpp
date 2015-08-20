@@ -15,8 +15,8 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GUICOMMON_MATERIALS_LIST_VIEW_FRAME_H___
-#define ___GUICOMMON_MATERIALS_LIST_VIEW_FRAME_H___
+#ifndef ___GUICOMMON_MATERIALS_LIST_VIEW_H___
+#define ___GUICOMMON_MATERIALS_LIST_VIEW_H___
 
 #include "GuiCommonPrerequisites.hpp"
 
@@ -25,8 +25,18 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GuiCommon
 {
 	class wxMaterialsListView
-		:	public wxListView
+		: public wxListView
 	{
+	public:
+		wxMaterialsListView( int p_imgWidth, wxWindow * p_pParent, wxWindowID p_id = wxID_ANY, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
+		~wxMaterialsListView();
+
+		wxImage * CreateMaterialImage( Castor3D::MaterialSPtr p_pMaterial, uint32_t p_uiWidth, uint32_t p_uiHeight );
+		wxImage * CreatePassImage( Castor3D::PassSPtr p_pPass, uint32_t p_uiWidth, uint32_t p_uiHeight );
+		wxImage * CreateTextureUnitImage( Castor3D::TextureUnitSPtr p_pUnit, uint32_t p_uiWidth, uint32_t p_uiHeight );
+		void CreateList( Castor3D::Engine * p_pEngine );
+		void AddItem( Castor::String const & p_strMaterialName );
+
 	private:
 		wxImageList * m_pListImages;
 		wxListItem * m_pListItems;
@@ -34,16 +44,6 @@ namespace GuiCommon
 		std::vector< wxImage * > m_arrayImages;
 		int m_iImgWidth;
 		Castor3D::Engine * m_pEngine;
-
-	public:
-		wxMaterialsListView( Castor3D::Engine * p_pEngine, wxWindow * p_pParent, wxWindowID p_id = wxID_ANY, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
-		~wxMaterialsListView();
-
-		wxImage * CreateMaterialImage( Castor3D::MaterialSPtr p_pMaterial, uint32_t p_uiWidth, uint32_t p_uiHeight );
-		wxImage * CreatePassImage( Castor3D::PassSPtr p_pPass, uint32_t p_uiWidth, uint32_t p_uiHeight );
-		wxImage * CreateTextureUnitImage( Castor3D::TextureUnitSPtr p_pUnit, uint32_t p_uiWidth, uint32_t p_uiHeight );
-		void CreateList();
-		void AddItem( Castor::String const & p_strMaterialName );
 	};
 }
 

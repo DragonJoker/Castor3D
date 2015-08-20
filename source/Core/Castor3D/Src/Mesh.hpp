@@ -265,7 +265,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Récupère un itérateur sur le début des sous maillages
 		 */
-		SubmeshPtrArrayIt Begin()
+		SubmeshPtrArrayIt begin()
 		{
 			return m_submeshes.begin();
 		}
@@ -275,7 +275,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Récupère un itérateur constant sur le début des sous maillages
 		 */
-		SubmeshPtrArrayConstIt Begin()const
+		SubmeshPtrArrayConstIt begin()const
 		{
 			return m_submeshes.begin();
 		}
@@ -285,7 +285,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Récupère un itérateur sur la fin des sous maillages
 		 */
-		SubmeshPtrArrayIt End()
+		SubmeshPtrArrayIt end()
 		{
 			return m_submeshes.end();
 		}
@@ -295,7 +295,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Récupère un itérateur constant sur la fin des sous maillages
 		 */
-		SubmeshPtrArrayConstIt End()const
+		SubmeshPtrArrayConstIt end()const
 		{
 			return m_submeshes.end();
 		}

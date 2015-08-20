@@ -74,23 +74,26 @@ namespace GuiCommon
 		wxArrayString m_arrayItems;
 		std::set< wxTreeItemId > m_setGeometriesInTree;
 		std::set< wxTreeItemId > m_setSubmeshesInTree;
-		Castor3D::SceneSPtr m_pScene;
+		Castor3D::SceneWPtr m_pScene;
 		uint32_t m_uiNbItems;
 		Castor3D::Engine * m_pEngine;
 		wxTreeItemId m_selItem;
 
 	public:
-		wxGeometriesListFrame( Castor3D::Engine * p_pEngine, wxWindow * p_pParent, wxString const & p_strTitle, Castor3D::SceneSPtr p_pScene, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
+		wxGeometriesListFrame( wxWindow * p_pParent, wxString const & p_strTitle, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
 		~wxGeometriesListFrame();
+		
+		void LoadScene( Castor3D::Engine * p_pEngine, Castor3D::SceneSPtr p_pScene );
+		void UnloadScene();
 
 	protected:
 		DECLARE_EVENT_TABLE()
-		void OnClose( wxCloseEvent &	p_event );
-		void OnDeleteItem( wxCommandEvent &	p_event );
-		void OnExpandItem( wxTreeEvent 	&	p_event );
-		void OnCollapseItem( wxTreeEvent 	&	p_event );
-		void OnActivateItem( wxTreeEvent 	&	p_event );
-		void OnChangeItem( wxTreeEvent 	&	p_event );
+		void OnClose( wxCloseEvent & p_event );
+		void OnDeleteItem( wxCommandEvent & p_event );
+		void OnExpandItem( wxTreeEvent & p_event );
+		void OnCollapseItem( wxTreeEvent & p_event );
+		void OnActivateItem( wxTreeEvent & p_event );
+		void OnChangeItem( wxTreeEvent & p_event );
 		void OnComboMaterials( wxCommandEvent & p_event );
 	};
 }

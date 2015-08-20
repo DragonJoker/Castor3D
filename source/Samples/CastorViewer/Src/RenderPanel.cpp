@@ -128,6 +128,65 @@ namespace CastorViewer
 		}
 	}
 
+	void RenderPanel::DoResetCamera()
+	{
+		RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
+
+		if ( l_pWindow )
+		{
+			SceneSPtr l_pScene = l_pWindow->GetScene();
+			DoStopTimer( eTIMER_ID_COUNT );
+			m_rZoom = 1.0;
+			m_deltaX = 0.0;
+			m_deltaY = 0.0;
+			m_x = 0.0;
+			m_y = 0.0;
+			m_oldX = 0.0;
+			m_oldY = 0.0;
+
+			if ( l_pScene )
+			{
+				SceneNodeSPtr l_cameraNode = l_pScene->GetCameraRootNode();
+				l_cameraNode->SetOrientation( m_qOriginalOrientation );
+				l_cameraNode->SetPosition( m_ptOriginalPosition );
+			}
+		}
+	}
+
+	void RenderPanel::DoSwitchPrimitiveType()
+	{
+		RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
+		DoStopTimer( eTIMER_ID_COUNT );
+
+		switch ( l_pWindow->GetPrimitiveType() )
+		{
+		case eTOPOLOGY_TRIANGLES:
+			l_pWindow->SetPrimitiveType( eTOPOLOGY_LINES );
+			break;
+
+		case eTOPOLOGY_LINES:
+			l_pWindow->SetPrimitiveType( eTOPOLOGY_POINTS );
+			break;
+
+		case eTOPOLOGY_POINTS:
+			l_pWindow->SetPrimitiveType( eTOPOLOGY_TRIANGLES );
+			break;
+		}
+	}
+
+	void RenderPanel::DoReloadScene()
+	{
+		DoStopTimer( eTIMER_ID_COUNT );
+		wxGetApp().GetMainFrame()->LoadScene();
+		m_rZoom = 1.0;
+		m_deltaX = 0.0;
+		m_deltaY = 0.0;
+		m_x = 0.0;
+		m_y = 0.0;
+		m_oldX = 0.0;
+		m_oldY = 0.0;
+	}
+
 	BEGIN_EVENT_TABLE( RenderPanel, wxPanel )
 		EVT_TIMER( eTIMER_ID_FORWARD, RenderPanel::OnTimerFwd )
 		EVT_TIMER( eTIMER_ID_BACK, RenderPanel::OnTimerBck )
@@ -195,14 +254,15 @@ namespace CastorViewer
 
 	void RenderPanel::OnSize( wxSizeEvent & p_event )
 	{
-		wxClientDC l_dc( this );
+		RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
 
-		if ( m_pRenderWindow.lock() )
+		if ( l_pWindow )
 		{
-			m_pRenderWindow.lock()->Resize( p_event.GetSize().x, p_event.GetSize().y );
+			l_pWindow->Resize( p_event.GetSize().x, p_event.GetSize().y );
 		}
 		else
 		{
+			wxClientDC l_dc( this );
 			l_dc.SetBrush( wxBrush( *wxWHITE ) );
 			l_dc.SetPen( wxPen( *wxWHITE ) );
 			l_dc.DrawRectangle( 0, 0, p_event.GetSize().x, p_event.GetSize().y );
@@ -213,10 +273,11 @@ namespace CastorViewer
 
 	void RenderPanel::OnMove( wxMoveEvent & p_event )
 	{
-		wxClientDC l_dc( this );
+		RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
 
-		if ( !m_pRenderWindow.lock() )
+		if ( !l_pWindow )
 		{
+			wxClientDC l_dc( this );
 			l_dc.SetBrush( wxBrush( *wxWHITE ) );
 			l_dc.SetPen( wxPen( *wxWHITE ) );
 			l_dc.DrawRectangle( 0, 0, GetClientSize().x, GetClientSize().y );
@@ -227,10 +288,11 @@ namespace CastorViewer
 
 	void RenderPanel::OnPaint( wxPaintEvent & p_event )
 	{
-		wxPaintDC l_dc( this );
+		RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
 
-		if ( !m_pRenderWindow.lock() )
+		if ( !l_pWindow )
 		{
+			wxPaintDC l_dc( this );
 			l_dc.SetBrush( wxBrush( *wxWHITE ) );
 			l_dc.SetPen( wxPen( *wxWHITE ) );
 			l_dc.DrawRectangle( 0, 0, GetClientSize().x, GetClientSize().y );
@@ -267,8 +329,6 @@ namespace CastorViewer
 
 	void RenderPanel::OnKeyDown( wxKeyEvent & p_event )
 	{
-		RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
-
 		switch ( p_event.GetKeyCode() )
 		{
 		case WXK_LEFT:
@@ -305,58 +365,18 @@ namespace CastorViewer
 
 	void RenderPanel::OnKeyUp( wxKeyEvent & p_event )
 	{
-		RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
-		SceneSPtr l_pScene = l_pWindow->GetScene();
-
 		switch ( p_event.GetKeyCode() )
 		{
 		case 'R':
-			DoStopTimer( eTIMER_ID_COUNT );
-			m_rZoom = 1.0;
-			m_deltaX = 0.0;
-			m_deltaY = 0.0;
-			m_x = 0.0;
-			m_y = 0.0;
-			m_oldX = 0.0;
-			m_oldY = 0.0;
-			if ( l_pScene )
-			{
-				SceneNodeSPtr l_cameraNode = l_pScene->GetCameraRootNode();
-				l_cameraNode->SetOrientation( m_qOriginalOrientation );
-				l_cameraNode->SetPosition( m_ptOriginalPosition );
-			}
+			DoResetCamera();
 			break;
 
 		case 'W':
-			DoStopTimer( eTIMER_ID_COUNT );
-
-			switch ( l_pWindow->GetPrimitiveType() )
-			{
-			case eTOPOLOGY_TRIANGLES:
-				l_pWindow->SetPrimitiveType( eTOPOLOGY_LINES );
-				break;
-
-			case eTOPOLOGY_LINES:
-				l_pWindow->SetPrimitiveType( eTOPOLOGY_POINTS );
-				break;
-
-			case eTOPOLOGY_POINTS:
-				l_pWindow->SetPrimitiveType( eTOPOLOGY_TRIANGLES );
-				break;
-			}
-
+			DoSwitchPrimitiveType();
 			break;
 
 		case WXK_F5:
-			DoStopTimer( eTIMER_ID_COUNT );
-			wxGetApp().GetMainFrame()->LoadScene();
-			m_rZoom		= 1.0;
-			m_deltaX	= 0.0;
-			m_deltaY	= 0.0;
-			m_x			= 0.0;
-			m_y			= 0.0;
-			m_oldX		= 0.0;
-			m_oldY		= 0.0;
+			DoReloadScene();
 			break;
 
 		case WXK_LEFT:
@@ -389,7 +409,11 @@ namespace CastorViewer
 
 	void RenderPanel::OnMouseLDClick( wxMouseEvent & p_event )
 	{
-		m_pListener->PostEvent( m_pKeyboardEvent );
+		if ( m_pListener )
+		{
+			m_pListener->PostEvent( m_pKeyboardEvent );
+		}
+
 		p_event.Skip();
 	}
 
@@ -478,8 +502,6 @@ namespace CastorViewer
 
 	void RenderPanel::OnMouseWheel( wxMouseEvent & p_event )
 	{
-		RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
-
 		int l_wheelRotation = p_event.GetWheelRotation();
 
 		if ( l_wheelRotation < 0 )

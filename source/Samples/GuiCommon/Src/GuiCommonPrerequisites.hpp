@@ -72,6 +72,7 @@ namespace GuiCommon
 	class wxGeometryTreeItemData;
 	class wxSubmeshTreeItemData;
 	class wxGeometriesListFrame;
+	class wxMaterialsListFrame;
 	class wxImagesLoader;
 	class wxMaterialPanel;
 	class wxMaterialsFrame;

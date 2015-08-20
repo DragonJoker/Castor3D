@@ -869,6 +869,18 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Retrieves the geometries map
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la map des géométries
+		 *\return		La valeur
+		 */
+		inline GeometryPtrStrMap const & Geometries()const
+		{
+			return m_addedPrimitives;
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves an iterator to the geometries map begin
 		 *\return		The value
 		 *\~french

@@ -1234,23 +1234,24 @@ namespace Castor3D
 					if ( p_ray->Intersects( l_box ) > 0.0f )
 					{
 						l_geoDist = l_curgeoDist;
-						std::for_each( l_mesh->Begin(), l_mesh->End(), [&]( SubmeshSPtr p_pSubmesh )
+
+						for ( auto && l_it: *l_mesh )
 						{
-							l_sphere = p_pSubmesh->GetSphere();
+							l_sphere = l_it->GetSphere();
 
 							if ( p_ray->Intersects( l_sphere ) >= 0.0f )
 							{
-								l_box = p_pSubmesh->GetCubeBox();
+								l_box = l_it->GetCubeBox();
 
 								if ( p_ray->Intersects( l_box ) >= 0.0f )
 								{
-									for ( uint32_t k = 0; k < p_pSubmesh->GetFaceCount(); k++ )
+									for ( uint32_t k = 0; k < l_it->GetFaceCount(); k++ )
 									{
-										l_face = p_pSubmesh->GetFace( k );
+										l_face = l_it->GetFace( k );
 
 										if ( ( l_curfaceDist = p_ray->Intersects( *l_face, *l_submesh ) ) < l_faceDist )
 										{
-											if ( ( l_curvertexDist = p_ray->Intersects( Vertex::GetPosition( p_pSubmesh->GetPoint( l_face->GetVertexIndex( 0 ) ), l_ptCoords ) ) ) < l_vertexDist )
+											if ( ( l_curvertexDist = p_ray->Intersects( Vertex::GetPosition( l_it->GetPoint( l_face->GetVertexIndex( 0 ) ), l_ptCoords ) ) ) < l_vertexDist )
 											{
 												l_vertexDist = l_curvertexDist;
 												l_geoDist = l_curgeoDist;
@@ -1261,7 +1262,7 @@ namespace Castor3D
 												//l_pSelectedVertex = p_pSubmesh->GetPoint( l_face->GetVertexIndex( 0 ) );
 											}
 
-											if ( ( l_curvertexDist = p_ray->Intersects( Vertex::GetPosition( p_pSubmesh->GetPoint( l_face->GetVertexIndex( 1 ) ), l_ptCoords ) ) ) < l_vertexDist )
+											if ( ( l_curvertexDist = p_ray->Intersects( Vertex::GetPosition( l_it->GetPoint( l_face->GetVertexIndex( 1 ) ), l_ptCoords ) ) ) < l_vertexDist )
 											{
 												l_vertexDist = l_curvertexDist;
 												l_geoDist = l_curgeoDist;
@@ -1272,7 +1273,7 @@ namespace Castor3D
 												//l_pSelectedVertex = p_pSubmesh->GetPoint( l_face->GetVertexIndex( 1 ) );
 											}
 
-											if ( ( l_curvertexDist = p_ray->Intersects( Vertex::GetPosition( p_pSubmesh->GetPoint( l_face->GetVertexIndex( 2 ) ), l_ptCoords ) ) ) < l_vertexDist )
+											if ( ( l_curvertexDist = p_ray->Intersects( Vertex::GetPosition( l_it->GetPoint( l_face->GetVertexIndex( 2 ) ), l_ptCoords ) ) ) < l_vertexDist )
 											{
 												l_vertexDist = l_curvertexDist;
 												l_geoDist = l_curgeoDist;
@@ -1286,7 +1287,7 @@ namespace Castor3D
 									}
 								}
 							}
-						} );
+						}
 					}
 				}
 			}
@@ -1381,10 +1382,10 @@ namespace Castor3D
 
 			if ( l_pMesh )
 			{
-				for ( SubmeshPtrArrayIt l_it = l_pMesh->Begin(); l_it != l_pMesh->End(); ++l_it )
+				for ( auto && l_submesh: *l_pMesh )
 				{
-					MaterialSPtr l_pMaterial( l_primitive.second->GetMaterial( *l_it ) );
-					stRENDER_NODE l_renderNode = { l_pNode, l_primitive.second, *l_it, l_pMaterial };
+					MaterialSPtr l_pMaterial( l_primitive.second->GetMaterial( l_submesh ) );
+					stRENDER_NODE l_renderNode = { l_pNode, l_primitive.second, l_submesh, l_pMaterial };
 
 					if ( l_pMaterial->HasAlphaBlending() )
 					{
@@ -1397,12 +1398,12 @@ namespace Castor3D
 							l_itMap = m_mapSubmeshesAlpha.find( l_pMaterial );
 						}
 
-						SubmeshNodesMapIt l_itSubmesh = l_itMap->second.find( *l_it );
+						SubmeshNodesMapIt l_itSubmesh = l_itMap->second.find( l_submesh );
 
 						if ( l_itSubmesh == l_itMap->second.end() )
 						{
-							l_itMap->second.insert( std::make_pair( *l_it, RenderNodeArray() ) );
-							l_itSubmesh = l_itMap->second.find( *l_it );
+							l_itMap->second.insert( std::make_pair( l_submesh, RenderNodeArray() ) );
+							l_itSubmesh = l_itMap->second.find( l_submesh );
 						}
 
 						l_itSubmesh->second.push_back( l_renderNode );
@@ -1418,12 +1419,12 @@ namespace Castor3D
 							l_itMap = m_mapSubmeshesNoAlpha.find( l_pMaterial );
 						}
 
-						SubmeshNodesMapIt l_itSubmesh = l_itMap->second.find( *l_it );
+						SubmeshNodesMapIt l_itSubmesh = l_itMap->second.find( l_submesh );
 
 						if ( l_itSubmesh == l_itMap->second.end() )
 						{
-							l_itMap->second.insert( std::make_pair( *l_it, RenderNodeArray() ) );
-							l_itSubmesh = l_itMap->second.find( *l_it );
+							l_itMap->second.insert( std::make_pair( l_submesh, RenderNodeArray() ) );
+							l_itSubmesh = l_itMap->second.find( l_submesh );
 						}
 
 						l_itSubmesh->second.push_back( l_renderNode );

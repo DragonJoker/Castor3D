@@ -27,13 +27,24 @@ namespace GuiCommon
 	class wxMaterialPanel
 		: public wxPanel
 	{
+	public:
+		wxMaterialPanel( bool p_small, bool p_bCanEdit, wxWindow * p_pParent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxSize( 370, 470 ) );
+		~wxMaterialPanel();
+
+		void SelectPass( int p_iIndex );
+		void SetMaterialName( Castor3D::Engine * p_pEngine, Castor::String const & p_strMaterialName );
+		int GetPassIndex()const;
+
 	private:
-		typedef enum eID
-		{
-			eID_BUTTON_DELETE,
-			eID_EDIT_MATERIAL_NAME,
-			eID_COMBO_PASS,
-		}	eID;
+		void DoSetMaterialName( wxString const & p_strMaterialName );
+		void DoCreatePassPanel();
+		void DoShowMaterialFields( bool p_bShow );
+		void DoShowPassFields( bool p_bShow );
+
+		DECLARE_EVENT_TABLE()
+		void OnDeletePass( wxCommandEvent & p_event );
+		void OnMaterialName( wxCommandEvent & p_event );
+		void OnPassSelect( wxCommandEvent & p_event );
 
 	private:
 		wxStaticText * m_pStaticName;
@@ -48,25 +59,6 @@ namespace GuiCommon
 		int m_iSelectedPassIndex;
 		bool m_bCanEdit;
 		Castor3D::Engine * m_pEngine;
-
-	public:
-		wxMaterialPanel( Castor3D::Engine * p_pEngine, bool p_bCanEdit, wxWindow * p_pParent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxSize( 370, 470 ) );
-		~wxMaterialPanel();
-
-		void SelectPass( int p_iIndex );
-		void SetMaterialName( Castor::String const & p_strMaterialName );
-		int GetPassIndex()const;
-
-	private:
-		void DoSetMaterialName( wxString const & p_strMaterialName );
-		void DoCreatePassPanel();
-		void DoShowMaterialFields( bool p_bShow );
-		void DoShowPassFields( bool p_bShow );
-
-		DECLARE_EVENT_TABLE()
-		void OnDeletePass( wxCommandEvent & p_event );
-		void OnMaterialName( wxCommandEvent & p_event );
-		void OnPassSelect( wxCommandEvent & p_event );
 	};
 }
 

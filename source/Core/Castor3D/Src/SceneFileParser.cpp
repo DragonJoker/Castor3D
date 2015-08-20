@@ -276,29 +276,18 @@ bool SceneFileParser::ParseFile( Path const & p_pathFile )
 
 		if ( l_archive.Inflate( l_path ) )
 		{
-			StringArray l_files;
+			PathArray l_files;
 
 			if ( File::ListDirectoryFiles( l_path, l_files ) )
 			{
-				StringArray::iterator l_it = l_files.begin();
-				bool l_found = false;
-
-				while ( l_it != l_files.end() && !l_found )
+				auto && l_it = std::find_if( l_files.begin(), l_files.end(), []( Path const & p_path )
 				{
-					Path l_pathTmp = *l_it;
+					return p_path.GetExtension() == cuT( "cscn" ) || p_path.GetExtension() == cuT( "cbsn" );
+				} );
 
-					if ( l_pathTmp.GetExtension() == cuT( "cscn" ) )
-					{
-						l_path = l_pathTmp;
-						l_found = true;
-					}
-					else if ( l_pathTmp.GetExtension() == cuT( "cbsn" ) )
-					{
-						l_path = l_pathTmp;
-						l_found = true;
-					}
-
-					++l_it;
+				if ( l_it != l_files.end() )
+				{
+					l_path = *l_it;
 				}
 			}
 		}

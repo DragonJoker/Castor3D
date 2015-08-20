@@ -30,23 +30,38 @@ namespace GuiCommon
 		:	public wxScrolledWindow
 	{
 	public:
-		typedef enum eID
-		{
-			eID_BUTTON_DELETE,
-			eID_BUTTON_AMBIENT,
-			eID_BUTTON_DIFFUSE,
-			eID_BUTTON_SPECULAR,
-			eID_BUTTON_EMISSIVE,
-			eID_BUTTON_TEXTURE_IMAGE,
-			eID_BUTTON_HAS_SHADER,
-			eID_EDIT_SHININESS,
-			eID_EDIT_TEXTURE_PATH,
-			eID_COMBO_TEXTURE_UNITS,
-			eID_CHECK_DOUBLE_FACE,
-			eID_RADIO_MAP_MODE,
-			eID_SLIDER_ALPHA,
-			eID_COMBO_TEXTURE_CHANNEL,
-		}	eID;
+		wxPassPanel( bool p_small, bool p_bCanEdit, wxWindow * p_pParent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxSize( 460, 380 ) );
+		~wxPassPanel();
+
+		void SetPass( Castor3D::Engine * p_pEngine, Castor3D::PassWPtr p_wpPass );
+		void GetDiffuse( Castor::Colour & p_clrColour )const;
+		void GetAmbient( Castor::Colour & p_clrColour )const;
+		void GetEmissive( Castor::Colour & p_clrColour )const;
+		void GetSpecular( Castor::Colour & p_clrColour )const;
+		Castor::real GetShininess()const;
+		int GetTextureUnitIndex()const;
+		void SetMaterialImage( uint32_t p_uiIndex, uint32_t p_uiWidth, uint32_t p_uiHeight );
+		void SetMaterialImage( Castor3D::TextureUnitSPtr p_pTexture, uint32_t p_uiWidth, uint32_t p_uiHeight );
+
+	private:
+		void DoSelectTextureUnit( int p_iIndex );
+		void DoShowPassFields( bool p_bShow );
+		void DoShowTextureFields( bool p_bShow );
+
+		DECLARE_EVENT_TABLE()
+		void OnDeleteTextureUnit( wxCommandEvent & p_event );
+		void OnAmbientColour( wxCommandEvent & p_event );
+		void OnDiffuseColour( wxCommandEvent & p_event );
+		void OnSpecularColour( wxCommandEvent & p_event );
+		void OnEmissiveColour( wxCommandEvent & p_event );
+		void OnTextureImage( wxCommandEvent & p_event );
+		void OnShininess( wxCommandEvent & p_event );
+		void OnTexturePath( wxCommandEvent & p_event );
+		void OnTextureSelect( wxCommandEvent & p_event );
+		void OnDoubleFace( wxCommandEvent & p_event );
+		void OnTextureChannel( wxCommandEvent & p_event );
+		void OnAlpha( wxCommandEvent & p_event );
+		void OnHasShader( wxCommandEvent & p_event );
 
 	private:
 		wxStaticBox * m_pBoxGeneral;
@@ -84,40 +99,6 @@ namespace GuiCommon
 		bool m_bCanEdit;
 		wxSize m_sizeImage;
 		Castor3D::Engine * m_pEngine;
-
-	public:
-		wxPassPanel( wxWindow * p_pParent, Castor3D::Engine * p_pEngine, bool p_bCanEdit, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxSize( 460, 380 ) );
-		~wxPassPanel();
-
-		void SetPass( Castor3D::PassWPtr p_wpPass );
-		void GetDiffuse( Castor::Colour & p_clrColour )const;
-		void GetAmbient( Castor::Colour & p_clrColour )const;
-		void GetEmissive( Castor::Colour & p_clrColour )const;
-		void GetSpecular( Castor::Colour & p_clrColour )const;
-		Castor::real GetShininess()const;
-		int GetTextureUnitIndex()const;
-		void SetMaterialImage( uint32_t p_uiIndex, uint32_t p_uiWidth, uint32_t p_uiHeight );
-		void SetMaterialImage( Castor3D::TextureUnitSPtr p_pTexture, uint32_t p_uiWidth, uint32_t p_uiHeight );
-
-	private:
-		void DoSelectTextureUnit( int p_iIndex );
-		void DoShowPassFields( bool p_bShow );
-		void DoShowTextureFields( bool p_bShow );
-
-		DECLARE_EVENT_TABLE()
-		void OnDeleteTextureUnit( wxCommandEvent & p_event );
-		void OnAmbientColour( wxCommandEvent & p_event );
-		void OnDiffuseColour( wxCommandEvent & p_event );
-		void OnSpecularColour( wxCommandEvent & p_event );
-		void OnEmissiveColour( wxCommandEvent & p_event );
-		void OnTextureImage( wxCommandEvent & p_event );
-		void OnShininess( wxCommandEvent & p_event );
-		void OnTexturePath( wxCommandEvent & p_event );
-		void OnTextureSelect( wxCommandEvent & p_event );
-		void OnDoubleFace( wxCommandEvent & p_event );
-		void OnTextureChannel( wxCommandEvent & p_event );
-		void OnAlpha( wxCommandEvent & p_event );
-		void OnHasShader( wxCommandEvent & p_event );
 	};
 }
 

@@ -246,7 +246,7 @@ namespace Castor
 		 *\param[in]	p_recursive		Définit si la recherche doit être récursive ou pas
 		 *\return		\p true si le dossier a été listé
 		 */
-		CU_API static bool ListDirectoryFiles( Path const & p_folderPath, StringArray & p_files, bool p_recursive = false );
+		CU_API static bool ListDirectoryFiles( Path const & p_folderPath, PathArray & p_files, bool p_recursive = false );
 		/**
 		 *\~english
 		 *\brief		Gives the current directory (id est where the execution is)

@@ -312,6 +312,7 @@ namespace Castor
 	DECLARE_VECTOR( SphericalVertexSPtr, SphericalVertexPtr );
 	DECLARE_VECTOR( int, Int );
 	DECLARE_VECTOR( String, String );
+	DECLARE_VECTOR( Path, Path );
 	DECLARE_VECTOR( ParserParameterBaseSPtr, ParserParameter );
 	DECLARE_MAP( String, uint32_t, UIntStr );
 	DECLARE_MAP( String, bool, BoolStr );

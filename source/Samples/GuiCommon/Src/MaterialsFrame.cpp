@@ -30,16 +30,16 @@ void wxMaterialsFrame::Initialise()
 void wxMaterialsFrame::SetMaterialName( String const & p_strMaterialName )
 {
 	m_pSelectedMaterial = m_pEngine->GetMaterialManager().find( p_strMaterialName );
-	m_pMaterialPanel->SetMaterialName( p_strMaterialName );
+	m_pMaterialPanel->SetMaterialName( m_pEngine, p_strMaterialName );
 }
 
 wxSizer * wxMaterialsFrame::DoBaseInit()
 {
 	wxSize l_size = GetClientSize();
-	m_pMaterialsList = new wxMaterialsListView( m_pEngine, this, eID_LIST_MATERIALS, wxDefaultPosition, wxSize( m_iListWidth, 100 ) );//l_size.y ) );
-	m_pMaterialPanel = new wxMaterialPanel( m_pEngine, m_bCanEdit, this, wxDefaultPosition, wxDefaultSize );//, wxPoint( m_iListWidth, 25 ), wxSize( l_size.x - m_iListWidth, l_size.y - 25 ) );
+	m_pMaterialsList = new wxMaterialsListView( m_iListWidth / 3, this, eID_LIST_MATERIALS, wxDefaultPosition, wxSize( m_iListWidth, 100 ) );//l_size.y ) );
+	m_pMaterialPanel = new wxMaterialPanel( false, m_bCanEdit, this, wxDefaultPosition, wxDefaultSize );//, wxPoint( m_iListWidth, 25 ), wxSize( l_size.x - m_iListWidth, l_size.y - 25 ) );
 	m_pMaterialsList->Show();
-	m_pMaterialsList->CreateList();
+	m_pMaterialsList->CreateList( m_pEngine );
 	wxBoxSizer * l_pSizer = new wxBoxSizer( wxHORIZONTAL );
 	l_pSizer->Add(	m_pMaterialsList,	wxSizerFlags( 0 ).Expand() );
 	l_pSizer->Add(	m_pMaterialPanel,	wxSizerFlags( 1 ).Expand() );

@@ -73,9 +73,9 @@ namespace Testing
 #	define TEST_EQUAL( x, y ) p_testCount++;if( !(x == y) ) { p_errCount++;Castor::Logger::LogWarning( "%s - %s, line %d : %s == %s (%s != %s)", __FILE__, __FUNCTION__, __LINE__, std::string( #x ).c_str(), std::string( #y ).c_str(), Testing::to_string( x ).c_str(), Testing::to_string( y ).c_str() ); }
 #	define TEST_REQUIRE( x ) p_testCount++;if( !(x) ) { p_errCount++;throw TestFailed( #x, __FILE__, __FUNCTION__, __LINE__ ); }
 #	define EXECUTE_TEST( test_func, errors, tests ) \
-    Logger::LogMessage( "*** Begin test case %s ***", #test_func );\
+    Logger::LogInfo( "*** Begin test case %s ***", #test_func );\
 	test_func( errors, tests );\
-    Logger::LogMessage( "*** End test case %s ***", #test_func )
+    Logger::LogInfo( "*** End test case %s ***", #test_func )
 }
 
 #endif

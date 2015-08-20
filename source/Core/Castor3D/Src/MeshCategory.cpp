@@ -30,9 +30,9 @@ namespace Castor3D
 
 	void MeshCategory::ComputeNormals( bool p_bReverted )
 	{
-		std::for_each( m_pMesh->Begin(), m_pMesh->End(), [&]( SubmeshSPtr p_pSubmesh )
+		for ( auto && l_submesh: *m_pMesh )
 		{
-			p_pSubmesh->ComputeNormals( p_bReverted );
-		} );
+			l_submesh->ComputeNormals( p_bReverted );
+		}
 	}
 }
