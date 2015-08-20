@@ -547,7 +547,7 @@ namespace Castor3D
 		m_pContext->Bind( p_eTargetBuffer, eFRAMEBUFFER_TARGET_DRAW );
 		m_wpDepthStencilState.lock()->Apply();
 		m_wpRasteriserState.lock()->Apply();
-#if DX_DEBUG
+#if !DX_DEBUG
 #if !defined( NDEBUG )
 		Colour l_save = GetEngine()->GetRenderSystem()->GetCurrentContext()->GetClearColour();
 		GetEngine()->GetRenderSystem()->GetCurrentContext()->SetClearColour( Colour::from_predef( Colour::ePREDEFINED_FULLALPHA_RED ) );

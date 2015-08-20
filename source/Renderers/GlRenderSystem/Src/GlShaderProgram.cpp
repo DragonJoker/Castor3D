@@ -53,9 +53,9 @@ namespace GlRender
 
 	bool GlShaderProgram::Link()
 	{
-		bool        l_bReturn       = false;
-		uint32_t    l_uiNbAttached  = 0;
-		int         l_iLinked       = 0;
+		bool l_bReturn = false;
+		uint32_t l_uiNbAttached = 0;
+		int l_iLinked = 0;
 
 		if ( m_pRenderSystem->UseShaders() && m_eStatus != ePROGRAM_STATUS_ERROR )
 		{

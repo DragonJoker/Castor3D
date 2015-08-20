@@ -114,7 +114,7 @@ namespace GlRender
 
 	bool GlDynamicTexture::DoBind( uint32_t p_index )
 	{
-		bool l_bReturn = m_gl.ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + m_uiIndex ) );
+		bool l_bReturn = m_gl.ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + p_index ) );
 
 		if ( l_bReturn )
 		{

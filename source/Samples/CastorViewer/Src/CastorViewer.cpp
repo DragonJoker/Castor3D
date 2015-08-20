@@ -80,9 +80,9 @@ namespace CastorViewer
 		{
 			try
 			{
-				ELogType		l_eLogLevel;
-				eRENDERER_TYPE	l_eRenderer;
-				wxString		l_strRenderer;
+				ELogType l_eLogLevel;
+				eRENDERER_TYPE l_eRenderer;
+				wxString l_strRenderer;
 
 				if ( !l_parser.Found( wxT( 'l' ), reinterpret_cast< long * >( &l_eLogLevel ) ) )
 				{

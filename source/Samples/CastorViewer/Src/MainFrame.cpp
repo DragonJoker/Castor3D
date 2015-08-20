@@ -599,17 +599,12 @@ namespace CastorViewer
 		l_pToolbar->Realize();
 	}
 
-	void MainFrame::DoLog( String const & p_strLog, ELogType p_eLogType )
+	void MainFrame::DoLogCallback( String const & p_strLog, ELogType p_eLogType )
 	{
 		if ( m_pListLog )
 		{
 			m_pListLog->InsertItem( 0, p_strLog );
 		}
-	}
-
-	void MainFrame::DoLogCallback( String const & p_strLog, ELogType p_eLogType )
-	{
-		DoLog( p_strLog, p_eLogType );
 	}
 
 	void MainFrame::DoExportScene( Castor::Path const & p_pathFile )const

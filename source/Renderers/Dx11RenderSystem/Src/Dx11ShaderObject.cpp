@@ -55,11 +55,11 @@ namespace Dx11Render
 	{
 		static std::string l_strProfiles[eSHADER_TYPE_COUNT][eSHADER_MODEL_COUNT] =
 		{
-			{ "vs_4_0",	"vs_4_0",	"vs_4_0",	"vs_4_0",	"vs_5_0" },
-			{ "",		"",			"gs_4_0",	"gs_4_0",	"gs_5_0" },
-			{ "",		"",			"",			"hs_4_0",	"hs_5_0" },
-			{ "",		"",			"",			"ds_4_0",	"ds_5_0" },
-			{ "",		"ps_4_0",	"ps_4_0",	"ps_4_0",	"ps_5_0" },
+			{ "vs_2_0",	"vs_2_0",	"vs_4_0",	"vs_4_1",	"vs_5_0" },
+			{ "",		"",			"gs_4_0",	"gs_4_1",	"gs_5_0" },
+			{ "",		"",			"",			"hs_4_1",	"hs_5_0" },
+			{ "",		"",			"",			"ds_4_1",	"ds_5_0" },
+			{ "ps_2_0",	"ps_2_0",	"ps_4_0",	"ps_4_1",	"ps_5_0" },
 			{ "",		"",			"",			"",			"cs_5_0" },
 		};
 		bool l_bReturn = false;

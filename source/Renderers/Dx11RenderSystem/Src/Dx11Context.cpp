@@ -203,7 +203,6 @@ namespace Dx11Render
 		DxContextSPtr l_pMainContext = std::static_pointer_cast< DxContext >( l_pRenderSystem->GetMainContext() );
 		IDXGIFactory * l_factory = NULL;
 		HRESULT l_hr = CreateDXGIFactory( __uuidof( IDXGIFactory ) , reinterpret_cast< void ** >( &l_factory ) );
-		//IDXGIFactory * l_pFactory = l_pRenderSystem->GetDXGIFactory();
 		ID3D11Texture2D * l_pDSTex = NULL;
 		ID3D11Texture2D * l_pRTTex = NULL;
 

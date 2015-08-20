@@ -292,7 +292,7 @@ namespace OceanLighting
 	public:
 		virtual ~RenderTechnique();
 
-		virtual Castor3D::RenderTechniqueBaseSPtr Clone( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_pRenderSystem, Castor3D::Parameters const & p_params );
+		static Castor3D::RenderTechniqueBaseSPtr Create( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_pRenderSystem, Castor3D::Parameters const & p_params );
 
 		inline void SetReloadPrograms( bool p_bLayer )
 		{
@@ -549,7 +549,7 @@ namespace OceanLighting
 	protected:
 		virtual bool DoCreate();
 		virtual void DoDestroy();
-		virtual bool DoInitialise();
+		virtual bool DoInitialise( uint32_t & p_index );
 		virtual void DoCleanup();
 		virtual bool DoBeginRender();
 		virtual void DoEndRender();

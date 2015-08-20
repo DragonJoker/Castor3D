@@ -59,22 +59,26 @@ namespace Dx11Render
 					if ( l_pTexture->GetType() == Castor3D::eTEXTURE_TYPE_STATIC )
 					{
 						l_pResourceView = static_cast< DxStaticTexture * >( l_pTexture )->GetShaderResourceView();
+#if !defined( NDEBUG )
 						ID3D11Resource * l_pResource;
 						l_pResourceView->GetResource( &l_pResource );
 						Castor::StringStream l_name;
 						l_name << cuT( "StaticTexture_" ) << ( void * )*p_pValue << cuT( "_SRV.png" );
 						D3DX11SaveTextureToFile( l_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
 						l_pResource->Release();
+#endif
 					}
 					else
 					{
 						l_pResourceView = static_cast< DxDynamicTexture * >( l_pTexture )->GetShaderResourceView();
+#if !defined( NDEBUG )
 						ID3D11Resource * l_pResource;
 						l_pResourceView->GetResource( &l_pResource );
 						Castor::StringStream l_name;
 						l_name << cuT( "DynamicTexture_" ) << ( void * )*p_pValue << cuT( "_SRV.png" );
 						D3DX11SaveTextureToFile( l_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
 						l_pResource->Release();
+#endif
 					}
 				}
 

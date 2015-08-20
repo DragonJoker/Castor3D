@@ -29,7 +29,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	pragma warning( disable:4996 )
 #endif
 
-#define DX_DEBUG 0
+#define DX_DEBUG 1
 
 #undef RGB
 

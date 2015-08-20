@@ -48,6 +48,7 @@ namespace Dx11Render
 			l_return = dxCheckError( l_hr, "CreateDepthStencilState" );
 			m_bChanged = false;
 		}
+
 		return l_return;
 	}
 

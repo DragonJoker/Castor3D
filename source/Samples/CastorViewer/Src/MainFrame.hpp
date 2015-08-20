@@ -64,7 +64,6 @@ namespace CastorViewer
 		bool DoInitialise3D();
 		bool DoInitialiseImages();
 		void DoPopulateToolbar();
-		void DoLog( Castor::String const & p_strLog, Castor::ELogType p_eLogType );
 		void DoExportScene( Castor::Path const & p_pathFile )const;
 		void DoObjExportScene( Castor::Path const & p_pathFile )const;
 		Castor::String DoObjExport( Castor::Path const & p_pathMtlFolder, Castor3D::MaterialSPtr p_pMaterial )const;

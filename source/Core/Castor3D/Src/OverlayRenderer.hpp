@@ -202,7 +202,7 @@ namespace Castor3D
 		 *\param[in]	p_index	The current index in the text GeometryBuffers array
 		 *\return		The used GeometryBuffers.
 		 *\~french
-		 *\brief		Remplit un GeometryBuffers d'une partie d'un tableau de sommetsvertex pour texte
+		 *\brief		Remplit un GeometryBuffers d'une partie d'un tableau de sommets pour texte
 		 *\param[in]	p_count	Le nombre de sommets à copier dans le GeometryBuffers
 		 *\param[in]	p_it	Le début du tableau de sommets
 		 *\param[in]	p_index	L'indice courant dans le tableau de GeometryBuffers de texte

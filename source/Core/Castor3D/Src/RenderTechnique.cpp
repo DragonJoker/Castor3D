@@ -159,7 +159,7 @@ namespace Castor3D
 
 	bool RenderTechniqueBase::BeginRender()
 	{
-#if DX_DEBUG
+#if !DX_DEBUG
 		return DoBeginRender();
 #else
 		return true;//m_pRenderTarget->GetFrameBuffer()->Bind();
@@ -174,23 +174,19 @@ namespace Castor3D
 
 	void RenderTechniqueBase::EndRender()
 	{
-#if DX_DEBUG
+#if !DX_DEBUG
 		DoEndRender();
 		m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
-		BlendStateSPtr l_pBlendState = m_wp2DBlendState.lock();
-		DepthStencilStateSPtr l_pDepthStencilState = m_wp2DDepthStencilState.lock();
-		l_pBlendState->Apply();
-		l_pDepthStencilState->Apply();
+		m_wp2DBlendState.lock()->Apply();
+		m_wp2DDepthStencilState.lock()->Apply();
 		m_pEngine->RenderOverlays( *m_pRenderSystem->GetTopScene(), m_size );
 		m_pFrameBuffer->Unbind();
 		m_pRenderSystem->PopScene();
 		m_pFrameBuffer->RenderToBuffer( m_pRenderTarget->GetFrameBuffer(), m_pRenderTarget->GetSize(), eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH, m_pRenderTarget->GetDepthStencilState(), m_pRenderTarget->GetRasteriserState() );
 #else
 		//m_pRenderTarget->GetFrameBuffer()->Unbind();
-		BlendStateSPtr l_pBlendState = m_wp2DBlendState.lock();
-		DepthStencilStateSPtr l_pDepthStencilState = m_wp2DDepthStencilState.lock();
-		l_pBlendState->Apply();
-		l_pDepthStencilState->Apply();
+		m_wp2DBlendState.lock()->Apply();
+		m_wp2DDepthStencilState.lock()->Apply();
 		m_pEngine->RenderOverlays( *m_pRenderSystem->GetTopScene(), m_size );
 		m_pRenderSystem->PopScene();
 #endif

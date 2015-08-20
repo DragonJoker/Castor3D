@@ -1583,7 +1583,6 @@ namespace Castor3D
 		ShaderProgramBaseSPtr l_pProgram;
 		uint32_t l_uiCount = 0;
 		uint32_t l_uiSize = p_node.m_pMaterial->GetPassCount();
-		auto l_itEnd = p_node.m_pMaterial->end();
 
 		for ( auto l_pass: *p_node.m_pMaterial )
 		{

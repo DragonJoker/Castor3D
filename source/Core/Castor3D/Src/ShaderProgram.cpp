@@ -178,6 +178,8 @@ namespace Castor3D
 
 	void ShaderProgramBase::Cleanup()
 	{
+		m_activeShaders.clear();
+
 		for ( auto l_shader: m_pShaders )
 		{
 			if ( l_shader )
