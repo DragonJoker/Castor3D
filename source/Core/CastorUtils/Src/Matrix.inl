@@ -703,11 +703,13 @@
 #endif
 	}
 
+#if !defined( NDEBUG )
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline void Matrix< T, Rows, Columns >::do_update_debug()const
 	{
 		memcpy( m_debugData, m_pPointer, sizeof( m_debugData ) );
 	}
+#endif
 
 //*************************************************************************************************
 
