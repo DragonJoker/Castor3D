@@ -162,7 +162,6 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( uint32_t p_flags )
 	l_strVtxShader += l_strAttribute0 + cuT( "	<vec4> vertex;\n" );
 	l_strVtxShader += BillboardVS;
 	str_utils::replace( l_strVtxShader, cuT( "<layout>" ), l_pKeywords->GetLayout() );
-	GLSL::ConstantsBase::Replace( l_strVtxShader );
 
 	String l_strGeoShader;
 	l_strGeoShader += l_strVersion;
@@ -174,7 +173,6 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( uint32_t p_flags )
 	str_utils::replace( l_strGeoShader, cuT( "<out_primitives>" ), PRIMITIVES[l_pObject->GetOutputType()] );
 	str_utils::replace( l_strGeoShader, cuT( "<max_vertices>" ), str_utils::to_string( l_pObject->GetOutputVtxCount() ) );
 	str_utils::replace( l_strGeoShader, cuT( "<layout>" ), l_pKeywords->GetLayout() );
-	GLSL::ConstantsBase::Replace( l_strGeoShader );
 
 	String l_strPxlShader = l_pProgram->GetPixelShaderSource( p_flags );
 

@@ -79,8 +79,6 @@ namespace GlRender
 			l_streamPxlShader << cuT( "	" ) << l_pKeywords->GetPixelOutputName() << cuT( " = <texture2D>( c3d_mapDiffuse, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
 			l_streamPxlShader << cuT( "}\n" );
 			String l_strPxlShader = l_streamPxlShader.str();
-			GLSL::ConstantsBase::Replace( l_strVtxShader );
-			GLSL::ConstantsBase::Replace( l_strPxlShader );
 			str_utils::replace( l_strPxlShader, cuT( "<texture2D>" ), l_pKeywords->GetTexture2D() );
 			str_utils::replace( l_strVtxShader, cuT( "<layout>" ), l_pKeywords->GetLayout() );
 			str_utils::replace( l_strPxlShader, cuT( "<layout>" ), l_pKeywords->GetLayout() );

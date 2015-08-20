@@ -78,7 +78,6 @@ ShaderProgramBaseSPtr GlOverlayRenderer::DoGetProgram( uint32_t p_uiFlags )
 	l_strVs += l_pConstants->Matrices();
 	l_strVs += OverlayVS;
 	str_utils::replace( l_strVs, cuT( "<layout>" ), l_pKeywords->GetLayout() );
-	GLSL::ConstantsBase::Replace( l_strVs );
 
 	// Pixel shader
 	String l_strPs, l_strPsMain;
@@ -113,7 +112,6 @@ ShaderProgramBaseSPtr GlOverlayRenderer::DoGetProgram( uint32_t p_uiFlags )
 	str_utils::replace( l_strPs, cuT( "<pass_buffer>" ), l_pConstants->Pass() );
 	str_utils::replace( l_strPs, cuT( "<texture2D>" ), l_pKeywords->GetTexture2D() );
 	str_utils::replace( l_strPs, cuT( "<layout>" ), l_pKeywords->GetLayout() );
-	GLSL::ConstantsBase::Replace( l_strPs );
 
 	for ( int i = 0; i < eSHADER_MODEL_COUNT; ++i )
 	{
