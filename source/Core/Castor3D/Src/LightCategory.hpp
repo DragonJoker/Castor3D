@@ -150,7 +150,7 @@ namespace Castor3D
 		 *\brief		Définit la couleur ambiante
 		 *\param[in]	p_ambient	La nouvelle valeur
 		 */
-		void SetAmbient( Castor::Colour const & p_ambient );
+		void SetAmbient( Castor::Point4f const & p_ambient );
 		/**
 		 *\~english
 		 *\brief		Sets the light's diffuse colour
@@ -159,7 +159,7 @@ namespace Castor3D
 		 *\brief		Définit la couleur diffuse
 		 *\param[in]	p_diffuse	La nouvelle valeur
 		 */
-		void SetDiffuse( Castor::Colour const & p_diffuse );
+		void SetDiffuse( Castor::Point4f const & p_diffuse );
 		/**
 		 *\~english
 		 *\brief		Sets the light's specular colour
@@ -168,7 +168,7 @@ namespace Castor3D
 		 *\brief		Définit la couleur spéculaire
 		 *\param[in]	p_specular	La nouvelle valeur
 		 */
-		void SetSpecular( Castor::Colour const & p_specular );
+		void SetSpecular( Castor::Point4f const & p_specular );
 		/**
 		 *\~english
 		 *\brief		Retrieves the light type
@@ -189,7 +189,7 @@ namespace Castor3D
 		 *\brief		Récupère la couleur ambiante
 		 *\return		La valeur
 		 */
-		inline Castor::Colour const & GetAmbient()const
+		inline Castor::Point4f const & GetAmbient()const
 		{
 			return m_ambient;
 		}
@@ -201,7 +201,7 @@ namespace Castor3D
 		 *\brief		Récupère la couleur diffuse
 		 *\return		La valeur
 		 */
-		inline Castor::Colour const & GetDiffuse()const
+		inline Castor::Point4f const & GetDiffuse()const
 		{
 			return m_diffuse;
 		}
@@ -213,7 +213,7 @@ namespace Castor3D
 		 *\brief		Récupère la couleur spéculaire
 		 *\return		La valeur
 		 */
-		inline Castor::Colour const & GetSpecular()const
+		inline Castor::Point4f const & GetSpecular()const
 		{
 			return m_specular;
 		}
@@ -225,7 +225,7 @@ namespace Castor3D
 		 *\brief		Récupère la couleur ambiante
 		 *\return		La valeur
 		 */
-		inline Castor::Colour & GetAmbient()
+		inline Castor::Point4f & GetAmbient()
 		{
 			return m_ambient;
 		}
@@ -237,7 +237,7 @@ namespace Castor3D
 		 *\brief		Récupère la couleur diffuse
 		 *\return		La valeur
 		 */
-		inline Castor::Colour & GetDiffuse()
+		inline Castor::Point4f & GetDiffuse()
 		{
 			return m_diffuse;
 		}
@@ -249,7 +249,7 @@ namespace Castor3D
 		 *\brief		Récupère la couleur spéculaire
 		 *\return		La valeur
 		 */
-		inline Castor::Colour & GetSpecular()
+		inline Castor::Point4f & GetSpecular()
 		{
 			return m_specular;
 		}
@@ -325,11 +325,11 @@ namespace Castor3D
 		//!\~english The parent light	\~french La lumière parente
 		Light * m_pLight;
 		//!\~english The ambient colour values	\~french La couleur ambiante
-		Castor::Colour m_ambient;
+		Castor::Point4f m_ambient;
 		//!\~english The diffuse colour values	\~french La couleur diffuse
-		Castor::Colour m_diffuse;
+		Castor::Point4f m_diffuse;
 		//!\~english The specular colour values	\~french La couleur spéculaire
-		Castor::Colour m_specular;
+		Castor::Point4f m_specular;
 		//!\~english The position and type of the light (type is in 4th coordinate)	\~french La position et le type de la lumière (le type est dans la 4ème coordonnée)
 		Castor::Point4f m_ptPositionType;
 	};

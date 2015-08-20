@@ -1,25 +1,11 @@
 ﻿#include "Overlay.hpp"
 
 #include "BorderPanelOverlay.hpp"
-#include "Buffer.hpp"
-#include "Camera.hpp"
 #include "Engine.hpp"
-#include "Material.hpp"
 #include "OverlayFactory.hpp"
 #include "OverlayManager.hpp"
-#include "OverlayRenderer.hpp"
 #include "PanelOverlay.hpp"
-#include "Pass.hpp"
-#include "Pipeline.hpp"
-#include "RenderSystem.hpp"
-#include "SceneFileParser.hpp"
-#include "ShaderManager.hpp"
-#include "ShaderProgram.hpp"
 #include "TextOverlay.hpp"
-#include "Texture.hpp"
-#include "TextureUnit.hpp"
-#include "Vertex.hpp"
-#include "Viewport.hpp"
 
 #include <TransformationMatrix.hpp>
 
@@ -36,7 +22,7 @@ namespace Castor3D
 
 	bool Overlay::TextLoader::operator()( Overlay const & p_overlay, TextFile & p_file )
 	{
-		return OverlayCategory::TextLoader()( *p_overlay.GetOverlayCategory(), p_file );
+		return OverlayCategory::TextLoader()( *p_overlay.m_pOverlayCategory, p_file );
 	}
 
 	//*************************************************************************************************
@@ -54,7 +40,7 @@ namespace Castor3D
 
 		if ( l_bReturn )
 		{
-			l_bReturn = OverlayCategory::BinaryParser( m_path ).Fill( *p_obj.GetOverlayCategory(), l_chunk );
+			l_bReturn = OverlayCategory::BinaryParser( m_path ).Fill( *p_obj.m_pOverlayCategory, l_chunk );
 		}
 
 		if ( l_bReturn )
@@ -119,7 +105,7 @@ namespace Castor3D
 					break;
 
 				default:
-					l_bReturn = OverlayCategory::BinaryParser( m_path ).Parse( *p_obj.GetOverlayCategory(), l_chunk );
+					l_bReturn = OverlayCategory::BinaryParser( m_path ).Parse( *p_obj.m_pOverlayCategory, l_chunk );
 					break;
 				}
 			}
@@ -210,6 +196,42 @@ namespace Castor3D
 			{
 				l_return += l_overlay->GetChildsCount( p_level );
 			}
+		}
+
+		return l_return;
+	}
+
+	PanelOverlaySPtr Overlay::GetPanelOverlay()const
+	{
+		PanelOverlaySPtr l_return;
+
+		if ( m_pOverlayCategory->GetType() == eOVERLAY_TYPE_PANEL )
+		{
+			l_return = std::static_pointer_cast< PanelOverlay >( m_pOverlayCategory );
+		}
+
+		return l_return;
+	}
+
+	BorderPanelOverlaySPtr Overlay::GetBorderPanelOverlay()const
+	{
+		BorderPanelOverlaySPtr l_return;
+
+		if ( m_pOverlayCategory->GetType() == eOVERLAY_TYPE_BORDER_PANEL )
+		{
+			l_return = std::static_pointer_cast< BorderPanelOverlay >( m_pOverlayCategory );
+		}
+
+		return l_return;
+	}
+
+	TextOverlaySPtr Overlay::GetTextOverlay()const
+	{
+		TextOverlaySPtr l_return;
+
+		if ( m_pOverlayCategory->GetType() == eOVERLAY_TYPE_TEXT )
+		{
+			l_return = std::static_pointer_cast< TextOverlay >( m_pOverlayCategory );
 		}
 
 		return l_return;

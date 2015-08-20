@@ -52,52 +52,27 @@ namespace Castor3D
 	{
 		void ApplyLightComponent( float p_exp, float p_cut, int p_index, int & p_offset, PxBufferBase & p_data )
 		{
-			Pixel< ePIXEL_FORMAT_ARGB32F > l_px( true );
-			uint8_t const * l_pSrc = p_data.get_at( p_index * 10 + p_offset, 0 );
-			uint8_t * l_pDst = l_px.ptr();
-			PF::ConvertPixel( p_data.format(), l_pSrc, ePIXEL_FORMAT_ARGB32F, l_pDst );
-			reinterpret_cast< float * >( l_px.ptr() )[0] = p_exp;
-			reinterpret_cast< float * >( l_px.ptr() )[1] = p_cut;
-			l_pSrc = l_px.const_ptr();
-			l_pDst = p_data.get_at( p_index * 10 + p_offset++, 0 );
-			PF::ConvertPixel( ePIXEL_FORMAT_ARGB32F, l_pSrc, p_data.format(), l_pDst );
-		}
-
-		void ApplyLightComponent( Colour const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
-		{
-			Point4ub l_components;
-			p_component.to_argb( l_components );
-			uint8_t const * l_pSrc = l_components.const_ptr();
-			uint8_t * l_pDst = p_data.get_at( p_index * 10 + p_offset++, 0 );
-			PF::ConvertPixel( ePIXEL_FORMAT_A8R8G8B8, l_pSrc, p_data.format(), l_pDst );
+			float * l_pDst = reinterpret_cast< float * >( p_data.get_at( p_index * 10 + p_offset++, 0 ) );
+			*l_pDst++ = p_exp;
+			*l_pDst++ = p_cut;
 		}
 
 		void ApplyLightComponent( Point3f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
 		{
-			Point4f l_ptAtt( p_component[0], p_component[1], p_component[2] );
-			Pixel< ePIXEL_FORMAT_ARGB32F > l_px( true );
-			l_px.set< ePIXEL_FORMAT_ARGB32F >( reinterpret_cast< uint8_t const * >( l_ptAtt.const_ptr() ) );
-			uint8_t const * l_pSrc = l_px.const_ptr();
 			uint8_t * l_pDst = p_data.get_at( p_index * 10 + p_offset++, 0 );
-			PF::ConvertPixel( ePIXEL_FORMAT_ARGB32F, l_pSrc, p_data.format(), l_pDst );
+			memcpy( l_pDst, p_component.const_ptr(), 3 * sizeof( float ) );
 		}
 
 		void ApplyLightComponent( Point4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
 		{
-			Pixel< ePIXEL_FORMAT_ARGB32F > l_px( true );
-			l_px.set< ePIXEL_FORMAT_ARGB32F >( reinterpret_cast< uint8_t const * >( p_component.const_ptr() ) );
-			uint8_t const * l_pSrc = l_px.const_ptr();
 			uint8_t * l_pDst = p_data.get_at( p_index * 10 + p_offset++, 0 );
-			PF::ConvertPixel( ePIXEL_FORMAT_A8R8G8B8, l_pSrc, p_data.format(), l_pDst );
+			memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
 		}
 
 		void ApplyLightMtxComponent( float const * p_component, int p_index, int & p_offset, PxBufferBase & p_data )
 		{
-			Pixel< ePIXEL_FORMAT_ARGB32F > l_px( true );
-			l_px.set< ePIXEL_FORMAT_ARGB32F >( reinterpret_cast< uint8_t const * >( p_component ) );
-			uint8_t const * l_pSrc = l_px.const_ptr();
-			uint8_t * l_pDst = p_data.get_at( p_index * 10 + p_offset++ + 1, 0 );
-			PF::ConvertPixel( ePIXEL_FORMAT_ARGB32F, l_pSrc, p_data.format(), l_pDst );
+			uint8_t * l_pDst = p_data.get_at( p_index * 10 + p_offset++, 0 );
+			memcpy( l_pDst, p_component, 4 * sizeof( float ) );
 		}
 
 		void ApplyLightComponent( Matrix4x4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
@@ -111,6 +86,15 @@ namespace Castor3D
 		void ApplyLightComponent( Matrix4x4d const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
 		{
 			ApplyLightComponent( Matrix4x4f( p_component.const_ptr() ), p_index, p_offset, p_data );
+		}
+
+		void ApplyLightColourIntensity( Point4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
+		{
+			float * l_pDst = reinterpret_cast< float * >( p_data.get_at( p_index * 10 + p_offset++, 0 ) );
+			*l_pDst++ = p_component[2];// R
+			*l_pDst++ = p_component[1];// G
+			*l_pDst++ = p_component[0];// B
+			*l_pDst++ = p_component[3];// I
 		}
 	}
 
@@ -1618,7 +1602,7 @@ namespace Castor3D
 				}
 
 				l_pProgram = m_pEngine->GetShaderManager().GetAutomaticProgram( l_pass->GetTextureFlags(), l_uiProgramFlags );
-				l_pass->BindToProgram( l_pProgram );
+				l_pass->BindToAutomaticProgram( l_pProgram );
 			}
 			else
 			{
@@ -1696,9 +1680,9 @@ namespace Castor3D
 	void Scene::DoBindLight( LightSPtr p_light, int p_index, ShaderProgramBase & p_program )
 	{
 		int l_offset = 0;
-		ApplyLightComponent( p_light->GetAmbient(), p_index, l_offset, *m_pLightsData );
-		ApplyLightComponent( p_light->GetDiffuse(), p_index, l_offset, *m_pLightsData );
-		ApplyLightComponent( p_light->GetSpecular(), p_index, l_offset, *m_pLightsData );
+		ApplyLightColourIntensity( p_light->GetAmbient(), p_index, l_offset, *m_pLightsData );
+		ApplyLightColourIntensity( p_light->GetDiffuse(), p_index, l_offset, *m_pLightsData );
+		ApplyLightColourIntensity( p_light->GetSpecular(), p_index, l_offset, *m_pLightsData );
 
 		if ( p_light->GetLightType() == eLIGHT_TYPE_DIRECTIONAL )
 		{

@@ -201,14 +201,14 @@ namespace Castor
 	{
 		StringStream l_strError;
 		l_strError << cuT( "Error Line #" ) << m_pParsingContext->ui64Line << cuT( " / " ) << p_strError;
-		Logger::LogInfo( l_strError.str() );
+		Logger::LogError( l_strError.str() );
 	}
 
 	void FileParser::ParseWarning( String const & p_strWarning )
 	{
 		StringStream l_strError;
 		l_strError << cuT( "Warning Line #" ) << m_pParsingContext->ui64Line << cuT( " / " ) << p_strWarning;
-		Logger::LogInfo( l_strError.str() );
+		Logger::LogWarning( l_strError.str() );
 	}
 
 	bool FileParser::CheckParams( String const & p_strParams, ParserParameterArrayConstIt p_itBegin, ParserParameterArrayConstIt p_itEnd )
@@ -492,10 +492,15 @@ namespace Castor
 
 			if ( !CheckParams( l_strTmp, l_iter->second.second.begin(), l_iter->second.second.end() ) )
 			{
-				Ignore();
+				bool l_ignored = true;
+				std::swap( l_ignored, m_bIgnored );
+				l_bReturn = l_iter->second.first( this, l_iter->second.second );
+				std::swap( l_ignored, m_bIgnored );
 			}
-
-			l_bReturn = l_iter->second.first( this, l_iter->second.second );
+			else
+			{
+				l_bReturn = l_iter->second.first( this, l_iter->second.second );
+			}
 		}
 
 		return l_bReturn;

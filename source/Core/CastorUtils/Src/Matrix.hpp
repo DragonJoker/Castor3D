@@ -538,7 +538,7 @@ namespace Castor
 		bool m_bOwnCoords;
 		value_type * m_pPointer;
 #if !defined( NDEBUG )
-		mutable value_type m_debugData[Rows * Columns];
+		mutable value_type * m_debugData[Columns][Rows];
 #endif
 	};
 	/**

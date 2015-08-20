@@ -950,7 +950,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightAmbient )
 
 	if ( l_pContext->pLight )
 	{
-		Point3f l_vVector;
+		Point4f l_vVector;
 		p_arrayParams[0]->Get( l_vVector );
 		l_pContext->pLight->SetAmbient( l_vVector.ptr() );
 	}
@@ -967,7 +967,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightDiffuse )
 
 	if ( l_pContext->pLight )
 	{
-		Point3f l_vVector;
+		Point4f l_vVector;
 		p_arrayParams[0]->Get( l_vVector );
 		l_pContext->pLight->SetDiffuse( l_vVector.ptr() );
 	}
@@ -984,7 +984,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightSpecular )
 
 	if ( l_pContext->pLight )
 	{
-		Point3f l_vVector;
+		Point4f l_vVector;
 		p_arrayParams[0]->Get( l_vVector );
 		l_pContext->pLight->SetSpecular( l_vVector.ptr() );
 	}
@@ -3313,7 +3313,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PanelOverlayUvs )
 	{
 		Point4d l_uvs;
 		p_arrayParams[0]->Get( l_uvs );
-		l_pOverlay->GetOverlayCategory()->SetUV( l_uvs );
+		l_pOverlay->GetPanelOverlay()->SetUV( l_uvs );
 	}
 	else
 	{
@@ -3331,7 +3331,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BorderPanelOverlaySizes )
 	{
 		Point4d l_ptSize;
 		p_arrayParams[0]->Get( l_ptSize );
-		std::static_pointer_cast< BorderPanelOverlay >( l_pOverlay->GetOverlayCategory() )->SetBorderSize( l_ptSize );
+		l_pOverlay->GetBorderPanelOverlay()->SetBorderSize( l_ptSize );
 	}
 	else
 	{
@@ -3349,7 +3349,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BorderPanelOverlayPixelSizes )
 	{
 		Rectangle l_size;
 		p_arrayParams[0]->Get( l_size );
-		std::static_pointer_cast< BorderPanelOverlay >( l_pOverlay->GetOverlayCategory() )->SetBorderPixelSize( l_size );
+		l_pOverlay->GetBorderPanelOverlay()->SetBorderPixelSize( l_size );
 	}
 	else
 	{
@@ -3368,7 +3368,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BorderPanelOverlayMaterial )
 		String l_strName;
 		p_arrayParams[0]->Get( l_strName );
 		MaterialManager & l_manager = l_pContext->m_pParser->GetEngine()->GetMaterialManager();
-		std::static_pointer_cast< BorderPanelOverlay >( l_pOverlay->GetOverlayCategory() )->SetBorderMaterial( l_manager.find( l_strName ) );
+		l_pOverlay->GetBorderPanelOverlay()->SetBorderMaterial( l_manager.find( l_strName ) );
 	}
 	else
 	{
@@ -3386,7 +3386,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BorderPanelOverlayPosition )
 	{
 		uint32_t l_position;
 		p_arrayParams[0]->Get( l_position );
-		std::static_pointer_cast< BorderPanelOverlay >( l_pOverlay->GetOverlayCategory() )->SetBorderPosition( eBORDER_POSITION( l_position ) );
+		l_pOverlay->GetBorderPanelOverlay()->SetBorderPosition( eBORDER_POSITION( l_position ) );
 	}
 	else
 	{
@@ -3404,7 +3404,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BorderPanelOverlayCenterUvs )
 	{
 		Point4d l_uvs;
 		p_arrayParams[0]->Get( l_uvs );
-		l_pOverlay->GetOverlayCategory()->SetUV( l_uvs );
+		l_pOverlay->GetBorderPanelOverlay()->SetUV( l_uvs );
 	}
 	else
 	{
@@ -3422,7 +3422,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BorderPanelOverlayOuterUvs )
 	{
 		Point4d l_uvs;
 		p_arrayParams[0]->Get( l_uvs );
-		std::static_pointer_cast< BorderPanelOverlay >( l_pOverlay->GetOverlayCategory() )->SetBorderOuterUV( l_uvs );
+		l_pOverlay->GetBorderPanelOverlay()->SetBorderOuterUV( l_uvs );
 	}
 	else
 	{
@@ -3440,7 +3440,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BorderPanelOverlayInnerUvs )
 	{
 		Point4d l_uvs;
 		p_arrayParams[0]->Get( l_uvs );
-		std::static_pointer_cast< BorderPanelOverlay >( l_pOverlay->GetOverlayCategory() )->SetBorderInnerUV( l_uvs );
+		l_pOverlay->GetBorderPanelOverlay()->SetBorderInnerUV( l_uvs );
 	}
 	else
 	{
@@ -3462,7 +3462,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_TextOverlayFont )
 
 		if ( l_fontManager.has( l_strName ) )
 		{
-			std::static_pointer_cast< TextOverlay >( l_pOverlay->GetOverlayCategory() )->SetFont( l_strName );
+			l_pOverlay->GetTextOverlay()->SetFont( l_strName );
 		}
 		else
 		{
@@ -3487,7 +3487,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_TextOverlayTextWrapping )
 		uint32_t l_value;
 		p_arrayParams[0]->Get( l_value );
 
-		std::static_pointer_cast< TextOverlay >( l_pOverlay->GetOverlayCategory() )->SetTextWrappingMode( eTEXT_WRAPPING_MODE( l_value ) );
+		l_pOverlay->GetTextOverlay()->SetTextWrappingMode( eTEXT_WRAPPING_MODE( l_value ) );
 	}
 	else
 	{
@@ -3505,7 +3505,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_TextOverlayText )
 
 	if ( l_pOverlay && l_pOverlay->GetType() == eOVERLAY_TYPE_TEXT )
 	{
-		std::static_pointer_cast< TextOverlay >( l_pOverlay->GetOverlayCategory() )->SetCaption( l_strParams );
+		l_pOverlay->GetTextOverlay()->SetCaption( l_strParams );
 	}
 	else
 	{

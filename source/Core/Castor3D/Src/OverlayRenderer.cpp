@@ -356,7 +356,7 @@ namespace Castor3D
 
 			if ( l_program )
 			{
-				l_pass->BindToProgram( l_program );
+				l_pass->BindToAutomaticProgram( l_program );
 				auto l_matrixBuffer = l_pass->GetMatrixBuffer();
 
 				if ( l_matrixBuffer )

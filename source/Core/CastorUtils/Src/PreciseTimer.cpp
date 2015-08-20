@@ -27,7 +27,7 @@ namespace Castor
 		auto l_current = DoGetTime();
 		auto l_diff( l_current - m_savedTime );
 		m_savedTime = l_current;
-		return std::chrono::duration_cast< std::chrono::nanoseconds >( l_diff ).count() / 1000.0;
+		return std::chrono::duration_cast< std::chrono::microseconds >( l_diff ).count() / 1000.0;
 	}
 
 	PreciseTimer::clock::time_point PreciseTimer::DoGetTime()const

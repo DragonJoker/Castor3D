@@ -129,73 +129,73 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the ambient colour
+		 *\brief		Retrieves the ambient colour (4 components: R, G, B and Intensity)
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la couleur ambiante
+		 *\brief		Récupère la couleur ambiante (4 composantes: R, V, B et Intensité)
 		 *\return		La valeur
 		 */
-		inline Castor::Colour const & GetAmbient()const
+		inline Castor::Point4f const & GetAmbient()const
 		{
 			return m_pCategory->GetAmbient();
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the diffuse colour
+		 *\brief		Retrieves the diffuse colour (4 components: R, G, B and Intensity)
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la couleur diffuse
+		 *\brief		Récupère la couleur diffuse (4 composantes: R, V, B et Intensité)
 		 *\return		La valeur
 		 */
-		inline Castor::Colour const & GetDiffuse()const
+		inline Castor::Point4f const & GetDiffuse()const
 		{
 			return m_pCategory->GetDiffuse();
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the specular colour
+		 *\brief		Retrieves the specular colour (4 components: R, G, B and Intensity)
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la couleur spéculaire
+		 *\brief		Récupère la couleur spéculaire (4 composantes: R, V, B et Intensité)
 		 *\return		La valeur
 		 */
-		inline Castor::Colour const & GetSpecular()const
+		inline Castor::Point4f const & GetSpecular()const
 		{
 			return m_pCategory->GetSpecular();
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the ambient colour
+		 *\brief		Retrieves the ambient colour (4 components: R, G, B and Intensity)
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la couleur ambiante
+		 *\brief		Récupère la couleur ambiante (4 composantes: R, V, B et Intensité)
 		 *\return		La valeur
 		 */
-		inline Castor::Colour & GetAmbient()
+		inline Castor::Point4f & GetAmbient()
 		{
 			return m_pCategory->GetAmbient();
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the diffuse colour
+		 *\brief		Retrieves the diffuse colour (4 components: R, G, B and Intensity)
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la couleur diffuse
+		 *\brief		Récupère la couleur diffuse (4 composantes: R, V, B et Intensité)
 		 *\return		La valeur
 		 */
-		inline Castor::Colour & GetDiffuse()
+		inline Castor::Point4f & GetDiffuse()
 		{
 			return m_pCategory->GetDiffuse();
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the specular colour
+		 *\brief		Retrieves the specular colour (4 components: R, G, B and Intensity)
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la couleur spéculaire
+		 *\brief		Récupère la couleur spéculaire (4 composantes: R, V, B et Intensité)
 		 *\return		La valeur
 		 */
-		inline Castor::Colour & GetSpecular()
+		inline Castor::Point4f & GetSpecular()
 		{
 			return m_pCategory->GetSpecular();
 		}
@@ -238,10 +238,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the light index
-		 *\param[in]	The new value
+		 *\param[in]	val	The new value
 		 *\~french
 		 *\brief		Définit l'indice de la lumière
-		 *\param[in]	La nouvelle valeur
+		 *\param[in]	val	La nouvelle valeur
 		 */
 		inline void SetIndex( int val )
 		{
@@ -249,119 +249,161 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the ambient colour
-		 *\param[in]	The new value
+		 *\brief		Sets the ambient colour (4 components: R, G, B and Intensity)
+		 *\param[in]	p_ambient	The new value
 		 *\~french
-		 *\brief		Définit la couleur ambiante
-		 *\param[in]	La nouvelle valeur
+		 *\brief		Définit la couleur ambiante (4 composantes: R, V, B et Intensité)
+		 *\param[in]	p_ambient	La nouvelle valeur
 		 */
 		inline void SetAmbient( float * p_ambient )
 		{
-			m_pCategory->SetAmbient( Castor::Colour::from_components( p_ambient[0], p_ambient[1], p_ambient[2], 1.0 ) );
+			m_pCategory->SetAmbient( Castor::Point4f( p_ambient[0], p_ambient[1], p_ambient[2], p_ambient[3] ) );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the ambient colour
-		 *\param[in]	The new value
+		 *\brief		Sets the ambient light
+		 *\param[in]	r, g, b	The RGB components
+		 *\param[in]	i		The intensity component
 		 *\~french
-		 *\brief		Définit la couleur ambiante
-		 *\param[in]	La nouvelle valeur
+		 *\brief		Définit la lumière ambiante
+		 *\param[in]	r, g, b	Les composantes RGB
+		 *\param[in]	i		La composante intensité
 		 */
-		inline void SetAmbient( float r, float g, float b )
+		inline void SetAmbient( float r, float g, float b, float i )
 		{
-			m_pCategory->SetAmbient( Castor::Colour::from_components( r, g, b, 1.0 ) );
+			m_pCategory->SetAmbient( Castor::Point4f( r, g, b, i ) );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the ambient colour
-		 *\param[in]	The new value
+		 *\brief		Sets the ambient colour (4 components: R, G, B and Intensity)
+		 *\param[in]	p_ambient	The new value
 		 *\~french
-		 *\brief		Définit la couleur ambiante
-		 *\param[in]	La nouvelle valeur
+		 *\brief		Définit la couleur ambiante (4 composantes: R, V, B et Intensité)
+		 *\param[in]	p_ambient	La nouvelle valeur
 		 */
-		inline void SetAmbient( Castor::Colour const & p_ambient )
+		inline void SetAmbient( Castor::Point4f const & p_ambient )
 		{
 			m_pCategory->SetAmbient( p_ambient );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the diffuse colour
-		 *\param[in]	The new value
+		 *\brief		Sets the ambient colour (4 components: R, G, B and Intensity)
+		 *\param[in]	p_ambient	The new value
 		 *\~french
-		 *\brief		Définit la couleur diffuse
-		 *\param[in]	La nouvelle valeur
+		 *\brief		Définit la couleur ambiante (4 composantes: R, V, B et Intensité)
+		 *\param[in]	p_ambient	La nouvelle valeur
+		 */
+		inline void SetAmbient( Castor::Colour const & p_ambient )
+		{
+			p_ambient.to_rgba( m_pCategory->GetAmbient() );
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the diffuse colour (4 components: R, G, B and Intensity)
+		 *\param[in]	p_diffuse	The new value
+		 *\~french
+		 *\brief		Définit la couleur diffuse (4 composantes: R, V, B et Intensité)
+		 *\param[in]	p_diffuse	La nouvelle valeur
 		 */
 		inline void SetDiffuse( float * p_diffuse )
 		{
-			m_pCategory->SetDiffuse( Castor::Colour::from_components( p_diffuse[0], p_diffuse[1], p_diffuse[2], 1.0 ) );
+			m_pCategory->SetDiffuse( Castor::Point4f( p_diffuse[0], p_diffuse[1], p_diffuse[2], p_diffuse[3] ) );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the diffuse colour
-		 *\param[in]	The new value
+		 *\param[in]	r, g, b	The RGB components
+		 *\param[in]	i		The intensity component
 		 *\~french
 		 *\brief		Définit la couleur diffuse
-		 *\param[in]	La nouvelle valeur
+		 *\param[in]	r, g, b	Les composantes RGB
+		 *\param[in]	i		La composante intensité
 		 */
-		inline void SetDiffuse( float r, float g, float b )
+		inline void SetDiffuse( float r, float g, float b, float i )
 		{
-			m_pCategory->SetDiffuse( Castor::Colour::from_components( r, g, b, 1.0 ) );
+			m_pCategory->SetDiffuse( Castor::Point4f( r, g, b, i ) );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the diffuse colour
-		 *\param[in]	The new value
+		 *\brief		Sets the diffuse colour (4 components: R, G, B and Intensity)
+		 *\param[in]	p_diffuse	The new value
 		 *\~french
-		 *\brief		Définit la couleur diffuse
-		 *\param[in]	La nouvelle valeur
+		 *\brief		Définit la couleur diffuse (4 composantes: R, V, B et Intensité)
+		 *\param[in]	p_diffuse	La nouvelle valeur
 		 */
-		inline void SetDiffuse( Castor::Colour const & p_diffuse )
+		inline void SetDiffuse( Castor::Point4f const & p_diffuse )
 		{
 			m_pCategory->SetDiffuse( p_diffuse );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the specular colour
-		 *\param[in]	The new value
+		 *\brief		Sets the diffuse colour (4 components: R, G, B and Intensity)
+		 *\param[in]	p_diffuse	The new value
 		 *\~french
-		 *\brief		Définit la couleur spéculaire
-		 *\param[in]	La nouvelle valeur
+		 *\brief		Définit la couleur diffuse (4 composantes: R, V, B et Intensité)
+		 *\param[in]	p_diffuse	La nouvelle valeur
+		 */
+		inline void SetDiffuse( Castor::Colour const & p_diffuse )
+		{
+			p_diffuse.to_rgba( m_pCategory->GetDiffuse() );
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the specular colour (4 components: R, G, B and Intensity)
+		 *\param[in]	p_specular	The new value
+		 *\~french
+		 *\brief		Définit la couleur spéculaire (4 composantes: R, V, B et Intensité)
+		 *\param[in]	p_specular	La nouvelle valeur
 		 */
 		inline void SetSpecular( float * p_specular )
 		{
-			m_pCategory->SetSpecular( Castor::Colour::from_components( p_specular[0], p_specular[1], p_specular[2], 1.0 ) );
+			m_pCategory->SetSpecular( Castor::Point4f( p_specular[0], p_specular[1], p_specular[2], p_specular[2] ) );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the specular colour
-		 *\param[in]	The new value
+		 *\param[in]	r, g, b	The RGB components
+		 *\param[in]	i		The intensity component
 		 *\~french
 		 *\brief		Définit la couleur spéculaire
-		 *\param[in]	La nouvelle valeur
+		 *\param[in]	r, g, b	Les composantes RGB
+		 *\param[in]	i		La composante intensité
 		 */
-		inline void SetSpecular( float r, float g, float b )
+		inline void SetSpecular( float r, float g, float b, float i )
 		{
-			m_pCategory->SetSpecular( Castor::Colour::from_components( r, g, b, 1.0 ) );
+			m_pCategory->SetSpecular( Castor::Point4f( r, g, b, i ) );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the specular colour
-		 *\param[in]	The new value
+		 *\brief		Sets the specular colour (4 components: R, G, B and Intensity)
+		 *\param[in]	p_specular	The new value
 		 *\~french
-		 *\brief		Définit la couleur spéculaire
-		 *\param[in]	La nouvelle valeur
+		 *\brief		Définit la couleur spéculaire (4 composantes: R, V, B et Intensité)
+		 *\param[in]	p_specular	La nouvelle valeur
 		 */
-		inline void SetSpecular( Castor::Colour const & p_specular )
+		inline void SetSpecular( Castor::Point4f const & p_specular )
 		{
 			m_pCategory->SetSpecular( p_specular );
 		}
 		/**
 		 *\~english
+		 *\brief		Sets the specular colour (4 components: R, G, B and Intensity)
+		 *\param[in]	p_specular	The new value
+		 *\~french
+		 *\brief		Définit la couleur spéculaire (4 composantes: R, V, B et Intensité)
+		 *\param[in]	p_specular	La nouvelle valeur
+		 */
+		inline void SetSpecular( Castor::Colour const & p_specular )
+		{
+			p_specular.to_rgba( m_pCategory->GetSpecular() );
+		}
+		/**
+		 *\~english
 		 *\brief		Sets the light enabled status
-		 *\param[in]	The new value
+		 *\param[in]	p_enabled	The new value
 		 *\~french
 		 *\brief		Définit le statut d'activation de la lumère
-		 *\param[in]	La nouvelle valeur
+		 *\param[in]	p_enabled	La nouvelle valeur
 		 */
 		inline void SetEnabled( bool p_enabled )
 		{

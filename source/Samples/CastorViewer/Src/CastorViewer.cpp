@@ -87,7 +87,7 @@ namespace CastorViewer
 				if ( !l_parser.Found( wxT( 'l' ), reinterpret_cast< long * >( &l_eLogLevel ) ) )
 				{
 #if defined( NDEBUG )
-					l_eLogLevel = ELogType_MESSAGE;
+					l_eLogLevel = ELogType_INFO;
 #else
 					l_eLogLevel = ELogType_DEBUG;
 #endif

@@ -1413,12 +1413,12 @@ namespace Castor3D
 			{
 				OverlaySPtr l_panel = m_pOverlayManager->GetOverlay( cuT( "DebugPanel" ) );
 				m_debugPanel = l_panel;
-				m_debugCpuTime = std::static_pointer_cast< TextOverlay >( m_pOverlayManager->GetOverlay( cuT( "DebugPanel-CpuTime-Value" ) )->GetOverlayCategory() );
-				m_debugGpuTime = std::static_pointer_cast< TextOverlay >( m_pOverlayManager->GetOverlay( cuT( "DebugPanel-GpuTime-Value" ) )->GetOverlayCategory() );
-				m_debugTotalTime = std::static_pointer_cast< TextOverlay >( m_pOverlayManager->GetOverlay( cuT( "DebugPanel-TotalTime-Value" ) )->GetOverlayCategory() );
-				m_debugVertexCount = std::static_pointer_cast< TextOverlay >( m_pOverlayManager->GetOverlay( cuT( "DebugPanel-VertexCount-Value" ) )->GetOverlayCategory() );
-				m_debugFaceCount = std::static_pointer_cast< TextOverlay >( m_pOverlayManager->GetOverlay( cuT( "DebugPanel-FaceCount-Value" ) )->GetOverlayCategory() );
-				m_debugObjectCount = std::static_pointer_cast< TextOverlay >( m_pOverlayManager->GetOverlay( cuT( "DebugPanel-ObjectCount-Value" ) )->GetOverlayCategory() );
+				m_debugCpuTime = m_pOverlayManager->GetOverlay( cuT( "DebugPanel-CpuTime-Value" ) )->GetTextOverlay();
+				m_debugGpuTime = m_pOverlayManager->GetOverlay( cuT( "DebugPanel-GpuTime-Value" ) )->GetTextOverlay();
+				m_debugTotalTime = m_pOverlayManager->GetOverlay( cuT( "DebugPanel-TotalTime-Value" ) )->GetTextOverlay();
+				m_debugVertexCount = m_pOverlayManager->GetOverlay( cuT( "DebugPanel-VertexCount-Value" ) )->GetTextOverlay();
+				m_debugFaceCount = m_pOverlayManager->GetOverlay( cuT( "DebugPanel-FaceCount-Value" ) )->GetTextOverlay();
+				m_debugObjectCount = m_pOverlayManager->GetOverlay( cuT( "DebugPanel-ObjectCount-Value" ) )->GetTextOverlay();
 
 				if ( l_panel )
 				{
@@ -1434,21 +1434,21 @@ namespace Castor3D
 
 		if ( l_txt )
 		{
-			l_txt->SetCaption( str_utils::to_string( p_cpuTime ) + cuT( " ms" ) );
+			l_txt->SetCaption( str_utils::to_string( int( p_cpuTime ) ) + cuT( " ms" ) );
 		}
 
 		l_txt = m_debugGpuTime.lock();
 
 		if ( l_txt )
 		{
-			l_txt->SetCaption( str_utils::to_string( p_gpuTime ) + cuT( " ms" ) );
+			l_txt->SetCaption( str_utils::to_string( int( p_gpuTime ) ) + cuT( " ms" ) );
 		}
 
 		l_txt = m_debugTotalTime.lock();
 
 		if ( l_txt )
 		{
-			l_txt->SetCaption( str_utils::to_string( p_totalTime ) + cuT( " ms" ) );
+			l_txt->SetCaption( str_utils::to_string( int( p_totalTime ) ) + cuT( " ms" ) );
 		}
 
 		l_txt = m_debugVertexCount.lock();

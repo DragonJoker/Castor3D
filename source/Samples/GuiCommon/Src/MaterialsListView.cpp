@@ -147,7 +147,7 @@ wxImage * wxMaterialsListView::CreatePassImage( PassSPtr p_pPass, uint32_t p_uiW
 		double l_dMinRadius = 0.0;
 		double l_dMidRadius1 = l_dMaxRadius / 3.0;
 		double l_dMidRadius2 = l_dMidRadius1 * 2.0;
-		double l_dStep = l_dMinRadius;
+		double l_dStep = l_dMidRadius1;
 		double l_dX, l_dY;
 		double l_dRadius = 0;
 		p_pPass->GetAmbient().red().convert_to( l_byRe );

@@ -102,9 +102,12 @@ namespace Dx11Render
 		virtual void DoInitialise();
 		virtual void DoCleanup();
 
+		HRESULT DoCreateDevice( IDXGIAdapter * l_pAdapter );
+
 	protected:
 		ID3D11Device * m_pDevice;
 		D3D_FEATURE_LEVEL m_featureLevel;
+		DXGI_ADAPTER_DESC m_adapterDesc;
 #if !defined( NDEBUG )
 		struct ObjectDeclaration
 		{

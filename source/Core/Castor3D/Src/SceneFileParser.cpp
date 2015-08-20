@@ -18,7 +18,7 @@ using namespace Castor;
 //****************************************************************************************************
 
 SceneFileContext::SceneFileContext( SceneFileParser * p_pParser,  TextFile * p_pFile )
-	:	FileParserContext( p_pFile )
+	: FileParserContext( p_pFile )
 	, pWindow()
 	, pSceneNode()
 	, pGeometry()
@@ -416,9 +416,9 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 
 	AddParser( eSECTION_LIGHT, cuT( "parent" ), Parser_LightParent, 1, ePARAMETER_TYPE_NAME );
 	AddParser( eSECTION_LIGHT, cuT( "type" ), Parser_LightType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapLightTypes );
-	AddParser( eSECTION_LIGHT, cuT( "ambient" ), Parser_LightAmbient, 1, ePARAMETER_TYPE_POINT3F );
-	AddParser( eSECTION_LIGHT, cuT( "diffuse" ), Parser_LightDiffuse, 1, ePARAMETER_TYPE_POINT3F );
-	AddParser( eSECTION_LIGHT, cuT( "specular" ), Parser_LightSpecular, 1, ePARAMETER_TYPE_POINT3F );
+	AddParser( eSECTION_LIGHT, cuT( "ambient" ), Parser_LightAmbient, 1, ePARAMETER_TYPE_POINT4F );
+	AddParser( eSECTION_LIGHT, cuT( "diffuse" ), Parser_LightDiffuse, 1, ePARAMETER_TYPE_POINT4F );
+	AddParser( eSECTION_LIGHT, cuT( "specular" ), Parser_LightSpecular, 1, ePARAMETER_TYPE_POINT4F );
 	AddParser( eSECTION_LIGHT, cuT( "attenuation" ), Parser_LightAttenuation, 1, ePARAMETER_TYPE_POINT3F );
 	AddParser( eSECTION_LIGHT, cuT( "cut_off" ), Parser_LightCutOff, 1, ePARAMETER_TYPE_FLOAT );
 	AddParser( eSECTION_LIGHT, cuT( "exponent" ), Parser_LightExponent, 1, ePARAMETER_TYPE_FLOAT );
@@ -611,7 +611,7 @@ void SceneFileParser::DoDiscardParser( String const & p_strLine )
 {
 	String l_strWarning;
 	l_strWarning + cuT( "Parser not found @ line #" ) + str_utils::to_string( m_pParsingContext->ui64Line ) + cuT( " : " ) + p_strLine;
-	Logger::LogWarning( l_strWarning );
+	Logger::LogError( l_strWarning );
 }
 
 void SceneFileParser::DoValidate()
