@@ -16,6 +16,8 @@
 #include <Vertex.hpp>
 #include <InitialiseEvent.hpp>
 
+#include <Image.hpp>
+
 #include "Md3Importer.hpp"
 
 using namespace Castor3D;
@@ -57,7 +59,7 @@ SceneSPtr Md3Importer::DoImportScene()
 		l_pScene = m_pEngine->CreateScene( cuT( "Scene_MD3" ) );
 		SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 		GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
-		l_pGeometry->AttachTo( l_pNode.get() );
+		l_pGeometry->AttachTo( l_pNode );
 		l_pGeometry->SetMesh( l_pMesh );
 	}
 
@@ -116,13 +118,13 @@ void Md3Importer::DoReadMD3Data( MeshSPtr p_pMesh, PassSPtr p_pPass )
 	uint64_t l_uiRead;
 	TextureUnitSPtr l_pTexture;
 	ImageSPtr l_pImage;
-	Logger::LogMessage( cuT( "MD3 File : size %d" ), m_pFile->GetLength() );
+	Logger::LogInfo( cuT( "MD3 File : size %d" ), m_pFile->GetLength() );
 
 	if ( m_header.m_numFrames > 0 )
 	{
 		m_bones = new Md3Bone[m_header.m_numFrames];
 		l_uiRead = m_pFile->ReadArray( m_bones, m_header.m_numFrames );
-		Logger::LogMessage( cuT( "* Bones : %d/%d (%d bytes)" ), ( l_uiRead / sizeof( Md3Bone ) ), m_header.m_numFrames, l_uiRead );
+		Logger::LogInfo( cuT( "* Bones : %d/%d (%d bytes)" ), ( l_uiRead / sizeof( Md3Bone ) ), m_header.m_numFrames, l_uiRead );
 		delete [] m_bones;
 	}
 
@@ -130,7 +132,7 @@ void Md3Importer::DoReadMD3Data( MeshSPtr p_pMesh, PassSPtr p_pPass )
 	{
 		m_tags = new Md3Tag[m_header.m_numFrames * m_header.m_numTags];
 		l_uiRead = m_pFile->ReadArray( m_tags, m_header.m_numFrames * m_header.m_numTags );
-		Logger::LogMessage( cuT( "* Tags : %d/%d (%d bytes)" ), ( l_uiRead / sizeof( Md3Tag ) ), m_header.m_numTags, l_uiRead );
+		Logger::LogInfo( cuT( "* Tags : %d/%d (%d bytes)" ), ( l_uiRead / sizeof( Md3Tag ) ), m_header.m_numTags, l_uiRead );
 		m_numOfTags = m_header.m_numTags;
 	}
 
@@ -148,12 +150,12 @@ void Md3Importer::DoReadMD3Data( MeshSPtr p_pMesh, PassSPtr p_pPass )
 
 	for ( i = 0; i < m_header.m_numMeshes; i++ )
 	{
-		Logger::LogMessage( cuT( "* Submesh : %d/%d (from %d)" ), ( i + 1 ), m_header.m_numMeshes, l_meshOffset );
+		Logger::LogInfo( cuT( "* Submesh : %d/%d (from %d)" ), ( i + 1 ), m_header.m_numMeshes, l_meshOffset );
 		m_pFile->Seek( l_meshOffset );
 		m_pFile->Read( l_meshHeader );
 		m_skins = new Md3Skin[l_meshHeader.m_numSkins];
 		l_uiRead = m_pFile->ReadArray( m_skins, l_meshHeader.m_numSkins );
-		Logger::LogMessage( cuT( "* * Skins : %d/%d (%d bytes)" ), ( l_uiRead / sizeof( Md3Skin ) ), l_meshHeader.m_numSkins, l_uiRead );
+		Logger::LogInfo( cuT( "* * Skins : %d/%d (%d bytes)" ), ( l_uiRead / sizeof( Md3Skin ) ), l_meshHeader.m_numSkins, l_uiRead );
 
 		for ( int i = 0 ; i < l_meshHeader.m_numSkins && !l_pTexture ; i++ )
 		{
@@ -198,15 +200,15 @@ void Md3Importer::DoReadMD3Data( MeshSPtr p_pMesh, PassSPtr p_pPass )
 		m_triangles = new Md3Face[l_meshHeader.m_numTriangles];
 		m_pFile->Seek( l_meshOffset + l_meshHeader.m_triStart );
 		l_uiRead = m_pFile->ReadArray( m_triangles, l_meshHeader.m_numTriangles );
-		Logger::LogMessage( cuT( "* * Triangles : %d/%d (%d bytes, from %d)" ), ( l_uiRead / sizeof( Md3Face ) ), l_meshHeader.m_numTriangles, l_uiRead, l_meshHeader.m_triStart );
+		Logger::LogInfo( cuT( "* * Triangles : %d/%d (%d bytes, from %d)" ), ( l_uiRead / sizeof( Md3Face ) ), l_meshHeader.m_numTriangles, l_uiRead, l_meshHeader.m_triStart );
 		m_texCoords = new Md3TexCoord[l_meshHeader.m_numVertices];
 		m_pFile->Seek( l_meshOffset + l_meshHeader.m_uvStart );
 		l_uiRead = m_pFile->ReadArray( m_texCoords, l_meshHeader.m_numVertices );
-		Logger::LogMessage( cuT( "* * TexCoords : %d/%d (%d bytes, from %d)" ), ( l_uiRead / sizeof( Md3TexCoord ) ), l_meshHeader.m_numVertices, l_uiRead, l_meshHeader.m_uvStart );
+		Logger::LogInfo( cuT( "* * TexCoords : %d/%d (%d bytes, from %d)" ), ( l_uiRead / sizeof( Md3TexCoord ) ), l_meshHeader.m_numVertices, l_uiRead, l_meshHeader.m_uvStart );
 		m_vertices  = new Md3Triangle[l_meshHeader.m_numVertices];
 		m_pFile->Seek( l_meshOffset + l_meshHeader.m_vertexStart );
 		l_uiRead = m_pFile->ReadArray( m_vertices, l_meshHeader.m_numVertices );
-		Logger::LogMessage( cuT( "* * Vertices : %d/%d (%d bytes, from %d)" ), ( l_uiRead / sizeof( Md3Triangle ) ), l_meshHeader.m_numVertices, l_uiRead, l_meshHeader.m_vertexStart );
+		Logger::LogInfo( cuT( "* * Vertices : %d/%d (%d bytes, from %d)" ), ( l_uiRead / sizeof( Md3Triangle ) ), l_meshHeader.m_numVertices, l_uiRead, l_meshHeader.m_vertexStart );
 		DoConvertDataStructures( p_pMesh, l_meshHeader );
 		delete [] m_skins;
 		delete [] m_texCoords;

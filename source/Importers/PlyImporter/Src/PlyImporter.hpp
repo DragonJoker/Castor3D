@@ -18,30 +18,15 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___PLY_IMPORTER_H___
 #define ___PLY_IMPORTER_H___
 
+#pragma warning( disable:4251 )
+#pragma warning( disable:4275 )
+
 #pragma warning( push )
 #pragma warning( disable:4311 )
 #pragma warning( disable:4312 )
 
-#include <RenderSystem.hpp>
-#include <Buffer.hpp>
-#include <SceneNode.hpp>
-#include <Scene.hpp>
-#include <Camera.hpp>
-#include <Viewport.hpp>
-#include <Material.hpp>
-#include <Pass.hpp>
-#include <TextureUnit.hpp>
-#include <Geometry.hpp>
-#include <Mesh.hpp>
-#include <Submesh.hpp>
-#include <Face.hpp>
-#include <Version.hpp>
-#include <Plugin.hpp>
-#include <Engine.hpp>
-#include <Vertex.hpp>
-#include <InitialiseEvent.hpp>
-
 #include <Importer.hpp>
+#include <Buffer.hpp>
 
 #pragma warning( pop )
 
@@ -63,7 +48,9 @@ namespace C3dPly
 	\author Sylvain DOREMUS
 	\date 25/08/2010
 	*/
-	class PlyImporter : public Castor3D::Importer
+	class PlyImporter
+		: public Castor3D::Importer
+		, private Castor::NonCopyable
 	{
 	private:
 		friend class Scene;

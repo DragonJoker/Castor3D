@@ -96,4 +96,40 @@ namespace Castor3D
 
 		m_pCategory->SetPositionType( l_ptPosType );
 	}
+
+	DirectionalLightSPtr Light::GetDirectionalLight()const
+	{
+		DirectionalLightSPtr l_return;
+
+		if ( m_pCategory->GetLightType() == eLIGHT_TYPE_DIRECTIONAL )
+		{
+			l_return = std::static_pointer_cast< DirectionalLight >( m_pCategory );
+		}
+
+		return l_return;
+	}
+
+	PointLightSPtr Light::GetPointLight()const
+	{
+		PointLightSPtr l_return;
+
+		if ( m_pCategory->GetLightType() == eLIGHT_TYPE_DIRECTIONAL )
+		{
+			l_return = std::static_pointer_cast< PointLight >( m_pCategory );
+		}
+
+		return l_return;
+	}
+
+	SpotLightSPtr Light::GetSpotLight()const
+	{
+		SpotLightSPtr l_return;
+
+		if ( m_pCategory->GetLightType() == eLIGHT_TYPE_DIRECTIONAL )
+		{
+			l_return = std::static_pointer_cast< SpotLight >( m_pCategory );
+		}
+
+		return l_return;
+	}
 }

@@ -1,5 +1,24 @@
 #include "PlyImporter.hpp"
 
+#include <RenderSystem.hpp>
+#include <SceneNode.hpp>
+#include <Scene.hpp>
+#include <Camera.hpp>
+#include <Viewport.hpp>
+#include <Material.hpp>
+#include <MaterialManager.hpp>
+#include <Pass.hpp>
+#include <TextureUnit.hpp>
+#include <Geometry.hpp>
+#include <Mesh.hpp>
+#include <Submesh.hpp>
+#include <Face.hpp>
+#include <Version.hpp>
+#include <Plugin.hpp>
+#include <Engine.hpp>
+#include <Vertex.hpp>
+#include <InitialiseEvent.hpp>
+
 using namespace Castor3D;
 using namespace Castor;
 using namespace C3dPly;
@@ -20,7 +39,7 @@ SceneSPtr PlyImporter::DoImportScene()
 		l_pScene = m_pEngine->CreateScene( cuT( "Scene_PLY" ) );
 		SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 		GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
-		l_pGeometry->AttachTo( l_pNode.get() );
+		l_pGeometry->AttachTo( l_pNode );
 		l_pGeometry->SetMesh( l_pMesh );
 	}
 
@@ -84,7 +103,7 @@ MeshSPtr PlyImporter::DoImportMesh()
 					l_ssToken.str( l_strLine.substr( std::string( "element vertex " ).length() ) );
 					l_ssToken >> l_iNbVertex;
 					l_ssToken.clear( std::istringstream::goodbit );
-					Logger::LogMessage( cuT( "Vertices : %d" ), l_iNbVertex );
+					Logger::LogInfo( cuT( "Vertices : %d" ), l_iNbVertex );
 					break;
 				}
 			}
@@ -120,7 +139,7 @@ MeshSPtr PlyImporter::DoImportMesh()
 					l_ssToken.str( l_strLine.substr( std::string( "element face " ).size() ) );
 					l_ssToken >> l_iNbFaces;
 					l_ssToken.clear( std::istringstream::goodbit );
-					Logger::LogMessage( cuT( "Triangles : %d" ), l_iNbFaces );
+					Logger::LogInfo( cuT( "Triangles : %d" ), l_iNbFaces );
 					break;
 				}
 			}

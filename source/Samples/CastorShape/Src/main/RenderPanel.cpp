@@ -66,7 +66,7 @@ void RenderPanel::SelectVertex( Vertex * p_vertex )
 
 void RenderPanel::InitialiseRenderWindow()
 {
-	Logger::LogMessage( cuT( "Initialising RenderWindow" ) );
+	Logger::LogInfo( cuT( "Initialising RenderWindow" ) );
 	StringStream l_streamName;
 	l_streamName << cuT( "RenderPanel_" ) << GetId();
 	SceneNodeSPtr l_pNode;
@@ -98,7 +98,7 @@ void RenderPanel::InitialiseRenderWindow()
 		m_pRenderWindow = l_pRenderWindow;
 //		m_pRotateCamEvent = std::make_shared< CameraRotateEvent >( l_pRenderWindow->GetCamera(), real( 0 ), real( 0 ), real( 0 ) );
 //		m_pTranslateCamEvent = std::make_shared< CameraTranslateEvent >( l_pRenderWindow->GetCamera(), real( 0 ), real( 0 ), real( 0 ) );
-		Logger::LogMessage( cuT( "RenderWindow Initialised" ) );
+		Logger::LogInfo( cuT( "RenderWindow Initialised" ) );
 	}
 }
 
@@ -198,7 +198,7 @@ void RenderPanel::_onKeyDown( wxKeyEvent & event )
 		{
 			l_pWindow->GetCamera()->ResetPosition();
 			l_pWindow->GetCamera()->ResetOrientation();
-			l_pWindow->GetCamera()->GetParent()->Translate( 0.0f, 0.0f, -5.0f );
+			l_pWindow->GetCamera()->GetParent()->Translate( Point3r( 0.0f, 0.0f, -5.0f ) );
 		}
 	}
 }
@@ -330,7 +330,7 @@ void RenderPanel::_onMenuClose( wxCommandEvent & WXUNUSED( p_event ) )
 
 void RenderPanel::_selectGeometry( int p_x, int p_y )
 {
-	GeometrySPtr l_geo = std::make_shared< Geometry >( m_mainScene.get() );
+	GeometrySPtr l_geo = std::make_shared< Geometry >( m_mainScene );
 
 	if ( ! m_pRenderWindow.expired() )
 	{

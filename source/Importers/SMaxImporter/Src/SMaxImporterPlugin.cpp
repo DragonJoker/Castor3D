@@ -31,13 +31,18 @@ C3D_SMax_API ImporterPlugin::ExtensionArray GetExtensions()
 
 C3D_SMax_API void Create( Engine * p_pEngine, ImporterPlugin * p_pPlugin )
 {
-	Logger::Initialise( p_pEngine->GetLoggerInstance() );
-	ImporterSPtr l_pImporter = std::make_shared< SMaxImporter >( p_pEngine );
-	p_pPlugin->AttachImporter( l_pImporter );
+	p_pPlugin->AttachImporter( std::make_shared< SMaxImporter >( p_pEngine ) );
 }
 
 C3D_SMax_API void Destroy( ImporterPlugin * p_pPlugin )
 {
 	p_pPlugin->DetachImporter();
-	Logger::Cleanup();
+}
+
+C3D_SMax_API void OnLoad( Castor3D::Engine * p_engine )
+{
+}
+
+C3D_SMax_API void OnUnload( Castor3D::Engine * p_engine )
+{
 }

@@ -34,6 +34,7 @@
 
 #include <ImporterPlugin.hpp>
 #include <DividerPlugin.hpp>
+#include <MaterialManager.hpp>
 
 #define ID_NEW_WINDOW 10000
 
@@ -48,7 +49,7 @@ DECLARE_APP( CastorShapeApp )
 
 MainFrame::MainFrame( wxWindow * parent, wxString const & p_strTitle, eRENDERER_TYPE p_eRenderer )
 	:	wxFrame( parent, wxID_ANY, p_strTitle, wxDefaultPosition, wxSize( 800, 700 ) )
-	,	m_castor3D( Logger::GetSingletonPtr() )
+	,	m_castor3D()
 	,	m_3dFrame( NULL )
 	,	m_2dFrameHD( NULL )
 	,	m_2dFrameBG( NULL )
@@ -109,8 +110,8 @@ void MainFrame::SelectGeometry( GeometrySPtr p_geometry )
 			std::for_each( l_mesh->Begin(), l_mesh->End(), [&]( SubmeshSPtr p_pSubmesh )
 			{
 				MaterialInfos * l_infos = m_selectedGeometryMaterials[l_uiIndex++];
-				m_selectedGeometry->GetMaterial( p_pSubmesh )->GetPass( 0 )->SetAmbient( l_infos->m_ambient );
-				m_selectedGeometry->GetMaterial( p_pSubmesh )->GetPass( 0 )->SetEmissive( l_infos->m_emissive );
+				m_selectedGeometry->GetMaterial( p_pSubmesh )->GetPass( 0 )->SetAmbient( Colour::from_rgb( l_infos->m_ambient ) );
+				m_selectedGeometry->GetMaterial( p_pSubmesh )->GetPass( 0 )->SetEmissive( Colour::from_rgb( l_infos->m_emissive ) );
 			} );
 			clear_container( m_selectedGeometryMaterials );
 		}
@@ -123,15 +124,15 @@ void MainFrame::SelectGeometry( GeometrySPtr p_geometry )
 			std::for_each( l_mesh->Begin(), l_mesh->End(), [&]( SubmeshSPtr p_pSubmesh )
 			{
 				MaterialInfos * l_infos = new MaterialInfos;
-				l_infos->m_ambient[0] = m_selectedGeometry->GetMaterial( p_pSubmesh )->GetPass( 0 )->GetAmbient().red().value();
-				l_infos->m_ambient[1] = m_selectedGeometry->GetMaterial( p_pSubmesh )->GetPass( 0 )->GetAmbient().green().value();
-				l_infos->m_ambient[2] = m_selectedGeometry->GetMaterial( p_pSubmesh )->GetPass( 0 )->GetAmbient().blue().value();
-				l_infos->m_emissive[0] = m_selectedGeometry->GetMaterial( p_pSubmesh )->GetPass( 0 )->GetEmissive().red().value();
-				l_infos->m_emissive[1] = m_selectedGeometry->GetMaterial( p_pSubmesh )->GetPass( 0 )->GetEmissive().green().value();
-				l_infos->m_emissive[2] = m_selectedGeometry->GetMaterial( p_pSubmesh )->GetPass( 0 )->GetEmissive().blue().value();
+				l_infos->m_ambient[0] = m_selectedGeometry->GetMaterial( p_pSubmesh )->GetPass( 0 )->GetAmbient().red();
+				l_infos->m_ambient[1] = m_selectedGeometry->GetMaterial( p_pSubmesh )->GetPass( 0 )->GetAmbient().green();
+				l_infos->m_ambient[2] = m_selectedGeometry->GetMaterial( p_pSubmesh )->GetPass( 0 )->GetAmbient().blue();
+				l_infos->m_emissive[0] = m_selectedGeometry->GetMaterial( p_pSubmesh )->GetPass( 0 )->GetEmissive().red();
+				l_infos->m_emissive[1] = m_selectedGeometry->GetMaterial( p_pSubmesh )->GetPass( 0 )->GetEmissive().green();
+				l_infos->m_emissive[2] = m_selectedGeometry->GetMaterial( p_pSubmesh )->GetPass( 0 )->GetEmissive().blue();
 				m_selectedGeometryMaterials.push_back( l_infos );
-				m_selectedGeometry->GetMaterial( p_pSubmesh )->GetPass( 0 )->SetAmbient( m_selectedMaterial.m_ambient );
-				m_selectedGeometry->GetMaterial( p_pSubmesh )->GetPass( 0 )->SetEmissive( m_selectedMaterial.m_emissive );
+				m_selectedGeometry->GetMaterial( p_pSubmesh )->GetPass( 0 )->SetAmbient( Colour::from_rgb( m_selectedMaterial.m_ambient ) );
+				m_selectedGeometry->GetMaterial( p_pSubmesh )->GetPass( 0 )->SetEmissive( Colour::from_rgb( m_selectedMaterial.m_emissive ) );
 			} );
 		}
 	}
@@ -185,12 +186,12 @@ void MainFrame::LoadScene( wxString const & p_strFileName )
 		Collection<Scene, String> l_scnCollection;
 //		str_utils::to_lower_case( m_strFilePath );
 		m_mainScene->ClearScene();
-		Logger::LogMessage( cuT( "Scene cleared" ) );
+		Logger::LogInfo( cuT( "Scene cleared" ) );
 		l_mshCollection.clear();
-		Logger::LogMessage( cuT( "Mesh manager cleared" ) );
+		Logger::LogInfo( cuT( "Mesh manager cleared" ) );
 		l_mtlManager.clear();
-		Logger::LogMessage( cuT( "Material manager cleared" ) );
-		Logger::LogMessage( cuT( "Loading scene file : " ) + m_strFilePath );
+		Logger::LogInfo( cuT( "Material manager cleared" ) );
+		Logger::LogInfo( cuT( "Loading scene file : " ) + m_strFilePath );
 		ImporterPluginSPtr l_pPlugin;
 		ImporterSPtr l_pImporter;
 
@@ -202,15 +203,15 @@ void MainFrame::LoadScene( wxString const & p_strFileName )
 			if ( File::FileExists( l_matFilePath ) )
 			{
 				TextFile l_fileMat( l_matFilePath, File::eOPEN_MODE_READ );
-				Logger::LogMessage( cuT( "Loading materials file : " ) + l_matFilePath );
+				Logger::LogInfo( cuT( "Loading materials file : " ) + l_matFilePath );
 
 				if ( l_mtlManager.Read( l_fileMat ) )
 				{
-					Logger::LogMessage( cuT( "Materials read" ) );
+					Logger::LogInfo( cuT( "Materials read" ) );
 				}
 				else
 				{
-					Logger::LogMessage( cuT( "Can't read materials" ) );
+					Logger::LogInfo( cuT( "Can't read materials" ) );
 					return;
 				}
 			}
@@ -221,15 +222,15 @@ void MainFrame::LoadScene( wxString const & p_strFileName )
 			if ( File::FileExists( l_meshFilePath ) )
 			{
 				BinaryFile l_fileMesh( l_meshFilePath, File::eOPEN_MODE_READ );
-				Logger::LogMessage( cuT( "Loading meshes file : " ) + l_meshFilePath );
+				Logger::LogInfo( cuT( "Loading meshes file : " ) + l_meshFilePath );
 
 				if ( m_castor3D.LoadMeshes( l_fileMesh ) )
 				{
-					Logger::LogMessage( cuT( "Meshes read" ) );
+					Logger::LogInfo( cuT( "Meshes read" ) );
 				}
 				else
 				{
-					Logger::LogMessage( cuT( "Can't read meshes" ) );
+					Logger::LogInfo( cuT( "Can't read meshes" ) );
 					return;
 				}
 			}
@@ -271,10 +272,10 @@ bool MainFrame::DoInitialise3D()
 {
 	bool l_bReturn = true;
 	m_pSplashScreen->Step( _( "Loading plugins" ), 1 );
-	Logger::LogMessage( cuT( "Initialising Castor3D" ) );
+	Logger::LogInfo( cuT( "Initialising Castor3D" ) );
 	m_castor3D.Initialise( 1000 / CASTOR_WANTED_FPS );
 	StringArray l_arrayFiles;
-	File::ListDirectoryFiles( Engine::GetPluginsPath(), l_arrayFiles );
+	File::ListDirectoryFiles( Engine::GetPluginsDirectory(), l_arrayFiles );
 
 	if ( l_arrayFiles.size() > 0 )
 	{
@@ -298,7 +299,7 @@ bool MainFrame::DoInitialise3D()
 		} );
 	}
 
-	Logger::LogMessage( cuT( "Plugins loaded" ) );
+	Logger::LogInfo( cuT( "Plugins loaded" ) );
 
 	try
 	{
@@ -332,7 +333,7 @@ bool MainFrame::DoInitialise3D()
 		{
 			m_mainScene = m_castor3D.CreateScene( cuT( "MainScene" ) );
 			m_mainScene->SetBackgroundColour( Colour::from_components( 0.5, 0.5, 0.5, 1.0 ) );
-			Logger::LogMessage( cuT( "Castor3D Initialised" ) );
+			Logger::LogInfo( cuT( "Castor3D Initialised" ) );
 			int l_width = GetClientSize().x / ( m_bMultiFrames ? 2 : 1 );
 			int l_height = GetClientSize().y / ( m_bMultiFrames ? 2 : 1 );
 			m_3dFrame = new RenderPanel( this, wxID_ANY, eVIEWPORT_TYPE_3D, m_mainScene, wxPoint( 0, 0 ), wxSize( l_width - 1, l_height - 1 ) );
@@ -468,7 +469,7 @@ void MainFrame::DoCreateGeometry( eMESH_TYPE p_meshType, String p_name, String c
 
 		if ( l_geometry )
 		{
-			l_sceneNode->AttachObject( l_geometry.get() );
+			l_sceneNode->AttachObject( l_geometry );
 			String l_materialName = p_dialog->GetMaterialName();
 			MeshSPtr l_mesh = l_geometry->GetMesh();
 			std::for_each( l_mesh->Begin(), l_mesh->End(), [&]( SubmeshSPtr p_pSubmesh )
@@ -784,31 +785,31 @@ void MainFrame::_onSaveScene( wxCommandEvent & WXUNUSED( p_event ) )
 
 		if ( m_castor3D.GetMaterialManager().Save( l_file ) )
 		{
-			Logger::LogMessage( cuT( "Materials written" ) );
+			Logger::LogInfo( cuT( "Materials written" ) );
 		}
 		else
 		{
-			Logger::LogMessage( cuT( "Can't write materials" ) );
+			Logger::LogInfo( cuT( "Can't write materials" ) );
 			return;
 		}
 
 		if ( m_castor3D.SaveMeshes( l_file ) )
 		{
-			Logger::LogMessage( cuT( "Meshes written" ) );
+			Logger::LogInfo( cuT( "Meshes written" ) );
 		}
 		else
 		{
-			Logger::LogMessage( cuT( "Can't write meshes" ) );
+			Logger::LogInfo( cuT( "Can't write meshes" ) );
 			return;
 		}
 
 		//if (Scene::BinaryLoader()( *l_scnManager.find( cuT( "MainScene")), l_file ) )
 		//{
-		//	Logger::LogMessage( cuT( "Save Successfull"));
+		//	Logger::LogInfo( cuT( "Save Successfull"));
 		//}
 		//else
 		//{
-		//	Logger::LogMessage( cuT( "Save Failed"));
+		//	Logger::LogInfo( cuT( "Save Failed"));
 		//}
 	}
 }
@@ -1030,7 +1031,7 @@ void MainFrame::_onNewMaterial( wxCommandEvent & WXUNUSED( p_event ) )
 
 	if ( l_dialog.ShowModal() == wxID_OK )
 	{
-		Logger::LogMessage( cuT( "Material Created" ) );
+		Logger::LogInfo( cuT( "Material Created" ) );
 	}
 }
 
@@ -1146,22 +1147,19 @@ void MainFrame::_onSubdivideAllPNTriangles( wxCommandEvent & WXUNUSED( p_event )
 
 		if ( l_pDivider )
 		{
-			Point3r l_ptCenter = m_selectedGeometry->GetMesh()->GetCollisionBox().GetCenter();
 			std::for_each( m_selectedGeometry->GetMesh()->Begin(), m_selectedGeometry->GetMesh()->End(), [&]( SubmeshSPtr p_pSubmesh )
 			{
-				l_pDivider->Subdivide( p_pSubmesh, &l_ptCenter, true );
+				l_pDivider->Subdivide( p_pSubmesh, 1, true );
 			} );
 			l_pPlugin->DestroyDivider( l_pDivider );
 		}
 
-		/*
-				m_arraySubdividers.push_back( l_pDivider );
-				l_pDivider->SetThreadEndFunction( &_endSubdivision, this );
-				m_selectedGeometry->Subdivide( i, l_pDivider, true );
+		//m_arraySubdividers.push_back( l_pDivider );
+		//l_pDivider->SetThreadEndFunction( &_endSubdivision, this );
+		//m_selectedGeometry->Subdivide( i, l_pDivider, true );
 
-				m_pSettingsMenu->FindItem( eSubdividePNTriangles)->Enable( false);
-				m_pSettingsMenu->FindItem( eSubdivideLoop)->Enable( false);
-		*/
+		//m_pSettingsMenu->FindItem( eSubdividePNTriangles)->Enable( false);
+		//m_pSettingsMenu->FindItem( eSubdivideLoop)->Enable( false);
 	}
 }
 
@@ -1184,22 +1182,19 @@ void MainFrame::_onSubdivideAllLoop( wxCommandEvent & WXUNUSED( p_event ) )
 
 		if ( l_pDivider )
 		{
-			Point3r l_ptCenter = m_selectedGeometry->GetMesh()->GetCollisionBox().GetCenter();
 			std::for_each( m_selectedGeometry->GetMesh()->Begin(), m_selectedGeometry->GetMesh()->End(), [&]( SubmeshSPtr p_pSubmesh )
 			{
-				l_pDivider->Subdivide( p_pSubmesh, &l_ptCenter, true );
+				l_pDivider->Subdivide( p_pSubmesh, 1, true );
 			} );
 			l_pPlugin->DestroyDivider( l_pDivider );
 		}
 
-		/*
-				m_arraySubdividers.push_back( l_pDivider );
-				l_pDivider->SetThreadEndFunction( &_endSubdivision, this );
-				m_selectedGeometry->Subdivide( i, l_pDivider, true );
+		//m_arraySubdividers.push_back( l_pDivider );
+		//l_pDivider->SetThreadEndFunction( &_endSubdivision, this );
+		//m_selectedGeometry->Subdivide( i, l_pDivider, true );
 
-				m_pSettingsMenu->FindItem( eSubdividePNTriangles)->Enable( false);
-				m_pSettingsMenu->FindItem( eSubdivideLoop)->Enable( false);
-		*/
+		//m_pSettingsMenu->FindItem( eSubdividePNTriangles)->Enable( false);
+		//m_pSettingsMenu->FindItem( eSubdivideLoop)->Enable( false);
 	}
 }
 
@@ -1325,7 +1320,7 @@ void MainFrame::OnInit3D( wxTimerEvent & WXUNUSED( p_event ) )
 
 	if ( l_light1 )
 	{
-		l_light1->GetParent()->SetPosition( 0.0f, 0.0f, 1.0f );
+		l_light1->GetDirectionalLight()->SetDirection( Point3r( 0.0f, 0.0f, 1.0f ) );
 		l_light1->SetDiffuse( 1.0f, 1.0f, 1.0f );
 		l_light1->SetSpecular( 1.0f, 1.0f, 1.0f );
 		l_light1->SetEnabled( true );
@@ -1335,7 +1330,7 @@ void MainFrame::OnInit3D( wxTimerEvent & WXUNUSED( p_event ) )
 
 	if ( l_light2 )
 	{
-		l_light2->GetParent()->SetPosition( 0.0f, -1.0f, 1.0f );
+		l_light2->GetDirectionalLight()->SetDirection( Point3r( 0.0f, -1.0f, 1.0f ) );
 		l_light2->SetDiffuse( 1.0f, 1.0f, 1.0f );
 		l_light2->SetSpecular( 1.0f, 1.0f, 1.0f );
 		l_light2->SetEnabled( true );
@@ -1345,7 +1340,7 @@ void MainFrame::OnInit3D( wxTimerEvent & WXUNUSED( p_event ) )
 
 	if ( l_light3 )
 	{
-		l_light3->GetParent()->SetPosition( -1.0f, -1.0f, -1.0f );
+		l_light3->GetDirectionalLight()->SetDirection( Point3r( -1.0f, -1.0f, -1.0f ) );
 		l_light3->SetDiffuse( 1.0f, 1.0f, 1.0f );
 		l_light3->SetSpecular( 1.0f, 1.0f, 1.0f );
 		l_light3->SetEnabled( true );

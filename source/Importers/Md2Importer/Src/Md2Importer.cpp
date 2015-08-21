@@ -16,6 +16,8 @@
 #include <Vertex.hpp>
 #include <InitialiseEvent.hpp>
 
+#include <Image.hpp>
+
 #include "Md2Importer.hpp"
 
 using namespace Castor3D;
@@ -24,13 +26,13 @@ using namespace Castor;
 //*************************************************************************************************
 
 Md2Importer::Md2Importer( Engine * p_pEngine, String const & p_textureName )
-	:	Importer		( p_pEngine													)
-	,	m_textureName	( p_textureName												)
-	,	m_skins			( nullptr													)
-	,	m_texCoords		( nullptr													)
-	,	m_triangles		( nullptr													)
-	,	m_frames		( nullptr													)
-	,	m_pFile			( nullptr													)
+	:	Importer( p_pEngine )
+	,	m_textureName( p_textureName )
+	,	m_skins( nullptr )
+	,	m_texCoords( nullptr )
+	,	m_triangles( nullptr )
+	,	m_frames( nullptr )
+	,	m_pFile( nullptr )
 {
 	memset( & m_header, 0, sizeof( Md2Header ) );
 }
@@ -46,7 +48,7 @@ SceneSPtr Md2Importer::DoImportScene()
 		l_pScene = m_pEngine->CreateScene( cuT( "Scene_MD2" ) );
 		SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 		GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
-		l_pGeometry->AttachTo( l_pNode.get() );
+		l_pGeometry->AttachTo( l_pNode );
 		l_pGeometry->SetMesh( l_pMesh );
 	}
 
@@ -73,7 +75,7 @@ MeshSPtr Md2Importer::DoImportMesh()
 
 	if ( m_header.m_version != 8 )
 	{
-		Logger::LogMessage( cuT( "Invalid file format (Version not 8): " ) + m_fileName );
+		Logger::LogInfo( cuT( "Invalid file format (Version not 8): " ) + m_fileName );
 	}
 	else
 	{

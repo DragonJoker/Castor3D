@@ -1005,9 +1005,13 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightAttenuation )
 		Point3f l_vVector;
 		p_arrayParams[0]->Get( l_vVector );
 
-		if ( l_pContext->eLightType == eLIGHT_TYPE_POINT || l_pContext->eLightType == eLIGHT_TYPE_SPOT )
+		if ( l_pContext->eLightType == eLIGHT_TYPE_POINT )
 		{
-			std::static_pointer_cast<SpotLight>( l_pContext->pLight->GetLightCategory() )->SetAttenuation( l_vVector );
+			l_pContext->pLight->GetPointLight()->SetAttenuation( l_vVector );
+		}
+		else if ( l_pContext->eLightType == eLIGHT_TYPE_SPOT )
+		{
+			l_pContext->pLight->GetSpotLight()->SetAttenuation( l_vVector );
 		}
 		else
 		{
@@ -1032,7 +1036,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightCutOff )
 
 		if ( l_pContext->eLightType == eLIGHT_TYPE_SPOT )
 		{
-			std::static_pointer_cast<SpotLight>( l_pContext->pLight->GetLightCategory() )->SetCutOff( l_fFloat );
+			l_pContext->pLight->GetSpotLight()->SetCutOff( l_fFloat );
 		}
 		else
 		{
@@ -1057,7 +1061,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightExponent )
 
 		if ( l_pContext->eLightType == eLIGHT_TYPE_SPOT )
 		{
-			std::static_pointer_cast<SpotLight>( l_pContext->pLight->GetLightCategory() )->SetExponent( l_fFloat );
+			l_pContext->pLight->GetSpotLight()->SetExponent( l_fFloat );
 		}
 		else
 		{

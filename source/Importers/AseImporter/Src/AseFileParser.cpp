@@ -21,6 +21,8 @@
 #include <Face.hpp>
 #include <Vertex.hpp>
 
+#include <Image.hpp>
+
 using namespace Castor3D;
 using namespace Castor;
 
@@ -190,7 +192,7 @@ namespace Ase
 
 	void AseFileParser::DoDiscardParser( String const & p_strLine )
 	{
-		String strToLog( cuT( "Parser not found @ line #" ) );
+		StringStream strToLog( cuT( "Parser not found @ line #" ) );
 		Logger::LogWarning( strToLog << m_pParsingContext->ui64Line << cuT( " : " ) << p_strLine );
 	}
 

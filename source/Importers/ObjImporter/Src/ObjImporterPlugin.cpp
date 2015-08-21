@@ -30,12 +30,18 @@ C3D_Obj_API ImporterPlugin::ExtensionArray GetExtensions()
 
 C3D_Obj_API void Create( Engine * p_pEngine, ImporterPlugin * p_pPlugin )
 {
-	Logger::Initialise( p_pEngine->GetLoggerInstance() );
 	p_pPlugin->AttachImporter( std::make_shared< Obj::ObjImporter >( p_pEngine ) );
 }
 
 C3D_Obj_API void Destroy( ImporterPlugin * p_pPlugin )
 {
 	p_pPlugin->DetachImporter();
-	Logger::Cleanup();
+}
+
+C3D_Obj_API void OnLoad( Castor3D::Engine * p_engine )
+{
+}
+
+C3D_Obj_API void OnUnload( Castor3D::Engine * p_engine )
+{
 }

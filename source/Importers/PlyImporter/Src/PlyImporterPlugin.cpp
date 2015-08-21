@@ -1,10 +1,10 @@
 #include "PlyImporter.hpp"
 
 #include <ImporterPlugin.hpp>
+#include <Engine.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
-using namespace C3dPly;
 
 C3D_Ply_API void GetRequiredVersion( Version & p_version )
 {
@@ -30,13 +30,18 @@ C3D_Ply_API ImporterPlugin::ExtensionArray GetExtensions()
 
 C3D_Ply_API void Create( Engine * p_pEngine, ImporterPlugin * p_pPlugin )
 {
-	Logger::Initialise( p_pEngine->GetLoggerInstance() );
-	ImporterSPtr l_pImporter = std::make_shared< PlyImporter >( p_pEngine );
-	p_pPlugin->AttachImporter( l_pImporter );
+	p_pPlugin->AttachImporter( std::make_shared< C3dPly::PlyImporter >( p_pEngine ) );
 }
 
 C3D_Ply_API void Destroy( ImporterPlugin * p_pPlugin )
 {
 	p_pPlugin->DetachImporter();
-	Logger::Cleanup();
+}
+
+C3D_Ply_API void OnLoad( Castor3D::Engine * p_engine )
+{
+}
+
+C3D_Ply_API void OnUnload( Castor3D::Engine * p_engine )
+{
 }

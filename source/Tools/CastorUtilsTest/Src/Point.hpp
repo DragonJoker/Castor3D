@@ -25,7 +25,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #pragma warning( disable:4312 )
 
 #include <cmath>
-#include <CL/cl.h>
+
+#define CL_HPP_ENABLE_EXCEPTIONS
+#define CL_HPP_TARGET_OPENCL_VERSION 120
+#include "cl.hpp"
 
 #pragma warning( pop )
 
