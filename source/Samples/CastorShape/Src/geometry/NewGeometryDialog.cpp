@@ -1,6 +1,8 @@
 #include "../geometry/NewGeometryDialog.hpp"
 #include "../material/NewMaterialDialog.hpp"
 
+#include <MaterialManager.hpp>
+
 using namespace Castor3D;
 using namespace Castor;
 using namespace CastorShape;

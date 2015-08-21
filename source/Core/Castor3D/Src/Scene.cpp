@@ -170,15 +170,15 @@ namespace Castor3D
 				switch ( l_it->second->GetLightType() )
 				{
 				case eLIGHT_TYPE_DIRECTIONAL:
-					l_bReturn = DirectionalLight::TextLoader()( *std::static_pointer_cast<DirectionalLight>( l_it->second->GetLightCategory() ), p_file );
+					l_bReturn = DirectionalLight::TextLoader()( *l_it->second->GetDirectionalLight(), p_file );
 					break;
 
 				case eLIGHT_TYPE_POINT:
-					l_bReturn = PointLight::TextLoader()( *std::static_pointer_cast<PointLight>( l_it->second->GetLightCategory() ), p_file );
+					l_bReturn = PointLight::TextLoader()( *l_it->second->GetPointLight(), p_file );
 					break;
 
 				case eLIGHT_TYPE_SPOT:
-					l_bReturn = SpotLight::TextLoader()( *std::static_pointer_cast<SpotLight>( l_it->second->GetLightCategory() ), p_file );
+					l_bReturn = SpotLight::TextLoader()( *l_it->second->GetSpotLight(), p_file );
 					break;
 
 				default:
@@ -258,15 +258,15 @@ namespace Castor3D
 				switch ( l_it->second->GetLightType() )
 				{
 				case eLIGHT_TYPE_DIRECTIONAL:
-					l_bReturn = DirectionalLight::BinaryParser( m_path ).Fill( *std::static_pointer_cast< DirectionalLight >( l_it->second->GetLightCategory() ), l_chunk );
+					l_bReturn = DirectionalLight::BinaryParser( m_path ).Fill( *l_it->second->GetDirectionalLight(), l_chunk );
 					break;
 
 				case eLIGHT_TYPE_POINT:
-					l_bReturn = PointLight::BinaryParser( m_path ).Fill( *std::static_pointer_cast< PointLight >( l_it->second->GetLightCategory() ), l_chunk );
+					l_bReturn = PointLight::BinaryParser( m_path ).Fill( *l_it->second->GetPointLight(), l_chunk );
 					break;
 
 				case eLIGHT_TYPE_SPOT:
-					l_bReturn = SpotLight::BinaryParser( m_path ).Fill( *std::static_pointer_cast< SpotLight >( l_it->second->GetLightCategory() ), l_chunk );
+					l_bReturn = SpotLight::BinaryParser( m_path ).Fill( *l_it->second->GetSpotLight(), l_chunk );
 					break;
 
 				default:
@@ -1703,20 +1703,20 @@ namespace Castor3D
 
 		if ( p_light->GetLightType() == eLIGHT_TYPE_DIRECTIONAL )
 		{
-			DirectionalLightSPtr l_light = std::static_pointer_cast< DirectionalLight >( p_light->GetLightCategory() );
+			DirectionalLightSPtr l_light = p_light->GetDirectionalLight();
 			ApplyLightComponent( l_light->GetPositionType(), p_index, l_offset, *m_pLightsData );
 			l_offset += 4;
 		}
 		else if ( p_light->GetLightType() == eLIGHT_TYPE_POINT )
 		{
-			PointLightSPtr l_light = std::static_pointer_cast< PointLight >( p_light->GetLightCategory() );
+			PointLightSPtr l_light = p_light->GetPointLight();
 			ApplyLightComponent( l_light->GetPositionType(), p_index, l_offset, *m_pLightsData );
 			l_offset += 4; // To match the matrix for spot lights
 			ApplyLightComponent( l_light->GetAttenuation(), p_index, l_offset, *m_pLightsData );
 		}
 		else
 		{
-			SpotLightSPtr l_light = std::static_pointer_cast< SpotLight >( p_light->GetLightCategory() );
+			SpotLightSPtr l_light = p_light->GetSpotLight();
 			ApplyLightComponent( l_light->GetPositionType(), p_index, l_offset, *m_pLightsData );
 			Matrix4x4r l_orientation;
 			p_light->GetParent()->GetOrientation().ToRotationMatrix( l_orientation );

@@ -441,7 +441,7 @@ RenderTechnique::~RenderTechnique()
 	m_pSamplerAnisotropicRepeat	.reset();
 }
 
-RenderTechniqueBaseSPtr RenderTechnique::Create( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
+RenderTechniqueBaseSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
 {
 	// No make_shared because ctor is protected;
 	return RenderTechniqueBaseSPtr( new RenderTechnique( p_renderTarget, p_pRenderSystem, p_params ) );

@@ -134,15 +134,15 @@ namespace Testing
 
 		if ( l_bContinue )
 		{
-			Castor::Logger::LogMessage( cuT( "Platform count is: %d" ), m_arrayPlatforms.size() );
+			Castor::Logger::LogInfo( cuT( "Platform count is: %d" ), m_arrayPlatforms.size() );
 			std::string l_strInfo;
 			m_platform = m_arrayPlatforms[0];
 			m_platform.getInfo( ( cl_platform_info )CL_PLATFORM_NAME, &l_strInfo );
-			Castor::Logger::LogMessage( "  Name    : %s", l_strInfo.c_str() );
+			Castor::Logger::LogInfo( "  Name    : %s", l_strInfo.c_str() );
 			m_platform.getInfo( ( cl_platform_info )CL_PLATFORM_VENDOR, &l_strInfo );
-			Castor::Logger::LogMessage( "  Vendor  : %s", l_strInfo.c_str() );
+			Castor::Logger::LogInfo( "  Vendor  : %s", l_strInfo.c_str() );
 			m_platform.getInfo( ( cl_platform_info )CL_PLATFORM_VERSION, &l_strInfo );
-			Castor::Logger::LogMessage( "  Version : %s", l_strInfo.c_str() );
+			Castor::Logger::LogInfo( "  Version : %s", l_strInfo.c_str() );
 			cl_context_properties l_props[3] = { CL_CONTEXT_PLATFORM, ( cl_context_properties )( m_platform )(), 0 };
 			m_context = cl::Context( CL_DEVICE_TYPE_CPU, l_props, NULL, NULL, &l_iErr );
 			l_bContinue = CheckErr( l_iErr, "Context::Context()" );
@@ -193,19 +193,19 @@ namespace Testing
 
 		if ( l_bContinue )
 		{
-			cl::Program::Sources l_source( 1, std::make_pair( l_prog.c_str(), l_prog.length() + 1 ) );
+			cl::Program::Sources l_source( 1, cl::string( l_prog ) );
 			m_program = cl::Program( m_context, l_source );
 			l_iErr = m_program.build( m_arrayDevices );
 			l_bContinue = CheckErr( l_iErr, "Program::build()" );
 
 			if ( !l_bContinue )
 			{
-				cl::STRING_CLASS l_strInfo;
+				cl::string l_strInfo;
 				l_iErr = m_program.getBuildInfo( m_arrayDevices[0], CL_PROGRAM_BUILD_LOG, &l_strInfo );
 
 				if ( CheckErr( l_iErr, "Program::getBuildInfo()" ) )
 				{
-					Castor::Logger::LogMessage( l_strInfo );
+					Castor::Logger::LogInfo( l_strInfo );
 				}
 			}
 		}

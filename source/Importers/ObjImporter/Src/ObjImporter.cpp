@@ -11,6 +11,7 @@
 #include <Buffer.hpp>
 #include <Geometry.hpp>
 #include <Face.hpp>
+#include <RenderSystem.hpp>
 #include <Scene.hpp>
 #include <SceneNode.hpp>
 #include <Version.hpp>
@@ -19,6 +20,8 @@
 #include <StaticTexture.hpp>
 #include <Vertex.hpp>
 #include <InitialiseEvent.hpp>
+
+#include <Image.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
@@ -43,7 +46,7 @@ namespace Obj
 			l_pScene = std::make_shared< Scene >( m_pEngine, m_pEngine->GetLightFactory(), cuT( "Scene_OBJ" ) );
 			SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 			GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
-			l_pGeometry->AttachTo( l_pNode.get() );
+			l_pGeometry->AttachTo( l_pNode );
 			l_pGeometry->SetMesh( l_pMesh );
 		}
 

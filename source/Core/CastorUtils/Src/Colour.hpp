@@ -383,6 +383,138 @@ namespace Castor
 		CU_API static Colour from_bgra( Point4f const & p_ptColour );
 		/**
 		 *\~english
+		 *\brief		Constructor from a point representing RGB components
+		 *\param[in]	p_ptColour	The point containing the colour components
+		 *\return		The built Colour
+		 *\~french
+		 *\brief		Constructeur à partir d'un point représentant des composantes RGB
+		 *\param[in]	p_ptColour	Le point contenant les composantes
+		 *\return		La Colour construite
+		 */
+		CU_API static Colour from_rgb( uint8_t const ( & p_ptColour )[3] );
+		/**
+		 *\~english
+		 *\brief		Constructor from a point representing BGR components
+		 *\param[in]	p_ptColour	The point containing the colour components
+		 *\return		The built Colour
+		 *\~french
+		 *\brief		Constructeur à partir d'un point représentant des composantes BGR
+		 *\param[in]	p_ptColour	Le point contenant les composantes
+		 *\return		La Colour construite
+		 */
+		CU_API static Colour from_bgr( uint8_t const ( & p_ptColour )[3] );
+		/**
+		 *\~english
+		 *\brief		Constructor from a point representing RGBA components
+		 *\param[in]	p_ptColour	The point containing the colour components
+		 *\return		The built Colour
+		 *\~french
+		 *\brief		Constructeur à partir d'un point représentant des composantes RGBA
+		 *\param[in]	p_ptColour	Le point contenant les composantes
+		 *\return		La Colour construite
+		 */
+		CU_API static Colour from_rgba( uint8_t const ( & p_ptColour )[4] );
+		/**
+		 *\~english
+		 *\brief		Constructor from a point representing BGRA components
+		 *\param[in]	p_ptColour	The point containing the colour components
+		 *\return		The built Colour
+		 *\~french
+		 *\brief		Constructeur à partir d'un point représentant des composantes BGRA
+		 *\param[in]	p_ptColour	Le point contenant les composantes
+		 *\return		La Colour construite
+		 */
+		CU_API static Colour from_bgra( uint8_t const ( & p_ptColour )[4] );
+		/**
+		 *\~english
+		 *\brief		Constructor from a point representing ARGB components
+		 *\param[in]	p_ptColour	The point containing the colour components
+		 *\return		The built Colour
+		 *\~french
+		 *\brief		Constructeur à partir d'un point représentant des composantes ARGB
+		 *\param[in]	p_ptColour	Le point contenant les composantes
+		 *\return		La Colour construite
+		 */
+		CU_API static Colour from_argb( uint8_t const ( & p_ptColour )[4] );
+		/**
+		 *\~english
+		 *\brief		Constructor from a point representing ABGR components
+		 *\param[in]	p_ptColour	The point containing the colour components
+		 *\return		The built Colour
+		 *\~french
+		 *\brief		Constructeur à partir d'un point représentant des composantes ABGR
+		 *\param[in]	p_ptColour	Le point contenant les composantes
+		 *\return		La Colour construite
+		 */
+		CU_API static Colour from_abgr( uint8_t const ( & p_ptColour )[4] );
+		/**
+		 *\~english
+		 *\brief		Constructor from a point representing RGB components
+		 *\param[in]	p_ptColour	The point containing the colour components
+		 *\return		The built Colour
+		 *\~french
+		 *\brief		Constructeur à partir d'un point représentant des composantes RGB
+		 *\param[in]	p_ptColour	Le point contenant les composantes
+		 *\return		La Colour construite
+		 */
+		CU_API static Colour from_rgb( float const ( & p_ptColour )[3] );
+		/**
+		 *\~english
+		 *\brief		Constructor from a point representing BGR components
+		 *\param[in]	p_ptColour	The point containing the colour components
+		 *\return		The built Colour
+		 *\~french
+		 *\brief		Constructeur à partir d'un point représentant des composantes BGR
+		 *\param[in]	p_ptColour	Le point contenant les composantes
+		 *\return		La Colour construite
+		 */
+		CU_API static Colour from_bgr( float const ( & p_ptColour )[3] );
+		/**
+		 *\~english
+		 *\brief		Constructor from a point representing RGBA components
+		 *\param[in]	p_ptColour	The point containing the colour components
+		 *\return		The built Colour
+		 *\~french
+		 *\brief		Constructeur à partir d'un point représentant des composantes RGBA
+		 *\param[in]	p_ptColour	Le point contenant les composantes
+		 *\return		La Colour construite
+		 */
+		CU_API static Colour from_rgba( float const ( & p_ptColour )[4] );
+		/**
+		 *\~english
+		 *\brief		Constructor from a point representing ARGB components
+		 *\param[in]	p_ptColour	The point containing the colour components
+		 *\return		The built Colour
+		 *\~french
+		 *\brief		Constructeur à partir d'un point représentant des composantes ARGB
+		 *\param[in]	p_ptColour	Le point contenant les composantes
+		 *\return		La Colour construite
+		 */
+		CU_API static Colour from_argb( float const ( & p_ptColour )[4] );
+		/**
+		 *\~english
+		 *\brief		Constructor from a point representing ABGR components
+		 *\param[in]	p_ptColour	The point containing the colour components
+		 *\return		The built Colour
+		 *\~french
+		 *\brief		Constructeur à partir d'un point représentant des composantes ABGR
+		 *\param[in]	p_ptColour	Le point contenant les composantes
+		 *\return		La Colour construite
+		 */
+		CU_API static Colour from_abgr( float const ( & p_ptColour )[4] );
+		/**
+		 *\~english
+		 *\brief		Constructor from a point representing BGRA components
+		 *\param[in]	p_ptColour	The point containing the colour components
+		 *\return		The built Colour
+		 *\~french
+		 *\brief		Constructeur à partir d'un point représentant des composantes BGRA
+		 *\param[in]	p_ptColour	Le point contenant les composantes
+		 *\return		La Colour construite
+		 */
+		CU_API static Colour from_bgra( float const ( & p_ptColour )[4] );
+		/**
+		 *\~english
 		 *\brief		Constructor from an uint32_t representing RGB components
 		 *\param[in]	p_colour	The uint32_t containing the colour (0x00RRGGBB)
 		 *\return		The built Colour

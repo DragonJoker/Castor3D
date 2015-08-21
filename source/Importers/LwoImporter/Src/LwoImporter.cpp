@@ -13,6 +13,7 @@
 #include <Buffer.hpp>
 #include <Geometry.hpp>
 #include <Face.hpp>
+#include <RenderSystem.hpp>
 #include <Scene.hpp>
 #include <SceneNode.hpp>
 #include <Version.hpp>
@@ -22,6 +23,8 @@
 #include <Vertex.hpp>
 #include <InitialiseEvent.hpp>
 #include <StaticTexture.hpp>
+
+#include <Image.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
@@ -51,7 +54,7 @@ namespace Lwo
 			l_pScene = m_pEngine->CreateScene( cuT( "Scene_LWO" ) );
 			SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 			GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
-			l_pGeometry->AttachTo( l_pNode.get() );
+			l_pGeometry->AttachTo( l_pNode );
 			l_pGeometry->SetMesh( l_pMesh );
 		}
 
@@ -101,7 +104,7 @@ namespace Lwo
 			SwitchEndianness( p_pChunk->m_eId		);
 			l_bReturn = DoIsTagId( p_pChunk->m_eId ) && m_pFile->IsOk();
 			char l_szId[5];
-			String l_strLog;
+			StringStream l_strLog;
 			DoToStr( l_szId, p_pChunk->m_eId );
 
 			if ( l_bReturn )
@@ -355,7 +358,7 @@ namespace Lwo
 			SwitchEndianness( p_pSubchunk->m_eId		);
 			l_bReturn = DoIsTagId( p_pSubchunk->m_eId ) && m_pFile->IsOk();
 			char l_szId[5];
-			String l_strLog;
+			StringStream l_strLog;
 			DoToStr( l_szId, p_pSubchunk->m_eId );
 
 			if ( l_bReturn )
@@ -589,7 +592,7 @@ namespace Lwo
 			char l_szType[5];
 			SwitchEndianness( l_eType );
 			DoToStr( l_szType, l_eType );
-			String l_strLog( cuT( "\tType : " ) );
+			StringStream l_strLog( cuT( "\tType : " ) );
 			Logger::LogDebug( l_strLog << l_szType );
 
 			if ( l_eType == ePTAG_TYPE_SURF )
@@ -615,7 +618,7 @@ namespace Lwo
 
 						if ( l_usTag < m_arrayTags.size() )
 						{
-							String l_strLog( cuT( "\tTAG Name : " ) );
+							StringStream l_strLog( cuT( "\tTAG Name : " ) );
 							Logger::LogDebug( l_strLog << m_arrayTags[l_usTag].c_str() );
 							m_arraySubmeshByMatName.push_back( std::make_pair( m_arrayTags[l_usTag], m_pSubmesh ) );
 						}
@@ -915,7 +918,7 @@ namespace Lwo
 
 					if ( l_it != m_mapImages.end() )
 					{
-						String l_strLog( cuT( "			Texture found : " ) );
+						StringStream l_strLog( cuT( "			Texture found : " ) );
 						Logger::LogDebug( l_strLog << l_it->second->GetPath().c_str() );
 						l_pTexture = p_pPass->AddTextureUnit();
 						StaticTextureSPtr l_pStaTexture = m_pEngine->GetRenderSystem()->CreateStaticTexture();
@@ -996,7 +999,7 @@ namespace Lwo
 			{
 				p_pChunk->m_uiRead += UI4( l_strTag.size() + 1 + ( 1 - l_strTag.size() % 2 ) );
 				m_arrayTags.push_back( l_strTag );
-				String l_strLog( cuT( "\tName : " ) );
+				StringStream l_strLog( cuT( "\tName : " ) );
 				Logger::LogDebug( l_strLog << l_strTag.c_str() );
 			}
 		}
@@ -1260,11 +1263,11 @@ namespace Lwo
 		{
 			char l_szType[5];
 			DoToStr( l_szType, l_eType );
-			String l_strLog1( cuT( "\tType : "	) );
-			String l_strLog2( cuT( "\tName : "	) );
-			Logger::LogDebug( l_strLog1 <<	l_szType			);
-			Logger::LogDebug(	cuT( "\tDimensions : %d"		),	l_usDimension	);
-			Logger::LogDebug( l_strLog2 <<	l_strName.c_str()	);
+			StringStream l_strLog1( cuT( "\tType : " ) );
+			StringStream l_strLog2( cuT( "\tName : " ) );
+			Logger::LogDebug( l_strLog1 <<	l_szType );
+			Logger::LogDebug(	cuT( "\tDimensions : %d" ), l_usDimension );
+			Logger::LogDebug( l_strLog2 <<	l_strName.c_str() );
 
 			if ( l_eType == eVMAP_TYPE_TXUV )
 			{
@@ -1328,7 +1331,7 @@ namespace Lwo
 			char l_szType[5];
 			SwitchEndianness( l_eType );
 			DoToStr( l_szType, l_eType );
-			String l_strLog( cuT( "\tType : " ) );
+			StringStream l_strLog( cuT( "\tType : " ) );
 			Logger::LogDebug( l_strLog << l_szType );
 
 			if ( l_eType == ePOLS_TYPE_FACE )
@@ -1442,12 +1445,12 @@ namespace Lwo
 			SwitchEndianness( l_ptPivot[1]	);
 			SwitchEndianness( l_ptPivot[2]	);
 			SwitchEndianness( l_usParent	);
-			String l_strLog( cuT( "\tName   : " )	);
-			Logger::LogDebug( l_strLog						<<	l_strName.c_str()							);
-			Logger::LogDebug( cuT( "\tNumber : %d"			),	l_usNumber									);
-			Logger::LogDebug( cuT( "\tFlags  : 0x%x"		),	l_usFlags									);
-			Logger::LogDebug( cuT( "\tPivot  : %f, %f, %f"	),	l_ptPivot[0], l_ptPivot[1], l_ptPivot[2]	);
-			Logger::LogDebug( cuT( "\tParent : %d"			),	l_usParent									);
+			StringStream l_strLog( cuT( "\tName   : " ) );
+			Logger::LogDebug( l_strLog << l_strName.c_str() );
+			Logger::LogDebug( cuT( "\tNumber : %d" ), l_usNumber );
+			Logger::LogDebug( cuT( "\tFlags  : 0x%x" ), l_usFlags );
+			Logger::LogDebug( cuT( "\tPivot  : %f, %f, %f" ), l_ptPivot[0], l_ptPivot[1], l_ptPivot[2] );
+			Logger::LogDebug( cuT( "\tParent : %d" ), l_usParent );
 			String l_strNameTmp = str_utils::from_str( l_strName );
 			str_utils::to_lower_case( l_strNameTmp );
 
