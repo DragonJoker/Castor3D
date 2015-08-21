@@ -309,42 +309,42 @@ namespace OceanLighting
 
 		inline void SetReloadPrograms( bool p_bLayer )
 		{
-			m_bReloadPrograms = true;
-			m_bLayer = p_bLayer;
+ m_bReloadPrograms = true;
+ m_bLayer = p_bLayer;
 		}
 		inline void SetWidth( int p_width )
 		{
-			m_width = p_width;
+ m_width = p_width;
 		}
 		inline void SetHeight( int p_height )
 		{
-			m_height = p_height;
+ m_height = p_height;
 		}
 		inline void SetComputeSlopeVarianceTex()
 		{
-			m_bComputeSlopeVarianceTex = true;
+ m_bComputeSlopeVarianceTex = true;
 		}
 		inline void SetGenerateWavesSpectrum()
 		{
-			m_bGenerateWavesSpectrum = true;
+ m_bGenerateWavesSpectrum = true;
 		}
 		inline void Resize( int p_width, int p_height )
 		{
-			m_bGenerateMesh = true;
-			m_width = p_width;
-			m_height = p_height;
+ m_bGenerateMesh = true;
+ m_width = p_width;
+ m_height = p_height;
 		}
 		inline void CameraThetaPlus( float p_fVal )
 		{
-			m_cameraTheta = std::min( m_cameraTheta + p_fVal, 90.0f - 0.001f );
+ m_cameraTheta = std::min( m_cameraTheta + p_fVal, 90.0f - 0.001f );
 		}
 		inline void CameraThetaMinus( float p_fVal )
 		{
-			m_cameraTheta = m_cameraTheta - p_fVal;
+ m_cameraTheta = m_cameraTheta - p_fVal;
 		}
 		inline void UpdateCameraPhi( float p_fVal )
 		{
-			m_cameraPhi += p_fVal;
+ m_cameraPhi += p_fVal;
 		}
 		inline void CameraHeightPlus( float p_fVal )
 		{
@@ -356,11 +356,11 @@ namespace OceanLighting
 		}
 		inline void UpdateSunPhi( int p_offset )
 		{
-			m_sunPhi += p_offset / 400.0f;
+ m_sunPhi += p_offset / 400.0f;
 		}
 		inline void UpdateSunTheta( int p_offset )
 		{
-			m_sunTheta += p_offset / 400.0f;
+ m_sunTheta += p_offset / 400.0f;
 		}
 
 #if ENABLE_FFT
