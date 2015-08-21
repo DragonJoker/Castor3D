@@ -37,7 +37,8 @@ namespace CastorViewer
 		void DoInitialiseGUI();
 		bool DoInitialise3D();
 		bool DoInitialiseImages();
-		void DoPopulateToolbar();
+		void DoPopulateStatusBar();
+		void DoPopulateToolBar();
 		void DoLogCallback( Castor::String const & p_strLog, Castor::ELogType p_eLogType );
 
 	private:
@@ -65,7 +66,8 @@ namespace CastorViewer
 		wxTimer * m_timer;
 		wxPanel * m_pBgPanel;
 		wxAuiNotebook * m_logTabsContainer;
-		wxAuiNotebook * m_propertyTabsContainer;
+		wxAuiNotebook * m_sceneTabsContainer;
+		wxPanel * m_propertiesContainer;
 		wxListView * m_messageLog;
 		wxListView * m_errorLog;
 		GuiCommon::wxImagesLoader * m_pImagesLoader;

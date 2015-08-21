@@ -25,7 +25,6 @@ namespace GuiCommon
 		, m_pEditMaterialName( NULL )
 		, m_pComboPass( NULL )
 		, m_pButtonDeletePass( NULL )
-		, m_pPanelPasses( NULL )
 		, m_pPanelSelectedPass( NULL )
 		, m_wpMaterial()
 		, m_wpPassSelected()
@@ -34,20 +33,16 @@ namespace GuiCommon
 		, m_pEngine( NULL )
 	{
 		// Initialise material panel
-		m_pStaticName = new wxStaticText( this, wxID_ANY, _( "Name :" ) + wxString( wxT( " " ) ) );
+		m_pStaticName = new wxStaticText( this, wxID_ANY, _( "Name:" ) + wxString( wxT( " " ) ) );
 		m_pEditMaterialName = new wxTextCtrl( this, eID_EDIT_MATERIAL_NAME, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER | wxBORDER_SIMPLE );
 		m_pEditMaterialName->Enable( m_bCanEdit );
 
-		// Initialise passes panel
-		m_pBoxPass = new wxStaticBox( this, wxID_ANY, _( "Passes" ) );
-		m_pPanelPasses = new wxPanel( this, wxID_ANY );
-
 		// Initialise pass selection controls
-		m_pComboPass = new wxComboBox( m_pPanelPasses, eID_COMBO_PASS, wxT( "0" ), wxDefaultPosition, wxDefaultSize, wxArrayString(), wxBORDER_SIMPLE | wxCB_READONLY );
-		m_pButtonDeletePass = new wxButton(	m_pPanelPasses, eID_BUTTON_DELETE, _( "Delete" ) );
+		m_pComboPass = new wxComboBox( this, eID_COMBO_PASS, wxT( "0" ), wxDefaultPosition, wxDefaultSize, wxArrayString(), wxBORDER_SIMPLE | wxCB_READONLY );
+		m_pButtonDeletePass = new wxButton(	this, eID_BUTTON_DELETE, _( "Delete" ) );
 
 		// Initialise pass panel
-		m_pPanelSelectedPass = new wxPassPanel( p_small, m_bCanEdit, m_pPanelPasses );
+		m_pPanelSelectedPass = new wxPassPanel( p_small, m_bCanEdit, this, wxDefaultPosition, wxDefaultSize );
 
 		if ( p_small )
 		{
@@ -56,29 +51,21 @@ namespace GuiCommon
 			l_pSizerName->Add( m_pStaticName, wxSizerFlags( 0 ).Align( wxALIGN_CENTER_VERTICAL ).ReserveSpaceEvenIfHidden() );
 			l_pSizerName->Add( m_pEditMaterialName, wxSizerFlags( 1 ).Align( wxALIGN_CENTER_VERTICAL ).ReserveSpaceEvenIfHidden() );
 
-			// Initialise passes panel
-			wxStaticBoxSizer * l_pSizerBox = new wxStaticBoxSizer( m_pBoxPass, wxVERTICAL );
-			l_pSizerBox->Add( m_pPanelPasses, wxSizerFlags( 1 ).Expand() );
-
 			// Initialise pass selection controls
 			wxBoxSizer * l_pSizerPass = new wxBoxSizer( wxHORIZONTAL );
 			l_pSizerPass->Add( m_pComboPass, wxSizerFlags( 0 ).Align( wxALIGN_CENTER_VERTICAL ).ReserveSpaceEvenIfHidden() );
 			l_pSizerPass->Add( m_pButtonDeletePass, wxSizerFlags( 0 ).Align( wxALIGN_CENTER_VERTICAL ).ReserveSpaceEvenIfHidden() );
 			l_pSizerPass->AddStretchSpacer();
 
-			// Set sizer for pass selection controls and pass panel
+			// Set sizer for pass panel
 			wxBoxSizer * l_pSizerPanel = new wxBoxSizer( wxVERTICAL );
-			l_pSizerPanel->Add( l_pSizerPass, wxSizerFlags( 0 ).ReserveSpaceEvenIfHidden() );
-			l_pSizerPanel->Add(	m_pPanelSelectedPass, wxSizerFlags( 1 ).Border( wxALL, 5 ).Expand() );
-
-			// Set passes panel sizer
-			m_pPanelPasses->SetSizer( l_pSizerPanel );
-			l_pSizerPanel->SetSizeHints( m_pPanelPasses );
+			l_pSizerPanel->Add( m_pPanelSelectedPass, wxSizerFlags( 1 ).Border( wxALL, 5 ).Expand() );
 
 			// Set material panel sizer
 			wxBoxSizer * l_pSizer = new wxBoxSizer( wxVERTICAL );
 			l_pSizer->Add( l_pSizerName, wxSizerFlags( 0 ).Border( wxALL, 5 ).Expand() );
-			l_pSizer->Add( l_pSizerBox, wxSizerFlags( 0 ).Border( wxALL, 5 ).Expand() );
+			l_pSizer->Add( l_pSizerPass, wxSizerFlags( 0 ).Border( wxALL, 5 ).Expand() );
+			l_pSizer->Add( l_pSizerPanel, wxSizerFlags( 1 ).Border( wxALL, 5 ).Expand() );
 			SetSizer( l_pSizer );
 			l_pSizer->SetSizeHints( this );
 		}
@@ -89,29 +76,21 @@ namespace GuiCommon
 			l_pSizerName->Add( m_pStaticName, wxSizerFlags( 0 ).Align( wxALIGN_CENTER_VERTICAL ).ReserveSpaceEvenIfHidden() );
 			l_pSizerName->Add( m_pEditMaterialName, wxSizerFlags( 1 ).Align( wxALIGN_CENTER_VERTICAL ).ReserveSpaceEvenIfHidden() );
 
-			// Initialise passes panel
-			wxStaticBoxSizer * l_pSizerBox = new wxStaticBoxSizer( m_pBoxPass, wxVERTICAL );
-			l_pSizerBox->Add( m_pPanelPasses, wxSizerFlags( 1 ).Expand() );
-
 			// Initialise pass selection controls
 			wxBoxSizer * l_pSizerPass = new wxBoxSizer( wxHORIZONTAL );
 			l_pSizerPass->Add( m_pComboPass, wxSizerFlags( 0 ).Align( wxALIGN_CENTER_VERTICAL ).ReserveSpaceEvenIfHidden() );
 			l_pSizerPass->Add( m_pButtonDeletePass, wxSizerFlags( 0 ).Align( wxALIGN_CENTER_VERTICAL ).ReserveSpaceEvenIfHidden() );
 			l_pSizerPass->AddStretchSpacer();
 
-			// Set sizer for pass selection controls and pass panel
+			// Set sizer for pass panel
 			wxBoxSizer * l_pSizerPanel = new wxBoxSizer( wxVERTICAL );
-			l_pSizerPanel->Add( l_pSizerPass, wxSizerFlags( 0 ).ReserveSpaceEvenIfHidden() );
-			l_pSizerPanel->Add(	m_pPanelSelectedPass, wxSizerFlags( 1 ).Border( wxALL, 5 ).Expand() );
-
-			// Set passes panel sizer
-			m_pPanelPasses->SetSizer( l_pSizerPanel );
-			l_pSizerPanel->SetSizeHints( m_pPanelPasses );
+			l_pSizerPanel->Add( m_pPanelSelectedPass, wxSizerFlags( 1 ).Border( wxALL, 5 ).Expand() );
 
 			// Set material panel sizer
 			wxBoxSizer * l_pSizer = new wxBoxSizer( wxVERTICAL );
 			l_pSizer->Add( l_pSizerName, wxSizerFlags( 0 ).Border( wxALL, 5 ).Expand() );
-			l_pSizer->Add( l_pSizerBox, wxSizerFlags( 0 ).Border( wxALL, 5 ).Expand() );
+			l_pSizer->Add( l_pSizerPass, wxSizerFlags( 0 ).Border( wxALL, 5 ).Expand() );
+			l_pSizer->Add( l_pSizerPanel, wxSizerFlags( 0 ).Border( wxALL, 5 ).Expand() );
 			SetSizer( l_pSizer );
 			l_pSizer->SetSizeHints( this );
 		}
@@ -168,7 +147,6 @@ namespace GuiCommon
 		if ( l_pMaterial )
 		{
 			m_pEditMaterialName->SetValue( p_strMaterialName );
-			m_pBoxPass->SetLabel( _( "Passes" ) + wxString() << wxT( " (" ) << l_pMaterial->GetPassCount() << wxT( ")" ) );
 			m_pComboPass->Clear();
 
 			for ( uint32_t i = 0; i < l_pMaterial->GetPassCount(); i++ )
@@ -218,12 +196,6 @@ namespace GuiCommon
 	{
 		m_pStaticName->Show( p_bShow );
 		m_pEditMaterialName->Show( p_bShow );
-
-		if ( m_pBoxPass )
-		{
-			m_pBoxPass->Show( p_bShow );
-		}
-
 		m_pComboPass->Show( p_bShow );
 		m_pEditMaterialName->Enable( m_bCanEdit );
 	}
@@ -231,15 +203,14 @@ namespace GuiCommon
 	void wxMaterialPanel::DoShowPassFields( bool p_bShow )
 	{
 		m_pButtonDeletePass->Show( p_bShow );
-		m_pPanelPasses->Show( p_bShow );
 		m_pPanelSelectedPass->Show( p_bShow );
 		m_pButtonDeletePass->Enable( m_bCanEdit );
 	}
 
 	BEGIN_EVENT_TABLE( wxMaterialPanel, wxPanel )
-		EVT_BUTTON(	eID_BUTTON_DELETE, wxMaterialPanel::OnDeletePass )
+		EVT_BUTTON( eID_BUTTON_DELETE, wxMaterialPanel::OnDeletePass )
 		EVT_TEXT_ENTER( eID_EDIT_MATERIAL_NAME, wxMaterialPanel::OnMaterialName )
-		EVT_COMBOBOX(	eID_COMBO_PASS, wxMaterialPanel::OnPassSelect )
+		EVT_COMBOBOX( eID_COMBO_PASS, wxMaterialPanel::OnPassSelect )
 	END_EVENT_TABLE()
 
 	void wxMaterialPanel::OnDeletePass( wxCommandEvent & p_event )
@@ -265,7 +236,6 @@ namespace GuiCommon
 				m_pComboPass->SetValue( wxCOMBO_NEW );
 				m_pComboPass->Update();
 				m_pButtonDeletePass->Hide();
-				m_pPanelPasses->Hide();
 				m_pPanelSelectedPass->Hide();
 			}
 		}

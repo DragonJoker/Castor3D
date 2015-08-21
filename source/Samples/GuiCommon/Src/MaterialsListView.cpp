@@ -20,9 +20,9 @@ using namespace GuiCommon;
 
 wxMaterialsListView::wxMaterialsListView( int p_imgWidth, wxWindow * p_pParent, wxWindowID p_id, wxPoint const & p_ptPos, wxSize const & p_size )
 #if defined( _WIN32 )
-	: wxListView( p_pParent, p_id, p_ptPos, p_size, wxLC_SMALL_ICON | wxLC_NO_HEADER | wxLC_SINGLE_SEL | wxLC_SORT_ASCENDING | wxBORDER_SIMPLE )
+	: wxListView( p_pParent, p_id, p_ptPos, p_size, wxLC_NO_HEADER | wxLC_SINGLE_SEL | wxLC_SORT_ASCENDING | wxBORDER_SIMPLE | wxLC_REPORT )
 #else
-	: wxListView( p_pParent, p_id, p_ptPos, p_size, wxLC_SMALL_ICON | wxLC_NO_HEADER | wxLC_SINGLE_SEL | wxLC_SORT_ASCENDING | wxBORDER_SIMPLE | wxLC_REPORT )
+	: wxListView( p_pParent, p_id, p_ptPos, p_size, wxLC_NO_HEADER | wxLC_SINGLE_SEL | wxLC_SORT_ASCENDING | wxBORDER_SIMPLE | wxLC_REPORT )
 #endif
 	, m_pListImages( NULL )
 	, m_uiNbItems( 0 )

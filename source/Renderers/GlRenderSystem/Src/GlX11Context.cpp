@@ -213,7 +213,7 @@ void GlContextImpl::Cleanup()
 {
 	try
 	{
-		m_gl.DeleteContext( m_hContext );
+		m_gl.DeleteContext( m_pDisplay, m_glXContext );
 	}
 	catch ( ... )
 	{

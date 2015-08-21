@@ -155,10 +155,10 @@ namespace CastorViewer
 				return new PlainWhiteAuiTabArt( *this );
 			}
 
-			virtual void PlainWhiteAuiTabArt::DrawBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect )
+			virtual void DrawBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect )
 			{
-				p_dc.SetPen( wxPen( *wxWHITE, 1, wxPENSTYLE_SOLID ) );
-				p_dc.SetBrush( wxBrush( *wxWHITE, wxBRUSHSTYLE_SOLID ) );
+				p_dc.SetPen( wxPen( *wxWHITE, 1, wxSOLID ) );
+				p_dc.SetBrush( wxBrush( *wxWHITE, wxSOLID ) );
 				p_dc.DrawRectangle( p_rect );
 			}
 		};
@@ -176,7 +176,7 @@ namespace CastorViewer
 		, m_messageLog( NULL )
 		, m_errorLog( NULL )
 		, m_iLogsHeight( 100 )
-		, m_iPropertiesWidth( 200 )
+		, m_iPropertiesWidth( 240 )
 		, m_eRenderer( p_eRenderer )
 		, m_pGeometriesFrame( NULL )
 		, m_auiManager( this,  wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
@@ -185,6 +185,7 @@ namespace CastorViewer
 
 	MainFrame::~MainFrame()
 	{
+		m_auiManager.UnInit();
 		delete m_pImagesLoader;
 	}
 
@@ -201,8 +202,8 @@ namespace CastorViewer
 
 		if ( l_bReturn )
 		{
-			CreateStatusBar();
-			DoPopulateToolbar();
+			DoPopulateStatusBar();
+			DoPopulateToolBar();
 			wxIcon l_icon = wxIcon( castor_xpm );
 			SetIcon( l_icon );
 			DoInitialiseGUI();
@@ -451,7 +452,9 @@ namespace CastorViewer
 				m_pGeometriesFrame->LoadScene( m_pCastor3D, m_pMainScene.lock() );
 				m_pMaterialsFrame->LoadMaterials( m_pCastor3D );
 				wxSize l_size = GetClientSize();
+#if wxCHECK_VERSION( 2, 9, 0 )
 				SetMinClientSize( l_size );
+#endif
 			}
 		}
 		else
@@ -515,32 +518,41 @@ namespace CastorViewer
 	{
 		SetClientSize( 800 + m_iPropertiesWidth, 600 + m_iLogsHeight );
 		wxSize l_size = GetClientSize();
+#if wxCHECK_VERSION( 2, 9, 0 )
 		SetMinClientSize( l_size );
+#endif
 		m_auiManager.GetArtProvider()->SetMetric( wxAuiPaneDockArtSetting::wxAUI_DOCKART_PANE_BORDER_SIZE, 0 );
 		m_pRenderPanel = new RenderPanel( this, wxID_ANY, wxDefaultPosition, wxSize( l_size.x - m_iPropertiesWidth, l_size.y - m_iLogsHeight ) );
 		m_logTabsContainer = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
 		m_logTabsContainer->SetArtProvider( new PlainWhiteAuiTabArt );
-		m_propertyTabsContainer = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
-		m_propertyTabsContainer->SetArtProvider( new PlainWhiteAuiTabArt );
+		m_sceneTabsContainer = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
+		m_sceneTabsContainer->SetArtProvider( new PlainWhiteAuiTabArt );
+		m_propertiesContainer = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize );
+
 		m_auiManager.AddPane( m_pRenderPanel, wxAuiPaneInfo().Center().CloseButton( false ).MinSize( l_size.x - m_iPropertiesWidth, l_size.y - m_iLogsHeight ).Layer( 0 ).Movable( false ).PaneBorder( false ).Dockable( false) );
 		m_auiManager.AddPane( m_logTabsContainer, wxAuiPaneInfo().CloseButton().Caption( _( "Logs" ) ).Bottom().Dock().BottomDockable().TopDockable().Movable().PinButton().MinSize( l_size.x, m_iLogsHeight ).Layer( 1 ).PaneBorder( false ) );
-		m_auiManager.AddPane( m_propertyTabsContainer, wxAuiPaneInfo().CloseButton().Caption( _( "Properties" ) ).Left().Dock().LeftDockable().RightDockable().Movable().PinButton().MinSize( m_iPropertiesWidth, l_size.y ).Layer( 1 ).PaneBorder( false ) );
+		m_auiManager.AddPane( m_sceneTabsContainer, wxAuiPaneInfo().CloseButton().Caption( _( "Scene" ) ).Left().Dock().LeftDockable().RightDockable().Movable().PinButton().MinSize( m_iPropertiesWidth, l_size.y / 3 ).Layer( 2 ).PaneBorder( false ) );
+		m_auiManager.AddPane( m_propertiesContainer , wxAuiPaneInfo().CloseButton().Caption( _( "Properties" ) ).Left().Dock().LeftDockable().RightDockable().Movable().PinButton().MinSize( m_iPropertiesWidth, l_size.y / 3 ).Layer( 2 ).PaneBorder( false ) );
 
 		auto l_logCreator = [this, &l_size]( wxString const & p_name, wxListView *& p_log )
 		{
 			p_log = new wxListView( m_logTabsContainer, wxID_ANY, wxDefaultPosition, wxDefaultSize );
+#if wxCHECK_VERSION( 2, 9, 0 )
 			p_log->AppendColumn( p_name, wxLIST_FORMAT_LEFT , l_size.x - 10 );
+#else
+			p_log->InsertColumn( 0, p_name, wxLIST_FORMAT_LEFT , l_size.x - 10 );
+#endif
 			m_logTabsContainer->AddPage( p_log, p_name, true );
 		};
 		
 		l_logCreator( _( "Messages" ), m_messageLog );
 		l_logCreator( _( "Errors" ), m_errorLog );
 		
-		m_pGeometriesFrame = new wxGeometriesListFrame( m_propertyTabsContainer, _( "Geometries" ), wxDefaultPosition, wxDefaultSize );
-		m_propertyTabsContainer->AddPage( m_pGeometriesFrame, _( "Geometries" ), true );
+		m_pGeometriesFrame = new wxGeometriesListFrame( m_propertiesContainer, m_sceneTabsContainer, _( "Geometries" ), wxDefaultPosition, wxDefaultSize );
+		m_sceneTabsContainer->AddPage( m_pGeometriesFrame, _( "Geometries" ), true );
 		
-		m_pMaterialsFrame = new wxMaterialsListFrame( m_propertyTabsContainer, _( "Materials" ), wxDefaultPosition, wxDefaultSize );
-		m_propertyTabsContainer->AddPage( m_pMaterialsFrame, _( "Materials" ), true );
+		m_pMaterialsFrame = new wxMaterialsListFrame( m_propertiesContainer, m_sceneTabsContainer, _( "Materials" ), wxDefaultPosition, wxDefaultSize );
+		m_sceneTabsContainer->AddPage( m_pMaterialsFrame, _( "Materials" ), true );
 
 		m_auiManager.Update();
 	}
@@ -622,7 +634,12 @@ namespace CastorViewer
 		return true;
 	}
 
-	void MainFrame::DoPopulateToolbar()
+	void MainFrame::DoPopulateStatusBar()
+	{
+		CreateStatusBar();
+	}
+
+	void MainFrame::DoPopulateToolBar()
 	{
 		m_pSplashScreen->Step( _( "Loading toolbar" ), 1 );
 		wxToolBar * l_pToolbar = CreateToolBar( wxTB_FLAT | wxTB_HORIZONTAL );
@@ -706,7 +723,10 @@ namespace CastorViewer
 
 	void MainFrame::OnClose( wxCloseEvent & p_event )
 	{
-		m_auiManager.UnInit();
+		m_auiManager.DetachPane( m_sceneTabsContainer );
+		m_auiManager.DetachPane( m_propertiesContainer );
+		m_auiManager.DetachPane( m_logTabsContainer );
+		m_auiManager.DetachPane( m_pRenderPanel );
 		m_messageLog = NULL;
 		m_errorLog = NULL;
 		Hide();
@@ -856,13 +876,13 @@ namespace CastorViewer
 
 	void MainFrame::OnShowProperties( wxCommandEvent & p_event )
 	{
-		if ( !m_propertyTabsContainer->IsShown() )
+		if ( !m_sceneTabsContainer->IsShown() )
 		{
-			m_auiManager.GetPane( m_propertyTabsContainer ).Show();
+			m_auiManager.GetPane( m_sceneTabsContainer ).Show();
 		}
 		else
 		{
-			m_auiManager.GetPane( m_propertyTabsContainer ).Hide();
+			m_auiManager.GetPane( m_sceneTabsContainer ).Hide();
 		}
 
 		m_auiManager.Update();

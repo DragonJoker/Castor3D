@@ -49,10 +49,8 @@ namespace GuiCommon
 	private:
 		wxStaticText * m_pStaticName;
 		wxTextCtrl * m_pEditMaterialName;
-		wxStaticBox * m_pBoxPass;
 		wxComboBox * m_pComboPass;
 		wxButton * m_pButtonDeletePass;
-		wxPanel * m_pPanelPasses;
 		wxPassPanel * m_pPanelSelectedPass;
 		Castor3D::MaterialWPtr m_wpMaterial;
 		Castor3D::PassWPtr m_wpPassSelected;

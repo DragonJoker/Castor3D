@@ -1,5 +1,5 @@
 /* XPM */
-static char * properties_xpm[] = {
+static const char * properties_xpm[] = {
 "128 128 4212 2",
 "  	c None",
 ". 	c #FFFFFF",

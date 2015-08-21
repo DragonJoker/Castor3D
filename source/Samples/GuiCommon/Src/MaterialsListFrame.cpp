@@ -21,18 +21,35 @@ namespace GuiCommon
 	}
 	static const int GC_IMG_SIZE = 20;
 
-	wxMaterialsListFrame::wxMaterialsListFrame( wxWindow * p_pParent, wxString const & p_strTitle, wxPoint const & p_ptPos, wxSize const & p_size )
-		: wxPanel( p_pParent, wxID_ANY, /*p_strTitle, */p_ptPos, p_size/*, wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN | wxFRAME_FLOAT_ON_PARENT*/ )
+	wxMaterialsListFrame::wxMaterialsListFrame( wxWindow * p_propsParent, wxWindow * p_pParent, wxString const & p_strTitle, wxPoint const & p_ptPos, wxSize const & p_size )
+		: wxPanel( p_pParent, wxID_ANY, p_ptPos, p_size )
 		, m_engine( NULL )
 	{
-		m_pMaterialsList = new wxMaterialsListView( 24, this, eID_LIST_MATERIALS, wxDefaultPosition, wxSize( GetClientSize().x, 70 ) );
-		m_materialPanel = new wxMaterialPanel( true, true, this, wxDefaultPosition, wxDefaultSize );
+		if ( !p_propsParent || p_propsParent == p_pParent )
+		{
+			m_pMaterialsList = new wxMaterialsListView( 24, this, eID_LIST_MATERIALS, wxDefaultPosition, wxSize( GetClientSize().x, 70 ) );
+			m_materialPanel = new wxMaterialPanel( true, true, this, wxDefaultPosition, wxDefaultSize );
+			wxBoxSizer * l_pSizer = new wxBoxSizer( wxVERTICAL );
+			l_pSizer->Add( m_pMaterialsList, wxSizerFlags( 1 ).Expand().ReserveSpaceEvenIfHidden() );
+			l_pSizer->Add( m_materialPanel, wxSizerFlags( 2 ).Expand().ReserveSpaceEvenIfHidden() );
+			SetSizer( l_pSizer );
+			l_pSizer->SetSizeHints( this );
+		}
+		else
+		{
+			m_pMaterialsList = new wxMaterialsListView( 24, this, eID_LIST_MATERIALS, wxDefaultPosition, wxSize( GetClientSize().x, 70 ) );
+			wxBoxSizer * l_pSizer = new wxBoxSizer( wxVERTICAL );
+			l_pSizer->Add( m_pMaterialsList, wxSizerFlags( 1 ).Expand().ReserveSpaceEvenIfHidden() );
+			SetSizer( l_pSizer );
+			l_pSizer->SetSizeHints( this );
 
-		wxBoxSizer * l_pSizer = new wxBoxSizer( wxVERTICAL );
-		l_pSizer->Add( m_pMaterialsList, wxSizerFlags( 1 ).Expand().ReserveSpaceEvenIfHidden() );
-		l_pSizer->Add( m_materialPanel, wxSizerFlags( 1 ).Expand().ReserveSpaceEvenIfHidden() );
-		SetSizer( l_pSizer );
-		l_pSizer->SetSizeHints( this );
+			m_materialPanel = new wxMaterialPanel( true, true, p_propsParent, wxDefaultPosition, wxDefaultSize );
+			l_pSizer = new wxBoxSizer( wxVERTICAL );
+			l_pSizer->Add( m_materialPanel, wxSizerFlags( 1 ).Expand().ReserveSpaceEvenIfHidden() );
+			p_propsParent->SetSizer( l_pSizer );
+			l_pSizer->SetSizeHints( p_propsParent );
+			p_propsParent->Update();
+		}
 	}
 
 	wxMaterialsListFrame::~wxMaterialsListFrame()
@@ -63,7 +80,6 @@ namespace GuiCommon
 
 	void wxMaterialsListFrame::OnSelected( wxListEvent & p_event )
 	{
-		//m_pSelectedMaterial = m_pEngine->GetMaterialManager().find( p_strMaterialName );
 		m_materialPanel->SetMaterialName( m_engine, ( wxChar const * )p_event.GetText().c_str() );
 	}
 }

@@ -29,7 +29,7 @@ namespace GuiCommon
 		: public wxPanel
 	{
 	public:
-		wxMaterialsListFrame( wxWindow * p_pParent, wxString const & p_strTitle, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
+		wxMaterialsListFrame( wxWindow * p_propsParent, wxWindow * p_pParent, wxString const & p_strTitle, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
 		~wxMaterialsListFrame();
 		
 		void LoadMaterials( Castor3D::Engine * p_pEngine );

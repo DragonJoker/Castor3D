@@ -23,11 +23,13 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Colour.hpp>
 
 #include <wx/scrolwin.h>
+#include <wx/propgrid/propgrid.h>
+#include <wx/propgrid/advprops.h>
 
 namespace GuiCommon
 {
 	class wxPassPanel
-		:	public wxScrolledWindow
+		:	public wxPanel
 	{
 	public:
 		wxPassPanel( bool p_small, bool p_bCanEdit, wxWindow * p_pParent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxSize( 460, 380 ) );
@@ -47,6 +49,7 @@ namespace GuiCommon
 		void DoSelectTextureUnit( int p_iIndex );
 		void DoShowPassFields( bool p_bShow );
 		void DoShowTextureFields( bool p_bShow );
+		void DoFillTexturesProperty( uint32_t p_count );
 
 		DECLARE_EVENT_TABLE()
 		void OnDeleteTextureUnit( wxCommandEvent & p_event );
@@ -64,38 +67,31 @@ namespace GuiCommon
 		void OnHasShader( wxCommandEvent & p_event );
 
 	private:
-		wxStaticBox * m_pBoxGeneral;
-		wxStaticText * m_pStaticAmbient;
-		wxStaticText * m_pStaticDiffuse;
-		wxStaticText * m_pStaticSpecular;
-		wxStaticText * m_pStaticEmissive;
-		wxStaticText * m_pStaticExponent;
-		wxStaticText * m_pStaticPathLabel;
-		wxStaticBox * m_pBoxTextures;
-		wxPanel * m_pPanelTextureUnit;
-		wxBitmapButton * m_pButtonTextureImage;
-		wxButton * m_pButtonDeleteMaterial;
-		wxButton * m_pButtonDeleteTextureUnit;
-		wxBitmapButton * m_pButtonAmbient;
-		wxBitmapButton * m_pButtonDiffuse;
-		wxBitmapButton * m_pButtonSpecular;
-		wxBitmapButton * m_pButtonEmissive;
-		wxCheckBox * m_pCheckTwoSided;
-		wxTextCtrl * m_pEditShininess;
-		wxSlider * m_pSliderAlpha;
-		wxStaticText * m_pStaticPath;
-		wxComboBox * m_pComboTextures;
+		// Main property grid
+		wxPropertyGrid * m_propertyGridPass;
+
+		// Pass properties
+		wxColourProperty * m_propertyAmbient;
+		wxColourProperty * m_propertyDiffuse;
+		wxColourProperty * m_propertySpecular;
+		wxColourProperty * m_propertyEmissive;
+		wxFloatProperty * m_propertyExponent;
+		wxBoolProperty * m_propertyTwoSided;
+		wxFloatProperty * m_propertyOpacity;
+		wxEnumProperty * m_propertyTextures;
+
+		// Texture properties
+		wxImageFileProperty * m_propertyImage;
+		wxEnumProperty * m_propertyChannel;
+
+		// Other controls
 		wxButton * m_pButtonShader;
-		wxColour m_clrDiffuse;
-		wxColour m_clrAmbient;
-		wxColour m_clrEmissive;
-		wxColour m_clrSpecular;
+
+		// Other members
 		wxImage m_imgSelected;
 		Castor3D::PassWPtr m_wpPass;
 		uint32_t m_uiSelectedUnitIndex;
 		Castor3D::TextureUnitWPtr m_pTextureUnit;
-		wxStaticText * m_pStaticTexChannel;
-		wxComboBox * m_pComboTextureChannel;
 		bool m_bCanEdit;
 		wxSize m_sizeImage;
 		Castor3D::Engine * m_pEngine;

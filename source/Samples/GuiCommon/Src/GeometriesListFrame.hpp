@@ -80,7 +80,7 @@ namespace GuiCommon
 		wxTreeItemId m_selItem;
 
 	public:
-		wxGeometriesListFrame( wxWindow * p_pParent, wxString const & p_strTitle, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
+		wxGeometriesListFrame( wxWindow * p_propsParent, wxWindow * p_pParent, wxString const & p_strTitle, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
 		~wxGeometriesListFrame();
 		
 		void LoadScene( Castor3D::Engine * p_pEngine, Castor3D::SceneSPtr p_pScene );

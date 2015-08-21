@@ -31,7 +31,7 @@ namespace GuiCommon
 {
 	static const int GC_IMG_SIZE	= 20;
 
-	wxGeometriesListFrame::wxGeometriesListFrame( wxWindow * p_pParent, wxString const & p_strTitle, wxPoint const & p_ptPos, wxSize const & p_size )
+	wxGeometriesListFrame::wxGeometriesListFrame( wxWindow * p_propsParent, wxWindow * p_pParent, wxString const & p_strTitle, wxPoint const & p_ptPos, wxSize const & p_size )
 		: wxPanel( p_pParent, wxID_ANY, /*p_strTitle, */p_ptPos, p_size/*, wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN | wxFRAME_FLOAT_ON_PARENT*/ )
 		, m_uiNbItems( 0 )
 	{

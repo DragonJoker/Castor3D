@@ -36,6 +36,7 @@ namespace Castor
 		: public Matrix< T, Rows, Rows >
 	{
 	private:
+		typedef T __value_type;
 		typedef SquareMatrix< __value_type, Rows > __square_type;
 		typedef SquareMatrix< __value_type, Rows > __transpose;
 
