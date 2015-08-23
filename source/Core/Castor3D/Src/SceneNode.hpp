@@ -491,6 +491,18 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Retrieves the childs map
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la map des enfants
+		 *\return		La valeur
+		 */
+		inline SceneNodePtrStrMap const & GetChilds()const
+		{
+			return m_mapChilds;
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves an iterator to the first child
 		 *\return		The value
 		 *\~french
@@ -536,6 +548,18 @@ namespace Castor3D
 		inline node_const_iterator ChildsEnd()const
 		{
 			return m_mapChilds.end();
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the objects map
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la map des objets
+		 *\return		La valeur
+		 */
+		inline MovableObjectPtrStrMap const & GetObjects()const
+		{
+			return m_mapAttachedObjects;
 		}
 		/**
 		 *\~english

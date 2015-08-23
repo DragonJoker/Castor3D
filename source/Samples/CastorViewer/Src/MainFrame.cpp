@@ -9,19 +9,27 @@
 #include <xpms/mat_blanc.xpm>
 #include <xpms/castor_transparent.xpm>
 #include <xpms/castor.xpm>
-#include <xpms/geo_visible.xpm>
-#include <xpms/geo_visible_sel.xpm>
-#include <xpms/geo_cachee.xpm>
-#include <xpms/geo_cachee_sel.xpm>
 #include <xpms/dossier.xpm>
 #include <xpms/dossier_sel.xpm>
 #include <xpms/dossier_ouv.xpm>
 #include <xpms/dossier_ouv_sel.xpm>
-#include <xpms/submesh.xpm>
-#include <xpms/submesh_sel.xpm>
 #include <xpms/export.xpm>
 #include <xpms/log.xpm>
 #include <xpms/properties.xpm>
+#include <xpms/node.xpm>
+#include <xpms/node_sel.xpm>
+#include <xpms/camera.xpm>
+#include <xpms/camera_sel.xpm>
+#include <xpms/light.xpm>
+#include <xpms/light_sel.xpm>
+#include <xpms/geometry.xpm>
+#include <xpms/geometry_sel.xpm>
+#include <xpms/submesh.xpm>
+#include <xpms/submesh_sel.xpm>
+#include <xpms/scene.xpm>
+#include <xpms/scene_sel.xpm>
+#include <xpms/overlay.xpm>
+#include <xpms/overlay_sel.xpm>
 
 #include <wx/display.h>
 #include <wx/aui/dockart.h>
@@ -615,16 +623,20 @@ namespace CastorViewer
 	{
 		m_pSplashScreen->Step( _( "Loading images" ), 1 );
 		m_pImagesLoader->AddBitmap( CV_IMG_CASTOR, castor_transparent_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_VISIBLE, geo_visible_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_VISIBLE_SEL, geo_visible_sel_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_HIDDEN, geo_cachee_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_HIDDEN_SEL, geo_cachee_sel_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_GEOMETRY, dossier_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_GEOMETRY_SEL, dossier_sel_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_GEOMETRY_OPEN, dossier_ouv_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_GEOMETRY_OPEN_SEL, dossier_ouv_sel_xpm );
+		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_SCENE, scene_xpm );
+		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_SCENE_SEL, scene_sel_xpm );
+		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_NODE, node_xpm );
+		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_NODE_SEL, node_sel_xpm );
+		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_CAMERA, camera_xpm );
+		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_CAMERA_SEL, camera_sel_xpm );
+		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_GEOMETRY, geometry_xpm );
+		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_GEOMETRY_SEL, geometry_sel_xpm );
+		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_LIGHT, light_xpm );
+		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_LIGHT_SEL, light_sel_xpm );
 		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_SUBMESH, submesh_xpm );
 		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_SUBMESH_SEL, submesh_sel_xpm );
+		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_OVERLAY, overlay_xpm );
+		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_OVERLAY_SEL, overlay_sel_xpm );
 		m_pImagesLoader->AddBitmap( eBMP_SCENE, scene_blanc_xpm );
 		m_pImagesLoader->AddBitmap( eBMP_MATERIALS, mat_blanc_xpm );
 		m_pImagesLoader->AddBitmap( eBMP_EXPORT, export_xpm );

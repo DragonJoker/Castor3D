@@ -26,58 +26,27 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GuiCommon
 {
 	class wxGeometriesListFrame
-		: public wxPanel
+		: public wxTreeCtrl
 	{
 	public:
 		typedef enum eBMP
 		{
-			eBMP_VISIBLE,
-			eBMP_VISIBLE_SEL,
-			eBMP_HIDDEN,
-			eBMP_HIDDEN_SEL,
+			eBMP_SCENE,
+			eBMP_SCENE_SEL,
+			eBMP_NODE,
+			eBMP_NODE_SEL,
+			eBMP_CAMERA,
+			eBMP_CAMERA_SEL,
 			eBMP_GEOMETRY,
 			eBMP_GEOMETRY_SEL,
-			eBMP_GEOMETRY_OPEN,
-			eBMP_GEOMETRY_OPEN_SEL,
+			eBMP_LIGHT,
+			eBMP_LIGHT_SEL,
 			eBMP_SUBMESH,
 			eBMP_SUBMESH_SEL,
+			eBMP_OVERLAY,
+			eBMP_OVERLAY_SEL,
 			eBMP_COUNT,
 		}	eBMP;
-
-	private:
-		typedef enum eID
-		{
-			eID_TREE_GEOMETRIES,
-			eID_COMBO_MATERIALS,
-			eID_BUTTON_DELETE,
-		}	eID;
-
-		typedef enum eTREE_ID
-		{
-			eTREE_ID_VISIBLE,
-			eTREE_ID_VISIBLE_SEL,
-			eTREE_ID_HIDDEN,
-			eTREE_ID_HIDDEN_SEL,
-			eTREE_ID_GEOMETRY,
-			eTREE_ID_GEOMETRY_SEL,
-			eTREE_ID_GEOMETRY_OPEN,
-			eTREE_ID_GEOMETRY_OPEN_SEL,
-			eTREE_ID_SUBMESH,
-			eTREE_ID_SUBMESH_SEL,
-			eTREE_ID_COUNT,
-		}	eTREE_ID;
-
-		wxTreeCtrl * m_pTreeGeometries;
-		wxButton * m_pButtonDeleteSelected;
-		wxComboBox * m_pComboMaterials;
-		wxImageList * m_pListImages;
-		wxArrayString m_arrayItems;
-		std::set< wxTreeItemId > m_setGeometriesInTree;
-		std::set< wxTreeItemId > m_setSubmeshesInTree;
-		Castor3D::SceneWPtr m_pScene;
-		uint32_t m_uiNbItems;
-		Castor3D::Engine * m_pEngine;
-		wxTreeItemId m_selItem;
 
 	public:
 		wxGeometriesListFrame( wxWindow * p_propsParent, wxWindow * p_pParent, wxString const & p_strTitle, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
@@ -87,14 +56,22 @@ namespace GuiCommon
 		void UnloadScene();
 
 	protected:
+		void DoAddGeometry( wxTreeItemId p_id, Castor3D::MovableObjectSPtr p_geometry );
+		void DoAddCamera( wxTreeItemId p_id, Castor3D::MovableObjectSPtr p_camera );
+		void DoAddLight( wxTreeItemId p_id, Castor3D::MovableObjectSPtr p_light );
+		void DoAddNode( wxTreeItemId p_id, Castor3D::SceneNodeSPtr p_node );
+		void DoAddOverlay( wxTreeItemId p_id, Castor3D::OverlaySPtr p_overlay );
+
 		DECLARE_EVENT_TABLE()
 		void OnClose( wxCloseEvent & p_event );
-		void OnDeleteItem( wxCommandEvent & p_event );
 		void OnExpandItem( wxTreeEvent & p_event );
 		void OnCollapseItem( wxTreeEvent & p_event );
 		void OnActivateItem( wxTreeEvent & p_event );
 		void OnChangeItem( wxTreeEvent & p_event );
-		void OnComboMaterials( wxCommandEvent & p_event );
+
+	private:
+		Castor3D::SceneWPtr m_pScene;
+		Castor3D::Engine * m_pEngine;
 	};
 }
 

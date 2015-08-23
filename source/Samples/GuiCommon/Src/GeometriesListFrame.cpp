@@ -1,26 +1,38 @@
 #include "GeometriesListFrame.hpp"
+
+#include "CameraTreeItemData.hpp"
 #include "GeometryTreeItemData.hpp"
+#include "LightTreeItemData.hpp"
+#include "NodeTreeItemData.hpp"
+#include "OverlayTreeItemData.hpp"
 #include "SubmeshTreeItemData.hpp"
+
 #include "ImagesLoader.hpp"
 
-#include "xpms/geo_visible.xpm"
-#include "xpms/geo_visible_sel.xpm"
-#include "xpms/geo_cachee.xpm"
-#include "xpms/geo_cachee_sel.xpm"
-#include "xpms/dossier.xpm"
-#include "xpms/dossier_sel.xpm"
-#include "xpms/dossier_ouv.xpm"
-#include "xpms/dossier_ouv_sel.xpm"
+#include "xpms/node.xpm"
+#include "xpms/node_sel.xpm"
+#include "xpms/camera.xpm"
+#include "xpms/camera_sel.xpm"
+#include "xpms/light.xpm"
+#include "xpms/light_sel.xpm"
+#include "xpms/geometry.xpm"
+#include "xpms/geometry_sel.xpm"
 #include "xpms/submesh.xpm"
 #include "xpms/submesh_sel.xpm"
+#include "xpms/scene.xpm"
+#include "xpms/scene_sel.xpm"
+#include "xpms/overlay.xpm"
+#include "xpms/overlay_sel.xpm"
 
 #include <wx/imaglist.h>
 #include <wx/aui/framemanager.h>
+#include <wx/artprov.h>
 
 #include <Geometry.hpp>
 #include <Engine.hpp>
 #include <Material.hpp>
 #include <MaterialManager.hpp>
+#include <OverlayManager.hpp>
 #include <Mesh.hpp>
 #include <Scene.hpp>
 
@@ -29,65 +41,62 @@ using namespace Castor;
 
 namespace GuiCommon
 {
-	static const int GC_IMG_SIZE	= 20;
+	static const int GC_IMG_SIZE = 16;
 
 	wxGeometriesListFrame::wxGeometriesListFrame( wxWindow * p_propsParent, wxWindow * p_pParent, wxString const & p_strTitle, wxPoint const & p_ptPos, wxSize const & p_size )
-		: wxPanel( p_pParent, wxID_ANY, /*p_strTitle, */p_ptPos, p_size/*, wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN | wxFRAME_FLOAT_ON_PARENT*/ )
-		, m_uiNbItems( 0 )
+		: wxTreeCtrl( p_pParent, wxID_ANY, p_ptPos, p_size, wxTR_DEFAULT_STYLE | wxNO_BORDER )
+		, m_pEngine( NULL )
 	{
-		wxSize l_size = GetClientSize();
-		m_pTreeGeometries = new wxTreeCtrl( this, eID_TREE_GEOMETRIES, wxDefaultPosition, l_size - wxSize( 0, 50 ), wxTR_HIDE_ROOT | wxTR_HAS_BUTTONS | wxTR_MULTIPLE | wxTR_EXTENDED );
-		m_pTreeGeometries->Show();
-		m_pComboMaterials = new wxComboBox( this, eID_COMBO_MATERIALS, wxEmptyString, wxPoint( 0, l_size.y - 50 ), wxSize( l_size.x, 25 ) );
-		m_pComboMaterials->Hide();
-		m_pButtonDeleteSelected = new wxButton( this, eID_BUTTON_DELETE, _( "Delete" ), wxPoint( 0, l_size.y - 25 ), wxSize( l_size.x, 25 ) );
-		wxTreeItemId l_idRoot = m_pTreeGeometries->AddRoot( _( "Geometries" ) );
-		m_pListImages = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
 		wxBusyCursor l_wait;
-		wxImage * l_icons[eTREE_ID_COUNT];
-		wxImagesLoader::AddBitmap( eBMP_VISIBLE, geo_visible_xpm );
-		wxImagesLoader::AddBitmap( eBMP_VISIBLE_SEL, geo_visible_sel_xpm );
-		wxImagesLoader::AddBitmap( eBMP_HIDDEN, geo_cachee_xpm );
-		wxImagesLoader::AddBitmap( eBMP_HIDDEN_SEL, geo_cachee_sel_xpm );
-		wxImagesLoader::AddBitmap( eBMP_GEOMETRY, dossier_xpm );
-		wxImagesLoader::AddBitmap( eBMP_GEOMETRY_SEL, dossier_sel_xpm );
-		wxImagesLoader::AddBitmap( eBMP_GEOMETRY_OPEN, dossier_ouv_xpm );
-		wxImagesLoader::AddBitmap( eBMP_GEOMETRY_OPEN_SEL, dossier_ouv_sel_xpm );
+		wxImagesLoader::AddBitmap( eBMP_SCENE, scene_xpm );
+		wxImagesLoader::AddBitmap( eBMP_SCENE_SEL, scene_sel_xpm );
+		wxImagesLoader::AddBitmap( eBMP_NODE, node_xpm );
+		wxImagesLoader::AddBitmap( eBMP_NODE_SEL, node_sel_xpm );
+		wxImagesLoader::AddBitmap( eBMP_CAMERA, camera_xpm );
+		wxImagesLoader::AddBitmap( eBMP_CAMERA_SEL, camera_sel_xpm );
+		wxImagesLoader::AddBitmap( eBMP_GEOMETRY, geometry_xpm );
+		wxImagesLoader::AddBitmap( eBMP_GEOMETRY_SEL, geometry_sel_xpm );
+		wxImagesLoader::AddBitmap( eBMP_LIGHT, light_xpm );
+		wxImagesLoader::AddBitmap( eBMP_LIGHT_SEL, light_sel_xpm );
 		wxImagesLoader::AddBitmap( eBMP_SUBMESH, submesh_xpm );
 		wxImagesLoader::AddBitmap( eBMP_SUBMESH_SEL, submesh_sel_xpm );
+		wxImagesLoader::AddBitmap( eBMP_OVERLAY, overlay_xpm );
+		wxImagesLoader::AddBitmap( eBMP_OVERLAY_SEL, overlay_sel_xpm );
 		wxImagesLoader::WaitAsyncLoads();
-		l_icons[eTREE_ID_VISIBLE] = wxImagesLoader::GetBitmap( eBMP_VISIBLE );
-		l_icons[eTREE_ID_VISIBLE_SEL] = wxImagesLoader::GetBitmap( eBMP_VISIBLE_SEL );
-		l_icons[eTREE_ID_HIDDEN] = wxImagesLoader::GetBitmap( eBMP_HIDDEN );
-		l_icons[eTREE_ID_HIDDEN_SEL] = wxImagesLoader::GetBitmap( eBMP_HIDDEN_SEL );
-		l_icons[eTREE_ID_GEOMETRY] = wxImagesLoader::GetBitmap( eBMP_GEOMETRY );
-		l_icons[eTREE_ID_GEOMETRY_SEL] = wxImagesLoader::GetBitmap( eBMP_GEOMETRY_SEL );
-		l_icons[eTREE_ID_GEOMETRY_OPEN] = wxImagesLoader::GetBitmap( eBMP_GEOMETRY_OPEN );
-		l_icons[eTREE_ID_GEOMETRY_OPEN_SEL] = wxImagesLoader::GetBitmap( eBMP_GEOMETRY_OPEN_SEL );
-		l_icons[eTREE_ID_SUBMESH] = wxImagesLoader::GetBitmap( eBMP_SUBMESH );
-		l_icons[eTREE_ID_SUBMESH_SEL] = wxImagesLoader::GetBitmap( eBMP_SUBMESH_SEL );
 
-		for ( uint32_t i = 0; i < eTREE_ID_COUNT; i++ )
+		std::array< wxImage *, eBMP_COUNT > l_icons =
 		{
-			int l_sizeOrig = l_icons[i]->GetWidth();
+			wxImagesLoader::GetBitmap( eBMP_SCENE ),
+			wxImagesLoader::GetBitmap( eBMP_SCENE_SEL ),
+			wxImagesLoader::GetBitmap( eBMP_NODE ),
+			wxImagesLoader::GetBitmap( eBMP_NODE_SEL ),
+			wxImagesLoader::GetBitmap( eBMP_CAMERA ),
+			wxImagesLoader::GetBitmap( eBMP_CAMERA_SEL ),
+			wxImagesLoader::GetBitmap( eBMP_GEOMETRY ),
+			wxImagesLoader::GetBitmap( eBMP_GEOMETRY_SEL ),
+			wxImagesLoader::GetBitmap( eBMP_LIGHT ),
+			wxImagesLoader::GetBitmap( eBMP_LIGHT_SEL ),
+			wxImagesLoader::GetBitmap( eBMP_SUBMESH ),
+			wxImagesLoader::GetBitmap( eBMP_SUBMESH_SEL ),
+			wxImagesLoader::GetBitmap( eBMP_OVERLAY ),
+			wxImagesLoader::GetBitmap( eBMP_OVERLAY_SEL ),
+		};
+
+		wxImageList * l_imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
+
+		for ( auto && l_image: l_icons )
+		{
+			int l_sizeOrig = l_image->GetWidth();
 
 			if ( l_sizeOrig != GC_IMG_SIZE )
 			{
-				l_icons[i]->Rescale( GC_IMG_SIZE, GC_IMG_SIZE, wxIMAGE_QUALITY_HIGHEST );
+				l_image->Rescale( GC_IMG_SIZE, GC_IMG_SIZE, wxIMAGE_QUALITY_HIGHEST );
 			}
 
-			m_pListImages->Add( wxImage( *l_icons[i] ) );
+			l_imageList->Add( wxImage( *l_image ) );
 		}
 
-		m_pTreeGeometries->AssignImageList( m_pListImages );
-
-
-		wxBoxSizer * l_pSizer = new wxBoxSizer( wxVERTICAL );
-		l_pSizer->Add( m_pTreeGeometries, wxSizerFlags( 1 ).Expand().ReserveSpaceEvenIfHidden() );
-		l_pSizer->Add( m_pComboMaterials, wxSizerFlags( 0 ).Expand().ReserveSpaceEvenIfHidden() );
-		l_pSizer->Add( m_pButtonDeleteSelected, wxSizerFlags( 0 ).Expand().ReserveSpaceEvenIfHidden() );
-		SetSizer( l_pSizer );
-		l_pSizer->SetSizeHints( this );
+		AssignImageList( l_imageList );
 	}
 
 	wxGeometriesListFrame::~wxGeometriesListFrame()
@@ -101,187 +110,96 @@ namespace GuiCommon
 
 		if ( p_pScene )
 		{
-			wxTreeItemId l_idRoot = m_pTreeGeometries->GetRootItem();
+			wxTreeItemId l_scene = AddRoot( p_pScene->GetName(), eBMP_SCENE, eBMP_SCENE_SEL );
+			SceneNodeSPtr l_rootNode = p_pScene->GetRootNode();
+			DoAddNode( l_scene, l_rootNode );
 
-			for ( auto && l_pair: p_pScene->Geometries() )
+			for ( auto && l_overlay: p_pEngine->GetOverlayManager() )
 			{
-				int l_iCount = 0;
-				GeometrySPtr l_pGeometry = l_pair.second;
-				String l_name = l_pair.first;
-				m_arrayItems.push_back( l_name );
-				wxTreeItemId l_idGeometry = m_pTreeGeometries->AppendItem( l_idRoot, l_name, eTREE_ID_GEOMETRY, eTREE_ID_GEOMETRY_SEL, new wxGeometryTreeItemData( l_pGeometry ) );
-				m_pTreeGeometries->AppendItem( l_idGeometry, l_pGeometry->IsVisible() ? _( "Visible" ) : _( "Hidden" ), eTREE_ID_VISIBLE, eTREE_ID_VISIBLE_SEL, new wxGeometryTreeItemData( l_pGeometry ) );
-
-				for ( auto l_submesh: *l_pGeometry->GetMesh() )
+				if ( l_overlay->GetName() != cuT( "DebugPanel" ) )
 				{
-					wxString l_strSubmesh = _( "Submesh " );
-					l_strSubmesh << l_iCount++;
-					wxTreeItemId l_idSubmesh = m_pTreeGeometries->AppendItem( l_idGeometry, l_strSubmesh, eTREE_ID_SUBMESH, eTREE_ID_SUBMESH_SEL, new wxSubmeshTreeItemData( l_pGeometry, l_submesh ) );
-					m_setSubmeshesInTree.insert( l_idSubmesh );
+					DoAddOverlay( AppendItem( l_scene, l_overlay->GetName(), eBMP_OVERLAY, eBMP_OVERLAY_SEL, new wxOverlayTreeItemData( l_overlay ) ), l_overlay );
 				}
-
-				m_setGeometriesInTree.insert( l_idGeometry );
 			}
 		}
 	}
 
 	void wxGeometriesListFrame::UnloadScene()
 	{
-		m_arrayItems.clear();
-		m_setSubmeshesInTree.clear();
-		m_setGeometriesInTree.clear();
-		m_pTreeGeometries->DeleteAllItems();
-		m_pComboMaterials->Hide();
+		DeleteAllItems();
+	}
+
+	void wxGeometriesListFrame::DoAddGeometry( wxTreeItemId p_id, MovableObjectSPtr p_geometry )
+	{
+		GeometrySPtr l_geometry = std::static_pointer_cast< Geometry >( p_geometry );
+		wxTreeItemId l_id = AppendItem( p_id, l_geometry->GetName(), eBMP_GEOMETRY, eBMP_GEOMETRY_SEL, new wxGeometryTreeItemData( l_geometry ) );
+		int l_count = 0;
+
+		for ( auto l_submesh: *l_geometry->GetMesh() )
+		{
+			wxString l_name = _( "Submesh " );
+			l_name << l_count++;
+			wxTreeItemId l_idSubmesh = AppendItem( l_id, l_name, eBMP_SUBMESH, eBMP_SUBMESH_SEL, new wxSubmeshTreeItemData( l_geometry, l_submesh ) );
+		}
+	}
+
+	void wxGeometriesListFrame::DoAddCamera( wxTreeItemId p_id, MovableObjectSPtr p_camera )
+	{
+		CameraSPtr l_camera = std::static_pointer_cast< Camera >( p_camera );
+		wxTreeItemId l_id = AppendItem( p_id, l_camera->GetName(), eBMP_CAMERA, eBMP_CAMERA_SEL, new wxCameraTreeItemData( l_camera ) );
+	}
+
+	void wxGeometriesListFrame::DoAddLight( wxTreeItemId p_id, MovableObjectSPtr p_light )
+	{
+		LightSPtr l_light = std::static_pointer_cast< Light >( p_light );
+		wxTreeItemId l_id = AppendItem( p_id, l_light->GetName(), eBMP_LIGHT, eBMP_LIGHT_SEL, new wxLightTreeItemData( l_light ) );
+	}
+
+	void wxGeometriesListFrame::DoAddNode( wxTreeItemId p_id, SceneNodeSPtr p_node )
+	{
+		for ( auto && l_pair: p_node->GetObjects() )
+		{
+			MovableObjectSPtr l_object = l_pair.second.lock();
+
+			switch ( l_object->GetType() )
+			{
+			case eMOVABLE_TYPE_GEOMETRY:
+				DoAddGeometry( p_id, l_object );
+				break;
+
+			case eMOVABLE_TYPE_CAMERA:
+				DoAddCamera( p_id, l_object );
+				break;
+
+			case eMOVABLE_TYPE_LIGHT:
+				DoAddLight( p_id, l_object );
+				break;
+			}
+		}
+
+		for ( auto && l_pair: p_node->GetChilds() )
+		{
+			DoAddNode( AppendItem( p_id, l_pair.first, eBMP_NODE, eBMP_NODE_SEL, new wxNodeTreeItemData( l_pair.second.lock() ) ), l_pair.second.lock() );
+		}
+	}
+
+	void wxGeometriesListFrame::DoAddOverlay( wxTreeItemId p_id, Castor3D::OverlaySPtr p_overlay )
+	{
+		for ( auto && l_overlay: *p_overlay )
+		{
+			DoAddOverlay( AppendItem( p_id, l_overlay->GetName(), eBMP_OVERLAY, eBMP_OVERLAY_SEL, new wxOverlayTreeItemData( l_overlay ) ), l_overlay );
+		}
 	}
 
 	BEGIN_EVENT_TABLE( wxGeometriesListFrame, wxPanel )
 		EVT_CLOSE( wxGeometriesListFrame::OnClose )
-		EVT_BUTTON( eID_BUTTON_DELETE, wxGeometriesListFrame::OnDeleteItem )
-		EVT_TREE_ITEM_EXPANDED( wxID_ANY, wxGeometriesListFrame::OnExpandItem )
-		EVT_TREE_ITEM_COLLAPSED( wxID_ANY, wxGeometriesListFrame::OnCollapseItem )
-		EVT_TREE_ITEM_ACTIVATED( wxID_ANY, wxGeometriesListFrame::OnActivateItem )
-		EVT_TREE_SEL_CHANGED( wxID_ANY, wxGeometriesListFrame::OnChangeItem )
-		EVT_COMBOBOX( eID_COMBO_MATERIALS, wxGeometriesListFrame::OnComboMaterials )
+		//EVT_TREE_ITEM_ACTIVATED( wxID_ANY, wxGeometriesListFrame::OnActivateItem )
+		//EVT_TREE_SEL_CHANGED( wxID_ANY, wxGeometriesListFrame::OnChangeItem )
 	END_EVENT_TABLE()
 
 	void wxGeometriesListFrame::OnClose( wxCloseEvent & p_event )
 	{
-		p_event.Skip();
-	}
-
-	void wxGeometriesListFrame::OnDeleteItem( wxCommandEvent & p_event )
-	{
-		wxArrayTreeItemIds l_arraySelected;
-		m_pTreeGeometries->GetSelections( l_arraySelected );
-		SceneSPtr l_scene( m_pScene.lock() );
-
-		if ( l_scene )
-		{
-			for( auto && l_selected: l_arraySelected )
-			{
-				GeometrySPtr l_pGeometry = l_scene->GetGeometry( ( wxChar const * )( m_pTreeGeometries->GetItemText( l_selected ).c_str() ) );
-
-				if ( l_pGeometry )
-				{
-					l_scene->RemoveGeometry( l_pGeometry );
-				}
-			}
-
-			for( auto && l_selected: l_arraySelected )
-			{
-				m_pTreeGeometries->Delete( l_selected );
-			}
-
-			m_pTreeGeometries->Refresh();
-			Refresh();
-			m_selItem = wxTreeItemId();
-		}
-
-		p_event.Skip();
-	}
-
-	void wxGeometriesListFrame::OnExpandItem( wxTreeEvent & p_event )
-	{
-		m_selItem = p_event.GetItem();
-		m_pTreeGeometries->SetItemImage( m_selItem, eTREE_ID_GEOMETRY_OPEN );
-		m_pTreeGeometries->SetItemImage( m_selItem, eTREE_ID_GEOMETRY_OPEN_SEL, wxTreeItemIcon_Selected );
-		p_event.Skip();
-	}
-
-	void wxGeometriesListFrame::OnCollapseItem( wxTreeEvent & p_event )
-	{
-		m_selItem = p_event.GetItem();
-		m_pTreeGeometries->SetItemImage( m_selItem, eTREE_ID_GEOMETRY );
-		m_pTreeGeometries->SetItemImage( m_selItem, eTREE_ID_GEOMETRY_SEL, wxTreeItemIcon_Selected );
-		p_event.Skip();
-	}
-
-	void wxGeometriesListFrame::OnActivateItem( wxTreeEvent & p_event )
-	{
-		m_selItem = p_event.GetItem();
-		wxString l_strText = m_pTreeGeometries->GetItemText( m_selItem );
-		SceneSPtr l_scene( m_pScene.lock() );
-
-		if ( l_scene )
-		{
-			if ( l_strText == _( "Visible" ) )
-			{
-				wxGeometryTreeItemData * l_pItemData = static_cast< wxGeometryTreeItemData * >( m_pTreeGeometries->GetItemData( m_selItem ) );
-				m_pComboMaterials->Hide();
-				l_pItemData->GetGeometry()->GetParent()->SetVisible( false );
-				m_pTreeGeometries->SetItemText( m_selItem, _( "Hidden" ) );
-				m_pTreeGeometries->SetItemImage( m_selItem, eTREE_ID_HIDDEN );
-				m_pTreeGeometries->SetItemImage( m_selItem, eTREE_ID_HIDDEN_SEL, wxTreeItemIcon_Selected );
-				l_scene->InitialiseGeometries();
-			}
-			else if ( l_strText == _( "Hidden" ) )
-			{
-				wxGeometryTreeItemData * l_pItemData = static_cast< wxGeometryTreeItemData * >( m_pTreeGeometries->GetItemData( m_selItem ) );
-				m_pComboMaterials->Hide();
-				l_pItemData->GetGeometry()->GetParent()->SetVisible( true );
-				m_pTreeGeometries->SetItemText( m_selItem, _( "Visible" ) );
-				m_pTreeGeometries->SetItemImage( m_selItem, eTREE_ID_VISIBLE );
-				m_pTreeGeometries->SetItemImage( m_selItem, eTREE_ID_VISIBLE_SEL, wxTreeItemIcon_Selected );
-				l_scene->InitialiseGeometries();
-			}
-		}
-
-		p_event.Skip();
-	}
-
-	void wxGeometriesListFrame::OnChangeItem( wxTreeEvent & p_event )
-	{
-		m_selItem = p_event.GetItem();
-
-		if ( m_setSubmeshesInTree.find( m_selItem ) != m_setSubmeshesInTree.end() )
-		{
-			wxSubmeshTreeItemData * l_pItemData = static_cast< wxSubmeshTreeItemData * >( m_pTreeGeometries->GetItemData( m_selItem ) );
-			String l_strMatName = l_pItemData->GetGeometry()->GetMaterial( l_pItemData->GetSubmesh() )->GetName();
-			m_pComboMaterials->Clear();
-			int l_iSelected = 0;
-			StringArray l_arrayNames;
-			m_pEngine->GetMaterialManager().GetNames( l_arrayNames );
-			wxArrayString l_wxArrayNames;
-			uint32_t i = 0;
-
-			for( auto && l_name: l_arrayNames )
-			{
-				if ( l_strMatName == l_name )
-				{
-					l_iSelected = int( i );
-				}
-
-				l_wxArrayNames.push_back( l_name.c_str() );
-				i++;
-			}
-
-			m_pComboMaterials->Append( l_wxArrayNames );
-			m_pComboMaterials->Show();
-			m_pComboMaterials->SetSelection( l_iSelected );
-		}
-		else
-		{
-			m_pComboMaterials->Hide();
-		}
-
-		p_event.Skip();
-	}
-
-	void wxGeometriesListFrame::OnComboMaterials( wxCommandEvent & p_event )
-	{
-		wxString l_strName = m_pComboMaterials->GetString( p_event.GetInt() );
-		wxSubmeshTreeItemData * l_pItemData = static_cast< wxSubmeshTreeItemData * >( m_pTreeGeometries->GetItemData( m_selItem ) );
-		SceneSPtr l_scene( m_pScene.lock() );
-
-		if ( l_scene )
-		{
-			if ( m_pEngine->GetMaterialManager().has( ( wxChar const * )l_strName.c_str() ) )
-			{
-				l_pItemData->GetGeometry()->SetMaterial( l_pItemData->GetSubmesh(), m_pEngine->GetMaterialManager().find( ( wxChar const * )l_strName.c_str() ) );
-				l_scene->InitialiseGeometries();
-			}
-		}
-
+		DeleteAllItems();
 		p_event.Skip();
 	}
 }
