@@ -171,11 +171,11 @@ namespace GlRender
 		GlslWriter l_writer( m_gl, eSHADER_TYPE_VERTEX );
 		l_writer << Version() << Endl();
 		// Vertex inputs
-		Vec4 vertex = l_writer.GetAttribute< Vec4 >( cuT( "vertex" ) );
-		Vec4 normal = l_writer.GetAttribute< Vec4 >( cuT( "normal" ) );
-		Vec4 tangent = l_writer.GetAttribute< Vec4 >( cuT( "tangent" ) );
-		Vec4 bitangent = l_writer.GetAttribute< Vec4 >( cuT( "bitangent" ) );
-		Vec4 texture = l_writer.GetAttribute< Vec4 >( cuT( "texture" ) );
+		ATTRIBUTE( l_writer, Vec4, vertex );
+		ATTRIBUTE( l_writer, Vec3, normal );
+		ATTRIBUTE( l_writer, Vec3, tangent );
+		ATTRIBUTE( l_writer, Vec3, bitangent );
+		ATTRIBUTE( l_writer, Vec3, texture );
 		IVec4 bone_ids;
 		Vec4 weights;
 		Mat4 transform;
@@ -191,45 +191,27 @@ namespace GlRender
 			transform = l_writer.GetAttribute< Mat4 >( cuT( "transform" ) );
 		}
 
-		// Matrices UBO
-		Ubo l_ubo = l_writer.GetUbo( cuT( "Matrices" ) );
-		Mat4 c3d_mtxProjection = l_ubo.GetUniform< Mat4 >( cuT( "c3d_mtxProjection" ) );
-		Mat4 c3d_mtxModel = l_ubo.GetUniform< Mat4 >( cuT( "c3d_mtxModel" ) );
-		Mat4 c3d_mtxView = l_ubo.GetUniform< Mat4 >( cuT( "c3d_mtxView" ) );
-		Mat4 c3d_mtxModelView = l_ubo.GetUniform< Mat4 >( cuT( "c3d_mtxModelView" ) );
-		Mat4 c3d_mtxProjectionView = l_ubo.GetUniform< Mat4 >( cuT( "c3d_mtxProjectionView" ) );
-		Mat4 c3d_mtxProjectionModelView = l_ubo.GetUniform< Mat4 >( cuT( "c3d_mtxProjectionModelView" ) );
-		Mat4 c3d_mtxNormal = l_ubo.GetUniform< Mat4 >( cuT( "c3d_mtxNormal" ) );
-		Mat4 c3d_mtxTexture0 = l_ubo.GetUniform< Mat4 >( cuT( "c3d_mtxTexture0" ) );
-		Mat4 c3d_mtxTexture1 = l_ubo.GetUniform< Mat4 >( cuT( "c3d_mtxTexture1" ) );
-		Mat4 c3d_mtxTexture2 = l_ubo.GetUniform< Mat4 >( cuT( "c3d_mtxTexture2" ) );
-		Mat4 c3d_mtxTexture3 = l_ubo.GetUniform< Mat4 >( cuT( "c3d_mtxTexture3" ) );
-		Array< Mat4 > c3d_mtxBones = l_ubo.GetUniform< Mat4 >( cuT( "c3d_mtxBones" ), 100 );
-		l_ubo.End();
+		UBO_MATRIX( l_writer );
 
 		// Outputs
-		Vec3 vtx_vertex = l_writer.GetOut< Vec3 >( cuT( "vtx_vertex" ) );
-		Vec3 vtx_normal = l_writer.GetOut< Vec3 >( cuT( "vtx_normal" ) );
-		Vec3 vtx_tangent = l_writer.GetOut< Vec3 >( cuT( "vtx_tangent" ) );
-		Vec3 vtx_bitangent = l_writer.GetOut< Vec3 >( cuT( "vtx_bitangent" ) );
-		Vec3 vtx_texture = l_writer.GetOut< Vec3 >( cuT( "vtx_texture" ) );
+		OUT( l_writer, Vec3, vtx_vertex );
+		OUT( l_writer, Vec3, vtx_normal );
+		OUT( l_writer, Vec3, vtx_tangent );
+		OUT( l_writer, Vec3, vtx_bitangent );
+		OUT( l_writer, Vec3, vtx_texture );
 		l_writer << Legacy_MatrixOut();
 
 		std::function< void() > l_main = [&]()
 		{
 			l_writer << Legacy_MatrixCopy();
-			Vec4 l_v4Vertex = l_writer.GetLocale< Vec4 >( cuT( "l_v4Vertex" ) );
-			Vec4 l_v4Normal = l_writer.GetLocale< Vec4 >( cuT( "l_v4Normal" ) );
-			Vec4 l_v4Tangent = l_writer.GetLocale< Vec4 >( cuT( "l_v4Tangent" ) );
-			Vec4 l_v4Bitangent = l_writer.GetLocale< Vec4 >( cuT( "l_v4Bitangent" ) );
-			l_v4Vertex = vec4( vertex.xyz(), 1.0 );
-			l_v4Normal = vec4( normal, 0.0 );
-			l_v4Tangent = vec4( tangent, 0.0 );
-			l_v4Bitangent = vec4( bitangent, 0.0 );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Vertex, vec4( vertex.xyz(), 1.0 ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Normal, vec4( normal, 0.0 ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Tangent, vec4( tangent, 0.0 ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Bitangent, vec4( bitangent, 0.0 ) );
 
 			if ( ( p_uiProgramFlags & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
 			{
-				Mat4 l_mtxBoneTransform = l_writer.GetLocale< Mat4 >( cuT( "l_mtxBoneTransform" ) );
+				LOCALE( l_writer, Mat4, l_mtxBoneTransform );
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids[Int( 0 )]] * weights[Int( 0 )];
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids[Int( 1 )]] * weights[Int( 1 )];
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids[Int( 2 )]] * weights[Int( 2 )];
@@ -243,10 +225,8 @@ namespace GlRender
 
 			if ( ( p_uiProgramFlags & ePROGRAM_FLAG_INSTANCIATION ) == ePROGRAM_FLAG_INSTANCIATION )
 			{
-				Mat4 l_mtxMV = l_writer.GetLocale< Mat4 >( cuT( "l_mtxMV" ) );
-				Mat4 l_mtxN = l_writer.GetLocale< Mat4 >( cuT( "l_mtxN" ) );
-				l_mtxMV = c3d_mtxView * transform;
-				l_mtxN = transpose( inverse( l_mtxMV ) );
+				LOCALE_ASSIGN( l_writer, Mat4, l_mtxMV, c3d_mtxView * transform );
+				LOCALE_ASSIGN( l_writer, Mat4, l_mtxN, transpose( inverse( l_mtxMV ) ) );
 				l_v4Vertex = l_mtxMV * l_v4Vertex;
 				l_v4Normal = l_mtxN * l_v4Normal;
 				l_v4Tangent = l_mtxN * l_v4Tangent;
@@ -265,11 +245,10 @@ namespace GlRender
 			vtx_normal = normalize( l_v4Normal.xyz() );
 			vtx_tangent = normalize( l_v4Tangent.xyz() );
 			vtx_bitangent = normalize( l_v4Bitangent.xyz() );
-			l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) ) = c3d_mtxProjection * l_v4Vertex;
+			BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * l_v4Vertex;
 		};
 
-		l_writer.GetFunction< Void >( cuT( "main" ), l_main );
-
+		l_writer.Implement_Function< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();
 	}
 
@@ -280,49 +259,19 @@ namespace GlRender
 		GlslWriter l_writer( m_gl, eSHADER_TYPE_PIXEL );
 		l_writer << Version() << Endl();
 
-		// Matrices UBO
-		Ubo l_matrices = l_writer.GetUbo( cuT( "Matrices" ) );
-		Mat4 c3d_mtxProjection = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxProjection" ) );
-		Mat4 c3d_mtxModel = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxModel" ) );
-		Mat4 c3d_mtxView = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxView" ) );
-		Mat4 c3d_mtxModelView = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxModelView" ) );
-		Mat4 c3d_mtxProjectionView = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxProjectionView" ) );
-		Mat4 c3d_mtxProjectionModelView = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxProjectionModelView" ) );
-		Mat4 c3d_mtxNormal = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxNormal" ) );
-		Mat4 c3d_mtxTexture0 = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxTexture0" ) );
-		Mat4 c3d_mtxTexture1 = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxTexture1" ) );
-		Mat4 c3d_mtxTexture2 = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxTexture2" ) );
-		Mat4 c3d_mtxTexture3 = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxTexture3" ) );
-		Array< Mat4 > c3d_mtxBones = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxBones" ), 100 );
-		l_matrices.End();
-
-		// Scene UBO
-		Ubo l_scene = l_writer.GetUbo( cuT( "Scene" ) );
-		Int c3d_iLightsCount = l_scene.GetUniform< Int >( cuT( "c3d_iLightsCount" ) );
-		Vec4 c3d_v4AmbientLight = l_scene.GetUniform< Vec4 >( cuT( "c3d_v4AmbientLight" ) );
-		Vec4 c3d_v4BackgroundColour = l_scene.GetUniform< Vec4 >( cuT( "c3d_v4BackgroundColour" ) );
-		Vec3 c3d_v3CameraPosition = l_scene.GetUniform< Vec3 >( cuT( "c3d_v3CameraPosition" ) );
-		l_scene.End();
-
-		// Pass UBO
-		Ubo l_pass = l_writer.GetUbo( cuT( "Pass" ) );
-		Vec4 c3d_v4MatAmbient = l_pass.GetUniform< Vec4 >( cuT( "c3d_v4MatAmbient" ) );
-		Vec4 c3d_v4MatDiffuse = l_pass.GetUniform< Vec4 >( cuT( "c3d_v4MatDiffuse" ) );
-		Vec4 c3d_v4MatEmissive = l_pass.GetUniform< Vec4 >( cuT( "c3d_v4MatEmissive" ) );
-		Vec4 c3d_v4MatSpecular = l_pass.GetUniform< Vec4 >( cuT( "c3d_v4MatSpecular" ) );
-		Float c3d_fMatShininess = l_pass.GetUniform< Float >( cuT( "c3d_fMatShininess" ) );
-		Float c3d_fMatOpacity = l_pass.GetUniform< Float >( cuT( "c3d_fMatOpacity" ) );
-		l_pass.End();
+		UBO_MATRIX( l_writer );
+		UBO_SCENE( l_writer );
+		UBO_PASS( l_writer );
 
 		// Pixel inputs
-		Vec3 vtx_vertex = l_writer.GetIn< Vec3 >( cuT( "vtx_vertex" ) );
-		Vec3 vtx_normal = l_writer.GetIn< Vec3 >( cuT( "vtx_normal" ) );
-		Vec3 vtx_tangent = l_writer.GetIn< Vec3 >( cuT( "vtx_tangent" ) );
-		Vec3 vtx_bitangent = l_writer.GetIn< Vec3 >( cuT( "vtx_bitangent" ) );
-		Vec3 vtx_texture = l_writer.GetIn< Vec3 >( cuT( "vtx_texture" ) );
+		IN( l_writer, Vec3, vtx_vertex );
+		IN( l_writer, Vec3, vtx_normal );
+		IN( l_writer, Vec3, vtx_tangent );
+		IN( l_writer, Vec3, vtx_bitangent );
+		IN( l_writer, Vec3, vtx_texture );
 
-		Vec4 pxl_v4FragColor = l_writer.GetLayout< Vec4 >( cuT( "pxl_v4FragColor" ) );
-		Sampler1D c3d_sLights = l_writer.GetUniform< Sampler1D >( cuT( "c3d_sLights" ) );
+		LAYOUT( l_writer, Vec4, pxl_v4FragColor );
+		UNIFORM( l_writer, Sampler1D, c3d_sLights );
 		Sampler2D c3d_mapColour;
 		Sampler2D c3d_mapAmbient;
 		Sampler2D c3d_mapDiffuse;
@@ -375,29 +324,24 @@ namespace GlRender
 			}
 		}
 
-		l_writer << GLSL::BlinnPhong().GetPixelLights() << Endl();
+		Lighting< BlinnPhongLightingModel > l_lighting;
+		l_lighting.Declare_Light( l_writer );
+		l_lighting.Declare_GetLight( l_writer );
+		l_lighting.Declare_ComputeLightDirection( l_writer );
+		l_lighting.Declare_ComputeFresnel( l_writer );
 		
 		std::function< void() > l_main = [&]()
 		{
-			cuT( "	Light l_light;\n" );
-			Vec3 l_v3LightDir = l_writer.GetLocale< Vec3 >( cuT( "l_v3LightDir" ) );
-			Vec3 l_fAttenuation = l_writer.GetLocale< Vec3 >( cuT( "l_fAttenuation" ) );
-			Vec3 l_fLambert = l_writer.GetLocale< Vec3 >( cuT( "l_fLambert" ) );
-			Vec3 l_fSpecular = l_writer.GetLocale< Vec3 >( cuT( "l_fSpecular" ) );
-			Vec3 l_v3Normal = l_writer.GetLocale< Vec3 >( cuT( "l_v3Normal" ) ) = normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) );
-			Vec3 l_v3Ambient = l_writer.GetLocale< Vec3 >( cuT( "l_v3Ambient" ) ) = vec3( 0, 0, 0 );
-			Vec3 l_v3Diffuse = l_writer.GetLocale< Vec3 >( cuT( "l_v3Diffuse" ) ) = vec3( 0, 0, 0 );
-			Vec3 l_v3Specular = l_writer.GetLocale< Vec3 >( cuT( "l_v3Specular" ) ) = vec3( 0, 0, 0 );
-			Vec3 l_v3TmpAmbient = l_writer.GetLocale< Vec3 >( cuT( "l_v3TmpAmbient" ) ) = vec3( 0, 0, 0 );
-			Vec3 l_v3TmpDiffuse = l_writer.GetLocale< Vec3 >( cuT( "l_v3TmpDiffuse" ) ) = vec3( 0, 0, 0 );
-			Vec3 l_v3TmpSpecular = l_writer.GetLocale< Vec3 >( cuT( "l_v3TmpSpecular" ) ) = vec3( 0, 0, 0 );
-			//Vec3 l_v3EyeVec = l_writer.GetLocale< Vec3 >( cuT( "l_v3EyeVec" ) ) = normalize( vec3( vtx_vertex.x(), vtx_vertex.y(), vtx_vertex.z() ) );
-			Vec3 l_v3EyeVec = l_writer.GetLocale< Vec3 >( cuT( "l_v3EyeVec" ) ) = normalize( c3d_v3CameraPosition - vec3( vtx_vertex.x(), vtx_vertex.y(), vtx_vertex.z() ) );
-			Vec3 l_fAlpha = l_writer.GetLocale< Vec3 >( cuT( "l_fAlpha" ) ) = c3d_fMatOpacity;
-			Vec3 l_fShininess = l_writer.GetLocale< Vec3 >( cuT( "l_fShininess" ) ) = c3d_fMatShininess;
-			Vec3 l_v3MatSpecular = l_writer.GetLocale< Vec3 >( cuT( "l_v3MatSpecular" ) ) = c3d_v4MatSpecular.xyz();
-			Vec3 l_v3Emissive = l_writer.GetLocale< Vec3 >( cuT( "l_v3Emissive" ) ) = c3d_v4MatEmissive.xyz();
-			pxl_v4FragColor = vec4( 0.0, 0.0, 0.0, 0.0 );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, vec3( Float( &l_writer, 0.0f ), 0, 0 ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, vec3( Float( 0.0f ), 0, 0 ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Specular, vec3( Float( 0.0f ), 0, 0 ) );
+			//LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, normalize( vec3( vtx_vertex.x(), vtx_vertex.y(), vtx_vertex.z() ) ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, normalize( c3d_v3CameraPosition - vec3( vtx_vertex.x(), vtx_vertex.y(), vtx_vertex.z() ) ) );
+			LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
+			LOCALE_ASSIGN( l_writer, Float, l_fShininess, c3d_fMatShininess );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.xyz() );
+			pxl_v4FragColor = vec4( Float( &l_writer, 0.0f ), 0.0f, 0.0f, 0.0f );
 			Vec3 l_v3MapColour;
 			Vec3 l_v3MapAmbient;
 			Vec3 l_v3MapDiffuse;
@@ -412,24 +356,24 @@ namespace GlRender
 			{
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
 				{
-					Vec3 l_v3MapColour = texture2D( c3d_mapColour, vtx_texture.xy() ).xyz();
+					l_v3MapColour = texture2D( c3d_mapColour, vtx_texture.xy() ).xyz();
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
 				{
-					Vec3 l_v3MapAmbient = texture2D( c3d_mapAmbient, vtx_texture.xy() ).xyz();
+					l_v3MapAmbient = texture2D( c3d_mapAmbient, vtx_texture.xy() ).xyz();
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
 				{
-					Vec3 l_v3MapDiffuse = texture2D( c3d_mapDiffuse, vtx_texture.xy() ).xyz();
+					l_v3MapDiffuse = texture2D( c3d_mapDiffuse, vtx_texture.xy() ).xyz();
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
 				{
 					l_v3MapNormal = texture2D( c3d_mapNormal, vtx_texture.xy() ).xyz();
-					l_fInvRadius = 0.02;
-					l_v3Normal = normalize( l_v3MapNormal.xyz() * 2.0f - 1.0f );
+					l_fInvRadius = Float( 0.02f );
+					l_v3Normal = normalize( l_v3MapNormal.xyz() * Float( 2.0f ) - Float( 1.0f ) );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
@@ -449,75 +393,69 @@ namespace GlRender
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
 				{
-					Float l_fGloss = texture2D( c3d_mapGloss, vtx_texture.xy() ).r();
-					l_fShininess = l_fGloss;
+					l_fShininess = texture2D( c3d_mapGloss, vtx_texture.xy() ).r();
+				}
+			}
+
+			FOR( l_writer, Int, i, 0, cuT( "i < c3d_iLightsCount" ), cuT( "++i" ) )
+			{
+				LOCALE_ASSIGN( l_writer, Light, l_light, l_lighting.GetLight( i ) );
+				LOCALE_ASSIGN( l_writer, Vec4, l_v4LightDir, l_lighting.ComputeLightDirection( l_light, vtx_vertex, c3d_mtxModelView ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3LightDir, l_v4LightDir.xyz() );
+				LOCALE_ASSIGN( l_writer, Float, l_fAttenuation, l_v4LightDir.w() );
+
+				if ( ( p_uiFlags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
+				{
+					l_lighting.Bump( vtx_tangent, vtx_bitangent, vtx_normal, l_v3LightDir, l_fAttenuation );
 				}
 
-				std::function< void() > l_lightsLoop = [&]()
+				LOCALE_ASSIGN( l_writer, Float, l_fLambert, max( dot( l_v3Normal, l_v3LightDir ), 0.0 ) );
+				//l_fLambert = dot( l_v3Normal, -l_v3LightDir );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3MatSpecular, c3d_v4MatSpecular.xyz() );
+				LOCALE_ASSIGN( l_writer, Float, l_fFresnel, l_lighting.ComputeFresnel( l_fLambert, l_v3LightDir, l_v3Normal, l_v3EyeVec, l_fShininess, l_v3MatSpecular ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpAmbient, ( l_light.m_v4Ambient().xyz() * l_light.m_v4Ambient().w() * c3d_v4MatAmbient.xyz() ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpDiffuse, ( l_light.m_v4Diffuse().xyz() * l_light.m_v4Diffuse().w() * c3d_v4MatDiffuse.xyz() * l_fLambert ) / l_fAttenuation );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpSpecular, ( l_light.m_v4Specular().xyz() * l_light.m_v4Specular().w() * l_v3MatSpecular * l_fFresnel ) / l_fAttenuation );
+
+				if ( ( p_uiFlags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
 				{
-					cuT(	"	for( int i = 0; i < c3d_iLightsCount; i++ )\n" )
-					cuT(	"	{\n" )
-					cuT(	"		l_light = GetLight( i );\n" )
-					cuT(	"		vec4 l_v4LightDir = ComputeLightDirection( l_light, vtx_vertex, <pxlin_mtxModelView> );\n" )
-					cuT(	"		l_v3LightDir = l_v4LightDir.xyz;\n" )
-					cuT(	"		l_fAttenuation = l_v4LightDir.w;\n" );
-				};
+					l_v3TmpSpecular = l_fAttenuation * l_light.m_v4Specular().xyz() * l_v3MapSpecular * l_v3TmpSpecular;
+				}
+
+				l_v3Ambient += l_v3TmpAmbient;
+				l_v3Diffuse += l_v3TmpDiffuse;
+				l_v3Specular += l_v3TmpSpecular;
 			}
+			ROF
+
+			if ( p_uiFlags != 0 )
+			{
+				if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
+				{
+					l_v3Ambient *= l_v3MapColour;
+				}
+
+				if ( ( p_uiFlags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
+				{
+					l_v3Ambient *= l_v3MapAmbient;
+				}
+
+				if ( ( p_uiFlags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
+				{
+					l_v3Diffuse *= l_v3MapDiffuse;
+				}
+
+				if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
+				{
+					l_fAlpha = l_fOpacity * c3d_fMatOpacity;
+				}
+			}
+
+			//pxl_v4FragColor = vec4( l_v3Emissive + l_v3Ambient + l_v3Diffuse + l_v3Specular, l_fAlpha );
+			pxl_v4FragColor = vec4( l_v3Diffuse, l_fAlpha );
 		};
-
-		String l_strReturn;
-		GLSL::VariablesBase * l_pVariables = GLSL::GetVariables( m_gl );
-		GLSL::ConstantsBase * l_pConstants = GLSL::GetConstants( m_gl );
-		std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::GetKeywords( m_gl );
-
-		String l_strPixelMainLightsLoop = pixelShaderSource.GetPixelMainLightsLoop();
-		String l_strPixelMainLightsLoopEnd = pixelShaderSource.GetPixelMainLightsLoopEnd();
-		String l_strPixelMainEnd = pixelShaderSource.GetPixelMainEnd();
-		String l_strPixelMainLightsLoopAfterLightDir = pixelShaderSource.GetPixelMainLightsLoopAfterLightDir();
-		String l_strPixelMtxModelView = l_pVariables->GetPixelMtxModelView();
-
-		if ( p_uiFlags != 0 )
-		{
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
-			{
-				l_strPixelMainLightsLoopEnd += cuT( "	l_v3Ambient *= l_v3MapColour;\n" );
-			}
-
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
-			{
-				l_strPixelMainLightsLoopEnd += cuT( "	l_v3Ambient *= l_v3MapAmbient;\n" );
-			}
-
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
-			{
-				l_strPixelMainLightsLoopEnd += cuT( "	l_v3Diffuse *= l_v3MapDiffuse;\n" );
-			}
-
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
-			{
-				l_strPixelMainLightsLoop += cuT( "		Bump( vtx_tangent, vtx_bitangent, vtx_normal, l_v3LightDir, l_fAttenuation );\n" );
-			}
-
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
-			{
-				l_strPixelMainLightsLoopEnd += cuT( "	l_fAlpha = l_fOpacity * c3d_fMatOpacity;\n" );
-			}
-
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
-			{
-				l_strPixelMainLightsLoopAfterLightDir += cuT( "		l_v3TmpSpecular = l_fAttenuation * l_light.m_v4Specular.xyz * l_v3MapSpecular * l_fSpecular;\n" );
-			}
-		}
-		
-		//l_strPixelMainLightsLoopEnd	+= cuT( "	" ) + l_strPixelOutput + cuT( " = vec4( l_v3Emissive + l_v3Ambient + l_v3Diffuse + l_v3Specular, l_fAlpha );\n" );
-		l_strPixelMainLightsLoopEnd	+= cuT( "	" ) + l_strPixelOutput + cuT( " = vec4( l_v3Diffuse, l_fAlpha );\n" );
-		l_strReturn += l_strPixelLights + l_strPixelMainDeclarations + l_strPixelMainLightsLoop + l_strPixelMainLightsLoopAfterLightDir + l_strPixelMainLightsLoopEnd + l_strPixelMainEnd;
-		str_utils::replace( l_strReturn, cuT( "<pxlin_mtxModelView>" ), l_strPixelMtxModelView );
-		str_utils::replace( l_strReturn, cuT( "<texture1D>" ), l_strTexture1D );
-		str_utils::replace( l_strReturn, cuT( "<texture2D>" ), l_strTexture2D );
-		str_utils::replace( l_strReturn, cuT( "<texture3D>" ), l_strTexture3D );
-		str_utils::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetLayout() );
-		return l_strReturn;
+		l_writer.Implement_Function< void >( cuT( "main" ), l_main );
+		return l_writer.Finalise();
 	}
 
 	String GlShaderProgram::DoGetDeferredVertexShaderSource( uint32_t p_uiProgramFlags, bool p_bLightPass )
@@ -609,7 +547,7 @@ namespace GlRender
 			l_strReturn += cuT( "}\n" );
 		}
 
-		str_utils::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetLayout() );
+		str_utils::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetStdLayout( 140 ) );
 		return l_strReturn;
 	}
 
@@ -746,7 +684,7 @@ namespace GlRender
 		str_utils::replace( l_strReturn, cuT( "<texture1D>" ), l_strTexture1D );
 		str_utils::replace( l_strReturn, cuT( "<texture2D>" ), l_strTexture2D );
 		str_utils::replace( l_strReturn, cuT( "<texture3D>" ), l_strTexture3D );
-		str_utils::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetLayout() );
+		str_utils::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetStdLayout( 140 ) );
 		return l_strReturn;
 	}
 

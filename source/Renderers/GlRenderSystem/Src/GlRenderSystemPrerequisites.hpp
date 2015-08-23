@@ -158,7 +158,7 @@ namespace GlRender
 		class KeywordsBase
 		{
 		protected:
-			Castor::String m_strLayout;
+			Castor::String m_strStdLayout;
 			Castor::String m_strVersion;
 			Castor::String m_strAttribute;
 			Castor::String m_strIn;
@@ -184,9 +184,9 @@ namespace GlRender
 			Castor::String m_strGSOutEmissiveDecl;
 
 		public:
-			inline Castor::String const & GetLayout()const
+			inline Castor::String GetStdLayout( int p_index )const
 			{
-				return m_strLayout;
+				return m_strStdLayout + cuT( "( std" ) + Castor::str_utils::to_string( p_index ) + cuT( " ) " );
 			}
 			inline Castor::String const & GetVersion()const
 			{
@@ -346,7 +346,7 @@ namespace GlRender
 		public:
 			Keywords()
 			{
-				m_strLayout  = cuT( "layout( std140 ) " );
+				m_strStdLayout  = cuT( "layout" );
 				m_strVersion = cuT( "#version " ) + Castor::str_utils::to_string( Version );
 				m_strAttribute = cuT( "in" );
 				m_strIn = cuT( "in" );
@@ -376,7 +376,7 @@ namespace GlRender
 		public:
 			Keywords()
 			{
-				m_strLayout  = cuT( "layout( std140 ) " );
+				m_strStdLayout  = cuT( "layout" );
 				m_strVersion = cuT( "#version " ) + Castor::str_utils::to_string( Version );
 				m_strAttribute = cuT( "in" );
 				m_strIn = cuT( "in" );

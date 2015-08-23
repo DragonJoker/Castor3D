@@ -1,154 +1,112 @@
 #include "GlShaderSource.hpp"
 
+#ifdef max
+#	undef max
+#	undef min
+#	undef abs
+#endif
+
+#ifdef OUT
+#	undef OUT
+#endif
+
+#ifdef IN
+#	undef IN
+#endif
+
 namespace GlRender
 {
 	namespace GLSL
 	{
 		//*****************************************************************************************
 
-		Lighting::Lighting()
-		{
-			m_strLightsDeclaration =
-				cuT( "struct Light\n" )
-				cuT( "{\n" )
-				cuT( "	vec4 m_v4Ambient;\n" )
-				cuT( "	vec4 m_v4Diffuse;\n" )
-				cuT( "	vec4 m_v4Specular;\n" )
-				cuT( "	vec4 m_v4Position;\n" )
-				cuT( "	int m_iType;\n" )
-				cuT( "	vec3 m_v3Attenuation;\n" )
-				cuT( "	mat4 m_mtx4Orientation;\n" )
-				cuT( "	float m_fExponent;\n" )
-				cuT( "	float m_fCutOff;\n" )
-				cuT( "};\n" )
-				cuT( "Light GetLight( int p_iIndex )\n" )
-				cuT( "{\n" )
-				cuT( "	float l_fFactor = (float( p_iIndex ) * 0.01);\n" )
-				cuT( "	Light l_lightReturn;\n" )
-				cuT( "	l_lightReturn.m_v4Ambient = <texture1D>( c3d_sLights, l_fFactor + (0 * 0.001) + 0.0005 );\n" )
-				cuT( "	l_lightReturn.m_v4Diffuse = <texture1D>( c3d_sLights, l_fFactor + (1 * 0.001) + 0.0005 );\n" )
-				cuT( "	l_lightReturn.m_v4Specular = <texture1D>( c3d_sLights, l_fFactor + (2 * 0.001) + 0.0005 );\n" )
-				cuT( "	vec4 l_v4Position = <texture1D>( c3d_sLights, l_fFactor + (3 * 0.001) + 0.0005 );\n" )
-				cuT( "	l_lightReturn.m_v3Attenuation = <texture1D>( c3d_sLights, l_fFactor + (4 * 0.001) + 0.0005 ).xyz;\n" )
-				cuT( "	vec4 l_v4A = <texture1D>( c3d_sLights, l_fFactor + (5 * 0.001) + 0.0005 );\n" )
-				cuT( "	vec4 l_v4B = <texture1D>( c3d_sLights, l_fFactor + (6 * 0.001) + 0.0005 );\n" )
-				cuT( "	vec4 l_v4C = <texture1D>( c3d_sLights, l_fFactor + (7 * 0.001) + 0.0005 );\n" )
-				cuT( "	vec4 l_v4D = <texture1D>( c3d_sLights, l_fFactor + (8 * 0.001) + 0.0005 );\n" )
-				cuT( "	vec2 l_v2Spot = <texture1D>( c3d_sLights, l_fFactor + (9 * 0.001) + 0.0005 ).xy;\n" )
-				cuT( "	l_lightReturn.m_v4Position = vec4( l_v4Position.z, l_v4Position.y, l_v4Position.x, 0.0 );\n" )
-				cuT( "	l_lightReturn.m_iType = int( l_v4Position.w );\n" )
-				cuT( "	l_lightReturn.m_mtx4Orientation = mat4( l_v4A, l_v4B, l_v4C, l_v4D );\n" )
-				cuT( "	l_lightReturn.m_fExponent = l_v2Spot.x;\n" )
-				cuT( "	l_lightReturn.m_fCutOff = l_v2Spot.x;\n" )
-				cuT( "	return l_lightReturn;\n" )
-				cuT( "}\n" );
-		}
-
-		//*****************************************************************************************
-
-		BlinnPhong::BlinnPhong()
-		{
-			m_blinnPhongFresnelShit =
-				// Computes BlinnPhong components : direction and attenuation
-				cuT( "vec4 ComputeLightDirection( in Light p_light, in vec3 p_position, in <mat4> p_mtxModelView )\n" )
-				cuT( "{\n" )
-				cuT( "	vec4 l_v4Return;\n" )
-				cuT( "	\n" )
-				cuT( "	if( 0 != p_light.m_iType ) // non directional light?\n" )
-				cuT( "	{\n" )
-				cuT( "		vec3 l_direction = p_position - p_light.m_v4Position.xyz;\n" )
-				cuT( "		float l_distance = length( l_direction );\n" )
-				cuT( "		l_v4Return.xyz = normalize( l_direction );\n" )
-				cuT( "		float l_attenuation = p_light.m_v3Attenuation.x\n" )
-				cuT( "		                    + p_light.m_v3Attenuation.y * l_distance\n" )
-				cuT( "		                    + p_light.m_v3Attenuation.z * l_distance * l_distance;\n" )
-				cuT( "		l_v4Return.w = l_attenuation;\n" )
-				cuT( "		\n" )
-				cuT( "		if ( p_light.m_fCutOff <= 90.0 ) // spotlight?\n" )
-				cuT( "		{\n" )
-				cuT( "			float l_clampedCosine = max( 0.0, dot( -l_v4Return.xyz, ( vec4( 0, 0, 1, 0 ) * p_light.m_mtx4Orientation ).xyz ) );\n" )
-				cuT( "			if ( l_clampedCosine < cos( radians( p_light.m_fCutOff ) ) ) // outside of spotlight cone?\n" )
-				cuT( "			{\n" )
-				cuT( "				l_v4Return.w = 0.0;\n" )
-				cuT( "			}\n" )
-				cuT( "			else\n" )
-				cuT( "			{\n" )
-				cuT( "				l_v4Return.w = l_v4Return.w * pow( l_clampedCosine, p_light.m_fExponent );\n" )
-				cuT( "			}\n" )
-				cuT( "		}\n" )
-				cuT( "	}\n" )
-				cuT( "	else\n" )
-				cuT( "	{\n" )
-				cuT( "		l_v4Return = vec4( p_light.m_v4Position.xyz, 1.0 );\n" )
-				cuT( "	}\n" )
-				cuT( "	\n" )
-				cuT( "	return l_v4Return;\n" )
-				cuT( "}\n" )
-				// Computes Fresnel component
-				cuT( "float ComputeFresnel( in float p_lambert, in vec3 p_direction, in vec3 p_normal, in vec3 p_eye, in float p_shininess, inout vec3 p_specular )\n" )
-				cuT( "{\n" )
-				cuT( "	vec3 l_lightReflect = normalize( reflect( p_direction, p_normal ) );\n" )
-				cuT( "	float l_fresnel = dot( p_eye, l_lightReflect );\n" )
-				cuT( "	l_fresnel = pow( l_fresnel, p_shininess );\n" )
-				//cuT( "	float l_fresnel = pow( 1.0 - clamp( dot( normalize( p_direction + p_eye ), p_eye ), 0.0, 1.0 ), 5.0 );\n" )
-				//cuT( "	p_specular = clamp( mix( vec3( c3d_v4MatSpecular ), vec3( 1.0 ), l_fresnel ), 0.0, 1.0 );\n" )
-				//cuT( "	l_fresnel = pow( clamp( dot( p_eye, l_lightReflect ), 0.0, 1.0 ), p_shininess );\n" )
-				////cuT( "	l_fFresnel = pow( max( 0.0, dot( l_lightReflect, p_eye ) ), p_shininess );\n" )
-				cuT( "	return l_fresnel;\n" )
-				cuT( "}\n" )
-				// Computes normal mapping components
-				cuT( "void Bump( in vec3 p_v3T, in vec3 p_v3B, in vec3 p_v3N, inout vec3 p_lightDir, inout float p_fAttenuation )\n" )
-				cuT( "{\n" )
-				cuT( "	float l_fInvRadius = 0.02;\n" )
-				cuT( "	p_lightDir = vec3( dot( p_lightDir, p_v3T ), dot( p_lightDir, p_v3B ), dot( p_lightDir, p_v3N ) );\n" )
-				cuT( "	float l_fSqrLength = dot( p_lightDir, p_lightDir );\n" )
-				cuT( "	p_lightDir = p_lightDir * inversesqrt( l_fSqrLength );\n" )
-				cuT( "	p_fAttenuation *= clamp( 1.0 - l_fInvRadius * sqrt( l_fSqrLength ), 0.0, 1.0 );\n" )
-				cuT( "}\n" );
-		}
-
-		//*****************************************************************************************
-
-		Type::Type( Castor::String const & p_type )
+		Expr::Expr()
 			: m_writer( NULL )
-			, m_type( p_type )
 		{
 		}
 
-		Type::Type( Castor::String const & p_type, GlslWriter * p_writer, Castor::String const & p_name )
-			: m_name( p_name )
-			, m_writer( p_writer )
-			, m_type( p_type )
+		Expr::Expr( int p_value )
+			: m_writer( NULL )
+		{
+			m_value << p_value;
+		}
+
+		Expr::Expr( float p_value )
+			: m_writer( NULL )
+		{
+			m_value << p_value;
+		}
+
+		Expr::Expr( double p_value )
+			: m_writer( NULL )
+		{
+			m_value << p_value;
+		}
+
+		Expr::Expr( GlslWriter * p_writer )
+			: m_writer( p_writer )
 		{
 		}
 
-		Type::Type( Type const & p_rhs )
-			: m_name( p_rhs.m_name )
-			, m_writer( p_rhs.m_writer )
-			, m_type( p_rhs.m_type )
+		Expr::Expr( GlslWriter * p_writer, Castor::String const & p_init )
+			: m_writer( p_writer )
 		{
-			m_result << p_rhs.m_result.rdbuf();
+			m_value << p_init;
 		}
 
-		Type & Type::operator=( Type const & p_rhs )
+		Expr::Expr( Expr const & p_rhs )
+			: m_writer( p_rhs.m_writer )
 		{
-			if ( m_name.empty() )
-			{
-				m_name = p_rhs.m_name;
-			}
+			m_value << p_rhs.m_value.rdbuf();
+		}
 
+		Expr & Expr::operator=( Expr const & p_rhs )
+		{
 			if ( !m_writer )
 			{
 				m_writer = p_rhs.m_writer;
 			}
 
-			m_type = p_rhs.m_type;
+			return *this;
+		}
+
+		//*****************************************************************************************
+
+		Type::Type( Castor::String const & p_type )
+			: Expr()
+			, m_type( p_type )
+		{
+		}
+
+		Type::Type( Castor::String const & p_type, GlslWriter * p_writer, Castor::String const & p_name )
+			: Expr( p_writer )
+			, m_name( p_name )
+			, m_type( p_type )
+		{
+		}
+
+		Type::Type( Type const & p_rhs )
+			: Expr( p_rhs )
+			, m_name( p_rhs.m_name )
+			, m_type( p_rhs.m_type )
+		{
+		}
+
+		Type & Type::operator=( Type const & p_rhs )
+		{
+			Expr::operator=( p_rhs );
+
+			if ( m_name.empty() )
+			{
+				m_name = p_rhs.m_name;
+			}
+
 			return *this;
 		}
 
 		Type::operator Castor::String()const
 		{
-			Castor::String l_return = m_result.str();
+			Castor::String l_return = m_value.str();
 
 			if ( l_return.empty() )
 			{
@@ -163,7 +121,7 @@ namespace GlRender
 			}
 			else
 			{
-				std::swap( Castor::StringStream(), m_result );
+				std::swap( Castor::StringStream(), m_value );
 				l_return = l_return;
 			}
 
@@ -242,84 +200,102 @@ namespace GlRender
 			return *this;
 		}
 
-		Type const & operator+( Type const & p_a, Type const & p_b )
+		Bool operator==( Type const & p_a, Type const & p_b )
 		{
-			p_a.m_result << Castor::String( p_a ) << cuT( " + " ) << Castor::String( p_b );
-			return p_a;
+			Bool l_return( p_a.m_writer );
+			l_return.m_value << Castor::String( p_a ) << cuT( " == " ) << Castor::String( p_b );
+			return l_return;
 		}
 
-		Type const & operator-( Type const & p_a, Type const & p_b )
+		Bool operator!=( Type const & p_a, Type const & p_b )
 		{
-			p_a.m_result << Castor::String( p_a ) << cuT( " - " ) << Castor::String( p_b );
-			return p_a;
+			Bool l_return( p_a.m_writer );
+			l_return.m_value << Castor::String( p_a ) << cuT( " != " ) << Castor::String( p_b );
+			return l_return;
 		}
 
-		Type const & operator*( Type const & p_a, Type const & p_b )
+		Type operator+( Type const & p_a, Type const & p_b )
 		{
-			p_a.m_result << Castor::String( p_a ) << cuT( " * " ) << Castor::String( p_b );
-			return p_a;
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << Castor::String( p_a ) << cuT( " + " ) << Castor::String( p_b );
+			return l_return;
 		}
 
-		Type const & operator/( Type const & p_a, Type const & p_b )
+		Type operator-( Type const & p_a, Type const & p_b )
 		{
-			p_a.m_result << Castor::String( p_a ) << cuT( " / " ) << Castor::String( p_b );
-			return p_a;
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << Castor::String( p_a ) << cuT( " - " ) << Castor::String( p_b );
+			return l_return;
 		}
 
-		Type const & operator+( Type const & p_a, float p_b )
+		Type operator*( Type const & p_a, Type const & p_b )
 		{
-			p_a.m_result << Castor::String( p_a ) << cuT( " + " ) << Castor::str_utils::to_string( p_b );
-			return p_a;
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << Castor::String( p_a ) << cuT( " * " ) << Castor::String( p_b );
+			return l_return;
 		}
 
-		Type const & operator-( Type const & p_a, float p_b )
+		Type operator/( Type const & p_a, Type const & p_b )
 		{
-			p_a.m_result << Castor::String( p_a ) << cuT( " - " ) << Castor::str_utils::to_string( p_b );
-			return p_a;
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << Castor::String( p_a ) << cuT( " / " ) << Castor::String( p_b );
+			return l_return;
 		}
 
-		Type const & operator*( Type const & p_a, float p_b )
+		Type operator+( Type const & p_a, float p_b )
 		{
-			p_a.m_result << Castor::String( p_a ) << cuT( " * " ) << Castor::str_utils::to_string( p_b );
-			return p_a;
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << Castor::String( p_a ) << cuT( " + " ) << Castor::str_utils::to_string( p_b );
+			return l_return;
 		}
 
-		Type const & operator/( Type const & p_a, float p_b )
+		Type operator-( Type const & p_a, float p_b )
 		{
-			p_a.m_result << Castor::String( p_a ) << cuT( " / " ) << Castor::str_utils::to_string( p_b );
-			return p_a;
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << Castor::String( p_a ) << cuT( " - " ) << Castor::str_utils::to_string( p_b );
+			return l_return;
 		}
 
-		Type const & operator+( Type const & p_a, int p_b )
+		Type operator*( Type const & p_a, float p_b )
 		{
-			p_a.m_result << Castor::String( p_a ) << cuT( " + " ) << Castor::str_utils::to_string( p_b );
-			return p_a;
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << Castor::String( p_a ) << cuT( " * " ) << Castor::str_utils::to_string( p_b );
+			return l_return;
 		}
 
-		Type const & operator-( Type const & p_a, int p_b )
+		Type operator/( Type const & p_a, float p_b )
 		{
-			p_a.m_result << Castor::String( p_a ) << cuT( " - " ) << Castor::str_utils::to_string( p_b );
-			return p_a;
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << Castor::String( p_a ) << cuT( " / " ) << Castor::str_utils::to_string( p_b );
+			return l_return;
 		}
 
-		Type const & operator*( Type const & p_a, int p_b )
+		Type operator+( Type const & p_a, int p_b )
 		{
-			p_a.m_result << Castor::String( p_a ) << cuT( " * " ) << Castor::str_utils::to_string( p_b );
-			return p_a;
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << Castor::String( p_a ) << cuT( " + " ) << Castor::str_utils::to_string( p_b );
+			return l_return;
 		}
 
-		Type const & operator/( Type const & p_a, int p_b )
+		Type operator-( Type const & p_a, int p_b )
 		{
-			p_a.m_result << Castor::String( p_a ) << cuT( " / " ) << Castor::str_utils::to_string( p_b );
-			return p_a;
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << Castor::String( p_a ) << cuT( " - " ) << Castor::str_utils::to_string( p_b );
+			return l_return;
 		}
 
-		//*****************************************************************************************
-
-		Vec4 & Vec4::operator=( Vec4 const & p_rhs )
+		Type operator*( Type const & p_a, int p_b )
 		{
-			*m_writer << m_name << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << Endl();
-			return *this;
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << Castor::String( p_a ) << cuT( " * " ) << Castor::str_utils::to_string( p_b );
+			return l_return;
+		}
+
+		Type operator/( Type const & p_a, int p_b )
+		{
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << Castor::String( p_a ) << cuT( " / " ) << Castor::str_utils::to_string( p_b );
+			return l_return;
 		}
 
 		//*****************************************************************************************
@@ -331,13 +307,14 @@ namespace GlRender
 			m_stream << cuT( "{" );
 			m_indent = format::get_indent( m_stream );
 			m_stream << format::indent( m_indent + 4 );
+			m_stream << std::endl;
 		}
 
 		IndentBlock::~IndentBlock()
 		{
 			using namespace Castor;
 			m_stream << format::indent( m_indent );
-			m_stream << cuT( "}" ) << std::endl;
+			m_stream << cuT( "}" );
 		}
 
 		//*****************************************************************************************
@@ -349,10 +326,9 @@ namespace GlRender
 		{
 			if ( m_writer.m_gl.HasUbo() )
 			{
-				m_writer << StdLayout() << Uniform() << p_name << Endl();
+				m_writer << StdLayout { 140 } << Uniform() << p_name << Endl();
 				m_writer.m_uniform.clear();
 				m_block = new IndentBlock( m_writer );
-				m_writer << Endl();
 			}
 		}
 
@@ -360,17 +336,26 @@ namespace GlRender
 		{
 			delete m_block;
 			m_block = NULL;
-			m_writer.m_uniform = cuT( "uniform" );
-			m_writer << Endl();
+			m_writer.m_uniform = cuT( "uniform " );
+			m_writer << cuT( ";" ) << Endl();
 		}
 
 		//*****************************************************************************************
-		
-		Function::Function( GlslWriter & p_writer, std::function< void() > p_function )
+
+		Struct::Struct( GlslWriter & p_writer, Castor::String const & p_name )
 			: m_writer( p_writer )
+			, m_name( p_name )
+			, m_block( NULL )
 		{
-			IndentBlock l_block( m_writer );
-			p_function();
+			m_writer << cuT( "struct " ) << p_name << Endl();
+			m_block = new IndentBlock( m_writer );
+		}
+
+		void Struct::End()
+		{
+			delete m_block;
+			m_block = NULL;
+			m_writer << cuT( ";" ) << Endl();
 		}
 
 		//*****************************************************************************************
@@ -383,6 +368,7 @@ namespace GlRender
 			, m_layoutIndex( 0 )
 			, m_type( p_type )
 			, m_gl( p_gl )
+			, m_uniform( cuT( "uniform " ) )
 		{
 		}
 
@@ -390,7 +376,69 @@ namespace GlRender
 		{
 			return m_stream.str();
 		}
-		
+
+		void GlslWriter::WriteAssign( Type const & p_lhs, Type const & p_rhs )
+		{
+			m_stream << Castor::String( p_lhs ) << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
+		}
+
+		void GlslWriter::WriteAssign( Type const & p_lhs, int const & p_rhs )
+		{
+			m_stream << Castor::String( p_lhs ) << cuT( " = " ) << Castor::str_utils::to_string( p_rhs ) << cuT( ";" ) << std::endl;
+		}
+
+		void GlslWriter::WriteAssign( Type const & p_lhs, float const & p_rhs )
+		{
+			m_stream << Castor::String( p_lhs ) << cuT( " = " ) << Castor::str_utils::to_string( p_rhs ) << cuT( ";" ) << std::endl;
+		}
+
+		void GlslWriter::For( Type const & p_init, Expr const & p_cond, Expr const & p_incr, std::function< void( Type ) > p_function )
+		{
+			m_stream << cuT( "for( " ) << Castor::String( p_init ) << cuT( "; " ) << p_cond.m_value.rdbuf() << cuT( "; " ) << p_incr.m_value.rdbuf() << cuT( " )" ) << std::endl;
+			{
+				IndentBlock l_block( *this );
+				p_function( p_init );
+			}
+			m_stream << std::endl;
+		}
+
+		GlslWriter & GlslWriter::If( Expr const & p_cond, std::function< void() > p_function )
+		{
+			m_stream << cuT( "if( " ) << p_cond.m_value.rdbuf() << cuT( " )" ) << std::endl;
+			{
+				IndentBlock l_block( *this );
+				p_function();
+			}
+			m_stream << std::endl;
+			return *this;
+		}
+
+		GlslWriter & GlslWriter::ElseIf( Expr const & p_cond, std::function< void() > p_function )
+		{
+			m_stream << cuT( "else if( " ) << p_cond.m_value.rdbuf() << cuT( " )" ) << std::endl;
+			{
+				IndentBlock l_block( *this );
+				p_function();
+			}
+			m_stream << std::endl;
+			return *this;
+		}
+
+		void GlslWriter::Else( std::function< void() > p_function )
+		{
+			m_stream << cuT( "else" ) << std::endl;
+			{
+				IndentBlock l_block( *this );
+				p_function();
+			}
+			m_stream << std::endl;
+		}
+
+		Struct GlslWriter::GetStruct( Castor::String const & p_name )
+		{
+			return Struct( *this, p_name );
+		}
+
 		Ubo GlslWriter::GetUbo( Castor::String const & p_name )
 		{
 			return Ubo( *this, p_name );
@@ -408,74 +456,6 @@ namespace GlRender
 			return *this;
 		}
 
-		GlslWriter & GlslWriter::operator<<( IVec2 const & p_rhs )
-		{
-			m_stream << cuT( "ivec2 " );
-			return *this;
-		}
-
-		GlslWriter & GlslWriter::operator<<( IVec3 const & p_rhs )
-		{
-			m_stream << cuT( "ivec3 " );
-			return *this;
-		}
-
-		GlslWriter & GlslWriter::operator<<( IVec4 const & p_rhs )
-		{
-			m_stream << cuT( "ivec4 " );
-			return *this;
-		}
-
-		GlslWriter & GlslWriter::operator<<( Vec2 const & p_rhs )
-		{
-#if CASTOR_USE_DOUBLE
-			m_stream << cuT( "dvec2 " );
-#else
-			m_stream << cuT( "vec2 " );
-#endif
-			return *this;
-		}
-
-		GlslWriter & GlslWriter::operator<<( Vec3 const & p_rhs )
-		{
-#if CASTOR_USE_DOUBLE
-			m_stream << cuT( "dvec3 " );
-#else
-			m_stream << cuT( "vec3 " );
-#endif
-			return *this;
-		}
-
-		GlslWriter & GlslWriter::operator<<( Vec4 const & p_rhs )
-		{
-#if CASTOR_USE_DOUBLE
-			m_stream << cuT( "dvec4 " );
-#else
-			m_stream << cuT( "vec4 " );
-#endif
-			return *this;
-		}
-
-		GlslWriter & GlslWriter::operator<<( Mat3 const & p_rhs )
-		{
-#if CASTOR_USE_DOUBLE
-			m_stream << cuT( "dmat3 " );
-#else
-			m_stream << cuT( "mat3 " );
-#endif
-			return *this;
-		}
-
-		GlslWriter & GlslWriter::operator<<( Mat4 const & p_rhs )
-		{
-#if CASTOR_USE_DOUBLE
-			m_stream << cuT( "dmat4 " );
-#else
-			m_stream << cuT( "mat4 " );
-#endif
-			return *this;
-		}
-
 		GlslWriter & GlslWriter::operator<<( In const & p_rhs )
 		{
 			m_stream << m_keywords->GetIn() << cuT( " " );
@@ -488,45 +468,9 @@ namespace GlRender
 			return *this;
 		}
 
-		GlslWriter & GlslWriter::operator<<( Void const & p_rhs )
-		{
-			m_stream << Castor::String( p_rhs );
-			return *this;
-		}
-
-		GlslWriter & GlslWriter::operator<<( Sampler1D const & p_rhs )
-		{
-			m_stream << Castor::String( p_rhs );
-			return *this;
-		}
-
-		GlslWriter & GlslWriter::operator<<( Sampler2D const & p_rhs )
-		{
-			m_stream << Castor::String( p_rhs );
-			return *this;
-		}
-
-		GlslWriter & GlslWriter::operator<<( Sampler3D const & p_rhs )
-		{
-			m_stream << Castor::String( p_rhs );
-			return *this;
-		}
-
-		GlslWriter & GlslWriter::operator<<( Int const & p_rhs )
-		{
-			m_stream << Castor::String( p_rhs );
-			return *this;
-		}
-
-		GlslWriter & GlslWriter::operator<<( Float const & p_rhs )
-		{
-			m_stream << Castor::String( p_rhs );
-			return *this;
-		}
-
 		GlslWriter & GlslWriter::operator<<( StdLayout const & p_rhs )
 		{
-			m_stream << m_keywords->GetLayout();
+			m_stream << m_keywords->GetStdLayout( p_rhs.m_index );
 			return *this;
 		}
 
@@ -540,7 +484,7 @@ namespace GlRender
 		{
 			if ( !m_uniform.empty() )
 			{
-				m_stream << m_uniform << cuT( " " );
+				m_stream << m_uniform;
 			}
 
 			return *this;
@@ -564,12 +508,6 @@ namespace GlRender
 			return *this;
 		}
 
-		GlslWriter & GlslWriter::operator<<( Main const & p_rhs )
-		{
-			m_stream << cuT( "void main()" );
-			return *this;
-		}
-
 		GlslWriter & GlslWriter::operator<<( Castor::String const & p_rhs )
 		{
 			m_stream << p_rhs;
@@ -580,6 +518,180 @@ namespace GlRender
 		{
 			m_stream << p_rhs;
 			return *this;
+		}
+
+		//*****************************************************************************************
+
+		Vec4 operator*( Vec4 const & p_a, Mat4 const & p_b )
+		{ 
+			Vec4 l_return( p_a.m_writer );
+			l_return.m_value << Castor::String( p_a ) << cuT( " * " ) << Castor::String( p_b );
+			return l_return;
+		}
+
+		Vec4 operator*( Mat4 const & p_a, Vec4 const & p_b )
+		{
+			Vec4 l_return( p_a.m_writer );
+			l_return.m_value << Castor::String( p_a ) << cuT( " * " ) << Castor::String( p_b );
+			return l_return;
+		}
+
+		Vec4 texture1D( Sampler1D const & p_sampler, Type const & p_value )
+		{
+			return WriteFunctionCall< Vec4 >( p_sampler.m_writer, cuT( "texture1D" ), p_sampler, p_value );
+		}
+
+		Vec4 texture2D( Sampler2D const & p_sampler, Type const & p_value )
+		{
+			return WriteFunctionCall< Vec4 >( p_sampler.m_writer, cuT( "texture2D" ), p_sampler, p_value );
+		}
+
+		Vec4 texture3D( Sampler3D const & p_sampler, Type const & p_value )
+		{
+			return WriteFunctionCall< Vec4 >( p_sampler.m_writer, cuT( "texture3D" ), p_sampler, p_value );
+		}
+
+		Vec2 reflect( Vec2 const & p_a, Type const & p_b )
+		{
+			return WriteFunctionCall< Vec2 >( p_a.m_writer, cuT( "reflect" ), p_a, p_b );
+		}
+
+		Vec3 reflect( Vec3 const & p_a, Type const & p_b )
+		{
+			return WriteFunctionCall< Vec3 >( p_a.m_writer, cuT( "reflect" ), p_a, p_b );
+		}
+
+		Vec4 reflect( Vec4 const & p_a, Type const & p_b )
+		{
+			return WriteFunctionCall< Vec4 >( p_a.m_writer, cuT( "reflect" ), p_a, p_b );
+		}
+
+		inline Float length( Type const & p_value )
+		{
+			return WriteFunctionCall< Float >( p_value.m_writer, cuT( "length" ), p_value );
+		}
+
+		inline Float radians( Type const & p_value )
+		{
+			return WriteFunctionCall< Float >( p_value.m_writer, cuT( "radians" ), p_value );
+		}
+
+		inline Float cos( Type const & p_value )
+		{
+			return WriteFunctionCall< Float >( p_value.m_writer, cuT( "cos" ), p_value );
+		}
+
+		inline Float sin( Type const & p_value )
+		{
+			return WriteFunctionCall< Float >( p_value.m_writer, cuT( "sin" ), p_value );
+		}
+
+		inline Float tan( Type const & p_value )
+		{
+			return WriteFunctionCall< Float >( p_value.m_writer, cuT( "tan" ), p_value );
+		}
+
+		//*****************************************************************************************
+
+		namespace BlinnPhong
+		{
+			Vec4 ComputeLightDirection( InParam< Light > const & p_light, InParam< Vec3 > const & p_position, InParam< Mat4 > const & p_mtxModelView )
+			{
+				GlslWriter * l_pWriter = p_light.m_writer;
+				GlslWriter & l_writer = *l_pWriter;
+				LOCALE( l_writer, Vec4, l_v4Return );
+
+				IF( l_writer, p_light.m_iType() != Int( 0 ) )
+				{
+					LOCALE_ASSIGN( l_writer, Vec3, l_direction, p_position - p_light.m_v4Position().xyz() );
+					LOCALE_ASSIGN( l_writer, Float, l_distance, length( l_direction ) );
+					l_v4Return.xyz() = normalize( l_direction );
+					LOCALE_ASSIGN( l_writer, Float, l_attenuation, p_light.m_v3Attenuation().x()
+						+ p_light.m_v3Attenuation().y() * l_distance
+						+ p_light.m_v3Attenuation().z() * l_distance * l_distance );
+					l_v4Return.w() = l_attenuation;
+					
+					IF( l_writer, p_light.m_fCutOff() <= Float( 90.0f ) ) // spotlight?
+					{
+						LOCALE( l_writer, Float, l_clampedCosine ) = max( Float( 0.0f ), dot( neg( l_v4Return.xyz() ), l_writer.Paren( vec4( Float( 0.0f ), 0.0f, 1.0f, 0.0f ) * p_light.m_mtx4Orientation() ).xyz() ) );
+
+						IF( l_writer, l_clampedCosine < cos( radians( p_light.m_fCutOff() ) ) )
+						{
+							l_v4Return.w() = Float( 0.0f );
+						}
+						ELSE
+						{
+							l_v4Return.w() = l_v4Return.w() * pow( l_clampedCosine, p_light.m_fExponent() );
+						}
+						FI
+					}
+					FI
+				}
+				ELSE
+				{
+					l_v4Return = vec4( p_light.m_v4Position().xyz(), 1.0 );
+				}
+				FI
+
+				l_writer.Return( l_v4Return );
+				return l_v4Return;
+			}
+
+			Void Bump( InParam< Vec3 > const & p_v3T, InParam< Vec3 > const & p_v3B, InParam< Vec3 > const & p_v3N, InOutParam< Vec3 > & p_lightDir, InOutParam< Float > & p_fAttenuation )
+			{
+				GlslWriter * l_pWriter = p_v3T.m_writer;
+				GlslWriter & l_writer = *l_pWriter;
+				LOCALE_ASSIGN( l_writer, Float, l_fInvRadius, Float( 0.02f ) );
+				p_lightDir = vec3( dot( p_lightDir, p_v3T ), dot( p_lightDir, p_v3B ), dot( p_lightDir, p_v3N ) );
+				LOCALE_ASSIGN( l_writer, Float, l_fSqrLength, dot( p_lightDir, p_lightDir ) );
+				p_lightDir = p_lightDir * inversesqrt( l_fSqrLength );
+				p_fAttenuation *= clamp( Float( 1.0f ) - l_fInvRadius * sqrt( l_fSqrLength ), 0.0, 1.0 );
+				return Void();
+			}
+
+			Float ComputeFresnel( InParam< Float > const & p_lambert, InParam< Vec3 > const & p_direction, InParam< Vec3 > const & p_normal, InParam< Vec3 > const & p_eye, InParam< Float > const & p_shininess, InOutParam< Vec3 > & p_specular )
+			{
+				GlslWriter * l_pWriter = p_lambert.m_writer;
+				GlslWriter & l_writer = *l_pWriter;
+				LOCALE_ASSIGN( l_writer, Vec3, l_lightReflect, normalize( reflect( p_direction, p_normal ) ) );
+				LOCALE_ASSIGN( l_writer, Float, l_fresnel, dot( p_eye, l_lightReflect ) );
+				l_fresnel = pow( l_fresnel, p_shininess );
+				//Float l_fresnel = pow( 1.0 - clamp( dot( normalize( p_direction + p_eye ), p_eye ), 0.0, 1.0 ), 5.0 );
+				//p_specular = clamp( mix( vec3( c3d_v4MatSpecular ), vec3( 1.0 ), l_fresnel ), 0.0, 1.0 );
+				//l_fresnel = pow( clamp( dot( p_eye, l_lightReflect ), 0.0, 1.0 ), p_shininess );
+				////l_fFresnel = pow( max( 0.0, dot( l_lightReflect, p_eye ) ), p_shininess );
+				l_writer.Return( l_fresnel );
+				return l_fresnel;
+			}
+		}
+
+		void BlinnPhongLightingModel::Declare_ComputeLightDirection( GlslWriter & p_writer )
+		{
+			p_writer.Implement_Function< Vec4 >( cuT( "ComputeLightDirection" ), &BlinnPhong::ComputeLightDirection,
+				InParam< Light >( &p_writer, cuT( "p_light" ) ),
+				InParam< Vec3 >( &p_writer, cuT( "p_position" ) ),
+				InParam< Mat4 >( &p_writer, cuT( "p_mtxModelView" ) ) );
+		}
+
+		void BlinnPhongLightingModel::Declare_Bump( GlslWriter & p_writer )
+		{
+			p_writer.Implement_Function< Void >( cuT( "Bump" ), &BlinnPhong::Bump,
+				InParam< Vec3 >( &p_writer, cuT( "p_v3T" ) ),
+				InParam< Vec3 >( &p_writer, cuT( "p_v3B" ) ),
+				InParam< Vec3 >( &p_writer, cuT( "p_v3N" ) ),
+				InOutParam< Vec3 >( &p_writer, cuT( "p_lightDir" ) ),
+				InOutParam< Float >( &p_writer, cuT( "p_fAttenuation" ) ) );
+		}
+
+		void BlinnPhongLightingModel::Declare_ComputeFresnel( GlslWriter & p_writer )
+		{
+			p_writer.Implement_Function< Float >( cuT( "ComputeFresnel" ), &BlinnPhong::ComputeFresnel,
+				InParam< Float >( &p_writer, cuT( "p_lambert" ) ),
+				InParam< Vec3 >( &p_writer, cuT( "p_direction" ) ),
+				InParam< Vec3 >( &p_writer, cuT( "p_normal" ) ),
+				InParam< Vec3 >( &p_writer, cuT( "p_eye" ) ),
+				InParam< Float >( &p_writer, cuT( "p_shininess" ) ),
+				InOutParam< Vec3 >( &p_writer, cuT( "p_specular" ) ) );
 		}
 	}
 }
