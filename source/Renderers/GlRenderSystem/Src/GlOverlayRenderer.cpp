@@ -1,6 +1,8 @@
 #include "GlOverlayRenderer.hpp"
+
 #include "GlBuffer.hpp"
 #include "GlRenderSystem.hpp"
+#include "GlShaderSource.hpp"
 #include "OpenGl.hpp"
 
 #include <ShaderManager.hpp>
@@ -9,29 +11,6 @@
 using namespace GlRender;
 using namespace Castor3D;
 using namespace Castor;
-
-//*************************************************************************************************
-
-static String OverlayVS =
-	cuT(	"void main()\n"	)
-	cuT(	"{\n" )
-	cuT(	"	vtx_texture = texture;\n" )
-	cuT(	"	gl_Position = c3d_mtxProjection * vec4( vertex.x, vertex.y, vertex.z, 1.0 );\n" )
-	cuT(	"}\n" );
-
-static String PanelPSDecl =
-	cuT(	"<pass_buffer>\n" )
-	cuT(	"out vec4 pxl_v4FragColor;\n" );
-
-static String PanelPSMain =
-	cuT(	"void main()\n" )
-	cuT(	"{\n" )
-	cuT(	"	vec4 l_v4Ambient = c3d_v4MatAmbient;\n" )
-	cuT(	"	float l_fAlpha = c3d_fMatOpacity;\n" );
-
-static String PanelPSEnd =
-	cuT(	"	pxl_v4FragColor = vec4( l_v4Ambient.xyz, l_fAlpha );\n" )
-	cuT(	"}\n" );
 
 //*************************************************************************************************
 
@@ -47,6 +26,7 @@ GlOverlayRenderer::~GlOverlayRenderer()
 
 ShaderProgramBaseSPtr GlOverlayRenderer::DoGetProgram( uint32_t p_uiFlags )
 {
+	using namespace GLSL;
 	GLSL::VariablesBase * l_pVariables = GLSL::GetVariables( m_gl );
 	GLSL::ConstantsBase * l_pConstants = GLSL::GetConstants( m_gl );
 	std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::GetKeywords( m_gl );
@@ -71,49 +51,86 @@ ShaderProgramBaseSPtr GlOverlayRenderer::DoGetProgram( uint32_t p_uiFlags )
 
 	// Vertex shader
 	String l_strVs;
-	l_strVs += l_strVersion;
-	l_strVs += l_strAttribute0 + cuT( " ivec4 vertex;\n" );
-	l_strVs += l_strAttribute1 + cuT( " <vec2> texture;\n" );
-	l_strVs += l_strOut + cuT( " <vec2> vtx_texture;\n" );
-	l_strVs += l_pConstants->Matrices();
-	l_strVs += OverlayVS;
-	str_utils::replace( l_strVs, cuT( "<layout>" ), l_pKeywords->GetLayout() );
-	GLSL::ConstantsBase::Replace( l_strVs );
+	{
+		GlslWriter l_writer( m_gl, eSHADER_TYPE_VERTEX );
+		l_writer << Version() << Endl();
 
+		UBO_MATRIX( l_writer );
+
+		// Shader inputs
+		ATTRIBUTE( l_writer, IVec4, vertex );
+		ATTRIBUTE( l_writer, Vec2, texture );
+
+		// Shader outputs
+		OUT( l_writer, Vec2, vtx_texture );
+
+		l_writer.Implement_Function< void >( cuT( "main" ), [&]()
+		{
+			vtx_texture = texture;
+			BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( vertex.x(), vertex.y(), vertex.z(), 1.0 );
+		} );
+
+		l_strVs = l_writer.Finalise();
+	}
+	
 	// Pixel shader
-	String l_strPs, l_strPsMain;
-	l_strPs += l_strVersion;
-	l_strPs += l_strIn + cuT( " <vec2> vtx_texture;\n" );
-	l_strPs	+= PanelPSDecl;
-	l_strPsMain += PanelPSMain;
+	String l_strPs;
+	{
+		// Vertex shader
+		GlslWriter l_writer( m_gl, eSHADER_TYPE_VERTEX );
+		l_writer << Version() << Endl();
+
+		UBO_PASS( l_writer );
+
+		// Shader inputs
+		IN( l_writer, Vec2, vtx_texture );
+		UNIFORM( l_writer, Sampler2D, c3d_mapText );
+		UNIFORM( l_writer, Sampler2D, c3d_mapColour );
+		UNIFORM( l_writer, Sampler2D, c3d_mapOpacity );
+
+		// Shader outputs
+		LAYOUT( l_writer, Vec4, pxl_v4FragColor );
+
+		l_writer.Implement_Function< void >( cuT( "main" ), [&]()
+		{
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Ambient, c3d_v4MatAmbient );
+			LOCALE_ASSIGN( l_writer, Float,  l_fAlpha, c3d_fMatOpacity );
+
+			if ( ( p_uiFlags & eTEXTURE_CHANNEL_TEXT ) == eTEXTURE_CHANNEL_TEXT )
+			{
+				l_fAlpha *= texture2D( c3d_mapText, vec2( vtx_texture.x(), vtx_texture.y() ) ).r();
+			}
+
+			if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
+			{
+				l_v4Ambient = texture2D( c3d_mapColour, vec2( vtx_texture.x(), vtx_texture.y() ) );
+			}
+
+			if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
+			{
+				l_fAlpha *= texture2D( c3d_mapOpacity, vec2( vtx_texture.x(), vtx_texture.y() ) ).r();
+			}
+
+			pxl_v4FragColor = vec4( l_v4Ambient.xyz(), l_fAlpha );
+		} );
+
+		l_strPs = l_writer.Finalise();
+	}
 
 	if ( ( p_uiFlags & eTEXTURE_CHANNEL_TEXT ) == eTEXTURE_CHANNEL_TEXT )
 	{
-		l_strPs += cuT( "uniform sampler2D c3d_mapText;\n" );
-		l_strPsMain += cuT( "	l_fAlpha *= <texture2D>( c3d_mapText, vec2( vtx_texture.x, vtx_texture.y ) ).r;\n" );
 		l_program->CreateFrameVariable( ShaderProgramBase::MapText, eSHADER_TYPE_PIXEL );
 	}
 
 	if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
 	{
-		l_strPs += cuT( "uniform sampler2D c3d_mapColour;\n" );
-		l_strPsMain += cuT( "	l_v4Ambient = <texture2D>( c3d_mapColour, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
 		l_program->CreateFrameVariable( ShaderProgramBase::MapColour, eSHADER_TYPE_PIXEL );
 	}
 
 	if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
 	{
-		l_strPs += cuT( "uniform sampler2D c3d_mapOpacity;\n" );
-		l_strPsMain += cuT( "	l_fAlpha *= <texture2D>( c3d_mapOpacity, vec2( vtx_texture.x, vtx_texture.y ) ).r;\n" );
 		l_program->CreateFrameVariable( ShaderProgramBase::MapOpacity, eSHADER_TYPE_PIXEL );
 	}
-
-	l_strPs += l_strPsMain;
-	l_strPs += PanelPSEnd;
-	str_utils::replace( l_strPs, cuT( "<pass_buffer>" ), l_pConstants->Pass() );
-	str_utils::replace( l_strPs, cuT( "<texture2D>" ), l_pKeywords->GetTexture2D() );
-	str_utils::replace( l_strPs, cuT( "<layout>" ), l_pKeywords->GetLayout() );
-	GLSL::ConstantsBase::Replace( l_strPs );
 
 	for ( int i = 0; i < eSHADER_MODEL_COUNT; ++i )
 	{

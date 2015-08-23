@@ -11,25 +11,6 @@ namespace GlRender
 
 		//***********************************************************************************************
 
-		void ConstantsBase::Replace( String & p_strSource )
-		{
-#if CASTOR_USE_DOUBLE
-			str_utils::replace( p_strSource, cuT( "<vec2>" ), cuT( "dvec2" ) );
-			str_utils::replace( p_strSource, cuT( "<vec3>" ), cuT( "dvec3" ) );
-			str_utils::replace( p_strSource, cuT( "<vec4>" ), cuT( "dvec4" ) );
-			str_utils::replace( p_strSource, cuT( "<mat3>" ), cuT( "dmat3" ) );
-			str_utils::replace( p_strSource, cuT( "<mat4>" ), cuT( "dmat4" ) );
-#else
-			str_utils::replace( p_strSource, cuT( "<vec2>" ), cuT( "vec2 " ) );
-			str_utils::replace( p_strSource, cuT( "<vec3>" ), cuT( "vec3 " ) );
-			str_utils::replace( p_strSource, cuT( "<vec4>" ), cuT( "vec4 " ) );
-			str_utils::replace( p_strSource, cuT( "<mat3>" ), cuT( "mat3 " ) );
-			str_utils::replace( p_strSource, cuT( "<mat4>" ), cuT( "mat4 " ) );
-#endif
-		}
-
-		//***********************************************************************************************
-
 		String ConstantsStd::Matrices()
 		{
 			return

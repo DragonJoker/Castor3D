@@ -1,7 +1,8 @@
 #include "GlBillboardList.hpp"
+
 #include "GlRenderSystem.hpp"
 #include "GlShaderObject.hpp"
-#include "GlPixelShaderSource.hpp"
+#include "GlShaderSource.hpp"
 
 #include <FrameVariableBuffer.hpp>
 #include <OneFrameVariable.hpp>
@@ -12,93 +13,6 @@
 using namespace Castor;
 using namespace Castor3D;
 using namespace GlRender;
-
-//*************************************************************************************************
-
-static String BillboardVS =
-	cuT( "void main()\n" )
-	cuT( "{\n" )
-	cuT( "    gl_Position = vec4( vertex.xyz, 1.0 );\n" )
-	cuT( "}\n" );
-
-static String BillboardGS =
-	cuT( "layout( <in_primitives> ) in;\n" )
-	cuT( "layout( <out_primitives> ) out;\n" )
-	cuT( "layout( max_vertices = <max_vertices> ) out;\n" )
-	cuT( "\n" )
-	cuT( "<matrix_buffer>" )
-	cuT( "<scene_buffer>" )
-	cuT( "<billboard_buffer>" )
-	cuT( "\n" )
-	cuT( "out vec3 vtx_normal;\n" )
-	cuT( "out vec3 vtx_tangent;\n" )
-	cuT( "out vec3 vtx_bitangent;\n" )
-	cuT( "out vec3 vtx_texture;\n" )
-	cuT( "\n" )
-	cuT( "void main()\n" )
-	cuT( "{\n" )
-	cuT( "    vec3 l_position = ( c3d_mtxProjectionModelView * gl_in[0].gl_Position ).xyz;\n" )
-	cuT( "    l_position.y = c3d_v3CameraPosition.y;\n" )
-	cuT( "    vec3 l_toCamera = c3d_v3CameraPosition - l_position;\n" )
-	cuT( "    vec3 l_up = vec3( 0.0, 1.0, 0.0 );\n" )
-	cuT( "    vec3 l_right = cross( l_toCamera, l_up );\n" )
-	cuT( "    vec3 l_v3Normal = ( c3d_mtxProjectionModelView * vec4( 0.0, 0.0, -1.0, 0.0 ) ).xyz;\n" )
-	cuT( "    l_v3Normal = ( c3d_mtxProjectionModelView * vec4( l_v3Normal, 0.0 ) ).xyz;\n" )
-	cuT( "    \n" )
-	cuT( "    vec3 l_position0 = l_position - ( l_right * 0.5 );\n" )
-	cuT( "    vec3 l_v2Texture0 = vec3( 0.0, 0.0, 0.0 );\n" )
-	cuT( "    vec3 l_position1 = l_position0 + vec3( 0.0, float( c3d_v2iDimensions.y ), 0.0 );\n" )
-	cuT( "    vec3 l_v2Texture1 = vec3( 0.0, 1.0, 0.0 );\n" )
-	cuT( "    vec3 l_position2 = l_position0 + l_right;\n" )
-	cuT( "    vec3 l_v2Texture2 = vec3( 1.0, 0.0, 0.0 );\n" )
-	cuT( "    vec3 l_position3 = l_position2 + vec3( 0.0, float( c3d_v2iDimensions.y ), 0.0 );\n" )
-	cuT( "    vec3 l_v2Texture3 = vec3( 1.0, 1.0, 0.0 );\n" )
-	cuT( "    \n" )
-	cuT( "    vec3 l_vec2m1 = l_position1 - l_position0;\n" )
-	cuT( "    vec3 l_vec3m1 = l_position2 - l_position0;\n" )
-	cuT( "    vec3 l_tex2m1 = l_v2Texture1 - l_v2Texture0;\n" )
-	cuT( "    vec3 l_tex3m1 = l_v2Texture2 - l_v2Texture0;\n" )
-	cuT( "    vec3 l_v3Tangent = normalize( ( l_vec2m1 * l_tex3m1.x ) - ( l_vec3m1 * l_tex2m1.y ) );\n" )
-	cuT( "    vec3 l_v3Bitangent = cross( l_v3Tangent, l_v3Normal );\n" )
-	cuT( "    \n" )
-	cuT( "    {\n" )
-	cuT( "        gl_Position = vec4( l_position0, 1.0 );\n" )
-	cuT( "        vtx_normal = l_v3Normal;\n" )
-	cuT( "        vtx_tangent = l_v3Tangent;\n" )
-	cuT( "        vtx_bitangent = l_v3Bitangent;\n" )
-	cuT( "        vtx_texture = l_v2Texture0;\n" )
-	cuT( "        EmitVertex();\n" )
-	cuT( "    }\n" )
-	cuT( "    \n" )
-	cuT( "    {\n" )
-	cuT( "        gl_Position = vec4( l_position1, 1.0 );\n" )
-	cuT( "        vtx_normal = l_v3Normal;\n" )
-	cuT( "        vtx_tangent = l_v3Tangent;\n" )
-	cuT( "        vtx_bitangent = l_v3Bitangent;\n" )
-	cuT( "        vtx_texture = l_v2Texture1;\n" )
-	cuT( "        EmitVertex();\n" )
-	cuT( "    }\n" )
-	cuT( "    \n" )
-	cuT( "    {\n" )
-	cuT( "        gl_Position = vec4( l_position2, 1.0 );\n" )
-	cuT( "        vtx_normal = l_v3Normal;\n" )
-	cuT( "        vtx_tangent = l_v3Tangent;\n" )
-	cuT( "        vtx_bitangent = l_v3Bitangent;\n" )
-	cuT( "        vtx_texture = l_v2Texture2;\n" )
-	cuT( "        EmitVertex();\n" )
-	cuT( "    }\n" )
-	cuT( "    \n" )
-	cuT( "    {\n" )
-	cuT( "        gl_Position = vec4( l_position3, 1.0 );\n" )
-	cuT( "        vtx_normal = l_v3Normal;\n" )
-	cuT( "        vtx_tangent = l_v3Tangent;\n" )
-	cuT( "        vtx_bitangent = l_v3Bitangent;\n" )
-	cuT( "        vtx_texture = l_v2Texture3;\n" )
-	cuT( "        EmitVertex();\n" )
-	cuT( "    }\n" )
-	cuT( "    \n" )
-	cuT( "    EndPrimitive();\n" )
-	cuT( "}\n" );
 
 //*************************************************************************************************
 
@@ -114,6 +28,8 @@ GlBillboardList::~GlBillboardList()
 
 ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( uint32_t p_flags )
 {
+	using namespace GLSL;
+
 	static String PRIMITIVES[] =
 	{
 		cuT( "points" ),//eTOPOLOGY_POINTS
@@ -141,40 +57,121 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( uint32_t p_flags )
 	l_pObject->SetInputType( eTOPOLOGY_POINTS );
 	l_pObject->SetOutputType( eTOPOLOGY_TRIANGLE_STRIPS );
 	l_pObject->SetOutputVtxCount( 4 );
-	
-	GLSL::VariablesBase * l_pVariables = GLSL::GetVariables( m_gl );
-	GLSL::ConstantsBase * l_pConstants = GLSL::GetConstants( m_gl );
-	std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::GetKeywords( m_gl );
-	String l_strVersion = l_pKeywords->GetVersion();
-	String l_strAttribute0 = l_pKeywords->GetAttribute( 0 );
-	String l_strAttribute1 = l_pKeywords->GetAttribute( 1 );
-	String l_strAttribute2 = l_pKeywords->GetAttribute( 2 );
-	String l_strAttribute3 = l_pKeywords->GetAttribute( 3 );
-	String l_strAttribute4 = l_pKeywords->GetAttribute( 4 );
-	String l_strAttribute5 = l_pKeywords->GetAttribute( 5 );
-	String l_strAttribute6 = l_pKeywords->GetAttribute( 6 );
-	String l_strAttribute7 = l_pKeywords->GetAttribute( 7 );
-	String l_strIn = l_pKeywords->GetIn();
-	String l_strOut = l_pKeywords->GetOut();
 
 	String l_strVtxShader;
-	l_strVtxShader += l_strVersion;
-	l_strVtxShader += l_strAttribute0 + cuT( "	<vec4> vertex;\n" );
-	l_strVtxShader += BillboardVS;
-	str_utils::replace( l_strVtxShader, cuT( "<layout>" ), l_pKeywords->GetLayout() );
-	GLSL::ConstantsBase::Replace( l_strVtxShader );
+	{
+		GlslWriter l_writer( m_gl, eSHADER_TYPE_VERTEX );
+		l_writer << Version() << Endl();
+
+		// Shader inputs
+		ATTRIBUTE( l_writer, IVec4, vertex );
+
+		l_writer.Implement_Function< void >( cuT( "main" ), [&]()
+		{
+			BUILTIN( l_writer, Vec4, gl_Position ) = vec4( vertex.xyz(), 1.0 );
+		} );
+
+		l_strVtxShader = l_writer.Finalise();
+	}
 
 	String l_strGeoShader;
-	l_strGeoShader += l_strVersion;
-	l_strGeoShader += BillboardGS;
-	str_utils::replace( l_strGeoShader, cuT( "<matrix_buffer>" ), l_pConstants->Matrices() );
-	str_utils::replace( l_strGeoShader, cuT( "<scene_buffer>" ), l_pConstants->Scene() );
-	str_utils::replace( l_strGeoShader, cuT( "<billboard_buffer>" ), l_pConstants->Billboard() );
-	str_utils::replace( l_strGeoShader, cuT( "<in_primitives>" ), PRIMITIVES[l_pObject->GetInputType()] );
-	str_utils::replace( l_strGeoShader, cuT( "<out_primitives>" ), PRIMITIVES[l_pObject->GetOutputType()] );
-	str_utils::replace( l_strGeoShader, cuT( "<max_vertices>" ), str_utils::to_string( l_pObject->GetOutputVtxCount() ) );
-	str_utils::replace( l_strGeoShader, cuT( "<layout>" ), l_pKeywords->GetLayout() );
-	GLSL::ConstantsBase::Replace( l_strGeoShader );
+	{
+		GlslWriter l_writer( m_gl, eSHADER_TYPE_VERTEX );
+		l_writer << Version() << Endl();
+
+		l_writer << cuT( "layout( " ) << PRIMITIVES[l_pObject->GetInputType()] << cuT( " ) in;" );
+		l_writer << cuT( "layout( " ) << PRIMITIVES[l_pObject->GetOutputType()] << cuT( " ) out;" );
+		l_writer << cuT( "layout( max_vertices = " ) << PRIMITIVES[l_pObject->GetOutputVtxCount()] << cuT( " ) out;" );
+
+		UBO_MATRIX( l_writer );
+		UBO_SCENE( l_writer );
+		UBO_BILLBOARD( l_writer );
+
+		OUT( l_writer, Vec3, vtx_normal );
+		OUT( l_writer, Vec3, vtx_tangent );
+		OUT( l_writer, Vec3, vtx_bitangent );
+		OUT( l_writer, Vec3, vtx_texture );
+
+		BUILTIN( l_writer, Vec4, gl_Position );
+		BUILTIN_ARRAY( l_writer, gl_PerVertex, gl_in, 8 );
+
+		l_writer.Implement_Function< void >( cuT( "main" ), [&]()
+		{
+			LOCALE_ASSIGN( l_writer, Vec3, l_position, ( c3d_mtxProjectionModelView * gl_in[0].gl_Position() ).xyz() );
+			l_position.y() = c3d_v3CameraPosition.y();
+			LOCALE_ASSIGN( l_writer, Vec3, l_toCamera, c3d_v3CameraPosition - l_position );
+			LOCALE_ASSIGN( l_writer, Vec3, l_up, vec3( Float( 0.0f ), 1.0, 0.0 ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_right, cross( l_toCamera, l_up ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, ( c3d_mtxProjectionModelView * vec4( Float( 0.0f ), 0.0, -1.0, 0.0 ) ).xyz() );
+			l_v3Normal = ( c3d_mtxProjectionModelView * vec4( l_v3Normal, 0.0 ) ).xyz();
+			
+			LOCALE_ASSIGN( l_writer, Vec3, l_position0, l_position - ( l_right * 0.5 ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture0, vec3( Float( 0.0f ), 0.0, 0.0 ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_position1, l_position0 + vec3( Float( 0.0f ), CAST( l_writer, Float, c3d_v2iDimensions.y() ), 0.0 ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture1, vec3( Float( 0.0f ), 1.0, 0.0 ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_position2, l_position0 + l_right );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture2, vec3( Float( 1.0f ), 0.0, 0.0 ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_position3, l_position2 + vec3( Float( 0.0f ), CAST( l_writer, Float, c3d_v2iDimensions.y() ), 0.0 ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture3, vec3( Float( 1.0f ), 1.0, 0.0 ) );
+			
+			LOCALE_ASSIGN( l_writer, Vec3, l_vec2m1, l_position1 - l_position0 );
+			LOCALE_ASSIGN( l_writer, Vec3, l_vec3m1, l_position2 - l_position0 );
+			LOCALE_ASSIGN( l_writer, Vec3, l_tex2m1, l_v2Texture1 - l_v2Texture0 );
+			LOCALE_ASSIGN( l_writer, Vec3, l_tex3m1, l_v2Texture2 - l_v2Texture0 );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, normalize( ( l_vec2m1 * l_tex3m1.x() ) - ( l_vec3m1 * l_tex2m1.y() ) ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, cross( l_v3Tangent, l_v3Normal ) );
+
+			{
+				IndentBlock l_block( l_writer );
+				l_writer << Endl();
+				gl_Position = vec4( l_position0, 1.0 );
+				vtx_normal = l_v3Normal;
+				vtx_tangent = l_v3Tangent;
+				vtx_bitangent = l_v3Bitangent;
+				vtx_texture = l_v2Texture0;
+				l_writer.EmitVertex();
+			}
+			l_writer << Endl();
+			
+			{
+				IndentBlock l_block( l_writer );
+				l_writer << Endl();
+				gl_Position = vec4( l_position1, 1.0 );
+				vtx_normal = l_v3Normal;
+				vtx_tangent = l_v3Tangent;
+				vtx_bitangent = l_v3Bitangent;
+				vtx_texture = l_v2Texture1;
+				l_writer.EmitVertex();
+			}
+			l_writer << Endl();
+			
+			{
+				IndentBlock l_block( l_writer );
+				l_writer << Endl();
+				gl_Position = vec4( l_position2, 1.0 );
+				vtx_normal = l_v3Normal;
+				vtx_tangent = l_v3Tangent;
+				vtx_bitangent = l_v3Bitangent;
+				vtx_texture = l_v2Texture2;
+				l_writer.EmitVertex();
+			}
+			l_writer << Endl();
+			
+			{
+				gl_Position = vec4( l_position3, 1.0 );
+				l_writer << Endl();
+				vtx_normal = l_v3Normal;
+				vtx_tangent = l_v3Tangent;
+				vtx_bitangent = l_v3Bitangent;
+				vtx_texture = l_v2Texture3;
+				l_writer.EmitVertex();
+			}
+			l_writer << Endl();
+			l_writer.EndPrimitive();
+		} );
+
+		l_strVtxShader = l_writer.Finalise();
+	}
 
 	String l_strPxlShader = l_pProgram->GetPixelShaderSource( p_flags );
 

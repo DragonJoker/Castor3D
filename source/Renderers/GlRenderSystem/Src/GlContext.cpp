@@ -7,6 +7,7 @@
 #endif
 
 #include "GlRenderSystem.hpp"
+#include "GlShaderSource.hpp"
 
 #include <RenderWindow.hpp>
 #include <ShaderProgram.hpp>
@@ -47,43 +48,56 @@ namespace GlRender
 
 	bool GlContext::DoInitialise()
 	{
+		using namespace GLSL;
 		m_pGlRenderSystem = static_cast< GlRenderSystem * >( m_pRenderSystem );
 		m_bInitialised = m_pImplementation->Initialise( m_pWindow );
 
 		if ( m_bInitialised )
 		{
 			SetCurrent();
-			GLSL::VariablesBase * l_pVariables = GLSL::GetVariables( m_gl );
-			GLSL::ConstantsBase * l_pConstants = GLSL::GetConstants( m_gl );
-			std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::GetKeywords( m_gl );
 
-			StringStream l_streamVtxShader;
-			l_streamVtxShader << l_pKeywords->GetVersion();
-			l_streamVtxShader << l_pConstants->Matrices();
-			l_streamVtxShader << l_pKeywords->GetAttribute( 0 ) << cuT( "	<vec4> vertex;\n" );
-			l_streamVtxShader << l_pKeywords->GetAttribute( 1 ) << cuT( "	<vec2> texture;\n" );
-			l_streamVtxShader << l_pKeywords->GetOut() << cuT( "	<vec2> vtx_texture;\n" );
-			l_streamVtxShader << cuT( "void main(void)\n" );
-			l_streamVtxShader << cuT( "{\n" );
-			l_streamVtxShader << cuT( "	vtx_texture = texture.xy;\n" );
-			l_streamVtxShader << cuT( "	gl_Position = c3d_mtxProjection * vec4( vertex.x, vertex.y, vertex.z, 1.0 );\n" );
-			l_streamVtxShader << cuT( "}\n" );
-			String l_strVtxShader = l_streamVtxShader.str();
-			StringStream l_streamPxlShader;
-			l_streamPxlShader << l_pKeywords->GetVersion();
-			l_streamPxlShader << l_pKeywords->GetIn() << cuT( "	<vec2> vtx_texture;\n" );
-			l_streamPxlShader << cuT( "uniform sampler2D c3d_mapDiffuse;\n" );
-			l_streamPxlShader << l_pKeywords->GetPixelOut();
-			l_streamPxlShader << cuT( "void main()\n" );
-			l_streamPxlShader << cuT( "{\n" );
-			l_streamPxlShader << cuT( "	" ) << l_pKeywords->GetPixelOutputName() << cuT( " = <texture2D>( c3d_mapDiffuse, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
-			l_streamPxlShader << cuT( "}\n" );
-			String l_strPxlShader = l_streamPxlShader.str();
-			GLSL::ConstantsBase::Replace( l_strVtxShader );
-			GLSL::ConstantsBase::Replace( l_strPxlShader );
-			str_utils::replace( l_strPxlShader, cuT( "<texture2D>" ), l_pKeywords->GetTexture2D() );
-			str_utils::replace( l_strVtxShader, cuT( "<layout>" ), l_pKeywords->GetLayout() );
-			str_utils::replace( l_strPxlShader, cuT( "<layout>" ), l_pKeywords->GetLayout() );
+			String l_strVtxShader;
+			{
+				// Vertex shader
+				GlslWriter l_writer( m_gl, eSHADER_TYPE_VERTEX );
+				l_writer << Version() << Endl();
+
+				UBO_MATRIX( l_writer );
+
+				// Shader inputs
+				ATTRIBUTE( l_writer, Vec4, vertex );
+				ATTRIBUTE( l_writer, Vec2, texture );
+
+				// Shader outputs
+				OUT( l_writer, Vec2, vtx_texture );
+
+				l_writer.Implement_Function< void >( cuT( "main" ), [&]()
+				{
+					vtx_texture = texture;
+					BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( vertex.x(), vertex.y(), vertex.z(), 1.0 );
+				} );
+				l_strVtxShader = l_writer.Finalise();
+			}
+
+			String l_strPxlShader;
+			{
+				GlslWriter l_writer( m_gl, eSHADER_TYPE_PIXEL );
+				l_writer << Version() << Endl();
+
+				// Shader inputs
+				UNIFORM( l_writer, Sampler2D, c3d_mapDiffuse );
+				IN( l_writer, Vec2, vtx_texture );
+
+				// Shader outputs
+				LAYOUT( l_writer, Vec4, plx_v4FragColor );
+
+				l_writer.Implement_Function< void >( cuT( "main" ), [&]()
+				{
+					plx_v4FragColor = texture2D( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) );
+				} );
+				l_strPxlShader = l_writer.Finalise();
+			}
+
 			ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
 			l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_2, l_strVtxShader );
 			l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_2, l_strPxlShader );

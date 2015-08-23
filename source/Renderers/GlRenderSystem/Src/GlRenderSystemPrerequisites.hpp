@@ -158,7 +158,7 @@ namespace GlRender
 		class KeywordsBase
 		{
 		protected:
-			Castor::String m_strLayout;
+			Castor::String m_strStdLayout;
 			Castor::String m_strVersion;
 			Castor::String m_strAttribute;
 			Castor::String m_strIn;
@@ -184,9 +184,9 @@ namespace GlRender
 			Castor::String m_strGSOutEmissiveDecl;
 
 		public:
-			inline Castor::String const & GetLayout()const
+			inline Castor::String GetStdLayout( int p_index )const
 			{
-				return m_strLayout;
+				return m_strStdLayout + cuT( "( std" ) + Castor::str_utils::to_string( p_index ) + cuT( " ) " );
 			}
 			inline Castor::String const & GetVersion()const
 			{
@@ -317,14 +317,14 @@ namespace GlRender
 		public:
 			Keywords()
 			{
-				m_strVersion = cuT( "#version " ) + Castor::str_utils::to_string( Version ) + cuT( "\n" );
+				m_strVersion = cuT( "#version " ) + Castor::str_utils::to_string( Version );
 				m_strAttribute = cuT( "in" );
 				m_strIn = cuT( "in" );
 				m_strOut = cuT( "out" );
 				m_strTexture1D = cuT( "texture1D" );
 				m_strTexture2D = cuT( "texture2D" );
 				m_strTexture3D = cuT( "texture3D" );
-				m_strPixelOut = cuT( "out vec4 pxl_v4FragColor;\n" );
+				m_strPixelOut = cuT( "out vec4 pxl_v4FragColor;" );
 				m_strPixelOutputName = cuT( "pxl_v4FragColor" );
 				m_strGSOutPositionName = cuT( "gl_FragData[0]" );
 				m_strGSOutDiffuseName = cuT( "gl_FragData[1]" );
@@ -346,15 +346,15 @@ namespace GlRender
 		public:
 			Keywords()
 			{
-				m_strLayout  = cuT( "layout( std140 ) " );
-				m_strVersion = cuT( "#version " ) + Castor::str_utils::to_string( Version ) + cuT( "\n" );
+				m_strStdLayout  = cuT( "layout" );
+				m_strVersion = cuT( "#version " ) + Castor::str_utils::to_string( Version );
 				m_strAttribute = cuT( "in" );
 				m_strIn = cuT( "in" );
 				m_strOut = cuT( "out" );
 				m_strTexture1D = cuT( "texture" );
 				m_strTexture2D = cuT( "texture" );
 				m_strTexture3D = cuT( "texture" );
-				m_strPixelOut = cuT( "out vec4 pxl_v4FragColor;\n" );
+				m_strPixelOut = cuT( "out vec4 pxl_v4FragColor;" );
 				m_strPixelOutputName = cuT( "pxl_v4FragColor" );
 				m_strGSOutPositionName = cuT( "out_c3dPosition" );
 				m_strGSOutNormalName = cuT( "out_c3dNormals" );
@@ -376,15 +376,15 @@ namespace GlRender
 		public:
 			Keywords()
 			{
-				m_strLayout  = cuT( "layout( std140 ) " );
-				m_strVersion = cuT( "#version " ) + Castor::str_utils::to_string( Version ) + cuT( "\n" );
+				m_strStdLayout  = cuT( "layout" );
+				m_strVersion = cuT( "#version " ) + Castor::str_utils::to_string( Version );
 				m_strAttribute = cuT( "in" );
 				m_strIn = cuT( "in" );
 				m_strOut = cuT( "out" );
 				m_strTexture1D = cuT( "texture" );
 				m_strTexture2D = cuT( "texture" );
 				m_strTexture3D = cuT( "texture" );
-				m_strPixelOut = cuT( "out vec4 pxl_v4FragColor;\n" );
+				m_strPixelOut = cuT( "out vec4 pxl_v4FragColor;" );
 				m_strPixelOutputName = cuT( "pxl_v4FragColor" );
 				m_strGSOutPositionName = cuT( "out_c3dPosition" );
 				m_strGSOutNormalName = cuT( "out_c3dNormals" );
@@ -393,13 +393,13 @@ namespace GlRender
 				m_strGSOutDiffuseName = cuT( "out_c3dDiffuse" );
 				m_strGSOutSpecularName = cuT( "out_c3dSpecular" );
 				m_strGSOutEmissiveName = cuT( "out_c3dEmissive" );
-				m_strGSOutPositionDecl = GetLayout( 0 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutPositionName + cuT( ";\n" );
-				m_strGSOutDiffuseDecl = GetLayout( 1 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutDiffuseName + cuT( ";\n" );
-				m_strGSOutNormalDecl = GetLayout( 2 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutNormalName + cuT( ";\n" );
-				m_strGSOutTangentDecl = GetLayout( 3 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutTangentName + cuT( ";\n" );
-				m_strGSOutBitangentDecl = GetLayout( 4 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutBitangentName + cuT( ";\n" );
-				m_strGSOutSpecularDecl = GetLayout( 5 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutSpecularName + cuT( ";\n" );
-				m_strGSOutEmissiveDecl = GetLayout( 6 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutEmissiveName + cuT( ";\n" );
+				m_strGSOutPositionDecl = GetLayout( 0 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutPositionName + cuT( ";" );
+				m_strGSOutDiffuseDecl = GetLayout( 1 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutDiffuseName + cuT( ";" );
+				m_strGSOutNormalDecl = GetLayout( 2 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutNormalName + cuT( ";" );
+				m_strGSOutTangentDecl = GetLayout( 3 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutTangentName + cuT( ";" );
+				m_strGSOutBitangentDecl = GetLayout( 4 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutBitangentName + cuT( ";" );
+				m_strGSOutSpecularDecl = GetLayout( 5 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutSpecularName + cuT( ";" );
+				m_strGSOutEmissiveDecl = GetLayout( 6 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutEmissiveName + cuT( ";" );
 			}
 
 			virtual Castor::String GetLayout( uint32_t p_uiIndex )const
@@ -415,7 +415,6 @@ namespace GlRender
 			virtual Castor::String Scene() = 0;
 			virtual Castor::String Pass() = 0;
 			virtual Castor::String Billboard() = 0;
-			static void Replace( Castor::String & p_strSource );
 		};
 
 		class ConstantsStd : public ConstantsBase
@@ -481,21 +480,21 @@ namespace GlRender
 			{
 				return
 					cuT( "out mat4 vtx_mtxModelView;\n" )
-					cuT( "out mat4 vtx_mtxView;\n" );
+					cuT( "out mat4 vtx_mtxView;" );
 			}
 
 			virtual Castor::String GetVertexMatrixCopy()const
 			{
 				return
 					cuT( "	vtx_mtxModelView = c3d_mtxModelView;\n" )
-					cuT( "	vtx_mtxView = c3d_mtxView;\n" );
+					cuT( "	vtx_mtxView = c3d_mtxView;" );
 			}
 
 			virtual Castor::String GetPixelInMatrices()const
 			{
 				return
 					cuT( "in mat4 vtx_mtxModelView;\n" )
-					cuT( "in mat4 vtx_mtxView;\n" );
+					cuT( "in mat4 vtx_mtxView;" );
 			}
 
 			virtual Castor::String GetPixelMtxModelView()const

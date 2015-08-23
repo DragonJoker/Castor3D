@@ -204,7 +204,7 @@ wxImage * wxMaterialsListView::CreatePassImage( PassSPtr p_pPass, uint32_t p_uiW
 				}
 
 				l_pMask->SetRGB( x, y, l_byR, l_byG, l_byB );
-				l_pMask->SetAlpha( x, y, l_byA );
+				l_pMask->SetAlpha( x, y, l_byA / 2 );
 			}
 		}
 

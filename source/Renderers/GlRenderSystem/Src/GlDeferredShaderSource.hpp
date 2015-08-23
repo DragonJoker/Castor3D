@@ -25,7 +25,6 @@ namespace GlRender
 	namespace GLSL
 	{
 		class DeferredShaderSource
-			: public ShaderSource
 		{
 		protected:
 			Castor::String m_strGSPixelDeclarations;
@@ -76,7 +75,7 @@ namespace GlRender
 				m_strGSPixelMainEnd =
 					cuT(	"}\n" );
 				m_strLSPixelProgram =
-					GetPixelLights() +
+					//Lighting< BlinnPhongLightingModel >().GetPixelLights() +
 					cuT(	"uniform sampler2D c3d_mapPosition;\n" )
 					cuT(	"uniform sampler2D c3d_mapDiffuse;\n" )
 					cuT(	"uniform sampler2D c3d_mapNormals;\n" )

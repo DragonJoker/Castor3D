@@ -1253,7 +1253,7 @@ namespace Castor3D
 	{
 		PreciseTimer l_timer;
 		m_pRenderSystem->GetMainContext()->SetCurrent();
-#if !DX_DEBUG
+#if DX_DEBUG
 		// Reverse iterator because we want to render textures before windows
 		for ( auto l_rit = m_mapRenderTargets.rbegin(); l_rit != m_mapRenderTargets.rend(); ++l_rit )
 		{
@@ -1434,21 +1434,21 @@ namespace Castor3D
 
 		if ( l_txt )
 		{
-			l_txt->SetCaption( str_utils::to_string( p_cpuTime ) + cuT( " ms" ) );
+			l_txt->SetCaption( str_utils::to_string( int( p_cpuTime ) ) + cuT( " ms" ) );
 		}
 
 		l_txt = m_debugGpuTime.lock();
 
 		if ( l_txt )
 		{
-			l_txt->SetCaption( str_utils::to_string( p_gpuTime ) + cuT( " ms" ) );
+			l_txt->SetCaption( str_utils::to_string( int( p_gpuTime ) ) + cuT( " ms" ) );
 		}
 
 		l_txt = m_debugTotalTime.lock();
 
 		if ( l_txt )
 		{
-			l_txt->SetCaption( str_utils::to_string( p_totalTime ) + cuT( " ms" ) );
+			l_txt->SetCaption( str_utils::to_string( int( p_totalTime ) ) + cuT( " ms" ) );
 		}
 
 		l_txt = m_debugVertexCount.lock();
