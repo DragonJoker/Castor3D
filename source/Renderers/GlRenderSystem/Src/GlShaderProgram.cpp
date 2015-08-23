@@ -342,53 +342,19 @@ namespace GlRender
 			LOCALE_ASSIGN( l_writer, Float, l_fShininess, c3d_fMatShininess );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.xyz() );
 			pxl_v4FragColor = vec4( Float( &l_writer, 0.0f ), 0.0f, 0.0f, 0.0f );
-			Vec3 l_v3MapColour;
-			Vec3 l_v3MapAmbient;
-			Vec3 l_v3MapDiffuse;
-			Float l_fSqrLength;
-			Vec3 l_v3MapNormal;
-			Float l_fInvRadius;
-			Float l_fOpacity;
-			Vec3 l_v3MapSpecular;
-			Vec4 l_v4MapHeight;
+			Vec3 l_v3MapSpecular( &l_writer, cuT( "l_v3MapSpecular" ) );
 
 			if ( p_uiFlags != 0 )
 			{
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
-				{
-					l_v3MapColour = texture2D( c3d_mapColour, vtx_texture.xy() ).xyz();
-				}
-
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
-				{
-					l_v3MapAmbient = texture2D( c3d_mapAmbient, vtx_texture.xy() ).xyz();
-				}
-
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
-				{
-					l_v3MapDiffuse = texture2D( c3d_mapDiffuse, vtx_texture.xy() ).xyz();
-				}
-
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
 				{
-					l_v3MapNormal = texture2D( c3d_mapNormal, vtx_texture.xy() ).xyz();
-					l_fInvRadius = Float( 0.02f );
+					LOCALE_ASSIGN( l_writer, Vec3, l_v3MapNormal, texture2D( c3d_mapNormal, vtx_texture.xy() ).xyz() );
 					l_v3Normal = normalize( l_v3MapNormal.xyz() * Float( 2.0f ) - Float( 1.0f ) );
-				}
-
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
-				{
-					l_fOpacity = texture2D( c3d_mapOpacity, vtx_texture.xy() ).r();
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
 				{
-					l_v3MapSpecular = texture2D( c3d_mapSpecular, vtx_texture.xy() ).xyz();
-				}
-
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
-				{
-					l_v4MapHeight = texture2D( c3d_mapHeight, vtx_texture.xy() );
+					LOCALE_ASSIGN( l_writer, Vec3, l_v3MapSpecular, texture2D( c3d_mapSpecular, vtx_texture.xy() ).xyz() );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
@@ -432,22 +398,22 @@ namespace GlRender
 			{
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
 				{
-					l_v3Ambient *= l_v3MapColour;
+					l_v3Ambient *= texture2D( c3d_mapColour, vtx_texture.xy() ).xyz();
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
 				{
-					l_v3Ambient *= l_v3MapAmbient;
+					l_v3Ambient *= texture2D( c3d_mapAmbient, vtx_texture.xy() ).xyz();
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
 				{
-					l_v3Diffuse *= l_v3MapDiffuse;
+					l_v3Diffuse *= texture2D( c3d_mapDiffuse, vtx_texture.xy() ).xyz();
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
 				{
-					l_fAlpha = l_fOpacity * c3d_fMatOpacity;
+					l_fAlpha = texture2D( c3d_mapOpacity, vtx_texture.xy() ).r() * c3d_fMatOpacity;
 				}
 			}
 

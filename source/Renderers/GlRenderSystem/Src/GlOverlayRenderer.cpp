@@ -52,7 +52,6 @@ ShaderProgramBaseSPtr GlOverlayRenderer::DoGetProgram( uint32_t p_uiFlags )
 	// Vertex shader
 	String l_strVs;
 	{
-		// Vertex shader
 		GlslWriter l_writer( m_gl, eSHADER_TYPE_VERTEX );
 		l_writer << Version() << Endl();
 

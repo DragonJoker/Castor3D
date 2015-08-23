@@ -444,6 +444,16 @@ namespace GlRender
 			return Ubo( *this, p_name );
 		}
 
+		void GlslWriter::EmitVertex()
+		{
+			m_stream << cuT( "EmitVertex();" ) << std::endl;
+		}
+
+		void GlslWriter::EndPrimitive()
+		{
+			m_stream << cuT( "EndPrimitive();" ) << std::endl;
+		}
+
 		GlslWriter & GlslWriter::operator<<( Version const & p_rhs )
 		{
 			m_stream << m_keywords->GetVersion();

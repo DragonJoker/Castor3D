@@ -136,7 +136,7 @@ namespace GlRender
 		TypeA operator+( TypeA const & p_a, TypeB const & p_b )
 		{
 			TypeA l_return( p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " + " ) << Castor::String( p_b );
+			l_return.m_value << Castor::String( p_a ) << cuT( " + " ) << ToString( p_b );
 			return l_return;
 		}
 
@@ -144,7 +144,7 @@ namespace GlRender
 		TypeA operator-( TypeA const & p_a, TypeB const & p_b )
 		{
 			TypeA l_return( p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " - " ) << Castor::String( p_b );
+			l_return.m_value << Castor::String( p_a ) << cuT( " - " ) << ToString( p_b );
 			return l_return;
 		}
 
@@ -152,7 +152,7 @@ namespace GlRender
 		TypeA operator*( TypeA const & p_a, TypeB const & p_b )
 		{
 			TypeA l_return( p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " * " ) << Castor::String( p_b );
+			l_return.m_value << Castor::String( p_a ) << cuT( " * " ) << ToString( p_b );
 			return l_return;
 		}
 
@@ -160,7 +160,7 @@ namespace GlRender
 		TypeA operator/( TypeA const & p_a, TypeB const & p_b )
 		{
 			TypeA l_return( p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " / " ) << Castor::String( p_b );
+			l_return.m_value << Castor::String( p_a ) << cuT( " / " ) << ToString( p_b );
 			return l_return;
 		}
 
@@ -168,7 +168,7 @@ namespace GlRender
 		Bool operator==( TypeA const & p_a, TypeB const & p_b )
 		{
 			Bool l_return( p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " == " ) << Castor::String( p_b );
+			l_return.m_value << Castor::String( p_a ) << cuT( " == " ) << ToString( p_b );
 			return l_return;
 		}
 
@@ -176,7 +176,7 @@ namespace GlRender
 		Bool operator!=( TypeA const & p_a, TypeB const & p_b )
 		{
 			Bool l_return( p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " != " ) << Castor::String( p_b );
+			l_return.m_value << Castor::String( p_a ) << cuT( " != " ) << ToString( p_b );
 			return l_return;
 		}
 
@@ -184,7 +184,7 @@ namespace GlRender
 		Bool operator<( TypeA const & p_a, TypeB const & p_b )
 		{
 			Bool l_return( p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " < " ) << Castor::String( p_b );
+			l_return.m_value << Castor::String( p_a ) << cuT( " < " ) << ToString( p_b );
 			return l_return;
 		}
 
@@ -192,7 +192,7 @@ namespace GlRender
 		Bool operator<=( TypeA const & p_a, TypeB const & p_b )
 		{
 			Bool l_return( p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " <= " ) << Castor::String( p_b );
+			l_return.m_value << Castor::String( p_a ) << cuT( " <= " ) << ToString( p_b );
 			return l_return;
 		}
 
@@ -200,7 +200,7 @@ namespace GlRender
 		Bool operator>( TypeA const & p_a, TypeB const & p_b )
 		{
 			Bool l_return( p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " > " ) << Castor::String( p_b );
+			l_return.m_value << Castor::String( p_a ) << cuT( " > " ) << ToString( p_b );
 			return l_return;
 		}
 
@@ -208,7 +208,7 @@ namespace GlRender
 		Bool operator>=( TypeA const & p_a, TypeB const & p_b )
 		{
 			Bool l_return( p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " >= " ) << Castor::String( p_b );
+			l_return.m_value << Castor::String( p_a ) << cuT( " >= " ) << ToString( p_b );
 			return l_return;
 		}
 
@@ -429,6 +429,12 @@ namespace GlRender
 		inline Float pow( Type const & p_value, Values const & ... p_values )
 		{
 			return WriteFunctionCall< Float >( p_value.m_writer, cuT( "pow" ), p_value, p_values... );
+		}
+
+		template< typename Value, typename ... Values >
+		inline Value cross( Value const & p_value, Values const & ... p_values )
+		{
+			return WriteFunctionCall< Value >( p_value.m_writer, cuT( "dot" ), p_value, p_values... );
 		}
 
 		template< typename Value, typename ... Values >

@@ -183,6 +183,9 @@ namespace GlRender
 			void Else( std::function< void() > p_function );
 			Struct GetStruct( Castor::String const & p_name );
 			Ubo GetUbo( Castor::String const & p_name );
+			void EmitVertex();
+			void EndPrimitive();
+
 			template< typename RetType, typename FuncType, typename ... Params > inline void Implement_Function( Castor::String const & p_name, FuncType p_function, Params && ... p_params );
 			template< typename RetType > void Return( RetType const & p_return );
 			template< typename ExprType > ExprType Paren( ExprType const p_expr );
@@ -205,7 +208,6 @@ namespace GlRender
 			template< typename T > inline Array< T > GetBuiltin( Castor::String const & p_name, uint32_t p_dimension );
 			template< typename T > inline Array< T > GetLayout( Castor::String const & p_name, uint32_t p_dimension );
 			template< typename T > inline Array< T > GetUniform( Castor::String const & p_name, uint32_t p_dimension );
-
 		
 			GlslWriter & operator<<( Version const & p_rhs );
 			GlslWriter & operator<<( Attribute const & p_rhs );
@@ -709,6 +711,17 @@ namespace GlRender
 			Float m_fCutOff()const { return Float( m_writer, m_name + cuT( ".m_fCutOff" ) ); }
 		};
 
+		struct gl_PerVertex: public Type
+		{
+			gl_PerVertex(): Type( cuT( "gl_PerVertex " ) ){}
+			gl_PerVertex( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "gl_PerVertex " ), p_writer, p_name ){}
+			inline gl_PerVertex & operator=( gl_PerVertex const & p_rhs ){ m_writer->WriteAssign( *this, p_rhs );return *this; }
+			template< typename T > inline gl_PerVertex & operator=( T const & p_rhs ){ m_writer->WriteAssign( *this, p_rhs );return *this; }
+			Vec4 gl_Position()const { return Vec4( m_writer, m_name + cuT( ".gl_Position" ) ); }
+			Float gl_PointSize()const { return Float( m_writer, m_name + cuT( ".gl_PointSize" ) ); }
+			Float gl_ClipDistance()const { return Array< Float >( m_writer, m_name + cuT( ".gl_ClipDistance" ), 8 ); }
+		};
+
 		template< typename TypeT >
 		struct InParam: public TypeT
 		{
@@ -766,6 +779,7 @@ namespace GlRender
 		template< typename ... Values > inline Float inversesqrt( Expr const & p_value, Values const & ... p_values );
 		template< typename ... Values > inline Float sqrt( Expr const & p_value, Values const & ... p_values );
 		template< typename ... Values > inline Float pow( Expr const & p_value, Values const & ... p_values );
+		template< typename Value, typename ... Values > inline Value cross( Value const & p_value, Values const & ... p_values );
 		template< typename Value, typename ... Values > inline Value clamp( Value const & p_value, Values const & ... p_values );
 		template< typename Value, typename ... Values > inline Value min( Value const & p_value, Values const & ... p_values );
 		template< typename Value, typename ... Values > inline Value max( Value const & p_value, Values const & ... p_values );
@@ -835,49 +849,49 @@ namespace GlRender
 	Type Name = ( Writer ).GetLocale< Type >( cuT( #Name ) )
 
 #define LOCALE_ARRAY( Writer, Type, Name, Dimension )\
-	Type Name = ( Writer ).GetLocale< Type >( cuT( #Name ), Dimension )
+	Array< Type > Name = ( Writer ).GetLocale< Type >( cuT( #Name ), Dimension )
 
 #define LOCALE_ASSIGN( Writer, Type, Name, Assign )\
 	Type Name = ( Writer ).GetLocale< Type >( cuT( #Name ), Assign )
 
 #define LOCALE_ASSIGN_ARRAY( Writer, Type, Name, Dimension, Assign )\
-	Type Name = ( Writer ).GetLocale< Type >( cuT( #Name ), Dimension, Assign )
+	Array< Type > Name = ( Writer ).GetLocale< Type >( cuT( #Name ), Dimension, Assign )
 
 #define BUILTIN( Writer, Type, Name )\
 	Type Name = ( Writer ).GetBuiltin< Type >( cuT( #Name ) )
 
 #define BUILTIN_ARRAY( Writer, Type, Name, Dimension )\
-	Type Name = ( Writer ).GetBuiltin< Type >( cuT( #Name ), Dimension )
+	Array< Type > Name = ( Writer ).GetBuiltin< Type >( cuT( #Name ), Dimension )
 
 #define OUT( Writer, Type, Name )\
 	Type Name = ( Writer ).GetOut< Type >( cuT( #Name ) )
 
 #define OUT_ARRAY( Writer, Type, Name, Dimension )\
-	Type Name = ( Writer ).GetOut< Type >( cuT( #Name ), Dimension )
+	Array< Type > Name = ( Writer ).GetOut< Type >( cuT( #Name ), Dimension )
 
 #define IN( Writer, Type, Name )\
 	Type Name = ( Writer ).GetIn< Type >( cuT( #Name ) )
 
 #define IN_ARRAY( Writer, Type, Name, Dimension )\
-	Type Name = ( Writer ).GetIn< Type >( cuT( #Name ), Dimension )
+	Array< Type > Name = ( Writer ).GetIn< Type >( cuT( #Name ), Dimension )
 
 #define ATTRIBUTE( Writer, Type, Name )\
 	Type Name = ( Writer ).GetAttribute< Type >( cuT( #Name ) )
 
 #define ATTRIBUTE_ARRAY( Writer, Type, Name, Dimension )\
-	Type Name = ( Writer ).GetAttribute< Type >( cuT( #Name ), Dimension )
+	Array< Type > Name = ( Writer ).GetAttribute< Type >( cuT( #Name ), Dimension )
 
 #define UNIFORM( Writer, Type, Name )\
 	Type Name = ( Writer ).GetUniform< Type >( cuT( #Name ) )
 
 #define UNIFORM_ARRAY( Writer, Type, Name, Dimension )\
-	Type Name = ( Writer ).GetUniform< Type >( cuT( #Name ), Dimension )
+	Array< Type > Name = ( Writer ).GetUniform< Type >( cuT( #Name ), Dimension )
 
 #define LAYOUT( Writer, Type, Name )\
 	Type Name = ( Writer ).GetLayout< Type >( cuT( #Name ) )
 
 #define LAYOUT_ARRAY( Writer, Type, Name, Dimension )\
-	Type Name = ( Writer ).GetLayout< Type >( cuT( #Name ), Dimension )
+	Array< Type > Name = ( Writer ).GetLayout< Type >( cuT( #Name ), Dimension )
 
 #define CAST( Writer, NewType, OldType )\
 	( Writer ).Cast< NewType >( OldType )
@@ -915,6 +929,11 @@ namespace GlRender
 	UNIFORM( l_scene, Vec4, c3d_v4BackgroundColour );\
 	UNIFORM( l_scene, Vec3, c3d_v3CameraPosition );\
 	l_scene.End();
+
+#define UBO_BILLBOARD( Writer )\
+	Ubo l_billboard = l_writer.GetUbo( cuT( "Billboard" ) );\
+	UNIFORM( l_billboard, IVec2, c3d_v2iDimensions );\
+	l_billboard.End();
 }
 
 #include "GlShaderSource.inl"
