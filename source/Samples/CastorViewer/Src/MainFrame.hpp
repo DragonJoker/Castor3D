@@ -8,8 +8,7 @@
 #include <wx/aui/framemanager.h>
 #include <wx/aui/auibook.h>
 
-#include <GeometriesListFrame.hpp>
-#include <MaterialsListFrame.hpp>
+#include <SceneObjectsList.hpp>
 #include <Logger.hpp>
 #include <Path.hpp>
 #include <Path.hpp>
@@ -54,8 +53,8 @@ namespace CastorViewer
 		void OnKeyUp( wxKeyEvent & p_event );
 		void OnLoadScene( wxCommandEvent & p_event );
 		void OnExportScene( wxCommandEvent & p_event );
-		void OnShowMaterialsList( wxCommandEvent & p_event );
 		void OnShowLogs( wxCommandEvent & p_event );
+		void OnShowLists( wxCommandEvent & p_event );
 		void OnShowProperties( wxCommandEvent & p_event );
 
 	private:
@@ -67,13 +66,13 @@ namespace CastorViewer
 		wxPanel * m_pBgPanel;
 		wxAuiNotebook * m_logTabsContainer;
 		wxAuiNotebook * m_sceneTabsContainer;
-		wxPanel * m_propertiesContainer;
+		wxPropertiesHolder * m_propertiesContainer;
 		wxListView * m_messageLog;
 		wxListView * m_errorLog;
 		GuiCommon::wxImagesLoader * m_pImagesLoader;
 		GuiCommon::wxSplashScreen * m_pSplashScreen;
-		GuiCommon::wxGeometriesListFrame * m_pGeometriesFrame;
-		GuiCommon::wxMaterialsListFrame * m_pMaterialsFrame;
+		GuiCommon::wxSceneObjectsList * m_sceneObjectsList;
+		GuiCommon::wxMaterialsList * m_materialsList;
 		Castor3D::SceneWPtr m_pMainScene;
 		Castor3D::CameraWPtr m_pMainCamera;
 		Castor3D::SceneNodeWPtr m_pSceneNode;

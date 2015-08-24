@@ -1438,19 +1438,19 @@ namespace Castor3D
 	{
 		RenderSystem * l_pRenderSystem = m_pEngine->GetRenderSystem();
 
-		for ( RenderNodeArrayConstIt l_itNodes = p_begin; l_itNodes != p_end; ++l_itNodes )
+		for ( RenderNodeArrayConstIt l_itMaterials = p_begin; l_itMaterials != p_end; ++l_itMaterials )
 		{
-			if ( l_itNodes->m_pNode && l_itNodes->m_pNode->IsDisplayable() && l_itNodes->m_pNode->IsVisible() )
+			if ( l_itMaterials->m_pMaterial && l_itMaterials->m_pNode->IsDisplayable() && l_itMaterials->m_pNode->IsVisible() )
 			{
-				if ( p_camera.IsVisible( l_itNodes->m_pSubmesh->GetParent()->GetCollisionBox(), l_itNodes->m_pNode->GetDerivedTransformationMatrix() ) )
+				if ( p_camera.IsVisible( l_itMaterials->m_pSubmesh->GetParent()->GetCollisionBox(), l_itMaterials->m_pNode->GetDerivedTransformationMatrix() ) )
 				{
-					if ( l_pRenderSystem->HasInstancing() && l_itNodes->m_pSubmesh->GetRefCount( l_itNodes->m_pMaterial ) > 1 )
+					if ( l_pRenderSystem->HasInstancing() && l_itMaterials->m_pSubmesh->GetRefCount( l_itMaterials->m_pMaterial ) > 1 )
 					{
-						DoRenderSubmeshInstancedSingle( p_pipeline, *l_itNodes, p_eTopology );
+						DoRenderSubmeshInstancedSingle( p_pipeline, *l_itMaterials, p_eTopology );
 					}
 					else
 					{
-						DoRenderSubmeshNonInstanced( p_pipeline, *l_itNodes, p_eTopology );
+						DoRenderSubmeshNonInstanced( p_pipeline, *l_itMaterials, p_eTopology );
 					}
 				}
 			}
@@ -1461,11 +1461,11 @@ namespace Castor3D
 	{
 		RenderSystem * l_pRenderSystem = m_pEngine->GetRenderSystem();
 
-		for ( SubmeshNodesByMaterialMapConstIt l_itNodes = p_begin; l_itNodes != p_end; ++l_itNodes )
+		for ( SubmeshNodesByMaterialMapConstIt l_itMaterials = p_begin; l_itMaterials != p_end; ++l_itMaterials )
 		{
-			MaterialSPtr l_pMaterial = l_itNodes->first;
+			MaterialSPtr l_pMaterial = l_itMaterials->first;
 
-			for ( SubmeshNodesMapConstIt l_itSubmeshes = l_itNodes->second.begin(); l_itSubmeshes != l_itNodes->second.end(); ++l_itSubmeshes )
+			for ( SubmeshNodesMapConstIt l_itSubmeshes = l_itMaterials->second.begin(); l_itSubmeshes != l_itMaterials->second.end(); ++l_itSubmeshes )
 			{
 				SubmeshSPtr l_pSubmesh = l_itSubmeshes->first;
 
@@ -1508,7 +1508,7 @@ namespace Castor3D
 
 		for ( RenderNodeArrayIt l_it = p_begin; l_it != p_end; ++l_it )
 		{
-			if ( l_it->m_pNode && l_it->m_pNode->IsDisplayable() && l_it->m_pNode->IsVisible() )
+			if ( l_it->m_pMaterial && l_it->m_pNode->IsDisplayable() && l_it->m_pNode->IsVisible() )
 			{
 				if ( p_camera.IsVisible( l_it->m_pSubmesh->GetParent()->GetCollisionBox(), l_it->m_pNode->GetDerivedTransformationMatrix() ) )
 				{

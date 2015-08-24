@@ -116,7 +116,7 @@ namespace Castor3D
 		int64_t iInt64;
 		bool bBool1;
 		bool bBool2;
-		SceneNodeSPtr m_pGeneralParentNode;
+		SceneNodeSPtr m_pGeneralParentMaterial;
 		ScenePtrStrMap mapScenes;
 		SceneFileParser * m_pParser;
 		eRENDERER_TYPE eRendererType;

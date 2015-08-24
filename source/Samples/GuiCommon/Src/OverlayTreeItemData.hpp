@@ -18,14 +18,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GUICOMMON_OVERLAY_TREE_ITEM_DATA_H___
 #define ___GUICOMMON_OVERLAY_TREE_ITEM_DATA_H___
 
-#include "GuiCommonPrerequisites.hpp"
-
-#include <wx/treectrl.h>
+#include "TreeItemPropertyData.hpp"
 
 namespace GuiCommon
 {
 	class wxOverlayTreeItemData
-		: public wxTreeItemData
+		: public wxTreeItemPropertyData
 	{
 	public:
 		wxOverlayTreeItemData( Castor3D::OverlaySPtr p_overlay );

@@ -15,8 +15,8 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GUICOMMON_MATERIALS_LIST_FRAME_H___
-#define ___GUICOMMON_MATERIALS_LIST_FRAME_H___
+#ifndef ___GUICOMMON_GEOMETRIES_LIST_FRAME_H___
+#define ___GUICOMMON_GEOMETRIES_LIST_FRAME_H___
 
 #include "GuiCommonPrerequisites.hpp"
 
@@ -25,25 +25,31 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GuiCommon
 {
-	class wxMaterialsListFrame
-		: public wxPanel
+	class wxSceneObjectsList
+		: public wxTreeCtrl
 	{
 	public:
-		wxMaterialsListFrame( wxWindow * p_propsParent, wxWindow * p_pParent, wxString const & p_strTitle, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
-		~wxMaterialsListFrame();
+		wxSceneObjectsList( wxPropertiesHolder * p_propertiesHolder, wxWindow * p_pParent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
+		~wxSceneObjectsList();
 		
-		void LoadMaterials( Castor3D::Engine * p_pEngine );
-		void UnloadMaterials();
+		void LoadScene( Castor3D::Engine * p_pEngine, Castor3D::SceneSPtr p_pScene );
+		void UnloadScene();
 
 	protected:
+		void DoAddGeometry( wxTreeItemId p_id, Castor3D::MovableObjectSPtr p_geometry );
+		void DoAddCamera( wxTreeItemId p_id, Castor3D::MovableObjectSPtr p_camera );
+		void DoAddLight( wxTreeItemId p_id, Castor3D::MovableObjectSPtr p_light );
+		void DoAddNode( wxTreeItemId p_id, Castor3D::SceneNodeSPtr p_node );
+		void DoAddOverlay( wxTreeItemId p_id, Castor3D::OverlaySPtr p_overlay );
+
 		DECLARE_EVENT_TABLE()
 		void OnClose( wxCloseEvent & p_event );
-		void OnSelected( wxListEvent & p_event );
+		void OnSelectItem( wxTreeEvent & p_event );
 
 	private:
-		wxMaterialPanel * m_materialPanel;
-		wxMaterialsListView * m_pMaterialsList;
-		Castor3D::Engine * m_engine;
+		Castor3D::SceneWPtr m_pScene;
+		Castor3D::Engine * m_pEngine;
+		wxPropertiesHolder * m_propertiesHolder;
 	};
 }
 

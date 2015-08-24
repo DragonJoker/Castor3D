@@ -3,6 +3,7 @@
 #include "MainFrame.hpp"
 #include "CastorViewer.hpp"
 #include "SceneExporter.hpp"
+#include "PropertiesHolder.hpp"
 
 #include <xpms/geo_blanc.xpm>
 #include <xpms/scene_blanc.xpm>
@@ -20,16 +21,30 @@
 #include <xpms/node_sel.xpm>
 #include <xpms/camera.xpm>
 #include <xpms/camera_sel.xpm>
-#include <xpms/light.xpm>
-#include <xpms/light_sel.xpm>
+#include <xpms/directional.xpm>
+#include <xpms/directional_sel.xpm>
+#include <xpms/point.xpm>
+#include <xpms/point_sel.xpm>
+#include <xpms/spot.xpm>
+#include <xpms/spot_sel.xpm>
 #include <xpms/geometry.xpm>
 #include <xpms/geometry_sel.xpm>
 #include <xpms/submesh.xpm>
 #include <xpms/submesh_sel.xpm>
 #include <xpms/scene.xpm>
 #include <xpms/scene_sel.xpm>
-#include <xpms/overlay.xpm>
-#include <xpms/overlay_sel.xpm>
+#include <xpms/panel.xpm>
+#include <xpms/panel_sel.xpm>
+#include <xpms/border_panel.xpm>
+#include <xpms/border_panel_sel.xpm>
+#include <xpms/text.xpm>
+#include <xpms/text_sel.xpm>
+#include <xpms/material.xpm>
+#include <xpms/material_sel.xpm>
+#include <xpms/pass.xpm>
+#include <xpms/pass_sel.xpm>
+#include <xpms/texture.xpm>
+#include <xpms/texture_sel.xpm>
 
 #include <wx/display.h>
 #include <wx/aui/dockart.h>
@@ -38,7 +53,7 @@
 #include <ImagesLoader.hpp>
 #include <FunctorEvent.hpp>
 #include <InitialiseEvent.hpp>
-#include <MaterialsFrame.hpp>
+#include <MaterialsList.hpp>
 #include <RendererSelector.hpp>
 #include <SplashScreen.hpp>
 
@@ -83,11 +98,12 @@ namespace CastorViewer
 			eID_TOOL_MATERIALS,
 			eID_TOOL_SHOW_LOGS,
 			eID_TOOL_SHOW_PROPERTIES,
+			eID_TOOL_SHOW_LISTS,
 		}	eID;
 
 		typedef enum eBMP
 		{
-			eBMP_SCENE = GuiCommon::wxGeometriesListFrame::eBMP_COUNT,
+			eBMP_SCENES = GuiCommon::eBMP_COUNT,
 			eBMP_MATERIALS,
 			eBMP_EXPORT,
 			eBMP_LOGS,
@@ -186,7 +202,9 @@ namespace CastorViewer
 		, m_iLogsHeight( 100 )
 		, m_iPropertiesWidth( 240 )
 		, m_eRenderer( p_eRenderer )
-		, m_pGeometriesFrame( NULL )
+		, m_sceneObjectsList( NULL )
+		, m_materialsList( NULL )
+		, m_propertiesContainer( NULL )
 		, m_auiManager( this,  wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
 	{
 	}
@@ -240,10 +258,8 @@ namespace CastorViewer
 
 				if ( m_pMainScene.lock() )
 				{
-					m_pMaterialsFrame->UnloadMaterials();
-					m_pGeometriesFrame->UnloadScene();
-					//p_pMainScene.lock()->ClearScene();
-					//m_pCastor3D->GetSceneManager().erase( m_pMainScene.lock()->GetName() );
+					m_materialsList->UnloadMaterials();
+					m_sceneObjectsList->UnloadScene();
 					m_pMainScene.reset();
 					Logger::LogDebug( cuT( "MainFrame::LoadScene - Scene unloaded" ) );
 				}
@@ -457,8 +473,8 @@ namespace CastorViewer
 
 			if ( l_initialised )
 			{
-				m_pGeometriesFrame->LoadScene( m_pCastor3D, m_pMainScene.lock() );
-				m_pMaterialsFrame->LoadMaterials( m_pCastor3D );
+				m_sceneObjectsList->LoadScene( m_pCastor3D, m_pMainScene.lock() );
+				m_materialsList->LoadMaterials( m_pCastor3D );
 				wxSize l_size = GetClientSize();
 #if wxCHECK_VERSION( 2, 9, 0 )
 				SetMinClientSize( l_size );
@@ -535,11 +551,11 @@ namespace CastorViewer
 		m_logTabsContainer->SetArtProvider( new PlainWhiteAuiTabArt );
 		m_sceneTabsContainer = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
 		m_sceneTabsContainer->SetArtProvider( new PlainWhiteAuiTabArt );
-		m_propertiesContainer = new wxPanel( this, wxID_ANY, wxDefaultPosition, wxDefaultSize );
+		m_propertiesContainer = new wxPropertiesHolder( false, this, wxDefaultPosition, wxDefaultSize );
 
 		m_auiManager.AddPane( m_pRenderPanel, wxAuiPaneInfo().Center().CloseButton( false ).MinSize( l_size.x - m_iPropertiesWidth, l_size.y - m_iLogsHeight ).Layer( 0 ).Movable( false ).PaneBorder( false ).Dockable( false) );
 		m_auiManager.AddPane( m_logTabsContainer, wxAuiPaneInfo().CloseButton().Caption( _( "Logs" ) ).Bottom().Dock().BottomDockable().TopDockable().Movable().PinButton().MinSize( l_size.x, m_iLogsHeight ).Layer( 1 ).PaneBorder( false ) );
-		m_auiManager.AddPane( m_sceneTabsContainer, wxAuiPaneInfo().CloseButton().Caption( _( "Scene" ) ).Left().Dock().LeftDockable().RightDockable().Movable().PinButton().MinSize( m_iPropertiesWidth, l_size.y / 3 ).Layer( 2 ).PaneBorder( false ) );
+		m_auiManager.AddPane( m_sceneTabsContainer, wxAuiPaneInfo().CloseButton().Caption( _( "Scenes" ) ).Left().Dock().LeftDockable().RightDockable().Movable().PinButton().MinSize( m_iPropertiesWidth, l_size.y / 3 ).Layer( 2 ).PaneBorder( false ) );
 		m_auiManager.AddPane( m_propertiesContainer , wxAuiPaneInfo().CloseButton().Caption( _( "Properties" ) ).Left().Dock().LeftDockable().RightDockable().Movable().PinButton().MinSize( m_iPropertiesWidth, l_size.y / 3 ).Layer( 2 ).PaneBorder( false ) );
 
 		auto l_logCreator = [this, &l_size]( wxString const & p_name, wxListView *& p_log )
@@ -556,11 +572,11 @@ namespace CastorViewer
 		l_logCreator( _( "Messages" ), m_messageLog );
 		l_logCreator( _( "Errors" ), m_errorLog );
 		
-		m_pGeometriesFrame = new wxGeometriesListFrame( m_propertiesContainer, m_sceneTabsContainer, _( "Geometries" ), wxDefaultPosition, wxDefaultSize );
-		m_sceneTabsContainer->AddPage( m_pGeometriesFrame, _( "Geometries" ), true );
+		m_sceneObjectsList = new wxSceneObjectsList( m_propertiesContainer, m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize );
+		m_sceneTabsContainer->AddPage( m_sceneObjectsList, _( "Scenes" ), true );
 		
-		m_pMaterialsFrame = new wxMaterialsListFrame( m_propertiesContainer, m_sceneTabsContainer, _( "Materials" ), wxDefaultPosition, wxDefaultSize );
-		m_sceneTabsContainer->AddPage( m_pMaterialsFrame, _( "Materials" ), true );
+		m_materialsList = new wxMaterialsList( m_propertiesContainer, m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize );
+		m_sceneTabsContainer->AddPage( m_materialsList, _( "Materials" ), true );
 
 		m_auiManager.Update();
 	}
@@ -623,21 +639,36 @@ namespace CastorViewer
 	{
 		m_pSplashScreen->Step( _( "Loading images" ), 1 );
 		m_pImagesLoader->AddBitmap( CV_IMG_CASTOR, castor_transparent_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_SCENE, scene_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_SCENE_SEL, scene_sel_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_NODE, node_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_NODE_SEL, node_sel_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_CAMERA, camera_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_CAMERA_SEL, camera_sel_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_GEOMETRY, geometry_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_GEOMETRY_SEL, geometry_sel_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_LIGHT, light_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_LIGHT_SEL, light_sel_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_SUBMESH, submesh_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_SUBMESH_SEL, submesh_sel_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_OVERLAY, overlay_xpm );
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_OVERLAY_SEL, overlay_sel_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_SCENE, scene_blanc_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_SCENE, scene_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_SCENE_SEL, scene_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_NODE, node_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_NODE_SEL, node_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_CAMERA, camera_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_CAMERA_SEL, camera_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_GEOMETRY, geometry_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_GEOMETRY_SEL, geometry_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_DIRECTIONAL_LIGHT, directional_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_DIRECTIONAL_LIGHT_SEL, directional_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_POINT_LIGHT, point_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_POINT_LIGHT_SEL, point_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_SPOT_LIGHT, spot_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_SPOT_LIGHT_SEL, spot_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_SUBMESH, submesh_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_SUBMESH_SEL, submesh_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_PANEL_OVERLAY, panel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_PANEL_OVERLAY_SEL, panel_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_BORDER_PANEL_OVERLAY, border_panel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_BORDER_PANEL_OVERLAY_SEL, border_panel_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_TEXT_OVERLAY, text_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_TEXT_OVERLAY_SEL, text_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_MATERIAL, material_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_MATERIAL_SEL, material_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_PASS, pass_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_PASS_SEL, pass_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_TEXTURE, texture_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_TEXTURE_SEL, texture_sel_xpm );
+
+		m_pImagesLoader->AddBitmap( eBMP_SCENES, scene_blanc_xpm );
 		m_pImagesLoader->AddBitmap( eBMP_MATERIALS, mat_blanc_xpm );
 		m_pImagesLoader->AddBitmap( eBMP_EXPORT, export_xpm );
 		m_pImagesLoader->AddBitmap( eBMP_LOGS, log_xpm );
@@ -657,15 +688,14 @@ namespace CastorViewer
 		wxToolBar * l_pToolbar = CreateToolBar( wxTB_FLAT | wxTB_HORIZONTAL );
 		l_pToolbar->SetBackgroundColour( *wxWHITE );
 		l_pToolbar->SetToolBitmapSize( wxSize( 32, 32 ) );
-		l_pToolbar->AddTool( eID_TOOL_LOAD_SCENE, _( "Load Scene" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_SCENE ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Open a new scene" ) );
+		l_pToolbar->AddTool( eID_TOOL_LOAD_SCENE, _( "Load Scene" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_SCENES ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Open a new scene" ) );
 		m_pSplashScreen->Step( 1 );
 		l_pToolbar->AddTool( eID_TOOL_EXPORT_SCENE, _( "Export Scene" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_EXPORT ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Export the current scene" ) );
 		m_pSplashScreen->Step( 1 );
 		l_pToolbar->AddSeparator();
-		l_pToolbar->AddTool( eID_TOOL_MATERIALS, _( "Materials" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_MATERIALS ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display materials" ) );
-		m_pSplashScreen->Step( 1 );
-		l_pToolbar->AddSeparator();
 		l_pToolbar->AddTool( eID_TOOL_SHOW_LOGS, _( "Logs" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_LOGS ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display logs" ) );
+		m_pSplashScreen->Step( 1 );
+		l_pToolbar->AddTool( eID_TOOL_SHOW_LISTS, _( "Lists" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_MATERIALS ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display lists" ) );
 		m_pSplashScreen->Step( 1 );
 		l_pToolbar->AddTool( eID_TOOL_SHOW_PROPERTIES, _( "Properties" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_PROPERTIES ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display properties" ) );
 		m_pSplashScreen->Step( 1 );
@@ -708,8 +738,8 @@ namespace CastorViewer
 		EVT_ERASE_BACKGROUND( MainFrame::OnEraseBackground )
 		EVT_TOOL( eID_TOOL_LOAD_SCENE, MainFrame::OnLoadScene )
 		EVT_TOOL( eID_TOOL_EXPORT_SCENE, MainFrame::OnExportScene )
-		EVT_TOOL( eID_TOOL_MATERIALS, MainFrame::OnShowMaterialsList )
 		EVT_TOOL( eID_TOOL_SHOW_LOGS, MainFrame::OnShowLogs )
+		EVT_TOOL( eID_TOOL_SHOW_LISTS, MainFrame::OnShowLists )
 		EVT_TOOL( eID_TOOL_SHOW_PROPERTIES, MainFrame::OnShowProperties )
 	END_EVENT_TABLE()
 
@@ -863,14 +893,6 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void MainFrame::OnShowMaterialsList( wxCommandEvent & p_event )
-	{
-		wxMaterialsFrame * l_pFrame = new wxMaterialsFrame( m_pCastor3D, false, this, _( "Materials" ), wxDefaultPosition );
-		l_pFrame->Initialise();
-		l_pFrame->Show();
-		p_event.Skip();
-	}
-
 	void MainFrame::OnShowLogs( wxCommandEvent & p_event )
 	{
 		if ( !m_logTabsContainer->IsShown() )
@@ -887,6 +909,21 @@ namespace CastorViewer
 	}
 
 	void MainFrame::OnShowProperties( wxCommandEvent & p_event )
+	{
+		if ( !m_propertiesContainer->IsShown() )
+		{
+			m_auiManager.GetPane( m_propertiesContainer ).Show();
+		}
+		else
+		{
+			m_auiManager.GetPane( m_propertiesContainer ).Hide();
+		}
+
+		m_auiManager.Update();
+		p_event.Skip();
+	}
+
+	void MainFrame::OnShowLists( wxCommandEvent & p_event )
 	{
 		if ( !m_sceneTabsContainer->IsShown() )
 		{

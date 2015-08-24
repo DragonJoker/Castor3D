@@ -18,14 +18,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GUICOMMON_CAMERA_TREE_ITEM_DATA_H___
 #define ___GUICOMMON_CAMERA_TREE_ITEM_DATA_H___
 
-#include "GuiCommonPrerequisites.hpp"
-
-#include <wx/treectrl.h>
+#include "TreeItemPropertyData.hpp"
 
 namespace GuiCommon
 {
 	class wxCameraTreeItemData
-		: public wxTreeItemData
+		: public wxTreeItemPropertyData
 	{
 	public:
 		wxCameraTreeItemData( Castor3D::CameraSPtr p_camera );

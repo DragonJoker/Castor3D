@@ -68,15 +68,58 @@ namespace GuiCommon
 		eSTC_TYPE_COUNT
 	}	eSTC_TYPE;
 
-	class wxFrameVariableDialog;
+	typedef enum eBMP
+	{
+		eBMP_SCENE,
+		eBMP_SCENE_SEL,
+		eBMP_NODE,
+		eBMP_NODE_SEL,
+		eBMP_CAMERA,
+		eBMP_CAMERA_SEL,
+		eBMP_GEOMETRY,
+		eBMP_GEOMETRY_SEL,
+		eBMP_DIRECTIONAL_LIGHT,
+		eBMP_DIRECTIONAL_LIGHT_SEL,
+		eBMP_POINT_LIGHT,
+		eBMP_POINT_LIGHT_SEL,
+		eBMP_SPOT_LIGHT,
+		eBMP_SPOT_LIGHT_SEL,
+		eBMP_SUBMESH,
+		eBMP_SUBMESH_SEL,
+		eBMP_PANEL_OVERLAY,
+		eBMP_PANEL_OVERLAY_SEL,
+		eBMP_BORDER_PANEL_OVERLAY,
+		eBMP_BORDER_PANEL_OVERLAY_SEL,
+		eBMP_TEXT_OVERLAY,
+		eBMP_TEXT_OVERLAY_SEL,
+		eBMP_MATERIAL,
+		eBMP_MATERIAL_SEL,
+		eBMP_PASS,
+		eBMP_PASS_SEL,
+		eBMP_TEXTURE,
+		eBMP_TEXTURE_SEL,
+		eBMP_COUNT,
+	}	eBMP;
+
+	static const int GC_IMG_SIZE = 16;
+
+	class wxPropertiesHolder;
+	class wxTreeItemPropertyData;
+	class wxCameraTreeItemData;
 	class wxGeometryTreeItemData;
+	class wxLightTreeItemData;
+	class wxMaterialTreeItemData;
+	class wxNodeTreeItemData;
+	class wxOverlayTreeItemData;
+	class wxPassTreeItemData;
 	class wxSubmeshTreeItemData;
-	class wxGeometriesListFrame;
-	class wxMaterialsListFrame;
+	class wxTextureTreeItemData;
+
+	class wxFrameVariableDialog;
+	class wxSceneObjectsList;
 	class wxImagesLoader;
 	class wxMaterialPanel;
-	class wxMaterialsFrame;
-	class wxMaterialsListView;
+	class wxMaterialsList;
 	class wxPassPanel;
 	class wxRendererSelector;
 	class wxShaderDialog;

@@ -7,9 +7,9 @@ using namespace Castor;
 
 namespace CastorViewer
 {
-	MouseCameraEvent::MouseCameraEvent( SceneNodeSPtr p_pNode, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
+	MouseCameraEvent::MouseCameraEvent( SceneNodeSPtr p_pMaterial, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
 		: FrameEvent( eEVENT_TYPE_PRE_RENDER )
-		, m_pNode( p_pNode )
+		, m_pMaterial( p_pMaterial )
 		, m_rDeltaX( p_rDeltaX )
 		, m_rDeltaY( p_rDeltaY )
 		, m_rDeltaZ( p_rDeltaZ )

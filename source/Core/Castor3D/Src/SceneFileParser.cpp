@@ -46,7 +46,7 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser,  TextFile * p_p
 	, uiUInt64( 0 )
 	, bBool1( false )
 	, bBool2( false )
-	, m_pGeneralParentNode( NULL )
+	, m_pGeneralParentMaterial( NULL )
 	, mapScenes()
 	, m_pParser( p_pParser )
 	, eRendererType( eRENDERER_TYPE_UNDEFINED )
@@ -215,7 +215,7 @@ void SceneFileContext::Initialise()
 	uiUInt64 = 0;
 	bBool1 = false;
 	bBool2 = false;
-	m_pGeneralParentNode = NULL;
+	m_pGeneralParentMaterial = NULL;
 	pViewport = NULL;
 	eRendererType = eRENDERER_TYPE_UNDEFINED;
 	eShaderObject = eSHADER_TYPE_COUNT;

@@ -8,8 +8,8 @@ using namespace Castor;
 
 namespace CastorViewer
 {
-	CameraRotateEvent::CameraRotateEvent( SceneNodeSPtr p_pNode, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
-		: MouseCameraEvent( p_pNode, p_rDeltaX, p_rDeltaY, p_rDeltaZ )
+	CameraRotateEvent::CameraRotateEvent( SceneNodeSPtr p_pMaterial, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
+		: MouseCameraEvent( p_pMaterial, p_rDeltaX, p_rDeltaY, p_rDeltaZ )
 	{
 	}
 
@@ -19,7 +19,7 @@ namespace CastorViewer
 
 	bool CameraRotateEvent::Apply()
 	{
-		SceneNodeSPtr l_node = m_pNode.lock();
+		SceneNodeSPtr l_node = m_pMaterial.lock();
 
 		if ( l_node )
 		{

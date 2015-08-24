@@ -69,7 +69,7 @@
  *<li>Now ShaderDialog uses wxSizers.</li>
  *<li>Using wxStcEditor to view and edit shaders.</li>
  *<li>Materials windows now use wxSizer classes to place and resize elements.</li>
- *<li>Added possibility to change the material used by a submesh in wxGeometriesListFrame.</li>
+ *<li>Added possibility to change the material used by a submesh in wxSceneObjectsList.</li>
  *<li>Corrected few bugs in images loading.</li>
  *<li>Improved StcTextEditor in order to have a better syntactic coloration.</li>
  *</ul>
@@ -254,8 +254,8 @@
  *<ul>
  *<li>Modified MemoryManager, added a template class MemoryTraced which overload new, delete new [] et delete [] operators in order to have better trace of allocations and deallocations. Each Castor class derive from this one and 3 files are created in root folder to log allocations, deallocations : memoryleaks.log, memoryalloc.log and memorydealloc.log</li>
  *<li>TransformationMatrix no longer exists, it is now a collection of functions which computes 4x4 matrix operations</li>
- *<li>Modification SceneNode management : base class NodeBase holds the informations that were in SceneNode, 3 derived classes (GeometryNode, CameraNode et LightNode) take care of each category specificities.</li>
- *<li>MovableObject class now has less features (name and NodeBase), Light and Camera now derive from it</li>
+ *<li>Modification SceneNode management : base class MaterialBase holds the informations that were in SceneNode, 3 derived classes (GeometryMaterial, CameraMaterial et LightMaterial) take care of each category specificities.</li>
+ *<li>MovableObject class now has less features (name and MaterialBase), Light and Camera now derive from it</li>
  *<li>Renamed UniformVariable to FrameVariable.</li>
  *<li>OpenGL 3.x/4.x now fully supported.</li>
  *<li>Modified Vertex class in order to make them include texture coordinates and normals in order to have only 1 vertex buffer instead of 3 in a mesh.</li>
@@ -482,7 +482,7 @@
  *<li>Maintenant ShaderDialog utilise wxSizers.</li>
  *<li>Utilisation de wxStcEditor pour l'édition de shaders.</li>
  *<li>La fenêtre de matériaux utilise les wxSizers pour placer et redimensionner les éléments.</li>
- *<li>Ajout de la possibilité de changer le matériau utilisé par un sous-maillage, avec la fenêtre wxGeometriesListFrame.</li>
+ *<li>Ajout de la possibilité de changer le matériau utilisé par un sous-maillage, avec la fenêtre wxSceneObjectsList.</li>
  *<li>Correction de bugs dans le chargement des images.</li>
  *<li>Amélioration de StcTextEditor afin d'avoir une meilleure coloration syntaxique.</li>
  *</ul>
@@ -611,8 +611,8 @@
  *<ul>
  *<li>Le MemoryManager (activé uniquement en debug) a été modifié, ajout d'une classe template MemoryTraced qui surcharge les operateurs new, delete new [] et delete [], ce afin d'avoir une meilleure trace des objets créés et détruits. Chaque classe des projets du Castor dérivent maintenant de celle-ci, et 3 fichiers sont donc créés dans le répertoire racine (C:\ sous Windows) : memoryleaks.log, memoryalloc.log et memorydealloc.log</li>
  *<li>La classe TransformationMatrix n'existe plus, il ne s'agit plus que d'une collection de fonctions sur matrices carrées 4x4.</li>
- *<li>Modification de la gestion des SceneNode : Une classe de base NodeBase qui contient les informations qui se trouvaient dans SceneNode, 3 classes dérivées (GeometryNode, CameraNode et LightNode) qui s'occupent des fonctionnalités spécifiques au rendu de chacun des types liés (respectivement Geometry, Camera et Light).</li>
- *<li>La classe MovableObject a maintenant moins de fonctionnalités (en fait elle n'a plus qu'un nom et un NodeBase) et les classes Light et Camera dérivent maintenant de cette classe (pour plus d'uniformité dans les déplacements de ces objets par rapport aux géométries)</li>
+ *<li>Modification de la gestion des SceneNode : Une classe de base MaterialBase qui contient les informations qui se trouvaient dans SceneNode, 3 classes dérivées (GeometryMaterial, CameraMaterial et LightMaterial) qui s'occupent des fonctionnalités spécifiques au rendu de chacun des types liés (respectivement Geometry, Camera et Light).</li>
+ *<li>La classe MovableObject a maintenant moins de fonctionnalités (en fait elle n'a plus qu'un nom et un MaterialBase) et les classes Light et Camera dérivent maintenant de cette classe (pour plus d'uniformité dans les déplacements de ces objets par rapport aux géométries)</li>
  *<li>Renommage des classes UniformVariable en FrameVariable, pour refléter plus ce que c'est et moins lier ce genre de choses à OpenGL.</li>
  *<li>Le module OpenGL 3.x/4.x est achevé.</li>
  *<li>Modifier la structure des vertex de façon à ce qu'ils incluent les coordonnées de texture et les normales directement, de façon à n'avoir qu'1 buffer de vertex par mesh au lieu de 3 actuellement.</li>

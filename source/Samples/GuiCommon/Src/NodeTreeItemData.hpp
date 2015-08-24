@@ -18,14 +18,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GUICOMMON_NODE_TREE_ITEM_DATA_H___
 #define ___GUICOMMON_NODE_TREE_ITEM_DATA_H___
 
-#include "GuiCommonPrerequisites.hpp"
-
-#include <wx/treectrl.h>
+#include "TreeItemPropertyData.hpp"
 
 namespace GuiCommon
 {
 	class wxNodeTreeItemData
-		: public wxTreeItemData
+		: public wxTreeItemPropertyData
 	{
 	public:
 		wxNodeTreeItemData( Castor3D::SceneNodeSPtr p_node );

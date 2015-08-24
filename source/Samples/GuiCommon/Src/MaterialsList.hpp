@@ -24,26 +24,28 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GuiCommon
 {
-	class wxMaterialsListView
-		: public wxListView
+	class wxMaterialsList
+		: public wxTreeCtrl
 	{
 	public:
-		wxMaterialsListView( int p_imgWidth, wxWindow * p_pParent, wxWindowID p_id = wxID_ANY, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
-		~wxMaterialsListView();
-
-		wxImage * CreateMaterialImage( Castor3D::MaterialSPtr p_pMaterial, uint32_t p_uiWidth, uint32_t p_uiHeight );
-		wxImage * CreatePassImage( Castor3D::PassSPtr p_pPass, uint32_t p_uiWidth, uint32_t p_uiHeight );
-		wxImage * CreateTextureUnitImage( Castor3D::TextureUnitSPtr p_pUnit, uint32_t p_uiWidth, uint32_t p_uiHeight );
-		void CreateList( Castor3D::Engine * p_pEngine );
-		void AddItem( Castor::String const & p_strMaterialName );
+		wxMaterialsList( wxPropertiesHolder * p_propertiesHolder, wxWindow * p_pParent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
+		~wxMaterialsList();
+		
+		void LoadMaterials( Castor3D::Engine * p_pEngine );
+		void UnloadMaterials();
 
 	private:
-		wxImageList * m_pListImages;
-		wxListItem * m_pListItems;
-		uint32_t m_uiNbItems;
-		std::vector< wxImage * > m_arrayImages;
-		int m_iImgWidth;
+		void DoAddMaterial( wxTreeItemId p_id, Castor3D::MaterialSPtr p_material );
+		void DoAddPass( wxTreeItemId p_id, uint32_t p_index, Castor3D::PassSPtr p_pass );
+		void DoAddTexture( wxTreeItemId p_id, uint32_t p_index, Castor3D::TextureUnitSPtr p_texture );
+
+		DECLARE_EVENT_TABLE();
+		void OnClose( wxCloseEvent & p_event );
+		void OnSelectItem( wxTreeEvent & p_event );
+
+	private:
 		Castor3D::Engine * m_pEngine;
+		wxPropertiesHolder * m_propertiesHolder;
 	};
 }
 

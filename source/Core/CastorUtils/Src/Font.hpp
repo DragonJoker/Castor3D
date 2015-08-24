@@ -339,7 +339,7 @@ namespace Castor
 		 *\brief		Récupère un itérateur sur la première glyphe
 		 *\return		L'itérateur
 		 */
-		inline GlyphMap::iterator Begin()
+		inline GlyphMap::iterator begin()
 		{
 			return m_loadedGlyphs.begin();
 		}
@@ -351,7 +351,7 @@ namespace Castor
 		 *\brief		Récupère un itérateur sur la première glyphe
 		 *\return		L'itérateur
 		 */
-		inline GlyphMap::const_iterator Begin()const
+		inline GlyphMap::const_iterator begin()const
 		{
 			return m_loadedGlyphs.begin();
 		}
@@ -363,7 +363,7 @@ namespace Castor
 		 *\brief		Récupère un itérateur sur la fin du tableau de glyphes
 		 *\return		L'itérateur
 		 */
-		inline GlyphMap::iterator End()
+		inline GlyphMap::iterator end()
 		{
 			return m_loadedGlyphs.end();
 		}
@@ -375,9 +375,33 @@ namespace Castor
 		 *\brief		Récupère un itérateur sur la fin du tableau de glyphes
 		 *\return		L'itérateur
 		 */
-		inline GlyphMap::const_iterator End()const
+		inline GlyphMap::const_iterator end()const
 		{
 			return m_loadedGlyphs.end();
+		}
+		/**
+		 *\~english
+		 *\brief		Sets The font face name
+		 *\param[in]	p_name	The value
+		 *\~french
+		 *\brief		Définit le nom de la police
+		 *\param[in]	p_name	La valeur
+		 */
+		inline void SetFaceName( String const & p_name )
+		{
+			m_faceName = p_name;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves The font face name
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le nom de la police
+		 *\return		La valeur
+		 */
+		inline String const & GetFaceName()const
+		{
+			return m_faceName;
 		}
 
 	protected:
@@ -395,6 +419,8 @@ namespace Castor
 		int m_iMaxTop;
 		//!\~english The max width of the glyphs	\~french La largeur maximale des glyphes
 		int m_iMaxWidth;
+		//!\~english The font face name	\~french Le nom de la police
+		String m_faceName;
 		//!\~english The glyph loader	\~french Le chargeur de glyphes
 		std::unique_ptr< SFontImpl > m_glyphLoader;
 	};

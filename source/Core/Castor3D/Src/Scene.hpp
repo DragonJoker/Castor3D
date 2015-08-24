@@ -156,7 +156,7 @@ namespace Castor3D
 		DECLARE_VECTOR( SceneNode *, SceneNode );
 		//!\~english Submesh multimap, with their nodes 	\~french Multimap de sous-maillages, avec leurs SceneNodes
 		DECLARE_MAP( SubmeshSPtr, RenderNodeArray, SubmeshNodes );
-		//!\~english Pass sorted SubmeshNodeMMap map	\~french Map de SubmeshNodeMMap, triés par passe
+		//!\~english Pass sorted SubmeshMaterialMMap map	\~french Map de SubmeshMaterialMMap, triés par passe
 		DECLARE_MAP( MaterialSPtr, SubmeshNodesMap, SubmeshNodesByMaterial );
 
 	public:
