@@ -52,9 +52,24 @@ namespace GuiCommon
 
 		wxEnumProperty * DoBuildMaterialProperty( wxString const & p_name, Castor3D::Engine * p_engine );
 
+		void OnCameraPropertyChanged( wxPropertyGridEvent & p_event );
+		void OnGeometryPropertyChanged( wxPropertyGridEvent & p_event );
+		void OnSubmeshPropertyChanged( wxPropertyGridEvent & p_event );
+		void OnDirectionalLightPropertyChanged( wxPropertyGridEvent & p_event );
+		void OnPointLightPropertyChanged( wxPropertyGridEvent & p_event );
+		void OnSpotLightPropertyChanged( wxPropertyGridEvent & p_event );
+		void OnNodePropertyChanged( wxPropertyGridEvent & p_event );
+		void OnPanelOverlayPropertyChanged( wxPropertyGridEvent & p_event );
+		void OnBorderPanelOverlayPropertyChanged( wxPropertyGridEvent & p_event );
+		void OnTextOverlayPropertyChanged( wxPropertyGridEvent & p_event );
+		void OnMaterialPropertyChanged( wxPropertyGridEvent & p_event );
+		void OnPassPropertyChanged( wxPropertyGridEvent & p_event );
+		void OnTexturePropertyChanged( wxPropertyGridEvent & p_event );
+
 	private:
 		bool m_bCanEdit;
-		ePROPERTY_DATA_TYPE m_dataType;
+		wxTreeItemPropertyData * m_data;
+		wxObjectEventFunction m_currentHandler;
 	};
 }
 

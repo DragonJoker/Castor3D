@@ -315,9 +315,21 @@ namespace Castor
 		 *\brief		Définit la largeur maximale des glyphes
 		 *\param[in]	p_iWidth	La nouvelle largeur
 		 */
-		inline void SetGlyphLoader( std::unique_ptr< SFontImpl > p_loader )
+		inline void SetGlyphLoader( std::unique_ptr< SFontImpl > && p_loader )
 		{
 			m_glyphLoader = std::move( p_loader );
+		}
+		/**
+		 *\~english
+		 *\brief		Tells if the font has a glyph loader
+		 *\return		The status
+		 *\~french
+		 *\brief		Dit si la police a un loader de glyphes
+		 *\return		Le statut
+		 */
+		inline bool HasGlyphLoader()
+		{
+			return m_glyphLoader != nullptr;
 		}
 		/**
 		 *\~english
@@ -327,9 +339,9 @@ namespace Castor
 		 *\brief		Définit le loader de glyphes
 		 *\return		Le loader
 		 */
-		inline std::unique_ptr< SFontImpl > & GetGlyphLoader()
+		inline SFontImpl & GetGlyphLoader()
 		{
-			return m_glyphLoader;
+			return *m_glyphLoader;
 		}
 		/**
 		 *\~english

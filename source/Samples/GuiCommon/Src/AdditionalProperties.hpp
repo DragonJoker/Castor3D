@@ -41,10 +41,15 @@ extern const char* classname##_VariantType;
 
 WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Size );
 WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Position );
+WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2i );
+WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3i );
 WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4i );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2r );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3r );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4r );
+WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2f );
+WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3f );
+WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4f );
+WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2d );
+WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3d );
+WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4d );
 WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Quaternion );
 
 namespace GuiCommon
@@ -109,61 +114,181 @@ namespace GuiCommon
 		}
 	};
 
-	class Point2rProperty
+	class Point2iProperty
 		: public wxPGProperty
 	{
-		WX_PG_DECLARE_PROPERTY_CLASS( Point2rProperty )
+		WX_PG_DECLARE_PROPERTY_CLASS( Point2iProperty )
 	public:
 
-		Point2rProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point2r const & value = Castor::Point2r() );
-		virtual ~Point2rProperty();
+		Point2iProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point2i const & value = Castor::Point2i() );
+		virtual ~Point2iProperty();
 
 		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
 		virtual void RefreshChildren();
 
 	protected:
 		// I stands for internal
-		void SetValueI( Castor::Point2r const & value )
+		void SetValueI( Castor::Point2i const & value )
 		{
 			m_value = WXVARIANT( value );
 		}
 	};
 
-	class Point3rProperty
+	class Point3iProperty
 		: public wxPGProperty
 	{
-		WX_PG_DECLARE_PROPERTY_CLASS( Point3rProperty )
+		WX_PG_DECLARE_PROPERTY_CLASS( Point3iProperty )
 	public:
 
-		Point3rProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point3r const & value = Castor::Point3r() );
-		virtual ~Point3rProperty();
+		Point3iProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point3i const & value = Castor::Point3i() );
+		virtual ~Point3iProperty();
 
 		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
 		virtual void RefreshChildren();
 
 	protected:
 		// I stands for internal
-		void SetValueI( Castor::Point3r const & value )
+		void SetValueI( Castor::Point3i const & value )
 		{
 			m_value = WXVARIANT( value );
 		}
 	};
 
-	class Point4rProperty
+	class Point4iProperty
 		: public wxPGProperty
 	{
-		WX_PG_DECLARE_PROPERTY_CLASS( Point3rProperty )
+		WX_PG_DECLARE_PROPERTY_CLASS( Point4iProperty )
 	public:
 
-		Point4rProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point4r const & value = Castor::Point4r() );
-		virtual ~Point4rProperty();
+		Point4iProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point4i const & value = Castor::Point4i() );
+		virtual ~Point4iProperty();
 
 		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
 		virtual void RefreshChildren();
 
 	protected:
 		// I stands for internal
-		void SetValueI( Castor::Point4r const & value )
+		void SetValueI( Castor::Point4i const & value )
+		{
+			m_value = WXVARIANT( value );
+		}
+	};
+
+	class Point2fProperty
+		: public wxPGProperty
+	{
+		WX_PG_DECLARE_PROPERTY_CLASS( Point2fProperty )
+	public:
+
+		Point2fProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point2f const & value = Castor::Point2f() );
+		virtual ~Point2fProperty();
+
+		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
+		virtual void RefreshChildren();
+
+	protected:
+		// I stands for internal
+		void SetValueI( Castor::Point2f const & value )
+		{
+			m_value = WXVARIANT( value );
+		}
+	};
+
+	class Point3fProperty
+		: public wxPGProperty
+	{
+		WX_PG_DECLARE_PROPERTY_CLASS( Point3fProperty )
+	public:
+
+		Point3fProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point3f const & value = Castor::Point3f() );
+		virtual ~Point3fProperty();
+
+		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
+		virtual void RefreshChildren();
+
+	protected:
+		// I stands for internal
+		void SetValueI( Castor::Point3f const & value )
+		{
+			m_value = WXVARIANT( value );
+		}
+	};
+
+	class Point4fProperty
+		: public wxPGProperty
+	{
+		WX_PG_DECLARE_PROPERTY_CLASS( Point4fProperty )
+	public:
+
+		Point4fProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point4f const & value = Castor::Point4f() );
+		virtual ~Point4fProperty();
+
+		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
+		virtual void RefreshChildren();
+
+	protected:
+		// I stands for internal
+		void SetValueI( Castor::Point4f const & value )
+		{
+			m_value = WXVARIANT( value );
+		}
+	};
+
+	class Point2dProperty
+		: public wxPGProperty
+	{
+		WX_PG_DECLARE_PROPERTY_CLASS( Point2dProperty )
+	public:
+
+		Point2dProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point2d const & value = Castor::Point2d() );
+		virtual ~Point2dProperty();
+
+		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
+		virtual void RefreshChildren();
+
+	protected:
+		// I stands for internal
+		void SetValueI( Castor::Point2d const & value )
+		{
+			m_value = WXVARIANT( value );
+		}
+	};
+
+	class Point3dProperty
+		: public wxPGProperty
+	{
+		WX_PG_DECLARE_PROPERTY_CLASS( Point3dProperty )
+	public:
+
+		Point3dProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point3d const & value = Castor::Point3d() );
+		virtual ~Point3dProperty();
+
+		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
+		virtual void RefreshChildren();
+
+	protected:
+		// I stands for internal
+		void SetValueI( Castor::Point3d const & value )
+		{
+			m_value = WXVARIANT( value );
+		}
+	};
+
+	class Point4dProperty
+		: public wxPGProperty
+	{
+		WX_PG_DECLARE_PROPERTY_CLASS( Point4dProperty )
+	public:
+
+		Point4dProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point4d const & value = Castor::Point4d() );
+		virtual ~Point4dProperty();
+
+		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
+		virtual void RefreshChildren();
+
+	protected:
+		// I stands for internal
+		void SetValueI( Castor::Point4d const & value )
 		{
 			m_value = WXVARIANT( value );
 		}
@@ -188,5 +313,15 @@ namespace GuiCommon
 			m_value = WXVARIANT( value );
 		}
 	};
+
+#if CASTOR_USE_DOUBLE
+	typedef Point2dProperty Point2rProperty;
+	typedef Point3dProperty Point3rProperty;
+	typedef Point4dProperty Point4rProperty;
+#else
+	typedef Point2fProperty Point2rProperty;
+	typedef Point3fProperty Point3rProperty;
+	typedef Point4fProperty Point4rProperty;
+#endif
 }
 #endif

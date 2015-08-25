@@ -209,11 +209,6 @@ namespace Castor
 			FT_Library m_library;
 			FT_Face m_face;
 		};
-
-		void LoadGlyph( wchar_t p_char, Font & p_font, int & p_iMaxTop )
-		{
-			p_iMaxTop = std::max( p_iMaxTop, p_font.LoadGlyph( p_char ) );
-		}
 	}
 
 	Font::BinaryLoader::BinaryLoader()
@@ -237,10 +232,13 @@ namespace Castor
 
 			try
 			{
-				std::unique_ptr< ft::SFreeTypeFontImpl > l_loader = std::make_unique< ft::SFreeTypeFontImpl >( p_pathFile, m_uiHeight );
+				if ( !p_font.HasGlyphLoader() )
+				{
+					p_font.SetGlyphLoader( std::make_unique< ft::SFreeTypeFontImpl >( p_pathFile, m_uiHeight ) );
+				}
+
 				p_font.SetFaceName( p_pathFile.GetFileName() );
-				p_font.SetGlyphLoader( std::unique_ptr< SFontImpl >( static_cast< Font::SFontImpl *>( l_loader.release() ) ) );
-				p_font.GetGlyphLoader()->Initialise();
+				p_font.GetGlyphLoader().Initialise();
 				uint16_t l_usMin = std::numeric_limits< uint8_t >::lowest();
 				uint16_t l_usMax = std::numeric_limits< uint8_t >::max();
 				int l_iMaxHeight = 0;
@@ -250,7 +248,7 @@ namespace Castor
 				// We first load the glyphs, updating the top position
 				for ( wchar_t c = l_usMin; c < l_usMax; c++ )
 				{
-					ft::LoadGlyph( c, p_font, l_iMaxTop );
+					l_iMaxTop = std::max( l_iMaxTop, p_font.LoadGlyph( c ) );
 					Glyph & l_glyph = p_font[c];
 					Size l_size( l_glyph.GetSize() );
 					Position l_ptPosition( l_glyph.GetPosition() );
@@ -258,7 +256,7 @@ namespace Castor
 					l_iMaxWidth = std::max< int >( l_iMaxWidth, l_size.width() );
 				}
 
-				p_font.GetGlyphLoader()->Cleanup();
+				p_font.GetGlyphLoader().Cleanup();
 				p_font.SetMaxHeight( l_iMaxHeight );
 				p_font.SetMaxWidth( l_iMaxWidth );
 				l_bReturn = true;
@@ -275,24 +273,24 @@ namespace Castor
 	//*********************************************************************************************
 
 	Font::Font( String const & p_strName, uint32_t p_uiHeight )
-		:	Resource< Font >( p_strName )
-		,	m_uiHeight( p_uiHeight )
-		,	m_iMaxHeight( 0 )
-		,	m_iMaxTop( 0 )
-		,	m_iMaxWidth( 0 )
-		,	m_glyphs( std::numeric_limits< uint16_t >::max() )
+		: Resource< Font >( p_strName )
+		, m_uiHeight( p_uiHeight )
+		, m_iMaxHeight( 0 )
+		, m_iMaxTop( 0 )
+		, m_iMaxWidth( 0 )
+		, m_glyphs( std::numeric_limits< uint16_t >::max() )
 	{
 	}
 
 	Font::Font( Path const & p_path, String const & p_strName, uint32_t p_uiHeight )
-		:	Resource< Font >( p_strName )
-		,	m_uiHeight( p_uiHeight )
-		,	m_iMaxHeight( 0 )
-		,	m_iMaxTop( 0 )
-		,	m_iMaxWidth( 0 )
-		,	m_glyphs( std::numeric_limits< uint16_t >::max() )
+		: Resource< Font >( p_strName )
+		, m_uiHeight( p_uiHeight )
+		, m_iMaxHeight( 0 )
+		, m_iMaxTop( 0 )
+		, m_iMaxWidth( 0 )
+		, m_glyphs( std::numeric_limits< uint16_t >::max() )
+		, m_glyphLoader( std::make_unique< ft::SFreeTypeFontImpl >( p_path, p_uiHeight ) )
 	{
-		Font::BinaryLoader()( *this, p_path, m_uiHeight );
 	}
 
 	Font::~Font()

@@ -185,6 +185,21 @@ namespace GuiCommon
 	 *\param[out]	p_bitmap	Reçoit le bitmap généré
 	 */
 	void wxCreateBitmapFromBuffer( Castor3D::TextureUnitSPtr p_pUnit, wxBitmap & p_bitmap );
+	/**
+	 *\~english
+	 *\brief		Loads a font glyphs using wxWidgets
+	 *\remark		Uses a custom SFontImpl
+	 *\param[in]	p_engine	The Castor3D engine, to check for font existence
+	 *\param[in]	p_font		The wxWidgets font
+	 *\return		The loaded font
+	 *\~french
+	 *\brief		Charge les glyphes de la police en utilisant wxWidgets
+	 *\remark		Utilise une version personnalisée de SFontImpl
+	 *\param[in]	p_engine	Le moteur, pour vérifier l'existance de la police
+	 *\param[in]	p_font		La police wxWidgets
+	 *\return		La police chargée
+	 */
+	Castor::FontSPtr wxLoadFont( Castor3D::Engine * p_engine, wxFont const & p_font );
 
 #if wxVERSION_NUMBER >= 2900
 #	define	wxIMAGE_QUALITY_HIGHEST wxIMAGE_QUALITY_BICUBIC

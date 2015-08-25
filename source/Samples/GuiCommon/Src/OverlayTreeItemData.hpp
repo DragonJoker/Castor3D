@@ -34,6 +34,17 @@ namespace GuiCommon
 			return m_overlay.lock();
 		}
 
+		void OnMaterialChange( Castor::String const & p_name );
+		void OnPositionChange( Castor::Position const & p_position );
+		void OnSizeChange( Castor::Size const & p_size );
+		void OnBorderMaterialChange( Castor::String const & p_name );
+		void OnBorderSizeChange( Castor::Rectangle const & p_size );
+		void OnBorderInnerUVChange( Castor::Point4d const & p_uv );
+		void OnBorderOuterUVChange( Castor::Point4d const & p_uv );
+		void OnBorderPositionChange( Castor3D::eBORDER_POSITION p_position );
+		void OnCaptionChange( Castor::String const & p_caption );
+		void OnFontChange( Castor::FontSPtr p_font );
+
 	protected:
 		Castor3D::OverlayWPtr m_overlay;
 	};
