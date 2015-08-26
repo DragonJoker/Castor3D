@@ -182,9 +182,6 @@ namespace Castor3D
 
 				l_uiOffY -= l_uiMaxHeight;
 			}
-
-			//Castor::Image l_img( cuT( "" ), *m_pTexture->GetBuffer() );
-			//Castor::Image::BinaryLoader()( const_cast< Image const & >( l_img ), l_pFont->GetName() + cuT( ".bmp" ) );
 		}
 
 		m_pTexture->Create();

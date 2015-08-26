@@ -176,15 +176,8 @@ namespace Castor3D
 
 	uint32_t FillBuffers( OverlayCategory::VertexArray::const_iterator p_begin, size_t p_count, GeometryBuffers & p_buffers )
 	{
-		VertexBuffer & l_vtxBuffer = p_buffers.GetVertexBuffer();
-
-		if ( l_vtxBuffer.Bind() )
-		{
-			OverlayCategory::Vertex const & l_vertex = *p_begin;
-			l_vtxBuffer.Fill( reinterpret_cast< uint8_t const * >( &l_vertex ), p_count * sizeof( OverlayCategory::Vertex ), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
-			l_vtxBuffer.Unbind();
-		}
-
+		OverlayCategory::Vertex const & l_vertex = *p_begin;
+		p_buffers.GetVertexBuffer().Fill( reinterpret_cast< uint8_t const * >( &l_vertex ), p_count * sizeof( OverlayCategory::Vertex ), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 		return p_count;
 	}
 

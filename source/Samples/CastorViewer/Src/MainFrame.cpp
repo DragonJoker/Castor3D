@@ -765,6 +765,7 @@ namespace CastorViewer
 
 	void MainFrame::OnClose( wxCloseEvent & p_event )
 	{
+		Logger::UnregisterCallback( this );
 		m_auiManager.DetachPane( m_sceneTabsContainer );
 		m_auiManager.DetachPane( m_propertiesContainer );
 		m_auiManager.DetachPane( m_logTabsContainer );
@@ -811,7 +812,6 @@ namespace CastorViewer
 
 		delete m_pCastor3D;
 		m_pCastor3D = NULL;
-		Logger::UnregisterCallback( this );
 		p_event.Skip();
 	}
 

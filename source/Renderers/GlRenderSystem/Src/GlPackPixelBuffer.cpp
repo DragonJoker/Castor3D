@@ -24,12 +24,9 @@ namespace GlRender
 
 	void GlPackPixelBuffer::Initialise()
 	{
-		Create();
-
-		if ( Bind() )
+		if ( Create() )
 		{
 			Fill( m_pPixels, m_uiPixelsSize );
-			Unbind();
 		}
 	}
 }

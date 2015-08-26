@@ -39,15 +39,7 @@ namespace GlRender
 	template< typename T >
 	bool GlBufferBase< T >::Initialise( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_eType, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
 	{
-		bool l_bResult = Bind();
-
-		if ( l_bResult )
-		{
-			l_bResult = Fill( p_pBuffer, p_iSize, p_eType, p_eNature );
-			Unbind();
-		}
-
-		return l_bResult;
+		return Fill( p_pBuffer, p_iSize, p_eType, p_eNature );
 	}
 
 	template< typename T >
@@ -70,7 +62,15 @@ namespace GlRender
 	template< typename T >
 	bool GlBufferBase< T >::Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_eType, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
 	{
-		return m_gl.BufferData( m_eTarget, p_iSize * sizeof( T ), p_pBuffer, m_gl.GetBufferFlags( p_eNature | p_eType ) );
+		bool l_bResult = Bind();
+
+		if ( l_bResult )
+		{
+			l_bResult = m_gl.BufferData( m_eTarget, p_iSize * sizeof( T ), p_pBuffer, m_gl.GetBufferFlags( p_eNature | p_eType ) );
+			Unbind();
+		}
+
+		return l_bResult;
 	}
 
 	template< typename T >
