@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -30,7 +30,7 @@ namespace Castor
 	\~english
 	\brief		Exception thrown when the user tries to retrieve a parameter of a wrong type
 	\~french
-	\brief		Exception lancée lorsque l'utilisateur se trompe de type de paramètre
+	\brief		Exception lancÃ©e lorsque l'utilisateur se trompe de type de paramÃ¨tre
 	*/
 	class ParserParameterTypeException
 		: public Castor::Exception
@@ -43,10 +43,10 @@ namespace Castor
 		 *\param[in]	p_eExpectedType	The real parameter type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_eGivenType	Le type demandé par l'utilisateur
-		 *\param[in]	p_eExpectedType	Le type réel du paramètre
+		 *\param[in]	p_eGivenType	Le type demandÃ© par l'utilisateur
+		 *\param[in]	p_eExpectedType	Le type rÃ©el du paramÃ¨tre
 		 */
-		ParserParameterTypeException( ePARAMETER_TYPE p_eGivenType, ePARAMETER_TYPE p_eExpectedType );
+		CU_API ParserParameterTypeException( ePARAMETER_TYPE p_eGivenType, ePARAMETER_TYPE p_eExpectedType );
 	};
 }
 

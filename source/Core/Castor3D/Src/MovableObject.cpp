@@ -1,4 +1,4 @@
-#include "MovableObject.hpp"
+﻿#include "MovableObject.hpp"
 #include "SceneNode.hpp"
 #include "Scene.hpp"
 #include "Animation.hpp"
@@ -58,7 +58,7 @@ namespace Castor3D
 
 				if ( l_pParent )
 				{
-					p_obj.AttachTo( l_pParent.get() );
+					p_obj.AttachTo( l_pParent );
 				}
 				else
 				{
@@ -79,73 +79,18 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	MovableObject::MovableObject( Scene * p_pScene, eMOVABLE_TYPE p_eType )
-		:	m_pSceneNode( NULL )
-		,	m_eType( p_eType )
+	MovableObject::MovableObject( SceneSPtr p_pScene, eMOVABLE_TYPE p_eType )
+		:	m_eType( p_eType )
 		,	m_pScene( p_pScene )
 	{
 	}
 
-	MovableObject::MovableObject( Scene * p_pScene, SceneNode * p_sn, String const & p_name, eMOVABLE_TYPE p_eType )
+	MovableObject::MovableObject( SceneSPtr p_pScene, SceneNodeSPtr p_sn, String const & p_name, eMOVABLE_TYPE p_eType )
 		:	m_strName( p_name )
 		,	m_pSceneNode( p_sn )
 		,	m_eType( p_eType )
 		,	m_pScene( p_pScene )
 	{
-		if ( m_pSceneNode )
-		{
-			m_pSceneNode->AttachObject( this );
-		}
-	}
-
-	MovableObject::MovableObject( MovableObject const & p_object )
-		:	m_strName( p_object.m_strName )
-		,	m_strNodeName( p_object.m_strNodeName )
-		,	m_pSceneNode( p_object.m_pSceneNode )
-		,	m_eType( p_object.m_eType )
-		,	m_pScene( p_object.m_pScene )
-	{
-	}
-
-	MovableObject::MovableObject( MovableObject && p_object )
-		:	m_strName( std::move( p_object.m_strName ) )
-		,	m_strNodeName( std::move( p_object.m_strNodeName ) )
-		,	m_pSceneNode( std::move( p_object.m_pSceneNode ) )
-		,	m_eType( std::move( p_object.m_eType ) )
-		,	m_pScene( std::move( p_object.m_pScene ) )
-	{
-		p_object.m_strName.clear();
-		p_object.m_strNodeName.clear();
-		p_object.m_pSceneNode = NULL;
-		p_object.m_pScene = NULL;
-	}
-
-	MovableObject & MovableObject::operator =( MovableObject const & p_object )
-	{
-		m_strName		= p_object.m_strName		;
-		m_strNodeName	= p_object.m_strNodeName	;
-		m_pSceneNode	= p_object.m_pSceneNode		;
-		m_eType			= p_object.m_eType			;
-		m_pScene		= p_object.m_pScene			;
-		return *this;
-	}
-
-	MovableObject & MovableObject::operator =( MovableObject && p_object )
-	{
-		if ( this != &p_object )
-		{
-			m_strName		= std::move( p_object.m_strName );
-			m_strNodeName	= std::move( p_object.m_strNodeName );
-			m_pSceneNode	= std::move( p_object.m_pSceneNode );
-			m_eType			= std::move( p_object.m_eType );
-			m_pScene		= std::move( p_object.m_pScene );
-			p_object.m_strName.clear();
-			p_object.m_strNodeName.clear();
-			p_object.m_pSceneNode = NULL;
-			p_object.m_pScene = NULL;
-		}
-
-		return *this;
 	}
 
 	MovableObject::~MovableObject()
@@ -159,24 +104,26 @@ namespace Castor3D
 
 	void MovableObject::Detach()
 	{
-		if ( m_pSceneNode )
+		SceneNodeSPtr l_node = GetParent();
+
+		if ( l_node )
 		{
-			m_pSceneNode->DetachObject( this );
-			m_pSceneNode = nullptr;
+			l_node->DetachObject( shared_from_this() );
+			m_pSceneNode.reset();
 		}
 	}
 
-	void MovableObject::AttachTo( SceneNode * p_node )
+	void MovableObject::AttachTo( SceneNodeSPtr p_node )
 	{
 		m_pSceneNode = p_node;
 
-		if ( m_pSceneNode != NULL )
+		if ( p_node )
 		{
-			m_strNodeName = m_pSceneNode->GetName();
+			m_strNodeName = p_node->GetName();
 		}
 		else
 		{
-			m_strNodeName = cuEmptyString;
+			m_strNodeName.clear();
 		}
 	}
 }

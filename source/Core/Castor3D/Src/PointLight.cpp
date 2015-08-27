@@ -1,4 +1,4 @@
-#include "PointLight.hpp"
+﻿#include "PointLight.hpp"
 #include "Vertex.hpp"
 
 using namespace Castor;
@@ -25,7 +25,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	PointLight::BinaryParser::BinaryParser( Path const & p_path )
-		:	LightCategory::BinaryParser( p_path )
+		: LightCategory::BinaryParser( p_path )
 	{
 	}
 
@@ -89,8 +89,8 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	PointLight::PointLight()
-		:	LightCategory( eLIGHT_TYPE_POINT )
-		,	m_attenuation( 1.0f, 0.0f, 0.0f )
+		: LightCategory( eLIGHT_TYPE_POINT )
+		, m_attenuation( 1.0f, 0.0f, 0.0f )
 	{
 	}
 
@@ -101,37 +101,6 @@ namespace Castor3D
 	LightCategorySPtr PointLight::Create()
 	{
 		return std::make_shared< PointLight >();
-	}
-
-	void PointLight::Render( LightRendererSPtr p_pRenderer )
-	{
-		if ( p_pRenderer )
-		{
-			p_pRenderer->Enable();
-			p_pRenderer->ApplyPosition();
-			p_pRenderer->ApplyAmbient();
-			p_pRenderer->ApplyDiffuse();
-			p_pRenderer->ApplySpecular();
-			p_pRenderer->ApplyConstantAtt(	m_attenuation[0] );
-			p_pRenderer->ApplyLinearAtt(	m_attenuation[1] );
-			p_pRenderer->ApplyQuadraticAtt(	m_attenuation[2] );
-			p_pRenderer->Bind();
-		}
-	}
-
-	void PointLight::Render( LightRendererSPtr p_pRenderer, ShaderProgramBase * p_pProgram )
-	{
-		if ( p_pRenderer )
-		{
-			p_pRenderer->EnableShader( p_pProgram );
-			p_pRenderer->ApplyPositionShader();
-			p_pRenderer->ApplyAmbientShader();
-			p_pRenderer->ApplyDiffuseShader();
-			p_pRenderer->ApplySpecularShader();
-			p_pRenderer->ApplyConstantAttShader(	m_attenuation[0] );
-			p_pRenderer->ApplyLinearAttShader(	m_attenuation[1] );
-			p_pRenderer->ApplyQuadraticAttShader(	m_attenuation[2] );
-		}
 	}
 
 	void PointLight::SetPosition( Castor::Point3r const & p_ptPosition )

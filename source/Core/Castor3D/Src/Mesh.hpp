@@ -135,17 +135,6 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_pEngine	The parent engine
-		 *\param[in]	p_eMeshType	The mesh type
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_pEngine	Le moteur parent
-		 *\param[in]	p_eMeshType	Le type de maillage
-		 */
-		Mesh( Engine * p_pEngine, eMESH_TYPE p_eMeshType = eMESH_TYPE_CUSTOM );
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_pEngine	The parent engine
 		 *\param[in]	p_name		This mesh name
 		 *\param[in]	p_eMeshType	The mesh type
 		 *\~french
@@ -154,7 +143,18 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom du maillage
 		 *\param[in]	p_eMeshType	Le type de maillage
 		 */
-		Mesh( Engine * p_pEngine, Castor::String const & p_name, eMESH_TYPE p_eType );
+		Mesh( Engine * p_pEngine, eMESH_TYPE p_eType, Castor::String const & p_name );
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	p_pEngine	The parent engine
+		 *\param[in]	p_eMeshType	The mesh type
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	p_pEngine	Le moteur parent
+		 *\param[in]	p_eMeshType	Le type de maillage
+		 */
+		Mesh( Engine * p_pEngine, eMESH_TYPE p_eMeshType = eMESH_TYPE_CUSTOM );
 		/**
 		 *\~english
 		 *\brief		Destructor

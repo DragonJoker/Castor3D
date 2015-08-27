@@ -25,7 +25,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GuiCommon
 {
 	class wxSubmeshTreeItemData
-		:	public wxTreeItemData
+		: public wxTreeItemData
 	{
 	protected:
 		Castor3D::GeometryWPtr m_pGeometry;

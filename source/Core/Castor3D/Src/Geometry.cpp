@@ -1,13 +1,15 @@
-#include "Geometry.hpp"
+﻿#include "Geometry.hpp"
 #include "Mesh.hpp"
 #include "Submesh.hpp"
 #include "Scene.hpp"
 #include "SceneNode.hpp"
 #include "Engine.hpp"
 #include "Material.hpp"
+#include "MaterialManager.hpp"
 #include "Pass.hpp"
 #include "ShaderManager.hpp"
 #include "ShaderProgram.hpp"
+#include "RenderSystem.hpp"
 
 #include <Logger.hpp>
 
@@ -17,7 +19,7 @@ namespace Castor3D
 {
 	bool Geometry::TextLoader::operator()( Geometry const & p_geometry, TextFile & p_file )
 	{
-		Logger::LogMessage( cuT( "Writing Geometry " ) + p_geometry.GetName() );
+		Logger::LogInfo( cuT( "Writing Geometry " ) + p_geometry.GetName() );
 		bool l_bReturn = p_file.WriteText( cuT( "\tobject \"" ) + p_geometry.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
 
 		if ( l_bReturn )
@@ -156,8 +158,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Geometry::Geometry( Scene * p_pScene, MeshSPtr p_mesh, SceneNodeSPtr p_sn, String const & p_name )
-		:	MovableObject( p_pScene, ( SceneNode * )p_sn.get(), p_name, eMOVABLE_TYPE_GEOMETRY )
+	Geometry::Geometry( SceneSPtr p_pScene, MeshSPtr p_mesh, SceneNodeSPtr p_sn, String const & p_name )
+		:	MovableObject( p_pScene, p_sn, p_name, eMOVABLE_TYPE_GEOMETRY )
 		,	m_mesh( p_mesh )
 		,	m_changed( true )
 		,	m_listCreated( false )
@@ -188,62 +190,46 @@ namespace Castor3D
 				p_nbFaces += l_nbFaces;
 				p_nbVertex += l_nbVertex;
 				l_pMesh->ComputeContainers();
-				uint32_t l_nbSubmeshes = l_pMesh->GetSubmeshCount();
-				m_listCreated = l_nbSubmeshes > 0;
-				Logger::LogMessage( cuT( "Geometry::CreateBuffers - NbVertex : %d, NbFaces : %d" ), l_nbVertex, l_nbFaces );
+				Logger::LogInfo( cuT( "Geometry::CreateBuffers - NbVertex : %d, NbFaces : %d" ), l_nbVertex, l_nbFaces );
 				m_listCreated = l_pMesh->GetSubmeshCount() > 0;
 			}
 
-			std::for_each( m_submeshesMaterials.begin(), m_submeshesMaterials.end(), [&]( std::pair< SubmeshSPtr, MaterialSPtr > p_pair )
-			{
-				uint32_t l_uiProgramFlags = p_pair.first->GetProgramFlags();
+			Engine * l_engine = GetScene()->GetEngine();
 
-				if ( p_pair.first->GetRefCount( p_pair.second ) > 1 )
+			for ( auto && l_pair : m_submeshesMaterials )
+			{
+				uint32_t l_uiProgramFlags = l_pair.first->GetProgramFlags();
+
+				if ( l_pair.first->GetRefCount( l_pair.second ) > 1 )
 				{
 					l_uiProgramFlags |= ePROGRAM_FLAG_INSTANCIATION;
 				}
 
-				if ( GetScene()->GetEngine()->GetRenderSystem()->GetCurrentContext()->IsDeferredShadingSet() )
+				if ( l_engine->GetRenderSystem()->GetCurrentContext()->IsDeferredShadingSet() )
 				{
 					l_uiProgramFlags |= ePROGRAM_FLAG_DEFERRED;
 				}
 
-				SkeletonSPtr l_pSkeleton = p_pair.first->GetSkeleton();
-
-				if ( p_pair.second )
+				if ( l_pair.second )
 				{
-					std::for_each( p_pair.second->Begin(), p_pair.second->End(), [&]( PassSPtr p_pPass )
+					for( auto && l_pass: *l_pair.second )
 					{
-						if ( !p_pPass->HasShader() )
+						if ( !l_pass->HasShader() )
 						{
-							ShaderProgramBaseSPtr l_pProgram = GetScene()->GetEngine()->GetShaderManager().GetAutomaticProgram( p_pPass->GetTextureFlags(), l_uiProgramFlags );
-							l_pProgram->Initialise();
+							l_engine->GetShaderManager().GetAutomaticProgram( l_pass->GetTextureFlags(), l_uiProgramFlags )->Initialise();
 						}
-					} );
+					}
 				}
-			} );
+			}
 		}
 	}
 
 	void Geometry::Render()
 	{
-		uint32_t l_nbSubmeshes;
-		SubmeshSPtr l_submesh;
-		MeshSPtr l_pMesh = GetMesh();
-
 		if ( !m_listCreated )
 		{
 			uint32_t l_nbFaces = 0, l_nbVertex = 0;
 			CreateBuffers( l_nbFaces, l_nbVertex );
-		}
-
-		if ( m_visible && l_pMesh && m_listCreated )
-		{
-			l_nbSubmeshes = static_cast< uint32_t >( l_pMesh->GetSubmeshCount() );
-			std::for_each( l_pMesh->Begin(), l_pMesh->End(), [&]( SubmeshSPtr p_pSubmesh )
-			{
-				p_pSubmesh->Render();
-			} );
 		}
 	}
 

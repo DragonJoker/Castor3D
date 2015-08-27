@@ -50,22 +50,22 @@ namespace Castor
 		 *\param[in]	p_szFile		Le fichier où se trouve la fonction
 		 *\param[in]	p_uiLine		La ligne dans la fonction
 		 */
-		BlockTracker( char const * p_szFunction, char const * p_szFile, uint32_t p_uiLine );
+		CU_API BlockTracker( char const * p_szFunction, char const * p_szFile, uint32_t p_uiLine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~BlockTracker();
+		CU_API ~BlockTracker();
 
 	private:
-		String			m_strFile;
-		String			m_strFunction;
-		uint32_t const	m_uiLine;
+		String m_strFile;
+		String m_strFunction;
+		uint32_t const m_uiLine;
 	};
 }
 
-#	define CASTOR_TRACK( fn )	Castor::BlockTracker l_tracker##__LINE__( __FUNCTION__, __FILE__, __LINE__ )
+#	define CASTOR_TRACK( fn ) Castor::BlockTracker l_tracker##__LINE__( __FUNCTION__, __FILE__, __LINE__ )
 
 #endif

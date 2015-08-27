@@ -55,7 +55,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			BinaryLoader();
+			CU_API BinaryLoader();
 			/**
 			 *\~english
 			 *\brief			Loads an image from a binary file
@@ -66,7 +66,7 @@ namespace Castor
 			 *\param[in,out]	p_image	Le nom de l'image
 			 *\param[in]		p_path	Le chemin du fichier contenant l'image
 			 */
-			virtual bool operator()( Image & p_image, Path const & p_path );
+			CU_API virtual bool operator()( Image & p_image, Path const & p_path );
 			/**
 			 *\~english
 			 *\brief			Writes an image into a binary file
@@ -77,7 +77,7 @@ namespace Castor
 			 *\param[in,out]	p_image	Le nom de l'image
 			 *\param[in]		p_path	Le chemin du fichier recevant l'image
 			 */
-			virtual bool operator()( Image const & p_image, Path const & p_path );
+			CU_API virtual bool operator()( Image const & p_image, Path const & p_path );
 		};
 
 	private:
@@ -103,7 +103,7 @@ namespace Castor
 		 *\param[in]	p_pBuffer		Un buffer de pixels
 		 *\param[in]	p_eBufferFormat	Le format des pixels du buffer
 		 */
-		Image( String const & p_strName, Size const & p_ptSize, ePIXEL_FORMAT p_ePixelFormat, ByteArray const & p_pBuffer, ePIXEL_FORMAT p_eBufferFormat );
+		CU_API Image( String const & p_strName, Size const & p_ptSize, ePIXEL_FORMAT p_ePixelFormat, ByteArray const & p_pBuffer, ePIXEL_FORMAT p_eBufferFormat );
 		/**
 		 *\~english
 		 *\brief		Creates the image with given params
@@ -120,7 +120,7 @@ namespace Castor
 		 *\param[in]	p_pBuffer		Un buffer de pixels
 		 *\param[in]	p_eBufferFormat	Le format des pixels du buffer
 		 */
-		Image( String const & p_strName, Size const & p_ptSize, ePIXEL_FORMAT p_ePixelFormat = ePIXEL_FORMAT_A8R8G8B8, uint8_t const * p_pBuffer = NULL, ePIXEL_FORMAT p_eBufferFormat = ePIXEL_FORMAT_A8R8G8B8 );
+		CU_API Image( String const & p_strName, Size const & p_ptSize, ePIXEL_FORMAT p_ePixelFormat = ePIXEL_FORMAT_A8R8G8B8, uint8_t const * p_pBuffer = NULL, ePIXEL_FORMAT p_eBufferFormat = ePIXEL_FORMAT_A8R8G8B8 );
 		/**
 		 *\~english
 		 *\brief		Creates the image with given params
@@ -131,7 +131,7 @@ namespace Castor
 		 *\param[in]	p_strName		Le nom de ressource
 		 *\param[in]	p_pBuffer		Un buffer de pixels
 		 */
-		Image( String const & p_strName, PxBufferBase const & p_pBuffer );
+		CU_API Image( String const & p_strName, PxBufferBase const & p_pBuffer );
 		/**
 		 *\~english
 		 *\brief		Creates the image with given params
@@ -163,7 +163,7 @@ namespace Castor
 		 *\param[in]	p_strName		Le nom de ressource
 		 *\param[in]	p_pathFile		Le chemin du fichier
 		 */
-		Image( String const & p_strName, Path const & p_pathFile );
+		CU_API Image( String const & p_strName, Path const & p_pathFile );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -172,7 +172,7 @@ namespace Castor
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_image	L'objet Image à copier
 		 */
-		Image( Image const & p_image );
+		CU_API Image( Image const & p_image );
 		/**
 		 *\~english
 		 *\brief		Move Constructor
@@ -181,7 +181,7 @@ namespace Castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	p_image	L'objet Image à déplacer
 		 */
-		Image( Image && p_image );
+		CU_API Image( Image && p_image );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -192,7 +192,7 @@ namespace Castor
 		 *\param[in]	p_image	L'objet Image à copier
 		 *\return		Une référence sur cet objet Image
 		 */
-		Image & operator =( Image const & p_image );
+		CU_API Image & operator =( Image const & p_image );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -203,14 +203,14 @@ namespace Castor
 		 *\param[in]	p_image	L'objet Image à déplacer
 		 *\return		Une référence sur cet objet Image
 		 */
-		Image & operator =( Image && p_image );
+		CU_API Image & operator =( Image && p_image );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Image();
+		CU_API virtual ~Image();
 		/**
 		 *\~english
 		 *\brief		Resizes the image to the given resolution
@@ -221,7 +221,7 @@ namespace Castor
 		 *\param[in]	p_size	La nouvelle résolution
 		 *\return		La référence de l'image
 		 */
-		Image & Resample( Size const & p_size );
+		CU_API Image & Resample( Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Fills all image pixels with the given colour
@@ -232,7 +232,7 @@ namespace Castor
 		 *\param[in]	p_clrColour	La couleur de remplissage
 		 *\return		La référence de l'image
 		 */
-		Image & Fill( Colour const & p_clrColour );
+		CU_API Image & Fill( Colour const & p_clrColour );
 		/**
 		 *\~english
 		 *\brief		Fills the wanted pixel with the given buffer
@@ -245,7 +245,7 @@ namespace Castor
 		 *\param[in]	p_pPixel	Le buffer
 		 *\return		La référence de l'image
 		 */
-		Image & SetPixel( uint32_t x, uint32_t y, uint8_t const * p_pPixel );
+		CU_API Image & SetPixel( uint32_t x, uint32_t y, uint8_t const * p_pPixel );
 		/**
 		 *\~english
 		 *\brief		Sets the colour of the wanted pixel to the given one
@@ -258,7 +258,7 @@ namespace Castor
 		 *\param[in]	p_clrColour	La couleur
 		 *\return		La référence de l'image
 		 */
-		Image & SetPixel( uint32_t x, uint32_t y, Colour const & p_clrColour );
+		CU_API Image & SetPixel( uint32_t x, uint32_t y, Colour const & p_clrColour );
 		/**
 		 *\~english
 		 *\brief		Set the wanted pixel to the given pixel
@@ -308,7 +308,7 @@ namespace Castor
 		 *\param[out]	p_pPixel	Reçoit le pixel dans le format donné
 		 *\param[in]	p_eFormat	Le format voulu pour le buffer
 		 */
-		void GetPixel( uint32_t x, uint32_t y, uint8_t * p_pPixel, ePIXEL_FORMAT p_eFormat )const;
+		CU_API void GetPixel( uint32_t x, uint32_t y, uint8_t * p_pPixel, ePIXEL_FORMAT p_eFormat )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel colour
@@ -319,7 +319,7 @@ namespace Castor
 		 *\param[in]	x,y			Les coordonnées du pixel
 		 *\return		La couleur du pixel
 		 */
-		Colour GetPixel( uint32_t x, uint32_t y )const;
+		CU_API Colour GetPixel( uint32_t x, uint32_t y )const;
 		/**
 		 *\~english
 		 *\brief		Copies the given image into this one
@@ -330,7 +330,7 @@ namespace Castor
 		 *\param[in]	p_src	L'image à copier
 		 *\return		La référence de l'image
 		 */
-		Image & CopyImage( Image const & p_src );
+		CU_API Image & CopyImage( Image const & p_src );
 		/**
 		 *\~english
 		 *\brief		Gives the sub-image contained in the given rectangle
@@ -341,7 +341,7 @@ namespace Castor
 		 *\param[in]	p_rcRect	Le rectangle de la portion d'image
 		 *\return		La portion d'image
 		 */
-		Image SubImage( Rectangle const & p_rcRect )const;
+		CU_API Image SubImage( Rectangle const & p_rcRect )const;
 		/**
 		 *\~english
 		 *\brief		Swaps the image lines
@@ -350,7 +350,7 @@ namespace Castor
 		 *\brief		Retourne verticalement l'image
 		 *\return		La référence de l'image
 		 */
-		Image & Flip();
+		CU_API Image & Flip();
 		/**
 		 *\~english
 		 *\brief		Swaps the image columns
@@ -359,7 +359,7 @@ namespace Castor
 		 *\brief		Retourne horizontalement l'image
 		 *\return		La référence de l'image
 		 */
-		Image & Mirror();
+		CU_API Image & Mirror();
 		/**
 		 *\~english
 		 *\brief		Retrieves the image dimensions

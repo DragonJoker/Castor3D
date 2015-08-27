@@ -22,9 +22,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Dx11Render
 {
-	template< typename Type > struct OneVariableApplier;
-	template< typename Type, uint32_t Count > struct PointVariableApplier;
-	template< typename Type, uint32_t Rows, uint32_t Columns > struct MatrixVariableApplier;
+	template< typename Type > struct OneVariableBinder;
+	template< typename Type, uint32_t Count > struct PointVariableBinder;
+	template< typename Type, uint32_t Rows, uint32_t Columns > struct MatrixVariableBinder;
 
 	class DxFrameVariableBase
 	{
@@ -32,12 +32,13 @@ namespace Dx11Render
 		DxFrameVariableBase( DxRenderSystem * p_pRenderSystem );
 		virtual ~DxFrameVariableBase();
 
-		virtual void Apply() = 0;
-
 	protected:
-		template< typename Type > void DoApply( DxShaderProgram & p_program, Type * p_pValue );
-		template< typename Type, uint32_t Count > void DoApply( DxShaderProgram & p_program, Type * p_pValue );
-		template< typename Type, uint32_t Rows, uint32_t Columns > void DoApply( DxShaderProgram & p_program, Type * p_pValue );
+		template< typename Type > void DoBind( DxShaderProgram & p_program, Type * p_pValue );
+		template< typename Type, uint32_t Count > void DoBind( DxShaderProgram & p_program, Type * p_pValue );
+		template< typename Type, uint32_t Rows, uint32_t Columns > void DoBind( DxShaderProgram & p_program, Type * p_pValue );
+		template< typename Type > void DoUnbind( DxShaderProgram & p_program, Type * p_pValue );
+		template< typename Type, uint32_t Count > void DoUnbind( DxShaderProgram & p_program, Type * p_pValue );
+		template< typename Type, uint32_t Rows, uint32_t Columns > void DoUnbind( DxShaderProgram & p_program, Type * p_pValue );
 
 	protected:
 		std::string m_stdstrName;

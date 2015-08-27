@@ -109,22 +109,23 @@ namespace Castor3D
 		{
 			return m_radius;
 		}
-		/**
-		 *\~english
-		 *\brief		Stream operator
-		 *\~french
-		 *\brief		Opérateur de flux
-		 */
-		inline friend std::ostream & operator <<( std::ostream & o, Cylinder const & c )
-		{
-			return o << "Cylinder(" << c.m_nbFaces << "," << c.m_height << "," << c.m_radius << ")";
-		}
 
 	private:
 		real m_height;
 		real m_radius;
 		uint32_t m_nbFaces;
+		friend std::ostream & operator <<( std::ostream & o, Cylinder const & c );
 	};
+	/**
+	 *\~english
+	 *\brief		Stream operator
+	 *\~french
+	 *\brief		Opérateur de flux
+	 */
+	inline std::ostream & operator <<( std::ostream & o, Cylinder const & c )
+	{
+		return o << "Cylinder(" << c.m_nbFaces << "," << c.m_height << "," << c.m_radius << ")";
+	}
 }
 
 #endif

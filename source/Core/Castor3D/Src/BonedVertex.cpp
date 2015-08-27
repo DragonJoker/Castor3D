@@ -1,4 +1,4 @@
-#include "BonedVertex.hpp"
+﻿#include "BonedVertex.hpp"
 
 using namespace Castor;
 

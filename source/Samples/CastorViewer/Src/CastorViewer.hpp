@@ -11,14 +11,14 @@ namespace CastorViewer
 		: public wxApp
 	{
 	private:
-		MainFrame *	m_pMainFrame;
-		wxLocale *	m_pLocale;
+		MainFrame * m_pMainFrame;
+		std::unique_ptr< wxLocale > m_pLocale;
 
 	public:
 		virtual bool OnInit();
 		virtual int OnExit();
 
-		inline MainFrame *	GetMainFrame()const
+		inline MainFrame * GetMainFrame()const
 		{
 			return m_pMainFrame;
 		}

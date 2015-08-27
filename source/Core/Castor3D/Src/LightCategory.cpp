@@ -1,4 +1,4 @@
-#include "LightCategory.hpp"
+﻿#include "LightCategory.hpp"
 #include "Light.hpp"
 
 #include <Logger.hpp>
@@ -8,13 +8,13 @@ using namespace Castor;
 namespace Castor3D
 {
 	LightCategory::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< LightCategory, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+		: Loader< LightCategory, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
 	{
 	}
 
 	bool LightCategory::TextLoader::operator()( LightCategory const & p_light, TextFile & p_file )
 	{
-		Logger::LogMessage( cuT( "Writing Light " ) + p_light.GetLight()->GetName() );
+		Logger::LogInfo( cuT( "Writing Light " ) + p_light.GetLight()->GetName() );
 		bool l_bReturn = p_file.WriteText( cuT( "\tlight \"" ) + p_light.GetLight()->GetName() + cuT( "\"\n\t{\n" ) ) > 0;
 
 		if ( l_bReturn )
@@ -42,17 +42,17 @@ namespace Castor3D
 
 		if ( l_bReturn )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\t\tambient " ) ) > 0 && Colour::TextLoader()( p_light.GetAmbient(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_bReturn = p_file.WriteText( cuT( "\t\tambient " ) ) > 0 && Point4f::TextLoader()( p_light.GetAmbient(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_bReturn )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\t\tdiffuse " ) ) > 0 && Colour::TextLoader()( p_light.GetDiffuse(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_bReturn = p_file.WriteText( cuT( "\t\tdiffuse " ) ) > 0 && Point4f::TextLoader()( p_light.GetDiffuse(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_bReturn )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\t\tspecular " ) ) > 0 && Colour::TextLoader()( p_light.GetSpecular(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_bReturn = p_file.WriteText( cuT( "\t\tspecular " ) ) > 0 && Point4f::TextLoader()( p_light.GetSpecular(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		return l_bReturn;
@@ -61,7 +61,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	LightCategory::BinaryParser::BinaryParser( Path const & p_path )
-		:	Castor3D::BinaryParser< LightCategory >( p_path )
+		: Castor3D::BinaryParser< LightCategory >( p_path )
 	{
 	}
 
@@ -100,7 +100,7 @@ namespace Castor3D
 	bool LightCategory::BinaryParser::Parse( LightCategory & p_obj, BinaryChunk & p_chunk )const
 	{
 		bool l_bReturn = true;
-		Colour l_colour;
+		Point4f l_colour;
 
 		switch ( p_chunk.GetChunkType() )
 		{
@@ -150,11 +150,11 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	LightCategory::LightCategory( eLIGHT_TYPE p_eLightType )
-		:	m_eLightType( p_eLightType )
-		,	m_ambient( Colour::from_rgba( 0x000000FF ) )
-		,	m_diffuse( Colour::from_rgba( 0x000000FF ) )
-		,	m_specular( Colour::from_rgba( 0xFFFFFFFF ) )
-		,	m_ptPositionType( 0.0f, 0.0f, 1.0f, 0.0f )
+		: m_eLightType( p_eLightType )
+		, m_ambient( 0.0, 0.0, 0.0, 1.0 )
+		, m_diffuse( 0.0, 0.0, 0.0, 1.0 )
+		, m_specular( 1.0, 1.0, 1.0, 1.0 )
+		, m_ptPositionType( 0.0, 0.0, 1.0, 0.0 )
 	{
 		switch ( p_eLightType )
 		{
@@ -170,24 +170,18 @@ namespace Castor3D
 	{
 	}
 
-	void LightCategory::SetAmbient( Colour const & p_ambient )
+	void LightCategory::SetAmbient( Point4f const & p_ambient )
 	{
-		m_ambient.red()		= p_ambient.red()	;
-		m_ambient.green()	= p_ambient.green()	;
-		m_ambient.blue()	= p_ambient.blue()	;
+		m_ambient = p_ambient;
 	}
 
-	void LightCategory::SetDiffuse( Colour const & p_diffuse )
+	void LightCategory::SetDiffuse( Point4f const & p_diffuse )
 	{
-		m_diffuse.red()		= p_diffuse.red()	;
-		m_diffuse.green()	= p_diffuse.green()	;
-		m_diffuse.blue()	= p_diffuse.blue()	;
+		m_diffuse = p_diffuse;
 	}
 
-	void LightCategory::SetSpecular( Colour const & p_specular )
+	void LightCategory::SetSpecular( Point4f const & p_specular )
 	{
-		m_specular.red()	= p_specular.red()		;
-		m_specular.green()	= p_specular.green()	;
-		m_specular.blue()	= p_specular.blue()		;
+		m_specular = p_specular;
 	}
 }

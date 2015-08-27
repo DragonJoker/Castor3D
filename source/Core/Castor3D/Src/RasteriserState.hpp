@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -56,21 +56,21 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Initialises the states
 		 *\~french
-		 *\brief		Initialise les états
+		 *\brief		Initialise les Ã©tats
 		 */
 		virtual bool Initialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans the states
 		 *\~french
-		 *\brief		Nettoie les états
+		 *\brief		Nettoie les Ã©tats
 		 */
 		virtual void Cleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Applies the states
 		 *\~french
-		 *\brief		Applique les états
+		 *\brief		Applique les Ã©tats
 		 */
 		virtual bool Apply() = 0;
 		/**
@@ -78,7 +78,7 @@ namespace Castor3D
 		 *\brief		Retrieves the fill mode
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le mode de remplissage
+		 *\brief		RÃ©cupÃ¨re le mode de remplissage
 		 *\return		La valeur
 		 */
 		inline Castor3D::eFILL_MODE GetFillMode()const
@@ -90,7 +90,7 @@ namespace Castor3D
 		 *\brief		Sets the fill mode
 		 *\param[in]	p_eMode	The new value
 		 *\~french
-		 *\brief		Définit le mode de remplissage
+		 *\brief		DÃ©finit le mode de remplissage
 		 *\param[in]	p_eMode	La nouvelle valeur
 		 */
 		inline void SetFillMode( Castor3D::eFILL_MODE p_eMode )
@@ -103,7 +103,7 @@ namespace Castor3D
 		 *\brief		Retrieves the culled faces
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère les faces cachées
+		 *\brief		RÃ©cupÃ¨re les faces cachÃ©es
 		 *\return		La valeur
 		 */
 		inline Castor3D::eFACE GetCulledFaces()const
@@ -115,7 +115,7 @@ namespace Castor3D
 		 *\brief		Sets the culled faces
 		 *\param[in]	p_eFace	The new value
 		 *\~french
-		 *\brief		Définit les faces cachées
+		 *\brief		DÃ©finit les faces cachÃ©es
 		 *\param[in]	p_eFace	La nouvelle valeur
 		 */
 		inline void SetCulledFaces( Castor3D::eFACE p_eFace )
@@ -128,7 +128,7 @@ namespace Castor3D
 		 *\brief		Retrieves the faces considered front facing
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère les faces considérées comme tournées vers l'avant
+		 *\brief		RÃ©cupÃ¨re les faces considÃ©rÃ©es comme tournÃ©es vers l'avant
 		 *\return		La valeur
 		 */
 		inline bool GetFrontCCW()const
@@ -140,7 +140,7 @@ namespace Castor3D
 		 *\brief		Sets the faces considered front facing
 		 *\param[in]	p_bCCW	The new value
 		 *\~french
-		 *\brief		Définit les faces considérées comme tournées vers l'avant
+		 *\brief		DÃ©finit les faces considÃ©rÃ©es comme tournÃ©es vers l'avant
 		 *\param[in]	p_bCCW	La nouvelle valeur
 		 */
 		inline void SetFrontCCW( bool p_bCCW )
@@ -153,7 +153,7 @@ namespace Castor3D
 		 *\brief		Retrieves the antialiased lines status
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le statut d'antialising des lignes
+		 *\brief		RÃ©cupÃ¨re le statut d'antialising des lignes
 		 *\return		La valeur
 		 */
 		inline bool GetAntialiasedLines()const
@@ -165,7 +165,7 @@ namespace Castor3D
 		 *\brief		Sets the antialiased lines status
 		 *\param[in]	p_bAA	The new value
 		 *\~french
-		 *\brief		Définit le statut d'antialising des lignes
+		 *\brief		DÃ©finit le statut d'antialising des lignes
 		 *\param[in]	p_bAA	La nouvelle valeur
 		 */
 		inline void SetAntialiasedLines( bool p_bAA )
@@ -178,7 +178,7 @@ namespace Castor3D
 		 *\brief		Retrieves the depth bias
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le depth bias
+		 *\brief		RÃ©cupÃ¨re le depth bias
 		 *\return		La valeur
 		 */
 		inline float GetDepthBias()const
@@ -190,7 +190,7 @@ namespace Castor3D
 		 *\brief		Sets the depth bias
 		 *\param[in]	p_fBias	The new value
 		 *\~french
-		 *\brief		Définit le depth bias
+		 *\brief		DÃ©finit le depth bias
 		 *\param[in]	p_fBias	La nouvelle valeur
 		 */
 		inline void SetDepthBias( float p_fBias )
@@ -203,7 +203,7 @@ namespace Castor3D
 		 *\brief		Retrieves the depth clipping status
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le statut de depth clipping
+		 *\brief		RÃ©cupÃ¨re le statut de depth clipping
 		 *\return		La valeur
 		 */
 		inline bool GetDepthClipping()const
@@ -215,7 +215,7 @@ namespace Castor3D
 		 *\brief		Sets the depth clipping status
 		 *\param[in]	p_bEnable	The new value
 		 *\~french
-		 *\brief		Définit le statut de depth clipping
+		 *\brief		DÃ©finit le statut de depth clipping
 		 *\param[in]	p_bEnable	La nouvelle valeur
 		 */
 		inline void SetDepthClipping( bool p_bEnable )
@@ -228,7 +228,7 @@ namespace Castor3D
 		 *\brief		Retrieves the multisample activation status
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le statut d'acitvation du multisample
+		 *\brief		RÃ©cupÃ¨re le statut d'acitvation du multisample
 		 *\return		La valeur
 		 */
 		inline bool GetMultisample()const
@@ -240,7 +240,7 @@ namespace Castor3D
 		 *\brief		Sets the multisample activation status
 		 *\param[in]	p_bEnable	The new value
 		 *\~french
-		 *\brief		Définit le statut d'acitvation du multisample
+		 *\brief		DÃ©finit le statut d'acitvation du multisample
 		 *\param[in]	p_bEnable	La nouvelle valeur
 		 */
 		inline void SetMultisample( bool p_bEnable )
@@ -253,7 +253,7 @@ namespace Castor3D
 		 *\brief		Retrieves the scissor test activation status
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le statut d'acitvation du scissor test
+		 *\brief		RÃ©cupÃ¨re le statut d'acitvation du scissor test
 		 *\return		La valeur
 		 */
 		inline bool GetScissor()const
@@ -265,7 +265,7 @@ namespace Castor3D
 		 *\brief		Sets the scissor test activation status
 		 *\param[in]	p_bEnable	The new value
 		 *\~french
-		 *\brief		Définit le statut d'acitvation du scissor test
+		 *\brief		DÃ©finit le statut d'acitvation du scissor test
 		 *\param[in]	p_bEnable	La nouvelle valeur
 		 */
 		inline void SetScissor( bool p_bEnable )

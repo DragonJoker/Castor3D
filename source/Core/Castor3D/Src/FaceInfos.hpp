@@ -43,6 +43,13 @@ namespace Castor3D
 		*/
 		struct stVERTEX
 		{
+			stVERTEX()
+				:	m_iIndex( -1 )
+				,	m_bHasNormal( false )
+				,	m_bHasTexCoords( false )
+			{
+			}
+
 			//!\~english Vertex index	\~french Indice du vertex
 			int m_iIndex;
 			//!\~english Vertex normal	\~french Normale du vertex
@@ -53,13 +60,6 @@ namespace Castor3D
 			bool m_bHasNormal;
 			//!\~english Tells the vertex has UV	\~french Dit que le vertex a un UV
 			bool m_bHasTexCoords;
-
-			stVERTEX()
-				:	m_iIndex( -1 )
-				,	m_bHasNormal( false )
-				,	m_bHasTexCoords( false )
-			{
-			}
 		};
 		//!\~english The 3 vertex informations	\~french Les informations des 3 vertex
 		stVERTEX m_vertex[3];

@@ -32,7 +32,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GuiCommon
 {
-	class wxStcTextEditor : public wxStyledTextCtrl
+	class wxStcTextEditor
+		: public wxStyledTextCtrl
 	{
 	private:
 		typedef enum gcID
@@ -125,14 +126,17 @@ namespace GuiCommon
 		bool IsModified();
 		wxString DeterminePrefs( wxString const & p_strFilename );
 		bool InitializePrefs( wxString const & p_strFilename );
+
 		inline wxString GetFilename()
 		{
 			return m_strFilename;
 		}
+
 		inline void SetFilename( wxString const & p_strFilename )
 		{
 			m_strFilename = p_strFilename;
 		}
+
 		inline LanguageInfoPtr GetLanguageInfo()
 		{
 			return m_pLanguage;

@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -36,8 +36,8 @@ namespace Castor3D
 	\brief		Configuration parameters
 	\remark		Pair of a name and binary data
 	\~french
-	\brief		Paramètres de configuration
-	\remark		Couple nom/données binaires
+	\brief		ParamÃ¨tres de configuration
+	\remark		Couple nom/donnÃ©es binaires
 	*/
 	class C3D_API Parameters
 	{
@@ -69,12 +69,12 @@ namespace Castor3D
 		 *\param[in]	p_uiCount	The values count
 		 *\return		\p false if a parameter with the given name already exists
 		 *\~french
-		 *\brief		Ajoute un paramètre
-		 *\remark		Si un paramètre avec le nom donné existe déjà, rien n'est fait
-		 *\param[in]	p_strName	Le nom du paramètre
-		 *\param[in]	p_tParam	Les valeurs du paramètre
+		 *\brief		Ajoute un paramÃ¨tre
+		 *\remark		Si un paramÃ¨tre avec le nom donnÃ© existe dÃ©jÃ , rien n'est fait
+		 *\param[in]	p_strName	Le nom du paramÃ¨tre
+		 *\param[in]	p_tParam	Les valeurs du paramÃ¨tre
 		 *\param[in]	p_uiCount	Le compte des valeurs
-		 *\return		\p false si un paramètre avec le nom donné existe déjà
+		 *\return		\p false si un paramÃ¨tre avec le nom donnÃ© existe dÃ©jÃ 
 		 */
 		template< typename T, uint32_t N >
 		inline bool Add( Castor::String const & p_strName, T const( & p_tParam )[N] )
@@ -101,12 +101,12 @@ namespace Castor3D
 		 *\param[in]	p_uiCount	The values count
 		 *\return		\p false if a parameter with the given name already exists
 		 *\~french
-		 *\brief		Ajoute un paramètre
-		 *\remark		Si un paramètre avec le nom donné existe déjà, rien n'est fait
-		 *\param[in]	p_strName	Le nom du paramètre
-		 *\param[in]	p_tParam	Les valeurs du paramètre
+		 *\brief		Ajoute un paramÃ¨tre
+		 *\remark		Si un paramÃ¨tre avec le nom donnÃ© existe dÃ©jÃ , rien n'est fait
+		 *\param[in]	p_strName	Le nom du paramÃ¨tre
+		 *\param[in]	p_tParam	Les valeurs du paramÃ¨tre
 		 *\param[in]	p_uiCount	Le compte des valeurs
-		 *\return		\p false si un paramètre avec le nom donné existe déjà
+		 *\return		\p false si un paramÃ¨tre avec le nom donnÃ© existe dÃ©jÃ 
 		 */
 		template< typename T >
 		inline bool Add( Castor::String const & p_strName, T * p_tParam, uint32_t p_uiCount )
@@ -132,11 +132,11 @@ namespace Castor3D
 		 *\param[in]	p_tParam	The parameter value
 		 *\return		\p false if a parameter with the given name already exists
 		 *\~french
-		 *\brief		Ajoute un paramètre
-		 *\remark		Si un paramètre avec le nom donné existe déjà, rien n'est fait
-		 *\param[in]	p_strName	Le nom du paramètre
-		 *\param[in]	p_tParam	La valeur du paramètre
-		 *\return		\p false si un paramètre avec le nom donné existe déjà
+		 *\brief		Ajoute un paramÃ¨tre
+		 *\remark		Si un paramÃ¨tre avec le nom donnÃ© existe dÃ©jÃ , rien n'est fait
+		 *\param[in]	p_strName	Le nom du paramÃ¨tre
+		 *\param[in]	p_tParam	La valeur du paramÃ¨tre
+		 *\return		\p false si un paramÃ¨tre avec le nom donnÃ© existe dÃ©jÃ 
 		 */
 		template< typename T >
 		inline bool Add( Castor::String const & p_strName, T const & p_tParam )
@@ -161,10 +161,10 @@ namespace Castor3D
 		 *\param[in]	p_tParam	The parameter value
 		 *\return		\p false if there is no parameter with the given name
 		 *\~french
-		 *\brief		Définit la valeur d'un paramètre
-		 *\param[in]	p_strName	Le nom du paramètre
-		 *\param[in]	p_tParam	La valeur du paramètre
-		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
+		 *\brief		DÃ©finit la valeur d'un paramÃ¨tre
+		 *\param[in]	p_strName	Le nom du paramÃ¨tre
+		 *\param[in]	p_tParam	La valeur du paramÃ¨tre
+		 *\return		\p false s'il n'y a pas de paramÃ¨tre avec le nom donnÃ©
 		 */
 		template< typename T >
 		inline bool Set( Castor::String const & p_strName, T const & p_tParam )
@@ -187,10 +187,10 @@ namespace Castor3D
 		 *\param[out]	p_tParam	The parameter value
 		 *\return		\p false if there is no parameter with the given name
 		 *\~french
-		 *\brief		Récupère la valeur d'un paramètre
-		 *\param[in]	p_strName	Le nom du paramètre
-		 *\param[out]	p_tParam	La valeur du paramètre
-		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
+		 *\brief		RÃ©cupÃ¨re la valeur d'un paramÃ¨tre
+		 *\param[in]	p_strName	Le nom du paramÃ¨tre
+		 *\param[out]	p_tParam	La valeur du paramÃ¨tre
+		 *\return		\p false s'il n'y a pas de paramÃ¨tre avec le nom donnÃ©
 		 */
 		template< typename T >
 		inline bool Get( Castor::String const & p_strName, T & p_tParam )const
@@ -216,10 +216,10 @@ namespace Castor3D
 		 *\param[out]	p_tParam	The parameter values
 		 *\return		\p false if there is no parameter with the given name
 		 *\~french
-		 *\brief		Récupère la valeur d'un paramètre
-		 *\param[in]	p_strName	Le nom du paramètre
-		 *\param[out]	p_tParam	Les valeurs du paramètre
-		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
+		 *\brief		RÃ©cupÃ¨re la valeur d'un paramÃ¨tre
+		 *\param[in]	p_strName	Le nom du paramÃ¨tre
+		 *\param[out]	p_tParam	Les valeurs du paramÃ¨tre
+		 *\return		\p false s'il n'y a pas de paramÃ¨tre avec le nom donnÃ©
 		 */
 		template< typename T, uint32_t N >
 		inline bool Get( Castor::String const & p_strName, T( & p_tParam )[N] )const
@@ -246,11 +246,11 @@ namespace Castor3D
 		 *\param[in]	p_uiCount	The values available count
 		 *\return		\p false if there is no parameter with the given name
 		 *\~french
-		 *\brief		Récupère la valeur d'un paramètre
-		 *\param[in]	p_strName	Le nom du paramètre
-		 *\param[out]	p_tParam	Ls valeurs du paramètre
+		 *\brief		RÃ©cupÃ¨re la valeur d'un paramÃ¨tre
+		 *\param[in]	p_strName	Le nom du paramÃ¨tre
+		 *\param[out]	p_tParam	Ls valeurs du paramÃ¨tre
 		 *\param[in]	p_uiCount	La nombre disponible de valeurs
-		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
+		 *\return		\p false s'il n'y a pas de paramÃ¨tre avec le nom donnÃ©
 		 */
 		template< typename T, uint32_t N >
 		inline bool Get( Castor::String const & p_strName, T * p_tParam, uint32_t p_uiCount )const

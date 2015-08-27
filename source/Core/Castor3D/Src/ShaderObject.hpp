@@ -184,14 +184,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Active le shader
 		 */
-		virtual void Bind();
+		void Bind();
 		/**
 		 *\~english
 		 *\brief		Deactivates the shader
 		 *\~french
 		 *\brief		Désactive le shader
 		 */
-		virtual void Unbind();
+		void Unbind();
 		/**
 		 *\~english
 		 *\brief		Compiles the shader
@@ -514,6 +514,22 @@ namespace Castor3D
 		{
 			return m_pParent;
 		}
+
+	protected:
+		/**
+		 *\~english
+		 *\brief		Activates the shader
+		 *\~french
+		 *\brief		Active le shader
+		 */
+		virtual void DoBind() = 0;
+		/**
+		 *\~english
+		 *\brief		Deactivates the shader
+		 *\~french
+		 *\brief		Désactive le shader
+		 */
+		virtual void DoUnbind() = 0;
 
 	protected:
 		//!\~english The parent shader program	\~french Le programme parent

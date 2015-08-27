@@ -1,4 +1,4 @@
-#include "AnimatedObjectGroup.hpp"
+﻿#include "AnimatedObjectGroup.hpp"
 #include "AnimatedObject.hpp"
 #include "Animation.hpp"
 #include "MovableObject.hpp"
@@ -28,16 +28,16 @@ namespace Castor3D
 
 	bool AnimatedObjectGroup::BinaryLoader::operator()( AnimatedObjectGroup & p_group, BinaryFile & p_file )
 	{
-		Collection<AnimatedObjectGroup, String> l_collection;
+		Collection< AnimatedObjectGroup, String > l_collection;
 		bool l_bResult = false;
 
 		if ( ! l_bResult || l_collection.has( p_group.GetName() ) )
 		{
-			Logger::LogMessage( cuT( "Can't add AnimatedObjectGroup [" ) + p_group.GetName() + cuT( "]" ) );
+			Logger::LogInfo( cuT( "Can't add AnimatedObjectGroup [" ) + p_group.GetName() + cuT( "]" ) );
 		}
 		else
 		{
-			Logger::LogMessage( cuT( "AnimatedObjectGroup [" ) + p_group.GetName() +  + cuT( "] added" ) );
+			Logger::LogInfo( cuT( "AnimatedObjectGroup [" ) + p_group.GetName() +  + cuT( "] added" ) );
 		}
 
 		return l_bResult;
@@ -75,24 +75,23 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	AnimatedObjectGroup::AnimatedObjectGroup()
-		:	Named( cuT( "" ) )
-		,	m_pScene( NULL )
+		: Named( cuT( "" ) )
 	{
 		m_timer.TimeS();
 	}
 
 	AnimatedObjectGroup::AnimatedObjectGroup( AnimatedObjectGroup const & p_src )
-		:	Named( p_src.GetName() )
-		,	m_pScene( p_src.m_pScene )
-		,	m_setAnimations( p_src.m_setAnimations )
-		,	m_mapObjects( p_src.m_mapObjects )
+		: Named( p_src.GetName() )
+		, m_pScene( p_src.m_pScene )
+		, m_setAnimations( p_src.m_setAnimations )
+		, m_mapObjects( p_src.m_mapObjects )
 	{
 		m_timer.TimeS();
 	}
 
-	AnimatedObjectGroup::AnimatedObjectGroup( Scene * p_pScene, String const & p_strName )
-		:	Named( p_strName )
-		,	m_pScene( p_pScene )
+	AnimatedObjectGroup::AnimatedObjectGroup( SceneSPtr p_pScene, String const & p_strName )
+		: Named( p_strName )
+		, m_pScene( p_pScene )
 	{
 		m_timer.TimeS();
 	}

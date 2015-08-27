@@ -25,29 +25,29 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GuiCommon
 {
 	class wxMaterialPanel
-		:	public wxPanel
+		: public wxPanel
 	{
 	private:
 		typedef enum eID
 		{
-			eID_BUTTON_DELETE
-			,	eID_EDIT_MATERIAL_NAME
-			,	eID_COMBO_PASS
+			eID_BUTTON_DELETE,
+			eID_EDIT_MATERIAL_NAME,
+			eID_COMBO_PASS,
 		}	eID;
 
 	private:
-		wxStaticText 			*			m_pStaticName;
-		wxTextCtrl 			*			m_pEditMaterialName;
-		wxStaticBox 			*			m_pBoxPass;
-		wxComboBox 			*			m_pComboPass;
-		wxButton 			*				m_pButtonDeletePass;
-		wxPanel 			*				m_pPanelPasses;
-		wxPassPanel 			*			m_pPanelSelectedPass;
-		Castor3D::MaterialWPtr				m_wpMaterial;
-		Castor3D::PassWPtr					m_wpPassSelected;
-		int									m_iSelectedPassIndex;
-		bool								m_bCanEdit;
-		Castor3D::Engine 		*			m_pEngine;
+		wxStaticText * m_pStaticName;
+		wxTextCtrl * m_pEditMaterialName;
+		wxStaticBox * m_pBoxPass;
+		wxComboBox * m_pComboPass;
+		wxButton * m_pButtonDeletePass;
+		wxPanel * m_pPanelPasses;
+		wxPassPanel * m_pPanelSelectedPass;
+		Castor3D::MaterialWPtr m_wpMaterial;
+		Castor3D::PassWPtr m_wpPassSelected;
+		int m_iSelectedPassIndex;
+		bool m_bCanEdit;
+		Castor3D::Engine * m_pEngine;
 
 	public:
 		wxMaterialPanel( Castor3D::Engine * p_pEngine, bool p_bCanEdit, wxWindow * p_pParent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxSize( 370, 470 ) );

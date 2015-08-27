@@ -1,4 +1,4 @@
-/*
+Ôªø/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -31,7 +31,7 @@ namespace Castor3D
 	\~english
 	\brief		Base class for renderer dependant buffers
 	\~french
-	\brief		Classe de base pour les tampons dÈpendants du renderer
+	\brief		Classe de base pour les tampons d√©pendants du renderer
 	\remark
 	*/
 	template< typename T >
@@ -60,8 +60,8 @@ namespace Castor3D
 		 *\brief		Creation function
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Fonction de crÈation
-		 *\return		\p true si tout s'est bien passÈ
+		 *\brief		Fonction de cr√©ation
+		 *\return		\p true si tout s'est bien pass√©
 		 */
 		virtual bool Create()
 		{
@@ -82,11 +82,11 @@ namespace Castor3D
 		 *\param[in]	p_pProgram	The shader program
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Fonction d'initialisation, utilisÈe par les VBOs
-		 *\param[in]	p_eType		Type d'accËs du tampon
-		 *\param[in]	p_eNature	Nature d'accËs du tampon
+		 *\brief		Fonction d'initialisation, utilis√©e par les VBOs
+		 *\param[in]	p_eType		Type d'acc√®s du tampon
+		 *\param[in]	p_eNature	Nature d'acc√®s du tampon
 		 *\param[in]	p_pProgram	Le programme de shader
-		 *\return		\p true si tout s'est bien passÈ
+		 *\return		\p true si tout s'est bien pass√©
 		 */
 		virtual bool Initialise( eBUFFER_ACCESS_TYPE p_eType, eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram = nullptr ) = 0;
 		/**
@@ -105,12 +105,12 @@ namespace Castor3D
 		 *\param[in]	p_uiFlags	The lock flags
 		 *\return		The mapped buffer address
 		 *\~french
-		 *\brief		Locke le tampon, c‡d le mappe en mÈmoire ram afin d'y autoriser des modifications
-		 *\remark		Mappe de tampon[p_uiOffset*sizeof( T )] ‡ tampon[(p_uiOffset+p_uiSize-1) * sizeof( T )]
-		 *\param[in]	p_uiOffset	L'offset de dÈpart
-		 *\param[in]	p_uiCount	Le nombre d'ÈlÈments ‡ mapper
+		 *\brief		Locke le tampon, c√†d le mappe en m√©moire ram afin d'y autoriser des modifications
+		 *\remark		Mappe de tampon[p_uiOffset*sizeof( T )] √† tampon[(p_uiOffset+p_uiSize-1) * sizeof( T )]
+		 *\param[in]	p_uiOffset	L'offset de d√©part
+		 *\param[in]	p_uiCount	Le nombre d'√©l√©ments √† mapper
 		 *\param[in]	p_uiFlags	Les flags de lock
-		 *\return		L'adresse du tampon mappÈ
+		 *\return		L'adresse du tampon mapp√©
 		 */
 		virtual T * Lock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags ) = 0;
 		/**
@@ -118,8 +118,8 @@ namespace Castor3D
 		 *\brief		Unlocks the buffer, id est unmaps it from memory so no modification can be made after that
 		 *\remark		All modifications made in the mapped buffer are put into GPU memory
 		 *\~french
-		 *\brief		Un locke le tampon, c‡d l'unmappe de la mÈmoire ram afin de ne plus autoriser de modifications dessus
-		 *\remark		Toutes les modifications qui avaient ÈtÈ effectuÈes sur le tampon mappÈ sont rapatriÈes dans la mÈmoire GPU
+		 *\brief		Un locke le tampon, c√†d l'unmappe de la m√©moire ram afin de ne plus autoriser de modifications dessus
+		 *\remark		Toutes les modifications qui avaient √©t√© effectu√©es sur le tampon mapp√© sont rapatri√©es dans la m√©moire GPU
 		 */
 		virtual void Unlock() = 0;
 		/**
@@ -127,8 +127,8 @@ namespace Castor3D
 		 *\brief		Activation function, to tell the GPU it is active
 		 *\return		\p true if successful
 		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activÈ
-		 *\return		\p true si tout s'est bien passÈ
+		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activ√©
+		 *\return		\p true si tout s'est bien pass√©
 		 */
 		virtual bool Bind() = 0;
 		/**
@@ -138,10 +138,10 @@ namespace Castor3D
 		 *\param[in]	p_uiCount	Instances count
 		 *\return		\p true if successful
 		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activÈ
-		 *\remark		UtilisÈ pour l'instanciation
+		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activ√©
+		 *\remark		Utilis√© pour l'instanciation
 		 *\param[in]	p_uiCount	Nombre d'instances
-		 *\return		\p true si tout s'est bien passÈ
+		 *\return		\p true si tout s'est bien pass√©
 		 */
 		virtual bool Bind( uint32_t p_uiCount )
 		{
@@ -151,7 +151,7 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
 		 *\~french
-		 *\brief		Fonction de dÈsactivation, pour dire au GPU qu'il est dÈsactivÈ
+		 *\brief		Fonction de d√©sactivation, pour dire au GPU qu'il est d√©sactiv√©
 		 */
 		virtual void Unbind() = 0;
 		/**
@@ -163,12 +163,12 @@ namespace Castor3D
 		 *\param[in]	p_eNature	Transfer nature
 		 *\return		\p true if successful
 		 *\~french
-		 *\brief		TransfËre des donnÈes au tampon GPU ‡ partir de la ram
-		 *\param[in]	p_pBuffer	Les donnÈes
-		 *\param[in]	p_iSize		Taille du tampon de donnÈes
+		 *\brief		Transf√®re des donn√©es au tampon GPU √† partir de la ram
+		 *\param[in]	p_pBuffer	Les donn√©es
+		 *\param[in]	p_iSize		Taille du tampon de donn√©es
 		 *\param[in]	p_eType		Type de transfert
 		 *\param[in]	p_eNature	Nature du transfert
-		 *\return		\p true si tout s'est bien passÈ
+		 *\return		\p true si tout s'est bien pass√©
 		 */
 		virtual bool Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_eType, Castor3D::eBUFFER_ACCESS_NATURE p_eNature ) = 0;
 	};

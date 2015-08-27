@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -31,7 +31,7 @@ namespace Castor
 	\remark		Kind of specialisation of Coords< 2, uint32_t >
 	\~french
 	\brief		Classe de taille
-	\remark		Sorte de spécialisation de Coords< 2, uint32_t >
+	\remark		Sorte de spÃ©cialisation de Coords< 2, uint32_t >
 	*/
 	class Size
 		: private Coords< uint32_t, 2 >
@@ -48,69 +48,69 @@ namespace Castor
 		 *\brief		Constructeur
 		 *\param[in]	p_uiWidth, p_uiHeight	Les dimensions
 		 */
-		Size( uint32_t p_uiWidth = 0, uint32_t p_uiHeight = 0 );
+		CU_API Size( uint32_t p_uiWidth = 0, uint32_t p_uiHeight = 0 );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
 		 *\param[in]	p_obj	The object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_obj	L'objet à copier
+		 *\param[in]	p_obj	L'objet Ã  copier
 		 */
-		Size( Size const & p_obj );
+		CU_API Size( Size const & p_obj );
 		/**
 		 *\~english
 		 *\brief		Move assignment Constructor
 		 *\param[in]	p_obj	The object to move
 		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_obj	L'objet à déplacer
+		 *\brief		Constructeur par dÃ©placement
+		 *\param[in]	p_obj	L'objet Ã  dÃ©placer
 		 */
-		Size( Size && p_obj );
+		CU_API Size( Size && p_obj );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Size();
+		CU_API ~Size();
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
 		 *\param[in]	p_obj	The object to copy
 		 *\return		A reference to this object
 		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_obj	L'objet à copier
-		 *\return		Une référence sur cet objet
+		 *\brief		OpÃ©rateur d'affectation par copie
+		 *\param[in]	p_obj	L'objet Ã  copier
+		 *\return		Une rÃ©fÃ©rence sur cet objet
 		 */
-		Size & operator =( Size const & p_obj );
+		CU_API Size & operator =( Size const & p_obj );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
 		 *\param[in]	p_obj	The object to move
 		 *\return		A reference to this object
 		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_obj	L'objet à déplacer
-		 *\return		Une référence sur cet objet
+		 *\brief		OpÃ©rateur d'affectation par dÃ©placement
+		 *\param[in]	p_obj	L'objet Ã  dÃ©placer
+		 *\return		Une rÃ©fÃ©rence sur cet objet
 		 */
-		Size & operator =( Size && p_obj );
+		CU_API Size & operator =( Size && p_obj );
 		/**
 		 *\~english
 		 *\brief		Sets the size values
 		 *\param[in]	p_uiWidth, p_uiHeight	The dimensions
 		 *\~french
-		 *\brief		Définit la taille
+		 *\brief		DÃ©finit la taille
 		 *\param[in]	p_uiWidth, p_uiHeight	Les dimensions
 		 */
-		void set( uint32_t p_uiWidth, uint32_t p_uiHeight );
+		CU_API void set( uint32_t p_uiWidth, uint32_t p_uiHeight );
 		/**
 		 *\~english
 		 *\brief		Retrieves the width
 		 *\return		The width
 		 *\~french
-		 *\brief		Récupère la largeur
+		 *\brief		RÃ©cupÃ¨re la largeur
 		 *\return		La largeur
 		 */
 		inline uint32_t width()const
@@ -122,7 +122,7 @@ namespace Castor
 		 *\brief		Retrieves the width
 		 *\return		The width
 		 *\~french
-		 *\brief		Récupère la largeur
+		 *\brief		RÃ©cupÃ¨re la largeur
 		 *\return		La largeur
 		 */
 		inline uint32_t & width()
@@ -134,7 +134,7 @@ namespace Castor
 		 *\brief		Retrieves the height
 		 *\return		The height
 		 *\~french
-		 *\brief		Récupère la hauteur
+		 *\brief		RÃ©cupÃ¨re la hauteur
 		 *\return		La hauteur
 		 */
 		inline uint32_t height()const
@@ -146,7 +146,7 @@ namespace Castor
 		 *\brief		Retrieves the height
 		 *\return		The height
 		 *\~french
-		 *\brief		Récupère la hauteur
+		 *\brief		RÃ©cupÃ¨re la hauteur
 		 *\return		La hauteur
 		 */
 		inline uint32_t & height()
@@ -163,7 +163,7 @@ namespace Castor
 		 *\remark		Si width+cx < 0 (ou height+cy < 0) alors width=0 (respectivement height=0)
 		 *\param[in]	p_cx, p_cy	Les valeurs de modification
 		 */
-		void grow( int32_t p_cx, int32_t p_cy );
+		CU_API void grow( int32_t p_cx, int32_t p_cy );
 
 		using BaseType::ptr;
 		using BaseType::const_ptr;
@@ -185,22 +185,22 @@ namespace Castor
 	 *\param[in]	p_a, p_b	The sizes to compare
 	 *\return		\p true if sizes have same dimensions
 	 *\~french
-	 *\brief		Opérateur d'égalité
-	 *\param[in]	p_a, p_b	Les tailles à comparer
-	 *\return		\p true si les tailles ont les mêmes dimensions
+	 *\brief		OpÃ©rateur d'Ã©galitÃ©
+	 *\param[in]	p_a, p_b	Les tailles Ã  comparer
+	 *\return		\p true si les tailles ont les mÃªmes dimensions
 	 */
-	bool operator ==( Size const & p_a, Size const & p_b );
+	CU_API bool operator ==( Size const & p_a, Size const & p_b );
 	/**
 	 *\~english
 	 *\brief		Difference operator
 	 *\param[in]	p_a, p_b	The sizes to compare
 	 *\return		\p false if sizes have same dimensions
 	 *\~french
-	 *\brief		Opérateur de différence
-	 *\param[in]	p_a, p_b	Les tailles à comparer
-	 *\return		\p false si les tailles ont les mêmes dimensions
+	 *\brief		OpÃ©rateur de diffÃ©rence
+	 *\param[in]	p_a, p_b	Les tailles Ã  comparer
+	 *\return		\p false si les tailles ont les mÃªmes dimensions
 	 */
-	bool operator !=( Size const & p_a, Size const & p_b );
+	CU_API bool operator !=( Size const & p_a, Size const & p_b );
 }
 
 #endif

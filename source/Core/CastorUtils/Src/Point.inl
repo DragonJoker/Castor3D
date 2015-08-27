@@ -1150,15 +1150,26 @@ namespace Castor
 	}
 #endif
 	template< typename T, uint32_t Count >
+	template< typename U >
+	Point< T, Count >::Point( Point< U, Count > const & p_pt )
+	{
+		if ( std::is_same< T, U >::value )
+		{
+			std::memcpy( m_coords, p_pt.m_coords, binary_size );
+		}
+		else
+		{
+			for( uint32_t i = 0; i < Count; i++ )
+			{
+				m_coords[i] = static_cast< T >( p_pt.m_coords[i] );
+			}
+		}
+	}
+
+	template< typename T, uint32_t Count >
 	Point< T, Count >::Point( Point< T, Count > const & p_pt )
 	{
 		std::memcpy( m_coords, p_pt.m_coords, binary_size );
-		/*
-				for( uint32_t i = 0; i < Count; i++ )
-				{
-					m_coords[i] = p_pt.m_coords[i];
-				}
-		*/
 	}
 
 	template< typename T, uint32_t Count >
@@ -1446,15 +1457,15 @@ namespace Castor
 	{
 		return PtOperators< T, U, Count, Count >::div( p_pt, p_coords );
 	}
-	template< typename T, uint32_t Count >
-	inline Point< T, Count > operator *( Point< T, Count > const & p_pt, T const & p_coord )
+	template< typename T, uint32_t Count, typename U >
+	inline Point< T, Count > operator *( Point< T, Count > const & p_pt, U const & p_coord )
 	{
-		return PtOperators< T, T, Count, Count >::mul( p_pt, p_coord );
+		return PtOperators< T, U, Count, Count >::mul( p_pt, p_coord );
 	}
-	template< typename T, uint32_t Count >
-	inline Point< T, Count > operator /( Point< T, Count > const & p_pt, T const & p_coord )
+	template< typename T, uint32_t Count, typename U >
+	inline Point< T, Count > operator /( Point< T, Count > const & p_pt, U const & p_coord )
 	{
-		return PtOperators< T, T, Count, Count >::div( p_pt, p_coord );
+		return PtOperators< T, U, Count, Count >::div( p_pt, p_coord );
 	}
 
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >

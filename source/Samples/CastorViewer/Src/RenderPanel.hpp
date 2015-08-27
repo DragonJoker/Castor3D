@@ -36,7 +36,8 @@ namespace CastorViewer
 	class RenderPanel : public wxPanel
 	{
 	private:
-		typedef enum eTIMER_ID : int
+		typedef enum eTIMER_ID :
+		int
 		{
 			eTIMER_ID_FORWARD,
 			eTIMER_ID_BACK,

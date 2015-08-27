@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Version=0.7.0
-Name=Castor Viewer
-GenericName=Castor Viewer
-Icon=/usr/share/CastorViewer/gfx/castor.png
-Exec=/usr/bin/CastorViewer
-Categories=Graphics;

@@ -1,4 +1,4 @@
-namespace
+﻿namespace
 {
 	template< typename Type, uint32_t Rows > struct SqrMtxOperators;
 
@@ -212,11 +212,40 @@ namespace
 			return l_ptReturn;
 		}
 	};
+
+	template< typename T, uint32_t Rows > struct CoFactorComputer;
+
+	template< typename T > struct CoFactorComputer< T, 1 >
+	{
+		T operator()( Castor::SquareMatrix< T, 1 > const & CU_PARAM_UNUSED( p_matrix ), uint32_t CU_PARAM_UNUSED( p_uiRow ), uint32_t CU_PARAM_UNUSED( p_uiColumn ) )
+		{
+			return Castor::Policy< T >::unit();
+		}
+	};
+
+	template< typename T, uint32_t Rows > struct CoFactorComputer
+	{
+		T operator()( Castor::SquareMatrix< T, Rows > const & p_matrix, uint32_t p_uiRow, uint32_t p_uiColumn )
+		{
+			T l_tReturn = T();
+			Castor::SquareMatrix < T, Rows - 1 > l_mtxTmp = p_matrix.get_minor( p_uiRow, p_uiColumn );
+
+			if ( ( p_uiRow + p_uiColumn ) % 2 == 0 )
+			{
+				l_tReturn = l_mtxTmp.get_determinant();
+			}
+			else
+			{
+				l_tReturn = -l_mtxTmp.get_determinant();
+			}
+
+			return l_tReturn;
+		}
+	};
 }
 
 namespace Castor
 {
-	template< typename T, uint32_t Rows > struct CoFactorComputer;
 
 //*************************************************************************************************
 
@@ -259,6 +288,9 @@ namespace Castor
 		{
 			this->operator[]( i )[i] = Castor::Policy< T >::unit();
 		}
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 	}
 	template< typename T, uint32_t Rows >
 	template< typename Type >
@@ -285,6 +317,9 @@ namespace Castor
 	template< typename T, uint32_t Rows >
 	inline T SquareMatrix< T, Rows >::get_determinant()const
 	{
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		T l_tReturn(	Castor::Policy< T >::zero() );
 
 		for ( uint32_t i = 0; i < Rows; i++ )
@@ -302,6 +337,9 @@ namespace Castor
 	template< typename T, uint32_t Rows >
 	inline bool SquareMatrix< T, Rows >::is_orthogonal()const
 	{
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		bool l_bReturn = false;
 		Matrix< T, Rows, Rows > l_mTmp( * this );
 		SquareMatrix< T, Rows > l_mId1;
@@ -325,11 +363,17 @@ namespace Castor
 	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::transpose()
 	{
 		*this = my_matrix_type::get_transposed();
+#if !defined( NDEBUG )
+		do_update_debug();
+#endif
 		return *this;
 	}
 	template< typename T, uint32_t Rows >
 	inline bool SquareMatrix< T, Rows >::is_symmetrical()const
 	{
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		bool l_bReturn = true;
 
 		for ( uint32_t i = 0; i < Rows && l_bReturn; i++ )
@@ -345,6 +389,9 @@ namespace Castor
 	template< typename T, uint32_t Rows >
 	inline bool SquareMatrix< T, Rows >::is_anti_symmetrical()const
 	{
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		bool l_bReturn = true;
 
 		for ( uint32_t i = 0; i < Rows && l_bReturn; i++ )
@@ -363,9 +410,9 @@ namespace Castor
 	template< typename T, uint32_t Rows >
 	inline SquareMatrix< T, Rows > SquareMatrix< T, Rows >::get_inverse()const
 	{
-//  		SquareMatrix< T, Rows > l_mtxReturn( *this );
-//  		l_mtxReturn.invert();
-//  		return l_mtxReturn;
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		return SqrMtxOperators< T, Rows >::inverse( *this );
 	}
 	template< typename T, uint32_t Rows >
@@ -398,6 +445,9 @@ namespace Castor
 	template< typename T, uint32_t Rows >
 	inline T SquareMatrix< T, Rows >::get_cofactor( uint32_t p_uiRow, uint32_t p_uiColumn )const
 	{
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		return CoFactorComputer< T, Rows >()( *this, p_uiRow, p_uiColumn );
 	}
 	template< typename T, uint32_t Rows >
@@ -433,11 +483,17 @@ namespace Castor
 			}
 		}
 
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		return *this;
 	}
 	template< typename T, uint32_t Rows >
 	inline SquareMatrix< T, Rows > SquareMatrix< T, Rows >::multiply( SquareMatrix< T, Rows > const & p_matrix )const
 	{
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		SquareMatrix< T, Rows > l_mtxReturn;
 
 		for ( uint32_t i = 0; i < Rows; i++ )
@@ -454,6 +510,9 @@ namespace Castor
 	template< typename Type >
 	inline SquareMatrix< T, Rows > SquareMatrix< T, Rows >::multiply( SquareMatrix< Type, Rows > const & p_matrix )const
 	{
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		SquareMatrix< T, Rows > l_mtxReturn;
 
 		for ( uint32_t i = 0; i < Rows; i++ )
@@ -470,6 +529,9 @@ namespace Castor
 	template <uint32_t _Columns>
 	inline Matrix< T, Rows, _Columns > SquareMatrix< T, Rows >::multiply( Matrix< T, Rows, _Columns > const & p_matrix )const
 	{
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		Matrix< T, Rows, _Columns > l_mtxReturn;
 
 		for ( uint32_t i = 0; i < _Columns; i++ )
@@ -526,6 +588,9 @@ namespace Castor
 	template< typename Type >
 	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::operator *= ( SquareMatrix< Type, Rows > const & p_matrix )
 	{
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		*this = SqrMtxOperators< T, Rows >::mul( *this, p_matrix );
 		return * this;
 	}
@@ -554,6 +619,9 @@ namespace Castor
 	template< typename Type >
 	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::operator *= ( Type const * p_pMatrix )
 	{
+#if !defined( NDEBUG )
+		Matrix< T, Rows, Rows >::do_update_debug();
+#endif
 		*this = multiply( p_pMatrix );
 		return * this;
 	}
@@ -722,130 +790,4 @@ namespace Castor
 	}
 
 //*************************************************************************************************
-
-	template <typename T> struct CoFactorComputer<T, 1>
-	{
-		T operator()( SquareMatrix< T, 1 > const & CU_PARAM_UNUSED( p_matrix ), uint32_t CU_PARAM_UNUSED( p_uiRow ), uint32_t CU_PARAM_UNUSED( p_uiColumn ) )
-		{
-			return Castor::Policy< T >::unit();
-		}
-	};
-	template< typename T, uint32_t Rows > struct CoFactorComputer
-	{
-		T operator()( SquareMatrix< T, Rows > const & p_matrix, uint32_t p_uiRow, uint32_t p_uiColumn )
-		{
-			T l_tReturn = T();
-			SquareMatrix < T, Rows - 1 > l_mtxTmp = p_matrix.get_minor( p_uiRow, p_uiColumn );
-
-			if ( ( p_uiRow + p_uiColumn ) % 2 == 0 )
-			{
-				l_tReturn = l_mtxTmp.get_determinant();
-			}
-			else
-			{
-				l_tReturn = -l_mtxTmp.get_determinant();
-			}
-
-			return l_tReturn;
-		}
-	};
-
-//*************************************************************************************************
-}
-
-template< typename T, uint32_t Rows >
-inline Castor::String & operator << ( Castor::String & p_strOut, Castor::SquareMatrix <T, Rows> const & p_matrix )
-{
-	Castor::StringStream & l_streamOut;
-
-	for ( uint32_t i = 0; i < Rows; i++ )
-	{
-		for ( uint32_t j = 0; j < Rows; j++ )
-		{
-			l_streamOut << cuT( "\t" ) << p_matrix[j][i];
-		}
-
-		l_streamOut << std::endl;
-	}
-
-	p_strOut += l_streamOut.str();
-	return p_strOut;
-}
-template< typename T, uint32_t Rows >
-inline Castor::String & operator >> ( Castor::String & p_strIn, Castor::SquareMatrix <T, Rows> & p_matrix )
-{
-	Castor::StringStream & l_streamIn( p_strIn );
-
-	for ( uint32_t i = 0; i < Rows; i++ )
-	{
-		for ( uint32_t j = 0; j < Rows; j++ )
-		{
-			l_streamIn >> p_matrix[j][i];
-		}
-
-		l_streamIn.ignore();
-	}
-
-	p_strIn += l_streamIn.str();
-	return p_strIn;
-}
-template< typename T, uint32_t Rows >
-inline std::ostream & operator << ( std::ostream & p_streamOut, Castor::SquareMatrix <T, Rows> const & p_matrix )
-{
-	for ( uint32_t i = 0; i < Rows; i++ )
-	{
-		for ( uint32_t j = 0; j < Rows; j++ )
-		{
-			p_streamOut << "\t" << p_matrix[j][i];
-		}
-
-		p_streamOut << std::endl;
-	}
-
-	return p_streamOut;
-}
-template< typename T, uint32_t Rows >
-inline std::istream & operator >> ( std::istream & p_streamIn, Castor::SquareMatrix <T, Rows> & p_matrix )
-{
-	for ( uint32_t i = 0; i < Rows; i++ )
-	{
-		for ( uint32_t j = 0; j < Rows; j++ )
-		{
-			p_streamIn >> p_matrix[j][i];
-		}
-
-		p_streamIn.ignore();
-	}
-
-	return p_streamIn;
-}
-template< typename T, uint32_t Rows >
-inline std::wostream & operator << ( std::wostream & p_streamOut, Castor::SquareMatrix <T, Rows> const & p_matrix )
-{
-	for ( uint32_t i = 0; i < Rows; i++ )
-	{
-		for ( uint32_t j = 0; j < Rows; j++ )
-		{
-			p_streamOut << L"\t" << p_matrix[j][i];
-		}
-
-		p_streamOut << std::endl;
-	}
-
-	return p_streamOut;
-}
-template< typename T, uint32_t Rows >
-inline std::wistream & operator >> ( std::wistream & p_streamIn, Castor::SquareMatrix <T, Rows> & p_matrix )
-{
-	for ( uint32_t i = 0; i < Rows; i++ )
-	{
-		for ( uint32_t j = 0; j < Rows; j++ )
-		{
-			p_streamIn >> p_matrix[j][i];
-		}
-
-		p_streamIn.ignore();
-	}
-
-	return p_streamIn;
 }

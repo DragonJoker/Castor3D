@@ -113,11 +113,11 @@ namespace GlRender
 
 				if ( m_compilerLog.size() > 0 )
 				{
-					Logger::LogMessage( m_compilerLog );
+					Logger::LogInfo( m_compilerLog );
 
 					if ( m_eStatus == eSHADER_STATUS_ERROR )
 					{
-						Logger::LogMessage( m_strLoadedSource );
+						Logger::LogInfo( m_strLoadedSource );
 						m_strLoadedSource.clear();
 					}
 				}
@@ -148,16 +148,15 @@ namespace GlRender
 		{
 			m_pShaderProgram = p_pProgram;
 			m_gl.AttachShader( m_pShaderProgram->GetGlProgram(), m_shaderObject );
-			/*
-						if( m_eType == eSHADER_TYPE_GEOMETRY )
-						{
-							int l_iTmp;
-							m_gl.GetIntegerv( eGL_GETINTEGER_PARAM_MAX_GEOMETRY_OUTPUT_VERTICES,	&l_iTmp );
-							m_gl.ProgramParameteri( m_pShaderProgram->GetGlProgram(), eGL_PROGRAM_PARAM_GEOMETRY_INPUT_TYPE,	m_gl.Get( m_eInputType )						);
-							m_gl.ProgramParameteri( m_pShaderProgram->GetGlProgram(), eGL_PROGRAM_PARAM_GEOMETRY_OUTPUT_TYPE,	m_gl.Get( m_eOutputType )						);
-							m_gl.ProgramParameteri( m_pShaderProgram->GetGlProgram(), eGL_PROGRAM_PARAM_GEOMETRY_VERTICES_OUT,	std::min< int >( m_uiOutputVtxCount, l_iTmp )	);
-						}
-			*/
+
+			//if( m_eType == eSHADER_TYPE_GEOMETRY )
+			//{
+			//	int l_iTmp;
+			//	m_gl.GetIntegerv( eGL_GETINTEGER_PARAM_MAX_GEOMETRY_OUTPUT_VERTICES,	&l_iTmp );
+			//	m_gl.ProgramParameteri( m_pShaderProgram->GetGlProgram(), eGL_PROGRAM_PARAM_GEOMETRY_INPUT_TYPE,	m_gl.Get( m_eInputType )						);
+			//	m_gl.ProgramParameteri( m_pShaderProgram->GetGlProgram(), eGL_PROGRAM_PARAM_GEOMETRY_OUTPUT_TYPE,	m_gl.Get( m_eOutputType )						);
+			//	m_gl.ProgramParameteri( m_pShaderProgram->GetGlProgram(), eGL_PROGRAM_PARAM_GEOMETRY_VERTICES_OUT,	std::min< int >( m_uiOutputVtxCount, l_iTmp )	);
+			//}
 		}
 	}
 

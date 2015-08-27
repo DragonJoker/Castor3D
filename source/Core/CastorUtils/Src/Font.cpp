@@ -1,4 +1,4 @@
-#include "Font.hpp"
+﻿#include "Font.hpp"
 #include "Image.hpp"
 
 #include <ft2build.h>
@@ -30,6 +30,8 @@ namespace Castor
 
 	namespace ft
 	{
+#define CHECK_FT_ERR( func, ... ) CheckErr( func( __VA_ARGS__ ), #func )
+
 		inline bool CheckErr( FT_Error p_iErr, const char * p_szName )
 		{
 			bool l_bReturn = true;
@@ -123,7 +125,7 @@ namespace Castor
 		}
 
 		struct SFreeTypeFontImpl
-				: public Font::SFontImpl
+			: public Font::SFontImpl
 		{
 			SFreeTypeFontImpl( Path const & p_pathFile, uint32_t p_height )
 				: m_height( p_height )
@@ -139,16 +141,16 @@ namespace Castor
 
 			virtual void Initialise()
 			{
-				CheckErr( FT_Init_FreeType( &m_library ), "FT_Init_FreeType" );
-				CheckErr( FT_New_Face( m_library, str_utils::to_str( m_path ).c_str(), 0, &m_face ), "FT_New_Face" );
-				CheckErr( FT_Select_Charmap( m_face, FT_ENCODING_UNICODE ), "FT_Select_Charmap" );
-				CheckErr( FT_Set_Pixel_Sizes( m_face, 0, m_height ), "FT_Set_Pixel_Sizes" );
+				CHECK_FT_ERR( FT_Init_FreeType, &m_library );
+				CHECK_FT_ERR( FT_New_Face, m_library, str_utils::to_str( m_path ).c_str(), 0, &m_face );
+				CHECK_FT_ERR( FT_Select_Charmap, m_face, FT_ENCODING_UNICODE );
+				CHECK_FT_ERR( FT_Set_Pixel_Sizes, m_face, 0, m_height );
 			}
 
 			virtual void Cleanup()
 			{
-				CheckErr( FT_Done_Face( m_face ), "FT_Done_Face" );
-				CheckErr( FT_Done_FreeType( m_library ), "FT_Done_FreeType" );
+				CHECK_FT_ERR( FT_Done_Face, m_face );
+				CHECK_FT_ERR( FT_Done_FreeType, m_library );
 				m_library = NULL;
 				m_face = NULL;
 			}
@@ -156,9 +158,9 @@ namespace Castor
 			virtual int LoadGlyph( Glyph & p_glyph )
 			{
 				FT_Glyph l_ftGlyph;
-				CheckErr( FT_Load_Glyph( m_face, FT_Get_Char_Index( m_face, p_glyph.GetCharacter() ), FT_LOAD_DEFAULT ), "FT_Load_Glyph" );
-				CheckErr( FT_Get_Glyph( m_face->glyph, &l_ftGlyph ), "FT_Get_Glyph" );
-				CheckErr( FT_Glyph_To_Bitmap( &l_ftGlyph, FT_RENDER_MODE_NORMAL, 0, 1 ), "FT_Glyph_To_Bitmap" );
+				CHECK_FT_ERR( FT_Load_Glyph, m_face, FT_Get_Char_Index( m_face, p_glyph.GetCharacter() ), FT_LOAD_DEFAULT );
+				CHECK_FT_ERR( FT_Get_Glyph, m_face->glyph, &l_ftGlyph );
+				CHECK_FT_ERR( FT_Glyph_To_Bitmap, &l_ftGlyph, FT_RENDER_MODE_NORMAL, 0, 1 );
 				FT_BitmapGlyph l_ftBmpGlyph = FT_BitmapGlyph( l_ftGlyph );
 				FT_Bitmap & l_ftBitmap = l_ftBmpGlyph->bitmap;
 				Size l_advance( uint32_t( std::abs( l_ftGlyph->advance.x ) / 65536.0 ), uint32_t( l_ftGlyph->advance.y  / 65536.0 ) );
@@ -175,7 +177,7 @@ namespace Castor
 					uint8_t * l_dst = l_bitmap.data();
 					uint8_t const * l_src = l_ftBitmap.buffer;
 
-					for ( int i = 0; i < l_ftBitmap.rows; i++ )
+					for ( uint32_t i = 0; i < uint32_t( l_ftBitmap.rows ); i++ )
 					{
 						memcpy( l_dst, l_src, l_ftBitmap.width );
 						l_src += l_pitch;
@@ -187,7 +189,7 @@ namespace Castor
 					uint8_t * l_dst = l_bitmap.data() + l_uiSize - l_pitch;
 					uint8_t const * l_src = l_ftBitmap.buffer;
 
-					for ( int i = 0; i < l_ftBitmap.rows; i++ )
+					for ( uint32_t i = 0; i < uint32_t( l_ftBitmap.rows ); i++ )
 					{
 						memcpy( l_dst, l_src, l_ftBitmap.width );
 						l_src += l_pitch;

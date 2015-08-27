@@ -1,4 +1,4 @@
-#include "IndexBuffer.hpp"
+﻿#include "IndexBuffer.hpp"
 #include "RenderSystem.hpp"
 
 using namespace Castor;

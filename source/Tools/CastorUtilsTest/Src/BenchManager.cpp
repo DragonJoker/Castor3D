@@ -2,6 +2,8 @@
 #include "Benchmark.hpp"
 #include "UnitTest.hpp"
 
+#include <algorithm>
+
 using namespace Castor;
 
 namespace Testing

@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -29,7 +29,7 @@ namespace Castor
 	\~english
 	\brief		Specified parser parameter
 	\~french
-	\brief		Parmètre de parseur spécifié
+	\brief		ParmÃ¨tre de parseur spÃ©cifiÃ©
 	\remark
 	*/
 	template< ePARAMETER_TYPE Type >
@@ -42,7 +42,7 @@ namespace Castor
 		 *\brief		Retrieves the parameter type
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le type du paramètre
+		 *\brief		RÃ©cupÃ¨re le type du paramÃ¨tre
 		 *\return		La valeur
 		 */
 		virtual ePARAMETER_TYPE GetType()
@@ -54,7 +54,7 @@ namespace Castor
 		 *\brief		Retrieves the parameter type
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le type du paramètre
+		 *\brief		RÃ©cupÃ¨re le type du paramÃ¨tre
 		 *\return		La valeur
 		 */
 		virtual xchar const * GetStrType()
@@ -66,7 +66,7 @@ namespace Castor
 		 *\brief			Defines the parameter value from a String
 		 *\param[in,out]	p_strParam	The String containing the value
 		 *\~french
-		 *\brief			Définit la valeur du paramètre, à partir d'un String
+		 *\brief			DÃ©finit la valeur du paramÃ¨tre, Ã  partir d'un String
 		 *\param[in,out]	p_strParam	Le String contenant la valeur
 		 */
 		virtual bool Parse( String & p_strParam );

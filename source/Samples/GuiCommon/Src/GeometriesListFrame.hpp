@@ -26,45 +26,45 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GuiCommon
 {
 	class wxGeometriesListFrame
-		:	public wxPanel
+		: public wxPanel
 	{
 	public:
 		typedef enum eBMP
 		{
-			eBMP_VISIBLE
-			,	eBMP_VISIBLE_SEL
-			,	eBMP_HIDDEN
-			,	eBMP_HIDDEN_SEL
-			,	eBMP_GEOMETRY
-			,	eBMP_GEOMETRY_SEL
-			,	eBMP_GEOMETRY_OPEN
-			,	eBMP_GEOMETRY_OPEN_SEL
-			,	eBMP_SUBMESH
-			,	eBMP_SUBMESH_SEL
-			,	eBMP_COUNT
+			eBMP_VISIBLE,
+			eBMP_VISIBLE_SEL,
+			eBMP_HIDDEN,
+			eBMP_HIDDEN_SEL,
+			eBMP_GEOMETRY,
+			eBMP_GEOMETRY_SEL,
+			eBMP_GEOMETRY_OPEN,
+			eBMP_GEOMETRY_OPEN_SEL,
+			eBMP_SUBMESH,
+			eBMP_SUBMESH_SEL,
+			eBMP_COUNT,
 		}	eBMP;
 
 	private:
 		typedef enum eID
 		{
-			eID_TREE_GEOMETRIES
-			,	eID_COMBO_MATERIALS
-			,	eID_BUTTON_DELETE
+			eID_TREE_GEOMETRIES,
+			eID_COMBO_MATERIALS,
+			eID_BUTTON_DELETE,
 		}	eID;
 
 		typedef enum eTREE_ID
 		{
-			eTREE_ID_VISIBLE
-			,	eTREE_ID_VISIBLE_SEL
-			,	eTREE_ID_HIDDEN
-			,	eTREE_ID_HIDDEN_SEL
-			,	eTREE_ID_GEOMETRY
-			,	eTREE_ID_GEOMETRY_SEL
-			,	eTREE_ID_GEOMETRY_OPEN
-			,	eTREE_ID_GEOMETRY_OPEN_SEL
-			,	eTREE_ID_SUBMESH
-			,	eTREE_ID_SUBMESH_SEL
-			,	eTREE_ID_COUNT
+			eTREE_ID_VISIBLE,
+			eTREE_ID_VISIBLE_SEL,
+			eTREE_ID_HIDDEN,
+			eTREE_ID_HIDDEN_SEL,
+			eTREE_ID_GEOMETRY,
+			eTREE_ID_GEOMETRY_SEL,
+			eTREE_ID_GEOMETRY_OPEN,
+			eTREE_ID_GEOMETRY_OPEN_SEL,
+			eTREE_ID_SUBMESH,
+			eTREE_ID_SUBMESH_SEL,
+			eTREE_ID_COUNT,
 		}	eTREE_ID;
 
 		wxTreeCtrl * m_pTreeGeometries;

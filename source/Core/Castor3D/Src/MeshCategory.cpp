@@ -1,4 +1,4 @@
-#include "MeshCategory.hpp"
+﻿#include "MeshCategory.hpp"
 #include "Submesh.hpp"
 
 using namespace Castor;

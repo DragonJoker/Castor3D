@@ -1,4 +1,4 @@
-#include "MovingObjectBase.hpp"
+﻿#include "MovingObjectBase.hpp"
 #include "KeyFrame.hpp"
 #include "Interpolator.hpp"
 
@@ -84,7 +84,7 @@ namespace Castor3D
 
 		if ( HasKeyFrames() )
 		{
-			MtxUtils::set_transform( l_mtxReturn, DoComputeTranslation( p_rTime ), DoComputeScaling( p_rTime ), DoComputeRotation( p_rTime ) );
+			MtxUtils::set_transform_rh( l_mtxReturn, DoComputeTranslation( p_rTime ), DoComputeScaling( p_rTime ), DoComputeRotation( p_rTime ) );
 		}
 		else
 		{

@@ -1,4 +1,4 @@
-#include "GeneratorPlugin.hpp"
+﻿#include "GeneratorPlugin.hpp"
 
 #if defined( _WIN32 )
 #	include <Windows.h>
@@ -22,8 +22,8 @@ namespace Castor3D
 #	error "Implement ABI names for this compiler"
 #endif
 
-	GeneratorPlugin::GeneratorPlugin( DynamicLibrarySPtr p_pLibrary )
-		:	PluginBase( ePLUGIN_TYPE_DIVIDER, p_pLibrary )
+	GeneratorPlugin::GeneratorPlugin( DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
+		:	PluginBase( ePLUGIN_TYPE_DIVIDER, p_pLibrary, p_engine )
 	{
 		if ( !p_pLibrary->GetFunction( m_pfnCreateGenerator, CreateGeneratorFunctionABIName ) )
 		{
@@ -38,49 +38,19 @@ namespace Castor3D
 			l_strError += str_utils::to_string( dlerror() );
 			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
 		}
-	}
 
-	GeneratorPlugin::GeneratorPlugin( GeneratorPlugin const & p_plugin )
-		:	PluginBase( p_plugin )
-		,	m_pfnCreateGenerator( p_plugin.m_pfnCreateGenerator )
-		,	m_pfnDestroyGenerator( p_plugin.m_pfnDestroyGenerator )
-	{
-	}
-
-	GeneratorPlugin::GeneratorPlugin( GeneratorPlugin && p_plugin )
-		:	PluginBase( std::move( p_plugin ) )
-		,	m_pfnCreateGenerator( std::move( p_plugin.m_pfnCreateGenerator ) )
-		,	m_pfnDestroyGenerator( std::move( p_plugin.m_pfnDestroyGenerator ) )
-	{
-		p_plugin.m_pfnCreateGenerator	= NULL;
-		p_plugin.m_pfnDestroyGenerator	= NULL;
+		if ( m_pfnOnLoad )
+		{
+			m_pfnOnLoad( m_engine );
+		}
 	}
 
 	GeneratorPlugin::~GeneratorPlugin()
 	{
-	}
-
-	GeneratorPlugin & GeneratorPlugin::operator =( GeneratorPlugin const & p_plugin )
-	{
-		PluginBase::operator =( p_plugin );
-		m_pfnCreateGenerator	= p_plugin.m_pfnCreateGenerator;
-		m_pfnDestroyGenerator	= p_plugin.m_pfnDestroyGenerator;
-		return * this;
-	}
-
-	GeneratorPlugin & GeneratorPlugin::operator =( GeneratorPlugin && p_plugin )
-	{
-		PluginBase::operator =( std::move( p_plugin ) );
-
-		if ( this != & p_plugin )
+		if ( m_pfnOnUnload )
 		{
-			m_pfnCreateGenerator	= std::move( p_plugin.m_pfnCreateGenerator );
-			m_pfnDestroyGenerator	= std::move( p_plugin.m_pfnDestroyGenerator );
-			p_plugin.m_pfnCreateGenerator	= NULL;
-			p_plugin.m_pfnDestroyGenerator	= NULL;
+			m_pfnOnUnload( m_engine );
 		}
-
-		return * this;
 	}
 
 	Subdivider * GeneratorPlugin::CreateGenerator( TextureUnit * p_pTexture )

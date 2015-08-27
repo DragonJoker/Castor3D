@@ -1,4 +1,6 @@
-#include "Mesh.hpp"
+﻿#include "Mesh.hpp"
+
+#include "Engine.hpp"
 #include "MeshFactory.hpp"
 #include "Submesh.hpp"
 #include "Cone.hpp"
@@ -25,7 +27,7 @@ namespace Castor3D
 
 	bool Mesh::TextLoader::operator()( Mesh const & p_mesh, TextFile & p_file )
 	{
-		Logger::LogMessage( cuT( "Writing Mesh " ) + p_mesh.GetName() );
+		Logger::LogInfo( cuT( "Writing Mesh " ) + p_mesh.GetName() );
 		bool l_return = p_file.WriteText( cuT( "\t\tmesh \"" ) + p_mesh.GetName() + cuT( "\"\n\t\t{\n" ) ) > 0;
 
 		if ( l_return )
@@ -123,8 +125,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Mesh::Mesh( Engine * p_pEngine, eMESH_TYPE p_eMeshType )
-		:	Resource< Mesh >( cuEmptyString )
+	Mesh::Mesh( Engine * p_pEngine, eMESH_TYPE p_eMeshType, String const & p_name )
+		:	Resource< Mesh >( p_name )
 		,	m_modified( false )
 		,	m_factory( p_pEngine->GetMeshFactory() )
 		,	m_pEngine( p_pEngine )
@@ -133,14 +135,9 @@ namespace Castor3D
 		m_pMeshCategory->SetMesh( this );
 	}
 
-	Mesh::Mesh( Engine * p_pEngine, String const & p_name, eMESH_TYPE p_eMeshType )
-		:	Resource< Mesh >( p_name )
-		,	m_modified( false )
-		,	m_factory( p_pEngine->GetMeshFactory() )
-		,	m_pEngine( p_pEngine )
+	Mesh::Mesh( Engine * p_pEngine, eMESH_TYPE p_eMeshType )
+		:	Mesh( p_pEngine, p_eMeshType, cuEmptyString )
 	{
-		m_pMeshCategory = m_factory.Create( p_eMeshType );
-		m_pMeshCategory->SetMesh( this );
 	}
 
 	Mesh::~Mesh()
@@ -293,7 +290,7 @@ namespace Castor3D
 
 	MeshSPtr Mesh::Clone( String const & p_name )
 	{
-		MeshSPtr l_clone = std::make_shared< Mesh >( m_pEngine, p_name, GetMeshType() );
+		MeshSPtr l_clone = std::make_shared< Mesh >( m_pEngine, GetMeshType(), p_name );
 		std::for_each( m_submeshes.begin(), m_submeshes.end(), [&]( SubmeshSPtr p_pSubmesh )
 		{
 			l_clone->m_submeshes.push_back( p_pSubmesh->Clone() );

@@ -1,4 +1,4 @@
-#include "SubdivisionFrameEvent.hpp"
+﻿#include "SubdivisionFrameEvent.hpp"
 #include "Submesh.hpp"
 
 using namespace Castor;
@@ -19,12 +19,7 @@ namespace Castor3D
 	{
 		m_pSubmesh->ComputeNormals();
 		m_pSubmesh->GenerateBuffers();
-
-		if ( m_pSubmesh->GetRenderer() )
-		{
-			m_pSubmesh->GetRenderer()->Initialise();
-		}
-
+		m_pSubmesh->Initialise();
 		return true;
 	}
 }

@@ -1,5 +1,7 @@
-#include "FrameListener.hpp"
+﻿#include "FrameListener.hpp"
 #include "FrameEvent.hpp"
+
+using namespace Castor;
 
 namespace Castor3D
 {
@@ -9,9 +11,9 @@ namespace Castor3D
 
 	FrameListener::~FrameListener()
 	{
-		for ( std::array< FrameEventPtrArray, eEVENT_TYPE_COUNT >::iterator l_it = m_events.begin(); l_it != m_events.end(); ++l_it )
+		for ( auto && l_it: m_events )
 		{
-			l_it->clear();
+			l_it.clear();
 		}
 	}
 
@@ -29,9 +31,27 @@ namespace Castor3D
 		m_mutex.unlock();
 		bool l_bReturn = true;
 
-		for ( FrameEventPtrArrayIt l_it = l_arrayEvents.begin(); l_it != l_arrayEvents.end() && l_bReturn; ++l_it )
+		try
 		{
-			l_bReturn = ( *l_it )->Apply();
+			for ( auto && l_it = l_arrayEvents.begin(); l_it != l_arrayEvents.end() && l_bReturn; ++l_it )
+			{
+				l_bReturn = ( *l_it )->Apply();
+			}
+		}
+		catch ( Exception & p_exc )
+		{
+			Logger::LogError( StringStream() << cuT( "Encountered exception while processing events: " ) << str_utils::from_str( p_exc.GetFullDescription() ) );
+			l_bReturn = false;
+		}
+		catch ( std::exception & p_exc )
+		{
+			Logger::LogError( StringStream() << cuT( "Encountered exception while processing events: " ) << str_utils::from_str( p_exc.what() ) );
+			l_bReturn = false;
+		}
+		catch ( ... )
+		{
+			Logger::LogError( StringStream() << cuT( "Encountered exception while processing events" ) );
+			l_bReturn = false;
 		}
 
 		return l_bReturn;

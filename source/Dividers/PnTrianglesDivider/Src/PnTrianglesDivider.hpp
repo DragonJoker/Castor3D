@@ -28,6 +28,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Subdivider.hpp>
 #include <FrameListener.hpp>
+#include <PlaneEquation.hpp>
 
 #pragma warning( pop )
 
@@ -47,6 +48,27 @@ namespace PnTriangles
 	\author 	Sylvain DOREMUS
 	\date 		12/03/2010
 	\~english
+	\brief		The PN Triangle bezier patch
+	*/
+	struct Patch
+	{
+		Patch( Castor::PlaneEquation< double > const & p_p1, Castor::PlaneEquation< double > const & p_p2, Castor::PlaneEquation< double > const & p_p3 );
+
+		Castor::Point3d b300;
+		Castor::Point3d b030;
+		Castor::Point3d b003;
+		Castor::Point3d b201;
+		Castor::Point3d b210;
+		Castor::Point3d b120;
+		Castor::Point3d b021;
+		Castor::Point3d b102;
+		Castor::Point3d b012;
+		Castor::Point3d b111;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/03/2010
+	\~english
 	\brief		Subdivider using PN Triangles subdivision algorithm
 	*/
 	class Subdivider : public Castor3D::Subdivider
@@ -55,10 +77,15 @@ namespace PnTriangles
 		Subdivider();
 		virtual ~Subdivider();
 		virtual void Cleanup();
+		virtual void Subdivide( Castor3D::SubmeshSPtr p_pSubmesh, int p_occurences, bool p_bGenerateBuffers = true, bool p_bThreaded = false );
 
 	private:
-		virtual void  DoSubdivide();
-		Castor3D::BufferElementGroupSPtr DoComputePointFrom( Castor::Point3r const & p_ptPosA, Castor::Point3r const & p_ptPosB, Castor::Point3r const & p_ptNmlA, Castor::Point3r const & p_ptNmlB, Castor::Point3r const & p_ptCenter );
+		virtual void DoSubdivide();
+		void DoComputeFaces( double u0, double v0, double u2, double v2, int p_occurences, Patch const & p_patch );
+		Castor3D::BufferElementGroupSPtr DoComputePoint( double u, double v, Patch const & p_patch );
+
+	private:
+		int m_occurences;
 	};
 }
 

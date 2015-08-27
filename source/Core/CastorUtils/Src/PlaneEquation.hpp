@@ -41,7 +41,7 @@ namespace Castor
 
 	private:
 		point m_normal;
-		real m_d;
+		point m_point;
 
 	public:
 		/**
@@ -215,7 +215,7 @@ namespace Castor
 		 */
 		inline Point< T, 3 > const & GetPoint()const
 		{
-			return m_d;
+			return m_point;
 		}
 	};
 }

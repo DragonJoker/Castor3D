@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -31,7 +31,7 @@ namespace Castor
 	\remark		Kind of specialisation of Coords< 2, int32_t >
 	\~french
 	\brief		Classe de position
-	\remark		Sorte de spécialisation de Coords< 2, int32_t >
+	\remark		Sorte de spÃ©cialisation de Coords< 2, int32_t >
 	*/
 	class Position
 		: private Coords< int32_t, 2 >
@@ -48,79 +48,79 @@ namespace Castor
 		 *\brief		Constructeur
 		 *\param[in]	p_x, p_y	La position
 		 */
-		Position( int32_t p_x = 0, int32_t p_y = 0 );
+		CU_API Position( int32_t p_x = 0, int32_t p_y = 0 );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
 		 *\param[in]	p_obj	The object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_obj	L'objet à copier
+		 *\param[in]	p_obj	L'objet Ã  copier
 		 */
-		Position( Position const & p_obj );
+		CU_API Position( Position const & p_obj );
 		/**
 		 *\~english
 		 *\brief		Move assignment Constructor
 		 *\param[in]	p_obj	The object to move
 		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_obj	L'objet à déplacer
+		 *\brief		Constructeur par dÃ©placement
+		 *\param[in]	p_obj	L'objet Ã  dÃ©placer
 		 */
-		Position( Position && p_obj );
+		CU_API Position( Position && p_obj );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Position();
+		CU_API ~Position();
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
 		 *\param[in]	p_obj	The object to copy
 		 *\return		A reference to this object
 		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_obj	L'objet à copier
-		 *\return		Une référence sur cet objet
+		 *\brief		OpÃ©rateur d'affectation par copie
+		 *\param[in]	p_obj	L'objet Ã  copier
+		 *\return		Une rÃ©fÃ©rence sur cet objet
 		 */
-		Position & operator =( Position const & p_obj );
+		CU_API Position & operator =( Position const & p_obj );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
 		 *\param[in]	p_obj	The object to move
 		 *\return		A reference to this object
 		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_obj	L'objet à déplacer
-		 *\return		Une référence sur cet objet
+		 *\brief		OpÃ©rateur d'affectation par dÃ©placement
+		 *\param[in]	p_obj	L'objet Ã  dÃ©placer
+		 *\return		Une rÃ©fÃ©rence sur cet objet
 		 */
-		Position & operator =( Position && p_obj );
+		CU_API Position & operator =( Position && p_obj );
 		/**
 		 *\~english
 		 *\brief		Sets the position values
 		 *\param[in]	p_x, p_y	The position
 		 *\~french
-		 *\brief		Définit la position
+		 *\brief		DÃ©finit la position
 		 *\param[in]	p_x, p_y	La position
 		 */
-		void set( int32_t p_x, int32_t p_y );
+		CU_API void set( int32_t p_x, int32_t p_y );
 		/**
 		 *\~english
 		 *\brief		Offsets the position values
 		 *\param[in]	p_x, p_y	The position offsets
 		 *\~french
-		 *\brief		Déplace la position
-		 *\param[in]	p_x, p_y	Les valeurs de déplacement
+		 *\brief		DÃ©place la position
+		 *\param[in]	p_x, p_y	Les valeurs de dÃ©placement
 		 */
-		void offset( int32_t p_x, int32_t p_y );
+		CU_API void offset( int32_t p_x, int32_t p_y );
 		/**
 		 *\~english
 		 *\brief		Retrieves the left coordinate
 		 *\return		The rectangle's left coordinate
 		 *\~french
-		 *\brief		Récupère la coordonnée gauche
-		 *\return		La coordonnée gauche du rectangle
+		 *\brief		RÃ©cupÃ¨re la coordonnÃ©e gauche
+		 *\return		La coordonnÃ©e gauche du rectangle
 		 */
 		inline int32_t y()const
 		{
@@ -131,8 +131,8 @@ namespace Castor
 		 *\brief		Retrieves the left coordinate
 		 *\return		The rectangle's left coordinate
 		 *\~french
-		 *\brief		Récupère la coordonnée gauche
-		 *\return		La coordonnée gauche du rectangle
+		 *\brief		RÃ©cupÃ¨re la coordonnÃ©e gauche
+		 *\return		La coordonnÃ©e gauche du rectangle
 		 */
 		inline int32_t & y()
 		{
@@ -143,8 +143,8 @@ namespace Castor
 		 *\brief		Retrieves the right coordinate
 		 *\return		The rectangle's right coordinate
 		 *\~french
-		 *\brief		Récupère la coordonnée droite
-		 *\return		La coordonnée droite du rectangle
+		 *\brief		RÃ©cupÃ¨re la coordonnÃ©e droite
+		 *\return		La coordonnÃ©e droite du rectangle
 		 */
 		inline int32_t x()const
 		{
@@ -155,8 +155,8 @@ namespace Castor
 		 *\brief		Retrieves the right coordinate
 		 *\return		The rectangle's right coordinate
 		 *\~french
-		 *\brief		Récupère la coordonnée droite
-		 *\return		La coordonnée droite du rectangle
+		 *\brief		RÃ©cupÃ¨re la coordonnÃ©e droite
+		 *\return		La coordonnÃ©e droite du rectangle
 		 */
 		inline int32_t & x()
 		{
@@ -183,22 +183,22 @@ namespace Castor
 	 *\param[in]	p_a, p_b	The positions to compare
 	 *\return		\p true if positions have same coordinates
 	 *\~french
-	 *\brief		Opérateur d'égalité
-	 *\param[in]	p_a, p_b	Les positions à comparer
-	 *\return		\p true si les positions ont les mêmes coordonnées
+	 *\brief		OpÃ©rateur d'Ã©galitÃ©
+	 *\param[in]	p_a, p_b	Les positions Ã  comparer
+	 *\return		\p true si les positions ont les mÃªmes coordonnÃ©es
 	 */
-	bool operator ==( Position const & p_a, Position const & p_b );
+	CU_API bool operator ==( Position const & p_a, Position const & p_b );
 	/**
 	 *\~english
 	 *\brief		Difference operator
 	 *\param[in]	p_a, p_b	The positions to compare
 	 *\return		\p false if positions have same coordinates
 	 *\~french
-	 *\brief		Opérateur de différence
-	 *\param[in]	p_a, p_b	Les positions à comparer
-	 *\return		\p false si les positions ont les mêmes coordonnées
+	 *\brief		OpÃ©rateur de diffÃ©rence
+	 *\param[in]	p_a, p_b	Les positions Ã  comparer
+	 *\return		\p false si les positions ont les mÃªmes coordonnÃ©es
 	 */
-	bool operator !=( Position const & p_a, Position const & p_b );
+	CU_API bool operator !=( Position const & p_a, Position const & p_b );
 }
 
 #endif

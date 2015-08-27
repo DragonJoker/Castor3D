@@ -1,4 +1,4 @@
-#include "Rectangle.hpp"
+﻿#include "Rectangle.hpp"
 #include "Point.hpp"
 
 namespace Castor

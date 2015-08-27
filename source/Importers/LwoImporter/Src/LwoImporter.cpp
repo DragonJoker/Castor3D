@@ -4,6 +4,7 @@
 
 #include <Colour.hpp>
 #include <Material.hpp>
+#include <MaterialManager.hpp>
 #include <Pass.hpp>
 #include <TextureUnit.hpp>
 #include <Mesh.hpp>

@@ -49,7 +49,9 @@ namespace Castor3D
 		\~french
 		\brief		Loader d'AnimatedObjectGroup
 		*/
-		class C3D_API BinaryLoader : public Castor::Loader< AnimatedObjectGroup, Castor::eFILE_TYPE_BINARY, Castor::BinaryFile >, public Castor::NonCopyable
+		class C3D_API BinaryLoader
+			: public Castor::Loader< AnimatedObjectGroup, Castor::eFILE_TYPE_BINARY, Castor::BinaryFile >
+			, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -90,7 +92,9 @@ namespace Castor3D
 		\~french
 		\brief		Loader d'AnimatedObjectGroup
 		*/
-		class C3D_API TextLoader : public Castor::Loader< AnimatedObjectGroup, Castor::eFILE_TYPE_TEXT, Castor::TextFile >, public Castor::NonCopyable
+		class C3D_API TextLoader
+			: public Castor::Loader< AnimatedObjectGroup, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -133,7 +137,7 @@ namespace Castor3D
 		 *\param[in]	p_pScene	La scène
 		 *\param[in]	p_strName	Le nom du groupe
 		 */
-		AnimatedObjectGroup( Scene * p_pScene, Castor::String const & p_strName );
+		AnimatedObjectGroup( SceneSPtr p_pScene, Castor::String const & p_strName );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -375,9 +379,9 @@ namespace Castor3D
 		 *\brief		Récupère la Scene
 		 *\return		La Scene
 		 */
-		inline Scene * GetScene()const
+		inline SceneSPtr GetScene()const
 		{
-			return m_pScene;
+			return m_pScene.lock();
 		}
 
 	protected:
@@ -386,7 +390,7 @@ namespace Castor3D
 		//!<\~english The list of AnimatedObjects	\~french La liste des AnimatedObject
 		AnimatedObjectPtrStrMap m_mapObjects;
 		//!<\~english The scene that updates animations	\~french La scène qui met à jour les animations
-		Scene * m_pScene;
+		SceneWPtr m_pScene;
 		//!<\~english A timer, usefull for animation handling	\~french Un timer, pour mettre à jour précisément les animations
 		Castor::PreciseTimer m_timer;
 	};

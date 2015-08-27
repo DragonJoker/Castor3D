@@ -1,4 +1,6 @@
-#include "StaticTexture.hpp"
+﻿#include "StaticTexture.hpp"
+
+#include "RenderSystem.hpp"
 #include "Sampler.hpp"
 
 #include <Logger.hpp>
@@ -9,7 +11,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	StaticTexture::StaticTexture( RenderSystem * p_pRenderSystem )
-		:	TextureBase( eTEXTURE_TYPE_STATIC, p_pRenderSystem )
+		: TextureBase( eTEXTURE_TYPE_STATIC, p_pRenderSystem )
 	{
 	}
 
@@ -21,16 +23,8 @@ namespace Castor3D
 	{
 		if ( !m_bInitialised )
 		{
-			if ( !m_pRenderSystem->HasNonPowerOfTwoTextures() )
-			{
-				Castor::Image l_img( cuT( "Tmp" ), *m_pPixelBuffer );
-				Castor::Size l_size = m_pPixelBuffer->dimensions();
-				l_size.set( GetNext2Pow( l_size.width() ), GetNext2Pow( l_size.height() ) );
-				m_pPixelBuffer = l_img.Resample( l_size ).GetPixels();
-			}
-
-			m_uiIndex			= p_uiIndex;
-			m_bInitialised		= DoInitialise();
+			m_uiIndex = p_uiIndex;
+			m_bInitialised = DoInitialise();
 		}
 		else
 		{
@@ -43,26 +37,16 @@ namespace Castor3D
 
 	void StaticTexture::SetImage( Castor::Point3ui const & p_dimensions, Castor::PxBufferBaseSPtr p_pBuffer )
 	{
-		Size l_size;
-
 		if ( !m_pRenderSystem->HasNonPowerOfTwoTextures() )
 		{
 			m_uiDepth = GetNext2Pow( p_dimensions[2] );
-			l_size.set( GetNext2Pow( p_dimensions[0] ), GetNext2Pow( p_dimensions[1] ) * m_uiDepth );
-		}
-		else
-		{
-			m_uiDepth = p_dimensions[2];
-			l_size.set( p_dimensions[0], p_dimensions[1] * m_uiDepth );
-		}
-
-		if ( !m_pRenderSystem->HasNonPowerOfTwoTextures() )
-		{
+			Size l_size( GetNext2Pow( p_dimensions[0] ), GetNext2Pow( p_dimensions[1] ) * m_uiDepth );
 			Castor::Image l_img( cuT( "Tmp" ), *p_pBuffer );
 			m_pPixelBuffer = l_img.Resample( l_size ).GetPixels();
 		}
 		else
 		{
+			m_uiDepth = p_dimensions[2];
 			m_pPixelBuffer = p_pBuffer;
 		}
 	}
@@ -75,7 +59,7 @@ namespace Castor3D
 		}
 	}
 
-	bool StaticTexture::Bind()
+	bool StaticTexture::BindAt( uint32_t p_index )
 	{
 		bool l_bReturn = false;
 
@@ -89,24 +73,24 @@ namespace Castor3D
 				m_pPixelBuffer.reset();
 			}
 
-			l_bReturn = DoBind();
+			l_bReturn = DoBind( p_index );
 
 			if ( l_bReturn && GetSampler() )
 			{
-				l_bReturn = GetSampler()->Bind( m_eDimension, m_uiIndex );
+				l_bReturn = GetSampler()->Bind( m_eDimension, p_index );
 			}
 		}
 
 		return l_bReturn;
 	}
 
-	void StaticTexture::Unbind()
+	void StaticTexture::UnbindFrom( uint32_t p_index )
 	{
 		if ( GetSampler() )
 		{
 			GetSampler()->Unbind();
 		}
 
-		DoUnbind();
+		DoUnbind( p_index );
 	}
 }

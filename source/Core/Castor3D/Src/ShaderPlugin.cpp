@@ -1,4 +1,4 @@
-#include "ShaderPlugin.hpp"
+﻿#include "ShaderPlugin.hpp"
 
 #if defined( _WIN32 )
 #	include <Windows.h>
@@ -41,8 +41,8 @@ namespace Castor3D
 #	error "Implement ABI names for this compiler"
 #endif
 
-	ShaderPlugin::ShaderPlugin( DynamicLibrarySPtr p_pLibrary )
-		:	PluginBase( ePLUGIN_TYPE_PROGRAM, p_pLibrary )
+	ShaderPlugin::ShaderPlugin( DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
+		:	PluginBase( ePLUGIN_TYPE_PROGRAM, p_pLibrary, p_engine )
 	{
 		if ( !p_pLibrary->GetFunction( m_pfnGetShaderLanguage, GetShaderLanguageFunctionABIName ) )
 		{
@@ -71,61 +71,19 @@ namespace Castor3D
 			l_strError += str_utils::to_string( dlerror() );
 			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
 		}
-	}
 
-	ShaderPlugin::ShaderPlugin( ShaderPlugin const & p_plugin )
-		:	PluginBase( p_plugin )
-		,	m_pfnCreateShader( p_plugin.m_pfnCreateShader )
-		,	m_pfnCreatePipeline( p_plugin.m_pfnCreatePipeline )
-		,	m_pfnDestroyPipeline( p_plugin.m_pfnDestroyPipeline )
-		,	m_pfnGetShaderLanguage( p_plugin.m_pfnGetShaderLanguage )
-	{
-	}
-
-	ShaderPlugin::ShaderPlugin( ShaderPlugin && p_plugin )
-		:	PluginBase( std::move( p_plugin ) )
-		,	m_pfnCreateShader( std::move( p_plugin.m_pfnCreateShader ) )
-		,	m_pfnCreatePipeline( std::move( p_plugin.m_pfnCreatePipeline ) )
-		,	m_pfnDestroyPipeline( std::move( p_plugin.m_pfnDestroyPipeline ) )
-		,	m_pfnGetShaderLanguage( std::move( p_plugin.m_pfnGetShaderLanguage ) )
-	{
-		p_plugin.m_pfnCreateShader		= NULL;
-		p_plugin.m_pfnCreatePipeline	= NULL;
-		p_plugin.m_pfnDestroyPipeline	= NULL;
-		p_plugin.m_pfnGetShaderLanguage	= NULL;
+		if ( m_pfnOnLoad )
+		{
+			m_pfnOnLoad( m_engine );
+		}
 	}
 
 	ShaderPlugin::~ShaderPlugin()
 	{
-	}
-
-	ShaderPlugin & ShaderPlugin::operator =( ShaderPlugin const & p_plugin )
-	{
-		PluginBase::operator =( p_plugin );
-		m_pfnCreateShader		= p_plugin.m_pfnCreateShader;
-		m_pfnGetShaderLanguage	= p_plugin.m_pfnGetShaderLanguage;
-		m_pfnCreatePipeline		= p_plugin.m_pfnCreatePipeline;
-		m_pfnDestroyPipeline	= p_plugin.m_pfnDestroyPipeline;
-		return * this;
-	}
-
-	ShaderPlugin & ShaderPlugin::operator =( ShaderPlugin && p_plugin )
-	{
-		PluginBase::operator =( std::move( p_plugin ) );
-
-		if ( this != & p_plugin )
+		if ( m_pfnOnUnload )
 		{
-			m_pfnCreateShader		= std::move( p_plugin.m_pfnCreateShader );
-			m_pfnGetShaderLanguage	= std::move( p_plugin.m_pfnGetShaderLanguage );
-			m_pfnCreatePipeline		= std::move( p_plugin.m_pfnCreatePipeline );
-			m_pfnDestroyPipeline	= std::move( p_plugin.m_pfnDestroyPipeline );
-			p_plugin.m_pfnCreateShader		= NULL;
-			p_plugin.m_pfnCreatePipeline	= NULL;
-			p_plugin.m_pfnDestroyPipeline	= NULL;
-			p_plugin.m_pfnGetShaderLanguage	= NULL;
+			m_pfnOnUnload( m_engine );
 		}
-
-		return * this;
 	}
 
 	ShaderProgramBaseSPtr ShaderPlugin::CreateShader( RenderSystem * p_pRenderSystem )

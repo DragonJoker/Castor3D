@@ -131,7 +131,7 @@ namespace Castor3D
 		 *\param[in]	p_sn		Le scene node auquel la géométrie est attachée
 		 *\param[in]	p_name		Nom de la géométrie
 		 */
-		Geometry( Scene * p_pScene = NULL, MeshSPtr p_mesh = nullptr, SceneNodeSPtr p_sn = nullptr, Castor::String const & p_name = cuT( "" ) );
+		Geometry( SceneSPtr p_pScene = nullptr, MeshSPtr p_mesh = nullptr, SceneNodeSPtr p_sn = nullptr, Castor::String const & p_name = cuT( "" ) );
 		/**
 		 *\~english
 		 *\brief		Destructor

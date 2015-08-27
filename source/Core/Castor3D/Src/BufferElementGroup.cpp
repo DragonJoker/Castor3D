@@ -1,4 +1,4 @@
-#include "BufferElementGroup.hpp"
+﻿#include "BufferElementGroup.hpp"
 
 #include <cstring>
 

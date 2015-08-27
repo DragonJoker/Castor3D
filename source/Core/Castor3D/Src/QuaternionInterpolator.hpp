@@ -37,14 +37,6 @@ namespace Castor3D
 	*/
 	template<> class C3D_API Interpolator< Castor::Quaternion, eINTERPOLATOR_MODE_LINEAR >
 	{
-	protected:
-		//!\~english The starting value	\~french La valeur de départ
-		Castor::Quaternion m_tSrc;
-		//!\~english The current value	\~french La valeur courante
-		Castor::Quaternion m_tCurrent;
-		//!\~english The ending value	\~french La valeur d'arrivée
-		Castor::Quaternion m_tDest;
-
 	public:
 		/**
 		 *\~english
@@ -85,6 +77,14 @@ namespace Castor3D
 //			m_tCurrent = m_tCurrent * (m_tDest - m_tSrc).Slerp( Castor::Quaternion::Identity(), 1.0f - p_rPercent, true );
 			return m_tCurrent;
 		}
+
+	protected:
+		//!\~english The starting value	\~french La valeur de départ
+		Castor::Quaternion m_tSrc;
+		//!\~english The current value	\~french La valeur courante
+		Castor::Quaternion m_tCurrent;
+		//!\~english The ending value	\~french La valeur d'arrivée
+		Castor::Quaternion m_tDest;
 	};
 }
 

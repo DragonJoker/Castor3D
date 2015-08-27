@@ -37,6 +37,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootPanelOverlay )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootBorderPanelOverlay )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootTextOverlay )
+	DECLARE_ATTRIBUTE_PARSER( Parser_RootDebugOverlays )
 
 	//Window parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_WindowRenderTarget )
@@ -149,6 +150,8 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassGlShader )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassCgShader )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassHlShader )
+	DECLARE_ATTRIBUTE_PARSER( Parser_PassAlphaBlendMode )
+	DECLARE_ATTRIBUTE_PARSER( Parser_PassColourBlendMode )
 
 	// Texture Unit Parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_UnitImage )
@@ -210,6 +213,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_OverlayPosition )
 	DECLARE_ATTRIBUTE_PARSER( Parser_OverlaySize )
 	DECLARE_ATTRIBUTE_PARSER( Parser_OverlayPixelSize )
+	DECLARE_ATTRIBUTE_PARSER( Parser_OverlayPixelPosition )
 	DECLARE_ATTRIBUTE_PARSER( Parser_OverlayMaterial )
 	DECLARE_ATTRIBUTE_PARSER( Parser_OverlayEnd )
 	DECLARE_ATTRIBUTE_PARSER( Parser_OverlayPanelOverlay )

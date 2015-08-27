@@ -45,8 +45,8 @@ namespace GlRender
 		}
 
 	private:
-		virtual bool DoBind();
-		virtual void DoUnbind();
+		virtual bool DoBind( uint32_t p_index );
+		virtual void DoUnbind( uint32_t p_index );
 		virtual bool DoInitialise();
 		void DoDeletePbos();
 		void DoCleanupPbos();

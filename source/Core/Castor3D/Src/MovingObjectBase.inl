@@ -1,4 +1,4 @@
-namespace Castor3D
+﻿namespace Castor3D
 {
 	template< class KeyFrameType >
 	std::shared_ptr< KeyFrameType > MovingObjectBase::DoAddKeyFrame( real p_from, std::map< real, std::shared_ptr< KeyFrameType > > & p_map )

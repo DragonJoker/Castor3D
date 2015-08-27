@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -38,8 +38,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <set>
 #include <string>
 #include <cstdint>
+#include <deque>
 
 #include "SmartPtr.hpp"
+#include "ELogType.hpp"
 
 #if defined( min )
 #	undef min
@@ -49,6 +51,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 #endif
 #if defined( abs )
 #	undef abs
+#endif
+
+#if defined( _MSC_VER )
+#	define TPL_PIXEL_FORMAT	uint32_t
+#else
+#	define TPL_PIXEL_FORMAT	ePIXEL_FORMAT
 #endif
 
 namespace Castor
@@ -87,7 +95,9 @@ namespace Castor
 		ePIXEL_FORMAT_A4R4G4B4,		//!< 16 bits 4444 ARGB
 		ePIXEL_FORMAT_R5G6B5,		//!< 16 bits 565 RGB
 		ePIXEL_FORMAT_R8G8B8,		//!< 24 bits 888 RGB
+		ePIXEL_FORMAT_B8G8R8,		//!< 24 bits 888 BGR
 		ePIXEL_FORMAT_A8R8G8B8,		//!< 32 bits 8888 ARGB
+		ePIXEL_FORMAT_A8B8G8R8,		//!< 32 bits 8888 ABGR
 		ePIXEL_FORMAT_RGB16F32F,	//!< Half float RGB on GPU, Float RGB on CPU
 		ePIXEL_FORMAT_ARGB16F32F,	//!< Half float ARGB on GPU, Float ARGB on CPU
 		ePIXEL_FORMAT_RGB32F,		//!< Float RGB
@@ -149,7 +159,7 @@ namespace Castor
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	class Matrix;
 	class ParserParameterBase;
-	template< ePIXEL_FORMAT PF >
+	template< TPL_PIXEL_FORMAT FT >
 	class Pixel;
 	template< typename T >
 	class PlaneEquation;
@@ -157,7 +167,7 @@ namespace Castor
 	class Point;
 	class Position;
 	class PxBufferBase;
-	template < ePIXEL_FORMAT PF >
+	template < TPL_PIXEL_FORMAT FT >
 	class PxBuffer;
 	class Quaternion;
 	class Rectangle;
@@ -175,6 +185,11 @@ namespace Castor
 	class Factory;
 	class Path;
 	class DynamicLibrary;
+
+	struct MessageBase;
+	class Logger;
+	class LoggerImpl;
+	class ProgramConsole;
 
 	/*!
 	\author 	Sylvain DOREMUS
@@ -302,6 +317,21 @@ namespace Castor
 	DECLARE_MAP( String, bool, BoolStr );
 	DECLARE_MAP( String, String, StrStr );
 	DECLARE_SET( String, Str );
+
+	typedef std::deque< std::unique_ptr< MessageBase > > MessageQueue;
+	/**
+	 *\~english
+	 *\brief		Logging callback function
+	 *\param[in]	p_pCaller	Pointer to the caller
+	 *\param[in]	p_strLog	The logged text
+	 *\param[in]	p_eLogType	The log type
+	 *\~french
+	 *\brief		Fonction de callback de log
+	 *\param[in]	p_pCaller	Pointeur sur l'appelant
+	 *\param[in]	p_strLog	Le texte écrit
+	 *\param[in]	p_eLogType	Le type de log
+	 */
+	typedef std::function< void ( String const & p_strLog, ELogType p_eLogType ) > LogCallback;
 }
 
 #endif

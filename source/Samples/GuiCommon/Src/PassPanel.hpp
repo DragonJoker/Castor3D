@@ -86,7 +86,7 @@ namespace GuiCommon
 		Castor3D::Engine * m_pEngine;
 
 	public:
-		wxPassPanel( Castor3D::Engine * p_pEngine, bool p_bCanEdit, wxWindow * p_pParent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxSize( 460, 380 ) );
+		wxPassPanel( wxWindow * p_pParent, Castor3D::Engine * p_pEngine, bool p_bCanEdit, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxSize( 460, 380 ) );
 		~wxPassPanel();
 
 		void SetPass( Castor3D::PassWPtr p_wpPass );

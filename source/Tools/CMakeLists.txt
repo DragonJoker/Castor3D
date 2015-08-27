@@ -85,3 +85,29 @@ function( ToolsSummary msg )
 	set( msg_tmp "${msg_tmp}\n    CastorUtils test    ${Testing}" )
 	SET( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 endfunction( ToolsSummary )
+
+function( ToolsSetup )
+	cpack_add_component_group( Tools
+		EXPANDED
+		DESCRIPTION "Some tools"
+	)
+
+	if( ${CASTOR_BUILD_TOOL_IMG_CONVERTER} )
+		cpack_add_component( ImgConverter
+			DISPLAY_NAME "ImgConverter application"
+			DESCRIPTION "A small image converter, to convert from any image format to ICO or XPM"
+			GROUP Tools
+			INSTALL_TYPES Full
+		)
+	endif()
+
+	if( ${CASTOR_BUILD_TOOL_TESTING} )
+		cpack_add_component( CastorUtilsTest
+			DISPLAY_NAME "CastorUtilsTest application"
+			DESCRIPTION "A test application, to test CastorUtils classes and functions"
+			GROUP Tools
+			DEPENDS CastorUtils CastorUtils_dev
+			INSTALL_TYPES Full Developer
+		)
+	endif()
+endfunction( ToolsSetup )

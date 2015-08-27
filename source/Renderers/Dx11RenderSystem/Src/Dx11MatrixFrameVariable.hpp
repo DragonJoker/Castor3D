@@ -41,7 +41,6 @@ namespace Dx11Render
 		virtual void Cleanup() {}
 		virtual void Bind();
 		virtual void Unbind();
-		virtual void Apply();
 	};
 }
 

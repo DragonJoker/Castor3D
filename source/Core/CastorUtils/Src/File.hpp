@@ -71,7 +71,7 @@ namespace Castor
 	 *\param[in]	p_pszMode	Le mode d'ouverture
 	 *\return		\p true en cas de réussite
 	 */
-	bool FOpen( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode );
+	CU_API bool FOpen( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode );
 	/**
 	 *\~english
 	 *\brief		Opens a file
@@ -86,7 +86,7 @@ namespace Castor
 	 *\param[in]	p_pszMode	Le mode d'ouverture
 	 *\return		\p true en cas de réussite
 	 */
-	bool FOpen64( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode );
+	CU_API bool FOpen64( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode );
 	/**
 	 *\~english
 	 *\brief		Seeks into a file
@@ -101,7 +101,7 @@ namespace Castor
 	 *\param[in]	p_iOrigin	L'origine du déplacement
 	 *\return		\p true en cas de réussite
 	 */
-	bool FSeek( FILE * p_pFile, int64_t p_i64Offset, int p_iOrigin );
+	CU_API bool FSeek( FILE * p_pFile, int64_t p_i64Offset, int p_iOrigin );
 	/**
 	 *\~english
 	 *\brief		Retrieves the file cursor position
@@ -112,7 +112,7 @@ namespace Castor
 	 *\param[out]	p_pFile		Le descripteur du fichier
 	 *\return		La position
 	 */
-	int64_t FTell( FILE * p_pFile );
+	CU_API int64_t FTell( FILE * p_pFile );
 	/*!
 	\author Sylvain DOREMUS
 	\version 0.6.1.0
@@ -133,15 +133,40 @@ namespace Castor
 		\~french
 		\brief Enumérateur des modes d'ouverture
 		*/
+		typedef enum eCREATE_MODE
+		CASTOR_TYPE( uint32_t )
+		{
+			eCREATE_MODE_USER_READ = 0x00000001,	//!<\~english Owner can read	\~french Le propriétaire peut lire
+			eCREATE_MODE_USER_WRITE = 0x00000002,	//!<\~english Owner can write	\~french Le propriétaire peut écrire
+			eCREATE_MODE_USER_EXEC = 0x00000004,	//!<\~english Owner can execute	\~french Le propriétaire peut exécuter
+			eCREATE_MODE_GROUP_READ = 0x00000010,	//!<\~english Owner group can read	\~french Le groupe du propriétaire peut lire
+			eCREATE_MODE_GROUP_WRITE = 0x00000020,	//!<\~english Owner group can write	\~french Le groupe du propriétaire peut écrire
+			eCREATE_MODE_GROUP_EXEC = 0x00000040,	//!<\~english Owner group can execute	\~french Le groupe du propriétaire peut exécuter
+			eCREATE_MODE_OTHERS_READ = 0x00000100,	//!<\~english Others can read	\~french Les autres peuvent lire
+			eCREATE_MODE_OTHERS_WRITE = 0x00000200,	//!<\~english Others can write	\~french Les autres peuvent écrire
+			eCREATE_MODE_OTHERS_EXEC = 0x00000400,	//!<\~english Others can execute	\~french Les autres peuvent exécuter
+		}	eCREATE_MODE;
+		//!\~english Read, write and execution rights for owner	\~french Droits en lecture, écriture et exécution pour le propriétaire
+		static const uint32_t eCREATE_MODE_USER_RWX = eCREATE_MODE_USER_READ | eCREATE_MODE_USER_WRITE | eCREATE_MODE_USER_EXEC;
+		//!\~english Read, write and execution rights for owner group	\~french Droits en lecture, écriture et exécution pour le groupe du propriétaire
+		static const uint32_t eCREATE_MODE_GROUP_RWX = eCREATE_MODE_GROUP_READ | eCREATE_MODE_GROUP_WRITE | eCREATE_MODE_GROUP_EXEC;
+		//!\~english Read, write and execution rights for others	\~french Droits en lecture, écriture et exécution pour les autres
+		static const uint32_t eCREATE_MODE_OTHERS_RWX = eCREATE_MODE_OTHERS_READ | eCREATE_MODE_OTHERS_WRITE | eCREATE_MODE_OTHERS_EXEC;
+		/*!
+		\~english
+		\brief Open modes enumerator
+		\~french
+		\brief Enumérateur des modes d'ouverture
+		*/
 		typedef enum eOPEN_MODE
 		CASTOR_TYPE( uint32_t )
 		{
-			eOPEN_MODE_DUMMY	= 0x00000000	//!<\~english Dummy open mode, not to be used	\~french Mode d'ouverture 'dummy', à ne pas utiliser
-								  ,	eOPEN_MODE_READ		= 0x00000001	//!<\~english Read open mode					\~french Mode d'ouverture en lecture
-										  ,	eOPEN_MODE_WRITE	= 0x00000002	//!<\~english Write open mode					\~french Mode d'ouverture en création / écriture
-												  ,	eOPEN_MODE_APPEND	= 0x00000004	//!<\~english Append open mode					\~french Mode d'ouverture en écriture en fin de fichier
-														  ,	eOPEN_MODE_BINARY	= 0x00000008	//!<\~english Binary open mode					\~french Mode d'ouverture en binaire
-																  ,	eOPEN_MODE_COUNT
+			eOPEN_MODE_DUMMY = 0x00000000,	//!<\~english Dummy open mode, not to be used	\~french Mode d'ouverture 'dummy', à ne pas utiliser
+			eOPEN_MODE_READ = 0x00000001,	//!<\~english Read open mode					\~french Mode d'ouverture en lecture
+			eOPEN_MODE_WRITE = 0x00000002,	//!<\~english Write open mode					\~french Mode d'ouverture en création / écriture
+			eOPEN_MODE_APPEND = 0x00000004,	//!<\~english Append open mode					\~french Mode d'ouverture en écriture en fin de fichier
+			eOPEN_MODE_BINARY = 0x00000008,	//!<\~english Binary open mode					\~french Mode d'ouverture en binaire
+			eOPEN_MODE_COUNT
 		}	eOPEN_MODE;
 		/*!
 		\~english
@@ -152,9 +177,9 @@ namespace Castor
 		typedef enum eOFFSET_MODE
 		CASTOR_TYPE( uint8_t )
 		{
-			eOFFSET_MODE_BEGINNING	//!<\~english The offset is set from the beginning of the file	\~french L'offset est défini par rapport au début du fichier
-			,	eOFFSET_MODE_CURRENT	//!<\~english The offset is set from the current position		\~french L'offset est défini par rapport à la position actuelle
-			,	eOFFSET_MODE_END		//!<\~english The offset is set from the end of the file		\~french L'offset est défini par rapport à la fin du fichier
+			eOFFSET_MODE_BEGINNING,	//!<\~english The offset is set from the beginning of the file	\~french L'offset est défini par rapport au début du fichier
+			eOFFSET_MODE_CURRENT,	//!<\~english The offset is set from the current position		\~french L'offset est défini par rapport à la position actuelle
+			eOFFSET_MODE_END,		//!<\~english The offset is set from the end of the file		\~french L'offset est défini par rapport à la fin du fichier
 		}	eOFFSET_MODE;
 		/*!
 		\~english
@@ -165,10 +190,10 @@ namespace Castor
 		typedef enum eENCODING_MODE
 		CASTOR_TYPE( uint8_t )
 		{
-			eENCODING_MODE_AUTO		//!<\~english Auto select text encoding	\~french Encodage de texte en sélection automatique
-			,	eENCODING_MODE_ASCII	//!<\~english ASCII text encoding		\~french Encodage de texte en ASCII
-			,	eENCODING_MODE_UTF8		//!<\~english UTF8 text encoding		\~french Encodage de texte en UTF8
-			,	eENCODING_MODE_UTF16	//!<\~english UTF16 text encoding		\~french Encodage de texte en UTF16
+			eENCODING_MODE_AUTO,	//!<\~english Auto select text encoding	\~french Encodage de texte en sélection automatique
+			eENCODING_MODE_ASCII,	//!<\~english ASCII text encoding		\~french Encodage de texte en ASCII
+			eENCODING_MODE_UTF8,	//!<\~english UTF8 text encoding		\~french Encodage de texte en UTF8
+			eENCODING_MODE_UTF16,	//!<\~english UTF16 text encoding		\~french Encodage de texte en UTF16
 		}	eENCODING_MODE;
 
 	protected:
@@ -184,30 +209,16 @@ namespace Castor
 		 *\param[in]	p_iMode		Le mode d'ouverture, combinaison d'un ou plusieurs eOPEN_MODE
 		 *\param[in]	p_eEncoding	Le mode d'encodage du fichier
 		 */
-		File( Path const & p_fileName, int p_iMode, eENCODING_MODE p_eEncoding = eENCODING_MODE_ASCII );
+		CU_API File( Path const & p_fileName, int p_iMode, eENCODING_MODE p_eEncoding = eENCODING_MODE_ASCII );
 
 	public:
-		/**
-		 *\~english
-		 *\brief		Copy constructor
-		 *\~french
-		 *\brief		Constructeur par copie
-		 */
-		File( File const & p_file );
-		/**
-		 *\~english
-		 *\brief		Move constructor
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 */
-		File( File && p_file );
 		/**
 		 *\~english
 		 *\brief		Destructor, closes the file
 		 *\~french
 		 *\brief		Destructeur, ferme le fichier
 		 */
-		virtual ~File();
+		CU_API virtual ~File();
 		/**
 		 *\~english
 		 *\brief		Seek function, sets the cursor in the file according to the given offset and the given mode
@@ -220,29 +231,7 @@ namespace Castor
 		 *\param[in]	p_eOrigin	Le mode
 		 *\return		\p 0 si réussi
 		 */
-		int Seek( long long p_i64Offset, eOFFSET_MODE p_eOrigin = eOFFSET_MODE_BEGINNING );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	p_file	The file to copy
-		 *\return		A reference to this file
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_file	Le fichier à copier
-		 *\return		Une référence sur ce fichier
-		 */
-		File & operator =( File const & p_file );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	p_file	The file to move
-		 *\return		A reference to this file
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_file	Le fichier à déplacer
-		 *\return		Une référence sur ce fichier
-		 */
-		File & operator =( File && p_file );
+		CU_API int Seek( long long p_i64Offset, eOFFSET_MODE p_eOrigin = eOFFSET_MODE_BEGINNING );
 		/**
 		 *\~english
 		 *\brief		List all files in a directory, recursively or not
@@ -257,7 +246,7 @@ namespace Castor
 		 *\param[in]	p_recursive		Définit si la recherche doit être récursive ou pas
 		 *\return		\p true si le dossier a été listé
 		 */
-		static bool ListDirectoryFiles( Path const & p_folderPath, StringArray & p_files, bool p_recursive = false );
+		CU_API static bool ListDirectoryFiles( Path const & p_folderPath, StringArray & p_files, bool p_recursive = false );
 		/**
 		 *\~english
 		 *\brief		Gives the current directory (id est where the execution is)
@@ -266,7 +255,7 @@ namespace Castor
 		 *\brief		Donne le répertoire d'exécution
 		 *\return		Le répertoire
 		 */
-		static Path	DirectoryGetCurrent();
+		CU_API static Path	DirectoryGetCurrent();
 		/**
 		 *\~english
 		 *\brief		Gives the user home directory
@@ -275,27 +264,42 @@ namespace Castor
 		 *\brief		Donne le répertoire de l'utilisateur courant
 		 *\return		Le répertoire
 		 */
-		static Path	GetUserDirectory();
+		CU_API static Path	GetUserDirectory();
 		/**
 		 *\~english
 		 *\brief		Tests directory existence
-		 *\param[in]	p_pathFile	Directory path
+		 *\param[in]	p_path	Directory path
 		 *\return		\p true if directory is found
 		 *\~french
 		 *\brief		Teste l'existence d'un dossier
-		 *\param[in]	p_pathFile	Le chemin du dossier
+		 *\param[in]	p_path	Le chemin du dossier
 		 *\return		\p true si le dossier existe
 		 */
-		static bool	DirectoryExists( Path const & p_path );
+		CU_API static bool	DirectoryExists( Path const & p_path );
 		/**
 		 *\~english
 		 *\brief		Creates a directory
-		 *\return		The directory
+		 *\param[in]	p_path	Directory path
+		 *\param[in]	p_flags	User rights
+		 *\return		\p true if the directory has been created
 		 *\~french
 		 *\brief		Crée un dossier
-		 *\return		Le dossier
+		 *\param[in]	p_path	Le chemin du dossier
+		 *\param[in]	p_flags	Les droits d'utilisation
+		 *\return		\p true si le dossier a été créé
 		 */
-		static bool DirectoryCreate( Path const & p_file );
+		CU_API static bool DirectoryCreate( Path const & p_path, uint32_t p_flags = eCREATE_MODE_USER_RWX | eCREATE_MODE_GROUP_RWX | eCREATE_MODE_OTHERS_RWX );
+		/**
+		 *\~english
+		 *\brief		Deletes an empty directory
+		 *\param[in]	p_path	Directory path
+		 *\return		\p true if the directory has been deleted
+		 *\~french
+		 *\brief		Supprime un dossier vide
+		 *\param[in]	p_path	Le chemin du dossier
+		 *\return		\p true si le dossier a été supprimé
+		 */
+		CU_API static bool DirectoryDelete( Path const & p_path );
 		/**
 		 *\~english
 		 *\brief		Tests file existence
@@ -306,7 +310,7 @@ namespace Castor
 		 *\param[in]	p_pathFile	Le chemin du fichier
 		 *\return		\p true si le fichier existe
 		 */
-		static bool	FileExists( Path const & p_pathFile );
+		CU_API static bool	FileExists( Path const & p_pathFile );
 		/**
 		 *\~english
 		 *\brief		Deletes a file
@@ -317,7 +321,7 @@ namespace Castor
 		 *\param[in]	p_file	    Le chemin du fichier
 		 *\return		\p true si le fichier a été supprimé correctement
 		 */
-		static bool	DeleteFile( Path const & p_file );
+		CU_API static bool	DeleteFile( Path const & p_file );
 		/**
 		 *\~english
 		 *\brief		Copy a file into a folder
@@ -330,7 +334,7 @@ namespace Castor
 		 *\param[in]	p_folder	Le dossier de destination
 		 *\return		\p true si le fichier a été copié correctement
 		 */
-		static bool	CopyFile( Path const & p_file, Path const & p_folder );
+		CU_API static bool	CopyFile( Path const & p_file, Path const & p_folder );
 		/**
 		 *\~english
 		 *\brief		Retrieves the file size
@@ -339,7 +343,7 @@ namespace Castor
 		 *\brief		Récupère la taille du fichier
 		 *\return		La valeur
 		*/
-		long long GetLength();
+		CU_API long long GetLength();
 		/**
 		 *\~english
 		 *\brief		Tells if the file cursor is OK
@@ -348,7 +352,7 @@ namespace Castor
 		 *\brief		Dit si le curseur du fichier est OK
 		 *\return		\p true si le curseur du fichier n'est pas en erreur ni EOF
 		*/
-		bool IsOk()const;
+		CU_API bool IsOk()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the file cursor position
@@ -357,7 +361,7 @@ namespace Castor
 		 *\brief		Récupère la position du curseur du fichier
 		 *\return		La valeur
 		*/
-		long long Tell();
+		CU_API long long Tell();
 		/**
 		 *\~english
 		 *\brief		Retrieves the full file path, name and extension
@@ -397,8 +401,8 @@ namespace Castor
 
 	protected:
 		DECLARE_INVARIANT_BLOCK()
-		uint64_t DoWrite( uint8_t const * p_pBuffer, uint64_t p_uiSize );
-		uint64_t DoRead( uint8_t * p_pBuffer, uint64_t p_uiSize );
+		CU_API uint64_t DoWrite( uint8_t const * p_pBuffer, uint64_t p_uiSize );
+		CU_API uint64_t DoRead( uint8_t * p_pBuffer, uint64_t p_uiSize );
 
 	protected:
 		//!\~english The opening mode	\~french Le mode d'ouverture

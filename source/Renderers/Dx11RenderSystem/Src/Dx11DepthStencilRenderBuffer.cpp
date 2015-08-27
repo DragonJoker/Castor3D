@@ -6,8 +6,8 @@ using namespace Castor;
 namespace Dx11Render
 {
 	DxDepthStencilRenderBuffer::DxDepthStencilRenderBuffer( DxRenderSystem * p_pRenderSystem, ePIXEL_FORMAT p_eFormat )
-		:	DepthStencilRenderBuffer( p_eFormat )
-		,	m_dxRenderBuffer( p_pRenderSystem, DirectX11::Get( p_eFormat ), eBUFFER_COMPONENT_DEPTH, *this )
+		: DepthStencilRenderBuffer( p_eFormat )
+		, m_dxRenderBuffer( p_pRenderSystem, DirectX11::Get( p_eFormat ), eBUFFER_COMPONENT_DEPTH, *this )
 	{
 	}
 
@@ -27,7 +27,14 @@ namespace Dx11Render
 
 	bool DxDepthStencilRenderBuffer::Initialise( Castor::Size const & p_size )
 	{
-		return m_dxRenderBuffer.Initialise( p_size );
+		bool l_return = m_dxRenderBuffer.Initialise( p_size );
+
+		if ( l_return )
+		{
+			m_size = p_size;
+		}
+
+		return l_return;
 	}
 
 	void DxDepthStencilRenderBuffer::Cleanup()
@@ -46,6 +53,13 @@ namespace Dx11Render
 
 	bool DxDepthStencilRenderBuffer::Resize( Castor::Size const & p_size )
 	{
-		return m_dxRenderBuffer.Resize( p_size );
+		bool l_return = m_dxRenderBuffer.Resize( p_size );
+
+		if ( l_return )
+		{
+			m_size = p_size;
+		}
+
+		return l_return;
 	}
 }

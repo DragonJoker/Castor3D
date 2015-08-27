@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -56,7 +56,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_renderTarget	La render target pour cette technique
 		 *\param[in]	p_pRenderSystem	Le render system
-		 *\param[in]	p_params		Les paramètres de la technique
+		 *\param[in]	p_params		Les paramÃ¨tres de la technique
 		 */
 		DirectRenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params );
 
@@ -76,11 +76,11 @@ namespace Castor3D
 		 *\param[in]	p_params		The technique parameters
 		 *\return		A clone of this object
 		 *\~french
-		 *\brief		Fonction d'instanciation, utilisée par la fabrique pour créer des objets d'un type donné
+		 *\brief		Fonction d'instanciation, utilisÃ©e par la fabrique pour crÃ©er des objets d'un type donnÃ©
 		 *\param[in]	p_renderTarget	La cible de rendu de la technique
 		 *\param[in]	p_pRenderSystem	Le render system
-		 *\param[in]	p_params		Les paramètres de la technique
-		 *\return		Un clône de cet objet
+		 *\param[in]	p_params		Les paramÃ¨tres de la technique
+		 *\return		Un clÃ´ne de cet objet
 		 */
 		static RenderTechniqueBaseSPtr CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params );
 
@@ -90,8 +90,8 @@ namespace Castor3D
 		 *\brief		Creation function
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Fonction de création
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Fonction de crÃ©ation
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool DoCreate();
 		/**
@@ -124,8 +124,8 @@ namespace Castor3D
 		 *\brief		Render begin function
 		 *\return		\p true if ok
 		 *\~french
-		 *\brief		Fonction de début de rendu
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Fonction de dÃ©but de rendu
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool DoBeginRender();
 		/**
@@ -138,11 +138,11 @@ namespace Castor3D
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Fonction de rendu
-		 *\param[in]	p_scene			La scène à rendre
-		 *\param[in]	p_camera		La caméra à travers laquelle la scène est vue
+		 *\param[in]	p_scene			La scÃ¨ne Ã  rendre
+		 *\param[in]	p_camera		La camÃ©ra Ã  travers laquelle la scÃ¨ne est vue
 		 *\param[in]	p_ePrimitives	Le mode d'affichage
-		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la dernière frame
-		 *\return		\p true si tout s'est bien passé
+		 *\param[in]	p_dFrameTime	Le temps Ã©coulÃ© depuis le rendu de la derniÃ¨re frame
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime );
 		/**

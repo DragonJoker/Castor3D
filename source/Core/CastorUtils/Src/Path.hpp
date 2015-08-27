@@ -43,13 +43,10 @@ namespace Castor
 	{
 	public:
 		//!\~english Path separator (OS dependant)	\~french Séparateur de chemin (dépendant de l'OS)
-#if defined( _WIN32 )
-		static const xchar Separator = cuT( '\\' );
-#else
-		static const xchar Separator = cuT( '/' );
-#endif
+		static const xchar Separator;
+
 	public:
-		Path();
+		CU_API Path();
 		/**
 		 *\~english
 		 *\brief		Constructor from a char array
@@ -58,7 +55,7 @@ namespace Castor
 		 *\brief		Constructeur à partir d'un tableau de char
 		 *\param[in]	p_data	Le tableau de char
 		 */
-		Path( char const * p_data );
+		CU_API Path( char const * p_data );
 		/**
 		 *\~english
 		 *\brief		Constructor from a wchar_t array
@@ -67,7 +64,7 @@ namespace Castor
 		 *\brief		Constructeur à partir d'un tableau de wchar_t
 		 *\param[in]	p_data	Le tableau de wchar_t
 		 */
-		Path( wchar_t const * p_data );
+		CU_API Path( wchar_t const * p_data );
 		/**
 		 *\~english
 		 *\brief		Constructor from a String
@@ -76,7 +73,7 @@ namespace Castor
 		 *\brief		Constructeur à partir d'un String
 		 *\param[in]	p_data	Le String
 		 */
-		Path( String const & p_data );
+		CU_API Path( String const & p_data );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -85,7 +82,7 @@ namespace Castor
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_data	L'objet Path à copier
 		 */
-		Path( Path const & p_data );
+		CU_API Path( Path const & p_data );
 		/**
 		 *\~english
 		 *\brief		Move Constructor
@@ -94,7 +91,7 @@ namespace Castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	p_data	L'objet Path à déplacer
 		 */
-		Path( Path && p_data );
+		CU_API Path( Path && p_data );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -105,7 +102,7 @@ namespace Castor
 		 *\param[in]	p_data	L'objet Path à copier
 		 *\return		Une référence sur cet objet Path
 		 */
-		Path & operator =( Path const & p_data );
+		CU_API Path & operator =( Path const & p_data );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -116,7 +113,7 @@ namespace Castor
 		 *\param[in]	p_data	L'objet Path à déplacer
 		 *\return		Une référence sur cet objet Path
 		 */
-		Path & operator =( Path && p_data );
+		CU_API Path & operator =( Path && p_data );
 		/**
 		 *\~english
 		 *\brief		Appends a path to the current path. Adds the separator if needed
@@ -125,7 +122,7 @@ namespace Castor
 		 *\brief		Concatène un chemin à celui-ci. Ajoute le séparateur si besoin est
 		 *\param[in]	p_path	Le chemin à concaténer
 		 */
-		Path & operator /=( Path const & p_path );
+		CU_API Path & operator /=( Path const & p_path );
 		/**
 		 *\~english
 		 *\brief		Adds a string to the current path. Adds the separator if needed
@@ -134,7 +131,7 @@ namespace Castor
 		 *\brief		Concatène une chaîne de caractères à ce chemin. Ajoute le séparateur si besoin est
 		 *\param[in]	p_string	La chaîne de caractères à concaténer
 		 */
-		Path & operator /=( String const & p_string );
+		CU_API Path & operator /=( String const & p_string );
 		/**
 		 *\~english
 		 *\brief		Adds a MBCS C string to the current path. Adds the separator if needed
@@ -143,7 +140,7 @@ namespace Castor
 		 *\brief		Concatène une chaîne de caractères C MBCS à ce chemin. Ajoute le séparateur si besoin est
 		 *\param[in]	p_pBuffer	La chaîne de caractères C à concaténer
 		 */
-		Path & operator /=( char const * p_pBuffer );
+		CU_API Path & operator /=( char const * p_pBuffer );
 		/**
 		 *\~english
 		 *\brief		Adds a Unicode C string to the current path. Adds the separator if needed
@@ -152,7 +149,7 @@ namespace Castor
 		 *\brief		Concatène une chaîne de caractères C Unicode à ce chemin. Ajoute le séparateur si besoin est
 		 *\param[in]	p_pBuffer	La chaîne de caractères C à concaténer
 		 */
-		Path & operator /=( wchar_t const * p_pBuffer );
+		CU_API Path & operator /=( wchar_t const * p_pBuffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves the parent path
@@ -161,7 +158,7 @@ namespace Castor
 		 *\brief		Récupère le dossier parent
 		 *\return		Le dossier parent
 		 */
-		Path	GetPath()const;
+		CU_API Path GetPath()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the leaf of this path
@@ -170,7 +167,7 @@ namespace Castor
 		 *\brief		Récupère la feuille de ce chemin
 		 *\return		La feuille
 		 */
-		String	GetFileName()const;
+		CU_API String GetFileName()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the full path and leaf
@@ -179,7 +176,7 @@ namespace Castor
 		 *\brief		Récupère le chemin complet
 		 *\return		Le chemin complet
 		 */
-		String	GetFullFileName()const;
+		CU_API String GetFullFileName()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the extension of the file name, if any
@@ -188,7 +185,7 @@ namespace Castor
 		 *\brief		Récupère l'extension du nom de fichier, s'il y en a
 		 *\return		L'extension
 		 */
-		String	GetExtension()const;
+		CU_API String GetExtension()const;
 
 	private:
 		void DoNormalise();
@@ -203,7 +200,7 @@ namespace Castor
 	 *\param[in]	p_pathA	Le premier chemin à concaténer
 	 *\param[in]	p_pathB	Le second chemin à concaténer
 	 */
-	Path operator /( Path const 	&	p_pathA,	Path const &	p_pathB	);
+	CU_API Path operator /( Path const & p_pathA, Path const & p_pathB	);
 	/**
 	 *\~english
 	 *\brief		Adds a string to a path. Adds the separator if needed
@@ -214,7 +211,7 @@ namespace Castor
 	 *\param[in]	p_path		The first path to add
 	 *\param[in]	p_string	La chaîne de caractères à concaténer
 	 */
-	Path operator /( Path const 	&	p_path,		String const &	p_string	);
+	CU_API Path operator /( Path const & p_path, String const & p_string	);
 	/**
 	 *\~english
 	 *\brief		Adds a string to a path. Adds the separator if needed
@@ -225,7 +222,7 @@ namespace Castor
 	 *\param[in]	p_path		The first path to add
 	 *\param[in]	p_pBuffer	La chaîne de caractères à concaténer
 	 */
-	Path operator /( Path const 	&	p_path,		char const *	p_pBuffer	);
+	CU_API Path operator /( Path const & p_path, char const * p_pBuffer	);
 	/**
 	 *\~english
 	 *\brief		Adds a string to a path. Adds the separator if needed
@@ -236,7 +233,7 @@ namespace Castor
 	 *\param[in]	p_path		The first path to add
 	 *\param[in]	p_pBuffer	La chaîne de caractères à concaténer
 	 */
-	Path operator /( Path const 	&	p_path,		wchar_t const *	p_pBuffer	);
+	CU_API Path operator /( Path const & p_path, wchar_t const * p_pBuffer	);
 	/**
 	 *\~english
 	 *\brief		Adds a string to a path. Adds the separator if needed
@@ -247,7 +244,7 @@ namespace Castor
 	 *\param[in]	p_string	La chaîne de caractères à concaténer
 	 *\param[in]	p_path		The first path to add
 	 */
-	Path operator /( String const 	&	p_string,	Path const &	p_path	);
+	CU_API Path operator /( String const & p_string, Path const & p_path	);
 	/**
 	 *\~english
 	 *\brief		Adds a string to a path. Adds the separator if needed
@@ -258,7 +255,7 @@ namespace Castor
 	 *\param[in]	p_pBuffer	La chaîne de caractères à concaténer
 	 *\param[in]	p_path		The first path to add
 	 */
-	Path operator /( char const 	*	p_pBuffer,	Path const &	p_path	);
+	CU_API Path operator /( char const * p_pBuffer, Path const & p_path	);
 	/**
 	 *\~english
 	 *\brief		Adds a string to a path. Adds the separator if needed
@@ -269,7 +266,7 @@ namespace Castor
 	 *\param[in]	p_pBuffer	La chaîne de caractères à concaténer
 	 *\param[in]	p_path		The first path to add
 	 */
-	Path operator /( wchar_t const *	p_pBuffer,	Path const &	p_path	);
+	CU_API Path operator /( wchar_t const * p_pBuffer, Path const & p_path	);
 }
 
 #endif

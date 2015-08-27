@@ -58,8 +58,8 @@ namespace
 			l_ctfacet.widen( p_strIn.data(), p_strIn.data() + p_strIn.size(), &p_wstrOut[0] );
 		}
 	}
-
-	inline bool operator ==( Castor::Matrix4x4r const & a, glm::mat4x4 const & b )
+#if defined( CASTOR_USE_GLM )
+ 	inline bool operator ==( Castor::Matrix4x4r const & a, glm::mat4x4 const & b )
 	{
 		return a[0][0] == b[0][0] && a[1][0] == b[1][0] &&	a[2][0] == b[2][0] &&	a[3][0] == b[3][0]
 			   && a[0][1] == b[0][1] && a[1][1] == b[1][1] &&	a[2][1] == b[2][1] &&	a[3][1] == b[3][1]
@@ -81,6 +81,7 @@ namespace
 
 		return p_stream;
 	}
+#endif
 }
 
 namespace Testing
@@ -106,6 +107,7 @@ namespace Testing
 		m_mtx1[1][3] = 0.0f;
 		m_mtx1[2][3] = 0.0f;
 		m_mtx1[3][3] = 1.0f;
+#if defined( CASTOR_USE_GLM )
 		m_mtx1glm[0][0] =  0.299f;
 		m_mtx1glm[1][0] =  0.587f;
 		m_mtx1glm[2][0] =  0.114f;
@@ -123,6 +125,7 @@ namespace Testing
 		m_mtx1glm[2][3] = 0.0f;
 		m_mtx1glm[3][3] = 1.0f;
 		randomInit( m_mtx2.ptr(), &m_mtx2glm[0][0], 16 );
+#endif
 	}
 
 	CastorUtilsBench::~CastorUtilsBench()
@@ -132,11 +135,17 @@ namespace Testing
 	void CastorUtilsBench::Execute()
 	{
 		BENCHMARK( MatrixMultiplicationsCastor, NB_TESTS );
+#if defined( CASTOR_USE_GLM )
 		BENCHMARK( MatrixMultiplicationsGlm, NB_TESTS );
+#endif
 		BENCHMARK( MatrixInversionCastor, NB_TESTS );
+#if defined( CASTOR_USE_GLM )
 		BENCHMARK( MatrixInversionGlm, NB_TESTS );
+#endif
 		BENCHMARK( MatrixCopyCastor, NB_TESTS );
+#if defined( CASTOR_USE_GLM )
 		BENCHMARK( MatrixCopyGlm, NB_TESTS );
+#endif
 		BENCHMARK( StrToWStrUsingConvert, NB_TESTS );
 		BENCHMARK( StrToWStrUsingWiden, NB_TESTS );
 		BENCHMARK( WStrToStrUsingConvert, NB_TESTS );
@@ -147,32 +156,32 @@ namespace Testing
 	{
 		DoNotOptimizeAway( m_mtx1 * m_mtx2 );
 	}
-
+#if defined( CASTOR_USE_GLM )
 	void CastorUtilsBench::MatrixMultiplicationsGlm()
 	{
 		DoNotOptimizeAway( m_mtx1glm * m_mtx2glm );
 	}
-
+#endif
 	void CastorUtilsBench::MatrixInversionCastor()
 	{
 		DoNotOptimizeAway( m_mtx1.get_inverse() );
 	}
-
+#if defined( CASTOR_USE_GLM )
 	void CastorUtilsBench::MatrixInversionGlm()
 	{
 		DoNotOptimizeAway( glm::inverse( m_mtx1glm ) );
 	}
-
+#endif
 	void CastorUtilsBench::MatrixCopyCastor()
 	{
 		DoNotOptimizeAway( m_mtx2 = m_mtx1 );
 	}
-
+#if defined( CASTOR_USE_GLM )
 	void CastorUtilsBench::MatrixCopyGlm()
 	{
 		DoNotOptimizeAway( m_mtx2glm = m_mtx1glm );
 	}
-
+#endif
 	void CastorUtilsBench::StrToWStrUsingConvert()
 	{
 		convert( m_strIn, m_wstrOut );

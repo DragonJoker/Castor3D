@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -30,7 +30,7 @@ namespace Castor3D
 	\brief		Texture buffer representation, holds texture data
 	\remark		Holds the texture image
 	\~french
-	\brief		Représentation d'un tampon de texture
+	\brief		ReprÃ©sentation d'un tampon de texture
 	\remark		Contient l'image d'une texture
 	*/
 	class C3D_API TextureBuffer
@@ -64,7 +64,7 @@ namespace Castor3D
 		 *\brief		Fonction d'initialisation
 		 *\param[in]	p_format	Le format des pixels de la texture
 		 *\param[in]	p_uiSize	La taille du tampon de texture
-		 *\param[in]	p_pBytes	Les données du tampon
+		 *\param[in]	p_pBytes	Les donnÃ©es du tampon
 		 *\param[in]	p_pProgram	Le programme shader
 		 */
 		virtual void Initialise( Castor::ePIXEL_FORMAT const & p_format, uint32_t p_uiSize, uint8_t const * p_pBytes, Castor3D::ShaderProgramBaseSPtr p_pProgram );
@@ -77,7 +77,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Fonction d'initialisation
 		 *\param[in]	p_format	Le format des pixels de la texture
-		 *\param[in]	p_pBytes	Les données du tampon
+		 *\param[in]	p_pBytes	Les donnÃ©es du tampon
 		 *\param[in]	p_pProgram	Le programme shader
 		 */
 		template< uint32_t N >
@@ -94,7 +94,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Fonction d'initialisation
 		 *\param[in]	p_format	Le format des pixels de la texture
-		 *\param[in]	p_pBytes	Les données du tampon
+		 *\param[in]	p_pBytes	Les donnÃ©es du tampon
 		 *\param[in]	p_pProgram	Le programme shader
 		 */
 		inline void Initialise( Castor::ePIXEL_FORMAT const & p_format, std::vector< uint8_t > const & p_pBytes, Castor3D::ShaderProgramBaseSPtr p_pProgram )
@@ -116,7 +116,7 @@ namespace Castor3D
 		Castor::ePIXEL_FORMAT m_pixelFormat;
 		//!\~english The texture size	\~french La taille du tampon de la texture
 		uint32_t m_uiSize;
-		//!\~english The texture data	\~french Les données de la texture
+		//!\~english The texture data	\~french Les donnÃ©es de la texture
 		uint8_t const * m_pBytes;
 	};
 }

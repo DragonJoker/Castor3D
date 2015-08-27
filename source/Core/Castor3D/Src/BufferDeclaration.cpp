@@ -1,4 +1,4 @@
-#include "BufferDeclaration.hpp"
+﻿#include "BufferDeclaration.hpp"
 
 using namespace Castor;
 

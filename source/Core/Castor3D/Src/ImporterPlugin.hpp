@@ -41,26 +41,26 @@ namespace Castor3D
 	private:
 		friend class PluginBase;
 		friend class Engine;
-		typedef void			CreateImporterFunction( Engine * p_pEngine, ImporterPlugin * p_pPlugin );
-		typedef void			DestroyImporterFunction( ImporterPlugin * p_pPlugin );
-		typedef ExtensionArray	GetExtensionFunction();
+		typedef void CreateImporterFunction( Engine * p_pEngine, ImporterPlugin * p_pPlugin );
+		typedef void DestroyImporterFunction( ImporterPlugin * p_pPlugin );
+		typedef ExtensionArray GetExtensionFunction();
 
-		typedef CreateImporterFunction	*	PCreateImporterFunction;
-		typedef DestroyImporterFunction	*	PDestroyImporterFunction;
-		typedef GetExtensionFunction	*	PGetExtensionFunction;
+		typedef CreateImporterFunction * PCreateImporterFunction;
+		typedef DestroyImporterFunction * PDestroyImporterFunction;
+		typedef GetExtensionFunction * PGetExtensionFunction;
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pEngine		The core engine
-		 *\param[in]	p_pLibrary		The shared library holding the plugin
+		 *\param[in]	p_pLibrary	The shared library holding the plugin
+		 *\param[in]	p_engine	The engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pEngine		Le moteur
-		 *\param[in]	p_pLibrary		La librairie partagée contenant le plugin
+		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
+		 *\param[in]	p_engine	Le moteur
 		 */
-		ImporterPlugin( Engine * p_pEngine, Castor::DynamicLibrarySPtr p_pLibrary );
+		ImporterPlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -113,48 +113,6 @@ namespace Castor3D
 		 *\return		Le tableau d'extensions supportées
 		 */
 		ExtensionArray GetExtensions();
-
-	private:
-		/**
-		 *\~english
-		 *\brief		Copy constructor
-		 *\param[in]	p_plugin	The Plugin object to copy
-		 *\~french
-		 *\brief		Constructeur par copie
-		 *\param[in]	p_plugin	L'objet Plugin à copier
-		 */
-		ImporterPlugin( ImporterPlugin const & p_plugin );
-		/**
-		 *\~english
-		 *\brief		Move constructor
-		 *\param[in]	p_plugin	The Plugin object to move
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_plugin	L'objet Plugin à déplacer
-		 */
-		ImporterPlugin( ImporterPlugin && p_plugin );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	p_plugin	The Plugin object to copy
-		 *\return		A reference to this Plugin object
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_plugin	L'objet Plugin à copier
-		 *\return		Une référence sur cet objet Plugin
-		 */
-		ImporterPlugin & operator =( ImporterPlugin const & p_plugin );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	p_plugin	The Plugin object to move
-		 *\return		A reference to this Plugin object
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_plugin	L'objet Plugin à déplacer
-		 *\return		Une référence sur cet objet Plugin
-		 */
-		ImporterPlugin & operator =( ImporterPlugin && p_plugin );
 
 	private:
 		PCreateImporterFunction m_pfnCreateImporter;

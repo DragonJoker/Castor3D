@@ -43,8 +43,8 @@ namespace Castor3D
 	\remark		Une incrustation est un élément 2D qui est affiché en premier plan
 	*/
 	class C3D_API Overlay
-		:	public std::enable_shared_from_this< Overlay >
-		,	public Castor::NonCopyable
+		: public std::enable_shared_from_this< Overlay >
+		, public Castor::NonCopyable
 	{
 	public:
 		/*!
@@ -92,7 +92,7 @@ namespace Castor3D
 		\brief		Loader de Overlay
 		*/
 		class C3D_API BinaryParser
-			:	public Castor3D::BinaryParser< Overlay >
+			: public Castor3D::BinaryParser< Overlay >
 		{
 		public:
 			/**
@@ -138,8 +138,8 @@ namespace Castor3D
 		};
 
 	protected:
-		typedef OverlayPtrIntMap::iterator iterator;
-		typedef OverlayPtrIntMap::const_iterator const_iterator;
+		typedef OverlayPtrArray::iterator iterator;
+		typedef OverlayPtrArray::const_iterator const_iterator;
 
 	public:
 		/**
@@ -188,15 +188,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Adds a child to the overlay
 		 *\param[in]	p_pOverlay	The overlay to add
-		 *\param[in]	p_iZIndex	The wanted Z Index for the child
 		 *\return		\p true if successful, false if not
 		 *\~french
 		 *\brief		Ajoute un enfant à l'incrustation
 		 *\param[in]	p_pOverlay	L'incrustation enfant
-		 *\param[in]	p_iZIndex	Le Z index souhaité pour l'enfant
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool AddChild( OverlaySPtr p_pOverlay, int p_iZIndex );
+		bool AddChild( OverlaySPtr p_pOverlay );
 		/**
 		 *\~english
 		 *\brief		Initialises the overlay
@@ -208,6 +206,17 @@ namespace Castor3D
 						<br />Initialise la partie rendu.
 		 */
 		void Initialise();
+		/**
+		 *\~english
+		 *\brief		Retrieves the childs count at given level
+		 *\param[in]	p_level	The wanted level
+		 *\return		The count
+		 *\~french
+		 *\brief		Récupère le compte des enfants du niveau donné
+		 *\param[in]	p_level	Le niveau voulu
+		 *\return		Le compte
+		 */
+		int GetChildsCount( int p_level )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute overlay position, in pixels
@@ -442,15 +451,27 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the Z index
+		 *\brief		Retrieves the index
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le Z index
+		 *\brief		Récupère l'indice
 		 *\return		La valeur
 		 */
-		inline int GetZIndex()const
+		inline int GetIndex()const
 		{
-			return m_pOverlayCategory->GetZIndex();
+			return m_pOverlayCategory->GetIndex();
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the level
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le niveau
+		 *\return		La valeur
+		 */
+		inline int GetLevel()const
+		{
+			return m_pOverlayCategory->GetLevel();
 		}
 		/**
 		 *\~english
@@ -462,7 +483,7 @@ namespace Castor3D
 		 */
 		inline uint32_t GetChildsCount()const
 		{
-			return uint32_t( m_mapOverlays.size() );
+			return uint32_t( m_overlays.size() );
 		}
 		/**
 		 *\~english
@@ -472,9 +493,9 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur le premier enfant
 		 *\return		La valeur
 		 */
-		inline iterator Begin()
+		inline iterator begin()
 		{
-			return m_mapOverlays.begin();
+			return m_overlays.begin();
 		}
 		/**
 		 *\~english
@@ -484,9 +505,9 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur le premier enfant
 		 *\return		La valeur
 		 */
-		inline const_iterator Begin()const
+		inline const_iterator begin()const
 		{
-			return m_mapOverlays.begin();
+			return m_overlays.begin();
 		}
 		/**
 		 *\~english
@@ -496,9 +517,9 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur après le dernier enfant
 		 *\return		La valeur
 		 */
-		inline iterator End()
+		inline iterator end()
 		{
-			return m_mapOverlays.end();
+			return m_overlays.end();
 		}
 		/**
 		 *\~english
@@ -508,21 +529,45 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur après le dernier enfant
 		 *\return		La valeur
 		 */
-		inline const_iterator End()const
+		inline const_iterator end()const
 		{
-			return m_mapOverlays.end();
+			return m_overlays.end();
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the overlay category
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la catégorie de l'overlay
+		 *\brief		Récupère la catégorie de l'incrustation
 		 *\return		La valeur
 		 */
 		inline OverlayCategorySPtr GetOverlayCategory()const
 		{
 			return m_pOverlayCategory;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the overlay manager
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le gestionnaire d'incrustations
+		 *\return		La valeur
+		 */
+		inline OverlayManager const & GetOverlayManager()const
+		{
+			return m_manager;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the overlay manager
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le gestionnaire d'incrustations
+		 *\return		La valeur
+		 */
+		inline OverlayManager & GetOverlayManager()
+		{
+			return m_manager;
 		}
 		/**
 		 *\~english
@@ -538,15 +583,17 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the Z index
-		 *\param[in]	p_iZIndex	The new value
+		 *\brief		Sets the overlay order
+		 *\param[in]	p_index	The new index
+		 *\param[in]	p_level	The new level
 		 *\~french
-		 *\brief		Définit le Z index
-		 *\param[in]	p_iZIndex	La nouvelle valeur
+		 *\brief		Définit l'ordre de l'incrustation
+		 *\param[in]	p_index	Le nouvel indice
+		 *\param[in]	p_level	Le nouveau niveau
 		 */
-		inline void SetZIndex( int p_iZIndex )
+		inline void SetOrder( int p_index, int p_level )
 		{
-			m_pOverlayCategory->SetZIndex( p_iZIndex );
+			m_pOverlayCategory->SetOrder( p_index, p_level );
 		}
 		/**
 		 *\~english
@@ -622,18 +669,18 @@ namespace Castor3D
 		}
 
 	protected:
+		//!\~english The overlay manager	\~french Le gestionnaire d'inscrustations
+		OverlayManager & m_manager;
 		//!\~english The overlay name	\~french Le nom de l'incrustation
 		Castor::String m_strName;
 		//!\~english The parent overlay, if any	\~french L'incrustation parente, s'il y en a
 		OverlayWPtr m_pParent;
 		//!\~english The childs	\~french Les enfants
-		OverlayPtrIntMap m_mapOverlays;
+		OverlayPtrArray m_overlays;
 		//!\~english The overlay category	\~french La catégorie de l'incrustation
 		OverlayCategorySPtr m_pOverlayCategory;
 		//!\~english The parent scene	\~french La scène parente
 		SceneWPtr m_pScene;
-		//!\~english The childs	\~french Les enfants
-		mutable OverlayPtrArray m_arrayOverlays;
 		//!\~english The factory	\~french La fabrique
 		OverlayFactory & m_factory;
 		//!\~english The engine	\~french Le moteur

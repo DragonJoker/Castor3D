@@ -37,24 +37,26 @@ namespace Castor3D
 	private:
 		friend class PluginBase;
 		friend class Engine;
-		typedef Subdivider *	CreateDividerFunction();
-		typedef void			DestroyDividerFunction( Subdivider * p_pDivider );
-		typedef Castor::String	GetDividerTypeFunction();
+		typedef Subdivider * CreateDividerFunction();
+		typedef void DestroyDividerFunction( Subdivider * p_pDivider );
+		typedef Castor::String GetDividerTypeFunction();
 
-		typedef CreateDividerFunction		*	PCreateDividerFunction;
-		typedef DestroyDividerFunction		*	PDestroyDividerFunction;
-		typedef GetDividerTypeFunction		*	PGetDividerTypeFunction;
+		typedef CreateDividerFunction * PCreateDividerFunction;
+		typedef DestroyDividerFunction * PDestroyDividerFunction;
+		typedef GetDividerTypeFunction * PGetDividerTypeFunction;
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_pLibrary	The shared library holding the plugin
+		 *\param[in]	p_engine	The engine
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
+		 *\param[in]	p_engine	Le moteur
 		 */
-		DividerPlugin( Castor::DynamicLibrarySPtr p_pLibrary );
+		DividerPlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -87,48 +89,6 @@ namespace Castor3D
 		 *\brief		Donne le nom court du diviseur
 		 */
 		Castor::String GetDividerType();
-
-	private:
-		/**
-		 *\~english
-		 *\brief		Copy constructor
-		 *\param[in]	p_plugin	The Plugin object to copy
-		 *\~french
-		 *\brief		Constructeur par copie
-		 *\param[in]	p_plugin	L'objet Plugin à copier
-		 */
-		DividerPlugin( DividerPlugin const & p_plugin );
-		/**
-		 *\~english
-		 *\brief		Move constructor
-		 *\param[in]	p_plugin	The Plugin object to move
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_plugin	L'objet Plugin à déplacer
-		 */
-		DividerPlugin( DividerPlugin && p_plugin );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	p_plugin	The Plugin object to copy
-		 *\return		A reference to this Plugin object
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_plugin	L'objet Plugin à copier
-		 *\return		Une référence sur cet objet Plugin
-		 */
-		DividerPlugin & operator =( DividerPlugin const & p_plugin );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	p_plugin	The Plugin object to move
-		 *\return		A reference to this Plugin object
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_plugin	L'objet Plugin à déplacer
-		 *\return		Une référence sur cet objet Plugin
-		 */
-		DividerPlugin & operator =( DividerPlugin && p_plugin );
 
 	private:
 		PCreateDividerFunction m_pfnCreateDivider;

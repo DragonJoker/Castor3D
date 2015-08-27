@@ -1,43 +1,46 @@
-#include "SceneFileParser_Parsers.hpp"
-#include "InitialiseEvent.hpp"
-#include "FrameVariableBuffer.hpp"
-#include "Engine.hpp"
-#include "Material.hpp"
-#include "Overlay.hpp"
-#include "PanelOverlay.hpp"
-#include "BorderPanelOverlay.hpp"
-#include "TextOverlay.hpp"
-#include "RenderWindow.hpp"
-#include "RenderTarget.hpp"
-#include "Scene.hpp"
-#include "ImporterPlugin.hpp"
-#include "DividerPlugin.hpp"
-#include "SceneNode.hpp"
-#include "Mesh.hpp"
-#include "Light.hpp"
-#include "DirectionalLight.hpp"
-#include "PointLight.hpp"
-#include "SpotLight.hpp"
-#include "Geometry.hpp"
-#include "Importer.hpp"
-#include "Submesh.hpp"
-#include "Subdivider.hpp"
-#include "Vertex.hpp"
-#include "Face.hpp"
-#include "Pass.hpp"
-#include "Texture.hpp"
-#include "TextureUnit.hpp"
-#include "ShaderProgram.hpp"
-#include "FrameVariable.hpp"
-#include "Viewport.hpp"
-#include "Camera.hpp"
-#include "Sampler.hpp"
-#include "BlendState.hpp"
-#include "BillboardList.hpp"
+﻿#include "SceneFileParser_Parsers.hpp"
+
 #include "AnimatedObjectGroup.hpp"
 #include "AnimatedObject.hpp"
 #include "Animation.hpp"
+#include "BillboardList.hpp"
+#include "BlendState.hpp"
+#include "BorderPanelOverlay.hpp"
+#include "Camera.hpp"
+#include "DirectionalLight.hpp"
+#include "DividerPlugin.hpp"
+#include "Engine.hpp"
+#include "Face.hpp"
+#include "FrameVariable.hpp"
+#include "Geometry.hpp"
+#include "Importer.hpp"
+#include "ImporterPlugin.hpp"
+#include "InitialiseEvent.hpp"
+#include "FrameVariableBuffer.hpp"
+#include "Light.hpp"
+#include "Material.hpp"
+#include "MaterialManager.hpp"
+#include "Mesh.hpp"
+#include "Overlay.hpp"
+#include "PanelOverlay.hpp"
+#include "Pass.hpp"
+#include "PointLight.hpp"
+#include "RenderSystem.hpp"
+#include "RenderTarget.hpp"
+#include "RenderWindow.hpp"
+#include "Sampler.hpp"
+#include "Scene.hpp"
+#include "SceneNode.hpp"
 #include "ShaderManager.hpp"
+#include "ShaderProgram.hpp"
+#include "SpotLight.hpp"
+#include "Subdivider.hpp"
+#include "Submesh.hpp"
+#include "TextOverlay.hpp"
+#include "Texture.hpp"
+#include "TextureUnit.hpp"
+#include "Vertex.hpp"
+#include "Viewport.hpp"
 
 #include <Font.hpp>
 #include <Logger.hpp>
@@ -59,15 +62,15 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootMtlFile )
 	if ( File::FileExists( l_path ) )
 	{
 		TextFile l_fileMat( l_path, File::eOPEN_MODE_READ, File::eENCODING_MODE_ASCII );
-		Logger::LogMessage( cuT( "Loading materials file : " ) + l_path );
+		Logger::LogInfo( cuT( "Loading materials file : " ) + l_path );
 
 		if ( l_pContext->m_pParser->GetEngine()->GetMaterialManager().Read( l_fileMat ) )
 		{
-			Logger::LogMessage( cuT( "Materials read" ) );
+			Logger::LogInfo( cuT( "Materials read" ) );
 		}
 		else
 		{
-			Logger::LogMessage( cuT( "Can't read materials" ) );
+			Logger::LogInfo( cuT( "Can't read materials" ) );
 		}
 	}
 }
@@ -77,9 +80,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootScene )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
 	String l_strName;
-	l_pContext->spScene = l_pContext->m_pParser->GetEngine()->CreateScene( p_arrayParams[0]->Get( l_strName ) );
-	l_pContext->pScene = l_pContext->spScene.get();
-	l_pContext->mapScenes.insert( std::make_pair( l_strName, l_pContext->spScene ) );
+	l_pContext->pScene = l_pContext->m_pParser->GetEngine()->CreateScene( p_arrayParams[0]->Get( l_strName ) );
+	l_pContext->mapScenes.insert( std::make_pair( l_strName, l_pContext->pScene ) );
 }
 END_ATTRIBUTE_PUSH( eSECTION_SCENE )
 
@@ -154,6 +156,14 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootSamplerState )
 	l_pContext->pSampler = l_pContext->m_pParser->GetEngine()->CreateSampler( p_arrayParams[0]->Get( l_strName ) );
 }
 END_ATTRIBUTE_PUSH( eSECTION_SAMPLER )
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootDebugOverlays )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
+	bool l_value;
+	l_pContext->m_pParser->GetEngine()->ShowDebugOverlays( p_arrayParams[0]->Get( l_value ) );
+}
+END_ATTRIBUTE_PUSH( eSECTION_SCENE )
 
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_WindowRenderTarget )
 {
@@ -856,7 +866,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ScenePanelOverlay )
 	if ( l_pContext->pScene )
 	{
 		String l_strName;
-		l_pContext->pOverlay = l_pContext->m_pParser->GetEngine()->CreateOverlay( eOVERLAY_TYPE_PANEL, p_arrayParams[0]->Get( l_strName ), l_pContext->pOverlay, l_pContext->spScene );
+		l_pContext->pOverlay = l_pContext->m_pParser->GetEngine()->CreateOverlay( eOVERLAY_TYPE_PANEL, p_arrayParams[0]->Get( l_strName ), l_pContext->pOverlay, l_pContext->pScene );
 		l_pContext->pOverlay->SetVisible( false );
 	}
 	else
@@ -873,7 +883,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneBorderPanelOverlay )
 	if ( l_pContext->pScene )
 	{
 		String l_strName;
-		l_pContext->pOverlay = l_pContext->m_pParser->GetEngine()->CreateOverlay( eOVERLAY_TYPE_BORDER_PANEL, p_arrayParams[0]->Get( l_strName ), l_pContext->pOverlay, l_pContext->spScene );
+		l_pContext->pOverlay = l_pContext->m_pParser->GetEngine()->CreateOverlay( eOVERLAY_TYPE_BORDER_PANEL, p_arrayParams[0]->Get( l_strName ), l_pContext->pOverlay, l_pContext->pScene );
 		l_pContext->pOverlay->SetVisible( false );
 	}
 	else
@@ -890,7 +900,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneTextOverlay )
 	if ( l_pContext->pScene )
 	{
 		String l_strName;
-		l_pContext->pOverlay = l_pContext->m_pParser->GetEngine()->CreateOverlay( eOVERLAY_TYPE_TEXT, p_arrayParams[0]->Get( l_strName ), l_pContext->pOverlay, l_pContext->spScene );
+		l_pContext->pOverlay = l_pContext->m_pParser->GetEngine()->CreateOverlay( eOVERLAY_TYPE_TEXT, p_arrayParams[0]->Get( l_strName ), l_pContext->pOverlay, l_pContext->pScene );
 		l_pContext->pOverlay->SetVisible( false );
 	}
 	else
@@ -919,7 +929,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightParent )
 	if ( l_pContext->pLight )
 	{
 		l_pContext->pLight->Detach();
-		l_pContext->pSceneNode->AttachObject( l_pContext->pLight.get() );
+		l_pContext->pSceneNode->AttachObject( l_pContext->pLight );
 	}
 }
 END_ATTRIBUTE()
@@ -1072,7 +1082,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_NodeParent )
 
 		if ( l_pParent )
 		{
-			l_pContext->pSceneNode->AttachTo( l_pParent.get() );
+			l_pContext->pSceneNode->AttachTo( l_pParent );
 		}
 		else
 		{
@@ -1092,7 +1102,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_NodePosition )
 
 	if ( l_pContext->pSceneNode )
 	{
-		Point3r l_vVector;
+		Point3f l_vVector;
 		p_arrayParams[0]->Get( l_vVector );
 		l_pContext->pSceneNode->SetPosition( l_vVector );
 	}
@@ -1151,7 +1161,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ObjectParent )
 
 		if ( l_pParent )
 		{
-			l_pParent->AttachObject( l_pContext->pGeometry.get() );
+			l_pParent->AttachObject( l_pContext->pGeometry );
 		}
 		else
 		{
@@ -1519,10 +1529,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshDivide )
 			Point3r l_ptCenter = l_pContext->pMesh->GetCollisionBox().GetCenter();
 			std::for_each( l_pContext->pMesh->Begin(), l_pContext->pMesh->End(), [&]( SubmeshSPtr p_pSubmesh )
 			{
-				for ( uint8_t i = 0; i < l_uiCount; i++ )
-				{
-					l_pDivider->Subdivide( p_pSubmesh, &l_ptCenter, false );
-				}
+				l_pDivider->Subdivide( p_pSubmesh, l_uiCount, false );
 			} );
 			l_pPlugin->DestroyDivider( l_pDivider );
 		}
@@ -1957,7 +1964,7 @@ END_ATTRIBUTE_PUSH( eSECTION_PASS )
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MaterialEnd )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-	l_pContext->m_pParser->GetEngine()->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_pContext->pMaterial ) );
+	l_pContext->m_pParser->GetEngine()->PostEvent( MakeInitialiseEvent( *l_pContext->pMaterial ) );
 }
 END_ATTRIBUTE_POP()
 
@@ -2166,6 +2173,40 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassHlShader )
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_HLSL_SHADER )
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassAlphaBlendMode )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
+
+	if ( l_pContext->uiPass >= 0 )
+	{
+		uint32_t l_mode = 0;
+		p_arrayParams[0]->Get( l_mode );
+		l_pContext->pMaterial->GetPass( l_pContext->uiPass )->SetAlphaBlendMode( eBLEND_MODE( l_mode ) );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <pass::alpha_blend_mode> : Pass not initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassColourBlendMode )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
+
+	if ( l_pContext->uiPass >= 0 )
+	{
+		uint32_t l_mode = 0;
+		p_arrayParams[0]->Get( l_mode );
+		l_pContext->pMaterial->GetPass( l_pContext->uiPass )->SetColourBlendMode( eBLEND_MODE( l_mode ) );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <pass::colour_blend_mode> : Pass not initialised" ) );
+	}
+}
+END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitImage )
 {
@@ -2631,7 +2672,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlShaderVariableType )
 	{
 		if ( !l_pContext->pFrameVariable )
 		{
-			l_pContext->pFrameVariable = l_pContext->pShaderProgram->GetUserBuffer()->CreateVariable( *l_pContext->pShaderProgram.get(), eFRAME_VARIABLE_TYPE( l_uiType ), l_pContext->strName2 );
+			//l_pContext->pFrameVariable = l_pContext->pShaderProgram->GetUserBuffer()->CreateVariable( *l_pContext->pShaderProgram.get(), eFRAME_VARIABLE_TYPE( l_uiType ), l_pContext->strName2 );
 		}
 		else
 		{
@@ -3047,7 +3088,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_HlShaderVariableType )
 	{
 		if ( ! l_pContext->pFrameVariable )
 		{
-			l_pContext->pFrameVariable = l_pContext->pShaderProgram->GetUserBuffer()->CreateVariable( *l_pContext->pShaderProgram.get(), eFRAME_VARIABLE_TYPE( l_uiType ), l_pContext->strName2 );
+			//l_pContext->pFrameVariable = l_pContext->pShaderProgram->GetUserBuffer()->CreateVariable( *l_pContext->pShaderProgram.get(), eFRAME_VARIABLE_TYPE( l_uiType ), l_pContext->strName2 );
 		}
 		else
 		{
@@ -3188,7 +3229,24 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_OverlayPixelSize )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <overlay::size> : Overlay not initialised" ) );
+		PARSING_ERROR( cuT( "Directive <overlay::pxl_size> : Overlay not initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_OverlayPixelPosition )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
+
+	if ( l_pContext->pOverlay )
+	{
+		Position l_position;
+		p_arrayParams[0]->Get( l_position );
+		l_pContext->pOverlay->SetPixelPosition( l_position );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <overlay::pxl_position> : Overlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -3295,7 +3353,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BorderPanelOverlayPixelSizes )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <border_panel_overlay::border_size> : Overlay not initialised" ) );
+		PARSING_ERROR( cuT( "Directive <border_panel_overlay::pxl_border_size> : Overlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -3465,6 +3523,16 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_CameraParent )
 	if ( l_pParent )
 	{
 		l_pContext->pSceneNode = l_pParent;
+
+		while ( l_pParent->GetParent() && l_pParent->GetParent() != l_pContext->pScene->GetObjectRootNode() && l_pParent->GetParent() != l_pContext->pScene->GetCameraRootNode() )
+		{
+			l_pParent = l_pParent->GetParent();
+		}
+
+		if ( !l_pParent->GetParent() || l_pParent->GetParent() == l_pContext->pScene->GetObjectRootNode() )
+		{
+			l_pParent->AttachTo( l_pContext->pScene->GetCameraRootNode() );
+		}
 	}
 	else
 	{
@@ -3600,7 +3668,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BillboardParent )
 
 		if ( l_pParent )
 		{
-			l_pParent->AttachObject( l_pContext->pBillboards.get() );
+			l_pParent->AttachObject( l_pContext->pBillboards );
 		}
 		else
 		{
@@ -3657,7 +3725,7 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BillboardEnd )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-	l_pContext->m_pParser->GetEngine()->PostEvent( std::make_shared< InitialiseEvent< BillboardList > >( *l_pContext->pBillboards ) );
+	l_pContext->m_pParser->GetEngine()->PostEvent( MakeInitialiseEvent( *l_pContext->pBillboards ) );
 	l_pContext->pBillboards = nullptr;
 }
 END_ATTRIBUTE_POP()

@@ -1,4 +1,4 @@
-#include "DirectRenderTechnique.hpp"
+﻿#include "DirectRenderTechnique.hpp"
 #include "RenderTarget.hpp"
 #include "FrameBuffer.hpp"
 #include "DepthStencilState.hpp"
@@ -20,7 +20,7 @@ namespace Castor3D
 	DirectRenderTechnique::DirectRenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
 		:	RenderTechniqueBase( cuT( "direct" ), p_renderTarget, p_pRenderSystem, p_params )
 	{
-		Logger::LogMessage( "Using Direct rendering" );
+		Logger::LogInfo( "Using Direct rendering" );
 	}
 
 	DirectRenderTechnique::~DirectRenderTechnique()
@@ -53,26 +53,18 @@ namespace Castor3D
 
 	bool DirectRenderTechnique::DoBeginRender()
 	{
-#if DX_DEBUG
-		return true;
-#else
 		return m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
-#endif
 	}
 
 	bool DirectRenderTechnique::DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime )
 	{
-#if !DX_DEBUG
 		m_pRenderTarget->GetDepthStencilState()->Apply();
 		m_pRenderTarget->GetRasteriserState()->Apply();
-#endif
 		return RenderTechniqueBase::DoRender( p_scene, p_camera, p_ePrimitives, p_dFrameTime );
 	}
 
 	void DirectRenderTechnique::DoEndRender()
 	{
-#if !DX_DEBUG
 		m_pFrameBuffer->Unbind();
-#endif
 	}
 }

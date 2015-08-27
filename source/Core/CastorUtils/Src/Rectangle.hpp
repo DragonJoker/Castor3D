@@ -81,7 +81,7 @@ namespace Castor
 		 *\param[in]	p_ptOrigin	Position
 		 *\param[in]	p_ptSize	Dimensions
 		 */
-		Rectangle( Position const & p_ptOrigin = Position(), Size const & p_ptSize = Size() );
+		CU_API Rectangle( Position const & p_ptOrigin = Position(), Size const & p_ptSize = Size() );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -92,7 +92,7 @@ namespace Castor
 		 *\param[in]	p_iLeft, p_iTop		Point haut gauche
 		 *\param[in]	p_iRight, p_iBottom	Point bas droit
 		 */
-		Rectangle( int32_t p_iLeft, int32_t p_iTop, int32_t p_iRight, int32_t p_iBottom );
+		CU_API Rectangle( int32_t p_iLeft, int32_t p_iTop, int32_t p_iRight, int32_t p_iBottom );
 		/**
 		 *\~english
 		 *\brief		Test if the givent point is onto or into this rectangle
@@ -103,7 +103,7 @@ namespace Castor
 		 *\param[in]	p_ptPoint	Le point à tester
 		 *\return		\p eINTERSECTION_IN si sur ou dedans, \p eINTERSECTION_OUT sinon
 		 */
-		eINTERSECTION intersects( Position const & p_ptPoint )const;
+		CU_API eINTERSECTION intersects( Position const & p_ptPoint )const;
 		/**
 		 *\~english
 		 *\brief		Test if the givent rectangle intersects this rectangle
@@ -114,7 +114,7 @@ namespace Castor
 		 *\param[in]	p_rcRect	Le rectangle à tester
 		 *\return		Le type d'intersection entre les 2 rectangles
 		 */
-		eINTERSECTION intersects( Rectangle const & p_rcRect )const;
+		CU_API eINTERSECTION intersects( Rectangle const & p_rcRect )const;
 		/**
 		 *\~english
 		 *\brief		Sets the rectangle values
@@ -125,7 +125,7 @@ namespace Castor
 		 *\param[in]	p_iLeft, p_iTop		Point haut gauche
 		 *\param[in]	p_iRight, p_iBottom	Point bas droit
 		 */
-		void set( int32_t p_iLeft, int32_t p_iTop, int32_t p_iRight, int32_t p_iBottom );
+		CU_API void set( int32_t p_iLeft, int32_t p_iTop, int32_t p_iRight, int32_t p_iBottom );
 		/**
 		 *\~english
 		 *\brief		Retrieves the rectangle size
@@ -134,7 +134,7 @@ namespace Castor
 		 *\brief		Récupère les dimensions du rectangle
 		 *\param[out]	p_ptResult	Les dimensions du rectangle
 		 */
-		void size( Size & p_ptResult )const;
+		CU_API void size( Size & p_ptResult )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the left coordinate

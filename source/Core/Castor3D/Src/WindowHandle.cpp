@@ -1,4 +1,4 @@
-#include "WindowHandle.hpp"
+﻿#include "WindowHandle.hpp"
 
 using namespace Castor;
 

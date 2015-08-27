@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -43,6 +43,7 @@ namespace Castor3D
 				<br />Elle a au moins une caméra permettant son rendu
 	*/
 	class C3D_API Scene
+		: public std::enable_shared_from_this< Scene >
 	{
 	public:
 		/*!
@@ -139,7 +140,7 @@ namespace Castor3D
 		struct stRENDER_NODE
 		{
 			//!\~english The parent mesh node	\~french Le node du mesh parent
-			SceneNodeRPtr m_pNode;
+			SceneNodeSPtr m_pNode;
 			//!\~english The geometry instanciating the submesh	\~french La géométrie instanciant le submesh
 			GeometrySPtr m_pGeometry;
 			//!\~english The submesh	\~french Le sous-maillage
@@ -181,6 +182,13 @@ namespace Castor3D
 		~Scene();
 		/**
 		 *\~english
+		 *\brief		Initialises the scene
+		 *\~french
+		 *\brief		Initialise la scène
+		 */
+		void Initialise();
+		/**
+		 *\~english
 		 *\brief		Clears the maps, leaves the root nodes
 		 *\~french
 		 *\brief		Vide les maps, laisse les noeuds pères
@@ -219,16 +227,16 @@ namespace Castor3D
 		bool SetBackgroundImage( Castor::Path const & p_pathFile );
 		/**
 		 *\~english
-		 *\brief		Creates a scene node in the scene, attached to the root node if th given parent is nullptr
+		 *\brief		Creates a scene node in the scene, attached to the root node
 		 *\param[in]	p_name		The node name, default is empty
-		 *\param[in]	p_parent	The parent node, if nullptr, the created node will be attached to root
+		 *\return		The created node
 		 *\~french
 		 *\brief		Crée un SceneNode
-		 *\remark		Si le parent donné est nul, le SceneNode créé sera attaché au root node
+		 *\remark		Le SceneNode créé sera attaché au root node
 		 *\param[in]	p_name		Le nom du node
-		 *\param[in]	p_parent	Le parent du node
+		 *\return		Le noeud créé
 		 */
-		SceneNodeSPtr CreateSceneNode( Castor::String const & p_name, SceneNode * p_parent = NULL );
+		SceneNodeSPtr CreateSceneNode( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Creates a scene node in the scene, attached to the root node if th given parent is nullptr
@@ -589,6 +597,24 @@ namespace Castor3D
 		 *\return
 		 */
 		void AddOverlay( OverlaySPtr p_pOverlay );
+		/**
+		 *\~english
+		 *\brief		Retrieves the vertices count
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le nombre de sommets
+		 *\return		La valeur
+		 */
+		uint32_t GetVertexCount()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the faces count
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le nombre de faces
+		 *\return		La valeur
+		 */
+		uint32_t GetFaceCount()const;
 		/**
 		 *\~english
 		 *\brief		Sets the background colour
@@ -979,12 +1005,21 @@ namespace Castor3D
 		void DoDeleteToDelete();
 		void DoUpdateAnimations();
 		void DoSortByAlpha();
-		void DoRenderSubmeshes( Camera const & p_camera, Pipeline & p_pipeline, eTOPOLOGY p_displayMode, RenderNodeArrayConstIt p_begin, RenderNodeArrayConstIt p_end );
-		void DoRenderSubmeshes( Camera const & p_camera, Pipeline & p_pipeline, eTOPOLOGY p_displayMode, SubmeshNodesByMaterialMapConstIt p_begin, SubmeshNodesByMaterialMapConstIt p_end );
-		void DoRenderSubmeshes( Pipeline & p_pipeline, eTOPOLOGY p_displayMode, RenderNodeByDistanceMMapConstIt p_begin, RenderNodeByDistanceMMapConstIt p_end );
-		void DoResortAlpha( Camera const & p_camera, RenderNodeArrayIt p_begin, RenderNodeArrayIt p_end, RenderNodeByDistanceMMap p_map, int p_sign );
-		void DoRenderSubmesh( Pipeline & p_pipeline, stRENDER_NODE p_node, eTOPOLOGY p_eTopology );
+		void DoRenderSubmeshesNonInstanced( Camera const & p_camera, Pipeline & p_pipeline, eTOPOLOGY p_displayMode, RenderNodeArrayConstIt p_begin, RenderNodeArrayConstIt p_end );
+		void DoRenderSubmeshesInstanced( Camera const & p_camera, Pipeline & p_pipeline, eTOPOLOGY p_displayMode, SubmeshNodesByMaterialMapConstIt p_begin, SubmeshNodesByMaterialMapConstIt p_end );
+		void DoRenderAlphaSortedSubmeshes( Pipeline & p_pipeline, eTOPOLOGY p_displayMode, RenderNodeByDistanceMMapConstIt p_begin, RenderNodeByDistanceMMapConstIt p_end );
+		void DoResortAlpha( Camera const & p_camera, RenderNodeArrayIt p_begin, RenderNodeArrayIt p_end, RenderNodeByDistanceMMap & p_map, int p_sign );
+		void DoRenderSubmeshInstancedMultiple( Pipeline & p_pipeline, RenderNodeArray const & p_nodes, eTOPOLOGY p_eTopology );
+		void DoRenderSubmeshInstancedSingle( Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
+		void DoRenderSubmeshNonInstanced( Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
+		void DoRenderSubmesh( Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
+		void DoApplySkeleton( FrameVariableBuffer const & p_matrixBuffer, AnimatedObjectSPtr p_object );
 		void DoRenderBillboards( Pipeline & p_pipeline, BillboardListStrMapIt p_itBegin, BillboardListStrMapIt p_itEnd );
+		void DoBindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer );
+		void DoBindLight( LightSPtr p_light, int p_index, ShaderProgramBase & p_program );
+		void DoUnbindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer );
+		void DoUnbindLight( LightSPtr p_light, int p_index, ShaderProgramBase & p_program );
+		void DoBindCamera( FrameVariableBuffer & p_sceneBuffer );
 
 		template< typename MapType >
 		void DoMerge( SceneSPtr p_pScene, MapType & p_map, MapType & p_myMap )
@@ -996,12 +1031,12 @@ namespace Castor3D
 				if ( l_it->second->GetParent()->GetName() == cuT( "CameraRootNode" ) )
 				{
 					l_it->second->Detach();
-					l_it->second->AttachTo( m_rootCameraNode.get() );
+					l_it->second->AttachTo( m_rootCameraNode );
 				}
 				else if ( l_it->second->GetParent()->GetName() == cuT( "ObjectRootNode" ) )
 				{
 					l_it->second->Detach();
-					l_it->second->AttachTo( m_rootObjectNode.get() );
+					l_it->second->AttachTo( m_rootObjectNode );
 				}
 
 				l_strName = l_it->first;
@@ -1209,12 +1244,14 @@ namespace Castor3D
 		Engine * m_pEngine;
 		//!\~english Lights map, ordered by index	\~french Map de lumières, triées par index
 		std::map< int, LightSPtr > m_mapLights;
-		//!\~english The geometries with no alpha blending	\~french Les géométries n'ayant pas d'alpha blend
+		//!\~english The geometries with no alpha blending, sorted by material	\~french Les géométries n'ayant pas d'alpha blend, triées par matériau
 		SubmeshNodesByMaterialMap m_mapSubmeshesNoAlpha;
 		//!\~english The geometries without alpha blending, unsorted	\~french Les géométries sans alpha blend, non triées
 		RenderNodeArray m_arraySubmeshesNoAlpha;
+		//!\~english The geometries with alpha blending, sorted by material	\~french Les géométries avec de l'alpha blend, triées par matériau
+		SubmeshNodesByMaterialMap m_mapSubmeshesAlpha;
 		//!\~english The geometries with alpha blending, sorted by distance to the camera	\~french Les géométries avec de l'alpha blend, triées par distance à la caméra
-		RenderNodeByDistanceMMap m_mapSubmeshesAlpha;
+		RenderNodeByDistanceMMap m_mapSubmeshesAlphaSorted;
 		//!\~english The geometries with alpha blending, unsorted	\~french Les géométries avec de l'alpha blend, non triées
 		RenderNodeArray m_arraySubmeshesAlpha;
 		//!\~english The scene background colour	\~french La couleur de fond de la scène
@@ -1225,6 +1262,16 @@ namespace Castor3D
 		BillboardListArray m_arrayBillboardsToDelete;
 		//!\~english The background image	\~french L'image de fond
 		TextureBaseSPtr m_pBackgroundImage;
+		//!\~english The DepthStencilState for alpha render	\~french Le DepthStencilState utilisé pour le rendu de la transparence
+		DepthStencilStateWPtr m_alphaDepthState;
+		//!\~english Tells if at least one light has changed since last frame	\~french Dit si une lumière au moins a changé depuis la dernière frame
+		bool m_bLightsChanged;
+		//!\~english The image containing lights data	\~french L'image contenant les données des lumières
+		Castor::PxBufferBaseSPtr m_pLightsData;
+		//!\~english The lights texture	\~french La texture contenant les lumières
+		TextureUnitSPtr m_pLightsTexture;
+		//!\~english The set of available images	indices	\~french Le set contenant les indices des lumières disponibles
+		std::set< int > m_setFreeLights;
 	};
 }
 

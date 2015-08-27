@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -34,7 +34,7 @@ namespace Castor3D
 	\remark		A dynamic texture can update it's buffer
 	\~french
 	\brief		Class de texture dynamique
-	\remark		Une texture statique peut mettre à jour son buffer
+	\remark		Une texture statique peut mettre Ã  jour son buffer
 	*/
 	class C3D_API DynamicTexture
 		:	public TextureBase
@@ -64,7 +64,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Fonction d'initialisation
 		 *\param[in]	p_uiIndex		L'index de la texture
-		 *\return		\p true si tout s'est bien passé
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
 		virtual bool Initialise( uint32_t p_uiIndex );
 		/**
@@ -77,25 +77,29 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
+		 *\param[in]	p_index	The texture index
 		 *\return		\p true if successful
 		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activÃ©
+		 *\param[in]	p_index	L'index de texture
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
-		virtual bool Bind();
+		virtual bool BindAt( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
+		 *\param[in]	p_index	The texture index
 		 *\~french
-		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
+		 *\brief		Fonction de dÃ©sactivation, pour dire au GPU qu'il est dÃ©sactivÃ©
+		 *\param[in]	p_index	L'index de texture
 		 */
-		virtual void Unbind();
+		virtual void UnbindFrom( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Defines the texture buffer
 		 *\param[in]	p_pBuffer	The buffer
 		 *\~french
-		 *\brief		Définit le buffer de la texture
+		 *\brief		DÃ©finit le buffer de la texture
 		 *\param[in]	p_pBuffer	The buffer
 		 */
 		void SetImage( Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_ePixelFormat );
@@ -104,7 +108,7 @@ namespace Castor3D
 		 *\brief		Defines the 3D texture buffer
 		 *\param[in]	p_pBuffer	The buffer
 		 *\~french
-		 *\brief		Définit le buffer de la texture 3D
+		 *\brief		DÃ©finit le buffer de la texture 3D
 		 *\param[in]	p_pBuffer	The buffer
 		 */
 		void SetImage( Castor::Point3ui const & p_size, Castor::ePIXEL_FORMAT p_ePixelFormat );
@@ -131,7 +135,7 @@ namespace Castor3D
 		 *\brief		Retrieves the render target status
 		 *\return		The status
 		 *\~french
-		 *\brief		Récupère le statut de cible de rendu
+		 *\brief		RÃ©cupÃ¨re le statut de cible de rendu
 		 *\return		Le statut
 		 */
 		inline bool	IsRenderTarget()const
@@ -143,7 +147,7 @@ namespace Castor3D
 		 *\brief		Defines the render target status
 		 *\param[in]	val	The status
 		 *\~french
-		 *\brief		Définit le statut de cible de rendu
+		 *\brief		DÃ©finit le statut de cible de rendu
 		 *\param[in]	val	Le statut
 		 */
 		inline void SetRenderTarget( bool val )
@@ -155,7 +159,7 @@ namespace Castor3D
 		 *\brief		Retrieves the samples count
 		 *\return		The samples count
 		 *\~french
-		 *\brief		Récupère le nombre de samples
+		 *\brief		RÃ©cupÃ¨re le nombre de samples
 		 *\return		Le nombre de samples
 		 */
 		inline int	GetSamplesCount()const
@@ -167,7 +171,7 @@ namespace Castor3D
 		 *\brief		Defines the samples count
 		 *\param[in]	val	The samples count
 		 *\~french
-		 *\brief		Définit le nombre de samples
+		 *\brief		DÃ©finit le nombre de samples
 		 *\param[in]	val	Le nombre de samples
 		 */
 		inline void SetSamplesCount( int p_iCount )
@@ -179,7 +183,7 @@ namespace Castor3D
 		 *\brief		Sets the unit index
 		 *\param[in]	p_uiIndex	The new value
 		 *\~french
-		 *\brief		Définit l'index de l'unité
+		 *\brief		DÃ©finit l'index de l'unitÃ©
 		 *\param[in]	p_uiIndex	La nouvelle valeur
 		 */
 		inline void SetIndex( uint32_t p_uiIndex )
@@ -195,7 +199,7 @@ namespace Castor3D
 		 *\param[in]	p_eFormat	The image pixel format
 		 *\~french
 		 *\brief		Envoie le buffer d'image au driver
-		 *\remark		Ne met pas à jour le buffer interne, donc ne l'utilisez jamais ou utilisez la tout le temps
+		 *\remark		Ne met pas Ã  jour le buffer interne, donc ne l'utilisez jamais ou utilisez la tout le temps
 		 *\param[in]	p_pBuffer	Le buffer d'image
 		 *\param[in]	p_size		Les dimensions de l'image
 		 *\param[in]	p_eFormat	Le format des pixels de l'image
@@ -205,9 +209,9 @@ namespace Castor3D
 		using TextureBase::SetImage;
 
 	private:
-		//!\~english Tells that the texture needs to be initialised as a render target	\~french Dit qu e la texture doit être initialiséée en tant que render target
+		//!\~english Tells that the texture needs to be initialised as a render target	\~french Dit qu e la texture doit Ãªtre initialisÃ©Ã©e en tant que render target
 		bool m_bRenderTarget;
-		//!\~english The samples count, if it is a multisample texture	\~french Le nombre de samples dans le cas où c'est une texture multisample
+		//!\~english The samples count, if it is a multisample texture	\~french Le nombre de samples dans le cas oÃ¹ c'est une texture multisample
 		int m_iSamplesCount;
 	};
 }

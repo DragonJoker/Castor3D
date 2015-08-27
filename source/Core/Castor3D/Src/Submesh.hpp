@@ -19,8 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_SUBMESH_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "Renderable.hpp"
-#include "SubmeshRenderer.hpp"
 #include "Mesh.hpp"
 #include "FaceIndices.hpp"
 #include "FaceInfos.hpp"
@@ -43,7 +41,7 @@ namespace Castor3D
 	\brief		Representation d'un submesh
 	\remark		Un submesh est sous partie d'un mesh. Il possede ses propres tampons (vertex, normales et texture coords) ses smoothgroups et ses combobox
 	*/
-	class C3D_API Submesh : public Renderable<Submesh, SubmeshRenderer>
+	class C3D_API Submesh
 	{
 	public:
 		/*!
@@ -54,7 +52,9 @@ namespace Castor3D
 		\~french
 		\brief		Loader texte de Submesh
 		*/
-		class C3D_API TextLoader : public Castor::Loader< Submesh, Castor::eFILE_TYPE_TEXT, Castor::TextFile >, public Castor::NonCopyable
+		class C3D_API TextLoader
+			: public Castor::Loader< Submesh, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -87,7 +87,7 @@ namespace Castor3D
 		\brief		Loader de MovableObject
 		*/
 		class C3D_API BinaryParser
-			:	public Castor3D::BinaryParser< Submesh >
+			: public Castor3D::BinaryParser< Submesh >
 		{
 		public:
 			/**
@@ -129,21 +129,6 @@ namespace Castor3D
 
 	private:
 		DECLARE_LIST( Castor::ByteArray, BytePtr );
-		class C3D_API FaceAndAngle
-		{
-		public:
-			real			m_rAngle;
-			Castor::Point3r	m_ptNormal;
-			Castor::Point3r	m_ptTangent;
-
-			FaceAndAngle()
-				:	m_rAngle( 0 )
-			{
-			}
-		};
-
-		typedef std::shared_ptr<FaceAndAngle>	FaceAndAnglePtr;
-		typedef std::vector<FaceAndAnglePtr>	FaceAndAnglePtrArray;
 
 	public:
 		/**
@@ -166,6 +151,13 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		~Submesh();
+		/**
+		 *\~english
+		 *\brief		Initialises the submesh
+		 *\~french
+		 *\brief		Initialise le submesh
+		 */
+		void Initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans the submesh
@@ -198,13 +190,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Tests if the given Point3r is in mine
 		 *\param[in]	p_vertex	The vertex to test
+		 *\param[in]	p_precision	The comparison precision
 		 *\return		The index of the vertex equal to parameter, -1 if not found
 		 *\~french
 		 *\brief		Teste si le point donné fait partie de ceux de ce submesh
 		 *\param[in]	p_vertex	Le point à tester
+		 *\param[in]	p_precision	La précision de comparaison
 		 *\return		L'index du point s'il a été trouvé, -1 sinon
 		 */
-		int IsInMyPoints( Castor::Point3r const & p_vertex );
+		int IsInMyPoints( Castor::Point3r const & p_vertex, double p_precision );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a vertex to my list
@@ -286,18 +280,6 @@ namespace Castor3D
 		void AddFaceGroup( stFACE_INDICES * p_pFaces, uint32_t p_uiNbFaces );
 		/**
 		 *\~english
-		 *\brief		Creates and adds faces to the submesh
-		 *\param[in]	p_arrayFaces	The faces
-		 *\~french
-		 *\brief		Crée et ajoute une face au submesh
-		 *\param[in]	p_arrayFaces	Les faces
-		 */
-		template< uint32_t Count > void AddFaceGroup( stFACE_INDICES( & p_pFaces )[Count] )
-		{
-			AddFaceGroup( p_pFaces, Count );
-		}
-		/**
-		 *\~english
 		 *\brief		Creates and adds a quad face to the submesh
 		 *\param[in]	a			The first face's vertex index
 		 *\param[in]	b			The second face's vertex index
@@ -342,6 +324,17 @@ namespace Castor3D
 		void ResetGpuBuffers();
 		/**
 		 *\~english
+		 *\brief		Draws the submesh
+		 *\param[in]	p_eMode	The render mode
+		 *\param[in]	p_pass	The Pass containing material informations
+		 *\~french
+		 *\brief		Dessine le submesh
+		 *\param[in]	p_eMode	Le mode de rendu
+		 *\param[in]	p_pass	La Pass contenant les informations de matériau
+		 */
+		void Draw( eTOPOLOGY p_eMode, Pass const & p_pass );
+		/**
+		 *\~english
 		 *\brief		Creates faces from the points
 		 *\remark		This function assumes the points are sorted like triangles fan
 		 *\~french
@@ -351,11 +344,94 @@ namespace Castor3D
 		void ComputeFacesFromPolygonVertex();
 		/**
 		 *\~english
-		 *\brief		Renders the submesh
+		 *\brief		Generates normals and tangents
 		 *\~french
-		 *\brief		Dessine le submesh
+		 *\brief		Génère les normales et les tangentes
 		 */
-		virtual void Render();
+		void ComputeNormals( bool p_bReverted = false );
+		/**
+		 *\~english
+		 *\brief		Computes normal and tangent for each vertex of the given face
+		 *\param[in]	p_pFace	The face
+		 *\~french
+		 *\brief		Calcule la normale et la tangente pour chaque vertex de la face donnée
+		 *\param[in]	p_pFace	La face
+		 */
+		void ComputeNormals( FaceSPtr p_pFace );
+		/**
+		 *\~english
+		 *\brief		Computes tangent for each vertex of the given face
+		 *\param[in]	p_pFace	The face
+		 *\~french
+		 *\brief		Calcule la tangente pour chaque vertex de la face donnée
+		 *\param[in]	p_pFace	La face
+		 */
+		void ComputeTangents( FaceSPtr p_pFace );
+		/**
+		 *\~english
+		 *\brief		Computes tangent for each vertex of the submesh
+		 *\remark		This function supposes the normals are defined
+		 *\~french
+		 *\brief		Calcule la tangente pour chaque vertex du submesh
+		 *\remark		Cette fonction suppose que les normales sont définies
+		 */
+		void ComputeTangentsFromNormals();
+		/**
+		 *\~english
+		 *\brief		Computes tangent for each vertex of the submesh
+		 *\remark		This function supposes bitangents and normals are defined
+		 *\~french
+		 *\brief		Calcule la tangente pour chaque vertex du submesh
+		 *\remark		Cette fonction suppose que les bitangentes et les normales sont définies
+		 */
+		void ComputeTangentsFromBitangents();
+		/**
+		 *\~english
+		 *\brief		Computes bitangent for each vertex of the submesh
+		 *\remark		This function supposes the tangents and normals are defined
+		 *\~french
+		 *\brief		Calcule la bitangente pour chaque vertex du submesh
+		 *\remark		Cette fonction suppose que les tangentes et les normales sont définies
+		 */
+		void ComputeBitangents();
+		/**
+		 *\~english
+		 *\brief		Sorts the face from farthest to nearest from the camera
+		 *\param[in]	p_ptCamera	The camera position, relative to submesh
+		 *\~french
+		 *\brief		Trie les faces des plus éloignées aux plus proches de la caméra
+		 *\param[in]	p_ptCamera	La position de la caméra, relative au submesh
+		 */
+		void SortFaces( Castor::Point3r const & p_ptCamera );
+		/**
+		 *\~english
+		 *\brief		Increments instance count
+		 *\param[in]	p_material	The material for which the instance count is incremented
+		 *\~french
+		 *\brief		Incrémente le compte d'instances
+		 *\param[in]	p_material	Le matériau pour lequel le compte est incrémenté
+		 */
+		void Ref( MaterialSPtr p_material );
+		/**
+		 *\~english
+		 *\brief		Decrements instance count
+		 *\param[in]	p_material	The material for which the instance count is decremented
+		 *\~french
+		 *\brief		Décrémente le compte d'instances
+		 *\param[in]	p_material	Le matériau pour lequel le compte est décrémenté
+		 */
+		void UnRef( MaterialSPtr p_material );
+		/**
+		 *\~english
+		 *\brief		Retrieves the instances count
+		 *\param[in]	p_material	The material for which the instance count is retrieved
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le nombre d'instances
+		 *\param[in]	p_material	Le matériau pour lequel le compte est récupéré
+		 *\return		La valeur
+		 */
+		uint32_t GetRefCount( MaterialSPtr p_material )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator over the first vertex of the submesh
@@ -643,65 +719,28 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Generates normals and tangents
+		 *\brief		Retrieves the IndexBuffer of wanted primitive type
+		 *\return		The IndexBuffer
 		 *\~french
-		 *\brief		Génère les normales et les tangentes
+		 *\brief		Récupère l'IndexBuffer pour le type de primitive voulu
+		 *\return		Le IndexBuffer
 		 */
-		virtual void ComputeNormals( bool p_bReverted = false );
+		inline GeometryBuffersSPtr GetGeometryBuffers()const
+		{
+			return m_pGeometryBuffers;
+		}
 		/**
 		 *\~english
-		 *\brief		Computes normal and tangent for each vertex of the given face
-		 *\param[in]	p_pFace	The face
+		 *\brief		Retrieves the initialisation status
+		 *\return		\p true if initialised
 		 *\~french
-		 *\brief		Calcule la normale et la tangente pour chaque vertex de la face donnée
-		 *\param[in]	p_pFace	La face
+		 *\brief		Récupère le statut d'initialisation
+		 *\return		\p true si initialisé
 		 */
-		void ComputeNormals( FaceSPtr p_pFace );
-		/**
-		 *\~english
-		 *\brief		Computes tangent for each vertex of the given face
-		 *\param[in]	p_pFace	The face
-		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex de la face donnée
-		 *\param[in]	p_pFace	La face
-		 */
-		void ComputeTangents( FaceSPtr p_pFace );
-		/**
-		 *\~english
-		 *\brief		Computes tangent for each vertex of the submesh
-		 *\remark		This function supposes the normals are defined
-		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex du submesh
-		 *\remark		Cette fonction suppose que les normales sont définies
-		 */
-		void ComputeTangentsFromNormals();
-		/**
-		 *\~english
-		 *\brief		Computes tangent for each vertex of the submesh
-		 *\remark		This function supposes bitangents and normals are defined
-		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex du submesh
-		 *\remark		Cette fonction suppose que les bitangentes et les normales sont définies
-		 */
-		void ComputeTangentsFromBitangents();
-		/**
-		 *\~english
-		 *\brief		Computes bitangent for each vertex of the submesh
-		 *\remark		This function supposes the tangents and normals are defined
-		 *\~french
-		 *\brief		Calcule la bitangente pour chaque vertex du submesh
-		 *\remark		Cette fonction suppose que les tangentes et les normales sont définies
-		 */
-		void ComputeBitangents();
-		/**
-		 *\~english
-		 *\brief		Sorts the face from farthest to nearest from the camera
-		 *\param[in]	p_ptCamera	The camera position, relative to submesh
-		 *\~french
-		 *\brief		Trie les faces des plus éloignées aux plus proches de la caméra
-		 *\param[in]	p_ptCamera	La position de la caméra, relative au submesh
-		 */
-		void SortFaces( Castor::Point3r const & p_ptCamera );
+		inline bool	IsInitialised()const
+		{
+			return m_bInitialised;
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the parent mesh
@@ -716,35 +755,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Increments instance count
-		 *\param[in]	p_material	The material for which the instance count is incremented
-		 *\~french
-		 *\brief		Incrémente le compte d'instances
-		 *\param[in]	p_material	Le matériau pour lequel le compte est incrémenté
-		 */
-		void Ref( MaterialSPtr p_material );
-		/**
-		 *\~english
-		 *\brief		Decrements instance count
-		 *\param[in]	p_material	The material for which the instance count is decremented
-		 *\~french
-		 *\brief		Décrémente le compte d'instances
-		 *\param[in]	p_material	Le matériau pour lequel le compte est décrémenté
-		 */
-		void UnRef( MaterialSPtr p_material );
-		/**
-		 *\~english
-		 *\brief		Retrieves the instances count
-		 *\param[in]	p_material	The material for which the instance count is retrieved
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le nombre d'instances
-		 *\param[in]	p_material	Le matériau pour lequel le compte est récupéré
-		 *\return		La valeur
-		 */
-		uint32_t GetRefCount( MaterialSPtr p_material )const;
-		/**
-		 *\~english
 		 *\brief		Retrieves the shader program flags
 		 *\return		The value
 		 *\~french
@@ -755,6 +765,28 @@ namespace Castor3D
 		{
 			return m_uiProgramFlags;
 		}
+		/**
+		 *\~english
+		 *\brief		Creates and adds faces to the submesh
+		 *\param[in]	p_arrayFaces	The faces
+		 *\~french
+		 *\brief		Crée et ajoute une face au submesh
+		 *\param[in]	p_arrayFaces	Les faces
+		 */
+		template< uint32_t Count > void AddFaceGroup( stFACE_INDICES( & p_pFaces )[Count] )
+		{
+			AddFaceGroup( p_pFaces, Count );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the Engine
+		 *\~french
+		 *\brief		Récupère l'Engine
+		 */
+		virtual Engine * GetEngine()const
+		{
+			return m_pEngine;
+		}
 
 	private:
 		FaceSPtr DoAddFace( const FaceSPtr p_face );
@@ -762,8 +794,13 @@ namespace Castor3D
 		void DoGenerateIndexBuffer();
 		void DoGenerateMatrixBuffer();
 		void DoUpdateDeclaration();
+		void DoCleanupGeometryBuffers();
+		void DoCreateGeometryBuffers();
+		bool DoPrepareGeometryBuffers( Pass const & p_pass );
 
 	private:
+		//!\~english The core engine	\~french Le moteur
+		Engine * m_pEngine;
 		//!\~english The submesh ID	\~french L'id du sbmesh
 		uint32_t m_uiID;
 		//!\~english The submesh instances count	\~french Le nombre d'instances du submesh
@@ -790,6 +827,16 @@ namespace Castor3D
 		MeshRPtr m_pParentMesh;
 		//!\~english The shader program flags	\~french Les indicateurs pour le shader
 		uint32_t m_uiProgramFlags;
+		//!\~english Pointer over geometry buffers	\~french Pointeur sur les buffers de la géométrie
+		GeometryBuffersSPtr	m_pGeometryBuffers;
+		//!\~english Tells the renderer has been initialised	\~french Dit que le renderer a été initialisé
+		bool m_bInitialised;
+		//!\~english The actual draw type	\~french Le type de dessin actuel
+		eTOPOLOGY m_eCurDrawType;
+		//!\~english The previous call draw type	\~french Le type de dessin lors du précédent appel
+		eTOPOLOGY m_ePrvDrawType;
+		//!\~english Tells the VAO needs reininitialisation	\~french Dit que le VAO a besoin d'être réinitialisé
+		bool m_bDirty;
 	};
 }
 

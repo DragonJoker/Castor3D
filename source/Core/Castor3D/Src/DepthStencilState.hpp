@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -41,19 +41,19 @@ namespace Castor3D
 		\~english
 		\brief		Stencil function and operations description
 		\~french
-		\brief		Fonction et opérations de stencil
+		\brief		Fonction et opÃ©rations de stencil
 		*/
 		struct stSTENCIL
 		{
 			//!\~english The function	\~french La fonction
 			eSTENCIL_FUNC m_eFunc;
-			//!\~english The reference value for the function	\~french La valeur de référence pour la fonction
+			//!\~english The reference value for the function	\~french La valeur de rÃ©fÃ©rence pour la fonction
 			uint32_t m_ref;
-			//!\~english The operation on stencil test fail	\~french Opération faite en cas d'échec du stencil test
+			//!\~english The operation on stencil test fail	\~french OpÃ©ration faite en cas d'Ã©chec du stencil test
 			eSTENCIL_OP m_eFailOp;
-			//!\~english The operation on deph test fail	\~french Opération faite en cas d'échec du test de profondeur
+			//!\~english The operation on deph test fail	\~french OpÃ©ration faite en cas d'Ã©chec du test de profondeur
 			eSTENCIL_OP m_eDepthFailOp;
-			//!\~english The operation on depth and stencil tests success	\~french Opération faite en cas de réussite des tests stencil et profondeur
+			//!\~english The operation on depth and stencil tests success	\~french OpÃ©ration faite en cas de rÃ©ussite des tests stencil et profondeur
 			eSTENCIL_OP m_ePassOp;
 		};
 
@@ -76,21 +76,21 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Initialises the states
 		 *\~french
-		 *\brief		Initialise les états
+		 *\brief		Initialise les Ã©tats
 		 */
 		virtual bool Initialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans the states
 		 *\~french
-		 *\brief		Nettoie les états
+		 *\brief		Nettoie les Ã©tats
 		 */
 		virtual void Cleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Applies the states
 		 *\~french
-		 *\brief		Applique les états
+		 *\brief		Applique les Ã©tats
 		 */
 		virtual bool Apply() = 0;
 		/**
@@ -98,7 +98,7 @@ namespace Castor3D
 		 *\brief		Defines the depth test status
 		 *\param[in]	p_bEnable The new status
 		 *\~french
-		 *\brief		Définit le statut du test de profondeur
+		 *\brief		DÃ©finit le statut du test de profondeur
 		 *\param[in]	p_bEnable	Le nouveau statut
 		 */
 		inline void SetDepthTest( bool p_bEnable )
@@ -111,7 +111,7 @@ namespace Castor3D
 		 *\brief		Retrieves the depth test status
 		 *\return		The status
 		 *\~french
-		 *\brief		Récupère le statut du test de profondeur
+		 *\brief		RÃ©cupÃ¨re le statut du test de profondeur
 		 *\return		Le statut
 		 */
 		inline bool GetDepthTest()const
@@ -123,7 +123,7 @@ namespace Castor3D
 		 *\brief		Defines the depth function
 		 *\param[in]	p_eFunc The function
 		 *\~french
-		 *\brief		Définit la fonction de profondeur
+		 *\brief		DÃ©finit la fonction de profondeur
 		 *\param[in]	p_eFunc	La fonction
 		 */
 		inline void SetDepthFunc( eDEPTH_FUNC p_eFunc )
@@ -136,7 +136,7 @@ namespace Castor3D
 		 *\brief		Retrieves the depth function
 		 *\return		The function
 		 *\~french
-		 *\brief		Récupère la fonction de profondeur
+		 *\brief		RÃ©cupÃ¨re la fonction de profondeur
 		 *\return		La fonction
 		 */
 		inline eDEPTH_FUNC GetDepthFunc()const
@@ -148,7 +148,7 @@ namespace Castor3D
 		 *\brief		Defines the depth function
 		 *\param[in]	p_eFunc The function
 		 *\~french
-		 *\brief		Définit la fonction de profondeur
+		 *\brief		DÃ©finit la fonction de profondeur
 		 *\param[in]	p_eFunc	La fonction
 		 */
 		inline void SetDepthRange( double p_dNear, double p_dFar )
@@ -162,7 +162,7 @@ namespace Castor3D
 		 *\brief		Retrieves the depth near value
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la valeur proche pour la profondeur
+		 *\brief		RÃ©cupÃ¨re la valeur proche pour la profondeur
 		 *\return		La valeur
 		 */
 		inline double GetDepthNear()const
@@ -174,7 +174,7 @@ namespace Castor3D
 		 *\brief		Retrieves the depth far value
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la valeur lointaine pour la profondeur
+		 *\brief		RÃ©cupÃ¨re la valeur lointaine pour la profondeur
 		 *\return		La valeur
 		 */
 		inline double GetDepthFar()const
@@ -186,7 +186,7 @@ namespace Castor3D
 		 *\brief		Defines the depth writing mask
 		 *\param[in]	p_eMask The mask
 		 *\~french
-		 *\brief		Définit le masque d'écriture de la profondeur
+		 *\brief		DÃ©finit le masque d'Ã©criture de la profondeur
 		 *\param[in]	p_eMask	Le masque
 		 */
 		inline void SetDepthMask( eWRITING_MASK p_eMask )
@@ -199,7 +199,7 @@ namespace Castor3D
 		 *\brief		Retrieves the depth writing mask
 		 *\return		The mask
 		 *\~french
-		 *\brief		Récupère le masque d'écriture de la profondeur
+		 *\brief		RÃ©cupÃ¨re le masque d'Ã©criture de la profondeur
 		 *\return		Le masque
 		 */
 		inline eWRITING_MASK GetDepthMask()const
@@ -211,7 +211,7 @@ namespace Castor3D
 		 *\brief		Defines the stencil test status
 		 *\param[in]	p_bEnable The new status
 		 *\~french
-		 *\brief		Définit le statut du test de stencil
+		 *\brief		DÃ©finit le statut du test de stencil
 		 *\param[in]	p_bEnable	Le nouveau statut
 		 */
 		inline void SetStencilTest( bool p_bEnable )
@@ -224,7 +224,7 @@ namespace Castor3D
 		 *\brief		Retrieves the stencil test status
 		 *\return		The status
 		 *\~french
-		 *\brief		Récupère le statut du test de stencil
+		 *\brief		RÃ©cupÃ¨re le statut du test de stencil
 		 *\return		Le statut
 		 */
 		inline bool GetStencilTest()const
@@ -236,7 +236,7 @@ namespace Castor3D
 		 *\brief		Defines the stencil read mask
 		 *\param[in]	p_uiMask The mask
 		 *\~french
-		 *\brief		Définit le masque de lecture du stencil
+		 *\brief		DÃ©finit le masque de lecture du stencil
 		 *\param[in]	p_uiMask	Le masque
 		 */
 		inline void SetStencilReadMask( uint32_t p_uiMask )
@@ -249,7 +249,7 @@ namespace Castor3D
 		 *\brief		Retrieves the stencil read mask
 		 *\return		The mask
 		 *\~french
-		 *\brief		Récupère le masque de lecture du stencil
+		 *\brief		RÃ©cupÃ¨re le masque de lecture du stencil
 		 *\return		Le masque
 		 */
 		inline uint32_t GetStencilReadMask()const
@@ -261,7 +261,7 @@ namespace Castor3D
 		 *\brief		Defines the stencil write mask
 		 *\param[in]	p_uiMask The mask
 		 *\~french
-		 *\brief		Définit le masque d'écriture du stencil
+		 *\brief		DÃ©finit le masque d'Ã©criture du stencil
 		 *\param[in]	p_uiMask	Le masque
 		 */
 		inline void SetStencilWriteMask( uint32_t p_uiMask )
@@ -274,7 +274,7 @@ namespace Castor3D
 		 *\brief		Retrieves the stencil write mask
 		 *\return		The mask
 		 *\~french
-		 *\brief		Récupère le masque d'écriture du stencil
+		 *\brief		RÃ©cupÃ¨re le masque d'Ã©criture du stencil
 		 *\return		Le masque
 		 */
 		inline uint32_t GetStencilWriteMask()const
@@ -286,8 +286,8 @@ namespace Castor3D
 		 *\brief		Defines the stencil reference value for front faces
 		 *\param[in]	p_ref The reference value
 		 *\~french
-		 *\brief		Définit la valeur de référence de stencil pour les faces avant
-		 *\param[in]	p_ref	La valeur de référence
+		 *\brief		DÃ©finit la valeur de rÃ©fÃ©rence de stencil pour les faces avant
+		 *\param[in]	p_ref	La valeur de rÃ©fÃ©rence
 		 */
 		inline void SetStencilFrontRef( uint32_t p_ref )
 		{
@@ -299,8 +299,8 @@ namespace Castor3D
 		 *\brief		Retrieves the stencil reference value for front faces
 		 *\return		The reference value
 		 *\~french
-		 *\brief		Récupère la valeur de référence de stencil pour les faces avant
-		 *\return		La valeur de référence
+		 *\brief		RÃ©cupÃ¨re la valeur de rÃ©fÃ©rence de stencil pour les faces avant
+		 *\return		La valeur de rÃ©fÃ©rence
 		 */
 		inline uint32_t GetStencilFrontRef()const
 		{
@@ -311,7 +311,7 @@ namespace Castor3D
 		 *\brief		Defines the stencil function for front faces
 		 *\param[in]	p_eFunc The function
 		 *\~french
-		 *\brief		Définit la fonction de stencil pour les faces avant
+		 *\brief		DÃ©finit la fonction de stencil pour les faces avant
 		 *\param[in]	p_eFunc	La fonction
 		 */
 		inline void SetStencilFrontFunc( eSTENCIL_FUNC p_eFunc )
@@ -324,7 +324,7 @@ namespace Castor3D
 		 *\brief		Retrieves the stencil function for front faces
 		 *\return		The function
 		 *\~french
-		 *\brief		Récupère la fonction de stencil pour les faces avant
+		 *\brief		RÃ©cupÃ¨re la fonction de stencil pour les faces avant
 		 *\return		La fonction
 		 */
 		inline eSTENCIL_FUNC GetStencilFrontFunc()const
@@ -336,8 +336,8 @@ namespace Castor3D
 		 *\brief		Defines the operation when stencil test failed, for front faces
 		 *\param[in]	p_eOp The operation
 		 *\~french
-		 *\brief		Définit l'opération lors de l'échec du test de stencil, pour les faces avant
-		 *\param[in]	p_eOp	L'opération
+		 *\brief		DÃ©finit l'opÃ©ration lors de l'Ã©chec du test de stencil, pour les faces avant
+		 *\param[in]	p_eOp	L'opÃ©ration
 		 */
 		inline void SetStencilFrontFailOp( eSTENCIL_OP p_eOp )
 		{
@@ -349,8 +349,8 @@ namespace Castor3D
 		 *\brief		Retrieves the  operation when stencil test failed, for front faces
 		 *\return		The operation
 		 *\~french
-		 *\brief		Récupère l'opération lors de l'échec du test de stencil, pour les faces avant
-		 *\return		L'opération
+		 *\brief		RÃ©cupÃ¨re l'opÃ©ration lors de l'Ã©chec du test de stencil, pour les faces avant
+		 *\return		L'opÃ©ration
 		 */
 		inline eSTENCIL_OP GetStencilFrontFailOp()const
 		{
@@ -361,8 +361,8 @@ namespace Castor3D
 		 *\brief		Defines the operation when stencil test passes but depth test failed, for front faces
 		 *\param[in]	p_eOp The operation
 		 *\~french
-		 *\brief		Définit l'opération lors de la réussite du test de stencil mais de l'échec du test de profondeur, pour les faces avant
-		 *\param[in]	p_eOp	L'opération
+		 *\brief		DÃ©finit l'opÃ©ration lors de la rÃ©ussite du test de stencil mais de l'Ã©chec du test de profondeur, pour les faces avant
+		 *\param[in]	p_eOp	L'opÃ©ration
 		 */
 		inline void SetStencilFrontDepthFailOp( eSTENCIL_OP p_eOp )
 		{
@@ -374,8 +374,8 @@ namespace Castor3D
 		 *\brief		Retrieves the  operation when stencil test passes but depth test failed, for front faces
 		 *\return		The operation
 		 *\~french
-		 *\brief		Récupère l'opération lors de la réussite du test de stencil mais de l'échec du test de profondeur, pour les faces avant
-		 *\return		L'opération
+		 *\brief		RÃ©cupÃ¨re l'opÃ©ration lors de la rÃ©ussite du test de stencil mais de l'Ã©chec du test de profondeur, pour les faces avant
+		 *\return		L'opÃ©ration
 		 */
 		inline eSTENCIL_OP GetStencilFrontDepthFailOp()const
 		{
@@ -386,8 +386,8 @@ namespace Castor3D
 		 *\brief		Defines the operation when stencil stencil and depth tests passed, for front faces
 		 *\param[in]	p_eOp The operation
 		 *\~french
-		 *\brief		Définit l'opération lors de la réussite des tests de stencil et de profondeur, pour les faces avant
-		 *\param[in]	p_eOp	L'opération
+		 *\brief		DÃ©finit l'opÃ©ration lors de la rÃ©ussite des tests de stencil et de profondeur, pour les faces avant
+		 *\param[in]	p_eOp	L'opÃ©ration
 		 */
 		inline void SetStencilFrontPassOp( eSTENCIL_OP p_eOp )
 		{
@@ -399,8 +399,8 @@ namespace Castor3D
 		 *\brief		Retrieves the  operation when stencil and depth tests passed, for front faces
 		 *\return		The operation
 		 *\~french
-		 *\brief		Récupère l'opération lors de la réussite des tests de stencil et de profondeur, pour les faces avant
-		 *\return		L'opération
+		 *\brief		RÃ©cupÃ¨re l'opÃ©ration lors de la rÃ©ussite des tests de stencil et de profondeur, pour les faces avant
+		 *\return		L'opÃ©ration
 		 */
 		inline eSTENCIL_OP GetStencilFrontPassOp()const
 		{
@@ -411,8 +411,8 @@ namespace Castor3D
 		 *\brief		Defines the stencil reference value for back faces
 		 *\param[in]	p_ref The reference value
 		 *\~french
-		 *\brief		Définit la valeur de référence de stencil pour les faces arrières
-		 *\param[in]	p_ref	La valeur de référence
+		 *\brief		DÃ©finit la valeur de rÃ©fÃ©rence de stencil pour les faces arriÃ¨res
+		 *\param[in]	p_ref	La valeur de rÃ©fÃ©rence
 		 */
 		inline void SetStencilBackRef( uint32_t p_ref )
 		{
@@ -424,8 +424,8 @@ namespace Castor3D
 		 *\brief		Retrieves the stencil reference value for back faces
 		 *\return		The reference value
 		 *\~french
-		 *\brief		Récupère la valeur de référence de stencil pour les faces arrières
-		 *\return		La valeur de référence
+		 *\brief		RÃ©cupÃ¨re la valeur de rÃ©fÃ©rence de stencil pour les faces arriÃ¨res
+		 *\return		La valeur de rÃ©fÃ©rence
 		 */
 		inline uint32_t GetStencilBackRef()const
 		{
@@ -436,7 +436,7 @@ namespace Castor3D
 		 *\brief		Defines the stencil function for front back
 		 *\param[in]	p_eFunc The function
 		 *\~french
-		 *\brief		Définit la fonction de stencil pour les faces arrières
+		 *\brief		DÃ©finit la fonction de stencil pour les faces arriÃ¨res
 		 *\param[in]	p_eFunc	La fonction
 		 */
 		inline void SetStencilBackFunc( eSTENCIL_FUNC p_eFunc )
@@ -449,7 +449,7 @@ namespace Castor3D
 		 *\brief		Retrieves the stencil function for back faces
 		 *\return		The function
 		 *\~french
-		 *\brief		Récupère la fonction de stencil pour les faces arrières
+		 *\brief		RÃ©cupÃ¨re la fonction de stencil pour les faces arriÃ¨res
 		 *\return		La fonction
 		 */
 		inline eSTENCIL_FUNC GetStencilBackFunc()const
@@ -461,8 +461,8 @@ namespace Castor3D
 		 *\brief		Defines the operation when stencil test failed, for back faces
 		 *\param[in]	p_eOp The operation
 		 *\~french
-		 *\brief		Définit l'opération lors de l'échec du test de stencil, pour les faces arrières
-		 *\param[in]	p_eOp	L'opération
+		 *\brief		DÃ©finit l'opÃ©ration lors de l'Ã©chec du test de stencil, pour les faces arriÃ¨res
+		 *\param[in]	p_eOp	L'opÃ©ration
 		 */
 		inline void SetStencilBackFailOp( eSTENCIL_OP p_eOp )
 		{
@@ -474,8 +474,8 @@ namespace Castor3D
 		 *\brief		Retrieves the  operation when stencil test failed, for back faces
 		 *\return		The operation
 		 *\~french
-		 *\brief		Récupère l'opération lors de l'échec du test de stencil, pour les faces arrières
-		 *\return		L'opération
+		 *\brief		RÃ©cupÃ¨re l'opÃ©ration lors de l'Ã©chec du test de stencil, pour les faces arriÃ¨res
+		 *\return		L'opÃ©ration
 		 */
 		inline eSTENCIL_OP GetStencilBackFailOp()const
 		{
@@ -486,8 +486,8 @@ namespace Castor3D
 		 *\brief		Defines the operation when stencil test passes but depth test failed, for back faces
 		 *\param[in]	p_eOp The operation
 		 *\~french
-		 *\brief		Définit l'opération lors de la réussite du test de stencil mais de l'échec du test de profondeur, pour les faces arrières
-		 *\param[in]	p_eOp	L'opération
+		 *\brief		DÃ©finit l'opÃ©ration lors de la rÃ©ussite du test de stencil mais de l'Ã©chec du test de profondeur, pour les faces arriÃ¨res
+		 *\param[in]	p_eOp	L'opÃ©ration
 		 */
 		inline void SetStencilBackDepthFailOp( eSTENCIL_OP p_eOp )
 		{
@@ -499,8 +499,8 @@ namespace Castor3D
 		 *\brief		Retrieves the  operation when stencil test passes but depth test failed, for back faces
 		 *\return		The operation
 		 *\~french
-		 *\brief		Récupère l'opération lors de la réussite du test de stencil mais de l'échec du test de profondeur, pour les faces arrières
-		 *\return		L'opération
+		 *\brief		RÃ©cupÃ¨re l'opÃ©ration lors de la rÃ©ussite du test de stencil mais de l'Ã©chec du test de profondeur, pour les faces arriÃ¨res
+		 *\return		L'opÃ©ration
 		 */
 		inline eSTENCIL_OP GetStencilBackDepthFailOp()const
 		{
@@ -511,8 +511,8 @@ namespace Castor3D
 		 *\brief		Defines the operation when stencil stencil and depth tests passed, for back faces
 		 *\param[in]	p_eOp The operation
 		 *\~french
-		 *\brief		Définit l'opération lors de la réussite des tests de stencil et de profondeur, pour les faces arrières
-		 *\param[in]	p_eOp	L'opération
+		 *\brief		DÃ©finit l'opÃ©ration lors de la rÃ©ussite des tests de stencil et de profondeur, pour les faces arriÃ¨res
+		 *\param[in]	p_eOp	L'opÃ©ration
 		 */
 		inline void SetStencilBackPassOp( eSTENCIL_OP p_eOp )
 		{
@@ -524,8 +524,8 @@ namespace Castor3D
 		 *\brief		Retrieves the  operation when stencil and depth tests passed, for back faces
 		 *\return		The operation
 		 *\~french
-		 *\brief		Récupère l'opération lors de la réussite des tests de stencil et de profondeur, pour les faces arrières
-		 *\return		L'opération
+		 *\brief		RÃ©cupÃ¨re l'opÃ©ration lors de la rÃ©ussite des tests de stencil et de profondeur, pour les faces arriÃ¨res
+		 *\return		L'opÃ©ration
 		 */
 		inline eSTENCIL_OP GetStencilBackPassOp()const
 		{
@@ -533,9 +533,9 @@ namespace Castor3D
 		}
 
 	protected:
-		//!\~english Tells it has changed	\~french Dit que l'état a changé
+		//!\~english Tells it has changed	\~french Dit que l'Ã©tat a changÃ©
 		bool m_bChanged;
-		//!\~english Tells whether the depth test is activated or not	\~french Dit si oui on non le test de profondeur est activé
+		//!\~english Tells whether the depth test is activated or not	\~french Dit si oui on non le test de profondeur est activÃ©
 		bool m_bDepthTest;
 		//!\~english The depth test function	\~french La fonction du test de profondeur
 		eDEPTH_FUNC m_eDepthFunc;
@@ -543,17 +543,17 @@ namespace Castor3D
 		double m_dDepthNear;
 		//!\~english The far plane for depth test	\~french Le plan lointain pour le test de profondeur
 		double m_dDepthFar;
-		//!\~english Depth writing mask	\~french Masque d'écriture de la profondeur
+		//!\~english Depth writing mask	\~french Masque d'Ã©criture de la profondeur
 		eWRITING_MASK m_eDepthMask;
-		//!\~english Tells whether the stencil test is activated or not	\~french Dit si le test stencil est activé ou non
+		//!\~english Tells whether the stencil test is activated or not	\~french Dit si le test stencil est activÃ© ou non
 		bool m_bStencilTest;
 		//!\~english The stencil read mask	\~french Le masque de lecture du stencil
 		uint32_t m_uiStencilReadMask;
-		//!\~english The stencil write mask	\~french Le masque d'écriture du stencil
+		//!\~english The stencil write mask	\~french Le masque d'Ã©criture du stencil
 		uint32_t m_uiStencilWriteMask;
 		//!\~english Front buffer stencil function	\~french Fonction stencil du tampon de premier plan
 		stSTENCIL m_stStencilFront;
-		//!\~english Back buffer stencil function	\~french Fonction stencil du tampon d'arrière plan
+		//!\~english Back buffer stencil function	\~french Fonction stencil du tampon d'arriÃ¨re plan
 		stSTENCIL m_stStencilBack;
 	};
 }
