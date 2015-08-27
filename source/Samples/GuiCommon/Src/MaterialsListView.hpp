@@ -28,12 +28,12 @@ namespace GuiCommon
 		:	public wxListView
 	{
 	private:
-		wxImageList * m_pListImages;
-		wxListItem * m_pListItems;
-		uint32_t m_uiNbItems;
-		std::vector< wxImage * > m_arrayImages;
-		int m_iImgWidth;
-		Castor3D::Engine * m_pEngine;
+		wxImageList 		*		m_pListImages;
+		wxListItem 		*		m_pListItems;
+		uint32_t					m_uiNbItems;
+		std::vector< wxImage * >	m_arrayImages;
+		int							m_iImgWidth;
+		Castor3D::Engine 	*		m_pEngine;
 
 	public:
 		wxMaterialsListView( Castor3D::Engine * p_pEngine, wxWindow * p_pParent, wxWindowID p_id = wxID_ANY, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );

@@ -1,4 +1,4 @@
-ï»¿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -32,8 +32,8 @@ namespace Castor
 	\remark		Holds conversion operators to be converted either into float or uint8_t, with corresponding operations
 				<br />A colour component value is a floating number between 0.0 and 1.0
 	\~french
-	\brief		ReprÃ©sente une composante de couleur (R, V, B ou A) pour l'utilisation dans Castor::Colour
-	\remark		DÃ©finit les opÃ©rateurs de conversion en float ou uint8_t, avec les opÃ©rations correspondantes
+	\brief		Représente une composante de couleur (R, V, B ou A) pour l'utilisation dans Castor::Colour
+	\remark		Définit les opérateurs de conversion en float ou uint8_t, avec les opérations correspondantes
 				<br />La valeur d'une composante de couleur est un nombre flottant compris entre 0.0 et 1.0
 	*/
 	class ColourComponent
@@ -46,7 +46,7 @@ namespace Castor
 		 *\param[in]	p_object	The object to copy
 		 *\~french
 		 *\brief		Constructeur par recopie
-		 *\param[in]	p_object	L'objet Ã  copier
+		 *\param[in]	p_object	L'objet à copier
 		 */
 		ColourComponent()	: m_pfComponent( NULL ) {}
 
@@ -56,7 +56,7 @@ namespace Castor
 		 *\brief		Specified constructor
 		 *\param[in]	p_fComponent	The component value
 		 *\~french
-		 *\brief		Constructeur spÃ©cifiÃ©
+		 *\brief		Constructeur spécifié
 		 *\param[in]	p_fComponent	La valeur de la composante
 		 */
 		ColourComponent( float * p_pfComponent )	: m_pfComponent( p_pfComponent	) {}
@@ -66,9 +66,9 @@ namespace Castor
 		 *\param[in]	p_component	The component
 		 *\return		Reference to this object
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation par copie
+		 *\brief		Opérateur d'affectation par copie
 		 *\param[in]	p_component	La composante
-		 *\return		RÃ©fÃ©rence sur cet objet
+		 *\return		Référence sur cet objet
 		 */
 		ColourComponent & operator =( ColourComponent const & p_component )
 		{
@@ -81,9 +81,9 @@ namespace Castor
 		 *\param[in]	p_fComponent	The component value, must be between 0.0f and 1.0f
 		 *\return		Reference to this object
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation Ã  partir d'un float
-		 *\param[in]	p_fComponent	La valeur de la composante, doit Ãªtre comprise entre 0.0f et 1.0f
-		 *\return		RÃ©fÃ©rence sur cet objet
+		 *\brief		Opérateur d'affectation à partir d'un float
+		 *\param[in]	p_fComponent	La valeur de la composante, doit être comprise entre 0.0f et 1.0f
+		 *\return		Référence sur cet objet
 		 */
 		ColourComponent & operator =( float p_fComponent )
 		{
@@ -97,9 +97,9 @@ namespace Castor
 		 *\param[in]	p_dComponent	The component value, must be between 0.0 and 1.0
 		 *\return		Reference to this object
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation Ã  partir d'un double
-		 *\param[in]	p_dComponent	La valeur de la composante, doit Ãªtre comprise entre 0.0 et 1.0
-		 *\return		RÃ©fÃ©rence sur cet objet
+		 *\brief		Opérateur d'affectation à partir d'un double
+		 *\param[in]	p_dComponent	La valeur de la composante, doit être comprise entre 0.0 et 1.0
+		 *\return		Référence sur cet objet
 		 */
 		ColourComponent & operator =( double p_dComponent )
 		{
@@ -113,9 +113,9 @@ namespace Castor
 		 *\param[in]	p_dComponent	The component value, must be between 0.0 and 1.0
 		 *\return		Reference to this object
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation Ã  partir d'un long double
-		 *\param[in]	p_dComponent	La valeur de la composante, doit Ãªtre comprise entre 0.0 et 1.0
-		 *\return		RÃ©fÃ©rence sur cet objet
+		 *\brief		Opérateur d'affectation à partir d'un long double
+		 *\param[in]	p_dComponent	La valeur de la composante, doit être comprise entre 0.0 et 1.0
+		 *\return		Référence sur cet objet
 		 */
 		ColourComponent & operator =( long double p_ldComponent )
 		{
@@ -129,9 +129,9 @@ namespace Castor
 		 *\param[in]	p_cComponent	The component value
 		 *\return		Reference to this object
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation Ã  partir d'un int8_t
+		 *\brief		Opérateur d'affectation à partir d'un int8_t
 		 *\param[in]	p_cComponent	La valeur de la composante
-		 *\return		RÃ©fÃ©rence sur cet objet
+		 *\return		Référence sur cet objet
 		 */
 		ColourComponent & operator =( int8_t p_i8Component )
 		{
@@ -145,9 +145,9 @@ namespace Castor
 		 *\param[in]	p_byComponent	The component value
 		 *\return		Reference to this object
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation Ã  partir d'un uint8_t
+		 *\brief		Opérateur d'affectation à partir d'un uint8_t
 		 *\param[in]	p_byComponent	La valeur de la composante
-		 *\return		RÃ©fÃ©rence sur cet objet
+		 *\return		Référence sur cet objet
 		 */
 		ColourComponent & operator =( uint8_t p_ui8Component )
 		{
@@ -160,9 +160,9 @@ namespace Castor
 		 *\param[in]	p_iComponent	The component value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation Ã  partir d'un int16_t
-		 *\param[in]	p_iComponent	La valeur de la composante, doit Ãªtre comprise entre 0 et 255
-		 *\return		RÃ©fÃ©rence sur cet objet
+		 *\brief		Opérateur d'affectation à partir d'un int16_t
+		 *\param[in]	p_iComponent	La valeur de la composante, doit être comprise entre 0 et 255
+		 *\return		Référence sur cet objet
 		 */
 		ColourComponent & operator =( int16_t p_i16Component )
 		{
@@ -176,9 +176,9 @@ namespace Castor
 		 *\param[in]	p_uiComponent	The component value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation Ã  partir d'un uint16_t
-		 *\param[in]	p_uiComponent	La valeur de la composante, doit Ãªtre comprise entre 0 et 255
-		 *\return		RÃ©fÃ©rence sur cet objet
+		 *\brief		Opérateur d'affectation à partir d'un uint16_t
+		 *\param[in]	p_uiComponent	La valeur de la composante, doit être comprise entre 0 et 255
+		 *\return		Référence sur cet objet
 		 */
 		ColourComponent & operator =( uint16_t p_ui16Component )
 		{
@@ -192,9 +192,9 @@ namespace Castor
 		 *\param[in]	p_iComponent	The component value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation Ã  partir d'un int32_t
-		 *\param[in]	p_iComponent	La valeur de la composante, doit Ãªtre comprise entre 0 et 255
-		 *\return		RÃ©fÃ©rence sur cet objet
+		 *\brief		Opérateur d'affectation à partir d'un int32_t
+		 *\param[in]	p_iComponent	La valeur de la composante, doit être comprise entre 0 et 255
+		 *\return		Référence sur cet objet
 		 */
 		ColourComponent & operator =( int32_t p_i32Component )
 		{
@@ -208,9 +208,9 @@ namespace Castor
 		 *\param[in]	p_uiComponent	The component value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation Ã  partir d'un uint32_t
-		 *\param[in]	p_uiComponent	La valeur de la composante, doit Ãªtre comprise entre 0 et 255
-		 *\return		RÃ©fÃ©rence sur cet objet
+		 *\brief		Opérateur d'affectation à partir d'un uint32_t
+		 *\param[in]	p_uiComponent	La valeur de la composante, doit être comprise entre 0 et 255
+		 *\return		Référence sur cet objet
 		 */
 		ColourComponent & operator =( uint32_t p_ui32Component )
 		{
@@ -224,9 +224,9 @@ namespace Castor
 		 *\param[in]	p_llComponent	The component value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation Ã  partir d'un int64_t
-		 *\param[in]	p_llComponent	La valeur de la composante, doit Ãªtre comprise entre 0 et 255
-		 *\return		RÃ©fÃ©rence sur cet objet
+		 *\brief		Opérateur d'affectation à partir d'un int64_t
+		 *\param[in]	p_llComponent	La valeur de la composante, doit être comprise entre 0 et 255
+		 *\return		Référence sur cet objet
 		 */
 		ColourComponent & operator =( int64_t p_i64Component )
 		{
@@ -240,9 +240,9 @@ namespace Castor
 		 *\param[in]	p_llComponent	The component value, must be between 0 and 255
 		 *\return		Reference to this object
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation Ã  partir d'un uint64_t
-		 *\param[in]	p_llComponent	La valeur de la composante, doit Ãªtre comprise entre 0 et 255
-		 *\return		RÃ©fÃ©rence sur cet objet
+		 *\brief		Opérateur d'affectation à partir d'un uint64_t
+		 *\param[in]	p_llComponent	La valeur de la composante, doit être comprise entre 0 et 255
+		 *\return		Référence sur cet objet
 		 */
 		ColourComponent & operator =( uint64_t p_ui64Component )
 		{
@@ -254,7 +254,7 @@ namespace Castor
 		 *\~english
 		 *\brief		int8_t conversion operator
 		 *\~french
-		 *\brief		OpÃ©rateur de conversion vers int8_t
+		 *\brief		Opérateur de conversion vers int8_t
 		 */
 		inline int8_t & convert_to( int8_t & p_value )const
 		{
@@ -264,7 +264,7 @@ namespace Castor
 		 *\~english
 		 *\brief		uint8_t conversion operator
 		 *\~french
-		 *\brief		OpÃ©rateur de conversion vers uint8_t
+		 *\brief		Opérateur de conversion vers uint8_t
 		 */
 		inline uint8_t & convert_to( uint8_t & p_value )const
 		{
@@ -274,7 +274,7 @@ namespace Castor
 		 *\~english
 		 *\brief		int16_t conversion operator
 		 *\~french
-		 *\brief		OpÃ©rateur de conversion vers int16_t
+		 *\brief		Opérateur de conversion vers int16_t
 		 */
 		inline int16_t & convert_to( int16_t & p_value )const
 		{
@@ -284,7 +284,7 @@ namespace Castor
 		 *\~english
 		 *\brief		uint16_t conversion operator
 		 *\~french
-		 *\brief		OpÃ©rateur de conversion vers uint16_t
+		 *\brief		Opérateur de conversion vers uint16_t
 		 */
 		inline uint16_t & convert_to( uint16_t & p_value )const
 		{
@@ -294,7 +294,7 @@ namespace Castor
 		 *\~english
 		 *\brief		int32_t conversion operator
 		 *\~french
-		 *\brief		OpÃ©rateur de conversion vers int32_t
+		 *\brief		Opérateur de conversion vers int32_t
 		 */
 		inline int32_t & convert_to( int32_t & p_value )const
 		{
@@ -304,7 +304,7 @@ namespace Castor
 		 *\~english
 		 *\brief		uint32_t conversion operator
 		 *\~french
-		 *\brief		OpÃ©rateur de conversion vers uint32_t
+		 *\brief		Opérateur de conversion vers uint32_t
 		 */
 		inline uint32_t & convert_to( uint32_t & p_value )const
 		{
@@ -314,7 +314,7 @@ namespace Castor
 		 *\~english
 		 *\brief		int64_t conversion operator
 		 *\~french
-		 *\brief		OpÃ©rateur de conversion vers int64_t
+		 *\brief		Opérateur de conversion vers int64_t
 		 */
 		inline int64_t & convert_to( int64_t & p_value )const
 		{
@@ -324,7 +324,7 @@ namespace Castor
 		 *\~english
 		 *\brief		uint64_t conversion operator
 		 *\~french
-		 *\brief		OpÃ©rateur de conversion vers uint64_t
+		 *\brief		Opérateur de conversion vers uint64_t
 		 */
 		inline uint64_t & convert_to( uint64_t & p_value )const
 		{
@@ -334,7 +334,7 @@ namespace Castor
 		 *\~english
 		 *\brief		float conversion operator
 		 *\~french
-		 *\brief		OpÃ©rateur de conversion vers float
+		 *\brief		Opérateur de conversion vers float
 		 */
 		inline float & convert_to( float & p_value )const
 		{
@@ -344,7 +344,7 @@ namespace Castor
 		 *\~english
 		 *\brief		float conversion operator
 		 *\~french
-		 *\brief		OpÃ©rateur de conversion vers float
+		 *\brief		Opérateur de conversion vers float
 		 */
 		inline double & convert_to( double & p_value )const
 		{
@@ -354,7 +354,7 @@ namespace Castor
 		 *\~english
 		 *\brief		float conversion operator
 		 *\~french
-		 *\brief		OpÃ©rateur de conversion vers float
+		 *\brief		Opérateur de conversion vers float
 		 */
 		inline long double & convert_to( long double & p_value )const
 		{
@@ -366,8 +366,8 @@ namespace Castor
 		 *\remark		Clamps the result
 		 *\param[in]	p_value	The value
 		 *\~french
-		 *\brief		DÃ©finit la valeur de la composante
-		 *\remark		Clampe le rÃ©sultat
+		 *\brief		Définit la valeur de la composante
+		 *\remark		Clampe le résultat
 		 *\param[in]	p_value	La valeur
 		 */
 		void link( float * p_value )
@@ -382,9 +382,9 @@ namespace Castor
 		 *\param[in]	p_component	The value to add
 		 *\return		Result of this + p_component
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation par addition
-		 *\remark		Clampe le rÃ©sultat
-		 *\param[in]	p_component	La valeur Ã  ajouter
+		 *\brief		Opérateur d'affectation par addition
+		 *\remark		Clampe le résultat
+		 *\param[in]	p_component	La valeur à ajouter
 		 *\return		Resultat de this + p_component
 		 */
 		ColourComponent & operator +=( ColourComponent && p_component )
@@ -400,9 +400,9 @@ namespace Castor
 		 *\param[in]	p_component	The value to substract
 		 *\return		Result of this - p_component
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation par soustraction
-		 *\remark		Clampe le rÃ©sultat
-		 *\param[in]	p_component	La valeur Ã  soustraire
+		 *\brief		Opérateur d'affectation par soustraction
+		 *\remark		Clampe le résultat
+		 *\param[in]	p_component	La valeur à soustraire
 		 *\return		Resultat de this - p_component
 		 */
 		ColourComponent & operator -=( ColourComponent && p_component )
@@ -418,9 +418,9 @@ namespace Castor
 		 *\param[in]	p_component	The value to multiply
 		 *\return		Result of this * p_component
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation par multiplication
-		 *\remark		Clampe le rÃ©sultat
-		 *\param[in]	p_component	La valeur Ã  multiplier
+		 *\brief		Opérateur d'affectation par multiplication
+		 *\remark		Clampe le résultat
+		 *\param[in]	p_component	La valeur à multiplier
 		 *\return		Resultat de this * p_component
 		 */
 		ColourComponent & operator *=( ColourComponent && p_component )
@@ -436,9 +436,9 @@ namespace Castor
 		 *\param[in]	p_component	The value to divide
 		 *\return		Result of this / p_component
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation par division
-		 *\remark		Clampe le rÃ©sultat
-		 *\param[in]	p_component	La valeur Ã  diviser
+		 *\brief		Opérateur d'affectation par division
+		 *\remark		Clampe le résultat
+		 *\param[in]	p_component	La valeur à diviser
 		 *\return		Resultat de this / p_component
 		 */
 		ColourComponent & operator /=( ColourComponent && p_component )
@@ -453,8 +453,8 @@ namespace Castor
 		 *\param[in]	p_scalar	The value to add
 		 *\return		Result of this + p_scalar
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation par addition
-		 *\param[in]	p_scalar	La valeur Ã  ajouter
+		 *\brief		Opérateur d'affectation par addition
+		 *\param[in]	p_scalar	La valeur à ajouter
 		 *\return		Resultat de this + p_scalar
 		 */
 		template< typename T >
@@ -473,8 +473,8 @@ namespace Castor
 		 *\param[in]	p_scalar	The value to substract
 		 *\return		Result of this - p_scalar
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation par soustraction
-		 *\param[in]	p_scalar	La valeur Ã  soustraire
+		 *\brief		Opérateur d'affectation par soustraction
+		 *\param[in]	p_scalar	La valeur à soustraire
 		 *\return		Resultat de this - p_scalar
 		 */
 		template< typename T >
@@ -493,8 +493,8 @@ namespace Castor
 		 *\param[in]	p_scalar	The value to multiply
 		 *\return		Result of this * p_scalar
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation par multiplication
-		 *\param[in]	p_scalar	La valeur Ã  multiplier
+		 *\brief		Opérateur d'affectation par multiplication
+		 *\param[in]	p_scalar	La valeur à multiplier
 		 *\return		Resultat de this * p_scalar
 		 */
 		template< typename T >
@@ -513,8 +513,8 @@ namespace Castor
 		 *\param[in]	p_scalar	The value to divide
 		 *\return		Result of this / p_scalar
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation par division
-		 *\param[in]	p_scalar	La valeur Ã  diviser
+		 *\brief		Opérateur d'affectation par division
+		 *\param[in]	p_scalar	La valeur à diviser
 		 *\return		Resultat de this / p_scalar
 		 */
 		template< typename T >
@@ -532,7 +532,7 @@ namespace Castor
 		 *\brief		Implicit cast operator
 		 *\return		The value
 		 *\~french
-		 *\brief		OpÃ©rateur de conversion implicite
+		 *\brief		Opérateur de conversion implicite
 		 *\return		La valeur
 		 */
 		inline operator float()const
@@ -544,7 +544,7 @@ namespace Castor
 		 *\brief		Retrieves the component value
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re la valeur de la composante
+		 *\brief		Récupère la valeur de la composante
 		 *\return		La valeur
 		 */
 		inline float const & value()const
@@ -573,27 +573,27 @@ namespace Castor
 	 *\brief		Equality operator
 	 *\param[in]	p_cpnA,p_clrB	The components to compare
 	 *\~french
-	 *\brief		OpÃ©rateur d'Ã©galitÃ©
-	 *\param[in]	p_cpnA,p_cpnB	Les composantes Ã  comparer
+	 *\brief		Opérateur d'égalité
+	 *\param[in]	p_cpnA,p_cpnB	Les composantes à comparer
 	 */
-	CU_API bool operator ==( ColourComponent const & p_cpnA, ColourComponent const & p_cpnB );
+	bool operator ==( ColourComponent const & p_cpnA, ColourComponent const & p_cpnB );
 	/**
 	 *\~english
 	 *\brief		Inequality operator
 	 *\param[in]	p_cpnA,p_cpnB	The components to compare
 	 *\~french
-	 *\brief		OpÃ©rateur de diffÃ©rence
-	 *\param[in]	p_cpnA,p_cpnB	Les composantes Ã  comparer
+	 *\brief		Opérateur de différence
+	 *\param[in]	p_cpnA,p_cpnB	Les composantes à comparer
 	 */
-	CU_API bool operator !=( ColourComponent const & p_cpnA, ColourComponent const & p_cpnB );
+	bool operator !=( ColourComponent const & p_cpnA, ColourComponent const & p_cpnB );
 	/**
 	 *\~english
 	 *\brief		Addition assignment operator
 	 *\param[in]	p_scalar	The value to add
 	 *\return		Result of this + p_scalar
 	 *\~french
-	 *\brief		OpÃ©rateur d'affectation par addition
-	 *\param[in]	p_scalar	La valeur Ã  ajouter
+	 *\brief		Opérateur d'affectation par addition
+	 *\param[in]	p_scalar	La valeur à ajouter
 	 *\return		Resultat de this + p_scalar
 	 */
 	template< typename T >
@@ -611,8 +611,8 @@ namespace Castor
 	 *\param[in]	p_scalar	The value to substract
 	 *\return		Result of this - p_scalar
 	 *\~french
-	 *\brief		OpÃ©rateur d'affectation par soustraction
-	 *\param[in]	p_scalar	La valeur Ã  soustraire
+	 *\brief		Opérateur d'affectation par soustraction
+	 *\param[in]	p_scalar	La valeur à soustraire
 	 *\return		Resultat de this - p_scalar
 	 */
 	template< typename T >
@@ -630,8 +630,8 @@ namespace Castor
 	 *\param[in]	p_scalar	The value to divide
 	 *\return		Result of this / p_scalar
 	 *\~french
-	 *\brief		OpÃ©rateur d'affectation par division
-	 *\param[in]	p_scalar	La valeur Ã  diviser
+	 *\brief		Opérateur d'affectation par division
+	 *\param[in]	p_scalar	La valeur à diviser
 	 *\return		Resultat de this / p_scalar
 	 */
 	template< typename T >
@@ -649,8 +649,8 @@ namespace Castor
 	 *\param[in]	p_scalar	The value to multiply
 	 *\return		Result of this * p_scalar
 	 *\~french
-	 *\brief		OpÃ©rateur d'affectation par multiplication
-	 *\param[in]	p_scalar	La valeur Ã  multiplier
+	 *\brief		Opérateur d'affectation par multiplication
+	 *\param[in]	p_scalar	La valeur à multiplier
 	 *\return		Resultat de this * p_scalar
 	 */
 	template< typename T >
@@ -668,44 +668,44 @@ namespace Castor
 	 *\param[in]	p_scalar	The value to substract
 	 *\return		Result of this - p_scalar
 	 *\~french
-	 *\brief		OpÃ©rateur d'affectation par soustraction
-	 *\param[in]	p_scalar	La valeur Ã  soustraire
+	 *\brief		Opérateur d'affectation par soustraction
+	 *\param[in]	p_scalar	La valeur à soustraire
 	 *\return		Resultat de this - p_scalar
 	 */
-	CU_API float operator -( ColourComponent const & p_cpnt, ColourComponent const & p_scalar );
+	float operator -( ColourComponent const & p_cpnt, ColourComponent const & p_scalar );
 	/**
 	 *\~english
 	 *\brief		Addition assignment operator
 	 *\param[in]	p_scalar	The value to add
 	 *\return		Result of this + p_scalar
 	 *\~french
-	 *\brief		OpÃ©rateur d'affectation par addition
-	 *\param[in]	p_scalar	La valeur Ã  ajouter
+	 *\brief		Opérateur d'affectation par addition
+	 *\param[in]	p_scalar	La valeur à ajouter
 	 *\return		Resultat de this + p_scalar
 	 */
-	CU_API float operator +( ColourComponent const & p_cpnt, ColourComponent const & p_scalar );
+	float operator +( ColourComponent const & p_cpnt, ColourComponent const & p_scalar );
 	/**
 	 *\~english
 	 *\brief		Multiplication assignment operator
 	 *\param[in]	p_scalar	The value to multiply
 	 *\return		Result of this * p_scalar
 	 *\~french
-	 *\brief		OpÃ©rateur d'affectation par multiplication
-	 *\param[in]	p_scalar	La valeur Ã  multiplier
+	 *\brief		Opérateur d'affectation par multiplication
+	 *\param[in]	p_scalar	La valeur à multiplier
 	 *\return		Resultat de this * p_scalar
 	 */
-	CU_API float operator *( ColourComponent const & p_cpnt, ColourComponent const & p_scalar );
+	float operator *( ColourComponent const & p_cpnt, ColourComponent const & p_scalar );
 	/**
 	 *\~english
 	 *\brief		Division assignment operator
 	 *\param[in]	p_scalar	The value to divide
 	 *\return		Result of this / p_scalar
 	 *\~french
-	 *\brief		OpÃ©rateur d'affectation par division
-	 *\param[in]	p_scalar	La valeur Ã  diviser
+	 *\brief		Opérateur d'affectation par division
+	 *\param[in]	p_scalar	La valeur à diviser
 	 *\return		Resultat de this / p_scalar
 	 */
-	CU_API float operator /( ColourComponent const & p_cpnt, ColourComponent const & p_scalar );
+	float operator /( ColourComponent const & p_cpnt, ColourComponent const & p_scalar );
 }
 
 #endif

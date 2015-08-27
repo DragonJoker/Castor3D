@@ -18,8 +18,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___Testing_Point___
 #define ___Testing_Point___
 
-#if defined( CASTOR_USE_OCL )
-
 #pragma warning( push )
 #pragma warning( disable:4311 )
 #pragma warning( disable:4312 )
@@ -1740,7 +1738,5 @@ namespace Testing
 }
 
 #include "Point.inl"
-
-#endif
 
 #endif

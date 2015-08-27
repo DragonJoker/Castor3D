@@ -1,4 +1,4 @@
-﻿#include "DynamicLibrary.hpp"
+#include "DynamicLibrary.hpp"
 #include "Assertion.hpp"
 #include "Logger.hpp"
 

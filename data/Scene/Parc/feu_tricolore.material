@@ -1,0 +1,139 @@
+
+material feu_tricolore/metal
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.315 0.315 0.315 1 16
+
+			texture_unit
+			{
+				texture_alias 0
+				texture feu_tricolore_metal.jpg
+			}
+		}
+
+	}
+
+}
+
+material feu_tricolore/feu
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture feu_tricolore_rouge.jpg
+			}
+		}
+
+	}
+
+}
+
+material feu_tricolore/feu2
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture feu_tricolore_orange.jpg
+			}
+		}
+
+	}
+
+}
+
+material feu_tricolore/feu3
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture feu_tricolore_vert.jpg
+			}
+		}
+
+	}
+
+}
+
+material feu_tricolore/pieton
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture feu_tricolore_pieton_vert.jpg
+			}
+		}
+
+	}
+
+}
+
+material feu_tricolore/pieton2
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture feu_tricolore_pieton_rouge.jpg
+			}
+		}
+
+	}
+
+}
+
+material coll_pf_feu_tricolore_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}

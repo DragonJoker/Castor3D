@@ -1,0 +1,24 @@
+
+material z
+{
+	technique
+	{
+		pass
+		{
+			ambient 0 0 0 1
+			specular 0 0 0 1 1
+			emissive 0.1 0.1 0.1 1
+			alpha_rejection greater 128
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture_alias Map #0
+				texture fx_pathfinding.png
+			}
+		}
+
+	}
+
+}

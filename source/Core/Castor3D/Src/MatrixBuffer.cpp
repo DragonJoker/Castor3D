@@ -1,4 +1,4 @@
-﻿#include "MatrixBuffer.hpp"
+#include "MatrixBuffer.hpp"
 #include "RenderSystem.hpp"
 
 using namespace Castor;

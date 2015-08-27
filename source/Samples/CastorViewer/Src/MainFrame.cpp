@@ -32,7 +32,6 @@
 #include <GeometryBuffers.hpp>
 #include <IndexBuffer.hpp>
 #include <Material.hpp>
-#include <MaterialManager.hpp>
 #include <Mesh.hpp>
 #include <Pass.hpp>
 #include <RenderWindow.hpp>
@@ -40,6 +39,7 @@
 #include <Scene.hpp>
 #include <SceneFileParser.hpp>
 #include <Submesh.hpp>
+#include <SubmeshRenderer.hpp>
 #include <TextureUnit.hpp>
 #include <Vertex.hpp>
 #include <VertexBuffer.hpp>
@@ -106,30 +106,7 @@ namespace CastorViewer
 				if ( !p_collection.has( l_obj->GetName() ) )
 				{
 					p_collection.insert( l_obj->GetName(), l_obj );
-					p_engine->PostEvent( MakeInitialiseEvent( *l_obj ) );
-				}
-				else
-				{
-					Logger::LogWarning( cuT( "Duplicate object found with name " ) + l_obj->GetName() );
-					l_return = false;
-				}
-			}
-
-			return l_return;
-		}
-
-		template<>
-		bool FillCollection< Sampler, Castor::String >( Engine * p_engine, Castor::Collection< Sampler, Castor::String > & p_collection, BinaryChunk & p_chunk, Sampler::BinaryParser p_parser )
-		{
-			std::shared_ptr< Sampler > l_obj = p_engine->CreateSampler( Castor::String() );
-			bool l_return = p_parser.Parse( *l_obj, p_chunk );
-
-			if ( l_return )
-			{
-				if ( !p_collection.has( l_obj->GetName() ) )
-				{
-					p_collection.insert( l_obj->GetName(), l_obj );
-					p_engine->PostEvent( MakeInitialiseEvent( *l_obj ) );
+					p_engine->PostEvent( std::make_shared< InitialiseEvent< TObj > >( *l_obj ) );
 				}
 				else
 				{
@@ -279,14 +256,14 @@ namespace CastorViewer
 			wxIcon l_icon = wxIcon( castor_xpm );
 			SetIcon( l_icon );
 			m_pListLog = new wxListView( this, wxID_ANY, wxDefaultPosition, wxSize( 200, m_iListHeight ) );
-			m_pListLog->InsertColumn( 0, _( "Log" ), 0 );
+			m_pListLog->InsertColumn( 0, _( "Log"	), 0 );
 			m_pAuiManager->AddPane( m_pListLog, wxAuiPaneInfo().CloseButton().Caption( _( "Log" ) ).Direction( wxBOTTOM ).Dock().Bottom().BottomDockable().TopDockable().Movable().PinButton() );
 #if defined( NDEBUG )
 			m_pListLog->Hide();
 #else
 			m_pListLog->Hide();
 #endif
-			Logger::RegisterCallback( std::bind( &MainFrame::DoLogCallback, this, std::placeholders::_1, std::placeholders::_2 ), this );
+			Logger::SetCallback( Castor::PLogCallback( DoLogCallback ), this );
 			l_bReturn = DoInitialise3D();
 		}
 
@@ -339,7 +316,7 @@ namespace CastorViewer
 				m_pCastor3D->Cleanup();
 				Logger::LogDebug( cuT( "MainFrame::LoadScene - Engine cleared" ) );
 
-				if ( m_strFilePath.GetExtension() != cuT( "cbsn" ) && m_strFilePath.GetExtension() != cuT( "zip" ) )
+				if ( m_strFilePath.GetExtension() != cuT( "cbsn" ) )
 				{
 					Path l_meshFilePath = m_strFilePath;
 					str_utils::replace( l_meshFilePath, cuT( "cscn" ), cuT( "cmsh" ) );
@@ -347,15 +324,15 @@ namespace CastorViewer
 					if ( File::FileExists( l_meshFilePath ) )
 					{
 						BinaryFile l_fileMesh( l_meshFilePath, File::eOPEN_MODE_READ );
-						Logger::LogInfo( cuT( "Loading meshes file : " ) + l_meshFilePath );
+						Logger::LogMessage( cuT( "Loading meshes file : " ) + l_meshFilePath );
 
 						if ( m_pCastor3D->LoadMeshes( l_fileMesh ) )
 						{
-							Logger::LogInfo( cuT( "Meshes read" ) );
+							Logger::LogMessage( cuT( "Meshes read" ) );
 						}
 						else
 						{
-							Logger::LogInfo( cuT( "Can't read meshes" ) );
+							Logger::LogMessage( cuT( "Can't read meshes" ) );
 							return;
 						}
 					}
@@ -363,18 +340,17 @@ namespace CastorViewer
 
 				try
 				{
-					m_pCastor3D->Initialise( CASTOR_WANTED_FPS, CASTOR3D_THREADED );
-
 					if ( File::FileExists( m_strFilePath ) )
 					{
-						Logger::LogInfo( cuT( "Loading scene file : " ) + m_strFilePath );
+						Logger::LogMessage( cuT( "Loading scene file : " ) + m_strFilePath );
 
-						if ( m_strFilePath.GetExtension() == cuT( "cscn" ) || m_strFilePath.GetExtension() == cuT( "zip" ) )
+						if ( m_strFilePath.GetExtension() == cuT( "cscn" ) )
 						{
 							SceneFileParser l_parser( m_pCastor3D );
 
 							if ( l_parser.ParseFile( m_strFilePath ) )
 							{
+								m_pCastor3D->Initialise( CASTOR_WANTED_FPS, CASTOR3D_THREADED );
 								RenderWindowSPtr l_pRenderWindow = l_parser.GetRenderWindow();
 
 								if ( l_pRenderWindow )
@@ -390,7 +366,7 @@ namespace CastorViewer
 											ShowFullScreen( true, wxFULLSCREEN_ALL );
 										}
 
-										Logger::LogInfo( cuT( "Scene file read" ) );
+										Logger::LogMessage( cuT( "Scene file read" ) );
 									}
 									else
 									{
@@ -439,13 +415,14 @@ namespace CastorViewer
 	{
 		bool l_bReturn = true;
 		m_pSplashScreen->Step( _( "Loading plugins" ), 1 );
-		Logger::LogInfo( cuT( "Initialising Castor3D" ) );
-		m_pCastor3D = new Engine();
+		Logger::LogMessage( cuT( "Initialising Castor3D" ) );
+		m_pCastor3D = new Engine( Logger::GetSingletonPtr() );
+		m_pCastor3D->Initialise( CASTOR_WANTED_FPS, CASTOR3D_THREADED );
 		StringArray l_arrayFiles;
 		StringArray l_arrayFailed;
 		std::mutex l_mutex;
 		ThreadPtrArray l_arrayThreads;
-		File::ListDirectoryFiles( Engine::GetPluginsDirectory(), l_arrayFiles );
+		File::ListDirectoryFiles( Engine::GetPluginsPath(), l_arrayFiles );
 
 		if ( l_arrayFiles.size() > 0 )
 		{
@@ -488,7 +465,7 @@ namespace CastorViewer
 			l_arrayFailed.clear();
 		}
 
-		Logger::LogInfo( cuT( "Plugins loaded" ) );
+		Logger::LogMessage( cuT( "Plugins loaded" ) );
 
 		try
 		{
@@ -519,7 +496,7 @@ namespace CastorViewer
 
 			if ( l_bReturn )
 			{
-				Logger::LogInfo( cuT( "Castor3D Initialised" ) );
+				Logger::LogMessage( cuT( "Castor3D Initialised" ) );
 				SetClientSize( 800, 600 + m_iListHeight );
 				int l_width = GetClientSize().x;
 				int l_height = GetClientSize().y;
@@ -599,12 +576,17 @@ namespace CastorViewer
 		l_pToolbar->Realize();
 	}
 
-	void MainFrame::DoLogCallback( String const & p_strLog, ELogType p_eLogType )
+	void MainFrame::DoLog( String const & p_strLog, eLOG_TYPE p_eLogType )
 	{
 		if ( m_pListLog )
 		{
 			m_pListLog->InsertItem( 0, p_strLog );
 		}
+	}
+
+	void MainFrame::DoLogCallback( MainFrame * p_pThis, String const & p_strLog, eLOG_TYPE p_eLogType )
+	{
+		p_pThis->DoLog( p_strLog, p_eLogType );
 	}
 
 	void MainFrame::DoExportScene( Castor::Path const & p_pathFile )const
@@ -751,8 +733,9 @@ namespace CastorViewer
 			StringStream l_strVT;
 			StringStream l_strVN;
 			StringStream l_strF;
-			VertexBuffer & l_vtxBuffer = p_pSubmesh->GetGeometryBuffers()->GetVertexBuffer();
-			IndexBuffer & l_idxBuffer = p_pSubmesh->GetGeometryBuffers()->GetIndexBuffer();
+			SubmeshRendererSPtr l_pRenderer = p_pSubmesh->GetRenderer();
+			VertexBuffer & l_vtxBuffer = l_pRenderer->GetGeometryBuffers()->GetVertexBuffer();
+			IndexBuffer & l_idxBuffer = l_pRenderer->GetGeometryBuffers()->GetIndexBuffer();
 			uint32_t l_uiStride = l_vtxBuffer.GetDeclaration().GetStride();
 			uint32_t l_uiNbPoints = l_vtxBuffer.GetSize() / l_uiStride;
 			uint32_t l_uiNbFaces = l_idxBuffer.GetSize() / 3;
@@ -765,9 +748,9 @@ namespace CastorViewer
 			for ( uint32_t j = 0; j < l_uiNbPoints; j++ )
 			{
 				real * l_pVertex = reinterpret_cast< real * >( &l_pVtx[j * l_uiStride] );
-				Vertex::GetPosition( l_pVertex, l_ptPos );
-				Vertex::GetNormal( l_pVertex, l_ptNml );
-				Vertex::GetTexCoord( l_pVertex, l_ptTex );
+				Vertex::GetPosition(	l_pVertex, l_ptPos );
+				Vertex::GetNormal(	l_pVertex, l_ptNml );
+				Vertex::GetTexCoord(	l_pVertex, l_ptTex );
 				l_strV  << cuT( "v " ) << l_ptPos[0] << " " << l_ptPos[1] << " " << l_ptPos[2] << cuT( "\n" );
 				l_strVN << cuT( "vn " ) << l_ptNml[0] << " " << l_ptNml[1] << " " << l_ptNml[2] << cuT( "\n" );
 				l_strVT << cuT( "vt " ) << l_ptTex[0] << " " << l_ptTex[1] << cuT( "\n" );
@@ -915,7 +898,7 @@ namespace CastorViewer
 	void MainFrame::OnClose( wxCloseEvent & p_event )
 	{
 		m_pListLog = NULL;
-		Logger::UnregisterCallback( this );
+		Logger::SetCallback( NULL, NULL );
 		Hide();
 
 		if ( m_pGeometriesFrame && m_pAuiManager )
@@ -996,13 +979,11 @@ namespace CastorViewer
 	void MainFrame::OnLoadScene( wxCommandEvent & p_event )
 	{
 		wxString l_wildcard = _( "Castor3D scene files" );
-		l_wildcard += wxT( " (*.cscn;*.cbsn;*.zip)|*.cscn;*.cbsn;*.zip|" );
+		l_wildcard += wxT( " (*.cscn;*.cbsn)|*.cscn;*.cbsn|" );
 		l_wildcard += _( "Castor3D text scene file" );
 		l_wildcard += wxT( " (*.cscn)|*.cscn|" );
 		l_wildcard += _( "Castor3D binary scene file" );
-		l_wildcard += wxT( " (*.cbsn)|*.cbsn|" );
-		l_wildcard += _( "Zip archive" );
-		l_wildcard += wxT( " (*.zip)|*.zip" );
+		l_wildcard += wxT( " (*.cbsn)|*.cbsn" );
 		wxFileDialog l_fileDialog( this, _( "Open a scene" ), wxEmptyString, wxEmptyString, l_wildcard );
 
 		if ( l_fileDialog.ShowModal() == wxID_OK )
@@ -1062,7 +1043,7 @@ namespace CastorViewer
 
 	void MainFrame::OnShowMaterialsList( wxCommandEvent & p_event )
 	{
-		wxMaterialsFrame * l_pFrame = new wxMaterialsFrame( m_pCastor3D, false, this, _( "Materials" ), wxDefaultPosition );
+		wxMaterialsFrame * l_pFrame = new wxMaterialsFrame( m_pCastor3D, true, this, _( "Materials" ), wxDefaultPosition );
 		l_pFrame->Initialise();
 		l_pFrame->Show();
 		p_event.Skip();

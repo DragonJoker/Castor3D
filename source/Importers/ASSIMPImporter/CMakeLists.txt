@@ -1,9 +1,9 @@
-project( AssimpImporter )
+project( ASSIMPImporter )
 
 find_package( ASSIMP )
 
 if( ASSIMP_FOUND )
-	message( STATUS "+ Found Assimp" )
+	message( STATUS "+ Found ASSIMP" )
 
     include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
     include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D/Src )
@@ -21,7 +21,7 @@ if( ASSIMP_FOUND )
 
 	set( CastorBinsDependencies 
 		${CastorBinsDependencies}
-		${PROJECT_NAME}
+		ASSIMPImporter
 		PARENT_SCOPE
 	)
 
@@ -30,20 +30,47 @@ if( ASSIMP_FOUND )
     set( ASSIMP_VERSION_BUILD	0 )
 
 	add_target(
-		${PROJECT_NAME}
+		ASSIMPImporter
 		plugin
 		"Castor3D"
 		"${CastorMinLibraries};${ASSIMPLibraries}"
 	)
 
-	set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Importers" )
+	set_property( TARGET ASSIMPImporter PROPERTY FOLDER "Importers" )
 	set( Build "yes (version ${ASSIMP_VERSION_MAJOR}.${ASSIMP_VERSION_MINOR}.${ASSIMP_VERSION_BUILD})" PARENT_SCOPE )
-	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
+	add_target_astyle( ASSIMPImporter ".h;.hpp;.inl;.cpp" )
 
 	if ( WIN32 )
 		# Preparing ASSIMP dll installation
-		copy_dll( ${PROJECT_NAME} ${ASSIMP_LIBRARY_RELEASE} Release )
-		copy_dll( ${PROJECT_NAME} ${ASSIMP_LIBRARY_DEBUG} Debug )
+		if ( EXISTS ${ASSIMP_LIBRARY_RELEASE_DIR}/assimp.dll )
+			install(
+				FILES ${ASSIMP_LIBRARY_RELEASE_DIR}/assimp.dll
+				DESTINATION bin
+				CONFIGURATIONS Release
+				COMPONENT ASSIMPImporter
+			)
+		elseif ( EXISTS ${ASSIMP_LIBRARY_RELEASE_DIR}/../../bin/${PROJECTS_PLATFORM}/assimp.dll )
+			install(
+				FILES ${ASSIMP_LIBRARY_RELEASE_DIR}/../../bin/${PROJECTS_PLATFORM}/assimp.dll
+				DESTINATION bin
+				CONFIGURATIONS Release
+				COMPONENT ASSIMPImporter
+			)
+		endif ()
+		if ( EXISTS ${ASSIMP_LIBRARY_DEBUG_DIR}/assimpD.dll )
+			install(
+				FILES ${ASSIMP_LIBRARY_DEBUG_DIR}/assimpD.dll
+				DESTINATION bin
+				CONFIGURATIONS Debug
+				COMPONENT ASSIMPImporter
+			)
+		elseif ( EXISTS ${ASSIMP_LIBRARY_DEBUG_DIR}/../../bin/${PROJECTS_PLATFORM}/assimpD.dll )
+			install( FILES ${ASSIMP_LIBRARY_DEBUG_DIR}/../../bin/${PROJECTS_PLATFORM}/assimpD.dll
+				DESTINATION bin
+				CONFIGURATIONS Debug
+				COMPONENT ASSIMPImporter
+			)
+		endif ()
 	elseif ( {${CASTOR_PACKAGE_DEB} )
 		set( CPACK_DEBIAN_PACKAGE_DEPENDS "libassimp3-dev, ${CPACK_DEBIAN_PACKAGE_DEPENDS}" )
 	endif ()

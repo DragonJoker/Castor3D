@@ -36,10 +36,10 @@ namespace GuiCommon
 	*/
 	typedef enum eSTC_STYLE
 	{
-		eSTC_STYLE_BOLD		= 0x01,
-		eSTC_STYLE_ITALIC	= 0x02,
-		eSTC_STYLE_UNDERL	= 0x04,
-		eSTC_STYLE_HIDDEN	= 0x08,
+		eSTC_STYLE_BOLD		= 0x01
+							  ,	eSTC_STYLE_ITALIC	= 0x02
+									  ,	eSTC_STYLE_UNDERL	= 0x04
+											  ,	eSTC_STYLE_HIDDEN	= 0x08
 	}	eSTC_STYLE;
 	/*!
 	\author Sylvain DOREMUS
@@ -52,13 +52,13 @@ namespace GuiCommon
 	*/
 	typedef enum eSTC_FOLD
 	{
-		eSTC_FOLD_COMMENT	= 0x01,
-		eSTC_FOLD_COMPACT	= 0x02,
-		eSTC_FOLD_PREPROC	= 0x04,
-		eSTC_FOLD_HTML		= 0x10,
-		eSTC_FOLD_HTMLPREP	= 0x20,
-		eSTC_FOLD_COMMENTPY	= 0x40,
-		eSTC_FOLD_QUOTESPY	= 0x80,
+		eSTC_FOLD_COMMENT	= 0x01
+							  ,	eSTC_FOLD_COMPACT	= 0x02
+									  ,	eSTC_FOLD_PREPROC	= 0x04
+											  ,	eSTC_FOLD_HTML		= 0x10
+													  ,	eSTC_FOLD_HTMLPREP	= 0x20
+															  ,	eSTC_FOLD_COMMENTPY	= 0x40
+																	  ,	eSTC_FOLD_QUOTESPY	= 0x80
 	}	eSTC_FOLD;
 	/*!
 	\author Sylvain DOREMUS
@@ -71,7 +71,7 @@ namespace GuiCommon
 	*/
 	typedef enum eSTC_FLAG
 	{
-		eSTC_FLAG_WRAPMODE	= 0x10,
+		eSTC_FLAG_WRAPMODE	= 0x10
 	}	eSTC_FLAG;
 	/*!
 	\author Sylvain DOREMUS
@@ -103,32 +103,26 @@ namespace GuiCommon
 		{
 			return m_iLetterCase;
 		}
-
 		inline int GetFontStyle()const
 		{
 			return m_iFontStyle;
 		}
-
 		inline int GetFontSize()const
 		{
 			return m_iFontSize;
 		}
-
 		inline wxString	const & GetFontName()const
 		{
 			return m_strFontName;
 		}
-
 		inline wxString	const & GetBackground()const
 		{
 			return m_strBackground;
 		}
-
 		inline wxString	const & GetForeground()const
 		{
 			return m_strForeground;
 		}
-
 		inline wxString	const & GetName()const
 		{
 			return m_strName;
@@ -138,32 +132,26 @@ namespace GuiCommon
 		{
 			m_strName = val;
 		}
-
 		inline void SetForeground( wxString const & val )
 		{
 			m_strForeground = val;
 		}
-
 		inline void SetBackground( wxString const & val )
 		{
 			m_strBackground = val;
 		}
-
 		inline void SetFontName( wxString const & val )
 		{
 			m_strFontName = val;
 		}
-
 		inline void SetFontSize( int val )
 		{
 			m_iFontSize = val;
 		}
-
 		inline void SetFontStyle( int val )
 		{
 			m_iFontStyle = val;
 		}
-
 		inline void SetLetterCase( int val )
 		{
 			m_iLetterCase = val;

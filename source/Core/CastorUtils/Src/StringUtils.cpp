@@ -1,4 +1,4 @@
-﻿#include "StringUtils.hpp"
+#include "StringUtils.hpp"
 #include <locale>
 #include <wchar.h>
 #include <cstdlib>

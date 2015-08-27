@@ -1,1 +1,1 @@
-﻿#include "Parameter.hpp"
+#include "Parameter.hpp"

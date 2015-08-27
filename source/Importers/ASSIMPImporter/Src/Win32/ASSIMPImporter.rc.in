@@ -60,11 +60,11 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "DragonJoker"
-            VALUE "FileDescription", "Assimp powered importer plugin for Castor3D"
+            VALUE "FileDescription", "ASSIMP powered importer plugin for Castor3D"
             VALUE "FileVersion", "${ASSIMP_VERSION_MAJOR}.${ASSIMP_VERSION_MINOR}.${ASSIMP_VERSION_BUILD}.0"
-            VALUE "InternalName", "AssimpImporter"
+            VALUE "InternalName", "ASSIMPImporter"
             VALUE "LegalCopyright", "Copyright (C) ${VERSION_YEAR}"
-            VALUE "OriginalFilename", "AssimpImporter.dll"
+            VALUE "OriginalFilename", "ASSIMPImporter.dll"
             VALUE "ProductName", "Castor3D"
             VALUE "ProductVersion", "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_BUILD}.0"
         END

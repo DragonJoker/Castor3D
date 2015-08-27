@@ -9,9 +9,9 @@ using namespace Castor;
 namespace Dx11Render
 {
 	DxRasteriserState::DxRasteriserState( DxRenderSystem * p_pRenderSystem )
-		: RasteriserState()
-		, m_pRenderSystem( p_pRenderSystem )
-		, m_pRasteriserState( NULL )
+		:	RasteriserState()
+		,	m_pRenderSystem( p_pRenderSystem )
+		,	m_pRasteriserState( NULL )
 	{
 	}
 
@@ -34,14 +34,14 @@ namespace Dx11Render
 		l_rasterDesc.MultisampleEnable = m_bMultisampled;
 		l_rasterDesc.ScissorEnable = m_bScissor;
 		HRESULT l_hr = m_pRenderSystem->GetDevice()->CreateRasterizerState( &l_rasterDesc, &m_pRasteriserState );
-		dxDebugName( m_pRenderSystem, m_pRasteriserState, RasteriserState );
+		dxDebugName( m_pRasteriserState, RasteriserState );
 		m_bChanged = false;
 		return dxCheckError( l_hr, "CreateRasterizerState" );
 	}
 
 	void DxRasteriserState::Cleanup()
 	{
-		ReleaseTracked( m_pRenderSystem, m_pRasteriserState );
+		SafeRelease( m_pRasteriserState );
 	}
 
 	bool DxRasteriserState::Apply()
@@ -56,11 +56,13 @@ namespace Dx11Render
 
 		if ( l_bReturn && m_pRasteriserState )
 		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+			ID3D11DeviceContext * l_pDC;
+			m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDC );
 
-			if ( l_pDeviceContext )
+			if ( l_pDC )
 			{
-				l_pDeviceContext->RSSetState( m_pRasteriserState );
+				l_pDC->RSSetState( m_pRasteriserState );
+				SafeRelease( l_pDC );
 			}
 		}
 

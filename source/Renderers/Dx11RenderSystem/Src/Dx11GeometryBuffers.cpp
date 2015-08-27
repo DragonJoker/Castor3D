@@ -9,8 +9,8 @@ using namespace Castor3D;
 namespace Dx11Render
 {
 	DxGeometryBuffers::DxGeometryBuffers( DxRenderSystem * p_pRenderSystem, VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer )
-		: GeometryBuffers( std::move( p_pVertexBuffer ), std::move( p_pIndexBuffer ), std::move( p_pMatrixBuffer ) )
-		, m_pRenderSystem( p_pRenderSystem )
+		:	GeometryBuffers( std::move( p_pVertexBuffer ), std::move( p_pIndexBuffer ), std::move( p_pMatrixBuffer ) )
+		,	m_pRenderSystem( p_pRenderSystem )
 	{
 	}
 
@@ -20,7 +20,8 @@ namespace Dx11Render
 
 	bool DxGeometryBuffers::Draw( eTOPOLOGY p_ePrimitiveType, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex )
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext;
+		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
 		l_pDeviceContext->IASetPrimitiveTopology( DirectX11::Get( p_ePrimitiveType ) );
 		bool l_bReturn = m_pVertexBuffer->Bind();
 
@@ -44,12 +45,14 @@ namespace Dx11Render
 			m_pVertexBuffer->Unbind();
 		}
 
+		l_pDeviceContext->Release();
 		return l_bReturn;
 	}
 
 	bool DxGeometryBuffers::DrawInstanced( eTOPOLOGY p_ePrimitiveType, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex, uint32_t p_uiCount )
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext;
+		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
 		l_pDeviceContext->IASetPrimitiveTopology( DirectX11::Get( p_ePrimitiveType ) );
 		bool l_bReturn = m_pVertexBuffer->Bind();
 
@@ -81,6 +84,7 @@ namespace Dx11Render
 			m_pVertexBuffer->Unbind();
 		}
 
+		l_pDeviceContext->Release();
 		return l_bReturn;
 	}
 

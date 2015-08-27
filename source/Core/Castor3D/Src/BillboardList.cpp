@@ -1,5 +1,4 @@
-﻿#include "BillboardList.hpp"
-
+#include "BillboardList.hpp"
 #include "PointFrameVariable.hpp"
 #include "Buffer.hpp"
 #include "RenderSystem.hpp"
@@ -8,9 +7,8 @@
 #include "ShaderProgram.hpp"
 #include "ShaderObject.hpp"
 #include "Material.hpp"
-#include "MaterialManager.hpp"
 #include "Pass.hpp"
-#include "Engine.hpp"
+#include "PassRenderer.hpp"
 #include "Pipeline.hpp"
 #include "ShaderManager.hpp"
 
@@ -148,13 +146,27 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	BillboardList::BillboardList( SceneSPtr p_pScene, RenderSystem * p_pRenderSystem )
+	BillboardList::BillboardList( Scene * p_pScene, RenderSystem * p_pRenderSystem )
 		:	MovableObject( p_pScene, eMOVABLE_TYPE_BILLBOARD )
 		,	m_pRenderSystem( p_pRenderSystem )
 		,	m_bNeedUpdate( false )
 	{
 		BufferElementDeclaration l_vertexDeclarationElements[] = { BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS ) };
 		m_pDeclaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
+		ShaderProgramBaseSPtr l_pProgram = p_pRenderSystem->GetEngine()->GetShaderManager().GetNewProgram();
+		l_pProgram->CreateFrameVariable( ShaderProgramBase::MapAmbient,		eSHADER_TYPE_PIXEL );
+		l_pProgram->CreateFrameVariable( ShaderProgramBase::MapColour,		eSHADER_TYPE_PIXEL );
+		l_pProgram->CreateFrameVariable( ShaderProgramBase::MapDiffuse,		eSHADER_TYPE_PIXEL );
+		l_pProgram->CreateFrameVariable( ShaderProgramBase::MapNormal,		eSHADER_TYPE_PIXEL );
+		l_pProgram->CreateFrameVariable( ShaderProgramBase::MapSpecular,	eSHADER_TYPE_PIXEL );
+		l_pProgram->CreateFrameVariable( ShaderProgramBase::MapOpacity,		eSHADER_TYPE_PIXEL );
+		l_pProgram->CreateFrameVariable( ShaderProgramBase::MapGloss,		eSHADER_TYPE_PIXEL );
+		l_pProgram->CreateFrameVariable( ShaderProgramBase::MapHeight,		eSHADER_TYPE_PIXEL );
+		m_wpProgram = l_pProgram;
+		ShaderObjectBaseSPtr l_pObject = l_pProgram->CreateObject( eSHADER_TYPE_GEOMETRY );
+		l_pObject->SetInputType( eTOPOLOGY_POINTS );
+		l_pObject->SetOutputType( eTOPOLOGY_TRIANGLE_STRIPS );
+		l_pObject->SetOutputVtxCount( 4 );
 	}
 
 	BillboardList::~BillboardList()
@@ -177,24 +189,29 @@ namespace Castor3D
 
 		m_pGeometryBuffers = m_pRenderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
 		MaterialSPtr l_pMaterial = m_wpMaterial.lock();
+		ShaderProgramBaseSPtr l_pProgram = m_wpProgram.lock();
 		bool l_bReturn = false;
 
-		if ( l_pMaterial && l_pMaterial->GetPassCount() )
+		if ( l_pProgram && l_pMaterial )
 		{
 			l_pMaterial->Cleanup();
-			ShaderProgramBaseSPtr l_pProgram = DoGetProgram( l_pMaterial->GetPass( 0 )->GetTextureFlags() );
-			m_wpProgram = l_pProgram;
-			l_bReturn = DoInitialise();
 
-			if ( l_bReturn )
+			for ( PassPtrArrayConstIt l_it = l_pMaterial->Begin(); l_it != l_pMaterial->End(); ++l_it )
 			{
-				l_pMaterial->Initialise();
-				m_pDimensionsUniform->SetValue( Point2i( m_dimensions.width(), m_dimensions.height() ) );
-				m_pGeometryBuffers->GetVertexBuffer().Create();
-				m_pGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, l_pProgram );
-				m_pGeometryBuffers->Initialise();
-				m_bNeedUpdate = false;
+				( *l_it )->SetShader( l_pProgram );
 			}
+
+			l_bReturn = DoInitialise();
+		}
+
+		if ( l_bReturn )
+		{
+			l_pMaterial->Initialise();
+			m_pDimensionsUniform->SetValue( Point2i( m_dimensions.width(), m_dimensions.height() ) );
+			m_pGeometryBuffers->GetVertexBuffer().Create();
+			m_pGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, l_pProgram );
+			m_pGeometryBuffers->Initialise();
+			m_bNeedUpdate = false;
 		}
 
 		return l_bReturn;
@@ -243,23 +260,17 @@ namespace Castor3D
 
 			if ( l_pProgram && l_pMaterial )
 			{
-				uint8_t l_index = 0;
-				uint8_t l_count = l_pMaterial->GetPassCount();
+				l_pPipeline->ApplyMatrices( *l_pProgram );
+				l_pProgram->Begin( 0, 1 );
 
-				for ( auto && l_pass: *l_pMaterial )
+				for ( PassPtrArrayConstIt l_it = l_pMaterial->Begin(); l_it != l_pMaterial->End(); ++l_it )
 				{
-					l_pass->BindToProgram( l_pProgram );
-					auto l_matrixBuffer = l_pass->GetMatrixBuffer();
-
-					if ( l_matrixBuffer )
-					{
-						l_pPipeline->ApplyMatrices( *l_matrixBuffer, 0xFFFFFFFFFFFFFFFF );
-					}
-
-					l_pass->Render( l_index++, l_count );
+					( *l_it )->Render( 0, 1 );
 					m_pGeometryBuffers->Draw( eTOPOLOGY_POINTS, l_pProgram, l_uiSize, 0 );
-					l_pass->EndRender();
+					( *l_it )->EndRender();
 				}
+
+				l_pProgram->End();
 			}
 		}
 	}

@@ -8,7 +8,6 @@
 #include <Camera.hpp>
 #include <Viewport.hpp>
 #include <Material.hpp>
-#include <MaterialManager.hpp>
 #include <Pass.hpp>
 #include <TextureUnit.hpp>
 #include <Version.hpp>

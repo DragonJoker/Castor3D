@@ -1,4 +1,4 @@
-﻿#include "Torus.hpp"
+#include "Torus.hpp"
 #include "Submesh.hpp"
 #include "Vertex.hpp"
 

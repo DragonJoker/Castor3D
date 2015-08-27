@@ -39,7 +39,6 @@ namespace Castor3D
 	*/
 	class C3D_API MovableObject
 		:	public Animable
-		,	public std::enable_shared_from_this< MovableObject >
 	{
 	public:
 		/*!
@@ -130,7 +129,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		MovableObject( SceneSPtr p_pScene, eMOVABLE_TYPE p_eType );
+		MovableObject( Scene * p_pScene, eMOVABLE_TYPE p_eType );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -143,7 +142,47 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom
 		 *\param[in]	p_eType	Le type de MovableObject
 		 */
-		MovableObject( SceneSPtr p_pScene, SceneNodeSPtr p_sn, Castor::String const & p_name, eMOVABLE_TYPE p_eType );
+		MovableObject( Scene * p_pScene, SceneNode * p_sn, Castor::String const & p_name, eMOVABLE_TYPE p_eType );
+		/**
+		 *\~english
+		 *\brief		Copy constructor
+		 *\param[in]	p_object	The object to copy
+		 *\~french
+		 *\brief		Constructeur par copie
+		 *\param[in]	p_object	L'objet à copier
+		 */
+		MovableObject( MovableObject const & p_object );
+		/**
+		 *\~english
+		 *\brief		Move constructor
+		 *\param[in]	p_object	The object to move
+		 *\~french
+		 *\brief		Constructeur par déplacement
+		 *\param[in]	p_object	L'objet à déplacer
+		 */
+		MovableObject( MovableObject && p_object );
+		/**
+		 *\~english
+		 *\brief		Copy assignment operator
+		 *\param[in]	p_object	The object to copy
+		 *\return		A reference to this object
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie
+		 *\param[in]	p_object	L'objet à copier
+		 *\return		Une référence sur cet objet
+		 */
+		MovableObject & operator =( MovableObject const & p_object );
+		/**
+		 *\~english
+		 *\brief		Move assignment operator
+		 *\param[in]	p_object	The object to move
+		 *\return		A reference to this object
+		 *\~french
+		 *\brief		Opérateur d'affectation par déplacement
+		 *\param[in]	p_object	L'objet à déplacer
+		 *\return		Une référence sur cet objet
+		 */
+		MovableObject & operator =( MovableObject && p_object );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -171,7 +210,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Attache l'object à un noeud
 		 */
-		void AttachTo( SceneNodeSPtr p_node );
+		void AttachTo( SceneNode * p_node );
 		/**
 		 *\~english
 		 *\brief		Retrieves the object name
@@ -192,9 +231,9 @@ namespace Castor3D
 		 *\brief		Récupère le noeud parent
 		 *\return		La valeur
 		 */
-		inline SceneNodeSPtr GetParent()const
+		inline SceneNode * GetParent()const
 		{
-			return m_pSceneNode.lock();
+			return m_pSceneNode;
 		}
 		/**
 		 *\~english
@@ -204,9 +243,9 @@ namespace Castor3D
 		 *\brief		Récupère la scène parente
 		 *\return		La valeur
 		 */
-		inline SceneSPtr GetScene()const
+		inline Scene * GetScene()const
 		{
-			return m_pScene.lock();
+			return m_pScene;
 		}
 		/**
 		 *\~english
@@ -241,9 +280,9 @@ namespace Castor3D
 		//!\~english The parent node name	\~french Le nom du noeud parent
 		Castor::String m_strNodeName;
 		//!\~english The parent scene node	\~french Le noeud parent
-		SceneNodeWPtr m_pSceneNode;
+		SceneNode * m_pSceneNode;
 		//!\~english The parent scene	\~french La scène parente
-		SceneWPtr m_pScene;
+		Scene * m_pScene;
 	};
 }
 

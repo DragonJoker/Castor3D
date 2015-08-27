@@ -186,16 +186,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the background colour
-		 *\~french
-		 *\brief		Récupère la couleur de fond
-		 */
-		inline Castor::Colour GetClearColour()const
-		{
-			return m_clearColour;
-		}
-		/**
-		 *\~english
 		 *\brief		Binds given system frame buffer to given mode
 		 *\param[in]	p_eBuffer	The buffer
 		 *\param[in]	p_eTarget	The target
@@ -353,8 +343,6 @@ namespace Castor3D
 		bool m_bMultiSampling;
 		//!\~english The ShaderProgram used when rendering from a buffer to another one	\~french Le ShaderProgram utilisé lors du rendu d'un tampon vers un autre
 		ShaderProgramBaseWPtr m_pBtoBShaderProgram;
-		//!\~english The diffuse map frame variable, in the buffer-to-buffer shader program	\french La frame variable de l'image diffuse, dans le shader buffer-to-buffer
-		OneTextureFrameVariableSPtr m_mapDiffuse;
 		//!\~english The GeometryBuffers used when rendering from a buffer to another one	\~french Le GeometryBuffers utilisé lors du rendu d'un tampon vers un autre
 		GeometryBuffersSPtr m_pGeometryBuffers;
 		//!\~english The Viewport used when rendering from a buffer to another one	\~french Le Viewport utilisé lors du rendu d'un tampon vers un autre
@@ -364,11 +352,9 @@ namespace Castor3D
 		//!\~english Vertex array (quad definition)	\~french Tableau de vertex (définition du quad)
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
 		//!	6 * [2(vertex position) 2(texture coordinates)]
-		Castor::real m_pBuffer[24];
+		Castor::real m_pBuffer[16];
 		//!\~english DepthStencilState used while rendering background image	\~french DepthStencilState utilisé pour le rendu de l'image de fond
 		DepthStencilStateSPtr m_pDsStateBackground;
-		//!\~english The background colour	\french La couleur de fond
-		Castor::Colour m_clearColour;
 	};
 }
 

@@ -41,6 +41,8 @@ namespace Castor3D
 	class C3D_API CleanupEvent : public FrameEvent
 	{
 	private:
+		//!\~english The object to initialise	\~french L'objet à initialiser
+		T & m_tObject;
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -50,8 +52,8 @@ namespace Castor3D
 		 *\param[in]	p_copy	L'objet à copier
 		 */
 		CleanupEvent( CleanupEvent const & p_copy )
-			: FrameEvent( p_copy )
-			, m_object( p_copy.m_object )
+			:	FrameEvent( p_copy )
+			,	m_tObject( p_copy.m_tObject )
 		{
 		}
 		/**
@@ -65,7 +67,7 @@ namespace Castor3D
 		CleanupEvent & operator=( CleanupEvent const & p_copy )
 		{
 			CleanupEvent l_evt( p_copy );
-			std::swap( m_object, l_evt.m_object );
+			std::swap( m_tObject, l_evt.m_tObject );
 			std::swap( m_eType, l_evt.m_eType );
 			return *this;
 		}
@@ -80,8 +82,8 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet à nettoyer
 		 */
 		CleanupEvent( T & p_object )
-			: FrameEvent( eEVENT_TYPE_PRE_RENDER )
-			, m_object( p_object )
+			:	FrameEvent( eEVENT_TYPE_PRE_RENDER )
+			,	m_tObject( p_object )
 		{
 		}
 		/**
@@ -105,27 +107,34 @@ namespace Castor3D
 		 */
 		virtual bool Apply()
 		{
-			m_object.Cleanup();
-			return true;
-		}
+			bool l_bReturn = true;
 
-	private:
-		//!\~english The object to cleanup	\~french L'objet à nettoyer
-		T & m_object;
+			try
+			{
+				m_tObject.Cleanup();
+			}
+			catch ( Castor::Exception & p_exc )
+			{
+				Castor::String l_strText = cuT( "Encountered exception while cleaning object up : " ) + Castor::str_utils::from_str( p_exc.GetFullDescription() );
+				Castor::Logger::LogError( l_strText );
+				l_bReturn = false;
+			}
+			catch ( std::exception & p_exc )
+			{
+				Castor::String l_strText = cuT( "Encountered exception while cleaning object up : " ) + Castor::str_utils::from_str( p_exc.what() );
+				Castor::Logger::LogError( l_strText );
+				l_bReturn = false;
+			}
+			catch ( ... )
+			{
+				Castor::String l_strText = cuT( "Encountered unknown exception while cleaning object up" );
+				Castor::Logger::LogError( l_strText );
+				l_bReturn = false;
+			}
+
+			return l_bReturn;
+		}
 	};
-	/**
-	 *\~english
-	 *\brief		Helper function to create a cleanup event
-	 *\param[in]	p_object	The object to cleanup
-	 *\~french
-	 *\brief		Fonction d'aide pour créer un éveènement de nettoyage
-	 *\param[in]	p_object	L'objet à nettoyer
-	 */
-	template< typename T >
-	std::shared_ptr< CleanupEvent< T > > MakeCleanupEvent( T & p_object )
-	{
-		return std::make_shared< CleanupEvent< T > >( p_object );
-	}
 }
 
 #endif

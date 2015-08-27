@@ -1,4 +1,4 @@
-ï»¿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -36,7 +36,7 @@ namespace Castor3D
 	\brief		Class holding bone data
 	\remark		Holds weight for each vertice and matrix from mesh space to bone space
 	\~french
-	\brief		Classe contenant les donnÃ©es d'un bone
+	\brief		Classe contenant les données d'un bone
 	\remark		Contient les poids pour chaque vertice et la matrice de transformation de l'espace objet vers l'espace bone
 	*/
 	class C3D_API Bone
@@ -71,7 +71,7 @@ namespace Castor3D
 		 *\brief		Retrieves the bone name
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le nom du bone
+		 *\brief		Récupère le nom du bone
 		 *\return		La valeur
 		 */
 		inline Castor::String const & GetName()const
@@ -83,7 +83,7 @@ namespace Castor3D
 		 *\brief		Sets the bone name
 		 *\param[in]	p_strName	The new value
 		 *\~french
-		 *\brief		DÃ©finit le nom du bone
+		 *\brief		Définit le nom du bone
 		 *\param[in]	p_strName	La nouvelle valeur
 		 */
 		inline void SetName( Castor::String const & p_strName )
@@ -95,7 +95,7 @@ namespace Castor3D
 		 *\brief		Retrieves the transfromation matrix from mesh space to bone space
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re la matrice de transformation de l'espace objet vers l'espace du bone
+		 *\brief		Récupère la matrice de transformation de l'espace objet vers l'espace du bone
 		 *\return		La valeur
 		 */
 		inline const Castor::Matrix4x4r & GetOffsetMatrix()const
@@ -107,7 +107,7 @@ namespace Castor3D
 		 *\brief		Sets the transfromation matrix from mesh space to bone space
 		 *\param[in]	p_mtxOffset	The new value
 		 *\~french
-		 *\brief		DÃ©finit la matrice de transformation de l'espace objet vers l'espace du bone
+		 *\brief		Définit la matrice de transformation de l'espace objet vers l'espace du bone
 		 *\param[in]	p_mtxOffset	La nouvelle valeur
 		 */
 		inline void SetOffsetMatrix( const Castor::Matrix4x4r & p_mtxOffset )
@@ -119,7 +119,7 @@ namespace Castor3D
 		 *\brief		Retrieves the parent skeleton
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le squelette parent
+		 *\brief		Récupère le squelette parent
 		 *\return		La valeur
 		 */
 		inline const Skeleton & GetSkeleton()const

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -37,7 +37,7 @@ namespace Castor
 		*/
 		template < typename char_type, char_type fill_char = ' ', typename traits = std::char_traits< char_type > >
 		struct basic_indent_buffer
-			: public std::basic_streambuf< char_type, traits >
+				: public std::basic_streambuf< char_type, traits >
 		{
 		public:
 			typedef typename traits::int_type int_type;

@@ -1,0 +1,46 @@
+
+material saule_pleureur/tronc
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0.108 0.108 0.108 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture tronc_saule.jpg
+			}
+		}
+
+	}
+
+}
+
+material saule_pleureur/feuilles
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 1
+			alpha_rejection greater 128
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture feuille_saule.png
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}

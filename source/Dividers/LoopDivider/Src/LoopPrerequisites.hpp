@@ -52,15 +52,14 @@ namespace Loop
 	class Edge;
 	class FaceEdges;
 
-	DECLARE_SMART_PTR( Vertex );
-	DECLARE_SMART_PTR( Edge );
-	DECLARE_SMART_PTR( FaceEdges );
+	typedef std::shared_ptr<	Vertex		>	VertexSPtr;
+	typedef std::shared_ptr<	Edge		>	EdgePtr;
+	typedef std::shared_ptr<	FaceEdges	>	FaceEdgesPtr;
 
-	DECLARE_VECTOR( FaceEdgesSPtr, FaceEdgesPtr );
-	//! Map of edges, ordered by index
-	DECLARE_MAP( uint32_t, EdgeSPtr, EdgePtrUInt );
-	DECLARE_MAP( uint32_t, EdgePtrUIntMap, EdgePtrUIntMapUInt );
-	DECLARE_MAP( uint32_t, VertexSPtr, VertexPtrUInt );
+	typedef std::vector<	FaceEdgesPtr					>	FaceEdgesPtrArray;
+	typedef std::map<		uint32_t,		EdgePtr			>	EdgePtrUIntMap;			//!< Map of edges, ordered by index
+	typedef std::map<		uint32_t,		EdgePtrUIntMap	>	EdgePtrUIntMapUIntMap;
+	typedef std::map<		uint32_t,		VertexSPtr		>	VertexPtrUIntMap;
 }
 
 #endif

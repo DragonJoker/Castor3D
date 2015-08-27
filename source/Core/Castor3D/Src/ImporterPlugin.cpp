@@ -1,4 +1,4 @@
-﻿#include "ImporterPlugin.hpp"
+#include "ImporterPlugin.hpp"
 
 #if defined( _WIN32 )
 #	include <Windows.h>
@@ -30,8 +30,8 @@ namespace Castor3D
 #	error "Implement ABI names for this compiler"
 #endif
 
-	ImporterPlugin::ImporterPlugin( DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
-		:	PluginBase( ePLUGIN_TYPE_IMPORTER, p_pLibrary, p_engine )
+	ImporterPlugin::ImporterPlugin( Engine * p_pEngine, DynamicLibrarySPtr p_pLibrary )
+		:	PluginBase( ePLUGIN_TYPE_IMPORTER, p_pLibrary )
 	{
 		if ( !p_pLibrary->GetFunction( m_pfnCreateImporter, CreateImporterFunctionABIName ) )
 		{
@@ -54,22 +54,63 @@ namespace Castor3D
 			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
 		}
 
-		if ( m_pfnOnLoad )
+		m_pfnCreateImporter( p_pEngine, this );
+	}
+
+	ImporterPlugin::ImporterPlugin( ImporterPlugin const & p_plugin )
+		:	PluginBase( p_plugin )
+		,	m_pfnCreateImporter( p_plugin.m_pfnCreateImporter )
+		,	m_pfnDestroyImporter( p_plugin.m_pfnDestroyImporter )
+		,	m_pfnGetExtension( p_plugin.m_pfnGetExtension )
+		,	m_pImporter( p_plugin.m_pImporter )
+	{
+	}
+
+	ImporterPlugin::ImporterPlugin( ImporterPlugin && p_plugin )
+		:	PluginBase( std::move( p_plugin ) )
+		,	m_pfnCreateImporter( std::move( p_plugin.m_pfnCreateImporter ) )
+		,	m_pfnDestroyImporter( std::move( p_plugin.m_pfnDestroyImporter ) )
+		,	m_pfnGetExtension( std::move( p_plugin.m_pfnGetExtension ) )
+		,	m_pImporter( std::move( p_plugin.m_pImporter ) )
+	{
+		p_plugin.m_pfnCreateImporter	= NULL;
+		p_plugin.m_pfnDestroyImporter	= NULL;
+		p_plugin.m_pfnGetExtension		= NULL;
+		p_plugin.m_pImporter			.reset();
+	}
+
+	ImporterPlugin & ImporterPlugin::operator =( ImporterPlugin const & p_plugin )
+	{
+		PluginBase::operator =( p_plugin );
+		m_pfnCreateImporter		= p_plugin.m_pfnCreateImporter;
+		m_pfnDestroyImporter	= p_plugin.m_pfnDestroyImporter;
+		m_pfnGetExtension		= p_plugin.m_pfnGetExtension;
+		m_pImporter				= p_plugin.m_pImporter;
+		return * this;
+	}
+
+	ImporterPlugin & ImporterPlugin::operator =( ImporterPlugin && p_plugin )
+	{
+		PluginBase::operator =( std::move( p_plugin ) );
+
+		if ( this != & p_plugin )
 		{
-			m_pfnOnLoad( m_engine );
+			m_pfnCreateImporter		= std::move( p_plugin.m_pfnCreateImporter );
+			m_pfnDestroyImporter	= std::move( p_plugin.m_pfnDestroyImporter );
+			m_pfnGetExtension		= std::move( p_plugin.m_pfnGetExtension );
+			m_pImporter				= std::move( p_plugin.m_pImporter );
+			p_plugin.m_pfnCreateImporter	= NULL;
+			p_plugin.m_pfnDestroyImporter	= NULL;
+			p_plugin.m_pfnGetExtension		= NULL;
+			p_plugin.m_pImporter			.reset();
 		}
 
-		m_pfnCreateImporter( p_engine, this );
+		return * this;
 	}
 
 	ImporterPlugin::~ImporterPlugin()
 	{
 		m_pfnDestroyImporter( this );
-
-		if ( m_pfnOnUnload )
-		{
-			m_pfnOnUnload( m_engine );
-		}
 	}
 
 	ImporterPlugin::ExtensionArray ImporterPlugin::GetExtensions()

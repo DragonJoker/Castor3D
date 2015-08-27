@@ -35,23 +35,22 @@ namespace Dx11Render
 		 * Destructor
 		 */
 		virtual ~DxVertexShader();
-
-	private:
 		/**
 		 *\~english
 		 *\brief		Activates the shader
 		 *\~french
 		 *\brief		Active le shader
 		 */
-		virtual void DoBind();
+		virtual void Bind();
 		/**
 		 *\~english
 		 *\brief		Deactivates the shader
 		 *\~french
 		 *\brief		Désactive le shader
 		 */
-		virtual void DoUnbind();
+		virtual void Unbind();
 
+	private:
 		void DoRetrieveShader();
 
 	private:

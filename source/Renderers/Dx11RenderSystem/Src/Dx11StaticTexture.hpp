@@ -45,8 +45,8 @@ namespace Dx11Render
 
 	private:
 		virtual bool DoInitialise();
-		virtual bool DoBind( uint32_t p_index );
-		virtual void DoUnbind( uint32_t p_index );
+		virtual bool DoBind();
+		virtual void DoUnbind();
 
 		void DoInitTex2DDesc( D3D11_TEXTURE2D_DESC & p_tex2dDesc );
 		void DoInitTex2DData( D3D11_SUBRESOURCE_DATA & p_tex2dData );

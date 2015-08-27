@@ -160,18 +160,11 @@ namespace Castor3D
 		virtual void Cleanup() = 0;
 		/**
 		 *\~english
-		 *\brief		Binds this variable to the shader
+		 *\brief		Applies this variable
 		 *\~french
-		 *\brief		Lie cette variable au shader
+		 *\brief		Applique cette variable
 		 */
-		virtual void Bind() = 0;
-		/**
-		 *\~english
-		 *\brief		Unbinds this variable from the shader
-		 *\~french
-		 *\brief		Délie cette variable du shader
-		 */
-		virtual void Unbind() = 0;
+		virtual void Apply() = 0;
 		/**
 		 *\~english
 		 *\brief		Gives the variable full type
@@ -199,6 +192,13 @@ namespace Castor3D
 		 *\return		Le nom du type de données
 		 */
 		virtual Castor::String GetDataType()const = 0;
+		/**
+		 *\~english
+		 *\brief		Binds this variable to it's program or object, depending of implementation (Glsl, Hlsl or Cg)
+		 *\~french
+		 *\brief		Active cette variable
+		 */
+		virtual void Bind() = 0;
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable, from a string

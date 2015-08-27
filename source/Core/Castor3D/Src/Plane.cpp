@@ -1,4 +1,4 @@
-﻿#include "Plane.hpp"
+#include "Plane.hpp"
 #include "Submesh.hpp"
 #include "Vertex.hpp"
 

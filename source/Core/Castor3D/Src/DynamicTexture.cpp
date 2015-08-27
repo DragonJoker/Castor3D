@@ -1,6 +1,4 @@
-﻿#include "DynamicTexture.hpp"
-
-#include "RenderSystem.hpp"
+#include "DynamicTexture.hpp"
 #include "Sampler.hpp"
 
 #include <Image.hpp>
@@ -33,8 +31,8 @@ namespace Castor3D
 				m_pPixelBuffer = l_img.Resample( l_size ).GetPixels();
 			}
 
-			m_uiIndex = p_uiIndex;
-			m_bInitialised = DoInitialise();
+			m_uiIndex			= p_uiIndex;
+			m_bInitialised		= DoInitialise();
 
 			if ( GetSampler() )
 			{
@@ -53,31 +51,31 @@ namespace Castor3D
 		}
 	}
 
-	bool DynamicTexture::BindAt( uint32_t p_index )
+	bool DynamicTexture::Bind()
 	{
 		bool l_bReturn = false;
 
 		if ( m_bInitialised )
 		{
-			l_bReturn = DoBind( p_index );
+			l_bReturn = DoBind();
 
 			if ( l_bReturn && GetSampler() )
 			{
-				l_bReturn = GetSampler()->Bind( m_eDimension, p_index );
+				l_bReturn = GetSampler()->Bind( m_eDimension, m_uiIndex );
 			}
 		}
 
 		return l_bReturn;
 	}
 
-	void DynamicTexture::UnbindFrom( uint32_t p_index )
+	void DynamicTexture::Unbind()
 	{
 		if ( GetSampler() )
 		{
 			GetSampler()->Unbind();
 		}
 
-		DoUnbind( p_index );
+		DoUnbind();
 	}
 
 	void DynamicTexture::Resize( Castor::Size const & p_size )

@@ -19,6 +19,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_RENDER_TARGET_H___
 
 #include "Castor3DPrerequisites.hpp"
+#include "Renderable.hpp"
+#include "TargetRenderer.hpp"
 #include "BinaryParser.hpp"
 
 #pragma warning( push )
@@ -39,6 +41,7 @@ namespace Castor3D
 	\remark		Une render target dessine une scène dans un tampon d'image qui peut ensuite être utilisé dans une fenêtre pour un rendu direct, ou une texture pour un rendu hors écran
 	*/
 	class C3D_API RenderTarget
+		:	public Renderable< RenderTarget, TargetRenderer >
 	{
 	public:
 		/*!
@@ -50,8 +53,8 @@ namespace Castor3D
 		\brief		Loader de RenderTarget
 		*/
 		class C3D_API TextLoader
-			: public Castor::Loader< RenderTarget, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			, public Castor::NonCopyable
+			:	public Castor::Loader< RenderTarget, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			,	public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -88,7 +91,7 @@ namespace Castor3D
 		\brief		Loader de RenderTarget
 		*/
 		class C3D_API BinaryParser
-			: public Castor3D::BinaryParser< RenderTarget >
+			:	public Castor3D::BinaryParser< RenderTarget >
 		{
 		public:
 			/**
@@ -218,6 +221,18 @@ namespace Castor3D
 		void Cleanup();
 		/**
 		 *\~english
+		 *\brief		Retrieves the intialisation status
+		 *\return		The intialisation status
+		 *\~french
+		 *\brief		Récupère le statut de l'initialisation
+		 *\return		Le statut de l'initialisation
+		 */
+		inline bool IsInitialised()const
+		{
+			return m_bInitialised;
+		}
+		/**
+		 *\~english
 		 *\brief		Sets the target dimensions
 		 *\param[in]	p_size	The new dimensions
 		 *\~english
@@ -234,130 +249,6 @@ namespace Castor3D
 		void Resize();
 		/**
 		 *\~english
-		 *\brief		Creates a dynamic texture
-		 *\return		The texture
-		 *\~french
-		 *\brief		Crée une texture dynamique
-		 *\return		La texture
-		 */
-		DynamicTextureSPtr CreateDynamicTexture()const;
-		/**
-		 *\~english
-		 *\brief		Defines the RenderTechnique
-		 *\param[in]	p_strName	The RenderTechnique name
-		 *\~french
-		 *\brief		Définit la RenderTechnique
-		 *\param[in]	p_strName	La RenderTechnique name
-		 */
-		void SetTechnique( Castor::String const & p_strName );
-		/**
-		 *\~english
-		 *\brief		Retrieves the eTOPOLOGY
-		 *\return		The eTOPOLOGY
-		 *\~french
-		 *\brief		Récupère le eTOPOLOGY
-		 *\return		Le eTOPOLOGY
-		 */
-		eTOPOLOGY GetPrimitiveType()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the eVIEWPORT_TYPE
-		 *\return		The eVIEWPORT_TYPE
-		 *\~french
-		 *\brief		Récupère le eVIEWPORT_TYPE
-		 *\return		Le eVIEWPORT_TYPE
-		 */
-		eVIEWPORT_TYPE GetViewportType()const;
-		/**
-		 *\~english
-		 *\brief		Sets the eTOPOLOGY
-		 *\param[in]	val	The new eTOPOLOGY
-		 *\~french
-		 *\brief		Définit le eTOPOLOGY
-		 *\param[in]	val	Le nouveau eTOPOLOGY
-		 */
-		void SetPrimitiveType( eTOPOLOGY val );
-		/**
-		 *\~english
-		 *\brief		Sets the eVIEWPORT_TYPE
-		 *\param[in]	val	The new eVIEWPORT_TYPE
-		 *\~french
-		 *\brief		Définit le eVIEWPORT_TYPE
-		 *\param[in]	val	Le nouveau eVIEWPORT_TYPE
-		 */
-		void SetViewportType( eVIEWPORT_TYPE val );
-		/**
-		 *\~english
-		 *\brief		Sets the camera
-		 *\remark		Defines also LEye and REye cameras
-		 *\param[in]	p_pCamera	The new camera
-		 *\~french
-		 *\brief		Définit la caméra
-		 *\remark		Définit aussi les caméras des yeux gauche et droit
-		 *\param[in]	p_pCamera	La nouvelle caméra
-		 */
-		void SetCamera( CameraSPtr p_pCamera );
-		/**
-		 *\~english
-		 *\brief		Defines the intra ocular distance
-		 *\param[in]	p_rIod	The intra ocular distance
-		 *\~french
-		 *\brief		Définit la distance inter oculaire
-		 *\param[in]	p_rIod	La distance inter oculaire
-		 */
-		void SetIntraOcularDistance( real p_rIod );
-		/**
-		 *\~english
-		 *\brief		Clears the scene buffers
-		 *\~french
-		 *\brief		Nettoie les buffers de scène
-		 */
-		virtual void Clear() = 0;
-		/**
-		 *\~english
-		 *\brief		Creates an attachment to a render buffer
-		 *\param[in]	p_pRenderBuffer	The render buffer
-		 *\return		The created attachment
-		 *\~french
-		 *\brief		Crée une attache à un tampon de rendu
-		 *\param[in]	p_pRenderBuffer	Le tampon de rendu
-		 *\return		L'attache créée
-		 */
-		virtual RenderBufferAttachmentSPtr CreateAttachment( RenderBufferSPtr p_pRenderBuffer )const = 0;
-		/**
-		 *\~english
-		 *\brief		Creates an attachment to a texture
-		 *\param[in]	p_pTexture	The texture
-		 *\return		The created attachment
-		 *\~french
-		 *\brief		Crée une attache à une texture
-		 *\param[in]	p_pTexture	La texture
-		 *\return		L'attache créée
-		 */
-		virtual TextureAttachmentSPtr CreateAttachment( DynamicTextureSPtr p_pTexture )const = 0;
-		/**
-		 *\~english
-		 *\brief		Creates a frame buffer
-		 *\return		The created frame buffer
-		 *\~french
-		 *\brief		Crée un tampon d'image
-		 *\return		Le tampon d'image créé
-		 */
-		virtual FrameBufferSPtr CreateFrameBuffer()const = 0;
-		/**
-		 *\~english
-		 *\brief		Retrieves the intialisation status
-		 *\return		The intialisation status
-		 *\~french
-		 *\brief		Récupère le statut de l'initialisation
-		 *\return		Le statut de l'initialisation
-		 */
-		inline bool IsInitialised()const
-		{
-			return m_bInitialised;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the target size
 		 *\return		The size
 		 *\~english
@@ -368,6 +259,46 @@ namespace Castor3D
 		{
 			return m_size;
 		}
+		/**
+		 *\~english
+		 *\brief		Creates a dynamic texture
+		 *\return		The texture
+		 *\~french
+		 *\brief		Crée une texture dynamique
+		 *\return		La texture
+		 */
+		DynamicTextureSPtr CreateDynamicTexture()const;
+		/**
+		 *\~english
+		 *\brief		Creates an attachment to a render buffer
+		 *\param[in]	p_pRenderBuffer	The render buffer
+		 *\return		The created attachment
+		 *\~french
+		 *\brief		Crée une attache à un tampon de rendu
+		 *\param[in]	p_pRenderBuffer	Le tampon de rendu
+		 *\return		L'attache créée
+		 */
+		RenderBufferAttachmentSPtr CreateAttachment( RenderBufferSPtr p_pRenderBuffer )const;
+		/**
+		 *\~english
+		 *\brief		Creates an attachment to a texture
+		 *\param[in]	p_pTexture	The texture
+		 *\return		The created attachment
+		 *\~french
+		 *\brief		Crée une attache à une texture
+		 *\param[in]	p_pTexture	La texture
+		 *\return		L'attache créée
+		 */
+		TextureAttachmentSPtr CreateAttachment( DynamicTextureSPtr p_pTexture )const;
+		/**
+		 *\~english
+		 *\brief		Creates a frame buffer
+		 *\return		The created frame buffer
+		 *\~french
+		 *\brief		Crée un tampon d'image
+		 *\return		Le tampon d'image créé
+		 */
+		FrameBufferSPtr CreateFrameBuffer()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the DepthStencilState
@@ -416,6 +347,15 @@ namespace Castor3D
 		{
 			m_pRenderTechnique = p_pTechnique;
 		}
+		/**
+		 *\~english
+		 *\brief		Defines the RenderTechnique
+		 *\param[in]	p_strName	The RenderTechnique name
+		 *\~french
+		 *\brief		Définit la RenderTechnique
+		 *\param[in]	p_strName	La RenderTechnique name
+		 */
+		void SetTechnique( Castor::String const & p_strName );
 		/**
 		 *\~english
 		 *\brief		Retrieves the multisampling status
@@ -502,6 +442,42 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Retrieves the eTOPOLOGY
+		 *\return		The eTOPOLOGY
+		 *\~french
+		 *\brief		Récupère le eTOPOLOGY
+		 *\return		Le eTOPOLOGY
+		 */
+		eTOPOLOGY GetPrimitiveType()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the eVIEWPORT_TYPE
+		 *\return		The eVIEWPORT_TYPE
+		 *\~french
+		 *\brief		Récupère le eVIEWPORT_TYPE
+		 *\return		Le eVIEWPORT_TYPE
+		 */
+		eVIEWPORT_TYPE GetViewportType()const;
+		/**
+		 *\~english
+		 *\brief		Sets the eTOPOLOGY
+		 *\param[in]	val	The new eTOPOLOGY
+		 *\~french
+		 *\brief		Définit le eTOPOLOGY
+		 *\param[in]	val	Le nouveau eTOPOLOGY
+		 */
+		void SetPrimitiveType( eTOPOLOGY val );
+		/**
+		 *\~english
+		 *\brief		Sets the eVIEWPORT_TYPE
+		 *\param[in]	val	The new eVIEWPORT_TYPE
+		 *\~french
+		 *\brief		Définit le eVIEWPORT_TYPE
+		 *\param[in]	val	Le nouveau eVIEWPORT_TYPE
+		 */
+		void SetViewportType( eVIEWPORT_TYPE val );
+		/**
+		 *\~english
 		 *\brief		Sets the Scene
 		 *\param[in]	p_pScene	The new Scene
 		 *\~french
@@ -512,6 +488,17 @@ namespace Castor3D
 		{
 			m_pScene = p_pScene;
 		}
+		/**
+		 *\~english
+		 *\brief		Sets the camera
+		 *\remark		Defines also LEye and REye cameras
+		 *\param[in]	p_pCamera	The new camera
+		 *\~french
+		 *\brief		Définit la caméra
+		 *\remark		Définit aussi les caméras des yeux gauche et droit
+		 *\param[in]	p_pCamera	La nouvelle caméra
+		 */
+		void SetCamera( CameraSPtr p_pCamera );
 		/**
 		 *\~english
 		 *\brief		Retrieves the frame buffer
@@ -622,6 +609,15 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Defines the intra ocular distance
+		 *\param[in]	p_rIod	The intra ocular distance
+		 *\~french
+		 *\brief		Définit la distance inter oculaire
+		 *\param[in]	p_rIod	La distance inter oculaire
+		 */
+		void SetIntraOcularDistance( real p_rIod );
+		/**
+		 *\~english
 		 *\brief		Retrieves the stereo status
 		 *\return		\p true if stereo is used
 		 *\~french
@@ -692,16 +688,8 @@ namespace Castor3D
 		{
 			return m_eTargetType;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Engine
-		 *\~french
-		 *\brief		Récupère l'Engine
-		 */
-		virtual Engine * GetEngine()const
-		{
-			return m_pEngine;
-		}
+
+		using Renderable::GetEngine;
 
 	private:
 		void DoRender( stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, double p_dFrameTime );
@@ -711,8 +699,6 @@ namespace Castor3D
 		static const Castor::String DefaultSamplerName;
 
 	protected:
-		//!\~english The core engine	\~french Le moteur
-		Engine * m_pEngine;
 		//!\~english The render target type	\~french Type de RenderTarget
 		eTARGET_TYPE m_eTargetType;
 		//!\~english Tells if the target is initalised	\~french Dit si la cible est initialisée

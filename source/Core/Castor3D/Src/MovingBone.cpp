@@ -1,4 +1,4 @@
-﻿#include "MovingBone.hpp"
+#include "MovingBone.hpp"
 #include "Bone.hpp"
 
 using namespace Castor;

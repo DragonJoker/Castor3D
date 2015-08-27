@@ -18,8 +18,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CUTOpenCLBenchmark___
 #define ___CUTOpenCLBenchmark___
 
-#if defined( CASTOR_USE_OCL )
-
 #include "Benchmark.hpp"
 
 #include <TransformationMatrix.hpp>
@@ -65,7 +63,5 @@ namespace Testing
 		cl::Event m_event;
 	};
 }
-
-#endif
 
 #endif

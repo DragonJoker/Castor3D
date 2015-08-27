@@ -64,20 +64,20 @@ namespace OceanLighting
 		{
 			try
 			{
-				ELogType l_eLogLevel;
+				eLOG_TYPE		l_eLogLevel;
 
 				if ( !l_parser.Found( wxT( 'l' ), reinterpret_cast< long * >( &l_eLogLevel ) ) )
 				{
 #if defined( NDEBUG )
-					l_eLogLevel = ELogType_INFO;
+					l_eLogLevel = eLOG_TYPE_MESSAGE;
 #else
-					l_eLogLevel = ELogType_DEBUG;
+					l_eLogLevel = eLOG_TYPE_DEBUG;
 #endif
 				}
 
 				Logger::Initialise( l_eLogLevel );
 				Logger::SetFileName( File::DirectoryGetCurrent() / cuT( "OceanLighting.log" ) );
-				Logger::LogInfo( cuT( "OceanLighting - Start" ) );
+				Logger::LogMessage( cuT( "OceanLighting - Start" ) );
 				wxInitAllImageHandlers();
 				m_pMainFrame = new MainFrame();
 				SetTopWindow( m_pMainFrame );
@@ -102,7 +102,7 @@ namespace OceanLighting
 	int Application::OnExit()
 	{
 		delete m_pLocale;
-		Logger::LogInfo( cuT( "OceanLighting - Exit" ) );
+		Logger::LogMessage( cuT( "OceanLighting - Exit" ) );
 		Logger::Cleanup();
 		wxImage::CleanUpHandlers();
 		return wxApp::OnExit();

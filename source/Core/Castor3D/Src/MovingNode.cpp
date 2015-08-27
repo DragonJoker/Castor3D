@@ -1,4 +1,4 @@
-﻿#include "MovingNode.hpp"
+#include "MovingNode.hpp"
 
 using namespace Castor;
 

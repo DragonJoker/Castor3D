@@ -247,7 +247,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur constant sur le début du tableau de passes
 		 *\return		L'itérateur
 		 */
-		inline PassPtrArrayConstIt begin()const
+		inline PassPtrArrayConstIt Begin()const
 		{
 			return m_passes.begin();
 		}
@@ -259,7 +259,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur le début du tableau de passes
 		 *\return		L'itérateur
 		 */
-		inline PassPtrArrayIt begin()
+		inline PassPtrArrayIt Begin()
 		{
 			return m_passes.begin();
 		}
@@ -271,7 +271,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur constant sur la fin du tableau de passes
 		 *\return		L'itérateur
 		 */
-		inline PassPtrArrayConstIt end()const
+		inline PassPtrArrayConstIt End()const
 		{
 			return m_passes.end();
 		}
@@ -283,7 +283,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur la fin du tableau de passes
 		 *\return		L'itérateur
 		 */
-		inline PassPtrArrayIt end()
+		inline PassPtrArrayIt End()
 		{
 			return m_passes.end();
 		}
@@ -302,6 +302,123 @@ namespace Castor3D
 	private:
 		PassPtrArray m_passes;
 		Engine * m_pEngine;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		09/02/2010
+	\version	0.1
+	\~english
+	\brief		Material collection, with additional functions
+	\~french
+	\brief		Collection de matériaux, avec des fonctions additionnelles
+	*/
+	class C3D_API MaterialManager : public MaterialCollection
+	{
+	private:
+		DECLARE_VECTOR(	MaterialWPtr, MaterialWPtr );
+
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\~french
+		 *\brief		Constructeur
+		 */
+		MaterialManager( Engine * p_pEngine );
+		/**
+		 *\~english
+		 *\brief		Destructor
+		 *\~french
+		 *\brief		Destructeur
+		 */
+		virtual ~MaterialManager();
+		/**
+		 *\~english
+		 *\brief		Materials initialisation function
+		 *\remark		Intialises the default material, a renderer must have been loaded
+		 */
+		void Initialise();
+		/**
+		 *\~english
+		 *\brief		Sets all the materials to be cleaned up
+		 *\~french
+		 *\brief		Met tous les matériaux à nettoyer
+		 */
+		void Cleanup();
+		/**
+		 *\~english
+		 *\brief		Deletes the default material, flush the collection
+		 *\~french
+		 *\brief		Supprime le matériau par défaut, vide la collection
+		 */
+		void DeleteAll();
+		/**
+		 *\~english
+		 *\brief		Puts all the materials names in the given array
+		 *\param[out]	p_names	The array of names to be filled
+		 *\~french
+		 *\brief		Remplit la liste des noms de tous les matériaux
+		 *\param[out]	p_names	La liste de noms
+		 */
+		void GetNames( Castor::StringArray & p_names );
+		/**
+		 *\~english
+		 *\brief		Writes materials in a text file
+		 *\param[out]	p_file	The file
+		 *\return		\p true if ok
+		 *\~french
+		 *\brief		Ecrit les matériaux dans un fichier texte
+		 *\param[out]	p_file	Le fichier
+		 *\return		\p true si tout s'est bien passé
+		 */
+		virtual bool Write( Castor::TextFile & p_file )const;
+		/**
+		 *\~english
+		 *\brief		Reads materials from a text file
+		 *\param[in]	p_file	The file
+		 *\return		\p true if ok
+		 *\~french
+		 *\brief		Lit les matériaux à partir d'un fichier texte
+		 *\param[in]	p_file	Le fichier
+		 *\return		\p true si tout s'est bien passé
+		 */
+		virtual bool Read( Castor::TextFile & p_file );
+		/**
+		 *\~english
+		 *\brief		Writes materials in a binary file
+		 *\param[out]	p_file	The file
+		 *\return		\p true if ok
+		 *\~french
+		 *\brief		Ecrit les matériaux dans un fichier binaire
+		 *\param[out]	p_file	Le fichier
+		 *\return		\p true si tout s'est bien passé
+		 */
+		virtual bool Save( Castor::BinaryFile & p_file )const;
+		/**
+		 *\~english
+		 *\brief		Reads materials from a binary file
+		 *\param[in]	p_file	The file
+		 *\return		\p true if ok
+		 *\~french
+		 *\brief		Lit les matériaux à partir d'un fichier binaire
+		 *\param[in]	p_file	Le fichier
+		 *\return		\p true si tout s'est bien passé
+		 */
+		virtual bool Load( Castor::BinaryFile & p_file );
+		/**
+		 *\~english
+		 *\brief		Retrieves the default material
+		 *\~french
+		 *\brief		Récupère le matériau par défaut
+		 */
+		inline MaterialSPtr	GetDefaultMaterial()const
+		{
+			return m_defaultMaterial;
+		}
+
+	private:
+		MaterialSPtr		m_defaultMaterial;		//!< The default material
+		Engine 	*		m_pEngine;
 	};
 }
 

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -29,7 +29,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	pragma warning( disable:4996 )
 #endif
 
-#define DX_DEBUG 1
+#define DX_DEBUG	0
 
 #undef RGB
 
@@ -525,23 +525,6 @@ namespace Castor3D
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
-	\brief		Blending modes enumeration
-	\~french
-	\brief		Enumération des modes de mélange
-	*/
-	typedef enum eBLEND_MODE
-	CASTOR_TYPE( uint8_t )
-	{
-		eBLEND_MODE_NONE,			//!< Order dependent blending.
-		eBLEND_MODE_ADDITIVE,		//!< Order independent, add the components.
-		eBLEND_MODE_MULTIPLICATIVE,	//!< Order independent, multiply the components.
-		eBLEND_MODE_A_BUFFER,		//!< Order independent, using A-buffer, not implemented yet.
-		eBLEND_MODE_DEPTH_PEELING,	//!< Order independent, using depth peeling, not implemented yet.
-		eBLEND_MODE_COUNT,
-	}	eBLEND_MODE;
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
 	\brief		Texture dimensions enumeration
 	\~french
 	\brief		Enumération des dimensions de texture
@@ -625,16 +608,16 @@ namespace Castor3D
 	CASTOR_TYPE( uint32_t )
 	{
 		eTEXTURE_CHANNEL_COLOUR		= 0x00000001,	//!< Colour map
-		eTEXTURE_CHANNEL_DIFFUSE	= 0x00000002,	//!< Diffuse map
-		eTEXTURE_CHANNEL_NORMAL		= 0x00000004,	//!< Normal map
-		eTEXTURE_CHANNEL_OPACITY	= 0x00000008,	//!< Opacity map
-		eTEXTURE_CHANNEL_SPECULAR	= 0x00000010,	//!< Specular map
-		eTEXTURE_CHANNEL_HEIGHT		= 0x00000020,	//!< Height map
-		eTEXTURE_CHANNEL_AMBIENT	= 0x00000040,	//!< Ambient map
-		eTEXTURE_CHANNEL_GLOSS		= 0x00000080,	//!< Gloss map
-		eTEXTURE_CHANNEL_LGHTPASS	= 0x00000100,	//!< Not really a texture channel (it is out of eTEXTURE_CHANNEL_ALL), used to tell we want light pass shader source in deferred shading
-		eTEXTURE_CHANNEL_TEXT		= 0x00000200,	//!< Not really a texture channel (it is out of eTEXTURE_CHANNEL_ALL), used to tell we want text overlay shader source
-		eTEXTURE_CHANNEL_ALL		= 0x000000FF,
+		   eTEXTURE_CHANNEL_DIFFUSE	= 0x00000002,	//!< Diffuse map
+			  eTEXTURE_CHANNEL_NORMAL		= 0x00000004,	//!< Normal map
+				 eTEXTURE_CHANNEL_OPACITY	= 0x00000008,	//!< Opacity map
+					eTEXTURE_CHANNEL_SPECULAR	= 0x00000010,	//!< Specular map
+					  eTEXTURE_CHANNEL_HEIGHT		= 0x00000020,	//!< Height map
+						 eTEXTURE_CHANNEL_AMBIENT	= 0x00000040,	//!< Ambient map
+							eTEXTURE_CHANNEL_GLOSS		= 0x00000080,	//!< Gloss map
+								eTEXTURE_CHANNEL_LGHTPASS	= 0x00000100,	//!< Not really a texture channel (it is out of eTEXTURE_CHANNEL_ALL), used to tell we want light pass shader source in deferred shading
+								  eTEXTURE_CHANNEL_TEXT		= 0x00000200,	//!< Not really a texture channel (it is out of eTEXTURE_CHANNEL_ALL), used to tell we want text overlay shader source
+									   eTEXTURE_CHANNEL_ALL		= 0x000000FF,
 	}	eTEXTURE_CHANNEL;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -760,20 +743,19 @@ namespace Castor3D
 	class TextOverlay;
 	class OverlayManager;
 	class OverlayFactory;
-	class OverlayRenderer;
 
 	DECLARE_SMART_PTR( OverlayFactory );
 	DECLARE_SMART_PTR( OverlayManager );
-	DECLARE_SMART_PTR( OverlayRenderer );
 
-	DECLARE_SMART_PTR( Overlay );
-	DECLARE_SMART_PTR( OverlayCategory );
-	DECLARE_SMART_PTR( PanelOverlay );
-	DECLARE_SMART_PTR( BorderPanelOverlay );
-	DECLARE_SMART_PTR( TextOverlay );
+	DECLARE_SMART_PTR(	Overlay );
+	DECLARE_SMART_PTR(	OverlayCategory );
+	DECLARE_SMART_PTR(	PanelOverlay );
+	DECLARE_SMART_PTR(	BorderPanelOverlay );
+	DECLARE_SMART_PTR(	TextOverlay );
 
-	DECLARE_VECTOR( OverlaySPtr, OverlayPtr );
-	DECLARE_MAP( Castor::String, OverlaySPtr, OverlayPtrStr );
+	DECLARE_MAP(	int,			OverlaySPtr,	OverlayPtrInt );
+	DECLARE_MAP(	Castor::String,	OverlaySPtr,	OverlayPtrStr );
+	DECLARE_VECTOR(	OverlaySPtr,					OverlayPtr );
 
 	//@}
 	/**@name Render */
@@ -824,52 +806,8 @@ namespace Castor3D
 		eMTXMODE_TEXTURE29,		//!<\~english Texture transforms	\~french Transformations de texture
 		eMTXMODE_TEXTURE30,		//!<\~english Texture transforms	\~french Transformations de texture
 		eMTXMODE_TEXTURE31,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_COUNT
+		eMTXMODE_COUNT,
 	}	eMTXMODE;
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Matrix modes masks
-	\~french
-	\brief		Masques pour les types de matrices
-	*/
-	static const uint64_t MASK_MTXMODE_PROJECTION = uint64_t( 0x1 ) << eMTXMODE_PROJECTION;
-	static const uint64_t MASK_MTXMODE_MODEL = uint64_t( 0x1 ) << eMTXMODE_MODEL;
-	static const uint64_t MASK_MTXMODE_VIEW = uint64_t( 0x1 ) << eMTXMODE_VIEW;
-	static const uint64_t MASK_MTXMODE_TEXTURE0 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE0;
-	static const uint64_t MASK_MTXMODE_TEXTURE1 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE1;
-	static const uint64_t MASK_MTXMODE_TEXTURE2 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE2;
-	static const uint64_t MASK_MTXMODE_TEXTURE3 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE3;
-	static const uint64_t MASK_MTXMODE_TEXTURE4 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE4;
-	static const uint64_t MASK_MTXMODE_TEXTURE5 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE5;
-	static const uint64_t MASK_MTXMODE_TEXTURE6 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE6;
-	static const uint64_t MASK_MTXMODE_TEXTURE7 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE7;
-	static const uint64_t MASK_MTXMODE_TEXTURE8 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE8;
-	static const uint64_t MASK_MTXMODE_TEXTURE9 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE9;
-	static const uint64_t MASK_MTXMODE_TEXTURE10 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE10;
-	static const uint64_t MASK_MTXMODE_TEXTURE11 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE11;
-	static const uint64_t MASK_MTXMODE_TEXTURE12 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE12;
-	static const uint64_t MASK_MTXMODE_TEXTURE13 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE13;
-	static const uint64_t MASK_MTXMODE_TEXTURE14 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE14;
-	static const uint64_t MASK_MTXMODE_TEXTURE15 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE15;
-	static const uint64_t MASK_MTXMODE_TEXTURE16 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE16;
-	static const uint64_t MASK_MTXMODE_TEXTURE17 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE17;
-	static const uint64_t MASK_MTXMODE_TEXTURE18 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE18;
-	static const uint64_t MASK_MTXMODE_TEXTURE19 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE19;
-	static const uint64_t MASK_MTXMODE_TEXTURE20 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE20;
-	static const uint64_t MASK_MTXMODE_TEXTURE21 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE21;
-	static const uint64_t MASK_MTXMODE_TEXTURE22 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE22;
-	static const uint64_t MASK_MTXMODE_TEXTURE23 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE23;
-	static const uint64_t MASK_MTXMODE_TEXTURE24 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE24;
-	static const uint64_t MASK_MTXMODE_TEXTURE25 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE25;
-	static const uint64_t MASK_MTXMODE_TEXTURE26 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE26;
-	static const uint64_t MASK_MTXMODE_TEXTURE27 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE27;
-	static const uint64_t MASK_MTXMODE_TEXTURE28 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE28;
-	static const uint64_t MASK_MTXMODE_TEXTURE29 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE29;
-	static const uint64_t MASK_MTXMODE_TEXTURE30 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE30;
-	static const uint64_t MASK_MTXMODE_TEXTURE31 = uint64_t( 0x1 ) << eMTXMODE_TEXTURE31;
-	
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -881,7 +819,7 @@ namespace Castor3D
 	CASTOR_TYPE( uint32_t )
 	{
 		eLOCK_FLAG_READ_ONLY	= 1 << 0,
-		eLOCK_FLAG_WRITE_ONLY	= 1 << 1,
+		   eLOCK_FLAG_WRITE_ONLY	= 1 << 1,
 	}	eLOCK_FLAG;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -897,8 +835,8 @@ namespace Castor3D
 	CASTOR_TYPE( uint32_t )
 	{
 		eBUFFER_ACCESS_TYPE_STATIC		= 1 << 0,	//!< Modified once and used many times
-		eBUFFER_ACCESS_TYPE_DYNAMIC		= 1 << 1,	//!< Modified many times and used many times
-		eBUFFER_ACCESS_TYPE_STREAM		= 1 << 2,	//!< Modified oncce and used at most a few times
+			eBUFFER_ACCESS_TYPE_DYNAMIC		= 1 << 1,	//!< Modified many times and used many times
+			   eBUFFER_ACCESS_TYPE_STREAM		= 1 << 2,	//!< Modified oncce and used at most a few times
 	}	eBUFFER_ACCESS_TYPE;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -914,8 +852,8 @@ namespace Castor3D
 	CASTOR_TYPE( uint32_t )
 	{
 		eBUFFER_ACCESS_NATURE_DRAW	= 1 << 4,	//!< Modified by CPU and used by GPU
-		eBUFFER_ACCESS_NATURE_READ	= 1 << 5,	//!< Modified by GPU and used by CPU
-		eBUFFER_ACCESS_NATURE_COPY	= 1 << 6,	//!< Modified by GPU and used by GPU
+		 eBUFFER_ACCESS_NATURE_READ	= 1 << 5,	//!< Modified by GPU and used by CPU
+		  eBUFFER_ACCESS_NATURE_COPY	= 1 << 6,	//!< Modified by GPU and used by GPU
 	}	eBUFFER_ACCESS_NATURE;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -1070,8 +1008,20 @@ namespace Castor3D
 		eELEMENT_TYPE_COUNT,
 	}	eELEMENT_TYPE;
 
+	template< class T, class Y > class Renderer;
+	template< class T, class Y > class Renderable;
 	template< typename T> class CpuBuffer;
+	class RendererBase;
 	class RenderSystem;
+	class SubmeshRenderer;
+	class TextureRenderer;
+	class PassRenderer;
+	class LightRenderer;
+	class WindowRenderer;
+	class CameraRenderer;
+	class OverlayRenderer;
+	class TargetRenderer;
+	class SamplerRenderer;
 	class Context;
 	class RenderWindow;
 	class IPipelineImpl;
@@ -1089,28 +1039,47 @@ namespace Castor3D
 	class GeometryBuffers;
 	class TextureBuffer;
 
-	DECLARE_SMART_PTR( GeometryBuffers );
-	DECLARE_SMART_PTR( BufferElementDeclaration );
-	DECLARE_SMART_PTR( BufferDeclaration );
-	DECLARE_SMART_PTR( VertexBuffer );
-	DECLARE_SMART_PTR( IndexBuffer );
-	DECLARE_SMART_PTR( MatrixBuffer );
-	DECLARE_SMART_PTR( TextureBuffer );
-	DECLARE_SMART_PTR( Context );
-	DECLARE_SMART_PTR( DepthStencilState );
-	DECLARE_SMART_PTR( RasteriserState );
-	DECLARE_SMART_PTR( BlendState );
+	DECLARE_SMART_PTR(	GeometryBuffers );
+	DECLARE_SMART_PTR(	RendererBase );
+	DECLARE_SMART_PTR(	SubmeshRenderer );
+	DECLARE_SMART_PTR(	TextureRenderer );
+	DECLARE_SMART_PTR(	PassRenderer );
+	DECLARE_SMART_PTR(	LightRenderer );
+	DECLARE_SMART_PTR(	WindowRenderer );
+	DECLARE_SMART_PTR(	CameraRenderer );
+	DECLARE_SMART_PTR(	OverlayRenderer );
+	DECLARE_SMART_PTR(	TargetRenderer );
+	DECLARE_SMART_PTR(	SamplerRenderer );
+	DECLARE_SMART_PTR(	BufferElementDeclaration );
+	DECLARE_SMART_PTR(	BufferDeclaration );
+	DECLARE_SMART_PTR(	VertexBuffer );
+	DECLARE_SMART_PTR(	IndexBuffer );
+	DECLARE_SMART_PTR(	MatrixBuffer );
+	DECLARE_SMART_PTR(	TextureBuffer );
+	DECLARE_SMART_PTR(	Context );
+	DECLARE_SMART_PTR(	DepthStencilState );
+	DECLARE_SMART_PTR(	RasteriserState );
+	DECLARE_SMART_PTR(	BlendState );
 
-	DECLARE_COLLECTION( DepthStencilState, Castor::String, DepthStencilState );
-	DECLARE_COLLECTION( RasteriserState, Castor::String, RasteriserState );
-	DECLARE_COLLECTION( BlendState, Castor::String, BlendState );
+	DECLARE_COLLECTION( DepthStencilState,	Castor::String, DepthStencilState );
+	DECLARE_COLLECTION( RasteriserState,	Castor::String, RasteriserState );
+	DECLARE_COLLECTION( BlendState,			Castor::String, BlendState );
 
 	DECLARE_SMART_PTR( DepthStencilStateCollection );
 	DECLARE_SMART_PTR( RasteriserStateCollection );
 	DECLARE_SMART_PTR( BlendStateCollection );
 
-	DECLARE_MAP( RenderWindow *, ContextSPtr, ContextPtr );
-	DECLARE_MAP( std::thread::id, ContextPtrMap, ContextPtrMapId );
+	DECLARE_VECTOR( SubmeshRendererSPtr,				SubmeshRendererPtr );
+	DECLARE_VECTOR( TextureRendererSPtr,				TextureRendererPtr );
+	DECLARE_VECTOR( PassRendererSPtr,					PassRendererPtr );
+	DECLARE_VECTOR( LightRendererSPtr,					LightRendererPtr );
+	DECLARE_VECTOR( WindowRendererSPtr,					WindowRendererPtr );
+	DECLARE_VECTOR( CameraRendererSPtr,					CameraRendererPtr );
+	DECLARE_VECTOR(	OverlayRendererSPtr,				OverlayRendererPtr );
+	DECLARE_VECTOR(	TargetRendererSPtr,					TargetRendererPtr );
+	DECLARE_VECTOR(	SamplerRendererSPtr,				SamplerRendererPtr );
+	DECLARE_MAP(	RenderWindow *,		ContextSPtr,	ContextPtr );
+	DECLARE_MAP(	std::thread::id,	ContextPtrMap,	ContextPtrMapId );
 
 	//@}
 	/**@name Scene */
@@ -1215,27 +1184,14 @@ namespace Castor3D
 	CASTOR_TYPE( int8_t )
 	{
 		eSHADER_TYPE_NONE		= -1,
-		eSHADER_TYPE_VERTEX,
-		eSHADER_TYPE_HULL,
-		eSHADER_TYPE_DOMAIN,
-		eSHADER_TYPE_GEOMETRY,
-		eSHADER_TYPE_PIXEL,
-		eSHADER_TYPE_COMPUTE,
-		eSHADER_TYPE_COUNT,
+			 eSHADER_TYPE_VERTEX,
+			 eSHADER_TYPE_HULL,
+			 eSHADER_TYPE_DOMAIN,
+			 eSHADER_TYPE_GEOMETRY,
+			 eSHADER_TYPE_PIXEL,
+			 eSHADER_TYPE_COMPUTE,
+			 eSHADER_TYPE_COUNT,
 	}	eSHADER_TYPE;
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Shader object types masks
-	\~french
-	\brief		Masques pour les types de shader object
-	*/
-	static const uint64_t MASK_SHADER_TYPE_VERTEX = uint64_t( 0x1 ) << eSHADER_TYPE_VERTEX;
-	static const uint64_t MASK_SHADER_TYPE_HULL = uint64_t( 0x1 ) << eSHADER_TYPE_HULL;
-	static const uint64_t MASK_SHADER_TYPE_DOMAIN = uint64_t( 0x1 ) << eSHADER_TYPE_DOMAIN;
-	static const uint64_t MASK_SHADER_TYPE_GEOMETRY = uint64_t( 0x1 ) << eSHADER_TYPE_GEOMETRY;
-	static const uint64_t MASK_SHADER_TYPE_PIXEL = uint64_t( 0x1 ) << eSHADER_TYPE_PIXEL;
-	static const uint64_t MASK_SHADER_TYPE_COMPUTE = uint64_t( 0x1 ) << eSHADER_TYPE_COMPUTE;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		20/11/13
@@ -1249,9 +1205,8 @@ namespace Castor3D
 	CASTOR_TYPE( uint32_t )
 	{
 		ePROGRAM_FLAG_DEFERRED		= 0x01,	//!<\~english Program used in deferred rendering	\~french Programme utilisé lors d'un rendu différé
-		ePROGRAM_FLAG_INSTANCIATION	= 0x02,	//!<\~english Program using instanciation	\~french Programme utilisant l'instanciation
-		ePROGRAM_FLAG_SKINNING		= 0x04,	//!<\~english Program using skeleton animations	\~french Programme utilisant les animations par squelette
-		ePROGRAM_FLAG_BILLBOARDS	= 0x08,	//!<\~english Program used by billboards	\~french Programme utilisé par des billboards
+			ePROGRAM_FLAG_INSTANCIATION	= 0x02,	//!<\~english Program using instanciation	\~french Programme utilisant l'instanciation
+			ePROGRAM_FLAG_SKINNING		= 0x04,	//!<\~english Program using skeleton animations	\~french Programme utilisant les animations par squelette
 	}	ePROGRAM_FLAG;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -1567,15 +1522,12 @@ namespace Castor3D
 	DECLARE_SMART_PTR(	ShaderObjectBase );
 	DECLARE_SMART_PTR(	ShaderProgramBase );
 
-	DECLARE_LIST( FrameVariableLinkSPtr, VariableLinkPtr );
-	DECLARE_MAP( ShaderProgramBase *, ProgramLinksSPtr,	LinksPtrListProgram );
-	DECLARE_VECTOR(	ShaderProgramBaseSPtr, ShaderProgramPtr );
-	DECLARE_VECTOR(	ShaderObjectBaseSPtr, ShaderObjectPtr );
-	DECLARE_LIST( FrameVariableSPtr, FrameVariablePtr );
-	DECLARE_LIST( FrameVariableBufferSPtr, FrameVariableBufferPtr );
-	DECLARE_MAP( Castor::String, FrameVariableWPtr,	FrameVariablePtrStr );
-	DECLARE_MAP( Castor::String, FrameVariableBufferWPtr, FrameVariableBufferPtrStr );
-	DECLARE_MAP( eSHADER_TYPE, FrameVariableBufferWPtr, FrameVariableBufferPtrShader );
+	DECLARE_LIST(	FrameVariableLinkSPtr,						VariableLinkPtr );
+	DECLARE_MAP(	ShaderProgramBase *,	ProgramLinksSPtr,	LinksPtrListProgram );
+	DECLARE_VECTOR(	ShaderProgramBaseSPtr,						ShaderProgramPtr );
+	DECLARE_VECTOR(	ShaderObjectBaseSPtr,						ShaderObjectPtr );
+	DECLARE_LIST(	FrameVariableSPtr,							FrameVariablePtr );
+	DECLARE_MAP(	Castor::String,			FrameVariableWPtr,	FrameVariablePtrStr );
 
 	//@}
 	/**@name General */
@@ -1651,11 +1603,11 @@ namespace Castor3D
 	CASTOR_TYPE( int8_t )
 	{
 		eRENDERER_TYPE_UNDEFINED	= -1,
-		eRENDERER_TYPE_OPENGL		= 0,	//!< OpenGl Renderer
-		eRENDERER_TYPE_DIRECT3D9	= 1,	//!< Direct3D9 Renderer
-		eRENDERER_TYPE_DIRECT3D10	= 2,	//!< Direct3D10 Renderer
-		eRENDERER_TYPE_DIRECT3D11	= 3,	//!< Direct3D11 Renderer
-		eRENDERER_TYPE_COUNT		= 4,
+		   eRENDERER_TYPE_OPENGL		= 0,	//!< OpenGl Renderer
+				eRENDERER_TYPE_DIRECT3D9	= 1,	//!< Direct3D9 Renderer
+				   eRENDERER_TYPE_DIRECT3D10	= 2,	//!< Direct3D10 Renderer
+					 eRENDERER_TYPE_DIRECT3D11	= 3,	//!< Direct3D11 Renderer
+					   eRENDERER_TYPE_COUNT		= 4,
 	}	eRENDERER_TYPE;
 	/*!
 	\author		Sylvain DOREMUS
@@ -1670,8 +1622,8 @@ namespace Castor3D
 	CASTOR_TYPE( uint8_t )
 	{
 		eBUFFER_COMPONENT_COLOUR	= 1,
-		eBUFFER_COMPONENT_DEPTH		= 2,
-		eBUFFER_COMPONENT_STENCIL	= 4,
+		   eBUFFER_COMPONENT_DEPTH		= 2,
+			  eBUFFER_COMPONENT_STENCIL	= 4,
 	}	eBUFFER_COMPONENT;
 	/*!
 	\author		Sylvain DOREMUS
@@ -1888,7 +1840,6 @@ namespace Castor3D
 		eFILL_MODE_POINT,	//!<\~english Polygon vertices that are marked as the start of a boundary edge are drawn as points	\~french Les vertices marquant les arêtes sont dessinés en tant que points
 		eFILL_MODE_LINE,	//!<\~english Boundary edges of the polygon are drawn as line segments	\~french Les arêtes du polygone sont dessinées en tant que segments
 		eFILL_MODE_SOLID,	//!<\~english The interior of the polygon is filled	\~french L'intérieur du polygone est rempli
-		eFILL_MODE_COUNT,	//!<\~english Fill modes count	\~french Compte des modes de rastérisation
 	}   eFILL_MODE;
 
 	class WindowHandle;

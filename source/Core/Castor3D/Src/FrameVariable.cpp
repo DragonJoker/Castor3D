@@ -1,4 +1,4 @@
-﻿#include "FrameVariable.hpp"
+#include "FrameVariable.hpp"
 #include "FrameVariableBuffer.hpp"
 
 using namespace Castor;

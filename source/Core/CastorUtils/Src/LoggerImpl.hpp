@@ -15,77 +15,36 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___CU_LOGGER_IMPL_H___
-#define ___CU_LOGGER_IMPL_H___
+#ifndef ___CASTOR_LOGGER_IMPL_H___
+#define ___CASTOR_LOGGER_IMPL_H___
 
-#include "CastorUtilsPrerequisites.hpp"
-
-#include "ELogType.hpp"
-#include "StringUtils.hpp"
+#include "Console.hpp"
 
 #pragma warning( push )
 #pragma warning( disable:4290 )
 
 namespace Castor
 {
-	/** Base class for a message representation
-	*/
-	struct MessageBase
-	{
-		/** Constructor
-		@param[in] type
-			The message type
-		*/
-		MessageBase( ELogType type )
-			: m_type( type )
-		{
-		}
-
-		/** Retrieves the message content
-		@return
-			The message text
-		*/
-		virtual String GetMessage() = 0;
-
-		//! The message type
-		ELogType m_type;
-	};
-
-	/** Template class, holding character type dependant message text
-	*/
-	template< typename Char >
-	struct BasicMessage
-		: public MessageBase
-	{
-		typedef std::basic_string< Char > string_type;
-
-		/** Constructor
-		@param[in] type
-			The message type
-		@param[in] message
-			The message text
-		*/
-		BasicMessage( ELogType type, string_type const & message )
-			: MessageBase( type )
-			, m_message( message )
-		{
-		}
-
-		//@copydoc Database::SMessageBase::GetMessage
-		virtual String GetMessage()
-		{
-			return str_utils::string_cast< String >( m_message );
-		}
-
-		//! The message text
-		string_type m_message;
-	};
-
-	//! A char message
-	typedef BasicMessage< char > Message;
-	//! A wchar_t message
-	typedef BasicMessage< wchar_t > WMessage;
-
+	/**
+	 *\~english
+	 *\brief		Logging callback function
+	 *\param[in]	p_pCaller	Pointer to the caller
+	 *\param[in]	p_strLog	The logged text
+	 *\param[in]	p_eLogType	The log type
+	 *\~french
+	 *\brief		Fonction de callback de log
+	 *\param[in]	p_pCaller	Pointeur sur l'appelant
+	 *\param[in]	p_strLog	Le texte écrit
+	 *\param[in]	p_eLogType	Le type de log
+	 */
+	typedef void ( LogCallback )( void * p_pCaller, String const & p_strLog, eLOG_TYPE p_eLogType );
+	/**
+	 *\~english
+	 *\brief		Typedef over a pointer to the logging callback function
+	 *\~french
+	 *\brief		Typedef d'un pointeur sur la fonction de callback de log
+	 */
+	typedef LogCallback * PLogCallback;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		27/08/2012
@@ -95,108 +54,46 @@ namespace Castor
 	\~french
 	\brief		Classe d'aide pour Logger, dépendante du niveau de log
 	*/
-
-	class LoggerImpl
+	class ILoggerImpl
 	{
 	private:
-		DECLARE_MAP( void *, LogCallback, LoggerCallback );
+		struct stLOGGER_CALLBACK
+		{
+			PLogCallback m_pfnCallback;
+			void * m_pCaller;
+		};
+
+		DECLARE_MAP( std::thread::id, stLOGGER_CALLBACK, LoggerCallback );
 
 	public:
-		/** Constructor
-		*/
-		LoggerImpl();
+		ILoggerImpl( eLOG_TYPE p_eLogLevel );
+		virtual ~ILoggerImpl();
 
-		/** Destructor
-		*/
-		virtual ~LoggerImpl();
+		void Initialise( Logger * p_pLogger );
+		void SetCallback( PLogCallback p_pfnCallback, void * p_pCaller );
 
-		/** Initialises the headers, from the given logger
-		@param[in] logger
-			The logger
-		*/
-		void Initialise( Logger const & logger );
+		void SetFileName( String const & p_logFilePath, eLOG_TYPE p_eLogType );
 
-		/** Cleans up the class
-		*/
-		void Cleanup();
+		virtual void LogDebug( String const & p_strToLog );
+		virtual void LogMessage( String const & p_strToLog );
+		virtual void LogWarning( String const & p_strToLog );
+		virtual bool LogError( String const & p_strToLog );
 
-		/** Registers a callback
-		*/
-		void RegisterCallback( LogCallback p_pfnCallback, void * p_pCaller );
-
-		/** Unregisters a callback
-		*/
-		void UnregisterCallback( void * p_pCaller );
-
-		/** Sets the file for given log level
-		@param[in] logFilePath
-			The file path
-		@param[in] logLevel
-			The log level.
-			If ELogType_COUNT, sets the file for every log level
-		*/
-		void SetFileName( String const & logFilePath, ELogType logLevel );
-
-		/** Prints a message to the console
-		@param[in] logLevel
-			The log level.
-		@param[in] message
-			The message.
-		*/
-		void PrintMessage( ELogType logLevel, std::string const & message );
-
-		/** Prints a message to the console
-		@param[in] logLevel
-			The log level.
-		@param[in] message
-			The message.
-		*/
-		void PrintMessage( ELogType logLevel, std::wstring const & message );
-
-		/** Logs a message queue
-		@param[in] queue
-			The messages
-		*/
-		void LogMessageQueue( MessageQueue const & queue );
+		inline eLOG_TYPE GetLogLevel()const
+		{
+			return m_eLogLevel;
+		}
 
 	private:
-		/** Prints a message to the console
-		@param[in] logLevel
-			The log level.
-		@param[in] message
-			The message.
-		*/
-		void DoPrintMessage( ELogType logLevel, String const & message );
-
-		/** Prints a line to the console
-		@param[in] line
-			The line
-		@param[in] logType
-			The log level
-		*/
-		void DoPrintLine( String const & line, ELogType logType );
-
-		/** Logs a line in the given file
-		@param[in] timestamp
-			The line timestamp
-		@param[in] line
-			The line
-		@param logFile
-			The file
-		@param[in] logType
-			The log level
-		*/
-		void DoLogLine( String const & timestamp, String const & line, FILE * logFile, ELogType logType );
+		void DoLogMessage( String const & p_strToLog, eLOG_TYPE p_eLogType );
 
 	private:
-		//! The files paths, per log level
-		String m_logFilePath[ELogType_COUNT];
-		//! The headers, per log level
-		String m_headers[ELogType_COUNT];
-		//! The console
-		std::unique_ptr< ProgramConsole > m_console;
-		//! Registered callbacks
+		String m_logFilePath[eLOG_TYPE_COUNT];
+		String m_strHeaders[eLOG_TYPE_COUNT];
+		ProgramConsole * m_pConsole;
+		eLOG_TYPE m_eLogLevel;
 		LoggerCallbackMap m_mapCallbacks;
+		std::mutex m_mutex;
 	};
 }
 

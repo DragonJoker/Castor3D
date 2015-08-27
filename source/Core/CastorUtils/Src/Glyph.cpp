@@ -1,4 +1,4 @@
-﻿#include "Glyph.hpp"
+#include "Glyph.hpp"
 
 namespace Castor
 {

@@ -13,7 +13,6 @@
 
 #	include <PlatformWindowHandle.hpp>
 #	include <Material.hpp>
-#	include <MaterialManager.hpp>
 #	include <RenderWindow.hpp>
 
 #	include <Logger.hpp>
@@ -154,7 +153,7 @@ bool GlContextImpl::Initialise( RenderWindow * p_pWindow )
 			}
 			else
 			{
-				Logger::LogInfo( str_utils::from_str( "GlXContext::Create - glXContext created" ) );
+				Logger::LogMessage( str_utils::from_str( "GlXContext::Create - glXContext created" ) );
 
 				if ( !l_pRenderSystem->IsInitialised() )
 				{
@@ -344,7 +343,7 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_pW
 
 XVisualInfo * GlContextImpl::DoCreateVisualInfoWithoutFBConfig( IntArray & p_arrayAttribs, int p_iScreen )
 {
-	Logger::LogInfo( cuT( "GlXContext::Create - Not using FBConfig" ) );
+	Logger::LogMessage( cuT( "GlXContext::Create - Not using FBConfig" ) );
 	XVisualInfo	* l_pReturn = glXChooseVisual( m_pDisplay, p_iScreen, &p_arrayAttribs[0] );
 
 	if ( !l_pReturn )
@@ -364,7 +363,7 @@ bool GlContextImpl::DoCreateGl3Context( Castor3D::RenderWindow * p_pWindow )
 
 	if ( m_gl.HasCreateContextAttribs() )
 	{
-		Logger::LogInfo( cuT( "GlXContext::Create - Using OpenGL %i.%i" ), m_gl.GetVersion() / 10, m_gl.GetVersion() % 10 );
+		Logger::LogMessage( cuT( "GlXContext::Create - Using OpenGL %i.%i" ), l_pRenderSystem->GetOpenGlMajor(), l_pRenderSystem->GetOpenGlMinor() );
 		IntArray l_arrayAttribs;
 		l_arrayAttribs.push_back( GLX_CONTEXT_MAJOR_VERSION_ARB	);
 		l_arrayAttribs.push_back( m_gl.GetVersion() / 10 );

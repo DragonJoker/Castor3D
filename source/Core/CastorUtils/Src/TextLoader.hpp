@@ -44,7 +44,7 @@ namespace Castor
 		 *\brief		Constructeur
 		 */
 		TextLoader( File::eENCODING_MODE p_eEncodingMode = File::eENCODING_MODE_ASCII )
-			: Loader< T, eFILE_TYPE_BINARY, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+			:	Loader< T, eFILE_TYPE_BINARY, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
 		{
 		}
 		/**

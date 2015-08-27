@@ -39,6 +39,8 @@ namespace Castor3D
 		:	public FrameEvent
 	{
 	private:
+		//!\~english The RenderWindow to resize	\~french La RenderWindow à redimensionner
+		RenderWindow & m_window;
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -84,10 +86,6 @@ namespace Castor3D
 		 *\return		\p true si l'évènement a été traité avec succès
 		 */
 		virtual bool Apply();
-
-	private:
-		//!\~english The RenderWindow to resize	\~french La RenderWindow à redimensionner
-		RenderWindow & m_window;
 	};
 }
 

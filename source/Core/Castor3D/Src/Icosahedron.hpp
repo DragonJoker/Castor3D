@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -103,22 +103,21 @@ namespace Castor3D
 		{
 			return m_radius;
 		}
+		/**
+		 *\~english
+		 *\brief		Stream operator
+		 *\~french
+		 *\brief		Operateur de flux
+		 */
+		inline friend std::ostream & operator <<( std::ostream & o, Icosahedron const & c )
+		{
+			return o << "Icosaedre(" << c.m_nbFaces << "," << c.m_radius << ")";
+		}
 
 	private:
-		real m_radius;
-		uint32_t m_nbFaces;
-		friend std::ostream & operator <<( std::ostream & o, Icosahedron const & c );
+		real		m_radius;
+		uint32_t	m_nbFaces;
 	};
-	/**
-	 *\~english
-	 *\brief		Stream operator
-	 *\~french
-	 *\brief		Operateur de flux
-	 */
-	inline std::ostream & operator <<( std::ostream & o, Icosahedron const & c )
-	{
-		return o << "Icosahedron(" << c.m_nbFaces << "," << c.m_radius << ")";
-	}
 }
 
 #pragma warning( pop )

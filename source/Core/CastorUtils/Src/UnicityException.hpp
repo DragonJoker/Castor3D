@@ -38,10 +38,7 @@ namespace Castor
 		: public Castor::Exception
 	{
 	public:
-		UnicityException( std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line )
-			: Exception( p_description, p_file, p_function, p_line )
-		{
-		}
+		UnicityException( std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line ) : Exception( p_description, p_file, p_function, p_line ) {}
 	};
 	//!\~english Helper macro to use UnicityException	\~french Macro pour faciliter l'utilisation de UnicityException
 #	define UNICITY_ERROR( p_text ) throw UnicityException( std::string( "Duplicate instance for Unique class " ) + p_text, __FILE__, __FUNCTION__, __LINE__)

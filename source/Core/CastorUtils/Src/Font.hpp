@@ -64,7 +64,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			CU_API BinaryLoader();
+			BinaryLoader();
 			/**
 			 *\~english
 			 *\brief			Loads a font
@@ -77,10 +77,10 @@ namespace Castor
 			 *\param[in]		p_path		Le chemin du fichier contenant la police
 			 *\param[in]		p_uiHeight	La précision de la police
 			 */
-			CU_API bool operator()( Font & p_font, Path const & p_path, uint32_t p_uiHeight );
+			bool operator()( Font & p_font, Path const & p_path, uint32_t p_uiHeight );
 
 		private:
-			CU_API virtual bool operator()( Font & p_font, Path const & p_path );
+			virtual bool operator()( Font & p_font, Path const & p_path );
 
 		private:
 			//!\~english Font wanted height	\~french Hauteur voulue pour la police
@@ -143,7 +143,7 @@ namespace Castor
 		 *\param[in]	p_strName	Le nom de la police
 		 *\param[in]	p_uiHeight	La hauteur des caractères de la police
 		 */
-		CU_API Font( String const & p_strName, uint32_t p_uiHeight );
+		Font( String const & p_strName, uint32_t p_uiHeight );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -156,14 +156,14 @@ namespace Castor
 		 *\param[in]	p_strName	Le nom de la police
 		 *\param[in]	p_uiHeight	La hauteur des caractères de la police
 		 */
-		CU_API Font( Path const & p_path, String const & p_strName, uint32_t p_uiHeight );
+		Font( Path const & p_path, String const & p_strName, uint32_t p_uiHeight );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		CU_API virtual ~Font();
+		virtual ~Font();
 		/**
 		 *\~english
 		 *\brief		Sets the glyph for given character
@@ -180,7 +180,7 @@ namespace Castor
 		 *\param[in]	p_advance	Nombre de pixels pour placer le caractère suivant
 		 *\param[in]	p_bitmap	L'image de la glyphe
 		 */
-		CU_API void SetGlyphAt( wchar_t p_char, Size const & p_size, Position p_position, Size const & p_advance, ByteArray const & p_bitmap );
+		void SetGlyphAt( wchar_t p_char, Size const & p_size, Position p_position, Size const & p_advance, ByteArray const & p_bitmap );
 		/**
 		 *\~english
 		 *\brief		Loads wanted glyph
@@ -190,7 +190,7 @@ namespace Castor
 		 *\brief		Charge le glyphe voulue
 		 *\param[in]	p_char	Le caractère
 		 */
-		CU_API int LoadGlyph( wchar_t p_char );
+		int LoadGlyph( wchar_t p_char );
 		/**
 		 *\~english
 		 *\brief		Retrieves the glyph of wanted chaaracter

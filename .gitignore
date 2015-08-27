@@ -1,13 +1,12 @@
 /binaries
 /build
 /setup
+/include/Castor3D/RequiredVersion.hpp
 /doc/x86
 /doc/x64
 /source/Samples/CastorViewerSharp/Src/obj
-/.gitattributes
-/data/Ignored
-/data/Scene/Tests
-/source/CMake
 *.csproj
 *.suo
+/.gitattributes
 *.gch
+/data/Ignored

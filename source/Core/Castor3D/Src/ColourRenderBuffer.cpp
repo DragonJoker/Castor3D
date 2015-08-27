@@ -1,4 +1,4 @@
-﻿#include "ColourRenderBuffer.hpp"
+#include "ColourRenderBuffer.hpp"
 
 using namespace Castor;
 

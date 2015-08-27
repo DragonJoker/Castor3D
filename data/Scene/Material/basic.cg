@@ -1,0 +1,30 @@
+float4x4 ProjectionModelViewMatrix;
+sampler2D in_Texture;
+
+struct VtxInput
+{
+	float4 Position	:	POSITION0;
+	float2 Texture	:	TEXCOORD0;
+};
+
+struct VtxOutput
+{
+	float4 Position	: 	POSITION0;
+	float2 Texture	:	TEXCOORD0;
+};
+
+VtxOutput mainVx( in VtxInput p_input)
+{
+	VtxOutput l_output;
+	l_output.Position = mul( p_input.Position, ProjectionModelViewMatrix);
+	l_output.Texture = p_input.Texture;
+	return l_output;
+}
+
+float4 mainPx( in VtxOutput p_input) : COLOR
+{
+	float4 l_output = float4( 0.0, 0.0, 0.0, 1.0);
+	l_output = tex2D( in_Texture, p_input.Texture);
+	l_output.a = 1.0;
+	return l_output;
+};

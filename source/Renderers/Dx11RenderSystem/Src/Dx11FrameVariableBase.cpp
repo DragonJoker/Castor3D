@@ -6,8 +6,8 @@ using namespace Castor3D;
 namespace Dx11Render
 {
 	DxFrameVariableBase::DxFrameVariableBase( DxRenderSystem * p_pRenderSystem )
-		: m_bPresentInProgram( true )
-		, m_pRenderSystem( p_pRenderSystem )
+		:	m_bPresentInProgram( true )
+		,	m_pRenderSystem( p_pRenderSystem )
 	{
 	}
 

@@ -1,4 +1,4 @@
-ï»¿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -32,8 +32,8 @@ namespace Castor
 	\brief		Font character (glyph) representation
 	\remark		Holds position, size and data of a character
 	\~french
-	\brief		ReprÃ©sentation d'un caractÃ¨re d'une Font (glyphe)
-	\remark		Contient la position, taille et pixels d'un caractÃ¨re
+	\brief		Représentation d'un caractère d'une Font (glyphe)
+	\remark		Contient la position, taille et pixels d'un caractère
 	*/
 	class Glyph
 	{
@@ -48,26 +48,26 @@ namespace Castor
 		 *\param[in]	p_bitmap	The glyph image
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_wcChar	Le caractÃ¨re de la glyphe
+		 *\param[in]	p_wcChar	Le caractère de la glyphe
 		 *\param[in]	p_size		Les dimensions de la glyphe
 		 *\param[in]	p_position	La position de la glyphe
-		 *\param[in]	p_advance	Nombre de pixels pour placer le caractÃ¨re suivant
+		 *\param[in]	p_advance	Nombre de pixels pour placer le caractère suivant
 		 *\param[in]	p_bitmap	L'image de la glyphe
 		 */
-		CU_API Glyph( wchar_t p_wcChar = 0, Size const & p_size = Size(), Position const & p_position = Position(), Size const & p_advance = Size(), ByteArray const & p_bitmap = ByteArray() );
+		Glyph( wchar_t p_wcChar = 0, Size const & p_size = Size(), Position const & p_position = Position(), Size const & p_advance = Size(), ByteArray const & p_bitmap = ByteArray() );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		CU_API ~Glyph();
+		~Glyph();
 		/**
 		 *\~english
 		 *\brief		Retrieves the glyph character
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le caractÃ¨re de la glyphe
+		 *\brief		Récupère le caractère de la glyphe
 		 *\return		La valeur
 		 */
 		inline wchar_t GetCharacter()const
@@ -79,7 +79,7 @@ namespace Castor
 		 *\brief		Sets the glyph dimensions
 		 *\param[in]	p_size	The glyph dimensions
 		 *\~french
-		 *\brief		DÃ©finit les dimensions de la glyphe
+		 *\brief		Définit les dimensions de la glyphe
 		 *\param[in]	p_size	Les dimensions de la glyphe
 		 */
 		inline void SetSize( Size const & p_size )
@@ -91,7 +91,7 @@ namespace Castor
 		 *\brief		Retrieves the glyph dimensions
 		 *\return		The glyph dimensions
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re les dimensions de la glyphe
+		 *\brief		Récupère les dimensions de la glyphe
 		 *\return		Les dimensions de la glyphe
 		 */
 		inline Size const & GetSize()const
@@ -103,7 +103,7 @@ namespace Castor
 		 *\brief		Sets the glyph position
 		 *\param[in]	p_position	The glyph position
 		 *\~french
-		 *\brief		DÃ©finit la position de la glyphe
+		 *\brief		Définit la position de la glyphe
 		 *\param[in]	p_position	La position de la glyphe
 		 */
 		inline void SetPosition( Position const & p_position )
@@ -115,7 +115,7 @@ namespace Castor
 		 *\brief		Retrieves the glyph position
 		 *\return		The glyph position
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re la position de la glyphe
+		 *\brief		Récupère la position de la glyphe
 		 *\return		La position de la glyphe
 		 */
 		inline Position const & GetPosition()const
@@ -127,7 +127,7 @@ namespace Castor
 		 *\brief		Sets the number of pixels to go before drawing next glyph
 		 *\param[in]	p_advance	The value
 		 *\~french
-		 *\brief		DÃ©finit le nombre de pixels pour place la prchaine glyphe
+		 *\brief		Définit le nombre de pixels pour place la prchaine glyphe
 		 *\param[in]	p_advance	La valeur
 		 */
 		inline void SetAdvance( Size const & p_advance )
@@ -139,7 +139,7 @@ namespace Castor
 		 *\brief		Retrieves the number of pixels to go before drawing next glyph
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le nombre de pixels pour place la prchaine glyphe
+		 *\brief		Récupère le nombre de pixels pour place la prchaine glyphe
 		 *\return		La valeur
 		 */
 		inline Size const & GetAdvance()const
@@ -151,7 +151,7 @@ namespace Castor
 		 *\brief		Sets the glyph image
 		 *\param[in]	p_bitmap	The image of the glyph
 		 *\~french
-		 *\brief		DÃ©finit l'image de la glyphe
+		 *\brief		Définit l'image de la glyphe
 		 *\param[in]	p_bitmap	L'image de la glyphe
 		 */
 		inline void SetBitmap( ByteArray const & p_bitmap )
@@ -163,8 +163,8 @@ namespace Castor
 		 *\brief		Retrieves the glyph image
 		 *\return		A constant reference to the image of the glyph
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re l'image de la glyphe
-		 *\return		Une rÃ©fÃ©rence constante sur l'image de la glyphe
+		 *\brief		Récupère l'image de la glyphe
+		 *\return		Une référence constante sur l'image de la glyphe
 		 */
 		inline ByteArray const & GetBitmap()const
 		{
@@ -176,7 +176,7 @@ namespace Castor
 		 *\param[in]	x, y	The glyph position decal
 		 *\~french
 		 *\brief		Ajuste la position de la glyphe
-		 *\param[in]	x, y	Le dÃ©calage de position de la glyphe
+		 *\param[in]	x, y	Le décalage de position de la glyphe
 		 */
 		inline void AdjustPosition( uint32_t x, uint32_t y )
 		{
@@ -188,11 +188,11 @@ namespace Castor
 		Position m_position;
 		//!\~english Glyph dimensions	\~french Dimensions de la glyphe
 		Size m_size;
-		//!\~english Pixels to advance in order to go next character	\~french Nombre de pixels pour placer le caractÃ¨re suivant
+		//!\~english Pixels to advance in order to go next character	\~french Nombre de pixels pour placer le caractère suivant
 		Size m_advance;
 		//!\~english Glyph image	\~french Image de la glyphe
 		ByteArray m_bitmap;
-		//!\~english Glyph character	\~french CaractÃ¨re de la glyphe
+		//!\~english Glyph character	\~french Caractère de la glyphe
 		wchar_t m_wcCharacter;
 	};
 }

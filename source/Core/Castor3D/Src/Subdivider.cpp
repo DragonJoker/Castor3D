@@ -1,9 +1,7 @@
-﻿#include "Subdivider.hpp"
-
-#include "Engine.hpp"
-#include "Face.hpp"
+#include "Subdivider.hpp"
 #include "SubdivisionFrameEvent.hpp"
 #include "Submesh.hpp"
+#include "Face.hpp"
 #include "Vertex.hpp"
 
 #include <Line3D.hpp>
@@ -26,11 +24,32 @@ namespace Castor3D
 		Cleanup();
 	}
 
-	void Subdivider::Subdivide( SubmeshSPtr p_pSubmesh, int p_occurences, bool p_bGenerateBuffers, bool p_bThreaded )
+	void Subdivider::Subdivide( SubmeshSPtr p_pSubmesh, Point3r * p_pCenter, bool p_bGenerateBuffers, bool p_bThreaded )
 	{
-		for ( int i = 0; i < p_occurences; ++i )
+		m_submesh = p_pSubmesh;
+		m_bGenerateBuffers = p_bGenerateBuffers;
+
+		if ( !p_pCenter )
 		{
-			DoSubdivide( p_pSubmesh, p_bGenerateBuffers, p_bThreaded );
+			m_submesh->ComputeContainers();
+			m_ptDivisionCenter = m_submesh->GetCubeBox().GetCenter();
+		}
+		else
+		{
+			m_ptDivisionCenter = *p_pCenter;
+		}
+
+		DoInitialise();
+		m_bThreaded = p_bThreaded;
+
+		if ( p_bThreaded )
+		{
+			m_pThread = std::make_shared< std::thread >( DoSubdivideThreaded, this );
+		}
+		else
+		{
+			DoSubdivide();
+			DoSwapBuffers();
 		}
 	}
 
@@ -72,9 +91,9 @@ namespace Castor3D
 		return l_pReturn;
 	}
 
-	int Subdivider::IsInMyPoints( Point3r const & p_vertex, double p_precision )
+	int Subdivider::IsInMyPoints( Point3r const & p_vertex )
 	{
-		return m_submesh->IsInMyPoints( p_vertex, p_precision );
+		return m_submesh->IsInMyPoints( p_vertex );
 	}
 
 	uint32_t Subdivider::GetNbPoints()const
@@ -85,51 +104,6 @@ namespace Castor3D
 	BufferElementGroupSPtr Subdivider::GetPoint( uint32_t i )const
 	{
 		return m_submesh->GetPoint( i );
-	}
-
-	Castor3D::BufferElementGroupSPtr Subdivider::DoTryAddPoint( Point3r const & p_point )
-	{
-		std::unique_lock< std::recursive_mutex > l_lock( m_mutex );
-		int l_index = -1;
-		Castor3D::BufferElementGroupSPtr l_return;
-
-		if ( ( l_index = IsInMyPoints( p_point, 0.001 ) ) < 0 )
-		{
-			l_return = AddPoint( p_point );
-		}
-		else
-		{
-			l_return = GetPoint( l_index );
-			Coords3r l_coords;
-			Castor3D::Vertex::GetPosition( *l_return, l_coords );
-
-			if ( l_coords != p_point )
-			{
-				Castor3D::Vertex::SetPosition( *l_return, ( l_coords + p_point ) / real( 2 ) );
-			}
-		}
-
-		return l_return;
-	}
-
-	void Subdivider::DoSubdivide( SubmeshSPtr p_pSubmesh, bool p_bGenerateBuffers, bool p_bThreaded )
-	{
-		m_submesh = p_pSubmesh;
-		m_bGenerateBuffers = p_bGenerateBuffers;
-		m_submesh->ComputeContainers();
-
-		DoInitialise();
-		m_bThreaded = p_bThreaded;
-
-		if ( p_bThreaded )
-		{
-			m_pThread = std::make_shared< std::thread >( std::bind( &Subdivider::DoSubdivideThreaded, this ) );
-		}
-		else
-		{
-			DoSubdivide();
-			DoSwapBuffers();
-		}
 	}
 
 	void Subdivider::DoInitialise()
@@ -155,32 +129,32 @@ namespace Castor3D
 		if ( m_bGenerateBuffers && !m_bThreaded )
 		{
 			m_submesh->GenerateBuffers();
-			m_submesh->Initialise();
+			m_submesh->GetRenderer()->Initialise();
 		}
 
 		Cleanup();
 	}
 
-	uint32_t Subdivider::DoSubdivideThreaded()
+	uint32_t Subdivider::DoSubdivideThreaded( Subdivider * p_pThis )
 	{
-		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutex );
-		DoSubdivide();
-		DoSwapBuffers();
+		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( p_pThis->m_mutex );
+		p_pThis->DoSubdivide();
+		p_pThis->DoSwapBuffers();
 
-		if ( m_bGenerateBuffers )
+		if ( p_pThis->m_bGenerateBuffers )
 		{
-			m_submesh->GetEngine()->PostEvent( std::make_shared< SubdivisionFrameEvent >( m_submesh ) );
+			p_pThis->m_submesh->GetEngine()->PostEvent( std::make_shared< SubdivisionFrameEvent >( p_pThis->m_submesh ) );
 		}
 
-		if ( m_pfnSubdivisionEnd )
+		if ( p_pThis->m_pfnSubdivisionEnd )
 		{
-			m_pfnSubdivisionEnd( m_pArg, this );
+			p_pThis->m_pfnSubdivisionEnd( p_pThis->m_pArg, p_pThis );
 		}
 
 		return 0;
 	}
 
-	void Subdivider::DoSetTextCoords( BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_d, BufferElementGroup & p_e, BufferElementGroup & p_f )
+	void Subdivider::DoSetTextCoords( FaceSPtr p_face, BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_d, BufferElementGroup & p_e, BufferElementGroup & p_f )
 	{
 		Point3r l_aTex;
 		Point3r l_bTex;
@@ -188,27 +162,51 @@ namespace Castor3D
 		Vertex::GetTexCoord( p_a, l_aTex );
 		Vertex::GetTexCoord( p_b, l_bTex );
 		Vertex::GetTexCoord( p_c, l_cTex );
-		Vertex::SetTexCoord( p_d, ( l_aTex + l_bTex ) / real( 2.0 ) );
-		Vertex::SetTexCoord( p_e, ( l_bTex + l_cTex ) / real( 2.0 ) );
-		Vertex::SetTexCoord( p_f, ( l_aTex + l_cTex ) / real( 2.0 ) );
+		Vertex::SetTexCoord( p_d, l_aTex + ( l_bTex - l_aTex ) / real( 2.0 ) );
+		Vertex::SetTexCoord( p_e, l_bTex + ( l_cTex - l_bTex ) / real( 2.0 ) );
+		Vertex::SetTexCoord( p_f, l_aTex + ( l_cTex - l_aTex ) / real( 2.0 ) );
 		AddFace( p_a.GetIndex(), p_d.GetIndex(), p_f.GetIndex() );
 		AddFace( p_b.GetIndex(), p_e.GetIndex(), p_d.GetIndex() );
 		AddFace( p_c.GetIndex(), p_f.GetIndex(), p_e.GetIndex() );
 		AddFace( p_d.GetIndex(), p_e.GetIndex(), p_f.GetIndex() );
 	}
 
-	void Subdivider::DoSetTextCoords( BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_p )
+	void Subdivider::DoComputeCenterFrom( Point3r const & p_a, Point3r const & p_b, Point3r const & p_ptANormal, Point3r const & p_ptBNormal, Point3r & p_ptResult )
 	{
-		Point3r l_aTex;
-		Point3r l_bTex;
-		Point3r l_cTex;
-		Vertex::GetTexCoord( p_a, l_aTex );
-		Vertex::GetTexCoord( p_b, l_bTex );
-		Vertex::GetTexCoord( p_c, l_cTex );
-		Vertex::SetTexCoord( p_p, ( l_aTex + l_bTex + l_cTex ) / real( 3.0 ) );
-		AddFace( p_a.GetIndex(), p_b.GetIndex(), p_p.GetIndex() );
-		AddFace( p_b.GetIndex(), p_c.GetIndex(), p_p.GetIndex() );
-		AddFace( p_c.GetIndex(), p_a.GetIndex(), p_p.GetIndex() );
+		/**/
+		Line3D< real > l_aEq = Line3D< real >::FromPointAndSlope( p_a, p_ptANormal );
+		Line3D< real > l_bEq = Line3D< real >::FromPointAndSlope( p_b, p_ptBNormal );
+		l_aEq.Intersects( l_bEq, p_ptResult );
+		/**/
+		/*
+			// Projection sur XY => R�cup�ration du point d'intersection (X, Y) y = ax + b
+			Line3D< real > l_aEq = Line3D< real >::FromPointAndSlope( p_a, p_ptANormal );
+			Line3D< real > l_bEq = Line3D< real >::FromPointAndSlope( p_b, p_ptBNormal );
+			Point3r l_pt1;
+
+			if( l_aEq.Intersects( l_bEq, l_pt1 ) )
+			{
+				// Projection sur XZ => R�cup�ration du point d'intersection (X, Z) z = ax + b
+				l_aEq = Line3D< real >::FromPointAndSlope( p_a, p_ptANormal );
+				l_bEq = Line3D< real >::FromPointAndSlope( p_b, p_ptBNormal );
+				Point3r l_pt2;
+
+				if( l_aEq.Intersects( l_bEq, l_pt2 ) )
+				{
+					p_ptResult[0] = l_pt1[0] + (l_pt2[0] - l_pt1[0]) / 2.0f;
+					p_ptResult[1] = l_pt1[1] + (l_pt2[1] - l_pt1[1]) / 2.0f;
+					p_ptResult[2] = l_pt1[2] + (l_pt2[2] - l_pt1[2]) / 2.0f;
+				}
+			}
+		/**/
+	}
+
+	void Subdivider::DoComputeCenterFrom( Point3r const & p_a, Point3r const & p_b, Point3r const & p_c, Point3r const & p_ptANormal, Point3r const & p_ptBNormal, Point3r const & p_ptCNormal, Point3r & p_ptResult )
+	{
+		PlaneEquation<real> ABO( p_a, p_ptANormal, p_ptBNormal );
+		PlaneEquation<real> BCO( p_b, p_ptBNormal, p_ptCNormal );
+		PlaneEquation<real> CAO( p_c, p_ptCNormal, p_ptANormal );
+		ABO.Intersects( BCO, CAO, p_ptResult );
 	}
 }
 

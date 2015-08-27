@@ -1,4 +1,4 @@
-ï»¿/*
+/*
 This source file is part of ProceduralGenerator (https://sourceforge.net/projects/proceduralgene/)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -31,7 +31,7 @@ namespace Castor
 	\~french
 	\brief		Buffer de pixels avec le format de pixel en argument template
 	*/
-	template< TPL_PIXEL_FORMAT PF >
+	template< ePIXEL_FORMAT PF >
 	class PxBuffer
 		: public PxBufferBase
 	{
@@ -51,8 +51,8 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_ptSize		Les dimensions voulues pour le buffer
-		 *\param[in]	p_pBuffer		Buffer de donnÃ©es
-		 *\param[in]	p_eBufferFormat	Format des pixels du buffer de donnÃ©es
+		 *\param[in]	p_pBuffer		Buffer de données
+		 *\param[in]	p_eBufferFormat	Format des pixels du buffer de données
 		 */
 		PxBuffer( Size const & p_ptSize, uint8_t const * p_pBuffer = NULL, ePIXEL_FORMAT p_eBufferFormat = ePIXEL_FORMAT_A8R8G8B8 );
 		/**
@@ -61,7 +61,7 @@ namespace Castor
 		 *\param[in]	p_pixelBuffer	The PxBuffer object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_pixelBuffer	L'objet PxBuffer Ã  copier
+		 *\param[in]	p_pixelBuffer	L'objet PxBuffer à copier
 		 */
 		PxBuffer( PxBuffer const & p_pixelBuffer );
 		/**
@@ -69,8 +69,8 @@ namespace Castor
 		 *\brief		Move Constructor
 		 *\param[in]	p_pixelBuffer	The PxBuffer object to move
 		 *\~french
-		 *\brief		Constructeur par dÃ©placement
-		 *\param[in]	p_pixelBuffer	L'objet PxBuffer Ã  dÃ©placer
+		 *\brief		Constructeur par déplacement
+		 *\param[in]	p_pixelBuffer	L'objet PxBuffer à déplacer
 		 */
 		PxBuffer( PxBuffer && p_pixelBuffer );
 		/**
@@ -86,9 +86,9 @@ namespace Castor
 		 *\param[in]	p_pixelBuffer	The PxBuffer object to copy
 		 *\return		A reference to this PxBuffer object
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation par copie
-		 *\param[in]	p_pixelBuffer	L'objet PxBuffer Ã  copier
-		 *\return		Une rÃ©fÃ©rence sur cet objet PxBuffer
+		 *\brief		Opérateur d'affectation par copie
+		 *\param[in]	p_pixelBuffer	L'objet PxBuffer à copier
+		 *\return		Une référence sur cet objet PxBuffer
 		 */
 		PxBuffer & operator =( PxBuffer const & p_pixelBuffer );
 		/**
@@ -97,9 +97,9 @@ namespace Castor
 		 *\param[in]	p_pixelBuffer	The PxBuffer object to move
 		 *\return		A reference to this PxBuffer object
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation  par dÃ©placement
-		 *\param[in]	p_pixelBuffer	L'objet PxBuffer Ã  dÃ©placer
-		 *\return		Une rÃ©fÃ©rence sur cet objet PxBuffer
+		 *\brief		Opérateur d'affectation  par déplacement
+		 *\param[in]	p_pixelBuffer	L'objet PxBuffer à déplacer
+		 *\return		Une référence sur cet objet PxBuffer
 		 */
 		PxBuffer & operator =( PxBuffer && p_pixelBuffer );
 		/**
@@ -109,12 +109,12 @@ namespace Castor
 		 *\param[in]	p_uiIndex	The wanted index
 		 *\return		A constant reference on column at wanted index
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re la colonne Ã  l'index donnÃ©
-		 *\remark		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous Ã  un crash
+		 *\brief		Récupère la colonne à l'index donné
+		 *\remark		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
 		 *\param[in]	p_uiIndex	L'index
-		 *\return		Une rÃ©fÃ©rence constante sur la colonne Ã  l'index voulu
+		 *\return		Une référence constante sur la colonne à l'index voulu
 		 */
-		inline column const & operator []( uint32_t p_uiIndex )const
+		inline	column const & operator []( uint32_t p_uiIndex )const
 		{
 			do_init_column( p_uiIndex );
 			return m_column;
@@ -126,12 +126,12 @@ namespace Castor
 		 *\param[in]	p_uiIndex	The wanted index
 		 *\return		A reference on column at wanted index
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re la colonne Ã  l'index donnÃ©
-		 *\remark		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous Ã  un crash
+		 *\brief		Récupère la colonne à l'index donné
+		 *\remark		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
 		 *\param[in]	p_uiIndex	L'index
-		 *\return		Une rÃ©fÃ©rence sur la colonne Ã  l'index voulu
+		 *\return		Une référence sur la colonne à l'index voulu
 		 */
-		inline column & operator []( uint32_t p_uiIndex )
+		inline	column & operator []( uint32_t p_uiIndex )
 		{
 			do_init_column( p_uiIndex );
 			return m_column;
@@ -141,8 +141,8 @@ namespace Castor
 		 *\brief		Swaps this buffer's data with the given one's
 		 *\param[in]	p_pixelBuffer	The buffer to swap
 		 *\~french
-		 *\brief		Echange les donnÃ©es de ce buffer avec celles du buffer donnÃ©
-		 *\param[in]	p_pixelBuffer	Le buffer Ã  Ã©changer
+		 *\brief		Echange les données de ce buffer avec celles du buffer donné
+		 *\param[in]	p_pixelBuffer	Le buffer à échanger
 		 */
 		virtual void swap( PxBuffer & p_pixelBuffer );
 		/**
@@ -152,9 +152,9 @@ namespace Castor
 		 *\param[in]	p_eBufferFormat	Data buffer's pixels format
 		 *\return
 		 *\~french
-		 *\brief		Convertit et assigne les donnÃ©es du buffer donnÃ© Ã  ce buffer
-		 *\param[in]	p_pBuffer		Buffer de donnÃ©es
-		 *\param[in]	p_eBufferFormat	Format des pixels du buffer de donnÃ©es
+		 *\brief		Convertit et assigne les données du buffer donné à ce buffer
+		 *\param[in]	p_pBuffer		Buffer de données
+		 *\param[in]	p_eBufferFormat	Format des pixels du buffer de données
 		 *\return
 		 */
 		virtual void assign( std::vector< uint8_t > const & p_pBuffer, ePIXEL_FORMAT p_eBufferFormat );
@@ -163,35 +163,44 @@ namespace Castor
 		 *\brief		Retrieves the pointer on constant datas
 		 *\return		The pointer
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le pointeur sur les donnÃ©es constantes
-		 *\return		Les donnÃ©es
+		 *\brief		Récupère le pointeur sur les données constantes
+		 *\return		Les données
 		 */
-		virtual uint8_t const * const_ptr()const;
+		virtual uint8_t const * const_ptr()const
+		{
+			return m_pBuffer;
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the pointer on datas
 		 *\return		The pointer
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le pointeur sur les donnÃ©es
-		 *\return		Les donnÃ©es
+		 *\brief		Récupère le pointeur sur les données
+		 *\return		Les données
 		 */
-		virtual uint8_t * ptr();
+		virtual uint8_t * ptr()
+		{
+			return m_pBuffer;
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the total size of the buffer
 		 *\return		count() * pixel_definitions< PF >::Size
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re la taille totale du buffer
+		 *\brief		Récupère la taille totale du buffer
 		 *\return		count() * pixel_definitions< PF >::Size
 		 */
-		virtual uint32_t size()const;
+		virtual uint32_t size()const
+		{
+			return count() * pixel_definitions< PF >::Size;
+		}
 		/**
 		 *\~english
 		 *\brief		Creates a new buffer with same values as this one
 		 *\return		The created buffer
 		 *\~french
-		 *\brief		CrÃ©e un nouveau buffer avec les mÃªmes valeurs
-		 *\return		Le buffer crÃ©Ã©
+		 *\brief		Crée un nouveau buffer avec les mêmes valeurs
+		 *\return		Le buffer créé
 		 */
 		virtual std::shared_ptr< PxBufferBase >	clone()const;
 		/**
@@ -200,9 +209,9 @@ namespace Castor
 		 *\param[in]	x, y	The pixel position
 		 *\return		The pixel data
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re les donnÃ©es du pixel Ã  la position donnÃ©e
+		 *\brief		Récupère les données du pixel à la position donnée
 		 *\param[in]	x, y	The pixel position
-		 *\return		Les donnÃ©es du pixel
+		 *\return		Les données du pixel
 		 */
 		virtual uint8_t * get_at( uint32_t x, uint32_t y );
 		/**
@@ -211,32 +220,32 @@ namespace Castor
 		 *\param[in]	x, y	The pixel position
 		 *\return		The pixel constant data
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re les donnÃ©es du pixel Ã  la position donnÃ©e
+		 *\brief		Récupère les données du pixel à la position donnée
 		 *\param[in]	x, y	The pixel position
-		 *\return		Les donnÃ©es constantes du pixel
+		 *\return		Les données constantes du pixel
 		 */
 		virtual uint8_t const * get_at( uint32_t x, uint32_t y )const;
 		/**
 		 *\~english
 		 *\brief		Makes a vertical swap of pixels
 		 *\~french
-		 *\brief		Effectue un Ã©change vertical des pixels
+		 *\brief		Effectue un échange vertical des pixels
 		 */
 		virtual void flip();
 		/**
 		 *\~english
 		 *\brief		Makes a horizontal swap of pixels
 		 *\~french
-		 *\brief		Effectue un Ã©change horizontal des pixels
+		 *\brief		Effectue un échange horizontal des pixels
 		 */
 		virtual void mirror();
 
 	private:
-		virtual void do_init_column( uint32_t p_uiColumn )const;
+		virtual void do_init_column( uint32_t p_uiColumn );
 
 	private:
 		pixel m_pixel;
-		mutable column m_column;
+		column m_column;
 	};
 }
 

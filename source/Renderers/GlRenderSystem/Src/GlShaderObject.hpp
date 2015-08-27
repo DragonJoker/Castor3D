@@ -25,8 +25,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GlRender
 {
 	class GlShaderObject
-		: public Castor3D::ShaderObjectBase
-		, public Castor::NonCopyable
+		:	public Castor3D::ShaderObjectBase
+		,	public Castor::NonCopyable
 	{
 		friend class GlShaderProgram;
 		typedef std::map< Castor::String, uint32_t > UIntStrMap;
@@ -55,6 +55,14 @@ namespace GlRender
 		 * Compiles program
 		 */
 		virtual bool Compile();
+		/**
+		 * Compiles program
+		 */
+		inline void Bind() {}
+		/**
+		 * Compiles program
+		 */
+		inline void Unbind() {}
 		/**
 		 * Get compiler messages
 		 */
@@ -121,16 +129,6 @@ namespace GlRender
 		 *\param[in]	p_mtxValue	La valeur du paramètre
 		 */
 		virtual void SetParameter( Castor::String const & p_strName, Castor::Matrix3x3r const & p_mtxValue );
-
-	private:
-		/**
-		 * Compiles program
-		 */
-		virtual void DoBind() {}
-		/**
-		 * Compiles program
-		 */
-		virtual void DoUnbind() {}
 	};
 }
 

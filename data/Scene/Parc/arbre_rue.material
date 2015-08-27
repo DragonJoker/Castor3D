@@ -1,0 +1,92 @@
+
+material arbre_rue/branches
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.490196 0.490196 0.490196 1
+			specular 0.156863 0.156863 0.156863 1 1
+			emissive 0.392157 0.392157 0.392157 1
+			alpha_rejection greater 192
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture arbre_rue_branche.png
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material arbre_rue/tronc
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.0784314 0.0784314 0.0784314 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture arbre_rue_tronc.jpg
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material arbre_rue/terre
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.0392157 0.0392157 0.0392157 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture arbre_rue_terre.jpg
+			}
+		}
+
+	}
+
+}
+
+material arbre_rue/bac
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.0392157 0.0392157 0.0392157 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture arbre_rue_bac.jpg
+			}
+		}
+
+	}
+
+}

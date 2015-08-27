@@ -19,7 +19,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CU_TEXTURE_UNIT_H___
 
 #include "Castor3DPrerequisites.hpp"
+#include "Renderable.hpp"
 #include "BinaryParser.hpp"
+#include "TextureRenderer.hpp"
 
 #pragma warning( push )
 #pragma warning( disable:4251 )
@@ -39,6 +41,7 @@ namespace Castor3D
 	\remark		Une unité de texture se compose d'une texture avec des options telles que son canal, modes de mélange, transformations.
 	*/
 	class C3D_API TextureUnit
+		:	public Renderable< TextureUnit, TextureRenderer >
 	{
 	public:
 		/*!
@@ -167,14 +170,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Applique la texture
 		 */
-		void Bind();
+		virtual void Render();
 		/**
 		 *\~english
 		 *\brief		Removes the texture unit from the stack, in order not to interfere with other ones
 		 *\~french
 		 *\brief		Desactive la texture
 		 */
-		void Unbind();
+		virtual void EndRender();
 		/**
 		 *\~english
 		 *\brief		Uploads current image to the GPU
@@ -632,21 +635,9 @@ namespace Castor3D
 		{
 			return m_pRenderTarget.lock();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Engine
-		 *\~french
-		 *\brief		Récupère l'Engine
-		 */
-		virtual Engine * GetEngine()const
-		{
-			return m_pEngine;
-		}
 
 	private:
 		friend class TextureRenderer;
-		//!\~english The core engine	\~french Le moteur
-		Engine * m_pEngine;
 		//!\~english The unit index inside it's pass	\~french L'index de l'unité dans sa passe
 		uint32_t m_uiIndex;
 		//!\see eTEXTURE_CHANNEL	\~english The unit channel inside it's pass	\~french Le canal de l'unité dans sa passe

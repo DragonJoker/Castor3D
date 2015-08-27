@@ -30,6 +30,10 @@ namespace Loop
 	*/
 	class Subdivider : public Castor3D::Subdivider
 	{
+	private:
+		VertexPtrUIntMap m_mapVertex;
+		FaceEdgesPtrArray m_facesEdges;
+
 	public:
 		Subdivider();
 		virtual ~Subdivider();
@@ -64,11 +68,7 @@ namespace Loop
 		virtual void DoInitialise();
 		virtual void DoSubdivide();
 		void DoDivide();
-		void DoAverage();
-
-	private:
-		VertexPtrUIntMap m_mapVertex;
-		FaceEdgesPtrArray m_facesEdges;
+		void DoAverage( Castor::Point3r const & p_center );
 	};
 }
 

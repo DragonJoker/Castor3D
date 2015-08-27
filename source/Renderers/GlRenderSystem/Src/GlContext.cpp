@@ -7,7 +7,6 @@
 #endif
 
 #include "GlRenderSystem.hpp"
-#include "GlShaderSource.hpp"
 
 #include <RenderWindow.hpp>
 #include <ShaderProgram.hpp>
@@ -48,70 +47,56 @@ namespace GlRender
 
 	bool GlContext::DoInitialise()
 	{
-		using namespace GLSL;
 		m_pGlRenderSystem = static_cast< GlRenderSystem * >( m_pRenderSystem );
 		m_bInitialised = m_pImplementation->Initialise( m_pWindow );
 
 		if ( m_bInitialised )
 		{
 			SetCurrent();
+			GLSL::VariablesBase * l_pVariables = GLSL::GetVariables( m_gl );
+			GLSL::ConstantsBase * l_pConstants = GLSL::GetConstants( m_gl );
+			std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::GetKeywords( m_gl );
 
 			String l_strVtxShader;
-			{
-				// Vertex shader
-				GlslWriter l_writer( m_gl, eSHADER_TYPE_VERTEX );
-				l_writer << Version() << Endl();
-
-				UBO_MATRIX( l_writer );
-
-				// Shader inputs
-				ATTRIBUTE( l_writer, Vec4, vertex );
-				ATTRIBUTE( l_writer, Vec2, texture );
-
-				// Shader outputs
-				OUT( l_writer, Vec2, vtx_texture );
-
-				l_writer.Implement_Function< void >( cuT( "main" ), [&]()
-				{
-					vtx_texture = texture;
-					BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( vertex.x(), vertex.y(), vertex.z(), 1.0 );
-				} );
-				l_strVtxShader = l_writer.Finalise();
-			}
-
+			l_strVtxShader += l_pKeywords->GetVersion();
+			l_strVtxShader += l_pKeywords->GetAttribute( 0 )	+	cuT( "	vec4	vertex;\n"	);
+			l_strVtxShader += l_pKeywords->GetAttribute( 1 )	+	cuT( "	vec2	texture;\n"	);
+			l_strVtxShader += l_pKeywords->GetOut()				+	cuT( "	vec2	vtx_texture;\n"	);
+			l_strVtxShader += l_pConstants->Matrices();
+			l_strVtxShader +=								cuT( "void main(void)\n"	);
+			l_strVtxShader +=								cuT( "{\n"	);
+			l_strVtxShader +=								cuT( "	vtx_texture 	= texture.xy;\n"	);
+			l_strVtxShader +=								cuT( "	gl_Position 	= c3d_mtxProjectionModelView * vertex;\n"	);
+			l_strVtxShader +=								cuT( "}\n"	);
 			String l_strPxlShader;
-			{
-				GlslWriter l_writer( m_gl, eSHADER_TYPE_PIXEL );
-				l_writer << Version() << Endl();
-
-				// Shader inputs
-				UNIFORM( l_writer, Sampler2D, c3d_mapDiffuse );
-				IN( l_writer, Vec2, vtx_texture );
-
-				// Shader outputs
-				LAYOUT( l_writer, Vec4, plx_v4FragColor );
-
-				l_writer.Implement_Function< void >( cuT( "main" ), [&]()
-				{
-					plx_v4FragColor = texture2D( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) );
-				} );
-				l_strPxlShader = l_writer.Finalise();
-			}
-
+			l_strPxlShader += l_pKeywords->GetVersion();
+			l_strPxlShader += l_pKeywords->GetIn()		+	cuT( "	vec2	vtx_texture;\n"	);
+			l_strPxlShader +=								cuT( "uniform sampler2D	c3d_mapDiffuse;\n"	);
+			l_strPxlShader += l_pKeywords->GetPixelOut();
+			l_strPxlShader +=								cuT( "void main()\n"	);
+			l_strPxlShader +=								cuT( "{\n"	);
+			l_strPxlShader +=								cuT( "	" ) + l_pKeywords->GetPixelOutputName() + cuT( " = <texture2D>( c3d_mapDiffuse, vtx_texture );\n"	);
+			l_strPxlShader +=								cuT( "}\n"	);
+			GLSL::ConstantsBase::Replace( l_strVtxShader );
+			GLSL::ConstantsBase::Replace( l_strPxlShader );
+			str_utils::replace( l_strPxlShader, cuT( "<texture2D>" ), l_pKeywords->GetTexture2D() );
 			ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
-			l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_2, l_strVtxShader );
-			l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_2, l_strPxlShader );
-			l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_3, l_strVtxShader );
-			l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_3, l_strPxlShader );
-			l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_4, l_strVtxShader );
-			l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_4, l_strPxlShader );
+			l_pProgram->CreateFrameVariable( cuT( "c3d_mapDiffuse" ), eSHADER_TYPE_PIXEL );
+			l_pProgram->SetSource( eSHADER_TYPE_VERTEX,	eSHADER_MODEL_2, l_strVtxShader );
+			l_pProgram->SetSource( eSHADER_TYPE_PIXEL,	eSHADER_MODEL_2, l_strPxlShader );
+			l_pProgram->SetSource( eSHADER_TYPE_VERTEX,	eSHADER_MODEL_3, l_strVtxShader );
+			l_pProgram->SetSource( eSHADER_TYPE_PIXEL,	eSHADER_MODEL_3, l_strPxlShader );
+			l_pProgram->SetSource( eSHADER_TYPE_VERTEX,	eSHADER_MODEL_4, l_strVtxShader );
+			l_pProgram->SetSource( eSHADER_TYPE_PIXEL,	eSHADER_MODEL_4, l_strPxlShader );
 			l_pProgram->Initialise();
+			m_pGeometryBuffers->GetIndexBuffer().Create();
 			m_pGeometryBuffers->GetVertexBuffer().Create();
 			m_pGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, l_pProgram );
+			m_pGeometryBuffers->GetIndexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, l_pProgram );
 			m_pGeometryBuffers->Initialise();
 #if !defined( NDEBUG )
-			l_pProgram->Bind( 0, 1 );
-			l_pProgram->Unbind();
+			l_pProgram->Begin( 0, 1 );
+			l_pProgram->End();
 #endif
 			EndCurrent();
 		}

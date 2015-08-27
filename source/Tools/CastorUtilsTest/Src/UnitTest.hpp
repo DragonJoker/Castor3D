@@ -23,17 +23,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Testing
 {
 	template< typename T >
-	inline std::string to_string( T const & p_value )
+	static inline std::string to_string( T const & p_value )
 	{
 		std::stringstream l_stream;
 		l_stream << p_value;
-		return l_stream.str();
-	}
-	template<>
-	inline std::string to_string< Castor::String >( Castor::String const & p_value )
-	{
-		std::stringstream l_stream;
-		l_stream << Castor::str_utils::to_str( p_value );
 		return l_stream.str();
 	}
 
@@ -72,10 +65,6 @@ namespace Testing
 #	define TEST_CHECK( x ) p_testCount++;if( !(x) ) { p_errCount++;Castor::Logger::LogWarning( "%s - %s, line %d : %s", __FILE__, __FUNCTION__, __LINE__, #x ); }
 #	define TEST_EQUAL( x, y ) p_testCount++;if( !(x == y) ) { p_errCount++;Castor::Logger::LogWarning( "%s - %s, line %d : %s == %s (%s != %s)", __FILE__, __FUNCTION__, __LINE__, std::string( #x ).c_str(), std::string( #y ).c_str(), Testing::to_string( x ).c_str(), Testing::to_string( y ).c_str() ); }
 #	define TEST_REQUIRE( x ) p_testCount++;if( !(x) ) { p_errCount++;throw TestFailed( #x, __FILE__, __FUNCTION__, __LINE__ ); }
-#	define EXECUTE_TEST( test_func, errors, tests ) \
-    Logger::LogMessage( "*** Begin test case %s ***", #test_func );\
-	test_func( errors, tests );\
-    Logger::LogMessage( "*** End test case %s ***", #test_func )
 }
 
 #endif

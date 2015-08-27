@@ -1,4 +1,4 @@
-﻿#include "MeshFactory.hpp"
+#include "MeshFactory.hpp"
 
 #include "Cone.hpp"
 #include "Cube.hpp"

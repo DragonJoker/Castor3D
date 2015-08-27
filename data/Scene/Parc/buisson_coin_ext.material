@@ -1,0 +1,47 @@
+
+material buisson_coin_ext/feuilles
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 1
+			alpha_rejection greater 128
+			depth_bias 1
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture buisson.png
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material buisson_coin_ext/tronc
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture tronc_buisson.jpg
+			}
+		}
+
+	}
+
+}

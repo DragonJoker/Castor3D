@@ -123,24 +123,23 @@ namespace Castor3D
 		{
 			return m_rExternalRadius;
 		}
+		/**
+		 *\~english
+		 *\brief		Stream operator
+		 *\~french
+		 *\brief		Operateur de flux
+		 */
+		inline friend std::ostream & operator <<( std::ostream & o, Torus const & c )
+		{
+			return o << "Torus(" << c.m_uiInternalNbFaces << "," << c.m_uiExternalNbFaces << "," << c.m_rInternalRadius << "," << c.m_rExternalRadius << ")";
+		}
 
 	private:
 		real m_rInternalRadius;
 		real m_rExternalRadius;
 		uint32_t m_uiInternalNbFaces;
 		uint32_t m_uiExternalNbFaces;
-		friend std::ostream & operator <<( std::ostream & o, Torus const & c );
 	};
-	/**
-	 *\~english
-	 *\brief		Stream operator
-	 *\~french
-	 *\brief		Operateur de flux
-	 */
-	inline std::ostream & operator <<( std::ostream & o, Torus const & c )
-	{
-		return o << "Torus(" << c.m_uiInternalNbFaces << "," << c.m_uiExternalNbFaces << "," << c.m_rInternalRadius << "," << c.m_rExternalRadius << ")";
-	}
 }
 
 #pragma warning( pop )

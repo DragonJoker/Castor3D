@@ -48,7 +48,12 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur par défaut
 		 */
-		CU_API CubeBox();
+		CubeBox()
+			:	ContainerBox3D()
+			,	m_min()
+			,	m_max()
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -57,7 +62,12 @@ namespace Castor
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_cube	La cube box à copier
 		 */
-		CU_API CubeBox( CubeBox const & p_cube );
+		CubeBox( CubeBox const & p_cube )
+			:	ContainerBox3D( p_cube	)
+			,	m_min( p_cube.m_min	)
+			,	m_max( p_cube.m_max	)
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Move constructor
@@ -66,7 +76,14 @@ namespace Castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	p_cube	La cube box à déplacer
 		 */
-		CU_API CubeBox( CubeBox && p_cube );
+		CubeBox( CubeBox && p_cube )
+			:	ContainerBox3D( std::move( p_cube )	)
+			,	m_min( std::move( p_cube.m_min )	)
+			,	m_max( std::move( p_cube.m_max )	)
+		{
+			p_cube.m_min = Point3r( 0, 0, 0 );
+			p_cube.m_max = Point3r( 0, 0, 0 );
+		}
 		/**
 		 *\~english
 		 *\brief		Constructor from min and max extents
@@ -77,7 +94,12 @@ namespace Castor
 		 *\param[in]	p_min	Le point minimal
 		 *\param[in]	p_max	Le point maximal
 		 */
-		CU_API CubeBox( Point3r const & p_min, Point3r const & p_max );
+		CubeBox( Point3r const & p_min, Point3r const & p_max )
+			:	ContainerBox3D( p_min + ( p_max - p_min ) / real( 2.0 )	)
+			,	m_min( p_min	)
+			,	m_max( p_max	)
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -88,7 +110,13 @@ namespace Castor
 		 *\param[in]	p_container	Le conteneur à copier
 		 *\return		Une référence sur ce conteneur
 		 */
-		CU_API CubeBox & operator =( CubeBox const & p_container );
+		CubeBox & operator =( CubeBox const & p_container )
+		{
+			ContainerBox3D::operator =( p_container );
+			m_min = p_container.m_min;
+			m_max = p_container.m_max;
+			return *this;
+		}
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -99,7 +127,18 @@ namespace Castor
 		 *\param[in]	p_container	Le conteneur à copier
 		 *\return		Une référence sur ce conteneur
 		 */
-		CU_API CubeBox & operator =( CubeBox && p_container );
+		CubeBox & operator =( CubeBox && p_container )
+		{
+			ContainerBox3D::operator =( std::move( p_container ) );
+
+			if ( this != &p_container )
+			{
+				m_min = std::move( p_container.m_min );
+				m_max = std::move( p_container.m_max );
+			}
+
+			return *this;
+		}
 		/**
 		 *\~english
 		 *\brief		Tests if a vertex is within the container, id est inside it but not on it's limits
@@ -110,7 +149,12 @@ namespace Castor
 		 *\param[in]	p_v	Le point à tester
 		 *\return		\p true si le point est dans le container
 		 */
-		CU_API virtual bool IsWithin( Point3r const & p_v );
+		virtual bool IsWithin( Point3r const & p_v )
+		{
+			return ( p_v[0] > m_min[0] && p_v[0] < m_max[0] )
+				   && ( p_v[1] > m_min[1] && p_v[1] < m_max[1] )
+				   && ( p_v[2] > m_min[2] && p_v[2] < m_max[2] );
+		}
 		/**
 		 *\~english
 		 *\brief		Tests if a vertex is on the limits of this container, and not within
@@ -121,7 +165,16 @@ namespace Castor
 		 *\param[in]	p_v	Le point à tester
 		 *\return		\p true si le point est sur la limite
 		 */
-		CU_API virtual bool IsOnLimits( Point3r const & p_v );
+		virtual bool IsOnLimits( Point3r const & p_v )
+		{
+			return ! IsWithin( p_v )
+				   && ( policy::equals( p_v[0], m_min[0] )
+						|| policy::equals( p_v[0], m_max[0] )
+						|| policy::equals( p_v[1], m_min[1] )
+						|| policy::equals( p_v[1], m_max[1] )
+						|| policy::equals( p_v[2], m_min[2] )
+						|| policy::equals( p_v[2], m_max[2] ) );
+		}
 		/**
 		 *\~english
 		 *\brief		Reinitialises the combo box to the given limits
@@ -132,7 +185,12 @@ namespace Castor
 		 *\param[in]	p_ptMin	Le point minimal
 		 *\param[in]	p_ptMax	Le point maximal
 		 */
-		CU_API void Load( Point3r const & p_ptMin, Point3r const & p_ptMax );
+		void Load( Point3r const & p_ptMin, Point3r const & p_ptMax )
+		{
+			m_min = p_ptMin;
+			m_max = p_ptMax;
+			m_ptCenter = ( m_min + m_max ) / real( 2.0 );
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the min extent

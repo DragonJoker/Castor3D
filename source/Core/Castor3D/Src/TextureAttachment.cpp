@@ -1,4 +1,4 @@
-﻿#include "TextureAttachment.hpp"
+#include "TextureAttachment.hpp"
 #include "FrameBuffer.hpp"
 
 using namespace Castor;

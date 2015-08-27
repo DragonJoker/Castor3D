@@ -30,7 +30,7 @@ void _printMatrixN( float const * p_mtx, uint32_t p_uiSize )
 	}
 
 	l_ostream << std::endl;
-	Logger::LogInfo( l_ostream.str() );
+	Logger::LogMessage( l_ostream.str() );
 }
 
 void _printMatrix4( float const * p_mtx )
@@ -60,7 +60,7 @@ void _printMatrixN( double const * p_mtx, uint32_t p_uiSize )
 	}
 
 	l_ostream << std::endl;
-	Logger::LogInfo( l_ostream.str() );
+	Logger::LogMessage( l_ostream.str() );
 }
 
 void _printMatrix4( double const * p_mtx )
@@ -165,11 +165,11 @@ GlPipelineImplNoShader::~GlPipelineImplNoShader()
 
 void GlPipelineImplNoShader::ShowMatrices( String const & p_strText )
 {
-	Logger::LogInfo( p_strText );
-	Logger::LogInfo( cuT( "OpenGL : " ) );
+	Logger::LogMessage( p_strText );
+	Logger::LogMessage( cuT( "OpenGL : " ) );
 	GetMatrix( GetCurrentMode() );
 	_printMatrix4( g_tmpMatrix );
-	Logger::LogInfo( cuT( "Internal : " ) );
+	Logger::LogMessage( cuT( "Internal : " ) );
 	_printMatrix4( GetCurrentMatrix().const_ptr() );
 }
 
@@ -221,6 +221,36 @@ bool GlPipelineImplNoShader::PopMatrix()
 
 	IPipelineImpl::PopMatrix();
 	return m_gl.PopMatrix();
+}
+
+bool GlPipelineImplNoShader::Translate( Point3r const & p_translate )
+{
+//	ShowMatrices( cuT( "Before Translate" ) );
+	IPipelineImpl::Translate( p_translate );
+	m_gl.Translate( p_translate[0], p_translate[1], p_translate[2] );
+//	ShowMatrices( cuT( "After Translate" ) );
+	return true;
+}
+
+bool GlPipelineImplNoShader::Rotate( Quaternion const & p_rotate )
+{
+//	ShowMatrices( cuT( "Before Rotate" ) );
+	IPipelineImpl::Rotate( p_rotate );
+	Point3r l_axis;
+	Angle l_angle;
+	p_rotate.ToAxisAngle( l_axis, l_angle );
+	m_gl.Rotate( l_angle.Degrees(), l_axis[0], l_axis[1], l_axis[2] );
+//	ShowMatrices( cuT( "After Rotate" ) );
+	return true;
+}
+
+bool GlPipelineImplNoShader::Scale( Point3r const & p_scale )
+{
+//	ShowMatrices( cuT( "Before Scale" ) );
+	IPipelineImpl::Scale( p_scale );
+	m_gl.Scale( p_scale[0], p_scale[1], p_scale[2] );
+//	ShowMatrices( cuT( "After Scale" ) );
+	return true;
 }
 
 bool GlPipelineImplNoShader::MultMatrix( Matrix4x4r const & p_matrix )

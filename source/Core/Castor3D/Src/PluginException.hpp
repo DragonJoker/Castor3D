@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -36,38 +36,8 @@ namespace Castor3D
 		: public Castor::Exception
 	{
 	public:
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_critical		Tells if the exception is critical
-		 *\param[in]	p_description	The exception description
-		 *\param[in]	p_strFile		The file
-		 *\param[in]	p_strFunction	The function
-		 *\param[in]	p_uiLine		The file line
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_critical		Dit si l'exception est critique
-		 *\param[in]	p_description	La description de l'exception
-		 *\param[in]	p_strFile		Le fichier
-		 *\param[in]	p_strFunction	La fonction
-		 *\param[in]	p_uiLine		La ligne dans le fichier
-		 */
 		PluginException( bool p_critical, std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
 		~PluginException()throw();
-		/**
-		 *\~english
-		 *\brief		Tells if the exception is critical
-		 *\return		The status
-		 *\~french
-		 *\brief		Dit si l'exception est critique
-		 *\return		Le statut
-		 */
 		inline bool IsCritical()const
 		{
 			return m_critical;

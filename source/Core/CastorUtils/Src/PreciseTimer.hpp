@@ -19,9 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_PRECISE_TIMER_H___
 
 #include "NonCopyable.hpp"
-#include "PlatformConfig.hpp"
 #include <cstdint>
-#include <chrono>
 
 namespace Castor
 {
@@ -37,8 +35,6 @@ namespace Castor
 	class PreciseTimer
 		: public Castor::NonCopyable
 	{
-		typedef std::chrono::high_resolution_clock clock;
-
 	public:
 		/**
 		 *\~english
@@ -46,34 +42,52 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		CU_API PreciseTimer();
+		PreciseTimer();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		CU_API ~PreciseTimer();
+		~PreciseTimer();
 		/**
 		 *\~english
 		 *\return		The time elapsed since the last call, in seconds
 		 *\~french
 		 *\return		Le temps écoulé depuis le dernier appel, en secondes
 		 */
-		CU_API double TimeS();
+		double TimeS();
 		/**
 		 *\~english
 		 *\return		The time elapsed since the last call, in milliseconds
 		 *\~french
 		 *\return		Le temps écoulé depuis le dernier appel, en millisecondes
 		 */
-		CU_API double TimeMs();
+		double TimeMs();
+		/**
+		 *\~english
+		 *\return		The time elapsed since the last call, in microseconds
+		 *\~french
+		 *\return		Le temps écoulé depuis le dernier appel, en microsecondes
+		 */
+		double TimeUs();
+		/**
+		 *\~english
+		 *\return		The last call time
+		 *\~french
+		 *\return		Le temps du dernier appel
+		 */
+		inline int64_t SaveTime()const
+		{
+			return m_i64PreviousTime;
+		}
 
 	private:
-		clock::time_point DoGetTime()const;
+		long long DoGetTime()const;
 
 	private:
-		clock::time_point m_savedTime;
+		static int64_t sm_i64Frequency;
+		int64_t m_i64PreviousTime;
 	};
 }
 

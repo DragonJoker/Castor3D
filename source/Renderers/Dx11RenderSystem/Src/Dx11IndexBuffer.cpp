@@ -8,7 +8,7 @@ using namespace Castor3D;
 namespace Dx11Render
 {
 	DxIndexBuffer::DxIndexBuffer( HardwareBufferPtr p_pBuffer )
-		: DxBufferObject< uint32_t, ID3D11Buffer >( p_pBuffer )
+		:	DxBufferObject< uint32_t, ID3D11Buffer >( p_pBuffer )
 	{
 	}
 
@@ -37,32 +37,31 @@ namespace Dx11Render
 
 		if ( m_pBuffer )
 		{
-			DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem *>( m_pBuffer->GetRenderSystem() );
-			ID3D11Device * l_pDevice = l_renderSystem->GetDevice();
+			ID3D11Device * l_pDevice = static_cast< DxRenderSystem *>( m_pBuffer->GetRenderSystem() )->GetDevice();
 			UINT l_uiSize = UINT( m_pBuffer->GetSize() );
 
 			if ( l_uiSize > 0 )
 			{
 				HRESULT l_hr;
-				D3D11_BUFFER_DESC l_desc = { 0 };
-				l_desc.ByteWidth = l_uiSize * UINT( sizeof( uint32_t ) );
-				l_desc.Usage = DirectX11::Get( p_eType );
-				l_desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-				l_desc.CPUAccessFlags = DirectX11::GetCpuAccessFlags( p_eType | p_eNature );
-				l_desc.MiscFlags = 0;
-				l_desc.StructureByteStride = 0;//sizeof( uint32_t );
+				D3D11_BUFFER_DESC l_desc	= { 0 };
+				l_desc.ByteWidth			= l_uiSize * UINT( sizeof( uint32_t ) );
+				l_desc.Usage				= DirectX11::Get( p_eType );
+				l_desc.BindFlags			= D3D11_BIND_INDEX_BUFFER;
+				l_desc.CPUAccessFlags		= DirectX11::GetCpuAccessFlags( p_eType | p_eNature );
+				l_desc.MiscFlags			= 0;
+				l_desc.StructureByteStride	= 0;//sizeof( uint32_t );
 
 				if ( p_eType == eBUFFER_ACCESS_TYPE_STATIC )
 				{
 					D3D11_SUBRESOURCE_DATA l_data = { 0 };
 					l_data.pSysMem = &m_pBuffer->data()[0];
 					l_hr = l_pDevice->CreateBuffer( &l_desc, &l_data, &m_pBufferObject );
-					dxDebugName( l_renderSystem, m_pBufferObject, IndexBuffer );
+					dxDebugName( m_pBufferObject, IndexBuffer );
 				}
 				else
 				{
 					l_hr = l_pDevice->CreateBuffer( &l_desc, NULL, &m_pBufferObject );
-					dxDebugName( l_renderSystem, m_pBufferObject, IndexBuffer );
+					dxDebugName( m_pBufferObject, IndexBuffer );
 				}
 
 				l_bReturn = dxCheckError( l_hr, "ID3D11Device::CreateIndexBuffer" );
@@ -104,8 +103,10 @@ namespace Dx11Render
 
 		if ( m_pBuffer && m_pBuffer->IsAssigned() )
 		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pBuffer->GetRenderSystem()->GetCurrentContext() )->GetDeviceContext();
+			ID3D11DeviceContext * l_pDeviceContext;
+			reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() )->GetDevice()->GetImmediateContext( &l_pDeviceContext );
 			l_pDeviceContext->IASetIndexBuffer( m_pBufferObject, DXGI_FORMAT_R32_UINT, 0 );
+			l_pDeviceContext->Release();
 		}
 
 		return l_bReturn;

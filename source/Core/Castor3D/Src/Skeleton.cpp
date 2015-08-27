@@ -1,4 +1,4 @@
-﻿#include "Skeleton.hpp"
+#include "Skeleton.hpp"
 #include "Animation.hpp"
 
 using namespace Castor;

@@ -38,6 +38,9 @@ namespace Dx11Render
 		bool Initialise( Castor::Size const & p_size );
 		void Cleanup();
 
+		bool Bind();
+		void Unbind();
+
 		bool Resize( Castor::Size const & p_size );
 
 		inline ID3D11View * GetSurface()const

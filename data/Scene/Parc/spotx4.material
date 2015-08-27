@@ -1,0 +1,71 @@
+
+material spotx4/metal
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.392157 0.392157 0.392157 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture spot_simple_metal.jpg
+			}
+		}
+
+	}
+
+}
+
+material spotx4/lumiere
+{
+	technique
+	{
+		pass
+		{
+			ambient 0 0 0 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+			emissive 1 1 1 1
+
+			texture_unit
+			{
+				texture_alias 0
+				texture spot_simple_lumiere.jpg
+			}
+		}
+
+	}
+
+}
+
+material spotx4/light
+{
+	technique
+	{
+		pass
+		{
+			ambient 0 0 0 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+			emissive 1 1 1 1
+			scene_blend alpha_blend
+			depth_write off
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture spot_light.png
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}

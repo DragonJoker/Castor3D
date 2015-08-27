@@ -53,7 +53,7 @@ namespace Castor
 		 *\param[in]	p_function		Le nom de la fonction
 		 *\param[in]	p_line			Le numéro de ligne
 		 */
-		Exception( std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line )
+		Exception(	std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line )
 			:	m_line( p_line	)
 			,	m_description( p_description	)
 			,	m_filename( p_file ? p_file : ""	)

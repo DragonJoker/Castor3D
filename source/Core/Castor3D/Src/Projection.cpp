@@ -1,4 +1,4 @@
-﻿#include "Projection.hpp"
+#include "Projection.hpp"
 #include "Submesh.hpp"
 #include "Vertex.hpp"
 

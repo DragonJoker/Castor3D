@@ -1,0 +1,443 @@
+sampler "Linear"
+{
+	min_filter		linear
+	mag_filter		linear
+	min_lod			-500.0
+	max_lod			500.0
+	lod_bias		0.0
+	u_wrap_mode		clamp_to_edge
+	v_wrap_mode		clamp_to_edge
+	w_wrap_mode		clamp_to_edge
+	border_colour	0.0 0.0 0.0 0.0
+}
+
+material "DiffuseMap"
+{
+	pass
+	{
+		ambient 0.0745	0.0745	0.0745 1.0
+		diffuse 0.75164	0.75164	0.75164 1.0
+		emissive 0.0 0.0 0.0 1.0
+		shininess 50.2
+		two_sided true
+
+		texture_unit
+		{
+			image "Texturing/Diffuse.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel diffuse
+			sampler	"Linear"
+		}
+	}
+}
+
+material "SpecularMap"
+{
+	pass
+	{
+		ambient 0.0745	0.0745	0.0745 1.0
+		diffuse 0.75164	0.75164	0.75164 1.0
+		emissive 0.0 0.0 0.0 1.0
+		shininess 50.2
+		two_sided true
+
+		texture_unit
+		{
+			image "Texturing/Diffuse.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel diffuse
+			sampler	"Linear"
+		}
+
+		texture_unit
+		{
+			image "Texturing/Specular.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel specular
+			sampler	"Linear"
+		}
+	}
+}
+
+material "SpecGlossMap"
+{
+	pass
+	{
+		ambient 0.0745	0.0745	0.0745 1.0
+		diffuse 0.75164	0.75164	0.75164 1.0
+		emissive 0.0 0.0 0.0 1.0
+		shininess 50.2
+		two_sided true
+
+		texture_unit
+		{
+			image "Texturing/Diffuse.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel diffuse
+			sampler	"Linear"
+		}
+
+		texture_unit
+		{
+			image "Texturing/Specular.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel specular
+			sampler	"Linear"
+		}
+
+		texture_unit
+		{
+			image "Texturing/Gloss.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel gloss
+			sampler	"Linear"
+		}
+	}
+}
+
+material "NormalMap"
+{
+	pass
+	{
+		ambient 0.0745	0.0745	0.0745 1.0
+		diffuse 0.75164	0.75164	0.75164 1.0
+		emissive 0.0 0.0 0.0 1.0
+		shininess 50.2
+		two_sided true
+
+		texture_unit
+		{
+			image "Texturing/Diffuse.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel diffuse
+			sampler	"Linear"
+		}
+
+		texture_unit
+		{
+			image "Texturing/Normal.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel normal
+			sampler	"Linear"
+		}
+	}
+}
+
+material "NormalSpecularMap"
+{
+	pass
+	{
+		ambient 0.0745	0.0745	0.0745 1.0
+		diffuse 0.75164	0.75164	0.75164 1.0
+		emissive 0.0 0.0 0.0 1.0
+		shininess 50.2
+		two_sided true
+
+		texture_unit
+		{
+			image "Texturing/Diffuse.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel diffuse
+			sampler	"Linear"
+		}
+
+		texture_unit
+		{
+			image "Texturing/Specular.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel specular
+			sampler	"Linear"
+		}
+
+		texture_unit
+		{
+			image "Texturing/Normal.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel normal
+			sampler	"Linear"
+		}
+	}
+}
+
+material "OpacityMap"
+{
+	pass
+	{
+		ambient 0.0745	0.0745	0.0745 1.0
+		diffuse 0.75164	0.75164	0.75164 1.0
+		emissive 0.0 0.0 0.0 1.0
+		shininess 50.2
+		two_sided true
+
+		texture_unit
+		{
+			image "Texturing/Diffuse.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel diffuse
+			sampler	"Linear"
+		}
+
+		texture_unit
+		{
+			image "Texturing/Specular.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel specular
+			sampler	"Linear"
+		}
+
+		texture_unit
+		{
+			image "Texturing/Normal.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel normal
+			sampler	"Linear"
+		}
+
+		texture_unit
+		{
+			image "Texturing/Opacity.png"
+			colour 1.0 1.0 1.0 1.0
+			channel opacity
+			sampler	"Linear"
+		}
+	}
+}
+
+material "Relief"
+{
+	pass
+	{
+		ambient 0.5 0.5 0.5 1.0
+		diffuse 0.4 0.4 0.4 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 0.1 0.1 0.1 1.0
+		shininess 50
+
+		texture_unit
+		{
+			image "Texturing/Diffuse.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel diffuse
+			sampler	"Linear"
+		}
+
+		texture_unit
+		{
+			image "Texturing/Normal.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel normal
+			sampler	"Linear"
+		}
+
+		hl_shader_program
+		{
+			file sm_2 "Relief/Relief.hl"
+			
+			vertex_program
+			{
+				entry "mainVx"
+			}
+			
+			pixel_program
+			{
+				entry "mainPx"
+
+				variable "LinearSearchSteps"
+				{
+					type int
+					value 20
+				}
+
+				variable "BinarySearchSteps"
+				{
+					type int
+					value 5
+				}
+
+				variable "Depth"
+				{
+					type float
+					value 0.075
+				}
+
+				variable "Tile"
+				{
+					type float
+					value 1.0
+				}
+			}
+		}
+
+		gl_shader_program
+		{
+			vertex_program
+			{
+				file sm_4 "Relief/Relief-4.x.vert"
+				file sm_3 "Relief/Relief-3.x.vert"
+				file sm_2 "Relief/Relief.vert"
+			}
+			
+			pixel_program
+			{
+				file sm_4 "Relief/Relief-4.x.frag"
+				file sm_3 "Relief/Relief-3.x.frag"
+				file sm_2 "Relief/Relief.frag"
+
+				variable "LinearSearchSteps"
+				{
+					type int
+					value 20
+				}
+
+				variable "BinarySearchSteps"
+				{
+					type int
+					value 5
+				}
+
+				variable "Depth"
+				{
+					type float
+					value 0.075
+				}
+
+				variable "Tile"
+				{
+					type float
+					value 1.0
+				}
+			}
+		}
+	}
+}
+
+scene "Scene"
+{
+	background_colour 0.5 0.5 0.5 1.0
+	ambient_light 0.5 0.5 0.5 1.0
+
+	scene_node "SunLightNode1"
+	{
+		position  0.0 -1.0 1.0
+	}
+	light "SunLight1"
+	{
+		parent		"SunLightNode1"
+		type		directional
+		diffuse		0.8 0.8 0.8
+		specular	1.0 1.0 1.0
+	}
+
+	scene_node "Diff"
+	{
+		position -10.0 -5.0 0.0
+	}
+	object "Diff"
+	{
+		parent "Diff"
+		mesh "Diff"
+		{
+			type plane 1 1 10.0 10.0
+		}
+		material "DiffuseMap"
+	}
+
+	scene_node "Spec"
+	{
+		position 0.0 -5.0 0.0
+	}
+	object "Spec"
+	{
+		parent "Spec"
+		mesh "Spec"
+		{
+			type plane 1 1 10.0 10.0
+		}
+		material "SpecularMap"
+	}
+
+	scene_node "SpecGloss"
+	{
+		position 10.0 -5.0 0.0
+	}
+	object "SpecGloss"
+	{
+		parent "SpecGloss"
+		mesh "SpecGloss"
+		{
+			type plane 1 1 10.0 10.0
+		}
+		material "SpecGlossMap"
+	}
+
+	scene_node "Norm"
+	{
+		position -10.0 5.0 0.0
+	}
+	object "Norm"
+	{
+		parent "Norm"
+		mesh "Norm"
+		{
+			type plane 1 1 10.0 10.0
+		}
+		material "NormalMap"
+	}
+
+	scene_node "SpecNorm"
+	{
+		position 0.0 5.0 0.0
+	}
+	object "SpecNorm"
+	{
+		parent "SpecNorm"
+		mesh "SpecNorm"
+		{
+			type plane 1 1 10.0 10.0
+		}
+		material "NormalSpecularMap"
+	}
+
+	scene_node "Opa"
+	{
+		position 10.0 5.0 0.0
+	}
+	object "Opa"
+	{
+		parent "Opa"
+		mesh "Opa"
+		{
+			type plane 1 1 10.0 10.0
+		}
+		material "OpacityMap"
+	}
+
+	scene_node "Relief"
+	{
+		position 0.0 15.0 0.0
+	}
+	object "Relief"
+	{
+		parent "Relief"
+		mesh "Relief"
+		{
+			type plane 1 1 10.0 10.0
+		}
+		material "Relief"
+	}
+}
+
+window "Window"
+{
+	render_target
+	{
+		format		argb32
+		depth		depth24s8
+		size		800 600
+//		msaa		8
+//		deferred	true
+		scene		"Scene"
+	}
+	fullscreen	false
+	vsync		true
+}

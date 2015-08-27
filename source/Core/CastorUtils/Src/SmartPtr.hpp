@@ -43,7 +43,7 @@ namespace Castor
 			p_pPointer = 0;
 		}
 	};
-	CU_API extern dummy_dtor g_dummyDtor;
+	extern dummy_dtor g_dummyDtor;
 }
 #if CASTOR_HAS_STDSMARTPTR
 #   include <memory>

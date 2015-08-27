@@ -1,5 +1,4 @@
 #include <Material.hpp>
-#include <MaterialManager.hpp>
 #include <Pass.hpp>
 #include <TextureUnit.hpp>
 #include <RenderSystem.hpp>

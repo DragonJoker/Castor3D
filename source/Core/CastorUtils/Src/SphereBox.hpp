@@ -44,7 +44,11 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur par défaut
 		 */
-		CU_API SphereBox();
+		SphereBox()
+			:	ContainerBox3D(	)
+			,	m_radius( 0	)
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -53,7 +57,11 @@ namespace Castor
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_sphere	La sphere box à copier
 		 */
-		CU_API SphereBox( SphereBox const & p_sphere );
+		SphereBox( SphereBox const & p_sphere )
+			:	ContainerBox3D( p_sphere	)
+			,	m_radius( p_sphere.m_radius	)
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Move constructor
@@ -62,7 +70,12 @@ namespace Castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	p_sphere	La sphere box à déplacer
 		 */
-		CU_API SphereBox( SphereBox && p_sphere );
+		SphereBox( SphereBox && p_sphere )
+			:	ContainerBox3D( std::move( p_sphere )	)
+			,	m_radius( std::move( p_sphere.m_radius )	)
+		{
+			p_sphere.m_radius = 0;
+		}
 		/**
 		 *\~english
 		 *\brief		Specified constructor
@@ -73,7 +86,11 @@ namespace Castor
 		 *\param[in]	p_center	Le centre de la sphère
 		 *\param[in]	p_radius	Le rayon de la sphère
 		 */
-		CU_API SphereBox( Point3r const & p_center, real p_radius );
+		SphereBox( Point3r const & p_center, real p_radius )
+			:	ContainerBox3D( p_center	)
+			,	m_radius( p_radius	)
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Constructor from a CubeBox
@@ -82,7 +99,11 @@ namespace Castor
 		 *\brief		Constructeur à partir d'une CubeBox
 		 *\param[in]	p_box	La CubeBox
 		 */
-		CU_API SphereBox( CubeBox const & p_box );
+		SphereBox( CubeBox const & p_box )
+			:	ContainerBox3D( p_box.GetCenter()	)
+			,	m_radius( real( point::distance( p_box.GetMax() - m_ptCenter ) )	)
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -93,7 +114,12 @@ namespace Castor
 		 *\param[in]	p_container	Le conteneur à copier
 		 *\return		Une référence sur ce conteneur
 		 */
-		CU_API SphereBox & operator =( SphereBox const & p_container );
+		SphereBox & operator =( SphereBox const & p_container )
+		{
+			ContainerBox3D::operator =( p_container );
+			m_radius = p_container.m_radius;
+			return *this;
+		}
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -104,7 +130,17 @@ namespace Castor
 		 *\param[in]	p_container	Le conteneur à copier
 		 *\return		Une référence sur ce conteneur
 		 */
-		CU_API SphereBox & operator =( SphereBox && p_container );
+		SphereBox & operator =( SphereBox && p_container )
+		{
+			ContainerBox3D::operator =( std::move( p_container ) );
+
+			if ( this != &p_container )
+			{
+				m_radius = std::move( p_container.m_radius );
+			}
+
+			return *this;
+		}
 		/**
 		 *\~english
 		 *\brief		Reinitialises the sphere box
@@ -115,7 +151,11 @@ namespace Castor
 		 *\param[in]	p_center	Le centre
 		 *\param[in]	p_radius	Le rayon
 		 */
-		CU_API void Load( Point3r const & p_center, real p_radius );
+		void Load( Point3r const & p_center, real p_radius )
+		{
+			m_ptCenter = p_center;
+			m_radius = p_radius;
+		}
 		/**
 		 *\~english
 		 *\brief		Reinitialises the sphere box from a CubeBox
@@ -124,7 +164,11 @@ namespace Castor
 		 *\brief		Réinitialise à partir d'une CubeBox
 		 *\param[in]	p_box	La CubeBox
 		 */
-		CU_API void Load( CubeBox const & p_box );
+		void Load( CubeBox const & p_box )
+		{
+			m_ptCenter = p_box.GetCenter();
+			m_radius = real( point::distance( p_box.GetMax() - m_ptCenter ) );
+		}
 		/**
 		 *\~english
 		 *\brief		Tests if a vertex is within the container, id est inside it but not on it's limits
@@ -135,7 +179,10 @@ namespace Castor
 		 *\param[in]	p_v	Le point à tester
 		 *\return		\p true si le point est dans le container
 		 */
-		CU_API virtual bool IsWithin( Point3r const & p_v );
+		virtual bool IsWithin( Point3r const & p_v )
+		{
+			return point::distance( p_v - m_ptCenter ) < m_radius;
+		}
 		/**
 		 *\~english
 		 *\brief		Tests if a vertex is on the limits of this container, and not within
@@ -146,7 +193,10 @@ namespace Castor
 		 *\param[in]	p_v	Le point à tester
 		 *\return		\p true si le point est sur la limite
 		 */
-		CU_API virtual bool IsOnLimits( Point3r const & p_v );
+		virtual bool IsOnLimits( Point3r const & p_v )
+		{
+			return policy::equals( real( point::distance( p_v - m_ptCenter ) ), m_radius );
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the radius

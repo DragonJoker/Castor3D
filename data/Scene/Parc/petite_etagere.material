@@ -1,0 +1,46 @@
+
+material petite_etagere/bois
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture bois.jpg
+			}
+		}
+
+	}
+
+}
+
+material petite_etagere/metal
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture metal.jpg
+			}
+		}
+
+	}
+
+}

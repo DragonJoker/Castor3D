@@ -20,7 +20,6 @@
 #include <Geometry.hpp>
 #include <Engine.hpp>
 #include <Material.hpp>
-#include <MaterialManager.hpp>
 #include <Mesh.hpp>
 #include <Scene.hpp>
 
@@ -161,7 +160,7 @@ namespace GuiCommon
 		} );
 		m_pTreeGeometries->Refresh();
 		Refresh();
-		m_selItem = wxTreeItemId();
+		m_selItem = NULL;
 		p_event.Skip();
 	}
 

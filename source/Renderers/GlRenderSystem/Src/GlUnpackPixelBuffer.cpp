@@ -22,9 +22,12 @@ namespace GlRender
 
 	void GlUnpackPixelBuffer::Initialise()
 	{
-		if ( Create() )
+		Create();
+
+		if ( Bind() )
 		{
 			Fill( NULL, m_uiPixelsSize );
+			Unbind();
 		}
 	}
 }

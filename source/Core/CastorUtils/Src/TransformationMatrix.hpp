@@ -54,7 +54,7 @@ namespace Castor
 		 *\param[in]	p_axis		L'axe autour duquel l'angle est défini
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & rotate( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_angle, Point< TypeB, 3 > const & p_axis );
+		static void rotate( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_angle, Point< TypeB, 3 > const & p_axis );
 		/**
 		 *\~english
 		 *\brief		Rotation function, builds a rotation matrix from the quaternion in parameter.
@@ -66,7 +66,7 @@ namespace Castor
 		 *\param[in]	p_quat		Le quaternion contenant la rotation
 		 */
 		template< typename TypeA >
-		static SquareMatrix< TypeA, 4 > & rotate( SquareMatrix< TypeA, 4 > & p_matrix, Quaternion const & p_quat );
+		static void rotate( SquareMatrix< TypeA, 4 > & p_matrix, Quaternion const & p_quat );
 		/**
 		 *\~english
 		 *\brief		Rotation function, builds a rotation matrix from the angle and the axis in parameter.
@@ -80,7 +80,7 @@ namespace Castor
 		 *\param[in]	p_axis		L'axe autour duquel l'angle est défini
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & set_rotate( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_angle, Point< TypeB, 3 > const & p_axis );
+		static void set_rotate( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_angle, Point< TypeB, 3 > const & p_axis );
 		/**
 		 *\~english
 		 *\brief		Rotation function, builds a rotation matrix from the quaternion in parameter.
@@ -92,7 +92,7 @@ namespace Castor
 		 *\param[in]	p_quat		Le quaternion contenant la rotation
 		 */
 		template< typename TypeA >
-		static SquareMatrix< TypeA, 4 > & set_rotate( SquareMatrix< TypeA, 4 > & p_matrix, Quaternion const & p_quat );
+		static void set_rotate( SquareMatrix< TypeA, 4 > & p_matrix, Quaternion const & p_quat );
 		/**
 		 *\~english
 		 *\brief		Rotation function, builds a rotation matrix from the quaternion in parameter.
@@ -116,7 +116,7 @@ namespace Castor
 		 *\param[in]	p_angle		L'angle de rotation
 		 */
 		template< typename TypeA >
-		static SquareMatrix< TypeA, 4 > & yaw( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_angle );
+		static void yaw( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_angle );
 		/**
 		 *\~english
 		 *\brief		Rotation function, around X axis. Builds a rotation matrix from the angle in parameter.
@@ -128,7 +128,7 @@ namespace Castor
 		 *\param[in]	p_angle		L'angle de rotation
 		 */
 		template< typename TypeA >
-		static SquareMatrix< TypeA, 4 > & pitch( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_angle );
+		static void pitch( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_angle );
 		/**
 		 *\~english
 		 *\brief		Rotation function, around Z axis. Builds a rotation matrix from the angle in parameter.
@@ -140,7 +140,7 @@ namespace Castor
 		 *\param[in]	p_angle		L'angle de rotation
 		 */
 		template< typename TypeA >
-		static SquareMatrix< TypeA, 4 > & roll( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_angle );
+		static void roll( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_angle );
 		/**
 		 *\~english
 		 *\brief		Scale function. Scales matrix from the three values in parameter.
@@ -152,7 +152,7 @@ namespace Castor
 		 *\param[in]	p_hx, p_hy, p_hz	Les valeurs d'échelle sur les 3 axes
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & scale( SquareMatrix< TypeA, 4 > & p_matrix, TypeB p_hx, TypeB p_hy, TypeB p_hz );
+		static void scale( SquareMatrix< TypeA, 4 > & p_matrix, TypeB p_hx, TypeB p_hy, TypeB p_hz );
 		/**
 		 *\~english
 		 *\brief		Scale function. Scales matrix from the value in parameter.
@@ -164,7 +164,7 @@ namespace Castor
 		 *\param[in]	p_scale		Les valeurs d'échelle sur les 3 axes
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & scale( SquareMatrix< TypeA, 4 > & p_matrix, Point< TypeB, 3 > const & p_scale );
+		static void scale( SquareMatrix< TypeA, 4 > & p_matrix, Point< TypeB, 3 > const & p_scale );
 		/**
 		 *\~english
 		 *\brief		Scale function. Scales matrix from the three values in parameter.
@@ -176,7 +176,7 @@ namespace Castor
 		 *\param[in]	p_hx, p_hy, p_hz	Les valeurs d'échelle sur les 3 axes
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & set_scale( SquareMatrix< TypeA, 4 > & p_matrix, TypeB p_hx, TypeB p_hy, TypeB p_hz );
+		static void set_scale( SquareMatrix< TypeA, 4 > & p_matrix, TypeB p_hx, TypeB p_hy, TypeB p_hz );
 		/**
 		 *\~english
 		 *\brief		Scale function. Scales matrix from the value in parameter.
@@ -188,7 +188,7 @@ namespace Castor
 		 *\param[in]	p_scale		Les valeurs d'échelle sur les 3 axes
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & set_scale( SquareMatrix< TypeA, 4 > & p_matrix, Point< TypeB, 3 > const & p_scale );
+		static void set_scale( SquareMatrix< TypeA, 4 > & p_matrix, Point< TypeB, 3 > const & p_scale );
 		/**
 		 *\~english
 		 *\brief		Retrieves scale from a transformation matrix.
@@ -212,7 +212,7 @@ namespace Castor
 		 *\param[in]	p_tx, p_ty, p_tz	Les valeurs de translation sur les 3 axes
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & translate( SquareMatrix< TypeA, 4 > & p_matrix, TypeB p_tx, TypeB p_ty, TypeB p_tz );
+		static void translate( SquareMatrix< TypeA, 4 > & p_matrix, TypeB p_tx, TypeB p_ty, TypeB p_tz );
 		/**
 		 *\~english
 		 *\brief		Translate function. Translates a matrix from the value in parameter.
@@ -224,7 +224,7 @@ namespace Castor
 		 *\param[in]	p_translation	Les valeurs de translation sur les 3 axes
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & translate( SquareMatrix< TypeA, 4 > & p_matrix, Point< TypeB, 3 > const & p_translation );
+		static void translate( SquareMatrix< TypeA, 4 > & p_matrix, Point< TypeB, 3 > const & p_translation );
 		/**
 		 *\~english
 		 *\brief		Translate function. Translates a matrix from the three values in parameter.
@@ -236,7 +236,7 @@ namespace Castor
 		 *\param[in]	p_tx, p_ty, p_tz	Les valeurs de translation sur les 3 axes
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & set_translate( SquareMatrix< TypeA, 4 > & p_matrix, TypeB p_tx, TypeB p_ty, TypeB p_tz );
+		static void set_translate( SquareMatrix< TypeA, 4 > & p_matrix, TypeB p_tx, TypeB p_ty, TypeB p_tz );
 		/**
 		 *\~english
 		 *\brief		Translate function. Translates a matrix from the value in parameter.
@@ -248,7 +248,7 @@ namespace Castor
 		 *\param[in]	p_translation	Les valeurs de translation sur les 3 axes
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & set_translate( SquareMatrix< TypeA, 4 > & p_matrix, Point< TypeB, 3 > const & p_translation );
+		static void set_translate( SquareMatrix< TypeA, 4 > & p_matrix, Point< TypeB, 3 > const & p_translation );
 		/**
 		 *\~english
 		 *\brief		Retrieves translation from a transformation matrix.
@@ -276,23 +276,7 @@ namespace Castor
 		 *\param[in]	p_qOrientation	La valeur de rotation
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & set_transform_rh( Castor::SquareMatrix< TypeA, 4 > & p_matrix, Castor::Point< TypeB, 3 > const & p_ptPosition, Castor::Point< TypeB, 3 > const & p_ptScale, Castor::Quaternion const & p_qOrientation );
-		/**
-		 *\~english
-		 *\brief		Retrieves transformation matrix from translation, scaling and rotation
-		 *\param[out]	p_matrix		Receives the transformation
-		 *\param[in]	p_ptPosition	The translation value
-		 *\param[in]	p_ptScale		The scaling value
-		 *\param[in]	p_qOrientation	The rotation value
-		 *\~french
-		 *\brief		Récupère la matrice de transformation à partir de la translation, la mise à l'échelle et la rotation
-		 *\param[out]	p_matrix		Reçoit la transformation
-		 *\param[in]	p_ptPosition	La valeur de translation
-		 *\param[in]	p_ptScale		La valeur de mise à l'échelle
-		 *\param[in]	p_qOrientation	La valeur de rotation
-		 */
-		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & set_transform_lh( Castor::SquareMatrix< TypeA, 4 > & p_matrix, Castor::Point< TypeB, 3 > const & p_ptPosition, Castor::Point< TypeB, 3 > const & p_ptScale, Castor::Quaternion const & p_qOrientation );
+		static void set_transform( Castor::SquareMatrix< TypeA, 4 > & p_matrix, Castor::Point< TypeB, 3 > const & p_ptPosition, Castor::Point< TypeB, 3 > const & p_ptScale, Castor::Quaternion const & p_qOrientation );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a centered perspective projection from the given parameters
@@ -310,7 +294,7 @@ namespace Castor
 		 *\param[in]	zFar		Position du plan lointain
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & perspective_rh( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_aFOVY, TypeB aspect, TypeB zNear, TypeB zFar );
+		static void perspective( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_aFOVY, TypeB aspect, TypeB zNear, TypeB zFar );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a centered perspective projection from the given parameters
@@ -330,7 +314,7 @@ namespace Castor
 		 *\param[in]	zFar		Position du plan lointain
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & perspective_lh( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_aFOVY, TypeB aspect, TypeB zNear, TypeB zFar );
+		static void perspective_dx( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_aFOVY, TypeB aspect, TypeB zNear, TypeB zFar );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters
@@ -352,7 +336,7 @@ namespace Castor
 		 *\param[in]	farVal		Position du plan lointain
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & frustum_rh( SquareMatrix< TypeA, 4 > & p_matrix, TypeB left, TypeB right, TypeB bottom, TypeB top, TypeB nearVal, TypeB farVal );
+		static void frustum( SquareMatrix< TypeA, 4 > & p_matrix, TypeB left, TypeB right, TypeB bottom, TypeB top, TypeB nearVal, TypeB farVal );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a centered orthographic projection from the given parameters
@@ -370,7 +354,7 @@ namespace Castor
 		 *\param[in]	top			Position du plan haut
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & centered_ortho( SquareMatrix< TypeA, 4 > & p_matrix, TypeB left, TypeB right, TypeB top, TypeB bottom );
+		static void ortho( SquareMatrix< TypeA, 4 > & p_matrix, TypeB left, TypeB right, TypeB top, TypeB bottom );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a non centered orthogonal projection from the given parameters
@@ -392,7 +376,7 @@ namespace Castor
 		 *\param[in]	zFar		Position du plan lointain
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & ortho_rh( SquareMatrix< TypeA, 4 > & p_matrix, TypeB left, TypeB right, TypeB bottom, TypeB top, TypeB zNear, TypeB zFar );
+		static void ortho( SquareMatrix< TypeA, 4 > & p_matrix, TypeB left, TypeB right, TypeB bottom, TypeB top, TypeB zNear, TypeB zFar );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a non centered orthogonal projection from the given parameters
@@ -414,7 +398,7 @@ namespace Castor
 		 *\param[in]	zFar		Position du plan lointain
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & ortho_lh( SquareMatrix< TypeA, 4 > & p_matrix, TypeB left, TypeB right, TypeB bottom, TypeB top, TypeB zNear, TypeB zFar );
+		static void ortho_dx( SquareMatrix< TypeA, 4 > & p_matrix, TypeB left, TypeB right, TypeB bottom, TypeB top, TypeB zNear, TypeB zFar );
 		/**
 		 *\~english
 		 *\brief		Builds a view matrix that looks at a given point
@@ -430,18 +414,18 @@ namespace Castor
 		 *\param[in]	p_ptUp		La direction vers le haut
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & look_at( SquareMatrix< TypeA, 4 > & p_matrix, Point< TypeB, 3 > const & p_ptEye, Point< TypeB, 3 > const & p_ptCenter, Point< TypeB, 3 > const & p_ptUp );
+		static void look_at( SquareMatrix< TypeA, 4 > & p_matrix, Point< TypeB, 3 > const & p_ptEye, Point< TypeB, 3 > const & p_ptCenter, Point< TypeB, 3 > const & p_ptUp );
 		/**
 		 *\~english
 		 *\brief		Transforms a vector through a transformation matrix
 		 *\param[in]	p_matrix	The transformation matrix
 		 *\param[in]	p_vertex	The vector to transform
-		 *\return		The transformed vector
+		 *\return	The transformed vector
 		 *\~french
 		 *\brief		Transforme un vecteur par une matrice de transformation
 		 *\param[in]	p_matrix	La matrice
 		 *\param[in]	p_vertex	Le vecteur
-		 *\return		Le vecteur tranforme
+		 *\return	Le vecteur tranforme
 		 */
 		template <typename TypeA, typename TypeB, uint32_t Count>
 		static Point<TypeB, Count> mult( SquareMatrix< TypeA, 4 > const & p_matrix, Point<TypeB, Count> const & p_vertex );
@@ -450,39 +434,27 @@ namespace Castor
 		 *\brief		Multiplies 2 matrix
 		 *\param[in]	p_matrixA	The first matrix
 		 *\param[in]	p_matrixB	The second matrix
-		 *\return		The result matrix
+		 *\return	The result matrix
 		 *\~french
 		 *\brief		Multiplie 2 matrices
 		 *\param[in]	p_matrixA	La premiere matrice
 		 *\param[in]	p_matrixB	La seconde matrice
-		 *\return		La matrice résultat
+		 *\return	La matrice résultat
 		 */
 		template< typename TypeA, typename TypeB >
 		static SquareMatrix< TypeA, 4 > mult( SquareMatrix< TypeA, 4 > const & p_matrixA, SquareMatrix<TypeB, 4> const & p_matrixB );
 		/**
 		 *\~english
-		 *\brief		Switches the handness of a matrix (from right to left or left to right)
-		 *\param[in,out]p_matrix	The matrix to switch, receives the switched matrix
-		 *\return		The switched matrix
-		 *\~french
-		 *\brief		Change la main de la matrice (de main gauche à droite et inversement)
-		 *\param[in,out]p_matrix	La matrice à changer, reçoit la matrice changée
-		 *\return		La matrice changée
-		 */
-		template< typename TypeA >
-		static SquareMatrix< TypeA, 4 > & switch_hand( SquareMatrix< TypeA, 4 > const & p_matrix );
-		/**
-		 *\~english
-		 *\brief		Switches the handness of a matrix (from right to left or left to right)
+		 *\brief		switches the handness of a matrix (from right to left or left to right)
 		 *\param[in]	p_matrix	The matrix to switch
-		 *\return		The switched matrix
+		 *\return	The switched matrix
 		 *\~french
 		 *\brief		Change la main de la matrice (de main gauche à droite et inversement)
 		 *\param[in]	p_matrix	La matrice à changer
-		 *\return		La matrice changée
+		 *\return	La matrice changée
 		 */
 		template< typename TypeA >
-		static SquareMatrix< TypeA, 4 > get_switch_hand( SquareMatrix< TypeA, 4 > const & p_matrix );
+		static SquareMatrix< TypeA, 4 > switch_hand( SquareMatrix< TypeA, 4 > const & p_matrix );
 	};
 }
 

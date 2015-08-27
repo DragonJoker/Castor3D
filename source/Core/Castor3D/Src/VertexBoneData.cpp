@@ -1,4 +1,4 @@
-﻿#include "VertexBoneData.hpp"
+#include "VertexBoneData.hpp"
 
 using namespace Castor;
 

@@ -1,0 +1,23 @@
+
+material logo_ns
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0.0196078 0.0196078 0.0196078 1 10
+			emissive 0.0392157 0.0392157 0.0392157 1
+
+			texture_unit
+			{
+				texture_alias 0
+				texture logo_ns.jpg
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}

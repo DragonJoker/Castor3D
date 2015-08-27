@@ -1,0 +1,73 @@
+
+material chene/tronc
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0.09 0.09 0.09 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture tronc_chene.jpg
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material chene/feuilles
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0 0 0 1 10
+			alpha_rejection greater 192
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture feuille_chene.png
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material coll_pf_chene_01_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}
+
+material coll_pf_chene_02_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}

@@ -1,4 +1,4 @@
-﻿#include "RasteriserState.hpp"
+#include "RasteriserState.hpp"
 
 using namespace Castor3D;
 

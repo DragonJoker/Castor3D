@@ -1,4 +1,4 @@
-ï»¿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -60,19 +60,19 @@ namespace Castor3D
 		 *\param[in]	p_iLayer		The associated layer, if p_eDimension equal eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Attache la texture au tampon d'image donnÃ©, au point d'attache voulu
+		 *\brief		Attache la texture au tampon d'image donné, au point d'attache voulu
 		 *\param[in]	p_eAttachment	Le point d'attache
 		 *\param[in]	p_pFrameBuffer	Le tampon d'image
-		 *\param[in]	p_eTarget		La dimension Ã  laquelle la texture doit Ãªtre attachÃ©e
-		 *\param[in]	p_iLayer		La couche associÃ©e, si p_eDimension vaut eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
-		 *\return		\p true si tout s'est bien passÃ©
+		 *\param[in]	p_eTarget		La dimension à laquelle la texture doit être attachée
+		 *\param[in]	p_iLayer		La couche associée, si p_eDimension vaut eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
+		 *\return		\p true si tout s'est bien passé
 		 */
 		bool Attach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer, eTEXTURE_TARGET p_eTarget, int p_iLayer = 0 );
 		/**
 		 *\~english
 		 *\brief		Detaches the render buffer from the frame buffer
 		 *\~french
-		 *\brief		DÃ©tache la texture du tampon d'image
+		 *\brief		Détache la texture du tampon d'image
 		 */
 		void Detach();
 		/**
@@ -80,7 +80,7 @@ namespace Castor3D
 		 *\brief		Retrieves the texture
 		 *\return		The texture
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re la texture
+		 *\brief		Récupère la texture
 		 *\return		La texture
 		 */
 		inline DynamicTextureSPtr GetTexture()const
@@ -92,8 +92,8 @@ namespace Castor3D
 		 *\brief		Retrieves the attached dimension
 		 *\return		The attached dimension
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re la dimension attachÃ©e
-		 *\return		La dimension attachÃ©e
+		 *\brief		Récupère la dimension attachée
+		 *\return		La dimension attachée
 		 */
 		inline eTEXTURE_TARGET GetAttachedTarget()const
 		{
@@ -104,8 +104,8 @@ namespace Castor3D
 		 *\brief		Retrieves the attached layer
 		 *\return		The attached layer
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re la couche associÃ©e
-		 *\return		La couche associÃ©e
+		 *\brief		Récupère la couche associée
+		 *\return		La couche associée
 		 */
 		inline int GetAttachedLayer()const
 		{
@@ -113,11 +113,11 @@ namespace Castor3D
 		}
 
 	private:
-		//!\~english The attached texture	\~french La texture attachÃ©e
+		//!\~english The attached texture	\~french La texture attachée
 		DynamicTextureWPtr m_pTexture;
 		//!\~english The texture target type	\~french Le type de cible de la texture
 		eTEXTURE_TARGET m_eAttachedTarget;
-		//!\~english The attached layer	\~french La couche attachÃ©e
+		//!\~english The attached layer	\~french La couche attachée
 		int m_iAttachedLayer;
 	};
 }

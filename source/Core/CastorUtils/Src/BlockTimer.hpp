@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -51,23 +51,23 @@ namespace Castor
 		 *\param[in]	p_szFile		Le fichier o� se trouve la fonction
 		 *\param[in]	p_uiLine		La ligne dans la fonction
 		 */
-		CU_API BlockTimer( char const * p_szFunction, char const * p_szFile, uint32_t p_uiLine );
+		BlockTimer( char const * p_szFunction, char const * p_szFile, uint32_t p_uiLine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		CU_API ~BlockTimer();
+		~BlockTimer();
 
 	private:
-		String m_strFile;
-		String m_strFunction;
-		uint32_t const m_uiLine;
-		PreciseTimer m_timer;
+		String			m_strFile;
+		String			m_strFunction;
+		uint32_t const	m_uiLine;
+		PreciseTimer	m_timer;
 	};
 }
 
-#	define CASTOR_TIME() Castor::BlockTimer l_timer##__LINE__( __FUNCTION__, __FILE__, __LINE__ )
+#	define CASTOR_TIME()		Castor::BlockTimer	 l_timer##__LINE__( __FUNCTION__, __FILE__, __LINE__ )
 
 #endif

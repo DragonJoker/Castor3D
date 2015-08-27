@@ -1,0 +1,168 @@
+#define LUMIERE0_ACTIVE 1
+#define LUMIERE1_ACTIVE 1
+#define LUMIERE2_ACTIVE 1
+
+#define COEF_LUMIERE0	1.0
+#define COEF_LUMIERE1	1.0
+#define COEF_LUMIERE2	1.0
+
+#define COEF_AMBIANTE	1.0
+
+
+#define ACTIVER_OFFSET_MAPPING			0
+#define ACTIVER_CORRECTION_OFFSET		0
+#define ACTIVER_BUMP_MAPPING			1
+#define ACTIVER_OMBRES_INTERNES			1
+
+struct VtxInput
+{
+	float4 Position	:	POSITION0;
+	float3 Normal	:	NORMAL0;
+	float3 Tangent	:	TANGENT0;
+	float2 Texture	:	TEXCOORD0;
+};
+
+struct VtxOutput
+{
+	float4 Position			:	POSITION0;
+	float2 Texture			:	TEXCOORD0;
+	float3 EyePosition		:	NORMAL0;
+	float3 Light0			:	NORMAL1;
+	float3 Light1			:	NORMAL2;
+	float3 Light2			:	NORMAL3;
+	float3 PositionVertex	:	NORMAL4;
+	float3 NormaleVertex	:	NORMAL5;
+};
+
+float4x4 ProjectionMatrix;
+float4x4 ProjectionModelViewMatrix;
+float4x4 ModelViewMatrix;
+float4x4 NormalMatrix;
+sampler2D c3d_mapDiffuse;
+sampler2D c3d_mapHeight;
+sampler2D c3d_mapNormal;
+sampler2D OffsetMap;
+float3 RVBdiffu;
+float3 RVBspeculaire;
+float4 c3d_LightsPosition[8];
+float4 c3d_LightsAmbient[8];
+float4 c3d_LightsDiffuse[8];
+
+float HeightMapScale;
+float Scale;
+
+VtxOutput mainVx( in VtxInput p_input)
+{
+	float3x3 l_normalMatrix = (float3x3)NormalMatrix;
+	VtxOutput l_output;
+	l_output.Texture = p_input.Texture;
+
+	float3 binormal = cross( p_input.Tangent, p_input.Normal);
+
+	float3x3 TBN_Matrix;
+	TBN_Matrix[0] =  mul( p_input.Tangent, l_normalMatrix);
+	TBN_Matrix[1] =  mul( binormal, l_normalMatrix);
+	TBN_Matrix[2] =  mul( p_input.Normal, l_normalMatrix);
+
+	// transforme le vecteur vision :
+	float4 VertexModelView = mul( p_input.Position, ModelViewMatrix);
+	l_output.EyePosition = mul( TBN_Matrix, -VertexModelView.xyz);
+
+	// transforme le vecteur lumiere :
+	// transforme le vecteur lumiere :
+	l_output.Light0 = mul( c3d_LightsPosition[0], ModelViewMatrix).xyz;
+	l_output.Light1 = mul( c3d_LightsPosition[1], ModelViewMatrix).xyz;
+	l_output.Light2 = mul( c3d_LightsPosition[2], ModelViewMatrix).xyz;
+
+	l_output.PositionVertex = mul( TBN_Matrix, mul( p_input.Position, ModelViewMatrix).xyz);
+	l_output.NormaleVertex = normalize( mul( p_input.Normal, l_normalMatrix));
+
+	// Vertex transformation 
+	l_output.Position = mul( p_input.Position, ProjectionModelViewMatrix);
+	
+	return l_output;
+}
+
+float4 mainPx( in VtxOutput p_input)	:	COLOR0
+{
+	float3 CouleurFinale = float3(0.0, 0.0, 0.0);
+	float2 CoordonneesTex0 = p_input.Texture;
+	
+	#if ACTIVER_OFFSET_MAPPING == 1
+	    float hauteur = tex2D( c3d_mapHeight, CoordonneesTex0).r;
+    	float v = hauteur * (HeightMapScale * 2.0) - HeightMapScale;
+    	float3 eye = normalize( p_input.EyePosition);
+    	float2 DecalageCoordsTex = eye.xy * v;
+
+    	#if ACTIVER_CORRECTION_OFFSET == 1
+			float4 MinMax = tex2D( OffsetMap, CoordonneesTex0).rgba;
+			float Echelle = Scale; // 0.6 par défaut
+	    	DecalageCoordsTex.x = max(-MinMax.z * Echelle, DecalageCoordsTex.x);
+	    	DecalageCoordsTex.x = min(MinMax.x * Echelle, DecalageCoordsTex.x);
+	    	DecalageCoordsTex.y = max(-MinMax.y * Echelle, DecalageCoordsTex.y);
+	    	DecalageCoordsTex.y = min(MinMax.w * Echelle, DecalageCoordsTex.y);
+    	#endif
+
+    	CoordonneesTex0 += DecalageCoordsTex;
+    #endif
+
+    float3 RVB = COEF_AMBIANTE * tex2D( c3d_mapDiffuse, CoordonneesTex0).rgb;
+	CouleurFinale += RVB;
+	
+// bump :
+
+	#if ACTIVER_BUMP_MAPPING == 1
+		float3 NormaleBump = tex2D( c3d_mapNormal, CoordonneesTex0).xyz * 2.0 - 1.0;
+	#else
+		float3 NormaleBump = float3(0.0, 0.0, 1.0);
+	#endif
+	
+	float3 DirectionOeil = normalize( -p_input.PositionVertex); // origine - PositionVertex
+	
+	#if LUMIERE0_ACTIVE == 1
+		float3 vvRVBdiffu0 = c3d_LightsDiffuse[0].xyz;//float3(1.0, 1.0, 0.0);
+		float3 LumiereNormalisee0 = normalize( p_input.Light0 - p_input.PositionVertex); 
+		float diffuse0 = max(dot(NormaleBump, LumiereNormalisee0), 0.0);
+		float3 Bump0 =  float3( COEF_LUMIERE0 * diffuse0, COEF_LUMIERE0 * diffuse0, COEF_LUMIERE0 * diffuse0) * vvRVBdiffu0.xyz;// + float3(10.2* pow(diffuse, 16.0)) * vvRVBdiffu.xyz;
+		CouleurFinale += Bump0;
+	#endif
+	#if LUMIERE1_ACTIVE == 1
+		float3 vvRVBdiffu1 = c3d_LightsDiffuse[1].xyz;//float3(1.0, 0.0, 0.0);
+		float3 LumiereNormalisee1 = normalize(p_input.Light1 - p_input.PositionVertex); 
+		float diffuse1 = max(dot(NormaleBump, LumiereNormalisee1), 0.0);
+		float3 Bump1 =  float3(COEF_LUMIERE1 * diffuse1, COEF_LUMIERE1 * diffuse1, COEF_LUMIERE1 * diffuse1) * vvRVBdiffu1.xyz;// + float3(10.2* pow(diffuse, 16.0)) * vvRVBdiffu.xyz;
+		CouleurFinale += Bump1;
+	#endif
+	#if LUMIERE2_ACTIVE == 1
+		float3 vvRVBdiffu2 = c3d_LightsDiffuse[2].xyz;//float3(0.0, 1.0, 0.0);
+		float3 LumiereNormalisee2 = normalize(p_input.Light2 - p_input.PositionVertex); 
+		float diffuse2 = max(dot(NormaleBump, LumiereNormalisee2), 0.0);
+		float3 Bump2 =  float3(COEF_LUMIERE2 * diffuse2, COEF_LUMIERE2 * diffuse2, COEF_LUMIERE2 * diffuse2) * vvRVBdiffu2.xyz;// + float3(10.2* pow(diffuse, 16.0)) * vvRVBdiffu.xyz;
+		CouleurFinale += Bump2;
+	#endif
+
+	#if LUMIERE0_ACTIVE == 1 && ACTIVER_OMBRES_INTERNES == 1
+		float Saturation0 = clamp(diffuse0*1.0 + 0.5, 0.0, 1.0);
+		CouleurFinale *= float3(Saturation0, Saturation0, Saturation0);
+	#endif
+	#if LUMIERE1_ACTIVE == 1 && ACTIVER_OMBRES_INTERNES == 1
+		float Saturation1 = clamp(diffuse1*1.0 + 0.5, 0.0, 1.0);
+		CouleurFinale *= float3(Saturation1, Saturation1, Saturation1);
+	#endif
+	#if LUMIERE2_ACTIVE == 1 && ACTIVER_OMBRES_INTERNES == 1
+		float Saturation2 = clamp(diffuse2*1.0 + 0.5, 0.0, 1.0);
+		CouleurFinale *= float3(Saturation2, Saturation2, Saturation2);
+	#endif
+
+	return float4( CouleurFinale, 1.0);
+}
+
+technique RenderPass
+{
+	pass p0
+	{
+		CullMode=none;
+		PixelShader = compile ps_3_0 mainPx();
+		VertexShader = compile vs_3_0 mainVx();
+	}
+};

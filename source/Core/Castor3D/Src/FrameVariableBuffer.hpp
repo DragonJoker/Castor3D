@@ -141,35 +141,22 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Binds all the variables, through the GPU buffer if supported (OpenGL UBO, Direct3D Constants buffers)
-		 *\param[in]	p_index	The buffer index
+		 *\param[in]	p_pProgram	The program
 		 *\return		\p false if any problem occured
 		 *\~french
 		 *\brief		Active toutes les variables, au travers du tampon GPU si supporté (OpenGL UBO, Direct3D Constants buffers)
-		 *\param[in]	p_index	L'index du tampon GPU
-		 *\return		\p false en cas de problème
+		 *\param[in]	p_pProgram	Le programme
+		 *\return		\p false if any problem occured
 		 */
-		bool Bind( uint32_t p_index );
+		bool Bind();
 		/**
 		 *\~english
 		 *\brief		Unbinds all variables
-		 *\param[in]	p_index	The buffer index
+		 *\param[in]	p_pProgram	The program
 		 *\~french
 		 *\brief		Désactive toutes les variables
-		 *\param[in]	p_pProgram	L'index du tampon GPU
 		 */
-		void Unbind( uint32_t p_index );
-		/**
-		 *\~english
-		 *\brief		Retrieves the variables buffer name
-		 *\return		The name
-		 *\~french
-		 *\brief		Récupère le nom du buffer de variables
-		 *\return		Le nom
-		 */
-		inline Castor::String const & GetName()const
-		{
-			return m_strName;
-		}
+		void Unbind();
 
 	protected:
 		/**
@@ -207,23 +194,23 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Binds all the variables, through the GPU buffer if supported (OpenGL UBO, Direct3D Constants buffers)
-		 *\param[in]	p_index	The buffer index
+		 *\param[in]	p_pProgram	The program
 		 *\return		\p false if any problem occured
 		 *\~french
 		 *\brief		Active toutes les variables, au traves du tampon GPU si supporté (OpenGL UBO, Direct3D Constants buffers)
-		 *\param[in]	p_pProgram	L'index du tampon GPU
+		 *\param[in]	p_pProgram	Le programme
 		 *\return		\p false if any problem occured
 		 */
-		virtual bool DoBind( uint32_t p_index ) = 0;
+		virtual bool DoBind() = 0;
 		/**
 		 *\~english
 		 *\brief		Unbinds all variables
-		 *\param[in]	p_index	The buffer index
+		 *\param[in]	p_pProgram	The program
 		 *\~french
 		 *\brief		Désactive toutes les variables
-		 *\param[in]	p_pProgram	L'index du tampon GPU
+		 *\param[in]	p_pProgram	Le programme
 		 */
-		virtual void DoUnbind( uint32_t p_index ) = 0;
+		virtual void DoUnbind() = 0;
 
 	protected:
 		//!\~english The buffers count	\~french Le compte des tampons

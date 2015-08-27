@@ -1,0 +1,41 @@
+
+material borne_incendie/borne_incendie_rouge
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.351 0.351 0.351 1 17
+
+			texture_unit
+			{
+				texture_alias 0
+				texture borne_metal.jpg
+			}
+		}
+
+	}
+
+}
+
+material borne_incendie/borne_incendie_gris
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0.351 0.351 0.351 1 17
+
+			texture_unit
+			{
+				texture_alias 0
+				texture borne_metal_gris.jpg
+			}
+		}
+
+	}
+
+}

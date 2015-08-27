@@ -1,4 +1,4 @@
-ï»¿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -36,7 +36,7 @@ namespace Castor3D
 	\brief		Vertex buffer representation
 	\remark		Holds the submesh vertices informations
 	\~french
-	\brief		ReprÃ©sentation d'un tampon de sommets
+	\brief		Représentation d'un tampon de sommets
 	\remark		Contient les informations des sommets d'un submesh
 	*/
 	class C3D_API VertexBuffer
@@ -51,7 +51,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_pRenderSystem	The RenderSystem
-		 *\param[in]	p_pElements		Les descriptions des Ã©lÃ©ments
+		 *\param[in]	p_pElements		Les descriptions des éléments
 		 */
 		template< uint32_t N >
 		VertexBuffer( RenderSystem * p_pRenderSystem, BufferElementDeclaration const( & p_pElements )[N] )
@@ -68,8 +68,8 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_pRenderSystem	The RenderSystem
-		 *\param[in]	p_pElements		Les descriptions des Ã©lÃ©ments
-		 *\param[in]	p_uiNbElements	Le compte des descriptions des Ã©lÃ©ments
+		 *\param[in]	p_pElements		Les descriptions des éléments
+		 *\param[in]	p_uiNbElements	Le compte des descriptions des éléments
 		 */
 		VertexBuffer( RenderSystem * p_pRenderSystem, BufferElementDeclaration const * p_pElements, uint32_t p_uiNbElements );
 		/**
@@ -84,8 +84,8 @@ namespace Castor3D
 		 *\brief		Gets buffer declaration
 		 *\return		The buffer declaration
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re la dÃ©claration du tampon
-		 *\return		La dÃ©claration du tampon
+		 *\brief		Récupère la déclaration du tampon
+		 *\return		La déclaration du tampon
 		 */
 		BufferDeclaration const & GetDeclaration()const
 		{
@@ -102,7 +102,7 @@ namespace Castor3D
 		virtual bool DoCreateBuffer();
 
 	protected:
-		//!\~english Buffer elements description	\~french Description des Ã©lÃ©ment du tampon
+		//!\~english Buffer elements description	\~french Description des élément du tampon
 		BufferDeclaration m_bufferDeclaration;
 	};
 }

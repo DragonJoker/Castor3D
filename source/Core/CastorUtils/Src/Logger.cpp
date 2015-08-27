@@ -1,11 +1,18 @@
-#include "CastorUtilsPch.hpp"
-
-#include "Logger.hpp"
 #include "File.hpp"
 
-#include "LoggerImpl.hpp"
-#include "StringUtils.hpp"
-#include "Exception.hpp"
+#if defined _WIN32
+#	if defined( _MSC_VER )
+#		pragma warning( push )
+#		pragma warning( disable:4311 )
+#		pragma warning( disable:4312 )
+#	endif
+#	include <windows.h>
+#	if defined( _MSC_VER )
+#		pragma warning( pop )
+#	endif
+#endif
+
+#include "Logger.hpp"
 
 namespace Castor
 {
@@ -37,207 +44,170 @@ namespace Castor
 	}
 #	endif
 #endif
+	template< eLOG_TYPE Level >	class LeveledLogger;
 
-	static const std::string ERROR_LOGGER_ALREADY_INITIALISED = "Logger instance already initialised";
-
-	template< typename CharType, typename LogStreambufTraits >
-	class LogStreambuf
-		: public std::basic_streambuf< CharType >
+	template <> class LeveledLogger< eLOG_TYPE_DEBUG > : public ILoggerImpl
 	{
 	public:
-		typedef typename std::basic_streambuf< CharType >::int_type int_type;
-		typedef typename std::basic_streambuf< CharType >::traits_type traits_type;
-
-		LogStreambuf( std::basic_ostream< CharType > & p_stream )
-			: m_stream( p_stream )
+		LeveledLogger()
+			:	ILoggerImpl( eLOG_TYPE_DEBUG )
 		{
-			m_old = m_stream.rdbuf( this );
 		}
-
-		virtual ~LogStreambuf()
-		{
-			m_stream.rdbuf( m_old );
-		}
-
-		virtual int_type overflow( int_type c = traits_type::eof() )
-		{
-			if ( traits_type::eq_int_type( c, traits_type::eof() ) )
-			{
-				sync();
-			}
-			else
-			{
-				m_buffer += traits_type::to_char_type( c );
-			}
-
-			return c;
-		}
-
-		virtual int sync()
-		{
-			if ( !m_buffer.empty() )
-			{
-				LogStreambufTraits::Log( m_buffer );
-				m_buffer.clear();
-			}
-
-			return 0;
-		}
-
-	private:
-		std::basic_string< CharType > m_buffer;
-		std::basic_ostream< CharType > & m_stream;
-		std::basic_streambuf< CharType > * m_old;
 	};
 
-	template< typename CharType >
-	struct DebugLogStreambufTraits
+	template <> class LeveledLogger< eLOG_TYPE_MESSAGE > : public ILoggerImpl
 	{
-		static void Log( std::basic_string< CharType > const & p_text )
+	public:
+		LeveledLogger()
+			:	ILoggerImpl( eLOG_TYPE_MESSAGE )
 		{
-			Logger::LogDebug( p_text );
 		}
+
+		virtual void LogDebug( String const & CU_PARAM_UNUSED( p_strToLog ) ) {}
 	};
 
-	template< typename CharType >
-	struct InfoLogStreambufTraits
+	template <> class LeveledLogger< eLOG_TYPE_WARNING > : public ILoggerImpl
 	{
-		static void Log( std::basic_string< CharType > const & p_text )
+	public:
+		LeveledLogger()
+			:	ILoggerImpl( eLOG_TYPE_WARNING )
 		{
-			Logger::LogInfo( p_text );
 		}
+
+		virtual void LogDebug( String const & CU_PARAM_UNUSED( p_strToLog ) ) {}
+		virtual void LogMessage( String const & CU_PARAM_UNUSED( p_strToLog ) ) {}
 	};
 
-	template< typename CharType >
-	struct WarningLogStreambufTraits
+	template <> class LeveledLogger< eLOG_TYPE_ERROR > : public ILoggerImpl
 	{
-		static void Log( std::basic_string< CharType > const & p_text )
+	public:
+		LeveledLogger()
+			:	ILoggerImpl( eLOG_TYPE_ERROR )
 		{
-			Logger::LogWarning( p_text );
 		}
+
+		virtual void LogDebug( String const & CU_PARAM_UNUSED( p_strToLog ) ) {}
+		virtual void LogMessage( String const & CU_PARAM_UNUSED( p_strToLog ) ) {}
+		virtual void LogWarning( String const & CU_PARAM_UNUSED( p_strToLog ) ) {}
 	};
 
-	template< typename CharType >
-	struct ErrorLogStreambufTraits
-	{
-		static void Log( std::basic_string< CharType > const & p_text )
-		{
-			Logger::LogError( p_text );
-		}
-	};
-
-	Logger * Logger::m_singleton = NULL;
-	bool Logger::m_ownInstance = true;
-	uint32_t Logger::m_counter = 0;
+	Logger *	Logger::m_pSingleton		= NULL;
+	bool		Logger::m_bOwnInstance	= true;
+	uint32_t	Logger::m_uiCounter		= 0;
 
 	Logger::Logger()
-		: m_impl( NULL )
+		:	m_pImpl( NULL	)
 	{
-		std::unique_lock< std::mutex > lock( m_mutex );
-		m_headers[ELogType_DEBUG] = cuT( "***DEBUG*** " );
-		m_headers[ELogType_INFO] = String();
-		m_headers[ELogType_WARNING] = cuT( "***WARNING*** " );
-		m_headers[ELogType_ERROR] = cuT( "***ERROR*** " );
-
-		m_cout = new LogStreambuf< char, InfoLogStreambufTraits< char > >( std::cout );
-		m_cerr = new LogStreambuf< char, ErrorLogStreambufTraits< char > >( std::cerr );
-		m_clog = new LogStreambuf< char, DebugLogStreambufTraits< char > >( std::clog );
-		m_wcout = new LogStreambuf< wchar_t, InfoLogStreambufTraits< wchar_t > >( std::wcout );
-		m_wcerr = new LogStreambuf< wchar_t, ErrorLogStreambufTraits< wchar_t > >( std::wcerr );
-		m_wclog = new LogStreambuf< wchar_t, DebugLogStreambufTraits< wchar_t > >( std::wclog );
+		CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+		m_strHeaders[eLOG_TYPE_DEBUG	] = cuT( "***DEBUG*** "	);
+		m_strHeaders[eLOG_TYPE_MESSAGE	] = cuEmptyString;
+		m_strHeaders[eLOG_TYPE_WARNING	] = cuT( "***WARNING*** "	);
+		m_strHeaders[eLOG_TYPE_ERROR	] = cuT( "***ERROR*** "	);
 	}
 
 	Logger::~Logger()
 	{
-		delete m_cout;
-		delete m_cerr;
-		delete m_clog;
-		delete m_wcout;
-		delete m_wcerr;
-		delete m_wclog;
-
-		if ( m_ownInstance )
+		if ( m_bOwnInstance )
 		{
-			m_impl->Cleanup();
-			delete m_impl;
-			m_impl = NULL;
+			delete m_pImpl;
 		}
 	}
 
 	void Logger::Initialise( Logger * p_pLogger )
 	{
-		m_counter++;
+		m_uiCounter++;
 #if defined( _WIN32 )
 
-		if ( m_singleton )
+		if ( m_pSingleton )
 		{
-			m_counter--;
-			Logger::LogWarning( ERROR_LOGGER_ALREADY_INITIALISED );
+			throw "Logger instance already initialised";
 		}
 		else
 		{
-			m_ownInstance = false;
+			m_bOwnInstance = false;
 			Logger & l_logger = GetSingleton();
-			delete l_logger.m_impl;
-			l_logger.m_impl = p_pLogger->m_impl;
+			delete l_logger.m_pImpl;
+			l_logger.m_pImpl = p_pLogger->m_pImpl;
 
-			for ( int i = 0; i < ELogType_COUNT; i++ )
+			for ( int i = 0; i < eLOG_TYPE_COUNT; i++ )
 			{
-				l_logger.m_headers[i] = p_pLogger->m_headers[i];
+				l_logger.m_strHeaders[i] = p_pLogger->m_strHeaders[i];
 			}
-
-			l_logger.m_logLevel = p_pLogger->m_logLevel;
-			l_logger.DoInitialiseThread();
 		}
 
 #endif
 	}
 
-	void Logger::Initialise( ELogType p_eLogLevel )
+	void Logger::Initialise( eLOG_TYPE p_eLogLevel )
 	{
-		m_counter++;
+		m_uiCounter++;
 
-		if ( m_singleton )
+		if ( m_pSingleton )
 		{
-			CASTOR_EXCEPTION( ERROR_LOGGER_ALREADY_INITIALISED );
+			throw "Logger instance already initialised";
 		}
 		else
 		{
-			m_ownInstance = true;
+			m_bOwnInstance = true;
 			Logger & l_logger = GetSingleton();
-			delete l_logger.m_impl;
-			l_logger.m_impl = new LoggerImpl;
-			l_logger.m_impl->Initialise( l_logger );
-			l_logger.m_logLevel = p_eLogLevel;
-			l_logger.DoInitialiseThread();
+			delete l_logger.m_pImpl;
+			l_logger.m_pImpl = NULL;
+
+			switch ( p_eLogLevel )
+			{
+			case eLOG_TYPE_DEBUG:
+				l_logger.m_pImpl = new LeveledLogger< eLOG_TYPE_DEBUG >();
+				break;
+
+			case eLOG_TYPE_MESSAGE:
+				l_logger.m_pImpl = new LeveledLogger< eLOG_TYPE_MESSAGE >();
+				break;
+
+			case eLOG_TYPE_WARNING:
+				l_logger.m_pImpl = new LeveledLogger< eLOG_TYPE_WARNING >();
+				break;
+
+			case eLOG_TYPE_ERROR:
+				l_logger.m_pImpl = new LeveledLogger< eLOG_TYPE_ERROR >();
+				break;
+			}
+
+			if ( l_logger.m_pImpl )
+			{
+				l_logger.m_pImpl->Initialise( &l_logger );
+			}
+			else
+			{
+				throw std::range_error( "SetLogLevel subscript error" );
+			}
 		}
 	}
 
 	void Logger::Cleanup()
 	{
-		GetSingleton().DoCleanupThread();
+		m_uiCounter--;
+#if !defined( _WIN32 )
 
-		if ( m_counter > 0 )
+		if ( m_uiCounter <= 0 )
 		{
-			m_counter--;
-			delete m_singleton;
-			m_singleton = NULL;
+			delete m_pSingleton;
+			m_pSingleton = NULL;
 		}
+
+#else
+		delete m_pSingleton;
+		m_pSingleton = NULL;
+#endif
 	}
 
-	void Logger::RegisterCallback( LogCallback p_pfnCallback, void * p_pCaller )
+	void Logger::SetCallback( PLogCallback p_pfnCallback, void * p_pCaller )
 	{
-		GetSingleton().DoRegisterCallback( p_pfnCallback, p_pCaller );
+		GetSingleton().DoSetCallback( p_pfnCallback, p_pCaller );
 	}
 
-	void Logger::UnregisterCallback( void * p_pCaller )
+	void Logger::SetFileName( String const & p_logFilePath, eLOG_TYPE p_eLogType )
 	{
-		GetSingleton().DoUnregisterCallback( p_pCaller );
-	}
-
-	void Logger::SetFileName( String const & p_logFilePath, ELogType p_eLogType )
-	{
-		if ( GetSingleton().m_impl )
+		if ( GetSingleton().m_pImpl )
 		{
 			GetSingleton().DoSetFileName( p_logFilePath, p_eLogType );
 		}
@@ -250,22 +220,23 @@ namespace Castor
 			char l_pText[256];
 			va_list l_vaList;
 			va_start( l_vaList, p_pFormat );
-			Vsnprintf( l_pText, p_pFormat, l_vaList );
+			std::string l_strFormat( p_pFormat );
+			Vsnprintf( l_pText, l_strFormat.c_str(), l_vaList );
 			va_end( l_vaList );
-			LogDebug( std::string( l_pText ) );
+
+			if ( GetSingleton().m_pImpl )
+			{
+				GetSingleton().m_pImpl->LogDebug( str_utils::from_str( l_pText ) );
+			}
 		}
 	}
 
 	void Logger::LogDebug( std::string const & p_msg )
 	{
-		GetSingleton().DoPushMessage( ELogType_DEBUG, p_msg );
-	}
-
-	void Logger::LogDebug( std::ostream const & p_msg )
-	{
-		std::stringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogDebug( l_ss.str() );
+		if ( GetSingleton().m_pImpl )
+		{
+			GetSingleton().m_pImpl->LogDebug( str_utils::from_str( p_msg ) );
+		}
 	}
 
 	void Logger::LogDebug( wchar_t const * p_pFormat , ... )
@@ -275,72 +246,75 @@ namespace Castor
 			wchar_t l_pText[256];
 			va_list l_vaList;
 			va_start( l_vaList, p_pFormat );
-			Vswprintf( l_pText, p_pFormat, l_vaList );
+			std::wstring l_strFormat( p_pFormat );
+			Vswprintf( l_pText, l_strFormat.c_str(), l_vaList );
 			va_end( l_vaList );
-			LogDebug( std::wstring( l_pText ) );
+
+			if ( GetSingleton().m_pImpl )
+			{
+				GetSingleton().m_pImpl->LogDebug( str_utils::from_wstr( l_pText ) );
+			}
 		}
 	}
 
 	void Logger::LogDebug( std::wstring const & p_msg )
 	{
-		GetSingleton().DoPushMessage( ELogType_DEBUG, p_msg );
+		if ( GetSingleton().m_pImpl )
+		{
+			GetSingleton().m_pImpl->LogDebug( str_utils::from_wstr( p_msg ) );
+		}
 	}
 
-	void Logger::LogDebug( std::wostream const & p_msg )
-	{
-		std::wstringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogDebug( l_ss.str() );
-	}
-
-	void Logger::LogInfo( char const * p_pFormat, ... )
+	void Logger::LogMessage( char const * p_pFormat, ... )
 	{
 		if ( p_pFormat )
 		{
 			char l_pText[256];
 			va_list l_vaList;
 			va_start( l_vaList, p_pFormat );
-			Vsnprintf( l_pText, p_pFormat, l_vaList );
+			std::string l_strFormat( p_pFormat );
+			Vsnprintf( l_pText, l_strFormat.c_str(), l_vaList );
 			va_end( l_vaList );
-			LogInfo( std::string( l_pText ) );
+
+			if ( GetSingleton().m_pImpl )
+			{
+				GetSingleton().m_pImpl->LogMessage( str_utils::from_str( l_pText ) );
+			}
 		}
 	}
 
-	void Logger::LogInfo( std::string const & p_msg )
+	void Logger::LogMessage( std::string const & p_msg )
 	{
-		GetSingleton().DoPushMessage( ELogType_INFO, p_msg );
+		if ( GetSingleton().m_pImpl )
+		{
+			GetSingleton().m_pImpl->LogMessage( str_utils::from_str( p_msg ) );
+		}
 	}
 
-	void Logger::LogInfo( std::ostream const & p_msg )
-	{
-		std::stringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogInfo( l_ss.str() );
-	}
-
-	void Logger::LogInfo( wchar_t const * p_pFormat , ... )
+	void Logger::LogMessage( wchar_t const * p_pFormat , ... )
 	{
 		if ( p_pFormat )
 		{
 			wchar_t l_pText[256];
 			va_list l_vaList;
 			va_start( l_vaList, p_pFormat );
-			Vswprintf( l_pText, p_pFormat, l_vaList );
+			std::wstring l_strFormat( p_pFormat );
+			Vswprintf( l_pText, l_strFormat.c_str(), l_vaList );
 			va_end( l_vaList );
-			LogInfo( std::wstring( l_pText ) );
+
+			if ( GetSingleton().m_pImpl )
+			{
+				GetSingleton().m_pImpl->LogMessage( str_utils::from_wstr( l_pText ) );
+			}
 		}
 	}
 
-	void Logger::LogInfo( std::wstring const & p_msg )
+	void Logger::LogMessage( std::wstring const & p_msg )
 	{
-		GetSingleton().DoPushMessage( ELogType_INFO, p_msg );
-	}
-
-	void Logger::LogInfo( std::wostream const & p_msg )
-	{
-		std::wstringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogInfo( l_ss.str() );
+		if ( GetSingleton().m_pImpl )
+		{
+			GetSingleton().m_pImpl->LogMessage( str_utils::from_wstr( p_msg ) );
+		}
 	}
 
 	void Logger::LogWarning( char const * p_pFormat, ... )
@@ -350,22 +324,23 @@ namespace Castor
 			char l_pText[256];
 			va_list l_vaList;
 			va_start( l_vaList, p_pFormat );
-			Vsnprintf( l_pText, p_pFormat, l_vaList );
+			std::string l_strFormat( p_pFormat );
+			Vsnprintf( l_pText, l_strFormat.c_str(), l_vaList );
 			va_end( l_vaList );
-			LogWarning( std::string( l_pText ) );
+
+			if ( GetSingleton().m_pImpl )
+			{
+				GetSingleton().m_pImpl->LogWarning( str_utils::from_str( l_pText ) );
+			}
 		}
 	}
 
 	void Logger::LogWarning( std::string const & p_msg )
 	{
-		GetSingleton().DoPushMessage( ELogType_WARNING, p_msg );
-	}
-
-	void Logger::LogWarning( std::ostream const & p_msg )
-	{
-		std::stringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogWarning( l_ss.str() );
+		if ( GetSingleton().m_pImpl )
+		{
+			GetSingleton().m_pImpl->LogWarning( str_utils::from_str( p_msg ) );
+		}
 	}
 
 	void Logger::LogWarning( wchar_t const * p_pFormat , ... )
@@ -375,23 +350,25 @@ namespace Castor
 			wchar_t l_pText[256];
 			va_list l_vaList;
 			va_start( l_vaList, p_pFormat );
-			Vswprintf( l_pText, p_pFormat, l_vaList );
+			std::wstring l_strFormat( p_pFormat );
+			Vswprintf( l_pText, l_strFormat.c_str(), l_vaList );
 			va_end( l_vaList );
-			LogWarning( std::wstring( l_pText ) );
+
+			if ( GetSingleton().m_pImpl )
+			{
+				GetSingleton().m_pImpl->LogWarning( str_utils::from_wstr( l_pText ) );
+			}
 		}
 	}
 
 	void Logger::LogWarning( std::wstring const & p_msg )
 	{
-		GetSingleton().DoPushMessage( ELogType_WARNING, p_msg );
+		if ( GetSingleton().m_pImpl )
+		{
+			GetSingleton().m_pImpl->LogWarning( str_utils::from_wstr( p_msg ) );
+		}
 	}
 
-	void Logger::LogWarning( std::wostream const & p_msg )
-	{
-		std::wstringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogWarning( l_ss.str() );
-	}
 
 	void Logger::LogError( char const * p_pFormat, ... )
 	{
@@ -400,22 +377,23 @@ namespace Castor
 			char l_pText[256];
 			va_list l_vaList;
 			va_start( l_vaList, p_pFormat );
-			Vsnprintf( l_pText, p_pFormat, l_vaList );
+			std::string l_strFormat( p_pFormat );
+			Vsnprintf( l_pText, l_strFormat.c_str(), l_vaList );
 			va_end( l_vaList );
-			LogError( std::string( l_pText ) );
+
+			if ( GetSingleton().m_pImpl )
+			{
+				GetSingleton().m_pImpl->LogError( str_utils::from_str( l_pText ) );
+			}
 		}
 	}
 
 	void Logger::LogError( std::string const & p_msg )
 	{
-		GetSingleton().DoPushMessage( ELogType_ERROR, p_msg );
-	}
-
-	void Logger::LogError( std::ostream const & p_msg )
-	{
-		std::stringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogError( l_ss.str() );
+		if ( GetSingleton().m_pImpl )
+		{
+			GetSingleton().m_pImpl->LogError( str_utils::from_str( p_msg ) );
+		}
 	}
 
 	void Logger::LogError( wchar_t const * p_pFormat , ... )
@@ -425,32 +403,33 @@ namespace Castor
 			wchar_t l_pText[256];
 			va_list l_vaList;
 			va_start( l_vaList, p_pFormat );
-			Vswprintf( l_pText, p_pFormat, l_vaList );
+			std::wstring l_strFormat( p_pFormat );
+			Vswprintf( l_pText, l_strFormat.c_str(), l_vaList );
 			va_end( l_vaList );
-			LogError( std::wstring( l_pText ) );
+
+			if ( GetSingleton().m_pImpl )
+			{
+				GetSingleton().m_pImpl->LogError( str_utils::from_wstr( l_pText ) );
+			}
 		}
 	}
 
 	void Logger::LogError( std::wstring const & p_msg )
 	{
-		GetSingleton().DoPushMessage( ELogType_ERROR, p_msg );
-	}
-
-	void Logger::LogError( std::wostream const & p_msg )
-	{
-		std::wstringstream l_ss;
-		l_ss << p_msg.rdbuf();
-		LogError( l_ss.str() );
+		if ( GetSingleton().m_pImpl )
+		{
+			GetSingleton().m_pImpl->LogError( str_utils::from_wstr( p_msg ) );
+		}
 	}
 
 	Logger & Logger::GetSingleton()
 	{
-		if ( !m_singleton )
+		if ( !m_pSingleton )
 		{
-			m_singleton = new Logger();
+			m_pSingleton = new Logger();
 		}
 
-		return *m_singleton;
+		return *m_pSingleton;
 	}
 
 	Logger * Logger::GetSingletonPtr()
@@ -458,96 +437,14 @@ namespace Castor
 		return &GetSingleton();
 	}
 
-	void Logger::DoRegisterCallback( LogCallback p_pfnCallback, void * p_pCaller )
+	void Logger::DoSetCallback( PLogCallback p_pfnCallback, void * p_pCaller )
 	{
-		m_impl->RegisterCallback( p_pfnCallback, p_pCaller );
+		m_pImpl->SetCallback( p_pfnCallback, p_pCaller );
 	}
 
-	void Logger::DoUnregisterCallback( void * p_pCaller )
+	void Logger::DoSetFileName( String const & p_logFilePath, eLOG_TYPE p_eLogType )
 	{
-		m_impl->UnregisterCallback( p_pCaller );
-	}
-
-	void Logger::DoSetFileName( String const & logFilePath, ELogType logLevel )
-	{
-		std::unique_lock< std::mutex > lock( m_mutex );
-		m_impl->SetFileName( logFilePath, logLevel );
-	}
-
-	void Logger::DoPushMessage( ELogType logLevel, std::string const & message )
-	{
-		if ( logLevel >= m_logLevel )
-		{
-#if !defined( NDEBUG )
-			{
-				std::unique_lock< std::mutex > lock( m_mutex );
-				m_impl->PrintMessage( logLevel, message );
-			}
-#endif
-			std::unique_lock< std::mutex > l_lock( m_mutexQueue );
-			m_queue.push_back( std::make_unique< Message >( logLevel, message ) );
-		}
-	}
-
-	void Logger::DoPushMessage( ELogType logLevel, std::wstring const & message )
-	{
-		if ( logLevel >= m_logLevel )
-		{
-#if !defined( NDEBUG )
-			{
-				std::unique_lock< std::mutex > lock( m_mutex );
-				m_impl->PrintMessage( logLevel, message );
-			}
-#endif
-			std::unique_lock< std::mutex > l_lock( m_mutexQueue );
-			m_queue.push_back( std::make_unique< WMessage >( logLevel, message ) );
-		}
-	}
-
-	void Logger::DoFlushQueue()
-	{
-		if ( !m_queue.empty() )
-		{
-			MessageQueue queue;
-
-			{
-				std::unique_lock< std::mutex > l_lock( m_mutexQueue );
-				std::swap( queue, m_queue );
-			}
-
-			m_impl->LogMessageQueue( queue );
-		}
-	}
-
-	void Logger::DoInitialiseThread()
-	{
-		m_stopped = false;
-		m_logThread = std::thread( [this]()
-		{
-			while ( !m_stopped )
-			{
-				DoFlushQueue();
-				std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
-			}
-
-			DoFlushQueue();
-			{
-				std::unique_lock< std::mutex > l_lock( m_mutexThreadEnded );
-				m_threadEnded.notify_all();
-			}
-		} );
-	}
-
-	void Logger::DoCleanupThread()
-	{
-		if ( !m_stopped )
-		{
-			m_stopped = true;
-			{
-				std::unique_lock< std::mutex > l_lock( m_mutexThreadEnded );
-				m_threadEnded.wait( l_lock );
-			}
-			m_logThread.join();
-		}
+		CASTOR_MUTEX_AUTO_SCOPED_LOCK();
+		m_pImpl->SetFileName( p_logFilePath, p_eLogType );
 	}
 }

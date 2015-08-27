@@ -50,8 +50,8 @@ namespace Castor
 		 *\param[in]	p_eMode	Le mode d'ouverture du fichier
 		 */
 		Loader( File::eOPEN_MODE p_eMode, File::eENCODING_MODE p_eEncodingMode = File::eENCODING_MODE_ASCII )
-			: m_eOpenMode( p_eMode )
-			, m_eEncodingMode( p_eEncodingMode )
+			:	m_eOpenMode( p_eMode	)
+			,	m_eEncodingMode( p_eEncodingMode	)
 		{
 		}
 		/**

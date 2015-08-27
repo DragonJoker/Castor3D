@@ -61,6 +61,7 @@ namespace GlRender
 
 		if ( m_pMatrixBuffer )
 		{
+			m_gl.BindBuffer( eGL_BUFFER_TARGET_ARRAY, std::static_pointer_cast< GlMatrixBufferObject >( m_pMatrixBuffer->GetGpuBuffer() )->GetGlIndex() );
 			m_pMatrixBuffer->GetGpuBuffer()->Fill( m_pMatrixBuffer->data(), m_pMatrixBuffer->GetSize(), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 		}
 

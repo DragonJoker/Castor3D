@@ -85,7 +85,6 @@ namespace Dx11Render
 		virtual bool DoAttach( Castor3D::eATTACHMENT_POINT p_eAttachment, Castor3D::RenderBufferSPtr p_pRenderBuffer );
 		virtual void DoDetachAll();
 		virtual bool DoStretchInto( Castor3D::FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, Castor3D::eINTERPOLATION_MODE p_eInterpolation );
-		void DoCleanupOld();
 
 	private:
 		DxRenderSystem * m_pRenderSystem;

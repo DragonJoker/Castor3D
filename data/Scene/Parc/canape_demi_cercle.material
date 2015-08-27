@@ -1,0 +1,216 @@
+
+material canape_demi_cercle
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture canape_demi_cercle.jpg
+			}
+		}
+
+	}
+
+}
+
+material coll_pf_canape_demi_cercle_01_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}
+
+material coll_pf_canape_demi_cercle_03_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}
+
+material coll_pf_canape_demi_cercle_02_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}
+
+material coll_sd_canape_demi_cercle_04_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}
+
+material coll_sd_canape_demi_cercle_05_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}
+
+material coll_sd_canape_demi_cercle_06_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}
+
+material coll_sd_canape_demi_cercle_07_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}
+
+material coll_sd_canape_demi_cercle_08_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}
+
+material coll_sd_canape_demi_cercle_10_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}
+
+material coll_sd_canape_demi_cercle_11_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}
+
+material coll_sd_canape_demi_cercle_12_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}
+
+material coll_sd_canape_demi_cercle_09_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}
+
+material coll_sd_canape_demi_cercle_01_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}
+
+material coll_sd_canape_demi_cercle_02_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}
+
+material coll_sd_canape_demi_cercle_03_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}

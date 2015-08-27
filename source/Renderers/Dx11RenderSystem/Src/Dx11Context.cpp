@@ -14,47 +14,59 @@ using namespace Castor;
 namespace ShaderModel1_2_3_4
 {
 	static const String VtxShader =
-		cuT( "struct VtxInput\n" )
-		cuT( "{\n" )
-		cuT( "	float4 Position: POSITION;\n" )
-		cuT( "	float2 TextureUV: TEXCOORD0;\n" )
-		cuT( "};\n" )
-		cuT( "struct VtxOutput\n" )
-		cuT( "{\n" )
-		cuT( "	float4 Position: SV_POSITION;\n" )
-		cuT( "	float2 TextureUV: TEXCOORD0;\n" )
-		cuT( "};\n" )
-		cuT( "VtxOutput mainVx( VtxInput p_input )\n" )
-		cuT( "{\n" )
-		cuT( "	VtxOutput l_output;\n" )
-		cuT( "	p_input.Position.w = 1.0f;\n" )
-		cuT( "	l_output.Position = mul( p_input.Position, c3d_mtxProjection );\n" )
-		cuT( "	l_output.TextureUV = p_input.TextureUV;\n" )
-		cuT( "	return l_output;\n" )
-		cuT( "}\n" );
+		cuT( "cbuffer matrices : register( cb0 )\n"	)
+		cuT( "{\n"	)
+		cuT( "	matrix	c3d_mtxProjection;\n"	)
+		cuT( "	matrix	c3d_mtxModel;\n"	)
+		cuT( "	matrix	c3d_mtxView;\n"	)
+		cuT( "	matrix	c3d_mtxModelView;\n"	)
+		cuT( "	matrix	c3d_mtxProjectionModelView;\n"	)
+		cuT( "	matrix	c3d_mtxNormal;\n"	)
+		cuT( "	matrix	c3d_mtxTexture0;\n"	)
+		cuT( "	matrix	c3d_mtxTexture1;\n"	)
+		cuT( "	matrix	c3d_mtxTexture2;\n"	)
+		cuT( "	matrix	c3d_mtxTexture3;\n"	)
+		cuT( "};\n"	)
+		cuT( "struct VtxInput\n"	)
+		cuT( "{\n"	)
+		cuT( "	float4	Position	:	POSITION;\n"	)
+		cuT( "	float2	TextureUV	:	TEXCOORD0;\n"	)
+		cuT( "};\n"	)
+		cuT( "struct VtxOutput\n"	)
+		cuT( "{\n"	)
+		cuT( "	float4	Position	:	SV_POSITION;\n"	)
+		cuT( "	float2	TextureUV	:	TEXCOORD0;\n"	)
+		cuT( "};\n"	)
+		cuT( "VtxOutput mainVx( in VtxInput p_input )\n"	)
+		cuT( "{\n"	)
+		cuT( "	VtxOutput l_output;\n"	)
+		cuT( "	p_input.Position.w = 1.0f;\n"	)
+		cuT( "	l_output.Position		= mul( p_input.Position, c3d_mtxProjectionModelView );\n"	)
+		cuT( "	l_output.TextureUV		= p_input.TextureUV;\n"	)
+		cuT( "	return l_output;\n"	)
+		cuT( "}\n"	);
 
 	static const String PxlShader =
-		cuT( "Texture2D diffuseTexture: register( t0 );\n" )
-		cuT( "SamplerState DiffuseSampler: register( s0 );\n" )
-		cuT( "struct PxlInput\n" )
-		cuT( "{\n" )
-		cuT( "	float4 Position: SV_POSITION;\n" )
-		cuT( "	float2 TextureUV: TEXCOORD0;\n" )
-		cuT( "};\n" )
-		cuT( "float4 mainPx( PxlInput p_input ): SV_TARGET\n" )
-		cuT( "{\n" )
-		cuT( "	return diffuseTexture.Sample( DiffuseSampler, p_input.TextureUV );\n" )
-		cuT( "}\n" );
+		cuT( "struct PxlInput\n"	)
+		cuT( "{\n"	)
+		cuT( "	float4	Position	:	SV_POSITION;\n"	)
+		cuT( "	float2	TextureUV	:	TEXCOORD0;\n"	)
+		cuT( "};\n"	)
+		cuT( "Texture2D diffuseTexture : register( t0 );\n"	)
+		cuT( "SamplerState DiffuseSampler : register( s0 );\n"	)
+		cuT( "float4 mainPx( in PxlInput p_input ) : SV_Target\n"	)
+		cuT( "{\n"	)
+		cuT( "	return diffuseTexture.Sample( DiffuseSampler, p_input.TextureUV );\n"	)
+		cuT( "}\n"	);
 }
 
 namespace Dx11Render
 {
 	DxContext::DxContext()
-		: Context()
-		, m_pSwapChain( NULL )
-		, m_pRenderTargetView( NULL )
-		, m_pDepthStencilView( NULL )
-		, m_pDeviceContext( NULL )
+		:	Context()
+		,	m_pSwapChain( NULL )
+		,	m_pRenderTargetView( NULL )
+		,	m_pDepthStencilView( NULL )
 	{
 	}
 
@@ -80,28 +92,28 @@ namespace Dx11Render
 		{
 			DxRenderSystem * l_pRenderSystem = static_cast< DxRenderSystem * >( m_pRenderSystem );
 			m_hWnd = m_pWindow->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd();
+			//		m_size.set( ::GetSystemMetrics( SM_CXFULLSCREEN ), ::GetSystemMetrics( SM_CYFULLSCREEN ) );
 			m_size = m_pWindow->GetSize();
 
 			if ( DoInitPresentParameters() == S_OK &&  l_pRenderSystem->InitialiseDevice( m_hWnd, m_deviceParams ) )
 			{
 				DoInitVolatileResources();
-				Logger::LogInfo( cuT( "Dx11Context::DoInitialise - Context for window 0x%X initialised" ), m_hWnd );
+				Logger::LogMessage( cuT( "Dx11Context::DoInitialise - Context for window 0x%X initialised" ), m_hWnd );
 				m_bInitialised = true;
 			}
 
 			if ( m_bInitialised )
 			{
-				auto l_uniforms = UniformsBase::Get( *l_pRenderSystem );
-				StringStream l_vtxShader;
-				l_vtxShader << l_uniforms->GetVertexInMatrices( 0 ) << std::endl;
-				l_vtxShader << ShaderModel1_2_3_4::VtxShader;
 				ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
-				l_pProgram->SetEntryPoint( eSHADER_TYPE_VERTEX, cuT( "mainVx" ) );
-				l_pProgram->SetEntryPoint( eSHADER_TYPE_PIXEL, cuT( "mainPx" ) );
-				l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_5, l_vtxShader.str() );
-				l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_5, ShaderModel1_2_3_4::PxlShader );
+				OneTextureFrameVariableSPtr l_pVariable = l_pProgram->CreateFrameVariable( cuT( "c3d_mapDiffuse" ), eSHADER_TYPE_PIXEL );
+				l_pProgram->SetEntryPoint( eSHADER_TYPE_VERTEX,	cuT( "mainVx" ) );
+				l_pProgram->SetEntryPoint( eSHADER_TYPE_PIXEL,	cuT( "mainPx" ) );
+				l_pProgram->SetSource( eSHADER_TYPE_VERTEX,	eSHADER_MODEL_4, ShaderModel1_2_3_4::VtxShader	);
+				l_pProgram->SetSource( eSHADER_TYPE_PIXEL,	eSHADER_MODEL_4, ShaderModel1_2_3_4::PxlShader	);
 				l_pProgram->Initialise();
+				m_pGeometryBuffers->GetIndexBuffer().Create();
 				m_pGeometryBuffers->GetVertexBuffer().Create();
+				m_pGeometryBuffers->GetIndexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 				m_pGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, l_pProgram );
 				m_pGeometryBuffers->Initialise();
 			}
@@ -112,18 +124,15 @@ namespace Dx11Render
 
 	void DxContext::DoCleanup()
 	{
-		SafeRelease( m_pDeviceContext );
 		DoFreeVolatileResources();
 	}
 
 	void DxContext::DoSetCurrent()
 	{
-		static_cast< DxRenderSystem * >( m_pRenderSystem )->GetDevice()->GetImmediateContext( &m_pDeviceContext );
 	}
 
 	void DxContext::DoEndCurrent()
 	{
-		SafeRelease( m_pDeviceContext );
 	}
 
 	void DxContext::DoSwapBuffers()
@@ -151,29 +160,32 @@ namespace Dx11Render
 
 	void DxContext::DoClear( uint32_t p_uiTargets )
 	{
-		ID3D11DeviceContext * l_pDeviceContext = GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext;
+		reinterpret_cast< DxRenderSystem * >( m_pRenderSystem )->GetDevice()->GetImmediateContext( &l_pDeviceContext );
 
 		if ( p_uiTargets & eBUFFER_COMPONENT_COLOUR )
 		{
 			l_pDeviceContext->ClearRenderTargetView( m_pRenderTargetView, m_fClearColour );
 		}
 
-		UINT l_uiFlags = 0;
-
-		if ( p_uiTargets & eBUFFER_COMPONENT_DEPTH )
+		if ( ( p_uiTargets & eBUFFER_COMPONENT_DEPTH ) || ( p_uiTargets & eBUFFER_COMPONENT_STENCIL ) )
 		{
-			l_uiFlags |= D3D11_CLEAR_DEPTH;
-		}
+			UINT l_uiFlags = 0;
 
-		if ( p_uiTargets & eBUFFER_COMPONENT_STENCIL )
-		{
-			l_uiFlags |= D3D11_CLEAR_STENCIL;
-		}
+			if ( p_uiTargets & eBUFFER_COMPONENT_DEPTH )
+			{
+				l_uiFlags |= D3D11_CLEAR_DEPTH;
+			}
 
-		if ( l_uiFlags )
-		{
+			if ( p_uiTargets & eBUFFER_COMPONENT_STENCIL )
+			{
+				l_uiFlags |= D3D11_CLEAR_STENCIL;
+			}
+
 			l_pDeviceContext->ClearDepthStencilView( m_pDepthStencilView, l_uiFlags, 0, 0 );
 		}
+
+		l_pDeviceContext->Release();
 	}
 
 	void DxContext::DoBind( Castor3D::eBUFFER p_eBuffer, Castor3D::eFRAMEBUFFER_TARGET p_eTarget )
@@ -182,8 +194,10 @@ namespace Dx11Render
 		{
 			if ( p_eBuffer == eBUFFER_BACK || p_eBuffer == eBUFFER_BACK_LEFT || p_eBuffer == eBUFFER_BACK_RIGHT )
 			{
-				ID3D11DeviceContext * l_pDeviceContext = GetDeviceContext();
+				ID3D11DeviceContext * l_pDeviceContext;
+				reinterpret_cast< DxRenderSystem * >( m_pRenderSystem )->GetDevice()->GetImmediateContext( &l_pDeviceContext );
 				l_pDeviceContext->OMSetRenderTargets( 1, &m_pRenderTargetView, m_pDepthStencilView );
+				l_pDeviceContext->Release();
 			}
 		}
 		else if ( p_eTarget == eFRAMEBUFFER_TARGET_READ )
@@ -198,19 +212,16 @@ namespace Dx11Render
 
 	void DxContext::DoInitVolatileResources()
 	{
-		DoSetCurrent();
 		DxRenderSystem * l_pRenderSystem = static_cast< DxRenderSystem * >( m_pRenderSystem );
 		DxContextSPtr l_pMainContext = std::static_pointer_cast< DxContext >( l_pRenderSystem->GetMainContext() );
-		IDXGIFactory * l_factory = NULL;
-		HRESULT l_hr = CreateDXGIFactory( __uuidof( IDXGIFactory ) , reinterpret_cast< void ** >( &l_factory ) );
+		IDXGIFactory * l_pFactory = l_pRenderSystem->GetDXGIFactory();
 		ID3D11Texture2D * l_pDSTex = NULL;
 		ID3D11Texture2D * l_pRTTex = NULL;
 
-		if ( l_factory )
+		if ( l_pFactory )
 		{
-			HRESULT l_hr = l_factory->CreateSwapChain( l_pRenderSystem->GetDevice(), &m_deviceParams, &m_pSwapChain );
-			dxDebugName( l_pRenderSystem, m_pSwapChain, SwapChain );
-			l_factory->Release();
+			HRESULT l_hr = l_pFactory->CreateSwapChain( l_pRenderSystem->GetDevice(), &m_deviceParams, &m_pSwapChain );
+			dxDebugName( m_pSwapChain, SwapChain );
 			bool l_bContinue = dxCheckError( l_hr, "CreateSwapChain" );
 
 			if ( l_bContinue )
@@ -222,26 +233,27 @@ namespace Dx11Render
 			if ( l_bContinue )
 			{
 				l_hr = l_pRenderSystem->GetDevice()->CreateRenderTargetView( l_pRTTex, NULL, &m_pRenderTargetView );
-				dxDebugName( l_pRenderSystem, m_pRenderTargetView, ContextRTView );
+				dxDebugName( m_pRenderTargetView, ContextRTView );
 				l_bContinue = dxCheckError( l_hr, "CreateRenderTargetView" );
-				l_pRTTex->Release();
 			}
+
+			SafeRelease( l_pRTTex );
 
 			if ( l_bContinue )
 			{
 				// Create depth stencil texture
-				D3D11_TEXTURE2D_DESC l_descDepth = { 0 };
-				l_descDepth.Width = m_deviceParams.BufferDesc.Width;
-				l_descDepth.Height = m_deviceParams.BufferDesc.Height;
-				l_descDepth.MipLevels = 1;
-				l_descDepth.ArraySize = 1;
-				l_descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-				l_descDepth.SampleDesc.Count = 1;
-				l_descDepth.SampleDesc.Quality = 0;
-				l_descDepth.Usage = D3D11_USAGE_DEFAULT;
-				l_descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-				l_descDepth.CPUAccessFlags = 0;
-				l_descDepth.MiscFlags = 0;
+				D3D11_TEXTURE2D_DESC l_descDepth	= { 0 };
+				l_descDepth.Width					= m_deviceParams.BufferDesc.Width;
+				l_descDepth.Height					= m_deviceParams.BufferDesc.Height;
+				l_descDepth.MipLevels				= 1;
+				l_descDepth.ArraySize				= 1;
+				l_descDepth.Format					= DXGI_FORMAT_D24_UNORM_S8_UINT;
+				l_descDepth.SampleDesc.Count		= 1;
+				l_descDepth.SampleDesc.Quality		= 0;
+				l_descDepth.Usage					= D3D11_USAGE_DEFAULT;
+				l_descDepth.BindFlags				= D3D11_BIND_DEPTH_STENCIL;
+				l_descDepth.CPUAccessFlags			= 0;
+				l_descDepth.MiscFlags				= 0;
 				l_hr = l_pRenderSystem->GetDevice()->CreateTexture2D( &l_descDepth, NULL, &l_pDSTex );
 				l_bContinue = dxCheckError( l_hr, "CreateTexture2D" );
 			}
@@ -250,25 +262,25 @@ namespace Dx11Render
 			{
 				// Create the depth stencil view
 				D3D11_DEPTH_STENCIL_VIEW_DESC l_descDSV = D3D11_DEPTH_STENCIL_VIEW_DESC();
-				l_descDSV.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-				l_descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-				l_descDSV.Texture2D.MipSlice = 0;
+				l_descDSV.Format              = DXGI_FORMAT_D24_UNORM_S8_UINT;
+				l_descDSV.ViewDimension       = D3D11_DSV_DIMENSION_TEXTURE2D;
+				l_descDSV.Texture2D.MipSlice  = 0;
 				l_hr = l_pRenderSystem->GetDevice()->CreateDepthStencilView( l_pDSTex, &l_descDSV, &m_pDepthStencilView );
-				dxDebugName( l_pRenderSystem, m_pDepthStencilView, ContextDSView );
+				dxDebugName( m_pDepthStencilView, ContextDSView );
 				l_bContinue = dxCheckError( l_hr, "CreateDepthStencilView" );
-				l_pDSTex->Release();
 			}
+
+			SafeRelease( l_pDSTex );
 
 			if ( l_bContinue )
 			{
-				ID3D11DeviceContext * l_pDeviceContext = GetDeviceContext();
+				ID3D11DeviceContext * l_pDeviceContext;
+				reinterpret_cast< DxRenderSystem * >( m_pRenderSystem )->GetDevice()->GetImmediateContext( &l_pDeviceContext );
 				l_pDeviceContext->OMSetRenderTargets( 1, &m_pRenderTargetView, m_pDepthStencilView );
 				l_pDeviceContext->Release();
 				dxCheckError( l_hr, "OMSetRenderTargets" );
 			}
 		}
-
-		DoEndCurrent();
 	}
 
 	void DxContext::DoFreeVolatileResources()
@@ -278,37 +290,37 @@ namespace Dx11Render
 			m_pSwapChain->SetFullscreenState( false, NULL );
 		}
 
-		ReleaseTracked( m_pRenderSystem, m_pDepthStencilView );
-		ReleaseTracked( m_pRenderSystem, m_pRenderTargetView );
-		ReleaseTracked( m_pRenderSystem, m_pSwapChain );
+		SafeRelease( m_pDepthStencilView );
+		SafeRelease( m_pRenderTargetView );
+		SafeRelease( m_pSwapChain );
 	}
 
 	HRESULT DxContext::DoInitPresentParameters()
 	{
 		HRESULT l_hr = E_FAIL;
 		std::memset( &m_deviceParams, 0, sizeof( m_deviceParams ) );
-		m_deviceParams.Windowed = TRUE;
-		m_deviceParams.BufferCount = 1;
-		m_deviceParams.BufferDesc.Width = ::GetSystemMetrics( SM_CXFULLSCREEN );
-		m_deviceParams.BufferDesc.Height = ::GetSystemMetrics( SM_CYFULLSCREEN );
-		m_deviceParams.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		m_deviceParams.BufferDesc.RefreshRate.Numerator = 60;
-		m_deviceParams.BufferDesc.RefreshRate.Denominator = 1;
-		m_deviceParams.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-		m_deviceParams.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
-		m_deviceParams.SampleDesc.Count = 1;
-		m_deviceParams.SampleDesc.Quality = 0;
-		m_deviceParams.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-		m_deviceParams.OutputWindow = m_hWnd;
-		m_deviceParams.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
+		m_deviceParams.Windowed								= TRUE;
+		m_deviceParams.BufferCount							= 1;
+		m_deviceParams.BufferDesc.Width						= ::GetSystemMetrics( SM_CXFULLSCREEN );
+		m_deviceParams.BufferDesc.Height					= ::GetSystemMetrics( SM_CYFULLSCREEN );
+		m_deviceParams.BufferDesc.Format					= DXGI_FORMAT_R8G8B8A8_UNORM;
+		m_deviceParams.BufferDesc.RefreshRate.Numerator		= 60;
+		m_deviceParams.BufferDesc.RefreshRate.Denominator	= 1;
+		m_deviceParams.BufferDesc.ScanlineOrdering			= DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+		m_deviceParams.BufferDesc.Scaling					= DXGI_MODE_SCALING_UNSPECIFIED;
+		m_deviceParams.SampleDesc.Count						= 1;
+		m_deviceParams.SampleDesc.Quality					= 0;
+		m_deviceParams.BufferUsage							= DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		m_deviceParams.OutputWindow							= m_hWnd;
+		m_deviceParams.SwapEffect							= DXGI_SWAP_EFFECT_DISCARD;
 
 		if ( m_pWindow->IsFullscreen() )
 		{
-			m_deviceParams.Windowed = FALSE;
+			m_deviceParams.Windowed							= FALSE;
 		}
 		else
 		{
-			m_deviceParams.Windowed = TRUE;
+			m_deviceParams.Windowed							= TRUE;
 		}
 
 		l_hr = S_OK;

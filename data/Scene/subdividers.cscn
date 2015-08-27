@@ -1,0 +1,371 @@
+material "Silver"
+{
+	pass
+	{
+		ambient 0.0745	0.0745	0.0745 1.0
+		diffuse 0.75164	0.75164	0.75164 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 0.628281 0.628281 0.628281 1.0
+		shininess 51.2
+	}
+}
+
+material "ShowNormals"
+{
+	pass
+	{
+		ambient 0.0 0.0 0.0 1.0
+		diffuse 1.0 1.0 1.0 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 1.0 1.0 1.0 1.0
+		blend_func src_alpha inv_src_alpha
+		shininess 50.0
+
+		gl_shader_program
+		{
+			vertex_program
+			{
+				file sm_3 "Normals/normals-3.x.vert"
+				file sm_4 "Normals/normals-4.x.vert"
+			}
+			
+			geometry_program
+			{
+				file sm_3 "Normals/normals-3.x.geom"
+				file sm_4 "Normals/normals-4.x.geom"
+				input_type triangles
+				output_type line_strip
+				output_vtx_count 22
+
+				variable "p_bShowNormals"
+				{
+					type int
+					value 1
+				}
+
+				variable "p_bShowTangents"
+				{
+					type int
+					value 1
+				}
+
+				variable "p_bShowBitangents"
+				{
+					type int
+					value 1
+				}
+
+				variable "p_iSize"
+				{
+					type int
+					value 2
+				}
+			}
+			
+			pixel_program
+			{
+				file sm_3 "Normals/normals-3.x.frag"
+			}
+		}
+	}
+}
+
+scene "AlphaScene"
+{
+	background_colour 0.5 0.5 0.5 1.0
+	ambient_light 0.5 0.5 0.5 1.0
+
+	scene_node "SunLightNode1"
+	{
+		position  0.0 -1.0 -1.0
+	}
+	light "SunLight1"
+	{
+		parent		"SunLightNode1"
+		type		directional
+		diffuse		0.8 0.8 0.8
+		specular	1.0 1.0 1.0
+	}
+	
+	scene_node "Torus"
+	{
+		position 0 -20 0
+	}
+	object "Torus"
+	{
+		parent "Torus"
+		mesh "Torus"
+		{
+			type torus 4 4 5.0 10.0
+		}
+		material "ShowNormals"
+	}
+	
+	scene_node "Loop1Torus"
+	{
+		position 30 -20 -15
+	}
+	object "Loop1Torus"
+	{
+		parent "Loop1Torus"
+		mesh "Loop1Torus"
+		{
+			type torus 4 4 5.0 10.0
+			division loop 1
+		}
+		material "Silver"
+	}
+	
+	scene_node "PnTri1Torus"
+	{
+		position 30 -20 15
+	}
+	object "PnTri1Torus"
+	{
+		parent "PnTri1Torus"
+		mesh "PnTri1Torus"
+		{
+			type torus 4 4 5.0 10.0
+			division pn_tri 1
+		}
+		material "Silver"
+	}
+	
+	scene_node "Loop2Torus"
+	{
+		position 60 -20 -15
+	}
+	object "Loop2Torus"
+	{
+		parent "Loop2Torus"
+		mesh "Loop2Torus"
+		{
+			type torus 4 4 5.0 10.0
+			division loop 2
+		}
+		material "Silver"
+	}
+	
+	scene_node "PnTri2Torus"
+	{
+		position 60 -20 15
+	}
+	object "PnTri2Torus"
+	{
+		parent "PnTri2Torus"
+		mesh "PnTri2Torus"
+		{
+			type torus 4 4 5.0 10.0
+			division pn_tri 2
+		}
+		material "Silver"
+	}
+	
+	scene_node "Loop3Torus"
+	{
+		position 90 -20 -15
+	}
+	object "Loop3Torus"
+	{
+		parent "Loop3Torus"
+		mesh "Loop3Torus"
+		{
+			type torus 4 4 5.0 10.0
+			division loop 3
+		}
+		material "Silver"
+	}
+	
+	scene_node "PnTri3Torus"
+	{
+		position 90 -20 15
+	}
+	object "PnTri3Torus"
+	{
+		parent "PnTri3Torus"
+		mesh "PnTri3Torus"
+		{
+			type torus 4 4 5.0 10.0
+			division pn_tri 3
+		}
+		material "Silver"
+	}
+	
+	scene_node "Loop4Torus"
+	{
+		position 120 -20 -15
+	}
+	object "Loop4Torus"
+	{
+		parent "Loop4Torus"
+		mesh "Loop4Torus"
+		{
+			type torus 4 4 5.0 10.0
+			division loop 4
+		}
+		material "Silver"
+	}
+	
+	scene_node "PnTri4Torus"
+	{
+		position 120 -20 15
+	}
+	object "PnTri4Torus"
+	{
+		parent "PnTri4Torus"
+		mesh "PnTri4Torus"
+		{
+			type torus 4 4 5.0 10.0
+			division pn_tri 4
+		}
+		material "Silver"
+	}
+	
+	scene_node "Sphere"
+	{
+		position 0 20 0
+	}
+	object "Sphere"
+	{
+		parent "Sphere"
+		mesh "Sphere"
+		{
+			type icosahedron 10.0
+		}
+		material "ShowNormals"
+	}
+	
+	scene_node "Loop1Sphere"
+	{
+		position 30 20 -15
+	}
+	object "Loop1Sphere"
+	{
+		parent "Loop1Sphere"
+		mesh "Loop1Sphere"
+		{
+			type icosahedron 10.0
+			division loop 1
+		}
+		material "Silver"
+	}
+	
+	scene_node "PnTri1Sphere"
+	{
+		position 30 20 15
+	}
+	object "PnTri1Sphere"
+	{
+		parent "PnTri1Sphere"
+		mesh "PnTri1Sphere"
+		{
+			type icosahedron 10.0
+			division pn_tri 1
+		}
+		material "Silver"
+	}
+	
+	scene_node "Loop2Sphere"
+	{
+		position 60 20 -15
+	}
+	object "Loop2Sphere"
+	{
+		parent "Loop2Sphere"
+		mesh "Loop2Sphere"
+		{
+			type icosahedron 10.0
+			division loop 2
+		}
+		material "Silver"
+	}
+	
+	scene_node "PnTri2Sphere"
+	{
+		position 60 20 15
+	}
+	object "PnTri2Sphere"
+	{
+		parent "PnTri2Sphere"
+		mesh "PnTri2Sphere"
+		{
+			type icosahedron 10.0
+			division pn_tri 2
+		}
+		material "Silver"
+	}
+	
+	scene_node "Loop3Sphere"
+	{
+		position 90 20 -15
+	}
+	object "Loop3Sphere"
+	{
+		parent "Loop3Sphere"
+		mesh "Loop3Sphere"
+		{
+			type icosahedron 10.0
+			division loop 3
+		}
+		material "Silver"
+	}
+	
+	scene_node "PnTri3Sphere"
+	{
+		position 90 20 15
+	}
+	object "PnTri3Sphere"
+	{
+		parent "PnTri3Sphere"
+		mesh "PnTri3Sphere"
+		{
+			type icosahedron 10.0
+			division pn_tri 3
+		}
+		material "Silver"
+	}
+	
+	scene_node "Loop4Sphere"
+	{
+		position 120 20 -15
+	}
+	object "Loop4Sphere"
+	{
+		parent "Loop4Sphere"
+		mesh "Loop4Sphere"
+		{
+			type icosahedron 10.0
+			division loop 4
+		}
+		material "Silver"
+	}
+	
+	scene_node "PnTri4Sphere"
+	{
+		position 120 20 15
+	}
+	object "PnTri4Sphere"
+	{
+		parent "PnTri4Sphere"
+		mesh "PnTri4Sphere"
+		{
+			type icosahedron 10.0
+			division pn_tri 4
+		}
+		material "Silver"
+	}
+}
+
+window "MyWindow"
+{
+	render_target
+	{
+		format		argb32
+		depth		depth32
+		size		1107 600
+		msaa		8
+		scene		"AlphaScene"
+	}
+//	fullscreen	true
+	vsync		true
+}

@@ -1,4 +1,4 @@
-﻿#include "Utils.hpp"
+#include "Utils.hpp"
 #include "Size.hpp"
 
 #if defined( _WIN32 )
@@ -26,14 +26,6 @@
 
 namespace Castor
 {
-	namespace System
-	{
-		void Sleep( uint32_t p_uiTime )
-		{
-			std::this_thread::sleep_for( std::chrono::milliseconds( p_uiTime ) );
-		}
-	}
-
 #if defined( _WIN32 )
 	namespace System
 	{
@@ -81,6 +73,11 @@ namespace Castor
 			}
 
 			return l_strReturn;
+		}
+
+		void Sleep( uint32_t p_uiTime )
+		{
+			::Sleep( p_uiTime );
 		}
 
 		uint8_t GetCPUCount()
@@ -148,6 +145,11 @@ namespace Castor
 			return l_strReturn;
 		}
 
+		void Sleep( uint32_t p_uiTime )
+		{
+			usleep( p_uiTime * 1000 );
+		}
+
 		uint8_t GetCPUCount()
 		{
 			char res[128];
@@ -155,6 +157,11 @@ namespace Castor
 			fread( res, 1, sizeof( res ) - 1, fp );
 			pclose( fp );
 			return res[0];
+		}
+
+		void Localtime( std::tm * p_tm, time_t const * p_pTime )
+		{
+			p_tm = localtime( p_pTime );
 		}
 	}
 

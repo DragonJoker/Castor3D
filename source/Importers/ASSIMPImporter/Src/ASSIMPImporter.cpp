@@ -1,8 +1,7 @@
-#include "AssimpImporter.hpp"
+#include "ASSIMPImporter.hpp"
 
 #include <InitialiseEvent.hpp>
 #include <ImporterPlugin.hpp>
-#include <MaterialManager.hpp>
 #include <Bone.hpp>
 
 using namespace Castor3D;
@@ -129,7 +128,7 @@ C3D_Assimp_API ImporterPlugin::ExtensionArray GetExtensions()
 	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "3DS" ), cuT( "3D Studio Max 3DS" ) ) );
 	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "ASE" ), cuT( "3D Studio Max ASE" ) ) );
 	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "OBJ" ), cuT( "Wavefront Object" ) ) );
-	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "PLY" ), cuT( "Stanford Polygon Library" ) ) );
+//	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "PLY" ), cuT( "Stanford Polygon Library" ) ) );
 	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "MD2" ), cuT( "Quake II" ) ) );
 	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "MD3" ), cuT( "Quake III" ) ) );
 	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "LWO" ), cuT( "LightWave Model" ) ) );
@@ -168,6 +167,7 @@ C3D_Assimp_API ImporterPlugin::ExtensionArray GetExtensions()
 
 C3D_Assimp_API void Create( Engine * p_pEngine, ImporterPlugin * p_pPlugin )
 {
+	Logger::Initialise( p_pEngine->GetLoggerInstance() );
 	ImporterSPtr l_pImporter = std::make_shared< AssimpImporter >( p_pEngine );
 	p_pPlugin->AttachImporter( l_pImporter );
 }
@@ -175,14 +175,7 @@ C3D_Assimp_API void Create( Engine * p_pEngine, ImporterPlugin * p_pPlugin )
 C3D_Assimp_API void Destroy( ImporterPlugin * p_pPlugin )
 {
 	p_pPlugin->DetachImporter();
-}
-
-C3D_Assimp_API void OnLoad( Castor3D::Engine * p_engine )
-{
-}
-
-C3D_Assimp_API void OnUnload( Castor3D::Engine * p_engine )
-{
+	Logger::Cleanup();
 }
 
 //*************************************************************************************************
@@ -208,7 +201,7 @@ SceneSPtr AssimpImporter::DoImportScene()
 		l_pScene = m_pEngine->CreateScene( cuT( "Scene_ASSIMP" ) );
 		SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( m_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 		GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( m_pMesh->GetName() );
-		l_pGeometry->AttachTo( l_pNode );
+		l_pGeometry->AttachTo( l_pNode.get() );
 		l_pGeometry->SetMesh( m_pMesh );
 		m_pMesh.reset();
 	}
@@ -321,79 +314,6 @@ bool AssimpImporter::DoProcessMesh( SkeletonSPtr p_pSkeleton, aiMesh const * p_p
 		p_pSubmesh->Ref( l_pMaterial );
 		stVERTEX_GROUP l_stVertices = { 0 };
 		l_stVertices.m_uiCount = p_pAiMesh->mNumVertices;
-#if CASTOR_USE_DOUBLE
-		std::vector< real > vtx;
-		std::vector< real > nml;
-		std::vector< real > tan;
-		std::vector< real > bin;
-		std::vector< real > tex;
-		vtx.reserve( p_pAiMesh->mNumVertices * 3 );
-
-		for ( unsigned int i = 0; i < p_pAiMesh->mNumVertices; ++i )
-		{
-			vtx.push_back( p_pAiMesh->mVertices[i].x );
-			vtx.push_back( p_pAiMesh->mVertices[i].y );
-			vtx.push_back( p_pAiMesh->mVertices[i].z );
-		}
-
-		l_stVertices.m_pVtx = vtx.data();
-
-		if ( p_pAiMesh->mNormals )
-		{
-			nml.reserve( p_pAiMesh->mNumVertices * 3 );
-
-			for ( unsigned int i = 0; i < p_pAiMesh->mNumVertices; ++i )
-			{
-				nml.push_back( p_pAiMesh->mNormals[i].x );
-				nml.push_back( p_pAiMesh->mNormals[i].y );
-				nml.push_back( p_pAiMesh->mNormals[i].z );
-			}
-
-			l_stVertices.m_pNml = nml.data();
-		}
-		
-		if ( p_pAiMesh->mTangents )
-		{
-			tan.reserve( p_pAiMesh->mNumVertices * 3 );
-
-			for ( unsigned int i = 0; i < p_pAiMesh->mNumVertices; ++i )
-			{
-				tan.push_back( p_pAiMesh->mTangents[i].x );
-				tan.push_back( p_pAiMesh->mTangents[i].y );
-				tan.push_back( p_pAiMesh->mTangents[i].z );
-			}
-
-			l_stVertices.m_pTan = tan.data();
-		}
-		
-		if ( p_pAiMesh->mBitangents )
-		{
-			bin.reserve( p_pAiMesh->mNumVertices * 3 );
-
-			for ( unsigned int i = 0; i < p_pAiMesh->mNumVertices; ++i )
-			{
-				bin.push_back( p_pAiMesh->mBitangents[i].x );
-				bin.push_back( p_pAiMesh->mBitangents[i].y );
-				bin.push_back( p_pAiMesh->mBitangents[i].z );
-			}
-
-			l_stVertices.m_pBin = bin.data();
-		}
-
-		if ( p_pAiMesh->HasTextureCoords( 0 ) )
-		{
-			tex.reserve( p_pAiMesh->mNumVertices * 3 );
-
-			for ( unsigned int i = 0; i < p_pAiMesh->mNumVertices; ++i )
-			{
-				tex.push_back( p_pAiMesh->mTextureCoords[0][i].x );
-				tex.push_back( p_pAiMesh->mTextureCoords[0][i].y );
-				tex.push_back( p_pAiMesh->mTextureCoords[0][i].z );
-			}
-
-			l_stVertices.m_pTex = tex.data();
-		}
-#else
 		l_stVertices.m_pVtx = ( real * )p_pAiMesh->mVertices;
 		l_stVertices.m_pNml = ( real * )p_pAiMesh->mNormals;
 		l_stVertices.m_pTan = ( real * )p_pAiMesh->mTangents;
@@ -403,7 +323,6 @@ bool AssimpImporter::DoProcessMesh( SkeletonSPtr p_pSkeleton, aiMesh const * p_p
 		{
 			l_stVertices.m_pTex = ( real * )p_pAiMesh->mTextureCoords[0];
 		}
-#endif
 
 		std::vector< stVERTEX_BONE_DATA > l_arrayBones( p_pAiMesh->mNumVertices );
 
@@ -471,26 +390,24 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 	{
 		float l_fOpacity = 1;
 		float l_fShininess = 0.5f;
-		float l_fShininessStrength = 1.0f;
 		int l_iTwoSided = 0;
 		l_pReturn = std::make_shared< Material >( m_pEngine, l_strName );
 		l_pReturn->CreatePass();
 		l_pPass = l_pReturn->GetPass( 0 );
-		p_pAiMaterial->Get( AI_MATKEY_COLOR_AMBIENT, l_clrAmbient );
-		p_pAiMaterial->Get( AI_MATKEY_COLOR_DIFFUSE, l_clrDiffuse );
-		p_pAiMaterial->Get( AI_MATKEY_COLOR_SPECULAR, l_clrSpecular );
-		p_pAiMaterial->Get( AI_MATKEY_COLOR_EMISSIVE, l_clrEmissive );
-		p_pAiMaterial->Get( AI_MATKEY_OPACITY, l_fOpacity );
-		p_pAiMaterial->Get( AI_MATKEY_SHININESS, l_fShininess );
-		p_pAiMaterial->Get( AI_MATKEY_SHININESS_STRENGTH, l_fShininessStrength );
-		p_pAiMaterial->Get( AI_MATKEY_TWOSIDED, l_iTwoSided );
-		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_AMBIENT, 0 ), l_ambTexName );
-		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_DIFFUSE, 0 ), l_difTexName );
-		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_NORMALS, 0 ), l_nmlTexName );
-		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_HEIGHT, 0 ), l_hgtTexName );
-		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_OPACITY, 0 ), l_opaTexName );
-		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_SHININESS, 0 ), l_shnTexName );
-		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_SPECULAR, 0 ), l_spcTexName );
+		p_pAiMaterial->Get( AI_MATKEY_COLOR_AMBIENT,	l_clrAmbient );
+		p_pAiMaterial->Get( AI_MATKEY_COLOR_DIFFUSE,	l_clrDiffuse );
+		p_pAiMaterial->Get( AI_MATKEY_COLOR_SPECULAR,	l_clrSpecular );
+		p_pAiMaterial->Get( AI_MATKEY_COLOR_EMISSIVE,	l_clrEmissive );
+		p_pAiMaterial->Get( AI_MATKEY_OPACITY,			l_fOpacity );
+		p_pAiMaterial->Get( AI_MATKEY_SHININESS,		l_fShininess );
+		p_pAiMaterial->Get( AI_MATKEY_TWOSIDED,			l_iTwoSided );
+		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_AMBIENT,	0 ), l_ambTexName );
+		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_DIFFUSE,	0 ), l_difTexName );
+		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_NORMALS,	0 ), l_nmlTexName );
+		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_HEIGHT,	0 ), l_hgtTexName );
+		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_OPACITY,	0 ), l_opaTexName );
+		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_SHININESS,	0 ), l_shnTexName );
+		p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_SPECULAR,	0 ), l_spcTexName );
 
 		if ( l_clrAmbient.IsBlack() && l_clrDiffuse.IsBlack() && l_clrSpecular.IsBlack() && l_clrEmissive.IsBlack() )
 		{
@@ -501,12 +418,12 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 
 		l_pPass->SetAmbient( Colour::from_components( l_clrAmbient.r, l_clrAmbient.g, l_clrAmbient.b, 1 ) );
 		l_pPass->SetDiffuse( Colour::from_components( l_clrDiffuse.r, l_clrDiffuse.g, l_clrDiffuse.b, 1 ) );
-		l_pPass->SetSpecular( Colour::from_components( l_clrSpecular.r * l_fShininessStrength, l_clrSpecular.g * l_fShininessStrength, l_clrSpecular.b * l_fShininessStrength, 1 ) );
+		l_pPass->SetSpecular( Colour::from_components( l_clrSpecular.r, l_clrSpecular.g, l_clrSpecular.b, 1 ) );
 		l_pPass->SetEmissive( Colour::from_components( l_clrEmissive.r, l_clrEmissive.g, l_clrEmissive.b, 1 ) );
 
 		if ( l_fShininess > 0 )
 		{
-			l_pPass->SetShininess( l_fShininess );
+			l_pPass->SetShininess( l_fShininess * 128.0f );
 		}
 
 		l_pPass->SetAlpha( l_fOpacity );
@@ -568,7 +485,7 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 		}
 
 		l_mtlManager.insert( l_strName, l_pReturn );
-		m_pEngine->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
+		m_pEngine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_pReturn ) );
 	}
 
 	return l_pReturn;

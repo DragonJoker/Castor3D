@@ -49,6 +49,20 @@ namespace Dx11Render
 		void RetrieveCompilerLog( Castor::String & p_strCompilerLog );
 		/**
 		 *\~english
+		 *\brief		Activates the shader
+		 *\~french
+		 *\brief		Active le shader
+		 */
+		virtual void Bind() = 0;
+		/**
+		 *\~english
+		 *\brief		Deactivates the shader
+		 *\~french
+		 *\brief		Désactive le shader
+		 */
+		virtual void Unbind() = 0;
+		/**
+		 *\~english
 		 *\brief		Destroys the program on GPU
 		 *\~french
 		 *\brief		Détruit le programme sur le GPU

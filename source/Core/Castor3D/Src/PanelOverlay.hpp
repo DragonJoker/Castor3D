@@ -1,4 +1,4 @@
-ï»¿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -63,10 +63,10 @@ namespace Castor3D
 			 *\param[in]	p_overlay	the overlay to save
 			 *\return		\p true if everything is OK
 			 *\~french
-			 *\brief		Sauvegarde l'incrustation donnÃ©e dans un fichier texte
-			 *\param[in]	p_file		Le fichier oÃ¹ enregistrer l'incrustation
-			 *\param[in]	p_overlay	L'incrustation Ã  enregistrer
-			 *\return		\p true si tout s'est bien passÃ©
+			 *\brief		Sauvegarde l'incrustation donnée dans un fichier texte
+			 *\param[in]	p_file		Le fichier où enregistrer l'incrustation
+			 *\param[in]	p_overlay	L'incrustation à enregistrer
+			 *\return		\p true si tout s'est bien passé
 			 */
 			virtual bool operator()( PanelOverlay const & p_overlay, Castor::TextFile & p_file );
 		};
@@ -88,7 +88,7 @@ namespace Castor3D
 			 *\param[in]	p_path	The current folder path
 			 *\~french
 			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accÃ¨s au dossier courant
+			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
 			BinaryParser( Castor::Path const & p_path );
 			/**
@@ -98,10 +98,10 @@ namespace Castor3D
 			 *\param[out]	p_chunk	The chunk to fill
 			 *\return		\p false if any error occured
 			 *\~french
-			 *\brief		Fonction utilisÃ©e afin de remplir le chunk de donnÃ©es spÃ©cifiques
-			 *\param[in]	p_obj	L'objet Ã  Ã©crire
-			 *\param[out]	p_chunk	Le chunk Ã  remplir
-			 *\return		\p false si une erreur quelconque est arrivÃ©e
+			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
+			 *\param[in]	p_obj	L'objet à écrire
+			 *\param[out]	p_chunk	Le chunk à remplir
+			 *\return		\p false si une erreur quelconque est arrivée
 			 */
 			virtual bool Fill( PanelOverlay const & p_obj, BinaryChunk & p_chunk )const;
 			/**
@@ -111,10 +111,10 @@ namespace Castor3D
 			 *\param[in]	p_chunk	The chunk containing data
 			 *\return		\p false if any error occured
 			 *\~french
-			 *\brief		Fonction utilisÃ©e afin de rÃ©cupÃ©rer des donnÃ©es spÃ©cifiques Ã  partir d'un chunk
-			 *\param[out]	p_obj	L'objet Ã  lire
-			 *\param[in]	p_chunk	Le chunk contenant les donnÃ©es
-			 *\return		\p false si une erreur quelconque est arrivÃ©e
+			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
+			 *\param[out]	p_obj	L'objet à lire
+			 *\param[in]	p_chunk	Le chunk contenant les données
+			 *\return		\p false si une erreur quelconque est arrivée
 			 */
 			virtual bool Parse( PanelOverlay & p_obj, BinaryChunk & p_chunk )const;
 		};
@@ -139,22 +139,10 @@ namespace Castor3D
 		 *\brief		Creation function, used by the factory
 		 *\return		An overlay
 		 *\~french
-		 *\brief		Fonction de crÃ©ation utilisÃ©e par la fabrique
+		 *\brief		Fonction de création utilisée par la fabrique
 		 *\return		Un overlay
 		 */
 		static OverlayCategorySPtr Create();
-		/**
-		 *\~english
-		 *\brief		Retrieves the panel vertex buffer
-		 *\return		The buffer
-		 *\~french
-		 *\brief		RÃ©cupÃ¨re le tampon de sommets du panneau
-		 *\return		Le tampon
-		 */
-		inline OverlayCategory::VertexArray const & GetPanelVertex()const
-		{
-			return m_arrayVtx;
-		}
 
 	protected:
 		/**
@@ -163,7 +151,7 @@ namespace Castor3D
 		 *\param[in]	p_renderer	The renderer used to draw this overlay
 		 *\~french
 		 *\brief		Dessine l'incrustation
-		 *\param[in]	p_renderer	Le renderer utilisÃ© pour dessiner cette incrustation
+		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation
 		 */
 		virtual void DoRender( OverlayRendererSPtr p_renderer );
 		/**
@@ -171,8 +159,8 @@ namespace Castor3D
 		 *\brief		Updates the vertex buffer
 		 *\param[in]	p_renderer	The renderer used to draw this overlay
 		 *\~french
-		 *\brief		Met Ã  jour le tampon de sommets
-		 *\param[in]	p_renderer	Le renderer utilisÃ© pour dessiner cette incrustation
+		 *\brief		Met à jour le tampon de sommets
+		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation
 		 */
 		virtual void DoUpdate( OverlayRendererSPtr p_renderer );
 	};

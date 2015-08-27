@@ -1,4 +1,4 @@
-ï»¿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -33,14 +33,14 @@ namespace Castor3D
 	\~english
 	\brief		Overlay collection, with additional add and remove functions to manage Z-Index
 	\~french
-	\brief		Collection d'incrustations, avec des fonctions additionnelles d'ajout et de suppression pour gÃ©rer les Z-Index
+	\brief		Collection d'incrustations, avec des fonctions additionnelles d'ajout et de suppression pour gérer les Z-Index
 	*/
 	class C3D_API OverlayManager
-		: private OverlayCollection
+		:	private OverlayCollection
 	{
 	public:
-		typedef OverlayCollectionIt iterator;
-		typedef OverlayCollectionConstIt const_iterator;
+		typedef OverlayCollectionIt			iterator;
+		typedef OverlayCollectionConstIt	const_iterator;
 
 	public:
 		/**
@@ -79,24 +79,57 @@ namespace Castor3D
 		void AddOverlay( Castor::String const & p_strName, OverlaySPtr p_pOverlay, OverlaySPtr p_pParent );
 		/**
 		 *\~english
+		 *\brief		Add an overlay to the lists, given it's z-index
+		 *\param[in]	p_iZIndex	The wanted z-index
+		 *\param[in]	p_pOverlay	The overlay
+		 *\~french
+		 *\brief		Ajoute une incrustation aux listes, selon son z-index
+		 *\param[in]	p_iZIndex	Le z-index voulu
+		 *\param[in]	p_pOverlay	L'incrustation
+		 */
+		void AddOverlay( int p_iZIndex, OverlaySPtr p_pOverlay );
+		/**
+		 *\~english
+		 *\brief		Checks if an overlay exists at given z-index
+		 *\param[in]	p_iZIndex	The z-index
+		 *\return		\p true if an overlay is defined at the given z-index
+		 *\~french
+		 *\brief		Vérifie si une incrustation existe au z-index donné
+		 *\param[in]	p_iZIndex	Le z-index
+		 *\return		\p true si un overlayest défini au z-index donné
+		 */
+		bool HasOverlay( int p_iZIndex );
+		/**
+		 *\~english
 		 *\brief		Retrieves the overlay with the given name
 		 *\param[in]	p_strName	The name
 		 *\return		The overlay, \p nullptr if not found
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re l'incrustation avec le nom donnÃ©
+		 *\brief		Récupère l'incrustation avec le nom donné
 		 *\param[in]	p_strName	Le nom
-		 *\return		L'incrustation, \p nullptr si non trouvÃ©e
+		 *\return		L'incrustation, \p nullptr si non trouvée
 		 */
 		OverlaySPtr GetOverlay( Castor::String const & p_strName );
+		/**
+		 *\~english
+		 *\brief		Retrieves the overlay at given z-index
+		 *\param[in]	p_iZIndex	The z-index
+		 *\return		The overlay, \p nullptr if not found
+		 *\~french
+		 *\brief		Récupère l'incrustation au z-index donné
+		 *\param[in]	p_iZIndex	Le z-index
+		 *\return		L'incrustation, \p nullptr si non trouvée
+		 */
+		OverlaySPtr GetOverlay( int p_iZIndex );
 		/**
 		 *\~english
 		 *\brief		Checks if an overlay with the given name exists
 		 *\param[in]	p_strName	The name
 		 *\return		\p true if an overlay is defined with given name
 		 *\~french
-		 *\brief		VÃ©rifie si une incrustation avec le nom donnÃ© existe
+		 *\brief		Vérifie si une incrustation avec le nom donné existe
 		 *\param[in]	p_strName	Le nom
-		 *\return		\p true Si une incrustation est dÃ©fini avec le nom donnÃ©
+		 *\return		\p true Si une incrustation est défini avec le nom donné
 		 */
 		bool HasOverlay( Castor::String const & p_strName );
 		/**
@@ -107,7 +140,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Ecrit les overlays dans un fichier texte
 		 *\param[out]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passÃ©
+		 *\return		\p true si tout s'est bien passé
 		 */
 		bool WriteOverlays( Castor::TextFile & p_file )const;
 		/**
@@ -116,9 +149,9 @@ namespace Castor3D
 		 *\param[in]	p_file	The file
 		 *\return		\p true if ok
 		 *\~french
-		 *\brief		Lit les overlays Ã  partir d'un fichier texte
+		 *\brief		Lit les overlays à partir d'un fichier texte
 		 *\param[in]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passÃ©
+		 *\return		\p true si tout s'est bien passé
 		 */
 		bool ReadOverlays( Castor::TextFile & p_file );
 		/**
@@ -129,7 +162,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Ecrit les overlays dans un fichier binaire
 		 *\param[out]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passÃ©
+		 *\return		\p true si tout s'est bien passé
 		 */
 		bool SaveOverlays( Castor::BinaryFile & p_file )const;
 		/**
@@ -138,9 +171,9 @@ namespace Castor3D
 		 *\param[in]	p_file	The file
 		 *\return		\p true if ok
 		 *\~french
-		 *\brief		Lit les overlays Ã  partir d'un fichier binaire
+		 *\brief		Lit les overlays à partir d'un fichier binaire
 		 *\param[in]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passÃ©
+		 *\return		\p true si tout s'est bien passé
 		 */
 		bool LoadOverlays( Castor::BinaryFile & p_file );
 		/**
@@ -155,7 +188,7 @@ namespace Castor3D
 		 *\brief		Retrieves the overlay renderer
 		 *\return		The overlay renderer
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le renderer d'incrustation
+		 *\brief		Récupère le renderer d'incrustation
 		 *\return		Le renderer d'incrustation
 		 */
 		OverlayRendererSPtr GetRenderer()const
@@ -167,124 +200,129 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the first overlay
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur la premiÃ¨re incrustation
+		 *\brief		Récupère un itérateur sur la première incrustation
 		 *\return		La valeur
 		 */
-		inline OverlayPtrArray::iterator begin()
+		inline OverlayPtrIntMap::iterator Begin()
 		{
-			return m_overlays.begin();
+			return m_mapOverlaysByZIndex.begin();
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the first overlay
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur la premiÃ¨re incrustation
+		 *\brief		Récupère un itérateur sur la première incrustation
 		 *\return		La valeur
 		 */
-		inline OverlayPtrArray::const_iterator begin()const
+		inline OverlayPtrIntMap::const_iterator Begin()const
 		{
-			return m_overlays.begin();
+			return m_mapOverlaysByZIndex.begin();
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the first overlay
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur la premiÃ¨re incrustation
+		 *\brief		Récupère un itérateur sur la première incrustation
 		 *\return		La valeur
 		 */
-		inline OverlayPtrArray::reverse_iterator rbegin()
+		inline OverlayPtrIntMap::reverse_iterator RBegin()
 		{
-			return m_overlays.rbegin();
+			return m_mapOverlaysByZIndex.rbegin();
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the first overlay
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur la premiÃ¨re incrustation
+		 *\brief		Récupère un itérateur sur la première incrustation
 		 *\return		La valeur
 		 */
-		inline OverlayPtrArray::const_reverse_iterator rbegin()const
+		inline OverlayPtrIntMap::const_reverse_iterator RBegin()const
 		{
-			return m_overlays.rbegin();
+			return m_mapOverlaysByZIndex.rbegin();
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to after the last overlay
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur aprÃ¨s la derniÃ¨re incrustation
+		 *\brief		Récupère un itérateur sur après la dernière incrustation
 		 *\return		La valeur
 		 */
-		inline OverlayPtrArray::iterator end()
+		inline OverlayPtrIntMap::iterator End()
 		{
-			return m_overlays.end();
+			return m_mapOverlaysByZIndex.end();
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to after the last overlay
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur aprÃ¨s la derniÃ¨re incrustation
+		 *\brief		Récupère un itérateur sur après la dernière incrustation
 		 *\return		La valeur
 		 */
-		inline OverlayPtrArray::const_iterator end()const
+		inline OverlayPtrIntMap::const_iterator End()const
 		{
-			return m_overlays.end();
+			return m_mapOverlaysByZIndex.end();
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to after the last overlay
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur aprÃ¨s la derniÃ¨re incrustation
+		 *\brief		Récupère un itérateur sur après la dernière incrustation
 		 *\return		La valeur
 		 */
-		inline OverlayPtrArray::reverse_iterator rend()
+		inline OverlayPtrIntMap::reverse_iterator REnd()
 		{
-			return m_overlays.rend();
+			return m_mapOverlaysByZIndex.rend();
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to after the last overlay
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur aprÃ¨s la derniÃ¨re incrustation
+		 *\brief		Récupère un itérateur sur après la dernière incrustation
 		 *\return		La valeur
 		 */
-		inline OverlayPtrArray::const_reverse_iterator rend()const
+		inline OverlayPtrIntMap::const_reverse_iterator REnd()const
 		{
-			return m_overlays.rend();
+			return m_mapOverlaysByZIndex.rend();
 		}
 		/**
 		 *\~english
-		 *\brief		Renders the overlays
-		 *\param[in]	p_scene	The currently rendered scene
+		 *\brief		Begins the overlays rendering
 		 *\param[in]	p_size	The render window size
 		 *\~french
-		 *\brief		Dessine les incrustations
-		 *\param[in]	p_scene	La scÃ¨ne en cours de rendu
-		 *\param[in]	p_size	La taille de la fenÃªtre de rendu
+		 *\brief		Commence le rendu des incrustations
+		 *\param[in]	p_size	La taille de la fenêtre de rendu
 		 */
-		void RenderOverlays( Scene const & p_scene, Castor::Size const & p_size );
+		void BeginRendering( Castor::Size const & p_size );
+		/**
+		 *\~english
+		 *\brief		Ends the overlays rendering
+		 *\~french
+		 *\brief		Termine le rendu des incrustations
+		 */
+		void EndRendering();
 
 		using OverlayCollection::lock;
 		using OverlayCollection::unlock;
 
 	private:
-		//!\~english The overlays, in rendering order	\~french Les incrustations, dans l'ordre de rendu
-		OverlayPtrArray m_overlays;
+		//!\~english Current available Z index	\~french Z index disponible
+		int m_iCurrentZIndex;
+		//!\~english The overlays, sorted by Z index	\~french Les incrustations, triées par Z index
+		OverlayPtrIntMap m_mapOverlaysByZIndex;
 		//!\~english The engine	\~french Le moteur
 		Engine * m_pEngine;
 		//!\~english The overlay renderer	\~french le renderer d'incrustation
 		OverlayRendererSPtr m_pRenderer;
-		//!\~english The overlay count, per level	\~french Le nombre d'incrustations par niveau
-		std::vector< int > m_overlayCountPerLevel;
 	};
-	typedef OverlayManager::iterator OverlayManagerIt;
-	typedef OverlayManager::const_iterator OverlayManagerConstIt;
+	typedef OverlayManager::iterator		OverlayManagerIt;
+	typedef OverlayManager::const_iterator	OverlayManagerConstIt;
 }
 
 #pragma warning( pop )

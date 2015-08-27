@@ -1,4 +1,4 @@
-ï»¿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -28,7 +28,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	//!\~english A define to ease the declaration of a chunk id	\~french Un define pour faciliter la dÃ©claration d'un id de chunk
+	//!\~english A define to ease the declaration of a chunk id	\~french Un define pour faciliter la déclaration d'un id de chunk
 #define MAKE_CHUNK_ID( a, b, c, d )	((uint8_t( a ) << 24) | (uint8_t( b ) << 16) | (uint8_t( c ) << 8) | (uint8_t( d ) << 0))
 	/*!
 	\author 	Sylvain DOREMUS
@@ -37,7 +37,7 @@ namespace Castor3D
 	\~english
 	\brief		Binary data chunk types enumeration
 	\~french
-	\brief		EnumÃ©ration des types de chunks de donnÃ©es binaires
+	\brief		Enumération des types de chunks de données binaires
 	*/
 	typedef enum eCHUNK_TYPE CASTOR_TYPE( uint32_t )
 	{
@@ -179,7 +179,7 @@ namespace Castor3D
 	\~english
 	\brief		Binary data chunk base class
 	\~french
-	\brief		Classe de base d'un chunk de donnÃ©es binaires
+	\brief		Classe de base d'un chunk de données binaires
 	*/
 	class C3D_API BinaryChunk
 	{
@@ -204,7 +204,7 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Computes the final data buffer from each one added until this call
 		 *\~french
-		 *\brief		CrÃ©e le tampon final Ã  partir de tout ce qui a Ã©tÃ© ajoutÃ© jusqu'Ã  cet appel
+		 *\brief		Crée le tampon final à partir de tout ce qui a été ajouté jusqu'à cet appel
 		 */
 		void Finalise();
 		/**
@@ -213,8 +213,8 @@ namespace Castor3D
 		 *\param[in]	p_data	The data buffer
 		 *\param[in]	p_size	The buffer size
 		 *\~french
-		 *\brief		Ajoute des donnÃ©es au chunk
-		 *\param[in]	p_data	Le tampon de donnÃ©es
+		 *\brief		Ajoute des données au chunk
+		 *\param[in]	p_data	Le tampon de données
 		 *\param[in]	p_size	La taille du tampon
 		 */
 		void Add( uint8_t * p_data, uint32_t p_size );
@@ -224,8 +224,8 @@ namespace Castor3D
 		 *\param[in]	p_data	The data buffer to fill
 		 *\param[in]	p_size	The buffer size
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re des donnÃ©es du chunk
-		 *\param[in]	p_data	Le tampon de donnÃ©es Ã  remplir
+		 *\brief		Récupère des données du chunk
+		 *\param[in]	p_data	Le tampon de données à remplir
 		 *\param[in]	p_size	La taille du tampon
 		 */
 		void Get( uint8_t * p_data, uint32_t p_size );
@@ -234,7 +234,7 @@ namespace Castor3D
 		 *\brief		Checks that the remaining place can hold the given size
 		 *\param[in]	p_size	The size
 		 *\~french
-		 *\brief		VÃ©rifie que la place restante peut contenir la taille donnÃ©e
+		 *\brief		Vérifie que la place restante peut contenir la taille donnée
 		 *\param[in]	p_size	La taille
 		 */
 		bool CheckAvailable( uint32_t p_size = 0 )const;
@@ -243,7 +243,7 @@ namespace Castor3D
 		 *\brief		Retrieves the remaining place
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re la place restante
+		 *\brief		Récupère la place restante
 		 *\return		La valeur
 		 */
 		uint32_t GetRemaining()const;
@@ -252,7 +252,7 @@ namespace Castor3D
 		 *\brief		Retrieves the remaining data
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le tampon restant
+		 *\brief		Récupère le tampon restant
 		 *\return		La valeur
 		 */
 		uint8_t const * GetRemainingData()const
@@ -265,9 +265,9 @@ namespace Castor3D
 		 *\param[out]	p_subchunk	Receives the subchunk
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re un sous chunk
-		 *\param[out]	p_subchunk	ReÃ§oit le sous chunk
-		 *\return		\p false si une erreur quelconque est arrivÃ©e
+		 *\brief		Récupère un sous chunk
+		 *\param[out]	p_subchunk	Reçoit le sous chunk
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		bool GetSubChunk( BinaryChunk & p_subchunk );
 		/**
@@ -278,7 +278,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Ecrit un subchunk dans un chunk
 		 *\param[in]	p_subchunk	Le subchunk
-		 *\return		\p false si une erreur quelconque est arrivÃ©e
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		bool AddSubChunk( BinaryChunk const & p_subchunk );
 		/**
@@ -286,7 +286,7 @@ namespace Castor3D
 		 *\brief		Retrieves the chunk type
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le type de chunk
+		 *\brief		Récupère le type de chunk
 		 *\return		La valeur
 		 */
 		eCHUNK_TYPE GetChunkType()const
@@ -298,7 +298,7 @@ namespace Castor3D
 		 *\brief		Retrieves the chunk data size
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re la taille des donnÃ©es du chunk
+		 *\brief		Récupère la taille des données du chunk
 		 *\return		La valeur
 		 */
 		uint32_t GetDataSize()const
@@ -310,7 +310,7 @@ namespace Castor3D
 		 *\brief		Retrieves the chunk data
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re les donnÃ©es du chunk
+		 *\brief		Récupère les données du chunk
 		 *\return		La valeur
 		 */
 		uint8_t const * GetData()const
@@ -322,8 +322,8 @@ namespace Castor3D
 		 *\brief		Sets the chunk's data
 		 *\param[in]	p_data	The data buffer
 		 *\~french
-		 *\brief		DÃ©finit les donnÃ©es du chunk
-		 *\param[in]	p_data	Le tampon de donnÃ©es
+		 *\brief		Définit les données du chunk
+		 *\param[in]	p_data	Le tampon de données
 		 *\param[in]	p_size	La taille du tampon
 		 */
 		inline void SetData( uint8_t const * p_data, uint32_t p_size )
@@ -334,7 +334,7 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Retrieves the chunk data size
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re la taille des donnÃ©es du chunk
+		 *\brief		Récupère la taille des données du chunk
 		 */
 		void EndParse()
 		{
@@ -347,10 +347,10 @@ namespace Castor3D
 		 *\param[in]	p_file	The file
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		Fonction d'Ã©criture dans un fichier
-		 *\param[in]	p_obj	L'objet Ã  Ã©crire
+		 *\brief		Fonction d'écriture dans un fichier
+		 *\param[in]	p_obj	L'objet à écrire
 		 *\param[in]	p_file	Le fichier
-		 *\return		\p false si une erreur quelconque est arrivÃ©e
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		bool Write( Castor::BinaryFile & p_file );
 		/**
@@ -360,10 +360,10 @@ namespace Castor3D
 		 *\param[in]	p_file	The file containing the chunk
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		Fonction de lecture Ã  partir d'un fichier
-		 *\param[out]	p_obj	L'objet Ã  lire
+		 *\brief		Fonction de lecture à partir d'un fichier
+		 *\param[out]	p_obj	L'objet à lire
 		 *\param[in]	p_file	Le fichier qui contient le chunk
-		 *\return		\p false si une erreur quelconque est arrivÃ©e
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		bool Read( Castor::BinaryFile & p_file );
 
@@ -385,11 +385,11 @@ namespace Castor3D
 
 		//!\~english The chunk type	\~french Le type du chunk
 		eCHUNK_TYPE m_eChunkType;
-		//!\~english The chunk data	\~french Les donnÃ©es du chunk
+		//!\~english The chunk data	\~french Les données du chunk
 		Castor::ByteArray m_pData;
-		//!\~english The current index in the chunk data	\~french L'index courant dans les donnÃ©es du chunk
+		//!\~english The current index in the chunk data	\~french L'index courant dans les données du chunk
 		uint32_t m_uiIndex;
-		//!\~english The chunk data	\~french Les donnÃ©es du chunk
+		//!\~english The chunk data	\~french Les données du chunk
 		std::list< Castor::ByteArray > m_addedData;
 	};
 }

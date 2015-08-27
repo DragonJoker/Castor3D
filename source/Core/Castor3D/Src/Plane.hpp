@@ -121,24 +121,23 @@ namespace Castor3D
 		{
 			return m_subDivisionsD;
 		}
+		/**
+		 *\~english
+		 *\brief		Stream operator
+		 *\~french
+		 *\brief		Operateur de flux
+		 */
+		inline friend std::ostream & operator <<( std::ostream & o, Plane const & c )
+		{
+			return o << "Plane(" << c.m_depth << "," << c.m_width << "," << c.m_subDivisionsW << "," << c.m_subDivisionsD << ")";
+		}
 
 	private:
-		real m_depth;
-		real m_width;
-		uint32_t m_subDivisionsW;
-		uint32_t m_subDivisionsD;
-		friend std::ostream & operator <<( std::ostream & o, Plane const & c );
+		real		m_depth;
+		real		m_width;
+		uint32_t	m_subDivisionsW;
+		uint32_t	m_subDivisionsD;
 	};
-	/**
-	 *\~english
-	 *\brief		Stream operator
-	 *\~french
-	 *\brief		Operateur de flux
-	 */
-	inline std::ostream & operator <<( std::ostream & o, Plane const & c )
-	{
-		return o << "Plane(" << c.m_depth << "," << c.m_width << "," << c.m_subDivisionsW << "," << c.m_subDivisionsD << ")";
-	}
 }
 
 #pragma warning( pop )
