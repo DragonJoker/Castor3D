@@ -164,6 +164,11 @@ namespace GlRender
 			GlslWriter & m_writer;
 			Castor::String m_name;
 		};
+		
+		struct Sampler1D;
+		struct Sampler2D;
+		struct Sampler3D;
+		struct Vec4;
 
 		class GlslWriter
 		{
@@ -185,6 +190,9 @@ namespace GlRender
 			Ubo GetUbo( Castor::String const & p_name );
 			void EmitVertex();
 			void EndPrimitive();
+			Vec4 Texture1D( Sampler1D const & p_sampler, Type const & p_value );
+			Vec4 Texture2D( Sampler2D const & p_sampler, Type const & p_value );
+			Vec4 Texture3D( Sampler3D const & p_sampler, Type const & p_value );
 
 			template< typename RetType, typename FuncType, typename ... Params > inline void Implement_Function( Castor::String const & p_name, FuncType p_function, Params && ... p_params );
 			template< typename RetType > void Return( RetType const & p_return );

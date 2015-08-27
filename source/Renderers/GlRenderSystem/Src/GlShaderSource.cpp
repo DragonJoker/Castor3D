@@ -454,6 +454,21 @@ namespace GlRender
 			m_stream << cuT( "EndPrimitive();" ) << std::endl;
 		}
 
+		Vec4 GlslWriter::Texture1D( Sampler1D const & p_sampler, Type const & p_value )
+		{
+			return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexture1D(), p_sampler, p_value );
+		}
+
+		Vec4 GlslWriter::Texture2D( Sampler2D const & p_sampler, Type const & p_value )
+		{
+			return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexture2D(), p_sampler, p_value );
+		}
+
+		Vec4 GlslWriter::Texture3D( Sampler3D const & p_sampler, Type const & p_value )
+		{
+			return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexture3D(), p_sampler, p_value );
+		}
+
 		GlslWriter & GlslWriter::operator<<( Version const & p_rhs )
 		{
 			m_stream << m_keywords->GetVersion();
@@ -548,17 +563,17 @@ namespace GlRender
 
 		Vec4 texture1D( Sampler1D const & p_sampler, Type const & p_value )
 		{
-			return WriteFunctionCall< Vec4 >( p_sampler.m_writer, cuT( "texture1D" ), p_sampler, p_value );
+			return p_sampler.m_writer->Texture1D( p_sampler, p_value );
 		}
 
 		Vec4 texture2D( Sampler2D const & p_sampler, Type const & p_value )
 		{
-			return WriteFunctionCall< Vec4 >( p_sampler.m_writer, cuT( "texture2D" ), p_sampler, p_value );
+			return p_sampler.m_writer->Texture2D( p_sampler, p_value );
 		}
 
 		Vec4 texture3D( Sampler3D const & p_sampler, Type const & p_value )
 		{
-			return WriteFunctionCall< Vec4 >( p_sampler.m_writer, cuT( "texture3D" ), p_sampler, p_value );
+			return p_sampler.m_writer->Texture3D( p_sampler, p_value );
 		}
 
 		Vec2 reflect( Vec2 const & p_a, Type const & p_b )

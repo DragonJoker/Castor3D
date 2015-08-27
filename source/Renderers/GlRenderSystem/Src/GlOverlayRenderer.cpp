@@ -58,7 +58,7 @@ ShaderProgramBaseSPtr GlOverlayRenderer::DoGetProgram( uint32_t p_uiFlags )
 		UBO_MATRIX( l_writer );
 
 		// Shader inputs
-		ATTRIBUTE( l_writer, IVec4, vertex );
+		ATTRIBUTE( l_writer, IVec2, vertex );
 		ATTRIBUTE( l_writer, Vec2, texture );
 
 		// Shader outputs
@@ -67,7 +67,7 @@ ShaderProgramBaseSPtr GlOverlayRenderer::DoGetProgram( uint32_t p_uiFlags )
 		l_writer.Implement_Function< void >( cuT( "main" ), [&]()
 		{
 			vtx_texture = texture;
-			BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( vertex.x(), vertex.y(), vertex.z(), 1.0 );
+			BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( vertex.x(), vertex.y(), 0.0, 1.0 );
 		} );
 
 		l_strVs = l_writer.Finalise();
