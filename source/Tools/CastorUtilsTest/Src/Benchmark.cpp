@@ -38,16 +38,16 @@ namespace Testing
 			l_stream << "*		- Average time : %" << ( 1000.0 * m_dCumulativeTimes / m_uiTotalExecutions ) << "ms" << std::endl;
 			l_stream << "**************************************************" << std::endl;
 			m_strSummary += l_stream.str();
-			Logger::LogMessage(	"*	Bench ended for : %s",			p_name.c_str() );
-			Logger::LogMessage(	"*		- Executed %d times",		p_ui64Calls );
-			Logger::LogMessage(	cuT(	"*		- Total time : %.4fs" ),	m_dCumulativeTimes );
-			Logger::LogMessage(	cuT(	"*		- Average time : %.4fms" ),	( 1000.0 * m_dCumulativeTimes / m_uiTotalExecutions ) );
-			Logger::LogMessage(	cuT(	"**************************************************" ) );
+			Logger::LogInfo(	"*	Bench ended for : %s",			p_name.c_str() );
+			Logger::LogInfo(	"*		- Executed %d times",		p_ui64Calls );
+			Logger::LogInfo(	cuT(	"*		- Total time : %.4fs" ),	m_dCumulativeTimes );
+			Logger::LogInfo(	cuT(	"*		- Average time : %.4fms" ),	( 1000.0 * m_dCumulativeTimes / m_uiTotalExecutions ) );
+			Logger::LogInfo(	cuT(	"**************************************************" ) );
 		}
 		catch ( ... )
 		{
-			Logger::LogMessage(	"*	Bench %s failed",				p_name.c_str() );
-			Logger::LogMessage(	cuT(	"**************************************************" ) );
+			Logger::LogInfo(	"*	Bench %s failed",				p_name.c_str() );
+			Logger::LogInfo(	cuT(	"**************************************************" ) );
 		}
 	}
 }

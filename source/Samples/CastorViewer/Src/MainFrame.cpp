@@ -2,30 +2,58 @@
 
 #include "MainFrame.hpp"
 #include "CastorViewer.hpp"
+#include "SceneExporter.hpp"
+#include "PropertiesHolder.hpp"
 
 #include <xpms/geo_blanc.xpm>
 #include <xpms/scene_blanc.xpm>
 #include <xpms/mat_blanc.xpm>
 #include <xpms/castor_transparent.xpm>
 #include <xpms/castor.xpm>
-#include <xpms/geo_visible.xpm>
-#include <xpms/geo_visible_sel.xpm>
-#include <xpms/geo_cachee.xpm>
-#include <xpms/geo_cachee_sel.xpm>
 #include <xpms/dossier.xpm>
 #include <xpms/dossier_sel.xpm>
 #include <xpms/dossier_ouv.xpm>
 #include <xpms/dossier_ouv_sel.xpm>
+#include <xpms/export.xpm>
+#include <xpms/log.xpm>
+#include <xpms/properties.xpm>
+#include <xpms/node.xpm>
+#include <xpms/node_sel.xpm>
+#include <xpms/camera.xpm>
+#include <xpms/camera_sel.xpm>
+#include <xpms/directional.xpm>
+#include <xpms/directional_sel.xpm>
+#include <xpms/point.xpm>
+#include <xpms/point_sel.xpm>
+#include <xpms/spot.xpm>
+#include <xpms/spot_sel.xpm>
+#include <xpms/geometry.xpm>
+#include <xpms/geometry_sel.xpm>
 #include <xpms/submesh.xpm>
 #include <xpms/submesh_sel.xpm>
-#include <xpms/export.xpm>
+#include <xpms/scene.xpm>
+#include <xpms/scene_sel.xpm>
+#include <xpms/panel.xpm>
+#include <xpms/panel_sel.xpm>
+#include <xpms/border_panel.xpm>
+#include <xpms/border_panel_sel.xpm>
+#include <xpms/text.xpm>
+#include <xpms/text_sel.xpm>
+#include <xpms/material.xpm>
+#include <xpms/material_sel.xpm>
+#include <xpms/pass.xpm>
+#include <xpms/pass_sel.xpm>
+#include <xpms/texture.xpm>
+#include <xpms/texture_sel.xpm>
 
 #include <wx/display.h>
+#include <wx/aui/dockart.h>
 
 #include <RenderTarget.hpp>
 #include <ImagesLoader.hpp>
+#include <FunctorEvent.hpp>
 #include <InitialiseEvent.hpp>
-#include <MaterialsFrame.hpp>
+#include <MaterialsList.hpp>
 #include <RendererSelector.hpp>
 #include <SplashScreen.hpp>
 
@@ -62,43 +90,68 @@ namespace CastorViewer
 {
 	namespace
 	{
-		struct PluginLoader
+		typedef enum eID
 		{
-			StringArray * m_pArrayFailed;
-			std::mutex * m_pMutex;
+			eID_TOOL_EXIT,
+			eID_TOOL_LOAD_SCENE,
+			eID_TOOL_EXPORT_SCENE,
+			eID_TOOL_MATERIALS,
+			eID_TOOL_SHOW_LOGS,
+			eID_TOOL_SHOW_PROPERTIES,
+			eID_TOOL_SHOW_LISTS,
+		}	eID;
 
-			PluginLoader( StringArray * p_pArrayFailed = NULL, std::mutex * p_pMutex = NULL )
-				:	m_pArrayFailed( p_pArrayFailed	)
-				,	m_pMutex( p_pMutex	)
-			{
-			}
-			void operator()( Engine * p_pEngine, Path const & p_pathFile )
-			{
-				p_pEngine->LoadPlugin( p_pathFile );
-			}
-		};
-
-		template< typename TObj, typename TKey >
-		bool ParseCollection( Engine * p_pEngine, Castor::Collection< TObj, TKey > & p_collection, BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
+		typedef enum eBMP
 		{
-			bool l_result = true;
-			p_collection.lock();
-			typename Castor::Collection< TObj, TKey >::TObjPtrMapIt l_it = p_collection.begin();
+			eBMP_SCENES = GuiCommon::eBMP_COUNT,
+			eBMP_MATERIALS,
+			eBMP_EXPORT,
+			eBMP_LOGS,
+			eBMP_PROPERTIES,
+		}	eBMP;
 
-			while ( l_result && l_it != p_collection.end() )
+		template< typename TObj >
+		std::shared_ptr< TObj > CreateObject( Engine * p_engine )
+		{
+			return std::make_shared< TObj >( p_engine );
+		}
+
+		template<>
+		std::shared_ptr< Sampler > CreateObject< Sampler >( Engine * p_engine )
+		{
+			return p_engine->CreateSampler( Castor::String() );
+		}
+
+		template<>
+		std::shared_ptr< Scene > CreateObject< Scene >( Engine * p_engine )
+		{
+			return std::make_shared< Scene >( p_engine, p_engine->GetLightFactory() );
+		}
+
+		template< typename TObj >
+		void InitialiseObject( std::shared_ptr< TObj > p_object, Engine * p_engine )
+		{
+			p_engine->PostEvent( MakeInitialiseEvent( *p_object ) );
+		}
+
+		template<>
+		void InitialiseObject< Mesh >( std::shared_ptr< Mesh > p_object, Engine * p_engine )
+		{
+			p_engine->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [&p_object]()
 			{
-				l_result = p_parser.Fill( *l_it->second, p_chunk );
-				++l_it;
-			}
+				p_object->GenerateBuffers();
+			} ) );
+		}
 
-			p_collection.unlock();
-			return l_result;
+		template<>
+		void InitialiseObject< Scene >( std::shared_ptr< Scene > p_object, Engine * p_engine )
+		{
 		}
 
 		template< typename TObj, typename TKey >
 		bool FillCollection( Engine * p_engine, Castor::Collection< TObj, TKey > & p_collection, BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
 		{
-			std::shared_ptr< TObj > l_obj = std::make_shared< TObj >( p_engine );
+			std::shared_ptr< TObj > l_obj = CreateObject< TObj >( p_engine );
 			bool l_return = p_parser.Parse( *l_obj, p_chunk );
 
 			if ( l_return )
@@ -106,7 +159,7 @@ namespace CastorViewer
 				if ( !p_collection.has( l_obj->GetName() ) )
 				{
 					p_collection.insert( l_obj->GetName(), l_obj );
-					p_engine->PostEvent( MakeInitialiseEvent( *l_obj ) );
+					InitialiseObject( l_obj, p_engine );
 				}
 				else
 				{
@@ -118,193 +171,74 @@ namespace CastorViewer
 			return l_return;
 		}
 
-		template<>
-		bool FillCollection< Sampler, Castor::String >( Engine * p_engine, Castor::Collection< Sampler, Castor::String > & p_collection, BinaryChunk & p_chunk, Sampler::BinaryParser p_parser )
+		class PlainWhiteAuiTabArt
+			: public wxAuiDefaultTabArt
 		{
-			std::shared_ptr< Sampler > l_obj = p_engine->CreateSampler( Castor::String() );
-			bool l_return = p_parser.Parse( *l_obj, p_chunk );
-
-			if ( l_return )
+			wxAuiTabArt * Clone()
 			{
-				if ( !p_collection.has( l_obj->GetName() ) )
-				{
-					p_collection.insert( l_obj->GetName(), l_obj );
-					p_engine->PostEvent( MakeInitialiseEvent( *l_obj ) );
-				}
-				else
-				{
-					Logger::LogWarning( cuT( "Duplicate object found with name " ) + l_obj->GetName() );
-					l_return = false;
-				}
+				return new PlainWhiteAuiTabArt( *this );
 			}
 
-			return l_return;
-		}
-
-		template<>
-		bool FillCollection< Mesh, Castor::String >( Engine * p_engine, Castor::Collection< Mesh, Castor::String > & p_collection, BinaryChunk & p_chunk, Mesh::BinaryParser p_parser )
-		{
-			std::shared_ptr< Mesh > l_obj = std::make_shared< Mesh >( p_engine );
-			bool l_return = p_parser.Parse( *l_obj, p_chunk );
-
-			if ( l_return )
+			virtual void DrawBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect )
 			{
-				if ( !p_collection.has( l_obj->GetName() ) )
-				{
-					l_obj->GenerateBuffers();
-					p_collection.insert( l_obj->GetName(), l_obj );
-				}
-				else
-				{
-					Logger::LogWarning( cuT( "Duplicate mesh found with name " ) + l_obj->GetName() );
-					l_return = false;
-				}
+				p_dc.SetPen( wxPen( *wxWHITE, 1, wxSOLID ) );
+				p_dc.SetBrush( wxBrush( *wxWHITE, wxSOLID ) );
+				p_dc.DrawRectangle( p_rect );
 			}
-
-			return l_return;
-		}
-
-		template<>
-		bool FillCollection< Scene, Castor::String >( Engine * p_engine, Castor::Collection< Scene, Castor::String > & p_collection, BinaryChunk & p_chunk, Scene::BinaryParser p_parser )
-		{
-			std::shared_ptr< Scene > l_obj = std::make_shared< Scene >( p_engine, p_engine->GetLightFactory() );
-			bool l_return = p_parser.Parse( *l_obj, p_chunk );
-
-			if ( l_return )
-			{
-				if ( !p_collection.has( l_obj->GetName() ) )
-				{
-					p_collection.insert( l_obj->GetName(), l_obj );
-				}
-				else
-				{
-					Logger::LogWarning( cuT( "Duplicate scene found with name " ) + l_obj->GetName() );
-					l_return = false;
-				}
-			}
-
-			return l_return;
-		}
-
-		bool ParseFile( Engine * p_engine, BinaryFile & p_file )
-		{
-			bool l_return = true;
-			String l_name;
-			BinaryChunk l_chunkFile;
-			RenderWindowSPtr l_window;
-			Path l_path = p_file.GetFilePath();
-			l_chunkFile.Read( p_file );
-
-			if ( l_chunkFile.GetChunkType() == eCHUNK_TYPE_CBSN_FILE )
-			{
-				while ( l_return && l_chunkFile.CheckAvailable( 1 ) )
-				{
-					BinaryChunk l_chunk;
-					l_return = l_chunkFile.GetSubChunk( l_chunk );
-
-					switch ( l_chunk.GetChunkType() )
-					{
-					case eCHUNK_TYPE_SAMPLER:
-						l_return = FillCollection( p_engine, p_engine->GetSamplerManager(), l_chunk, Sampler::BinaryParser( l_path ) );
-						break;
-
-					case eCHUNK_TYPE_MATERIAL:
-						l_return = FillCollection( p_engine, p_engine->GetMaterialManager(), l_chunk, Material::BinaryParser( l_path, p_engine ) );
-						break;
-
-					case eCHUNK_TYPE_MESH:
-						l_return = FillCollection( p_engine, p_engine->GetMeshManager(), l_chunk, Mesh::BinaryParser( l_path ) );
-						break;
-
-					case eCHUNK_TYPE_SCENE:
-						l_return = FillCollection( p_engine, p_engine->GetSceneManager(), l_chunk, Scene::BinaryParser( l_path ) );
-						break;
-
-					case eCHUNK_TYPE_WINDOW:
-						l_window = p_engine->CreateRenderWindow();
-						l_return = RenderWindow::BinaryParser( l_path ).Parse( *l_window, l_chunk );
-						break;
-					}
-
-					if ( !l_return )
-					{
-						l_chunk.EndParse();
-					}
-				}
-
-				if ( l_return )
-				{
-					wxMessageBox( _( "Import successful" ) );
-				}
-			}
-			else
-			{
-				wxMessageBox( _( "The given file is not a valid CBSN file" ) + wxString( wxT( "\n" ) ) + p_file.GetFileName() );
-			}
-
-			return l_return;
-		}
+		};
 	}
 
 	DECLARE_APP( CastorViewerApp )
 
 	MainFrame::MainFrame( wxWindow * p_pParent, wxString const & p_strTitle, eRENDERER_TYPE p_eRenderer )
-		:	wxFrame( p_pParent, wxID_ANY, p_strTitle, wxDefaultPosition, wxSize( 800, 700 ) )
-		,	m_pCastor3D( NULL )
-		,	m_pRenderPanel( NULL )
-		,	m_pImagesLoader( new wxImagesLoader )
-		,	m_timer( NULL )
-		,	m_pListLog( NULL )
-		,	m_iListHeight( 100 )
-		,	m_eRenderer( p_eRenderer )
-		,	m_pGeometriesFrame( NULL )
+		: wxFrame( p_pParent, wxID_ANY, p_strTitle, wxDefaultPosition, wxSize( 800, 700 ) )
+		, m_pCastor3D( NULL )
+		, m_pRenderPanel( NULL )
+		, m_pImagesLoader( new wxImagesLoader )
+		, m_timer( NULL )
+		, m_logTabsContainer( NULL )
+		, m_messageLog( NULL )
+		, m_errorLog( NULL )
+		, m_iLogsHeight( 100 )
+		, m_iPropertiesWidth( 240 )
+		, m_eRenderer( p_eRenderer )
+		, m_sceneObjectsList( NULL )
+		, m_materialsList( NULL )
+		, m_propertiesContainer( NULL )
+		, m_auiManager( this,  wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
 	{
-		m_pAuiManager =  new wxAuiManager( this );
+	}
+
+	MainFrame::~MainFrame()
+	{
+		m_auiManager.UnInit();
+		delete m_pImagesLoader;
 	}
 
 	bool MainFrame::Initialise()
 	{
+		Logger::RegisterCallback( std::bind( &MainFrame::DoLogCallback, this, std::placeholders::_1, std::placeholders::_2 ), this );
 		wxDisplay l_display;
 		wxRect l_rect = l_display.GetClientArea();
 		wxString l_strCopyright;
 		l_strCopyright << wxDateTime().Now().GetCurrentYear();
-		wxSplashScreen l_splashScreen( this, wxT( "Castor\nViewer" ), l_strCopyright + cuT( " " ) + _( " DragonJoker, All rights shared" ), wxPoint( 10, 230 ), wxPoint( 200, 300 ), wxPoint( 180, 260 ), wxPoint( ( l_rect.width - 512 ) / 2, ( l_rect.height - 384 ) / 2 ), 8 );
+		wxSplashScreen l_splashScreen( this, wxT( "Castor\nViewer" ), l_strCopyright + cuT( " " ) + _( " DragonJoker, All rights shared" ), wxPoint( 10, 230 ), wxPoint( 200, 300 ), wxPoint( 180, 260 ), wxPoint( ( l_rect.width - 512 ) / 2, ( l_rect.height - 384 ) / 2 ), 9 );
 		m_pSplashScreen = &l_splashScreen;
 		bool l_bReturn = DoInitialiseImages();
 
 		if ( l_bReturn )
 		{
-			CreateStatusBar();
-			DoPopulateToolbar();
+			DoPopulateStatusBar();
+			DoPopulateToolBar();
 			wxIcon l_icon = wxIcon( castor_xpm );
 			SetIcon( l_icon );
-			m_pListLog = new wxListView( this, wxID_ANY, wxDefaultPosition, wxSize( 200, m_iListHeight ) );
-			m_pListLog->InsertColumn( 0, _( "Log" ), 0 );
-			m_pAuiManager->AddPane( m_pListLog, wxAuiPaneInfo().CloseButton().Caption( _( "Log" ) ).Direction( wxBOTTOM ).Dock().Bottom().BottomDockable().TopDockable().Movable().PinButton() );
-#if defined( NDEBUG )
-			m_pListLog->Hide();
-#else
-			m_pListLog->Hide();
-#endif
-			Logger::RegisterCallback( std::bind( &MainFrame::DoLogCallback, this, std::placeholders::_1, std::placeholders::_2 ), this );
+			DoInitialiseGUI();
 			l_bReturn = DoInitialise3D();
 		}
 
 		l_splashScreen.Close();
 		Show( l_bReturn );
 		return l_bReturn;
-	}
-
-	MainFrame::~MainFrame()
-	{
-		if ( m_pAuiManager )
-		{
-			m_pAuiManager->UnInit();
-			delete m_pAuiManager;
-		}
-
-		delete m_pImagesLoader;
-		delete m_pCastor3D;
 	}
 
 	void MainFrame::LoadScene( wxString const & p_strFileName )
@@ -315,117 +249,39 @@ namespace CastorViewer
 
 			if ( !p_strFileName.empty() )
 			{
-				Logger::LogDebug( cuT( "MainFrame::LoadScene - param not empty" ) );
 				m_strFilePath = ( wxChar const * )p_strFileName.c_str();
-				Logger::LogDebug( cuT( "MainFrame::LoadScene - " ) + m_strFilePath );
 			}
 
 			if ( !m_strFilePath.empty() )
 			{
-				Logger::LogDebug( cuT( "MainFrame::LoadScene - file path not empty" ) );
 				String l_strLowered = str_utils::lower_case( m_strFilePath );
-				Logger::LogDebug( cuT( "MainFrame::LoadScene - file path lowered : " ) + l_strLowered );
 
 				if ( m_pMainScene.lock() )
 				{
-					m_pMainScene.lock()->ClearScene();
-					m_pCastor3D->GetSceneManager().erase( m_pMainScene.lock()->GetName() );
-					Logger::LogDebug( cuT( "MainFrame::LoadScene - scene erased from manager" ) );
+					m_materialsList->UnloadMaterials();
+					m_sceneObjectsList->UnloadScene();
 					m_pMainScene.reset();
-					Logger::LogDebug( cuT( "Scene cleared" ) );
+					Logger::LogDebug( cuT( "MainFrame::LoadScene - Scene unloaded" ) );
 				}
 
 				m_pRenderPanel->SetRenderWindow( nullptr );
 				m_pCastor3D->Cleanup();
+				bool l_continue = true;
 				Logger::LogDebug( cuT( "MainFrame::LoadScene - Engine cleared" ) );
 
-				if ( m_strFilePath.GetExtension() != cuT( "cbsn" ) && m_strFilePath.GetExtension() != cuT( "zip" ) )
+
+				if ( DoLoadMeshFile() )
 				{
-					Path l_meshFilePath = m_strFilePath;
-					str_utils::replace( l_meshFilePath, cuT( "cscn" ), cuT( "cmsh" ) );
-
-					if ( File::FileExists( l_meshFilePath ) )
+					try
 					{
-						BinaryFile l_fileMesh( l_meshFilePath, File::eOPEN_MODE_READ );
-						Logger::LogInfo( cuT( "Loading meshes file : " ) + l_meshFilePath );
-
-						if ( m_pCastor3D->LoadMeshes( l_fileMesh ) )
-						{
-							Logger::LogInfo( cuT( "Meshes read" ) );
-						}
-						else
-						{
-							Logger::LogInfo( cuT( "Can't read meshes" ) );
-							return;
-						}
+						m_pCastor3D->Initialise( CASTOR_WANTED_FPS, CASTOR3D_THREADED );
 					}
-				}
-
-				try
-				{
-					m_pCastor3D->Initialise( CASTOR_WANTED_FPS, CASTOR3D_THREADED );
-
-					if ( File::FileExists( m_strFilePath ) )
+					catch ( std::exception & exc )
 					{
-						Logger::LogInfo( cuT( "Loading scene file : " ) + m_strFilePath );
-
-						if ( m_strFilePath.GetExtension() == cuT( "cscn" ) || m_strFilePath.GetExtension() == cuT( "zip" ) )
-						{
-							SceneFileParser l_parser( m_pCastor3D );
-
-							if ( l_parser.ParseFile( m_strFilePath ) )
-							{
-								RenderWindowSPtr l_pRenderWindow = l_parser.GetRenderWindow();
-
-								if ( l_pRenderWindow )
-								{
-									m_pRenderPanel->SetRenderWindow( l_pRenderWindow );
-
-									if ( l_pRenderWindow->IsInitialised() )
-									{
-										m_pMainScene = l_pRenderWindow->GetScene();
-
-										if ( l_pRenderWindow->IsFullscreen() )
-										{
-											ShowFullScreen( true, wxFULLSCREEN_ALL );
-										}
-
-										Logger::LogInfo( cuT( "Scene file read" ) );
-									}
-									else
-									{
-										wxMessageBox( _( "Can't initialise the render window" ) );
-									}
-
-#if CASTOR3D_THREADED
-									m_pCastor3D->StartRendering();
-#endif
-								}
-							}
-							else
-							{
-								Logger::LogWarning( cuT( "Can't read scene file" ) );
-							}
-						}
-						else
-						{
-							Castor::BinaryFile l_file( m_strFilePath, Castor::File::eOPEN_MODE_READ );
-
-							if ( !ParseFile( m_pCastor3D, l_file ) )
-							{
-								wxMessageBox( _T( "Failed to read read binary scene file" ) + wxString( wxT( "\n" ) ) + m_strFilePath );
-								Logger::LogWarning( cuT( "Failed to read read binary scene file" ) );
-							}
-						}
+						wxMessageBox( _( "Castor initialisation failed with following error:" ) + wxString( wxT( "\n" ) ) + wxString( exc.what(), wxMBConvLibc() ) );
 					}
-					else
-					{
-						wxMessageBox( _( "Scene file doesn't exist :" ) + wxString( wxT( "\n" ) ) + m_strFilePath );
-					}
-				}
-				catch ( std::exception & exc )
-				{
-					wxMessageBox( _T( "Scene file parsing failed with error:" ) + wxString( wxT( "\n" ) ) + wxString( exc.what(), wxMBConvLibc() ) );
+
+					DoLoadSceneFile();
 				}
 			}
 		}
@@ -435,60 +291,302 @@ namespace CastorViewer
 		}
 	}
 
-	bool MainFrame::DoInitialise3D()
+	bool MainFrame::DoLoadMeshFile()
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
+
+		if ( m_strFilePath.GetExtension() != cuT( "cbsn" ) && m_strFilePath.GetExtension() != cuT( "zip" ) )
+		{
+			Path l_meshFilePath = m_strFilePath;
+			str_utils::replace( l_meshFilePath, cuT( "cscn" ), cuT( "cmsh" ) );
+
+			if ( File::FileExists( l_meshFilePath ) )
+			{
+				BinaryFile l_fileMesh( l_meshFilePath, File::eOPEN_MODE_READ );
+				Logger::LogInfo( cuT( "Loading meshes file : " ) + l_meshFilePath );
+
+				if ( m_pCastor3D->LoadMeshes( l_fileMesh ) )
+				{
+					Logger::LogInfo( cuT( "Meshes read" ) );
+				}
+				else
+				{
+					Logger::LogInfo( cuT( "Can't read meshes" ) );
+					l_return = false;
+				}
+			}
+		}
+
+		return l_return;
+	}
+
+	bool MainFrame::DoLoadTextSceneFile()
+	{
+		bool l_return = false;
+		SceneFileParser l_parser( m_pCastor3D );
+
+		if ( l_parser.ParseFile( m_strFilePath ) )
+		{
+			RenderWindowSPtr l_pRenderWindow = l_parser.GetRenderWindow();
+
+			if ( l_pRenderWindow )
+			{
+				m_pRenderPanel->SetRenderWindow( l_pRenderWindow );
+
+				if ( l_pRenderWindow->IsInitialised() )
+				{
+					m_pMainScene = l_pRenderWindow->GetScene();
+
+					if ( l_pRenderWindow->IsFullscreen() )
+					{
+						ShowFullScreen( true, wxFULLSCREEN_ALL );
+					}
+
+					SetClientSize( l_pRenderWindow->GetSize().width() + m_iPropertiesWidth, l_pRenderWindow->GetSize().height() + m_iLogsHeight );
+					l_return = true;
+					Logger::LogInfo( cuT( "Scene file read" ) );
+				}
+				else
+				{
+					wxMessageBox( _( "Can't initialise the render window" ) );
+				}
+
+#if CASTOR3D_THREADED
+				m_pCastor3D->StartRendering();
+#endif
+			}
+		}
+		else
+		{
+			Logger::LogWarning( cuT( "Can't read scene file" ) );
+		}
+
+		return l_return;
+	}
+
+	bool MainFrame::DoLoadBinarySceneFile()
+	{
+		bool l_return = true;
+		Castor::BinaryFile l_file( m_strFilePath, Castor::File::eOPEN_MODE_READ );
+		BinaryChunk l_chunkFile;
+		RenderWindowSPtr l_window;
+		Path l_path = l_file.GetFilePath();
+		l_chunkFile.Read( l_file );
+
+		if ( l_chunkFile.GetChunkType() == eCHUNK_TYPE_CBSN_FILE )
+		{
+			while ( l_return && l_chunkFile.CheckAvailable( 1 ) )
+			{
+				BinaryChunk l_chunk;
+				l_return = l_chunkFile.GetSubChunk( l_chunk );
+
+				switch ( l_chunk.GetChunkType() )
+				{
+				case eCHUNK_TYPE_SAMPLER:
+					l_return = FillCollection( m_pCastor3D, m_pCastor3D->GetSamplerManager(), l_chunk, Sampler::BinaryParser( l_path ) );
+					break;
+
+				case eCHUNK_TYPE_MATERIAL:
+					l_return = FillCollection( m_pCastor3D, m_pCastor3D->GetMaterialManager(), l_chunk, Material::BinaryParser( l_path, m_pCastor3D ) );
+					break;
+
+				case eCHUNK_TYPE_MESH:
+					l_return = FillCollection( m_pCastor3D, m_pCastor3D->GetMeshManager(), l_chunk, Mesh::BinaryParser( l_path ) );
+					break;
+
+				case eCHUNK_TYPE_SCENE:
+					l_return = FillCollection( m_pCastor3D, m_pCastor3D->GetSceneManager(), l_chunk, Scene::BinaryParser( l_path ) );
+					break;
+
+				case eCHUNK_TYPE_WINDOW:
+					l_window = m_pCastor3D->CreateRenderWindow();
+					l_return = RenderWindow::BinaryParser( l_path ).Parse( *l_window, l_chunk );
+					break;
+				}
+
+				if ( !l_return )
+				{
+					l_chunk.EndParse();
+				}
+			}
+
+			if ( l_return )
+			{
+				wxMessageBox( _( "Import successful" ) );
+			}
+		}
+		else
+		{
+			wxMessageBox( _( "The given file is not a valid CBSN file" ) + wxString( wxT( "\n" ) ) + l_file.GetFileName() );
+		}
+
+		if ( !l_return )
+		{
+			wxMessageBox( _( "Failed to read the binary scene file" ) + wxString( wxT( "\n" ) ) + m_strFilePath );
+			Logger::LogWarning( cuT( "Failed to read read binary scene file" ) );
+		}
+		else if ( l_window )
+		{
+			m_pMainScene = l_window->GetScene();
+
+			if ( l_window->IsFullscreen() )
+			{
+				ShowFullScreen( true, wxFULLSCREEN_ALL );
+			}
+
+			SetClientSize( l_window->GetSize().width() + m_iPropertiesWidth, l_window->GetSize().height() + m_iLogsHeight );
+			l_return = true;
+		}
+
+		return l_return;
+	}
+
+	void MainFrame::DoLoadSceneFile()
+	{
+		if ( File::FileExists( m_strFilePath ) )
+		{
+			Logger::LogInfo( cuT( "Loading scene file : " ) + m_strFilePath );
+			bool l_initialised = false;
+
+			if ( m_strFilePath.GetExtension() == cuT( "cscn" ) || m_strFilePath.GetExtension() == cuT( "zip" ) )
+			{
+				try
+				{
+					l_initialised = DoLoadTextSceneFile();
+				}
+				catch ( std::exception & exc )
+				{
+					wxMessageBox( _( "Failed to parse the scene file, with following error:" ) + wxString( wxT( "\n" ) ) + wxString( exc.what(), wxMBConvLibc() ) );
+				}
+			}
+			else
+			{
+				try
+				{
+					l_initialised = DoLoadBinarySceneFile();
+				}
+				catch ( std::exception & exc )
+				{
+					wxMessageBox( _( "Failed to parse the binary scene file, with following error:" ) + wxString( wxT( "\n" ) ) + wxString( exc.what(), wxMBConvLibc() ) );
+				}
+			}
+
+			if ( l_initialised )
+			{
+				m_sceneObjectsList->LoadScene( m_pCastor3D, m_pMainScene.lock() );
+				m_materialsList->LoadMaterials( m_pCastor3D );
+				wxSize l_size = GetClientSize();
+#if wxCHECK_VERSION( 2, 9, 0 )
+				SetMinClientSize( l_size );
+#endif
+			}
+		}
+		else
+		{
+			wxMessageBox( _( "Scene file doesn't exist :" ) + wxString( wxT( "\n" ) ) + m_strFilePath );
+		}
+	}
+
+	void MainFrame::DoLoadPlugins()
+	{
 		m_pSplashScreen->Step( _( "Loading plugins" ), 1 );
-		Logger::LogInfo( cuT( "Initialising Castor3D" ) );
-		m_pCastor3D = new Engine();
-		StringArray l_arrayFiles;
-		StringArray l_arrayFailed;
+		PathArray l_arrayFiles;
+		PathArray l_arrayFailed;
 		std::mutex l_mutex;
 		ThreadPtrArray l_arrayThreads;
 		File::ListDirectoryFiles( Engine::GetPluginsDirectory(), l_arrayFiles );
 
 		if ( l_arrayFiles.size() > 0 )
 		{
-			std::for_each( l_arrayFiles.begin(), l_arrayFiles.end(), [&]( Path const & p_pathFile )
+			for ( auto && l_file: l_arrayFiles )
 			{
-				if ( p_pathFile.GetExtension() == CASTOR_DLL_EXT )
+				Path l_path( l_file );
+
+				if ( l_path.GetExtension() == CASTOR_DLL_EXT )
 				{
-					l_arrayThreads.push_back( std::make_shared< std::thread >( PluginLoader( &l_arrayFailed, &l_mutex ), m_pCastor3D, p_pathFile ) );
+					l_arrayThreads.push_back( std::make_shared< std::thread >( [&l_arrayFailed, &l_mutex, this]( Path const & p_path )
+					{
+						if ( !m_pCastor3D->LoadPlugin( p_path ) )
+						{
+							std::unique_lock< std::mutex > l_lock( l_mutex );
+							l_arrayFailed.push_back( p_path );
+						}
+					}, l_path ) );
 				}
-			} );
-			std::for_each( l_arrayThreads.begin(), l_arrayThreads.end(), [&]( thread_sptr p_pThread )
+			}
+
+			for( auto && l_thread: l_arrayThreads )
 			{
-				p_pThread->join();
-			} );
+				l_thread->join();
+			}
+
 			l_arrayThreads.clear();
 		}
 
-		if ( l_arrayFailed.size() > 0 )
-		{
-			StringArray l_arrayFailed2;
-			std::swap( l_arrayFailed2, l_arrayFailed );
-			std::for_each( l_arrayFailed2.begin(), l_arrayFailed2.end(), [&]( Path const & p_pathFile )
-			{
-				l_arrayThreads.push_back( std::make_shared< std::thread >( PluginLoader( &l_arrayFailed, &l_mutex ), m_pCastor3D, p_pathFile ) );
-			} );
-			std::for_each( l_arrayThreads.begin(), l_arrayThreads.end(), [&]( thread_sptr p_pThread )
-			{
-				p_pThread->join();
-			} );
-			l_arrayThreads.clear();
-		}
-
-		if ( l_arrayFailed.size() > 0 )
+		if ( !l_arrayFailed.empty() )
 		{
 			Logger::LogWarning( cuT( "Some plugins couldn't be loaded :" ) );
-			std::for_each( l_arrayFailed.begin(), l_arrayFailed.end(), [&]( Path const & p_pathFile )
+
+			for ( auto && l_file: l_arrayFailed )
 			{
-				Logger::LogWarning( p_pathFile.GetFileName() );
-			} );
+				Logger::LogWarning( Path( l_file ).GetFileName() );
+			}
+
 			l_arrayFailed.clear();
 		}
 
 		Logger::LogInfo( cuT( "Plugins loaded" ) );
+	}
+
+	void MainFrame::DoInitialiseGUI()
+	{
+		SetClientSize( 800 + m_iPropertiesWidth, 600 + m_iLogsHeight );
+		wxSize l_size = GetClientSize();
+#if wxCHECK_VERSION( 2, 9, 0 )
+		SetMinClientSize( l_size );
+#endif
+		m_auiManager.GetArtProvider()->SetMetric( wxAuiPaneDockArtSetting::wxAUI_DOCKART_PANE_BORDER_SIZE, 0 );
+		m_pRenderPanel = new RenderPanel( this, wxID_ANY, wxDefaultPosition, wxSize( l_size.x - m_iPropertiesWidth, l_size.y - m_iLogsHeight ) );
+		m_logTabsContainer = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
+		m_logTabsContainer->SetArtProvider( new PlainWhiteAuiTabArt );
+		m_sceneTabsContainer = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
+		m_sceneTabsContainer->SetArtProvider( new PlainWhiteAuiTabArt );
+		m_propertiesContainer = new wxPropertiesHolder( false, this, wxDefaultPosition, wxDefaultSize );
+
+		m_auiManager.AddPane( m_pRenderPanel, wxAuiPaneInfo().Center().CloseButton( false ).MinSize( l_size.x - m_iPropertiesWidth, l_size.y - m_iLogsHeight ).Layer( 0 ).Movable( false ).PaneBorder( false ).Dockable( false) );
+		m_auiManager.AddPane( m_logTabsContainer, wxAuiPaneInfo().CloseButton().Caption( _( "Logs" ) ).Bottom().Dock().BottomDockable().TopDockable().Movable().PinButton().MinSize( l_size.x, m_iLogsHeight ).Layer( 1 ).PaneBorder( false ) );
+		m_auiManager.AddPane( m_sceneTabsContainer, wxAuiPaneInfo().CloseButton().Caption( _( "Scenes" ) ).Left().Dock().LeftDockable().RightDockable().Movable().PinButton().MinSize( m_iPropertiesWidth, l_size.y / 3 ).Layer( 2 ).PaneBorder( false ) );
+		m_auiManager.AddPane( m_propertiesContainer , wxAuiPaneInfo().CloseButton().Caption( _( "Properties" ) ).Left().Dock().LeftDockable().RightDockable().Movable().PinButton().MinSize( m_iPropertiesWidth, l_size.y / 3 ).Layer( 2 ).PaneBorder( false ) );
+
+		auto l_logCreator = [this, &l_size]( wxString const & p_name, wxListView *& p_log )
+		{
+			p_log = new wxListView( m_logTabsContainer, wxID_ANY, wxDefaultPosition, wxDefaultSize );
+#if wxCHECK_VERSION( 2, 9, 0 )
+			p_log->AppendColumn( p_name, wxLIST_FORMAT_LEFT , l_size.x - 10 );
+#else
+			p_log->InsertColumn( 0, p_name, wxLIST_FORMAT_LEFT , l_size.x - 10 );
+#endif
+			m_logTabsContainer->AddPage( p_log, p_name, true );
+		};
+		
+		l_logCreator( _( "Messages" ), m_messageLog );
+		l_logCreator( _( "Errors" ), m_errorLog );
+		
+		m_sceneObjectsList = new wxSceneObjectsList( m_propertiesContainer, m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize );
+		m_sceneTabsContainer->AddPage( m_sceneObjectsList, _( "Scenes" ), true );
+		
+		m_materialsList = new wxMaterialsList( m_propertiesContainer, m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize );
+		m_sceneTabsContainer->AddPage( m_materialsList, _( "Materials" ), true );
+
+		m_auiManager.Update();
+	}
+
+	bool MainFrame::DoInitialise3D()
+	{
+		bool l_bReturn = true;
+		Logger::LogInfo( cuT( "Initialising Castor3D" ) );
+		m_pCastor3D = new Engine();
+		DoLoadPlugins();
 
 		try
 		{
@@ -507,10 +605,6 @@ namespace CastorViewer
 					l_bReturn = false;
 				}
 			}
-			else
-			{
-				l_bReturn = true;
-			}
 
 			if ( l_bReturn )
 			{
@@ -520,23 +614,6 @@ namespace CastorViewer
 			if ( l_bReturn )
 			{
 				Logger::LogInfo( cuT( "Castor3D Initialised" ) );
-				SetClientSize( 800, 600 + m_iListHeight );
-				int l_width = GetClientSize().x;
-				int l_height = GetClientSize().y;
-				m_pRenderPanel = new RenderPanel( this, wxID_ANY, wxDefaultPosition, wxSize( l_width, l_height - m_iListHeight ) ), wxSizerFlags( 1 ).Expand();
-				m_pRenderPanel->Show();
-				wxBoxSizer * l_pSizerAll = new wxBoxSizer( wxVERTICAL	);
-				wxBoxSizer * l_pSizerLog = new wxBoxSizer( wxHORIZONTAL	);
-				l_pSizerLog->Add( m_pListLog,		wxSizerFlags( 1 )	);
-				l_pSizerAll->Add( m_pRenderPanel,	wxSizerFlags( 1 ).Expand()	);
-				l_pSizerAll->Add( l_pSizerLog,		wxSizerFlags( 0 ).Expand()	);
-				SetSizer( l_pSizerAll );
-				l_pSizerAll->SetSizeHints( this );
-
-				if ( m_pAuiManager )
-				{
-					m_pAuiManager->AddPane( m_pRenderPanel, wxAuiPaneInfo().Direction( wxCENTER ).Dock().CentrePane().PaneBorder( false ) );
-				}
 
 #if !CASTOR3D_THREADED
 
@@ -561,39 +638,66 @@ namespace CastorViewer
 	bool MainFrame::DoInitialiseImages()
 	{
 		m_pSplashScreen->Step( _( "Loading images" ), 1 );
-		m_pImagesLoader->AddBitmap( CV_IMG_CASTOR,									castor_transparent_xpm	);
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_VISIBLE,			geo_visible_xpm	);
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_VISIBLE_SEL,		geo_visible_sel_xpm	);
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_HIDDEN,				geo_cachee_xpm	);
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_HIDDEN_SEL,			geo_cachee_sel_xpm	);
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_GEOMETRY,			dossier_xpm	);
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_GEOMETRY_SEL,		dossier_sel_xpm	);
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_GEOMETRY_OPEN,		dossier_ouv_xpm	);
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_GEOMETRY_OPEN_SEL,	dossier_ouv_sel_xpm	);
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_SUBMESH,			submesh_xpm	);
-		m_pImagesLoader->AddBitmap( wxGeometriesListFrame::eBMP_SUBMESH_SEL,		submesh_sel_xpm	);
-		m_pImagesLoader->AddBitmap( eBMP_SCENE,										scene_blanc_xpm	);
-		m_pImagesLoader->AddBitmap( eBMP_GEOMETRIES,								geo_blanc_xpm	);
-		m_pImagesLoader->AddBitmap( eBMP_MATERIALS,									mat_blanc_xpm	);
-		m_pImagesLoader->AddBitmap( eBMP_EXPORT,									export_xpm	);
+		m_pImagesLoader->AddBitmap( CV_IMG_CASTOR, castor_transparent_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_SCENE, scene_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_SCENE_SEL, scene_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_NODE, node_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_NODE_SEL, node_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_CAMERA, camera_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_CAMERA_SEL, camera_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_GEOMETRY, geometry_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_GEOMETRY_SEL, geometry_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_DIRECTIONAL_LIGHT, directional_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_DIRECTIONAL_LIGHT_SEL, directional_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_POINT_LIGHT, point_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_POINT_LIGHT_SEL, point_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_SPOT_LIGHT, spot_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_SPOT_LIGHT_SEL, spot_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_SUBMESH, submesh_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_SUBMESH_SEL, submesh_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_PANEL_OVERLAY, panel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_PANEL_OVERLAY_SEL, panel_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_BORDER_PANEL_OVERLAY, border_panel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_BORDER_PANEL_OVERLAY_SEL, border_panel_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_TEXT_OVERLAY, text_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_TEXT_OVERLAY_SEL, text_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_MATERIAL, material_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_MATERIAL_SEL, material_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_PASS, pass_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_PASS_SEL, pass_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_TEXTURE, texture_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_TEXTURE_SEL, texture_sel_xpm );
+
+		m_pImagesLoader->AddBitmap( eBMP_SCENES, scene_blanc_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_MATERIALS, mat_blanc_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_EXPORT, export_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_LOGS, log_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_PROPERTIES, properties_xpm );
 		m_pImagesLoader->WaitAsyncLoads();
 		return true;
 	}
 
-	void MainFrame::DoPopulateToolbar()
+	void MainFrame::DoPopulateStatusBar()
+	{
+		CreateStatusBar();
+	}
+
+	void MainFrame::DoPopulateToolBar()
 	{
 		m_pSplashScreen->Step( _( "Loading toolbar" ), 1 );
 		wxToolBar * l_pToolbar = CreateToolBar( wxTB_FLAT | wxTB_HORIZONTAL );
-		l_pToolbar->SetBackgroundColour( * wxWHITE );
+		l_pToolbar->SetBackgroundColour( *wxWHITE );
 		l_pToolbar->SetToolBitmapSize( wxSize( 32, 32 ) );
-		l_pToolbar->AddTool( eID_TOOL_LOAD_SCENE,	_( "Load Scene"	),	wxImage( *m_pImagesLoader->GetBitmap( eBMP_SCENE	) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ),	_( "Open a new scene"	) );
+		l_pToolbar->AddTool( eID_TOOL_LOAD_SCENE, _( "Load Scene" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_SCENES ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Open a new scene" ) );
 		m_pSplashScreen->Step( 1 );
-		l_pToolbar->AddTool( eID_TOOL_EXPORT_SCENE,	_( "Export Scene"	),	wxImage( *m_pImagesLoader->GetBitmap( eBMP_EXPORT	) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ),	_( "Export the current scene"	) );
+		l_pToolbar->AddTool( eID_TOOL_EXPORT_SCENE, _( "Export Scene" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_EXPORT ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Export the current scene" ) );
 		m_pSplashScreen->Step( 1 );
 		l_pToolbar->AddSeparator();
-		l_pToolbar->AddTool( eID_TOOL_GEOMETRIES,	_( "Geometries"	),	wxImage( *m_pImagesLoader->GetBitmap( eBMP_GEOMETRIES	) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ),	_( "Display geometries"	) );
+		l_pToolbar->AddTool( eID_TOOL_SHOW_LOGS, _( "Logs" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_LOGS ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display logs" ) );
 		m_pSplashScreen->Step( 1 );
-		l_pToolbar->AddTool( eID_TOOL_MATERIALS,	_( "Materials"	),	wxImage( *m_pImagesLoader->GetBitmap( eBMP_MATERIALS	) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ),	_( "Display materials"	) );
+		l_pToolbar->AddTool( eID_TOOL_SHOW_LISTS, _( "Lists" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_MATERIALS ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display lists" ) );
+		m_pSplashScreen->Step( 1 );
+		l_pToolbar->AddTool( eID_TOOL_SHOW_PROPERTIES, _( "Properties" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_PROPERTIES ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display properties" ) );
 		m_pSplashScreen->Step( 1 );
 		l_pToolbar->AddSeparator();
 		l_pToolbar->Realize();
@@ -601,279 +705,26 @@ namespace CastorViewer
 
 	void MainFrame::DoLogCallback( String const & p_strLog, ELogType p_eLogType )
 	{
-		if ( m_pListLog )
+		switch( p_eLogType )
 		{
-			m_pListLog->InsertItem( 0, p_strLog );
-		}
-	}
-
-	void MainFrame::DoExportScene( Castor::Path const & p_pathFile )const
-	{
-		if ( p_pathFile.GetExtension() == cuT( "obj" ) )
-		{
-			DoObjExportScene( p_pathFile );
-		}
-		else if ( p_pathFile.GetExtension() == cuT( "cscn" ) )
-		{
-			DoCscnExportScene( p_pathFile );
-		}
-		else if ( p_pathFile.GetExtension() == cuT( "cbsn" ) )
-		{
-			DoBinaryExportScene( p_pathFile );
-		}
-	}
-
-	void MainFrame::DoObjExportScene( Castor::Path const & p_pathFile )const
-	{
-		StringStream l_mtl, l_obj;
-		Version l_version;
-		StringStream l_streamVersion;
-		l_streamVersion << l_version.m_iMajor << cuT( "." ) << l_version.m_iMinor << cuT( "." ) << l_version.m_iBuild;
-		// First we export the materials
-		Path l_pathFileMtl( p_pathFile );
-		str_utils::replace( l_pathFileMtl, l_pathFileMtl.GetExtension(), cuT( "mtl" ) );
-		MaterialManager const & l_mtlManager = m_pCastor3D->GetMaterialManager();
-		l_mtl << cuT( "#######################################################\n" );
-		l_mtl << cuT( "#      MTL File generated by CastorViewer v" ) + l_streamVersion.str() + cuT( "      #\n" );
-		l_mtl << cuT( "#######################################################\n\n" );
-		l_mtlManager.lock();
-		std::for_each( l_mtlManager.begin(), l_mtlManager.end(), [&]( std::pair< String, MaterialSPtr > p_pair )
-		{
-			l_mtl << DoObjExport( l_pathFileMtl.GetPath(), p_pair.second ) + cuT( "\n" );
-		} );
-		l_mtlManager.unlock();
-		TextFile l_fileMtl( l_pathFileMtl, File::eOPEN_MODE_WRITE, File::eENCODING_MODE_ASCII );
-		l_fileMtl.WriteText( l_mtl.str() );
-		// Then we export meshes
-		Path l_pathFileObj( p_pathFile );
-		str_utils::replace( l_pathFileObj, l_pathFileObj.GetExtension(), cuT( "obj" ) );
-		MeshCollection const & l_mshManager = m_pCastor3D->GetMeshManager();
-		uint32_t l_uiOffset = 1;
-		uint32_t l_uiCount = 0;
-		l_obj << cuT( "#######################################################\n" );
-		l_obj << cuT( "#      OBJ File generated by CastorViewer v" ) + l_streamVersion.str() + cuT( "      #\n" );
-		l_obj << cuT( "#######################################################\n\n" );
-		l_obj << cuT( "mtllib " ) + l_pathFileMtl.GetFullFileName() + cuT( "\n\n" );
-		l_mshManager.lock();
-
-		for ( MeshCollection::TObjPtrMapConstIt l_it = l_mshManager.begin(); l_it != l_mshManager.end(); ++l_it )
-		{
-			l_obj << DoObjExport( l_it->second, l_uiOffset, l_uiCount ) << cuT( "\n" );
-		}
-
-		l_mshManager.unlock();
-		TextFile l_fileObj( l_pathFileObj, File::eOPEN_MODE_WRITE, File::eENCODING_MODE_ASCII );
-		l_fileObj.WriteText( l_obj.str() );
-	}
-
-	Path GetTextureNewPath( Path const & p_pathSrcFile, Path const & p_pathFolder )
-	{
-		Path l_pathReturn( cuT( "Texture" ) );
-		l_pathReturn /= p_pathSrcFile.GetFullFileName();
-
-		if ( !wxDirExists( ( p_pathFolder / cuT( "Texture" ) ).c_str() ) )
-		{
-			wxMkDir( str_utils::to_str( p_pathFolder / cuT( "Texture" ) ).c_str(), 0777 );
-		}
-
-		if ( wxFileExists( p_pathSrcFile ) )
-		{
-			Logger::LogDebug( cuT( "Copying [" ) + p_pathSrcFile + cuT( "] to [" ) + p_pathFolder / l_pathReturn + cuT( "]" ) );
-			wxCopyFile( p_pathSrcFile, p_pathFolder / l_pathReturn );
-		}
-
-		return l_pathReturn;
-	};
-
-	String MainFrame::DoObjExport( Path const & p_pathMtlFolder, MaterialSPtr p_pMaterial )const
-	{
-		StringStream l_strReturn;
-		PassSPtr l_pPass = p_pMaterial->GetPass( 0 );
-
-		if ( l_pPass )
-		{
-			Colour l_clAmbient = l_pPass->GetAmbient();
-			Colour l_clDiffuse = l_pPass->GetDiffuse();
-			Colour l_clSpecular = l_pPass->GetSpecular();
-			TextureUnitSPtr l_pAmbient	= l_pPass->GetTextureUnit( eTEXTURE_CHANNEL_AMBIENT	);
-			TextureUnitSPtr l_pDiffuse	= l_pPass->GetTextureUnit( eTEXTURE_CHANNEL_DIFFUSE	);
-			TextureUnitSPtr l_pNormal	= l_pPass->GetTextureUnit( eTEXTURE_CHANNEL_NORMAL	);
-			TextureUnitSPtr l_pOpacity	= l_pPass->GetTextureUnit( eTEXTURE_CHANNEL_OPACITY	);
-			TextureUnitSPtr l_pSpecular	= l_pPass->GetTextureUnit( eTEXTURE_CHANNEL_SPECULAR	);
-			TextureUnitSPtr l_pGloss	= l_pPass->GetTextureUnit( eTEXTURE_CHANNEL_GLOSS	);
-			l_strReturn << cuT( "newmtl "	) << p_pMaterial->GetName() << cuT( "\n" );
-			l_strReturn << cuT( "	Ka "	) << l_clAmbient.red().value() << cuT( " " ) << l_clAmbient.green().value() << cuT( " " ) << l_clAmbient.blue().value() << cuT( "\n" );
-			l_strReturn << cuT( "	Kd "	) << l_clDiffuse.red().value() << cuT( " " ) << l_clDiffuse.green().value() << cuT( " " ) << l_clDiffuse.blue().value() << cuT( "\n" );
-			l_strReturn << cuT( "	Ks "	) << l_clSpecular.red().value() << cuT( " " ) << l_clSpecular.green().value() << cuT( " " ) << l_clSpecular.blue().value() << cuT( "\n" );
-			l_strReturn << cuT( "	Ns "	) << l_pPass->GetShininess() << cuT( "\n" );
-			l_strReturn << cuT( "	d "	) << l_pPass->GetAlpha() << cuT( "\n" );
-
-			if ( l_pAmbient && !l_pAmbient->GetTexturePath().empty() )
+		case Castor::ELogType_DEBUG:
+		case Castor::ELogType_INFO:
+			if ( m_messageLog )
 			{
-				l_strReturn << cuT( "	map_Ka " ) + GetTextureNewPath( l_pAmbient->GetTexturePath(), p_pathMtlFolder ) << cuT( "\n" );
+				m_messageLog->InsertItem( 0, p_strLog );
 			}
+			break;
 
-			if ( l_pDiffuse && !l_pDiffuse->GetTexturePath().empty() )
+		case Castor::ELogType_WARNING:
+		case Castor::ELogType_ERROR:
+			if ( m_errorLog )
 			{
-				l_strReturn << cuT( "	map_Kd " ) + GetTextureNewPath( l_pDiffuse->GetTexturePath(), p_pathMtlFolder ) << cuT( "\n" );
+				m_errorLog->InsertItem( 0, p_strLog );
 			}
+			break;
 
-			if ( l_pNormal && !l_pNormal->GetTexturePath().empty() )
-			{
-				l_strReturn << cuT( "	map_Bump " ) + GetTextureNewPath( l_pNormal->GetTexturePath(), p_pathMtlFolder ) << cuT( "\n" );
-			}
-
-			if ( l_pOpacity && !l_pOpacity->GetTexturePath().empty() )
-			{
-				l_strReturn << cuT( "	map_d " ) + GetTextureNewPath( l_pOpacity->GetTexturePath(), p_pathMtlFolder ) << cuT( "\n" );
-			}
-
-			if ( l_pSpecular && !l_pSpecular->GetTexturePath().empty() )
-			{
-				l_strReturn << cuT( "	map_Ks " ) + GetTextureNewPath( l_pSpecular->GetTexturePath(), p_pathMtlFolder ) << cuT( "\n" );
-			}
-
-			if ( l_pGloss && !l_pGloss->GetTexturePath().empty() )
-			{
-				l_strReturn << cuT( "	map_Ns " ) + GetTextureNewPath( l_pGloss->GetTexturePath(), p_pathMtlFolder ) << cuT( "\n" );
-			}
-		}
-
-		return l_strReturn.str();
-	}
-
-	String MainFrame::DoObjExport( MeshSPtr p_pMesh, uint32_t & p_uiOffset, uint32_t & p_uiCount )const
-	{
-		StringStream l_strReturn;
-		std::for_each( p_pMesh->Begin(), p_pMesh->End(), [&]( SubmeshSPtr p_pSubmesh )
-		{
-			StringStream l_strV;
-			StringStream l_strVT;
-			StringStream l_strVN;
-			StringStream l_strF;
-			VertexBuffer & l_vtxBuffer = p_pSubmesh->GetGeometryBuffers()->GetVertexBuffer();
-			IndexBuffer & l_idxBuffer = p_pSubmesh->GetGeometryBuffers()->GetIndexBuffer();
-			uint32_t l_uiStride = l_vtxBuffer.GetDeclaration().GetStride();
-			uint32_t l_uiNbPoints = l_vtxBuffer.GetSize() / l_uiStride;
-			uint32_t l_uiNbFaces = l_idxBuffer.GetSize() / 3;
-			uint8_t * l_pVtx = l_vtxBuffer.data();
-			uint32_t * l_pIdx = l_idxBuffer.data();
-			Point3r l_ptPos;
-			Point3r l_ptNml;
-			Point3r l_ptTex;
-
-			for ( uint32_t j = 0; j < l_uiNbPoints; j++ )
-			{
-				real * l_pVertex = reinterpret_cast< real * >( &l_pVtx[j * l_uiStride] );
-				Vertex::GetPosition( l_pVertex, l_ptPos );
-				Vertex::GetNormal( l_pVertex, l_ptNml );
-				Vertex::GetTexCoord( l_pVertex, l_ptTex );
-				l_strV  << cuT( "v " ) << l_ptPos[0] << " " << l_ptPos[1] << " " << l_ptPos[2] << cuT( "\n" );
-				l_strVN << cuT( "vn " ) << l_ptNml[0] << " " << l_ptNml[1] << " " << l_ptNml[2] << cuT( "\n" );
-				l_strVT << cuT( "vt " ) << l_ptTex[0] << " " << l_ptTex[1] << cuT( "\n" );
-			}
-
-			l_strF << cuT( "usemtl " ) << p_pSubmesh->GetDefaultMaterial()->GetName() << cuT( "\ns off\n" );
-
-			for ( uint32_t j = 0; j < l_uiNbFaces; j++ )
-			{
-				uint32_t * l_pFace = &l_pIdx[j * 3];
-				uint32_t l_v0 = p_uiOffset + l_pFace[0];
-				uint32_t l_v1 = p_uiOffset + l_pFace[1];
-				uint32_t l_v2 = p_uiOffset + l_pFace[2];
-				l_strF << cuT( "f " ) << l_v0 << cuT( "/" ) << l_v0 << cuT( "/" ) << l_v0 << cuT( " " ) << l_v1 << cuT( "/" ) << l_v1 << cuT( "/" ) << l_v1 << cuT( " " ) << l_v2 << cuT( "/" ) << l_v2 << cuT( "/" ) << l_v2 << cuT( "\n" );
-			}
-
-			l_strReturn << cuT( "g mesh" ) << p_uiCount << cuT( "\n" ) << l_strV.str() << cuT( "\n" ) << l_strVN.str() << cuT( "\n" ) << l_strVT.str() << cuT( "\n" ) << l_strF.str() << cuT( "\n" );
-			p_uiOffset += l_uiNbPoints;
-			p_uiCount++;
-		} );
-		return l_strReturn.str();
-	}
-
-	void MainFrame::DoCscnExportScene( Path const & p_pathFile )const
-	{
-		bool l_result = true;
-		Path l_folder = p_pathFile.GetPath() / p_pathFile.GetFileName();
-
-		if ( !File::DirectoryExists( l_folder ) )
-		{
-			File::DirectoryCreate( l_folder );
-		}
-
-		Path l_filePath = l_folder / p_pathFile.GetFileName();
-		TextFile l_mtlFile( l_filePath + cuT( ".cmtl" ), File::eOPEN_MODE_WRITE, File::eENCODING_MODE_ASCII );
-		TextFile l_scnFile( l_filePath + cuT( ".cscn" ), File::eOPEN_MODE_WRITE, File::eENCODING_MODE_ASCII );
-		l_result = m_pCastor3D->GetMaterialManager().Write( l_mtlFile );
-
-		if ( l_result )
-		{
-			SceneSPtr l_pScene = m_pMainScene.lock();
-
-			if ( l_pScene )
-			{
-				if ( l_scnFile.WriteText( cuT( "mtl_file \"" ) + p_pathFile.GetFileName() + cuT( ".cmtl\"\n\n" ) ) > 0 )
-				{
-					l_result = Scene::TextLoader()( *l_pScene, l_scnFile );
-				}
-			}
-		}
-
-		for ( RenderWindowMapConstIt l_it = m_pCastor3D->RenderWindowsBegin(); l_it != m_pCastor3D->RenderWindowsEnd() && l_result; ++l_it )
-		{
-			l_result = RenderWindow::TextLoader()( *l_it->second, l_scnFile );
-		}
-
-		if ( l_result )
-		{
-			wxMessageBox( _( "Export successful" ) );
-		}
-		else
-		{
-			wxMessageBox( _( "Export failed" ) );
-		}
-	}
-
-	void MainFrame::DoBinaryExportScene( Path const & p_pathFile )const
-	{
-		Path l_folder = p_pathFile.GetPath() / p_pathFile.GetFileName();
-
-		if ( !File::DirectoryExists( l_folder ) )
-		{
-			File::DirectoryCreate( l_folder );
-		}
-
-		Path l_filePath = l_folder / p_pathFile.GetFileName();
-		bool l_result = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_CBSN_FILE );
-		ParseCollection( m_pCastor3D, m_pCastor3D->GetSamplerManager(), l_chunk, Sampler::BinaryParser( l_folder ) );
-		ParseCollection( m_pCastor3D, m_pCastor3D->GetMaterialManager(), l_chunk, Material::BinaryParser( l_folder, m_pCastor3D ) );
-		ParseCollection( m_pCastor3D, m_pCastor3D->GetMeshManager(), l_chunk, Mesh::BinaryParser( l_folder ) );
-		const SceneSPtr l_pScene = m_pMainScene.lock();
-
-		if ( l_pScene && l_result )
-		{
-			l_result = Scene::BinaryParser( l_folder ).Fill( const_cast< Scene const & >( *l_pScene ), l_chunk );
-		}
-
-		for ( RenderWindowMapConstIt l_it = m_pCastor3D->RenderWindowsBegin(); l_result && l_it != m_pCastor3D->RenderWindowsEnd(); ++l_it )
-		{
-			l_result = RenderWindow::BinaryParser( l_folder ).Fill( *l_it->second, l_chunk );
-		}
-
-		if ( l_result )
-		{
-			BinaryFile l_file( l_filePath + cuT( ".cbsn" ), File::eOPEN_MODE_WRITE );
-			l_chunk.Write( l_file );
-		}
-
-		if ( l_result )
-		{
-			wxMessageBox( _( "Export successful" ) );
-		}
-		else
-		{
-			wxMessageBox( _( "Export failed" ) );
+		default:
+			break;
 		}
 	}
 
@@ -885,11 +736,11 @@ namespace CastorViewer
 		EVT_ENTER_WINDOW( MainFrame::OnEnterWindow )
 		EVT_LEAVE_WINDOW( MainFrame::OnLeaveWindow )
 		EVT_ERASE_BACKGROUND( MainFrame::OnEraseBackground )
-		EVT_KEY_UP(	MainFrame::OnKeyUp )
 		EVT_TOOL( eID_TOOL_LOAD_SCENE, MainFrame::OnLoadScene )
 		EVT_TOOL( eID_TOOL_EXPORT_SCENE, MainFrame::OnExportScene )
-		EVT_TOOL( eID_TOOL_GEOMETRIES, MainFrame::OnShowGeometriesList )
-		EVT_TOOL( eID_TOOL_MATERIALS, MainFrame::OnShowMaterialsList )
+		EVT_TOOL( eID_TOOL_SHOW_LOGS, MainFrame::OnShowLogs )
+		EVT_TOOL( eID_TOOL_SHOW_LISTS, MainFrame::OnShowLists )
+		EVT_TOOL( eID_TOOL_SHOW_PROPERTIES, MainFrame::OnShowProperties )
 	END_EVENT_TABLE()
 
 	void MainFrame::OnPaint( wxPaintEvent & p_event )
@@ -914,14 +765,14 @@ namespace CastorViewer
 
 	void MainFrame::OnClose( wxCloseEvent & p_event )
 	{
-		m_pListLog = NULL;
 		Logger::UnregisterCallback( this );
+		m_auiManager.DetachPane( m_sceneTabsContainer );
+		m_auiManager.DetachPane( m_propertiesContainer );
+		m_auiManager.DetachPane( m_logTabsContainer );
+		m_auiManager.DetachPane( m_pRenderPanel );
+		m_messageLog = NULL;
+		m_errorLog = NULL;
 		Hide();
-
-		if ( m_pGeometriesFrame && m_pAuiManager )
-		{
-			m_pAuiManager->DetachPane( m_pGeometriesFrame );
-		}
 
 		if ( m_timer )
 		{
@@ -934,11 +785,6 @@ namespace CastorViewer
 
 		if ( m_pRenderPanel )
 		{
-			if ( m_pAuiManager )
-			{
-				m_pAuiManager->DetachPane( m_pRenderPanel );
-			}
-
 			m_pRenderPanel->SetRenderWindow( nullptr );
 		}
 
@@ -964,6 +810,8 @@ namespace CastorViewer
 			m_pImagesLoader->Cleanup();
 		}
 
+		delete m_pCastor3D;
+		m_pCastor3D = NULL;
 		p_event.Skip();
 	}
 
@@ -981,16 +829,6 @@ namespace CastorViewer
 	void MainFrame::OnEraseBackground( wxEraseEvent & p_event )
 	{
 		p_event.Skip();
-	}
-
-	void MainFrame::OnKeyUp( wxKeyEvent & p_event )
-	{
-		switch ( p_event.GetKeyCode() )
-		{
-		case WXK_F5:
-			LoadScene();
-			break;
-		}
 	}
 
 	void MainFrame::OnLoadScene( wxCommandEvent & p_event )
@@ -1022,49 +860,81 @@ namespace CastorViewer
 		l_wildcard += _( "Wavefront OBJ" );
 		l_wildcard += wxT( " (*.obj)|*.obj" );
 		wxFileDialog l_fileDialog( this, _( "Export the scene" ), wxEmptyString, wxEmptyString, l_wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+		SceneSPtr l_scene = m_pMainScene.lock();
 
-		if ( l_fileDialog.ShowModal() == wxID_OK )
+		if ( l_scene )
 		{
-			DoExportScene( ( wxChar const * )l_fileDialog.GetPath().c_str() );
-		}
-
-		p_event.Skip();
-	}
-
-	void MainFrame::OnShowGeometriesList( wxCommandEvent & p_event )
-	{
-		if ( !m_pGeometriesFrame )
-		{
-			m_pGeometriesFrame = new wxGeometriesListFrame( m_pCastor3D, this, _( "Geometries" ), m_pMainScene.lock(), wxDefaultPosition, wxSize( 200, 300 ) );
-
-			if ( m_pAuiManager )
+			if ( l_fileDialog.ShowModal() == wxID_OK )
 			{
-				m_pAuiManager->AddPane( m_pGeometriesFrame, wxAuiPaneInfo().CloseButton().Caption( _( "Geometries" ) ).Direction( wxLEFT ).Dock().Left().LeftDockable().RightDockable().Movable().PinButton() );
-			}
-		}
+				Path l_pathFile( ( wxChar const * )l_fileDialog.GetPath().c_str() );
 
-		if ( !m_pGeometriesFrame->IsShown() )
-		{
-			m_pGeometriesFrame->Show();
+				if ( l_pathFile.GetExtension() == cuT( "obj" ) )
+				{
+					ObjSceneExporter l_exporter;
+					l_exporter.ExportScene( m_pCastor3D, *m_pMainScene.lock(), l_pathFile );
+				}
+				else if ( l_pathFile.GetExtension() == cuT( "cscn" ) )
+				{
+					CscnSceneExporter l_exporter;
+					l_exporter.ExportScene( m_pCastor3D, *m_pMainScene.lock(), l_pathFile );
+				}
+				else if ( l_pathFile.GetExtension() == cuT( "cbsn" ) )
+				{
+					CbsnSceneExporter l_exporter;
+					l_exporter.ExportScene( m_pCastor3D, *m_pMainScene.lock(), l_pathFile );
+				}
+			}
 		}
 		else
 		{
-			m_pGeometriesFrame->Hide();
-		}
-
-		if ( m_pAuiManager )
-		{
-			m_pAuiManager->Update();
+			wxMessageBox( _( "No scene Loaded." ), _( "Error" ), wxOK | wxCENTRE | wxICON_ERROR );
 		}
 
 		p_event.Skip();
 	}
 
-	void MainFrame::OnShowMaterialsList( wxCommandEvent & p_event )
+	void MainFrame::OnShowLogs( wxCommandEvent & p_event )
 	{
-		wxMaterialsFrame * l_pFrame = new wxMaterialsFrame( m_pCastor3D, false, this, _( "Materials" ), wxDefaultPosition );
-		l_pFrame->Initialise();
-		l_pFrame->Show();
+		if ( !m_logTabsContainer->IsShown() )
+		{
+			m_auiManager.GetPane( m_logTabsContainer ).Show();
+		}
+		else
+		{
+			m_auiManager.GetPane( m_logTabsContainer ).Hide();
+		}
+
+		m_auiManager.Update();
+		p_event.Skip();
+	}
+
+	void MainFrame::OnShowProperties( wxCommandEvent & p_event )
+	{
+		if ( !m_propertiesContainer->IsShown() )
+		{
+			m_auiManager.GetPane( m_propertiesContainer ).Show();
+		}
+		else
+		{
+			m_auiManager.GetPane( m_propertiesContainer ).Hide();
+		}
+
+		m_auiManager.Update();
+		p_event.Skip();
+	}
+
+	void MainFrame::OnShowLists( wxCommandEvent & p_event )
+	{
+		if ( !m_sceneTabsContainer->IsShown() )
+		{
+			m_auiManager.GetPane( m_sceneTabsContainer ).Show();
+		}
+		else
+		{
+			m_auiManager.GetPane( m_sceneTabsContainer ).Hide();
+		}
+
+		m_auiManager.Update();
 		p_event.Skip();
 	}
 }

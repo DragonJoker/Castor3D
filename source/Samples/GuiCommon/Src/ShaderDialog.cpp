@@ -14,45 +14,45 @@ using namespace GuiCommon;
 
 typedef enum eID
 {
-	eID_NOTEBOOK_EDITORS
-	,	eID_GRID_VERTEX
-	,	eID_GRID_FRAGMENT
-	,	eID_GRID_GEOMETRY
-	,	eID_GRID_HULL
-	,	eID_GRID_DOMAIN
-	,	eID_MENU_OPEN
-	,	eID_MENU_SAVE_ONE
-	,	eID_MENU_SAVE_ALL
-	,	eID_MENU_QUIT
-	,	eID_MENU_PREFS
+	eID_NOTEBOOK_EDITORS,
+	eID_GRID_VERTEX,
+	eID_GRID_FRAGMENT,
+	eID_GRID_GEOMETRY,
+	eID_GRID_HULL,
+	eID_GRID_DOMAIN,
+	eID_MENU_OPEN,
+	eID_MENU_SAVE_ONE,
+	eID_MENU_SAVE_ALL,
+	eID_MENU_QUIT,
+	eID_MENU_PREFS,
 }	eID;
 
 wxShaderDialog::wxShaderDialog( Engine * p_pEngine, bool p_bCanEdit, wxWindow * p_pParent, PassSPtr p_pPass, wxPoint const & p_ptPosition, const wxSize p_ptSize )
-	:	wxFrame( p_pParent, wxID_ANY, _( "Shaders" ), p_ptPosition, p_ptSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMAXIMIZE_BOX )
-	,	m_pPass( p_pPass	)
-	,	m_bCompiled( true	)
-	,	m_bOwnShader( true	)
-	,	m_pStcContext( new StcContext	)
+	: wxFrame( p_pParent, wxID_ANY, _( "Shaders" ), p_ptPosition, p_ptSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMAXIMIZE_BOX )
+	, m_pPass( p_pPass )
+	, m_bCompiled( true )
+	, m_bOwnShader( true )
+	, m_pStcContext( new StcContext )
 #if defined( NDEBUG )
-	,	m_bCanEdit( p_bCanEdit	)
+	, m_bCanEdit( p_bCanEdit )
 #else
-	,	m_bCanEdit( p_bCanEdit || true	)
+	, m_bCanEdit( p_bCanEdit || true )
 #endif
-	,	m_pEngine( p_pEngine	)
+	, m_pEngine( p_pEngine )
 {
 	wxPanel * l_pPanelBackGround = new wxPanel( this, wxID_ANY, wxPoint( 0, 0 ), GetClientSize() );
 	l_pPanelBackGround->Show();
-	wxArrayString		l_arrayChoices;
-	wxArrayString		l_arrayTexts;
-	StringArray			l_arrayFiles;
-	wxPoint				l_ptButtonPosition	= wxPoint( 10, 10 );
-	wxSize				l_sizeButton		= wxSize( 65, 20 );
-	wxSize				l_size				= GetClientSize();
-	Path				l_pathCurrent		= Engine::GetDataDirectory() / cuT( "Castor3D" );
-	RenderSystem 	*	l_pRenderSystem		= m_pEngine->GetRenderSystem();
-	eSHADER_MODEL		l_eMaxShaderModel	= eSHADER_MODEL_COUNT;
-	eSHADER_MODEL		l_eShaderModel		= eSHADER_MODEL_COUNT;
-	wxString			l_strExtension;
+	wxArrayString l_arrayChoices;
+	wxArrayString l_arrayTexts;
+	PathArray l_arrayFiles;
+	wxPoint l_ptButtonPosition = wxPoint( 10, 10 );
+	wxSize l_sizeButton = wxSize( 65, 20 );
+	wxSize l_size = GetClientSize();
+	Path l_pathCurrent = Engine::GetDataDirectory() / cuT( "Castor3D" );
+	RenderSystem * l_pRenderSystem = m_pEngine->GetRenderSystem();
+	eSHADER_MODEL l_eMaxShaderModel = eSHADER_MODEL_COUNT;
+	eSHADER_MODEL l_eShaderModel = eSHADER_MODEL_COUNT;
+	wxString l_strExtension;
 
 	if ( l_pRenderSystem->CheckSupport( eSHADER_MODEL_5 ) )
 	{
@@ -106,16 +106,16 @@ wxShaderDialog::wxShaderDialog( Engine * p_pEngine, bool p_bCanEdit, wxWindow * 
 			break;
 
 		case Castor3D::eSHADER_LANGUAGE_HLSL:
-			l_strExtension = wxT( ".hlsl"	);
+			l_strExtension = wxT( ".hlsl" );
 			break;
 		}
 
-		l_arrayTexts.push_back( _( "Vertex"	) );
-		l_arrayTexts.push_back( _( "Hull"	) );
-		l_arrayTexts.push_back( _( "Domain"	) );
-		l_arrayTexts.push_back( _( "Geometry"	) );
-		l_arrayTexts.push_back( _( "Pixel"	) );
-		l_arrayTexts.push_back( _( "Compute"	) );
+		l_arrayTexts.push_back( _( "Vertex" ) );
+		l_arrayTexts.push_back( _( "Hull" ) );
+		l_arrayTexts.push_back( _( "Domain" ) );
+		l_arrayTexts.push_back( _( "Geometry" ) );
+		l_arrayTexts.push_back( _( "Pixel" ) );
+		l_arrayTexts.push_back( _( "Compute" ) );
 		File::ListDirectoryFiles( l_pathCurrent, l_arrayFiles, true );
 		Path l_pathFile;
 		std::for_each( l_arrayFiles.begin(), l_arrayFiles.end(), [&]( String const & p_strFile )

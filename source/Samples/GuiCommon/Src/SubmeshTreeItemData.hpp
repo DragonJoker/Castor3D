@@ -18,14 +18,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GUICOMMON_SUBMESH_TREE_ITEM_DATA_H___
 #define ___GUICOMMON_SUBMESH_TREE_ITEM_DATA_H___
 
-#include "GuiCommonPrerequisites.hpp"
-
-#include <wx/treectrl.h>
+#include "TreeItemPropertyData.hpp"
 
 namespace GuiCommon
 {
 	class wxSubmeshTreeItemData
-		: public wxTreeItemData
+		: public wxTreeItemPropertyData
 	{
 	protected:
 		Castor3D::GeometryWPtr m_pGeometry;

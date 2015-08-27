@@ -95,6 +95,24 @@ namespace Castor
 		CU_API Rectangle( int32_t p_iLeft, int32_t p_iTop, int32_t p_iRight, int32_t p_iBottom );
 		/**
 		 *\~english
+		 *\brief		Copy constructor
+		 *\param[in]	p_rhs	The other object
+		 *\~french
+		 *\brief		Constructeur par copie
+		 *\param[in]	p_rhs	l'autre object
+		 */
+		CU_API Rectangle( Rectangle const & p_rhs );
+		/**
+		 *\~english
+		 *\brief		Copy assignment operator
+		 *\param[in]	p_rhs	The other object
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie
+		 *\param[in]	p_rhs	l'autre object
+		 */
+		CU_API Rectangle & operator=( Rectangle const & p_rhs );
+		/**
+		 *\~english
 		 *\brief		Test if the givent point is onto or into this rectangle
 		 *\param[in]	p_ptPoint	The point to test
 		 *\return		\p eINTERSECTION_IN if onto or into, \p eINTERSECTION_OUT if not

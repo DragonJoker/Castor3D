@@ -156,7 +156,7 @@ namespace Castor3D
 		DECLARE_VECTOR( SceneNode *, SceneNode );
 		//!\~english Submesh multimap, with their nodes 	\~french Multimap de sous-maillages, avec leurs SceneNodes
 		DECLARE_MAP( SubmeshSPtr, RenderNodeArray, SubmeshNodes );
-		//!\~english Pass sorted SubmeshNodeMMap map	\~french Map de SubmeshNodeMMap, triés par passe
+		//!\~english Pass sorted SubmeshMaterialMMap map	\~french Map de SubmeshMaterialMMap, triés par passe
 		DECLARE_MAP( MaterialSPtr, SubmeshNodesMap, SubmeshNodesByMaterial );
 
 	public:
@@ -866,6 +866,18 @@ namespace Castor3D
 		inline uint32_t GetGeometriesCount()const
 		{
 			return uint32_t( m_addedPrimitives.size() );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the geometries map
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la map des géométries
+		 *\return		La valeur
+		 */
+		inline GeometryPtrStrMap const & Geometries()const
+		{
+			return m_addedPrimitives;
 		}
 		/**
 		 *\~english

@@ -6,8 +6,9 @@
 #include <wx/frame.h>
 #include <wx/listctrl.h>
 #include <wx/aui/framemanager.h>
+#include <wx/aui/auibook.h>
 
-#include <GeometriesListFrame.hpp>
+#include <SceneObjectsList.hpp>
 #include <Logger.hpp>
 #include <Path.hpp>
 #include <Path.hpp>
@@ -16,43 +17,9 @@ namespace CastorViewer
 {
 	class RenderPanel;
 
-	class MainFrame : public wxFrame
+	class MainFrame
+		: public wxFrame
 	{
-	private:
-		typedef enum eID
-		{
-			eID_TOOL_EXIT,
-			eID_TOOL_LOAD_SCENE,
-			eID_TOOL_EXPORT_SCENE,
-			eID_TOOL_GEOMETRIES,
-			eID_TOOL_MATERIALS,
-		}	eID;
-
-		typedef enum eBMP
-		{
-			eBMP_SCENE = GuiCommon::wxGeometriesListFrame::eBMP_COUNT,
-			eBMP_GEOMETRIES,
-			eBMP_MATERIALS,
-			eBMP_EXPORT,
-		}	eBMP;
-
-	private:
-		RenderPanel * m_pRenderPanel;
-		Castor3D::SceneWPtr m_pMainScene;
-		Castor3D::CameraWPtr m_pMainCamera;
-		Castor::Path m_strFilePath;
-		GuiCommon::wxImagesLoader 	* m_pImagesLoader;
-		Castor3D::SceneNodeWPtr m_pSceneNode;
-		wxTimer * m_timer;
-		GuiCommon::wxSplashScreen * m_pSplashScreen;
-		Castor3D::Engine * m_pCastor3D;
-		wxPanel * m_pBgPanel;
-		int m_iListHeight;
-		wxListView * m_pListLog;
-		Castor3D::eRENDERER_TYPE m_eRenderer;
-		wxAuiManager * m_pAuiManager;
-		GuiCommon::wxGeometriesListFrame * m_pGeometriesFrame;
-
 	public:
 		MainFrame( wxWindow * parent, wxString const & title, Castor3D::eRENDERER_TYPE p_eRenderer );
 		~MainFrame();
@@ -61,16 +28,16 @@ namespace CastorViewer
 		void LoadScene( wxString const & p_strFileName = wxEmptyString );
 
 	private:
+		bool DoLoadMeshFile();
+		bool DoLoadTextSceneFile();
+		bool DoLoadBinarySceneFile();
+		void DoLoadSceneFile();
+		void DoLoadPlugins();
+		void DoInitialiseGUI();
 		bool DoInitialise3D();
 		bool DoInitialiseImages();
-		void DoPopulateToolbar();
-		void DoExportScene( Castor::Path const & p_pathFile )const;
-		void DoObjExportScene( Castor::Path const & p_pathFile )const;
-		Castor::String DoObjExport( Castor::Path const & p_pathMtlFolder, Castor3D::MaterialSPtr p_pMaterial )const;
-		Castor::String DoObjExport( Castor3D::MeshSPtr p_pMesh, uint32_t & p_uiOffset, uint32_t & p_uiCount )const;
-		void DoCscnExportScene( Castor::Path const & p_pathFile )const;
-		void DoBinaryExportScene( Castor::Path const & p_pathFile )const;
-
+		void DoPopulateStatusBar();
+		void DoPopulateToolBar();
 		void DoLogCallback( Castor::String const & p_strLog, Castor::ELogType p_eLogType );
 
 	private:
@@ -86,8 +53,32 @@ namespace CastorViewer
 		void OnKeyUp( wxKeyEvent & p_event );
 		void OnLoadScene( wxCommandEvent & p_event );
 		void OnExportScene( wxCommandEvent & p_event );
-		void OnShowGeometriesList( wxCommandEvent & p_event );
-		void OnShowMaterialsList( wxCommandEvent & p_event );
+		void OnShowLogs( wxCommandEvent & p_event );
+		void OnShowLists( wxCommandEvent & p_event );
+		void OnShowProperties( wxCommandEvent & p_event );
+
+	private:
+		int m_iLogsHeight;
+		int m_iPropertiesWidth;
+		wxAuiManager m_auiManager;
+		RenderPanel * m_pRenderPanel;
+		wxTimer * m_timer;
+		wxPanel * m_pBgPanel;
+		wxAuiNotebook * m_logTabsContainer;
+		wxAuiNotebook * m_sceneTabsContainer;
+		wxPropertiesHolder * m_propertiesContainer;
+		wxListView * m_messageLog;
+		wxListView * m_errorLog;
+		GuiCommon::wxImagesLoader * m_pImagesLoader;
+		GuiCommon::wxSplashScreen * m_pSplashScreen;
+		GuiCommon::wxSceneObjectsList * m_sceneObjectsList;
+		GuiCommon::wxMaterialsList * m_materialsList;
+		Castor3D::SceneWPtr m_pMainScene;
+		Castor3D::CameraWPtr m_pMainCamera;
+		Castor3D::SceneNodeWPtr m_pSceneNode;
+		Castor3D::Engine * m_pCastor3D;
+		Castor3D::eRENDERER_TYPE m_eRenderer;
+		Castor::Path m_strFilePath;
 	};
 }
 

@@ -121,6 +121,20 @@ namespace GlRender
 
 	void GlContext::DoCleanup()
 	{
+		m_bInitialised = false;
+		SetCurrent();
+		ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
+
+		if ( l_pProgram )
+		{
+			l_pProgram->Cleanup();
+		}
+
+		m_pGeometryBuffers->Cleanup();
+		m_pGeometryBuffers->GetVertexBuffer().Cleanup();
+		m_pGeometryBuffers->GetVertexBuffer().Destroy();
+		EndCurrent();
+		m_pImplementation->Cleanup();
 	}
 
 	void GlContext::DoSetCurrent()

@@ -37,9 +37,9 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			for ( SubmeshPtrArrayConstIt l_it = p_mesh.Begin(); l_it != p_mesh.End(); ++l_it )
+			for ( auto && l_submesh: p_mesh )
 			{
-				Submesh::TextLoader()( *( *l_it ), p_file );
+				Submesh::TextLoader()( *l_submesh, p_file );
 			}
 		}
 
@@ -68,9 +68,9 @@ namespace Castor3D
 			l_bReturn = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
 		}
 
-		for ( SubmeshPtrArrayConstIt l_it = p_obj.Begin(); l_it != p_obj.End(); ++l_it )
+		for ( auto && l_submesh: p_obj )
 		{
-			Submesh::BinaryParser( m_path ).Fill( *( *l_it ), l_chunk );
+			Submesh::BinaryParser( m_path ).Fill( *l_submesh, l_chunk );
 		}
 
 		if ( l_bReturn )
@@ -173,9 +173,9 @@ namespace Castor3D
 		Point3r l_min( m_submeshes[0]->GetCubeBox().GetMin() );
 		Point3r l_max( m_submeshes[0]->GetCubeBox().GetMax() );
 
-		for ( uint32_t i = 1; i < l_uiCount; i++ )
+		for ( auto && l_submesh: m_submeshes )
 		{
-			CubeBox const & l_box = m_submeshes[i]->GetCubeBox();
+			CubeBox const & l_box = l_submesh->GetCubeBox();
 
 			if ( l_box.GetMin()[0] < l_min[0] )
 			{
@@ -215,20 +215,24 @@ namespace Castor3D
 	uint32_t Mesh::GetFaceCount()const
 	{
 		uint32_t l_nbFaces = 0;
-		std::for_each( m_submeshes.begin(), m_submeshes.end(), [&]( SubmeshSPtr p_pSubmesh )
+
+		for ( auto && l_submesh: m_submeshes )
 		{
-			l_nbFaces += p_pSubmesh->GetFaceCount();
-		} );
+			l_nbFaces += l_submesh->GetFaceCount();
+		}
+
 		return l_nbFaces;
 	}
 
 	uint32_t Mesh::GetVertexCount()const
 	{
 		uint32_t l_nbFaces = 0;
-		std::for_each( m_submeshes.begin(), m_submeshes.end(), [&]( SubmeshSPtr p_pSubmesh )
+
+		for ( auto && l_submesh: m_submeshes )
 		{
-			l_nbFaces += p_pSubmesh->GetPointsCount();
-		} );
+			l_nbFaces += l_submesh->GetPointsCount();
+		}
+
 		return l_nbFaces;
 	}
 
@@ -247,31 +251,19 @@ namespace Castor3D
 	SubmeshSPtr Mesh::CreateSubmesh()
 	{
 		SubmeshSPtr l_submesh = std::make_shared< Submesh >( this, m_pEngine, GetSubmeshCount() );
-
-		if ( l_submesh )
-		{
-			m_submeshes.push_back( l_submesh );
-		}
-
+		m_submeshes.push_back( l_submesh );
 		return l_submesh;
 	}
 
-	void Mesh::DeleteSubmesh( SubmeshSPtr & p_pSubmesh )
+	void Mesh::DeleteSubmesh( SubmeshSPtr & p_submesh )
 	{
-		SubmeshPtrArray::iterator l_it = m_submeshes.begin();
+		auto && l_it = std::find( m_submeshes.begin(), m_submeshes.end(), p_submesh );
 
-		while ( l_it != m_submeshes.end() )
+		if ( l_it != m_submeshes.end() )
 		{
-			if ( *l_it == p_pSubmesh )
-			{
-				m_submeshes.erase( l_it );
-				p_pSubmesh.reset();
-				l_it = m_submeshes.end();
-			}
-			else
-			{
-				++l_it;
-			}
+			m_submeshes.erase( l_it );
+			p_submesh.reset();
+			l_it = m_submeshes.end();
 		}
 	}
 
@@ -282,36 +274,38 @@ namespace Castor3D
 
 	void Mesh::GenerateBuffers()
 	{
-		std::for_each( m_submeshes.begin(), m_submeshes.end(), [&]( SubmeshSPtr p_pSubmesh )
+		for ( auto && l_submesh: m_submeshes )
 		{
-			p_pSubmesh->GenerateBuffers();
-		} );
+			l_submesh->GenerateBuffers();
+		}
 	}
 
 	MeshSPtr Mesh::Clone( String const & p_name )
 	{
 		MeshSPtr l_clone = std::make_shared< Mesh >( m_pEngine, GetMeshType(), p_name );
-		std::for_each( m_submeshes.begin(), m_submeshes.end(), [&]( SubmeshSPtr p_pSubmesh )
+
+		for ( auto && l_submesh: m_submeshes )
 		{
-			l_clone->m_submeshes.push_back( p_pSubmesh->Clone() );
-		} );
+			l_clone->m_submeshes.push_back( l_submesh->Clone() );
+		}
+
 		l_clone->ComputeContainers();
 		return l_clone;
 	}
 
 	void Mesh::Ref( MaterialSPtr p_material )
 	{
-		std::for_each( m_submeshes.begin(), m_submeshes.end(), [&]( SubmeshSPtr p_pSubmesh )
+		for ( auto && l_submesh: m_submeshes )
 		{
-			p_pSubmesh->Ref( p_material );
-		} );
+			l_submesh->Ref( p_material );
+		}
 	}
 
 	void Mesh::UnRef( MaterialSPtr p_material )
 	{
-		std::for_each( m_submeshes.begin(), m_submeshes.end(), [&]( SubmeshSPtr p_pSubmesh )
+		for ( auto && l_submesh: m_submeshes )
 		{
-			p_pSubmesh->UnRef( p_material );
-		} );
+			l_submesh->UnRef( p_material );
+		}
 	}
 }

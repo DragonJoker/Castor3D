@@ -3,8 +3,8 @@
 namespace GuiCommon
 {
 	wxGeometryTreeItemData::wxGeometryTreeItemData( Castor3D::GeometrySPtr p_pGeometry )
-		:	wxTreeItemData()
-		,	m_pGeometry( p_pGeometry )
+		: wxTreeItemPropertyData( ePROPERTY_DATA_TYPE_GEOMETRY )
+		, m_pGeometry( p_pGeometry )
 	{
 	}
 

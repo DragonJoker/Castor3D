@@ -118,11 +118,11 @@
 #	endif
 
 #	include <FrameVariableDialog.hpp>
-#	include <GeometriesListFrame.hpp>
+#	include <SceneObjectsList.hpp>
 #	include <ImagesLoader.hpp>
 #	include <MaterialPanel.hpp>
-#	include <MaterialsFrame.hpp>
-#	include <MaterialsListView.hpp>
+#	include <PropertiesHolder.hpp>
+#	include <MaterialsList.hpp>
 #	include <PassPanel.hpp>
 #	include <RendererSelector.hpp>
 #	include <ShaderDialog.hpp>

@@ -81,7 +81,7 @@ namespace
 			   && a[0][3] == b[0][3] && a[1][3] == b[1][3] &&	a[2][3] == b[2][3] &&	a[3][3] == b[3][3];
 	}
 
-	inline std::ostream & operator <<( std::ostream & p_stream, glm::mat4 p_mtx )
+	inline std::ostream & operator <<( std::ostream & p_stream, glm::mat4 const & p_mtx )
 	{
 		for ( uint32_t i = 0; i < 4; i++ )
 		{
@@ -560,39 +560,39 @@ namespace Testing
 		std::wstring l_wstrOut;
 		std::string l_strOut;
 		l_tstrOut = str_utils::from_str( l_strIn );
-		Logger::LogMessage(	"	Conversion from std::string to String" );
-		Logger::LogMessage(	"		Entry  : " + l_strIn );
-		Logger::LogMessage( cuT(	"		Result : " ) + l_tstrOut );
-		Logger::LogMessage(	"" );
+		Logger::LogInfo(	"	Conversion from std::string to String" );
+		Logger::LogInfo(	"		Entry  : " + l_strIn );
+		Logger::LogInfo( cuT(	"		Result : " ) + l_tstrOut );
+		Logger::LogInfo(	"" );
 		TEST_EQUAL( l_tstrOut, l_tstrIn );
 		l_tstrOut = str_utils::from_wstr( l_wstrIn );
-		Logger::LogMessage(	"	Conversion from std::wstring to String" );
-		Logger::LogMessage( L"		Entry  : " + l_wstrIn );
-		Logger::LogMessage( cuT(	"		Result : " ) + l_tstrOut );
-		Logger::LogMessage(	"" );
+		Logger::LogInfo(	"	Conversion from std::wstring to String" );
+		Logger::LogInfo( L"		Entry  : " + l_wstrIn );
+		Logger::LogInfo( cuT(	"		Result : " ) + l_tstrOut );
+		Logger::LogInfo(	"" );
 		TEST_EQUAL( l_tstrOut, l_tstrIn );
 		l_strOut = str_utils::to_str( l_tstrIn );
-		Logger::LogMessage(	"	Conversion from String to std::string" );
-		Logger::LogMessage( cuT(	"		Entry  : " ) + l_tstrIn );
-		Logger::LogMessage(	"		Result : " + l_strOut );
-		Logger::LogMessage(	"" );
+		Logger::LogInfo(	"	Conversion from String to std::string" );
+		Logger::LogInfo( cuT(	"		Entry  : " ) + l_tstrIn );
+		Logger::LogInfo(	"		Result : " + l_strOut );
+		Logger::LogInfo(	"" );
 		TEST_EQUAL( l_strOut, l_strIn );
 		l_wstrOut = str_utils::to_wstr( l_tstrIn );
-		Logger::LogMessage(	"	Conversion from String to std::wstring" );
-		Logger::LogMessage( cuT(	"		Entry  : " ) + l_tstrIn );
-		Logger::LogMessage( L"		Result : " + l_wstrOut );
-		Logger::LogMessage(	"" );
+		Logger::LogInfo(	"	Conversion from String to std::wstring" );
+		Logger::LogInfo( cuT(	"		Entry  : " ) + l_tstrIn );
+		Logger::LogInfo( L"		Result : " + l_wstrOut );
+		Logger::LogInfo(	"" );
 		TEST_EQUAL( l_wstrOut, l_wstrIn );
 		convert( l_strIn, l_wstrOut );
-		Logger::LogMessage(	"	Conversion from std::string to std::wstring" );
-		Logger::LogMessage(	"		Entry  : " + l_strIn );
-		Logger::LogMessage( L"		Result : " + l_wstrOut );
-		Logger::LogMessage(	"" );
+		Logger::LogInfo(	"	Conversion from std::string to std::wstring" );
+		Logger::LogInfo(	"		Entry  : " + l_strIn );
+		Logger::LogInfo( L"		Result : " + l_wstrOut );
+		Logger::LogInfo(	"" );
 		TEST_EQUAL( l_wstrOut, l_wstrIn );
 		convert( l_wstrIn, l_strOut );
-		Logger::LogMessage(	"	Conversion from std::wstring to std::string" );
-		Logger::LogMessage( L"		Entry  : " + l_wstrIn );
-		Logger::LogMessage(	"		Result : " + l_strOut );
+		Logger::LogInfo(	"	Conversion from std::wstring to std::string" );
+		Logger::LogInfo( L"		Entry  : " + l_wstrIn );
+		Logger::LogInfo(	"		Result : " + l_strOut );
 		TEST_EQUAL( l_strOut, l_strIn );
 	}
 
@@ -608,15 +608,15 @@ namespace Testing
 		l_mtxRGBtoYUV[0][2] =  0.615;
 		l_mtxRGBtoYUV[1][2] = -0.51499;
 		l_mtxRGBtoYUV[2][2] = -0.10001;
-		Logger::LogMessage( cuT( "	RGB to YUV conversion matrix (BT 601) :" ) );
-		Logger::LogMessage( cuT( "		%.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][0], l_mtxRGBtoYUV[1][0], l_mtxRGBtoYUV[2][0] );
-		Logger::LogMessage( cuT( "		%.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][1], l_mtxRGBtoYUV[1][1], l_mtxRGBtoYUV[2][1] );
-		Logger::LogMessage( cuT( "		%.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][2], l_mtxRGBtoYUV[1][2], l_mtxRGBtoYUV[2][2] );
+		Logger::LogInfo( cuT( "	RGB to YUV conversion matrix (BT 601) :" ) );
+		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][0], l_mtxRGBtoYUV[1][0], l_mtxRGBtoYUV[2][0] );
+		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][1], l_mtxRGBtoYUV[1][1], l_mtxRGBtoYUV[2][1] );
+		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][2], l_mtxRGBtoYUV[1][2], l_mtxRGBtoYUV[2][2] );
 		Matrix3x3d l_mtxYUVtoRGB( l_mtxRGBtoYUV.get_inverse() );
-		Logger::LogMessage( cuT( "	YUV to RGB conversion matrix (BT 601) :" ) );
-		Logger::LogMessage( cuT( "		%.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][0], l_mtxYUVtoRGB[1][0], l_mtxYUVtoRGB[2][0] );
-		Logger::LogMessage( cuT( "		%.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][1], l_mtxYUVtoRGB[1][1], l_mtxYUVtoRGB[2][1] );
-		Logger::LogMessage( cuT( "		%.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][2], l_mtxYUVtoRGB[1][2], l_mtxYUVtoRGB[2][2] );
+		Logger::LogInfo( cuT( "	YUV to RGB conversion matrix (BT 601) :" ) );
+		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][0], l_mtxYUVtoRGB[1][0], l_mtxYUVtoRGB[2][0] );
+		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][1], l_mtxYUVtoRGB[1][1], l_mtxYUVtoRGB[2][1] );
+		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][2], l_mtxYUVtoRGB[1][2], l_mtxYUVtoRGB[2][2] );
 		TEST_EQUAL( l_mtxRGBtoYUV, l_mtxYUVtoRGB.get_inverse() );
 		l_mtxRGBtoYUV[0][0] =  0.2126;
 		l_mtxRGBtoYUV[1][0] =  0.7152;
@@ -627,15 +627,15 @@ namespace Testing
 		l_mtxRGBtoYUV[0][2] =  0.615;
 		l_mtxRGBtoYUV[1][2] = -0.55861;
 		l_mtxRGBtoYUV[2][2] = -0.05639;
-		Logger::LogMessage( cuT( "	RGB to YUV conversion matrix (BT 709) :" ) );
-		Logger::LogMessage( cuT( "		%.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][0], l_mtxRGBtoYUV[1][0], l_mtxRGBtoYUV[2][0] );
-		Logger::LogMessage( cuT( "		%.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][1], l_mtxRGBtoYUV[1][1], l_mtxRGBtoYUV[2][1] );
-		Logger::LogMessage( cuT( "		%.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][2], l_mtxRGBtoYUV[1][2], l_mtxRGBtoYUV[2][2] );
+		Logger::LogInfo( cuT( "	RGB to YUV conversion matrix (BT 709) :" ) );
+		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][0], l_mtxRGBtoYUV[1][0], l_mtxRGBtoYUV[2][0] );
+		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][1], l_mtxRGBtoYUV[1][1], l_mtxRGBtoYUV[2][1] );
+		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][2], l_mtxRGBtoYUV[1][2], l_mtxRGBtoYUV[2][2] );
 		l_mtxYUVtoRGB = l_mtxRGBtoYUV.get_inverse();
-		Logger::LogMessage( cuT( "	YUV to RGB conversion matrix (BT 709) :" ) );
-		Logger::LogMessage( cuT( "		%.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][0], l_mtxYUVtoRGB[1][0], l_mtxYUVtoRGB[2][0] );
-		Logger::LogMessage( cuT( "		%.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][1], l_mtxYUVtoRGB[1][1], l_mtxYUVtoRGB[2][1] );
-		Logger::LogMessage( cuT( "		%.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][2], l_mtxYUVtoRGB[1][2], l_mtxYUVtoRGB[2][2] );
+		Logger::LogInfo( cuT( "	YUV to RGB conversion matrix (BT 709) :" ) );
+		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][0], l_mtxYUVtoRGB[1][0], l_mtxYUVtoRGB[2][0] );
+		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][1], l_mtxYUVtoRGB[1][1], l_mtxYUVtoRGB[2][1] );
+		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][2], l_mtxYUVtoRGB[1][2], l_mtxYUVtoRGB[2][2] );
 		TEST_EQUAL( l_mtxRGBtoYUV, l_mtxYUVtoRGB.get_inverse() );
 	}
 
@@ -677,30 +677,30 @@ namespace Testing
 		l_glmRGBtoYUV[2][3] = 0.0f;
 		l_glmRGBtoYUV[3][3] = 1.0f;
 		TEST_EQUAL( l_mtxRGBtoYUV, l_glmRGBtoYUV );
-		Logger::LogMessage( cuT( "	Matrix Inversion with CastorUtils :" ) );
-		Logger::LogMessage( cuT( "		Normal :" ) );
-		Logger::LogMessage( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][0], l_mtxRGBtoYUV[1][0], l_mtxRGBtoYUV[2][0], l_mtxRGBtoYUV[3][0] );
-		Logger::LogMessage( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][1], l_mtxRGBtoYUV[1][1], l_mtxRGBtoYUV[2][1], l_mtxRGBtoYUV[3][1] );
-		Logger::LogMessage( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][2], l_mtxRGBtoYUV[1][2], l_mtxRGBtoYUV[2][2], l_mtxRGBtoYUV[3][2] );
-		Logger::LogMessage( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][3], l_mtxRGBtoYUV[1][3], l_mtxRGBtoYUV[2][3], l_mtxRGBtoYUV[3][3] );
+		Logger::LogInfo( cuT( "	Matrix Inversion with CastorUtils :" ) );
+		Logger::LogInfo( cuT( "		Normal :" ) );
+		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][0], l_mtxRGBtoYUV[1][0], l_mtxRGBtoYUV[2][0], l_mtxRGBtoYUV[3][0] );
+		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][1], l_mtxRGBtoYUV[1][1], l_mtxRGBtoYUV[2][1], l_mtxRGBtoYUV[3][1] );
+		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][2], l_mtxRGBtoYUV[1][2], l_mtxRGBtoYUV[2][2], l_mtxRGBtoYUV[3][2] );
+		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][3], l_mtxRGBtoYUV[1][3], l_mtxRGBtoYUV[2][3], l_mtxRGBtoYUV[3][3] );
 		Matrix4x4r l_mtxYUVtoRGB( l_mtxRGBtoYUV.get_inverse() );
-		Logger::LogMessage( cuT( "		Inverted :" ) );
-		Logger::LogMessage( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][0], l_mtxYUVtoRGB[1][0], l_mtxYUVtoRGB[2][0], l_mtxYUVtoRGB[3][0] );
-		Logger::LogMessage( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][1], l_mtxYUVtoRGB[1][1], l_mtxYUVtoRGB[2][1], l_mtxYUVtoRGB[3][1] );
-		Logger::LogMessage( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][2], l_mtxYUVtoRGB[1][2], l_mtxYUVtoRGB[2][2], l_mtxYUVtoRGB[3][2] );
-		Logger::LogMessage( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][3], l_mtxYUVtoRGB[1][3], l_mtxYUVtoRGB[2][3], l_mtxYUVtoRGB[3][3] );
-		Logger::LogMessage( cuT( "	Matrix Inversion with GLM :" ) );
-		Logger::LogMessage( cuT( "		Normal :" ) );
-		Logger::LogMessage( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmRGBtoYUV[0][0], l_glmRGBtoYUV[1][0], l_glmRGBtoYUV[2][0], l_glmRGBtoYUV[3][0] );
-		Logger::LogMessage( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmRGBtoYUV[0][1], l_glmRGBtoYUV[1][1], l_glmRGBtoYUV[2][1], l_glmRGBtoYUV[3][1] );
-		Logger::LogMessage( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmRGBtoYUV[0][2], l_glmRGBtoYUV[1][2], l_glmRGBtoYUV[2][2], l_glmRGBtoYUV[3][2] );
-		Logger::LogMessage( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmRGBtoYUV[0][3], l_glmRGBtoYUV[1][3], l_glmRGBtoYUV[2][3], l_glmRGBtoYUV[3][3] );
+		Logger::LogInfo( cuT( "		Inverted :" ) );
+		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][0], l_mtxYUVtoRGB[1][0], l_mtxYUVtoRGB[2][0], l_mtxYUVtoRGB[3][0] );
+		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][1], l_mtxYUVtoRGB[1][1], l_mtxYUVtoRGB[2][1], l_mtxYUVtoRGB[3][1] );
+		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][2], l_mtxYUVtoRGB[1][2], l_mtxYUVtoRGB[2][2], l_mtxYUVtoRGB[3][2] );
+		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][3], l_mtxYUVtoRGB[1][3], l_mtxYUVtoRGB[2][3], l_mtxYUVtoRGB[3][3] );
+		Logger::LogInfo( cuT( "	Matrix Inversion with GLM :" ) );
+		Logger::LogInfo( cuT( "		Normal :" ) );
+		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmRGBtoYUV[0][0], l_glmRGBtoYUV[1][0], l_glmRGBtoYUV[2][0], l_glmRGBtoYUV[3][0] );
+		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmRGBtoYUV[0][1], l_glmRGBtoYUV[1][1], l_glmRGBtoYUV[2][1], l_glmRGBtoYUV[3][1] );
+		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmRGBtoYUV[0][2], l_glmRGBtoYUV[1][2], l_glmRGBtoYUV[2][2], l_glmRGBtoYUV[3][2] );
+		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmRGBtoYUV[0][3], l_glmRGBtoYUV[1][3], l_glmRGBtoYUV[2][3], l_glmRGBtoYUV[3][3] );
 		glm::mat4x4 l_glmYUVtoRGB( glm::inverse( l_glmRGBtoYUV ) );
-		Logger::LogMessage( cuT( "		Inverted :" ) );
-		Logger::LogMessage( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmYUVtoRGB[0][0], l_glmYUVtoRGB[1][0], l_glmYUVtoRGB[2][0], l_glmYUVtoRGB[3][0] );
-		Logger::LogMessage( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmYUVtoRGB[0][1], l_glmYUVtoRGB[1][1], l_glmYUVtoRGB[2][1], l_glmYUVtoRGB[3][1] );
-		Logger::LogMessage( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmYUVtoRGB[0][2], l_glmYUVtoRGB[1][2], l_glmYUVtoRGB[2][2], l_glmYUVtoRGB[3][2] );
-		Logger::LogMessage( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmYUVtoRGB[0][3], l_glmYUVtoRGB[1][3], l_glmYUVtoRGB[2][3], l_glmYUVtoRGB[3][3] );
+		Logger::LogInfo( cuT( "		Inverted :" ) );
+		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmYUVtoRGB[0][0], l_glmYUVtoRGB[1][0], l_glmYUVtoRGB[2][0], l_glmYUVtoRGB[3][0] );
+		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmYUVtoRGB[0][1], l_glmYUVtoRGB[1][1], l_glmYUVtoRGB[2][1], l_glmYUVtoRGB[3][1] );
+		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmYUVtoRGB[0][2], l_glmYUVtoRGB[1][2], l_glmYUVtoRGB[2][2], l_glmYUVtoRGB[3][2] );
+		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmYUVtoRGB[0][3], l_glmYUVtoRGB[1][3], l_glmYUVtoRGB[2][3], l_glmYUVtoRGB[3][3] );
 		TEST_EQUAL( l_mtxYUVtoRGB, l_glmYUVtoRGB );
 	}
 #endif
@@ -710,11 +710,11 @@ namespace Testing
 		Path l_folder1 = cuT( "test1" );
 		Path l_folder2 = l_folder1 / cuT( "test2" );
 		
-		Logger::LogMessage( "	First folder creation" );
+		Logger::LogInfo( "	First folder creation" );
 
 		if ( File::DirectoryExists( l_folder1 ) || File::DirectoryCreate( l_folder1 ) )
 		{
-			Logger::LogMessage( "	Second folder creation" );
+			Logger::LogInfo( "	Second folder creation" );
 
 			if ( File::DirectoryExists( l_folder2 ) || File::DirectoryCreate( l_folder2 ) )
 			{
@@ -727,20 +727,20 @@ namespace Testing
 
 				if ( !File::FileExists( l_binName ) )
 				{
-					Logger::LogMessage( "	Binary file creation" );
+					Logger::LogInfo( "	Binary file creation" );
 					BinaryFile l_binary( l_binName, File::eOPEN_MODE_WRITE );
 					l_binary.WriteArray( l_inBinData.data(), l_inBinData.size() );
 				}
 
 				if ( !File::FileExists( l_txtName ) )
 				{
-					Logger::LogMessage( "	Text file creation" );
+					Logger::LogInfo( "	Text file creation" );
 					TextFile l_text( l_txtName, File::eOPEN_MODE_WRITE );
 					l_text.WriteText( l_inTxtData );
 				}
 
 				{
-					Logger::LogMessage( "	Deflate the archive" );
+					Logger::LogInfo( "	Deflate the archive" );
 					ZipArchive l_def( l_zipName, File::eOPEN_MODE_WRITE );
 					l_def.AddFile( l_binName );
 					l_def.AddFile( l_txtName );
@@ -748,7 +748,7 @@ namespace Testing
 				}
 
 				{
-					Logger::LogMessage( "	Inflate the archive" );
+					Logger::LogInfo( "	Inflate the archive" );
 					Path l_folder( cuT( "	inflated" ) );
 
 					if ( File::DirectoryExists( l_folder ) || File::DirectoryCreate( l_folder ) )
@@ -759,7 +759,7 @@ namespace Testing
 						String l_outTxtData;
 
 						{
-							Logger::LogMessage( "	Check binary file content" );
+							Logger::LogInfo( "	Check binary file content" );
 							BinaryFile l_binary( l_folder / l_binName, File::eOPEN_MODE_READ );
 							std::vector< uint8_t > l_outBinData( size_t( l_binary.GetLength() ) );
 							l_binary.ReadArray( l_outBinData.data(), l_outBinData.size() );
@@ -768,7 +768,7 @@ namespace Testing
 						}
 
 						{
-							Logger::LogMessage( "	Check text file content" );
+							Logger::LogInfo( "	Check text file content" );
 							TextFile l_text( l_folder / l_txtName, File::eOPEN_MODE_READ );
 							l_text.ReadLine( l_outTxtData, l_inTxtData.size() * 2 );
 							TEST_EQUAL( l_outTxtData, l_inTxtData );
@@ -797,9 +797,8 @@ namespace Testing
 		{
 			Logger::LogError( "	Couldn't create first folder" );
 		}
-	}
 
-		Logger::LogMessage(	"End test case : ZipFile" );
+		Logger::LogInfo( "End test case : ZipFile" );
 	}
 
 	void CastorUtilsTest::TestPixelConversions( uint32_t & p_errCount, uint32_t & p_testCount )

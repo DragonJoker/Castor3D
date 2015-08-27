@@ -67,7 +67,7 @@ namespace
 			   && a[0][3] == b[0][3] && a[1][3] == b[1][3] &&	a[2][3] == b[2][3] &&	a[3][3] == b[3][3];
 	}
 
-	inline std::ostream & operator <<( std::ostream & p_stream, glm::mat4 p_mtx )
+	inline std::ostream & operator <<( std::ostream & p_stream, glm::mat4 const & p_mtx )
 	{
 		for ( uint32_t i = 0; i < 4; i++ )
 		{

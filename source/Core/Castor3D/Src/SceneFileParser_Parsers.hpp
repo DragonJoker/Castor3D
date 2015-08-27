@@ -148,7 +148,6 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassBlendFunc )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassTextureUnit )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassGlShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_PassCgShader )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassHlShader )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassAlphaBlendMode )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassColourBlendMode )
@@ -164,45 +163,33 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_UnitSampler )
 	DECLARE_ATTRIBUTE_PARSER( Parser_UnitBlendColour )
 
-	// GLSL Shader Parsers
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlVertexShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlPixelShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlGeometryShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlHullShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlDomainShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderEnd )
+	// Shader Parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_VertexShader )
+	DECLARE_ATTRIBUTE_PARSER( Parser_PixelShader )
+	DECLARE_ATTRIBUTE_PARSER( Parser_GeometryShader )
+	DECLARE_ATTRIBUTE_PARSER( Parser_HullShader )
+	DECLARE_ATTRIBUTE_PARSER( Parser_DomainShader )
+	DECLARE_ATTRIBUTE_PARSER( Parser_ConstantsBuffer )
+	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderEnd )
 
-	// GLSL Shader Program Parsers
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderProgramFile )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderProgramVariable )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlGeometryInputType )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlGeometryOutputType )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlGeometryOutputVtxCount )
+	// Shader Program Parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderProgramFile )
+	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderProgramEntry )
+	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderProgramSampler )
+	DECLARE_ATTRIBUTE_PARSER( Parser_GeometryInputType )
+	DECLARE_ATTRIBUTE_PARSER( Parser_GeometryOutputType )
+	DECLARE_ATTRIBUTE_PARSER( Parser_GeometryOutputVtxCount )
 
-	// GLSL Shader Variables Parsers
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderVariableType )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderVariableValue )
+	// Shader Program Sampler Parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderSamplerValue )
 
-	// HLSL Shader Parsers
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlVertexShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlPixelShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlGeometryShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlHullShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlDomainShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlFile )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlShaderEnd )
+	// Shader Program UBO Parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderUboShaders )
+	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderUboVariable )
 
-	// HLSL Shader Program Parsers
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlShaderProgramFile )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlShaderProgramVariable )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlShaderProgramEntry )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlGeometryInputType )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlGeometryOutputType )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlGeometryOutputVtxCount )
-
-	// HLSL Shader Variables Parsers
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlShaderVariableType )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlShaderVariableValue )
+	// Shader UBO Variables Parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderVariableType )
+	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderVariableValue )
 
 	// Font Parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_FontFile )

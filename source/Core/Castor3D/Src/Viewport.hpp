@@ -138,7 +138,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_pEngine	Le moteur
 		 *\param[in]	p_size		Les dimensions de rendu du viewport
-		 *\param[in]	p_pNode		SceneNode parent
+		 *\param[in]	p_pMaterial		SceneNode parent
 		 *\param[in]	p_eType		Type de projection
 		 */
 		Viewport( Engine * p_pEngine, Castor::Size const & p_size, eVIEWPORT_TYPE p_eType );

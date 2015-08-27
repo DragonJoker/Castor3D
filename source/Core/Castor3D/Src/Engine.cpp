@@ -206,6 +206,26 @@ namespace Castor3D
 		m_pLightsSampler.reset();
 		m_pDefaultSampler.reset();
 
+		// To destroy before RenderSystem, since it contain elements instantiated in Renderer plug-in
+		m_pSamplerManager.reset();
+		m_pShaderManager.reset();
+		m_pDepthStencilStateManager.reset();
+		m_pRasteriserStateManager.reset();
+		m_pBlendStateManager.reset();
+		m_pAnimationManager.reset();
+		m_pMeshManager.reset();
+		m_pOverlayManager.reset();
+		m_pFontManager.reset();
+		m_pImageManager.reset();
+		m_pSceneManager.reset();
+		m_pMaterialManager.reset();
+		m_pLightFactory.reset();
+		m_pMeshFactory.reset();
+		m_pOverlayFactory.reset();
+		m_pTechniqueFactory.reset();
+		m_arrayListeners.clear();
+
+		// Destroy the RenderSystem
 		if ( m_pRenderSystem )
 		{
 			m_mutexRenderers.lock();
@@ -224,6 +244,7 @@ namespace Castor3D
 			}
 		}
 
+		// Destroy plugins
 		m_mutexLoadedPlugins.lock();
 		m_mutexLibraries.lock();
 		m_mapLoadedPluginTypes.clear();
@@ -242,27 +263,10 @@ namespace Castor3D
 		{
 			l_it.clear();
 		}
-		
+
 		m_mapLoadedPluginTypes.clear();
 		m_mutexLibraries.unlock();
 		m_mutexLoadedPlugins.unlock();
-		m_pAnimationManager.reset();
-		m_pMeshManager.reset();
-		m_pOverlayManager.reset();
-		m_pFontManager.reset();
-		m_pImageManager.reset();
-		m_pSceneManager.reset();
-		m_pShaderManager.reset();
-		m_pMaterialManager.reset();
-		m_pLightFactory.reset();
-		m_pMeshFactory.reset();
-		m_pOverlayFactory.reset();
-		m_pTechniqueFactory.reset();
-		m_pSamplerManager.reset();
-		m_pDepthStencilStateManager.reset();
-		m_pRasteriserStateManager.reset();
-		m_pBlendStateManager.reset();
-		m_arrayListeners.clear();
 		CASTOR_CLEANUP_UNIQUE_INSTANCE();
 	}
 
@@ -783,7 +787,7 @@ namespace Castor3D
 
 	void Engine::LoadAllPlugins( Path const & p_strFolder )
 	{
-		StringArray l_arrayFiles;
+		PathArray l_arrayFiles;
 		File::ListDirectoryFiles( p_strFolder, l_arrayFiles );
 
 		if ( l_arrayFiles.size() > 0 )

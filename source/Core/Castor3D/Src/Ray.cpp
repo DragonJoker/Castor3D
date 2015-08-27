@@ -236,73 +236,65 @@ real Ray::Intersects( SphereBox const & p_sphere )
 real Ray::Intersects( GeometrySPtr p_pGeometry, FaceSPtr * CU_PARAM_UNUSED( p_ppFace ), SubmeshSPtr * p_ppSubmesh )
 {
 	Point3r l_vCenter( p_pGeometry->GetParent()->GetPosition() );
-	Quaternion l_qOrientation = p_pGeometry->GetParent()->GetOrientation();
-	Point3r l_vOrientedCenter;
-	l_qOrientation.Transform( l_vCenter, l_vOrientedCenter );
 	MeshSPtr l_pMesh = p_pGeometry->GetMesh();
 	SphereBox l_sphere( l_vCenter, l_pMesh->GetCollisionSphere().GetRadius() );
 	real l_fDistance = Intersects( l_sphere );
+	//real l_faceDist = 10e6, l_vertexDist = 10e6;
+	//real l_curfaceDist, l_curvertexDist;
 
-	/*
-		real l_faceDist = 10e6, l_vertexDist = 10e6;
-		real l_curfaceDist, l_curvertexDist;
-	*/
 	if ( l_fDistance >= 0.0f )
 	{
 		l_fDistance = -1.0f;
-		Point3r l_submeshCenter;
-		std::for_each( l_pMesh->Begin(), l_pMesh->End(), [&]( SubmeshSPtr p_pSubmesh )
+
+		for ( auto && l_submesh: *l_pMesh )
 		{
-			l_submeshCenter = l_vCenter + p_pSubmesh->GetSphere().GetCenter();
-			l_qOrientation.Transform( l_submeshCenter, l_submeshCenter );
-			l_sphere.Load( l_submeshCenter, p_pSubmesh->GetSphere().GetRadius() );
+			Point3r l_submeshCenter = l_vCenter + l_submesh->GetSphere().GetCenter();
+			l_sphere.Load( l_submeshCenter, l_submesh->GetSphere().GetRadius() );
 
 			if ( p_ppSubmesh )
 			{
-				*p_ppSubmesh = p_pSubmesh;
+				*p_ppSubmesh = l_submesh;
 			}
 
-			/*
-						if (Intersects( l_sphere) >= 0.0f)
-						{
-							for (uint32_t k = 0; k < l_pSubmesh->GetFaceCount(); k++)
-							{
-								FaceSPtr l_pFace = l_pSubmesh->GetFace( k );
+			//if (Intersects( l_sphere) >= 0.0f)
+			//{
+			//	for (uint32_t k = 0; k < l_pSubmesh->GetFaceCount(); k++)
+			//	{
+			//		FaceSPtr l_pFace = l_pSubmesh->GetFace( k );
 
-								if ((l_curfaceDist = Intersects( * l_pFace)) >= 0.0 && l_curfaceDist < l_faceDist)
-								{
-									if (p_ppFace)
-									{
-										*p_ppFace = l_pFace;
-									}
+			//		if ((l_curfaceDist = Intersects( * l_pFace)) >= 0.0 && l_curfaceDist < l_faceDist)
+			//		{
+			//			if (p_ppFace)
+			//			{
+			//				*p_ppFace = l_pFace;
+			//			}
 
-									if (p_ppSubmesh)
-									{
-										*p_ppSubmesh = l_pSubmesh;
-									}
+			//			if (p_ppSubmesh)
+			//			{
+			//				*p_ppSubmesh = l_pSubmesh;
+			//			}
 
-									l_faceDist = l_curfaceDist;
-									l_fDistance = l_curfaceDist;
+			//			l_faceDist = l_curfaceDist;
+			//			l_fDistance = l_curfaceDist;
 
-									if ((l_curvertexDist = Intersects( * l_pFace->m_vertex1)) >= 0.0 && l_curvertexDist < l_fDistance)
-									{
-										l_fDistance = l_curvertexDist;
-									}
+			//			if ((l_curvertexDist = Intersects( * l_pFace->m_vertex1)) >= 0.0 && l_curvertexDist < l_fDistance)
+			//			{
+			//				l_fDistance = l_curvertexDist;
+			//			}
 
-									if ((l_curvertexDist = Intersects( * l_pFace->m_vertex2)) >= 0.0 && l_curvertexDist < l_fDistance)
-									{
-										l_fDistance = l_curvertexDist;
-									}
+			//			if ((l_curvertexDist = Intersects( * l_pFace->m_vertex2)) >= 0.0 && l_curvertexDist < l_fDistance)
+			//			{
+			//				l_fDistance = l_curvertexDist;
+			//			}
 
-									if ((l_curvertexDist = Intersects( * l_pFace->m_vertex2)) >= 0.0 && l_curvertexDist < l_fDistance)
-									{
-										l_fDistance = l_curvertexDist;
-									}
-								}
-							}
-						}
-			*/
-		} );
+			//			if ((l_curvertexDist = Intersects( * l_pFace->m_vertex2)) >= 0.0 && l_curvertexDist < l_fDistance)
+			//			{
+			//				l_fDistance = l_curvertexDist;
+			//			}
+			//		}
+			//	}
+			//}
+		}
 	}
 
 	return l_fDistance;

@@ -239,8 +239,8 @@ namespace Castor3D
 		 */
 		inline Castor::Point4d & GetBorderSize()
 		{
-			return m_ptBorderSize;
 			m_changed = true;
+			return m_ptBorderSize;
 		}
 		/**
 		 *\~english
