@@ -887,8 +887,8 @@ namespace GlRender
 				{
 					m_gl.GetActiveUniformBlockiv( l_pProgram->GetGlProgram(), m_iUniformBlockIndex, eGL_UNIFORM_BLOCK_DATA_SIZE, &m_iUniformBlockSize );
 					m_glBuffer.Create();
-					m_glBuffer.Bind();
 					m_glBuffer.Fill( NULL, m_iUniformBlockSize, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+					m_glBuffer.Bind();
 					m_gl.BindBufferBase( eGL_BUFFER_TARGET_UNIFORM, m_uiIndex, m_glBuffer.GetGlIndex() );
 					m_gl.UniformBlockBinding( l_pProgram->GetGlProgram(), m_iUniformBlockIndex, m_uiIndex );
 					m_buffer.resize( m_iUniformBlockSize );

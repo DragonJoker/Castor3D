@@ -33,6 +33,7 @@ include( CompilerVersion )
 include( UnitTest )
 include( CompilationFlags )
 include( AStyleUtils )
+include( ExternalDependencies )
 
 # Organize projects into folders
 set_property( GLOBAL PROPERTY USE_FOLDERS ON )
