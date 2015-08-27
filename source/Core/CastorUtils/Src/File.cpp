@@ -1,4 +1,4 @@
-﻿#include "File.hpp"
+#include "File.hpp"
 #include "Math.hpp"
 #include "Utils.hpp"
 #include "Logger.hpp"
@@ -187,10 +187,46 @@ namespace Castor
 		}
 		else
 		{
-			CASTOR_EXCEPTION( "Couldn't open file " + str_utils::to_str( m_strFileFullPath ) + " : " + str_utils::to_str( System::GetLastErrorText() ) );
+			CASTOR_EXCEPTION( str_utils::to_str( System::GetLastErrorText() ) );
 		}
 
 		CHECK_INVARIANTS();
+	}
+
+	File::File( File const & p_file )
+		:	m_iMode( p_file.m_iMode	)
+		,	m_eEncoding( p_file.m_eEncoding	)
+		,	m_strFileFullPath( p_file.m_strFileFullPath	)
+		,	m_ullCursor( p_file.m_ullCursor	)
+		,	m_ullLength( p_file.m_ullLength	)
+		,	m_pFile( p_file.m_pFile	)
+		,	m_bOwnFile( false	)
+	{
+	}
+
+	File::File( File && p_file )
+		:	m_iMode( 0	)
+		,	m_eEncoding( eENCODING_MODE_AUTO	)
+		,	m_strFileFullPath(	)
+		,	m_ullCursor( 0	)
+		,	m_ullLength( 0	)
+		,	m_pFile( NULL	)
+		,	m_bOwnFile( true	)
+	{
+		m_iMode				= std::move( p_file.m_iMode	);
+		m_eEncoding			= std::move( p_file.m_eEncoding	);
+		m_strFileFullPath	= std::move( p_file.m_strFileFullPath	);
+		m_ullCursor			= std::move( p_file.m_ullCursor	);
+		m_ullLength			= std::move( p_file.m_ullLength	);
+		m_pFile				= std::move( p_file.m_pFile	);
+		m_bOwnFile			= std::move( p_file.m_bOwnFile	);
+		p_file.m_iMode				= 0;
+		p_file.m_eEncoding			= eENCODING_MODE_AUTO;
+		p_file.m_strFileFullPath.clear();
+		p_file.m_ullCursor			= 0;
+		p_file.m_ullLength			= 0;
+		p_file.m_pFile				= NULL;
+		p_file.m_bOwnFile			= true;
 	}
 
 	File::~File()
@@ -273,6 +309,41 @@ namespace Castor
 
 		CHECK_INVARIANTS();
 		return l_llReturn;
+	}
+
+	File & File::operator =( File const & p_file )
+	{
+		m_iMode				= p_file.m_iMode;
+		m_eEncoding			= p_file.m_eEncoding;
+		m_strFileFullPath	= p_file.m_strFileFullPath;
+		m_ullCursor			= p_file.m_ullCursor;
+		m_ullLength			= p_file.m_ullLength;
+		m_pFile				= p_file.m_pFile;
+		m_bOwnFile			= false;
+		return * this;
+	}
+
+	File & File::operator =( File && p_file )
+	{
+		if ( this != & p_file )
+		{
+			m_iMode				= std::move( p_file.m_iMode	);
+			m_eEncoding			= std::move( p_file.m_eEncoding	);
+			m_strFileFullPath	= std::move( p_file.m_strFileFullPath	);
+			m_ullCursor			= std::move( p_file.m_ullCursor	);
+			m_ullLength			= std::move( p_file.m_ullLength	);
+			m_pFile				= std::move( p_file.m_pFile	);
+			m_bOwnFile			= std::move( p_file.m_bOwnFile	);
+			p_file.m_iMode				= 0;
+			p_file.m_eEncoding			= eENCODING_MODE_AUTO;
+			p_file.m_strFileFullPath.clear();
+			p_file.m_ullCursor			= 0;
+			p_file.m_ullLength			= 0;
+			p_file.m_pFile				= NULL;
+			p_file.m_bOwnFile			= true;
+		}
+
+		return * this;
 	}
 
 	BEGIN_INVARIANT_BLOCK( File )
@@ -489,77 +560,14 @@ namespace Castor
 		return ( status.st_mode & S_IFDIR ) == S_IFDIR;
 	}
 
-	bool File::DirectoryCreate( Path const & p_path, uint32_t p_flags )
+	bool File::DirectoryCreate( Path const & p_file )
 	{
-		Path l_path = p_path.GetPath();
-
-		if ( !l_path.empty() && !DirectoryExists( l_path ) )
-		{
-			DirectoryCreate( l_path, p_flags );
-		}
-
 #if defined( _MSC_VER )
-		return _tmkdir( p_path.c_str() ) == 0;
+		return _tmkdir( p_file.c_str() ) == 0;
 #elif defined( _WIN32 )
-		return mkdir( str_utils::to_str( p_path ).c_str() ) == 0;
+		return mkdir( str_utils::to_str( p_file ).c_str() ) == 0;
 #else
-		mode_t l_mode = 0;
-
-		if ( ( p_flags & eCREATE_MODE_USER_READ ) == eCREATE_MODE_USER_READ )
-		{
-			l_mode |= S_IRUSR;
-		}
-
-		if ( ( p_flags & eCREATE_MODE_USER_WRITE ) == eCREATE_MODE_USER_WRITE )
-		{
-			l_mode |= S_IWUSR;
-		}
-
-		if ( ( p_flags & eCREATE_MODE_USER_EXEC ) == eCREATE_MODE_USER_EXEC )
-		{
-			l_mode |= S_IXUSR;
-		}
-
-		if ( ( p_flags & eCREATE_MODE_GROUP_READ ) == eCREATE_MODE_GROUP_READ )
-		{
-			l_mode |= S_IRGRP;
-		}
-
-		if ( ( p_flags & eCREATE_MODE_GROUP_WRITE ) == eCREATE_MODE_GROUP_WRITE )
-		{
-			l_mode |= S_IWGRP;
-		}
-
-		if ( ( p_flags & eCREATE_MODE_GROUP_EXEC ) == eCREATE_MODE_GROUP_EXEC )
-		{
-			l_mode |= S_IXGRP;
-		}
-
-		if ( ( p_flags & eCREATE_MODE_OTHERS_READ ) == eCREATE_MODE_OTHERS_READ )
-		{
-			l_mode |= S_IROTH;
-		}
-
-		if ( ( p_flags & eCREATE_MODE_OTHERS_WRITE ) == eCREATE_MODE_OTHERS_WRITE )
-		{
-			l_mode |= S_IWOTH;
-		}
-
-		if ( ( p_flags & eCREATE_MODE_OTHERS_EXEC ) == eCREATE_MODE_OTHERS_EXEC )
-		{
-			l_mode |= S_IXOTH;
-		}
-
-		return mkdir( str_utils::to_str( p_path ).c_str(), l_mode ) == 0;
-#endif
-	}
-
-	bool File::DirectoryDelete( Path const & p_path )
-	{
-#if defined( _MSC_VER )
-		return _trmdir( p_path.c_str() ) == 0;
-#else
-		return rmdir( str_utils::to_str( p_path ).c_str() ) == 0;
+		return mkdir( str_utils::to_str( p_file ).c_str(), 777 ) == 0;
 #endif
 	}
 

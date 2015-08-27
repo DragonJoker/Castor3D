@@ -1,4 +1,4 @@
-ï»¿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -47,7 +47,7 @@ namespace Castor3D
 		 *\param[in]	p_uiSize		La taille des valeurs
 		 *\param[in]	p_eChunkType	Le type du subchunk
 		 *\param[in]	p_chunk			Le chunk
-		 *\return		\p false si une erreur quelconque est arrivÃ©e
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		bool operator()( uint8_t const * p_pValues, uint32_t p_uiSize, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
@@ -77,7 +77,7 @@ namespace Castor3D
 	\brief		Remplisseur de chunk
 	*/
 	template< typename T > struct C3D_API ChunkFiller
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\~english
@@ -93,7 +93,7 @@ namespace Castor3D
 		 *\param[in]	p_uiCount		Le nombre de valeurs
 		 *\param[in]	p_eChunkType	Le type du subchunk
 		 *\param[in]	p_chunk			Le chunk
-		 *\return		\p false si une erreur quelconque est arrivÃ©e
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		bool operator()( T const * p_pValues, uint32_t p_uiCount, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
@@ -111,7 +111,7 @@ namespace Castor3D
 		 *\param[in]	p_tValue		Les valeurs
 		 *\param[in]	p_eChunkType	Le type du subchunk
 		 *\param[in]	p_chunk			Le chunk
-		 *\return		\p false si une erreur quelconque est arrivÃ©e
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< uint32_t Count >
 		bool operator()( T const( & p_tValue )[Count], eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
@@ -130,7 +130,7 @@ namespace Castor3D
 		 *\param[in]	p_tValue		La valeur
 		 *\param[in]	p_eChunkType	Le type du subchunk
 		 *\param[in]	p_chunk			Le chunk
-		 *\return		\p false si une erreur quelconque est arrivÃ©e
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		bool operator()( T const & p_tValue, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
@@ -141,7 +141,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::String >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -167,7 +167,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Path >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -193,7 +193,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Point2f >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -207,7 +207,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Point3f >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -221,7 +221,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Point4f >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -235,7 +235,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Point2d >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -249,7 +249,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Point3d >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -263,7 +263,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Point4d >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -277,7 +277,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Point2i >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -291,7 +291,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Point3i >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -305,7 +305,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Point4i >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -319,7 +319,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Point2ui >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -333,7 +333,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Point3ui >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -347,7 +347,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Point4ui >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -361,7 +361,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Coords2f >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -375,7 +375,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Coords3f >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -389,7 +389,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Coords4f >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -403,7 +403,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Coords2d >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -417,7 +417,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Coords3d >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -431,7 +431,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Coords4d >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -445,7 +445,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Coords2i >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -459,7 +459,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Coords3i >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -473,7 +473,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Coords4i >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -487,7 +487,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Coords2ui >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -501,7 +501,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Coords3ui >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -515,7 +515,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Coords4ui >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -529,7 +529,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Matrix2x2f >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -543,7 +543,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Matrix3x3f >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -557,7 +557,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Matrix4x4f >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -571,7 +571,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Matrix2x2d >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -585,7 +585,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Matrix3x3d >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -599,7 +599,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Matrix4x4d >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -613,7 +613,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Colour >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -627,7 +627,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Size >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -641,7 +641,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Position >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -655,7 +655,7 @@ namespace Castor3D
 	\copydoc 	Castor3D::ChunkFiller
 	*/
 	template<> struct C3D_API ChunkFiller< Castor::Quaternion >
-		:	public ChunkFillerBase
+			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()

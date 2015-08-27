@@ -1,0 +1,41 @@
+
+material Material_#149/metal
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.588235 0.588235 0.588235 1 10
+
+			texture_unit
+			{
+				texture_alias textureUnit_0
+				texture tabouret_metal.jpg
+			}
+		}
+
+	}
+
+}
+
+material Material_#149/cuir
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0.196078 0.196078 0.196078 1 10
+
+			texture_unit
+			{
+				texture_alias textureUnit_0
+				texture tabouret_cuir.jpg
+			}
+		}
+
+	}
+
+}

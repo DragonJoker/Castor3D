@@ -1,4 +1,4 @@
-﻿//#include "Light.hpp"
+//#include "Light.hpp"
 #include "LightFactory.hpp"
 
 #include "DirectionalLight.hpp"

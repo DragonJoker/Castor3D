@@ -187,14 +187,14 @@ namespace Castor
 		 *\param[in]	p_iRootSectionNumber	L'id de la section de root
 		 *\param[in]	p_iSectionCount			Le nombre de sections
 		 */
-		CU_API FileParser( int p_iRootSectionNumber, int p_iSectionCount );
+		FileParser( int p_iRootSectionNumber, int p_iSectionCount );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		CU_API virtual ~FileParser();
+		virtual ~FileParser();
 		/**
 		 *\~english
 		 *\brief		Parsing function
@@ -205,7 +205,7 @@ namespace Castor
 		 *\param[in]	p_strFileName	Le nom du fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		CU_API bool ParseFile( String const & p_strFileName );
+		bool ParseFile( String const & p_strFileName );
 		/**
 		 *\~english
 		 *\brief		Parsing function
@@ -216,7 +216,7 @@ namespace Castor
 		 *\param[in]	p_file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		CU_API bool ParseFile( TextFile & p_file );
+		bool ParseFile( TextFile & p_file );
 		/**
 		 *\~english
 		 *\brief		Logs an error in the log file
@@ -227,7 +227,7 @@ namespace Castor
 		 *\param[in]	p_strError	Le texte de l'erreur
 		 *\param[in]	p_pContext	Le context d'analyse
 		 */
-		CU_API void ParseError( String const & p_strError );
+		void ParseError( String const & p_strError );
 		/**
 		 *\~english
 		 *\brief		Logs a warning in the log file
@@ -238,7 +238,27 @@ namespace Castor
 		 *\param[in]	p_strWarning	Le texte de l'avertissement
 		 *\param[in]	p_pContext		Le context d'analyse
 		 */
-		CU_API void ParseWarning( String const & p_strWarning );
+		void ParseWarning( String const & p_strWarning );
+		/**
+		 *\~english
+		 *\brief		Tells if the read lines are to be ignored
+		 *\~french
+		 *\brief		Dit si les lignes suivantes doivent être ignorées
+		 */
+		bool IsIgnored()const
+		{
+			return m_bIgnored;
+		}
+		/**
+		 *\~english
+		 *\brief		Increments ignore level
+		 *\~french
+		 *\brief		Incrémente le niveau d'ignorés
+		 */
+		void Ignore()
+		{
+			m_bIgnored = true;
+		}
 		/**
 		 *\~english
 		 *\brief		Tests if the params given to the function will be appropriate
@@ -253,7 +273,7 @@ namespace Castor
 		 *\param[in]	p_itEnd			Un itérateur sur la fin des paramètres attendus
 		 *\return		\p false si \p p_strParams ne contient pas tous les types de paramètres attendus par la fonction
 		 */
-		CU_API bool CheckParams( String const & p_strParams, ParserParameterArrayConstIt p_itBegin, ParserParameterArrayConstIt p_itEnd );
+		bool CheckParams( String const & p_strParams, ParserParameterArrayConstIt p_itBegin, ParserParameterArrayConstIt p_itEnd );
 		/**
 		 *\~english
 		 *\brief		Adds a parser function to the parsers list
@@ -270,27 +290,7 @@ namespace Castor
 		 *\param[in]	p_iCount		Le compte des paramètres attendus
 		 *\param[in]	...				La liste des paramètres attendus
 		 */
-		CU_API void AddParser( int p_iSection, String const & p_strName, PParserFunction p_pfnFunction, int p_iCount = 0, ... );
-		/**
-		 *\~english
-		 *\brief		Tells if the read lines are to be ignored
-		 *\~french
-		 *\brief		Dit si les lignes suivantes doivent être ignorées
-		 */
-		inline bool IsIgnored()const
-		{
-			return m_bIgnored;
-		}
-		/**
-		 *\~english
-		 *\brief		Increments ignore level
-		 *\~french
-		 *\brief		Incrémente le niveau d'ignorés
-		 */
-		inline void Ignore()
-		{
-			m_bIgnored = true;
-		}
+		void AddParser( int p_iSection, String const & p_strName, PParserFunction p_pfnFunction, int p_iCount = 0, ... );
 		/**
 		 *\~english
 		 *\brief		Retrieves the parser pontext
@@ -311,14 +311,14 @@ namespace Castor
 		 *\~french
 		 *\brief		Initialisation spécifique
 		 */
-		CU_API virtual void DoInitialiseParser( Castor::TextFile & p_file ) = 0;
+		virtual void DoInitialiseParser( Castor::TextFile & p_file ) = 0;
 		/**
 		 *\~english
 		 *\brief		Specific cleanup
 		 *\~french
 		 *\brief		Nettoyage spécifique
 		 */
-		CU_API virtual void DoCleanupParser() = 0;
+		virtual void DoCleanupParser() = 0;
 		/**
 		 *\~english
 		 *\brief		Function called when \p m_iSection is out of bounds
@@ -329,7 +329,7 @@ namespace Castor
 		 *\param[in]	p_strLine	La ligne en cours d'analyse
 		 *\return		\p true si une accolade doit être ouverte à la ligne suivant, \p false sinon
 		 */
-		CU_API virtual bool DoDelegateParser( String const & p_strLine ) = 0;
+		virtual bool DoDelegateParser( String const & p_strLine ) = 0;
 		/**
 		 *\~english
 		 *\brief		Function called when no parser is found for the line
@@ -338,14 +338,14 @@ namespace Castor
 		 *\brief		Fonction appelée si aucun analyseur n'est trouvé pour traiter la ligne
 		 *\param[in]	p_strLine	La ligne en cours d'analyse
 		 */
-		CU_API virtual void DoDiscardParser( String const & p_strLine ) = 0;
+		virtual void DoDiscardParser( String const & p_strLine ) = 0;
 		/**
 		 *\~english
 		 *\brief		Function called when file parsing is completed with no error
 		 *\~french
 		 *\brief		Fonction appelée si l'analyse est complétée sans erreurs
 		 */
-		CU_API virtual void DoValidate() = 0;
+		virtual void DoValidate() = 0;
 
 	private:
 		bool DoParseScriptLine( String & p_strLine );

@@ -1,0 +1,68 @@
+
+material tabouret_bar/tabouret_bar_cuir
+{
+	technique
+	{
+		pass
+		{
+			ambient 0 0 0 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture_alias Map #798
+				texture tabouret_bar_cuir.jpg
+			}
+		}
+
+	}
+
+}
+
+material tabouret_bar/tabouret_bar_metal
+{
+	technique
+	{
+		pass
+		{
+			ambient 0 0 0 1
+			specular 0 0 0 1 10
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture_alias Map #797
+				texture tabouret_bar_metal.jpg
+			}
+		}
+
+	}
+
+}
+
+material tabouret_bar_coll_01_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}
+
+material coll_sd_tabouret_bar_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}

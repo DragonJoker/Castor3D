@@ -1,4 +1,4 @@
-﻿#include "Generator.hpp"
+#include "Generator.hpp"
 #include "Engine.hpp"
 
 #include <Utils.hpp>

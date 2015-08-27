@@ -46,8 +46,6 @@ namespace Dx11Render
 		ID3D11InputLayout * m_pDxDeclaration;
 		Castor3D::BufferDeclaration const & m_declaration;
 		DxShaderProgramWPtr m_pProgram;
-		Castor3D::eBUFFER_ACCESS_TYPE m_eType;
-		Castor3D::eBUFFER_ACCESS_NATURE m_eNature;
 	};
 }
 

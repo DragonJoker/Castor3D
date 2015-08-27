@@ -870,9 +870,7 @@ OpenGl::OpenGl()
 	PixelFormats[			ePIXEL_FORMAT_A4R4G4B4				] = PixelFmt( eGL_FORMAT_BGRA,				eGL_INTERNAL_RGBA4,						eGL_TYPE_UNSIGNED_SHORT_4_4_4_4_REV	);
 	PixelFormats[			ePIXEL_FORMAT_R5G6B5				] = PixelFmt( eGL_FORMAT_BGR,				eGL_INTERNAL_RGB16,						eGL_TYPE_UNSIGNED_SHORT_5_6_5_REV	);
 	PixelFormats[			ePIXEL_FORMAT_R8G8B8				] = PixelFmt( eGL_FORMAT_BGR,				eGL_INTERNAL_RGB8,						eGL_TYPE_UNSIGNED_BYTE	);
-	PixelFormats[			ePIXEL_FORMAT_B8G8R8				] = PixelFmt( eGL_FORMAT_RGB,				eGL_INTERNAL_RGB8,						eGL_TYPE_UNSIGNED_BYTE	);
 	PixelFormats[			ePIXEL_FORMAT_A8R8G8B8				] = PixelFmt( eGL_FORMAT_BGRA,				eGL_INTERNAL_RGBA8,						eGL_TYPE_UNSIGNED_BYTE	);
-	PixelFormats[			ePIXEL_FORMAT_A8B8G8R8				] = PixelFmt( eGL_FORMAT_RGBA,				eGL_INTERNAL_RGBA8,						eGL_TYPE_UNSIGNED_BYTE	);
 	PixelFormats[			ePIXEL_FORMAT_RGB16F32F				] = PixelFmt( eGL_FORMAT_RGB,				eGL_INTERNAL_RGB16F,					eGL_TYPE_FLOAT	);
 	PixelFormats[			ePIXEL_FORMAT_ARGB16F32F			] = PixelFmt( eGL_FORMAT_RGBA,				eGL_INTERNAL_RGBA16F,					eGL_TYPE_FLOAT	);
 	PixelFormats[			ePIXEL_FORMAT_RGB32F				] = PixelFmt( eGL_FORMAT_RGB,				eGL_INTERNAL_RGB32F,					eGL_TYPE_FLOAT	);
@@ -905,9 +903,7 @@ OpenGl::OpenGl()
 	Internals[				ePIXEL_FORMAT_A4R4G4B4				] =	eGL_INTERNAL_FORMAT_RGBA16UI			;
 	Internals[				ePIXEL_FORMAT_R5G6B5				] =	eGL_INTERNAL_FORMAT_RGB16UI				;
 	Internals[				ePIXEL_FORMAT_R8G8B8				] =	eGL_INTERNAL_FORMAT_RGBA32UI			;
-	Internals[				ePIXEL_FORMAT_B8G8R8				] =	eGL_INTERNAL_FORMAT_RGBA32UI			;
 	Internals[				ePIXEL_FORMAT_A8R8G8B8				] =	eGL_INTERNAL_FORMAT_RGBA32UI			;
-	Internals[				ePIXEL_FORMAT_A8B8G8R8				] =	eGL_INTERNAL_FORMAT_RGBA32UI			;
 	Internals[				ePIXEL_FORMAT_RGB16F32F				] =	eGL_INTERNAL_FORMAT_RGBA16F				;
 	Internals[				ePIXEL_FORMAT_ARGB16F32F			] =	eGL_INTERNAL_FORMAT_RGBA16F				;
 	Internals[				ePIXEL_FORMAT_RGB32F				] =	eGL_INTERNAL_FORMAT_RGBA32F				;
@@ -967,9 +963,7 @@ OpenGl::OpenGl()
 	RboStorages[			ePIXEL_FORMAT_A4R4G4B4				] =	eGL_RENDERBUFFER_STORAGE_RGBA4			;
 	RboStorages[			ePIXEL_FORMAT_R5G6B5				] =	eGL_RENDERBUFFER_STORAGE_RGB565			;
 	RboStorages[			ePIXEL_FORMAT_R8G8B8				] =	eGL_RENDERBUFFER_STORAGE_RGB8			;
-	RboStorages[			ePIXEL_FORMAT_B8G8R8				] =	eGL_RENDERBUFFER_STORAGE_RGB8			;
 	RboStorages[			ePIXEL_FORMAT_A8R8G8B8				] =	eGL_RENDERBUFFER_STORAGE_RGBA8			;
-	RboStorages[			ePIXEL_FORMAT_A8B8G8R8				] =	eGL_RENDERBUFFER_STORAGE_RGBA8			;
 	RboStorages[			ePIXEL_FORMAT_RGB16F32F				] =	eGL_RENDERBUFFER_STORAGE_RGB16F			;
 	RboStorages[			ePIXEL_FORMAT_ARGB16F32F			] =	eGL_RENDERBUFFER_STORAGE_RGBA16F		;
 	RboStorages[			ePIXEL_FORMAT_RGB32F				] =	eGL_RENDERBUFFER_STORAGE_RGB32F			;
@@ -1658,7 +1652,7 @@ bool OpenGl::Initialise()
 
 			if ( HasExtension( ARB_uniform_buffer_object ) )
 			{
-				m_bHasUbo = m_iGlslVersion >= 140;
+				m_bHasUbo = true;
 				GL_GET_FUNC( this,	GetUniformBlockIndex,	);
 				GL_GET_FUNC( this,	BindBufferBase,			EXT	);
 				GL_GET_FUNC( this,	UniformBlockBinding,	);
@@ -3661,83 +3655,80 @@ void OpenGl::StDebugLogAMD( uint32_t id, eGL_DEBUG_CATEGORY category, eGL_DEBUG_
 
 void OpenGl::DebugLog( eGL_DEBUG_SOURCE source, eGL_DEBUG_TYPE type, uint32_t id, eGL_DEBUG_SEVERITY severity, int CU_PARAM_UNUSED( length ), const char * message )
 {
-	if ( id != 131185 )
+	String l_strToLog = cuT( "OpenGl Debug - " );
+
+	switch ( source )
 	{
-		String l_strToLog = cuT( "OpenGl Debug - " );
+	case eGL_DEBUG_SOURCE_API:
+		l_strToLog += cuT( "Source:OpenGL\t" );
+		break;
 
-		switch ( source )
-		{
-		case eGL_DEBUG_SOURCE_API:
-			l_strToLog += cuT( "Source:OpenGL\t" );
-			break;
+	case eGL_DEBUG_SOURCE_WINDOW_SYSTEM:
+		l_strToLog += cuT( "Source:Windows\t" );
+		break;
 
-		case eGL_DEBUG_SOURCE_WINDOW_SYSTEM:
-			l_strToLog += cuT( "Source:Windows\t" );
-			break;
+	case eGL_DEBUG_SOURCE_SHADER_COMPILER:
+		l_strToLog += cuT( "Source:Shader compiler\t" );
+		break;
 
-		case eGL_DEBUG_SOURCE_SHADER_COMPILER:
-			l_strToLog += cuT( "Source:Shader compiler\t" );
-			break;
+	case eGL_DEBUG_SOURCE_THIRD_PARTY:
+		l_strToLog += cuT( "Source:Third party\t" );
+		break;
 
-		case eGL_DEBUG_SOURCE_THIRD_PARTY:
-			l_strToLog += cuT( "Source:Third party\t" );
-			break;
+	case eGL_DEBUG_SOURCE_APPLICATION:
+		l_strToLog += cuT( "Source:Application\t" );
+		break;
 
-		case eGL_DEBUG_SOURCE_APPLICATION:
-			l_strToLog += cuT( "Source:Application\t" );
-			break;
-
-		case eGL_DEBUG_SOURCE_OTHER:
-			l_strToLog += cuT( "Source:Other\t" );
-			break;
-		}
-
-		switch ( type )
-		{
-		case eGL_DEBUG_TYPE_ERROR:
-			l_strToLog += cuT( "Type:Error\t" );
-			break;
-
-		case eGL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
-			l_strToLog += cuT( "Type:Deprecated behavior\t" );
-			break;
-
-		case eGL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
-			l_strToLog += cuT( "Type:Undefined behavior\t" );
-			break;
-
-		case eGL_DEBUG_TYPE_PORTABILITY:
-			l_strToLog += cuT( "Type:Portability\t" );
-			break;
-
-		case eGL_DEBUG_TYPE_PERFORMANCE:
-			l_strToLog += cuT( "Type:Performance\t" );
-			break;
-
-		case eGL_DEBUG_TYPE_OTHER:
-			l_strToLog += cuT( "Type:Other\t" );
-			break;
-		}
-
-		l_strToLog += cuT( "ID:" ) + str_utils::to_string( id ) + cuT( "\t" );
-
-		switch ( severity )
-		{
-		case eGL_DEBUG_SEVERITY_HIGH:
-			l_strToLog += cuT( "Severity:High\t" );
-			break;
-
-		case eGL_DEBUG_SEVERITY_MEDIUM:
-			l_strToLog += cuT( "Severity:Medium\t" );
-			break;
-
-		case eGL_DEBUG_SEVERITY_LOW:
-			l_strToLog += cuT( "Severity:Low\t" );
-			break;
-		}
-
-		Logger::LogWarning(	l_strToLog + cuT( "Message:" ) + str_utils::from_str( message ) );
+	case eGL_DEBUG_SOURCE_OTHER:
+		l_strToLog += cuT( "Source:Other\t" );
+		break;
 	}
+
+	switch ( type )
+	{
+	case eGL_DEBUG_TYPE_ERROR:
+		l_strToLog += cuT( "Type:Error\t" );
+		break;
+
+	case eGL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
+		l_strToLog += cuT( "Type:Deprecated behavior\t" );
+		break;
+
+	case eGL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
+		l_strToLog += cuT( "Type:Undefined behavior\t" );
+		break;
+
+	case eGL_DEBUG_TYPE_PORTABILITY:
+		l_strToLog += cuT( "Type:Portability\t" );
+		break;
+
+	case eGL_DEBUG_TYPE_PERFORMANCE:
+		l_strToLog += cuT( "Type:Performance\t" );
+		break;
+
+	case eGL_DEBUG_TYPE_OTHER:
+		l_strToLog += cuT( "Type:Other\t" );
+		break;
+	}
+
+	l_strToLog += cuT( "ID:" ) + str_utils::to_string( id ) + cuT( "\t" );
+
+	switch ( severity )
+	{
+	case eGL_DEBUG_SEVERITY_HIGH:
+		l_strToLog += cuT( "Severity:High\t" );
+		break;
+
+	case eGL_DEBUG_SEVERITY_MEDIUM:
+		l_strToLog += cuT( "Severity:Medium\t" );
+		break;
+
+	case eGL_DEBUG_SEVERITY_LOW:
+		l_strToLog += cuT( "Severity:Low\t" );
+		break;
+	}
+
+	Logger::LogWarning(	l_strToLog + cuT( "Message:" ) + str_utils::from_str( message ) );
 }
 
 void OpenGl::DebugLogAMD( uint32_t id, eGL_DEBUG_CATEGORY category, eGL_DEBUG_SEVERITY severity, int CU_PARAM_UNUSED( length ), const char * message )

@@ -1,11 +1,9 @@
-﻿#include "Camera.hpp"
-
-#include "Engine.hpp"
-#include "Pipeline.hpp"
-#include "RenderSystem.hpp"
+#include "Camera.hpp"
+#include "CameraRenderer.hpp"
 #include "Scene.hpp"
 #include "SceneNode.hpp"
 #include "Viewport.hpp"
+#include "Pipeline.hpp"
 
 #include <TransformationMatrix.hpp>
 
@@ -165,17 +163,65 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Camera::Camera( SceneSPtr p_pScene, String const & p_strName, SceneNodeSPtr p_pNode, ViewportSPtr p_pViewport, eTOPOLOGY p_ePrimitiveType )
-		: MovableObject( p_pScene, p_pNode, p_strName, eMOVABLE_TYPE_CAMERA )
-		, m_pEngine( p_pScene->GetEngine() )
-		, m_pViewport( std::make_shared< Viewport >( *p_pViewport ) )
-		, m_ePrimitiveType( eTOPOLOGY_TRIANGLES )
+	Camera::Camera( Scene * p_pScene, String const & p_strName, Size const & p_size, SceneNodeSPtr p_pNode, eVIEWPORT_TYPE p_eType, eTOPOLOGY p_ePrimitiveType, ePROJECTION_DIRECTION p_eProjectionDirection )
+		:	MovableObject( p_pScene, p_pNode.get(), p_strName, eMOVABLE_TYPE_CAMERA )
+		,	Renderable< Camera, CameraRenderer >( p_pScene->GetEngine() )
+		,	m_pViewport( std::make_shared< Viewport >( p_pScene->GetEngine(), p_size, p_eType ) )
+		,	m_ePrimitiveType( p_ePrimitiveType )
+		,	m_eProjectionDirection( p_eProjectionDirection )
 	{
 	}
 
-	Camera::Camera( SceneSPtr p_pScene, String const & p_strName, SceneNodeSPtr p_pNode, Size const & p_size, eVIEWPORT_TYPE p_eType, eTOPOLOGY p_ePrimitiveType )
-		: Camera( p_pScene, p_strName, p_pNode, std::make_shared< Viewport >( p_pScene->GetEngine(), p_size, p_eType ), p_ePrimitiveType )
+	Camera::Camera( Scene * p_pScene, String const & p_strName, SceneNodeSPtr p_pNode, ViewportSPtr p_pViewport )
+		:	MovableObject( p_pScene, p_pNode.get(), p_strName, eMOVABLE_TYPE_CAMERA )
+		,	Renderable< Camera, CameraRenderer >( p_pScene->GetEngine() )
+		,	m_pViewport( std::make_shared< Viewport >( *p_pViewport ) )
+		,	m_ePrimitiveType( eTOPOLOGY_TRIANGLES )
+		,	m_eProjectionDirection( ePROJECTION_DIRECTION_FRONT )
 	{
+	}
+
+	Camera::Camera( Camera const & p_camera )
+		:	MovableObject( p_camera )
+		,	Renderable< Camera, CameraRenderer >( p_camera )
+		,	m_ePrimitiveType( p_camera.m_ePrimitiveType )
+		,	m_eProjectionDirection( p_camera.m_eProjectionDirection )
+		,	m_pViewport( std::make_shared< Viewport >( *p_camera.m_pViewport ) )
+	{
+	}
+
+	Camera::Camera( Camera && p_camera )
+		:	MovableObject( std::move( p_camera ) )
+		,	Renderable< Camera, CameraRenderer >( std::move( p_camera ) )
+		,	m_ePrimitiveType( std::move( p_camera.m_ePrimitiveType ) )
+		,	m_eProjectionDirection( std::move( p_camera.m_eProjectionDirection ) )
+		,	m_pViewport( std::move( p_camera.m_pViewport ) )
+	{
+	}
+
+	Camera & Camera::operator =( Camera const & p_camera )
+	{
+		MovableObject::operator =( p_camera );
+		Renderable< Camera, CameraRenderer >::operator =( p_camera );
+		m_ePrimitiveType		= p_camera.m_ePrimitiveType								;
+		m_eProjectionDirection	= p_camera.m_eProjectionDirection						;
+		m_pViewport				= std::make_shared< Viewport >( *p_camera.m_pViewport )	;
+		return *this;
+	}
+
+	Camera & Camera::operator =( Camera && p_camera )
+	{
+		MovableObject::operator =( std::move( p_camera ) );
+		Renderable< Camera, CameraRenderer >::operator =( std::move( p_camera ) );
+
+		if ( this != &p_camera )
+		{
+			m_ePrimitiveType		= std::move( p_camera.m_ePrimitiveType );
+			m_eProjectionDirection	= std::move( p_camera.m_eProjectionDirection );
+			m_pViewport				= std::move( p_camera.m_pViewport );
+		}
+
+		return *this;
 	}
 
 	Camera::~Camera()
@@ -184,59 +230,42 @@ namespace Castor3D
 
 	void Camera::ResetOrientation()
 	{
-		SceneNodeSPtr l_node = GetParent();
-
-		if ( l_node )
-		{
-			l_node->SetOrientation( Quaternion::Identity() );
-		}
+		m_pSceneNode->SetOrientation( Quaternion::Identity() );
 	}
 
 	void Camera::ResetPosition()
 	{
-		SceneNodeSPtr l_node = GetParent();
-
-		if ( l_node )
-		{
-			l_node->SetPosition( Point3r( 0, 0, 0 ) );
-		}
+		m_pSceneNode->SetPosition( Point3r( 0, 0, 0 ) );
 	}
 
 	void Camera::Render()
 	{
+		Pipeline * l_pPipeline = m_pEngine->GetRenderSystem()->GetPipeline();
 		bool l_bModified = m_pViewport->Render();
-		SceneNodeSPtr l_node = GetParent();
+		Matrix4x4r const & l_mtx = m_pSceneNode->GetDerivedTransformationMatrix();
 
-		if ( l_node )
+		if ( l_bModified || m_pSceneNode->IsModified() )
 		{
-			Pipeline * l_pPipeline = m_pEngine->GetRenderSystem()->GetPipeline();
-			Matrix4x4r const & l_mtx = l_node->GetDerivedTransformationMatrix();
+			// Express frustum view in world coordinates
+			Point3r l_position;
+			MtxUtils::get_translate( l_mtx, l_position );
 
-			if ( l_bModified || l_node->IsModified() )
+			for ( int i = 0; i < eFRUSTUM_PLANE_COUNT; ++i )
 			{
-				// Express frustum view in world coordinates
-				Point3r l_position;
-				MtxUtils::get_translate( l_mtx, l_position );
-
-				for ( int i = 0; i < eFRUSTUM_PLANE_COUNT; ++i )
-				{
-					m_planes[i].Set( l_mtx * m_pViewport->GetFrustumPlane( eFRUSTUM_PLANE( i ) ).GetNormal(), l_position );
-				}
+				m_planes[i].Set( l_mtx * m_pViewport->GetFrustumPlane( eFRUSTUM_PLANE( i ) ).GetNormal(), l_position );
 			}
-
-			l_pPipeline->MatrixMode( eMTXMODE_VIEW );
-			l_pPipeline->LoadIdentity();
-			l_pPipeline->PushMatrix();
-			l_pPipeline->MultMatrix( l_mtx );
 		}
 
+		l_pPipeline->MatrixMode( eMTXMODE_VIEW );
+		l_pPipeline->LoadIdentity();
+		l_pPipeline->PushMatrix();
+		l_pPipeline->MultMatrix( l_mtx );
 		m_pEngine->GetRenderSystem()->SetCurrentCamera( this );
 	}
 
 	void Camera::EndRender()
 	{
 		m_pEngine->GetRenderSystem()->SetCurrentCamera( NULL );
-		m_pEngine->GetRenderSystem()->GetPipeline()->MatrixMode( eMTXMODE_VIEW );
 		m_pEngine->GetRenderSystem()->GetPipeline()->PopMatrix();
 	}
 
@@ -253,6 +282,12 @@ namespace Castor3D
 	bool Camera::Select( SceneSPtr p_pScene, eSELECTION_MODE p_eMode, int p_iX, int p_iY, stSELECT_RESULT & p_stFound )
 	{
 		bool l_bReturn = false;
+		CameraRendererSPtr l_pRenderer = GetRenderer();
+
+		if ( l_pRenderer )
+		{
+			l_bReturn = l_pRenderer->Select( p_pScene, p_eMode, p_iX, p_iY, p_stFound );
+		}
 
 		return l_bReturn;
 	}
@@ -280,44 +315,45 @@ namespace Castor3D
 	bool Camera::IsVisible( CubeBox const & p_box, Matrix4x4r const & p_transformations )const
 	{
 		bool l_bReturn = true;
-		//Point3r l_ptCorners[8];
-		//l_ptCorners[0] = p_box.GetMin();
-		//l_ptCorners[1] = p_box.GetMax();
+		/*
+			Point3r l_ptCorners[8];
+			l_ptCorners[0] = p_box.GetMin();
+			l_ptCorners[1] = p_box.GetMax();
 
-		//// Express object box in world coordinates
-		//l_ptCorners[2] = p_transformations * Point3r( l_ptCorners[0][0], l_ptCorners[1][1], l_ptCorners[0][2] );
-		//l_ptCorners[3] = p_transformations * Point3r( l_ptCorners[1][0], l_ptCorners[1][1], l_ptCorners[0][2] );
-		//l_ptCorners[4] = p_transformations * Point3r( l_ptCorners[1][0], l_ptCorners[0][1], l_ptCorners[0][2] );
-		//l_ptCorners[5] = p_transformations * Point3r( l_ptCorners[0][0], l_ptCorners[1][1], l_ptCorners[1][2] );
-		//l_ptCorners[6] = p_transformations * Point3r( l_ptCorners[0][0], l_ptCorners[0][1], l_ptCorners[1][2] );
-		//l_ptCorners[7] = p_transformations * Point3r( l_ptCorners[1][0], l_ptCorners[0][1], l_ptCorners[1][2] );
-		//l_ptCorners[0] = p_transformations * l_ptCorners[0];
-		//l_ptCorners[1] = p_transformations * l_ptCorners[1];
+			// Express object box in world coordinates
+			l_ptCorners[2] = p_transformations * Point3r( l_ptCorners[0][0], l_ptCorners[1][1], l_ptCorners[0][2] );
+			l_ptCorners[3] = p_transformations * Point3r( l_ptCorners[1][0], l_ptCorners[1][1], l_ptCorners[0][2] );
+			l_ptCorners[4] = p_transformations * Point3r( l_ptCorners[1][0], l_ptCorners[0][1], l_ptCorners[0][2] );
+			l_ptCorners[5] = p_transformations * Point3r( l_ptCorners[0][0], l_ptCorners[1][1], l_ptCorners[1][2] );
+			l_ptCorners[6] = p_transformations * Point3r( l_ptCorners[0][0], l_ptCorners[0][1], l_ptCorners[1][2] );
+			l_ptCorners[7] = p_transformations * Point3r( l_ptCorners[1][0], l_ptCorners[0][1], l_ptCorners[1][2] );
+			l_ptCorners[0] = p_transformations * l_ptCorners[0];
+			l_ptCorners[1] = p_transformations * l_ptCorners[1];
 
-		//// Retrieve axis aligned box boundaries
-		//Point3r l_ptMin( l_ptCorners[0] );
-		//Point3r l_ptMax( l_ptCorners[1] );
+			// Retrieve axis aligned box boundaries
+			Point3r l_ptMin( l_ptCorners[0] );
+			Point3r l_ptMax( l_ptCorners[1] );
 
-		//for( int j = 0; j < 8; ++j )
-		//{
-		//	l_ptMin[0] = std::min( l_ptCorners[j][0], l_ptMin[0] );
-		//	l_ptMin[1] = std::min( l_ptCorners[j][1], l_ptMin[1] );
-		//	l_ptMin[2] = std::min( l_ptCorners[j][2], l_ptMin[2] );
+			for( int j = 0; j < 8; ++j )
+			{
+				l_ptMin[0] = std::min( l_ptCorners[j][0], l_ptMin[0] );
+				l_ptMin[1] = std::min( l_ptCorners[j][1], l_ptMin[1] );
+				l_ptMin[2] = std::min( l_ptCorners[j][2], l_ptMin[2] );
 
-		//	l_ptMax[0] = std::max( l_ptCorners[j][0], l_ptMax[0] );
-		//	l_ptMax[1] = std::max( l_ptCorners[j][1], l_ptMax[1] );
-		//	l_ptMax[2] = std::max( l_ptCorners[j][2], l_ptMax[2] );
-		//}
+				l_ptMax[0] = std::max( l_ptCorners[j][0], l_ptMax[0] );
+				l_ptMax[1] = std::max( l_ptCorners[j][1], l_ptMax[1] );
+				l_ptMax[2] = std::max( l_ptCorners[j][2], l_ptMax[2] );
+			}
 
-		//// Test positive vertex from the axis aligned box to be inside the frustum view.
-		//for( int i = 0; i < eFRUSTUM_PLANE_COUNT && l_bReturn; ++i )
-		//{
-		//	if( m_planes[i].Distance( GetVertexP( l_ptMin, l_ptMax, m_planes[i].GetNormal() ) ) < 0 )
-		//	{
-		//		l_bReturn = false;
-		//	}
-		//}
-
+			// Test positive vertex from the axis aligned box to be inside the frustum view.
+			for( int i = 0; i < eFRUSTUM_PLANE_COUNT && l_bReturn; ++i )
+			{
+				if( m_planes[i].Distance( GetVertexP( l_ptMin, l_ptMax, m_planes[i].GetNormal() ) ) < 0 )
+				{
+					l_bReturn = false;
+				}
+			}
+		*/
 		return l_bReturn;
 	}
 

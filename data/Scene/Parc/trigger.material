@@ -1,0 +1,29 @@
+
+material trigger
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.772549 0.376471 0.0235294 0.5
+			diffuse 0.772549 0.376471 0.0235294 0.5
+			specular 0.18 0.18 0.18 0.5 10
+			emissive 0.294118 0.294118 0.294118 0.5
+		}
+
+	}
+
+}
+
+material coll_tr_trigger_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}

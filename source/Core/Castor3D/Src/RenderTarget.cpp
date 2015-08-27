@@ -1,6 +1,4 @@
-﻿#include "RenderTarget.hpp"
-
-#include "Engine.hpp"
+#include "RenderTarget.hpp"
 #include "RenderTechnique.hpp"
 #include "DynamicTexture.hpp"
 #include "FrameBuffer.hpp"
@@ -20,7 +18,6 @@
 #include "RasteriserState.hpp"
 #include "BlendState.hpp"
 #include "Parameter.hpp"
-#include "RenderSystem.hpp"
 
 #include <Logger.hpp>
 #include <Image.hpp>
@@ -37,7 +34,7 @@ namespace Castor3D
 
 	bool RenderTarget::TextLoader::operator()( RenderTarget const & p_target, TextFile & p_file )
 	{
-		Logger::LogInfo( cuT( "RenderTarget::Write" ) );
+		Logger::LogMessage( cuT( "RenderTarget::Write" ) );
 		bool l_bReturn = p_file.WriteText( m_tabs + cuT( "render_target\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_bReturn && p_target.GetScene() )
@@ -276,12 +273,12 @@ namespace Castor3D
 
 	bool RenderTarget::stFRAME_BUFFER::Create( RenderTarget * p_renderTarget )
 	{
-		m_pRenderTarget = p_renderTarget;
-		m_pFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
-		m_pColorTexture = m_pRenderTarget->CreateDynamicTexture();
-		m_pColorAttach = m_pRenderTarget->CreateAttachment( m_pColorTexture );
-		m_pDepthBuffer = m_pFrameBuffer->CreateDepthStencilRenderBuffer( m_pRenderTarget->GetDepthFormat() );
-		m_pDepthAttach = m_pRenderTarget->CreateAttachment( m_pDepthBuffer );
+		m_pRenderTarget	= p_renderTarget;
+		m_pFrameBuffer	= m_pRenderTarget->CreateFrameBuffer();
+		m_pColorTexture	= m_pRenderTarget->CreateDynamicTexture();
+		m_pColorAttach	= m_pRenderTarget->CreateAttachment( m_pColorTexture );
+		m_pDepthBuffer	= m_pFrameBuffer->CreateDepthStencilRenderBuffer( m_pRenderTarget->GetDepthFormat() );
+		m_pDepthAttach	= m_pRenderTarget->CreateAttachment( m_pDepthBuffer );
 		SamplerSPtr l_pSampler = m_pRenderTarget->GetEngine()->CreateSampler( RenderTarget::DefaultSamplerName );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_ANISOTROPIC );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_ANISOTROPIC );
@@ -342,23 +339,23 @@ namespace Castor3D
 	const Castor::String RenderTarget::DefaultSamplerName = cuT( "DefaultRTSampler" );
 
 	RenderTarget::RenderTarget( Engine * p_pRoot, eTARGET_TYPE p_eTargetType )
-		: m_pEngine( p_pRoot )
-		, m_eTargetType( p_eTargetType )
-		, m_ePixelFormat( ePIXEL_FORMAT_A8R8G8B8 )
-		, m_eDepthFormat( ePIXEL_FORMAT_DEPTH24S8 )
-		, m_bInitialised( false )
-		, m_size( Size( 100, 100 ) )
-		, m_pRenderTechnique( )
-		, m_bMultisampling( false )
-		, m_iSamplesCount( 0 )
-		, m_bStereo( false )
-		, m_rIntraOcularDistance( 0 )
-		, m_bDeferredRendering( false )
-		, m_uiIndex( ++sm_uiCount )
-		, m_strTechniqueName( cuT( "direct" ) )
+		:	Renderable< RenderTarget, TargetRenderer >( p_pRoot )
+		,	m_eTargetType( p_eTargetType )
+		,	m_ePixelFormat( ePIXEL_FORMAT_A8R8G8B8 )
+		,	m_eDepthFormat( ePIXEL_FORMAT_DEPTH24S8 )
+		,	m_bInitialised( false )
+		,	m_size( Size( 100, 100 ) )
+		,	m_pRenderTechnique( )
+		,	m_bMultisampling( false )
+		,	m_iSamplesCount( 0 )
+		,	m_bStereo( false )
+		,	m_rIntraOcularDistance( 0 )
+		,	m_bDeferredRendering( false )
+		,	m_uiIndex( ++sm_uiCount )
+		,	m_strTechniqueName( cuT( "direct" ) )
 	{
-		m_wpDepthStencilState = p_pRoot->CreateDepthStencilState( cuT( "RenderTargetState_" ) + str_utils::to_string( m_uiIndex ) );
-		m_wpRasteriserState = p_pRoot->CreateRasteriserState( cuT( "RenderTargetState_" ) + str_utils::to_string( m_uiIndex ) );
+		m_wpDepthStencilState	= p_pRoot->CreateDepthStencilState( cuT( "RenderTargetState_" ) + str_utils::to_string( m_uiIndex ) );
+		m_wpRasteriserState		= p_pRoot->CreateRasteriserState( cuT( "RenderTargetState_" ) + str_utils::to_string( m_uiIndex ) );
 	}
 
 	RenderTarget::~RenderTarget()
@@ -369,6 +366,7 @@ namespace Castor3D
 	{
 		m_fbLeftEye.Create( this );
 		m_fbRightEye.Create( this );
+		GetRenderer()->Initialise();
 
 		if ( !m_pRenderTechnique )
 		{
@@ -395,7 +393,7 @@ namespace Castor3D
 		m_size = m_fbLeftEye.m_pColorTexture->GetDimensions();
 		m_fbRightEye.Initialise( p_index, m_size );
 		m_pRenderTechnique->Create();
-		uint32_t l_index = p_index;
+		uint32_t l_index = p_index + 1;
 		m_pRenderTechnique->Initialise( l_index );
 		m_bInitialised = true;
 	}
@@ -409,12 +407,15 @@ namespace Castor3D
 		m_pRenderTechnique->Destroy();
 		m_fbLeftEye.Destroy();
 		m_fbRightEye.Destroy();
+		GetRenderer()->Cleanup();
 		m_pRenderTechnique.reset();
 	}
 
 	void RenderTarget::Render( double p_dFrameTime )
 	{
-		SceneSPtr l_pScene = GetScene();
+		Engine 	*		l_pEngine		= GetEngine();
+		SceneSPtr			l_pScene		= GetScene();
+		RenderSystem 	*	l_pRenderSystem	= l_pEngine->GetRenderSystem();
 
 		if ( l_pScene && l_pScene->HasChanged() )
 		{
@@ -423,31 +424,19 @@ namespace Castor3D
 
 		if ( m_bInitialised && l_pScene )
 		{
-			if ( m_bStereo && m_rIntraOcularDistance > 0 && GetEngine()->GetRenderSystem()->IsStereoAvailable() )
+			CameraSPtr l_pCamera = GetCamera();
+
+			if ( m_bStereo && m_rIntraOcularDistance > 0 && l_pRenderSystem->IsStereoAvailable() )
 			{
 				if ( GetCameraLEye() && GetCameraREye() )
 				{
 					DoRender( m_fbLeftEye, GetCameraLEye(), p_dFrameTime );
 					DoRender( m_fbRightEye, GetCameraREye(), p_dFrameTime );
 				}
-				else
-				{
-					CameraSPtr l_pCamera = GetCamera();
-
-					if ( l_pCamera )
-					{
-						DoRender( m_fbLeftEye, GetCamera(), p_dFrameTime );
-					}
-				}
 			}
-			else
+			else if ( l_pCamera )
 			{
-				CameraSPtr l_pCamera = GetCamera();
-
-				if ( l_pCamera )
-				{
-					DoRender( m_fbLeftEye, GetCamera(), p_dFrameTime );
-				}
+				DoRender( m_fbLeftEye, l_pCamera, p_dFrameTime );
 			}
 		}
 	}
@@ -455,6 +444,45 @@ namespace Castor3D
 	DynamicTextureSPtr RenderTarget::CreateDynamicTexture()const
 	{
 		return m_pEngine->GetRenderSystem()->CreateDynamicTexture();
+	}
+
+	RenderBufferAttachmentSPtr RenderTarget::CreateAttachment( RenderBufferSPtr p_pRenderBuffer )const
+	{
+		RenderBufferAttachmentSPtr	l_pReturn;
+		TargetRendererSPtr			l_pRenderer	= GetRenderer();
+
+		if ( l_pRenderer )
+		{
+			l_pReturn = l_pRenderer->CreateAttachment( p_pRenderBuffer );
+		}
+
+		return l_pReturn;
+	}
+
+	TextureAttachmentSPtr RenderTarget::CreateAttachment( DynamicTextureSPtr p_pTexture )const
+	{
+		TextureAttachmentSPtr	l_pReturn;
+		TargetRendererSPtr		l_pRenderer	= GetRenderer();
+
+		if ( l_pRenderer )
+		{
+			l_pReturn = l_pRenderer->CreateAttachment( p_pTexture );
+		}
+
+		return l_pReturn;
+	}
+
+	FrameBufferSPtr RenderTarget::CreateFrameBuffer()const
+	{
+		FrameBufferSPtr		l_pReturn;
+		TargetRendererSPtr	l_pRenderer	= GetRenderer();
+
+		if ( l_pRenderer )
+		{
+			l_pReturn = l_pRenderer->CreateFrameBuffer();
+		}
+
+		return l_pReturn;
 	}
 
 	eTOPOLOGY RenderTarget::GetPrimitiveType()const
@@ -485,13 +513,13 @@ namespace Castor3D
 
 	void RenderTarget::SetCamera( CameraSPtr p_pCamera )
 	{
-		SceneNodeSPtr l_pCamNode;
-		SceneNodeSPtr l_pLECamNode;
-		SceneNodeSPtr l_pRECamNode;
-		String l_strLENodeName;
-		String l_strRENodeName;
-		String l_strIndex = cuT( "_RT" ) + str_utils::to_string( m_uiIndex );
-		SceneSPtr l_pScene = GetScene();
+		SceneNode 	*	l_pCamNode;
+		SceneNodeSPtr	l_pLECamNode;
+		SceneNodeSPtr	l_pRECamNode;
+		String			l_strLENodeName;
+		String			l_strRENodeName;
+		String			l_strIndex = cuT( "_RT" ) + str_utils::to_string( m_uiIndex );
+		SceneSPtr		l_pScene = GetScene();
 
 		if ( l_pScene )
 		{
@@ -508,9 +536,9 @@ namespace Castor3D
 
 		if ( GetCamera() )
 		{
-			l_pCamNode = GetCamera()->GetParent();
-			l_strLENodeName = l_pCamNode->GetName() + l_strIndex + cuT( "_LEye" );
-			l_strRENodeName = l_pCamNode->GetName() + l_strIndex + cuT( "_REye" );
+			l_pCamNode		= GetCamera()->GetParent();
+			l_strLENodeName	= l_pCamNode->GetName() + l_strIndex + cuT( "_LEye" );
+			l_strRENodeName	= l_pCamNode->GetName() + l_strIndex + cuT( "_REye" );
 			l_pCamNode->DetachChild( l_pCamNode->GetChild( l_strLENodeName ) );
 			l_pCamNode->DetachChild( l_pCamNode->GetChild( l_strRENodeName ) );
 
@@ -545,8 +573,8 @@ namespace Castor3D
 	{
 		if ( GetCameraLEye() && GetCameraREye() )
 		{
-			SceneNodeSPtr l_pLECamNode = GetCameraLEye()->GetParent();
-			SceneNodeSPtr l_pRECamNode = GetCameraREye()->GetParent();
+			SceneNode * l_pLECamNode = GetCameraLEye()->GetParent();
+			SceneNode * l_pRECamNode = GetCameraREye()->GetParent();
 			l_pLECamNode->Translate( Point3r( m_rIntraOcularDistance / 2, 0, 0 ) );
 			l_pRECamNode->Translate( Point3r( -m_rIntraOcularDistance / 2, 0, 0 ) );
 			l_pLECamNode->Translate( Point3r( -p_rIod / 2, 0, 0 ) );
@@ -576,19 +604,26 @@ namespace Castor3D
 
 	void RenderTarget::DoRender( RenderTarget::stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, double p_dFrameTime )
 	{
+		Engine 		*		l_pEngine		= GetEngine();
+		SceneSPtr			l_pScene		= GetScene();
+		TargetRendererSPtr	l_pRenderer		= GetRenderer();
+		RenderSystem 	*	l_pRenderSystem	= l_pEngine->GetRenderSystem();
+		ContextRPtr			l_pContext		= l_pRenderSystem->GetCurrentContext();
 		m_pCurrentFrameBuffer = p_fb.m_pFrameBuffer;
 		m_pCurrentCamera = p_pCamera;
-		Clear();
+		l_pRenderer->BeginScene();
 
 		if ( m_pRenderTechnique->BeginRender() )
 		{
-			SceneSPtr l_pScene = GetScene();
-			GetEngine()->GetRenderSystem()->GetCurrentContext()->Clear( eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL );
+			l_pContext->Clear( eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL );
+			p_pCamera->Render();
 			l_pScene->RenderBackground( *p_pCamera );
+			p_pCamera->EndRender();
 			m_pRenderTechnique->Render( *l_pScene, *p_pCamera, GetPrimitiveType(), p_dFrameTime );
 			m_pRenderTechnique->EndRender();
 		}
 
+		l_pRenderer->EndScene();
 		m_pCurrentFrameBuffer.reset();
 		m_pCurrentCamera.reset();
 #if DEBUG_BUFFERS

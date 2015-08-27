@@ -78,10 +78,10 @@ namespace OceanLighting
 
 	void AddTextCtrl( wxWindow * p_pParent, wxString const & p_strCaption, wxWindowID p_id, float p_fValue, void * p_pClientData, wxSizer * p_pSizer, wxValidator const & p_validator = wxDefaultValidator )
 	{
-		StringStream l_strValue;
+		String l_strValue;
 		l_strValue << p_fValue;
 		wxStaticText * l_pStaticText = new wxStaticText( p_pParent, wxID_ANY, p_strCaption );
-		wxTextCtrl * l_pTextCtrl = new wxTextCtrl( p_pParent, p_id, l_strValue.str() );
+		wxTextCtrl * l_pTextCtrl = new wxTextCtrl( p_pParent, p_id, l_strValue );
 		l_pTextCtrl->SetValidator( p_validator );
 		l_pTextCtrl->SetClientData( &p_pClientData );
 		AddElemToSizer( l_pStaticText, l_pTextCtrl, p_pSizer );
@@ -149,7 +149,7 @@ namespace OceanLighting
 		,	m_drag( 0	)
 		,	m_width( 1244	)
 		,	m_height( 768	)
-		,	m_pCastor3D( new Engine()	)
+		,	m_pCastor3D( new Engine( Logger::GetSingletonPtr() )	)
 		,	m_timer( NULL	)
 	{
 		SetClientSize( m_width, m_height );
@@ -258,14 +258,14 @@ namespace OceanLighting
 		typedef std::shared_ptr< std::thread > thread_sptr;
 		DECLARE_VECTOR( thread_sptr, ThreadPtr );
 		bool l_bReturn = true;
-		Logger::LogInfo( cuT( "Initialising Castor3D" ) );
+		Logger::LogMessage( cuT( "Initialising Castor3D" ) );
 		m_pCastor3D->Initialise( 30, false );
-		m_pCastor3D->GetTechniqueFactory().Register( cuT( "ocean lighting" ), &RenderTechnique::Create );
+		m_pCastor3D->GetTechniqueFactory().Register< RenderTechnique >( cuT( "ocean lighting" ) );
 		StringArray l_arrayFiles;
 		StringArray l_arrayFailed;
 		std::mutex l_mutex;
 		ThreadPtrArray l_arrayThreads;
-		File::ListDirectoryFiles( Engine::GetPluginsDirectory(), l_arrayFiles );
+		File::ListDirectoryFiles( Engine::GetPluginsPath(), l_arrayFiles );
 
 		if ( l_arrayFiles.size() > 0 )
 		{
@@ -306,7 +306,7 @@ namespace OceanLighting
 			l_arrayFailed.clear();
 		}
 
-		Logger::LogInfo( cuT( "Plugins loaded" ) );
+		Logger::LogMessage( cuT( "Plugins loaded" ) );
 
 		try
 		{
@@ -368,7 +368,7 @@ namespace OceanLighting
 
 		if ( l_bReturn )
 		{
-			Logger::LogInfo( cuT( "Castor3D Initialised" ) );
+			Logger::LogMessage( cuT( "Castor3D Initialised" ) );
 			m_timer = new wxTimer( this, 1 );
 			m_timer->Start( 1000 / 30 );
 		}
@@ -408,7 +408,7 @@ namespace OceanLighting
 
 	void MainFrame::OnClose( wxCloseEvent & p_event )
 	{
-		Logger::UnregisterCallback( this );
+		Logger::SetCallback( NULL, NULL );
 		Hide();
 
 		if ( m_timer )

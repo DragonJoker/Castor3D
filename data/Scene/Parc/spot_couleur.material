@@ -1,0 +1,155 @@
+
+material spot_couleur/metal
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.294118 0.294118 0.294118 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture spot_couleur_metal.jpg
+			}
+		}
+
+	}
+
+}
+
+material spot_couleur/lumiere
+{
+	technique
+	{
+		pass
+		{
+			ambient 0 0 0 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+			emissive 1 1 1 1
+
+			texture_unit
+			{
+				texture_alias 0
+				texture spot_couleur_lumiere.jpg
+			}
+		}
+
+	}
+
+}
+
+material spot_couleur/light_rouge
+{
+	technique
+	{
+		pass
+		{
+			ambient 0 0 0 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+			emissive 1 1 1 1
+			scene_blend alpha_blend
+			depth_write off
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture spot_light_rouge.png
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material spot_couleur/light_bleu
+{
+	technique
+	{
+		pass
+		{
+			ambient 0 0 0 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+			emissive 1 1 1 1
+			scene_blend alpha_blend
+			depth_write off
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture spot_light_bleu.png
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material spot_couleur/light
+{
+	technique
+	{
+		pass
+		{
+			ambient 0 0 0 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+			emissive 1 1 1 1
+			scene_blend alpha_blend
+			depth_write off
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture spot_light.png
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material spot_couleur/light_vert
+{
+	technique
+	{
+		pass
+		{
+			ambient 0 0 0 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+			emissive 1 1 1 1
+			scene_blend alpha_blend
+			depth_write off
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture spot_light_vert.png
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}

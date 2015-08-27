@@ -3,39 +3,23 @@ project( CastorUtils )
 include( Doxygen )
 
 find_package( Freetype )
-find_package( ZLIB 1.2.7 )
 find_package( FreeImage )
-find_package( LibZip )
 
 if( NOT WIN32 )
 	find_package( X11 )
 endif()
 
 if( FREETYPE_FOUND )
-	message( STATUS "+ Found FreeType (version ${FREETYPE_VERSION_STRING})" )
-endif()
-
-if( ZLIB_FOUND )
-	message( STATUS "+ Found Zlib (version ${ZLIB_VERSION_STRING})" )
+	message( STATUS "+ Found FreeType" )
 endif()
 
 if( FREEIMAGE_FOUND )
-	message( STATUS "+ Found FreeImage (version ${FreeImage_VERSION_STRING})" )
+	message( STATUS "+ Found FreeImage" )
 endif()
 
-if( LIBZIP_FOUND )
-	message( STATUS "+ Found libzip" )
-endif()
-
-if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
+if( FREEIMAGE_FOUND AND FREETYPE_FOUND )
 	include_directories( ${FREETYPE_INCLUDE_DIRS} )
 	include_directories( ${FreeImage_INCLUDE_DIR} )
-	include_directories( ${ZLIB_INCLUDE_DIRS} )
-	include_directories( ${LIBZIP_INCLUDE_DIRS} )
-	
-	option( CASTOR_USE_DOUBLE "Use double precision floats for Castor::real type" FALSE )
-	option( CASTOR_USE_TRACK "Enable function tracking" FALSE )
-	option( CASTOR_USE_LOG_TRACK "Enable function tracking to be written in log file" FALSE )
 	
 	#FreeImage Libs
 	set( FreeImageLibraries "")
@@ -57,33 +41,12 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		endif()
 	endforeach()
 	
-	#Zlib Libs
-	set( ZlibLibraries "")
-	foreach(Lib ${ZLIB_LIBRARIES})
-		if (ZlibLibraries)
-			set(ZlibLibraries "${ZlibLibraries}|${Lib}")
-		else()
-			set(ZlibLibraries "${Lib}")
-		endif()
-	endforeach()
-	
-	#libzip Libs
-	set( LibZipLibraries "")
-	foreach(Lib ${LIBZIP_LIBRARY})
-		if (LibZipLibraries)
-			set(LibZipLibraries "${LibZipLibraries}|${Lib}")
-		else()
-			set(LibZipLibraries "${Lib}")
-		endif()
-	endforeach()
-	
-	#X11 Libs
-	set( X11Libraries "" )
+	set( x11Libraries "" )
 	foreach( Lib ${X11_LIBRARIES} )
-		if( X11Libraries )
-			set( X11Libraries "${X11Libraries}|${Lib}" )
+		if( x11Libraries )
+			set( x11Libraries "${x11Libraries}|${Lib}" )
 		else()
-			set( X11Libraries "${Lib}" )
+			set( x11Libraries "${Lib}" )
 		endif()
 	endforeach()
 	
@@ -92,39 +55,14 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		CastorUtils
 		PARENT_SCOPE
 	)
-
-	set( CastorMinLibraries
-		${CastorMinLibraries}
-		${FreeImageLibraries}
-		${FreeTypeLibraries}
-		${ZlibLibraries}
-		${LibZipLibraries}
-		${X11Libraries}
-	)
 	
 	set( CU_VERSION_MAJOR	0 )
 	set( CU_VERSION_MINOR	7 )
-	set( CU_VERSION_BUILD	1 )
+	set( CU_VERSION_BUILD	0 )
 	
+	set( CASTOR_USE_PCH 0 )
 	if( PROJECTS_USE_PRECOMPILED_HEADERS )
 		set( CASTOR_USE_PCH 1 )
-	else()
-		set( CASTOR_USE_PCH 0 )
-	endif()
-	if( CASTOR_USE_DOUBLE )
-		set( CASTOR_USE_DOUBLE 1 )
-	else()
-		set( CASTOR_USE_DOUBLE 0 )
-	endif()
-	if( CASTOR_USE_TRACK )
-		set( CASTOR_USE_TRACK 1 )
-	else()
-		set( CASTOR_USE_TRACK 0 )
-	endif()
-	if( CASTOR_USE_LOG_TRACK )
-		set( CASTOR_USE_LOG_TRACK 1 )
-	else()
-		set( CASTOR_USE_LOG_TRACK 0 )
 	endif()
 	
 	configure_file( 
@@ -139,7 +77,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 	
 	add_target(
 		CastorUtils
-		api_dll
+		lib
 		""
 		"${CastorMinLibraries};${x11Libraries}"
 		"CastorUtilsPch.hpp"
@@ -258,15 +196,12 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Loader*.inl
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Path*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Path*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Archive*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Archive*.inl
 	)
 	file( GLOB CASTOR_Data_SOURCE_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*File*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Parser*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Loader*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Path*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Archive*.cpp
 	)
 	source_group( "Header Files\\Data" FILES ${CASTOR_Data_HEADER_FILES} )
 	source_group( "Source Files\\Data" FILES ${CASTOR_Data_SOURCE_FILES} )
@@ -337,89 +272,17 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 	install(
 		FILES ${CMAKE_CURRENT_BINARY_DIR}/Src/config.hpp
 		DESTINATION include/CastorUtils
-		COMPONENT CastorUtils_dev
+		COMPONENT CastorUtils
 	)
 	
 	if ( WIN32 )
 		include( InstallRequiredSystemLibraries )
 		# Preparing FreeImage and freetype dlls installation
 		get_filename_component( FreeTypePath ${FREETYPE_LIBRARY} PATH)
-		get_filename_component( FreeTypePath ${FreeTypePath} PATH)
-		get_filename_component( ZlibPath ${ZLIB_LIBRARY} PATH)
-		get_filename_component( ZlibPath ${ZlibPath} PATH)
-		get_filename_component( LibZipPath ${LIBZIP_LIBRARY} PATH)
-		get_filename_component( LibZipPath ${LibZipPath} PATH)
 		install(
-			FILES
-				${FreeImage_LIBRARY_DIR}/FreeImage.dll
-				${LibZipPath}/bin/zip.dll
+			FILES ${FreeTypePath}/../bin/freetype6.dll ${FreeTypePath}/../bin/zlib1.dll ${FreeImage_LIBRARY_DIR}/FreeImage.dll
 			DESTINATION bin
 			COMPONENT CastorUtils
-		)
-		if ( EXISTS ${FreeTypePath}/bin/freetype6.dll )
-			add_custom_command(
-				TARGET CastorUtils
-				POST_BUILD
-				COMMAND
-					${CMAKE_COMMAND} -E
-						copy_if_different
-						${FreeTypePath}/bin/freetype6.dll
-						${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-			)
-			install(
-				FILES ${FreeTypePath}/bin/freetype6.dll
-				DESTINATION bin
-				COMPONENT CastorUtils
-			)
-		endif ()
-		if ( EXISTS ${ZlibPath}/bin/zlib1.dll )
-			add_custom_command(
-				TARGET CastorUtils
-				POST_BUILD
-				COMMAND
-					${CMAKE_COMMAND} -E
-						copy_if_different
-						${ZlibPath}/bin/zlib1.dll
-						${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-			)
-			install(
-				FILES ${FreeTypePath}/bin/zlib1.dll
-				DESTINATION bin
-				COMPONENT CastorUtils
-			)
-		elseif ( EXISTS ${ZlibPath}/bin/zlibwapi.dll )
-			add_custom_command(
-				TARGET CastorUtils
-				POST_BUILD
-				COMMAND
-					${CMAKE_COMMAND} -E
-						copy_if_different
-						${ZlibPath}/bin/zlibwapi.dll
-						${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-			)
-			install(
-				FILES ${ZlibPath}/bin/zlibwapi.dll
-				DESTINATION bin
-				COMPONENT CastorUtils
-			)
-		endif ()
-		add_custom_command(
-			TARGET CastorUtils
-			POST_BUILD
-			COMMAND
-				${CMAKE_COMMAND} -E
-					copy_if_different
-					${FreeImage_LIBRARY_DIR}/FreeImage.dll
-					${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-		)
-		add_custom_command(
-			TARGET CastorUtils
-			POST_BUILD
-			COMMAND
-				${CMAKE_COMMAND} -E
-					copy_if_different
-					${LibZipPath}/bin/zip.dll
-					${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
 		)
 	endif ()
 	
@@ -437,18 +300,13 @@ else ()
 	if( NOT FREETYPE_FOUND )
 		set( msg "${msg} Freetype" )
 	endif()
-	if( NOT ZLIB_FOUND )
-		set( msg "${msg} Zlib" )
-	endif()
-	if( NOT LIBZIP_FOUND )
-		set( msg "${msg} libzip" )
-	endif()
 	set( Build "${msg})" PARENT_SCOPE )
-	set( Error TRUE PARENT_SCOPE )
 endif ()
 
 set( CastorMinLibraries
 	${CastorMinLibraries}
+	${FreeImageLibraries}
+	${FreeTypeLibraries}
 	CastorUtils
 	PARENT_SCOPE
 )

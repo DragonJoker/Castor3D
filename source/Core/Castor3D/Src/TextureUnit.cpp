@@ -1,13 +1,10 @@
-﻿#include "TextureUnit.hpp"
-
+#include "TextureUnit.hpp"
 #include "DynamicTexture.hpp"
-#include "Engine.hpp"
-#include "Pipeline.hpp"
-#include "RenderSystem.hpp"
-#include "RenderTarget.hpp"
-#include "RenderTechnique.hpp"
-#include "Sampler.hpp"
 #include "StaticTexture.hpp"
+#include "RenderTarget.hpp"
+#include "Sampler.hpp"
+#include "Pipeline.hpp"
+#include "RenderTechnique.hpp"
 
 #include <Image.hpp>
 
@@ -67,7 +64,7 @@ namespace Castor3D
 
 				case eCHUNK_TYPE_TEXTURE_DATA:
 					l_pPxBuffer = PxBufferBase::create( l_size, l_ePf, l_chunk.GetRemainingData(), l_ePf );
-					l_pTexture = p_unit.GetEngine()->GetRenderSystem()->CreateDynamicTexture();
+					l_pTexture = p_unit.GetRenderer()->GetRenderSystem()->CreateDynamicTexture();
 					l_pTexture->SetImage( l_pPxBuffer );
 					p_unit.SetTexture( l_pTexture );
 					break;
@@ -457,16 +454,16 @@ namespace Castor3D
 	//*********************************************************************************************
 
 	TextureUnit::TextureUnit( Engine * p_pEngine )
-		: m_pEngine( p_pEngine )
-		, m_uiIndex( 0 )
-		, m_clrBlend( Colour::from_rgba( 0xFFFFFFFF ) )
-		, m_eChannel( eTEXTURE_CHANNEL_DIFFUSE )
-		, m_eAlphaFunc( eALPHA_FUNC_ALWAYS )
-		, m_fAlphaValue( 0 )
-		, m_eRgbFunction( eRGB_BLEND_FUNC_NONE )
-		, m_eAlpFunction( eALPHA_BLEND_FUNC_NONE )
-		, m_bAutoMipmaps( false )
-		, m_bChanged( false )
+		:	Renderable< TextureUnit, TextureRenderer >( p_pEngine )
+		,	m_uiIndex( 0 )
+		,	m_clrBlend( Colour::from_rgba( 0xFFFFFFFF ) )
+		,	m_eChannel( eTEXTURE_CHANNEL_DIFFUSE )
+		,	m_eAlphaFunc( eALPHA_FUNC_ALWAYS )
+		,	m_fAlphaValue( 0 )
+		,	m_eRgbFunction( eRGB_BLEND_FUNC_NONE )
+		,	m_eAlpFunction( eALPHA_BLEND_FUNC_NONE )
+		,	m_bAutoMipmaps( false )
+		,	m_bChanged( false )
 	{
 		m_mtxTransformations.set_identity();
 		m_eRgbArguments[0] = eBLEND_SOURCE_COUNT;
@@ -531,11 +528,12 @@ namespace Castor3D
 		m_fAlphaValue = 1.0f;
 	}
 
-	void TextureUnit::Bind()
+	void TextureUnit::Render()
 	{
 		if ( m_pTexture && m_pTexture->IsInitialised() )
 		{
-			Pipeline * l_pPipeline = GetEngine()->GetRenderSystem()->GetPipeline();
+			TextureRendererSPtr l_pRenderer = GetRenderer();
+			Pipeline * l_pPipeline = l_pRenderer->GetRenderSystem()->GetPipeline();
 			m_pTexture->Bind();
 
 			if ( m_bChanged && m_bAutoMipmaps || m_pTexture->GetType() == eTEXTURE_TYPE_DYNAMIC )
@@ -555,18 +553,20 @@ namespace Castor3D
 				m_bChanged = false;
 			}
 
+			l_pRenderer->Render();
 			m_ePrevMtxMode = l_pPipeline->MatrixMode( eMTXMODE( eMTXMODE_TEXTURE0 + GetIndex() ) );
 			l_pPipeline->LoadIdentity();
 			l_pPipeline->MultMatrix( m_mtxTransformations );
-			GetEngine()->GetRenderSystem()->GetPipeline()->MatrixMode( m_ePrevMtxMode );
+			l_pRenderer->GetRenderSystem()->GetPipeline()->MatrixMode( m_ePrevMtxMode );
 		}
 	}
 
-	void TextureUnit::Unbind()
+	void TextureUnit::EndRender()
 	{
 		if ( m_pTexture && m_pTexture->IsInitialised() )
 		{
 			m_pTexture->Unbind();
+			GetRenderer()->EndRender();
 		}
 	}
 

@@ -40,16 +40,14 @@ namespace Castor
 	{
 	protected:
 		typedef T __value_type;
-		typedef Castor::Policy< __value_type > __policy;
-		typedef Matrix< __value_type, Rows, Columns > __type;
-		typedef Matrix< __value_type, Columns, Rows > __transpose;
-		typedef Point< __value_type, Columns > __row;
-		typedef Coords< __value_type, Rows > __column;
+		typedef Matrix<__value_type, Rows, Columns> __type;
+		typedef Matrix<__value_type, Columns, Rows> __transpose;
+		typedef Point<__value_type, Columns> __row;
+		typedef Coords<__value_type, Rows> __column;
+		typedef Castor::Policy<__value_type> __policy;
 		static const std::size_t size = sizeof( T ) * Rows * Columns;
 
 	public:
-		//!\~english Typedef on the policy	\~french Typedef sur la politique
-		typedef __policy policy;
 		//!\~english Typedef on the data type	\~french Typedef sur le type de données
 		typedef __value_type value_type;
 		//!\~english Typedef on the column type	\~french Typedef sur le type de colonne
@@ -58,6 +56,8 @@ namespace Castor
 		typedef __row row_type;
 		//!\~english Typedef on the transposed matrix type	\~french Typedef sur le type de matrice transposée
 		typedef __transpose transpose_type;
+		//!\~english Typedef on the policy	\~french Typedef sur la politique
+		typedef __policy policy;
 		//!\~english Typedef on this matrix type	\~french Typedef sur le type de cette matrice
 		typedef Matrix< value_type, Rows, Columns > my_type;
 
@@ -241,7 +241,7 @@ namespace Castor
 		 *\param[in]	i	L'index
 		 *\return		Un pointeur constant sur le premier élément de la colonne
 		 */
-		value_type const * operator[]( uint32_t i )const;
+		value_type const * operator []( uint32_t i )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the column at given index
@@ -252,7 +252,7 @@ namespace Castor
 		 *\param[in]	i	L'index
 		 *\return		Un pointeur sur le premier élément de la colonne
 		 */
-		value_type * operator[]( uint32_t i );
+		value_type * operator []( uint32_t i );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pointer on datas
@@ -378,7 +378,7 @@ namespace Castor
 		 *\param[in]	p_matrix	L'objet Matrix à copier
 		 *\return		Une référence sur cet objet Matrix
 		 */
-		Matrix< T, Rows, Columns > & operator=( Matrix< T, Rows, Columns > const & p_matrix );
+		Matrix< T, Rows, Columns > & operator =( Matrix< T, Rows, Columns > const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -389,7 +389,7 @@ namespace Castor
 		 *\param[in]	p_matrix	L'objet Matrix à déplacer
 		 *\return		Une référence sur cet objet Matrix
 		 */
-		Matrix< T, Rows, Columns > & operator=( Matrix< T, Rows, Columns > && p_matrix );
+		Matrix< T, Rows, Columns > & operator =( Matrix< T, Rows, Columns > && p_matrix );
 		/**
 		 *\~english
 		 *\brief		Conversion Copy assignment operator
@@ -400,7 +400,7 @@ namespace Castor
 		 *\param[in]	p_matrix	L'objet Matrix à copier
 		 *\return		Une référence sur cet objet Matrix
 		 */
-		template< typename Type > Matrix< T, Rows, Columns > & operator=( Matrix< Type, Rows, Columns > const & p_matrix );
+		template< typename Type > Matrix< T, Rows, Columns > & operator =( Matrix< Type, Rows, Columns > const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Addition assignment operator
@@ -411,7 +411,7 @@ namespace Castor
 		 *\param[in]	p_matrix	L'objet Matrix à ajouter
 		 *\return		Une référence sur cet objet Matrix
 		 */
-		template< typename Type > Matrix< T, Rows, Columns > & operator+=( Matrix< Type, Rows, Columns > const & p_matrix );
+		template< typename Type > Matrix< T, Rows, Columns > & operator +=( Matrix< Type, Rows, Columns > const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
@@ -422,7 +422,7 @@ namespace Castor
 		 *\param[in]	p_matrix	L'objet Matrix à soustraire
 		 *\return		Une référence sur cet objet Matrix
 		 */
-		template< typename Type > Matrix< T, Rows, Columns > & operator-=( Matrix< Type, Rows, Columns > const & p_matrix );
+		template< typename Type > Matrix< T, Rows, Columns > & operator -=( Matrix< Type, Rows, Columns > const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Conversion Copy assignment operator
@@ -433,7 +433,7 @@ namespace Castor
 		 *\param[in]	p_pMatrix	Le pointeur sur les données à copier
 		 *\return		Une référence sur cet objet Matrix
 		 */
-		template< typename Type > Matrix< T, Rows, Columns > & operator=( Type const * p_pMatrix );
+		template< typename Type > Matrix< T, Rows, Columns > & operator =( Type const * p_pMatrix );
 		/**
 		 *\~english
 		 *\brief		Addition assignment operator
@@ -444,7 +444,7 @@ namespace Castor
 		 *\param[in]	p_pMatrix	Le pointeur sur les données à ajouter
 		 *\return		Une référence sur cet objet Matrix
 		 */
-		template< typename Type > Matrix< T, Rows, Columns > & operator+=( Type const * p_pMatrix );
+		template< typename Type > Matrix< T, Rows, Columns > & operator +=( Type const * p_pMatrix );
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
@@ -455,7 +455,7 @@ namespace Castor
 		 *\param[in]	p_pMatrix	Le pointeur sur les données à soustraire
 		 *\return		Une référence sur cet objet Matrix
 		 */
-		template< typename Type > Matrix< T, Rows, Columns > & operator-=( Type const * p_pMatrix );
+		template< typename Type > Matrix< T, Rows, Columns > & operator -=( Type const * p_pMatrix );
 		/**
 		 *\~english
 		 *\brief		Addition assignment operator
@@ -466,7 +466,7 @@ namespace Castor
 		 *\param[in]	p_tValue	La valeur à additionner
 		 *\return		Une référence sur cet objet Matrix
 		 */
-		Matrix< T, Rows, Columns > & operator+=( T const & p_tValue );
+		Matrix< T, Rows, Columns > & operator +=( T const & p_tValue );
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
@@ -477,7 +477,7 @@ namespace Castor
 		 *\param[in]	p_tValue	La valeur à soustraire
 		 *\return		Une référence sur cet objet Matrix
 		 */
-		Matrix< T, Rows, Columns > & operator-=( T const & p_tValue );
+		Matrix< T, Rows, Columns > & operator -=( T const & p_tValue );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
@@ -488,7 +488,7 @@ namespace Castor
 		 *\param[in]	p_tValue	La valeur à multiplier
 		 *\return		Une référence sur cet objet Matrix
 		 */
-		Matrix< T, Rows, Columns > & operator*=( T const & p_tValue );
+		Matrix< T, Rows, Columns > & operator *=( T const & p_tValue );
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
@@ -499,7 +499,7 @@ namespace Castor
 		 *\param[in]	p_tValue	La valeur à diviser
 		 *\return		Une référence sur cet objet Matrix
 		 */
-		Matrix< T, Rows, Columns > & operator/=( T const & p_tValue );
+		Matrix< T, Rows, Columns > & operator /=( T const & p_tValue );
 		/**
 		 *\~english
 		 *\brief		Indexing operator
@@ -529,17 +529,10 @@ namespace Castor
 
 	protected:
 		my_type rec_get_minor( uint32_t x, uint32_t y, uint32_t p_uiRows, uint32_t p_uiCols )const;
-		
-#if !defined( NDEBUG )
-		void do_update_debug()const;
-#endif
 
 	protected:
 		bool m_bOwnCoords;
 		value_type * m_pPointer;
-#if !defined( NDEBUG )
-		mutable value_type m_debugData[Rows * Columns];
-#endif
 	};
 	/**
 	 *\~english
@@ -551,7 +544,7 @@ namespace Castor
 	 *\param[in]	p_mtxA, p_mtxB	Les matrices à comparer
 	 *\return		\p true si les matrices ont les mêmes dimensions et les mêmes valeurs
 	 */
-	template< typename T, uint32_t Rows, uint32_t Columns > bool operator==( Matrix< T, Rows, Columns > const & p_mtxA, Matrix< T, Rows, Columns > const & p_mtxB );
+	template< typename T, uint32_t Rows, uint32_t Columns > bool operator ==( Matrix< T, Rows, Columns > const & p_mtxA, Matrix< T, Rows, Columns > const & p_mtxB );
 	/**
 	 *\~english
 	 *\brief		Difference operator
@@ -562,7 +555,7 @@ namespace Castor
 	 *\param[in]	p_mtxA, p_mtxB	Les matrices à comparer
 	 *\return		\p true si les matrices ont des dimensions différentes ou au moins une valeur différente
 	 */
-	template< typename T, uint32_t Rows, uint32_t Columns > bool operator!=( Matrix< T, Rows, Columns > const & p_mtxA, Matrix< T, Rows, Columns > const & p_mtxB );
+	template< typename T, uint32_t Rows, uint32_t Columns > bool operator !=( Matrix< T, Rows, Columns > const & p_mtxA, Matrix< T, Rows, Columns > const & p_mtxB );
 	/**
 	 *\~english
 	 *\brief		Addition operator
@@ -573,7 +566,7 @@ namespace Castor
 	 *\param[in]	p_mtxA, p_mtxB	Les matrices à additionner
 	 *\return		Le résultat de l'addition
 	 */
-	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator+( Matrix< T, Rows, Columns > const & p_mtxA, Matrix< U, Rows, Columns > const & p_mtxB );
+	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator +( Matrix< T, Rows, Columns > const & p_mtxA, Matrix< U, Rows, Columns > const & p_mtxB );
 	/**
 	 *\~english
 	 *\brief		Substraction operator
@@ -584,7 +577,7 @@ namespace Castor
 	 *\param[in]	p_mtxA, p_mtxB	Les matrices à soustraire
 	 *\return		Le résultat de la soustraction
 	 */
-	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator-( Matrix< T, Rows, Columns > const & p_mtxA, Matrix< U, Rows, Columns > const & p_mtxB );
+	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator -( Matrix< T, Rows, Columns > const & p_mtxA, Matrix< U, Rows, Columns > const & p_mtxB );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
@@ -595,7 +588,7 @@ namespace Castor
 	 *\param[in]	p_mtxA, p_mtxB	Les matrices à multiplier
 	 *\return		Le résultat de la multiplication
 	 */
-	template< typename T, uint32_t Rows, uint32_t Columns, typename U, uint32_t _Columns > Matrix< T, Rows, _Columns > operator*( Matrix< T, Rows, Columns > const & p_mtxA, Matrix< U, Columns, _Columns > const & p_mtxB );
+	template< typename T, uint32_t Rows, uint32_t Columns, typename U, uint32_t _Columns > Matrix< T, Rows, _Columns > operator * ( Matrix< T, Rows, Columns > const & p_mtxA, Matrix< U, Columns, _Columns > const & p_mtxB );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
@@ -608,7 +601,7 @@ namespace Castor
 	 *\param[in]	p_ptVector	Le vecteur
 	 *\return		Le résultat de la multiplication
 	 */
-	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Point< T, Rows > operator*( Matrix< T, Rows, Columns > const  & p_mtxA, Point< U, Columns > const &	p_ptVector );
+	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Point< T, Rows > operator *( Matrix< T, Rows, Columns > const  & p_mtxA, Point< U, Columns > const &	p_ptVector );
 	/**
 	 *\~english
 	 *\brief		Addition operator
@@ -619,7 +612,7 @@ namespace Castor
 	 *\param[in]	p_mtxA, p_mtxB	Les matrices à additionner
 	 *\return		Le résultat de l'addition
 	 */
-	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator+( Matrix< T, Rows, Columns > const & p_mtxA, U const	* p_mtxB );
+	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator +( Matrix< T, Rows, Columns > const & p_mtxA, U const	* p_mtxB );
 	/**
 	 *\~english
 	 *\brief		Substraction operator
@@ -630,7 +623,7 @@ namespace Castor
 	 *\param[in]	p_mtxA, p_mtxB	Les matrices à soustraire
 	 *\return		Le résultat de la soustraction
 	 */
-	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator-( Matrix< T, Rows, Columns > const & p_mtxA, U const	* p_mtxB );
+	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator -( Matrix< T, Rows, Columns > const & p_mtxA, U const	* p_mtxB );
 	/**
 	 *\~english
 	 *\brief		Addition operator
@@ -643,7 +636,7 @@ namespace Castor
 	 *\param[in]	p_tValue	La valeur à additionner
 	 *\return		Le résultat de l'addition
 	 */
-	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator+( Matrix< T, Rows, Columns > const & p_mtxA, T const & p_tValue );
+	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator +( Matrix< T, Rows, Columns > const & p_mtxA, T const & p_tValue );
 	/**
 	 *\~english
 	 *\brief		Substraction operator
@@ -656,7 +649,7 @@ namespace Castor
 	 *\param[in]	p_tValue	La valeur à soustraire
 	 *\return		Le résultat de la soustraction
 	 */
-	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator-( Matrix< T, Rows, Columns > const & p_mtxA, T const & p_tValue );
+	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator -( Matrix< T, Rows, Columns > const & p_mtxA, T const & p_tValue );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
@@ -669,7 +662,7 @@ namespace Castor
 	 *\param[in]	p_tValue	La valeur
 	 *\return		Le résultat de la multiplication
 	 */
-	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator*( Matrix< T, Rows, Columns > const & p_mtxA, T const & p_tValue );
+	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator *( Matrix< T, Rows, Columns > const & p_mtxA, T const & p_tValue );
 	/**
 	 *\~english
 	 *\brief		Division operator
@@ -682,7 +675,7 @@ namespace Castor
 	 *\param[in]	p_tValue	La valeur
 	 *\return		Le résultat de la division
 	 */
-	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator/( Matrix< T, Rows, Columns > const & p_mtxA, T const & p_tValue );
+	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator /( Matrix< T, Rows, Columns > const & p_mtxA, T const & p_tValue );
 	/**
 	 *\~english
 	 *\brief		Addition operator
@@ -695,7 +688,7 @@ namespace Castor
 	 *\param[in]	p_tValue	La valeur à additionner
 	 *\return		Le résultat de l'addition
 	 */
-	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator+( T const & p_tValue, Matrix< U, Rows, Columns > const & p_matrix );
+	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator + ( T const & p_tValue, Matrix< U, Rows, Columns > const & p_matrix );
 	/**
 	 *\~english
 	 *\brief		Substraction operator
@@ -708,7 +701,7 @@ namespace Castor
 	 *\param[in]	p_tValue	La valeur à soustraire
 	 *\return		Le résultat de la soustraction
 	 */
-	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator-( T const & p_tValue, Matrix< U, Rows, Columns > const & p_matrix );
+	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator - ( T const & p_tValue, Matrix< U, Rows, Columns > const & p_matrix );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
@@ -721,7 +714,7 @@ namespace Castor
 	 *\param[in]	p_tValue	La valeur
 	 *\return		Le résultat de la multiplication
 	 */
-	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator*( T const & p_tValue, Matrix< U, Rows, Columns > const & p_matrix );
+	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Matrix< T, Rows, Columns > operator * ( T const & p_tValue, Matrix< U, Rows, Columns > const & p_matrix );
 	/*
 	 *\~english
 	 *\brief		Negation operator
@@ -732,7 +725,7 @@ namespace Castor
 	 *\param[in]	p_matrix	La matrice
 	 *\return		Le résultat de la négation
 	 */
-	template< typename T, uint32_t Rows, uint32_t Columns > Matrix< T, Rows, Columns > operator-( Matrix< T, Rows, Columns > const & p_matrix );
+	template< typename T, uint32_t Rows, uint32_t Columns > Matrix< T, Rows, Columns > operator - ( Matrix< T, Rows, Columns > const & p_matrix );
 }
 /**
  *\~english
@@ -746,7 +739,7 @@ namespace Castor
  *\param[in]		p_matrix	La matrice entré
  *\return			Une référence sur le flux
  */
-template< typename T, uint32_t Rows, uint32_t Columns > Castor::String & operator<<( Castor::String & p_streamOut, Castor::Matrix< T, Rows, Columns > const & p_matrix );
+template< typename T, uint32_t Rows, uint32_t Columns > Castor::String & operator <<( Castor::String & p_streamOut, Castor::Matrix< T, Rows, Columns > const & p_matrix );
 /**
  *\~english
  *\brief			Stream operator
@@ -759,7 +752,7 @@ template< typename T, uint32_t Rows, uint32_t Columns > Castor::String & operato
  *\param[in,out]	p_matrix	La matrice sortie
  *\return			Une référence sur le flux
  */
-template< typename T, uint32_t Rows, uint32_t Columns > Castor::String & operator>>( Castor::String & p_streamIn, Castor::Matrix< T, Rows, Columns > & p_matrix );
+template< typename T, uint32_t Rows, uint32_t Columns	> Castor::String & operator >>( Castor::String & p_streamIn, Castor::Matrix< T, Rows, Columns > & p_matrix );
 /**
  *\~english
  *\brief			Stream operator
@@ -772,7 +765,7 @@ template< typename T, uint32_t Rows, uint32_t Columns > Castor::String & operato
  *\param[in]		p_matrix	La matrice entré
  *\return			Une référence sur le flux
  */
-template< typename CharT, typename T, uint32_t Rows, uint32_t Columns > std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & p_streamOut, Castor::Matrix< T, Rows, Columns > const & p_matrix );
+template< typename T, uint32_t Rows, uint32_t Columns	> std::ostream & operator <<( std::ostream & p_streamOut, Castor::Matrix< T, Rows, Columns > const & p_matrix );
 /**
  *\~english
  *\brief			Stream operator
@@ -785,7 +778,33 @@ template< typename CharT, typename T, uint32_t Rows, uint32_t Columns > std::bas
  *\param[in,out]	p_matrix	La matrice sortie
  *\return			Une référence sur le flux
  */
-template< typename CharT, typename T, uint32_t Rows, uint32_t Columns > std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & p_streamIn, Castor::Matrix< T, Rows, Columns > & p_matrix );
+template< typename T, uint32_t Rows, uint32_t Columns	> std::istream & operator >>( std::istream & p_streamIn, Castor::Matrix< T, Rows, Columns > & p_matrix );
+/**
+ *\~english
+ *\brief			Stream operator
+ *\param[in,out]	p_streamOut	The stream receiving matrix's data
+ *\param[in]		p_matrix	The input matrix
+ *\return			A reference to the stream
+ *\~french
+ *\brief			Opérateur de flux
+ *\param[in,out]	p_streamOut	Le flux qui reçoit les données de la matrice
+ *\param[in]		p_matrix	La matrice entré
+ *\return			Une référence sur le flux
+ */
+template< typename T, uint32_t Rows, uint32_t Columns	> std::wostream & operator <<( std::wostream & p_streamOut, Castor::Matrix< T, Rows, Columns > const & p_matrix );
+/**
+ *\~english
+ *\brief			Stream operator
+ *\param[in,out]	p_streamIn	The stream holding matrix's data
+ *\param[in,out]	p_matrix	The output matrix
+ *\return			A reference to the stream
+ *\~french
+ *\brief			Opérateur de flux
+ *\param[in,out]	p_streamIn	Le flux qui contient les données de la matrice
+ *\param[in,out]	p_matrix	La matrice sortie
+ *\return			Une référence sur le flux
+ */
+template< typename T, uint32_t Rows, uint32_t Columns	> std::wistream & operator >>( std::wistream & p_streamIn, Castor::Matrix< T, Rows, Columns	> & p_matrix );
 
 #include "Matrix.inl"
 

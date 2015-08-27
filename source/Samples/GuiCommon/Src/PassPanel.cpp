@@ -18,66 +18,63 @@ using namespace Castor;
 
 //*************************************************************************************************
 
-wxPassPanel::wxPassPanel( wxWindow * p_pParent, Engine * p_pEngine, bool p_bCanEdit, wxPoint const & p_ptPos, wxSize const & p_size )
+wxPassPanel::wxPassPanel( Engine * p_pEngine, bool p_bCanEdit, wxWindow * p_pParent, wxPoint const & p_ptPos, wxSize const & p_size )
 	:	wxScrolledWindow( p_pParent, wxID_ANY, p_ptPos, p_size, 524288 | wxBORDER_NONE )
 	,	m_pPanelTextureUnit( NULL	)
 	,	m_bCanEdit( p_bCanEdit	)
 	,	m_pEngine( p_pEngine	)
 {
-	wxSize l_sizeClrBtn( 50, 50 );
-	wxSize l_sizeTextureImg( 70, 70 );
-	m_sizeImage = wxSize( l_sizeTextureImg.x - 2, l_sizeTextureImg.y - 2 );
+	wxSize l_sizeClrBtn(	50,						50	);
+	wxSize l_sizeTextureImg(	70,						70	);
+	m_sizeImage = wxSize(	l_sizeTextureImg.x - 2,	l_sizeTextureImg.y - 2	);
 	wxArrayString l_arrayModes;
-	l_arrayModes.push_back( _( "Normal" ) );
-	l_arrayModes.push_back( _( "Reflexion map" ) );
-	l_arrayModes.push_back( _( "Sphere map" ) );
+	l_arrayModes.push_back( _( "Normal"	) );
+	l_arrayModes.push_back( _( "Reflexion map"	) );
+	l_arrayModes.push_back( _( "Sphere map"	) );
 	wxArrayString l_arrayChannels;
-	l_arrayChannels.push_back( _( "Colour" ) ); //	eTEXTURE_CHANNEL_COLOUR		= 0x00000001	//!< Colour map
-	l_arrayChannels.push_back( _( "Diffuse" ) ); //	eTEXTURE_CHANNEL_DIFFUSE	= 0x00000002	//!< Diffuse map
-	l_arrayChannels.push_back( _( "Normal" ) ); //	eTEXTURE_CHANNEL_NORMAL		= 0x00000004	//!< Normal map
-	l_arrayChannels.push_back( _( "Opacity" ) ); //	eTEXTURE_CHANNEL_OPACITY	= 0x00000008	//!< Opacity map
-	l_arrayChannels.push_back( _( "Specular" ) );//	eTEXTURE_CHANNEL_SPECULAR	= 0x00000010	//!< Specular map
-	l_arrayChannels.push_back( _( "Height" ) ); //	eTEXTURE_CHANNEL_HEIGHT		= 0x00000020	//!< Height map
-	l_arrayChannels.push_back( _( "Ambient" ) ); //	eTEXTURE_CHANNEL_AMBIENT	= 0x00000040	//!< Ambient map
-	l_arrayChannels.push_back( _( "Gloss" ) ); //	eTEXTURE_CHANNEL_GLOSS		= 0x00000080	//!< Gloss map
-	m_pBoxGeneral = new wxStaticBox( this, wxID_ANY, _( "General" ) );
-	m_pStaticAmbient = new wxStaticText( this, wxID_ANY, _( "Ambient" ) );
-	m_pStaticDiffuse = new wxStaticText( this, wxID_ANY, _( "Diffuse" ) );
-	m_pStaticSpecular = new wxStaticText( this, wxID_ANY, _( "Specular" ) );
-	m_pStaticEmissive = new wxStaticText( this, wxID_ANY, _( "Emissive" ) );
-	m_pButtonAmbient = new wxBitmapButton( this, eID_BUTTON_AMBIENT, wxBitmap(), wxDefaultPosition, l_sizeClrBtn );
-	m_pButtonDiffuse = new wxBitmapButton( this, eID_BUTTON_DIFFUSE, wxBitmap(), wxDefaultPosition, l_sizeClrBtn );
-	m_pButtonSpecular = new wxBitmapButton( this, eID_BUTTON_SPECULAR, wxBitmap(), wxDefaultPosition, l_sizeClrBtn );
-	m_pButtonEmissive = new wxBitmapButton( this, eID_BUTTON_EMISSIVE, wxBitmap(), wxDefaultPosition, l_sizeClrBtn );
-	m_pStaticExponent = new wxStaticText( this, wxID_ANY, _( "Exponent" ) );
-	m_pEditShininess = new wxTextCtrl( this, eID_EDIT_SHININESS, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER | wxBORDER_SIMPLE );
-	m_pEditShininess->Enable( m_bCanEdit );
-	m_pCheckTwoSided = new wxCheckBox( this, eID_CHECK_DOUBLE_FACE, _( "Two sided" ) );
-	m_pCheckTwoSided->Enable( m_bCanEdit );
-	m_pSliderAlpha = new wxSlider( this, eID_SLIDER_ALPHA, 255, 0, 255 );
-	m_pSliderAlpha->Enable( m_bCanEdit );
-	m_pBoxTextures = new wxStaticBox( this, wxID_ANY, _( "Texture Units" ) );
-	m_pComboTextures = new wxComboBox( this, eID_COMBO_TEXTURE_UNITS, _( "New..." ), wxDefaultPosition, wxDefaultSize, wxArrayString(), wxBORDER_SIMPLE | wxCB_READONLY );
-	m_pButtonDeleteTextureUnit = new wxButton( this, eID_BUTTON_DELETE, _( "Delete" ) );
-	m_pPanelTextureUnit = new wxPanel( this, wxID_ANY );
-	m_pButtonShader = new wxButton( this, eID_BUTTON_HAS_SHADER, _( "Edit shaders" ) );
-	m_pStaticPathLabel = new wxStaticText( m_pPanelTextureUnit, wxID_ANY, _( "Image path:" ) + wxString( wxT( " " ) ) );
-	m_pStaticPath = new wxStaticText( m_pPanelTextureUnit, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxST_ELLIPSIZE_START );
-	m_pButtonTextureImage = new wxBitmapButton( m_pPanelTextureUnit, eID_BUTTON_TEXTURE_IMAGE, wxBitmap( m_sizeImage.x, m_sizeImage.y ) );
-	m_pStaticTexChannel = new wxStaticText( m_pPanelTextureUnit, wxID_ANY, _( "Channel" ) );
-	m_pComboTextureChannel = new wxComboBox( m_pPanelTextureUnit, eID_COMBO_TEXTURE_CHANNEL, _( "Diffuse" ), wxDefaultPosition, wxDefaultSize, l_arrayChannels, wxBORDER_SIMPLE | wxCB_READONLY );
+	l_arrayChannels.push_back( _( "Colour"	) ); //	eTEXTURE_CHANNEL_COLOUR		= 0x00000001	//!< Colour map
+	l_arrayChannels.push_back( _( "Diffuse"	) ); //	eTEXTURE_CHANNEL_DIFFUSE	= 0x00000002	//!< Diffuse map
+	l_arrayChannels.push_back( _( "Normal"	) ); //	eTEXTURE_CHANNEL_NORMAL		= 0x00000004	//!< Normal map
+	l_arrayChannels.push_back( _( "Opacity"	) ); //	eTEXTURE_CHANNEL_OPACITY	= 0x00000008	//!< Opacity map
+	l_arrayChannels.push_back( _( "Specular"	) );//	eTEXTURE_CHANNEL_SPECULAR	= 0x00000010	//!< Specular map
+	l_arrayChannels.push_back( _( "Height"	) ); //	eTEXTURE_CHANNEL_HEIGHT		= 0x00000020	//!< Height map
+	l_arrayChannels.push_back( _( "Ambient"	) ); //	eTEXTURE_CHANNEL_AMBIENT	= 0x00000040	//!< Ambient map
+	l_arrayChannels.push_back( _( "Gloss"	) ); //	eTEXTURE_CHANNEL_GLOSS		= 0x00000080	//!< Gloss map
+	m_pBoxGeneral				= new wxStaticBox(	this,				wxID_ANY,					_( "General"	)	);
+	m_pStaticAmbient			= new wxStaticText(	this,				wxID_ANY,					_( "Ambient"	)	);
+	m_pStaticDiffuse			= new wxStaticText(	this,				wxID_ANY,					_( "Diffuse"	)	);
+	m_pStaticSpecular			= new wxStaticText(	this,				wxID_ANY,					_( "Specular"	)	);
+	m_pStaticEmissive			= new wxStaticText(	this,				wxID_ANY,					_( "Emissive"	)	);
+	m_pButtonAmbient			= new wxBitmapButton(	this,				eID_BUTTON_AMBIENT,			wxBitmap(),									wxDefaultPosition, l_sizeClrBtn	);
+	m_pButtonDiffuse			= new wxBitmapButton(	this,				eID_BUTTON_DIFFUSE,			wxBitmap(),									wxDefaultPosition, l_sizeClrBtn	);
+	m_pButtonSpecular			= new wxBitmapButton(	this,				eID_BUTTON_SPECULAR,		wxBitmap(),									wxDefaultPosition, l_sizeClrBtn	);
+	m_pButtonEmissive			= new wxBitmapButton(	this,				eID_BUTTON_EMISSIVE,		wxBitmap(),									wxDefaultPosition, l_sizeClrBtn	);
+	m_pStaticExponent			= new wxStaticText(	this,				wxID_ANY,					_( "Exponent"	)	);
+	m_pEditShininess			= new wxTextCtrl(	this,				eID_EDIT_SHININESS,			wxEmptyString,								wxDefaultPosition, wxDefaultSize,					wxTE_PROCESS_ENTER | wxBORDER_SIMPLE );
+	m_pCheckTwoSided			= new wxCheckBox(	this,				eID_CHECK_DOUBLE_FACE,		_( "Two sided"	)	);
+	m_pSliderAlpha				= new wxSlider(	this,				eID_SLIDER_ALPHA,			255, 0, 255	);
+	m_pBoxTextures				= new wxStaticBox(	this,				wxID_ANY,					_( "Texture Units"	)	);
+	m_pComboTextures			= new wxComboBox(	this,				eID_COMBO_TEXTURE_UNITS,	_( "New..."	),					wxDefaultPosition, wxDefaultSize, wxArrayString(),	wxBORDER_SIMPLE | wxCB_READONLY );
+	m_pButtonDeleteTextureUnit	= new wxButton(	this,				eID_BUTTON_DELETE,			_( "Delete"	)	);
+	m_pPanelTextureUnit			= new wxPanel(	this,				wxID_ANY	);
+	m_pButtonShader				= new wxButton(	this,				eID_BUTTON_HAS_SHADER,		_( "Edit shaders"	)	);
+	m_pStaticPathLabel			= new wxStaticText(	m_pPanelTextureUnit, wxID_ANY,					_( "Image path : "	)	);
+	m_pStaticPath				= new wxStaticText(	m_pPanelTextureUnit, wxID_ANY,					wxEmptyString	);
+	m_pButtonTextureImage		= new wxBitmapButton(	m_pPanelTextureUnit, eID_BUTTON_TEXTURE_IMAGE,	wxBitmap( m_sizeImage.x, m_sizeImage.y )	);
+	m_pStaticTexChannel			= new wxStaticText(	m_pPanelTextureUnit, wxID_ANY,					_( "Channel"	)	);
+	m_pComboTextureChannel		= new wxComboBox(	m_pPanelTextureUnit, eID_COMBO_TEXTURE_CHANNEL,	_( "Diffuse"	),					wxDefaultPosition, wxDefaultSize, l_arrayChannels,	wxBORDER_SIMPLE | wxCB_READONLY );
 	// The material's base colours
-	wxFlexGridSizer * l_pSizerComponents = new wxFlexGridSizer( 2, 4, 5, 5 );
+	wxFlexGridSizer * l_pSizerComponents = new wxFlexGridSizer( 2, 5, 5, 5 );
 	l_pSizerComponents->SetFlexibleDirection( wxVERTICAL );
 	l_pSizerComponents->SetNonFlexibleGrowMode( wxFLEX_GROWMODE_ALL );
 	l_pSizerComponents->Add(	m_pStaticAmbient,			wxSizerFlags( 1 ).Expand()	);
 	l_pSizerComponents->Add(	m_pStaticDiffuse,			wxSizerFlags( 1 ).Expand()	);
 	l_pSizerComponents->Add(	m_pStaticSpecular,			wxSizerFlags( 1 ).Expand()	);
 	l_pSizerComponents->Add(	m_pStaticEmissive,			wxSizerFlags( 1 ).Expand()	);
-	l_pSizerComponents->Add(	m_pButtonAmbient,			wxSizerFlags( 1 ).Expand().Border( wxALL, 1 )	);
-	l_pSizerComponents->Add(	m_pButtonDiffuse,			wxSizerFlags( 1 ).Expand().Border( wxALL, 1 )	);
-	l_pSizerComponents->Add(	m_pButtonSpecular,			wxSizerFlags( 1 ).Expand().Border( wxALL, 1 )	);
-	l_pSizerComponents->Add(	m_pButtonEmissive,			wxSizerFlags( 1 ).Expand().Border( wxALL, 1 )	);
+	l_pSizerComponents->Add(	m_pButtonAmbient,			wxSizerFlags( 1 ).Expand()	);
+	l_pSizerComponents->Add(	m_pButtonDiffuse,			wxSizerFlags( 1 ).Expand()	);
+	l_pSizerComponents->Add(	m_pButtonSpecular,			wxSizerFlags( 1 ).Expand()	);
+	l_pSizerComponents->Add(	m_pButtonEmissive,			wxSizerFlags( 1 ).Expand()	);
 	// The material's additional components (shininess, double faced and alpha)
 	wxBoxSizer * l_pSizerAdditionnal = new wxBoxSizer( wxHORIZONTAL );
 	l_pSizerAdditionnal->Add(	m_pStaticExponent,			wxSizerFlags( 0 ).Border( wxRIGHT,	5 ).Align( wxALIGN_CENTER_VERTICAL )	);
@@ -90,16 +87,15 @@ wxPassPanel::wxPassPanel( wxWindow * p_pParent, Engine * p_pEngine, bool p_bCanE
 	l_pSizerGeneral->Add(	l_pSizerAdditionnal,		wxSizerFlags( 0 ).Border( wxALL,	5 ).Expand()	);
 	// The texture selection and deletion
 	wxBoxSizer * l_pSizerTexSel = new wxBoxSizer( wxHORIZONTAL );
-	l_pSizerTexSel->Add(	m_pComboTextures,			wxSizerFlags( 0 ).Align( wxALIGN_CENTER_VERTICAL )	);
-	l_pSizerTexSel->Add(	m_pButtonDeleteTextureUnit,	wxSizerFlags( 0 ).Align( wxALIGN_CENTER_VERTICAL ).ReserveSpaceEvenIfHidden()	);
+	l_pSizerTexSel->Add(	m_pComboTextures,			wxSizerFlags( 0 )	);
+	l_pSizerTexSel->Add(	m_pButtonDeleteTextureUnit,	wxSizerFlags( 0 ).ReserveSpaceEvenIfHidden()	);
 	// The texture file path
 	wxBoxSizer * l_pSizerTexPath = new wxBoxSizer( wxHORIZONTAL );
 	l_pSizerTexPath->Add(	m_pStaticPathLabel,			wxSizerFlags( 0 ).ReserveSpaceEvenIfHidden()	);
 	l_pSizerTexPath->Add(	m_pStaticPath,				wxSizerFlags( 0 ).ReserveSpaceEvenIfHidden()	);
 	// The texture channel
 	wxBoxSizer * l_pSizerTexChan = new wxBoxSizer( wxHORIZONTAL );
-	l_pSizerTexChan->Add(	m_pStaticTexChannel,		wxSizerFlags( 0 ).Align( wxALIGN_CENTER_VERTICAL ).ReserveSpaceEvenIfHidden()	);
-	l_pSizerTexChan->AddSpacer( 20 );
+	l_pSizerTexChan->Add(	m_pStaticTexChannel,		wxSizerFlags( 0 ).ReserveSpaceEvenIfHidden()	);
 	l_pSizerTexChan->Add(	m_pComboTextureChannel,		wxSizerFlags( 0 ).ReserveSpaceEvenIfHidden()	);
 	// The texture panel
 	wxBoxSizer * l_pSizerTexPanel = new wxBoxSizer( wxVERTICAL );
@@ -139,14 +135,14 @@ void wxPassPanel::SetPass( PassWPtr p_wpPass )
 		wxBitmap	l_bmpDiffuse(	l_sizeClrBtn.x, l_sizeClrBtn.y, 24 );
 		wxBitmap	l_bmpSpecular(	l_sizeClrBtn.x, l_sizeClrBtn.y, 24 );
 		wxBitmap	l_bmpEmissive(	l_sizeClrBtn.x, l_sizeClrBtn.y, 24 );
-		wxPen		l_penAmbient(	wxColour( l_pPass->GetAmbient().to_bgr()	) );
-		wxPen		l_penDiffuse(	wxColour( l_pPass->GetDiffuse().to_bgr()	) );
-		wxPen		l_penSpecular(	wxColour( l_pPass->GetSpecular().to_bgr()	) );
-		wxPen		l_penEmissive(	wxColour( l_pPass->GetEmissive().to_bgr()	) );
-		wxBrush		l_brushAmbient(	wxColour( l_pPass->GetAmbient().to_bgr()	) );
-		wxBrush		l_brushDiffuse(	wxColour( l_pPass->GetDiffuse().to_bgr()	) );
-		wxBrush		l_brushSpecular(	wxColour( l_pPass->GetSpecular().to_bgr()	) );
-		wxBrush		l_brushEmissive(	wxColour( l_pPass->GetEmissive().to_bgr()	) );
+		wxPen		l_penAmbient(	wxColour( l_pPass->GetAmbient().to_rgb()	) );
+		wxPen		l_penDiffuse(	wxColour( l_pPass->GetDiffuse().to_rgb()	) );
+		wxPen		l_penSpecular(	wxColour( l_pPass->GetSpecular().to_rgb()	) );
+		wxPen		l_penEmissive(	wxColour( l_pPass->GetEmissive().to_rgb()	) );
+		wxBrush		l_brushAmbient(	wxColour( l_pPass->GetAmbient().to_rgb()	) );
+		wxBrush		l_brushDiffuse(	wxColour( l_pPass->GetDiffuse().to_rgb()	) );
+		wxBrush		l_brushSpecular(	wxColour( l_pPass->GetSpecular().to_rgb()	) );
+		wxBrush		l_brushEmissive(	wxColour( l_pPass->GetEmissive().to_rgb()	) );
 		wxMemoryDC l_dc;
 		l_dc.SelectObject(	l_bmpAmbient	);
 		l_dc.SetBrush(	l_brushAmbient	);
@@ -393,6 +389,10 @@ void wxPassPanel::DoShowPassFields( bool p_bShow )
 	m_pCheckTwoSided->Show(	p_bShow );
 	m_pEditShininess->Show(	p_bShow );
 	m_pSliderAlpha->Show(	p_bShow );
+	m_pButtonAmbient->Enable(	m_bCanEdit );
+	m_pButtonDiffuse->Enable(	m_bCanEdit );
+	m_pButtonSpecular->Enable(	m_bCanEdit );
+	m_pButtonEmissive->Enable(	m_bCanEdit );
 	m_pCheckTwoSided->Enable(	m_bCanEdit );
 	m_pEditShininess->Enable(	m_bCanEdit );
 	m_pSliderAlpha->Enable(	m_bCanEdit );
@@ -465,7 +465,7 @@ void wxPassPanel::OnAmbientColour( wxCommandEvent & p_event )
 {
 	PassSPtr l_pPass = m_wpPass.lock();
 
-	if ( l_pPass && m_bCanEdit )
+	if ( l_pPass )
 	{
 		wxColourDialog l_colourDialor( this );
 
@@ -487,7 +487,7 @@ void wxPassPanel::OnDiffuseColour( wxCommandEvent & p_event )
 {
 	PassSPtr l_pPass = m_wpPass.lock();
 
-	if ( l_pPass && m_bCanEdit )
+	if ( l_pPass )
 	{
 		wxColourDialog l_colourDialor( this );
 
@@ -509,7 +509,7 @@ void wxPassPanel::OnSpecularColour( wxCommandEvent & p_event )
 {
 	PassSPtr l_pPass = m_wpPass.lock();
 
-	if ( l_pPass && m_bCanEdit )
+	if ( l_pPass )
 	{
 		wxColourDialog l_colourDialor( this );
 
@@ -531,7 +531,7 @@ void wxPassPanel::OnEmissiveColour( wxCommandEvent & p_event )
 {
 	PassSPtr l_pPass = m_wpPass.lock();
 
-	if ( l_pPass && m_bCanEdit )
+	if ( l_pPass )
 	{
 		wxColourDialog l_colourDialor( this );
 
@@ -580,7 +580,7 @@ void wxPassPanel::OnTextureImage( wxCommandEvent & p_event )
 				l_pTexture->SetImage( l_pImage->GetPixels() );
 				m_pTextureUnit.lock()->SetTexture( l_pTexture );
 				SetMaterialImage( m_pTextureUnit.lock(), 78, 78 );
-				m_pEngine->PostEvent( MakeInitialiseEvent( *l_pPass->GetParent() ) );
+				m_pEngine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_pPass->GetParent() ) );
 			}
 		}
 	}

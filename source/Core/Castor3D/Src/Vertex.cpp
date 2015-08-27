@@ -1,4 +1,4 @@
-﻿#include "Vertex.hpp"
+#include "Vertex.hpp"
 
 using namespace Castor;
 

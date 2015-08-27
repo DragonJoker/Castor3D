@@ -25,12 +25,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GlRender
 {
 	class GlFrameVariableBase
-		: public Castor::NonCopyable
+		:	public Castor::NonCopyable
 	{
 	public:
 		GlFrameVariableBase( OpenGl & p_gl, uint32_t * p_uiProgram );
 		virtual ~GlFrameVariableBase();
-		virtual void Bind() = 0;
+		virtual void Apply() = 0;
 
 		inline uint32_t GetGlIndex() const
 		{
@@ -39,9 +39,9 @@ namespace GlRender
 
 	protected:
 		void GetVariableLocation( char const * p_pVarName );
-		template <typename Type> void DoBind( Type const * p_pValue, uint32_t p_uiOcc );
-		template <typename Type, int Count> void DoBind( Type const * p_pValue, uint32_t p_uiOcc );
-		template <typename Type, int Rows, int Columns> void DoBind( Type const * p_pValue, uint32_t p_uiOcc );
+		template <typename Type> void DoApply( Type const * p_pValue, uint32_t p_uiOcc );
+		template <typename Type, int Count> void DoApply( Type const * p_pValue, uint32_t p_uiOcc );
+		template <typename Type, int Rows, int Columns> void DoApply( Type const * p_pValue, uint32_t p_uiOcc );
 
 	protected:
 		uint32_t m_iGlIndex;

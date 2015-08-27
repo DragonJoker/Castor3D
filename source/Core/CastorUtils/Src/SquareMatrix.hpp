@@ -31,29 +31,33 @@ namespace Castor
 	\~french
 	\brief		Représentation d'une matrice carrée
 	*/
-	template< typename T, uint32_t Rows >
+	template< typename T, uint32_t Rows>
 	class SquareMatrix
-		: public Matrix< T, Rows, Rows >
+		: public Matrix<T, Rows, Rows>
 	{
 	private:
-		typedef SquareMatrix< __value_type, Rows > __square_type;
-		typedef SquareMatrix< __value_type, Rows > __transpose;
+		typedef T __value_type;
+		typedef SquareMatrix<__value_type, Rows> __square_type;
+		typedef SquareMatrix<__value_type, Rows> __transpose;
+		typedef Coords<__value_type, Rows> __row;
+		typedef Coords<__value_type, Rows> __column;
+		typedef Castor::Policy<__value_type> __policy;
 
 	public:
-		//!\~english Typedef on the policy	\~french Typedef sur la politique
-		typedef typename Matrix< __value_type, Rows, Rows >::policy policy;
 		//!\~english Typedef on the data type	\~french Typedef sur le type de données
-		typedef typename Matrix< __value_type, Rows, Rows >::value_type value_type;
+		typedef __value_type value_type;
 		//!\~english Typedef on the column type	\~french Typedef sur le type de colonne
-		typedef typename Matrix< __value_type, Rows, Rows >::col_type col_type;
+		typedef __column col_type;
 		//!\~english Typedef on the line type	\~french Typedef sur le type de ligne
-		typedef typename Matrix< __value_type, Rows, Rows >::row_type row_type;
+		typedef __row row_type;
 		//!\~english Typedef on the transposed matrix type	\~french Typedef sur le type de matrice transposée
-		typedef __square_type transpose_type;
+		typedef __transpose transpose_type;
+		//!\~english Typedef on the policy	\~french Typedef sur la politique
+		typedef __policy policy;
 		//!\~english Typedef on this matrix type	\~french Typedef sur le type de cette matrice
 		typedef __square_type square_matrix_type;
 		//!\~english Typedef on this matrix type	\~french Typedef sur le type de cette matrice
-		typedef Matrix< T, Rows, Rows > my_matrix_type;
+		typedef Matrix<T, Rows, Rows> my_matrix_type;
 		//!\~english Typedef on this matrix type	\~french Typedef sur le type de cette matrice
 		typedef __square_type my_square_type;
 
@@ -624,6 +628,85 @@ namespace Castor
 	 */
 	template< typename T, uint32_t Rows > SquareMatrix< T, Rows > operator -( SquareMatrix< T, Rows > const & p_matrix );
 }
+
+/**
+ *\~english
+ *\brief			Stream operator
+ *\param[in,out]	p_streamOut	The stream receiving matrix's data
+ *\param[in]		p_matrix	The input matrix
+ *\return			A reference to the stream
+ *\~french
+ *\brief			Opérateur de flux
+ *\param[in,out]	p_streamOut	Le flux qui reçoit les données de la matrice
+ *\param[in]		p_matrix	La matrice entré
+ *\return			Une référence sur le flux
+ */
+template< typename T, uint32_t Rows > Castor::String & operator <<( Castor::String & p_streamOut, Castor::SquareMatrix< T, Rows > const & p_matrix );
+/**
+ *\~english
+ *\brief			Stream operator
+ *\param[in,out]	p_streamIn	The stream holding matrix's data
+ *\param[in,out]	p_matrix	The output matrix
+ *\return			A reference to the stream
+ *\~french
+ *\brief			Opérateur de flux
+ *\param[in,out]	p_streamIn	Le flux qui contient les données de la matrice
+ *\param[in,out]	p_matrix	La matrice sortie
+ *\return			Une référence sur le flux
+ */
+template< typename T, uint32_t Rows > Castor::String & operator >>( Castor::String & p_streamIn, Castor::SquareMatrix< T, Rows > & p_matrix );
+/**
+ *\~english
+ *\brief			Stream operator
+ *\param[in,out]	p_streamOut	The stream receiving matrix's data
+ *\param[in]		p_matrix	The input matrix
+ *\return			A reference to the stream
+ *\~french
+ *\brief			Opérateur de flux
+ *\param[in,out]	p_streamOut	Le flux qui reçoit les données de la matrice
+ *\param[in]		p_matrix	La matrice entré
+ *\return			Une référence sur le flux
+ */
+template< typename T, uint32_t Rows > std::ostream & operator <<( std::ostream & p_streamOut, Castor::SquareMatrix< T, Rows > const & p_matrix );
+/**
+ *\~english
+ *\brief			Stream operator
+ *\param[in,out]	p_streamIn	The stream holding matrix's data
+ *\param[in,out]	p_matrix	The output matrix
+ *\return			A reference to the stream
+ *\~french
+ *\brief			Opérateur de flux
+ *\param[in,out]	p_streamIn	Le flux qui contient les données de la matrice
+ *\param[in,out]	p_matrix	La matrice sortie
+ *\return			Une référence sur le flux
+ */
+template< typename T, uint32_t Rows > std::istream & operator >>( std::istream & p_streamIn, Castor::SquareMatrix< T, Rows > & p_matrix );
+/**
+ *\~english
+ *\brief			Stream operator
+ *\param[in,out]	p_streamOut	The stream receiving matrix's data
+ *\param[in]		p_matrix	The input matrix
+ *\return			A reference to the stream
+ *\~french
+ *\brief			Opérateur de flux
+ *\param[in,out]	p_streamOut	Le flux qui reçoit les données de la matrice
+ *\param[in]		p_matrix	La matrice entré
+ *\return			Une référence sur le flux
+ */
+template< typename T, uint32_t Rows > std::wostream & operator <<( std::wostream & p_streamOut, Castor::SquareMatrix< T, Rows > const & p_matrix );
+/**
+ *\~english
+ *\brief			Stream operator
+ *\param[in,out]	p_streamIn	The stream holding matrix's data
+ *\param[in,out]	p_matrix	The output matrix
+ *\return			A reference to the stream
+ *\~french
+ *\brief			Opérateur de flux
+ *\param[in,out]	p_streamIn	Le flux qui contient les données de la matrice
+ *\param[in,out]	p_matrix	La matrice sortie
+ *\return			Une référence sur le flux
+ */
+template< typename T, uint32_t Rows > std::wistream & operator >>( std::wistream & p_streamIn, Castor::SquareMatrix< T, Rows > & p_matrix );
 
 #include "SquareMatrix.inl"
 

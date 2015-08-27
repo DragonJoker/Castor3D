@@ -9,11 +9,11 @@ using namespace Castor;
 namespace Dx11Render
 {
 	DxTextureAttachment::DxTextureAttachment( DxRenderSystem * p_pRenderSystem, DynamicTextureSPtr p_pTexture )
-		: TextureAttachment( p_pTexture )
-		, m_pOldSurface( NULL )
-		, m_dwAttachment( 0xFFFFFFFF )
-		, m_pRenderSystem( p_pRenderSystem )
-		, m_pDxTexture( std::static_pointer_cast< DxDynamicTexture >( p_pTexture ) )
+		:	TextureAttachment( p_pTexture )
+		,	m_pOldSurface( NULL )
+		,	m_dwAttachment( 0xFFFFFFFF )
+		,	m_pRenderSystem( p_pRenderSystem )
+		,	m_pDxTexture( std::static_pointer_cast< DxDynamicTexture >( p_pTexture ) )
 	{
 	}
 
@@ -25,17 +25,17 @@ namespace Dx11Render
 	bool DxTextureAttachment::DownloadBuffer( PxBufferBaseSPtr p_pBuffer )
 	{
 		bool l_bReturn = false;
-		//D3D11_MAPPED_SUBRESOURCE l_mappedResource;
-		//ID3D11Resource * l_pResource;
-		//ID3D11RenderTargetView * l_pSurface = m_pDxTexture.lock()->GetRenderTargetView();
-		//l_pSurface->GetResource( &l_pResource );
-		//HRESULT l_hr = m_pRenderSystem->GetDeviceContext()->Map( l_pResource, 0, D3D11_MAP_READ, 0, &l_mappedResource );
+		// 	D3D11_MAPPED_SUBRESOURCE l_mappedResource;
+		// 	ID3D11Resource * l_pResource;
+		// 	ID3D11RenderTargetView * l_pSurface = m_pDxTexture.lock()->GetRenderTargetView();
+		// 	l_pSurface->GetResource( &l_pResource );
+		// 	HRESULT l_hr = m_pRenderSystem->GetDeviceContext()->Map( l_pResource, 0, D3D11_MAP_READ, 0, &l_mappedResource );
 		//
-		//if( l_hr == S_OK && l_mappedResource.pData != NULL )
-		//{
-		//	l_bReturn = true;
-		//	std::memcpy( p_pBuffer->ptr(), l_mappedResource.pData, p_pBuffer->size() );
-		//}
+		// 	if( l_hr == S_OK && l_mappedResource.pData != NULL )
+		// 	{
+		// 		l_bReturn = true;
+		// 		std::memcpy( p_pBuffer->ptr(), l_mappedResource.pData, p_pBuffer->size() );
+		// 	}
 		return l_bReturn;
 	}
 
@@ -50,7 +50,7 @@ namespace Dx11Render
 		l_pBuffer->GetSurface( GetAttachmentPoint() )->GetResource( &l_pDstSurface );
 		m_pDxTexture.lock()->GetShaderResourceView()->GetResource( &l_pSrcSurface );
 
-		if ( l_pDstSurface && l_pSrcSurface )
+		if ( l_pDstSurface )
 		{
 			D3D11_BOX l_box = { 0 };
 			l_box.front = 0;
@@ -59,8 +59,10 @@ namespace Dx11Render
 			l_box.right = l_rcSrc.right;
 			l_box.top = l_rcSrc.top;
 			l_box.bottom = l_rcSrc.bottom;
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+			ID3D11DeviceContext * l_pDeviceContext;
+			m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
 			l_pDeviceContext->CopySubresourceRegion( l_pDstSurface, 0, l_rcDst.left, l_rcDst.top, 0, l_pSrcSurface, 0, &l_box );
+			l_pDeviceContext->Release();
 		}
 
 		SafeRelease( l_pSrcSurface );
@@ -74,6 +76,34 @@ namespace Dx11Render
 		//	return m_pDxTexture.lock()->GetDxSurface();
 	}
 
+	bool DxTextureAttachment::Bind()
+	{
+		ID3D11DeviceContext * l_pDeviceContext;
+		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+		ID3D11DepthStencilView * l_pView;
+		ID3D11RenderTargetView * l_pSurface = m_pDxTexture.lock()->GetRenderTargetView();
+		l_pDeviceContext->OMGetRenderTargets( 1, &m_pOldSurface, &l_pView );
+		l_pDeviceContext->OMSetRenderTargets( 1, &l_pSurface, l_pView );
+		SafeRelease( l_pView );
+		l_pDeviceContext->Release();
+		return true;
+	}
+
+	void DxTextureAttachment::Unbind()
+	{
+		if ( m_pOldSurface )
+		{
+			ID3D11DeviceContext * l_pDeviceContext;
+			m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
+			ID3D11DepthStencilView * l_pView;
+			l_pDeviceContext->OMGetRenderTargets( 1, NULL, &l_pView );
+			l_pDeviceContext->OMSetRenderTargets( 1, &m_pOldSurface, l_pView );
+			SafeRelease( l_pView );
+			SafeRelease( m_pOldSurface );
+			l_pDeviceContext->Release();
+		}
+	}
+
 	bool DxTextureAttachment::DoAttach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer )
 	{
 		m_dwAttachment = DirectX11::Get( p_eAttachment );
@@ -83,7 +113,6 @@ namespace Dx11Render
 
 	void DxTextureAttachment::DoDetach()
 	{
-		m_pFrameBuffer.reset();
-		m_dwAttachment = 0;
+		Unbind();
 	}
 }

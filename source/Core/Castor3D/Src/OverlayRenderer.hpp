@@ -1,4 +1,4 @@
-Ôªø/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -97,7 +97,7 @@ namespace Castor3D
 		 *\param[in]	p_size	The render window size
 		 *\~french
 		 *\brief		Commence le rendu des incrustations
-		 *\param[in]	p_size	La taille de la fen√™tre de rendu
+		 *\param[in]	p_size	La taille de la fenÍtre de rendu
 		 */
 		void BeginRender( Castor::Size const & p_size );
 		/**
@@ -111,7 +111,7 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Retrieves the current render target size
 		 *\~french
-		 *\brief		R√©cup√®re les dimensions de la cible du rendu courant
+		 *\brief		RÈcupËre les dimensions de la cible du rendu courant
 		 */
 		Castor::Size const & GetSize()const
 		{
@@ -125,7 +125,7 @@ namespace Castor3D
 		 *\param[in]	p_uiFlags	Bitwise ORed eTEXTURE_CHANNEL
 		 *\return		The program
 		 *\~french
-		 *\brief		R√©cup√®re un programme compil√© en utilisant les indicateurs donn√©s
+		 *\brief		RÈcupËre un programme compilÈ en utilisant les indicateurs donnÈs
 		 *\param[in]	p_uiFlags	Combinaison de eTEXTURE_CHANNEL
 		 *\return		Le programme
 		 */
@@ -150,101 +150,54 @@ namespace Castor3D
 		 *\param[in]	p_uiFlags	Bitwise ORed eTEXTURE_CHANNEL
 		 *\return		The program
 		 *\~french
-		 *\brief		R√©cup√®re un programme de panneau compil√© en utilisant les indicateurs donn√©s
+		 *\brief		RÈcupËre un programme de panneau compilÈ en utilisant les indicateurs donnÈs
 		 *\param[in]	p_uiFlags	Combinaison de eTEXTURE_CHANNEL
 		 *\return		Le programme
 		 */
-		ShaderProgramBaseSPtr DoGetPanelProgram( uint32_t p_uiFlags );
+		ShaderProgramBaseSPtr GetPanelProgram( uint32_t p_uiFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves a text program compiled using given flags
 		 *\param[in]	p_uiFlags	Bitwise ORed eTEXTURE_CHANNEL
 		 *\return		The program
 		 *\~french
-		 *\brief		R√©cup√®re un programme de texte compil√© en utilisant les indicateurs donn√©s
+		 *\brief		RÈcupËre un programme de texte compilÈ en utilisant les indicateurs donnÈs
 		 *\param[in]	p_uiFlags	Combinaison de eTEXTURE_CHANNEL
 		 *\return		Le programme
 		 */
-		ShaderProgramBaseSPtr DoGetTextProgram( uint32_t p_uiFlags );
-		/**
-		 *\~english
-		 *\brief		Creates a GeometryBuffers that can contain 1000 characters.
-		 *\remarks		Adds this GeometryBuffers to the text GeometryBuffers array.
-		 *\return		The created GeometryBuffers.
-		 *\~french
-		 *\brief		Cr√©e un GeometryBuffers pouvant contenir 1000 caract√®res.
-		 *\remarks		Ajoute de GeometryBuffers au tableau de GeometryBuffers de texte.
-		 *\return		Le GeometryBuffers cr√©√©.
-		 */
-		GeometryBuffersSPtr DoCreateTextGeometryBuffers();
-		/**
-		 *\~english
-		 *\brief		Function to draw an overlay
-		 *\param[in]	p_material			The overlay material
-		 *\param[in]	p_pipeline			The pipeline
-		 *\param[in]	p_geometryBuffers	The overlay geometry buffers
-		 *\param[in]	p_texture			An optional font texture
-		 *\param[in]	p_count				The vertex count
-		 *\~french
-		 *\brief		Fonction de dessin d'une incrustation
-		 *\param[in]	p_material			The overlay material
-		 *\param[in]	p_pipeline			Le pipeline
-		 *\param[in]	p_geometryBuffers	Les buffer de la g√©om√©trie de l'incrustation
-		 *\param[in]	p_texture			Une texture de polices optionnelle
-		 *\param[in]	p_count				Le nombre de sommets
-		 */
-		void DoDrawItem( Material & p_material, Pipeline & p_pipeline, GeometryBuffersSPtr p_geometryBuffers, DynamicTextureSPtr p_texture, uint32_t p_count );
-		/**
-		 *\~english
-		 *\brief		Fills a GeometryBuffers from a part of a text vertex array
-		 *\param[in]	p_count	The number of vertex to copy in the GeometryBuffers
-		 *\param[in]	p_it	The beginning of the vertex array
-		 *\param[in]	p_index	The current index in the text GeometryBuffers array
-		 *\return		The used GeometryBuffers.
-		 *\~french
-		 *\brief		Remplit un GeometryBuffers d'une partie d'un tableau de sommets pour texte
-		 *\param[in]	p_count	Le nombre de sommets √† copier dans le GeometryBuffers
-		 *\param[in]	p_it	Le d√©but du tableau de sommets
-		 *\param[in]	p_index	L'indice courant dans le tableau de GeometryBuffers de texte
-		 *\return		Le GeometryBuffers utilis√©.
-		 */
-		GeometryBuffersSPtr DoFillTextPart( int32_t p_count, OverlayCategory::VertexArray::const_iterator & p_it, uint32_t & p_index );
+		ShaderProgramBaseSPtr GetTextProgram( uint32_t p_uiFlags );
 
 	protected:
-		//!\~english Geometry buffers for panels	\~french Tampons de g√©ometrie pour les panneaux
+		//!\~english Pointer over geometry vertex buffer	\~french Pointeur sur le tampon de sommets
+		VertexBufferWPtr m_pVertexBuffer;
+		//!\~english Geometry indices buffer	\~french Le tampon de sommets
+		IndexBufferWPtr m_pIndexBuffer;
+		//!\~english Geometry buffers for panels	\~french Tampons de gÈometrie pour les panneaux
 		GeometryBuffersSPtr m_pPanelGeometryBuffer;
-		//!\~english Geometry buffers for borders	\~french Tampons de g√©ometrie pour les bordures
+		//!\~english Geometry buffers for borders	\~french Tampons de gÈometrie pour les bordures
 		GeometryBuffersSPtr m_pBorderGeometryBuffer;
-		//!\~english The GeometryBuffers used to render texts	\~french Les GeometryBuffers utilis√© pour rendre les textes
-		std::vector< GeometryBuffersSPtr > m_pTextsGeometryBuffers;
-		//!\~english The buffer elements declaration	\~french La d√©claration des √©l√©ments du tampon
+		//!\~english The GeometryBuffers used to render one character	\~french Le GeometryBuffers utilisÈ pour rendre un caractËre
+		GeometryBuffersSPtr m_pTextGeometryBuffers;
+		//!\~english The buffer elements declaration	\~french La dÈclaration des ÈlÈments du tampon
 		BufferDeclarationSPtr m_pDeclaration;
 		//!\~english The render system	\~french Le render system
 		RenderSystem * m_pRenderSystem;
 		//!\~english The current render target size	\~french Les dimensions de la cible du rendu courant
 		Castor::Size m_size;
-		//!\~english The shader programs used to render a panel (used for borders too)	\~french Les programmes de shader utilis√©s pour rendre un panneau (utilis√© pour les bords aussi)
+		//!\~english The shader programs used to render a panel (used for borders too)	\~french Les programmes de shader utilisÈs pour rendre un panneau (utilisÈ pour les bords aussi)
 		std::map< uint32_t, ShaderProgramBaseSPtr > m_mapPanelPrograms;
-		//!\~english The shader programs used to render texts	\~french Les programmes de shader utilis√©s pour rendre les textes
+		//!\~english The shader programs used to render texts	\~french Les programmes de shader utilisÈs pour rendre les textes
 		std::map< uint32_t, ShaderProgramBaseSPtr > m_mapTextPrograms;
 		//!\~english Text texture sampler	\~french Echantillonneur de la texture de texte
 		OneTextureFrameVariableSPtr m_mapText;
-		//!\~english The previously rendered BorderPanelOverlay z-index	\~french Le z-index du pr√©cedent BorderPanelOverlay rendu
+		//!\~english The previously rendered BorderPanelOverlay z-index	\~french Le z-index du prÈcedent BorderPanelOverlay rendu
 		int m_previousBorderZIndex;
-		//!\~english The previously rendered PanelOverlay z-index	\~french Le z-index du pr√©cedent PanelOverlay rendu
+		//!\~english The previously rendered PanelOverlay z-index	\~french Le z-index du prÈcedent PanelOverlay rendu
 		int m_previousPanelZIndex;
-		//!\~english The previously rendered TextOverlay z-index	\~french Le z-index du pr√©cedent TextOverlay rendu
+		//!\~english The previously rendered TextOverlay z-index	\~french Le z-index du prÈcedent TextOverlay rendu
 		int m_previousTextZIndex;
-		//!\~english The previously rendered text	\~french Le texte rendu pr√©c√©demment
+		//!\~english The previously rendered text	\~french Le texte rendu prÈcÈdemment
 		Castor::String m_previousCaption;
-		//!\~english Panel overlays vertex array (quad definition)	\~french Tableau de vertex (d√©finition du quad) pour les incrustations panneau
-		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_panelVertex;
-		//!	6 * [2 uint (vertex position) + 2 float (texture coordinates)]
-		uint8_t m_panelBuffer[6 * 2 * 2 * 4];
-		//!\~english Border panel overlays vertex array (quad definition)	\~french Tableau de vertex (d√©finition du quad) pour les incrustations bordure
-		std::array< Castor3D::BufferElementGroupSPtr, 8 * 6 > m_borderVertex;
-		//!	8 * 6 * [2 uint (vertex position) + 2 float (texture coordinates)]
-		uint8_t m_borderBuffer[8 * 6 * 2 * 2 * 4];
 	};
 }
 

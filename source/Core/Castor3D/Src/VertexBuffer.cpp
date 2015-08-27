@@ -1,4 +1,4 @@
-﻿#include "VertexBuffer.hpp"
+#include "VertexBuffer.hpp"
 #include "RenderSystem.hpp"
 
 using namespace Castor;

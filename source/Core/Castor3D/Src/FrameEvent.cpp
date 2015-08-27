@@ -1,4 +1,4 @@
-﻿#include "FrameEvent.hpp"
+#include "FrameEvent.hpp"
 
 namespace Castor3D
 {

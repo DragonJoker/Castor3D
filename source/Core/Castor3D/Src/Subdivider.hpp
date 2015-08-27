@@ -40,47 +40,36 @@ namespace Castor3D
 		typedef void SubdivisionEndFunction( void *, Subdivider * );
 		typedef SubdivisionEndFunction * PSubdivisionEndFunction;
 
+		SubmeshSPtr						m_submesh;			//!< The submesh being subdivided
+		FacePtrArray					m_arrayFaces;
+		Castor::Point3r					m_ptDivisionCenter;
+		std::shared_ptr< std::thread >	m_pThread;
+		bool							m_bGenerateBuffers;
+		PSubdivisionEndFunction			m_pfnSubdivisionEnd;
+		void 			*				m_pArg;
+		bool							m_bThreaded;
+		std::recursive_mutex			m_mutex;
+
 	public:
 		/**
-		 *\~english
-		 *\brief		Default constructor
-		 *\~french
-		 *\brief		Constructeur par défaut
+		 * Constructor
+		 *\param[in]	p_submesh	The submesh to subdivide
 		 */
 		Subdivider();
 		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
+		 * Destructor
 		 */
 		virtual ~Subdivider();
 		/**
-		 *\~english
-		 *\brief		Main subdivision function
-		 *\param[in]	p_submesh			The submesh to subdivide
-		 *\param[in]	p_occurences		The subdivisions occurences
-		 *\param[in]	p_bGenerateBuffers	Tells if the buffers must be generated after subdivision
-		 *\param[in]	p_bThreaded			Tells if subdivision must be threaded
-		 *\~french
-		 *\brief		Fonction de subdivision
-		 *\param[in]	p_submesh			Le sous maillage à subdiviser
-		 *\param[in]	p_occurences		Le nombre de subdivisions à effectuer
-		 *\param[in]	p_bGenerateBuffers	Dit si les tampons doivent être générés
-		 *\param[in]	p_bThreaded			Dit si la subdivision doit être threadée
+		 * Main subdivision function, must be implemented by children classes
+		 *\param[in]	p_pCenter	The point used as center to compute new points
 		 */
-		virtual void Subdivide( SubmeshSPtr p_pSubmesh, int p_occurences, bool p_bGenerateBuffers = true, bool p_bThreaded = false );
+		void Subdivide( SubmeshSPtr p_pSubmesh, Castor::Point3r * p_pCenter, bool p_bGenerateBuffers = true, bool p_bThreaded = false );
 		/**
-		 *\~english
-		 *\brief		Defines a function to execute when the threaded subdivision ends
-		 *\remarks		That function *MUST NEITHER* destroy the thread *NOR* the subdivider
+		 * Defines a function to execute when the threaded subdivision ends
+		 * That function *MUST NEITHER* destroy the thread *NOR* the subdivider
 		 *\param[in]	p_pfnSubdivisionEnd	Pointer over the function to execute
-		 *\param[in]	p_pArg				Optional parameter for the function
-		 *\~french
-		 *\brief		Définit une fonction qui sera appelée lors de la fin de la subdivision
-		 *\remarks		Cette fonction ne doit pas détruire le thread ni le subdiviseur
-		 *\param[in]	p_pfnSubdivisionEnd	Pointeur de la fonction à exécuter
-		 *\param[in]	p_pArg				Paramètre optionnel de la fonction
+		 *\param[in]	p_pArg	Optional parameter for the function
 		 */
 		void SetThreadEndFunction( PSubdivisionEndFunction p_pfnSubdivisionEnd, void * p_pArg = nullptr )
 		{
@@ -88,187 +77,58 @@ namespace Castor3D
 			m_pArg = p_pArg;
 		}
 		/**
-		 *\~english
-		 *\brief		Cleans all member variables
-		 *\~french
-		 *\brief		Nettoie tous les membres
+		 * Cleans all member variables, making this divider dummy
 		 */
 		virtual void Cleanup();
 		/**
-		 *\~english
-		 *\brief		Creates and adds a vertex to my list
-		 *\param[in]	x, y, z	The vertex coordinates
-		 *\return		The created vertex
-		 *\~french
-		 *\brief		Crée et ajoute un sommet à la liste
-		 *\param[in]	x, y, z	Les coordonnées de la position du sommet
-		 *\return		Le sommet créé
+		 * Creates and adds a vertex to my list
+		 *\param[in]	x	The vertex X coordinate
+		 *\param[in]	y	The vertex Y coordinate
+		 *\param[in]	z	The vertex Z coordinate
+		 *\return	The created vertex
 		 */
 		BufferElementGroupSPtr AddPoint( real x, real y, real z );
 		/**
-		 *\~english
-		 *\brief		Adds a vertex to my list
+		 * Adds a vertex to my list
 		 *\param[in]	p_v	The vertex to add
-		 *\return		The created vertex
-		 *\~french
-		 *\brief		Crée et ajoute un sommet à la liste
-		 *\param[in]	p_v	La position du sommet à ajouter
-		 *\return		Le sommet créé
+		 *\return	The vertex
 		 */
 		BufferElementGroupSPtr AddPoint( Castor::Point3r const & p_v );
 		/**
-		 *\~english
-		 *\brief		Creates and adds a vertex to my list
+		 * Creates and adds a vertex to my list
 		 *\param[in]	p_v	The vertex coordinates
-		 *\return		The created vertex
-		 *\~french
-		 *\brief		Crée et ajoute un sommet à la liste
-		 *\param[in]	p_v	Les coordonnées de la position du sommet à ajouter
-		 *\return		Le sommet créé
+		 *\return	The created vertex
 		 */
 		BufferElementGroupSPtr AddPoint( real * p_v );
 		/**
-		 *\~english
-		 *\brief		Creates and adds a face
+		 * Creates and adds a face to the wanted smoothgroup
 		 *\param[in]	a	The first face's vertex index
 		 *\param[in]	b	The second face's vertex index
 		 *\param[in]	c	The third face's vertex index
-		 *\return		The created face
-		 *\~french
-		 *\brief		Crée et ajoute une face
-		 *\param[in]	a	L'indice du premier sommet de la face
-		 *\param[in]	b	L'indice du second sommet de la face
-		 *\param[in]	c	L'indice du troisième sommet de la face
-		 *\return		La face créée
+		 *\param[in]	p_sgIndex	The wanted smoothing group index
+		 *\return	The created face
 		 */
 		virtual FaceSPtr AddFace( uint32_t a, uint32_t b, uint32_t c );
 		/**
-		 *\~english
-		 *\brief		Tests if the given Point3r is in mine
+		 * Tests if the given Point3r is in mine
 		 *\param[in]	p_vertex	The vertex to test
-		 *\param[in]	p_precision	The comparison precision
-		 *\return		The index of the vertex equal to parameter, -1 if not found
-		 *\~french
-		 *\brief		Teste si le point donné fait partie de ceux de ce submesh
-		 *\param[in]	p_vertex	Le point à tester
-		 *\param[in]	p_precision	La précision de comparaison
-		 *\return		L'index du point s'il a été trouvé, -1 sinon
+		 *\return	The index of the vertex equal to parameter, -1 if not found
 		 */
-		virtual int IsInMyPoints( Castor::Point3r const & p_vertex, double p_precision );
-		/**
-		 *\~english
-		 *\brief		Retrieves the points count
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le nombre de points
-		 *\return		La valeur
-		 */
+		virtual int IsInMyPoints( Castor::Point3r const & p_vertex );
 		uint32_t GetNbPoints()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the wanted point
-		 *\param[in]	i	The point index
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le point voulu
-		 *\param[in]	i	L'indice du point
-		 *\return		La valeur
-		 */
 		BufferElementGroupSPtr GetPoint( uint32_t i )const;
 
 	protected:
+		static uint32_t DoSubdivideThreaded( Subdivider * p_pThis );
 		/**
-		 *\~english
-		 *\brief		Threaded subdivision function
-		 *\~french
-		 *\brief		Fonction de subdivision du thread
-		 */
-		uint32_t DoSubdivideThreaded();
-		/**
-		 *\~english
-		 *\brief		Checks if the given point is in my list and if not creates and adds it
-		 *\param[in]	p_v	The vertex coordinates
-		 *\return		The created vertex
-		 *\~french
-		 *\brief		Vérifie si le point donnée est déjà dans la liste, et sinon le crée et l'ajoute
-		 *\param[in]	p_v	Les coordonnées de la position du sommet à ajouter
-		 *\return		Le sommet créé
-		 */
-		Castor3D::BufferElementGroupSPtr DoTryAddPoint( Castor::Point3r const & p_point );
-		/**
-		 *\~english
-		 *\brief		Main subdivision function
-		 *\param[in]	p_submesh			The submesh to subdivide
-		 *\param[in]	p_bGenerateBuffers	Tells if the buffers must be generated after subdivision
-		 *\param[in]	p_bThreaded			Tells if subdivision must be threaded
-		 *\~french
-		 *\brief		Fonction de subdivision
-		 *\param[in]	p_submesh			Le sous maillage à subdiviser
-		 *\param[in]	p_bGenerateBuffers	Dit si les tampons doivent être générés
-		 *\param[in]	p_bThreaded			Dit si la subdivision doit être threadée
-		 */
-		virtual void DoSubdivide( SubmeshSPtr p_pSubmesh, bool p_bGenerateBuffers, bool p_bThreaded );
-		/**
-		 *\~english
-		 *\brief		Initialisation function
-		 *\~french
-		 *\brief		Fonction d'initialisation
+		 * Initialisation function
 		 */
 		virtual void DoInitialise();
-		/**
-		 *\~english
-		 *\brief		Swaps the internal faces with the submeshes ones
-		 *\~french
-		 *\brief		Echange les faces internes avec celles du sous-maillage
-		 */
 		void DoSwapBuffers();
-		/**
-		 *\~english
-		 *\brief		Effectively subdivides the submesh
-		 *\~french
-		 *\brief		Subdivise le sous-maillage
-		 */
 		virtual void DoSubdivide() = 0;
-		/**
-		 *\~english
-		 *\brief		Computes the texture coordinates for given vertices, creates the faces
-		 *\param[in]	p_a, p_b, p_c	The source vertices
-		 *\param[in]	p_d, p_e, p_f	The new vertices
-		 *\~french
-		 *\brief		Calcule les coordonnées de texture des sommets donnés, crée les faces
-		 *\param[in]	p_a, p_b, p_c	Les sommets source
-		 *\param[in]	p_d, p_e, p_f	Les nouveaux sommets
-		 */
-		void DoSetTextCoords( BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_d, BufferElementGroup & p_e, BufferElementGroup & p_f );
-		/**
-		 *\~english
-		 *\brief		Computes the texture coordinates for the new vertex, creates the faces
-		 *\param[in]	p_a, p_b, p_c	The source vertices
-		 *\param[in]	p_p				The new vertex
-		 *\~french
-		 *\brief		Calcule les coordonnées de texture du nouveau sommet, crée les faces
-		 *\param[in]	p_a, p_b, p_c	Les sommets sources
-		 *\param[in]	p_p				Le nouveau sommet
-		 */
-		void DoSetTextCoords( BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_p );
-
-	protected:
-		//!\~english The submesh being subdivided	\~french Le sous-maillage à diviser
-		SubmeshSPtr m_submesh;
-		//!\~english The faces	\~french Les faces
-		FacePtrArray m_arrayFaces;
-		//!\~english Tells if the buffers must be generatef	\~french Dit si les tampons doivent être générés
-		bool m_bGenerateBuffers;
-		//!\~english The subdivision end callback	\~french Le callback de fin de subdivision
-		PSubdivisionEndFunction m_pfnSubdivisionEnd;
-		//!\~english The subdivision end callback parameter	\~french Le paramètre du callback de fin de subdivision
-		void * m_pArg;
-		//!\~english The subdivision thread	\~french Le thread de subdivision
-		std::shared_ptr< std::thread > m_pThread;
-		//!\~english Tells that the subdivision is threaded	\~french Dit si la subdivision est threadée
-		bool m_bThreaded;
-		//!\~english The subdivision thread mutex	\~french Le mutex du thread de subdivision
-		std::recursive_mutex m_mutex;
+		void DoSetTextCoords( FaceSPtr p_face, BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_d, BufferElementGroup & p_e, BufferElementGroup & p_f );
+		void DoComputeCenterFrom( Castor::Point3r const & p_a, Castor::Point3r const & p_b, Castor::Point3r const & p_ptANormal, Castor::Point3r const & p_ptBNormal, Castor::Point3r & p_ptResult );
+		void DoComputeCenterFrom( Castor::Point3r const & p_a, Castor::Point3r const & p_b, Castor::Point3r const & p_c, Castor::Point3r const & p_ptANormal, Castor::Point3r const & p_ptBNormal, Castor::Point3r const & p_ptCNormal, Castor::Point3r & p_ptResult );
 	};
 }
 

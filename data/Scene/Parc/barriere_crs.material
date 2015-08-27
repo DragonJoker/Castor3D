@@ -1,0 +1,35 @@
+
+material barriere_crs
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0.504 0.504 0.504 1 10
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture barriere_metal.jpg
+			}
+		}
+
+	}
+
+}
+
+material coll_pf_barriere_crs_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}

@@ -1,4 +1,4 @@
-ï»¿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -42,8 +42,8 @@ namespace Castor
 	\brief		The context used into file parsing functions
 	\remark		While parsing a "brace file", the context holds the important data retrieved
 	\~french
-	\brief		Contexte utilisÃ© dans les fonctions d'analyse
-	\remark		Lorsqu'on analyse un fichier, le contexte contient les informations importantes qui ont Ã©tÃ© rÃ©cupÃ©rÃ©es.
+	\brief		Contexte utilisé dans les fonctions d'analyse
+	\remark		Lorsqu'on analyse un fichier, le contexte contient les informations importantes qui ont été récupérées.
 	*/
 	class FileParserContext
 	{
@@ -56,14 +56,14 @@ namespace Castor
 		 *\brief		Constructeur
 		 *\param[in]	p_pFile	Le fichier en cours de traitement
 		 */
-		CU_API FileParserContext( TextFile * p_pFile );
+		FileParserContext( TextFile * p_pFile );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		CU_API virtual ~FileParserContext();
+		virtual ~FileParserContext();
 
 	public:
 		//!\~english The file currently parsed	\~french Le fichier en cours d'analyse

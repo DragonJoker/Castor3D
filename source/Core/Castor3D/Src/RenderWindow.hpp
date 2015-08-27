@@ -19,9 +19,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_RENDER_WINDOW_H___
 
 #include "Castor3DPrerequisites.hpp"
+#include "Renderable.hpp"
 #include "FrameListener.hpp"
 #include "BinaryParser.hpp"
 #include "WindowHandle.hpp"
+#include "WindowRenderer.hpp"
 
 #pragma warning( push )
 #pragma warning( disable:4251 )
@@ -41,6 +43,7 @@ namespace Castor3D
 	\remark		Gère une fenêtre dans laquelle une scène peut être rendue
 	*/
 	class C3D_API RenderWindow
+		:	public Renderable< RenderWindow, WindowRenderer >
 	{
 	public:
 		/*!
@@ -52,8 +55,8 @@ namespace Castor3D
 		\brief		Loader de RenderTarget
 		*/
 		class C3D_API TextLoader
-			: public Castor::Loader< RenderWindow, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			, public Castor::NonCopyable
+			:	public Castor::Loader< RenderWindow, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			,	public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -84,7 +87,7 @@ namespace Castor3D
 		\brief		Loader de RenderWindow
 		*/
 		class C3D_API BinaryParser
-			: public Castor3D::BinaryParser< RenderWindow >
+			:	public Castor3D::BinaryParser< RenderWindow >
 		{
 		public:
 			/**
@@ -296,96 +299,6 @@ namespace Castor3D
 		void SetScene( SceneSPtr p_pScene );
 		/**
 		 *\~english
-		 *\brief		Retrieves the window dimensions
-		 *\return		The window dimensions
-		 *\~french
-		 *\brief		Récupère les dimensions de la fenêtre
-		 *\return		Les dimensions de la fenêtre
-		 */
-		Castor::Size GetSize()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the stereo status
-		 *\return		\p true if stereo is used
-		 *\~french
-		 *\brief		Récupère le statut d'utilisation stéréo
-		 *\return		\p true si le rendu stéréo est utilisé
-		 */
-		bool IsUsingStereo()const;
-		/**
-		 *\~english
-		 *\brief		Defines the stereo status
-		 *\param[in]	p_bStereo	\p true if stereo is to be used
-		 *\~french
-		 *\brief		Définit le statut d'utilisation stéréo
-		 *\param[in]	p_bStereo	\p true si le rendu stéréo est à utiliser
-		 */
-		void SetStereo( bool p_bStereo );
-		/**
-		 *\~english
-		 *\brief		Retrieves the intra ocular distance
-		 *\return		The intra ocular distance
-		 *\~french
-		 *\brief		Récupère la distance inter oculaire
-		 *\return		La distance inter oculaire
-		 */
-		real GetIntraOcularDistance()const;
-		/**
-		 *\~english
-		 *\brief		Defines the intra ocular distance
-		 *\param[in]	p_rIao	The intra ocular distance
-		 *\~french
-		 *\brief		Définit la distance inter oculaire
-		 *\param[in]	p_rIao	La distance inter oculaire
-		 */
-		void SetIntraOcularDistance( real p_rIao );
-		/**
-		 *\~english
-		 *\brief		Retrieves the stereo status
-		 *\return		\p true if stereo is used
-		 *\~french
-		 *\brief		Récupère le statut d'utilisation stéréo
-		 *\return		\p true si le rendu stéréo est utilisé
-		 */
-		bool IsUsingDeferredRendering()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the window pixel format
-		 *\return		The window pixel format
-		 *\~french
-		 *\brief		Récupère le format des pixels de la fenêtre
-		 *\return		Le format des pixels de la fenêtre
-		 */
-		Castor::ePIXEL_FORMAT GetPixelFormat()const;
-		/**
-		 *\~english
-		 *\brief		Sets the window pixel format
-		 *\param[in]	val	The new window pixel format
-		 *\~french
-		 *\brief		Définit le format des pixels de la fenêtre
-		 *\param[in]	val	Le nouveau format des pixels de la fenêtre
-		 */
-		void SetPixelFormat( Castor::ePIXEL_FORMAT val );
-		/**
-		 *\~english
-		 *\brief		Retrieves the window depth format
-		 *\return		The window depth format
-		 *\~french
-		 *\brief		Récupère le format de profondeur de la fenêtre
-		 *\return		Le format de profondeur de la fenêtre
-		 */
-		Castor::ePIXEL_FORMAT GetDepthFormat()const;
-		/**
-		 *\~english
-		 *\brief		Sets the window depth format
-		 *\param[in]	val	The new window depth format
-		 *\~french
-		 *\brief		Définit le format de profondeur de la fenêtre
-		 *\param[in]	val	Le nouveau format de profondeur de la fenêtre
-		 */
-		void SetDepthFormat( Castor::ePIXEL_FORMAT val );
-		/**
-		 *\~english
 		 *\brief		Retrieves the window index
 		 *\return		The window index
 		 *\~french
@@ -408,6 +321,15 @@ namespace Castor3D
 		{
 			return m_handle;
 		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the window dimensions
+		 *\return		The window dimensions
+		 *\~french
+		 *\brief		Récupère les dimensions de la fenêtre
+		 *\return		Les dimensions de la fenêtre
+		 */
+		Castor::Size GetSize()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the intialisation status
@@ -470,6 +392,51 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Retrieves the stereo status
+		 *\return		\p true if stereo is used
+		 *\~french
+		 *\brief		Récupère le statut d'utilisation stéréo
+		 *\return		\p true si le rendu stéréo est utilisé
+		 */
+		bool IsUsingStereo()const;
+		/**
+		 *\~english
+		 *\brief		Defines the stereo status
+		 *\param[in]	p_bStereo	\p true if stereo is to be used
+		 *\~french
+		 *\brief		Définit le statut d'utilisation stéréo
+		 *\param[in]	p_bStereo	\p true si le rendu stéréo est à utiliser
+		 */
+		void SetStereo( bool p_bStereo );
+		/**
+		 *\~english
+		 *\brief		Retrieves the intra ocular distance
+		 *\return		The intra ocular distance
+		 *\~french
+		 *\brief		Récupère la distance inter oculaire
+		 *\return		La distance inter oculaire
+		 */
+		real GetIntraOcularDistance()const;
+		/**
+		 *\~english
+		 *\brief		Defines the intra ocular distance
+		 *\param[in]	p_rIao	The intra ocular distance
+		 *\~french
+		 *\brief		Définit la distance inter oculaire
+		 *\param[in]	p_rIao	La distance inter oculaire
+		 */
+		void SetIntraOcularDistance( real p_rIao );
+		/**
+		 *\~english
+		 *\brief		Retrieves the stereo status
+		 *\return		\p true if stereo is used
+		 *\~french
+		 *\brief		Récupère le statut d'utilisation stéréo
+		 *\return		\p true si le rendu stéréo est utilisé
+		 */
+		bool IsUsingDeferredRendering()const;
+		/**
+		 *\~english
 		 *\brief		Tells the context is using vsync
 		 *\~french
 		 *\brief		Dit si le contexte utilise la vsync
@@ -514,6 +481,42 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Retrieves the window pixel format
+		 *\return		The window pixel format
+		 *\~french
+		 *\brief		Récupère le format des pixels de la fenêtre
+		 *\return		Le format des pixels de la fenêtre
+		 */
+		Castor::ePIXEL_FORMAT GetPixelFormat()const;
+		/**
+		 *\~english
+		 *\brief		Sets the window pixel format
+		 *\param[in]	val	The new window pixel format
+		 *\~french
+		 *\brief		Définit le format des pixels de la fenêtre
+		 *\param[in]	val	Le nouveau format des pixels de la fenêtre
+		 */
+		void SetPixelFormat( Castor::ePIXEL_FORMAT val );
+		/**
+		 *\~english
+		 *\brief		Retrieves the window depth format
+		 *\return		The window depth format
+		 *\~french
+		 *\brief		Récupère le format de profondeur de la fenêtre
+		 *\return		Le format de profondeur de la fenêtre
+		 */
+		Castor::ePIXEL_FORMAT GetDepthFormat()const;
+		/**
+		 *\~english
+		 *\brief		Sets the window depth format
+		 *\param[in]	val	The new window depth format
+		 *\~french
+		 *\brief		Définit le format de profondeur de la fenêtre
+		 *\param[in]	val	Le nouveau format de profondeur de la fenêtre
+		 */
+		void SetDepthFormat( Castor::ePIXEL_FORMAT val );
+		/**
+		 *\~english
 		 *\brief		Tells the RenderWindow is initialised
 		 *\~french
 		 *\brief		Dit que la RenderWindow est initialisée
@@ -534,41 +537,13 @@ namespace Castor3D
 		{
 			return m_strName;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Engine
-		 *\~french
-		 *\brief		Récupère l'Engine
-		 */
-		virtual Engine * GetEngine()const
-		{
-			return m_pEngine;
-		}
 
 	protected:
-		/**
-		 *\~english
-		 *\brief		Begins the scene on GPU side
-		 *\~french
-		 *\brief		Démarre la scène côté GPU
-		 */
-		virtual void DoBeginScene() = 0;
-		/**
-		 *\~english
-		 *\brief		Ends the scene on GPU side
-		 *\~french
-		 *\brief		Termine la scène côté GPU
-		 */
-		virtual void DoEndScene() = 0;
-
-	private:
 		Castor::String DoGetName();
 		void DoRender( eBUFFER p_eTargetBuffer, DynamicTextureSPtr p_pTexture );
 		void DoUpdateSize();
 
 	private:
-		//!\~english The core engine	\~french Le moteur
-		Engine * m_pEngine;
 		//!\~english Total number of render windows	\~french Nombre total de fenêtres de rendu
 		static uint32_t s_nbRenderWindows;
 		//!\~english This window's index	\~french Index de la fenêtre

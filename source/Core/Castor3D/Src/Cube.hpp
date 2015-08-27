@@ -107,23 +107,22 @@ namespace Castor3D
 		{
 			return m_depth;
 		}
+		/**
+		 *\~english
+		 *\brief		Stream operator
+		 *\~french
+		 *\brief		Opérateur de flux
+		 */
+		inline friend std::ostream & operator <<( std::ostream & o, Cube const & c )
+		{
+			return o << "Pave(" << c.m_height << "," << c.m_width << "," << c.m_depth << ")";
+		}
 
 	private:
 		real m_height;
 		real m_width;
 		real m_depth;
-		friend std::ostream & operator <<( std::ostream & o, Cube const & c );
 	};
-	/**
-	 *\~english
-	 *\brief		Stream operator
-	 *\~french
-	 *\brief		Opérateur de flux
-	 */
-	inline std::ostream & operator <<( std::ostream & o, Cube const & c )
-	{
-		return o << "Cube(" << c.m_height << "," << c.m_width << "," << c.m_depth << ")";
-	}
 }
 
 #endif

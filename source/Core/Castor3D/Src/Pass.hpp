@@ -19,7 +19,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_PASS_H___
 
 #include "Castor3DPrerequisites.hpp"
+#include "Renderable.hpp"
 #include "BinaryParser.hpp"
+#include "PassRenderer.hpp"
 
 #pragma warning( push )
 #pragma warning( disable:4251 )
@@ -40,6 +42,7 @@ namespace Castor3D
 	\remark		Une passe est composé de : couleurs (ambiante, diffuse, spéculaire, émissive), exposant, textures, programme de shader
 	*/
 	class C3D_API Pass
+		:	public Renderable<Pass, PassRenderer>
 	{
 	public:
 		/*!
@@ -52,8 +55,8 @@ namespace Castor3D
 		\brief Loader de Pass
 		*/
 		class C3D_API TextLoader
-			: public Castor::Loader< Pass, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			, public Castor::NonCopyable
+			:	public Castor::Loader< Pass, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			,	public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -85,7 +88,7 @@ namespace Castor3D
 		\brief		Loader de Pass
 		*/
 		class C3D_API BinaryParser
-			: public Castor3D::BinaryParser< Pass >
+			:	public Castor3D::BinaryParser< Pass >
 		{
 		public:
 			/**
@@ -184,7 +187,7 @@ namespace Castor3D
 		 *\param[in]	p_byIndex	L'index de la passe
 		 *\param[in]	p_byCount	Le compte des passes du material
 		 */
-		void Render( uint8_t p_byIndex, uint8_t p_byCount );
+		virtual void Render( uint8_t p_byIndex, uint8_t p_byCount );
 		/**
 		 *\~english
 		 *\brief		Applies the pass for 2D render
@@ -195,14 +198,14 @@ namespace Castor3D
 		 *\param[in]	p_byIndex	L'index de la passe
 		 *\param[in]	p_byCount	Le compte des passes du material
 		 */
-		void Render2D( uint8_t p_byIndex, uint8_t p_byCount );
+		virtual void Render2D( uint8_t p_byIndex, uint8_t p_byCount );
 		/**
 		 *\~english
 		 *\brief		Removes the pass (to avoid it from interfering with other passes)
 		 *\~french
 		 *\brief		Retire la passe du rendu courant
 		 */
-		void EndRender();
+		virtual void EndRender();
 		/**
 		 *\~english
 		 *\brief		Creates and adds a TextureUnit
@@ -265,15 +268,6 @@ namespace Castor3D
 		 *\param[in]	p_pProgram	Le programme
 		 */
 		void SetShader( ShaderProgramBaseSPtr p_pProgram );
-		/**
-		 *\~english
-		 *\brief		Tells if the pass needs alpha blending
-		 *\return		\p true if at least one texture unit has an alpha channel
-		 *\~french
-		 *\brief		Dit si la passe a besoin de mélange d'alpha
-		 *\return		\p true si au moins une unité de texture a un canal alpha
-		 */
-		bool HasAlphaBlending()const;
 		/**
 		 *\~english
 		 *\brief		Gives the current shader program
@@ -417,30 +411,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the alpha blend mode
-		 *\param[in]	p_value	The value
-		 *\~french
-		 *\brief		Définit le mode de mélange alpha
-		 *\param[in]	p_value	La valeur
-		 */
-		inline void SetAlphaBlendMode( eBLEND_MODE p_value )
-		{
-			m_alphaBlendMode = p_value;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the colour blend mode
-		 *\param[in]	p_value	The value
-		 *\~french
-		 *\brief		Définit le mode de mélange couleur
-		 *\param[in]	p_value	La valeur
-		 */
-		inline void SetColourBlendMode( eBLEND_MODE p_value )
-		{
-			m_colourBlendMode = p_value;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the blend state
 		 *\return		The value
 		 *\~french
@@ -509,30 +479,6 @@ namespace Castor3D
 		inline float GetAlpha()const
 		{
 			return m_fAlpha;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the alpha blend mode
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le mode de mélange alpha
-		 *\return		La valeur
-		 */
-		inline eBLEND_MODE GetAlphaBlendMode()const
-		{
-			return m_alphaBlendMode;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the colour blend mode
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le mode de mélange couleur
-		 *\return		La valeur
-		 */
-		inline eBLEND_MODE GetColourBlendMode()const
-		{
-			return m_colourBlendMode;
 		}
 		/**
 		 *\~english
@@ -632,13 +578,22 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Tells if the pass needs alpha blending
+		 *\return		\p true if at least one texture unit has an alpha channel
+		 *\~french
+		 *\brief		Dit si la passe a besoin de mélange d'alpha
+		 *\return		\p true si au moins une unité de texture a un canal alpha
+		 */
+		bool HasAlphaBlending()const;
+		/**
+		 *\~english
 		 *\brief		Retrieves a constant iterator on the beginning of the textures array
 		 *\return		The iterator
 		 *\~french
 		 *\brief		Récupère un itérateur constant sur le début du tableau de textures
 		 *\return		L'itérateur
 		 */
-		inline TextureUnitPtrArrayConstIt begin()const
+		inline TextureUnitPtrArrayConstIt Begin()const
 		{
 			return m_arrayTextureUnits.begin();
 		}
@@ -650,7 +605,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur le début du tableau de textures
 		 *\return		L'itérateur
 		 */
-		inline TextureUnitPtrArrayIt begin()
+		inline TextureUnitPtrArrayIt Begin()
 		{
 			return m_arrayTextureUnits.begin();
 		}
@@ -662,7 +617,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur constant sur la fin du tableau de textures
 		 *\return		L'itérateur
 		 */
-		inline TextureUnitPtrArrayConstIt end()const
+		inline TextureUnitPtrArrayConstIt End()const
 		{
 			return m_arrayTextureUnits.end();
 		}
@@ -674,61 +629,13 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur la fin du tableau de textures
 		 *\return		L'itérateur
 		 */
-		inline TextureUnitPtrArrayIt end()
+		inline TextureUnitPtrArrayIt End()
 		{
 			return m_arrayTextureUnits.end();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the pass variable buffer
-		 *\return		The variable buffer
-		 *\~french
-		 *\brief		Récupère le buffer de variables pour pass
-		 *\return		Le buffer de variables
-		 */
-		inline FrameVariableBufferSPtr GetPassBuffer()const
-		{
-			return m_passBuffer.lock();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the scene variable buffer
-		 *\return		The variable buffer
-		 *\~french
-		 *\brief		Récupère le buffer de variables pour la scène
-		 *\return		Le buffer de variables
-		 */
-		inline FrameVariableBufferSPtr GetSceneBuffer()const
-		{
-			return m_sceneBuffer.lock();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the matrices variable buffer
-		 *\return		The variable buffer
-		 *\~french
-		 *\brief		Récupère le buffer de variables pour les matrices
-		 *\return		Le buffer de variables
-		 */
-		inline FrameVariableBufferSPtr GetMatrixBuffer()const
-		{
-			return m_matrixBuffer.lock();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Engine
-		 *\~french
-		 *\brief		Récupère l'Engine
-		 */
-		virtual Engine * GetEngine()const
-		{
-			return m_pEngine;
-		}
 
 	private:
-		void DoBindTexture( eTEXTURE_CHANNEL p_channel, Castor::String const & p_name, ShaderProgramBase & p_program );
 		void DoBindTextures();
-		void DoBindBuffers();
 		/**
 		 *\~english
 		 *\brief		Prepares a texture to be integrated to the pass.
@@ -765,24 +672,11 @@ namespace Castor3D
 		 *\param[in,out]p_index			L'index de la texture
 		 */
 		void DoPrepareTexture( eTEXTURE_CHANNEL p_channel, TextureUnitSPtr p_unit, uint32_t & p_index );
-		/**
-		 *\~english
-		 *\brief		Applies the pass
-		 *\param[in]	p_byIndex	The pass index
-		 *\param[in]	p_byCount	The material passes count
-		 *\~french
-		 *\brief		Applique la passe
-		 *\param[in]	p_byIndex	L'index de la passe
-		 *\param[in]	p_byCount	Le compte des passes du material
-		 */
-		void DoRender( uint8_t p_byIndex, uint8_t p_byCount );
 
 	protected:
 		typedef std::pair< TextureUnitWPtr, OneTextureFrameVariableWPtr > UnitVariablePair;
 		DECLARE_MAP( eTEXTURE_CHANNEL, UnitVariablePair, UnitVariableChannel );
 		friend class Material;
-		//!\~english The core engine	\~french Le moteur
-		Engine * m_pEngine;
 		//!\~english Diffuse material colour	\~french La couleur diffuse
 		Castor::Colour m_clrDiffuse;
 		//!\~english Ambient material colour	\~french La couleur ambiante
@@ -811,40 +705,6 @@ namespace Castor3D
 		uint32_t m_uiTextureFlags;
 		//!\~english Tells the pass shader is an automatically generated one	\~french Dit que le shader de la passe a été généré automatiquement
 		bool m_bAutomaticShader;
-		//!\~english The alpha blend mode \~french Le mode de mélange alpha
-		eBLEND_MODE m_alphaBlendMode;
-		//!\~english The colour blend mode \~french Le mode de mélange couleur
-		eBLEND_MODE m_colourBlendMode;
-		//!\~english Holds The scene frame variables buffer	\~french Le buffer de variables, pour la scène
-		FrameVariableBufferWPtr m_sceneBuffer;
-		//!\~english Holds The pass frame variables buffer	\~french Le buffer de variables, pour la passe
-		FrameVariableBufferWPtr m_passBuffer;
-		//!\~english Holds The matrix frame variables buffer	\~french Le buffer de variables, pour les matrices
-		FrameVariableBufferWPtr m_matrixBuffer;
-		//! The ambient colour frame variable
-		Point4fFrameVariableWPtr m_pAmbient;
-		//! The diffuser colour frame variable
-		Point4fFrameVariableWPtr m_pDiffuse;
-		//! The specular colour frame variable
-		Point4fFrameVariableWPtr m_pSpecular;
-		//! The emissive colour frame variable
-		Point4fFrameVariableWPtr m_pEmissive;
-		//! The shininess value frame variable
-		OneFloatFrameVariableWPtr m_pShininess;
-		//! The opacity value frame variable
-		OneFloatFrameVariableWPtr m_pOpacity;
-		//! The camera position frame variable
-		Point3rFrameVariableWPtr m_pCameraPos;
-		//! The ambient colour value
-		Castor::Point4f m_ptAmbient;
-		//! The diffuse colour value
-		Castor::Point4f m_ptDiffuse;
-		//! The specular colour value
-		Castor::Point4f m_ptSpecular;
-		//! The emissive colour value
-		Castor::Point4f m_ptEmissive;
-		//! The camera position value
-		Castor::Point3r m_ptCameraPos;
 	};
 }
 

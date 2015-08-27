@@ -1,4 +1,4 @@
-﻿#include "PanelOverlay.hpp"
+#include "PanelOverlay.hpp"
 #include "OverlayRenderer.hpp"
 #include "Overlay.hpp"
 
@@ -73,7 +73,7 @@ namespace Castor3D
 
 	void PanelOverlay::DoUpdate( OverlayRendererSPtr p_renderer )
 	{
-		int l_zIndex = 0;
+		int l_zIndex = 1000 - GetOverlay().GetZIndex();
 		Size l_screenSize = p_renderer->GetSize();
 		Position l_pos = GetAbsolutePosition( l_screenSize );
 		Size l_size = GetAbsoluteSize( l_screenSize );
@@ -83,12 +83,12 @@ namespace Castor3D
 		int32_t l_centerR = l_pos.x() + l_size.width();
 		int32_t l_centerB = l_pos.y() + l_size.height();
 
-		OverlayCategory::Vertex l_vertex0 = { { l_centerL, l_centerT }, { real( m_uv[0] ), real( m_uv[3] ) } };
-		OverlayCategory::Vertex l_vertex1 = { { l_centerL, l_centerB }, { real( m_uv[0] ), real( m_uv[1] ) } };
-		OverlayCategory::Vertex l_vertex2 = { { l_centerR, l_centerB }, { real( m_uv[2] ), real( m_uv[1] ) } };
-		OverlayCategory::Vertex l_vertex3 = { { l_centerL, l_centerT }, { real( m_uv[0] ), real( m_uv[3] ) } };
-		OverlayCategory::Vertex l_vertex4 = { { l_centerR, l_centerB }, { real( m_uv[2] ), real( m_uv[1] ) } };
-		OverlayCategory::Vertex l_vertex5 = { { l_centerR, l_centerT }, { real( m_uv[2] ), real( m_uv[3] ) } };
+		OverlayCategory::Vertex l_vertex0 = { { l_centerL, l_centerT, l_zIndex }, { real( m_uv[0] ), real( m_uv[3] ) } };
+		OverlayCategory::Vertex l_vertex1 = { { l_centerL, l_centerB, l_zIndex }, { real( m_uv[0] ), real( m_uv[1] ) } };
+		OverlayCategory::Vertex l_vertex2 = { { l_centerR, l_centerB, l_zIndex }, { real( m_uv[2] ), real( m_uv[1] ) } };
+		OverlayCategory::Vertex l_vertex3 = { { l_centerL, l_centerT, l_zIndex }, { real( m_uv[0] ), real( m_uv[3] ) } };
+		OverlayCategory::Vertex l_vertex4 = { { l_centerR, l_centerB, l_zIndex }, { real( m_uv[2] ), real( m_uv[1] ) } };
+		OverlayCategory::Vertex l_vertex5 = { { l_centerR, l_centerT, l_zIndex }, { real( m_uv[2] ), real( m_uv[3] ) } };
 
 		m_arrayVtx[0] = l_vertex0;
 		m_arrayVtx[1] = l_vertex1;

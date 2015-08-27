@@ -1,4 +1,4 @@
-﻿#include "PostFxPlugin.hpp"
+#include "PostFxPlugin.hpp"
 
 #if defined( _WIN32 )
 #	include <Windows.h>
@@ -33,8 +33,8 @@ namespace Castor3D
 #	error "Implement ABI names for this compiler"
 #endif
 
-	PostFxPlugin::PostFxPlugin( DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
-		:	PluginBase( ePLUGIN_TYPE_POSTFX, p_pLibrary, p_engine )
+	PostFxPlugin::PostFxPlugin( DynamicLibrarySPtr p_pLibrary )
+		:	PluginBase( ePLUGIN_TYPE_POSTFX, p_pLibrary )
 	{
 		if ( !p_pLibrary->GetFunction( m_pfnCreateEffect, CreateEffectFunctionABIName ) )
 		{
@@ -42,19 +42,43 @@ namespace Castor3D
 			l_strError += str_utils::to_string( dlerror() );
 			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
 		}
+	}
 
-		if ( m_pfnOnLoad )
-		{
-			m_pfnOnLoad( m_engine );
-		}
+	PostFxPlugin::PostFxPlugin( PostFxPlugin const & p_plugin )
+		:	PluginBase( p_plugin )
+		,	m_pfnCreateEffect( p_plugin.m_pfnCreateEffect )
+	{
+	}
+
+	PostFxPlugin::PostFxPlugin( PostFxPlugin && p_plugin )
+		:	PluginBase( std::move( p_plugin ) )
+		,	m_pfnCreateEffect( std::move( p_plugin.m_pfnCreateEffect ) )
+	{
+		p_plugin.m_pfnCreateEffect	= NULL;
 	}
 
 	PostFxPlugin::~PostFxPlugin()
 	{
-		if ( m_pfnOnUnload )
+	}
+
+	PostFxPlugin & PostFxPlugin::operator =( PostFxPlugin const & p_plugin )
+	{
+		PluginBase::operator =( p_plugin );
+		m_pfnCreateEffect		= p_plugin.m_pfnCreateEffect;
+		return * this;
+	}
+
+	PostFxPlugin & PostFxPlugin::operator =( PostFxPlugin && p_plugin )
+	{
+		PluginBase::operator =( std::move( p_plugin ) );
+
+		if ( this != & p_plugin )
 		{
-			m_pfnOnUnload( m_engine );
+			m_pfnCreateEffect			= std::move( p_plugin.m_pfnCreateEffect );
+			p_plugin.m_pfnCreateEffect	= NULL;
 		}
+
+		return * this;
 	}
 
 	PostEffectSPtr PostFxPlugin::CreateEffect( RenderSystem * p_pRenderSystem )

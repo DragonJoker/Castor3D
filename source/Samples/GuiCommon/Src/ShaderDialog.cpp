@@ -48,7 +48,7 @@ wxShaderDialog::wxShaderDialog( Engine * p_pEngine, bool p_bCanEdit, wxWindow * 
 	wxPoint				l_ptButtonPosition	= wxPoint( 10, 10 );
 	wxSize				l_sizeButton		= wxSize( 65, 20 );
 	wxSize				l_size				= GetClientSize();
-	Path				l_pathCurrent		= Engine::GetDataDirectory() / cuT( "Castor3D" );
+	Path				l_pathCurrent		= p_pEngine->GetDataPath() / cuT( "Castor3D" );
 	RenderSystem 	*	l_pRenderSystem		= m_pEngine->GetRenderSystem();
 	eSHADER_MODEL		l_eMaxShaderModel	= eSHADER_MODEL_COUNT;
 	eSHADER_MODEL		l_eShaderModel		= eSHADER_MODEL_COUNT;

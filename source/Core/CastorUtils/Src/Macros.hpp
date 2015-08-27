@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -19,8 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___Castor_Macros___
 
 #include "config.hpp"
-#include "PlatformConfig.hpp"
-#include "CompilerConfig.hpp"
 
 #if !defined( __FUNCTION__ )
 //! Defines this macro if not in debug
@@ -41,9 +39,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	define Cerr( x) std::cerr << x
 typedef char xchar;
 typedef wchar_t ychar;
-#	define xout cout
-#	define xerr cerr
-#	define xlog clog
 #else
 //!\~english Tells CastorUtils was compiled in Unicode mode	\~french Dit que CastorUtils a été compilé en Unicode
 #	define CASTOR_UNICODE 1
@@ -55,9 +50,6 @@ typedef wchar_t ychar;
 #	define Cerr( x) std::wcerr << x
 typedef wchar_t xchar;
 typedef char ychar;
-#	define xout wcout
-#	define xerr wcerr
-#	define xlog wclog
 #endif
 
 //@}
@@ -153,12 +145,12 @@ typedef char ychar;
 #endif
 
 #if CASTOR_HAS_DEFAULTED_FUNC
-#	define CASTOR_DEFAULT = default
+#	define d_default = default
 #else
 #	define d_default
 #endif
 #if CASTOR_HAS_DELETED_FUNC
-#	define CASTOR_DELETED = delete
+#	define d_deleted = delete
 #else
 #	define d_deleted
 #endif

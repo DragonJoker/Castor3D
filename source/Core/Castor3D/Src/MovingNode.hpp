@@ -1,4 +1,4 @@
-ï»¿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -34,8 +34,8 @@ namespace Castor3D
 	\brief		Implementation of MovingObjectBase for abstract nodes
 	\remark		Used to decompose the model and place intermediate animations
 	\~french
-	\brief		ImplÃ©mentation de MovingObjectBase pour des noeuds abstraits.
-	\remark		UtilisÃ© afin de dÃ©composer le modÃ¨le et ajouter des animatiobns intermÃ©diaires
+	\brief		Implémentation de MovingObjectBase pour des noeuds abstraits.
+	\remark		Utilisé afin de décomposer le modèle et ajouter des animatiobns intermédiaires
 	*/
 	class C3D_API MovingNode
 		: public MovingObjectBase
@@ -60,7 +60,7 @@ namespace Castor3D
 		 *\brief		Retrieves the object name
 		 *\return		The name
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le nom de l'objet
+		 *\brief		Récupère le nom de l'objet
 		 *\return		Le nom
 		 */
 		virtual Castor::String const & GetName()const;

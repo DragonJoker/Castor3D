@@ -1,0 +1,41 @@
+
+material lustre/luminaire_lustre
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.828 0.828 0.828 1 1
+			emissive 0 0.32549 0.992157 1
+			cull_hardware none
+			cull_software none
+		}
+
+	}
+
+}
+
+material lustre/metal_lustre
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture_alias 0
+				texture metal_fringue.jpg
+			}
+		}
+
+	}
+
+}

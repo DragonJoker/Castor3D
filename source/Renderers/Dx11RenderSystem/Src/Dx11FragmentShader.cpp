@@ -1,7 +1,5 @@
 #include "Dx11FragmentShader.hpp"
-
 #include "Dx11RenderSystem.hpp"
-#include "Dx11FrameVariableBuffer.hpp"
 
 #include <Logger.hpp>
 
@@ -11,54 +9,30 @@ using namespace Castor;
 namespace Dx11Render
 {
 	DxFragmentShader::DxFragmentShader( DxShaderProgram * p_pParent )
-		: DxShaderObject( p_pParent, eSHADER_TYPE_PIXEL )
-		, m_pPixelShader( NULL )
+		:	DxShaderObject( p_pParent, eSHADER_TYPE_PIXEL )
+		,	m_pPixelShader( NULL )
 	{
 	}
 
 	DxFragmentShader::~DxFragmentShader()
 	{
-		ReleaseTracked( m_pRenderSystem, m_pPixelShader );
+		SafeRelease( m_pPixelShader );
 	}
 
-	void DxFragmentShader::DoBind()
+	void DxFragmentShader::Bind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext;
+		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
 		l_pDeviceContext->PSSetShader( m_pPixelShader, NULL, 0 );
-		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_PIXEL );
-
-		if ( !l_ubos.empty() )
-		{
-			std::vector< ID3D11Buffer * > l_buffers;
-			l_buffers.reserve( l_ubos.size() );
-
-			for ( auto l_variableBuffer: m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_PIXEL ) )
-			{
-				l_buffers.push_back( std::static_pointer_cast< DxFrameVariableBuffer >( l_variableBuffer )->GetDxBuffer() );
-			}
-
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_PIXEL ) )
-			{
-				l_pDeviceContext->PSSetConstantBuffers( 0, l_buffers.size(), l_buffers.data() );
-			}
-		}
+		l_pDeviceContext->Release();
 	}
 
-	void DxFragmentShader::DoUnbind()
+	void DxFragmentShader::Unbind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
-		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_PIXEL );
-
-		if ( !l_ubos.empty() )
-		{
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_PIXEL ) )
-			{
-				ID3D11Buffer * l_buffer = NULL;
-				l_pDeviceContext->PSSetConstantBuffers( 0, 1, &l_buffer );
-			}
-		}
-
+		ID3D11DeviceContext * l_pDeviceContext;
+		m_pRenderSystem->GetDevice()->GetImmediateContext( &l_pDeviceContext );
 		l_pDeviceContext->PSSetShader( NULL, NULL, 0 );
+		l_pDeviceContext->Release();
 	}
 
 	void DxFragmentShader::DoRetrieveShader()
@@ -70,7 +44,7 @@ namespace Dx11Render
 			if ( l_pDevice )
 			{
 				HRESULT l_hr = l_pDevice->CreatePixelShader( reinterpret_cast< DWORD * >( m_pCompiled->GetBufferPointer() ), m_pCompiled->GetBufferSize(), NULL, &m_pPixelShader );
-				dxDebugName( m_pRenderSystem, m_pPixelShader, PSShader );
+				dxDebugName( m_pPixelShader, PSShader );
 
 				if ( l_hr == S_OK )
 				{

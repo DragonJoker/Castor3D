@@ -1,4 +1,4 @@
-﻿#include "Castor3DPch.hpp"
+#include "Castor3DPch.hpp"
 
 #pragma warning( disable:4311 )
 #pragma warning( disable:4312 )

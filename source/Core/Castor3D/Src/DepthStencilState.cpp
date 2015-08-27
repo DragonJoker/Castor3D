@@ -1,4 +1,4 @@
-﻿#include "DepthStencilState.hpp"
+#include "DepthStencilState.hpp"
 
 namespace Castor3D
 {

@@ -124,7 +124,7 @@ namespace Castor3D
 		 *\param[out]	p_ppSubmesh	The intersected submesh
 		 *\return		\p true if the ray intersects the face, false if not
 		 */
-		real Intersects( GeometrySPtr p_pGeometry, FaceSPtr * p_ppFace, SubmeshSPtr * p_ppSubmesh );
+		real Intersects( Geometry * p_pGeometry, FaceSPtr * p_ppFace, SubmeshSPtr * p_ppSubmesh );
 		/**
 		 *\brief		Projects the given vertex on the ray
 		 *\param[in]	p_point	The vertex we want to project

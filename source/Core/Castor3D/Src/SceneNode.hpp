@@ -131,14 +131,14 @@ namespace Castor3D
 		};
 
 	protected:
-		typedef std::map< Castor::String, SceneNodeWPtr > SceneNodePtrStrMap;
-		typedef std::map< Castor::String, MovableObjectWPtr > MovableObjectPtrStrMap;
+		typedef std::map< Castor::String, SceneNode *		>	SceneNodeSPtrStrMap;
+		typedef std::map< Castor::String, MovableObject *	>	MovableObjectPtrStrMap;
 
 	public:
-		typedef SceneNodePtrStrMap::iterator node_iterator;
-		typedef SceneNodePtrStrMap::const_iterator node_const_iterator;
-		typedef MovableObjectPtrStrMap::iterator object_iterator;
-		typedef MovableObjectPtrStrMap::const_iterator object_const_iterator;
+		typedef SceneNodeSPtrStrMap::iterator					node_iterator;
+		typedef SceneNodeSPtrStrMap::const_iterator				node_const_iterator;
+		typedef MovableObjectPtrStrMap::iterator				object_iterator;
+		typedef MovableObjectPtrStrMap::const_iterator			object_const_iterator;
 
 	public:
 		/**
@@ -158,7 +158,7 @@ namespace Castor3D
 		 *\param[in]	p_pScene	La scène parente
 		 *\param[in]	p_name		The node's name. If empty the name is "SceneNode<s_nbSceneNodes>"
 		 */
-		SceneNode( SceneSPtr p_pScene, Castor::String const & p_name = Castor::cuEmptyString );
+		SceneNode( Scene * p_pScene, Castor::String const & p_name = Castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -174,7 +174,7 @@ namespace Castor3D
 		 *\brief		Attache un MovableObject au noeud
 		 *\param[in]	p_pObject	L'objet à attacher
 		 */
-		void AttachObject( MovableObjectSPtr p_pObject );
+		void AttachObject( MovableObject * p_pObject );
 		/**
 		 *\~english
 		 *\brief		Detaches a MovableObject from the node
@@ -183,7 +183,7 @@ namespace Castor3D
 		 *\brief		Détache un MovableObject fu noeud
 		 *\param[in]	p_pObject	L'objet à détacher
 		 */
-		void DetachObject( MovableObjectSPtr p_pObject );
+		void DetachObject( MovableObject * p_pObject );
 		/**
 		 *\~english
 		 *\brief		Sets the parent node
@@ -192,7 +192,7 @@ namespace Castor3D
 		 *\brief		Définit le noeud parent
 		 *\param[in]	p_parent	Le nouveau parent
 		 */
-		void AttachTo( SceneNodeSPtr p_parent );
+		void AttachTo( SceneNode * p_parent );
 		/**
 		 *\~english
 		 *\brief		Detaches the node from it's parent
@@ -217,7 +217,7 @@ namespace Castor3D
 		 *\brief		Ajoute le noeud donné aux enfants de ce noeud, s'il n'y est pas encore
 		 *\param[in]	p_child	Le noeud à ajouter
 		 */
-		void AddChild( SceneNodeSPtr p_child );
+		void AddChild( SceneNode * p_child );
 		/**
 		 *\~english
 		 *\brief		Detaches a child from my child's list, if it is one of my childs
@@ -226,7 +226,7 @@ namespace Castor3D
 		 *\brief		Détache un noeud des enfants de ce noeud, s'il en fait partie
 		 *\param[in]	p_child	Le noeud à détacher
 		 */
-		void DetachChild( SceneNodeSPtr p_child );
+		void DetachChild( SceneNode * p_child );
 		/**
 		 *\~english
 		 *\brief		Detaches a child from my child's list, if it is one of my childs
@@ -351,7 +351,7 @@ namespace Castor3D
 		 *\param[out]	p_ppSubmesh	Reçoit le submesh de la géométrie rencontrée
 		 *\return		La géométrie, NULL si aucune
 		 */
-		GeometrySPtr GetNearestGeometry( Ray * p_pRay, real & p_fDistance, FaceSPtr * p_ppFace, SubmeshSPtr * p_ppSubmesh );
+		Geometry * GetNearestGeometry( Ray * p_pRay, real & p_fDistance, FaceSPtr * p_ppFace, SubmeshSPtr * p_ppSubmesh );
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute position
@@ -461,9 +461,9 @@ namespace Castor3D
 		 *\brief		Récupère le noeud parent
 		 *\return		La valeur
 		 */
-		inline SceneNodeSPtr GetParent()const
+		inline SceneNode * GetParent()const
 		{
-			return m_pParent.lock();
+			return m_pParent;
 		}
 		/**
 		 *\~english
@@ -473,9 +473,9 @@ namespace Castor3D
 		 *\brief		Récupère la scène
 		 *\return		La valeur
 		 */
-		inline SceneSPtr GetScene()const
+		inline Scene * GetScene()const
 		{
-			return m_pScene.lock();
+			return m_pScene;
 		}
 		/**
 		 *\~english
@@ -595,9 +595,9 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de l'enfant
 		 *\return		La valeur, NULL si non trouvé
 		 */
-		inline SceneNodeSPtr GetChild( Castor::String const & p_name )
+		inline SceneNode * GetChild( Castor::String const & p_name )
 		{
-			return ( m_mapChilds.find( p_name ) != m_mapChilds.end() ? m_mapChilds.find( p_name )->second.lock() : nullptr );
+			return ( m_mapChilds.find( p_name ) != m_mapChilds.end() ? m_mapChilds.find( p_name )->second : NULL );
 		}
 		/**
 		 *\~english
@@ -688,13 +688,13 @@ namespace Castor3D
 		//!\~english Tells the absolute transformation matrix needs recomputation	\~french Dit si la matrice de transformation absolue doit être recalculée
 		bool m_bDerivedMtxChanged;
 		//!\~english  This node's parent	\~french Le noeud parent
-		SceneNodeWPtr m_pParent;
+		SceneNode * m_pParent;
 		//!\~english  This node's childs	\~french Les enfants de ce noeud
-		SceneNodePtrStrMap m_mapChilds;
+		SceneNodeSPtrStrMap m_mapChilds;
 		//!\~english  This node's attached objects	\~french Les objets attachés à ce noeud
 		MovableObjectPtrStrMap m_mapAttachedObjects;
 		//!\~english The parent scene	\~french La scène parente
-		SceneWPtr m_pScene;
+		Scene * m_pScene;
 	};
 }
 

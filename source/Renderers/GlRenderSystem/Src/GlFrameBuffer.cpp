@@ -153,7 +153,6 @@ namespace GlRender
 			switch ( p_eTarget )
 			{
 			case eTEXTURE_TARGET_1D:
-
 				if ( l_pTexture->GetDimension() == eTEXTURE_DIMENSION_1D )
 				{
 					l_bReturn = m_gl.FramebufferTexture1D( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetDimension() ), l_pTexture->GetGlName(), 0 );
@@ -166,7 +165,6 @@ namespace GlRender
 				break;
 
 			case eTEXTURE_TARGET_2D:
-
 				if ( l_pTexture->GetDimension() == eTEXTURE_DIMENSION_2D )
 				{
 					l_bReturn = m_gl.FramebufferTexture2D( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetDimension() ), l_pTexture->GetGlName(), 0 );
@@ -179,7 +177,6 @@ namespace GlRender
 				break;
 
 			case eTEXTURE_TARGET_3D:
-
 				if ( l_pTexture->GetDimension() == eTEXTURE_DIMENSION_3D )
 				{
 					l_bReturn = m_gl.FramebufferTexture3D( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetDimension() ), l_pTexture->GetGlName(), 0, p_iLayer );

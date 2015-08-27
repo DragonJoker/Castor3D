@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -166,7 +166,7 @@ namespace Castor
 		*/
 		template< typename CharType >
 		struct base_num_put
-			: std::num_put< CharType >
+				: std::num_put< CharType >
 		{
 			typedef typename std::num_put< CharType >::iter_type iter_type;
 			// These absVal functions are needed as std::abs doesnt support

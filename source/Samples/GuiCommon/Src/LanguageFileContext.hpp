@@ -35,7 +35,7 @@ namespace GuiCommon
 	\brief Contexte d'analyse pour les fichiers de langage
 	*/
 	class LanguageFileContext
-		: public Castor::FileParserContext
+		:	public Castor::FileParserContext
 	{
 	public:
 		LanguageInfoPtr pCurrentLanguage;

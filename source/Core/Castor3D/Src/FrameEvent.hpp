@@ -1,4 +1,4 @@
-ï»¿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -31,9 +31,9 @@ namespace Castor3D
 	\remark		Basically a frame event has a eEVENT_TYPE to know when it must be applied.
 				<br />It can be applied, so the function must be implemented by children classes
 	\~french
-	\brief		Interface reprÃ©sentant un Ã©vÃ¨nement de frame
-	\remark		Un Ã©vÃ¨nement a un eEVENT_TYPE pour savoir quand il doit Ãªtre traitÃ©.
-				<br />La fonction de traitement doit Ãªtre implÃ©mentÃ©e par les classes filles.
+	\brief		Interface représentant un évènement de frame
+	\remark		Un évènement a un eEVENT_TYPE pour savoir quand il doit être traité.
+				<br />La fonction de traitement doit être implémentée par les classes filles.
 	*/
 	class C3D_API FrameEvent
 	{
@@ -44,7 +44,7 @@ namespace Castor3D
 		 *\param[in]	p_eType	The event type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_eType	Le type d'Ã©vÃ¨nement
+		 *\param[in]	p_eType	Le type d'évènement
 		 */
 		FrameEvent( eEVENT_TYPE p_eType );
 		/**
@@ -53,7 +53,7 @@ namespace Castor3D
 		 *\param[in]	p_object	The object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_object	L'objet Ã  copier
+		 *\param[in]	p_object	L'objet à copier
 		 */
 		FrameEvent( FrameEvent const & p_object );
 		/**
@@ -61,8 +61,8 @@ namespace Castor3D
 		 *\brief		Move constructor
 		 *\param[in]	p_object	The object to move
 		 *\~french
-		 *\brief		Constructeur par dÃ©placement
-		 *\param[in]	p_object	L'objet Ã  dÃ©placer
+		 *\brief		Constructeur par déplacement
+		 *\param[in]	p_object	L'objet à déplacer
 		 */
 		FrameEvent( FrameEvent && p_object );
 		/**
@@ -71,9 +71,9 @@ namespace Castor3D
 		 *\param[in]	p_object	The object to copy
 		 *\return		A reference to this object
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation par copie
-		 *\param[in]	p_object	L'objet Ã  copier
-		 *\return		Une rÃ©fÃ©rence sur cet objet
+		 *\brief		Opérateur d'affectation par copie
+		 *\param[in]	p_object	L'objet à copier
+		 *\return		Une référence sur cet objet
 		 */
 		FrameEvent & operator =( FrameEvent const & p_object );
 		/**
@@ -82,9 +82,9 @@ namespace Castor3D
 		 *\param[in]	p_object	The object to move
 		 *\return		A reference to this object
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation par dÃ©placement
-		 *\param[in]	p_object	L'objet Ã  dÃ©placer
-		 *\return		Une rÃ©fÃ©rence sur cet objet
+		 *\brief		Opérateur d'affectation par déplacement
+		 *\param[in]	p_object	L'objet à déplacer
+		 *\return		Une référence sur cet objet
 		 */
 		FrameEvent & operator =( FrameEvent && p_object );
 		/**
@@ -100,9 +100,9 @@ namespace Castor3D
 		 *\remark		Must be implemented by children classes
 		 *\return		\p true if the event was applied successfully
 		 *\~french
-		 *\brief		Traite l'Ã©vÃ¨nement
-		 *\remark		Doit Ãªtre implÃ©mentÃ©e dans les classes filles
-		 *\return		\p true si l'Ã©vÃ¨nement a Ã©tÃ© traitÃ© avec succÃ¨s
+		 *\brief		Traite l'évènement
+		 *\remark		Doit être implémentée dans les classes filles
+		 *\return		\p true si l'évènement a été traité avec succès
 		 */
 		virtual bool Apply() = 0;
 		/**
@@ -110,8 +110,8 @@ namespace Castor3D
 		 *\brief		Retrieves the event type
 		 *\return		The event type
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le type de l'Ã©vÃ¨nement
-		 *\return		Le type de l'Ã©vÃ¨nement
+		 *\brief		Récupère le type de l'évènement
+		 *\return		Le type de l'évènement
 		 */
 		inline eEVENT_TYPE GetType()
 		{
@@ -119,7 +119,7 @@ namespace Castor3D
 		}
 
 	protected:
-		//!\~english The event type	\~french Le type d'Ã©vÃ¨nement
+		//!\~english The event type	\~french Le type d'évènement
 		eEVENT_TYPE m_eType;
 	};
 }

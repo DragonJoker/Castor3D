@@ -1,4 +1,4 @@
-﻿#include "FrameBufferAttachment.hpp"
+#include "FrameBufferAttachment.hpp"
 
 using namespace Castor;
 

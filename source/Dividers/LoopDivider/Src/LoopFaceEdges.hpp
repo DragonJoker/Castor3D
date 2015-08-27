@@ -32,13 +32,13 @@ namespace Loop
 	{
 	private:
 		Subdivider * m_pDivider;
-		VertexWPtr m_pVertex0;
-		VertexWPtr m_pVertex1;
-		VertexWPtr m_pVertex2;
+		VertexSPtr m_pVertex0;
+		VertexSPtr m_pVertex1;
+		VertexSPtr m_pVertex2;
 		Castor3D::FaceSPtr m_face;
-		EdgeSPtr m_edgeAB;
-		EdgeSPtr m_edgeBC;
-		EdgeSPtr m_edgeCA;
+		EdgePtr m_edgeAB;
+		EdgePtr m_edgeBC;
+		EdgePtr m_edgeCA;
 		bool m_bOwnFace;
 
 	public:
@@ -59,7 +59,7 @@ namespace Loop
 		 *\param[in]	l_bc	Edge between 2nd and 3rd vertex
 		 *\param[in]	l_ca	Edge between 3rd and 1st vertex
 		 */
-		FaceEdges( Subdivider * p_pDivider, Castor3D::FaceSPtr p_face, EdgeSPtr l_ab, EdgeSPtr l_bc, EdgeSPtr l_ca );
+		FaceEdges( Subdivider * p_pDivider, Castor3D::FaceSPtr p_face, EdgePtr l_ab, EdgePtr l_bc, EdgePtr l_ca );
 		/**
 		 * Divides the edges held, creates needed faces to complete the division
 		 *\param[in]	p_value	The weight of division (if 0.5, divides all edges in the middle)
@@ -74,15 +74,15 @@ namespace Loop
 	public:
 		/**@name Accessors */
 		//@{
-		inline EdgeSPtr GetEdgesAB()
+		inline EdgePtr GetEdgesAB()
 		{
 			return m_edgeAB;
 		}
-		inline EdgeSPtr GetEdgesBC()
+		inline EdgePtr GetEdgesBC()
 		{
 			return m_edgeBC;
 		}
-		inline EdgeSPtr GetEdgesCA()
+		inline EdgePtr GetEdgesCA()
 		{
 			return m_edgeCA;
 		}
@@ -90,9 +90,9 @@ namespace Loop
 
 	private:
 		void DoAddFaceAndEdges( VertexSPtr p_a, VertexSPtr p_b, VertexSPtr p_c, Castor::Point3r const & p_aTex, Castor::Point3r const & p_bTex, Castor::Point3r const & p_cTex, FaceEdgesPtrArray & p_newFaces );
-		void DoAddFaceAndEdges( VertexSPtr p_a, VertexSPtr p_b, VertexSPtr p_c, Castor::Point3r const & p_aTex, Castor::Point3r const & p_bTex, Castor::Point3r const & p_cTex, EdgeSPtr p_edgeAB, EdgeSPtr p_edgeBC, EdgeSPtr p_edgeCA, FaceEdgesPtrArray & p_newFaces );
-		EdgeSPtr DoAddEdge( VertexSPtr p_v1, VertexSPtr p_v2, bool p_toDivide );
-		void DoRemoveEdge( EdgeSPtr p_edge );
+		void DoAddFaceAndEdges( VertexSPtr p_a, VertexSPtr p_b, VertexSPtr p_c, Castor::Point3r const & p_aTex, Castor::Point3r const & p_bTex, Castor::Point3r const & p_cTex, EdgePtr p_edgeAB, EdgePtr p_edgeBC, EdgePtr p_edgeCA, FaceEdgesPtrArray & p_newFaces );
+		EdgePtr DoAddEdge( VertexSPtr p_v1, VertexSPtr p_v2, bool p_toDivide );
+		void DoRemoveEdge( EdgePtr p_edge );
 	};
 }
 

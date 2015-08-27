@@ -1,4 +1,4 @@
-﻿#include "FrameVariableBuffer.hpp"
+#include "FrameVariableBuffer.hpp"
 #include "FrameVariable.hpp"
 
 using namespace Castor;
@@ -51,22 +51,22 @@ namespace Castor3D
 		{
 			uint32_t l_uiTotalSize = 0;
 
-			for ( auto && l_variable: m_listVariables )
+			for ( FrameVariablePtrListIt l_it = m_listVariables.begin(); l_it != m_listVariables.end(); ++l_it )
 			{
-				if ( l_variable->Initialise() )
+				if ( ( *l_it )->Initialise() )
 				{
-					l_uiTotalSize += l_variable->size();
-					m_listInitialised.push_back( l_variable );
+					l_uiTotalSize += ( *l_it )->size();
+					m_listInitialised.push_back( *l_it );
 				}
 			}
 
 			m_buffer.resize( l_uiTotalSize );
-			uint8_t * l_buffer = m_buffer.data();
+			l_uiTotalSize = 0;
 
-			for ( auto && l_variable: m_listInitialised )
+			for ( FrameVariablePtrListIt l_it = m_listInitialised.begin(); l_it != m_listInitialised.end(); ++l_it )
 			{
-				l_variable->link( &m_buffer[l_uiTotalSize] );
-				l_buffer += l_uiTotalSize;
+				( *l_it )->link( &m_buffer[l_uiTotalSize] );
+				l_uiTotalSize += ( *l_it )->size();
 			}
 		}
 
@@ -80,13 +80,13 @@ namespace Castor3D
 		m_listVariables.clear();
 	}
 
-	bool FrameVariableBuffer::Bind( uint32_t p_index )
+	bool FrameVariableBuffer::Bind()
 	{
-		return DoBind( p_index );
+		return DoBind();
 	}
 
-	void FrameVariableBuffer::Unbind( uint32_t p_index )
+	void FrameVariableBuffer::Unbind()
 	{
-		DoUnbind( p_index );
+		DoUnbind();
 	}
 }

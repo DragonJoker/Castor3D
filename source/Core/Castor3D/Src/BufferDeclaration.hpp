@@ -1,4 +1,4 @@
-ï»¿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -30,7 +30,7 @@ namespace Castor3D
 	\~english
 	\brief		Description of all elements in a vertex buffer
 	\~french
-	\brief		Description de tous les Ã©lÃ©ments dans un tampon de sommets
+	\brief		Description de tous les éléments dans un tampon de sommets
 	*/
 	class C3D_API BufferDeclaration
 	{
@@ -44,7 +44,7 @@ namespace Castor3D
 		 *\param[in]	p_elements	The elements array
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_elements	Tableau des Ã©lÃ©ments
+		 *\param[in]	p_elements	Tableau des éléments
 		 */
 		template< uint32_t N >
 		BufferDeclaration( BufferElementDeclaration const( & p_elements )[N] )
@@ -58,8 +58,8 @@ namespace Castor3D
 		 *\param[in]	p_uiNbElements	Elements array size
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pElements		Tableau d'Ã©lÃ©ments
-		 *\param[in]	p_uiNbElements	Taille du tableau d'Ã©lÃ©ments
+		 *\param[in]	p_pElements		Tableau d'éléments
+		 *\param[in]	p_uiNbElements	Taille du tableau d'éléments
 		 */
 		BufferDeclaration( BufferElementDeclaration const * p_pElements, uint32_t p_uiNbElements );
 		/**
@@ -68,7 +68,7 @@ namespace Castor3D
 		 *\param[in]	p_declaration	The BufferDeclaration object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_declaration	L'objet BufferDeclaration Ã  copier
+		 *\param[in]	p_declaration	L'objet BufferDeclaration à copier
 		 */
 		BufferDeclaration( BufferDeclaration const & p_declaration );
 		/**
@@ -76,8 +76,8 @@ namespace Castor3D
 		 *\brief		Move Constructor
 		 *\param[in]	p_declaration	The BufferDeclaration object to move
 		 *\~french
-		 *\brief		Constructeur par dÃ©placement
-		 *\param[in]	p_declaration	L'objet BufferDeclaration Ã  dÃ©placer
+		 *\brief		Constructeur par déplacement
+		 *\param[in]	p_declaration	L'objet BufferDeclaration à déplacer
 		 */
 		BufferDeclaration( BufferDeclaration && p_declaration );
 		/**
@@ -86,9 +86,9 @@ namespace Castor3D
 		 *\param[in]	p_declaration	The BufferDeclaration object to copy
 		 *\return		A reference to this6.5.0 BufferDeclaration object
 		 *\~french
-		 *\brief		OpÃ©rateur d'affectation
-		 *\param[in]	p_declaration	L'objet BufferDeclaration Ã  copier
-		 *\return		Une rÃ©fÃ©rence sur cet objet BufferDeclaration
+		 *\brief		Opérateur d'affectation
+		 *\param[in]	p_declaration	L'objet BufferDeclaration à copier
+		 *\return		Une référence sur cet objet BufferDeclaration
 		 */
 		BufferDeclaration & operator =( BufferDeclaration p_declaration );
 		/**
@@ -103,8 +103,8 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the begin of the elements array
 		 *\return		Constant iterator to the begin of the elements array
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur le dÃ©but du tableau d'Ã©lÃ©ments
-		 *\return		ItÃ©rateur constant sur le dÃ©but du tableau d'Ã©lÃ©ments
+		 *\brief		Récupère un itérateur sur le début du tableau d'éléments
+		 *\return		Itérateur constant sur le début du tableau d'éléments
 		 */
 		inline BufferElementDeclarationArrayConstIt	Begin()const
 		{
@@ -115,8 +115,8 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the end of the elements array
 		 *\return		Constant iterator to the end of the elements array
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re un itÃ©rateur sur la fin du tableau d'Ã©lÃ©ments
-		 *\return		ItÃ©rateur constant sur la fin du tableau d'Ã©lÃ©ments
+		 *\brief		Récupère un itérateur sur la fin du tableau d'éléments
+		 *\return		Itérateur constant sur la fin du tableau d'éléments
 		 */
 		inline BufferElementDeclarationArrayConstIt	End()const
 		{
@@ -127,8 +127,8 @@ namespace Castor3D
 		 *\brief		Retrieves the elements count
 		 *\return		The elements count
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le compte des Ã©lÃ©ments
-		 *\return		Le compte des Ã©lÃ©ments
+		 *\brief		Récupère le compte des éléments
+		 *\return		Le compte des éléments
 		 */
 		inline uint32_t Size()const
 		{
@@ -139,7 +139,7 @@ namespace Castor3D
 		 *\brief		Retrieves the total elements byte count
 		 *\return		The byte count
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re la taille totale en octet des Ã©lÃ©ments
+		 *\brief		Récupère la taille totale en octet des éléments
 		 *\return		La taille en octets
 		 */
 		inline uint32_t GetStride()const
@@ -154,9 +154,9 @@ namespace Castor3D
 		 *\return		The element at given index
 		 *\~french
 		 *\brief		Accesseur de type tableau
-		 *\remark		Cette fonction ne vÃ©rifie pas la validitÃ© de l'index donnÃ©, donc attention aux crashes si mal utilisÃ©e
+		 *\remark		Cette fonction ne vérifie pas la validité de l'index donné, donc attention aux crashes si mal utilisée
 		 *\param[in]	p_uiIndex	L'index
-		 *\return		L'Ã©lÃ©ment Ã  l'index donnÃ©
+		 *\return		L'élément à l'index donné
 		 */
 		inline BufferElementDeclaration const & operator []( uint32_t p_uiIndex )const
 		{
@@ -170,9 +170,9 @@ namespace Castor3D
 		 *\return		The element at given index
 		 *\~french
 		 *\brief		Accesseur de type tableau
-		 *\remark		Cette fonction ne vÃ©rifie pas la validitÃ© de l'index donnÃ©, donc attention aux crashes si mal utilisÃ©e
+		 *\remark		Cette fonction ne vérifie pas la validité de l'index donné, donc attention aux crashes si mal utilisée
 		 *\param[in]	p_uiIndex	L'index
-		 *\return		L'Ã©lÃ©ment Ã  l'index donnÃ©
+		 *\return		L'élément à l'index donné
 		 */
 		inline BufferElementDeclaration & operator []( uint32_t p_uiIndex )
 		{
@@ -184,9 +184,9 @@ namespace Castor3D
 
 	protected:
 		friend void swap( BufferDeclaration & p_obj1, BufferDeclaration & p_obj2 );
-		//!\~english Element description array	\~french Tableau de descriptions d'Ã©lÃ©ments
+		//!\~english Element description array	\~french Tableau de descriptions d'éléments
 		BufferElementDeclarationArray m_arrayElements;
-		//!\~english Byte size of the element	\~french Taille de l'Ã©lÃ©ment, en octets
+		//!\~english Byte size of the element	\~french Taille de l'élément, en octets
 		uint32_t m_uiStride;
 	};
 	/**
@@ -194,8 +194,8 @@ namespace Castor3D
 	 *\brief		Swapping function
 	 *\param[in]	p_obj1, p_obj2	The 2 objects to swap
 	 *\~french
-	 *\brief		Fonction d'Ã©change
-	 *\param[in]	p_obj1, p_obj2	Les 2 objets Ã  Ã©changer
+	 *\brief		Fonction d'échange
+	 *\param[in]	p_obj1, p_obj2	Les 2 objets à échanger
 	 */
 	void swap( BufferDeclaration & p_obj1, BufferDeclaration & p_obj2 );
 }

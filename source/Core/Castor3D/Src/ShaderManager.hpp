@@ -101,56 +101,6 @@ namespace Castor3D
 		ShaderProgramBaseSPtr GetAutomaticProgram( uint32_t p_uiTextureFlags, uint32_t p_uiProgramFlags );
 		/**
 		 *\~english
-		 *\brief		Creates a matrix frame variable buffer
-		 *\param[in]	p_program		The programme to which the buffer is bound
-		 *\param[in]	p_shaderMask	MASK_SHADER_TYPE combination, to set at what shaders it is to be bound
-		 *\return		The frame variable buffer
-		 *\~french
-		 *\brief		Crée un frame variable buffer pour les matrices
-		 *\param[in]	p_program		Le programme auquel le buffer est lié
-		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié
-		 *\return		Le frame variable buffer
-		 */
-		FrameVariableBufferSPtr CreateMatrixBuffer( ShaderProgramBase & p_program, uint32_t p_shaderMask );
-		/**
-		 *\~english
-		 *\brief		Creates a scene frame variable buffer
-		 *\param[in]	p_program		The program to which the buffer is bound
-		 *\param[in]	p_shaderMask	MASK_SHADER_TYPE combination, to set at what shaders it is to be bound
-		 *\return		The frame variable buffer
-		 *\~french
-		 *\brief		Crée un frame variable buffer pour les données de scène
-		 *\param[in]	p_program		Le programme auquel le buffer est lié
-		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié
-		 *\return		Le frame variable buffer
-		 */
-		FrameVariableBufferSPtr CreateSceneBuffer( ShaderProgramBase & p_program, uint32_t p_shaderMask );
-		/**
-		 *\~english
-		 *\brief		Creates a pass frame variable buffer
-		 *\param[in]	p_program		The program to which the buffer is bound
-		 *\param[in]	p_shaderMask	MASK_SHADER_TYPE combination, to set at what shaders it is to be bound
-		 *\return		The frame variable buffer
-		 *\~french
-		 *\brief		Crée un frame variable buffer pour les données de passe
-		 *\param[in]	p_program		Le programme auquel le buffer est lié
-		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié
-		 *\return		Le frame variable buffer
-		 */
-		FrameVariableBufferSPtr CreatePassBuffer( ShaderProgramBase & p_program, uint32_t p_shaderMask );
-		/**
-		 *\~english
-		 *\brief		Creates the textures related frame variables
-		 *\param[in]	p_uiTextureFlags	Bitwise ORed eTEXTURE_CHANNEL
-		 *\param[in]	p_program			The program to which the buffer is bound
-		 *\~french
-		 *\brief		Crée les frame variables relatives aux textures
-		 *\param[in]	p_uiTextureFlags	Une combinaison de eTEXTURE_CHANNEL
-		 *\param[in]	p_program			Le programme auquel le buffer est lié
-		 */
-		void CreateTextureVariables( ShaderProgramBase & p_program, uint32_t p_uiTextureFlags );
-		/**
-		 *\~english
 		 *\brief		Sets the RenderSystem
 		 *\param[in]	p_pRenderSystem	The new value
 		 *\~french

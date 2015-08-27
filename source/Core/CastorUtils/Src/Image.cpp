@@ -1,4 +1,4 @@
-﻿#include "Image.hpp"
+#include "Image.hpp"
 #include "Path.hpp"
 #include "Rectangle.hpp"
 #include "BinaryFile.hpp"

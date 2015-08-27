@@ -1,4 +1,4 @@
-﻿#include "Face.hpp"
+#include "Face.hpp"
 
 using namespace Castor;
 

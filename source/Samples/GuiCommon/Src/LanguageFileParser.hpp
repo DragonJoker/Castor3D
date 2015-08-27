@@ -35,12 +35,12 @@ namespace GuiCommon
 	*/
 	typedef enum eSECTION
 	{
-		eSECTION_ROOT,
-		eSECTION_LANGUAGE,
-		eSECTION_SECTION,
-		eSECTION_STYLE,
-		eSECTION_LIST,
-		eSECTION_COUNT,
+		eSECTION_ROOT
+		,	eSECTION_LANGUAGE
+		,	eSECTION_SECTION
+		,	eSECTION_STYLE
+		,	eSECTION_LIST
+		,	eSECTION_COUNT
 	}	eSECTION;
 	/*!
 	\author Sylvain DOREMUS
@@ -52,7 +52,7 @@ namespace GuiCommon
 	\brief Analyseur de fichiers de langage
 	*/
 	class LanguageFileParser
-		: public Castor::FileParser
+		:	public Castor::FileParser
 	{
 	private:
 		StcContext * m_pStcContext;
@@ -75,21 +75,21 @@ namespace GuiCommon
 		virtual void DoValidate();
 	};
 
-	DECLARE_ATTRIBUTE_PARSER( Root_Language )
-	DECLARE_ATTRIBUTE_PARSER( Language_Pattern )
-	DECLARE_ATTRIBUTE_PARSER( Language_Lexer )
-	DECLARE_ATTRIBUTE_PARSER( Language_FoldFlags )
-	DECLARE_ATTRIBUTE_PARSER( Language_Section )
-	DECLARE_ATTRIBUTE_PARSER( Language_Style )
-	DECLARE_ATTRIBUTE_PARSER( Style_Type )
-	DECLARE_ATTRIBUTE_PARSER( Style_FgColour )
-	DECLARE_ATTRIBUTE_PARSER( Style_BgColour )
-	DECLARE_ATTRIBUTE_PARSER( Style_FontName )
-	DECLARE_ATTRIBUTE_PARSER( Style_FontStyle )
-	DECLARE_ATTRIBUTE_PARSER( Style_FontSize )
-	DECLARE_ATTRIBUTE_PARSER( Section_Type )
-	DECLARE_ATTRIBUTE_PARSER( Section_List )
-	DECLARE_ATTRIBUTE_PARSER( Section_End )
+	DECLARE_ATTRIBUTE_PARSER( Root_Language	)
+	DECLARE_ATTRIBUTE_PARSER( Language_Pattern	)
+	DECLARE_ATTRIBUTE_PARSER( Language_Lexer	)
+	DECLARE_ATTRIBUTE_PARSER( Language_FoldFlags	)
+	DECLARE_ATTRIBUTE_PARSER( Language_Section	)
+	DECLARE_ATTRIBUTE_PARSER( Language_Style	)
+	DECLARE_ATTRIBUTE_PARSER( Style_Type	)
+	DECLARE_ATTRIBUTE_PARSER( Style_FgColour	)
+	DECLARE_ATTRIBUTE_PARSER( Style_BgColour	)
+	DECLARE_ATTRIBUTE_PARSER( Style_FontName	)
+	DECLARE_ATTRIBUTE_PARSER( Style_FontStyle	)
+	DECLARE_ATTRIBUTE_PARSER( Style_FontSize	)
+	DECLARE_ATTRIBUTE_PARSER( Section_Type	)
+	DECLARE_ATTRIBUTE_PARSER( Section_List	)
+	DECLARE_ATTRIBUTE_PARSER( Section_End	)
 }
 
 #endif

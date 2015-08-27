@@ -1,13 +1,38 @@
-﻿#include "PreciseTimer.hpp"
+#include "PreciseTimer.hpp"
 #include "CastorUtils.hpp"
 
-#include <chrono>
+#if defined( _WIN32 )
+#	if defined( _MSC_VER )
+#		pragma warning( push )
+#		pragma warning( disable:4311 )
+#		pragma warning( disable:4312 )
+#	endif
+#	include <windows.h>
+#	if defined( _MSC_VER )
+#		pragma warning( pop )
+#	endif
+#else
+#	include <sys/time.h>
+#endif
 
 namespace Castor
 {
+	int64_t PreciseTimer::sm_i64Frequency = 0;
+
 	PreciseTimer::PreciseTimer()
 	{
-		m_savedTime = DoGetTime();
+		if ( sm_i64Frequency == 0 )
+		{
+#if defined( _WIN32 )
+			LARGE_INTEGER l_liFrequency;
+			::QueryPerformanceFrequency( & l_liFrequency );
+			sm_i64Frequency = l_liFrequency.QuadPart;
+#else
+			sm_i64Frequency = 1000000;
+#endif
+		}
+
+		m_i64PreviousTime = DoGetTime();
 	}
 
 	PreciseTimer::~PreciseTimer()
@@ -16,22 +41,40 @@ namespace Castor
 
 	double PreciseTimer::TimeS()
 	{
-		auto l_current = DoGetTime();
-		auto l_diff( l_current - m_savedTime );
-		m_savedTime = l_current;
-		return std::chrono::duration_cast< std::chrono::milliseconds >( l_diff ).count() / 1000.0;
+		long long l_i64Current = DoGetTime();
+		double l_dReturn = double( l_i64Current - m_i64PreviousTime ) / double( sm_i64Frequency );
+		m_i64PreviousTime = l_i64Current;
+		return l_dReturn;
 	}
 
 	double PreciseTimer::TimeMs()
 	{
-		auto l_current = DoGetTime();
-		auto l_diff( l_current - m_savedTime );
-		m_savedTime = l_current;
-		return std::chrono::duration_cast< std::chrono::microseconds >( l_diff ).count() / 1000.0;
+		long long l_i64Current = DoGetTime();
+		double l_dReturn = 1000 * double( l_i64Current - m_i64PreviousTime ) / double( sm_i64Frequency );
+		m_i64PreviousTime = l_i64Current;
+		return l_dReturn;
 	}
 
-	PreciseTimer::clock::time_point PreciseTimer::DoGetTime()const
+	double PreciseTimer::TimeUs()
 	{
-		return clock::now();
+		long long l_i64Current = DoGetTime();
+		double l_dReturn = 1000000 * double( l_i64Current - m_i64PreviousTime ) / double( sm_i64Frequency );
+		m_i64PreviousTime = l_i64Current;
+		return l_dReturn;
+	}
+
+	long long PreciseTimer::DoGetTime()const
+	{
+		long long l_i64Return;
+#if defined( _WIN32 )
+		LARGE_INTEGER l_liCurrentTime;
+		::QueryPerformanceCounter( & l_liCurrentTime );
+		l_i64Return = l_liCurrentTime.QuadPart;
+#else
+		timeval l_time;
+		gettimeofday( & l_time, nullptr );
+		l_i64Return = l_time.tv_sec * sm_i64Frequency + l_time.tv_usec;
+#endif
+		return l_i64Return;
 	}
 }

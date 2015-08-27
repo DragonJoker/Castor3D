@@ -1,9 +1,8 @@
-﻿#include "Overlay.hpp"
+#include "Overlay.hpp"
 
 #include "BorderPanelOverlay.hpp"
 #include "Buffer.hpp"
 #include "Camera.hpp"
-#include "Engine.hpp"
 #include "Material.hpp"
 #include "OverlayFactory.hpp"
 #include "OverlayManager.hpp"
@@ -62,10 +61,9 @@ namespace Castor3D
 			l_bReturn = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
 		}
 
-		for ( auto && l_it = p_obj.begin(); l_it != p_obj.end() && l_bReturn; ++l_it )
+		for ( Overlay::const_iterator l_it = p_obj.Begin(); l_it != p_obj.End() && l_bReturn; ++l_it )
 		{
-			OverlaySPtr l_overlay = *l_it;
-			l_bReturn = Overlay::BinaryParser( m_path, m_engine ).Fill( *l_overlay, l_chunk );
+			l_bReturn = Overlay::BinaryParser( m_path, m_engine ).Fill( *l_it->second, l_chunk );
 		}
 
 		if ( l_bReturn )
@@ -136,26 +134,26 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	Overlay::Overlay( Engine * p_pEngine, eOVERLAY_TYPE p_eType )
-		: m_manager( p_pEngine->GetOverlayManager() )
-		, m_pParent()
-		, m_pScene()
-		, m_factory( p_pEngine->GetOverlayFactory() )
-		, m_pEngine( p_pEngine )
-		, m_pRenderSystem( p_pEngine->GetRenderSystem() )
-		, m_pOverlayCategory( p_pEngine->GetOverlayFactory().Create( p_eType ) )
+		:	m_pParent()
+		,	m_pScene()
+		,	m_factory( p_pEngine->GetOverlayFactory() )
+		,	m_pEngine( p_pEngine )
+		,	m_pRenderSystem( p_pEngine->GetRenderSystem() )
 	{
+		m_pOverlayCategory = m_factory.Create( p_eType );
+		m_pOverlayCategory->SetRenderer( p_pEngine->GetOverlayManager().GetRenderer() );
 		m_pOverlayCategory->SetOverlay( this );
 	}
 
 	Overlay::Overlay( Engine * p_pEngine, eOVERLAY_TYPE p_eType, SceneSPtr p_pScene, OverlaySPtr p_pParent )
-		: m_manager( p_pEngine->GetOverlayManager() )
-		, m_pParent( p_pParent )
-		, m_pScene( p_pScene )
-		, m_factory( p_pEngine->GetOverlayFactory() )
-		, m_pRenderSystem( p_pEngine->GetRenderSystem() )
-		, m_pEngine( p_pEngine )
-		, m_pOverlayCategory( p_pEngine->GetOverlayFactory().Create( p_eType ) )
+		:	m_pParent( p_pParent )
+		,	m_pScene( p_pScene )
+		,	m_factory( p_pEngine->GetOverlayFactory() )
+		,	m_pRenderSystem( p_pEngine->GetRenderSystem() )
+		,	m_pEngine( p_pEngine )
 	{
+		m_pOverlayCategory = m_factory.Create( p_eType );
+		m_pOverlayCategory->SetRenderer( p_pEngine->GetOverlayManager().GetRenderer() );
 		m_pOverlayCategory->SetOverlay( this );
 	}
 
@@ -168,50 +166,55 @@ namespace Castor3D
 		if ( IsVisible() )
 		{
 			m_pOverlayCategory->UpdatePositionAndSize();
+			Pipeline * l_pPipeline = m_pRenderSystem->GetPipeline();
+			Matrix4x4r l_mtxTransform;
+			MtxUtils::set_transform(
+				l_mtxTransform,
+				Point3r( 0, 0, 0 ),
+				Point3r( 1, 1, 0 ),
+				Quaternion::Identity()
+			);
+			l_pPipeline->PushMatrix();
+			l_pPipeline->MultMatrix( l_mtxTransform );
 			m_pOverlayCategory->Render();
 
-			for ( auto && l_overlay: m_overlays )
+			for ( OverlayPtrIntMapIt l_it = m_mapOverlays.begin(); l_it != m_mapOverlays.end(); ++l_it )
 			{
-				l_overlay->Render( p_size );
+				l_it->second->Render( p_size );
 			}
+
+			l_pPipeline->PopMatrix();
 		}
 	}
 
-	bool Overlay::AddChild( OverlaySPtr p_pOverlay )
+	bool Overlay::AddChild( OverlaySPtr p_pOverlay, int p_iZIndex )
 	{
 		bool l_bReturn = false;
-		int l_index = 1;
 
-		if ( !m_overlays.empty() )
+		if ( p_iZIndex == 0 )
 		{
-			l_index = ( *( m_overlays.end() - 1 ) )->GetIndex() + 1;
+			m_mapOverlays.insert( std::make_pair( GetZIndex(), p_pOverlay ) );
+			SetZIndex( GetZIndex() + 100 );
+			l_bReturn = true;
+		}
+		else if ( m_mapOverlays.find( p_iZIndex ) == m_mapOverlays.end() )
+		{
+			m_mapOverlays.insert( std::make_pair( p_iZIndex, p_pOverlay ) );
+			l_bReturn = true;
 		}
 
-		p_pOverlay->SetOrder( l_index, GetLevel() + 1 );
-		m_overlays.push_back( p_pOverlay );
-		return true;
+		p_pOverlay->SetZIndex( p_iZIndex );
+
+		while ( m_mapOverlays.find( GetZIndex() ) != m_mapOverlays.end() )
+		{
+			SetZIndex( GetZIndex() + 100 );
+			l_bReturn = true;
+		}
+
+		return l_bReturn;
 	}
 
 	void Overlay::Initialise()
 	{
-	}
-
-	int Overlay::GetChildsCount( int p_level )const
-	{
-		int l_return = 0;
-
-		if ( p_level == GetLevel() + 1 )
-		{
-			l_return = int( m_overlays.size() );
-		}
-		else if ( p_level > GetLevel() )
-		{
-			for ( auto && l_overlay: m_overlays )
-			{
-				l_return += l_overlay->GetChildsCount( p_level );
-			}
-		}
-
-		return l_return;
 	}
 }

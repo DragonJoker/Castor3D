@@ -1,0 +1,131 @@
+scene "AnimScene"
+{
+	background_colour 0.5 0.5 0.5 1.0
+	ambient_light 0.5 0.5 0.5 1.0
+
+	scene_node "SunLightNode1"
+	{
+		position  0.0 -1.0 1.0
+	}
+	light "SunLight1"
+	{
+		parent		"SunLightNode1"
+		type		directional
+		diffuse		0.8 0.8 0.8
+		specular	1.0 1.0 1.0
+	}
+
+	scene_node "FinalNode01"
+	{
+		position 0.0 0.0 0.0
+	}
+	object "Geom01"
+	{
+		parent "FinalNode01"
+		mesh "GeomMesh01"
+		{
+			import "Anim/boblampclean.md5mesh" -smooth_normals -tangent_space
+		}
+	}
+
+	scene_node "FinalNode02"
+	{
+		position 50.0 0.0 0.0
+	}
+	object "Geom02"
+	{
+		parent "FinalNode02"
+		mesh "boblampclean"
+	}
+
+	scene_node "FinalNode03"
+	{
+		position 100.0 0.0 0.0
+	}
+	object "Geom03"
+	{
+		parent "FinalNode03"
+		mesh "boblampclean"
+	}
+
+	scene_node "FinalNode11"
+	{
+		position 0.0 0.0 50.0
+	}
+	object "Geom11"
+	{
+		parent "FinalNode11"
+		mesh "GeomMesh"
+	}
+
+	scene_node "FinalNode12"
+	{
+		position 50.0 0.0 50.0
+	}
+	object "Geom12"
+	{
+		parent "FinalNode12"
+		mesh "boblampclean"
+	}
+
+	scene_node "FinalNode13"
+	{
+		position 100.0 0.0 50.0
+	}
+	object "Geom13"
+	{
+		parent "FinalNode13"
+		mesh "boblampclean"
+	}
+
+	scene_node "FinalNode21"
+	{
+		position 0.0 0.0 100.0
+	}
+	object "Geom21"
+	{
+		parent "FinalNode21"
+		mesh "GeomMesh"
+	}
+
+	scene_node "FinalNode22"
+	{
+		position 50.0 0.0 100.0
+	}
+	object "Geom22"
+	{
+		parent "FinalNode22"
+		mesh "boblampclean"
+	}
+
+	scene_node "FinalNode23"
+	{
+		position 100.0 0.0 100.0
+	}
+	object "Geom23"
+	{
+		parent "FinalNode23"
+		mesh "boblampclean"
+	}
+
+	animated_object_group "Anim"
+	{
+		animation "boblampclean"
+		animated_object "Geom01"
+		animated_object "Geom02"
+	}
+}
+
+window "MainWindow"
+{
+	render_target
+	{
+		format		argb32
+		depth		depth24s8
+//		msaa		8
+		size		screen_size
+		scene		"AnimScene"
+	}
+	fullscreen	false
+	vsync		true
+}

@@ -1,0 +1,34 @@
+
+material plot_beton
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.0392157 0.0392157 0.0392157 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture bite_basse_beton.jpg
+			}
+		}
+
+	}
+
+}
+
+material coll_pf_plot_beton_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}

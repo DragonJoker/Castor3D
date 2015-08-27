@@ -1,4 +1,4 @@
-Ôªø/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -59,27 +59,11 @@ namespace Castor3D
 		virtual ~TextureBase();
 		/**
 		 *\~english
-		 *\brief		Activation function, to tell the GPU it is active
-		 *\return		\p true if successful
-		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activ√©
-		 *\return		\p true si tout s'est bien pass√©
-		 */
-		bool Bind();
-		/**
-		 *\~english
-		 *\brief		Deactivation function, to tell the GPU it is inactive
-		 *\~french
-		 *\brief		Fonction de d√©sactivation, pour dire au GPU qu'il est d√©sactiv√©
-		 */
-		void Unbind();
-		/**
-		 *\~english
 		 *\brief		Creation function
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Fonction de cr√©ation
-		 *\return		\p true si tout s'est bien pass√©
+		 *\brief		Fonction de crÈation
+		 *\return		\p true si tout s'est bien passÈ
 		 */
 		virtual bool Create() = 0;
 		/**
@@ -97,7 +81,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Fonction d'initialisation
 		 *\param[in]	p_uiIndex		L'index de la texture
-		 *\return		\p true si tout s'est bien pass√©
+		 *\return		\p true si tout s'est bien passÈ
 		 */
 		virtual bool Initialise( uint32_t p_uiIndex ) = 0;
 		/**
@@ -113,8 +97,8 @@ namespace Castor3D
 		 *\param[in]	p_eLock	Defines the lock mode (r, w, rw), combination of eLOCK_FLAG
 		 *\return		The image buffer
 		 *\~french
-		 *\brief		Locke le buffer de l'image √† partir du GPU, permettant des modification dessus
-		 *\param[in]	p_eLock	D√©finit le mode de lock (lecture, √©criture, les 2), combinaison de eLOCK_FLAG
+		 *\brief		Locke le buffer de l'image ‡ partir du GPU, permettant des modification dessus
+		 *\param[in]	p_eLock	DÈfinit le mode de lock (lecture, Ècriture, les 2), combinaison de eLOCK_FLAG
 		 *\return		Le buffer de l'image
 		 */
 		virtual uint8_t * Lock( uint32_t p_uiLock ) = 0;
@@ -123,35 +107,35 @@ namespace Castor3D
 		 *\brief		Unlocks image buffer from GPU
 		 *\param[in]	p_bModified	Tells if the buffer has been modified, so modifications are uploaded to GPU
 		 *\~french
-		 *\brief		D√©locke le buffer de l'image √† partir du GPU
-		 *\param[in]	p_bModified	Dit si le buffer a √©t√© modifi√©, afin que les modifications soient mises sur le GPU
+		 *\brief		DÈlocke le buffer de l'image ‡ partir du GPU
+		 *\param[in]	p_bModified	Dit si le buffer a ÈtÈ modifiÈ, afin que les modifications soient mises sur le GPU
 		 */
 		virtual void Unlock( bool p_bModified ) = 0;
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
-		 *\param[in]	p_index	The texture index
+		 *\param[in]	p_uiIndex	The texture index
 		 *\return		\p true if successful
 		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activ√©
-		 *\param[in]	p_index	L'index de texture
-		 *\return		\p true si tout s'est bien pass√©
+		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activÈ
+		 *\param[in]	p_uiIndex	L'index de texture
+		 *\return		\p true si tout s'est bien passÈ
 		 */
-		virtual bool BindAt( uint32_t p_index ) = 0;
+		virtual bool Bind() = 0;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
-		 *\param[in]	p_index	The texture index
+		 *\param[in]	p_uiIndex	The texture index
 		 *\~french
-		 *\brief		Fonction de d√©sactivation, pour dire au GPU qu'il est d√©sactiv√©
-		 *\param[in]	p_index	L'index de texture
+		 *\brief		Fonction de dÈsactivation, pour dire au GPU qu'il est dÈsactivÈ
+		 *\param[in]	p_uiIndex	L'index de texture
 		 */
-		virtual void UnbindFrom( uint32_t p_index ) = 0;
+		virtual void Unbind() = 0;
 		/**
 		 *\~english
 		 *\brief		Generate texture mipmaps
 		 *\~french
-		 *\brief		G√©n√®re les mipmaps de la texture
+		 *\brief		GÈnËre les mipmaps de la texture
 		 */
 		virtual void GenerateMipmaps() = 0;
 		/**
@@ -159,7 +143,7 @@ namespace Castor3D
 		 *\brief		Retrieves the initialisation status
 		 *\return		The initialisation status
 		 *\~french
-		 *\brief		R√©cup√®re le statut d'initialisation
+		 *\brief		RÈcupËre le statut d'initialisation
 		 *\return		Le statut d'initialisation
 		 */
 		inline bool IsInitialised()const
@@ -171,7 +155,7 @@ namespace Castor3D
 		 *\brief		Retrieves the texture type
 		 *\return		The texture type
 		 *\~french
-		 *\brief		R√©cup√®re le type de texture
+		 *\brief		RÈcupËre le type de texture
 		 *\return		Le type de texture
 		 */
 		inline eTEXTURE_TYPE GetType()const
@@ -183,7 +167,7 @@ namespace Castor3D
 		 *\brief		Retrieves the texture dimension
 		 *\return		The texture dimension
 		 *\~french
-		 *\brief		R√©cup√®re la dimension de la texture
+		 *\brief		RÈcupËre la dimension de la texture
 		 *\return		La dimension de la texture
 		 */
 		inline eTEXTURE_DIMENSION GetDimension()const
@@ -195,7 +179,7 @@ namespace Castor3D
 		 *\brief		Defines the texture dimension
 		 *\param[in]	p_eDimension	The texture dimension
 		 *\~french
-		 *\brief		D√©finit la dimension de la texture
+		 *\brief		DÈfinit la dimension de la texture
 		 *\param[in]	p_eDimension	La dimension de la texture
 		 */
 		inline void SetDimension( eTEXTURE_DIMENSION p_eDimension )
@@ -207,7 +191,7 @@ namespace Castor3D
 		 *\brief		Retrieves the texture mapping mode
 		 *\return		The texture mapping mode
 		 *\~french
-		 *\brief		R√©cup√®re le mode mappage de la texture
+		 *\brief		RÈcupËre le mode mappage de la texture
 		 *\return		Le mode mappage de la texture
 		 */
 		inline eTEXTURE_MAP_MODE GetMappingMode()const
@@ -219,7 +203,7 @@ namespace Castor3D
 		 *\brief		Defines the texture mapping mode
 		 *\param[in]	p_eMapMode	The texture mapping mode
 		 *\~french
-		 *\brief		D√©finit le mode mappage de la texture
+		 *\brief		DÈfinit le mode mappage de la texture
 		 *\param[in]	p_eMapMode	Le mode mappage de la texture
 		 */
 		inline void SetMappingMode( eTEXTURE_MAP_MODE p_eMapMode )
@@ -231,7 +215,7 @@ namespace Castor3D
 		 *\brief		Retrieves the texture image dimensions
 		 *\return		The image dimensions
 		 *\~french
-		 *\brief		R√©cup√®re les dimensions de l'image de la texture
+		 *\brief		RÈcupËre les dimensions de l'image de la texture
 		 *\return		Les dimensions de l'image
 		 */
 		inline Castor::Size GetDimensions()const
@@ -243,7 +227,7 @@ namespace Castor3D
 		 *\brief		Retrieves the texture depth
 		 *\return		The depth, 1 if not 3D
 		 *\~french
-		 *\brief		R√©cup√®re la profondeur de la texture
+		 *\brief		RÈcupËre la profondeur de la texture
 		 *\return		La profondeur, 1 si pas 3D
 		 */
 		inline uint32_t GetDepth()const
@@ -255,7 +239,7 @@ namespace Castor3D
 		 *\brief		Retrieves the texture pixel format
 		 *\return		The pixel format
 		 *\~french
-		 *\brief		R√©cup√®re le format des pixels de la texture
+		 *\brief		RÈcupËre le format des pixels de la texture
 		 *\return		Le format des pixels
 		 */
 		inline Castor::ePIXEL_FORMAT GetPixelFormat()const
@@ -267,7 +251,7 @@ namespace Castor3D
 		 *\brief		Retrieves the texture image width
 		 *\return		The width
 		 *\~french
-		 *\brief		R√©cup√®re la largeur de l'image de la texture
+		 *\brief		RÈcupËre la largeur de l'image de la texture
 		 *\return		La largeur
 		 */
 		uint32_t GetWidth()const
@@ -279,7 +263,7 @@ namespace Castor3D
 		 *\brief		Retrieves the texture image height
 		 *\return		The height
 		 *\~french
-		 *\brief		R√©cup√®re la hauteur de l'image de la texture
+		 *\brief		RÈcupËre la hauteur de l'image de la texture
 		 *\return		La hauteur
 		 */
 		uint32_t GetHeight()const
@@ -291,7 +275,7 @@ namespace Castor3D
 		 *\brief		Defines the texture buffer
 		 *\param[in]	p_pBuffer	The buffer
 		 *\~french
-		 *\brief		D√©finit le buffer de la texture
+		 *\brief		DÈfinit le buffer de la texture
 		 *\param[in]	p_pBuffer	Le buffer
 		 */
 		void SetImage( Castor::PxBufferBaseSPtr p_pBuffer );
@@ -300,7 +284,7 @@ namespace Castor3D
 		 *\brief		Retrieves the texture buffer
 		 *\return		The buffer
 		 *\~french
-		 *\brief		R√©cup√®re le buffer de la texture
+		 *\brief		RÈcupËre le buffer de la texture
 		 *\return		Le buffer
 		 */
 		inline Castor::PxBufferBaseSPtr GetBuffer()const
@@ -312,7 +296,7 @@ namespace Castor3D
 		 *\brief		Retrieves the texture index
 		 *\return		The index
 		 *\~french
-		 *\brief		R√©cup√®re l'index de la texture
+		 *\brief		RÈcupËre l'index de la texture
 		 *\return		L'index
 		 */
 		inline uint32_t const & GetIndex()const
@@ -321,22 +305,10 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the texture index
-		 *\param[in]	p_index	The index
-		 *\~french
-		 *\brief		D√©finit l'index de la texture
-		 *\param[in]	p_index	L'index
-		 */
-		inline void SetIndex( uint32_t p_index )
-		{
-			m_uiIndex = p_index;
-		}
-		/**
-		 *\~english
 		 *\brief		Defines the texture sampler
 		 *\param[in]	p_pSampler	The sampler
 		 *\~french
-		 *\brief		D√©finit le sampler de la texture
+		 *\brief		DÈfinit le sampler de la texture
 		 *\param[in]	p_pSampler	Le sampler
 		 */
 		inline void SetSampler( SamplerSPtr p_pSampler )
@@ -348,7 +320,7 @@ namespace Castor3D
 		 *\brief		Retrieves the texture sampler
 		 *\return		The sampler
 		 *\~french
-		 *\brief		R√©cup√®re le sampler de la texture
+		 *\brief		RÈcupËre le sampler de la texture
 		 *\return		Le buffer
 		 */
 		inline SamplerSPtr GetSampler()const
@@ -362,8 +334,8 @@ namespace Castor3D
 		 *\brief		API specific initialisation function
 		 *\return		\p if OK
 		 *\~french
-		 *\brief		Initialisation sp√©cifique selon l'API
-		 *\return		\p si tout s'est bien pass√©
+		 *\brief		Initialisation spÈcifique selon l'API
+		 *\return		\p si tout s'est bien passÈ
 		 */
 		virtual bool DoInitialise() = 0;
 		/**
@@ -371,17 +343,17 @@ namespace Castor3D
 		 *\brief		API specific binding function
 		 *\return		\p if OK
 		 *\~french
-		 *\brief		Activation sp√©cifique selon l'API
-		 *\return		\p si tout s'est bien pass√©
+		 *\brief		Activation spÈcifique selon l'API
+		 *\return		\p si tout s'est bien passÈ
 		 */
-		virtual bool DoBind( uint32_t p_index ) = 0;
+		virtual bool DoBind() = 0;
 		/**
 		 *\~english
 		 *\brief		API specific unbinding function
 		 *\~french
-		 *\brief		D√©sactivation sp√©cifique selon l'API
+		 *\brief		DÈsactivation spÈcifique selon l'API
 		 */
-		virtual void DoUnbind( uint32_t p_index ) = 0;
+		virtual void DoUnbind() = 0;
 
 	protected:
 		DECLARE_VECTOR( Castor::PxBufferBaseSPtr, PxBuffer );
@@ -415,10 +387,10 @@ namespace Castor3D
 	 *\param[in]		p_texture	The input texture
 	 *\return			A reference to the stream
 	 *\~french
-	 *\brief			Op√©rateur de flux
-	 *\param[in,out]	p_streamOut	Le flux qui re√ßoit les donn√©es de la texture
+	 *\brief			OpÈrateur de flux
+	 *\param[in,out]	p_streamOut	Le flux qui reÁoit les donnÈes de la texture
 	 *\param[in]		p_texture	La texture
-	 *\return			Une r√©f√©rence sur le flux
+	 *\return			Une rÈfÈrence sur le flux
 	 */
 	inline std::ostream & operator <<( std::ostream & p_streamOut, TextureBaseSPtr const & p_texture )
 	{
@@ -432,10 +404,10 @@ namespace Castor3D
 	 *\param[in,out]	p_texture	The output texture
 	 *\return			A reference to the stream
 	 *\~french
-	 *\brief			Op√©rateur de flux
-	 *\param[in,out]	p_streamIn	Le flux qui contient les donn√©es de la texture
+	 *\brief			OpÈrateur de flux
+	 *\param[in,out]	p_streamIn	Le flux qui contient les donnÈes de la texture
 	 *\param[in,out]	p_texture	La texture
-	 *\return			Une r√©f√©rence sur le flux
+	 *\return			Une rÈfÈrence sur le flux
 	 */
 	inline std::istream & operator >>( std::istream & p_streamIn, TextureBaseSPtr & p_texture )
 	{
@@ -451,10 +423,10 @@ namespace Castor3D
 	 *\param[in]		p_texture	The input texture
 	 *\return			A reference to the stream
 	 *\~french
-	 *\brief			Op√©rateur de flux
-	 *\param[in,out]	p_streamOut	Le flux qui re√ßoit les donn√©es de la texture
+	 *\brief			OpÈrateur de flux
+	 *\param[in,out]	p_streamOut	Le flux qui reÁoit les donnÈes de la texture
 	 *\param[in]		p_texture	La texture
-	 *\return			Une r√©f√©rence sur le flux
+	 *\return			Une rÈfÈrence sur le flux
 	 */
 	inline std::ostream & operator <<( std::ostream & p_streamOut, TextureBaseRPtr const & p_texture )
 	{
@@ -468,10 +440,10 @@ namespace Castor3D
 	 *\param[in,out]	p_texture	The output texture
 	 *\return			A reference to the stream
 	 *\~french
-	 *\brief			Op√©rateur de flux
-	 *\param[in,out]	p_streamIn	Le flux qui contient les donn√©es de la texture
+	 *\brief			OpÈrateur de flux
+	 *\param[in,out]	p_streamIn	Le flux qui contient les donnÈes de la texture
 	 *\param[in,out]	p_texture	La texture
-	 *\return			Une r√©f√©rence sur le flux
+	 *\return			Une rÈfÈrence sur le flux
 	 */
 	inline std::istream & operator >>( std::istream & p_streamIn, TextureBaseRPtr & p_texture )
 	{
@@ -487,10 +459,10 @@ namespace Castor3D
 	 *\param[in]		p_texture	The input texture
 	 *\return			A reference to the stream
 	 *\~french
-	 *\brief			Op√©rateur de flux
-	 *\param[in,out]	p_streamOut	Le flux qui re√ßoit les donn√©es de la texture
+	 *\brief			OpÈrateur de flux
+	 *\param[in,out]	p_streamOut	Le flux qui reÁoit les donnÈes de la texture
 	 *\param[in]		p_texture	La texture
-	 *\return			Une r√©f√©rence sur le flux
+	 *\return			Une rÈfÈrence sur le flux
 	 */
 	inline std::wostream & operator <<( std::wostream & p_streamOut, TextureBaseSPtr const & p_texture )
 	{
@@ -504,10 +476,10 @@ namespace Castor3D
 	 *\param[in,out]	p_texture	The output texture
 	 *\return			A reference to the stream
 	 *\~french
-	 *\brief			Op√©rateur de flux
-	 *\param[in,out]	p_streamIn	Le flux qui contient les donn√©es de la texture
+	 *\brief			OpÈrateur de flux
+	 *\param[in,out]	p_streamIn	Le flux qui contient les donnÈes de la texture
 	 *\param[in,out]	p_texture	La texture
-	 *\return			Une r√©f√©rence sur le flux
+	 *\return			Une rÈfÈrence sur le flux
 	 */
 	inline std::wistream & operator >>( std::wistream & p_streamIn, TextureBaseSPtr & p_texture )
 	{
@@ -523,10 +495,10 @@ namespace Castor3D
 	 *\param[in]		p_texture	The input texture
 	 *\return			A reference to the stream
 	 *\~french
-	 *\brief			Op√©rateur de flux
-	 *\param[in,out]	p_streamOut	Le flux qui re√ßoit les donn√©es de la texture
+	 *\brief			OpÈrateur de flux
+	 *\param[in,out]	p_streamOut	Le flux qui reÁoit les donnÈes de la texture
 	 *\param[in]		p_texture	La texture
-	 *\return			Une r√©f√©rence sur le flux
+	 *\return			Une rÈfÈrence sur le flux
 	 */
 	inline std::wostream & operator <<( std::wostream & p_streamOut, TextureBaseRPtr const & p_texture )
 	{
@@ -540,10 +512,10 @@ namespace Castor3D
 	 *\param[in,out]	p_texture	The output texture
 	 *\return			A reference to the stream
 	 *\~french
-	 *\brief			Op√©rateur de flux
-	 *\param[in,out]	p_streamIn	Le flux qui contient les donn√©es de la texture
+	 *\brief			OpÈrateur de flux
+	 *\param[in,out]	p_streamIn	Le flux qui contient les donnÈes de la texture
 	 *\param[in,out]	p_texture	La texture
-	 *\return			Une r√©f√©rence sur le flux
+	 *\return			Une rÈfÈrence sur le flux
 	 */
 	inline std::wistream & operator >>( std::wistream & p_streamIn, TextureBaseRPtr & p_texture )
 	{

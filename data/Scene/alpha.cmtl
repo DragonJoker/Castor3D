@@ -1,0 +1,631 @@
+sampler "Default"
+{
+	min_filter		linear
+	mag_filter		linear
+	min_lod			-500.0
+	max_lod			500.0
+	lod_bias		0.0
+	u_wrap_mode		repeat
+	v_wrap_mode		repeat
+	w_wrap_mode		repeat
+	border_colour	0.0 0.0 0.0 0.0
+}
+
+material "TesselateGeom"
+{
+	pass
+	{
+		ambient 0.0 0.0 0.0 1.0
+		diffuse 0.5 0.5 0.5 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 1.0 1.0 1.0 1.0
+		shininess 50.0
+
+		gl_shader_program
+		{
+			vertex_program
+			{
+				file sm_3 "Tesselation/tessellation_pn-3.x.vert"
+				file sm_4 "Tesselation/tessellation_pn-4.vert"
+			}
+
+			geometry_program
+			{
+				input_type triangles
+//				output_type triangle_strip
+				output_type line_strip
+				output_vtx_count 16
+				file sm_3 "Tesselation/tessellation_pn-3.x.geom"
+				file sm_4 "Tesselation/tessellation_pn-4.geom"
+			}
+
+			pixel_program
+			{
+				file sm_3 "Tesselation/tessellation_pn-3.x.frag"
+				file sm_4 "Tesselation/tessellation_pn-4.frag"
+			}
+		}
+	}
+}
+
+material "Tesselate"
+{
+	pass
+	{
+		ambient 0.0 0.0 0.0 1.0
+		diffuse 0.5 0.5 0.5 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 1.0 1.0 1.0 1.0
+		shininess 50.0
+		blend_func src_alpha inv_src_alpha
+
+		gl_shader_program
+		{
+			vertex_program
+			{
+				file sm_4 "Tesselation/Tesselation-4.x.vert"
+			}
+
+			hull_program
+			{
+				file sm_4 "Tesselation/Tesselation-4.x.ctrl"
+			}
+
+			domain_program
+			{
+				file sm_4 "Tesselation/Tesselation-4.x.eval"
+			}
+
+			pixel_program
+			{
+				file sm_4 "Tesselation/Tesselation-4.x.frag"
+			}
+		}
+	}
+}
+
+material "Basic"
+{
+	pass
+	{
+		ambient 0.0 0.0 0.0 1.0
+		diffuse 0.5 0.5 0.5 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 1.0 1.0 1.0 1.0
+		shininess 50.0
+	}
+}
+
+material "Gold"
+{
+	pass
+	{
+		ambient 0.24725	0.1995	0.0745 1.0
+		diffuse 0.75164	0.60648	0.22648 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 0.628281 0.555802 0.366065 1.0
+		shininess 51.2
+		two_sided true
+	}
+}
+
+material "GoldTransp"
+{
+	pass
+	{
+		ambient 0.24725	0.1995	0.0745 0.6
+		diffuse 0.75164	0.60648	0.22648 0.6
+		emissive 0.0 0.0 0.0 0.4
+		specular 0.628281 0.555802 0.366065 0.6
+		shininess 51.2
+//		blend_func one_minus_dst_alpha dst_alpha
+		blend_func src_alpha inv_src_alpha
+		alpha 0.6
+		two_sided true
+	}
+}
+
+material "TnL"
+{
+	pass
+	{
+		ambient 0.0 0.0 0.0 1.0
+		diffuse 1.0 1.0 1.0 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 1.0 1.0 1.0 1.0
+		shininess 50.0
+
+		texture_unit
+		{
+			image "Bump/Diffuse.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel diffuse
+			sampler	"Default"
+		}
+	}
+}
+
+material "ShowNormals"
+{
+	pass
+	{
+		ambient 0.0 0.0 0.0 1.0
+		diffuse 1.0 1.0 1.0 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 1.0 1.0 1.0 1.0
+		blend_func src_alpha inv_src_alpha
+		shininess 50.0
+
+		gl_shader_program
+		{
+			vertex_program
+			{
+				file sm_3 "Normals/normals-3.x.vert"
+				file sm_4 "Normals/normals-4.x.vert"
+			}
+			
+			geometry_program
+			{
+				file sm_3 "Normals/normals-3.x.geom"
+				file sm_4 "Normals/normals-4.x.geom"
+				input_type triangles
+				output_type line_strip
+				output_vtx_count 22
+
+				variable "p_bShowNormals"
+				{
+					type int
+					value 1
+				}
+
+				variable "p_bShowTangents"
+				{
+					type int
+					value 1
+				}
+
+				variable "p_bShowBitangents"
+				{
+					type int
+					value 1
+				}
+			}
+			
+			pixel_program
+			{
+				file sm_3 "Normals/normals-3.x.frag"
+			}
+		}
+	}
+}
+
+material "Bump"
+{
+	pass
+	{
+		ambient 0.321212 0.321212 0.321212 1.0
+		diffuse 1.0 1.0 1.0 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 0.847059 0.847059 0.847059 1.0
+		shininess 128
+
+		texture_unit
+		{
+			image "Bump/Diffuse.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel diffuse
+			sampler	"Default"
+		}
+
+		texture_unit
+		{
+			image "Bump/Normal.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel normal
+			sampler	"Default"
+		}
+	}
+}
+
+material "Relief"
+{
+	pass
+	{
+		ambient 0.5 0.5 0.5 1.0
+		diffuse 0.4 0.4 0.4 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 0.1 0.1 0.1 1.0
+		shininess 50
+
+		texture_unit
+		{
+			image "Relief/Diffuse.jpg"
+			colour 1.0 1.0 1.0 1.0
+			channel diffuse
+			sampler	"Default"
+		}
+
+		texture_unit
+		{
+			image "Relief/Normal.tga"
+			colour 1.0 1.0 1.0 1.0
+			channel normal
+			sampler	"Default"
+		}
+
+		hl_shader_program
+		{
+			file sm_2 "Relief/Relief.hl"
+			
+			vertex_program
+			{
+				entry "mainVx"
+				file sm_3 "Relief/Relief3v.hl"
+				file sm_4 "Relief/Relief4v.hl"
+			}
+			
+			pixel_program
+			{
+				entry "mainPx"
+				file sm_3 "Relief/Relief3p.hl"
+				file sm_4 "Relief/Relief4p.hl"
+
+				variable "LinearSearchSteps"
+				{
+					type int
+					value 20
+				}
+
+				variable "BinarySearchSteps"
+				{
+					type int
+					value 5
+				}
+
+				variable "Depth"
+				{
+					type float
+					value 0.075
+				}
+
+				variable "Tile"
+				{
+					type float
+					value 1.0
+				}
+			}
+		}
+
+		gl_shader_program
+		{
+			vertex_program
+			{
+				file sm_3 "Relief/Relief-3.x.vert"
+				file sm_2 "Relief/Relief.vert"
+			}
+			
+			pixel_program
+			{
+				file sm_3 "Relief/Relief-3.x.frag"
+				file sm_2 "Relief/Relief.frag"
+
+				variable "LinearSearchSteps"
+				{
+					type int
+					value 20
+				}
+
+				variable "BinarySearchSteps"
+				{
+					type int
+					value 5
+				}
+
+				variable "Depth"
+				{
+					type float
+					value 0.075
+				}
+
+				variable "Tile"
+				{
+					type float
+					value 1.0
+				}
+			}
+		}
+	}
+}
+
+material "OffsetRV"
+{
+	pass
+	{
+		ambient 0.0 0.0 0.0 1.0
+		diffuse 1.0 1.0 1.0 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 1.0 1.0 1.0 1.0
+		shininess 128
+
+		texture_unit
+		{
+			image "OffsetRV/Diffuse.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel diffuse
+			sampler	"Default"
+		}
+
+		texture_unit
+		{
+			image "OffsetRV/Normal.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel normal
+			sampler	"Default"
+		}
+
+		texture_unit
+		{
+			image "OffsetRV/Height.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel height
+			sampler	"Default"
+		}
+
+		texture_unit
+		{
+			image "OffsetRV/Offset.bmp"
+			colour 1.0 1.0 1.0 1.0
+			sampler	"Default"
+		}
+
+		hl_shader_program
+		{
+			file sm_2 "OffsetRV/offsetRV.hl"
+			
+			vertex_program
+			{
+				entry "mainVx"
+				file sm_3 "OffsetRV/offsetRV3v.hl"
+				file sm_4 "OffsetRV/offsetRV4v.hl"
+
+				variable "HeightMapScale"
+				{
+					type float
+					value 0.0306
+				}
+
+				variable "Scale"
+				{
+					type float
+					value 0.753
+				}
+			}
+
+			pixel_program
+			{
+				entry "mainPx"
+				file sm_3 "OffsetRV/offsetRV3p.hl"
+				file sm_4 "OffsetRV/offsetRV4p.hl"
+
+				variable "OffsetMap"
+				{
+					type int
+					value 4
+				}
+			}
+		}
+
+		gl_shader_program
+		{
+			vertex_program
+			{
+				file sm_3 "OffsetRV/offsetRV-3.x.vert"
+				file sm_2 "OffsetRV/offsetRV.vert"
+
+				variable "HeightMapScale"
+				{
+					type float
+					value 0.0306
+				}
+
+				variable "Scale"
+				{
+					type float
+					value 0.753
+				}
+			}
+
+			pixel_program
+			{
+				file sm_3 "OffsetRV/offsetRV-3.x.frag"
+				file sm_2 "OffsetRV/offsetRV.frag"
+
+				variable "OffsetMap"
+				{
+					type int
+					value 4
+				}
+			}
+		}
+	}
+}
+
+material "Parallax"
+{
+	pass
+	{
+		ambient 0.321212 0.321212 0.321212 1.0
+		diffuse 0.5 0.5 0.5 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 0.847059 0.847059 0.847059 1.0
+		shininess 20
+
+		texture_unit
+		{
+			image "Parallax/Diffuse.tga"
+			colour 1.0 1.0 1.0 1.0
+			channel diffuse
+			sampler	"Default"
+		}
+
+		texture_unit
+		{
+			image "Parallax/Height.tga"
+			colour 1.0 1.0 1.0 1.0
+			channel height
+			sampler	"Default"
+		}
+
+		gl_shader_program
+		{
+			vertex_program
+			{
+				file sm_3 "Parallax/parallax-3.x.vert"
+				file sm_2 "Parallax/parallax.vert"
+			}
+
+			pixel_program
+			{
+				file sm_3 "Parallax/parallax-3.x.frag"
+				file sm_2 "Parallax/parallax.frag"
+
+				variable "Scale"
+				{
+					type float
+					value 0.004
+				}
+			}
+		}
+	}
+}
+
+material "SteepParallax"
+{
+	pass
+	{
+		ambient 0.321212 0.321212 0.321212 1.0
+		diffuse 1.0 1.0 1.0 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 0.847059 0.847059 0.847059 1.0
+		shininess 128
+
+		texture_unit
+		{
+			image "Parallax/Diffuse.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel diffuse
+			sampler	"Default"
+		}
+
+		texture_unit
+		{
+			image "Parallax/Normal.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel normal
+			sampler	"Default"
+		}
+
+		texture_unit
+		{
+			image "Parallax/Height.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel height
+			sampler	"Default"
+		}
+
+		gl_shader_program
+		{
+			vertex_program
+			{
+				file sm_3 "Parallax/steep_parallax-3.x.vert"
+				file sm_2 "Parallax/steep_parallax.vert"
+			}
+
+			pixel_program
+			{
+				file sm_3 "Parallax/steep_parallax-3.x.frag"
+				file sm_2 "Parallax/steep_parallax.frag"
+			}
+		}
+	}
+}
+
+material "ParallaxGloss"
+{
+	pass
+	{
+		ambient 0.321212 0.321212 0.321212 1.0
+		diffuse 1.0 1.0 1.0 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 0.847059 0.847059 0.847059 1.0
+		shininess 50
+
+		texture_unit
+		{
+			image "Parallax/Gloss.tga"
+			colour 1.0 1.0 1.0 1.0
+			channel diffuse
+			sampler	"Default"
+		}
+
+		texture_unit
+		{
+			image "Parallax/Normal.tga"
+			colour 1.0 1.0 1.0 1.0
+			channel normal
+			sampler	"Default"
+		}
+
+		gl_shader_program
+		{
+			vertex_program
+			{
+				file sm_3 "Parallax/parallax_gloss-3.x.vert"
+				file sm_2 "Parallax/parallax_gloss.vert"
+			}
+
+			pixel_program
+			{
+				file sm_3 "Parallax/parallax_gloss-3.x.frag"
+				file sm_2 "Parallax/parallax_gloss.frag"
+			}
+		}
+	}
+}
+/*
+material "CgTexture"
+{
+	pass
+	{
+		ambient 0.0 0.0 0.0 1.0
+		diffuse 0.5 0.5 0.5 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 1.0 1.0 1.0 1.0
+		shininess 50.0
+		two_sided true
+
+		texture_unit
+		{
+			image "Bump/Diffuse.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel diffuse
+			sampler	"Default"
+		}
+		
+		cg_shader_program
+		{
+			file sm_3 "Texturing/texturing.cg"
+			
+			vertex_program
+			{
+				entry "mainVx"
+			}
+
+			pixel_program
+			{
+				entry "mainPx"
+			}
+		}
+	}
+}
+*/

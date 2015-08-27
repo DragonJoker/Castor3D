@@ -1,4 +1,4 @@
-﻿#include "Size.hpp"
+#include "Size.hpp"
 
 namespace Castor
 {

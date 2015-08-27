@@ -1,0 +1,433 @@
+
+material magasins_parc/enseigne_fashion
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture magasin_enseigne.jpg
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material magasins_parc/entree_snow
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0.207 0.207 0.207 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture rideau_fer.jpg
+			}
+		}
+
+	}
+
+}
+
+material magasins_parc/vitrine_snow
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0.18 0.18 0.18 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture rideau_fer_reserve.jpg
+			}
+		}
+
+	}
+
+}
+
+material magasins_parc/vitrine_snow2
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0.18 0.18 0.18 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture rideau_fer_reserve.jpg
+			}
+		}
+
+	}
+
+}
+
+material magasins_parc/vitrine_mode2
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0.18 0.18 0.18 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture rideau_fer_reserve.jpg
+			}
+		}
+
+	}
+
+}
+
+material magasins_parc/magasin_enseigne2
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.588235 0.588235 0.588235 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture magasin_enseigne2.jpg
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material magasins_parc/dab
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.588235 0.588235 0.588235 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture magasins_dab.jpg
+			}
+		}
+
+	}
+
+}
+
+material magasins_parc/troquet_enseigne
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture magasins_troquet_enseigne.jpg
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material magasins_parc/vitrine_bar
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture magasins_vitrine_bar.jpg
+			}
+		}
+
+	}
+
+}
+
+material magasins_parc/tabac
+{
+	technique
+	{
+		pass
+		{
+			ambient 0 0 0 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.0392157 0.0392157 0.0392157 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture magasins_tabac.jpg
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material magasins_parc/vitrine_homme
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0.18 0.18 0.18 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture rideau_fer_reserve.jpg
+			}
+		}
+
+	}
+
+}
+
+material magasins_parc/vitrine_femme
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0.18 0.18 0.18 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture rideau_fer_reserve.jpg
+			}
+		}
+
+	}
+
+}
+
+material magasins_parc/enseigne_snow
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.196078 0.196078 0.196078 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture magasins_enseigne_snow.jpg
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material magasins_parc/enseigne_cb
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.196078 0.196078 0.196078 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture magasins_enseigne_cb.jpg
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material magasins_parc/vetement_3
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.392157 0.392157 0.392157 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture magasin_enseigne3.jpg
+				max_anisotropy 8
+				filtering anisotropic anisotropic linear
+			}
+		}
+
+	}
+
+}
+
+material magasins_parc/vitres
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.196078 0.196078 0.196078 1
+			diffuse 0 0 0 1
+			specular 0.117647 0.117647 0.117647 1 15
+		}
+
+	}
+
+}
+
+material magasins_parc/metal_bleu
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			diffuse 0.996078 0.996078 0.996078 1
+			specular 0.156863 0.156863 0.156863 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture baltar_metal_bleu.jpg
+			}
+		}
+
+	}
+
+}
+
+material magasins_parc/black
+{
+	technique
+	{
+		pass
+		{
+			ambient 0 0 0 1
+			diffuse 0 0 0 1
+			specular 0 0 0 1 10
+		}
+
+	}
+
+}
+
+material magasins_parc/soldes
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.588235 0.588235 0.588235 1
+			specular 0 0 0 1 10
+
+			texture_unit
+			{
+				texture_alias 0
+				texture pub_soldes.jpg
+			}
+		}
+
+	}
+
+}
+
+material coll_pf_magasins_parc_01_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}
+
+material coll_pf_magasins_parc_02_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}
+
+material coll_pf_magasins_parc_03_mesh_material
+{
+	technique
+	{
+		pass
+		{
+			specular 1 1 1 1 20
+		}
+
+	}
+
+}

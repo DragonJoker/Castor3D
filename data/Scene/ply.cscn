@@ -1,0 +1,71 @@
+material "Gold"
+{
+	pass
+	{
+		ambient 0.24725	0.1995	0.0745 1.0
+		diffuse 0.75164	0.60648	0.22648 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 0.628281 0.555802 0.366065 1.0
+		shininess 51.2
+	}
+}
+
+scene "MyScene"
+{
+	background_colour 0.5 0.5 0.5 1.0
+	ambient_light 0.5 0.5 0.5 1.0
+
+	scene_node "SunLightNode"
+	{
+		position  0.0 -1.0 1.0
+	}
+	
+	scene_node "SunLightNode2"
+	{
+		position  1.0 1.0 -1.0
+	}
+
+	light "SunLight"
+	{
+		parent		"SunLightNode"
+		type		directional
+		diffuse		0.8 0.8 0.8
+		specular	1.0 1.0 1.0
+	}
+	
+	light "SunLight2"
+	{
+		parent		"SunLightNode2"
+		type		directional
+		diffuse		0.8 0.8 0.8
+		specular	1.0 1.0 1.0
+	}
+	
+	scene_node "BuddahNode"
+	{
+		scale 5 5 5
+	}
+	object "Buddah"
+	{
+		parent "BuddahNode"
+		mesh "BuddahMesh"
+		{
+			import "PlyModels/happy.ply"
+		}
+		material "Gold"
+	}
+}
+
+window "MyWindow"
+{
+	render_target
+	{
+		format		argb32
+		depth		depth24s8
+//		msaa		8
+		size		screen_size
+        scene "MyScene"
+	}
+	fullscreen	false
+	vsync		true
+}

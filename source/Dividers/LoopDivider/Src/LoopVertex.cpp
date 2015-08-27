@@ -19,9 +19,9 @@ namespace Loop
 		return m_mapEdges.find( p_uiIndex ) != m_mapEdges.end();
 	}
 
-	EdgeSPtr Vertex::GetEdge( uint32_t p_uiIndex )
+	EdgePtr Vertex::GetEdge( uint32_t p_uiIndex )
 	{
-		EdgeSPtr l_pReturn;
+		EdgePtr l_pReturn;
 		EdgePtrUIntMap::iterator l_it = m_mapEdges.find( p_uiIndex );
 
 		if ( l_it != m_mapEdges.end() )
@@ -32,7 +32,7 @@ namespace Loop
 		return l_pReturn;
 	}
 
-	void Vertex::AddEdge( EdgeSPtr p_pEdge, uint32_t p_uiIndex )
+	void Vertex::AddEdge( EdgePtr p_pEdge, uint32_t p_uiIndex )
 	{
 		EdgePtrUIntMap::iterator l_it = m_mapEdges.find( p_uiIndex );
 

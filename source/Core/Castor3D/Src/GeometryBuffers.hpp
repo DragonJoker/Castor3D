@@ -1,4 +1,4 @@
-ï»¿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -35,9 +35,9 @@ namespace Castor3D
 	\remark		Allows implementations to use API specific optimisations (like OpenGL Vertex array objects)
 				<br />Acquires it's buffers responsibility when constructed
 	\~french
-	\brief		Conteneur de buffers de gÃ©omÃ©tries
-	\remark		Permet aux implÃ©mentations d'utiliser les optimisations spÃ©cifiques aux API (comme les Vertex arrays objects OpenGL)
-				<br />Acquiert la responsabilitÃ© de ses buffers Ã  la crÃ©ation
+	\brief		Conteneur de buffers de géométries
+	\remark		Permet aux implémentations d'utiliser les optimisations spécifiques aux API (comme les Vertex arrays objects OpenGL)
+				<br />Acquiert la responsabilité de ses buffers à la création
 	*/
 	class C3D_API GeometryBuffers
 	{
@@ -68,7 +68,7 @@ namespace Castor3D
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Fonction d'initialisation
-		 *\return		\p true si tout s'est bien passÃ©
+		 *\return		\p true si tout s'est bien passé
 		 */
 		virtual bool Initialise() = 0;
 		/**
@@ -86,11 +86,11 @@ namespace Castor3D
 		 *\param[in]	p_uiIndex	Specifies the starting index in the enabled arrays
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Dessine la gÃ©omÃ©trie contenue dans les buffers
+		 *\brief		Dessine la géométrie contenue dans les buffers
 		 *\param[in]	p_eTopology	La topologie voulue
-		 *\param[in]	p_uiSize	SpÃ©cifie le nombre de vertices Ã  rendre
-		 *\param[in]	p_uiIndex	SpÃ©cifie l'indice du premier vertice
-		 *\return		\p true si tout s'est bien passÃ©
+		 *\param[in]	p_uiSize	Spécifie le nombre de vertices à rendre
+		 *\param[in]	p_uiIndex	Spécifie l'indice du premier vertice
+		 *\return		\p true si tout s'est bien passé
 		 */
 		virtual bool Draw( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex ) = 0;
 		/**
@@ -102,12 +102,12 @@ namespace Castor3D
 		 *\param[in]	p_uiCount	The instances count
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Dessine la gÃ©omÃ©trie contenue dans les buffers
+		 *\brief		Dessine la géométrie contenue dans les buffers
 		 *\param[in]	p_eTopology	La topologie voulue
-		 *\param[in]	p_uiSize	SpÃ©cifie le nombre de vertices Ã  rendre
-		 *\param[in]	p_uiIndex	SpÃ©cifie l'indice du premier vertice
-		 *\param[in]	p_uiCount	Le nombre d'instances Ã  dessiner
-		 *\return		\p true si tout s'est bien passÃ©
+		 *\param[in]	p_uiSize	Spécifie le nombre de vertices à rendre
+		 *\param[in]	p_uiIndex	Spécifie l'indice du premier vertice
+		 *\param[in]	p_uiCount	Le nombre d'instances à dessiner
+		 *\return		\p true si tout s'est bien passé
 		 */
 		virtual bool DrawInstanced( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex, uint32_t p_uiCount ) = 0;
 		/**
@@ -116,16 +116,16 @@ namespace Castor3D
 		 *\remark		If it fails they will be correctly unbound
 		 *\return		\p false if one buffer failed to be bound
 		 *\~french
-		 *\brief		Active les buffers de la gÃ©omÃ©trie
-		 *\remark		Si Ã§a Ã©choue, les buffers seront correctement dÃ©sactivÃ©s
-		 *\return		\p false si l'activation d'un tampon a Ã©chouÃ©
+		 *\brief		Active les buffers de la géométrie
+		 *\remark		Si ça échoue, les buffers seront correctement désactivés
+		 *\return		\p false si l'activation d'un tampon a échoué
 		 */
 		virtual bool Bind();
 		/**
 		 *\~english
 		 *\brief		Unbinds the geometry buffers
 		 *\~french
-		 *\brief		DÃ©sactive les buffers de la gÃ©omÃ©trie
+		 *\brief		Désactive les buffers de la géométrie
 		 */
 		virtual void Unbind();
 		/**
@@ -133,7 +133,7 @@ namespace Castor3D
 		 *\brief		Retrieves the indices buffer
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le tampon d'indices
+		 *\brief		Récupère le tampon d'indices
 		 *\return		La valeur
 		 */
 		inline IndexBuffer & GetIndexBuffer()
@@ -145,7 +145,7 @@ namespace Castor3D
 		 *\brief		Retrieves the vertices buffer
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le tampon de vertices
+		 *\brief		Récupère le tampon de vertices
 		 *\return		La valeur
 		 */
 		inline VertexBuffer & GetVertexBuffer()
@@ -157,7 +157,7 @@ namespace Castor3D
 		 *\brief		Retrieves the matrix buffer
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le tampon de matrices
+		 *\brief		Récupère le tampon de matrices
 		 *\return		La valeur
 		 */
 		inline MatrixBuffer & GetMatrixBuffer()
@@ -169,7 +169,7 @@ namespace Castor3D
 		 *\brief		Retrieves if the geometry buffers has an indices buffer
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le fait que le conteneur possÃ¨de un tampon d'indices
+		 *\brief		Récupère le fait que le conteneur possède un tampon d'indices
 		 *\return		La valeur
 		 */
 		inline bool HasIndexBuffer()
@@ -181,7 +181,7 @@ namespace Castor3D
 		 *\brief		Retrieves if the geometry buffers has a matrix buffer
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le fait que le conteneur possÃ¨de un tampon de matrices
+		 *\brief		Récupère le fait que le conteneur possède un tampon de matrices
 		 *\return		La valeur
 		 */
 		inline bool HasMatrixBuffer()
@@ -196,9 +196,9 @@ namespace Castor3D
 		IndexBufferUPtr m_pIndexBuffer;
 		//!\~english The matrix buffer	\~french Le tampon de matrices
 		MatrixBufferUPtr m_pMatrixBuffer;
-		//!\~english Tells the geometry buffers has an index buffer	\~french Dit si le conteneur possÃ¨de un tampon d'indices
+		//!\~english Tells the geometry buffers has an index buffer	\~french Dit si le conteneur possède un tampon d'indices
 		bool m_bIndexBuffer;
-		//!\~english Tells the geometry buffers has a matrix buffer	\~french Dit si le conteneur possÃ¨de un tampon de matrices
+		//!\~english Tells the geometry buffers has a matrix buffer	\~french Dit si le conteneur possède un tampon de matrices
 		bool m_bMatrixBuffer;
 	};
 }

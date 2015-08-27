@@ -1,4 +1,4 @@
-﻿#include "ShaderObject.hpp"
+#include "ShaderObject.hpp"
 #include "ShaderProgram.hpp"
 #include "FrameVariable.hpp"
 #include "OneFrameVariable.hpp"
@@ -176,14 +176,14 @@ namespace Castor3D
 						break;
 					}
 
-					//if ( l_bReturn && !l_pVariable )
-					//{
-					//	if ( l_uiCount && l_eType != eFRAME_VARIABLE_TYPE( -1 ) && !l_strText.empty() )
-					//	{
-					//		FrameVariableBufferSPtr l_buffer = p_object.GetParent()->GetUserBuffer();
-					//		l_pVariable = l_buffer->CreateVariable( *p_object.GetParent(), l_eType, l_strText, l_uiCount );
-					//	}
-					//}
+					if ( l_bReturn && !l_pVariable )
+					{
+						if ( l_uiCount && l_eType != eFRAME_VARIABLE_TYPE( -1 ) && !l_strText.empty() )
+						{
+							FrameVariableBufferSPtr l_buffer = p_object.GetParent()->GetUserBuffer();
+							l_pVariable = l_buffer->CreateVariable( *p_object.GetParent(), l_eType, l_strText, l_uiCount );
+						}
+					}
 
 					if ( !l_bReturn )
 					{
@@ -324,27 +324,23 @@ namespace Castor3D
 
 	bool ShaderObjectBase::Compile()
 	{
+		std::for_each( m_listFrameVariables.begin(), m_listFrameVariables.end(), [&]( FrameVariableSPtr p_pVariable )
+		{
+			p_pVariable->Bind();
+		} );
 		return true;
 	}
 
 	void ShaderObjectBase::Bind()
 	{
-		DoBind();
-
-		for ( auto && l_variable: m_listFrameVariables )
+		std::for_each( m_listFrameVariables.begin(), m_listFrameVariables.end(), [&]( FrameVariableSPtr p_pVariable )
 		{
-			l_variable->Bind();
-		}
+			p_pVariable->Apply();
+		} );
 	}
 
 	void ShaderObjectBase::Unbind()
 	{
-		for ( auto && l_variable: m_listFrameVariables )
-		{
-			l_variable->Unbind();
-		}
-
-		DoUnbind();
 	}
 
 	void ShaderObjectBase::SetFile( eSHADER_MODEL p_eModel, Path const & p_filename )

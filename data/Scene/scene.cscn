@@ -1,0 +1,69 @@
+mtl_file "scene.cmtl"
+
+scene "MainScene"
+{
+	background_colour 1.0 1.0 1.0 1.0
+	ambient_light 0.5 0.5 0.5 1.0
+
+	scene_node "SunLightNode"
+	{
+		position  0.0 0.0 1.0
+	}
+	light "SunLight"
+	{
+		parent		"SunLightNode"
+		type		directional
+		diffuse		0.8 0.8 0.8
+		specular	1.0 1.0 1.0
+	}
+	
+	scene_node "PrimitiveNode"
+	{
+	}
+	object "PrimitiveObject"
+	{
+		parent "PrimitiveNode"
+		mesh "PrimitiveMesh"
+		{
+//			type plane 0 0 1.0 1.0
+			type cube 1.0 1.0 1.0
+//			type cylinder 40 1.0 2.0
+//			type cone 40 1.0 2.0
+//			type sphere 10 1.0
+//			type torus 10 10 1.0 2.0
+//			type icosaedron 1 1.0
+//			division pn_tri 1
+//			division loop 1
+		}
+		material "Relief"
+//		material GoldTransp
+	}
+/*
+	scene_node "TessNode"
+	{
+	}
+	object Tess
+	{
+		parent "TessNode"
+		mesh Mesh
+		{
+			type cube 1.0 1.0 1.0
+			material "Tesselate"
+		}
+	}
+/**/
+}
+
+window "MainWindow"
+{
+	render_target
+	{
+		format		argb32
+		depth		depth24s8
+//		msaa		8
+		size		1125 600
+		scene		"MainScene"
+	}
+	fullscreen	false
+	vsync		true
+}

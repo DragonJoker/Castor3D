@@ -59,7 +59,6 @@ namespace GlRender
 				break;
 
 			case eELEMENT_USAGE_TANGENT:
-
 				if ( m_gl.HasTangentPointer() )
 				{
 					l_bReturn &= m_gl.EnableClientState( eGL_BUFFER_USAGE_TANGENT_ARRAY );
@@ -69,7 +68,6 @@ namespace GlRender
 				break;
 
 			case eELEMENT_USAGE_BITANGENT:
-
 				if ( m_gl.HasBinormalPointer() )
 				{
 					l_bReturn &= m_gl.EnableClientState( eGL_BUFFER_USAGE_BINORMAL_ARRAY );

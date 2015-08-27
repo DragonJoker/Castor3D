@@ -62,67 +62,54 @@ namespace GuiCommon
 		{
 			return uint32_t( m_arrayLanguages.size() );
 		}
-
 		inline LanguageInfoPtrArrayIt Begin()
 		{
 			return m_arrayLanguages.begin();
 		}
-
 		inline LanguageInfoPtrArrayConstIt Begin()const
 		{
 			return m_arrayLanguages.begin();
 		}
-
 		inline LanguageInfoPtrArrayConstIt End()const
 		{
 			return m_arrayLanguages.end();
 		}
-
 		inline bool GetWhiteSpaceEnable()const
 		{
 			return m_bWhiteSpaceEnable;
 		}
-
 		inline bool GetLongLineOnEnable()const
 		{
 			return m_bLongLineOnEnable;
 		}
-
 		inline bool GetLineNumberEnable()const
 		{
 			return m_bLineNumberEnable;
 		}
-
 		inline bool GetIndentGuideEnable()const
 		{
 			return m_bIndentGuideEnable;
 		}
-
 		inline bool GetDisplayEOLEnable()const
 		{
 			return m_bDisplayEOLEnable;
 		}
-
 		inline bool GetWrapModeInitial()const
 		{
 			return m_bWrapModeInitial;
 		}
-
 		inline bool GetOverTypeInitial()const
 		{
 			return m_bOverTypeInitial;
 		}
-
 		inline bool GetReadOnlyInitial()const
 		{
 			return m_bReadOnlyInitial;
 		}
-
 		inline bool GetIndentEnable()const
 		{
 			return m_bIndentEnable;
 		}
-
 		inline bool GetFoldEnable()const
 		{
 			return m_bFoldEnable;
@@ -136,57 +123,46 @@ namespace GuiCommon
 		{
 			m_arrayLanguages.push_back( p_pLanguage );
 		}
-
 		inline void SetSyntaxEnable( bool val )
 		{
 			m_bSyntaxEnable = val;
 		}
-
 		inline void SetFoldEnable( bool val )
 		{
 			m_bFoldEnable = val;
 		}
-
 		inline void SetIndentEnable( bool val )
 		{
 			m_bIndentEnable = val;
 		}
-
 		inline void SetReadOnlyInitial( bool val )
 		{
 			m_bReadOnlyInitial = val;
 		}
-
 		inline void SetOverTypeInitial( bool val )
 		{
 			m_bOverTypeInitial = val;
 		}
-
 		inline void SetWrapModeInitial( bool val )
 		{
 			m_bWrapModeInitial = val;
 		}
-
 		inline void SetDisplayEOLEnable( bool val )
 		{
 			m_bDisplayEOLEnable = val;
 		}
-
 		inline void SetIndentGuideEnable( bool val )
 		{
 			m_bIndentGuideEnable = val;
 		}
-
 		inline void SetLineNumberEnable( bool val )
 		{
 			m_bLineNumberEnable = val;
 		}
-
 		inline void SetLongLineOnEnable( bool val )
 		{
 			m_bLongLineOnEnable = val;
 		}
-
 		inline void SetWhiteSpaceEnable( bool val )
 		{
 			m_bWhiteSpaceEnable = val;

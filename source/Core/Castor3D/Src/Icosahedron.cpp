@@ -1,4 +1,4 @@
-﻿#include "Icosahedron.hpp"
+#include "Icosahedron.hpp"
 #include "Submesh.hpp"
 #include "Vertex.hpp"
 #include "Face.hpp"
@@ -45,82 +45,31 @@ void Icosahedron::Generate()
 	Point3r l_ptCoordsC;
 	BufferElementGroupSPtr l_pVertex;
 	Point3r l_ptNml;
-	std::vector< real > l_vtx( 12 * 3 );
-	std::vector< real > l_nml( 12 * 3 );
-
-	real * l_pVtx = l_vtx.data();
-	real * l_pNml = l_nml.data();
-
-	stVERTEX_GROUP l_group = { 0 };
-	l_group.m_uiCount = 12;
-	l_group.m_pVtx = l_pVtx;
-	l_group.m_pNml = l_pNml;
-	
-	Point3r l_vertex;
 	// on crée les 12 points le composant
-	l_vertex = Point3r( -X,  0,  Z );
-	memcpy( l_pVtx, l_vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
-	l_pVtx += 3;
-	l_pNml += 3;
-	l_vertex = Point3r(  X,  0,  Z );
-	memcpy( l_pVtx, l_vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
-	l_pVtx += 3;
-	l_pNml += 3;
-	l_vertex = Point3r( -X,  0, -Z );
-	memcpy( l_pVtx, l_vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
-	l_pVtx += 3;
-	l_pNml += 3;
-	l_vertex = Point3r(  X,  0, -Z );
-	memcpy( l_pVtx, l_vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
-	l_pVtx += 3;
-	l_pNml += 3;
-	l_vertex = Point3r(  0,  Z,  X );
-	memcpy( l_pVtx, l_vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
-	l_pVtx += 3;
-	l_pNml += 3;
-	l_vertex = Point3r(  0,  Z, -X );
-	memcpy( l_pVtx, l_vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
-	l_pVtx += 3;
-	l_pNml += 3;
-	l_vertex = Point3r(  0, -Z,  X );
-	memcpy( l_pVtx, l_vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
-	l_pVtx += 3;
-	l_pNml += 3;
-	l_vertex = Point3r(  0, -Z, -X );
-	memcpy( l_pVtx, l_vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
-	l_pVtx += 3;
-	l_pNml += 3;
-	l_vertex = Point3r(  Z,  X,  0 );
-	memcpy( l_pVtx, l_vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
-	l_pVtx += 3;
-	l_pNml += 3;
-	l_vertex = Point3r( -Z,  X,  0 );
-	memcpy( l_pVtx, l_vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
-	l_pVtx += 3;
-	l_pNml += 3;
-	l_vertex = Point3r(  Z, -X,  0 );
-	memcpy( l_pVtx, l_vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
-	l_pVtx += 3;
-	l_pNml += 3;
-	l_vertex = Point3r( -Z, -X,  0 );
-	memcpy( l_pVtx, l_vertex.ptr(), 3 * sizeof( real ) );
-	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
-	l_pVtx += 3;
-	l_pNml += 3;
-	l_pSubmesh->AddPoints( l_group );
-
-	// on construit toutes les faces de l'icosaèdre
+	l_pVertex = l_pSubmesh->AddPoint( -X,  0,  Z );
+	Vertex::SetNormal( l_pVertex, point::get_normalised( Vertex::GetPosition( l_pVertex, l_ptCoordsA ) ) );
+	l_pVertex = l_pSubmesh->AddPoint( X,  0,  Z );
+	Vertex::SetNormal( l_pVertex, point::get_normalised( Vertex::GetPosition( l_pVertex, l_ptCoordsA ) ) );
+	l_pVertex = l_pSubmesh->AddPoint( -X,  0, -Z );
+	Vertex::SetNormal( l_pVertex, point::get_normalised( Vertex::GetPosition( l_pVertex, l_ptCoordsA ) ) );
+	l_pVertex = l_pSubmesh->AddPoint( X,  0, -Z );
+	Vertex::SetNormal( l_pVertex, point::get_normalised( Vertex::GetPosition( l_pVertex, l_ptCoordsA ) ) );
+	l_pVertex = l_pSubmesh->AddPoint( 0,  Z,  X );
+	Vertex::SetNormal( l_pVertex, point::get_normalised( Vertex::GetPosition( l_pVertex, l_ptCoordsA ) ) );
+	l_pVertex = l_pSubmesh->AddPoint( 0,  Z, -X );
+	Vertex::SetNormal( l_pVertex, point::get_normalised( Vertex::GetPosition( l_pVertex, l_ptCoordsA ) ) );
+	l_pVertex = l_pSubmesh->AddPoint( 0, -Z,  X );
+	Vertex::SetNormal( l_pVertex, point::get_normalised( Vertex::GetPosition( l_pVertex, l_ptCoordsA ) ) );
+	l_pVertex = l_pSubmesh->AddPoint( 0, -Z, -X );
+	Vertex::SetNormal( l_pVertex, point::get_normalised( Vertex::GetPosition( l_pVertex, l_ptCoordsA ) ) );
+	l_pVertex = l_pSubmesh->AddPoint( Z,  X,  0 );
+	Vertex::SetNormal( l_pVertex, point::get_normalised( Vertex::GetPosition( l_pVertex, l_ptCoordsA ) ) );
+	l_pVertex = l_pSubmesh->AddPoint( -Z,  X,  0 );
+	Vertex::SetNormal( l_pVertex, point::get_normalised( Vertex::GetPosition( l_pVertex, l_ptCoordsA ) ) );
+	l_pVertex = l_pSubmesh->AddPoint( Z, -X,  0 );
+	Vertex::SetNormal( l_pVertex, point::get_normalised( Vertex::GetPosition( l_pVertex, l_ptCoordsA ) ) );
+	l_pVertex = l_pSubmesh->AddPoint( -Z, -X,  0 );
+	// on construit toutes les faces de l'isocaèdre
 	l_pFaces[l_iIndex++] = l_pSubmesh->AddFace( 0,  1,  4 );
 	l_pFaces[l_iIndex++] = l_pSubmesh->AddFace( 9,  0,  4 );
 	l_pFaces[l_iIndex++] = l_pSubmesh->AddFace( 9,  4,  5 );
@@ -134,11 +83,11 @@ void Icosahedron::Generate()
 	l_pFaces[l_iIndex++] = l_pSubmesh->AddFace( 3, 10,  7 );
 	l_pFaces[l_iIndex++] = l_pSubmesh->AddFace( 6,  7, 10 );
 	l_pFaces[l_iIndex++] = l_pSubmesh->AddFace( 6, 11,  7 );
-	l_pFaces[l_iIndex++] = l_pSubmesh->AddFace( 11, 6,  0 );
+	l_pFaces[l_iIndex++] = l_pSubmesh->AddFace( 11,  6,  0 );
 	l_pFaces[l_iIndex++] = l_pSubmesh->AddFace( 1,  0,  6 );
 	l_pFaces[l_iIndex++] = l_pSubmesh->AddFace( 1,  6, 10 );
 	l_pFaces[l_iIndex++] = l_pSubmesh->AddFace( 0,  9, 11 );
-	l_pFaces[l_iIndex++] = l_pSubmesh->AddFace( 11, 9,  2 );
+	l_pFaces[l_iIndex++] = l_pSubmesh->AddFace( 11,  9,  2 );
 	l_pFaces[l_iIndex++] = l_pSubmesh->AddFace( 9,  5,  2 );
 	l_pFaces[l_iIndex++] = l_pSubmesh->AddFace( 2,  7, 11 );
 
@@ -165,7 +114,7 @@ void Icosahedron::Generate()
 		Vertex::SetTexCoord( ( *l_it ), l_vsVertex1.m_rPhi, l_vsVertex1.m_rTheta );
 	}
 
-	l_pSubmesh->ComputeTangentsFromNormals();
+	ComputeNormals( true );
 	GetMesh()->ComputeContainers();
 }
 

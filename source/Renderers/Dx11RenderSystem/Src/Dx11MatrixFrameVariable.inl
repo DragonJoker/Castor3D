@@ -22,13 +22,20 @@ namespace Dx11Render
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	void DxMatrixFrameVariable< T, Rows, Columns >::Bind()
 	{
-		DxFrameVariableBase::DoBind< T, Rows, Columns >( *static_cast< DxShaderProgram * >( Castor3D::FrameVariable::GetProgram() ), Castor3D::MatrixFrameVariable< T, Rows, Columns >::m_pValues );
-		Castor3D::FrameVariable::m_bChanged = false;
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	void DxMatrixFrameVariable< T, Rows, Columns >::Unbind()
 	{
-		DxFrameVariableBase::DoUnbind< T, Rows, Columns >( *static_cast< DxShaderProgram * >( Castor3D::FrameVariable::GetProgram() ), Castor3D::MatrixFrameVariable< T, Rows, Columns >::m_pValues );
+	}
+
+	template< typename T, uint32_t Rows, uint32_t Columns >
+	void DxMatrixFrameVariable< T, Rows, Columns >::Apply()
+	{
+		if ( Castor3D::FrameVariable::m_bChanged )
+		{
+			DxFrameVariableBase::DoApply< T, Rows, Columns >( *static_cast< DxShaderProgram * >( Castor3D::FrameVariable::GetProgram() ), Castor3D::MatrixFrameVariable< T, Rows, Columns >::m_pValues );
+			Castor3D::FrameVariable::m_bChanged = false;
+		}
 	}
 }

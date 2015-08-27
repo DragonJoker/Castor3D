@@ -1,4 +1,4 @@
-﻿#include "Version.hpp"
+#include "Version.hpp"
 
 using namespace Castor;
 
@@ -55,42 +55,42 @@ namespace Castor3D
 		return * this;
 	}
 
-	bool operator ==( Version const & p_a, Version const & p_b )
+	bool Version::operator ==( Version const & p_version )
 	{
-		return p_a.m_iMajor == p_b.m_iMajor
-				&& p_a.m_iMinor == p_b.m_iMinor
-				&& p_a.m_iBuild == p_b.m_iBuild;
+		return	m_iMajor	== p_version.m_iMajor
+				&&	m_iMinor	== p_version.m_iMinor
+				&&	m_iBuild	== p_version.m_iBuild;
 	}
 
-	bool operator !=( Version const & p_a, Version const & p_b )
+	bool Version::operator !=( Version const & p_version )
 	{
-		return p_a.m_iMajor != p_b.m_iMajor
-				|| p_a.m_iMinor != p_b.m_iMinor
-				|| p_a.m_iBuild != p_b.m_iBuild;
+		return	m_iMajor	!= p_version.m_iMajor
+				||	m_iMinor	!= p_version.m_iMinor
+				||	m_iBuild	!= p_version.m_iBuild;
 	}
 
-	bool operator < ( Version const & p_a, Version const & p_b )
+	bool Version::operator < ( Version const & p_version )
 	{
-		return	p_a.m_iMajor  < p_b.m_iMajor
-				|| ( p_a.m_iMajor == p_b.m_iMajor && p_a.m_iMinor  < p_b.m_iMinor )
-				|| ( p_a.m_iMajor == p_b.m_iMajor && p_a.m_iMinor == p_b.m_iMinor && p_a.m_iBuild  < p_b.m_iBuild );
+		return	m_iMajor  < p_version.m_iMajor
+				|| ( m_iMajor == p_version.m_iMajor && m_iMinor  < p_version.m_iMinor )
+				|| ( m_iMajor == p_version.m_iMajor && m_iMinor == p_version.m_iMinor && m_iBuild  < p_version.m_iBuild );
 	}
 
-	bool operator > ( Version const & p_a, Version const & p_b )
+	bool Version::operator > ( Version const & p_version )
 	{
-		return	p_a.m_iMajor  > p_b.m_iMajor
-				|| ( p_a.m_iMajor == p_b.m_iMajor && p_a.m_iMinor  > p_b.m_iMinor )
-				|| ( p_a.m_iMajor == p_b.m_iMajor && p_a.m_iMinor == p_b.m_iMinor && p_a.m_iBuild  < p_b.m_iBuild );
+		return	m_iMajor  > p_version.m_iMajor
+				|| ( m_iMajor == p_version.m_iMajor && m_iMinor  > p_version.m_iMinor )
+				|| ( m_iMajor == p_version.m_iMajor && m_iMinor == p_version.m_iMinor && m_iBuild  < p_version.m_iBuild );
 	}
 
-	bool operator <=( Version const & p_a, Version const & p_b )
+	bool Version::operator <=( Version const & p_version )
 	{
-		return !( p_a > p_b );
+		return ! operator >( p_version );
 	}
 
-	bool operator >=( Version const & p_a, Version const & p_b )
+	bool Version::operator >=( Version const & p_version )
 	{
-		return !( p_a < p_b );
+		return ! operator <( p_version );
 	}
 }
 

@@ -31,10 +31,10 @@ namespace Loop
 	class Edge
 	{
 	private:
-		VertexWPtr m_firstVertex;
-		VertexWPtr m_secondVertex;
-		Castor3D::FaceWPtr m_firstFace;
-		Castor3D::FaceWPtr m_secondFace;
+		VertexSPtr m_firstVertex;
+		VertexSPtr m_secondVertex;
+		Castor3D::FaceSPtr m_firstFace;
+		Castor3D::FaceSPtr m_secondFace;
 		VertexSPtr m_createdVertex;
 		bool m_divided;
 		bool m_toDivide;
@@ -76,19 +76,19 @@ namespace Loop
 		}
 		inline VertexSPtr GetVertex1()const
 		{
-			return m_firstVertex.lock();
+			return m_firstVertex;
 		}
 		inline VertexSPtr GetVertex2()const
 		{
-			return m_secondVertex.lock();
+			return m_secondVertex;
 		}
 		inline Castor3D::FaceSPtr GetFace1()const
 		{
-			return m_firstFace.lock();
+			return m_firstFace;
 		}
 		inline Castor3D::FaceSPtr GetFace2()const
 		{
-			return m_secondFace.lock();
+			return m_secondFace;
 		}
 
 		inline void SetToDivide()

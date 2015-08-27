@@ -12,11 +12,38 @@ namespace Loop
 {
 	namespace
 	{
-		double alpha( uint32_t n )
+		static const int ALPHA_MAX = 20;
+		static const double ALPHA_LIMIT = 0.469; /* converges to ~ 0.469 */
+
+		real g_alpha[ALPHA_MAX] = { real( 1.13333 ), real( -0.358974 ), real( -0.333333 ), real( 0.129032 ), real( 0.945783 ), real( 2.0 ),
+									real( 3.19889 ), real( 4.47885 ), real( 5.79946 ), real( 7.13634 ), real( 8.47535 ), real( 9.80865 ),
+									real( 11.1322 ), real( 12.4441 ), real( 13.7439 ), real( 15.0317 ), real( 16.3082 ), real( 17.574 ),
+									real( 18.83 ), real( 20.0769 )
+								  };
+
+		static const int BETA_MAX = 20;
+		static const double BETA_LIMIT = 0.469; /* converges to ~ 0.469 */
+
+		real g_beta[BETA_MAX] = {	real( 0.46875 ), real( 1.21875 ), real( 1.125 ), real( 0.96875 ), real( 0.840932 ), real( 0.75 ), real( 0.686349 ),
+									real( 0.641085 ), real( 0.60813 ), real( 0.583555 ), real( 0.564816 ), real( 0.55024 ), real( 0.5387 ),
+									real( 0.529419 ), real( 0.52185 ), real( 0.515601 ), real( 0.510385 ), real( 0.505987 ), real( 0.502247 ), real( 0.49904 )
+								};
+
+		real beta( uint32_t n )
 		{
-			double l_tmp = 3.0 + 2.0 * cos( 2.0 * Angle::PiDouble / n );
-			double l_beta = 1.25 - ( l_tmp * l_tmp ) / 32.0;
-			return n * ( 1 - l_beta ) / l_beta;
+			real l_rTmp = real( 3.0 + 2.0 * cos( Angle::PiMult2 / n ) );
+			return ( real( 40.0 ) - ( l_rTmp * l_rTmp ) ) / real( 32.0 );
+		}
+
+		real alpha( uint32_t n )
+		{
+			if ( n <= ALPHA_MAX )
+			{
+				return g_alpha[n - 1];
+			}
+
+			real l_rBeta = beta( n );
+			return n * ( 1 - l_rBeta ) / l_rBeta;
 		}
 	}
 
@@ -78,55 +105,58 @@ namespace Loop
 	void Subdivider::DoSubdivide()
 	{
 		DoDivide();
-		DoAverage();
+		DoAverage( m_ptDivisionCenter );
 	}
 
 	void Subdivider::DoDivide()
 	{
 		uint32_t l_size = uint32_t( m_facesEdges.size() );
-		FaceEdgesPtrArray l_old;
-		std::swap( l_old, m_facesEdges );
 
-		for ( FaceEdgesPtrArray::iterator l_it = l_old.begin(); l_it != l_old.end(); ++l_it )
+		for ( uint32_t i = 0; i < l_size; i++ )
 		{
-			( *l_it )->Divide( real( 0.5 ), m_mapVertex, m_facesEdges );
-		}
-	}
-
-	void Subdivider::DoAverage()
-	{
-		std::map< uint32_t, Point3r > l_positions;
-
-		for ( VertexPtrUIntMap::iterator l_it = m_mapVertex.begin(); l_it != m_mapVertex.end(); ++l_it )
-		{
-			Point3r l_point;
-			Castor3D::Vertex::GetPosition( l_it->second->GetPoint(), l_point );
-			l_positions.insert( std::make_pair( l_it->first, l_point ) );
+			FaceEdgesPtrArray l_newFaces;
+			FaceEdgesPtr l_pEdges = m_facesEdges[0];
+			l_pEdges->Divide( real( 0.5 ), m_mapVertex, l_newFaces );
+			m_facesEdges.erase( m_facesEdges.begin() );
+			m_facesEdges.insert( m_facesEdges.end(), l_newFaces.begin(), l_newFaces.end() );
 		}
 
 		for ( VertexPtrUIntMap::iterator l_itVertex = m_mapVertex.begin(); l_itVertex != m_mapVertex.end(); ++l_itVertex )
 		{
 			VertexSPtr l_pVertex = l_itVertex->second;
+			Coords3r l_ptPoint;
+			Castor3D::Vertex::GetPosition( l_pVertex->GetPoint(), l_ptPoint );
+		}
+	}
+
+	void Subdivider::DoAverage( Point3r const & p_center )
+	{
+		Coords3r l_ptPoint;
+		Coords3r l_ptDump;
+
+		for ( VertexPtrUIntMap::iterator l_itVertex = m_mapVertex.begin(); l_itVertex != m_mapVertex.end(); ++l_itVertex )
+		{
+			VertexSPtr l_pVertex = l_itVertex->second;
 			uint32_t l_nbEdges = l_pVertex->Size();
-			Coords3r l_position = Castor3D::Vertex::GetPosition( l_pVertex->GetPoint(), l_position );
-			real l_alpha = real( alpha( l_nbEdges ) );
-			l_position *= l_alpha;
+			Castor3D::Vertex::GetPosition( l_pVertex->GetPoint(), l_ptPoint );
+			l_ptPoint -= m_ptDivisionCenter;
+			l_ptPoint *= alpha( l_nbEdges );
 
 			for ( EdgePtrUIntMap::iterator l_it = l_pVertex->Begin(); l_it != l_pVertex->End(); ++l_it )
 			{
-				l_position += l_positions[l_it->first];
+				l_ptPoint += Castor3D::Vertex::GetPosition( GetPoint( l_it->first ), l_ptDump ) - m_ptDivisionCenter;
 			}
 
-			l_position /= l_alpha + l_nbEdges;
+			l_ptPoint /= alpha( l_nbEdges ) + l_nbEdges;
+			l_ptPoint += m_ptDivisionCenter;
 		}
 
 		for ( uint32_t j = 0; j < m_submesh->GetFaceCount(); j++ )
 		{
-			Coords3r l_dump;
 			Castor3D::FaceSPtr l_pFace = m_submesh->GetFace( j );
-			Castor3D::Vertex::SetPosition( m_submesh->GetPoint( l_pFace->GetVertexIndex( 0 ) ), Castor3D::Vertex::GetPosition( m_mapVertex[l_pFace->GetVertexIndex( 0 )]->GetPoint(), l_dump ) );
-			Castor3D::Vertex::SetPosition( m_submesh->GetPoint( l_pFace->GetVertexIndex( 1 ) ), Castor3D::Vertex::GetPosition( m_mapVertex[l_pFace->GetVertexIndex( 1 )]->GetPoint(), l_dump ) );
-			Castor3D::Vertex::SetPosition( m_submesh->GetPoint( l_pFace->GetVertexIndex( 2 ) ), Castor3D::Vertex::GetPosition( m_mapVertex[l_pFace->GetVertexIndex( 2 )]->GetPoint(), l_dump ) );
+			Castor3D::Vertex::SetPosition( m_submesh->GetPoint( l_pFace->GetVertexIndex( 0 ) ), Castor3D::Vertex::GetPosition( m_mapVertex[l_pFace->GetVertexIndex( 0 )]->GetPoint(), l_ptDump ) );
+			Castor3D::Vertex::SetPosition( m_submesh->GetPoint( l_pFace->GetVertexIndex( 1 ) ), Castor3D::Vertex::GetPosition( m_mapVertex[l_pFace->GetVertexIndex( 1 )]->GetPoint(), l_ptDump ) );
+			Castor3D::Vertex::SetPosition( m_submesh->GetPoint( l_pFace->GetVertexIndex( 2 ) ), Castor3D::Vertex::GetPosition( m_mapVertex[l_pFace->GetVertexIndex( 2 )]->GetPoint(), l_ptDump ) );
 		}
 
 		m_mapVertex.clear();

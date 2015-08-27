@@ -1,4 +1,4 @@
-﻿#include "TechniquePlugin.hpp"
+#include "TechniquePlugin.hpp"
 
 #if defined( _WIN32 )
 #	include <Windows.h>
@@ -15,33 +15,81 @@ namespace Castor3D
 #pragma warning( disable:4290 )
 #if defined( _MSC_VER)
 #	if defined( _WIN64 )
-	static const String RegisterTechniqueFunctionABIName		= cuT( "?RegisterTechnique@@YAXAEAVTechniqueFactory@Castor3D@@@Z" );
-	static const String UnregisterTechniqueFunctionABIName		= cuT( "?UnregisterTechnique@@YAXAEAVTechniqueFactory@Castor3D@@@Z" );
+#		if ( _MSC_VER < 1700 )
+	static const String CreateTechniqueFunctionABIName		= cuT( "?CreateTechnique@@YA?AV?$shared_ptr@VRenderTechnique@Castor3D@@@tr1@std@@PEAVRenderSystem@Castor3D@@@Z" );
+#		else
+	static const String CreateTechniqueFunctionABIName		= cuT( "?CreateTechnique@@YA?AV?$shared_ptr@VRenderTechnique@Castor3D@@@std@@PEAVRenderSystem@Castor3D@@@Z" );
+#		endif
 #	else
-	static const String RegisterTechniqueFunctionABIName		= cuT( "?RegisterTechnique@@YAXAAVTechniqueFactory@Castor3D@@@Z" );
-	static const String UnregisterTechniqueFunctionABIName		= cuT( "?UnregisterTechnique@@YAXAAVTechniqueFactory@Castor3D@@@Z" );
+#		if ( _MSC_VER < 1700 )
+	static const String CreateTechniqueFunctionABIName		= cuT( "?CreateTechnique@@YA?AV?$shared_ptr@VRenderTechnique@Castor3D@@@tr1@std@@PAVRenderSystem@Castor3D@@@Z" );
+#		else
+	static const String CreateTechniqueFunctionABIName		= cuT( "?CreateTechnique@@YA?AV?$shared_ptr@VRenderTechnique@Castor3D@@@std@@PAVRenderSystem@Castor3D@@@Z" );
+#		endif
 #	endif
 #elif defined( __GNUG__)
-	static const String RegisterTechniqueFunctionABIName		= cuT( "_Z17RegisterTechniqueN8Castor3D17TechniqueFactoryE" );
-	static const String UnregisterTechniqueFunctionABIName		= cuT( "_Z19UnregisterTechniqueN8Castor3D17TechniqueFactoryE" );
+	static const String CreateTechniqueFunctionABIName		= cuT( "_Z12CreateTechniquePN8Castor3D12RenderSystemE" );
 #else
 #	error "Implement ABI names for this compiler"
 #endif
 
-	TechniquePlugin::TechniquePlugin( DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
-		:	PluginBase( ePLUGIN_TYPE_TECHNIQUE, p_pLibrary, p_engine )
+	TechniquePlugin::TechniquePlugin( DynamicLibrarySPtr p_pLibrary )
+		:	PluginBase( ePLUGIN_TYPE_TECHNIQUE, p_pLibrary )
 	{
-		if ( m_pfnOnLoad )
+		if ( !p_pLibrary->GetFunction( m_pfnCreateTechnique, CreateTechniqueFunctionABIName ) )
 		{
-			m_pfnOnLoad( m_engine );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] CreateTechnique plugin function : " );
+			l_strError += str_utils::to_string( dlerror() );
+			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
 		}
+	}
+
+	TechniquePlugin::TechniquePlugin( TechniquePlugin const & p_plugin )
+		:	PluginBase( p_plugin )
+		,	m_pfnCreateTechnique( p_plugin.m_pfnCreateTechnique )
+	{
+	}
+
+	TechniquePlugin::TechniquePlugin( TechniquePlugin && p_plugin )
+		:	PluginBase( std::move( p_plugin ) )
+		,	m_pfnCreateTechnique( std::move( p_plugin.m_pfnCreateTechnique ) )
+	{
+		p_plugin.m_pfnCreateTechnique	= NULL;
 	}
 
 	TechniquePlugin::~TechniquePlugin()
 	{
-		if ( m_pfnOnUnload )
+	}
+
+	TechniquePlugin & TechniquePlugin::operator =( TechniquePlugin const & p_plugin )
+	{
+		PluginBase::operator =( p_plugin );
+		m_pfnCreateTechnique		= p_plugin.m_pfnCreateTechnique;
+		return * this;
+	}
+
+	TechniquePlugin & TechniquePlugin::operator =( TechniquePlugin && p_plugin )
+	{
+		PluginBase::operator =( std::move( p_plugin ) );
+
+		if ( this != & p_plugin )
 		{
-			m_pfnOnUnload( m_engine );
+			m_pfnCreateTechnique			= std::move( p_plugin.m_pfnCreateTechnique );
+			p_plugin.m_pfnCreateTechnique	= NULL;
 		}
+
+		return * this;
+	}
+
+	RenderTechniqueBaseSPtr TechniquePlugin::CreateTechnique( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
+	{
+		RenderTechniqueBaseSPtr l_pReturn;
+
+		if ( m_pfnCreateTechnique )
+		{
+			l_pReturn = m_pfnCreateTechnique( p_renderTarget, p_pRenderSystem, p_params );
+		}
+
+		return l_pReturn;
 	}
 }

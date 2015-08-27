@@ -25,11 +25,11 @@ namespace Loop
 
 	void Edge::AddFace( Castor3D::FaceSPtr p_face )
 	{
-		if ( m_firstFace.expired() )
+		if ( !m_firstFace )
 		{
 			m_firstFace = p_face;
 		}
-		else if ( m_secondFace.expired() )
+		else if ( !m_secondFace )
 		{
 			m_secondFace = p_face;
 		}
@@ -46,8 +46,8 @@ namespace Loop
 				// The edge is to divide and not divided yet, we create the new point
 				Point3r l_ptPoint1;
 				Point3r l_ptPoint2;
-				Castor3D::Vertex::GetPosition( GetVertex1()->GetPoint(), l_ptPoint1 );
-				l_ptPoint1 += Castor3D::Vertex::GetPosition( *GetVertex2()->GetPoint(), l_ptPoint2 );
+				Castor3D::Vertex::GetPosition( m_firstVertex->GetPoint(), l_ptPoint1 );
+				l_ptPoint1 += Castor3D::Vertex::GetPosition( *m_secondVertex->GetPoint(), l_ptPoint2 );
 				l_ptPoint1 *= p_value;
 				m_createdVertex = p_pDivider->AddPoint( l_ptPoint1 );
 				m_divided = true;

@@ -11,10 +11,10 @@ using namespace Castor;
 namespace Dx11Render
 {
 	DxShaderObject::DxShaderObject( DxShaderProgram * p_pParent, eSHADER_TYPE p_eType )
-		: ShaderObjectBase( p_pParent, p_eType )
-		, m_pShaderProgram( p_pParent )
-		, m_pCompiled( NULL )
-		, m_pRenderSystem( static_cast< DxRenderSystem * >( p_pParent->GetRenderSystem() ) )
+		:	ShaderObjectBase( p_pParent, p_eType )
+		,	m_pShaderProgram( p_pParent )
+		,	m_pCompiled( NULL )
+		,	m_pRenderSystem( static_cast< DxRenderSystem * >( p_pParent->GetRenderSystem() ) )
 	{
 		m_eShaderModel = eSHADER_MODEL_3;
 	}
@@ -55,12 +55,12 @@ namespace Dx11Render
 	{
 		static std::string l_strProfiles[eSHADER_TYPE_COUNT][eSHADER_MODEL_COUNT] =
 		{
-			{ "vs_2_0",	"vs_2_0",	"vs_4_0",	"vs_4_1",	"vs_5_0" },
-			{ "",		"",			"gs_4_0",	"gs_4_1",	"gs_5_0" },
-			{ "",		"",			"",			"hs_4_1",	"hs_5_0" },
-			{ "",		"",			"",			"ds_4_1",	"ds_5_0" },
-			{ "ps_2_0",	"ps_2_0",	"ps_4_0",	"ps_4_1",	"ps_5_0" },
-			{ "",		"",			"",			"",			"cs_5_0" },
+			{ "vs_4_0",	"vs_4_0",	"vs_4_0",	"vs_4_0",	"vs_5_0" }
+			,	{ "",		"",			"gs_4_0",	"gs_4_0",	"gs_5_0" }
+			,	{ "",		"",			"",			"hs_4_0",	"hs_5_0" }
+			,	{ "",		"",			"",			"ds_4_0",	"ds_5_0" }
+			,	{ "",		"ps_4_0",	"ps_4_0",	"ps_4_0",	"ps_5_0" }
+			,	{ "",		"",			"",			"",			"cs_5_0" }
 		};
 		bool l_bReturn = false;
 		std::string l_strSource;
@@ -79,8 +79,8 @@ namespace Dx11Render
 		{
 			l_strSource = str_utils::to_str( m_strLoadedSource );
 			m_eStatus = eSHADER_STATUS_NOTCOMPILED;
-			ID3DBlob * l_pErrors = NULL;
-			UINT l_uiFlags = 0;
+			ID3DBlob *	l_pErrors = NULL;
+			UINT		l_uiFlags = 0;
 #if !defined( NDEBUG )
 			l_uiFlags |= D3DCOMPILE_DEBUG | D3DCOMPILE_WARNINGS_ARE_ERRORS;
 #endif
@@ -88,13 +88,13 @@ namespace Dx11Render
 
 			if ( l_hr == S_OK )
 			{
-				Logger::LogInfo( cuT( "Shader compiled successfully" ) );
+				Logger::LogMessage( cuT( "Shader compiled successfully" ) );
 				DoRetrieveShader();
 			}
 			else if ( l_pErrors )
 			{
-				Logger::LogInfo( str_utils::from_str( reinterpret_cast< char * >( l_pErrors->GetBufferPointer() ) ) );
-				Logger::LogInfo( m_strLoadedSource );
+				Logger::LogMessage( str_utils::from_str( reinterpret_cast< char * >( l_pErrors->GetBufferPointer() ) ) );
+				Logger::LogMessage( m_strLoadedSource );
 				m_eStatus = eSHADER_STATUS_ERROR;
 				m_strLoadedSource.clear();
 			}

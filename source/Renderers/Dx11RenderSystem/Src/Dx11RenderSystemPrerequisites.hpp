@@ -147,12 +147,30 @@ DECLARE_GUID( IID_IDXGIFactory,					0x7b7166ec, 0x21c7, 0x44ae, 0xb2, 0x1a, 0xc9
 
 #	if !defined( NDEBUG )
 #		define dxCheckError( hr, txt ) Dx11Render::DirectX11::CheckError( hr, cuT( txt ) )
-#		define dxDebugName( rs, obj, type ) rs->SetDxDebugName( obj, #type, __FILE__, __LINE__ )
-#		define dxUnDebugName( rs, obj ) rs->UnsetDxDebugName( obj )
+#		if defined( _MSC_VER )
+#			define dxDebugName( obj, type )\
+				if( obj )\
+				{\
+					char l_szName[1024] = { 0 };\
+					uint64_t l_ui64Address = (uint64_t)obj;\
+					sprintf_s( l_szName, "%20s [0x%016X]", #type, l_ui64Address );\
+					obj->SetPrivateData( WKPDID_D3DDebugObjectName, UINT( strlen( l_szName ) - 1 ), l_szName );\
+					Castor::Logger::LogDebug( l_szName );\
+				}
+#		else
+#			define dxDebugName( obj, type )\
+				if( obj )\
+				{\
+					char l_szName[1024] = { 0 };\
+					uint64_t l_ui64Address = (uint64_t)obj;\
+					sprintf( l_szName, "%20s [0x%016X]", #type, l_ui64Address );\
+					obj->SetPrivateData( WKPDID_D3DDebugObjectName, UINT( strlen( l_szName ) - 1 ), l_szName );\
+					Castor::Logger::LogDebug( l_szName );\
+				}
+#		endif
 #	else
 #		define dxCheckError( hr, txt ) SUCCEEDED( hr )
-#		define dxDebugName( rs, obj, txt )
-#		define dxUnDebugName( rs, obj )
+#		define dxDebugName( obj, txt )
 #	endif
 
 namespace Dx11Render
@@ -170,7 +188,12 @@ namespace Dx11Render
 	class DxTextureBuffer;
 	class DxRenderSystem;
 	class DxPlugin;
-	class DxRenderWindow;
+	class DxSubmeshRenderer;
+	class DxTextureRenderer;
+	class DxMaterialRenderer;
+	class DxLightRenderer;
+	class DxCameraRenderer;
+	class DxWindowRenderer;
 	class DxOverlayRenderer;
 	class DxShaderObject;
 	class DxShaderProgram;
@@ -393,32 +416,7 @@ namespace Dx11Render
 
 			return l_uiReturn;
 		}
-		static inline D3D11_MAP GetBufferMapMode( Castor3D::eBUFFER_ACCESS_NATURE eNature )
-		{
-			D3D11_MAP l_eReturn;
-
-			if ( eNature == Castor3D::eBUFFER_ACCESS_NATURE_READ )
-			{
-				l_eReturn = D3D11_MAP_READ;
-			}
-			else
-			{
-				l_eReturn = D3D11_MAP_WRITE;
-			}
-
-			return l_eReturn;
-		}
 	};
-
-	template< typename T > void ReleaseTracked( Castor3D::RenderSystem * p_rs, T *& p_ptReleasable )
-	{
-		if ( p_ptReleasable )
-		{
-			dxUnDebugName( static_cast< DxRenderSystem * >( p_rs ), p_ptReleasable );
-			p_ptReleasable->Release();
-			p_ptReleasable = NULL;
-		}
-	}
 
 	template< typename T > void SafeRelease( T *& p_ptReleasable )
 	{

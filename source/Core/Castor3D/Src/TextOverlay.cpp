@@ -1,12 +1,10 @@
-﻿#include "TextOverlay.hpp"
-
-#include "DynamicTexture.hpp"
-#include "Engine.hpp"
+#include "TextOverlay.hpp"
 #include "InitialiseEvent.hpp"
 #include "Overlay.hpp"
 #include "OverlayRenderer.hpp"
-#include "RenderSystem.hpp"
+#include "Engine.hpp"
 #include "Sampler.hpp"
+#include "DynamicTexture.hpp"
 
 #include <Font.hpp>
 #include <Image.hpp>
@@ -129,7 +127,6 @@ namespace Castor3D
 
 	TextOverlay::~TextOverlay()
 	{
-		Cleanup();
 		m_pTexture.reset();
 		m_wpFont.reset();
 		m_wpSampler.reset();
@@ -183,15 +180,12 @@ namespace Castor3D
 				l_uiOffY -= l_uiMaxHeight;
 			}
 
-			//Castor::Image l_img( cuT( "" ), *m_pTexture->GetBuffer() );
-			//Castor::Image::BinaryLoader()( const_cast< Image const & >( l_img ), l_pFont->GetName() + cuT( ".bmp" ) );
+//			Castor::Image l_img( cuT( "" ), *m_pTexture->GetBuffer() );
+//			Castor::Image::BinaryLoader()( const_cast< Image const & >( l_img ), l_pFont->GetName() + cuT( ".bmp" ) );
 		}
 
 		m_pTexture->Create();
 		m_pTexture->Initialise( 0 );
-		m_pTexture->Bind();
-		m_pTexture->GenerateMipmaps();
-		m_pTexture->Unbind();
 
 		return true;
 	}
@@ -230,7 +224,7 @@ namespace Castor3D
 			CASTOR_EXCEPTION( "Font " + str_utils::to_str( p_strFont ) + "not found" );
 		}
 
-		m_pOverlay->GetEngine()->PostEvent( MakeInitialiseEvent( *this ) );
+		m_pOverlay->GetEngine()->PostEvent( std::make_shared< InitialiseEvent< TextOverlay > >( *this ) );
 		m_strFontName = p_strFont;
 		m_changed = true;
 	}
@@ -275,7 +269,7 @@ namespace Castor3D
 				Point2d l_ptSize( p_renderer->GetSize().width() * l_ovAbsSize[0], p_renderer->GetSize().height() * l_ovAbsSize[1] );
 				Size l_screenSize = Size( uint32_t( l_ptSize[0] ), uint32_t( l_ptSize[1] ) );
 				m_previousCaption = m_strCaption;
-				int l_zIndex = 0;
+				int l_zIndex = 1000 - GetOverlay().GetZIndex();
 				m_arrayVtx.clear();
 				m_arrayVtx.reserve( m_previousCaption.size() * 6 );
 				Point2d l_ptPosition;
@@ -338,6 +332,7 @@ namespace Castor3D
 	void TextOverlay::DoWriteWord( OverlayRendererSPtr p_renderer, String const & p_word, double p_wordWidth, Point2d const & p_size, Point2d & p_position )
 	{
 		FontSPtr l_pFont = GetFont();
+		int l_zIndex = 1000 - GetOverlay().GetZIndex();
 		Size const & l_texDim = m_pTexture->GetDimensions();
 		Position l_ovPosition = GetAbsolutePosition( p_renderer->GetSize() );
 
@@ -402,10 +397,10 @@ namespace Castor3D
 				double l_uvStepY = l_charSize[1] / l_texDim.height();
 				double l_uvCrop = l_charCrop / l_texDim.height();
 
-				OverlayCategory::Vertex l_vertexTR = { { int32_t( l_ovPosition.x() + ( l_position[0] + l_width ) ), int32_t( l_ovPosition.y() + ( l_position[1] ) ),           }, { real( l_uvX + l_uvStepX ), real( l_uvY + l_uvStepY ) } };
-				OverlayCategory::Vertex l_vertexTL = { { int32_t( l_ovPosition.x() + ( l_position[0] ) ),           int32_t( l_ovPosition.y() + ( l_position[1] ) ),           }, { real( l_uvX ),             real( l_uvY + l_uvStepY ) } };
-				OverlayCategory::Vertex l_vertexBL = { { int32_t( l_ovPosition.x() + ( l_position[0] ) ),           int32_t( l_ovPosition.y() + ( l_position[1] + l_height ) ) }, { real( l_uvX ),             real( l_uvY + l_uvCrop ) } };
-				OverlayCategory::Vertex l_vertexBR = { { int32_t( l_ovPosition.x() + ( l_position[0] + l_width ) ), int32_t( l_ovPosition.y() + ( l_position[1] + l_height ) ) }, { real( l_uvX + l_uvStepX ), real( l_uvY + l_uvCrop ) } };
+				OverlayCategory::Vertex l_vertexTR = { { int32_t( l_ovPosition.x() + ( l_position[0] + l_width ) ), int32_t( l_ovPosition.y() + ( l_position[1] ) ),            l_zIndex }, { real( l_uvX + l_uvStepX ), real( l_uvY + l_uvStepY ) } };
+				OverlayCategory::Vertex l_vertexTL = { { int32_t( l_ovPosition.x() + ( l_position[0] ) ),           int32_t( l_ovPosition.y() + ( l_position[1] ) ),            l_zIndex }, { real( l_uvX ),             real( l_uvY + l_uvStepY ) } };
+				OverlayCategory::Vertex l_vertexBL = { { int32_t( l_ovPosition.x() + ( l_position[0] ) ),           int32_t( l_ovPosition.y() + ( l_position[1] + l_height ) ), l_zIndex }, { real( l_uvX ),             real( l_uvY + l_uvCrop ) } };
+				OverlayCategory::Vertex l_vertexBR = { { int32_t( l_ovPosition.x() + ( l_position[0] + l_width ) ), int32_t( l_ovPosition.y() + ( l_position[1] + l_height ) ), l_zIndex }, { real( l_uvX + l_uvStepX ), real( l_uvY + l_uvCrop ) } };
 
 				m_arrayVtx.push_back( l_vertexBL );
 				m_arrayVtx.push_back( l_vertexBR );

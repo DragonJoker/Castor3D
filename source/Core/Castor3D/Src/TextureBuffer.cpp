@@ -1,4 +1,4 @@
-﻿#include "TextureBuffer.hpp"
+#include "TextureBuffer.hpp"
 #include "RenderSystem.hpp"
 
 using namespace Castor;

@@ -1,4 +1,4 @@
-﻿#include "Position.hpp"
+#include "Position.hpp"
 
 namespace Castor
 {
