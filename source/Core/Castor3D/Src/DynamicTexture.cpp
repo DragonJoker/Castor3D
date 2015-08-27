@@ -12,7 +12,6 @@ namespace Castor3D
 {
 	DynamicTexture::DynamicTexture( RenderSystem * p_pRenderSystem )
 		:	TextureBase( eTEXTURE_TYPE_DYNAMIC, p_pRenderSystem )
-		,	m_bRenderTarget( false )
 		,	m_iSamplesCount( 0 )
 	{
 	}

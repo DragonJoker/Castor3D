@@ -45,6 +45,12 @@
 #include <xpms/pass_sel.xpm>
 #include <xpms/texture.xpm>
 #include <xpms/texture_sel.xpm>
+#include <xpms/viewport.xpm>
+#include <xpms/viewport_sel.xpm>
+#include <xpms/render_window.xpm>
+#include <xpms/render_window_sel.xpm>
+#include <xpms/render_target.xpm>
+#include <xpms/render_target_sel.xpm>
 
 #include <wx/display.h>
 #include <wx/aui/dockart.h>
@@ -667,6 +673,12 @@ namespace CastorViewer
 		m_pImagesLoader->AddBitmap( eBMP_PASS_SEL, pass_sel_xpm );
 		m_pImagesLoader->AddBitmap( eBMP_TEXTURE, texture_xpm );
 		m_pImagesLoader->AddBitmap( eBMP_TEXTURE_SEL, texture_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_VIEWPORT, viewport_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_VIEWPORT_SEL, viewport_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_RENDER_TARGET, render_target_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_RENDER_TARGET_SEL, render_target_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_RENDER_WINDOW, render_window_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_RENDER_WINDOW_SEL, render_window_sel_xpm );
 
 		m_pImagesLoader->AddBitmap( eBMP_SCENES, scene_blanc_xpm );
 		m_pImagesLoader->AddBitmap( eBMP_MATERIALS, mat_blanc_xpm );

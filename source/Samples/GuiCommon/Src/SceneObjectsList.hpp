@@ -36,6 +36,7 @@ namespace GuiCommon
 		void UnloadScene();
 
 	protected:
+		void DoAddRenderWindow( wxTreeItemId p_id, Castor3D::RenderWindowSPtr p_window );
 		void DoAddGeometry( wxTreeItemId p_id, Castor3D::MovableObjectSPtr p_geometry );
 		void DoAddCamera( wxTreeItemId p_id, Castor3D::MovableObjectSPtr p_camera );
 		void DoAddLight( wxTreeItemId p_id, Castor3D::MovableObjectSPtr p_light );

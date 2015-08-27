@@ -72,6 +72,12 @@ namespace GuiCommon
 	{
 		eBMP_SCENE,
 		eBMP_SCENE_SEL,
+		eBMP_VIEWPORT,
+		eBMP_VIEWPORT_SEL,
+		eBMP_RENDER_TARGET,
+		eBMP_RENDER_TARGET_SEL,
+		eBMP_RENDER_WINDOW,
+		eBMP_RENDER_WINDOW_SEL,
 		eBMP_NODE,
 		eBMP_NODE_SEL,
 		eBMP_CAMERA,
@@ -104,16 +110,16 @@ namespace GuiCommon
 	static const int GC_IMG_SIZE = 16;
 
 	class wxPropertiesHolder;
-	class wxTreeItemPropertyData;
-	class wxCameraTreeItemData;
-	class wxGeometryTreeItemData;
-	class wxLightTreeItemData;
-	class wxMaterialTreeItemData;
-	class wxNodeTreeItemData;
-	class wxOverlayTreeItemData;
-	class wxPassTreeItemData;
-	class wxSubmeshTreeItemData;
-	class wxTextureTreeItemData;
+	class wxTreeItemProperty;
+	class wxCameraTreeItem;
+	class wxGeometryTreeItemProperty;
+	class wxLightTreeItemProperty;
+	class wxMaterialTreeItemProperty;
+	class wxNodeTreeItemProperty;
+	class wxOverlayTreeItemProperty;
+	class wxPassTreeItemProperrty;
+	class wxSubmeshTreeItemProperty;
+	class wxTextureTreeItemProperty;
 
 	class wxFrameVariableDialog;
 	class wxSceneObjectsList;

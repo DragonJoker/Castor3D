@@ -2213,12 +2213,12 @@ END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitImage )
 {
-	SceneFileContextSPtr	l_pContext		= std::static_pointer_cast< SceneFileContext >( p_pContext );
-	Engine 	*		l_pEngine		= l_pContext->m_pParser->GetEngine();
-	ImageCollection &	l_imgCollection	= l_pEngine->GetImageManager();
-	ImageSPtr			l_pImage;
-	StaticTextureSPtr	l_pTexture;
-	Path				l_path;
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
+	Engine * l_pEngine = l_pContext->m_pParser->GetEngine();
+	ImageCollection & l_imgCollection	= l_pEngine->GetImageManager();
+	ImageSPtr l_pImage;
+	StaticTextureSPtr l_pTexture;
+	Path l_path;
 
 	if ( l_pContext->pTextureUnit )
 	{

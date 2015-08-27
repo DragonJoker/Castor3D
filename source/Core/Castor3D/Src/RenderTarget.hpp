@@ -39,6 +39,7 @@ namespace Castor3D
 	\remark		Une render target dessine une scène dans un tampon d'image qui peut ensuite être utilisé dans une fenêtre pour un rendu direct, ou une texture pour un rendu hors écran
 	*/
 	class C3D_API RenderTarget
+		: public std::enable_shared_from_this< RenderTarget >
 	{
 	public:
 		/*!
@@ -141,7 +142,8 @@ namespace Castor3D
 		struct stFRAME_BUFFER
 		{
 		public:
-			bool Create( RenderTarget * p_renderTarget );
+			stFRAME_BUFFER( RenderTarget & p_renderTarget );
+			bool Create();
 			void Destroy();
 			bool Initialise( uint32_t p_index, Castor::Size const & p_size );
 			void Cleanup();
@@ -158,7 +160,7 @@ namespace Castor3D
 			RenderBufferAttachmentSPtr m_pDepthAttach;
 
 		private:
-			RenderTargetRPtr m_pRenderTarget;
+			RenderTarget & m_renderTarget;
 		};
 
 	public:

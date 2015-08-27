@@ -36,7 +36,7 @@ namespace Castor3D
 		m_pFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
 		m_pColorBuffer = m_pRenderSystem->CreateDynamicTexture();
 		m_pDepthBuffer = m_pFrameBuffer->CreateDepthStencilRenderBuffer(	ePIXEL_FORMAT_DEPTH24S8 );
-		m_pColorBuffer->SetRenderTarget( true );
+		m_pColorBuffer->SetRenderTarget( p_renderTarget.shared_from_this() );
 		m_pColorAttach = m_pRenderTarget->CreateAttachment( m_pColorBuffer );
 		m_pDepthAttach = m_pRenderTarget->CreateAttachment( m_pDepthBuffer );
 		m_wp2DBlendState = m_pEngine->CreateBlendState( cuT( "RT_OVERLAY_BLEND" ) );

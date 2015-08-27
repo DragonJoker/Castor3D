@@ -1,12 +1,16 @@
 #include "SceneObjectsList.hpp"
 
-#include "CameraTreeItemData.hpp"
-#include "GeometryTreeItemData.hpp"
-#include "LightTreeItemData.hpp"
-#include "NodeTreeItemData.hpp"
-#include "OverlayTreeItemData.hpp"
-#include "SubmeshTreeItemData.hpp"
+#include "CameraTreeItemProperty.hpp"
+#include "GeometryTreeItemProperty.hpp"
+#include "LightTreeItemProperty.hpp"
+#include "NodeTreeItemProperty.hpp"
+#include "OverlayTreeItemProperty.hpp"
+#include "SceneTreeItemProperty.hpp"
+#include "RenderTargetTreeItemProperty.hpp"
+#include "RenderWindowTreeItemProperty.hpp"
+#include "SubmeshTreeItemProperty.hpp"
 #include "PropertiesHolder.hpp"
+#include "ViewportTreeItemProperty.hpp"
 
 #include "ImagesLoader.hpp"
 
@@ -32,6 +36,12 @@
 #include "xpms/border_panel_sel.xpm"
 #include "xpms/text.xpm"
 #include "xpms/text_sel.xpm"
+#include "xpms/viewport.xpm"
+#include "xpms/viewport_sel.xpm"
+#include "xpms/render_window.xpm"
+#include "xpms/render_window_sel.xpm"
+#include "xpms/render_target.xpm"
+#include "xpms/render_target_sel.xpm"
 
 #include <wx/imaglist.h>
 #include <wx/aui/framemanager.h>
@@ -62,6 +72,8 @@ namespace GuiCommon
 		wxImagesLoader::AddBitmap( eBMP_NODE_SEL, node_sel_xpm );
 		wxImagesLoader::AddBitmap( eBMP_CAMERA, camera_xpm );
 		wxImagesLoader::AddBitmap( eBMP_CAMERA_SEL, camera_sel_xpm );
+		wxImagesLoader::AddBitmap( eBMP_VIEWPORT, viewport_xpm );
+		wxImagesLoader::AddBitmap( eBMP_VIEWPORT_SEL, viewport_sel_xpm );
 		wxImagesLoader::AddBitmap( eBMP_GEOMETRY, geometry_xpm );
 		wxImagesLoader::AddBitmap( eBMP_GEOMETRY_SEL, geometry_sel_xpm );
 		wxImagesLoader::AddBitmap( eBMP_DIRECTIONAL_LIGHT, directional_xpm );
@@ -78,12 +90,22 @@ namespace GuiCommon
 		wxImagesLoader::AddBitmap( eBMP_BORDER_PANEL_OVERLAY_SEL, border_panel_sel_xpm );
 		wxImagesLoader::AddBitmap( eBMP_TEXT_OVERLAY, text_xpm );
 		wxImagesLoader::AddBitmap( eBMP_TEXT_OVERLAY_SEL, text_sel_xpm );
+		wxImagesLoader::AddBitmap( eBMP_RENDER_TARGET, render_target_xpm );
+		wxImagesLoader::AddBitmap( eBMP_RENDER_TARGET_SEL, render_target_sel_xpm );
+		wxImagesLoader::AddBitmap( eBMP_RENDER_WINDOW, render_window_xpm );
+		wxImagesLoader::AddBitmap( eBMP_RENDER_WINDOW_SEL, render_window_sel_xpm );
 		wxImagesLoader::WaitAsyncLoads();
 
 		wxImage * l_icons[] =
 		{
 			wxImagesLoader::GetBitmap( eBMP_SCENE ),
 			wxImagesLoader::GetBitmap( eBMP_SCENE_SEL ),
+			wxImagesLoader::GetBitmap( eBMP_VIEWPORT ),
+			wxImagesLoader::GetBitmap( eBMP_VIEWPORT_SEL ),
+			wxImagesLoader::GetBitmap( eBMP_RENDER_TARGET ),
+			wxImagesLoader::GetBitmap( eBMP_RENDER_TARGET_SEL ),
+			wxImagesLoader::GetBitmap( eBMP_RENDER_WINDOW ),
+			wxImagesLoader::GetBitmap( eBMP_RENDER_WINDOW_SEL ),
 			wxImagesLoader::GetBitmap( eBMP_NODE ),
 			wxImagesLoader::GetBitmap( eBMP_NODE_SEL ),
 			wxImagesLoader::GetBitmap( eBMP_CAMERA ),
@@ -134,7 +156,13 @@ namespace GuiCommon
 
 		if ( p_pScene )
 		{
-			wxTreeItemId l_scene = AddRoot( p_pScene->GetName(), eBMP_SCENE, eBMP_SCENE_SEL );
+			wxTreeItemId l_scene = AddRoot( p_pScene->GetName(), eBMP_SCENE, eBMP_SCENE_SEL, new wxSceneTreeItemProperty( p_pScene ) );
+
+			for ( auto && l_it = p_pScene->GetEngine()->RenderWindowsBegin(); l_it != p_pScene->GetEngine()->RenderWindowsEnd(); ++l_it )
+			{
+				DoAddRenderWindow( l_scene, l_it->second );
+			}
+
 			SceneNodeSPtr l_rootNode = p_pScene->GetRootNode();
 			DoAddNode( l_scene, l_rootNode );
 
@@ -145,15 +173,15 @@ namespace GuiCommon
 					switch( l_overlay->GetType() )
 					{
 					case eOVERLAY_TYPE_PANEL:
-						DoAddOverlay( AppendItem( l_scene, l_overlay->GetName(), eBMP_PANEL_OVERLAY, eBMP_PANEL_OVERLAY_SEL, new wxOverlayTreeItemData( l_overlay ) ), l_overlay );
+						DoAddOverlay( AppendItem( l_scene, l_overlay->GetName(), eBMP_PANEL_OVERLAY, eBMP_PANEL_OVERLAY_SEL, new wxOverlayTreeItemProperty( l_overlay ) ), l_overlay );
 						break;
 
 					case eOVERLAY_TYPE_BORDER_PANEL:
-						DoAddOverlay( AppendItem( l_scene, l_overlay->GetName(), eBMP_BORDER_PANEL_OVERLAY, eBMP_BORDER_PANEL_OVERLAY_SEL, new wxOverlayTreeItemData( l_overlay ) ), l_overlay );
+						DoAddOverlay( AppendItem( l_scene, l_overlay->GetName(), eBMP_BORDER_PANEL_OVERLAY, eBMP_BORDER_PANEL_OVERLAY_SEL, new wxOverlayTreeItemProperty( l_overlay ) ), l_overlay );
 						break;
 
 					case eOVERLAY_TYPE_TEXT:
-						DoAddOverlay( AppendItem( l_scene, l_overlay->GetName(), eBMP_TEXT_OVERLAY, eBMP_TEXT_OVERLAY_SEL, new wxOverlayTreeItemData( l_overlay ) ), l_overlay );
+						DoAddOverlay( AppendItem( l_scene, l_overlay->GetName(), eBMP_TEXT_OVERLAY, eBMP_TEXT_OVERLAY_SEL, new wxOverlayTreeItemProperty( l_overlay ) ), l_overlay );
 						break;
 					}
 				}
@@ -168,24 +196,37 @@ namespace GuiCommon
 		DeleteAllItems();
 	}
 
+	void wxSceneObjectsList::DoAddRenderWindow( wxTreeItemId p_id, RenderWindowSPtr p_window )
+	{
+		wxTreeItemId l_id = AppendItem( p_id, p_window->GetName(), eBMP_RENDER_WINDOW, eBMP_RENDER_WINDOW_SEL, new wxRenderWindowTreeItemProperty( p_window ) );
+		RenderTargetSPtr l_target = p_window->GetRenderTarget();
+
+		if ( l_target )
+		{
+			wxString l_name = _( "Render Target" );
+			AppendItem( l_id, l_name, eBMP_RENDER_TARGET, eBMP_RENDER_TARGET_SEL, new wxRenderTargetTreeItemProperty( l_target ) );
+		}
+	}
+
 	void wxSceneObjectsList::DoAddGeometry( wxTreeItemId p_id, MovableObjectSPtr p_geometry )
 	{
 		GeometrySPtr l_geometry = std::static_pointer_cast< Geometry >( p_geometry );
-		wxTreeItemId l_id = AppendItem( p_id, l_geometry->GetName(), eBMP_GEOMETRY, eBMP_GEOMETRY_SEL, new wxGeometryTreeItemData( l_geometry ) );
+		wxTreeItemId l_id = AppendItem( p_id, l_geometry->GetName(), eBMP_GEOMETRY, eBMP_GEOMETRY_SEL, new wxGeometryTreeItemProperty( l_geometry ) );
 		int l_count = 0;
 
 		for ( auto l_submesh: *l_geometry->GetMesh() )
 		{
 			wxString l_name = _( "Submesh " );
 			l_name << l_count++;
-			wxTreeItemId l_idSubmesh = AppendItem( l_id, l_name, eBMP_SUBMESH, eBMP_SUBMESH_SEL, new wxSubmeshTreeItemData( l_geometry, l_submesh ) );
+			wxTreeItemId l_idSubmesh = AppendItem( l_id, l_name, eBMP_SUBMESH, eBMP_SUBMESH_SEL, new wxSubmeshTreeItemProperty( l_geometry, l_submesh ) );
 		}
 	}
 
 	void wxSceneObjectsList::DoAddCamera( wxTreeItemId p_id, MovableObjectSPtr p_camera )
 	{
 		CameraSPtr l_camera = std::static_pointer_cast< Camera >( p_camera );
-		wxTreeItemId l_id = AppendItem( p_id, l_camera->GetName(), eBMP_CAMERA, eBMP_CAMERA_SEL, new wxCameraTreeItemData( l_camera ) );
+		wxTreeItemId l_id = AppendItem( p_id, l_camera->GetName(), eBMP_CAMERA, eBMP_CAMERA_SEL, new wxCameraTreeItem( l_camera ) );
+		AppendItem( l_id, _( "Viewport" ), eBMP_VIEWPORT, eBMP_VIEWPORT_SEL, new wxViewportTreeItemProperty( l_camera->GetViewport() ) );
 	}
 
 	void wxSceneObjectsList::DoAddLight( wxTreeItemId p_id, MovableObjectSPtr p_light )
@@ -195,15 +236,15 @@ namespace GuiCommon
 		switch( l_light->GetLightType() )
 		{
 		case eLIGHT_TYPE_DIRECTIONAL:
-			AppendItem( p_id, l_light->GetName(), eBMP_DIRECTIONAL_LIGHT, eBMP_DIRECTIONAL_LIGHT_SEL, new wxLightTreeItemData( l_light ) );
+			AppendItem( p_id, l_light->GetName(), eBMP_DIRECTIONAL_LIGHT, eBMP_DIRECTIONAL_LIGHT_SEL, new wxLightTreeItemProperty( l_light ) );
 			break;
 
 		case eLIGHT_TYPE_POINT:
-			AppendItem( p_id, l_light->GetName(), eBMP_POINT_LIGHT, eBMP_POINT_LIGHT_SEL, new wxLightTreeItemData( l_light ) );
+			AppendItem( p_id, l_light->GetName(), eBMP_POINT_LIGHT, eBMP_POINT_LIGHT_SEL, new wxLightTreeItemProperty( l_light ) );
 			break;
 
 		case eLIGHT_TYPE_SPOT:
-			AppendItem( p_id, l_light->GetName(), eBMP_SPOT_LIGHT, eBMP_SPOT_LIGHT_SEL, new wxLightTreeItemData( l_light ) );
+			AppendItem( p_id, l_light->GetName(), eBMP_SPOT_LIGHT, eBMP_SPOT_LIGHT_SEL, new wxLightTreeItemProperty( l_light ) );
 			break;
 		}
 	}
@@ -232,7 +273,7 @@ namespace GuiCommon
 
 		for ( auto && l_pair: p_node->GetChilds() )
 		{
-			DoAddNode( AppendItem( p_id, l_pair.first, eBMP_NODE, eBMP_NODE_SEL, new wxNodeTreeItemData( l_pair.second.lock() ) ), l_pair.second.lock() );
+			DoAddNode( AppendItem( p_id, l_pair.first, eBMP_NODE, eBMP_NODE_SEL, new wxNodeTreeItemProperty( l_pair.second.lock() ) ), l_pair.second.lock() );
 		}
 	}
 
@@ -243,15 +284,15 @@ namespace GuiCommon
 			switch( l_overlay->GetType() )
 			{
 			case eOVERLAY_TYPE_PANEL:
-				DoAddOverlay( AppendItem( p_id, l_overlay->GetName(), eBMP_PANEL_OVERLAY, eBMP_PANEL_OVERLAY_SEL, new wxOverlayTreeItemData( l_overlay ) ), l_overlay );
+				DoAddOverlay( AppendItem( p_id, l_overlay->GetName(), eBMP_PANEL_OVERLAY, eBMP_PANEL_OVERLAY_SEL, new wxOverlayTreeItemProperty( l_overlay ) ), l_overlay );
 				break;
 
 			case eOVERLAY_TYPE_BORDER_PANEL:
-				DoAddOverlay( AppendItem( p_id, l_overlay->GetName(), eBMP_BORDER_PANEL_OVERLAY, eBMP_BORDER_PANEL_OVERLAY_SEL, new wxOverlayTreeItemData( l_overlay ) ), l_overlay );
+				DoAddOverlay( AppendItem( p_id, l_overlay->GetName(), eBMP_BORDER_PANEL_OVERLAY, eBMP_BORDER_PANEL_OVERLAY_SEL, new wxOverlayTreeItemProperty( l_overlay ) ), l_overlay );
 				break;
 
 			case eOVERLAY_TYPE_TEXT:
-				DoAddOverlay( AppendItem( p_id, l_overlay->GetName(), eBMP_TEXT_OVERLAY, eBMP_TEXT_OVERLAY_SEL, new wxOverlayTreeItemData( l_overlay ) ), l_overlay );
+				DoAddOverlay( AppendItem( p_id, l_overlay->GetName(), eBMP_TEXT_OVERLAY, eBMP_TEXT_OVERLAY_SEL, new wxOverlayTreeItemProperty( l_overlay ) ), l_overlay );
 				break;
 			}
 		}
@@ -270,7 +311,7 @@ namespace GuiCommon
 
 	void wxSceneObjectsList::OnSelectItem( wxTreeEvent & p_event )
 	{
-		wxTreeItemPropertyData * l_data = reinterpret_cast< wxTreeItemPropertyData * >( p_event.GetClientObject() );
+		wxTreeItemProperty * l_data = reinterpret_cast< wxTreeItemProperty * >( p_event.GetClientObject() );
 		m_propertiesHolder->SetPropertyData( l_data );
 		p_event.Skip();
 	}

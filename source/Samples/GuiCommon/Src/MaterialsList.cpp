@@ -2,9 +2,10 @@
 
 #include "PassPanel.hpp"
 #include "ImagesLoader.hpp"
-#include "MaterialTreeItemData.hpp"
-#include "PassTreeItemData.hpp"
-#include "TextureTreeItemData.hpp"
+#include "MaterialTreeItemProperty.hpp"
+#include "PassTreeItemProperty.hpp"
+#include "RenderTargetTreeItemProperty.hpp"
+#include "TextureTreeItemProperty.hpp"
 #include "PropertiesHolder.hpp"
 
 #include <Engine.hpp>
@@ -12,6 +13,7 @@
 #include <MaterialManager.hpp>
 #include <Pass.hpp>
 #include <Logger.hpp>
+#include <DynamicTexture.hpp>
 
 #include <wx/imaglist.h>
 
@@ -99,7 +101,7 @@ namespace GuiCommon
 
 	void wxMaterialsList::DoAddMaterial( wxTreeItemId p_id, Castor3D::MaterialSPtr p_material )
 	{
-		wxTreeItemId l_id = AppendItem( p_id, p_material->GetName(), eBMP_MATERIAL - eBMP_MATERIAL, eBMP_MATERIAL_SEL - eBMP_MATERIAL, new wxMaterialTreeItemData( p_material ) );
+		wxTreeItemId l_id = AppendItem( p_id, p_material->GetName(), eBMP_MATERIAL - eBMP_MATERIAL, eBMP_MATERIAL_SEL - eBMP_MATERIAL, new wxMaterialTreeItemProperty( p_material ) );
 		uint32_t l_index = 0;
 
 		for ( auto && l_pass: *p_material )
@@ -110,7 +112,7 @@ namespace GuiCommon
 
 	void wxMaterialsList::DoAddPass( wxTreeItemId p_id, uint32_t p_index, Castor3D::PassSPtr p_pass )
 	{
-		wxTreeItemId l_id = AppendItem( p_id, wxString( _( "Pass " ) ) << p_index, eBMP_PASS - eBMP_MATERIAL, eBMP_PASS_SEL - eBMP_MATERIAL, new wxPassTreeItemData( p_pass ) );
+		wxTreeItemId l_id = AppendItem( p_id, wxString( _( "Pass " ) ) << p_index, eBMP_PASS - eBMP_MATERIAL, eBMP_PASS_SEL - eBMP_MATERIAL, new wxPassTreeItemProperrty( p_pass ) );
 		uint32_t l_index = 0;
 
 		for ( auto && l_pass: *p_pass )
@@ -121,7 +123,19 @@ namespace GuiCommon
 
 	void wxMaterialsList::DoAddTexture( wxTreeItemId p_id, uint32_t p_index, Castor3D::TextureUnitSPtr p_texture )
 	{
-		wxTreeItemId l_id = AppendItem( p_id, wxString( _( "Texture Unit " ) ) << p_index, eBMP_TEXTURE - eBMP_MATERIAL, eBMP_TEXTURE_SEL - eBMP_MATERIAL, new wxTextureTreeItemData( p_texture ) );
+		wxTreeItemId l_id = AppendItem( p_id, wxString( _( "Texture Unit " ) ) << p_index, eBMP_TEXTURE - eBMP_MATERIAL, eBMP_TEXTURE_SEL - eBMP_MATERIAL, new wxTextureTreeItemProperty( p_texture ) );
+		TextureBaseSPtr l_texture = p_texture->GetTexture();
+
+		if ( l_texture->GetType() == eTEXTURE_TYPE_DYNAMIC )
+		{
+			RenderTargetSPtr l_target = std::static_pointer_cast< DynamicTexture >( l_texture )->GetRenderTarget();
+
+			if ( l_target )
+			{
+				wxString l_name = _( "Render Target" );
+				AppendItem( l_id, l_name, eBMP_RENDER_TARGET, eBMP_RENDER_TARGET_SEL, new wxRenderTargetTreeItemProperty( l_target ) );
+			}
+		}
 	}
 
 	BEGIN_EVENT_TABLE( wxMaterialsList, wxTreeCtrl )
@@ -137,7 +151,7 @@ namespace GuiCommon
 
 	void wxMaterialsList::OnSelectItem( wxTreeEvent & p_event )
 	{
-		wxTreeItemPropertyData * l_data = reinterpret_cast< wxTreeItemPropertyData * >( p_event.GetClientObject() );
+		wxTreeItemProperty * l_data = reinterpret_cast< wxTreeItemProperty * >( p_event.GetClientObject() );
 		m_propertiesHolder->SetPropertyData( l_data );
 		p_event.Skip();
 	}

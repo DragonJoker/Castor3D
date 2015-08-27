@@ -238,10 +238,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the viewport projection type
-		 *\param[in]		The new value
+		 *\return		The new value
 		 *\~french
 		 *\brief		Définit le type de projection du viewport
-		 *\param[in]		La nouvelle valeur
+		 *\return		La nouvelle valeur
 		 */
 		inline eVIEWPORT_TYPE GetType()const
 		{
@@ -250,10 +250,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the aspect ratio
-		 *\param[in]	The new value
+		 *\return		The new value
 		 *\~french
 		 *\brief		Définit le ratio d'aspect
-		 *\param[in]	La nouvelle valeur
+		 *\return		La nouvelle valeur
 		 */
 		inline real GetRatio()const
 		{
@@ -507,6 +507,18 @@ namespace Castor3D
 		inline const Castor::PlaneEquation< real > & GetFrustumPlane( eFRUSTUM_PLANE p_ePlane )const
 		{
 			return m_planes[p_ePlane];
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the engine
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le moteur
+		 *\return		La valeur
+		 */
+		inline Engine * GetEngine()const
+		{
+			return m_pEngine;
 		}
 
 	private:
