@@ -130,7 +130,17 @@ namespace GlRender
 
 	GlContextImpl::~GlContextImpl()
 	{
-		m_gl.DeleteContext( m_hContext );
+	}
+
+	void GlContextImpl::Cleanup()
+	{
+		try
+		{
+			m_gl.DeleteContext( m_hContext );
+		}
+		catch ( ... )
+		{
+		}
 	}
 
 	void GlContextImpl::SetCurrent()

@@ -437,7 +437,7 @@ namespace Castor
 			StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
 			p_strParams.clear();
 
-			if ( l_array.size() )
+			if ( !l_array.empty() )
 			{
 				m_value = l_array[0];
 				str_utils::trim( m_value );
@@ -546,7 +546,7 @@ namespace Castor
 			StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
 			p_strParams.clear();
 
-			if ( l_array.size() )
+			if ( !l_array.empty() )
 			{
 				m_value = str_utils::to_lower_case( l_array[0] ) == cuT( "true" );
 				l_bReturn = l_array[0] == cuT( "true" ) || l_array[0] == cuT( "false" );
@@ -756,7 +756,7 @@ namespace Castor
 			StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
 			p_strParams.clear();
 
-			if ( l_array.size() )
+			if ( !l_array.empty() )
 			{
 				UIntStrMapIt l_it = m_mapValues.find( l_array[0] );
 
@@ -764,6 +764,59 @@ namespace Castor
 				{
 					m_value = l_it->second;
 					l_bReturn = true;
+				}
+
+				if ( l_array.size() > 1 )
+				{
+					p_strParams = l_array[1];
+				}
+			}
+
+			return l_bReturn;
+		}
+	};
+
+	template<> class ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT >
+		: public ParserParameter< ePARAMETER_TYPE_UINT32 >
+	{
+	public:
+		UIntStrMap m_mapValues;
+
+		ParserParameter( UIntStrMap const & p_mapValues ) : m_mapValues( p_mapValues ) {}
+
+		virtual ePARAMETER_TYPE GetType()
+		{
+			return ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT;
+		}
+		virtual ePARAMETER_TYPE GetBaseType()
+		{
+			return ePARAMETER_TYPE_UINT32;
+		}
+		virtual xchar const * GetStrType()
+		{
+			return cuT( "bitwise ORed checked texts" );
+		}
+
+		virtual bool Parse( String & p_strParams )
+		{
+			bool l_bReturn = false;
+			m_value = 0;
+			StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
+			p_strParams.clear();
+
+			if ( !l_array.empty() )
+			{
+				StringArray l_values = str_utils::split( l_array[0], cuT( "|" ), std::count( l_array[0].begin(), l_array[0].end(), cuT( '|' ) ) + 1, false );
+
+				for ( auto && l_value: l_values )
+				{
+					UIntStrMapIt l_it = m_mapValues.find( l_value );
+
+					if ( l_it != m_mapValues.end() )
+					{
+						m_value |= l_it->second;
+						l_bReturn = true;
+					}
 				}
 
 				if ( l_array.size() > 1 )

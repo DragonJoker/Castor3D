@@ -29,9 +29,9 @@ function( SamplesBuild )
 	
 		#we look for wxWidgets
 		if (WIN32)
-			find_package( wxWidgets COMPONENTS stc scintilla core base aui )
+			find_package( wxWidgets COMPONENTS stc scintilla core base aui adv propgrid )
 		else ()
-			find_package( wxWidgets COMPONENTS core base stc aui )
+			find_package( wxWidgets COMPONENTS core base stc aui adv propgrid )
 		endif()
 	
 		if( wxWidgets_FOUND AND GTK2_FOUND )

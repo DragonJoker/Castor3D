@@ -161,24 +161,24 @@ namespace Castor3D
 		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
 		 *\remark		Not to be used by the user, use Scene::CreateCamera instead
 		 *\param[in]	p_strName			The camera name
-		 *\param[in]	p_pNode				The parent camera node
+		 *\param[in]	p_pMaterial				The parent camera node
 		 *\param[in]	p_pViewport			Viewport to copy
 		 *\param[in]	p_ePrimitiveType	The camera display mode
 		 *\~french
 		 *\brief		Constructeur
 		 *\remark		L'utilisateur ne devrait pas s'en servir, préférer l'utilisation de Scene::CreateCamera
 		 *\param[in]	p_strName			Le nom de la caméra
-		 *\param[in]	p_pNode				SceneNode parent
+		 *\param[in]	p_pMaterial				SceneNode parent
 		 *\param[in]	p_pViewport			Viewport à copier
 		 *\param[in]	p_ePrimitiveType	Mode d'affichage de la caméra
 		 */
-		Camera( SceneSPtr p_pScene, Castor::String const & p_strName, const SceneNodeSPtr p_pNode, ViewportSPtr p_pViewport, eTOPOLOGY p_ePrimitiveType = eTOPOLOGY_TRIANGLES );
+		Camera( SceneSPtr p_pScene, Castor::String const & p_strName, const SceneNodeSPtr p_pMaterial, ViewportSPtr p_pViewport, eTOPOLOGY p_ePrimitiveType = eTOPOLOGY_TRIANGLES );
 		/**
 		 *\~english
 		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
 		 *\remark		Not to be used by the user, use Scene::CreateCamera instead
 		 *\param[in]	p_strName			The camera name
-		 *\param[in]	p_pNode				The parent camera node
+		 *\param[in]	p_pMaterial				The parent camera node
 		 *\param[in]	p_size				The viewport render size
 		 *\param[in]	p_eType				Projection type
 		 *\param[in]	p_ePrimitiveType	The camera display mode
@@ -186,12 +186,12 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\remark		L'utilisateur ne devrait pas s'en servir, préférer l'utilisation de Scene::CreateCamera
 		 *\param[in]	p_strName			Le nom de la caméra
-		 *\param[in]	p_pNode				SceneNode parent
+		 *\param[in]	p_pMaterial				SceneNode parent
 		 *\param[in]	p_size				Les dimensions de rendu du viewport
 		 *\param[in]	p_eType				Type de projection
 		 *\param[in]	p_ePrimitiveType	Mode d'affichage de la caméra
 		 */
-		Camera( SceneSPtr p_pScene, Castor::String const & p_strName, const SceneNodeSPtr p_pNode, Castor::Size const & p_size, eVIEWPORT_TYPE p_eType, eTOPOLOGY p_ePrimitiveType = eTOPOLOGY_TRIANGLES );
+		Camera( SceneSPtr p_pScene, Castor::String const & p_strName, const SceneNodeSPtr p_pMaterial, Castor::Size const & p_size, eVIEWPORT_TYPE p_eType, eTOPOLOGY p_ePrimitiveType = eTOPOLOGY_TRIANGLES );
 		/**
 		 *\~english
 		 *\brief		Destructor

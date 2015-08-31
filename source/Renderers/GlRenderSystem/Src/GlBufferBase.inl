@@ -66,7 +66,7 @@ namespace GlRender
 
 		if ( l_bResult )
 		{
-			m_gl.BufferData( m_eTarget, p_iSize * sizeof( T ), p_pBuffer, m_gl.GetBufferFlags( p_eNature | p_eType ) );
+			l_bResult = m_gl.BufferData( m_eTarget, p_iSize * sizeof( T ), p_pBuffer, m_gl.GetBufferFlags( p_eNature | p_eType ) );
 			Unbind();
 		}
 

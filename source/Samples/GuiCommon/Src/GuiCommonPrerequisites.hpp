@@ -68,14 +68,64 @@ namespace GuiCommon
 		eSTC_TYPE_COUNT
 	}	eSTC_TYPE;
 
+	typedef enum eBMP
+	{
+		eBMP_SCENE,
+		eBMP_SCENE_SEL,
+		eBMP_VIEWPORT,
+		eBMP_VIEWPORT_SEL,
+		eBMP_RENDER_TARGET,
+		eBMP_RENDER_TARGET_SEL,
+		eBMP_RENDER_WINDOW,
+		eBMP_RENDER_WINDOW_SEL,
+		eBMP_NODE,
+		eBMP_NODE_SEL,
+		eBMP_CAMERA,
+		eBMP_CAMERA_SEL,
+		eBMP_GEOMETRY,
+		eBMP_GEOMETRY_SEL,
+		eBMP_DIRECTIONAL_LIGHT,
+		eBMP_DIRECTIONAL_LIGHT_SEL,
+		eBMP_POINT_LIGHT,
+		eBMP_POINT_LIGHT_SEL,
+		eBMP_SPOT_LIGHT,
+		eBMP_SPOT_LIGHT_SEL,
+		eBMP_SUBMESH,
+		eBMP_SUBMESH_SEL,
+		eBMP_PANEL_OVERLAY,
+		eBMP_PANEL_OVERLAY_SEL,
+		eBMP_BORDER_PANEL_OVERLAY,
+		eBMP_BORDER_PANEL_OVERLAY_SEL,
+		eBMP_TEXT_OVERLAY,
+		eBMP_TEXT_OVERLAY_SEL,
+		eBMP_MATERIAL,
+		eBMP_MATERIAL_SEL,
+		eBMP_PASS,
+		eBMP_PASS_SEL,
+		eBMP_TEXTURE,
+		eBMP_TEXTURE_SEL,
+		eBMP_COUNT,
+	}	eBMP;
+
+	static const int GC_IMG_SIZE = 16;
+
+	class wxPropertiesHolder;
+	class wxTreeItemProperty;
+	class wxCameraTreeItem;
+	class wxGeometryTreeItemProperty;
+	class wxLightTreeItemProperty;
+	class wxMaterialTreeItemProperty;
+	class wxNodeTreeItemProperty;
+	class wxOverlayTreeItemProperty;
+	class wxPassTreeItemProperrty;
+	class wxSubmeshTreeItemProperty;
+	class wxTextureTreeItemProperty;
+
 	class wxFrameVariableDialog;
-	class wxGeometryTreeItemData;
-	class wxSubmeshTreeItemData;
-	class wxGeometriesListFrame;
+	class wxSceneObjectsList;
 	class wxImagesLoader;
 	class wxMaterialPanel;
-	class wxMaterialsFrame;
-	class wxMaterialsListView;
+	class wxMaterialsList;
 	class wxPassPanel;
 	class wxRendererSelector;
 	class wxShaderDialog;
@@ -141,6 +191,21 @@ namespace GuiCommon
 	 *\param[out]	p_bitmap	Reçoit le bitmap généré
 	 */
 	void wxCreateBitmapFromBuffer( Castor3D::TextureUnitSPtr p_pUnit, wxBitmap & p_bitmap );
+	/**
+	 *\~english
+	 *\brief		Loads a font glyphs using wxWidgets
+	 *\remark		Uses a custom SFontImpl
+	 *\param[in]	p_engine	The Castor3D engine, to check for font existence
+	 *\param[in]	p_font		The wxWidgets font
+	 *\return		The loaded font
+	 *\~french
+	 *\brief		Charge les glyphes de la police en utilisant wxWidgets
+	 *\remark		Utilise une version personnalisée de SFontImpl
+	 *\param[in]	p_engine	Le moteur, pour vérifier l'existance de la police
+	 *\param[in]	p_font		La police wxWidgets
+	 *\return		La police chargée
+	 */
+	Castor::FontSPtr wxLoadFont( Castor3D::Engine * p_engine, wxFont const & p_font );
 
 #if wxVERSION_NUMBER >= 2900
 #	define	wxIMAGE_QUALITY_HIGHEST wxIMAGE_QUALITY_BICUBIC

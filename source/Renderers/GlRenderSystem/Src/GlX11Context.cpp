@@ -209,6 +209,17 @@ bool GlContextImpl::Initialise( RenderWindow * p_pWindow )
 	return m_bInitialised;
 }
 
+void GlContextImpl::Cleanup()
+{
+	try
+	{
+		m_gl.DeleteContext( m_pDisplay, m_glXContext );
+	}
+	catch ( ... )
+	{
+	}
+}
+
 void GlContextImpl::SetCurrent()
 {
 	m_gl.MakeCurrent( m_pDisplay, m_drawable, m_glXContext );

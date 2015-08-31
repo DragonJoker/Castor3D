@@ -165,10 +165,10 @@ namespace GlRender
 			Castor::String m_name;
 		};
 		
+		struct Vec4;
 		struct Sampler1D;
 		struct Sampler2D;
 		struct Sampler3D;
-		struct Vec4;
 
 		class GlslWriter
 		{

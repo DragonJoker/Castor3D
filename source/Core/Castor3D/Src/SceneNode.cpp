@@ -24,9 +24,9 @@ namespace Castor3D
 	bool SceneNode::TextLoader::operator()( SceneNode const & p_node, TextFile & p_file )
 	{
 		bool l_bReturn = false;
-		Logger::LogInfo( cuT( "Writing Node " ) + p_node.GetName() );
+		Logger::LogInfo( cuT( "Writing Material " ) + p_node.GetName() );
 
-		if ( p_node.GetName() != cuT( "RootNode" ) )
+		if ( p_node.GetName() != cuT( "RootMaterial" ) )
 		{
 			l_bReturn = p_file.WriteText( cuT( "\tscene_node \"" ) + p_node.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
 
@@ -93,7 +93,7 @@ namespace Castor3D
 		Point3f l_scale;
 		Point3f l_position;
 
-		if ( p_obj.GetName() != cuT( "RootNode" ) )
+		if ( p_obj.GetName() != cuT( "RootMaterial" ) )
 		{
 			l_bReturn = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
 
@@ -185,16 +185,16 @@ namespace Castor3D
 
 				case eCHUNK_TYPE_SCENE_NODE:
 				{
-					BinaryChunk l_chunkNode;
+					BinaryChunk l_chunkMaterial;
 					String l_name;
-					l_bReturn = l_chunk.GetSubChunk( l_chunkNode );
+					l_bReturn = l_chunk.GetSubChunk( l_chunkMaterial );
 
 					if ( l_bReturn )
 					{
-						switch ( l_chunkNode.GetChunkType() )
+						switch ( l_chunkMaterial.GetChunkType() )
 						{
 						case eCHUNK_TYPE_NAME:
-							l_bReturn = DoParseChunk( l_name, l_chunkNode );
+							l_bReturn = DoParseChunk( l_name, l_chunkMaterial );
 							break;
 
 						default:
@@ -252,7 +252,7 @@ namespace Castor3D
 		,	m_bVisible( true )
 		,	m_ptScale( 1.0, 1.0, 1.0 )
 		,	m_ptPosition( 0.0, 0.0, 0.0 )
-		,	m_bDisplayable( p_name == cuT( "RootNode" ) )
+		,	m_bDisplayable( p_name == cuT( "RootMaterial" ) )
 		,	m_pScene( p_pScene )
 		,	m_bMtxChanged( true )
 	{

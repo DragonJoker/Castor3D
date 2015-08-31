@@ -38,7 +38,7 @@ namespace Castor3D
 	\remark		Excécute une fonction lorsqu'il est traité
 	*/
 	template< class Functor >
-	class C3D_API FunctorEvent
+	class FunctorEvent
 		: public FrameEvent
 	{
 	private:
@@ -50,7 +50,7 @@ namespace Castor3D
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_copy	L'objet à copier
 		 */
-		FunctorEvent( FunctorEvent const & p_copy )
+		inline FunctorEvent( FunctorEvent const & p_copy )
 			: FrameEvent( p_copy )
 			, m_functor( p_copy.m_functor )
 		{
@@ -63,7 +63,7 @@ namespace Castor3D
 		 *\brief		Opérateur d'affectation par copie
 		 *\param[in]	p_copy	L'objet à copier
 		 */
-		FunctorEvent & operator=( FunctorEvent const & p_copy )
+		inline FunctorEvent & operator=( FunctorEvent const & p_copy )
 		{
 			FunctorEvent l_evt( p_copy );
 			std::swap( m_functor, l_evt.m_functor );
@@ -82,7 +82,7 @@ namespace Castor3D
 		 *\param[in]	p_type		Le type d'évènement
 		 *\param[in]	p_functor	Le foncteur à exécuter
 		 */
-		FunctorEvent( eEVENT_TYPE p_type, Functor p_functor )
+		inline FunctorEvent( eEVENT_TYPE p_type, Functor p_functor )
 			: FrameEvent( p_type )
 			, m_functor( p_functor )
 		{
@@ -93,7 +93,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~FunctorEvent()
+		inline ~FunctorEvent()
 		{
 		}
 		/**
@@ -127,7 +127,7 @@ namespace Castor3D
 	 *\param[in]	p_functor	Le foncteur à exécuter
 	 */
 	template< typename Functor >
-	std::shared_ptr< FunctorEvent< Functor > > MakeFunctorEvent( eEVENT_TYPE p_type, Functor p_functor )
+	inline std::shared_ptr< FunctorEvent< Functor > > MakeFunctorEvent( eEVENT_TYPE p_type, Functor p_functor )
 	{
 		return std::make_shared< FunctorEvent< Functor > >( p_type, p_functor );
 	}

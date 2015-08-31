@@ -32,6 +32,63 @@ add_target(
 	"${wxWidgets_CXXFLAGS}"
 )
 
+file( GLOB ${PROJECT_NAME}_PROPERTIES_HEADER_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Properties*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Properties*.inl
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Property*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Property*.inl
+)
+file( GLOB ${PROJECT_NAME}_PROPERTIES_SOURCE_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Properties*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Property*.cpp
+)
+source_group( "Header Files\\Properties" FILES ${${PROJECT_NAME}_PROPERTIES_HEADER_FILES} )
+source_group( "Source Files\\Properties" FILES ${${PROJECT_NAME}_PROPERTIES_SOURCE_FILES} )
+
+file( GLOB ${PROJECT_NAME}_SHADER_HEADER_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Language*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Language*.inl
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Lexer*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Lexer*.inl
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Stc*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Stc*.inl
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Style*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Style*.inl
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameVariable*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameVariable*.inl
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Shader*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Shader*.inl
+)
+file( GLOB ${PROJECT_NAME}_SHADER_SOURCE_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Language*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Lexer*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Stc*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Style*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameVariable*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Shader*.cpp
+)
+source_group( "Header Files\\Shader" FILES ${${PROJECT_NAME}_SHADER_HEADER_FILES} )
+source_group( "Source Files\\Shader" FILES ${${PROJECT_NAME}_SHADER_SOURCE_FILES} )
+
+file( GLOB ${PROJECT_NAME}_SYSTEM_HEADER_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Loader*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Loader*.inl
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Screen*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Screen*.inl
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Renderer*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Renderer*.inl
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*List*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*List*.inl
+)
+file( GLOB ${PROJECT_NAME}_SYSTEM_SOURCE_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Loader*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Screen*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Renderer*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*List*.cpp
+)
+source_group( "Header Files\\System" FILES ${${PROJECT_NAME}_SYSTEM_HEADER_FILES} )
+source_group( "Source Files\\System" FILES ${${PROJECT_NAME}_SYSTEM_SOURCE_FILES} )
+
 # Copying language files for GLSL and HLSL coloration in wxShaderDialog
 file(
 	GLOB_RECURSE

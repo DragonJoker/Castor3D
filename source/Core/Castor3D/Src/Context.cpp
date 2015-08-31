@@ -40,18 +40,20 @@ namespace Castor3D
 		std::memcpy( m_pBuffer, l_pBuffer, sizeof( l_pBuffer ) );
 		m_pDeclaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
 		uint32_t i = 0;
-		std::for_each( m_arrayVertex.begin(), m_arrayVertex.end(), [&]( BufferElementGroupSPtr & p_vertex )
+
+		for ( auto & l_vertex: m_arrayVertex )
 		{
-			p_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_pBuffer )[i++ * m_pDeclaration->GetStride()] );
-		} );
+			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_pBuffer )[i++ * m_pDeclaration->GetStride()] );
+		}
 	}
 
 	Context::~Context()
 	{
-		std::for_each( m_arrayVertex.begin(), m_arrayVertex.end(), [&]( BufferElementGroupSPtr & p_vertex )
+		for ( auto & l_vertex: m_arrayVertex )
 		{
-			p_vertex.reset();
-		} );
+			l_vertex.reset();
+		}
+
 		m_pDeclaration.reset();
 	}
 
@@ -92,22 +94,15 @@ namespace Castor3D
 
 	void Context::Cleanup()
 	{
-		m_bInitialised = false;
 		DoCleanup();
-		SetCurrent();
-		ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
-
-		if ( l_pProgram )
-		{
-			l_pProgram->Cleanup();
-			l_pProgram.reset();
-		}
-
-		m_pGeometryBuffers->GetVertexBuffer().Cleanup();
-		m_pGeometryBuffers->Cleanup();
-		m_pGeometryBuffers.reset();
+		m_pDsStateBackground.reset();
 		m_pViewport.reset();
-		EndCurrent();
+		m_pGeometryBuffers.reset();
+		m_bMultiSampling = false;
+		m_pBtoBShaderProgram.reset();
+		m_bDeferredShadingSet = false;
+		m_pRenderSystem = NULL;
+		m_pWindow = NULL;
 	}
 
 	void Context::SetCurrent()

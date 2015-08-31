@@ -18,7 +18,7 @@ int main( int argc, char const * argv[] )
 		l_iCount = std::max< int >( 1, atoi( argv[2] ) );
 	}
 
-	Castor::Logger::Initialise( Castor::eLOG_TYPE_DEBUG );
+	Castor::Logger::Initialise( Castor::ELogType_DEBUG );
 	Castor::Logger::SetFileName( Castor::File::DirectoryGetCurrent() / cuT( "Tests.log" ) );
 #if defined( CASTOR_USE_OCL )
 	Testing::Register( std::make_shared< Testing::OpenCLBench >() );

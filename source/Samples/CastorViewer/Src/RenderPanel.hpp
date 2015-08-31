@@ -33,7 +33,8 @@ namespace CastorViewer
 		eCAMERA_MODE_COUNT,
 	}	eCAMERA_MODE;
 
-	class RenderPanel : public wxPanel
+	class RenderPanel
+		: public wxPanel
 	{
 	private:
 		typedef enum eTIMER_ID :
@@ -47,33 +48,6 @@ namespace CastorViewer
 			eTIMER_ID_DOWN,
 			eTIMER_ID_COUNT,
 		}	eTIMER_ID;
-	public:
-		Castor::real m_deltaX;
-		Castor::real m_deltaY;
-		Castor::real m_x;
-		Castor::real m_y;
-		Castor::real m_oldX;
-		Castor::real m_oldY;
-		Castor::real m_rZoom;
-		Castor::Point3r m_ptOriginalPosition;
-		Castor::Quaternion m_qOriginalOrientation;
-		bool m_mouseLeftDown;	//!< The left mouse button status
-		bool m_mouseRightDown;	//!< The right mouse button status
-		bool m_mouseMiddleDown;	//!< The middle mouse button status
-		eCAMERA_MODE m_eCameraMode;
-		wxTimer * m_pTimer[eTIMER_ID_COUNT];
-		Castor3D::RenderWindowWPtr m_pRenderWindow;
-		Castor3D::FrameListenerSPtr m_pListener;
-		wxCursor * m_pCursorArrow;
-		wxCursor * m_pCursorHand;
-		wxCursor * m_pCursorNone;
-
-		MouseCameraEventSPtr m_pRotateCamEvent;
-		CameraTranslateEventSPtr m_pTranslateCamEvent;
-		FirstPersonCameraRotateEventSPtr m_pFpRotateCamEvent;
-		FirstPersonCameraTranslateEventSPtr m_pFpTranslateCamEvent;
-		KeyboardEventSPtr m_pKeyboardEvent;
-		Castor::real m_rFpCamSpeed;
 
 	public:
 		RenderPanel( wxWindow * parent, wxWindowID p_id, wxPoint const & pos = wxDefaultPosition, wxSize const & size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE );
@@ -85,14 +59,17 @@ namespace CastorViewer
 		virtual void DrawOneFrame();
 		void SetRenderWindow( Castor3D::RenderWindowSPtr p_pWindow );
 
-		inline Castor3D::RenderWindowSPtr	GetRenderWindow()const
+		inline Castor3D::RenderWindowSPtr GetRenderWindow()const
 		{
 			return m_pRenderWindow.lock();
 		}
 
 	private:
-		virtual void DoStartTimer( int p_iId );
-		virtual void DoStopTimer( int p_iId );
+		void DoStartTimer( int p_iId );
+		void DoStopTimer( int p_iId );
+		void DoResetCamera();
+		void DoSwitchPrimitiveType();
+		void DoReloadScene();
 
 		DECLARE_EVENT_TABLE()
 		virtual void OnTimerFwd( wxTimerEvent & p_event );
@@ -121,6 +98,34 @@ namespace CastorViewer
 		virtual void OnMouseMove( wxMouseEvent & p_event );
 		virtual void OnMouseWheel( wxMouseEvent & p_event );
 		virtual void OnMenuClose( wxCommandEvent & p_event );
+
+	public:
+		Castor::real m_deltaX;
+		Castor::real m_deltaY;
+		Castor::real m_x;
+		Castor::real m_y;
+		Castor::real m_oldX;
+		Castor::real m_oldY;
+		Castor::real m_rZoom;
+		Castor::Point3r m_ptOriginalPosition;
+		Castor::Quaternion m_qOriginalOrientation;
+		bool m_mouseLeftDown;	//!< The left mouse button status
+		bool m_mouseRightDown;	//!< The right mouse button status
+		bool m_mouseMiddleDown;	//!< The middle mouse button status
+		eCAMERA_MODE m_eCameraMode;
+		wxTimer * m_pTimer[eTIMER_ID_COUNT];
+		Castor3D::RenderWindowWPtr m_pRenderWindow;
+		Castor3D::FrameListenerSPtr m_pListener;
+		wxCursor * m_pCursorArrow;
+		wxCursor * m_pCursorHand;
+		wxCursor * m_pCursorNone;
+
+		MouseCameraEventSPtr m_pRotateCamEvent;
+		CameraTranslateEventSPtr m_pTranslateCamEvent;
+		FirstPersonCameraRotateEventSPtr m_pFpRotateCamEvent;
+		FirstPersonCameraTranslateEventSPtr m_pFpTranslateCamEvent;
+		KeyboardEventSPtr m_pKeyboardEvent;
+		Castor::real m_rFpCamSpeed;
 	};
 }
 

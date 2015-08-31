@@ -15,35 +15,27 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GUICOMMON_SUBMESH_TREE_ITEM_DATA_H___
-#define ___GUICOMMON_SUBMESH_TREE_ITEM_DATA_H___
+#ifndef ___GUICOMMON_LIGHT_TREE_ITEM_DATA_H___
+#define ___GUICOMMON_LIGHT_TREE_ITEM_DATA_H___
 
-#include "GuiCommonPrerequisites.hpp"
-
-#include <wx/treectrl.h>
+#include "TreeItemPropertyData.hpp"
 
 namespace GuiCommon
 {
-	class wxSubmeshTreeItemData
-		: public wxTreeItemData
+	class wxLightTreeItemData
+		: public wxTreeItemPropertyData
 	{
-	protected:
-		Castor3D::GeometryWPtr m_pGeometry;
-		Castor3D::SubmeshWPtr m_pSubmesh;
-
 	public:
-		wxSubmeshTreeItemData( Castor3D::GeometrySPtr p_pGeometry, Castor3D::SubmeshSPtr p_pSubmesh );
-		~wxSubmeshTreeItemData();
+		wxLightTreeItemData( Castor3D::LightSPtr p_light );
+		~wxLightTreeItemData();
 
-		inline Castor3D::SubmeshSPtr GetSubmesh()
+		inline Castor3D::LightSPtr GetLight()
 		{
-			return m_pSubmesh.lock();
+			return m_light.lock();
 		}
 
-		inline Castor3D::GeometrySPtr GetGeometry()
-		{
-			return m_pGeometry.lock();
-		}
+	protected:
+		Castor3D::LightWPtr m_light;
 	};
 }
 

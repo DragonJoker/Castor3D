@@ -80,7 +80,7 @@ namespace Dx11Render
 
 		if ( l_hr == S_OK )
 		{
-			if ( IsRenderTarget() )
+			if ( GetRenderTarget() )
 			{
 				D3D11_RENDER_TARGET_VIEW_DESC l_desc = {};
 				l_desc.Format = DirectX11::Get( m_pPixelBuffer->format() );
@@ -171,7 +171,7 @@ namespace Dx11Render
 			}
 		}
 
-		if ( IsRenderTarget() )
+		if ( GetRenderTarget() )
 		{
 			p_tex2dDesc.CPUAccessFlags = 0;
 			p_tex2dDesc.Usage = D3D11_USAGE_DEFAULT;

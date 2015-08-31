@@ -46,7 +46,7 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser,  TextFile * p_p
 	, uiUInt64( 0 )
 	, bBool1( false )
 	, bBool2( false )
-	, m_pGeneralParentNode( NULL )
+	, m_pGeneralParentMaterial( NULL )
 	, mapScenes()
 	, m_pParser( p_pParser )
 	, eRendererType( eRENDERER_TYPE_UNDEFINED )
@@ -163,76 +163,24 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser,  TextFile * p_p
 	m_mapWrappingModes[cuT( "clamp_to_border" )] = eWRAP_MODE_CLAMP_TO_BORDER;
 	m_mapWrappingModes[cuT( "clamp_to_edge" )] = eWRAP_MODE_CLAMP_TO_EDGE;
 
-	m_mapGlslVariableTypes[cuT( "int" )] = eFRAME_VARIABLE_TYPE_INT;
-	m_mapGlslVariableTypes[cuT( "uint" )] = eFRAME_VARIABLE_TYPE_UINT;
-	m_mapGlslVariableTypes[cuT( "float" )] = eFRAME_VARIABLE_TYPE_FLOAT;
-	m_mapGlslVariableTypes[cuT( "vec2i" )] = eFRAME_VARIABLE_TYPE_VEC2I;
-	m_mapGlslVariableTypes[cuT( "vec3i" )] = eFRAME_VARIABLE_TYPE_VEC3I;
-	m_mapGlslVariableTypes[cuT( "vec4i" )] = eFRAME_VARIABLE_TYPE_VEC4I;
-	m_mapGlslVariableTypes[cuT( "vec2ui" )] = eFRAME_VARIABLE_TYPE_VEC2UI;
-	m_mapGlslVariableTypes[cuT( "vec3ui" )] = eFRAME_VARIABLE_TYPE_VEC3UI;
-	m_mapGlslVariableTypes[cuT( "vec4ui" )] = eFRAME_VARIABLE_TYPE_VEC4UI;
-	m_mapGlslVariableTypes[cuT( "vec2f" )] = eFRAME_VARIABLE_TYPE_VEC2F;
-	m_mapGlslVariableTypes[cuT( "vec3f" )] = eFRAME_VARIABLE_TYPE_VEC3F;
-	m_mapGlslVariableTypes[cuT( "vec4f" )] = eFRAME_VARIABLE_TYPE_VEC4F;
-	m_mapGlslVariableTypes[cuT( "mat2x2f" )] = eFRAME_VARIABLE_TYPE_MAT2X2F;
-	m_mapGlslVariableTypes[cuT( "mat2x3f" )] = eFRAME_VARIABLE_TYPE_MAT2X3F;
-	m_mapGlslVariableTypes[cuT( "mat2x4f" )] = eFRAME_VARIABLE_TYPE_MAT2X4F;
-	m_mapGlslVariableTypes[cuT( "mat3x2f" )] = eFRAME_VARIABLE_TYPE_MAT3X2F;
-	m_mapGlslVariableTypes[cuT( "mat3x3f" )] = eFRAME_VARIABLE_TYPE_MAT3X3F;
-	m_mapGlslVariableTypes[cuT( "mat3x4f" )] = eFRAME_VARIABLE_TYPE_MAT3X4F;
-	m_mapGlslVariableTypes[cuT( "mat4x2f" )] = eFRAME_VARIABLE_TYPE_MAT4X2F;
-	m_mapGlslVariableTypes[cuT( "mat4x3f" )] = eFRAME_VARIABLE_TYPE_MAT4X3F;
-	m_mapGlslVariableTypes[cuT( "mat4x4f" )] = eFRAME_VARIABLE_TYPE_MAT4X4F;
-	m_mapHlslVariableTypes[cuT( "int" )] = eFRAME_VARIABLE_TYPE_INT;
-	m_mapHlslVariableTypes[cuT( "float" )] = eFRAME_VARIABLE_TYPE_FLOAT;
-	m_mapHlslVariableTypes[cuT( "vec2i" )] = eFRAME_VARIABLE_TYPE_VEC2I;
-	m_mapHlslVariableTypes[cuT( "vec3i" )] = eFRAME_VARIABLE_TYPE_VEC3I;
-	m_mapHlslVariableTypes[cuT( "vec4i" )] = eFRAME_VARIABLE_TYPE_VEC4I;
-	m_mapHlslVariableTypes[cuT( "vec2f" )] = eFRAME_VARIABLE_TYPE_VEC2F;
-	m_mapHlslVariableTypes[cuT( "vec3f" )] = eFRAME_VARIABLE_TYPE_VEC3F;
-	m_mapHlslVariableTypes[cuT( "vec4f" )] = eFRAME_VARIABLE_TYPE_VEC4F;
-	m_mapHlslVariableTypes[cuT( "mat4x4f" )] = eFRAME_VARIABLE_TYPE_MAT4X4F;
+	m_mapShaderTypes[cuT( "vertex" )] = eSHADER_TYPE_VERTEX;
+	m_mapShaderTypes[cuT( "hull" )] = eSHADER_TYPE_HULL;
+	m_mapShaderTypes[cuT( "domain" )] = eSHADER_TYPE_DOMAIN;
+	m_mapShaderTypes[cuT( "geometry" )] = eSHADER_TYPE_GEOMETRY;
+	m_mapShaderTypes[cuT( "pixel" )] = eSHADER_TYPE_PIXEL;
+	m_mapShaderTypes[cuT( "compute" )] = eSHADER_TYPE_COMPUTE;
 
-	m_mapCgVariableTypes[cuT( "int" )] = eFRAME_VARIABLE_TYPE_INT;
-	m_mapCgVariableTypes[cuT( "float" )] = eFRAME_VARIABLE_TYPE_FLOAT;
-	m_mapCgVariableTypes[cuT( "double" )] = eFRAME_VARIABLE_TYPE_DOUBLE;
-	m_mapCgVariableTypes[cuT( "vec2i" )] = eFRAME_VARIABLE_TYPE_VEC2I;
-	m_mapCgVariableTypes[cuT( "vec3i" )] = eFRAME_VARIABLE_TYPE_VEC3I;
-	m_mapCgVariableTypes[cuT( "vec4i" )] = eFRAME_VARIABLE_TYPE_VEC4I;
-	m_mapCgVariableTypes[cuT( "vec2f" )] = eFRAME_VARIABLE_TYPE_VEC2F;
-	m_mapCgVariableTypes[cuT( "vec3f" )] = eFRAME_VARIABLE_TYPE_VEC3F;
-	m_mapCgVariableTypes[cuT( "vec4f" )] = eFRAME_VARIABLE_TYPE_VEC4F;
-	m_mapCgVariableTypes[cuT( "vec2d" )] = eFRAME_VARIABLE_TYPE_VEC2D;
-	m_mapCgVariableTypes[cuT( "vec3d" )] = eFRAME_VARIABLE_TYPE_VEC3D;
-	m_mapCgVariableTypes[cuT( "vec4d" )] = eFRAME_VARIABLE_TYPE_VEC4D;
-	m_mapCgVariableTypes[cuT( "mat2x2i" )] = eFRAME_VARIABLE_TYPE_MAT2X2I;
-	m_mapCgVariableTypes[cuT( "mat2x3i" )] = eFRAME_VARIABLE_TYPE_MAT2X3I;
-	m_mapCgVariableTypes[cuT( "mat2x4i" )] = eFRAME_VARIABLE_TYPE_MAT2X4I;
-	m_mapCgVariableTypes[cuT( "mat3x2i" )] = eFRAME_VARIABLE_TYPE_MAT3X2I;
-	m_mapCgVariableTypes[cuT( "mat3x3i" )] = eFRAME_VARIABLE_TYPE_MAT3X3I;
-	m_mapCgVariableTypes[cuT( "mat3x4i" )] = eFRAME_VARIABLE_TYPE_MAT3X4I;
-	m_mapCgVariableTypes[cuT( "mat4x2i" )] = eFRAME_VARIABLE_TYPE_MAT4X2I;
-	m_mapCgVariableTypes[cuT( "mat4x3i" )] = eFRAME_VARIABLE_TYPE_MAT4X3I;
-	m_mapCgVariableTypes[cuT( "mat4x4i" )] = eFRAME_VARIABLE_TYPE_MAT4X4I;
-	m_mapCgVariableTypes[cuT( "mat2x2f" )] = eFRAME_VARIABLE_TYPE_MAT2X2F;
-	m_mapCgVariableTypes[cuT( "mat2x3f" )] = eFRAME_VARIABLE_TYPE_MAT2X3F;
-	m_mapCgVariableTypes[cuT( "mat2x4f" )] = eFRAME_VARIABLE_TYPE_MAT2X4F;
-	m_mapCgVariableTypes[cuT( "mat3x2f" )] = eFRAME_VARIABLE_TYPE_MAT3X2F;
-	m_mapCgVariableTypes[cuT( "mat3x3f" )] = eFRAME_VARIABLE_TYPE_MAT3X3F;
-	m_mapCgVariableTypes[cuT( "mat3x4f" )] = eFRAME_VARIABLE_TYPE_MAT3X4F;
-	m_mapCgVariableTypes[cuT( "mat4x2f" )] = eFRAME_VARIABLE_TYPE_MAT4X2F;
-	m_mapCgVariableTypes[cuT( "mat4x3f" )] = eFRAME_VARIABLE_TYPE_MAT4X3F;
-	m_mapCgVariableTypes[cuT( "mat4x4f" )] = eFRAME_VARIABLE_TYPE_MAT4X4F;
-	m_mapCgVariableTypes[cuT( "mat2x2d" )] = eFRAME_VARIABLE_TYPE_MAT2X2D;
-	m_mapCgVariableTypes[cuT( "mat2x3d" )] = eFRAME_VARIABLE_TYPE_MAT2X3D;
-	m_mapCgVariableTypes[cuT( "mat2x4d" )] = eFRAME_VARIABLE_TYPE_MAT2X4D;
-	m_mapCgVariableTypes[cuT( "mat3x2d" )] = eFRAME_VARIABLE_TYPE_MAT3X2D;
-	m_mapCgVariableTypes[cuT( "mat3x3d" )] = eFRAME_VARIABLE_TYPE_MAT3X3D;
-	m_mapCgVariableTypes[cuT( "mat3x4d" )] = eFRAME_VARIABLE_TYPE_MAT3X4D;
-	m_mapCgVariableTypes[cuT( "mat4x2d" )] = eFRAME_VARIABLE_TYPE_MAT4X2D;
-	m_mapCgVariableTypes[cuT( "mat4x3d" )] = eFRAME_VARIABLE_TYPE_MAT4X3D;
-	m_mapCgVariableTypes[cuT( "mat4x4d" )] = eFRAME_VARIABLE_TYPE_MAT4X4D;
+	m_mapVariableTypes[cuT( "int" )] = eFRAME_VARIABLE_TYPE_INT;
+	m_mapVariableTypes[cuT( "uint" )] = eFRAME_VARIABLE_TYPE_UINT;
+	m_mapVariableTypes[cuT( "float" )] = eFRAME_VARIABLE_TYPE_FLOAT;
+	m_mapVariableTypes[cuT( "vec2i" )] = eFRAME_VARIABLE_TYPE_VEC2I;
+	m_mapVariableTypes[cuT( "vec3i" )] = eFRAME_VARIABLE_TYPE_VEC3I;
+	m_mapVariableTypes[cuT( "vec4i" )] = eFRAME_VARIABLE_TYPE_VEC4I;
+	m_mapVariableTypes[cuT( "vec2f" )] = eFRAME_VARIABLE_TYPE_VEC2F;
+	m_mapVariableTypes[cuT( "vec3f" )] = eFRAME_VARIABLE_TYPE_VEC3F;
+	m_mapVariableTypes[cuT( "vec4f" )] = eFRAME_VARIABLE_TYPE_VEC4F;
+	m_mapVariableTypes[cuT( "mat3x3f" )] = eFRAME_VARIABLE_TYPE_MAT3X3F;
+	m_mapVariableTypes[cuT( "mat4x4f" )] = eFRAME_VARIABLE_TYPE_MAT4X4F;
 
 	m_mapMovables[cuT( "camera" )] = eMOVABLE_TYPE_CAMERA;
 	m_mapMovables[cuT( "light" )] = eMOVABLE_TYPE_LIGHT;
@@ -267,7 +215,7 @@ void SceneFileContext::Initialise()
 	uiUInt64 = 0;
 	bBool1 = false;
 	bBool2 = false;
-	m_pGeneralParentNode = NULL;
+	m_pGeneralParentMaterial = NULL;
 	pViewport = NULL;
 	eRendererType = eRENDERER_TYPE_UNDEFINED;
 	eShaderObject = eSHADER_TYPE_COUNT;
@@ -328,29 +276,18 @@ bool SceneFileParser::ParseFile( Path const & p_pathFile )
 
 		if ( l_archive.Inflate( l_path ) )
 		{
-			StringArray l_files;
+			PathArray l_files;
 
 			if ( File::ListDirectoryFiles( l_path, l_files ) )
 			{
-				StringArray::iterator l_it = l_files.begin();
-				bool l_found = false;
-
-				while ( l_it != l_files.end() && !l_found )
+				auto && l_it = std::find_if( l_files.begin(), l_files.end(), []( Path const & p_path )
 				{
-					Path l_pathTmp = *l_it;
+					return p_path.GetExtension() == cuT( "cscn" ) || p_path.GetExtension() == cuT( "cbsn" );
+				} );
 
-					if ( l_pathTmp.GetExtension() == cuT( "cscn" ) )
-					{
-						l_path = l_pathTmp;
-						l_found = true;
-					}
-					else if ( l_pathTmp.GetExtension() == cuT( "cbsn" ) )
-					{
-						l_path = l_pathTmp;
-						l_found = true;
-					}
-
-					++l_it;
+				if ( l_it != l_files.end() )
+				{
+					l_path = *l_it;
 				}
 			}
 		}
@@ -483,39 +420,36 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "sampler" ), Parser_UnitSampler, 1, ePARAMETER_TYPE_NAME );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "colour" ), Parser_UnitBlendColour, 1, ePARAMETER_TYPE_COLOUR );
 
-	AddParser( eSECTION_GLSL_SHADER, cuT( "vertex_program" ), Parser_GlVertexShader );
-	AddParser( eSECTION_GLSL_SHADER, cuT( "pixel_program" ), Parser_GlPixelShader );
-	AddParser( eSECTION_GLSL_SHADER, cuT( "geometry_program" ), Parser_GlGeometryShader );
-	AddParser( eSECTION_GLSL_SHADER, cuT( "hull_program" ), Parser_GlHullShader );
-	AddParser( eSECTION_GLSL_SHADER, cuT( "domain_program" ), Parser_GlDomainShader );
-	AddParser( eSECTION_GLSL_SHADER, cuT( "}" ), Parser_GlShaderEnd );
+	AddParser( eSECTION_GLSL_SHADER, cuT( "vertex_program" ), Parser_VertexShader );
+	AddParser( eSECTION_GLSL_SHADER, cuT( "pixel_program" ), Parser_PixelShader );
+	AddParser( eSECTION_GLSL_SHADER, cuT( "geometry_program" ), Parser_GeometryShader );
+	AddParser( eSECTION_GLSL_SHADER, cuT( "hull_program" ), Parser_HullShader );
+	AddParser( eSECTION_GLSL_SHADER, cuT( "domain_program" ), Parser_DomainShader );
+	AddParser( eSECTION_GLSL_SHADER, cuT( "constants_buffer" ), Parser_ConstantsBuffer, 1, ePARAMETER_TYPE_NAME );
+	AddParser( eSECTION_GLSL_SHADER, cuT( "}" ), Parser_ShaderEnd );
 
-	AddParser( eSECTION_GLSL_SHADER_PROGRAM, cuT( "file" ), Parser_GlShaderProgramFile, 2, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapModels, ePARAMETER_TYPE_PATH );
-	AddParser( eSECTION_GLSL_SHADER_PROGRAM, cuT( "variable" ), Parser_GlShaderProgramVariable, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_GLSL_SHADER_PROGRAM, cuT( "input_type" ), Parser_GlGeometryInputType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapPrimitiveTypes );
-	AddParser( eSECTION_GLSL_SHADER_PROGRAM, cuT( "output_type" ), Parser_GlGeometryOutputType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapPrimitiveOutputTypes );
-	AddParser( eSECTION_GLSL_SHADER_PROGRAM, cuT( "output_vtx_count" ), Parser_GlGeometryOutputVtxCount, 1, ePARAMETER_TYPE_UINT8 );
+	AddParser( eSECTION_HLSL_SHADER, cuT( "vertex_program" ), Parser_VertexShader );
+	AddParser( eSECTION_HLSL_SHADER, cuT( "pixel_program" ), Parser_PixelShader );
+	AddParser( eSECTION_HLSL_SHADER, cuT( "geometry_program" ), Parser_GeometryShader );
+	AddParser( eSECTION_HLSL_SHADER, cuT( "hull_program" ), Parser_HullShader );
+	AddParser( eSECTION_HLSL_SHADER, cuT( "domain_program" ), Parser_DomainShader );
+	AddParser( eSECTION_GLSL_SHADER, cuT( "constants_buffer" ), Parser_ConstantsBuffer, 1, ePARAMETER_TYPE_NAME );
+	AddParser( eSECTION_HLSL_SHADER, cuT( "}" ), Parser_ShaderEnd );
 
-	AddParser( eSECTION_GLSL_SHADER_VARIABLE, cuT( "type" ), Parser_GlShaderVariableType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapGlslVariableTypes );
-	AddParser( eSECTION_GLSL_SHADER_VARIABLE, cuT( "value" ), Parser_GlShaderVariableValue, 1, ePARAMETER_TYPE_TEXT );
+	AddParser( eSECTION_SHADER_PROGRAM, cuT( "entry" ), Parser_ShaderProgramEntry, 1, ePARAMETER_TYPE_NAME );
+	AddParser( eSECTION_SHADER_PROGRAM, cuT( "file" ), Parser_ShaderProgramFile, 2, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapModels, ePARAMETER_TYPE_PATH );
+	AddParser( eSECTION_SHADER_PROGRAM, cuT( "sampler" ), Parser_ShaderProgramSampler, 1, ePARAMETER_TYPE_NAME );
+	AddParser( eSECTION_SHADER_PROGRAM, cuT( "input_type" ), Parser_GeometryInputType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapPrimitiveTypes );
+	AddParser( eSECTION_SHADER_PROGRAM, cuT( "output_type" ), Parser_GeometryOutputType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapPrimitiveOutputTypes );
+	AddParser( eSECTION_SHADER_PROGRAM, cuT( "output_vtx_count" ), Parser_GeometryOutputVtxCount, 1, ePARAMETER_TYPE_UINT8 );
 
-	AddParser( eSECTION_HLSL_SHADER, cuT( "vertex_program" ), Parser_HlVertexShader );
-	AddParser( eSECTION_HLSL_SHADER, cuT( "pixel_program" ), Parser_HlPixelShader );
-	AddParser( eSECTION_HLSL_SHADER, cuT( "geometry_program" ), Parser_HlGeometryShader );
-	AddParser( eSECTION_HLSL_SHADER, cuT( "hull_program" ), Parser_HlHullShader );
-	AddParser( eSECTION_HLSL_SHADER, cuT( "domain_program" ), Parser_HlDomainShader );
-	AddParser( eSECTION_HLSL_SHADER, cuT( "file" ), Parser_HlFile, 2, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapModels, ePARAMETER_TYPE_PATH );
-	AddParser( eSECTION_HLSL_SHADER, cuT( "}" ), Parser_HlShaderEnd );
+	AddParser( eSECTION_SHADER_UBO, cuT( "shaders" ), Parser_ShaderUboShaders, 1, ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT, &l_pContext->m_mapShaderTypes );
+	AddParser( eSECTION_SHADER_UBO, cuT( "variable" ), Parser_ShaderUboVariable, 1, ePARAMETER_TYPE_NAME );
 
-	AddParser( eSECTION_HLSL_SHADER_PROGRAM, cuT( "entry" ), Parser_HlShaderProgramEntry, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_HLSL_SHADER_PROGRAM, cuT( "file" ), Parser_HlShaderProgramFile, 2, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapModels, ePARAMETER_TYPE_PATH );
-	AddParser( eSECTION_HLSL_SHADER_PROGRAM, cuT( "variable" ), Parser_HlShaderProgramVariable, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_HLSL_SHADER_PROGRAM, cuT( "input_type" ), Parser_HlGeometryInputType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapPrimitiveTypes );
-	AddParser( eSECTION_HLSL_SHADER_PROGRAM, cuT( "output_type" ), Parser_HlGeometryOutputType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapPrimitiveOutputTypes );
-	AddParser( eSECTION_HLSL_SHADER_PROGRAM, cuT( "output_vtx_count" ), Parser_HlGeometryOutputVtxCount, 1, ePARAMETER_TYPE_UINT8 );
+	AddParser( eSECTION_SHADER_SAMPLER, cuT( "value" ), Parser_ShaderSamplerValue, 1, ePARAMETER_TYPE_INT32 );
 
-	AddParser( eSECTION_HLSL_SHADER_VARIABLE, cuT( "type" ), Parser_HlShaderVariableType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapHlslVariableTypes );
-	AddParser( eSECTION_HLSL_SHADER_VARIABLE, cuT( "value" ), Parser_HlShaderVariableValue, 1, ePARAMETER_TYPE_TEXT );
+	AddParser( eSECTION_SHADER_UBO_VARIABLE, cuT( "type" ), Parser_ShaderVariableType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapVariableTypes );
+	AddParser( eSECTION_SHADER_UBO_VARIABLE, cuT( "value" ), Parser_ShaderVariableValue, 1, ePARAMETER_TYPE_TEXT );
 
 	AddParser( eSECTION_FONT, cuT( "file" ), Parser_FontFile, 1, ePARAMETER_TYPE_PATH );
 	AddParser( eSECTION_FONT, cuT( "height" ), Parser_FontHeight, 1, ePARAMETER_TYPE_INT16 );

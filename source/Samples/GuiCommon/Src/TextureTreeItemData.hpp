@@ -15,29 +15,27 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GUICOMMON_GEOMETRY_TREE_ITEM_DATA_H___
-#define ___GUICOMMON_GEOMETRY_TREE_ITEM_DATA_H___
+#ifndef ___GUICOMMON_TEXTURE_TREE_ITEM_DATA_H___
+#define ___GUICOMMON_TEXTURE_TREE_ITEM_DATA_H___
 
-#include "GuiCommonPrerequisites.hpp"
-
-#include <wx/treectrl.h>
+#include "TreeItemPropertyData.hpp"
 
 namespace GuiCommon
 {
-	class wxGeometryTreeItemData
-		: public wxTreeItemData
+	class wxTextureTreeItemData
+		: public wxTreeItemPropertyData
 	{
-	protected:
-		Castor3D::GeometryWPtr m_pGeometry;
-
 	public:
-		wxGeometryTreeItemData( Castor3D::GeometrySPtr p_pGeometry );
-		~wxGeometryTreeItemData();
+		wxTextureTreeItemData( Castor3D::TextureUnitSPtr p_texture );
+		~wxTextureTreeItemData();
 
-		inline Castor3D::GeometrySPtr GetGeometry()
+		inline Castor3D::TextureUnitSPtr GetTexture()
 		{
-			return m_pGeometry.lock();
+			return m_texture.lock();
 		}
+
+	protected:
+		Castor3D::TextureUnitWPtr m_texture;
 	};
 }
 

@@ -21,10 +21,12 @@ namespace GuiCommon
 	{
 		WaitAsyncLoads();
 		m_mutex.lock();
-		std::for_each( m_mapImages.begin(), m_mapImages.end(), [&]( std::pair< uint32_t, wxImage * > p_pair )
+
+		for ( auto && l_pair: m_mapImages )
 		{
-			delete p_pair.second;
-		} );
+			delete l_pair.second;
+		}
+
 		m_mapImages.clear();
 		m_mutex.unlock();
 	}
@@ -54,7 +56,7 @@ namespace GuiCommon
 
 		if ( l_it == l_itEnd )
 		{
-			thread_sptr l_threadLoad = std::make_shared< std::thread >( [ = ]()
+			thread_sptr l_threadLoad = std::make_shared< std::thread >( [p_pBits, p_uiID]()
 			{
 				wxImage * l_pImage = new wxImage;
 				l_pImage->Create( p_pBits );
@@ -68,11 +70,12 @@ namespace GuiCommon
 
 	void wxImagesLoader::WaitAsyncLoads()
 	{
-		std::for_each( m_arrayCurrentLoads.begin(), m_arrayCurrentLoads.end(), [&]( thread_sptr p_pThread )
+		for ( auto && l_thread: m_arrayCurrentLoads )
 		{
-			p_pThread->join();
-			p_pThread.reset();
-		} );
+			l_thread->join();
+			l_thread.reset();
+		}
+
 		m_arrayCurrentLoads.clear();
 	}
 }

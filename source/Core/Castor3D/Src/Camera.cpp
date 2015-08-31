@@ -165,16 +165,16 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Camera::Camera( SceneSPtr p_pScene, String const & p_strName, SceneNodeSPtr p_pNode, ViewportSPtr p_pViewport, eTOPOLOGY p_ePrimitiveType )
-		: MovableObject( p_pScene, p_pNode, p_strName, eMOVABLE_TYPE_CAMERA )
+	Camera::Camera( SceneSPtr p_pScene, String const & p_strName, SceneNodeSPtr p_pMaterial, ViewportSPtr p_pViewport, eTOPOLOGY p_ePrimitiveType )
+		: MovableObject( p_pScene, p_pMaterial, p_strName, eMOVABLE_TYPE_CAMERA )
 		, m_pEngine( p_pScene->GetEngine() )
 		, m_pViewport( std::make_shared< Viewport >( *p_pViewport ) )
 		, m_ePrimitiveType( eTOPOLOGY_TRIANGLES )
 	{
 	}
 
-	Camera::Camera( SceneSPtr p_pScene, String const & p_strName, SceneNodeSPtr p_pNode, Size const & p_size, eVIEWPORT_TYPE p_eType, eTOPOLOGY p_ePrimitiveType )
-		: Camera( p_pScene, p_strName, p_pNode, std::make_shared< Viewport >( p_pScene->GetEngine(), p_size, p_eType ), p_ePrimitiveType )
+	Camera::Camera( SceneSPtr p_pScene, String const & p_strName, SceneNodeSPtr p_pMaterial, Size const & p_size, eVIEWPORT_TYPE p_eType, eTOPOLOGY p_ePrimitiveType )
+		: Camera( p_pScene, p_strName, p_pMaterial, std::make_shared< Viewport >( p_pScene->GetEngine(), p_size, p_eType ), p_ePrimitiveType )
 	{
 	}
 

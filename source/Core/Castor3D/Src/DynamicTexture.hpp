@@ -132,27 +132,27 @@ namespace Castor3D
 		virtual void Resize( Castor::Point3ui const & p_size );
 		/**
 		 *\~english
-		 *\brief		Retrieves the render target status
-		 *\return		The status
+		 *\brief		Retrieves the render target
+		 *\return		The target
 		 *\~french
-		 *\brief		Récupère le statut de cible de rendu
-		 *\return		Le statut
+		 *\brief		Récupère la cible de rendu
+		 *\return		La cible
 		 */
-		inline bool	IsRenderTarget()const
+		inline RenderTargetSPtr	GetRenderTarget()const
 		{
-			return m_bRenderTarget;
+			return m_renderTarget.lock();
 		}
 		/**
 		 *\~english
-		 *\brief		Defines the render target status
-		 *\param[in]	val	The status
+		 *\brief		Defines the render target
+		 *\param[in]	p_target	The target
 		 *\~french
-		 *\brief		Définit le statut de cible de rendu
-		 *\param[in]	val	Le statut
+		 *\brief		Définit la cible de rendu
+		 *\param[in]	p_target	La cible
 		 */
-		inline void SetRenderTarget( bool val )
+		inline void SetRenderTarget( RenderTargetSPtr p_target )
 		{
-			m_bRenderTarget = val;
+			m_renderTarget = p_target;
 		}
 		/**
 		 *\~english
@@ -209,8 +209,8 @@ namespace Castor3D
 		using TextureBase::SetImage;
 
 	private:
-		//!\~english Tells that the texture needs to be initialised as a render target	\~french Dit qu e la texture doit être initialiséée en tant que render target
-		bool m_bRenderTarget;
+		//!\~english The texture render target	\~french La cible de rendu
+		RenderTargetWPtr m_renderTarget;
 		//!\~english The samples count, if it is a multisample texture	\~french Le nombre de samples dans le cas où c'est une texture multisample
 		int m_iSamplesCount;
 	};

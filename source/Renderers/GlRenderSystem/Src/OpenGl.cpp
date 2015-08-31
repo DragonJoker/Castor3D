@@ -3597,7 +3597,12 @@ bool OpenGl::DoGlCheckError( String const & p_text )const
 		String l_strSysError = System::GetLastErrorText();
 		l_errorCode -= GL_INVALID_ENUM;
 		String l_strError = p_text + cuT( " - " ) + GlslErrors[l_errorCode];
-		l_strError += cuT( " - " ) + l_strSysError;
+
+		if ( !l_strSysError.empty() )
+		{
+			l_strError += cuT( " - " ) + l_strSysError;
+		}
+
 		Logger::LogError( l_strError );
 		l_bReturn = false;
 	}
@@ -3719,7 +3724,7 @@ void OpenGl::DebugLog( eGL_DEBUG_SOURCE source, eGL_DEBUG_TYPE type, uint32_t id
 			break;
 		}
 
-		l_strToLog += cuT( "ID:" ) + str_utils::to_string( id ) + cuT( "\t" );
+		l_strToLog += cuT( "ID:" ) + GlslErrors[id - GL_INVALID_ENUM] + cuT( "\t" );
 
 		switch ( severity )
 		{

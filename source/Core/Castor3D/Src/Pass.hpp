@@ -338,6 +338,7 @@ namespace Castor3D
 		inline void SetDiffuse( Castor::Colour const & p_clrColour )
 		{
 			m_clrDiffuse = p_clrColour;
+			m_changed = true;
 		}
 		/**
 		 *\~english
@@ -350,6 +351,7 @@ namespace Castor3D
 		inline void SetAmbient( Castor::Colour const & p_clrColour )
 		{
 			m_clrAmbient = p_clrColour;
+			m_changed = true;
 		}
 		/**
 		 *\~english
@@ -362,6 +364,7 @@ namespace Castor3D
 		inline void SetSpecular( Castor::Colour const & p_clrColour )
 		{
 			m_clrSpecular = p_clrColour;
+			m_changed = true;
 		}
 		/**
 		 *\~english
@@ -374,6 +377,7 @@ namespace Castor3D
 		inline void SetEmissive( Castor::Colour const & p_clrColour )
 		{
 			m_clrEmissive = p_clrColour;
+			m_changed = true;
 		}
 		/**
 		 *\~english
@@ -386,6 +390,7 @@ namespace Castor3D
 		inline void SetShininess( float p_fShininess )
 		{
 			m_fShininess = p_fShininess;
+			m_changed = true;
 		}
 		/**
 		 *\~english
@@ -398,6 +403,7 @@ namespace Castor3D
 		inline void SetTwoSided( bool p_bDouble )
 		{
 			m_bDoubleFace = p_bDouble;
+			m_changed = true;
 		}
 		/**
 		 *\~english
@@ -414,6 +420,7 @@ namespace Castor3D
 			m_clrAmbient.alpha() = p_fAlpha;
 			m_clrSpecular.alpha() = p_fAlpha;
 			m_clrEmissive.alpha() = p_fAlpha;
+			m_changed = true;
 		}
 		/**
 		 *\~english
@@ -426,6 +433,7 @@ namespace Castor3D
 		inline void SetAlphaBlendMode( eBLEND_MODE p_value )
 		{
 			m_alphaBlendMode = p_value;
+			m_changed = true;
 		}
 		/**
 		 *\~english
@@ -438,6 +446,7 @@ namespace Castor3D
 		inline void SetColourBlendMode( eBLEND_MODE p_value )
 		{
 			m_colourBlendMode = p_value;
+			m_changed = true;
 		}
 		/**
 		 *\~english
@@ -592,6 +601,7 @@ namespace Castor3D
 		 */
 		inline Castor::Colour & GetDiffuse()
 		{
+			m_changed = true;
 			return m_clrDiffuse;
 		}
 		/**
@@ -604,6 +614,7 @@ namespace Castor3D
 		 */
 		inline Castor::Colour & GetAmbient()
 		{
+			m_changed = true;
 			return m_clrAmbient;
 		}
 		/**
@@ -616,6 +627,7 @@ namespace Castor3D
 		 */
 		inline Castor::Colour & GetSpecular()
 		{
+			m_changed = true;
 			return m_clrSpecular;
 		}
 		/**
@@ -628,6 +640,7 @@ namespace Castor3D
 		 */
 		inline Castor::Colour & GetEmissive()
 		{
+			m_changed = true;
 			return m_clrEmissive;
 		}
 		/**
@@ -652,6 +665,7 @@ namespace Castor3D
 		 */
 		inline TextureUnitPtrArrayIt begin()
 		{
+			m_changed = true;
 			return m_arrayTextureUnits.begin();
 		}
 		/**
@@ -676,6 +690,7 @@ namespace Castor3D
 		 */
 		inline TextureUnitPtrArrayIt end()
 		{
+			m_changed = true;
 			return m_arrayTextureUnits.end();
 		}
 		/**
@@ -845,6 +860,8 @@ namespace Castor3D
 		Castor::Point4f m_ptEmissive;
 		//! The camera position value
 		Castor::Point3r m_ptCameraPos;
+		//!\~english Tells that the pass has changed and its values must be passed to the shader again	\~french Dit que la passe a changé et que ses valeurs doivent être redonnées au shader
+		bool m_changed;
 	};
 }
 

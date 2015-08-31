@@ -32,6 +32,7 @@ namespace GlRender
 		virtual ~GlContextImpl();
 
 		bool Initialise( Castor3D::RenderWindow * p_pWindow );
+		void Cleanup();
 		void SetCurrent();
 		void EndCurrent();
 		void SwapBuffers();

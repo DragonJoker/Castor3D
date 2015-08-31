@@ -319,7 +319,7 @@ namespace Castor
 		return l_uiReturn;
 	}
 
-	bool File::ListDirectoryFiles( Path const & p_folderPath, StringArray & p_files, bool CU_PARAM_UNUSED( p_recursive ) )
+	bool File::ListDirectoryFiles( Path const & p_folderPath, PathArray & p_files, bool CU_PARAM_UNUSED( p_recursive ) )
 	{
 		REQUIRE( ! p_folderPath.empty() );
 		bool l_bReturn = false;

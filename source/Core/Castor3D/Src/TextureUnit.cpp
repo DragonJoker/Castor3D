@@ -696,17 +696,22 @@ namespace Castor3D
 
 	bool TextureUnit::LoadTexture( Path const & p_pathFile )
 	{
-		bool		l_bReturn = false;
-		ImageSPtr	l_pImage;
+		bool l_bReturn = false;
+		ImageSPtr l_pImage;
 
-		if ( !p_pathFile.empty() )
+		if ( !p_pathFile.empty() && File::FileExists( p_pathFile ) )
 		{
 			l_pImage = m_pEngine->GetImageManager().find( p_pathFile.GetFileName() );
 
-			if ( !l_pImage && File::FileExists( p_pathFile ) )
+			if ( !l_pImage )
 			{
 				l_pImage = std::make_shared< Image >( p_pathFile.GetFileName(), p_pathFile );
 				m_pEngine->GetImageManager().insert( p_pathFile.GetFileName(), l_pImage );
+			}
+			else if ( !l_pImage->GetBuffer() )
+			{
+				// Image has been emptied after texture initialisation, so we reload it.
+				Image::BinaryLoader()( *l_pImage, p_pathFile );
 			}
 		}
 

@@ -12,15 +12,16 @@
 #include "Engine.hpp"
 #include "Face.hpp"
 #include "FrameVariable.hpp"
+#include "FrameVariableBuffer.hpp"
 #include "Geometry.hpp"
 #include "Importer.hpp"
 #include "ImporterPlugin.hpp"
 #include "InitialiseEvent.hpp"
-#include "FrameVariableBuffer.hpp"
 #include "Light.hpp"
 #include "Material.hpp"
 #include "MaterialManager.hpp"
 #include "Mesh.hpp"
+#include "OneFrameVariable.hpp"
 #include "Overlay.hpp"
 #include "PanelOverlay.hpp"
 #include "Pass.hpp"
@@ -1198,12 +1199,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ObjectMaterial )
 
 			if ( l_manager.has( l_strName ) )
 			{
-				std::for_each( l_pContext->pGeometry->GetMesh()->Begin(), l_pContext->pGeometry->GetMesh()->End(), [&]( SubmeshSPtr p_pSubmesh )
+				for ( auto && l_submesh: *l_pContext->pGeometry->GetMesh() )
 				{
 					MaterialSPtr l_material = l_manager.find( l_strName );
-					l_pContext->pGeometry->SetMaterial( p_pSubmesh, l_material );
-					p_pSubmesh->Ref( l_material );
-				} );
+					l_pContext->pGeometry->SetMaterial( l_submesh, l_material );
+					l_submesh->Ref( l_material );
+				}
 			}
 			else
 			{
@@ -1527,10 +1528,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshDivide )
 		{
 			l_pContext->pMesh->ComputeContainers();
 			Point3r l_ptCenter = l_pContext->pMesh->GetCollisionBox().GetCenter();
-			std::for_each( l_pContext->pMesh->Begin(), l_pContext->pMesh->End(), [&]( SubmeshSPtr p_pSubmesh )
+
+			for ( auto && l_submesh: *l_pContext->pMesh )
 			{
-				l_pDivider->Subdivide( p_pSubmesh, l_uiCount, false );
-			} );
+				l_pDivider->Subdivide( l_submesh, l_uiCount, false );
+			}
+
 			l_pPlugin->DestroyDivider( l_pDivider );
 		}
 	}
@@ -2210,12 +2213,12 @@ END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitImage )
 {
-	SceneFileContextSPtr	l_pContext		= std::static_pointer_cast< SceneFileContext >( p_pContext );
-	Engine 	*		l_pEngine		= l_pContext->m_pParser->GetEngine();
-	ImageCollection &	l_imgCollection	= l_pEngine->GetImageManager();
-	ImageSPtr			l_pImage;
-	StaticTextureSPtr	l_pTexture;
-	Path				l_path;
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
+	Engine * l_pEngine = l_pContext->m_pParser->GetEngine();
+	ImageCollection & l_imgCollection	= l_pEngine->GetImageManager();
+	ImageSPtr l_pImage;
+	StaticTextureSPtr l_pTexture;
+	Path l_path;
 
 	if ( l_pContext->pTextureUnit )
 	{
@@ -2376,7 +2379,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitBlendColour )
 }
 END_ATTRIBUTE()
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlVertexShader )
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_VertexShader )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
 
@@ -2387,19 +2390,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlVertexShader )
 	}
 	else
 	{
-		if ( l_pContext->eRendererType == eRENDERER_TYPE_OPENGL )
-		{
-			PARSING_ERROR( cuT( "Directive <gl_shader_program::vertex_program> : Shader not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <gl_shader_program::vertex_program> : Non OpenGL Renderer" ) );
-		}
+		PARSING_ERROR( cuT( "Directive <shader_program::vertex_program>: Shader not initialised" ) );
 	}
 }
-END_ATTRIBUTE_PUSH( eSECTION_GLSL_SHADER_PROGRAM )
+END_ATTRIBUTE_PUSH( eSECTION_SHADER_PROGRAM )
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlPixelShader )
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PixelShader )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
 
@@ -2410,19 +2406,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlPixelShader )
 	}
 	else
 	{
-		if ( l_pContext->eRendererType == eRENDERER_TYPE_OPENGL )
-		{
-			PARSING_ERROR( cuT( "Directive <gl_shader_program::pixel_program> : Shader not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <gl_shader_program::pixel_program> : Non OpenGL Renderer" ) );
-		}
+		PARSING_ERROR( cuT( "Directive <shader_program::pixel_program>: Shader not initialised" ) );
 	}
 }
-END_ATTRIBUTE_PUSH( eSECTION_GLSL_SHADER_PROGRAM )
+END_ATTRIBUTE_PUSH( eSECTION_SHADER_PROGRAM )
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlGeometryShader )
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GeometryShader )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
 
@@ -2433,133 +2422,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlGeometryShader )
 	}
 	else
 	{
-		if ( l_pContext->eRendererType == eRENDERER_TYPE_OPENGL )
-		{
-			PARSING_ERROR( cuT( "Directive <gl_shader_program::geometry_program> : Shader not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <gl_shader_program::geometry_program> : Non OpenGL Renderer" ) );
-		}
+		PARSING_ERROR( cuT( "Directive <shader_program::geometry_program>: Shader not initialised" ) );
 	}
 }
-END_ATTRIBUTE_PUSH( eSECTION_GLSL_SHADER_PROGRAM )
+END_ATTRIBUTE_PUSH( eSECTION_SHADER_PROGRAM )
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlGeometryInputType )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-	uint32_t l_uiType;
-	p_arrayParams[0]->Get( l_uiType );
-
-	if ( l_pContext->eShaderObject != eSHADER_TYPE_COUNT )
-	{
-		if ( l_pContext->eShaderObject == eSHADER_TYPE_GEOMETRY )
-		{
-			l_pContext->pShaderProgram->SetInputType( l_pContext->eShaderObject, eTOPOLOGY( l_uiType ) );
-		}
-		else
-		{
-			if ( l_pContext->eRendererType == eRENDERER_TYPE_OPENGL )
-			{
-				PARSING_ERROR( cuT( "Directive <gl_shader_program::input_type> : Only valid for geometry shader" ) );
-			}
-			else
-			{
-				PARSING_WARNING( cuT( "Directive <gl_shader_program::input_type> : Non OpenGL Renderer" ) );
-			}
-		}
-	}
-	else
-	{
-		if ( l_pContext->eRendererType == eRENDERER_TYPE_OPENGL )
-		{
-			PARSING_ERROR( cuT( "Directive <gl_shader_program::input_type> : Shader not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <gl_shader_program::input_type> : Non OpenGL Renderer" ) );
-		}
-	}
-}
-END_ATTRIBUTE()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlGeometryOutputType )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-	uint32_t l_uiType;
-	p_arrayParams[0]->Get( l_uiType );
-
-	if ( l_pContext->eShaderObject != eSHADER_TYPE_COUNT )
-	{
-		if ( l_pContext->eShaderObject == eSHADER_TYPE_GEOMETRY )
-		{
-			l_pContext->pShaderProgram->SetOutputType( l_pContext->eShaderObject, eTOPOLOGY( l_uiType ) );
-		}
-		else
-		{
-			if ( l_pContext->eRendererType == eRENDERER_TYPE_OPENGL )
-			{
-				PARSING_ERROR( cuT( "Directive <gl_shader_program::output_type> : Only valid for geometry shader" ) );
-			}
-			else
-			{
-				PARSING_WARNING( cuT( "Directive <gl_shader_program::output_type> : Non OpenGL Renderer" ) );
-			}
-		}
-	}
-	else
-	{
-		if ( l_pContext->eRendererType == eRENDERER_TYPE_OPENGL )
-		{
-			PARSING_ERROR( cuT( "Directive <gl_shader_program::output_type> : Shader not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <gl_shader_program::output_type> : Non OpenGL Renderer" ) );
-		}
-	}
-}
-END_ATTRIBUTE()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlGeometryOutputVtxCount )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-
-	if ( l_pContext->eShaderObject != eSHADER_TYPE_COUNT )
-	{
-		if ( l_pContext->eShaderObject == eSHADER_TYPE_GEOMETRY )
-		{
-			uint8_t l_uiCount;
-			p_arrayParams[0]->Get( l_uiCount );
-			l_pContext->pShaderProgram->SetOutputVtxCount( l_pContext->eShaderObject, l_uiCount );
-		}
-		else
-		{
-			if ( l_pContext->eRendererType == eRENDERER_TYPE_OPENGL )
-			{
-				PARSING_ERROR( cuT( "Directive <gl_shader_program::output_vtx_count> : Only valid for geometry shader" ) );
-			}
-			else
-			{
-				PARSING_WARNING( cuT( "Directive <gl_shader_program::output_vtx_count> : Non OpenGL Renderer" ) );
-			}
-		}
-	}
-	else
-	{
-		if ( l_pContext->eRendererType == eRENDERER_TYPE_OPENGL )
-		{
-			PARSING_ERROR( cuT( "Directive <gl_shader_program::output_vtx_count> : Shader not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <gl_shader_program::output_vtx_count> : Non OpenGL Renderer" ) );
-		}
-	}
-}
-END_ATTRIBUTE()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlHullShader )
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_HullShader )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
 
@@ -2570,19 +2438,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlHullShader )
 	}
 	else
 	{
-		if ( l_pContext->eRendererType == eRENDERER_TYPE_OPENGL )
-		{
-			PARSING_ERROR( cuT( "Directive <gl_shader_program::hull_program> : Shader not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <gl_shader_program::hull_program> : Non OpenGL Renderer" ) );
-		}
+		PARSING_ERROR( cuT( "Directive <shader_program::hull_program>: Shader not initialised" ) );
 	}
 }
-END_ATTRIBUTE_PUSH( eSECTION_GLSL_SHADER_PROGRAM )
+END_ATTRIBUTE_PUSH( eSECTION_SHADER_PROGRAM )
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlDomainShader )
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_DomainShader )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
 
@@ -2593,19 +2454,37 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlDomainShader )
 	}
 	else
 	{
-		if ( l_pContext->eRendererType == eRENDERER_TYPE_OPENGL )
+		PARSING_ERROR( cuT( "Directive <shader_program::domain_program>: Shader not initialised" ) );
+	}
+}
+END_ATTRIBUTE_PUSH( eSECTION_SHADER_PROGRAM )
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ConstantsBuffer )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
+
+	if ( l_pContext->pShaderProgram )
+	{
+		String l_name;
+		p_arrayParams[0]->Get( l_name );
+
+		if ( l_name.empty() )
 		{
-			PARSING_ERROR( cuT( "Directive <gl_shader_program::domain_program> : Shader not initialised" ) );
+			PARSING_ERROR( cuT( "Directive <shader_program::constants_buffer>: Invalid empty name" ) );
 		}
 		else
 		{
-			PARSING_WARNING( cuT( "Directive <gl_shader_program::domain_program> : Non OpenGL Renderer" ) );
+			l_pContext->pFrameVariableBuffer = l_pContext->m_pParser->GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( l_name );
 		}
 	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <shader_program::constants_buffer>: Shader not initialised" ) );
+	}
 }
-END_ATTRIBUTE_PUSH( eSECTION_GLSL_SHADER_PROGRAM )
+END_ATTRIBUTE_PUSH( eSECTION_SHADER_UBO )
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlShaderEnd )
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderEnd )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
 
@@ -2616,7 +2495,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlShaderEnd )
 }
 END_ATTRIBUTE_POP()
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlShaderProgramFile )
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderProgramFile )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
 
@@ -2630,497 +2509,217 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlShaderProgramFile )
 	}
 	else
 	{
-		if ( l_pContext->eRendererType == eRENDERER_TYPE_OPENGL )
-		{
-			PARSING_ERROR( cuT( "Directive <gl_program::file> : Shader Program not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <gl_program::file> : Non OpenGL Renderer" ) );
-		}
+		PARSING_ERROR( cuT( "Directive <program::file>: Shader not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlShaderProgramVariable )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-	l_pContext->pFrameVariable.reset();
-	p_arrayParams[0]->Get( l_pContext->strName2 );
-
-	if ( l_pContext->eShaderObject == eSHADER_TYPE_COUNT )
-	{
-		if ( l_pContext->eRendererType == eRENDERER_TYPE_OPENGL )
-		{
-			PARSING_ERROR( cuT( "Directive <gl_program::variable> : GPU Program not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <gl_program::variable> : Non OpenGL Renderer" ) );
-		}
-	}
-}
-END_ATTRIBUTE_PUSH( eSECTION_GLSL_SHADER_VARIABLE )
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlShaderVariableType )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-	uint32_t l_uiType;
-	p_arrayParams[0]->Get( l_uiType );
-
-	if ( l_pContext->pShaderProgram && l_pContext->eShaderObject != eSHADER_TYPE_COUNT )
-	{
-		if ( !l_pContext->pFrameVariable )
-		{
-			//l_pContext->pFrameVariable = l_pContext->pShaderProgram->GetUserBuffer()->CreateVariable( *l_pContext->pShaderProgram.get(), eFRAME_VARIABLE_TYPE( l_uiType ), l_pContext->strName2 );
-		}
-		else
-		{
-			if ( l_pContext->eRendererType == eRENDERER_TYPE_OPENGL )
-			{
-				PARSING_ERROR( cuT( "Directive <gl_variable::type> : Variable type already set" ) );
-			}
-			else
-			{
-				PARSING_WARNING( cuT( "Directive <gl_variable::type> : Non OpenGL Renderer" ) );
-			}
-		}
-	}
-	else
-	{
-		if ( l_pContext->eRendererType == eRENDERER_TYPE_OPENGL )
-		{
-			PARSING_ERROR( cuT( "Directive <gl_variable::type> : Shader program or object not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <gl_variable::type> : Non OpenGL Renderer" ) );
-		}
-	}
-}
-END_ATTRIBUTE()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GlShaderVariableValue )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-	String l_strParams;
-	p_arrayParams[0]->Get( l_strParams );
-
-	if ( l_pContext->pFrameVariable )
-	{
-		l_pContext->pFrameVariable->SetValueStr( l_strParams );
-	}
-	else
-	{
-		if ( l_pContext->eRendererType == eRENDERER_TYPE_OPENGL )
-		{
-			PARSING_ERROR( cuT( "Directive <gl_variable::value> : Variable not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <gl_variable::value> : Non OpenGL Renderer" ) );
-		}
-	}
-}
-END_ATTRIBUTE()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_HlVertexShader )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-
-	if ( l_pContext->pShaderProgram )
-	{
-		l_pContext->pShaderProgram->CreateObject( eSHADER_TYPE_VERTEX );
-		l_pContext->eShaderObject = eSHADER_TYPE_VERTEX;
-	}
-	else
-	{
-		eRENDERER_TYPE l_eRendererType = l_pContext->eRendererType;
-
-		if ( l_eRendererType == eRENDERER_TYPE_DIRECT3D9 || l_eRendererType == eRENDERER_TYPE_DIRECT3D10 || l_eRendererType == eRENDERER_TYPE_DIRECT3D11 )
-		{
-			PARSING_ERROR( cuT( "Directive <hl_shader_program::vertex_program> : Shader not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <hl_shader_program::vertex_program> : Non D3D Renderer" ) );
-		}
-	}
-}
-END_ATTRIBUTE_PUSH( eSECTION_HLSL_SHADER_PROGRAM )
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_HlPixelShader )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-
-	if ( l_pContext->pShaderProgram )
-	{
-		l_pContext->pShaderProgram->CreateObject( eSHADER_TYPE_PIXEL );
-		l_pContext->eShaderObject = eSHADER_TYPE_PIXEL;
-	}
-	else
-	{
-		eRENDERER_TYPE l_eRendererType = l_pContext->eRendererType;
-
-		if ( l_eRendererType == eRENDERER_TYPE_DIRECT3D9 || l_eRendererType == eRENDERER_TYPE_DIRECT3D10 || l_eRendererType == eRENDERER_TYPE_DIRECT3D11 )
-		{
-			PARSING_ERROR( cuT( "Directive <hl_shader_program::pixel_program> : Shader not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <hl_shader_program::pixel_program> : Non D3D Renderer" ) );
-		}
-	}
-}
-END_ATTRIBUTE_PUSH( eSECTION_HLSL_SHADER_PROGRAM )
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_HlGeometryShader )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-
-	if ( l_pContext->pShaderProgram )
-	{
-		l_pContext->pShaderProgram->CreateObject( eSHADER_TYPE_GEOMETRY );
-		l_pContext->eShaderObject = eSHADER_TYPE_GEOMETRY;
-	}
-	else
-	{
-		eRENDERER_TYPE l_eRendererType = l_pContext->eRendererType;
-
-		if ( l_eRendererType == eRENDERER_TYPE_DIRECT3D9 || l_eRendererType == eRENDERER_TYPE_DIRECT3D10 || l_eRendererType == eRENDERER_TYPE_DIRECT3D11 )
-		{
-			PARSING_ERROR( cuT( "Directive <hl_shader_program::geometry_program> : Shader not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <hl_shader_program::geometry_program> : Non D3D Renderer" ) );
-		}
-	}
-}
-END_ATTRIBUTE_PUSH( eSECTION_HLSL_SHADER_PROGRAM )
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_HlGeometryInputType )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-	uint32_t l_uiType;
-	p_arrayParams[0]->Get( l_uiType );
-
-	if ( l_pContext->eShaderObject != eSHADER_TYPE_COUNT )
-	{
-		if ( l_pContext->eShaderObject == eSHADER_TYPE_GEOMETRY )
-		{
-			l_pContext->pShaderProgram->SetInputType( l_pContext->eShaderObject, eTOPOLOGY( l_uiType ) );
-		}
-		else
-		{
-			if ( l_pContext->eRendererType == eRENDERER_TYPE_DIRECT3D10 || l_pContext->eRendererType == eRENDERER_TYPE_DIRECT3D11 )
-			{
-				PARSING_ERROR( cuT( "Directive <hl_shader_program::input_type> : Only valid for geometry shader" ) );
-			}
-			else
-			{
-				PARSING_WARNING( cuT( "Directive <hl_shader_program::input_type> : Non Direct3D10/Direct3D11 Renderer" ) );
-			}
-		}
-	}
-	else
-	{
-		if ( l_pContext->eRendererType == eRENDERER_TYPE_DIRECT3D10 || l_pContext->eRendererType == eRENDERER_TYPE_DIRECT3D11 )
-		{
-			PARSING_ERROR( cuT( "Directive <hl_shader_program::input_type> : Shader not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <hl_shader_program::input_type> : Non Direct3D10/Direct3D11 Renderer" ) );
-		}
-	}
-}
-END_ATTRIBUTE()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_HlGeometryOutputType )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-	uint32_t l_uiType;
-	p_arrayParams[0]->Get( l_uiType );
-
-	if ( l_pContext->eShaderObject != eSHADER_TYPE_COUNT )
-	{
-		if ( l_pContext->eShaderObject == eSHADER_TYPE_GEOMETRY )
-		{
-			l_pContext->pShaderProgram->SetOutputType( l_pContext->eShaderObject, eTOPOLOGY( l_uiType ) );
-		}
-		else
-		{
-			if ( l_pContext->eRendererType == eRENDERER_TYPE_DIRECT3D10 || l_pContext->eRendererType == eRENDERER_TYPE_DIRECT3D11 )
-			{
-				PARSING_ERROR( cuT( "Directive <hl_shader_program::output_type> : Only valid for geometry shader" ) );
-			}
-			else
-			{
-				PARSING_WARNING( cuT( "Directive <hl_shader_program::output_type> : Non Direct3D10/Direct3D11 Renderer" ) );
-			}
-		}
-	}
-	else
-	{
-		if ( l_pContext->eRendererType == eRENDERER_TYPE_DIRECT3D10 || l_pContext->eRendererType == eRENDERER_TYPE_DIRECT3D11 )
-		{
-			PARSING_ERROR( cuT( "Directive <hl_shader_program::output_type> : Shader not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <hl_shader_program::output_type> : Non Direct3D10/Direct3D11 Renderer" ) );
-		}
-	}
-}
-END_ATTRIBUTE()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_HlGeometryOutputVtxCount )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-
-	if ( l_pContext->eShaderObject != eSHADER_TYPE_COUNT )
-	{
-		if ( l_pContext->eShaderObject == eSHADER_TYPE_GEOMETRY )
-		{
-			uint8_t l_uiCount;
-			p_arrayParams[0]->Get( l_uiCount );
-			l_pContext->pShaderProgram->SetOutputVtxCount( l_pContext->eShaderObject, l_uiCount );
-		}
-		else
-		{
-			if ( l_pContext->eRendererType == eRENDERER_TYPE_DIRECT3D10 || l_pContext->eRendererType == eRENDERER_TYPE_DIRECT3D11 )
-			{
-				PARSING_ERROR( cuT( "Directive <hl_shader_program::output_vtx_count> : Only valid for geometry shader" ) );
-			}
-			else
-			{
-				PARSING_WARNING( cuT( "Directive <hl_shader_program::output_vtx_count> : Non Direct3D10/Direct3D11 Renderer" ) );
-			}
-		}
-	}
-	else
-	{
-		if ( l_pContext->eRendererType == eRENDERER_TYPE_DIRECT3D10 || l_pContext->eRendererType == eRENDERER_TYPE_DIRECT3D11 )
-		{
-			PARSING_ERROR( cuT( "Directive <hl_shader_program::output_vtx_count> : Shader not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <hl_shader_program::output_vtx_count> : Non Direct3D10/Direct3D11 Renderer" ) );
-		}
-	}
-}
-END_ATTRIBUTE()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_HlHullShader )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-
-	if ( l_pContext->pShaderProgram )
-	{
-		l_pContext->pShaderProgram->CreateObject( eSHADER_TYPE_HULL );
-		l_pContext->eShaderObject = eSHADER_TYPE_HULL;
-	}
-	else
-	{
-		eRENDERER_TYPE l_eRendererType = l_pContext->eRendererType;
-
-		if ( l_eRendererType == eRENDERER_TYPE_DIRECT3D9 || l_eRendererType == eRENDERER_TYPE_DIRECT3D10 || l_eRendererType == eRENDERER_TYPE_DIRECT3D11 )
-		{
-			PARSING_ERROR( cuT( "Directive <hl_shader_program::hull_program> : Shader not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <hl_shader_program::hull_program> : Non D3D Renderer" ) );
-		}
-	}
-}
-END_ATTRIBUTE_PUSH( eSECTION_HLSL_SHADER_PROGRAM )
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_HlDomainShader )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-
-	if ( l_pContext->pShaderProgram )
-	{
-		l_pContext->pShaderProgram->CreateObject( eSHADER_TYPE_DOMAIN );
-		l_pContext->eShaderObject = eSHADER_TYPE_DOMAIN;
-	}
-	else
-	{
-		eRENDERER_TYPE l_eRendererType = l_pContext->eRendererType;
-
-		if ( l_eRendererType == eRENDERER_TYPE_DIRECT3D9 || l_eRendererType == eRENDERER_TYPE_DIRECT3D10 || l_eRendererType == eRENDERER_TYPE_DIRECT3D11 )
-		{
-			PARSING_ERROR( cuT( "Directive <hl_shader_program::domain_program> : Shader not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <hl_shader_program::domain_program> : Non D3D Renderer" ) );
-		}
-	}
-}
-END_ATTRIBUTE_PUSH( eSECTION_HLSL_SHADER_PROGRAM )
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_HlFile )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-
-	if ( l_pContext->pShaderProgram )
-	{
-		uint32_t l_uiModel;
-		Path l_path;
-		p_arrayParams[0]->Get( l_uiModel );
-		p_arrayParams[1]->Get( l_path );
-		l_pContext->pShaderProgram->SetFile( eSHADER_MODEL( l_uiModel ), p_pContext->pFile->GetFilePath() / l_path );
-	}
-	else
-	{
-		eRENDERER_TYPE l_eRendererType = l_pContext->eRendererType;
-
-		if ( l_eRendererType == eRENDERER_TYPE_DIRECT3D9 || l_eRendererType == eRENDERER_TYPE_DIRECT3D10 || l_eRendererType == eRENDERER_TYPE_DIRECT3D11 )
-		{
-			PARSING_ERROR( cuT( "Directive <hl_shader_program::file> : Shader not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <hl_shader_program::file> : Non D3D Renderer" ) );
-		}
-	}
-}
-END_ATTRIBUTE()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_HlShaderEnd )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-
-	if ( l_pContext->pShaderProgram )
-	{
-		l_pContext->pMaterial->GetPass( l_pContext->uiPass )->SetShader( l_pContext->pShaderProgram );
-	}
-}
-END_ATTRIBUTE_POP()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_HlShaderProgramFile )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-
-	if ( l_pContext->eShaderObject != eSHADER_TYPE_COUNT )
-	{
-		uint32_t l_uiModel;
-		Path l_path;
-		p_arrayParams[0]->Get( l_uiModel );
-		p_arrayParams[1]->Get( l_path );
-		l_pContext->pShaderProgram->SetFile( l_pContext->eShaderObject, eSHADER_MODEL( l_uiModel ), p_pContext->pFile->GetFilePath() / l_path );
-	}
-	else
-	{
-		eRENDERER_TYPE l_eRendererType = l_pContext->eRendererType;
-
-		if ( l_eRendererType == eRENDERER_TYPE_DIRECT3D9 || l_eRendererType == eRENDERER_TYPE_DIRECT3D10 || l_eRendererType == eRENDERER_TYPE_DIRECT3D11 )
-		{
-			PARSING_ERROR( cuT( "Directive <hl_program::file> : Shader Program not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <hl_program::file> : Non D3D Renderer" ) );
-		}
-	}
-}
-END_ATTRIBUTE()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_HlShaderProgramEntry )
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderProgramEntry )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
 	String l_strName;
-	p_arrayParams[0]->Get( l_strName );
+	eRENDERER_TYPE l_eRendererType = l_pContext->eRendererType;
 
-	if ( l_pContext->eShaderObject != eSHADER_TYPE_COUNT )
+	if ( l_eRendererType == eRENDERER_TYPE_DIRECT3D9 || l_eRendererType == eRENDERER_TYPE_DIRECT3D10 || l_eRendererType == eRENDERER_TYPE_DIRECT3D11 )
 	{
-		l_pContext->pShaderProgram->SetEntryPoint( l_pContext->eShaderObject, l_strName );
-	}
-	else
-	{
-		eRENDERER_TYPE l_eRendererType = l_pContext->eRendererType;
+		p_arrayParams[0]->Get( l_strName );
 
-		if ( l_eRendererType == eRENDERER_TYPE_DIRECT3D9 || l_eRendererType == eRENDERER_TYPE_DIRECT3D10 || l_eRendererType == eRENDERER_TYPE_DIRECT3D11 )
+		if ( l_pContext->eShaderObject != eSHADER_TYPE_COUNT )
 		{
-			PARSING_ERROR( cuT( "Directive <hl_program::entry> : Shader Program not initialised" ) );
+			l_pContext->pShaderProgram->SetEntryPoint( l_pContext->eShaderObject, l_strName );
 		}
 		else
 		{
-			PARSING_WARNING( cuT( "Directive <hl_program::entry> : Non D3D Renderer" ) );
+			PARSING_ERROR( cuT( "Directive <program::entry> : Shader Program not initialised" ) );
+		}
+	}
+	else
+	{
+		PARSING_WARNING( cuT( "Directive <program::entry> : Non D3D Renderer" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderProgramSampler )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
+	String l_name;
+	p_arrayParams[0]->Get( l_name );
+
+	if ( l_pContext->pShaderProgram )
+	{
+		if ( l_pContext->eShaderObject != eSHADER_TYPE_COUNT )
+		{
+			l_pContext->pSamplerFrameVariable = l_pContext->pShaderProgram->CreateFrameVariable( l_name, l_pContext->eShaderObject );
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "Directive <program::sampler>: Shader program not initialised" ) );
+		}
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <program::sampler>: Shader not initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderUboShaders )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
+
+	if ( !l_pContext->pFrameVariableBuffer )
+	{
+		PARSING_ERROR( cuT( "Directive <constants_buffer::shaders>: Shader constants buffer not initialised" ) );
+	}
+	else
+	{
+		uint32_t l_value;
+		p_arrayParams[0]->Get( l_value );
+
+		if ( !l_value )
+		{
+			l_pContext->pShaderProgram->AddFrameVariableBuffer( l_pContext->pFrameVariableBuffer, l_value );
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "Directive <constants_buffer::shaders>: Unsupported shader type" ) );
 		}
 	}
 }
 END_ATTRIBUTE()
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_HlShaderProgramVariable )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
-	l_pContext->pFrameVariable.reset();
-	p_arrayParams[0]->Get( l_pContext->strName2 );
-
-	if ( l_pContext->eShaderObject == eSHADER_TYPE_COUNT )
-	{
-		eRENDERER_TYPE l_eRendererType = l_pContext->eRendererType;
-
-		if ( l_eRendererType == eRENDERER_TYPE_DIRECT3D9 || l_eRendererType == eRENDERER_TYPE_DIRECT3D10 || l_eRendererType == eRENDERER_TYPE_DIRECT3D11 )
-		{
-			PARSING_ERROR( cuT( "Directive <hl_program::variable> : GPU Program not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <hl_program::variable> : Non D3D Renderer" ) );
-		}
-	}
-}
-END_ATTRIBUTE_PUSH( eSECTION_HLSL_SHADER_VARIABLE )
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_HlShaderVariableType )
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GeometryInputType )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
 	uint32_t l_uiType;
 	p_arrayParams[0]->Get( l_uiType );
 
-	if ( l_pContext->pShaderProgram && l_pContext->eShaderObject != eSHADER_TYPE_COUNT )
+	if ( l_pContext->eShaderObject != eSHADER_TYPE_COUNT )
 	{
-		if ( ! l_pContext->pFrameVariable )
+		if ( l_pContext->eShaderObject == eSHADER_TYPE_GEOMETRY )
 		{
-			//l_pContext->pFrameVariable = l_pContext->pShaderProgram->GetUserBuffer()->CreateVariable( *l_pContext->pShaderProgram.get(), eFRAME_VARIABLE_TYPE( l_uiType ), l_pContext->strName2 );
+			l_pContext->pShaderProgram->SetInputType( l_pContext->eShaderObject, eTOPOLOGY( l_uiType ) );
 		}
 		else
 		{
-			eRENDERER_TYPE l_eRendererType = l_pContext->eRendererType;
-
-			if ( l_eRendererType == eRENDERER_TYPE_DIRECT3D9 || l_eRendererType == eRENDERER_TYPE_DIRECT3D10 || l_eRendererType == eRENDERER_TYPE_DIRECT3D11 )
-			{
-				PARSING_ERROR( cuT( "Directive <hl_variable::type> : Variable type already set" ) );
-			}
-			else
-			{
-				PARSING_WARNING( cuT( "Directive <hl_variable::type> : Non D3D Renderer" ) );
-			}
+			PARSING_ERROR( cuT( "Directive <shader_program::input_type>: Only valid for geometry shader" ) );
 		}
 	}
 	else
 	{
-		eRENDERER_TYPE l_eRendererType = l_pContext->eRendererType;
-
-		if ( l_eRendererType == eRENDERER_TYPE_DIRECT3D9 || l_eRendererType == eRENDERER_TYPE_DIRECT3D10 || l_eRendererType == eRENDERER_TYPE_DIRECT3D11 )
-		{
-			PARSING_ERROR( cuT( "Directive <hl_variable::type> : Shader program or object not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <hl_variable::type> : Non D3D Renderer" ) );
-		}
+		PARSING_ERROR( cuT( "Directive <shader_program::input_type>: Shader not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_HlShaderVariableValue )
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GeometryOutputType )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
+	uint32_t l_uiType;
+	p_arrayParams[0]->Get( l_uiType );
+
+	if ( l_pContext->eShaderObject != eSHADER_TYPE_COUNT )
+	{
+		if ( l_pContext->eShaderObject == eSHADER_TYPE_GEOMETRY )
+		{
+			l_pContext->pShaderProgram->SetOutputType( l_pContext->eShaderObject, eTOPOLOGY( l_uiType ) );
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "Directive <shader_program::output_type>: Only valid for geometry shader" ) );
+		}
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <shader_program::output_type>: Shader not initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GeometryOutputVtxCount )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
+
+	if ( l_pContext->eShaderObject != eSHADER_TYPE_COUNT )
+	{
+		if ( l_pContext->eShaderObject == eSHADER_TYPE_GEOMETRY )
+		{
+			uint8_t l_uiCount;
+			p_arrayParams[0]->Get( l_uiCount );
+			l_pContext->pShaderProgram->SetOutputVtxCount( l_pContext->eShaderObject, l_uiCount );
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "Directive <shader_program::output_vtx_count>: Only valid for geometry shader" ) );
+		}
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <shader_program::output_vtx_count>: Shader not initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderSamplerValue )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
+	int32_t l_value = 0;
+	p_arrayParams[0]->Get( l_value );
+
+	if ( l_pContext->pSamplerFrameVariable )
+	{
+		//l_pContext->pSamplerFrameVariable->SetValue( l_value );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <variable::value>: Variable not initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderUboVariable )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
+	l_pContext->pFrameVariable.reset();
+	p_arrayParams[0]->Get( l_pContext->strName2 );
+
+	if ( !l_pContext->pFrameVariableBuffer )
+	{
+		PARSING_ERROR( cuT( "Directive <constants_buffer::variable>: Shader constants buffer not initialised" ) );
+	}
+	else if ( l_pContext->strName2.empty() )
+	{
+		PARSING_ERROR( cuT( "Directive <constants_buffer::variable>: Invalid empty name" ) );
+	}
+}
+END_ATTRIBUTE_PUSH( eSECTION_SHADER_UBO_VARIABLE )
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderVariableType )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
+	uint32_t l_uiType;
+	p_arrayParams[0]->Get( l_uiType );
+
+	if ( l_pContext->pFrameVariableBuffer )
+	{
+		if ( !l_pContext->pFrameVariable )
+		{
+			l_pContext->pFrameVariable = l_pContext->pFrameVariableBuffer->CreateVariable( *l_pContext->pShaderProgram.get(), eFRAME_VARIABLE_TYPE( l_uiType ), l_pContext->strName2 );
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "Directive <variable::type>: Variable type already set" ) );
+		}
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <variable::type>: Shader constants buffer not initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderVariableValue )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
 	String l_strParams;
@@ -3132,16 +2731,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_HlShaderVariableValue )
 	}
 	else
 	{
-		eRENDERER_TYPE l_eRendererType = l_pContext->eRendererType;
-
-		if ( l_eRendererType == eRENDERER_TYPE_DIRECT3D9 || l_eRendererType == eRENDERER_TYPE_DIRECT3D10 || l_eRendererType == eRENDERER_TYPE_DIRECT3D11 )
-		{
-			PARSING_ERROR( cuT( "Directive <hl_variable::value> : Variable not initialised" ) );
-		}
-		else
-		{
-			PARSING_WARNING( cuT( "Directive <hl_variable::value> : Non D3D Renderer" ) );
-		}
+		PARSING_ERROR( cuT( "Directive <variable::value>: Variable not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
