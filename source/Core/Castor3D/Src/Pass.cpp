@@ -392,6 +392,7 @@ namespace Castor3D
 		, m_bAutomaticShader( true )
 		, m_alphaBlendMode( eBLEND_MODE_ADDITIVE )
 		, m_colourBlendMode( eBLEND_MODE_ADDITIVE )
+		, m_changed( true )
 	{
 		if ( TEXTURE_CHANNEL_NAME.empty() )
 		{
@@ -644,6 +645,7 @@ namespace Castor3D
 		m_mapUnits.clear();
 		m_pShaderProgram = p_pProgram;
 		m_bAutomaticShader = false;
+		DoBindTextures();
 		DoBindBuffers();
 	}
 
@@ -780,6 +782,13 @@ namespace Castor3D
 
 	void Pass::DoRender( uint8_t p_index, uint8_t p_count )
 	{
+		if ( m_changed )
+		{
+			DoBindTextures();
+			DoBindBuffers();
+			m_changed = false;
+		}
+
 		ShaderProgramBaseSPtr l_program = m_pShaderProgram.lock();
 
 		if ( l_program )

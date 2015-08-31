@@ -1,6 +1,8 @@
 #include "NodeTreeItemProperty.hpp"
 
 #include <SceneNode.hpp>
+#include <Engine.hpp>
+#include <FunctorEvent.hpp>
 
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>
@@ -18,9 +20,10 @@ namespace GuiCommon
 		static const wxString PROPERTY_NODE_ORIENTATION = _( "Orientation" );
 	}
 
-	wxNodeTreeItemProperty::wxNodeTreeItemProperty( SceneNodeSPtr p_node )
+	wxNodeTreeItemProperty::wxNodeTreeItemProperty( Engine * p_engine, SceneNodeSPtr p_node )
 		: wxTreeItemProperty( ePROPERTY_DATA_TYPE_NODE )
 		, m_node( p_node )
+		, m_engine( p_engine )
 	{
 	}
 
@@ -48,6 +51,48 @@ namespace GuiCommon
 
 		if ( l_property && l_node )
 		{
+			if ( l_property->GetName() == PROPERTY_NODE_POSITION )
+			{
+				OnPositionChange( Point3rRefFromVariant( p_event.GetValue() ) );
+			}
+			else if ( l_property->GetName() == PROPERTY_NODE_SCALE )
+			{
+				OnScaleChange( Point3rRefFromVariant( p_event.GetValue() ) );
+			}
+			else if ( l_property->GetName() == PROPERTY_NODE_ORIENTATION )
+			{
+				OnOrientationChange( QuaternionRefFromVariant( p_event.GetValue() ) );
+			}
 		}
+	}
+
+	void wxNodeTreeItemProperty::OnPositionChange( Castor::Point3r const & p_value )
+	{
+		SceneNodeSPtr l_node = GetNode();
+
+		m_engine->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_node]()
+		{
+			l_node->SetPosition( p_value );
+		} ) );
+	}
+
+	void wxNodeTreeItemProperty::OnScaleChange( Castor::Point3r const & p_value )
+	{
+		SceneNodeSPtr l_node = GetNode();
+
+		m_engine->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_node]()
+		{
+			l_node->SetScale( p_value );
+		} ) );
+	}
+
+	void wxNodeTreeItemProperty::OnOrientationChange( Castor::Quaternion const & p_value )
+	{
+		SceneNodeSPtr l_node = GetNode();
+
+		m_engine->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_node]()
+		{
+			l_node->SetOrientation( p_value );
+		} ) );
 	}
 }

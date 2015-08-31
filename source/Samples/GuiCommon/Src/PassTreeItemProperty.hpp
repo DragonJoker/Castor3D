@@ -83,6 +83,15 @@ namespace GuiCommon
 		}
 
 	private:
+		void OnAmbientColourChange( Castor::Colour const & p_value );
+		void OnDiffuseColourChange( Castor::Colour const & p_value );
+		void OnSpecularColourChange( Castor::Colour const & p_value );
+		void OnEmissiveColourChange( Castor::Colour const & p_value );
+		void OnExponentChange( double p_value );
+		void OnTwoSidedChange( bool p_value );
+		void OnOpacityChange( double p_value );
+
+	private:
 		Castor3D::PassWPtr m_pass;
 	};
 }

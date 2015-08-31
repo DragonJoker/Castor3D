@@ -1,5 +1,7 @@
 #include "LightTreeItemProperty.hpp"
 
+#include <Engine.hpp>
+#include <FunctorEvent.hpp>
 #include <Light.hpp>
 
 #include "AdditionalProperties.hpp"
@@ -71,6 +73,41 @@ namespace GuiCommon
 
 		if ( l_property && l_light )
 		{
+			wxColour l_colour;
+
+			if ( l_property->GetName() == PROPERTY_LIGHT_AMBIENT )
+			{
+				l_colour << l_property->GetValue();
+				OnAmbientColourChange( Colour::from_bgr( l_colour.GetRGB() ) );
+			}
+			else if ( l_property->GetName() == PROPERTY_LIGHT_DIFFUSE )
+			{
+				l_colour << l_property->GetValue();
+				OnDiffuseColourChange( Colour::from_bgr( l_colour.GetRGB() ) );
+			}
+			else if ( l_property->GetName() == PROPERTY_LIGHT_SPECULAR )
+			{
+				l_colour << l_property->GetValue();
+				OnSpecularColourChange( Colour::from_bgr( l_colour.GetRGB() ) );
+			}
+			else if ( l_light->GetType() != eLIGHT_TYPE_DIRECTIONAL )
+			{
+				if ( l_property->GetName() == PROPERTY_LIGHT_ATTENUATION )
+				{
+					OnAttenuationChange( Point3fRefFromVariant( l_property->GetValue() ) );
+				}
+				else if ( l_light->GetType() == eLIGHT_TYPE_SPOT )
+				{
+					if ( l_property->GetName() == PROPERTY_LIGHT_CUT_OFF )
+					{
+						OnCutOffChange( l_property->GetValue() );
+					}
+					else if ( l_property->GetName() == PROPERTY_LIGHT_EXPONENT )
+					{
+						OnExponentChange( l_property->GetValue() );
+					}
+				}
+			}
 		}
 	}
 
@@ -92,15 +129,70 @@ namespace GuiCommon
 		p_grid->Append( new wxFloatProperty( PROPERTY_LIGHT_EXPONENT ) )->SetValue( p_light->GetExponent() );
 	}
 
-	void wxLightTreeItemProperty::OnDirectionalLightPropertyChanged( wxPropertyGridEvent & p_event )
+	void wxLightTreeItemProperty::OnAmbientColourChange( Colour const & p_value )
 	{
+		LightSPtr l_light = GetLight();
+
+		l_light->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_light]()
+		{
+			l_light->SetAmbient( p_value );
+		} ) );
 	}
 
-	void wxLightTreeItemProperty::OnPointLightPropertyChanged( wxPropertyGridEvent & p_event )
+	void wxLightTreeItemProperty::OnDiffuseColourChange( Colour const & p_value )
 	{
+		LightSPtr l_light = GetLight();
+
+		l_light->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_light]()
+		{
+			l_light->SetDiffuse( p_value );
+		} ) );
 	}
 
-	void wxLightTreeItemProperty::OnSpotLightPropertyChanged( wxPropertyGridEvent & p_event )
+	void wxLightTreeItemProperty::OnSpecularColourChange( Colour const & p_value )
 	{
+		LightSPtr l_light = GetLight();
+
+		l_light->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_light]()
+		{
+			l_light->SetSpecular( p_value );
+		} ) );
+	}
+
+	void wxLightTreeItemProperty::OnAttenuationChange( Point3f const & p_value )
+	{
+		LightSPtr l_light = GetLight();
+
+		l_light->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_light]()
+		{
+			if ( l_light->GetType() == eLIGHT_TYPE_POINT )
+			{
+				std::static_pointer_cast< PointLight >( l_light->GetLightCategory() )->SetAttenuation( p_value );
+			}
+			else
+			{
+				std::static_pointer_cast< SpotLight >( l_light->GetLightCategory() )->SetAttenuation( p_value );
+			}
+		} ) );
+	}
+
+	void wxLightTreeItemProperty::OnCutOffChange( double p_value )
+	{
+		LightSPtr l_light = GetLight();
+
+		l_light->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_light]()
+		{
+			std::static_pointer_cast< SpotLight >( l_light->GetLightCategory() )->SetCutOff( p_value );
+		} ) );
+	}
+
+	void wxLightTreeItemProperty::OnExponentChange( double p_value )
+	{
+		LightSPtr l_light = GetLight();
+
+		l_light->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_light]()
+		{
+			std::static_pointer_cast< SpotLight >( l_light->GetLightCategory() )->SetExponent( p_value );
+		} ) );
 	}
 }

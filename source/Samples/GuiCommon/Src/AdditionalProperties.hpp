@@ -318,10 +318,70 @@ namespace GuiCommon
 	typedef Point2dProperty Point2rProperty;
 	typedef Point3dProperty Point3rProperty;
 	typedef Point4dProperty Point4rProperty;
+
+	inline Castor::Point2r const & Point2rRefFromVariant( wxVariant const & p_variant )
+	{
+		return Point2dRefFromVariant( p_variant );
+	}
+
+	inline Castor::Point3r const & Point3rRefFromVariant( wxVariant const & p_variant )
+	{
+		return Point3dRefFromVariant( p_variant );
+	}
+
+	inline Castor::Point4r const & Point4rRefFromVariant( wxVariant const & p_variant )
+	{
+		return Point4dRefFromVariant( p_variant );
+	}
+
+	inline Castor::Point2r & Point2rRefFromVariant( wxVariant & p_variant )
+	{
+		return Point2dRefFromVariant( p_variant );
+	}
+
+	inline Castor::Point3r & Point3rRefFromVariant( wxVariant & p_variant )
+	{
+		return Point3dRefFromVariant( p_variant );
+	}
+
+	inline Castor::Point4r & Point4rRefFromVariant( wxVariant & p_variant )
+	{
+		return Point4dRefFromVariant( p_variant );
+	}
 #else
 	typedef Point2fProperty Point2rProperty;
 	typedef Point3fProperty Point3rProperty;
 	typedef Point4fProperty Point4rProperty;
+
+	inline Castor::Point2r const & Point2rRefFromVariant( wxVariant const & p_variant )
+	{
+		return Point2fRefFromVariant( p_variant );
+	}
+
+	inline Castor::Point3r const & Point3rRefFromVariant( wxVariant const & p_variant )
+	{
+		return Point3fRefFromVariant( p_variant );
+	}
+
+	inline Castor::Point4r const & Point4rRefFromVariant( wxVariant const & p_variant )
+	{
+		return Point4fRefFromVariant( p_variant );
+	}
+
+	inline Castor::Point2r & Point2rRefFromVariant( wxVariant & p_variant )
+	{
+		return Point2fRefFromVariant( p_variant );
+	}
+
+	inline Castor::Point3r & Point3rRefFromVariant( wxVariant & p_variant )
+	{
+		return Point3fRefFromVariant( p_variant );
+	}
+
+	inline Castor::Point4r & Point4rRefFromVariant( wxVariant & p_variant )
+	{
+		return Point4fRefFromVariant( p_variant );
+	}
 #endif
 }
 #endif

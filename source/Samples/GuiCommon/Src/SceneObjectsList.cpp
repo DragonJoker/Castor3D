@@ -273,7 +273,7 @@ namespace GuiCommon
 
 		for ( auto && l_pair: p_node->GetChilds() )
 		{
-			DoAddNode( AppendItem( p_id, l_pair.first, eBMP_NODE, eBMP_NODE_SEL, new wxNodeTreeItemProperty( l_pair.second.lock() ) ), l_pair.second.lock() );
+			DoAddNode( AppendItem( p_id, l_pair.first, eBMP_NODE, eBMP_NODE_SEL, new wxNodeTreeItemProperty( m_pEngine, l_pair.second.lock() ) ), l_pair.second.lock() );
 		}
 	}
 

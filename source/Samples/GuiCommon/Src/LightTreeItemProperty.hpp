@@ -86,9 +86,12 @@ namespace GuiCommon
 		void DoCreateDirectionalLightProperties( wxPropertyGrid * p_grid, Castor3D::DirectionalLightSPtr p_light );
 		void DoCreatePointLightProperties( wxPropertyGrid * p_grid, Castor3D::PointLightSPtr p_light );
 		void DoCreateSpotLightProperties( wxPropertyGrid * p_grid, Castor3D::SpotLightSPtr p_light );
-		void OnDirectionalLightPropertyChanged( wxPropertyGridEvent & p_event );
-		void OnPointLightPropertyChanged( wxPropertyGridEvent & p_event );
-		void OnSpotLightPropertyChanged( wxPropertyGridEvent & p_event );
+		void OnAmbientColourChange( Castor::Colour const & p_value );
+		void OnDiffuseColourChange( Castor::Colour const & p_value );
+		void OnSpecularColourChange( Castor::Colour const & p_value );
+		void OnAttenuationChange( Castor::Point3f const & p_value );
+		void OnCutOffChange( double p_value );
+		void OnExponentChange( double p_value );
 
 	private:
 		Castor3D::LightWPtr m_light;

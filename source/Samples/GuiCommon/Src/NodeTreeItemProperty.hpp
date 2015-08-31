@@ -38,12 +38,14 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pGeometry	 The target geometry
+		 *\param[in]	p_engine	The engine
+		 *\param[in]	p_node		The target object
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pGeometry	La géométrie cible
+		 *\param[in]	p_engine	Le moteur
+		 *\param[in]	p_node		L'objet cible
 		 */
-		wxNodeTreeItemProperty( Castor3D::SceneNodeSPtr p_node );
+		wxNodeTreeItemProperty( Castor3D::Engine * p_engine, Castor3D::SceneNodeSPtr p_node );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -53,10 +55,10 @@ namespace GuiCommon
 		~wxNodeTreeItemProperty();
 		/**
 		 *\~english
-		 *\brief		Creates and fills the overlay properties, in the given wxPropertyGrid
+		 *\brief		Creates and fills the object properties, in the given wxPropertyGrid
 		 *\param[in]	p_grid	The target wxPropertyGrid
 		 *\~french
-		 *\brief		Construit et remplit les propriétés de l'incrustation, dans la wxPropertyGrid donnée
+		 *\brief		Construit et remplit les propriétés de l'objet, dans la wxPropertyGrid donnée
 		 *\param[in]	p_grid	La wxPropertyGrid cible
 		 */
 		virtual void CreateProperties( wxPropertyGrid * p_grid );
@@ -71,10 +73,10 @@ namespace GuiCommon
 		virtual void OnPropertyChange( wxPropertyGridEvent & p_event );
 		/**
 		 *\~english
-		 *\brief		Retrieves the geometry
+		 *\brief		Retrieves the object
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la géométrie
+		 *\brief		Récupère l'objet
 		 *\return		La valeur
 		 */
 		inline Castor3D::SceneNodeSPtr GetNode()
@@ -83,6 +85,12 @@ namespace GuiCommon
 		}
 
 	private:
+	void OnPositionChange( Castor::Point3r const & p_value );
+	void OnScaleChange( Castor::Point3r const & p_value );
+	void OnOrientationChange( Castor::Quaternion const & p_value );
+
+	private:
+		Castor3D::Engine * m_engine;
 		Castor3D::SceneNodeWPtr m_node;
 	};
 }

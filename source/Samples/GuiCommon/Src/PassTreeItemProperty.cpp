@@ -1,5 +1,7 @@
 #include "PassTreeItemProperty.hpp"
 
+#include <Engine.hpp>
+#include <FunctorEvent.hpp>
 #include <Pass.hpp>
 
 #include "AdditionalProperties.hpp"
@@ -56,6 +58,110 @@ namespace GuiCommon
 
 		if ( l_property && l_pass )
 		{
+			wxColour l_colour;
+
+			if ( l_property->GetName() == PROPERTY_PASS_DIFFUSE )
+			{
+				l_colour << l_property->GetValue();
+				OnAmbientColourChange( Colour::from_bgr( l_colour.GetRGB() ) );
+			}
+			else if ( l_property->GetName() == PROPERTY_PASS_AMBIENT )
+			{
+				l_colour << l_property->GetValue();
+				OnDiffuseColourChange( Colour::from_bgr( l_colour.GetRGB() ) );
+			}
+			else if ( l_property->GetName() == PROPERTY_PASS_SPECULAR )
+			{
+				l_colour << l_property->GetValue();
+				OnSpecularColourChange( Colour::from_bgr( l_colour.GetRGB() ) );
+			}
+			else if ( l_property->GetName() == PROPERTY_PASS_EMISSIVE )
+			{
+				l_colour << l_property->GetValue();
+				OnEmissiveColourChange( Colour::from_bgr( l_colour.GetRGB() ) );
+			}
+			else if ( l_property->GetName() == PROPERTY_PASS_EXPONENT )
+			{
+				OnExponentChange( l_property->GetValue() );
+			}
+			else if ( l_property->GetName() == PROPERTY_PASS_TWO_SIDED )
+			{
+				OnTwoSidedChange( l_property->GetValue() );
+			}
+			else if ( l_property->GetName() == PROPERTY_PASS_OPACITY )
+			{
+				OnOpacityChange( l_property->GetValue() );
+			}
 		}
+	}
+
+	void wxPassTreeItemProperrty::OnAmbientColourChange( Colour const & p_value )
+	{
+		PassSPtr l_pass = GetPass();
+
+		l_pass->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_pass]()
+		{
+			l_pass->SetAmbient( p_value );
+		} ) );
+	}
+
+	void wxPassTreeItemProperrty::OnDiffuseColourChange( Colour const & p_value )
+	{
+		PassSPtr l_pass = GetPass();
+
+		l_pass->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_pass]()
+		{
+			l_pass->SetDiffuse( p_value );
+		} ) );
+	}
+
+	void wxPassTreeItemProperrty::OnSpecularColourChange( Colour const & p_value )
+	{
+		PassSPtr l_pass = GetPass();
+
+		l_pass->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_pass]()
+		{
+			l_pass->SetSpecular( p_value );
+		} ) );
+	}
+
+	void wxPassTreeItemProperrty::OnEmissiveColourChange( Colour const & p_value )
+	{
+		PassSPtr l_pass = GetPass();
+
+		l_pass->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_pass]()
+		{
+			l_pass->SetSpecular( p_value );
+		} ) );
+	}
+
+	void wxPassTreeItemProperrty::OnExponentChange( double p_value )
+	{
+		PassSPtr l_pass = GetPass();
+
+		l_pass->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_pass]()
+		{
+			l_pass->SetShininess( p_value );
+		} ) );
+	}
+
+	void wxPassTreeItemProperrty::OnTwoSidedChange( bool p_value )
+	{
+		PassSPtr l_pass = GetPass();
+
+		l_pass->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_pass]()
+		{
+			l_pass->SetTwoSided( p_value );
+		} ) );
+	}
+
+	void wxPassTreeItemProperrty::OnOpacityChange( double p_value )
+	{
+		PassSPtr l_pass = GetPass();
+
+		l_pass->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_pass]()
+		{
+			l_pass->SetAlpha( p_value );
+		} ) );
 	}
 }
