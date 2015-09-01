@@ -1,8 +1,4 @@
 ﻿#include "Utils.hpp"
-#include "Size.hpp"
-#include "Position.hpp"
-#include "Rectangle.hpp"
-#include "Colour.hpp"
 #include "Logger.hpp"
 #include "PixelFormat.hpp"
 #include "FileParserContext.hpp"

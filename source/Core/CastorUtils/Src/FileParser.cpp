@@ -207,14 +207,14 @@ namespace Castor
 	{
 		StringStream l_strError;
 		l_strError << cuT( "Error, line #" ) << m_pParsingContext->ui64Line << cuT( ": " ) << p_strError;
-		Logger::LogInfo( l_strError.str() );
+		Logger::LogError( l_strError.str() );
 	}
 
 	void FileParser::ParseWarning( String const & p_strWarning )
 	{
 		StringStream l_strError;
 		l_strError << cuT( "Warning, line #" ) << m_pParsingContext->ui64Line << cuT( ": " ) << p_strWarning;
-		Logger::LogInfo( l_strError.str() );
+		Logger::LogWarning( l_strError.str() );
 	}
 
 	bool FileParser::CheckParams( String const & p_strParams, ParserParameterArrayConstIt p_itBegin, ParserParameterArrayConstIt p_itEnd )

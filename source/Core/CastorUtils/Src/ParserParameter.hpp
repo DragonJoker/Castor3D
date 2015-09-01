@@ -20,6 +20,13 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "ParserParameterBase.hpp"
 
+#include "Colour.hpp"
+#include "Path.hpp"
+#include "Point.hpp"
+#include "Position.hpp"
+#include "Rectangle.hpp"
+#include "Size.hpp"
+
 namespace Castor
 {
 	/*!
