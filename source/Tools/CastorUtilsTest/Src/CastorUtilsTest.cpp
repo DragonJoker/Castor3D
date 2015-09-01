@@ -115,7 +115,7 @@ namespace
 			p_stream << uint32_t( PF::GetBytesPerPixel( p_pixel.get_format() ) );
 			p_stream << ", Format : ";
 			p_stream.width( 10 );
-			p_stream << PF::GetFormatName( p_pixel.get_format() );
+			p_stream << str_utils::to_str( PF::GetFormatName( p_pixel.get_format() ) );
 			p_stream << ", Value : (";
 			p_stream.width( 3 );
 			p_stream << int( PF::GetByteRed( p_pixel ) );
