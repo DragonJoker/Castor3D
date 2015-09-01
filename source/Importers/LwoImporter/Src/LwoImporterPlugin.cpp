@@ -26,13 +26,18 @@ C3D_Lwo_API Castor3D::ImporterPlugin::ExtensionArray GetExtensions()
 
 C3D_Lwo_API void Create( Castor3D::Engine * p_pEngine, Castor3D::ImporterPlugin * p_pPlugin )
 {
-	Castor::Logger::Initialise( p_pEngine->GetLoggerInstance() );
-	Castor3D::ImporterSPtr l_pImporter = std::make_shared< Lwo::LwoImporter >( p_pEngine );
-	p_pPlugin->AttachImporter( l_pImporter );
+	p_pPlugin->AttachImporter( std::make_shared< Lwo::LwoImporter >( p_pEngine ) );
 }
 
 C3D_Lwo_API void Destroy( Castor3D::ImporterPlugin * p_pPlugin )
 {
 	p_pPlugin->DetachImporter();
-	Castor::Logger::Cleanup();
+}
+
+C3D_Lwo_API void OnLoad( Castor3D::Engine * p_engine )
+{
+}
+
+C3D_Lwo_API void OnUnload( Castor3D::Engine * p_engine )
+{
 }

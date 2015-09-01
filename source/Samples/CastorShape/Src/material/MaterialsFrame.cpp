@@ -1,5 +1,7 @@
 #include "../material/MaterialsFrame.hpp"
 
+#include <MaterialManager.hpp>
+
 using namespace Castor3D;
 using namespace CastorShape;
 using namespace Castor;

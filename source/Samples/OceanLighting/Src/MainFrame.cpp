@@ -144,13 +144,13 @@ namespace OceanLighting
 
 	MainFrame::MainFrame()
 		:	wxFrame( NULL, wxID_ANY, wxT( "OceanLighting" )	)
-		,	m_oldx( 0	)
-		,	m_oldy( 0	)
-		,	m_drag( 0	)
-		,	m_width( 1244	)
-		,	m_height( 768	)
-		,	m_pCastor3D( new Engine()	)
-		,	m_timer( NULL	)
+		,	m_oldx( 0 )
+		,	m_oldy( 0 )
+		,	m_drag( 0 )
+		,	m_width( 1244 )
+		,	m_height( 768 )
+		,	m_pCastor3D( new Engine )
+		,	m_timer( NULL )
 	{
 		SetClientSize( m_width, m_height );
 	}
@@ -258,13 +258,12 @@ namespace OceanLighting
 		typedef std::shared_ptr< std::thread > thread_sptr;
 		DECLARE_VECTOR( thread_sptr, ThreadPtr );
 		bool l_bReturn = true;
-		Logger::LogInfo( cuT( "Initialising Castor3D" ) );
-		m_pCastor3D->Initialise( 30, false );
-		m_pCastor3D->GetTechniqueFactory().Register( cuT( "ocean lighting" ), &RenderTechnique::Create );
 		StringArray l_arrayFiles;
 		StringArray l_arrayFailed;
 		std::mutex l_mutex;
 		ThreadPtrArray l_arrayThreads;
+		Logger::LogInfo( cuT( "Loading plugins" ) );
+
 		File::ListDirectoryFiles( Engine::GetPluginsDirectory(), l_arrayFiles );
 
 		if ( l_arrayFiles.size() > 0 )
@@ -322,6 +321,10 @@ namespace OceanLighting
 			wxMessageBox( _( "Problem occured while initialising Castor3D.\nLook at OceanLighting.log for more details" ), _( "Exception" ), wxOK | wxCENTRE | wxICON_ERROR );
 			l_bReturn = false;
 		}
+
+		Logger::LogInfo( cuT( "Initialising Castor3D" ) );
+		m_pCastor3D->Initialise( 30, false );
+		m_pCastor3D->GetTechniqueFactory().Register( cuT( "ocean lighting" ), &RenderTechnique::CreateInstance );
 
 		if ( l_bReturn )
 		{

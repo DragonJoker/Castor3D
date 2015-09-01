@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___OBJ_IMPORTER_PREREQUISITES_H___
 
 #include <Importer.hpp>
+#include <FaceIndices.hpp>
 
 #ifndef _WIN32
 #	define C3D_Obj_API
@@ -38,13 +39,13 @@ namespace Obj
 	struct stUVW;
 	struct stGROUP;
 
-	typedef std::vector< stVERTEX					> VertexArray;
-	typedef std::vector< stNORMAL					> NormalArray;
-	typedef std::vector< stUV						> UvArray;
-	typedef std::vector< stUVW						> UvwArray;
-	typedef std::vector< Castor3D::stFACE_INDICES	> FaceArray;
-	typedef std::map< uint32_t, FaceArray			> FaceArrayGrpMap;
-	typedef std::map< uint32_t, uint32_t			> UIntUIntMap;
+	typedef std::vector< stVERTEX > VertexArray;
+	typedef std::vector< stNORMAL > NormalArray;
+	typedef std::vector< stUV > UvArray;
+	typedef std::vector< stUVW > UvwArray;
+	typedef std::vector< Castor3D::stFACE_INDICES > FaceArray;
+	typedef std::map< uint32_t, FaceArray > FaceArrayGrpMap;
+	typedef std::map< uint32_t, uint32_t > UIntUIntMap;
 	typedef std::vector< stGROUP * > GroupPtrArray;
 	class ObjImporter;
 }

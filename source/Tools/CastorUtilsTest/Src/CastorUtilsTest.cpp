@@ -81,7 +81,8 @@ namespace
 			   && a[0][3] == b[0][3] && a[1][3] == b[1][3] &&	a[2][3] == b[2][3] &&	a[3][3] == b[3][3];
 	}
 
-	inline std::ostream & operator <<( std::ostream & p_stream, glm::mat4 const & p_mtx )
+	template< typename CharType >
+	inline std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & p_stream, glm::mat4 const & p_mtx )
 	{
 		for ( uint32_t i = 0; i < 4; i++ )
 		{
@@ -95,12 +96,6 @@ namespace
 
 		return p_stream;
 	}
-
-	inline std::ostream & operator <<( std::ostream & p_stream, Castor::String const & p_str )
-	{
-		p_stream << Castor::str_utils::to_str( p_str );
-		return p_stream;
-	}
 #endif
 
 	template< TPL_PIXEL_FORMAT PF, typename Enable=void > struct PixelStreamer;
@@ -108,14 +103,15 @@ namespace
 	template< TPL_PIXEL_FORMAT PF >
 	struct PixelStreamer< PF, typename std::enable_if< is_colour_format< PF >::value >::type >
 	{
-		std::ostream & operator()( std::ostream & p_stream, Pixel< PF > const & p_pixel )
+		template< typename CharType >
+		std::basic_ostream< CharType > & operator()( std::basic_ostream< CharType > & p_stream, Pixel< PF > const & p_pixel )
 		{
 			p_stream << "BPP : ";
 			p_stream.width( 2 );
 			p_stream << uint32_t( PF::GetBytesPerPixel( p_pixel.get_format() ) );
 			p_stream << ", Format : ";
 			p_stream.width( 10 );
-			p_stream << str_utils::to_str( PF::GetFormatName( p_pixel.get_format() ) );
+			p_stream << str_utils::string_cast< CharType >( PF::GetFormatName( p_pixel.get_format() ) );
 			p_stream << ", Value : (";
 			p_stream.width( 3 );
 			p_stream << int( PF::GetByteRed( p_pixel ) );
@@ -152,14 +148,15 @@ namespace
 	template< TPL_PIXEL_FORMAT PF >
 	struct PixelStreamer< PF, typename std::enable_if< is_depth_stencil_format< PF >::value >::type >
 	{
-		std::ostream & operator()( std::ostream & p_stream, Pixel< PF > const & p_pixel )
+		template< typename CharType >
+		std::basic_ostream< CharType > & operator()( std::basic_ostream< CharType > & p_stream, Pixel< PF > const & p_pixel )
 		{
 			p_stream << "BPP : ";
 			p_stream.width( 2 );
 			p_stream << uint32_t( PF::GetBytesPerPixel( p_pixel.get_format() ) );
 			p_stream << ", Format : ";
 			p_stream.width( 10 );
-			p_stream << str_utils::to_str( PF::GetFormatName( p_pixel.get_format() ) );
+			p_stream << str_utils::string_cast< CharType >( PF::GetFormatName( p_pixel.get_format() ) );
 			p_stream << ", Value : (";
 			p_stream.width( 11 );
 			p_stream << int( PF::GetUInt32Depth( p_pixel ) );
@@ -179,8 +176,8 @@ namespace
 		}
 	};
 	
-	template< TPL_PIXEL_FORMAT PF >
-	std::ostream & operator <<( std::ostream & p_stream, Pixel< PF > const & p_pixel )
+	template< typename CharType, TPL_PIXEL_FORMAT PF >
+	std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & p_stream, Pixel< PF > const & p_pixel )
 	{
 		return PixelStreamer< PF >()( p_stream, p_pixel );
 	}
@@ -190,12 +187,13 @@ namespace
 	template< TPL_PIXEL_FORMAT PF >
 	struct BufferStreamer< PF, typename std::enable_if< is_colour_format< PF >::value >::type >
 	{
-		std::ostream & operator()( std::ostream & p_stream, PxBuffer< PF > const & p_buffer )
+		template< typename CharType >
+		std::basic_ostream< CharType > & operator()( std::basic_ostream< CharType > & p_stream, PxBuffer< PF > const & p_buffer )
 		{
 			uint8_t const * l_data = p_buffer.const_ptr();
 			uint32_t l_width = p_buffer.dimensions().width();
 			uint32_t l_height = p_buffer.dimensions().height();
-			char l_fill = p_stream.fill( '0' );
+			CharType l_fill = p_stream.fill( '0' );
 			
 			for ( uint32_t x = 0; x < l_width; ++x )
 			{
@@ -226,12 +224,13 @@ namespace
 	template< TPL_PIXEL_FORMAT PF >
 	struct BufferStreamer< PF, typename std::enable_if< is_depth_stencil_format< PF >::value >::type >
 	{
-		std::ostream & operator()( std::ostream & p_stream, PxBuffer< PF > const & p_buffer )
+		template< typename CharType >
+		std::basic_ostream< CharType > & operator()( std::basic_ostream< CharType > & p_stream, PxBuffer< PF > const & p_buffer )
 		{
 			uint8_t const * l_data = p_buffer.const_ptr();
 			uint32_t l_width = p_buffer.dimensions().width();
 			uint32_t l_height = p_buffer.dimensions().height();
-			char l_fill = p_stream.fill( '0' );
+			CharType l_fill = p_stream.fill( '0' );
 			
 			for ( uint32_t x = 0; x < l_width; ++x )
 			{
@@ -255,19 +254,20 @@ namespace
 		}
 	};
 	
-	std::ostream & operator <<( std::ostream & p_stream, PxBufferBase const & p_buffer )
+	template< typename CharType >
+	std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & p_stream, PxBufferBase const & p_buffer )
 	{
 		p_stream << "BPP : ";
 		p_stream.width( 2 );
 		p_stream << uint32_t( PF::GetBytesPerPixel( p_buffer.format() ) );
 		p_stream << ", Format : ";
 		p_stream.width( 10 );
-		p_stream << str_utils::to_str( PF::GetFormatName( p_buffer.format() ) ) << std::endl;
+		p_stream << str_utils::string_cast< CharType >( PF::GetFormatName( p_buffer.format() ) );
 		return p_stream;
 	}
 	
-	template< TPL_PIXEL_FORMAT PF >
-	std::ostream & operator <<( std::ostream & p_stream, PxBuffer< PF > const & p_buffer )
+	template< typename CharType, TPL_PIXEL_FORMAT PF >
+	std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & p_stream, PxBuffer< PF > const & p_buffer )
 	{
 		p_stream << static_cast< PxBufferBase const & >( p_buffer );
 		return BufferStreamer< PF >()( p_stream, p_buffer );
@@ -279,9 +279,10 @@ namespace
 		void operator()( Pixel< PFSrc > const & p_source )
 		{
 			Pixel< PFDst > l_dest( p_source );
-			std::cout.width( 20 );
-			std::cout << "Converted pixel : ";
-			std::cout << l_dest << std::endl;
+			StringStream l_stream;
+			l_stream.width( 20 );
+			l_stream << "Converted pixel : " << l_dest;
+			Logger::LogDebug( l_stream );
 		}
 	};
 	
@@ -311,9 +312,10 @@ namespace
 			PF::SetByteGreen( l_source, 0x80 );
 			PF::SetByteBlue( l_source, 0xBF );
 			PF::SetByteAlpha( l_source, 0xFF );
-			std::cout.width( 20 );
-			std::cout << "Source pixel : ";
-			std::cout << l_source << std::endl;
+			StringStream l_stream;
+			l_stream.width( 20 );
+			l_stream << "Source pixel : " << l_source;
+			Logger::LogDebug( l_stream );
 			ConvertPixel< ePIXEL_FORMAT_L8 >( l_source );
 			ConvertPixel< ePIXEL_FORMAT_L32F >( l_source );
 			ConvertPixel< ePIXEL_FORMAT_A8L8 >( l_source );
@@ -337,15 +339,16 @@ namespace
 			Pixel< PFSrc > l_source( true );
 			PF::SetUInt32Depth( l_source, 0x10204080 );
 			PF::SetByteStencil( l_source, 0x80 );
-			std::cout.width( 20 );
-			std::cout << "Source pixel : ";
-			std::cout << l_source << std::endl;
+			StringStream l_stream;
+			l_stream.width( 20 );
+			l_stream << "Source pixel : " << l_source;
+			Logger::LogDebug( l_stream );
 			ConvertPixel< ePIXEL_FORMAT_DEPTH16 >( l_source );
 			ConvertPixel< ePIXEL_FORMAT_DEPTH24 >( l_source );
 			ConvertPixel< ePIXEL_FORMAT_DEPTH32 >( l_source );
 			ConvertPixel< ePIXEL_FORMAT_DEPTH24S8 >( l_source );
 			ConvertPixel< ePIXEL_FORMAT_STENCIL8 >( l_source );
-			std::cout << std::endl;
+			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
 	
@@ -361,9 +364,10 @@ namespace
 		void operator()( std::shared_ptr< PxBuffer< PFSrc > > p_source )
 		{
 			std::shared_ptr< PxBuffer< PFDst > > l_dest = std::static_pointer_cast< PxBuffer< PFDst > >( PxBufferBase::create( p_source->dimensions(), ePIXEL_FORMAT( PFDst ), p_source->ptr(), ePIXEL_FORMAT( PFSrc ) ) );
-			std::cout.width( 20 );
-			std::cout << "Converted buffer : ";
-			std::cout << *l_dest << std::endl;
+			StringStream l_stream;
+			l_stream.width( 20 );
+			l_stream << "Converted buffer : " << *l_dest;
+			Logger::LogDebug( l_stream );
 		}
 	};
 	
@@ -405,9 +409,10 @@ namespace
 			}
 			
 			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, ePIXEL_FORMAT( PFSrc ), l_buffer.data(), ePIXEL_FORMAT( PFSrc ) ) );
-			std::cout.width( 20 );
-			std::cout << "Source buffer : ";
-			std::cout << *l_source << std::endl;
+			StringStream l_stream;
+			l_stream.width( 20 );
+			l_stream << "Source buffer : " << *l_source;
+			Logger::LogDebug( l_stream );
 			ConvertBuffer< ePIXEL_FORMAT_L8 >( l_source );
 			ConvertBuffer< ePIXEL_FORMAT_L32F >( l_source );
 			ConvertBuffer< ePIXEL_FORMAT_A8L8 >( l_source );
@@ -446,9 +451,10 @@ namespace
 			}
 			
 			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, ePIXEL_FORMAT( PFSrc ), l_buffer.data(), ePIXEL_FORMAT( PFSrc ) ) );
-			std::cout.width( 20 );
-			std::cout << "Source buffer : ";
-			std::cout << *l_source << std::endl;
+			StringStream l_stream;
+			l_stream.width( 20 );
+			l_stream << "Source buffer : " << *l_source;
+			Logger::LogDebug( l_stream );
 			ConvertBuffer< ePIXEL_FORMAT_DEPTH16 >( l_source );
 			ConvertBuffer< ePIXEL_FORMAT_DEPTH24 >( l_source );
 			ConvertBuffer< ePIXEL_FORMAT_DEPTH32 >( l_source );
@@ -480,9 +486,10 @@ namespace
 			}
 			
 			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, ePIXEL_FORMAT( PFSrc ), l_buffer.data(), ePIXEL_FORMAT( PFSrc ) ) );
-			std::cout.width( 20 );
-			std::cout << "Source buffer : ";
-			std::cout << *l_source << std::endl;
+			StringStream l_stream;
+			l_stream.width( 20 );
+			l_stream << "Source buffer : " << *l_source;
+			Logger::LogDebug( l_stream );
 			ConvertBuffer< ePIXEL_FORMAT_DEPTH16 >( l_source );
 			ConvertBuffer< ePIXEL_FORMAT_DEPTH24 >( l_source );
 			ConvertBuffer< ePIXEL_FORMAT_DEPTH32 >( l_source );
@@ -512,9 +519,10 @@ namespace
 			}
 			
 			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, ePIXEL_FORMAT( PFSrc ), l_buffer.data(), ePIXEL_FORMAT( PFSrc ) ) );
-			std::cout.width( 20 );
-			std::cout << "Source buffer : ";
-			std::cout << *l_source << std::endl;
+			StringStream l_stream;
+			l_stream.width( 20 );
+			l_stream << "Source buffer : " << *l_source;
+			Logger::LogDebug( l_stream );
 			ConvertBuffer< ePIXEL_FORMAT_DEPTH24S8 >( l_source );
 			ConvertBuffer< ePIXEL_FORMAT_STENCIL8 >( l_source );
 			std::cout << std::endl;
@@ -797,8 +805,6 @@ namespace Testing
 		{
 			Logger::LogError( "	Couldn't create first folder" );
 		}
-
-		Logger::LogInfo( "End test case : ZipFile" );
 	}
 
 	void CastorUtilsTest::TestPixelConversions( uint32_t & p_errCount, uint32_t & p_testCount )

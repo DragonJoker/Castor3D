@@ -19,6 +19,8 @@
 #include <Vertex.hpp>
 #include <InitialiseEvent.hpp>
 
+#include <Image.hpp>
+
 #include "SMaxImporter.hpp"
 
 using namespace SMax;
@@ -45,7 +47,7 @@ SceneSPtr SMaxImporter::DoImportScene()
 		l_pScene = m_pEngine->CreateScene( cuT( "Scene_3DS" ) );
 		SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 		GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
-		l_pGeometry->AttachTo( l_pNode.get() );
+		l_pGeometry->AttachTo( l_pNode );
 		l_pGeometry->SetMesh( l_pMesh );
 	}
 

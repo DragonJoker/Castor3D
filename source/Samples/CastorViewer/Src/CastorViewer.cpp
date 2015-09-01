@@ -55,10 +55,10 @@ namespace CastorViewer
 			m_pLocale = std::make_unique< wxLocale >( l_lLanguage );
 		}
 
-//		wxAppConsole::SetAppDisplayName(	wxT( "Castor Viewer"	) );
+		//wxAppConsole::SetAppDisplayName(	wxT( "Castor Viewer"	) );
 		wxAppConsole::SetAppName(	wxT( "castor_viewer"	) );
 		wxAppConsole::SetVendorName(	wxT( "dragonjoker"	) );
-//		wxAppConsole::SetVendorDisplayName(	wxT( "DragonJoker"		) );
+		//wxAppConsole::SetVendorDisplayName(	wxT( "DragonJoker"		) );
 		wxCmdLineParser l_parser( argc, argv );
 		l_parser.AddSwitch(	wxT( "h"	),	wxT( "help"	),	_( "Displays this help"	)	);
 		l_parser.AddOption(	wxT( "l"	),	wxT( "log"	),	_( "Defines log level"	),	wxCMD_LINE_VAL_NUMBER	);

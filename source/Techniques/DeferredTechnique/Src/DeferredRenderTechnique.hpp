@@ -199,6 +199,10 @@ namespace Deferred
 		Castor3D::RenderBufferAttachmentSPtr m_pDsDepthAttach;
 		//!\~english The shader program used to render lights	\~french Le shader utilisé pour rendre les lumières
 		Castor3D::ShaderProgramBaseSPtr m_pDsShaderProgram;
+		//!\~english The framve variable buffer used to apply matrices	\~french Le tampon de variables shader utilisé pour appliquer les matrices
+		Castor3D::FrameVariableBufferWPtr m_pDsMatrices;
+		//!\~english The framve variable buffer used to transmit scene values	\~french Le tampon de variables shader utilisé pour transmettre les variables de scène
+		Castor3D::FrameVariableBufferWPtr m_pDsScene;
 		//!\~english Buffer elements declaration	\~french Déclaration des éléments d'un vertex
 		Castor3D::BufferDeclarationSPtr m_pDeclaration;
 		//!\~english Vertex array (quad definition)	\~french Tableau de vertex (définition du quad)

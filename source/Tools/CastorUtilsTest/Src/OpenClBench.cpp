@@ -193,14 +193,14 @@ namespace Testing
 
 		if ( l_bContinue )
 		{
-			cl::Program::Sources l_source( 1, std::make_pair( l_prog.c_str(), l_prog.length() + 1 ) );
+			cl::Program::Sources l_source( 1, cl::string( l_prog ) );
 			m_program = cl::Program( m_context, l_source );
 			l_iErr = m_program.build( m_arrayDevices );
 			l_bContinue = CheckErr( l_iErr, "Program::build()" );
 
 			if ( !l_bContinue )
 			{
-				cl::STRING_CLASS l_strInfo;
+				cl::string l_strInfo;
 				l_iErr = m_program.getBuildInfo( m_arrayDevices[0], CL_PROGRAM_BUILD_LOG, &l_strInfo );
 
 				if ( CheckErr( l_iErr, "Program::getBuildInfo()" ) )

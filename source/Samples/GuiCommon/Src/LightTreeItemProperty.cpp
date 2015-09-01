@@ -52,15 +52,15 @@ namespace GuiCommon
 			switch ( l_light->GetLightType() )
 			{
 			case eLIGHT_TYPE_DIRECTIONAL:
-				DoCreateDirectionalLightProperties( p_grid, std::static_pointer_cast< DirectionalLight >( l_light->GetLightCategory() ) );
+				DoCreateDirectionalLightProperties( p_grid, l_light->GetDirectionalLight() );
 				break;
 
 			case eLIGHT_TYPE_POINT:
-				DoCreatePointLightProperties( p_grid, std::static_pointer_cast< PointLight >( l_light->GetLightCategory() ) );
+				DoCreatePointLightProperties( p_grid, l_light->GetPointLight() );
 				break;
 
 			case eLIGHT_TYPE_SPOT:
-				DoCreateSpotLightProperties( p_grid, std::static_pointer_cast< SpotLight >( l_light->GetLightCategory() ) );
+				DoCreateSpotLightProperties( p_grid, l_light->GetSpotLight() );
 				break;
 			}
 		}
@@ -167,11 +167,11 @@ namespace GuiCommon
 		{
 			if ( l_light->GetType() == eLIGHT_TYPE_POINT )
 			{
-				std::static_pointer_cast< PointLight >( l_light->GetLightCategory() )->SetAttenuation( p_value );
+				l_light->GetPointLight()->SetAttenuation( p_value );
 			}
 			else
 			{
-				std::static_pointer_cast< SpotLight >( l_light->GetLightCategory() )->SetAttenuation( p_value );
+				l_light->GetSpotLight()->SetAttenuation( p_value );
 			}
 		} ) );
 	}
@@ -182,7 +182,7 @@ namespace GuiCommon
 
 		l_light->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_light]()
 		{
-			std::static_pointer_cast< SpotLight >( l_light->GetLightCategory() )->SetCutOff( p_value );
+			l_light->GetSpotLight()->SetCutOff( p_value );
 		} ) );
 	}
 
@@ -192,7 +192,7 @@ namespace GuiCommon
 
 		l_light->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_light]()
 		{
-			std::static_pointer_cast< SpotLight >( l_light->GetLightCategory() )->SetExponent( p_value );
+			l_light->GetSpotLight()->SetExponent( p_value );
 		} ) );
 	}
 }

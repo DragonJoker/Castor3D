@@ -74,7 +74,7 @@ namespace Castor
 		//@copydoc Database::SMessageBase::GetMessage
 		virtual String GetMessage()
 		{
-			return str_utils::string_cast< String >( m_message );
+			return str_utils::string_cast< xchar >( m_message );
 		}
 
 		//! The message text

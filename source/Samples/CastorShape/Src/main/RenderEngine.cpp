@@ -44,7 +44,7 @@ bool RenderEngine::Draw()
 		// balayage
 		for ( int y = 0; y < l_iSizeY; ++y )
 		{
-			Logger::LogMessage( cuT( "y : %i" ), y );
+			Logger::LogInfo( cuT( "y : %i" ), y );
 
 			for ( int x = 0; x < l_iSizeX; ++x )
 			{
@@ -55,7 +55,7 @@ bool RenderEngine::Draw()
 				Ray l_viewRay( Point3r( real( x - 128 ), real( y - 128 ), real( -10000.0 ) ), Point3r( 0, 0, 1 ) );
 				SceneNodePtrStrMap::const_iterator l_itNodesEnd = m_pScene->NodesEnd();
 				LightPtrIntMap::const_iterator l_itLightsEnd = m_pScene->LightsEnd();
-				Geometry * l_pNearestGeometry = nullptr;
+				GeometrySPtr l_pNearestGeometry = nullptr;
 				SubmeshSPtr l_pNearestSubmesh;
 
 				do
@@ -71,7 +71,7 @@ bool RenderEngine::Draw()
 
 					if ( l_pNearestGeometry )
 					{
-//						Logger::LogMessage( cuT( "Geometry : ") + l_pNearestGeometry->GetName());
+//						Logger::LogInfo( cuT( "Geometry : ") + l_pNearestGeometry->GetName());
 						Point3r l_vNewStart( l_viewRay.m_ptOrigin + ( l_viewRay.m_ptDirection * l_fDistance ) );
 						// la normale au point d'intersection
 						Point3r l_vNormal( l_vNewStart - l_pNearestSubmesh->GetSphere().GetCenter() );

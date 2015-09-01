@@ -182,6 +182,10 @@ namespace Deferred
 			{
 				m_pDsShaderProgram->CreateFrameVariable( g_strNames[i], eSHADER_TYPE_PIXEL )->SetValue( m_pDsTextures[i].get() );
 			}
+			
+			m_pDsMatrices = m_pEngine->GetShaderManager().CreateMatrixBuffer( *m_pDsShaderProgram, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
+			FrameVariableBufferSPtr l_scene = m_pEngine->GetShaderManager().CreateSceneBuffer( *m_pDsShaderProgram, MASK_SHADER_TYPE_PIXEL );
+			m_pDsScene = l_scene;
 
 			m_pGeometryBuffers->GetVertexBuffer().Create();
 			m_pGeometryBuffers->GetIndexBuffer().Create();
@@ -252,7 +256,10 @@ namespace Deferred
 		m_pDsLightsState->Initialise();
 
 		m_pDsShaderProgram->Initialise();
-		m_pDsShaderProgram->GetSceneBuffer()->GetVariable( ShaderProgramBase::CameraPos, m_pShaderCamera );
+		m_pDsMatrices = m_pDsShaderProgram->FindFrameVariableBuffer( ShaderProgramBase::BufferMatrix );
+		FrameVariableBufferSPtr l_scene = m_pDsShaderProgram->FindFrameVariableBuffer( ShaderProgramBase::BufferScene );
+		l_scene->GetVariable( ShaderProgramBase::CameraPos, m_pShaderCamera );
+		m_pDsScene = l_scene;
 		m_pGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, m_pDsShaderProgram );
 		m_pGeometryBuffers->GetIndexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, m_pDsShaderProgram );
 		m_pGeometryBuffers->Initialise();
@@ -308,9 +315,9 @@ namespace Deferred
 			bool l_bReturn = true;
 			m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
 			m_pDsLightsState->Apply();
-//			m_pRenderTarget->GetDepthStencilState()->Apply();
+			//m_pRenderTarget->GetDepthStencilState()->Apply();
 			m_pRenderTarget->GetRasteriserState()->Apply();
-			m_pRenderTarget->GetRenderer()->BeginScene();
+			//m_pRenderTarget->GetRenderer()->BeginScene();
 			l_pContext->SetClearColour( m_pRenderSystem->GetTopScene()->GetBackgroundColour() );
 			l_pContext->Clear( eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL );
 			m_pViewport->SetSize( m_size );
@@ -325,8 +332,8 @@ namespace Deferred
 			{
 				Point3r l_position = m_pRenderTarget->GetCamera()->GetParent()->GetDerivedPosition();
 				m_pShaderCamera->SetValue( l_position );
-				m_pDsShaderProgram->Begin( 0, 1 );
-				l_pPipeline->ApplyMatrices( *m_pDsShaderProgram );
+				m_pDsShaderProgram->Bind( 0, 1 );
+				l_pPipeline->ApplyMatrices( *m_pDsMatrices.lock(), 0xFFFFFFFFFFFFFFFF );
 
 #if DEBUG_BUFFERS
 				int l_width = int( m_size.width() );
@@ -359,10 +366,10 @@ namespace Deferred
 
 #endif
 
-				m_pDsShaderProgram->End();
+				m_pDsShaderProgram->Unbind();
 			}
 
-			m_pRenderTarget->GetRenderer()->EndScene();
+			//m_pRenderTarget->EndScene();
 			m_pFrameBuffer->Unbind();
 		}
 	}
