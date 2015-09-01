@@ -132,6 +132,33 @@ namespace Castor3D
 		SpotLightSPtr GetSpotLight()const;
 		/**
 		 *\~english
+		 *\brief		Retrieves the DirectionalLight category
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la DirectionalLight
+		 *\return		La valeur
+		 */
+		DirectionalLightSPtr GetDirectionalLight()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the PointLight category
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la PointLight
+		 *\return		La valeur
+		 */
+		PointLightSPtr GetPointLight()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the SpotLight category
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la SpotLight
+		 *\return		La valeur
+		 */
+		SpotLightSPtr GetSpotLight()const;
+		/**
+		 *\~english
 		 *\brief		Retrieves the light type
 		 *\return		The value
 		 *\~french
