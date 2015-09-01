@@ -81,6 +81,18 @@ namespace Castor
 	public:
 		/**
 		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	p_context	The parsing context
+		 *\~french
+		 *\brief		Constructor
+		 *\param[in]	p_context	Le contexte d'analyse
+		 */
+		CU_API ParserParameterBase( FileParserContext & p_context )
+			: m_context( p_context )
+		{
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the parameter type
 		 *\return		The type
 		 *\~french
@@ -123,15 +135,20 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Retrieves the parameter value
-		 *\param[out]	p_value	Receives the value
+		 *\param[out]	p_value		Receives the value
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la valeur du paramètre
-		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[out]	p_value		Reçoit la valeur
 		 *\return		La valeur
 		 */
 		template< typename T > T const & Get( T & p_value );
+		
+	protected:
+		FileParserContext & m_context;
 	};
 }
+
+#include "ParserParameterBase.inl"
 
 #endif

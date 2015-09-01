@@ -951,7 +951,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightAmbient )
 
 	if ( l_pContext->pLight )
 	{
-		Point3f l_vVector;
+		Point4f l_vVector;
 		p_arrayParams[0]->Get( l_vVector );
 		l_pContext->pLight->SetAmbient( l_vVector.ptr() );
 	}
@@ -968,7 +968,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightDiffuse )
 
 	if ( l_pContext->pLight )
 	{
-		Point3f l_vVector;
+		Point4f l_vVector;
 		p_arrayParams[0]->Get( l_vVector );
 		l_pContext->pLight->SetDiffuse( l_vVector.ptr() );
 	}
@@ -985,7 +985,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightSpecular )
 
 	if ( l_pContext->pLight )
 	{
-		Point3f l_vVector;
+		Point4f l_vVector;
 		p_arrayParams[0]->Get( l_vVector );
 		l_pContext->pLight->SetSpecular( l_vVector.ptr() );
 	}

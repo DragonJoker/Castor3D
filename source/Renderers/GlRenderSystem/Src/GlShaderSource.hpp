@@ -83,18 +83,18 @@ namespace GlRender
 			Castor::String m_name;
 		};
 
-		struct Bool: public Type
+		struct GlslBool: public Type
 		{
-			Bool(): Type( cuT( "bool " ) ){}
-			Bool( bool p_value ): Type( cuT( "bool " ) ){ m_value << p_value; }
-			Bool( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "bool " ), p_writer, p_name ){}
-			template< typename T > inline Bool & operator=( T const & p_rhs ){ m_writer->WriteAssign( *this, p_rhs );return *this; }
-			template< typename T > inline Bool & operator=( int p_rhs ){ m_writer->WriteAssign( *this, p_rhs );return *this; }
+			GlslBool(): Type( cuT( "bool " ) ){}
+			GlslBool( bool p_value ): Type( cuT( "bool " ) ){ m_value << p_value; }
+			GlslBool( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "bool " ), p_writer, p_name ){}
+			template< typename T > inline GlslBool & operator=( T const & p_rhs );
+			template< typename T > inline GlslBool & operator=( int p_rhs );
 			inline operator uint32_t() { return 0u; }
 		};
 
-		Bool operator==( Type const & p_a, Type const & p_b );
-		Bool operator!=( Type const & p_a, Type const & p_b );
+		GlslBool operator==( Type const & p_a, Type const & p_b );
+		GlslBool operator!=( Type const & p_a, Type const & p_b );
 		Type operator+( Type const & p_a, Type const & p_b );
 		Type operator-( Type const & p_a, Type const & p_b );
 		Type operator*( Type const & p_a, Type const & p_b );
@@ -112,7 +112,7 @@ namespace GlRender
 		struct Array: public T
 		{
 			Array( GlslWriter * p_writer, const Castor::String & p_name, uint32_t p_dimension );
-			template< typename U > T & operator[]( U const & p_offset ) { *m_writer << m_name << cuT( "[" ) << p_offset << cuT( "]" );return *this; }
+			template< typename U > T & operator[]( U const & p_offset );
 			uint32_t m_dimension;
 		};
 
@@ -310,7 +310,7 @@ namespace GlRender
 			Vec2( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "vec2 " ), p_writer, p_name ){}
 			inline Vec2 & operator=( Vec2 const & p_rhs ){ m_writer->WriteAssign( *this, p_rhs );return *this; }
 			template< typename T > inline Vec2 & operator=( T const & p_rhs ){ m_writer->WriteAssign( *this, p_rhs );return *this; }
-			template< typename T > inline Vec2 & operator[]( T const & p_offset ) { m_value << Castor::String( *this ) << cuT( "[" ) << Castor::String( p_rhs ) << cuT( "]" );return *this; }
+			template< typename T > inline Vec2 & operator[]( T const & p_rhs ) { m_value << Castor::String( *this ) << cuT( "[" ) << Castor::String( p_rhs ) << cuT( "]" );return *this; }
 			inline Float x() { Float l_return( m_writer );l_return.m_value << Castor::String( *this ) << cuT( ".x" );return l_return; }
 			inline Float y() { Float l_return( m_writer );l_return.m_value << Castor::String( *this ) << cuT( ".y" );return l_return; }
 			inline Float r() { Float l_return( m_writer );l_return.m_value << Castor::String( *this ) << cuT( ".r" );return l_return; }
@@ -740,14 +740,14 @@ namespace GlRender
 		struct OutParam: public TypeT
 		{
 			OutParam( GlslWriter * p_writer, Castor::String const & p_name ): TypeT( p_writer, p_name ){ TypeT::m_type = cuT( "out " ) + TypeT::m_type; }
-			template< typename T > inline OutParam< TypeT > operator=( T const & p_rhs ){ m_writer->WriteAssign( *this, p_rhs );return *this; }
+			template< typename T > inline OutParam< TypeT > operator=( T const & p_rhs ){ TypeT::m_writer->WriteAssign( *this, p_rhs );return *this; }
 		};
 
 		template< typename TypeT >
 		struct InOutParam: public TypeT
 		{
 			InOutParam( GlslWriter * p_writer, Castor::String const & p_name ): TypeT( p_writer, p_name ){ TypeT::m_type = cuT( "inout " ) + TypeT::m_type; }
-			template< typename T > inline InOutParam< TypeT > operator=( T const & p_rhs ){ m_writer->WriteAssign( *this, p_rhs );return *this; }
+			template< typename T > inline InOutParam< TypeT > operator=( T const & p_rhs ){ TypeT::m_writer->WriteAssign( *this, p_rhs );return *this; }
 		};
 		
 		template< typename T > struct is_arithmetic_type : public std::false_type {};
@@ -766,12 +766,12 @@ namespace GlRender
 		template< typename TypeA, typename TypeB, typename Enable=typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >TypeA operator-( TypeA const & p_a, TypeB const & p_b );
 		template< typename TypeA, typename TypeB, typename Enable=typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >TypeA operator*( TypeA const & p_a, TypeB const & p_b );
 		template< typename TypeA, typename TypeB, typename Enable=typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >TypeA operator/( TypeA const & p_a, TypeB const & p_b );
-		template< typename TypeA, typename TypeB, typename Enable=typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >Bool operator==( TypeA const & p_a, TypeB const & p_b );
-		template< typename TypeA, typename TypeB, typename Enable=typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >Bool operator!=( TypeA const & p_a, TypeB const & p_b );
-		template< typename TypeA, typename TypeB, typename Enable=typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >Bool operator<( TypeA const & p_a, TypeB const & p_b );
-		template< typename TypeA, typename TypeB, typename Enable=typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >Bool operator<=( TypeA const & p_a, TypeB const & p_b );
-		template< typename TypeA, typename TypeB, typename Enable=typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >Bool operator>( TypeA const & p_a, TypeB const & p_b );
-		template< typename TypeA, typename TypeB, typename Enable=typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >Bool operator>=( TypeA const & p_a, TypeB const & p_b );
+		template< typename TypeA, typename TypeB, typename Enable=typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator==( TypeA const & p_a, TypeB const & p_b );
+		template< typename TypeA, typename TypeB, typename Enable=typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator!=( TypeA const & p_a, TypeB const & p_b );
+		template< typename TypeA, typename TypeB, typename Enable=typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator<( TypeA const & p_a, TypeB const & p_b );
+		template< typename TypeA, typename TypeB, typename Enable=typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator<=( TypeA const & p_a, TypeB const & p_b );
+		template< typename TypeA, typename TypeB, typename Enable=typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator>( TypeA const & p_a, TypeB const & p_b );
+		template< typename TypeA, typename TypeB, typename Enable=typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator>=( TypeA const & p_a, TypeB const & p_b );
 		
 		Vec4 operator*( Mat4 const & p_a, Vec4 const & p_b );
 

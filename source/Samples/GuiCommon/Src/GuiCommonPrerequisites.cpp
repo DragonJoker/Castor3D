@@ -22,7 +22,7 @@ namespace GuiCommon
 	namespace
 	{
 		struct wxWidgetsFontImpl
-			: public Font::SFontImpl
+			: public Castor::Font::SFontImpl
 		{
 			wxWidgetsFontImpl( wxFont const & p_font )
 				: m_font( p_font )
@@ -197,7 +197,7 @@ namespace GuiCommon
 
 	FontSPtr wxLoadFont( Engine * p_engine, wxFont const & p_font )
 	{
-		String l_name = p_font.GetFaceName() + str_utils::to_string( p_font.GetPointSize() );
+		String l_name = make_String( p_font.GetFaceName() ) + str_utils::to_string( p_font.GetPointSize() );
 		FontCollection & l_manager = p_engine->GetFontManager();
 		FontSPtr l_font = l_manager.find( l_name );
 

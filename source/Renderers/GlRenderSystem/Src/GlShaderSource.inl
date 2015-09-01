@@ -46,13 +46,10 @@ namespace GlRender
 				return Castor::str_utils::to_string( p_value );
 			}
 
+			//***********************************************************************************************
+
 			template< typename Return, typename Param, typename ... Params >
-			inline void WriteFunctionCallRec( Castor::String & p_separator, Return & p_return, Param && p_current, Params && ... p_params )
-			{
-				p_return.m_value << p_separator << ToString( p_current );
-				p_separator = cuT( ", " );
-				WriteFunctionCallRec( p_separator, p_return, std::forward< Params >( p_params )... );
-			}
+			inline void WriteFunctionCallRec( Castor::String & p_separator, Return & p_return, Param && p_current, Params && ... p_params );
 
 			template< typename Return >
 			inline void WriteFunctionCallRec( Castor::String & p_separator, Return & p_return )
@@ -66,6 +63,14 @@ namespace GlRender
 				p_return.m_value << p_separator << ToString( p_last ) << cuT( " )" );
 			}
 
+			template< typename Return, typename Param, typename ... Params >
+			inline void WriteFunctionCallRec( Castor::String & p_separator, Return & p_return, Param && p_current, Params && ... p_params )
+			{
+				p_return.m_value << p_separator << ToString( p_current );
+				p_separator = cuT( ", " );
+				WriteFunctionCallRec( p_separator, p_return, std::forward< Params >( p_params )... );
+			}
+
 			template< typename Return, typename ... Params >
 			inline Return WriteFunctionCall( GlslWriter * p_writer, Castor::String const & p_name, Params && ... p_params )
 			{
@@ -76,13 +81,10 @@ namespace GlRender
 				return l_return;
 			}
 
+			//***********************************************************************************************
+
 			template< typename Return, typename Param, typename ... Params >
-			inline void WriteFunctionHeaderRec( Castor::String & p_separator, Return & p_return, Param && p_current, Params && ... p_params )
-			{
-				p_return.m_value << p_separator << p_current.m_type << p_current.m_name;
-				p_separator = cuT( ", " );
-				WriteFunctionHeaderRec( p_separator, p_return, std::forward< Params >( p_params )... );
-			}
+			inline void WriteFunctionHeaderRec( Castor::String & p_separator, Return & p_return, Param && p_current, Params && ... p_params );
 
 			template< typename Return >
 			inline void WriteFunctionHeaderRec( Castor::String & p_separator, Return & p_return )
@@ -94,6 +96,14 @@ namespace GlRender
 			inline void WriteFunctionHeaderRec( Castor::String & p_separator, Return & p_return, Param && p_last )
 			{
 				p_return.m_value << p_separator << p_last.m_type << p_last.m_name << cuT( " )" );
+			}
+
+			template< typename Return, typename Param, typename ... Params >
+			inline void WriteFunctionHeaderRec( Castor::String & p_separator, Return & p_return, Param && p_current, Params && ... p_params )
+			{
+				p_return.m_value << p_separator << p_current.m_type << p_current.m_name;
+				p_separator = cuT( ", " );
+				WriteFunctionHeaderRec( p_separator, p_return, std::forward< Params >( p_params )... );
 			}
 
 			template< typename Return, typename ... Params >
@@ -122,12 +132,36 @@ namespace GlRender
 		}
 
 		//***********************************************************************************************
+		
+		template< typename T >
+		inline GlslBool & GlslBool::operator=( T const & p_rhs )
+		{
+			m_writer->WriteAssign( *this, p_rhs );
+			return *this;
+		}
+		
+		template< typename T >
+		inline GlslBool & GlslBool::operator=( int p_rhs )
+		{
+			m_writer->WriteAssign( *this, p_rhs );
+			return *this;
+		}
+
+		//***********************************************************************************************
 
 		template< typename T >
 		Array< T >::Array( GlslWriter * p_writer, const Castor::String & p_name, uint32_t p_dimension )
 			: T( p_writer, p_name )
 			, m_dimension( p_dimension )
 		{
+		}
+
+		template< typename T >
+		template< typename U >
+		T & Array< T >::operator[]( U const & p_offset )
+		{
+			*T::m_writer << T::m_name << cuT( "[" ) << p_offset << cuT( "]" );
+			return *this;
 		}
 
 		//***********************************************************************************************
@@ -165,49 +199,49 @@ namespace GlRender
 		}
 
 		template< typename TypeA, typename TypeB, typename Enable >
-		Bool operator==( TypeA const & p_a, TypeB const & p_b )
+		GlslBool operator==( TypeA const & p_a, TypeB const & p_b )
 		{
-			Bool l_return( p_a.m_writer );
+			GlslBool l_return( p_a.m_writer );
 			l_return.m_value << Castor::String( p_a ) << cuT( " == " ) << ToString( p_b );
 			return l_return;
 		}
 
 		template< typename TypeA, typename TypeB, typename Enable >
-		Bool operator!=( TypeA const & p_a, TypeB const & p_b )
+		GlslBool operator!=( TypeA const & p_a, TypeB const & p_b )
 		{
-			Bool l_return( p_a.m_writer );
+			GlslBool l_return( p_a.m_writer );
 			l_return.m_value << Castor::String( p_a ) << cuT( " != " ) << ToString( p_b );
 			return l_return;
 		}
 
 		template< typename TypeA, typename TypeB, typename Enable >
-		Bool operator<( TypeA const & p_a, TypeB const & p_b )
+		GlslBool operator<( TypeA const & p_a, TypeB const & p_b )
 		{
-			Bool l_return( p_a.m_writer );
+			GlslBool l_return( p_a.m_writer );
 			l_return.m_value << Castor::String( p_a ) << cuT( " < " ) << ToString( p_b );
 			return l_return;
 		}
 
 		template< typename TypeA, typename TypeB, typename Enable >
-		Bool operator<=( TypeA const & p_a, TypeB const & p_b )
+		GlslBool operator<=( TypeA const & p_a, TypeB const & p_b )
 		{
-			Bool l_return( p_a.m_writer );
+			GlslBool l_return( p_a.m_writer );
 			l_return.m_value << Castor::String( p_a ) << cuT( " <= " ) << ToString( p_b );
 			return l_return;
 		}
 
 		template< typename TypeA, typename TypeB, typename Enable >
-		Bool operator>( TypeA const & p_a, TypeB const & p_b )
+		GlslBool operator>( TypeA const & p_a, TypeB const & p_b )
 		{
-			Bool l_return( p_a.m_writer );
+			GlslBool l_return( p_a.m_writer );
 			l_return.m_value << Castor::String( p_a ) << cuT( " > " ) << ToString( p_b );
 			return l_return;
 		}
 
 		template< typename TypeA, typename TypeB, typename Enable >
-		Bool operator>=( TypeA const & p_a, TypeB const & p_b )
+		GlslBool operator>=( TypeA const & p_a, TypeB const & p_b )
 		{
-			Bool l_return( p_a.m_writer );
+			GlslBool l_return( p_a.m_writer );
 			l_return.m_value << Castor::String( p_a ) << cuT( " >= " ) << ToString( p_b );
 			return l_return;
 		}

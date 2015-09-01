@@ -403,7 +403,11 @@ namespace Castor
 
 		void Print( String const & toLog, bool newLine )
 		{
+#if defined( _UNICODE )
+			printf( "%ls", toLog.c_str() );
+#else
 			printf( "%s", toLog.c_str() );
+#endif
 
 			if ( newLine )
 			{

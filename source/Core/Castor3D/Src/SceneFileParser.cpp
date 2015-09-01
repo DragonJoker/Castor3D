@@ -299,6 +299,7 @@ bool SceneFileParser::ParseFile( Path const & p_pathFile )
 void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 {
 	SceneFileContextSPtr l_pContext = std::make_shared< SceneFileContext >( this, &p_file );
+	m_pParsingContext = l_pContext;
 	AddParser( eSECTION_ROOT, cuT( "mtl_file" ), Parser_RootMtlFile, 1, ePARAMETER_TYPE_PATH );
 	AddParser( eSECTION_ROOT, cuT( "scene" ), Parser_RootScene, 1, ePARAMETER_TYPE_NAME );
 	AddParser( eSECTION_ROOT, cuT( "font" ), Parser_RootFont, 1, ePARAMETER_TYPE_NAME );
@@ -522,8 +523,6 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 
 	AddParser( eSECTION_ANIMGROUP, cuT( "animated_object" ), Parser_GroupAnimatedObject, 1, ePARAMETER_TYPE_NAME );
 	AddParser( eSECTION_ANIMGROUP, cuT( "animation" ), Parser_GroupAnimation, 1, ePARAMETER_TYPE_NAME );
-
-	m_pParsingContext = l_pContext;
 
 	if ( m_pEngine->GetRenderSystem() )
 	{

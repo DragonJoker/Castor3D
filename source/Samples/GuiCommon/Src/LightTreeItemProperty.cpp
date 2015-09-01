@@ -90,13 +90,13 @@ namespace GuiCommon
 				l_colour << l_property->GetValue();
 				OnSpecularColourChange( Colour::from_bgr( l_colour.GetRGB() ) );
 			}
-			else if ( l_light->GetType() != eLIGHT_TYPE_DIRECTIONAL )
+			else if ( l_light->GetLightType() != eLIGHT_TYPE_DIRECTIONAL )
 			{
 				if ( l_property->GetName() == PROPERTY_LIGHT_ATTENUATION )
 				{
 					OnAttenuationChange( Point3fRefFromVariant( l_property->GetValue() ) );
 				}
-				else if ( l_light->GetType() == eLIGHT_TYPE_SPOT )
+				else if ( l_light->GetLightType() == eLIGHT_TYPE_SPOT )
 				{
 					if ( l_property->GetName() == PROPERTY_LIGHT_CUT_OFF )
 					{
@@ -165,7 +165,7 @@ namespace GuiCommon
 
 		l_light->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_light]()
 		{
-			if ( l_light->GetType() == eLIGHT_TYPE_POINT )
+			if ( l_light->GetLightType() == eLIGHT_TYPE_POINT )
 			{
 				l_light->GetPointLight()->SetAttenuation( p_value );
 			}

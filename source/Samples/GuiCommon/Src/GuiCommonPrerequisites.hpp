@@ -206,6 +206,34 @@ namespace GuiCommon
 	 *\return		La police chargée
 	 */
 	Castor::FontSPtr wxLoadFont( Castor3D::Engine * p_engine, wxFont const & p_font );
+	/**
+	 *\~english
+	 *\brief		Creates a Castor::String from a wxString
+	 *\param[in]	p_value	The wxString
+	 *\return		The Castor::String
+	 *\~french
+	 *\brief		Cree un Castor::String a partir d'un wxString
+	 *\param[in]	p_value	Le wxString
+	 *\return		Le Castor::String
+	 */
+	inline Castor::String make_String( wxString const & p_value )
+	{
+		return Castor::String( p_value.c_str() );
+	}
+	/**
+	 *\~english
+	 *\brief		Creates a wxString from a Castor::String
+	 *\param[in]	p_value	The Castor::String
+	 *\return		The wxString
+	 *\~french
+	 *\brief		Cree wxString a partir d'un Castor::String
+	 *\param[in]	p_value	Le Castor::String
+	 *\return		Le wxString
+	 */
+	inline wxString make_wxString( Castor::String const & p_value )
+	{
+		return wxString( p_value.c_str() );
+	}
 
 #if wxVERSION_NUMBER >= 2900
 #	define	wxIMAGE_QUALITY_HIGHEST wxIMAGE_QUALITY_BICUBIC
