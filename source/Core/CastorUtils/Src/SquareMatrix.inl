@@ -364,7 +364,7 @@ namespace Castor
 	{
 		*this = my_matrix_type::get_transposed();
 #if !defined( NDEBUG )
-		do_update_debug();
+		Matrix< T, Rows, Rows >::do_update_debug();
 #endif
 		return *this;
 	}

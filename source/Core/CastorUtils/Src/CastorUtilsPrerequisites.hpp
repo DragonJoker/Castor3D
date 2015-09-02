@@ -155,7 +155,7 @@ namespace Castor
 	class Line3D;
 	template< class T, eFILE_TYPE FT, class TFile >
 	class Loader;
-  	class ILoggerImpl;
+	class ILoggerImpl;
 	class Logger;
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	class Matrix;
