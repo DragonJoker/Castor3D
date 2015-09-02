@@ -2,6 +2,7 @@
 #include "Logger.hpp"
 #include "PixelFormat.hpp"
 #include "FileParserContext.hpp"
+#include "ParserParameterTypeException.hpp"
 
 namespace Castor
 {

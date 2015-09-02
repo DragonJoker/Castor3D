@@ -1,5 +1,3 @@
-#include "ParserParameterTypeException.hpp"
-#include "ParserParameter.hpp"
 #include "Colour.hpp"
 #include "Path.hpp"
 #include "Point.hpp"
