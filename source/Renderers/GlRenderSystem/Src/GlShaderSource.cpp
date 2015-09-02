@@ -121,8 +121,7 @@ namespace GlRender
 			}
 			else
 			{
-				std::swap( Castor::StringStream(), m_value );
-				l_return = l_return;
+				m_value.str( Castor::String() );
 			}
 
 			return l_return;
@@ -200,16 +199,16 @@ namespace GlRender
 			return *this;
 		}
 
-		Bool operator==( Type const & p_a, Type const & p_b )
+		GlslBool operator==( Type const & p_a, Type const & p_b )
 		{
-			Bool l_return( p_a.m_writer );
+			GlslBool l_return( p_a.m_writer );
 			l_return.m_value << Castor::String( p_a ) << cuT( " == " ) << Castor::String( p_b );
 			return l_return;
 		}
 
-		Bool operator!=( Type const & p_a, Type const & p_b )
+		GlslBool operator!=( Type const & p_a, Type const & p_b )
 		{
-			Bool l_return( p_a.m_writer );
+			GlslBool l_return( p_a.m_writer );
 			l_return.m_value << Castor::String( p_a ) << cuT( " != " ) << Castor::String( p_b );
 			return l_return;
 		}
@@ -337,7 +336,13 @@ namespace GlRender
 			delete m_block;
 			m_block = NULL;
 			m_writer.m_uniform = cuT( "uniform " );
-			m_writer << cuT( ";" ) << Endl();
+
+			if ( m_writer.m_gl.HasUbo() )
+			{
+				m_writer << cuT( ";" );
+			}
+
+			m_writer << Endl();
 		}
 
 		//*****************************************************************************************
@@ -700,23 +705,26 @@ namespace GlRender
 
 		void BlinnPhongLightingModel::Declare_Bump( GlslWriter & p_writer )
 		{
+			InOutParam< Vec3 > p_lightDir( &p_writer, cuT( "p_lightDir" ) );
+			InOutParam< Float > p_fAttenuation( &p_writer, cuT( "p_fAttenuation" ) );
 			p_writer.Implement_Function< Void >( cuT( "Bump" ), &BlinnPhong::Bump,
 				InParam< Vec3 >( &p_writer, cuT( "p_v3T" ) ),
 				InParam< Vec3 >( &p_writer, cuT( "p_v3B" ) ),
 				InParam< Vec3 >( &p_writer, cuT( "p_v3N" ) ),
-				InOutParam< Vec3 >( &p_writer, cuT( "p_lightDir" ) ),
-				InOutParam< Float >( &p_writer, cuT( "p_fAttenuation" ) ) );
+				p_lightDir,
+				p_fAttenuation );
 		}
 
 		void BlinnPhongLightingModel::Declare_ComputeFresnel( GlslWriter & p_writer )
 		{
+			InOutParam< Vec3 > p_specular( &p_writer, cuT( "p_specular" ) );
 			p_writer.Implement_Function< Float >( cuT( "ComputeFresnel" ), &BlinnPhong::ComputeFresnel,
 				InParam< Float >( &p_writer, cuT( "p_lambert" ) ),
 				InParam< Vec3 >( &p_writer, cuT( "p_direction" ) ),
 				InParam< Vec3 >( &p_writer, cuT( "p_normal" ) ),
 				InParam< Vec3 >( &p_writer, cuT( "p_eye" ) ),
 				InParam< Float >( &p_writer, cuT( "p_shininess" ) ),
-				InOutParam< Vec3 >( &p_writer, cuT( "p_specular" ) ) );
+				p_specular );
 		}
 	}
 }

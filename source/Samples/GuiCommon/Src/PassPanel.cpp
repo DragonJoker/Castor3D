@@ -119,25 +119,29 @@ namespace GuiCommon
 
 	void wxPassPanel::GetDiffuse( Colour & clrColour )const
 	{
-		wxColour l_colour = m_propertyDiffuse->GetValue();
+		wxColour l_colour;
+		l_colour << m_propertyDiffuse->GetValue();
 		clrColour = Colour::from_components( l_colour.Red(), l_colour.Green(), l_colour.Blue(), l_colour.Alpha() );
 	}
 
 	void wxPassPanel::GetAmbient( Colour & clrColour )const
 	{
-		wxColour l_colour = m_propertyAmbient->GetValue();
+		wxColour l_colour;
+		l_colour << m_propertyAmbient->GetValue();
 		clrColour = Colour::from_components( l_colour.Red(), l_colour.Green(), l_colour.Blue(), l_colour.Alpha() );
 	}
 
 	void wxPassPanel::GetEmissive( Colour & clrColour )const
 	{
-		wxColour l_colour = m_propertySpecular->GetValue();
+		wxColour l_colour;
+		l_colour << m_propertySpecular->GetValue();
 		clrColour = Colour::from_components( l_colour.Red(), l_colour.Green(), l_colour.Blue(), l_colour.Alpha() );
 	}
 
 	void wxPassPanel::GetSpecular( Colour & clrColour )const
 	{
-		wxColour l_colour = m_propertyEmissive->GetValue();
+		wxColour l_colour;
+		l_colour << m_propertyEmissive->GetValue();
 		clrColour = Colour::from_components( l_colour.Red(), l_colour.Green(), l_colour.Blue(), l_colour.Alpha() );
 	}
 

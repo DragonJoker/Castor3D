@@ -1,9 +1,7 @@
 ﻿#include "Utils.hpp"
-#include "Size.hpp"
-#include "Position.hpp"
-#include "Rectangle.hpp"
-#include "Colour.hpp"
+#include "Logger.hpp"
 #include "PixelFormat.hpp"
+#include "FileParserContext.hpp"
 #include "ParserParameterTypeException.hpp"
 
 namespace Castor
@@ -166,7 +164,7 @@ namespace Castor
 		inline bool ParseVector( String & p_strParams, Point< T, Count > & p_vResult )
 		{
 			bool l_bReturn = false;
-			StringArray l_arrayValues = str_utils::split( p_strParams, cuT( " \t,;" ) );
+			StringArray l_arrayValues = str_utils::split( p_strParams, cuT( " \t,;" ), Count + 1, false );
 
 			if ( l_arrayValues.size() >= Count )
 			{
@@ -374,127 +372,76 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	template<> class ParserParameter< ePARAMETER_TYPE_TEXT >
-		: public ParserParameterBase
+	inline ParserParameter< ePARAMETER_TYPE_TEXT >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
 	{
-	public:
-		typedef String value_type;
-		value_type m_value;
+	}
 
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_TEXT;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "text" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			m_value = p_strParams;
-
-			if ( !m_value.empty() )
-			{
-				if ( m_value[0] == cuT( '\"' ) )
-				{
-					m_value = m_value.substr( 1 );
-
-					if ( !m_value.empty() )
-					{
-						if ( m_value[m_value.size() - 1] == cuT( '\"' ) )
-						{
-							m_value = m_value.substr( 0, m_value.size() - 1 );
-						}
-					}
-				}
-			}
-
-			p_strParams.clear();
-			return true;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_NAME >
-		: public ParserParameter< ePARAMETER_TYPE_TEXT >
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_TEXT >::GetType()
 	{
-	public:
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_NAME;
-		}
-		virtual ePARAMETER_TYPE GetBaseType()
-		{
-			return ePARAMETER_TYPE_TEXT;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "name" );
-		}
+		return ePARAMETER_TYPE_TEXT;
+	}
 
-		virtual bool Parse( String & p_strParams )
-		{
-			StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
-			p_strParams.clear();
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_TEXT >::GetStrType()
+	{
+		return cuT( "text" );
+	}
 
-			if ( !l_array.empty() )
+	inline bool ParserParameter< ePARAMETER_TYPE_TEXT >::Parse( String & p_strParams )
+	{
+		m_value = p_strParams;
+
+		if ( !m_value.empty() )
+		{
+			if ( m_value[0] == cuT( '\"' ) )
 			{
-				m_value = l_array[0];
-				str_utils::trim( m_value );
+				m_value = m_value.substr( 1 );
 
 				if ( !m_value.empty() )
 				{
-					if ( m_value[0] == cuT( '\"' ) )
+					if ( m_value[m_value.size() - 1] == cuT( '\"' ) )
 					{
-						m_value = m_value.substr( 1 );
-
-						if ( !m_value.empty() )
-						{
-							std::size_t l_uiIndex = m_value.find( cuT( '\"' ) );
-
-							if ( l_uiIndex != String::npos )
-							{
-								if ( l_uiIndex != m_value.size() - 1 )
-								{
-									l_array[1] = m_value.substr( l_uiIndex + 1 ) + l_array[1];
-								}
-
-								m_value = m_value.substr( 0, l_uiIndex );
-							}
-						}
+						m_value = m_value.substr( 0, m_value.size() - 1 );
 					}
 				}
-
-				if ( l_array.size() > 1 )
-				{
-					p_strParams = l_array[1];
-				}
 			}
-
-			return !m_value.empty();
 		}
-	};
 
-	template<> class ParserParameter< ePARAMETER_TYPE_PATH >
-		: public ParserParameterBase
+		p_strParams.clear();
+		return true;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_NAME >::ParserParameter( FileParserContext & p_context )
+		: ParserParameter< ePARAMETER_TYPE_TEXT >( p_context )
 	{
-	public:
-		typedef Path value_type;
-		value_type m_value;
+	}
 
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_PATH;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "path" );
-		}
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_NAME >::GetType()
+	{
+		return ePARAMETER_TYPE_NAME;
+	}
 
-		virtual bool Parse( String & p_strParams )
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_NAME >::GetBaseType()
+	{
+		return ePARAMETER_TYPE_TEXT;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_NAME >::GetStrType()
+	{
+		return cuT( "name" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_NAME >::Parse( String & p_strParams )
+	{
+		StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
+		p_strParams.clear();
+
+		if ( !l_array.empty() )
 		{
-			m_value = p_strParams;
-			p_strParams.clear();
+			m_value = l_array[0];
+			str_utils::trim( m_value );
 
 			if ( !m_value.empty() )
 			{
@@ -510,8 +457,7 @@ namespace Castor
 						{
 							if ( l_uiIndex != m_value.size() - 1 )
 							{
-								p_strParams = m_value.substr( l_uiIndex + 1 );
-								str_utils::trim( p_strParams );
+								l_array[1] = m_value.substr( l_uiIndex + 1 ) + l_array[1];
 							}
 
 							m_value = m_value.substr( 0, l_uiIndex );
@@ -520,917 +466,831 @@ namespace Castor
 				}
 			}
 
-			return !m_value.empty();
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_BOOL >
-		: public ParserParameterBase
-	{
-	public:
-		typedef bool value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_BOOL;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "boolean" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
-			p_strParams.clear();
-
-			if ( !l_array.empty() )
+			if ( l_array.size() > 1 )
 			{
-				m_value = str_utils::to_lower_case( l_array[0] ) == cuT( "true" );
-				l_bReturn = l_array[0] == cuT( "true" ) || l_array[0] == cuT( "false" );
-
-				if ( l_array.size() > 1 )
-				{
-					p_strParams = l_array[1];
-				}
+				p_strParams = l_array[1];
 			}
-
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_INT8 >
-		: public ParserParameterBase
-	{
-	public:
-		typedef int8_t value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_INT8;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "8 bits signed integer" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseInteger( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_INT16 >
-		: public ParserParameterBase
-	{
-	public:
-		typedef int16_t value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_INT16;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "16 bits signed integer" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseInteger( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_INT32 >
-		: public ParserParameterBase
-	{
-	public:
-		typedef int32_t value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_INT32;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "32 bits signed integer" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseInteger( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_INT64 >
-		: public ParserParameterBase
-	{
-	public:
-		typedef int64_t value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_INT64;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "64 bits signed integer" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseInteger( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_UINT8 >
-		: public ParserParameterBase
-	{
-	public:
-		typedef uint8_t value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_UINT8;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "8 bits unsigned integer" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseInteger( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_UINT16 >
-		: public ParserParameterBase
-	{
-	public:
-		typedef uint16_t value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_UINT16;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "16 bits unsigned integer" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseInteger( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_UINT32 >
-		: public ParserParameterBase
-	{
-	public:
-		typedef uint32_t value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_UINT32;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "32 bits unsigned integer" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseInteger( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT >
-		: public ParserParameter< ePARAMETER_TYPE_UINT32 >
-	{
-	public:
-		UIntStrMap m_mapValues;
-
-		ParserParameter( UIntStrMap const & p_mapValues ) : m_mapValues( p_mapValues ) {}
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_CHECKED_TEXT;
-		}
-		virtual ePARAMETER_TYPE GetBaseType()
-		{
-			return ePARAMETER_TYPE_UINT32;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "checked text" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
-			p_strParams.clear();
-
-			if ( !l_array.empty() )
-			{
-				UIntStrMapIt l_it = m_mapValues.find( l_array[0] );
-
-				if ( l_it != m_mapValues.end() )
-				{
-					m_value = l_it->second;
-					l_bReturn = true;
-				}
-
-				if ( l_array.size() > 1 )
-				{
-					p_strParams = l_array[1];
-				}
-			}
-
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT >
-		: public ParserParameter< ePARAMETER_TYPE_UINT32 >
-	{
-	public:
-		UIntStrMap m_mapValues;
-
-		ParserParameter( UIntStrMap const & p_mapValues ) : m_mapValues( p_mapValues ) {}
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT;
-		}
-		virtual ePARAMETER_TYPE GetBaseType()
-		{
-			return ePARAMETER_TYPE_UINT32;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "bitwise ORed checked texts" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			m_value = 0;
-			StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
-			p_strParams.clear();
-
-			if ( !l_array.empty() )
-			{
-				StringArray l_values = str_utils::split( l_array[0], cuT( "|" ), std::count( l_array[0].begin(), l_array[0].end(), cuT( '|' ) ) + 1, false );
-
-				for ( auto && l_value: l_values )
-				{
-					UIntStrMapIt l_it = m_mapValues.find( l_value );
-
-					if ( l_it != m_mapValues.end() )
-					{
-						m_value |= l_it->second;
-						l_bReturn = true;
-					}
-				}
-
-				if ( l_array.size() > 1 )
-				{
-					p_strParams = l_array[1];
-				}
-			}
-
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_UINT64 >
-		: public ParserParameterBase
-	{
-	public:
-		typedef uint64_t value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_UINT64;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "64 bits unsigned integer" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseInteger( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_FLOAT >
-		: public ParserParameterBase
-	{
-	public:
-		typedef float value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_FLOAT;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "simple precision floating point" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseFloat( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_DOUBLE >
-		: public ParserParameterBase
-	{
-	public:
-		typedef double value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_DOUBLE;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "double precision floating point" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseFloat( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_LONGDOUBLE >
-		: public ParserParameterBase
-	{
-	public:
-		typedef long double value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_LONGDOUBLE;
 		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "long double precision floating point" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseFloat( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_PIXELFORMAT >
-		: public ParserParameterBase
-	{
-	public:
-		typedef ePIXEL_FORMAT value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_PIXELFORMAT;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "pixel format" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
-			p_strParams.clear();
-
-			if ( l_array.size() )
-			{
-				m_value = PF::GetFormatByName( l_array[0] );
-				l_bReturn = m_value != ePIXEL_FORMAT_COUNT;
-
-				if ( l_array.size() > 1 )
-				{
-					p_strParams = l_array[1];
-				}
-			}
-
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_POINT2I >
-		: public ParserParameterBase
-	{
-	public:
-		typedef Point2i value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_POINT2I;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "2 integers point" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseVector( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_POINT3I >
-		: public ParserParameterBase
-	{
-	public:
-		typedef Point3i value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_POINT3I;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "3 integers point" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseVector( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_POINT4I >
-		: public ParserParameterBase
-	{
-	public:
-		typedef Point4i value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_POINT4I;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "4 integers point" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseVector( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_POINT2F >
-		: public ParserParameterBase
-	{
-	public:
-		typedef Point2f value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_POINT2F;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "2 simple precision floating point numbers point" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseVector( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_POINT3F >
-		: public ParserParameterBase
-	{
-	public:
-		typedef Point3f value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_POINT3F;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "3 simple precision floating point numbers point" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseVector( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_POINT4F >
-		: public ParserParameterBase
-	{
-	public:
-		typedef Point4f value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_POINT4F;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "4 simple precision floating point numbers point" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseVector( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_POINT2D >
-		: public ParserParameterBase
-	{
-	public:
-		typedef Point2d value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_POINT2D;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "2 double precision floating point numbers point" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseVector( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_POINT3D >
-		: public ParserParameterBase
-	{
-	public:
-		typedef Point3d value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_POINT3D;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "3 double precision floating point numbers point" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseVector( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_POINT4D >
-		: public ParserParameterBase
-	{
-	public:
-		typedef Point4d value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_POINT4D;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "4 double precision floating point numbers point" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseVector( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
 
-	template<> class ParserParameter< ePARAMETER_TYPE_SIZE >
-		: public ParserParameterBase
-	{
-	public:
-		typedef Size value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_SIZE;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "size" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseSize( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_POSITION >
-		: public ParserParameterBase
-	{
-	public:
-		typedef Position value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_POSITION;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "position" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParsePosition( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_RECTANGLE >
-		: public ParserParameterBase
-	{
-	public:
-		typedef Rectangle value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_RECTANGLE;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "rectangle" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseRectangle( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
-
-	template<> class ParserParameter< ePARAMETER_TYPE_COLOUR >
-		: public ParserParameterBase
-	{
-	public:
-		typedef Colour value_type;
-		value_type m_value;
-
-		virtual ePARAMETER_TYPE GetType()
-		{
-			return ePARAMETER_TYPE_COLOUR;
-		}
-		virtual xchar const * GetStrType()
-		{
-			return cuT( "colour" );
-		}
-
-		virtual bool Parse( String & p_strParams )
-		{
-			bool l_bReturn = false;
-			l_bReturn = ParseColour( p_strParams, m_value );
-			return l_bReturn;
-		}
-	};
+		return !m_value.empty();
+	}
 
 	//*************************************************************************************************
 
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template< typename T > struct ParserValueTyper;
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< String >
+	inline ParserParameter< ePARAMETER_TYPE_PATH >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_TEXT;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< Path >
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_PATH >::GetType()
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_PATH;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< bool >
+		return ePARAMETER_TYPE_PATH;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_PATH >::GetStrType()
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_BOOL;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< int8_t >
+		return cuT( "path" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_PATH >::Parse( String & p_strParams )
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_INT8;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< int16_t >
+		m_value = p_strParams;
+		p_strParams.clear();
+
+		if ( !m_value.empty() )
+		{
+			if ( m_value[0] == cuT( '\"' ) )
+			{
+				m_value = m_value.substr( 1 );
+
+				if ( !m_value.empty() )
+				{
+					std::size_t l_uiIndex = m_value.find( cuT( '\"' ) );
+
+					if ( l_uiIndex != String::npos )
+					{
+						if ( l_uiIndex != m_value.size() - 1 )
+						{
+							p_strParams = m_value.substr( l_uiIndex + 1 );
+							str_utils::trim( p_strParams );
+						}
+
+						m_value = m_value.substr( 0, l_uiIndex );
+					}
+				}
+			}
+		}
+
+		return !m_value.empty();
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_BOOL >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_INT16;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< int32_t >
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_BOOL >::GetType()
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_INT32;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< int64_t >
+		return ePARAMETER_TYPE_BOOL;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_BOOL >::GetStrType()
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_INT64;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< uint8_t >
+		return cuT( "boolean" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_BOOL >::Parse( String & p_strParams )
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_UINT8;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< uint16_t >
+		bool l_bReturn = false;
+		StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
+		p_strParams.clear();
+
+		if ( !l_array.empty() )
+		{
+			m_value = str_utils::to_lower_case( l_array[0] ) == cuT( "true" );
+			l_bReturn = l_array[0] == cuT( "true" ) || l_array[0] == cuT( "false" );
+
+			if ( l_array.size() > 1 )
+			{
+				p_strParams = l_array[1];
+			}
+		}
+
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_INT8 >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_UINT16;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< uint32_t >
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_INT8 >::GetType()
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_UINT32;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< uint64_t >
+		return ePARAMETER_TYPE_INT8;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_INT8 >::GetStrType()
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_UINT64;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< float >
+		return cuT( "8 bits signed integer" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_INT8 >::Parse( String & p_strParams )
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_FLOAT;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< double >
+		bool l_bReturn = false;
+		l_bReturn = ParseInteger( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_INT16 >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_DOUBLE;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< long double >
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_INT16 >::GetType()
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_LONGDOUBLE;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< ePIXEL_FORMAT >
+		return ePARAMETER_TYPE_INT16;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_INT16 >::GetStrType()
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_PIXELFORMAT;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< Point2i >
+		return cuT( "16 bits signed integer" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_INT16 >::Parse( String & p_strParams )
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_POINT2I;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< Point3i >
+		bool l_bReturn = false;
+		l_bReturn = ParseInteger( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_INT32 >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_POINT3I;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< Point4i >
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_INT32 >::GetType()
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_POINT4I;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< Point2f >
+		return ePARAMETER_TYPE_INT32;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_INT32 >::GetStrType()
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_POINT2F;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< Point3f >
+		return cuT( "32 bits signed integer" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_INT32 >::Parse( String & p_strParams )
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_POINT3F;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< Point4f >
+		bool l_bReturn = false;
+		l_bReturn = ParseInteger( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_INT64 >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_POINT4F;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< Point2d >
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_INT64 >::GetType()
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_POINT2D;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< Point3d >
+		return ePARAMETER_TYPE_INT64;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_INT64 >::GetStrType()
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_POINT3D;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< Point4d >
+		return cuT( "64 bits signed integer" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_INT64 >::Parse( String & p_strParams )
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_POINT4D;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< Size >
+		bool l_bReturn = false;
+		l_bReturn = ParseInteger( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_UINT8 >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_SIZE;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< Position >
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_UINT8 >::GetType()
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_POSITION;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< Rectangle >
+		return ePARAMETER_TYPE_UINT8;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_UINT8 >::GetStrType()
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_RECTANGLE;
-	};
-	//!\~english Retrieves parameter type from c++ type	\~french Récupère le type de paramètre à partir du type C++
-	template<> struct ParserValueTyper< Colour >
+		return cuT( "8 bits unsigned integer" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_UINT8 >::Parse( String & p_strParams )
 	{
-		static const ePARAMETER_TYPE Type = ePARAMETER_TYPE_COLOUR;
-	};
+		bool l_bReturn = false;
+		l_bReturn = ParseInteger( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_UINT16 >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_UINT16 >::GetType()
+	{
+		return ePARAMETER_TYPE_UINT16;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_UINT16 >::GetStrType()
+	{
+		return cuT( "16 bits unsigned integer" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_UINT16 >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		l_bReturn = ParseInteger( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_UINT32 >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_UINT32 >::GetType()
+	{
+		return ePARAMETER_TYPE_UINT32;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_UINT32 >::GetStrType()
+	{
+		return cuT( "32 bits unsigned integer" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_UINT32 >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		l_bReturn = ParseInteger( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT >::ParserParameter( FileParserContext & p_context, UIntStrMap const & p_mapValues )
+		: ParserParameter< ePARAMETER_TYPE_UINT32 >( p_context )
+		, m_mapValues( p_mapValues )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT >::GetType()
+	{
+		return ePARAMETER_TYPE_CHECKED_TEXT;
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT >::GetBaseType()
+	{
+		return ePARAMETER_TYPE_UINT32;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT >::GetStrType()
+	{
+		return cuT( "checked text" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
+		p_strParams.clear();
+
+		if ( !l_array.empty() )
+		{
+			UIntStrMapIt l_it = m_mapValues.find( l_array[0] );
+
+			if ( l_it != m_mapValues.end() )
+			{
+				m_value = l_it->second;
+				l_bReturn = true;
+			}
+
+			if ( l_array.size() > 1 )
+			{
+				p_strParams = l_array[1];
+			}
+		}
+
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT >::ParserParameter( FileParserContext & p_context, UIntStrMap const & p_mapValues )
+		: ParserParameter< ePARAMETER_TYPE_UINT32 >( p_context )
+		, m_mapValues( p_mapValues )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT >::GetType()
+	{
+		return ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT;
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT >::GetBaseType()
+	{
+		return ePARAMETER_TYPE_UINT32;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT >::GetStrType()
+	{
+		return cuT( "bitwise ORed checked texts" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		m_value = 0;
+		StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
+		p_strParams.clear();
+
+		if ( !l_array.empty() )
+		{
+			StringArray l_values = str_utils::split( l_array[0], cuT( "|" ), std::count( l_array[0].begin(), l_array[0].end(), cuT( '|' ) ) + 1, false );
+
+			for ( auto && l_value: l_values )
+			{
+				UIntStrMapIt l_it = m_mapValues.find( l_value );
+
+				if ( l_it != m_mapValues.end() )
+				{
+					m_value |= l_it->second;
+					l_bReturn = true;
+				}
+			}
+
+			if ( l_array.size() > 1 )
+			{
+				p_strParams = l_array[1];
+			}
+		}
+
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_UINT64 >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_UINT64 >::GetType()
+	{
+		return ePARAMETER_TYPE_UINT64;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_UINT64 >::GetStrType()
+	{
+		return cuT( "64 bits unsigned integer" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_UINT64 >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		l_bReturn = ParseInteger( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_FLOAT >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_FLOAT >::GetType()
+	{
+		return ePARAMETER_TYPE_FLOAT;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_FLOAT >::GetStrType()
+	{
+		return cuT( "simple precision floating point" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_FLOAT >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		l_bReturn = ParseFloat( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_DOUBLE >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_DOUBLE >::GetType()
+	{
+		return ePARAMETER_TYPE_DOUBLE;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_DOUBLE >::GetStrType()
+	{
+		return cuT( "double precision floating point" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_DOUBLE >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		l_bReturn = ParseFloat( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_LONGDOUBLE >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_LONGDOUBLE >::GetType()
+	{
+		return ePARAMETER_TYPE_LONGDOUBLE;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_LONGDOUBLE >::GetStrType()
+	{
+		return cuT( "long double precision floating point" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_LONGDOUBLE >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		l_bReturn = ParseFloat( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_PIXELFORMAT >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_PIXELFORMAT >::GetType()
+	{
+		return ePARAMETER_TYPE_PIXELFORMAT;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_PIXELFORMAT >::GetStrType()
+	{
+		return cuT( "pixel format" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_PIXELFORMAT >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
+		p_strParams.clear();
+
+		if ( l_array.size() )
+		{
+			m_value = PF::GetFormatByName( l_array[0] );
+			l_bReturn = m_value != ePIXEL_FORMAT_COUNT;
+
+			if ( l_array.size() > 1 )
+			{
+				p_strParams = l_array[1];
+			}
+		}
+
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+  inline ParserParameter< ePARAMETER_TYPE_POINT2I >::ParserParameter( FileParserContext & p_context )
+	  : ParserParameterBase( p_context )
+  {
+  }
+
+  inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_POINT2I >::GetType()
+  {
+	  return ePARAMETER_TYPE_POINT2I;
+  }
+
+  inline xchar const * ParserParameter< ePARAMETER_TYPE_POINT2I >::GetStrType()
+  {
+	  return cuT( "2 integers point" );
+  }
+
+  inline bool ParserParameter< ePARAMETER_TYPE_POINT2I >::Parse( String & p_strParams )
+  {
+	  bool l_bReturn = false;
+	  l_bReturn = ParseVector( p_strParams, m_value );
+	  return l_bReturn;
+  }
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_POINT3I >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_POINT3I >::GetType()
+	{
+		return ePARAMETER_TYPE_POINT3I;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_POINT3I >::GetStrType()
+	{
+		return cuT( "3 integers point" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_POINT3I >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		l_bReturn = ParseVector( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_POINT4I >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_POINT4I >::GetType()
+	{
+		return ePARAMETER_TYPE_POINT4I;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_POINT4I >::GetStrType()
+	{
+		return cuT( "4 integers point" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_POINT4I >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		l_bReturn = ParseVector( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_POINT2F >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_POINT2F >::GetType()
+	{
+		return ePARAMETER_TYPE_POINT2F;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_POINT2F >::GetStrType()
+	{
+		return cuT( "2 simple precision floating point numbers point" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_POINT2F >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		l_bReturn = ParseVector( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_POINT3F >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_POINT3F >::GetType()
+	{
+		return ePARAMETER_TYPE_POINT3F;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_POINT3F >::GetStrType()
+	{
+		return cuT( "3 simple precision floating point numbers point" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_POINT3F >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		l_bReturn = ParseVector( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_POINT4F >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_POINT4F >::GetType()
+	{
+		return ePARAMETER_TYPE_POINT4F;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_POINT4F >::GetStrType()
+	{
+		return cuT( "4 simple precision floating point numbers point" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_POINT4F >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		l_bReturn = ParseVector( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_POINT2D >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_POINT2D >::GetType()
+	{
+		return ePARAMETER_TYPE_POINT2D;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_POINT2D >::GetStrType()
+	{
+		return cuT( "2 double precision floating point numbers point" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_POINT2D >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		l_bReturn = ParseVector( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_POINT3D >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_POINT3D >::GetType()
+	{
+		return ePARAMETER_TYPE_POINT3D;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_POINT3D >::GetStrType()
+	{
+		return cuT( "3 double precision floating point numbers point" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_POINT3D >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		l_bReturn = ParseVector( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_POINT4D >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_POINT4D >::GetType()
+	{
+		return ePARAMETER_TYPE_POINT4D;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_POINT4D >::GetStrType()
+	{
+		return cuT( "4 double precision floating point numbers point" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_POINT4D >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		l_bReturn = ParseVector( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_SIZE >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_SIZE >::GetType()
+	{
+		return ePARAMETER_TYPE_SIZE;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_SIZE >::GetStrType()
+	{
+		return cuT( "size" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_SIZE >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		l_bReturn = ParseSize( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_POSITION >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_POSITION >::GetType()
+	{
+		return ePARAMETER_TYPE_POSITION;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_POSITION >::GetStrType()
+	{
+		return cuT( "position" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_POSITION >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		l_bReturn = ParsePosition( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_RECTANGLE >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_RECTANGLE >::GetType()
+	{
+		return ePARAMETER_TYPE_RECTANGLE;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_RECTANGLE >::GetStrType()
+	{
+		return cuT( "rectangle" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_RECTANGLE >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		l_bReturn = ParseRectangle( p_strParams, m_value );
+		return l_bReturn;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_COLOUR >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_COLOUR >::GetType()
+	{
+		return ePARAMETER_TYPE_COLOUR;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_COLOUR >::GetStrType()
+	{
+		return cuT( "colour" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_COLOUR >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		l_bReturn = ParseColour( p_strParams, m_value );
+		return l_bReturn;
+	}
 
 	//*************************************************************************************************
 
 	template< typename T >
 	T const & ParserParameterBase::Get( T & p_value )
 	{
-		if ( ParserValueTyper< T >::Type == GetBaseType() )
+		static const ePARAMETER_TYPE l_given = ParserValueTyper< T >::Type;
+		ePARAMETER_TYPE l_expected = GetBaseType();
+
+		if ( l_given == l_expected )
 		{
-			p_value = static_cast< ParserParameter< ParserValueTyper< T >::Type >* >( this )->m_value;
+			p_value = static_cast< ParserParameter< l_given >* >( this )->m_value;
 		}
 		else
 		{
-			throw ParserParameterTypeException( ParserValueTyper< T >::Type, GetBaseType() );
+			throw ParserParameterTypeException( m_context.strFunctionName, l_given, l_expected );
 		}
 
 		return p_value;

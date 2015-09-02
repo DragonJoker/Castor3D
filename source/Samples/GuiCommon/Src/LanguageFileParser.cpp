@@ -27,6 +27,7 @@ namespace GuiCommon
 	void LanguageFileParser::DoInitialiseParser( TextFile & p_file )
 	{
 		LanguageFileContextPtr l_pContext = std::make_shared< LanguageFileContext >( &p_file );
+		m_pParsingContext = l_pContext;
 		AddParser( eSECTION_ROOT,		cuT( "language"	),	Root_Language		, 1,	ePARAMETER_TYPE_NAME	);
 		AddParser( eSECTION_LANGUAGE,	cuT( "pattern"	),	Language_Pattern	, 1,	ePARAMETER_TYPE_TEXT	);
 		AddParser( eSECTION_LANGUAGE,	cuT( "lexer"	),	Language_Lexer		, 1,	ePARAMETER_TYPE_CHECKED_TEXT,	&l_pContext->mapLexers	);
@@ -42,7 +43,6 @@ namespace GuiCommon
 		AddParser( eSECTION_SECTION,	cuT( "type"	),	Section_Type		, 1,	ePARAMETER_TYPE_CHECKED_TEXT,	&l_pContext->mapTypes	);
 		AddParser( eSECTION_SECTION,	cuT( "list"	),	Section_List	);
 		AddParser( eSECTION_SECTION,	cuT( "}"	),	Section_End	);
-		m_pParsingContext = l_pContext;
 		l_pContext->pCurrentLanguage.reset( new LanguageInfo );
 	}
 

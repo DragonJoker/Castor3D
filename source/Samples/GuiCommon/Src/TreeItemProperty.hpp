@@ -49,7 +49,7 @@ namespace GuiCommon
 		ePROPERTY_DATA_TYPE_MATERIAL,
 		ePROPERTY_DATA_TYPE_PASS,
 		ePROPERTY_DATA_TYPE_TEXTURE,
-	};
+	}	ePROPERTY_DATA_TYPE;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		24/08/2015

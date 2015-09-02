@@ -440,12 +440,11 @@ namespace Castor
 		{
 			StringArray	l_arrayReturn;
 
-			if ( ! p_str.empty() && ! p_delims.empty() && p_maxSplits > 0 )
+			if ( !p_str.empty() && !p_delims.empty() && p_maxSplits > 0 )
 			{
 				l_arrayReturn.reserve( p_maxSplits + 1 );
-				std::size_t l_numSplits = 0;
-				std::size_t	l_pos		= 0;
-				std::size_t	l_start		= 0;
+				std::size_t	l_pos = 0;
+				std::size_t	l_start = 0;
 
 				do
 				{
@@ -457,13 +456,19 @@ namespace Castor
 
 						if ( p_bKeepVoid )
 						{
-							l_arrayReturn.push_back( cuT( "" ) );
+							l_arrayReturn.push_back( String() );
 						}
 					}
-					else if ( l_pos == std::string::npos || l_numSplits == p_maxSplits )
+					else if ( l_pos == std::string::npos || l_arrayReturn.size() == p_maxSplits )
 					{
-						l_arrayReturn.push_back( p_str.substr( l_start ) );
-						return l_arrayReturn;
+						String remnants = p_str.substr( l_start );
+
+						if ( !remnants.empty() || p_bKeepVoid )
+						{
+							l_arrayReturn.push_back( remnants );
+						}
+
+						l_pos = String::npos;
 					}
 					else
 					{
@@ -471,8 +476,6 @@ namespace Castor
 						l_start = l_pos + 1;
 					}
 
-					l_start = p_str.find_first_not_of( p_delims, l_start );
-					++ l_numSplits;
 				}
 				while ( l_pos != std::string::npos );
 			}
