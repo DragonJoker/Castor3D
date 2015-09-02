@@ -179,12 +179,10 @@ C3D_Assimp_API void Destroy( ImporterPlugin * p_pPlugin )
 
 C3D_Assimp_API void OnLoad( Castor3D::Engine * p_engine )
 {
-	Castor::Logger::Initialise( p_engine->GetLoggerInstance() );
 }
 
 C3D_Assimp_API void OnUnload( Castor3D::Engine * p_engine )
 {
-	Castor::Logger::Cleanup();
 }
 
 //*************************************************************************************************
@@ -570,7 +568,7 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 		}
 
 		l_mtlManager.insert( l_strName, l_pReturn );
-		m_pEngine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_pReturn ) );
+		m_pEngine->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
 	}
 
 	return l_pReturn;
