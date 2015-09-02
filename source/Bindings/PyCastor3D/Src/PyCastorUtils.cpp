@@ -15,114 +15,20 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#include "PyCastor3DPch.hpp"
-
 #include "PyCastor3DPrerequisites.hpp"
-
-#include <Logger.hpp>
-#include <Angle.hpp>
-#include <Glyph.hpp>
-#include <Font.hpp>
-#include <Quaternion.hpp>
-#include <Position.hpp>
-#include <Size.hpp>
-#include <Rectangle.hpp>
-#include <Image.hpp>
-#include <PixelBufferBase.hpp>
-
-#include <Castor3DPrerequisites.hpp>
 
 using namespace Castor;
 using namespace Castor3D;
 
-namespace
+void ExportCastorUtils()
 {
-	struct VectorNormaliser
-	{
-		void operator()( Point3r * p_arg )
-		{
-			point::normalise( *p_arg );
-		}
-	};
-	struct VectorNegater
-	{
-		void operator()( Point3r * p_arg )
-		{
-			point::negate( *p_arg );
-		}
-	};
-	struct VectorLengther
-	{
-		void operator()( Point3r * p_arg )
-		{
-			point::distance( *p_arg );
-		}
-	};
-	struct VectorDotter
-	{
-		real operator()( Point3r const & p_1, Point3r const & p_2 )
-		{
-			return point::dot( p_1, p_2 );
-		}
-	};
-	struct VectorCrosser
-	{
-		Point3r operator()( Point3r const & p_1, Point3r const & p_2 )
-		{
-			return p_1 ^ p_2;
-		}
-	};
-	struct PxBufferCreator
-	{
-		PxBufferBaseSPtr operator()( Size const & p_size, ePIXEL_FORMAT p_ePixelFormat )
-		{
-			return PxBufferBase::create( p_size, p_ePixelFormat );
-		}
-	};
-}
-
-namespace boost
-{
-	namespace python
-	{
-		namespace detail
-		{
-			inline boost::mpl::vector< void, Point3r * >
-			get_signature( VectorNormaliser, void * = 0 )
-			{
-				return boost::mpl::vector< void, Point3r * >();
-			}
-			inline boost::mpl::vector< void, Point3r * >
-			get_signature( VectorNegater, void * = 0 )
-			{
-				return boost::mpl::vector< void, Point3r * >();
-			}
-			inline boost::mpl::vector< void, Point3r * >
-			get_signature( VectorLengther, void * = 0 )
-			{
-				return boost::mpl::vector< void, Point3r * >();
-			}
-			inline boost::mpl::vector< real, Point3r const &, Point3r const & >
-			get_signature( VectorDotter, void * = 0 )
-			{
-				return boost::mpl::vector< real, Point3r const &, Point3r const & >();
-			}
-			inline boost::mpl::vector< Point3r, Point3r const &, Point3r const & >
-			get_signature( VectorCrosser, void * = 0 )
-			{
-				return boost::mpl::vector< Point3r, Point3r const &, Point3r const & >();
-			}
-			inline boost::mpl::vector< PxBufferBaseSPtr, Size const &, ePIXEL_FORMAT >
-			get_signature( PxBufferCreator, void * = 0 )
-			{
-				return boost::mpl::vector< PxBufferBaseSPtr, Size const &, ePIXEL_FORMAT >();
-			}
-		}
-	}
-}
-
-BOOST_PYTHON_MODULE( Castor )
-{
+	// Make "from castor.gfx import <whatever>" work
+	py::object l_module( py::handle<>( py::borrowed( PyImport_AddModule( "castor.utils" ) ) ) );
+	// Make "from castor import gfx" work
+	py::scope().attr( "utils" ) = l_module;
+	// Set the current scope to the new sub-module
+	py::scope l_scope = l_module;
+	
 	/**@group_name ePIXEL_FORMAT	*/
 	//@{
 	py::enum_< ePIXEL_FORMAT >( "PixelFormat" )
@@ -190,8 +96,8 @@ BOOST_PYTHON_MODULE( Castor )
 	py::class_< Point2r >( "Vector2D", py::init< real, real >() )
 	.add_property( "x", cpy::make_getter( &Point2r::operator[], 0u ), cpy::make_setter( &Point2r::operator[], 0u ), "The X coordinate" )
 	.add_property( "y", cpy::make_getter( &Point2r::operator[], 1u ), cpy::make_setter( &Point2r::operator[], 1u ), "The Y coordinate" )
-	.def( "normalise", VectorNormaliser() )
-	.def( "negate", VectorNegater() )
+	.def( "normalise", cpy::VectorNormaliser() )
+	.def( "negate", cpy::VectorNegater() )
 	.def( py::self += py::other< Point2r >() )
 	.def( py::self -= py::other< Point2r >() )
 	.def( py::self *= py::other< Point2r >() )
@@ -200,8 +106,8 @@ BOOST_PYTHON_MODULE( Castor )
 	.def( py::self != py::other< Point2r >() )
 	.def( py::self *= py::other< real >() )
 	.def( py::self /= py::other< real >() )
-	.def( "length", VectorLengther() );
-	py::def( "dot", VectorCrosser() );
+	.def( "length", cpy::VectorLengther() );
+	py::def( "dot", cpy::VectorCrosser() );
 	//@}
 	/**@group_name Vector3D	*/
 	//@{
@@ -209,8 +115,8 @@ BOOST_PYTHON_MODULE( Castor )
 	.add_property( "x", cpy::make_getter( &Point3r::operator[], 0u ), cpy::make_setter( &Point3r::operator[], 0u ), "The X coordinate" )
 	.add_property( "y", cpy::make_getter( &Point3r::operator[], 1u ), cpy::make_setter( &Point3r::operator[], 1u ), "The Y coordinate" )
 	.add_property( "z", cpy::make_getter( &Point3r::operator[], 2u ), cpy::make_setter( &Point3r::operator[], 2u ), "The Z coordinate" )
-	.def( "normalise", VectorNormaliser() )
-	.def( "negate", VectorNegater() )
+	.def( "normalise", cpy::VectorNormaliser() )
+	.def( "negate", cpy::VectorNegater() )
 	.def( py::self += py::other< Point3r >() )
 	.def( py::self -= py::other< Point3r >() )
 	.def( py::self *= py::other< Point3r >() )
@@ -219,9 +125,9 @@ BOOST_PYTHON_MODULE( Castor )
 	.def( py::self != py::other< Point3r >() )
 	.def( py::self *= py::other< real >() )
 	.def( py::self /= py::other< real >() )
-	.def( "length", VectorLengther() );
-	py::def( "cross", VectorDotter() );
-	py::def( "dot", VectorCrosser() );
+	.def( "length", cpy::VectorLengther() );
+	py::def( "cross", cpy::VectorDotter() );
+	py::def( "dot", cpy::VectorCrosser() );
 	//@}
 	/**@group_name Angle	*/
 	//@{
@@ -321,8 +227,8 @@ BOOST_PYTHON_MODULE( Castor )
 	//@}
 	/**@group_name Font	*/
 	//@{
-	typedef Font::GlyphArrayIt( Font::*GlyphsItFunc )();
-	py::class_< Font >( "Font", py::init< Path const &, String const &, uint32_t >() )
+	typedef Font::GlyphMap::iterator( Font::*GlyphsItFunc )();
+	py::class_< Font, boost::noncopyable >( "Font", py::init< Path const &, String const &, uint32_t >() )
 	.add_property( "height", &Font::GetHeight, "The font height" )
 	.add_property( "max_height", &Font::GetMaxHeight, "The glyphs maximum height" )
 	.add_property( "max_width", &Font::GetMaxWidth, "The glyphs maximum width" )
@@ -337,7 +243,7 @@ BOOST_PYTHON_MODULE( Castor )
 	.add_property( "pixel_format", &PxBufferBase::format, "The buffer pixel format" )
 	.def( "flip", &PxBufferBase::flip, py::return_value_policy< py::reference_existing_object >() )
 	.def( "mirror", &PxBufferBase::mirror, py::return_value_policy< py::reference_existing_object >() )
-	.def( "create", PxBufferCreator() )
+	.def( "create", cpy::PxBufferCreator() )
 	.staticmethod( "create" );
 	//@}
 	/**@group_name Image	*/
@@ -376,3 +282,4 @@ BOOST_PYTHON_MODULE( Castor )
 	.staticmethod( "log_error" );
 	//@}
 }
+

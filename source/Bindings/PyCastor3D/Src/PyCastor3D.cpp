@@ -19,199 +19,18 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "PyCastor3DPrerequisites.hpp"
 
-#include <Angle.hpp>
-#include <Point.hpp>
-#include <SquareMatrix.hpp>
-#include <Quaternion.hpp>
-
-#include <Animable.hpp>
-#include <AnimatedObject.hpp>
-#include <AnimatedObjectGroup.hpp>
-#include <Engine.hpp>
-#include <Scene.hpp>
-#include <Camera.hpp>
-#include <Mesh.hpp>
-#include <Submesh.hpp>
-#include <Light.hpp>
-#include <DirectionalLight.hpp>
-#include <SpotLight.hpp>
-#include <PointLight.hpp>
-#include <Material.hpp>
-#include <Pass.hpp>
-#include <TextureUnit.hpp>
-#include <StaticTexture.hpp>
-#include <DynamicTexture.hpp>
-#include <ShaderProgram.hpp>
-#include <Sampler.hpp>
-#include <Geometry.hpp>
-#include <RenderWindow.hpp>
-#include <Overlay.hpp>
-#include <PanelOverlay.hpp>
-#include <BorderPanelOverlay.hpp>
-#include <TextOverlay.hpp>
-#include <BlendState.hpp>
-#include <DepthStencilState.hpp>
-#include <RasteriserState.hpp>
-
 using namespace Castor;
 using namespace Castor3D;
 
-namespace cpy
+void ExportCastor3D()
 {
-	struct PointAdder
-	{
-		void operator()( Submesh * p_submesh, Point3r const & p_point )
-		{
-			p_submesh->AddPoint( p_point );
-		}
-	};
-
-	struct FaceAdder
-	{
-		void operator()( Submesh * p_submesh, uint32_t a, uint32_t b, uint32_t c )
-		{
-			p_submesh->AddFace( a, b, c );
-		}
-	};
-
-	struct Texture3DResizer
-	{
-		void operator()( DynamicTexture * texture, Size const & size, uint32_t depth )
-		{
-			texture->Resize( Point3ui( size.width(), size.height(), depth ) );
-		}
-	};
-
-	template< class Texture, typename Param >
-	struct Texture3DImageSetter
-	{
-		void operator()( Texture * texture, Size const & size, uint32_t depth, Param param )
-		{
-			texture->SetImage( Point3ui( size.width(), size.height(), depth ), param );
-		}
-	};
-
-	template< typename Blend >
-	struct BlendSetter
-	{
-		typedef void ( BlendState::*Function )( Blend, uint8_t );
-		Function m_function;
-		uint8_t m_index;
-		BlendSetter( Function function, uint8_t index )
-			:	m_function( function )
-			,	m_index( index )
-		{
-		}
-		void operator()( BlendState * state, Blend blend )
-		{
-			( state->*( this->m_function ) )( blend, m_index );
-		}
-	};
-
-	template< class Texture, typename Param >
-	Texture3DImageSetter< Texture, Param >
-	make_image_setter( void ( Texture::* )( Point3ui const & sizes, Param param ) )
-	{
-		return Texture3DImageSetter< Texture, Param >();
-	}
-
-	template< typename Blend >
-	BlendSetter< Blend >
-	make_blend_setter( void ( BlendState::*function )( Blend, uint8_t ), uint8_t index )
-	{
-		return BlendSetter< Blend >( function, index );
-	}
-}
-
-namespace boost
-{
-	namespace python
-	{
-		namespace detail
-		{
-			inline boost::mpl::vector< PluginBaseSPtr, Engine *, Path const & >
-			get_signature( PluginBaseSPtr( Engine::* )( Path const & ), void * = 0 )
-			{
-				return boost::mpl::vector< PluginBaseSPtr, Engine *, Path const & >();
-			}
-			inline boost::mpl::vector< MeshSPtr, Engine *, eMESH_TYPE, String const & >
-			get_signature( MeshSPtr( Engine::* )( eMESH_TYPE, String const & ), void * = 0 )
-			{
-				return boost::mpl::vector< MeshSPtr, Engine *, eMESH_TYPE, String const & >();
-			}
-			inline boost::mpl::vector< MeshSPtr, Engine *, eMESH_TYPE, String const &, UIntArray const & >
-			get_signature( MeshSPtr( Engine::* )( eMESH_TYPE, String const &, UIntArray const & ), void * = 0 )
-			{
-				return boost::mpl::vector< MeshSPtr, Engine *, eMESH_TYPE, String const &, UIntArray const & >();
-			}
-			inline boost::mpl::vector< MeshSPtr, Engine *, eMESH_TYPE, String const &, UIntArray const &, RealArray const & >
-			get_signature( MeshSPtr( Engine::* )( eMESH_TYPE, String const &, UIntArray const &, RealArray const & ), void * = 0 )
-			{
-				return boost::mpl::vector< MeshSPtr, Engine *, eMESH_TYPE, String const &, UIntArray const &, RealArray const & >();
-			}
-			inline boost::mpl::vector< bool, Engine *, RenderWindowSPtr >
-			get_signature( bool ( Engine::* )( RenderWindowSPtr ), void * = 0 )
-			{
-				return boost::mpl::vector< bool, Engine *, RenderWindowSPtr >();
-			}
-			inline boost::mpl::vector< OverlaySPtr, Engine *, eOVERLAY_TYPE, Castor::String const &, OverlaySPtr, SceneSPtr >
-			get_signature( OverlaySPtr( Engine::* )( eOVERLAY_TYPE, Castor::String const &, OverlaySPtr, SceneSPtr ), void * = 0 )
-			{
-				return boost::mpl::vector< OverlaySPtr, Engine *, eOVERLAY_TYPE, Castor::String const &, OverlaySPtr, SceneSPtr >();
-			}
-			inline boost::mpl::vector< RenderWindowSPtr, Engine * >
-			get_signature( RenderWindowSPtr( Engine::* )(), void * = 0 )
-			{
-				return boost::mpl::vector< RenderWindowSPtr, Engine * >();
-			}
-			inline boost::mpl::vector< SceneSPtr, Engine *, Castor::String const & >
-			get_signature( SceneSPtr( Engine::* )( Castor::String const & ), void * = 0 )
-			{
-				return boost::mpl::vector< SceneSPtr, Engine *, Castor::String const & >();
-			}
-			inline boost::mpl::vector< void, Submesh *, Point3r const & >
-			get_signature( cpy::PointAdder, void * = 0 )
-			{
-				return boost::mpl::vector< void, Submesh *, Point3r const & >();
-			}
-			inline boost::mpl::vector< void, Submesh *, uint32_t, uint32_t, uint32_t >
-			get_signature( cpy::FaceAdder, void * = 0 )
-			{
-				return boost::mpl::vector< void, Submesh *, uint32_t, uint32_t, uint32_t >();
-			}
-			inline boost::mpl::vector< MaterialSPtr, Geometry *, SubmeshSPtr >
-			get_signature( MaterialSPtr( Geometry::* )( SubmeshSPtr ), void * = 0 )
-			{
-				return boost::mpl::vector< MaterialSPtr, Geometry *, SubmeshSPtr >();
-			}
-			inline boost::mpl::vector< void, Geometry *, SubmeshSPtr, MaterialSPtr >
-			get_signature( void ( Geometry::* )( SubmeshSPtr, MaterialSPtr ), void * = 0 )
-			{
-				return boost::mpl::vector< void, Geometry *, SubmeshSPtr, MaterialSPtr >();
-			}
-			inline boost::mpl::vector< void, DynamicTexture *, Size const &, uint32_t >
-			get_signature( cpy::Texture3DResizer, void * = 0 )
-			{
-				return boost::mpl::vector< void, DynamicTexture *, Size const &, uint32_t >();
-			}
-			template< class Texture, typename Param >
-			inline boost::mpl::vector< void, Texture *, Size const &, uint32_t, Param >
-			get_signature( cpy::Texture3DImageSetter< Texture, Param >, void * = 0 )
-			{
-				return boost::mpl::vector< void, Texture *, Size const &, uint32_t, Param >();
-			}
-			template< typename Blend >
-			inline boost::mpl::vector< void, BlendState *, Blend >
-			get_signature( cpy::BlendSetter< Blend >, void * = 0 )
-			{
-				return boost::mpl::vector< void, BlendState *, Blend >();
-			}
-		}
-	}
-}
-
-BOOST_PYTHON_MODULE( Castor3D )
-{
+	// Make "from castor.gfx import <whatever>" work
+	py::object l_module( py::handle<>( py::borrowed( PyImport_AddModule( "castor.gfx" ) ) ) );
+	// Make "from castor import gfx" work
+	py::scope().attr( "gfx" ) = l_module;
+	// Set the current scope to the new sub-module
+	py::scope l_scope = l_module;
+	
 	/**@group_name eRENDERER_TYPE	*/
 	//@{
 	py::enum_< eRENDERER_TYPE >( "RendererType" )
@@ -673,7 +492,7 @@ BOOST_PYTHON_MODULE( Castor3D )
 	void( ShaderProgramBase::*ShaderProgramFileSetter )( eSHADER_TYPE, eSHADER_MODEL, Path const & ) = &ShaderProgramBase::SetFile;
 	py::class_< ShaderProgramBase, boost::noncopyable >( "ShaderProgram", py::no_init )
 	.def( "get_file", &ShaderProgramBase::GetFile )
-    .def( "set_file", ShaderProgramFileSetter )
+	.def( "set_file", ShaderProgramFileSetter )
 	.def( "get_source", &ShaderProgramBase::GetSource )
 	.def( "set_source", &ShaderProgramBase::SetSource )
 	.def( "get_entry_point", &ShaderProgramBase::GetEntryPoint )
@@ -738,15 +557,15 @@ BOOST_PYTHON_MODULE( Castor3D )
 	CameraSPtr( Scene::*SceneCameraCreator )( Castor::String const &, int, int, SceneNodeSPtr, eVIEWPORT_TYPE ) = &Scene::CreateCamera;
 	py::class_< Scene, boost::noncopyable >( "Scene", py::no_init )
 	.add_property( "background_colour", py::make_function( &Scene::GetBackgroundColour, py::return_value_policy< py::copy_const_reference >() ), &Scene::SetBackgroundColour, "The background colour" )
-    .add_property( "name", py::make_function( &Scene::GetName, py::return_value_policy< py::copy_const_reference >() ), &Scene::SetName, "The scene name" )
+	.add_property( "name", py::make_function( &Scene::GetName, py::return_value_policy< py::copy_const_reference >() ), &Scene::SetName, "The scene name" )
 	.add_property( "ambient_light", py::make_function( &Scene::GetAmbientLight, py::return_value_policy< py::copy_const_reference >() ), &Scene::SetAmbientLight, "The ambient light colour" )
-    .add_property( "nodes_count", &Scene::GetNodesCount, "The nodes count" )
+	.add_property( "nodes_count", &Scene::GetNodesCount, "The nodes count" )
 	.add_property( "lights_count", &Scene::GetLightsCount, "The lights count" )
 	.add_property( "geometries_count", &Scene::GetGeometriesCount, "The geometries count" )
 	.add_property( "cameras_count", &Scene::GetCamerasCount, "The cameras count" )
-    .add_property( "root_node", &Scene::GetRootNode, "The root scene node" )
+	.add_property( "root_node", &Scene::GetRootNode, "The root scene node" )
 	.add_property( "root_object_node", &Scene::GetObjectRootNode, "The objects root scene node" )
-    .add_property( "root_camera_node", &Scene::GetCameraRootNode, "The cameras root scene node" )
+	.add_property( "root_camera_node", &Scene::GetCameraRootNode, "The cameras root scene node" )
 	.def( "clear_scene", &Scene::ClearScene )
 	.def( "create_node", SceneNodeCreator )
 	.def( "create_geometry", SceneGeometryCreator )
@@ -788,7 +607,7 @@ BOOST_PYTHON_MODULE( Castor3D )
 	py::class_< MovableObject, boost::noncopyable >( "MovableObject", py::no_init )
 	.add_property( "name", py::make_function( &MovableObject::GetName, py::return_value_policy< py::copy_const_reference >() ), "The object name" )
 	.add_property( "type", &MovableObject::GetType, "The movable type" )
-	.add_property( "scene", py::make_function( &MovableObject::GetScene, py::return_value_policy< py::reference_existing_object >() ), "The object's parent scene" )
+	.add_property( "scene", &MovableObject::GetScene, "The object's parent scene" )
 	.def( "attach", &MovableObject::AttachTo )
 	.def( "detach", &MovableObject::Detach );
 	//@}
@@ -841,7 +660,7 @@ BOOST_PYTHON_MODULE( Castor3D )
 	//@}
 	/**@group_name SceneNode	*/
 	//@{
-	py::class_< SceneNode >( "SceneNode", py::init< Scene *, String const & >() )
+	py::class_< SceneNode >( "SceneNode", py::init< SceneSPtr, String const & >() )
 	.add_property( "position", cpy::make_getter( &SceneNode::GetPosition, py::return_value_policy< py::copy_const_reference >() ), cpy::make_setter( &SceneNode::SetPosition ), "The node position" )
 	.add_property( "orientation", cpy::make_getter( &SceneNode::GetOrientation, py::return_value_policy< py::copy_const_reference >() ), cpy::make_setter( &SceneNode::SetOrientation ), "The node orientation" )
 	.add_property( "scale", cpy::make_getter( &SceneNode::GetScale, py::return_value_policy< py::copy_const_reference >() ), cpy::make_setter( &SceneNode::SetScale ), "The node scale" )
@@ -923,12 +742,12 @@ BOOST_PYTHON_MODULE( Castor3D )
 	//@{
 	typedef Castor::StrSetIt( AnimatedObjectGroup::*AnimatedObjectGroupAnimationsItFunc )();
 	typedef AnimatedObjectPtrStrMapIt( AnimatedObjectGroup::*AnimatedObjectGroupObjectsItFunc )();
-	py::class_< AnimatedObjectGroup >( "AnimatedObjectGroup", py::init< Scene *, Castor::String >() )
+	py::class_< AnimatedObjectGroup >( "AnimatedObjectGroup", py::init< SceneSPtr, Castor::String >() )
 	.add_property( "animation_count", &AnimatedObjectGroup::GetAnimationCount )
 	.add_property( "object_count", &AnimatedObjectGroup::GetObjectCount )
 	.add_property( "animations", py::range< AnimatedObjectGroupAnimationsItFunc, AnimatedObjectGroupAnimationsItFunc >( &AnimatedObjectGroup::AnimationsBegin, &AnimatedObjectGroup::AnimationsEnd ) )
 	.add_property( "objects", py::range< AnimatedObjectGroupObjectsItFunc, AnimatedObjectGroupObjectsItFunc >( &AnimatedObjectGroup::ObjectsBegin, &AnimatedObjectGroup::ObjectsEnd ) )
-	.add_property( "scene", py::make_function( &AnimatedObjectGroup::GetScene, py::return_value_policy< py::reference_existing_object >() ) )
+	.add_property( "scene", &AnimatedObjectGroup::GetScene )
 	.def( "start_all_animations", &AnimatedObjectGroup::StartAllAnimations )
 	.def( "stop_all_animations", &AnimatedObjectGroup::StopAllAnimations )
 	.def( "pause_all_animations", &AnimatedObjectGroup::PauseAllAnimations )

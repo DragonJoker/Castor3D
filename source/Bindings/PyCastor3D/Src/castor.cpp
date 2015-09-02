@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -15,9 +15,17 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3DPY_PCH_H___
-#define ___C3DPY_PCH_H___
-
 #include "PyCastor3DPrerequisites.hpp"
 
-#endif
+using namespace Castor;
+using namespace Castor3D;
+
+BOOST_PYTHON_MODULE( castor )
+{
+  py::object l_package = py::scope();
+  l_package.attr( "__path__" ) = "castor";
+  
+	ExportCastorUtils();
+	ExportCastor3D();
+}
+

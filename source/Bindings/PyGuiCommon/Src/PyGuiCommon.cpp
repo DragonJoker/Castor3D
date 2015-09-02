@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -15,9 +15,17 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3DPY_PCH_H___
-#define ___C3DPY_PCH_H___
+#include "PyGuiCommonPrerequisites.hpp"
 
-#include "PyCastor3DPrerequisites.hpp"
+using namespace Castor;
+using namespace Castor3D;
+using namespace GuiCommon;
 
-#endif
+BOOST_PYTHON_MODULE( castor_wx )
+{
+	py::object l_castor( py::handle<>( py::borrowed( PyImport_AddModule( "castor" ) ) ) );
+	py::object l_wx( py::handle<>( py::borrowed( PyImport_AddModule( "wx" ) ) ) );
+	
+	py::def( "makeWindowHandle", cpy::WindowHandleCreatorFromWindow() );
+	py::def( "makeWindowHandle", cpy::WindowHandleCreatorFromFrame() );
+}
