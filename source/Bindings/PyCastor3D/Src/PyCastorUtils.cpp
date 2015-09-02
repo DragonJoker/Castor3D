@@ -20,6 +20,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 using namespace Castor;
 using namespace Castor3D;
 
+Colour * CreateColourFromComponents( float p_r, float p_g, float p_b, float p_a )
+{
+	return new Colour( Colour::from_components( p_r, p_g, p_b, p_a ) );
+}
+
 void ExportCastorUtils()
 {
 	// Make "from castor.gfx import <whatever>" work
@@ -77,7 +82,8 @@ void ExportCastorUtils()
 	/**@group_name Colour	*/
 	//@{
 	py::implicitly_convertible< ColourComponent, float >();
-	py::class_< Colour >( "Colour" )
+	py::class_< Colour >( "Colour", py::no_init )
+	.def( "__init__", py::make_constructor( &CreateColourFromComponents ) )
 	.add_property( "r", cpy::make_getter( &Colour::operator[], Colour::eCOMPONENT_RED ), cpy::make_setter( &Colour::operator[], Colour::eCOMPONENT_RED ), "The red value" )
 	.add_property( "g", cpy::make_getter( &Colour::operator[], Colour::eCOMPONENT_GREEN ), cpy::make_setter( &Colour::operator[], Colour::eCOMPONENT_GREEN ), "The green value" )
 	.add_property( "b", cpy::make_getter( &Colour::operator[], Colour::eCOMPONENT_BLUE ), cpy::make_setter( &Colour::operator[], Colour::eCOMPONENT_BLUE ), "The blue value" )
