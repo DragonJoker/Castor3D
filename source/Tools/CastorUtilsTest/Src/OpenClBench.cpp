@@ -111,11 +111,11 @@ namespace Testing
 
 			if ( l_it != MapErrors.end() )
 			{
-				Castor::Logger::LogWarning( cuT( "ERROR: %s - 0x%08X (%s)" ), Castor::str_utils::from_str( p_szName ).c_str(), p_iErr, l_it->second.c_str() );
+				Castor::Logger::LogWarning( Castor::StringStream() << cuT( "ERROR: " ) << Castor::str_utils::from_str( p_szName ) << cuT( " - 0x" ) << std::hex << p_iErr << cuT( " (" ) << l_it->second << cuT( ")" ) );
 			}
 			else
 			{
-				Castor::Logger::LogWarning( cuT( "ERROR: %s - 0x%08X" ), Castor::str_utils::from_str( p_szName ).c_str(), p_iErr );
+				Castor::Logger::LogWarning( Castor::StringStream() << cuT( "ERROR: " ) << Castor::str_utils::from_str( p_szName ) << cuT( " - 0x" ) << std::hex << p_iErr );
 			}
 
 			l_bReturn = false;
@@ -134,15 +134,15 @@ namespace Testing
 
 		if ( l_bContinue )
 		{
-			Castor::Logger::LogInfo( cuT( "Platform count is: %d" ), m_arrayPlatforms.size() );
+			Castor::Logger::LogInfo( Castor::StringStream() << cuT( "Platform count is: " ) << m_arrayPlatforms.size() );
 			std::string l_strInfo;
 			m_platform = m_arrayPlatforms[0];
 			m_platform.getInfo( ( cl_platform_info )CL_PLATFORM_NAME, &l_strInfo );
-			Castor::Logger::LogInfo( "  Name    : %s", l_strInfo.c_str() );
+			Castor::Logger::LogInfo( std::stringstream() << "  Name:    " << l_strInfo );
 			m_platform.getInfo( ( cl_platform_info )CL_PLATFORM_VENDOR, &l_strInfo );
-			Castor::Logger::LogInfo( "  Vendor  : %s", l_strInfo.c_str() );
+			Castor::Logger::LogInfo( std::stringstream() << "  Vendor:  " << l_strInfo );
 			m_platform.getInfo( ( cl_platform_info )CL_PLATFORM_VERSION, &l_strInfo );
-			Castor::Logger::LogInfo( "  Version : %s", l_strInfo.c_str() );
+			Castor::Logger::LogInfo( std::stringstream() << "  Version: " << l_strInfo );
 			cl_context_properties l_props[3] = { CL_CONTEXT_PLATFORM, ( cl_context_properties )( m_platform )(), 0 };
 			m_context = cl::Context( CL_DEVICE_TYPE_CPU, l_props, NULL, NULL, &l_iErr );
 			l_bContinue = CheckErr( l_iErr, "Context::Context()" );

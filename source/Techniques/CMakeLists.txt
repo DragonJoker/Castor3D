@@ -9,8 +9,8 @@ function( TechniquesInit )
 endfunction( TechniquesInit )
 
 function( TechniquesBuild )
-	add_subdirectory( Techniques/DirectTechnique )
-
+	set( TechniqueLibraries ${CastorMinLibraries} )
+	
 	if( ${CASTOR_BUILD_RENDERER_OGL} )
 		set( TechniqueLibraries
 			${TechniqueLibraries}
@@ -24,6 +24,8 @@ function( TechniquesBuild )
 			Dx11RenderSystem
 		)
 	endif ()
+	
+	add_subdirectory( Techniques/DirectTechnique )
 	
 	if( ${CASTOR_BUILD_TECHNIQUE_DEFERRED} )
 		set( Build ${Defr} )

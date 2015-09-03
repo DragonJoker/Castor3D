@@ -2,25 +2,26 @@ project( SsaoPostEffect )
 
 set( CastorBinsDependencies 
 	${CastorBinsDependencies}
-	SsaoPostEffect
+	${PROJECT_NAME}
 	PARENT_SCOPE
 )
 
-set( SSAO_VERSION_MAJOR	0 )
-set( SSAO_VERSION_MINOR	1 )
-set( SSAO_VERSION_BUILD	0 )
+set( ${PROJECT_NAME}_DESCRIPTION "Screen Space Ambiant Occlusion Post Effect" )
+set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
+set( ${PROJECT_NAME}_VERSION_MINOR	1 )
+set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
 include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D/Src )
 include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
 
 add_target(
-	SsaoPostEffect
+	${PROJECT_NAME}
 	plugin
 	"Castor3D"
 	"${CastorMinLibraries}"
 )
 
-set_property( TARGET SsaoPostEffect PROPERTY FOLDER "PostEffects" )
-set( Build "yes (version ${SSAO_VERSION_MAJOR}.${SSAO_VERSION_MINOR}.${SSAO_VERSION_BUILD})" PARENT_SCOPE )
-add_target_astyle( SsaoPostEffect ".h;.hpp;.inl;.cpp" )
+set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "PostEffects" )
+set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
+add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )

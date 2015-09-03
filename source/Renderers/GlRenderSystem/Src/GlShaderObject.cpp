@@ -92,7 +92,7 @@ namespace GlRender
 				std::vector< char > l_pszTmp( m_strLoadedSource.size() + 1 );
 				char * l_buffer = l_pszTmp.data();
 #if defined( _MSC_VER )
-				strncpy_s( l_buffer, m_strLoadedSource.size(), l_strTmp.c_str(), l_strTmp.size() );
+				strncpy_s( l_buffer, m_strLoadedSource.size() + 1, l_strTmp.c_str(), l_strTmp.size() );
 #else
 				strncpy( l_buffer, l_strTmp.c_str(), l_strTmp.size() );
 #endif

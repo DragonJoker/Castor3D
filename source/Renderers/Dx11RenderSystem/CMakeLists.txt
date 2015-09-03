@@ -35,9 +35,10 @@ if( DIRECT3D11_FOUND AND DIRECT3D9_FOUND )
 		PARENT_SCOPE
 	)
 
-    set( DX11_VERSION_MAJOR	0 )
-    set( DX11_VERSION_MINOR	7 )
-    set( DX11_VERSION_BUILD	0 )
+	set( ${PROJECT_NAME}_DESCRIPTION "Direct3D 11 Renderer" )
+	set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
+	set( ${PROJECT_NAME}_VERSION_MINOR	8 )
+	set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 	add_target(
 		${PROJECT_NAME}
@@ -179,7 +180,7 @@ if( DIRECT3D11_FOUND AND DIRECT3D9_FOUND )
         add_target_compilation_flags( ${PROJECT_NAME} "-fcheck-new" )
     endif ()
     
-	set( Build "yes (version ${DX11_VERSION_MAJOR}.${DX11_VERSION_MINOR}.${DX11_VERSION_BUILD})" PARENT_SCOPE )
+	set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
 else()
 	set( Build "no (Direct3D11 SDK not found)" PARENT_SCOPE )
 endif()

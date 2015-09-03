@@ -32,12 +32,13 @@ endif()
 include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
 include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
 
-set( CT_VERSION_MAJOR	0 )
-set( CT_VERSION_MINOR	7 )
-set( CT_VERSION_BUILD	1 )
+set( ${PROJECT_NAME}_DESCRIPTION "${PROJECT_NAME} application" )
+set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
+set( ${PROJECT_NAME}_VERSION_MINOR	8 )
+set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 add_target(
-    CastorUtilsTest
+    ${PROJECT_NAME}
     bin_dos
     "CastorUtils"
     "CastorUtils;${CastorMinLibraries};${OpenCLLibraries}"
@@ -46,7 +47,7 @@ add_target(
     "${CUT_CXX_FLAGS}"
 )
 
-set_property( TARGET CastorUtilsTest PROPERTY FOLDER "Tools" )
-add_target_astyle( CastorUtilsTest ".h;.hpp;.inl;.cpp" )
-add_target_test( CastorUtilsTest )
-set( Build "yes (version ${CT_VERSION_MAJOR}.${CT_VERSION_MINOR}.${CT_VERSION_BUILD})" PARENT_SCOPE )
+set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Tools" )
+add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
+add_target_test( ${PROJECT_NAME} )
+set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )

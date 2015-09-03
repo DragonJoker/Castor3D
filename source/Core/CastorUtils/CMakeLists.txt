@@ -89,7 +89,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 	
 	set( CastorBinsDependencies 
 		${CastorBinsDependencies}
-		CastorUtils
+		${PROJECT_NAME}
 		PARENT_SCOPE
 	)
 
@@ -102,9 +102,10 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		${X11Libraries}
 	)
 	
-	set( CU_VERSION_MAJOR	0 )
-	set( CU_VERSION_MINOR	7 )
-	set( CU_VERSION_BUILD	1 )
+	set( ${PROJECT_NAME}_DESCRIPTION "${MAIN_PROJECT_NAME} Utils" )
+	set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
+	set( ${PROJECT_NAME}_VERSION_MINOR	8 )
+	set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 	
 	if( PROJECTS_USE_PRECOMPILED_HEADERS )
 		set( CASTOR_USE_PCH 1 )
@@ -138,7 +139,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 	include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Src )
 	
 	add_target(
-		CastorUtils
+		${PROJECT_NAME}
 		api_dll
 		""
 		"${CastorMinLibraries};${x11Libraries}"
@@ -342,8 +343,8 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 
 	install(
 		FILES ${CMAKE_CURRENT_BINARY_DIR}/Src/config.hpp
-		DESTINATION include/CastorUtils
-		COMPONENT CastorUtils_dev
+		DESTINATION include/${PROJECT_NAME}
+		COMPONENT ${PROJECT_NAME}_dev
 	)
 	
 	if ( WIN32 )
@@ -360,11 +361,11 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 				${FreeImage_LIBRARY_DIR}/FreeImage.dll
 				${LibZipPath}/bin/zip.dll
 			DESTINATION bin
-			COMPONENT CastorUtils
+			COMPONENT ${PROJECT_NAME}
 		)
 		if ( EXISTS ${FreeTypePath}/bin/freetype6.dll )
 			add_custom_command(
-				TARGET CastorUtils
+				TARGET ${PROJECT_NAME}
 				POST_BUILD
 				COMMAND
 					${CMAKE_COMMAND} -E
@@ -375,12 +376,12 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 			install(
 				FILES ${FreeTypePath}/bin/freetype6.dll
 				DESTINATION bin
-				COMPONENT CastorUtils
+				COMPONENT ${PROJECT_NAME}
 			)
 		endif ()
 		if ( EXISTS ${ZlibPath}/bin/zlib1.dll )
 			add_custom_command(
-				TARGET CastorUtils
+				TARGET ${PROJECT_NAME}
 				POST_BUILD
 				COMMAND
 					${CMAKE_COMMAND} -E
@@ -391,11 +392,11 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 			install(
 				FILES ${FreeTypePath}/bin/zlib1.dll
 				DESTINATION bin
-				COMPONENT CastorUtils
+				COMPONENT ${PROJECT_NAME}
 			)
 		elseif ( EXISTS ${ZlibPath}/bin/zlibwapi.dll )
 			add_custom_command(
-				TARGET CastorUtils
+				TARGET ${PROJECT_NAME}
 				POST_BUILD
 				COMMAND
 					${CMAKE_COMMAND} -E
@@ -406,11 +407,11 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 			install(
 				FILES ${ZlibPath}/bin/zlibwapi.dll
 				DESTINATION bin
-				COMPONENT CastorUtils
+				COMPONENT ${PROJECT_NAME}
 			)
 		endif ()
 		add_custom_command(
-			TARGET CastorUtils
+			TARGET ${PROJECT_NAME}
 			POST_BUILD
 			COMMAND
 				${CMAKE_COMMAND} -E
@@ -419,7 +420,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 					${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
 		)
 		add_custom_command(
-			TARGET CastorUtils
+			TARGET ${PROJECT_NAME}
 			POST_BUILD
 			COMMAND
 				${CMAKE_COMMAND} -E
@@ -429,12 +430,12 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		)
 	endif ()
 	
-	set_property( TARGET CastorUtils PROPERTY FOLDER "Core" )
-	add_target_astyle( CastorUtils ".h;.hpp;.inl;.cpp" )
-	add_target_doc( CastorUtils "French" "*.h *.hpp" )
-	add_target_doc( CastorUtils "English" "*.h *.hpp" )
+	set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core" )
+	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
+	add_target_doc( ${PROJECT_NAME} "French" "*.h *.hpp" )
+	add_target_doc( ${PROJECT_NAME} "English" "*.h *.hpp" )
 	
-	set( Build "yes (version ${CU_VERSION_MAJOR}.${CU_VERSION_MINOR}.${CU_VERSION_BUILD})" PARENT_SCOPE )
+	set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
 else ()
 	set( msg "no (missing :" )
 	if( NOT FREEIMAGE_FOUND )
@@ -455,6 +456,6 @@ endif ()
 
 set( CastorMinLibraries
 	${CastorMinLibraries}
-	CastorUtils
+	${PROJECT_NAME}
 	PARENT_SCOPE
 )

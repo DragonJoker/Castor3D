@@ -32,7 +32,7 @@ namespace Msaa
 	{
 		if ( p_params.Get( cuT( "samples_count" ), m_iSamplesCount ) && m_iSamplesCount > 1 )
 		{
-			Logger::LogInfo( "Using MSAA, %d samples", m_iSamplesCount );
+			Logger::LogInfo( StringStream() << cuT( "Using MSAA, " ) << m_iSamplesCount << cuT( " samples" ) );
 			m_pMsFrameBuffer	= m_pRenderTarget->CreateFrameBuffer();
 			m_pMsColorBuffer	= m_pFrameBuffer->CreateColourRenderBuffer(	ePIXEL_FORMAT_A8R8G8B8 );
 			m_pMsDepthBuffer	= m_pFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24 );

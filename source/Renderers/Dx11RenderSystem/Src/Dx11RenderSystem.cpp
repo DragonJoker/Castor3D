@@ -186,8 +186,8 @@ bool DxRenderSystem::InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swa
 								int l_videoCardMemory = int( l_adapterDesc.DedicatedVideoMemory / 1024 / 1024 );
 								// Convert the name of the video card to a character array and store it.
 								String l_strVideoCardDescription = str_utils::from_wstr( l_adapterDesc.Description );
-								Logger::LogInfo( cuT( "Video card name : " ) + l_strVideoCardDescription );
-								Logger::LogInfo( cuT( "Video card memory : %d" ), l_videoCardMemory );
+								Logger::LogInfo( cuT( "Video card name: " ) + l_strVideoCardDescription );
+								Logger::LogInfo( StringStream() << cuT( "Video card memory: " ) << l_videoCardMemory );
 							}
 						}
 					}
@@ -224,7 +224,7 @@ bool DxRenderSystem::InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swa
 		}
 		else
 		{
-			Logger::LogWarning( "Dx11Context ::InitialiseDevice - Error creating device : 0x%X", uint32_t( l_hr ) );
+			Logger::LogWarning( StringStream() << cuT( "Dx11Context ::InitialiseDevice - Error creating device : 0x" ) << std::hex << uint32_t( l_hr ) );
 			l_bReturn = false;
 		}
 
@@ -399,7 +399,7 @@ namespace
 		ULONG l_count = p_object->AddRef() - 1;
 		p_object->Release();
 		l_type<< std::left << p_name;
-		Castor::Logger::LogWarning( "Released %s [0x%016X] => %d", l_type.str().c_str(), uint64_t( p_object ), l_count );
+		Castor::Logger::LogWarning( std::stringstream() << "Released " << l_type.str().c_str() << " [0x" << std::hex << uint64_t( p_object ) << "] => " << l_count );
 	}
 }
 
@@ -478,7 +478,7 @@ void DxRenderSystem::UnsetDxDebugName( ID3D11Device * p_object )
 	}
 	else
 	{
-		Castor::Logger::LogWarning( "Untracked [0x%016X]", uint64_t( p_object ) );
+		Castor::Logger::LogWarning( StringStream() << cuT( "Untracked [0x" ) << std::hex << uint64_t( p_object ) << cuT( "]" ) );
 	}
 }
 
@@ -497,7 +497,7 @@ void DxRenderSystem::UnsetDxDebugName( ID3D11DeviceChild * p_object )
 	}
 	else
 	{
-		Castor::Logger::LogWarning( "Untracked [0x%016X]", uint64_t( p_object ) );
+		Castor::Logger::LogWarning( StringStream() << cuT( "Untracked [0x" ) << std::hex << uint64_t( p_object ) << cuT( "]" ) );
 	}
 }
 
@@ -516,7 +516,7 @@ void DxRenderSystem::UnsetDxDebugName( IDXGIDeviceSubObject * p_object )
 	}
 	else
 	{
-		Castor::Logger::LogWarning( "Untracked [0x%016X]", uint64_t( p_object ) );
+		Castor::Logger::LogWarning( StringStream() << cuT( "Untracked [0x" ) << std::hex << uint64_t( p_object ) << cuT( "]" ) );
 	}
 }
 

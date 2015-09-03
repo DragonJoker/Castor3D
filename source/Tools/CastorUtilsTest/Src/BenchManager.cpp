@@ -85,7 +85,7 @@ namespace Testing
 				catch ( std::exception & exc )
 				{
 					l_errCount++;
-					Logger::LogInfo(	"*	Test %s execution failed (%s)",	p_pCode->GetName().c_str(), exc.what() );
+					Logger::LogInfo( std::stringstream() << "*	Test " << p_pCode->GetName().c_str() << " execution failed (" << exc.what() << ")" );
 				}
 				catch ( ... )
 				{
@@ -98,11 +98,11 @@ namespace Testing
 
 			if ( l_errCount )
 			{
-				Logger::LogInfo( cuT(	"Tests - End, %d errors detected out of %d tests" ), l_errCount, l_testCount );
+				Logger::LogInfo( StringStream() << cuT(	"Tests - End, " ) << l_errCount << cuT( " errors detected out of " ) << l_testCount << cuT( " tests" ) );
 			}
 			else
 			{
-				Logger::LogInfo( cuT(	"Tests - End, no error detected out of %d tests" ), l_testCount );
+				Logger::LogInfo( StringStream() << cuT(	"Tests - End, no error detected out of " ) << l_testCount << cuT( " tests" ) );
 			}
 		}
 		else

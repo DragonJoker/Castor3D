@@ -69,13 +69,13 @@ namespace Testing
 		std::string m_what;
 	};
 
-#	define TEST_CHECK( x ) p_testCount++;if( !(x) ) { p_errCount++;Castor::Logger::LogWarning( "%s - %s, line %d : %s", __FILE__, __FUNCTION__, __LINE__, #x ); }
-#	define TEST_EQUAL( x, y ) p_testCount++;if( !(x == y) ) { p_errCount++;Castor::Logger::LogWarning( "%s - %s, line %d : %s == %s (%s != %s)", __FILE__, __FUNCTION__, __LINE__, std::string( #x ).c_str(), std::string( #y ).c_str(), Testing::to_string( x ).c_str(), Testing::to_string( y ).c_str() ); }
+#	define TEST_CHECK( x ) p_testCount++;if( !(x) ) { p_errCount++;Castor::Logger::LogWarning( std::stringstream() << __FILE__ << " - " << __FUNCTION__ << ", line " << __LINE__ << ": " << #x ); }
+#	define TEST_EQUAL( x, y ) p_testCount++;if( !(x == y) ) { p_errCount++;Castor::Logger::LogWarning( std::stringstream() << __FILE__ << " - " << __FUNCTION__ << ", line " << __LINE__ << ": " << #x << " == " << #y << " (" << Testing::to_string( x ) << " != " << Testing::to_string( y ) << ")" ); }
 #	define TEST_REQUIRE( x ) p_testCount++;if( !(x) ) { p_errCount++;throw TestFailed( #x, __FILE__, __FUNCTION__, __LINE__ ); }
 #	define EXECUTE_TEST( test_func, errors, tests ) \
-    Logger::LogInfo( "*** Begin test case %s ***", #test_func );\
+    Logger::LogInfo( std::stringstream() << "*** Begin test case " << #test_func << " ***" );\
 	test_func( errors, tests );\
-    Logger::LogInfo( "*** End test case %s ***", #test_func )
+    Logger::LogInfo( std::stringstream() << "*** End test case " << #test_func << " ***" )
 }
 
 #endif

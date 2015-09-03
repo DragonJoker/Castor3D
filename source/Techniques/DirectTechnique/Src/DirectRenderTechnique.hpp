@@ -23,7 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef _WIN32
 #	define C3D_DirectTechnique_API
 #else
-#	ifdef MsaaTechnique_EXPORTS
+#	ifdef DirectTechnique_EXPORTS
 #		define C3D_DirectTechnique_API __declspec(dllexport)
 #	else
 #		define C3D_DirectTechnique_API __declspec(dllimport)
