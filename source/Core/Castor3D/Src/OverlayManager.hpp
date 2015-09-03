@@ -272,6 +272,7 @@ namespace Castor3D
 
 		using OverlayCollection::lock;
 		using OverlayCollection::unlock;
+		using OverlayCollection::clear;
 
 	private:
 		//!\~english The overlays, in rendering order	\~french Les incrustations, dans l'ordre de rendu

@@ -248,7 +248,7 @@ namespace Castor3D
 
 				for ( auto && l_pass: *l_pMaterial )
 				{
-					l_pass->BindToProgram( l_pProgram );
+					l_pass->BindToAutomaticProgram( l_pProgram );
 					auto l_matrixBuffer = l_pass->GetMatrixBuffer();
 
 					if ( l_matrixBuffer )

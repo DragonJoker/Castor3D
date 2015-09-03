@@ -145,7 +145,13 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		"CastorUtilsPch.hpp"
 		"CastorUtilsPch.cpp"
 	)
-
+	
+	if ( WIN32 )
+		target_link_libraries( ${PROJECT_NAME} Dbghelp )
+	else ()
+		target_link_libraries( ${PROJECT_NAME} dl )
+	endif ()
+	
 	file( GLOB CASTOR_Math_HEADER_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Angle*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Angle*.inl

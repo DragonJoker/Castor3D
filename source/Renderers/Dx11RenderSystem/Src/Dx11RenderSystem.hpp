@@ -114,6 +114,7 @@ namespace Dx11Render
 			std::string m_file;
 			int m_line;
 			int m_ref;
+			Castor::String m_stack;
 		};
 		ID3D11Debug * m_pDebug;
 		uint32_t m_id = 0;

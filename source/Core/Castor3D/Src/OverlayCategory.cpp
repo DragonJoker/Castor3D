@@ -62,15 +62,15 @@ namespace Castor3D
 			switch ( l_overlay->GetType() )
 			{
 			case eOVERLAY_TYPE_PANEL:
-				l_bReturn = PanelOverlay::TextLoader()( *std::static_pointer_cast<PanelOverlay>( l_overlay->GetOverlayCategory() ), p_file );
+				l_bReturn = PanelOverlay::TextLoader()( *l_overlay->GetPanelOverlay(), p_file );
 				break;
 
 			case eOVERLAY_TYPE_BORDER_PANEL:
-				l_bReturn = BorderPanelOverlay::TextLoader()( *std::static_pointer_cast<BorderPanelOverlay>( l_overlay->GetOverlayCategory() ), p_file );
+				l_bReturn = BorderPanelOverlay::TextLoader()( *l_overlay->GetBorderPanelOverlay(), p_file );
 				break;
 
 			case eOVERLAY_TYPE_TEXT:
-				l_bReturn = TextOverlay::TextLoader()( *std::static_pointer_cast<TextOverlay>( l_overlay->GetOverlayCategory() ), p_file );
+				l_bReturn = TextOverlay::TextLoader()( *l_overlay->GetTextOverlay(), p_file );
 				break;
 
 			default:

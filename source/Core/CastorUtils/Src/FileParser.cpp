@@ -498,10 +498,15 @@ namespace Castor
 
 			if ( !CheckParams( l_strParameters, l_iter->second.second.begin(), l_iter->second.second.end() ) )
 			{
-				Ignore();
+				bool l_ignored = true;
+				std::swap( l_ignored, m_bIgnored );
+				l_bReturn = l_iter->second.first( this, l_iter->second.second );
+				std::swap( l_ignored, m_bIgnored );
 			}
-
-			l_bReturn = l_iter->second.first( this, l_iter->second.second );
+			else
+			{
+				l_bReturn = l_iter->second.first( this, l_iter->second.second );
+			}
 		}
 
 		return l_bReturn;

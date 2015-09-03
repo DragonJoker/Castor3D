@@ -219,6 +219,33 @@ namespace Castor3D
 		int GetChildsCount( int p_level )const;
 		/**
 		 *\~english
+		 *\brief		Retrieves the panel overlay
+		 *\return		The category, nullptr if the overlay is not a panel
+		 *\~french
+		 *\brief		Récupère la l'incrustation panneau
+		 *\return		La catégorie, nullptr si l'incrustation n'est pas un panneau
+		 */
+		PanelOverlaySPtr GetPanelOverlay()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the border panel overlay
+		 *\return		The category, nullptr if the overlay is not a border panel
+		 *\~french
+		 *\brief		Récupère la l'incrustation panneau borduré
+		 *\return		La catégorie, nullptr si l'incrustation n'est pas un panneau borduré
+		 */
+		BorderPanelOverlaySPtr GetBorderPanelOverlay()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the text overlay
+		 *\return		The category, nullptr if the overlay is not a text
+		 *\~french
+		 *\brief		Récupère la l'incrustation texte
+		 *\return		La catégorie, nullptr si l'incrustation n'est pas un texte
+		 */
+		TextOverlaySPtr GetTextOverlay()const;
+		/**
+		 *\~english
 		 *\brief		Retrieves the absolute overlay position, in pixels
 		 *\param[in]	p_size	The screen size
 		 *\return		The position
@@ -532,18 +559,6 @@ namespace Castor3D
 		inline const_iterator end()const
 		{
 			return m_overlays.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay category
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la catégorie de l'incrustation
-		 *\return		La valeur
-		 */
-		inline OverlayCategorySPtr GetOverlayCategory()const
-		{
-			return m_pOverlayCategory;
 		}
 		/**
 		 *\~english

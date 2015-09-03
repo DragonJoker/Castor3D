@@ -22,6 +22,7 @@
 #include <Logger.hpp>
 #include <Material.hpp>
 #include <MaterialManager.hpp>
+#include <Debug.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
@@ -242,6 +243,7 @@ void DxRenderSystem::Delete()
 	{
 		std::stringstream l_stream;
 		l_stream << "Leaked 0x" << std::hex << l_decl.m_object << std::dec << " (" << l_decl.m_name << "), from file " << l_decl.m_file << ", line " << l_decl.m_line << std::endl;
+		l_stream << str_utils::to_str( l_decl.m_stack ) << std::endl;
 		Castor::Logger::LogError( l_stream.str() );
 	}
 
@@ -410,7 +412,9 @@ void DxRenderSystem::SetDxDebugName( ID3D11Device * p_object, std::string const 
 
 	if ( l_it == m_allocated.end() )
 	{
-		m_allocated.push_back( { ++m_id, p_type, p_object, p_file, p_line, 1 } );
+		StringStream l_stream;
+		Debug::ShowBacktrace( l_stream );
+		m_allocated.push_back( { ++m_id, p_type, p_object, p_file, p_line, 1, l_stream.str() } );
 		DoSetDxDebugName( m_id, p_object, p_type );
 	}
 	else
@@ -428,7 +432,9 @@ void DxRenderSystem::SetDxDebugName( ID3D11DeviceChild * p_object, std::string c
 
 	if ( l_it == m_allocated.end() )
 	{
-		m_allocated.push_back( { ++m_id, p_type, p_object, p_file, p_line, 1 } );
+		StringStream l_stream;
+		Debug::ShowBacktrace( l_stream );
+		m_allocated.push_back( { ++m_id, p_type, p_object, p_file, p_line, 1, l_stream.str() } );
 		DoSetDxDebugName( m_id, p_object, p_type );
 	}
 	else
@@ -446,7 +452,9 @@ void DxRenderSystem::SetDxDebugName( IDXGIDeviceSubObject * p_object, std::strin
 
 	if ( l_it == m_allocated.end() )
 	{
-		m_allocated.push_back( { ++m_id, p_type, p_object, p_file, p_line, 1 } );
+		StringStream l_stream;
+		Debug::ShowBacktrace( l_stream );
+		m_allocated.push_back( { ++m_id, p_type, p_object, p_file, p_line, 1, l_stream.str() } );
 		DoSetDxDebugName( m_id, p_object, p_type );
 	}
 	else

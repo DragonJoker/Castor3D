@@ -19,8 +19,16 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_ENGINE_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "Version.hpp"
+
 #include "FrameEvent.hpp"
+#include "LightFactory.hpp"
+#include "MaterialManager.hpp"
+#include "MeshFactory.hpp"
+#include "OverlayFactory.hpp"
+#include "OverlayManager.hpp"
+#include "ShaderManager.hpp"
+#include "TechniqueFactory.hpp"
+#include "Version.hpp"
 
 #include <Unique.hpp>
 #include <SquareMatrix.hpp>
@@ -637,7 +645,7 @@ namespace Castor3D
 		 */
 		TechniqueFactory const & GetTechniqueFactory()const
 		{
-			return *m_pTechniqueFactory;
+			return m_techniqueFactory;
 		}
 		/**
 		 *\~english
@@ -649,7 +657,7 @@ namespace Castor3D
 		 */
 		TechniqueFactory & GetTechniqueFactory()
 		{
-			return *m_pTechniqueFactory;
+			return m_techniqueFactory;
 		}
 		/**
 		 *\~english
@@ -805,7 +813,7 @@ namespace Castor3D
 		 */
 		inline MaterialManager const & GetMaterialManager()const
 		{
-			return *m_pMaterialManager;
+			return m_materialManager;
 		}
 		/**
 		 *\~english
@@ -817,7 +825,7 @@ namespace Castor3D
 		 */
 		inline MaterialManager & GetMaterialManager()
 		{
-			return *m_pMaterialManager;
+			return m_materialManager;
 		}
 		/**
 		 *\~english
@@ -829,7 +837,7 @@ namespace Castor3D
 		 */
 		inline OverlayManager const & GetOverlayManager()const
 		{
-			return *m_pOverlayManager;
+			return m_overlayManager;
 		}
 		/**
 		 *\~english
@@ -841,7 +849,7 @@ namespace Castor3D
 		 */
 		inline OverlayManager & GetOverlayManager()
 		{
-			return *m_pOverlayManager;
+			return m_overlayManager;
 		}
 		/**
 		 *\~english
@@ -853,7 +861,7 @@ namespace Castor3D
 		 */
 		inline ShaderManager const & GetShaderManager()const
 		{
-			return *m_pShaderManager;
+			return m_shaderManager;
 		}
 		/**
 		 *\~english
@@ -865,7 +873,7 @@ namespace Castor3D
 		 */
 		inline ShaderManager & GetShaderManager()
 		{
-			return *m_pShaderManager;
+			return m_shaderManager;
 		}
 		/**
 		 *\~english
@@ -877,7 +885,7 @@ namespace Castor3D
 		 */
 		inline SceneCollection const & GetSceneManager()const
 		{
-			return *m_pSceneManager;
+			return m_sceneManager;
 		}
 		/**
 		 *\~english
@@ -889,7 +897,7 @@ namespace Castor3D
 		 */
 		inline SceneCollection & GetSceneManager()
 		{
-			return *m_pSceneManager;
+			return m_sceneManager;
 		}
 		/**
 		 *\~english
@@ -901,7 +909,7 @@ namespace Castor3D
 		 */
 		inline ImageCollection const & GetImageManager()const
 		{
-			return *m_pImageManager;
+			return m_imageManager;
 		}
 		/**
 		 *\~english
@@ -913,7 +921,7 @@ namespace Castor3D
 		 */
 		inline ImageCollection & GetImageManager()
 		{
-			return *m_pImageManager;
+			return m_imageManager;
 		}
 		/**
 		 *\~english
@@ -925,7 +933,7 @@ namespace Castor3D
 		 */
 		inline FontCollection const & GetFontManager()const
 		{
-			return *m_pFontManager;
+			return m_fontManager;
 		}
 		/**
 		 *\~english
@@ -937,7 +945,7 @@ namespace Castor3D
 		 */
 		inline FontCollection & GetFontManager()
 		{
-			return *m_pFontManager;
+			return m_fontManager;
 		}
 		/**
 		 *\~english
@@ -949,7 +957,7 @@ namespace Castor3D
 		 */
 		inline AnimationCollection const & GetAnimationManager()const
 		{
-			return *m_pAnimationManager;
+			return m_animationManager;
 		}
 		/**
 		 *\~english
@@ -961,7 +969,7 @@ namespace Castor3D
 		 */
 		inline AnimationCollection & GetAnimationManager()
 		{
-			return *m_pAnimationManager;
+			return m_animationManager;
 		}
 		/**
 		 *\~english
@@ -973,7 +981,7 @@ namespace Castor3D
 		 */
 		inline MeshCollection const & GetMeshManager()const
 		{
-			return *m_pMeshManager;
+			return m_meshManager;
 		}
 		/**
 		 *\~english
@@ -985,7 +993,7 @@ namespace Castor3D
 		 */
 		inline MeshCollection & GetMeshManager()
 		{
-			return *m_pMeshManager;
+			return m_meshManager;
 		}
 		/**
 		 *\~english
@@ -997,7 +1005,7 @@ namespace Castor3D
 		 */
 		inline DepthStencilStateCollection const & GetDepthStencilStateManager()const
 		{
-			return *m_pDepthStencilStateManager;
+			return m_depthStencilStateManager;
 		}
 		/**
 		 *\~english
@@ -1009,7 +1017,7 @@ namespace Castor3D
 		 */
 		inline DepthStencilStateCollection & GetDepthStencilStateManager()
 		{
-			return *m_pDepthStencilStateManager;
+			return m_depthStencilStateManager;
 		}
 		/**
 		 *\~english
@@ -1021,7 +1029,7 @@ namespace Castor3D
 		 */
 		inline RasteriserStateCollection const & GetRasteriserStateManager()const
 		{
-			return *m_pRasteriserStateManager;
+			return m_rasteriserStateManager;
 		}
 		/**
 		 *\~english
@@ -1033,7 +1041,7 @@ namespace Castor3D
 		 */
 		inline RasteriserStateCollection & GetRasteriserStateManager()
 		{
-			return *m_pRasteriserStateManager;
+			return m_rasteriserStateManager;
 		}
 		/**
 		 *\~english
@@ -1045,7 +1053,7 @@ namespace Castor3D
 		 */
 		inline BlendStateCollection const & GetBlendStateManager()const
 		{
-			return *m_pBlendStateManager;
+			return m_blendStateManager;
 		}
 		/**
 		 *\~english
@@ -1057,7 +1065,7 @@ namespace Castor3D
 		 */
 		inline BlendStateCollection & GetBlendStateManager()
 		{
-			return *m_pBlendStateManager;
+			return m_blendStateManager;
 		}
 		/**
 		 *\~english
@@ -1069,7 +1077,7 @@ namespace Castor3D
 		 */
 		inline MeshFactory const & GetMeshFactory()const
 		{
-			return *m_pMeshFactory;
+			return m_meshFactory;
 		}
 		/**
 		 *\~english
@@ -1081,7 +1089,7 @@ namespace Castor3D
 		 */
 		inline MeshFactory  & GetMeshFactory()
 		{
-			return *m_pMeshFactory;
+			return m_meshFactory;
 		}
 		/**
 		 *\~english
@@ -1093,7 +1101,7 @@ namespace Castor3D
 		 */
 		inline LightFactory const & GetLightFactory()const
 		{
-			return *m_pLightFactory;
+			return m_lightFactory;
 		}
 		/**
 		 *\~english
@@ -1105,7 +1113,7 @@ namespace Castor3D
 		 */
 		inline LightFactory & GetLightFactory()
 		{
-			return *m_pLightFactory;
+			return m_lightFactory;
 		}
 		/**
 		 *\~english
@@ -1117,7 +1125,7 @@ namespace Castor3D
 		 */
 		inline OverlayFactory const & GetOverlayFactory()const
 		{
-			return *m_pOverlayFactory;
+			return m_overlayFactory;
 		}
 		/**
 		 *\~english
@@ -1129,7 +1137,7 @@ namespace Castor3D
 		 */
 		inline OverlayFactory & GetOverlayFactory()
 		{
-			return *m_pOverlayFactory;
+			return m_overlayFactory;
 		}
 		/**
 		 *\~english
@@ -1153,7 +1161,7 @@ namespace Castor3D
 		 */
 		inline SamplerCollection const & GetSamplerManager()const
 		{
-			return *m_pSamplerManager;
+			return m_samplerManager;
 		}
 		/**
 		 *\~english
@@ -1165,7 +1173,7 @@ namespace Castor3D
 		 */
 		inline SamplerCollection & GetSamplerManager()
 		{
-			return *m_pSamplerManager;
+			return m_samplerManager;
 		}
 		/**
 		 *\~english
@@ -1272,37 +1280,37 @@ namespace Castor3D
 		//!\~english The frame listeners array	\~french Le tableau de frame listeners
 		FrameListenerPtrArray m_arrayListeners;
 		//!\~english The animations collection	\~french La collection d'animations
-		AnimationCollectionUPtr m_pAnimationManager;
+		AnimationCollection m_animationManager;
 		//!\~english The meshes collection	\~french La collection de maillages
-		MeshCollectionUPtr m_pMeshManager;
+		MeshCollection m_meshManager;
 		//!\~english The fonts collection	\~french La collection de polices
-		FontCollectionUPtr m_pFontManager;
+		FontCollection m_fontManager;
 		//!\~english The images collection	\~french La collection d'images
-		ImageCollectionUPtr m_pImageManager;
+		ImageCollection m_imageManager;
 		//!\~english The scenes collection	\~french La collection de scènes
-		SceneCollectionUPtr m_pSceneManager;
+		SceneCollection m_sceneManager;
 		//!\~english The overlays collection	\~french La collection d'overlays
-		OverlayManagerUPtr m_pOverlayManager;
+		OverlayManager m_overlayManager;
 		//!\~english The shaders collection	\~french La collection de shaders
-		ShaderManagerUPtr m_pShaderManager;
+		ShaderManager m_shaderManager;
 		//!\~english The materials collection	\~french La collection de matériaux
-		MaterialManagerUPtr m_pMaterialManager;
+		MaterialManager m_materialManager;
 		//!\~english The LightCategory factory	\~french La fabrique de LightCategory
-		LightFactoryUPtr m_pLightFactory;
+		LightFactory m_lightFactory;
 		//!\~english The MeshCategory factory	\~french La fabrique de MeshCategory
-		MeshFactoryUPtr m_pMeshFactory;
+		MeshFactory m_meshFactory;
 		//!\~english The OverlayCategory factory	\~french La fabrique de OverlayCategory
-		OverlayFactoryUPtr m_pOverlayFactory;
+		OverlayFactory m_overlayFactory;
 		//!\~english The RenderTechnique factory	\~french La fabrique de RenderTechnique
-		TechniqueFactoryUPtr m_pTechniqueFactory;
+		TechniqueFactory m_techniqueFactory;
 		//!\~english The sampler states collection	\~french La collection de sampler states
-		SamplerCollectionUPtr m_pSamplerManager;
+		SamplerCollection m_samplerManager;
 		//!\~english The DepthStencilState collection	\~french La collection de DepthStencilState
-		DepthStencilStateCollectionUPtr m_pDepthStencilStateManager;
+		DepthStencilStateCollection m_depthStencilStateManager;
 		//!\~english The RasteriserState collection	\~french La collection de RasteriserState
-		RasteriserStateCollectionUPtr m_pRasteriserStateManager;
+		RasteriserStateCollection m_rasteriserStateManager;
 		//!\~english The BlendState collection	\~french La collection de BlendState
-		BlendStateCollectionUPtr m_pBlendStateManager;
+		BlendStateCollection m_blendStateManager;
 		//!\~english  The current RenderSystem	\~french Le RenderSystem courant
 		RenderSystem * m_pRenderSystem;
 		//!\~english  If \p false, the render can't be threaded	\~french Si \p false, le rendu ne peut pas être threadé
