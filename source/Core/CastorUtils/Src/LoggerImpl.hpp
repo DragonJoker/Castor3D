@@ -93,7 +93,7 @@ namespace Castor
 	\~english
 	\brief		Helper class for Logger, level dependant
 	\~french
-	\brief		Classe d'aide pour Logger, dépendante du niveau de log
+	\brief		Classe d'aide pour Logger, dÃ©pendante du niveau de log
 	*/
 
 	class LoggerImpl

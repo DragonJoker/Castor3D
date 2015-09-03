@@ -1,18 +1,16 @@
 project( OceanLighting )
 
-set( OL_VERSION_MAJOR	0 )
-set( OL_VERSION_MINOR	7 )
-set( OL_VERSION_BUILD	0 )
+set( ${PROJECT_NAME}_DESCRIPTION "Eric Bruneton's OceanLightingFFT demo adapted for ${MAIN_PROJECT_NAME}" )
+set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
+set( ${PROJECT_NAME}_VERSION_MINOR	8 )
+set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
 include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D/Src )
 include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
 
-message( STATUS "[${CastorBinsDependencies}]" )
-message( STATUS "[${CastorMinLibraries}]" )
-
 add_target(
-	OceanLighting
+	${PROJECT_NAME}
 	bin
 	"${CastorBinsDependencies}"
 	"${CastorMinLibraries};${wxWidgetsLibraries}"
@@ -25,56 +23,56 @@ add_target(
 # Copying data files
 file(
 	GLOB
-		OceanLighting_datas1
+		${PROJECT_NAME}_datas1
 		${CMAKE_CURRENT_SOURCE_DIR}/rsc/*.*
 )
 
 file(
     COPY
-        ${OceanLighting_datas1}
+        ${${PROJECT_NAME}_datas1}
     DESTINATION
-        ${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/share/OceanLighting
+        ${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/share/${PROJECT_NAME}
 )
 
 file(
     COPY
-        ${OceanLighting_datas1}
+        ${${PROJECT_NAME}_datas1}
     DESTINATION
-        ${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/share/OceanLighting
+        ${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/share/${PROJECT_NAME}
 )
 
 install(
-	FILES ${OceanLighting_datas1}
-	DESTINATION ${CMAKE_INSTALL_PREFIX}/share/OceanLighting/
-	COMPONENT OceanLighting
+	FILES ${${PROJECT_NAME}_datas1}
+	DESTINATION ${CMAKE_INSTALL_PREFIX}/share/${PROJECT_NAME}/
+	COMPONENT ${PROJECT_NAME}
 )
 
 file(
 	GLOB
-		OceanLighting_datas2
+		${PROJECT_NAME}_datas2
 		${CMAKE_CURRENT_SOURCE_DIR}/rsc/data/*.*
 )
 
 file(
     COPY
-        ${OceanLighting_datas2}
+        ${${PROJECT_NAME}_datas2}
     DESTINATION
-        ${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/share/OceanLighting/data
+        ${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/share/${PROJECT_NAME}/data
 )
 
 file(
     COPY
-        ${OceanLighting_datas2}
+        ${${PROJECT_NAME}_datas2}
     DESTINATION
-        ${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/share/OceanLighting/data
+        ${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/share/${PROJECT_NAME}/data
 )
 
 install(
-	FILES ${OceanLighting_datas2}
-	DESTINATION ${CMAKE_INSTALL_PREFIX}/share/OceanLighting/data/
-	COMPONENT OceanLighting
+	FILES ${${PROJECT_NAME}_datas2}
+	DESTINATION ${CMAKE_INSTALL_PREFIX}/share/${PROJECT_NAME}/data/
+	COMPONENT ${PROJECT_NAME}
 )
 
-set_property( TARGET OceanLighting PROPERTY FOLDER "Samples" )
-set( Build "yes (version ${OL_VERSION_MAJOR}.${OL_VERSION_MINOR}.${OL_VERSION_BUILD})" PARENT_SCOPE )
-add_target_astyle( OceanLighting ".h;.hpp;.inl;.cpp" )
+set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Samples" )
+set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
+add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )

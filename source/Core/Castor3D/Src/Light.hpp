@@ -45,17 +45,17 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_pScene		Parent scene
-		 *\param[in]	p_pMaterial			The parent scene node
+		 *\param[in]	p_pNode			The parent scene node
 		 *\param[in]	p_pFactory		Factory used to create the LightCategory
 		 *\param[in]	p_eLightType	The light type
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_pScene		La scène parente
-		 *\param[in]	p_pMaterial			Le scene node parent
+		 *\param[in]	p_pNode			Le scene node parent
 		 *\param[in]	p_pFactory		La fabrique de LightCategory
 		 *\param[in]	p_eLightType	Le type de lumière
 		 */
-		Light( LightFactory & p_factory, SceneSPtr p_pScene, eLIGHT_TYPE p_eLightType, SceneNodeSPtr p_pMaterial, Castor::String const & p_name );
+		Light( LightFactory & p_factory, SceneSPtr p_pScene, eLIGHT_TYPE p_eLightType, SceneNodeSPtr p_pNode, Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -97,12 +97,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Attaches this light to a Material
-		 *\param[in]	p_pMaterial	The new light's parent node
+		 *\param[in]	p_pNode	The new light's parent node
 		 *\~french
 		 *\brief		Attache cette lumière au node donné
-		 *\param[in]	p_pMaterial	Le nouveau node parent de cette lumière
+		 *\param[in]	p_pNode	Le nouveau node parent de cette lumière
 		 */
-		virtual void AttachTo( SceneNodeSPtr p_pMaterial );
+		virtual void AttachTo( SceneNodeSPtr p_pNode );
 		/**
 		 *\~english
 		 *\brief		Retrieves the DirectionalLight category

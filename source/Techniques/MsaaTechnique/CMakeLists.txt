@@ -28,7 +28,7 @@ add_target(
 	${PROJECT_NAME}
 	plugin
 	"Castor3D"
-	"${CastorMinLibraries};${TechniqueLibraries}"
+	"${TechniqueLibraries}"
 )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Techniques" )

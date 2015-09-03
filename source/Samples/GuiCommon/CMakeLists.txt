@@ -2,27 +2,28 @@ project( GuiCommon )
 
 set( CastorBinsDependencies
 	${CastorBinsDependencies}
-	GuiCommon
+	${PROJECT_NAME}
 	PARENT_SCOPE
 )
 
 set( CastorBinLibraries
 	${CastorMinLibraries}
 	${wxWidgetsLibraries}
-	GuiCommon
+	${PROJECT_NAME}
 	PARENT_SCOPE
 )
 
-set( GC_VERSION_MAJOR	0 )
-set( GC_VERSION_MINOR	7 )
-set( GC_VERSION_BUILD	0 )
+set( ${PROJECT_NAME}_DESCRIPTION "${MAIN_PROJECT_NAME} Common GUI tools" )
+set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
+set( ${PROJECT_NAME}_VERSION_MINOR	8 )
+set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
 include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D/Src )
 include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
 
 add_target(
-	GuiCommon
+	${PROJECT_NAME}
 	lib
 	"Castor3D"
 	"${CastorBinLibraries}"
@@ -92,13 +93,13 @@ source_group( "Source Files\\System" FILES ${${PROJECT_NAME}_SYSTEM_SOURCE_FILES
 # Copying language files for GLSL and HLSL coloration in wxShaderDialog
 file(
 	GLOB_RECURSE
-		Parser_languages tools/resource/GuiCommon/languages/*.lang
+		Parser_languages tools/resource/${PROJECT_NAME}/languages/*.lang
 )
 
-set_property( TARGET GuiCommon PROPERTY FOLDER "Samples" )
-add_target_astyle( GuiCommon ".h;.hpp;.inl;.cpp" )
+set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Samples" )
+add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 
-set( Build "yes (version ${GC_VERSION_MAJOR}.${GC_VERSION_MINOR}.${GC_VERSION_BUILD})" PARENT_SCOPE )
+set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
 
 if ( {${CASTOR_PACKAGE_DEB} )
 	set( CPACK_DEBIAN_PACKAGE_DEPENDS "wxWidgets >= ${wxWidgetsVersion}" )

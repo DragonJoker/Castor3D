@@ -560,9 +560,9 @@ namespace CastorViewer
 		m_propertiesContainer = new wxPropertiesHolder( false, this, wxDefaultPosition, wxDefaultSize );
 
 		m_auiManager.AddPane( m_pRenderPanel, wxAuiPaneInfo().Center().CloseButton( false ).MinSize( l_size.x - m_iPropertiesWidth, l_size.y - m_iLogsHeight ).Layer( 0 ).Movable( false ).PaneBorder( false ).Dockable( false) );
-		m_auiManager.AddPane( m_logTabsContainer, wxAuiPaneInfo().CloseButton().Caption( _( "Logs" ) ).Bottom().Dock().BottomDockable().TopDockable().Movable().PinButton().MinSize( l_size.x, m_iLogsHeight ).Layer( 1 ).PaneBorder( false ) );
-		m_auiManager.AddPane( m_sceneTabsContainer, wxAuiPaneInfo().CloseButton().Caption( _( "Scenes" ) ).Left().Dock().LeftDockable().RightDockable().Movable().PinButton().MinSize( m_iPropertiesWidth, l_size.y / 3 ).Layer( 2 ).PaneBorder( false ) );
-		m_auiManager.AddPane( m_propertiesContainer , wxAuiPaneInfo().CloseButton().Caption( _( "Properties" ) ).Left().Dock().LeftDockable().RightDockable().Movable().PinButton().MinSize( m_iPropertiesWidth, l_size.y / 3 ).Layer( 2 ).PaneBorder( false ) );
+		m_auiManager.AddPane( m_logTabsContainer, wxAuiPaneInfo().Hide().CloseButton().Caption( _( "Logs" ) ).Bottom().Dock().BottomDockable().TopDockable().Movable().PinButton().MinSize( l_size.x, m_iLogsHeight ).Layer( 1 ).PaneBorder( false ) );
+		m_auiManager.AddPane( m_sceneTabsContainer, wxAuiPaneInfo().Hide().CloseButton().Caption( _( "Scenes" ) ).Left().Dock().LeftDockable().RightDockable().Movable().PinButton().MinSize( m_iPropertiesWidth, l_size.y / 3 ).Layer( 2 ).PaneBorder( false ) );
+		m_auiManager.AddPane( m_propertiesContainer , wxAuiPaneInfo().Hide().CloseButton().Caption( _( "Properties" ) ).Left().Dock().LeftDockable().RightDockable().Movable().PinButton().MinSize( m_iPropertiesWidth, l_size.y / 3 ).Layer( 2 ).PaneBorder( false ) );
 
 		auto l_logCreator = [this, &l_size]( wxString const & p_name, wxListView *& p_log )
 		{

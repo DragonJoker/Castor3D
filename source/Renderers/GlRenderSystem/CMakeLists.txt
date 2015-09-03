@@ -18,9 +18,10 @@ if( OPENGL_FOUND )
 		PARENT_SCOPE
 	)
 	
-	set( GL_VERSION_MAJOR 0 )
-	set( GL_VERSION_MINOR 7 )
-	set( GL_VERSION_BUILD 0 )
+	set( ${PROJECT_NAME}_DESCRIPTION "OpenGL Renderer" )
+	set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
+	set( ${PROJECT_NAME}_VERSION_MINOR 8 )
+	set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 	
 	include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
 	include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D/Src )
@@ -163,9 +164,9 @@ if( OPENGL_FOUND )
 	
 	set( Ogl "yes" PARENT_SCOPE )
 	
-	set_property( TARGET GlRenderSystem PROPERTY FOLDER "Renderers" )
-	set( Build "yes (version ${GL_VERSION_MAJOR}.${GL_VERSION_MINOR}.${GL_VERSION_BUILD})" PARENT_SCOPE )
-	add_target_astyle( GlRenderSystem ".h;.hpp;.inl;.cpp" )
+	set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Renderers" )
+	set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
+	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 else()
 	set( Build "no (OpenGL libraries not found)" PARENT_SCOPE )
 endif()

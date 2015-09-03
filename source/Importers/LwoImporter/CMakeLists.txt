@@ -2,9 +2,14 @@ project( LwoImporter )
 
 set( CastorBinsDependencies 
 	${CastorBinsDependencies}
-	LwoImporter
+	${PROJECT_NAME}
 	PARENT_SCOPE
 )
+
+set( ${PROJECT_NAME}_DESCRIPTION "LightWave Model Importer" )
+set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
+set( ${PROJECT_NAME}_VERSION_MINOR	7 )
+set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 set( LWO_VERSION_MAJOR	0 )
 set( LWO_VERSION_MINOR	7 )
@@ -15,7 +20,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D/Src )
 include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
 
 add_target(
-	LwoImporter
+	${PROJECT_NAME}
 	plugin
 	"Castor3D"
 	"${CastorMinLibraries}"
@@ -23,6 +28,6 @@ add_target(
     "LwoImporterPch.cpp"
 )
 
-set_property( TARGET LwoImporter PROPERTY FOLDER "Importers" )
-set( Build "yes (version ${LWO_VERSION_MAJOR}.${LWO_VERSION_MINOR}.${LWO_VERSION_BUILD})" PARENT_SCOPE )
-add_target_astyle( LwoImporter ".h;.hpp;.inl;.cpp" )
+set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Importers" )
+set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
+add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )

@@ -63,15 +63,15 @@ namespace GuiCommon
 			switch ( l_overlay->GetType() )
 			{
 			case eOVERLAY_TYPE_PANEL:
-				DoCreatePanelOverlayProperties( p_grid, std::static_pointer_cast< PanelOverlay >( GetOverlay()->GetOverlayCategory() ) );
+				DoCreatePanelOverlayProperties( p_grid, GetOverlay()->GetPanelOverlay() );
 				break;
 
 			case eOVERLAY_TYPE_BORDER_PANEL:
-				DoCreateBorderPanelOverlayProperties( p_grid, std::static_pointer_cast< BorderPanelOverlay >( GetOverlay()->GetOverlayCategory() ) );
+				DoCreateBorderPanelOverlayProperties( p_grid, GetOverlay()->GetBorderPanelOverlay() );
 				break;
 
 			case eOVERLAY_TYPE_TEXT:
-				DoCreateTextOverlayProperties( p_grid, std::static_pointer_cast< TextOverlay >( GetOverlay()->GetOverlayCategory() ) );
+				DoCreateTextOverlayProperties( p_grid, GetOverlay()->GetTextOverlay() );
 				break;
 			}
 		}
@@ -279,7 +279,7 @@ namespace GuiCommon
 
 			if ( l_material )
 			{
-				std::static_pointer_cast< BorderPanelOverlay >( l_overlay->GetOverlayCategory() )->SetBorderMaterial( l_material );
+				l_overlay->GetBorderPanelOverlay()->SetBorderMaterial( l_material );
 			}
 		} ) );
 	}
@@ -291,7 +291,7 @@ namespace GuiCommon
 
 		l_overlay->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_size, l_overlay]()
 		{
-			std::static_pointer_cast< BorderPanelOverlay >( l_overlay->GetOverlayCategory() )->SetBorderPixelSize( p_size );
+			l_overlay->GetBorderPanelOverlay()->SetBorderPixelSize( p_size );
 		} ) );
 	}
 
@@ -302,7 +302,7 @@ namespace GuiCommon
 
 		l_overlay->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_uv, l_overlay]()
 		{
-			std::static_pointer_cast< BorderPanelOverlay >( l_overlay->GetOverlayCategory() )->SetBorderInnerUV( p_uv );
+			l_overlay->GetBorderPanelOverlay()->SetBorderInnerUV( p_uv );
 		} ) );
 	}
 
@@ -313,7 +313,7 @@ namespace GuiCommon
 
 		l_overlay->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_uv, l_overlay]()
 		{
-			std::static_pointer_cast< BorderPanelOverlay >( l_overlay->GetOverlayCategory() )->SetBorderOuterUV( p_uv );
+			l_overlay->GetBorderPanelOverlay()->SetBorderOuterUV( p_uv );
 		} ) );
 	}
 
@@ -324,7 +324,7 @@ namespace GuiCommon
 
 		l_overlay->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_position, l_overlay]()
 		{
-			std::static_pointer_cast< BorderPanelOverlay >( l_overlay->GetOverlayCategory() )->SetBorderPosition( p_position );
+			l_overlay->GetBorderPanelOverlay()->SetBorderPosition( p_position );
 		} ) );
 	}
 
@@ -335,7 +335,7 @@ namespace GuiCommon
 
 		l_overlay->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_caption, l_overlay]()
 		{
-			std::static_pointer_cast< TextOverlay >( l_overlay->GetOverlayCategory() )->SetCaption( p_caption );
+			l_overlay->GetTextOverlay()->SetCaption( p_caption );
 		} ) );
 	}
 
@@ -346,7 +346,7 @@ namespace GuiCommon
 
 		l_overlay->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_font, l_overlay]()
 		{
-			std::static_pointer_cast< TextOverlay >( l_overlay->GetOverlayCategory() )->SetFont( p_font->GetName() );
+			l_overlay->GetTextOverlay()->SetFont( p_font->GetName() );
 		} ) );
 	}
 }

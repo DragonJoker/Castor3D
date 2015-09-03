@@ -2,25 +2,26 @@ project( SMaxImporter )
 
 set( CastorBinsDependencies 
 	${CastorBinsDependencies}
-	SMaxImporter
+	${PROJECT_NAME}
 	PARENT_SCOPE
 )
 
-set( 3DS_VERSION_MAJOR	0 )
-set( 3DS_VERSION_MINOR	7 )
-set( 3DS_VERSION_BUILD	0 )
+set( ${PROJECT_NAME}_DESCRIPTION "3D Studio Max 3DS Importer" )
+set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
+set( ${PROJECT_NAME}_VERSION_MINOR	7 )
+set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
 include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D/Src )
 include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
 
 add_target(
-	SMaxImporter
+	${PROJECT_NAME}
 	plugin
 	"Castor3D"
 	"${CastorMinLibraries}"
 )
 
-set_property( TARGET SMaxImporter PROPERTY FOLDER "Importers" )
-set( Build "yes (version ${3DS_VERSION_MAJOR}.${3DS_VERSION_MINOR}.${3DS_VERSION_BUILD})" PARENT_SCOPE )
-add_target_astyle( SMaxImporter ".h;.hpp;.inl;.cpp" )
+set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Importers" )
+set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
+add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )

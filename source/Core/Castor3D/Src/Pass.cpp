@@ -22,27 +22,15 @@ namespace Castor3D
 {
 	namespace
 	{
-		template< class Type, typename Value >
-		void RetrieveVariable( std::weak_ptr< Type > & p_member, String const & p_name, FrameVariableBufferSPtr p_frameVariablesBuffer, Value const & p_value )
+		template< class Type >
+		void RetrieveVariable( std::weak_ptr< Type > & p_member, String const & p_name, FrameVariableBufferSPtr p_frameVariablesBuffer )
 		{
 			std::shared_ptr< Type > l_variable;
 
-			if ( p_member.expired() )
+			if ( p_frameVariablesBuffer )
 			{
-				if ( p_frameVariablesBuffer )
-				{
-					p_frameVariablesBuffer->GetVariable( p_name, l_variable );
-					p_member = l_variable;
-				}
-			}
-			else
-			{
-				l_variable = p_member.lock();
-			}
-
-			if ( l_variable )
-			{
-				l_variable->SetValue( p_value );
+				p_frameVariablesBuffer->GetVariable( p_name, l_variable );
+				p_member = l_variable;
 			}
 		}
 	}
@@ -392,7 +380,6 @@ namespace Castor3D
 		, m_bAutomaticShader( true )
 		, m_alphaBlendMode( eBLEND_MODE_ADDITIVE )
 		, m_colourBlendMode( eBLEND_MODE_ADDITIVE )
-		, m_changed( true )
 	{
 		if ( TEXTURE_CHANNEL_NAME.empty() )
 		{
@@ -526,11 +513,11 @@ namespace Castor3D
 		if ( HasShader() && !HasAutomaticShader() )
 		{
 			m_pShaderProgram.lock()->Initialise();
-			DoBindTextures();
+			DoGetTextures();
 		}
 	}
 
-	void Pass::BindToProgram( ShaderProgramBaseSPtr p_pProgram )
+	void Pass::BindToAutomaticProgram( ShaderProgramBaseSPtr p_pProgram )
 	{
 		ShaderProgramBaseSPtr l_pProgram = m_pShaderProgram.lock();
 		m_bAutomaticShader = true;
@@ -538,9 +525,11 @@ namespace Castor3D
 		if ( l_pProgram != p_pProgram && p_pProgram->GetStatus() == ePROGRAM_STATUS_LINKED )
 		{
 			m_pShaderProgram = p_pProgram;
-			DoBindTextures();
-			DoBindBuffers();
+			DoGetTextures();
+			DoGetBuffers();
 		}
+
+		DoFillShaderVariables();
 	}
 
 	void Pass::Cleanup()
@@ -645,8 +634,7 @@ namespace Castor3D
 		m_mapUnits.clear();
 		m_pShaderProgram = p_pProgram;
 		m_bAutomaticShader = false;
-		DoBindTextures();
-		DoBindBuffers();
+		DoGetBuffers();
 	}
 
 	bool Pass::HasShader()const
@@ -659,7 +647,7 @@ namespace Castor3D
 		return m_pBlendState->IsBlendEnabled();
 	}
 
-	void Pass::DoBindTexture( eTEXTURE_CHANNEL p_channel, String const & p_name, ShaderProgramBase & p_program )
+	void Pass::DoGetTexture( eTEXTURE_CHANNEL p_channel, String const & p_name, ShaderProgramBase & p_program, OneTextureFrameVariableWPtr & p_variable )
 	{
 		TextureUnitSPtr l_unit = GetTextureUnit( p_channel );
 
@@ -669,27 +657,70 @@ namespace Castor3D
 
 			if ( l_variable )
 			{
-				l_variable->SetValue( l_unit->GetTexture().get() );
 				m_mapUnits.insert( std::make_pair( p_channel, std::make_pair( l_unit, l_variable ) ) );
+				p_variable = l_variable;
 			}
 		}
 	}
 
-	void Pass::DoBindTextures()
+	void Pass::DoFillShaderVariables()
+	{
+		for ( auto && l_pair: m_mapUnits )
+		{
+			TextureUnitSPtr l_unit = l_pair.second.first.lock();
+			OneTextureFrameVariableSPtr l_variable = l_pair.second.second.lock();
+
+			if ( l_unit && l_variable )
+			{
+				l_variable->SetValue( l_unit->GetTexture().get() );
+			}
+		}
+
+		FrameVariableBufferSPtr l_passBuffer = m_passBuffer.lock();
+
+		if ( l_passBuffer )
+		{
+			Point4f l_colour;
+			GetAmbient().to_rgba( l_colour );
+			m_pAmbient.lock()->SetValue( l_colour );
+			GetDiffuse().to_rgba( l_colour );
+			m_pDiffuse.lock()->SetValue( l_colour );
+			GetSpecular().to_rgba( l_colour );
+			m_pSpecular.lock()->SetValue( l_colour );
+			GetEmissive().to_rgba( l_colour );
+			m_pEmissive.lock()->SetValue( l_colour );
+			m_pShininess.lock()->SetValue( GetShininess() );
+			m_pOpacity.lock()->SetValue( GetAlpha() );
+		}
+
+		FrameVariableBufferSPtr l_sceneBuffer = m_sceneBuffer.lock();
+
+		if ( l_sceneBuffer )
+		{
+			RenderSystem * l_renderSystem = m_pEngine->GetRenderSystem();
+
+			if ( l_renderSystem->GetCurrentCamera() )
+			{
+				m_pCameraPos.lock()->SetValue( l_renderSystem->GetCurrentCamera()->GetParent()->GetDerivedPosition() );
+			}
+		}
+	}
+
+	void Pass::DoGetTextures()
 	{
 		ShaderProgramBaseSPtr l_pProgram = m_pShaderProgram.lock();
 		m_mapUnits.clear();
-		DoBindTexture( eTEXTURE_CHANNEL_AMBIENT, ShaderProgramBase::MapAmbient, *l_pProgram );
-		DoBindTexture( eTEXTURE_CHANNEL_COLOUR, ShaderProgramBase::MapColour, *l_pProgram );
-		DoBindTexture( eTEXTURE_CHANNEL_DIFFUSE, ShaderProgramBase::MapDiffuse, *l_pProgram );
-		DoBindTexture( eTEXTURE_CHANNEL_NORMAL, ShaderProgramBase::MapNormal, *l_pProgram );
-		DoBindTexture( eTEXTURE_CHANNEL_SPECULAR, ShaderProgramBase::MapSpecular, *l_pProgram );
-		DoBindTexture( eTEXTURE_CHANNEL_OPACITY, ShaderProgramBase::MapOpacity, *l_pProgram );
-		DoBindTexture( eTEXTURE_CHANNEL_GLOSS, ShaderProgramBase::MapGloss, *l_pProgram );
-		DoBindTexture( eTEXTURE_CHANNEL_HEIGHT, ShaderProgramBase::MapHeight, *l_pProgram );
+		DoGetTexture( eTEXTURE_CHANNEL_AMBIENT, ShaderProgramBase::MapAmbient, *l_pProgram, m_pAmbientMap );
+		DoGetTexture( eTEXTURE_CHANNEL_COLOUR, ShaderProgramBase::MapColour, *l_pProgram, m_pColourMap );
+		DoGetTexture( eTEXTURE_CHANNEL_DIFFUSE, ShaderProgramBase::MapDiffuse, *l_pProgram, m_pDiffuseMap );
+		DoGetTexture( eTEXTURE_CHANNEL_NORMAL, ShaderProgramBase::MapNormal, *l_pProgram, m_pNormalMap );
+		DoGetTexture( eTEXTURE_CHANNEL_SPECULAR, ShaderProgramBase::MapSpecular, *l_pProgram, m_pSpecularMap );
+		DoGetTexture( eTEXTURE_CHANNEL_OPACITY, ShaderProgramBase::MapOpacity, *l_pProgram, m_pOpacityMap );
+		DoGetTexture( eTEXTURE_CHANNEL_GLOSS, ShaderProgramBase::MapGloss, *l_pProgram, m_pGlossMap );
+		DoGetTexture( eTEXTURE_CHANNEL_HEIGHT, ShaderProgramBase::MapHeight, *l_pProgram, m_pHeightMap );
 	}
 
-	void Pass::DoBindBuffers()
+	void Pass::DoGetBuffers()
 	{
 		ShaderProgramBaseSPtr l_pProgram = m_pShaderProgram.lock();
 
@@ -700,16 +731,12 @@ namespace Castor3D
 
 			if ( l_passBuffer )
 			{
-				GetAmbient().to_rgba( m_ptAmbient );
-				RetrieveVariable( m_pAmbient, ShaderProgramBase::MatAmbient, l_passBuffer, m_ptAmbient );
-				GetDiffuse().to_rgba( m_ptDiffuse );
-				RetrieveVariable( m_pDiffuse, ShaderProgramBase::MatDiffuse, l_passBuffer, m_ptDiffuse );
-				GetSpecular().to_rgba( m_ptSpecular );
-				RetrieveVariable( m_pSpecular, ShaderProgramBase::MatSpecular, l_passBuffer, m_ptSpecular );
-				GetEmissive().to_rgba( m_ptEmissive );
-				RetrieveVariable( m_pEmissive, ShaderProgramBase::MatEmissive, l_passBuffer, m_ptEmissive );
-				RetrieveVariable( m_pShininess, ShaderProgramBase::MatShininess, l_passBuffer, GetShininess() );
-				RetrieveVariable( m_pOpacity, ShaderProgramBase::MatOpacity, l_passBuffer, GetAlpha() );
+				RetrieveVariable( m_pAmbient, ShaderProgramBase::MatAmbient, l_passBuffer );
+				RetrieveVariable( m_pDiffuse, ShaderProgramBase::MatDiffuse, l_passBuffer );
+				RetrieveVariable( m_pSpecular, ShaderProgramBase::MatSpecular, l_passBuffer );
+				RetrieveVariable( m_pEmissive, ShaderProgramBase::MatEmissive, l_passBuffer );
+				RetrieveVariable( m_pShininess, ShaderProgramBase::MatShininess, l_passBuffer );
+				RetrieveVariable( m_pOpacity, ShaderProgramBase::MatOpacity, l_passBuffer );
 				m_passBuffer = l_passBuffer;
 			}
 
@@ -717,13 +744,7 @@ namespace Castor3D
 
 			if ( l_sceneBuffer )
 			{
-				RenderSystem * l_renderSystem = m_pEngine->GetRenderSystem();
-
-				if ( l_renderSystem->GetCurrentCamera() )
-				{
-					RetrieveVariable( m_pCameraPos, ShaderProgramBase::CameraPos, l_sceneBuffer, l_renderSystem->GetCurrentCamera()->GetParent()->GetDerivedPosition() );
-				}
-
+				RetrieveVariable( m_pCameraPos, ShaderProgramBase::CameraPos, l_sceneBuffer );
 				m_sceneBuffer = l_sceneBuffer;
 			}
 		}
@@ -782,17 +803,11 @@ namespace Castor3D
 
 	void Pass::DoRender( uint8_t p_index, uint8_t p_count )
 	{
-		if ( m_changed )
-		{
-			DoBindTextures();
-			DoBindBuffers();
-			m_changed = false;
-		}
-
 		ShaderProgramBaseSPtr l_program = m_pShaderProgram.lock();
 
 		if ( l_program )
 		{
+			DoFillShaderVariables();
 			l_program->Bind( p_index, p_count );
 		}
 

@@ -54,8 +54,6 @@ namespace GlRender
 
 		if ( m_bInitialised )
 		{
-			SetCurrent();
-
 			String l_strVtxShader;
 			{
 				// Vertex shader
@@ -105,15 +103,6 @@ namespace GlRender
 			l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_3, l_strPxlShader );
 			l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_4, l_strVtxShader );
 			l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_4, l_strPxlShader );
-			l_pProgram->Initialise();
-			m_pGeometryBuffers->GetVertexBuffer().Create();
-			m_pGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, l_pProgram );
-			m_pGeometryBuffers->Initialise();
-#if !defined( NDEBUG )
-			l_pProgram->Bind( 0, 1 );
-			l_pProgram->Unbind();
-#endif
-			EndCurrent();
 		}
 
 		return m_bInitialised;
@@ -121,19 +110,6 @@ namespace GlRender
 
 	void GlContext::DoCleanup()
 	{
-		m_bInitialised = false;
-		SetCurrent();
-		ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
-
-		if ( l_pProgram )
-		{
-			l_pProgram->Cleanup();
-		}
-
-		m_pGeometryBuffers->Cleanup();
-		m_pGeometryBuffers->GetVertexBuffer().Cleanup();
-		m_pGeometryBuffers->GetVertexBuffer().Destroy();
-		EndCurrent();
 		m_pImplementation->Cleanup();
 	}
 

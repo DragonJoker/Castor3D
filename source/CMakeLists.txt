@@ -6,10 +6,10 @@ cmake_minimum_required( VERSION 2.8 )
 set( MAIN_PROJECT_NAME "Castor3D" )
 
 # Set project version numbers
-set( VERSION_MAJOR	0		)
-set( VERSION_MINOR	7		)
-set( VERSION_BUILD	1		)
-set( VERSION_YEAR	2014	)
+set( VERSION_MAJOR 0 )
+set( VERSION_MINOR 8 )
+set( VERSION_BUILD 0 )
+set( VERSION_YEAR 2015 )
 
 # Used to look for external modules
 set( CMAKE_MODULE_PATH

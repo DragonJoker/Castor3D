@@ -173,7 +173,7 @@ namespace Castor3D
 		 *\param[in]	p_pProgram	Le programme
 		 *\return
 		 */
-		void BindToProgram( ShaderProgramBaseSPtr p_pProgram );
+		void BindToAutomaticProgram( ShaderProgramBaseSPtr p_pProgram );
 		/**
 		 *\~english
 		 *\brief		Applies the pass
@@ -275,6 +275,15 @@ namespace Castor3D
 		 */
 		bool HasAlphaBlending()const;
 		/**
+		*\~english
+		*\brief			Tells if the pass has a shader program
+		*\return		\p true if the shader program has been set, \p false if not
+		*\~french
+		*\brief			Dit si la passe a un shader
+		*\return		\p true si le programme a été défini, \p false sinon
+		 */
+		bool HasShader()const;
+		/**
 		 *\~english
 		 *\brief		Gives the current shader program
 		 *\return		The shader program, nullptr if none
@@ -294,15 +303,6 @@ namespace Castor3D
 
 			return l_pReturn;
 		}
-		/**
-		*\~english
-		*\brief			Tells if the pass has a shader program
-		*\return		\p true if the shader program has been set, \p false if not
-		*\~french
-		*\brief			Dit si la passe a un shader
-		*\return		\p true si le programme a été défini, \p false sinon
-		 */
-		bool HasShader()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the texture channels flags combination
@@ -338,7 +338,6 @@ namespace Castor3D
 		inline void SetDiffuse( Castor::Colour const & p_clrColour )
 		{
 			m_clrDiffuse = p_clrColour;
-			m_changed = true;
 		}
 		/**
 		 *\~english
@@ -351,7 +350,6 @@ namespace Castor3D
 		inline void SetAmbient( Castor::Colour const & p_clrColour )
 		{
 			m_clrAmbient = p_clrColour;
-			m_changed = true;
 		}
 		/**
 		 *\~english
@@ -364,7 +362,6 @@ namespace Castor3D
 		inline void SetSpecular( Castor::Colour const & p_clrColour )
 		{
 			m_clrSpecular = p_clrColour;
-			m_changed = true;
 		}
 		/**
 		 *\~english
@@ -377,7 +374,6 @@ namespace Castor3D
 		inline void SetEmissive( Castor::Colour const & p_clrColour )
 		{
 			m_clrEmissive = p_clrColour;
-			m_changed = true;
 		}
 		/**
 		 *\~english
@@ -390,7 +386,6 @@ namespace Castor3D
 		inline void SetShininess( float p_fShininess )
 		{
 			m_fShininess = p_fShininess;
-			m_changed = true;
 		}
 		/**
 		 *\~english
@@ -403,7 +398,6 @@ namespace Castor3D
 		inline void SetTwoSided( bool p_bDouble )
 		{
 			m_bDoubleFace = p_bDouble;
-			m_changed = true;
 		}
 		/**
 		 *\~english
@@ -420,7 +414,6 @@ namespace Castor3D
 			m_clrAmbient.alpha() = p_fAlpha;
 			m_clrSpecular.alpha() = p_fAlpha;
 			m_clrEmissive.alpha() = p_fAlpha;
-			m_changed = true;
 		}
 		/**
 		 *\~english
@@ -433,7 +426,6 @@ namespace Castor3D
 		inline void SetAlphaBlendMode( eBLEND_MODE p_value )
 		{
 			m_alphaBlendMode = p_value;
-			m_changed = true;
 		}
 		/**
 		 *\~english
@@ -446,7 +438,6 @@ namespace Castor3D
 		inline void SetColourBlendMode( eBLEND_MODE p_value )
 		{
 			m_colourBlendMode = p_value;
-			m_changed = true;
 		}
 		/**
 		 *\~english
@@ -601,7 +592,6 @@ namespace Castor3D
 		 */
 		inline Castor::Colour & GetDiffuse()
 		{
-			m_changed = true;
 			return m_clrDiffuse;
 		}
 		/**
@@ -614,7 +604,6 @@ namespace Castor3D
 		 */
 		inline Castor::Colour & GetAmbient()
 		{
-			m_changed = true;
 			return m_clrAmbient;
 		}
 		/**
@@ -627,7 +616,6 @@ namespace Castor3D
 		 */
 		inline Castor::Colour & GetSpecular()
 		{
-			m_changed = true;
 			return m_clrSpecular;
 		}
 		/**
@@ -640,7 +628,6 @@ namespace Castor3D
 		 */
 		inline Castor::Colour & GetEmissive()
 		{
-			m_changed = true;
 			return m_clrEmissive;
 		}
 		/**
@@ -665,7 +652,6 @@ namespace Castor3D
 		 */
 		inline TextureUnitPtrArrayIt begin()
 		{
-			m_changed = true;
 			return m_arrayTextureUnits.begin();
 		}
 		/**
@@ -690,7 +676,6 @@ namespace Castor3D
 		 */
 		inline TextureUnitPtrArrayIt end()
 		{
-			m_changed = true;
 			return m_arrayTextureUnits.end();
 		}
 		/**
@@ -741,9 +726,35 @@ namespace Castor3D
 		}
 
 	private:
-		void DoBindTexture( eTEXTURE_CHANNEL p_channel, Castor::String const & p_name, ShaderProgramBase & p_program );
-		void DoBindTextures();
-		void DoBindBuffers();
+		/**
+		 *\~english
+		 *\brief		Makes the link between an existing texture bound to a channel, and the matching shader variable in given program
+		 *\param[in]	p_channel	The texture channel
+		 *\param[in]	p_name		The shader variable name
+		 *\param[in]	p_program	The shader program
+		 *\param[in,out]p_variable	Receives the shader variable
+		 *\~french
+		 *\brief		Fait le lien entre une texture affectée à un canal, et la variable shader correspondante dans le programme donné
+		 *\param[in]	p_channel	Le canal de la texture
+		 *\param[in]	p_name		Le nom de la variable shader
+		 *\param[in]	p_program	Le programme
+		 *\param[in,out]p_variable	Reçoit la variable shader
+		 */
+		void DoGetTexture( eTEXTURE_CHANNEL p_channel, Castor::String const & p_name, ShaderProgramBase & p_program, OneTextureFrameVariableWPtr & p_variable );
+		/**
+		 *\~english
+		 *\brief		Retrieves the channeled textures shader variables
+		 *\~french
+		 *\brief		Récupère les variables associées aux texture affectées à un canal
+		 */
+		void DoGetTextures();
+		/**
+		 *\~english
+		 *\brief		Retrieves the pass, scene, and matrix buffers, and needed variables
+		 *\~french
+		 *\brief		Récupère les tampons de variables de passe, scène et matrices, ainsi que les variables nécessaires
+		 */
+		void DoGetBuffers();
 		/**
 		 *\~english
 		 *\brief		Prepares a texture to be integrated to the pass.
@@ -791,6 +802,13 @@ namespace Castor3D
 		 *\param[in]	p_byCount	Le compte des passes du material
 		 */
 		void DoRender( uint8_t p_byIndex, uint8_t p_byCount );
+		/**
+		 *\~english
+		 *\brief		Fills shader variables
+		 *\~french
+		 *\brief		Remplit les variables de shader
+		 */
+		void DoFillShaderVariables();
 
 	protected:
 		typedef std::pair< TextureUnitWPtr, OneTextureFrameVariableWPtr > UnitVariablePair;
@@ -836,32 +854,36 @@ namespace Castor3D
 		FrameVariableBufferWPtr m_passBuffer;
 		//!\~english Holds The matrix frame variables buffer	\~french Le buffer de variables, pour les matrices
 		FrameVariableBufferWPtr m_matrixBuffer;
-		//! The ambient colour frame variable
+		//!\~english  The ambient colour frame variable	\~french La variable uniforme contenant la couleur ambiante
 		Point4fFrameVariableWPtr m_pAmbient;
-		//! The diffuser colour frame variable
+		//!\~english  The diffuser colour frame variable	\~french La variable uniforme contenant la couleur diffuse
 		Point4fFrameVariableWPtr m_pDiffuse;
-		//! The specular colour frame variable
+		//!\~english  The specular colour frame variable	\~french La variable uniforme contenant la couleur spéculaire
 		Point4fFrameVariableWPtr m_pSpecular;
-		//! The emissive colour frame variable
+		//!\~english  The emissive colour frame variable	\~french La variable uniforme contenant la couleur émise
 		Point4fFrameVariableWPtr m_pEmissive;
-		//! The shininess value frame variable
+		//!\~english  The shininess value frame variable	\~french La variable uniforme contenant l'exposant
 		OneFloatFrameVariableWPtr m_pShininess;
-		//! The opacity value frame variable
+		//!\~english  The opacity value frame variable	\~french La variable uniforme contenant l'opacité
 		OneFloatFrameVariableWPtr m_pOpacity;
-		//! The camera position frame variable
+		//!\~english  The camera position frame variable	\~french La variable uniforme contenant la position de la caméra
 		Point3rFrameVariableWPtr m_pCameraPos;
-		//! The ambient colour value
-		Castor::Point4f m_ptAmbient;
-		//! The diffuse colour value
-		Castor::Point4f m_ptDiffuse;
-		//! The specular colour value
-		Castor::Point4f m_ptSpecular;
-		//! The emissive colour value
-		Castor::Point4f m_ptEmissive;
-		//! The camera position value
-		Castor::Point3r m_ptCameraPos;
-		//!\~english Tells that the pass has changed and its values must be passed to the shader again	\~french Dit que la passe a changé et que ses valeurs doivent être redonnées au shader
-		bool m_changed;
+		//!\~english  The ambient texture frame variable	\~french La variable uniforme contenant la texture ambiante
+		OneTextureFrameVariableWPtr m_pAmbientMap;
+		//!\~english  The colour texture frame variable	\~french La variable uniforme contenant la texture couleur
+		OneTextureFrameVariableWPtr m_pColourMap;
+		//!\~english  The diffuse texture frame variable	\~french La variable uniforme contenant la texture diffuse
+		OneTextureFrameVariableWPtr m_pDiffuseMap;
+		//!\~english  The normal texture frame variable	\~french La variable uniforme contenant la texture de normales
+		OneTextureFrameVariableWPtr m_pNormalMap;
+		//!\~english  The specular texture frame variable	\~french La variable uniforme contenant la texture spéculaire
+		OneTextureFrameVariableWPtr m_pSpecularMap;
+		//!\~english  The opacity texture frame variable	\~french La variable uniforme contenant la texture d'opacité
+		OneTextureFrameVariableWPtr m_pOpacityMap;
+		//!\~english  The gloss texture frame variable	\~french La variable uniforme contenant la texture de brillance
+		OneTextureFrameVariableWPtr m_pGlossMap;
+		//!\~english  The height texture frame variable	\~french La variable uniforme contenant la texture de hauteurs
+		OneTextureFrameVariableWPtr m_pHeightMap;
 	};
 }
 

@@ -49,24 +49,26 @@ namespace CastorViewer
 		}
 		else
 		{
-			std::cout << "The selected language is not supported by your system."
+			std::cerr << "The selected language is not supported by your system."
 					  << "Try installing support for this language." << std::endl;
 			l_lLanguage = wxLANGUAGE_ENGLISH;
 			m_pLocale = std::make_unique< wxLocale >( l_lLanguage );
 		}
 
-		//wxAppConsole::SetAppDisplayName(	wxT( "Castor Viewer"	) );
-		wxAppConsole::SetAppName(	wxT( "castor_viewer"	) );
-		wxAppConsole::SetVendorName(	wxT( "dragonjoker"	) );
-		//wxAppConsole::SetVendorDisplayName(	wxT( "DragonJoker"		) );
+		wxAppConsole::SetAppName( wxT( "castor_viewer" ) );
+		wxAppConsole::SetVendorName( wxT( "dragonjoker" ) );
+#if wxCHECK_VERSION( 2, 9, 0 )
+		wxAppConsole::SetAppDisplayName( wxT( "Castor Viewer" ) );
+		wxAppConsole::SetVendorDisplayName( wxT( "DragonJoker" ) );
+#endif
 		wxCmdLineParser l_parser( argc, argv );
-		l_parser.AddSwitch(	wxT( "h"	),	wxT( "help"	),	_( "Displays this help"	)	);
-		l_parser.AddOption(	wxT( "l"	),	wxT( "log"	),	_( "Defines log level"	),	wxCMD_LINE_VAL_NUMBER	);
-		l_parser.AddOption(	wxT( "f"	),	wxT( "file"	),	_( "Defines initial scene file"	),	wxCMD_LINE_VAL_STRING	);
-		l_parser.AddSwitch(	wxT( "opengl"	),	wxEmptyString,		_( "Defines the renderer to OpenGl"	)	);
-		l_parser.AddSwitch(	wxT( "directx9"	),	wxEmptyString,		_( "Defines the renderer to Direct3D9"	)	);
-		l_parser.AddSwitch(	wxT( "directx10"	),	wxEmptyString,		_( "Defines the renderer to Direct3D10"	)	);
-		l_parser.AddSwitch(	wxT( "directx11"	),	wxEmptyString,		_( "Defines the renderer to Direct3D11"	)	);
+		l_parser.AddSwitch(	wxT( "h" ), wxT( "help" ), _( "Displays this help" ) );
+		l_parser.AddOption(	wxT( "l" ), wxT( "log" ), _( "Defines log level" ), wxCMD_LINE_VAL_NUMBER );
+		l_parser.AddOption(	wxT( "f" ), wxT( "file" ), _( "Defines initial scene file" ), wxCMD_LINE_VAL_STRING );
+		l_parser.AddSwitch(	wxT( "opengl" ), wxEmptyString, _( "Defines the renderer to OpenGl" ) );
+		l_parser.AddSwitch(	wxT( "directx9" ), wxEmptyString, _( "Defines the renderer to Direct3D9" ) );
+		l_parser.AddSwitch(	wxT( "directx10" ), wxEmptyString, _( "Defines the renderer to Direct3D10" ) );
+		l_parser.AddSwitch(	wxT( "directx11" ), wxEmptyString, _( "Defines the renderer to Direct3D11" ) );
 		bool l_bReturn = l_parser.Parse( false ) == 0;
 
 		// S'il y avait des erreurs ou "-h" ou "--help", on affiche l'aide et on sort

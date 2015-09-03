@@ -177,7 +177,7 @@ namespace Castor3D
 #if !DX_DEBUG
 		DoEndRender();
 		m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
-		m_wp2DBlendState.lock();->Apply();
+		m_wp2DBlendState.lock()->Apply();
 		m_wp2DDepthStencilState.lock()->Apply();
 		m_pEngine->RenderOverlays( *m_pRenderSystem->GetTopScene(), m_size );
 		m_pFrameBuffer->Unbind();

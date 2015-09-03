@@ -6,14 +6,9 @@
 #include "DividerPlugin.hpp"
 #include "ImporterPlugin.hpp"
 #include "InitialiseEvent.hpp"
-#include "LightFactory.hpp"
 #include "Material.hpp"
-#include "MaterialManager.hpp"
 #include "Mesh.hpp"
-#include "MeshFactory.hpp"
 #include "Overlay.hpp"
-#include "OverlayFactory.hpp"
-#include "OverlayManager.hpp"
 #include "Pipeline.hpp"
 #include "Plugin.hpp"
 #include "RasteriserState.hpp"
@@ -25,9 +20,7 @@
 #include "Sampler.hpp"
 #include "Scene.hpp"
 #include "SceneFileParser.hpp"
-#include "ShaderManager.hpp"
 #include "ShaderPlugin.hpp"
-#include "TechniqueFactory.hpp"
 #include "TechniquePlugin.hpp"
 #include "TextOverlay.hpp"
 #include "VersionException.hpp"
@@ -156,28 +149,14 @@ namespace Castor3D
 		: m_bEnded( false )
 		, m_uiWantedFPS( 100 )
 		, m_dFrameTime( 0.01 )
-		, m_pAnimationManager( new AnimationCollection )
-		, m_pMeshManager( new MeshCollection )
-		, m_pFontManager( new FontCollection )
-		, m_pImageManager( new ImageCollection )
-		, m_pSceneManager( new SceneCollection )
-		, m_pShaderManager( new ShaderManager )
-		, m_pLightFactory( new LightFactory )
-		, m_pMeshFactory( new MeshFactory )
-		, m_pOverlayFactory( new OverlayFactory )
-		, m_pSamplerManager( new SamplerCollection )
-		, m_pDepthStencilStateManager( new DepthStencilStateCollection )
-		, m_pRasteriserStateManager( new RasteriserStateCollection )
-		, m_pBlendStateManager( new BlendStateCollection )
 		, m_pRenderSystem( NULL )
 		, m_pThreadMainLoop( nullptr )
 		, m_bStarted( false )
 		, m_bCreateContext( false )
 		, m_bCreated( false )
 		, m_bCleaned( true )
-		, m_pTechniqueFactory( new TechniqueFactory )
-		, m_pMaterialManager( new MaterialManager( this ) )
-		, m_pOverlayManager( new OverlayManager( this ) )
+		, m_materialManager( this )
+		, m_overlayManager( this )
 		, m_pMainWindow( NULL )
 		, m_bDefaultInitialised( false )
 		, m_vertexCount( 0 )
@@ -207,18 +186,18 @@ namespace Castor3D
 		m_pDefaultSampler.reset();
 
 		// To destroy before RenderSystem, since it contain elements instantiated in Renderer plug-in
-		m_pSamplerManager.reset();
-		m_pShaderManager.reset();
-		m_pDepthStencilStateManager.reset();
-		m_pRasteriserStateManager.reset();
-		m_pBlendStateManager.reset();
-		m_pAnimationManager.reset();
-		m_pMeshManager.reset();
-		m_pOverlayManager.reset();
-		m_pFontManager.reset();
-		m_pImageManager.reset();
-		m_pSceneManager.reset();
-		m_pMaterialManager.reset();
+		m_samplerManager.clear();
+		m_shaderManager.Clear();
+		m_depthStencilStateManager.clear();
+		m_rasteriserStateManager.clear();
+		m_blendStateManager.clear();
+		m_animationManager.clear();
+		m_meshManager.clear();
+		m_overlayManager.clear();
+		m_fontManager.clear();
+		m_imageManager.clear();
+		m_sceneManager.clear();
+		m_materialManager.clear();
 		m_arrayListeners.clear();
 
 		// Destroy the RenderSystem
@@ -264,10 +243,6 @@ namespace Castor3D
 		m_mutexLibraries.unlock();
 		m_mutexLoadedPlugins.unlock();
 		CASTOR_CLEANUP_UNIQUE_INSTANCE();
-		m_pLightFactory.reset();
-		m_pMeshFactory.reset();
-		m_pOverlayFactory.reset();
-		m_pTechniqueFactory.reset();
 	}
 
 	void Engine::Initialise( uint32_t p_wantedFPS, bool p_bThreaded )
@@ -298,36 +273,36 @@ namespace Castor3D
 		{
 			SetCleaned();
 			ClearScenes();
-			m_pMaterialManager->Cleanup();
-			m_pOverlayManager->ClearOverlays();
-			m_pShaderManager->ClearShaders();
+			m_materialManager.Cleanup();
+			m_overlayManager.ClearOverlays();
+			m_shaderManager.ClearShaders();
 
 			{
 				CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexResources );
-				m_pDepthStencilStateManager->lock();
+				m_depthStencilStateManager.lock();
 
-				for( auto && l_it: *m_pDepthStencilStateManager )
+				for( auto && l_it: m_depthStencilStateManager )
 				{
 					m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
 				}
 
-				m_pDepthStencilStateManager->unlock();
-				m_pRasteriserStateManager->lock();
+				m_depthStencilStateManager.unlock();
+				m_rasteriserStateManager.lock();
 
-				for( auto && l_it: *m_pRasteriserStateManager )
+				for( auto && l_it: m_rasteriserStateManager )
 				{
 					m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
 				}
 
-				m_pRasteriserStateManager->unlock();
-				m_pBlendStateManager->lock();
+				m_rasteriserStateManager.unlock();
+				m_blendStateManager.lock();
 
-				for( auto && l_it: *m_pBlendStateManager )
+				for( auto && l_it: m_blendStateManager )
 				{
 					m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
 				}
 
-				m_pBlendStateManager->unlock();
+				m_blendStateManager.unlock();
 
 				for( auto && l_it: m_mapWindows )
 				{
@@ -367,20 +342,20 @@ namespace Castor3D
 				}
 			}
 
-			m_pSamplerManager->clear();
-			m_pMaterialManager->DeleteAll();
-			m_pSceneManager->clear();
+			m_samplerManager.clear();
+			m_materialManager.DeleteAll();
+			m_sceneManager.clear();
 			{
 				CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexResources );
-				m_pMeshManager->clear();
+				m_meshManager.clear();
 			}
-			m_pAnimationManager->clear();
-			m_pFontManager->clear();
-			m_pImageManager->clear();
-			m_pShaderManager->Clear();
-			m_pDepthStencilStateManager->clear();
-			m_pRasteriserStateManager->clear();
-			m_pBlendStateManager->clear();
+			m_animationManager.clear();
+			m_fontManager.clear();
+			m_imageManager.clear();
+			m_shaderManager.Clear();
+			m_depthStencilStateManager.clear();
+			m_rasteriserStateManager.clear();
+			m_blendStateManager.clear();
 			RemoveAllRenderWindows();
 			// We clear the listeners list
 			m_arrayListeners.clear();
@@ -501,18 +476,18 @@ namespace Castor3D
 
 	void Engine::RenderOverlays( Scene const & p_scene, Castor::Size const & p_size )
 	{
-		m_pOverlayManager->RenderOverlays( p_scene, p_size );
+		m_overlayManager.RenderOverlays( p_scene, p_size );
 	}
 
 	SceneSPtr Engine::CreateScene( String const & p_strName )
 	{
-		SceneSPtr l_pReturn = m_pSceneManager->find( p_strName );
+		SceneSPtr l_pReturn = m_sceneManager.find( p_strName );
 
 		if ( ! l_pReturn )
 		{
-			l_pReturn = std::make_shared< Scene >( this, *m_pLightFactory, p_strName );
+			l_pReturn = std::make_shared< Scene >( this, m_lightFactory, p_strName );
 			l_pReturn->Initialise();
-			m_pSceneManager->insert( p_strName, l_pReturn );
+			m_sceneManager.insert( p_strName, l_pReturn );
 		}
 
 		return l_pReturn;
@@ -520,12 +495,12 @@ namespace Castor3D
 
 	void Engine::ClearScenes()
 	{
-		m_pSceneManager->lock();
-		std::for_each( m_pSceneManager->begin(), m_pSceneManager->end(), [&]( std::pair< String, SceneSPtr > p_pair )
+		m_sceneManager.lock();
+		std::for_each( m_sceneManager.begin(), m_sceneManager.end(), [&]( std::pair< String, SceneSPtr > p_pair )
 		{
 			p_pair.second->ClearScene();
 		} );
-		m_pSceneManager->unlock();
+		m_sceneManager.unlock();
 	}
 
 	MeshSPtr Engine::CreateMesh( eMESH_TYPE p_eType, Castor::String const & p_strMeshName )
@@ -541,13 +516,13 @@ namespace Castor3D
 	MeshSPtr Engine::CreateMesh( eMESH_TYPE p_eType, Castor::String const & p_strMeshName, UIntArray const & p_arrayFaces, RealArray const & p_arraySizes )
 	{
 		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexResources );
-		MeshSPtr l_pReturn = m_pMeshManager->find( p_strMeshName );
+		MeshSPtr l_pReturn = m_meshManager.find( p_strMeshName );
 
 		if ( !l_pReturn )
 		{
 			l_pReturn = std::make_shared< Mesh >( this, p_eType, p_strMeshName );
 			l_pReturn->Initialise( p_arrayFaces, p_arraySizes );
-			m_pMeshManager->insert( p_strMeshName, l_pReturn );
+			m_meshManager.insert( p_strMeshName, l_pReturn );
 			Logger::LogInfo( cuT( "Engine::CreateMesh - Mesh [" ) + p_strMeshName + cuT( "] - Created" ) );
 		}
 		else
@@ -560,16 +535,16 @@ namespace Castor3D
 
 	bool Engine::SaveMeshes( BinaryFile & p_file )
 	{
-		m_pMeshManager->lock();
+		m_meshManager.lock();
 		Path l_path = p_file.GetFileFullPath();
 		bool l_bReturn = true;
-		MeshCollectionConstIt l_it = m_pMeshManager->begin();
+		MeshCollectionConstIt l_it = m_meshManager.begin();
 
 		if ( l_path.GetExtension() == cuT( "cmsh" ) )
 		{
-			l_bReturn = p_file.Write( uint32_t( m_pMeshManager->size() ) ) == sizeof( uint32_t );
+			l_bReturn = p_file.Write( uint32_t( m_meshManager.size() ) ) == sizeof( uint32_t );
 
-			while ( l_it != m_pMeshManager->end() && l_bReturn )
+			while ( l_it != m_meshManager.end() && l_bReturn )
 			{
 				//l_bReturn = Mesh::BinaryLoader()( * l_it->second, p_file);
 				++l_it;
@@ -579,16 +554,16 @@ namespace Castor3D
 		{
 			l_path = l_path.GetPath() / l_path.GetFileName() + cuT( ".cmsh" );
 			BinaryFile l_file( l_path, File::eOPEN_MODE_WRITE );
-			l_bReturn = l_file.Write( uint32_t( m_pMeshManager->size() ) ) == sizeof( uint32_t );
+			l_bReturn = l_file.Write( uint32_t( m_meshManager.size() ) ) == sizeof( uint32_t );
 
-			while ( l_it != m_pMeshManager->end() && l_bReturn )
+			while ( l_it != m_meshManager.end() && l_bReturn )
 			{
 				//			l_bReturn = Mesh::BinaryLoader()( * l_it->second, p_file);
 				++l_it;
 			}
 		}
 
-		m_pMeshManager->unlock();
+		m_meshManager.unlock();
 		return l_bReturn;
 	}
 
@@ -599,12 +574,12 @@ namespace Castor3D
 
 		for ( uint32_t i = 0; i < l_uiSize && l_bReturn; i++ )
 		{
-			MeshSPtr l_pMesh = m_pMeshManager->find( cuEmptyString );
+			MeshSPtr l_pMesh = m_meshManager.find( cuEmptyString );
 
 			if ( ! l_pMesh )
 			{
 				l_pMesh = std::make_shared< Mesh >( this, eMESH_TYPE_CUSTOM, cuEmptyString );
-				m_pMeshManager->insert( cuEmptyString, l_pMesh );
+				m_meshManager.insert( cuEmptyString, l_pMesh );
 			}
 
 			//		l_bReturn = Mesh::BinaryLoader()( * l_pMesh, p_file);
@@ -615,7 +590,7 @@ namespace Castor3D
 
 	OverlaySPtr Engine::CreateOverlay( eOVERLAY_TYPE p_eType, String const & p_strName, OverlaySPtr p_pParent, SceneSPtr p_pScene )
 	{
-		OverlaySPtr l_pReturn = m_pOverlayManager->GetOverlay( p_strName );
+		OverlaySPtr l_pReturn = m_overlayManager.GetOverlay( p_strName );
 
 		if ( !l_pReturn )
 		{
@@ -627,7 +602,7 @@ namespace Castor3D
 				p_pScene->AddOverlay( l_pReturn );
 			}
 
-			m_pOverlayManager->AddOverlay( p_strName, l_pReturn, p_pParent );
+			m_overlayManager.AddOverlay( p_strName, l_pReturn, p_pParent );
 			Logger::LogInfo( cuT( "Scene::CreateOverlay - Overlay [" ) + p_strName + cuT( "] - Created" ) );
 		}
 		else
@@ -770,7 +745,7 @@ namespace Castor3D
 		if ( l_pPlugin )
 		{
 			m_pRenderSystem = l_pPlugin->CreateRenderSystem( this );
-			m_pShaderManager->SetRenderSystem( m_pRenderSystem );
+			m_shaderManager.SetRenderSystem( m_pRenderSystem );
 			m_pDefaultBlendState = CreateBlendState( cuT( "Default" ) );
 			m_pDefaultSampler = CreateSampler( cuT( "Default" ) );
 			m_pDefaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
@@ -1004,17 +979,17 @@ namespace Castor3D
 
 	void Engine::UpdateOverlayManager()
 	{
-		m_pOverlayManager->Update();
+		m_overlayManager.Update();
 	}
 
 	void Engine::UpdateShaderManager()
 	{
-		m_pShaderManager->Update();
+		m_shaderManager.Update();
 	}
 
 	RenderTechniqueBaseSPtr Engine::CreateTechnique( Castor::String const & p_strName, RenderTarget & p_renderTarget, Parameters const & p_params )
 	{
-		return m_pTechniqueFactory->Create( p_strName, p_renderTarget, m_pRenderSystem, p_params );
+		return m_techniqueFactory.Create( p_strName, p_renderTarget, m_pRenderSystem, p_params );
 	}
 
 	bool Engine::IsEnded()
@@ -1168,12 +1143,12 @@ namespace Castor3D
 		}
 		else
 		{
-			l_pReturn = m_pSamplerManager->find( p_strName );
+			l_pReturn = m_samplerManager.find( p_strName );
 
 			if ( !l_pReturn )
 			{
 				l_pReturn = m_pRenderSystem->CreateSampler( p_strName );
-				m_pSamplerManager->insert( p_strName, l_pReturn );
+				m_samplerManager.insert( p_strName, l_pReturn );
 				m_arrayListeners[0]->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
 			}
 		}
@@ -1183,12 +1158,12 @@ namespace Castor3D
 
 	DepthStencilStateSPtr Engine::CreateDepthStencilState( String const & p_strName )
 	{
-		DepthStencilStateSPtr l_pReturn = m_pDepthStencilStateManager->find( p_strName );
+		DepthStencilStateSPtr l_pReturn = m_depthStencilStateManager.find( p_strName );
 
 		if ( m_pRenderSystem && !l_pReturn )
 		{
 			l_pReturn = m_pRenderSystem->CreateDepthStencilState();
-			m_pDepthStencilStateManager->insert( p_strName, l_pReturn );
+			m_depthStencilStateManager.insert( p_strName, l_pReturn );
 			CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexResources );
 			m_arrayListeners[0]->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
 		}
@@ -1198,12 +1173,12 @@ namespace Castor3D
 
 	RasteriserStateSPtr Engine::CreateRasteriserState( String const & p_strName )
 	{
-		RasteriserStateSPtr l_pReturn = m_pRasteriserStateManager->find( p_strName );
+		RasteriserStateSPtr l_pReturn = m_rasteriserStateManager.find( p_strName );
 
 		if ( m_pRenderSystem && !l_pReturn )
 		{
 			l_pReturn = m_pRenderSystem->CreateRasteriserState();
-			m_pRasteriserStateManager->insert( p_strName, l_pReturn );
+			m_rasteriserStateManager.insert( p_strName, l_pReturn );
 			m_arrayListeners[0]->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
 		}
 
@@ -1212,12 +1187,12 @@ namespace Castor3D
 
 	BlendStateSPtr Engine::CreateBlendState( String const & p_strName )
 	{
-		BlendStateSPtr l_pReturn = m_pBlendStateManager->find( p_strName );
+		BlendStateSPtr l_pReturn = m_blendStateManager.find( p_strName );
 
 		if ( m_pRenderSystem && !l_pReturn )
 		{
 			l_pReturn = m_pRenderSystem->CreateBlendState();
-			m_pBlendStateManager->insert( p_strName, l_pReturn );
+			m_blendStateManager.insert( p_strName, l_pReturn );
 			m_arrayListeners[0]->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
 		}
 
@@ -1415,14 +1390,14 @@ namespace Castor3D
 			}
 			else
 			{
-				OverlaySPtr l_panel = m_pOverlayManager->GetOverlay( cuT( "DebugPanel" ) );
+				OverlaySPtr l_panel = m_overlayManager.GetOverlay( cuT( "DebugPanel" ) );
 				m_debugPanel = l_panel;
-				m_debugCpuTime = std::static_pointer_cast< TextOverlay >( m_pOverlayManager->GetOverlay( cuT( "DebugPanel-CpuTime-Value" ) )->GetOverlayCategory() );
-				m_debugGpuTime = std::static_pointer_cast< TextOverlay >( m_pOverlayManager->GetOverlay( cuT( "DebugPanel-GpuTime-Value" ) )->GetOverlayCategory() );
-				m_debugTotalTime = std::static_pointer_cast< TextOverlay >( m_pOverlayManager->GetOverlay( cuT( "DebugPanel-TotalTime-Value" ) )->GetOverlayCategory() );
-				m_debugVertexCount = std::static_pointer_cast< TextOverlay >( m_pOverlayManager->GetOverlay( cuT( "DebugPanel-VertexCount-Value" ) )->GetOverlayCategory() );
-				m_debugFaceCount = std::static_pointer_cast< TextOverlay >( m_pOverlayManager->GetOverlay( cuT( "DebugPanel-FaceCount-Value" ) )->GetOverlayCategory() );
-				m_debugObjectCount = std::static_pointer_cast< TextOverlay >( m_pOverlayManager->GetOverlay( cuT( "DebugPanel-ObjectCount-Value" ) )->GetOverlayCategory() );
+				m_debugCpuTime = m_overlayManager.GetOverlay( cuT( "DebugPanel-CpuTime-Value" ) )->GetTextOverlay();
+				m_debugGpuTime = m_overlayManager.GetOverlay( cuT( "DebugPanel-GpuTime-Value" ) )->GetTextOverlay();
+				m_debugTotalTime = m_overlayManager.GetOverlay( cuT( "DebugPanel-TotalTime-Value" ) )->GetTextOverlay();
+				m_debugVertexCount = m_overlayManager.GetOverlay( cuT( "DebugPanel-VertexCount-Value" ) )->GetTextOverlay();
+				m_debugFaceCount = m_overlayManager.GetOverlay( cuT( "DebugPanel-FaceCount-Value" ) )->GetTextOverlay();
+				m_debugObjectCount = m_overlayManager.GetOverlay( cuT( "DebugPanel-ObjectCount-Value" ) )->GetTextOverlay();
 
 				if ( l_panel )
 				{

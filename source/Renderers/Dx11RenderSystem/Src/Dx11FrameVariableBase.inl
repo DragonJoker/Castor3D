@@ -53,6 +53,7 @@ namespace Dx11Render
 				ID3D11ShaderResourceView * l_pResourceView = NULL;
 				DxContext * l_pDxContext = static_cast< DxContext * >( p_program.GetRenderSystem()->GetCurrentContext() );
 				ID3D11DeviceContext * l_pDeviceContext = l_pDxContext->GetDeviceContext();
+
 				if ( l_pTexture )
 				{
 					if ( l_pTexture->GetType() == Castor3D::eTEXTURE_TYPE_STATIC )

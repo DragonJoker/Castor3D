@@ -7,6 +7,8 @@
 #include <TextFile.hpp>
 #include <PixelBuffer.hpp>
 
+#pragma warning( disable:4996 )
+
 #if defined( CASTOR_USE_GLM )
 #	include <glm/glm.hpp>
 #endif
@@ -606,6 +608,7 @@ namespace Testing
 
 	void CastorUtilsTest::MatrixInversion( uint32_t & p_errCount, uint32_t & p_testCount )
 	{
+		char l_msg[32] = { 0 };
 		Matrix3x3d l_mtxRGBtoYUV;
 		l_mtxRGBtoYUV[0][0] =  0.299;
 		l_mtxRGBtoYUV[1][0] =  0.587;
@@ -617,14 +620,20 @@ namespace Testing
 		l_mtxRGBtoYUV[1][2] = -0.51499;
 		l_mtxRGBtoYUV[2][2] = -0.10001;
 		Logger::LogInfo( cuT( "	RGB to YUV conversion matrix (BT 601) :" ) );
-		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][0], l_mtxRGBtoYUV[1][0], l_mtxRGBtoYUV[2][0] );
-		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][1], l_mtxRGBtoYUV[1][1], l_mtxRGBtoYUV[2][1] );
-		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][2], l_mtxRGBtoYUV[1][2], l_mtxRGBtoYUV[2][2] );
+		sprintf( l_msg, "		%.5f %.5f %.5f", l_mtxRGBtoYUV[0][0], l_mtxRGBtoYUV[1][0], l_mtxRGBtoYUV[2][0] );
+		Logger::LogInfo( l_msg );
+		sprintf( l_msg, "		%.5f %.5f %.5f", l_mtxRGBtoYUV[0][1], l_mtxRGBtoYUV[1][1], l_mtxRGBtoYUV[2][1] );
+		Logger::LogInfo( l_msg );
+		sprintf( l_msg, "		%.5f %.5f %.5f", l_mtxRGBtoYUV[0][2], l_mtxRGBtoYUV[1][2], l_mtxRGBtoYUV[2][2] );
+		Logger::LogInfo( l_msg );
 		Matrix3x3d l_mtxYUVtoRGB( l_mtxRGBtoYUV.get_inverse() );
 		Logger::LogInfo( cuT( "	YUV to RGB conversion matrix (BT 601) :" ) );
-		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][0], l_mtxYUVtoRGB[1][0], l_mtxYUVtoRGB[2][0] );
-		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][1], l_mtxYUVtoRGB[1][1], l_mtxYUVtoRGB[2][1] );
-		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][2], l_mtxYUVtoRGB[1][2], l_mtxYUVtoRGB[2][2] );
+		sprintf( l_msg, "		%.5f %.5f %.5f", l_mtxYUVtoRGB[0][0], l_mtxYUVtoRGB[1][0], l_mtxYUVtoRGB[2][0] );
+		Logger::LogInfo( l_msg );
+		sprintf( l_msg, "		%.5f %.5f %.5f", l_mtxYUVtoRGB[0][1], l_mtxYUVtoRGB[1][1], l_mtxYUVtoRGB[2][1] );
+		Logger::LogInfo( l_msg );
+		sprintf( l_msg, "		%.5f %.5f %.5f", l_mtxYUVtoRGB[0][2], l_mtxYUVtoRGB[1][2], l_mtxYUVtoRGB[2][2] );
+		Logger::LogInfo( l_msg );
 		TEST_EQUAL( l_mtxRGBtoYUV, l_mtxYUVtoRGB.get_inverse() );
 		l_mtxRGBtoYUV[0][0] =  0.2126;
 		l_mtxRGBtoYUV[1][0] =  0.7152;
@@ -636,20 +645,27 @@ namespace Testing
 		l_mtxRGBtoYUV[1][2] = -0.55861;
 		l_mtxRGBtoYUV[2][2] = -0.05639;
 		Logger::LogInfo( cuT( "	RGB to YUV conversion matrix (BT 709) :" ) );
-		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][0], l_mtxRGBtoYUV[1][0], l_mtxRGBtoYUV[2][0] );
-		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][1], l_mtxRGBtoYUV[1][1], l_mtxRGBtoYUV[2][1] );
-		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][2], l_mtxRGBtoYUV[1][2], l_mtxRGBtoYUV[2][2] );
+		sprintf( l_msg, "		%.5f %.5f %.5f", l_mtxRGBtoYUV[0][0], l_mtxRGBtoYUV[1][0], l_mtxRGBtoYUV[2][0] );
+		Logger::LogInfo( l_msg );
+		sprintf( l_msg, "		%.5f %.5f %.5f", l_mtxRGBtoYUV[0][1], l_mtxRGBtoYUV[1][1], l_mtxRGBtoYUV[2][1] );
+		Logger::LogInfo( l_msg );
+		sprintf( l_msg, "		%.5f %.5f %.5f", l_mtxRGBtoYUV[0][2], l_mtxRGBtoYUV[1][2], l_mtxRGBtoYUV[2][2] );
+		Logger::LogInfo( l_msg );
 		l_mtxYUVtoRGB = l_mtxRGBtoYUV.get_inverse();
 		Logger::LogInfo( cuT( "	YUV to RGB conversion matrix (BT 709) :" ) );
-		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][0], l_mtxYUVtoRGB[1][0], l_mtxYUVtoRGB[2][0] );
-		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][1], l_mtxYUVtoRGB[1][1], l_mtxYUVtoRGB[2][1] );
-		Logger::LogInfo( cuT( "		%.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][2], l_mtxYUVtoRGB[1][2], l_mtxYUVtoRGB[2][2] );
+		sprintf( l_msg, "		%.5f %.5f %.5f", l_mtxYUVtoRGB[0][0], l_mtxYUVtoRGB[1][0], l_mtxYUVtoRGB[2][0] );
+		Logger::LogInfo( l_msg );
+		sprintf( l_msg, "		%.5f %.5f %.5f", l_mtxYUVtoRGB[0][1], l_mtxYUVtoRGB[1][1], l_mtxYUVtoRGB[2][1] );
+		Logger::LogInfo( l_msg );
+		sprintf( l_msg, "		%.5f %.5f %.5f", l_mtxYUVtoRGB[0][2], l_mtxYUVtoRGB[1][2], l_mtxYUVtoRGB[2][2] );
+		Logger::LogInfo( l_msg );
 		TEST_EQUAL( l_mtxRGBtoYUV, l_mtxYUVtoRGB.get_inverse() );
 	}
 
 #if defined( CASTOR_USE_GLM )
 	void CastorUtilsTest::MatrixInversionComparison( uint32_t & p_errCount, uint32_t & p_testCount )
 	{
+		char l_msg[64] = { 0 };
 		Matrix4x4r l_mtxRGBtoYUV;
 		l_mtxRGBtoYUV[0][0] =  0.299f;
 		l_mtxRGBtoYUV[1][0] =  0.587f;
@@ -687,28 +703,44 @@ namespace Testing
 		TEST_EQUAL( l_mtxRGBtoYUV, l_glmRGBtoYUV );
 		Logger::LogInfo( cuT( "	Matrix Inversion with CastorUtils :" ) );
 		Logger::LogInfo( cuT( "		Normal :" ) );
-		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][0], l_mtxRGBtoYUV[1][0], l_mtxRGBtoYUV[2][0], l_mtxRGBtoYUV[3][0] );
-		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][1], l_mtxRGBtoYUV[1][1], l_mtxRGBtoYUV[2][1], l_mtxRGBtoYUV[3][1] );
-		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][2], l_mtxRGBtoYUV[1][2], l_mtxRGBtoYUV[2][2], l_mtxRGBtoYUV[3][2] );
-		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxRGBtoYUV[0][3], l_mtxRGBtoYUV[1][3], l_mtxRGBtoYUV[2][3], l_mtxRGBtoYUV[3][3] );
+		sprintf( l_msg, "		%.5f %.5f %.5f %.5f", l_mtxRGBtoYUV[0][0], l_mtxRGBtoYUV[1][0], l_mtxRGBtoYUV[2][0], l_mtxRGBtoYUV[3][0] );
+		Logger::LogInfo( l_msg );
+		sprintf( l_msg, "		%.5f %.5f %.5f %.5f", l_mtxRGBtoYUV[0][1], l_mtxRGBtoYUV[1][1], l_mtxRGBtoYUV[2][1], l_mtxRGBtoYUV[3][1] );
+		Logger::LogInfo( l_msg );
+		sprintf( l_msg, "		%.5f %.5f %.5f %.5f", l_mtxRGBtoYUV[0][2], l_mtxRGBtoYUV[1][2], l_mtxRGBtoYUV[2][2], l_mtxRGBtoYUV[3][2] );
+		Logger::LogInfo( l_msg );
+		sprintf( l_msg, "		%.5f %.5f %.5f %.5f", l_mtxRGBtoYUV[0][3], l_mtxRGBtoYUV[1][3], l_mtxRGBtoYUV[2][3], l_mtxRGBtoYUV[3][3] );
+		Logger::LogInfo( l_msg );
 		Matrix4x4r l_mtxYUVtoRGB( l_mtxRGBtoYUV.get_inverse() );
 		Logger::LogInfo( cuT( "		Inverted :" ) );
-		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][0], l_mtxYUVtoRGB[1][0], l_mtxYUVtoRGB[2][0], l_mtxYUVtoRGB[3][0] );
-		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][1], l_mtxYUVtoRGB[1][1], l_mtxYUVtoRGB[2][1], l_mtxYUVtoRGB[3][1] );
-		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][2], l_mtxYUVtoRGB[1][2], l_mtxYUVtoRGB[2][2], l_mtxYUVtoRGB[3][2] );
-		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_mtxYUVtoRGB[0][3], l_mtxYUVtoRGB[1][3], l_mtxYUVtoRGB[2][3], l_mtxYUVtoRGB[3][3] );
+		sprintf( l_msg, "		%.5f %.5f %.5f %.5f", l_mtxYUVtoRGB[0][0], l_mtxYUVtoRGB[1][0], l_mtxYUVtoRGB[2][0], l_mtxYUVtoRGB[3][0] );
+		Logger::LogInfo( l_msg );
+		sprintf( l_msg, "		%.5f %.5f %.5f %.5f", l_mtxYUVtoRGB[0][1], l_mtxYUVtoRGB[1][1], l_mtxYUVtoRGB[2][1], l_mtxYUVtoRGB[3][1] );
+		Logger::LogInfo( l_msg );
+		sprintf( l_msg, "		%.5f %.5f %.5f %.5f", l_mtxYUVtoRGB[0][2], l_mtxYUVtoRGB[1][2], l_mtxYUVtoRGB[2][2], l_mtxYUVtoRGB[3][2] );
+		Logger::LogInfo( l_msg );
+		sprintf( l_msg, "		%.5f %.5f %.5f %.5f", l_mtxYUVtoRGB[0][3], l_mtxYUVtoRGB[1][3], l_mtxYUVtoRGB[2][3], l_mtxYUVtoRGB[3][3] );
+		Logger::LogInfo( l_msg );
 		Logger::LogInfo( cuT( "	Matrix Inversion with GLM :" ) );
 		Logger::LogInfo( cuT( "		Normal :" ) );
-		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmRGBtoYUV[0][0], l_glmRGBtoYUV[1][0], l_glmRGBtoYUV[2][0], l_glmRGBtoYUV[3][0] );
-		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmRGBtoYUV[0][1], l_glmRGBtoYUV[1][1], l_glmRGBtoYUV[2][1], l_glmRGBtoYUV[3][1] );
-		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmRGBtoYUV[0][2], l_glmRGBtoYUV[1][2], l_glmRGBtoYUV[2][2], l_glmRGBtoYUV[3][2] );
-		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmRGBtoYUV[0][3], l_glmRGBtoYUV[1][3], l_glmRGBtoYUV[2][3], l_glmRGBtoYUV[3][3] );
+		sprintf( l_msg, "		%.5f %.5f %.5f %.5f", l_glmRGBtoYUV[0][0], l_glmRGBtoYUV[1][0], l_glmRGBtoYUV[2][0], l_glmRGBtoYUV[3][0] );
+		Logger::LogInfo( l_msg );
+		sprintf( l_msg, "		%.5f %.5f %.5f %.5f", l_glmRGBtoYUV[0][1], l_glmRGBtoYUV[1][1], l_glmRGBtoYUV[2][1], l_glmRGBtoYUV[3][1] );
+		Logger::LogInfo( l_msg );
+		sprintf( l_msg, "		%.5f %.5f %.5f %.5f", l_glmRGBtoYUV[0][2], l_glmRGBtoYUV[1][2], l_glmRGBtoYUV[2][2], l_glmRGBtoYUV[3][2] );
+		Logger::LogInfo( l_msg );
+		sprintf( l_msg, "		%.5f %.5f %.5f %.5f", l_glmRGBtoYUV[0][3], l_glmRGBtoYUV[1][3], l_glmRGBtoYUV[2][3], l_glmRGBtoYUV[3][3] );
+		Logger::LogInfo( l_msg );
 		glm::mat4x4 l_glmYUVtoRGB( glm::inverse( l_glmRGBtoYUV ) );
 		Logger::LogInfo( cuT( "		Inverted :" ) );
-		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmYUVtoRGB[0][0], l_glmYUVtoRGB[1][0], l_glmYUVtoRGB[2][0], l_glmYUVtoRGB[3][0] );
-		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmYUVtoRGB[0][1], l_glmYUVtoRGB[1][1], l_glmYUVtoRGB[2][1], l_glmYUVtoRGB[3][1] );
-		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmYUVtoRGB[0][2], l_glmYUVtoRGB[1][2], l_glmYUVtoRGB[2][2], l_glmYUVtoRGB[3][2] );
-		Logger::LogInfo( cuT( "			%.5f %.5f %.5f %.5f" ), l_glmYUVtoRGB[0][3], l_glmYUVtoRGB[1][3], l_glmYUVtoRGB[2][3], l_glmYUVtoRGB[3][3] );
+		sprintf( l_msg, "		%.5f %.5f %.5f %.5f", l_glmYUVtoRGB[0][0], l_glmYUVtoRGB[1][0], l_glmYUVtoRGB[2][0], l_glmYUVtoRGB[3][0] );
+		Logger::LogInfo( l_msg );
+		sprintf( l_msg, "		%.5f %.5f %.5f %.5f", l_glmYUVtoRGB[0][1], l_glmYUVtoRGB[1][1], l_glmYUVtoRGB[2][1], l_glmYUVtoRGB[3][1] );
+		Logger::LogInfo( l_msg );
+		sprintf( l_msg, "		%.5f %.5f %.5f %.5f", l_glmYUVtoRGB[0][2], l_glmYUVtoRGB[1][2], l_glmYUVtoRGB[2][2], l_glmYUVtoRGB[3][2] );
+		Logger::LogInfo( l_msg );
+		sprintf( l_msg, "		%.5f %.5f %.5f %.5f", l_glmYUVtoRGB[0][3], l_glmYUVtoRGB[1][3], l_glmYUVtoRGB[2][3], l_glmYUVtoRGB[3][3] );
+		Logger::LogInfo( l_msg );
 		TEST_EQUAL( l_mtxYUVtoRGB, l_glmYUVtoRGB );
 	}
 #endif

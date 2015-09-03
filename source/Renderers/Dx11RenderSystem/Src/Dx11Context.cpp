@@ -85,7 +85,7 @@ namespace Dx11Render
 			if ( DoInitPresentParameters() == S_OK &&  l_pRenderSystem->InitialiseDevice( m_hWnd, m_deviceParams ) )
 			{
 				DoInitVolatileResources();
-				Logger::LogInfo( cuT( "Dx11Context::DoInitialise - Context for window 0x%X initialised" ), m_hWnd );
+				Logger::LogInfo( StringStream() << cuT( "Dx11Context::DoInitialise - Context for window 0x" ) << std::hex << m_hWnd << cuT( " initialised" )  );
 				m_bInitialised = true;
 			}
 
@@ -100,10 +100,6 @@ namespace Dx11Render
 				l_pProgram->SetEntryPoint( eSHADER_TYPE_PIXEL, cuT( "mainPx" ) );
 				l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_5, l_vtxShader.str() );
 				l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_5, ShaderModel1_2_3_4::PxlShader );
-				l_pProgram->Initialise();
-				m_pGeometryBuffers->GetVertexBuffer().Create();
-				m_pGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, l_pProgram );
-				m_pGeometryBuffers->Initialise();
 			}
 		}
 

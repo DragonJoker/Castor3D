@@ -16,17 +16,17 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Light::Light( LightFactory & p_factory, SceneSPtr p_pScene, eLIGHT_TYPE p_eLightType, SceneNodeSPtr p_pMaterial, String const & p_name )
-		: MovableObject( p_pScene, p_pMaterial, p_name, eMOVABLE_TYPE_LIGHT )
+	Light::Light( LightFactory & p_factory, SceneSPtr p_pScene, eLIGHT_TYPE p_eLightType, SceneNodeSPtr p_pNode, String const & p_name )
+		: MovableObject( p_pScene, p_pNode, p_name, eMOVABLE_TYPE_LIGHT )
 		, m_pEngine( p_pScene->GetEngine() )
 		, m_enabled( false )
 	{
 		m_pCategory = p_factory.Create( p_eLightType );
 		m_pCategory->SetLight( this );
 
-		if ( p_pMaterial )
+		if ( p_pNode )
 		{
-			m_pCategory->SetPositionType( Point4f( p_pMaterial->GetPosition()[0], p_pMaterial->GetPosition()[1], p_pMaterial->GetPosition()[2], real( 0.0 ) ) );
+			m_pCategory->SetPositionType( Point4f( p_pNode->GetPosition()[0], p_pNode->GetPosition()[1], p_pNode->GetPosition()[2], real( 0.0 ) ) );
 		}
 	}
 

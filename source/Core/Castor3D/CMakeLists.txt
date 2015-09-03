@@ -1,8 +1,9 @@
 project( Castor3D )
 
-set( C3D_VERSION_MAJOR	0 )
-set( C3D_VERSION_MINOR	7 )
-set( C3D_VERSION_BUILD	1 )
+set( ${PROJECT_NAME}_DESCRIPTION "Castor3D Core engine" )
+set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
+set( ${PROJECT_NAME}_VERSION_MINOR	8 )
+set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 configure_file(
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/RequiredVersion.hpp.in
@@ -407,4 +408,4 @@ install(
 	COMPONENT ${PROJECT_NAME}_Samples
 )
 
-set( Build "yes (version ${C3D_VERSION_MAJOR}.${C3D_VERSION_MINOR}.${C3D_VERSION_BUILD})" PARENT_SCOPE )
+set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )

@@ -13,7 +13,7 @@ namespace
 	static String OverlayVS =
 		cuT( "struct VtxInput\n" )
 		cuT( "{\n" )
-		cuT( "	int2 Position: POSITION;\n" )
+		cuT( "	uint2 Position: POSITION;\n" )
 		cuT( "	float2 TextureUV: TEXCOORD0;\n" )
 		cuT( "};\n" )
 		cuT( "struct VtxOutput\n" )
@@ -24,7 +24,7 @@ namespace
 		cuT( "VtxOutput mainVx( VtxInput p_input )\n" )
 		cuT( "{\n" )
 		cuT( "	VtxOutput l_output;\n" )
-		cuT( "	l_output.Position = mul( int4( p_input.Position, 0.0, 1.0 ), c3d_mtxProjection );\n" )
+		cuT( "	l_output.Position = mul( float4( p_input.Position, 0.0, 1.0 ), c3d_mtxProjection );\n" )
 		cuT( "	l_output.TextureUV = p_input.TextureUV;\n" )
 		cuT( "	return l_output;\n" )
 		cuT( "}\n" );

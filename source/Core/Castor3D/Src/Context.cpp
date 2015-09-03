@@ -89,11 +89,36 @@ namespace Castor3D
 		m_pDsStateBackground = m_pRenderSystem->GetEngine()->CreateDepthStencilState( cuT( "ContextBackgroundDSState" ) );
 		m_pDsStateBackground->SetDepthTest( false );
 		m_pDsStateBackground->SetDepthMask( eWRITING_MASK_ZERO );
-		return DoInitialise();
+		bool l_return = DoInitialise();
+
+		if ( l_return )
+		{
+			SetCurrent();
+			l_program->Initialise();
+			m_pGeometryBuffers->GetVertexBuffer().Create();
+			m_pGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, l_program );
+			m_pGeometryBuffers->Initialise();
+			EndCurrent();
+		}
+
+		return l_return;
 	}
 
 	void Context::Cleanup()
 	{
+		m_bInitialised = false;
+		SetCurrent();
+		m_pGeometryBuffers->Cleanup();
+		m_pGeometryBuffers->GetVertexBuffer().Cleanup();
+		m_pGeometryBuffers->GetVertexBuffer().Destroy();
+		ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
+
+		if ( l_pProgram )
+		{
+			l_pProgram->Cleanup();
+		}
+
+		EndCurrent();
 		DoCleanup();
 		m_pDsStateBackground.reset();
 		m_pViewport.reset();

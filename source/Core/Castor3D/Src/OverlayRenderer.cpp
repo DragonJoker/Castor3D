@@ -222,7 +222,7 @@ namespace Castor3D
 				int32_t l_count = l_arrayVtx.size();
 				uint32_t l_index = 0;
 				std::vector< GeometryBuffersSPtr > l_geometryBuffers;
-				OverlayCategory::VertexArray::const_iterator l_it = l_arrayVtx.begin();
+				auto l_it = l_arrayVtx.begin();
 
 				while ( l_count > C3D_MAX_CHARS_PER_BUFFER )
 				{
@@ -349,7 +349,7 @@ namespace Castor3D
 
 			if ( l_program )
 			{
-				l_pass->BindToProgram( l_program );
+				l_pass->BindToAutomaticProgram( l_program );
 				auto l_matrixBuffer = l_pass->GetMatrixBuffer();
 
 				if ( l_matrixBuffer )
