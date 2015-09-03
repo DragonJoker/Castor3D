@@ -407,7 +407,7 @@ namespace Castor3D
 		bool l_bHasAlpha = m_fAlpha < 1;
 		m_uiTextureFlags = 0;
 
-		for ( auto l_unit: m_arrayTextureUnits )
+		for ( auto l_unit : m_arrayTextureUnits )
 		{
 			l_unit->SetIndex( 0 );
 		}
@@ -499,7 +499,7 @@ namespace Castor3D
 			}
 		}
 
-		for ( auto l_unit: m_arrayTextureUnits )
+		for ( auto l_unit : m_arrayTextureUnits )
 		{
 			if ( l_unit->GetIndex() == 0 )
 			{
@@ -536,7 +536,7 @@ namespace Castor3D
 	{
 		m_pBlendState->Cleanup();
 
-		for ( auto && l_unit: m_arrayTextureUnits )
+		for ( auto && l_unit : m_arrayTextureUnits )
 		{
 			l_unit->Cleanup();
 		}
@@ -665,7 +665,7 @@ namespace Castor3D
 
 	void Pass::DoFillShaderVariables()
 	{
-		for ( auto && l_pair: m_mapUnits )
+		for ( auto && l_pair : m_mapUnits )
 		{
 			TextureUnitSPtr l_unit = l_pair.second.first.lock();
 			OneTextureFrameVariableSPtr l_variable = l_pair.second.second.lock();
@@ -726,7 +726,7 @@ namespace Castor3D
 
 		if ( l_pProgram )
 		{
-			m_matrixBuffer = l_pProgram->FindFrameVariableBuffer(ShaderProgramBase::BufferMatrix );
+			m_matrixBuffer = l_pProgram->FindFrameVariableBuffer( ShaderProgramBase::BufferMatrix );
 			FrameVariableBufferSPtr l_passBuffer = l_pProgram->FindFrameVariableBuffer( ShaderProgramBase::BufferPass );
 
 			if ( l_passBuffer )
@@ -811,7 +811,7 @@ namespace Castor3D
 			l_program->Bind( p_index, p_count );
 		}
 
-		for ( auto && l_it: m_arrayTextureUnits )
+		for ( auto && l_it : m_arrayTextureUnits )
 		{
 			l_it->Bind();
 		}

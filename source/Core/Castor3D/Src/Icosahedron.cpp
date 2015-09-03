@@ -55,7 +55,7 @@ void Icosahedron::Generate()
 	l_group.m_uiCount = 12;
 	l_group.m_pVtx = l_pVtx;
 	l_group.m_pNml = l_pNml;
-	
+
 	Point3r l_vertex;
 	// on crée les 12 points le composant
 	l_vertex = Point3r( -X,  0,  Z );
@@ -63,7 +63,7 @@ void Icosahedron::Generate()
 	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
 	l_pVtx += 3;
 	l_pNml += 3;
-	l_vertex = Point3r(  X,  0,  Z );
+	l_vertex = Point3r( X,  0,  Z );
 	memcpy( l_pVtx, l_vertex.ptr(), 3 * sizeof( real ) );
 	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
 	l_pVtx += 3;
@@ -73,32 +73,32 @@ void Icosahedron::Generate()
 	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
 	l_pVtx += 3;
 	l_pNml += 3;
-	l_vertex = Point3r(  X,  0, -Z );
+	l_vertex = Point3r( X,  0, -Z );
 	memcpy( l_pVtx, l_vertex.ptr(), 3 * sizeof( real ) );
 	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
 	l_pVtx += 3;
 	l_pNml += 3;
-	l_vertex = Point3r(  0,  Z,  X );
+	l_vertex = Point3r( 0,  Z,  X );
 	memcpy( l_pVtx, l_vertex.ptr(), 3 * sizeof( real ) );
 	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
 	l_pVtx += 3;
 	l_pNml += 3;
-	l_vertex = Point3r(  0,  Z, -X );
+	l_vertex = Point3r( 0,  Z, -X );
 	memcpy( l_pVtx, l_vertex.ptr(), 3 * sizeof( real ) );
 	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
 	l_pVtx += 3;
 	l_pNml += 3;
-	l_vertex = Point3r(  0, -Z,  X );
+	l_vertex = Point3r( 0, -Z,  X );
 	memcpy( l_pVtx, l_vertex.ptr(), 3 * sizeof( real ) );
 	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
 	l_pVtx += 3;
 	l_pNml += 3;
-	l_vertex = Point3r(  0, -Z, -X );
+	l_vertex = Point3r( 0, -Z, -X );
 	memcpy( l_pVtx, l_vertex.ptr(), 3 * sizeof( real ) );
 	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
 	l_pVtx += 3;
 	l_pNml += 3;
-	l_vertex = Point3r(  Z,  X,  0 );
+	l_vertex = Point3r( Z,  X,  0 );
 	memcpy( l_pVtx, l_vertex.ptr(), 3 * sizeof( real ) );
 	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
 	l_pVtx += 3;
@@ -108,7 +108,7 @@ void Icosahedron::Generate()
 	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
 	l_pVtx += 3;
 	l_pNml += 3;
-	l_vertex = Point3r(  Z, -X,  0 );
+	l_vertex = Point3r( Z, -X,  0 );
 	memcpy( l_pVtx, l_vertex.ptr(), 3 * sizeof( real ) );
 	memcpy( l_pNml, point::get_normalised( l_vertex ).ptr(), 3 * sizeof( real ) );
 	l_pVtx += 3;

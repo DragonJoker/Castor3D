@@ -125,7 +125,7 @@ namespace GlRender
 
 		if ( l_pOldProgram != l_pNewProgram )
 		{
-			for ( auto l_attribute: m_arrayAttributes )
+			for ( auto l_attribute : m_arrayAttributes )
 			{
 				l_attribute->SetShader( l_pNewProgram );
 			}
@@ -306,7 +306,7 @@ namespace GlRender
 
 	void GlVertexBufferObject::DoAttributesCleanup()
 	{
-		for ( auto && l_attribute: m_arrayAttributes )
+		for ( auto && l_attribute : m_arrayAttributes )
 		{
 			l_attribute->Cleanup();
 		}
@@ -316,7 +316,7 @@ namespace GlRender
 	{
 		m_uiValid = 0;
 
-		for ( auto && l_attribute: m_arrayAttributes )
+		for ( auto && l_attribute : m_arrayAttributes )
 		{
 			m_uiValid += ( l_attribute->Initialise() ? 1 : 0 );
 		}
@@ -341,7 +341,7 @@ namespace GlRender
 
 	void GlVertexBufferObject::DoAttributesUnbind()
 	{
-		for ( auto && l_attribute: m_arrayAttributes )
+		for ( auto && l_attribute : m_arrayAttributes )
 		{
 			if ( l_attribute->GetLocation() != eGL_INVALID_INDEX )
 			{

@@ -50,20 +50,20 @@ namespace Castor3D
 		};
 
 		m_pDeclaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
-		
+
 		std::memset( m_panelBuffer, 0, sizeof( m_panelBuffer ) );
 		uint8_t * l_buffer = reinterpret_cast< uint8_t * >( m_panelBuffer );
 
-		for ( auto & l_vertex: m_panelVertex )
+		for ( auto & l_vertex : m_panelVertex )
 		{
 			l_vertex = std::make_shared< BufferElementGroup >( l_buffer );
 			l_buffer += m_pDeclaration->GetStride();
 		}
-		
+
 		std::memset( m_borderBuffer, 0, sizeof( m_borderBuffer ) );
 		l_buffer = reinterpret_cast< uint8_t * >( m_borderBuffer );
 
-		for ( auto & l_vertex: m_borderVertex )
+		for ( auto & l_vertex : m_borderVertex )
 		{
 			l_vertex = std::make_shared< BufferElementGroup >( l_buffer );
 			l_buffer += m_pDeclaration->GetStride();
@@ -72,7 +72,7 @@ namespace Castor3D
 
 	OverlayRenderer::~OverlayRenderer()
 	{
-		for ( auto & l_vertex: m_panelVertex )
+		for ( auto & l_vertex : m_panelVertex )
 		{
 			l_vertex.reset();
 		}
@@ -90,7 +90,7 @@ namespace Castor3D
 			l_pPanelVtxBuffer->Resize( m_panelVertex.size() * l_uiStride );
 			uint32_t l_index = 0;
 
-			for ( auto && l_vertex: m_panelVertex )
+			for ( auto && l_vertex : m_panelVertex )
 			{
 				l_vertex->LinkCoords( &l_pPanelVtxBuffer->data()[l_index++ * l_uiStride], l_uiStride );
 			}
@@ -109,7 +109,7 @@ namespace Castor3D
 			l_pBorderVtxBuffer->Resize( m_borderVertex.size() * l_uiStride );
 			uint32_t l_index = 0;
 
-			for ( auto && l_vertex: m_borderVertex )
+			for ( auto && l_vertex : m_borderVertex )
 			{
 				l_vertex->LinkCoords( &l_pBorderVtxBuffer->data()[l_index++ * l_uiStride], l_uiStride );
 			}
@@ -131,7 +131,7 @@ namespace Castor3D
 	{
 		DoCleanup();
 
-		for ( auto && l_pair: m_mapPanelPrograms )
+		for ( auto && l_pair : m_mapPanelPrograms )
 		{
 			if ( l_pair.second )
 			{
@@ -139,7 +139,7 @@ namespace Castor3D
 			}
 		}
 
-		for ( auto && l_pair: m_mapTextPrograms )
+		for ( auto && l_pair : m_mapTextPrograms )
 		{
 			if ( l_pair.second )
 			{
@@ -164,7 +164,7 @@ namespace Castor3D
 			m_pBorderGeometryBuffer.reset();
 		}
 
-		for ( auto && l_geometryBuffers: m_pTextsGeometryBuffers )
+		for ( auto && l_geometryBuffers : m_pTextsGeometryBuffers )
 		{
 			l_geometryBuffers->GetVertexBuffer().Cleanup();
 			l_geometryBuffers->Cleanup();
@@ -238,7 +238,7 @@ namespace Castor3D
 				DynamicTextureSPtr l_texture = p_overlay.GetTexture();
 				l_count = l_arrayVtx.size();
 
-				for ( auto l_vtxBuffer: l_geometryBuffers )
+				for ( auto l_vtxBuffer : l_geometryBuffers )
 				{
 					DoDrawItem( *l_pMaterial, *m_pRenderSystem->GetPipeline(), l_vtxBuffer, l_texture, std::min( l_count, C3D_MAX_CHARS_PER_BUFFER ) );
 					l_count -= C3D_MAX_CHARS_PER_BUFFER;
@@ -334,10 +334,10 @@ namespace Castor3D
 		uint8_t l_byIndex = 0;
 		uint8_t l_byCount = uint8_t( p_material.GetPassCount() );
 
-		for ( auto && l_pass: p_material )
+		for ( auto && l_pass : p_material )
 		{
 			ShaderProgramBaseSPtr l_program;
-			
+
 			if ( p_texture )
 			{
 				l_program = DoGetTextProgram( l_pass->GetTextureFlags() );

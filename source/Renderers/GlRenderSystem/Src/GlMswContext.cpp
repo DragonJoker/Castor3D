@@ -111,7 +111,7 @@ namespace GlRender
 			SetCurrent();
 			l_pRenderSystem->Initialise( cuT( "" ) );
 			p_window->GetEngine()->GetMaterialManager().Initialise();
-	#if !defined( NDEBUG )
+#if !defined( NDEBUG )
 
 			if ( m_gl.HasDebugOutput() )
 			{
@@ -120,7 +120,7 @@ namespace GlRender
 				m_gl.Enable( eGL_TWEAK_DEBUG_OUTPUT_SYNCHRONOUS );
 			}
 
-	#endif
+#endif
 			EndCurrent();
 			UpdateVSync( p_window->GetVSync() );
 		}
@@ -182,6 +182,7 @@ namespace GlRender
 		try
 		{
 			GlRenderSystem * l_pRenderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
+
 			if ( m_gl.HasCreateContextAttribs() )
 			{
 				std::function< HGLRC( HDC hDC, HGLRC hShareContext, int const * attribList ) > glCreateContextAttribs;

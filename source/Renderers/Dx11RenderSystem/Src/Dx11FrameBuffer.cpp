@@ -149,7 +149,7 @@ namespace Dx11Render
 		D3D11RenderTargetViewArray l_arraySurfaces;
 		ID3D11DepthStencilView * l_pView = m_pOldDepthStencilView;
 
-		for ( auto && l_old: m_arrayOldRenderTargets )
+		for ( auto && l_old : m_arrayOldRenderTargets )
 		{
 			if ( l_old )
 			{
@@ -251,7 +251,7 @@ namespace Dx11Render
 
 	void DxFrameBuffer::DoCleanupOld()
 	{
-		for ( auto && l_old: m_arrayOldRenderTargets )
+		for ( auto && l_old : m_arrayOldRenderTargets )
 		{
 			SafeRelease( l_old );
 		}

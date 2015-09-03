@@ -246,7 +246,7 @@ real Ray::Intersects( GeometrySPtr p_pGeometry, FaceSPtr * CU_PARAM_UNUSED( p_pp
 	{
 		l_fDistance = -1.0f;
 
-		for ( auto && l_submesh: *l_pMesh )
+		for ( auto && l_submesh : *l_pMesh )
 		{
 			Point3r l_submeshCenter = l_vCenter + l_submesh->GetSphere().GetCenter();
 			l_sphere.Load( l_submeshCenter, l_submesh->GetSphere().GetRadius() );

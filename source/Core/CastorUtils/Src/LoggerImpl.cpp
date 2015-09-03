@@ -185,6 +185,7 @@ namespace Castor
 #if defined( NDEBUG )
 		DoPrintLine( line, logLevel );
 #endif
+
 		for ( auto && l_it : m_mapCallbacks )
 		{
 			l_it.second( line, logLevel );

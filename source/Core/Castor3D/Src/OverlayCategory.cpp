@@ -57,7 +57,7 @@ namespace Castor3D
 			l_bReturn = p_file.WriteText( l_strTabs + cuT( "\tmaterial " ) + p_overlay.GetMaterial()->GetName() ) > 0;
 		}
 
-		for ( auto && l_overlay: p_overlay.GetOverlay() )
+		for ( auto && l_overlay : p_overlay.GetOverlay() )
 		{
 			switch ( l_overlay->GetType() )
 			{

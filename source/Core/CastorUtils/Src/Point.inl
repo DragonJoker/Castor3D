@@ -1159,7 +1159,7 @@ namespace Castor
 		}
 		else
 		{
-			for( uint32_t i = 0; i < Count; i++ )
+			for ( uint32_t i = 0; i < Count; i++ )
 			{
 				m_coords[i] = static_cast< T >( p_pt.m_coords[i] );
 			}

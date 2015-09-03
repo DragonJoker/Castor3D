@@ -166,7 +166,7 @@ namespace Castor
 		*/
 		template< typename CharType >
 		struct base_num_put
-			: std::num_put< CharType >
+				: std::num_put< CharType >
 		{
 			typedef typename std::num_put< CharType >::iter_type iter_type;
 			// These absVal functions are needed as std::abs doesnt support

@@ -281,7 +281,7 @@ namespace Castor3D
 				CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexResources );
 				m_depthStencilStateManager.lock();
 
-				for( auto && l_it: m_depthStencilStateManager )
+				for ( auto && l_it : m_depthStencilStateManager )
 				{
 					m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
 				}
@@ -289,7 +289,7 @@ namespace Castor3D
 				m_depthStencilStateManager.unlock();
 				m_rasteriserStateManager.lock();
 
-				for( auto && l_it: m_rasteriserStateManager )
+				for ( auto && l_it : m_rasteriserStateManager )
 				{
 					m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
 				}
@@ -297,14 +297,14 @@ namespace Castor3D
 				m_rasteriserStateManager.unlock();
 				m_blendStateManager.lock();
 
-				for( auto && l_it: m_blendStateManager )
+				for ( auto && l_it : m_blendStateManager )
 				{
 					m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
 				}
 
 				m_blendStateManager.unlock();
 
-				for( auto && l_it: m_mapWindows )
+				for ( auto && l_it : m_mapWindows )
 				{
 					m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
 				}
@@ -1233,6 +1233,7 @@ namespace Castor3D
 		PreciseTimer l_timer;
 		m_pRenderSystem->GetMainContext()->SetCurrent();
 #if DX_DEBUG
+
 		// Reverse iterator because we want to render textures before windows
 		for ( auto l_rit = m_mapRenderTargets.rbegin(); l_rit != m_mapRenderTargets.rend(); ++l_rit )
 		{
@@ -1241,6 +1242,7 @@ namespace Castor3D
 			p_vtxCount += l_rit->second->GetScene()->GetVertexCount();
 			l_rit->second->Render( m_dFrameTime );
 		}
+
 #endif
 		p_gpuTime += l_timer.TimeMs();
 

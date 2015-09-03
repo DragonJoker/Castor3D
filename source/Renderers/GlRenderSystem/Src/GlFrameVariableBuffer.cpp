@@ -894,7 +894,7 @@ namespace GlRender
 					m_buffer.resize( m_iUniformBlockSize );
 					std::vector< const char * > l_arrayNames;
 
-					for ( auto && l_pVariable: m_listVariables )
+					for ( auto && l_pVariable : m_listVariables )
 					{
 						char * l_szChar = new char[l_pVariable->GetName().size() + 1];
 						l_szChar[l_pVariable->GetName().size()] = 0;
@@ -911,7 +911,7 @@ namespace GlRender
 					clear_container( l_arrayNames );
 					int i = 0;
 
-					for ( auto && l_pVariable: m_listVariables )
+					for ( auto && l_pVariable : m_listVariables )
 					{
 						uint32_t l_uiIndex = l_arrayIndices[i++];
 						int l_iOffset, l_iSize;
@@ -966,7 +966,7 @@ namespace GlRender
 		}
 		else
 		{
-			for ( auto && l_variable: m_listInitialised )
+			for ( auto && l_variable : m_listInitialised )
 			{
 				l_variable->Bind();
 			}

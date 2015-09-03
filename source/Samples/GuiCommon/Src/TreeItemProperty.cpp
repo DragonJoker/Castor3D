@@ -25,7 +25,7 @@ namespace GuiCommon
 		wxPGChoices l_choices;
 		l_manager.lock();
 
-		for ( auto && l_pair: l_manager )
+		for ( auto && l_pair : l_manager )
 		{
 			l_choices.Add( l_pair.first );
 		}

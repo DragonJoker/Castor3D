@@ -35,7 +35,7 @@ namespace GlRender
 	public:
 		GlContextImpl( OpenGl & p_gl, GlContext * p_pContext );
 		virtual ~GlContextImpl();
-		
+
 		bool Initialise( Castor3D::RenderWindow * p_window );
 		void Cleanup();
 		void SetCurrent();

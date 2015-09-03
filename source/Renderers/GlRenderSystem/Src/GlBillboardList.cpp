@@ -104,7 +104,7 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( uint32_t p_flags )
 			LOCALE_ASSIGN( l_writer, Vec3, l_right, cross( l_toCamera, l_up ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, ( c3d_mtxProjectionModelView * vec4( Float( 0.0f ), 0.0, -1.0, 0.0 ) ).xyz() );
 			l_v3Normal = ( c3d_mtxProjectionModelView * vec4( l_v3Normal, 0.0 ) ).xyz();
-			
+
 			LOCALE_ASSIGN( l_writer, Vec3, l_position0, l_position - ( l_right * 0.5 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture0, vec3( Float( 0.0f ), 0.0, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_position1, l_position0 + vec3( Float( 0.0f ), CAST( l_writer, Float, c3d_v2iDimensions.y() ), 0.0 ) );
@@ -113,7 +113,7 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( uint32_t p_flags )
 			LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture2, vec3( Float( 1.0f ), 0.0, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_position3, l_position2 + vec3( Float( 0.0f ), CAST( l_writer, Float, c3d_v2iDimensions.y() ), 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture3, vec3( Float( 1.0f ), 1.0, 0.0 ) );
-			
+
 			LOCALE_ASSIGN( l_writer, Vec3, l_vec2m1, l_position1 - l_position0 );
 			LOCALE_ASSIGN( l_writer, Vec3, l_vec3m1, l_position2 - l_position0 );
 			LOCALE_ASSIGN( l_writer, Vec3, l_tex2m1, l_v2Texture1 - l_v2Texture0 );
@@ -132,7 +132,7 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( uint32_t p_flags )
 				l_writer.EmitVertex();
 			}
 			l_writer << Endl();
-			
+
 			{
 				IndentBlock l_block( l_writer );
 				l_writer << Endl();
@@ -144,7 +144,7 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( uint32_t p_flags )
 				l_writer.EmitVertex();
 			}
 			l_writer << Endl();
-			
+
 			{
 				IndentBlock l_block( l_writer );
 				l_writer << Endl();
@@ -156,7 +156,7 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( uint32_t p_flags )
 				l_writer.EmitVertex();
 			}
 			l_writer << Endl();
-			
+
 			{
 				gl_Position = vec4( l_position3, 1.0 );
 				l_writer << Endl();

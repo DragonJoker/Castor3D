@@ -215,9 +215,9 @@ namespace Dx11Render
 				cuT( "	float3 Tangent: TANGENT0;\n" )
 				cuT( "	float3 Binormal: BINORMAL0;\n" )
 				cuT( "	float3 TextureUV: TEXCOORD0;\n" )
- 				//cuT( "	int4 BoneIDs: BLENDINDICES;\n")
- 				//cuT( "	float4 Weights: BLENDWEIGHT;\n" )
- 				//cuT( "	float4x4 Matrix: MATRIX;\n" )
+				//cuT( "	int4 BoneIDs: BLENDINDICES;\n")
+				//cuT( "	float4 Weights: BLENDWEIGHT;\n" )
+				//cuT( "	float4x4 Matrix: MATRIX;\n" )
 				cuT( "};\n" );
 			m_strVtxOutput =
 				cuT( "struct VtxOutput\n" )
@@ -258,9 +258,9 @@ namespace Dx11Render
 				cuT( "	float3 Tangent: TANGENT0;\n" )
 				cuT( "	float3 Binormal: BINORMAL0;\n" )
 				cuT( "	float3 TextureUV: TEXCOORD0;\n" )
- 				//cuT( "	int4 BoneIDs: BLENDINDICES;\n")
- 				//cuT( "	float4 Weights: BLENDWEIGHT;\n" )
- 				//cuT( "	float4x4 Matrix: MATRIX;\n"	 )
+				//cuT( "	int4 BoneIDs: BLENDINDICES;\n")
+				//cuT( "	float4 Weights: BLENDWEIGHT;\n" )
+				//cuT( "	float4x4 Matrix: MATRIX;\n"	 )
 				cuT( "};\n" );
 			m_strVtxOutput =
 				cuT( "struct VtxOutput\n" )

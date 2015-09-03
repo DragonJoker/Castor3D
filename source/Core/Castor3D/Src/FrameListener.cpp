@@ -11,7 +11,7 @@ namespace Castor3D
 
 	FrameListener::~FrameListener()
 	{
-		for ( auto && l_it: m_events )
+		for ( auto && l_it : m_events )
 		{
 			l_it.clear();
 		}

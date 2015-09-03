@@ -37,7 +37,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			for ( auto && l_submesh: p_mesh )
+			for ( auto && l_submesh : p_mesh )
 			{
 				Submesh::TextLoader()( *l_submesh, p_file );
 			}
@@ -68,7 +68,7 @@ namespace Castor3D
 			l_bReturn = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
 		}
 
-		for ( auto && l_submesh: p_obj )
+		for ( auto && l_submesh : p_obj )
 		{
 			Submesh::BinaryParser( m_path ).Fill( *l_submesh, l_chunk );
 		}
@@ -173,7 +173,7 @@ namespace Castor3D
 		Point3r l_min( m_submeshes[0]->GetCubeBox().GetMin() );
 		Point3r l_max( m_submeshes[0]->GetCubeBox().GetMax() );
 
-		for ( auto && l_submesh: m_submeshes )
+		for ( auto && l_submesh : m_submeshes )
 		{
 			CubeBox const & l_box = l_submesh->GetCubeBox();
 
@@ -216,7 +216,7 @@ namespace Castor3D
 	{
 		uint32_t l_nbFaces = 0;
 
-		for ( auto && l_submesh: m_submeshes )
+		for ( auto && l_submesh : m_submeshes )
 		{
 			l_nbFaces += l_submesh->GetFaceCount();
 		}
@@ -228,7 +228,7 @@ namespace Castor3D
 	{
 		uint32_t l_nbFaces = 0;
 
-		for ( auto && l_submesh: m_submeshes )
+		for ( auto && l_submesh : m_submeshes )
 		{
 			l_nbFaces += l_submesh->GetPointsCount();
 		}
@@ -274,7 +274,7 @@ namespace Castor3D
 
 	void Mesh::GenerateBuffers()
 	{
-		for ( auto && l_submesh: m_submeshes )
+		for ( auto && l_submesh : m_submeshes )
 		{
 			l_submesh->GenerateBuffers();
 		}
@@ -284,7 +284,7 @@ namespace Castor3D
 	{
 		MeshSPtr l_clone = std::make_shared< Mesh >( m_pEngine, GetMeshType(), p_name );
 
-		for ( auto && l_submesh: m_submeshes )
+		for ( auto && l_submesh : m_submeshes )
 		{
 			l_clone->m_submeshes.push_back( l_submesh->Clone() );
 		}
@@ -295,7 +295,7 @@ namespace Castor3D
 
 	void Mesh::Ref( MaterialSPtr p_material )
 	{
-		for ( auto && l_submesh: m_submeshes )
+		for ( auto && l_submesh : m_submeshes )
 		{
 			l_submesh->Ref( p_material );
 		}
@@ -303,7 +303,7 @@ namespace Castor3D
 
 	void Mesh::UnRef( MaterialSPtr p_material )
 	{
-		for ( auto && l_submesh: m_submeshes )
+		for ( auto && l_submesh : m_submeshes )
 		{
 			l_submesh->UnRef( p_material );
 		}

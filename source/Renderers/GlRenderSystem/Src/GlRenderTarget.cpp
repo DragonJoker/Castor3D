@@ -13,7 +13,7 @@ using namespace GlRender;
 using namespace Castor3D;
 using namespace Castor;
 
-GlRenderTarget::GlRenderTarget( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem, eTARGET_TYPE p_type  )
+GlRenderTarget::GlRenderTarget( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem, eTARGET_TYPE p_type )
 	: RenderTarget( p_pRenderSystem->GetEngine(), p_type )
 	, m_gl( p_gl )
 	, m_pRenderSystem( p_pRenderSystem )

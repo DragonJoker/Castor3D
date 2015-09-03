@@ -72,7 +72,7 @@ ShaderProgramBaseSPtr GlOverlayRenderer::DoGetProgram( uint32_t p_uiFlags )
 
 		l_strVs = l_writer.Finalise();
 	}
-	
+
 	// Pixel shader
 	String l_strPs;
 	{

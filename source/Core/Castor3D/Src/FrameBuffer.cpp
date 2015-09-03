@@ -99,12 +99,12 @@ namespace Castor3D
 
 	void FrameBuffer::Resize( Castor::Size const & p_size )
 	{
-		for ( auto && l_pair: m_mapRbo )
+		for ( auto && l_pair : m_mapRbo )
 		{
 			l_pair.second->Resize( p_size );
 		}
 
-		for ( auto && l_pair: m_mapTex )
+		for ( auto && l_pair : m_mapTex )
 		{
 			l_pair.second->Resize( p_size );
 		}

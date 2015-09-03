@@ -35,6 +35,7 @@
 		{
 			m_pPointer[i] = T( p_pMatrix[i] );
 		}
+
 #if !defined( NDEBUG )
 		do_update_debug();
 #endif
@@ -76,6 +77,7 @@
 		{
 			m_pPointer[i] = T( p_matrix.m_pPointer[i] );
 		}
+
 #if !defined( NDEBUG )
 		do_update_debug();
 #endif
@@ -111,6 +113,7 @@
 				this->operator[]( i )[p_uiRow] = T( p_row[i] );
 			}
 		}
+
 #if !defined( NDEBUG )
 		do_update_debug();
 #endif
@@ -125,6 +128,7 @@
 				this->operator[]( i )[p_uiRow] = T( p_row[i] );
 			}
 		}
+
 #if !defined( NDEBUG )
 		do_update_debug();
 #endif
@@ -159,6 +163,7 @@
 		{
 			std::memcpy( this->operator[]( p_uiColumn ), p_col, Rows * sizeof( T ) );
 		}
+
 #if !defined( NDEBUG )
 		do_update_debug();
 #endif
@@ -170,6 +175,7 @@
 		{
 			std::memcpy( this->operator[]( p_uiColumn ), p_col.const_ptr(), Rows * sizeof( T ) );
 		}
+
 #if !defined( NDEBUG )
 		do_update_debug();
 #endif
@@ -232,6 +238,7 @@
 #if !defined( NDEBUG )
 		do_update_debug();
 #endif
+
 		for ( uint32_t i = 0; i < Columns; i++ )
 		{
 			for ( uint32_t j = 0; j < Rows; j++ )
@@ -309,6 +316,7 @@
 				}
 			}
 		}
+
 #if !defined( NDEBUG )
 		do_update_debug();
 #endif
@@ -382,6 +390,7 @@
 		{
 			this->operator[]( i + 1 )[i] = Castor::Policy< T >::unit();
 		}
+
 #if !defined( NDEBUG )
 		do_update_debug();
 #endif
@@ -410,6 +419,7 @@
 				}
 			}
 		}
+
 #if !defined( NDEBUG )
 		do_update_debug();
 #endif
@@ -445,7 +455,7 @@
 			p_matrix.m_pPointer = NULL;
 			p_matrix.m_bOwnCoords = true;
 		}
-		
+
 #if !defined( NDEBUG )
 		do_update_debug();
 #endif
@@ -702,7 +712,7 @@
 		do_update_debug();
 #endif
 	}
-	
+
 #if !defined( NDEBUG )
 
 	template< typename T, uint32_t Rows, uint32_t Columns >

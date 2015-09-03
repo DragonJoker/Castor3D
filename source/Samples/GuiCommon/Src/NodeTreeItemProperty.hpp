@@ -85,9 +85,9 @@ namespace GuiCommon
 		}
 
 	private:
-	void OnPositionChange( Castor::Point3r const & p_value );
-	void OnScaleChange( Castor::Point3r const & p_value );
-	void OnOrientationChange( Castor::Quaternion const & p_value );
+		void OnPositionChange( Castor::Point3r const & p_value );
+		void OnScaleChange( Castor::Point3r const & p_value );
+		void OnOrientationChange( Castor::Quaternion const & p_value );
 
 	private:
 		Castor3D::Engine * m_engine;

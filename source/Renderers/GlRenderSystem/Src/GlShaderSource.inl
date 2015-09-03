@@ -132,14 +132,14 @@ namespace GlRender
 		}
 
 		//***********************************************************************************************
-		
+
 		template< typename T >
 		inline GlslBool & GlslBool::operator=( T const & p_rhs )
 		{
 			m_writer->WriteAssign( *this, p_rhs );
 			return *this;
 		}
-		
+
 		template< typename T >
 		inline GlslBool & GlslBool::operator=( int p_rhs )
 		{
@@ -286,7 +286,7 @@ namespace GlRender
 			WriteFunctionHeader< RetType >( *this, p_name, p_params... );
 			{
 				IndentBlock l_block( *this );
-				p_function( std::forward< Params && >( p_params )... );
+				p_function( std::forward < Params && > ( p_params )... );
 			}
 			m_stream << std::endl;
 		}
@@ -564,7 +564,7 @@ namespace GlRender
 		}
 
 		//*****************************************************************************************
-		
+
 		template< typename LightingModel >
 		void Lighting< LightingModel >::Declare_Light( GlslWriter & p_writer )
 		{
@@ -619,7 +619,7 @@ namespace GlRender
 				return l_lightReturn;
 			}
 		}
-		
+
 		template< typename LightingModel >
 		void Lighting< LightingModel >::Declare_GetLight( GlslWriter & p_writer )
 		{

@@ -490,7 +490,7 @@
  *\subsubsection CastorViewer
  *<ul>
  *<li>Maintenant, MainFrame utilise wxSizers.</li>
- *<li>Ajout d'options de ligne de commande : 
+ *<li>Ajout d'options de ligne de commande :
  *<ul>
  *<li>-f/--file pour charger un fichier de scène au chargement</li>
  *<li>-h/--help pour afficher une aide</li>

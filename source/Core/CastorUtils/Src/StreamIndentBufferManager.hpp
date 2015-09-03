@@ -33,7 +33,7 @@ namespace Castor
 		\~french
 		\brief		Garde les associations flux/tampon de flux
 		*/
-		template< typename char_type, typename traits=std::char_traits< char_type > >
+		template< typename char_type, typename traits = std::char_traits< char_type > >
 		class basic_buffer_manager
 		{
 		private:

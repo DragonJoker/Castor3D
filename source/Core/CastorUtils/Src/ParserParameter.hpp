@@ -59,7 +59,7 @@ namespace Castor
 		virtual ePARAMETER_TYPE GetType();
 		virtual xchar const * GetStrType();
 		virtual bool Parse( String & p_strParams );
-		
+
 	public:
 		typedef String value_type;
 		value_type m_value;

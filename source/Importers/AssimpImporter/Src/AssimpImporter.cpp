@@ -351,7 +351,7 @@ bool AssimpImporter::DoProcessMesh( SkeletonSPtr p_pSkeleton, aiMesh const * p_p
 
 			l_stVertices.m_pNml = nml.data();
 		}
-		
+
 		if ( p_pAiMesh->mTangents )
 		{
 			tan.reserve( p_pAiMesh->mNumVertices * 3 );
@@ -365,7 +365,7 @@ bool AssimpImporter::DoProcessMesh( SkeletonSPtr p_pSkeleton, aiMesh const * p_p
 
 			l_stVertices.m_pTan = tan.data();
 		}
-		
+
 		if ( p_pAiMesh->mBitangents )
 		{
 			bin.reserve( p_pAiMesh->mNumVertices * 3 );
@@ -393,6 +393,7 @@ bool AssimpImporter::DoProcessMesh( SkeletonSPtr p_pSkeleton, aiMesh const * p_p
 
 			l_stVertices.m_pTex = tex.data();
 		}
+
 #else
 		l_stVertices.m_pVtx = ( real * )p_pAiMesh->mVertices;
 		l_stVertices.m_pNml = ( real * )p_pAiMesh->mNormals;
@@ -403,6 +404,7 @@ bool AssimpImporter::DoProcessMesh( SkeletonSPtr p_pSkeleton, aiMesh const * p_p
 		{
 			l_stVertices.m_pTex = ( real * )p_pAiMesh->mTextureCoords[0];
 		}
+
 #endif
 
 		std::vector< stVERTEX_BONE_DATA > l_arrayBones( p_pAiMesh->mNumVertices );

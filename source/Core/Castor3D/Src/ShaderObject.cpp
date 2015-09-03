@@ -331,7 +331,7 @@ namespace Castor3D
 	{
 		DoBind();
 
-		for ( auto && l_variable: m_listFrameVariables )
+		for ( auto && l_variable : m_listFrameVariables )
 		{
 			l_variable->Bind();
 		}
@@ -339,7 +339,7 @@ namespace Castor3D
 
 	void ShaderObjectBase::Unbind()
 	{
-		for ( auto && l_variable: m_listFrameVariables )
+		for ( auto && l_variable : m_listFrameVariables )
 		{
 			l_variable->Unbind();
 		}
