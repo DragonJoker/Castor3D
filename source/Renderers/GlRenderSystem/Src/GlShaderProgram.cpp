@@ -70,10 +70,10 @@ namespace GlRender
 				}
 			}
 
-			Logger::LogDebug( cuT( "GlShaderProgram::Link - Programs attached : %d" ), l_uiNbAttached );
+			Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Programs attached : " ) << l_uiNbAttached );
 			l_bReturn &= m_gl.LinkProgram( m_programObject );
 			l_bReturn &= m_gl.GetProgramiv( m_programObject, eGL_SHADER_STATUS_LINK, &l_iLinked );
-			Logger::LogDebug( cuT( "GlShaderProgram::Link - Program link status : %i" ), l_iLinked );
+			Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Program link status : " ) << l_iLinked );
 			RetrieveLinkerLog( m_linkerLog );
 
 			if ( m_linkerLog.size() > 0 )

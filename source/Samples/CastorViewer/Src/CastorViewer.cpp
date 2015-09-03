@@ -149,7 +149,7 @@ namespace CastorViewer
 			}
 			catch ( std::exception & exc )
 			{
-				Logger::LogError( "CastorViewer - Initialisation failed : %s", exc.what() );
+				Logger::LogError( std::stringstream() << "CastorViewer - Initialisation failed : " << exc.what() );
 				l_bReturn = false;
 			}
 		}

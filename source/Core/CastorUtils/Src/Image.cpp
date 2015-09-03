@@ -52,11 +52,11 @@ namespace Castor
 		{
 			if ( fif != FIF_UNKNOWN )
 			{
-				Logger::LogWarning( "FreeImage - %s Format - %s", FreeImage_GetFormatFromFIF( fif ), message );
+				Logger::LogWarning( std::stringstream() << "FreeImage - " << FreeImage_GetFormatFromFIF( fif ) << " Format - " << message );
 			}
 			else
 			{
-				Logger::LogWarning( "FreeImage - Unknown Format - %s", message );
+				Logger::LogWarning( std::stringstream() << "FreeImage - Unknown Format - " << message );
 			}
 		}
 	}

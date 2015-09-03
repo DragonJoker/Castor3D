@@ -748,8 +748,7 @@ namespace Castor3D
 			m_rootNode->CreateBuffers( m_nbFaces, m_nbVertex );
 		}
 
-		String l_strToLog = cuT( "Scene::CreateList - [" ) + m_strName + cuT( "] - NbVertex : %d - NbFaces : %d" );
-		Logger::LogInfo( l_strToLog.c_str(), m_nbVertex, m_nbFaces );
+		Logger::LogInfo( StringStream() << cuT( "Scene::CreateList - [" ) << m_strName << cuT( "] - NbVertex : " ) << m_nbVertex << cuT( " - NbFaces : " ) << m_nbFaces );
 		DoSortByAlpha();
 		DepthStencilStateSPtr state = m_alphaDepthState.lock();
 

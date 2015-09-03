@@ -293,7 +293,7 @@ MeshSPtr AssimpImporter::DoImportMesh()
 		else
 		{
 			// The import failed, report it
-			Logger::LogError( "Scene import failed : %s", importer.GetErrorString() );
+			Logger::LogError( std::stringstream() << "Scene import failed : " << importer.GetErrorString() );
 			m_pEngine->GetMeshManager().erase( l_meshName );
 			m_pMesh.reset();
 		}

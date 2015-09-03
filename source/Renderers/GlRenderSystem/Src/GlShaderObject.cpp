@@ -89,16 +89,16 @@ namespace GlRender
 				int l_iCompiled = 0;
 				int l_iLength = int( m_strLoadedSource.size() );
 				std::string l_strTmp = str_utils::to_str( m_strLoadedSource );
-				char * l_pszTmp = new char[m_strLoadedSource.size() + 1];
+				std::vector< char > l_pszTmp( m_strLoadedSource.size() + 1 );
+				char * l_buffer = l_pszTmp.data();
 #if defined( _MSC_VER )
-				strncpy_s( l_pszTmp, m_strLoadedSource.size() + 1, l_strTmp.c_str(), l_strTmp.size() );
+				strncpy_s( l_buffer, m_strLoadedSource.size(), l_strTmp.c_str(), l_strTmp.size() );
 #else
-				strncpy( l_pszTmp, l_strTmp.c_str(), l_strTmp.size() );
+				strncpy( l_buffer, l_strTmp.c_str(), l_strTmp.size() );
 #endif
-				l_bReturn &= m_gl.ShaderSource( m_shaderObject, 1, const_cast< const char ** >( &l_pszTmp ), & l_iLength );
+				l_bReturn &= m_gl.ShaderSource( m_shaderObject, 1, const_cast< const char ** >( &l_buffer ), & l_iLength );
 				l_bReturn &= m_gl.CompileShader( m_shaderObject );
 				l_bReturn &= m_gl.GetShaderiv( m_shaderObject, eGL_SHADER_STATUS_COMPILE, & l_iCompiled );
-				delete [] l_pszTmp;
 
 				if ( l_iCompiled != 0 )
 				{

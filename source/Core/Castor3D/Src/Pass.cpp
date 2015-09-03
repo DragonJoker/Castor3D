@@ -469,7 +469,7 @@ namespace Castor3D
 		if ( l_pOpacityMap )
 		{
 			l_pOpacityMap->SetIndex( l_uiIndex++ );
-			Logger::LogDebug( cuT( "	Opacity map at index %d" ), l_pOpacityMap->GetIndex() );
+			Logger::LogDebug( StringStream() << cuT( "	Opacity map at index " ) << l_pOpacityMap->GetIndex() );
 			m_uiTextureFlags |= eTEXTURE_CHANNEL_OPACITY;
 			l_pOpacityMap->Initialise();
 			l_bHasAlpha = true;
@@ -614,7 +614,7 @@ namespace Castor3D
 	{
 		CASTOR_ASSERT( p_uiIndex < m_arrayTextureUnits.size() );
 		bool l_bReturn = false;
-		Logger::LogInfo( cuT( "Destroying TextureUnit %d" ), p_uiIndex );
+		Logger::LogInfo( StringStream() << cuT( "Destroying TextureUnit " ) << p_uiIndex );
 		TextureUnitPtrArray::iterator l_it = m_arrayTextureUnits.begin();
 		m_arrayTextureUnits.erase( l_it + p_uiIndex );
 		uint32_t i = 0;

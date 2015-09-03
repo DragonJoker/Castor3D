@@ -107,10 +107,10 @@ namespace Castor
 	\date		19/10/2011
 	\~english
 	\brief		Log management class
-	\remark		Implements log facilities. Create a Log with a filename, then write logs into that file
+	\remarks	Implements log facilities. Create a Log with a filename, then write logs into that file
 	\~french
 	\brief		Classe de gestion de logs
-	\remark		Implémente les fonctions de logging. Initialise un log avec un nom de fichier puis écrit dedans
+	\remarks	Implémente les fonctions de logging. Initialise un log avec un nom de fichier puis écrit dedans
 	*/
 	class Logger
 	{
@@ -189,22 +189,11 @@ namespace Castor
 		CU_API static void SetFileName( String const & p_logFilePath, ELogType p_eLogType = ELogType_COUNT );
 		/**
 		 *\~english
-		 *\brief		Logs a debug message in the log file, using va_args
-		 *\param[in]	p_format	The line format
-		 *\param[in]	...			POD arguments, following printf format
-		 *\~french
-		 *\brief		Log un message debug dans le fichier de log, en utilisant va_args
-		 *\param[in]	p_format	Le format de la ligne
-		 *\param[in]	...			Paramètres POD, utilise le format de printf
-		 */
-		CU_API static void LogDebug( char const * p_format, ... );
-		/**
-		 *\~english
 		 *\brief		Logs a debug message, from a std::string
 		 *\param[in]	p_msg	The line to log
 		 *\~french
 		 *\brief		Log un message debug, à partir d'un std::string
-		 *\param[in]	p_msg	The line to log
+		 *\param[in]	p_msg	La ligne a logger
 		 */
 		CU_API static void LogDebug( std::string const & p_msg );
 		/**
@@ -213,27 +202,16 @@ namespace Castor
 		 *\param[in]	p_msg	The line to log
 		 *\~french
 		 *\brief		Log un message debug, à partir d'un std::ostream
-		 *\param[in]	p_msg	The line to log
+		 *\param[in]	p_msg	La ligne a logger
 		 */
 		CU_API static void LogDebug( std::ostream const & p_msg );
-		/**
-		 *\~english
-		 *\brief		Logs a unicode debug message in the log file, using va_args
-		 *\param[in]	p_format	The line format
-		 *\param[in]	...			POD arguments, following printf format
-		 *\~french
-		 *\brief		Log un message unicode debug dans le fichier de log, en utilisant va_args
-		 *\param[in]	p_format	Le format de la ligne
-		 *\param[in]	...			Paramètres POD, utilise le format de printf
-		 */
-		CU_API static void LogDebug( wchar_t const * p_format , ... );
 		/**
 		 *\~english
 		 *\brief		Logs a unicode debug message, from a std::wstring
 		 *\param[in]	p_msg	The line to log
 		 *\~french
 		 *\brief		Log un message debug, à partir d'un std::wstring
-		 *\param[in]	p_msg	The line to log
+		 *\param[in]	p_msg	La ligne a logger
 		 */
 		CU_API static void LogDebug( std::wstring const & p_msg );
 		/**
@@ -247,22 +225,11 @@ namespace Castor
 		CU_API static void LogDebug( std::wostream const & p_msg );
 		/**
 		 *\~english
-		 *\brief		Logs a message in the log file, using va_args
-		 *\param[in]	p_format	The line format
-		 *\param[in]	...			POD arguments, following printf format
-		 *\~french
-		 *\brief		Log un message dans le fichier de log, en utilisant va_args
-		 *\param[in]	p_format	Le format de la ligne
-		 *\param[in]	...			Paramètres POD, utilise le format de printf
-		 */
-		CU_API static void LogInfo( char const * p_format, ... );
-		/**
-		 *\~english
 		 *\brief		Logs a message, from a std::string
 		 *\param[in]	p_msg	The line to log
 		 *\~french
 		 *\brief		Log un message, à partir d'un std::string
-		 *\param[in]	p_msg	The line to log
+		 *\param[in]	p_msg	La ligne a logger
 		 */
 		CU_API static void LogInfo( std::string const & p_msg );
 		/**
@@ -274,17 +241,6 @@ namespace Castor
 		 *\param[in]	p_msg	The line to log
 		 */
 		CU_API static void LogInfo( std::ostream const & p_msg );
-		/**
-		 *\~english
-		 *\brief		Logs a unicode line in the log file, using va_args
-		 *\param[in]	p_format	The line format
-		 *\param[in]	...			POD arguments, following printf format
-		 *\~french
-		 *\brief		Log une ligne unicode dans le fichier de log, en utilisant va_args
-		 *\param[in]	p_format	Le format de la ligne
-		 *\param[in]	...			Paramètres POD, utilise le format de printf
-		 */
-		CU_API static void LogInfo( wchar_t const * p_format , ... );
 		/**
 		 *\~english
 		 *\brief		Logs a message, from a std::wstring
@@ -305,17 +261,6 @@ namespace Castor
 		CU_API static void LogInfo( std::wostream const & p_msg );
 		/**
 		 *\~english
-		 *\brief		Logs a warning in the log file, using va_args
-		 *\param[in]	p_format	The line format
-		 *\param[in]	...			POD arguments, following printf format
-		 *\~french
-		 *\brief		Log un avertissement dans le fichier de log, en utilisant va_args
-		 *\param[in]	p_format	Le format de la ligne
-		 *\param[in]	...			Paramètres POD, utilise le format de printf
-		 */
-		CU_API static void LogWarning( char const * p_format, ... );
-		/**
-		 *\~english
 		 *\brief		Logs a warning, from a std::string
 		 *\param[in]	p_msg	The line to log
 		 *\~french
@@ -332,17 +277,6 @@ namespace Castor
 		 *\param[in]	p_msg	The line to log
 		 */
 		CU_API static void LogWarning( std::ostream const & p_msg );
-		/**
-		 *\~english
-		 *\brief		Logs a unicode warning in the log file, using va_args
-		 *\param[in]	p_format	The line format
-		 *\param[in]	...			POD arguments, following printf format
-		 *\~french
-		 *\brief		Log un avertissement en unicode dans le fichier de log, en utilisant va_args
-		 *\param[in]	p_format	Le format de la ligne
-		 *\param[in]	...			Paramètres POD, utilise le format de printf
-		 */
-		CU_API static void LogWarning( wchar_t const * p_format, ... );
 		/**
 		 *\~english
 		 *\brief		Logs a warning, from a std::wstring
@@ -363,17 +297,6 @@ namespace Castor
 		CU_API static void LogWarning( std::wostream const & msg );
 		/**
 		 *\~english
-		 *\brief		Logs an error in the log file, using va_args
-		 *\param[in]	p_format	The line format
-		 *\param[in]	...			POD arguments, following printf format
-		 *\~french
-		 *\brief		Log une erreur dans le fichier de log, en utilisant va_args
-		 *\param[in]	p_format	Le format de la ligne
-		 *\param[in]	...			Paramètres POD, utilise le format de printf
-		 */
-		CU_API static void LogError( char const * p_format, ... );
-		/**
-		 *\~english
 		 *\brief		Logs an error, from a std::string
 		 *\param[in]	p_msg		The line to log
 		 *\~french
@@ -390,17 +313,6 @@ namespace Castor
 		 *\param[in]	p_msg	The line to log
 		 */
 		CU_API static void LogError( std::ostream const & p_msg );
-		/**
-		 *\~english
-		 *\brief		Logs a unicode error in the log file, using va_args
-		 *\param[in]	p_format	The line format
-		 *\param[in]	...			POD arguments, following printf format
-		 *\~french
-		 *\brief		Log une erreur en unicode dans le fichier de log, en utilisant va_args
-		 *\param[in]	p_format	Le format de la ligne
-		 *\param[in]	...			Paramètres POD, utilise le format de printf
-		 */
-		CU_API static void LogError( wchar_t const * p_format, ... );
 		/**
 		 *\~english
 		 *\brief		Logs an error, from a std::wstring

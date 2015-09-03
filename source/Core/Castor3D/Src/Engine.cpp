@@ -219,10 +219,6 @@ namespace Castor3D
 		m_pImageManager.reset();
 		m_pSceneManager.reset();
 		m_pMaterialManager.reset();
-		m_pLightFactory.reset();
-		m_pMeshFactory.reset();
-		m_pOverlayFactory.reset();
-		m_pTechniqueFactory.reset();
 		m_arrayListeners.clear();
 
 		// Destroy the RenderSystem
@@ -268,6 +264,10 @@ namespace Castor3D
 		m_mutexLibraries.unlock();
 		m_mutexLoadedPlugins.unlock();
 		CASTOR_CLEANUP_UNIQUE_INSTANCE();
+		m_pLightFactory.reset();
+		m_pMeshFactory.reset();
+		m_pOverlayFactory.reset();
+		m_pTechniqueFactory.reset();
 	}
 
 	void Engine::Initialise( uint32_t p_wantedFPS, bool p_bThreaded )

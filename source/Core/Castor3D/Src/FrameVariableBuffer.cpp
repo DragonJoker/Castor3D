@@ -65,8 +65,8 @@ namespace Castor3D
 
 			for ( auto && l_variable: m_listInitialised )
 			{
-				l_variable->link( &m_buffer[l_uiTotalSize] );
-				l_buffer += l_uiTotalSize;
+				l_variable->link( l_buffer );
+				l_buffer += l_variable->size();
 			}
 		}
 

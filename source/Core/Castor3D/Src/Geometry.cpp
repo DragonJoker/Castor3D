@@ -190,7 +190,7 @@ namespace Castor3D
 				p_nbFaces += l_nbFaces;
 				p_nbVertex += l_nbVertex;
 				l_pMesh->ComputeContainers();
-				Logger::LogInfo( cuT( "Geometry::CreateBuffers - NbVertex : %d, NbFaces : %d" ), l_nbVertex, l_nbFaces );
+				Logger::LogInfo( StringStream() << cuT( "Geometry::CreateBuffers - NbVertex: " ) << l_nbVertex << cuT( ", NbFaces: " ) << l_nbFaces );
 				m_listCreated = l_pMesh->GetSubmeshCount() > 0;
 			}
 

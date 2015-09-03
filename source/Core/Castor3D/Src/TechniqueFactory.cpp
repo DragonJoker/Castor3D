@@ -1,7 +1,5 @@
 ﻿#include "TechniqueFactory.hpp"
 
-#include "DirectRenderTechnique.hpp"
-
 using namespace Castor;
 
 namespace Castor3D
@@ -18,6 +16,5 @@ namespace Castor3D
 
 	void TechniqueFactory::Initialise()
 	{
-		Register( cuT( "direct" ), &DirectRenderTechnique::CreateInstance );
 	}
 }

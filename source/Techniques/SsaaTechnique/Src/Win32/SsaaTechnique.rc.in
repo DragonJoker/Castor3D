@@ -52,7 +52,7 @@ END
 //
 
 1 VERSIONINFO
- FILEVERSION ${SSAA_VERSION_MAJOR}, ${SSAA_VERSION_MINOR}, ${SSAA_VERSION_BUILD}, 0
+ FILEVERSION ${${PROJECT_NAME}_VERSION_MAJOR}, ${${PROJECT_NAME}_VERSION_MINOR}, ${${PROJECT_NAME}_VERSION_BUILD}, 0
  PRODUCTVERSION ${VERSION_MAJOR}, ${VERSION_MINOR}, ${VERSION_BUILD}, 0
 BEGIN
     BLOCK "StringFileInfo"
@@ -60,11 +60,11 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "DragonJoker"
-            VALUE "FileDescription", "SSAA RenderTechnique plugin for Castor3D"
-            VALUE "FileVersion", "${SSAA_VERSION_MAJOR}.${SSAA_VERSION_MINOR}.${SSAA_VERSION_BUILD}.0"
-            VALUE "InternalName", "SsaaTechnique"
+            VALUE "FileDescription", "${${PROJECT_NAME}_DESCRIPTION} plugin for Castor3D"
+            VALUE "FileVersion", "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD}.0"
+            VALUE "InternalName", "${PROJECT_NAME}"
             VALUE "LegalCopyright", "Copyright (C) ${VERSION_YEAR}"
-            VALUE "OriginalFilename", "SsaaTechnique.dll"
+            VALUE "OriginalFilename", "${PROJECT_NAME}.dll"
             VALUE "ProductName", "Castor3D"
             VALUE "ProductVersion", "${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_BUILD}.0"
         END
