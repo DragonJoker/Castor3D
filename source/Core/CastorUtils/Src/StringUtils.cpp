@@ -1,4 +1,7 @@
 ﻿#include "StringUtils.hpp"
+
+#include "Exception.hpp"
+
 #include <locale>
 #include <wchar.h>
 #include <cstdlib>
@@ -112,11 +115,11 @@ namespace Castor
 				return l_bReturn;
 			}
 
-			template< typename InChar, typename OutChar > struct str_converter;
+			template< typename InChar, typename OutChar > struct StringConverter;
 
-			template<> struct str_converter< char, wchar_t >
+			template<> struct StringConverter< char, wchar_t >
 			{
-				void operator()( std::basic_string< char > const & p_strIn, std::basic_string< wchar_t > & p_strOut, std::locale const & p_locale = std::locale() )
+				static void Convert( std::basic_string< char > const & p_strIn, std::basic_string< wchar_t > & p_strOut, std::locale const & p_locale = std::locale() )
 				{
 					if ( !p_strIn.empty() )
 					{
@@ -136,9 +139,9 @@ namespace Castor
 				}
 			};
 
-			template<> struct str_converter< wchar_t, char >
+			template<> struct StringConverter< wchar_t, char >
 			{
-				void operator()( std::basic_string< wchar_t > const & p_strIn, std::basic_string< char > & p_strOut, std::locale const & p_locale = std::locale() )
+				static void Convert( std::basic_string< wchar_t > const & p_strIn, std::basic_string< char > & p_strOut, std::locale const & p_locale = std::locale() )
 				{
 					if ( !p_strIn.empty() )
 					{
@@ -159,9 +162,9 @@ namespace Castor
 			};
 
 			template< typename InChar >
-			struct str_converter< InChar, InChar >
+			struct StringConverter< InChar, InChar >
 			{
-				void operator()( std::basic_string< InChar > const & p_strIn, std::basic_string< InChar > & p_strOut, std::locale const & )
+				static void Convert( std::basic_string< InChar > const & p_strIn, std::basic_string< InChar > & p_strOut, std::locale const & p_locale = std::locale() )
 				{
 					p_strOut = p_strIn;
 				}
@@ -599,34 +602,30 @@ namespace Castor
 
 		String from_str( std::string const & p_strString )
 		{
-			String l_strReturn;
-			std::wostringstream l_wstream;
-			str_converter< char, xchar >()( p_strString, l_strReturn, l_wstream.getloc() );
-			return l_strReturn;
+			String l_return;
+			StringConverter< char, xchar >::Convert( p_strString, l_return );
+			return l_return;
 		}
 
 		String from_wstr( std::wstring const & p_strString )
 		{
-			String l_strReturn;
-			std::wostringstream l_wstream;
-			str_converter< wchar_t, xchar >()( p_strString, l_strReturn, l_wstream.getloc() );
-			return l_strReturn;
+			String l_return;
+			StringConverter< wchar_t, xchar >::Convert( p_strString, l_return );
+			return l_return;
 		}
 
 		std::string to_str( std::wstring const & p_str )
 		{
-			std::string l_strReturn;
-			std::wostringstream l_wstream;
-			str_converter< wchar_t, char >()( p_str, l_strReturn, l_wstream.getloc() );
-			return l_strReturn;
+			std::string l_return;
+			StringConverter< wchar_t, char >::Convert( p_str, l_return );
+			return l_return;
 		}
 
 		std::wstring to_wstr( std::string const & p_str )
 		{
-			std::wstring l_strReturn;
-			std::wostringstream l_wstream;
-			str_converter< char, wchar_t >()( p_str, l_strReturn, l_wstream.getloc() );
-			return l_strReturn;
+			std::wstring l_return;
+			StringConverter< char, wchar_t >::Convert( p_str, l_return );
+			return l_return;
 		}
 
 		String from_char( char p_char )

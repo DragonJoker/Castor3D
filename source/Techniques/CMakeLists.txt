@@ -9,6 +9,22 @@ function( TechniquesInit )
 endfunction( TechniquesInit )
 
 function( TechniquesBuild )
+	add_subdirectory( Techniques/DirectTechnique )
+
+	if( ${CASTOR_BUILD_RENDERER_OGL} )
+		set( TechniqueLibraries
+			${TechniqueLibraries}
+			GlRenderSystem
+		)
+	endif ()
+
+	if( ${CASTOR_BUILD_RENDERER_D3D11} )
+		set( TechniqueLibraries
+			${TechniqueLibraries}
+			Dx11RenderSystem
+		)
+	endif ()
+	
 	if( ${CASTOR_BUILD_TECHNIQUE_DEFERRED} )
 		set( Build ${Defr} )
 		add_subdirectory( Techniques/DeferredTechnique )

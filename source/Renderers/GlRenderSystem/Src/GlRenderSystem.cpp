@@ -90,7 +90,7 @@ bool GlRenderSystem::InitOpenGlExtensions()
 				m_iOpenGlMajor = 2;
 				m_iOpenGlMinor = 1;
 #endif
-				Logger::LogInfo( cuT( "Using version %d.%d core functions" ), m_iOpenGlMajor, m_iOpenGlMinor );
+				Logger::LogInfo( StringStream() << cuT( "Using version " ) << m_iOpenGlMajor << cuT( "." ) << m_iOpenGlMinor << cuT( " core functions" ) );
 				m_useShader[eSHADER_TYPE_COMPUTE] = m_gl.HasCSh();
 				m_useShader[eSHADER_TYPE_HULL] = m_gl.HasTSh();
 				m_useShader[eSHADER_TYPE_DOMAIN] = m_gl.HasTSh();

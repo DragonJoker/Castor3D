@@ -18,13 +18,23 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_DIRECT_RENDER_TECHNIQUE_H___
 #define ___C3D_DIRECT_RENDER_TECHNIQUE_H___
 
-#include "RenderTechnique.hpp"
+#include <RenderTechnique.hpp>
+
+#ifndef _WIN32
+#	define C3D_DirectTechnique_API
+#else
+#	ifdef MsaaTechnique_EXPORTS
+#		define C3D_DirectTechnique_API __declspec(dllexport)
+#	else
+#		define C3D_DirectTechnique_API __declspec(dllimport)
+#	endif
+#endif
 
 #pragma warning( push )
 #pragma warning( disable:4251 )
 #pragma warning( disable:4275 )
 
-namespace Castor3D
+namespace Direct
 {
 	/*!
 	\author		Sylvain DOREMUS
@@ -35,8 +45,8 @@ namespace Castor3D
 	\~french
 	\brief		Classe de technique de rendu basique
 	*/
-	class C3D_API DirectRenderTechnique
-		:	public RenderTechniqueBase
+	class RenderTechnique
+		:	public Castor3D::RenderTechniqueBase
 	{
 	protected:
 		/**
@@ -45,7 +55,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		DirectRenderTechnique();
+		RenderTechnique();
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -58,7 +68,7 @@ namespace Castor3D
 		 *\param[in]	p_pRenderSystem	Le render system
 		 *\param[in]	p_params		Les paramètres de la technique
 		 */
-		DirectRenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params );
+		RenderTechnique( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_pRenderSystem, Castor3D::Parameters const & p_params );
 
 	public:
 		/**
@@ -67,7 +77,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~DirectRenderTechnique();
+		virtual ~RenderTechnique();
 		/**
 		 *\~english
 		 *\brief		Instantiation function, used by the factory to create objects of a wanted type
@@ -82,7 +92,7 @@ namespace Castor3D
 		 *\param[in]	p_params		Les paramètres de la technique
 		 *\return		Un clône de cet objet
 		 */
-		static RenderTechniqueBaseSPtr CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params );
+		static Castor3D::RenderTechniqueBaseSPtr CreateInstance( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_pRenderSystem, Castor3D::Parameters const & p_params );
 
 	protected:
 		/**
@@ -144,7 +154,7 @@ namespace Castor3D
 		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la dernière frame
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime );
+		virtual bool DoRender( Castor3D::Scene & p_scene, Castor3D::Camera & p_camera, Castor3D::eTOPOLOGY p_ePrimitives, double p_dFrameTime );
 		/**
 		 *\~english
 		 *\brief		Render end function

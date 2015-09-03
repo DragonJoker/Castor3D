@@ -1,4 +1,4 @@
-project( MsaaTechnique )
+project( DirectTechnique )
 
 set( CastorBinsDependencies 
 	${CastorBinsDependencies}
@@ -6,9 +6,9 @@ set( CastorBinsDependencies
 	PARENT_SCOPE
 )
 
-set( ${PROJECT_NAME}_DESCRIPTION "MSAA RenderTechnique" )
+set( ${PROJECT_NAME}_DESCRIPTION "Direct RenderTechnique" )
 set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
-set( ${PROJECT_NAME}_VERSION_MINOR	8 )
+set( ${PROJECT_NAME}_VERSION_MINOR	0 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 if( ${CASTOR_BUILD_RENDERER_OGL} )

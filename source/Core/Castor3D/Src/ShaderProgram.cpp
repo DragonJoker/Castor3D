@@ -190,7 +190,7 @@ namespace Castor3D
 		}
 
 		clear_container( m_arrayFiles );
-		
+
 		m_frameVariableBuffersByName.clear();
 
 		for ( auto && l_list: m_frameVariableBuffers )

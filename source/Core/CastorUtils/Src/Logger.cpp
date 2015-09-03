@@ -243,19 +243,6 @@ namespace Castor
 		}
 	}
 
-	void Logger::LogDebug( char const * p_pFormat, ... )
-	{
-		if ( p_pFormat )
-		{
-			char l_pText[256];
-			va_list l_vaList;
-			va_start( l_vaList, p_pFormat );
-			Vsnprintf( l_pText, p_pFormat, l_vaList );
-			va_end( l_vaList );
-			LogDebug( std::string( l_pText ) );
-		}
-	}
-
 	void Logger::LogDebug( std::string const & p_msg )
 	{
 		GetSingleton().DoPushMessage( ELogType_DEBUG, p_msg );
@@ -266,19 +253,6 @@ namespace Castor
 		std::stringstream l_ss;
 		l_ss << p_msg.rdbuf();
 		LogDebug( l_ss.str() );
-	}
-
-	void Logger::LogDebug( wchar_t const * p_pFormat , ... )
-	{
-		if ( p_pFormat )
-		{
-			wchar_t l_pText[256];
-			va_list l_vaList;
-			va_start( l_vaList, p_pFormat );
-			Vswprintf( l_pText, p_pFormat, l_vaList );
-			va_end( l_vaList );
-			LogDebug( std::wstring( l_pText ) );
-		}
 	}
 
 	void Logger::LogDebug( std::wstring const & p_msg )
@@ -293,19 +267,6 @@ namespace Castor
 		LogDebug( l_ss.str() );
 	}
 
-	void Logger::LogInfo( char const * p_pFormat, ... )
-	{
-		if ( p_pFormat )
-		{
-			char l_pText[256];
-			va_list l_vaList;
-			va_start( l_vaList, p_pFormat );
-			Vsnprintf( l_pText, p_pFormat, l_vaList );
-			va_end( l_vaList );
-			LogInfo( std::string( l_pText ) );
-		}
-	}
-
 	void Logger::LogInfo( std::string const & p_msg )
 	{
 		GetSingleton().DoPushMessage( ELogType_INFO, p_msg );
@@ -316,19 +277,6 @@ namespace Castor
 		std::stringstream l_ss;
 		l_ss << p_msg.rdbuf();
 		LogInfo( l_ss.str() );
-	}
-
-	void Logger::LogInfo( wchar_t const * p_pFormat , ... )
-	{
-		if ( p_pFormat )
-		{
-			wchar_t l_pText[256];
-			va_list l_vaList;
-			va_start( l_vaList, p_pFormat );
-			Vswprintf( l_pText, p_pFormat, l_vaList );
-			va_end( l_vaList );
-			LogInfo( std::wstring( l_pText ) );
-		}
 	}
 
 	void Logger::LogInfo( std::wstring const & p_msg )
@@ -343,19 +291,6 @@ namespace Castor
 		LogInfo( l_ss.str() );
 	}
 
-	void Logger::LogWarning( char const * p_pFormat, ... )
-	{
-		if ( p_pFormat )
-		{
-			char l_pText[256];
-			va_list l_vaList;
-			va_start( l_vaList, p_pFormat );
-			Vsnprintf( l_pText, p_pFormat, l_vaList );
-			va_end( l_vaList );
-			LogWarning( std::string( l_pText ) );
-		}
-	}
-
 	void Logger::LogWarning( std::string const & p_msg )
 	{
 		GetSingleton().DoPushMessage( ELogType_WARNING, p_msg );
@@ -366,19 +301,6 @@ namespace Castor
 		std::stringstream l_ss;
 		l_ss << p_msg.rdbuf();
 		LogWarning( l_ss.str() );
-	}
-
-	void Logger::LogWarning( wchar_t const * p_pFormat , ... )
-	{
-		if ( p_pFormat )
-		{
-			wchar_t l_pText[256];
-			va_list l_vaList;
-			va_start( l_vaList, p_pFormat );
-			Vswprintf( l_pText, p_pFormat, l_vaList );
-			va_end( l_vaList );
-			LogWarning( std::wstring( l_pText ) );
-		}
 	}
 
 	void Logger::LogWarning( std::wstring const & p_msg )
@@ -393,19 +315,6 @@ namespace Castor
 		LogWarning( l_ss.str() );
 	}
 
-	void Logger::LogError( char const * p_pFormat, ... )
-	{
-		if ( p_pFormat )
-		{
-			char l_pText[256];
-			va_list l_vaList;
-			va_start( l_vaList, p_pFormat );
-			Vsnprintf( l_pText, p_pFormat, l_vaList );
-			va_end( l_vaList );
-			LogError( std::string( l_pText ) );
-		}
-	}
-
 	void Logger::LogError( std::string const & p_msg )
 	{
 		GetSingleton().DoPushMessage( ELogType_ERROR, p_msg );
@@ -416,19 +325,6 @@ namespace Castor
 		std::stringstream l_ss;
 		l_ss << p_msg.rdbuf();
 		LogError( l_ss.str() );
-	}
-
-	void Logger::LogError( wchar_t const * p_pFormat , ... )
-	{
-		if ( p_pFormat )
-		{
-			wchar_t l_pText[256];
-			va_list l_vaList;
-			va_start( l_vaList, p_pFormat );
-			Vswprintf( l_pText, p_pFormat, l_vaList );
-			va_end( l_vaList );
-			LogError( std::wstring( l_pText ) );
-		}
 	}
 
 	void Logger::LogError( std::wstring const & p_msg )
