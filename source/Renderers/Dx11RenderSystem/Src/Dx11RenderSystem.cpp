@@ -239,7 +239,7 @@ void DxRenderSystem::Delete()
 	Cleanup();
 #if !defined( NDEBUG )
 
-	for ( auto && l_decl: m_allocated )
+	for ( auto && l_decl : m_allocated )
 	{
 		std::stringstream l_stream;
 		l_stream << "Leaked 0x" << std::hex << l_decl.m_object << std::dec << " (" << l_decl.m_name << "), from file " << l_decl.m_file << ", line " << l_decl.m_line << std::endl;
@@ -378,13 +378,13 @@ namespace
 	template< typename T >
 	void DoSetDxDebugName( uint32_t p_id, T * p_object, std::string const & p_type )
 	{
-		if( p_object )
+		if ( p_object )
 		{
 			char l_szName[100] = { 0 };
-			uint64_t l_ui64Address = (uint64_t)p_object;
+			uint64_t l_ui64Address = ( uint64_t )p_object;
 			std::stringstream l_type;
 			l_type.width( 20 );
-			l_type<< std::left << p_type;
+			l_type << std::left << p_type;
 			sprintf_s( l_szName, "(%d) %s [0x%016X]", p_id, l_type.str().c_str(), l_ui64Address );
 			p_object->SetPrivateData( WKPDID_D3DDebugObjectName, UINT( strlen( l_szName ) - 1 ), l_szName );
 			Castor::Logger::LogDebug( l_szName );
@@ -398,7 +398,7 @@ namespace
 		l_type.width( 20 );
 		ULONG l_count = p_object->AddRef() - 1;
 		p_object->Release();
-		l_type<< std::left << p_name;
+		l_type << std::left << p_name;
 		Castor::Logger::LogWarning( std::stringstream() << "Released " << l_type.str().c_str() << " [0x" << std::hex << uint64_t( p_object ) << "] => " << l_count );
 	}
 }
@@ -465,7 +465,10 @@ void DxRenderSystem::SetDxDebugName( IDXGIDeviceSubObject * p_object, std::strin
 
 void DxRenderSystem::UnsetDxDebugName( ID3D11Device * p_object )
 {
-	auto l_it = std::find_if( m_allocated.begin(), m_allocated.end(), [&p_object]( ObjectDeclaration p_decl ){ return p_object == p_decl.m_object; } );
+	auto l_it = std::find_if( m_allocated.begin(), m_allocated.end(), [&p_object]( ObjectDeclaration p_decl )
+	{
+		return p_object == p_decl.m_object;
+	} );
 	char l_szName[1024] = { 0 };
 
 	if ( l_it != m_allocated.end() )
@@ -484,7 +487,10 @@ void DxRenderSystem::UnsetDxDebugName( ID3D11Device * p_object )
 
 void DxRenderSystem::UnsetDxDebugName( ID3D11DeviceChild * p_object )
 {
-	auto l_it = std::find_if( m_allocated.begin(), m_allocated.end(), [&p_object]( ObjectDeclaration p_decl ){ return p_object == p_decl.m_object; } );
+	auto l_it = std::find_if( m_allocated.begin(), m_allocated.end(), [&p_object]( ObjectDeclaration p_decl )
+	{
+		return p_object == p_decl.m_object;
+	} );
 	char l_szName[1024] = { 0 };
 
 	if ( l_it != m_allocated.end() )
@@ -503,7 +509,10 @@ void DxRenderSystem::UnsetDxDebugName( ID3D11DeviceChild * p_object )
 
 void DxRenderSystem::UnsetDxDebugName( IDXGIDeviceSubObject * p_object )
 {
-	auto l_it = std::find_if( m_allocated.begin(), m_allocated.end(), [&p_object]( ObjectDeclaration p_decl ){ return p_object == p_decl.m_object; } );
+	auto l_it = std::find_if( m_allocated.begin(), m_allocated.end(), [&p_object]( ObjectDeclaration p_decl )
+	{
+		return p_object == p_decl.m_object;
+	} );
 	char l_szName[1024] = { 0 };
 
 	if ( l_it != m_allocated.end() )

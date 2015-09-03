@@ -246,7 +246,7 @@ namespace Castor3D
 				uint8_t l_index = 0;
 				uint8_t l_count = l_pMaterial->GetPassCount();
 
-				for ( auto && l_pass: *l_pMaterial )
+				for ( auto && l_pass : *l_pMaterial )
 				{
 					l_pass->BindToAutomaticProgram( l_pProgram );
 					auto l_matrixBuffer = l_pass->GetMatrixBuffer();

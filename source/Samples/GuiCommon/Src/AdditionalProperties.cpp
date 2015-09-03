@@ -20,7 +20,7 @@ WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( Quaternion )
 
 namespace GuiCommon
 {
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( SizeProperty, wxPGProperty, Size, const Size &,TextCtrl )
+	WX_PG_IMPLEMENT_PROPERTY_CLASS( SizeProperty, wxPGProperty, Size, const Size &, TextCtrl )
 
 	SizeProperty::SizeProperty( wxString const & label, wxString const & name, Size const & value )
 		: wxPGProperty( label, name )
@@ -51,8 +51,13 @@ namespace GuiCommon
 
 		switch ( childIndex )
 		{
-			case 0: size.width() = val; break;
-			case 1: size.height() = val; break;
+		case 0:
+			size.width() = val;
+			break;
+
+		case 1:
+			size.height() = val;
+			break;
 		}
 
 		wxVariant newVariant;
@@ -62,9 +67,9 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( PositionProperty, wxPGProperty, Position, Position const &,TextCtrl )
+	WX_PG_IMPLEMENT_PROPERTY_CLASS( PositionProperty, wxPGProperty, Position, Position const &, TextCtrl )
 
-	PositionProperty::PositionProperty( wxString const & label, wxString const & name, Position const & value)
+	PositionProperty::PositionProperty( wxString const & label, wxString const & name, Position const & value )
 		: wxPGProperty( label, name )
 	{
 		SetValueI( value );
@@ -88,13 +93,18 @@ namespace GuiCommon
 
 	wxVariant PositionProperty::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
 	{
-		Position& point = PositionRefFromVariant( thisValue );
+		Position & point = PositionRefFromVariant( thisValue );
 		int val = childValue.GetLong();
 
 		switch ( childIndex )
 		{
-			case 0: point.x() = val; break;
-			case 1: point.y() = val; break;
+		case 0:
+			point.x() = val;
+			break;
+
+		case 1:
+			point.y() = val;
+			break;
 		}
 
 		wxVariant newVariant;
@@ -104,9 +114,9 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( RectangleProperty, wxPGProperty, Castor::Point4i, Castor::Point4i const &,TextCtrl )
+	WX_PG_IMPLEMENT_PROPERTY_CLASS( RectangleProperty, wxPGProperty, Castor::Point4i, Castor::Point4i const &, TextCtrl )
 
-	RectangleProperty::RectangleProperty( wxString const & label, wxString const & name, Castor::Point4i const & value)
+	RectangleProperty::RectangleProperty( wxString const & label, wxString const & name, Castor::Point4i const & value )
 		: wxPGProperty( label, name )
 	{
 		SetValueI( value );
@@ -134,15 +144,26 @@ namespace GuiCommon
 
 	wxVariant RectangleProperty::ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const
 	{
-		Castor::Point4i& point = Point4iRefFromVariant( thisValue );
+		Castor::Point4i & point = Point4iRefFromVariant( thisValue );
 		int val = childValue.GetLong();
 
 		switch ( childIndex )
 		{
-			case 0: point[0] = val; break;
-			case 1: point[1] = val; break;
-			case 2: point[2] = val; break;
-			case 3: point[3] = val; break;
+		case 0:
+			point[0] = val;
+			break;
+
+		case 1:
+			point[1] = val;
+			break;
+
+		case 2:
+			point[2] = val;
+			break;
+
+		case 3:
+			point[3] = val;
+			break;
 		}
 
 		wxVariant newVariant;
@@ -154,7 +175,7 @@ namespace GuiCommon
 
 	WX_PG_IMPLEMENT_PROPERTY_CLASS( Point2fProperty, wxPGProperty, Point2f, Point2f const &, TextCtrl )
 
-	Point2fProperty::Point2fProperty( wxString const & label, wxString const & name, Point2f const & value)
+	Point2fProperty::Point2fProperty( wxString const & label, wxString const & name, Point2f const & value )
 		: wxPGProperty( label, name )
 	{
 		SetValueI( value );
@@ -183,8 +204,13 @@ namespace GuiCommon
 
 		switch ( childIndex )
 		{
-			case 0: point[0] = val; break;
-			case 1: point[1] = val; break;
+		case 0:
+			point[0] = val;
+			break;
+
+		case 1:
+			point[1] = val;
+			break;
 		}
 
 		wxVariant newVariant;
@@ -194,9 +220,9 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( Point3fProperty, wxPGProperty, Point3f, Point3f const &,TextCtrl )
+	WX_PG_IMPLEMENT_PROPERTY_CLASS( Point3fProperty, wxPGProperty, Point3f, Point3f const &, TextCtrl )
 
-	Point3fProperty::Point3fProperty( wxString const & label, wxString const & name, Point3f const & value)
+	Point3fProperty::Point3fProperty( wxString const & label, wxString const & name, Point3f const & value )
 		: wxPGProperty( label, name )
 	{
 		SetValueI( value );
@@ -227,9 +253,17 @@ namespace GuiCommon
 
 		switch ( childIndex )
 		{
-			case 0: point[0] = val; break;
-			case 1: point[1] = val; break;
-			case 2: point[2] = val; break;
+		case 0:
+			point[0] = val;
+			break;
+
+		case 1:
+			point[1] = val;
+			break;
+
+		case 2:
+			point[2] = val;
+			break;
 		}
 
 		wxVariant newVariant;
@@ -239,9 +273,9 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( Point4fProperty, wxPGProperty, Point4f, Point4f const &,TextCtrl )
+	WX_PG_IMPLEMENT_PROPERTY_CLASS( Point4fProperty, wxPGProperty, Point4f, Point4f const &, TextCtrl )
 
-	Point4fProperty::Point4fProperty( wxString const & label, wxString const & name, Point4f const & value)
+	Point4fProperty::Point4fProperty( wxString const & label, wxString const & name, Point4f const & value )
 		: wxPGProperty( label, name )
 	{
 		SetValueI( value );
@@ -274,10 +308,21 @@ namespace GuiCommon
 
 		switch ( childIndex )
 		{
-			case 0: point[0] = val; break;
-			case 1: point[1] = val; break;
-			case 2: point[2] = val; break;
-			case 3: point[3] = val; break;
+		case 0:
+			point[0] = val;
+			break;
+
+		case 1:
+			point[1] = val;
+			break;
+
+		case 2:
+			point[2] = val;
+			break;
+
+		case 3:
+			point[3] = val;
+			break;
 		}
 
 		wxVariant newVariant;
@@ -289,7 +334,7 @@ namespace GuiCommon
 
 	WX_PG_IMPLEMENT_PROPERTY_CLASS( Point2dProperty, wxPGProperty, Point2d, Point2d const &, TextCtrl )
 
-	Point2dProperty::Point2dProperty( wxString const & label, wxString const & name, Point2d const & value)
+	Point2dProperty::Point2dProperty( wxString const & label, wxString const & name, Point2d const & value )
 		: wxPGProperty( label, name )
 	{
 		SetValueI( value );
@@ -318,8 +363,13 @@ namespace GuiCommon
 
 		switch ( childIndex )
 		{
-			case 0: point[0] = val; break;
-			case 1: point[1] = val; break;
+		case 0:
+			point[0] = val;
+			break;
+
+		case 1:
+			point[1] = val;
+			break;
 		}
 
 		wxVariant newVariant;
@@ -329,9 +379,9 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( Point3dProperty, wxPGProperty, Point3d, Point3d const &,TextCtrl )
+	WX_PG_IMPLEMENT_PROPERTY_CLASS( Point3dProperty, wxPGProperty, Point3d, Point3d const &, TextCtrl )
 
-	Point3dProperty::Point3dProperty( wxString const & label, wxString const & name, Point3d const & value)
+	Point3dProperty::Point3dProperty( wxString const & label, wxString const & name, Point3d const & value )
 		: wxPGProperty( label, name )
 	{
 		SetValueI( value );
@@ -362,9 +412,17 @@ namespace GuiCommon
 
 		switch ( childIndex )
 		{
-			case 0: point[0] = val; break;
-			case 1: point[1] = val; break;
-			case 2: point[2] = val; break;
+		case 0:
+			point[0] = val;
+			break;
+
+		case 1:
+			point[1] = val;
+			break;
+
+		case 2:
+			point[2] = val;
+			break;
 		}
 
 		wxVariant newVariant;
@@ -374,9 +432,9 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( Point4dProperty, wxPGProperty, Point4d, Point4d const &,TextCtrl )
+	WX_PG_IMPLEMENT_PROPERTY_CLASS( Point4dProperty, wxPGProperty, Point4d, Point4d const &, TextCtrl )
 
-	Point4dProperty::Point4dProperty( wxString const & label, wxString const & name, Point4d const & value)
+	Point4dProperty::Point4dProperty( wxString const & label, wxString const & name, Point4d const & value )
 		: wxPGProperty( label, name )
 	{
 		SetValueI( value );
@@ -409,10 +467,21 @@ namespace GuiCommon
 
 		switch ( childIndex )
 		{
-			case 0: point[0] = val; break;
-			case 1: point[1] = val; break;
-			case 2: point[2] = val; break;
-			case 3: point[3] = val; break;
+		case 0:
+			point[0] = val;
+			break;
+
+		case 1:
+			point[1] = val;
+			break;
+
+		case 2:
+			point[2] = val;
+			break;
+
+		case 3:
+			point[3] = val;
+			break;
 		}
 
 		wxVariant newVariant;
@@ -422,9 +491,9 @@ namespace GuiCommon
 
 	//************************************************************************************************
 
-	WX_PG_IMPLEMENT_PROPERTY_CLASS( QuaternionProperty, wxPGProperty, Quaternion, Quaternion const &,TextCtrl )
+	WX_PG_IMPLEMENT_PROPERTY_CLASS( QuaternionProperty, wxPGProperty, Quaternion, Quaternion const &, TextCtrl )
 
-	QuaternionProperty::QuaternionProperty( wxString const & label, wxString const & name, Quaternion const & value)
+	QuaternionProperty::QuaternionProperty( wxString const & label, wxString const & name, Quaternion const & value )
 		: wxPGProperty( label, name )
 	{
 		SetValueI( value );
@@ -457,10 +526,21 @@ namespace GuiCommon
 
 		switch ( childIndex )
 		{
-			case 0: point[0] = val; break;
-			case 1: point[1] = val; break;
-			case 2: point[2] = val; break;
-			case 3: point[3] = val; break;
+		case 0:
+			point[0] = val;
+			break;
+
+		case 1:
+			point[1] = val;
+			break;
+
+		case 2:
+			point[2] = val;
+			break;
+
+		case 3:
+			point[3] = val;
+			break;
 		}
 
 		wxVariant newVariant;

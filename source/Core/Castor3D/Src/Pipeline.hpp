@@ -244,7 +244,7 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Projects the given screen point to 3D scene point
 		 *\param[in]	p_ptObj			The screen coordinates
-		 *\param[in]	p_ptViewport	The viewport 
+		 *\param[in]	p_ptViewport	The viewport
 		 *\param[out]	p_ptResult		Receives the scene coordinates
 		 *\return		\p false if the current mode is not valid
 		 *\~french
@@ -259,7 +259,7 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Unprojects the given scene point to screen point
 		 *\param[in]	p_ptObj			The scene coordinates
-		 *\param[in]	p_ptViewport	The viewport 
+		 *\param[in]	p_ptViewport	The viewport
 		 *\param[out]	p_ptResult		Receives the screen coordinates
 		 *\return		\p false if the current mode is not valid
 		 *\~french
@@ -581,7 +581,7 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Projects the given screen point to 3D scene point
 		 *\param[in]	p_ptObj			The screen coordinates
-		 *\param[in]	p_ptViewport	The viewport 
+		 *\param[in]	p_ptViewport	The viewport
 		 *\param[out]	p_ptResult		Receives the scene coordinates
 		 *\return		\p false if the current mode is not valid
 		 *\~french
@@ -596,7 +596,7 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Unprojects the given scene point to screen point
 		 *\param[in]	p_ptObj			The scene coordinates
-		 *\param[in]	p_ptViewport	The viewport 
+		 *\param[in]	p_ptViewport	The viewport
 		 *\param[out]	p_ptResult		Receives the screen coordinates
 		 *\return		\p false if the current mode is not valid
 		 *\~french

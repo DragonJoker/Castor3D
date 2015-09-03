@@ -21,15 +21,15 @@ namespace Dx11Render
 
 	bool DxBlendState::Initialise()
 	{
-		Cleanup(); 
+		Cleanup();
 		D3D11_BLEND_DESC l_blendDesc = { 0 };
 		l_blendDesc.AlphaToCoverageEnable = FALSE;
 		l_blendDesc.IndependentBlendEnable = TRUE;
 
 		UINT8 l_writeMask = ( GetColourMaskR() == eWRITING_MASK_ALL ? D3D11_COLOR_WRITE_ENABLE_RED : 0 )
-			| ( GetColourMaskG() == eWRITING_MASK_ALL ? D3D11_COLOR_WRITE_ENABLE_GREEN : 0 )
-			| ( GetColourMaskB() == eWRITING_MASK_ALL ? D3D11_COLOR_WRITE_ENABLE_BLUE : 0 )
-			| ( GetColourMaskA() == eWRITING_MASK_ALL ? D3D11_COLOR_WRITE_ENABLE_ALPHA : 0 );
+							| ( GetColourMaskG() == eWRITING_MASK_ALL ? D3D11_COLOR_WRITE_ENABLE_GREEN : 0 )
+							| ( GetColourMaskB() == eWRITING_MASK_ALL ? D3D11_COLOR_WRITE_ENABLE_BLUE : 0 )
+							| ( GetColourMaskA() == eWRITING_MASK_ALL ? D3D11_COLOR_WRITE_ENABLE_ALPHA : 0 );
 
 		for ( uint8_t i = 0; i < 8; i++ )
 		{

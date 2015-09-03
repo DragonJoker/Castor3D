@@ -83,7 +83,7 @@ namespace CastorViewer
 		l_mtl << cuT( "#######################################################\n\n" );
 		l_mtlManager.lock();
 
-		for ( auto && l_pair: l_mtlManager )
+		for ( auto && l_pair : l_mtlManager )
 		{
 			l_mtl << DoExportMaterial( l_pathFileMtl.GetPath(), *l_pair.second ) + cuT( "\n" );
 		}
@@ -103,7 +103,7 @@ namespace CastorViewer
 		l_obj << cuT( "mtllib " ) + l_pathFileMtl.GetFullFileName() + cuT( "\n\n" );
 		l_mshManager.lock();
 
-		for ( auto && l_pair: l_mshManager )
+		for ( auto && l_pair : l_mshManager )
 		{
 			l_obj << DoExportMesh( *l_pair.second, l_uiOffset, l_uiCount ) << cuT( "\n" );
 		}
@@ -174,7 +174,7 @@ namespace CastorViewer
 	{
 		StringStream l_strReturn;
 
-		for ( auto && l_submesh: p_mesh )
+		for ( auto && l_submesh : p_mesh )
 		{
 			StringStream l_strV;
 			StringStream l_strVT;

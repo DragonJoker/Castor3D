@@ -51,7 +51,7 @@ namespace Castor3D
 		{
 			uint32_t l_uiTotalSize = 0;
 
-			for ( auto && l_variable: m_listVariables )
+			for ( auto && l_variable : m_listVariables )
 			{
 				if ( l_variable->Initialise() )
 				{
@@ -63,7 +63,7 @@ namespace Castor3D
 			m_buffer.resize( l_uiTotalSize );
 			uint8_t * l_buffer = m_buffer.data();
 
-			for ( auto && l_variable: m_listInitialised )
+			for ( auto && l_variable : m_listInitialised )
 			{
 				l_variable->link( l_buffer );
 				l_buffer += l_variable->size();

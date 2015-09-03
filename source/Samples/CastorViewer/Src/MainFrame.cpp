@@ -54,6 +54,7 @@
 
 #include <wx/display.h>
 #include <wx/aui/dockart.h>
+#include <wx/renderer.h>
 
 #include <RenderTarget.hpp>
 #include <ImagesLoader.hpp>
@@ -84,18 +85,21 @@ using namespace Castor3D;
 using namespace Castor;
 using namespace GuiCommon;
 
-#define CASTOR3D_THREADED 0
+// These methods are implemented in wxAUI, but are not in headers
+wxString wxAuiChopText( wxDC & dc, const wxString & text, int max_size );
 
-#if defined( NDEBUG )
-static const int CASTOR_WANTED_FPS	= 120;
-#else
-static const int CASTOR_WANTED_FPS	= 30;
-#endif
+#define CASTOR3D_THREADED 0
 
 namespace CastorViewer
 {
 	namespace
 	{
+#if defined( NDEBUG )
+		static const int CASTOR_WANTED_FPS	= 120;
+#else
+		static const int CASTOR_WANTED_FPS	= 30;
+#endif
+
 		typedef enum eID
 		{
 			eID_TOOL_EXIT,
@@ -115,6 +119,15 @@ namespace CastorViewer
 			eBMP_LOGS,
 			eBMP_PROPERTIES,
 		}	eBMP;
+
+		void IndentPressedBitmap( wxRect * rect, int button_state )
+		{
+			if ( button_state == wxAUI_BUTTON_STATE_PRESSED )
+			{
+				rect->x++;
+				rect->y++;
+			}
+		}
 
 		template< typename TObj >
 		std::shared_ptr< TObj > CreateObject( Engine * p_engine )
@@ -177,12 +190,298 @@ namespace CastorViewer
 			return l_return;
 		}
 
-		class PlainWhiteAuiTabArt
+		class AuiTabArt
 			: public wxAuiDefaultTabArt
 		{
-			wxAuiTabArt * Clone()
+		public:
+			AuiTabArt()
 			{
-				return new PlainWhiteAuiTabArt( *this );
+				wxAuiDefaultTabArt::SetColour( INACTIVE_TAB_COLOUR );
+				wxAuiDefaultTabArt::SetActiveColour( ACTIVE_TAB_COLOUR );
+				wxAuiDefaultTabArt::SetMeasuringFont( wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false ) );
+				wxAuiDefaultTabArt::SetNormalFont( wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false ) );
+				wxAuiDefaultTabArt::SetSelectedFont( wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false ) );
+			}
+
+			virtual wxAuiTabArt * Clone()
+			{
+				return new AuiTabArt( *this );
+			}
+
+			virtual void DrawBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect )
+			{
+				p_dc.SetPen( m_baseColourPen );
+				p_dc.SetBrush( m_baseColourBrush );
+				p_dc.DrawRectangle( p_rect );
+			}
+
+			// DrawTab() draws an individual tab.
+			//
+			// dc       - output dc
+			// in_rect  - rectangle the tab should be confined to
+			// caption  - tab's caption
+			// active   - whether or not the tab is active
+			// out_rect - actual output rectangle
+			// x_extent - the advance x; where the next tab should start
+			void DrawTab( wxDC & dc, wxWindow * wnd, const wxAuiNotebookPage & page, const wxRect & in_rect, int close_button_state, wxRect * out_tab_rect, wxRect * out_button_rect, int * x_extent )
+			{
+				wxCoord normal_textx, normal_texty;
+				wxCoord selected_textx, selected_texty;
+				wxCoord texty;
+
+				// if the caption is empty, measure some temporary text
+				wxString caption = page.caption;
+
+				if ( caption.empty() )
+				{
+					caption = wxT( "Xj" );
+				}
+
+				dc.SetFont( m_selectedFont );
+				dc.GetTextExtent( caption, &selected_textx, &selected_texty );
+
+				dc.SetFont( m_normalFont );
+				dc.GetTextExtent( caption, &normal_textx, &normal_texty );
+
+				// figure out the size of the tab
+				wxSize tab_size = GetTabSize( dc, wnd, page.caption, page.bitmap, page.active, close_button_state, x_extent );
+
+				wxCoord tab_height = m_tabCtrlHeight - 3;
+				wxCoord tab_width = tab_size.x;
+				wxCoord tab_x = in_rect.x;
+				wxCoord tab_y = in_rect.y + in_rect.height - tab_height;
+
+				caption = page.caption;
+
+				// select pen, brush and font for the tab to be drawn
+				if ( page.active )
+				{
+					dc.SetFont( m_selectedFont );
+					texty = selected_texty;
+				}
+				else
+				{
+					dc.SetFont( m_normalFont );
+					texty = normal_texty;
+				}
+
+
+				// create points that will make the tab outline
+
+				int clip_width = tab_width;
+
+				if ( tab_x + clip_width > in_rect.x + in_rect.width )
+				{
+					clip_width = ( in_rect.x + in_rect.width ) - tab_x;
+				}
+
+				wxPoint clip_points[6];
+				clip_points[0] = wxPoint( tab_x,              tab_y + tab_height - 3 );
+				clip_points[1] = wxPoint( tab_x,              tab_y + 2 );
+				clip_points[2] = wxPoint( tab_x + 2,            tab_y );
+				clip_points[3] = wxPoint( tab_x + clip_width - 1, tab_y );
+				clip_points[4] = wxPoint( tab_x + clip_width + 1, tab_y + 2 );
+				clip_points[5] = wxPoint( tab_x + clip_width + 1, tab_y + tab_height - 3 );
+#if !defined(__WXDFB__) && !defined(__WXCOCOA__)
+				// since the above code above doesn't play well with WXDFB or WXCOCOA,
+				// we'll just use a rectangle for the clipping region for now --
+				dc.SetClippingRegion( tab_x, tab_y, clip_width + 1, tab_height - 3 );
+#endif // !wxDFB && !wxCocoa
+
+				wxPoint border_points[6];
+
+				if ( m_flags & wxAUI_NB_BOTTOM )
+				{
+					border_points[0] = wxPoint( tab_x,             tab_y );
+					border_points[1] = wxPoint( tab_x,             tab_y + tab_height - 6 );
+					border_points[2] = wxPoint( tab_x + 2,           tab_y + tab_height - 4 );
+					border_points[3] = wxPoint( tab_x + tab_width - 2, tab_y + tab_height - 4 );
+					border_points[4] = wxPoint( tab_x + tab_width,   tab_y + tab_height - 6 );
+					border_points[5] = wxPoint( tab_x + tab_width,   tab_y );
+				}
+				else //if (m_flags & wxAUI_NB_TOP) {}
+				{
+					border_points[0] = wxPoint( tab_x,             tab_y + tab_height - 4 );
+					border_points[1] = wxPoint( tab_x,             tab_y + 2 );
+					border_points[2] = wxPoint( tab_x + 2,           tab_y );
+					border_points[3] = wxPoint( tab_x + tab_width - 2, tab_y );
+					border_points[4] = wxPoint( tab_x + tab_width,   tab_y + 2 );
+					border_points[5] = wxPoint( tab_x + tab_width,   tab_y + tab_height - 4 );
+				}
+
+				// TODO: else if (m_flags &wxAUI_NB_LEFT) {}
+				// TODO: else if (m_flags &wxAUI_NB_RIGHT) {}
+
+				int drawn_tab_yoff = border_points[1].y;
+				int drawn_tab_height = border_points[0].y - border_points[1].y;
+
+				if ( page.active )
+				{
+					// draw active tab
+
+					// draw base background color
+					wxRect r( tab_x, tab_y, tab_width, tab_height );
+					dc.SetPen( wxPen( m_activeColour ) );
+					dc.SetBrush( wxBrush( m_activeColour ) );
+					dc.DrawRectangle( r.x + 1, r.y + 1, r.width - 1, r.height - 4 );
+
+					// these two points help the rounded corners appear more antialiased
+					dc.SetPen( wxPen( m_activeColour ) );
+					dc.DrawPoint( r.x + 2, r.y + 1 );
+					dc.DrawPoint( r.x + r.width - 2, r.y + 1 );
+				}
+				else
+				{
+					// draw inactive tab
+
+					// draw base background color
+					wxRect r( tab_x, tab_y, tab_width, tab_height );
+					dc.SetPen( wxPen( m_baseColour ) );
+					dc.SetBrush( wxBrush( m_baseColour ) );
+					dc.DrawRectangle( r.x + 1, r.y + 1, r.width - 1, r.height - 4 );
+				}
+
+				//// draw tab outline
+				//dc.SetPen( m_borderPen );
+				//dc.SetBrush( *wxTRANSPARENT_BRUSH );
+				//dc.DrawPolygon( WXSIZEOF( border_points ), border_points );
+
+				// there are two horizontal grey lines at the bottom of the tab control,
+				// this gets rid of the top one of those lines in the tab control
+				if ( page.active )
+				{
+					if ( m_flags & wxAUI_NB_BOTTOM )
+					{
+						dc.SetPen( wxPen( m_activeColour.ChangeLightness( 170 ) ) );
+					}
+					// TODO: else if (m_flags &wxAUI_NB_LEFT) {}
+					// TODO: else if (m_flags &wxAUI_NB_RIGHT) {}
+					else //for wxAUI_NB_TOP
+					{
+						dc.SetPen( m_activeColour );
+					}
+
+					dc.DrawLine( border_points[0].x + 1,
+								 border_points[0].y,
+								 border_points[5].x,
+								 border_points[5].y );
+				}
+
+
+				int text_offset = tab_x + 8;
+				int close_button_width = 0;
+
+				if ( close_button_state != wxAUI_BUTTON_STATE_HIDDEN )
+				{
+					close_button_width = m_activeCloseBmp.GetWidth();
+				}
+
+				int bitmap_offset = 0;
+				text_offset = tab_x + 8;
+
+				wxString draw_text = wxAuiChopText( dc, caption, tab_width - ( text_offset - tab_x ) - close_button_width );
+
+				// draw tab text
+				if ( page.active )
+				{
+					dc.SetTextForeground( ACTIVE_TEXT_COLOUR );
+				}
+				else
+				{
+					dc.SetTextForeground( INACTIVE_TEXT_COLOUR );
+				}
+
+				dc.SetFont( m_normalFont );
+				dc.DrawText( draw_text, text_offset, drawn_tab_yoff + ( drawn_tab_height ) / 2 - ( texty / 2 ) );
+
+				// draw focus rectangle
+				if ( page.active && ( wnd->FindFocus() == wnd ) )
+				{
+					wxRect focusRectText( text_offset, ( drawn_tab_yoff + ( drawn_tab_height ) / 2 - ( texty / 2 ) - 1 ), selected_textx, selected_texty );
+
+					wxRect focusRect;
+					wxRect focusRectBitmap;
+
+					if ( page.bitmap.IsOk() )
+					{
+						focusRectBitmap = wxRect( bitmap_offset, drawn_tab_yoff + ( drawn_tab_height / 2 ) - ( page.bitmap.GetHeight() / 2 ), page.bitmap.GetWidth(), page.bitmap.GetHeight() );
+					}
+
+					if ( page.bitmap.IsOk() && draw_text.IsEmpty() )
+					{
+						focusRect = focusRectBitmap;
+					}
+					else if ( !page.bitmap.IsOk() && !draw_text.IsEmpty() )
+					{
+						focusRect = focusRectText;
+					}
+					else if ( page.bitmap.IsOk() && !draw_text.IsEmpty() )
+					{
+						focusRect = focusRectText.Union( focusRectBitmap );
+					}
+
+					focusRect.Inflate( 2, 2 );
+
+					wxRendererNative::Get().DrawFocusRect( wnd, dc, focusRect, 0 );
+				}
+
+				// draw close button if necessary
+				if ( close_button_state != wxAUI_BUTTON_STATE_HIDDEN )
+				{
+					wxBitmap bmp = m_disabledCloseBmp;
+
+					if ( close_button_state == wxAUI_BUTTON_STATE_HOVER || close_button_state == wxAUI_BUTTON_STATE_PRESSED )
+					{
+						bmp = m_activeCloseBmp;
+					}
+
+					int offsetY = tab_y - 1;
+
+					if ( m_flags & wxAUI_NB_BOTTOM )
+					{
+						offsetY = 1;
+					}
+
+					wxRect rect( tab_x + tab_width - close_button_width - 1,
+								 offsetY + ( tab_height / 2 ) - ( bmp.GetHeight() / 2 ),
+								 close_button_width,
+								 tab_height );
+
+					IndentPressedBitmap( &rect, close_button_state );
+					dc.DrawBitmap( bmp, rect.x, rect.y, true );
+
+					*out_button_rect = rect;
+				}
+
+				*out_tab_rect = wxRect( tab_x, tab_y, tab_width, tab_height );
+
+				dc.DestroyClippingRegion();
+			}
+
+		private:
+			wxColour m_default;
+			wxColour m_active;
+		};
+
+		class AuiDockArt
+			: public wxAuiDefaultDockArt
+		{
+		public:
+			AuiDockArt()
+				: wxAuiDefaultDockArt()
+			{
+				wxAuiDefaultDockArt::SetMetric( wxAuiPaneDockArtSetting::wxAUI_DOCKART_PANE_BORDER_SIZE, 0 );
+				wxAuiDefaultDockArt::SetMetric( wxAuiPaneDockArtSetting::wxAUI_DOCKART_GRADIENT_TYPE, wxAUI_GRADIENT_NONE );
+				wxAuiDefaultDockArt::SetColour( wxAuiPaneDockArtSetting::wxAUI_DOCKART_BACKGROUND_COLOUR, INACTIVE_TAB_COLOUR );
+				wxAuiDefaultDockArt::SetColour( wxAuiPaneDockArtSetting::wxAUI_DOCKART_BORDER_COLOUR, BORDER_COLOUR );
+				wxAuiDefaultDockArt::SetColour( wxAuiPaneDockArtSetting::wxAUI_DOCKART_GRIPPER_COLOUR, wxColour( 127, 127, 127 ) );
+				wxAuiDefaultDockArt::SetColour( wxAuiPaneDockArtSetting::wxAUI_DOCKART_SASH_COLOUR, INACTIVE_TAB_COLOUR );
+				wxAuiDefaultDockArt::SetColour( wxAuiPaneDockArtSetting::wxAUI_DOCKART_INACTIVE_CAPTION_COLOUR, INACTIVE_TAB_COLOUR );
+				wxAuiDefaultDockArt::SetColour( wxAuiPaneDockArtSetting::wxAUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR, INACTIVE_TAB_COLOUR );
+				wxAuiDefaultDockArt::SetColour( wxAuiPaneDockArtSetting::wxAUI_DOCKART_ACTIVE_CAPTION_COLOUR, ACTIVE_TAB_COLOUR );
+				wxAuiDefaultDockArt::SetColour( wxAuiPaneDockArtSetting::wxAUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR, ACTIVE_TAB_COLOUR );
+				wxAuiDefaultDockArt::SetColour( wxAuiPaneDockArtSetting::wxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR, INACTIVE_TEXT_COLOUR );
+				wxAuiDefaultDockArt::SetColour( wxAuiPaneDockArtSetting::wxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR, ACTIVE_TEXT_COLOUR );
 			}
 
 			virtual void DrawBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect )
@@ -504,7 +803,7 @@ namespace CastorViewer
 
 		if ( l_arrayFiles.size() > 0 )
 		{
-			for ( auto && l_file: l_arrayFiles )
+			for ( auto && l_file : l_arrayFiles )
 			{
 				Path l_path( l_file );
 
@@ -521,7 +820,7 @@ namespace CastorViewer
 				}
 			}
 
-			for( auto && l_thread: l_arrayThreads )
+			for ( auto && l_thread : l_arrayThreads )
 			{
 				l_thread->join();
 			}
@@ -533,7 +832,7 @@ namespace CastorViewer
 		{
 			Logger::LogWarning( cuT( "Some plugins couldn't be loaded :" ) );
 
-			for ( auto && l_file: l_arrayFailed )
+			for ( auto && l_file : l_arrayFailed )
 			{
 				Logger::LogWarning( Path( l_file ).GetFileName() );
 			}
@@ -551,37 +850,49 @@ namespace CastorViewer
 #if wxCHECK_VERSION( 2, 9, 0 )
 		SetMinClientSize( l_size );
 #endif
-		m_auiManager.GetArtProvider()->SetMetric( wxAuiPaneDockArtSetting::wxAUI_DOCKART_PANE_BORDER_SIZE, 0 );
+		m_auiManager.SetArtProvider( new AuiDockArt );
 		m_pRenderPanel = new RenderPanel( this, wxID_ANY, wxDefaultPosition, wxSize( l_size.x - m_iPropertiesWidth, l_size.y - m_iLogsHeight ) );
 		m_logTabsContainer = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
-		m_logTabsContainer->SetArtProvider( new PlainWhiteAuiTabArt );
+		m_logTabsContainer->SetArtProvider( new AuiTabArt );
 		m_sceneTabsContainer = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
-		m_sceneTabsContainer->SetArtProvider( new PlainWhiteAuiTabArt );
+		m_sceneTabsContainer->SetArtProvider( new AuiTabArt );
 		m_propertiesContainer = new wxPropertiesHolder( false, this, wxDefaultPosition, wxDefaultSize );
+		m_propertiesContainer->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		m_propertiesContainer->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		m_propertiesContainer->SetCaptionBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		m_propertiesContainer->SetCaptionTextColour( PANEL_FOREGROUND_COLOUR );
+		m_propertiesContainer->SetSelectionBackgroundColour( ACTIVE_TAB_COLOUR );
+		m_propertiesContainer->SetSelectionTextColour( ACTIVE_TEXT_COLOUR );
+		m_propertiesContainer->SetCellBackgroundColour( INACTIVE_TAB_COLOUR );
+		m_propertiesContainer->SetCellTextColour( INACTIVE_TEXT_COLOUR );
+		m_propertiesContainer->SetLineColour( BORDER_COLOUR );
+		m_propertiesContainer->SetMarginColour( BORDER_COLOUR );
 
-		m_auiManager.AddPane( m_pRenderPanel, wxAuiPaneInfo().Center().CloseButton( false ).MinSize( l_size.x - m_iPropertiesWidth, l_size.y - m_iLogsHeight ).Layer( 0 ).Movable( false ).PaneBorder( false ).Dockable( false) );
-		m_auiManager.AddPane( m_logTabsContainer, wxAuiPaneInfo().Hide().CloseButton().Caption( _( "Logs" ) ).Bottom().Dock().BottomDockable().TopDockable().Movable().PinButton().MinSize( l_size.x, m_iLogsHeight ).Layer( 1 ).PaneBorder( false ) );
-		m_auiManager.AddPane( m_sceneTabsContainer, wxAuiPaneInfo().Hide().CloseButton().Caption( _( "Scenes" ) ).Left().Dock().LeftDockable().RightDockable().Movable().PinButton().MinSize( m_iPropertiesWidth, l_size.y / 3 ).Layer( 2 ).PaneBorder( false ) );
-		m_auiManager.AddPane( m_propertiesContainer , wxAuiPaneInfo().Hide().CloseButton().Caption( _( "Properties" ) ).Left().Dock().LeftDockable().RightDockable().Movable().PinButton().MinSize( m_iPropertiesWidth, l_size.y / 3 ).Layer( 2 ).PaneBorder( false ) );
+		m_auiManager.AddPane( m_pRenderPanel, wxAuiPaneInfo().CaptionVisible( false ).Center().CloseButton( false ).MinSize( l_size.x - m_iPropertiesWidth, l_size.y - m_iLogsHeight ).Layer( 0 ).Movable( false ).PaneBorder( false ).Dockable( false ) );
+		m_auiManager.AddPane( m_logTabsContainer, wxAuiPaneInfo().CaptionVisible( false ).Hide().CloseButton().Caption( _( "Logs" ) ).Bottom().Dock().BottomDockable().TopDockable().Movable().PinButton().MinSize( l_size.x, m_iLogsHeight ).Layer( 1 ).PaneBorder( false ) );
+		m_auiManager.AddPane( m_sceneTabsContainer, wxAuiPaneInfo().CaptionVisible( false ).Hide().CloseButton().Caption( _( "Objects" ) ).Left().Dock().LeftDockable().RightDockable().Movable().PinButton().MinSize( m_iPropertiesWidth, l_size.y / 3 ).Layer( 2 ).PaneBorder( false ) );
+		m_auiManager.AddPane( m_propertiesContainer, wxAuiPaneInfo().CaptionVisible( false ).Hide().CloseButton().Caption( _( "Properties" ) ).Left().Dock().LeftDockable().RightDockable().Movable().PinButton().MinSize( m_iPropertiesWidth, l_size.y / 3 ).Layer( 2 ).PaneBorder( false ) );
+		
 
-		auto l_logCreator = [this, &l_size]( wxString const & p_name, wxListView *& p_log )
+		auto l_logCreator = [this, &l_size]( wxString const & p_name, wxListBox *& p_log )
 		{
-			p_log = new wxListView( m_logTabsContainer, wxID_ANY, wxDefaultPosition, wxDefaultSize );
-#if wxCHECK_VERSION( 2, 9, 0 )
-			p_log->AppendColumn( p_name, wxLIST_FORMAT_LEFT , l_size.x - 10 );
-#else
-			p_log->InsertColumn( 0, p_name, wxLIST_FORMAT_LEFT , l_size.x - 10 );
-#endif
+			p_log = new wxListBox( m_logTabsContainer, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxBORDER_NONE );
+			p_log->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+			p_log->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 			m_logTabsContainer->AddPage( p_log, p_name, true );
 		};
-		
+
 		l_logCreator( _( "Messages" ), m_messageLog );
 		l_logCreator( _( "Errors" ), m_errorLog );
-		
+
 		m_sceneObjectsList = new wxSceneObjectsList( m_propertiesContainer, m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize );
+		m_sceneObjectsList->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		m_sceneObjectsList->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_sceneTabsContainer->AddPage( m_sceneObjectsList, _( "Scenes" ), true );
-		
+
 		m_materialsList = new wxMaterialsList( m_propertiesContainer, m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize );
+		m_materialsList->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		m_materialsList->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_sceneTabsContainer->AddPage( m_materialsList, _( "Materials" ), true );
 
 		m_auiManager.Update();
@@ -698,7 +1009,7 @@ namespace CastorViewer
 	{
 		m_pSplashScreen->Step( _( "Loading toolbar" ), 1 );
 		wxToolBar * l_pToolbar = CreateToolBar( wxTB_FLAT | wxTB_HORIZONTAL );
-		l_pToolbar->SetBackgroundColour( *wxWHITE );
+		l_pToolbar->SetBackgroundColour( INACTIVE_TAB_COLOUR );
 		l_pToolbar->SetToolBitmapSize( wxSize( 32, 32 ) );
 		l_pToolbar->AddTool( eID_TOOL_LOAD_SCENE, _( "Load Scene" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_SCENES ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Open a new scene" ) );
 		m_pSplashScreen->Step( 1 );
@@ -717,22 +1028,24 @@ namespace CastorViewer
 
 	void MainFrame::DoLogCallback( String const & p_strLog, ELogType p_eLogType )
 	{
-		switch( p_eLogType )
+		switch ( p_eLogType )
 		{
 		case Castor::ELogType_DEBUG:
 		case Castor::ELogType_INFO:
 			if ( m_messageLog )
 			{
-				m_messageLog->InsertItem( 0, p_strLog );
+				m_messageLog->Insert( wxArrayString( 1, p_strLog ), 0 );
 			}
+
 			break;
 
 		case Castor::ELogType_WARNING:
 		case Castor::ELogType_ERROR:
 			if ( m_errorLog )
 			{
-				m_errorLog->InsertItem( 0, p_strLog );
+				m_errorLog->Insert( wxArrayString( 1, p_strLog ), 0 );
 			}
+
 			break;
 
 		default:

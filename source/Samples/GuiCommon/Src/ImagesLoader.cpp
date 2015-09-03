@@ -22,7 +22,7 @@ namespace GuiCommon
 		WaitAsyncLoads();
 		m_mutex.lock();
 
-		for ( auto && l_pair: m_mapImages )
+		for ( auto && l_pair : m_mapImages )
 		{
 			delete l_pair.second;
 		}
@@ -70,7 +70,7 @@ namespace GuiCommon
 
 	void wxImagesLoader::WaitAsyncLoads()
 	{
-		for ( auto && l_thread: m_arrayCurrentLoads )
+		for ( auto && l_thread : m_arrayCurrentLoads )
 		{
 			l_thread->join();
 			l_thread.reset();

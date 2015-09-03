@@ -180,7 +180,7 @@ namespace Castor3D
 	{
 		m_activeShaders.clear();
 
-		for ( auto l_shader: m_pShaders )
+		for ( auto l_shader : m_pShaders )
 		{
 			if ( l_shader )
 			{
@@ -193,12 +193,12 @@ namespace Castor3D
 
 		m_frameVariableBuffersByName.clear();
 
-		for ( auto && l_list: m_frameVariableBuffers )
+		for ( auto && l_list : m_frameVariableBuffers )
 		{
 			l_list.clear();
 		}
 
-		for ( auto l_buffer: m_listFrameVariableBuffers )
+		for ( auto l_buffer : m_listFrameVariableBuffers )
 		{
 			l_buffer->Cleanup();
 		}
@@ -214,7 +214,7 @@ namespace Castor3D
 			{
 				bool l_bResult = true;
 
-				for ( auto l_shader: m_pShaders )
+				for ( auto l_shader : m_pShaders )
 				{
 					if ( l_shader && l_shader->HasSource() )
 					{
@@ -241,7 +241,7 @@ namespace Castor3D
 					{
 						Logger::LogError( cuT( "ShaderProgram::Initialise - LINKER ERROR" ) );
 
-						for ( auto l_shader: m_pShaders )
+						for ( auto l_shader : m_pShaders )
 						{
 							if ( l_shader )
 							{
@@ -253,7 +253,7 @@ namespace Castor3D
 					}
 					else
 					{
-						for ( auto && l_buffer: m_listFrameVariableBuffers )
+						for ( auto && l_buffer : m_listFrameVariableBuffers )
 						{
 							l_buffer->Initialise( *this );
 						}
@@ -315,7 +315,7 @@ namespace Castor3D
 			m_pShaders[p_eType] = l_pReturn;
 			int i = eSHADER_MODEL_1;
 
-			for ( auto && l_file: m_arrayFiles )
+			for ( auto && l_file : m_arrayFiles )
 			{
 				if ( !l_file.empty() )
 				{
@@ -339,7 +339,7 @@ namespace Castor3D
 		{
 			if ( m_eStatus != ePROGRAM_STATUS_LINKED )
 			{
-				for ( auto && l_shader: m_activeShaders )
+				for ( auto && l_shader : m_activeShaders )
 				{
 					std::for_each( l_shader->GetFrameVariablesBegin(), l_shader->GetFrameVariablesEnd(), [&]( std::pair< String, FrameVariableWPtr > p_pair )
 					{
@@ -360,14 +360,14 @@ namespace Castor3D
 	{
 		if ( m_pRenderSystem->UseShaders() && m_bEnabled && m_eStatus == ePROGRAM_STATUS_LINKED )
 		{
-			for ( auto && l_shader: m_activeShaders )
+			for ( auto && l_shader : m_activeShaders )
 			{
 				l_shader->Bind();
 			}
 
 			uint32_t l_index = 0;
 
-			for ( auto l_variableBuffer: m_listFrameVariableBuffers )
+			for ( auto l_variableBuffer : m_listFrameVariableBuffers )
 			{
 				l_variableBuffer->Bind( l_index++ );
 			}
@@ -380,12 +380,12 @@ namespace Castor3D
 		{
 			uint32_t l_index = 0;
 
-			for ( auto l_variableBuffer: m_listFrameVariableBuffers )
+			for ( auto l_variableBuffer : m_listFrameVariableBuffers )
 			{
 				l_variableBuffer->Unbind( l_index++ );
 			}
 
-			for ( auto && l_shader: m_activeShaders )
+			for ( auto && l_shader : m_activeShaders )
 			{
 				l_shader->Unbind();
 			}
@@ -397,7 +397,7 @@ namespace Castor3D
 		m_arrayFiles[p_eModel] = p_path;
 		int i = eSHADER_TYPE_VERTEX;
 
-		for ( auto && l_shader: m_pShaders )
+		for ( auto && l_shader : m_pShaders )
 		{
 			if ( l_shader && m_pRenderSystem->HasShaderType( eSHADER_TYPE( i++ ) ) )
 			{

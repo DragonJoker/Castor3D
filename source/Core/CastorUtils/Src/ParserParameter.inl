@@ -811,7 +811,7 @@ namespace Castor
 		{
 			StringArray l_values = str_utils::split( l_array[0], cuT( "|" ), std::count( l_array[0].begin(), l_array[0].end(), cuT( '|' ) ) + 1, false );
 
-			for ( auto && l_value: l_values )
+			for ( auto && l_value : l_values )
 			{
 				UIntStrMapIt l_it = m_mapValues.find( l_value );
 
@@ -966,27 +966,27 @@ namespace Castor
 
 	//*************************************************************************************************
 
-  inline ParserParameter< ePARAMETER_TYPE_POINT2I >::ParserParameter( FileParserContext & p_context )
-	  : ParserParameterBase( p_context )
-  {
-  }
+	inline ParserParameter< ePARAMETER_TYPE_POINT2I >::ParserParameter( FileParserContext & p_context )
+		: ParserParameterBase( p_context )
+	{
+	}
 
-  inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_POINT2I >::GetType()
-  {
-	  return ePARAMETER_TYPE_POINT2I;
-  }
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_POINT2I >::GetType()
+	{
+		return ePARAMETER_TYPE_POINT2I;
+	}
 
-  inline xchar const * ParserParameter< ePARAMETER_TYPE_POINT2I >::GetStrType()
-  {
-	  return cuT( "2 integers point" );
-  }
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_POINT2I >::GetStrType()
+	{
+		return cuT( "2 integers point" );
+	}
 
-  inline bool ParserParameter< ePARAMETER_TYPE_POINT2I >::Parse( String & p_strParams )
-  {
-	  bool l_bReturn = false;
-	  l_bReturn = ParseVector( p_strParams, m_value );
-	  return l_bReturn;
-  }
+	inline bool ParserParameter< ePARAMETER_TYPE_POINT2I >::Parse( String & p_strParams )
+	{
+		bool l_bReturn = false;
+		l_bReturn = ParseVector( p_strParams, m_value );
+		return l_bReturn;
+	}
 
 	//*************************************************************************************************
 

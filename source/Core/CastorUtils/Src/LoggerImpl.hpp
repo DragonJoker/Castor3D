@@ -55,7 +55,7 @@ namespace Castor
 	*/
 	template< typename Char >
 	struct BasicMessage
-		: public MessageBase
+			: public MessageBase
 	{
 		typedef std::basic_string< Char > string_type;
 

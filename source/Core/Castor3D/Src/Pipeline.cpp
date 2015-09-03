@@ -197,7 +197,7 @@ void Pipeline::ApplyMatrices( FrameVariableBuffer & p_matrixBuffer, uint64_t p_m
 		{
 			ApplyView( p_matrixBuffer );
 			ApplyProjectionView( p_matrixBuffer );
-			
+
 			if ( ( p_matrices & MASK_MTXMODE_MODEL ) )
 			{
 				ApplyProjectionModelView( p_matrixBuffer );

@@ -553,7 +553,7 @@ namespace GlRender
 		//*****************************************************************************************
 
 		Vec4 operator*( Vec4 const & p_a, Mat4 const & p_b )
-		{ 
+		{
 			Vec4 l_return( p_a.m_writer );
 			l_return.m_value << Castor::String( p_a ) << cuT( " * " ) << Castor::String( p_b );
 			return l_return;
@@ -637,10 +637,10 @@ namespace GlRender
 					LOCALE_ASSIGN( l_writer, Float, l_distance, length( l_direction ) );
 					l_v4Return.xyz() = normalize( l_direction );
 					LOCALE_ASSIGN( l_writer, Float, l_attenuation, p_light.m_v3Attenuation().x()
-						+ p_light.m_v3Attenuation().y() * l_distance
-						+ p_light.m_v3Attenuation().z() * l_distance * l_distance );
+								   + p_light.m_v3Attenuation().y() * l_distance
+								   + p_light.m_v3Attenuation().z() * l_distance * l_distance );
 					l_v4Return.w() = l_attenuation;
-					
+
 					IF( l_writer, p_light.m_fCutOff() <= Float( 90.0f ) ) // spotlight?
 					{
 						LOCALE( l_writer, Float, l_clampedCosine ) = max( Float( 0.0f ), dot( neg( l_v4Return.xyz() ), l_writer.Paren( vec4( Float( 0.0f ), 0.0f, 1.0f, 0.0f ) * p_light.m_mtx4Orientation() ).xyz() ) );
@@ -698,9 +698,9 @@ namespace GlRender
 		void BlinnPhongLightingModel::Declare_ComputeLightDirection( GlslWriter & p_writer )
 		{
 			p_writer.Implement_Function< Vec4 >( cuT( "ComputeLightDirection" ), &BlinnPhong::ComputeLightDirection,
-				InParam< Light >( &p_writer, cuT( "p_light" ) ),
-				InParam< Vec3 >( &p_writer, cuT( "p_position" ) ),
-				InParam< Mat4 >( &p_writer, cuT( "p_mtxModelView" ) ) );
+												 InParam< Light >( &p_writer, cuT( "p_light" ) ),
+												 InParam< Vec3 >( &p_writer, cuT( "p_position" ) ),
+												 InParam< Mat4 >( &p_writer, cuT( "p_mtxModelView" ) ) );
 		}
 
 		void BlinnPhongLightingModel::Declare_Bump( GlslWriter & p_writer )
@@ -708,23 +708,23 @@ namespace GlRender
 			InOutParam< Vec3 > p_lightDir( &p_writer, cuT( "p_lightDir" ) );
 			InOutParam< Float > p_fAttenuation( &p_writer, cuT( "p_fAttenuation" ) );
 			p_writer.Implement_Function< Void >( cuT( "Bump" ), &BlinnPhong::Bump,
-				InParam< Vec3 >( &p_writer, cuT( "p_v3T" ) ),
-				InParam< Vec3 >( &p_writer, cuT( "p_v3B" ) ),
-				InParam< Vec3 >( &p_writer, cuT( "p_v3N" ) ),
-				p_lightDir,
-				p_fAttenuation );
+												 InParam< Vec3 >( &p_writer, cuT( "p_v3T" ) ),
+												 InParam< Vec3 >( &p_writer, cuT( "p_v3B" ) ),
+												 InParam< Vec3 >( &p_writer, cuT( "p_v3N" ) ),
+												 p_lightDir,
+												 p_fAttenuation );
 		}
 
 		void BlinnPhongLightingModel::Declare_ComputeFresnel( GlslWriter & p_writer )
 		{
 			InOutParam< Vec3 > p_specular( &p_writer, cuT( "p_specular" ) );
 			p_writer.Implement_Function< Float >( cuT( "ComputeFresnel" ), &BlinnPhong::ComputeFresnel,
-				InParam< Float >( &p_writer, cuT( "p_lambert" ) ),
-				InParam< Vec3 >( &p_writer, cuT( "p_direction" ) ),
-				InParam< Vec3 >( &p_writer, cuT( "p_normal" ) ),
-				InParam< Vec3 >( &p_writer, cuT( "p_eye" ) ),
-				InParam< Float >( &p_writer, cuT( "p_shininess" ) ),
-				p_specular );
+												  InParam< Float >( &p_writer, cuT( "p_lambert" ) ),
+												  InParam< Vec3 >( &p_writer, cuT( "p_direction" ) ),
+												  InParam< Vec3 >( &p_writer, cuT( "p_normal" ) ),
+												  InParam< Vec3 >( &p_writer, cuT( "p_eye" ) ),
+												  InParam< Float >( &p_writer, cuT( "p_shininess" ) ),
+												  p_specular );
 		}
 	}
 }

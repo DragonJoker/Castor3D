@@ -137,4 +137,15 @@
 
 using namespace GuiCommon;
 
+namespace CastorViewer
+{
+	static const wxColour PANEL_BACKGROUND_COLOUR = wxColour( 30, 30, 30 );
+	static const wxColour PANEL_FOREGROUND_COLOUR = wxColour( 220, 220, 220 );
+	static const wxColour BORDER_COLOUR = wxColour( 90, 90, 90 );
+	static const wxColour INACTIVE_TAB_COLOUR = wxColour( 60, 60, 60 );
+	static const wxColour ACTIVE_TAB_COLOUR = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
+	static const wxColour INACTIVE_TEXT_COLOUR = wxColour( 200, 200, 200 );
+	static const wxColour ACTIVE_TEXT_COLOUR = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
+}
+
 #endif

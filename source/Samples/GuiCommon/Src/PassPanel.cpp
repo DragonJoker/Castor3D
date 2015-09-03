@@ -39,7 +39,7 @@ namespace GuiCommon
 	}	eID;
 
 	wxPassPanel::wxPassPanel( bool p_small, bool p_bCanEdit, wxWindow * p_pParent, wxPoint const & p_ptPos, wxSize const & p_size )
-		: wxPanel( p_pParent, wxID_ANY, p_ptPos, p_size,wxBORDER_NONE )
+		: wxPanel( p_pParent, wxID_ANY, p_ptPos, p_size, wxBORDER_NONE )
 		, m_bCanEdit( p_bCanEdit )
 		, m_pEngine( NULL )
 	{
@@ -101,7 +101,7 @@ namespace GuiCommon
 			m_propertyEmissive->SetValue( wxVariant( wxColour( l_pPass->GetEmissive().to_bgr() ) ) );
 			m_propertyExponent->SetValue( l_pPass->GetShininess() );
 			m_propertyTwoSided->SetValue( l_pPass->IsTwoSided() );
-			
+
 			DoFillTexturesProperty( l_pPass->GetTextureUnitsCount() );
 
 			if ( l_pPass->GetTextureUnitsCount() > 0 )

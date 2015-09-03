@@ -39,7 +39,7 @@ namespace Castor3D
 
 		if ( l_bReturn )
 		{
-			for ( auto && l_submesh: *p_geometry.GetMesh() )
+			for ( auto && l_submesh : *p_geometry.GetMesh() )
 			{
 				l_bReturn = p_file.WriteText( cuT( "\t\t\t\tmaterial \"" ) + p_geometry.GetMaterial( l_submesh )->GetName() + cuT( "\"\n" ) ) > 0;
 			}
@@ -83,7 +83,7 @@ namespace Castor3D
 			{
 				uint32_t l_id = 0;
 
-				for ( auto && l_submesh: *p_obj.GetMesh() )
+				for ( auto && l_submesh : *p_obj.GetMesh() )
 				{
 					l_bReturn = DoFillChunk( l_id, eCHUNK_TYPE_GEOMETRY_MATERIAL_ID, l_chunk );
 					l_bReturn = DoFillChunk( p_obj.GetMaterial( l_submesh )->GetName(), eCHUNK_TYPE_GEOMETRY_MATERIAL_NAME, l_chunk );
@@ -212,7 +212,7 @@ namespace Castor3D
 
 				if ( l_pair.second )
 				{
-					for( auto && l_pass: *l_pair.second )
+					for ( auto && l_pass : *l_pair.second )
 					{
 						if ( !l_pass->HasShader() )
 						{
@@ -242,7 +242,7 @@ namespace Castor3D
 		{
 			m_strMeshName = p_pMesh->GetName();
 
-			for ( auto && l_submesh: *p_pMesh )
+			for ( auto && l_submesh : *p_pMesh )
 			{
 				SetMaterial( l_submesh, l_submesh->GetDefaultMaterial() );
 			}

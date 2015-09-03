@@ -142,7 +142,7 @@ namespace GlRender
 		{
 			uint32_t l_index = 0;
 
-			for ( auto l_variableBuffer: m_listFrameVariableBuffers )
+			for ( auto l_variableBuffer : m_listFrameVariableBuffers )
 			{
 				l_variableBuffer->Unbind( l_index++ );
 			}
@@ -329,7 +329,7 @@ namespace GlRender
 		l_lighting.Declare_GetLight( l_writer );
 		l_lighting.Declare_ComputeLightDirection( l_writer );
 		l_lighting.Declare_ComputeFresnel( l_writer );
-		
+
 		std::function< void() > l_main = [&]()
 		{
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );

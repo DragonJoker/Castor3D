@@ -366,62 +366,62 @@ namespace Castor
 		return from_components( p_ptColour[1], p_ptColour[2], p_ptColour[3], p_ptColour[0] );
 	}
 
-	Colour Colour::from_rgb( uint8_t const ( & p_ptColour )[3] )
+	Colour Colour::from_rgb( uint8_t const( & p_ptColour )[3] )
 	{
 		return from_components( p_ptColour[0], p_ptColour[1], p_ptColour[2], uint8_t( 255 ) );
 	}
 
-	Colour Colour::from_bgr( uint8_t const ( & p_ptColour )[3] )
+	Colour Colour::from_bgr( uint8_t const( & p_ptColour )[3] )
 	{
 		return from_components( p_ptColour[2], p_ptColour[1], p_ptColour[0], uint8_t( 255 ) );
 	}
 
-	Colour Colour::from_rgba( uint8_t const ( & p_ptColour )[4] )
+	Colour Colour::from_rgba( uint8_t const( & p_ptColour )[4] )
 	{
 		return from_components( p_ptColour[0], p_ptColour[1], p_ptColour[2], p_ptColour[3] );
 	}
 
-	Colour Colour::from_abgr( uint8_t const ( & p_ptColour )[4] )
+	Colour Colour::from_abgr( uint8_t const( & p_ptColour )[4] )
 	{
 		return from_components( p_ptColour[3], p_ptColour[2], p_ptColour[1], p_ptColour[0] );
 	}
 
-	Colour Colour::from_bgra( uint8_t const ( & p_ptColour )[4] )
+	Colour Colour::from_bgra( uint8_t const( & p_ptColour )[4] )
 	{
 		return from_components( p_ptColour[2], p_ptColour[1], p_ptColour[0], p_ptColour[3] );
 	}
 
-	Colour Colour::from_argb( uint8_t const ( & p_ptColour )[4] )
+	Colour Colour::from_argb( uint8_t const( & p_ptColour )[4] )
 	{
 		return from_components( p_ptColour[1], p_ptColour[2], p_ptColour[3], p_ptColour[0] );
 	}
 
-	Colour Colour::from_rgb( float const ( & p_ptColour )[3] )
+	Colour Colour::from_rgb( float const( & p_ptColour )[3] )
 	{
 		return from_components( p_ptColour[0], p_ptColour[1], p_ptColour[2], 1.0f );
 	}
 
-	Colour Colour::from_bgr( float const ( & p_ptColour )[3] )
+	Colour Colour::from_bgr( float const( & p_ptColour )[3] )
 	{
 		return from_components( p_ptColour[2], p_ptColour[1], p_ptColour[0], 1.0f );
 	}
 
-	Colour Colour::from_rgba( float const ( & p_ptColour )[4] )
+	Colour Colour::from_rgba( float const( & p_ptColour )[4] )
 	{
 		return from_components( p_ptColour[0], p_ptColour[1], p_ptColour[2], p_ptColour[3] );
 	}
 
-	Colour Colour::from_abgr( float const ( & p_ptColour )[4] )
+	Colour Colour::from_abgr( float const( & p_ptColour )[4] )
 	{
 		return from_components( p_ptColour[3], p_ptColour[2], p_ptColour[1], p_ptColour[0] );
 	}
 
-	Colour Colour::from_bgra( float const ( & p_ptColour )[4] )
+	Colour Colour::from_bgra( float const( & p_ptColour )[4] )
 	{
 		return from_components( p_ptColour[2], p_ptColour[1], p_ptColour[0], p_ptColour[3] );
 	}
 
-	Colour Colour::from_argb( float const ( & p_ptColour )[4] )
+	Colour Colour::from_argb( float const( & p_ptColour )[4] )
 	{
 		return from_components( p_ptColour[1], p_ptColour[2], p_ptColour[3], p_ptColour[0] );
 	}

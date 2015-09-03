@@ -130,7 +130,7 @@ namespace GuiCommon
 
 		wxImageList * l_imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
 
-		for ( auto && l_image: l_icons )
+		for ( auto && l_image : l_icons )
 		{
 			int l_sizeOrig = l_image->GetWidth();
 
@@ -166,11 +166,11 @@ namespace GuiCommon
 			SceneNodeSPtr l_rootNode = p_pScene->GetRootNode();
 			DoAddNode( l_scene, l_rootNode );
 
-			for ( auto && l_overlay: p_pEngine->GetOverlayManager() )
+			for ( auto && l_overlay : p_pEngine->GetOverlayManager() )
 			{
 				if ( l_overlay->GetName() != cuT( "DebugPanel" ) )
 				{
-					switch( l_overlay->GetType() )
+					switch ( l_overlay->GetType() )
 					{
 					case eOVERLAY_TYPE_PANEL:
 						DoAddOverlay( AppendItem( l_scene, l_overlay->GetName(), eBMP_PANEL_OVERLAY, eBMP_PANEL_OVERLAY_SEL, new wxOverlayTreeItemProperty( l_overlay ) ), l_overlay );
@@ -214,7 +214,7 @@ namespace GuiCommon
 		wxTreeItemId l_id = AppendItem( p_id, l_geometry->GetName(), eBMP_GEOMETRY, eBMP_GEOMETRY_SEL, new wxGeometryTreeItemProperty( l_geometry ) );
 		int l_count = 0;
 
-		for ( auto l_submesh: *l_geometry->GetMesh() )
+		for ( auto l_submesh : *l_geometry->GetMesh() )
 		{
 			wxString l_name = _( "Submesh " );
 			l_name << l_count++;
@@ -233,7 +233,7 @@ namespace GuiCommon
 	{
 		LightSPtr l_light = std::static_pointer_cast< Light >( p_light );
 
-		switch( l_light->GetLightType() )
+		switch ( l_light->GetLightType() )
 		{
 		case eLIGHT_TYPE_DIRECTIONAL:
 			AppendItem( p_id, l_light->GetName(), eBMP_DIRECTIONAL_LIGHT, eBMP_DIRECTIONAL_LIGHT_SEL, new wxLightTreeItemProperty( l_light ) );
@@ -251,7 +251,7 @@ namespace GuiCommon
 
 	void wxSceneObjectsList::DoAddNode( wxTreeItemId p_id, SceneNodeSPtr p_node )
 	{
-		for ( auto && l_pair: p_node->GetObjects() )
+		for ( auto && l_pair : p_node->GetObjects() )
 		{
 			MovableObjectSPtr l_object = l_pair.second.lock();
 
@@ -271,7 +271,7 @@ namespace GuiCommon
 			}
 		}
 
-		for ( auto && l_pair: p_node->GetChilds() )
+		for ( auto && l_pair : p_node->GetChilds() )
 		{
 			DoAddNode( AppendItem( p_id, l_pair.first, eBMP_NODE, eBMP_NODE_SEL, new wxNodeTreeItemProperty( m_pEngine, l_pair.second.lock() ) ), l_pair.second.lock() );
 		}
@@ -279,9 +279,9 @@ namespace GuiCommon
 
 	void wxSceneObjectsList::DoAddOverlay( wxTreeItemId p_id, Castor3D::OverlaySPtr p_overlay )
 	{
-		for ( auto && l_overlay: *p_overlay )
+		for ( auto && l_overlay : *p_overlay )
 		{
-			switch( l_overlay->GetType() )
+			switch ( l_overlay->GetType() )
 			{
 			case eOVERLAY_TYPE_PANEL:
 				DoAddOverlay( AppendItem( p_id, l_overlay->GetName(), eBMP_PANEL_OVERLAY, eBMP_PANEL_OVERLAY_SEL, new wxOverlayTreeItemProperty( l_overlay ) ), l_overlay );

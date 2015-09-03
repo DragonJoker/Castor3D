@@ -718,7 +718,7 @@ namespace Castor3D
 
 		if ( m_newlyAddedPrimitives.size() > 0 )
 		{
-			for ( auto && l_pair: m_newlyAddedPrimitives )
+			for ( auto && l_pair : m_newlyAddedPrimitives )
 			{
 				l_pair.second->CreateBuffers( m_nbFaces, m_nbVertex );
 			}
@@ -1199,7 +1199,7 @@ namespace Castor3D
 		SphereBox l_sphere;
 		Point3r l_ptCoords;
 
-		for ( auto && l_pair: m_addedPrimitives )
+		for ( auto && l_pair : m_addedPrimitives )
 		{
 			l_geo = l_pair.second;
 
@@ -1216,7 +1216,7 @@ namespace Castor3D
 					{
 						l_geoDist = l_curgeoDist;
 
-						for ( auto && l_it: *l_mesh )
+						for ( auto && l_it : *l_mesh )
 						{
 							l_sphere = l_it->GetSphere();
 
@@ -1305,7 +1305,7 @@ namespace Castor3D
 	{
 		uint32_t l_return = 0;
 
-		for ( auto && l_pair: m_addedPrimitives )
+		for ( auto && l_pair : m_addedPrimitives )
 		{
 			l_return += l_pair.second->GetMesh()->GetVertexCount();
 		}
@@ -1317,7 +1317,7 @@ namespace Castor3D
 	{
 		uint32_t l_return = 0;
 
-		for ( auto && l_pair: m_addedPrimitives )
+		for ( auto && l_pair : m_addedPrimitives )
 		{
 			l_return += l_pair.second->GetMesh()->GetFaceCount();
 		}
@@ -1329,7 +1329,7 @@ namespace Castor3D
 	{
 		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 
-		for ( auto l_geometry: m_arrayPrimitivesToDelete )
+		for ( auto l_geometry : m_arrayPrimitivesToDelete )
 		{
 			l_geometry->Detach();
 		}
@@ -1343,7 +1343,7 @@ namespace Castor3D
 
 	void Scene::DoUpdateAnimations()
 	{
-		for ( auto && l_pair: m_addedGroups )
+		for ( auto && l_pair : m_addedGroups )
 		{
 			l_pair.second->Update();
 		}
@@ -1356,14 +1356,14 @@ namespace Castor3D
 		m_mapSubmeshesAlpha.clear();
 		m_arraySubmeshesAlpha.clear();
 
-		for ( auto && l_primitive: m_addedPrimitives )
+		for ( auto && l_primitive : m_addedPrimitives )
 		{
 			MeshSPtr l_pMesh = l_primitive.second->GetMesh();
 			SceneNodeSPtr l_pNode = l_primitive.second->GetParent();
 
 			if ( l_pMesh )
 			{
-				for ( auto && l_submesh: *l_pMesh )
+				for ( auto && l_submesh : *l_pMesh )
 				{
 					MaterialSPtr l_pMaterial( l_primitive.second->GetMaterial( l_submesh ) );
 					stRENDER_NODE l_renderNode = { l_pNode, l_primitive.second, l_submesh, l_pMaterial };
@@ -1517,7 +1517,7 @@ namespace Castor3D
 			real * l_pBuffer = l_mtxBuffer.data();
 			uint32_t l_count = l_pSubmesh->GetRefCount( l_pMaterial );
 
-			for ( auto && l_it: p_nodes )
+			for ( auto && l_it : p_nodes )
 			{
 				if ( ( l_pSubmesh->GetProgramFlags() & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
 				{
@@ -1584,7 +1584,7 @@ namespace Castor3D
 		uint32_t l_uiCount = 0;
 		uint32_t l_uiSize = p_node.m_pMaterial->GetPassCount();
 
-		for ( auto l_pass: *p_node.m_pMaterial )
+		for ( auto l_pass : *p_node.m_pMaterial )
 		{
 			if ( l_pass->HasAutomaticShader() )
 			{
@@ -1730,7 +1730,7 @@ namespace Castor3D
 		{
 			int l_index = 0;
 
-			for ( auto && l_it: m_addedLights )
+			for ( auto && l_it : m_addedLights )
 			{
 				DoBindLight( l_it.second, l_index, p_program );
 				l_lightsCount->GetValue( 0 )++;
@@ -1738,7 +1738,7 @@ namespace Castor3D
 		}
 		else
 		{
-			for ( auto && l_it: m_addedLights )
+			for ( auto && l_it : m_addedLights )
 			{
 				l_it.second->Render();
 			}
@@ -1764,7 +1764,7 @@ namespace Castor3D
 		{
 			int l_index = 0;
 
-			for ( auto && l_it: m_addedLights )
+			for ( auto && l_it : m_addedLights )
 			{
 				DoUnbindLight( l_it.second, l_index, p_program );
 				l_lightsCount->GetValue( 0 )--;
@@ -1772,7 +1772,7 @@ namespace Castor3D
 		}
 		else
 		{
-			for ( auto && l_it: m_addedLights )
+			for ( auto && l_it : m_addedLights )
 			{
 				l_it.second->EndRender();
 			}

@@ -391,7 +391,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La Colour construite
 		 */
-		CU_API static Colour from_rgb( uint8_t const ( & p_ptColour )[3] );
+		CU_API static Colour from_rgb( uint8_t const( & p_ptColour )[3] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGR components
@@ -402,7 +402,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La Colour construite
 		 */
-		CU_API static Colour from_bgr( uint8_t const ( & p_ptColour )[3] );
+		CU_API static Colour from_bgr( uint8_t const( & p_ptColour )[3] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGBA components
@@ -413,7 +413,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La Colour construite
 		 */
-		CU_API static Colour from_rgba( uint8_t const ( & p_ptColour )[4] );
+		CU_API static Colour from_rgba( uint8_t const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGRA components
@@ -424,7 +424,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La Colour construite
 		 */
-		CU_API static Colour from_bgra( uint8_t const ( & p_ptColour )[4] );
+		CU_API static Colour from_bgra( uint8_t const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ARGB components
@@ -435,7 +435,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La Colour construite
 		 */
-		CU_API static Colour from_argb( uint8_t const ( & p_ptColour )[4] );
+		CU_API static Colour from_argb( uint8_t const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ABGR components
@@ -446,7 +446,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La Colour construite
 		 */
-		CU_API static Colour from_abgr( uint8_t const ( & p_ptColour )[4] );
+		CU_API static Colour from_abgr( uint8_t const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGB components
@@ -457,7 +457,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La Colour construite
 		 */
-		CU_API static Colour from_rgb( float const ( & p_ptColour )[3] );
+		CU_API static Colour from_rgb( float const( & p_ptColour )[3] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGR components
@@ -468,7 +468,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La Colour construite
 		 */
-		CU_API static Colour from_bgr( float const ( & p_ptColour )[3] );
+		CU_API static Colour from_bgr( float const( & p_ptColour )[3] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing RGBA components
@@ -479,7 +479,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La Colour construite
 		 */
-		CU_API static Colour from_rgba( float const ( & p_ptColour )[4] );
+		CU_API static Colour from_rgba( float const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ARGB components
@@ -490,7 +490,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La Colour construite
 		 */
-		CU_API static Colour from_argb( float const ( & p_ptColour )[4] );
+		CU_API static Colour from_argb( float const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing ABGR components
@@ -501,7 +501,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La Colour construite
 		 */
-		CU_API static Colour from_abgr( float const ( & p_ptColour )[4] );
+		CU_API static Colour from_abgr( float const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from a point representing BGRA components
@@ -512,7 +512,7 @@ namespace Castor
 		 *\param[in]	p_ptColour	Le point contenant les composantes
 		 *\return		La Colour construite
 		 */
-		CU_API static Colour from_bgra( float const ( & p_ptColour )[4] );
+		CU_API static Colour from_bgra( float const( & p_ptColour )[4] );
 		/**
 		 *\~english
 		 *\brief		Constructor from an uint32_t representing RGB components

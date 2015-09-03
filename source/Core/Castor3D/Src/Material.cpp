@@ -105,7 +105,7 @@ namespace Castor3D
 
 		bool l_bFirst = true;
 
-		for ( auto && l_pass: p_material )
+		for ( auto && l_pass : p_material )
 		{
 			if ( l_bFirst )
 			{

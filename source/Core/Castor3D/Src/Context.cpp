@@ -30,18 +30,18 @@ namespace Castor3D
 		};
 		real l_pBuffer[] =
 		{
-			 0,  0, 0, 0,
-			 1,  1, 1, 1,
-			 0,  1, 0, 1,
-			 0,  0, 0, 0,
-			 1,  0, 1, 0,
-			 1,  1, 1, 1,
+			0,  0, 0, 0,
+			1,  1, 1, 1,
+			0,  1, 0, 1,
+			0,  0, 0, 0,
+			1,  0, 1, 0,
+			1,  1, 1, 1,
 		};
 		std::memcpy( m_pBuffer, l_pBuffer, sizeof( l_pBuffer ) );
 		m_pDeclaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
 		uint32_t i = 0;
 
-		for ( auto & l_vertex: m_arrayVertex )
+		for ( auto & l_vertex : m_arrayVertex )
 		{
 			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_pBuffer )[i++ * m_pDeclaration->GetStride()] );
 		}
@@ -49,7 +49,7 @@ namespace Castor3D
 
 	Context::~Context()
 	{
-		for ( auto & l_vertex: m_arrayVertex )
+		for ( auto & l_vertex : m_arrayVertex )
 		{
 			l_vertex.reset();
 		}
@@ -205,7 +205,7 @@ namespace Castor3D
 		{
 			l_pProgram->Unbind();
 		}
-		
+
 		p_pTexture->SetIndex( l_id );
 	}
 }

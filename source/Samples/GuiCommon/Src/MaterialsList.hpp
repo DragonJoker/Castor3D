@@ -30,7 +30,7 @@ namespace GuiCommon
 	public:
 		wxMaterialsList( wxPropertiesHolder * p_propertiesHolder, wxWindow * p_pParent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
 		~wxMaterialsList();
-		
+
 		void LoadMaterials( Castor3D::Engine * p_pEngine );
 		void UnloadMaterials();
 

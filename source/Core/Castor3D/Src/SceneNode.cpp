@@ -400,7 +400,7 @@ namespace Castor3D
 		}
 		else
 		{
-			Logger::LogInfo( m_strName + cuT( " - Can't remove SceneNode - Null pointer given"));
+			Logger::LogInfo( m_strName + cuT( " - Can't remove SceneNode - Null pointer given" ) );
 		}
 	}
 

@@ -1203,7 +1203,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ObjectMaterial )
 
 			if ( l_manager.has( l_strName ) )
 			{
-				for ( auto && l_submesh: *l_pContext->pGeometry->GetMesh() )
+				for ( auto && l_submesh : *l_pContext->pGeometry->GetMesh() )
 				{
 					MaterialSPtr l_material = l_manager.find( l_strName );
 					l_pContext->pGeometry->SetMaterial( l_submesh, l_material );
@@ -1533,7 +1533,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshDivide )
 			l_pContext->pMesh->ComputeContainers();
 			Point3r l_ptCenter = l_pContext->pMesh->GetCollisionBox().GetCenter();
 
-			for ( auto && l_submesh: *l_pContext->pMesh )
+			for ( auto && l_submesh : *l_pContext->pMesh )
 			{
 				l_pDivider->Subdivide( l_submesh, l_uiCount, false );
 			}

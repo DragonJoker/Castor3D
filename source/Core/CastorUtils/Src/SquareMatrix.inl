@@ -288,6 +288,7 @@ namespace Castor
 		{
 			this->operator[]( i )[i] = Castor::Policy< T >::unit();
 		}
+
 #if !defined( NDEBUG )
 		Matrix< T, Rows, Rows >::do_update_debug();
 #endif

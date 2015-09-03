@@ -668,7 +668,7 @@ namespace Dx11Render
 			{
 				l_strVertex = g_ds.GetGSVertexProgram();
 				l_strReturn = l_strVertex;
-	//			Logger::LogDebug( l_strReturn );
+				//			Logger::LogDebug( l_strReturn );
 			}
 		}
 

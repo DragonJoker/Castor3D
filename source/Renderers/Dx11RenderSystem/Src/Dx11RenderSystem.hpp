@@ -33,7 +33,7 @@ namespace Dx11Render
 	public:
 		DxRenderSystem( Castor3D::Engine * p_pEngine );
 		virtual ~DxRenderSystem();
-		
+
 		void CheckShaderSupport();
 		bool InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swapChainDesc );
 
@@ -89,7 +89,7 @@ namespace Dx11Render
 		{
 			return m_pDebug;
 		}
-		
+
 		void SetDxDebugName( ID3D11Device * p_object, std::string const & p_name, std::string const & p_file, int line );
 		void SetDxDebugName( ID3D11DeviceChild * p_object, std::string const & p_name, std::string const & p_file, int line );
 		void SetDxDebugName( IDXGIDeviceSubObject * p_object, std::string const & p_name, std::string const & p_file, int line );

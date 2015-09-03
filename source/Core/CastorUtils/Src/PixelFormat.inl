@@ -1166,7 +1166,7 @@ namespace Castor
 #undef dst
 	};
 	//!\~english Specialisation for ePIXEL_FORMAT_RGB16F32F	\~french Spécialisation pour ePIXEL_FORMAT_RGB16F32F
-  	  template<> struct component< ePIXEL_FORMAT_RGB16F32F >
+	template<> struct component< ePIXEL_FORMAT_RGB16F32F >
 	{
 		static inline uint8_t L8( uint8_t const * p_pSrc )
 		{
@@ -1248,10 +1248,10 @@ namespace Castor
 		static inline void A32F( uint8_t *, float )
 		{
 		}
-    };
-    //!\~english Specialisation for ePIXEL_FORMAT_RGB32F	\~french Spécialisation pour ePIXEL_FORMAT_RGB32F
-    template<> struct component< ePIXEL_FORMAT_RGB32F >
-    {
+	};
+	//!\~english Specialisation for ePIXEL_FORMAT_RGB32F	\~french Spécialisation pour ePIXEL_FORMAT_RGB32F
+	template<> struct component< ePIXEL_FORMAT_RGB32F >
+	{
 		static inline uint8_t L8( uint8_t const * p_pSrc )
 		{
 			return uint8_t( L32F( p_pSrc ) * 255 );
@@ -2786,8 +2786,8 @@ namespace Castor
 	{
 		namespace
 		{
-			template< TPL_PIXEL_FORMAT PF, typename Enable=void > struct PixelComponent;
-			
+			template< TPL_PIXEL_FORMAT PF, typename Enable = void > struct PixelComponent;
+
 			template< TPL_PIXEL_FORMAT PF >
 			struct PixelComponent< PF, typename std::enable_if< is_colour_format< PF >::value >::type >
 			{
@@ -2795,7 +2795,7 @@ namespace Castor
 				{
 					float l_return = 0.0f;
 
-					switch( p_component )
+					switch ( p_component )
 					{
 					case ePIXEL_COMPONENT_RED:
 						l_return = component< PF >::R32F( p_pixel.const_ptr() );
@@ -2827,7 +2827,7 @@ namespace Castor
 
 				static void SetFloat( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, float p_value )
 				{
-					switch( p_component )
+					switch ( p_component )
 					{
 					case ePIXEL_COMPONENT_RED:
 						component< PF >::R8( p_pixel.ptr(), p_value );
@@ -2858,7 +2858,7 @@ namespace Castor
 				{
 					uint8_t l_return = 0;
 
-					switch( p_component )
+					switch ( p_component )
 					{
 					case ePIXEL_COMPONENT_RED:
 						l_return = component< PF >::R8( p_pixel.const_ptr() );
@@ -2890,7 +2890,7 @@ namespace Castor
 
 				static void SetByte( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint8_t p_value )
 				{
-					switch( p_component )
+					switch ( p_component )
 					{
 					case ePIXEL_COMPONENT_RED:
 						component< PF >::R8( p_pixel.ptr(), p_value );
@@ -2925,7 +2925,7 @@ namespace Castor
 				{
 					float l_return = 0.0f;
 
-					switch( p_component )
+					switch ( p_component )
 					{
 					case ePIXEL_COMPONENT_DEPTH:
 						l_return = float( component< PF >::D32F( p_pixel.const_ptr() ) );
@@ -2945,7 +2945,7 @@ namespace Castor
 
 				static void SetFloat( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, float p_value )
 				{
-					switch( p_component )
+					switch ( p_component )
 					{
 					case ePIXEL_COMPONENT_DEPTH:
 						component< PF >::D32F( p_pixel.ptr(), p_value );
@@ -2964,7 +2964,7 @@ namespace Castor
 				{
 					uint8_t l_return = 0;
 
-					switch( p_component )
+					switch ( p_component )
 					{
 					case ePIXEL_COMPONENT_DEPTH:
 						l_return = uint8_t( component< PF >::D32( p_pixel.const_ptr() ) >> 24 );
@@ -2984,7 +2984,7 @@ namespace Castor
 
 				static void SetByte( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint8_t p_value )
 				{
-					switch( p_component )
+					switch ( p_component )
 					{
 					case ePIXEL_COMPONENT_DEPTH:
 						component< PF >::D32( p_pixel.ptr(), uint32_t( p_value ) << 24 );
@@ -3003,7 +3003,7 @@ namespace Castor
 				{
 					uint32_t l_return = 0;
 
-					switch( p_component )
+					switch ( p_component )
 					{
 					case ePIXEL_COMPONENT_DEPTH:
 						l_return = component< PF >::D16( p_pixel.const_ptr() );
@@ -3019,7 +3019,7 @@ namespace Castor
 
 				static void SetUInt16( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint16_t p_value )
 				{
-					switch( p_component )
+					switch ( p_component )
 					{
 					case ePIXEL_COMPONENT_DEPTH:
 						component< PF >::D16( p_pixel.ptr(), p_value );
@@ -3034,7 +3034,7 @@ namespace Castor
 				{
 					uint32_t l_return = 0;
 
-					switch( p_component )
+					switch ( p_component )
 					{
 					case ePIXEL_COMPONENT_DEPTH:
 						l_return = component< PF >::D24( p_pixel.const_ptr() );
@@ -3050,7 +3050,7 @@ namespace Castor
 
 				static void SetUInt24( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint32_t p_value )
 				{
-					switch( p_component )
+					switch ( p_component )
 					{
 					case ePIXEL_COMPONENT_DEPTH:
 						component< PF >::D24( p_pixel.ptr(), p_value );
@@ -3065,7 +3065,7 @@ namespace Castor
 				{
 					uint32_t l_return = 0;
 
-					switch( p_component )
+					switch ( p_component )
 					{
 					case ePIXEL_COMPONENT_DEPTH:
 						l_return = component< PF >::D32( p_pixel.const_ptr() );
@@ -3081,7 +3081,7 @@ namespace Castor
 
 				static void SetUInt32( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint32_t p_value )
 				{
-					switch( p_component )
+					switch ( p_component )
 					{
 					case ePIXEL_COMPONENT_DEPTH:
 						component< PF >::D32( p_pixel.ptr(), p_value );
@@ -3093,61 +3093,61 @@ namespace Castor
 				}
 			};
 		}
-	
+
 		template< TPL_PIXEL_FORMAT PF >
 		float GetFloatComponent( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
 		{
 			return PixelComponent< PF >::GetFloat( p_pixel, p_component );
 		}
-		
+
 		template< TPL_PIXEL_FORMAT PF >
 		void SetFloatComponent( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, float p_value )
 		{
 			return PixelComponent< PF >::SetFloat( p_pixel, p_component, p_value );
 		}
-		
+
 		template< TPL_PIXEL_FORMAT PF >
 		uint8_t GetByteComponent( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
 		{
 			return PixelComponent< PF >::GetByte( p_pixel, p_component );
 		}
-		
+
 		template< TPL_PIXEL_FORMAT PF >
 		void SetByteComponent( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint8_t p_value )
 		{
 			return PixelComponent< PF >::SetByte( p_pixel, p_component, p_value );
 		}
-		
+
 		template< TPL_PIXEL_FORMAT PF >
 		uint16_t GetUInt16Component( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
 		{
 			return PixelComponent< PF >::GetUInt16( p_pixel, p_component );
 		}
-		
+
 		template< TPL_PIXEL_FORMAT PF >
 		void SetUInt16Component( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint16_t p_value )
 		{
 			return PixelComponent< PF >::SetUInt16( p_pixel, p_component, p_value );
 		}
-		
+
 		template< TPL_PIXEL_FORMAT PF >
 		uint32_t GetUInt24Component( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
 		{
 			return PixelComponent< PF >::GetUInt24( p_pixel, p_component );
 		}
-		
+
 		template< TPL_PIXEL_FORMAT PF >
 		void SetUInt24Component( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint32_t p_value )
 		{
 			return PixelComponent< PF >::SetUInt24( p_pixel, p_component, p_value );
 		}
-		
+
 		template< TPL_PIXEL_FORMAT PF >
 		uint32_t GetUInt32Component( Pixel< PF > const & p_pixel, ePIXEL_COMPONENT p_component )
 		{
 			return PixelComponent< PF >::GetUInt32( p_pixel, p_component );
 		}
-		
+
 		template< TPL_PIXEL_FORMAT PF >
 		void SetUInt32Component( Pixel< PF > & p_pixel, ePIXEL_COMPONENT p_component, uint32_t p_value )
 		{

@@ -234,7 +234,7 @@ namespace Castor3D
 			l_pipeline->MultMatrix( l_mtxTransform );
 			m_pRenderer->BeginRender( p_size );
 
-			for( auto l_overlay: m_overlays )
+			for ( auto l_overlay : m_overlays )
 			{
 				SceneSPtr l_scene = l_overlay->GetScene();
 

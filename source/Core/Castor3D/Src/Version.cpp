@@ -58,15 +58,15 @@ namespace Castor3D
 	bool operator ==( Version const & p_a, Version const & p_b )
 	{
 		return p_a.m_iMajor == p_b.m_iMajor
-				&& p_a.m_iMinor == p_b.m_iMinor
-				&& p_a.m_iBuild == p_b.m_iBuild;
+			   && p_a.m_iMinor == p_b.m_iMinor
+			   && p_a.m_iBuild == p_b.m_iBuild;
 	}
 
 	bool operator !=( Version const & p_a, Version const & p_b )
 	{
 		return p_a.m_iMajor != p_b.m_iMajor
-				|| p_a.m_iMinor != p_b.m_iMinor
-				|| p_a.m_iBuild != p_b.m_iBuild;
+			   || p_a.m_iMinor != p_b.m_iMinor
+			   || p_a.m_iBuild != p_b.m_iBuild;
 	}
 
 	bool operator < ( Version const & p_a, Version const & p_b )

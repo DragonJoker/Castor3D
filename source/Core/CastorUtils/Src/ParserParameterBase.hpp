@@ -143,7 +143,7 @@ namespace Castor
 		 *\return		La valeur
 		 */
 		template< typename T > T const & Get( T & p_value );
-		
+
 	protected:
 		FileParserContext & m_context;
 	};

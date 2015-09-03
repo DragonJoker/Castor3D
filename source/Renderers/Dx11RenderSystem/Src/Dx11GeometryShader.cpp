@@ -32,7 +32,7 @@ namespace Dx11Render
 			std::vector< ID3D11Buffer * > l_buffers;
 			l_buffers.reserve( l_ubos.size() );
 
-			for ( auto l_variableBuffer: m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_GEOMETRY ) )
+			for ( auto l_variableBuffer : m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_GEOMETRY ) )
 			{
 				l_buffers.push_back( std::static_pointer_cast< DxFrameVariableBuffer >( l_variableBuffer )->GetDxBuffer() );
 			}
