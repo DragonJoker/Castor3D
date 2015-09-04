@@ -126,7 +126,7 @@ namespace CastorViewer
 		{
 			wxCoord x, y;
 			// first check if the text fits with no problems
-			dc.GetTextExtent(text, &x, &y);
+			dc.GetTextExtent( text, &x, &y );
 
 			if ( x <= max_size )
 			{
@@ -150,8 +150,8 @@ namespace CastorViewer
 				last_good_length = i;
 			}
 
-			wxString ret = text.Left(last_good_length);
-			ret += wxT("...");
+			wxString ret = text.Left( last_good_length );
+			ret += wxT( "..." );
 			return ret;
 		}
 
