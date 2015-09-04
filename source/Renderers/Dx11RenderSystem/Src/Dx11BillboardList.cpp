@@ -21,7 +21,7 @@ bool DxBillboardList::DoInitialise()
 	return true;
 }
 
-ShaderProgramBaseSPtr DxBillboardList::DoGetProgram( uint32_t p_flags )
+ShaderProgramBaseSPtr DxBillboardList::DoGetProgram( RenderTechniqueBase const & p_technique, uint32_t p_flags )
 {
 	static String PRIMITIVES[] =
 	{

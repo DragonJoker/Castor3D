@@ -23,7 +23,7 @@ using namespace GlRender;
 
 #if C3D_HAS_D3D11_RENDERER
 #	include <Dx11RenderSystem.hpp>
-using namespace DxRender;
+using namespace Dx11Render;
 #endif
 
 using namespace Castor;
@@ -325,6 +325,11 @@ namespace Msaa
 
 	String RenderTechnique::DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
+		if ( !m_pRenderSystem )
+		{
+			CASTOR_EXCEPTION( "No renderer selected" );
+		}
+
 #if C3D_HAS_GL_RENDERER
 		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
@@ -338,10 +343,17 @@ namespace Msaa
 			return DoGetD3D11VertexShaderSource( p_uiProgramFlags );
 		}
 #endif
+
+		CASTOR_EXCEPTION( "No renderer selected" );
 	}
 
 	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_uiFlags )const
 	{
+		if ( !m_pRenderSystem )
+		{
+			CASTOR_EXCEPTION( "No renderer selected" );
+		}
+
 #if C3D_HAS_GL_RENDERER
 		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
@@ -355,6 +367,8 @@ namespace Msaa
 			return DoGetD3D11PixelShaderSource( p_uiFlags );
 		}
 #endif
+
+		CASTOR_EXCEPTION( "No renderer selected" );
 	}
 
 #if C3D_HAS_GL_RENDERER
@@ -620,10 +634,10 @@ namespace Msaa
 #endif
 
 #if C3D_HAS_D3D11_RENDERER
-	String RenderTechnique::DoGetD3D11VertexShaderSource( uint32_t p_uiProgramFlags )
+	String RenderTechnique::DoGetD3D11VertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
 		String l_strReturn;
-		Dx11RenderSystem * l_renderSystem = static_cast< Dx11RenderSystem * >( m_pRenderSystem );
+		DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( m_pRenderSystem );
 		std::unique_ptr< UniformsBase > l_pUniforms = UniformsBase::Get( *l_renderSystem );
 		std::unique_ptr< InOutsBase > l_pInputs = InOutsBase::Get( *l_renderSystem );
 
@@ -655,16 +669,15 @@ namespace Msaa
 		return l_strReturn;
 	}
 
-	String RenderTechnique::DoGetD3D11PixelShaderSource( uint32_t p_uiFlags )
+	String RenderTechnique::DoGetD3D11PixelShaderSource( uint32_t p_uiFlags )const
 	{
 		String l_strReturn;
-		Dx11RenderSystem * l_renderSystem = static_cast< Dx11RenderSystem * >( m_pRenderSystem );
+		DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( m_pRenderSystem );
 		std::unique_ptr< UniformsBase > l_pUniforms = UniformsBase::Get( *l_renderSystem );
 		std::unique_ptr< InOutsBase > l_pInputs = InOutsBase::Get( *l_renderSystem );
 
 		if ( l_pUniforms && l_pInputs )
 		{
-			String l_strIndex;
 			String l_strOutput = g_ps.GetOutput();
 			String l_strDeclarations = g_ps.GetDeclarations();
 			String l_strLights = g_ps.GetLights();
@@ -685,27 +698,27 @@ namespace Msaa
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
 				{
-					l_strIndex.clear();
+					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
-					l_strDeclarations += cuT( "Texture2D c3d_mapColour: register( t" ) + l_strIndex + cuT( " );\n" );
+					l_strDeclarations += cuT( "Texture2D c3d_mapColour: register( t" ) + l_strIndex.str() + cuT( " );\n" );
 					l_strMainDeclarations += cuT( "	float4 l_v4MapColour = c3d_mapColour.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
 					l_strMainLightsLoopEnd += cuT( "	l_v4Ambient *= l_v4MapColour;\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
 				{
-					l_strIndex.clear();
+					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
-					l_strDeclarations += cuT( "Texture2D c3d_mapAmbient: register( t" ) + l_strIndex + cuT( " );\n" );
+					l_strDeclarations += cuT( "Texture2D c3d_mapAmbient: register( t" ) + l_strIndex.str() + cuT( " );\n" );
 					l_strMainDeclarations += cuT( "	float4 l_v4MapAmbient = c3d_mapAmbient.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
 					l_strMainLightsLoopEnd += cuT( "	l_v4Ambient *= l_v4MapAmbient;\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
 				{
-					l_strIndex.clear();
+					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
-					l_strDeclarations += cuT( "Texture2D c3d_mapDiffuse: register( t" ) + l_strIndex + cuT( " );\n" );
+					l_strDeclarations += cuT( "Texture2D c3d_mapDiffuse: register( t" ) + l_strIndex.str() + cuT( " );\n" );
 					l_strMainDeclarations += cuT( "	float4 l_v4MapDiffuse = c3d_mapDiffuse.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
 					l_strMainLightsLoopEnd += cuT( "	l_v4Ambient *= l_v4MapDiffuse;\n" );
 					l_strMainLightsLoopEnd += cuT( "	l_v4Diffuse *= l_v4MapDiffuse;\n" );
@@ -713,9 +726,9 @@ namespace Msaa
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
 				{
-					l_strIndex.clear();
+					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
-					l_strDeclarations += cuT( "Texture2D c3d_mapNormal: register( t" ) + l_strIndex + cuT( " );\n" );
+					l_strDeclarations += cuT( "Texture2D c3d_mapNormal: register( t" ) + l_strIndex.str() + cuT( " );\n" );
 					l_strMainDeclarations += cuT( "	float4 l_v4MapNormal = c3d_mapNormal.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
 					l_strMainDeclarations += cuT( "	float l_fSqrLength;\n" );
 					l_strMainDeclarations += cuT( "	float l_fAttenuation;\n" );
@@ -733,35 +746,35 @@ namespace Msaa
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
 				{
-					l_strIndex.clear();
+					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
-					l_strDeclarations += cuT( "Texture2D c3d_mapOpacity: register( t" ) + l_strIndex + cuT( " );\n" );
+					l_strDeclarations += cuT( "Texture2D c3d_mapOpacity: register( t" ) + l_strIndex.str() + cuT( " );\n" );
 					l_strMainDeclarations += cuT( "	float4 l_v4MapOpacity = c3d_mapOpacity.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
 					l_strMainLightsLoopEnd += cuT( "	l_fAlpha = l_v4MapOpacity.r * c3d_fMatOpacity;\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
 				{
-					l_strIndex.clear();
+					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
-					l_strDeclarations += cuT( "Texture2D c3d_mapSpecular: register( t" ) + l_strIndex + cuT( " );\n" );
+					l_strDeclarations += cuT( "Texture2D c3d_mapSpecular: register( t" ) + l_strIndex.str() + cuT( " );\n" );
 					l_strMainDeclarations += cuT( "	float4 l_v4MapSpecular = c3d_mapSpecular.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
 					l_strMainLightsLoopEnd += cuT( "	l_v4Specular *= l_v4MapSpecular;\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
 				{
-					l_strIndex.clear();
+					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
-					l_strDeclarations += cuT( "Texture2D c3d_mapHeight: register( t" ) + l_strIndex + cuT( " );\n" );
+					l_strDeclarations += cuT( "Texture2D c3d_mapHeight: register( t" ) + l_strIndex.str() + cuT( " );\n" );
 					l_strMainDeclarations += cuT( "	float4 l_v4MapHeight = c3d_mapHeight.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
 				{
-					l_strIndex.clear();
+					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
-					l_strDeclarations += cuT( "Texture2D c3d_mapGloss: register( t" ) + l_strIndex + cuT( " );\n" );
+					l_strDeclarations += cuT( "Texture2D c3d_mapGloss: register( t" ) + l_strIndex.str() + cuT( " );\n" );
 					l_strMainDeclarations += cuT( "	float4 l_v4MapGloss = c3d_mapGloss.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
 				}
 			}

@@ -105,6 +105,7 @@ namespace Dx11Render
 	protected:
 		ID3D11Device * m_pDevice;
 		D3D_FEATURE_LEVEL m_featureLevel;
+		DXGI_ADAPTER_DESC m_adapterDesc;
 #if !defined( NDEBUG )
 		struct ObjectDeclaration
 		{

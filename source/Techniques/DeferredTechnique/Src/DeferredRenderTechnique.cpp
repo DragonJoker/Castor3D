@@ -43,7 +43,7 @@ using namespace GlRender;
 
 #if C3D_HAS_D3D11_RENDERER
 #	include <Dx11RenderSystem.hpp>
-using namespace DxRender;
+using namespace Dx11Render;
 #endif
 
 using namespace Castor;
@@ -101,6 +101,15 @@ namespace Deferred
 				cuT( "	return l_output;\n" )
 				cuT( "}\n" );
 			m_strGSPixelDeclarations =
+				cuT( "SamplerState DefaultSampler\n" )
+				cuT( "{\n" )
+				cuT( "	AddressU  = WRAP;\n" )
+				cuT( "	AddressV  = WRAP;\n" )
+				cuT( "	AddressW  = WRAP;\n" )
+				cuT( "	MipFilter = NONE;\n" )
+				cuT( "	MinFilter = LINEAR;\n" )
+				cuT( "	MagFilter = LINEAR;\n" )
+				cuT( "};\n" )
 				cuT( "uniform float4 c3d_v4AmbientLight;\n" )
 				cuT( "uniform float4 c3d_v4MatAmbient;\n" )
 				cuT( "uniform float4 c3d_v4MatEmissive;\n" )
@@ -641,6 +650,11 @@ namespace Deferred
 
 	String RenderTechnique::DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
+		if ( !m_pRenderSystem )
+		{
+			CASTOR_EXCEPTION( "No renderer selected" );
+		}
+
 #if C3D_HAS_GL_RENDERER
 		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
@@ -654,10 +668,17 @@ namespace Deferred
 			return DoGetD3D11VertexShaderSource( p_uiProgramFlags );
 		}
 #endif
+
+		CASTOR_EXCEPTION( "No renderer selected" );
 	}
 
 	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_uiFlags )const
 	{
+		if ( !m_pRenderSystem )
+		{
+			CASTOR_EXCEPTION( "No renderer selected" );
+		}
+
 #if C3D_HAS_GL_RENDERER
 		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
@@ -671,10 +692,17 @@ namespace Deferred
 			return DoGetD3D11PixelShaderSource( p_uiFlags );
 		}
 #endif
+
+		CASTOR_EXCEPTION( "No renderer selected" );
 	}
 
 	String RenderTechnique::DoGetLightPassVertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
+		if ( !m_pRenderSystem )
+		{
+			CASTOR_EXCEPTION( "No renderer selected" );
+		}
+
 #if C3D_HAS_GL_RENDERER
 		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
@@ -688,10 +716,17 @@ namespace Deferred
 			return DoGetD3D11LightPassVertexShaderSource( p_uiProgramFlags );
 		}
 #endif
+
+		CASTOR_EXCEPTION( "No renderer selected" );
 	}
 
 	String RenderTechnique::DoGetLightPassPixelShaderSource( uint32_t p_uiFlags )const
 	{
+		if ( !m_pRenderSystem )
+		{
+			CASTOR_EXCEPTION( "No renderer selected" );
+		}
+
 #if C3D_HAS_GL_RENDERER
 		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
@@ -705,15 +740,17 @@ namespace Deferred
 			return DoGetD3D11LightPassPixelShaderSource( p_uiFlags );
 		}
 #endif
+
+		CASTOR_EXCEPTION( "No renderer selected" );
 	}
 
 #if C3D_HAS_GL_RENDERER
 	String RenderTechnique::DoGetGlVertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
 		String	l_strReturn;
-		GLSL::VariablesBase * l_pVariables = GLSL::GetVariables( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		GLSL::ConstantsBase * l_pConstants = GLSL::GetConstants( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::GetKeywords( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
+		GLSL::VariablesBase * l_pVariables = GLSL::VariablesBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
+		GLSL::ConstantsBase * l_pConstants = GLSL::ConstantsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
+		std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::KeywordsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
 
 		String l_strVersion = l_pKeywords->GetVersion();
 		String l_strAttribute0 = l_pKeywords->GetAttribute( 0 );
@@ -781,9 +818,9 @@ namespace Deferred
 	String RenderTechnique::DoGetGlPixelShaderSource( uint32_t p_uiFlags )const
 	{
 		String	l_strReturn;
-		GLSL::VariablesBase * l_pVariables = GLSL::GetVariables( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		GLSL::ConstantsBase * l_pConstants = GLSL::GetConstants( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::GetKeywords( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
+		GLSL::VariablesBase * l_pVariables = GLSL::VariablesBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
+		GLSL::ConstantsBase * l_pConstants = GLSL::ConstantsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
+		std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::KeywordsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
 
 		String l_strVersion = l_pKeywords->GetVersion();
 		String l_strIn = l_pKeywords->GetIn();
@@ -899,9 +936,9 @@ namespace Deferred
 	String RenderTechnique::DoGetGlLightPassVertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
 		String	l_strReturn;
-		GLSL::VariablesBase * l_pVariables = GLSL::GetVariables( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		GLSL::ConstantsBase * l_pConstants = GLSL::GetConstants( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::GetKeywords( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
+		GLSL::VariablesBase * l_pVariables = GLSL::VariablesBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
+		GLSL::ConstantsBase * l_pConstants = GLSL::ConstantsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
+		std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::KeywordsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
 
 		String l_strVersion = l_pKeywords->GetVersion();
 		String l_strAttribute0 = l_pKeywords->GetAttribute( 0 );
@@ -938,9 +975,9 @@ namespace Deferred
 	String RenderTechnique::DoGetGlLightPassPixelShaderSource( uint32_t p_uiFlags )const
 	{
 		String	l_strReturn;
-		GLSL::VariablesBase * l_pVariables = GLSL::GetVariables( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		GLSL::ConstantsBase * l_pConstants = GLSL::GetConstants( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::GetKeywords( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
+		GLSL::VariablesBase * l_pVariables = GLSL::VariablesBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
+		GLSL::ConstantsBase * l_pConstants = GLSL::ConstantsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
+		std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::KeywordsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
 
 		String l_strVersion = l_pKeywords->GetVersion();
 		String l_strIn = l_pKeywords->GetIn();
@@ -972,7 +1009,7 @@ namespace Deferred
 #endif
 
 #if C3D_HAS_D3D11_RENDERER
-	String RenderTechnique::DoGetD3D11VertexShaderSource( uint32_t p_uiProgramFlags, bool p_bLightPass )const
+	String RenderTechnique::DoGetD3D11VertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
 		return g_ds.GetGSVertexProgram();
 	}
@@ -980,22 +1017,17 @@ namespace Deferred
 	String RenderTechnique::DoGetD3D11PixelShaderSource( uint32_t p_uiFlags )const
 	{
 		String l_strReturn;
-		String l_strIndex;
-		String l_strPixelOutput;
-		String l_strPixelDeclarations;
-		String l_strPixelMainDeclarations;
-		String l_strPixelMainLightsLoopAfterLightDir;
-		String l_strPixelMainLightsLoopEnd;
-		String l_strPixelMainEnd;
-		std::unique_ptr< UniformsBase > l_pUniforms = UniformsBase::Get( *m_pDxRenderSystem );
-		std::unique_ptr< InOutsBase > l_pInputs = InOutsBase::Get( *m_pDxRenderSystem );
+		DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( m_pRenderSystem );
+		std::unique_ptr< UniformsBase > l_pUniforms = UniformsBase::Get( *l_renderSystem );
+		std::unique_ptr< InOutsBase > l_pInputs = InOutsBase::Get( *l_renderSystem );
 
 		if ( l_pUniforms && l_pInputs )
 		{
-			l_strPixelDeclarations = g_ds.GetGSPixelDeclarations();
-			l_strPixelMainDeclarations = g_ds.GetGSPixelMainDeclarations();
-			l_strPixelMainLightsLoopAfterLightDir = g_ds.GetGSPixelMainLightsLoopAfterLightDir();
-			l_strPixelMainEnd = g_ds.GetGSPixelMainEnd();
+			String l_strPixelDeclarations = g_ds.GetGSPixelDeclarations();
+			String l_strPixelMainDeclarations = g_ds.GetGSPixelMainDeclarations();
+			String l_strPixelMainLightsLoopAfterLightDir = g_ds.GetGSPixelMainLightsLoopAfterLightDir();
+			String l_strPixelMainEnd = g_ds.GetGSPixelMainEnd();
+			String l_strPixelMainLightsLoopEnd;
 
 			if ( p_uiFlags != 0 )
 			{
@@ -1003,166 +1035,86 @@ namespace Deferred
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
 				{
-					l_strIndex.clear();
+					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
-					l_strPixelDeclarations += cuT( "texture			c3d_mapColour;\n" );
-					l_strPixelDeclarations += cuT( "sampler ColourTextureSampler\n" );
-					l_strPixelDeclarations += cuT( "{\n" );
-					l_strPixelDeclarations += cuT( "	Texture = < c3d_mapColour >;\n" );
-					l_strPixelDeclarations += cuT( "	AddressU  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	AddressV  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	AddressW  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	MipFilter = NONE;\n" );
-					l_strPixelDeclarations += cuT( "	MinFilter = LINEAR;\n" );
-					l_strPixelDeclarations += cuT( "	MagFilter = LINEAR;\n" );
-					l_strPixelDeclarations += cuT( "};\n" );
-					l_strPixelMainDeclarations += cuT( "	float4	l_v4MapColour		= tex2D( ColourTextureSampler, p_input.TextureUV.xy );\n" );
-					l_strPixelMainLightsLoopEnd += cuT( "	l_v4Diffuse		*= l_v4MapColour;\n" );
+					l_strPixelDeclarations += cuT( "texture c3d_mapColour: register( t" ) + l_strIndex.str() + cuT( " );\n" );
+					l_strPixelMainDeclarations += cuT( "	float4 l_v4MapColour = tex2D( DefaultSampler, p_input.TextureUV.xy );\n" );
+					l_strPixelMainLightsLoopEnd += cuT( "	l_v4Diffuse *= l_v4MapColour;\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
 				{
-					l_strIndex.clear();
+					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
-					l_strPixelDeclarations += cuT( "texture			c3d_mapAmbient;\n" );
-					l_strPixelDeclarations += cuT( "sampler AmbientTextureSampler\n" );
-					l_strPixelDeclarations += cuT( "{\n" );
-					l_strPixelDeclarations += cuT( "	Texture = < c3d_mapAmbient >;\n" );
-					l_strPixelDeclarations += cuT( "	AddressU  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	AddressV  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	AddressW  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	MipFilter = NONE;\n" );
-					l_strPixelDeclarations += cuT( "	MinFilter = LINEAR;\n" );
-					l_strPixelDeclarations += cuT( "	MagFilter = LINEAR;\n" );
-					l_strPixelDeclarations += cuT( "};\n" );
-					l_strPixelMainDeclarations += cuT( "	float4	l_v4MapAmbient		= tex2D( AmbientTextureSampler, p_input.TextureUV.xy );\n" );
-					l_strPixelMainLightsLoopEnd += cuT( "	l_v4Diffuse		*= l_v4MapAmbient;\n" );
+					l_strPixelDeclarations += cuT( "texture c3d_mapAmbient: register( t" ) + l_strIndex.str() + cuT( " );\n" );
+					l_strPixelMainDeclarations += cuT( "	float4 l_v4MapAmbient = tex2D( DefaultSampler, p_input.TextureUV.xy );\n" );
+					l_strPixelMainLightsLoopEnd += cuT( "	l_v4Diffuse *= l_v4MapAmbient;\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
 				{
-					l_strIndex.clear();
+					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
-					l_strPixelDeclarations += cuT( "texture			c3d_mapDiffuse;\n" );
-					l_strPixelDeclarations += cuT( "sampler DiffuseTextureSampler\n" );
-					l_strPixelDeclarations += cuT( "{\n" );
-					l_strPixelDeclarations += cuT( "	Texture = < c3d_mapDiffuse >;\n" );
-					l_strPixelDeclarations += cuT( "	AddressU  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	AddressV  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	AddressW  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	MipFilter = NONE;\n" );
-					l_strPixelDeclarations += cuT( "	MinFilter = LINEAR;\n" );
-					l_strPixelDeclarations += cuT( "	MagFilter = LINEAR;\n" );
-					l_strPixelDeclarations += cuT( "};\n" );
-					l_strPixelMainDeclarations += cuT( "	float4	l_v4MapDiffuse		= tex2D( DiffuseTextureSampler, p_input.TextureUV.xy );\n" );
-					l_strPixelMainLightsLoopEnd += cuT( "	l_v4Diffuse		*= l_v4MapDiffuse;\n" );
+					l_strPixelDeclarations += cuT( "texture c3d_mapDiffuse: register( t" ) + l_strIndex.str() + cuT( " );\n" );
+					l_strPixelMainDeclarations += cuT( "	float4 l_v4MapDiffuse = tex2D( DefaultSampler, p_input.TextureUV.xy );\n" );
+					l_strPixelMainLightsLoopEnd += cuT( "	l_v4Diffuse *= l_v4MapDiffuse;\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
 				{
-					l_strIndex.clear();
+					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
-					l_strPixelDeclarations += cuT( "texture			c3d_mapNormal;\n" );
-					l_strPixelDeclarations += cuT( "sampler NormalTextureSampler\n" );
-					l_strPixelDeclarations += cuT( "{\n" );
-					l_strPixelDeclarations += cuT( "	Texture = < c3d_mapNormal >;\n" );
-					l_strPixelDeclarations += cuT( "	AddressU  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	AddressV  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	AddressW  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	MipFilter = NONE;\n" );
-					l_strPixelDeclarations += cuT( "	MinFilter = LINEAR;\n" );
-					l_strPixelDeclarations += cuT( "	MagFilter = LINEAR;\n" );
-					l_strPixelDeclarations += cuT( "};\n" );
-					l_strPixelMainDeclarations += cuT( "	float4	l_v4MapNormal		= tex2D( NormalTextureSampler, p_input.TextureUV.xy );\n" );
-					l_strPixelMainDeclarations += cuT( "	l_v4Normal					+= float4( normalize( (l_v4MapNormal.xyz * 2.0 - 1.0) ), 0 );\n" );
+					l_strPixelDeclarations += cuT( "texture c3d_mapNormal: register( t" ) + l_strIndex.str() + cuT( " );\n" );
+					l_strPixelMainDeclarations += cuT( "	float4 l_v4MapNormal = tex2D( DefaultSampler, p_input.TextureUV.xy );\n" );
+					l_strPixelMainDeclarations += cuT( "	l_v4Normal += float4( normalize( (l_v4MapNormal.xyz * 2.0 - 1.0) ), 0 );\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
 				{
-					l_strIndex.clear();
+					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
-					l_strPixelDeclarations += cuT( "texture			c3d_mapOpacity;\n" );
-					l_strPixelDeclarations += cuT( "sampler OpacityTextureSampler\n" );
-					l_strPixelDeclarations += cuT( "{\n" );
-					l_strPixelDeclarations += cuT( "	Texture = < c3d_mapOpacity >;\n" );
-					l_strPixelDeclarations += cuT( "	AddressU  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	AddressV  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	AddressW  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	MipFilter = NONE;\n" );
-					l_strPixelDeclarations += cuT( "	MinFilter = LINEAR;\n" );
-					l_strPixelDeclarations += cuT( "	MagFilter = LINEAR;\n" );
-					l_strPixelDeclarations += cuT( "};\n" );
-					l_strPixelMainDeclarations += cuT( "	float4	l_v4MapOpacity		= tex2D( OpacityTextureSampler, p_input.TextureUV.xy );\n" );
-					l_strPixelMainLightsLoopEnd += cuT( "	l_fAlpha		= l_v4MapOpacity.r * l_v4MapOpacity.a;\n" );
+					l_strPixelDeclarations += cuT( "texture c3d_mapOpacity: register( t" ) + l_strIndex.str() + cuT( " );\n" );
+					l_strPixelMainDeclarations += cuT( "	float4 l_v4MapOpacity = tex2D( DefaultSampler, p_input.TextureUV.xy );\n" );
+					l_strPixelMainLightsLoopEnd += cuT( "	l_fAlpha = l_v4MapOpacity.r * l_v4MapOpacity.a;\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
 				{
-					l_strIndex.clear();
+					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
-					l_strPixelDeclarations += cuT( "texture			c3d_mapSpecular;\n" );
-					l_strPixelDeclarations += cuT( "sampler SpecularTextureSampler)\n" );
-					l_strPixelDeclarations += cuT( "{\n" );
-					l_strPixelDeclarations += cuT( "	Texture = < c3d_mapSpecular >;\n" );
-					l_strPixelDeclarations += cuT( "	AddressU  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	AddressV  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	AddressW  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	MipFilter = NONE;\n" );
-					l_strPixelDeclarations += cuT( "	MinFilter = LINEAR;\n" );
-					l_strPixelDeclarations += cuT( "	MagFilter = LINEAR;\n" );
-					l_strPixelDeclarations += cuT( "};\n" );
-					l_strPixelMainDeclarations += cuT( "	float4	l_v4MapSpecular		= tex2D( SpecularTextureSampler, p_input.TextureUV.xy );\n" );
-					l_strPixelMainLightsLoopEnd += cuT( "	l_v4Specular	*= l_v4MapSpecular;\n" );
+					l_strPixelDeclarations += cuT( "texture c3d_mapSpecular: register( t" ) + l_strIndex.str() + cuT( " );\n" );
+					l_strPixelMainDeclarations += cuT( "	float4 l_v4MapSpecular = tex2D( DefaultSampler, p_input.TextureUV.xy );\n" );
+					l_strPixelMainLightsLoopEnd += cuT( "	l_v4Specular *= l_v4MapSpecular;\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
 				{
-					l_strIndex.clear();
+					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
-					l_strPixelDeclarations += cuT( "texture			c3d_mapHeight;\n" );
-					l_strPixelDeclarations += cuT( "sampler HeightTextureSampler)\n" );
-					l_strPixelDeclarations += cuT( "{\n" );
-					l_strPixelDeclarations += cuT( "	Texture = < c3d_mapHeight >;\n" );
-					l_strPixelDeclarations += cuT( "	AddressU  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	AddressV  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	AddressW  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	MipFilter = NONE;\n" );
-					l_strPixelDeclarations += cuT( "	MinFilter = LINEAR;\n" );
-					l_strPixelDeclarations += cuT( "	MagFilter = LINEAR;\n" );
-					l_strPixelDeclarations += cuT( "};\n" );
-					l_strPixelMainDeclarations += cuT( "	float4	l_v4MapHeight		= tex2D( HeightTextureSampler, p_input.TextureUV.xy );\n" );
+					l_strPixelDeclarations += cuT( "texture c3d_mapHeight: register( t" ) + l_strIndex.str() + cuT( " );\n" );
+					l_strPixelMainDeclarations += cuT( "	float4 l_v4MapHeight = tex2D( DefaultSampler, p_input.TextureUV.xy );\n" );
 				}
 
 				if ( ( p_uiFlags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
 				{
-					l_strIndex.clear();
+					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
-					l_strPixelDeclarations += cuT( "texture			c3d_mapGloss;\n" );
-					l_strPixelDeclarations += cuT( "sampler GlossTextureSampler)\n" );
-					l_strPixelDeclarations += cuT( "{\n" );
-					l_strPixelDeclarations += cuT( "	Texture = < c3d_mapGloss >;\n" );
-					l_strPixelDeclarations += cuT( "	AddressU  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	AddressV  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	AddressW  = WRAP;\n" );
-					l_strPixelDeclarations += cuT( "	MipFilter = NONE;\n" );
-					l_strPixelDeclarations += cuT( "	MinFilter = LINEAR;\n" );
-					l_strPixelDeclarations += cuT( "	MagFilter = LINEAR;\n" );
-					l_strPixelDeclarations += cuT( "};\n" );
-					l_strPixelMainDeclarations += cuT( "	float4	l_v4MapGloss		= tex2D( GlossTextureSampler, p_input.TextureUV.xy );\n" );
-					l_strPixelMainLightsLoopEnd += cuT( "	l_v4Specular.w		*= l_v4MapGloss.x;\n" );
+					l_strPixelDeclarations += cuT( "texture c3d_mapGloss: register( t" ) + l_strIndex.str() + cuT( " );\n" );
+					l_strPixelMainDeclarations += cuT( "	float4 l_v4MapGloss = tex2D( GlossTextureSampler, p_input.TextureUV.xy );\n" );
+					l_strPixelMainLightsLoopEnd += cuT( "	l_v4Specular.w *= l_v4MapGloss.x;\n" );
 				}
 			}
 
-			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.Position		= float4( l_v4Position.xyz,	1 );\n" );
-			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.Normals		= float4( l_v4Normal.xyz,	1 );\n" );
-			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.DiffSpecular.x	= pack2Floats(l_v4Diffuse.x,l_v4Diffuse.y);\n" );
-			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.DiffSpecular.y	= pack2Floats(l_v4Diffuse.z,l_v4Diffuse.w);\n" );
-			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.DiffSpecular.z	= pack2Floats(l_v4Specular.x,l_v4Specular.y);\n" );
-			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.DiffSpecular.w	= pack2Floats(l_v4Specular.z,l_v4Specular.w);\n" );
-			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.TanBitangent.x	= pack2Floats(l_v4Tangent.x,l_v4Tangent.y);\n" );
-			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.TanBitangent.y	= pack2Floats(l_v4Tangent.z,l_v4Tangent.w);\n" );
-			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.TanBitangent.z	= pack2Floats(l_v4Bitangent.x,l_v4Bitangent.y);\n" );
-			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.TanBitangent.w	= pack2Floats(l_v4Bitangent.z,l_v4Bitangent.w);\n" );
+			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.Position = float4( l_v4Position.xyz,	1 );\n" );
+			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.Normals = float4( l_v4Normal.xyz,	1 );\n" );
+			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.DiffSpecular.x = pack2Floats(l_v4Diffuse.x,l_v4Diffuse.y);\n" );
+			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.DiffSpecular.y = pack2Floats(l_v4Diffuse.z,l_v4Diffuse.w);\n" );
+			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.DiffSpecular.z = pack2Floats(l_v4Specular.x,l_v4Specular.y);\n" );
+			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.DiffSpecular.w = pack2Floats(l_v4Specular.z,l_v4Specular.w);\n" );
+			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.TanBitangent.x = pack2Floats(l_v4Tangent.x,l_v4Tangent.y);\n" );
+			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.TanBitangent.y = pack2Floats(l_v4Tangent.z,l_v4Tangent.w);\n" );
+			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.TanBitangent.z = pack2Floats(l_v4Bitangent.x,l_v4Bitangent.y);\n" );
+			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.TanBitangent.w = pack2Floats(l_v4Bitangent.z,l_v4Bitangent.w);\n" );
 			l_strReturn = l_strPixelDeclarations + l_strPixelMainDeclarations + l_strPixelMainLightsLoopAfterLightDir + l_strPixelMainLightsLoopEnd + l_strPixelMainEnd;
 			//Logger::LogDebug( l_strReturn );
 		}
@@ -1170,12 +1122,12 @@ namespace Deferred
 		return l_strReturn;
 	}
 
-	String RenderTechnique::DoGetD3D11LightPassVertexShaderSource( uint32_t p_uiProgramFlags, bool p_bLightPass )const
+	String RenderTechnique::DoGetD3D11LightPassVertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
 		return g_ds.GetLSVertexProgram();
 	}
 
-	String RenderTechnique::DoGetD3D11PixelShaderSource( uint32_t p_uiFlags )const
+	String RenderTechnique::DoGetD3D11LightPassPixelShaderSource( uint32_t p_uiFlags )const
 	{
 		return g_ds.GetLSPixelProgram();
 	}

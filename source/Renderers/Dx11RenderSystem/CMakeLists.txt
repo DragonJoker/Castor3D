@@ -9,23 +9,22 @@ if( DIRECT3D11_FOUND AND DIRECT3D9_FOUND )
     include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
     include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D/Src )
     include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
+	include_directories( ${D3D9_INCLUDE_DIR} )
 	include_directories( ${D3D11_INCLUDE_DIR} )
 
-	set( D3d9Libraries "" )
+	set( D3dLibraries "" )
 	foreach( Lib ${D3D9_LIBRARIES} )
 		if( D3d9Libraries )
-			set( D3d9Libraries "${D3d9Libraries}|${Lib}" )
+			set( D3dLibraries "${D3d9Libraries}|${Lib}" )
 		else()
-			set( D3d9Libraries "${Lib}" )
+			set( D3dLibraries "${Lib}" )
 		endif()
 	endforeach()
-
-	set( D3d11Libraries "" )
 	foreach( Lib ${D3D11_LIBRARIES} )
-		if( D3d11Libraries )
-			set( D3d11Libraries "${D3d11Libraries}|${Lib}" )
+		if( D3dLibraries )
+			set( D3dLibraries "${D3dLibraries}|${Lib}" )
 		else()
-			set( D3d11Libraries "${Lib}" )
+			set( D3dLibraries "${Lib}" )
 		endif()
 	endforeach()
 
@@ -44,7 +43,7 @@ if( DIRECT3D11_FOUND AND DIRECT3D9_FOUND )
 		${PROJECT_NAME}
 		plugin
 		"Castor3D"
-		"${CastorMinLibraries};${D3d9Libraries};${D3d11Libraries}"
+		"${CastorMinLibraries};${D3dLibraries}"
 		"Dx11RenderSystemPch.hpp"
 		"Dx11RenderSystemPch.cpp"
 	)

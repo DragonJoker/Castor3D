@@ -159,12 +159,12 @@ namespace Dx11Render
 {
 	using Castor::real;
 
-	template< typename T, uint32_t Count					> class DxVertexAttribs;
-	template< typename T, class D3dBufferObject				> class DxVertexBufferObject;
-	template< typename T, uint32_t Count					> class DxVertexAttribsBuffer;
-	template< typename T									> class DxOneFrameVariable;
-	template< typename T, uint32_t Count					> class DxPointFrameVariable;
-	template< typename T, uint32_t Rows, uint32_t Columns	> class DxMatrixFrameVariable;
+	template< typename T, uint32_t Count > class DxVertexAttribs;
+	template< typename T, class D3dBufferObject > class DxVertexBufferObject;
+	template< typename T, uint32_t Count > class DxVertexAttribsBuffer;
+	template< typename T > class DxOneFrameVariable;
+	template< typename T, uint32_t Count > class DxPointFrameVariable;
+	template< typename T, uint32_t Rows, uint32_t Columns > class DxMatrixFrameVariable;
 	class DxVertexBuffer;
 	class DxNormalsBuffer;
 	class DxTextureBuffer;
@@ -187,73 +187,73 @@ namespace Dx11Render
 	class DxStaticTexture;
 	class DxDynamicTexture;
 
-	DECLARE_SMART_PTR( DxContext	);
-	DECLARE_SMART_PTR( DxRenderBuffer	);
-	DECLARE_SMART_PTR( DxColourRenderBuffer	);
-	DECLARE_SMART_PTR( DxDepthStencilRenderBuffer	);
-	DECLARE_SMART_PTR( DxRenderBufferAttachment	);
-	DECLARE_SMART_PTR( DxTextureAttachment	);
-	DECLARE_SMART_PTR( DxFrameBuffer	);
-	DECLARE_SMART_PTR( DxStaticTexture	);
-	DECLARE_SMART_PTR( DxDynamicTexture	);
-	DECLARE_SMART_PTR( DxShaderProgram	);
-	DECLARE_SMART_PTR( DxFrameVariableBuffer	);
+	DECLARE_SMART_PTR( DxContext );
+	DECLARE_SMART_PTR( DxRenderBuffer );
+	DECLARE_SMART_PTR( DxColourRenderBuffer );
+	DECLARE_SMART_PTR( DxDepthStencilRenderBuffer );
+	DECLARE_SMART_PTR( DxRenderBufferAttachment );
+	DECLARE_SMART_PTR( DxTextureAttachment );
+	DECLARE_SMART_PTR( DxFrameBuffer );
+	DECLARE_SMART_PTR( DxStaticTexture );
+	DECLARE_SMART_PTR( DxDynamicTexture );
+	DECLARE_SMART_PTR( DxShaderProgram );
+	DECLARE_SMART_PTR( DxFrameVariableBuffer );
 
-	DECLARE_VECTOR( DxTextureAttachment *,			DxTextureAttachmentPtr	);
-	DECLARE_VECTOR( DxRenderBufferAttachment *,		DxRenderBufferAttachmentPtr	);
+	DECLARE_VECTOR( DxTextureAttachment *, DxTextureAttachmentPtr );
+	DECLARE_VECTOR( DxRenderBufferAttachment *, DxRenderBufferAttachmentPtr );
 
-	typedef DxVertexAttribs<		real,	3	>	DxVertexAttribs3r;
-	typedef DxVertexAttribs<		real,	2	>	DxVertexAttribs2r;
-	typedef DxVertexAttribs<		int,	3	>	DxVertexAttribs3i;
-	typedef DxVertexAttribs<		int,	2	>	DxVertexAttribs2i;
-	typedef DxVertexAttribsBuffer<	real,	3	>	DxVertexAttribsBuffer3r;
-	typedef DxVertexAttribsBuffer<	real,	2	>	DxVertexAttribsBuffer2r;
-	typedef DxVertexAttribsBuffer<	int,	3	>	DxVertexAttribsBuffer3i;
-	typedef DxVertexAttribsBuffer<	int,	2	>	DxVertexAttribsBuffer2i;
+	typedef DxVertexAttribs< real, 3 > DxVertexAttribs3r;
+	typedef DxVertexAttribs< real, 2 > DxVertexAttribs2r;
+	typedef DxVertexAttribs< int, 3 > DxVertexAttribs3i;
+	typedef DxVertexAttribs< int, 2 > DxVertexAttribs2i;
+	typedef DxVertexAttribsBuffer< real, 3 > DxVertexAttribsBuffer3r;
+	typedef DxVertexAttribsBuffer< real, 2 > DxVertexAttribsBuffer2r;
+	typedef DxVertexAttribsBuffer< int, 3 > DxVertexAttribsBuffer3i;
+	typedef DxVertexAttribsBuffer< int, 2 > DxVertexAttribsBuffer2i;
 
-	typedef std::shared_ptr<	DxVertexBuffer			>	DxVertexBufferPtr;
-	typedef std::shared_ptr<	DxNormalsBuffer			>	DxNormalsBufferPtr;
-	typedef std::shared_ptr<	DxTextureBuffer			>	DxTextureBufferPtr;
-	typedef std::shared_ptr<	DxVertexAttribs3r		>	DxVertexAttribs3rPtr;
-	typedef std::shared_ptr<	DxVertexAttribs2r		>	DxVertexAttribs2rPtr;
-	typedef std::shared_ptr<	DxVertexAttribs3i		>	DxVertexAttribs3iPtr;
-	typedef std::shared_ptr<	DxVertexAttribs2i		>	DxVertexAttribs2iPtr;
-	typedef std::shared_ptr<	DxVertexAttribsBuffer3r	>	DxVertexAttribsBuffer3rPtr;
-	typedef std::shared_ptr<	DxVertexAttribsBuffer2r	>	DxVertexAttribsBuffer2rPtr;
-	typedef std::shared_ptr<	DxVertexAttribsBuffer3i	>	DxVertexAttribsBuffer3iPtr;
-	typedef std::shared_ptr<	DxVertexAttribsBuffer2i	>	DxVertexAttribsBuffer2iPtr;
-	typedef std::shared_ptr<	DxShaderObject			>	DxShaderObjectPtr;
-	typedef std::shared_ptr<	DxShaderProgram			>	DxShaderProgramPtr;
-	typedef std::shared_ptr<	DxFrameVariableBase		>	DxFrameVariablePtr;
+	typedef std::shared_ptr< DxVertexBuffer > DxVertexBufferPtr;
+	typedef std::shared_ptr< DxNormalsBuffer > DxNormalsBufferPtr;
+	typedef std::shared_ptr< DxTextureBuffer > DxTextureBufferPtr;
+	typedef std::shared_ptr< DxVertexAttribs3r > DxVertexAttribs3rPtr;
+	typedef std::shared_ptr< DxVertexAttribs2r > DxVertexAttribs2rPtr;
+	typedef std::shared_ptr< DxVertexAttribs3i > DxVertexAttribs3iPtr;
+	typedef std::shared_ptr< DxVertexAttribs2i > DxVertexAttribs2iPtr;
+	typedef std::shared_ptr< DxVertexAttribsBuffer3r > DxVertexAttribsBuffer3rPtr;
+	typedef std::shared_ptr< DxVertexAttribsBuffer2r > DxVertexAttribsBuffer2rPtr;
+	typedef std::shared_ptr< DxVertexAttribsBuffer3i > DxVertexAttribsBuffer3iPtr;
+	typedef std::shared_ptr< DxVertexAttribsBuffer2i > DxVertexAttribsBuffer2iPtr;
+	typedef std::shared_ptr< DxShaderObject > DxShaderObjectPtr;
+	typedef std::shared_ptr< DxShaderProgram > DxShaderProgramPtr;
+	typedef std::shared_ptr< DxFrameVariableBase > DxFrameVariablePtr;
 
-	typedef std::vector<	DxShaderProgramPtr						>	DxShaderProgramPtrArray;
-	typedef std::vector<	DxShaderObjectPtr						>	DxShaderObjectPtrArray;
-	typedef std::map<		Castor::String,		DxFrameVariablePtr	>	DxFrameVariablePtrStrMap;
+	typedef std::vector< DxShaderProgramPtr > DxShaderProgramPtrArray;
+	typedef std::vector< DxShaderObjectPtr > DxShaderObjectPtrArray;
+	typedef std::map< Castor::String, DxFrameVariablePtr > DxFrameVariablePtrStrMap;
 
 	class DirectX11
 	{
 	private:
-		static Castor::String														HlslStrings				[];
-		static Castor::String														HlslErrors				[];
-		static DWORD																TextureDimensions		[Castor3D::eTEXTURE_DIMENSION_COUNT];
-		static DWORD																TextureInterpolation	[Castor3D::eINTERPOLATION_MODE_COUNT];
-		static DWORD 																TextureArguments		[Castor3D::eBLEND_SOURCE_COUNT];
-		static DWORD 																LightIndexes			[Castor3D::eLIGHT_INDEXES_COUNT];
-		static DWORD																Index					[Castor3D::eATTACHMENT_POINT_COUNT];
-		static DXGI_FORMAT															PixelFormats			[Castor::ePIXEL_FORMAT_COUNT];
-		static D3D11_TEXTURE_ADDRESS_MODE											TextureWrapMode			[Castor3D::eWRAP_MODE_COUNT];
-		static D3D11_BLEND 															BlendFactors			[Castor3D::eBLEND_COUNT];
-		static D3D11_BLEND_OP														BlendOps				[Castor3D::eBLEND_OP_COUNT];
-		static D3D11_PRIMITIVE_TOPOLOGY												DrawTypes				[Castor3D::eTOPOLOGY_COUNT];
-		static D3D11_DEPTH_WRITE_MASK												DepthMasks				[Castor3D::eWRITING_MASK_COUNT];
-		static D3D11_COMPARISON_FUNC												DepthFuncs				[Castor3D::eDEPTH_FUNC_COUNT];
-		static D3D11_COMPARISON_FUNC												StencilFuncs			[Castor3D::eSTENCIL_FUNC_COUNT];
-		static D3D11_STENCIL_OP														StencilOps				[Castor3D::eSTENCIL_OP_COUNT];
-		static D3D11_FILL_MODE														FillModes				[3];
-		static D3D11_CULL_MODE														CullModes				[3];
-		static std::map< Castor3D::eBUFFER_ACCESS_TYPE, D3D11_USAGE >				Usages;
-		static std::map< Castor3D::eBUFFER_ACCESS_NATURE, D3D11_CPU_ACCESS_FLAG >	Accesses;
-		static std::map< HRESULT, Castor::String >									MapErrors;
+		static Castor::String HlslStrings[];
+		static Castor::String HlslErrors[];
+		static DWORD TextureDimensions[Castor3D::eTEXTURE_DIMENSION_COUNT];
+		static DWORD TextureInterpolation[Castor3D::eINTERPOLATION_MODE_COUNT];
+		static DWORD TextureArguments[Castor3D::eBLEND_SOURCE_COUNT];
+		static DWORD LightIndexes[Castor3D::eLIGHT_INDEXES_COUNT];
+		static DWORD Index[Castor3D::eATTACHMENT_POINT_COUNT];
+		static DXGI_FORMAT PixelFormats[Castor::ePIXEL_FORMAT_COUNT];
+		static D3D11_TEXTURE_ADDRESS_MODE TextureWrapMode[Castor3D::eWRAP_MODE_COUNT];
+		static D3D11_BLEND BlendFactors[Castor3D::eBLEND_COUNT];
+		static D3D11_BLEND_OP BlendOps[Castor3D::eBLEND_OP_COUNT];
+		static D3D11_PRIMITIVE_TOPOLOGY DrawTypes[Castor3D::eTOPOLOGY_COUNT];
+		static D3D11_DEPTH_WRITE_MASK DepthMasks[Castor3D::eWRITING_MASK_COUNT];
+		static D3D11_COMPARISON_FUNC DepthFuncs[Castor3D::eDEPTH_FUNC_COUNT];
+		static D3D11_COMPARISON_FUNC StencilFuncs[Castor3D::eSTENCIL_FUNC_COUNT];
+		static D3D11_STENCIL_OP StencilOps[Castor3D::eSTENCIL_OP_COUNT];
+		static D3D11_FILL_MODE FillModes[3];
+		static D3D11_CULL_MODE CullModes[3];
+		static std::map< Castor3D::eBUFFER_ACCESS_TYPE, D3D11_USAGE > Usages;
+		static std::map< Castor3D::eBUFFER_ACCESS_NATURE, D3D11_CPU_ACCESS_FLAG > Accesses;
+		static std::map< HRESULT, Castor::String > MapErrors;
 
 	public:
 		DirectX11();
