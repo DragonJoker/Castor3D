@@ -18,6 +18,7 @@
 namespace Castor
 {
 #if defined( _MSC_VER )
+
 	class CMsvcConsoleInfo
 		: public IConsole
 	{
@@ -218,7 +219,9 @@ namespace Castor
 		bool m_allocated;
 		bool m_console;
 	};
+
 #elif defined( _WIN32 )
+
 	class CMswConsoleInfo
 		: public IConsole
 	{
@@ -384,7 +387,63 @@ namespace Castor
 		bool m_allocated;
 		bool m_console;
 	};
+
+#else
+
+	class CLinuxConsoleInfo
+		: public IConsole
+	{
+	public:
+		CLinuxConsoleInfo()
+		{
+		}
+
+		virtual ~CLinuxConsoleInfo()
+		{
+		}
+
+		void BeginLog( ELogType logLevel )
+		{
+			switch ( logLevel )
+			{
+			case ELogType_DEBUG:
+				m_header = cuT( "\033[36m" );
+				break;
+
+			case ELogType_INFO:
+				m_header = cuT( "\033[0m" );
+				break;
+
+			case ELogType_WARNING:
+				m_header = cuT( "\033[33m" );
+				break;
+
+			case ELogType_ERROR:
+				m_header = cuT( "\033[31m" );
+				break;
+			}
+		}
+
+		void Print( String const & toLog, bool newLine )
+		{
+#if defined( _UNICODE )
+			printf( "%ls%ls\033[0m", m_header.c_str(), toLog.c_str() );
+#else
+			printf( "%s%s\033[0m", m_header.c_str(), toLog.c_str() );
 #endif
+
+			if ( newLine )
+			{
+				printf( "\n" );
+			}
+		}
+
+	private:
+		String m_header;
+	};
+
+#endif
+
 	class CGenericConsoleInfo
 		: public IConsole
 	{
@@ -443,7 +502,7 @@ namespace Castor
 #elif defined( _WIN32 )
 		m_console = std::make_unique< CMswConsoleInfo >();
 #else
-		m_console = std::make_unique< CGenericConsoleInfo >();
+		m_console = std::make_unique< CLinuxConsoleInfo >();
 #endif
 	}
 

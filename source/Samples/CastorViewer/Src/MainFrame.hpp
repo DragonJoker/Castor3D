@@ -7,6 +7,7 @@
 #include <wx/listctrl.h>
 #include <wx/aui/framemanager.h>
 #include <wx/aui/auibook.h>
+#include <wx/aui/auibar.h>
 
 #include <SceneObjectsList.hpp>
 #include <Logger.hpp>
@@ -26,6 +27,7 @@ namespace CastorViewer
 
 		bool Initialise();
 		void LoadScene( wxString const & p_strFileName = wxEmptyString );
+		void ToggleFullScreen( bool p_fullscreen );
 
 	private:
 		bool DoLoadMeshFile();
@@ -38,6 +40,7 @@ namespace CastorViewer
 		bool DoInitialiseImages();
 		void DoPopulateStatusBar();
 		void DoPopulateToolBar();
+		void DoInitialisePerspectives();
 		void DoLogCallback( Castor::String const & p_strLog, Castor::ELogType p_eLogType );
 
 	private:
@@ -64,6 +67,7 @@ namespace CastorViewer
 		RenderPanel * m_pRenderPanel;
 		wxTimer * m_timer;
 		wxPanel * m_pBgPanel;
+		wxAuiToolBar * m_toolBar;
 		wxAuiNotebook * m_logTabsContainer;
 		wxAuiNotebook * m_sceneTabsContainer;
 		wxPropertiesHolder * m_propertiesContainer;
@@ -79,6 +83,8 @@ namespace CastorViewer
 		Castor3D::Engine * m_pCastor3D;
 		Castor3D::eRENDERER_TYPE m_eRenderer;
 		Castor::Path m_strFilePath;
+		wxString m_currentPerspective;
+		wxString m_fullScreenPerspective;
 	};
 }
 
