@@ -264,7 +264,6 @@ namespace Castor3D
 		p_uiFlags &= ~eTEXTURE_CHANNEL_SPECULAR;
 		p_uiFlags &= ~eTEXTURE_CHANNEL_GLOSS;
 		p_uiFlags &= ~eTEXTURE_CHANNEL_HEIGHT;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_LGHTPASS;
 		std::map< uint32_t, ShaderProgramBaseSPtr >::const_iterator l_it = m_mapPanelPrograms.find( p_uiFlags );
 		ShaderProgramBaseSPtr l_pReturn;
 
@@ -294,7 +293,6 @@ namespace Castor3D
 		p_uiFlags &= ~eTEXTURE_CHANNEL_SPECULAR;
 		p_uiFlags &= ~eTEXTURE_CHANNEL_GLOSS;
 		p_uiFlags &= ~eTEXTURE_CHANNEL_HEIGHT;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_LGHTPASS;
 		p_uiFlags |= eTEXTURE_CHANNEL_TEXT;
 		std::map< uint32_t, ShaderProgramBaseSPtr >::const_iterator l_it = m_mapTextPrograms.find( p_uiFlags );
 		ShaderProgramBaseSPtr l_pReturn;

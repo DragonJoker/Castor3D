@@ -61,10 +61,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Flushes the active shaders list and adds all it's shaders to the array of shaders to destroy
-		 *\remark		Calls Update
+		 *\remarks		Calls Update
 		 *\~french
 		 *\brief		Vide la liste des shaders actifs dans celle des shaders à détruire
-		 *\remark		Appelle Update
+		 *\remarks		Appelle Update
 		 */
 		void Clear();
 		/**
@@ -88,17 +88,19 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Looks for an automatically generated program corresponding to given flags
-		 *\remark		If none exists it is created
+		 *\remarks		If none exists it is created
+		 *\param[in]	p_technique			The technique from witch the program code is retrieved
 		 *\param[in]	p_uiTextureFlags	Bitwise ORed eTEXTURE_CHANNEL
 		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
 		 *\return		The found or created program
 		 *\~french
 		 *\brief		Cherche un programme automatiquement généré correspondant aux flags donnés
+		 *\param[in]	p_technique			La technique a pqrtir de laquelle est recuperee le code du programme
 		 *\param[in]	p_uiTextureFlags	Une combinaison de eTEXTURE_CHANNEL
 		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
 		 *\return		Le programme trouvé ou créé
 		 */
-		ShaderProgramBaseSPtr GetAutomaticProgram( uint32_t p_uiTextureFlags, uint32_t p_uiProgramFlags );
+		ShaderProgramBaseSPtr GetAutomaticProgram( RenderTechniqueBase const & p_technique, uint32_t p_uiTextureFlags, uint32_t p_uiProgramFlags );
 		/**
 		 *\~english
 		 *\brief		Creates a matrix frame variable buffer

@@ -100,6 +100,11 @@ namespace GlRender
 			m_iOpenGlMinor = p_iMinor;
 		}
 
+		inline OpenGl & GetOpenGl()
+		{
+			return m_gl;
+		}
+
 	private:
 		virtual void DoInitialise();
 		virtual void DoCleanup();

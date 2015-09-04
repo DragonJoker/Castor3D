@@ -228,26 +228,6 @@ namespace Castor3D
 		virtual void Initialise();
 		/**
 		 *\~english
-		 *\brief		Retrieves the vertex shader source according to the flags
-		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
-		 *\param[in]	p_bLightPass		Tells we want the light pass shader
-		 *\~french
-		 *\brief		Récupère le source du vertex shader selon les flags donnés
-		 *\param[in]	p_uiProgramFlags	Combinaison de ePROGRAM_FLAG
-		 *\param[in]	p_bLightPass		Dit si on veut le shader de la passe de lumières
-		 */
-		Castor::String GetVertexShaderSource( uint32_t p_uiProgramFlags, bool p_bLightPass = false );
-		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source according to the flags
-		 *\param[in]	p_uiFlags	A combination of eTEXTURE_CHANNEL
-		 *\~french
-		 *\brief		Récupère le source du pixel shader selon les flags donnés
-		 *\param[in]	p_uiFlags	Une combinaison de eTEXTURE_CHANNEL
-		 */
-		Castor::String GetPixelShaderSource( uint32_t p_uiFlags );
-		/**
-		 *\~english
 		 *\brief		Creates the wanted shader object
 		 *\param[in]	p_eType		The shader object concerned
 		 *\~french
@@ -314,11 +294,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the frame variable buffers bound to one shader type
-		 *\parma[in]	p_type	The shader type
+		 *\param[in]	p_type	The shader type
 		 *\return		The list
 		 *\~french
 		 *\brief		Récupère les tampons de variable de frames liés à un type de shader particulier
-		 *\parma[in]	p_type	The shader type
+		 *\param[in]	p_type	The shader type
 		 *\return		La liste
 		 */
 		inline FrameVariableBufferPtrList & GetFrameVariableBuffers( eSHADER_TYPE p_type )
@@ -328,11 +308,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the frame variable buffers bound to one shader type
-		 *\parma[in]	p_type	The shader type
+		 *\param[in]	p_type	The shader type
 		 *\return		The list
 		 *\~french
 		 *\brief		Récupère les tampons de variable de frames liés à un type de shader particulier
-		 *\parma[in]	p_type	The shader type
+		 *\param[in]	p_type	The shader type
 		 *\return		La liste
 		 */
 		inline const FrameVariableBufferPtrList & GetFrameVariableBuffers( eSHADER_TYPE p_type )const
@@ -393,13 +373,13 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the shader file for given model
-		 *\remark		The loaded file will be the one of the highest supported profile
+		 *\remarks		The loaded file will be the one of the highest supported profile
 		 *\param[in]	p_eTarget	The shader object concerned
 		 *\param[in]	p_eModel	The shader model
 		 *\param[in]	p_pathFile	The file name
 		 *\~french
 		 *\brief		Définit le fichier du shader pour le modèle donné
-		 *\remark		Le fichier chargé sera celui du plus haut profil supporté
+		 *\remarks		Le fichier chargé sera celui du plus haut profil supporté
 		 *\param[in]	p_eTarget	Le shader object concerné
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\param[in]	p_pathFile	Le nom du fichier
@@ -421,13 +401,13 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the shader source for given model
-		 *\remark		The loaded source will be the one of the highest supported profile
+		 *\remarks		The loaded source will be the one of the highest supported profile
 		 *\param[in]	p_eTarget	The shader object concerned
 		 *\param[in]	p_eModel	The shader model
 		 *\param[in]	p_strSource	The source code
 		 *\~french
 		 *\brief		Définit la source du shader pour le modèle donné
-		 *\remark		La source chargée sera celle du plus haut profil supporté
+		 *\remarks		La source chargée sera celle du plus haut profil supporté
 		 *\param[in]	p_eTarget	Le shader object concerné
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\param[in]	p_strSource	Le code de la source
@@ -576,44 +556,6 @@ namespace Castor3D
 		 *\return		La variable créée, nullptr en cas d'échec
 		 */
 		virtual OneTextureFrameVariableSPtr DoCreateTextureVariable( int p_iNbOcc ) = 0;
-		/**
-		 *\~english
-		 *\brief		Retrieves the vertex shader source according to the flags
-		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
-		 *\~french
-		 *\brief		Récupère le source du vertex shader selon les flags donnés
-		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
-		 */
-		virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags ) = 0;
-		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source according to the flags
-		 *\param[in]	p_uiFlags	A combination of eTEXTURE_CHANNEL
-		 *\~french
-		 *\brief		Récupère le source du pixel shader selon les flags donnés
-		 *\param[in]	p_uiFlags	Une combinaison de eTEXTURE_CHANNEL
-		 */
-		virtual Castor::String DoGetPixelShaderSource( uint32_t p_uiFlags ) = 0;
-		/**
-		 *\~english
-		 *\brief		Retrieves the vertex shader source for deferred shading's geometry pass according to the flags
-		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
-		 *\param[in]	p_bLightPass		Tells we want the light pass shader
-		 *\~french
-		 *\brief		Récupère le source du vertex shader pour la passe géométrique du deferred shading selon les flags donnés
-		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
-		 *\param[in]	p_bLightPass		Dit si on veut le shader de la passe de lumières
-		 */
-		virtual Castor::String DoGetDeferredVertexShaderSource( uint32_t p_uiProgramFlags, bool p_bLightPass ) = 0;
-		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source for deferred shading's geometry pass according to the flags
-		 *\param[in]	p_uiFlags	A combination of eTEXTURE_CHANNEL
-		 *\~french
-		 *\brief		Récupère le source du pixel shader pour la passe géométrique du deferred shading selon les flags donnés
-		 *\param[in]	p_uiFlags	Une combinaison de eTEXTURE_CHANNEL
-		 */
-		virtual Castor::String DoGetDeferredPixelShaderSource( uint32_t p_uiFlags ) = 0;
 
 	protected:
 		//!<\~english The program status	\~french Le statut du programme
