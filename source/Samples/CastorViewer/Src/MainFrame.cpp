@@ -5,15 +5,10 @@
 #include "SceneExporter.hpp"
 #include "PropertiesHolder.hpp"
 
-#include <xpms/geo_blanc.xpm>
 #include <xpms/scene_blanc.xpm>
 #include <xpms/mat_blanc.xpm>
 #include <xpms/castor_transparent.xpm>
 #include <xpms/castor.xpm>
-#include <xpms/dossier.xpm>
-#include <xpms/dossier_sel.xpm>
-#include <xpms/dossier_ouv.xpm>
-#include <xpms/dossier_ouv_sel.xpm>
 #include <xpms/export.xpm>
 #include <xpms/log.xpm>
 #include <xpms/properties.xpm>
@@ -53,6 +48,7 @@
 #include <xpms/render_target_sel.xpm>
 
 #include <wx/display.h>
+#include <wx/aui/auibar.h>
 #include <wx/aui/dockart.h>
 #include <wx/renderer.h>
 
@@ -84,9 +80,6 @@
 using namespace Castor3D;
 using namespace Castor;
 using namespace GuiCommon;
-
-// These methods are implemented in wxAUI, but are not in headers
-wxString wxAuiChopText( wxDC & dc, const wxString & text, int max_size );
 
 #define CASTOR3D_THREADED 0
 
@@ -127,6 +120,39 @@ namespace CastorViewer
 				rect->x++;
 				rect->y++;
 			}
+		}
+
+		static wxString AuiChopText( wxDC & dc, const wxString & text, int max_size )
+		{
+			wxCoord x, y;
+			// first check if the text fits with no problems
+			dc.GetTextExtent( text, &x, &y );
+
+			if ( x <= max_size )
+			{
+				return text;
+			}
+
+			size_t i, len = text.Length();
+			size_t last_good_length = 0;
+
+			for ( i = 0; i < len; ++i )
+			{
+				wxString s = text.Left( i );
+				s += wxT( "..." );
+				dc.GetTextExtent( s, &x, &y );
+
+				if ( x > max_size )
+				{
+					break;
+				}
+
+				last_good_length = i;
+			}
+
+			wxString ret = text.Left( last_good_length );
+			ret += wxT( "..." );
+			return ret;
 		}
 
 		template< typename TObj >
@@ -379,7 +405,7 @@ namespace CastorViewer
 				int bitmap_offset = 0;
 				text_offset = tab_x + 8;
 
-				wxString draw_text = wxAuiChopText( dc, caption, tab_width - ( text_offset - tab_x ) - close_button_width );
+				wxString draw_text = AuiChopText( dc, caption, tab_width - ( text_offset - tab_x ) - close_button_width );
 
 				// draw tab text
 				if ( page.active )
@@ -463,6 +489,41 @@ namespace CastorViewer
 			wxColour m_active;
 		};
 
+		class AuiToolBarArt
+			: public wxAuiDefaultToolBarArt
+		{
+		public:
+			AuiToolBarArt()
+				: wxAuiDefaultToolBarArt()
+			{
+			}
+
+			virtual wxAuiToolBarArt * Clone()
+			{
+				return new AuiToolBarArt( *this );
+			}
+
+			virtual void DrawBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect )
+			{
+				p_dc.SetPen( wxPen( INACTIVE_TAB_COLOUR, 1, wxSOLID ) );
+				p_dc.SetBrush( wxBrush( INACTIVE_TAB_COLOUR, wxSOLID ) );
+				p_dc.DrawRectangle( p_rect );
+			}
+
+			virtual void DrawPlainBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect )
+			{
+				p_dc.SetPen( wxPen( INACTIVE_TAB_COLOUR, 1, wxSOLID ) );
+				p_dc.SetBrush( wxBrush( INACTIVE_TAB_COLOUR, wxSOLID ) );
+				p_dc.DrawRectangle( p_rect );
+			}
+
+			virtual void DrawSeparator( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect )
+			{
+				p_dc.SetPen( wxPen( BORDER_COLOUR, 1, wxSOLID ) );
+				p_dc.DrawLine( ( p_rect.GetBottomLeft() + p_rect.GetBottomRight() ) / 2, ( p_rect.GetTopLeft() + p_rect.GetTopRight() ) / 2 );
+			}
+		};
+
 		class AuiDockArt
 			: public wxAuiDefaultDockArt
 		{
@@ -486,8 +547,8 @@ namespace CastorViewer
 
 			virtual void DrawBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect )
 			{
-				p_dc.SetPen( wxPen( *wxWHITE, 1, wxSOLID ) );
-				p_dc.SetBrush( wxBrush( *wxWHITE, wxSOLID ) );
+				p_dc.SetPen( wxPen( PANEL_BACKGROUND_COLOUR, 1, wxSOLID ) );
+				p_dc.SetBrush( wxBrush( PANEL_BACKGROUND_COLOUR, wxSOLID ) );
 				p_dc.DrawRectangle( p_rect );
 			}
 		};
@@ -511,6 +572,7 @@ namespace CastorViewer
 		, m_materialsList( NULL )
 		, m_propertiesContainer( NULL )
 		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
+		, m_toolBar( NULL )
 	{
 	}
 
@@ -538,6 +600,7 @@ namespace CastorViewer
 			wxIcon l_icon = wxIcon( castor_xpm );
 			SetIcon( l_icon );
 			DoInitialiseGUI();
+			DoInitialisePerspectives();
 			l_bReturn = DoInitialise3D();
 		}
 
@@ -593,6 +656,21 @@ namespace CastorViewer
 		else
 		{
 			wxMessageBox( _( "Can't open a scene file : no engine loaded" ) );
+		}
+	}
+
+	void MainFrame::ToggleFullScreen( bool p_fullscreen )
+	{
+		ShowFullScreen( p_fullscreen, wxFULLSCREEN_ALL );
+
+		if ( p_fullscreen )
+		{
+			m_currentPerspective = m_auiManager.SavePerspective();
+			m_auiManager.LoadPerspective( m_fullScreenPerspective );
+		}
+		else
+		{
+			m_auiManager.LoadPerspective( m_currentPerspective );
 		}
 	}
 
@@ -736,7 +814,7 @@ namespace CastorViewer
 
 			if ( l_window->IsFullscreen() )
 			{
-				ShowFullScreen( true, wxFULLSCREEN_ALL );
+				ToggleFullScreen( true );
 			}
 
 			SetClientSize( l_window->GetSize().width() + m_iPropertiesWidth, l_window->GetSize().height() + m_iLogsHeight );
@@ -845,6 +923,8 @@ namespace CastorViewer
 
 	void MainFrame::DoInitialiseGUI()
 	{
+		SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		SetClientSize( 800 + m_iPropertiesWidth, 600 + m_iLogsHeight );
 		wxSize l_size = GetClientSize();
 #if wxCHECK_VERSION( 2, 9, 0 )
@@ -868,11 +948,11 @@ namespace CastorViewer
 		m_propertiesContainer->SetLineColour( BORDER_COLOUR );
 		m_propertiesContainer->SetMarginColour( BORDER_COLOUR );
 
-		m_auiManager.AddPane( m_pRenderPanel, wxAuiPaneInfo().CaptionVisible( false ).Center().CloseButton( false ).MinSize( l_size.x - m_iPropertiesWidth, l_size.y - m_iLogsHeight ).Layer( 0 ).Movable( false ).PaneBorder( false ).Dockable( false ) );
-		m_auiManager.AddPane( m_logTabsContainer, wxAuiPaneInfo().CaptionVisible( false ).Hide().CloseButton().Caption( _( "Logs" ) ).Bottom().Dock().BottomDockable().TopDockable().Movable().PinButton().MinSize( l_size.x, m_iLogsHeight ).Layer( 1 ).PaneBorder( false ) );
-		m_auiManager.AddPane( m_sceneTabsContainer, wxAuiPaneInfo().CaptionVisible( false ).Hide().CloseButton().Caption( _( "Objects" ) ).Left().Dock().LeftDockable().RightDockable().Movable().PinButton().MinSize( m_iPropertiesWidth, l_size.y / 3 ).Layer( 2 ).PaneBorder( false ) );
-		m_auiManager.AddPane( m_propertiesContainer, wxAuiPaneInfo().CaptionVisible( false ).Hide().CloseButton().Caption( _( "Properties" ) ).Left().Dock().LeftDockable().RightDockable().Movable().PinButton().MinSize( m_iPropertiesWidth, l_size.y / 3 ).Layer( 2 ).PaneBorder( false ) );
-		
+		m_auiManager.AddPane( m_pRenderPanel, wxAuiPaneInfo().CaptionVisible( false ).Center().CloseButton( false ).Name( wxT( "Render" ) ).MinSize( l_size.x - m_iPropertiesWidth, l_size.y - m_iLogsHeight ).Layer( 0 ).Movable( false ).PaneBorder( false ).Dockable( false ) );
+		m_auiManager.AddPane( m_logTabsContainer, wxAuiPaneInfo().CaptionVisible( false ).Hide().CloseButton().Name( wxT( "Logs" ) ).Caption( _( "Logs" ) ).Bottom().Dock().BottomDockable().TopDockable().Movable().PinButton().MinSize( l_size.x, m_iLogsHeight ).Layer( 1 ).PaneBorder( false ) );
+		m_auiManager.AddPane( m_sceneTabsContainer, wxAuiPaneInfo().CaptionVisible( false ).Hide().CloseButton().Name( wxT( "Objects" ) ).Caption( _( "Objects" ) ).Left().Dock().LeftDockable().RightDockable().Movable().PinButton().MinSize( m_iPropertiesWidth, l_size.y / 3 ).Layer( 2 ).PaneBorder( false ) );
+		m_auiManager.AddPane( m_propertiesContainer, wxAuiPaneInfo().CaptionVisible( false ).Hide().CloseButton().Name( wxT( "Properties" ) ).Caption( _( "Properties" ) ).Left().Dock().LeftDockable().RightDockable().Movable().PinButton().MinSize( m_iPropertiesWidth, l_size.y / 3 ).Layer( 2 ).PaneBorder( false ) );
+
 
 		auto l_logCreator = [this, &l_size]( wxString const & p_name, wxListBox *& p_log )
 		{
@@ -1002,28 +1082,47 @@ namespace CastorViewer
 
 	void MainFrame::DoPopulateStatusBar()
 	{
-		CreateStatusBar();
+		wxStatusBar * l_statusBar = CreateStatusBar();
+		l_statusBar->SetBackgroundColour( INACTIVE_TAB_COLOUR );
+		l_statusBar->SetForegroundColour( INACTIVE_TEXT_COLOUR );
 	}
 
 	void MainFrame::DoPopulateToolBar()
 	{
 		m_pSplashScreen->Step( _( "Loading toolbar" ), 1 );
-		wxToolBar * l_pToolbar = CreateToolBar( wxTB_FLAT | wxTB_HORIZONTAL );
-		l_pToolbar->SetBackgroundColour( INACTIVE_TAB_COLOUR );
-		l_pToolbar->SetToolBitmapSize( wxSize( 32, 32 ) );
-		l_pToolbar->AddTool( eID_TOOL_LOAD_SCENE, _( "Load Scene" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_SCENES ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Open a new scene" ) );
+		m_toolBar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_TB_PLAIN_BACKGROUND | wxAUI_TB_HORIZONTAL );
+		m_toolBar->SetArtProvider( new AuiToolBarArt );
+		m_toolBar->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		m_toolBar->SetToolBitmapSize( wxSize( 32, 32 ) );
+		m_toolBar->AddTool( eID_TOOL_LOAD_SCENE, _( "Load Scene" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_SCENES ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Open a new scene" ) );
 		m_pSplashScreen->Step( 1 );
-		l_pToolbar->AddTool( eID_TOOL_EXPORT_SCENE, _( "Export Scene" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_EXPORT ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Export the current scene" ) );
+		m_toolBar->AddTool( eID_TOOL_EXPORT_SCENE, _( "Export Scene" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_EXPORT ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Export the current scene" ) );
 		m_pSplashScreen->Step( 1 );
-		l_pToolbar->AddSeparator();
-		l_pToolbar->AddTool( eID_TOOL_SHOW_LOGS, _( "Logs" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_LOGS ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display logs" ) );
+		m_toolBar->AddSeparator();
+		m_toolBar->AddTool( eID_TOOL_SHOW_LOGS, _( "Logs" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_LOGS ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display logs" ) );
 		m_pSplashScreen->Step( 1 );
-		l_pToolbar->AddTool( eID_TOOL_SHOW_LISTS, _( "Lists" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_MATERIALS ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display lists" ) );
+		m_toolBar->AddTool( eID_TOOL_SHOW_LISTS, _( "Lists" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_MATERIALS ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display lists" ) );
 		m_pSplashScreen->Step( 1 );
-		l_pToolbar->AddTool( eID_TOOL_SHOW_PROPERTIES, _( "Properties" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_PROPERTIES ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display properties" ) );
+		m_toolBar->AddTool( eID_TOOL_SHOW_PROPERTIES, _( "Properties" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_PROPERTIES ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display properties" ) );
 		m_pSplashScreen->Step( 1 );
-		l_pToolbar->AddSeparator();
-		l_pToolbar->Realize();
+		m_toolBar->Realize();
+		m_auiManager.AddPane( m_toolBar, wxAuiPaneInfo().Name( wxT( "MainToolBar" ) ).ToolbarPane().Top().Row( 1 ).Dockable( false ).Gripper( false ) );
+	}
+
+	void MainFrame::DoInitialisePerspectives()
+	{
+		wxAuiPaneInfoArray l_panes = m_auiManager.GetAllPanes();
+		std::vector< bool > l_visibilities;
+		m_currentPerspective = m_auiManager.SavePerspective();
+
+		for ( size_t i = 0; i < l_panes.size(); ++i )
+		{
+			l_panes[i].Hide();
+		}
+
+		m_auiManager.GetPane( m_toolBar ).Hide();
+		m_fullScreenPerspective = m_auiManager.SavePerspective();
+		m_auiManager.LoadPerspective( m_currentPerspective );
 	}
 
 	void MainFrame::DoLogCallback( String const & p_strLog, ELogType p_eLogType )

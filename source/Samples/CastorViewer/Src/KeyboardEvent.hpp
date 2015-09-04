@@ -7,20 +7,22 @@
 
 namespace CastorViewer
 {
+	class MainFrame;
+
 	class KeyboardEvent
 		:	public Castor3D::FrameEvent
 	{
-	private:
-		Castor3D::RenderWindowWPtr m_pWindow;
-		wxFrame * m_pMainFrame;
-
 	public:
-		KeyboardEvent( Castor3D::RenderWindowSPtr p_pWindow, wxFrame * p_pMainFrame );
+		KeyboardEvent( Castor3D::RenderWindowSPtr p_pWindow, MainFrame * p_pMainFrame );
 		virtual ~KeyboardEvent();
 
 		static void Add( Castor3D::FrameEventSPtr p_pThis, Castor3D::FrameListenerSPtr p_pListener );
 
 		virtual bool Apply();
+
+	private:
+		Castor3D::RenderWindowWPtr m_pWindow;
+		MainFrame * m_pMainFrame;
 	};
 }
 
