@@ -8,6 +8,7 @@
 #include <OneFrameVariable.hpp>
 #include <PointFrameVariable.hpp>
 #include <MatrixFrameVariable.hpp>
+#include <RenderTechnique.hpp>
 #include <ShaderProgram.hpp>
 
 using namespace Castor;
@@ -26,7 +27,7 @@ GlBillboardList::~GlBillboardList()
 {
 }
 
-ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( uint32_t p_flags )
+ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const & p_technique, uint32_t p_flags )
 {
 	using namespace GLSL;
 
@@ -173,7 +174,7 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( uint32_t p_flags )
 		l_strVtxShader = l_writer.Finalise();
 	}
 
-	String l_strPxlShader = l_pProgram->GetPixelShaderSource( p_flags );
+	String l_strPxlShader = p_technique.GetPixelShaderSource( p_flags );
 
 	m_pDimensionsUniform = std::static_pointer_cast< Point2iFrameVariable >( l_billboardUbo->CreateVariable( *l_pProgram.get(), eFRAME_VARIABLE_TYPE_VEC2I, cuT( "c3d_v2iDimensions" ) ) );
 	l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_3, l_strVtxShader );

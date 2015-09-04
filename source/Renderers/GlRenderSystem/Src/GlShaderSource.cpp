@@ -366,9 +366,9 @@ namespace GlRender
 		//*****************************************************************************************
 
 		GlslWriter::GlslWriter( OpenGl & p_gl, Castor3D::eSHADER_TYPE p_type )
-			: m_variables( GLSL::GetVariables( p_gl ) )
-			, m_constants( GLSL::GetConstants( p_gl ) )
-			, m_keywords( GLSL::GetKeywords( p_gl ) )
+			: m_variables( GLSL::VariablesBase::Get( p_gl ) )
+			, m_constants( GLSL::ConstantsBase::Get( p_gl ) )
+			, m_keywords( GLSL::KeywordsBase::Get( p_gl ) )
 			, m_attributeIndex( 0 )
 			, m_layoutIndex( 0 )
 			, m_type( p_type )

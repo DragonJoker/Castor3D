@@ -14,6 +14,7 @@ function( TechniquesBuild )
 	if( ${CASTOR_BUILD_RENDERER_OGL} )
 		set( TechniqueLibraries
 			${TechniqueLibraries}
+			${OpenGlLibraries}
 			GlRenderSystem
 		)
 	endif ()
@@ -21,6 +22,7 @@ function( TechniquesBuild )
 	if( ${CASTOR_BUILD_RENDERER_D3D11} )
 		set( TechniqueLibraries
 			${TechniqueLibraries}
+			${D3dLibraries}
 			Dx11RenderSystem
 		)
 	endif ()

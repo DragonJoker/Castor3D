@@ -18,6 +18,8 @@ endif ()
 if( ${CASTOR_BUILD_RENDERER_D3D11} )
 	add_definitions( "-DC3D_HAS_D3D11_RENDERER" )
 	include_directories( ${CMAKE_SOURCE_DIR}/Renderers/Dx11RenderSystem/Src )
+	include_directories( ${D3D9_INCLUDE_DIR} )
+	include_directories( ${D3D11_INCLUDE_DIR} )
 endif ()
 
 include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )

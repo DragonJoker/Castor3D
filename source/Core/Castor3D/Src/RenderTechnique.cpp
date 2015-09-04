@@ -192,10 +192,20 @@ namespace Castor3D
 #endif
 	}
 
+	String RenderTechniqueBase::GetVertexShaderSource( uint32_t p_uiProgramFlags )const
+	{
+		return DoGetVertexShaderSource( p_uiProgramFlags );
+	}
+
+	String RenderTechniqueBase::GetPixelShaderSource( uint32_t p_uiFlags )const
+	{
+		return DoGetPixelShaderSource( p_uiFlags );
+	}
+
 	bool RenderTechniqueBase::DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime )
 	{
 		p_camera.Render();
-		p_scene.Render( p_ePrimitives, p_dFrameTime, p_camera );
+		p_scene.Render( *this, p_ePrimitives, p_dFrameTime, p_camera );
 		p_camera.EndRender();
 		return true;
 	}

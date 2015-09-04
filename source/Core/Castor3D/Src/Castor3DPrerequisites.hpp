@@ -625,16 +625,15 @@ namespace Castor3D
 	CASTOR_TYPE( uint32_t )
 	{
 		eTEXTURE_CHANNEL_COLOUR		= 0x00000001,	//!< Colour map
-		   eTEXTURE_CHANNEL_DIFFUSE	= 0x00000002,	//!< Diffuse map
-			  eTEXTURE_CHANNEL_NORMAL		= 0x00000004,	//!< Normal map
-				 eTEXTURE_CHANNEL_OPACITY	= 0x00000008,	//!< Opacity map
-					eTEXTURE_CHANNEL_SPECULAR	= 0x00000010,	//!< Specular map
-					  eTEXTURE_CHANNEL_HEIGHT		= 0x00000020,	//!< Height map
-						 eTEXTURE_CHANNEL_AMBIENT	= 0x00000040,	//!< Ambient map
-							eTEXTURE_CHANNEL_GLOSS		= 0x00000080,	//!< Gloss map
-								eTEXTURE_CHANNEL_LGHTPASS	= 0x00000100,	//!< Not really a texture channel (it is out of eTEXTURE_CHANNEL_ALL), used to tell we want light pass shader source in deferred shading
-								  eTEXTURE_CHANNEL_TEXT		= 0x00000200,	//!< Not really a texture channel (it is out of eTEXTURE_CHANNEL_ALL), used to tell we want text overlay shader source
-									   eTEXTURE_CHANNEL_ALL		= 0x000000FF,
+		eTEXTURE_CHANNEL_DIFFUSE	= 0x00000002,	//!< Diffuse map
+		eTEXTURE_CHANNEL_NORMAL		= 0x00000004,	//!< Normal map
+		eTEXTURE_CHANNEL_OPACITY	= 0x00000008,	//!< Opacity map
+		eTEXTURE_CHANNEL_SPECULAR	= 0x00000010,	//!< Specular map
+		eTEXTURE_CHANNEL_HEIGHT		= 0x00000020,	//!< Height map
+		eTEXTURE_CHANNEL_AMBIENT	= 0x00000040,	//!< Ambient map
+		eTEXTURE_CHANNEL_GLOSS		= 0x00000080,	//!< Gloss map
+		eTEXTURE_CHANNEL_TEXT		= 0x00000100,	//!< Not really a texture channel (it is out of eTEXTURE_CHANNEL_ALL), used to tell we want text overlay shader source
+		eTEXTURE_CHANNEL_ALL		= 0x000000FF,
 	}	eTEXTURE_CHANNEL;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -1248,10 +1247,9 @@ namespace Castor3D
 	typedef enum ePROGRAM_FLAG
 	CASTOR_TYPE( uint32_t )
 	{
-		ePROGRAM_FLAG_DEFERRED		= 0x01,	//!<\~english Program used in deferred rendering	\~french Programme utilisé lors d'un rendu différé
-			ePROGRAM_FLAG_INSTANCIATION	= 0x02,	//!<\~english Program using instanciation	\~french Programme utilisant l'instanciation
-			ePROGRAM_FLAG_SKINNING		= 0x04,	//!<\~english Program using skeleton animations	\~french Programme utilisant les animations par squelette
-				ePROGRAM_FLAG_BILLBOARDS	= 0x08,	//!<\~english Program used by billboards	\~french Programme utilisé par des billboards
+		ePROGRAM_FLAG_INSTANCIATION	= 0x01,	//!<\~english Program using instanciation	\~french Programme utilisant l'instanciation
+		ePROGRAM_FLAG_SKINNING		= 0x02,	//!<\~english Program using skeleton animations	\~french Programme utilisant les animations par squelette
+		ePROGRAM_FLAG_BILLBOARDS	= 0x04,	//!<\~english Program used by billboards	\~french Programme utilisé par des billboards
 	}	ePROGRAM_FLAG;
 	/*!
 	\author 	Sylvain DOREMUS

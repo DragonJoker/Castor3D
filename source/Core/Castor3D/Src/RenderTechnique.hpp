@@ -39,10 +39,10 @@ namespace Castor3D
 	\date		12/11/2012
 	\~english
 	\brief		Render technique base class
-	\remark		A render technique is the description of a way to render a render target
+	\remarks	A render technique is the description of a way to render a render target
 	\~french
 	\brief		Classe de base d'une technique de rendu
-	\remark		Une technique de rendu est la description d'une manière de rendre une cible de rendu
+	\remarks	Une technique de rendu est la description d'une manière de rendre une cible de rendu
 	*/
 	class C3D_API RenderTechniqueBase
 	{
@@ -149,6 +149,24 @@ namespace Castor3D
 		void EndRender();
 		/**
 		 *\~english
+		 *\brief		Retrieves the vertex shader source matching the given flags
+		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
+		 *\~french
+		 *\brief		Récupère le source du vertex shader qui correspond aux flags donnés
+		 *\param[in]	p_uiProgramFlags	Combinaison de ePROGRAM_FLAG
+		 */
+		Castor::String GetVertexShaderSource( uint32_t p_uiProgramFlags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags
+		 *\param[in]	p_uiFlags	A combination of eTEXTURE_CHANNEL
+		 *\~french
+		 *\brief		Récupère le source du pixel shader qui correspond aux flags donnés
+		 *\param[in]	p_uiFlags	Une combinaison de eTEXTURE_CHANNEL
+		 */
+		Castor::String GetPixelShaderSource( uint32_t p_uiFlags )const;
+		/**
+		 *\~english
 		 *\brief		Retrieves the technique name
 		 *\return		The value
 		 *\~french
@@ -228,6 +246,24 @@ namespace Castor3D
 		 *\brief		Fonction de fin de rendu
 		 */
 		virtual void DoEndRender() = 0;
+		/**
+		 *\~english
+		 *\brief		Retrieves the vertex shader source matching the given flags
+		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
+		 *\~french
+		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
+		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
+		 */
+		virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const = 0;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags
+		 *\param[in]	p_uiFlags	A combination of eTEXTURE_CHANNEL
+		 *\~french
+		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
+		 *\param[in]	p_uiFlags	Une combinaison de eTEXTURE_CHANNEL
+		 */
+		virtual Castor::String DoGetPixelShaderSource( uint32_t p_uiFlags )const = 0;
 
 	protected:
 		//!\~english The technique name	\~french Le nom de la technique

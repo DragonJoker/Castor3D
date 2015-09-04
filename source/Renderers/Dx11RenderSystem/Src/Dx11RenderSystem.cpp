@@ -104,7 +104,6 @@ bool DxRenderSystem::InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swa
 		uint32_t l_uiCount = 0;
 		IDXGIAdapter * l_pAdapter;
 		IDXGIOutput * l_pAdapterOutput;
-		DXGI_ADAPTER_DESC l_adapterDesc;
 		UINT l_uiFlags = 0;
 #if !defined( NDEBUG )
 		l_uiFlags = D3D11_CREATE_DEVICE_DEBUG;
@@ -177,17 +176,7 @@ bool DxRenderSystem::InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swa
 							if ( SUCCEEDED( l_hr ) )
 							{
 								// Get the adapter (video card) description.
-								l_hr = l_pAdapter->GetDesc( &l_adapterDesc );
-							}
-
-							if ( SUCCEEDED( l_hr ) )
-							{
-								// Store the dedicated video card memory in megabytes.
-								int l_videoCardMemory = int( l_adapterDesc.DedicatedVideoMemory / 1024 / 1024 );
-								// Convert the name of the video card to a character array and store it.
-								String l_strVideoCardDescription = str_utils::from_wstr( l_adapterDesc.Description );
-								Logger::LogInfo( cuT( "Video card name: " ) + l_strVideoCardDescription );
-								Logger::LogInfo( StringStream() << cuT( "Video card memory: " ) << l_videoCardMemory );
+								l_hr = l_pAdapter->GetDesc( &m_adapterDesc );
 							}
 						}
 					}
@@ -540,6 +529,12 @@ void DxRenderSystem::DoInitialise()
 		m_useMultiTexturing = true;
 		m_bInitialised = true;
 		CheckShaderSupport();
+		// Store the dedicated video card memory in megabytes.
+		int l_videoCardMemory = int( m_adapterDesc.DedicatedVideoMemory / 1024 / 1024 );
+		// Convert the name of the video card to a character array and store it.
+		String l_strVideoCardDescription = str_utils::from_wstr( m_adapterDesc.Description );
+		Logger::LogInfo( cuT( "Video card name: " ) + l_strVideoCardDescription );
+		Logger::LogInfo( StringStream() << cuT( "Video card memory: " ) << l_videoCardMemory );
 		m_pPipeline->Initialise();
 		Logger::LogInfo( cuT( "Direct3D Initialisation Ended" ) );
 		Logger::LogInfo( cuT( "************************************************************************************************************************" ) );

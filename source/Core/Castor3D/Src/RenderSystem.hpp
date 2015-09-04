@@ -39,7 +39,6 @@ namespace Castor3D
 	\brief		Template class used to create a renderer
 	\~french
 	\brief		Classe template utilisée pour créer un renderer
-	\remark
 	*/
 	template< class Ty > struct RendererCreator;
 	/*!
@@ -50,7 +49,6 @@ namespace Castor3D
 	\brief		Template class used to add a renderer to the list
 	\~french
 	\brief		Classe template utilisée pour ajouter un renderer à la liste
-	\remark
 	*/
 	template< class Ty > struct RendererAdder;
 	/*!
@@ -59,11 +57,11 @@ namespace Castor3D
 	\version	0.1
 	\~english
 	\brief		The render system representation
-	\remark		This is the class which is the link between Castor3D and the renderer driver (OpenGL or Direct3D)
+	\remarks	This is the class which is the link between Castor3D and the renderer driver (OpenGL or Direct3D)
 				<br />Hence it is also the only class which can create the renderers
 	\~french
 	\brief		Représentation du système de rendu
-	\remark		Cette classe fait le lien entre Castor3D et l'api de rendu (OpenGL ou Direct3D)
+	\remarks	Cette classe fait le lien entre Castor3D et l'api de rendu (OpenGL ou Direct3D)
 				<br />Ainsi c'est aussi la seule classe à même de créer les renderers
 	*/
 	class C3D_API RenderSystem
@@ -108,12 +106,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a ShaderProgram in a given language
-		 *\remark		Only the render system can do that
+		 *\remarks		Only the render system can do that
 		 *\param[in]	p_eLanguage	The shader language
 		 *\return		The created ShaderProgram
 		 *\~french
 		 *\brief		Crée un ShaderProgram dans un langage donné
-		 *\remark		Seul le render system peut faire ça
+		 *\remarks		Seul le render system peut faire ça
 		 *\param[in]	p_eLanguage	Le langage du shader
 		 *\return		Le ShaderProgram créé
 		 */
@@ -210,11 +208,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Checks if the loaded render API needs matrix transposition for shader variables
-		 *\remark		Needed because of Direct3D 11
+		 *\remarks		Needed because of Direct3D 11
 		 *\return		\p false if the doesn't need it
 		 *\~french
 		 *\brief		Vérifie si l'API de rendu nécessite de transposer les matrices pour les variables de shaders
-		 *\remark		Nécessaire à cause de Direct3D 11
+		 *\remarks		Nécessaire à cause de Direct3D 11
 		 *\return		\p false s'il la transposition n'est pas nécessaire
 		 */
 		virtual	bool NeedsMatrixTransposition()const = 0;
@@ -350,12 +348,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a texture
-		 *\remark		Only the render system can do that
+		 *\remarks		Only the render system can do that
 		 *\param[in]	p_eType	The texture type
 		 *\return		The created texture, dependant of current API
 		 *\~french
 		 *\brief		Crée une texture
-		 *\remark		Seul le render system peut faire ça
+		 *\remarks		Seul le render system peut faire ça
 		 *\param[in]	p_eType	Le type de texture
 		 *\return		La texture créée, dépendante de l'API actuelle
 		 */
@@ -363,12 +361,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a texture
-		 *\remark		Only the render system can do that
+		 *\remarks		Only the render system can do that
 		 *\param[in]	p_eType	The texture type
 		 *\return		The created texture, dependant of current API
 		 *\~french
 		 *\brief		Crée une texture
-		 *\remark		Seul le render system peut faire ça
+		 *\remarks		Seul le render system peut faire ça
 		 *\param[in]	p_eType	Le type de texture
 		 *\return		La texture créée, dépendante de l'API actuelle
 		 */
@@ -376,13 +374,13 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a vertex buffer, given a buffer declaration
-		 *\remark		Only the render system can do that
+		 *\remarks		Only the render system can do that
 		 *\param[in]	p_elements	The buffer declaration
 		 *\param[in]	p_pBuffer	The hardware buffer to which the vertex buffer will be linked
 		 *\return		The created vertex buffer, dependant of current API
 		 *\~french
 		 *\brief		Crée un tampon de sommets, selon une déclaration de tampon
-		 *\remark		Seul le render system peut faire ça
+		 *\remarks		Seul le render system peut faire ça
 		 *\param[in]	p_elements	La déclaration de tampon
 		 *\param[in]	p_pBuffer	Le tampon hardware auquel sera lié le tampon de sommets
 		 *\return		Le tampon de sommets créé, dépendant de l'API actuelle
@@ -391,12 +389,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates an index buffer
-		 *\remark		Only the render system can do that
+		 *\remarks		Only the render system can do that
 		 *\param[in]	p_pBuffer	The hardware buffer to which the index buffer will be linked
 		 *\return		The created index buffer, dependant of current API
 		 *\~french
 		 *\brief		Crée un tampon d'indices
-		 *\remark		Seul le render system peut faire ça
+		 *\remarks		Seul le render system peut faire ça
 		 *\param[in]	p_pBuffer	Le tampon hardware auquel sera lié le tampon d'indices
 		 *\return		Le tampon d'indices créé, dépendant de l'API actuelle
 		 */
@@ -404,12 +402,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a matrix buffer
-		 *\remark		Only the render system can do that
+		 *\remarks		Only the render system can do that
 		 *\param[in]	p_pBuffer	The hardware buffer to which the buffer will be linked
 		 *\return		The created buffer, dependant of current API
 		 *\~french
 		 *\brief		Crée un tampon de matrices
-		 *\remark		Seul le render system peut faire ça
+		 *\remarks		Seul le render system peut faire ça
 		 *\param[in]	p_pBuffer	Le tampon hardware auquel sera lié le tampon
 		 *\return		Le tampon créé, dépendant de l'API actuelle
 		 */
@@ -417,12 +415,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a texture buffer
-		 *\remark		Only the render system can do that
+		 *\remarks		Only the render system can do that
 		 *\param[in]	p_pBuffer	The hardware buffer to which the texture buffer will be linked
 		 *\return		The created texture buffer, dependant of current API
 		 *\~french
 		 *\brief		Crée un tampon detexture
-		 *\remark		Seul le render system peut faire ça
+		 *\remarks		Seul le render system peut faire ça
 		 *\param[in]	p_pBuffer	Le tampon hardware auquel sera lié le tampon de texture
 		 *\return		Le tampon de texture créé, dépendant de l'API actuelle
 		 */

@@ -24,7 +24,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Dx11Render
 {
-	class UniformsBase
+	class C3D_Dx11_API UniformsBase
 	{
 	protected:
 		Castor::String m_strVertexInMatrices;
@@ -76,7 +76,7 @@ namespace Dx11Render
 		static std::unique_ptr< UniformsBase > Get( DxRenderSystem const & p_renderSystem );
 	};
 
-	class UniformsBuf : public UniformsBase
+	class C3D_Dx11_API UniformsBuf : public UniformsBase
 	{
 	public:
 		UniformsBuf()
@@ -132,7 +132,7 @@ namespace Dx11Render
 		}
 	};
 
-	class UniformsStd : public UniformsBase
+	class C3D_Dx11_API UniformsStd : public UniformsBase
 	{
 	public:
 		UniformsStd()
@@ -174,7 +174,7 @@ namespace Dx11Render
 		}
 	};
 
-	class InOutsBase
+	class C3D_Dx11_API InOutsBase
 	{
 	protected:
 		Castor::String	m_strVtxInput;
@@ -202,7 +202,7 @@ namespace Dx11Render
 		static std::unique_ptr< InOutsBase > Get( DxRenderSystem const & p_renderSystem );
 	};
 
-	class InOutsOld : public InOutsBase
+	class C3D_Dx11_API InOutsOld : public InOutsBase
 	{
 	public:
 		InOutsOld()
@@ -245,7 +245,7 @@ namespace Dx11Render
 		}
 	};
 
-	class InOutsNew : public InOutsBase
+	class C3D_Dx11_API InOutsNew : public InOutsBase
 	{
 	public:
 		InOutsNew()
@@ -312,10 +312,6 @@ namespace Dx11Render
 		ID3DBlob * GetCompiled( Castor3D::eSHADER_TYPE p_eType );
 
 	private:
-		virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags );
-		virtual Castor::String DoGetPixelShaderSource( uint32_t p_uiFlags );
-		virtual Castor::String DoGetDeferredVertexShaderSource( uint32_t p_uiProgramFlags, bool p_bLightPass );
-		virtual Castor::String DoGetDeferredPixelShaderSource( uint32_t p_uiFlags );
 		Castor3D::ShaderObjectBaseSPtr DoCreateObject( Castor3D::eSHADER_TYPE p_eType );
 		virtual std::shared_ptr< Castor3D::OneTextureFrameVariable > DoCreateTextureVariable( int p_iNbOcc );
 

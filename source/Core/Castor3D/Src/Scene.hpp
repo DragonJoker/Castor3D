@@ -35,11 +35,11 @@ namespace Castor3D
 	\date		09/02/2010
 	\~english
 	\brief		Scene handler class
-	\remark		A scene is a collection of lights, scene nodes and geometries.
+	\remarks	A scene is a collection of lights, scene nodes and geometries.
 				<br />It has at least one camera to render it
 	\~french
 	\brief		Classe de gestion d'un scène
-	\remark		Une scène est une collection de lumières, noeuds et géométries.
+	\remarks	Une scène est une collection de lumières, noeuds et géométries.
 				<br />Elle a au moins une caméra permettant son rendu
 	*/
 	class C3D_API Scene
@@ -135,7 +135,6 @@ namespace Castor3D
 		\brief		Helper structure used to sort submeshes
 		\~french
 		\brief		Structure d'aide utilisée lors du tri des sous-maillages
-		\remark
 		*/
 		struct stRENDER_NODE
 		{
@@ -206,16 +205,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders the scene in a given display mode
+		 *\param[in]	p_technique		The current rendering technique, used to select appropriate shaders
 		 *\param[in]	p_displayMode	The mode in which the display must be made
 		 *\param[in]	p_dFrameTime	The time elapsed since the last frame was rendered
 		 *\param[in]	p_camera		The camera from which the render is made
 		 *\~french
 		 *\brief		Rend la scène dans un mode d'affichage donné
+		 *\param[in]	p_technique		La technique de rendu courante, utilisee pour recuperer les bons shaders
 		 *\param[in]	p_displayMode	Le mode d'affichage
 		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la frame précédente
 		 *\param[in]	p_camera		La caméra utilisée pour le rendu
 		 */
-		void Render( eTOPOLOGY p_displayMode, double p_dFrameTime, Camera const & p_camera );
+		void Render( RenderTechniqueBase & p_technique, eTOPOLOGY p_displayMode, double p_dFrameTime, Camera const & p_camera );
 		/**
 		 *\~english
 		 *\brief		Sets the background image for the scene
@@ -232,7 +233,7 @@ namespace Castor3D
 		 *\return		The created node
 		 *\~french
 		 *\brief		Crée un SceneNode
-		 *\remark		Le SceneNode créé sera attaché au root node
+		 *\remarks		Le SceneNode créé sera attaché au root node
 		 *\param[in]	p_name		Le nom du node
 		 *\return		Le noeud créé
 		 */
@@ -244,7 +245,7 @@ namespace Castor3D
 		 *\param[in]	p_parent	The parent node, if nullptr, the created node will be attached to root
 		 *\~french
 		 *\brief		Crée un SceneNode
-		 *\remark		Si le parent donné est nul, le SceneNode créé sera attaché au root node
+		 *\remarks		Si le parent donné est nul, le SceneNode créé sera attaché au root node
 		 *\param[in]	p_name		Le nom du node
 		 *\param[in]	p_parent	Le parent du node
 		 */
@@ -269,11 +270,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a geometry, with no mesh
-		 *\remark		The geometry is not added to the geometries of the scene. Call AddPrimitive to do that
+		 *\remarks		The geometry is not added to the geometries of the scene. Call AddPrimitive to do that
 		 *\param[in]	p_name	The primitive name
 		 *\~french
 		 *\brief		Crée une géométrie
-		 *\remark		La géométrie n'est pas ajoutée aux géoméétries de la scène, il faut donc appeler AddPrimitive pour ce faire.
+		 *\remarks		La géométrie n'est pas ajoutée aux géoméétries de la scène, il faut donc appeler AddPrimitive pour ce faire.
 		 *\param[in]	p_name	Le nom de la géométrie
 		 */
 		GeometrySPtr CreateGeometry( Castor::String const & p_name );
@@ -1017,16 +1018,16 @@ namespace Castor3D
 		void DoDeleteToDelete();
 		void DoUpdateAnimations();
 		void DoSortByAlpha();
-		void DoRenderSubmeshesNonInstanced( Camera const & p_camera, Pipeline & p_pipeline, eTOPOLOGY p_displayMode, RenderNodeArrayConstIt p_begin, RenderNodeArrayConstIt p_end );
-		void DoRenderSubmeshesInstanced( Camera const & p_camera, Pipeline & p_pipeline, eTOPOLOGY p_displayMode, SubmeshNodesByMaterialMapConstIt p_begin, SubmeshNodesByMaterialMapConstIt p_end );
-		void DoRenderAlphaSortedSubmeshes( Pipeline & p_pipeline, eTOPOLOGY p_displayMode, RenderNodeByDistanceMMapConstIt p_begin, RenderNodeByDistanceMMapConstIt p_end );
+		void DoRenderSubmeshesNonInstanced( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline, eTOPOLOGY p_displayMode, RenderNodeArrayConstIt p_begin, RenderNodeArrayConstIt p_end );
+		void DoRenderSubmeshesInstanced( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline, eTOPOLOGY p_displayMode, SubmeshNodesByMaterialMapConstIt p_begin, SubmeshNodesByMaterialMapConstIt p_end );
+		void DoRenderAlphaSortedSubmeshes( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, eTOPOLOGY p_displayMode, RenderNodeByDistanceMMapConstIt p_begin, RenderNodeByDistanceMMapConstIt p_end );
 		void DoResortAlpha( Camera const & p_camera, RenderNodeArrayIt p_begin, RenderNodeArrayIt p_end, RenderNodeByDistanceMMap & p_map, int p_sign );
-		void DoRenderSubmeshInstancedMultiple( Pipeline & p_pipeline, RenderNodeArray const & p_nodes, eTOPOLOGY p_eTopology );
-		void DoRenderSubmeshInstancedSingle( Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
-		void DoRenderSubmeshNonInstanced( Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
-		void DoRenderSubmesh( Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
+		void DoRenderSubmeshInstancedMultiple( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, RenderNodeArray const & p_nodes, eTOPOLOGY p_eTopology );
+		void DoRenderSubmeshInstancedSingle( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
+		void DoRenderSubmeshNonInstanced( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
+		void DoRenderSubmesh( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
 		void DoApplySkeleton( FrameVariableBuffer const & p_matrixBuffer, AnimatedObjectSPtr p_object );
-		void DoRenderBillboards( Pipeline & p_pipeline, BillboardListStrMapIt p_itBegin, BillboardListStrMapIt p_itEnd );
+		void DoRenderBillboards( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, BillboardListStrMapIt p_itBegin, BillboardListStrMapIt p_itEnd );
 		void DoBindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer );
 		void DoBindLight( LightSPtr p_light, int p_index, ShaderProgramBase & p_program );
 		void DoUnbindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer );

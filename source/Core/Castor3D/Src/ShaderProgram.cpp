@@ -265,46 +265,6 @@ namespace Castor3D
 		}
 	}
 
-	String ShaderProgramBase::GetVertexShaderSource( uint32_t p_uiProgramFlags, bool p_bLightPass )
-	{
-		String l_strReturn;
-		ContextSPtr l_pContext = m_pRenderSystem->GetMainContext();
-
-		if ( l_pContext )
-		{
-			if ( l_pContext->IsDeferredShadingSet() )
-			{
-				l_strReturn = DoGetDeferredVertexShaderSource( p_uiProgramFlags, p_bLightPass );
-			}
-			else
-			{
-				l_strReturn = DoGetVertexShaderSource( p_uiProgramFlags );
-			}
-		}
-
-		return l_strReturn;
-	}
-
-	String ShaderProgramBase::GetPixelShaderSource( uint32_t p_uiFlags )
-	{
-		String l_strReturn;
-		ContextSPtr l_pContext = m_pRenderSystem->GetMainContext();
-
-		if ( l_pContext )
-		{
-			if ( l_pContext->IsDeferredShadingSet() )
-			{
-				l_strReturn = DoGetDeferredPixelShaderSource( p_uiFlags );
-			}
-			else
-			{
-				l_strReturn = DoGetPixelShaderSource( p_uiFlags );
-			}
-		}
-
-		return l_strReturn;
-	}
-
 	ShaderObjectBaseSPtr ShaderProgramBase::CreateObject( eSHADER_TYPE p_eType )
 	{
 		ShaderObjectBaseSPtr l_pReturn;

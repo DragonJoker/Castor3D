@@ -32,10 +32,10 @@ namespace Castor3D
 	\version	0.7.0
 	\~english
 	\brief		Initialiser event
-	\remark		Initialises the member given when constructed.
+	\remarks	Initialises the member given when constructed.
 	\~french
 	\brief		Evènement d'initialisation
-	\remark		Initialise le membre donné lors de la construction.
+	\remarks	Initialise le membre donné lors de la construction.
 	*/
 	template< class T >
 	class C3D_API InitialiseEvent
@@ -97,11 +97,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Applies the event
-		 *\remark		Initialises the object
+		 *\remarks		Initialises the object
 		 *\return		\p true if the event was applied successfully
 		 *\~french
 		 *\brief		Traite l'évènement
-		 *\remark		Initialise l'objet
+		 *\remarks		Initialise l'objet
 		 *\return		\p true si l'évènement a été traité avec succès
 		 */
 		virtual bool Apply()

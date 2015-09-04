@@ -879,23 +879,55 @@ namespace CastorViewer
 		ThreadPtrArray l_arrayThreads;
 		File::ListDirectoryFiles( Engine::GetPluginsDirectory(), l_arrayFiles );
 
-		if ( l_arrayFiles.size() > 0 )
+		if ( !l_arrayFiles.empty() )
 		{
+			// Since techniques depend on renderers, we load them first
+			PathArray l_otherPlugins;
+
 			for ( auto && l_file : l_arrayFiles )
 			{
 				Path l_path( l_file );
 
 				if ( l_path.GetExtension() == CASTOR_DLL_EXT )
 				{
-					l_arrayThreads.push_back( std::make_shared< std::thread >( [&l_arrayFailed, &l_mutex, this]( Path const & p_path )
+					if ( l_path.find( cuT( "RenderSystem" ) ) != String::npos )
 					{
-						if ( !m_pCastor3D->LoadPlugin( p_path ) )
+						l_arrayThreads.push_back( std::make_shared< std::thread >( [&l_arrayFailed, &l_mutex, this]( Path const & p_path )
 						{
-							std::unique_lock< std::mutex > l_lock( l_mutex );
-							l_arrayFailed.push_back( p_path );
-						}
-					}, l_path ) );
+							if ( !m_pCastor3D->LoadPlugin( p_path ) )
+							{
+								std::unique_lock< std::mutex > l_lock( l_mutex );
+								l_arrayFailed.push_back( p_path );
+							}
+						}, l_path ) );
+					}
+					else
+					{
+						l_otherPlugins.push_back( l_file );
+					}
 				}
+			}
+
+			for ( auto && l_thread : l_arrayThreads )
+			{
+				l_thread->join();
+			}
+
+			l_arrayThreads.clear();
+
+			// Then we load other plugins
+			for ( auto && l_file : l_otherPlugins )
+			{
+				Path l_path( l_file );
+
+				l_arrayThreads.push_back( std::make_shared< std::thread >( [&l_arrayFailed, &l_mutex, this]( Path const & p_path )
+				{
+					if ( !m_pCastor3D->LoadPlugin( p_path ) )
+					{
+						std::unique_lock< std::mutex > l_lock( l_mutex );
+						l_arrayFailed.push_back( p_path );
+					}
+				}, l_path ) );
 			}
 
 			for ( auto && l_thread : l_arrayThreads )
@@ -1194,6 +1226,7 @@ namespace CastorViewer
 		m_auiManager.DetachPane( m_propertiesContainer );
 		m_auiManager.DetachPane( m_logTabsContainer );
 		m_auiManager.DetachPane( m_pRenderPanel );
+		m_auiManager.DetachPane( m_toolBar );
 		m_messageLog = NULL;
 		m_errorLog = NULL;
 		Hide();

@@ -43,12 +43,12 @@ namespace Deferred
 	\date		12/11/2012
 	\~english
 	\brief		Deferred lighting Render technique class
-	\remark		Creates up to 6 render buffers (position, diffuse, normals, tangents, bitangents, specular)
+	\remarks	Creates up to 6 render buffers (position, diffuse, normals, tangents, bitangents, specular)
 				<br />it renders to these buffers (Geometry Pass)
 				<br />then renders these buffers into the final one, adding the lights (Light Pass)
 	\~french
 	\brief		Classe de technique de rendu implémentant le Deferred lighting
-	\remark		On crée jusqu'à 6 tampons de rendu (position, diffuse, normales, tangentes, bitangentes, spéculaire)
+	\remarks	On crée jusqu'à 6 tampons de rendu (position, diffuse, normales, tangentes, bitangentes, spéculaire)
 				<br />on fait le rendu dans ces tampons (Geometry Pass)
 				<br />puis on fait un rendu de ces tampons en ajoutant les lumières (Light Pass)
 	*/
@@ -73,10 +73,10 @@ namespace Deferred
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\remark		Used only by TechniqueFactory
+		 *\remarks		Used only by TechniqueFactory
 		 *\~french
 		 *\brief		Constructeur
-		 *\remark		Utilisé uniquement par TechniqueFactory
+		 *\remarks		Utilisé uniquement par TechniqueFactory
 		 */
 		RenderTechnique();
 		/**
@@ -185,6 +185,120 @@ namespace Deferred
 		 *\brief		Fonction de fin de rendu
 		 */
 		virtual void DoEndRender();
+		/**
+		 *\~english
+		 *\brief		Retrieves the vertex shader source matching the given flags
+		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
+		 *\~french
+		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
+		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
+		 */
+		virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags
+		 *\param[in]	p_uiFlags	A combination of eTEXTURE_CHANNEL
+		 *\~french
+		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
+		 *\param[in]	p_uiFlags	Une combinaison de eTEXTURE_CHANNEL
+		 */
+		virtual Castor::String DoGetPixelShaderSource( uint32_t p_uiFlags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the vertex shader source matching the given flags
+		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
+		 *\~french
+		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
+		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
+		 */
+		Castor::String DoGetLightPassVertexShaderSource( uint32_t p_uiProgramFlags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags
+		 *\param[in]	p_uiFlags	A combination of eTEXTURE_CHANNEL
+		 *\~french
+		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
+		 *\param[in]	p_uiFlags	Une combinaison de eTEXTURE_CHANNEL
+		 */
+		Castor::String DoGetLightPassPixelShaderSource( uint32_t p_uiFlags )const;
+
+#if C3D_HAS_GL_RENDERER
+		/**
+		 *\~english
+		 *\brief		Retrieves the vertex shader source matching the given flags
+		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
+		 *\~french
+		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
+		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
+		 */
+		Castor::String DoGetGlVertexShaderSource( uint32_t p_uiProgramFlags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags
+		 *\param[in]	p_uiFlags	A combination of eTEXTURE_CHANNEL
+		 *\~french
+		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
+		 *\param[in]	p_uiFlags	Une combinaison de eTEXTURE_CHANNEL
+		 */
+		Castor::String DoGetGlPixelShaderSource( uint32_t p_uiFlags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the vertex shader source matching the given flags
+		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
+		 *\~french
+		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
+		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
+		 */
+		Castor::String DoGetGlLightPassVertexShaderSource( uint32_t p_uiProgramFlags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags
+		 *\param[in]	p_uiFlags	A combination of eTEXTURE_CHANNEL
+		 *\~french
+		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
+		 *\param[in]	p_uiFlags	Une combinaison de eTEXTURE_CHANNEL
+		 */
+		Castor::String DoGetGlLightPassPixelShaderSource( uint32_t p_uiFlags )const;
+#endif
+
+#if C3D_HAS_D3D11_RENDERER
+		/**
+		 *\~english
+		 *\brief		Retrieves the vertex shader source matching the given flags
+		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
+		 *\~french
+		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
+		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
+		 */
+		Castor::String DoGetD3D11VertexShaderSource( uint32_t p_uiProgramFlags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags
+		 *\param[in]	p_uiFlags	A combination of eTEXTURE_CHANNEL
+		 *\~french
+		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
+		 *\param[in]	p_uiFlags	Une combinaison de eTEXTURE_CHANNEL
+		 */
+		Castor::String DoGetD3D11PixelShaderSource( uint32_t p_uiFlags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the vertex shader source matching the given flags
+		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
+		 *\~french
+		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
+		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
+		 */
+		Castor::String DoGetD3D11LightPassVertexShaderSource( uint32_t p_uiProgramFlags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags
+		 *\param[in]	p_uiFlags	A combination of eTEXTURE_CHANNEL
+		 *\~french
+		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
+		 *\param[in]	p_uiFlags	Une combinaison de eTEXTURE_CHANNEL
+		 */
+		Castor::String DoGetD3D11LightPassPixelShaderSource( uint32_t p_uiFlags )const;
+#endif
 
 	protected:
 		//!\~english The various textures	\~french Les diverses textures

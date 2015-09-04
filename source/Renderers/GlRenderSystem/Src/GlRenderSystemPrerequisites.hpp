@@ -155,7 +155,7 @@ namespace GlRender
 
 	namespace GLSL
 	{
-		class KeywordsBase
+		class C3D_Gl_API KeywordsBase
 		{
 		protected:
 			Castor::String m_strStdLayout;
@@ -184,6 +184,7 @@ namespace GlRender
 			Castor::String m_strGSOutEmissiveDecl;
 
 		public:
+			static std::unique_ptr< GLSL::KeywordsBase > Get( OpenGl const & p_gl );
 			inline Castor::String GetStdLayout( int p_index )const
 			{
 				return m_strStdLayout + cuT( "( std" ) + Castor::str_utils::to_string( p_index ) + cuT( " ) " );
@@ -285,7 +286,8 @@ namespace GlRender
 
 		template< int Version, class Enable = void > class Keywords;
 
-		template< int Version > class Keywords < Version, typename std::enable_if< ( Version <= 120 ) >::type > : public KeywordsBase
+		template< int Version >
+		class Keywords < Version, typename std::enable_if< ( Version <= 120 ) >::type > : public KeywordsBase
 		{
 		public:
 			Keywords()
@@ -312,7 +314,8 @@ namespace GlRender
 			}
 		};
 
-		template< int Version > class Keywords < Version, typename std::enable_if < ( Version > 120 ) && ( Version < 140 ) >::type > : public KeywordsBase
+		template< int Version >
+		class Keywords < Version, typename std::enable_if < ( Version > 120 ) && ( Version < 140 ) >::type > : public KeywordsBase
 		{
 		public:
 			Keywords()
@@ -341,7 +344,8 @@ namespace GlRender
 			}
 		};
 
-		template< int Version > class Keywords < Version, typename std::enable_if < ( Version >= 140 ) && ( Version < 330 ) >::type > : public KeywordsBase
+		template< int Version >
+		class Keywords < Version, typename std::enable_if < ( Version >= 140 ) && ( Version < 330 ) >::type > : public KeywordsBase
 		{
 		public:
 			Keywords()
@@ -371,7 +375,8 @@ namespace GlRender
 			}
 		};
 
-		template< int Version > class Keywords< Version, typename std::enable_if< ( Version >= 330 ) >::type > : public KeywordsBase
+		template< int Version >
+		class Keywords< Version, typename std::enable_if< ( Version >= 330 ) >::type > : public KeywordsBase
 		{
 		public:
 			Keywords()
@@ -408,16 +413,17 @@ namespace GlRender
 			}
 		};
 
-		class ConstantsBase
+		class C3D_Gl_API ConstantsBase
 		{
 		public:
+			static GLSL::ConstantsBase * Get( OpenGl const & p_gl );
 			virtual Castor::String Matrices() = 0;
 			virtual Castor::String Scene() = 0;
 			virtual Castor::String Pass() = 0;
 			virtual Castor::String Billboard() = 0;
 		};
 
-		class ConstantsStd : public ConstantsBase
+		class C3D_Gl_API ConstantsStd : public ConstantsBase
 		{
 		public:
 			virtual Castor::String Matrices();
@@ -426,7 +432,7 @@ namespace GlRender
 			virtual Castor::String Billboard();
 		};
 
-		class ConstantsUbo : public ConstantsBase
+		class C3D_Gl_API ConstantsUbo : public ConstantsBase
 		{
 		public:
 			virtual Castor::String Matrices();
@@ -438,16 +444,17 @@ namespace GlRender
 		static ConstantsStd	constantsStd;
 		static ConstantsUbo	constantsUbo;
 
-		class VariablesBase
+		class C3D_Gl_API VariablesBase
 		{
 		public:
+			static GLSL::VariablesBase * Get( OpenGl const & p_gl );
 			virtual Castor::String GetVertexOutMatrices()const = 0;
 			virtual Castor::String GetVertexMatrixCopy()const = 0;
 			virtual Castor::String GetPixelInMatrices()const = 0;
 			virtual Castor::String GetPixelMtxModelView()const = 0;
 		};
 
-		class VariablesUbo
+		class C3D_Gl_API VariablesUbo
 			: public VariablesBase
 		{
 		public:
@@ -472,7 +479,7 @@ namespace GlRender
 			}
 		};
 
-		class VariablesStd
+		class C3D_Gl_API VariablesStd
 			: public VariablesBase
 		{
 		public:
@@ -505,10 +512,6 @@ namespace GlRender
 
 		static VariablesUbo variablesUbo;
 		static VariablesStd variablesStd;
-
-		GLSL::VariablesBase * GetVariables( OpenGl const & p_gl );
-		GLSL::ConstantsBase * GetConstants( OpenGl const & p_gl );
-		std::unique_ptr< GLSL::KeywordsBase > GetKeywords( OpenGl const & p_gl );
 	}
 }
 

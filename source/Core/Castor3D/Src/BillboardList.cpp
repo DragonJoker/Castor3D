@@ -176,24 +176,37 @@ namespace Castor3D
 		}
 
 		m_pGeometryBuffers = m_pRenderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
+		return true;
+	}
+
+	bool BillboardList::InitialiseShader( RenderTechniqueBase & p_technique )
+	{
 		MaterialSPtr l_pMaterial = m_wpMaterial.lock();
 		bool l_bReturn = false;
 
 		if ( l_pMaterial && l_pMaterial->GetPassCount() )
 		{
 			l_pMaterial->Cleanup();
-			ShaderProgramBaseSPtr l_pProgram = DoGetProgram( l_pMaterial->GetPass( 0 )->GetTextureFlags() );
-			m_wpProgram = l_pProgram;
-			l_bReturn = DoInitialise();
+			ShaderProgramBaseSPtr l_pProgram = DoGetProgram( p_technique, l_pMaterial->GetPass( 0 )->GetTextureFlags() );
 
-			if ( l_bReturn )
+			if ( m_wpProgram.expired() || m_wpProgram.lock() != l_pProgram )
 			{
-				l_pMaterial->Initialise();
-				m_pDimensionsUniform->SetValue( Point2i( m_dimensions.width(), m_dimensions.height() ) );
-				m_pGeometryBuffers->GetVertexBuffer().Create();
-				m_pGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, l_pProgram );
-				m_pGeometryBuffers->Initialise();
-				m_bNeedUpdate = false;
+				m_wpProgram = l_pProgram;
+				l_bReturn = DoInitialise();
+
+				if ( l_bReturn )
+				{
+					l_pMaterial->Initialise();
+					m_pDimensionsUniform->SetValue( Point2i( m_dimensions.width(), m_dimensions.height() ) );
+					m_pGeometryBuffers->GetVertexBuffer().Create();
+					m_pGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, l_pProgram );
+					m_pGeometryBuffers->Initialise();
+					m_bNeedUpdate = false;
+				}
+			}
+			else
+			{
+				l_bReturn = true;
 			}
 		}
 

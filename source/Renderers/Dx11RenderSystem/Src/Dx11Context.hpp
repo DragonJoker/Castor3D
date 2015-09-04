@@ -22,6 +22,13 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Context.hpp>
 #include <Size.hpp>
+#include <algorithm>
+
+#if defined( min )
+#	undef min
+#	undef max
+#	undef abs
+#endif
 
 #if defined( _WIN32 )
 namespace Dx11Render
@@ -36,7 +43,7 @@ namespace Dx11Render
 		virtual void UpdateFullScreen( bool p_bVal );
 		virtual Castor::Size GetMaxSize( Castor::Size const & p_size )
 		{
-			return Castor::Size( min( p_size.width(), m_size.width() ), min( p_size.height(), m_size.height() ) );
+			return Castor::Size( std::min( p_size.width(), m_size.width() ), std::min( p_size.height(), m_size.height() ) );
 		}
 		ID3D11RenderTargetView * GetRenderTargetView()const
 		{

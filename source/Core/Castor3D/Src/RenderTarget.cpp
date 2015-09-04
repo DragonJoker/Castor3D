@@ -393,7 +393,15 @@ namespace Castor3D
 				m_bDeferredRendering = true;
 			}
 
-			m_pRenderTechnique = m_pEngine->CreateTechnique( m_strTechniqueName, *this, l_params );
+			try
+			{
+				m_pRenderTechnique = m_pEngine->CreateTechnique( m_strTechniqueName, *this, l_params );
+			}
+			catch( Exception & p_exc )
+			{
+				Logger::LogError( cuT( "Couldn't load technique " ) + m_strTechniqueName + cuT( ": " ) + str_utils::from_str( p_exc.GetFullDescription() ) );
+				throw;
+			}
 		}
 
 		m_fbLeftEye.Initialise( p_index, m_size );

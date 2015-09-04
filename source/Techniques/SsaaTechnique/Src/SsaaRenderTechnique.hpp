@@ -42,38 +42,18 @@ namespace Ssaa
 	\date		12/11/2012
 	\~english
 	\brief		SSAA Render technique class
-	\remark		It creates a supersampled frame buffer and needed attachments,
+	\remarks	It creates a supersampled frame buffer and needed attachments,
 				<br />it renders to the singlesampled frame buffer
 				<br />then it blits this singlesampled frame buffer to the main one with appropriate resize
 	\~french
 	\brief		Classe de technique de rendu implémentant le SSAA
-	\remark		On crée un tampon d'image supersamplé avec les attaches nécessaires
+	\remarks	On crée un tampon d'image supersamplé avec les attaches nécessaires
 				<br />on fait le rendu dans le tampon d'image singlesamplé
 				<br />puis on blitte ce tampon d'image singlesamplé dans le principal avec le redimensionnement approprié
 	*/
 	class RenderTechnique
 		:	public Castor3D::RenderTechniqueBase
 	{
-	protected:
-		//!\~english The supersampled frame buffer	\~french Le tampon d'image supersamplé
-		Castor3D::FrameBufferSPtr m_pSsFrameBuffer;
-		//!\~english The buffer receiving the supersampled color render	\~french Le tampon recevant le rendu couleur supersamplé
-		Castor3D::ColourRenderBufferSPtr m_pSsColorBuffer;
-		//!\~english The buffer receiving the supersampled depth render	\~french Le tampon recevant le rendu profondeur supersamplé
-		Castor3D::DepthStencilRenderBufferSPtr m_pSsDepthBuffer;
-		//!\~english The attach between supersampled colour buffer and supersampled frame buffer	\~french L'attache entre le tampon couleur supersamplé et le tampon supersamplé
-		Castor3D::RenderBufferAttachmentSPtr m_pSsColorAttach;
-		//!\~english The attach between supersampled depth buffer and supersampled frame buffer	\~french L'attache entre le tampon profondeur supersamplé et le tampon supersamplé
-		Castor3D::RenderBufferAttachmentSPtr m_pSsDepthAttach;
-		//!\~english The samples count	\~french Le nombre de samples
-		int m_iSamplesCount;
-		//!\~english The bound frame buffer, depends on m_iSamplesCount	\~french Le tampon d'image lié, dépend de m_iSamplesCount
-		Castor3D::FrameBufferSPtr m_pBoundFrameBuffer;
-		//!\~english Supersampled size	\~french Taille supersamplée
-		Castor::Size m_sizeSsaa;
-		//!\~english Supersampled rectangle	\~french Rectangle supersamplé
-		Castor::Rectangle m_rectSsaa;
-
 	protected:
 		/**
 		 *\~english
@@ -188,6 +168,86 @@ namespace Ssaa
 		 *\brief		Fonction de fin de rendu
 		 */
 		virtual void DoEndRender();
+		/**
+		 *\~english
+		 *\brief		Retrieves the vertex shader source matching the given flags
+		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
+		 *\~french
+		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
+		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
+		 */
+		virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags
+		 *\param[in]	p_uiFlags	A combination of eTEXTURE_CHANNEL
+		 *\~french
+		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
+		 *\param[in]	p_uiFlags	Une combinaison de eTEXTURE_CHANNEL
+		 */
+		virtual Castor::String DoGetPixelShaderSource( uint32_t p_uiFlags )const;
+
+#if C3D_HAS_GL_RENDERER
+		/**
+		 *\~english
+		 *\brief		Retrieves the vertex shader source matching the given flags
+		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
+		 *\~french
+		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
+		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
+		 */
+		Castor::String DoGetGlVertexShaderSource( uint32_t p_uiProgramFlags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags
+		 *\param[in]	p_uiFlags	A combination of eTEXTURE_CHANNEL
+		 *\~french
+		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
+		 *\param[in]	p_uiFlags	Une combinaison de eTEXTURE_CHANNEL
+		 */
+		Castor::String DoGetGlPixelShaderSource( uint32_t p_uiFlags )const;
+#endif
+
+#if C3D_HAS_D3D11_RENDERER
+		/**
+		 *\~english
+		 *\brief		Retrieves the vertex shader source matching the given flags
+		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
+		 *\~french
+		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
+		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
+		 */
+		Castor::String DoGetD3D11VertexShaderSource( uint32_t p_uiProgramFlags )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags
+		 *\param[in]	p_uiFlags	A combination of eTEXTURE_CHANNEL
+		 *\~french
+		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
+		 *\param[in]	p_uiFlags	Une combinaison de eTEXTURE_CHANNEL
+		 */
+		Castor::String DoGetD3D11PixelShaderSource( uint32_t p_uiFlags )const;
+#endif
+
+	protected:
+		//!\~english The supersampled frame buffer	\~french Le tampon d'image supersamplé
+		Castor3D::FrameBufferSPtr m_pSsFrameBuffer;
+		//!\~english The buffer receiving the supersampled color render	\~french Le tampon recevant le rendu couleur supersamplé
+		Castor3D::ColourRenderBufferSPtr m_pSsColorBuffer;
+		//!\~english The buffer receiving the supersampled depth render	\~french Le tampon recevant le rendu profondeur supersamplé
+		Castor3D::DepthStencilRenderBufferSPtr m_pSsDepthBuffer;
+		//!\~english The attach between supersampled colour buffer and supersampled frame buffer	\~french L'attache entre le tampon couleur supersamplé et le tampon supersamplé
+		Castor3D::RenderBufferAttachmentSPtr m_pSsColorAttach;
+		//!\~english The attach between supersampled depth buffer and supersampled frame buffer	\~french L'attache entre le tampon profondeur supersamplé et le tampon supersamplé
+		Castor3D::RenderBufferAttachmentSPtr m_pSsDepthAttach;
+		//!\~english The samples count	\~french Le nombre de samples
+		int m_iSamplesCount;
+		//!\~english The bound frame buffer, depends on m_iSamplesCount	\~french Le tampon d'image lié, dépend de m_iSamplesCount
+		Castor3D::FrameBufferSPtr m_pBoundFrameBuffer;
+		//!\~english Supersampled size	\~french Taille supersamplée
+		Castor::Size m_sizeSsaa;
+		//!\~english Supersampled rectangle	\~french Rectangle supersamplé
+		Castor::Rectangle m_rectSsaa;
 	};
 }
 

@@ -27,21 +27,6 @@ GlOverlayRenderer::~GlOverlayRenderer()
 ShaderProgramBaseSPtr GlOverlayRenderer::DoGetProgram( uint32_t p_uiFlags )
 {
 	using namespace GLSL;
-	GLSL::VariablesBase * l_pVariables = GLSL::GetVariables( m_gl );
-	GLSL::ConstantsBase * l_pConstants = GLSL::GetConstants( m_gl );
-	std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::GetKeywords( m_gl );
-
-	String l_strVersion = l_pKeywords->GetVersion();
-	String l_strAttribute0 = l_pKeywords->GetAttribute( 0 );
-	String l_strAttribute1 = l_pKeywords->GetAttribute( 1 );
-	String l_strAttribute2 = l_pKeywords->GetAttribute( 2 );
-	String l_strAttribute3 = l_pKeywords->GetAttribute( 3 );
-	String l_strAttribute4 = l_pKeywords->GetAttribute( 4 );
-	String l_strAttribute5 = l_pKeywords->GetAttribute( 5 );
-	String l_strAttribute6 = l_pKeywords->GetAttribute( 6 );
-	String l_strAttribute7 = l_pKeywords->GetAttribute( 7 );
-	String l_strIn = l_pKeywords->GetIn();
-	String l_strOut = l_pKeywords->GetOut();
 
 	// Shader program
 	ShaderManager & l_manager = m_pRenderSystem->GetEngine()->GetShaderManager();

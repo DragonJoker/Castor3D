@@ -193,34 +193,6 @@ namespace Castor3D
 				Logger::LogInfo( StringStream() << cuT( "Geometry::CreateBuffers - NbVertex: " ) << l_nbVertex << cuT( ", NbFaces: " ) << l_nbFaces );
 				m_listCreated = l_pMesh->GetSubmeshCount() > 0;
 			}
-
-			Engine * l_engine = GetScene()->GetEngine();
-
-			for ( auto && l_pair : m_submeshesMaterials )
-			{
-				uint32_t l_uiProgramFlags = l_pair.first->GetProgramFlags();
-
-				if ( l_pair.first->GetRefCount( l_pair.second ) > 1 )
-				{
-					l_uiProgramFlags |= ePROGRAM_FLAG_INSTANCIATION;
-				}
-
-				if ( l_engine->GetRenderSystem()->GetCurrentContext()->IsDeferredShadingSet() )
-				{
-					l_uiProgramFlags |= ePROGRAM_FLAG_DEFERRED;
-				}
-
-				if ( l_pair.second )
-				{
-					for ( auto && l_pass : *l_pair.second )
-					{
-						if ( !l_pass->HasShader() )
-						{
-							l_engine->GetShaderManager().GetAutomaticProgram( l_pass->GetTextureFlags(), l_uiProgramFlags )->Initialise();
-						}
-					}
-				}
-			}
 		}
 	}
 
