@@ -39,16 +39,16 @@ scene "TextureScene"
 	{
 		parent		"TextureSunLightNode"
 		type		directional
-		diffuse		0.8 0.8 0.8
-		specular	1.0 1.0 1.0
+		diffuse		0.8 0.8 0.8 1.0
+		specular	1.0 1.0 1.0 1.0
 	}
 
 	light "TextureSunLight2"
 	{
 		parent		"TextureSunLightNode2"
 		type		directional
-		diffuse		0.8 0.8 0.8
-		specular	1.0 1.0 1.0
+		diffuse		0.8 0.8 0.8 1.0
+		specular	1.0 1.0 1.0 1.0
 	}
 
 	camera "TextureCamera"
@@ -141,16 +141,16 @@ scene "FinalScene"
 	{
 		parent		"FinalSunLightNode"
 		type		directional
-		diffuse		0.8 0.8 0.8
-		specular	1.0 1.0 1.0
+		diffuse		0.8 0.8 0.8 1.0
+		specular	1.0 1.0 1.0 1.0
 	}
 
 	light "FinalSunLight2"
 	{
 		parent		"FinalSunLightNode2"
 		type		directional
-		diffuse		0.8 0.8 0.8
-		specular	1.0 1.0 1.0
+		diffuse		0.8 0.8 0.8 1.0
+		specular	1.0 1.0 1.0 1.0
 	}
 
 	object "FinalGeometry"
