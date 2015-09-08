@@ -34,6 +34,13 @@ namespace GlRender
 		virtual void Initialise();
 		/**
 		 *\~english
+		 *\brief		Cleans the program up
+		 *\~french
+		 *\brief		Nettoie le programme
+		 */
+		virtual void Cleanup();
+		/**
+		 *\~english
 		 *\brief		Link all Shaders
 		 */
 		virtual bool Link();

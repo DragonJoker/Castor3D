@@ -21,6 +21,7 @@
 #include "Scene.hpp"
 #include "SceneFileParser.hpp"
 #include "ShaderPlugin.hpp"
+#include "ShaderProgram.hpp"
 #include "TechniquePlugin.hpp"
 #include "TextOverlay.hpp"
 #include "VersionException.hpp"
@@ -271,38 +272,72 @@ namespace Castor3D
 	{
 		if ( !IsCleaned() )
 		{
-			SetCleaned();
 			ClearScenes();
-			m_materialManager.Cleanup();
-			m_overlayManager.ClearOverlays();
-			m_shaderManager.ClearShaders();
+
+			m_depthStencilStateManager.lock();
+
+			for ( auto && l_it : m_depthStencilStateManager )
+			{
+				m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
+			}
+
+			m_depthStencilStateManager.unlock();
+			m_rasteriserStateManager.lock();
+
+			for ( auto && l_it : m_rasteriserStateManager )
+			{
+				m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
+			}
+
+			m_rasteriserStateManager.unlock();
+			m_blendStateManager.lock();
+
+			for ( auto && l_it : m_blendStateManager )
+			{
+				m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
+			}
+
+			m_blendStateManager.unlock();
+			m_samplerManager.lock();
+
+			for ( auto && l_it : m_samplerManager )
+			{
+				m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
+			}
+
+			m_samplerManager.unlock();
+			m_meshManager.lock();
+
+			for ( auto && l_it : m_meshManager )
+			{
+				m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
+			}
+
+			m_meshManager.unlock();
+			m_overlayManager.lock();
+
+			for ( auto && l_it : reinterpret_cast< OverlayCollection & >( m_overlayManager ) )
+			{
+				m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
+			}
+
+			m_overlayManager.unlock();
+			m_materialManager.lock();
+
+			for ( auto && l_it : m_materialManager )
+			{
+				m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
+			}
+
+			m_materialManager.unlock();
 
 			{
 				CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexResources );
-				m_depthStencilStateManager.lock();
 
-				for ( auto && l_it : m_depthStencilStateManager )
+				for ( auto && l_it : m_shaderManager )
 				{
-					m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
+					m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it ) );
 				}
-
-				m_depthStencilStateManager.unlock();
-				m_rasteriserStateManager.lock();
-
-				for ( auto && l_it : m_rasteriserStateManager )
-				{
-					m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
-				}
-
-				m_rasteriserStateManager.unlock();
-				m_blendStateManager.lock();
-
-				for ( auto && l_it : m_blendStateManager )
-				{
-					m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
-				}
-
-				m_blendStateManager.unlock();
 
 				for ( auto && l_it : m_mapWindows )
 				{
@@ -325,6 +360,8 @@ namespace Castor3D
 				m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *m_pDefaultSampler ) );
 			}
 
+			SetCleaned();
+
 			if ( m_pThreadMainLoop )
 			{
 				// We wait for the main loop to end (it makes a final render to clean the render system)
@@ -340,9 +377,13 @@ namespace Castor3D
 				{
 					GetRenderSystem()->GetMainContext()->Cleanup();
 				}
+
+				GetRenderSystem()->Cleanup();
 			}
 
 			m_samplerManager.clear();
+			m_shaderManager.ClearShaders();
+			m_overlayManager.ClearOverlays();
 			m_materialManager.DeleteAll();
 			m_sceneManager.clear();
 			{
@@ -357,11 +398,13 @@ namespace Castor3D
 			m_rasteriserStateManager.clear();
 			m_blendStateManager.clear();
 			RemoveAllRenderWindows();
-			// We clear the listeners list
-			m_arrayListeners.clear();
-			// We push a default listener in the list.
-			FrameListenerSPtr l_pListener = std::make_shared< FrameListener >();
-			m_arrayListeners.push_back( l_pListener );
+
+			for ( auto && l_listener : m_arrayListeners )
+			{
+				l_listener->Flush();
+			}
+
+			FrameListenerSPtr l_pListener = m_arrayListeners[0];
 
 			if ( m_pDefaultBlendState )
 			{
@@ -496,10 +539,12 @@ namespace Castor3D
 	void Engine::ClearScenes()
 	{
 		m_sceneManager.lock();
-		std::for_each( m_sceneManager.begin(), m_sceneManager.end(), [&]( std::pair< String, SceneSPtr > p_pair )
+
+		for ( auto l_it : m_sceneManager )
 		{
-			p_pair.second->ClearScene();
-		} );
+			l_it.second->ClearScene();
+		}
+
 		m_sceneManager.unlock();
 	}
 

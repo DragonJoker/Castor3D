@@ -58,7 +58,7 @@ namespace GlRender
 			}
 			else
 			{
-				m_gl.PreInitialise( cuT( "" ) );
+				m_gl.PreInitialise( String() );
 			}
 
 			EndCurrent();
@@ -108,8 +108,9 @@ namespace GlRender
 
 		if ( m_bInitialised )
 		{
+			glTrack( m_gl, GlContextImpl, this );
 			SetCurrent();
-			l_pRenderSystem->Initialise( cuT( "" ) );
+			l_pRenderSystem->Initialise();
 			p_window->GetEngine()->GetMaterialManager().Initialise();
 #if !defined( NDEBUG )
 
@@ -136,6 +137,7 @@ namespace GlRender
 	{
 		try
 		{
+			glUntrack( m_gl, this );
 			m_gl.DeleteContext( m_hContext );
 		}
 		catch ( ... )

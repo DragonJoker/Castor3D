@@ -178,17 +178,17 @@ namespace Castor3D
 
 	void ShaderProgramBase::Cleanup()
 	{
-		m_activeShaders.clear();
-
-		for ( auto l_shader : m_pShaders )
+		for ( auto l_shader : m_activeShaders )
 		{
 			if ( l_shader )
 			{
+				l_shader->Detach();
 				l_shader->FlushFrameVariables();
 				l_shader->DestroyProgram();
 			}
 		}
 
+		m_activeShaders.clear();
 		clear_container( m_arrayFiles );
 
 		m_frameVariableBuffersByName.clear();
@@ -230,6 +230,7 @@ namespace Castor3D
 						}
 						else
 						{
+							l_shader->AttachTo( *this );
 							m_activeShaders.push_back( l_shader );
 						}
 					}

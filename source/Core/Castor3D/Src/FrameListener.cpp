@@ -17,6 +17,14 @@ namespace Castor3D
 		}
 	}
 
+	void FrameListener::Flush()
+	{
+		for ( auto && l_list : m_events )
+		{
+			l_list.clear();
+		}
+	}
+
 	void FrameListener::PostEvent( FrameEventSPtr p_event )
 	{
 		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();

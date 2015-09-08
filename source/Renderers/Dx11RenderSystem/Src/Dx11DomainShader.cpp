@@ -61,7 +61,7 @@ namespace Dx11Render
 		l_pDeviceContext->DSSetShader( NULL, NULL, 0 );
 	}
 
-	void DxDomainShader::DoRetrieveShader()
+	void DxDomainShader::AttachTo( ShaderProgramBase & p_program )
 	{
 		if ( m_pCompiled )
 		{
@@ -78,5 +78,10 @@ namespace Dx11Render
 				}
 			}
 		}
+	}
+
+	void DxDomainShader::Detach()
+	{
+		ReleaseTracked( m_pRenderSystem, m_pDomainShader );
 	}
 }

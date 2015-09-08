@@ -197,6 +197,8 @@ namespace Castor
 		std::unique_ptr< ProgramConsole > m_console;
 		//! Registered callbacks
 		LoggerCallbackMap m_mapCallbacks;
+		//! Protects the registered callbacks map
+		std::mutex m_mutexCallbacks;
 	};
 }
 

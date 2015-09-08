@@ -380,143 +380,143 @@ namespace GlRender
 		template< eFRAME_VARIABLE_TYPE Type > FrameVariableSPtr GlFrameVariableCreator( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc );
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_INT >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlOneFrameVariable<	int > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlOneFrameVariable< int > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_UINT >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlOneFrameVariable<	uint32_t > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlOneFrameVariable< uint32_t > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_FLOAT >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlOneFrameVariable<	float > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlOneFrameVariable< float > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_DOUBLE >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlOneFrameVariable<	double > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlOneFrameVariable< double > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_SAMPLER >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlOneFrameVariable<	TextureBaseRPtr > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlOneFrameVariable< TextureBaseRPtr > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2I >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlPointFrameVariable<	int, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< int, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3I >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlPointFrameVariable<	int, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< int, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4I >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlPointFrameVariable<	int, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< int, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2UI >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlPointFrameVariable<	uint32_t, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< uint32_t, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3UI >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlPointFrameVariable<	uint32_t, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< uint32_t, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4UI >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlPointFrameVariable<	uint32_t, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< uint32_t, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlPointFrameVariable<	float, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< float, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlPointFrameVariable<	float, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< float, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlPointFrameVariable<	float, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< float, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlPointFrameVariable<	double, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< double, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlPointFrameVariable<	double, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< double, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlPointFrameVariable<	double, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< double, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlMatrixFrameVariable<	float, 2, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< float, 2, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlMatrixFrameVariable<	float, 2, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< float, 2, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlMatrixFrameVariable<	float, 2, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< float, 2, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlMatrixFrameVariable<	float, 3, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< float, 3, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlMatrixFrameVariable<	float, 3, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< float, 3, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlMatrixFrameVariable<	float, 3, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< float, 3, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlMatrixFrameVariable<	float, 4, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< float, 4, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlMatrixFrameVariable<	float, 4, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< float, 4, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlMatrixFrameVariable<	float, 4, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< float, 4, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlMatrixFrameVariable<	double, 2, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< double, 2, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlMatrixFrameVariable<	double, 2, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< double, 2, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlMatrixFrameVariable<	double, 2, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< double, 2, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlMatrixFrameVariable<	double, 3, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< double, 3, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlMatrixFrameVariable<	double, 3, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< double, 3, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlMatrixFrameVariable<	double, 3, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< double, 3, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlMatrixFrameVariable<	double, 4, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< double, 4, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlMatrixFrameVariable<	double, 4, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< double, 4, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
 		{
-			return std::make_shared< GlMatrixFrameVariable<	double, 4, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< double, 4, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
 		}
 
 		template< eFRAME_VARIABLE_TYPE Type > GlVariableApplyerBaseSPtr GlApplyerCreator();

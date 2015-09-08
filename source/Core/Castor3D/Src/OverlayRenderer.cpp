@@ -153,6 +153,7 @@ namespace Castor3D
 		if ( m_pPanelGeometryBuffer )
 		{
 			m_pPanelGeometryBuffer->GetVertexBuffer().Cleanup();
+			m_pPanelGeometryBuffer->GetVertexBuffer().Destroy();
 			m_pPanelGeometryBuffer->Cleanup();
 			m_pPanelGeometryBuffer.reset();
 		}
@@ -160,6 +161,7 @@ namespace Castor3D
 		if ( m_pBorderGeometryBuffer )
 		{
 			m_pBorderGeometryBuffer->GetVertexBuffer().Cleanup();
+			m_pBorderGeometryBuffer->GetVertexBuffer().Destroy();
 			m_pBorderGeometryBuffer->Cleanup();
 			m_pBorderGeometryBuffer.reset();
 		}
@@ -167,6 +169,7 @@ namespace Castor3D
 		for ( auto && l_geometryBuffers : m_pTextsGeometryBuffers )
 		{
 			l_geometryBuffers->GetVertexBuffer().Cleanup();
+			l_geometryBuffers->GetVertexBuffer().Destroy();
 			l_geometryBuffers->Cleanup();
 			l_geometryBuffers.reset();
 		}

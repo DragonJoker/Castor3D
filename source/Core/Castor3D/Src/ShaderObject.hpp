@@ -308,6 +308,22 @@ namespace Castor3D
 		virtual Castor::String	GetEntryPoint()const = 0;
 		/**
 		 *\~english
+		 *\brief		Detaches this shader from it's program
+		 *\~french
+		 *\brief		Détache ce shader de son programme
+		 */
+		virtual void Detach() = 0;
+		/**
+		 *\~english
+		 *\brief		Attaches this shader to the given program
+		 *\param[in]	p_program	The program
+		 *\~french
+		 *\brief		Attache ce shader au programme donné
+		 *\param[in]	p_program	Le programme
+		 */
+		virtual void AttachTo( ShaderProgramBase & p_program ) = 0;
+		/**
+		 *\~english
 		 *\brief		Tells if the compiled shader has the given parameter
 		 *\param[in]	p_strName	The parameter name
 		 *\return		\p true if the parameter was found

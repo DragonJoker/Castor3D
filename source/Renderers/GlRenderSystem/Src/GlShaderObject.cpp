@@ -19,7 +19,6 @@ namespace GlRender
 
 	GlShaderObject::~GlShaderObject()
 	{
-		DestroyProgram();
 	}
 
 	void GlShaderObject::DestroyProgram()
@@ -28,6 +27,7 @@ namespace GlRender
 
 		if ( m_eStatus == eSHADER_STATUS_COMPILED )
 		{
+			glUntrack( m_gl, this );
 			m_gl.DeleteShader( m_shaderObject );
 			m_eStatus = eSHADER_STATUS_NOTCOMPILED;
 		}
@@ -58,6 +58,7 @@ namespace GlRender
 		if ( m_pParent->GetRenderSystem()->UseShaders() && m_pParent->GetRenderSystem()->HasShaderType( m_eType ) )
 		{
 			m_shaderObject = m_gl.CreateShader( m_gl.Get( m_eType ) );
+			glTrack( m_gl, GlShaderObject, this );
 		}
 	}
 
@@ -134,19 +135,19 @@ namespace GlRender
 		if ( m_eStatus == eSHADER_STATUS_COMPILED && m_pShaderProgram && m_pParent->GetRenderSystem()->HasShaderType( m_eType ) )
 		{
 			m_gl.DetachShader( m_pShaderProgram->GetGlProgram(), m_shaderObject );
-			m_pShaderProgram = nullptr;
+			m_pShaderProgram = NULL;
 			// if you get an error here, you deleted the Program object first and then
 			// the ShaderObject! Always delete ShaderPrograms last!
 		}
 	}
 
-	void GlShaderObject::AttachTo( GlShaderProgram * p_pProgram )
+	void GlShaderObject::AttachTo( ShaderProgramBase & p_program )
 	{
 		Detach();
 
 		if ( m_eStatus == eSHADER_STATUS_COMPILED && m_pParent->GetRenderSystem()->HasShaderType( m_eType ) )
 		{
-			m_pShaderProgram = p_pProgram;
+			m_pShaderProgram = &static_cast< GlShaderProgram & >( p_program );
 			m_gl.AttachShader( m_pShaderProgram->GetGlProgram(), m_shaderObject );
 
 			//if( m_eType == eSHADER_TYPE_GEOMETRY )

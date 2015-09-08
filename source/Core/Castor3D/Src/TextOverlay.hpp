@@ -148,14 +148,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise l'incrustation
 		 */
-		bool Initialise();
+		virtual void Initialise();
 		/**
 		 *\~english
 		 *\brief		Flushes the overlay
 		 *\~french
 		 *\brief		Nettoie l'incrustation
 		 */
-		void Cleanup();
+		virtual void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Sets the text font

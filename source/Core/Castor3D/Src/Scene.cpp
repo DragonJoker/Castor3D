@@ -518,21 +518,12 @@ namespace Castor3D
 		{
 			m_setFreeLights.insert( i );
 		}
-
-		m_pEngine->PostEvent( MakeInitialiseEvent( *m_pLightsTexture ) );
 	}
 
 	Scene::~Scene()
 	{
-		ClearScene();
-		DoRemoveAll( m_addedCameras, m_arrayCamerasToDelete );
-		DoRemoveAll( m_addedNodes, m_arrayNodesToDelete );
-		m_alphaDepthState.reset();
-		m_arrayCamerasToDelete.clear();
-		m_arrayNodesToDelete.clear();
-		m_rootNode.reset();
-		m_rootCameraNode.reset();
-		m_rootObjectNode.reset();
+		m_pLightsData.reset();
+		m_pLightsTexture.reset();
 	}
 
 	void Scene::Initialise()
@@ -546,18 +537,30 @@ namespace Castor3D
 		m_addedNodes.insert( std::make_pair( cuT( "ObjectRootNode" ), m_rootObjectNode ) );
 
 		m_alphaDepthState.lock()->SetDepthMask( eWRITING_MASK_ZERO );
+
+		m_pEngine->PostEvent( MakeInitialiseEvent( *m_pLightsTexture ) );
 	}
 
 	void Scene::ClearScene()
 	{
 		m_mapSubmeshesAlpha.clear();
+		m_arraySubmeshesNoAlpha.clear();
 		m_mapSubmeshesAlphaSorted.clear();
+		m_arraySubmeshesAlpha.clear();
 		m_mapSubmeshesNoAlpha.clear();
 		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+
+		for ( auto && l_overlay : m_arrayOverlays )
+		{
+			m_pEngine->PostEvent( MakeCleanupEvent( *l_overlay ) );
+		}
+
 		m_arrayOverlays.clear();
 		DoRemoveAll( m_addedLights, m_arrayLightsToDelete );
 		DoRemoveAll( m_addedPrimitives, m_arrayPrimitivesToDelete );
 		DoRemoveAll( m_mapBillboardsLists, m_arrayBillboardsToDelete );
+		DoRemoveAll( m_addedCameras, m_arrayCamerasToDelete );
+		DoRemoveAll( m_addedNodes, m_arrayNodesToDelete );
 
 		DepthStencilStateSPtr state = m_alphaDepthState.lock();
 
@@ -568,11 +571,26 @@ namespace Castor3D
 
 		if ( m_pBackgroundImage )
 		{
-			m_pEngine->PostEvent( MakeCleanupEvent( *m_pBackgroundImage ) );
+			m_pEngine->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
+			{
+				m_pBackgroundImage->Cleanup();
+				m_pBackgroundImage->Destroy();
+			} ) );
 		}
 
 		m_arrayLightsToDelete.clear();
 		m_arrayPrimitivesToDelete.clear();
+		m_arrayCamerasToDelete.clear();
+		m_arrayNodesToDelete.clear();
+		m_addedNodes.clear();
+		m_rootCameraNode->Detach();
+		m_rootCameraNode.reset();
+		m_rootObjectNode->Detach();
+		m_rootObjectNode.reset();
+		m_rootNode->Detach();
+		m_rootNode.reset();
+		m_mapLights.clear();
+		m_alphaDepthState.reset();
 
 		m_pEngine->PostEvent( MakeCleanupEvent( *m_pLightsTexture ) );
 	}

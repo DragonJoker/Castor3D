@@ -275,7 +275,7 @@ namespace Castor3D
 		using OverlayCollection::clear;
 
 	private:
-		//!\~english The overlays, in rendering order	\~french Les incrustations, dans l'ordre de rendu
+		//!\~english The overlays, in rendering order.	\~french Les incrustations, dans l'ordre de rendu.
 		OverlayPtrArray m_overlays;
 		//!\~english The engine	\~french Le moteur
 		Engine * m_pEngine;

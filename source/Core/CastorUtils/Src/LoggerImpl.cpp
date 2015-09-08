@@ -40,11 +40,13 @@ namespace Castor
 
 	void LoggerImpl::RegisterCallback( LogCallback p_pfnCallback, void * p_pCaller )
 	{
+		std::lock_guard< std::mutex > l_lock( m_mutexCallbacks );
 		m_mapCallbacks[p_pCaller] = p_pfnCallback;
 	}
 
 	void LoggerImpl::UnregisterCallback( void * p_pCaller )
 	{
+		std::lock_guard< std::mutex > l_lock( m_mutexCallbacks );
 		auto && l_it = m_mapCallbacks.find( p_pCaller );
 
 		if ( l_it != m_mapCallbacks.end() )
@@ -186,9 +188,16 @@ namespace Castor
 		DoPrintLine( line, logLevel );
 #endif
 
-		for ( auto && l_it : m_mapCallbacks )
 		{
-			l_it.second( line, logLevel );
+			std::lock_guard< std::mutex > l_lock( m_mutexCallbacks );
+
+			if ( !m_mapCallbacks.empty() )
+			{
+				for ( auto && l_it : m_mapCallbacks )
+				{
+					l_it.second( line, logLevel );
+				}
+			}
 		}
 
 		if ( logFile )

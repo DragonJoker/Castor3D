@@ -21,7 +21,6 @@ namespace Dx11Render
 
 	DxShaderObject::~DxShaderObject()
 	{
-		DestroyProgram();
 	}
 
 	void DxShaderObject::DestroyProgram()
@@ -89,7 +88,6 @@ namespace Dx11Render
 			if ( l_hr == S_OK )
 			{
 				Logger::LogInfo( cuT( "Shader compiled successfully" ) );
-				DoRetrieveShader();
 			}
 			else if ( l_pErrors )
 			{

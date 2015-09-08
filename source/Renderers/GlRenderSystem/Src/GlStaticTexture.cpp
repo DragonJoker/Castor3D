@@ -33,6 +33,7 @@ namespace GlRender
 		if ( m_uiGlName == eGL_INVALID_INDEX )
 		{
 			l_bReturn = m_gl.GenTextures( 1, &m_uiGlName );
+			glTrack( m_gl, GlStaticTexture, this );
 		}
 
 		return l_bReturn;
@@ -42,6 +43,7 @@ namespace GlRender
 	{
 		if ( m_uiGlName != eGL_INVALID_INDEX )
 		{
+			glUntrack( m_gl, this );
 			m_gl.DeleteTextures( 1, &m_uiGlName );
 			m_uiGlName = uint32_t( eGL_INVALID_INDEX );
 		}

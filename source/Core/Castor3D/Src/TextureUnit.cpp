@@ -518,6 +518,7 @@ namespace Castor3D
 		if ( m_pTexture )
 		{
 			m_pTexture->Cleanup();
+			m_pTexture->Destroy();
 		}
 
 		m_clrBlend = Colour();

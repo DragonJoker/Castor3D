@@ -159,7 +159,7 @@ bool GlContextImpl::Initialise( RenderWindow * p_pWindow )
 				if ( !l_pRenderSystem->IsInitialised() )
 				{
 					glXMakeCurrent( m_pDisplay, m_drawable, m_glXContext );
-					m_gl.PreInitialise( cuT( "" ) );
+					m_gl.PreInitialise( String() );
 					glXMakeCurrent( m_pDisplay, None, NULL );
 				}
 
@@ -175,7 +175,7 @@ bool GlContextImpl::Initialise( RenderWindow * p_pWindow )
 				if ( !l_pRenderSystem->IsInitialised() )
 				{
 					glXMakeCurrent( m_pDisplay, m_drawable, m_glXContext );
-					l_pRenderSystem->Initialise( cuT( "" ) );
+					l_pRenderSystem->Initialise();
 					p_pWindow->GetEngine()->GetMaterialManager().Initialise();
 					glXMakeCurrent( m_pDisplay, None, NULL );
 				}
@@ -191,6 +191,7 @@ bool GlContextImpl::Initialise( RenderWindow * p_pWindow )
 
 	if ( m_bInitialised )
 	{
+		glTrack( m_gl, GlContextImpl, this );
 #if !defined( NDEBUG )
 
 		if ( m_gl.HasDebugOutput() )
@@ -213,6 +214,7 @@ void GlContextImpl::Cleanup()
 {
 	try
 	{
+		glUntrack( m_gl, this );
 		m_gl.DeleteContext( m_pDisplay, m_glXContext );
 	}
 	catch ( ... )

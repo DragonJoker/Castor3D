@@ -37,7 +37,6 @@ namespace Dx11Render
 		void CheckShaderSupport();
 		bool InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swapChainDesc );
 
-		virtual void Delete();
 		virtual bool CheckSupport( Castor3D::eSHADER_MODEL p_eProfile );
 		virtual Castor3D::ContextSPtr CreateContext();
 		virtual Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::VertexBufferUPtr p_pVertexBuffer, Castor3D::IndexBufferUPtr p_pIndexBuffer, Castor3D::MatrixBufferUPtr p_pMatrixBuffer );
@@ -84,7 +83,20 @@ namespace Dx11Render
 			return m_featureLevel;
 		}
 
+	private:
+		virtual void DoInitialise();
+		virtual void DoCleanup();
+
+	protected:
+		ID3D11Device * m_pDevice;
+		D3D_FEATURE_LEVEL m_featureLevel;
+		DXGI_ADAPTER_DESC m_adapterDesc;
+
 #if !defined( NDEBUG )
+
+		ID3D11Debug * m_pDebug;
+
+	public:
 		inline ID3D11Debug * GetDebug()
 		{
 			return m_pDebug;
@@ -96,30 +108,7 @@ namespace Dx11Render
 		void UnsetDxDebugName( ID3D11Device * p_object );
 		void UnsetDxDebugName( ID3D11DeviceChild * p_object );
 		void UnsetDxDebugName( IDXGIDeviceSubObject * p_object );
-#endif
 
-	private:
-		virtual void DoInitialise();
-		virtual void DoCleanup();
-
-	protected:
-		ID3D11Device * m_pDevice;
-		D3D_FEATURE_LEVEL m_featureLevel;
-		DXGI_ADAPTER_DESC m_adapterDesc;
-#if !defined( NDEBUG )
-		struct ObjectDeclaration
-		{
-			uint32_t m_id;
-			std::string m_name;
-			void * m_object;
-			std::string m_file;
-			int m_line;
-			int m_ref;
-			Castor::String m_stack;
-		};
-		ID3D11Debug * m_pDebug;
-		uint32_t m_id = 0;
-		std::list< ObjectDeclaration > m_allocated;
 #endif
 	};
 }

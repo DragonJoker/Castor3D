@@ -35,6 +35,14 @@ namespace Dx11Render
 		 * Destructor
 		 */
 		virtual ~DxVertexShader();
+		/**
+		 * Detaches this shader from it's program
+		 */
+		virtual void Detach();
+		/**
+		 * Attaches this shader to the given program
+		 */
+		virtual void AttachTo( Castor3D::ShaderProgramBase & p_program );
 
 	private:
 		/**
@@ -51,8 +59,6 @@ namespace Dx11Render
 		 *\brief		Désactive le shader
 		 */
 		virtual void DoUnbind();
-
-		void DoRetrieveShader();
 
 	private:
 		ID3D11VertexShader * m_pVertexShader;

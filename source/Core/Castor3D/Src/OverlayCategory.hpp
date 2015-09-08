@@ -157,6 +157,20 @@ namespace Castor3D
 		virtual ~OverlayCategory();
 		/**
 		 *\~english
+		 *\brief		Initialises the overlay.
+		 *\~french
+		 *\brief		Initialise l'incrustation.
+		 */
+		virtual void Initialise() {}
+		/**
+		 *\~english
+		 *\brief		Cleanus the overlay up.
+		 *\~french
+		 *\brief		Nettoie l'incrustation.
+		 */
+		virtual void Cleanup() {}
+		/**
+		 *\~english
 		 *\brief		Draws the overlay
 		 *\~french
 		 *\brief		Dessine l'incrustation

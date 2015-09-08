@@ -1,5 +1,7 @@
 ﻿#include "RendererPlugin.hpp"
 
+#include "RenderSystem.hpp"
+
 #if defined( _WIN32 )
 #	include <Windows.h>
 #else
