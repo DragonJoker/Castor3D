@@ -1,5 +1,7 @@
 #include "OpenGl.hpp"
 
+#include "GlRenderSystem.hpp"
+
 #include <Rectangle.hpp>
 #include <Logger.hpp>
 #include <Utils.hpp>
@@ -13,16 +15,16 @@ using namespace Castor;
 //*************************************************************************************************
 
 MtxFunctionsBase::MtxFunctionsBase( OpenGl & p_gl )
-	:	m_gl( p_gl	)
+	: m_gl( p_gl )
 {
 }
 
 //*************************************************************************************************
 
 MtxFunctions::MtxFunctions( OpenGl & p_gl )
-	:	MtxFunctionsBase( p_gl	)
-	,	m_pfnOrtho(	)
-	,	m_pfnFrustum(	)
+	: MtxFunctionsBase( p_gl )
+	, m_pfnOrtho()
+	, m_pfnFrustum()
 {
 }
 
@@ -89,10 +91,10 @@ bool MtxFunctions::MultMatrix( real const * matrix )
 //*************************************************************************************************
 
 MtxFunctionsDSA::MtxFunctionsDSA( OpenGl & p_gl )
-	:	MtxFunctionsBase( p_gl )
-	,	m_eMatrixMode( eGL_MATRIX_TYPE_MODELVIEW )
-	,	m_pfnMatrixOrtho()
-	,	m_pfnMatrixFrustum()
+	: MtxFunctionsBase( p_gl )
+	, m_eMatrixMode( eGL_MATRIX_TYPE_MODELVIEW )
+	, m_pfnMatrixOrtho()
+	, m_pfnMatrixFrustum()
 {
 }
 
@@ -169,20 +171,20 @@ bool MtxFunctionsDSA::MultMatrix( real const * matrix )
 //*************************************************************************************************
 
 TexFunctionsBase::TexFunctionsBase( OpenGl & p_gl )
-	:	m_gl( p_gl )
+	: m_gl( p_gl )
 {
 }
 
 //*************************************************************************************************
 
 TexFunctions::TexFunctions( OpenGl & p_gl )
-	:	TexFunctionsBase( p_gl )
-	,	m_pfnTexSubImage1D()
-	,	m_pfnTexSubImage2D()
-	,	m_pfnTexSubImage3D()
-	,	m_pfnTexImage1D()
-	,	m_pfnTexImage2D()
-	,	m_pfnTexImage3D()
+	: TexFunctionsBase( p_gl )
+	, m_pfnTexSubImage1D()
+	, m_pfnTexSubImage2D()
+	, m_pfnTexSubImage3D()
+	, m_pfnTexImage1D()
+	, m_pfnTexImage2D()
+	, m_pfnTexImage3D()
 {
 }
 
@@ -317,14 +319,14 @@ bool TexFunctions::GetTexImage( eGL_TEXDIM mode, int level, eGL_FORMAT format, e
 //*************************************************************************************************
 
 TexFunctionsDSA::TexFunctionsDSA( OpenGl & p_gl )
-	:	TexFunctionsBase( p_gl )
-	,	m_uiTexture( 0 )
-	,	m_pfnTextureSubImage1D()
-	,	m_pfnTextureSubImage2D()
-	,	m_pfnTextureSubImage3D()
-	,	m_pfnTextureImage1D()
-	,	m_pfnTextureImage2D()
-	,	m_pfnTextureImage3D()
+	: TexFunctionsBase( p_gl )
+	, m_uiTexture( 0 )
+	, m_pfnTextureSubImage1D()
+	, m_pfnTextureSubImage2D()
+	, m_pfnTextureSubImage3D()
+	, m_pfnTextureImage1D()
+	, m_pfnTextureImage2D()
+	, m_pfnTextureImage3D()
 {
 }
 
@@ -453,7 +455,7 @@ bool TexFunctionsDSA::GetTexImage( eGL_TEXDIM mode, int level, eGL_FORMAT format
 //*************************************************************************************************
 
 BufFunctionsBase::BufFunctionsBase( OpenGl & p_gl )
-	:	m_gl( p_gl )
+	: m_gl( p_gl )
 {
 }
 
@@ -575,7 +577,7 @@ bool BufFunctionsBase::GetBufferParameter( eGL_BUFFER_TARGET target, eGL_BUFFER_
 	return glCheckError( m_gl, cuT( "glGetBufferParameterui64v" ) );
 }
 
-bool BufFunctionsBase::GetNamedBufferParameter( uint32_t buffer, eGL_BUFFER_PARAMETER pname,  uint64_t * params )
+bool BufFunctionsBase::GetNamedBufferParameter( uint32_t buffer, eGL_BUFFER_PARAMETER pname, uint64_t * params )
 {
 	m_pfnGetNamedBufferParameterui64v( buffer, pname, params );
 	return glCheckError( m_gl, cuT( "glGetNamedBufferParameterui64v" ) );
@@ -584,7 +586,7 @@ bool BufFunctionsBase::GetNamedBufferParameter( uint32_t buffer, eGL_BUFFER_PARA
 //*************************************************************************************************
 
 BufFunctions::BufFunctions( OpenGl & p_gl )
-	:	BufFunctionsBase( p_gl )
+	: BufFunctionsBase( p_gl )
 {
 }
 
@@ -654,8 +656,8 @@ bool BufFunctions::FlushMappedBufferRange( eGL_BUFFER_TARGET p_eTarget, ptrdiff_
 //*************************************************************************************************
 
 BufFunctionsDSA::BufFunctionsDSA( OpenGl & p_gl )
-	:	BufFunctionsBase( p_gl )
-	,	m_uiBuffer( 0 )
+	: BufFunctionsBase( p_gl )
+	, m_uiBuffer( 0 )
 {
 }
 
@@ -720,367 +722,368 @@ bool BufFunctionsDSA::FlushMappedBufferRange( eGL_BUFFER_TARGET p_eTarget, ptrdi
 
 #define CASTOR_DBG_WIN32 0
 
-OpenGl::OpenGl()
-	:	m_bHasAnisotropic( false )
-	,	m_bHasInstancedDraw( false )
-	,	m_bHasInstancedArrays( false )
-	,	m_pMtxFunctions( NULL )
-	,	m_pTexFunctions( NULL )
-	,	m_pBufFunctions( NULL )
-	,	m_pfnReadPixels()
-	,	m_pfnBlitFramebuffer()
-	,	m_pfnTexImage2DMultisample()
-	,	m_pfnGetActiveUniform()
-	,	m_pfnVertexAttribPointer()
-	,	m_bBindVboToGpuAddress( false )
+OpenGl::OpenGl(  GlRenderSystem & p_renderSystem  )
+	: m_bHasAnisotropic( false )
+	, m_bHasInstancedDraw( false )
+	, m_bHasInstancedArrays( false )
+	, m_pMtxFunctions( NULL )
+	, m_pTexFunctions( NULL )
+	, m_pBufFunctions( NULL )
+	, m_pfnReadPixels()
+	, m_pfnBlitFramebuffer()
+	, m_pfnTexImage2DMultisample()
+	, m_pfnGetActiveUniform()
+	, m_pfnVertexAttribPointer()
+	, m_bBindVboToGpuAddress( false )
+	, m_renderSystem( p_renderSystem )
 {
 	uint32_t l_uiIndex = 0;
-	GlslStrings[			l_uiIndex++							] =	cuT( "[e00] GLSL is not available!"	);
-	GlslStrings[			l_uiIndex++							] =	cuT( "[e01] Not a valid program object!"	);
-	GlslStrings[			l_uiIndex++							] =	cuT( "[e02] Not a valid object!"	);
-	GlslStrings[			l_uiIndex++							] =	cuT( "[e03] Out of memory!"	);
-	GlslStrings[			l_uiIndex++							] =	cuT( "[e04] Unknown compiler error!"	);
-	GlslStrings[			l_uiIndex++							] =	cuT( "[e05] Linker log is not available!"	);
-	GlslStrings[			l_uiIndex++							] =	cuT( "[e06] Compiler log is not available!"	);
-	GlslStrings[			l_uiIndex							] =	cuT( "[Empty]"	);
+	GlslStrings[l_uiIndex++] = cuT( "[e00] GLSL is not available!" );
+	GlslStrings[l_uiIndex++] = cuT( "[e01] Not a valid program object!" );
+	GlslStrings[l_uiIndex++] = cuT( "[e02] Not a valid object!" );
+	GlslStrings[l_uiIndex++] = cuT( "[e03] Out of memory!" );
+	GlslStrings[l_uiIndex++] = cuT( "[e04] Unknown compiler error!" );
+	GlslStrings[l_uiIndex++] = cuT( "[e05] Linker log is not available!" );
+	GlslStrings[l_uiIndex++] = cuT( "[e06] Compiler log is not available!" );
+	GlslStrings[l_uiIndex] = cuT( "[Empty]" );
 
 	l_uiIndex = 0;
-	GlslErrors[				l_uiIndex++							] =	cuT( "[500] Invalid Enum !"	);
-	GlslErrors[				l_uiIndex++							] =	cuT( "[501] Invalid Value !"	);
-	GlslErrors[				l_uiIndex++							] =	cuT( "[502] Invalid Operation !"	);
-	GlslErrors[				l_uiIndex++							] =	cuT( "[503] Stack Overflow !"	);
-	GlslErrors[				l_uiIndex++							] =	cuT( "[504] Stack Underflow !"	);
-	GlslErrors[				l_uiIndex++							] =	cuT( "[505] Out of memory !"	);
-	GlslErrors[				l_uiIndex++							] =	cuT( "[506] Invalid frame buffer operation"	);
-	GlslErrors[				l_uiIndex							] =	cuT( "[Empty] Unknown Error"	);
+	GlslErrors[l_uiIndex++] = cuT( "[500] Invalid Enum !" );
+	GlslErrors[l_uiIndex++] = cuT( "[501] Invalid Value !" );
+	GlslErrors[l_uiIndex++] = cuT( "[502] Invalid Operation !" );
+	GlslErrors[l_uiIndex++] = cuT( "[503] Stack Overflow !" );
+	GlslErrors[l_uiIndex++] = cuT( "[504] Stack Underflow !" );
+	GlslErrors[l_uiIndex++] = cuT( "[505] Out of memory !" );
+	GlslErrors[l_uiIndex++] = cuT( "[506] Invalid frame buffer operation" );
+	GlslErrors[l_uiIndex] = cuT( "[Empty] Unknown Error" );
 
-	PrimitiveTypes[			eTOPOLOGY_POINTS					] =	eGL_PRIMITIVE_POINTS					;
-	PrimitiveTypes[			eTOPOLOGY_LINES						] =	eGL_PRIMITIVE_LINES						;
-	PrimitiveTypes[			eTOPOLOGY_LINE_LOOP					] =	eGL_PRIMITIVE_LINE_LOOP					;
-	PrimitiveTypes[			eTOPOLOGY_LINE_STRIP				] =	eGL_PRIMITIVE_LINE_STRIP				;
-	PrimitiveTypes[			eTOPOLOGY_TRIANGLES					] =	eGL_PRIMITIVE_TRIANGLES					;
-	PrimitiveTypes[			eTOPOLOGY_TRIANGLE_STRIPS			] =	eGL_PRIMITIVE_TRIANGLE_STRIP			;
-	PrimitiveTypes[			eTOPOLOGY_TRIANGLE_FAN				] =	eGL_PRIMITIVE_TRIANGLE_FAN				;
-	PrimitiveTypes[			eTOPOLOGY_QUADS						] =	eGL_PRIMITIVE_QUADS						;
-	PrimitiveTypes[			eTOPOLOGY_QUAD_STRIPS				] =	eGL_PRIMITIVE_QUAD_STRIP				;
-	PrimitiveTypes[			eTOPOLOGY_POLYGON					] =	eGL_PRIMITIVE_POLYGON					;
+	PrimitiveTypes[eTOPOLOGY_POINTS] = eGL_PRIMITIVE_POINTS;
+	PrimitiveTypes[eTOPOLOGY_LINES] = eGL_PRIMITIVE_LINES;
+	PrimitiveTypes[eTOPOLOGY_LINE_LOOP] = eGL_PRIMITIVE_LINE_LOOP;
+	PrimitiveTypes[eTOPOLOGY_LINE_STRIP] = eGL_PRIMITIVE_LINE_STRIP;
+	PrimitiveTypes[eTOPOLOGY_TRIANGLES] = eGL_PRIMITIVE_TRIANGLES;
+	PrimitiveTypes[eTOPOLOGY_TRIANGLE_STRIPS] = eGL_PRIMITIVE_TRIANGLE_STRIP;
+	PrimitiveTypes[eTOPOLOGY_TRIANGLE_FAN] = eGL_PRIMITIVE_TRIANGLE_FAN;
+	PrimitiveTypes[eTOPOLOGY_QUADS] = eGL_PRIMITIVE_QUADS;
+	PrimitiveTypes[eTOPOLOGY_QUAD_STRIPS] = eGL_PRIMITIVE_QUAD_STRIP;
+	PrimitiveTypes[eTOPOLOGY_POLYGON] = eGL_PRIMITIVE_POLYGON;
 
-	TextureDimensions[		eTEXTURE_DIMENSION_1D				] =	eGL_TEXDIM_1D							;
-	TextureDimensions[		eTEXTURE_DIMENSION_2D				] =	eGL_TEXDIM_2D							;
-	TextureDimensions[		eTEXTURE_DIMENSION_3D				] =	eGL_TEXDIM_3D							;
-	TextureDimensions[		eTEXTURE_DIMENSION_2DMS				] =	eGL_TEXDIM_2D_MULTISAMPLE				;
-	TextureDimensions[		eTEXTURE_DIMENSION_2DARRAY			] =	eGL_TEXDIM_2D_ARRAY						;
+	TextureDimensions[eTEXTURE_DIMENSION_1D] = eGL_TEXDIM_1D;
+	TextureDimensions[eTEXTURE_DIMENSION_2D] = eGL_TEXDIM_2D;
+	TextureDimensions[eTEXTURE_DIMENSION_3D] = eGL_TEXDIM_3D;
+	TextureDimensions[eTEXTURE_DIMENSION_2DMS] = eGL_TEXDIM_2D_MULTISAMPLE;
+	TextureDimensions[eTEXTURE_DIMENSION_2DARRAY] = eGL_TEXDIM_2D_ARRAY;
 
-	AlphaFuncs[				eALPHA_FUNC_ALWAYS					] =	eGL_FUNC_ALWAYS							;
-	AlphaFuncs[				eALPHA_FUNC_LESS					] =	eGL_FUNC_LESS							;
-	AlphaFuncs[				eALPHA_FUNC_LESS_OR_EQUAL			] =	eGL_FUNC_LEQUAL							;
-	AlphaFuncs[				eALPHA_FUNC_EQUAL					] =	eGL_FUNC_EQUAL							;
-	AlphaFuncs[				eALPHA_FUNC_NOT_EQUAL				] =	eGL_FUNC_NOTEQUAL						;
-	AlphaFuncs[				eALPHA_FUNC_GREATER_OR_EQUAL		] =	eGL_FUNC_GEQUAL							;
-	AlphaFuncs[				eALPHA_FUNC_GREATER					] =	eGL_FUNC_GREATER						;
-	AlphaFuncs[				eALPHA_FUNC_NEVER					] =	eGL_FUNC_NEVER							;
+	AlphaFuncs[eALPHA_FUNC_ALWAYS] = eGL_FUNC_ALWAYS;
+	AlphaFuncs[eALPHA_FUNC_LESS] = eGL_FUNC_LESS;
+	AlphaFuncs[eALPHA_FUNC_LESS_OR_EQUAL] = eGL_FUNC_LEQUAL;
+	AlphaFuncs[eALPHA_FUNC_EQUAL] = eGL_FUNC_EQUAL;
+	AlphaFuncs[eALPHA_FUNC_NOT_EQUAL] = eGL_FUNC_NOTEQUAL;
+	AlphaFuncs[eALPHA_FUNC_GREATER_OR_EQUAL] = eGL_FUNC_GEQUAL;
+	AlphaFuncs[eALPHA_FUNC_GREATER] = eGL_FUNC_GREATER;
+	AlphaFuncs[eALPHA_FUNC_NEVER] = eGL_FUNC_NEVER;
 
-	TextureWrapMode[		eWRAP_MODE_REPEAT					] =	eGL_WRAP_MODE_REPEAT					;
-	TextureWrapMode[		eWRAP_MODE_MIRRORED_REPEAT			] =	eGL_WRAP_MODE_MIRRORED_REPEAT			;
-	TextureWrapMode[		eWRAP_MODE_CLAMP_TO_BORDER			] =	eGL_WRAP_MODE_CLAMP_TO_BORDER			;
-	TextureWrapMode[		eWRAP_MODE_CLAMP_TO_EDGE			] =	eGL_WRAP_MODE_CLAMP_TO_EDGE				;
+	TextureWrapMode[eWRAP_MODE_REPEAT] = eGL_WRAP_MODE_REPEAT;
+	TextureWrapMode[eWRAP_MODE_MIRRORED_REPEAT] = eGL_WRAP_MODE_MIRRORED_REPEAT;
+	TextureWrapMode[eWRAP_MODE_CLAMP_TO_BORDER] = eGL_WRAP_MODE_CLAMP_TO_BORDER;
+	TextureWrapMode[eWRAP_MODE_CLAMP_TO_EDGE] = eGL_WRAP_MODE_CLAMP_TO_EDGE;
 
-	TextureInterpolation[	eINTERPOLATION_MODE_UNDEFINED		] =	eGL_INTERPOLATION_MODE_NEAREST			;
-	TextureInterpolation[	eINTERPOLATION_MODE_NEAREST			] =	eGL_INTERPOLATION_MODE_NEAREST			;
-	TextureInterpolation[	eINTERPOLATION_MODE_LINEAR			] =	eGL_INTERPOLATION_MODE_LINEAR			;
-	TextureInterpolation[	eINTERPOLATION_MODE_ANISOTROPIC		] =	eGL_INTERPOLATION_MODE_LINEAR			;
+	TextureInterpolation[eINTERPOLATION_MODE_UNDEFINED] = eGL_INTERPOLATION_MODE_NEAREST;
+	TextureInterpolation[eINTERPOLATION_MODE_NEAREST] = eGL_INTERPOLATION_MODE_NEAREST;
+	TextureInterpolation[eINTERPOLATION_MODE_LINEAR] = eGL_INTERPOLATION_MODE_LINEAR;
+	TextureInterpolation[eINTERPOLATION_MODE_ANISOTROPIC] = eGL_INTERPOLATION_MODE_LINEAR;
 
-	LightIndexes[			eLIGHT_INDEXES_0					] =	eGL_LIGHT_INDEX_0						;
-	LightIndexes[			eLIGHT_INDEXES_1					] =	eGL_LIGHT_INDEX_1						;
-	LightIndexes[			eLIGHT_INDEXES_2					] =	eGL_LIGHT_INDEX_2						;
-	LightIndexes[			eLIGHT_INDEXES_3					] =	eGL_LIGHT_INDEX_3						;
-	LightIndexes[			eLIGHT_INDEXES_4					] =	eGL_LIGHT_INDEX_4						;
-	LightIndexes[			eLIGHT_INDEXES_5					] =	eGL_LIGHT_INDEX_5						;
-	LightIndexes[			eLIGHT_INDEXES_6					] =	eGL_LIGHT_INDEX_6						;
-	LightIndexes[			eLIGHT_INDEXES_7					] =	eGL_LIGHT_INDEX_7						;
+	LightIndexes[eLIGHT_INDEXES_0] = eGL_LIGHT_INDEX_0;
+	LightIndexes[eLIGHT_INDEXES_1] = eGL_LIGHT_INDEX_1;
+	LightIndexes[eLIGHT_INDEXES_2] = eGL_LIGHT_INDEX_2;
+	LightIndexes[eLIGHT_INDEXES_3] = eGL_LIGHT_INDEX_3;
+	LightIndexes[eLIGHT_INDEXES_4] = eGL_LIGHT_INDEX_4;
+	LightIndexes[eLIGHT_INDEXES_5] = eGL_LIGHT_INDEX_5;
+	LightIndexes[eLIGHT_INDEXES_6] = eGL_LIGHT_INDEX_6;
+	LightIndexes[eLIGHT_INDEXES_7] = eGL_LIGHT_INDEX_7;
 
-	BlendFactors[			eBLEND_ZERO							] =	eGL_BLEND_FACTOR_ZERO					;
-	BlendFactors[			eBLEND_ONE							] =	eGL_BLEND_FACTOR_ONE					;
-	BlendFactors[			eBLEND_SRC_COLOUR					] =	eGL_BLEND_FACTOR_SRC_COLOR				;
-	BlendFactors[			eBLEND_INV_SRC_COLOUR				] =	eGL_BLEND_FACTOR_ONE_MINUS_SRC_COLOR	;
-	BlendFactors[			eBLEND_DST_COLOUR					] =	eGL_BLEND_FACTOR_DST_COLOR				;
-	BlendFactors[			eBLEND_INV_DST_COLOUR				] =	eGL_BLEND_FACTOR_ONE_MINUS_DST_COLOR	;
-	BlendFactors[			eBLEND_SRC_ALPHA					] =	eGL_BLEND_FACTOR_SRC_ALPHA				;
-	BlendFactors[			eBLEND_INV_SRC_ALPHA				] =	eGL_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA	;
-	BlendFactors[			eBLEND_DST_ALPHA					] =	eGL_BLEND_FACTOR_DST_ALPHA				;
-	BlendFactors[			eBLEND_INV_DST_ALPHA				] =	eGL_BLEND_FACTOR_ONE_MINUS_DST_ALPHA	;
-	BlendFactors[			eBLEND_CONSTANT						] =	eGL_BLEND_FACTOR_CONSTANT				;
-	BlendFactors[			eBLEND_INV_CONSTANT					] =	eGL_BLEND_FACTOR_ONE_MINUS_CONSTANT		;
-	BlendFactors[			eBLEND_SRC_ALPHA_SATURATE			] =	eGL_BLEND_FACTOR_SRC_ALPHA_SATURATE		;
-	BlendFactors[			eBLEND_SRC1_COLOUR					] =	eGL_BLEND_FACTOR_SRC1_COLOR				;
-	BlendFactors[			eBLEND_INV_SRC1_COLOUR				] =	eGL_BLEND_FACTOR_ONE_MINUS_SRC1_COLOR	;
-	BlendFactors[			eBLEND_SRC1_ALPHA					] =	eGL_BLEND_FACTOR_SRC1_ALPHA				;
-	BlendFactors[			eBLEND_INV_SRC1_ALPHA				] =	eGL_BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA	;
+	BlendFactors[eBLEND_ZERO] = eGL_BLEND_FACTOR_ZERO;
+	BlendFactors[eBLEND_ONE] = eGL_BLEND_FACTOR_ONE;
+	BlendFactors[eBLEND_SRC_COLOUR] = eGL_BLEND_FACTOR_SRC_COLOR;
+	BlendFactors[eBLEND_INV_SRC_COLOUR] = eGL_BLEND_FACTOR_ONE_MINUS_SRC_COLOR;
+	BlendFactors[eBLEND_DST_COLOUR] = eGL_BLEND_FACTOR_DST_COLOR;
+	BlendFactors[eBLEND_INV_DST_COLOUR] = eGL_BLEND_FACTOR_ONE_MINUS_DST_COLOR;
+	BlendFactors[eBLEND_SRC_ALPHA] = eGL_BLEND_FACTOR_SRC_ALPHA;
+	BlendFactors[eBLEND_INV_SRC_ALPHA] = eGL_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+	BlendFactors[eBLEND_DST_ALPHA] = eGL_BLEND_FACTOR_DST_ALPHA;
+	BlendFactors[eBLEND_INV_DST_ALPHA] = eGL_BLEND_FACTOR_ONE_MINUS_DST_ALPHA;
+	BlendFactors[eBLEND_CONSTANT] = eGL_BLEND_FACTOR_CONSTANT;
+	BlendFactors[eBLEND_INV_CONSTANT] = eGL_BLEND_FACTOR_ONE_MINUS_CONSTANT;
+	BlendFactors[eBLEND_SRC_ALPHA_SATURATE] = eGL_BLEND_FACTOR_SRC_ALPHA_SATURATE;
+	BlendFactors[eBLEND_SRC1_COLOUR] = eGL_BLEND_FACTOR_SRC1_COLOR;
+	BlendFactors[eBLEND_INV_SRC1_COLOUR] = eGL_BLEND_FACTOR_ONE_MINUS_SRC1_COLOR;
+	BlendFactors[eBLEND_SRC1_ALPHA] = eGL_BLEND_FACTOR_SRC1_ALPHA;
+	BlendFactors[eBLEND_INV_SRC1_ALPHA] = eGL_BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA;
 
-	Usages[					eELEMENT_USAGE_POSITION				] =	eGL_BUFFER_USAGE_VERTEX_ARRAY			;
-	Usages[					eELEMENT_USAGE_NORMAL				] =	eGL_BUFFER_USAGE_NORMAL_ARRAY			;
-	Usages[					eELEMENT_USAGE_TANGENT				] =	eGL_BUFFER_USAGE_TANGENT_ARRAY			;
-	Usages[					eELEMENT_USAGE_BITANGENT			] =	eGL_BUFFER_USAGE_BINORMAL_ARRAY			;
-	Usages[					eELEMENT_USAGE_DIFFUSE				] =	eGL_BUFFER_USAGE_COLOR_ARRAY			;
-	Usages[					eELEMENT_USAGE_TEXCOORDS0			] =	eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY	;
-	Usages[					eELEMENT_USAGE_TEXCOORDS1			] =	eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY	;
-	Usages[					eELEMENT_USAGE_TEXCOORDS2			] =	eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY	;
-	Usages[					eELEMENT_USAGE_TEXCOORDS3			] =	eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY	;
+	Usages[eELEMENT_USAGE_POSITION] = eGL_BUFFER_USAGE_VERTEX_ARRAY;
+	Usages[eELEMENT_USAGE_NORMAL] = eGL_BUFFER_USAGE_NORMAL_ARRAY;
+	Usages[eELEMENT_USAGE_TANGENT] = eGL_BUFFER_USAGE_TANGENT_ARRAY;
+	Usages[eELEMENT_USAGE_BITANGENT] = eGL_BUFFER_USAGE_BINORMAL_ARRAY;
+	Usages[eELEMENT_USAGE_DIFFUSE] = eGL_BUFFER_USAGE_COLOR_ARRAY;
+	Usages[eELEMENT_USAGE_TEXCOORDS0] = eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY;
+	Usages[eELEMENT_USAGE_TEXCOORDS1] = eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY;
+	Usages[eELEMENT_USAGE_TEXCOORDS2] = eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY;
+	Usages[eELEMENT_USAGE_TEXCOORDS3] = eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY;
 
-	TextureArguments[		eBLEND_SOURCE_TEXTURE				] =	eGL_BLEND_SOURCE_TEXTURE				;
-	TextureArguments[		eBLEND_SOURCE_TEXTURE0				] =	eGL_BLEND_SOURCE_TEXTURE0				;
-	TextureArguments[		eBLEND_SOURCE_TEXTURE1				] =	eGL_BLEND_SOURCE_TEXTURE1				;
-	TextureArguments[		eBLEND_SOURCE_TEXTURE2				] =	eGL_BLEND_SOURCE_TEXTURE2				;
-	TextureArguments[		eBLEND_SOURCE_TEXTURE3				] =	eGL_BLEND_SOURCE_TEXTURE3				;
-	TextureArguments[		eBLEND_SOURCE_CONSTANT				] =	eGL_BLEND_SOURCE_CONSTANT				;
-	TextureArguments[		eBLEND_SOURCE_DIFFUSE				] =	eGL_BLEND_SOURCE_PRIMARY_COLOR			;
-	TextureArguments[		eBLEND_SOURCE_PREVIOUS				] =	eGL_BLEND_SOURCE_PREVIOUS				;
+	TextureArguments[eBLEND_SOURCE_TEXTURE] = eGL_BLEND_SOURCE_TEXTURE;
+	TextureArguments[eBLEND_SOURCE_TEXTURE0] = eGL_BLEND_SOURCE_TEXTURE0;
+	TextureArguments[eBLEND_SOURCE_TEXTURE1] = eGL_BLEND_SOURCE_TEXTURE1;
+	TextureArguments[eBLEND_SOURCE_TEXTURE2] = eGL_BLEND_SOURCE_TEXTURE2;
+	TextureArguments[eBLEND_SOURCE_TEXTURE3] = eGL_BLEND_SOURCE_TEXTURE3;
+	TextureArguments[eBLEND_SOURCE_CONSTANT] = eGL_BLEND_SOURCE_CONSTANT;
+	TextureArguments[eBLEND_SOURCE_DIFFUSE] = eGL_BLEND_SOURCE_PRIMARY_COLOR;
+	TextureArguments[eBLEND_SOURCE_PREVIOUS] = eGL_BLEND_SOURCE_PREVIOUS;
 
-	RgbBlendFuncs[			eRGB_BLEND_FUNC_NONE				] =	eGL_BLEND_FUNC_MODULATE					;
-	RgbBlendFuncs[			eRGB_BLEND_FUNC_FIRST_ARG			] =	eGL_BLEND_FUNC_REPLACE					;
-	RgbBlendFuncs[			eRGB_BLEND_FUNC_ADD					] =	eGL_BLEND_FUNC_ADD						;
-	RgbBlendFuncs[			eRGB_BLEND_FUNC_ADD_SIGNED			] =	eGL_BLEND_FUNC_ADD_SIGNED				;
-	RgbBlendFuncs[			eRGB_BLEND_FUNC_MODULATE			] =	eGL_BLEND_FUNC_MODULATE					;
-	RgbBlendFuncs[			eRGB_BLEND_FUNC_INTERPOLATE			] =	eGL_BLEND_FUNC_INTERPOLATE				;
-	RgbBlendFuncs[			eRGB_BLEND_FUNC_SUBTRACT			] =	eGL_BLEND_FUNC_SUBTRACT					;
-	RgbBlendFuncs[			eRGB_BLEND_FUNC_DOT3_RGB			] =	eGL_BLEND_FUNC_DOT3_RGB					;
-	RgbBlendFuncs[			eRGB_BLEND_FUNC_DOT3_RGBA			] =	eGL_BLEND_FUNC_DOT3_RGBA				;
+	RgbBlendFuncs[eRGB_BLEND_FUNC_NONE] = eGL_BLEND_FUNC_MODULATE;
+	RgbBlendFuncs[eRGB_BLEND_FUNC_FIRST_ARG] = eGL_BLEND_FUNC_REPLACE;
+	RgbBlendFuncs[eRGB_BLEND_FUNC_ADD] = eGL_BLEND_FUNC_ADD;
+	RgbBlendFuncs[eRGB_BLEND_FUNC_ADD_SIGNED] = eGL_BLEND_FUNC_ADD_SIGNED;
+	RgbBlendFuncs[eRGB_BLEND_FUNC_MODULATE] = eGL_BLEND_FUNC_MODULATE;
+	RgbBlendFuncs[eRGB_BLEND_FUNC_INTERPOLATE] = eGL_BLEND_FUNC_INTERPOLATE;
+	RgbBlendFuncs[eRGB_BLEND_FUNC_SUBTRACT] = eGL_BLEND_FUNC_SUBTRACT;
+	RgbBlendFuncs[eRGB_BLEND_FUNC_DOT3_RGB] = eGL_BLEND_FUNC_DOT3_RGB;
+	RgbBlendFuncs[eRGB_BLEND_FUNC_DOT3_RGBA] = eGL_BLEND_FUNC_DOT3_RGBA;
 
-	AlphaBlendFuncs[		eALPHA_BLEND_FUNC_NONE				] =	eGL_BLEND_FUNC_MODULATE					;
-	AlphaBlendFuncs[		eALPHA_BLEND_FUNC_FIRST_ARG			] =	eGL_BLEND_FUNC_REPLACE					;
-	AlphaBlendFuncs[		eALPHA_BLEND_FUNC_ADD				] =	eGL_BLEND_FUNC_ADD						;
-	AlphaBlendFuncs[		eALPHA_BLEND_FUNC_ADD_SIGNED		] =	eGL_BLEND_FUNC_ADD_SIGNED				;
-	AlphaBlendFuncs[		eALPHA_BLEND_FUNC_MODULATE			] =	eGL_BLEND_FUNC_MODULATE					;
-	AlphaBlendFuncs[		eALPHA_BLEND_FUNC_INTERPOLATE		] =	eGL_BLEND_FUNC_INTERPOLATE				;
-	AlphaBlendFuncs[		eALPHA_BLEND_FUNC_SUBSTRACT			] =	eGL_BLEND_FUNC_SUBTRACT					;
+	AlphaBlendFuncs[eALPHA_BLEND_FUNC_NONE] = eGL_BLEND_FUNC_MODULATE;
+	AlphaBlendFuncs[eALPHA_BLEND_FUNC_FIRST_ARG] = eGL_BLEND_FUNC_REPLACE;
+	AlphaBlendFuncs[eALPHA_BLEND_FUNC_ADD] = eGL_BLEND_FUNC_ADD;
+	AlphaBlendFuncs[eALPHA_BLEND_FUNC_ADD_SIGNED] = eGL_BLEND_FUNC_ADD_SIGNED;
+	AlphaBlendFuncs[eALPHA_BLEND_FUNC_MODULATE] = eGL_BLEND_FUNC_MODULATE;
+	AlphaBlendFuncs[eALPHA_BLEND_FUNC_INTERPOLATE] = eGL_BLEND_FUNC_INTERPOLATE;
+	AlphaBlendFuncs[eALPHA_BLEND_FUNC_SUBSTRACT] = eGL_BLEND_FUNC_SUBTRACT;
 
-	BlendOps[				eBLEND_OP_ADD						] =	eGL_BLEND_OP_ADD						;
-	BlendOps[				eBLEND_OP_SUBSTRACT					] =	eGL_BLEND_OP_SUBTRACT					;
-	BlendOps[				eBLEND_OP_REV_SUBSTRACT				] =	eGL_BLEND_OP_REV_SUBTRACT				;
-	BlendOps[				eBLEND_OP_MIN						] =	eGL_BLEND_OP_MIN						;
-	BlendOps[				eBLEND_OP_MAX						] =	eGL_BLEND_OP_MAX						;
+	BlendOps[eBLEND_OP_ADD] = eGL_BLEND_OP_ADD;
+	BlendOps[eBLEND_OP_SUBSTRACT] = eGL_BLEND_OP_SUBTRACT;
+	BlendOps[eBLEND_OP_REV_SUBSTRACT] = eGL_BLEND_OP_REV_SUBTRACT;
+	BlendOps[eBLEND_OP_MIN] = eGL_BLEND_OP_MIN;
+	BlendOps[eBLEND_OP_MAX] = eGL_BLEND_OP_MAX;
 
-	PixelFormats[			ePIXEL_FORMAT_L8					] = PixelFmt( eGL_FORMAT_RED,				eGL_INTERNAL_R8,						eGL_TYPE_UNSIGNED_BYTE	);
-	PixelFormats[			ePIXEL_FORMAT_L16F32F				] = PixelFmt( eGL_FORMAT_RED,				eGL_INTERNAL_R16F,						eGL_TYPE_FLOAT	);
-	PixelFormats[			ePIXEL_FORMAT_L32F					] = PixelFmt( eGL_FORMAT_RED,				eGL_INTERNAL_R32F,						eGL_TYPE_FLOAT	);
-	PixelFormats[			ePIXEL_FORMAT_A8L8					] = PixelFmt( eGL_FORMAT_RG,				eGL_INTERNAL_RG16,						eGL_TYPE_UNSIGNED_BYTE	);
-	PixelFormats[			ePIXEL_FORMAT_AL16F32F				] = PixelFmt( eGL_FORMAT_RG,				eGL_INTERNAL_RG16F,						eGL_TYPE_FLOAT	);
-	PixelFormats[			ePIXEL_FORMAT_AL32F					] = PixelFmt( eGL_FORMAT_RG,				eGL_INTERNAL_RG32F,						eGL_TYPE_FLOAT	);
-	PixelFormats[			ePIXEL_FORMAT_A1R5G5B5				] = PixelFmt( eGL_FORMAT_BGRA,				eGL_INTERNAL_RGB5_A1,					eGL_TYPE_UNSIGNED_SHORT_1_5_5_5_REV	);
-	PixelFormats[			ePIXEL_FORMAT_A4R4G4B4				] = PixelFmt( eGL_FORMAT_BGRA,				eGL_INTERNAL_RGBA4,						eGL_TYPE_UNSIGNED_SHORT_4_4_4_4_REV	);
-	PixelFormats[			ePIXEL_FORMAT_R5G6B5				] = PixelFmt( eGL_FORMAT_BGR,				eGL_INTERNAL_RGB16,						eGL_TYPE_UNSIGNED_SHORT_5_6_5_REV	);
-	PixelFormats[			ePIXEL_FORMAT_R8G8B8				] = PixelFmt( eGL_FORMAT_BGR,				eGL_INTERNAL_RGB8,						eGL_TYPE_UNSIGNED_BYTE	);
-	PixelFormats[			ePIXEL_FORMAT_B8G8R8				] = PixelFmt( eGL_FORMAT_RGB,				eGL_INTERNAL_RGB8,						eGL_TYPE_UNSIGNED_BYTE	);
-	PixelFormats[			ePIXEL_FORMAT_A8R8G8B8				] = PixelFmt( eGL_FORMAT_BGRA,				eGL_INTERNAL_RGBA8,						eGL_TYPE_UNSIGNED_BYTE	);
-	PixelFormats[			ePIXEL_FORMAT_A8B8G8R8				] = PixelFmt( eGL_FORMAT_RGBA,				eGL_INTERNAL_RGBA8,						eGL_TYPE_UNSIGNED_BYTE	);
-	PixelFormats[			ePIXEL_FORMAT_RGB16F32F				] = PixelFmt( eGL_FORMAT_RGB,				eGL_INTERNAL_RGB16F,					eGL_TYPE_FLOAT	);
-	PixelFormats[			ePIXEL_FORMAT_ARGB16F32F			] = PixelFmt( eGL_FORMAT_RGBA,				eGL_INTERNAL_RGBA16F,					eGL_TYPE_FLOAT	);
-	PixelFormats[			ePIXEL_FORMAT_RGB32F				] = PixelFmt( eGL_FORMAT_RGB,				eGL_INTERNAL_RGB32F,					eGL_TYPE_FLOAT	);
-	PixelFormats[			ePIXEL_FORMAT_ARGB32F				] = PixelFmt( eGL_FORMAT_BGRA,				eGL_INTERNAL_RGBA32F,					eGL_TYPE_FLOAT	);
-	PixelFormats[			ePIXEL_FORMAT_DXTC1					] = PixelFmt( eGL_FORMAT_BGR,				eGL_INTERNAL_COMPRESSED_RGBA_S3TC_DXT1,	eGL_TYPE_DEFAULT	);
-	PixelFormats[			ePIXEL_FORMAT_DXTC3					] = PixelFmt( eGL_FORMAT_BGRA,				eGL_INTERNAL_COMPRESSED_RGBA_S3TC_DXT3,	eGL_TYPE_DEFAULT	);
-	PixelFormats[			ePIXEL_FORMAT_DXTC5					] = PixelFmt( eGL_FORMAT_RGBA,				eGL_INTERNAL_COMPRESSED_RGBA_S3TC_DXT5,	eGL_TYPE_DEFAULT	);
-	PixelFormats[			ePIXEL_FORMAT_YUY2					] = PixelFmt( eGL_FORMAT( 0 ),				eGL_INTERNAL( 0 ),						eGL_TYPE_DEFAULT	);
-	PixelFormats[			ePIXEL_FORMAT_DEPTH16				] = PixelFmt( eGL_FORMAT_DEPTH,				eGL_INTERNAL_DEPTH_COMPONENT16,			eGL_TYPE_UNSIGNED_BYTE	);
-	PixelFormats[			ePIXEL_FORMAT_DEPTH24				] = PixelFmt( eGL_FORMAT_DEPTH,				eGL_INTERNAL_DEPTH_COMPONENT24,			eGL_TYPE_UNSIGNED_BYTE	);
-	PixelFormats[			ePIXEL_FORMAT_DEPTH24S8				] = PixelFmt( eGL_FORMAT_DEPTH_STENCIL,		eGL_INTERNAL_DEPTH24_STENCIL8,			eGL_TYPE_UNSIGNED_INT_24_8	);
-	PixelFormats[			ePIXEL_FORMAT_DEPTH32				] = PixelFmt( eGL_FORMAT_DEPTH,				eGL_INTERNAL_DEPTH_COMPONENT32,			eGL_TYPE_UNSIGNED_BYTE	);
-	PixelFormats[			ePIXEL_FORMAT_STENCIL1				] = PixelFmt( eGL_FORMAT_STENCIL,			eGL_INTERNAL_STENCIL_INDEX1,			eGL_TYPE_UNSIGNED_BYTE	);
-	PixelFormats[			ePIXEL_FORMAT_STENCIL8				] = PixelFmt( eGL_FORMAT_STENCIL,			eGL_INTERNAL_STENCIL_INDEX8,			eGL_TYPE_UNSIGNED_BYTE	);
+	PixelFormats[ePIXEL_FORMAT_L8] = PixelFmt( eGL_FORMAT_RED, eGL_INTERNAL_R8, eGL_TYPE_UNSIGNED_BYTE );
+	PixelFormats[ePIXEL_FORMAT_L16F32F] = PixelFmt( eGL_FORMAT_RED, eGL_INTERNAL_R16F, eGL_TYPE_FLOAT );
+	PixelFormats[ePIXEL_FORMAT_L32F] = PixelFmt( eGL_FORMAT_RED, eGL_INTERNAL_R32F, eGL_TYPE_FLOAT );
+	PixelFormats[ePIXEL_FORMAT_A8L8] = PixelFmt( eGL_FORMAT_RG, eGL_INTERNAL_RG16, eGL_TYPE_UNSIGNED_BYTE );
+	PixelFormats[ePIXEL_FORMAT_AL16F32F] = PixelFmt( eGL_FORMAT_RG, eGL_INTERNAL_RG16F, eGL_TYPE_FLOAT );
+	PixelFormats[ePIXEL_FORMAT_AL32F] = PixelFmt( eGL_FORMAT_RG, eGL_INTERNAL_RG32F, eGL_TYPE_FLOAT );
+	PixelFormats[ePIXEL_FORMAT_A1R5G5B5] = PixelFmt( eGL_FORMAT_BGRA, eGL_INTERNAL_RGB5_A1, eGL_TYPE_UNSIGNED_SHORT_1_5_5_5_REV );
+	PixelFormats[ePIXEL_FORMAT_A4R4G4B4] = PixelFmt( eGL_FORMAT_BGRA, eGL_INTERNAL_RGBA4, eGL_TYPE_UNSIGNED_SHORT_4_4_4_4_REV );
+	PixelFormats[ePIXEL_FORMAT_R5G6B5] = PixelFmt( eGL_FORMAT_BGR, eGL_INTERNAL_RGB16, eGL_TYPE_UNSIGNED_SHORT_5_6_5_REV );
+	PixelFormats[ePIXEL_FORMAT_R8G8B8] = PixelFmt( eGL_FORMAT_BGR, eGL_INTERNAL_RGB8, eGL_TYPE_UNSIGNED_BYTE );
+	PixelFormats[ePIXEL_FORMAT_B8G8R8] = PixelFmt( eGL_FORMAT_RGB, eGL_INTERNAL_RGB8, eGL_TYPE_UNSIGNED_BYTE );
+	PixelFormats[ePIXEL_FORMAT_A8R8G8B8] = PixelFmt( eGL_FORMAT_BGRA, eGL_INTERNAL_RGBA8, eGL_TYPE_UNSIGNED_BYTE );
+	PixelFormats[ePIXEL_FORMAT_A8B8G8R8] = PixelFmt( eGL_FORMAT_RGBA, eGL_INTERNAL_RGBA8, eGL_TYPE_UNSIGNED_BYTE );
+	PixelFormats[ePIXEL_FORMAT_RGB16F32F] = PixelFmt( eGL_FORMAT_RGB, eGL_INTERNAL_RGB16F, eGL_TYPE_FLOAT );
+	PixelFormats[ePIXEL_FORMAT_ARGB16F32F] = PixelFmt( eGL_FORMAT_RGBA, eGL_INTERNAL_RGBA16F, eGL_TYPE_FLOAT );
+	PixelFormats[ePIXEL_FORMAT_RGB32F] = PixelFmt( eGL_FORMAT_RGB, eGL_INTERNAL_RGB32F, eGL_TYPE_FLOAT );
+	PixelFormats[ePIXEL_FORMAT_ARGB32F] = PixelFmt( eGL_FORMAT_BGRA, eGL_INTERNAL_RGBA32F, eGL_TYPE_FLOAT );
+	PixelFormats[ePIXEL_FORMAT_DXTC1] = PixelFmt( eGL_FORMAT_BGR, eGL_INTERNAL_COMPRESSED_RGBA_S3TC_DXT1, eGL_TYPE_DEFAULT );
+	PixelFormats[ePIXEL_FORMAT_DXTC3] = PixelFmt( eGL_FORMAT_BGRA, eGL_INTERNAL_COMPRESSED_RGBA_S3TC_DXT3, eGL_TYPE_DEFAULT );
+	PixelFormats[ePIXEL_FORMAT_DXTC5] = PixelFmt( eGL_FORMAT_RGBA, eGL_INTERNAL_COMPRESSED_RGBA_S3TC_DXT5, eGL_TYPE_DEFAULT );
+	PixelFormats[ePIXEL_FORMAT_YUY2] = PixelFmt( eGL_FORMAT( 0 ), eGL_INTERNAL( 0 ), eGL_TYPE_DEFAULT );
+	PixelFormats[ePIXEL_FORMAT_DEPTH16] = PixelFmt( eGL_FORMAT_DEPTH, eGL_INTERNAL_DEPTH_COMPONENT16, eGL_TYPE_UNSIGNED_BYTE );
+	PixelFormats[ePIXEL_FORMAT_DEPTH24] = PixelFmt( eGL_FORMAT_DEPTH, eGL_INTERNAL_DEPTH_COMPONENT24, eGL_TYPE_UNSIGNED_BYTE );
+	PixelFormats[ePIXEL_FORMAT_DEPTH24S8] = PixelFmt( eGL_FORMAT_DEPTH_STENCIL, eGL_INTERNAL_DEPTH24_STENCIL8, eGL_TYPE_UNSIGNED_INT_24_8 );
+	PixelFormats[ePIXEL_FORMAT_DEPTH32] = PixelFmt( eGL_FORMAT_DEPTH, eGL_INTERNAL_DEPTH_COMPONENT32, eGL_TYPE_UNSIGNED_BYTE );
+	PixelFormats[ePIXEL_FORMAT_STENCIL1] = PixelFmt( eGL_FORMAT_STENCIL, eGL_INTERNAL_STENCIL_INDEX1, eGL_TYPE_UNSIGNED_BYTE );
+	PixelFormats[ePIXEL_FORMAT_STENCIL8] = PixelFmt( eGL_FORMAT_STENCIL, eGL_INTERNAL_STENCIL_INDEX8, eGL_TYPE_UNSIGNED_BYTE );
 
-	ShaderTypes[			eSHADER_TYPE_VERTEX					] = eGL_SHADER_TYPE_VERTEX					;
-	ShaderTypes[			eSHADER_TYPE_HULL					] = eGL_SHADER_TYPE_TESS_CONTROL			;
-	ShaderTypes[			eSHADER_TYPE_DOMAIN					] = eGL_SHADER_TYPE_TESS_EVALUATION			;
-	ShaderTypes[			eSHADER_TYPE_GEOMETRY				] = eGL_SHADER_TYPE_GEOMETRY				;
-	ShaderTypes[			eSHADER_TYPE_PIXEL					] = eGL_SHADER_TYPE_FRAGMENT				;
-	ShaderTypes[			eSHADER_TYPE_COMPUTE				] = eGL_SHADER_TYPE_COMPUTE					;
+	ShaderTypes[eSHADER_TYPE_VERTEX] = eGL_SHADER_TYPE_VERTEX;
+	ShaderTypes[eSHADER_TYPE_HULL] = eGL_SHADER_TYPE_TESS_CONTROL;
+	ShaderTypes[eSHADER_TYPE_DOMAIN] = eGL_SHADER_TYPE_TESS_EVALUATION;
+	ShaderTypes[eSHADER_TYPE_GEOMETRY] = eGL_SHADER_TYPE_GEOMETRY;
+	ShaderTypes[eSHADER_TYPE_PIXEL] = eGL_SHADER_TYPE_FRAGMENT;
+	ShaderTypes[eSHADER_TYPE_COMPUTE] = eGL_SHADER_TYPE_COMPUTE;
 
-	Internals[				ePIXEL_FORMAT_L8					] =	eGL_INTERNAL_FORMAT_R16					;
-	Internals[				ePIXEL_FORMAT_L16F32F				] =	eGL_INTERNAL_FORMAT_R16F				;
-	Internals[				ePIXEL_FORMAT_L32F					] =	eGL_INTERNAL_FORMAT_R32F				;
-	Internals[				ePIXEL_FORMAT_A8L8					] =	eGL_INTERNAL_FORMAT_RG16				;
-	Internals[				ePIXEL_FORMAT_AL16F32F				] =	eGL_INTERNAL_FORMAT_RG16F				;
-	Internals[				ePIXEL_FORMAT_AL32F					] =	eGL_INTERNAL_FORMAT_RG32F				;
-	Internals[				ePIXEL_FORMAT_A1R5G5B5				] =	eGL_INTERNAL_FORMAT_RGBA16UI			;
-	Internals[				ePIXEL_FORMAT_A4R4G4B4				] =	eGL_INTERNAL_FORMAT_RGBA16UI			;
-	Internals[				ePIXEL_FORMAT_R5G6B5				] =	eGL_INTERNAL_FORMAT_RGB16UI				;
-	Internals[				ePIXEL_FORMAT_R8G8B8				] =	eGL_INTERNAL_FORMAT_RGBA32UI			;
-	Internals[				ePIXEL_FORMAT_B8G8R8				] =	eGL_INTERNAL_FORMAT_RGBA32UI			;
-	Internals[				ePIXEL_FORMAT_A8R8G8B8				] =	eGL_INTERNAL_FORMAT_RGBA32UI			;
-	Internals[				ePIXEL_FORMAT_A8B8G8R8				] =	eGL_INTERNAL_FORMAT_RGBA32UI			;
-	Internals[				ePIXEL_FORMAT_RGB16F32F				] =	eGL_INTERNAL_FORMAT_RGBA16F				;
-	Internals[				ePIXEL_FORMAT_ARGB16F32F			] =	eGL_INTERNAL_FORMAT_RGBA16F				;
-	Internals[				ePIXEL_FORMAT_RGB32F				] =	eGL_INTERNAL_FORMAT_RGBA32F				;
-	Internals[				ePIXEL_FORMAT_ARGB32F				] =	eGL_INTERNAL_FORMAT_RGBA32F				;
+	Internals[ePIXEL_FORMAT_L8] = eGL_INTERNAL_FORMAT_R16;
+	Internals[ePIXEL_FORMAT_L16F32F] = eGL_INTERNAL_FORMAT_R16F;
+	Internals[ePIXEL_FORMAT_L32F] = eGL_INTERNAL_FORMAT_R32F;
+	Internals[ePIXEL_FORMAT_A8L8] = eGL_INTERNAL_FORMAT_RG16;
+	Internals[ePIXEL_FORMAT_AL16F32F] = eGL_INTERNAL_FORMAT_RG16F;
+	Internals[ePIXEL_FORMAT_AL32F] = eGL_INTERNAL_FORMAT_RG32F;
+	Internals[ePIXEL_FORMAT_A1R5G5B5] = eGL_INTERNAL_FORMAT_RGBA16UI;
+	Internals[ePIXEL_FORMAT_A4R4G4B4] = eGL_INTERNAL_FORMAT_RGBA16UI;
+	Internals[ePIXEL_FORMAT_R5G6B5] = eGL_INTERNAL_FORMAT_RGB16UI;
+	Internals[ePIXEL_FORMAT_R8G8B8] = eGL_INTERNAL_FORMAT_RGBA32UI;
+	Internals[ePIXEL_FORMAT_B8G8R8] = eGL_INTERNAL_FORMAT_RGBA32UI;
+	Internals[ePIXEL_FORMAT_A8R8G8B8] = eGL_INTERNAL_FORMAT_RGBA32UI;
+	Internals[ePIXEL_FORMAT_A8B8G8R8] = eGL_INTERNAL_FORMAT_RGBA32UI;
+	Internals[ePIXEL_FORMAT_RGB16F32F] = eGL_INTERNAL_FORMAT_RGBA16F;
+	Internals[ePIXEL_FORMAT_ARGB16F32F] = eGL_INTERNAL_FORMAT_RGBA16F;
+	Internals[ePIXEL_FORMAT_RGB32F] = eGL_INTERNAL_FORMAT_RGBA32F;
+	Internals[ePIXEL_FORMAT_ARGB32F] = eGL_INTERNAL_FORMAT_RGBA32F;
 
-	Attachments[			eATTACHMENT_POINT_NONE				] =	eGL_TEXTURE_ATTACHMENT_NONE				;
-	Attachments[			eATTACHMENT_POINT_COLOUR0			] =	eGL_TEXTURE_ATTACHMENT_COLOR0			;
-	Attachments[			eATTACHMENT_POINT_COLOUR1			] =	eGL_TEXTURE_ATTACHMENT_COLOR1			;
-	Attachments[			eATTACHMENT_POINT_COLOUR2			] =	eGL_TEXTURE_ATTACHMENT_COLOR2			;
-	Attachments[			eATTACHMENT_POINT_COLOUR3			] =	eGL_TEXTURE_ATTACHMENT_COLOR3			;
-	Attachments[			eATTACHMENT_POINT_COLOUR4			] =	eGL_TEXTURE_ATTACHMENT_COLOR4			;
-	Attachments[			eATTACHMENT_POINT_COLOUR5			] =	eGL_TEXTURE_ATTACHMENT_COLOR5			;
-	Attachments[			eATTACHMENT_POINT_COLOUR6			] =	eGL_TEXTURE_ATTACHMENT_COLOR6			;
-	Attachments[			eATTACHMENT_POINT_COLOUR7			] =	eGL_TEXTURE_ATTACHMENT_COLOR7			;
-	Attachments[			eATTACHMENT_POINT_COLOUR8			] =	eGL_TEXTURE_ATTACHMENT_COLOR8			;
-	Attachments[			eATTACHMENT_POINT_COLOUR9			] =	eGL_TEXTURE_ATTACHMENT_COLOR9			;
-	Attachments[			eATTACHMENT_POINT_COLOUR10			] =	eGL_TEXTURE_ATTACHMENT_COLOR10			;
-	Attachments[			eATTACHMENT_POINT_COLOUR11			] =	eGL_TEXTURE_ATTACHMENT_COLOR11			;
-	Attachments[			eATTACHMENT_POINT_COLOUR12			] =	eGL_TEXTURE_ATTACHMENT_COLOR12			;
-	Attachments[			eATTACHMENT_POINT_COLOUR13			] =	eGL_TEXTURE_ATTACHMENT_COLOR13			;
-	Attachments[			eATTACHMENT_POINT_COLOUR14			] =	eGL_TEXTURE_ATTACHMENT_COLOR14			;
-	Attachments[			eATTACHMENT_POINT_COLOUR15			] =	eGL_TEXTURE_ATTACHMENT_COLOR15			;
-	Attachments[			eATTACHMENT_POINT_DEPTH				] =	eGL_TEXTURE_ATTACHMENT_DEPTH			;
-	Attachments[			eATTACHMENT_POINT_STENCIL			] =	eGL_TEXTURE_ATTACHMENT_STENCIL			;
+	Attachments[eATTACHMENT_POINT_NONE] = eGL_TEXTURE_ATTACHMENT_NONE;
+	Attachments[eATTACHMENT_POINT_COLOUR0] = eGL_TEXTURE_ATTACHMENT_COLOR0;
+	Attachments[eATTACHMENT_POINT_COLOUR1] = eGL_TEXTURE_ATTACHMENT_COLOR1;
+	Attachments[eATTACHMENT_POINT_COLOUR2] = eGL_TEXTURE_ATTACHMENT_COLOR2;
+	Attachments[eATTACHMENT_POINT_COLOUR3] = eGL_TEXTURE_ATTACHMENT_COLOR3;
+	Attachments[eATTACHMENT_POINT_COLOUR4] = eGL_TEXTURE_ATTACHMENT_COLOR4;
+	Attachments[eATTACHMENT_POINT_COLOUR5] = eGL_TEXTURE_ATTACHMENT_COLOR5;
+	Attachments[eATTACHMENT_POINT_COLOUR6] = eGL_TEXTURE_ATTACHMENT_COLOR6;
+	Attachments[eATTACHMENT_POINT_COLOUR7] = eGL_TEXTURE_ATTACHMENT_COLOR7;
+	Attachments[eATTACHMENT_POINT_COLOUR8] = eGL_TEXTURE_ATTACHMENT_COLOR8;
+	Attachments[eATTACHMENT_POINT_COLOUR9] = eGL_TEXTURE_ATTACHMENT_COLOR9;
+	Attachments[eATTACHMENT_POINT_COLOUR10] = eGL_TEXTURE_ATTACHMENT_COLOR10;
+	Attachments[eATTACHMENT_POINT_COLOUR11] = eGL_TEXTURE_ATTACHMENT_COLOR11;
+	Attachments[eATTACHMENT_POINT_COLOUR12] = eGL_TEXTURE_ATTACHMENT_COLOR12;
+	Attachments[eATTACHMENT_POINT_COLOUR13] = eGL_TEXTURE_ATTACHMENT_COLOR13;
+	Attachments[eATTACHMENT_POINT_COLOUR14] = eGL_TEXTURE_ATTACHMENT_COLOR14;
+	Attachments[eATTACHMENT_POINT_COLOUR15] = eGL_TEXTURE_ATTACHMENT_COLOR15;
+	Attachments[eATTACHMENT_POINT_DEPTH] = eGL_TEXTURE_ATTACHMENT_DEPTH;
+	Attachments[eATTACHMENT_POINT_STENCIL] = eGL_TEXTURE_ATTACHMENT_STENCIL;
 
-	FramebufferModes[		eFRAMEBUFFER_TARGET_DRAW			] =	eGL_FRAMEBUFFER_MODE_DRAW				;
-	FramebufferModes[		eFRAMEBUFFER_TARGET_READ			] =	eGL_FRAMEBUFFER_MODE_READ				;
-	FramebufferModes[		eFRAMEBUFFER_TARGET_BOTH			] =	eGL_FRAMEBUFFER_MODE_DEFAULT			;
+	FramebufferModes[eFRAMEBUFFER_TARGET_DRAW] = eGL_FRAMEBUFFER_MODE_DRAW;
+	FramebufferModes[eFRAMEBUFFER_TARGET_READ] = eGL_FRAMEBUFFER_MODE_READ;
+	FramebufferModes[eFRAMEBUFFER_TARGET_BOTH] = eGL_FRAMEBUFFER_MODE_DEFAULT;
 
-	RboAttachments[			eATTACHMENT_POINT_NONE				] = eGL_RENDERBUFFER_ATTACHMENT_NONE		;
-	RboAttachments[			eATTACHMENT_POINT_COLOUR0			] = eGL_RENDERBUFFER_ATTACHMENT_COLOR0		;
-	RboAttachments[			eATTACHMENT_POINT_COLOUR1			] = eGL_RENDERBUFFER_ATTACHMENT_COLOR1		;
-	RboAttachments[			eATTACHMENT_POINT_COLOUR2			] = eGL_RENDERBUFFER_ATTACHMENT_COLOR2		;
-	RboAttachments[			eATTACHMENT_POINT_COLOUR3			] = eGL_RENDERBUFFER_ATTACHMENT_COLOR3		;
-	RboAttachments[			eATTACHMENT_POINT_COLOUR4			] = eGL_RENDERBUFFER_ATTACHMENT_COLOR4		;
-	RboAttachments[			eATTACHMENT_POINT_COLOUR5			] = eGL_RENDERBUFFER_ATTACHMENT_COLOR5		;
-	RboAttachments[			eATTACHMENT_POINT_COLOUR6			] = eGL_RENDERBUFFER_ATTACHMENT_COLOR6		;
-	RboAttachments[			eATTACHMENT_POINT_COLOUR7			] = eGL_RENDERBUFFER_ATTACHMENT_COLOR7		;
-	RboAttachments[			eATTACHMENT_POINT_COLOUR8			] = eGL_RENDERBUFFER_ATTACHMENT_COLOR8		;
-	RboAttachments[			eATTACHMENT_POINT_COLOUR9			] = eGL_RENDERBUFFER_ATTACHMENT_COLOR9		;
-	RboAttachments[			eATTACHMENT_POINT_COLOUR10			] = eGL_RENDERBUFFER_ATTACHMENT_COLOR10		;
-	RboAttachments[			eATTACHMENT_POINT_COLOUR11			] = eGL_RENDERBUFFER_ATTACHMENT_COLOR11		;
-	RboAttachments[			eATTACHMENT_POINT_COLOUR12			] = eGL_RENDERBUFFER_ATTACHMENT_COLOR12		;
-	RboAttachments[			eATTACHMENT_POINT_COLOUR13			] = eGL_RENDERBUFFER_ATTACHMENT_COLOR13		;
-	RboAttachments[			eATTACHMENT_POINT_COLOUR14			] = eGL_RENDERBUFFER_ATTACHMENT_COLOR14		;
-	RboAttachments[			eATTACHMENT_POINT_COLOUR15			] = eGL_RENDERBUFFER_ATTACHMENT_COLOR15		;
-	RboAttachments[			eATTACHMENT_POINT_DEPTH				] = eGL_RENDERBUFFER_ATTACHMENT_DEPTH		;
-	RboAttachments[			eATTACHMENT_POINT_STENCIL			] = eGL_RENDERBUFFER_ATTACHMENT_STENCIL		;
+	RboAttachments[eATTACHMENT_POINT_NONE] = eGL_RENDERBUFFER_ATTACHMENT_NONE;
+	RboAttachments[eATTACHMENT_POINT_COLOUR0] = eGL_RENDERBUFFER_ATTACHMENT_COLOR0;
+	RboAttachments[eATTACHMENT_POINT_COLOUR1] = eGL_RENDERBUFFER_ATTACHMENT_COLOR1;
+	RboAttachments[eATTACHMENT_POINT_COLOUR2] = eGL_RENDERBUFFER_ATTACHMENT_COLOR2;
+	RboAttachments[eATTACHMENT_POINT_COLOUR3] = eGL_RENDERBUFFER_ATTACHMENT_COLOR3;
+	RboAttachments[eATTACHMENT_POINT_COLOUR4] = eGL_RENDERBUFFER_ATTACHMENT_COLOR4;
+	RboAttachments[eATTACHMENT_POINT_COLOUR5] = eGL_RENDERBUFFER_ATTACHMENT_COLOR5;
+	RboAttachments[eATTACHMENT_POINT_COLOUR6] = eGL_RENDERBUFFER_ATTACHMENT_COLOR6;
+	RboAttachments[eATTACHMENT_POINT_COLOUR7] = eGL_RENDERBUFFER_ATTACHMENT_COLOR7;
+	RboAttachments[eATTACHMENT_POINT_COLOUR8] = eGL_RENDERBUFFER_ATTACHMENT_COLOR8;
+	RboAttachments[eATTACHMENT_POINT_COLOUR9] = eGL_RENDERBUFFER_ATTACHMENT_COLOR9;
+	RboAttachments[eATTACHMENT_POINT_COLOUR10] = eGL_RENDERBUFFER_ATTACHMENT_COLOR10;
+	RboAttachments[eATTACHMENT_POINT_COLOUR11] = eGL_RENDERBUFFER_ATTACHMENT_COLOR11;
+	RboAttachments[eATTACHMENT_POINT_COLOUR12] = eGL_RENDERBUFFER_ATTACHMENT_COLOR12;
+	RboAttachments[eATTACHMENT_POINT_COLOUR13] = eGL_RENDERBUFFER_ATTACHMENT_COLOR13;
+	RboAttachments[eATTACHMENT_POINT_COLOUR14] = eGL_RENDERBUFFER_ATTACHMENT_COLOR14;
+	RboAttachments[eATTACHMENT_POINT_COLOUR15] = eGL_RENDERBUFFER_ATTACHMENT_COLOR15;
+	RboAttachments[eATTACHMENT_POINT_DEPTH] = eGL_RENDERBUFFER_ATTACHMENT_DEPTH;
+	RboAttachments[eATTACHMENT_POINT_STENCIL] = eGL_RENDERBUFFER_ATTACHMENT_STENCIL;
 
-	RboStorages[			ePIXEL_FORMAT_L8					] =	eGL_RENDERBUFFER_STORAGE_L8				;
-	RboStorages[			ePIXEL_FORMAT_L16F32F				] =	eGL_RENDERBUFFER_STORAGE_L16F			;
-	RboStorages[			ePIXEL_FORMAT_L32F					] =	eGL_RENDERBUFFER_STORAGE_L32F			;
-	RboStorages[			ePIXEL_FORMAT_A8L8					] =	eGL_RENDERBUFFER_STORAGE_A8L8			;
-	RboStorages[			ePIXEL_FORMAT_AL16F32F				] =	eGL_RENDERBUFFER_STORAGE_AL16F			;
-	RboStorages[			ePIXEL_FORMAT_AL32F					] =	eGL_RENDERBUFFER_STORAGE_AL32F			;
-	RboStorages[			ePIXEL_FORMAT_A1R5G5B5				] =	eGL_RENDERBUFFER_STORAGE_RGB5_A1		;
-	RboStorages[			ePIXEL_FORMAT_A4R4G4B4				] =	eGL_RENDERBUFFER_STORAGE_RGBA4			;
-	RboStorages[			ePIXEL_FORMAT_R5G6B5				] =	eGL_RENDERBUFFER_STORAGE_RGB565			;
-	RboStorages[			ePIXEL_FORMAT_R8G8B8				] =	eGL_RENDERBUFFER_STORAGE_RGB8			;
-	RboStorages[			ePIXEL_FORMAT_B8G8R8				] =	eGL_RENDERBUFFER_STORAGE_RGB8			;
-	RboStorages[			ePIXEL_FORMAT_A8R8G8B8				] =	eGL_RENDERBUFFER_STORAGE_RGBA8			;
-	RboStorages[			ePIXEL_FORMAT_A8B8G8R8				] =	eGL_RENDERBUFFER_STORAGE_RGBA8			;
-	RboStorages[			ePIXEL_FORMAT_RGB16F32F				] =	eGL_RENDERBUFFER_STORAGE_RGB16F			;
-	RboStorages[			ePIXEL_FORMAT_ARGB16F32F			] =	eGL_RENDERBUFFER_STORAGE_RGBA16F		;
-	RboStorages[			ePIXEL_FORMAT_RGB32F				] =	eGL_RENDERBUFFER_STORAGE_RGB32F			;
-	RboStorages[			ePIXEL_FORMAT_ARGB32F				] =	eGL_RENDERBUFFER_STORAGE_RGBA32F		;
-	RboStorages[			ePIXEL_FORMAT_DXTC1					] =	eGL_RENDERBUFFER_STORAGE_DXTC1			;
-	RboStorages[			ePIXEL_FORMAT_DXTC3					] =	eGL_RENDERBUFFER_STORAGE_DXTC3			;
-	RboStorages[			ePIXEL_FORMAT_DXTC5					] =	eGL_RENDERBUFFER_STORAGE_DXTC5			;
-	RboStorages[			ePIXEL_FORMAT_YUY2					] =	eGL_RENDERBUFFER_STORAGE( 0 )			;
-	RboStorages[			ePIXEL_FORMAT_DEPTH16				] =	eGL_RENDERBUFFER_STORAGE_DEPTH16		;
-	RboStorages[			ePIXEL_FORMAT_DEPTH24				] =	eGL_RENDERBUFFER_STORAGE_DEPTH24		;
-	RboStorages[			ePIXEL_FORMAT_DEPTH24S8				] =	eGL_RENDERBUFFER_STORAGE_DEPTH24		;
-	RboStorages[			ePIXEL_FORMAT_DEPTH32				] =	eGL_RENDERBUFFER_STORAGE_DEPTH32		;
-	RboStorages[			ePIXEL_FORMAT_STENCIL1				] =	eGL_RENDERBUFFER_STORAGE_STENCIL1		;
-	RboStorages[			ePIXEL_FORMAT_STENCIL8				] =	eGL_RENDERBUFFER_STORAGE_STENCIL8		;
+	RboStorages[ePIXEL_FORMAT_L8] = eGL_RENDERBUFFER_STORAGE_L8;
+	RboStorages[ePIXEL_FORMAT_L16F32F] = eGL_RENDERBUFFER_STORAGE_L16F;
+	RboStorages[ePIXEL_FORMAT_L32F] = eGL_RENDERBUFFER_STORAGE_L32F;
+	RboStorages[ePIXEL_FORMAT_A8L8] = eGL_RENDERBUFFER_STORAGE_A8L8;
+	RboStorages[ePIXEL_FORMAT_AL16F32F] = eGL_RENDERBUFFER_STORAGE_AL16F;
+	RboStorages[ePIXEL_FORMAT_AL32F] = eGL_RENDERBUFFER_STORAGE_AL32F;
+	RboStorages[ePIXEL_FORMAT_A1R5G5B5] = eGL_RENDERBUFFER_STORAGE_RGB5_A1;
+	RboStorages[ePIXEL_FORMAT_A4R4G4B4] = eGL_RENDERBUFFER_STORAGE_RGBA4;
+	RboStorages[ePIXEL_FORMAT_R5G6B5] = eGL_RENDERBUFFER_STORAGE_RGB565;
+	RboStorages[ePIXEL_FORMAT_R8G8B8] = eGL_RENDERBUFFER_STORAGE_RGB8;
+	RboStorages[ePIXEL_FORMAT_B8G8R8] = eGL_RENDERBUFFER_STORAGE_RGB8;
+	RboStorages[ePIXEL_FORMAT_A8R8G8B8] = eGL_RENDERBUFFER_STORAGE_RGBA8;
+	RboStorages[ePIXEL_FORMAT_A8B8G8R8] = eGL_RENDERBUFFER_STORAGE_RGBA8;
+	RboStorages[ePIXEL_FORMAT_RGB16F32F] = eGL_RENDERBUFFER_STORAGE_RGB16F;
+	RboStorages[ePIXEL_FORMAT_ARGB16F32F] = eGL_RENDERBUFFER_STORAGE_RGBA16F;
+	RboStorages[ePIXEL_FORMAT_RGB32F] = eGL_RENDERBUFFER_STORAGE_RGB32F;
+	RboStorages[ePIXEL_FORMAT_ARGB32F] = eGL_RENDERBUFFER_STORAGE_RGBA32F;
+	RboStorages[ePIXEL_FORMAT_DXTC1] = eGL_RENDERBUFFER_STORAGE_DXTC1;
+	RboStorages[ePIXEL_FORMAT_DXTC3] = eGL_RENDERBUFFER_STORAGE_DXTC3;
+	RboStorages[ePIXEL_FORMAT_DXTC5] = eGL_RENDERBUFFER_STORAGE_DXTC5;
+	RboStorages[ePIXEL_FORMAT_YUY2] = eGL_RENDERBUFFER_STORAGE( 0 );
+	RboStorages[ePIXEL_FORMAT_DEPTH16] = eGL_RENDERBUFFER_STORAGE_DEPTH16;
+	RboStorages[ePIXEL_FORMAT_DEPTH24] = eGL_RENDERBUFFER_STORAGE_DEPTH24;
+	RboStorages[ePIXEL_FORMAT_DEPTH24S8] = eGL_RENDERBUFFER_STORAGE_DEPTH24;
+	RboStorages[ePIXEL_FORMAT_DEPTH32] = eGL_RENDERBUFFER_STORAGE_DEPTH32;
+	RboStorages[ePIXEL_FORMAT_STENCIL1] = eGL_RENDERBUFFER_STORAGE_STENCIL1;
+	RboStorages[ePIXEL_FORMAT_STENCIL8] = eGL_RENDERBUFFER_STORAGE_STENCIL8;
 
-	Tweaks[					eTWEAK_DEPTH_TEST					] =	eGL_TWEAK_DEPTH_TEST					;
-	Tweaks[					eTWEAK_STENCIL_TEST					] =	eGL_TWEAK_STENCIL_TEST					;
-	Tweaks[					eTWEAK_BLEND						] =	eGL_TWEAK_BLEND							;
-	Tweaks[					eTWEAK_LIGHTING						] =	eGL_TWEAK_LIGHTING						;
-	Tweaks[					eTWEAK_ALPHA_TEST					] =	eGL_TWEAK_ALPHA_TEST					;
-	Tweaks[					eTWEAK_CULLING						] =	eGL_TWEAK_CULL_FACE						;
-	Tweaks[					eTWEAK_DITHERING					] =	eGL_TWEAK_DITHER						;
-	Tweaks[					eTWEAK_FOG							] =	eGL_TWEAK_FOG							;
-	Tweaks[					eTWEAK_DEPTH_WRITE					] =	eGL_TWEAK( -1 )							;
-	Tweaks[					eTWEAK_ALPHA_TO_COVERAGE			] =	eGL_TWEAK_ALPHA_TO_COVERAGE				;
+	Tweaks[eTWEAK_DEPTH_TEST] = eGL_TWEAK_DEPTH_TEST;
+	Tweaks[eTWEAK_STENCIL_TEST] = eGL_TWEAK_STENCIL_TEST;
+	Tweaks[eTWEAK_BLEND] = eGL_TWEAK_BLEND;
+	Tweaks[eTWEAK_LIGHTING] = eGL_TWEAK_LIGHTING;
+	Tweaks[eTWEAK_ALPHA_TEST] = eGL_TWEAK_ALPHA_TEST;
+	Tweaks[eTWEAK_CULLING] = eGL_TWEAK_CULL_FACE;
+	Tweaks[eTWEAK_DITHERING] = eGL_TWEAK_DITHER;
+	Tweaks[eTWEAK_FOG] = eGL_TWEAK_FOG;
+	Tweaks[eTWEAK_DEPTH_WRITE] = eGL_TWEAK( -1 );
+	Tweaks[eTWEAK_ALPHA_TO_COVERAGE] = eGL_TWEAK_ALPHA_TO_COVERAGE;
 
-	Buffers[				eBUFFER_NONE						] =	eGL_BUFFER_NONE							;
-	Buffers[				eBUFFER_FRONT_LEFT					] =	eGL_BUFFER_FRONT_LEFT					;
-	Buffers[				eBUFFER_FRONT_RIGHT					] =	eGL_BUFFER_FRONT_RIGHT					;
-	Buffers[				eBUFFER_BACK_LEFT					] =	eGL_BUFFER_BACK_LEFT					;
-	Buffers[				eBUFFER_BACK_RIGHT					] =	eGL_BUFFER_BACK_RIGHT					;
-	Buffers[				eBUFFER_FRONT						] =	eGL_BUFFER_FRONT						;
-	Buffers[				eBUFFER_BACK						] =	eGL_BUFFER_BACK							;
-	Buffers[				eBUFFER_LEFT						] =	eGL_BUFFER_LEFT							;
-	Buffers[				eBUFFER_RIGHT						] =	eGL_BUFFER_RIGHT						;
-	Buffers[				eBUFFER_FRONT_AND_BACK				] =	eGL_BUFFER_FRONT_AND_BACK				;
+	Buffers[eBUFFER_NONE] = eGL_BUFFER_NONE;
+	Buffers[eBUFFER_FRONT_LEFT] = eGL_BUFFER_FRONT_LEFT;
+	Buffers[eBUFFER_FRONT_RIGHT] = eGL_BUFFER_FRONT_RIGHT;
+	Buffers[eBUFFER_BACK_LEFT] = eGL_BUFFER_BACK_LEFT;
+	Buffers[eBUFFER_BACK_RIGHT] = eGL_BUFFER_BACK_RIGHT;
+	Buffers[eBUFFER_FRONT] = eGL_BUFFER_FRONT;
+	Buffers[eBUFFER_BACK] = eGL_BUFFER_BACK;
+	Buffers[eBUFFER_LEFT] = eGL_BUFFER_LEFT;
+	Buffers[eBUFFER_RIGHT] = eGL_BUFFER_RIGHT;
+	Buffers[eBUFFER_FRONT_AND_BACK] = eGL_BUFFER_FRONT_AND_BACK;
 
-	Faces[					eFACE_NONE							] =	eGL_FACE( 0 )							;
-	Faces[					eFACE_FRONT							] =	eGL_FACE_FRONT							;
-	Faces[					eFACE_BACK							] =	eGL_FACE_BACK							;
-	Faces[					eFACE_FRONT_AND_BACK				] =	eGL_FACE_FRONT_AND_BACK					;
+	Faces[eFACE_NONE] = eGL_FACE( 0 );
+	Faces[eFACE_FRONT] = eGL_FACE_FRONT;
+	Faces[eFACE_BACK] = eGL_FACE_BACK;
+	Faces[eFACE_FRONT_AND_BACK] = eGL_FACE_FRONT_AND_BACK;
 
-	FillModes[				eFILL_MODE_POINT					] =	eGL_FILL_MODE_POINT						;
-	FillModes[				eFILL_MODE_LINE						] =	eGL_FILL_MODE_LINE						;
-	FillModes[				eFILL_MODE_SOLID					] =	eGL_FILL_MODE_FILL						;
+	FillModes[eFILL_MODE_POINT] = eGL_FILL_MODE_POINT;
+	FillModes[eFILL_MODE_LINE] = eGL_FILL_MODE_LINE;
+	FillModes[eFILL_MODE_SOLID] = eGL_FILL_MODE_FILL;
 
-	DepthFuncs[				eDEPTH_FUNC_NEVER					] =	eGL_FUNC_NEVER							;
-	DepthFuncs[				eDEPTH_FUNC_LESS					] =	eGL_FUNC_LESS							;
-	DepthFuncs[				eDEPTH_FUNC_EQUAL					] =	eGL_FUNC_LEQUAL							;
-	DepthFuncs[				eDEPTH_FUNC_LEQUAL					] =	eGL_FUNC_EQUAL							;
-	DepthFuncs[				eDEPTH_FUNC_GREATER					] =	eGL_FUNC_NOTEQUAL						;
-	DepthFuncs[				eDEPTH_FUNC_NOTEQUAL				] =	eGL_FUNC_GEQUAL							;
-	DepthFuncs[				eDEPTH_FUNC_GEQUAL					] =	eGL_FUNC_GREATER						;
-	DepthFuncs[				eDEPTH_FUNC_ALWAYS					] =	eGL_FUNC_ALWAYS							;
+	DepthFuncs[eDEPTH_FUNC_NEVER] = eGL_FUNC_NEVER;
+	DepthFuncs[eDEPTH_FUNC_LESS] = eGL_FUNC_LESS;
+	DepthFuncs[eDEPTH_FUNC_EQUAL] = eGL_FUNC_LEQUAL;
+	DepthFuncs[eDEPTH_FUNC_LEQUAL] = eGL_FUNC_EQUAL;
+	DepthFuncs[eDEPTH_FUNC_GREATER] = eGL_FUNC_NOTEQUAL;
+	DepthFuncs[eDEPTH_FUNC_NOTEQUAL] = eGL_FUNC_GEQUAL;
+	DepthFuncs[eDEPTH_FUNC_GEQUAL] = eGL_FUNC_GREATER;
+	DepthFuncs[eDEPTH_FUNC_ALWAYS] = eGL_FUNC_ALWAYS;
 
-	WriteMasks[				eWRITING_MASK_ZERO					] =	false									;
-	WriteMasks[				eWRITING_MASK_ALL					] =	true									;
+	WriteMasks[eWRITING_MASK_ZERO] = false;
+	WriteMasks[eWRITING_MASK_ALL] = true;
 
-	StencilFuncs[			eSTENCIL_FUNC_NEVER					] =	eGL_FUNC_NEVER							;
-	StencilFuncs[			eSTENCIL_FUNC_LESS					] =	eGL_FUNC_LESS							;
-	StencilFuncs[			eSTENCIL_FUNC_EQUAL					] =	eGL_FUNC_LEQUAL							;
-	StencilFuncs[			eSTENCIL_FUNC_LEQUAL				] =	eGL_FUNC_EQUAL							;
-	StencilFuncs[			eSTENCIL_FUNC_GREATER				] =	eGL_FUNC_NOTEQUAL						;
-	StencilFuncs[			eSTENCIL_FUNC_NOTEQUAL				] =	eGL_FUNC_GEQUAL							;
-	StencilFuncs[			eSTENCIL_FUNC_GEQUAL				] =	eGL_FUNC_GREATER						;
-	StencilFuncs[			eSTENCIL_FUNC_ALWAYS				] =	eGL_FUNC_ALWAYS							;
+	StencilFuncs[eSTENCIL_FUNC_NEVER] = eGL_FUNC_NEVER;
+	StencilFuncs[eSTENCIL_FUNC_LESS] = eGL_FUNC_LESS;
+	StencilFuncs[eSTENCIL_FUNC_EQUAL] = eGL_FUNC_LEQUAL;
+	StencilFuncs[eSTENCIL_FUNC_LEQUAL] = eGL_FUNC_EQUAL;
+	StencilFuncs[eSTENCIL_FUNC_GREATER] = eGL_FUNC_NOTEQUAL;
+	StencilFuncs[eSTENCIL_FUNC_NOTEQUAL] = eGL_FUNC_GEQUAL;
+	StencilFuncs[eSTENCIL_FUNC_GEQUAL] = eGL_FUNC_GREATER;
+	StencilFuncs[eSTENCIL_FUNC_ALWAYS] = eGL_FUNC_ALWAYS;
 
-	StencilOps[				eSTENCIL_OP_KEEP					] =	eGL_STENCIL_OP_KEEP						;
-	StencilOps[				eSTENCIL_OP_ZERO					] =	eGL_STENCIL_OP_ZERO						;
-	StencilOps[				eSTENCIL_OP_REPLACE					] =	eGL_STENCIL_OP_REPLACE					;
-	StencilOps[				eSTENCIL_OP_INCR					] =	eGL_STENCIL_OP_INCR						;
-	StencilOps[				eSTENCIL_OP_INCR_WRAP				] =	eGL_STENCIL_OP_INCR_WRAP				;
-	StencilOps[				eSTENCIL_OP_DECR					] =	eGL_STENCIL_OP_DECR						;
-	StencilOps[				eSTENCIL_OP_DECR_WRAP				] =	eGL_STENCIL_OP_DECR_WRAP				;
-	StencilOps[				eSTENCIL_OP_INVERT					] =	eGL_STENCIL_OP_INVERT					;
+	StencilOps[eSTENCIL_OP_KEEP] = eGL_STENCIL_OP_KEEP;
+	StencilOps[eSTENCIL_OP_ZERO] = eGL_STENCIL_OP_ZERO;
+	StencilOps[eSTENCIL_OP_REPLACE] = eGL_STENCIL_OP_REPLACE;
+	StencilOps[eSTENCIL_OP_INCR] = eGL_STENCIL_OP_INCR;
+	StencilOps[eSTENCIL_OP_INCR_WRAP] = eGL_STENCIL_OP_INCR_WRAP;
+	StencilOps[eSTENCIL_OP_DECR] = eGL_STENCIL_OP_DECR;
+	StencilOps[eSTENCIL_OP_DECR_WRAP] = eGL_STENCIL_OP_DECR_WRAP;
+	StencilOps[eSTENCIL_OP_INVERT] = eGL_STENCIL_OP_INVERT;
 
-	BuffersTA[				eGL_TEXTURE_ATTACHMENT_NONE			] = eGL_BUFFER_NONE							;
-	BuffersTA[				eGL_TEXTURE_ATTACHMENT_COLOR0		] = eGL_BUFFER_COLOR0						;
-	BuffersTA[				eGL_TEXTURE_ATTACHMENT_COLOR1		] = eGL_BUFFER_COLOR1						;
-	BuffersTA[				eGL_TEXTURE_ATTACHMENT_COLOR2		] = eGL_BUFFER_COLOR2						;
-	BuffersTA[				eGL_TEXTURE_ATTACHMENT_COLOR3		] = eGL_BUFFER_COLOR3						;
-	BuffersTA[				eGL_TEXTURE_ATTACHMENT_COLOR4		] = eGL_BUFFER_COLOR4						;
-	BuffersTA[				eGL_TEXTURE_ATTACHMENT_COLOR5		] = eGL_BUFFER_COLOR5						;
-	BuffersTA[				eGL_TEXTURE_ATTACHMENT_COLOR6		] = eGL_BUFFER_COLOR6						;
-	BuffersTA[				eGL_TEXTURE_ATTACHMENT_COLOR7		] = eGL_BUFFER_COLOR7						;
-	BuffersTA[				eGL_TEXTURE_ATTACHMENT_COLOR8		] = eGL_BUFFER_COLOR8						;
-	BuffersTA[				eGL_TEXTURE_ATTACHMENT_COLOR9		] = eGL_BUFFER_COLOR9						;
-	BuffersTA[				eGL_TEXTURE_ATTACHMENT_COLOR10		] = eGL_BUFFER_COLOR10						;
-	BuffersTA[				eGL_TEXTURE_ATTACHMENT_COLOR11		] = eGL_BUFFER_COLOR11						;
-	BuffersTA[				eGL_TEXTURE_ATTACHMENT_COLOR12		] = eGL_BUFFER_COLOR12						;
-	BuffersTA[				eGL_TEXTURE_ATTACHMENT_COLOR13		] = eGL_BUFFER_COLOR13						;
-	BuffersTA[				eGL_TEXTURE_ATTACHMENT_COLOR14		] = eGL_BUFFER_COLOR14						;
-	BuffersTA[				eGL_TEXTURE_ATTACHMENT_COLOR15		] = eGL_BUFFER_COLOR15						;
+	BuffersTA[eGL_TEXTURE_ATTACHMENT_NONE] = eGL_BUFFER_NONE;
+	BuffersTA[eGL_TEXTURE_ATTACHMENT_COLOR0] = eGL_BUFFER_COLOR0;
+	BuffersTA[eGL_TEXTURE_ATTACHMENT_COLOR1] = eGL_BUFFER_COLOR1;
+	BuffersTA[eGL_TEXTURE_ATTACHMENT_COLOR2] = eGL_BUFFER_COLOR2;
+	BuffersTA[eGL_TEXTURE_ATTACHMENT_COLOR3] = eGL_BUFFER_COLOR3;
+	BuffersTA[eGL_TEXTURE_ATTACHMENT_COLOR4] = eGL_BUFFER_COLOR4;
+	BuffersTA[eGL_TEXTURE_ATTACHMENT_COLOR5] = eGL_BUFFER_COLOR5;
+	BuffersTA[eGL_TEXTURE_ATTACHMENT_COLOR6] = eGL_BUFFER_COLOR6;
+	BuffersTA[eGL_TEXTURE_ATTACHMENT_COLOR7] = eGL_BUFFER_COLOR7;
+	BuffersTA[eGL_TEXTURE_ATTACHMENT_COLOR8] = eGL_BUFFER_COLOR8;
+	BuffersTA[eGL_TEXTURE_ATTACHMENT_COLOR9] = eGL_BUFFER_COLOR9;
+	BuffersTA[eGL_TEXTURE_ATTACHMENT_COLOR10] = eGL_BUFFER_COLOR10;
+	BuffersTA[eGL_TEXTURE_ATTACHMENT_COLOR11] = eGL_BUFFER_COLOR11;
+	BuffersTA[eGL_TEXTURE_ATTACHMENT_COLOR12] = eGL_BUFFER_COLOR12;
+	BuffersTA[eGL_TEXTURE_ATTACHMENT_COLOR13] = eGL_BUFFER_COLOR13;
+	BuffersTA[eGL_TEXTURE_ATTACHMENT_COLOR14] = eGL_BUFFER_COLOR14;
+	BuffersTA[eGL_TEXTURE_ATTACHMENT_COLOR15] = eGL_BUFFER_COLOR15;
 
-	BuffersRBA[				eGL_RENDERBUFFER_ATTACHMENT_NONE	] = eGL_BUFFER_NONE							;
-	BuffersRBA[				eGL_RENDERBUFFER_ATTACHMENT_COLOR0	] = eGL_BUFFER_COLOR0						;
-	BuffersRBA[				eGL_RENDERBUFFER_ATTACHMENT_COLOR1	] = eGL_BUFFER_COLOR1						;
-	BuffersRBA[				eGL_RENDERBUFFER_ATTACHMENT_COLOR2	] = eGL_BUFFER_COLOR2						;
-	BuffersRBA[				eGL_RENDERBUFFER_ATTACHMENT_COLOR3	] = eGL_BUFFER_COLOR3						;
-	BuffersRBA[				eGL_RENDERBUFFER_ATTACHMENT_COLOR4	] = eGL_BUFFER_COLOR4						;
-	BuffersRBA[				eGL_RENDERBUFFER_ATTACHMENT_COLOR5	] = eGL_BUFFER_COLOR5						;
-	BuffersRBA[				eGL_RENDERBUFFER_ATTACHMENT_COLOR6	] = eGL_BUFFER_COLOR6						;
-	BuffersRBA[				eGL_RENDERBUFFER_ATTACHMENT_COLOR7	] = eGL_BUFFER_COLOR7						;
-	BuffersRBA[				eGL_RENDERBUFFER_ATTACHMENT_COLOR8	] = eGL_BUFFER_COLOR8						;
-	BuffersRBA[				eGL_RENDERBUFFER_ATTACHMENT_COLOR9	] = eGL_BUFFER_COLOR9						;
-	BuffersRBA[				eGL_RENDERBUFFER_ATTACHMENT_COLOR10	] = eGL_BUFFER_COLOR10						;
-	BuffersRBA[				eGL_RENDERBUFFER_ATTACHMENT_COLOR11	] = eGL_BUFFER_COLOR11						;
-	BuffersRBA[				eGL_RENDERBUFFER_ATTACHMENT_COLOR12	] = eGL_BUFFER_COLOR12						;
-	BuffersRBA[				eGL_RENDERBUFFER_ATTACHMENT_COLOR13	] = eGL_BUFFER_COLOR13						;
-	BuffersRBA[				eGL_RENDERBUFFER_ATTACHMENT_COLOR14	] = eGL_BUFFER_COLOR14						;
-	BuffersRBA[				eGL_RENDERBUFFER_ATTACHMENT_COLOR15	] = eGL_BUFFER_COLOR15						;
+	BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_NONE] = eGL_BUFFER_NONE;
+	BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_COLOR0] = eGL_BUFFER_COLOR0;
+	BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_COLOR1] = eGL_BUFFER_COLOR1;
+	BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_COLOR2] = eGL_BUFFER_COLOR2;
+	BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_COLOR3] = eGL_BUFFER_COLOR3;
+	BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_COLOR4] = eGL_BUFFER_COLOR4;
+	BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_COLOR5] = eGL_BUFFER_COLOR5;
+	BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_COLOR6] = eGL_BUFFER_COLOR6;
+	BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_COLOR7] = eGL_BUFFER_COLOR7;
+	BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_COLOR8] = eGL_BUFFER_COLOR8;
+	BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_COLOR9] = eGL_BUFFER_COLOR9;
+	BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_COLOR10] = eGL_BUFFER_COLOR10;
+	BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_COLOR11] = eGL_BUFFER_COLOR11;
+	BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_COLOR12] = eGL_BUFFER_COLOR12;
+	BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_COLOR13] = eGL_BUFFER_COLOR13;
+	BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_COLOR14] = eGL_BUFFER_COLOR14;
+	BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_COLOR15] = eGL_BUFFER_COLOR15;
 
 	Cleanup();
 }
@@ -1092,10 +1095,10 @@ OpenGl::~OpenGl()
 bool OpenGl::PreInitialise( String const & p_strExtensions )
 {
 	char const * l_extensions = ( char const * )glGetString( GL_EXTENSIONS );
-	m_strExtensions	= str_utils::from_str( l_extensions ) + p_strExtensions;
-	m_strVendor		= str_utils::from_str( ( char const * )glGetString( GL_VENDOR	) );
-	m_strRenderer	= str_utils::from_str( ( char const * )glGetString( GL_RENDERER	) );
-	m_strVersion	= str_utils::from_str( ( char const * )glGetString( GL_VERSION	) );
+	m_strExtensions = str_utils::from_str( l_extensions ) + p_strExtensions;
+	m_strVendor = str_utils::from_str( ( char const * )glGetString( GL_VENDOR ) );
+	m_strRenderer = str_utils::from_str( ( char const * )glGetString( GL_RENDERER ) );
+	m_strVersion = str_utils::from_str( ( char const * )glGetString( GL_VERSION ) );
 	String l_strExtensions = m_strExtensions;
 	StringArray l_arrayExtensions = str_utils::split( l_strExtensions, cuT( " " ), 10000, false );
 	Logger::LogDebug( cuT( "Available extensions :" ) );
@@ -1150,9 +1153,9 @@ bool OpenGl::PreInitialise( String const & p_strExtensions )
 	}
 
 #if defined( _WIN32 )
-	m_pfnMakeCurrent			= &wglMakeCurrent			;
-	m_pfnCreateContext			= &wglCreateContext			;
-	m_pfnDeleteContext			= &wglDeleteContext			;
+	m_pfnMakeCurrent = &wglMakeCurrent;
+	m_pfnCreateContext = &wglCreateContext;
+	m_pfnDeleteContext = &wglDeleteContext;
 
 	if ( HasExtension( ARB_create_context ) )
 	{
@@ -1160,9 +1163,9 @@ bool OpenGl::PreInitialise( String const & p_strExtensions )
 	}
 
 #elif defined( __linux__ )
-	m_pfnMakeCurrent	= &glXMakeCurrent				;
-	m_pfnCreateContext	= &glXCreateContext				;
-	m_pfnDeleteContext	= &glXDestroyContext			;
+	m_pfnMakeCurrent = &glXMakeCurrent;
+	m_pfnCreateContext = &glXCreateContext;
+	m_pfnDeleteContext = &glXDestroyContext;
 
 	if ( HasExtension( ARB_create_context ) )
 	{
@@ -1182,77 +1185,77 @@ bool OpenGl::PreInitialise( String const & p_strExtensions )
 bool OpenGl::Initialise()
 {
 #define GL_GET_FUNC( ptr, func, ext )\
-	if( !gl_api::GetFunction( cuT( "gl" ) + str_utils::from_str( #func ), ptr->m_pfn##func ) )										\
-	{																																\
-		if( !gl_api::GetFunction( cuT( "gl" ) + str_utils::from_str( #func ) + str_utils::from_str( #ext ), ptr->m_pfn##func ) )	\
-		{																															\
-			Logger::LogWarning( cuT( "Unable to retrieve function gl" ) + str_utils::from_str( #func ) );							\
-		}																															\
+	if( !gl_api::GetFunction( cuT( "gl" ) + str_utils::from_str( #func ), ptr->m_pfn##func ) )\
+	{\
+		if( !gl_api::GetFunction( cuT( "gl" ) + str_utils::from_str( #func ) + str_utils::from_str( #ext ), ptr->m_pfn##func ) )\
+		{\
+			Logger::LogWarning( cuT( "Unable to retrieve function gl" ) + str_utils::from_str( #func ) );\
+		}\
 	}
-	m_pfnGetError				= &glGetError				;
-	m_pfnClearColor				= &glClearColor				;
-	m_pfnShadeModel				= &glShadeModel				;
-	m_pfnViewport				= &glViewport				;
-	m_pfnClear					= &glClear					;
-	m_pfnDrawArrays				= &glDrawArrays				;
-	m_pfnDrawElements			= &glDrawElements			;
-	m_pfnEnable					= &glEnable					;
-	m_pfnDisable				= &glDisable				;
-	m_pfnGenTextures			= &glGenTextures			;
-	m_pfnDeleteTextures			= &glDeleteTextures			;
-	m_pfnVertexPointer			= &glVertexPointer			;
-	m_pfnColorPointer			= &glColorPointer			;
-	m_pfnNormalPointer			= &glNormalPointer			;
-	m_pfnTexCoordPointer		= &glTexCoordPointer		;
-	m_pfnTexEnvi				= &glTexEnvi				;
-	m_pfnTexEnviv				= &glTexEnviv				;
-	m_pfnTexEnvf				= &glTexEnvf				;
-	m_pfnTexEnvfv				= &glTexEnvfv				;
-	m_pfnBlendFunc				= &glBlendFunc				;
-	m_pfnAlphaFunc				= &glAlphaFunc				;
-	m_pfnLightModeli			= &glLightModeli			;
-	m_pfnLightModeliv			= &glLightModeliv			;
-	m_pfnLightModelf			= &glLightModelf			;
-	m_pfnLightModelfv			= &glLightModelfv			;
-	m_pfnIsTexture				= &glIsTexture				;
-	m_pfnTexGeni				= &glTexGeni				;
-	m_pfnCullFace				= &glCullFace				;
-	m_pfnFrontFace				= &glFrontFace				;
-	m_pfnMaterialf				= &glMaterialf				;
-	m_pfnMaterialfv				= &glMaterialfv				;
-	m_pfnLightf					= &glLightf					;
-	m_pfnLightfv				= &glLightfv				;
-	m_pfnSelectBuffer			= &glSelectBuffer			;
-	m_pfnGetIntegerv			= &glGetIntegerv			;
-	m_pfnRenderMode				= &glRenderMode				;
-	m_pfnReadBuffer				= &glReadBuffer				;
-	m_pfnReadPixels				= &glReadPixels				;
-	m_pfnDrawBuffer				= &glDrawBuffer				;
-	m_pfnDrawPixels				= &glDrawPixels				;
-	m_pfnPixelStorei			= &glPixelStorei			;
-	m_pfnPixelStoref			= &glPixelStoref			;
-	m_pfnDepthFunc				= &glDepthFunc				;
-	m_pfnDepthMask				= &glDepthMask				;
-	m_pfnColorMask				= &glColorMask				;
-	m_pfnPolygonMode			= &glPolygonMode			;
-	m_pfnHint					= &glHint					;
-	m_pfnPolygonOffset			= &glPolygonOffset			;
-	m_pfnStencilOp				= &glStencilOp				;
-	m_pfnStencilFunc			= &glStencilFunc			;
-	m_pfnStencilMask			= &glStencilMask			;
-	GL_GET_FUNC( this,	BlendEquation,			EXT	);
-	GL_GET_FUNC( this,	BlendFuncSeparate,		EXT	);
-	GL_GET_FUNC( this,	BlendColor,				EXT );
-	GL_GET_FUNC( this,	StencilOpSeparate,		ATI	);
-	GL_GET_FUNC( this,	StencilFuncSeparate,	ATI	);
-	GL_GET_FUNC( this,	StencilMaskSeparate,	);
-	GL_GET_FUNC( this,	ActiveTexture,			ARB	);
-	GL_GET_FUNC( this,	ClientActiveTexture,	ARB	);
+	m_pfnGetError = &glGetError;
+	m_pfnClearColor = &glClearColor;
+	m_pfnShadeModel = &glShadeModel;
+	m_pfnViewport = &glViewport;
+	m_pfnClear = &glClear;
+	m_pfnDrawArrays = &glDrawArrays;
+	m_pfnDrawElements = &glDrawElements;
+	m_pfnEnable = &glEnable;
+	m_pfnDisable = &glDisable;
+	m_pfnGenTextures = &glGenTextures;
+	m_pfnDeleteTextures = &glDeleteTextures;
+	m_pfnVertexPointer = &glVertexPointer;
+	m_pfnColorPointer = &glColorPointer;
+	m_pfnNormalPointer = &glNormalPointer;
+	m_pfnTexCoordPointer = &glTexCoordPointer;
+	m_pfnTexEnvi = &glTexEnvi;
+	m_pfnTexEnviv = &glTexEnviv;
+	m_pfnTexEnvf = &glTexEnvf;
+	m_pfnTexEnvfv = &glTexEnvfv;
+	m_pfnBlendFunc = &glBlendFunc;
+	m_pfnAlphaFunc = &glAlphaFunc;
+	m_pfnLightModeli = &glLightModeli;
+	m_pfnLightModeliv = &glLightModeliv;
+	m_pfnLightModelf = &glLightModelf;
+	m_pfnLightModelfv = &glLightModelfv;
+	m_pfnIsTexture = &glIsTexture;
+	m_pfnTexGeni = &glTexGeni;
+	m_pfnCullFace = &glCullFace;
+	m_pfnFrontFace = &glFrontFace;
+	m_pfnMaterialf = &glMaterialf;
+	m_pfnMaterialfv = &glMaterialfv;
+	m_pfnLightf = &glLightf;
+	m_pfnLightfv = &glLightfv;
+	m_pfnSelectBuffer = &glSelectBuffer;
+	m_pfnGetIntegerv = &glGetIntegerv;
+	m_pfnRenderMode = &glRenderMode;
+	m_pfnReadBuffer = &glReadBuffer;
+	m_pfnReadPixels = &glReadPixels;
+	m_pfnDrawBuffer = &glDrawBuffer;
+	m_pfnDrawPixels = &glDrawPixels;
+	m_pfnPixelStorei = &glPixelStorei;
+	m_pfnPixelStoref = &glPixelStoref;
+	m_pfnDepthFunc = &glDepthFunc;
+	m_pfnDepthMask = &glDepthMask;
+	m_pfnColorMask = &glColorMask;
+	m_pfnPolygonMode = &glPolygonMode;
+	m_pfnHint = &glHint;
+	m_pfnPolygonOffset = &glPolygonOffset;
+	m_pfnStencilOp = &glStencilOp;
+	m_pfnStencilFunc = &glStencilFunc;
+	m_pfnStencilMask = &glStencilMask;
+	GL_GET_FUNC( this, BlendEquation, EXT );
+	GL_GET_FUNC( this, BlendFuncSeparate, EXT );
+	GL_GET_FUNC( this, BlendColor, EXT );
+	GL_GET_FUNC( this, StencilOpSeparate, ATI );
+	GL_GET_FUNC( this, StencilFuncSeparate, ATI );
+	GL_GET_FUNC( this, StencilMaskSeparate, );
+	GL_GET_FUNC( this, ActiveTexture, ARB );
+	GL_GET_FUNC( this, ClientActiveTexture, ARB );
 #if defined( _WIN32 )
-	m_pfnMakeCurrent			= &wglMakeCurrent			;
-	m_pfnSwapBuffers			= &::SwapBuffers			;
-	m_pfnCreateContext			= &wglCreateContext			;
-	m_pfnDeleteContext			= &wglDeleteContext			;
+	m_pfnMakeCurrent = &wglMakeCurrent;
+	m_pfnSwapBuffers = &::SwapBuffers;
+	m_pfnCreateContext = &wglCreateContext;
+	m_pfnDeleteContext = &wglDeleteContext;
 
 	if ( HasExtension( ARB_create_context ) )
 	{
@@ -1265,10 +1268,10 @@ bool OpenGl::Initialise()
 	}
 
 #elif defined( __linux__ )
-	m_pfnMakeCurrent	= &glXMakeCurrent				;
-	m_pfnSwapBuffers	= &glXSwapBuffers				;
-	m_pfnCreateContext	= &glXCreateContext				;
-	m_pfnDeleteContext	= &glXDestroyContext			;
+	m_pfnMakeCurrent = &glXMakeCurrent;
+	m_pfnSwapBuffers = &glXSwapBuffers;
+	m_pfnCreateContext = &glXCreateContext;
+	m_pfnDeleteContext = &glXDestroyContext;
 
 	if ( HasExtension( ARB_create_context ) )
 	{
@@ -1297,44 +1300,44 @@ bool OpenGl::Initialise()
 	{
 		MtxFunctionsDSA * l_pMtxFunctions = new MtxFunctionsDSA( *this );
 #if CASTOR_USE_DOUBLE
-		GL_GET_FUNC( l_pMtxFunctions,	MatrixTranslated,				EXT	);
-		GL_GET_FUNC( l_pMtxFunctions,	MatrixRotated,					EXT	);
-		GL_GET_FUNC( l_pMtxFunctions,	MatrixScaled,					EXT	);
-		GL_GET_FUNC( l_pMtxFunctions,	MatrixMultd,					EXT	);
+		GL_GET_FUNC( l_pMtxFunctions, MatrixTranslated, EXT );
+		GL_GET_FUNC( l_pMtxFunctions, MatrixRotated, EXT );
+		GL_GET_FUNC( l_pMtxFunctions, MatrixScaled, EXT );
+		GL_GET_FUNC( l_pMtxFunctions, MatrixMultd, EXT );
 #else
-		GL_GET_FUNC( l_pMtxFunctions,	MatrixTranslatef,				EXT	);
-		GL_GET_FUNC( l_pMtxFunctions,	MatrixRotatef,					EXT	);
-		GL_GET_FUNC( l_pMtxFunctions,	MatrixScalef,					EXT	);
-		GL_GET_FUNC( l_pMtxFunctions,	MatrixMultf,					EXT	);
+		GL_GET_FUNC( l_pMtxFunctions, MatrixTranslatef, EXT );
+		GL_GET_FUNC( l_pMtxFunctions, MatrixRotatef, EXT );
+		GL_GET_FUNC( l_pMtxFunctions, MatrixScalef, EXT );
+		GL_GET_FUNC( l_pMtxFunctions, MatrixMultf, EXT );
 #endif
-		GL_GET_FUNC( l_pMtxFunctions,	MatrixLoadIdentity,				EXT	);
-		GL_GET_FUNC( l_pMtxFunctions,	MatrixOrtho,					EXT	);
-		GL_GET_FUNC( l_pMtxFunctions,	MatrixPush,						EXT	);
-		GL_GET_FUNC( l_pMtxFunctions,	MatrixPop,						EXT	);
-		GL_GET_FUNC( l_pMtxFunctions,	MatrixFrustum,					EXT	);
+		GL_GET_FUNC( l_pMtxFunctions, MatrixLoadIdentity, EXT );
+		GL_GET_FUNC( l_pMtxFunctions, MatrixOrtho, EXT );
+		GL_GET_FUNC( l_pMtxFunctions, MatrixPush, EXT );
+		GL_GET_FUNC( l_pMtxFunctions, MatrixPop, EXT );
+		GL_GET_FUNC( l_pMtxFunctions, MatrixFrustum, EXT );
 		m_pMtxFunctions = l_pMtxFunctions;
 		TexFunctionsDSA * l_pTexFunctions = new TexFunctionsDSA( *this );
-		GL_GET_FUNC( l_pTexFunctions,	TextureSubImage1D,				EXT );
-		GL_GET_FUNC( l_pTexFunctions,	TextureSubImage2D,				EXT );
-		GL_GET_FUNC( l_pTexFunctions,	TextureImage1D,					EXT );
-		GL_GET_FUNC( l_pTexFunctions,	TextureImage2D,					EXT );
-		GL_GET_FUNC( l_pTexFunctions,	TextureParameteri,				EXT );
-		GL_GET_FUNC( l_pTexFunctions,	TextureParameterf,				EXT );
-		GL_GET_FUNC( l_pTexFunctions,	TextureParameteriv,				EXT );
-		GL_GET_FUNC( l_pTexFunctions,	TextureParameterfv,				EXT );
-		GL_GET_FUNC( l_pTexFunctions,	GetTextureImage,				EXT );
-		GL_GET_FUNC( l_pTexFunctions,	TextureImage3D,					EXT	);
-		GL_GET_FUNC( l_pTexFunctions,	TextureSubImage3D,				EXT	);
-		GL_GET_FUNC( l_pTexFunctions,	GenerateTextureMipmap,			EXT	);
+		GL_GET_FUNC( l_pTexFunctions, TextureSubImage1D, EXT );
+		GL_GET_FUNC( l_pTexFunctions, TextureSubImage2D, EXT );
+		GL_GET_FUNC( l_pTexFunctions, TextureImage1D, EXT );
+		GL_GET_FUNC( l_pTexFunctions, TextureImage2D, EXT );
+		GL_GET_FUNC( l_pTexFunctions, TextureParameteri, EXT );
+		GL_GET_FUNC( l_pTexFunctions, TextureParameterf, EXT );
+		GL_GET_FUNC( l_pTexFunctions, TextureParameteriv, EXT );
+		GL_GET_FUNC( l_pTexFunctions, TextureParameterfv, EXT );
+		GL_GET_FUNC( l_pTexFunctions, GetTextureImage, EXT );
+		GL_GET_FUNC( l_pTexFunctions, TextureImage3D, EXT );
+		GL_GET_FUNC( l_pTexFunctions, TextureSubImage3D, EXT );
+		GL_GET_FUNC( l_pTexFunctions, GenerateTextureMipmap, EXT );
 		m_pTexFunctions = l_pTexFunctions;
 		BufFunctionsDSA * l_pBufFunctions = new BufFunctionsDSA( *this );
-		GL_GET_FUNC( l_pBufFunctions,	NamedBufferData,				EXT );
-		GL_GET_FUNC( l_pBufFunctions,	NamedBufferSubData,				EXT );
-		GL_GET_FUNC( l_pBufFunctions,	GetNamedBufferParameteriv,		EXT );
-		GL_GET_FUNC( l_pBufFunctions,	MapNamedBuffer,					EXT );
-		GL_GET_FUNC( l_pBufFunctions,	UnmapNamedBuffer,				EXT );
-		GL_GET_FUNC( l_pBufFunctions,	MapNamedBufferRange,			EXT );
-		GL_GET_FUNC( l_pBufFunctions,	FlushMappedNamedBufferRange,	EXT );
+		GL_GET_FUNC( l_pBufFunctions, NamedBufferData, EXT );
+		GL_GET_FUNC( l_pBufFunctions, NamedBufferSubData, EXT );
+		GL_GET_FUNC( l_pBufFunctions, GetNamedBufferParameteriv, EXT );
+		GL_GET_FUNC( l_pBufFunctions, MapNamedBuffer, EXT );
+		GL_GET_FUNC( l_pBufFunctions, UnmapNamedBuffer, EXT );
+		GL_GET_FUNC( l_pBufFunctions, MapNamedBufferRange, EXT );
+		GL_GET_FUNC( l_pBufFunctions, FlushMappedNamedBufferRange, EXT );
 		m_pBufFunctions = l_pBufFunctions;
 	}
 	else
@@ -1342,91 +1345,91 @@ bool OpenGl::Initialise()
 	{
 		MtxFunctions * l_pMtxFunctions = new MtxFunctions( *this );
 #if CASTOR_USE_DOUBLE
-		l_pMtxFunctions->m_pfnTranslate				= &glTranslated;
-		l_pMtxFunctions->m_pfnRotate				= &glRotated;
-		l_pMtxFunctions->m_pfnScale					= &glScaled;
-		l_pMtxFunctions->m_pfnMultMatrix			= &glMultMatrixd;
+		l_pMtxFunctions->m_pfnTranslate = &glTranslated;
+		l_pMtxFunctions->m_pfnRotate = &glRotated;
+		l_pMtxFunctions->m_pfnScale = &glScaled;
+		l_pMtxFunctions->m_pfnMultMatrix = &glMultMatrixd;
 #else
-		l_pMtxFunctions->m_pfnTranslate				= &glTranslatef;
-		l_pMtxFunctions->m_pfnRotate				= &glRotatef;
-		l_pMtxFunctions->m_pfnScale					= &glScalef;
-		l_pMtxFunctions->m_pfnMultMatrix			= &glMultMatrixf;
+		l_pMtxFunctions->m_pfnTranslate = &glTranslatef;
+		l_pMtxFunctions->m_pfnRotate = &glRotatef;
+		l_pMtxFunctions->m_pfnScale = &glScalef;
+		l_pMtxFunctions->m_pfnMultMatrix = &glMultMatrixf;
 #endif
-		l_pMtxFunctions->m_pfnMatrixMode			= &glMatrixMode;
-		l_pMtxFunctions->m_pfnLoadIdentity			= &glLoadIdentity;
-		l_pMtxFunctions->m_pfnOrtho					= &glOrtho;
-		l_pMtxFunctions->m_pfnPushMatrix			= &glPushMatrix;
-		l_pMtxFunctions->m_pfnPopMatrix				= &glPopMatrix;
-		l_pMtxFunctions->m_pfnFrustum				= &glFrustum;
+		l_pMtxFunctions->m_pfnMatrixMode = &glMatrixMode;
+		l_pMtxFunctions->m_pfnLoadIdentity = &glLoadIdentity;
+		l_pMtxFunctions->m_pfnOrtho = &glOrtho;
+		l_pMtxFunctions->m_pfnPushMatrix = &glPushMatrix;
+		l_pMtxFunctions->m_pfnPopMatrix = &glPopMatrix;
+		l_pMtxFunctions->m_pfnFrustum = &glFrustum;
 		m_pMtxFunctions = l_pMtxFunctions;
 		TexFunctions * l_pTexFunctions = new TexFunctions( *this );
-		l_pTexFunctions->m_pfnBindTexture			= &glBindTexture;
-		l_pTexFunctions->m_pfnTexSubImage1D			= &glTexSubImage1D;
-		l_pTexFunctions->m_pfnTexSubImage2D			= &glTexSubImage2D;
-		l_pTexFunctions->m_pfnTexImage1D			= &glTexImage1D;
-		l_pTexFunctions->m_pfnTexImage2D			= &glTexImage2D;
-		l_pTexFunctions->m_pfnTexParameteri			= &glTexParameteri;
-		l_pTexFunctions->m_pfnTexParameterf			= &glTexParameterf;
-		l_pTexFunctions->m_pfnTexParameteriv		= &glTexParameteriv;
-		l_pTexFunctions->m_pfnTexParameterfv		= &glTexParameterfv;
-		l_pTexFunctions->m_pfnGetTexImage			= &glGetTexImage;
-		GL_GET_FUNC( l_pTexFunctions,	TexImage3D,							EXT	);
-		GL_GET_FUNC( l_pTexFunctions,	TexSubImage3D,						EXT	);
-		GL_GET_FUNC( l_pTexFunctions,	GenerateMipmap,						EXT	);
+		l_pTexFunctions->m_pfnBindTexture = &glBindTexture;
+		l_pTexFunctions->m_pfnTexSubImage1D = &glTexSubImage1D;
+		l_pTexFunctions->m_pfnTexSubImage2D = &glTexSubImage2D;
+		l_pTexFunctions->m_pfnTexImage1D = &glTexImage1D;
+		l_pTexFunctions->m_pfnTexImage2D = &glTexImage2D;
+		l_pTexFunctions->m_pfnTexParameteri = &glTexParameteri;
+		l_pTexFunctions->m_pfnTexParameterf = &glTexParameterf;
+		l_pTexFunctions->m_pfnTexParameteriv = &glTexParameteriv;
+		l_pTexFunctions->m_pfnTexParameterfv = &glTexParameterfv;
+		l_pTexFunctions->m_pfnGetTexImage = &glGetTexImage;
+		GL_GET_FUNC( l_pTexFunctions, TexImage3D, EXT );
+		GL_GET_FUNC( l_pTexFunctions, TexSubImage3D, EXT );
+		GL_GET_FUNC( l_pTexFunctions, GenerateMipmap, EXT );
 		m_pTexFunctions = l_pTexFunctions;
 		BufFunctions * l_pBufFunctions = new BufFunctions( *this );
-		GL_GET_FUNC( l_pBufFunctions,	BindBuffer,							ARB	);
-		GL_GET_FUNC( l_pBufFunctions,	BufferData,							ARB	);
-		GL_GET_FUNC( l_pBufFunctions,	BufferSubData,						ARB	);
-		GL_GET_FUNC( l_pBufFunctions,	GetBufferParameteriv,				ARB	);
-		GL_GET_FUNC( l_pBufFunctions,	MapBuffer,							ARB	);
-		GL_GET_FUNC( l_pBufFunctions,	UnmapBuffer,						ARB	);
-		GL_GET_FUNC( l_pBufFunctions,	MapBufferRange,	);
-		GL_GET_FUNC( l_pBufFunctions,	FlushMappedBufferRange,	);
+		GL_GET_FUNC( l_pBufFunctions, BindBuffer, ARB );
+		GL_GET_FUNC( l_pBufFunctions, BufferData, ARB );
+		GL_GET_FUNC( l_pBufFunctions, BufferSubData, ARB );
+		GL_GET_FUNC( l_pBufFunctions, GetBufferParameteriv, ARB );
+		GL_GET_FUNC( l_pBufFunctions, MapBuffer, ARB );
+		GL_GET_FUNC( l_pBufFunctions, UnmapBuffer, ARB );
+		GL_GET_FUNC( l_pBufFunctions, MapBufferRange, );
+		GL_GET_FUNC( l_pBufFunctions, FlushMappedBufferRange, );
 		m_pBufFunctions = l_pBufFunctions;
 	}
 
 	if ( HasExtension( NV_shader_buffer_load ) )
 	{
-		GL_GET_FUNC( m_pBufFunctions,	MakeBufferResident,					NV	);
-		GL_GET_FUNC( m_pBufFunctions,	MakeBufferNonResident,				NV	);
-		GL_GET_FUNC( m_pBufFunctions,	IsBufferResident,					NV	);
-		GL_GET_FUNC( m_pBufFunctions,	MakeNamedBufferResident,			NV	);
-		GL_GET_FUNC( m_pBufFunctions,	MakeNamedBufferNonResident,			NV	);
-		GL_GET_FUNC( m_pBufFunctions,	IsNamedBufferResident,				NV	);
-		GL_GET_FUNC( m_pBufFunctions,	GetBufferParameterui64v,			NV	);
-		GL_GET_FUNC( m_pBufFunctions,	GetNamedBufferParameterui64v,		NV	);
-		GL_GET_FUNC( this,				GetIntegerui64v,					NV	);
+		GL_GET_FUNC( m_pBufFunctions, MakeBufferResident, NV );
+		GL_GET_FUNC( m_pBufFunctions, MakeBufferNonResident, NV );
+		GL_GET_FUNC( m_pBufFunctions, IsBufferResident, NV );
+		GL_GET_FUNC( m_pBufFunctions, MakeNamedBufferResident, NV );
+		GL_GET_FUNC( m_pBufFunctions, MakeNamedBufferNonResident, NV );
+		GL_GET_FUNC( m_pBufFunctions, IsNamedBufferResident, NV );
+		GL_GET_FUNC( m_pBufFunctions, GetBufferParameterui64v, NV );
+		GL_GET_FUNC( m_pBufFunctions, GetNamedBufferParameterui64v, NV );
+		GL_GET_FUNC( this, GetIntegerui64v, NV );
 	}
 
 	if ( HasExtension( NV_vertex_buffer_unified_memory ) )
 	{
-		GL_GET_FUNC( m_pBufFunctions,	BufferAddressRange,				NV	);
-		GL_GET_FUNC( m_pBufFunctions,	VertexFormat,					NV	);
-		GL_GET_FUNC( m_pBufFunctions,	NormalFormat,					NV	);
-		GL_GET_FUNC( m_pBufFunctions,	ColorFormat,					NV	);
-		GL_GET_FUNC( m_pBufFunctions,	IndexFormat,					NV	);
-		GL_GET_FUNC( m_pBufFunctions,	TexCoordFormat,					NV	);
-		GL_GET_FUNC( m_pBufFunctions,	EdgeFlagFormat,					NV	);
-		GL_GET_FUNC( m_pBufFunctions,	SecondaryColorFormat,			NV	);
-		GL_GET_FUNC( m_pBufFunctions,	FogCoordFormat,					NV	);
-		GL_GET_FUNC( m_pBufFunctions,	VertexAttribFormat,				NV	);
-		GL_GET_FUNC( m_pBufFunctions,	VertexAttribIFormat,			NV	);
+		GL_GET_FUNC( m_pBufFunctions, BufferAddressRange, NV );
+		GL_GET_FUNC( m_pBufFunctions, VertexFormat, NV );
+		GL_GET_FUNC( m_pBufFunctions, NormalFormat, NV );
+		GL_GET_FUNC( m_pBufFunctions, ColorFormat, NV );
+		GL_GET_FUNC( m_pBufFunctions, IndexFormat, NV );
+		GL_GET_FUNC( m_pBufFunctions, TexCoordFormat, NV );
+		GL_GET_FUNC( m_pBufFunctions, EdgeFlagFormat, NV );
+		GL_GET_FUNC( m_pBufFunctions, SecondaryColorFormat, NV );
+		GL_GET_FUNC( m_pBufFunctions, FogCoordFormat, NV );
+		GL_GET_FUNC( m_pBufFunctions, VertexAttribFormat, NV );
+		GL_GET_FUNC( m_pBufFunctions, VertexAttribIFormat, NV );
 	}
 
-	m_bBindVboToGpuAddress =  HasExtension( NV_shader_buffer_load ) && HasExtension( NV_vertex_buffer_unified_memory );
-	m_pBufFunctions->m_pfnEnableClientState		= &glEnableClientState;
-	m_pBufFunctions->m_pfnDisableClientState	= &glDisableClientState;
+	m_bBindVboToGpuAddress = HasExtension( NV_shader_buffer_load ) && HasExtension( NV_vertex_buffer_unified_memory );
+	m_pBufFunctions->m_pfnEnableClientState = &glEnableClientState;
+	m_pBufFunctions->m_pfnDisableClientState = &glDisableClientState;
 
 	if ( m_iVersion >= 40 || HasExtension( ARB_draw_buffers_blend ) )
 	{
-		GL_GET_FUNC( this,	BlendEquationi,		ARB	);
-		GL_GET_FUNC( this,	BlendFuncSeparatei,	ARB	);
+		GL_GET_FUNC( this, BlendEquationi, ARB );
+		GL_GET_FUNC( this, BlendFuncSeparatei, ARB );
 	}
 	else if ( HasExtension( AMD_draw_buffers_blend ) )
 	{
-		gl_api::GetFunction( cuT( "glBlendEquationIndexedAMD"	), m_pfnBlendEquationi	);
-		gl_api::GetFunction( cuT( "glBlendFuncIndexedAMD"	), m_pfnBlendFuncSeparatei	);
+		gl_api::GetFunction( cuT( "glBlendEquationIndexedAMD" ), m_pfnBlendEquationi );
+		gl_api::GetFunction( cuT( "glBlendFuncIndexedAMD" ), m_pfnBlendFuncSeparatei );
 	}
 
 	m_bHasDepthClipping = HasExtension( EXT_clip_volume_hint );
@@ -1434,8 +1437,8 @@ bool OpenGl::Initialise()
 
 	if ( HasExtension( ARB_texture_multisample ) )
 	{
-		GL_GET_FUNC( this,	TexImage2DMultisample,	);
-		GL_GET_FUNC( this,	SampleCoverage,					ARB	);
+		GL_GET_FUNC( this, TexImage2DMultisample, );
+		GL_GET_FUNC( this, SampleCoverage, ARB );
 	}
 
 	if ( HasExtension( ARB_imaging ) )
@@ -1444,24 +1447,24 @@ bool OpenGl::Initialise()
 
 	if ( HasExtension( ARB_debug_output ) )
 	{
-		GL_GET_FUNC( this,	DebugMessageCallback,			ARB	);
+		GL_GET_FUNC( this, DebugMessageCallback, ARB );
 	}
 	else if ( HasExtension( AMDX_debug_output ) )
 	{
-		GL_GET_FUNC( this,	DebugMessageCallbackAMD,	);
+		GL_GET_FUNC( this, DebugMessageCallbackAMD, );
 	}
 
 	if ( HasExtension( ARB_vertex_buffer_object ) )
 	{
 		m_bHasVbo = true;
-		GL_GET_FUNC( this,	GenBuffers,						ARB	);
-		GL_GET_FUNC( this,	DeleteBuffers,					ARB	);
-		GL_GET_FUNC( this,	IsBuffer,						ARB	);
+		GL_GET_FUNC( this, GenBuffers, ARB );
+		GL_GET_FUNC( this, DeleteBuffers, ARB );
+		GL_GET_FUNC( this, IsBuffer, ARB );
 
 		if ( HasExtension( EXT_coordinate_frame ) )
 		{
-			GL_GET_FUNC( this,	TangentPointer,				EXT	);
-			GL_GET_FUNC( this,	BinormalPointer,			EXT	);
+			GL_GET_FUNC( this, TangentPointer, EXT );
+			GL_GET_FUNC( this, BinormalPointer, EXT );
 		}
 
 		if ( HasExtension( ARB_pixel_buffer_object ) )
@@ -1473,77 +1476,77 @@ bool OpenGl::Initialise()
 	if ( HasExtension( ARB_vertex_array_object ) )
 	{
 		m_bHasVao = true;
-		GL_GET_FUNC( this,	GenVertexArrays,	);
-		GL_GET_FUNC( this,	BindVertexArray,	);
-		GL_GET_FUNC( this,	DeleteVertexArrays,	);
+		GL_GET_FUNC( this, GenVertexArrays, );
+		GL_GET_FUNC( this, BindVertexArray, );
+		GL_GET_FUNC( this, DeleteVertexArrays, );
 	}
 
 	if ( HasExtension( ARB_texture_buffer_object ) )
 	{
 		m_bHasTbo = true;
-		GL_GET_FUNC( this,	TexBuffer,						EXT	);
+		GL_GET_FUNC( this, TexBuffer, EXT );
 	}
 
 	if ( HasExtension( ARB_framebuffer_object ) )
 	{
 		m_bHasFbo = true;
-		GL_GET_FUNC( this,	DrawBuffers,					ARB );
-		GL_GET_FUNC( this,	BlitFramebuffer,				ARB );
-		GL_GET_FUNC( this,	GenRenderbuffers,				ARB	);
-		GL_GET_FUNC( this,	DeleteRenderbuffers,			ARB	);
-		GL_GET_FUNC( this,	BindRenderbuffer,				ARB	);
-		GL_GET_FUNC( this,	RenderbufferStorage,			ARB	);
-		GL_GET_FUNC( this,	RenderbufferStorageMultisample,	ARB	);
-		GL_GET_FUNC( this,	GetRenderbufferParameteriv,		ARB	);
-		GL_GET_FUNC( this,	FramebufferRenderbuffer,		ARB	);
-		GL_GET_FUNC( this,	GenFramebuffers,				ARB	);
-		GL_GET_FUNC( this,	DeleteFramebuffers,				ARB	);
-		GL_GET_FUNC( this,	BindFramebuffer,				ARB	);
-		GL_GET_FUNC( this,	FramebufferTexture,				ARB	);
-		GL_GET_FUNC( this,	FramebufferTexture1D,			ARB	);
-		GL_GET_FUNC( this,	FramebufferTexture2D,			ARB	);
-		GL_GET_FUNC( this,	FramebufferTexture3D,			ARB	);
-		GL_GET_FUNC( this,	FramebufferTextureLayer,		ARB	);
-		GL_GET_FUNC( this,	CheckFramebufferStatus,			ARB	);
+		GL_GET_FUNC( this, DrawBuffers, ARB );
+		GL_GET_FUNC( this, BlitFramebuffer, ARB );
+		GL_GET_FUNC( this, GenRenderbuffers, ARB );
+		GL_GET_FUNC( this, DeleteRenderbuffers, ARB );
+		GL_GET_FUNC( this, BindRenderbuffer, ARB );
+		GL_GET_FUNC( this, RenderbufferStorage, ARB );
+		GL_GET_FUNC( this, RenderbufferStorageMultisample, ARB );
+		GL_GET_FUNC( this, GetRenderbufferParameteriv, ARB );
+		GL_GET_FUNC( this, FramebufferRenderbuffer, ARB );
+		GL_GET_FUNC( this, GenFramebuffers, ARB );
+		GL_GET_FUNC( this, DeleteFramebuffers, ARB );
+		GL_GET_FUNC( this, BindFramebuffer, ARB );
+		GL_GET_FUNC( this, FramebufferTexture, ARB );
+		GL_GET_FUNC( this, FramebufferTexture1D, ARB );
+		GL_GET_FUNC( this, FramebufferTexture2D, ARB );
+		GL_GET_FUNC( this, FramebufferTexture3D, ARB );
+		GL_GET_FUNC( this, FramebufferTextureLayer, ARB );
+		GL_GET_FUNC( this, CheckFramebufferStatus, ARB );
 	}
 	else if ( HasExtension( EXT_framebuffer_object ) )
 	{
 		m_bHasFbo = true;
-		GL_GET_FUNC( this,	DrawBuffers,					EXT );
-		GL_GET_FUNC( this,	BlitFramebuffer,				EXT );
-		GL_GET_FUNC( this,	GenRenderbuffers,				EXT	);
-		GL_GET_FUNC( this,	DeleteRenderbuffers,			EXT	);
-		GL_GET_FUNC( this,	BindRenderbuffer,				EXT	);
-		GL_GET_FUNC( this,	RenderbufferStorage,			EXT	);
-		GL_GET_FUNC( this,	RenderbufferStorageMultisample,	EXT	);
-		GL_GET_FUNC( this,	GetRenderbufferParameteriv,		EXT	);
-		GL_GET_FUNC( this,	FramebufferRenderbuffer,		EXT	);
-		GL_GET_FUNC( this,	GenFramebuffers,				EXT	);
-		GL_GET_FUNC( this,	DeleteFramebuffers,				EXT	);
-		GL_GET_FUNC( this,	BindFramebuffer,				EXT	);
-		GL_GET_FUNC( this,	FramebufferTexture,				EXT	);
-		GL_GET_FUNC( this,	FramebufferTexture1D,			EXT	);
-		GL_GET_FUNC( this,	FramebufferTexture2D,			EXT	);
-		GL_GET_FUNC( this,	FramebufferTexture3D,			EXT	);
-		GL_GET_FUNC( this,	FramebufferTextureLayer,		EXT	);
-		GL_GET_FUNC( this,	CheckFramebufferStatus,			EXT	);
+		GL_GET_FUNC( this, DrawBuffers, EXT );
+		GL_GET_FUNC( this, BlitFramebuffer, EXT );
+		GL_GET_FUNC( this, GenRenderbuffers, EXT );
+		GL_GET_FUNC( this, DeleteRenderbuffers, EXT );
+		GL_GET_FUNC( this, BindRenderbuffer, EXT );
+		GL_GET_FUNC( this, RenderbufferStorage, EXT );
+		GL_GET_FUNC( this, RenderbufferStorageMultisample, EXT );
+		GL_GET_FUNC( this, GetRenderbufferParameteriv, EXT );
+		GL_GET_FUNC( this, FramebufferRenderbuffer, EXT );
+		GL_GET_FUNC( this, GenFramebuffers, EXT );
+		GL_GET_FUNC( this, DeleteFramebuffers, EXT );
+		GL_GET_FUNC( this, BindFramebuffer, EXT );
+		GL_GET_FUNC( this, FramebufferTexture, EXT );
+		GL_GET_FUNC( this, FramebufferTexture1D, EXT );
+		GL_GET_FUNC( this, FramebufferTexture2D, EXT );
+		GL_GET_FUNC( this, FramebufferTexture3D, EXT );
+		GL_GET_FUNC( this, FramebufferTextureLayer, EXT );
+		GL_GET_FUNC( this, CheckFramebufferStatus, EXT );
 	}
 
 	if ( HasExtension( ARB_sampler_objects ) )
 	{
 		m_bHasSpl = true;
-		GL_GET_FUNC( this,	BindSampler,	);
-		GL_GET_FUNC( this,	DeleteSamplers,	);
-		GL_GET_FUNC( this,	GenSamplers,	);
-		GL_GET_FUNC( this,	GetSamplerParameteruiv,	);
-		GL_GET_FUNC( this,	GetSamplerParameterfv,	);
-		GL_GET_FUNC( this,	GetSamplerParameteriv,	);
-		GL_GET_FUNC( this,	IsSampler,	);
-		GL_GET_FUNC( this,	SamplerParameteruiv,	);
-		GL_GET_FUNC( this,	SamplerParameterf,	);
-		GL_GET_FUNC( this,	SamplerParameterfv,	);
-		GL_GET_FUNC( this,	SamplerParameteri,	);
-		GL_GET_FUNC( this,	SamplerParameteriv,	);
+		GL_GET_FUNC( this, BindSampler, );
+		GL_GET_FUNC( this, DeleteSamplers, );
+		GL_GET_FUNC( this, GenSamplers, );
+		GL_GET_FUNC( this, GetSamplerParameteruiv, );
+		GL_GET_FUNC( this, GetSamplerParameterfv, );
+		GL_GET_FUNC( this, GetSamplerParameteriv, );
+		GL_GET_FUNC( this, IsSampler, );
+		GL_GET_FUNC( this, SamplerParameteruiv, );
+		GL_GET_FUNC( this, SamplerParameterf, );
+		GL_GET_FUNC( this, SamplerParameterfv, );
+		GL_GET_FUNC( this, SamplerParameteri, );
+		GL_GET_FUNC( this, SamplerParameteriv, );
 
 		if ( HasExtension( EXT_texture_filter_anisotropic ) )
 		{
@@ -1554,117 +1557,117 @@ bool OpenGl::Initialise()
 	if ( HasExtension( ARB_draw_instanced ) )
 	{
 		m_bHasInstancedDraw = true;
-		GL_GET_FUNC( this,	DrawArraysInstanced,			ARB	);
-		GL_GET_FUNC( this,	DrawElementsInstanced,			ARB	);
+		GL_GET_FUNC( this, DrawArraysInstanced, ARB );
+		GL_GET_FUNC( this, DrawElementsInstanced, ARB );
 
 		if ( HasExtension( ARB_instanced_arrays ) )
 		{
 			m_bHasInstancedArrays = true;
-			GL_GET_FUNC( this,	VertexAttribDivisor,		ARB	);
+			GL_GET_FUNC( this, VertexAttribDivisor, ARB );
 		}
 	}
 	else if ( HasExtension( EXT_draw_instanced ) )
 	{
 		m_bHasInstancedDraw = true;
-		GL_GET_FUNC( this,	DrawArraysInstanced,			EXT	);
-		GL_GET_FUNC( this,	DrawElementsInstanced,			EXT	);
+		GL_GET_FUNC( this, DrawArraysInstanced, EXT );
+		GL_GET_FUNC( this, DrawElementsInstanced, EXT );
 
 		if ( HasExtension( EXT_instanced_arrays ) )
 		{
 			m_bHasInstancedArrays = true;
-			GL_GET_FUNC( this,	VertexAttribDivisor,		EXT	);
+			GL_GET_FUNC( this, VertexAttribDivisor, EXT );
 		}
 	}
 
 	if ( HasExtension( ARB_vertex_program ) )
 	{
 		m_bHasVSh = true;
-		GL_GET_FUNC( this,	CreateShader,	);
-		GL_GET_FUNC( this,	DeleteShader,	);
-		GL_GET_FUNC( this,	AttachShader,	);
-		GL_GET_FUNC( this,	DetachShader,	);
-		GL_GET_FUNC( this,	CompileShader,					ARB	);
-		GL_GET_FUNC( this,	GetShaderiv,	);
-		GL_GET_FUNC( this,	GetShaderInfoLog,	);
-		GL_GET_FUNC( this,	ShaderSource,					ARB	);
-		GL_GET_FUNC( this,	CreateProgram,	);
-		GL_GET_FUNC( this,	DeleteProgram,	);
-		GL_GET_FUNC( this,	LinkProgram,					ARB	);
-		GL_GET_FUNC( this,	UseProgram,	);
-		GL_GET_FUNC( this,	GetProgramiv,					ARB	);
-		GL_GET_FUNC( this,	GetProgramInfoLog,	);
-		GL_GET_FUNC( this,	GetAttribLocation,				ARB	);
-		GL_GET_FUNC( this,	IsProgram,						ARB	);
-		GL_GET_FUNC( this,	EnableVertexAttribArray,		ARB	);
-		GL_GET_FUNC( this,	VertexAttribPointer,			ARB	);
-		GL_GET_FUNC( this,	VertexAttribIPointer,			ARB	);
-		GL_GET_FUNC( this,	DisableVertexAttribArray,		ARB	);
-		GL_GET_FUNC( this,	ProgramParameteri,				ARB	);
-		GL_GET_FUNC( this,	GetUniformLocation,				ARB	);
+		GL_GET_FUNC( this, CreateShader, );
+		GL_GET_FUNC( this, DeleteShader, );
+		GL_GET_FUNC( this, AttachShader, );
+		GL_GET_FUNC( this, DetachShader, );
+		GL_GET_FUNC( this, CompileShader, ARB );
+		GL_GET_FUNC( this, GetShaderiv, );
+		GL_GET_FUNC( this, GetShaderInfoLog, );
+		GL_GET_FUNC( this, ShaderSource, ARB );
+		GL_GET_FUNC( this, CreateProgram, );
+		GL_GET_FUNC( this, DeleteProgram, );
+		GL_GET_FUNC( this, LinkProgram, ARB );
+		GL_GET_FUNC( this, UseProgram, );
+		GL_GET_FUNC( this, GetProgramiv, ARB );
+		GL_GET_FUNC( this, GetProgramInfoLog, );
+		GL_GET_FUNC( this, GetAttribLocation, ARB );
+		GL_GET_FUNC( this, IsProgram, ARB );
+		GL_GET_FUNC( this, EnableVertexAttribArray, ARB );
+		GL_GET_FUNC( this, VertexAttribPointer, ARB );
+		GL_GET_FUNC( this, VertexAttribIPointer, ARB );
+		GL_GET_FUNC( this, DisableVertexAttribArray, ARB );
+		GL_GET_FUNC( this, ProgramParameteri, ARB );
+		GL_GET_FUNC( this, GetUniformLocation, ARB );
 
 		if ( HasExtension( ARB_fragment_program ) )
 		{
 			m_bHasPSh = true;
-			GL_GET_FUNC( this,	Uniform1i,					ARB	);
-			GL_GET_FUNC( this,	Uniform2i,					ARB	);
-			GL_GET_FUNC( this,	Uniform3i,					ARB	);
-			GL_GET_FUNC( this,	Uniform4i,					ARB	);
-			GL_GET_FUNC( this,	Uniform1iv,					ARB	);
-			GL_GET_FUNC( this,	Uniform2iv,					ARB	);
-			GL_GET_FUNC( this,	Uniform3iv,					ARB	);
-			GL_GET_FUNC( this,	Uniform4iv,					ARB	);
-			GL_GET_FUNC( this,	Uniform1ui,					EXT	);
-			GL_GET_FUNC( this,	Uniform2ui,					EXT	);
-			GL_GET_FUNC( this,	Uniform3ui,					EXT	);
-			GL_GET_FUNC( this,	Uniform4ui,					EXT	);
-			GL_GET_FUNC( this,	Uniform1uiv,				EXT	);
-			GL_GET_FUNC( this,	Uniform2uiv,				EXT	);
-			GL_GET_FUNC( this,	Uniform3uiv,				EXT	);
-			GL_GET_FUNC( this,	Uniform4uiv,				EXT	);
-			GL_GET_FUNC( this,	Uniform1f,					ARB	);
-			GL_GET_FUNC( this,	Uniform2f,					ARB	);
-			GL_GET_FUNC( this,	Uniform3f,					ARB	);
-			GL_GET_FUNC( this,	Uniform4f,					ARB	);
-			GL_GET_FUNC( this,	Uniform1fv,					ARB	);
-			GL_GET_FUNC( this,	Uniform2fv,					ARB	);
-			GL_GET_FUNC( this,	Uniform3fv,					ARB	);
-			GL_GET_FUNC( this,	Uniform4fv,					ARB	);
-			GL_GET_FUNC( this,	Uniform1d,	);
-			GL_GET_FUNC( this,	Uniform2d,	);
-			GL_GET_FUNC( this,	Uniform3d,	);
-			GL_GET_FUNC( this,	Uniform4d,	);
-			GL_GET_FUNC( this,	Uniform1dv,	);
-			GL_GET_FUNC( this,	Uniform2dv,	);
-			GL_GET_FUNC( this,	Uniform3dv,	);
-			GL_GET_FUNC( this,	Uniform4dv,	);
-			GL_GET_FUNC( this,	UniformMatrix2fv,			ARB	);
-			GL_GET_FUNC( this,	UniformMatrix2x3fv,	);
-			GL_GET_FUNC( this,	UniformMatrix2x4fv,	);
-			GL_GET_FUNC( this,	UniformMatrix3fv,			ARB	);
-			GL_GET_FUNC( this,	UniformMatrix3x2fv,	);
-			GL_GET_FUNC( this,	UniformMatrix3x4fv,	);
-			GL_GET_FUNC( this,	UniformMatrix4fv,			ARB	);
-			GL_GET_FUNC( this,	UniformMatrix4x2fv,	);
-			GL_GET_FUNC( this,	UniformMatrix4x3fv,	);
-			GL_GET_FUNC( this,	UniformMatrix2dv,	);
-			GL_GET_FUNC( this,	UniformMatrix2x3dv,	);
-			GL_GET_FUNC( this,	UniformMatrix2x4dv,	);
-			GL_GET_FUNC( this,	UniformMatrix3dv,	);
-			GL_GET_FUNC( this,	UniformMatrix3x2dv,	);
-			GL_GET_FUNC( this,	UniformMatrix3x4dv,	);
-			GL_GET_FUNC( this,	UniformMatrix4dv,	);
-			GL_GET_FUNC( this,	UniformMatrix4x2dv,	);
-			GL_GET_FUNC( this,	UniformMatrix4x3dv,	);
+			GL_GET_FUNC( this, Uniform1i, ARB );
+			GL_GET_FUNC( this, Uniform2i, ARB );
+			GL_GET_FUNC( this, Uniform3i, ARB );
+			GL_GET_FUNC( this, Uniform4i, ARB );
+			GL_GET_FUNC( this, Uniform1iv, ARB );
+			GL_GET_FUNC( this, Uniform2iv, ARB );
+			GL_GET_FUNC( this, Uniform3iv, ARB );
+			GL_GET_FUNC( this, Uniform4iv, ARB );
+			GL_GET_FUNC( this, Uniform1ui, EXT );
+			GL_GET_FUNC( this, Uniform2ui, EXT );
+			GL_GET_FUNC( this, Uniform3ui, EXT );
+			GL_GET_FUNC( this, Uniform4ui, EXT );
+			GL_GET_FUNC( this, Uniform1uiv, EXT );
+			GL_GET_FUNC( this, Uniform2uiv, EXT );
+			GL_GET_FUNC( this, Uniform3uiv, EXT );
+			GL_GET_FUNC( this, Uniform4uiv, EXT );
+			GL_GET_FUNC( this, Uniform1f, ARB );
+			GL_GET_FUNC( this, Uniform2f, ARB );
+			GL_GET_FUNC( this, Uniform3f, ARB );
+			GL_GET_FUNC( this, Uniform4f, ARB );
+			GL_GET_FUNC( this, Uniform1fv, ARB );
+			GL_GET_FUNC( this, Uniform2fv, ARB );
+			GL_GET_FUNC( this, Uniform3fv, ARB );
+			GL_GET_FUNC( this, Uniform4fv, ARB );
+			GL_GET_FUNC( this, Uniform1d, );
+			GL_GET_FUNC( this, Uniform2d, );
+			GL_GET_FUNC( this, Uniform3d, );
+			GL_GET_FUNC( this, Uniform4d, );
+			GL_GET_FUNC( this, Uniform1dv, );
+			GL_GET_FUNC( this, Uniform2dv, );
+			GL_GET_FUNC( this, Uniform3dv, );
+			GL_GET_FUNC( this, Uniform4dv, );
+			GL_GET_FUNC( this, UniformMatrix2fv, ARB );
+			GL_GET_FUNC( this, UniformMatrix2x3fv, );
+			GL_GET_FUNC( this, UniformMatrix2x4fv, );
+			GL_GET_FUNC( this, UniformMatrix3fv, ARB );
+			GL_GET_FUNC( this, UniformMatrix3x2fv, );
+			GL_GET_FUNC( this, UniformMatrix3x4fv, );
+			GL_GET_FUNC( this, UniformMatrix4fv, ARB );
+			GL_GET_FUNC( this, UniformMatrix4x2fv, );
+			GL_GET_FUNC( this, UniformMatrix4x3fv, );
+			GL_GET_FUNC( this, UniformMatrix2dv, );
+			GL_GET_FUNC( this, UniformMatrix2x3dv, );
+			GL_GET_FUNC( this, UniformMatrix2x4dv, );
+			GL_GET_FUNC( this, UniformMatrix3dv, );
+			GL_GET_FUNC( this, UniformMatrix3x2dv, );
+			GL_GET_FUNC( this, UniformMatrix3x4dv, );
+			GL_GET_FUNC( this, UniformMatrix4dv, );
+			GL_GET_FUNC( this, UniformMatrix4x2dv, );
+			GL_GET_FUNC( this, UniformMatrix4x3dv, );
 
 			if ( HasExtension( ARB_uniform_buffer_object ) )
 			{
 				m_bHasUbo = m_iGlslVersion >= 140;
-				GL_GET_FUNC( this,	GetUniformBlockIndex,	);
-				GL_GET_FUNC( this,	BindBufferBase,			EXT	);
-				GL_GET_FUNC( this,	UniformBlockBinding,	);
-				GL_GET_FUNC( this,	GetUniformIndices,	);
-				GL_GET_FUNC( this,	GetActiveUniformsiv,	);
-				GL_GET_FUNC( this,	GetActiveUniformBlockiv,	);
+				GL_GET_FUNC( this, GetUniformBlockIndex, );
+				GL_GET_FUNC( this, BindBufferBase, EXT );
+				GL_GET_FUNC( this, UniformBlockBinding, );
+				GL_GET_FUNC( this, GetUniformIndices, );
+				GL_GET_FUNC( this, GetActiveUniformsiv, );
+				GL_GET_FUNC( this, GetActiveUniformBlockiv, );
 			}
 
 			if ( HasExtension( ARB_geometry_shader4 ) || HasExtension( EXT_geometry_shader4 ) )
@@ -1674,7 +1677,7 @@ bool OpenGl::Initialise()
 				if ( HasExtension( ARB_tessellation_shader ) )
 				{
 					m_bHasTSh = true;
-					GL_GET_FUNC( this,	PatchParameteri,	);
+					GL_GET_FUNC( this, PatchParameteri, );
 
 					if ( HasExtension( ARB_compute_shader ) )
 					{
@@ -2855,8 +2858,8 @@ bool OpenGl::RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE p_eBindingMod
 	bool l_bReturn = true;
 	int l_iMaxSamples;
 	int l_iMaxSize;
-	OpenGl::GetIntegerv( eGL_MAX_SAMPLES,			&l_iMaxSamples	);
-	OpenGl::GetIntegerv( eGL_MAX_RENDERBUFFER_SIZE,	&l_iMaxSize	);
+	OpenGl::GetIntegerv( eGL_MAX_SAMPLES, &l_iMaxSamples );
+	OpenGl::GetIntegerv( eGL_MAX_RENDERBUFFER_SIZE, &l_iMaxSize );
 
 	if ( p_iSamples <= l_iMaxSamples && width <= l_iMaxSize && height < l_iMaxSize )
 	{
@@ -2894,8 +2897,8 @@ bool OpenGl::RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE p_eBindingMod
 	bool l_bReturn = true;
 	int l_iMaxSamples;
 	int l_iMaxSize;
-	OpenGl::GetIntegerv( eGL_MAX_SAMPLES,				&l_iMaxSamples	);
-	OpenGl::GetIntegerv( eGL_MAX_RENDERBUFFER_SIZE, 	&l_iMaxSize	);
+	OpenGl::GetIntegerv( eGL_MAX_SAMPLES, &l_iMaxSamples );
+	OpenGl::GetIntegerv( eGL_MAX_RENDERBUFFER_SIZE, &l_iMaxSize );
 
 	if ( p_iSamples <= l_iMaxSamples && int( size.width() ) <= l_iMaxSize && int( size.height() ) < l_iMaxSize )
 	{
@@ -3577,6 +3580,20 @@ bool OpenGl::PatchParameter( eGL_PATCH_PARAMETER p_eParam, int p_iValue )
 	return l_bReturn;
 }
 
+#if !defined( NDEBUG )
+
+void OpenGl::Track( void * p_object, std::string const & p_name, std::string const & p_file, int p_line )
+{
+	m_renderSystem.Track( p_object, p_name, p_file, p_line );
+}
+
+void OpenGl::UnTrack( void * p_object )
+{
+	m_renderSystem.UnTrack( p_object );
+}
+
+#endif
+
 bool OpenGl::GlCheckError( std::string const & p_text )const
 {
 	return DoGlCheckError( str_utils::from_str( p_text ) );
@@ -3724,7 +3741,7 @@ void OpenGl::DebugLog( eGL_DEBUG_SOURCE source, eGL_DEBUG_TYPE type, uint32_t id
 			break;
 		}
 
-		l_strToLog += cuT( "ID:" ) + GlslErrors[id - GL_INVALID_ENUM] + cuT( "\t" );
+		l_strToLog += cuT( "ID:" ) + str_utils::to_string( id ) + cuT( "\t" );
 
 		switch ( severity )
 		{

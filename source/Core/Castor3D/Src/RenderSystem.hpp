@@ -679,6 +679,30 @@ namespace Castor3D
 		CameraRPtr m_pCurrentCamera;
 		//!\~english The matrix mode before call to BeginOverlaysRendering	\~french Le mode de matrice avant l'appel à BeginOverlaysRendering
 		eMTXMODE m_ePreviousMtxMode;
+
+#if !defined( NDEBUG )
+
+		struct ObjectDeclaration
+		{
+			uint32_t m_id;
+			std::string m_name;
+			void * m_object;
+			std::string m_file;
+			int m_line;
+			int m_ref;
+			Castor::String m_stack;
+		};
+
+		uint32_t m_id = 0;
+		std::list< ObjectDeclaration > m_allocated;
+
+		bool DoTrack( void * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name );
+		bool DoTrack( Castor::Named * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name );
+		bool DoUntrack( void * p_object, ObjectDeclaration & p_declaration );
+		bool DoUntrack( Castor::Named * p_object, ObjectDeclaration & p_declaration );
+		void DoReportTracked();
+
+#endif
 	};
 }
 

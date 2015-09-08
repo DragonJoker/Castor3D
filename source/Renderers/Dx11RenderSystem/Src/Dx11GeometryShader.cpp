@@ -61,7 +61,7 @@ namespace Dx11Render
 		l_pDeviceContext->GSSetShader( NULL, NULL, 0 );
 	}
 
-	void DxGeometryShader::DoRetrieveShader()
+	void DxGeometryShader::AttachTo( ShaderProgramBase & p_program )
 	{
 		if ( m_pCompiled )
 		{
@@ -78,5 +78,10 @@ namespace Dx11Render
 				}
 			}
 		}
+	}
+
+	void DxGeometryShader::Detach()
+	{
+		ReleaseTracked( m_pRenderSystem, m_pGeometryShader );
 	}
 }

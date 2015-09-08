@@ -180,6 +180,12 @@ namespace Castor3D
 
 	void Overlay::Initialise()
 	{
+		m_pOverlayCategory->Initialise();
+	}
+
+	void Overlay::Cleanup()
+	{
+		m_pOverlayCategory->Cleanup();
 	}
 
 	int Overlay::GetChildsCount( int p_level )const

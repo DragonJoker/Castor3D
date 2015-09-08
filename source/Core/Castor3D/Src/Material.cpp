@@ -144,46 +144,49 @@ namespace Castor3D
 	void Material::Initialise()
 	{
 		Logger::LogDebug( cuT( "Initialising material [" ) + GetName() + cuT( "]" ) );
-		std::for_each( m_passes.begin(), m_passes.end(), [&]( PassSPtr p_pPass )
+
+		for ( auto && l_pass : m_passes )
 		{
-			p_pPass->Initialise();
-		} );
+			l_pass->Initialise();
+		}
 	}
 
 	void Material::Cleanup()
 	{
-		std::for_each( m_passes.begin(), m_passes.end(), [&]( PassSPtr p_pPass )
+		for ( auto && l_pass : m_passes )
 		{
-			p_pPass->Cleanup();
-		} );
+			l_pass->Cleanup();
+		}
 	}
 
 	void Material::Render()
 	{
 		uint8_t l_byIndex = 0;
 		uint8_t l_byCount = uint8_t( m_passes.size() );
-		std::for_each( m_passes.begin(), m_passes.end(), [&]( PassSPtr p_pPass )
+
+		for ( auto && l_pass : m_passes )
 		{
-			p_pPass->Render( l_byIndex++, l_byCount );
-		} );
+			l_pass->Render( l_byIndex++, l_byCount );
+		}
 	}
 
 	void Material::Render2D()
 	{
 		uint8_t l_byIndex = 0;
 		uint8_t l_byCount = uint8_t( m_passes.size() );
-		std::for_each( m_passes.begin(), m_passes.end(), [&]( PassSPtr p_pPass )
+
+		for ( auto && l_pass : m_passes )
 		{
-			p_pPass->Render2D( l_byIndex++, l_byCount );
-		} );
+			l_pass->Render2D( l_byIndex++, l_byCount );
+		}
 	}
 
 	void Material::EndRender()
 	{
-		std::for_each( m_passes.begin(), m_passes.end(), [&]( PassSPtr p_pPass )
+		for ( auto && l_pass : m_passes )
 		{
-			p_pPass->EndRender();
-		} );
+			l_pass->EndRender();
+		}
 	}
 
 	PassSPtr Material::CreatePass()

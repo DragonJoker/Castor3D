@@ -61,7 +61,7 @@ namespace Dx11Render
 		l_pDeviceContext->HSSetShader( NULL, NULL, 0 );
 	}
 
-	void DxHullShader::DoRetrieveShader()
+	void DxHullShader::AttachTo( ShaderProgramBase & p_program )
 	{
 		if ( m_pCompiled )
 		{
@@ -78,5 +78,10 @@ namespace Dx11Render
 				}
 			}
 		}
+	}
+
+	void DxHullShader::Detach()
+	{
+		ReleaseTracked( m_pRenderSystem, m_pHullShader );
 	}
 }

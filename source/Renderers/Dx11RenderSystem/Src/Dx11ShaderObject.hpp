@@ -72,9 +72,6 @@ namespace Dx11Render
 		}
 
 	protected:
-		virtual void DoRetrieveShader() = 0;
-
-	protected:
 		Castor::String m_strEntryPoint;
 		DxShaderProgram * m_pShaderProgram;
 		Castor::String m_strProfile;

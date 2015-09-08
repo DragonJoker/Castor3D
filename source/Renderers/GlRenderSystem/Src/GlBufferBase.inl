@@ -21,6 +21,7 @@ namespace GlRender
 		if ( m_uiGlIndex == eGL_INVALID_INDEX )
 		{
 			l_bReturn = m_gl.GenBuffers( 1, &m_uiGlIndex );
+			glTrack( m_gl, GlBufferBase, this );
 		}
 
 		return l_bReturn;
@@ -31,6 +32,7 @@ namespace GlRender
 	{
 		if ( m_uiGlIndex != eGL_INVALID_INDEX )
 		{
+			glUntrack( m_gl, this );
 			m_gl.DeleteBuffers( 1, &m_uiGlIndex );
 			m_uiGlIndex = uint32_t( eGL_INVALID_INDEX );
 		}

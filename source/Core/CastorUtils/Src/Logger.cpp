@@ -356,11 +356,13 @@ namespace Castor
 
 	void Logger::DoRegisterCallback( LogCallback p_pfnCallback, void * p_pCaller )
 	{
+		std::unique_lock< std::mutex > lock( m_mutex );
 		m_impl->RegisterCallback( p_pfnCallback, p_pCaller );
 	}
 
 	void Logger::DoUnregisterCallback( void * p_pCaller )
 	{
+		std::unique_lock< std::mutex > lock( m_mutex );
 		m_impl->UnregisterCallback( p_pCaller );
 	}
 

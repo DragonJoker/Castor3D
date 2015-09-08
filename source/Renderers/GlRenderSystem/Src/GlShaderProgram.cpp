@@ -24,12 +24,17 @@ namespace GlRender
 
 	GlShaderProgram::~GlShaderProgram()
 	{
+	}
+
+	void GlShaderProgram::Cleanup()
+	{
 		ShaderProgramBase::Cleanup();
 
 		if ( m_pRenderSystem->UseShaders() )
 		{
 			if ( m_programObject )
 			{
+				glUntrack( m_gl, this );
 				m_gl.DeleteProgram( m_programObject );
 				m_programObject = 0;
 			}
@@ -43,6 +48,7 @@ namespace GlRender
 			if ( m_pRenderSystem->UseShaders() && !m_programObject )
 			{
 				m_programObject = m_gl.CreateProgram();
+				glTrack( m_gl, GlShaderProgram, this );
 			}
 
 			ShaderProgramBase::Initialise();
@@ -52,23 +58,12 @@ namespace GlRender
 	bool GlShaderProgram::Link()
 	{
 		bool l_bReturn = false;
-		uint32_t l_uiNbAttached = 0;
 		int l_iLinked = 0;
 
 		if ( m_pRenderSystem->UseShaders() && m_eStatus != ePROGRAM_STATUS_ERROR )
 		{
 			l_bReturn = true;
-
-			for ( int i = eSHADER_TYPE_VERTEX; i < eSHADER_TYPE_COUNT; i++ )
-			{
-				if ( m_pShaders[i] && m_pShaders[i]->GetStatus() == eSHADER_STATUS_COMPILED )
-				{
-					std::static_pointer_cast< GlShaderObject >( m_pShaders[i] )->AttachTo( this );
-					l_uiNbAttached++;
-				}
-			}
-
-			Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Programs attached : " ) << l_uiNbAttached );
+			Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Programs attached : " ) << uint32_t( m_activeShaders.size() ) );
 			l_bReturn &= m_gl.LinkProgram( m_programObject );
 			l_bReturn &= m_gl.GetProgramiv( m_programObject, eGL_SHADER_STATUS_LINK, &l_iLinked );
 			Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Program link status : " ) << l_iLinked );

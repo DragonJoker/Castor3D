@@ -36,8 +36,6 @@ namespace GlRender
 		void CheckShaderSupport();	//!< Checks the different shader types support.
 		bool InitOpenGlExtensions();	//!< Initialize OpenGL Extensions
 
-		virtual void Initialise( Castor::String const & p_strExtensions );
-		virtual void Delete();
 		virtual bool CheckSupport( Castor3D::eSHADER_MODEL p_eProfile );
 		virtual Castor3D::ContextSPtr CreateContext();
 		virtual Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::VertexBufferUPtr p_pVertexBuffer, Castor3D::IndexBufferUPtr p_pIndexBuffer, Castor3D::MatrixBufferUPtr p_pMatrixBuffer );
@@ -114,8 +112,15 @@ namespace GlRender
 		bool m_extensionsInit;
 		int m_iOpenGlMajor;
 		int m_iOpenGlMinor;
-		Castor::String m_strExtensions;
 		OpenGl m_gl;
+
+#if !defined( NDEBUG )
+
+	public:
+		void Track( void * p_object, std::string const & p_name, std::string const & p_file, int line );
+		void UnTrack( void * p_object );
+
+#endif
 	};
 }
 

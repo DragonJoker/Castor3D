@@ -27,6 +27,7 @@ namespace GlRender
 		if ( m_gl.HasFbo() )
 		{
 			m_gl.GenRenderbuffers( 1, &m_uiGlName );
+			glTrack( m_gl, GlRenderBuffer, this );
 		}
 
 		return m_uiGlName != eGL_INVALID_INDEX;
@@ -36,6 +37,7 @@ namespace GlRender
 	{
 		if ( m_uiGlName != eGL_INVALID_INDEX )
 		{
+			glUntrack( m_gl, this );
 			m_gl.DeleteRenderbuffers( 1, &m_uiGlName );
 			m_uiGlName = uint32_t( eGL_INVALID_INDEX );
 		}

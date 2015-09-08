@@ -2,37 +2,37 @@ namespace GlRender
 {
 	template< typename T > struct GlTyper;
 
-	template <> struct GlTyper< int			>
+	template <> struct GlTyper< int >
 	{
-		enum { Value = eGL_TYPE_INT				};
+		enum { Value = eGL_TYPE_INT };
 	};
-	template <> struct GlTyper< uint32_t	>
+	template <> struct GlTyper< uint32_t >
 	{
-		enum { Value = eGL_TYPE_UNSIGNED_INT	};
+		enum { Value = eGL_TYPE_UNSIGNED_INT };
 	};
-	template <> struct GlTyper< short		>
+	template <> struct GlTyper< short >
 	{
-		enum { Value = eGL_TYPE_SHORT			};
+		enum { Value = eGL_TYPE_SHORT };
 	};
-	template <> struct GlTyper< uint16_t	>
+	template <> struct GlTyper< uint16_t >
 	{
-		enum { Value = eGL_TYPE_UNSIGNED_SHORT	};
+		enum { Value = eGL_TYPE_UNSIGNED_SHORT };
 	};
-	template <> struct GlTyper< char		>
+	template <> struct GlTyper< char >
 	{
-		enum { Value = eGL_TYPE_BYTE			};
+		enum { Value = eGL_TYPE_BYTE };
 	};
-	template <> struct GlTyper< uint8_t		>
+	template <> struct GlTyper< uint8_t >
 	{
-		enum { Value = eGL_TYPE_UNSIGNED_BYTE	};
+		enum { Value = eGL_TYPE_UNSIGNED_BYTE };
 	};
-	template <> struct GlTyper< float		>
+	template <> struct GlTyper< float >
 	{
-		enum { Value = eGL_TYPE_FLOAT			};
+		enum { Value = eGL_TYPE_FLOAT };
 	};
-	template <> struct GlTyper< double		>
+	template <> struct GlTyper< double >
 	{
-		enum { Value = eGL_TYPE_DOUBLE			};
+		enum { Value = eGL_TYPE_DOUBLE };
 	};
 
 	template <typename T, uint32_t Count>

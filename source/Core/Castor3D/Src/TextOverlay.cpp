@@ -129,7 +129,6 @@ namespace Castor3D
 
 	TextOverlay::~TextOverlay()
 	{
-		Cleanup();
 		m_pTexture.reset();
 		m_wpFont.reset();
 		m_wpSampler.reset();
@@ -140,7 +139,7 @@ namespace Castor3D
 		return std::make_shared< TextOverlay >();
 	}
 
-	bool TextOverlay::Initialise()
+	void TextOverlay::Initialise()
 	{
 		FontSPtr l_pFont = GetFont();
 
@@ -189,8 +188,6 @@ namespace Castor3D
 		m_pTexture->Bind();
 		m_pTexture->GenerateMipmaps();
 		m_pTexture->Unbind();
-
-		return true;
 	}
 
 	void TextOverlay::Cleanup()

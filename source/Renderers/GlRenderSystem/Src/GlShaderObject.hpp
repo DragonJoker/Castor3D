@@ -62,11 +62,11 @@ namespace GlRender
 		/**
 		 * Detaches this shader from it's program
 		 */
-		void Detach();
+		virtual void Detach();
 		/**
 		 * Attaches this shader to the given program
 		 */
-		void AttachTo( GlShaderProgram * p_pProgram );
+		virtual void AttachTo( Castor3D::ShaderProgramBase & p_program );
 		/**
 		 * Destroys the GL Shader Program
 		 */

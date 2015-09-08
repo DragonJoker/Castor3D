@@ -197,15 +197,18 @@ namespace Castor3D
 		bool AddChild( OverlaySPtr p_pOverlay );
 		/**
 		 *\~english
-		 *\brief		Initialises the overlay
-		 *\remark		Checks material used, adds automatic shader if needed.
-						<br />Initialises renderer part
+		 *\brief		Initialises the overlay.
 		 *\~french
-		 *\brief		Initialise l'incrustation
-		 *\remark		Vérifie le matériau utilisé, ajoute un shader automatique si besoin est
-						<br />Initialise la partie rendu.
+		 *\brief		Initialise l'incrustation.
 		 */
 		void Initialise();
+		/**
+		 *\~english
+		 *\brief		Cleanus the overlay up.
+		 *\~french
+		 *\brief		Nettoie l'incrustation.
+		 */
+		void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Retrieves the childs count at given level

@@ -18,7 +18,6 @@ namespace Dx11Render
 
 	DxVertexShader::~DxVertexShader()
 	{
-		ReleaseTracked( m_pRenderSystem, m_pVertexShader );
 	}
 
 	void DxVertexShader::DoBind()
@@ -61,7 +60,7 @@ namespace Dx11Render
 		l_pDeviceContext->VSSetShader( NULL, NULL, 0 );
 	}
 
-	void DxVertexShader::DoRetrieveShader()
+	void DxVertexShader::AttachTo( ShaderProgramBase & p_program )
 	{
 		if ( m_pCompiled )
 		{
@@ -78,5 +77,10 @@ namespace Dx11Render
 				}
 			}
 		}
+	}
+
+	void DxVertexShader::Detach()
+	{
+		ReleaseTracked( m_pRenderSystem, m_pVertexShader );
 	}
 }

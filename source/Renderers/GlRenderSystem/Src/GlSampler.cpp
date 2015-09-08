@@ -25,6 +25,7 @@ namespace GlRender
 			if ( m_gl.HasSpl() && m_uiSamplerId == eGL_INVALID_INDEX )
 			{
 				m_gl.GenSamplers( 1, &m_uiSamplerId );
+				glTrack( m_gl, GlSampler, this );
 			}
 
 			if ( m_uiSamplerId != eGL_INVALID_INDEX )
@@ -141,6 +142,7 @@ namespace GlRender
 	{
 		if ( m_uiSamplerId != eGL_INVALID_INDEX )
 		{
+			glUntrack( m_gl, this );
 			m_gl.DeleteSamplers( 1, &m_uiSamplerId );
 			m_uiSamplerId = eGL_INVALID_INDEX;
 		}

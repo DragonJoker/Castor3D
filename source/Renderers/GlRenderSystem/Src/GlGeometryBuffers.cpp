@@ -107,6 +107,7 @@ namespace GlRender
 			if ( m_uiIndex == eGL_INVALID_INDEX )
 			{
 				m_gl.GenVertexArrays( 1, &m_uiIndex );
+				glTrack( m_gl, GlGeometryBuffers, this );
 			}
 
 			if ( m_uiIndex != eGL_INVALID_INDEX )
@@ -160,6 +161,7 @@ namespace GlRender
 		{
 			if ( m_uiIndex != eGL_INVALID_INDEX )
 			{
+				glUntrack( m_gl, this );
 				m_gl.DeleteVertexArrays( 1, &m_uiIndex );
 			}
 		}

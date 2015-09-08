@@ -37,6 +37,7 @@ GlRenderSystem::GlRenderSystem( Engine * p_pEngine )
 	, m_iOpenGlMinor( 0 )
 	, m_useVertexBufferObjects( false )
 	, m_extensionsInit( false )
+	, m_gl( *this )
 {
 	Logger::LogInfo( cuT( "GlRenderSystem::GlRenderSystem" ) );
 	m_bAccumBuffer = true;
@@ -46,13 +47,6 @@ GlRenderSystem::GlRenderSystem( Engine * p_pEngine )
 GlRenderSystem::~GlRenderSystem()
 {
 	delete m_pPipeline;
-	Delete();
-}
-
-void GlRenderSystem::Initialise( String const & p_strExtensions )
-{
-	m_strExtensions = p_strExtensions;
-	RenderSystem::Initialise();
 }
 
 void GlRenderSystem::CheckShaderSupport()
@@ -113,12 +107,6 @@ bool GlRenderSystem::InitOpenGlExtensions()
 	}
 
 	return m_extensionsInit;
-}
-
-void GlRenderSystem::Delete()
-{
-	Cleanup();
-	m_gl.Cleanup();
 }
 
 bool GlRenderSystem::CheckSupport( eSHADER_MODEL p_eProfile )
@@ -321,4 +309,27 @@ void GlRenderSystem::DoInitialise()
 
 void GlRenderSystem::DoCleanup()
 {
+	m_gl.Cleanup();
 }
+
+#if !defined( NDEBUG )
+
+void GlRenderSystem::Track( void * p_object, std::string const & p_name, std::string const & p_file, int p_line )
+{
+	std::string l_name;
+
+	if ( DoTrack( p_object, p_name, p_file, p_line, l_name ) )
+	{
+	}
+}
+
+void GlRenderSystem::UnTrack( void * p_object )
+{
+	ObjectDeclaration l_decl;
+
+	if ( DoUntrack( p_object, l_decl ) )
+	{
+	}
+}
+
+#endif

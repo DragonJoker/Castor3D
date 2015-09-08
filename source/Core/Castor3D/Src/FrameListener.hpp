@@ -52,6 +52,13 @@ namespace Castor3D
 		~FrameListener();
 		/**
 		 *\~english
+		 *\brief		Empties the event lists.
+		 *\~french
+		 *\brief		Vide les listes d'évènements.
+		 */
+		void Flush();
+		/**
+		 *\~english
 		 *\brief		Puts an event in the corresponding array
 		 *\param[in]	p_event	The event to put
 		 *\~french
