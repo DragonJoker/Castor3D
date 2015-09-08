@@ -1,7 +1,11 @@
 ﻿#include "Pipeline.hpp"
-#include "RenderSystem.hpp"
+
+#include "Camera.hpp"
 #include "FrameVariableBuffer.hpp"
 #include "MatrixFrameVariable.hpp"
+#include "RenderSystem.hpp"
+#include "SceneNode.hpp"
+#include "Viewport.hpp"
 
 #include <TransformationMatrix.hpp>
 

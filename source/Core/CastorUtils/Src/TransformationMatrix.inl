@@ -16,7 +16,7 @@ namespace Castor
 	}
 
 	template< typename T, typename U >
-	SquareMatrix< T, 4 > & matrix::set_rotate( SquareMatrix< T, 4 > & p_matrix, Angle const & p_angle, Point< U, 3 > const & p_axis )
+	SquareMatrix< TypeA, 4 > & MtxUtils::set_rotate( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_angle, Point< TypeB, 3 > const & p_axis )
 	{
 		T l_cos = T( p_angle.Cos() );
 		T l_sin = T( p_angle.Sin() );
@@ -189,8 +189,10 @@ namespace Castor
 		p_matrix.initialise();
 		p_matrix[0][0] = T( range / aspect );
 		p_matrix[1][1] = T( range );
+		//p_matrix[2][2] = T( zFar / ( zNear - zFar ) );
 		p_matrix[2][2] = T( - ( zFar + zNear ) / ( zFar - zNear ) );
 		p_matrix[2][3] = T( - 1 );
+		//p_matrix[3][2] = T( zNear * zFar / ( zNear - zFar ) );
 		p_matrix[3][2] = T( - 2 * zFar * zNear / ( zFar - zNear ) );
 		return p_matrix;
 	}
