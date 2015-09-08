@@ -330,18 +330,57 @@ namespace Castor
 
 	namespace point
 	{
+		namespace
+		{
+			template< typename T, uint32_t Count >
+			struct ComputeDot
+			{
+				static T Calc( Coords< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB )
+				{
+					T l_tReturn;
+					Policy< T >::init( l_tReturn );
+
+					for ( uint32_t i = 0; i < Count; i++ )
+					{
+						l_tReturn += p_ptA[i] * p_ptB[i];
+					}
+
+					return l_tReturn;
+				}
+			};
+
+			template< typename T >
+			struct ComputeDot< T, 2 >
+			{
+				static T Calc( Coords< T, 2 > const & p_ptA, Coords< T, 2 > const & p_ptB )
+				{
+					return ( p_ptA[0] * p_ptB[0] ) + ( p_ptA[1] * p_ptB[1] );
+				}
+			};
+
+			template< typename T >
+			struct ComputeDot< T, 3 >
+			{
+				static T Calc( Coords< T, 3 > const & p_ptA, Coords< T, 3 > const & p_ptB )
+				{
+					return ( p_ptA[0] * p_ptB[0] ) + ( p_ptA[1] * p_ptB[1] ) + ( p_ptA[2] * p_ptB[2] );
+				}
+			};
+
+			template< typename T >
+			struct ComputeDot< T, 4 >
+			{
+				static T Calc( Coords< T, 4 > const & p_ptA, Coords< T, 4 > const & p_ptB )
+				{
+					return ( p_ptA[0] * p_ptB[0] ) + ( p_ptA[1] * p_ptB[1] ) + ( p_ptA[2] * p_ptB[2] ) + ( p_ptA[3] * p_ptB[3] );
+				}
+			};
+		}
+
 		template< typename T, uint32_t Count >
 		T dot( Coords< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB )
 		{
-			T l_tReturn;
-			Policy< T >::init( l_tReturn );
-
-			for ( uint32_t i = 0; i < Count; i++ )
-			{
-				l_tReturn += p_ptA[i] * p_ptB[i];
-			}
-
-			return l_tReturn;
+			return ComputeDot< T, Count >::Calc( p_ptA, p_ptB );
 		}
 
 		template< typename T, uint32_t Count >

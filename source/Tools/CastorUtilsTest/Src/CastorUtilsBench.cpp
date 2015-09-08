@@ -58,7 +58,9 @@ namespace
 			l_ctfacet.widen( p_strIn.data(), p_strIn.data() + p_strIn.size(), &p_wstrOut[0] );
 		}
 	}
+
 #if defined( CASTOR_USE_GLM )
+
  	inline bool operator ==( Castor::Matrix4x4r const & a, glm::mat4x4 const & b )
 	{
 		return a[0][0] == b[0][0] && a[1][0] == b[1][0] &&	a[2][0] == b[2][0] &&	a[3][0] == b[3][0]

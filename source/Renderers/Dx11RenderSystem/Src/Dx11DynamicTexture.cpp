@@ -87,7 +87,7 @@ namespace Dx11Render
 				l_desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 				l_desc.Texture2D.MipSlice = 0;
 				l_hr = l_pDevice->CreateRenderTargetView( l_pTexture, NULL, &m_renderTargetView );
-				dxDebugName( m_renderSystem, m_renderTargetView, DynamicRTView );
+				dxTrack( m_renderSystem, m_renderTargetView, DynamicRTView );
 			}
 
 			D3D11_SHADER_RESOURCE_VIEW_DESC l_desc = {};
@@ -96,7 +96,7 @@ namespace Dx11Render
 			l_desc.Texture2D.MipLevels = 1;
 			l_desc.Texture2D.MostDetailedMip = 0;
 			l_hr = l_pDevice->CreateShaderResourceView( l_pTexture, &l_desc, &m_shaderResourceView );
-			dxDebugName( m_renderSystem, m_shaderResourceView, DynamicSRView );
+			dxTrack( m_renderSystem, m_shaderResourceView, DynamicSRView );
 			l_pTexture->Release();
 		}
 

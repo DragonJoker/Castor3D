@@ -2490,9 +2490,9 @@ namespace GlRender
 		bool GetFunction( Castor::String const & p_strName, Func & p_func )
 		{
 #if defined( _WIN32 )
-			p_func = reinterpret_cast< Func >( wglGetProcAddress( Castor::str_utils::to_str( p_strName ).c_str() ) );
+			p_func = reinterpret_cast< Func >( wglGetProcAddress( Castor::string::to_str( p_strName ).c_str() ) );
 #else
-			p_func = reinterpret_cast< Func >( glXGetProcAddressARB( ( GLubyte const * )Castor::str_utils::to_str( p_strName ).c_str() ) );
+			p_func = reinterpret_cast< Func >( glXGetProcAddressARB( ( GLubyte const * )Castor::string::to_str( p_strName ).c_str() ) );
 #endif
 			return p_func != NULL;
 		}

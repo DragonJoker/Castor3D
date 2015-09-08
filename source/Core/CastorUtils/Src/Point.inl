@@ -298,7 +298,7 @@ namespace
 			T1 * l_pBuffer = l_ptReturn.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
-				*l_pBuffer += p_pVal;
+				*l_pBuffer = T1( *l_pBuffer + p_pVal );
 				l_pBuffer++;
 			} );
 			return l_ptReturn;
@@ -310,7 +310,7 @@ namespace
 			T1 * l_pBuffer = l_ptReturn.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
-				*l_pBuffer -= p_pVal;
+				*l_pBuffer = T1( *l_pBuffer - p_pVal );
 				l_pBuffer++;
 			} );
 			return l_ptReturn;
@@ -322,7 +322,7 @@ namespace
 			T1 * l_pBuffer = l_ptReturn.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
-				*l_pBuffer *= p_pVal;
+				*l_pBuffer = T1( *l_pBuffer * p_pVal );
 				l_pBuffer++;
 			} );
 			return l_ptReturn;
@@ -334,7 +334,7 @@ namespace
 			T1 * l_pBuffer = l_ptReturn.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
-				*l_pBuffer /= p_pVal;
+				*l_pBuffer = T1( *l_pBuffer / p_pVal );
 				l_pBuffer++;
 			} );
 			return l_ptReturn;
@@ -346,7 +346,7 @@ namespace
 			T1 * l_pBuffer = l_ptReturn.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
-				*l_pBuffer += p_pVal;
+				*l_pBuffer = T1( *l_pBuffer + p_pVal );
 				l_pBuffer++;
 			} );
 			return l_ptReturn;
@@ -358,7 +358,7 @@ namespace
 			T1 * l_pBuffer = l_ptReturn.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
-				*l_pBuffer -= p_pVal;
+				*l_pBuffer = T1( *l_pBuffer - p_pVal );
 				l_pBuffer++;
 			} );
 			return l_ptReturn;
@@ -370,7 +370,7 @@ namespace
 			T1 * l_pBuffer = l_ptReturn.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
-				*l_pBuffer *= p_pVal;
+				*l_pBuffer = T1( *l_pBuffer * p_pVal );
 				l_pBuffer++;
 			} );
 			return l_ptReturn;
@@ -382,7 +382,7 @@ namespace
 			T1 * l_pBuffer = l_ptReturn.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
-				*l_pBuffer /= p_pVal;
+				*l_pBuffer = T1( *l_pBuffer / p_pVal );
 				l_pBuffer++;
 			} );
 			return l_ptReturn;
@@ -1605,15 +1605,15 @@ namespace Castor
 			return l_ptReturn;
 		}
 
-		template< typename T, uint32_t Count >
-		T dot( Point< T, Count > const & p_ptA, Point< T, Count > const & p_ptB )
+		template< typename T, typename U, uint32_t Count >
+		T dot( Point< T, Count > const & p_ptA, Point< U, Count > const & p_ptB )
 		{
 			T l_tReturn;
 			Policy< T >::init( l_tReturn );
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_tReturn += p_ptA[i] * p_ptB[i];
+				l_tReturn += T( p_ptA[i] * p_ptB[i] );
 			}
 
 			return l_tReturn;
@@ -1695,14 +1695,14 @@ namespace Castor
 			return l_dReturn;
 		}
 
-		template< typename T, uint32_t Count >
-		T dot( Point< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB )
+		template< typename T, typename U, uint32_t Count >
+		T dot( Point< T, Count > const & p_ptA, Coords< U, Count > const & p_ptB )
 		{
 			T l_tReturn = T();
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_tReturn += p_ptA[i] * p_ptB[i];
+				l_tReturn += T( p_ptA[i] * p_ptB[i] );
 			}
 
 			return l_tReturn;
@@ -1725,15 +1725,15 @@ namespace Castor
 			return l_dReturn;
 		}
 
-		template< typename T, uint32_t Count >
-		T dot( Coords< T, Count > const & p_ptA, Point< T, Count > const & p_ptB )
+		template< typename T, typename U, uint32_t Count >
+		T dot( Coords< T, Count > const & p_ptA, Point< U, Count > const & p_ptB )
 		{
 			T l_tReturn;
 			Policy< T >::init( l_tReturn );
 
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				l_tReturn += p_ptA[i] * p_ptB[i];
+				l_tReturn += T( p_ptA[i] * p_ptB[i] );
 			}
 
 			return l_tReturn;

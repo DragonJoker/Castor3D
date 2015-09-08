@@ -198,7 +198,7 @@ bool RenderSystem::DoTrack( void * p_object, std::string const & p_type, std::st
 
 bool RenderSystem::DoTrack( Named * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name )
 {
-	return DoTrack( reinterpret_cast< void * >( p_object ), p_type + ": " + str_utils::to_str( p_object->GetName() ), p_file, p_line, p_name );
+	return DoTrack( reinterpret_cast< void * >( p_object ), p_type + ": " + string::to_str( p_object->GetName() ), p_file, p_line, p_name );
 }
 
 bool RenderSystem::DoUntrack( void * p_object, ObjectDeclaration & p_declaration )
@@ -247,7 +247,7 @@ void RenderSystem::DoReportTracked()
 	{
 		std::stringstream l_stream;
 		l_stream << "Leaked 0x" << std::hex << l_decl.m_object << std::dec << " (" << l_decl.m_name << "), from file " << l_decl.m_file << ", line " << l_decl.m_line << std::endl;
-		l_stream << str_utils::to_str( l_decl.m_stack ) << std::endl;
+		l_stream << string::to_str( l_decl.m_stack ) << std::endl;
 		Castor::Logger::LogError( l_stream.str() );
 	}
 }

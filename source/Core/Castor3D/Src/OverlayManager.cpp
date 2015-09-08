@@ -221,18 +221,11 @@ namespace Castor3D
 			Pipeline * l_pipeline = l_prenderSystem->GetPipeline();
 			l_context->CullFace( eFACE_BACK );
 
-			eMTXMODE l_oldMode = l_pipeline->MatrixMode( eMTXMODE_PROJECTION );
-			l_pipeline->PushMatrix();
-			l_pipeline->Ortho( 0.0, real( p_size.width() ), real( p_size.height() ), 0.0, 0.0, 1000.0 );
-			Matrix4x4r l_mtxTransform;
-			MtxUtils::set_transform_rh(
-				l_mtxTransform,
-				Point3r( 0, 0, 0 ),
-				Point3r( 1, 1, 0 ),
-				Quaternion::Identity()
-			);
-			l_pipeline->MultMatrix( l_mtxTransform );
-			m_pRenderer->BeginRender( p_size );
+			l_pipeline->ApplyViewport( p_size.width(), p_size.height() );
+			Matrix4x4r l_projection;
+			matrix::ortho( l_projection, real( 0 ), real( p_size.width() ), real( p_size.height() ), real( 0 ), real( 0 ), real( 1000 ) );
+			matrix::transform( l_projection, Point3r( 0, 0, 0 ), Point3r( 1, 1, 0 ), Quaternion::Identity() );
+			m_pRenderer->BeginRender( p_size, l_projection );
 
 			for ( auto l_overlay : m_overlays )
 			{
@@ -244,8 +237,6 @@ namespace Castor3D
 				}
 			}
 
-			l_pipeline->PopMatrix();
-			l_pipeline->MatrixMode( l_oldMode );
 			unlock();
 		}
 	}

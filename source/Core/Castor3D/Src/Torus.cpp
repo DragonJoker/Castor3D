@@ -38,8 +38,8 @@ void Torus::Generate()
 		uint32_t l_uiPrv = 0;
 		uint32_t l_uiPCr = 0;
 		uint32_t l_uiPPr = 0;
-		real l_rStepAngleIn = ( Angle::PiMult2 ) / m_uiInternalNbFaces;
-		real l_rStepAngleEx = ( Angle::PiMult2 ) / m_uiExternalNbFaces;
+		real l_rStepAngleIn = real( Angle::PiMult2 ) / m_uiInternalNbFaces;
+		real l_rStepAngleEx = real( Angle::PiMult2 ) / m_uiExternalNbFaces;
 		real l_rAngleIn = 0.0;
 		real l_rAngleEx = 0.0;
 		uint32_t l_uiExtMax = m_uiExternalNbFaces;

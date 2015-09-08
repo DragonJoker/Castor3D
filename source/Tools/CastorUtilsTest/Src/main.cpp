@@ -6,7 +6,10 @@
 #include "BenchManager.hpp"
 #include "OpenClBench.hpp"
 #include "CastorUtilsBench.hpp"
-#include "CastorUtilsTest.hpp"
+#include "CastorUtilsMatrixTest.hpp"
+#include "CastorUtilsPixelFormatTest.hpp"
+#include "CastorUtilsStringTest.hpp"
+#include "CastorUtilsZipTest.hpp"
 
 int main( int argc, char const * argv[] )
 {
@@ -18,13 +21,21 @@ int main( int argc, char const * argv[] )
 		l_iCount = std::max< int >( 1, atoi( argv[2] ) );
 	}
 
+#if defined( NDEBUG )
+	Castor::Logger::Initialise( Castor::ELogType_INFO );
+#else
 	Castor::Logger::Initialise( Castor::ELogType_DEBUG );
+#endif
+
 	Castor::Logger::SetFileName( Castor::File::DirectoryGetCurrent() / cuT( "Tests.log" ) );
 #if defined( CASTOR_USE_OCL )
 	Testing::Register( std::make_shared< Testing::OpenCLBench >() );
 #endif
 	Testing::Register( std::make_shared< Testing::CastorUtilsBench >() );
-	Testing::Register( std::make_shared< Testing::CastorUtilsTest >() );
+	Testing::Register( std::make_shared< Testing::CastorUtilsMatrixTest >() );
+	Testing::Register( std::make_shared< Testing::CastorUtilsPixelFormatTest >() );
+	Testing::Register( std::make_shared< Testing::CastorUtilsStringTest >() );
+	Testing::Register( std::make_shared< Testing::CastorUtilsZipTest >() );
 	BENCHLOOP( l_iCount, l_iReturn );
 	Castor::Logger::Cleanup();
 	return l_iReturn;

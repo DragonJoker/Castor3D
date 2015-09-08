@@ -150,11 +150,11 @@ bool GlContextImpl::Initialise( RenderWindow * p_pWindow )
 
 			if ( !m_glXContext )
 			{
-				Logger::LogWarning( str_utils::from_str( "GlXContext::Create - glXCreateContext failed" ) );
+				Logger::LogWarning( string::from_str( "GlXContext::Create - glXCreateContext failed" ) );
 			}
 			else
 			{
-				Logger::LogInfo( str_utils::from_str( "GlXContext::Create - glXContext created" ) );
+				Logger::LogInfo( string::from_str( "GlXContext::Create - glXContext created" ) );
 
 				if ( !l_pRenderSystem->IsInitialised() )
 				{
@@ -294,17 +294,17 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_pW
 				if ( !m_pFbConfig )
 				{
 					// Last FBConfig try failed
-					Logger::LogWarning( str_utils::from_str( "GlXContext::Create - Default glXChooseFBConfig failed" ) );
+					Logger::LogWarning( string::from_str( "GlXContext::Create - Default glXChooseFBConfig failed" ) );
 					l_pReturn = DoCreateVisualInfoWithoutFBConfig( p_arrayAttribs, p_iScreen );
 				}
 				else
 				{
-					Logger::LogDebug( str_utils::from_str( "GlXContext::Create - Default glXChooseFBConfig successful" ) );
+					Logger::LogDebug( string::from_str( "GlXContext::Create - Default glXChooseFBConfig successful" ) );
 				}
 			}
 			else
 			{
-				Logger::LogDebug( str_utils::from_str( "GlXContext::Create - Mono glXChooseFBConfig successful with detailed attributes" ) );
+				Logger::LogDebug( string::from_str( "GlXContext::Create - Mono glXChooseFBConfig successful with detailed attributes" ) );
 			}
 		}
 		else
@@ -316,12 +316,12 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_pW
 			if ( !m_pFbConfig )
 			{
 				// Last FBConfig try failed, we try from XVisualInfo
-				Logger::LogWarning( str_utils::from_str( "GlXContext::Create - Default glXChooseFBConfig failed" ) );
+				Logger::LogWarning( string::from_str( "GlXContext::Create - Default glXChooseFBConfig failed" ) );
 				l_pReturn = DoCreateVisualInfoWithoutFBConfig( p_arrayAttribs, p_iScreen );
 			}
 			else
 			{
-				Logger::LogDebug( str_utils::from_str( "GlXContext::Create - Default glXChooseFBConfig successful" ) );
+				Logger::LogDebug( string::from_str( "GlXContext::Create - Default glXChooseFBConfig successful" ) );
 			}
 		}
 	}
@@ -330,11 +330,11 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_pW
 		if ( p_pWindow->IsUsingStereo() )
 		{
 			p_pWindow->GetEngine()->GetRenderSystem()->SetStereoAvailable( true );
-			Logger::LogDebug( str_utils::from_str( "GlXContext::Create - Stereo glXChooseFBConfig successful with detailed attributes" ) );
+			Logger::LogDebug( string::from_str( "GlXContext::Create - Stereo glXChooseFBConfig successful with detailed attributes" ) );
 		}
 		else
 		{
-			Logger::LogDebug( str_utils::from_str( "GlXContext::Create - glXChooseFBConfig successful with detailed attributes" ) );
+			Logger::LogDebug( string::from_str( "GlXContext::Create - glXChooseFBConfig successful with detailed attributes" ) );
 		}
 	}
 
@@ -344,11 +344,11 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_pW
 
 		if ( !l_pReturn )
 		{
-			Logger::LogError( str_utils::from_str( "GlXContext::Create - glXGetVisualFromFBConfig failed" ) );
+			Logger::LogError( string::from_str( "GlXContext::Create - glXGetVisualFromFBConfig failed" ) );
 		}
 		else
 		{
-			Logger::LogDebug( str_utils::from_str( "GlXContext::Create - GlXGetVisualFromFBConfig successful" ) );
+			Logger::LogDebug( string::from_str( "GlXContext::Create - GlXGetVisualFromFBConfig successful" ) );
 		}
 	}
 
@@ -362,7 +362,7 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithoutFBConfig( IntArray & p_arr
 
 	if ( !l_pReturn )
 	{
-		Logger::LogError( str_utils::from_str( "GlXContext::Create - glXChooseVisual failed" ) );
+		Logger::LogError( string::from_str( "GlXContext::Create - glXChooseVisual failed" ) );
 	}
 
 	return l_pReturn;
@@ -400,12 +400,12 @@ bool GlContextImpl::DoCreateGl3Context( Castor3D::RenderWindow * p_pWindow )
 
 		if ( !m_glXContext )
 		{
-			Logger::LogWarning( str_utils::from_str( "GlXContext::Create - glXCreateContextAttribs failed" ) );
+			Logger::LogWarning( string::from_str( "GlXContext::Create - glXCreateContextAttribs failed" ) );
 			l_return = false;
 		}
 		else
 		{
-			Logger::LogDebug( str_utils::from_str( "GlXContext::Create - glXContext 3.x/4.x compatible created" ) );
+			Logger::LogDebug( string::from_str( "GlXContext::Create - glXContext 3.x/4.x compatible created" ) );
 			l_return = true;
 		}
 	}

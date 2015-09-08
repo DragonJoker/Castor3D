@@ -15,38 +15,31 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___CUT_TestPrerequisites___
-#define ___CUT_TestPrerequisites___
+#ifndef ___CUT_CastorUtilsMatrixTest___
+#define ___CUT_CastorUtilsMatrixTest___
 
-#if defined( _WIN32 )
-#	pragma warning( push )
-#	pragma warning( disable:4311 )
-#	pragma warning( disable:4312 )
-#	include <process.h>
-#	pragma warning( pop )
-#else
-#	include <sys/types.h>
-#	include <unistd.h>
-#endif
-
-#include <StringUtils.hpp>
-#include <Logger.hpp>
-#include <PreciseTimer.hpp>
-
-#if defined( NDEBUG )
-#	define NB_TESTS 10000000
-#else
-#	define NB_TESTS 1000
-#endif
+#include "UnitTest.hpp"
 
 namespace Testing
 {
-	class BenchCase;
-	class TestCase;
-	class BenchManager;
+	class CastorUtilsMatrixTest
+		: public TestCase
+	{
+	public:
+		CastorUtilsMatrixTest();
+		virtual ~CastorUtilsMatrixTest();
+		virtual void Execute( uint32_t & p_errCount, uint32_t & p_testCount );
 
-	DECLARE_SMART_PTR( BenchCase );
-	DECLARE_SMART_PTR( TestCase );
+	private:
+		void MatrixInversion( uint32_t & p_errCount, uint32_t & p_testCount );
+#if defined( CASTOR_USE_GLM )
+		void MatrixInversionComparison( uint32_t & p_errCount, uint32_t & p_testCount );
+		void MatrixMultiplicationComparison( uint32_t & p_errCount, uint32_t & p_testCount );
+		void TransformationMatrixComparison( uint32_t & p_errCount, uint32_t & p_testCount );
+		void ProjectionMatrixComparison( uint32_t & p_errCount, uint32_t & p_testCount );
+		void QuaternionComparison( uint32_t & p_errCount, uint32_t & p_testCount );
+#endif
+	};
 }
 
 #endif

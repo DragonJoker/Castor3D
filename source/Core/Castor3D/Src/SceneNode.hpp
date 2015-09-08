@@ -43,7 +43,7 @@ namespace Castor3D
 	{
 	public:
 		//!\~english The total number of scene nodes	\~french Le nombre total de noeuds de scène
-		static unsigned long long Count;
+		static uint64_t Count;
 		/*!
 		\author Sylvain DOREMUS
 		\version 0.6.1.0
@@ -688,6 +688,12 @@ namespace Castor3D
 
 	private:
 		void DoComputeMatrix();
+		/**
+		 *\~english
+		 *\brief		Sets this node's children's absolute transformation matrix to be recalculated
+		 *\~french
+		 *\brief		Fait que la matrice de transfomation des enfants de ce noeud doit être recalculée
+		 */
 		void DoUpdateChildsDerivedTransform();
 
 	protected:

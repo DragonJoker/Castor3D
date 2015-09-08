@@ -33,17 +33,17 @@ namespace GlRender
 
 			inline Castor::String ToString( int const & p_value )
 			{
-				return Castor::str_utils::to_string( p_value );
+				return Castor::string::to_string( p_value );
 			}
 
 			inline Castor::String ToString( double const & p_value )
 			{
-				return Castor::str_utils::to_string( p_value );
+				return Castor::string::to_string( p_value );
 			}
 
 			inline Castor::String ToString( float const & p_value )
 			{
-				return Castor::str_utils::to_string( p_value );
+				return Castor::string::to_string( p_value );
 			}
 
 			//***********************************************************************************************
@@ -136,6 +136,7 @@ namespace GlRender
 		template< typename T >
 		inline GlslBool & GlslBool::operator=( T const & p_rhs )
 		{
+			UpdateWriter( p_rhs );
 			m_writer->WriteAssign( *this, p_rhs );
 			return *this;
 		}
@@ -160,7 +161,7 @@ namespace GlRender
 		template< typename U >
 		T & Array< T >::operator[]( U const & p_offset )
 		{
-			*T::m_writer << T::m_name << cuT( "[" ) << p_offset << cuT( "]" );
+			T::m_value << Castor::String( *static_cast< T * >( this )  ) << cuT( "[" ) << ToString( p_offset ) << cuT( "]" );
 			return *this;
 		}
 
@@ -309,7 +310,7 @@ namespace GlRender
 		inline T GlslWriter::Cast( Type const & p_from )
 		{
 			T l_return;
-			l_return.m_value << Castor::str_utils::trim( l_return.m_type ) << cuT( "( " ) << Castor::String( p_from ) << cuT( " )" );
+			l_return.m_value << Castor::string::trim( l_return.m_type ) << cuT( "( " ) << Castor::String( p_from ) << cuT( " )" );
 			return l_return;
 		}
 

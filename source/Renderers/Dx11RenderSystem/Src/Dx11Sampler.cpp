@@ -100,7 +100,7 @@ namespace Dx11Render
 			}
 
 			l_hr = l_pDevice->CreateSamplerState( &m_tex2dSampler, &m_pSamplerState );
-			dxDebugName( static_cast< DxRenderSystem * >( GetEngine()->GetRenderSystem() ), m_pSamplerState, SamplerState );
+			dxTrack( static_cast< DxRenderSystem * >( GetEngine()->GetRenderSystem() ), m_pSamplerState, SamplerState );
 		}
 
 		return l_hr == S_OK;

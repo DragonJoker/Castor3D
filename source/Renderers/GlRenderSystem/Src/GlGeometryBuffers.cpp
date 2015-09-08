@@ -81,7 +81,17 @@ namespace GlRender
 		return true;
 	}
 
-	bool GlGeometryBuffers::Initialise()
+	bool GlGeometryBuffers::Bind()
+	{
+		return m_pfnBind();
+	}
+
+	void GlGeometryBuffers::Unbind()
+	{
+		m_pfnUnbind();
+	}
+
+	bool GlGeometryBuffers::DoInitialise()
 	{
 		bool l_return = false;
 #if !C3DGL_LIMIT_TO_2_1
@@ -153,7 +163,7 @@ namespace GlRender
 		return l_return;
 	}
 
-	void GlGeometryBuffers::Cleanup()
+	void GlGeometryBuffers::DoCleanup()
 	{
 #if !C3DGL_LIMIT_TO_2_1
 
@@ -168,15 +178,5 @@ namespace GlRender
 
 #endif
 		m_uiIndex = eGL_INVALID_INDEX;
-	}
-
-	bool GlGeometryBuffers::Bind()
-	{
-		return m_pfnBind();
-	}
-
-	void GlGeometryBuffers::Unbind()
-	{
-		m_pfnUnbind();
 	}
 }

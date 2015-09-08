@@ -46,7 +46,7 @@ namespace Dx11Render
 		}
 
 		HRESULT l_hr = m_pRenderSystem->GetDevice()->CreateBlendState( &l_blendDesc, &m_pBlendState );
-		dxDebugName( m_pRenderSystem, m_pBlendState, BlendState );
+		dxTrack( m_pRenderSystem, m_pBlendState, BlendState );
 		m_bChanged = false;
 		return dxCheckError( l_hr, "CreateBlendState" );
 	}

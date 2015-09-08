@@ -168,11 +168,6 @@ namespace Castor3D
 	*/
 	class C3D_API SceneFileParser : public Castor::FileParser
 	{
-	private:
-		Castor::String	m_strSceneFilePath;
-		ScenePtrStrMap	m_mapScenes;
-		Engine 	*	m_pEngine;
-
 	public:
 		/**
 		 * Constructor
@@ -199,19 +194,19 @@ namespace Castor3D
 		 */
 		bool ParseFile( Castor::Path const & p_pathFile );
 
-		inline Engine 			*				GetEngine()const
+		inline Engine * GetEngine()const
 		{
 			return m_pEngine;
 		}
-		inline ScenePtrStrMap::iterator			ScenesBegin()
+		inline ScenePtrStrMap::iterator ScenesBegin()
 		{
 			return m_mapScenes.begin();
 		}
-		inline ScenePtrStrMap::const_iterator	ScenesBegin()const
+		inline ScenePtrStrMap::const_iterator ScenesBegin()const
 		{
 			return m_mapScenes.begin();
 		}
-		inline ScenePtrStrMap::const_iterator	ScenesEnd()const
+		inline ScenePtrStrMap::const_iterator ScenesEnd()const
 		{
 			return m_mapScenes.end();
 		}
@@ -225,6 +220,13 @@ namespace Castor3D
 		}
 		virtual void DoDiscardParser( Castor::String const & p_strLine );
 		virtual void DoValidate();
+
+	private:
+		Castor::String m_strSceneFilePath;
+		ScenePtrStrMap m_mapScenes;
+		Engine * m_pEngine;
+		RenderWindowSPtr m_renderWindow;
+
 	};
 }
 

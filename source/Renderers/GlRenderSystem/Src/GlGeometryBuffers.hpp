@@ -48,8 +48,6 @@ namespace GlRender
 		GlGeometryBuffers( OpenGl & p_gl, Castor3D::VertexBufferUPtr p_pVertexBuffer, Castor3D::IndexBufferUPtr p_pIndexBuffer, Castor3D::MatrixBufferUPtr p_pMatrixBuffer );
 		virtual ~GlGeometryBuffers();
 
-		virtual bool Initialise();
-		virtual void Cleanup();
 		virtual bool Draw( Castor3D::eTOPOLOGY p_ePrimitiveType, Castor3D::ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex );
 		virtual bool DrawInstanced( Castor3D::eTOPOLOGY p_ePrimitiveType, Castor3D::ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex, uint32_t p_uiCount );
 		virtual bool Bind();
@@ -59,6 +57,10 @@ namespace GlRender
 		{
 			return m_uiIndex;
 		}
+
+	private:
+		virtual bool DoInitialise();
+		virtual void DoCleanup();
 
 	private:
 		uint32_t m_uiIndex;

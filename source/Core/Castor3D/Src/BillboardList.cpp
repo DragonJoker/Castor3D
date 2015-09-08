@@ -198,9 +198,8 @@ namespace Castor3D
 				{
 					l_pMaterial->Initialise();
 					m_pDimensionsUniform->SetValue( Point2i( m_dimensions.width(), m_dimensions.height() ) );
-					m_pGeometryBuffers->GetVertexBuffer().Create();
-					m_pGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, l_pProgram );
-					m_pGeometryBuffers->Initialise();
+					m_pGeometryBuffers->Create();
+					m_pGeometryBuffers->Initialise( l_pProgram, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 					m_bNeedUpdate = false;
 				}
 			}
@@ -218,8 +217,8 @@ namespace Castor3D
 		m_pDimensionsUniform.reset();
 		ShaderProgramBaseSPtr l_pProgram = m_wpProgram.lock();
 		l_pProgram->Cleanup();
-		m_pGeometryBuffers->GetVertexBuffer().Cleanup();
 		m_pGeometryBuffers->Cleanup();
+		m_pGeometryBuffers->Destroy();
 		m_pGeometryBuffers.reset();
 	}
 

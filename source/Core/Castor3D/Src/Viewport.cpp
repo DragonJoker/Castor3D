@@ -3,6 +3,8 @@
 #include "Engine.hpp"
 #include "RenderSystem.hpp"
 
+#include <TransformationMatrix.hpp>
+
 using namespace Castor;
 
 namespace Castor3D
@@ -274,17 +276,17 @@ namespace Castor3D
 		,	m_pEngine( std::move( p_viewport.m_pEngine ) )
 		,	m_bModified( std::move( p_viewport.m_bModified ) )
 	{
-		p_viewport.m_eType			= eVIEWPORT_TYPE_3D;
-		p_viewport.m_rLeft			= -2;
-		p_viewport.m_rRight			= 2;
-		p_viewport.m_rTop			= 2;
-		p_viewport.m_rBottom		= -2;
-		p_viewport.m_rFar			= 2000;
-		p_viewport.m_rNear			= 1.0;
-		p_viewport.m_aFovY			= Angle::FromDegrees( 45.0 );
-		p_viewport.m_rRatio			= 1;
-		p_viewport.m_pEngine		= NULL;
-		p_viewport.m_bModified		= true;
+		p_viewport.m_eType = eVIEWPORT_TYPE_3D;
+		p_viewport.m_rLeft = -2;
+		p_viewport.m_rRight = 2;
+		p_viewport.m_rTop = 2;
+		p_viewport.m_rBottom = -2;
+		p_viewport.m_rFar = 2000;
+		p_viewport.m_rNear = 1.0;
+		p_viewport.m_aFovY = Angle::FromDegrees( 45.0 );
+		p_viewport.m_rRatio = 1;
+		p_viewport.m_pEngine = NULL;
+		p_viewport.m_bModified = true;
 	}
 
 	Viewport::~Viewport()
@@ -293,18 +295,18 @@ namespace Castor3D
 
 	Viewport & Viewport::operator =( Viewport const & p_viewport )
 	{
-		m_eType		= p_viewport.m_eType;
-		m_size		= p_viewport.m_size;
-		m_rLeft		= p_viewport.m_rLeft;
-		m_rRight	= p_viewport.m_rRight;
-		m_rTop		= p_viewport.m_rTop;
-		m_rBottom	= p_viewport.m_rBottom;
-		m_rFar		= p_viewport.m_rFar;
-		m_rNear		= p_viewport.m_rNear;
-		m_aFovY		= p_viewport.m_aFovY;
-		m_rRatio	= p_viewport.m_rRatio;
-		m_pEngine	= p_viewport.m_pEngine;
-		m_bModified	= p_viewport.m_bModified;
+		m_eType = p_viewport.m_eType;
+		m_size = p_viewport.m_size;
+		m_rLeft = p_viewport.m_rLeft;
+		m_rRight = p_viewport.m_rRight;
+		m_rTop = p_viewport.m_rTop;
+		m_rBottom = p_viewport.m_rBottom;
+		m_rFar = p_viewport.m_rFar;
+		m_rNear = p_viewport.m_rNear;
+		m_aFovY = p_viewport.m_aFovY;
+		m_rRatio = p_viewport.m_rRatio;
+		m_pEngine = p_viewport.m_pEngine;
+		m_bModified = p_viewport.m_bModified;
 		return * this;
 	}
 
@@ -312,29 +314,29 @@ namespace Castor3D
 	{
 		if ( this != & p_viewport )
 		{
-			m_eType		= std::move( p_viewport.m_eType );
-			m_size		= std::move( p_viewport.m_size );
-			m_rLeft		= std::move( p_viewport.m_rLeft );
-			m_rRight	= std::move( p_viewport.m_rRight );
-			m_rTop		= std::move( p_viewport.m_rTop );
-			m_rBottom	= std::move( p_viewport.m_rBottom );
-			m_rFar		= std::move( p_viewport.m_rFar );
-			m_rNear		= std::move( p_viewport.m_rNear );
-			m_aFovY		= std::move( p_viewport.m_aFovY );
-			m_rRatio	= std::move( p_viewport.m_rRatio );
-			m_pEngine	= std::move( p_viewport.m_pEngine );
-			m_bModified	= std::move( p_viewport.m_bModified );
-			p_viewport.m_eType			= eVIEWPORT_TYPE_3D;
-			p_viewport.m_rLeft			= -2;
-			p_viewport.m_rRight			= 2;
-			p_viewport.m_rTop			= 2;
-			p_viewport.m_rBottom		= -2;
-			p_viewport.m_rFar			= 2000;
-			p_viewport.m_rNear			= 1.0;
-			p_viewport.m_aFovY			= Angle::FromDegrees( 45.0 );
-			p_viewport.m_rRatio			= 1;
-			p_viewport.m_pEngine		= NULL;
-			p_viewport.m_bModified		= true;
+			m_eType = std::move( p_viewport.m_eType );
+			m_size = std::move( p_viewport.m_size );
+			m_rLeft = std::move( p_viewport.m_rLeft );
+			m_rRight = std::move( p_viewport.m_rRight );
+			m_rTop = std::move( p_viewport.m_rTop );
+			m_rBottom = std::move( p_viewport.m_rBottom );
+			m_rFar = std::move( p_viewport.m_rFar );
+			m_rNear = std::move( p_viewport.m_rNear );
+			m_aFovY = std::move( p_viewport.m_aFovY );
+			m_rRatio = std::move( p_viewport.m_rRatio );
+			m_pEngine = std::move( p_viewport.m_pEngine );
+			m_bModified = std::move( p_viewport.m_bModified );
+			p_viewport.m_eType = eVIEWPORT_TYPE_3D;
+			p_viewport.m_rLeft = -2;
+			p_viewport.m_rRight = 2;
+			p_viewport.m_rTop = 2;
+			p_viewport.m_rBottom = -2;
+			p_viewport.m_rFar = 2000;
+			p_viewport.m_rNear = 1.0;
+			p_viewport.m_aFovY = Angle::FromDegrees( 45.0 );
+			p_viewport.m_rRatio = 1;
+			p_viewport.m_pEngine = NULL;
+			p_viewport.m_bModified = true;
 		}
 
 		return * this;
@@ -360,18 +362,18 @@ namespace Castor3D
 
 			if ( GetType() == eVIEWPORT_TYPE_3D )
 			{
-				real l_rTan = tan( GetFovY().Radians() / 2 );
-				l_rNearHeight	= 2 * l_rTan * GetNear();
-				l_rNearWidth	= l_rNearHeight * GetRatio();
-				l_rFarHeight	= 2 * l_rTan * GetFar();
-				l_rFarWidth		= l_rFarHeight * GetRatio();
+				real l_rTan = real( tan( GetFovY().Radians() / 2 ) );
+				l_rNearHeight = 2 * l_rTan * GetNear();
+				l_rNearWidth = l_rNearHeight * GetRatio();
+				l_rFarHeight = 2 * l_rTan * GetFar();
+				l_rFarWidth = l_rFarHeight * GetRatio();
 			}
 			else if ( GetType() == eVIEWPORT_TYPE_2D )
 			{
-				l_rNearHeight	= GetBottom() - GetTop();
-				l_rNearWidth	= GetRight() - GetLeft();
-				l_rFarHeight	= l_rNearHeight;
-				l_rFarWidth		= l_rNearWidth;
+				l_rNearHeight = GetBottom() - GetTop();
+				l_rNearWidth = GetRight() - GetLeft();
+				l_rFarHeight = l_rNearHeight;
+				l_rFarWidth = l_rNearWidth;
 			}
 
 			// N => Near, F => Far, C => Center, T => Top, L => Left, R => Right, B => Bottom
@@ -385,30 +387,27 @@ namespace Castor3D
 			Point3r l_ptFBL( l_ptFTL - Point3r( real( 0 ), l_rFarHeight, real( 0 ) ) );
 			Point3r l_ptFTR( l_ptFTL + Point3r( l_rFarWidth, real( 0 ), real( 0 ) ) );
 			Point3r l_ptFBR( l_ptFBL + Point3r( l_rFarWidth, real( 0 ), real( 0 ) ) );
-			m_planes[eFRUSTUM_PLANE_NEAR	].Set( l_ptNBL, l_ptNTL, l_ptNTR );
-			m_planes[eFRUSTUM_PLANE_FAR		].Set( l_ptFBR, l_ptFTR, l_ptFTL );
-			m_planes[eFRUSTUM_PLANE_LEFT	].Set( l_ptFBL, l_ptFTL, l_ptNTL );
-			m_planes[eFRUSTUM_PLANE_RIGHT	].Set( l_ptNBR, l_ptNTR, l_ptFTR );
-			m_planes[eFRUSTUM_PLANE_TOP		].Set( l_ptNTL, l_ptFTL, l_ptFTR );
-			m_planes[eFRUSTUM_PLANE_BOTTOM	].Set( l_ptNBR, l_ptFBR, l_ptFBL );
+			m_planes[eFRUSTUM_PLANE_NEAR].Set( l_ptNBL, l_ptNTL, l_ptNTR );
+			m_planes[eFRUSTUM_PLANE_FAR].Set( l_ptFBR, l_ptFTR, l_ptFTL );
+			m_planes[eFRUSTUM_PLANE_LEFT].Set( l_ptFBL, l_ptFTL, l_ptNTL );
+			m_planes[eFRUSTUM_PLANE_RIGHT].Set( l_ptNBR, l_ptNTR, l_ptFTR );
+			m_planes[eFRUSTUM_PLANE_TOP].Set( l_ptNTL, l_ptFTL, l_ptFTR );
+			m_planes[eFRUSTUM_PLANE_BOTTOM].Set( l_ptNBR, l_ptFBR, l_ptFBL );
+
+			if ( m_eType == eVIEWPORT_TYPE_3D )
+			{
+				matrix::perspective( m_projection, m_aFovY, m_rRatio, m_rNear, m_rFar );
+			}
+			else if ( m_eType == eVIEWPORT_TYPE_2D )
+			{
+				matrix::ortho( m_projection, m_rLeft, m_rRight, m_rBottom, m_rTop, m_rNear, m_rFar );
+			}
+
 			m_bModified = false;
 			l_return = true;
 		}
 
-		Pipeline * l_pPipeline = m_pEngine->GetRenderSystem()->GetPipeline();
-		l_pPipeline->ApplyViewport( m_size.width(), m_size.height() );
-		l_pPipeline->MatrixMode( eMTXMODE_PROJECTION );
-		l_pPipeline->LoadIdentity();
-
-		if ( m_eType == eVIEWPORT_TYPE_3D )
-		{
-			l_pPipeline->Perspective( m_aFovY, m_rRatio, m_rNear, m_rFar );
-		}
-		else if ( m_eType == eVIEWPORT_TYPE_2D )
-		{
-			l_pPipeline->Ortho( m_rLeft, m_rRight, m_rBottom, m_rTop, m_rNear, m_rFar );
-		}
-
+		m_pEngine->GetRenderSystem()->GetPipeline()->ApplyViewport( m_size.width(), m_size.height() );
 		return l_return;
 	}
 

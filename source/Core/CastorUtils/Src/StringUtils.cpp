@@ -11,7 +11,7 @@ using namespace Castor;
 
 namespace Castor
 {
-	namespace str_utils
+	namespace string
 	{
 		namespace
 		{

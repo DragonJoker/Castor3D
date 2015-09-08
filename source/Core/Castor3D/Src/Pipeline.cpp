@@ -118,17 +118,23 @@ bool Pipeline::PickMatrix( real x, real y, real width, real height, int viewport
 
 void Pipeline::ApplyProjection( FrameVariableBuffer & p_matrixBuffer )
 {
-	DoApplyMatrix( eMTXMODE_PROJECTION, MtxProjection, p_matrixBuffer );
+	if ( m_pRenderSystem->GetCurrentCamera() && m_pRenderSystem->GetCurrentCamera()->GetViewport() )
+	{
+		DoApplyMatrix( m_pRenderSystem->GetCurrentCamera()->GetViewport()->GetProjection(), MtxProjection, p_matrixBuffer );
+	}
 }
 
 void Pipeline::ApplyModel( FrameVariableBuffer & p_matrixBuffer )
 {
-	DoApplyMatrix( eMTXMODE_MODEL, MtxModel, p_matrixBuffer );
+	DoApplyMatrix( m_mtxModel, MtxModel, p_matrixBuffer );
 }
 
 void Pipeline::ApplyView( FrameVariableBuffer & p_matrixBuffer )
 {
-	DoApplyMatrix( eMTXMODE_VIEW, MtxView, p_matrixBuffer );
+	if ( m_pRenderSystem->GetCurrentCamera() && m_pRenderSystem->GetCurrentCamera()->GetParent() )
+	{
+		DoApplyMatrix( m_pRenderSystem->GetCurrentCamera()->GetView(), MtxView, p_matrixBuffer );
+	}
 }
 
 void Pipeline::ApplyNormal( FrameVariableBuffer & p_matrixBuffer )
@@ -140,24 +146,27 @@ void Pipeline::ApplyNormal( FrameVariableBuffer & p_matrixBuffer )
 void Pipeline::ApplyModelView( FrameVariableBuffer & p_matrixBuffer )
 {
 	// Model view must always be computed because normal and projection model view are computed from it
-	if ( HasMatrix( eMTXMODE_VIEW ) && HasMatrix( eMTXMODE_MODEL ) )
+	if ( m_pRenderSystem->GetCurrentCamera() && m_pRenderSystem->GetCurrentCamera()->GetParent() )
 	{
-		m_mtxModelView = GetMatrix( eMTXMODE_VIEW ) * GetMatrix( eMTXMODE_MODEL );
+		m_mtxModelView = m_pRenderSystem->GetCurrentCamera()->GetView() * m_mtxModel;
 		DoApplyMatrix( m_mtxModelView, MtxModelView, p_matrixBuffer );
 	}
 }
 
 void Pipeline::ApplyProjectionModelView( FrameVariableBuffer & p_matrixBuffer )
 {
-	m_mtxProjectionModelView = GetMatrix( eMTXMODE_PROJECTION ) * m_mtxModelView;
-	DoApplyMatrix( m_mtxProjectionModelView, MtxProjectionModelView, p_matrixBuffer );
+	if ( m_pRenderSystem->GetCurrentCamera() && m_pRenderSystem->GetCurrentCamera()->GetViewport() )
+	{
+		m_mtxProjectionModelView = m_mtxModelView * m_pRenderSystem->GetCurrentCamera()->GetViewport()->GetProjection();
+		DoApplyMatrix( m_mtxProjectionModelView, MtxProjectionModelView, p_matrixBuffer );
+	}
 }
 
 void Pipeline::ApplyProjectionView( FrameVariableBuffer & p_matrixBuffer )
 {
-	if ( HasMatrix( eMTXMODE_VIEW ) && HasMatrix( eMTXMODE_PROJECTION ) )
+	if ( m_pRenderSystem->GetCurrentCamera() && m_pRenderSystem->GetCurrentCamera()->GetViewport() && m_pRenderSystem->GetCurrentCamera()->GetParent() )
 	{
-		m_mtxProjectionView = GetMatrix( eMTXMODE_PROJECTION ) * GetMatrix( eMTXMODE_VIEW );
+		m_mtxProjectionView = m_pRenderSystem->GetCurrentCamera()->GetView() * m_pRenderSystem->GetCurrentCamera()->GetViewport()->GetProjection();
 		DoApplyMatrix( m_mtxProjectionView, MtxProjectionView, p_matrixBuffer );
 	}
 }
@@ -200,8 +209,8 @@ void Pipeline::ApplyMatrices( FrameVariableBuffer & p_matrixBuffer, uint64_t p_m
 
 			if ( ( p_matrices & MASK_MTXMODE_MODEL ) )
 			{
-				ApplyProjectionModelView( p_matrixBuffer );
 				ApplyModelView( p_matrixBuffer );
+				ApplyProjectionModelView( p_matrixBuffer );
 				ApplyNormal( p_matrixBuffer );
 			}
 		}
@@ -370,7 +379,7 @@ bool IPipelineImpl::Perspective( Angle const & p_aFOVY, real p_rRatio, real p_rN
 
 	if ( m_pPipeline->m_pRenderSystem->UseShaders() )
 	{
-		MtxUtils::perspective_rh( GetCurrentMatrix(), p_aFOVY, p_rRatio, p_rNear, p_rFar );
+		matrix::perspective( GetCurrentMatrix(), p_aFOVY, p_rRatio, p_rNear, p_rFar );
 		l_return = true;
 	}
 
@@ -383,7 +392,7 @@ bool IPipelineImpl::Frustum( real p_rLeft, real p_rRight, real p_rBottom, real p
 
 	if ( m_pPipeline->m_pRenderSystem->UseShaders() )
 	{
-		MtxUtils::frustum_rh( GetCurrentMatrix(), p_rLeft, p_rRight, p_rBottom, p_rTop, p_rNear, p_rFar );
+		matrix::frustum( GetCurrentMatrix(), p_rLeft, p_rRight, p_rBottom, p_rTop, p_rNear, p_rFar );
 		l_return = true;
 	}
 
@@ -396,7 +405,7 @@ bool IPipelineImpl::Ortho( real p_rLeft, real p_rRight, real p_rBottom, real p_r
 
 	if ( m_pPipeline->m_pRenderSystem->UseShaders() )
 	{
-		MtxUtils::ortho_rh( GetCurrentMatrix(), p_rLeft, p_rRight, p_rBottom, p_rTop, p_rNear, p_rFar );
+		matrix::ortho( GetCurrentMatrix(), p_rLeft, p_rRight, p_rBottom, p_rTop, p_rNear, p_rFar );
 		l_return = true;
 	}
 

@@ -46,7 +46,7 @@ namespace Dx11Render
 			l_depthStencilDesc.BackFace.StencilPassOp = DirectX11::Get( m_stStencilBack.m_ePassOp );
 			l_depthStencilDesc.BackFace.StencilFunc = DirectX11::Get( m_stStencilBack.m_eFunc );
 			HRESULT l_hr = m_pRenderSystem->GetDevice()->CreateDepthStencilState( &l_depthStencilDesc, &m_pDepthStencilState );
-			dxDebugName( m_pRenderSystem, m_pDepthStencilState, DepthStencilState );
+			dxTrack( m_pRenderSystem, m_pDepthStencilState, DepthStencilState );
 			l_return = dxCheckError( l_hr, "CreateDepthStencilState" );
 			m_bChanged = false;
 		}

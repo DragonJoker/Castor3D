@@ -163,8 +163,8 @@ namespace Castor3D
 		, m_bFullscreen( false )
 		, m_bResized( true )
 	{
-		m_wpDepthStencilState = m_pEngine->CreateDepthStencilState( cuT( "RenderWindowState_" ) + str_utils::to_string( m_index ) );
-		m_wpRasteriserState = m_pEngine->CreateRasteriserState( cuT( "RenderWindowState_" ) + str_utils::to_string( m_index ) );
+		m_wpDepthStencilState = m_pEngine->CreateDepthStencilState( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
+		m_wpRasteriserState = m_pEngine->CreateRasteriserState( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
 	}
 
 	RenderWindow::~RenderWindow()
@@ -538,7 +538,7 @@ namespace Castor3D
 	String RenderWindow::DoGetName()
 	{
 		String l_strReturn = cuT( "RenderWindow_" );
-		l_strReturn += str_utils::to_string( RenderWindow::s_nbRenderWindows++ );
+		l_strReturn += string::to_string( RenderWindow::s_nbRenderWindows++ );
 		return l_strReturn;
 	}
 

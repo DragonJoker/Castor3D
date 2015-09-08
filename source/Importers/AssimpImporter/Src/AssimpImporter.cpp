@@ -40,7 +40,7 @@ namespace details
 		{
 			const aiNodeAnim * l_pNodeAnim = p_pAnimation->mChannels[i];
 
-			if ( str_utils::from_str( l_pNodeAnim->mNodeName.data ) == p_strNodeName )
+			if ( string::from_str( l_pNodeAnim->mNodeName.data ) == p_strNodeName )
 			{
 				l_pReturn = l_pNodeAnim;
 			}
@@ -99,7 +99,7 @@ namespace details
 		real l_rFactor = FindFactor( p_mapNodes, p_itCur, l_itPrv, l_itNxt );
 		const Quaternion & l_qStart = l_itPrv->second.qRotate;
 		const Quaternion & l_qEnd = l_itNxt->second.qRotate;
-		return l_qStart.Slerp( l_qEnd, l_rFactor, true );
+		return l_qStart.Slerp( l_qEnd, l_rFactor );
 	}
 }
 
@@ -247,7 +247,7 @@ MeshSPtr AssimpImporter::DoImportMesh()
 		}
 
 		// And have it read the given file with some postprocessing
-		aiScene const * l_pScene = importer.ReadFile( str_utils::to_str( m_fileName ), l_uiFlags );
+		aiScene const * l_pScene = importer.ReadFile( string::to_str( m_fileName ), l_uiFlags );
 
 		if ( l_pScene )
 		{
@@ -449,7 +449,7 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 	MaterialManager & l_mtlManager = m_pEngine->GetMaterialManager();
 	aiString l_mtlname;
 	p_pAiMaterial->Get( AI_MATKEY_NAME, l_mtlname );
-	String l_strName = str_utils::from_str( l_mtlname.C_Str() );
+	String l_strName = string::from_str( l_mtlname.C_Str() );
 	aiColor3D l_clrAmbient( 1, 1, 1 );
 	aiColor3D l_clrDiffuse( 1, 1, 1 );
 	aiColor3D l_clrSpecular( 1, 1, 1 );
@@ -464,7 +464,7 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 
 	if ( l_strName.empty() )
 	{
-		l_strName = m_fileName.GetFileName() + str_utils::to_string( m_anonymous++ );;
+		l_strName = m_fileName.GetFileName() + string::to_string( m_anonymous++ );;
 	}
 
 	l_pReturn = l_mtlManager.find( l_strName );
@@ -516,56 +516,56 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 
 		if ( l_difTexName.length > 0 && std::string( l_difTexName.C_Str() ).find( "_Cine_" ) != String::npos && std::string( l_difTexName.C_Str() ).find( "/MI_CH_" ) != String::npos )
 		{
-			String l_strGlob = str_utils::from_str( l_difTexName.C_Str() ) + cuT( ".tga" );
-			str_utils::replace( l_strGlob, cuT( "/MI_CH_" ), cuT( "TX_CH_" ) );
+			String l_strGlob = string::from_str( l_difTexName.C_Str() ) + cuT( ".tga" );
+			string::replace( l_strGlob, cuT( "/MI_CH_" ), cuT( "TX_CH_" ) );
 			String l_strDiff = l_strGlob;
 			String l_strNorm = l_strGlob;
 			String l_strSpec = l_strGlob;
 			String l_strOpac = l_strGlob;
-			DoAddTexture( str_utils::replace( l_strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ), l_pPass, eTEXTURE_CHANNEL_DIFFUSE );
-			DoAddTexture( str_utils::replace( l_strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ), l_pPass, eTEXTURE_CHANNEL_NORMAL );
-			DoAddTexture( str_utils::replace( l_strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ), l_pPass, eTEXTURE_CHANNEL_SPECULAR );
-			DoAddTexture( str_utils::replace( l_strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ), l_pPass, eTEXTURE_CHANNEL_OPACITY );
+			DoAddTexture( string::replace( l_strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ), l_pPass, eTEXTURE_CHANNEL_DIFFUSE );
+			DoAddTexture( string::replace( l_strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ), l_pPass, eTEXTURE_CHANNEL_NORMAL );
+			DoAddTexture( string::replace( l_strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ), l_pPass, eTEXTURE_CHANNEL_SPECULAR );
+			DoAddTexture( string::replace( l_strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ), l_pPass, eTEXTURE_CHANNEL_OPACITY );
 		}
 		else
 		{
 			if ( l_ambTexName.length > 0 )
 			{
-				DoAddTexture( str_utils::from_str( l_ambTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_AMBIENT	);
+				DoAddTexture( string::from_str( l_ambTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_AMBIENT	);
 			}
 
 			if ( l_difTexName.length > 0 )
 			{
-				DoAddTexture( str_utils::from_str( l_difTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_DIFFUSE	);
+				DoAddTexture( string::from_str( l_difTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_DIFFUSE	);
 			}
 
 			if ( l_opaTexName.length > 0 )
 			{
-				DoAddTexture( str_utils::from_str( l_opaTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_OPACITY	);
+				DoAddTexture( string::from_str( l_opaTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_OPACITY	);
 			}
 
 			if ( l_shnTexName.length > 0 )
 			{
-				DoAddTexture( str_utils::from_str( l_shnTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_GLOSS	);
+				DoAddTexture( string::from_str( l_shnTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_GLOSS	);
 			}
 
 			if ( l_spcTexName.length > 0 )
 			{
-				DoAddTexture( str_utils::from_str( l_spcTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_SPECULAR	);
+				DoAddTexture( string::from_str( l_spcTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_SPECULAR	);
 			}
 
 			if ( l_nmlTexName.length > 0 )
 			{
-				DoAddTexture( str_utils::from_str( l_nmlTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_NORMAL	);
+				DoAddTexture( string::from_str( l_nmlTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_NORMAL	);
 
 				if ( l_hgtTexName.length > 0 )
 				{
-					DoAddTexture( str_utils::from_str( l_hgtTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_HEIGHT	);
+					DoAddTexture( string::from_str( l_hgtTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_HEIGHT	);
 				}
 			}
 			else if ( l_hgtTexName.length > 0 )
 			{
-				DoAddTexture( str_utils::from_str( l_hgtTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_NORMAL	);
+				DoAddTexture( string::from_str( l_hgtTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_NORMAL	);
 			}
 		}
 
@@ -581,7 +581,7 @@ void AssimpImporter::DoProcessBones( SkeletonSPtr p_pSkeleton, aiBone ** p_pBone
 	for ( uint32_t i = 0; i < p_uiCount; ++i )
 	{
 		aiBone * l_pAiBone = p_pBones[i];
-		String l_strName = str_utils::from_str( l_pAiBone->mName.C_Str() );
+		String l_strName = string::from_str( l_pAiBone->mName.C_Str() );
 		uint32_t l_uiIndex;
 
 		if ( m_mapBoneByID.find( l_strName ) == m_mapBoneByID.end() )
@@ -610,7 +610,7 @@ void AssimpImporter::DoProcessBones( SkeletonSPtr p_pSkeleton, aiBone ** p_pBone
 
 AnimationSPtr AssimpImporter::DoProcessAnimation( SkeletonSPtr p_pSkeleton, aiNode * p_pNode, aiAnimation * p_pAnimation )
 {
-	String l_strName = str_utils::from_str( p_pAnimation->mName.C_Str() );
+	String l_strName = string::from_str( p_pAnimation->mName.C_Str() );
 
 	if ( l_strName.empty() )
 	{
@@ -625,7 +625,7 @@ AnimationSPtr AssimpImporter::DoProcessAnimation( SkeletonSPtr p_pSkeleton, aiNo
 
 void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_pAnimation, real p_rTicksPerSecond, SkeletonSPtr p_pSkeleton, aiNode * p_pNode, aiAnimation * p_paiAnimation, MovingObjectBaseSPtr p_pObject )
 {
-	String l_strName = str_utils::from_str( p_pNode->mName.data );
+	String l_strName = string::from_str( p_pNode->mName.data );
 	const aiNodeAnim * l_pNodeAnim = ::details::FindNodeAnim( p_paiAnimation, l_strName );
 	Matrix4x4r l_mtxNode( &p_pNode->mTransformation/*.Transpose()*/.a1 );
 	MovingObjectBaseSPtr l_pObject;

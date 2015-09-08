@@ -36,7 +36,7 @@ namespace Dx11Render
 		l_rasterDesc.MultisampleEnable = m_bMultisampled;
 		l_rasterDesc.ScissorEnable = m_bScissor;
 		HRESULT l_hr = m_pRenderSystem->GetDevice()->CreateRasterizerState( &l_rasterDesc, &m_pRasteriserState );
-		dxDebugName( m_pRenderSystem, m_pRasteriserState, RasteriserState );
+		dxTrack( m_pRenderSystem, m_pRasteriserState, RasteriserState );
 		m_bChanged = false;
 		return dxCheckError( l_hr, "CreateRasterizerState" );
 	}

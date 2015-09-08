@@ -38,22 +38,22 @@ namespace Castor3D
 		if ( !p_pLibrary->GetFunction( m_pfnGetRendererType, GetRendererTypeFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] GetRendererType plugin function : " );
-			l_strError += str_utils::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
+			l_strError += string::to_string( dlerror() );
+			CASTOR_PLUGIN_EXCEPTION( string::to_str( l_strError ), false );
 		}
 
 		if ( !p_pLibrary->GetFunction( m_pfnCreateRenderSystem, CreateRenderSystemFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] CreateRenderSystem plugin function : " );
-			l_strError += str_utils::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
+			l_strError += string::to_string( dlerror() );
+			CASTOR_PLUGIN_EXCEPTION( string::to_str( l_strError ), false );
 		}
 
 		if ( !p_pLibrary->GetFunction( m_pfnDestroyRenderSystem, DestroyRenderSystemFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] DestroyRenderSystem plugin function : " );
-			l_strError += str_utils::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
+			l_strError += string::to_string( dlerror() );
+			CASTOR_PLUGIN_EXCEPTION( string::to_str( l_strError ), false );
 		}
 
 		if ( m_pfnOnLoad )

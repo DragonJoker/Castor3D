@@ -147,14 +147,14 @@ void Icosahedron::Generate()
 		Vertex::GetPosition( l_pSubmesh->GetPoint( l_pFaces[i]->GetVertexIndex( 0 ) ), l_ptCoordsA );
 		Vertex::GetPosition( l_pSubmesh->GetPoint( l_pFaces[i]->GetVertexIndex( 1 ) ), l_ptCoordsB );
 		Vertex::GetPosition( l_pSubmesh->GetPoint( l_pFaces[i]->GetVertexIndex( 2 ) ), l_ptCoordsC );
-		u = real( 0.5 ) * ( real( 1.0 ) + atan2( l_ptCoordsA[2], l_ptCoordsA[0] ) * ( 1 / Angle::Pi ) );
-		v = acos( l_ptCoordsA[1] ) * ( 1 / Angle::Pi );
+		u = real( 0.5 ) * ( real( 1.0 ) + real( atan2( l_ptCoordsA[2], l_ptCoordsA[0] ) * ( 1 / Angle::Pi ) ) );
+		v = real( acos( l_ptCoordsA[1] ) * ( 1 / Angle::Pi ) );
 		Vertex::SetTexCoord( l_pSubmesh->GetPoint( l_pFaces[i]->GetVertexIndex( 0 ) ), u, v );
-		u = real( 0.5 ) * ( real( 1.0 ) + atan2( l_ptCoordsB[2], l_ptCoordsB[0] ) * ( 1 / Angle::Pi ) );
-		v = acos( l_ptCoordsB[1] ) * ( 1 / Angle::Pi );
+		u = real( 0.5 ) * ( real( 1.0 ) + real( atan2( l_ptCoordsB[2], l_ptCoordsB[0] ) * ( 1 / Angle::Pi ) ) );
+		v = real( acos( l_ptCoordsB[1] ) * ( 1 / Angle::Pi ) );
 		Vertex::SetTexCoord( l_pSubmesh->GetPoint( l_pFaces[i]->GetVertexIndex( 1 ) ), u, v );
-		u = real( 0.5 ) * ( real( 1.0 ) + atan2( l_ptCoordsC[2], l_ptCoordsC[0] ) * ( 1 / Angle::Pi ) );
-		v = acos( l_ptCoordsC[1] ) * ( 1 / Angle::Pi );
+		u = real( 0.5 ) * ( real( 1.0 ) + real( atan2( l_ptCoordsC[2], l_ptCoordsC[0] ) * ( 1 / Angle::Pi ) ) );
+		v = real( acos( l_ptCoordsC[1] ) * ( 1 / Angle::Pi ) );
 		Vertex::SetTexCoord( l_pSubmesh->GetPoint( l_pFaces[i]->GetVertexIndex( 2 ) ), u, v );
 	}
 

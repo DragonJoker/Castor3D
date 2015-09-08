@@ -248,7 +248,7 @@ namespace Dx11Render
 			{
 				DxRenderSystem * l_renderSystem = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() );
 				HRESULT l_hr = l_renderSystem->GetDevice()->CreateInputLayout( &l_arrayDxElements[0], UINT( l_arrayDxElements.size() ), reinterpret_cast< DWORD const * >( l_pBlob->GetBufferPointer() ), l_pBlob->GetBufferSize(), &m_pDxDeclaration );
-				dxDebugName( l_renderSystem, m_pDxDeclaration, VtxInputLayout );
+				dxTrack( l_renderSystem, m_pDxDeclaration, VtxInputLayout );
 				l_return = dxCheckError( l_hr, "ID3D11Device::CreateInputLayout" );
 			}
 		}
@@ -280,12 +280,12 @@ namespace Dx11Render
 				D3D11_SUBRESOURCE_DATA l_data = { 0 };
 				l_data.pSysMem = m_pBuffer->data();
 				l_hr = l_renderSystem->GetDevice()->CreateBuffer( &l_desc, &l_data, &m_pBufferObject );
-				dxDebugName( l_renderSystem, m_pBufferObject, VertexBuffer );
+				dxTrack( l_renderSystem, m_pBufferObject, VertexBuffer );
 			}
 			else
 			{
 				l_hr = l_renderSystem->GetDevice()->CreateBuffer( &l_desc, NULL, &m_pBufferObject );
-				dxDebugName( l_renderSystem, m_pBufferObject, VertexBuffer );
+				dxTrack( l_renderSystem, m_pBufferObject, VertexBuffer );
 			}
 
 			l_return = dxCheckError( l_hr, "ID3D11Device::CreateBuffer" );

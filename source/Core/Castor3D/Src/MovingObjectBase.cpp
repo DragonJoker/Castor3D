@@ -84,7 +84,7 @@ namespace Castor3D
 
 		if ( HasKeyFrames() )
 		{
-			MtxUtils::set_transform_rh( l_mtxReturn, DoComputeTranslation( p_rTime ), DoComputeScaling( p_rTime ), DoComputeRotation( p_rTime ) );
+			matrix::set_transform( l_mtxReturn, DoComputeTranslation( p_rTime ), DoComputeScaling( p_rTime ), DoComputeRotation( p_rTime ) );
 		}
 		else
 		{

@@ -1,275 +1,275 @@
-﻿namespace Castor
+namespace Castor
 {
-	template< typename TypeA, typename TypeB >
-	SquareMatrix< TypeA, 4 > & MtxUtils::rotate( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_angle, Point< TypeB, 3 > const & p_axis )
+	template< typename T, typename U >
+	SquareMatrix< T, 4 > & matrix::rotate( SquareMatrix< T, 4 > & p_matrix, Angle const & p_angle, Point< U, 3 > const & p_axis )
 	{
-		return MtxUtils::rotate( p_matrix, Quaternion( p_axis, p_angle ) );
+		SquareMatrix< T, 4 > l_rotate;
+		return p_matrix *= matrix::set_rotate( l_rotate, p_angle, p_axis );
 	}
 
-	template< typename TypeA >
-	SquareMatrix< TypeA, 4 > & MtxUtils::rotate( SquareMatrix< TypeA, 4 > & p_matrix, Quaternion const & p_quat )
+	template< typename T >S
+	SquareMatrix< T, 4 > & matrix::rotate( SquareMatrix< T, 4 > & p_matrix, Quaternion const & p_quat )
 	{
-		SquareMatrix< TypeA, 4 > l_matrix;
-		p_quat.ToRotationMatrix( l_matrix );
-		p_matrix *= l_matrix;
+		Point3r l_axis;
+		Angle l_angle;
+		p_quat.ToAxisAngle( l_axis, l_angle );
+	}
+
+	template< typename T, typename U >
+	SquareMatrix< T, 4 > & matrix::set_rotate( SquareMatrix< T, 4 > & p_matrix, Angle const & p_angle, Point< U, 3 > const & p_axis )
+	{
+		T l_cos = T( p_angle.Cos() );
+		T l_sin = T( p_angle.Sin() );
+		Point< U, 3 > l_axis( point::get_normalised( p_axis ) );
+		Point< T, 3 > l_temp( ( T( 1 ) - l_cos ) * l_axis );
+		p_matrix[0][0] = l_cos + l_temp[0] * l_axis[0];
+		p_matrix[0][1] =     0 + l_temp[0] * l_axis[1] + l_sin * l_axis[2];
+		p_matrix[0][2] =     0 + l_temp[0] * l_axis[2] - l_sin * l_axis[1];
+
+		p_matrix[1][0] =     0 + l_temp[1] * l_axis[0] - l_sin * l_axis[2];
+		p_matrix[1][1] = l_cos + l_temp[1] * l_axis[1];
+		p_matrix[1][2] =     0 + l_temp[1] * l_axis[2] + l_sin * l_axis[0];
+
+		p_matrix[2][0] =     0 + l_temp[2] * l_axis[0] + l_sin * l_axis[1];
+		p_matrix[2][1] =     0 + l_temp[2] * l_axis[1] - l_sin * l_axis[0];
+		p_matrix[2][2] = l_cos + l_temp[2] * l_axis[2];
+		p_matrix[3][3] = 1;
 		return p_matrix;
 	}
 
-	template< typename TypeA, typename TypeB >
-	SquareMatrix< TypeA, 4 > & MtxUtils::set_rotate( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_angle, Point< TypeB, 3 > const & p_axis )
+	template< typename T >
+	SquareMatrix< T, 4 > & matrix::set_rotate( SquareMatrix< T, 4 > & p_matrix, Quaternion const & p_quat )
 	{
-		return MtxUtils::set_rotate( p_matrix, Quaternion( p_axis, p_angle ) );
-	}
-
-	template< typename TypeA >
-	SquareMatrix< TypeA, 4 > & MtxUtils::set_rotate( SquareMatrix< TypeA, 4 > & p_matrix, Quaternion const & p_quat )
-	{
+		Point3r l_axis;
+		Angle l_angle;
+		p_quat.ToAxisAngle( l_axis, l_angle );
+		return matrix::set_rotate( p_matrix, l_angle, l_axis );
 		p_quat.ToRotationMatrix( p_matrix );
 		return p_matrix;
 	}
 
-	template< typename TypeA >
-	void MtxUtils::get_rotate( SquareMatrix< TypeA, 4 > const & p_matrix, Quaternion & p_quat )
+	template< typename T >
+	void matrix::get_rotate( SquareMatrix< T, 4 > const & p_matrix, Quaternion & p_quat )
 	{
 		p_quat.FromRotationMatrix( p_matrix );
 	}
 
-	template< typename TypeA >
-	SquareMatrix< TypeA, 4 > & MtxUtils::yaw( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_angle )
+	template< typename T >
+	SquareMatrix< T, 4 > & matrix::yaw( SquareMatrix< T, 4 > & p_matrix, Angle const & p_angle )
 	{
-		return MtxUtils::rotate( p_matrix, p_angle, Point< TypeA, 3 >( 0, 1, 0 ) );
+		return matrix::rotate( p_matrix, p_angle, Point< T, 3 >( 0, 1, 0 ) );
 	}
 
-	template< typename TypeA >
-	SquareMatrix< TypeA, 4 > & MtxUtils::pitch( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_angle )
+	template< typename T >
+	SquareMatrix< T, 4 > & matrix::pitch( SquareMatrix< T, 4 > & p_matrix, Angle const & p_angle )
 	{
-		return MtxUtils::rotate( p_matrix, p_angle, Point< TypeA, 3 >( 0, 0, 1 ) );
+		return matrix::rotate( p_matrix, p_angle, Point< T, 3 >( 0, 0, 1 ) );
 	}
 
-	template< typename TypeA >
-	SquareMatrix< TypeA, 4 > & MtxUtils::roll( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_angle )
+	template< typename T >
+	SquareMatrix< T, 4 > & matrix::roll( SquareMatrix< T, 4 > & p_matrix, Angle const & p_angle )
 	{
-		return MtxUtils::rotate( p_matrix, p_angle, Point< TypeA, 3 >( 1, 0, 0 ) );
+		return matrix::rotate( p_matrix, p_angle, Point< T, 3 >( 1, 0, 0 ) );
 	}
 
-	template< typename TypeA, typename TypeB >
-	SquareMatrix< TypeA, 4 > & MtxUtils::scale( SquareMatrix< TypeA, 4 > & p_matrix, TypeB x, TypeB y, TypeB z )
+	template< typename T, typename U >
+	SquareMatrix< T, 4 > & matrix::scale( SquareMatrix< T, 4 > & p_matrix, U x, U y, U z )
 	{
-		p_matrix[0][0] = TypeA( p_matrix[0][0] * x );
-		p_matrix[1][1] = TypeA( p_matrix[1][1] * y );
-		p_matrix[2][2] = TypeA( p_matrix[2][2] * z );
+		p_matrix[0][0] = T( p_matrix[0][0] * x );
+		p_matrix[1][1] = T( p_matrix[1][1] * y );
+		p_matrix[2][2] = T( p_matrix[2][2] * z );
 		return p_matrix;
 	}
 
-	template< typename TypeA, typename TypeB >
-	SquareMatrix< TypeA, 4 > & MtxUtils::scale( SquareMatrix< TypeA, 4 > & p_matrix, Point< TypeB, 3 > const & p_scale )
+	template< typename T, typename U >
+	SquareMatrix< T, 4 > & matrix::scale( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_scale )
 	{
-		return MtxUtils::scale( p_matrix, p_scale[0], p_scale[1], p_scale[2] );
+		return matrix::scale( p_matrix, p_scale[0], p_scale[1], p_scale[2] );
 	}
 
-	template< typename TypeA, typename TypeB >
-	SquareMatrix< TypeA, 4 > & MtxUtils::set_scale( SquareMatrix< TypeA, 4 > & p_matrix, TypeB x, TypeB y, TypeB z )
+	template< typename T, typename U >
+	SquareMatrix< T, 4 > & matrix::set_scale( SquareMatrix< T, 4 > & p_matrix, U x, U y, U z )
 	{
-		std::memset( p_matrix.ptr(), 0, sizeof( TypeA ) * 4 * 4 );
-		p_matrix[0][0] = TypeA( x );
-		p_matrix[1][1] = TypeA( y );
-		p_matrix[2][2] = TypeA( z );
-		p_matrix[3][3] = TypeA( 1 );
+		std::memset( p_matrix.ptr(), 0, sizeof( T ) * 4 * 4 );
+		p_matrix[0][0] = T( x );
+		p_matrix[1][1] = T( y );
+		p_matrix[2][2] = T( z );
+		p_matrix[3][3] = T( 1 );
 		return p_matrix;
 	}
 
-	template< typename TypeA, typename TypeB >
-	SquareMatrix< TypeA, 4 > & MtxUtils::set_scale( SquareMatrix< TypeA, 4 > & p_matrix, Point< TypeB, 3 > const & p_scale )
+	template< typename T, typename U >
+	SquareMatrix< T, 4 > & matrix::set_scale( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_scale )
 	{
-		return MtxUtils::set_scale( p_matrix, p_scale[0], p_scale[1], p_scale[2] );
+		return matrix::set_scale( p_matrix, p_scale[0], p_scale[1], p_scale[2] );
 	}
 
-	template< typename TypeA, typename TypeB >
-	void MtxUtils::get_scale( SquareMatrix< TypeA, 4 > const & p_matrix, Point< TypeB, 3 > & p_scale )
+	template< typename T, typename U >
+	void matrix::get_scale( SquareMatrix< T, 4 > const & p_matrix, Point< U, 3 > & p_scale )
 	{
-		p_scale[0] = TypeB( p_matrix[0][0] );
-		p_scale[1] = TypeB( p_matrix[1][1] );
-		p_scale[2] = TypeB( p_matrix[2][2] );
+		p_scale[0] = U( p_matrix[0][0] );
+		p_scale[1] = U( p_matrix[1][1] );
+		p_scale[2] = U( p_matrix[2][2] );
 	}
 
-	template< typename TypeA, typename TypeB >
-	SquareMatrix< TypeA, 4 > & MtxUtils::translate( SquareMatrix< TypeA, 4 > & p_matrix, TypeB x, TypeB y, TypeB z )
+	template< typename T, typename U >
+	SquareMatrix< T, 4 > & matrix::translate( SquareMatrix< T, 4 > & p_matrix, U x, U y, U z )
 	{
-		p_matrix[3][0] += TypeA( x );
-		p_matrix[3][1] += TypeA( y );
-		p_matrix[3][2] += TypeA( z );
+		p_matrix[3][0] += T( x );
+		p_matrix[3][1] += T( y );
+		p_matrix[3][2] += T( z );
 		return p_matrix;
 	}
 
-	template< typename TypeA, typename TypeB >
-	SquareMatrix< TypeA, 4 > & MtxUtils::translate( SquareMatrix< TypeA, 4 > & p_matrix, Point< TypeB, 3 > const & p_translation )
+	template< typename T, typename U >
+	SquareMatrix< T, 4 > & matrix::translate( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_translation )
 	{
-		return MtxUtils::translate( p_matrix, p_translation[0], p_translation[1], p_translation[2] );
+		return matrix::translate( p_matrix, p_translation[0], p_translation[1], p_translation[2] );
 	}
 
-	template< typename TypeA, typename TypeB >
-	SquareMatrix< TypeA, 4 > & MtxUtils::set_translate( SquareMatrix< TypeA, 4 > & p_matrix, TypeB x, TypeB y, TypeB z )
+	template< typename T, typename U >
+	SquareMatrix< T, 4 > & matrix::set_translate( SquareMatrix< T, 4 > & p_matrix, U x, U y, U z )
 	{
-		std::memset( p_matrix.ptr(), 0, sizeof( TypeA ) * 4 * 4 );
-		TypeA l_unit( 1 );
+		std::memset( p_matrix.ptr(), 0, sizeof( T ) * 4 * 4 );
+		T l_unit( 1 );
 		p_matrix[0][0] = l_unit;
 		p_matrix[1][1] = l_unit;
 		p_matrix[2][2] = l_unit;
-		p_matrix[3][0] = TypeA( x );
-		p_matrix[3][1] = TypeA( y );
-		p_matrix[3][2] = TypeA( z );
+		p_matrix[3][0] = T( x );
+		p_matrix[3][1] = T( y );
+		p_matrix[3][2] = T( z );
 		p_matrix[3][3] = l_unit;
 		return p_matrix;
 	}
 
-	template< typename TypeA, typename TypeB >
-	SquareMatrix< TypeA, 4 > & MtxUtils::set_translate( SquareMatrix< TypeA, 4 > & p_matrix, Point< TypeB, 3 > const & p_translation )
+	template< typename T, typename U >
+	SquareMatrix< T, 4 > & matrix::set_translate( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_translation )
 	{
 		return set_translate( p_matrix, p_translation[0], p_translation[1], p_translation[2] );
 	}
 
-	template< typename TypeA, typename TypeB >
-	void MtxUtils::get_translate( SquareMatrix< TypeA, 4 > const & p_matrix, Point< TypeB, 3 > & p_translation )
+	template< typename T, typename U >
+	void matrix::get_translate( SquareMatrix< T, 4 > const & p_matrix, Point< U, 3 > & p_translation )
 	{
-		p_translation[0] = Policy< TypeB >::convert( p_matrix[3][0] );
-		p_translation[1] = Policy< TypeB >::convert( p_matrix[3][1] );
-		p_translation[2] = Policy< TypeB >::convert( p_matrix[3][2] );
+		p_translation[0] = Policy< U >::convert( p_matrix[3][0] );
+		p_translation[1] = Policy< U >::convert( p_matrix[3][1] );
+		p_translation[2] = Policy< U >::convert( p_matrix[3][2] );
 	}
 
-	template< typename TypeA, typename TypeB >
-	SquareMatrix< TypeA, 4 > & MtxUtils::set_transform_rh( SquareMatrix< TypeA, 4 > & p_matrix, Point< TypeB, 3 > const & p_ptPosition, Point< TypeB, 3 > const & p_ptScale, Quaternion const & p_qOrientation )
+	template< typename T, typename U >
+	SquareMatrix< T, 4 > & matrix::set_transform( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_ptPosition, Point< U, 3 > const & p_ptScale, Quaternion const & p_qOrientation )
 	{
-		SquareMatrix< TypeA, 4 > l_scale;
-		SquareMatrix< TypeA, 4 > l_rotate;
-		SquareMatrix< TypeA, 4 > l_translate;
-		MtxUtils::set_scale( l_scale, p_ptScale );
-		MtxUtils::set_rotate( l_rotate, p_qOrientation );
-		MtxUtils::set_translate( l_translate, p_ptPosition );
+		SquareMatrix< T, 4 > l_scale;
+		SquareMatrix< T, 4 > l_rotate;
+		SquareMatrix< T, 4 > l_translate;
+		matrix::set_scale( l_scale, p_ptScale );
+		matrix::set_rotate( l_rotate, p_qOrientation );
+		matrix::set_translate( l_translate, p_ptPosition );
 		p_matrix = l_translate * l_rotate * l_scale;
 		return p_matrix;
 	}
 
-	template< typename TypeA, typename TypeB >
-	SquareMatrix< TypeA, 4 > & MtxUtils::set_transform_lh( SquareMatrix< TypeA, 4 > & p_matrix, Point< TypeB, 3 > const & p_ptPosition, Point< TypeB, 3 > const & p_ptScale, Quaternion const & p_qOrientation )
+	template< typename T, typename U >
+	SquareMatrix< T, 4 > & matrix::transform( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_ptPosition, Point< U, 3 > const & p_ptScale, Quaternion const & p_qOrientation )
 	{
-		return switch_hand( set_transform_rh( p_matrix, p_ptPosition, p_ptScale, p_qOrientation ) );
-	}
-
-	template< typename TypeA, typename TypeB >
-	SquareMatrix< TypeA, 4 > & MtxUtils::perspective_rh( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_aFOVY, TypeB aspect, TypeB zNear, TypeB zFar )
-	{
-		TypeA range = Policy< TypeA >::convert( ( 1 / tan( p_aFOVY.Radians() / 2 ) ) );
-		p_matrix.initialise();
-		p_matrix[0][0] = Policy< TypeA >::convert( range / aspect );
-		p_matrix[1][1] = Policy< TypeA >::convert( range );
-		p_matrix[2][2] = Policy< TypeA >::convert( - ( zFar + zNear ) / ( zFar - zNear ) );
-		p_matrix[2][3] = Policy< TypeA >::convert( - 1 );
-		p_matrix[3][2] = Policy< TypeA >::convert( - 2 * zFar * zNear / ( zFar - zNear ) );
+		SquareMatrix< T, 4 > l_scale;
+		SquareMatrix< T, 4 > l_rotate;
+		SquareMatrix< T, 4 > l_translate;
+		matrix::set_scale( l_scale, p_ptScale );
+		matrix::set_rotate( l_rotate, p_qOrientation );
+		matrix::set_translate( l_translate, p_ptPosition );
+		p_matrix *= l_translate * l_rotate * l_scale;
 		return p_matrix;
 	}
 
-	template< typename TypeA, typename TypeB >
-	SquareMatrix< TypeA, 4 > & MtxUtils::perspective_lh( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_aFOVY, TypeB aspect, TypeB zNear, TypeB zFar )
+	template< typename T, typename U >
+	SquareMatrix< T, 4 > & matrix::perspective( SquareMatrix< T, 4 > & p_matrix, Angle const & p_aFOVY, U aspect, U zNear, U zFar )
 	{
-		TypeA range = Policy< TypeA >::convert( ( 1 / tan( p_aFOVY.Radians() / 2 ) ) );
+		T range = T( ( 1 / tan( p_aFOVY.Radians() / 2 ) ) );
 		p_matrix.initialise();
-		p_matrix[0][0] = Policy< TypeA >::convert( range / aspect );
-		p_matrix[1][1] = Policy< TypeA >::convert( range );
-		p_matrix[2][2] = Policy< TypeA >::convert( zFar / ( zNear - zFar ) );
-		p_matrix[2][3] = Policy< TypeA >::convert( - 1 );
-		p_matrix[3][2] = Policy< TypeA >::convert( zNear * zFar / ( zNear - zFar ) );
+		p_matrix[0][0] = T( range / aspect );
+		p_matrix[1][1] = T( range );
+		p_matrix[2][2] = T( - ( zFar + zNear ) / ( zFar - zNear ) );
+		p_matrix[2][3] = T( - 1 );
+		p_matrix[3][2] = T( - 2 * zFar * zNear / ( zFar - zNear ) );
 		return p_matrix;
 	}
 
-	template< typename TypeA, typename TypeB >
-	SquareMatrix< TypeA, 4 > & MtxUtils::centered_ortho( SquareMatrix< TypeA, 4 > & p_matrix, TypeB left, TypeB right, TypeB top, TypeB bottom )
+	template< typename T, typename U >
+	SquareMatrix< T, 4 > & matrix::ortho( SquareMatrix< T, 4 > & p_matrix, U left, U right, U bottom, U top )
 	{
 		p_matrix.set_identity();
-		p_matrix[0][0] = Policy< TypeA >::convert( 2 / ( right - left ) );
-		p_matrix[1][1] = Policy< TypeA >::convert( 2 / ( top - bottom ) );
-		p_matrix[0][3] = Policy< TypeA >::convert( -( right + left ) / ( right - left ) );
-		p_matrix[1][3] = Policy< TypeA >::convert( -( top + bottom ) / ( top - bottom ) );
+		p_matrix[0][0] = T( 2 / ( right - left ) );
+		p_matrix[1][1] = T( 2 / ( top - bottom ) );
+		p_matrix[2][2] = - T( 1 );
+		p_matrix[3][0] = T( -( right + left ) / ( right - left ) );
+		p_matrix[3][1] = T( -( top + bottom ) / ( top - bottom ) );
 		return p_matrix;
 	}
 
-	template< typename TypeA, typename TypeB >
-	SquareMatrix< TypeA, 4 > & MtxUtils::ortho_rh( SquareMatrix< TypeA, 4 > & p_matrix, TypeB left, TypeB right, TypeB bottom, TypeB top, TypeB zNear, TypeB zFar )
+	template< typename T, typename U >
+	SquareMatrix< T, 4 > & matrix::ortho( SquareMatrix< T, 4 > & p_matrix, U left, U right, U bottom, U top, U zNear, U zFar )
 	{
 		p_matrix.set_identity();
-		p_matrix[0][0] = Policy< TypeA >::convert( 2 / ( right - left ) );
-		p_matrix[1][1] = Policy< TypeA >::convert( 2 / ( top - bottom ) );
-		p_matrix[2][2] = Policy< TypeA >::convert( -2 / ( zFar - zNear ) );
-		p_matrix[3][0] = Policy< TypeA >::convert( -( right + left ) / ( right - left ) );
-		p_matrix[3][1] = Policy< TypeA >::convert( -( top + bottom ) / ( top - bottom ) );
-		p_matrix[3][2] = Policy< TypeA >::convert( -( zFar + zNear ) / ( zFar - zNear ) );
+		p_matrix[0][0] = T( 2 / ( right - left ) );
+		p_matrix[1][1] = T( 2 / ( top - bottom ) );
+		p_matrix[2][2] = T( -2 / ( zFar - zNear ) );
+		p_matrix[3][0] = T( -( right + left ) / ( right - left ) );
+		p_matrix[3][1] = T( -( top + bottom ) / ( top - bottom ) );
+		p_matrix[3][2] = T( -( zFar + zNear ) / ( zFar - zNear ) );
 		p_matrix[3][3] = 1;
 		return p_matrix;
 	}
 
-	template< typename TypeA, typename TypeB >
-	SquareMatrix< TypeA, 4 > & MtxUtils::ortho_lh( SquareMatrix< TypeA, 4 > & p_matrix, TypeB left, TypeB right, TypeB bottom, TypeB top, TypeB zNear, TypeB zFar )
+	template< typename T, typename U >
+	SquareMatrix< T, 4 > & matrix::frustum( SquareMatrix< T, 4 > & p_matrix, U left, U right, U bottom, U top, U nearVal, U farVal )
 	{
+		p_matrix.initialise();
+		p_matrix[0][0] = T( ( 2 * nearVal ) / ( right - left ) );
+		p_matrix[1][1] = T( ( 2 * nearVal ) / ( top - bottom ) );
+		p_matrix[2][0] = T( ( right + left ) / ( right - left ) );
+		p_matrix[2][1] = T( ( top + bottom ) / ( top - bottom ) );
+		p_matrix[2][2] = T( ( nearVal + farVal ) / ( nearVal - farVal ) );
+		p_matrix[2][3] = T( -1 );
+		p_matrix[3][2] = T( ( 2 * farVal * nearVal ) / ( nearVal - farVal ) );
+		return p_matrix;
+	}
+
+	template< typename T, typename U >
+	SquareMatrix< T, 4 > & matrix::look_at( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_ptEye, Point< U, 3 > const & p_ptCenter, Point< U, 3 > const & p_ptUp )
+	{
+		Point< T, 3 > l_f( point::get_normalised( p_ptCenter - p_ptEye ) );
+		Point< T, 3 > l_s( point::get_normalised( l_f ^ p_ptUp ) );
+		Point< T, 3 > l_u( point::get_normalised( l_s ^ l_f ) );
 		p_matrix.set_identity();
-		p_matrix[0][0] = Policy< TypeA >::convert( 2 / ( right - left ) );
-		p_matrix[1][1] = Policy< TypeA >::convert( 2 / ( top - bottom ) );
-		p_matrix[2][2] = Policy< TypeA >::convert( 1 / ( zNear - zFar ) );
-		p_matrix[3][0] = Policy< TypeA >::convert( ( left + right ) / ( left - right ) );
-		p_matrix[3][1] = Policy< TypeA >::convert( ( top + bottom ) / ( bottom - top ) );
-		p_matrix[3][2] = Policy< TypeA >::convert( zNear / ( zNear - zFar ) );
-		p_matrix[3][3] = 1;
-		return p_matrix;
-	}
-
-	template< typename TypeA, typename TypeB >
-	SquareMatrix< TypeA, 4 > & MtxUtils::frustum_rh( SquareMatrix< TypeA, 4 > & p_matrix, TypeB left, TypeB right, TypeB bottom, TypeB top, TypeB nearVal, TypeB farVal )
-	{
-		p_matrix.initialise();
-		p_matrix[0][0] = Policy< TypeA >::convert( ( 2 * nearVal ) / ( right - left ) );
-		p_matrix[1][1] = Policy< TypeA >::convert( ( 2 * nearVal ) / ( top - bottom ) );
-		p_matrix[2][0] = Policy< TypeA >::convert( ( right + left ) / ( right - left ) );
-		p_matrix[2][1] = Policy< TypeA >::convert( ( top + bottom ) / ( top - bottom ) );
-		p_matrix[2][2] = Policy< TypeA >::convert( ( nearVal + farVal ) / ( nearVal - farVal ) );
-		p_matrix[2][3] = Policy< TypeA >::convert( -1 );
-		p_matrix[3][2] = Policy< TypeA >::convert( ( 2 * farVal * nearVal ) / ( nearVal - farVal ) );
-		return p_matrix;
-	}
-
-	template< typename TypeA, typename TypeB >
-	SquareMatrix< TypeA, 4 > & MtxUtils::look_at( SquareMatrix< TypeA, 4 > & p_matrix, Point< TypeB, 3 > const & p_ptEye, Point< TypeB, 3 > const & p_ptCenter, Point< TypeB, 3 > const & p_ptUp )
-	{
-		Point< TypeA, 3 > l_f = point::normalise( p_ptCenter - p_ptEye );
-		Point< TypeA, 3 > l_u = point::normalise( p_ptUp );
-		Point< TypeA, 3 > l_s = point::normalise( l_f ^ l_u );
-		l_u = l_s ^ l_f;
-		p_matrix.initialise();
-		p_matrix[0][0] =  l_s.x;
-		p_matrix[1][0] =  l_s.y;
-		p_matrix[2][0] =  l_s.z;
-		p_matrix[0][1] =  l_u.x;
-		p_matrix[1][1] =  l_u.y;
-		p_matrix[2][1] =  l_u.z;
-		p_matrix[0][2] = -l_f.x;
-		p_matrix[1][2] = -l_f.y;
-		p_matrix[2][2] = -l_f.z;
+		p_matrix[0][0] =  l_s[0];
+		p_matrix[1][0] =  l_s[1];
+		p_matrix[2][0] =  l_s[2];
+		p_matrix[0][1] =  l_u[0];
+		p_matrix[1][1] =  l_u[1];
+		p_matrix[2][1] =  l_u[2];
+		p_matrix[0][2] = -l_f[0];
+		p_matrix[1][2] = -l_f[1];
+		p_matrix[2][2] = -l_f[2];
 		p_matrix[3][0] = -point::dot( l_s, p_ptEye );
 		p_matrix[3][1] = -point::dot( l_u, p_ptEye );
 		p_matrix[3][2] =  point::dot( l_f, p_ptEye );
 		return p_matrix;
 	}
 
-	template <typename TypeA, typename TypeB, uint32_t Count>
-	Point<TypeB, Count> MtxUtils::mult( SquareMatrix< TypeA, 4 > const & p_matrix, Point<TypeB, Count> const & p_vertex )
+	template <typename T, typename U, uint32_t Count>
+	Point<U, Count> matrix::mult( SquareMatrix< T, 4 > const & p_matrix, Point<U, Count> const & p_vertex )
 	{
-		return MtxMultiplicator< TypeA, TypeB, Count >()( p_matrix, p_vertex );
+		return MtxMultiplicator< T, U, Count >()( p_matrix, p_vertex );
 	}
 
-	template< typename TypeA, typename TypeB >
-	SquareMatrix< TypeA, 4 > MtxUtils::mult( SquareMatrix< TypeA, 4 > const & p_matrixA, SquareMatrix<TypeB, 4> const & p_matrixB )
+	template< typename T, typename U >
+	SquareMatrix< T, 4 > matrix::mult( SquareMatrix< T, 4 > const & p_matrixA, SquareMatrix<U, 4> const & p_matrixB )
 	{
 		return p_matrixA.multiply( p_matrixB );
 	}
-	template< typename TypeA >
-	SquareMatrix< TypeA, 4 > & MtxUtils::switch_hand( SquareMatrix< TypeA, 4 > const & p_matrix )
+	template< typename T >
+	SquareMatrix< T, 4 > & matrix::switch_hand( SquareMatrix< T, 4 > & p_matrix )
 	{
 		auto l_col2 = p_matrix[2];
 		auto l_col3 = p_matrix[3];
@@ -279,10 +279,10 @@
 		std::swap( l_col2[3], l_col3[3] );
 		return p_matrix;
 	}
-	template< typename TypeA >
-	SquareMatrix< TypeA, 4 > MtxUtils::get_switch_hand( SquareMatrix< TypeA, 4 > const & p_matrix )
+	template< typename T >
+	SquareMatrix< T, 4 > matrix::get_switch_hand( SquareMatrix< T, 4 > const & p_matrix )
 	{
-		SquareMatrix< TypeA, 4 > l_mtxReturn( p_matrix );
+		SquareMatrix< T, 4 > l_mtxReturn( p_matrix );
 		switch_hand( l_mtxReturn );
 		return l_mtxReturn;
 	}

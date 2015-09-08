@@ -38,7 +38,7 @@ namespace Castor
 	\remark		Contient des fonctions de rotation, translation, scale et multiplication (optimisées pour des matrices 4x4)
 				<br />Permet aussi de calculer les frustum, persperctive, ortho, le passage main gauche main droite et inversement
 	*/
-	class MtxUtils
+	class matrix
 	{
 	public:
 		/**
@@ -276,7 +276,7 @@ namespace Castor
 		 *\param[in]	p_qOrientation	La valeur de rotation
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & set_transform_rh( Castor::SquareMatrix< TypeA, 4 > & p_matrix, Castor::Point< TypeB, 3 > const & p_ptPosition, Castor::Point< TypeB, 3 > const & p_ptScale, Castor::Quaternion const & p_qOrientation );
+		static SquareMatrix< TypeA, 4 > & set_transform( Castor::SquareMatrix< TypeA, 4 > & p_matrix, Castor::Point< TypeB, 3 > const & p_ptPosition, Castor::Point< TypeB, 3 > const & p_ptScale, Castor::Quaternion const & p_qOrientation );
 		/**
 		 *\~english
 		 *\brief		Retrieves transformation matrix from translation, scaling and rotation
@@ -292,7 +292,7 @@ namespace Castor
 		 *\param[in]	p_qOrientation	La valeur de rotation
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & set_transform_lh( Castor::SquareMatrix< TypeA, 4 > & p_matrix, Castor::Point< TypeB, 3 > const & p_ptPosition, Castor::Point< TypeB, 3 > const & p_ptScale, Castor::Quaternion const & p_qOrientation );
+		static SquareMatrix< TypeA, 4 > & transform( Castor::SquareMatrix< TypeA, 4 > & p_matrix, Castor::Point< TypeB, 3 > const & p_ptPosition, Castor::Point< TypeB, 3 > const & p_ptScale, Castor::Quaternion const & p_qOrientation );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a centered perspective projection from the given parameters
@@ -310,27 +310,7 @@ namespace Castor
 		 *\param[in]	zFar		Position du plan lointain
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & perspective_rh( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_aFOVY, TypeB aspect, TypeB zNear, TypeB zFar );
-		/**
-		 *\~english
-		 *\brief		Builds a matrix that sets a centered perspective projection from the given parameters
-		 *\see			D3DXMatrixPerspectiveFovRH
-		 *\param[out]	p_matrix	The matrix that will receive the perspective matrix
-		 *\param[in]	p_aFOVY		Y Field of View
-		 *\param[in]	aspect		Width / Height ratio
-		 *\param[in]	zNear		Near clipping plane value
-		 *\param[in]	zFar		Far clipping plane value
-		 *\~french
-		 *\brief		Construit une matrice de projection en perspective centrée
-		 *\see			D3DXMatrixPerspectiveFovRH
-		 *\param[out]	p_matrix	La matrice qui contiendra le résultat
-		 *\param[in]	p_aFOVY		Angle de vision Y
-		 *\param[in]	aspect		Ratio Largeur / Hauteur
-		 *\param[in]	zNear		Position du plan proche
-		 *\param[in]	zFar		Position du plan lointain
-		 */
-		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & perspective_lh( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_aFOVY, TypeB aspect, TypeB zNear, TypeB zFar );
+		static SquareMatrix< TypeA, 4 > & perspective( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_aFOVY, TypeB aspect, TypeB zNear, TypeB zFar );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters
@@ -352,17 +332,17 @@ namespace Castor
 		 *\param[in]	farVal		Position du plan lointain
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & frustum_rh( SquareMatrix< TypeA, 4 > & p_matrix, TypeB left, TypeB right, TypeB bottom, TypeB top, TypeB nearVal, TypeB farVal );
+		static SquareMatrix< TypeA, 4 > & frustum( SquareMatrix< TypeA, 4 > & p_matrix, TypeB left, TypeB right, TypeB bottom, TypeB top, TypeB nearVal, TypeB farVal );
 		/**
 		 *\~english
-		 *\brief		Builds a matrix that sets a centered orthographic projection from the given parameters
+		 *\brief		Builds a matrix that sets a non centered orthogonal projection from the given parameters
 		 *\param[out]	p_matrix	The matrix that will receive the perspective matrix
 		 *\param[in]	left		Left clipping plane value
 		 *\param[in]	right		Right clipping plane value
 		 *\param[in]	bottom		Bottom clipping plane value
 		 *\param[in]	top			Top clipping plane value
 		 *\~french
-		 *\brief		Construit une matrice de projection orthographique centrée
+		 *\brief		Construit une matrice de projection orthographique non centrée
 		 *\param[out]	p_matrix	La matrice qui contiendra le résultat
 		 *\param[in]	left		Position du plan gauche
 		 *\param[in]	right		Position du plan droit
@@ -370,7 +350,7 @@ namespace Castor
 		 *\param[in]	top			Position du plan haut
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & centered_ortho( SquareMatrix< TypeA, 4 > & p_matrix, TypeB left, TypeB right, TypeB top, TypeB bottom );
+		static SquareMatrix< TypeA, 4 > & ortho( SquareMatrix< TypeA, 4 > & p_matrix, TypeB left, TypeB right, TypeB bottom, TypeB top );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a non centered orthogonal projection from the given parameters
@@ -392,29 +372,7 @@ namespace Castor
 		 *\param[in]	zFar		Position du plan lointain
 		 */
 		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & ortho_rh( SquareMatrix< TypeA, 4 > & p_matrix, TypeB left, TypeB right, TypeB bottom, TypeB top, TypeB zNear, TypeB zFar );
-		/**
-		 *\~english
-		 *\brief		Builds a matrix that sets a non centered orthogonal projection from the given parameters
-		 *\param[out]	p_matrix	The matrix that will receive the perspective matrix
-		 *\param[in]	left		Left clipping plane value
-		 *\param[in]	right		Right clipping plane value
-		 *\param[in]	bottom		Bottom clipping plane value
-		 *\param[in]	top			Top clipping plane value
-		 *\param[in]	zNear		Near clipping plane value
-		 *\param[in]	zFar		Far clipping plane value
-		 *\~french
-		 *\brief		Construit une matrice de projection orthographique non centrée
-		 *\param[out]	p_matrix	La matrice qui contiendra le résultat
-		 *\param[in]	left		Position du plan gauche
-		 *\param[in]	right		Position du plan droit
-		 *\param[in]	bottom		Position du plan bas
-		 *\param[in]	top			Position du plan haut
-		 *\param[in]	zNear		Position du plan proche
-		 *\param[in]	zFar		Position du plan lointain
-		 */
-		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & ortho_lh( SquareMatrix< TypeA, 4 > & p_matrix, TypeB left, TypeB right, TypeB bottom, TypeB top, TypeB zNear, TypeB zFar );
+		static SquareMatrix< TypeA, 4 > & ortho( SquareMatrix< TypeA, 4 > & p_matrix, TypeB left, TypeB right, TypeB bottom, TypeB top, TypeB zNear, TypeB zFar );
 		/**
 		 *\~english
 		 *\brief		Builds a view matrix that looks at a given point
@@ -470,7 +428,7 @@ namespace Castor
 		 *\return		La matrice changée
 		 */
 		template< typename TypeA >
-		static SquareMatrix< TypeA, 4 > & switch_hand( SquareMatrix< TypeA, 4 > const & p_matrix );
+		static SquareMatrix< TypeA, 4 > & switch_hand( SquareMatrix< TypeA, 4 > & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Switches the handness of a matrix (from right to left or left to right)

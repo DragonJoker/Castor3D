@@ -520,6 +520,18 @@ namespace Castor3D
 		{
 			return m_pEngine;
 		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the projection matrix
+		 *\return		The matrix
+		 *\~french
+		 *\brief		Récupère la matrice de projection
+		 *\return		La matrice
+		 */
+		inline Castor::Matrix4x4r const & GetProjection()const
+		{
+			return m_projection;
+		}
 
 	private:
 		//!\~english The left viewport plane	\~french Position du plan gauche
@@ -548,6 +560,8 @@ namespace Castor3D
 		bool m_bModified;
 		//!\~english The view frustum's planes	\~french Les plans du frustum de vue
 		Castor::PlaneEquation< real >	m_planes[eFRUSTUM_PLANE_COUNT];
+		//!\~english The projection matrix.	\~french La matrice de projection.
+		Castor::Matrix4x4r m_projection;
 	};
 }
 

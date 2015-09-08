@@ -295,10 +295,10 @@ bool DirectX11::CheckError( HRESULT p_hResult, String const & p_text )
 
 		if ( ::FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, nullptr, GetLastError(), 0, ( LPTSTR )& l_szError, 0, nullptr ) != 0 )
 		{
-			l_strWinError += str_utils::from_str( " - Windows : " ) + l_szError;
+			l_strWinError += string::from_str( " - Windows : " ) + l_szError;
 			LocalFree( l_szError );
-			str_utils::replace( l_strWinError, cuT( "\r" ), cuEmptyString );
-			str_utils::replace( l_strWinError, cuT( "\n" ), cuEmptyString );
+			string::replace( l_strWinError, cuT( "\r" ), cuEmptyString );
+			string::replace( l_strWinError, cuT( "\n" ), cuEmptyString );
 		}
 
 		Logger::LogError( l_strWinError );

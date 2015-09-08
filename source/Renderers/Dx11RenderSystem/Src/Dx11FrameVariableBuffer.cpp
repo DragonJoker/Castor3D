@@ -382,7 +382,7 @@ namespace Dx11Render
 			l_d3dInitData.SysMemSlicePitch = 0;
 
 			l_hr = l_pDevice->CreateBuffer( &l_d3dBufferDesc, &l_d3dInitData, &m_pDxBuffer );
-			dxDebugName( static_cast< DxRenderSystem * >( m_pRenderSystem ), m_pDxBuffer, ConstantBuffer );
+			dxTrack( static_cast< DxRenderSystem * >( m_pRenderSystem ), m_pDxBuffer, ConstantBuffer );
 		}
 
 		return l_hr == S_OK;

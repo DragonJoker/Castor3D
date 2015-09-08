@@ -205,7 +205,7 @@ namespace Dx11Render
 		if ( l_factory )
 		{
 			HRESULT l_hr = l_factory->CreateSwapChain( l_pRenderSystem->GetDevice(), &m_deviceParams, &m_pSwapChain );
-			dxDebugName( l_pRenderSystem, m_pSwapChain, SwapChain );
+			dxTrack( l_pRenderSystem, m_pSwapChain, SwapChain );
 			l_factory->Release();
 			bool l_bContinue = dxCheckError( l_hr, "CreateSwapChain" );
 
@@ -218,7 +218,7 @@ namespace Dx11Render
 			if ( l_bContinue )
 			{
 				l_hr = l_pRenderSystem->GetDevice()->CreateRenderTargetView( l_pRTTex, NULL, &m_pRenderTargetView );
-				dxDebugName( l_pRenderSystem, m_pRenderTargetView, ContextRTView );
+				dxTrack( l_pRenderSystem, m_pRenderTargetView, ContextRTView );
 				l_bContinue = dxCheckError( l_hr, "CreateRenderTargetView" );
 				l_pRTTex->Release();
 			}
@@ -250,7 +250,7 @@ namespace Dx11Render
 				l_descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 				l_descDSV.Texture2D.MipSlice = 0;
 				l_hr = l_pRenderSystem->GetDevice()->CreateDepthStencilView( l_pDSTex, &l_descDSV, &m_pDepthStencilView );
-				dxDebugName( l_pRenderSystem, m_pDepthStencilView, ContextDSView );
+				dxTrack( l_pRenderSystem, m_pDepthStencilView, ContextDSView );
 				l_bContinue = dxCheckError( l_hr, "CreateDepthStencilView" );
 				l_pDSTex->Release();
 			}

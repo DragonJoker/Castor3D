@@ -110,7 +110,7 @@ namespace Castor
 			if ( p_iErr != 0 )
 			{
 				std::map< FT_Error, std::string >::const_iterator l_it = MapErrors.find( p_iErr );
-				std::string l_strError = "ERROR : " + std::string( p_szName ) + " failed - " + str_utils::to_str( str_utils::to_string( p_iErr ) );
+				std::string l_strError = "ERROR : " + std::string( p_szName ) + " failed - " + string::to_str( string::to_string( p_iErr ) );
 
 				if ( l_it != MapErrors.end() )
 				{
@@ -142,7 +142,7 @@ namespace Castor
 			virtual void Initialise()
 			{
 				CHECK_FT_ERR( FT_Init_FreeType, &m_library );
-				CHECK_FT_ERR( FT_New_Face, m_library, str_utils::to_str( m_path ).c_str(), 0, &m_face );
+				CHECK_FT_ERR( FT_New_Face, m_library, string::to_str( m_path ).c_str(), 0, &m_face );
 				CHECK_FT_ERR( FT_Select_Charmap, m_face, FT_ENCODING_UNICODE );
 				CHECK_FT_ERR( FT_Set_Pixel_Sizes, m_face, 0, m_height );
 			}

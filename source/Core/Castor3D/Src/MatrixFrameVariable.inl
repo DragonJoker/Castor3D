@@ -530,7 +530,7 @@
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline void MatrixFrameVariable< T, Rows, Columns >::DoSetValueStr( Castor::String const & p_strValue, uint32_t p_uiIndex )
 	{
-		Castor::StringArray l_arrayLines = Castor::str_utils::split( p_strValue, cuT( ";" ) );
+		Castor::StringArray l_arrayLines = Castor::string::split( p_strValue, cuT( ";" ) );
 
 		if ( l_arrayLines.size() == Rows )
 		{
@@ -539,7 +539,7 @@
 			for ( uint32_t i = 0; i < Rows && l_bOK; i++ )
 			{
 				l_bOK = false;
-				Castor::StringArray l_arraySplitted = Castor::str_utils::split( l_arrayLines[i], cuT( ", \t" ) );
+				Castor::StringArray l_arraySplitted = Castor::string::split( l_arrayLines[i], cuT( ", \t" ) );
 
 				if ( l_arraySplitted.size() == Columns )
 				{

@@ -139,7 +139,7 @@ namespace Castor
 		template< typename FuncType >
 		bool GetFunction( FuncType & p_pfnFunction, char const * p_szName )throw()
 		{
-			return GetFunction( p_pfnFunction, str_utils::from_str( p_szName ) );
+			return GetFunction( p_pfnFunction, string::from_str( p_szName ) );
 		}
 		/**
 		 *\~english
@@ -156,7 +156,7 @@ namespace Castor
 		template< typename FuncType >
 		bool GetFunction( FuncType & p_pfnFunction, wchar_t const * p_wszName )throw()
 		{
-			return GetFunction( p_pfnFunction, str_utils::from_wstr( p_wszName ) );
+			return GetFunction( p_pfnFunction, string::from_wstr( p_wszName ) );
 		}
 		/**
 		 *\~english

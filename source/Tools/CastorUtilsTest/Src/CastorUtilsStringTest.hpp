@@ -15,28 +15,23 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___CUT_CastorUtilsTest___
-#define ___CUT_CastorUtilsTest___
+#ifndef ___CUT_STRING_TEST_H___
+#define ___CUT_STRING_TEST_H___
 
 #include "UnitTest.hpp"
 
 namespace Testing
 {
-	class CastorUtilsTest
+	class CastorUtilsStringTest
 		:	public TestCase
 	{
 	public:
-		CastorUtilsTest();
-		virtual ~CastorUtilsTest();
+		CastorUtilsStringTest();
+		virtual ~CastorUtilsStringTest();
 		virtual void Execute( uint32_t & p_errCount, uint32_t & p_testCount );
 
 	private:
 		void StringConversions( uint32_t & p_errCount, uint32_t & p_testCount );
-		void MatrixInversion( uint32_t & p_errCount, uint32_t & p_testCount );
-		void MatrixInversionComparison( uint32_t & p_errCount, uint32_t & p_testCount );
-		void ZipFile( uint32_t & p_errCount, uint32_t & p_testCount );
-		void TestPixelConversions( uint32_t & p_errCount, uint32_t & p_testCount );
-		void TestBufferConversions( uint32_t & p_errCount, uint32_t & p_testCount );
 	};
 }
 

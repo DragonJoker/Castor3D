@@ -298,7 +298,7 @@ namespace Castor
 		static value_type parse( String const & p_str )
 		{
 			value_type l_tReturn;
-			str_utils::parse( p_str, l_tReturn );
+			string::parse( p_str, l_tReturn );
 			return l_tReturn;
 		}
 		/**
@@ -614,7 +614,7 @@ namespace Castor
 		 */
 		static value_type parse( String const & p_strVal )
 		{
-			return p_strVal == cuT( "true" ) || p_strVal == cuT( "TRUE" ) || p_strVal == cuT( "1" ) || str_utils::to_int( p_strVal ) != 0;
+			return p_strVal == cuT( "true" ) || p_strVal == cuT( "TRUE" ) || p_strVal == cuT( "1" ) || string::to_int( p_strVal ) != 0;
 		}
 		/**
 		 *\~english

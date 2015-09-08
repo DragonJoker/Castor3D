@@ -40,7 +40,7 @@ namespace Castor3D
 	\remark		Contient les informations des sommets d'un submesh
 	*/
 	class C3D_API VertexBuffer
-		:	public CpuBuffer< uint8_t >
+		: public CpuBuffer< uint8_t >
 	{
 	public:
 		/**
@@ -55,8 +55,8 @@ namespace Castor3D
 		 */
 		template< uint32_t N >
 		VertexBuffer( RenderSystem * p_pRenderSystem, BufferElementDeclaration const( & p_pElements )[N] )
-			:	CpuBuffer< uint8_t >( p_pRenderSystem )
-			,	m_bufferDeclaration( p_pElements, N )
+			: CpuBuffer< uint8_t >( p_pRenderSystem )
+			, m_bufferDeclaration( p_pElements, N )
 		{
 		}
 		/**
@@ -90,6 +90,25 @@ namespace Castor3D
 		BufferDeclaration const & GetDeclaration()const
 		{
 			return m_bufferDeclaration;
+		}
+		/**
+		 *\~english
+		 *\brief		Link all elements to this buffer
+		 *\param[in]	p_begin, p_end	The elements array iterators
+		 *\~french
+		 *\brief		Lie tous les éméents à ce tampon
+		 *\param[in]	p_begin, p_end	Les itérateurs du tableau d'éléments
+		 */
+		template< typename ItType >
+		void LinkCoords( ItType p_begin, ItType p_end )
+		{
+			size_t i = 0;
+			uint32_t l_stride = m_bufferDeclaration.GetStride();
+
+			for ( auto && l_it = p_begin; l_it != p_end; ++l_it )
+			{
+				( *l_it )->LinkCoords( &CpuBuffer< uint8_t >::data()[i++ * l_stride], l_stride );
+			}
 		}
 
 	private:

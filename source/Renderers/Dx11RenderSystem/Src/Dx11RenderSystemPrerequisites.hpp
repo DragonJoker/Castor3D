@@ -147,12 +147,12 @@ DECLARE_GUID( IID_IDXGIFactory,					0x7b7166ec, 0x21c7, 0x44ae, 0xb2, 0x1a, 0xc9
 
 #	if !defined( NDEBUG )
 #		define dxCheckError( hr, txt ) Dx11Render::DirectX11::CheckError( hr, cuT( txt ) )
-#		define dxDebugName( rs, obj, type ) rs->SetDxDebugName( obj, #type, __FILE__, __LINE__ )
-#		define dxUnDebugName( rs, obj ) rs->UnsetDxDebugName( obj )
+#		define dxTrack( rs, obj, type ) rs->Track( obj, #type, __FILE__, __LINE__ )
+#		define dxUntrack( rs, obj ) rs->Untrack( obj )
 #	else
 #		define dxCheckError( hr, txt ) SUCCEEDED( hr )
-#		define dxDebugName( rs, obj, txt )
-#		define dxUnDebugName( rs, obj )
+#		define dxTrack( rs, obj, txt )
+#		define dxUntrack( rs, obj )
 #	endif
 
 namespace Dx11Render
@@ -414,7 +414,7 @@ namespace Dx11Render
 	{
 		if ( p_ptReleasable )
 		{
-			dxUnDebugName( static_cast< DxRenderSystem * >( p_rs ), p_ptReleasable );
+			dxUntrack( static_cast< DxRenderSystem * >( p_rs ), p_ptReleasable );
 			p_ptReleasable->Release();
 			p_ptReleasable = NULL;
 		}

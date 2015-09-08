@@ -220,23 +220,10 @@ namespace Castor3D
 
 	void Submesh::Initialise()
 	{
-		m_pGeometryBuffers->GetVertexBuffer().Create();
-		m_pGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
-
-		if ( m_pGeometryBuffers->HasIndexBuffer() )
+		if ( m_pGeometryBuffers->Create() )
 		{
-			m_pGeometryBuffers->GetIndexBuffer().Create();
-			m_pGeometryBuffers->GetIndexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
+			m_bInitialised = m_pGeometryBuffers->Initialise( nullptr, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
 		}
-
-		if ( m_pGeometryBuffers->HasMatrixBuffer() )
-		{
-			m_pGeometryBuffers->GetMatrixBuffer().Create();
-			m_pGeometryBuffers->GetMatrixBuffer().Initialise( eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
-		}
-
-		m_pGeometryBuffers->Initialise();
-		m_bInitialised = true;
 	}
 
 	void Submesh::Cleanup()
@@ -1078,22 +1065,8 @@ namespace Castor3D
 
 		if ( m_pGeometryBuffers )
 		{
-			m_pGeometryBuffers->GetVertexBuffer().Cleanup();
-			m_pGeometryBuffers->GetVertexBuffer().Destroy();
-
-			if ( m_pGeometryBuffers->HasIndexBuffer() )
-			{
-				m_pGeometryBuffers->GetIndexBuffer().Cleanup();
-				m_pGeometryBuffers->GetIndexBuffer().Destroy();
-			}
-
-			if ( m_pGeometryBuffers->HasMatrixBuffer() )
-			{
-				m_pGeometryBuffers->GetMatrixBuffer().Cleanup();
-				m_pGeometryBuffers->GetMatrixBuffer().Destroy();
-			}
-
 			m_pGeometryBuffers->Cleanup();
+			m_pGeometryBuffers->Destroy();
 		}
 	}
 
@@ -1121,57 +1094,27 @@ namespace Castor3D
 	bool Submesh::DoPrepareGeometryBuffers( Pass const & p_pass )
 	{
 		ShaderProgramBaseSPtr l_pProgram = p_pass.GetShader< ShaderProgramBase >();
-		bool l_bUseShader = l_pProgram && l_pProgram->GetStatus() == ePROGRAM_STATUS_LINKED;
 
-		if ( m_eCurDrawType != m_ePrvDrawType || !m_pGeometryBuffers )
+		if ( l_pProgram && l_pProgram->GetStatus() == ePROGRAM_STATUS_LINKED )
+		{
+			l_pProgram.reset();
+		}
+
+		if ( m_pGeometryBuffers && ( m_eCurDrawType != m_ePrvDrawType || m_bDirty ) )
 		{
 			m_ePrvDrawType = m_eCurDrawType;
-			m_pGeometryBuffers->GetVertexBuffer().Cleanup();
-
-			if ( l_bUseShader )
-			{
-				m_pGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, l_pProgram );
-			}
-			else
-			{
-				m_pGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
-			}
-
-			if ( m_pGeometryBuffers->HasIndexBuffer() )
-			{
-				m_pGeometryBuffers->GetIndexBuffer().Cleanup();
-				m_pGeometryBuffers->GetIndexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
-			}
-
-			if ( m_pGeometryBuffers->HasMatrixBuffer() )
-			{
-				m_pGeometryBuffers->GetMatrixBuffer().Cleanup();
-				m_pGeometryBuffers->GetMatrixBuffer().Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, l_pProgram );
-			}
-
-			if ( m_pGeometryBuffers )
-			{
-				m_pGeometryBuffers->Cleanup();
-			}
-
-			m_pGeometryBuffers->Initialise();
-		}
-		else if ( m_bDirty )
-		{
-			m_pGeometryBuffers->Initialise();
+			m_bDirty = false;
+			m_pGeometryBuffers->Cleanup();
+			m_pGeometryBuffers->Initialise( l_pProgram, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
 		}
 
 		auto l_matrixBuffer = p_pass.GetMatrixBuffer();
 
-		if ( l_bUseShader && l_matrixBuffer )
+		if ( l_pProgram && l_matrixBuffer )
 		{
 			GetEngine()->GetRenderSystem()->GetPipeline()->ApplyMatrices( *l_matrixBuffer, 0xFFFFFFFFFFFFFFFF );
 		}
-		else
-		{
-			l_bUseShader = true;
-		}
 
-		return l_bUseShader;
+		return true;
 	}
 }

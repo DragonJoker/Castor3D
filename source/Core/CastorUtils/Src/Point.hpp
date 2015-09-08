@@ -1144,7 +1144,7 @@ namespace Castor
 		 *\param[in]	p_ptA, p_ptB	Les points
 		 *\return		Le produit scalaire
 		 */
-		template< typename T, uint32_t Count > static T dot( Point< T, Count > const & p_ptA, Point< T, Count > const & p_ptB );
+		template< typename T, typename U, uint32_t Count > static T dot( Point< T, Count > const & p_ptA, Point< T, Count > const & p_ptB );
 		/**
 		 *\~english
 		 *\brief		Computes the trigonometric cosine of the angle between 2 points
@@ -1223,7 +1223,7 @@ namespace Castor
 		 *\param[in]	p_ptA, p_ptB	Les points
 		 *\return		Le produit scalaire
 		 */
-		template< typename T, uint32_t Count > static T dot( Coords< T, Count > const & p_ptA, Point< T, Count > const & p_ptB );
+		template< typename T, typename U, uint32_t Count > static T dot( Coords< T, Count > const & p_ptA, Point< T, Count > const & p_ptB );
 		/**
 		 *\~english
 		 *\brief		Computes the trigonometric cosine of the angle between 2 points
@@ -1245,7 +1245,7 @@ namespace Castor
 		 *\param[in]	p_ptA, p_ptB	Les points
 		 *\return		Le produit scalaire
 		 */
-		template< typename T, uint32_t Count > static T dot( Point< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB );
+		template< typename T, typename U, uint32_t Count > static T dot( Point< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB );
 		/**
 		 *\~english
 		 *\brief		Computes the trigonometric cosine of the angle between 2 points

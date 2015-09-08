@@ -43,16 +43,16 @@ namespace Castor3D
 		if ( !p_pLibrary->GetFunction( m_pfnGetName, GetNameFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] plugin GetName function : " );
-			l_strError += str_utils::to_string( dlerror() );
+			l_strError += string::to_string( dlerror() );
 			l_strError += System::GetLastErrorText();
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), true );
+			CASTOR_PLUGIN_EXCEPTION( string::to_str( l_strError ), true );
 		}
 
 		if ( !p_pLibrary->GetFunction( m_pfnGetRequiredVersion, GetRequiredVersionFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] plugin GetRequiredVersion function : " );
-			l_strError += str_utils::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), true );
+			l_strError += string::to_string( dlerror() );
+			CASTOR_PLUGIN_EXCEPTION( string::to_str( l_strError ), true );
 		}
 
 		p_pLibrary->GetFunction( m_pfnOnLoad, GetOnLoadFunctionABIName );

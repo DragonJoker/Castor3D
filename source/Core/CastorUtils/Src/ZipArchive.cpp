@@ -54,7 +54,7 @@ namespace Castor
 
 				if ( ( p_mode & File::eOPEN_MODE_WRITE ) == File::eOPEN_MODE_WRITE )
 				{
-					std::remove( str_utils::to_str( p_path ).c_str() );
+					std::remove( string::to_str( p_path ).c_str() );
 					l_mode |= ZIP_CREATE;
 				}
 
@@ -64,15 +64,15 @@ namespace Castor
 				}
 
 				int l_result = 0;
-				m_zip = zip_open( str_utils::to_str( p_path ).c_str(), l_mode, &l_result );
+				m_zip = zip_open( string::to_str( p_path ).c_str(), l_mode, &l_result );
 
 				if ( !m_zip )
 				{
-					CASTOR_EXCEPTION( "Couldn't create archive file " + str_utils::to_str( libzip::GetError( l_result ) ) );
+					CASTOR_EXCEPTION( "Couldn't create archive file " + string::to_str( libzip::GetError( l_result ) ) );
 				}
 				else if ( l_result != ZIP_ER_OK )
 				{
-					CASTOR_EXCEPTION( "Couldn't create archive file " + str_utils::to_str( libzip::GetError( l_result ) ) );
+					CASTOR_EXCEPTION( "Couldn't create archive file " + string::to_str( libzip::GetError( l_result ) ) );
 				}
 			}
 
@@ -92,7 +92,7 @@ namespace Castor
 			virtual bool FindFolder( String const & p_folder )
 			{
 				bool l_return = false;
-				std::string l_folder = str_utils::to_str( p_folder );
+				std::string l_folder = string::to_str( p_folder );
 
 				//Search for the folder
 				struct zip_stat l_stat = { 0 };
@@ -115,7 +115,7 @@ namespace Castor
 			virtual bool FindFile( String const & p_file )
 			{
 				bool l_return = false;
-				std::string l_file = str_utils::to_str( p_file );
+				std::string l_file = string::to_str( p_file );
 
 				//Search for the folder
 				struct zip_stat l_stat = { 0 };
@@ -190,8 +190,8 @@ namespace Castor
 
 						//Read the compressed file
 						zip_uint64_t l_read = 0;
-						Path l_name = str_utils::to_string( l_stat.name );
-						StringArray l_folders = str_utils::split( l_name.GetPath(), str_utils::to_string( Path::Separator ), 100, false );
+						Path l_name = string::to_string( l_stat.name );
+						StringArray l_folders = string::split( l_name.GetPath(), string::to_string( Path::Separator ), 100, false );
 
 						if ( !l_folders.empty() )
 						{
@@ -230,7 +230,7 @@ namespace Castor
 								zip_error_get( m_zip, &l_zep, &l_sep );
 								std::string l_error = libzip::GetError( l_zep ) + " - " + libzip::GetError( l_sep );
 								zip_fclose( l_zipfile );
-								CASTOR_EXCEPTION( "Couldn't read ZIP archive file " + str_utils::to_str( l_name ) + " : " + l_error );
+								CASTOR_EXCEPTION( "Couldn't read ZIP archive file " + string::to_str( l_name ) + " : " + l_error );
 							}
 						}
 
@@ -269,11 +269,11 @@ namespace Castor
 			{
 				for ( std::list< String >::const_iterator l_it = p_files.begin(); l_it != p_files.end(); ++l_it )
 				{
-					std::string l_file = str_utils::to_str( p_path + cuT( "/" ) + ( *l_it ) );
+					std::string l_file = string::to_str( p_path + cuT( "/" ) + ( *l_it ) );
 
-					if ( !File::FileExists( str_utils::from_str( l_file ) ) )
+					if ( !File::FileExists( string::from_str( l_file ) ) )
 					{
-						CASTOR_EXCEPTION( "Couldn't file doesn't exist : " + l_file );
+						CASTOR_EXCEPTION( "The file doesn't exist: " + l_file );
 					}
 
 					struct zip_source * l_source = zip_source_file( m_zip, l_file.c_str(), 0, 0 );
@@ -283,7 +283,7 @@ namespace Castor
 						if ( zip_add( m_zip, l_file.c_str(), l_source ) == -1 )
 						{
 							std::string l_error = zip_strerror( m_zip );
-							CASTOR_EXCEPTION( "Couldn't add file to a ZIP archive : " + l_error );
+							CASTOR_EXCEPTION( "Couldn't add file to a ZIP archive: " + l_error );
 						}
 
 						struct zip_stat l_stat = { 0 };
@@ -291,7 +291,7 @@ namespace Castor
 						if ( zip_stat( m_zip, l_file.c_str(), 0, &l_stat ) == -1 )
 						{
 							std::string l_error = zip_strerror( m_zip );
-							CASTOR_EXCEPTION( "Couldn't add file to a ZIP archive : " + l_error );
+							CASTOR_EXCEPTION( "Couldn't add file to a ZIP archive: " + l_error );
 						}
 						else
 						{
@@ -301,7 +301,7 @@ namespace Castor
 					else
 					{
 						std::string l_error = zip_strerror( m_zip );
-						CASTOR_EXCEPTION( "Couldn't write ZIP archive : " + l_error );
+						CASTOR_EXCEPTION( "Couldn't write ZIP archive: " + l_error );
 					}
 				}
 			}
@@ -467,7 +467,7 @@ namespace Castor
 
 			for ( StringArray::iterator l_it = l_entries.begin(); l_it != l_entries.end(); ++l_it )
 			{
-				str_utils::replace( *l_it, m_rootFolder + Path::Separator, String() );
+				string::replace( *l_it, m_rootFolder + Path::Separator, String() );
 				AddFile( *l_it );
 			}
 

@@ -371,6 +371,16 @@ namespace Castor3D
 		{
 			return m_pEngine;
 		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the view matrix
+		 *\~french
+		 *\brief		Récupère la matrice de vue
+		 */
+		virtual Castor::Matrix4x4r const & GetView()const
+		{
+			return m_view;
+		}
 
 	private:
 		friend class Scene;
@@ -383,6 +393,8 @@ namespace Castor3D
 		eTOPOLOGY m_ePrimitiveType;
 		//!\~english The view frustum's planes	\~french Les plans du frustum de vue
 		Castor::PlaneEquation< real > m_planes[eFRUSTUM_PLANE_COUNT];
+		//!\~english The view matrix	\~french La matrice vue
+		Castor::Matrix4x4r m_view;
 	};
 }
 

@@ -112,7 +112,7 @@ namespace GlRender
 				{
 					char * l_pTmp = new char[l_iLength];
 					m_gl.GetProgramInfoLog( m_programObject, l_iLength, &l_iLength2, l_pTmp );
-					strLog = str_utils::from_str( l_pTmp );
+					strLog = string::from_str( l_pTmp );
 					delete [] l_pTmp;
 				}
 			}
@@ -151,7 +151,7 @@ namespace GlRender
 
 		if ( m_programObject != eGL_INVALID_INDEX && m_gl.IsProgram( m_programObject ) )
 		{
-			l_iReturn = m_gl.GetAttribLocation( m_programObject, str_utils::to_str( p_strName ).c_str() );
+			l_iReturn = m_gl.GetAttribLocation( m_programObject, string::to_str( p_strName ).c_str() );
 		}
 
 		return l_iReturn;

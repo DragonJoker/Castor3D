@@ -88,12 +88,12 @@ namespace Dx11Render
 					l_descTex.CPUAccessFlags = 0;
 					l_descTex.MiscFlags = 0;
 					l_hr = m_pRenderSystem->GetDevice()->CreateTexture2D( &l_descTex, NULL, &m_pTexture );
-					dxDebugName( m_pRenderSystem, m_pTexture, RTTexture );
+					dxTrack( m_pRenderSystem, m_pTexture, RTTexture );
 
 					if ( l_hr == S_OK )
 					{
 						l_hr = m_pRenderSystem->GetDevice()->CreateRenderTargetView( m_pTexture, NULL, reinterpret_cast< ID3D11RenderTargetView ** >( &m_pSurface ) );
-						dxDebugName( m_pRenderSystem, m_pSurface, RTView );
+						dxTrack( m_pRenderSystem, m_pSurface, RTView );
 					}
 				}
 				else
@@ -111,12 +111,12 @@ namespace Dx11Render
 					l_descDepth.CPUAccessFlags = 0;
 					l_descDepth.MiscFlags = 0;
 					l_hr = m_pRenderSystem->GetDevice()->CreateTexture2D( &l_descDepth, NULL, &m_pTexture );
-					dxDebugName( m_pRenderSystem, m_pTexture, DSTexture );
+					dxTrack( m_pRenderSystem, m_pTexture, DSTexture );
 
 					if ( l_hr == S_OK )
 					{
 						l_hr = m_pRenderSystem->GetDevice()->CreateDepthStencilView( m_pTexture, NULL, reinterpret_cast< ID3D11DepthStencilView ** >( &m_pSurface ) );
-						dxDebugName( m_pRenderSystem, m_pSurface, DSView );
+						dxTrack( m_pRenderSystem, m_pSurface, DSView );
 					}
 				}
 

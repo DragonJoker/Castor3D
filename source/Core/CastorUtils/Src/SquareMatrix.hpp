@@ -563,19 +563,6 @@ namespace Castor
 	template< typename T, uint32_t Rows, typename U > SquareMatrix< T, Rows > operator /( SquareMatrix< T, Rows > const & p_mtxA, T const & p_tValue );
 	/**
 	 *\~english
-	 *\brief		Multiplication operator
-	 *\param[in]	p_mtxA		The matrix to multiply
-	 *\param[in]	p_ptVector	The vector
-	 *\return		The multiplication result
-	 *\~french
-	 *\brief		Opérateur de multiplication
-	 *\param[in]	p_mtxA		La matrice à multiplier
-	 *\param[in]	p_ptVector	Le vecteur
-	 *\return		Le résultat de la multiplication
-	 */
-	template< typename T, uint32_t Rows, typename U > Point< T, Rows > operator *( SquareMatrix< T, Rows > const & p_mtxA, Point< U, Rows > const & p_ptVector );
-	/**
-	 *\~english
 	 *\brief		Addition operator
 	 *\param[in]	p_matrix	The matrix
 	 *\param[in]	p_tValue	The value to add

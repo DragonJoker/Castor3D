@@ -84,12 +84,12 @@ namespace Dx11Render
 		return l_return;
 	}
 
-	bool DxGeometryBuffers::Initialise()
+	bool DxGeometryBuffers::DoInitialise()
 	{
 		return true;
 	}
 
-	void DxGeometryBuffers::Cleanup()
+	void DxGeometryBuffers::DoCleanup()
 	{
 	}
 }

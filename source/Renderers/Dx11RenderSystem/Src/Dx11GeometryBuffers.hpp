@@ -33,8 +33,10 @@ namespace Dx11Render
 
 		virtual bool Draw( Castor3D::eTOPOLOGY p_ePrimitiveType, Castor3D::ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex );
 		virtual bool DrawInstanced( Castor3D::eTOPOLOGY p_ePrimitiveType, Castor3D::ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex, uint32_t p_uiCount );
-		virtual bool Initialise();
-		virtual void Cleanup();
+
+	private:
+		virtual bool DoInitialise();
+		virtual void DoCleanup();
 
 	private:
 		DxRenderSystem * m_pRenderSystem;

@@ -35,7 +35,7 @@ namespace Castor3D
 			Submesh & l_submeshBase	= *GetMesh()->CreateSubmesh();
 			Submesh & l_submeshSide	= *GetMesh()->CreateSubmesh();
 			//CALCUL DE LA POSITION DES POINTS
-			real angleRotation = Angle::PiMult2 / m_nbFaces;
+			real angleRotation = real( Angle::PiMult2 / m_nbFaces );
 			uint32_t i = 0;
 			real l_rCos, l_rSin;
 

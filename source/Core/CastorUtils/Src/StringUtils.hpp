@@ -33,7 +33,7 @@ namespace Castor
 	\~french
 	\brief 		Classe regroupant des fonctions sur les chaînes de caractères
 	*/
-	namespace str_utils
+	namespace string
 	{
 		/**
 		 *\~english
@@ -510,7 +510,7 @@ namespace Castor
 			{
 				static std::string Cast( std::wstring const & p_src )
 				{
-					return str_utils::to_str( p_src );
+					return string::to_str( p_src );
 				}
 			};
 
@@ -518,7 +518,7 @@ namespace Castor
 			{
 				static std::wstring Cast( std::string const & p_src )
 				{
-					return str_utils::to_wstr( p_src );
+					return string::to_wstr( p_src );
 				}
 			};
 		}

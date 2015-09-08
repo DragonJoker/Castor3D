@@ -74,9 +74,9 @@ namespace Castor
 
 			if ( l_dwError != ERROR_SUCCESS && ::FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, l_dwError, 0, LPTSTR( &l_szError ), 0, NULL ) != 0 )
 			{
-				l_strReturn = str_utils::to_string( l_dwError ) + cuT( " (" ) + l_szError + cuT( ")" );
-				str_utils::replace( l_strReturn, cuT( "\r" ), cuT( "" ) );
-				str_utils::replace( l_strReturn, cuT( "\n" ), cuT( "" ) );
+				l_strReturn = string::to_string( l_dwError ) + cuT( " (" ) + l_szError + cuT( ")" );
+				string::replace( l_strReturn, cuT( "\r" ), cuT( "" ) );
+				string::replace( l_strReturn, cuT( "\n" ), cuT( "" ) );
 				LocalFree( l_szError );
 			}
 
@@ -141,8 +141,8 @@ namespace Castor
 
 			if ( l_error != 0 && ( l_szError = strerror( l_error ) ) != NULL )
 			{
-				l_strReturn = str_utils::to_string( l_error ) + cuT( " (" ) + str_utils::from_str( l_szError ) + cuT( ")" );
-				str_utils::replace( l_strReturn, cuT( "\n" ), cuT( "" ) );
+				l_strReturn = string::to_string( l_error ) + cuT( " (" ) + string::from_str( l_szError ) + cuT( ")" );
+				string::replace( l_strReturn, cuT( "\n" ), cuT( "" ) );
 			}
 
 			return l_strReturn;

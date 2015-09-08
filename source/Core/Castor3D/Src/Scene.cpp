@@ -1596,21 +1596,8 @@ namespace Castor3D
 
 	void Scene::DoRenderSubmeshNonInstanced( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology )
 	{
-		SubmeshSPtr l_pSubmesh = p_node.m_pSubmesh;
-		SceneNodeSPtr l_pNode = p_node.m_pNode;
-		p_pipeline.PushMatrix();
-
-		if ( ( l_pSubmesh->GetProgramFlags() & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
-		{
-			p_pipeline.MultMatrix( l_pNode->GetDerivedTransformationMatrix().get_inverse() );
-		}
-		else
-		{
-			p_pipeline.MultMatrix( l_pNode->GetDerivedTransformationMatrix() );
-		}
-
+		p_pipeline.SetModel( p_node.m_pNode->GetDerivedTransformationMatrix() );
 		DoRenderSubmesh( p_technique, p_pipeline, p_node, p_eTopology );
-		p_pipeline.PopMatrix();
 	}
 
 	void Scene::DoRenderSubmesh( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology )
@@ -1648,12 +1635,21 @@ namespace Castor3D
 			}
 
 			FrameVariableBufferSPtr l_sceneBuffer = l_pass->GetSceneBuffer();
-			DoBindLights( *l_pProgram, *l_sceneBuffer );
-			DoBindCamera( *l_sceneBuffer );
+
+			if ( l_sceneBuffer )
+			{
+				DoBindLights( *l_pProgram, *l_sceneBuffer );
+				DoBindCamera( *l_sceneBuffer );
+			}
+
 			l_pass->Render( l_uiCount++, l_uiSize );
 			p_node.m_pSubmesh->Draw( p_eTopology, *l_pass );
 			l_pass->EndRender();
-			DoUnbindLights( *l_pProgram, *l_sceneBuffer );
+
+			if ( l_sceneBuffer )
+			{
+				DoUnbindLights( *l_pProgram, *l_sceneBuffer );
+			}
 		}
 	}
 
@@ -1826,7 +1822,7 @@ namespace Castor3D
 			{
 				if ( l_renderSystem->GetMainContext()->IsDeferredShadingSet() )
 				{
-					//m_pCameraPos->SetValue( Castor::MtxUtils::mult( m_pRenderSystem->GetPipeline()->GetMatrix( eMTXMODE_VIEW ), l_position ) );
+					//m_pCameraPos->SetValue( Castor::matrix::mult( m_pRenderSystem->GetPipeline()->GetMatrix( eMTXMODE_VIEW ), l_position ) );
 					l_cameraPos->SetValue( l_position );
 				}
 				else

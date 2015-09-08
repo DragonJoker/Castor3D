@@ -29,10 +29,10 @@ namespace Castor
 	\version	0.1.0.0
 	\date		09/02/2010
 	\~english
-	\brief		Templated column major matrix representation
+	\brief		Templated row major matrix representation
 	\remark		Can hold any type which has a defined Policy
 	\~french
-	\brief		Représentation d'une matrice column major, le type des éléments et les dimensions de la matrice sont en template
+	\brief		Représentation d'une matrice row major, le type des éléments et les dimensions de la matrice sont en template
 	\remark		Peut contenir n'importe quel élément qui a une Castor::Policy
 	*/
 	template< typename T, uint32_t Rows, uint32_t Columns >
@@ -43,8 +43,8 @@ namespace Castor
 		typedef Castor::Policy< __value_type > __policy;
 		typedef Matrix< __value_type, Rows, Columns > __type;
 		typedef Matrix< __value_type, Columns, Rows > __transpose;
-		typedef Point< __value_type, Columns > __row;
-		typedef Coords< __value_type, Rows > __column;
+		typedef Coords< __value_type, Columns > __row;
+		typedef Point< __value_type, Rows > __column;
 		static const std::size_t size = sizeof( T ) * Rows * Columns;
 
 	public:
@@ -145,26 +145,37 @@ namespace Castor
 		void set_row( uint32_t p_uiRow, Point< value_type, Columns > const & p_row );
 		/**
 		 *\~english
-		 *\brief		Retrieves a line
-		 *\param[in]	p_uiRow	The line index
-		 *\return		The line
+		 *\brief		Retrieves a row
+		 *\param[in]	p_uiRow	The row index
+		 *\return		The row
 		 *\~french
 		 *\brief		Récupère une ligne
 		 *\param[in]	p_uiRow	L'index de la ligne
 		 *\return		La ligne
 		 */
-		row_type get_row( uint32_t p_uiRow )const;
+		Point< value_type, Columns > get_row( uint32_t p_uiRow )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves a line
-		 *\param[in]	p_uiRow		The line index
-		 *\param[out]	p_mResult	Receives the line values
+		 *\brief		Retrieves a row
+		 *\param[in]	p_uiRow	The row index
+		 *\return		The row
+		 *\~french
+		 *\brief		Récupère une ligne
+		 *\param[in]	p_uiRow	L'index de la ligne
+		 *\return		La ligne
+		 */
+		row_type get_row( uint32_t p_uiRow );
+		/**
+		 *\~english
+		 *\brief		Retrieves a row
+		 *\param[in]	p_uiRow		The row index
+		 *\param[out]	p_mResult	Receives the row values
 		 *\~french
 		 *\brief		Récupère une ligne
 		 *\param[in]	p_uiRow		L'index de la ligne
 		 *\param[out]	p_mResult	Reçoit les valeurs de la ligne
 		 */
-		void get_row( uint32_t p_uiRow, row_type & p_mResult )const;
+		void get_row( uint32_t p_uiRow, Point< value_type, Columns > & p_mResult )const;
 		/**
 		 *\~english
 		 *\brief		Sets the values for the given column
@@ -202,17 +213,6 @@ namespace Castor
 		 *\~english
 		 *\brief		Retrieves a column
 		 *\param[in]	p_uiColumn	The column index
-		 *\param[out]	p_mResult	Receives the column values
-		 *\~french
-		 *\brief		Récupère une colonne
-		 *\param[in]	p_uiColumn	L'index de la colonne
-		 *\param[out]	p_mResult	Reçoit les valeurs de la colonne
-		 */
-		void get_column( uint32_t p_uiColumn, Point< value_type, Rows > & p_mResult )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves a column
-		 *\param[in]	p_uiColumn	The column index
 		 *\return		The column
 		 *\~french
 		 *\brief		Récupère une colonne
@@ -220,6 +220,17 @@ namespace Castor
 		 *\return		La colonne
 		 */
 		col_type get_column( uint32_t p_uiColumn );
+		/**
+		 *\~english
+		 *\brief		Retrieves a column
+		 *\param[in]	p_uiColumn	The column index
+		 *\param[out]	p_mResult	Receives the column values
+		 *\~french
+		 *\brief		Récupère une colonne
+		 *\param[in]	p_uiColumn	L'index de la colonne
+		 *\param[out]	p_mResult	Reçoit les valeurs de la colonne
+		 */
+		void get_column( uint32_t p_uiColumn, Point< value_type, Rows > & p_mResult )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the value at the given position
@@ -309,26 +320,6 @@ namespace Castor
 		void get_transposed( transpose_type & p_mResult )const;
 		/**
 		 *\~english
-		 *\brief		Computes and returns the triangular of this matrix
-		 *\return		The triangular
-		 *\~french
-		 *\brief		Calcule et renvoie la triangulaire de cette matrice
-		 *\return		La triangulaire
-		 */
-		my_type get_triangle()const;
-		/**
-		 *\~english
-		 *\brief		Computes and returns a Jordan matrix
-		 *\param[in]	p_tLambda	Ther Jordan value
-		 *\return		The Jordan matrix
-		 *\~french
-		 *\brief		Calcule et renvoie une matrice de Jordan
-		 *\param[in]	p_tLambda	La valeur de Jordan
-		 *\return		La matrice de Jordan
-		 */
-		my_type get_jordan( value_type p_tLambda )const;
-		/**
-		 *\~english
 		 *\brief		Computes and returns an identity matrix
 		 *\return		The identity matrix
 		 *\~french
@@ -345,22 +336,6 @@ namespace Castor
 		 *\return		La trace
 		 */
 		value_type get_trace()const;
-		/**
-		 *\~english
-		 *\brief		Sets this matrix to its triangular
-		 *\~french
-		 *\brief		Définit cette matrice comme sa triangulaire
-		 */
-		void set_triangle();
-		/**
-		 *\~english
-		 *\brief		Sets this matrix to a Jordan one
-		 *\param[in]	p_tLambda	The Jordan value
-		 *\~french
-		 *\brief		Définit cette matrice à une matrice de Jordan
-		 *\param[in]	p_tLambda	La valeur de Jordan
-		 */
-		void set_jordan( value_type p_tLambda );
 		/**
 		 *\~english
 		 *\brief		Sets this matrix to identity
@@ -403,6 +378,17 @@ namespace Castor
 		template< typename Type > Matrix< T, Rows, Columns > & operator=( Matrix< Type, Rows, Columns > const & p_matrix );
 		/**
 		 *\~english
+		 *\brief		Conversion Copy assignment operator
+		 *\param[in]	p_pMatrix	The data pointer to copy
+		 *\return		A reference to this Matrix object
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie convertie
+		 *\param[in]	p_pMatrix	Le pointeur sur les données à copier
+		 *\return		Une référence sur cet objet Matrix
+		 */
+		template< typename Type > Matrix< T, Rows, Columns > & operator=( Type const * p_pMatrix );
+		/**
+		 *\~english
 		 *\brief		Addition assignment operator
 		 *\param[in]	p_matrix	The Matrix object to add
 		 *\return		A reference to this Matrix object
@@ -423,39 +409,6 @@ namespace Castor
 		 *\return		Une référence sur cet objet Matrix
 		 */
 		template< typename Type > Matrix< T, Rows, Columns > & operator-=( Matrix< Type, Rows, Columns > const & p_matrix );
-		/**
-		 *\~english
-		 *\brief		Conversion Copy assignment operator
-		 *\param[in]	p_pMatrix	The data pointer to copy
-		 *\return		A reference to this Matrix object
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie convertie
-		 *\param[in]	p_pMatrix	Le pointeur sur les données à copier
-		 *\return		Une référence sur cet objet Matrix
-		 */
-		template< typename Type > Matrix< T, Rows, Columns > & operator=( Type const * p_pMatrix );
-		/**
-		 *\~english
-		 *\brief		Addition assignment operator
-		 *\param[in]	p_pMatrix	The data pointer to add
-		 *\return		A reference to this Matrix object
-		 *\~french
-		 *\brief		Opérateur d'affectation par addition
-		 *\param[in]	p_pMatrix	Le pointeur sur les données à ajouter
-		 *\return		Une référence sur cet objet Matrix
-		 */
-		template< typename Type > Matrix< T, Rows, Columns > & operator+=( Type const * p_pMatrix );
-		/**
-		 *\~english
-		 *\brief		Substraction assignment operator
-		 *\param[in]	p_pMatrix	The data pointer to substract
-		 *\return		A reference to this Matrix object
-		 *\~french
-		 *\brief		Opérateur d'affectation par soustraction
-		 *\param[in]	p_pMatrix	Le pointeur sur les données à soustraire
-		 *\return		Une référence sur cet objet Matrix
-		 */
-		template< typename Type > Matrix< T, Rows, Columns > & operator-=( Type const * p_pMatrix );
 		/**
 		 *\~english
 		 *\brief		Addition assignment operator
@@ -530,14 +483,11 @@ namespace Castor
 	protected:
 		my_type rec_get_minor( uint32_t x, uint32_t y, uint32_t p_uiRows, uint32_t p_uiCols )const;
 
-#if !defined( NDEBUG )
-		void do_update_debug()const;
-#endif
-
 	protected:
 		bool m_bOwnCoords;
 		value_type * m_pPointer;
 #if !defined( NDEBUG )
+		void do_update_debug()const;
 		mutable value_type * m_debugData[Columns][Rows];
 #endif
 	};
@@ -608,7 +558,20 @@ namespace Castor
 	 *\param[in]	p_ptVector	Le vecteur
 	 *\return		Le résultat de la multiplication
 	 */
-	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Point< T, Rows > operator*( Matrix< T, Rows, Columns > const  & p_mtxA, Point< U, Columns > const &	p_ptVector );
+	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Point< T, Rows > operator*( Matrix< T, Rows, Columns > const & p_mtxA, Point< U, Columns > const & p_ptVector );
+	/**
+	 *\~english
+	 *\brief		Multiplication operator
+	 *\param[in]	p_ptVector	The vector
+	 *\param[in]	p_mtxA		The matrix to multiply
+	 *\return		The multiplication result
+	 *\~french
+	 *\brief		Opérateur de multiplication
+	 *\param[in]	p_ptVector	Le vecteur
+	 *\param[in]	p_mtxA		La matrice à multiplier
+	 *\return		Le résultat de la multiplication
+	 */
+	template< typename T, uint32_t Rows, uint32_t Columns, typename U > Point< T, Columns > operator*( Point< T, Rows > const & p_ptVector, Matrix< U, Rows, Columns > const & p_mtxA );
 	/**
 	 *\~english
 	 *\brief		Addition operator

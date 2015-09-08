@@ -106,7 +106,7 @@ bool DxPipelineImplHlsl::MultMatrix( real const * p_matrix )
 
 bool DxPipelineImplHlsl::Perspective( Angle const & p_aFOVY, real p_rRatio, real p_rNear, real p_rFar )
 {
-	Castor::MtxUtils::perspective_lh( GetCurrentMatrix(), p_aFOVY, p_rRatio, p_rNear, p_rFar );
+	Castor::matrix::perspective( GetCurrentMatrix(), p_aFOVY, p_rRatio, p_rNear, p_rFar );
 	IPipelineImpl::Perspective( p_aFOVY, p_rRatio, p_rNear, p_rFar );
 #if C3D_DIRECTX_MTX
 	D3DXMATRIX l_d3dMtx;
@@ -139,7 +139,7 @@ bool DxPipelineImplHlsl::Frustum( real p_rLeft, real p_rRight, real p_rBottom, r
 
 bool DxPipelineImplHlsl::Ortho( real p_rLeft, real p_rRight, real p_rBottom, real p_rTop, real p_rNear, real p_rFar )
 {
-	Castor::MtxUtils::ortho_lh( GetCurrentMatrix(), p_rLeft, p_rRight, p_rBottom, p_rTop, p_rNear, p_rFar );
+	Castor::matrix::ortho( GetCurrentMatrix(), p_rLeft, p_rRight, p_rBottom, p_rTop, p_rNear, p_rFar );
 #if C3D_DIRECTX_MTX
 	D3DXMATRIX l_d3dMtx;
 	D3DXMatrixOrthoOffCenterRH( &l_d3dMtx, p_rLeft, p_rRight, p_rBottom, p_rTop, p_rNear, p_rFar );

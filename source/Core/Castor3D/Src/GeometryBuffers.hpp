@@ -64,20 +64,72 @@ namespace Castor3D
 		virtual ~GeometryBuffers();
 		/**
 		 *\~english
+		 *\brief		Creates the buffers on GPU
+		 *\return		\p true if OK
+		 *\~french
+		 *\brief		Crée les tampons au niveau GPU
+		 *\return		\p true si tout s'est bien passé
+		 */
+		bool Create();
+		/**
+		 *\~english
+		 *\brief		Destroys the buffers on GPU
+		 *\~french
+		 *\brief		Détruit les tampons au niveau GPU
+		 */
+		void Destroy();
+		/**
+		 *\~english
 		 *\brief		Initialisation function
+		 *\param[in]	p_shader				The shader program
+		 *\param[in]	p_vtxType, p_vtxAccess	Vertex buffer access flags
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Fonction d'initialisation
+		 *\param[in]	p_shader				Le programme shader
+		 *\param[in]	p_vtxType, p_vtxAccess	Indicateurs d'accès pour le tampon de sommets
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Initialise() = 0;
+		bool Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature );
+		/**
+		 *\~english
+		 *\brief		Initialisation function
+		 *\param[in]	p_shader				The shader program
+		 *\param[in]	p_vtxType, p_vtxAccess	Vertex buffer access flags
+		 *\param[in]	p_idxType, p_idxAccess	Index buffer access flags
+		 *\return		\p true if OK
+		 *\~french
+		 *\brief		Fonction d'initialisation
+		 *\param[in]	p_shader				Le programme shader
+		 *\param[in]	p_vtxType, p_vtxAccess	Indicateurs d'accès pour le tampon de sommets
+		 *\param[in]	p_idxType, p_idxAccess	Indicateurs d'accès pour le tampon d'indices
+		 *\return		\p true si tout s'est bien passé
+		 */
+		bool Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature, eBUFFER_ACCESS_TYPE p_idxType, eBUFFER_ACCESS_NATURE p_idxNature );
+		/**
+		 *\~english
+		 *\brief		Initialisation function
+		 *\param[in]	p_shader				The shader program
+		 *\param[in]	p_vtxType, p_vtxAccess	Vertex buffer access flags
+		 *\param[in]	p_idxType, p_idxAccess	Index buffer access flags
+		 *\param[in]	p_mtxType, p_mtxAccess	Matrix buffer access flags
+		 *\return		\p true if OK
+		 *\~french
+		 *\brief		Fonction d'initialisation
+		 *\param[in]	p_shader				Le programme shader
+		 *\param[in]	p_vtxType, p_vtxAccess	Indicateurs d'accès pour le tampon de sommets
+		 *\param[in]	p_idxType, p_idxAccess	Indicateurs d'accès pour le tampon d'indices
+		 *\param[in]	p_mtxType, p_mtxAccess	Indicateurs d'accès pour le tampon de matrices
+		 *\return		\p true si tout s'est bien passé
+		 */
+		bool Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature, eBUFFER_ACCESS_TYPE p_idxType, eBUFFER_ACCESS_NATURE p_idxNature, eBUFFER_ACCESS_TYPE p_mtxType, eBUFFER_ACCESS_NATURE p_mtxNature );
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		virtual void Cleanup() = 0;
+		void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Draws the geometry held into the buffers
@@ -188,6 +240,24 @@ namespace Castor3D
 		{
 			return m_bMatrixBuffer;
 		}
+
+	protected:
+		/**
+		 *\~english
+		 *\brief		Initialisation function
+		 *\return		\p true if OK
+		 *\~french
+		 *\brief		Fonction d'initialisation
+		 *\return		\p true si tout s'est bien passé
+		 */
+		virtual bool DoInitialise() = 0;
+		/**
+		 *\~english
+		 *\brief		Cleanup function
+		 *\~french
+		 *\brief		Fonction de nettoyage
+		 */
+		virtual void DoCleanup() = 0;
 
 	protected:
 		//!\~english The vertex buffer	\~french Le tampon de sommets

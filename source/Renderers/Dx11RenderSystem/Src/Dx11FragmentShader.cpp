@@ -70,7 +70,7 @@ namespace Dx11Render
 			if ( l_pDevice )
 			{
 				HRESULT l_hr = l_pDevice->CreatePixelShader( reinterpret_cast< DWORD * >( m_pCompiled->GetBufferPointer() ), m_pCompiled->GetBufferSize(), NULL, &m_pPixelShader );
-				dxDebugName( m_pRenderSystem, m_pPixelShader, PSShader );
+				dxTrack( m_pRenderSystem, m_pPixelShader, PSShader );
 
 				if ( l_hr == S_OK )
 				{

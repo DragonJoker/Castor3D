@@ -111,11 +111,11 @@ namespace Castor
 			 *\brief		Initialise le flux afin de pouvoir l'indenter
 			 *\param[in]	stream	Le flux
 			 */
-			template< typename CharType >
-			inline basic_indent_buffer< CharType > * install_buffer( std::basic_ostream< CharType > & stream )
+			template< typename CharType, typename BufferType = basic_indent_buffer< CharType >, typename BufferManagerType = basic_buffer_manager< CharType > >
+			inline BufferType * install_buffer( std::basic_ostream< CharType > & stream )
 			{
-				basic_indent_buffer< CharType > * sbuf( new basic_indent_buffer< CharType >( stream.rdbuf() ) );
-				basic_buffer_manager< CharType >::instance()->insert( stream, sbuf );
+				BufferType * sbuf( new BufferType( stream.rdbuf() ) );
+				BufferManagerType::instance()->insert( stream, sbuf );
 				stream.rdbuf( sbuf );
 				return sbuf;
 			}

@@ -72,19 +72,19 @@ ShaderProgramBaseSPtr DxBillboardList::DoGetProgram( RenderTechniqueBase const &
 	//l_strVtxShader += l_strVersion;
 	//l_strVtxShader += l_strAttribute0 + cuT( "    <vec4>   vertex;\n" );
 	//l_strVtxShader += BillboardVS;
-	//str_utils::replace( l_strVtxShader, cuT( "<layout>" ), l_pKeywords->GetLayout() );
+	//string::replace( l_strVtxShader, cuT( "<layout>" ), l_pKeywords->GetLayout() );
 	//GLSL::ConstantsBase::Replace( l_strVtxShader );
 
 	//String l_strGeoShader;
 	//l_strGeoShader += l_strVersion;
 	//l_strGeoShader += BillboardGS;
-	//str_utils::replace( l_strGeoShader, cuT( "<matrix_buffer>" ), l_pConstants->Matrices() );
-	//str_utils::replace( l_strGeoShader, cuT( "<scene_buffer>" ), l_pConstants->Scene() );
-	//str_utils::replace( l_strGeoShader, cuT( "<user_buffer>" ), l_pConstants->User() );
-	//str_utils::replace( l_strGeoShader, cuT( "<in_primitives>" ), PRIMITIVES[l_pObject->GetInputType()] );
-	//str_utils::replace( l_strGeoShader, cuT( "<out_primitives>" ), PRIMITIVES[l_pObject->GetOutputType()] );
-	//str_utils::replace( l_strGeoShader, cuT( "<max_vertices>" ), str_utils::to_string( l_pObject->GetOutputVtxCount() ) );
-	//str_utils::replace( l_strGeoShader, cuT( "<layout>" ), l_pKeywords->GetLayout() );
+	//string::replace( l_strGeoShader, cuT( "<matrix_buffer>" ), l_pConstants->Matrices() );
+	//string::replace( l_strGeoShader, cuT( "<scene_buffer>" ), l_pConstants->Scene() );
+	//string::replace( l_strGeoShader, cuT( "<user_buffer>" ), l_pConstants->User() );
+	//string::replace( l_strGeoShader, cuT( "<in_primitives>" ), PRIMITIVES[l_pObject->GetInputType()] );
+	//string::replace( l_strGeoShader, cuT( "<out_primitives>" ), PRIMITIVES[l_pObject->GetOutputType()] );
+	//string::replace( l_strGeoShader, cuT( "<max_vertices>" ), string::to_string( l_pObject->GetOutputVtxCount() ) );
+	//string::replace( l_strGeoShader, cuT( "<layout>" ), l_pKeywords->GetLayout() );
 	//GLSL::ConstantsBase::Replace( l_strGeoShader );
 
 	//String l_strPxlShader = l_pProgram->GetPixelShaderSource( p_flags );

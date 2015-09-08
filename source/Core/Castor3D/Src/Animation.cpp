@@ -64,7 +64,7 @@ namespace Castor3D
 	MovingObjectBaseSPtr Animation::AddMovingObject()
 	{
 		std::shared_ptr< MovingNode > l_pObj = std::make_shared< MovingNode >();
-		m_mapToMove.insert( std::make_pair( str_utils::to_string( uint32_t( m_mapToMove.size() ) ), l_pObj ) );
+		m_mapToMove.insert( std::make_pair( string::to_string( uint32_t( m_mapToMove.size() ) ), l_pObj ) );
 		return l_pObj;
 	}
 
@@ -73,9 +73,8 @@ namespace Castor3D
 		MovingObjectBaseSPtr l_return;
 		MovingObjectPtrStrMapIt l_it = m_mapToMove.find( p_pObject->GetName() );
 
-		if ( l_it != m_mapToMove.end() )
+		if ( l_it == m_mapToMove.end() )
 		{
-			l_return = l_it->second;
 			std::shared_ptr< MovingObject > l_pObj = std::make_shared< MovingObject >();
 			l_pObj->SetObject( p_pObject );
 			l_return = l_pObj;
@@ -94,9 +93,8 @@ namespace Castor3D
 		MovingObjectBaseSPtr l_return;
 		MovingObjectPtrStrMapIt l_it = m_mapToMove.find( p_pBone->GetName() );
 
-		if ( l_it != m_mapToMove.end() )
+		if ( l_it == m_mapToMove.end() )
 		{
-			l_return = l_it->second;
 			std::shared_ptr< MovingBone > l_pObj = std::make_shared< MovingBone >();
 			l_pObj->SetBone( p_pBone );
 			l_return = l_pObj;

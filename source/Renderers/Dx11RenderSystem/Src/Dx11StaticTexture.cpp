@@ -88,7 +88,7 @@ namespace Dx11Render
 			l_desc.Texture2D.MipLevels = 2;
 			l_desc.Texture2D.MostDetailedMip = 0;
 			l_hr = l_pDevice->CreateShaderResourceView( l_pTexture, NULL, &m_pShaderResourceView );
-			dxDebugName( m_pRenderSystem, m_pShaderResourceView, StaticSRView );
+			dxTrack( m_pRenderSystem, m_pShaderResourceView, StaticSRView );
 			l_pTexture->Release();
 		}
 

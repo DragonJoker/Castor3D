@@ -15,8 +15,8 @@ using namespace Castor;
 //*************************************************************************************************
 
 GlOverlayRenderer::GlOverlayRenderer( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem )
-	:	OverlayRenderer( p_pRenderSystem )
-	,	m_gl( p_gl	)
+	: OverlayRenderer( p_pRenderSystem )
+	, m_gl( p_gl )
 {
 }
 
@@ -24,7 +24,7 @@ GlOverlayRenderer::~GlOverlayRenderer()
 {
 }
 
-ShaderProgramBaseSPtr GlOverlayRenderer::DoGetProgram( uint32_t p_uiFlags )
+ShaderProgramBaseSPtr GlOverlayRenderer::DoCreateProgram( uint32_t p_uiFlags )
 {
 	using namespace GLSL;
 

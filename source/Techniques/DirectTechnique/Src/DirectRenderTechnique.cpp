@@ -386,6 +386,17 @@ namespace Direct
 		Sampler2D c3d_mapHeight;
 		Sampler2D c3d_mapGloss;
 
+		Lighting< BlinnPhongLightingModel > l_lighting;
+		l_lighting.Declare_Light( l_writer );
+		l_lighting.Declare_GetLight( l_writer );
+		l_lighting.Declare_ComputeLightDirection( l_writer );
+		l_lighting.Declare_ComputeFresnel( l_writer );
+
+		if ( ( p_uiFlags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
+		{
+			l_lighting.Declare_Bump( l_writer );
+		}
+
 		if ( p_uiFlags != 0 )
 		{
 			if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
@@ -428,12 +439,6 @@ namespace Direct
 				c3d_mapGloss = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapGloss" ) );
 			}
 		}
-
-		Lighting< BlinnPhongLightingModel > l_lighting;
-		l_lighting.Declare_Light( l_writer );
-		l_lighting.Declare_GetLight( l_writer );
-		l_lighting.Declare_ComputeLightDirection( l_writer );
-		l_lighting.Declare_ComputeFresnel( l_writer );
 
 		std::function< void() > l_main = [&]()
 		{
@@ -587,7 +592,7 @@ namespace Direct
 			l_strDeclarations += l_pUniforms->GetPixelScene( 1 );
 			l_strDeclarations += l_pUniforms->GetPixelPass( 2 );
 			l_strDeclarations += l_pInputs->GetPxlInput();
-			l_strMainDeclarations = str_utils::replace( l_strMainDeclarations, cuT( "[PxlOutput]" ), l_pInputs->GetPxlOutput() );
+			l_strMainDeclarations = string::replace( l_strMainDeclarations, cuT( "[PxlOutput]" ), l_pInputs->GetPxlOutput() );
 
 			if ( p_uiFlags )
 			{

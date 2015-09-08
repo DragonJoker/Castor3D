@@ -54,7 +54,7 @@ namespace GlRender
 
 			if ( wglGetExtensionsStringEXT() )
 			{
-				m_gl.PreInitialise( str_utils::from_str( wglGetExtensionsStringEXT() ) );
+				m_gl.PreInitialise( string::from_str( wglGetExtensionsStringEXT() ) );
 			}
 			else
 			{
@@ -103,7 +103,7 @@ namespace GlRender
 		}
 		else
 		{
-			Logger::LogError( str_utils::from_str( "No supported pixel format found, context creation failed" ) );
+			Logger::LogError( string::from_str( "No supported pixel format found, context creation failed" ) );
 		}
 
 		if ( m_bInitialised )

@@ -250,14 +250,7 @@ SceneFileParser::~SceneFileParser()
 
 RenderWindowSPtr SceneFileParser::GetRenderWindow()
 {
-	RenderWindowSPtr l_pReturn;
-
-	if ( m_pParsingContext )
-	{
-		l_pReturn = std::static_pointer_cast< SceneFileContext >( m_pParsingContext )->pWindow;
-	}
-
-	return l_pReturn;
+	return m_renderWindow;
 }
 
 bool SceneFileParser::ParseFile( TextFile & p_file )
@@ -533,17 +526,20 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 void SceneFileParser::DoCleanupParser()
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( m_pParsingContext );
+	m_pParsingContext.reset();
 
 	for ( ScenePtrStrMap::iterator l_it = l_pContext->mapScenes.begin(); l_it != l_pContext->mapScenes.end(); ++l_it )
 	{
 		m_mapScenes.insert( std::make_pair( l_it->first,  l_it->second ) );
 	}
+
+	m_renderWindow = l_pContext->pWindow;
 }
 
 void SceneFileParser::DoDiscardParser( String const & p_strLine )
 {
 	String l_strWarning;
-	l_strWarning + cuT( "Parser not found @ line #" ) + str_utils::to_string( m_pParsingContext->ui64Line ) + cuT( " : " ) + p_strLine;
+	l_strWarning + cuT( "Parser not found @ line #" ) + string::to_string( m_pParsingContext->ui64Line ) + cuT( " : " ) + p_strLine;
 	Logger::LogError( l_strWarning );
 }
 

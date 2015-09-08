@@ -390,6 +390,30 @@ namespace Castor3D
 		 *\param[in]	p_iWindowWidth, p_iWindowHeight	Les dimensions
 		 */
 		void ApplyViewport( int p_iWindowWidth, int p_iWindowHeight );
+		/**
+		 *\~english
+		 *\brief		Sets the model matrix
+		 *\param[in]	m_mtx	The new matrix
+		 *\~french
+		 *\brief		Définit la matrice modèle
+		 *\param[in]	m_mtx	La nouvelle matrice
+		 */
+		inline void SetModel( Castor::Matrix4x4r const & p_mtx )
+		{
+			m_mtxModel = p_mtx;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the model matrix
+		 *\param[in]	m_mtx	The new matrix
+		 *\~french
+		 *\brief		Définit la matrice modèle
+		 *\param[in]	m_mtx	La nouvelle matrice
+		 */
+		inline Castor::Matrix4x4r const & GetModel()const
+		{
+			return m_mtxModel;
+		}
 
 	private:
 		void DoApplyMatrix( eMTXMODE p_eMatrix, Castor::String const & p_strName, FrameVariableBuffer & p_matrixBuffer );
@@ -417,6 +441,7 @@ namespace Castor3D
 		//!<
 		matrix4x4 m_matTmp;
 		MatrixStack m_matrix[eMTXMODE_COUNT];
+		matrix4x4 m_mtxModel;
 		matrix4x4 m_mtxModelView;
 		matrix4x4 m_mtxProjectionView;
 		matrix4x4 m_mtxProjectionModelView;

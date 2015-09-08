@@ -176,7 +176,7 @@ namespace Castor
 			}
 		}
 
-		FOpen( m_pFile, str_utils::to_str( m_strFileFullPath ).c_str(), str_utils::to_str( l_strMode ).c_str() );
+		FOpen( m_pFile, string::to_str( m_strFileFullPath ).c_str(), string::to_str( l_strMode ).c_str() );
 
 		if ( m_pFile )
 		{
@@ -187,7 +187,7 @@ namespace Castor
 		}
 		else
 		{
-			CASTOR_EXCEPTION( "Couldn't open file " + str_utils::to_str( m_strFileFullPath ) + " : " + str_utils::to_str( System::GetLastErrorText() ) );
+			CASTOR_EXCEPTION( "Couldn't open file " + string::to_str( m_strFileFullPath ) + " : " + string::to_str( System::GetLastErrorText() ) );
 		}
 
 		CHECK_INVARIANTS();
@@ -362,7 +362,7 @@ namespace Castor
 #elif defined( __linux__ )
 		DIR * l_pDir;
 
-		if ( ( l_pDir = opendir( str_utils::to_str( p_folderPath ).c_str() ) ) == NULL )
+		if ( ( l_pDir = opendir( string::to_str( p_folderPath ).c_str() ) ) == NULL )
 		{
 			switch ( errno )
 			{
@@ -409,7 +409,7 @@ namespace Castor
 			{
 				if ( strcmp( l_pDirent->d_name, "." ) )
 				{
-					p_files.push_back( p_folderPath / str_utils::from_str( l_pDirent->d_name ) );
+					p_files.push_back( p_folderPath / string::from_str( l_pDirent->d_name ) );
 				}
 			}
 
@@ -469,7 +469,7 @@ namespace Castor
 #elif defined( __linux__ )
 		struct passwd * l_pw = getpwuid( getuid() );
 		const char * l_homedir = l_pw->pw_dir;
-		l_pathReturn = str_utils::from_str( l_homedir );
+		l_pathReturn = string::from_str( l_homedir );
 
 #else
 #	error "Unsupported platform"
@@ -481,10 +481,10 @@ namespace Castor
 	{
 #if defined( _WIN32 )
 		struct _stat status = { 0 };
-		_stat( str_utils::to_str( p_path ).c_str(), &status );
+		_stat( string::to_str( p_path ).c_str(), &status );
 #else
 		struct stat status = { 0 };
-		stat( str_utils::to_str( p_path ).c_str(), &status );
+		stat( string::to_str( p_path ).c_str(), &status );
 #endif
 		return ( status.st_mode & S_IFDIR ) == S_IFDIR;
 	}
@@ -501,7 +501,7 @@ namespace Castor
 #if defined( _MSC_VER )
 		return _tmkdir( p_path.c_str() ) == 0;
 #elif defined( _WIN32 )
-		return mkdir( str_utils::to_str( p_path ).c_str() ) == 0;
+		return mkdir( string::to_str( p_path ).c_str() ) == 0;
 #else
 		mode_t l_mode = 0;
 
@@ -550,7 +550,7 @@ namespace Castor
 			l_mode |= S_IXOTH;
 		}
 
-		return mkdir( str_utils::to_str( p_path ).c_str(), l_mode ) == 0;
+		return mkdir( string::to_str( p_path ).c_str(), l_mode ) == 0;
 #endif
 	}
 
@@ -559,13 +559,13 @@ namespace Castor
 #if defined( _MSC_VER )
 		return _trmdir( p_path.c_str() ) == 0;
 #else
-		return rmdir( str_utils::to_str( p_path ).c_str() ) == 0;
+		return rmdir( string::to_str( p_path ).c_str() ) == 0;
 #endif
 	}
 
 	bool File::FileExists( Path const & p_pathFile )
 	{
-		std::ifstream l_ifile( str_utils::to_str( p_pathFile ).c_str() );
+		std::ifstream l_ifile( string::to_str( p_pathFile ).c_str() );
 		return l_ifile.is_open();
 	}
 
@@ -575,7 +575,7 @@ namespace Castor
 
 		if ( FileExists( p_file ) )
 		{
-			l_return = std::remove( str_utils::to_str( p_file ).c_str() ) == 0;
+			l_return = std::remove( string::to_str( p_file ).c_str() ) == 0;
 		}
 		else
 		{
@@ -589,11 +589,11 @@ namespace Castor
 	{
 		bool l_return = false;
 		Path l_file = p_folder / p_file.GetFileName() + cuT( "." ) + p_file.GetExtension();
-		std::ifstream l_src( str_utils::to_str( p_file ), std::ios::binary );
+		std::ifstream l_src( string::to_str( p_file ), std::ios::binary );
 
 		if ( l_src.is_open() )
 		{
-			std::ofstream l_dst( str_utils::to_str( l_file ), std::ios::binary );
+			std::ofstream l_dst( string::to_str( l_file ), std::ios::binary );
 
 			if ( l_src.is_open() )
 			{

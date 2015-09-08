@@ -541,7 +541,7 @@ namespace GuiCommon
 
 	FontSPtr make_Font( Engine * p_engine, wxFont const & p_font )
 	{
-		String l_name = make_String( p_font.GetFaceName() ) + str_utils::to_string( p_font.GetPointSize() );
+		String l_name = make_String( p_font.GetFaceName() ) + string::to_string( p_font.GetPointSize() );
 		FontCollection & l_manager = p_engine->GetFontManager();
 		FontSPtr l_font = l_manager.find( l_name );
 

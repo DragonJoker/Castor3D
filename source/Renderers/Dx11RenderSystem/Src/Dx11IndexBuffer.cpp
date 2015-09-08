@@ -57,12 +57,12 @@ namespace Dx11Render
 					D3D11_SUBRESOURCE_DATA l_data = { 0 };
 					l_data.pSysMem = &m_pBuffer->data()[0];
 					l_hr = l_pDevice->CreateBuffer( &l_desc, &l_data, &m_pBufferObject );
-					dxDebugName( l_renderSystem, m_pBufferObject, IndexBuffer );
+					dxTrack( l_renderSystem, m_pBufferObject, IndexBuffer );
 				}
 				else
 				{
 					l_hr = l_pDevice->CreateBuffer( &l_desc, NULL, &m_pBufferObject );
-					dxDebugName( l_renderSystem, m_pBufferObject, IndexBuffer );
+					dxTrack( l_renderSystem, m_pBufferObject, IndexBuffer );
 				}
 
 				l_return = dxCheckError( l_hr, "ID3D11Device::CreateIndexBuffer" );

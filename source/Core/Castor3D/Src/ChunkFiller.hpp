@@ -152,7 +152,7 @@ namespace Castor3D
 
 			try
 			{
-				std::string l_strValue = Castor::str_utils::to_str( p_strValue );
+				std::string l_strValue = Castor::string::to_str( p_strValue );
 				ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( l_strValue.data() ), uint32_t( l_strValue.size() ), p_eChunkType, p_chunk );
 			}
 			catch ( ... )
@@ -178,7 +178,7 @@ namespace Castor3D
 
 			try
 			{
-				std::string l_strValue = Castor::str_utils::to_str( p_strValue );
+				std::string l_strValue = Castor::string::to_str( p_strValue );
 				ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( l_strValue.data() ), uint32_t( l_strValue.size() ), p_eChunkType, p_chunk );
 			}
 			catch ( ... )

@@ -53,7 +53,7 @@ namespace Castor
 
 		if ( l_return )
 		{
-			l_arraySplitted = str_utils::split( l_strLine, cuT( " \t,;" ) );
+			l_arraySplitted = string::split( l_strLine, cuT( " \t,;" ) );
 			l_return = l_arraySplitted.size() >= Colour::eCOMPONENT_COUNT;
 		}
 
@@ -66,7 +66,7 @@ namespace Castor
 
 			for ( uint8_t i = 0; i < Colour::eCOMPONENT_COUNT; i++ )
 			{
-				p_colour[Colour::eCOMPONENT( i )] = str_utils::to_double( l_arraySplitted[i] );
+				p_colour[Colour::eCOMPONENT( i )] = string::to_double( l_arraySplitted[i] );
 			}
 		}
 

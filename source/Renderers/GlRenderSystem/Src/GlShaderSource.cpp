@@ -70,6 +70,14 @@ namespace GlRender
 			return *this;
 		}
 
+		void Expr::UpdateWriter( Expr const & p_expr )
+		{
+			if ( !m_writer )
+			{
+				m_writer = p_expr.m_writer;
+			}
+		}
+
 		//*****************************************************************************************
 
 		Type::Type( Castor::String const & p_type )
@@ -153,49 +161,49 @@ namespace GlRender
 
 		Type & Type::operator+=( float p_type )
 		{
-			*m_writer << m_name << cuT( " += " ) << Castor::str_utils::to_string( p_type ) << cuT( ";" ) << Endl();
+			*m_writer << m_name << cuT( " += " ) << Castor::string::to_string( p_type ) << cuT( ";" ) << Endl();
 			return *this;
 		}
 
 		Type & Type::operator-=( float p_type )
 		{
-			*m_writer << m_name << cuT( " -= " ) << Castor::str_utils::to_string( p_type ) << cuT( ";" ) << Endl();
+			*m_writer << m_name << cuT( " -= " ) << Castor::string::to_string( p_type ) << cuT( ";" ) << Endl();
 			return *this;
 		}
 
 		Type & Type::operator*=( float p_type )
 		{
-			*m_writer << m_name << cuT( " *= " ) << Castor::str_utils::to_string( p_type ) << cuT( ";" ) << Endl();
+			*m_writer << m_name << cuT( " *= " ) << Castor::string::to_string( p_type ) << cuT( ";" ) << Endl();
 			return *this;
 		}
 
 		Type & Type::operator/=( float p_type )
 		{
-			*m_writer << m_name << cuT( " /= " ) << Castor::str_utils::to_string( p_type ) << cuT( ";" ) << Endl();
+			*m_writer << m_name << cuT( " /= " ) << Castor::string::to_string( p_type ) << cuT( ";" ) << Endl();
 			return *this;
 		}
 
 		Type & Type::operator+=( int p_type )
 		{
-			*m_writer << m_name << cuT( " += " ) << Castor::str_utils::to_string( p_type ) << cuT( ";" ) << Endl();
+			*m_writer << m_name << cuT( " += " ) << Castor::string::to_string( p_type ) << cuT( ";" ) << Endl();
 			return *this;
 		}
 
 		Type & Type::operator-=( int p_type )
 		{
-			*m_writer << m_name << cuT( " -= " ) << Castor::str_utils::to_string( p_type ) << cuT( ";" ) << Endl();
+			*m_writer << m_name << cuT( " -= " ) << Castor::string::to_string( p_type ) << cuT( ";" ) << Endl();
 			return *this;
 		}
 
 		Type & Type::operator*=( int p_type )
 		{
-			*m_writer << m_name << cuT( " *= " ) << Castor::str_utils::to_string( p_type ) << cuT( ";" ) << Endl();
+			*m_writer << m_name << cuT( " *= " ) << Castor::string::to_string( p_type ) << cuT( ";" ) << Endl();
 			return *this;
 		}
 
 		Type & Type::operator/=( int p_type )
 		{
-			*m_writer << m_name << cuT( " /= " ) << Castor::str_utils::to_string( p_type ) << cuT( ";" ) << Endl();
+			*m_writer << m_name << cuT( " /= " ) << Castor::string::to_string( p_type ) << cuT( ";" ) << Endl();
 			return *this;
 		}
 
@@ -244,56 +252,56 @@ namespace GlRender
 		Type operator+( Type const & p_a, float p_b )
 		{
 			Type l_return( p_a.m_type, p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " + " ) << Castor::str_utils::to_string( p_b );
+			l_return.m_value << Castor::String( p_a ) << cuT( " + " ) << Castor::string::to_string( p_b );
 			return l_return;
 		}
 
 		Type operator-( Type const & p_a, float p_b )
 		{
 			Type l_return( p_a.m_type, p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " - " ) << Castor::str_utils::to_string( p_b );
+			l_return.m_value << Castor::String( p_a ) << cuT( " - " ) << Castor::string::to_string( p_b );
 			return l_return;
 		}
 
 		Type operator*( Type const & p_a, float p_b )
 		{
 			Type l_return( p_a.m_type, p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " * " ) << Castor::str_utils::to_string( p_b );
+			l_return.m_value << Castor::String( p_a ) << cuT( " * " ) << Castor::string::to_string( p_b );
 			return l_return;
 		}
 
 		Type operator/( Type const & p_a, float p_b )
 		{
 			Type l_return( p_a.m_type, p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " / " ) << Castor::str_utils::to_string( p_b );
+			l_return.m_value << Castor::String( p_a ) << cuT( " / " ) << Castor::string::to_string( p_b );
 			return l_return;
 		}
 
 		Type operator+( Type const & p_a, int p_b )
 		{
 			Type l_return( p_a.m_type, p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " + " ) << Castor::str_utils::to_string( p_b );
+			l_return.m_value << Castor::String( p_a ) << cuT( " + " ) << Castor::string::to_string( p_b );
 			return l_return;
 		}
 
 		Type operator-( Type const & p_a, int p_b )
 		{
 			Type l_return( p_a.m_type, p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " - " ) << Castor::str_utils::to_string( p_b );
+			l_return.m_value << Castor::String( p_a ) << cuT( " - " ) << Castor::string::to_string( p_b );
 			return l_return;
 		}
 
 		Type operator*( Type const & p_a, int p_b )
 		{
 			Type l_return( p_a.m_type, p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " * " ) << Castor::str_utils::to_string( p_b );
+			l_return.m_value << Castor::String( p_a ) << cuT( " * " ) << Castor::string::to_string( p_b );
 			return l_return;
 		}
 
 		Type operator/( Type const & p_a, int p_b )
 		{
 			Type l_return( p_a.m_type, p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " / " ) << Castor::str_utils::to_string( p_b );
+			l_return.m_value << Castor::String( p_a ) << cuT( " / " ) << Castor::string::to_string( p_b );
 			return l_return;
 		}
 
@@ -389,12 +397,12 @@ namespace GlRender
 
 		void GlslWriter::WriteAssign( Type const & p_lhs, int const & p_rhs )
 		{
-			m_stream << Castor::String( p_lhs ) << cuT( " = " ) << Castor::str_utils::to_string( p_rhs ) << cuT( ";" ) << std::endl;
+			m_stream << Castor::String( p_lhs ) << cuT( " = " ) << Castor::string::to_string( p_rhs ) << cuT( ";" ) << std::endl;
 		}
 
 		void GlslWriter::WriteAssign( Type const & p_lhs, float const & p_rhs )
 		{
-			m_stream << Castor::String( p_lhs ) << cuT( " = " ) << Castor::str_utils::to_string( p_rhs ) << cuT( ";" ) << std::endl;
+			m_stream << Castor::String( p_lhs ) << cuT( " = " ) << Castor::string::to_string( p_rhs ) << cuT( ";" ) << std::endl;
 		}
 
 		void GlslWriter::For( Type const & p_init, Expr const & p_cond, Expr const & p_incr, std::function< void( Type ) > p_function )

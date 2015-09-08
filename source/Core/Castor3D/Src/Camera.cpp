@@ -1,4 +1,4 @@
-﻿#include "Camera.hpp"
+#include "Camera.hpp"
 
 #include "Engine.hpp"
 #include "Pipeline.hpp"
@@ -209,25 +209,30 @@ namespace Castor3D
 
 		if ( l_node )
 		{
-			Pipeline * l_pPipeline = m_pEngine->GetRenderSystem()->GetPipeline();
-			Matrix4x4r const & l_mtx = l_node->GetDerivedTransformationMatrix();
-
 			if ( l_bModified || l_node->IsModified() )
 			{
-				// Express frustum view in world coordinates
-				Point3r l_position;
-				MtxUtils::get_translate( l_mtx, l_position );
+				Point3r l_u( 0, 1, 0 );
+				Point3r l_n( 0, 0, 1 );
+				point::normalise( l_node->GetDerivedOrientation().Transform( l_u, l_u ) );
+				point::normalise( l_node->GetDerivedOrientation().Transform( l_n, l_n ) );
+				Point3r l_v = l_n ^ l_u;
+				Matrix4x4r l_rotate( 1 );
+				l_rotate[0][0] = l_u[0]; l_rotate[0][1] = l_u[1]; l_rotate[0][2] = l_u[2]; l_rotate[0][3] = 0.0f;
+				l_rotate[1][0] = l_v[0]; l_rotate[1][1] = l_v[1]; l_rotate[1][2] = l_v[2]; l_rotate[1][3] = 0.0f;
+				l_rotate[2][0] = l_n[0]; l_rotate[2][1] = l_n[1]; l_rotate[2][2] = l_n[2]; l_rotate[2][3] = 0.0f;
+				l_rotate[3][0] = 0.0f; l_rotate[3][1] = 0.0f; l_rotate[3][2] = 0.0f; l_rotate[3][3] = 1.0f;
+				Matrix4x4r l_translate( 1 );
+				matrix::set_translate( l_translate, l_node->GetDerivedPosition() );
+				m_view = l_rotate * l_translate;
+
+				// Express frustum in view coordinates
+				Point3r l_position = l_node->GetDerivedPosition();
 
 				for ( int i = 0; i < eFRUSTUM_PLANE_COUNT; ++i )
 				{
-					m_planes[i].Set( l_mtx * m_pViewport->GetFrustumPlane( eFRUSTUM_PLANE( i ) ).GetNormal(), l_position );
+					m_planes[i].Set( m_view * m_pViewport->GetFrustumPlane( eFRUSTUM_PLANE( i ) ).GetNormal(), l_position );
 				}
 			}
-
-			l_pPipeline->MatrixMode( eMTXMODE_VIEW );
-			l_pPipeline->LoadIdentity();
-			l_pPipeline->PushMatrix();
-			l_pPipeline->MultMatrix( l_mtx );
 		}
 
 		m_pEngine->GetRenderSystem()->SetCurrentCamera( this );
@@ -236,8 +241,6 @@ namespace Castor3D
 	void Camera::EndRender()
 	{
 		m_pEngine->GetRenderSystem()->SetCurrentCamera( NULL );
-		m_pEngine->GetRenderSystem()->GetPipeline()->MatrixMode( eMTXMODE_VIEW );
-		m_pEngine->GetRenderSystem()->GetPipeline()->PopMatrix();
 	}
 
 	void Camera::Resize( uint32_t p_uiWidth, uint32_t p_uiHeight )

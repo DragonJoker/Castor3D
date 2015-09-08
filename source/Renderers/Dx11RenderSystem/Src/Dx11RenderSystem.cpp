@@ -351,7 +351,7 @@ void DxRenderSystem::DoInitialise()
 		// Store the dedicated video card memory in megabytes.
 		int l_videoCardMemory = int( m_adapterDesc.DedicatedVideoMemory / 1024 / 1024 );
 		// Convert the name of the video card to a character array and store it.
-		String l_strVideoCardDescription = str_utils::from_wstr( m_adapterDesc.Description );
+		String l_strVideoCardDescription = string::from_wstr( m_adapterDesc.Description );
 		Logger::LogInfo( cuT( "Video card name: " ) + l_strVideoCardDescription );
 		Logger::LogInfo( StringStream() << cuT( "Video card memory: " ) << l_videoCardMemory );
 		m_pPipeline->Initialise();
@@ -375,7 +375,7 @@ void DxRenderSystem::DoCleanup()
 
 #if !defined( NDEBUG )
 
-void DxRenderSystem::SetDxDebugName( ID3D11Device * p_object, std::string const & p_type, std::string const & p_file, int p_line )
+void DxRenderSystem::Track( ID3D11Device * p_object, std::string const & p_type, std::string const & p_file, int p_line )
 {
 	std::string l_name;
 
@@ -385,7 +385,7 @@ void DxRenderSystem::SetDxDebugName( ID3D11Device * p_object, std::string const 
 	}
 }
 
-void DxRenderSystem::SetDxDebugName( ID3D11DeviceChild * p_object, std::string const & p_type, std::string const & p_file, int p_line )
+void DxRenderSystem::Track( ID3D11DeviceChild * p_object, std::string const & p_type, std::string const & p_file, int p_line )
 {
 	std::string l_name;
 
@@ -395,7 +395,7 @@ void DxRenderSystem::SetDxDebugName( ID3D11DeviceChild * p_object, std::string c
 	}
 }
 
-void DxRenderSystem::SetDxDebugName( IDXGIDeviceSubObject * p_object, std::string const & p_type, std::string const & p_file, int p_line )
+void DxRenderSystem::Track( IDXGIDeviceSubObject * p_object, std::string const & p_type, std::string const & p_file, int p_line )
 {
 	std::string l_name;
 
@@ -405,7 +405,7 @@ void DxRenderSystem::SetDxDebugName( IDXGIDeviceSubObject * p_object, std::strin
 	}
 }
 
-void DxRenderSystem::UnsetDxDebugName( ID3D11Device * p_object )
+void DxRenderSystem::Untrack( ID3D11Device * p_object )
 {
 	ObjectDeclaration l_declaration;
 
@@ -414,7 +414,7 @@ void DxRenderSystem::UnsetDxDebugName( ID3D11Device * p_object )
 	}
 }
 
-void DxRenderSystem::UnsetDxDebugName( ID3D11DeviceChild * p_object )
+void DxRenderSystem::Untrack( ID3D11DeviceChild * p_object )
 {
 	ObjectDeclaration l_declaration;
 
@@ -423,7 +423,7 @@ void DxRenderSystem::UnsetDxDebugName( ID3D11DeviceChild * p_object )
 	}
 }
 
-void DxRenderSystem::UnsetDxDebugName( IDXGIDeviceSubObject * p_object )
+void DxRenderSystem::Untrack( IDXGIDeviceSubObject * p_object )
 {
 	ObjectDeclaration l_declaration;
 

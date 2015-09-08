@@ -221,7 +221,7 @@ namespace Castor3D
 		}
 		else
 		{
-			CASTOR_EXCEPTION( "Font " + str_utils::to_str( p_strFont ) + "not found" );
+			CASTOR_EXCEPTION( "Font " + string::to_str( p_strFont ) + "not found" );
 		}
 
 		m_pOverlay->GetEngine()->PostEvent( MakeInitialiseEvent( *this ) );
@@ -246,7 +246,7 @@ namespace Castor3D
 
 		if ( l_it == m_glyphsPositions.end() )
 		{
-			CASTOR_EXCEPTION( std::string( "No loaded glyph for character " ) + str_utils::to_str( str_utils::to_string( p_char ) ) );
+			CASTOR_EXCEPTION( std::string( "No loaded glyph for character " ) + string::to_str( string::to_string( p_char ) ) );
 		}
 
 		return l_it->second;
@@ -274,7 +274,7 @@ namespace Castor3D
 				m_arrayVtx.reserve( m_previousCaption.size() * 6 );
 				Point2d l_ptPosition;
 
-				StringArray l_lines = str_utils::split( m_previousCaption, cuT( "\n" ), std::count( m_previousCaption.begin(), m_previousCaption.end(), cuT( '\n' ) ) + 1 );
+				StringArray l_lines = string::split( m_previousCaption, cuT( "\n" ), std::count( m_previousCaption.begin(), m_previousCaption.end(), cuT( '\n' ) ) + 1 );
 
 				for ( StringArrayConstIt l_itLines = l_lines.begin(); l_itLines != l_lines.end() && l_ptPosition[1] < l_ptSize[1]; ++l_itLines )
 				{

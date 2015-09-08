@@ -70,7 +70,7 @@ namespace Dx11Render
 			if ( l_pDevice )
 			{
 				HRESULT l_hr = l_pDevice->CreateGeometryShader( reinterpret_cast< DWORD * >( m_pCompiled->GetBufferPointer() ), m_pCompiled->GetBufferSize(), NULL, &m_pGeometryShader );
-				dxDebugName( m_pRenderSystem, m_pGeometryShader, GSShader );
+				dxTrack( m_pRenderSystem, m_pGeometryShader, GSShader );
 
 				if ( l_hr == S_OK )
 				{

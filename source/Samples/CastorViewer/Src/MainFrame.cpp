@@ -138,7 +138,7 @@ namespace CastorViewer
 
 			if ( !m_strFilePath.empty() )
 			{
-				String l_strLowered = str_utils::lower_case( m_strFilePath );
+				String l_strLowered = string::lower_case( m_strFilePath );
 
 				if ( m_pMainScene.lock() )
 				{

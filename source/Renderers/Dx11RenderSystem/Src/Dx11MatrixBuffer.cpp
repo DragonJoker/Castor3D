@@ -71,7 +71,7 @@ namespace Dx11Render
 				if ( l_pBlob )
 				{
 					HRESULT l_hr = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() )->GetDevice()->CreateInputLayout( &l_arrayDxElements[0], UINT( l_arrayDxElements.size() ), reinterpret_cast< DWORD const * >( l_pBlob->GetBufferPointer() ), l_pBlob->GetBufferSize(), &m_pDxDeclaration );
-					dxDebugName( m_pRenderSystem, m_pBufferObject, MtxInputLayout );
+					dxTrack( m_pRenderSystem, m_pBufferObject, MtxInputLayout );
 					l_return = dxCheckError( l_hr, "ID3D11Device::CreateInputLayout" );
 				}
 			}
@@ -94,12 +94,12 @@ namespace Dx11Render
 					D3D11_SUBRESOURCE_DATA l_data = { 0 };
 					l_data.pSysMem = &m_pBuffer->data()[0];
 					l_hr = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() )->GetDevice()->CreateBuffer( &l_desc, &l_data, &m_pBufferObject );
-					dxDebugName( m_pRenderSystem, m_pBufferObject, MatrixBuffer );
+					dxTrack( m_pRenderSystem, m_pBufferObject, MatrixBuffer );
 				}
 				else
 				{
 					l_hr = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() )->GetDevice()->CreateBuffer( &l_desc, NULL, &m_pBufferObject );
-					dxDebugName( m_pRenderSystem, m_pBufferObject, MatrixBuffer );
+					dxTrack( m_pRenderSystem, m_pBufferObject, MatrixBuffer );
 				}
 
 				l_return = dxCheckError( l_hr, "ID3D11Device::CreateIndexBuffer" );

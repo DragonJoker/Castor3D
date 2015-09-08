@@ -102,12 +102,12 @@ namespace Dx11Render
 			return m_pDebug;
 		}
 
-		void SetDxDebugName( ID3D11Device * p_object, std::string const & p_name, std::string const & p_file, int line );
-		void SetDxDebugName( ID3D11DeviceChild * p_object, std::string const & p_name, std::string const & p_file, int line );
-		void SetDxDebugName( IDXGIDeviceSubObject * p_object, std::string const & p_name, std::string const & p_file, int line );
-		void UnsetDxDebugName( ID3D11Device * p_object );
-		void UnsetDxDebugName( ID3D11DeviceChild * p_object );
-		void UnsetDxDebugName( IDXGIDeviceSubObject * p_object );
+		void Track( ID3D11Device * p_object, std::string const & p_name, std::string const & p_file, int line );
+		void Track( ID3D11DeviceChild * p_object, std::string const & p_name, std::string const & p_file, int line );
+		void Track( IDXGIDeviceSubObject * p_object, std::string const & p_name, std::string const & p_file, int line );
+		void Untrack( ID3D11Device * p_object );
+		void Untrack( ID3D11DeviceChild * p_object );
+		void Untrack( IDXGIDeviceSubObject * p_object );
 
 #endif
 	};
