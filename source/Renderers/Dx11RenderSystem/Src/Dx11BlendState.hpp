@@ -26,15 +26,29 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Dx11Render
 {
 	class DxBlendState
-		:	public Castor3D::BlendState
+		: public Castor3D::BlendState
 	{
 	public:
 		DxBlendState( DxRenderSystem * p_pRenderSystem );
 		virtual ~DxBlendState();
-
+		/**
+		 *\copydoc Castor3D::BlendState::Initialise
+		 */
 		virtual bool Initialise();
+		/**
+		 *\copydoc Castor3D::BlendState::Cleanup
+		 */
 		virtual void Cleanup();
+		/**
+		 *\copydoc Castor3D::BlendState::Apply
+		 */
 		virtual bool Apply();
+
+	private:
+		/**
+		 *\copydoc Castor3D::BlendState::DoCreateCurrent
+		 */
+		virtual Castor3D::BlendStateSPtr DoCreateCurrent();
 
 	private:
 		DxRenderSystem * m_pRenderSystem;

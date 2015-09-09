@@ -454,6 +454,27 @@ namespace Castor3D
 			eBLEND_OP	m_eAlphaBlendOp;
 			uint8_t		m_uiWriteMask;
 		};
+		/**
+		 *\~english
+		 *\brief		Creates the state used to save the current state
+		 *\~french
+		 *\brief		Crée l'état utilisé pour stocker l'état courant
+		 */
+		void CreateCurrent();
+		/**
+		 *\~english
+		 *\brief		Destroys the state used to save the current state
+		 *\~french
+		 *\brief		Détruit l'état utilisé pour stocker l'état courant
+		 */
+		void DestroyCurrent();
+		/**
+		 *\~english
+		 *\brief		Creates the state used to save the current state
+		 *\~french
+		 *\brief		Crée l'état utilisé pour stocker l'état courant
+		 */
+		virtual BlendStateSPtr DoCreateCurrent() = 0;
 
 	protected:
 		//!\~english Tells if the blend state has changed	\~french Dit que l'Ã©tat a changÃ©
@@ -470,6 +491,10 @@ namespace Castor3D
 		std::array< stRT_BLEND_STATE, 8 > m_rtStates;
 		//!\~english	Colours writing mask	\~french	Masque d'écriture des couleurs
 		eWRITING_MASK m_eColourMask[4];
+		//!\~english	The internal global state used to commit only the changed states.	\~french	Etat interne global, utilisé pour n'appliquer que les changements d'état.
+		static BlendStateWPtr m_wCurrentState;
+		//!\~english	Shared_pointer to the internal global state, to use reference counting for this static member.	\~french	Pointeur partag2 sur l'état interne global, utilisé pour avoir le comptage de références pour ce membre statique.
+		BlendStateSPtr m_currentState;
 	};
 }
 

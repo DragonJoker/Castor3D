@@ -275,15 +275,51 @@ namespace Castor3D
 		}
 
 	protected:
+		/**
+		 *\~english
+		 *\brief		Creates the state used to save the current state
+		 *\~french
+		 *\brief		Crée l'état utilisé pour stocker l'état courant
+		 */
+		void CreateCurrent();
+		/**
+		 *\~english
+		 *\brief		Destroys the state used to save the current state
+		 *\~french
+		 *\brief		Détruit l'état utilisé pour stocker l'état courant
+		 */
+		void DestroyCurrent();
+		/**
+		 *\~english
+		 *\brief		Creates the state used to save the current state
+		 *\~french
+		 *\brief		Crée l'état utilisé pour stocker l'état courant
+		 */
+		virtual RasteriserStateSPtr DoCreateCurrent() = 0;
+
+	protected:
+		//!\~english Tells it has changed.	\~french Dit que l'état a changé.
 		bool m_bChanged;
+		//!\~english The fill mode.	\~french Définit le mode de remplissage.
 		eFILL_MODE m_eFillMode;
+		//!\~english The culled faces.	\~french Les faces cachées.
 		eFACE m_eCulledFaces;
+		//!\~english The faces considered front facing.	\~french Les faces considérées comme tournées vers l'avant.
 		bool m_bFrontCCW;
+		//!\~english The antialiased lines status.	\~french Le statut d'antialising des lignes.
 		bool m_bAntialiasedLines;
+		//!\~english The depth bias.	\~french Le depth bias.
 		float m_fDepthBias;
+		//!\~english The scissor test activation status.	\~french Le statut d'acitvation du scissor test.
 		bool m_bScissor;
+		//!\~english The depth clipping status.	\~french Le statut de depth clipping.
 		bool m_bDepthClipping;
+		//!\~english The multisample activation status.	\~french Le statut d'acitvation du multisample.
 		bool m_bMultisampled;
+		//!\~english	The internal global state used to commit only the changed states.	\~french	Etat interne global, utilisé pour n'appliquer que les changements d'état.
+		static RasteriserStateWPtr m_wCurrentState;
+		//!\~english	Shared_pointer to the internal global state, to use reference counting for this static member.	\~french	Pointeur partag2 sur l'état interne global, utilisé pour avoir le comptage de références pour ce membre statique.
+		RasteriserStateSPtr m_currentState;
 	};
 }
 

@@ -533,6 +533,29 @@ namespace Castor3D
 		}
 
 	protected:
+		/**
+		 *\~english
+		 *\brief		Creates the state used to save the current state
+		 *\~french
+		 *\brief		Crée l'état utilisé pour stocker l'état courant
+		 */
+		void CreateCurrent();
+		/**
+		 *\~english
+		 *\brief		Destroys the state used to save the current state
+		 *\~french
+		 *\brief		Détruit l'état utilisé pour stocker l'état courant
+		 */
+		void DestroyCurrent();
+		/**
+		 *\~english
+		 *\brief		Creates the state used to save the current state
+		 *\~french
+		 *\brief		Crée l'état utilisé pour stocker l'état courant
+		 */
+		virtual DepthStencilStateSPtr DoCreateCurrent() = 0;
+
+	protected:
 		//!\~english Tells it has changed	\~french Dit que l'état a changé
 		bool m_bChanged;
 		//!\~english Tells whether the depth test is activated or not	\~french Dit si oui on non le test de profondeur est activé
@@ -555,6 +578,10 @@ namespace Castor3D
 		stSTENCIL m_stStencilFront;
 		//!\~english Back buffer stencil function	\~french Fonction stencil du tampon d'arrière plan
 		stSTENCIL m_stStencilBack;
+		//!\~english	The internal global state used to commit only the changed states.	\~french	Etat interne global, utilisé pour n'appliquer que les changements d'état.
+		static DepthStencilStateWPtr m_wCurrentState;
+		//!\~english	Shared_pointer to the internal global state, to use reference counting for this static member.	\~french	Pointeur partag2 sur l'état interne global, utilisé pour avoir le comptage de références pour ce membre statique.
+		DepthStencilStateSPtr m_currentState;
 	};
 }
 

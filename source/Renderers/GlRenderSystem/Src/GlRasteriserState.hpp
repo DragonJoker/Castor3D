@@ -25,19 +25,35 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GlRender
 {
 	class GlRasteriserState
-		:	public Castor3D::RasteriserState
-		,	public Castor::NonCopyable
+		: public Castor3D::RasteriserState
+		, public Castor::NonCopyable
 	{
 	public:
 		GlRasteriserState( OpenGl & p_gl );
 		virtual ~GlRasteriserState();
-
+		/**
+		 *\copydoc Castor3D::RasteriserState::Initialise
+		 */
 		virtual bool Initialise()
 		{
 			return true;
 		}
-		virtual void Cleanup() {}
+		/**
+		 *\copydoc Castor3D::RasteriserState::Cleanup
+		 */
+		virtual void Cleanup()
+		{
+		}
+		/**
+		 *\copydoc Castor3D::RasteriserState::Apply
+		 */
 		virtual bool Apply();
+
+	private:
+		/**
+		 *\copydoc Castor3D::RasteriserState::DoCreateCurrent
+		 */
+		virtual Castor3D::RasteriserStateSPtr DoCreateCurrent();
 
 	private:
 		OpenGl & m_gl;

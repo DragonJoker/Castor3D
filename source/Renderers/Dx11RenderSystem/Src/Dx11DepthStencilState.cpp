@@ -13,10 +13,12 @@ namespace Dx11Render
 		, m_pRenderSystem( p_pRenderSystem )
 		, m_pDepthStencilState( NULL )
 	{
+		CreateCurrent();
 	}
 
 	DxDepthStencilState::~DxDepthStencilState()
 	{
+		DestroyCurrent();
 	}
 
 	bool DxDepthStencilState::Initialise()
@@ -78,5 +80,10 @@ namespace Dx11Render
 		}
 
 		return l_bReturn;
+	}
+
+	DepthStencilStateSPtr DxDepthStencilState::DoCreateCurrent()
+	{
+		return std::make_unique< DxDepthStencilState >( m_pRenderSystem );
 	}
 }

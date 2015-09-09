@@ -13,10 +13,12 @@ namespace Dx11Render
 		, m_pRenderSystem( p_pRenderSystem )
 		, m_pRasteriserState( NULL )
 	{
+		CreateCurrent();
 	}
 
 	DxRasteriserState::~DxRasteriserState()
 	{
+		DestroyCurrent();
 	}
 
 	bool DxRasteriserState::Initialise()
@@ -65,5 +67,10 @@ namespace Dx11Render
 		}
 
 		return l_bReturn;
+	}
+
+	RasteriserStateSPtr DxRasteriserState::DoCreateCurrent()
+	{
+		return std::make_unique< DxRasteriserState >( m_pRenderSystem );
 	}
 }

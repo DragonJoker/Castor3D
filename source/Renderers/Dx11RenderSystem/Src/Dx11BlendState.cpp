@@ -13,10 +13,12 @@ namespace Dx11Render
 		, m_pRenderSystem( p_pRenderSystem )
 		, m_pBlendState( NULL )
 	{
+		CreateCurrent();
 	}
 
 	DxBlendState::~DxBlendState()
 	{
+		DestroyCurrent();
 	}
 
 	bool DxBlendState::Initialise()
@@ -75,5 +77,10 @@ namespace Dx11Render
 		}
 
 		return l_bReturn;
+	}
+
+	BlendStateSPtr DxBlendState::DoCreateCurrent()
+	{
+		return std::make_unique< DxBlendState >( m_pRenderSystem );
 	}
 }

@@ -85,6 +85,12 @@ namespace CastorViewer
 		Castor::Path m_strFilePath;
 		wxString m_currentPerspective;
 		wxString m_fullScreenPerspective;
+		wxTimer * m_timerErr;
+		wxArrayString m_errLogList;
+		std::mutex m_errLogListMtx;
+		wxTimer * m_timerMsg;
+		wxArrayString m_msgLogList;
+		std::mutex m_msgLogListMtx;
 	};
 }
 
