@@ -102,6 +102,9 @@ namespace CastorViewer
 			eID_TOOL_SHOW_LOGS,
 			eID_TOOL_SHOW_PROPERTIES,
 			eID_TOOL_SHOW_LISTS,
+			eID_RENDER_TIMER,
+			eID_MSGLOG_TIMER,
+			eID_ERRLOG_TIMER,
 		}	eID;
 
 		typedef enum eBMP
@@ -562,6 +565,8 @@ namespace CastorViewer
 		, m_pRenderPanel( NULL )
 		, m_pImagesLoader( new wxImagesLoader )
 		, m_timer( NULL )
+		, m_timerMsg( NULL )
+		, m_timerErr( NULL )
 		, m_logTabsContainer( NULL )
 		, m_messageLog( NULL )
 		, m_errorLog( NULL )
@@ -1046,13 +1051,25 @@ namespace CastorViewer
 
 #if !CASTOR3D_THREADED
 
-				if ( m_timer == NULL )
+				if ( !m_timer )
 				{
-					m_timer = new wxTimer( this, 1 );
+					m_timer = new wxTimer( this, eID_RENDER_TIMER );
 					m_timer->Start( 1000 / CASTOR_WANTED_FPS );
 				}
 
 #endif
+
+				if ( !m_timerMsg )
+				{
+					m_timerMsg = new wxTimer( this, eID_MSGLOG_TIMER );
+					m_timerMsg->Start( 100 );
+				}
+
+				if ( !m_timerErr )
+				{
+					m_timerErr = new wxTimer( this, eID_ERRLOG_TIMER );
+					m_timerErr->Start( 100 );
+				}
 			}
 		}
 		catch ( ... )
@@ -1163,20 +1180,18 @@ namespace CastorViewer
 		{
 		case Castor::ELogType_DEBUG:
 		case Castor::ELogType_INFO:
-			if ( m_messageLog )
 			{
-				m_messageLog->Insert( wxArrayString( 1, p_strLog ), 0 );
+				std::lock_guard< std::mutex > l_lock( m_msgLogListMtx );
+				m_msgLogList.push_back( p_strLog );
 			}
-
 			break;
 
 		case Castor::ELogType_WARNING:
 		case Castor::ELogType_ERROR:
-			if ( m_errorLog )
 			{
-				m_errorLog->Insert( wxArrayString( 1, p_strLog ), 0 );
+				std::lock_guard< std::mutex > l_lock( m_errLogListMtx );
+				m_errLogList.push_back( p_strLog );
 			}
-
 			break;
 
 		default:
@@ -1185,7 +1200,9 @@ namespace CastorViewer
 	}
 
 	BEGIN_EVENT_TABLE( MainFrame, wxFrame )
-		EVT_TIMER( 1, MainFrame::OnTimer )
+		EVT_TIMER( eID_RENDER_TIMER, MainFrame::OnTimer )
+		EVT_TIMER( eID_MSGLOG_TIMER, MainFrame::OnTimer )
+		EVT_TIMER( eID_ERRLOG_TIMER, MainFrame::OnTimer )
 		EVT_PAINT( MainFrame::OnPaint )
 		EVT_INIT_DIALOG( MainFrame::OnInit )
 		EVT_CLOSE( MainFrame::OnClose )
@@ -1207,9 +1224,36 @@ namespace CastorViewer
 
 	void MainFrame::OnTimer( wxTimerEvent & p_event )
 	{
-		if ( m_pCastor3D )
+		if ( p_event.GetId() == eID_RENDER_TIMER )
 		{
-			m_pCastor3D->RenderOneFrame();
+			if ( m_pCastor3D )
+			{
+				m_pCastor3D->RenderOneFrame();
+			}
+		}
+		else if ( p_event.GetId() == eID_MSGLOG_TIMER && m_messageLog )
+		{
+			wxArrayString l_flush;
+			{
+				std::lock_guard< std::mutex > l_lock( m_msgLogListMtx );
+				std::swap( l_flush, m_msgLogList );
+			}
+			if ( !l_flush.empty() )
+			{
+				m_messageLog->Insert( l_flush, 0 );
+			}
+		}
+		else if ( p_event.GetId() == eID_ERRLOG_TIMER && m_errorLog )
+		{
+			wxArrayString l_flush;
+			{
+				std::lock_guard< std::mutex > l_lock( m_errLogListMtx );
+				std::swap( l_flush, m_errLogList );
+			}
+			if ( !l_flush.empty() )
+			{
+				m_errorLog->Insert( l_flush, 0 );
+			}
 		}
 
 		p_event.Skip();
@@ -1236,6 +1280,20 @@ namespace CastorViewer
 			m_timer->Stop();
 			delete m_timer;
 			m_timer = nullptr;
+		}
+
+		if ( m_timerMsg )
+		{
+			m_timerMsg->Stop();
+			delete m_timerMsg;
+			m_timerMsg = nullptr;
+		}
+
+		if ( m_timerErr )
+		{
+			m_timerErr->Stop();
+			delete m_timerErr;
+			m_timerErr = nullptr;
 		}
 
 		m_pMainScene.reset();

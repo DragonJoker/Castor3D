@@ -25,19 +25,35 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GlRender
 {
 	class GlBlendState
-		:	public Castor3D::BlendState
-		,	public Castor::NonCopyable
+		: public Castor3D::BlendState
+		, public Castor::NonCopyable
 	{
 	public:
 		GlBlendState( OpenGl & p_gl );
 		virtual ~GlBlendState();
-
+		/**
+		 *\copydoc Castor3D::BlendState::Initialise
+		 */
 		virtual bool Initialise()
 		{
 			return true;
 		}
-		virtual void Cleanup() {}
+		/**
+		 *\copydoc Castor3D::BlendState::Cleanup
+		 */
+		virtual void Cleanup()
+		{
+		}
+		/**
+		 *\copydoc Castor3D::BlendState::Apply
+		 */
 		virtual bool Apply();
+
+	private:
+		/**
+		 *\copydoc Castor3D::BlendState::DoCreateCurrent
+		 */
+		virtual Castor3D::BlendStateSPtr DoCreateCurrent();
 
 	private:
 		OpenGl & m_gl;

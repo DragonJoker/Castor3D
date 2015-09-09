@@ -25,19 +25,35 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GlRender
 {
 	class GlDepthStencilState
-		:	public Castor3D::DepthStencilState
-		,	public Castor::NonCopyable
+		: public Castor3D::DepthStencilState
+		, public Castor::NonCopyable
 	{
 	public:
 		GlDepthStencilState( OpenGl & p_gl );
 		virtual ~GlDepthStencilState();
-
+		/**
+		 *\copydoc Castor3D::DepthStencilState::Initialise
+		 */
 		virtual bool Initialise()
 		{
 			return true;
 		}
-		virtual void Cleanup() {}
+		/**
+		 *\copydoc Castor3D::DepthStencilState::Cleanup
+		 */
+		virtual void Cleanup()
+		{
+		}
+		/**
+		 *\copydoc Castor3D::DepthStencilState::Apply
+		 */
 		virtual bool Apply();
+
+	private:
+		/**
+		 *\copydoc Castor3D::DepthStencilState::DoCreateCurrent
+		 */
+		virtual Castor3D::DepthStencilStateSPtr DoCreateCurrent();
 
 	private:
 		OpenGl & m_gl;

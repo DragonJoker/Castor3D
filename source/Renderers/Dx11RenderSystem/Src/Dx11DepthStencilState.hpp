@@ -26,15 +26,29 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Dx11Render
 {
 	class DxDepthStencilState
-		:	public Castor3D::DepthStencilState
+		: public Castor3D::DepthStencilState
 	{
 	public:
 		DxDepthStencilState( DxRenderSystem * p_pRenderSystem );
 		virtual ~DxDepthStencilState();
-
+		/**
+		 *\copydoc Castor3D::DepthStencilState::Initialise
+		 */
 		virtual bool Initialise();
+		/**
+		 *\copydoc Castor3D::DepthStencilState::Cleanup
+		 */
 		virtual void Cleanup();
+		/**
+		 *\copydoc Castor3D::DepthStencilState::Apply
+		 */
 		virtual bool Apply();
+
+	private:
+		/**
+		 *\copydoc Castor3D::DepthStencilState::DoCreateCurrent
+		 */
+		virtual Castor3D::DepthStencilStateSPtr DoCreateCurrent();
 
 	private:
 		DxRenderSystem * m_pRenderSystem;

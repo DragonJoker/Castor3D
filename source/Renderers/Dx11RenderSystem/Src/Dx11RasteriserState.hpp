@@ -26,15 +26,29 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Dx11Render
 {
 	class DxRasteriserState
-		:	public Castor3D::RasteriserState
+		: public Castor3D::RasteriserState
 	{
 	public:
 		DxRasteriserState( DxRenderSystem * p_pRenderSystem );
 		virtual ~DxRasteriserState();
-
+		/**
+		 *\copydoc Castor3D::RasteriserState::Initialise
+		 */
 		virtual bool Initialise();
+		/**
+		 *\copydoc Castor3D::RasteriserState::Cleanup
+		 */
 		virtual void Cleanup();
+		/**
+		 *\copydoc Castor3D::RasteriserState::Apply
+		 */
 		virtual bool Apply();
+
+	private:
+		/**
+		 *\copydoc Castor3D::RasteriserState::DoCreateCurrent
+		 */
+		virtual Castor3D::RasteriserStateSPtr DoCreateCurrent();
 
 	private:
 		DxRenderSystem * m_pRenderSystem;
