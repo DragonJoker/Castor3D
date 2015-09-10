@@ -15,17 +15,17 @@ namespace GuiCommon
 		static const wxString PROPERTY_CATEGORY_RENDER_WINDOW = _( "Render Window: " );
 	}
 
-	wxRenderWindowTreeItemProperty::wxRenderWindowTreeItemProperty( RenderWindowSPtr p_window )
-		: wxTreeItemProperty( ePROPERTY_DATA_TYPE_RENDER_WINDOW )
+	RenderWindowTreeItemProperty::RenderWindowTreeItemProperty( bool p_editable, RenderWindowSPtr p_window )
+		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_RENDER_WINDOW )
 		, m_window( p_window )
 	{
 	}
 
-	wxRenderWindowTreeItemProperty::~wxRenderWindowTreeItemProperty()
+	RenderWindowTreeItemProperty::~RenderWindowTreeItemProperty()
 	{
 	}
 
-	void wxRenderWindowTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void RenderWindowTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
 	{
 		RenderWindowSPtr l_window = GetRenderWindow();
 
@@ -34,7 +34,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxRenderWindowTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void RenderWindowTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		RenderWindowSPtr l_window = GetRenderWindow();
 		wxPGProperty * l_property = p_event.GetProperty();

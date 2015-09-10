@@ -24,21 +24,33 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GuiCommon
 {
-	class wxPropertiesHolder
+	class PropertiesHolder
 		: public wxPropertyGrid
 	{
 	public:
-		wxPropertiesHolder( bool p_bCanEdit, wxWindow * p_pParent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
-		~wxPropertiesHolder();
+		PropertiesHolder( bool p_bCanEdit, wxWindow * p_pParent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
+		~PropertiesHolder();
 
-		void SetPropertyData( wxTreeItemProperty * p_data );
+		void SetPropertyData( TreeItemProperty * p_data );
+		/**
+		 *\~english
+		 *\brief		Retrieves the editable status
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le statut de modifiabilité
+		 *\return		La valeur
+		 */
+		inline bool IsEditable()const
+		{
+			return m_bCanEdit;
+		}
 
 	private:
 		void OnPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
 		bool m_bCanEdit;
-		wxTreeItemProperty * m_data;
+		TreeItemProperty * m_data;
 	};
 }
 

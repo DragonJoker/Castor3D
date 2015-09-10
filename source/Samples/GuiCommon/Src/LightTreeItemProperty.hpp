@@ -27,30 +27,32 @@ namespace GuiCommon
 	\date 		24/08/2015
 	\version	0.8.0
 	\~english
-	\brief		Geometry helper class to communicate between Scene objects or Materials lists and wxPropertiesHolder
+	\brief		Geometry helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et wxPropertiesHolder, pour les géométries
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les géométries
 	*/
-	class wxLightTreeItemProperty
-		: public wxTreeItemProperty
+	class LightTreeItemProperty
+		: public TreeItemProperty
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pGeometry	 The target geometry
+		 *\param[in]	p_editable	Tells if the properties are modifiable
+		 *\param[in]	p_light		The target light
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pGeometry	La géométrie cible
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
+		 *\param[in]	p_light		La lumière cible
 		 */
-		wxLightTreeItemProperty( Castor3D::LightSPtr p_light );
+		LightTreeItemProperty( bool p_editable, Castor3D::LightSPtr p_light );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~wxLightTreeItemProperty();
+		~LightTreeItemProperty();
 		/**
 		 *\~english
 		 *\brief		Creates and fills the overlay properties, in the given wxPropertyGrid

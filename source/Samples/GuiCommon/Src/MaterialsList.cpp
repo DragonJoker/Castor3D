@@ -1,12 +1,11 @@
 #include "MaterialsList.hpp"
 
-#include "PassPanel.hpp"
 #include "ImagesLoader.hpp"
 #include "MaterialTreeItemProperty.hpp"
 #include "PassTreeItemProperty.hpp"
+#include "PropertiesHolder.hpp"
 #include "RenderTargetTreeItemProperty.hpp"
 #include "TextureTreeItemProperty.hpp"
-#include "PropertiesHolder.hpp"
 
 #include <Engine.hpp>
 #include <Material.hpp>
@@ -34,28 +33,28 @@ using namespace Castor;
 
 namespace GuiCommon
 {
-	wxMaterialsList::wxMaterialsList( wxPropertiesHolder * p_propertiesHolder, wxWindow * p_pParent, wxPoint const & p_ptPos, wxSize const & p_size )
+	MaterialsList::MaterialsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_pParent, wxPoint const & p_ptPos, wxSize const & p_size )
 		: wxTreeCtrl( p_pParent, wxID_ANY, p_ptPos, p_size, wxTR_DEFAULT_STYLE | wxTR_HIDE_ROOT | wxNO_BORDER )
 		, m_pEngine( NULL )
 		, m_propertiesHolder( p_propertiesHolder )
 	{
 		wxBusyCursor l_wait;
-		wxImagesLoader::AddBitmap( eBMP_MATERIAL, material_xpm );
-		wxImagesLoader::AddBitmap( eBMP_MATERIAL_SEL, material_sel_xpm );
-		wxImagesLoader::AddBitmap( eBMP_PASS, pass_xpm );
-		wxImagesLoader::AddBitmap( eBMP_PASS_SEL, pass_sel_xpm );
-		wxImagesLoader::AddBitmap( eBMP_TEXTURE, texture_xpm );
-		wxImagesLoader::AddBitmap( eBMP_TEXTURE_SEL, texture_sel_xpm );
-		wxImagesLoader::WaitAsyncLoads();
+		ImagesLoader::AddBitmap( eBMP_MATERIAL, material_xpm );
+		ImagesLoader::AddBitmap( eBMP_MATERIAL_SEL, material_sel_xpm );
+		ImagesLoader::AddBitmap( eBMP_PASS, pass_xpm );
+		ImagesLoader::AddBitmap( eBMP_PASS_SEL, pass_sel_xpm );
+		ImagesLoader::AddBitmap( eBMP_TEXTURE, texture_xpm );
+		ImagesLoader::AddBitmap( eBMP_TEXTURE_SEL, texture_sel_xpm );
+		ImagesLoader::WaitAsyncLoads();
 
 		wxImage * l_icons[] =
 		{
-			wxImagesLoader::GetBitmap( eBMP_MATERIAL ),
-			wxImagesLoader::GetBitmap( eBMP_MATERIAL_SEL ),
-			wxImagesLoader::GetBitmap( eBMP_PASS ),
-			wxImagesLoader::GetBitmap( eBMP_PASS_SEL ),
-			wxImagesLoader::GetBitmap( eBMP_TEXTURE ),
-			wxImagesLoader::GetBitmap( eBMP_TEXTURE_SEL ),
+			ImagesLoader::GetBitmap( eBMP_MATERIAL ),
+			ImagesLoader::GetBitmap( eBMP_MATERIAL_SEL ),
+			ImagesLoader::GetBitmap( eBMP_PASS ),
+			ImagesLoader::GetBitmap( eBMP_PASS_SEL ),
+			ImagesLoader::GetBitmap( eBMP_TEXTURE ),
+			ImagesLoader::GetBitmap( eBMP_TEXTURE_SEL ),
 		};
 
 		wxImageList * l_imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
@@ -75,12 +74,12 @@ namespace GuiCommon
 		AssignImageList( l_imageList );
 	}
 
-	wxMaterialsList::~wxMaterialsList()
+	MaterialsList::~MaterialsList()
 	{
 		DeleteAllItems();
 	}
 
-	void wxMaterialsList::LoadMaterials( Castor3D::Engine * p_pEngine )
+	void MaterialsList::LoadMaterials( Castor3D::Engine * p_pEngine )
 	{
 		m_pEngine = p_pEngine;
 		wxTreeItemId l_root = AddRoot( _( "Root" ), eBMP_SCENE, eBMP_SCENE_SEL );
@@ -94,14 +93,14 @@ namespace GuiCommon
 		m_pEngine->GetMaterialManager().unlock();
 	}
 
-	void wxMaterialsList::UnloadMaterials()
+	void MaterialsList::UnloadMaterials()
 	{
 		DeleteAllItems();
 	}
 
-	void wxMaterialsList::DoAddMaterial( wxTreeItemId p_id, Castor3D::MaterialSPtr p_material )
+	void MaterialsList::DoAddMaterial( wxTreeItemId p_id, Castor3D::MaterialSPtr p_material )
 	{
-		wxTreeItemId l_id = AppendItem( p_id, p_material->GetName(), eBMP_MATERIAL - eBMP_MATERIAL, eBMP_MATERIAL_SEL - eBMP_MATERIAL, new wxMaterialTreeItemProperty( p_material ) );
+		wxTreeItemId l_id = AppendItem( p_id, p_material->GetName(), eBMP_MATERIAL - eBMP_MATERIAL, eBMP_MATERIAL_SEL - eBMP_MATERIAL, new MaterialTreeItemProperty( m_propertiesHolder->IsEditable(), p_material ) );
 		uint32_t l_index = 0;
 
 		for ( auto && l_pass : *p_material )
@@ -110,9 +109,9 @@ namespace GuiCommon
 		}
 	}
 
-	void wxMaterialsList::DoAddPass( wxTreeItemId p_id, uint32_t p_index, Castor3D::PassSPtr p_pass )
+	void MaterialsList::DoAddPass( wxTreeItemId p_id, uint32_t p_index, Castor3D::PassSPtr p_pass )
 	{
-		wxTreeItemId l_id = AppendItem( p_id, wxString( _( "Pass " ) ) << p_index, eBMP_PASS - eBMP_MATERIAL, eBMP_PASS_SEL - eBMP_MATERIAL, new wxPassTreeItemProperrty( p_pass ) );
+		wxTreeItemId l_id = AppendItem( p_id, wxString( _( "Pass " ) ) << p_index, eBMP_PASS - eBMP_MATERIAL, eBMP_PASS_SEL - eBMP_MATERIAL, new PassTreeItemProperty( m_propertiesHolder->IsEditable(), p_pass ) );
 		uint32_t l_index = 0;
 
 		for ( auto && l_pass : *p_pass )
@@ -121,9 +120,9 @@ namespace GuiCommon
 		}
 	}
 
-	void wxMaterialsList::DoAddTexture( wxTreeItemId p_id, uint32_t p_index, Castor3D::TextureUnitSPtr p_texture )
+	void MaterialsList::DoAddTexture( wxTreeItemId p_id, uint32_t p_index, Castor3D::TextureUnitSPtr p_texture )
 	{
-		wxTreeItemId l_id = AppendItem( p_id, wxString( _( "Texture Unit " ) ) << p_index, eBMP_TEXTURE - eBMP_MATERIAL, eBMP_TEXTURE_SEL - eBMP_MATERIAL, new wxTextureTreeItemProperty( p_texture ) );
+		wxTreeItemId l_id = AppendItem( p_id, wxString( _( "Texture Unit " ) ) << p_index, eBMP_TEXTURE - eBMP_MATERIAL, eBMP_TEXTURE_SEL - eBMP_MATERIAL, new TextureTreeItemProperty( m_propertiesHolder->IsEditable(), p_texture ) );
 		TextureBaseSPtr l_texture = p_texture->GetTexture();
 
 		if ( l_texture->GetType() == eTEXTURE_TYPE_DYNAMIC )
@@ -133,30 +132,30 @@ namespace GuiCommon
 			if ( l_target )
 			{
 				wxString l_name = _( "Render Target" );
-				AppendItem( l_id, l_name, eBMP_RENDER_TARGET, eBMP_RENDER_TARGET_SEL, new wxRenderTargetTreeItemProperty( l_target ) );
+				AppendItem( l_id, l_name, eBMP_RENDER_TARGET, eBMP_RENDER_TARGET_SEL, new RenderTargetTreeItemProperty( m_propertiesHolder->IsEditable(), l_target ) );
 			}
 		}
 	}
 
-	BEGIN_EVENT_TABLE( wxMaterialsList, wxTreeCtrl )
-		EVT_CLOSE( wxMaterialsList::OnClose )
-		EVT_TREE_SEL_CHANGED( wxID_ANY, wxMaterialsList::OnSelectItem )
+	BEGIN_EVENT_TABLE( MaterialsList, wxTreeCtrl )
+		EVT_CLOSE( MaterialsList::OnClose )
+		EVT_TREE_SEL_CHANGED( wxID_ANY, MaterialsList::OnSelectItem )
 	END_EVENT_TABLE()
 
-	void wxMaterialsList::OnClose( wxCloseEvent & p_event )
+	void MaterialsList::OnClose( wxCloseEvent & p_event )
 	{
 		DeleteAllItems();
 		p_event.Skip();
 	}
 
-	void wxMaterialsList::OnSelectItem( wxTreeEvent & p_event )
+	void MaterialsList::OnSelectItem( wxTreeEvent & p_event )
 	{
-		wxTreeItemProperty * l_data = reinterpret_cast< wxTreeItemProperty * >( p_event.GetClientObject() );
+		TreeItemProperty * l_data = reinterpret_cast< TreeItemProperty * >( p_event.GetClientObject() );
 		m_propertiesHolder->SetPropertyData( l_data );
 		p_event.Skip();
 	}
 
-	//void wxMaterialsList::AddItem( String const & p_strMaterialName )
+	//void MaterialsList::AddItem( String const & p_strMaterialName )
 	//{
 	//	MaterialSPtr l_pMaterial = m_pEngine->GetMaterialManager().find( p_strMaterialName );
 	//	int l_iIndex = m_pListImages->GetImageCount();
@@ -175,7 +174,7 @@ namespace GuiCommon
 	//
 	//	if ( InsertItem( l_item ) == -1 )
 	//	{
-	//		Logger::LogWarning( cuT( "wxMaterialsList::AddItem - Item not inserted" ) );
+	//		Logger::LogWarning( cuT( "MaterialsList::AddItem - Item not inserted" ) );
 	//	}
 	//	else
 	//	{
@@ -183,7 +182,7 @@ namespace GuiCommon
 	//	}
 	//}
 	//
-	//wxImage * wxMaterialsList::CreateMaterialImage( MaterialSPtr p_pMaterial, uint32_t p_uiWidth, uint32_t p_uiHeight )
+	//wxImage * MaterialsList::CreateMaterialImage( MaterialSPtr p_pMaterial, uint32_t p_uiWidth, uint32_t p_uiHeight )
 	//{
 	//	wxBitmap l_bmpReturn( p_uiWidth, p_uiHeight, 32 );
 	//	wxMemoryDC l_dcReturn( l_bmpReturn );
@@ -202,7 +201,7 @@ namespace GuiCommon
 	//	return new wxImage( l_bmpReturn.ConvertToImage() );
 	//}
 	//
-	//wxImage * wxMaterialsList::CreatePassImage( PassSPtr p_pPass, uint32_t p_uiWidth, uint32_t p_uiHeight )
+	//wxImage * MaterialsList::CreatePassImage( PassSPtr p_pPass, uint32_t p_uiWidth, uint32_t p_uiHeight )
 	//{
 	//	wxImage * l_pReturn = NULL;
 	//
@@ -303,14 +302,14 @@ namespace GuiCommon
 	//	return l_pReturn;
 	//}
 	//
-	//wxImage * wxMaterialsList::CreateTextureUnitImage( TextureUnitSPtr p_pUnit, uint32_t p_uiWidth, uint32_t p_uiHeight )
+	//wxImage * MaterialsList::CreateTextureUnitImage( TextureUnitSPtr p_pUnit, uint32_t p_uiWidth, uint32_t p_uiHeight )
 	//{
 	//	wxImage * l_pReturn = NULL;
 	//
 	//	if ( p_pUnit )
 	//	{
 	//		wxBitmap l_bmp;
-	//		wxCreateBitmapFromBuffer( p_pUnit, l_bmp );
+	//		CreateBitmapFromBuffer( p_pUnit, l_bmp );
 	//
 	//		try
 	//		{
@@ -322,7 +321,7 @@ namespace GuiCommon
 	//		}
 	//		catch ( ... )
 	//		{
-	//			Logger::LogWarning( cuT( "wxMaterialsList::CreateTextureUnitImage" ) );
+	//			Logger::LogWarning( cuT( "MaterialsList::CreateTextureUnitImage" ) );
 	//		}
 	//	}
 	//

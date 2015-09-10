@@ -60,72 +60,72 @@ using namespace Castor;
 
 namespace GuiCommon
 {
-	wxSceneObjectsList::wxSceneObjectsList( wxPropertiesHolder * p_propertiesHolder, wxWindow * p_pParent, wxPoint const & p_ptPos, wxSize const & p_size )
+	SceneObjectsList::SceneObjectsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_pParent, wxPoint const & p_ptPos, wxSize const & p_size )
 		: wxTreeCtrl( p_pParent, wxID_ANY, p_ptPos, p_size, wxTR_DEFAULT_STYLE | wxNO_BORDER )
 		, m_pEngine( NULL )
 		, m_propertiesHolder( p_propertiesHolder )
 	{
 		wxBusyCursor l_wait;
-		wxImagesLoader::AddBitmap( eBMP_SCENE, scene_xpm );
-		wxImagesLoader::AddBitmap( eBMP_SCENE_SEL, scene_sel_xpm );
-		wxImagesLoader::AddBitmap( eBMP_NODE, node_xpm );
-		wxImagesLoader::AddBitmap( eBMP_NODE_SEL, node_sel_xpm );
-		wxImagesLoader::AddBitmap( eBMP_CAMERA, camera_xpm );
-		wxImagesLoader::AddBitmap( eBMP_CAMERA_SEL, camera_sel_xpm );
-		wxImagesLoader::AddBitmap( eBMP_VIEWPORT, viewport_xpm );
-		wxImagesLoader::AddBitmap( eBMP_VIEWPORT_SEL, viewport_sel_xpm );
-		wxImagesLoader::AddBitmap( eBMP_GEOMETRY, geometry_xpm );
-		wxImagesLoader::AddBitmap( eBMP_GEOMETRY_SEL, geometry_sel_xpm );
-		wxImagesLoader::AddBitmap( eBMP_DIRECTIONAL_LIGHT, directional_xpm );
-		wxImagesLoader::AddBitmap( eBMP_DIRECTIONAL_LIGHT_SEL, directional_sel_xpm );
-		wxImagesLoader::AddBitmap( eBMP_POINT_LIGHT, point_xpm );
-		wxImagesLoader::AddBitmap( eBMP_POINT_LIGHT_SEL, point_sel_xpm );
-		wxImagesLoader::AddBitmap( eBMP_SPOT_LIGHT, spot_xpm );
-		wxImagesLoader::AddBitmap( eBMP_SPOT_LIGHT_SEL, spot_sel_xpm );
-		wxImagesLoader::AddBitmap( eBMP_SUBMESH, submesh_xpm );
-		wxImagesLoader::AddBitmap( eBMP_SUBMESH_SEL, submesh_sel_xpm );
-		wxImagesLoader::AddBitmap( eBMP_PANEL_OVERLAY, panel_xpm );
-		wxImagesLoader::AddBitmap( eBMP_PANEL_OVERLAY_SEL, panel_sel_xpm );
-		wxImagesLoader::AddBitmap( eBMP_BORDER_PANEL_OVERLAY, border_panel_xpm );
-		wxImagesLoader::AddBitmap( eBMP_BORDER_PANEL_OVERLAY_SEL, border_panel_sel_xpm );
-		wxImagesLoader::AddBitmap( eBMP_TEXT_OVERLAY, text_xpm );
-		wxImagesLoader::AddBitmap( eBMP_TEXT_OVERLAY_SEL, text_sel_xpm );
-		wxImagesLoader::AddBitmap( eBMP_RENDER_TARGET, render_target_xpm );
-		wxImagesLoader::AddBitmap( eBMP_RENDER_TARGET_SEL, render_target_sel_xpm );
-		wxImagesLoader::AddBitmap( eBMP_RENDER_WINDOW, render_window_xpm );
-		wxImagesLoader::AddBitmap( eBMP_RENDER_WINDOW_SEL, render_window_sel_xpm );
-		wxImagesLoader::WaitAsyncLoads();
+		ImagesLoader::AddBitmap( eBMP_SCENE, scene_xpm );
+		ImagesLoader::AddBitmap( eBMP_SCENE_SEL, scene_sel_xpm );
+		ImagesLoader::AddBitmap( eBMP_NODE, node_xpm );
+		ImagesLoader::AddBitmap( eBMP_NODE_SEL, node_sel_xpm );
+		ImagesLoader::AddBitmap( eBMP_CAMERA, camera_xpm );
+		ImagesLoader::AddBitmap( eBMP_CAMERA_SEL, camera_sel_xpm );
+		ImagesLoader::AddBitmap( eBMP_VIEWPORT, viewport_xpm );
+		ImagesLoader::AddBitmap( eBMP_VIEWPORT_SEL, viewport_sel_xpm );
+		ImagesLoader::AddBitmap( eBMP_GEOMETRY, geometry_xpm );
+		ImagesLoader::AddBitmap( eBMP_GEOMETRY_SEL, geometry_sel_xpm );
+		ImagesLoader::AddBitmap( eBMP_DIRECTIONAL_LIGHT, directional_xpm );
+		ImagesLoader::AddBitmap( eBMP_DIRECTIONAL_LIGHT_SEL, directional_sel_xpm );
+		ImagesLoader::AddBitmap( eBMP_POINT_LIGHT, point_xpm );
+		ImagesLoader::AddBitmap( eBMP_POINT_LIGHT_SEL, point_sel_xpm );
+		ImagesLoader::AddBitmap( eBMP_SPOT_LIGHT, spot_xpm );
+		ImagesLoader::AddBitmap( eBMP_SPOT_LIGHT_SEL, spot_sel_xpm );
+		ImagesLoader::AddBitmap( eBMP_SUBMESH, submesh_xpm );
+		ImagesLoader::AddBitmap( eBMP_SUBMESH_SEL, submesh_sel_xpm );
+		ImagesLoader::AddBitmap( eBMP_PANEL_OVERLAY, panel_xpm );
+		ImagesLoader::AddBitmap( eBMP_PANEL_OVERLAY_SEL, panel_sel_xpm );
+		ImagesLoader::AddBitmap( eBMP_BORDER_PANEL_OVERLAY, border_panel_xpm );
+		ImagesLoader::AddBitmap( eBMP_BORDER_PANEL_OVERLAY_SEL, border_panel_sel_xpm );
+		ImagesLoader::AddBitmap( eBMP_TEXT_OVERLAY, text_xpm );
+		ImagesLoader::AddBitmap( eBMP_TEXT_OVERLAY_SEL, text_sel_xpm );
+		ImagesLoader::AddBitmap( eBMP_RENDER_TARGET, render_target_xpm );
+		ImagesLoader::AddBitmap( eBMP_RENDER_TARGET_SEL, render_target_sel_xpm );
+		ImagesLoader::AddBitmap( eBMP_RENDER_WINDOW, render_window_xpm );
+		ImagesLoader::AddBitmap( eBMP_RENDER_WINDOW_SEL, render_window_sel_xpm );
+		ImagesLoader::WaitAsyncLoads();
 
 		wxImage * l_icons[] =
 		{
-			wxImagesLoader::GetBitmap( eBMP_SCENE ),
-			wxImagesLoader::GetBitmap( eBMP_SCENE_SEL ),
-			wxImagesLoader::GetBitmap( eBMP_VIEWPORT ),
-			wxImagesLoader::GetBitmap( eBMP_VIEWPORT_SEL ),
-			wxImagesLoader::GetBitmap( eBMP_RENDER_TARGET ),
-			wxImagesLoader::GetBitmap( eBMP_RENDER_TARGET_SEL ),
-			wxImagesLoader::GetBitmap( eBMP_RENDER_WINDOW ),
-			wxImagesLoader::GetBitmap( eBMP_RENDER_WINDOW_SEL ),
-			wxImagesLoader::GetBitmap( eBMP_NODE ),
-			wxImagesLoader::GetBitmap( eBMP_NODE_SEL ),
-			wxImagesLoader::GetBitmap( eBMP_CAMERA ),
-			wxImagesLoader::GetBitmap( eBMP_CAMERA_SEL ),
-			wxImagesLoader::GetBitmap( eBMP_GEOMETRY ),
-			wxImagesLoader::GetBitmap( eBMP_GEOMETRY_SEL ),
-			wxImagesLoader::GetBitmap( eBMP_DIRECTIONAL_LIGHT ),
-			wxImagesLoader::GetBitmap( eBMP_DIRECTIONAL_LIGHT_SEL ),
-			wxImagesLoader::GetBitmap( eBMP_POINT_LIGHT ),
-			wxImagesLoader::GetBitmap( eBMP_POINT_LIGHT_SEL ),
-			wxImagesLoader::GetBitmap( eBMP_SPOT_LIGHT ),
-			wxImagesLoader::GetBitmap( eBMP_SPOT_LIGHT_SEL ),
-			wxImagesLoader::GetBitmap( eBMP_SUBMESH ),
-			wxImagesLoader::GetBitmap( eBMP_SUBMESH_SEL ),
-			wxImagesLoader::GetBitmap( eBMP_PANEL_OVERLAY ),
-			wxImagesLoader::GetBitmap( eBMP_PANEL_OVERLAY_SEL ),
-			wxImagesLoader::GetBitmap( eBMP_BORDER_PANEL_OVERLAY ),
-			wxImagesLoader::GetBitmap( eBMP_BORDER_PANEL_OVERLAY_SEL ),
-			wxImagesLoader::GetBitmap( eBMP_TEXT_OVERLAY ),
-			wxImagesLoader::GetBitmap( eBMP_TEXT_OVERLAY_SEL ),
+			ImagesLoader::GetBitmap( eBMP_SCENE ),
+			ImagesLoader::GetBitmap( eBMP_SCENE_SEL ),
+			ImagesLoader::GetBitmap( eBMP_VIEWPORT ),
+			ImagesLoader::GetBitmap( eBMP_VIEWPORT_SEL ),
+			ImagesLoader::GetBitmap( eBMP_RENDER_TARGET ),
+			ImagesLoader::GetBitmap( eBMP_RENDER_TARGET_SEL ),
+			ImagesLoader::GetBitmap( eBMP_RENDER_WINDOW ),
+			ImagesLoader::GetBitmap( eBMP_RENDER_WINDOW_SEL ),
+			ImagesLoader::GetBitmap( eBMP_NODE ),
+			ImagesLoader::GetBitmap( eBMP_NODE_SEL ),
+			ImagesLoader::GetBitmap( eBMP_CAMERA ),
+			ImagesLoader::GetBitmap( eBMP_CAMERA_SEL ),
+			ImagesLoader::GetBitmap( eBMP_GEOMETRY ),
+			ImagesLoader::GetBitmap( eBMP_GEOMETRY_SEL ),
+			ImagesLoader::GetBitmap( eBMP_DIRECTIONAL_LIGHT ),
+			ImagesLoader::GetBitmap( eBMP_DIRECTIONAL_LIGHT_SEL ),
+			ImagesLoader::GetBitmap( eBMP_POINT_LIGHT ),
+			ImagesLoader::GetBitmap( eBMP_POINT_LIGHT_SEL ),
+			ImagesLoader::GetBitmap( eBMP_SPOT_LIGHT ),
+			ImagesLoader::GetBitmap( eBMP_SPOT_LIGHT_SEL ),
+			ImagesLoader::GetBitmap( eBMP_SUBMESH ),
+			ImagesLoader::GetBitmap( eBMP_SUBMESH_SEL ),
+			ImagesLoader::GetBitmap( eBMP_PANEL_OVERLAY ),
+			ImagesLoader::GetBitmap( eBMP_PANEL_OVERLAY_SEL ),
+			ImagesLoader::GetBitmap( eBMP_BORDER_PANEL_OVERLAY ),
+			ImagesLoader::GetBitmap( eBMP_BORDER_PANEL_OVERLAY_SEL ),
+			ImagesLoader::GetBitmap( eBMP_TEXT_OVERLAY ),
+			ImagesLoader::GetBitmap( eBMP_TEXT_OVERLAY_SEL ),
 		};
 
 		wxImageList * l_imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
@@ -145,18 +145,18 @@ namespace GuiCommon
 		AssignImageList( l_imageList );
 	}
 
-	wxSceneObjectsList::~wxSceneObjectsList()
+	SceneObjectsList::~SceneObjectsList()
 	{
 	}
 
-	void wxSceneObjectsList::LoadScene( Engine * p_pEngine, SceneSPtr p_pScene )
+	void SceneObjectsList::LoadScene( Engine * p_pEngine, SceneSPtr p_pScene )
 	{
 		m_pScene = p_pScene;
 		m_pEngine = p_pEngine;
 
 		if ( p_pScene )
 		{
-			wxTreeItemId l_scene = AddRoot( p_pScene->GetName(), eBMP_SCENE, eBMP_SCENE_SEL, new wxSceneTreeItemProperty( p_pScene ) );
+			wxTreeItemId l_scene = AddRoot( p_pScene->GetName(), eBMP_SCENE, eBMP_SCENE_SEL, new SceneTreeItemProperty( m_propertiesHolder->IsEditable(), p_pScene ) );
 
 			for ( auto && l_it = p_pScene->GetEngine()->RenderWindowsBegin(); l_it != p_pScene->GetEngine()->RenderWindowsEnd(); ++l_it )
 			{
@@ -173,15 +173,15 @@ namespace GuiCommon
 					switch ( l_overlay->GetType() )
 					{
 					case eOVERLAY_TYPE_PANEL:
-						DoAddOverlay( AppendItem( l_scene, l_overlay->GetName(), eBMP_PANEL_OVERLAY, eBMP_PANEL_OVERLAY_SEL, new wxOverlayTreeItemProperty( l_overlay ) ), l_overlay );
+						DoAddOverlay( AppendItem( l_scene, l_overlay->GetName(), eBMP_PANEL_OVERLAY, eBMP_PANEL_OVERLAY_SEL, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), l_overlay ) ), l_overlay );
 						break;
 
 					case eOVERLAY_TYPE_BORDER_PANEL:
-						DoAddOverlay( AppendItem( l_scene, l_overlay->GetName(), eBMP_BORDER_PANEL_OVERLAY, eBMP_BORDER_PANEL_OVERLAY_SEL, new wxOverlayTreeItemProperty( l_overlay ) ), l_overlay );
+						DoAddOverlay( AppendItem( l_scene, l_overlay->GetName(), eBMP_BORDER_PANEL_OVERLAY, eBMP_BORDER_PANEL_OVERLAY_SEL, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), l_overlay ) ), l_overlay );
 						break;
 
 					case eOVERLAY_TYPE_TEXT:
-						DoAddOverlay( AppendItem( l_scene, l_overlay->GetName(), eBMP_TEXT_OVERLAY, eBMP_TEXT_OVERLAY_SEL, new wxOverlayTreeItemProperty( l_overlay ) ), l_overlay );
+						DoAddOverlay( AppendItem( l_scene, l_overlay->GetName(), eBMP_TEXT_OVERLAY, eBMP_TEXT_OVERLAY_SEL, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), l_overlay ) ), l_overlay );
 						break;
 					}
 				}
@@ -191,65 +191,65 @@ namespace GuiCommon
 		ExpandAll();
 	}
 
-	void wxSceneObjectsList::UnloadScene()
+	void SceneObjectsList::UnloadScene()
 	{
 		DeleteAllItems();
 	}
 
-	void wxSceneObjectsList::DoAddRenderWindow( wxTreeItemId p_id, RenderWindowSPtr p_window )
+	void SceneObjectsList::DoAddRenderWindow( wxTreeItemId p_id, RenderWindowSPtr p_window )
 	{
-		wxTreeItemId l_id = AppendItem( p_id, p_window->GetName(), eBMP_RENDER_WINDOW, eBMP_RENDER_WINDOW_SEL, new wxRenderWindowTreeItemProperty( p_window ) );
+		wxTreeItemId l_id = AppendItem( p_id, p_window->GetName(), eBMP_RENDER_WINDOW, eBMP_RENDER_WINDOW_SEL, new RenderWindowTreeItemProperty( m_propertiesHolder->IsEditable(), p_window ) );
 		RenderTargetSPtr l_target = p_window->GetRenderTarget();
 
 		if ( l_target )
 		{
 			wxString l_name = _( "Render Target" );
-			AppendItem( l_id, l_name, eBMP_RENDER_TARGET, eBMP_RENDER_TARGET_SEL, new wxRenderTargetTreeItemProperty( l_target ) );
+			AppendItem( l_id, l_name, eBMP_RENDER_TARGET, eBMP_RENDER_TARGET_SEL, new RenderTargetTreeItemProperty( m_propertiesHolder->IsEditable(), l_target ) );
 		}
 	}
 
-	void wxSceneObjectsList::DoAddGeometry( wxTreeItemId p_id, MovableObjectSPtr p_geometry )
+	void SceneObjectsList::DoAddGeometry( wxTreeItemId p_id, MovableObjectSPtr p_geometry )
 	{
 		GeometrySPtr l_geometry = std::static_pointer_cast< Geometry >( p_geometry );
-		wxTreeItemId l_id = AppendItem( p_id, l_geometry->GetName(), eBMP_GEOMETRY, eBMP_GEOMETRY_SEL, new wxGeometryTreeItemProperty( l_geometry ) );
+		wxTreeItemId l_id = AppendItem( p_id, l_geometry->GetName(), eBMP_GEOMETRY, eBMP_GEOMETRY_SEL, new GeometryTreeItemProperty( m_propertiesHolder->IsEditable(), l_geometry ) );
 		int l_count = 0;
 
 		for ( auto l_submesh : *l_geometry->GetMesh() )
 		{
 			wxString l_name = _( "Submesh " );
 			l_name << l_count++;
-			wxTreeItemId l_idSubmesh = AppendItem( l_id, l_name, eBMP_SUBMESH, eBMP_SUBMESH_SEL, new wxSubmeshTreeItemProperty( l_geometry, l_submesh ) );
+			wxTreeItemId l_idSubmesh = AppendItem( l_id, l_name, eBMP_SUBMESH, eBMP_SUBMESH_SEL, new SubmeshTreeItemProperty( m_propertiesHolder->IsEditable(), l_geometry, l_submesh ) );
 		}
 	}
 
-	void wxSceneObjectsList::DoAddCamera( wxTreeItemId p_id, MovableObjectSPtr p_camera )
+	void SceneObjectsList::DoAddCamera( wxTreeItemId p_id, MovableObjectSPtr p_camera )
 	{
 		CameraSPtr l_camera = std::static_pointer_cast< Camera >( p_camera );
-		wxTreeItemId l_id = AppendItem( p_id, l_camera->GetName(), eBMP_CAMERA, eBMP_CAMERA_SEL, new wxCameraTreeItem( l_camera ) );
-		AppendItem( l_id, _( "Viewport" ), eBMP_VIEWPORT, eBMP_VIEWPORT_SEL, new wxViewportTreeItemProperty( l_camera->GetViewport() ) );
+		wxTreeItemId l_id = AppendItem( p_id, l_camera->GetName(), eBMP_CAMERA, eBMP_CAMERA_SEL, new CameraTreeItemProperty( m_propertiesHolder->IsEditable(), l_camera ) );
+		AppendItem( l_id, _( "Viewport" ), eBMP_VIEWPORT, eBMP_VIEWPORT_SEL, new ViewportTreeItemProperty( m_propertiesHolder->IsEditable(), l_camera->GetViewport() ) );
 	}
 
-	void wxSceneObjectsList::DoAddLight( wxTreeItemId p_id, MovableObjectSPtr p_light )
+	void SceneObjectsList::DoAddLight( wxTreeItemId p_id, MovableObjectSPtr p_light )
 	{
 		LightSPtr l_light = std::static_pointer_cast< Light >( p_light );
 
 		switch ( l_light->GetLightType() )
 		{
 		case eLIGHT_TYPE_DIRECTIONAL:
-			AppendItem( p_id, l_light->GetName(), eBMP_DIRECTIONAL_LIGHT, eBMP_DIRECTIONAL_LIGHT_SEL, new wxLightTreeItemProperty( l_light ) );
+			AppendItem( p_id, l_light->GetName(), eBMP_DIRECTIONAL_LIGHT, eBMP_DIRECTIONAL_LIGHT_SEL, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), l_light ) );
 			break;
 
 		case eLIGHT_TYPE_POINT:
-			AppendItem( p_id, l_light->GetName(), eBMP_POINT_LIGHT, eBMP_POINT_LIGHT_SEL, new wxLightTreeItemProperty( l_light ) );
+			AppendItem( p_id, l_light->GetName(), eBMP_POINT_LIGHT, eBMP_POINT_LIGHT_SEL, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), l_light ) );
 			break;
 
 		case eLIGHT_TYPE_SPOT:
-			AppendItem( p_id, l_light->GetName(), eBMP_SPOT_LIGHT, eBMP_SPOT_LIGHT_SEL, new wxLightTreeItemProperty( l_light ) );
+			AppendItem( p_id, l_light->GetName(), eBMP_SPOT_LIGHT, eBMP_SPOT_LIGHT_SEL, new LightTreeItemProperty( m_propertiesHolder->IsEditable(), l_light ) );
 			break;
 		}
 	}
 
-	void wxSceneObjectsList::DoAddNode( wxTreeItemId p_id, SceneNodeSPtr p_node )
+	void SceneObjectsList::DoAddNode( wxTreeItemId p_id, SceneNodeSPtr p_node )
 	{
 		for ( auto && l_pair : p_node->GetObjects() )
 		{
@@ -273,45 +273,45 @@ namespace GuiCommon
 
 		for ( auto && l_pair : p_node->GetChilds() )
 		{
-			DoAddNode( AppendItem( p_id, l_pair.first, eBMP_NODE, eBMP_NODE_SEL, new wxNodeTreeItemProperty( m_pEngine, l_pair.second.lock() ) ), l_pair.second.lock() );
+			DoAddNode( AppendItem( p_id, l_pair.first, eBMP_NODE, eBMP_NODE_SEL, new NodeTreeItemProperty( m_propertiesHolder->IsEditable(), m_pEngine, l_pair.second.lock() ) ), l_pair.second.lock() );
 		}
 	}
 
-	void wxSceneObjectsList::DoAddOverlay( wxTreeItemId p_id, Castor3D::OverlaySPtr p_overlay )
+	void SceneObjectsList::DoAddOverlay( wxTreeItemId p_id, Castor3D::OverlaySPtr p_overlay )
 	{
 		for ( auto && l_overlay : *p_overlay )
 		{
 			switch ( l_overlay->GetType() )
 			{
 			case eOVERLAY_TYPE_PANEL:
-				DoAddOverlay( AppendItem( p_id, l_overlay->GetName(), eBMP_PANEL_OVERLAY, eBMP_PANEL_OVERLAY_SEL, new wxOverlayTreeItemProperty( l_overlay ) ), l_overlay );
+				DoAddOverlay( AppendItem( p_id, l_overlay->GetName(), eBMP_PANEL_OVERLAY, eBMP_PANEL_OVERLAY_SEL, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), l_overlay ) ), l_overlay );
 				break;
 
 			case eOVERLAY_TYPE_BORDER_PANEL:
-				DoAddOverlay( AppendItem( p_id, l_overlay->GetName(), eBMP_BORDER_PANEL_OVERLAY, eBMP_BORDER_PANEL_OVERLAY_SEL, new wxOverlayTreeItemProperty( l_overlay ) ), l_overlay );
+				DoAddOverlay( AppendItem( p_id, l_overlay->GetName(), eBMP_BORDER_PANEL_OVERLAY, eBMP_BORDER_PANEL_OVERLAY_SEL, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), l_overlay ) ), l_overlay );
 				break;
 
 			case eOVERLAY_TYPE_TEXT:
-				DoAddOverlay( AppendItem( p_id, l_overlay->GetName(), eBMP_TEXT_OVERLAY, eBMP_TEXT_OVERLAY_SEL, new wxOverlayTreeItemProperty( l_overlay ) ), l_overlay );
+				DoAddOverlay( AppendItem( p_id, l_overlay->GetName(), eBMP_TEXT_OVERLAY, eBMP_TEXT_OVERLAY_SEL, new OverlayTreeItemProperty( m_propertiesHolder->IsEditable(), l_overlay ) ), l_overlay );
 				break;
 			}
 		}
 	}
 
-	BEGIN_EVENT_TABLE( wxSceneObjectsList, wxTreeCtrl )
-		EVT_CLOSE( wxSceneObjectsList::OnClose )
-		EVT_TREE_SEL_CHANGED( wxID_ANY, wxSceneObjectsList::OnSelectItem )
+	BEGIN_EVENT_TABLE( SceneObjectsList, wxTreeCtrl )
+		EVT_CLOSE( SceneObjectsList::OnClose )
+		EVT_TREE_SEL_CHANGED( wxID_ANY, SceneObjectsList::OnSelectItem )
 	END_EVENT_TABLE()
 
-	void wxSceneObjectsList::OnClose( wxCloseEvent & p_event )
+	void SceneObjectsList::OnClose( wxCloseEvent & p_event )
 	{
 		DeleteAllItems();
 		p_event.Skip();
 	}
 
-	void wxSceneObjectsList::OnSelectItem( wxTreeEvent & p_event )
+	void SceneObjectsList::OnSelectItem( wxTreeEvent & p_event )
 	{
-		wxTreeItemProperty * l_data = reinterpret_cast< wxTreeItemProperty * >( p_event.GetClientObject() );
+		TreeItemProperty * l_data = reinterpret_cast< TreeItemProperty * >( p_event.GetClientObject() );
 		m_propertiesHolder->SetPropertyData( l_data );
 		p_event.Skip();
 	}

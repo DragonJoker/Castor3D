@@ -43,6 +43,26 @@ namespace Castor3D
 		return l_pReturn;
 	}
 
+	void FrameVariableBuffer::RemoveVariable( String const & p_name )
+	{
+		FrameVariablePtrStrMapConstIt l_itMap = m_mapVariables.find( p_name );
+
+		if ( l_itMap != m_mapVariables.end() )
+		{
+			m_mapVariables.erase( l_itMap );
+		}
+
+		auto && l_itList = std::find_if( m_listVariables.begin(), m_listVariables.end(), [&p_name]( FrameVariableSPtr p_variable )
+		{
+			return p_name == p_variable->GetName();
+		} );
+
+		if ( l_itList != m_listVariables.end() )
+		{
+			m_listVariables.erase( l_itList );
+		}
+	}
+
 	bool FrameVariableBuffer::Initialise( ShaderProgramBase & p_program )
 	{
 		bool l_bReturn = true;

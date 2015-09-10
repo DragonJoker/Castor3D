@@ -27,30 +27,33 @@ namespace GuiCommon
 	\date 		24/08/2015
 	\version	0.8.0
 	\~english
-	\brief		Geometry helper class to communicate between Scene objects or Materials lists and wxPropertiesHolder
+	\brief		Geometry helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et wxPropertiesHolder, pour les géométries
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les géométries
 	*/
-	class wxPassTreeItemProperrty
-		: public wxTreeItemProperty
+	class PassTreeItemProperty
+		: public TreeItemProperty
+		, private wxEvtHandler
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pGeometry	 The target geometry
+		 *\param[in]	p_editable	Tells if the properties are modifiable
+		 *\param[in]	p_pass		The target pass
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pGeometry	La géométrie cible
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
+		 *\param[in]	p_pass		La passe cible
 		 */
-		wxPassTreeItemProperrty( Castor3D::PassSPtr p_pass );
+		PassTreeItemProperty( bool p_editable, Castor3D::PassSPtr p_pass );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~wxPassTreeItemProperrty();
+		~PassTreeItemProperty();
 		/**
 		 *\~english
 		 *\brief		Creates and fills the overlay properties, in the given wxPropertyGrid
@@ -90,6 +93,7 @@ namespace GuiCommon
 		void OnExponentChange( double p_value );
 		void OnTwoSidedChange( bool p_value );
 		void OnOpacityChange( double p_value );
+		bool OnEditShader( wxPGProperty * p_property );
 
 	private:
 		Castor3D::PassWPtr m_pass;

@@ -302,10 +302,10 @@ namespace Castor3D
 			{
 				for ( auto && l_shader : m_activeShaders )
 				{
-					std::for_each( l_shader->GetFrameVariablesBegin(), l_shader->GetFrameVariablesEnd(), [&]( std::pair< String, FrameVariableWPtr > p_pair )
+					for ( auto && l_it : l_shader->GetFrameVariables() )
 					{
-						p_pair.second.lock()->Initialise();
-					} );
+						l_it->Initialise();
+					}
 				}
 
 				m_eStatus = ePROGRAM_STATUS_LINKED;
@@ -567,5 +567,15 @@ namespace Castor3D
 		}
 
 		return l_buffer;
+	}
+
+	FrameVariablePtrList & ShaderProgramBase::GetFrameVariables( eSHADER_TYPE p_type )
+	{
+		return m_pShaders[p_type]->GetFrameVariables();
+	}
+
+	FrameVariablePtrList const & ShaderProgramBase::GetFrameVariables( eSHADER_TYPE p_type )const
+	{
+		return m_pShaders[p_type]->GetFrameVariables();
 	}
 }

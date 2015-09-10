@@ -8,17 +8,18 @@ using namespace Castor3D;
 
 namespace GuiCommon
 {
-	wxTreeItemProperty::wxTreeItemProperty( ePROPERTY_DATA_TYPE p_type )
+	TreeItemProperty::TreeItemProperty( bool p_editable, ePROPERTY_DATA_TYPE p_type )
 		: wxTreeItemData()
 		, m_type( p_type )
+		, m_editable( p_editable )
 	{
 	}
 
-	wxTreeItemProperty::~wxTreeItemProperty()
+	TreeItemProperty::~TreeItemProperty()
 	{
 	}
 
-	wxEnumProperty * wxTreeItemProperty::DoCreateMaterialProperty( wxString const & p_name, Engine * p_engine )
+	wxEnumProperty * TreeItemProperty::DoCreateMaterialProperty( wxString const & p_name, Engine * p_engine )
 	{
 		wxEnumProperty * l_material = new wxEnumProperty( p_name );
 		MaterialManager & l_manager = p_engine->GetMaterialManager();

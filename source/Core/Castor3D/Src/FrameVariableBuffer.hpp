@@ -69,6 +69,43 @@ namespace Castor3D
 		virtual ~FrameVariableBuffer();
 		/**
 		 *\~english
+		 *\brief		Initialises all the variables and the GPU buffer associated
+		 *\return		\p false if any problem occured
+		 *\~french
+		 *\brief		Initialise toutes les variables et le tampon GPU associé
+		 *\param[in]	p_pProgram	Le programme
+		 *\return		\p false if any problem occured
+		 */
+		bool Initialise( ShaderProgramBase & p_pProgram );
+		/**
+		 *\~english
+		 *\brief		Cleans all the variables up and the GPU buffer associated
+		 *\~french
+		 *\brief		Nettoie toutes les variables et le tampon GPU associé
+		 */
+		void Cleanup();
+		/**
+		 *\~english
+		 *\brief		Binds all the variables, through the GPU buffer if supported (OpenGL UBO, Direct3D Constants buffers)
+		 *\param[in]	p_index	The buffer index
+		 *\return		\p false if any problem occured
+		 *\~french
+		 *\brief		Active toutes les variables, au travers du tampon GPU si supporté (OpenGL UBO, Direct3D Constants buffers)
+		 *\param[in]	p_index	L'index du tampon GPU
+		 *\return		\p false en cas de problème
+		 */
+		bool Bind( uint32_t p_index );
+		/**
+		 *\~english
+		 *\brief		Unbinds all variables
+		 *\param[in]	p_index	The buffer index
+		 *\~french
+		 *\brief		Désactive toutes les variables
+		 *\param[in]	p_pProgram	L'index du tampon GPU
+		 */
+		void Unbind( uint32_t p_index );
+		/**
+		 *\~english
 		 *\brief		Creates a variable of the wanted type
 		 *\param[in]	p_eType		The wanted type
 		 *\param[in]	p_strName	The variable name
@@ -82,6 +119,15 @@ namespace Castor3D
 		 *\return		La variable créée, nullptr en cas d'échec
 		 */
 		FrameVariableSPtr CreateVariable( ShaderProgramBase & p_program, eFRAME_VARIABLE_TYPE p_eType, Castor::String const & p_strName, uint32_t p_uiNbOcc = 1 );
+		/**
+		 *\~english
+		 *\brief		Removes a variable from this buffer
+		 *\param[in]	p_name	The variable name
+		 *\~french
+		 *\brief		Supprime une variable de ce tampon
+		 *\param[in]	p_name	Le nom de la variable
+		 */
+		void RemoveVariable( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves a variable by name
@@ -123,43 +169,6 @@ namespace Castor3D
 		template< typename T, uint32_t Rows, uint32_t Columns > bool GetVariable( Castor::String const & p_strName, std::shared_ptr< MatrixFrameVariable< T, Rows, Columns > > & p_pVariable )const;
 		/**
 		 *\~english
-		 *\brief		Initialises all the variables and the GPU buffer associated
-		 *\return		\p false if any problem occured
-		 *\~french
-		 *\brief		Initialise toutes les variables et le tampon GPU associé
-		 *\param[in]	p_pProgram	Le programme
-		 *\return		\p false if any problem occured
-		 */
-		bool Initialise( ShaderProgramBase & p_pProgram );
-		/**
-		 *\~english
-		 *\brief		Cleans all the variables up and the GPU buffer associated
-		 *\~french
-		 *\brief		Nettoie toutes les variables et le tampon GPU associé
-		 */
-		void Cleanup();
-		/**
-		 *\~english
-		 *\brief		Binds all the variables, through the GPU buffer if supported (OpenGL UBO, Direct3D Constants buffers)
-		 *\param[in]	p_index	The buffer index
-		 *\return		\p false if any problem occured
-		 *\~french
-		 *\brief		Active toutes les variables, au travers du tampon GPU si supporté (OpenGL UBO, Direct3D Constants buffers)
-		 *\param[in]	p_index	L'index du tampon GPU
-		 *\return		\p false en cas de problème
-		 */
-		bool Bind( uint32_t p_index );
-		/**
-		 *\~english
-		 *\brief		Unbinds all variables
-		 *\param[in]	p_index	The buffer index
-		 *\~french
-		 *\brief		Désactive toutes les variables
-		 *\param[in]	p_pProgram	L'index du tampon GPU
-		 */
-		void Unbind( uint32_t p_index );
-		/**
-		 *\~english
 		 *\brief		Retrieves the variables buffer name
 		 *\return		The name
 		 *\~french
@@ -169,6 +178,54 @@ namespace Castor3D
 		inline Castor::String const & GetName()const
 		{
 			return m_strName;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves an iterator to the beginnning of the variables list
+		 *\return		The iterator
+		 *\~french
+		 *\brief		Récupère un itérateur sur le début de la liste de variables
+		 *\return		L'itérateur
+		 */
+		inline FrameVariablePtrList::iterator begin()
+		{
+			return m_listVariables.begin();
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves an iterator to the beginnning of the variables list
+		 *\return		The iterator
+		 *\~french
+		 *\brief		Récupère un itérateur sur le début de la liste de variables
+		 *\return		L'itérateur
+		 */
+		inline FrameVariablePtrList::const_iterator begin()const
+		{
+			return m_listVariables.begin();
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves an iterator to the end of the variables list
+		 *\return		The iterator
+		 *\~french
+		 *\brief		Récupère un itérateur sur la fin de la liste de variables
+		 *\return		L'itérateur
+		 */
+		inline FrameVariablePtrList::iterator end()
+		{
+			return m_listVariables.end();
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves an iterator to the end of the variables list
+		 *\return		The iterator
+		 *\~french
+		 *\brief		Récupère un itérateur sur la fin de la liste de variables
+		 *\return		L'itérateur
+		 */
+		inline FrameVariablePtrList::const_iterator end()const
+		{
+			return m_listVariables.end();
 		}
 
 	protected:

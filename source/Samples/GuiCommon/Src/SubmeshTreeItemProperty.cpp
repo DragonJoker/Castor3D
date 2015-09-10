@@ -21,18 +21,18 @@ namespace GuiCommon
 		static const wxString PROPERTY_SUBMESH_MATERIAL = _( "Material" );
 	}
 
-	wxSubmeshTreeItemProperty::wxSubmeshTreeItemProperty( Castor3D::GeometrySPtr p_pGeometry, Castor3D::SubmeshSPtr p_pSubmesh )
-		: wxTreeItemProperty( ePROPERTY_DATA_TYPE_SUBMESH )
+	SubmeshTreeItemProperty::SubmeshTreeItemProperty( bool p_editable, GeometrySPtr p_pGeometry, SubmeshSPtr p_pSubmesh )
+		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_SUBMESH )
 		, m_pGeometry( p_pGeometry )
 		, m_pSubmesh( p_pSubmesh )
 	{
 	}
 
-	wxSubmeshTreeItemProperty::~wxSubmeshTreeItemProperty()
+	SubmeshTreeItemProperty::~SubmeshTreeItemProperty()
 	{
 	}
 
-	void wxSubmeshTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void SubmeshTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
 	{
 		GeometrySPtr l_geometry = GetGeometry();
 		SubmeshSPtr l_submesh = GetSubmesh();
@@ -44,7 +44,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxSubmeshTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void SubmeshTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		wxPGProperty * l_property = p_event.GetProperty();
 		GeometrySPtr l_geometry = GetGeometry();
@@ -59,7 +59,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxSubmeshTreeItemProperty::OnMaterialChange( Castor::String const & p_name )
+	void SubmeshTreeItemProperty::OnMaterialChange( Castor::String const & p_name )
 	{
 		SubmeshSPtr l_submesh = GetSubmesh();
 		GeometrySPtr l_geometry = GetGeometry();

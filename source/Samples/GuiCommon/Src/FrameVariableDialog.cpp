@@ -5,7 +5,7 @@
 using namespace Castor3D;
 using namespace GuiCommon;
 
-wxFrameVariableDialog::wxFrameVariableDialog( wxWindow * p_pParent, ShaderProgramBaseSPtr p_pProgram, Castor3D::eSHADER_TYPE p_eTargetStage, FrameVariableSPtr p_pFrameVariable )
+FrameVariableDialog::FrameVariableDialog( wxWindow * p_pParent, ShaderProgramBaseSPtr p_pProgram, Castor3D::eSHADER_TYPE p_eTargetStage, FrameVariableSPtr p_pFrameVariable )
 	:	wxDialog( p_pParent, wxID_ANY, _( "Frame Variable" ), wxDefaultPosition, wxSize( 200, 200 )	)
 	,	m_pFrameVariable( p_pFrameVariable	)
 	,	m_pProgram( p_pProgram	)
@@ -66,23 +66,23 @@ wxFrameVariableDialog::wxFrameVariableDialog( wxWindow * p_pParent, ShaderProgra
 	l_pSizer->SetSizeHints( this );
 }
 
-wxFrameVariableDialog::~wxFrameVariableDialog()
+FrameVariableDialog::~FrameVariableDialog()
 {
 }
 
-BEGIN_EVENT_TABLE( wxFrameVariableDialog, wxDialog )
-	EVT_CLOSE(	wxFrameVariableDialog::OnClose	)
-	EVT_BUTTON(	eID_BUTTON_OK,		wxFrameVariableDialog::OnOk	)
-	EVT_BUTTON(	eID_BUTTON_CANCEL,	wxFrameVariableDialog::OnCancel	)
-	EVT_COMBOBOX(	eID_COMBO_TYPE,		wxFrameVariableDialog::OnSelectType	)
+BEGIN_EVENT_TABLE( FrameVariableDialog, wxDialog )
+	EVT_CLOSE(	FrameVariableDialog::OnClose	)
+	EVT_BUTTON(	eID_BUTTON_OK,		FrameVariableDialog::OnOk	)
+	EVT_BUTTON(	eID_BUTTON_CANCEL,	FrameVariableDialog::OnCancel	)
+	EVT_COMBOBOX(	eID_COMBO_TYPE,		FrameVariableDialog::OnSelectType	)
 END_EVENT_TABLE()
 
-void wxFrameVariableDialog::OnClose( wxCloseEvent & WXUNUSED( p_event ) )
+void FrameVariableDialog::OnClose( wxCloseEvent & WXUNUSED( p_event ) )
 {
 	EndDialog( wxID_CANCEL );
 }
 
-void wxFrameVariableDialog::OnOk( wxCommandEvent & WXUNUSED( p_event ) )
+void FrameVariableDialog::OnOk( wxCommandEvent & WXUNUSED( p_event ) )
 {
 	FrameVariableSPtr l_pFrameVariable = m_pFrameVariable.lock();
 
@@ -95,13 +95,13 @@ void wxFrameVariableDialog::OnOk( wxCommandEvent & WXUNUSED( p_event ) )
 	EndDialog( wxID_OK );
 }
 
-void wxFrameVariableDialog::OnCancel( wxCommandEvent & WXUNUSED( p_event ) )
+void FrameVariableDialog::OnCancel( wxCommandEvent & WXUNUSED( p_event ) )
 {
 	m_pFrameVariable.reset();
 	EndDialog( wxID_CANCEL );
 }
 
-void wxFrameVariableDialog::OnSelectType( wxCommandEvent & p_event )
+void FrameVariableDialog::OnSelectType( wxCommandEvent & p_event )
 {
 	m_pFrameVariable.reset();
 	ShaderProgramBaseSPtr l_pProgram = m_pProgram.lock();

@@ -27,30 +27,32 @@ namespace GuiCommon
 	\date 		24/08/2015
 	\version	0.8.0
 	\~english
-	\brief		Camera helper class to communicate between Scene objects or Materials lists and wxPropertiesHolder
+	\brief		Camera helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et wxPropertiesHolder, pour les caméras
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les caméras
 	*/
-	class wxCameraTreeItem
-		: public wxTreeItemProperty
+	class CameraTreeItemProperty
+		: public TreeItemProperty
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_camera	 The target camera
+		 *\param[in]	p_editable	Tells if the properties are modifiable
+		 *\param[in]	p_camera	The target camera
 		 *\~french
 		 *\brief		Constructeur
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_camera	La caméra cible
 		 */
-		wxCameraTreeItem( Castor3D::CameraSPtr p_camera );
+		CameraTreeItemProperty( bool p_editable, Castor3D::CameraSPtr p_camera );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~wxCameraTreeItem();
+		~CameraTreeItemProperty();
 		/**
 		 *\~english
 		 *\brief		Creates and fills the overlay properties, in the given wxPropertyGrid

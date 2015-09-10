@@ -24,7 +24,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GuiCommon
 {
-	class wxFrameVariableDialog
+	class FrameVariableDialog
 		: public wxDialog
 	{
 	private:
@@ -45,8 +45,8 @@ namespace GuiCommon
 		Castor3D::eSHADER_TYPE m_eTargetStage;
 
 	public:
-		wxFrameVariableDialog( wxWindow * p_pParent, Castor3D::ShaderProgramBaseSPtr p_pProgram, Castor3D::eSHADER_TYPE p_eTargetStage, Castor3D::FrameVariableSPtr p_pFrameVariable = nullptr );
-		~wxFrameVariableDialog();
+		FrameVariableDialog( wxWindow * p_pParent, Castor3D::ShaderProgramBaseSPtr p_pProgram, Castor3D::eSHADER_TYPE p_eTargetStage, Castor3D::FrameVariableSPtr p_pFrameVariable = nullptr );
+		~FrameVariableDialog();
 
 		inline Castor3D::FrameVariableSPtr GetFrameVariable()
 		{

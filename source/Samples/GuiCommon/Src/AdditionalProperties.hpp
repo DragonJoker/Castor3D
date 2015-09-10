@@ -41,15 +41,27 @@ extern const char* classname##_VariantType;
 
 WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Size );
 WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Position );
+WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2b );
+WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3b );
+WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4b );
 WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2i );
 WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3i );
 WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4i );
+WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2ui );
+WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3ui );
+WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4ui );
 WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2f );
 WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3f );
 WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4f );
 WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2d );
 WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3d );
 WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4d );
+WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix2x2f );
+WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix3x3f );
+WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix4x4f );
+WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix2x2d );
+WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix3x3d );
+WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix4x4d );
 WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Quaternion );
 
 namespace GuiCommon
@@ -68,10 +80,7 @@ namespace GuiCommon
 
 	protected:
 		// I stands for internal
-		void SetValueI( Castor::Size const & value )
-		{
-			m_value = WXVARIANT( value );
-		}
+		inline void SetValueI( Castor::Size const & value );
 	};
 
 	class PositionProperty
@@ -88,10 +97,7 @@ namespace GuiCommon
 
 	protected:
 		// I stands for internal
-		void SetValueI( Castor::Position const & value )
-		{
-			m_value = WXVARIANT( value );
-		}
+		inline void SetValueI( Castor::Position const & value );
 	};
 
 	class RectangleProperty
@@ -108,190 +114,7 @@ namespace GuiCommon
 
 	protected:
 		// I stands for internal
-		void SetValueI( Castor::Point4i const & value )
-		{
-			m_value = WXVARIANT( value );
-		}
-	};
-
-	class Point2iProperty
-		: public wxPGProperty
-	{
-		WX_PG_DECLARE_PROPERTY_CLASS( Point2iProperty )
-	public:
-
-		Point2iProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point2i const & value = Castor::Point2i() );
-		virtual ~Point2iProperty();
-
-		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
-		virtual void RefreshChildren();
-
-	protected:
-		// I stands for internal
-		void SetValueI( Castor::Point2i const & value )
-		{
-			m_value = WXVARIANT( value );
-		}
-	};
-
-	class Point3iProperty
-		: public wxPGProperty
-	{
-		WX_PG_DECLARE_PROPERTY_CLASS( Point3iProperty )
-	public:
-
-		Point3iProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point3i const & value = Castor::Point3i() );
-		virtual ~Point3iProperty();
-
-		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
-		virtual void RefreshChildren();
-
-	protected:
-		// I stands for internal
-		void SetValueI( Castor::Point3i const & value )
-		{
-			m_value = WXVARIANT( value );
-		}
-	};
-
-	class Point4iProperty
-		: public wxPGProperty
-	{
-		WX_PG_DECLARE_PROPERTY_CLASS( Point4iProperty )
-	public:
-
-		Point4iProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point4i const & value = Castor::Point4i() );
-		virtual ~Point4iProperty();
-
-		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
-		virtual void RefreshChildren();
-
-	protected:
-		// I stands for internal
-		void SetValueI( Castor::Point4i const & value )
-		{
-			m_value = WXVARIANT( value );
-		}
-	};
-
-	class Point2fProperty
-		: public wxPGProperty
-	{
-		WX_PG_DECLARE_PROPERTY_CLASS( Point2fProperty )
-	public:
-
-		Point2fProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point2f const & value = Castor::Point2f() );
-		virtual ~Point2fProperty();
-
-		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
-		virtual void RefreshChildren();
-
-	protected:
-		// I stands for internal
-		void SetValueI( Castor::Point2f const & value )
-		{
-			m_value = WXVARIANT( value );
-		}
-	};
-
-	class Point3fProperty
-		: public wxPGProperty
-	{
-		WX_PG_DECLARE_PROPERTY_CLASS( Point3fProperty )
-	public:
-
-		Point3fProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point3f const & value = Castor::Point3f() );
-		virtual ~Point3fProperty();
-
-		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
-		virtual void RefreshChildren();
-
-	protected:
-		// I stands for internal
-		void SetValueI( Castor::Point3f const & value )
-		{
-			m_value = WXVARIANT( value );
-		}
-	};
-
-	class Point4fProperty
-		: public wxPGProperty
-	{
-		WX_PG_DECLARE_PROPERTY_CLASS( Point4fProperty )
-	public:
-
-		Point4fProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point4f const & value = Castor::Point4f() );
-		virtual ~Point4fProperty();
-
-		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
-		virtual void RefreshChildren();
-
-	protected:
-		// I stands for internal
-		void SetValueI( Castor::Point4f const & value )
-		{
-			m_value = WXVARIANT( value );
-		}
-	};
-
-	class Point2dProperty
-		: public wxPGProperty
-	{
-		WX_PG_DECLARE_PROPERTY_CLASS( Point2dProperty )
-	public:
-
-		Point2dProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point2d const & value = Castor::Point2d() );
-		virtual ~Point2dProperty();
-
-		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
-		virtual void RefreshChildren();
-
-	protected:
-		// I stands for internal
-		void SetValueI( Castor::Point2d const & value )
-		{
-			m_value = WXVARIANT( value );
-		}
-	};
-
-	class Point3dProperty
-		: public wxPGProperty
-	{
-		WX_PG_DECLARE_PROPERTY_CLASS( Point3dProperty )
-	public:
-
-		Point3dProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point3d const & value = Castor::Point3d() );
-		virtual ~Point3dProperty();
-
-		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
-		virtual void RefreshChildren();
-
-	protected:
-		// I stands for internal
-		void SetValueI( Castor::Point3d const & value )
-		{
-			m_value = WXVARIANT( value );
-		}
-	};
-
-	class Point4dProperty
-		: public wxPGProperty
-	{
-		WX_PG_DECLARE_PROPERTY_CLASS( Point4dProperty )
-	public:
-
-		Point4dProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point4d const & value = Castor::Point4d() );
-		virtual ~Point4dProperty();
-
-		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
-		virtual void RefreshChildren();
-
-	protected:
-		// I stands for internal
-		void SetValueI( Castor::Point4d const & value )
-		{
-			m_value = WXVARIANT( value );
-		}
+		inline void SetValueI( Castor::Point4i const & value );
 	};
 
 	class QuaternionProperty
@@ -308,11 +131,99 @@ namespace GuiCommon
 
 	protected:
 		// I stands for internal
-		void SetValueI( Castor::Quaternion const & value )
-		{
-			m_value = WXVARIANT( value );
-		}
+		inline void SetValueI( Castor::Quaternion const & value );
 	};
+
+	template< typename T, size_t Count >
+	class PointProperty
+		: public wxPGProperty
+	{
+		WX_PG_DECLARE_PROPERTY_CLASS( PointProperty )
+
+	public:
+		PointProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point< T, Count > const & value = Castor::Point< T, Count >() );
+		virtual ~PointProperty();
+
+		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
+		virtual void RefreshChildren();
+
+	protected:
+		// I stands for internal
+		inline void SetValueI( Castor::Point< T, Count > const & value );
+	};
+
+	template< typename T, size_t Rows, size_t Columns >
+	class MatrixProperty
+		: public wxPGProperty
+	{
+		WX_PG_DECLARE_PROPERTY_CLASS( MatrixProperty )
+
+	public:
+		MatrixProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Matrix< T, Rows, Columns > const & value = Castor::Matrix< T, Rows, Columns >() );
+		virtual ~MatrixProperty();
+
+		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
+		virtual void RefreshChildren();
+
+	protected:
+		// I stands for internal
+		inline void SetValueI( Castor::Matrix< T, Rows, Columns > const & value );
+	};
+
+	typedef bool ( wxEvtHandler::*ButtonEventMethod )( wxPGProperty * );
+
+	class ButtonData
+		: public wxClientData
+	{
+	public:
+		ButtonData( ButtonEventMethod p_method, wxEvtHandler * p_handler );
+		bool Call( wxPGProperty * property );
+
+	private:
+		ButtonEventMethod m_method;
+		wxEvtHandler * m_handler;
+	};
+
+	class ButtonEventEditor
+		: public wxPGEditor
+	{
+	protected:
+		virtual wxPGWindowList CreateControls( wxPropertyGrid * p_propgrid, wxPGProperty * p_property, wxPoint const & p_pos, wxSize const & p_size )const;
+		virtual void UpdateControl(wxPGProperty* property, wxWindow* ctrl) const;
+		virtual bool OnEvent( wxPropertyGrid * p_propgrid, wxPGProperty * p_property, wxWindow * p_wnd_primary, wxEvent & p_event )const;
+	};
+
+	template< typename Type, size_t Count > Castor::Point< Type, Count > const & ValueRefFromVariant( wxVariant const & p_variant );
+	template< typename Type, size_t Count > Castor::Point< Type, Count > & ValueRefFromVariant( wxVariant & p_variant );
+	
+	template< size_t Count > using BoolPointProperty = PointProperty< bool, Count >;
+	template< size_t Count > using IntPointProperty = PointProperty< int, Count >;
+	template< size_t Count > using UIntPointProperty = PointProperty< uint32_t, Count >;
+	template< size_t Count > using FloatPointProperty = PointProperty< float, Count >;
+	template< size_t Count > using DoublePointProperty = PointProperty< double, Count >;
+
+	template< size_t Rows, size_t Columns > using FloatMatrixProperty = MatrixProperty< float, Rows, Columns >;
+	template< size_t Rows, size_t Columns > using DoubleMatrixProperty = MatrixProperty< double, Rows, Columns >;
+
+	typedef BoolPointProperty< 2 > Point2bProperty;
+	typedef BoolPointProperty< 3 > Point3bProperty;
+	typedef BoolPointProperty< 4 > Point4bProperty;
+
+	typedef IntPointProperty< 2 > Point2iProperty;
+	typedef IntPointProperty< 3 > Point3iProperty;
+	typedef IntPointProperty< 4 > Point4iProperty;
+
+	typedef UIntPointProperty< 2 > Point2uiProperty;
+	typedef UIntPointProperty< 3 > Point3uiProperty;
+	typedef UIntPointProperty< 4 > Point4uiProperty;
+
+	typedef FloatPointProperty< 2 > Point2fProperty;
+	typedef FloatPointProperty< 3 > Point3fProperty;
+	typedef FloatPointProperty< 4 > Point4fProperty;
+
+	typedef DoublePointProperty< 2 > Point2dProperty;
+	typedef DoublePointProperty< 3 > Point3dProperty;
+	typedef DoublePointProperty< 4 > Point4dProperty;
 
 #if CASTOR_USE_DOUBLE
 	typedef Point2dProperty Point2rProperty;
@@ -384,4 +295,29 @@ namespace GuiCommon
 	}
 #endif
 }
+
+// Implements sans constructor function. Also, first arg is class name, not
+// property name.
+#define GC_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN( PROPNAME, T, EDITOR )\
+	const wxPGEditor* PROPNAME::DoGetEditorClass()const\
+	{\
+		return wxPGEditor_##EDITOR;\
+	}
+
+// Single inheritance with one base class
+#define GC_IMPLEMENT_DYNAMIC_CLASS( name, basename )\
+	wxIMPLEMENT_CLASS_COMMON1( name, basename, name::wxCreateObject )\
+	template<>\
+	wxObject* name::wxCreateObject()\
+		{ return new name; }
+
+//
+// Property class implementation helper macros.
+//
+#define GC_PG_IMPLEMENT_PROPERTY_CLASS( NAME, UPCLASS, T, T_AS_ARG, EDITOR )\
+	GC_IMPLEMENT_DYNAMIC_CLASS( NAME, UPCLASS )\
+	GC_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN( NAME, T, EDITOR )
+
+#include "AdditionalProperties.inl"
+
 #endif

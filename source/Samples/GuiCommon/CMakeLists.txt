@@ -90,7 +90,17 @@ file( GLOB ${PROJECT_NAME}_SYSTEM_SOURCE_FILES
 source_group( "Header Files\\System" FILES ${${PROJECT_NAME}_SYSTEM_HEADER_FILES} )
 source_group( "Source Files\\System" FILES ${${PROJECT_NAME}_SYSTEM_SOURCE_FILES} )
 
-# Copying language files for GLSL and HLSL coloration in wxShaderDialog
+file( GLOB ${PROJECT_NAME}_AUI_HEADER_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Aui*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Aui*.inl
+)
+file( GLOB ${PROJECT_NAME}_AUI_SOURCE_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Aui*.cpp
+)
+source_group( "Header Files\\Aui" FILES ${${PROJECT_NAME}_AUI_HEADER_FILES} )
+source_group( "Source Files\\Aui" FILES ${${PROJECT_NAME}_AUI_SOURCE_FILES} )
+
+# Copying language files for GLSL and HLSL coloration in ShaderDialog
 file(
 	GLOB_RECURSE
 		Parser_languages tools/resource/${PROJECT_NAME}/languages/*.lang

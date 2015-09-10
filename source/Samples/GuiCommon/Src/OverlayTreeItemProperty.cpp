@@ -39,17 +39,17 @@ namespace GuiCommon
 		static const wxString PROPERTY_OVERLAY_CAPTION = _( "Caption" );
 	}
 
-	wxOverlayTreeItemProperty::wxOverlayTreeItemProperty( Castor3D::OverlaySPtr p_overlay )
-		: wxTreeItemProperty( ePROPERTY_DATA_TYPE_OVERLAY )
+	OverlayTreeItemProperty::OverlayTreeItemProperty( bool p_editable, Castor3D::OverlaySPtr p_overlay )
+		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_OVERLAY )
 		, m_overlay( p_overlay )
 	{
 	}
 
-	wxOverlayTreeItemProperty::~wxOverlayTreeItemProperty()
+	OverlayTreeItemProperty::~OverlayTreeItemProperty()
 	{
 	}
 
-	void wxOverlayTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void OverlayTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
 	{
 		OverlaySPtr l_overlay = GetOverlay();
 
@@ -77,7 +77,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxOverlayTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void OverlayTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		wxPGProperty * l_property = p_event.GetProperty();
 		OverlaySPtr l_overlay = GetOverlay();
@@ -116,11 +116,11 @@ namespace GuiCommon
 		}
 	}
 
-	void wxOverlayTreeItemProperty::DoCreatePanelOverlayProperties( wxPropertyGrid * p_grid, PanelOverlaySPtr p_overlay )
+	void OverlayTreeItemProperty::DoCreatePanelOverlayProperties( wxPropertyGrid * p_grid, PanelOverlaySPtr p_overlay )
 	{
 	}
 
-	void wxOverlayTreeItemProperty::DoCreateBorderPanelOverlayProperties( wxPropertyGrid * p_grid, BorderPanelOverlaySPtr p_overlay )
+	void OverlayTreeItemProperty::DoCreateBorderPanelOverlayProperties( wxPropertyGrid * p_grid, BorderPanelOverlaySPtr p_overlay )
 	{
 		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_BORDER_PANEL_OVERLAY ) );
 		wxPGChoices l_choices;
@@ -152,7 +152,7 @@ namespace GuiCommon
 		p_grid->Append( new wxEnumProperty( PROPERTY_OVERLAY_BORDER_POSITION, PROPERTY_OVERLAY_BORDER_POSITION, l_choices ) )->SetValue( l_selected );
 	}
 
-	void wxOverlayTreeItemProperty::DoCreateTextOverlayProperties( wxPropertyGrid * p_grid, TextOverlaySPtr p_overlay )
+	void OverlayTreeItemProperty::DoCreateTextOverlayProperties( wxPropertyGrid * p_grid, TextOverlaySPtr p_overlay )
 	{
 		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_TEXT_OVERLAY ) );
 		FontSPtr l_font = p_overlay->GetFont();
@@ -162,11 +162,11 @@ namespace GuiCommon
 		p_grid->Append( new wxStringProperty( PROPERTY_OVERLAY_CAPTION ) )->SetValue( p_overlay->GetCaption() );
 	}
 
-	void wxOverlayTreeItemProperty::OnPanelOverlayPropertyChanged( wxPropertyGridEvent & p_event )
+	void OverlayTreeItemProperty::OnPanelOverlayPropertyChanged( wxPropertyGridEvent & p_event )
 	{
 	}
 
-	void wxOverlayTreeItemProperty::OnBorderPanelOverlayPropertyChanged( wxPropertyGridEvent & p_event )
+	void OverlayTreeItemProperty::OnBorderPanelOverlayPropertyChanged( wxPropertyGridEvent & p_event )
 	{
 		wxPGProperty * l_property = p_event.GetProperty();
 
@@ -207,7 +207,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxOverlayTreeItemProperty::OnTextOverlayPropertyChanged( wxPropertyGridEvent & p_event )
+	void OverlayTreeItemProperty::OnTextOverlayPropertyChanged( wxPropertyGridEvent & p_event )
 	{
 		wxPGProperty * l_property = p_event.GetProperty();
 
@@ -217,7 +217,7 @@ namespace GuiCommon
 			{
 				wxFont l_wxfont;
 				l_wxfont << l_property->GetValue();
-				FontSPtr l_font = wxLoadFont( GetOverlay()->GetEngine(), l_wxfont );
+				FontSPtr l_font = make_Font( GetOverlay()->GetEngine(), l_wxfont );
 
 				if ( l_font )
 				{
@@ -231,7 +231,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxOverlayTreeItemProperty::OnMaterialChange( Castor::String const & p_name )
+	void OverlayTreeItemProperty::OnMaterialChange( Castor::String const & p_name )
 	{
 		OverlaySPtr l_overlay = GetOverlay();
 
@@ -247,7 +247,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxOverlayTreeItemProperty::OnPositionChange( Castor::Position const & p_position )
+	void OverlayTreeItemProperty::OnPositionChange( Castor::Position const & p_position )
 	{
 		OverlaySPtr l_overlay = GetOverlay();
 
@@ -257,7 +257,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxOverlayTreeItemProperty::OnSizeChange( Castor::Size const & p_size )
+	void OverlayTreeItemProperty::OnSizeChange( Castor::Size const & p_size )
 	{
 		OverlaySPtr l_overlay = GetOverlay();
 
@@ -267,7 +267,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxOverlayTreeItemProperty::OnBorderMaterialChange( Castor::String const & p_name )
+	void OverlayTreeItemProperty::OnBorderMaterialChange( Castor::String const & p_name )
 	{
 		OverlaySPtr l_overlay = GetOverlay();
 		CASTOR_ASSERT( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
@@ -284,7 +284,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxOverlayTreeItemProperty::OnBorderSizeChange( Castor::Rectangle const & p_size )
+	void OverlayTreeItemProperty::OnBorderSizeChange( Castor::Rectangle const & p_size )
 	{
 		OverlaySPtr l_overlay = GetOverlay();
 		CASTOR_ASSERT( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
@@ -295,7 +295,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxOverlayTreeItemProperty::OnBorderInnerUVChange( Castor::Point4d const & p_uv )
+	void OverlayTreeItemProperty::OnBorderInnerUVChange( Castor::Point4d const & p_uv )
 	{
 		OverlaySPtr l_overlay = GetOverlay();
 		CASTOR_ASSERT( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
@@ -306,7 +306,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxOverlayTreeItemProperty::OnBorderOuterUVChange( Castor::Point4d const & p_uv )
+	void OverlayTreeItemProperty::OnBorderOuterUVChange( Castor::Point4d const & p_uv )
 	{
 		OverlaySPtr l_overlay = GetOverlay();
 		CASTOR_ASSERT( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
@@ -317,7 +317,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxOverlayTreeItemProperty::OnBorderPositionChange( Castor3D::eBORDER_POSITION p_position )
+	void OverlayTreeItemProperty::OnBorderPositionChange( Castor3D::eBORDER_POSITION p_position )
 	{
 		OverlaySPtr l_overlay = GetOverlay();
 		CASTOR_ASSERT( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
@@ -328,7 +328,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxOverlayTreeItemProperty::OnCaptionChange( Castor::String const & p_caption )
+	void OverlayTreeItemProperty::OnCaptionChange( Castor::String const & p_caption )
 	{
 		OverlaySPtr l_overlay = GetOverlay();
 		CASTOR_ASSERT( l_overlay->GetType() == eOVERLAY_TYPE_TEXT );
@@ -339,7 +339,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxOverlayTreeItemProperty::OnFontChange( Castor::FontSPtr p_font )
+	void OverlayTreeItemProperty::OnFontChange( Castor::FontSPtr p_font )
 	{
 		OverlaySPtr l_overlay = GetOverlay();
 		CASTOR_ASSERT( l_overlay->GetType() == eOVERLAY_TYPE_TEXT );

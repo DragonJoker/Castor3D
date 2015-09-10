@@ -27,30 +27,32 @@ namespace GuiCommon
 	\date 		24/08/2015
 	\version	0.8.0
 	\~english
-	\brief		Texture helper class to communicate between Scene objects or Materials lists and wxPropertiesHolder
+	\brief		Texture helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et wxPropertiesHolder, pour les textures
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les textures
 	*/
-	class wxTextureTreeItemProperty
-		: public wxTreeItemProperty
+	class TextureTreeItemProperty
+		: public TreeItemProperty
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_texture	 The target texture
+		 *\param[in]	p_editable	Tells if the properties are modifiable
+		 *\param[in]	p_texture	The target texture
 		 *\~french
 		 *\brief		Constructeur
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_texture	La texture cible
 		 */
-		wxTextureTreeItemProperty( Castor3D::TextureUnitSPtr p_texture );
+		TextureTreeItemProperty( bool p_editable, Castor3D::TextureUnitSPtr p_texture );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~wxTextureTreeItemProperty();
+		~TextureTreeItemProperty();
 		/**
 		 *\~english
 		 *\brief		Creates and fills the overlay properties, in the given wxPropertyGrid

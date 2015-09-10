@@ -11,7 +11,7 @@ using namespace GuiCommon;
 using namespace Castor3D;
 using namespace Castor;
 
-wxSplashScreen::wxSplashScreen( wxWindow * p_pParent, wxString const & p_strTitle, wxString const & p_strCopyright, wxPoint const & p_ptTitlePos, wxPoint const & p_ptCopyrightPos, wxPoint const & p_ptVersionPos, wxPoint p_ptPos, int p_iRange )
+SplashScreen::SplashScreen( wxWindow * p_pParent, wxString const & p_strTitle, wxString const & p_strCopyright, wxPoint const & p_ptTitlePos, wxPoint const & p_ptCopyrightPos, wxPoint const & p_ptVersionPos, wxPoint p_ptPos, int p_iRange )
 	:	wxFrame( p_pParent, wxID_ANY, p_strTitle, p_ptPos, wxSize( 512, 384 ), wxCLIP_CHILDREN | wxFRAME_FLOAT_ON_PARENT | wxBORDER_NONE	)
 	,	m_bmpSplash( splash_xpm	)
 	,	m_ptTitlePosition( p_ptTitlePos	)
@@ -30,18 +30,18 @@ wxSplashScreen::wxSplashScreen( wxWindow * p_pParent, wxString const & p_strTitl
 	Update();
 }
 
-wxSplashScreen::~wxSplashScreen()
+SplashScreen::~SplashScreen()
 {
 }
 
-void wxSplashScreen::Step( wxString const & p_strText, int p_iIncrement )
+void SplashScreen::Step( wxString const & p_strText, int p_iIncrement )
 {
-	Logger::LogInfo( String( cuT( "wxSplashScreen::Step - " ) ) + ( wxChar const * )p_strText.c_str() );
+	Logger::LogInfo( String( cuT( "SplashScreen::Step - " ) ) + ( wxChar const * )p_strText.c_str() );
 	m_strStatus = p_strText;
 	Step( p_iIncrement );
 }
 
-void wxSplashScreen::Step( int p_iIncrement )
+void SplashScreen::Step( int p_iIncrement )
 {
 	m_pGauge->SetValue( m_pGauge->GetValue() + p_iIncrement );
 	m_strSubStatus.clear();
@@ -50,7 +50,7 @@ void wxSplashScreen::Step( int p_iIncrement )
 	DoDraw( & l_clientDC );
 }
 
-void wxSplashScreen::SubStatus( wxString const & p_strText )
+void SplashScreen::SubStatus( wxString const & p_strText )
 {
 	m_strSubStatus = p_strText;
 	//	Refresh();
@@ -58,7 +58,7 @@ void wxSplashScreen::SubStatus( wxString const & p_strText )
 	DoDraw( & l_clientDC );
 }
 
-void wxSplashScreen::DoDraw( wxDC * p_pDC )
+void SplashScreen::DoDraw( wxDC * p_pDC )
 {
 	if ( IsVisible() )
 	{
@@ -91,19 +91,19 @@ void wxSplashScreen::DoDraw( wxDC * p_pDC )
 	}
 }
 
-BEGIN_EVENT_TABLE( wxSplashScreen, wxFrame )
-	EVT_PAINT(	wxSplashScreen::OnPaint )
-	EVT_ERASE_BACKGROUND(	wxSplashScreen::OnEraseBackground )
+BEGIN_EVENT_TABLE( SplashScreen, wxFrame )
+	EVT_PAINT(	SplashScreen::OnPaint )
+	EVT_ERASE_BACKGROUND(	SplashScreen::OnEraseBackground )
 END_EVENT_TABLE()
 
-void wxSplashScreen::OnPaint( wxPaintEvent & p_event )
+void SplashScreen::OnPaint( wxPaintEvent & p_event )
 {
 	wxAutoBufferedPaintDC l_paintDC( this );
 	DoDraw( & l_paintDC );
 	p_event.Skip();
 }
 
-void wxSplashScreen::OnEraseBackground( wxEraseEvent & p_event )
+void SplashScreen::OnEraseBackground( wxEraseEvent & p_event )
 {
 	p_event.Skip();
 }

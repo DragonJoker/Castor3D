@@ -26,7 +26,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GuiCommon
 {
-	class wxRendererSelector
+	class RendererSelector
 		:	public wxDialog
 	{
 	private:
@@ -45,8 +45,8 @@ namespace GuiCommon
 		Castor3D::Engine * m_pEngine;
 
 	public:
-		wxRendererSelector( Castor3D::Engine * p_pEngine, wxWindow * p_pParent, wxString const & p_strTitle );
-		virtual ~wxRendererSelector();
+		RendererSelector( Castor3D::Engine * p_pEngine, wxWindow * p_pParent, wxString const & p_strTitle );
+		virtual ~RendererSelector();
 
 		Castor3D::eRENDERER_TYPE GetSelectedRenderer()const;
 

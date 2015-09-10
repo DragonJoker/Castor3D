@@ -55,30 +55,32 @@ namespace GuiCommon
 	\date 		24/08/2015
 	\version	0.8.0
 	\~english
-	\brief		Helper class to communicate between Scene objects or Materials lists and wxPropertiesHolder
+	\brief		Helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et wxPropertiesHolder
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder
 	*/
-	class wxTreeItemProperty
+	class TreeItemProperty
 		: public wxTreeItemData
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_type	 The object type
+		 *\param[in]	p_editable	Tells if the properties are modifiable
+		 *\param[in]	p_type		The object type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_type	Le type d'objet
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
+		 *\param[in]	p_type		Le type d'objet
 		 */
-		wxTreeItemProperty( ePROPERTY_DATA_TYPE p_type );
+		TreeItemProperty( bool p_editable, ePROPERTY_DATA_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~wxTreeItemProperty();
+		virtual ~TreeItemProperty();
 		/**
 		 *\~english
 		 *\brief		Creates and fills the overlay properties, in the given wxPropertyGrid
@@ -109,6 +111,18 @@ namespace GuiCommon
 		{
 			return m_type;
 		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the editable status
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le statut de modifiabilité
+		 *\return		La valeur
+		 */
+		inline bool IsEditable()const
+		{
+			return m_editable;
+		}
 
 	protected:
 		/**
@@ -127,6 +141,7 @@ namespace GuiCommon
 
 	private:
 		ePROPERTY_DATA_TYPE m_type;
+		bool m_editable;
 	};
 }
 

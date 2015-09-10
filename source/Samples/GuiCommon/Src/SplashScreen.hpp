@@ -24,7 +24,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GuiCommon
 {
-	class wxSplashScreen
+	class SplashScreen
 		: public wxFrame
 	{
 	private:
@@ -40,8 +40,8 @@ namespace GuiCommon
 		wxString m_strSubStatus;
 
 	public:
-		wxSplashScreen( wxWindow * p_pParent, wxString const & p_strTitle, wxString const & p_strCopyright, wxPoint const & p_ptTitlePos, wxPoint const & p_ptCopyrightPos, wxPoint const & p_ptVersionPos, wxPoint p_ptPos, int p_iRange );
-		~wxSplashScreen();
+		SplashScreen( wxWindow * p_pParent, wxString const & p_strTitle, wxString const & p_strCopyright, wxPoint const & p_ptTitlePos, wxPoint const & p_ptCopyrightPos, wxPoint const & p_ptVersionPos, wxPoint p_ptPos, int p_iRange );
+		~SplashScreen();
 
 		void Step( wxString const & p_strText, int p_iIncrement );
 		void Step( int p_iIncrement );

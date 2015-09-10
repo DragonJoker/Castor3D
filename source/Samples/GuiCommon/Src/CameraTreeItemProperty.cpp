@@ -28,17 +28,17 @@ namespace GuiCommon
 		static const wxString PROPERTY_TOPOLOGY_POLYGON = _( "Polygon" );
 	}
 
-	wxCameraTreeItem::wxCameraTreeItem( Castor3D::CameraSPtr p_camera )
-		: wxTreeItemProperty( ePROPERTY_DATA_TYPE_CAMERA )
+	CameraTreeItemProperty::CameraTreeItemProperty( bool p_editable, Castor3D::CameraSPtr p_camera )
+		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_CAMERA )
 		, m_camera( p_camera )
 	{
 	}
 
-	wxCameraTreeItem::~wxCameraTreeItem()
+	CameraTreeItemProperty::~CameraTreeItemProperty()
 	{
 	}
 
-	void wxCameraTreeItem::CreateProperties( wxPropertyGrid * p_grid )
+	void CameraTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
 	{
 		CameraSPtr l_camera = GetCamera();
 
@@ -105,7 +105,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxCameraTreeItem::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void CameraTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		wxPGProperty * l_property = p_event.GetProperty();
 		CameraSPtr l_camera = GetCamera();
@@ -158,7 +158,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxCameraTreeItem::OnTopologyChange( eTOPOLOGY p_value )
+	void CameraTreeItemProperty::OnTopologyChange( eTOPOLOGY p_value )
 	{
 		CameraSPtr l_camera = GetCamera();
 

@@ -226,51 +226,28 @@ namespace Castor3D
 		virtual void AddFrameVariable( OneTextureFrameVariableSPtr p_pVariable );
 		/**
 		 *\~english
-		 *\brief		Retrieves a constant iterator on the beginning of the frame variables list
-		 *\return		The iterator
+		 *\brief		Retrieves the frame variables bound to this shader
+		 *\return		The list
 		 *\~french
-		 *\brief		Récupère un itérateur constant sur le début de la liste de frame variables
-		 *\return		L'itérateur
+		 *\brief		Récupère les variables de frame liées à ce shader
+		 *\return		La liste
 		 */
-		inline FrameVariablePtrStrMapConstIt GetFrameVariablesBegin()const
+		inline FrameVariablePtrList & GetFrameVariables()
 		{
-			return m_mapFrameVariables.begin();
+			return m_listFrameVariables;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves an iterator on the beginning of the frame variables list
-		 *\return		The iterator if the object exists, else an iterator to the end of my variables list
+		 *\brief		Retrieves the frame variables bound to this shader
+		 *\param[in]	p_type	The shader type
+		 *\return		The list
 		 *\~french
-		 *\brief		Récupère un itérateur sur le début de la liste de frame variables
-		 *\return		L'itérateur
+		 *\brief		Récupère les variables de frame liées à ce shader
+		 *\return		La liste
 		 */
-		inline FrameVariablePtrStrMapIt GetFrameVariablesBegin()
+		inline FrameVariablePtrList const & GetFrameVariables()const
 		{
-			return m_mapFrameVariables.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves a constant iterator on the end of the frame variables list
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur constant sur la fin de la liste de frame variables
-		 *\return		L'itérateur
-		 */
-		inline FrameVariablePtrStrMapConstIt GetFrameVariablesEnd()const
-		{
-			return m_mapFrameVariables.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator on the end of the frame variables list
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la liste de frame variables
-		 *\return		L'itérateur
-		 */
-		inline FrameVariablePtrStrMapIt GetFrameVariablesEnd()
-		{
-			return m_mapFrameVariables.end();
+			return m_listFrameVariables;
 		}
 		/**
 		 *\~english

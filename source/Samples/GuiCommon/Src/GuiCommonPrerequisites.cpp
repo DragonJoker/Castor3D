@@ -95,33 +95,7 @@ namespace GuiCommon
 		};
 	}
 
-	Castor3D::WindowHandle wxMakeWindowHandle( wxWindow * p_window )
-	{
-#if defined( _WIN32 )
-		return WindowHandle( std::make_shared< IMswWindowHandle >( p_window->GetHandle() ) );
-#elif defined( __linux__ )
-		GtkWidget * l_pGtkWidget = static_cast< GtkWidget * >( p_window->GetHandle() );
-		GLXDrawable l_drawable = None;
-		Display * l_pDisplay = NULL;
-
-		if ( l_pGtkWidget && l_pGtkWidget->window )
-		{
-			l_drawable = GDK_WINDOW_XID( l_pGtkWidget->window );
-			GdkDisplay * l_pGtkDisplay = gtk_widget_get_display( l_pGtkWidget );
-
-			if ( l_pGtkDisplay )
-			{
-				l_pDisplay = gdk_x11_display_get_xdisplay( l_pGtkDisplay );
-			}
-		}
-
-		return WindowHandle( std::make_shared< IXWindowHandle >( l_drawable, l_pDisplay ) );
-#else
-#	error "Yet unsupported OS"
-#endif
-	}
-
-	void wxCreateBitmapFromBuffer( uint8_t const * p_pBuffer, uint32_t p_uiWidth, uint32_t p_uiHeight, wxBitmap & p_bitmap )
+	void CreateBitmapFromBuffer( uint8_t const * p_pBuffer, uint32_t p_uiWidth, uint32_t p_uiHeight, wxBitmap & p_bitmap )
 	{
 		p_bitmap.Create( p_uiWidth, p_uiHeight, 24 );
 		wxNativePixelData l_data( p_bitmap );
@@ -159,17 +133,17 @@ namespace GuiCommon
 			}
 			catch ( ... )
 			{
-				Logger::LogWarning( cuT( "wxCreateBitmapFromBuffer encountered an exception" ) );
+				Logger::LogWarning( cuT( "CreateBitmapFromBuffer encountered an exception" ) );
 			}
 		}
 	}
 
-	void wxCreateBitmapFromBuffer( TextureUnitSPtr p_pUnit, wxBitmap & p_bitmap )
+	void CreateBitmapFromBuffer( TextureUnitSPtr p_pUnit, wxBitmap & p_bitmap )
 	{
 		if ( p_pUnit->GetImageBuffer() )
 		{
 			PxBufferBaseSPtr l_pBuffer = PxBufferBase::create( Size( p_pUnit->GetWidth(), p_pUnit->GetHeight() ), ePIXEL_FORMAT_A8R8G8B8, p_pUnit->GetImageBuffer(), p_pUnit->GetPixelFormat() );
-			wxCreateBitmapFromBuffer( l_pBuffer->const_ptr(), l_pBuffer->width(), l_pBuffer->height(), p_bitmap );
+			CreateBitmapFromBuffer( l_pBuffer->const_ptr(), l_pBuffer->width(), l_pBuffer->height(), p_bitmap );
 		}
 		else if ( !p_pUnit->GetTexturePath().empty() )
 		{
@@ -185,17 +159,43 @@ namespace GuiCommon
 				}
 				else
 				{
-					Logger::LogWarning( cuT( "wxCreateBitmapFromBuffer encountered a problem loading file [" ) + p_pUnit->GetTexturePath() + cuT( "]" ) );
+					Logger::LogWarning( cuT( "CreateBitmapFromBuffer encountered a problem loading file [" ) + p_pUnit->GetTexturePath() + cuT( "]" ) );
 				}
 			}
 			else
 			{
-				Logger::LogWarning( cuT( "wxCreateBitmapFromBuffer encountered a problem loading file [" ) + p_pUnit->GetTexturePath() + cuT( "] : Unsupported format" ) );
+				Logger::LogWarning( cuT( "CreateBitmapFromBuffer encountered a problem loading file [" ) + p_pUnit->GetTexturePath() + cuT( "] : Unsupported format" ) );
 			}
 		}
 	}
 
-	FontSPtr wxLoadFont( Engine * p_engine, wxFont const & p_font )
+	Castor3D::WindowHandle make_WindowHandle( wxWindow * p_window )
+	{
+#if defined( _WIN32 )
+		return WindowHandle( std::make_shared< IMswWindowHandle >( p_window->GetHandle() ) );
+#elif defined( __linux__ )
+		GtkWidget * l_pGtkWidget = static_cast< GtkWidget * >( p_window->GetHandle() );
+		GLXDrawable l_drawable = None;
+		Display * l_pDisplay = NULL;
+
+		if ( l_pGtkWidget && l_pGtkWidget->window )
+		{
+			l_drawable = GDK_WINDOW_XID( l_pGtkWidget->window );
+			GdkDisplay * l_pGtkDisplay = gtk_widget_get_display( l_pGtkWidget );
+
+			if ( l_pGtkDisplay )
+			{
+				l_pDisplay = gdk_x11_display_get_xdisplay( l_pGtkDisplay );
+			}
+		}
+
+		return WindowHandle( std::make_shared< IXWindowHandle >( l_drawable, l_pDisplay ) );
+#else
+#	error "Yet unsupported OS"
+#endif
+	}
+
+	FontSPtr make_Font( Engine * p_engine, wxFont const & p_font )
 	{
 		String l_name = make_String( p_font.GetFaceName() ) + str_utils::to_string( p_font.GetPointSize() );
 		FontCollection & l_manager = p_engine->GetFontManager();

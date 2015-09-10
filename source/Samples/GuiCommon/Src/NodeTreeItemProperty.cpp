@@ -20,18 +20,18 @@ namespace GuiCommon
 		static const wxString PROPERTY_NODE_ORIENTATION = _( "Orientation" );
 	}
 
-	wxNodeTreeItemProperty::wxNodeTreeItemProperty( Engine * p_engine, SceneNodeSPtr p_node )
-		: wxTreeItemProperty( ePROPERTY_DATA_TYPE_NODE )
+	NodeTreeItemProperty::NodeTreeItemProperty( bool p_editable, Engine * p_engine, SceneNodeSPtr p_node )
+		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_NODE )
 		, m_node( p_node )
 		, m_engine( p_engine )
 	{
 	}
 
-	wxNodeTreeItemProperty::~wxNodeTreeItemProperty()
+	NodeTreeItemProperty::~NodeTreeItemProperty()
 	{
 	}
 
-	void wxNodeTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void NodeTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
 	{
 		SceneNodeSPtr l_node = GetNode();
 
@@ -44,7 +44,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxNodeTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void NodeTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		SceneNodeSPtr l_node = GetNode();
 		wxPGProperty * l_property = p_event.GetProperty();
@@ -66,7 +66,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxNodeTreeItemProperty::OnPositionChange( Castor::Point3r const & p_value )
+	void NodeTreeItemProperty::OnPositionChange( Castor::Point3r const & p_value )
 	{
 		SceneNodeSPtr l_node = GetNode();
 
@@ -76,7 +76,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxNodeTreeItemProperty::OnScaleChange( Castor::Point3r const & p_value )
+	void NodeTreeItemProperty::OnScaleChange( Castor::Point3r const & p_value )
 	{
 		SceneNodeSPtr l_node = GetNode();
 
@@ -86,7 +86,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxNodeTreeItemProperty::OnOrientationChange( Castor::Quaternion const & p_value )
+	void NodeTreeItemProperty::OnOrientationChange( Castor::Quaternion const & p_value )
 	{
 		SceneNodeSPtr l_node = GetNode();
 

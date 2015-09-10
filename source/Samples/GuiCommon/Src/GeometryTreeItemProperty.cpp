@@ -15,17 +15,17 @@ namespace GuiCommon
 		static const wxString PROPERTY_CATEGORY_GEOMETRY = _( "Geometry: " );
 	}
 
-	wxGeometryTreeItemProperty::wxGeometryTreeItemProperty( Castor3D::GeometrySPtr p_pGeometry )
-		: wxTreeItemProperty( ePROPERTY_DATA_TYPE_GEOMETRY )
+	GeometryTreeItemProperty::GeometryTreeItemProperty( bool p_editable, Castor3D::GeometrySPtr p_pGeometry )
+		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_GEOMETRY )
 		, m_pGeometry( p_pGeometry )
 	{
 	}
 
-	wxGeometryTreeItemProperty::~wxGeometryTreeItemProperty()
+	GeometryTreeItemProperty::~GeometryTreeItemProperty()
 	{
 	}
 
-	void wxGeometryTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void GeometryTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
 	{
 		GeometrySPtr l_geometry = GetGeometry();
 
@@ -34,7 +34,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxGeometryTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void GeometryTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		GeometrySPtr l_geometry = GetGeometry();
 		wxPGProperty * l_property = p_event.GetProperty();

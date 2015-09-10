@@ -27,32 +27,34 @@ namespace GuiCommon
 	\date 		24/08/2015
 	\version	0.8.0
 	\~english
-	\brief		Geometry helper class to communicate between Scene objects or Materials lists and wxPropertiesHolder
+	\brief		Geometry helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et wxPropertiesHolder, pour les géométries
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les géométries
 	*/
-	class wxNodeTreeItemProperty
-		: public wxTreeItemProperty
+	class NodeTreeItemProperty
+		: public TreeItemProperty
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
+		 *\param[in]	p_editable	Tells if the properties are modifiable
 		 *\param[in]	p_engine	The engine
 		 *\param[in]	p_node		The target object
 		 *\~french
 		 *\brief		Constructeur
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_engine	Le moteur
 		 *\param[in]	p_node		L'objet cible
 		 */
-		wxNodeTreeItemProperty( Castor3D::Engine * p_engine, Castor3D::SceneNodeSPtr p_node );
+		NodeTreeItemProperty( bool p_editable, Castor3D::Engine * p_engine, Castor3D::SceneNodeSPtr p_node );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~wxNodeTreeItemProperty();
+		~NodeTreeItemProperty();
 		/**
 		 *\~english
 		 *\brief		Creates and fills the object properties, in the given wxPropertyGrid

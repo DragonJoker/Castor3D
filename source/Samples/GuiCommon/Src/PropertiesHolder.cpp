@@ -38,20 +38,20 @@ using namespace Castor;
 
 namespace GuiCommon
 {
-	wxPropertiesHolder::wxPropertiesHolder( bool p_bCanEdit, wxWindow * p_pParent, wxPoint const & p_ptPos, wxSize const & p_size )
+	PropertiesHolder::PropertiesHolder( bool p_bCanEdit, wxWindow * p_pParent, wxPoint const & p_ptPos, wxSize const & p_size )
 		: wxPropertyGrid( p_pParent, wxID_ANY, p_ptPos, p_size, wxPG_BOLD_MODIFIED | wxPG_SPLITTER_AUTO_CENTER | wxPG_DEFAULT_STYLE )
 		, m_bCanEdit( p_bCanEdit )
 		, m_data( NULL )
 	{
 		SetBackgroundColour( *wxWHITE );
-		Connect( wxEVT_PG_CHANGED, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, wxPropertiesHolder::OnPropertyChange ) );
+		Connect( wxEVT_PG_CHANGED, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, PropertiesHolder::OnPropertyChange ) );
 	}
 
-	wxPropertiesHolder::~wxPropertiesHolder()
+	PropertiesHolder::~PropertiesHolder()
 	{
 	}
 
-	void wxPropertiesHolder::SetPropertyData( wxTreeItemProperty * p_data )
+	void PropertiesHolder::SetPropertyData( TreeItemProperty * p_data )
 	{
 		if ( m_data )
 		{
@@ -66,7 +66,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxPropertiesHolder::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void PropertiesHolder::OnPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		if ( m_data )
 		{

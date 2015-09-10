@@ -15,17 +15,17 @@ namespace GuiCommon
 		static const wxString PROPERTY_CATEGORY_RENDER_TARGET = _( "Render Target: " );
 	}
 
-	wxRenderTargetTreeItemProperty::wxRenderTargetTreeItemProperty( RenderTargetSPtr p_target )
-		: wxTreeItemProperty( ePROPERTY_DATA_TYPE_RENDER_TARGET )
+	RenderTargetTreeItemProperty::RenderTargetTreeItemProperty( bool p_editable, RenderTargetSPtr p_target )
+		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_RENDER_TARGET )
 		, m_target( p_target )
 	{
 	}
 
-	wxRenderTargetTreeItemProperty::~wxRenderTargetTreeItemProperty()
+	RenderTargetTreeItemProperty::~RenderTargetTreeItemProperty()
 	{
 	}
 
-	void wxRenderTargetTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void RenderTargetTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
 	{
 		RenderTargetSPtr l_target = GetRenderTarget();
 
@@ -34,7 +34,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxRenderTargetTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void RenderTargetTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		RenderTargetSPtr l_target = GetRenderTarget();
 		wxPGProperty * l_property = p_event.GetProperty();

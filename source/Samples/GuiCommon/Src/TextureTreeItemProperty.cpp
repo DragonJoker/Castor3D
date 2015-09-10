@@ -26,17 +26,17 @@ namespace GuiCommon
 		static const wxString PROPERTY_CHANNEL_GLOSS = _( "Gloss" );
 	}
 
-	wxTextureTreeItemProperty::wxTextureTreeItemProperty( TextureUnitSPtr p_texture )
-		: wxTreeItemProperty( ePROPERTY_DATA_TYPE_TEXTURE )
+	TextureTreeItemProperty::TextureTreeItemProperty( bool p_editable, TextureUnitSPtr p_texture )
+		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_TEXTURE )
 		, m_texture( p_texture )
 	{
 	}
 
-	wxTextureTreeItemProperty::~wxTextureTreeItemProperty()
+	TextureTreeItemProperty::~TextureTreeItemProperty()
 	{
 	}
 
-	void wxTextureTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void TextureTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
 	{
 		TextureUnitSPtr l_unit = GetTexture();
 
@@ -98,7 +98,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxTextureTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void TextureTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		TextureUnitSPtr l_unit = GetTexture();
 		wxPGProperty * l_property = p_event.GetProperty();
@@ -154,7 +154,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxTextureTreeItemProperty::OnChannelChange( eTEXTURE_CHANNEL p_value )
+	void TextureTreeItemProperty::OnChannelChange( eTEXTURE_CHANNEL p_value )
 	{
 		TextureUnitSPtr l_unit = GetTexture();
 
@@ -164,7 +164,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxTextureTreeItemProperty::OnImageChange( Castor::String const & p_value )
+	void TextureTreeItemProperty::OnImageChange( Castor::String const & p_value )
 	{
 		TextureUnitSPtr l_unit = GetTexture();
 

@@ -32,7 +32,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GuiCommon
 {
-	class wxStcTextEditor
+	class StcTextEditor
 		: public wxStyledTextCtrl
 	{
 	private:
@@ -84,11 +84,11 @@ namespace GuiCommon
 		}	gcID;
 
 #if wxMAJOR_VERSION >= 3 || ( wxMAJOR_VERSION == 2 && wxMINOR_VERSION >= 9 )
-		class wxTextAutoCompleter
+		class TextAutoCompleter
 			: public wxTextCompleter
 		{
 		public:
-			wxTextAutoCompleter( wxArrayString const & p_keywords );
+			TextAutoCompleter( wxArrayString const & p_keywords );
 			virtual bool Start( wxString const & p_prefix );
 			virtual wxString GetNext();
 
@@ -99,24 +99,9 @@ namespace GuiCommon
 		};
 #endif
 
-	private:
-		wxString m_strFilename;
-		wxString m_strCurrentWord;
-		LanguageInfoPtr m_pLanguage;
-		int m_iLineNrID;
-		int m_iLineNrMargin;
-		int m_iFoldingID;
-		int m_iFoldingMargin;
-		int m_iDividerID;
-		StcContext * m_pContext;
-		int m_iTabSpaces;
-		bool m_bUseTabs;
-		bool m_bTabIndents;
-		bool m_bBackspaceUnindents;
-
 	public:
-		wxStcTextEditor( StcContext * p_pContext, wxWindow * p_pParent, wxWindowID p_id = wxID_ANY, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize, long p_lStyle = wxVSCROLL );
-		virtual ~wxStcTextEditor();
+		StcTextEditor( StcContext & p_context, wxWindow * p_pParent, wxWindowID p_id = wxID_ANY, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize, long p_lStyle = wxVSCROLL );
+		virtual ~StcTextEditor();
 
 		bool LoadFile();
 		bool LoadFile( wxString const & p_strFilename );
@@ -180,6 +165,21 @@ namespace GuiCommon
 		void OnMarginClick( wxStyledTextEvent & p_event );
 		void OnCharAdded( wxStyledTextEvent & p_event );
 		void OnKey( wxStyledTextEvent & p_event );
+
+	private:
+		wxString m_strFilename;
+		wxString m_strCurrentWord;
+		LanguageInfoPtr m_pLanguage;
+		int m_iLineNrID;
+		int m_iLineNrMargin;
+		int m_iFoldingID;
+		int m_iFoldingMargin;
+		int m_iDividerID;
+		StcContext & m_context;
+		int m_iTabSpaces;
+		bool m_bUseTabs;
+		bool m_bTabIndents;
+		bool m_bBackspaceUnindents;
 	};
 }
 

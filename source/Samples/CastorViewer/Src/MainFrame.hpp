@@ -70,13 +70,13 @@ namespace CastorViewer
 		wxAuiToolBar * m_toolBar;
 		wxAuiNotebook * m_logTabsContainer;
 		wxAuiNotebook * m_sceneTabsContainer;
-		wxPropertiesHolder * m_propertiesContainer;
+		PropertiesHolder * m_propertiesContainer;
 		wxListBox * m_messageLog;
 		wxListBox * m_errorLog;
-		GuiCommon::wxImagesLoader * m_pImagesLoader;
-		GuiCommon::wxSplashScreen * m_pSplashScreen;
-		GuiCommon::wxSceneObjectsList * m_sceneObjectsList;
-		GuiCommon::wxMaterialsList * m_materialsList;
+		GuiCommon::ImagesLoader * m_pImagesLoader;
+		GuiCommon::SplashScreen * m_pSplashScreen;
+		GuiCommon::SceneObjectsList * m_sceneObjectsList;
+		GuiCommon::MaterialsList * m_materialsList;
 		Castor3D::SceneWPtr m_pMainScene;
 		Castor3D::CameraWPtr m_pMainCamera;
 		Castor3D::SceneNodeWPtr m_pSceneNode;

@@ -284,41 +284,26 @@ namespace Castor3D
 		void AddFrameVariableBuffer( FrameVariableBufferSPtr p_pVariableBuffer, uint32_t p_shaderMask );
 		/**
 		 *\~english
-		 *\brief		Finds a variable
-		 *\return		The found variable, nullptr if failed
-		 *\~french
-		 *\brief		Trouve une variable
-		 *\return		La variable trouvé, nullptr en cas d'échec
-		 */
-		FrameVariableBufferSPtr FindFrameVariableBuffer( Castor::String const & p_strName )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the frame variable buffers bound to one shader type
+		 *\brief		Retrieves the frame variables bound to one shader type
 		 *\param[in]	p_type	The shader type
 		 *\return		The list
 		 *\~french
-		 *\brief		Récupère les tampons de variable de frames liés à un type de shader particulier
+		 *\brief		Récupère les variables de frame liées à un type de shader particulier
 		 *\param[in]	p_type	The shader type
 		 *\return		La liste
 		 */
-		inline FrameVariableBufferPtrList & GetFrameVariableBuffers( eSHADER_TYPE p_type )
-		{
-			return m_frameVariableBuffers[p_type];
-		}
+		FrameVariablePtrList & GetFrameVariables( eSHADER_TYPE p_type );
 		/**
 		 *\~english
-		 *\brief		Retrieves the frame variable buffers bound to one shader type
+		 *\brief		Retrieves the frame variables bound to one shader type
 		 *\param[in]	p_type	The shader type
 		 *\return		The list
 		 *\~french
-		 *\brief		Récupère les tampons de variable de frames liés à un type de shader particulier
+		 *\brief		Récupère les variables de frame liées à un type de shader particulier
 		 *\param[in]	p_type	The shader type
 		 *\return		La liste
 		 */
-		inline const FrameVariableBufferPtrList & GetFrameVariableBuffers( eSHADER_TYPE p_type )const
-		{
-			return m_frameVariableBuffers[p_type];
-		}
+		FrameVariablePtrList const & GetFrameVariables( eSHADER_TYPE p_type )const;
 		/**
 		 *\~english
 		 *\brief		Resets compilation variables to be able to compile again
@@ -498,6 +483,67 @@ namespace Castor3D
 		 *\return		La variable trouvé, nullptr en cas d'échec
 		 */
 		OneTextureFrameVariableSPtr FindFrameVariable( Castor::String const & p_strName, eSHADER_TYPE p_eType )const;
+		/**
+		 *\~english
+		 *\brief		Finds a variable
+		 *\return		The found variable, nullptr if failed
+		 *\~french
+		 *\brief		Trouve une variable
+		 *\return		La variable trouvé, nullptr en cas d'échec
+		 */
+		FrameVariableBufferSPtr FindFrameVariableBuffer( Castor::String const & p_strName )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the frame variable buffers bound to one shader type
+		 *\param[in]	p_type	The shader type
+		 *\return		The list
+		 *\~french
+		 *\brief		Récupère les tampons de variables de frame liés à un type de shader particulier
+		 *\param[in]	p_type	The shader type
+		 *\return		La liste
+		 */
+		inline FrameVariableBufferPtrList & GetFrameVariableBuffers( eSHADER_TYPE p_type )
+		{
+			return m_frameVariableBuffers[p_type];
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the frame variable buffers bound to one shader type
+		 *\param[in]	p_type	The shader type
+		 *\return		The list
+		 *\~french
+		 *\brief		Récupère les tampons de variable de frames liés à un type de shader particulier
+		 *\param[in]	p_type	The shader type
+		 *\return		La liste
+		 */
+		inline FrameVariableBufferPtrList const & GetFrameVariableBuffers( eSHADER_TYPE p_type )const
+		{
+			return m_frameVariableBuffers[p_type];
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the frame variable buffers
+		 *\return		The list
+		 *\~french
+		 *\brief		Récupère les tampons de variables de frame
+		 *\return		La liste
+		 */
+		inline FrameVariableBufferPtrList & GetFrameVariableBuffers()
+		{
+			return m_listFrameVariableBuffers;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the frame variable buffers
+		 *\return		The list
+		 *\~french
+		 *\brief		Récupère les tampons de variable de frames
+		 *\return		La liste
+		 */
+		inline FrameVariableBufferPtrList const & GetFrameVariableBuffers()const
+		{
+			return m_listFrameVariableBuffers;
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the program link status

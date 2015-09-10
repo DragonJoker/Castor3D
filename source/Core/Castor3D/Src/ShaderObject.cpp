@@ -59,9 +59,9 @@ namespace Castor3D
 			}
 		}
 
-		for ( FrameVariablePtrStrMapConstIt l_it = p_object.GetFrameVariablesBegin(); l_it != p_object.GetFrameVariablesEnd() && l_bReturn; ++l_it )
+		for ( auto && l_it : p_object.GetFrameVariables() )
 		{
-			FrameVariableSPtr l_pVariable = l_it->second.lock();
+			FrameVariableSPtr l_pVariable = l_it;
 			BinaryChunk l_chunkVariable( eCHUNK_TYPE_PROGRAM_VARIABLE );
 
 			if ( l_bReturn )
@@ -283,9 +283,9 @@ namespace Castor3D
 
 		if ( l_hasFile )
 		{
-			for ( FrameVariablePtrStrMapConstIt l_it = p_shaderObject.GetFrameVariablesBegin(); l_it != p_shaderObject.GetFrameVariablesEnd() && l_bReturn; ++l_it )
+			for ( auto && l_it : p_shaderObject.GetFrameVariables() )
 			{
-				l_bReturn = FrameVariable::TextLoader()( *l_it->second.lock(), p_file );
+				l_bReturn = FrameVariable::TextLoader()( *l_it, p_file );
 			}
 		}
 
