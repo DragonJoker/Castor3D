@@ -1384,49 +1384,53 @@ namespace Castor3D
 				for ( auto && l_submesh : *l_pMesh )
 				{
 					MaterialSPtr l_pMaterial( l_primitive.second->GetMaterial( l_submesh ) );
-					stRENDER_NODE l_renderNode = { l_pNode, l_primitive.second, l_submesh, l_pMaterial };
 
-					if ( l_pMaterial->HasAlphaBlending() )
+					if ( l_pMaterial )
 					{
-						m_arraySubmeshesAlpha.push_back( l_renderNode );
-						SubmeshNodesByMaterialMapIt l_itMap = m_mapSubmeshesAlpha.find( l_pMaterial );
+						stRENDER_NODE l_renderNode = { l_pNode, l_primitive.second, l_submesh, l_pMaterial };
 
-						if ( l_itMap == m_mapSubmeshesAlpha.end() )
+						if ( l_pMaterial->HasAlphaBlending() )
 						{
-							m_mapSubmeshesAlpha.insert( std::make_pair( l_pMaterial, SubmeshNodesMap() ) );
-							l_itMap = m_mapSubmeshesAlpha.find( l_pMaterial );
+							m_arraySubmeshesAlpha.push_back( l_renderNode );
+							SubmeshNodesByMaterialMapIt l_itMap = m_mapSubmeshesAlpha.find( l_pMaterial );
+
+							if ( l_itMap == m_mapSubmeshesAlpha.end() )
+							{
+								m_mapSubmeshesAlpha.insert( std::make_pair( l_pMaterial, SubmeshNodesMap() ) );
+								l_itMap = m_mapSubmeshesAlpha.find( l_pMaterial );
+							}
+
+							SubmeshNodesMapIt l_itSubmesh = l_itMap->second.find( l_submesh );
+
+							if ( l_itSubmesh == l_itMap->second.end() )
+							{
+								l_itMap->second.insert( std::make_pair( l_submesh, RenderNodeArray() ) );
+								l_itSubmesh = l_itMap->second.find( l_submesh );
+							}
+
+							l_itSubmesh->second.push_back( l_renderNode );
 						}
-
-						SubmeshNodesMapIt l_itSubmesh = l_itMap->second.find( l_submesh );
-
-						if ( l_itSubmesh == l_itMap->second.end() )
+						else
 						{
-							l_itMap->second.insert( std::make_pair( l_submesh, RenderNodeArray() ) );
-							l_itSubmesh = l_itMap->second.find( l_submesh );
+							m_arraySubmeshesNoAlpha.push_back( l_renderNode );
+							SubmeshNodesByMaterialMapIt l_itMap = m_mapSubmeshesNoAlpha.find( l_pMaterial );
+
+							if ( l_itMap == m_mapSubmeshesNoAlpha.end() )
+							{
+								m_mapSubmeshesNoAlpha.insert( std::make_pair( l_pMaterial, SubmeshNodesMap() ) );
+								l_itMap = m_mapSubmeshesNoAlpha.find( l_pMaterial );
+							}
+
+							SubmeshNodesMapIt l_itSubmesh = l_itMap->second.find( l_submesh );
+
+							if ( l_itSubmesh == l_itMap->second.end() )
+							{
+								l_itMap->second.insert( std::make_pair( l_submesh, RenderNodeArray() ) );
+								l_itSubmesh = l_itMap->second.find( l_submesh );
+							}
+
+							l_itSubmesh->second.push_back( l_renderNode );
 						}
-
-						l_itSubmesh->second.push_back( l_renderNode );
-					}
-					else
-					{
-						m_arraySubmeshesNoAlpha.push_back( l_renderNode );
-						SubmeshNodesByMaterialMapIt l_itMap = m_mapSubmeshesNoAlpha.find( l_pMaterial );
-
-						if ( l_itMap == m_mapSubmeshesNoAlpha.end() )
-						{
-							m_mapSubmeshesNoAlpha.insert( std::make_pair( l_pMaterial, SubmeshNodesMap() ) );
-							l_itMap = m_mapSubmeshesNoAlpha.find( l_pMaterial );
-						}
-
-						SubmeshNodesMapIt l_itSubmesh = l_itMap->second.find( l_submesh );
-
-						if ( l_itSubmesh == l_itMap->second.end() )
-						{
-							l_itMap->second.insert( std::make_pair( l_submesh, RenderNodeArray() ) );
-							l_itSubmesh = l_itMap->second.find( l_submesh );
-						}
-
-						l_itSubmesh->second.push_back( l_renderNode );
 					}
 				}
 			}

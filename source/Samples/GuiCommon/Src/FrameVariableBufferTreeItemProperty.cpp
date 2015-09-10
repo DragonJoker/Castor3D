@@ -27,7 +27,7 @@ namespace GuiCommon
 	{
 	}
 
-	void FrameVariableBufferTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void FrameVariableBufferTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		FrameVariableBufferSPtr l_buffer = GetBuffer();
 

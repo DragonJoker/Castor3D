@@ -38,7 +38,7 @@ namespace GuiCommon
 	{
 	}
 
-	void CameraTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void CameraTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		CameraSPtr l_camera = GetCamera();
 

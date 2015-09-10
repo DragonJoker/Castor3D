@@ -6,7 +6,9 @@
 #include <OneFrameVariable.hpp>
 #include <PointFrameVariable.hpp>
 
-#include "AdditionalProperties.hpp"
+#include "PointProperties.hpp"
+#include "MatrixProperties.hpp"
+
 #include <wx/propgrid/advprops.h>
 
 using namespace Castor3D;
@@ -131,22 +133,22 @@ namespace GuiCommon
 				l_return = new DoublePointProperty< 4 >( p_name, p_name, std::static_pointer_cast< Point4dFrameVariable >( p_variable )->GetValue() );
 				break;
 			case eFRAME_VARIABLE_TYPE_MAT2X2F:
-				l_return = new FloatMatrixProperty< 2, 2 >( p_name, p_name, std::static_pointer_cast< Matrix2x2fFrameVariable >( p_variable )->GetValue() );
+				l_return = new FloatMatrixProperty< 2 >( p_name, p_name, std::static_pointer_cast< Matrix2x2fFrameVariable >( p_variable )->GetValue() );
 				break;
 			case eFRAME_VARIABLE_TYPE_MAT3X3F:
-				l_return = new FloatMatrixProperty< 3, 3 >( p_name, p_name, std::static_pointer_cast< Matrix3x3fFrameVariable >( p_variable )->GetValue() );
+				l_return = new FloatMatrixProperty< 3 >( p_name, p_name, std::static_pointer_cast< Matrix3x3fFrameVariable >( p_variable )->GetValue() );
 				break;
 			case eFRAME_VARIABLE_TYPE_MAT4X4F:
-				l_return = new FloatMatrixProperty< 4, 4 >( p_name, p_name, std::static_pointer_cast< Matrix4x4fFrameVariable >( p_variable )->GetValue() );
+				l_return = new FloatMatrixProperty< 4 >( p_name, p_name, std::static_pointer_cast< Matrix4x4fFrameVariable >( p_variable )->GetValue() );
 				break;
 			case eFRAME_VARIABLE_TYPE_MAT2X2D:
-				l_return = new DoubleMatrixProperty< 2, 2 >( p_name, p_name, std::static_pointer_cast< Matrix2x2dFrameVariable >( p_variable )->GetValue() );
+				l_return = new DoubleMatrixProperty< 2 >( p_name, p_name, std::static_pointer_cast< Matrix2x2dFrameVariable >( p_variable )->GetValue() );
 				break;
 			case eFRAME_VARIABLE_TYPE_MAT3X3D:
-				l_return = new DoubleMatrixProperty< 3, 3 >( p_name, p_name, std::static_pointer_cast< Matrix3x3dFrameVariable >( p_variable )->GetValue() );
+				l_return = new DoubleMatrixProperty< 3 >( p_name, p_name, std::static_pointer_cast< Matrix3x3dFrameVariable >( p_variable )->GetValue() );
 				break;
 			case eFRAME_VARIABLE_TYPE_MAT4X4D:
-				l_return = new DoubleMatrixProperty< 4, 4 >( p_name, p_name, std::static_pointer_cast< Matrix4x4dFrameVariable >( p_variable )->GetValue() );
+				l_return = new DoubleMatrixProperty< 4 >( p_name, p_name, std::static_pointer_cast< Matrix4x4dFrameVariable >( p_variable )->GetValue() );
 				break;
 			}
 
@@ -173,7 +175,7 @@ namespace GuiCommon
 	{
 	}
 
-	void FrameVariableTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void FrameVariableTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		FrameVariableSPtr l_variable = GetVariable();
 

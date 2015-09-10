@@ -25,7 +25,7 @@ namespace GuiCommon
 	{
 	}
 
-	void GeometryTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void GeometryTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		GeometrySPtr l_geometry = GetGeometry();
 

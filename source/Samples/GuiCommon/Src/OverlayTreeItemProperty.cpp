@@ -11,7 +11,11 @@
 
 #include <Font.hpp>
 
-#include "AdditionalProperties.hpp"
+#include "PositionProperties.hpp"
+#include "SizeProperties.hpp"
+#include "RectangleProperties.hpp"
+#include "PointProperties.hpp"
+
 #include <wx/propgrid/advprops.h>
 
 using namespace Castor;
@@ -49,7 +53,7 @@ namespace GuiCommon
 	{
 	}
 
-	void OverlayTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void OverlayTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		OverlaySPtr l_overlay = GetOverlay();
 

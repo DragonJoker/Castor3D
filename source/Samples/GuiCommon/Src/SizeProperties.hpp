@@ -15,43 +15,35 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GUICOMMON_PROPERTIES_HOLDER_H___
-#define ___GUICOMMON_PROPERTIES_HOLDER_H___
+#ifndef ___GUICOMMON_SIZE_PROPERTIES_H___
+#define ___GUICOMMON_SIZE_PROPERTIES_H___
 
-#include "TreeItemProperty.hpp"
+#include "AdditionalProperties.hpp"
 
-#include <wx/propgrid/propgrid.h>
+#include <Size.hpp>
+
+WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Size );
 
 namespace GuiCommon
 {
-	class PropertiesHolder
-		: public wxPropertyGrid
+	class SizeProperty
+		: public wxPGProperty
 	{
+		WX_PG_DECLARE_PROPERTY_CLASS( SizeProperty )
+
 	public:
-		PropertiesHolder( bool p_bCanEdit, wxWindow * p_pParent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
-		~PropertiesHolder();
+		SizeProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Size const & value = Castor::Size() );
+		virtual ~SizeProperty();
 
-		void SetPropertyData( TreeItemProperty * p_data );
-		/**
-		 *\~english
-		 *\brief		Retrieves the editable status
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le statut de modifiabilité
-		 *\return		La valeur
-		 */
-		inline bool IsEditable()const
+		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
+		virtual void RefreshChildren();
+
+	protected:
+		// I stands for internal
+		inline void SetValueI( Castor::Size const & value )
 		{
-			return m_bCanEdit;
+			m_value = WXVARIANT( value );
 		}
-
-	private:
-		void OnPropertyChange( wxPropertyGridEvent & p_event );
-
-	private:
-		bool m_bCanEdit;
-		TreeItemProperty * m_data;
-		static wxPGEditor * m_buttonEditor;
 	};
 }
 

@@ -4,7 +4,9 @@
 #include <Engine.hpp>
 #include <FunctorEvent.hpp>
 
-#include "AdditionalProperties.hpp"
+#include "PointProperties.hpp"
+#include "QuaternionProperties.hpp"
+
 #include <wx/propgrid/advprops.h>
 
 using namespace Castor3D;
@@ -31,7 +33,7 @@ namespace GuiCommon
 	{
 	}
 
-	void NodeTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void NodeTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		SceneNodeSPtr l_node = GetNode();
 
@@ -53,11 +55,11 @@ namespace GuiCommon
 		{
 			if ( l_property->GetName() == PROPERTY_NODE_POSITION )
 			{
-				OnPositionChange( Point3rRefFromVariant( p_event.GetValue() ) );
+				OnPositionChange( PointRefFromVariant< real, 3 >( p_event.GetValue() ) );
 			}
 			else if ( l_property->GetName() == PROPERTY_NODE_SCALE )
 			{
-				OnScaleChange( Point3rRefFromVariant( p_event.GetValue() ) );
+				OnScaleChange( PointRefFromVariant< real, 3 >( p_event.GetValue() ) );
 			}
 			else if ( l_property->GetName() == PROPERTY_NODE_ORIENTATION )
 			{

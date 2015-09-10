@@ -25,7 +25,7 @@ namespace GuiCommon
 	{
 	}
 
-	void RenderWindowTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void RenderWindowTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		RenderWindowSPtr l_window = GetRenderWindow();
 

@@ -84,12 +84,13 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Creates and fills the overlay properties, in the given wxPropertyGrid
-		 *\param[in]	p_grid	The target wxPropertyGrid
+		 *\param[in]	p_editor	The button editor, for properties that need it
+		 *\param[in]	p_grid		The target wxPropertyGrid
 		 *\~french
 		 *\brief		Construit et remplit les propriétés de l'incrustation, dans la wxPropertyGrid donnée
 		 *\param[in]	p_grid	La wxPropertyGrid cible
 		 */
-		virtual void CreateProperties( wxPropertyGrid * p_grid ) = 0;
+		virtual void CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid ) = 0;
 		/**
 		 *\~english
 		 *\brief		Call when a property grid property is changed

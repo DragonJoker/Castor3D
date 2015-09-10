@@ -124,6 +124,7 @@ namespace GuiCommon
 	class PassTreeItemProperty;
 	class SubmeshTreeItemProperty;
 	class TextureTreeItemProperty;
+	class ButtonEventEditor;
 
 	class SceneObjectsList;
 	class FrameVariablesList;

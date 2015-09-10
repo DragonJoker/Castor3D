@@ -25,7 +25,7 @@ namespace GuiCommon
 	{
 	}
 
-	void MaterialTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void MaterialTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		MaterialSPtr l_material = GetMaterial();
 

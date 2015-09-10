@@ -38,7 +38,7 @@ namespace GuiCommon
 	{
 	}
 
-	void PassTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void PassTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		PassSPtr l_pass = GetPass();
 
@@ -53,10 +53,9 @@ namespace GuiCommon
 			p_grid->Append( new wxBoolProperty( PROPERTY_PASS_TWO_SIDED, wxPG_BOOL_USE_CHECKBOX ) )->SetValue( l_pass->IsTwoSided() );
 			p_grid->Append( new wxFloatProperty( PROPERTY_PASS_OPACITY ) )->SetValue( l_pass->GetAlpha() );
 
-			wxPGEditor * l_editor = p_grid->RegisterEditorClass( new ButtonEventEditor() );
 			wxPGProperty * l_prop = p_grid->Append( new wxStringProperty( PROPERTY_PASS_SHADER ) );
 			l_prop->SetValue( PROPERTY_PASS_EDIT_SHADER );
-			l_prop->SetEditor( l_editor );
+			l_prop->SetEditor( p_editor );
 			l_prop->SetClientObject( new ButtonData( static_cast< ButtonEventMethod >( &PassTreeItemProperty::OnEditShader ), this ) );
 		}
 	}

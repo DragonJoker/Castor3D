@@ -4,7 +4,7 @@
 #include <FunctorEvent.hpp>
 #include <Light.hpp>
 
-#include "AdditionalProperties.hpp"
+#include "PointProperties.hpp"
 #include <wx/propgrid/advprops.h>
 
 using namespace Castor3D;
@@ -35,7 +35,7 @@ namespace GuiCommon
 	{
 	}
 
-	void LightTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void LightTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		LightSPtr l_light = GetLight();
 

@@ -3,7 +3,8 @@
 #include <Viewport.hpp>
 #include <FunctorEvent.hpp>
 
-#include "AdditionalProperties.hpp"
+#include "SizeProperties.hpp"
+
 #include <wx/propgrid/advprops.h>
 
 using namespace Castor3D;
@@ -38,7 +39,7 @@ namespace GuiCommon
 	{
 	}
 
-	void ViewportTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void ViewportTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 

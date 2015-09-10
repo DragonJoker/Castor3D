@@ -146,8 +146,7 @@ namespace GuiCommon
 
 	void ShaderDialog::DoLoadPages( eSHADER_MODEL p_maxModel )
 	{
-		int l_iListWidth = 200;
-		wxPoint l_ptButtonPosition = wxPoint( 10, 10 );
+		const int l_iListWidth = 300;
 		ShaderProgramBaseSPtr l_program = m_pShaderProgram.lock();
 		wxArrayString l_arrayTexts;
 		l_arrayTexts.push_back( _( "Vertex" ) );
@@ -252,16 +251,17 @@ namespace GuiCommon
 			m_pListFrameVariables[i]->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 			m_pListFrameVariables[i]->LoadVariables( eSHADER_TYPE( i ), l_program );
 			m_pListFrameVariables[i]->Enable( m_bCanEdit );
-			l_ptButtonPosition.y += 20;
 
 			// Set a sizer for this couple
 			wxBoxSizer * l_pSizerTabList = new wxBoxSizer( wxVERTICAL );
 			l_pSizerTabList->Add( l_pTmpStatic, wxSizerFlags( 0 ) );
 			l_pSizerTabList->Add( m_pListFrameVariables[i], wxSizerFlags( 1 ).Expand() );
 			l_pSizerTabList->Add( m_pPropsFrameVariables[i], wxSizerFlags( 1 ).Expand() );
+
+			// Put all that stuff in a sizer
 			wxBoxSizer * l_pSizerTab = new wxBoxSizer( wxHORIZONTAL );
-			l_pSizerTab->Add( m_pStcEditors[i],	wxSizerFlags( 1 ).Expand() );
 			l_pSizerTab->Add( l_pSizerTabList,	wxSizerFlags( 0 ).Expand() );
+			l_pSizerTab->Add( m_pStcEditors[i],	wxSizerFlags( 1 ).Expand() );
 			l_panel->SetSizer( l_pSizerTab );
 			l_pSizerTab->SetSizeHints( l_panel );
 		}

@@ -25,7 +25,7 @@ namespace GuiCommon
 	{
 	}
 
-	void RenderTargetTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void RenderTargetTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		RenderTargetSPtr l_target = GetRenderTarget();
 

@@ -32,7 +32,7 @@ namespace GuiCommon
 	{
 	}
 
-	void SubmeshTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void SubmeshTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		GeometrySPtr l_geometry = GetGeometry();
 		SubmeshSPtr l_submesh = GetSubmesh();

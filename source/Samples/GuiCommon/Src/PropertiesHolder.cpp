@@ -38,12 +38,18 @@ using namespace Castor;
 
 namespace GuiCommon
 {
+	wxPGEditor * PropertiesHolder::m_buttonEditor = NULL;
+
 	PropertiesHolder::PropertiesHolder( bool p_bCanEdit, wxWindow * p_pParent, wxPoint const & p_ptPos, wxSize const & p_size )
 		: wxPropertyGrid( p_pParent, wxID_ANY, p_ptPos, p_size, wxPG_BOLD_MODIFIED | wxPG_SPLITTER_AUTO_CENTER | wxPG_DEFAULT_STYLE )
 		, m_bCanEdit( p_bCanEdit )
 		, m_data( NULL )
 	{
-		SetBackgroundColour( *wxWHITE );
+		if ( !m_buttonEditor )
+		{
+			m_buttonEditor = RegisterEditorClass( new ButtonEventEditor() );
+		}
+
 		Connect( wxEVT_PG_CHANGED, wxEVENT_HANDLER_CAST( wxPropertyGridEventFunction, PropertiesHolder::OnPropertyChange ) );
 	}
 
@@ -62,7 +68,7 @@ namespace GuiCommon
 
 		if ( m_data )
 		{
-			m_data->CreateProperties( this );
+			m_data->CreateProperties( m_buttonEditor, this );
 		}
 	}
 

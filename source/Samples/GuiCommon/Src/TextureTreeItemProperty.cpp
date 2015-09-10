@@ -36,7 +36,7 @@ namespace GuiCommon
 	{
 	}
 
-	void TextureTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void TextureTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		TextureUnitSPtr l_unit = GetTexture();
 

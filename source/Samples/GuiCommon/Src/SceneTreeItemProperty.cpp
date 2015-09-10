@@ -29,7 +29,7 @@ namespace GuiCommon
 	{
 	}
 
-	void SceneTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void SceneTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		SceneSPtr l_scene = GetScene();
 
