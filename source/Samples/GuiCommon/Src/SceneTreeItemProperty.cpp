@@ -13,23 +13,27 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static const wxString PROPERTY_CATEGORY_SCENE = _( "Scene: " );
-		static const wxString PROPERTY_SCENE_AMBIENT_LIGHT = _( "Ambient light" );
-		static const wxString PROPERTY_SCENE_BACKGROUND_COLOUR = _( "Background Colour" );
-		static const wxString PROPERTY_SCENE_BACKGROUND_IMAGE = _( "Background Image" );
+		static wxString PROPERTY_CATEGORY_SCENE = _( "Scene: " );
+		static wxString PROPERTY_SCENE_AMBIENT_LIGHT = _( "Ambient light" );
+		static wxString PROPERTY_SCENE_BACKGROUND_COLOUR = _( "Background Colour" );
+		static wxString PROPERTY_SCENE_BACKGROUND_IMAGE = _( "Background Image" );
 	}
 
-	wxSceneTreeItemProperty::wxSceneTreeItemProperty( SceneSPtr p_scene )
-		: wxTreeItemProperty( ePROPERTY_DATA_TYPE_SCENE )
+	SceneTreeItemProperty::SceneTreeItemProperty( bool p_editable, SceneSPtr p_scene )
+		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_SCENE )
 		, m_scene( p_scene )
 	{
+		PROPERTY_CATEGORY_SCENE = _( "Scene: " );
+		PROPERTY_SCENE_AMBIENT_LIGHT = _( "Ambient light" );
+		PROPERTY_SCENE_BACKGROUND_COLOUR = _( "Background Colour" );
+		PROPERTY_SCENE_BACKGROUND_IMAGE = _( "Background Image" );
 	}
 
-	wxSceneTreeItemProperty::~wxSceneTreeItemProperty()
+	SceneTreeItemProperty::~SceneTreeItemProperty()
 	{
 	}
 
-	void wxSceneTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void SceneTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		SceneSPtr l_scene = GetScene();
 
@@ -46,7 +50,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxSceneTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void SceneTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		SceneSPtr l_scene = GetScene();
 		wxPGProperty * l_property = p_event.GetProperty();
@@ -56,7 +60,7 @@ namespace GuiCommon
 		}
 	}
 
-	wxPGProperty * wxSceneTreeItemProperty::DoCreateTextureImageProperty( wxString const & p_name, Castor3D::TextureBaseSPtr p_texture )
+	wxPGProperty * SceneTreeItemProperty::DoCreateTextureImageProperty( wxString const & p_name, Castor3D::TextureBaseSPtr p_texture )
 	{
 		wxPGProperty * l_property = NULL;
 

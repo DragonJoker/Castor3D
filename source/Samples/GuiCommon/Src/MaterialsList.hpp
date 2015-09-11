@@ -24,12 +24,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GuiCommon
 {
-	class wxMaterialsList
+	class MaterialsList
 		: public wxTreeCtrl
 	{
 	public:
-		wxMaterialsList( wxPropertiesHolder * p_propertiesHolder, wxWindow * p_pParent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
-		~wxMaterialsList();
+		MaterialsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_pParent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
+		~MaterialsList();
 
 		void LoadMaterials( Castor3D::Engine * p_pEngine );
 		void UnloadMaterials();
@@ -45,7 +45,7 @@ namespace GuiCommon
 
 	private:
 		Castor3D::Engine * m_pEngine;
-		wxPropertiesHolder * m_propertiesHolder;
+		PropertiesHolder * m_propertiesHolder;
 	};
 }
 

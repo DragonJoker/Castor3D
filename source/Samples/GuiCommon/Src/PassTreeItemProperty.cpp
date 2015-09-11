@@ -1,5 +1,7 @@
 #include "PassTreeItemProperty.hpp"
 
+#include "ShaderDialog.hpp"
+
 #include <Engine.hpp>
 #include <FunctorEvent.hpp>
 #include <Pass.hpp>
@@ -14,27 +16,39 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static const wxString PROPERTY_CATEGORY_PASS = _( "Pass: " );
-		static const wxString PROPERTY_PASS_AMBIENT = _( "Ambient" );
-		static const wxString PROPERTY_PASS_DIFFUSE = _( "Diffuse" );
-		static const wxString PROPERTY_PASS_SPECULAR = _( "Specular" );
-		static const wxString PROPERTY_PASS_EMISSIVE = _( "Emissive" );
-		static const wxString PROPERTY_PASS_EXPONENT = _( "Exponent" );
-		static const wxString PROPERTY_PASS_TWO_SIDED = _( "Two sided" );
-		static const wxString PROPERTY_PASS_OPACITY = _( "Opacity" );
+		static wxString PROPERTY_CATEGORY_PASS = _( "Pass: " );
+		static wxString PROPERTY_PASS_AMBIENT = _( "Ambient" );
+		static wxString PROPERTY_PASS_DIFFUSE = _( "Diffuse" );
+		static wxString PROPERTY_PASS_SPECULAR = _( "Specular" );
+		static wxString PROPERTY_PASS_EMISSIVE = _( "Emissive" );
+		static wxString PROPERTY_PASS_EXPONENT = _( "Exponent" );
+		static wxString PROPERTY_PASS_TWO_SIDED = _( "Two sided" );
+		static wxString PROPERTY_PASS_OPACITY = _( "Opacity" );
+		static wxString PROPERTY_PASS_SHADER = _( "Shader" );
+		static wxString PROPERTY_PASS_EDIT_SHADER = _( "Edit Shader..." );
 	}
 
-	wxPassTreeItemProperrty::wxPassTreeItemProperrty( Castor3D::PassSPtr p_pass )
-		: wxTreeItemProperty( ePROPERTY_DATA_TYPE_PASS )
+	PassTreeItemProperty::PassTreeItemProperty( bool p_editable, Castor3D::PassSPtr p_pass )
+		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_PASS )
 		, m_pass( p_pass )
 	{
+		PROPERTY_CATEGORY_PASS = _( "Pass: " );
+		PROPERTY_PASS_AMBIENT = _( "Ambient" );
+		PROPERTY_PASS_DIFFUSE = _( "Diffuse" );
+		PROPERTY_PASS_SPECULAR = _( "Specular" );
+		PROPERTY_PASS_EMISSIVE = _( "Emissive" );
+		PROPERTY_PASS_EXPONENT = _( "Exponent" );
+		PROPERTY_PASS_TWO_SIDED = _( "Two sided" );
+		PROPERTY_PASS_OPACITY = _( "Opacity" );
+		PROPERTY_PASS_SHADER = _( "Shader" );
+		PROPERTY_PASS_EDIT_SHADER = _( "Edit Shader..." );
 	}
 
-	wxPassTreeItemProperrty::~wxPassTreeItemProperrty()
+	PassTreeItemProperty::~PassTreeItemProperty()
 	{
 	}
 
-	void wxPassTreeItemProperrty::CreateProperties( wxPropertyGrid * p_grid )
+	void PassTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		PassSPtr l_pass = GetPass();
 
@@ -48,10 +62,15 @@ namespace GuiCommon
 			p_grid->Append( new wxFloatProperty( PROPERTY_PASS_EXPONENT ) )->SetValue( l_pass->GetShininess() );
 			p_grid->Append( new wxBoolProperty( PROPERTY_PASS_TWO_SIDED, wxPG_BOOL_USE_CHECKBOX ) )->SetValue( l_pass->IsTwoSided() );
 			p_grid->Append( new wxFloatProperty( PROPERTY_PASS_OPACITY ) )->SetValue( l_pass->GetAlpha() );
+
+			wxPGProperty * l_prop = p_grid->Append( new wxStringProperty( PROPERTY_PASS_SHADER ) );
+			l_prop->SetValue( PROPERTY_PASS_EDIT_SHADER );
+			l_prop->SetEditor( p_editor );
+			l_prop->SetClientObject( new ButtonData( static_cast< ButtonEventMethod >( &PassTreeItemProperty::OnEditShader ), this ) );
 		}
 	}
 
-	void wxPassTreeItemProperrty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void PassTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		PassSPtr l_pass = GetPass();
 		wxPGProperty * l_property = p_event.GetProperty();
@@ -95,7 +114,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxPassTreeItemProperrty::OnAmbientColourChange( Colour const & p_value )
+	void PassTreeItemProperty::OnAmbientColourChange( Colour const & p_value )
 	{
 		PassSPtr l_pass = GetPass();
 
@@ -105,7 +124,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxPassTreeItemProperrty::OnDiffuseColourChange( Colour const & p_value )
+	void PassTreeItemProperty::OnDiffuseColourChange( Colour const & p_value )
 	{
 		PassSPtr l_pass = GetPass();
 
@@ -115,7 +134,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxPassTreeItemProperrty::OnSpecularColourChange( Colour const & p_value )
+	void PassTreeItemProperty::OnSpecularColourChange( Colour const & p_value )
 	{
 		PassSPtr l_pass = GetPass();
 
@@ -125,7 +144,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxPassTreeItemProperrty::OnEmissiveColourChange( Colour const & p_value )
+	void PassTreeItemProperty::OnEmissiveColourChange( Colour const & p_value )
 	{
 		PassSPtr l_pass = GetPass();
 
@@ -135,7 +154,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxPassTreeItemProperrty::OnExponentChange( double p_value )
+	void PassTreeItemProperty::OnExponentChange( double p_value )
 	{
 		PassSPtr l_pass = GetPass();
 
@@ -145,7 +164,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxPassTreeItemProperrty::OnTwoSidedChange( bool p_value )
+	void PassTreeItemProperty::OnTwoSidedChange( bool p_value )
 	{
 		PassSPtr l_pass = GetPass();
 
@@ -155,7 +174,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxPassTreeItemProperrty::OnOpacityChange( double p_value )
+	void PassTreeItemProperty::OnOpacityChange( double p_value )
 	{
 		PassSPtr l_pass = GetPass();
 
@@ -163,5 +182,13 @@ namespace GuiCommon
 		{
 			l_pass->SetAlpha( p_value );
 		} ) );
+	}
+
+	bool PassTreeItemProperty::OnEditShader( wxPGProperty * p_property )
+	{
+		PassSPtr l_pass = GetPass();
+		ShaderDialog * l_editor = new ShaderDialog( l_pass->GetEngine(), IsEditable(), NULL, l_pass );
+		l_editor->Show();
+		return false;
 	}
 }

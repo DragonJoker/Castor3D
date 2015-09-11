@@ -12,29 +12,37 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static const wxString PROPERTY_CATEGORY_RENDER_TARGET = _( "Render Target: " );
+		static wxString PROPERTY_CATEGORY_RENDER_TARGET = _( "Render Target: " );
 	}
 
-	wxRenderTargetTreeItemProperty::wxRenderTargetTreeItemProperty( RenderTargetSPtr p_target )
-		: wxTreeItemProperty( ePROPERTY_DATA_TYPE_RENDER_TARGET )
+	RenderTargetTreeItemProperty::RenderTargetTreeItemProperty( bool p_editable, RenderTargetSPtr p_target )
+		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_RENDER_TARGET )
 		, m_target( p_target )
 	{
+		PROPERTY_CATEGORY_RENDER_TARGET = _( "Render Target: " );
 	}
 
-	wxRenderTargetTreeItemProperty::~wxRenderTargetTreeItemProperty()
+	RenderTargetTreeItemProperty::~RenderTargetTreeItemProperty()
 	{
 	}
 
-	void wxRenderTargetTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void RenderTargetTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		RenderTargetSPtr l_target = GetRenderTarget();
 
 		if ( l_target )
 		{
+			wxString TARGETS[] =
+			{
+				_( "Window" ),
+				_( "Texture" )
+			};
+
+			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_RENDER_TARGET + TARGETS[l_target->GetTargetType()] ) );
 		}
 	}
 
-	void wxRenderTargetTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void RenderTargetTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		RenderTargetSPtr l_target = GetRenderTarget();
 		wxPGProperty * l_property = p_event.GetProperty();

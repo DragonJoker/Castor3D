@@ -27,32 +27,34 @@ namespace GuiCommon
 	\date 		24/08/2015
 	\version	0.8.0
 	\~english
-	\brief		Submesh helper class to communicate between Scene objects or Materials lists and wxPropertiesHolder
+	\brief		Submesh helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et wxPropertiesHolder, pour les maillages
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les maillages
 	*/
-	class wxSubmeshTreeItemProperty
-		: public wxTreeItemProperty
+	class SubmeshTreeItemProperty
+		: public TreeItemProperty
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pGeometry	 The parent geometry
-		 *\param[in]	p_pSubmesh	 The target submesh
+		 *\param[in]	p_editable	Tells if the properties are modifiable
+		 *\param[in]	p_pGeometry	The parent geometry
+		 *\param[in]	p_pSubmesh	The target submesh
 		 *\~french
 		 *\brief		Constructeur
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_pGeometry	La géométrie parente
 		 *\param[in]	p_pSubmesh	Le maillage cible
 		 */
-		wxSubmeshTreeItemProperty( Castor3D::GeometrySPtr p_pGeometry, Castor3D::SubmeshSPtr p_pSubmesh );
+		SubmeshTreeItemProperty( bool p_editable, Castor3D::GeometrySPtr p_pGeometry, Castor3D::SubmeshSPtr p_pSubmesh );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~wxSubmeshTreeItemProperty();
+		~SubmeshTreeItemProperty();
 		/**
 		 *\~english
 		 *\brief		Creates and fills the submesh properties, in the given wxPropertyGrid
@@ -61,7 +63,7 @@ namespace GuiCommon
 		 *\brief		Construit et remplit les propriétés du maillage, dans la wxPropertyGrid donnée
 		 *\param[in]	p_grid	La wxPropertyGrid cible
 		 */
-		virtual void CreateProperties( wxPropertyGrid * p_grid );
+		virtual void CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 		/**
 		 *\~english
 		 *\brief		Call when a property grid property is changed

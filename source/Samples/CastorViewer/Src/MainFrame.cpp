@@ -46,10 +46,13 @@
 #include <xpms/render_window_sel.xpm>
 #include <xpms/render_target.xpm>
 #include <xpms/render_target_sel.xpm>
+#include <xpms/frame_variable.xpm>
+#include <xpms/frame_variable_sel.xpm>
+#include <xpms/frame_variable_buffer.xpm>
+#include <xpms/frame_variable_buffer_sel.xpm>
 
 #include <wx/display.h>
 #include <wx/aui/auibar.h>
-#include <wx/aui/dockart.h>
 #include <wx/renderer.h>
 
 #include <RenderTarget.hpp>
@@ -59,6 +62,9 @@
 #include <MaterialsList.hpp>
 #include <RendererSelector.hpp>
 #include <SplashScreen.hpp>
+#include <AuiDockArt.hpp>
+#include <AuiTabArt.hpp>
+#include <AuiToolBarArt.hpp>
 
 #include <GeometryBuffers.hpp>
 #include <IndexBuffer.hpp>
@@ -92,6 +98,10 @@ namespace CastorViewer
 #else
 		static const int CASTOR_WANTED_FPS	= 30;
 #endif
+		static const wxString CSCN_WILDCARD = wxT( " (*.cscn)|*.cscn|" );
+		static const wxString CBSN_WILDCARD = wxT( " (*.cbsn)|*.cbsn|" );
+		static const wxString OBJ_WILDCARD = wxT( " (*.obj)|*.obj|" );
+		static const wxString ZIP_WILDCARD = wxT( " (*.zip)|*.zip|" );
 
 		typedef enum eID
 		{
@@ -123,39 +133,6 @@ namespace CastorViewer
 				rect->x++;
 				rect->y++;
 			}
-		}
-
-		static wxString AuiChopText( wxDC & dc, const wxString & text, int max_size )
-		{
-			wxCoord x, y;
-			// first check if the text fits with no problems
-			dc.GetTextExtent( text, &x, &y );
-
-			if ( x <= max_size )
-			{
-				return text;
-			}
-
-			size_t i, len = text.Length();
-			size_t last_good_length = 0;
-
-			for ( i = 0; i < len; ++i )
-			{
-				wxString s = text.Left( i );
-				s += wxT( "..." );
-				dc.GetTextExtent( s, &x, &y );
-
-				if ( x > max_size )
-				{
-					break;
-				}
-
-				last_good_length = i;
-			}
-
-			wxString ret = text.Left( last_good_length );
-			ret += wxT( "..." );
-			return ret;
 		}
 
 		template< typename TObj >
@@ -218,343 +195,6 @@ namespace CastorViewer
 
 			return l_return;
 		}
-
-		class AuiTabArt
-			: public wxAuiDefaultTabArt
-		{
-		public:
-			AuiTabArt()
-			{
-				wxAuiDefaultTabArt::SetColour( INACTIVE_TAB_COLOUR );
-				wxAuiDefaultTabArt::SetActiveColour( ACTIVE_TAB_COLOUR );
-				wxAuiDefaultTabArt::SetMeasuringFont( wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false ) );
-				wxAuiDefaultTabArt::SetNormalFont( wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false ) );
-				wxAuiDefaultTabArt::SetSelectedFont( wxFont( 8, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, false ) );
-			}
-
-			virtual wxAuiTabArt * Clone()
-			{
-				return new AuiTabArt( *this );
-			}
-
-			virtual void DrawBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect )
-			{
-				p_dc.SetPen( m_baseColourPen );
-				p_dc.SetBrush( m_baseColourBrush );
-				p_dc.DrawRectangle( p_rect );
-			}
-
-			// DrawTab() draws an individual tab.
-			//
-			// dc       - output dc
-			// in_rect  - rectangle the tab should be confined to
-			// caption  - tab's caption
-			// active   - whether or not the tab is active
-			// out_rect - actual output rectangle
-			// x_extent - the advance x; where the next tab should start
-			void DrawTab( wxDC & dc, wxWindow * wnd, const wxAuiNotebookPage & page, const wxRect & in_rect, int close_button_state, wxRect * out_tab_rect, wxRect * out_button_rect, int * x_extent )
-			{
-				wxCoord normal_textx, normal_texty;
-				wxCoord selected_textx, selected_texty;
-				wxCoord texty;
-
-				// if the caption is empty, measure some temporary text
-				wxString caption = page.caption;
-
-				if ( caption.empty() )
-				{
-					caption = wxT( "Xj" );
-				}
-
-				dc.SetFont( m_selectedFont );
-				dc.GetTextExtent( caption, &selected_textx, &selected_texty );
-
-				dc.SetFont( m_normalFont );
-				dc.GetTextExtent( caption, &normal_textx, &normal_texty );
-
-				// figure out the size of the tab
-				wxSize tab_size = GetTabSize( dc, wnd, page.caption, page.bitmap, page.active, close_button_state, x_extent );
-
-				wxCoord tab_height = m_tabCtrlHeight - 3;
-				wxCoord tab_width = tab_size.x;
-				wxCoord tab_x = in_rect.x;
-				wxCoord tab_y = in_rect.y + in_rect.height - tab_height;
-
-				caption = page.caption;
-
-				// select pen, brush and font for the tab to be drawn
-				if ( page.active )
-				{
-					dc.SetFont( m_selectedFont );
-					texty = selected_texty;
-				}
-				else
-				{
-					dc.SetFont( m_normalFont );
-					texty = normal_texty;
-				}
-
-
-				// create points that will make the tab outline
-
-				int clip_width = tab_width;
-
-				if ( tab_x + clip_width > in_rect.x + in_rect.width )
-				{
-					clip_width = ( in_rect.x + in_rect.width ) - tab_x;
-				}
-
-				wxPoint clip_points[6];
-				clip_points[0] = wxPoint( tab_x,              tab_y + tab_height - 3 );
-				clip_points[1] = wxPoint( tab_x,              tab_y + 2 );
-				clip_points[2] = wxPoint( tab_x + 2,            tab_y );
-				clip_points[3] = wxPoint( tab_x + clip_width - 1, tab_y );
-				clip_points[4] = wxPoint( tab_x + clip_width + 1, tab_y + 2 );
-				clip_points[5] = wxPoint( tab_x + clip_width + 1, tab_y + tab_height - 3 );
-#if !defined(__WXDFB__) && !defined(__WXCOCOA__)
-				// since the above code above doesn't play well with WXDFB or WXCOCOA,
-				// we'll just use a rectangle for the clipping region for now --
-				dc.SetClippingRegion( tab_x, tab_y, clip_width + 1, tab_height - 3 );
-#endif // !wxDFB && !wxCocoa
-
-				wxPoint border_points[6];
-
-				if ( m_flags & wxAUI_NB_BOTTOM )
-				{
-					border_points[0] = wxPoint( tab_x,             tab_y );
-					border_points[1] = wxPoint( tab_x,             tab_y + tab_height - 6 );
-					border_points[2] = wxPoint( tab_x + 2,           tab_y + tab_height - 4 );
-					border_points[3] = wxPoint( tab_x + tab_width - 2, tab_y + tab_height - 4 );
-					border_points[4] = wxPoint( tab_x + tab_width,   tab_y + tab_height - 6 );
-					border_points[5] = wxPoint( tab_x + tab_width,   tab_y );
-				}
-				else //if (m_flags & wxAUI_NB_TOP) {}
-				{
-					border_points[0] = wxPoint( tab_x,             tab_y + tab_height - 4 );
-					border_points[1] = wxPoint( tab_x,             tab_y + 2 );
-					border_points[2] = wxPoint( tab_x + 2,           tab_y );
-					border_points[3] = wxPoint( tab_x + tab_width - 2, tab_y );
-					border_points[4] = wxPoint( tab_x + tab_width,   tab_y + 2 );
-					border_points[5] = wxPoint( tab_x + tab_width,   tab_y + tab_height - 4 );
-				}
-
-				// TODO: else if (m_flags &wxAUI_NB_LEFT) {}
-				// TODO: else if (m_flags &wxAUI_NB_RIGHT) {}
-
-				int drawn_tab_yoff = border_points[1].y;
-				int drawn_tab_height = border_points[0].y - border_points[1].y;
-
-				if ( page.active )
-				{
-					// draw active tab
-
-					// draw base background color
-					wxRect r( tab_x, tab_y, tab_width, tab_height );
-					dc.SetPen( wxPen( m_activeColour ) );
-					dc.SetBrush( wxBrush( m_activeColour ) );
-					dc.DrawRectangle( r.x + 1, r.y + 1, r.width - 1, r.height - 4 );
-
-					// these two points help the rounded corners appear more antialiased
-					dc.SetPen( wxPen( m_activeColour ) );
-					dc.DrawPoint( r.x + 2, r.y + 1 );
-					dc.DrawPoint( r.x + r.width - 2, r.y + 1 );
-				}
-				else
-				{
-					// draw inactive tab
-
-					// draw base background color
-					wxRect r( tab_x, tab_y, tab_width, tab_height );
-					dc.SetPen( wxPen( m_baseColour ) );
-					dc.SetBrush( wxBrush( m_baseColour ) );
-					dc.DrawRectangle( r.x + 1, r.y + 1, r.width - 1, r.height - 4 );
-				}
-
-				//// draw tab outline
-				//dc.SetPen( m_borderPen );
-				//dc.SetBrush( *wxTRANSPARENT_BRUSH );
-				//dc.DrawPolygon( WXSIZEOF( border_points ), border_points );
-
-				// there are two horizontal grey lines at the bottom of the tab control,
-				// this gets rid of the top one of those lines in the tab control
-				if ( page.active )
-				{
-					if ( m_flags & wxAUI_NB_BOTTOM )
-					{
-						dc.SetPen( wxPen( m_activeColour.ChangeLightness( 170 ) ) );
-					}
-					// TODO: else if (m_flags &wxAUI_NB_LEFT) {}
-					// TODO: else if (m_flags &wxAUI_NB_RIGHT) {}
-					else //for wxAUI_NB_TOP
-					{
-						dc.SetPen( m_activeColour );
-					}
-
-					dc.DrawLine( border_points[0].x + 1,
-								 border_points[0].y,
-								 border_points[5].x,
-								 border_points[5].y );
-				}
-
-
-				int text_offset = tab_x + 8;
-				int close_button_width = 0;
-
-				if ( close_button_state != wxAUI_BUTTON_STATE_HIDDEN )
-				{
-					close_button_width = m_activeCloseBmp.GetWidth();
-				}
-
-				int bitmap_offset = 0;
-				text_offset = tab_x + 8;
-
-				wxString draw_text = AuiChopText( dc, caption, tab_width - ( text_offset - tab_x ) - close_button_width );
-
-				// draw tab text
-				if ( page.active )
-				{
-					dc.SetTextForeground( ACTIVE_TEXT_COLOUR );
-				}
-				else
-				{
-					dc.SetTextForeground( INACTIVE_TEXT_COLOUR );
-				}
-
-				dc.SetFont( m_normalFont );
-				dc.DrawText( draw_text, text_offset, drawn_tab_yoff + ( drawn_tab_height ) / 2 - ( texty / 2 ) );
-
-				// draw focus rectangle
-				if ( page.active && ( wnd->FindFocus() == wnd ) )
-				{
-					wxRect focusRectText( text_offset, ( drawn_tab_yoff + ( drawn_tab_height ) / 2 - ( texty / 2 ) - 1 ), selected_textx, selected_texty );
-
-					wxRect focusRect;
-					wxRect focusRectBitmap;
-
-					if ( page.bitmap.IsOk() )
-					{
-						focusRectBitmap = wxRect( bitmap_offset, drawn_tab_yoff + ( drawn_tab_height / 2 ) - ( page.bitmap.GetHeight() / 2 ), page.bitmap.GetWidth(), page.bitmap.GetHeight() );
-					}
-
-					if ( page.bitmap.IsOk() && draw_text.IsEmpty() )
-					{
-						focusRect = focusRectBitmap;
-					}
-					else if ( !page.bitmap.IsOk() && !draw_text.IsEmpty() )
-					{
-						focusRect = focusRectText;
-					}
-					else if ( page.bitmap.IsOk() && !draw_text.IsEmpty() )
-					{
-						focusRect = focusRectText.Union( focusRectBitmap );
-					}
-
-					focusRect.Inflate( 2, 2 );
-
-					wxRendererNative::Get().DrawFocusRect( wnd, dc, focusRect, 0 );
-				}
-
-				// draw close button if necessary
-				if ( close_button_state != wxAUI_BUTTON_STATE_HIDDEN )
-				{
-					wxBitmap bmp = m_disabledCloseBmp;
-
-					if ( close_button_state == wxAUI_BUTTON_STATE_HOVER || close_button_state == wxAUI_BUTTON_STATE_PRESSED )
-					{
-						bmp = m_activeCloseBmp;
-					}
-
-					int offsetY = tab_y - 1;
-
-					if ( m_flags & wxAUI_NB_BOTTOM )
-					{
-						offsetY = 1;
-					}
-
-					wxRect rect( tab_x + tab_width - close_button_width - 1,
-								 offsetY + ( tab_height / 2 ) - ( bmp.GetHeight() / 2 ),
-								 close_button_width,
-								 tab_height );
-
-					IndentPressedBitmap( &rect, close_button_state );
-					dc.DrawBitmap( bmp, rect.x, rect.y, true );
-
-					*out_button_rect = rect;
-				}
-
-				*out_tab_rect = wxRect( tab_x, tab_y, tab_width, tab_height );
-
-				dc.DestroyClippingRegion();
-			}
-
-		private:
-			wxColour m_default;
-			wxColour m_active;
-		};
-
-		class AuiToolBarArt
-			: public wxAuiDefaultToolBarArt
-		{
-		public:
-			AuiToolBarArt()
-				: wxAuiDefaultToolBarArt()
-			{
-			}
-
-			virtual wxAuiToolBarArt * Clone()
-			{
-				return new AuiToolBarArt( *this );
-			}
-
-			virtual void DrawBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect )
-			{
-				p_dc.SetPen( wxPen( INACTIVE_TAB_COLOUR, 1, wxSOLID ) );
-				p_dc.SetBrush( wxBrush( INACTIVE_TAB_COLOUR, wxSOLID ) );
-				p_dc.DrawRectangle( p_rect );
-			}
-
-			virtual void DrawPlainBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect )
-			{
-				p_dc.SetPen( wxPen( INACTIVE_TAB_COLOUR, 1, wxSOLID ) );
-				p_dc.SetBrush( wxBrush( INACTIVE_TAB_COLOUR, wxSOLID ) );
-				p_dc.DrawRectangle( p_rect );
-			}
-
-			virtual void DrawSeparator( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect )
-			{
-				p_dc.SetPen( wxPen( BORDER_COLOUR, 1, wxSOLID ) );
-				p_dc.DrawLine( ( p_rect.GetBottomLeft() + p_rect.GetBottomRight() ) / 2, ( p_rect.GetTopLeft() + p_rect.GetTopRight() ) / 2 );
-			}
-		};
-
-		class AuiDockArt
-			: public wxAuiDefaultDockArt
-		{
-		public:
-			AuiDockArt()
-				: wxAuiDefaultDockArt()
-			{
-				wxAuiDefaultDockArt::SetMetric( wxAuiPaneDockArtSetting::wxAUI_DOCKART_PANE_BORDER_SIZE, 0 );
-				wxAuiDefaultDockArt::SetMetric( wxAuiPaneDockArtSetting::wxAUI_DOCKART_GRADIENT_TYPE, wxAUI_GRADIENT_NONE );
-				wxAuiDefaultDockArt::SetColour( wxAuiPaneDockArtSetting::wxAUI_DOCKART_BACKGROUND_COLOUR, INACTIVE_TAB_COLOUR );
-				wxAuiDefaultDockArt::SetColour( wxAuiPaneDockArtSetting::wxAUI_DOCKART_BORDER_COLOUR, BORDER_COLOUR );
-				wxAuiDefaultDockArt::SetColour( wxAuiPaneDockArtSetting::wxAUI_DOCKART_GRIPPER_COLOUR, wxColour( 127, 127, 127 ) );
-				wxAuiDefaultDockArt::SetColour( wxAuiPaneDockArtSetting::wxAUI_DOCKART_SASH_COLOUR, INACTIVE_TAB_COLOUR );
-				wxAuiDefaultDockArt::SetColour( wxAuiPaneDockArtSetting::wxAUI_DOCKART_INACTIVE_CAPTION_COLOUR, INACTIVE_TAB_COLOUR );
-				wxAuiDefaultDockArt::SetColour( wxAuiPaneDockArtSetting::wxAUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR, INACTIVE_TAB_COLOUR );
-				wxAuiDefaultDockArt::SetColour( wxAuiPaneDockArtSetting::wxAUI_DOCKART_ACTIVE_CAPTION_COLOUR, ACTIVE_TAB_COLOUR );
-				wxAuiDefaultDockArt::SetColour( wxAuiPaneDockArtSetting::wxAUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR, ACTIVE_TAB_COLOUR );
-				wxAuiDefaultDockArt::SetColour( wxAuiPaneDockArtSetting::wxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR, INACTIVE_TEXT_COLOUR );
-				wxAuiDefaultDockArt::SetColour( wxAuiPaneDockArtSetting::wxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR, ACTIVE_TEXT_COLOUR );
-			}
-
-			virtual void DrawBackground( wxDC & p_dc, wxWindow * p_window, wxRect const & p_rect )
-			{
-				p_dc.SetPen( wxPen( PANEL_BACKGROUND_COLOUR, 1, wxSOLID ) );
-				p_dc.SetBrush( wxBrush( PANEL_BACKGROUND_COLOUR, wxSOLID ) );
-				p_dc.DrawRectangle( p_rect );
-			}
-		};
 	}
 
 	DECLARE_APP( CastorViewerApp )
@@ -563,7 +203,7 @@ namespace CastorViewer
 		: wxFrame( p_pParent, wxID_ANY, p_strTitle, wxDefaultPosition, wxSize( 800, 700 ) )
 		, m_pCastor3D( NULL )
 		, m_pRenderPanel( NULL )
-		, m_pImagesLoader( new wxImagesLoader )
+		, m_pImagesLoader( new ImagesLoader )
 		, m_timer( NULL )
 		, m_timerMsg( NULL )
 		, m_timerErr( NULL )
@@ -594,7 +234,7 @@ namespace CastorViewer
 		wxRect l_rect = l_display.GetClientArea();
 		wxString l_strCopyright;
 		l_strCopyright << wxDateTime().Now().GetCurrentYear();
-		wxSplashScreen l_splashScreen( this, wxT( "Castor\nViewer" ), l_strCopyright + cuT( " " ) + _( " DragonJoker, All rights shared" ), wxPoint( 10, 230 ), wxPoint( 200, 300 ), wxPoint( 180, 260 ), wxPoint( ( l_rect.width - 512 ) / 2, ( l_rect.height - 384 ) / 2 ), 9 );
+		SplashScreen l_splashScreen( this, wxT( "Castor\nViewer" ), l_strCopyright + cuT( " " ) + _( " DragonJoker, All rights shared" ), wxPoint( 10, 230 ), wxPoint( 200, 300 ), wxPoint( 180, 260 ), wxPoint( ( l_rect.width - 512 ) / 2, ( l_rect.height - 384 ) / 2 ), 9 );
 		m_pSplashScreen = &l_splashScreen;
 		bool l_bReturn = DoInitialiseImages();
 
@@ -973,7 +613,7 @@ namespace CastorViewer
 		m_logTabsContainer->SetArtProvider( new AuiTabArt );
 		m_sceneTabsContainer = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
 		m_sceneTabsContainer->SetArtProvider( new AuiTabArt );
-		m_propertiesContainer = new wxPropertiesHolder( false, this, wxDefaultPosition, wxDefaultSize );
+		m_propertiesContainer = new PropertiesHolder( true, this, wxDefaultPosition, wxDefaultSize );
 		m_propertiesContainer->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_propertiesContainer->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_propertiesContainer->SetCaptionBackgroundColour( PANEL_BACKGROUND_COLOUR );
@@ -1002,12 +642,12 @@ namespace CastorViewer
 		l_logCreator( _( "Messages" ), m_messageLog );
 		l_logCreator( _( "Errors" ), m_errorLog );
 
-		m_sceneObjectsList = new wxSceneObjectsList( m_propertiesContainer, m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize );
+		m_sceneObjectsList = new SceneObjectsList( m_propertiesContainer, m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize );
 		m_sceneObjectsList->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_sceneObjectsList->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_sceneTabsContainer->AddPage( m_sceneObjectsList, _( "Scenes" ), true );
 
-		m_materialsList = new wxMaterialsList( m_propertiesContainer, m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize );
+		m_materialsList = new MaterialsList( m_propertiesContainer, m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize );
 		m_materialsList->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_materialsList->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		m_sceneTabsContainer->AddPage( m_materialsList, _( "Materials" ), true );
@@ -1026,7 +666,7 @@ namespace CastorViewer
 		{
 			if ( m_eRenderer == eRENDERER_TYPE_UNDEFINED )
 			{
-				wxRendererSelector m_dialog( m_pCastor3D, this, wxT( "Castor Viewer" ) );
+				RendererSelector m_dialog( m_pCastor3D, this, wxT( "Castor Viewer" ) );
 				m_pSplashScreen->Step( _( "Initialising main window" ), 1 );
 				int l_iReturn = m_dialog.ShowModal();
 
@@ -1119,6 +759,10 @@ namespace CastorViewer
 		m_pImagesLoader->AddBitmap( eBMP_RENDER_TARGET_SEL, render_target_sel_xpm );
 		m_pImagesLoader->AddBitmap( eBMP_RENDER_WINDOW, render_window_xpm );
 		m_pImagesLoader->AddBitmap( eBMP_RENDER_WINDOW_SEL, render_window_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_FRAME_VARIABLE, frame_variable_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_FRAME_VARIABLE_SEL, frame_variable_sel_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_FRAME_VARIABLE_BUFFER, frame_variable_buffer_xpm );
+		m_pImagesLoader->AddBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL, frame_variable_buffer_sel_xpm );
 
 		m_pImagesLoader->AddBitmap( eBMP_SCENES, scene_blanc_xpm );
 		m_pImagesLoader->AddBitmap( eBMP_MATERIALS, mat_blanc_xpm );
@@ -1349,13 +993,14 @@ namespace CastorViewer
 	void MainFrame::OnLoadScene( wxCommandEvent & p_event )
 	{
 		wxString l_wildcard = _( "Castor3D scene files" );
-		l_wildcard += wxT( " (*.cscn;*.cbsn;*.zip)|*.cscn;*.cbsn;*.zip|" );
-		l_wildcard += _( "Castor3D text scene file" );
-		l_wildcard += wxT( " (*.cscn)|*.cscn|" );
-		l_wildcard += _( "Castor3D binary scene file" );
-		l_wildcard += wxT( " (*.cbsn)|*.cbsn|" );
-		l_wildcard += _( "Zip archive" );
-		l_wildcard += wxT( " (*.zip)|*.zip" );
+		l_wildcard << wxT( " (*.cscn;*.cbsn;*.zip)|*.cscn;*.cbsn;*.zip|" );
+		l_wildcard << _( "Castor3D text scene file" );
+		l_wildcard << CSCN_WILDCARD;
+		l_wildcard << _( "Castor3D binary scene file" );
+		l_wildcard << CBSN_WILDCARD;
+		l_wildcard << _( "Zip archive" );
+		l_wildcard << ZIP_WILDCARD;
+		l_wildcard << wxT( "|" );
 		wxFileDialog l_fileDialog( this, _( "Open a scene" ), wxEmptyString, wxEmptyString, l_wildcard );
 
 		if ( l_fileDialog.ShowModal() == wxID_OK )
@@ -1369,11 +1014,11 @@ namespace CastorViewer
 	void MainFrame::OnExportScene( wxCommandEvent & p_event )
 	{
 		wxString l_wildcard = _( "Castor3D text scene" );
-		l_wildcard += wxT( " (*.cscn)|*.cscn|" );
+		l_wildcard += CSCN_WILDCARD;
 		l_wildcard += _( "Castor3D binary scene" );
-		l_wildcard += wxT( " (*.cbsn)|*.cbsn|" );
+		l_wildcard += CBSN_WILDCARD;
 		l_wildcard += _( "Wavefront OBJ" );
-		l_wildcard += wxT( " (*.obj)|*.obj" );
+		l_wildcard += OBJ_WILDCARD;
 		wxFileDialog l_fileDialog( this, _( "Export the scene" ), wxEmptyString, wxEmptyString, l_wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 		SceneSPtr l_scene = m_pMainScene.lock();
 

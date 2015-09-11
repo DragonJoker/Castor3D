@@ -75,9 +75,6 @@ namespace Castor3D
 			virtual bool operator()( FrameVariable const & p_variable, Castor::TextFile & p_file );
 		};
 
-		//!\~english The names of the frame variable types	\~french Le nom des types de frame variable
-		static const Castor::String Names[];
-
 	public:
 		/**
 		 *\~english
@@ -192,13 +189,22 @@ namespace Castor3D
 		virtual eVARIABLE_TYPE GetType()const = 0;
 		/**
 		 *\~english
-		 *\brief		Gives the variable data type
+		 *\brief		Gives the variable full type name
+		 *\return		The type
+		 *\~english
+		 *\brief		Donne le nom du type complet de la variable
+		 *\return		Le type
+		 */
+		virtual Castor::String GetFullTypeName()const = 0;
+		/**
+		 *\~english
+		 *\brief		Gives the variable data type name
 		 *\return		The data type name
 		 *\~french
-		 *\brief		Donne le type de données de la variable
+		 *\brief		Donne le nom du type de données de la variable
 		 *\return		Le nom du type de données
 		 */
-		virtual Castor::String GetDataType()const = 0;
+		virtual Castor::String GetDataTypeName()const = 0;
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable, from a string
@@ -351,6 +357,17 @@ namespace Castor3D
 	};
 	/*!
 	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		10/09/2015
+	\~english
+	\brief		Helper structure used to retrieve the frame variable data type name.
+	\~french
+	\brief		Structure d'aide pour récupérer le nom du type de données d'une variable de frame.
+	*/
+	template< typename T > struct FrameVariableDataTyper;
+
+	/*!
+	\author		Sylvain DOREMUS
 	\version	0.6.1.0
 	\date		14/08/2010
 	\~english
@@ -434,22 +451,7 @@ namespace Castor3D
 		 *\brief		Donne le type de données de la variable
 		 *\return		Le nom du type de données
 		 */
-		inline Castor::String GetDataType()const
-		{
-			return TFrameVariable< T >::StGetDataType();
-		}
-		/**
-		 *\~english
-		 *\brief		Gives the variable data type
-		 *\return		The data type name
-		 *\~french
-		 *\brief		Donne le type de données de la variable
-		 *\return		Le nom du type de données
-		 */
-		static Castor::String StGetDataType()
-		{
-			return Castor::str_utils::from_str( typeid( T ).name() );
-		}
+		inline Castor::String GetDataTypeName()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a pointer to the variable data
@@ -458,10 +460,7 @@ namespace Castor3D
 		 *\brief		Récupère un pointeur sur les données de la variable
 		 *\return		Le pointeur
 		 */
-		virtual uint8_t const * const const_ptr()const
-		{
-			return reinterpret_cast< uint8_t * >( m_pValues );
-		}
+		virtual uint8_t const * const const_ptr()const;
 		/**
 		 *\~english
 		 *\brief		Defines the buffer holding the frame variable.

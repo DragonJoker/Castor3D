@@ -82,7 +82,7 @@ namespace CastorViewer
 
 		if ( p_pWindow )
 		{
-			if ( p_pWindow->Initialise( GuiCommon::wxMakeWindowHandle( this ) ) )
+			if ( p_pWindow->Initialise( GuiCommon::make_WindowHandle( this ) ) )
 			{
 				Castor::Size l_sizeScreen;
 				Castor::Size l_sizeWnd = p_pWindow->GetSize();

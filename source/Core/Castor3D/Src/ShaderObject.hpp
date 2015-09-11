@@ -145,64 +145,6 @@ namespace Castor3D
 		virtual ~ShaderObjectBase();
 		/**
 		 *\~english
-		 *\brief		Sets the shader file for given model
-		 *\remark		The loaded file will be the one of the highest supported profile
-		 *\param[in]	p_eModel	The shader model
-		 *\param[in]	p_pathFile	The file name
-		 *\~french
-		 *\brief		Définit le fichier du shader pour le modèle donné
-		 *\remark		Le fichier chargé sera celui du plus haut profil supporté
-		 *\param[in]	p_eModel	Le modèle de shader
-		 *\param[in]	p_pathFile	Le nom du fichier
-		 */
-		void SetFile( eSHADER_MODEL p_eModel, Castor::Path const & p_pathFile );
-		/**
-		 *\~english
-		 *\brief		Sets the shader source for given model
-		 *\remark		The loaded source will be the one of the highest supported profile
-		 *\param[in]	p_eModel	The shader model
-		 *\param[in]	p_strSource	The source code
-		 *\~french
-		 *\brief		Définit la source du shader pour le modèle donné
-		 *\remark		La source chargée sera celle du plus haut profil supporté
-		 *\param[in]	p_eModel	Le modèle de shader
-		 *\param[in]	p_strSource	Le code de la source
-		 */
-		void SetSource( eSHADER_MODEL p_eModel, Castor::String const & p_strSource );
-		/**
-		 *\~english
-		 *\brief		Tells if the shader object has a source code, whatever model it is
-		 *\return		\p true if the shader object has a source code
-		 *\~french
-		 *\brief		Dit si le shader a un code source, quel que soit son modèle
-		 *\return		\p true si le shader a un code source
-		 */
-		bool HasSource();
-		/**
-		 *\~english
-		 *\brief		Activates the shader
-		 *\~french
-		 *\brief		Active le shader
-		 */
-		void Bind();
-		/**
-		 *\~english
-		 *\brief		Deactivates the shader
-		 *\~french
-		 *\brief		Désactive le shader
-		 */
-		void Unbind();
-		/**
-		 *\~english
-		 *\brief		Compiles the shader
-		 *\return		\p true on success
-		 *\~french
-		 *\brief		Compile le shader
-		 *\return		\p true en cas de succès
-		 */
-		virtual bool Compile();
-		/**
-		 *\~english
 		 *\brief		Creates the program on GPU
 		 *\~french
 		 *\brief		Crée le programme sur le GPU
@@ -215,79 +157,6 @@ namespace Castor3D
 		 *\brief		Détruit le programme sur le GPU
 		 */
 		virtual void DestroyProgram() = 0;
-		/**
-		 *\~english
-		 *\brief		Adds a uniform variable to pass to the shader objects
-		 *\param[in]	p_pVariable	The variable to pass
-		 *\~french
-		 *\brief		Crée une variable uniform à donner aux ShaderObjects
-		 *\param[in]	p_pVariable	La variable à donner
-		 */
-		virtual void AddFrameVariable( OneTextureFrameVariableSPtr p_pVariable );
-		/**
-		 *\~english
-		 *\brief		Retrieves a constant iterator on the beginning of the frame variables list
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur constant sur le début de la liste de frame variables
-		 *\return		L'itérateur
-		 */
-		inline FrameVariablePtrStrMapConstIt GetFrameVariablesBegin()const
-		{
-			return m_mapFrameVariables.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator on the beginning of the frame variables list
-		 *\return		The iterator if the object exists, else an iterator to the end of my variables list
-		 *\~french
-		 *\brief		Récupère un itérateur sur le début de la liste de frame variables
-		 *\return		L'itérateur
-		 */
-		inline FrameVariablePtrStrMapIt GetFrameVariablesBegin()
-		{
-			return m_mapFrameVariables.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves a constant iterator on the end of the frame variables list
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur constant sur la fin de la liste de frame variables
-		 *\return		L'itérateur
-		 */
-		inline FrameVariablePtrStrMapConstIt GetFrameVariablesEnd()const
-		{
-			return m_mapFrameVariables.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator on the end of the frame variables list
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la liste de frame variables
-		 *\return		L'itérateur
-		 */
-		inline FrameVariablePtrStrMapIt GetFrameVariablesEnd()
-		{
-			return m_mapFrameVariables.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Finds a variable
-		 *\return		The found variable, nullptr if failed
-		 *\~french
-		 *\brief		Trouve une variable
-		 *\return		La variable trouvé, nullptr en cas d'échec
-		 */
-		OneTextureFrameVariableSPtr FindFrameVariable( Castor::String const & p_strName )const;
-		/**
-		 *\~english
-		 *\brief		Removes all frame variables
-		 *\~french
-		 *\brief		Vide la liste de frame variables
-		 */
-		virtual void FlushFrameVariables();
 		/**
 		 *\~english
 		 *\brief		Defines entry point for shader languages that need it
@@ -322,6 +191,123 @@ namespace Castor3D
 		 *\param[in]	p_program	Le programme
 		 */
 		virtual void AttachTo( ShaderProgramBase & p_program ) = 0;
+		/**
+		 *\~english
+		 *\brief		Sets the shader file for given model
+		 *\remark		The loaded file will be the one of the highest supported profile
+		 *\param[in]	p_eModel	The shader model
+		 *\param[in]	p_pathFile	The file name
+		 *\~french
+		 *\brief		Définit le fichier du shader pour le modèle donné
+		 *\remark		Le fichier chargé sera celui du plus haut profil supporté
+		 *\param[in]	p_eModel	Le modèle de shader
+		 *\param[in]	p_pathFile	Le nom du fichier
+		 */
+		void SetFile( eSHADER_MODEL p_eModel, Castor::Path const & p_pathFile );
+		/**
+		 *\~english
+		 *\brief		Tells if the shader object has a source file, whatever model it is
+		 *\return		\p true if the shader object has a source file
+		 *\~french
+		 *\brief		Dit si le shader a un fichier source, quel que soit son modèle
+		 *\return		\p true si le shader a un fichier source
+		 */
+		bool HasFile()const;
+		/**
+		 *\~english
+		 *\brief		Sets the shader source for given model
+		 *\remark		The loaded source will be the one of the highest supported profile
+		 *\param[in]	p_eModel	The shader model
+		 *\param[in]	p_strSource	The source code
+		 *\~french
+		 *\brief		Définit la source du shader pour le modèle donné
+		 *\remark		La source chargée sera celle du plus haut profil supporté
+		 *\param[in]	p_eModel	Le modèle de shader
+		 *\param[in]	p_strSource	Le code de la source
+		 */
+		void SetSource( eSHADER_MODEL p_eModel, Castor::String const & p_strSource );
+		/**
+		 *\~english
+		 *\brief		Tells if the shader object has a source code, whatever model it is
+		 *\return		\p true if the shader object has a source code
+		 *\~french
+		 *\brief		Dit si le shader a un code source, quel que soit son modèle
+		 *\return		\p true si le shader a un code source
+		 */
+		bool HasSource()const;
+		/**
+		 *\~english
+		 *\brief		Activates the shader
+		 *\~french
+		 *\brief		Active le shader
+		 */
+		void Bind();
+		/**
+		 *\~english
+		 *\brief		Deactivates the shader
+		 *\~french
+		 *\brief		Désactive le shader
+		 */
+		void Unbind();
+		/**
+		 *\~english
+		 *\brief		Compiles the shader
+		 *\return		\p true on success
+		 *\~french
+		 *\brief		Compile le shader
+		 *\return		\p true en cas de succès
+		 */
+		virtual bool Compile();
+		/**
+		 *\~english
+		 *\brief		Adds a uniform variable to pass to the shader objects
+		 *\param[in]	p_pVariable	The variable to pass
+		 *\~french
+		 *\brief		Crée une variable uniform à donner aux ShaderObjects
+		 *\param[in]	p_pVariable	La variable à donner
+		 */
+		virtual void AddFrameVariable( OneTextureFrameVariableSPtr p_pVariable );
+		/**
+		 *\~english
+		 *\brief		Finds a variable
+		 *\return		The found variable, nullptr if failed
+		 *\~french
+		 *\brief		Trouve une variable
+		 *\return		La variable trouvé, nullptr en cas d'échec
+		 */
+		OneTextureFrameVariableSPtr FindFrameVariable( Castor::String const & p_strName )const;
+		/**
+		 *\~english
+		 *\brief		Removes all frame variables
+		 *\~french
+		 *\brief		Vide la liste de frame variables
+		 */
+		virtual void FlushFrameVariables();
+		/**
+		 *\~english
+		 *\brief		Retrieves the frame variables bound to this shader
+		 *\return		The list
+		 *\~french
+		 *\brief		Récupère les variables de frame liées à ce shader
+		 *\return		La liste
+		 */
+		inline FrameVariablePtrList & GetFrameVariables()
+		{
+			return m_listFrameVariables;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the frame variables bound to this shader
+		 *\param[in]	p_type	The shader type
+		 *\return		The list
+		 *\~french
+		 *\brief		Récupère les variables de frame liées à ce shader
+		 *\return		La liste
+		 */
+		inline FrameVariablePtrList const & GetFrameVariables()const
+		{
+			return m_listFrameVariables;
+		}
 		/**
 		 *\~english
 		 *\brief		Tells if the compiled shader has the given parameter

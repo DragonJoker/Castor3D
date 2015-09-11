@@ -103,7 +103,7 @@ MeshSPtr PlyImporter::DoImportMesh()
 					l_ssToken.str( l_strLine.substr( std::string( "element vertex " ).length() ) );
 					l_ssToken >> l_iNbVertex;
 					l_ssToken.clear( std::istringstream::goodbit );
-					Logger::LogInfo( cuT( "Vertices : %d" ), l_iNbVertex );
+					Logger::LogInfo( StringStream() << cuT( "Vertices: " ) << l_iNbVertex );
 					break;
 				}
 			}
@@ -120,7 +120,7 @@ MeshSPtr PlyImporter::DoImportMesh()
 				else
 				{
 					l_isFile.seekg( -l_isFile.gcount() ); // Unget last line
-					Logger::LogDebug( cuT( "Vertex properties : %d" ), l_iNbProperties );
+					Logger::LogDebug( StringStream() << cuT( "Vertex properties: " ) << l_iNbProperties );
 					break;
 				}
 			}
@@ -139,7 +139,7 @@ MeshSPtr PlyImporter::DoImportMesh()
 					l_ssToken.str( l_strLine.substr( std::string( "element face " ).size() ) );
 					l_ssToken >> l_iNbFaces;
 					l_ssToken.clear( std::istringstream::goodbit );
-					Logger::LogInfo( cuT( "Triangles : %d" ), l_iNbFaces );
+					Logger::LogInfo( StringStream() << cuT( "Triangles: " ) << l_iNbFaces );
 					break;
 				}
 			}

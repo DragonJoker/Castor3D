@@ -7,9 +7,9 @@
 using namespace GuiCommon;
 using namespace Castor3D;
 
-wxRendererSelector::wxRendererSelector( Engine * p_pEngine, wxWindow * p_pParent, wxString const & p_strTitle )
+RendererSelector::RendererSelector( Engine * p_pEngine, wxWindow * p_pParent, wxString const & p_strTitle )
 	:	wxDialog( p_pParent, wxID_ANY, p_strTitle + _( " - Select renderer" ), wxDefaultPosition, wxSize( 500, 500 ), wxDEFAULT_DIALOG_STYLE )
-	,	m_pImgCastor( wxImagesLoader::GetBitmap( CV_IMG_CASTOR ) )
+	,	m_pImgCastor( ImagesLoader::GetBitmap( CV_IMG_CASTOR ) )
 	,	m_pEngine( p_pEngine )
 {
 	wxStaticText *	l_pTitle;
@@ -63,11 +63,11 @@ wxRendererSelector::wxRendererSelector( Engine * p_pEngine, wxWindow * p_pParent
 	DoDraw( & l_clientDC );
 }
 
-wxRendererSelector::~wxRendererSelector()
+RendererSelector::~RendererSelector()
 {
 }
 
-eRENDERER_TYPE wxRendererSelector::GetSelectedRenderer()const
+eRENDERER_TYPE RendererSelector::GetSelectedRenderer()const
 {
 	eRENDERER_TYPE l_eReturn = eRENDERER_TYPE_UNDEFINED;
 	uint32_t l_uiReturn = m_pListRenderers->GetSelection();
@@ -80,12 +80,12 @@ eRENDERER_TYPE wxRendererSelector::GetSelectedRenderer()const
 	return l_eReturn;
 }
 
-void wxRendererSelector::DoDraw( wxDC * p_pDC )
+void RendererSelector::DoDraw( wxDC * p_pDC )
 {
 	p_pDC->DrawBitmap( *m_pImgCastor, wxPoint( 0, 0 ), true );
 }
 
-void wxRendererSelector::DoSelect()
+void RendererSelector::DoSelect()
 {
 	if ( m_pListRenderers->GetCount() > 0 )
 	{
@@ -97,22 +97,22 @@ void wxRendererSelector::DoSelect()
 	}
 }
 
-BEGIN_EVENT_TABLE( wxRendererSelector, wxDialog )
-	EVT_PAINT(	wxRendererSelector::OnPaint	)
-	EVT_KEY_UP(	wxRendererSelector::OnKeyUp	)
-	EVT_BUTTON(	wxID_OK,			wxRendererSelector::OnButtonOk	)
-	EVT_BUTTON(	wxID_CANCEL,		wxRendererSelector::OnButtonCancel	)
-	EVT_LISTBOX_DCLICK( eID_LIST_RENDERERS,	wxRendererSelector::OnButtonOk	)
+BEGIN_EVENT_TABLE( RendererSelector, wxDialog )
+	EVT_PAINT(	RendererSelector::OnPaint	)
+	EVT_KEY_UP(	RendererSelector::OnKeyUp	)
+	EVT_BUTTON(	wxID_OK,			RendererSelector::OnButtonOk	)
+	EVT_BUTTON(	wxID_CANCEL,		RendererSelector::OnButtonCancel	)
+	EVT_LISTBOX_DCLICK( eID_LIST_RENDERERS,	RendererSelector::OnButtonOk	)
 END_EVENT_TABLE()
 
-void wxRendererSelector::OnPaint( wxPaintEvent & p_event )
+void RendererSelector::OnPaint( wxPaintEvent & p_event )
 {
 	wxPaintDC l_paintDC( this );
 	DoDraw( & l_paintDC );
 	p_event.Skip();
 }
 
-void wxRendererSelector::OnKeyUp( wxKeyEvent & p_event )
+void RendererSelector::OnKeyUp( wxKeyEvent & p_event )
 {
 	switch ( p_event.GetKeyCode() )
 	{
@@ -124,13 +124,13 @@ void wxRendererSelector::OnKeyUp( wxKeyEvent & p_event )
 	p_event.Skip();
 }
 
-void wxRendererSelector::OnButtonOk( wxCommandEvent & p_event )
+void RendererSelector::OnButtonOk( wxCommandEvent & p_event )
 {
 	DoSelect();
 	p_event.Skip();
 }
 
-void wxRendererSelector::OnButtonCancel( wxCommandEvent & p_event )
+void RendererSelector::OnButtonCancel( wxCommandEvent & p_event )
 {
 	EndModal( wxID_CANCEL );
 	p_event.Skip();

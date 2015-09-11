@@ -27,30 +27,32 @@ namespace GuiCommon
 	\date 		24/08/2015
 	\version	0.8.0
 	\~english
-	\brief		Material helper class to communicate between Scene objects or Materials lists and wxPropertiesHolder
+	\brief		Material helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et wxPropertiesHolder, pour les matériaux
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les matériaux
 	*/
-	class wxMaterialTreeItemProperty
-		: public wxTreeItemProperty
+	class MaterialTreeItemProperty
+		: public TreeItemProperty
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_material	 The target material
+		 *\param[in]	p_editable	Tells if the properties are modifiable
+		 *\param[in]	p_material	The target material
 		 *\~french
 		 *\brief		Constructeur
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_material	Le matériau cible
 		 */
-		wxMaterialTreeItemProperty( Castor3D::MaterialSPtr p_material );
+		MaterialTreeItemProperty( bool p_editable, Castor3D::MaterialSPtr p_material );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~wxMaterialTreeItemProperty();
+		~MaterialTreeItemProperty();
 		/**
 		 *\~english
 		 *\brief		Creates and fills the material properties, in the given wxPropertyGrid
@@ -59,7 +61,7 @@ namespace GuiCommon
 		 *\brief		Construit et remplit les propriétés du matériau, dans la wxPropertyGrid donnée
 		 *\param[in]	p_grid	La wxPropertyGrid cible
 		 */
-		virtual void CreateProperties( wxPropertyGrid * p_grid );
+		virtual void CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 		/**
 		 *\~english
 		 *\brief		Call when a property grid property is changed

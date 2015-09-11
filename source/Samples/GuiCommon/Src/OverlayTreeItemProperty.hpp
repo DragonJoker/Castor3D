@@ -27,30 +27,32 @@ namespace GuiCommon
 	\date 		24/08/2015
 	\version	0.8.0
 	\~english
-	\brief		Overlay helper class to communicate between Scene objects or Materials lists and wxPropertiesHolder
+	\brief		Overlay helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et wxPropertiesHolder, pour les incrustations
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les incrustations
 	*/
-	class wxOverlayTreeItemProperty
-		: public wxTreeItemProperty
+	class OverlayTreeItemProperty
+		: public TreeItemProperty
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_overlay	 The target overlay
+		 *\param[in]	p_editable	Tells if the properties are modifiable
+		 *\param[in]	p_overlay	The target overlay
 		 *\~french
 		 *\brief		Constructeur
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_overlay	L'incrustation cible
 		 */
-		wxOverlayTreeItemProperty( Castor3D::OverlaySPtr p_overlay );
+		OverlayTreeItemProperty( bool p_editable, Castor3D::OverlaySPtr p_overlay );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~wxOverlayTreeItemProperty();
+		virtual ~OverlayTreeItemProperty();
 		/**
 		 *\~english
 		 *\brief		Creates and fills the overlay properties, in the given wxPropertyGrid
@@ -59,7 +61,7 @@ namespace GuiCommon
 		 *\brief		Construit et remplit les propriétés de l'incrustation, dans la wxPropertyGrid donnée
 		 *\param[in]	p_grid	La wxPropertyGrid cible
 		 */
-		virtual void CreateProperties( wxPropertyGrid * p_grid );
+		virtual void CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 		/**
 		 *\~english
 		 *\brief		Call when a property grid property is changed

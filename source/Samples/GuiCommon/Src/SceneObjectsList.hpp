@@ -25,12 +25,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GuiCommon
 {
-	class wxSceneObjectsList
+	class SceneObjectsList
 		: public wxTreeCtrl
 	{
 	public:
-		wxSceneObjectsList( wxPropertiesHolder * p_propertiesHolder, wxWindow * p_pParent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
-		~wxSceneObjectsList();
+		SceneObjectsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_pParent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
+		~SceneObjectsList();
 
 		void LoadScene( Castor3D::Engine * p_pEngine, Castor3D::SceneSPtr p_pScene );
 		void UnloadScene();
@@ -50,7 +50,7 @@ namespace GuiCommon
 	private:
 		Castor3D::SceneWPtr m_pScene;
 		Castor3D::Engine * m_pEngine;
-		wxPropertiesHolder * m_propertiesHolder;
+		PropertiesHolder * m_propertiesHolder;
 	};
 }
 

@@ -36,7 +36,7 @@ namespace Dx11Render
 				l_buffers.push_back( std::static_pointer_cast< DxFrameVariableBuffer >( l_variableBuffer )->GetDxBuffer() );
 			}
 
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_VERTEX ) )
+			if ( m_pShaderProgram->HasObject( eSHADER_TYPE_VERTEX ) )
 			{
 				l_pDeviceContext->VSSetConstantBuffers( 0, l_buffers.size(), l_buffers.data() );
 			}
@@ -50,7 +50,7 @@ namespace Dx11Render
 
 		if ( !l_ubos.empty() )
 		{
-			if ( m_pShaderProgram->HasProgram( eSHADER_TYPE_VERTEX ) )
+			if ( m_pShaderProgram->HasObject( eSHADER_TYPE_VERTEX ) )
 			{
 				ID3D11Buffer * l_buffer = NULL;
 				l_pDeviceContext->VSSetConstantBuffers( 0, 1, &l_buffer );

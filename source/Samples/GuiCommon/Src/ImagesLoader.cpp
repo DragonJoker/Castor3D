@@ -4,20 +4,20 @@ using namespace Castor;
 
 namespace GuiCommon
 {
-	ImageIdMap		wxImagesLoader::m_mapImages;
-	std::mutex		wxImagesLoader::m_mutex;
-	ThreadPtrArray	wxImagesLoader::m_arrayCurrentLoads;
+	ImageIdMap		ImagesLoader::m_mapImages;
+	std::mutex		ImagesLoader::m_mutex;
+	ThreadPtrArray	ImagesLoader::m_arrayCurrentLoads;
 
-	wxImagesLoader::wxImagesLoader()
+	ImagesLoader::ImagesLoader()
 	{
 	}
 
-	wxImagesLoader::~wxImagesLoader()
+	ImagesLoader::~ImagesLoader()
 	{
 		Cleanup();
 	}
 
-	void wxImagesLoader::Cleanup()
+	void ImagesLoader::Cleanup()
 	{
 		WaitAsyncLoads();
 		m_mutex.lock();
@@ -31,7 +31,7 @@ namespace GuiCommon
 		m_mutex.unlock();
 	}
 
-	wxImage * wxImagesLoader::GetBitmap( uint32_t p_uiID )
+	wxImage * ImagesLoader::GetBitmap( uint32_t p_uiID )
 	{
 		wxImage * l_pReturn = NULL;
 		m_mutex.lock();
@@ -47,7 +47,7 @@ namespace GuiCommon
 		return l_pReturn;
 	}
 
-	void wxImagesLoader::AddBitmap( uint32_t p_uiID, char const * const * p_pBits )
+	void ImagesLoader::AddBitmap( uint32_t p_uiID, char const * const * p_pBits )
 	{
 		m_mutex.lock();
 		ImageIdMapIt l_it = m_mapImages.find( p_uiID );
@@ -68,7 +68,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxImagesLoader::WaitAsyncLoads()
+	void ImagesLoader::WaitAsyncLoads()
 	{
 		for ( auto && l_thread : m_arrayCurrentLoads )
 		{

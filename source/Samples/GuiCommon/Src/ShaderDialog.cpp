@@ -1,81 +1,68 @@
 #include "ShaderDialog.hpp"
+
+#include "AuiDockArt.hpp"
+#include "AuiTabArt.hpp"
+#include "AuiToolBarArt.hpp"
 #include "StcTextEditor.hpp"
-#include "FrameVariableDialog.hpp"
+#include "Parameter.hpp"
+#include "FrameVariablesList.hpp"
+#include "PropertiesHolder.hpp"
+#include "ShaderEditorPage.hpp"
 
 #include <Engine.hpp>
 #include <RenderSystem.hpp>
 #include <Pass.hpp>
+#include <RenderWindow.hpp>
+#include <RenderTarget.hpp>
 #include <ShaderManager.hpp>
 #include <ShaderProgram.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
-using namespace GuiCommon;
-
-typedef enum eID
+namespace GuiCommon
 {
-	eID_NOTEBOOK_EDITORS,
-	eID_GRID_VERTEX,
-	eID_GRID_FRAGMENT,
-	eID_GRID_GEOMETRY,
-	eID_GRID_HULL,
-	eID_GRID_DOMAIN,
-	eID_MENU_OPEN,
-	eID_MENU_SAVE_ONE,
-	eID_MENU_SAVE_ALL,
-	eID_MENU_QUIT,
-	eID_MENU_PREFS,
-}	eID;
+	typedef enum eID
+	{
+		eID_GRID_VERTEX,
+		eID_GRID_FRAGMENT,
+		eID_GRID_GEOMETRY,
+		eID_GRID_HULL,
+		eID_GRID_DOMAIN,
+		eID_MENU_OPEN,
+		eID_MENU_SAVE_ONE,
+		eID_MENU_SAVE_ALL,
+		eID_MENU_QUIT,
+		eID_MENU_PREFS,
+	}	eID;
 
-wxShaderDialog::wxShaderDialog( Engine * p_pEngine, bool p_bCanEdit, wxWindow * p_pParent, PassSPtr p_pPass, wxPoint const & p_ptPosition, const wxSize p_ptSize )
-	: wxFrame( p_pParent, wxID_ANY, _( "Shaders" ), p_ptPosition, p_ptSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMAXIMIZE_BOX )
-	, m_pPass( p_pPass )
-	, m_bCompiled( true )
-	, m_bOwnShader( true )
-	, m_pStcContext( new StcContext )
+	ShaderDialog::ShaderDialog( Engine * p_pEngine, bool p_bCanEdit, wxWindow * p_pParent, PassSPtr p_pPass, wxPoint const & p_ptPosition, const wxSize p_ptSize )
+		: wxFrame( p_pParent, wxID_ANY, _( "Shaders" ), p_ptPosition, p_ptSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMAXIMIZE_BOX )
+		, m_pPass( p_pPass )
+		, m_bCompiled( true )
+		, m_bOwnShader( true )
+		, m_pStcContext( std::make_unique< StcContext >() )
 #if defined( NDEBUG )
-	, m_bCanEdit( p_bCanEdit )
+		, m_bCanEdit( p_bCanEdit )
 #else
-	, m_bCanEdit( p_bCanEdit || true )
+		, m_bCanEdit( p_bCanEdit || true )
 #endif
-	, m_pEngine( p_pEngine )
-{
-	wxPanel * l_pPanelBackGround = new wxPanel( this, wxID_ANY, wxPoint( 0, 0 ), GetClientSize() );
-	l_pPanelBackGround->Show();
-	wxArrayString l_arrayChoices;
-	wxArrayString l_arrayTexts;
-	PathArray l_arrayFiles;
-	wxPoint l_ptButtonPosition = wxPoint( 10, 10 );
-	wxSize l_sizeButton = wxSize( 65, 20 );
-	wxSize l_size = GetClientSize();
-	Path l_pathCurrent = Engine::GetDataDirectory() / cuT( "Castor3D" );
-	RenderSystem * l_pRenderSystem = m_pEngine->GetRenderSystem();
-	eSHADER_MODEL l_eMaxShaderModel = eSHADER_MODEL_COUNT;
-	eSHADER_MODEL l_eShaderModel = eSHADER_MODEL_COUNT;
-	wxString l_strExtension;
-
-	if ( l_pRenderSystem->CheckSupport( eSHADER_MODEL_5 ) )
+		, m_pEngine( p_pEngine )
+		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
 	{
-		l_eMaxShaderModel = eSHADER_MODEL_5;
-	}
-	else if ( l_pRenderSystem->CheckSupport( eSHADER_MODEL_4 ) )
-	{
-		l_eMaxShaderModel = eSHADER_MODEL_4;
-	}
-	else if ( l_pRenderSystem->CheckSupport( eSHADER_MODEL_3 ) )
-	{
-		l_eMaxShaderModel = eSHADER_MODEL_3;
-	}
-	else if ( l_pRenderSystem->CheckSupport( eSHADER_MODEL_2 ) )
-	{
-		l_eMaxShaderModel = eSHADER_MODEL_2;
-	}
-	else if ( l_pRenderSystem->CheckSupport( eSHADER_MODEL_1 ) )
-	{
-		l_eMaxShaderModel = eSHADER_MODEL_1;
+		DoInitialiseShaderLanguage();
+		DoInitialiseLayout();
+		DoLoadPages();
+		DoPopulateMenu();
+		this->Maximize();
 	}
 
-	if ( l_eMaxShaderModel != eSHADER_MODEL_COUNT )
+	ShaderDialog::~ShaderDialog()
+	{
+		m_auiManager.UnInit();
+		m_pStcContext.reset();
+	}
+
+	void ShaderDialog::DoInitialiseShaderLanguage()
 	{
 		m_pShaderProgram = m_pPass.lock()->GetShader< ShaderProgramBase >();
 
@@ -85,184 +72,122 @@ wxShaderDialog::wxShaderDialog( Engine * p_pEngine, bool p_bCanEdit, wxWindow * 
 		}
 		else
 		{
-			switch ( l_pRenderSystem->GetRendererType() )
-			{
-			case eRENDERER_TYPE_OPENGL:
-				m_pShaderProgram = l_pRenderSystem->GetEngine()->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_GLSL );
-				break;
+			PassSPtr l_pass = m_pPass.lock();
+			Engine * l_engine = l_pass->GetEngine();
+			auto && l_it = l_engine->RenderWindowsBegin();
 
-			case eRENDERER_TYPE_DIRECT3D9:
-			case eRENDERER_TYPE_DIRECT3D10:
-			case eRENDERER_TYPE_DIRECT3D11:
-				m_pShaderProgram = l_pRenderSystem->GetEngine()->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_HLSL );
-				break;
+			if ( l_it != l_engine->RenderWindowsEnd() && l_it->second->GetRenderTarget() )
+			{
+				RenderTechniqueBaseSPtr l_technique = l_it->second->GetRenderTarget()->GetTechnique();
+
+				if ( l_technique )
+				{
+					m_pShaderProgram = m_pEngine->GetShaderManager().GetAutomaticProgram( *l_technique, l_pass->GetTextureFlags(), 0 );
+					m_bOwnShader = true;
+				}
 			}
 		}
 
-		switch ( m_pShaderProgram.lock()->GetLanguage() )
+		PathArray l_arrayFiles;
+		File::ListDirectoryFiles( Engine::GetDataDirectory() / cuT( "Castor3D" ), l_arrayFiles, true );
+
+		for( auto && l_pathFile : l_arrayFiles )
 		{
-		case Castor3D::eSHADER_LANGUAGE_GLSL:
-			l_strExtension = wxT( ".glsl" );
-			break;
-
-		case Castor3D::eSHADER_LANGUAGE_HLSL:
-			l_strExtension = wxT( ".hlsl" );
-			break;
+			if ( l_pathFile.GetFileName()[0] != cuT( '.' ) && l_pathFile.GetExtension() == cuT( "lang" ) )
+			{
+				m_pStcContext->ParseFile( l_pathFile );
+			}
 		}
+	}
 
+	void ShaderDialog::DoInitialiseLayout()
+	{
+		wxSize l_size = GetClientSize();
+		m_pNotebookEditors = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
+		m_pNotebookEditors->SetArtProvider( new AuiTabArt );
+
+		m_auiManager.SetArtProvider( new AuiDockArt );
+		m_auiManager.AddPane( m_pNotebookEditors, wxAuiPaneInfo().CaptionVisible( false ).Name( wxT( "Shaders" ) ).Caption( _( "Shaders" ) ).CenterPane().Dock().MinSize( l_size ).Layer( 1 ).PaneBorder( false ) );
+		m_auiManager.Update();
+	}
+
+	void ShaderDialog::DoLoadPages()
+	{
+		ShaderProgramBaseSPtr l_program = m_pShaderProgram.lock();
+		wxArrayString l_arrayTexts;
 		l_arrayTexts.push_back( _( "Vertex" ) );
 		l_arrayTexts.push_back( _( "Hull" ) );
 		l_arrayTexts.push_back( _( "Domain" ) );
 		l_arrayTexts.push_back( _( "Geometry" ) );
 		l_arrayTexts.push_back( _( "Pixel" ) );
 		l_arrayTexts.push_back( _( "Compute" ) );
-		File::ListDirectoryFiles( l_pathCurrent, l_arrayFiles, true );
-		Path l_pathFile;
-		std::for_each( l_arrayFiles.begin(), l_arrayFiles.end(), [&]( String const & p_strFile )
-		{
-			l_pathFile = p_strFile;
-
-			if ( l_pathFile.GetFileName()[0] != cuT( '.' ) && l_pathFile.GetExtension() == cuT( "lang" ) )
-			{
-				m_pStcContext->ParseFile( p_strFile );
-			}
-		} );
-		m_pNotebookEditors = new wxNotebook( l_pPanelBackGround, eID_NOTEBOOK_EDITORS, wxPoint( 0, 0 ), wxSize( l_size.x, l_size.y ), wxNB_FIXEDWIDTH );
-		ShaderProgramBaseSPtr l_pProgram = m_pShaderProgram.lock();
-		wxPanel * l_pTmpPanels[eSHADER_TYPE_COUNT] = { NULL };
-		wxStaticText * l_pTmpStatics[eSHADER_TYPE_COUNT] = { NULL };
-		int l_iListWidth = 200;
 
 		for ( int i = 0; i < eSHADER_TYPE_COUNT; i++ )
 		{
-			l_arrayChoices.clear();
+			wxArrayString l_arrayChoices;
 			l_arrayChoices.push_back( wxCOMBO_NEW );
 
-			if ( l_pProgram->HasProgram( eSHADER_TYPE( i ) ) )
-			{
-// 				int l_iCount = 0;
-//
-// 				for( FrameVariablePtrList::const_iterator l_it = l_pProgram->GetFrameVariablesBegin( eSHADER_TYPE( i ) ); l_it != l_pProgram->GetFrameVariablesEnd( eSHADER_TYPE( i ) ); ++l_it )
-// 				{
-// 					l_arrayChoices.push_back( (*l_it)->GetName() );
-// 					m_mapFrameVariables[i].insert( std::make_pair( l_iCount++, (*l_it) ) );
-// 				}
-				l_eShaderModel = l_eMaxShaderModel;
-
-				while ( m_strShaderSources[i].empty() && m_strShaderFiles[i].empty() && l_eShaderModel >= eSHADER_MODEL_1 )
-				{
-					m_strShaderSources[i]	= l_pProgram->GetSource(	eSHADER_TYPE( i ), l_eShaderModel );
-					m_strShaderFiles[i]		= l_pProgram->GetFile(	eSHADER_TYPE( i ), l_eShaderModel );
-
-					if ( m_strShaderSources[i].empty() || m_strShaderFiles[i].empty() )
-					{
-						l_eShaderModel = eSHADER_MODEL( int( l_eShaderModel ) - 1 );
-					}
-				}
-			}
-
-			l_pTmpPanels[i] = new wxPanel( m_pNotebookEditors, wxID_ANY, wxPoint( 0, 0 ) );
-			m_pNotebookEditors->AddPage( l_pTmpPanels[i], l_arrayTexts[i], true );
-			l_pTmpPanels[i]->SetBackgroundColour( * wxWHITE );
-			l_pTmpPanels[i]->SetSize( 0, 22, m_pNotebookEditors->GetClientSize().x, m_pNotebookEditors->GetClientSize().y - 22 );
-			m_pStcEditors[i] = new wxStcTextEditor( m_pStcContext, l_pTmpPanels[i], wxID_ANY, wxPoint( l_iListWidth, 0 ), l_pTmpPanels[i]->GetClientSize() - wxSize( l_iListWidth, 0 ) );
-			m_pStcEditors[i]->Show();
-			l_pTmpStatics[i] = new wxStaticText( l_pTmpPanels[i], wxID_ANY, _( "Frame variables" ), wxPoint( 0, 0 ), wxSize( l_iListWidth, 25 ), wxALIGN_CENTRE );
-			m_pListFrameVariables[i] = new wxListBox( l_pTmpPanels[i], eID_GRID_VERTEX + i, wxPoint( 0, 25 ), wxSize( l_iListWidth, 0 ), l_arrayChoices, wxBORDER_SIMPLE | wxWANTS_CHARS );
-			m_pListFrameVariables[i]->Enable( m_bCanEdit );
-			l_ptButtonPosition.y += 20;
-
-			if ( !m_strShaderFiles[i].empty() )
-			{
-				m_pStcEditors[i]->LoadFile( m_strShaderFiles[i] );
-				m_pStcEditors[i]->SetReadOnly( !m_bCanEdit );
-			}
-			else if ( !m_strShaderSources[i].empty() )
-			{
-				m_pStcEditors[i]->SetText( m_strShaderSources[i] );
-				m_pStcEditors[i]->SetReadOnly( true );
-			}
-
-			m_pStcEditors[i]->InitializePrefs( m_pStcEditors[i]->DeterminePrefs( l_strExtension ) );
-#if wxMAJOR_VERSION >= 3 || ( wxMAJOR_VERSION == 2 && wxMINOR_VERSION >= 9 )
-			m_pStcEditors[i]->AlwaysShowScrollbars( true, true );
-#endif
+			// The editor page
+			m_pEditorPages[i] = new ShaderEditorPage( m_bCanEdit, *m_pStcContext, l_program, eSHADER_TYPE( i ), m_pNotebookEditors );
+			m_pEditorPages[i]->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+			m_pEditorPages[i]->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+			m_pNotebookEditors->AddPage( m_pEditorPages[i], l_arrayTexts[i], true );
+			m_pEditorPages[i]->SetSize( 0, 22, m_pNotebookEditors->GetClientSize().x, m_pNotebookEditors->GetClientSize().y - 22 );
 		}
+	}
 
-		for ( int i = 0; i < eSHADER_TYPE_COUNT; i++ )
+	void ShaderDialog::DoPopulateMenu()
+	{
+		wxMenuBar * l_pMenuBar = new wxMenuBar;
+		l_pMenuBar->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		l_pMenuBar->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		wxMenu * l_pMenu = new wxMenu;
+
+		if ( m_bCanEdit )
 		{
-			wxBoxSizer * l_pSizerTabList = new wxBoxSizer( wxVERTICAL );
-			l_pSizerTabList->Add( l_pTmpStatics[i], wxSizerFlags( 0 ) );
-			l_pSizerTabList->Add( m_pListFrameVariables[i], wxSizerFlags( 1 ) );
-			wxBoxSizer * l_pSizerTab = new wxBoxSizer( wxHORIZONTAL );
-			l_pSizerTab->Add( m_pStcEditors[i],	wxSizerFlags( 1 ).Expand() );
-			l_pSizerTab->Add( l_pSizerTabList,	wxSizerFlags( 0 ).Expand() );
-			l_pTmpPanels[i]->SetSizer( l_pSizerTab );
-			l_pSizerTab->SetSizeHints( l_pTmpPanels[i] );
+			l_pMenu->Append( eID_MENU_OPEN, _( "&Open file\tCTRL+O" ) );
+			l_pMenu->Append( eID_MENU_SAVE_ONE, _( "Save &current file\tCTRL+S" ) );
+			l_pMenu->Append( eID_MENU_SAVE_ALL, _( "Save &all files\tCTRL+SHIFT+S" ) );
+			l_pMenu->AppendSeparator();
 		}
 
-		wxBoxSizer * l_pSizerPanel = new wxBoxSizer( wxHORIZONTAL	);
-		l_pSizerPanel->Add( m_pNotebookEditors, wxSizerFlags( 1 ).Border( wxALL, 10 ).Expand() );
-		l_pPanelBackGround->SetSizer( l_pSizerPanel );
-		l_pSizerPanel->SetSizeHints( l_pPanelBackGround );
-		wxBoxSizer * l_pSizerAll = new wxBoxSizer( wxHORIZONTAL	);
-		l_pSizerAll->Add( l_pPanelBackGround, wxSizerFlags( 1 ).Expand() );
-		this->SetSizer( l_pSizerAll );
-		l_pSizerAll->SetSizeHints( this );
-		DoPopulateMenu();
-		this->Maximize();
-	}
-}
-
-wxShaderDialog::~wxShaderDialog()
-{
-	delete m_pStcContext;
-}
-
-void wxShaderDialog::DoPopulateMenu()
-{
-	wxMenuBar * l_pMenuBar = new wxMenuBar;
-	wxMenu * l_pMenu = new wxMenu;
-
-	if ( m_bCanEdit )
-	{
-		l_pMenu->Append(	eID_MENU_OPEN,		_( "&Open file\tCTRL+O"	) );
-		l_pMenu->Append(	eID_MENU_SAVE_ONE,	_( "Save &current file\tCTRL+S"	) );
-		l_pMenu->Append(	eID_MENU_SAVE_ALL,	_( "Save &all files\tCTRL+SHIFT+S"	) );
-		l_pMenu->AppendSeparator();
+		l_pMenu->Append( eID_MENU_QUIT, _( "&Quit\tCTRL+Q" ) );
+		l_pMenuBar->Append( l_pMenu, _T( "&File" ) );
+		l_pMenu = new wxMenu;
+		l_pMenu->Append( eID_MENU_PREFS, _( "&Edit preferences ...\tCTRL+E" ) );
+		l_pMenuBar->Append( l_pMenu, _T( "O&ptions" ) );
+		SetMenuBar( l_pMenuBar );
 	}
 
-	l_pMenu->Append(	eID_MENU_QUIT,		_( "&Quit\tCTRL+Q"	) );
-	l_pMenuBar->Append(	l_pMenu,			_T( "&File"	) );
-	l_pMenu = new wxMenu;
-	l_pMenu->Append(	eID_MENU_PREFS,		_( "&Edit preferences ...\tCTRL+E"	) );
-	l_pMenuBar->Append(	l_pMenu,			_T( "O&ptions"	) );
-	SetMenuBar( l_pMenuBar );
-}
+	void ShaderDialog::DoCleanup()
+	{
+		m_auiManager.DetachPane( m_pNotebookEditors );
 
-void wxShaderDialog::DoCleanup()
-{
-	if ( m_bOwnShader && !m_pShaderProgram.expired() )
-	{
-		m_pPass.lock()->SetShader( nullptr );
-//		m_pEngine->GetShaderManager().RemoveProgram( m_pShaderProgram.lock() );
-		m_pShaderProgram.reset();
+		if ( m_bOwnShader && !m_pShaderProgram.expired() )
+		{
+			m_pPass.lock()->SetShader( nullptr );
+			//m_pEngine->GetShaderManager().RemoveProgram( m_pShaderProgram.lock() );
+			m_pShaderProgram.reset();
+		}
 	}
-}
 
-void wxShaderDialog::DoLoadShader()
-{
-	if ( m_strShaderFiles[eSHADER_TYPE_VERTEX].empty() )
+	void ShaderDialog::DoLoadShader()
 	{
-		wxMessageBox( _( "Fill the vertex shader file name" ), _( "ERROR" ) );
-	}
-	else
-	{
-		if ( m_strShaderFiles[eSHADER_TYPE_PIXEL].empty() )
+		bool l_continue = true;
+
+		if ( l_continue && m_pEditorPages[eSHADER_TYPE_VERTEX]->GetShaderFile().empty() )
+		{
+			wxMessageBox( _( "Fill the vertex shader file name" ), _( "ERROR" ) );
+			l_continue = false;
+		}
+
+		if ( l_continue && m_pEditorPages[eSHADER_TYPE_PIXEL]->GetShaderFile().empty() )
 		{
 			wxMessageBox( _( "Fill the fragment file name" ), _( "ERROR" ) );
+			l_continue = false;
 		}
-		else
+
+		if ( l_continue )
 		{
 			if ( m_pShaderProgram.expired() )
 			{
@@ -271,11 +196,13 @@ void wxShaderDialog::DoLoadShader()
 
 			for ( int i = eSHADER_TYPE_VERTEX; i < eSHADER_TYPE_COUNT; i++ )
 			{
-				if ( !m_strShaderFiles[i].empty() )
+				wxString l_file = m_pEditorPages[i]->GetShaderFile();
+
+				if ( l_file.empty() )
 				{
-					m_pStcEditors[i]->SaveFile( m_strShaderFiles[i] );
+					m_pEditorPages[i]->SaveFile( false );
 					m_pShaderProgram.lock()->CreateObject( eSHADER_TYPE( i ) );
-					m_pShaderProgram.lock()->SetFile( eSHADER_TYPE( i ), eSHADER_MODEL_3, ( wxChar const * )m_strShaderFiles[i].c_str() );
+					m_pShaderProgram.lock()->SetFile( eSHADER_TYPE( i ), m_pEditorPages[i]->GetShaderModel(), ( wxChar const * )l_file.c_str() );
 				}
 			}
 
@@ -283,197 +210,98 @@ void wxShaderDialog::DoLoadShader()
 			m_bCompiled = true;
 		}
 	}
-}
 
-void wxShaderDialog::DoFolder( eSHADER_TYPE p_eType )
-{
-	wxFileDialog l_dialog( this, _( "Select a shader program file" ), wxEmptyString, wxEmptyString, wxEmptyString );
-
-	if ( l_dialog.ShowModal() == wxID_OK )
+	void ShaderDialog::DoFolder( eSHADER_TYPE p_eType )
 	{
-		m_strShaderFiles[p_eType] = l_dialog.GetPath();
-		m_pStcEditors[p_eType]->LoadFile( m_strShaderFiles[p_eType] );
-		m_bCompiled = false;
-	}
-}
-
-void wxShaderDialog::DoSave( Castor3D::eSHADER_TYPE p_eType, bool p_bTell )
-{
-	if ( m_strShaderFiles[p_eType].empty() && p_bTell )
-	{
-		wxString l_wildcard;
-
-		switch ( m_pShaderProgram.lock()->GetLanguage() )
-		{
-		case Castor3D::eSHADER_LANGUAGE_GLSL:
-			l_wildcard = _( "GLSL Files" );
-			l_wildcard += wxT( " (*.glsl;*.frag;*.vert;*.geom;*.ctrl;*.eval)|*.glsl;*.frag;*.vert;*.geom;*.ctrl;*.eval" );
-			break;
-
-		case Castor3D::eSHADER_LANGUAGE_HLSL:
-			l_wildcard = _( "HLSL Files" );
-			l_wildcard += wxT( " (*.hlsl)|*.hlsl" );
-			break;
-		}
-
-		wxFileDialog l_dialog( this, _( "Save Shader file " ), wxEmptyString, wxEmptyString, l_wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
+		wxFileDialog l_dialog( this, _( "Select a shader program file" ), wxEmptyString, wxEmptyString, wxEmptyString );
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{
-			m_strShaderFiles[p_eType] = l_dialog.GetPath();
+			m_pEditorPages[p_eType]->LoadFile( l_dialog.GetPath() );
+			m_bCompiled = false;
 		}
 	}
 
-	if ( !m_strShaderFiles[p_eType].empty() )
+	void ShaderDialog::DoSave( Castor3D::eSHADER_TYPE p_eType, bool p_createIfNone )
 	{
-		m_pStcEditors[p_eType]->SaveFile( m_strShaderFiles[p_eType] );
-		m_pStcEditors[p_eType]->SetReadOnly( !m_bCanEdit );
+		m_pEditorPages[p_eType]->SaveFile( p_createIfNone );
 	}
-}
 
-void wxShaderDialog::DoGridCellChange( eSHADER_TYPE p_eType, int p_iRow )
-{
-	int l_iRow = p_iRow;
-	FrameVariableSPtr l_pFrameVariable;
+	BEGIN_EVENT_TABLE( ShaderDialog, wxFrame )
+		EVT_CLOSE( ShaderDialog::OnClose )
+		EVT_MENU( eID_MENU_OPEN, ShaderDialog::OnOpenFile )
+		EVT_MENU( eID_MENU_SAVE_ONE, ShaderDialog::OnSaveFile )
+		EVT_MENU( eID_MENU_SAVE_ALL, ShaderDialog::OnSaveAll )
+		EVT_MENU( eID_MENU_QUIT, ShaderDialog::OnMenuClose )
+	END_EVENT_TABLE()
 
-	if ( m_mapFrameVariables[p_eType].find( l_iRow ) == m_mapFrameVariables[p_eType].end() )
+	void ShaderDialog::OnOpenFile( wxCommandEvent & p_event )
 	{
-		wxFrameVariableDialog l_dialog( this, m_pShaderProgram.lock(), p_eType );
+		eSHADER_TYPE l_eType = eSHADER_TYPE_COUNT;
 
-		if ( l_dialog.ShowModal() == wxID_OK )
+		for ( int i = 0; i < eSHADER_TYPE_COUNT && l_eType == eSHADER_TYPE_COUNT; i++ )
 		{
-			l_pFrameVariable = l_dialog.GetFrameVariable();
-
-			if ( l_pFrameVariable )
+			if ( m_pNotebookEditors->GetPage( i ) == m_pNotebookEditors->GetCurrentPage() )
 			{
-				m_mapFrameVariables[p_eType].insert( std::make_pair( l_iRow, l_pFrameVariable ) );
-				wxArrayString l_arrayString;
-				l_arrayString.push_back( l_pFrameVariable->GetName() + wxT( "=" ) + l_pFrameVariable->GetStrValue() );
-				m_pListFrameVariables[p_eType]->InsertItems( l_arrayString, l_iRow );
+				l_eType = eSHADER_TYPE( i );
 			}
 		}
-	}
-	else
-	{
-		l_pFrameVariable = m_mapFrameVariables[p_eType].find( l_iRow )->second.lock();
-		wxFrameVariableDialog l_dialog( this, m_pShaderProgram.lock(), p_eType, l_pFrameVariable );
 
-		if ( l_dialog.ShowModal() == wxID_OK )
+		if ( l_eType != eSHADER_TYPE_COUNT )
 		{
-			m_pListFrameVariables[p_eType]->SetString( l_iRow, l_pFrameVariable->GetName() + wxT( "=" ) + l_pFrameVariable->GetStrValue() );
+			DoFolder( l_eType );
 		}
+
+		p_event.Skip();
 	}
-}
 
-BEGIN_EVENT_TABLE( wxShaderDialog, wxFrame )
-	EVT_CLOSE(	wxShaderDialog::OnClose	)
-	EVT_LISTBOX_DCLICK(	eID_GRID_VERTEX,		wxShaderDialog::OnGridVertexCellChange	)
-	EVT_LISTBOX_DCLICK(	eID_GRID_FRAGMENT,		wxShaderDialog::OnGridFragmentCellChange	)
-	EVT_LISTBOX_DCLICK(	eID_GRID_GEOMETRY,		wxShaderDialog::OnGridGeometryCellChange	)
-	EVT_LISTBOX_DCLICK(	eID_GRID_HULL,			wxShaderDialog::OnGridHullCellChange	)
-	EVT_LISTBOX_DCLICK(	eID_GRID_DOMAIN,		wxShaderDialog::OnGridDomainCellChange	)
-	EVT_MENU(	eID_MENU_OPEN,			wxShaderDialog::OnOpenFile	)
-	EVT_MENU(	eID_MENU_SAVE_ONE,		wxShaderDialog::OnSaveFile	)
-	EVT_MENU(	eID_MENU_SAVE_ALL,		wxShaderDialog::OnSaveAll	)
-	EVT_MENU(	eID_MENU_QUIT,			wxShaderDialog::OnMenuClose	)
-END_EVENT_TABLE()
-
-void wxShaderDialog::OnOpenFile( wxCommandEvent & p_event )
-{
-	eSHADER_TYPE l_eType = eSHADER_TYPE_COUNT;
-
-	for ( int i = 0; i < eSHADER_TYPE_COUNT && l_eType == eSHADER_TYPE_COUNT; i++ )
+	void ShaderDialog::OnLoadShader( wxCommandEvent & p_event )
 	{
-		if ( m_pNotebookEditors->GetPage( i ) == m_pNotebookEditors->GetCurrentPage() )
+		DoLoadShader();
+		p_event.Skip();
+	}
+
+	void ShaderDialog::OnClose( wxCloseEvent & p_event )
+	{
+		DoCleanup();
+		p_event.Skip();
+	}
+
+	void ShaderDialog::OnSaveFile( wxCommandEvent & p_event )
+	{
+		eSHADER_TYPE l_eType = eSHADER_TYPE_COUNT;
+
+		for ( int i = 0; i < eSHADER_TYPE_COUNT && l_eType == eSHADER_TYPE_COUNT; i++ )
 		{
-			l_eType = eSHADER_TYPE( i );
+			if ( m_pNotebookEditors->GetPage( i ) == m_pNotebookEditors->GetCurrentPage() )
+			{
+				l_eType = eSHADER_TYPE( i );
+			}
 		}
-	}
 
-	if ( l_eType != eSHADER_TYPE_COUNT )
-	{
-		DoFolder( l_eType );
-	}
-
-	p_event.Skip();
-}
-
-void wxShaderDialog::OnLoadShader( wxCommandEvent & p_event )
-{
-	DoLoadShader();
-	p_event.Skip();
-}
-
-void wxShaderDialog::OnClose( wxCloseEvent & p_event )
-{
-	DoCleanup();
-	p_event.Skip();
-}
-
-void wxShaderDialog::OnSaveFile( wxCommandEvent & p_event )
-{
-	eSHADER_TYPE l_eType = eSHADER_TYPE_COUNT;
-
-	for ( int i = 0; i < eSHADER_TYPE_COUNT && l_eType == eSHADER_TYPE_COUNT; i++ )
-	{
-		if ( m_pNotebookEditors->GetPage( i ) == m_pNotebookEditors->GetCurrentPage() )
+		if ( l_eType != eSHADER_TYPE_COUNT )
 		{
-			l_eType = eSHADER_TYPE( i );
+			DoSave( l_eType, true );
 		}
+
+		p_event.Skip();
 	}
 
-	if ( l_eType != eSHADER_TYPE_COUNT )
+	void ShaderDialog::OnSaveAll( wxCommandEvent & p_event )
 	{
-		DoSave( l_eType, true );
+		eSHADER_TYPE l_eType = eSHADER_TYPE_COUNT;
+
+		for ( int i = 0; i < eSHADER_TYPE_COUNT && l_eType == eSHADER_TYPE_COUNT; i++ )
+		{
+			DoSave( eSHADER_TYPE( i ), false );
+		}
+
+		p_event.Skip();
 	}
 
-	p_event.Skip();
-}
-
-void wxShaderDialog::OnSaveAll( wxCommandEvent & p_event )
-{
-	eSHADER_TYPE l_eType = eSHADER_TYPE_COUNT;
-
-	for ( int i = 0; i < eSHADER_TYPE_COUNT && l_eType == eSHADER_TYPE_COUNT; i++ )
+	void ShaderDialog::OnMenuClose( wxCommandEvent & p_event )
 	{
-		DoSave( eSHADER_TYPE( i ), false );
+		Close();
+		p_event.Skip();
 	}
-
-	p_event.Skip();
-}
-
-void wxShaderDialog::OnMenuClose( wxCommandEvent & p_event )
-{
-	Close();
-	p_event.Skip();
-}
-
-void wxShaderDialog::OnGridVertexCellChange( wxCommandEvent & p_event )
-{
-	DoGridCellChange( eSHADER_TYPE_VERTEX, p_event.GetInt() );
-	p_event.Skip();
-}
-
-void wxShaderDialog::OnGridFragmentCellChange( wxCommandEvent & p_event )
-{
-	DoGridCellChange( eSHADER_TYPE_PIXEL, p_event.GetInt() );
-	p_event.Skip();
-}
-
-void wxShaderDialog::OnGridGeometryCellChange( wxCommandEvent & p_event )
-{
-	DoGridCellChange( eSHADER_TYPE_GEOMETRY, p_event.GetInt() );
-	p_event.Skip();
-}
-
-void wxShaderDialog::OnGridHullCellChange( wxCommandEvent & p_event )
-{
-	DoGridCellChange( eSHADER_TYPE_HULL, p_event.GetInt() );
-	p_event.Skip();
-}
-
-void wxShaderDialog::OnGridDomainCellChange( wxCommandEvent & p_event )
-{
-	DoGridCellChange( eSHADER_TYPE_DOMAIN, p_event.GetInt() );
-	p_event.Skip();
 }

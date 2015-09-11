@@ -78,6 +78,10 @@ namespace GuiCommon
 		eBMP_RENDER_TARGET_SEL,
 		eBMP_RENDER_WINDOW,
 		eBMP_RENDER_WINDOW_SEL,
+		eBMP_FRAME_VARIABLE,
+		eBMP_FRAME_VARIABLE_SEL,
+		eBMP_FRAME_VARIABLE_BUFFER,
+		eBMP_FRAME_VARIABLE_BUFFER_SEL,
 		eBMP_NODE,
 		eBMP_NODE_SEL,
 		eBMP_CAMERA,
@@ -109,28 +113,28 @@ namespace GuiCommon
 
 	static const int GC_IMG_SIZE = 16;
 
-	class wxPropertiesHolder;
-	class wxTreeItemProperty;
-	class wxCameraTreeItem;
-	class wxGeometryTreeItemProperty;
-	class wxLightTreeItemProperty;
-	class wxMaterialTreeItemProperty;
-	class wxNodeTreeItemProperty;
-	class wxOverlayTreeItemProperty;
-	class wxPassTreeItemProperrty;
-	class wxSubmeshTreeItemProperty;
-	class wxTextureTreeItemProperty;
+	class PropertiesHolder;
+	class TreeItemProperty;
+	class CameraTreeItemProperty;
+	class GeometryTreeItemProperty;
+	class LightTreeItemProperty;
+	class MaterialTreeItemProperty;
+	class NodeTreeItemProperty;
+	class OverlayTreeItemProperty;
+	class PassTreeItemProperty;
+	class SubmeshTreeItemProperty;
+	class TextureTreeItemProperty;
+	class ButtonEventEditor;
 
-	class wxFrameVariableDialog;
-	class wxSceneObjectsList;
-	class wxImagesLoader;
-	class wxMaterialPanel;
-	class wxMaterialsList;
-	class wxPassPanel;
-	class wxRendererSelector;
-	class wxShaderDialog;
-	class wxSplashScreen;
-	class wxStcTextEditor;
+	class SceneObjectsList;
+	class FrameVariablesList;
+	class ImagesLoader;
+	class MaterialsList;
+	class RendererSelector;
+	class ShaderDialog;
+	class ShaderEditorPage;
+	class SplashScreen;
+	class StcTextEditor;
 
 	class LanguageFileContext;
 	class LanguageFileParser;
@@ -149,18 +153,14 @@ namespace GuiCommon
 	DECLARE_MAP( int, Castor3D::FrameVariableWPtr, FrameVariable );
 	DECLARE_ARRAY( StyleInfoPtr, eSTC_TYPE_COUNT, StyleInfoPtr );
 
+	static const wxColour PANEL_BACKGROUND_COLOUR = wxColour( 30, 30, 30 );
+	static const wxColour PANEL_FOREGROUND_COLOUR = wxColour( 220, 220, 220 );
+	static const wxColour BORDER_COLOUR = wxColour( 90, 90, 90 );
+	static const wxColour INACTIVE_TAB_COLOUR = wxColour( 60, 60, 60 );
+	static const wxColour ACTIVE_TAB_COLOUR = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
+	static const wxColour INACTIVE_TEXT_COLOUR = wxColour( 200, 200, 200 );
+	static const wxColour ACTIVE_TEXT_COLOUR = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
 
-	/**
-	 *\~english
-	 *\brief		Creates a WindowHandle from a wxWindow
-	 *\param[in]	p_window	The window
-	 *\return		The created WindowHandle
-	 *\~french
-	 *\brief		Crée un WindowHandle à partir d'un wxWindow
-	 *\param[in]	p_window	La fenêtre
-	 *\return		Le WindowHandle créé
-	 */
-	Castor3D::WindowHandle wxMakeWindowHandle( wxWindow * p_window );
 	/**
 	 *\~english
 	 *\brief		Copies the buffer into the bitmap
@@ -177,7 +177,7 @@ namespace GuiCommon
 	 *\param[in]	p_uiHeight	La hauteur de l'image
 	 *\param[out]	p_bitmap	Re�oit le bitmap g�n�r�
 	 */
-	void wxCreateBitmapFromBuffer( uint8_t const * p_pBuffer, uint32_t p_uiWidth, uint32_t p_uiHeight, wxBitmap & p_bitmap );
+	void CreateBitmapFromBuffer( uint8_t const * p_pBuffer, uint32_t p_uiWidth, uint32_t p_uiHeight, wxBitmap & p_bitmap );
 	/**
 	 *\~english
 	 *\brief		Copies the unit texture into the bitmap
@@ -190,7 +190,18 @@ namespace GuiCommon
 	 *\param[in]	p_pUnit		L'unité
 	 *\param[out]	p_bitmap	Reçoit le bitmap généré
 	 */
-	void wxCreateBitmapFromBuffer( Castor3D::TextureUnitSPtr p_pUnit, wxBitmap & p_bitmap );
+	void CreateBitmapFromBuffer( Castor3D::TextureUnitSPtr p_pUnit, wxBitmap & p_bitmap );
+	/**
+	 *\~english
+	 *\brief		Creates a WindowHandle from a wxWindow
+	 *\param[in]	p_window	The window
+	 *\return		The created WindowHandle
+	 *\~french
+	 *\brief		Crée un WindowHandle à partir d'un wxWindow
+	 *\param[in]	p_window	La fenêtre
+	 *\return		Le WindowHandle créé
+	 */
+	Castor3D::WindowHandle make_WindowHandle( wxWindow * p_window );
 	/**
 	 *\~english
 	 *\brief		Loads a font glyphs using wxWidgets
@@ -205,7 +216,7 @@ namespace GuiCommon
 	 *\param[in]	p_font		La police wxWidgets
 	 *\return		La police chargée
 	 */
-	Castor::FontSPtr wxLoadFont( Castor3D::Engine * p_engine, wxFont const & p_font );
+	Castor::FontSPtr make_Font( Castor3D::Engine * p_engine, wxFont const & p_font );
 	/**
 	 *\~english
 	 *\brief		Creates a Castor::String from a wxString

@@ -576,7 +576,7 @@ namespace Castor
 		 */
 		static bool is_null( value_type p_a )
 		{
-			return equals< value_type >( p_a, zero() );
+			return !p_a;
 		}
 		/**
 		 *\~english

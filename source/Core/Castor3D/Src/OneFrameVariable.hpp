@@ -32,6 +32,16 @@ namespace Castor3D
 	\version	0.6.1.0
 	\date		14/08/2010
 	\~english
+	\brief		Helper structure containing definitions for a frame variable type.
+	\~french
+	\brief		Structure d'aide contenant des informations sur une variable de frame.
+	*/
+	template< typename T > struct OneFrameVariableDefinitions;
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.6.1.0
+	\date		14/08/2010
+	\~english
 	\brief		Single shader variable with variable type
 	\~french
 	\brief		Variable simple à type variable
@@ -88,7 +98,7 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet à copier
 		 *\return		Une référence sur cet objet
 		 */
-		OneFrameVariable & operator =( OneFrameVariable< T > const & p_object );
+		OneFrameVariable & operator=( OneFrameVariable< T > const & p_object );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -99,7 +109,7 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet à déplacer
 		 *\return		Une référence sur cet objet
 		 */
-		OneFrameVariable & operator =( OneFrameVariable< T > && p_object );
+		OneFrameVariable & operator=( OneFrameVariable< T > && p_object );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -107,38 +117,6 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		virtual ~OneFrameVariable();
-		/**
-		 *\~english
-		 *\brief		Array subscript operator
-		 *\remark		Doesn't check the index bounds
-		 *\param[in]	p_uiIndex	The index
-		 *\return		A reference to the value at given index
-		 *\~french
-		 *\brief		Opérateur d'accès de type tableau
-		 *\remark		Ne vérifie pas que l'index est dans les bornes
-		 *\param[in]	p_uiIndex	L'indice
-		 *\return		Une référence sur la valeur à l'index donné
-		 */
-		inline T & operator []( uint32_t p_uiIndex )
-		{
-			return this->m_pValues[p_uiIndex];
-		}
-		/**
-		 *\~english
-		 *\brief		Array subscript operator
-		 *\remark		Doesn't check the index bounds
-		 *\param[in]	p_uiIndex	The index
-		 *\return		A constant reference to the value at given index
-		 *\~french
-		 *\brief		Opérateur d'accès de type tableau
-		 *\remark		Ne vérifie pas que l'index est dans les bornes
-		 *\param[in]	p_uiIndex	L'indice
-		 *\return		Une référence constante sur la valeur à l'index donné
-		 */
-		inline T const & operator []( uint32_t p_uiIndex )const
-		{
-			return this->m_pValues[p_uiIndex];
-		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the value
@@ -185,6 +163,97 @@ namespace Castor3D
 		inline T const & GetValue( uint32_t p_uiIndex )const throw( std::out_of_range );
 		/**
 		 *\~english
+		 *\brief		Defines the value of the variable
+		 *\param[in]	p_tValue	The new value
+		 *\~french
+		 *\brief		Définit la valeur de la variable
+		 *\param[in]	p_tValue	La valeur
+		 */
+		inline void SetValue( T const & p_tValue );
+		/**
+		 *\~english
+		 *\brief		Defines the value of the variable
+		 *\param[in]	p_tValue	The new value
+		 *\param[in]	p_uiIndex	The index of the value
+		 *\~french
+		 *\brief		Définit la valeur de la variable
+		 *\param[in]	p_tValue	La valeur
+		 *\param[in]	p_uiIndex	L'index de la valeur à modifier
+		 */
+		inline void SetValue( T const & p_tValue, uint32_t p_uiIndex );
+		/**
+		 *\~english
+		 *\brief		Retrieves the byte size of the variable
+		 *\return		The size
+		 *\~french
+		 *\brief		Récupère la taille en octets de la variable
+		 *\return		La taille
+		 */
+		virtual uint32_t size()const;
+		/**
+		 *\~english
+		 *\brief		Gives the variable full type
+		 *\return		The type
+		 *\~english
+		 *\brief		Donne le type complet de la variable
+		 *\return		Le type
+		 */
+		static inline eFRAME_VARIABLE_TYPE GetFrameVariableType();
+		/**
+		 *\~english
+		 *\brief		Gives the variable full type
+		 *\return		The type
+		 *\~english
+		 *\brief		Donne le type complet de la variable
+		 *\return		Le type
+		 */
+		static inline Castor::String GetFrameVariableTypeName();
+		/**
+		 *\~english
+		 *\brief		Array subscript operator
+		 *\remark		Doesn't check the index bounds
+		 *\param[in]	p_uiIndex	The index
+		 *\return		A reference to the value at given index
+		 *\~french
+		 *\brief		Opérateur d'accès de type tableau
+		 *\remark		Ne vérifie pas que l'index est dans les bornes
+		 *\param[in]	p_uiIndex	L'indice
+		 *\return		Une référence sur la valeur à l'index donné
+		 */
+		inline T & operator[]( uint32_t p_uiIndex )
+		{
+			return this->m_pValues[p_uiIndex];
+		}
+		/**
+		 *\~english
+		 *\brief		Array subscript operator
+		 *\remark		Doesn't check the index bounds
+		 *\param[in]	p_uiIndex	The index
+		 *\return		A constant reference to the value at given index
+		 *\~french
+		 *\brief		Opérateur d'accès de type tableau
+		 *\remark		Ne vérifie pas que l'index est dans les bornes
+		 *\param[in]	p_uiIndex	L'indice
+		 *\return		Une référence constante sur la valeur à l'index donné
+		 */
+		inline T const & operator[]( uint32_t p_uiIndex )const
+		{
+			return this->m_pValues[p_uiIndex];
+		}
+		/**
+		 *\~english
+		 *\brief		Gives the full type of the variable
+		 *\return		The type of the variable
+		 *\~french
+		 *\brief		Donne le type complet de la variable
+		 *\return		Le type complet
+		 */
+		static inline eVARIABLE_TYPE GetVariableType()
+		{
+			return eVARIABLE_TYPE_ONE;
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the variable type
 		 *\return		The variable type
 		 *\~french
@@ -209,54 +278,16 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Defines the value of the variable
-		 *\param[in]	p_tValue	The new value
-		 *\~french
-		 *\brief		Définit la valeur de la variable
-		 *\param[in]	p_tValue	La valeur
-		 */
-		inline void SetValue( T const & p_tValue );
-		/**
-		 *\~english
-		 *\brief		Defines the value of the variable
-		 *\param[in]	p_tValue	The new value
-		 *\param[in]	p_uiIndex	The index of the value
-		 *\~french
-		 *\brief		Définit la valeur de la variable
-		 *\param[in]	p_tValue	La valeur
-		 *\param[in]	p_uiIndex	L'index de la valeur à modifier
-		 */
-		inline void SetValue( T const & p_tValue, uint32_t p_uiIndex );
-		/**
-		 *\~english
-		 *\brief		Gives the full type of the variable
-		 *\return		The type of the variable
-		 *\~french
-		 *\brief		Donne le type complet de la variable
-		 *\return		Le type complet
-		 */
-		static inline eVARIABLE_TYPE GetVariableType()
-		{
-			return eVARIABLE_TYPE_ONE;
-		}
-		/**
-		 *\~english
-		 *\brief		Gives the variable full type
+		 *\brief		Gives the variable full type name
 		 *\return		The type
 		 *\~english
-		 *\brief		Donne le type complet de la variable
+		 *\brief		Donne le nom du type complet de la variable
 		 *\return		Le type
 		 */
-		static inline eFRAME_VARIABLE_TYPE GetFrameVariableType();
-		/**
-		 *\~english
-		 *\brief		Retrieves the byte size of the variable
-		 *\return		The size
-		 *\~french
-		 *\brief		Récupère la taille en octets de la variable
-		 *\return		La taille
-		 */
-		virtual uint32_t size()const;
+		inline Castor::String GetFullTypeName()const
+		{
+			return OneFrameVariable< T >::GetFrameVariableTypeName();
+		}
 
 	private:
 		/**

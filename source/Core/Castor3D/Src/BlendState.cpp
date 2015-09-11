@@ -39,14 +39,12 @@ namespace Castor3D
 		{
 			m_currentState = m_wCurrentState.lock();
 		}
-		else
+		else if ( !g_creatingCurrent )
 		{
-			if ( !g_creatingCurrent )
-			{
-				g_creatingCurrent = true;
-				m_currentState = DoCreateCurrent();
-				m_wCurrentState = m_currentState;
-			}
+			g_creatingCurrent = true;
+			m_currentState = DoCreateCurrent();
+			m_wCurrentState = m_currentState;
+			g_creatingCurrent = false;
 		}
 	}
 

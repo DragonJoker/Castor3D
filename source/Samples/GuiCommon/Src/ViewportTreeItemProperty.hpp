@@ -27,30 +27,32 @@ namespace GuiCommon
 	\date 		26/08/2015
 	\version	0.8.0
 	\~english
-	\brief		Viewport helper class to communicate between Scene objects or Materials lists and wxPropertiesHolder
+	\brief		Viewport helper class to communicate between Scene objects or Materials lists and PropertiesHolder
 	\~french
-	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et wxPropertiesHolder, pour les viewports
+	\brief		Classe d'aide facilitant la communication entre la liste des objets de scène, ou la liste de matériaux, et PropertiesHolder, pour les viewports
 	*/
-	class wxViewportTreeItemProperty
-		: public wxTreeItemProperty
+	class ViewportTreeItemProperty
+		: public TreeItemProperty
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_viewport	 The target viewport
+		 *\param[in]	p_editable	Tells if the properties are modifiable
+		 *\param[in]	p_viewport	The target viewport
 		 *\~french
 		 *\brief		Constructeur
+		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_viewport	Le viewport cible
 		 */
-		wxViewportTreeItemProperty( Castor3D::ViewportSPtr p_viewport );
+		ViewportTreeItemProperty( bool p_editable, Castor3D::ViewportSPtr p_viewport );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~wxViewportTreeItemProperty();
+		~ViewportTreeItemProperty();
 		/**
 		 *\~english
 		 *\brief		Creates and fills the viewport properties, in the given wxPropertyGrid
@@ -59,7 +61,7 @@ namespace GuiCommon
 		 *\brief		Construit et remplit les propriétés du viewport, dans la wxPropertyGrid donnée
 		 *\param[in]	p_grid	La wxPropertyGrid cible
 		 */
-		virtual void CreateProperties( wxPropertyGrid * p_grid );
+		virtual void CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
 		/**
 		 *\~english
 		 *\brief		Call when a property grid property is changed

@@ -13,30 +13,41 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static const wxString PROPERTY_CATEGORY_TEXTURE = _( "Texture" );
-		static const wxString PROPERTY_TEXTURE_IMAGE = _( "Image" );
-		static const wxString PROPERTY_CHANNEL = _( "Channel" );
-		static const wxString PROPERTY_CHANNEL_COLOUR = _( "Colour" );
-		static const wxString PROPERTY_CHANNEL_DIFFUSE = _( "Diffuse" );
-		static const wxString PROPERTY_CHANNEL_NORMAL = _( "Normal" );
-		static const wxString PROPERTY_CHANNEL_OPACITY = _( "Opacity" );
-		static const wxString PROPERTY_CHANNEL_SPECULAR = _( "Specular" );
-		static const wxString PROPERTY_CHANNEL_HEIGHT = _( "Height" );
-		static const wxString PROPERTY_CHANNEL_AMBIENT = _( "Ambient" );
-		static const wxString PROPERTY_CHANNEL_GLOSS = _( "Gloss" );
+		static wxString PROPERTY_CATEGORY_TEXTURE = _( "Texture" );
+		static wxString PROPERTY_TEXTURE_IMAGE = _( "Image" );
+		static wxString PROPERTY_CHANNEL = _( "Channel" );
+		static wxString PROPERTY_CHANNEL_COLOUR = _( "Colour" );
+		static wxString PROPERTY_CHANNEL_DIFFUSE = _( "Diffuse" );
+		static wxString PROPERTY_CHANNEL_NORMAL = _( "Normal" );
+		static wxString PROPERTY_CHANNEL_OPACITY = _( "Opacity" );
+		static wxString PROPERTY_CHANNEL_SPECULAR = _( "Specular" );
+		static wxString PROPERTY_CHANNEL_HEIGHT = _( "Height" );
+		static wxString PROPERTY_CHANNEL_AMBIENT = _( "Ambient" );
+		static wxString PROPERTY_CHANNEL_GLOSS = _( "Gloss" );
 	}
 
-	wxTextureTreeItemProperty::wxTextureTreeItemProperty( TextureUnitSPtr p_texture )
-		: wxTreeItemProperty( ePROPERTY_DATA_TYPE_TEXTURE )
+	TextureTreeItemProperty::TextureTreeItemProperty( bool p_editable, TextureUnitSPtr p_texture )
+		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_TEXTURE )
 		, m_texture( p_texture )
 	{
+		PROPERTY_CATEGORY_TEXTURE = _( "Texture" );
+		PROPERTY_TEXTURE_IMAGE = _( "Image" );
+		PROPERTY_CHANNEL = _( "Channel" );
+		PROPERTY_CHANNEL_COLOUR = _( "Colour" );
+		PROPERTY_CHANNEL_DIFFUSE = _( "Diffuse" );
+		PROPERTY_CHANNEL_NORMAL = _( "Normal" );
+		PROPERTY_CHANNEL_OPACITY = _( "Opacity" );
+		PROPERTY_CHANNEL_SPECULAR = _( "Specular" );
+		PROPERTY_CHANNEL_HEIGHT = _( "Height" );
+		PROPERTY_CHANNEL_AMBIENT = _( "Ambient" );
+		PROPERTY_CHANNEL_GLOSS = _( "Gloss" );
 	}
 
-	wxTextureTreeItemProperty::~wxTextureTreeItemProperty()
+	TextureTreeItemProperty::~TextureTreeItemProperty()
 	{
 	}
 
-	void wxTextureTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void TextureTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		TextureUnitSPtr l_unit = GetTexture();
 
@@ -98,7 +109,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxTextureTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void TextureTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		TextureUnitSPtr l_unit = GetTexture();
 		wxPGProperty * l_property = p_event.GetProperty();
@@ -154,7 +165,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxTextureTreeItemProperty::OnChannelChange( eTEXTURE_CHANNEL p_value )
+	void TextureTreeItemProperty::OnChannelChange( eTEXTURE_CHANNEL p_value )
 	{
 		TextureUnitSPtr l_unit = GetTexture();
 
@@ -164,7 +175,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxTextureTreeItemProperty::OnImageChange( Castor::String const & p_value )
+	void TextureTreeItemProperty::OnImageChange( Castor::String const & p_value )
 	{
 		TextureUnitSPtr l_unit = GetTexture();
 

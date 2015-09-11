@@ -12,29 +12,31 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static const wxString PROPERTY_CATEGORY_MATERIAL = _( "Material: " );
+		static wxString PROPERTY_CATEGORY_MATERIAL = _( "Material: " );
 	}
 
-	wxMaterialTreeItemProperty::wxMaterialTreeItemProperty( MaterialSPtr p_material )
-		: wxTreeItemProperty( ePROPERTY_DATA_TYPE_MATERIAL )
+	MaterialTreeItemProperty::MaterialTreeItemProperty( bool p_editable, MaterialSPtr p_material )
+		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_MATERIAL )
 		, m_material( p_material )
 	{
+		PROPERTY_CATEGORY_MATERIAL = _( "Material: " );
 	}
 
-	wxMaterialTreeItemProperty::~wxMaterialTreeItemProperty()
+	MaterialTreeItemProperty::~MaterialTreeItemProperty()
 	{
 	}
 
-	void wxMaterialTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void MaterialTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		MaterialSPtr l_material = GetMaterial();
 
 		if ( l_material )
 		{
+			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_MATERIAL + wxString( l_material->GetName() ) ) );
 		}
 	}
 
-	void wxMaterialTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void MaterialTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		MaterialSPtr l_material = GetMaterial();
 		wxPGProperty * l_property = p_event.GetProperty();

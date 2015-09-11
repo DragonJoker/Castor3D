@@ -302,10 +302,10 @@ namespace Castor3D
 			{
 				for ( auto && l_shader : m_activeShaders )
 				{
-					std::for_each( l_shader->GetFrameVariablesBegin(), l_shader->GetFrameVariablesEnd(), [&]( std::pair< String, FrameVariableWPtr > p_pair )
+					for ( auto && l_it : l_shader->GetFrameVariables() )
 					{
-						p_pair.second.lock()->Initialise();
-					} );
+						l_it->Initialise();
+					}
 				}
 
 				m_eStatus = ePROGRAM_STATUS_LINKED;
@@ -433,6 +433,18 @@ namespace Castor3D
 		return l_pathReturn;
 	}
 
+	bool ShaderProgramBase::HasFile( eSHADER_TYPE p_eTarget )const
+	{
+		bool l_bReturn = false;
+
+		if ( m_pShaders[p_eTarget] )
+		{
+			l_bReturn = m_pShaders[p_eTarget]->HasFile();
+		}
+
+		return l_bReturn;
+	}
+
 	void ShaderProgramBase::SetSource( eSHADER_TYPE p_eTarget, eSHADER_MODEL p_eModel, String const & p_strSource )
 	{
 		if ( m_pShaders[p_eTarget] )
@@ -502,9 +514,21 @@ namespace Castor3D
 		return l_strReturn;
 	}
 
-	bool ShaderProgramBase::HasProgram( eSHADER_TYPE p_eTarget )const
+	bool ShaderProgramBase::HasObject( eSHADER_TYPE p_eTarget )const
 	{
 		return m_pShaders[p_eTarget] && m_pShaders[p_eTarget]->HasSource() && m_pShaders[p_eTarget]->GetStatus() == eSHADER_STATUS_COMPILED;
+	}
+
+	eSHADER_STATUS ShaderProgramBase::GetObjectStatus( eSHADER_TYPE p_eTarget )const
+	{
+		eSHADER_STATUS l_return = eSHADER_STATUS_DONTEXIST;
+
+		if ( m_pShaders[p_eTarget] )
+		{
+			l_return = m_pShaders[p_eTarget]->GetStatus();
+		}
+
+		return l_return;
 	}
 
 	OneTextureFrameVariableSPtr ShaderProgramBase::CreateFrameVariable( String const & p_strName, eSHADER_TYPE p_eType, int p_iNbOcc )
@@ -567,5 +591,15 @@ namespace Castor3D
 		}
 
 		return l_buffer;
+	}
+
+	FrameVariablePtrList & ShaderProgramBase::GetFrameVariables( eSHADER_TYPE p_type )
+	{
+		return m_pShaders[p_type]->GetFrameVariables();
+	}
+
+	FrameVariablePtrList const & ShaderProgramBase::GetFrameVariables( eSHADER_TYPE p_type )const
+	{
+		return m_pShaders[p_type]->GetFrameVariables();
 	}
 }

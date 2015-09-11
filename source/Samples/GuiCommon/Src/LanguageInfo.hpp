@@ -149,7 +149,7 @@ namespace GuiCommon
 	class LanguageInfo
 	{
 	private:
-		typedef std::array< Castor::String, eSTC_TYPE_COUNT	> WordArray;
+		typedef std::array< Castor::String, eSTC_TYPE_COUNT > WordArray;
 
 	private:
 		Castor::String m_strName;

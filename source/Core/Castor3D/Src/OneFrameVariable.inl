@@ -1,5 +1,55 @@
 ﻿namespace Castor3D
 {
+	template<> struct OneFrameVariableDefinitions< bool >
+		: public FrameVariableDataTyper< bool >
+	{
+		static const uint32_t Size = uint32_t( sizeof( bool ) * 1 * 1 );
+		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_ONE;
+		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_BOOL;
+		C3D_API static const xchar * FullTypeName;
+	};
+	template<> struct OneFrameVariableDefinitions< int >
+		: public FrameVariableDataTyper< int >
+	{
+		static const uint32_t Size = uint32_t( sizeof( int ) * 1 * 1 );
+		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_ONE;
+		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_INT;
+		C3D_API static const xchar * FullTypeName;
+	};
+	template<> struct OneFrameVariableDefinitions< uint32_t >
+		: public FrameVariableDataTyper< uint32_t >
+	{
+		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 1 * 1 );
+		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_ONE;
+		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_UINT;
+		C3D_API static const xchar * FullTypeName;
+	};
+	template<> struct OneFrameVariableDefinitions< float >
+		: public FrameVariableDataTyper< float >
+	{
+		static const uint32_t Size = uint32_t( sizeof( float ) * 1 * 1 );
+		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_ONE;
+		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_FLOAT;
+		C3D_API static const xchar * FullTypeName;
+	};
+	template<> struct OneFrameVariableDefinitions< double >
+		: public FrameVariableDataTyper< double >
+	{
+		static const uint32_t Size = uint32_t( sizeof( double ) * 1 * 1 );
+		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_ONE;
+		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_DOUBLE;
+		C3D_API static const xchar * FullTypeName;
+	};
+	template<> struct OneFrameVariableDefinitions< TextureBase * >
+	{
+		static const uint32_t Size = uint32_t( sizeof( TextureBase * ) * 1 * 1 );
+		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_ONE;
+		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_SAMPLER;
+		C3D_API static const xchar * FullTypeName;
+	};
+
+	//*************************************************************************************************
+
 	template< typename T >
 	OneFrameVariable< T >::OneFrameVariable( ShaderProgramBase * p_pProgram )
 		:	TFrameVariable< T >( p_pProgram )
@@ -29,7 +79,7 @@
 	}
 
 	template< typename T >
-	OneFrameVariable< T > & OneFrameVariable< T >::operator =( OneFrameVariable< T > const & p_rVariable )
+	OneFrameVariable< T > & OneFrameVariable< T >::operator=( OneFrameVariable< T > const & p_rVariable )
 	{
 		OneFrameVariable< T > l_tmp( p_rVariable );
 		std::swap( *this, l_tmp );
@@ -37,7 +87,7 @@
 	}
 
 	template< typename T >
-	OneFrameVariable< T > & OneFrameVariable< T >::operator =( OneFrameVariable< T > && p_rVariable )
+	OneFrameVariable< T > & OneFrameVariable< T >::operator=( OneFrameVariable< T > && p_rVariable )
 	{
 		TFrameVariable< T >::operator =( std::move( p_rVariable ) );
 
@@ -105,15 +155,21 @@
 	}
 
 	template< typename T >
+	uint32_t OneFrameVariable< T >::size()const
+	{
+		return OneFrameVariableDefinitions< T >::Size * this->m_uiOcc;
+	}
+
+	template< typename T >
 	inline eFRAME_VARIABLE_TYPE OneFrameVariable< T >::GetFrameVariableType()
 	{
 		return eFRAME_VARIABLE_TYPE( OneFrameVariableDefinitions< T >::Full );
 	}
 
 	template< typename T >
-	uint32_t OneFrameVariable< T >::size()const
+	inline Castor::String OneFrameVariable< T >::GetFrameVariableTypeName()
 	{
-		return OneFrameVariableDefinitions< T >::Size * this->m_uiOcc;
+		return OneFrameVariableDefinitions< T >::FullTypeName;
 	}
 
 	template< typename T >

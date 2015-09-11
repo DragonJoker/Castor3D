@@ -33,18 +33,25 @@ add_target(
 	"${wxWidgets_CXXFLAGS}"
 )
 
-file( GLOB ${PROJECT_NAME}_PROPERTIES_HEADER_FILES
+file( GLOB ${PROJECT_NAME}_TREE_ITEMS_HEADER_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*TreeItem*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*TreeItem*.inl
+)
+file( GLOB ${PROJECT_NAME}_TREE_ITEMS_SOURCE_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*TreeItem*.cpp
+)
+source_group( "Header Files\\Properties\\Tree Items" FILES ${${PROJECT_NAME}_TREE_ITEMS_HEADER_FILES} )
+source_group( "Source Files\\Properties\\Tree Items" FILES ${${PROJECT_NAME}_TREE_ITEMS_SOURCE_FILES} )
+
+file( GLOB ${PROJECT_NAME}_PROPERTIES_MATH_HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Properties*.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Properties*.inl
-    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Property*.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Property*.inl
 )
-file( GLOB ${PROJECT_NAME}_PROPERTIES_SOURCE_FILES
+file( GLOB ${PROJECT_NAME}_PROPERTIES_MATH_SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Properties*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Property*.cpp
 )
-source_group( "Header Files\\Properties" FILES ${${PROJECT_NAME}_PROPERTIES_HEADER_FILES} )
-source_group( "Source Files\\Properties" FILES ${${PROJECT_NAME}_PROPERTIES_SOURCE_FILES} )
+source_group( "Header Files\\Properties\\Math" FILES ${${PROJECT_NAME}_PROPERTIES_MATH_HEADER_FILES} )
+source_group( "Source Files\\Properties\\Math" FILES ${${PROJECT_NAME}_PROPERTIES_MATH_SOURCE_FILES} )
 
 file( GLOB ${PROJECT_NAME}_SHADER_HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Language*.hpp
@@ -90,7 +97,17 @@ file( GLOB ${PROJECT_NAME}_SYSTEM_SOURCE_FILES
 source_group( "Header Files\\System" FILES ${${PROJECT_NAME}_SYSTEM_HEADER_FILES} )
 source_group( "Source Files\\System" FILES ${${PROJECT_NAME}_SYSTEM_SOURCE_FILES} )
 
-# Copying language files for GLSL and HLSL coloration in wxShaderDialog
+file( GLOB ${PROJECT_NAME}_AUI_HEADER_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Aui*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Aui*.inl
+)
+file( GLOB ${PROJECT_NAME}_AUI_SOURCE_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Aui*.cpp
+)
+source_group( "Header Files\\Aui" FILES ${${PROJECT_NAME}_AUI_HEADER_FILES} )
+source_group( "Source Files\\Aui" FILES ${${PROJECT_NAME}_AUI_SOURCE_FILES} )
+
+# Copying language files for GLSL and HLSL coloration in ShaderDialog
 file(
 	GLOB_RECURSE
 		Parser_languages tools/resource/${PROJECT_NAME}/languages/*.lang

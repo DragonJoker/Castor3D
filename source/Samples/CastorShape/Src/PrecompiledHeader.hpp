@@ -105,13 +105,7 @@
 #	include <vector>
 #	include <cmath>
 
-#	include <FrameVariableDialog.hpp>
-#	include <GeometriesListFrame.hpp>
 #	include <ImagesLoader.hpp>
-#	include <MaterialPanel.hpp>
-#	include <MaterialsFrame.hpp>
-#	include <MaterialsListView.hpp>
-#	include <PassPanel.hpp>
 #	include <RendererSelector.hpp>
 #	include <ShaderDialog.hpp>
 #	include <SplashScreen.hpp>

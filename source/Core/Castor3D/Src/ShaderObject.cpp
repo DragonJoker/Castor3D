@@ -59,9 +59,9 @@ namespace Castor3D
 			}
 		}
 
-		for ( FrameVariablePtrStrMapConstIt l_it = p_object.GetFrameVariablesBegin(); l_it != p_object.GetFrameVariablesEnd() && l_bReturn; ++l_it )
+		for ( auto && l_it : p_object.GetFrameVariables() )
 		{
-			FrameVariableSPtr l_pVariable = l_it->second.lock();
+			FrameVariableSPtr l_pVariable = l_it;
 			BinaryChunk l_chunkVariable( eCHUNK_TYPE_PROGRAM_VARIABLE );
 
 			if ( l_bReturn )
@@ -283,9 +283,9 @@ namespace Castor3D
 
 		if ( l_hasFile )
 		{
-			for ( FrameVariablePtrStrMapConstIt l_it = p_shaderObject.GetFrameVariablesBegin(); l_it != p_shaderObject.GetFrameVariablesEnd() && l_bReturn; ++l_it )
+			for ( auto && l_it : p_shaderObject.GetFrameVariables() )
 			{
-				l_bReturn = FrameVariable::TextLoader()( *l_it->second.lock(), p_file );
+				l_bReturn = FrameVariable::TextLoader()( *l_it, p_file );
 			}
 		}
 
@@ -368,13 +368,25 @@ namespace Castor3D
 		}
 	}
 
+	bool ShaderObjectBase::HasFile()const
+	{
+		bool l_bReturn = false;
+
+		for ( int i = 0; i < eSHADER_MODEL_COUNT && !l_bReturn; i++ )
+		{
+			l_bReturn = !m_arrayFiles[i].empty();
+		}
+
+		return l_bReturn;
+	}
+
 	void ShaderObjectBase::SetSource( eSHADER_MODEL p_eModel, String const & p_strSource )
 	{
 		m_eStatus = eSHADER_STATUS_NOTCOMPILED;
 		m_arraySources[p_eModel] = p_strSource;
 	}
 
-	bool ShaderObjectBase::HasSource()
+	bool ShaderObjectBase::HasSource()const
 	{
 		bool l_bReturn = false;
 

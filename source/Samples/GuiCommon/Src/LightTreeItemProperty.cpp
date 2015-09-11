@@ -4,7 +4,7 @@
 #include <FunctorEvent.hpp>
 #include <Light.hpp>
 
-#include "AdditionalProperties.hpp"
+#include "PointProperties.hpp"
 #include <wx/propgrid/advprops.h>
 
 using namespace Castor3D;
@@ -14,28 +14,37 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static const wxString PROPERTY_CATEGORY_LIGHT = _( "Light: " );
-		static const wxString PROPERTY_CATEGORY_POINT_LIGHT = _( "Point Light" );
-		static const wxString PROPERTY_CATEGORY_SPOT_LIGHT = _( "Spot Light" );
-		static const wxString PROPERTY_LIGHT_AMBIENT = _( "Ambient" );
-		static const wxString PROPERTY_LIGHT_DIFFUSE = _( "Diffuse" );
-		static const wxString PROPERTY_LIGHT_SPECULAR = _( "Specular" );
-		static const wxString PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
-		static const wxString PROPERTY_LIGHT_CUT_OFF = _( "Cut off" );
-		static const wxString PROPERTY_LIGHT_EXPONENT = _( "Exponent" );
+		static wxString PROPERTY_CATEGORY_LIGHT = _( "Light: " );
+		static wxString PROPERTY_CATEGORY_POINT_LIGHT = _( "Point Light" );
+		static wxString PROPERTY_CATEGORY_SPOT_LIGHT = _( "Spot Light" );
+		static wxString PROPERTY_LIGHT_AMBIENT = _( "Ambient" );
+		static wxString PROPERTY_LIGHT_DIFFUSE = _( "Diffuse" );
+		static wxString PROPERTY_LIGHT_SPECULAR = _( "Specular" );
+		static wxString PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
+		static wxString PROPERTY_LIGHT_CUT_OFF = _( "Cut off" );
+		static wxString PROPERTY_LIGHT_EXPONENT = _( "Exponent" );
 	}
 
-	wxLightTreeItemProperty::wxLightTreeItemProperty( LightSPtr p_light )
-		: wxTreeItemProperty( ePROPERTY_DATA_TYPE_LIGHT )
+	LightTreeItemProperty::LightTreeItemProperty( bool p_editable, LightSPtr p_light )
+		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_LIGHT )
 		, m_light( p_light )
 	{
+		PROPERTY_CATEGORY_LIGHT = _( "Light: " );
+		PROPERTY_CATEGORY_POINT_LIGHT = _( "Point Light" );
+		PROPERTY_CATEGORY_SPOT_LIGHT = _( "Spot Light" );
+		PROPERTY_LIGHT_AMBIENT = _( "Ambient" );
+		PROPERTY_LIGHT_DIFFUSE = _( "Diffuse" );
+		PROPERTY_LIGHT_SPECULAR = _( "Specular" );
+		PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
+		PROPERTY_LIGHT_CUT_OFF = _( "Cut off" );
+		PROPERTY_LIGHT_EXPONENT = _( "Exponent" );
 	}
 
-	wxLightTreeItemProperty::~wxLightTreeItemProperty()
+	LightTreeItemProperty::~LightTreeItemProperty()
 	{
 	}
 
-	void wxLightTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void LightTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		LightSPtr l_light = GetLight();
 
@@ -66,7 +75,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxLightTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void LightTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		LightSPtr l_light = GetLight();
 		wxPGProperty * l_property = p_event.GetProperty();
@@ -111,25 +120,25 @@ namespace GuiCommon
 		}
 	}
 
-	void wxLightTreeItemProperty::DoCreateDirectionalLightProperties( wxPropertyGrid * p_grid, DirectionalLightSPtr p_light )
+	void LightTreeItemProperty::DoCreateDirectionalLightProperties( wxPropertyGrid * p_grid, DirectionalLightSPtr p_light )
 	{
 	}
 
-	void wxLightTreeItemProperty::DoCreatePointLightProperties( wxPropertyGrid * p_grid, PointLightSPtr p_light )
+	void LightTreeItemProperty::DoCreatePointLightProperties( wxPropertyGrid * p_grid, PointLightSPtr p_light )
 	{
 		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_POINT_LIGHT ) );
-		p_grid->Append( new Point3rProperty( PROPERTY_LIGHT_ATTENUATION ) )->SetValue( wxVariant( p_light->GetAttenuation() ) );
+		p_grid->Append( new Point3rProperty( GC_POINT_XYZ, PROPERTY_LIGHT_ATTENUATION ) )->SetValue( wxVariant( p_light->GetAttenuation() ) );
 	}
 
-	void wxLightTreeItemProperty::DoCreateSpotLightProperties( wxPropertyGrid * p_grid, SpotLightSPtr p_light )
+	void LightTreeItemProperty::DoCreateSpotLightProperties( wxPropertyGrid * p_grid, SpotLightSPtr p_light )
 	{
 		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SPOT_LIGHT ) );
-		p_grid->Append( new Point3rProperty( PROPERTY_LIGHT_ATTENUATION ) )->SetValue( wxVariant( p_light->GetAttenuation() ) );
+		p_grid->Append( new Point3rProperty( GC_POINT_XYZ, PROPERTY_LIGHT_ATTENUATION ) )->SetValue( wxVariant( p_light->GetAttenuation() ) );
 		p_grid->Append( new wxFloatProperty( PROPERTY_LIGHT_CUT_OFF ) )->SetValue( p_light->GetCutOff() );
 		p_grid->Append( new wxFloatProperty( PROPERTY_LIGHT_EXPONENT ) )->SetValue( p_light->GetExponent() );
 	}
 
-	void wxLightTreeItemProperty::OnAmbientColourChange( Colour const & p_value )
+	void LightTreeItemProperty::OnAmbientColourChange( Colour const & p_value )
 	{
 		LightSPtr l_light = GetLight();
 
@@ -139,7 +148,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxLightTreeItemProperty::OnDiffuseColourChange( Colour const & p_value )
+	void LightTreeItemProperty::OnDiffuseColourChange( Colour const & p_value )
 	{
 		LightSPtr l_light = GetLight();
 
@@ -149,7 +158,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxLightTreeItemProperty::OnSpecularColourChange( Colour const & p_value )
+	void LightTreeItemProperty::OnSpecularColourChange( Colour const & p_value )
 	{
 		LightSPtr l_light = GetLight();
 
@@ -159,7 +168,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxLightTreeItemProperty::OnAttenuationChange( Point3f const & p_value )
+	void LightTreeItemProperty::OnAttenuationChange( Point3f const & p_value )
 	{
 		LightSPtr l_light = GetLight();
 
@@ -176,7 +185,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxLightTreeItemProperty::OnCutOffChange( double p_value )
+	void LightTreeItemProperty::OnCutOffChange( double p_value )
 	{
 		LightSPtr l_light = GetLight();
 
@@ -186,7 +195,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxLightTreeItemProperty::OnExponentChange( double p_value )
+	void LightTreeItemProperty::OnExponentChange( double p_value )
 	{
 		LightSPtr l_light = GetLight();
 

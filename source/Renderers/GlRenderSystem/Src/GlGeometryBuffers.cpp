@@ -26,7 +26,7 @@ namespace GlRender
 	{
 		eGL_PRIMITIVE l_eMode = m_gl.Get( p_ePrimitiveType );
 
-		if ( p_pProgram && p_pProgram->HasProgram( eSHADER_TYPE_HULL ) )
+		if ( p_pProgram && p_pProgram->HasObject( eSHADER_TYPE_HULL ) )
 		{
 			l_eMode = eGL_PRIMITIVE_PATCHES;
 			m_gl.PatchParameter( eGL_PATCH_PARAMETER_VERTICES, 3 );
@@ -53,7 +53,7 @@ namespace GlRender
 	{
 		eGL_PRIMITIVE l_eMode = m_gl.Get( p_eTopology );
 
-		if ( p_pProgram->HasProgram( eSHADER_TYPE_HULL ) )
+		if ( p_pProgram->HasObject( eSHADER_TYPE_HULL ) )
 		{
 			l_eMode = eGL_PRIMITIVE_PATCHES;
 			m_gl.PatchParameter( eGL_PATCH_PARAMETER_VERTICES, 3 );

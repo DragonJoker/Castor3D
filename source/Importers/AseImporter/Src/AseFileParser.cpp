@@ -681,10 +681,10 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeometryMaterialRef )
 
 	if ( l_it != l_pContext->m_mapMaterials.end() )
 	{
-		std::for_each( l_pContext->pMesh->Begin(), l_pContext->pMesh->End(), [&]( SubmeshSPtr p_pSubmesh )
+		for ( auto && l_submesh : *l_pContext->pMesh )
 		{
-			p_pSubmesh->SetDefaultMaterial( l_it->second );
-		} );
+			l_submesh->SetDefaultMaterial( l_it->second );
+		}
 	}
 }
 END_ATTRIBUTE()

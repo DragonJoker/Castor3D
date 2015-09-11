@@ -21,41 +21,27 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "GuiCommonPrerequisites.hpp"
 
 #include <wx/frame.h>
-#include <wx/notebook.h>
+#include <wx/aui/auibook.h>
 
 namespace GuiCommon
 {
-	class wxShaderDialog
-		:	public wxFrame
+	class ShaderDialog
+		: public wxFrame
 	{
-	protected:
-		wxNotebook * m_pNotebookEditors;
-		StcContext * m_pStcContext;
-		wxStcTextEditor * m_pStcEditors[Castor3D::eSHADER_TYPE_COUNT];
-		wxListBox * m_pListFrameVariables[Castor3D::eSHADER_TYPE_COUNT];
-		wxString m_strShaderFiles[Castor3D::eSHADER_TYPE_COUNT];
-		wxString m_strShaderSources[Castor3D::eSHADER_TYPE_COUNT];
-		Castor3D::ShaderProgramBaseWPtr m_pShaderProgram;
-		Castor3D::ShaderObjectBaseWPtr m_pShaderObject;
-		Castor3D::PassWPtr m_pPass;
-		bool m_bCompiled;
-		bool m_bOwnShader;
-		FrameVariableMap m_mapFrameVariables[Castor3D::eSHADER_TYPE_COUNT];
-		bool m_bCanEdit;
-		Castor3D::Engine * m_pEngine;
-
 	public:
-		wxShaderDialog( Castor3D::Engine * p_pEngine, bool p_bCanEdit, wxWindow * p_pParent, Castor3D::PassSPtr p_pPass, wxPoint const & p_ptPosition = wxDefaultPosition, const wxSize p_ptSize = wxSize( 800, 600 ) );
-		~wxShaderDialog();
+		ShaderDialog( Castor3D::Engine * p_pEngine, bool p_bCanEdit, wxWindow * p_pParent, Castor3D::PassSPtr p_pPass, wxPoint const & p_ptPosition = wxDefaultPosition, const wxSize p_ptSize = wxSize( 800, 600 ) );
+		~ShaderDialog();
 
 	private:
+		void DoInitialiseShaderLanguage();
+		void DoInitialiseLayout();
+		void DoLoadPages();
 		void DoPopulateMenu();
 		void DoCleanup();
 		void DoLoadShader();
 		void DoOpenShaderFile();
 		void DoFolder( Castor3D::eSHADER_TYPE p_eType );
-		void DoSave( Castor3D::eSHADER_TYPE p_eType, bool p_bTell );
-		void DoGridCellChange( Castor3D::eSHADER_TYPE p_eType, int p_iRow );
+		void DoSave( Castor3D::eSHADER_TYPE p_eType, bool p_createIfNone );
 
 		DECLARE_EVENT_TABLE()
 		void OnOpenFile( wxCommandEvent & p_event );
@@ -63,14 +49,21 @@ namespace GuiCommon
 		void OnClose( wxCloseEvent & p_event );
 		void OnOk( wxCommandEvent & p_event );
 		void OnCancel( wxCommandEvent & p_event );
-		void OnGridVertexCellChange( wxCommandEvent & p_event );
-		void OnGridFragmentCellChange( wxCommandEvent & p_event );
-		void OnGridGeometryCellChange( wxCommandEvent & p_event );
-		void OnGridHullCellChange( wxCommandEvent & p_event );
-		void OnGridDomainCellChange( wxCommandEvent & p_event );
 		void OnSaveFile( wxCommandEvent & p_event );
 		void OnSaveAll( wxCommandEvent & p_event );
 		void OnMenuClose( wxCommandEvent & p_event );
+
+	protected:
+		wxAuiManager m_auiManager;
+		wxAuiNotebook * m_pNotebookEditors;
+		std::unique_ptr< StcContext > m_pStcContext;
+		ShaderEditorPage * m_pEditorPages[Castor3D::eSHADER_TYPE_COUNT];
+		Castor3D::ShaderProgramBaseWPtr m_pShaderProgram;
+		Castor3D::PassWPtr m_pPass;
+		bool m_bCompiled;
+		bool m_bOwnShader;
+		bool m_bCanEdit;
+		Castor3D::Engine * m_pEngine;
 	};
 }
 

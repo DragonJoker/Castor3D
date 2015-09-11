@@ -3,7 +3,8 @@
 #include <Viewport.hpp>
 #include <FunctorEvent.hpp>
 
-#include "AdditionalProperties.hpp"
+#include "SizeProperties.hpp"
+
 #include <wx/propgrid/advprops.h>
 
 using namespace Castor3D;
@@ -28,17 +29,17 @@ namespace GuiCommon
 		static const wxString PROPERTY_VIEWPORT_RATIO = _( "Ratio" );
 	}
 
-	wxViewportTreeItemProperty::wxViewportTreeItemProperty( Castor3D::ViewportSPtr p_viewport )
-		: wxTreeItemProperty( ePROPERTY_DATA_TYPE_VIEWPORT )
+	ViewportTreeItemProperty::ViewportTreeItemProperty( bool p_editable, Castor3D::ViewportSPtr p_viewport )
+		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_VIEWPORT )
 		, m_viewport( p_viewport )
 	{
 	}
 
-	wxViewportTreeItemProperty::~wxViewportTreeItemProperty()
+	ViewportTreeItemProperty::~ViewportTreeItemProperty()
 	{
 	}
 
-	void wxViewportTreeItemProperty::CreateProperties( wxPropertyGrid * p_grid )
+	void ViewportTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
@@ -74,7 +75,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxViewportTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void ViewportTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		wxPGProperty * l_property = p_event.GetProperty();
 		ViewportSPtr l_viewport = GetViewport();
@@ -131,7 +132,7 @@ namespace GuiCommon
 		}
 	}
 
-	void wxViewportTreeItemProperty::OnTypeChange( eVIEWPORT_TYPE p_value )
+	void ViewportTreeItemProperty::OnTypeChange( eVIEWPORT_TYPE p_value )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
@@ -141,7 +142,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxViewportTreeItemProperty::OnSizeChange( Castor::Size const & p_value )
+	void ViewportTreeItemProperty::OnSizeChange( Castor::Size const & p_value )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
@@ -151,7 +152,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxViewportTreeItemProperty::OnTopChange( double p_value )
+	void ViewportTreeItemProperty::OnTopChange( double p_value )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
@@ -161,7 +162,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxViewportTreeItemProperty::OnBottomChange( double p_value )
+	void ViewportTreeItemProperty::OnBottomChange( double p_value )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
@@ -171,7 +172,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxViewportTreeItemProperty::OnLeftChange( double p_value )
+	void ViewportTreeItemProperty::OnLeftChange( double p_value )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
@@ -181,7 +182,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxViewportTreeItemProperty::OnRightChange( double p_value )
+	void ViewportTreeItemProperty::OnRightChange( double p_value )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
@@ -191,7 +192,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxViewportTreeItemProperty::OnNearChange( double p_value )
+	void ViewportTreeItemProperty::OnNearChange( double p_value )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
@@ -201,7 +202,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxViewportTreeItemProperty::OnFarChange( double p_value )
+	void ViewportTreeItemProperty::OnFarChange( double p_value )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
@@ -211,7 +212,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxViewportTreeItemProperty::OnFovYChange( double p_value )
+	void ViewportTreeItemProperty::OnFovYChange( double p_value )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
@@ -221,7 +222,7 @@ namespace GuiCommon
 		} ) );
 	}
 
-	void wxViewportTreeItemProperty::OnRatioChange( double p_value )
+	void ViewportTreeItemProperty::OnRatioChange( double p_value )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
