@@ -148,7 +148,7 @@ namespace Castor3D
 
 	bool GeometryBuffers::Bind()
 	{
-		bool l_return = m_pVertexBuffer;
+		bool l_return = m_pVertexBuffer != mullptr;
 
 		if ( l_return )
 		{

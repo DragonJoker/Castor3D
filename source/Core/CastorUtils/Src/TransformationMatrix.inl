@@ -7,7 +7,7 @@ namespace Castor
 		return p_matrix *= matrix::set_rotate( l_rotate, p_angle, p_axis );
 	}
 
-	template< typename T >S
+	template< typename T >
 	SquareMatrix< T, 4 > & matrix::rotate( SquareMatrix< T, 4 > & p_matrix, Quaternion const & p_quat )
 	{
 		Point3r l_axis;
