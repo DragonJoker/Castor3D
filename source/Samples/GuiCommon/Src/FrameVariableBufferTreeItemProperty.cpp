@@ -13,14 +13,16 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static const wxString PROPERTY_CATEGORY_FRAME_VARIABLE_BUFFER = _( "Frame Variable Buffer: " );
-		static const wxString PROPERTY_NAME = _( "Name" );
+		static wxString PROPERTY_CATEGORY_FRAME_VARIABLE_BUFFER = _( "Frame Variable Buffer: " );
+		static wxString PROPERTY_NAME = _( "Name" );
 	}
 
 	FrameVariableBufferTreeItemProperty::FrameVariableBufferTreeItemProperty( bool p_editable, FrameVariableBufferSPtr p_buffer )
 		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_CAMERA )
 		, m_buffer( p_buffer )
 	{
+		PROPERTY_CATEGORY_FRAME_VARIABLE_BUFFER = _( "Frame Variable Buffer: " );
+		PROPERTY_NAME = _( "Name" );
 	}
 
 	FrameVariableBufferTreeItemProperty::~FrameVariableBufferTreeItemProperty()

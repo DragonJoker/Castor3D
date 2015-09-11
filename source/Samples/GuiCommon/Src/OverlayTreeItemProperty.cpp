@@ -25,28 +25,44 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static const wxString PROPERTY_CATEGORY_OVERLAY = _( "Overlay: " );
-		static const wxString PROPERTY_CATEGORY_BORDER_PANEL_OVERLAY = _( "Border Panel Overlay" );
-		static const wxString PROPERTY_CATEGORY_TEXT_OVERLAY = _( "Text Overlay" );
-		static const wxString PROPERTY_OVERLAY_POSITION = _( "Position" );
-		static const wxString PROPERTY_OVERLAY_SIZE = _( "Size" );
-		static const wxString PROPERTY_OVERLAY_MATERIAL = _( "Material" );
-		static const wxString PROPERTY_OVERLAY_BORDER_SIZE = _( "Border Size" );
-		static const wxString PROPERTY_OVERLAY_BORDER_MATERIAL = _( "Border Material" );
-		static const wxString PROPERTY_OVERLAY_BORDER_INNER_UV = _( "Border Inner UV" );
-		static const wxString PROPERTY_OVERLAY_BORDER_OUTER_UV = _( "Border Outer UV" );
-		static const wxString PROPERTY_OVERLAY_BORDER_POSITION = _( "Border Position" );
-		static const wxString PROPERTY_OVERLAY_BORDER_POSITION_INTERNAL = _( "Internal" );
-		static const wxString PROPERTY_OVERLAY_BORDER_POSITION_MIDDLE = _( "Middle" );
-		static const wxString PROPERTY_OVERLAY_BORDER_POSITION_EXTERNAL = _( "External" );
-		static const wxString PROPERTY_OVERLAY_FONT = _( "Font" );
-		static const wxString PROPERTY_OVERLAY_CAPTION = _( "Caption" );
+		static wxString PROPERTY_CATEGORY_OVERLAY = _( "Overlay: " );
+		static wxString PROPERTY_CATEGORY_BORDER_PANEL_OVERLAY = _( "Border Panel Overlay" );
+		static wxString PROPERTY_CATEGORY_TEXT_OVERLAY = _( "Text Overlay" );
+		static wxString PROPERTY_OVERLAY_POSITION = _( "Position" );
+		static wxString PROPERTY_OVERLAY_SIZE = _( "Size" );
+		static wxString PROPERTY_OVERLAY_MATERIAL = _( "Material" );
+		static wxString PROPERTY_OVERLAY_BORDER_SIZE = _( "Border Size" );
+		static wxString PROPERTY_OVERLAY_BORDER_MATERIAL = _( "Border Material" );
+		static wxString PROPERTY_OVERLAY_BORDER_INNER_UV = _( "Border Inner UV" );
+		static wxString PROPERTY_OVERLAY_BORDER_OUTER_UV = _( "Border Outer UV" );
+		static wxString PROPERTY_OVERLAY_BORDER_POSITION = _( "Border Position" );
+		static wxString PROPERTY_OVERLAY_BORDER_POSITION_INTERNAL = _( "Internal" );
+		static wxString PROPERTY_OVERLAY_BORDER_POSITION_MIDDLE = _( "Middle" );
+		static wxString PROPERTY_OVERLAY_BORDER_POSITION_EXTERNAL = _( "External" );
+		static wxString PROPERTY_OVERLAY_FONT = _( "Font" );
+		static wxString PROPERTY_OVERLAY_CAPTION = _( "Caption" );
 	}
 
 	OverlayTreeItemProperty::OverlayTreeItemProperty( bool p_editable, Castor3D::OverlaySPtr p_overlay )
 		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_OVERLAY )
 		, m_overlay( p_overlay )
 	{
+		PROPERTY_CATEGORY_OVERLAY = _( "Overlay: " );
+		PROPERTY_CATEGORY_BORDER_PANEL_OVERLAY = _( "Border Panel Overlay" );
+		PROPERTY_CATEGORY_TEXT_OVERLAY = _( "Text Overlay" );
+		PROPERTY_OVERLAY_POSITION = _( "Position" );
+		PROPERTY_OVERLAY_SIZE = _( "Size" );
+		PROPERTY_OVERLAY_MATERIAL = _( "Material" );
+		PROPERTY_OVERLAY_BORDER_SIZE = _( "Border Size" );
+		PROPERTY_OVERLAY_BORDER_MATERIAL = _( "Border Material" );
+		PROPERTY_OVERLAY_BORDER_INNER_UV = _( "Border Inner UV" );
+		PROPERTY_OVERLAY_BORDER_OUTER_UV = _( "Border Outer UV" );
+		PROPERTY_OVERLAY_BORDER_POSITION = _( "Border Position" );
+		PROPERTY_OVERLAY_BORDER_POSITION_INTERNAL = _( "Internal" );
+		PROPERTY_OVERLAY_BORDER_POSITION_MIDDLE = _( "Middle" );
+		PROPERTY_OVERLAY_BORDER_POSITION_EXTERNAL = _( "External" );
+		PROPERTY_OVERLAY_FONT = _( "Font" );
+		PROPERTY_OVERLAY_CAPTION = _( "Caption" );
 	}
 
 	OverlayTreeItemProperty::~OverlayTreeItemProperty()

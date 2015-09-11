@@ -16,22 +16,32 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static const wxString PROPERTY_CATEGORY_PASS = _( "Pass: " );
-		static const wxString PROPERTY_PASS_AMBIENT = _( "Ambient" );
-		static const wxString PROPERTY_PASS_DIFFUSE = _( "Diffuse" );
-		static const wxString PROPERTY_PASS_SPECULAR = _( "Specular" );
-		static const wxString PROPERTY_PASS_EMISSIVE = _( "Emissive" );
-		static const wxString PROPERTY_PASS_EXPONENT = _( "Exponent" );
-		static const wxString PROPERTY_PASS_TWO_SIDED = _( "Two sided" );
-		static const wxString PROPERTY_PASS_OPACITY = _( "Opacity" );
-		static const wxString PROPERTY_PASS_SHADER = _( "Shader" );
-		static const wxString PROPERTY_PASS_EDIT_SHADER = _( "Edit Shader..." );
+		static wxString PROPERTY_CATEGORY_PASS = _( "Pass: " );
+		static wxString PROPERTY_PASS_AMBIENT = _( "Ambient" );
+		static wxString PROPERTY_PASS_DIFFUSE = _( "Diffuse" );
+		static wxString PROPERTY_PASS_SPECULAR = _( "Specular" );
+		static wxString PROPERTY_PASS_EMISSIVE = _( "Emissive" );
+		static wxString PROPERTY_PASS_EXPONENT = _( "Exponent" );
+		static wxString PROPERTY_PASS_TWO_SIDED = _( "Two sided" );
+		static wxString PROPERTY_PASS_OPACITY = _( "Opacity" );
+		static wxString PROPERTY_PASS_SHADER = _( "Shader" );
+		static wxString PROPERTY_PASS_EDIT_SHADER = _( "Edit Shader..." );
 	}
 
 	PassTreeItemProperty::PassTreeItemProperty( bool p_editable, Castor3D::PassSPtr p_pass )
 		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_PASS )
 		, m_pass( p_pass )
 	{
+		PROPERTY_CATEGORY_PASS = _( "Pass: " );
+		PROPERTY_PASS_AMBIENT = _( "Ambient" );
+		PROPERTY_PASS_DIFFUSE = _( "Diffuse" );
+		PROPERTY_PASS_SPECULAR = _( "Specular" );
+		PROPERTY_PASS_EMISSIVE = _( "Emissive" );
+		PROPERTY_PASS_EXPONENT = _( "Exponent" );
+		PROPERTY_PASS_TWO_SIDED = _( "Two sided" );
+		PROPERTY_PASS_OPACITY = _( "Opacity" );
+		PROPERTY_PASS_SHADER = _( "Shader" );
+		PROPERTY_PASS_EDIT_SHADER = _( "Edit Shader..." );
 	}
 
 	PassTreeItemProperty::~PassTreeItemProperty()

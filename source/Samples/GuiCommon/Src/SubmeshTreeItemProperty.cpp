@@ -17,8 +17,8 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static const wxString PROPERTY_CATEGORY_SUBMESH = _( "Submesh: " );
-		static const wxString PROPERTY_SUBMESH_MATERIAL = _( "Material" );
+		static wxString PROPERTY_CATEGORY_SUBMESH = _( "Submesh: " );
+		static wxString PROPERTY_SUBMESH_MATERIAL = _( "Material" );
 	}
 
 	SubmeshTreeItemProperty::SubmeshTreeItemProperty( bool p_editable, GeometrySPtr p_pGeometry, SubmeshSPtr p_pSubmesh )
@@ -26,6 +26,8 @@ namespace GuiCommon
 		, m_pGeometry( p_pGeometry )
 		, m_pSubmesh( p_pSubmesh )
 	{
+		PROPERTY_CATEGORY_SUBMESH = _( "Submesh: " );
+		PROPERTY_SUBMESH_MATERIAL = _( "Material" );
 	}
 
 	SubmeshTreeItemProperty::~SubmeshTreeItemProperty()

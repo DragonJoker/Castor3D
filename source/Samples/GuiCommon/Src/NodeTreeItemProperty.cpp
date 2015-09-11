@@ -16,10 +16,10 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static const wxString PROPERTY_CATEGORY_NODE = _( "Scene Node: " );
-		static const wxString PROPERTY_NODE_POSITION = _( "Position" );
-		static const wxString PROPERTY_NODE_SCALE = _( "Scale" );
-		static const wxString PROPERTY_NODE_ORIENTATION = _( "Orientation" );
+		static wxString PROPERTY_CATEGORY_NODE = _( "Scene Node: " );
+		static wxString PROPERTY_NODE_POSITION = _( "Position" );
+		static wxString PROPERTY_NODE_SCALE = _( "Scale" );
+		static wxString PROPERTY_NODE_ORIENTATION = _( "Orientation" );
 	}
 
 	NodeTreeItemProperty::NodeTreeItemProperty( bool p_editable, Engine * p_engine, SceneNodeSPtr p_node )
@@ -27,6 +27,10 @@ namespace GuiCommon
 		, m_node( p_node )
 		, m_engine( p_engine )
 	{
+		PROPERTY_CATEGORY_NODE = _( "Scene Node: " );
+		PROPERTY_NODE_POSITION = _( "Position" );
+		PROPERTY_NODE_SCALE = _( "Scale" );
+		PROPERTY_NODE_ORIENTATION = _( "Orientation" );
 	}
 
 	NodeTreeItemProperty::~NodeTreeItemProperty()

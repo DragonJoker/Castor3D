@@ -12,13 +12,14 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static const wxString PROPERTY_CATEGORY_GEOMETRY = _( "Geometry: " );
+		static wxString PROPERTY_CATEGORY_GEOMETRY = _( "Geometry: " );
 	}
 
 	GeometryTreeItemProperty::GeometryTreeItemProperty( bool p_editable, Castor3D::GeometrySPtr p_pGeometry )
 		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_GEOMETRY )
 		, m_pGeometry( p_pGeometry )
 	{
+		PROPERTY_CATEGORY_GEOMETRY = _( "Geometry: " );
 	}
 
 	GeometryTreeItemProperty::~GeometryTreeItemProperty()
@@ -31,6 +32,7 @@ namespace GuiCommon
 
 		if ( l_geometry )
 		{
+			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_GEOMETRY + wxString( l_geometry->GetName() ) ) );
 		}
 	}
 

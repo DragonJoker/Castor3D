@@ -12,13 +12,14 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static const wxString PROPERTY_CATEGORY_RENDER_WINDOW = _( "Render Window: " );
+		static wxString PROPERTY_CATEGORY_RENDER_WINDOW = _( "Render Window: " );
 	}
 
 	RenderWindowTreeItemProperty::RenderWindowTreeItemProperty( bool p_editable, RenderWindowSPtr p_window )
 		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_RENDER_WINDOW )
 		, m_window( p_window )
 	{
+		PROPERTY_CATEGORY_RENDER_WINDOW = _( "Render Window: " );
 	}
 
 	RenderWindowTreeItemProperty::~RenderWindowTreeItemProperty()
@@ -31,6 +32,7 @@ namespace GuiCommon
 
 		if ( l_window )
 		{
+			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_RENDER_WINDOW + wxString( l_window->GetName() ) ) );
 		}
 	}
 

@@ -13,16 +13,20 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static const wxString PROPERTY_CATEGORY_SCENE = _( "Scene: " );
-		static const wxString PROPERTY_SCENE_AMBIENT_LIGHT = _( "Ambient light" );
-		static const wxString PROPERTY_SCENE_BACKGROUND_COLOUR = _( "Background Colour" );
-		static const wxString PROPERTY_SCENE_BACKGROUND_IMAGE = _( "Background Image" );
+		static wxString PROPERTY_CATEGORY_SCENE = _( "Scene: " );
+		static wxString PROPERTY_SCENE_AMBIENT_LIGHT = _( "Ambient light" );
+		static wxString PROPERTY_SCENE_BACKGROUND_COLOUR = _( "Background Colour" );
+		static wxString PROPERTY_SCENE_BACKGROUND_IMAGE = _( "Background Image" );
 	}
 
 	SceneTreeItemProperty::SceneTreeItemProperty( bool p_editable, SceneSPtr p_scene )
 		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_SCENE )
 		, m_scene( p_scene )
 	{
+		PROPERTY_CATEGORY_SCENE = _( "Scene: " );
+		PROPERTY_SCENE_AMBIENT_LIGHT = _( "Ambient light" );
+		PROPERTY_SCENE_BACKGROUND_COLOUR = _( "Background Colour" );
+		PROPERTY_SCENE_BACKGROUND_IMAGE = _( "Background Image" );
 	}
 
 	SceneTreeItemProperty::~SceneTreeItemProperty()

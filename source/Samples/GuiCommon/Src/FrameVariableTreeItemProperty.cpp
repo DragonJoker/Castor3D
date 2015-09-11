@@ -18,46 +18,46 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static const wxString PROPERTY_CATEGORY_VARIABLE = _( "Frame Variable: " );
-		static const wxString PROPERTY_NAME = _( "Name" );
-		static const wxString PROPERTY_VALUE = _( "Value" );
-		static const wxString PROPERTY_TYPE = _( "Type" );
-		static const wxString PROPERTY_OCCURENCES = _( "Occurences" );
-		static const wxString PROPERTY_TYPE_BOOL = wxT( "bool" );
-		static const wxString PROPERTY_TYPE_INT = wxT( "int" );
-		static const wxString PROPERTY_TYPE_FLOAT = wxT( "float" );
-		static const wxString PROPERTY_TYPE_DOUBLE = wxT( "double" );
-		static const wxString PROPERTY_TYPE_BVEC2 = wxT( "bvec2" );
-		static const wxString PROPERTY_TYPE_BVEC3 = wxT( "bvec3" );
-		static const wxString PROPERTY_TYPE_BVEC4 = wxT( "bvec4" );
-		static const wxString PROPERTY_TYPE_IVEC2 = wxT( "ivec2" );
-		static const wxString PROPERTY_TYPE_IVEC3 = wxT( "ivec3" );
-		static const wxString PROPERTY_TYPE_IVEC4 = wxT( "ivec4" );
-		static const wxString PROPERTY_TYPE_UIVEC2 = wxT( "uivec2" );
-		static const wxString PROPERTY_TYPE_UIVEC3 = wxT( "uivec3" );
-		static const wxString PROPERTY_TYPE_UIVEC4 = wxT( "uivec4" );
-		static const wxString PROPERTY_TYPE_VEC2  = wxT( "vec2" );
-		static const wxString PROPERTY_TYPE_VEC3  = wxT( "vec3" );
-		static const wxString PROPERTY_TYPE_VEC4  = wxT( "vec4" );
-		static const wxString PROPERTY_TYPE_DVEC2 = wxT( "dvec2" );
-		static const wxString PROPERTY_TYPE_DVEC3 = wxT( "dvec3" );
-		static const wxString PROPERTY_TYPE_DVEC4 = wxT( "dvec4" );
-		static const wxString PROPERTY_TYPE_BMAT2 = wxT( "bmat2x2" );
-		static const wxString PROPERTY_TYPE_BMAT3 = wxT( "bmat3x3" );
-		static const wxString PROPERTY_TYPE_BMAT4 = wxT( "bmat4x4" );
-		static const wxString PROPERTY_TYPE_IMAT2 = wxT( "imat2x2" );
-		static const wxString PROPERTY_TYPE_IMAT3 = wxT( "imat3x3" );
-		static const wxString PROPERTY_TYPE_IMAT4 = wxT( "imat4x4" );
-		static const wxString PROPERTY_TYPE_UIMAT2 = wxT( "uimat2x2" );
-		static const wxString PROPERTY_TYPE_UIMAT3 = wxT( "uimat3x3" );
-		static const wxString PROPERTY_TYPE_UIMAT4 = wxT( "uimat4x4" );
-		static const wxString PROPERTY_TYPE_MAT2  = wxT( "mat2x2" );
-		static const wxString PROPERTY_TYPE_MAT3  = wxT( "mat3x3" );
-		static const wxString PROPERTY_TYPE_MAT4  = wxT( "mat4x4" );
-		static const wxString PROPERTY_TYPE_DMAT2 = wxT( "dmat2x2" );
-		static const wxString PROPERTY_TYPE_DMAT3 = wxT( "dmat3x3" );
-		static const wxString PROPERTY_TYPE_DMAT4 = wxT( "dmat4x4" );
-		static const wxString PROPERTY_TYPE_SAMPLER = wxT( "sampler" );
+		static wxString PROPERTY_CATEGORY_VARIABLE = _( "Frame Variable: " );
+		static wxString PROPERTY_NAME = _( "Name" );
+		static wxString PROPERTY_VALUE = _( "Value" );
+		static wxString PROPERTY_TYPE = _( "Type" );
+		static wxString PROPERTY_OCCURENCES = _( "Occurences" );
+		static wxString PROPERTY_TYPE_BOOL = wxT( "bool" );
+		static wxString PROPERTY_TYPE_INT = wxT( "int" );
+		static wxString PROPERTY_TYPE_FLOAT = wxT( "float" );
+		static wxString PROPERTY_TYPE_DOUBLE = wxT( "double" );
+		static wxString PROPERTY_TYPE_BVEC2 = wxT( "bvec2" );
+		static wxString PROPERTY_TYPE_BVEC3 = wxT( "bvec3" );
+		static wxString PROPERTY_TYPE_BVEC4 = wxT( "bvec4" );
+		static wxString PROPERTY_TYPE_IVEC2 = wxT( "ivec2" );
+		static wxString PROPERTY_TYPE_IVEC3 = wxT( "ivec3" );
+		static wxString PROPERTY_TYPE_IVEC4 = wxT( "ivec4" );
+		static wxString PROPERTY_TYPE_UIVEC2 = wxT( "uivec2" );
+		static wxString PROPERTY_TYPE_UIVEC3 = wxT( "uivec3" );
+		static wxString PROPERTY_TYPE_UIVEC4 = wxT( "uivec4" );
+		static wxString PROPERTY_TYPE_VEC2  = wxT( "vec2" );
+		static wxString PROPERTY_TYPE_VEC3  = wxT( "vec3" );
+		static wxString PROPERTY_TYPE_VEC4  = wxT( "vec4" );
+		static wxString PROPERTY_TYPE_DVEC2 = wxT( "dvec2" );
+		static wxString PROPERTY_TYPE_DVEC3 = wxT( "dvec3" );
+		static wxString PROPERTY_TYPE_DVEC4 = wxT( "dvec4" );
+		static wxString PROPERTY_TYPE_BMAT2 = wxT( "bmat2x2" );
+		static wxString PROPERTY_TYPE_BMAT3 = wxT( "bmat3x3" );
+		static wxString PROPERTY_TYPE_BMAT4 = wxT( "bmat4x4" );
+		static wxString PROPERTY_TYPE_IMAT2 = wxT( "imat2x2" );
+		static wxString PROPERTY_TYPE_IMAT3 = wxT( "imat3x3" );
+		static wxString PROPERTY_TYPE_IMAT4 = wxT( "imat4x4" );
+		static wxString PROPERTY_TYPE_UIMAT2 = wxT( "uimat2x2" );
+		static wxString PROPERTY_TYPE_UIMAT3 = wxT( "uimat3x3" );
+		static wxString PROPERTY_TYPE_UIMAT4 = wxT( "uimat4x4" );
+		static wxString PROPERTY_TYPE_MAT2  = wxT( "mat2x2" );
+		static wxString PROPERTY_TYPE_MAT3  = wxT( "mat3x3" );
+		static wxString PROPERTY_TYPE_MAT4  = wxT( "mat4x4" );
+		static wxString PROPERTY_TYPE_DMAT2 = wxT( "dmat2x2" );
+		static wxString PROPERTY_TYPE_DMAT3 = wxT( "dmat3x3" );
+		static wxString PROPERTY_TYPE_DMAT4 = wxT( "dmat4x4" );
+		static wxString PROPERTY_TYPE_SAMPLER = wxT( "sampler" );
 
 		wxPGProperty * DoBuildValueProperty( wxString const & p_name, FrameVariableSPtr p_variable )
 		{
@@ -251,6 +251,46 @@ namespace GuiCommon
 		, m_type( eSHADER_TYPE_COUNT )
 		, m_buffer( p_buffer )
 	{
+		PROPERTY_CATEGORY_VARIABLE = _( "Frame Variable: " );
+		PROPERTY_NAME = _( "Name" );
+		PROPERTY_VALUE = _( "Value" );
+		PROPERTY_TYPE = _( "Type" );
+		PROPERTY_OCCURENCES = _( "Occurences" );
+		PROPERTY_TYPE_BOOL = wxT( "bool" );
+		PROPERTY_TYPE_INT = wxT( "int" );
+		PROPERTY_TYPE_FLOAT = wxT( "float" );
+		PROPERTY_TYPE_DOUBLE = wxT( "double" );
+		PROPERTY_TYPE_BVEC2 = wxT( "bvec2" );
+		PROPERTY_TYPE_BVEC3 = wxT( "bvec3" );
+		PROPERTY_TYPE_BVEC4 = wxT( "bvec4" );
+		PROPERTY_TYPE_IVEC2 = wxT( "ivec2" );
+		PROPERTY_TYPE_IVEC3 = wxT( "ivec3" );
+		PROPERTY_TYPE_IVEC4 = wxT( "ivec4" );
+		PROPERTY_TYPE_UIVEC2 = wxT( "uivec2" );
+		PROPERTY_TYPE_UIVEC3 = wxT( "uivec3" );
+		PROPERTY_TYPE_UIVEC4 = wxT( "uivec4" );
+		PROPERTY_TYPE_VEC2  = wxT( "vec2" );
+		PROPERTY_TYPE_VEC3  = wxT( "vec3" );
+		PROPERTY_TYPE_VEC4  = wxT( "vec4" );
+		PROPERTY_TYPE_DVEC2 = wxT( "dvec2" );
+		PROPERTY_TYPE_DVEC3 = wxT( "dvec3" );
+		PROPERTY_TYPE_DVEC4 = wxT( "dvec4" );
+		PROPERTY_TYPE_BMAT2 = wxT( "bmat2x2" );
+		PROPERTY_TYPE_BMAT3 = wxT( "bmat3x3" );
+		PROPERTY_TYPE_BMAT4 = wxT( "bmat4x4" );
+		PROPERTY_TYPE_IMAT2 = wxT( "imat2x2" );
+		PROPERTY_TYPE_IMAT3 = wxT( "imat3x3" );
+		PROPERTY_TYPE_IMAT4 = wxT( "imat4x4" );
+		PROPERTY_TYPE_UIMAT2 = wxT( "uimat2x2" );
+		PROPERTY_TYPE_UIMAT3 = wxT( "uimat3x3" );
+		PROPERTY_TYPE_UIMAT4 = wxT( "uimat4x4" );
+		PROPERTY_TYPE_MAT2  = wxT( "mat2x2" );
+		PROPERTY_TYPE_MAT3  = wxT( "mat3x3" );
+		PROPERTY_TYPE_MAT4  = wxT( "mat4x4" );
+		PROPERTY_TYPE_DMAT2 = wxT( "dmat2x2" );
+		PROPERTY_TYPE_DMAT3 = wxT( "dmat3x3" );
+		PROPERTY_TYPE_DMAT4 = wxT( "dmat4x4" );
+		PROPERTY_TYPE_SAMPLER = wxT( "sampler" );
 	}
 
 	FrameVariableTreeItemProperty::FrameVariableTreeItemProperty( bool p_editable, Castor3D::FrameVariableSPtr p_variable, eSHADER_TYPE p_type )

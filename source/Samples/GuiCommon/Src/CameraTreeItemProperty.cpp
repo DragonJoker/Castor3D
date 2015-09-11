@@ -13,25 +13,38 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static const wxString PROPERTY_CATEGORY_CAMERA = _( "Camera: " );
-		static const wxString PROPERTY_CATEGORY_VIEWPORT = _( "Viewport" );
-		static const wxString PROPERTY_TOPOLOGY = _( "Topology" );
-		static const wxString PROPERTY_TOPOLOGY_POINTS = _( "Points" );
-		static const wxString PROPERTY_TOPOLOGY_LINES = _( "Lines" );
-		static const wxString PROPERTY_TOPOLOGY_LINE_LOOP = _( "Line Loop" );
-		static const wxString PROPERTY_TOPOLOGY_LINE_STRIP = _( "Line Strip" );
-		static const wxString PROPERTY_TOPOLOGY_TRIANGLES = _( "Triangles" );
-		static const wxString PROPERTY_TOPOLOGY_TRIANGLE_STRIP = _( "Triangle Strip" );
-		static const wxString PROPERTY_TOPOLOGY_TRIANGLE_FAN = _( "Triangle Fan" );
-		static const wxString PROPERTY_TOPOLOGY_QUADS = _( "Quads" );
-		static const wxString PROPERTY_TOPOLOGY_QUAD_STRIP = _( "Quad Strip" );
-		static const wxString PROPERTY_TOPOLOGY_POLYGON = _( "Polygon" );
+		static wxString PROPERTY_CATEGORY_CAMERA = _( "Camera: " );
+		static wxString PROPERTY_CATEGORY_VIEWPORT = _( "Viewport" );
+		static wxString PROPERTY_TOPOLOGY = _( "Topology" );
+		static wxString PROPERTY_TOPOLOGY_POINTS = _( "Points" );
+		static wxString PROPERTY_TOPOLOGY_LINES = _( "Lines" );
+		static wxString PROPERTY_TOPOLOGY_LINE_LOOP = _( "Line Loop" );
+		static wxString PROPERTY_TOPOLOGY_LINE_STRIP = _( "Line Strip" );
+		static wxString PROPERTY_TOPOLOGY_TRIANGLES = _( "Triangles" );
+		static wxString PROPERTY_TOPOLOGY_TRIANGLE_STRIP = _( "Triangle Strip" );
+		static wxString PROPERTY_TOPOLOGY_TRIANGLE_FAN = _( "Triangle Fan" );
+		static wxString PROPERTY_TOPOLOGY_QUADS = _( "Quads" );
+		static wxString PROPERTY_TOPOLOGY_QUAD_STRIP = _( "Quad Strip" );
+		static wxString PROPERTY_TOPOLOGY_POLYGON = _( "Polygon" );
 	}
 
 	CameraTreeItemProperty::CameraTreeItemProperty( bool p_editable, Castor3D::CameraSPtr p_camera )
 		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_CAMERA )
 		, m_camera( p_camera )
 	{
+		PROPERTY_CATEGORY_CAMERA = _( "Camera: " );
+		PROPERTY_CATEGORY_VIEWPORT = _( "Viewport" );
+		PROPERTY_TOPOLOGY = _( "Topology" );
+		PROPERTY_TOPOLOGY_POINTS = _( "Points" );
+		PROPERTY_TOPOLOGY_LINES = _( "Lines" );
+		PROPERTY_TOPOLOGY_LINE_LOOP = _( "Line Loop" );
+		PROPERTY_TOPOLOGY_LINE_STRIP = _( "Line Strip" );
+		PROPERTY_TOPOLOGY_TRIANGLES = _( "Triangles" );
+		PROPERTY_TOPOLOGY_TRIANGLE_STRIP = _( "Triangle Strip" );
+		PROPERTY_TOPOLOGY_TRIANGLE_FAN = _( "Triangle Fan" );
+		PROPERTY_TOPOLOGY_QUADS = _( "Quads" );
+		PROPERTY_TOPOLOGY_QUAD_STRIP = _( "Quad Strip" );
+		PROPERTY_TOPOLOGY_POLYGON = _( "Polygon" );
 	}
 
 	CameraTreeItemProperty::~CameraTreeItemProperty()
@@ -100,7 +113,7 @@ namespace GuiCommon
 				break;
 			}
 
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_CAMERA ) );
+			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_CAMERA + wxString( l_camera->GetName() ) ) );
 			p_grid->Append( new wxEnumProperty( PROPERTY_TOPOLOGY, PROPERTY_TOPOLOGY, l_choices ) )->SetValue( l_selected );
 		}
 	}

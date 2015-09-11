@@ -12,13 +12,14 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static const wxString PROPERTY_CATEGORY_RENDER_TARGET = _( "Render Target: " );
+		static wxString PROPERTY_CATEGORY_RENDER_TARGET = _( "Render Target: " );
 	}
 
 	RenderTargetTreeItemProperty::RenderTargetTreeItemProperty( bool p_editable, RenderTargetSPtr p_target )
 		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_RENDER_TARGET )
 		, m_target( p_target )
 	{
+		PROPERTY_CATEGORY_RENDER_TARGET = _( "Render Target: " );
 	}
 
 	RenderTargetTreeItemProperty::~RenderTargetTreeItemProperty()
@@ -31,6 +32,13 @@ namespace GuiCommon
 
 		if ( l_target )
 		{
+			wxString TARGETS[] =
+			{
+				_( "Window" ),
+				_( "Texture" )
+			};
+
+			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_RENDER_TARGET + TARGETS[l_target->GetTargetType()] ) );
 		}
 	}
 

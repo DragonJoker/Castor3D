@@ -14,21 +14,30 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static const wxString PROPERTY_CATEGORY_LIGHT = _( "Light: " );
-		static const wxString PROPERTY_CATEGORY_POINT_LIGHT = _( "Point Light" );
-		static const wxString PROPERTY_CATEGORY_SPOT_LIGHT = _( "Spot Light" );
-		static const wxString PROPERTY_LIGHT_AMBIENT = _( "Ambient" );
-		static const wxString PROPERTY_LIGHT_DIFFUSE = _( "Diffuse" );
-		static const wxString PROPERTY_LIGHT_SPECULAR = _( "Specular" );
-		static const wxString PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
-		static const wxString PROPERTY_LIGHT_CUT_OFF = _( "Cut off" );
-		static const wxString PROPERTY_LIGHT_EXPONENT = _( "Exponent" );
+		static wxString PROPERTY_CATEGORY_LIGHT = _( "Light: " );
+		static wxString PROPERTY_CATEGORY_POINT_LIGHT = _( "Point Light" );
+		static wxString PROPERTY_CATEGORY_SPOT_LIGHT = _( "Spot Light" );
+		static wxString PROPERTY_LIGHT_AMBIENT = _( "Ambient" );
+		static wxString PROPERTY_LIGHT_DIFFUSE = _( "Diffuse" );
+		static wxString PROPERTY_LIGHT_SPECULAR = _( "Specular" );
+		static wxString PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
+		static wxString PROPERTY_LIGHT_CUT_OFF = _( "Cut off" );
+		static wxString PROPERTY_LIGHT_EXPONENT = _( "Exponent" );
 	}
 
 	LightTreeItemProperty::LightTreeItemProperty( bool p_editable, LightSPtr p_light )
 		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_LIGHT )
 		, m_light( p_light )
 	{
+		PROPERTY_CATEGORY_LIGHT = _( "Light: " );
+		PROPERTY_CATEGORY_POINT_LIGHT = _( "Point Light" );
+		PROPERTY_CATEGORY_SPOT_LIGHT = _( "Spot Light" );
+		PROPERTY_LIGHT_AMBIENT = _( "Ambient" );
+		PROPERTY_LIGHT_DIFFUSE = _( "Diffuse" );
+		PROPERTY_LIGHT_SPECULAR = _( "Specular" );
+		PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
+		PROPERTY_LIGHT_CUT_OFF = _( "Cut off" );
+		PROPERTY_LIGHT_EXPONENT = _( "Exponent" );
 	}
 
 	LightTreeItemProperty::~LightTreeItemProperty()

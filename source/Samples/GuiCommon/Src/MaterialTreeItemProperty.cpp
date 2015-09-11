@@ -12,13 +12,14 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static const wxString PROPERTY_CATEGORY_MATERIAL = _( "Material: " );
+		static wxString PROPERTY_CATEGORY_MATERIAL = _( "Material: " );
 	}
 
 	MaterialTreeItemProperty::MaterialTreeItemProperty( bool p_editable, MaterialSPtr p_material )
 		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_MATERIAL )
 		, m_material( p_material )
 	{
+		PROPERTY_CATEGORY_MATERIAL = _( "Material: " );
 	}
 
 	MaterialTreeItemProperty::~MaterialTreeItemProperty()
@@ -31,6 +32,7 @@ namespace GuiCommon
 
 		if ( l_material )
 		{
+			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_MATERIAL + wxString( l_material->GetName() ) ) );
 		}
 	}
 
