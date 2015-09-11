@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Position.hpp>
 
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Position );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Position );
 
 namespace GuiCommon
 {

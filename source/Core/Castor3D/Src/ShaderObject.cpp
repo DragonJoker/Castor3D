@@ -368,13 +368,25 @@ namespace Castor3D
 		}
 	}
 
+	bool ShaderObjectBase::HasFile()const
+	{
+		bool l_bReturn = false;
+
+		for ( int i = 0; i < eSHADER_MODEL_COUNT && !l_bReturn; i++ )
+		{
+			l_bReturn = !m_arrayFiles[i].empty();
+		}
+
+		return l_bReturn;
+	}
+
 	void ShaderObjectBase::SetSource( eSHADER_MODEL p_eModel, String const & p_strSource )
 	{
 		m_eStatus = eSHADER_STATUS_NOTCOMPILED;
 		m_arraySources[p_eModel] = p_strSource;
 	}
 
-	bool ShaderObjectBase::HasSource()
+	bool ShaderObjectBase::HasSource()const
 	{
 		bool l_bReturn = false;
 

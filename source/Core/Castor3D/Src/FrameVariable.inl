@@ -29,7 +29,7 @@
 
 	template< typename T >
 	TFrameVariable< T >::TFrameVariable( ShaderProgramBase * p_pProgram )
-		:	FrameVariable( p_pProgram )
+		: FrameVariable( p_pProgram )
 		, m_pValues( NULL )
 		, m_bOwnBuffer( true )
 	{
@@ -38,7 +38,7 @@
 
 	template< typename T >
 	TFrameVariable< T >::TFrameVariable( ShaderProgramBase * p_pProgram, uint32_t p_uiOcc )
-		:	FrameVariable( p_pProgram, p_uiOcc )
+		: FrameVariable( p_pProgram, p_uiOcc )
 		, m_pValues( NULL )
 		, m_bOwnBuffer( true )
 	{
@@ -47,7 +47,7 @@
 
 	template< typename T >
 	TFrameVariable< T >::TFrameVariable( TFrameVariable< T > const & p_rVariable )
-		:	FrameVariable( p_rVariable )
+		: FrameVariable( p_rVariable )
 		, m_pValues( NULL )
 		, m_bOwnBuffer( p_rVariable.m_bOwnBuffer )
 	{
@@ -70,7 +70,7 @@
 
 	template< typename T >
 	TFrameVariable< T >::TFrameVariable( TFrameVariable< T > && p_rVariable )
-		:	FrameVariable( std::move( p_rVariable ) )
+		: FrameVariable( std::move( p_rVariable ) )
 		, m_pValues( std::move( p_rVariable.m_pValues ) )
 		, m_bOwnBuffer( std::move( p_rVariable.m_bOwnBuffer ) )
 	{
@@ -99,8 +99,8 @@
 		if ( this != &p_rVariable )
 		{
 			DoCleanupBuffer();
-			m_bOwnBuffer	= std::move( p_rVariable.m_bOwnBuffer );
-			m_pValues		= std::move( p_rVariable.m_pValues );
+			m_bOwnBuffer = std::move( p_rVariable.m_bOwnBuffer );
+			m_pValues = std::move( p_rVariable.m_pValues );
 
 			for ( uint32_t i = 0; i < m_uiOcc; i++ )
 			{

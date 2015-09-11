@@ -3,11 +3,11 @@
 #include "AuiDockArt.hpp"
 #include "AuiTabArt.hpp"
 #include "AuiToolBarArt.hpp"
-#include "FrameVariableDialog.hpp"
 #include "StcTextEditor.hpp"
 #include "Parameter.hpp"
 #include "FrameVariablesList.hpp"
 #include "PropertiesHolder.hpp"
+#include "ShaderEditorPage.hpp"
 
 #include <Engine.hpp>
 #include <RenderSystem.hpp>
@@ -49,15 +49,11 @@ namespace GuiCommon
 		, m_pEngine( p_pEngine )
 		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
 	{
-		eSHADER_MODEL l_maxShaderModel = DoInitialiseShaderLanguage();
-
-		if ( l_maxShaderModel != eSHADER_MODEL_COUNT )
-		{
-			DoInitialiseLayout();
-			DoLoadPages( l_maxShaderModel );
-			DoPopulateMenu();
-			this->Maximize();
-		}
+		DoInitialiseShaderLanguage();
+		DoInitialiseLayout();
+		DoLoadPages();
+		DoPopulateMenu();
+		this->Maximize();
 	}
 
 	ShaderDialog::~ShaderDialog()
@@ -66,55 +62,28 @@ namespace GuiCommon
 		m_pStcContext.reset();
 	}
 
-	eSHADER_MODEL ShaderDialog::DoInitialiseShaderLanguage()
+	void ShaderDialog::DoInitialiseShaderLanguage()
 	{
-		eSHADER_MODEL l_eMaxShaderModel = eSHADER_MODEL_COUNT;
-		RenderSystem * l_pRenderSystem = m_pEngine->GetRenderSystem();
+		m_pShaderProgram = m_pPass.lock()->GetShader< ShaderProgramBase >();
 
-		if ( l_pRenderSystem->CheckSupport( eSHADER_MODEL_5 ) )
+		if ( m_pShaderProgram.lock() )
 		{
-			l_eMaxShaderModel = eSHADER_MODEL_5;
+			m_bOwnShader = false;
 		}
-		else if ( l_pRenderSystem->CheckSupport( eSHADER_MODEL_4 ) )
+		else
 		{
-			l_eMaxShaderModel = eSHADER_MODEL_4;
-		}
-		else if ( l_pRenderSystem->CheckSupport( eSHADER_MODEL_3 ) )
-		{
-			l_eMaxShaderModel = eSHADER_MODEL_3;
-		}
-		else if ( l_pRenderSystem->CheckSupport( eSHADER_MODEL_2 ) )
-		{
-			l_eMaxShaderModel = eSHADER_MODEL_2;
-		}
-		else if ( l_pRenderSystem->CheckSupport( eSHADER_MODEL_1 ) )
-		{
-			l_eMaxShaderModel = eSHADER_MODEL_1;
-		}
+			PassSPtr l_pass = m_pPass.lock();
+			Engine * l_engine = l_pass->GetEngine();
+			auto && l_it = l_engine->RenderWindowsBegin();
 
-		if ( l_eMaxShaderModel != eSHADER_MODEL_COUNT )
-		{
-			m_pShaderProgram = m_pPass.lock()->GetShader< ShaderProgramBase >();
-
-			if ( m_pShaderProgram.lock() )
+			if ( l_it != l_engine->RenderWindowsEnd() && l_it->second->GetRenderTarget() )
 			{
-				m_bOwnShader = false;
-			}
-			else
-			{
-				PassSPtr l_pass = m_pPass.lock();
-				Engine * l_engine = l_pass->GetEngine();
-				auto && l_it = l_engine->RenderWindowsBegin();
+				RenderTechniqueBaseSPtr l_technique = l_it->second->GetRenderTarget()->GetTechnique();
 
-				if ( l_it != l_engine->RenderWindowsEnd() && l_it->second->GetRenderTarget() )
+				if ( l_technique )
 				{
-					RenderTechniqueBaseSPtr l_technique = l_it->second->GetRenderTarget()->GetTechnique();
-
-					if ( l_technique )
-					{
-						m_pShaderProgram = l_pRenderSystem->GetEngine()->GetShaderManager().GetAutomaticProgram( *l_technique, l_pass->GetTextureFlags(), 0 );
-						m_bOwnShader = true;
-					}
+					m_pShaderProgram = m_pEngine->GetShaderManager().GetAutomaticProgram( *l_technique, l_pass->GetTextureFlags(), 0 );
+					m_bOwnShader = true;
 				}
 			}
 		}
@@ -129,8 +98,6 @@ namespace GuiCommon
 				m_pStcContext->ParseFile( l_pathFile );
 			}
 		}
-
-		return l_eMaxShaderModel;
 	}
 
 	void ShaderDialog::DoInitialiseLayout()
@@ -144,9 +111,8 @@ namespace GuiCommon
 		m_auiManager.Update();
 	}
 
-	void ShaderDialog::DoLoadPages( eSHADER_MODEL p_maxModel )
+	void ShaderDialog::DoLoadPages()
 	{
-		const int l_iListWidth = 300;
 		ShaderProgramBaseSPtr l_program = m_pShaderProgram.lock();
 		wxArrayString l_arrayTexts;
 		l_arrayTexts.push_back( _( "Vertex" ) );
@@ -155,115 +121,18 @@ namespace GuiCommon
 		l_arrayTexts.push_back( _( "Geometry" ) );
 		l_arrayTexts.push_back( _( "Pixel" ) );
 		l_arrayTexts.push_back( _( "Compute" ) );
-		wxString l_strExtension;
-
-		switch ( l_program->GetLanguage() )
-		{
-		case Castor3D::eSHADER_LANGUAGE_GLSL:
-			l_strExtension = wxT( ".glsl" );
-			break;
-
-		case Castor3D::eSHADER_LANGUAGE_HLSL:
-			l_strExtension = wxT( ".hlsl" );
-			break;
-		}
 
 		for ( int i = 0; i < eSHADER_TYPE_COUNT; i++ )
 		{
 			wxArrayString l_arrayChoices;
 			l_arrayChoices.push_back( wxCOMBO_NEW );
 
-			if ( l_program->HasProgram( eSHADER_TYPE( i ) ) )
-			{
-				// Add shader specific frame variables to the list
-				int l_iCount = 0;
-
-				for ( auto l_it : l_program->GetFrameVariables( eSHADER_TYPE( i ) ) )
-				{
-					l_arrayChoices.push_back( l_it->GetName() );
-					m_mapFrameVariables[i].insert( std::make_pair( l_iCount++, l_it ) );
-				}
-
-				// Load the shader source file/text
-				int l_shaderModel = p_maxModel;
-
-				while ( m_strShaderSources[i].empty() && m_strShaderFiles[i].empty() && l_shaderModel >= eSHADER_MODEL_1 )
-				{
-					m_strShaderSources[i] = l_program->GetSource( eSHADER_TYPE( i ), eSHADER_MODEL( l_shaderModel ) );
-					m_strShaderFiles[i] = l_program->GetFile( eSHADER_TYPE( i ), eSHADER_MODEL( l_shaderModel ) );
-
-					if ( !m_strShaderSources[i].empty() || !m_strShaderFiles[i].empty() )
-					{
-						// Stop the loop as soon as we've got one of source or file
-						l_shaderModel = eSHADER_MODEL_1;
-					}
-
-					--l_shaderModel;
-				}
-			}
-
-			// The panel that holds the editor + the shader specific variables list
-			wxPanel * l_panel = new wxPanel( m_pNotebookEditors, wxID_ANY, wxPoint( 0, 0 ) );
-			m_pNotebookEditors->AddPage( l_panel, l_arrayTexts[i], true );
-			l_panel->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-			l_panel->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-			l_panel->SetSize( 0, 22, m_pNotebookEditors->GetClientSize().x, m_pNotebookEditors->GetClientSize().y - 22 );
-
-			// The editor
-			m_pStcEditors[i] = new StcTextEditor( *m_pStcContext, l_panel, wxID_ANY, wxPoint( l_iListWidth, 0 ), l_panel->GetClientSize() - wxSize( l_iListWidth, 0 ) );
-			m_pStcEditors[i]->Show();
-#if wxMAJOR_VERSION >= 3 || ( wxMAJOR_VERSION == 2 && wxMINOR_VERSION >= 9 )
-			m_pStcEditors[i]->AlwaysShowScrollbars( true, true );
-#endif
-			// Load the shader
-			if ( !m_strShaderFiles[i].empty() )
-			{
-				// file
-				m_pStcEditors[i]->LoadFile( m_strShaderFiles[i] );
-				m_pStcEditors[i]->SetReadOnly( !m_bCanEdit );
-			}
-			else if ( !m_strShaderSources[i].empty() )
-			{
-				// or source (read only, then)
-				m_pStcEditors[i]->SetText( m_strShaderSources[i] );
-				m_pStcEditors[i]->SetReadOnly( true );
-			}
-			// Initialise the editor
-			m_pStcEditors[i]->InitializePrefs( m_pStcEditors[i]->DeterminePrefs( l_strExtension ) );
-
-			// The frame variable properties holder
-			m_pPropsFrameVariables[i] = new PropertiesHolder( m_bCanEdit, l_panel, wxDefaultPosition, wxSize( l_iListWidth, 0 ) );
-			m_pPropsFrameVariables[i]->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-			m_pPropsFrameVariables[i]->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-			m_pPropsFrameVariables[i]->SetCaptionBackgroundColour( PANEL_BACKGROUND_COLOUR );
-			m_pPropsFrameVariables[i]->SetCaptionTextColour( PANEL_FOREGROUND_COLOUR );
-			m_pPropsFrameVariables[i]->SetSelectionBackgroundColour( ACTIVE_TAB_COLOUR );
-			m_pPropsFrameVariables[i]->SetSelectionTextColour( ACTIVE_TEXT_COLOUR );
-			m_pPropsFrameVariables[i]->SetCellBackgroundColour( INACTIVE_TAB_COLOUR );
-			m_pPropsFrameVariables[i]->SetCellTextColour( INACTIVE_TEXT_COLOUR );
-			m_pPropsFrameVariables[i]->SetLineColour( BORDER_COLOUR );
-			m_pPropsFrameVariables[i]->SetMarginColour( BORDER_COLOUR );
-
-			// The frame variables list
-			wxStaticText * l_pTmpStatic = new wxStaticText( l_panel, wxID_ANY, _( "Frame variables" ), wxPoint( 0, 0 ), wxSize( l_iListWidth, 25 ), wxALIGN_CENTRE );
-			m_pListFrameVariables[i] = new FrameVariablesList( m_pPropsFrameVariables[i], l_panel, wxPoint( 0, 25 ), wxSize( l_iListWidth, 0 ) );
-			m_pListFrameVariables[i]->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-			m_pListFrameVariables[i]->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-			m_pListFrameVariables[i]->LoadVariables( eSHADER_TYPE( i ), l_program );
-			m_pListFrameVariables[i]->Enable( m_bCanEdit );
-
-			// Set a sizer for this couple
-			wxBoxSizer * l_pSizerTabList = new wxBoxSizer( wxVERTICAL );
-			l_pSizerTabList->Add( l_pTmpStatic, wxSizerFlags( 0 ) );
-			l_pSizerTabList->Add( m_pListFrameVariables[i], wxSizerFlags( 1 ).Expand() );
-			l_pSizerTabList->Add( m_pPropsFrameVariables[i], wxSizerFlags( 1 ).Expand() );
-
-			// Put all that stuff in a sizer
-			wxBoxSizer * l_pSizerTab = new wxBoxSizer( wxHORIZONTAL );
-			l_pSizerTab->Add( l_pSizerTabList,	wxSizerFlags( 0 ).Expand() );
-			l_pSizerTab->Add( m_pStcEditors[i],	wxSizerFlags( 1 ).Expand() );
-			l_panel->SetSizer( l_pSizerTab );
-			l_pSizerTab->SetSizeHints( l_panel );
+			// The editor page
+			m_pEditorPages[i] = new ShaderEditorPage( m_bCanEdit, *m_pStcContext, l_program, eSHADER_TYPE( i ), m_pNotebookEditors );
+			m_pEditorPages[i]->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+			m_pEditorPages[i]->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+			m_pNotebookEditors->AddPage( m_pEditorPages[i], l_arrayTexts[i], true );
+			m_pEditorPages[i]->SetSize( 0, 22, m_pNotebookEditors->GetClientSize().x, m_pNotebookEditors->GetClientSize().y - 22 );
 		}
 	}
 
@@ -304,36 +173,41 @@ namespace GuiCommon
 
 	void ShaderDialog::DoLoadShader()
 	{
-		if ( m_strShaderFiles[eSHADER_TYPE_VERTEX].empty() )
+		bool l_continue = true;
+
+		if ( l_continue && m_pEditorPages[eSHADER_TYPE_VERTEX]->GetShaderFile().empty() )
 		{
 			wxMessageBox( _( "Fill the vertex shader file name" ), _( "ERROR" ) );
+			l_continue = false;
 		}
-		else
+
+		if ( l_continue && m_pEditorPages[eSHADER_TYPE_PIXEL]->GetShaderFile().empty() )
 		{
-			if ( m_strShaderFiles[eSHADER_TYPE_PIXEL].empty() )
-			{
-				wxMessageBox( _( "Fill the fragment file name" ), _( "ERROR" ) );
-			}
-			else
-			{
-				if ( m_pShaderProgram.expired() )
-				{
-					m_pShaderProgram = m_pEngine->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_GLSL );
-				}
+			wxMessageBox( _( "Fill the fragment file name" ), _( "ERROR" ) );
+			l_continue = false;
+		}
 
-				for ( int i = eSHADER_TYPE_VERTEX; i < eSHADER_TYPE_COUNT; i++ )
-				{
-					if ( !m_strShaderFiles[i].empty() )
-					{
-						m_pStcEditors[i]->SaveFile( m_strShaderFiles[i] );
-						m_pShaderProgram.lock()->CreateObject( eSHADER_TYPE( i ) );
-						m_pShaderProgram.lock()->SetFile( eSHADER_TYPE( i ), eSHADER_MODEL_3, ( wxChar const * )m_strShaderFiles[i].c_str() );
-					}
-				}
-
-				m_pPass.lock()->SetShader( m_pShaderProgram.lock() );
-				m_bCompiled = true;
+		if ( l_continue )
+		{
+			if ( m_pShaderProgram.expired() )
+			{
+				m_pShaderProgram = m_pEngine->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_GLSL );
 			}
+
+			for ( int i = eSHADER_TYPE_VERTEX; i < eSHADER_TYPE_COUNT; i++ )
+			{
+				wxString l_file = m_pEditorPages[i]->GetShaderFile();
+
+				if ( l_file.empty() )
+				{
+					m_pEditorPages[i]->SaveFile( false );
+					m_pShaderProgram.lock()->CreateObject( eSHADER_TYPE( i ) );
+					m_pShaderProgram.lock()->SetFile( eSHADER_TYPE( i ), m_pEditorPages[i]->GetShaderModel(), ( wxChar const * )l_file.c_str() );
+				}
+			}
+
+			m_pPass.lock()->SetShader( m_pShaderProgram.lock() );
+			m_bCompiled = true;
 		}
 	}
 
@@ -343,44 +217,14 @@ namespace GuiCommon
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{
-			m_strShaderFiles[p_eType] = l_dialog.GetPath();
-			m_pStcEditors[p_eType]->LoadFile( m_strShaderFiles[p_eType] );
+			m_pEditorPages[p_eType]->LoadFile( l_dialog.GetPath() );
 			m_bCompiled = false;
 		}
 	}
 
-	void ShaderDialog::DoSave( Castor3D::eSHADER_TYPE p_eType, bool p_bTell )
+	void ShaderDialog::DoSave( Castor3D::eSHADER_TYPE p_eType, bool p_createIfNone )
 	{
-		if ( m_strShaderFiles[p_eType].empty() && p_bTell )
-		{
-			wxString l_wildcard;
-
-			switch ( m_pShaderProgram.lock()->GetLanguage() )
-			{
-			case Castor3D::eSHADER_LANGUAGE_GLSL:
-				l_wildcard = _( "GLSL Files" );
-				l_wildcard += wxT( " (*.glsl;*.frag;*.vert;*.geom;*.ctrl;*.eval)|*.glsl;*.frag;*.vert;*.geom;*.ctrl;*.eval" );
-				break;
-
-			case Castor3D::eSHADER_LANGUAGE_HLSL:
-				l_wildcard = _( "HLSL Files" );
-				l_wildcard += wxT( " (*.hlsl)|*.hlsl" );
-				break;
-			}
-
-			wxFileDialog l_dialog( this, _( "Save Shader file " ), wxEmptyString, wxEmptyString, l_wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
-
-			if ( l_dialog.ShowModal() == wxID_OK )
-			{
-				m_strShaderFiles[p_eType] = l_dialog.GetPath();
-			}
-		}
-
-		if ( !m_strShaderFiles[p_eType].empty() )
-		{
-			m_pStcEditors[p_eType]->SaveFile( m_strShaderFiles[p_eType] );
-			m_pStcEditors[p_eType]->SetReadOnly( !m_bCanEdit );
-		}
+		m_pEditorPages[p_eType]->SaveFile( p_createIfNone );
 	}
 
 	BEGIN_EVENT_TABLE( ShaderDialog, wxFrame )

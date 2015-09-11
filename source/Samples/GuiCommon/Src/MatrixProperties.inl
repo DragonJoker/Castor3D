@@ -89,19 +89,20 @@ namespace GuiCommon
 	
 	template< typename T, size_t Count > struct MatrixPropertyHelper
 	{
-		static void AddChildren( MatrixProperty< T, Count > * p_prop, Castor::SquareMatrix< T, Count > const & p_value )
+		static void AddChildren( MatrixProperty< T, Count > * p_prop, wxString const * p_rowNames, wxString const * p_colNames, Castor::SquareMatrix< T, Count > const & p_value )
 		{
-			static wxString ChildName[4] =
-			{
-				wxT( "1" ),
-				wxT( "2" ),
-				wxT( "3" ),
-				wxT( "4" ),
-			};
-
 			for ( size_t i = 0; i < Count; ++i )
 			{
-				p_prop->AddPrivateChild( new PointProperty< T, Count >( wxString() << _( "Row " ) << ChildName[i], wxPG_LABEL, Castor::Point< T, Count >( p_value[i] ) ) );
+				wxString l_names[Count];
+
+				for ( size_t j = 0; j < Count; ++j )
+				{
+					l_names[j] << p_rowNames[i] << wxT( "." ) << p_colNames[j];
+				}
+
+				wxPGProperty * l_property = new PointProperty< T, Count >( l_names, wxString() << _( "Row " ) << p_rowNames[i], wxPG_LABEL, Castor::Point< T, Count >( p_value[i] ) );
+				l_property->Enable( false );
+				p_prop->AddPrivateChild( l_property );
 			}
 		}
 		static void RefreshChildren( MatrixProperty< T, Count > * p_prop )
@@ -126,12 +127,64 @@ namespace GuiCommon
 
 	//************************************************************************************************
 	
+	template< size_t Count > wxString const * GetMatrixRowDefaultNames();
+
+	template<>
+	inline wxString const * GetMatrixRowDefaultNames< 2 >()
+	{
+		return GC_POINT_12;
+	}
+
+	template<>
+	inline wxString const * GetMatrixRowDefaultNames< 3 >()
+	{
+		return GC_POINT_123;
+	}
+
+	template<>
+	inline wxString const * GetMatrixRowDefaultNames< 4 >()
+	{
+		return GC_POINT_1234;
+	}
+
+	//************************************************************************************************
+	
+	template< size_t Count > wxString const * GetMatrixColDefaultNames();
+
+	template<>
+	inline wxString const * GetMatrixColDefaultNames< 2 >()
+	{
+		return GC_POINT_12;
+	}
+
+	template<>
+	inline wxString const * GetMatrixColDefaultNames< 3 >()
+	{
+		return GC_POINT_123;
+	}
+
+	template<>
+	inline wxString const * GetMatrixColDefaultNames< 4 >()
+	{
+		return GC_POINT_1234;
+	}
+
+	//************************************************************************************************
+	
 	template< typename T, size_t Count >
 	MatrixProperty< T, Count >::MatrixProperty( wxString const & label, wxString const & name, Castor::SquareMatrix< T, Count > const & value )
 		: wxPGProperty( label, name )
 	{
 		SetValueI( value );
-		MatrixPropertyHelper< T, Count >::AddChildren( this, value );
+		MatrixPropertyHelper< T, Count >::AddChildren( this, GetMatrixRowDefaultNames< Count >(), GetMatrixColDefaultNames< Count >(), value );
+	}
+	
+	template< typename T, size_t Count >
+	MatrixProperty< T, Count >::MatrixProperty( wxString const ( & p_rowNames )[Count], wxString const ( & p_colNames )[Count], wxString const & label, wxString const & name, Castor::SquareMatrix< T, Count > const & value )
+		: wxPGProperty( label, name )
+	{
+		SetValueI( value );
+		MatrixPropertyHelper< T, Count >::AddChildren( this, p_rowNames, p_colNames, value );
 	}
 
 	template< typename T, size_t Count >

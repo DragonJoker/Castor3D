@@ -25,10 +25,10 @@ namespace OceanLighting
 {
 	struct PluginLoader
 	{
-		StringArray * m_pArrayFailed;
+		PathArray * m_pArrayFailed;
 		std::mutex * m_pMutex;
 
-		PluginLoader( StringArray * p_pArrayFailed = NULL, std::mutex * p_pMutex = NULL )
+		PluginLoader( PathArray * p_pArrayFailed = NULL, std::mutex * p_pMutex = NULL )
 			:	m_pArrayFailed( p_pArrayFailed	)
 			,	m_pMutex( p_pMutex	)
 		{
@@ -258,8 +258,8 @@ namespace OceanLighting
 		typedef std::shared_ptr< std::thread > thread_sptr;
 		DECLARE_VECTOR( thread_sptr, ThreadPtr );
 		bool l_bReturn = true;
-		StringArray l_arrayFiles;
-		StringArray l_arrayFailed;
+		PathArray l_arrayFiles;
+		PathArray l_arrayFailed;
 		std::mutex l_mutex;
 		ThreadPtrArray l_arrayThreads;
 		Logger::LogInfo( cuT( "Loading plugins" ) );
@@ -297,7 +297,7 @@ namespace OceanLighting
 
 		if ( l_arrayFailed.size() > 0 )
 		{
-			Logger::LogWarning( cuT( "Some plugins couldn't be loaded :" ) );
+			Logger::LogWarning( cuT( "Some plugins couldn't be loaded:" ) );
 			std::for_each( l_arrayFailed.begin(), l_arrayFailed.end(), [&]( Path const & p_pathFile )
 			{
 				Logger::LogWarning( p_pathFile.GetFileName() );

@@ -193,21 +193,35 @@ namespace GuiCommon
 
 	//************************************************************************************************
 	
+	template< size_t Count > wxString const * GetPointDefaultNames();
+
+	template<>
+	inline wxString const * GetPointDefaultNames< 2 >()
+	{
+		return GC_POINT_XY;
+	}
+
+	template<>
+	inline wxString const * GetPointDefaultNames< 3 >()
+	{
+		return GC_POINT_XYZ;
+	}
+
+	template<>
+	inline wxString const * GetPointDefaultNames< 4 >()
+	{
+		return GC_POINT_XYZW;
+	}
+
+	//************************************************************************************************
+	
 	template< typename T, size_t Count > struct PointPropertyHelper
 	{
-		static void AddChildren( PointProperty< T, Count > * p_prop, Castor::Point< T, Count > const & p_value )
+		static void AddChildren( PointProperty< T, Count > * p_prop, wxString const * p_names, Castor::Point< T, Count > const & p_value )
 		{
-			static wxString ChildName[4] =
-			{
-				wxT( "X" ),
-				wxT( "Y" ),
-				wxT( "Z" ),
-				wxT( "W" ),
-			};
-
 			for ( size_t i = 0; i < Count; ++i )
 			{
-				p_prop->AddPrivateChild( CreateProperty( ChildName[i], p_value[i] ) );
+				p_prop->AddPrivateChild( CreateProperty( p_names[i], p_value[i] ) );
 			}
 		}
 		static void RefreshChildren( PointProperty< T, Count > * p_prop )
@@ -256,7 +270,15 @@ namespace GuiCommon
 		: wxPGProperty( label, name )
 	{
 		SetValueI( value );
-		PointPropertyHelper< T, Count >::AddChildren( this, value );
+		PointPropertyHelper< T, Count >::AddChildren( this, GetPointDefaultNames< Count >(), value );
+	}
+	
+	template< typename T, size_t Count >
+	PointProperty< T, Count >::PointProperty( wxString const ( & p_names )[Count], wxString const & label, wxString const & name, Castor::Point< T, Count > const & value )
+		: wxPGProperty( label, name )
+	{
+		SetValueI( value );
+		PointPropertyHelper< T, Count >::AddChildren( this, p_names, value );
 	}
 
 	template< typename T, size_t Count >

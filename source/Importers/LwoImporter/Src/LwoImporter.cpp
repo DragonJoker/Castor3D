@@ -251,7 +251,7 @@ namespace Lwo
 			}
 			catch ( std::exception & exc )
 			{
-				Castor::Logger::LogDebug( cuT( "Exception caught when discarding chunk : " ), exc.what() );
+				Castor::Logger::LogDebug( std::stringstream() << "Exception caught when discarding chunk: " << exc.what() );
 			}
 			catch ( ... )
 			{
@@ -283,7 +283,7 @@ namespace Lwo
 			}
 			catch ( std::exception & exc )
 			{
-				Castor::Logger::LogDebug( cuT( "	Exception caught when discarding subchunk : %s" ), exc.what() );
+				Castor::Logger::LogDebug( std::stringstream() << "	Exception caught when discarding subchunk: " << exc.what() );
 			}
 			catch ( ... )
 			{
@@ -592,8 +592,7 @@ namespace Lwo
 			char l_szType[5];
 			SwitchEndianness( l_eType );
 			DoToStr( l_szType, l_eType );
-			StringStream l_strLog( cuT( "\tType : " ) );
-			Logger::LogDebug( l_strLog << l_szType );
+			Logger::LogDebug( std::stringstream() << "\tType: " << l_szType );
 
 			if ( l_eType == ePTAG_TYPE_SURF )
 			{
@@ -618,7 +617,7 @@ namespace Lwo
 
 						if ( l_usTag < m_arrayTags.size() )
 						{
-							StringStream l_strLog( cuT( "\tTAG Name : " ) );
+							StringStream l_strLog( cuT( "\tTAG Name: " ) );
 							Logger::LogDebug( l_strLog << m_arrayTags[l_usTag].c_str() );
 							m_arraySubmeshByMatName.push_back( std::make_pair( m_arrayTags[l_usTag], m_pSubmesh ) );
 						}
@@ -653,7 +652,7 @@ namespace Lwo
 		if ( l_bContinue )
 		{
 			p_pSubchunk->m_usRead += UI2( l_strOrdinal.size() + 1 + ( 1 - l_strOrdinal.size() % 2 ) );
-			Logger::LogDebug( cuT( "			Header ordinal : 0x%x" ) + l_strOrdinal[0] );
+			Logger::LogDebug( StringStream() << cuT( "			Header ordinal: 0x" ) << std::hex << int( l_strOrdinal[0] ) );
 		}
 
 		while ( l_bContinue && p_pSubchunk->m_usRead < p_pSubchunk->m_usSize )
@@ -669,7 +668,7 @@ namespace Lwo
 				case eID_TAG_BLOK_CHAN:
 					l_currentSubchunk.m_usRead += UI2( m_pFile->Read( p_eChannel ) );
 					SwitchEndianness( p_eChannel );
-					Logger::LogDebug( cuT( "				Channel : %d" ), p_eChannel );
+					Logger::LogDebug( StringStream() << cuT( "				Channel: " ) << p_eChannel );
 					break;
 				}
 
@@ -737,7 +736,7 @@ namespace Lwo
 				case eID_TAG_BLOK_CHAN:
 					l_currentSubchunk.m_usRead += UI2( m_pFile->Read( p_eChannel ) );
 					SwitchEndianness( p_eChannel );
-					Logger::LogDebug( cuT( "				Channel : %d" ), p_eChannel );
+					Logger::LogDebug( StringStream() << cuT( "				Channel: " ) << p_eChannel );
 					break;
 				}
 
@@ -764,12 +763,12 @@ namespace Lwo
 		{
 			if ( DoRead( cuT( "			" ), &l_currentSubchunk ) )
 			{
-				// 			switch( l_currentSubchunk.m_eId )
-				// 			{
-				// 			default:
+				//switch( l_currentSubchunk.m_eId )
+				//{
+				//default:
 				DoDiscard( &l_currentSubchunk );
-				// 				break;
-				// 			}
+				//	break;
+				//}
 				p_pSubchunk->m_usRead += l_currentSubchunk.m_usRead + sizeof( eID_TAG ) + sizeof( UI2 );
 			}
 			else
@@ -793,12 +792,12 @@ namespace Lwo
 		{
 			if ( DoRead( cuT( "			" ), &l_currentSubchunk ) )
 			{
-				// 			switch( l_currentSubchunk.m_eId )
-				// 			{
-				// 			default:
+				//switch( l_currentSubchunk.m_eId )
+				//{
+				//default:
 				DoDiscard( &l_currentSubchunk );
-				// 				break;
-				// 			}
+				//	break;
+				//}
 				p_pSubchunk->m_usRead += l_currentSubchunk.m_usRead + sizeof( eID_TAG ) + sizeof( UI2 );
 			}
 			else
@@ -918,7 +917,7 @@ namespace Lwo
 
 					if ( l_it != m_mapImages.end() )
 					{
-						StringStream l_strLog( cuT( "			Texture found : " ) );
+						StringStream l_strLog( cuT( "			Texture found: " ) );
 						Logger::LogDebug( l_strLog << l_it->second->GetPath().c_str() );
 						l_pTexture = p_pPass->AddTextureUnit();
 						StaticTextureSPtr l_pStaTexture = m_pEngine->GetRenderSystem()->CreateStaticTexture();
@@ -937,7 +936,7 @@ namespace Lwo
 				case eID_TAG_BLOK_CHAN:
 					l_currentSubchunk.m_usRead += UI2( m_pFile->Read( l_eChannel ) );
 					SwitchEndianness( l_eChannel );
-					Logger::LogDebug( cuT( "			Channel : %d" ), l_eChannel );
+					Logger::LogDebug( StringStream() << cuT( "			Channel: " ) << l_eChannel );
 					DoSetChannel( l_pTexture, l_eChannel );
 					break;
 
@@ -1052,34 +1051,34 @@ namespace Lwo
 					SwitchEndianness( l_clrBase.ptr()[2] );
 					l_clrBase.alpha() = 1.0f;
 					l_currentSubchunk.m_usRead += DoReadVX( l_uiVx );
-					Logger::LogDebug( cuT( "		Colour : %f, %f, %f - VX : 0x%x" ), l_clrBase.red().value(), l_clrBase.green().value(), l_clrBase.blue().value(), l_uiVx );
+					Logger::LogDebug( StringStream() << cuT( "		Colour: " ) << l_clrBase.red().value() << cuT( ", " ) << l_clrBase.green().value() << cuT( ", " ) << l_clrBase.blue().value() << cuT( " - VX : 0x" ) << std::hex << l_uiVx );
 					break;
 
 				case eID_TAG_SURF_DIFF:
 					l_currentSubchunk.m_usRead += UI2( m_pFile->Read( l_fDiff ) );
 					SwitchEndianness( l_fDiff );
 					l_currentSubchunk.m_usRead += DoReadVX( l_uiVx );
-					Logger::LogDebug( cuT( "		Diff. base level : %f - VX : 0x%x" ), l_fDiff, l_uiVx );
+					Logger::LogDebug( StringStream() << cuT( "		Diff. base level: " ) << l_fDiff << cuT( " - VX : 0x" ) << std::hex << l_uiVx );
 					break;
 
 				case eID_TAG_SURF_SPEC:
 					l_currentSubchunk.m_usRead += UI2( m_pFile->Read( l_fSpec ) );
 					SwitchEndianness( l_fSpec );
 					l_currentSubchunk.m_usRead += DoReadVX( l_uiVx );
-					Logger::LogDebug( cuT( "		Spec. base level : %f - VX : 0x%x" ), l_fSpec, l_uiVx );
+					Logger::LogDebug( StringStream() << cuT( "		Spec. base level: " ) << l_fSpec << cuT( " - VX : 0x" ) << std::hex << l_uiVx );
 					break;
 
 				case eID_TAG_SURF_GLOS:
 					l_currentSubchunk.m_usRead += UI2( m_pFile->Read( l_fGlos ) );
 					SwitchEndianness( l_fGlos );
 					l_currentSubchunk.m_usRead += DoReadVX( l_uiVx );
-					Logger::LogDebug( cuT( "		Glossiness : %f - VX : 0x%x" ), l_fGlos, l_uiVx );
+					Logger::LogDebug( StringStream() << cuT( "		Glossiness: " ) << l_fGlos << cuT( " - VX : 0x" ) << std::hex << l_uiVx );
 					break;
 
 				case eID_TAG_SURF_SIDE:
 					l_currentSubchunk.m_usRead += UI2( m_pFile->Read( l_usSide ) );
 					SwitchEndianness( l_usSide );
-					Logger::LogDebug( cuT( "		Sidedness : %f" ), l_usSide );
+					Logger::LogDebug( StringStream() << cuT( "		Sidedness: " ) << l_usSide );
 					break;
 
 				case eID_TAG_SURF_BLOK:
@@ -1132,7 +1131,7 @@ namespace Lwo
 		{
 			SwitchEndianness( l_uiIndex );
 			p_pChunk->m_uiRead += sizeof( UI4 );
-			Logger::LogDebug( cuT( "	Index : 0x%x" ), l_uiIndex );
+			Logger::LogDebug( StringStream() << cuT( "	Index: 0x" ) << std::hex << l_uiIndex );
 		}
 
 		while ( l_bContinue && p_pChunk->m_uiRead < p_pChunk->m_uiSize )
@@ -1213,7 +1212,7 @@ namespace Lwo
 		{
 			F4 l_fCoords[3];
 			UI4 l_uiCount = p_pChunk->m_uiSize / ( sizeof( F4 ) * 3 );
-			Logger::LogDebug( cuT( "\tCount : %d" ), l_uiCount );
+			Logger::LogDebug( StringStream() << cuT( "\tCount: " ) << l_uiCount );
 			m_arrayPoints.resize( l_uiCount );
 			m_arrayUvs.resize( l_uiCount );
 
@@ -1263,11 +1262,9 @@ namespace Lwo
 		{
 			char l_szType[5];
 			DoToStr( l_szType, l_eType );
-			StringStream l_strLog1( cuT( "\tType : " ) );
-			StringStream l_strLog2( cuT( "\tName : " ) );
-			Logger::LogDebug( l_strLog1 <<	l_szType );
-			Logger::LogDebug(	cuT( "\tDimensions : %d" ), l_usDimension );
-			Logger::LogDebug( l_strLog2 <<	l_strName.c_str() );
+			Logger::LogDebug( StringStream() << cuT( "\tType: " ) << l_szType );
+			Logger::LogDebug( StringStream() << cuT( "\tDimensions: " ) << l_usDimension );
+			Logger::LogDebug( StringStream() << cuT( "\tName: " ) << l_strName.c_str() );
 
 			if ( l_eType == eVMAP_TYPE_TXUV )
 			{
@@ -1294,11 +1291,11 @@ namespace Lwo
 						i++;
 					}
 
-					//				Logger::LogDebug( cuT( "\tVertex : %d - %f, %f"	), l_uiVx, l_fUv[0], l_fUv[1] );
+					//Logger::LogDebug( cuT( "\tVertex : %d - %f, %f"	), l_uiVx, l_fUv[0], l_fUv[1] );
 				}
 
 				m_bHasUv = true;
-				Logger::LogDebug( cuT( "\tUV count : %d"	),	i );
+				Logger::LogDebug( StringStream() << cuT( "\tUV count: " ) << i );
 			}
 			else
 			{
@@ -1359,7 +1356,7 @@ namespace Lwo
 					}
 				}
 
-				Logger::LogDebug( cuT( "\tFaces count : %d"	),	l_uiCount		);
+				Logger::LogDebug( StringStream() << cuT( "\tFaces count: " ) << l_uiCount );
 			}
 			else
 			{
@@ -1447,10 +1444,10 @@ namespace Lwo
 			SwitchEndianness( l_usParent	);
 			StringStream l_strLog( cuT( "\tName   : " ) );
 			Logger::LogDebug( l_strLog << l_strName.c_str() );
-			Logger::LogDebug( cuT( "\tNumber : %d" ), l_usNumber );
-			Logger::LogDebug( cuT( "\tFlags  : 0x%x" ), l_usFlags );
-			Logger::LogDebug( cuT( "\tPivot  : %f, %f, %f" ), l_ptPivot[0], l_ptPivot[1], l_ptPivot[2] );
-			Logger::LogDebug( cuT( "\tParent : %d" ), l_usParent );
+			Logger::LogDebug( StringStream() << cuT( "\tNumber: " ) << l_usNumber );
+			Logger::LogDebug( StringStream() << cuT( "\tFlags:  0x" ) << std::hex << l_usFlags );
+			Logger::LogDebug( StringStream() << cuT( "\tPivot:  " ) << l_ptPivot );
+			Logger::LogDebug( StringStream() << cuT( "\tParent: " ) << l_usParent );
 			String l_strNameTmp = str_utils::from_str( l_strName );
 			str_utils::to_lower_case( l_strNameTmp );
 

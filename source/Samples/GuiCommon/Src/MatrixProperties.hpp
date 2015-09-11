@@ -22,12 +22,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <SquareMatrix.hpp>
 
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix2x2f );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix3x3f );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix4x4f );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix2x2d );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix3x3d );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix4x4d );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix2x2f );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix3x3f );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix4x4f );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix2x2d );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix3x3d );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Matrix4x4d );
 
 namespace GuiCommon
 {
@@ -39,6 +39,7 @@ namespace GuiCommon
 
 	public:
 		MatrixProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::SquareMatrix< T, Count > const & value = Castor::SquareMatrix< T, Count >() );
+		MatrixProperty( wxString const ( & p_rowNames )[Count], wxString const ( & p_colNames )[Count], wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::SquareMatrix< T, Count > const & value = Castor::SquareMatrix< T, Count >() );
 		virtual ~MatrixProperty();
 
 		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;

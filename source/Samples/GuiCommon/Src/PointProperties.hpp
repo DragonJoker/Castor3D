@@ -22,24 +22,35 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Point.hpp>
 
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2b );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3b );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4b );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2i );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3i );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4i );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2ui );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3ui );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4ui );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2f );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3f );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4f );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2d );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3d );
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4d );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2b );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3b );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4b );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2i );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3i );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4i );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2ui );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3ui );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4ui );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2f );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3f );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4f );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point2d );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point3d );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Point4d );
 
 namespace GuiCommon
 {
+	static const wxString GC_POINT_XY[2] = { wxT( "X" ), wxT( "Y" ) };
+	static const wxString GC_POINT_XYZ[3] = { wxT( "X" ), wxT( "Y" ), wxT( "Z" ) };
+	static const wxString GC_POINT_XYZW[4] = { wxT( "X" ), wxT( "Y" ), wxT( "Z" ), wxT( "W" ) };
+	
+	static const wxString GC_POINT_12[2] = { wxT( "1" ), wxT( "2" ) };
+	static const wxString GC_POINT_123[3] = { wxT( "1" ), wxT( "2" ), wxT( "3" ) };
+	static const wxString GC_POINT_1234[4] = { wxT( "1" ), wxT( "2" ), wxT( "3" ), wxT( "4" ) };
+	
+	static const wxString GC_POINT_SIZE[2] = { _( "Width" ), _( "Height" ) };
+	static const wxString GC_POINT_POSITION[2] = { _( "Left" ), _( "Top" ) };
+	static const wxString GC_POINT_RECTANGLE[4] = { _( "Left" ), _( "TOP" ), _( "Right" ), _( "Bottom" ) };
 
 	template< typename T, size_t Count >
 	class PointProperty
@@ -49,6 +60,7 @@ namespace GuiCommon
 
 	public:
 		PointProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point< T, Count > const & value = Castor::Point< T, Count >() );
+		PointProperty( wxString const ( & p_names )[Count], wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point< T, Count > const & value = Castor::Point< T, Count >() );
 		virtual ~PointProperty();
 
 		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;

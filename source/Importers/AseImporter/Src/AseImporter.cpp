@@ -25,14 +25,16 @@ namespace Ase
 		m_pFileParser->ParseFile( m_fileName, l_pScene );
 		MeshSPtr l_pMesh;
 
-		for ( GeometryPtrStrMap::iterator l_it = m_geometries.begin() ; l_it != m_geometries.end() ; ++l_it )
+		for ( auto && l_it : m_geometries )
 		{
-			l_pMesh = l_it->second->GetMesh();
+			l_pMesh = l_it.second->GetMesh();
 			l_pMesh->ComputeContainers();
-			std::for_each( l_pMesh->Begin(), l_pMesh->End(), [&]( SubmeshSPtr p_pSubmesh )
+
+			for ( auto && l_submesh : *l_pMesh )
 			{
-				p_pSubmesh->GenerateBuffers();
-			} );
+				l_submesh->GenerateBuffers();
+			}
+
 			l_pMesh->ComputeNormals();
 		}
 

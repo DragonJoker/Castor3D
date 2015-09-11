@@ -113,6 +113,8 @@ namespace GuiCommon
 
 	private:
 		void OnTypeChange( Castor3D::eFRAME_VARIABLE_TYPE p_value );
+		void OnNameChange( Castor::String const & p_value );
+		void OnValueChange( wxVariant const & p_value );
 
 	private:
 		Castor3D::FrameVariableWPtr m_variable;

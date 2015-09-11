@@ -132,6 +132,7 @@ namespace GuiCommon
 	class MaterialsList;
 	class RendererSelector;
 	class ShaderDialog;
+	class ShaderEditorPage;
 	class SplashScreen;
 	class StcTextEditor;
 

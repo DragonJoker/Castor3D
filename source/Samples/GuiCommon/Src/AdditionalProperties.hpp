@@ -20,10 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <wx/propgrid/propgrid.h>
 
-#define WX_PG_NS_DECLARE_VARIANT_DATA( namspace, classname )\
-	WX_PG_NS_DECLARE_VARIANT_DATA_EXPORTED( namspace, classname, wxEMPTY_PARAMETER_VALUE )
-
-#define WX_PG_NS_DECLARE_VARIANT_DATA_EXPORTED( namspace, classname, expdecl )\
+#define GC_PG_NS_DECLARE_VARIANT_DATA_EXPORTED( namspace, classname, expdecl )\
 	namspace::classname & operator<<( namspace::classname & object, const wxVariant & variant );\
 	wxVariant & operator<<( wxVariant & variant, const namspace::classname & object );\
 	const namspace::classname & classname##RefFromVariant( const wxVariant & variant );\
@@ -35,6 +32,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 		return variant;\
 	}\
 	extern const char* classname##_VariantType;
+
+#define GC_PG_NS_DECLARE_VARIANT_DATA( namspace, classname )\
+	GC_PG_NS_DECLARE_VARIANT_DATA_EXPORTED( namspace, classname, wxEMPTY_PARAMETER_VALUE )
 
 // Implements sans constructor function. Also, first arg is class name, not
 // property name.

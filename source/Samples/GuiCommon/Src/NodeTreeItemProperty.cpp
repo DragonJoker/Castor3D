@@ -40,8 +40,8 @@ namespace GuiCommon
 		if ( l_node )
 		{
 			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_NODE + wxString( l_node->GetName() ) ) );
-			p_grid->Append( new Point3rProperty( PROPERTY_NODE_POSITION ) )->SetValue( wxVariant( l_node->GetPosition() ) );
-			p_grid->Append( new Point3rProperty( PROPERTY_NODE_SCALE ) )->SetValue( wxVariant( l_node->GetScale() ) );
+			p_grid->Append( new Point3rProperty( GC_POINT_XYZ, PROPERTY_NODE_POSITION ) )->SetValue( wxVariant( l_node->GetPosition() ) );
+			p_grid->Append( new Point3rProperty( GC_POINT_XYZ, PROPERTY_NODE_SCALE ) )->SetValue( wxVariant( l_node->GetScale() ) );
 			p_grid->Append( new QuaternionProperty( PROPERTY_NODE_ORIENTATION ) )->SetValue( wxVariant( l_node->GetOrientation() ) );
 		}
 	}

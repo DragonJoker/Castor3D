@@ -33,15 +33,15 @@ namespace GuiCommon
 		~ShaderDialog();
 
 	private:
-		Castor3D::eSHADER_MODEL DoInitialiseShaderLanguage();
+		void DoInitialiseShaderLanguage();
 		void DoInitialiseLayout();
-		void DoLoadPages( Castor3D::eSHADER_MODEL p_maxModel );
+		void DoLoadPages();
 		void DoPopulateMenu();
 		void DoCleanup();
 		void DoLoadShader();
 		void DoOpenShaderFile();
 		void DoFolder( Castor3D::eSHADER_TYPE p_eType );
-		void DoSave( Castor3D::eSHADER_TYPE p_eType, bool p_bTell );
+		void DoSave( Castor3D::eSHADER_TYPE p_eType, bool p_createIfNone );
 
 		DECLARE_EVENT_TABLE()
 		void OnOpenFile( wxCommandEvent & p_event );
@@ -57,17 +57,11 @@ namespace GuiCommon
 		wxAuiManager m_auiManager;
 		wxAuiNotebook * m_pNotebookEditors;
 		std::unique_ptr< StcContext > m_pStcContext;
-		StcTextEditor * m_pStcEditors[Castor3D::eSHADER_TYPE_COUNT];
-		FrameVariablesList * m_pListFrameVariables[Castor3D::eSHADER_TYPE_COUNT];
-		PropertiesHolder * m_pPropsFrameVariables[Castor3D::eSHADER_TYPE_COUNT];
-		wxString m_strShaderFiles[Castor3D::eSHADER_TYPE_COUNT];
-		wxString m_strShaderSources[Castor3D::eSHADER_TYPE_COUNT];
+		ShaderEditorPage * m_pEditorPages[Castor3D::eSHADER_TYPE_COUNT];
 		Castor3D::ShaderProgramBaseWPtr m_pShaderProgram;
-		Castor3D::ShaderObjectBaseWPtr m_pShaderObject;
 		Castor3D::PassWPtr m_pPass;
 		bool m_bCompiled;
 		bool m_bOwnShader;
-		FrameVariableMap m_mapFrameVariables[Castor3D::eSHADER_TYPE_COUNT];
 		bool m_bCanEdit;
 		Castor3D::Engine * m_pEngine;
 	};

@@ -529,7 +529,7 @@ void SMaxImporter::DoReadVertexIndices( SMaxChunk * p_pChunk, SubmeshSPtr p_pSub
 		uint16_t l_usNumOfFaces = 0;
 		p_pChunk->m_ulBytesRead += uint32_t( m_pFile->Read( l_usNumOfFaces ) );
 		l_arrayFaces.resize( l_usNumOfFaces );
-		Logger::LogDebug( cuT( "VertexIndices : %d" ), l_usNumOfFaces );
+		Logger::LogDebug( StringStream() << cuT( "VertexIndices: " ) << l_usNumOfFaces );
 
 		for ( uint16_t i = 0 ; i < l_usNumOfFaces && m_pFile->IsOk() && p_pChunk->m_ulBytesRead < p_pChunk->m_ulLength ; i++ )
 		{
@@ -619,17 +619,17 @@ void SMaxImporter::DoReadVertexIndices( SMaxChunk * p_pChunk, SubmeshSPtr p_pSub
 					if ( l_currentChunk.m_eChunkId == eSMAX_CHUNK_SMOOTH_GROUP )
 					{
 						l_currentChunk.m_ulBytesRead += uint32_t( m_pFile->ReadArray( &l_arrayGroups[0], l_uiNbFaces ) );
-						/*
-												for( std::size_t i = 0 ; i < l_uiNbFaces && p_pChunk->m_ulBytesRead < p_pChunk->m_ulLength ; ++i )
-												{
-													l_itGroups = l_mapGroupsById.find( l_arrayGroups[i] );
 
-													if( l_itGroups == l_mapGroupsById.end() )
-													{
-														l_mapGroupsById.insert( std::make_pair( l_arrayGroups[i], p_pSubmesh->AddSmoothingGroup() ) );
-													}
-												}
-						*/
+						//for( std::size_t i = 0 ; i < l_uiNbFaces && p_pChunk->m_ulBytesRead < p_pChunk->m_ulLength ; ++i )
+						//{
+						//	l_itGroups = l_mapGroupsById.find( l_arrayGroups[i] );
+
+						//	if( l_itGroups == l_mapGroupsById.end() )
+						//	{
+						//		l_mapGroupsById.insert( std::make_pair( l_arrayGroups[i], p_pSubmesh->AddSmoothingGroup() ) );
+						//	}
+						//}
+
 						p_pChunk->m_ulBytesRead += l_currentChunk.m_ulBytesRead;
 
 						if ( p_pChunk->m_ulBytesRead + 6 < p_pChunk->m_ulLength )
@@ -704,7 +704,7 @@ void SMaxImporter::DoReadVertexIndices( SMaxChunk * p_pChunk, SubmeshSPtr p_pSub
 	}
 	catch ( std::exception & exc )
 	{
-		Logger::LogWarning( cuT( "Exception caught when loading vertex indices : %s" ), exc.what() );
+		Logger::LogWarning( std::stringstream() << "Exception caught when loading vertex indices: " << exc.what() );
 		p_pChunk->m_ulBytesRead = p_pChunk->m_ulLength;
 	}
 	catch ( ... )
@@ -723,8 +723,13 @@ void SMaxImporter::DoReadUVCoordinates( SMaxChunk * p_pChunk, SubmeshSPtr p_pSub
 		p_pChunk->m_ulBytesRead += uint32_t( m_pFile->Read( l_usNumTexVertex ) );
 		l_uiNumTexVertex = l_usNumTexVertex;
 		m_arrayTexVerts.resize( l_uiNumTexVertex * 2 );
-		Logger::LogDebug( cuT( "TexCoords : %d" ), l_usNumTexVertex );
+		Logger::LogDebug( StringStream() << cuT( "TexCoords: " ) << l_usNumTexVertex );
 		p_pChunk->m_ulBytesRead += uint32_t( m_pFile->ReadArray( &m_arrayTexVerts[0], l_uiNumTexVertex * 2 ) );
+	}
+	catch ( std::exception & exc )
+	{
+		Logger::LogWarning( std::stringstream() << "Exception caught when loading uv indices: " << exc.what() );
+		p_pChunk->m_ulBytesRead = p_pChunk->m_ulLength;
 	}
 	catch ( ... )
 	{
@@ -750,13 +755,18 @@ void SMaxImporter::DoReadVertices( SMaxChunk * p_pChunk, SubmeshSPtr p_pSubmesh 
 			p_pChunk->m_ulBytesRead += uint32_t( m_pFile->ReadArray( l_pTmp, m_uiNbVertex * 3 ) );
 		}
 
-		Logger::LogDebug( cuT( "Vertices : %d" ), l_usNumOfVerts );
+		Logger::LogDebug( StringStream() << cuT( "Vertices: " ) << l_usNumOfVerts );
 
 		for ( uint16_t i = 0 ; i < l_usNumOfVerts ; i++ )
 		{
 			p_pSubmesh->AddPoint( l_pTmp[0], l_pTmp[2], -l_pTmp[1] );
 			l_pTmp += 3;
 		}
+	}
+	catch ( std::exception & exc )
+	{
+		Logger::LogWarning( std::stringstream() << "Exception caught when loading vertices: " << exc.what() );
+		p_pChunk->m_ulBytesRead = p_pChunk->m_ulLength;
 	}
 	catch ( ... )
 	{
@@ -803,7 +813,7 @@ void SMaxImporter::DoDiscardChunk( SMaxChunk * p_pChunk )
 		}
 		catch ( std::exception & exc )
 		{
-			Logger::LogWarning( cuT( "Exception caught when discarding chunk : " ), exc.what() );
+			Logger::LogWarning( StringStream() << "Exception caught when discarding chunk: " << exc.what() );
 		}
 		catch ( ... )
 		{

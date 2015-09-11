@@ -993,13 +993,14 @@ namespace CastorViewer
 	void MainFrame::OnLoadScene( wxCommandEvent & p_event )
 	{
 		wxString l_wildcard = _( "Castor3D scene files" );
-		l_wildcard += wxT( " (*.cscn;*.cbsn;*.zip)|*.cscn;*.cbsn;*.zip|" );
-		l_wildcard += _( "Castor3D text scene file" );
-		l_wildcard += CSCN_WILDCARD;
-		l_wildcard += _( "Castor3D binary scene file" );
-		l_wildcard += CBSN_WILDCARD;
-		l_wildcard += _( "Zip archive" );
-		l_wildcard += ZIP_WILDCARD;
+		l_wildcard << wxT( " (*.cscn;*.cbsn;*.zip)|*.cscn;*.cbsn;*.zip|" );
+		l_wildcard << _( "Castor3D text scene file" );
+		l_wildcard << CSCN_WILDCARD;
+		l_wildcard << _( "Castor3D binary scene file" );
+		l_wildcard << CBSN_WILDCARD;
+		l_wildcard << _( "Zip archive" );
+		l_wildcard << ZIP_WILDCARD;
+		l_wildcard << wxT( "|" );
 		wxFileDialog l_fileDialog( this, _( "Open a scene" ), wxEmptyString, wxEmptyString, l_wildcard );
 
 		if ( l_fileDialog.ShowModal() == wxID_OK )

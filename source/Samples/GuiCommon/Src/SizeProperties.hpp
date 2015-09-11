@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Size.hpp>
 
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Size );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Size );
 
 namespace GuiCommon
 {

@@ -275,40 +275,38 @@ DynamicTextureSPtr GlRenderSystem::CreateDynamicTexture()
 
 void GlRenderSystem::DoInitialise()
 {
-	if ( m_bInitialised )
+	if ( !m_bInitialised )
 	{
-		return;
+		Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
+		Logger::LogInfo( cuT( "Initialising OpenGL" ) );
+		InitOpenGlExtensions();
+		m_useMultiTexturing = m_gl.HasMultiTexturing();
+
+		if ( m_useMultiTexturing )
+		{
+			Logger::LogInfo( cuT( "Using Multitexturing" ) );
+		}
+
+		m_useVertexBufferObjects = m_gl.HasVbo();
+
+		if ( m_useVertexBufferObjects )
+		{
+			Logger::LogInfo( cuT( "Using Vertex Buffer Objects" ) );
+		}
+
+		m_bInitialised = true;
+		m_forceShaders = m_iOpenGlMajor >= 3;
+		CheckShaderSupport();
+		m_pPipeline->Initialise();
+		Logger::LogInfo( cuT( "OpenGL Initialisation Ended" ) );
+		Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
 	}
-
-	Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
-	Logger::LogInfo( cuT( "Initialising OpenGL" ) );
-	InitOpenGlExtensions();
-	m_useMultiTexturing = false;
-
-	if ( m_gl.HasMultiTexturing() )
-	{
-		Logger::LogInfo( cuT( "Using Multitexturing" ) );
-		m_useMultiTexturing = true;
-	}
-
-	m_useVertexBufferObjects = false;
-
-	if ( m_gl.HasVbo() )
-	{
-		Logger::LogInfo( cuT( "Using Vertex Buffer Objects" ) );
-		m_useVertexBufferObjects = true;
-	}
-
-	m_bInitialised = true;
-	m_forceShaders = m_iOpenGlMajor >= 3;
-	CheckShaderSupport();
-	m_pPipeline->Initialise();
-	Logger::LogInfo( cuT( "OpenGL Initialisation Ended" ) );
-	Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
 }
 
 void GlRenderSystem::DoCleanup()
 {
+	m_extensionsInit = false;
+	m_bInitialised = false;
 	m_gl.Cleanup();
 }
 

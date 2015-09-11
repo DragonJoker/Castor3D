@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Quaternion.hpp>
 
-WX_PG_NS_DECLARE_VARIANT_DATA( Castor, Quaternion );
+GC_PG_NS_DECLARE_VARIANT_DATA( Castor, Quaternion );
 
 namespace GuiCommon
 {

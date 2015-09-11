@@ -38,7 +38,6 @@ namespace GuiCommon
 	FrameVariablesList::FrameVariablesList( PropertiesHolder * p_propertiesHolder, wxWindow * p_pParent, wxPoint const & p_ptPos, wxSize const & p_size )
 		: wxTreeCtrl( p_pParent, wxID_ANY, p_ptPos, p_size, wxTR_DEFAULT_STYLE | wxTR_HIDE_ROOT | wxNO_BORDER )
 		, m_propertiesHolder( p_propertiesHolder )
-		, m_type( eSHADER_TYPE_COUNT )
 	{
 		wxBusyCursor l_wait;
 		ImagesLoader::AddBitmap( eBMP_FRAME_VARIABLE, frame_variable_xpm );
@@ -79,20 +78,19 @@ namespace GuiCommon
 
 	void FrameVariablesList::LoadVariables( eSHADER_TYPE p_type, ShaderProgramBaseSPtr p_program )
 	{
-		m_type = p_type;
 		m_program = p_program;
 		wxTreeItemId l_root = AddRoot( _( "Root" ) );
 
-		if ( p_program->HasProgram( m_type ) )
+		if ( p_program->GetObjectStatus( p_type ) != eSHADER_STATUS_DONTEXIST )
 		{
-			for ( auto && l_buffer : p_program->GetFrameVariableBuffers( m_type ) )
+			for ( auto && l_buffer : p_program->GetFrameVariableBuffers( p_type ) )
 			{
 				DoAddBuffer( l_root, l_buffer );
 			}
 
-			for ( auto && l_variable : p_program->GetFrameVariables( m_type ) )
+			for ( auto && l_variable : p_program->GetFrameVariables( p_type ) )
 			{
-				DoAddVariable( l_root, l_variable, m_type );
+				DoAddVariable( l_root, l_variable, p_type );
 			}
 		}
 	}
@@ -115,12 +113,26 @@ namespace GuiCommon
 
 	void FrameVariablesList::DoAddVariable( wxTreeItemId p_id, FrameVariableSPtr p_variable, FrameVariableBufferSPtr p_buffer )
 	{
-		AppendItem( p_id, p_variable->GetName(), eID_FRAME_VARIABLE, eID_FRAME_VARIABLE_SEL, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable(), p_variable, p_buffer ) );
+		wxString l_displayName = p_variable->GetName();
+
+		if ( p_variable->GetOccCount() > 1 )
+		{
+			l_displayName << wxT( "[" ) << p_variable->GetOccCount() << wxT( "]" );
+		}
+
+		AppendItem( p_id, l_displayName, eID_FRAME_VARIABLE, eID_FRAME_VARIABLE_SEL, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable(), p_variable, p_buffer ) );
 	}
 
 	void FrameVariablesList::DoAddVariable( wxTreeItemId p_id, Castor3D::FrameVariableSPtr p_variable, Castor3D::eSHADER_TYPE p_type )
 	{
-		AppendItem( p_id, p_variable->GetName(), eID_FRAME_VARIABLE, eID_FRAME_VARIABLE_SEL, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable(), p_variable, p_type ) );
+		wxString l_displayName = p_variable->GetName();
+
+		if ( p_variable->GetOccCount() > 1 )
+		{
+			l_displayName << wxT( "[" ) << p_variable->GetOccCount() << wxT( "]" );
+		}
+
+		AppendItem( p_id, l_displayName, eID_FRAME_VARIABLE, eID_FRAME_VARIABLE_SEL, new FrameVariableTreeItemProperty( m_propertiesHolder->IsEditable(), p_variable, p_type ) );
 	}
 
 	BEGIN_EVENT_TABLE( FrameVariablesList, wxTreeCtrl )

@@ -117,7 +117,6 @@
 #		endif
 #	endif
 
-#	include <FrameVariableDialog.hpp>
 #	include <SceneObjectsList.hpp>
 #	include <ImagesLoader.hpp>
 #	include <PropertiesHolder.hpp>

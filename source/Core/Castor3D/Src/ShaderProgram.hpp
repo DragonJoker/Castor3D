@@ -385,6 +385,17 @@ namespace Castor3D
 		Castor::Path GetFile( eSHADER_TYPE p_eTarget, eSHADER_MODEL p_eModel )const;
 		/**
 		 *\~english
+		 *\brief		Tells if the shader object has a source file, whatever model it is
+		 *\param[in]	p_eTarget	The shader object concerned
+		 *\return		\p true if the shader object has a source file
+		 *\~french
+		 *\brief		Dit si le shader a un fichier source, quel que soit son modèle
+		 *\param[in]	p_eTarget	Le shader object concerné
+		 *\return		\p true si le shader a un fichier source
+		 */
+		bool HasFile( eSHADER_TYPE p_eTarget )const;
+		/**
+		 *\~english
 		 *\brief		Sets the shader source for given model
 		 *\remarks		The loaded source will be the one of the highest supported profile
 		 *\param[in]	p_eTarget	The shader object concerned
@@ -454,7 +465,16 @@ namespace Castor3D
 		 *\param[in]	p_eTarget	Le type du shader object
 		 *\return		\p true si le shader object existe
 		 */
-		bool HasProgram( eSHADER_TYPE p_eTarget )const;
+		bool HasObject( eSHADER_TYPE p_eTarget )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the given object type status
+		 *\return		The status
+		 *\~french
+		 *\brief		Récupère le statut du type d'objet donné
+		 *\return		Le statut
+		 */
+		eSHADER_STATUS GetObjectStatus( eSHADER_TYPE p_eTarget )const;
 		/**
 		 *\~english
 		 *\brief		Creates a variable

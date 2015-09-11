@@ -79,7 +79,7 @@ namespace Obj
 		}
 		catch ( std::exception & exc )
 		{
-			Logger::LogWarning( "Encountered exception while importing mesh : %s", exc.what() );
+			Logger::LogWarning( std::stringstream() << "Encountered exception while importing mesh: " << exc.what() );
 		}
 
 		return l_pReturn;
@@ -96,10 +96,10 @@ namespace Obj
 		m_mapOffsets[p_pPass]		= l_offset;
 		m_mapScales[p_pPass]		= l_scale;
 		m_mapTurbulences[p_pPass]	= l_turbulence;
-		Logger::LogDebug( cuT( "-	Texture :    " ) + l_strValue );
-		Logger::LogDebug( cuT( "-	Offset :     %f %f %f" ), l_offset[0], l_offset[1], l_offset[2] );
-		Logger::LogDebug( cuT( "-	Scale :      %f %f %f" ), l_scale[0], l_scale[1], l_scale[2] );
-		Logger::LogDebug( cuT( "-	Turbulence : %f %f %f" ), l_turbulence[0], l_turbulence[1], l_turbulence[2] );
+		Logger::LogDebug( StringStream() << cuT( "-	Texture :    " ) + l_strValue );
+		Logger::LogDebug( StringStream() << cuT( "-	Offset :     " ) << l_offset );
+		Logger::LogDebug( StringStream() << cuT( "-	Scale :      " ) << l_scale );
+		Logger::LogDebug( StringStream() << cuT( "-	Turbulence : " ) << l_turbulence );
 
 		if ( !l_strValue.empty() )
 		{

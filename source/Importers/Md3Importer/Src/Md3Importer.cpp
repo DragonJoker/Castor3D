@@ -99,10 +99,12 @@ MeshSPtr Md3Importer::DoImportMesh()
 		l_pass->SetEmissive( Castor::Colour::from_components( 0.5f, 0.5f, 0.5f, 1.0f ) );
 		l_pass->SetShininess( 64.0f );
 		DoReadMD3Data( l_pMesh, l_pass );
-		std::for_each( l_pMesh->Begin(), l_pMesh->End(), [&]( SubmeshSPtr p_pSubmesh )
+
+		for ( auto && l_submesh : *l_pMesh )
 		{
-			p_pSubmesh->SetDefaultMaterial( l_material );
-		} );
+			l_submesh->SetDefaultMaterial( l_material );
+		}
+
 		l_pMesh->ComputeNormals();
 		m_pEngine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_material ) );
 		DoCleanUp();
@@ -118,13 +120,13 @@ void Md3Importer::DoReadMD3Data( MeshSPtr p_pMesh, PassSPtr p_pPass )
 	uint64_t l_uiRead;
 	TextureUnitSPtr l_pTexture;
 	ImageSPtr l_pImage;
-	Logger::LogInfo( cuT( "MD3 File : size %d" ), m_pFile->GetLength() );
+	Logger::LogInfo( StringStream() << cuT( "MD3 File: size " ) << m_pFile->GetLength() );
 
 	if ( m_header.m_numFrames > 0 )
 	{
 		m_bones = new Md3Bone[m_header.m_numFrames];
 		l_uiRead = m_pFile->ReadArray( m_bones, m_header.m_numFrames );
-		Logger::LogInfo( cuT( "* Bones : %d/%d (%d bytes)" ), ( l_uiRead / sizeof( Md3Bone ) ), m_header.m_numFrames, l_uiRead );
+		Logger::LogInfo( StringStream() << cuT( "* Bones: " ) << ( l_uiRead / sizeof( Md3Bone ) ) << cuT( "/" ) << m_header.m_numFrames << cuT( " (" ) << l_uiRead << cuT( " bytes)" ) );
 		delete [] m_bones;
 	}
 
@@ -132,7 +134,7 @@ void Md3Importer::DoReadMD3Data( MeshSPtr p_pMesh, PassSPtr p_pPass )
 	{
 		m_tags = new Md3Tag[m_header.m_numFrames * m_header.m_numTags];
 		l_uiRead = m_pFile->ReadArray( m_tags, m_header.m_numFrames * m_header.m_numTags );
-		Logger::LogInfo( cuT( "* Tags : %d/%d (%d bytes)" ), ( l_uiRead / sizeof( Md3Tag ) ), m_header.m_numTags, l_uiRead );
+		Logger::LogInfo( StringStream() << cuT( "* Tags: " ) << ( l_uiRead / sizeof( Md3Tag ) ) << cuT( "/" ) << m_header.m_numTags << cuT( " (" ) << l_uiRead << cuT( " bytes)" ) );
 		m_numOfTags = m_header.m_numTags;
 	}
 
@@ -150,12 +152,12 @@ void Md3Importer::DoReadMD3Data( MeshSPtr p_pMesh, PassSPtr p_pPass )
 
 	for ( i = 0; i < m_header.m_numMeshes; i++ )
 	{
-		Logger::LogInfo( cuT( "* Submesh : %d/%d (from %d)" ), ( i + 1 ), m_header.m_numMeshes, l_meshOffset );
+		Logger::LogInfo( StringStream() << cuT( "* Submesh: " ) << ( i + 1 ) << cuT( "/" ) << m_header.m_numMeshes << cuT( " (from " ) << l_meshOffset << cuT( ")" ) );
 		m_pFile->Seek( l_meshOffset );
 		m_pFile->Read( l_meshHeader );
 		m_skins = new Md3Skin[l_meshHeader.m_numSkins];
 		l_uiRead = m_pFile->ReadArray( m_skins, l_meshHeader.m_numSkins );
-		Logger::LogInfo( cuT( "* * Skins : %d/%d (%d bytes)" ), ( l_uiRead / sizeof( Md3Skin ) ), l_meshHeader.m_numSkins, l_uiRead );
+		Logger::LogInfo( StringStream() << cuT( "* * Skins: " ) << ( l_uiRead / sizeof( Md3Skin ) ) << cuT( "/" ) << l_meshHeader.m_numSkins << cuT( " (" ) << l_uiRead << cuT( " bytes)" ) );
 
 		for ( int i = 0 ; i < l_meshHeader.m_numSkins && !l_pTexture ; i++ )
 		{
@@ -200,15 +202,15 @@ void Md3Importer::DoReadMD3Data( MeshSPtr p_pMesh, PassSPtr p_pPass )
 		m_triangles = new Md3Face[l_meshHeader.m_numTriangles];
 		m_pFile->Seek( l_meshOffset + l_meshHeader.m_triStart );
 		l_uiRead = m_pFile->ReadArray( m_triangles, l_meshHeader.m_numTriangles );
-		Logger::LogInfo( cuT( "* * Triangles : %d/%d (%d bytes, from %d)" ), ( l_uiRead / sizeof( Md3Face ) ), l_meshHeader.m_numTriangles, l_uiRead, l_meshHeader.m_triStart );
+		Logger::LogInfo( StringStream() << cuT( "* * Triangles: " ) << ( l_uiRead / sizeof( Md3Face ) ) << cuT( "/" ) << l_meshHeader.m_numTriangles << cuT( " (" ) << l_uiRead << cuT( " bytes, from " ) << l_meshHeader.m_triStart << cuT( ")" ) );
 		m_texCoords = new Md3TexCoord[l_meshHeader.m_numVertices];
 		m_pFile->Seek( l_meshOffset + l_meshHeader.m_uvStart );
 		l_uiRead = m_pFile->ReadArray( m_texCoords, l_meshHeader.m_numVertices );
-		Logger::LogInfo( cuT( "* * TexCoords : %d/%d (%d bytes, from %d)" ), ( l_uiRead / sizeof( Md3TexCoord ) ), l_meshHeader.m_numVertices, l_uiRead, l_meshHeader.m_uvStart );
+		Logger::LogInfo( StringStream() << cuT( "* * TexCoords: " ) << ( l_uiRead / sizeof( Md3TexCoord ) ) << cuT( "/" ) << l_meshHeader.m_numVertices << cuT( " (" ) << l_uiRead << cuT( " bytes, from " ) << l_meshHeader.m_uvStart << cuT( ")" ) );
 		m_vertices  = new Md3Triangle[l_meshHeader.m_numVertices];
 		m_pFile->Seek( l_meshOffset + l_meshHeader.m_vertexStart );
 		l_uiRead = m_pFile->ReadArray( m_vertices, l_meshHeader.m_numVertices );
-		Logger::LogInfo( cuT( "* * Vertices : %d/%d (%d bytes, from %d)" ), ( l_uiRead / sizeof( Md3Triangle ) ), l_meshHeader.m_numVertices, l_uiRead, l_meshHeader.m_vertexStart );
+		Logger::LogInfo( StringStream() << cuT( "* * Vertices: " ) << ( l_uiRead / sizeof( Md3Triangle ) ) << cuT( "/" ) << l_meshHeader.m_numVertices << cuT( " (" ) << l_uiRead << cuT( " bytes, from " ) << l_meshHeader.m_vertexStart << cuT( ")" ) );
 		DoConvertDataStructures( p_pMesh, l_meshHeader );
 		delete [] m_skins;
 		delete [] m_texCoords;

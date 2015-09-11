@@ -44,7 +44,6 @@ namespace GuiCommon
 		void OnSelectItem( wxTreeEvent & p_event );
 
 	private:
-		Castor3D::eSHADER_TYPE m_type;
 		Castor3D::ShaderProgramBaseWPtr m_program;
 		PropertiesHolder * m_propertiesHolder;
 	};
