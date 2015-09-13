@@ -18,7 +18,7 @@ C3D_Dx11_API ePLUGIN_TYPE GetType()
 
 C3D_Dx11_API eRENDERER_TYPE GetRendererType()
 {
-	return eRENDERER_TYPE_DIRECT3D11;
+	return eRENDERER_TYPE_DIRECT3D;
 }
 
 C3D_Dx11_API String GetName()

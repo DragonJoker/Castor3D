@@ -547,18 +547,23 @@ namespace Castor3D
 		m_pContext->Bind( p_eTargetBuffer, eFRAMEBUFFER_TARGET_DRAW );
 		m_wpDepthStencilState.lock()->Apply();
 		m_wpRasteriserState.lock()->Apply();
-#if !DX_DEBUG
+		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
+
+		if ( l_renderSystem->GetRendererType() != eRENDERER_TYPE_DIRECT3D )
+		{
 #if !defined( NDEBUG )
-		Colour l_save = GetEngine()->GetRenderSystem()->GetCurrentContext()->GetClearColour();
-		GetEngine()->GetRenderSystem()->GetCurrentContext()->SetClearColour( Colour::from_predef( Colour::ePREDEFINED_FULLALPHA_RED ) );
+			Colour l_save = m_pContext->GetClearColour();
+			m_pContext->SetClearColour( Colour::from_predef( Colour::ePREDEFINED_FULLALPHA_RED ) );
 #endif
-		m_pContext->BToBRender( GetRenderTarget()->GetSize(), p_pTexture, eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL );
+			m_pContext->BToBRender( GetRenderTarget()->GetSize(), p_pTexture, eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL );
 #if !defined( NDEBUG )
-		GetEngine()->GetRenderSystem()->GetCurrentContext()->SetClearColour( l_save );
+			m_pContext->SetClearColour( l_save );
 #endif
-#else
-		GetRenderTarget()->Render( 0.0 );
-#endif
+		}
+		else
+		{
+			GetRenderTarget()->Render( 0.0 );
+		}
 	}
 
 	void RenderWindow::DoUpdateSize()

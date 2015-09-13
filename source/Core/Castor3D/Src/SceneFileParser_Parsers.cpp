@@ -2165,7 +2165,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassHlShader )
 	{
 		eRENDERER_TYPE l_eRendererType = l_pContext->m_pParser->GetEngine()->GetRenderSystem()->GetRendererType();
 
-		if ( l_eRendererType == eRENDERER_TYPE_DIRECT3D9 || l_eRendererType == eRENDERER_TYPE_DIRECT3D10 || l_eRendererType == eRENDERER_TYPE_DIRECT3D11 )
+		if ( l_eRendererType == eRENDERER_TYPE_DIRECT3D )
 		{
 			l_pContext->pShaderProgram = l_pContext->m_pParser->GetEngine()->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_HLSL );
 		}
@@ -2524,7 +2524,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderProgramEntry )
 	String l_strName;
 	eRENDERER_TYPE l_eRendererType = l_pContext->eRendererType;
 
-	if ( l_eRendererType == eRENDERER_TYPE_DIRECT3D9 || l_eRendererType == eRENDERER_TYPE_DIRECT3D10 || l_eRendererType == eRENDERER_TYPE_DIRECT3D11 )
+	if ( l_eRendererType == eRENDERER_TYPE_DIRECT3D )
 	{
 		p_arrayParams[0]->Get( l_strName );
 

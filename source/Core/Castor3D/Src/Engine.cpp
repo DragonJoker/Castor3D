@@ -1277,7 +1277,6 @@ namespace Castor3D
 	{
 		PreciseTimer l_timer;
 		m_pRenderSystem->GetMainContext()->SetCurrent();
-#if DX_DEBUG
 
 		// Reverse iterator because we want to render textures before windows
 		for ( auto l_rit = m_mapRenderTargets.rbegin(); l_rit != m_mapRenderTargets.rend(); ++l_rit )
@@ -1288,7 +1287,6 @@ namespace Castor3D
 			l_rit->second->Render( m_dFrameTime );
 		}
 
-#endif
 		p_gpuTime += l_timer.TimeMs();
 
 		for ( auto && l_listener : m_arrayListeners )

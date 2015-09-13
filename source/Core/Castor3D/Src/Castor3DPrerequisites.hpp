@@ -29,8 +29,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	pragma warning( disable:4996 )
 #endif
 
-#define DX_DEBUG 1
-
 #undef RGB
 
 #if defined( __linux__ )
@@ -1649,12 +1647,10 @@ namespace Castor3D
 	typedef enum eRENDERER_TYPE
 	CASTOR_TYPE( int8_t )
 	{
-		eRENDERER_TYPE_UNDEFINED	= -1,
-		   eRENDERER_TYPE_OPENGL		= 0,	//!< OpenGl Renderer
-				eRENDERER_TYPE_DIRECT3D9	= 1,	//!< Direct3D9 Renderer
-				   eRENDERER_TYPE_DIRECT3D10	= 2,	//!< Direct3D10 Renderer
-					 eRENDERER_TYPE_DIRECT3D11	= 3,	//!< Direct3D11 Renderer
-					   eRENDERER_TYPE_COUNT		= 4,
+		eRENDERER_TYPE_UNDEFINED = -1,
+		eRENDERER_TYPE_OPENGL = 0,		//!< OpenGl Renderer
+		eRENDERER_TYPE_DIRECT3D = 1,	//!< Direct3D11 Renderer
+		 eRENDERER_TYPE_COUNT = 2,
 	}	eRENDERER_TYPE;
 	/*!
 	\author		Sylvain DOREMUS
@@ -1668,9 +1664,9 @@ namespace Castor3D
 	typedef enum eBUFFER_COMPONENT
 	CASTOR_TYPE( uint8_t )
 	{
-		eBUFFER_COMPONENT_COLOUR	= 1,
-		   eBUFFER_COMPONENT_DEPTH		= 2,
-			  eBUFFER_COMPONENT_STENCIL	= 4,
+		eBUFFER_COMPONENT_COLOUR = 1,
+		eBUFFER_COMPONENT_DEPTH = 2,
+		eBUFFER_COMPONENT_STENCIL = 4,
 	}	eBUFFER_COMPONENT;
 	/*!
 	\author		Sylvain DOREMUS

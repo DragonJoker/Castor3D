@@ -159,11 +159,14 @@ namespace Castor3D
 
 	bool RenderTechniqueBase::BeginRender()
 	{
-#if !DX_DEBUG
-		return DoBeginRender();
-#else
-		return true;//m_pRenderTarget->GetFrameBuffer()->Bind();
-#endif
+		if ( m_pRenderSystem->GetRendererType() != eRENDERER_TYPE_DIRECT3D )
+		{
+			return DoBeginRender();
+		}
+		else
+		{
+			return true;//m_pRenderTarget->GetFrameBuffer()->Bind();
+		}
 	}
 
 	bool RenderTechniqueBase::Render( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime )
@@ -174,22 +177,25 @@ namespace Castor3D
 
 	void RenderTechniqueBase::EndRender()
 	{
-#if !DX_DEBUG
-		DoEndRender();
-		m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
-		m_wp2DBlendState.lock()->Apply();
-		m_wp2DDepthStencilState.lock()->Apply();
-		m_pEngine->RenderOverlays( *m_pRenderSystem->GetTopScene(), m_size );
-		m_pFrameBuffer->Unbind();
-		m_pRenderSystem->PopScene();
-		m_pFrameBuffer->RenderToBuffer( m_pRenderTarget->GetFrameBuffer(), m_pRenderTarget->GetSize(), eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH, m_pRenderTarget->GetDepthStencilState(), m_pRenderTarget->GetRasteriserState() );
-#else
-		//m_pRenderTarget->GetFrameBuffer()->Unbind();
-		m_wp2DBlendState.lock()->Apply();
-		m_wp2DDepthStencilState.lock()->Apply();
-		m_pEngine->RenderOverlays( *m_pRenderSystem->GetTopScene(), m_size );
-		m_pRenderSystem->PopScene();
-#endif
+		if ( m_pRenderSystem->GetRendererType() != eRENDERER_TYPE_DIRECT3D )
+		{
+			DoEndRender();
+			m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
+			m_wp2DBlendState.lock()->Apply();
+			m_wp2DDepthStencilState.lock()->Apply();
+			m_pEngine->RenderOverlays( *m_pRenderSystem->GetTopScene(), m_size );
+			m_pFrameBuffer->Unbind();
+			m_pRenderSystem->PopScene();
+			m_pFrameBuffer->RenderToBuffer( m_pRenderTarget->GetFrameBuffer(), m_pRenderTarget->GetSize(), eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH, m_pRenderTarget->GetDepthStencilState(), m_pRenderTarget->GetRasteriserState() );
+		}
+		else
+		{
+			//m_pRenderTarget->GetFrameBuffer()->Unbind();
+			m_wp2DBlendState.lock()->Apply();
+			m_wp2DDepthStencilState.lock()->Apply();
+			m_pEngine->RenderOverlays( *m_pRenderSystem->GetTopScene(), m_size );
+			m_pRenderSystem->PopScene();
+		}
 	}
 
 	String RenderTechniqueBase::GetVertexShaderSource( uint32_t p_uiProgramFlags )const

@@ -316,7 +316,7 @@ namespace Ssaa
 #endif
 
 #if C3D_HAS_D3D11_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D11 )
+		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
 		{
 			return DoGetD3D11VertexShaderSource( p_uiProgramFlags );
 		}
@@ -340,7 +340,7 @@ namespace Ssaa
 #endif
 
 #if C3D_HAS_D3D11_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D11 )
+		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
 		{
 			return DoGetD3D11PixelShaderSource( p_uiFlags );
 		}

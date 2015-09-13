@@ -66,9 +66,7 @@ namespace CastorViewer
 		l_parser.AddOption(	wxT( "l" ), wxT( "log" ), _( "Defines log level" ), wxCMD_LINE_VAL_NUMBER );
 		l_parser.AddOption(	wxT( "f" ), wxT( "file" ), _( "Defines initial scene file" ), wxCMD_LINE_VAL_STRING );
 		l_parser.AddSwitch(	wxT( "opengl" ), wxEmptyString, _( "Defines the renderer to OpenGl" ) );
-		l_parser.AddSwitch(	wxT( "directx9" ), wxEmptyString, _( "Defines the renderer to Direct3D9" ) );
-		l_parser.AddSwitch(	wxT( "directx10" ), wxEmptyString, _( "Defines the renderer to Direct3D10" ) );
-		l_parser.AddSwitch(	wxT( "directx11" ), wxEmptyString, _( "Defines the renderer to Direct3D11" ) );
+		l_parser.AddSwitch(	wxT( "directx" ), wxEmptyString, _( "Defines the renderer to Direct3D (11)" ) );
 		bool l_bReturn = l_parser.Parse( false ) == 0;
 
 		// S'il y avait des erreurs ou "-h" ou "--help", on affiche l'aide et on sort
@@ -82,9 +80,8 @@ namespace CastorViewer
 		{
 			try
 			{
-				ELogType l_eLogLevel;
-				eRENDERER_TYPE l_eRenderer;
-				wxString l_strRenderer;
+				ELogType l_eLogLevel = ELogType_INFO;
+				eRENDERER_TYPE l_eRenderer = eRENDERER_TYPE_UNDEFINED;
 
 				if ( !l_parser.Found( wxT( 'l' ), reinterpret_cast< long * >( &l_eLogLevel ) ) )
 				{
@@ -99,21 +96,9 @@ namespace CastorViewer
 				{
 					l_eRenderer = eRENDERER_TYPE_OPENGL;
 				}
-				else if ( l_parser.Found( wxT( "directx11" ) ) )
+				else if ( l_parser.Found( wxT( "directx" ) ) )
 				{
-					l_eRenderer = eRENDERER_TYPE_DIRECT3D11;
-				}
-				else if ( l_parser.Found( wxT( "directx10" ) ) )
-				{
-					l_eRenderer = eRENDERER_TYPE_DIRECT3D10;
-				}
-				else if ( l_parser.Found( wxT( "directx9" ) ) )
-				{
-					l_eRenderer = eRENDERER_TYPE_DIRECT3D9;
-				}
-				else
-				{
-					l_eRenderer	 = eRENDERER_TYPE_UNDEFINED;
+					l_eRenderer = eRENDERER_TYPE_DIRECT3D;
 				}
 
 				if ( !File::DirectoryExists( Castor3D::Engine::GetEngineDirectory() ) )

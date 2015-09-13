@@ -29,7 +29,7 @@ using namespace Castor;
 using namespace Dx11Render;
 
 DxRenderSystem::DxRenderSystem( Engine * p_pEngine )
-	: RenderSystem( p_pEngine, eRENDERER_TYPE_DIRECT3D11 )
+	: RenderSystem( p_pEngine, eRENDERER_TYPE_DIRECT3D )
 	, m_pDevice( NULL )
 {
 	Logger::LogInfo( cuT( "Dx11RenderSystem::Dx11RenderSystem" ) );
