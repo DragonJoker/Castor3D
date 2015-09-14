@@ -1,6 +1,8 @@
 #include "NewGeometryDialog.hpp"
+
 #include "NewMaterialDialog.hpp"
 
+#include <PropertiesHolder.hpp>
 #include <MaterialManager.hpp>
 
 #include <wx/propgrid/propgrid.h>
@@ -60,7 +62,7 @@ namespace CastorShape
 
 		while ( l_res == _( "New..." ) )
 		{
-			l_dialog = new NewMaterialDialog( m_engine, NULL, wxID_ANY );
+			l_dialog = new NewMaterialDialog( PropertiesHolder::GetButtonEditor(), m_engine, NULL, wxID_ANY );
 
 			if ( l_dialog->ShowModal() == wxID_OK )
 			{
@@ -90,13 +92,17 @@ namespace CastorShape
 			l_choices.Add( make_wxString( l_choice ) );
 		}
 
-		m_properties->Append( new wxStringProperty( GEOMETRY_NAME, wxPG_LABEL, _( "New Geometry" ) ) );
+		m_properties->Append( new wxStringProperty( GEOMETRY_NAME, wxPG_LABEL, GEOMETRY_NAME_DEFAULT_VALUE ) );
 		m_properties->Append( new wxEnumProperty( GEOMETRY_MATERIAL, wxPG_LABEL, l_choices ) )->SetValue( wxCOMBO_NEW );
 		DoCreateProperties();
 		m_properties->SetSize( m_properties->GetBestSize() );
 
-		wxButton * l_ok = new wxButton( this, wxID_OK, _( "OK" ), wxPoint( 5, GetClientSize().y - 35 ), wxSize( 60, 30 ), wxBORDER_SIMPLE );
-		wxButton * l_cancel = new wxButton( this, wxID_CANCEL, _( "Cancel" ), wxPoint( GetClientSize().x - 65, GetClientSize().y - 35 ), wxSize( 60, 30 ), wxBORDER_SIMPLE );
+		wxButton * l_ok = new wxButton( this, wxID_OK, _( "OK" ), wxPoint( 5, GetClientSize().y - 35 ), wxSize( 60, 30 ), wxBORDER_NONE );
+		l_ok->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		l_ok->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		wxButton * l_cancel = new wxButton( this, wxID_CANCEL, _( "Cancel" ), wxPoint( GetClientSize().x - 65, GetClientSize().y - 35 ), wxSize( 60, 30 ), wxBORDER_NONE );
+		l_cancel->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		l_cancel->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 
 		wxBoxSizer * l_btnsSizer = new wxBoxSizer( wxHORIZONTAL );
 		l_btnsSizer->Add( l_ok );

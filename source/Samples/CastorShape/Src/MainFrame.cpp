@@ -556,7 +556,9 @@ namespace CastorShape
 
 	void MainFrame::DoPopulateStatusBar()
 	{
-		CreateStatusBar();
+		wxStatusBar * l_bar = CreateStatusBar();
+		l_bar->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+		l_bar->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 	}
 
 	void MainFrame::DoPopulateToolbar()
@@ -854,7 +856,14 @@ namespace CastorShape
 		}
 
 		DestroyChildren();
-		m_pImagesLoader->Cleanup();
+
+		if ( m_pImagesLoader )
+		{
+			m_pImagesLoader->Cleanup();
+		}
+
+		delete m_castor3D;
+		m_castor3D = NULL;
 		p_event.Skip();
 	}
 
@@ -1218,7 +1227,7 @@ namespace CastorShape
 
 	void MainFrame::OnNewMaterial( wxCommandEvent & WXUNUSED( p_event ) )
 	{
-		NewMaterialDialog l_dialog( m_castor3D, this, wxID_ANY );
+		NewMaterialDialog l_dialog( PropertiesHolder::GetButtonEditor(), m_castor3D, this, wxID_ANY );
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{

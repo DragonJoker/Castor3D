@@ -44,6 +44,18 @@ namespace GuiCommon
 		{
 			return m_bCanEdit;
 		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the button editor
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère l'éditeur bouton
+		 *\return		La valeur
+		 */
+		static inline wxPGEditor * GetButtonEditor()
+		{
+			return m_buttonEditor;
+		}
 
 	private:
 		void OnPropertyChange( wxPropertyGridEvent & p_event );
