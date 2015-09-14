@@ -12,7 +12,6 @@
 #include <SceneObjectsList.hpp>
 #include <Logger.hpp>
 #include <Path.hpp>
-#include <Path.hpp>
 
 namespace CastorViewer
 {
@@ -30,10 +29,6 @@ namespace CastorViewer
 		void ToggleFullScreen( bool p_fullscreen );
 
 	private:
-		bool DoLoadMeshFile();
-		bool DoLoadTextSceneFile();
-		bool DoLoadBinarySceneFile();
-		void DoLoadSceneFile();
 		void DoLoadPlugins();
 		void DoInitialiseGUI();
 		bool DoInitialise3D();
@@ -66,11 +61,10 @@ namespace CastorViewer
 		wxAuiManager m_auiManager;
 		RenderPanel * m_pRenderPanel;
 		wxTimer * m_timer;
-		wxPanel * m_pBgPanel;
 		wxAuiToolBar * m_toolBar;
 		wxAuiNotebook * m_logTabsContainer;
 		wxAuiNotebook * m_sceneTabsContainer;
-		PropertiesHolder * m_propertiesContainer;
+		GuiCommon::PropertiesHolder * m_propertiesContainer;
 		wxListBox * m_messageLog;
 		wxListBox * m_errorLog;
 		GuiCommon::ImagesLoader * m_pImagesLoader;

@@ -263,8 +263,8 @@ namespace CastorViewer
 		else
 		{
 			wxClientDC l_dc( this );
-			l_dc.SetBrush( wxBrush( INACTIVE_TAB_COLOUR ) );
-			l_dc.SetPen( wxPen( INACTIVE_TAB_COLOUR ) );
+			l_dc.SetBrush( wxBrush( GuiCommon::INACTIVE_TAB_COLOUR ) );
+			l_dc.SetPen( wxPen( GuiCommon::INACTIVE_TAB_COLOUR ) );
 			l_dc.DrawRectangle( 0, 0, p_event.GetSize().x, p_event.GetSize().y );
 		}
 
@@ -278,8 +278,8 @@ namespace CastorViewer
 		if ( !l_pWindow )
 		{
 			wxClientDC l_dc( this );
-			l_dc.SetBrush( wxBrush( INACTIVE_TAB_COLOUR ) );
-			l_dc.SetPen( wxPen( INACTIVE_TAB_COLOUR ) );
+			l_dc.SetBrush( wxBrush( GuiCommon::INACTIVE_TAB_COLOUR ) );
+			l_dc.SetPen( wxPen( GuiCommon::INACTIVE_TAB_COLOUR ) );
 			l_dc.DrawRectangle( 0, 0, GetClientSize().x, GetClientSize().y );
 		}
 
@@ -293,8 +293,8 @@ namespace CastorViewer
 		if ( !l_pWindow )
 		{
 			wxPaintDC l_dc( this );
-			l_dc.SetBrush( wxBrush( INACTIVE_TAB_COLOUR ) );
-			l_dc.SetPen( wxPen( INACTIVE_TAB_COLOUR ) );
+			l_dc.SetBrush( wxBrush( GuiCommon::INACTIVE_TAB_COLOUR ) );
+			l_dc.SetPen( wxPen( GuiCommon::INACTIVE_TAB_COLOUR ) );
 			l_dc.DrawRectangle( 0, 0, GetClientSize().x, GetClientSize().y );
 		}
 

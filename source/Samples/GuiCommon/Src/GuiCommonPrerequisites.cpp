@@ -10,7 +10,11 @@
 #endif
 
 #include <Font.hpp>
+
+#include <FunctorEvent.hpp>
+#include <InitialiseEvent.hpp>
 #include <PlatformWindowHandle.hpp>
+#include <Sampler.hpp>
 
 #include <wx/window.h>
 
@@ -93,6 +97,219 @@ namespace GuiCommon
 
 			wxFont m_font;
 		};
+
+		template< typename TObj >
+		std::shared_ptr< TObj > CreateObject( Engine & p_engine )
+		{
+			return std::make_shared< TObj >( &p_engine );
+		}
+
+		template<>
+		std::shared_ptr< Sampler > CreateObject< Sampler >( Engine & p_engine )
+		{
+			return p_engine.CreateSampler( Castor::String() );
+		}
+
+		template<>
+		std::shared_ptr< Scene > CreateObject< Scene >( Engine & p_engine )
+		{
+			return std::make_shared< Scene >( &p_engine, p_engine.GetLightFactory() );
+		}
+
+		template< typename TObj >
+		void InitialiseObject( std::shared_ptr< TObj > p_object, Engine & p_engine )
+		{
+			p_engine.PostEvent( MakeInitialiseEvent( *p_object ) );
+		}
+
+		template<>
+		void InitialiseObject< Mesh >( std::shared_ptr< Mesh > p_object, Engine & p_engine )
+		{
+			p_engine.PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [&p_object]()
+			{
+				p_object->GenerateBuffers();
+			} ) );
+		}
+
+		template<>
+		void InitialiseObject< Scene >( std::shared_ptr< Scene > p_object, Engine & p_engine )
+		{
+		}
+
+		template< typename TObj, typename TKey >
+		bool DoFillCollection( Engine & p_engine, Collection< TObj, TKey > & p_collection, BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
+		{
+			std::shared_ptr< TObj > l_obj = CreateObject< TObj >( p_engine );
+			bool l_return = p_parser.Parse( *l_obj, p_chunk );
+
+			if ( l_return )
+			{
+				if ( !p_collection.has( l_obj->GetName() ) )
+				{
+					p_collection.insert( l_obj->GetName(), l_obj );
+					InitialiseObject( l_obj, p_engine );
+				}
+				else
+				{
+					Logger::LogWarning( cuT( "Duplicate object found with name " ) + l_obj->GetName() );
+					l_return = false;
+				}
+			}
+
+			return l_return;
+		}
+
+		bool DoLoadMeshFile( Engine & p_engine, Path const & p_fileName )
+		{
+			bool l_return = true;
+
+			if ( p_fileName.GetExtension() != cuT( "cbsn" ) && p_fileName.GetExtension() != cuT( "zip" ) )
+			{
+				Path l_meshFilePath = p_fileName;
+				str_utils::replace( l_meshFilePath, cuT( "cscn" ), cuT( "cmsh" ) );
+
+				if ( File::FileExists( l_meshFilePath ) )
+				{
+					BinaryFile l_fileMesh( l_meshFilePath, File::eOPEN_MODE_READ );
+					Logger::LogInfo( cuT( "Loading meshes file : " ) + l_meshFilePath );
+
+					if ( p_engine.LoadMeshes( l_fileMesh ) )
+					{
+						Logger::LogInfo( cuT( "Meshes read" ) );
+					}
+					else
+					{
+						Logger::LogInfo( cuT( "Can't read meshes" ) );
+						l_return = false;
+					}
+				}
+			}
+
+			return l_return;
+		}
+
+		RenderWindowSPtr DoLoadTextSceneFile( Engine & p_engine, Path const & p_fileName )
+		{
+			RenderWindowSPtr l_return;
+			SceneFileParser l_parser( &p_engine );
+
+			if ( l_parser.ParseFile( p_fileName ) )
+			{
+				l_return = l_parser.GetRenderWindow();
+			}
+			else
+			{
+				Logger::LogWarning( cuT( "Can't read scene file" ) );
+			}
+
+			return l_return;
+		}
+
+		RenderWindowSPtr DoLoadBinarySceneFile( Engine & p_engine, Path const & p_fileName )
+		{
+			RenderWindowSPtr l_return;
+			bool l_continue = true;
+			BinaryFile l_file( p_fileName, File::eOPEN_MODE_READ );
+			BinaryChunk l_chunkFile;
+			RenderWindowSPtr l_window;
+			Path l_path = l_file.GetFilePath();
+			l_chunkFile.Read( l_file );
+
+			if ( l_chunkFile.GetChunkType() == eCHUNK_TYPE_CBSN_FILE )
+			{
+				while ( l_continue && l_chunkFile.CheckAvailable( 1 ) )
+				{
+					BinaryChunk l_chunk;
+					l_continue = l_chunkFile.GetSubChunk( l_chunk );
+
+					switch ( l_chunk.GetChunkType() )
+					{
+					case eCHUNK_TYPE_SAMPLER:
+						l_continue = DoFillCollection( p_engine, p_engine.GetSamplerManager(), l_chunk, Sampler::BinaryParser( l_path ) );
+						break;
+
+					case eCHUNK_TYPE_MATERIAL:
+						l_continue = DoFillCollection( p_engine, p_engine.GetMaterialManager(), l_chunk, Material::BinaryParser( l_path, &p_engine ) );
+						break;
+
+					case eCHUNK_TYPE_MESH:
+						l_continue = DoFillCollection( p_engine, p_engine.GetMeshManager(), l_chunk, Mesh::BinaryParser( l_path ) );
+						break;
+
+					case eCHUNK_TYPE_SCENE:
+						l_continue = DoFillCollection( p_engine, p_engine.GetSceneManager(), l_chunk, Scene::BinaryParser( l_path ) );
+						break;
+
+					case eCHUNK_TYPE_WINDOW:
+						l_return = p_engine.CreateRenderWindow();
+						l_continue = RenderWindow::BinaryParser( l_path ).Parse( *l_window, l_chunk );
+						break;
+					}
+
+					if ( !l_continue )
+					{
+						l_chunk.EndParse();
+					}
+				}
+
+				if ( l_continue )
+				{
+					wxMessageBox( _( "Import successful" ) );
+				}
+			}
+			else
+			{
+				wxMessageBox( _( "The given file is not a valid CBSN file" ) + wxString( wxT( "\n" ) ) + l_file.GetFileName() );
+			}
+
+			if ( !l_continue )
+			{
+				wxMessageBox( _( "Failed to read the binary scene file" ) + wxString( wxT( "\n" ) ) + l_file.GetFileName() );
+				Logger::LogWarning( cuT( "Failed to read read binary scene file" ) );
+			}
+
+			return l_return;
+		}
+
+		RenderWindowSPtr DoLoadSceneFile( Engine & p_engine, Path const & p_fileName )
+		{
+			RenderWindowSPtr l_return;
+
+			if ( File::FileExists( p_fileName ) )
+			{
+				Logger::LogInfo( cuT( "Loading scene file : " ) + p_fileName );
+				bool l_initialised = false;
+
+				if ( p_fileName.GetExtension() == cuT( "cscn" ) || p_fileName.GetExtension() == cuT( "zip" ) )
+				{
+					try
+					{
+						l_return = DoLoadTextSceneFile( p_engine, p_fileName );
+					}
+					catch ( std::exception & exc )
+					{
+						wxMessageBox( _( "Failed to parse the scene file, with following error:" ) + wxString( wxT( "\n" ) ) + wxString( exc.what(), wxMBConvLibc() ) );
+					}
+				}
+				else
+				{
+					try
+					{
+						l_return = DoLoadBinarySceneFile( p_engine, p_fileName );
+					}
+					catch ( std::exception & exc )
+					{
+						wxMessageBox( _( "Failed to parse the binary scene file, with following error:" ) + wxString( wxT( "\n" ) ) + wxString( exc.what(), wxMBConvLibc() ) );
+					}
+				}
+			}
+			else
+			{
+				wxMessageBox( _( "Scene file doesn't exist :" ) + wxString( wxT( "\n" ) ) + p_fileName );
+			}
+
+			return l_return;
+		}
 	}
 
 	void CreateBitmapFromBuffer( uint8_t const * p_pBuffer, uint32_t p_uiWidth, uint32_t p_uiHeight, wxBitmap & p_bitmap )
@@ -167,6 +384,133 @@ namespace GuiCommon
 				Logger::LogWarning( cuT( "CreateBitmapFromBuffer encountered a problem loading file [" ) + p_pUnit->GetTexturePath() + cuT( "] : Unsupported format" ) );
 			}
 		}
+	}
+
+	RenderWindowSPtr LoadScene( Engine & p_engine, String const & p_fileName, uint32_t p_wantedFps, bool p_threaded )
+	{
+		RenderWindowSPtr l_return;
+		Logger::LogDebug( ( wxChar const * )( cuT( "GuiCommon::LoadSceneFile - " ) + p_fileName ).c_str() );
+
+		if ( !p_fileName.empty() )
+		{
+			String l_strLowered = str_utils::lower_case( p_fileName );
+			p_engine.Cleanup();
+
+			bool l_continue = true;
+			Logger::LogDebug( cuT( "GuiCommon::LoadSceneFile - Engine cleared" ) );
+
+			if ( DoLoadMeshFile( p_engine, p_fileName ) )
+			{
+				try
+				{
+					p_engine.Initialise( p_wantedFps, p_threaded );
+				}
+				catch ( std::exception & exc )
+				{
+					wxMessageBox( _( "Castor initialisation failed with following error:" ) + wxString( wxT( "\n" ) ) + wxString( exc.what(), wxMBConvLibc() ) );
+				}
+
+				l_return = DoLoadSceneFile( p_engine, p_fileName );
+			}
+		}
+
+		return l_return;
+	}
+
+	void LoadPlugins( Castor3D::Engine & p_engine )
+	{
+		PathArray l_arrayFiles;
+		PathArray l_arrayKept;
+		PathArray l_arrayFailed;
+		std::mutex l_mutex;
+		ThreadPtrArray l_arrayThreads;
+		File::ListDirectoryFiles( Engine::GetPluginsDirectory(), l_arrayFiles );
+
+		// Exclude debug plugin in release builds, and release plugins in debug builds
+		for ( auto && l_file : l_arrayFiles )
+		{
+#if defined( NDEBUG )
+			if ( l_file.find( String( cuT( "d." ) ) + CASTOR_DLL_EXT ) == String::npos )
+#else
+			if ( l_file.find( String( cuT( "d." ) ) + CASTOR_DLL_EXT ) != String::npos )
+#endif
+			{
+				l_arrayKept.push_back( l_file );
+			}
+		}
+
+		if ( !l_arrayKept.empty() )
+		{
+			// Since techniques depend on renderers, we load them first
+			PathArray l_otherPlugins;
+
+			for ( auto && l_file : l_arrayKept )
+			{
+				Path l_path( l_file );
+
+				if ( l_path.GetExtension() == CASTOR_DLL_EXT )
+				{
+					if ( l_path.find( cuT( "RenderSystem" ) ) != String::npos )
+					{
+						l_arrayThreads.push_back( std::make_shared< std::thread >( [&l_arrayFailed, &l_mutex, &p_engine]( Path const & p_path )
+						{
+							if ( !p_engine.LoadPlugin( p_path ) )
+							{
+								std::unique_lock< std::mutex > l_lock( l_mutex );
+								l_arrayFailed.push_back( p_path );
+							}
+						}, l_path ) );
+					}
+					else
+					{
+						l_otherPlugins.push_back( l_file );
+					}
+				}
+			}
+
+			for ( auto && l_thread : l_arrayThreads )
+			{
+				l_thread->join();
+			}
+
+			l_arrayThreads.clear();
+
+			// Then we load other plugins
+			for ( auto && l_file : l_otherPlugins )
+			{
+				Path l_path( l_file );
+
+				l_arrayThreads.push_back( std::make_shared< std::thread >( [&l_arrayFailed, &l_mutex, &p_engine]( Path const & p_path )
+				{
+					if ( !p_engine.LoadPlugin( p_path ) )
+					{
+						std::unique_lock< std::mutex > l_lock( l_mutex );
+						l_arrayFailed.push_back( p_path );
+					}
+				}, l_path ) );
+			}
+
+			for ( auto && l_thread : l_arrayThreads )
+			{
+				l_thread->join();
+			}
+
+			l_arrayThreads.clear();
+		}
+
+		if ( !l_arrayFailed.empty() )
+		{
+			Logger::LogWarning( cuT( "Some plugins couldn't be loaded :" ) );
+
+			for ( auto && l_file : l_arrayFailed )
+			{
+				Logger::LogWarning( Path( l_file ).GetFileName() );
+			}
+
+			l_arrayFailed.clear();
+		}
+
+		Logger::LogInfo( cuT( "Plugins loaded" ) );
 	}
 
 	Castor3D::WindowHandle make_WindowHandle( wxWindow * p_window )

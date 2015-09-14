@@ -253,7 +253,7 @@ namespace Castor3D
 			CASTOR_ASSERT( false );
 			CASTOR_EXCEPTION( "Render loop is already started" );
 		}
-		else
+		else if ( m_bCleaned )
 		{
 			m_bCleaned = false;
 			m_uiWantedFPS = p_wantedFPS;

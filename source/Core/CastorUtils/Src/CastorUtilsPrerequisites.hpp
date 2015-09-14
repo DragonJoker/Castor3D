@@ -131,6 +131,7 @@ namespace Castor
 #endif
 	typedef std::basic_string< xchar > String;
 	typedef std::basic_stringstream< xchar > StringStream;
+	typedef std::basic_ostream< xchar > OutputStream;
 
 	class Angle;
 	class BinaryFile;
