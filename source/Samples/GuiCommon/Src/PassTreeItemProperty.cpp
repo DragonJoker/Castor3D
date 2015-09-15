@@ -62,11 +62,7 @@ namespace GuiCommon
 			p_grid->Append( new wxFloatProperty( PROPERTY_PASS_EXPONENT ) )->SetValue( l_pass->GetShininess() );
 			p_grid->Append( new wxBoolProperty( PROPERTY_PASS_TWO_SIDED, wxPG_BOOL_USE_CHECKBOX ) )->SetValue( l_pass->IsTwoSided() );
 			p_grid->Append( new wxFloatProperty( PROPERTY_PASS_OPACITY ) )->SetValue( l_pass->GetAlpha() );
-
-			wxPGProperty * l_prop = p_grid->Append( new wxStringProperty( PROPERTY_PASS_SHADER ) );
-			l_prop->SetValue( PROPERTY_PASS_EDIT_SHADER );
-			l_prop->SetEditor( p_editor );
-			l_prop->SetClientObject( new ButtonData( static_cast< ButtonEventMethod >( &PassTreeItemProperty::OnEditShader ), this ) );
+			p_grid->Append( CreateButtonProperty( PROPERTY_PASS_SHADER, PROPERTY_PASS_EDIT_SHADER, static_cast< ButtonEventMethod >( &PassTreeItemProperty::OnEditShader ), this, p_editor ) );
 		}
 	}
 

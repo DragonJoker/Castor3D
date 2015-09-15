@@ -2,6 +2,7 @@
 
 #include "NewMaterialDialog.hpp"
 
+#include <GradientButton.hpp>
 #include <PropertiesHolder.hpp>
 #include <MaterialManager.hpp>
 
@@ -97,12 +98,8 @@ namespace CastorShape
 		DoCreateProperties();
 		m_properties->SetSize( m_properties->GetBestSize() );
 
-		wxButton * l_ok = new wxButton( this, wxID_OK, _( "OK" ), wxPoint( 5, GetClientSize().y - 35 ), wxSize( 60, 30 ), wxBORDER_NONE );
-		l_ok->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		l_ok->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-		wxButton * l_cancel = new wxButton( this, wxID_CANCEL, _( "Cancel" ), wxPoint( GetClientSize().x - 65, GetClientSize().y - 35 ), wxSize( 60, 30 ), wxBORDER_NONE );
-		l_cancel->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		l_cancel->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		GradientButton * l_ok = new GradientButton( this, wxID_OK, _( "OK" ), wxPoint( 5, GetClientSize().y - 35 ), wxSize( 60, 30 ), wxBORDER_SIMPLE );
+		GradientButton * l_cancel = new GradientButton( this, wxID_CANCEL, _( "Cancel" ), wxPoint( GetClientSize().x - 65, GetClientSize().y - 35 ), wxSize( 60, 30 ), wxBORDER_NONE );
 
 		wxBoxSizer * l_btnsSizer = new wxBoxSizer( wxHORIZONTAL );
 		l_btnsSizer->Add( l_ok );

@@ -140,6 +140,8 @@ namespace CastorShape
 		, m_eRenderer( p_eRenderer )
 		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
 		, m_iPropertiesWidth( 240 )
+		, m_sceneObjectsList( NULL )
+		, m_materialsList( NULL )
 	{
 		m_selectedMaterial.m_ambient[0] = 0.2f;
 		m_selectedMaterial.m_ambient[1] = 0.0f;
@@ -399,34 +401,11 @@ namespace CastorShape
 			}
 
 			ShowPanels();
-			LightSPtr l_light1 = l_scene->CreateLight( cuT( "Light1" ), l_scene->CreateSceneNode( cuT( "Light1Node" ) ), eLIGHT_TYPE_DIRECTIONAL );
 
-			if ( l_light1 )
+			if ( m_castor3D )
 			{
-				l_light1->GetDirectionalLight()->SetDirection( Point3r( 0.0f, 0.0f, 1.0f ) );
-				l_light1->GetDirectionalLight()->SetDiffuse( Point4f( 1.0f, 1.0f, 1.0f, 1.0f ) );
-				l_light1->GetDirectionalLight()->SetSpecular( Point4f( 1.0f, 1.0f, 1.0f, 1.0f ) );
-				l_light1->SetEnabled( true );
-			}
-
-			LightSPtr l_light2 = l_scene->CreateLight( cuT( "Light2" ), l_scene->CreateSceneNode( cuT( "Light2Node" ) ), eLIGHT_TYPE_DIRECTIONAL );
-
-			if ( l_light2 )
-			{
-				l_light2->GetDirectionalLight()->SetDirection( Point3r( 0.0f, -1.0f, 1.0f ) );
-				l_light2->GetDirectionalLight()->SetDiffuse( Point4f( 1.0f, 1.0f, 1.0f, 1.0f ) );
-				l_light2->GetDirectionalLight()->SetSpecular( Point4f( 1.0f, 1.0f, 1.0f, 1.0f ) );
-				l_light2->SetEnabled( true );
-			}
-
-			LightSPtr l_light3 = l_scene->CreateLight( cuT( "Light3" ), l_scene->CreateSceneNode( cuT( "Light3Node" ) ), eLIGHT_TYPE_DIRECTIONAL );
-
-			if ( l_light3 )
-			{
-				l_light3->GetDirectionalLight()->SetDirection( Point3r( -1.0f, -1.0f, -1.0f ) );
-				l_light3->GetDirectionalLight()->SetDiffuse( Point4f( 1.0f, 1.0f, 1.0f, 1.0f ) );
-				l_light3->GetDirectionalLight()->SetSpecular( Point4f( 1.0f, 1.0f, 1.0f, 1.0f ) );
-				l_light3->SetEnabled( true );
+				m_sceneObjectsList->LoadScene( m_castor3D, l_scene );
+				m_materialsList->LoadMaterials( m_castor3D );
 			}
 
 			if ( m_timer == NULL )
@@ -485,6 +464,46 @@ namespace CastorShape
 				m_mainScene = l_scene;
 				l_scene->SetBackgroundColour( Colour::from_components( 0.5, 0.5, 0.5, 1.0 ) );
 				Logger::LogInfo( cuT( "Castor3D Initialised" ) );
+
+				if ( m_sceneObjectsList )
+				{
+					m_sceneObjectsList->LoadScene( m_castor3D, m_mainScene.lock() );
+				}
+
+				if ( m_materialsList )
+				{
+					m_materialsList->LoadMaterials( m_castor3D );
+				}
+
+				LightSPtr l_light1 = l_scene->CreateLight( cuT( "Light1" ), l_scene->CreateSceneNode( cuT( "Light1Node" ) ), eLIGHT_TYPE_DIRECTIONAL );
+
+				if ( l_light1 )
+				{
+					l_light1->GetDirectionalLight()->SetDirection( Point3r( 0.0f, 0.0f, 1.0f ) );
+					l_light1->GetDirectionalLight()->SetDiffuse( Point4f( 1.0f, 1.0f, 1.0f, 1.0f ) );
+					l_light1->GetDirectionalLight()->SetSpecular( Point4f( 1.0f, 1.0f, 1.0f, 1.0f ) );
+					l_light1->SetEnabled( true );
+				}
+
+				LightSPtr l_light2 = l_scene->CreateLight( cuT( "Light2" ), l_scene->CreateSceneNode( cuT( "Light2Node" ) ), eLIGHT_TYPE_DIRECTIONAL );
+
+				if ( l_light2 )
+				{
+					l_light2->GetDirectionalLight()->SetDirection( Point3r( 0.0f, -1.0f, 1.0f ) );
+					l_light2->GetDirectionalLight()->SetDiffuse( Point4f( 1.0f, 1.0f, 1.0f, 1.0f ) );
+					l_light2->GetDirectionalLight()->SetSpecular( Point4f( 1.0f, 1.0f, 1.0f, 1.0f ) );
+					l_light2->SetEnabled( true );
+				}
+
+				LightSPtr l_light3 = l_scene->CreateLight( cuT( "Light3" ), l_scene->CreateSceneNode( cuT( "Light3Node" ) ), eLIGHT_TYPE_DIRECTIONAL );
+
+				if ( l_light3 )
+				{
+					l_light3->GetDirectionalLight()->SetDirection( Point3r( -1.0f, -1.0f, -1.0f ) );
+					l_light3->GetDirectionalLight()->SetDiffuse( Point4f( 1.0f, 1.0f, 1.0f, 1.0f ) );
+					l_light3->GetDirectionalLight()->SetSpecular( Point4f( 1.0f, 1.0f, 1.0f, 1.0f ) );
+					l_light3->SetEnabled( true );
+				}
 			}
 		}
 		catch ( Castor::Exception & p_exc )

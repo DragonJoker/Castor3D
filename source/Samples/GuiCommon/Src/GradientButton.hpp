@@ -15,49 +15,34 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GUICOMMON_RENDERER_SELECTOR_H___
-#define ___GUICOMMON_RENDERER_SELECTOR_H___
-
-#define CV_IMG_CASTOR	1268
+#ifndef ___GC_BUTTON_H___
+#define ___GC_BUTTON_H___
 
 #include "GuiCommonPrerequisites.hpp"
 
-#include <wx/dialog.h>
+#include <wx/button.h>
 
 namespace GuiCommon
 {
-	class RendererSelector
-		:	public wxDialog
+	class GradientButton
+		: public wxButton
 	{
-	private:
-		typedef enum eID
-		{
-			eID_BUTTON_OK,
-			eID_BUTTON_CANCEL,
-			eID_LIST_RENDERERS,
-		}	eID;
-
 	public:
-		RendererSelector( Castor3D::Engine * p_pEngine, wxWindow * p_pParent, wxString const & p_strTitle );
-		virtual ~RendererSelector();
-
-		Castor3D::eRENDERER_TYPE GetSelectedRenderer()const;
+		GradientButton();
+		GradientButton( wxWindow * p_parent, wxWindowID p_id, wxString const & p_label = wxEmptyString, wxPoint const & p_pos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize, long p_style = 0, wxValidator const & p_validator = wxDefaultValidator, wxString const & p_name = wxButtonNameStr );
 
 	private:
-		void DoDraw( wxDC * p_pDC );
-		void DoSelect();
-
-	protected:
-		DECLARE_EVENT_TABLE()
+		void DoInitialise();
+		DECLARE_EVENT_TABLE();
 		void OnPaint( wxPaintEvent & p_event );
-		void OnKeyUp( wxKeyEvent & p_event );
-		void OnButtonOk( wxCommandEvent & p_event );
-		void OnButtonCancel( wxCommandEvent & p_event );
 
 	private:
-		wxImage * m_pImgCastor;
-		wxListBox * m_pListRenderers;
-		Castor3D::Engine * m_pEngine;
+		wxColour m_gradientTopStartColour;
+		wxColour m_gradientTopEndColour;
+		wxColour m_gradientBottomStartColour;
+		wxColour m_gradientBottomEndColour;
+		wxColour m_pressedColourTop;
+		wxColour m_pressedColourBottom;
 	};
 }
 

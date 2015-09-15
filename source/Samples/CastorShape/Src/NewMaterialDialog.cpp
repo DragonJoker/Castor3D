@@ -6,6 +6,7 @@
 #include <Pass.hpp>
 #include <TextureUnit.hpp>
 
+#include <GradientButton.hpp>
 #include <AdditionalProperties.hpp>
 
 #include <wx/propgrid/advprops.h>
@@ -82,7 +83,6 @@ namespace CastorShape
 		wxSize l_size = GetClientSize();
 		l_size.y -= 30;
 		m_material = std::make_shared< Material >( m_pEngine, cuT( "NewMaterial" ) );
-		m_pass = m_material->CreatePass();
 
 		m_properties = new wxPropertyGrid( this, wxID_ANY, wxDefaultPosition, l_size, wxPG_SPLITTER_AUTO_CENTER | wxPG_DEFAULT_STYLE );
 		m_properties->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
@@ -96,13 +96,8 @@ namespace CastorShape
 		m_properties->SetLineColour( BORDER_COLOUR );
 		m_properties->SetMarginColour( BORDER_COLOUR );
 
-		wxButton * l_ok = new wxButton( this, wxID_OK, _( "OK" ), wxPoint( 20, l_size.y + 5 ), wxSize( 60, 25 ), wxBORDER_NONE );
-		l_ok->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		l_ok->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-
-		wxButton * l_cancel = new wxButton( this, wxID_CANCEL, _( "Cancel" ), wxPoint( 120, l_size.y + 5 ), wxSize( 60, 25 ), wxBORDER_NONE );
-		l_cancel->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-		l_cancel->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+		GradientButton * l_ok = new GradientButton( this, wxID_OK, _( "OK" ), wxPoint( 20, l_size.y + 5 ), wxSize( 60, 25 ), wxBORDER_NONE );
+		GradientButton * l_cancel = new GradientButton( this, wxID_CANCEL, _( "Cancel" ), wxPoint( 120, l_size.y + 5 ), wxSize( 60, 25 ), wxBORDER_NONE );
 
 		DoCreateProperties();
 
@@ -127,19 +122,19 @@ namespace CastorShape
 	void NewMaterialDialog::DoCreateProperties()
 	{
 		wxPGChoices l_choices;
-		l_choices.Add( cuT( "0" ) );
+		l_choices.Add( wxEmptyString );
 		l_choices.Add( wxCOMBO_NEW );
-
 		m_properties->Append( new wxPropertyCategory( PROPERTY_CATEGORY_MATERIAL ) );
 		m_properties->Append( new wxStringProperty( PROPERTY_MATERIAL_NAME, wxPG_LABEL, PROPERTY_MATERIAL_NAME_DEFAULT_VALUE ) );
 		m_properties->Append( new wxEnumProperty( PROPERTY_MATERIAL_PASSES, wxPG_LABEL, l_choices ) );
 		DoCreatePassProperties();
-
-		OnPassChange( cuT( "0" ) );
 	}
 
 	void NewMaterialDialog::DoCreatePassProperties()
 	{
+		wxPGChoices l_choices;
+		l_choices.Add( wxEmptyString );
+		l_choices.Add( wxCOMBO_NEW );
 		m_properties->Append( new wxPropertyCategory( PROPERTY_CATEGORY_PASS ) )->Hide( true );
 		m_properties->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->Hide( true );
 		m_properties->Append( new wxColourProperty( PROPERTY_PASS_AMBIENT ) )->Hide( true );
@@ -148,18 +143,9 @@ namespace CastorShape
 		m_properties->Append( new wxFloatProperty( PROPERTY_PASS_EXPONENT ) )->Hide( true );
 		m_properties->Append( new wxBoolProperty( PROPERTY_PASS_TWO_SIDED ) )->Hide( true );
 		m_properties->Append( new wxFloatProperty( PROPERTY_PASS_OPACITY ) )->Hide( true );
-
-		wxPGProperty * l_prop = m_properties->Append( new wxStringProperty( PROPERTY_PASS_SHADER ) );
-		l_prop->SetValue( PROPERTY_PASS_EDIT_SHADER );
-		l_prop->SetEditor( m_editor );
-		l_prop->SetClientObject( new ButtonData( static_cast< ButtonEventMethod >( &NewMaterialDialog::OnEditShader ), this ) );
-		
-		wxPGChoices l_choices;
-		l_choices.Add( wxCOMBO_NEW );
+		m_properties->Append( CreateButtonProperty( PROPERTY_PASS_SHADER, PROPERTY_PASS_EDIT_SHADER, static_cast< ButtonEventMethod >( &NewMaterialDialog::OnEditShader ), this, m_editor ) )->Hide( true );
 		m_properties->Append( new wxEnumProperty( PROPERTY_PASS_TEXTURES, wxPG_LABEL, l_choices ) )->Hide( true );
 		DoCreateTextureProperties();
-
-		//OnTextureChange( make_String( wxCOMBO_NEW ) );
 	}
 
 	void NewMaterialDialog::DoCreateTextureProperties()
@@ -173,7 +159,6 @@ namespace CastorShape
 		l_choices.Add( PROPERTY_CHANNEL_HEIGHT );
 		l_choices.Add( PROPERTY_CHANNEL_AMBIENT );
 		l_choices.Add( PROPERTY_CHANNEL_GLOSS );
-
 		m_properties->Append( new wxPropertyCategory( PROPERTY_CATEGORY_TEXTURE ) )->Hide( true );
 		m_properties->Append( new wxEnumProperty( PROPERTY_CHANNEL, PROPERTY_CHANNEL, l_choices ) )->Hide( true );
 		m_properties->Append( new wxImageFileProperty( PROPERTY_TEXTURE_IMAGE ) )->Hide( true );
@@ -224,6 +209,7 @@ namespace CastorShape
 		}
 
 		wxPGChoices l_choices;
+		l_choices.Add( wxEmptyString );
 		l_choices.Add( wxCOMBO_NEW );
 
 		for ( size_t i = 0; i < m_pass->GetTextureUnitsCount(); ++i )
@@ -232,8 +218,12 @@ namespace CastorShape
 		}
 
 		reinterpret_cast< wxEnumProperty * >( m_properties->GetProperty( PROPERTY_PASS_TEXTURES ) )->SetChoices( l_choices );
-		m_properties->SetPropertyValue( PROPERTY_PASS_TEXTURES, wxCOMBO_NEW );
+		m_properties->SetPropertyValue( PROPERTY_PASS_TEXTURES, wxEmptyString );
 		m_properties->SetPropertyLabel( PROPERTY_CATEGORY_PASS, PROPERTY_CATEGORY_PASS + l_value );
+
+		m_properties->HideProperty( PROPERTY_CATEGORY_TEXTURE, true );
+		m_properties->HideProperty( PROPERTY_CHANNEL, true );
+		m_properties->HideProperty( PROPERTY_TEXTURE_IMAGE, true );
 
 		m_properties->HideProperty( PROPERTY_CATEGORY_PASS, false );
 		m_properties->HideProperty( PROPERTY_PASS_DIFFUSE, false );

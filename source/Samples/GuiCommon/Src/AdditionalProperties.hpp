@@ -85,6 +85,8 @@ namespace GuiCommon
 		virtual void UpdateControl(wxPGProperty* property, wxWindow* ctrl) const;
 		virtual bool OnEvent( wxPropertyGrid * p_propgrid, wxPGProperty * p_property, wxWindow * p_wnd_primary, wxEvent & p_event )const;
 	};
+
+	wxPGProperty * CreateButtonProperty( wxString const & p_name, wxString const & p_label, ButtonEventMethod p_method, wxEvtHandler * p_handler, wxPGEditor * p_editor );
 }
 
 #include "AdditionalProperties.inl"
