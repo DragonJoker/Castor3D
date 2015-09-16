@@ -68,7 +68,7 @@ namespace Testing
 
 	void CastorUtilsStringTest::Execute( uint32_t & p_errCount, uint32_t & p_testCount )
 	{
-		EXECUTE_TEST( StringConversions, p_errCount, p_testCount );
+		EXECUTE_TEST( CastorUtilsStringTest, StringConversions, p_errCount, p_testCount );
 	}
 
 	void CastorUtilsStringTest::StringConversions( uint32_t & p_errCount, uint32_t & p_testCount )

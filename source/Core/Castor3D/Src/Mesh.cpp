@@ -163,9 +163,9 @@ namespace Castor3D
 			return;
 		}
 
-		uint32_t l_uiCount = GetSubmeshCount();
+		uint32_t l_count = GetSubmeshCount();
 
-		for ( uint32_t i = 0; i < l_uiCount; i++ )
+		for ( uint32_t i = 0; i < l_count; i++ )
 		{
 			m_submeshes[i]->ComputeContainers();
 		}

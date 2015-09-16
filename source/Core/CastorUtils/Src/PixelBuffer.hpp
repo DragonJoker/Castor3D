@@ -232,7 +232,7 @@ namespace Castor
 		virtual void mirror();
 
 	private:
-		virtual void do_init_column( uint32_t p_uiColumn )const;
+		virtual void do_init_column( uint32_t p_column )const;
 
 	private:
 		pixel m_pixel;

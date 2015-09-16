@@ -107,7 +107,7 @@ namespace Castor3D
 		eTOPOLOGY l_ePrimType;
 		eFRAME_VARIABLE_TYPE l_eType;
 		FrameVariableSPtr l_pVariable;
-		uint8_t l_uiCount;
+		uint8_t l_count;
 
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
@@ -141,7 +141,7 @@ namespace Castor3D
 				break;
 
 			case eCHUNK_TYPE_PROGRAM_VARIABLE:
-				l_uiCount = 0;
+				l_count = 0;
 				l_eType = eFRAME_VARIABLE_TYPE( -1 );
 				l_strText.clear();
 				l_pVariable.reset();
@@ -154,7 +154,7 @@ namespace Castor3D
 					switch ( l_chunkVariable.GetChunkType() )
 					{
 					case eCHUNK_TYPE_VARIABLE_COUNT:
-						l_return = DoParseChunk( l_uiCount, l_chunkVariable );
+						l_return = DoParseChunk( l_count, l_chunkVariable );
 						break;
 
 					case eCHUNK_TYPE_NAME:
@@ -178,10 +178,10 @@ namespace Castor3D
 
 					//if ( l_return && !l_pVariable )
 					//{
-					//	if ( l_uiCount && l_eType != eFRAME_VARIABLE_TYPE( -1 ) && !l_strText.empty() )
+					//	if ( l_count && l_eType != eFRAME_VARIABLE_TYPE( -1 ) && !l_strText.empty() )
 					//	{
 					//		FrameVariableBufferSPtr l_buffer = p_object.GetParent()->GetUserBuffer();
-					//		l_pVariable = l_buffer->CreateVariable( *p_object.GetParent(), l_eType, l_strText, l_uiCount );
+					//		l_pVariable = l_buffer->CreateVariable( *p_object.GetParent(), l_eType, l_strText, l_count );
 					//	}
 					//}
 
@@ -219,11 +219,11 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_SHADER_OBJECT_OUTCOUNT:
-					l_return = DoParseChunk( l_uiCount, l_chunk );
+					l_return = DoParseChunk( l_count, l_chunk );
 
 					if ( l_return )
 					{
-						p_object.SetOutputVtxCount( l_uiCount );
+						p_object.SetOutputVtxCount( l_count );
 					}
 
 					break;

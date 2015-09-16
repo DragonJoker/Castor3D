@@ -1510,9 +1510,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshDivide )
 	if ( l_pContext->pMesh )
 	{
 		String l_strName;
-		uint8_t l_uiCount;
+		uint8_t l_count;
 		p_arrayParams[0]->Get( l_strName );
-		p_arrayParams[1]->Get( l_uiCount );
+		p_arrayParams[1]->Get( l_count );
 
 		for ( PluginStrMap::iterator l_it = l_pEngine->PluginsBegin( ePLUGIN_TYPE_DIVIDER ); l_it != l_pEngine->PluginsEnd( ePLUGIN_TYPE_DIVIDER ) && !l_pDivider; ++l_it )
 		{
@@ -1535,7 +1535,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshDivide )
 
 			for ( auto && l_submesh : *l_pContext->pMesh )
 			{
-				l_pDivider->Subdivide( l_submesh, l_uiCount, false );
+				l_pDivider->Subdivide( l_submesh, l_count, false );
 			}
 
 			l_pPlugin->DestroyDivider( l_pDivider );
@@ -2649,9 +2649,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GeometryOutputVtxCount )
 	{
 		if ( l_pContext->eShaderObject == eSHADER_TYPE_GEOMETRY )
 		{
-			uint8_t l_uiCount;
-			p_arrayParams[0]->Get( l_uiCount );
-			l_pContext->pShaderProgram->SetOutputVtxCount( l_pContext->eShaderObject, l_uiCount );
+			uint8_t l_count;
+			p_arrayParams[0]->Get( l_count );
+			l_pContext->pShaderProgram->SetOutputVtxCount( l_pContext->eShaderObject, l_count );
 		}
 		else
 		{

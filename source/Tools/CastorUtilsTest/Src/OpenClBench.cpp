@@ -264,6 +264,7 @@ namespace Testing
 		{
 			m_queue.enqueueNDRangeKernel( m_kernel, cl::NullRange, cl::NDRange( 1, 1 ), cl::NDRange( 4, 4 ), NULL, &m_event );
 			m_queue.enqueueReadBuffer( m_clBufferMtx4x4C, CL_TRUE, 0, 16 * sizeof( float ), m_bufferMtx4x4C );
+			m_queue.flush();
 		}
 	}
 }

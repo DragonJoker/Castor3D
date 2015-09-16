@@ -1055,7 +1055,9 @@ namespace Castor
 			}
 		}
 	}
+
 #if CASTOR_HAS_VARIADIC_TEMPLATES
+
 	namespace
 	{
 		template< typename T, uint32_t Count, uint32_t Index, typename U, typename ... Values > void construct( Point< T, Count > & p_ptResult, U p_current, Values ... );
@@ -1085,7 +1087,9 @@ namespace Castor
 		std::memset( m_coords, 0, binary_size );
 		construct< T, Count, 0, Values... >( *this, p_values... );
 	}
+
 #else
+
 	template< typename T, uint32_t Count >
 	Point< T, Count >::Point()
 	{
@@ -1148,7 +1152,9 @@ namespace Castor
 		m_coords[2] = T( p_vC );
 		m_coords[3] = T( p_vD );
 	}
+
 #endif
+
 	template< typename T, uint32_t Count >
 	template< typename U >
 	Point< T, Count >::Point( Point< U, Count > const & p_pt )

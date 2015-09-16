@@ -261,28 +261,28 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Sets element value at given index
 		 *\param[in]	p_uiIndex	The index
-		 *\param[in]	p_tValue	The value
+		 *\param[in]	p_value	The value
 		 *\~french
 		 *\brief		Définit la valeur de l'élément à l'index donné
 		 *\param[in]	p_uiIndex	L'index
-		 *\param[in]	p_tValue	La valeur
+		 *\param[in]	p_value	La valeur
 		 */
-		virtual void SetElement( uint32_t p_uiIndex, T const & p_tValue )
+		virtual void SetElement( uint32_t p_uiIndex, T const & p_value )
 		{
 			CASTOR_ASSERT( p_uiIndex < m_arrayData.size() );
-			m_arrayData[p_uiIndex] = p_tValue;
+			m_arrayData[p_uiIndex] = p_value;
 		}
 		/**
 		 *\~english
 		 *\brief		Adds a value at the end of the buffer
-		 *\param[in]	p_tValue	The value
+		 *\param[in]	p_value	The value
 		 *\~french
 		 *\brief		Ajoute une valeur à la fin du tampon
-		 *\param[in]	p_tValue	La valeur
+		 *\param[in]	p_value	La valeur
 		 */
-		virtual void AddElement( T const & p_tValue )
+		virtual void AddElement( T const & p_value )
 		{
-			m_arrayData.push_back( p_tValue );
+			m_arrayData.push_back( p_value );
 		}
 		/**
 		 *\~english

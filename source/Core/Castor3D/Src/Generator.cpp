@@ -189,9 +189,9 @@ void Generator::ClearAllThreads()
 bool Generator::AllEnded()
 {
 	bool l_return = true;
-	uint32_t l_uiCount = DoGetThreadsCount();
+	uint32_t l_count = DoGetThreadsCount();
 
-	for ( uint32_t i = 0; i < l_uiCount && l_return; i++ )
+	for ( uint32_t i = 0; i < l_count && l_return; i++ )
 	{
 		l_return &= m_arraySlaveThreads[i] == NULL || m_arraySlaveThreads[i]->IsEnded();
 	}

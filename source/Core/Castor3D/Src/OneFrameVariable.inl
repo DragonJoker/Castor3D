@@ -104,15 +104,15 @@
 	}
 
 	template< typename T >
-	inline void OneFrameVariable< T >::SetValue( T const & p_tValue )
+	inline void OneFrameVariable< T >::SetValue( T const & p_value )
 	{
-		OneFrameVariable< T >::SetValue( p_tValue, 0 );
+		OneFrameVariable< T >::SetValue( p_value, 0 );
 	}
 
 	template< typename T >
-	inline void OneFrameVariable< T >::SetValue( T const & p_tValue, uint32_t p_uiIndex )
+	inline void OneFrameVariable< T >::SetValue( T const & p_value, uint32_t p_uiIndex )
 	{
-		policy::assign( this->m_pValues[p_uiIndex], p_tValue );
+		policy::assign( this->m_pValues[p_uiIndex], p_value );
 		TFrameVariable< T >::m_bChanged = true;
 	}
 

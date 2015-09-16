@@ -164,23 +164,23 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable
-		 *\param[in]	p_tValue	The new value
+		 *\param[in]	p_value	The new value
 		 *\~french
 		 *\brief		Définit la valeur de la variable
-		 *\param[in]	p_tValue	La valeur
+		 *\param[in]	p_value	La valeur
 		 */
-		inline void SetValue( T const & p_tValue );
+		inline void SetValue( T const & p_value );
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable
-		 *\param[in]	p_tValue	The new value
+		 *\param[in]	p_value	The new value
 		 *\param[in]	p_uiIndex	The index of the value
 		 *\~french
 		 *\brief		Définit la valeur de la variable
-		 *\param[in]	p_tValue	La valeur
+		 *\param[in]	p_value	La valeur
 		 *\param[in]	p_uiIndex	L'index de la valeur à modifier
 		 */
-		inline void SetValue( T const & p_tValue, uint32_t p_uiIndex );
+		inline void SetValue( T const & p_value, uint32_t p_uiIndex );
 		/**
 		 *\~english
 		 *\brief		Retrieves the byte size of the variable

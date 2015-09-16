@@ -2227,9 +2227,9 @@ namespace Castor
 				uint8_t const * l_pSrc = &p_pSrcBuffer[0];
 				uint8_t * l_pDst = &p_pDstBuffer[0];
 				uint32_t l_uiSrcCount = 0;
-				uint32_t l_uiCount = p_uiSrcSize / pixel_definitions< PFSrc >::Size;
+				uint32_t l_count = p_uiSrcSize / pixel_definitions< PFSrc >::Size;
 
-				for ( uint32_t i = 0; i < l_uiCount; i++ )
+				for ( uint32_t i = 0; i < l_count; i++ )
 				{
 					pixel_converter< PFSrc, PFDst >()( l_pSrc, l_pDst );
 				}

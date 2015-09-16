@@ -237,7 +237,7 @@ namespace
 			ConvertPixel< ePIXEL_FORMAT_A8R8G8B8 >( l_source );
 			ConvertPixel< ePIXEL_FORMAT_RGB32F >( l_source );
 			ConvertPixel< ePIXEL_FORMAT_ARGB32F >( l_source );
-			std::cout << std::endl;
+			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
 	
@@ -334,7 +334,7 @@ namespace
 			ConvertBuffer< ePIXEL_FORMAT_A8R8G8B8 >( l_source );
 			ConvertBuffer< ePIXEL_FORMAT_RGB32F >( l_source );
 			ConvertBuffer< ePIXEL_FORMAT_ARGB32F >( l_source );
-			std::cout << std::endl;
+			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
 	
@@ -369,7 +369,7 @@ namespace
 			ConvertBuffer< ePIXEL_FORMAT_DEPTH24 >( l_source );
 			ConvertBuffer< ePIXEL_FORMAT_DEPTH32 >( l_source );
 			ConvertBuffer< ePIXEL_FORMAT_DEPTH24S8 >( l_source );
-			std::cout << std::endl;
+			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
 	
@@ -405,7 +405,7 @@ namespace
 			ConvertBuffer< ePIXEL_FORMAT_DEPTH32 >( l_source );
 			ConvertBuffer< ePIXEL_FORMAT_DEPTH24S8 >( l_source );
 			ConvertBuffer< ePIXEL_FORMAT_STENCIL8 >( l_source );
-			std::cout << std::endl;
+			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
 	
@@ -435,7 +435,7 @@ namespace
 			Logger::LogDebug( l_stream );
 			ConvertBuffer< ePIXEL_FORMAT_DEPTH24S8 >( l_source );
 			ConvertBuffer< ePIXEL_FORMAT_STENCIL8 >( l_source );
-			std::cout << std::endl;
+			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
 	
@@ -459,8 +459,8 @@ namespace Testing
 
 	void CastorUtilsPixelFormatTest::Execute( uint32_t & p_errCount, uint32_t & p_testCount )
 	{
-		EXECUTE_TEST( TestPixelConversions, p_errCount, p_testCount );
-		EXECUTE_TEST( TestBufferConversions, p_errCount, p_testCount );
+		EXECUTE_TEST( CastorUtilsPixelFormatTest, TestPixelConversions, p_errCount, p_testCount );
+		EXECUTE_TEST( CastorUtilsPixelFormatTest, TestBufferConversions, p_errCount, p_testCount );
 	}
 
 	void CastorUtilsPixelFormatTest::TestPixelConversions( uint32_t & p_errCount, uint32_t & p_testCount )

@@ -265,11 +265,6 @@ namespace Castor
 		return MtxMultiplicator< T, U, Count >()( p_matrix, p_vertex );
 	}
 
-	template< typename T, typename U >
-	SquareMatrix< T, 4 > matrix::mult( SquareMatrix< T, 4 > const & p_matrixA, SquareMatrix<U, 4> const & p_matrixB )
-	{
-		return p_matrixA.multiply( p_matrixB );
-	}
 	template< typename T >
 	SquareMatrix< T, 4 > & matrix::switch_hand( SquareMatrix< T, 4 > & p_matrix )
 	{
@@ -284,8 +279,8 @@ namespace Castor
 	template< typename T >
 	SquareMatrix< T, 4 > matrix::get_switch_hand( SquareMatrix< T, 4 > const & p_matrix )
 	{
-		SquareMatrix< T, 4 > l_mtxReturn( p_matrix );
-		switch_hand( l_mtxReturn );
-		return l_mtxReturn;
+		SquareMatrix< T, 4 > l_return( p_matrix );
+		switch_hand( l_return );
+		return l_return;
 	}
 }

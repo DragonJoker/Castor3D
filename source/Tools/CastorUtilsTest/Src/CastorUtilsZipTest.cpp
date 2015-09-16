@@ -21,7 +21,7 @@ namespace Testing
 
 	void CastorUtilsZipTest::Execute( uint32_t & p_errCount, uint32_t & p_testCount )
 	{
-		EXECUTE_TEST( ZipFile, p_errCount, p_testCount );
+		EXECUTE_TEST( CastorUtilsZipTest, ZipFile, p_errCount, p_testCount );
 	}
 
 	void CastorUtilsZipTest::ZipFile( uint32_t & p_errCount, uint32_t & p_testCount )

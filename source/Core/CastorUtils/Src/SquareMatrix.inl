@@ -1,6 +1,6 @@
 ﻿namespace
 {
-	template< typename Type, uint32_t Rows > struct SqrMtxOperators;
+	template< typename Type, uint32_t Count > struct SqrMtxOperators;
 
 	template< typename Type > struct SqrMtxOperators< Type, 4 >
 	{
@@ -13,10 +13,10 @@
 			Castor::Point< Type, 4 > l_ptSrcA1( p_mtxA[1][0], p_mtxA[1][1], p_mtxA[1][2], p_mtxA[1][3] );
 			Castor::Point< Type, 4 > l_ptSrcA2( p_mtxA[2][0], p_mtxA[2][1], p_mtxA[2][2], p_mtxA[2][3] );
 			Castor::Point< Type, 4 > l_ptSrcA3( p_mtxA[3][0], p_mtxA[3][1], p_mtxA[3][2], p_mtxA[3][3] );
-			std::memcpy( p_mtxA[0], ( l_ptSrcA0 * p_mtxB[0][0] + l_ptSrcA1 * p_mtxB[0][1] + l_ptSrcA2 * p_mtxB[0][2] + l_ptSrcA3 * p_mtxB[0][3] ).const_ptr(), Size );
-			std::memcpy( p_mtxA[1], ( l_ptSrcA0 * p_mtxB[1][0] + l_ptSrcA1 * p_mtxB[1][1] + l_ptSrcA2 * p_mtxB[1][2] + l_ptSrcA3 * p_mtxB[1][3] ).const_ptr(), Size );
-			std::memcpy( p_mtxA[2], ( l_ptSrcA0 * p_mtxB[2][0] + l_ptSrcA1 * p_mtxB[2][1] + l_ptSrcA2 * p_mtxB[2][2] + l_ptSrcA3 * p_mtxB[2][3] ).const_ptr(), Size );
-			std::memcpy( p_mtxA[3], ( l_ptSrcA0 * p_mtxB[3][0] + l_ptSrcA1 * p_mtxB[3][1] + l_ptSrcA2 * p_mtxB[3][2] + l_ptSrcA3 * p_mtxB[3][3] ).const_ptr(), Size );
+			std::memcpy( p_mtxA[0].ptr(), ( l_ptSrcA0 * p_mtxB[0][0] + l_ptSrcA1 * p_mtxB[0][1] + l_ptSrcA2 * p_mtxB[0][2] + l_ptSrcA3 * p_mtxB[0][3] ).const_ptr(), Size );
+			std::memcpy( p_mtxA[1].ptr(), ( l_ptSrcA0 * p_mtxB[1][0] + l_ptSrcA1 * p_mtxB[1][1] + l_ptSrcA2 * p_mtxB[1][2] + l_ptSrcA3 * p_mtxB[1][3] ).const_ptr(), Size );
+			std::memcpy( p_mtxA[2].ptr(), ( l_ptSrcA0 * p_mtxB[2][0] + l_ptSrcA1 * p_mtxB[2][1] + l_ptSrcA2 * p_mtxB[2][2] + l_ptSrcA3 * p_mtxB[2][3] ).const_ptr(), Size );
+			std::memcpy( p_mtxA[3].ptr(), ( l_ptSrcA0 * p_mtxB[3][0] + l_ptSrcA1 * p_mtxB[3][1] + l_ptSrcA2 * p_mtxB[3][2] + l_ptSrcA3 * p_mtxB[3][3] ).const_ptr(), Size );
 		}
 
 		static inline Castor::SquareMatrix< Type, 4 > inverse( Castor::SquareMatrix< Type, 4 > const & p_mtx )
@@ -202,24 +202,24 @@
 		}
 	};
 
-	template< typename T, uint32_t Rows > struct CoFactorComputer;
+	template< typename T, uint32_t Count > struct CoFactorComputer;
 
 	template< typename T > struct CoFactorComputer< T, 1 >
 	{
-		T operator()( Castor::SquareMatrix< T, 1 > const & CU_PARAM_UNUSED( p_matrix ), uint32_t CU_PARAM_UNUSED( p_uiRow ), uint32_t CU_PARAM_UNUSED( p_uiColumn ) )
+		T operator()( Castor::SquareMatrix< T, 1 > const & CU_PARAM_UNUSED( p_matrix ), uint32_t CU_PARAM_UNUSED( p_column ), uint32_t CU_PARAM_UNUSED( p_row ) )
 		{
 			return Castor::Policy< T >::unit();
 		}
 	};
 
-	template< typename T, uint32_t Rows > struct CoFactorComputer
+	template< typename T, uint32_t Count > struct CoFactorComputer
 	{
-		T operator()( Castor::SquareMatrix< T, Rows > const & p_matrix, uint32_t p_uiRow, uint32_t p_uiColumn )
+		T operator()( Castor::SquareMatrix< T, Count > const & p_matrix, uint32_t p_column, uint32_t p_row )
 		{
 			T l_tReturn = T();
-			Castor::SquareMatrix < T, Rows - 1 > l_mtxTmp = p_matrix.get_minor( p_uiRow, p_uiColumn );
+			Castor::SquareMatrix < T, Count - 1 > l_mtxTmp = p_matrix.get_minor( p_column, p_row );
 
-			if ( ( p_uiRow + p_uiColumn ) % 2 == 0 )
+			if ( ( p_row + p_column ) % 2 == 0 )
 			{
 				l_tReturn = l_mtxTmp.get_determinant();
 			}
@@ -238,123 +238,123 @@ namespace Castor
 
 //*************************************************************************************************
 
-	template< typename T, uint32_t Rows >
-	inline SquareMatrix< T, Rows >::SquareMatrix()
-		: Matrix< T, Rows, Rows >()
+	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count >::SquareMatrix()
+		: my_matrix_type()
 	{
 	}
-	template< typename T, uint32_t Rows >
-	inline SquareMatrix< T, Rows >::SquareMatrix( T const & p_tValue )
-		: Matrix< T, Rows, Rows >( p_tValue )
+	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count >::SquareMatrix( T const & p_value )
+		: my_matrix_type( p_value )
 	{
 	}
-	template< typename T, uint32_t Rows >
-	inline SquareMatrix< T, Rows >::SquareMatrix( SquareMatrix< T, Rows > const & p_matrix )
-		: Matrix< T, Rows, Rows >( p_matrix )
+	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count >::SquareMatrix( SquareMatrix< T, Count > const & p_matrix )
+		: my_matrix_type( p_matrix )
 	{
 	}
-	template< typename T, uint32_t Rows >
-	inline SquareMatrix< T, Rows >::SquareMatrix( SquareMatrix< T, Rows > && p_matrix )
-		: Matrix< T, Rows, Rows >( std::move( p_matrix ) )
+	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count >::SquareMatrix( SquareMatrix< T, Count > && p_matrix )
+		: my_matrix_type( std::move( p_matrix ) )
 	{
 	}
-	template< typename T, uint32_t Rows >
+	template< typename T, uint32_t Count >
 	template< uint32_t _Rows >
-	inline SquareMatrix< T, Rows >::SquareMatrix( SquareMatrix< T, _Rows > const & p_matrix )
-		: Matrix< T, Rows, Rows >()
+	inline SquareMatrix< T, Count >::SquareMatrix( SquareMatrix< T, _Rows > const & p_matrix )
+		: my_matrix_type()
 	{
-		uint32_t l_uiCount = std::min( Rows, _Rows );
+		uint32_t l_count = std::min( Count, _Rows );
 
-		for ( uint32_t i = 0; i < l_uiCount; i++ )
+		for ( uint32_t i = 0; i < l_count; i++ )
 		{
-			for ( uint32_t j = 0; j < l_uiCount; j++ )
+			for ( uint32_t j = 0; j < l_count; j++ )
 			{
 				this->operator[]( i )[j] = p_matrix[i][j];
 			}
 		}
 
-		for ( int i = l_uiCount; i < Rows; i++ )
+		for ( int i = l_count; i < Count; i++ )
 		{
 			this->operator[]( i )[i] = Castor::Policy< T >::unit();
 		}
 	}
-	template< typename T, uint32_t Rows >
+	template< typename T, uint32_t Count >
 	template< typename Type >
-	inline SquareMatrix< T, Rows >::SquareMatrix( SquareMatrix< Type, Rows > const & p_matrix )
-		: Matrix< T, Rows, Rows >( p_matrix )
+	inline SquareMatrix< T, Count >::SquareMatrix( SquareMatrix< Type, Count > const & p_matrix )
+		: my_matrix_type( p_matrix )
 	{
 	}
-	template< typename T, uint32_t Rows >
+	template< typename T, uint32_t Count >
 	template< typename Type >
-	inline SquareMatrix< T, Rows >::SquareMatrix( Matrix< Type, Rows, Rows > const & p_matrix )
-		: Matrix< T, Rows, Rows >( p_matrix )
+	inline SquareMatrix< T, Count >::SquareMatrix( Matrix< Type, Count, Count > const & p_matrix )
+		: my_matrix_type( p_matrix )
 	{
 	}
-	template< typename T, uint32_t Rows >
+	template< typename T, uint32_t Count >
 	template< typename Type >
-	inline SquareMatrix< T, Rows >::SquareMatrix( Type const * p_matrix )
-		: Matrix< T, Rows, Rows >( p_matrix )
+	inline SquareMatrix< T, Count >::SquareMatrix( Type const * p_matrix )
+		: my_matrix_type( p_matrix )
 	{
 	}
-	template< typename T, uint32_t Rows >
-	inline SquareMatrix< T, Rows >::~SquareMatrix()
+	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count >::~SquareMatrix()
 	{
 	}
-	template< typename T, uint32_t Rows >
-	inline T SquareMatrix< T, Rows >::get_determinant()const
+	template< typename T, uint32_t Count >
+	inline T SquareMatrix< T, Count >::get_determinant()const
 	{
 		T l_tReturn( Castor::Policy< T >::zero() );
 
-		for ( uint32_t i = 0; i < Rows; i++ )
+		for ( uint32_t i = 0; i < Count; i++ )
 		{
 			l_tReturn += this->operator[]( 0 )[i] * get_cofactor( i, 0 );
 		}
 
 		return l_tReturn;
 	}
-	template< typename T, uint32_t Rows >
-	inline bool SquareMatrix< T, Rows >::is_orthogonal()const
+	template< typename T, uint32_t Count >
+	inline bool SquareMatrix< T, Count >::is_orthogonal()const
 	{
 		bool l_bReturn = false;
-		Matrix< T, Rows, Rows > l_mTmp( *this );
-		SquareMatrix< T, Rows > l_mId1;
-		SquareMatrix< T, Rows > l_mId2;
+		my_matrix_type l_mTmp( *this );
+		SquareMatrix< T, Count > l_mId1;
+		SquareMatrix< T, Count > l_mId2;
 		l_mTmp.transpose();
 		l_mId1.set_identity();
 		l_mId2.set_identity();
 		return ( l_mId1 == *this * l_mTmp ) && ( l_mId2 == l_mTmp * ( *this ) );
 	}
-	template< typename T, uint32_t Rows >
-	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::transpose()
+	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::transpose()
 	{
 		*this = my_matrix_type::get_transposed();
 		return *this;
 	}
-	template< typename T, uint32_t Rows >
-	inline bool SquareMatrix< T, Rows >::is_symmetrical()const
+	template< typename T, uint32_t Count >
+	inline bool SquareMatrix< T, Count >::is_symmetrical()const
 	{
 		bool l_bReturn = true;
 
-		for ( uint32_t i = 0; i < Rows && l_bReturn; i++ )
+		for ( uint32_t i = 0; i < Count && l_bReturn; i++ )
 		{
-			for ( uint32_t j = 0; j < Rows && l_bReturn; j++ )
+			for ( uint32_t j = 0; j < Count && l_bReturn; j++ )
 			{
-				l_bReturn = Castor::Policy< T >::equals( this->operator[]( i )[j], this->operator[]( j )[i] );
+				l_bReturn = Castor::Policy< T >::equals( m_columns[i][j], m_columns[j][i] );
 			}
 		}
 
 		return l_bReturn;
 	}
-	template< typename T, uint32_t Rows >
-	inline bool SquareMatrix< T, Rows >::is_anti_symmetrical()const
+	template< typename T, uint32_t Count >
+	inline bool SquareMatrix< T, Count >::is_anti_symmetrical()const
 	{
 		bool l_bReturn = true;
 
-		for ( uint32_t i = 0; i < Rows && l_bReturn; i++ )
+		for ( uint32_t i = 0; i < Count && l_bReturn; i++ )
 		{
-			for ( uint32_t j = 0; j < Rows && l_bReturn; j++ )
+			for ( uint32_t j = 0; j < Count && l_bReturn; j++ )
 			{
-				if ( !Castor::Policy< T >::is_null( this->operator[]( i )[j] + this->operator[]( j )[i] ) )
+				if ( !Castor::Policy< T >::is_null( m_columns[i][j] + m_columns[j][i] ) )
 				{
 					l_bReturn = false;
 				}
@@ -363,29 +363,29 @@ namespace Castor
 
 		return l_bReturn;
 	}
-	template< typename T, uint32_t Rows >
-	inline SquareMatrix< T, Rows > SquareMatrix< T, Rows >::get_inverse()const
+	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count > SquareMatrix< T, Count >::get_inverse()const
 	{
-		return SqrMtxOperators< T, Rows >::inverse( *this );
+		return SqrMtxOperators< T, Count >::inverse( *this );
 	}
-	template< typename T, uint32_t Rows >
-	inline SquareMatrix < T, Rows - 1 > SquareMatrix< T, Rows >::get_minor( uint32_t x, uint32_t y )const
+	template< typename T, uint32_t Count >
+	inline SquareMatrix < T, Count - 1 > SquareMatrix< T, Count >::get_minor( uint32_t x, uint32_t y )const
 	{
-		SquareMatrix < T, Rows - 1 > l_mReturn;
-		l_mReturn.set_identity();
+		SquareMatrix < T, Count - 1 > l_return;
+		l_return.set_identity();
 		uint32_t l_i = 0, l_j = 0;
 
-		for ( uint32_t i = 0; i < Rows; i++ )
+		for ( uint32_t i = 0; i < Count; i++ )
 		{
 			if ( i != x )
 			{
 				l_j = 0;
 
-				for ( uint32_t j = 0; j < Rows; j++ )
+				for ( uint32_t j = 0; j < Count; j++ )
 				{
 					if ( j != y )
 					{
-						l_mReturn[l_i][l_j++] = this->operator[]( i )[j];
+						l_return[l_i][l_j++] = m_columns[i][j];
 					}
 				}
 
@@ -393,205 +393,145 @@ namespace Castor
 			}
 		}
 
-		return l_mReturn;
+		return l_return;
 	}
-	template< typename T, uint32_t Rows >
-	inline T SquareMatrix< T, Rows >::get_cofactor( uint32_t p_uiRow, uint32_t p_uiColumn )const
+	template< typename T, uint32_t Count >
+	inline T SquareMatrix< T, Count >::get_cofactor( uint32_t p_column, uint32_t p_row )const
 	{
-		return CoFactorComputer< T, Rows >()( *this, p_uiRow, p_uiColumn );
+		return CoFactorComputer< T, Count >()( *this, p_column, p_row );
 	}
-	template< typename T, uint32_t Rows >
-	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::invert()
+	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::invert()
 	{
 		T l_tDeterminant = get_determinant();
 
 		if ( !Castor::Policy< T >::is_null( l_tDeterminant ) )
 		{
-			SquareMatrix< T, Rows > l_mTmp;
+			SquareMatrix< T, Count > l_mTmp;
 
-			for ( uint32_t i = 0; i < Rows; i++ )
+			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				for ( uint32_t j = 0; j < Rows; j++ )
+				for ( uint32_t j = 0; j < Count; j++ )
 				{
 					l_mTmp[i][j] = get_cofactor( i, j ) / l_tDeterminant;
 				}
 			}
 
-			for ( uint32_t i = 0; i < Rows; i++ )
-			{
-				for ( uint32_t j = 0; j < Rows; j++ )
-				{
-					if ( Castor::Policy< T >::is_null( l_mTmp[i][j] ) )
-					{
-						this->operator[]( i )[j] = T();
-					}
-					else
-					{
-						this->operator[]( i )[j] = l_mTmp[i][j];
-					}
-				}
-			}
+			std::memcpy( my_matrix_type::ptr(), l_mTmp.const_ptr(), my_matrix_type::size );
 		}
 
 		return *this;
 	}
-	template< typename T, uint32_t Rows >
-	inline SquareMatrix< T, Rows > SquareMatrix< T, Rows >::multiply( SquareMatrix< T, Rows > const & p_matrix )const
-	{
-		SquareMatrix< T, Rows > l_mtxReturn;
-
-		for ( uint32_t i = 0; i < Rows; i++ )
-		{
-			for ( uint32_t j = 0; j < Rows; j++ )
-			{
-				l_mtxReturn.set_column( i, l_mtxReturn.get_column( i ) + my_matrix_type::get_column( j ) * p_matrix[i][j] );
-			}
-		}
-
-		return l_mtxReturn;
-	}
-	template< typename T, uint32_t Rows >
+	template< typename T, uint32_t Count >
 	template< typename Type >
-	inline SquareMatrix< T, Rows > SquareMatrix< T, Rows >::multiply( SquareMatrix< Type, Rows > const & p_matrix )const
+	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator=( Matrix< Type, Count, Count > const & p_matrix )
 	{
-		SquareMatrix< T, Rows > l_mtxReturn;
-
-		for ( uint32_t i = 0; i < Rows; i++ )
-		{
-			for ( uint32_t j = 0; j < Rows; j++ )
-			{
-				l_mtxReturn.set_column( i, l_mtxReturn.get_column( i ) + my_matrix_type::get_column( j ) * T( p_matrix[i][j] ) );
-			}
-		}
-
-		return l_mtxReturn;
+		my_matrix_type::operator =( p_matrix );
+		return * this;
 	}
-	template< typename T, uint32_t Rows >
-	template <uint32_t _Columns>
-	inline Matrix< T, Rows, _Columns > SquareMatrix< T, Rows >::multiply( Matrix< T, Rows, _Columns > const & p_matrix )const
+	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator=( SquareMatrix< T, Count > const & p_matrix )
 	{
-		Matrix< T, Rows, _Columns > l_mtxReturn;
-
-		for ( uint32_t i = 0; i < _Columns; i++ )
-		{
-			for ( uint32_t j = 0; j < Rows; j++ )
-			{
-				l_mtxReturn.set_column( i, l_mtxReturn.get_column( i ) + my_matrix_type::get_column( j ) * p_matrix[i][j] );
-			}
-		}
-
-		return l_mtxReturn;
+		my_matrix_type::operator =( p_matrix );
+		return * this;
 	}
-	template< typename T, uint32_t Rows >
+	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator=( SquareMatrix< T, Count > && p_matrix )
+	{
+		my_matrix_type::operator =( std::move( p_matrix ) );
+		return * this;
+	}
+	template< typename T, uint32_t Count >
 	template< typename Type >
-	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::operator=( Matrix< Type, Rows, Rows > const & p_matrix )
+	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator=( SquareMatrix< Type, Count > const & p_matrix )
 	{
-		Matrix< T, Rows, Rows >::operator =( p_matrix );
+		my_matrix_type::operator =( p_matrix );
 		return * this;
 	}
-	template< typename T, uint32_t Rows >
-	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::operator=( SquareMatrix< T, Rows > const & p_matrix )
-	{
-		Matrix< T, Rows, Rows >::operator =( p_matrix );
-		return * this;
-	}
-	template< typename T, uint32_t Rows >
-	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::operator=( SquareMatrix< T, Rows > && p_matrix )
-	{
-		Matrix< T, Rows, Rows >::operator =( std::move( p_matrix ) );
-		return * this;
-	}
-	template< typename T, uint32_t Rows >
+	template< typename T, uint32_t Count >
 	template< typename Type >
-	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::operator=( SquareMatrix< Type, Rows > const & p_matrix )
+	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator+=( SquareMatrix< Type, Count > const & p_matrix )
 	{
-		Matrix< T, Rows, Rows >::operator =( p_matrix );
+		my_matrix_type::operator +=( p_matrix );
 		return * this;
 	}
-	template< typename T, uint32_t Rows >
+	template< typename T, uint32_t Count >
 	template< typename Type >
-	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::operator+=( SquareMatrix< Type, Rows > const & p_matrix )
+	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator-=( SquareMatrix< Type, Count > const & p_matrix )
 	{
-		Matrix< T, Rows, Rows >::operator +=( p_matrix );
+		my_matrix_type::operator -=( p_matrix );
 		return * this;
 	}
-	template< typename T, uint32_t Rows >
+	template< typename T, uint32_t Count >
 	template< typename Type >
-	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::operator-=( SquareMatrix< Type, Rows > const & p_matrix )
+	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator*=( SquareMatrix< Type, Count > const & p_matrix )
 	{
-		Matrix< T, Rows, Rows >::operator -=( p_matrix );
+		SqrMtxOperators< T, Count >::mul( *this, p_matrix );
 		return * this;
 	}
-	template< typename T, uint32_t Rows >
+	template< typename T, uint32_t Count >
 	template< typename Type >
-	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::operator*=( SquareMatrix< Type, Rows > const & p_matrix )
+	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator=( Type const * p_matrix )
 	{
-		SqrMtxOperators< T, Rows >::mul( *this, p_matrix );
+		my_matrix_type::operator=( p_matrix );
 		return * this;
 	}
-	template< typename T, uint32_t Rows >
+	template< typename T, uint32_t Count >
 	template< typename Type >
-	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::operator=( Type const * p_pMatrix )
+	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator+=( Type const * p_matrix )
 	{
-		Matrix< T, Rows, Rows >::operator =( p_pMatrix );
+		my_matrix_type::operator+=( p_matrix );
 		return * this;
 	}
-	template< typename T, uint32_t Rows >
+	template< typename T, uint32_t Count >
 	template< typename Type >
-	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::operator+=( Type const * p_pMatrix )
+	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator-=( Type const * p_matrix )
 	{
-		Matrix< T, Rows, Rows >::operator +=( p_pMatrix );
+		my_matrix_type::operator-=( p_matrix );
 		return * this;
 	}
-	template< typename T, uint32_t Rows >
+	template< typename T, uint32_t Count >
 	template< typename Type >
-	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::operator-=( Type const * p_pMatrix )
+	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator*=( Type const * p_matrix )
 	{
-		Matrix< T, Rows, Rows >::operator -=( p_pMatrix );
+		my_matrix_type::operator*=( p_matrix );
 		return * this;
 	}
-	template< typename T, uint32_t Rows >
-	template< typename Type >
-	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::operator*=( Type const * p_pMatrix )
+	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator+=( T const & p_value )
 	{
-		*this = multiply( p_pMatrix );
+		my_matrix_type::operator+=( p_value );
 		return * this;
 	}
-	template< typename T, uint32_t Rows >
-	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::operator+=( T const & p_tValue )
+	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator-=( T const & p_value )
 	{
-		Matrix< T, Rows, Rows >::operator +=( p_tValue );
+		my_matrix_type::operator-=( p_value );
 		return * this;
 	}
-	template< typename T, uint32_t Rows >
-	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::operator-=( T const & p_tValue )
+	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator*=( T const & p_value )
 	{
-		Matrix< T, Rows, Rows >::operator -=( p_tValue );
+		my_matrix_type::operator*=( p_value );
 		return * this;
 	}
-	template< typename T, uint32_t Rows >
-	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::operator*=( T const & p_tValue )
+	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::operator/=( T const & p_value )
 	{
-		Matrix< T, Rows, Rows >::operator *=( p_tValue );
-		return * this;
-	}
-	template< typename T, uint32_t Rows >
-	inline SquareMatrix< T, Rows > & SquareMatrix< T, Rows >::operator/=( T const & p_tValue )
-	{
-		Matrix< T, Rows, Rows >::operator /=( p_tValue );
+		my_matrix_type::operator/=( p_value );
 		return * this;
 	}
 
 //*************************************************************************************************
 
-	template< typename T, uint32_t Rows >
-	inline bool operator==( SquareMatrix< T, Rows > const & p_mtxA, SquareMatrix< T, Rows > const & p_mtxB )
+	template< typename T, uint32_t Count >
+	inline bool operator==( SquareMatrix< T, Count > const & p_mtxA, SquareMatrix< T, Count > const & p_mtxB )
 	{
 		bool l_bReturn = true;
 
-		for ( uint32_t i = 0; i < Rows && l_bReturn; i++ )
+		for ( uint32_t i = 0; i < Count && l_bReturn; i++ )
 		{
-			for ( uint32_t j = 0; j < Rows && l_bReturn; j++ )
+			for ( uint32_t j = 0; j < Count && l_bReturn; j++ )
 			{
 				l_bReturn = Castor::Policy< T >::equals( p_mtxA[i][j], p_mtxB[i][j] );
 			}
@@ -599,110 +539,110 @@ namespace Castor
 
 		return l_bReturn;
 	}
-	template< typename T, uint32_t Rows >
-	inline bool operator!=( SquareMatrix< T, Rows > const & p_mtxA, SquareMatrix< T, Rows > const & p_mtxB )
+	template< typename T, uint32_t Count >
+	inline bool operator!=( SquareMatrix< T, Count > const & p_mtxA, SquareMatrix< T, Count > const & p_mtxB )
 	{
 		return ! operator ==( p_mtxA, p_mtxB );
 	}
-	template< typename T, uint32_t Rows, typename U >
-	SquareMatrix< T, Rows > operator+( SquareMatrix< T, Rows > const & p_mtxA, SquareMatrix <U, Rows> const & p_mtxB )
+	template< typename T, uint32_t Count, typename U >
+	SquareMatrix< T, Count > operator+( SquareMatrix< T, Count > const & p_mtxA, SquareMatrix< U, Count > const & p_mtxB )
 	{
-		SquareMatrix< T, Rows > l_mtxReturn( p_mtxA );
-		l_mtxReturn += p_mtxB;
-		return l_mtxReturn;
+		SquareMatrix< T, Count > l_return( p_mtxA );
+		l_return += p_mtxB;
+		return l_return;
 	}
-	template< typename T, uint32_t Rows, typename U >
-	SquareMatrix< T, Rows > operator-( SquareMatrix< T, Rows > const & p_mtxA, SquareMatrix <U, Rows> const & p_mtxB )
+	template< typename T, uint32_t Count, typename U >
+	SquareMatrix< T, Count > operator-( SquareMatrix< T, Count > const & p_mtxA, SquareMatrix< U, Count > const & p_mtxB )
 	{
-		SquareMatrix< T, Rows > l_mtxReturn( p_mtxA );
-		l_mtxReturn -= p_mtxB;
-		return l_mtxReturn;
+		SquareMatrix< T, Count > l_return( p_mtxA );
+		l_return -= p_mtxB;
+		return l_return;
 	}
-	template< typename T, uint32_t Rows, typename U >
-	SquareMatrix< T, Rows > operator*( SquareMatrix< T, Rows > const & p_mtxA, SquareMatrix <U, Rows> const & p_mtxB )
+	template< typename T, uint32_t Count, typename U >
+	SquareMatrix< T, Count > operator*( SquareMatrix< T, Count > const & p_mtxA, SquareMatrix< U, Count > const & p_mtxB )
 	{
-		SquareMatrix< T, Rows > l_mtxReturn( p_mtxA );
-		l_mtxReturn *= p_mtxB;
-		return l_mtxReturn;
+		SquareMatrix< T, Count > l_return( p_mtxA );
+		l_return *= p_mtxB;
+		return l_return;
 	}
-	template< typename T, uint32_t Rows, typename U >
-	SquareMatrix< T, Rows > operator+( SquareMatrix< T, Rows > const & p_matrix, U const * p_pMatrix )
+	template< typename T, uint32_t Count, typename U >
+	SquareMatrix< T, Count > operator+( SquareMatrix< T, Count > const & p_matrix, U const * p_values )
 	{
-		SquareMatrix< T, Rows > l_mtxReturn( p_matrix );
-		l_mtxReturn += p_pMatrix;
-		return l_mtxReturn;
+		SquareMatrix< T, Count > l_return( p_matrix );
+		l_return += p_values;
+		return l_return;
 	}
-	template< typename T, uint32_t Rows, typename U >
-	SquareMatrix< T, Rows > operator-( SquareMatrix< T, Rows > const & p_matrix, U const * p_pMatrix )
+	template< typename T, uint32_t Count, typename U >
+	SquareMatrix< T, Count > operator-( SquareMatrix< T, Count > const & p_matrix, U const * p_values )
 	{
-		SquareMatrix< T, Rows > l_mtxReturn( p_matrix );
-		l_mtxReturn -= p_pMatrix;
-		return l_mtxReturn;
+		SquareMatrix< T, Count > l_return( p_matrix );
+		l_return -= p_values;
+		return l_return;
 	}
-	template< typename T, uint32_t Rows, typename U >
-	SquareMatrix< T, Rows > operator*( SquareMatrix< T, Rows > const & p_matrix, U const * p_pMatrix )
+	template< typename T, uint32_t Count, typename U >
+	SquareMatrix< T, Count > operator*( SquareMatrix< T, Count > const & p_matrix, U const * p_values )
 	{
-		SquareMatrix< T, Rows > l_mtxReturn( p_matrix );
-		l_mtxReturn *= p_pMatrix;
-		return l_mtxReturn;
+		SquareMatrix< T, Count > l_return( p_matrix );
+		l_return *= p_values;
+		return l_return;
 	}
-	template< typename T, uint32_t Rows, typename U >
-	SquareMatrix< T, Rows > operator+( SquareMatrix< T, Rows > const & p_matrix, T const & p_tValue )
+	template< typename T, uint32_t Count, typename U >
+	SquareMatrix< T, Count > operator+( SquareMatrix< T, Count > const & p_matrix, T const & p_value )
 	{
-		SquareMatrix< T, Rows > l_mtxReturn( p_matrix );
-		l_mtxReturn += p_tValue;
-		return l_mtxReturn;
+		SquareMatrix< T, Count > l_return( p_matrix );
+		l_return += p_value;
+		return l_return;
 	}
-	template< typename T, uint32_t Rows, typename U >
-	SquareMatrix< T, Rows > operator-( SquareMatrix< T, Rows > const & p_matrix, T const & p_tValue )
+	template< typename T, uint32_t Count, typename U >
+	SquareMatrix< T, Count > operator-( SquareMatrix< T, Count > const & p_matrix, T const & p_value )
 	{
-		SquareMatrix< T, Rows > l_mtxReturn( p_matrix );
-		l_mtxReturn -= p_tValue;
-		return l_mtxReturn;
+		SquareMatrix< T, Count > l_return( p_matrix );
+		l_return -= p_value;
+		return l_return;
 	}
-	template< typename T, uint32_t Rows, typename U >
-	SquareMatrix< T, Rows > operator*( SquareMatrix< T, Rows > const & p_matrix, T const & p_tValue )
+	template< typename T, uint32_t Count, typename U >
+	SquareMatrix< T, Count > operator*( SquareMatrix< T, Count > const & p_matrix, T const & p_value )
 	{
-		SquareMatrix< T, Rows > l_mtxReturn( p_matrix );
-		l_mtxReturn *= p_tValue;
-		return l_mtxReturn;
+		SquareMatrix< T, Count > l_return( p_matrix );
+		l_return *= p_value;
+		return l_return;
 	}
-	template< typename T, uint32_t Rows, typename U >
-	SquareMatrix< T, Rows > operator/( SquareMatrix< T, Rows > const & p_matrix, T const & p_tValue )
+	template< typename T, uint32_t Count, typename U >
+	SquareMatrix< T, Count > operator/( SquareMatrix< T, Count > const & p_matrix, T const & p_value )
 	{
-		SquareMatrix< T, Rows > l_mtxReturn( p_matrix );
-		l_mtxReturn /= p_tValue;
-		return l_mtxReturn;
+		SquareMatrix< T, Count > l_return( p_matrix );
+		l_return /= p_value;
+		return l_return;
 	}
-	template< typename T, uint32_t Rows >
-	inline SquareMatrix< T, Rows > operator+( T p_tValue, SquareMatrix< T, Rows > const & p_matrix )
+	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count > operator+( T p_value, SquareMatrix< T, Count > const & p_matrix )
 	{
-		return operator +( p_matrix, p_tValue );
+		return operator +( p_matrix, p_value );
 	}
-	template< typename T, uint32_t Rows >
-	inline SquareMatrix< T, Rows > operator-( T p_tValue, SquareMatrix< T, Rows > const & p_matrix )
+	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count > operator-( T p_value, SquareMatrix< T, Count > const & p_matrix )
 	{
-		return operator -( p_matrix, p_tValue );
+		return operator -( p_matrix, p_value );
 	}
-	template< typename T, uint32_t Rows >
-	inline SquareMatrix< T, Rows > operator*( T p_tValue, SquareMatrix< T, Rows > const & p_matrix )
+	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count > operator*( T p_value, SquareMatrix< T, Count > const & p_matrix )
 	{
-		return operator *( p_matrix, p_tValue );
+		return operator *( p_matrix, p_value );
 	}
-	template< typename T, uint32_t Rows >
-	inline SquareMatrix< T, Rows > operator-( SquareMatrix< T, Rows > const & p_matrix )
+	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count > operator-( SquareMatrix< T, Count > const & p_matrix )
 	{
-		Matrix< T, Rows, Rows > l_mtxReturn;
+		SquareMatrix< T, Count > l_return;
 
-		for ( uint32_t i = 0; i < Rows; i++ )
+		for ( uint32_t i = 0; i < Count; i++ )
 		{
-			for ( uint32_t j = 0; j < Rows; j++ )
+			for ( uint32_t j = 0; j < Count; j++ )
 			{
-				l_mtxReturn[i][j] = -p_matrix[i][j];
+				l_return[i][j] = -p_matrix[i][j];
 			}
 		}
 
-		return l_mtxReturn;
+		return l_return;
 	}
 
 //*************************************************************************************************

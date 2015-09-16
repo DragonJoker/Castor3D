@@ -69,10 +69,16 @@ namespace Castor3D
 			memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
 		}
 
-		void ApplyLightMtxComponent( float const * p_component, int p_index, int & p_offset, PxBufferBase & p_data )
+		void ApplyLightComponent( Coords4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
 		{
 			uint8_t * l_pDst = p_data.get_at( p_index * 10 + p_offset++, 0 );
-			memcpy( l_pDst, p_component, 4 * sizeof( float ) );
+			memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
+		}
+
+		void ApplyLightMtxComponent( Coords4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
+		{
+			uint8_t * l_pDst = p_data.get_at( p_index * 10 + p_offset++, 0 );
+			memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
 		}
 
 		void ApplyLightComponent( Matrix4x4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
@@ -1603,7 +1609,7 @@ namespace Castor3D
 	void Scene::DoRenderSubmesh( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology )
 	{
 		ShaderProgramBaseSPtr l_pProgram;
-		uint32_t l_uiCount = 0;
+		uint32_t l_count = 0;
 		uint32_t l_uiSize = p_node.m_pMaterial->GetPassCount();
 
 		for ( auto l_pass : *p_node.m_pMaterial )
@@ -1642,7 +1648,7 @@ namespace Castor3D
 				DoBindCamera( *l_sceneBuffer );
 			}
 
-			l_pass->Render( l_uiCount++, l_uiSize );
+			l_pass->Render( l_count++, l_uiSize );
 			p_node.m_pSubmesh->Draw( p_eTopology, *l_pass );
 			l_pass->EndRender();
 
@@ -1822,7 +1828,7 @@ namespace Castor3D
 			{
 				if ( l_renderSystem->GetMainContext()->IsDeferredShadingSet() )
 				{
-					//m_pCameraPos->SetValue( Castor::matrix::mult( m_pRenderSystem->GetPipeline()->GetMatrix( eMTXMODE_VIEW ), l_position ) );
+					//m_pCameraPos->SetValue( m_pRenderSystem->GetPipeline()->GetMatrix( eMTXMODE_VIEW ) * l_position );
 					l_cameraPos->SetValue( l_position );
 				}
 				else

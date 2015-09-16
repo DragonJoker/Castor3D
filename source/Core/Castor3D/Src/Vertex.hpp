@@ -169,14 +169,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the vertex position
-		 *\param[in]	p_pCoords	The new value
+		 *\param[in]	p_coords	The new value
 		 *\~french
 		 *\brief		Définit la position du vertice
-		 *\param[in]	p_pCoords	La nouvelle valeur
+		 *\param[in]	p_coords	La nouvelle valeur
 		 */
-		inline void SetPosition( real const * p_pCoords )
+		inline void SetPosition( real const * p_coords )
 		{
-			SetPosition( m_group.ptr(), p_pCoords );
+			SetPosition( m_group.ptr(), p_coords );
 		}
 		/**
 		 *\~english
@@ -217,14 +217,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the vertex normal
-		 *\param[in]	p_pCoords	The data buffer
+		 *\param[in]	p_coords	The data buffer
 		 *\~french
 		 *\brief		Définit la normale du vertex
-		 *\param[in]	p_pCoords	Le buffer de données
+		 *\param[in]	p_coords	Le buffer de données
 		 */
-		inline void SetNormal( real const * p_pCoords )
+		inline void SetNormal( real const * p_coords )
 		{
-			SetNormal( m_group.ptr(), p_pCoords );
+			SetNormal( m_group.ptr(), p_coords );
 		}
 		/**
 		 *\~english
@@ -265,14 +265,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the vertex tangent
-		 *\param[in]	p_pCoords	The data buffer
+		 *\param[in]	p_coords	The data buffer
 		 *\~french
 		 *\brief		Définit la tangente du vertex
-		 *\param[in]	p_pCoords	Le buffer de données
+		 *\param[in]	p_coords	Le buffer de données
 		 */
-		inline void SetTangent( real const * p_pCoords )
+		inline void SetTangent( real const * p_coords )
 		{
-			SetTangent( m_group.ptr(), p_pCoords );
+			SetTangent( m_group.ptr(), p_coords );
 		}
 		/**
 		 *\~english
@@ -313,14 +313,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the vertex bitangent
-		 *\param[in]	p_pCoords	The data buffer
+		 *\param[in]	p_coords	The data buffer
 		 *\~french
 		 *\brief		Définit la bitangente du vertex
-		 *\param[in]	p_pCoords	Le buffer de données
+		 *\param[in]	p_coords	Le buffer de données
 		 */
-		inline void SetBitangent( real const * p_pCoords )
+		inline void SetBitangent( real const * p_coords )
 		{
-			SetBitangent( m_group.ptr(), p_pCoords );
+			SetBitangent( m_group.ptr(), p_coords );
 		}
 		/**
 		 *\~english
@@ -361,14 +361,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the vertex texture coordinates
-		 *\param[in]	p_pCoords	The data buffer
+		 *\param[in]	p_coords	The data buffer
 		 *\~french
 		 *\brief		Définit les coordonnées de texture du vertex
-		 *\param[in]	p_pCoords	Le buffer de données
+		 *\param[in]	p_coords	Le buffer de données
 		 */
-		inline void SetTexCoord( real const * p_pCoords )
+		inline void SetTexCoord( real const * p_coords )
 		{
-			SetTexCoord( m_group.ptr(), p_pCoords );
+			SetTexCoord( m_group.ptr(), p_coords );
 		}
 		/**
 		 *\~english

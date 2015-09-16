@@ -100,7 +100,7 @@ bool DxRenderSystem::InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swa
 		}
 
 		// Enumerate adapters.
-		uint32_t l_uiCount = 0;
+		uint32_t l_count = 0;
 		IDXGIAdapter * l_pAdapter;
 		IDXGIOutput * l_pAdapterOutput;
 		UINT l_uiFlags = 0;
@@ -108,7 +108,7 @@ bool DxRenderSystem::InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swa
 		l_uiFlags = D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
-		while ( l_factory->EnumAdapters( l_uiCount, &l_pAdapter ) != DXGI_ERROR_NOT_FOUND && !m_pDevice )
+		while ( l_factory->EnumAdapters( l_count, &l_pAdapter ) != DXGI_ERROR_NOT_FOUND && !m_pDevice )
 		{
 			UINT l_numModes = 0;
 			// Enumerate the primary adapter output (monitor).
@@ -187,7 +187,7 @@ bool DxRenderSystem::InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swa
 
 			// Release the adapter.
 			SafeRelease( l_pAdapter );
-			l_uiCount++;
+			l_count++;
 		}
 
 #if !defined( NDEBUG )

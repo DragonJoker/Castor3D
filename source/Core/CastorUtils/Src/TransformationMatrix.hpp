@@ -402,21 +402,7 @@ namespace Castor
 		 *\return		Le vecteur tranforme
 		 */
 		template <typename TypeA, typename TypeB, uint32_t Count>
-		static Point<TypeB, Count> mult( SquareMatrix< TypeA, 4 > const & p_matrix, Point<TypeB, Count> const & p_vertex );
-		/**
-		 *\~english
-		 *\brief		Multiplies 2 matrix
-		 *\param[in]	p_matrixA	The first matrix
-		 *\param[in]	p_matrixB	The second matrix
-		 *\return		The result matrix
-		 *\~french
-		 *\brief		Multiplie 2 matrices
-		 *\param[in]	p_matrixA	La premiere matrice
-		 *\param[in]	p_matrixB	La seconde matrice
-		 *\return		La matrice résultat
-		 */
-		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > mult( SquareMatrix< TypeA, 4 > const & p_matrixA, SquareMatrix<TypeB, 4> const & p_matrixB );
+		static Point<TypeB, Count> transform( SquareMatrix< TypeA, 4 > const & p_matrix, Point<TypeB, Count> const & p_vertex );
 		/**
 		 *\~english
 		 *\brief		Switches the handness of a matrix (from right to left or left to right)

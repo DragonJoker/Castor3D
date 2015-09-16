@@ -217,9 +217,9 @@ namespace Castor3D
 	bool Material::HasAlphaBlending()const
 	{
 		bool l_return = true;
-		uint32_t l_uiCount = GetPassCount();
+		uint32_t l_count = GetPassCount();
 
-		for ( uint32_t i = 0; i < l_uiCount && l_return; i++ )
+		for ( uint32_t i = 0; i < l_count && l_return; i++ )
 		{
 			l_return = m_passes[i]->HasAlphaBlending();
 		}

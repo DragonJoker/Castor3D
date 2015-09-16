@@ -22,9 +22,9 @@ namespace Testing
 	{
 		auto l_precision = p_streamOut.precision( 10 );
 
-		for ( uint32_t i = 0; i < Rows; i++ )
+		for ( uint32_t i = 0; i < Columns; i++ )
 		{
-			for ( uint32_t j = 0; j < Columns; j++ )
+			for ( uint32_t j = 0; j < Rows; j++ )
 			{
 				p_streamOut.width( 15 );
 				p_streamOut << std::right << p_matrix[i][j];
@@ -266,13 +266,13 @@ namespace Testing
 
 	void CastorUtilsMatrixTest::Execute( uint32_t & p_errCount, uint32_t & p_testCount )
 	{
-		EXECUTE_TEST( MatrixInversion, p_errCount, p_testCount );
+		EXECUTE_TEST( CastorUtilsMatrixTest, MatrixInversion, p_errCount, p_testCount );
 #if defined( CASTOR_USE_GLM )
-		EXECUTE_TEST( MatrixInversionComparison, p_errCount, p_testCount );
-		EXECUTE_TEST( MatrixMultiplicationComparison, p_errCount, p_testCount );
-		EXECUTE_TEST( TransformationMatrixComparison, p_errCount, p_testCount );
-		EXECUTE_TEST( ProjectionMatrixComparison, p_errCount, p_testCount );
-		EXECUTE_TEST( QuaternionComparison, p_errCount, p_testCount );
+		EXECUTE_TEST( CastorUtilsMatrixTest, MatrixInversionComparison, p_errCount, p_testCount );
+		EXECUTE_TEST( CastorUtilsMatrixTest, MatrixMultiplicationComparison, p_errCount, p_testCount );
+		EXECUTE_TEST( CastorUtilsMatrixTest, TransformationMatrixComparison, p_errCount, p_testCount );
+		EXECUTE_TEST( CastorUtilsMatrixTest, ProjectionMatrixComparison, p_errCount, p_testCount );
+		EXECUTE_TEST( CastorUtilsMatrixTest, QuaternionComparison, p_errCount, p_testCount );
 #endif
 	}
 

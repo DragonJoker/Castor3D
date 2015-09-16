@@ -27,34 +27,34 @@ namespace Castor
 	\version	0.1.0.0
 	\date		09/02/2010
 	\~english
-	\brief		Templated square matrix representation
+	\brief		Templated column major square matrix representation
 	\~french
-	\brief		Représentation d'une matrice carrée
+	\brief		Représentation d'une matrice carrée column major
 	*/
-	template< typename T, uint32_t Rows >
+	template< typename T, uint32_t Count >
 	class SquareMatrix
-		: public Matrix< T, Rows, Rows >
+		: public Matrix< T, Count, Count >
 	{
 	private:
 		typedef T __value_type;
-		typedef SquareMatrix< __value_type, Rows > __square_type;
-		typedef SquareMatrix< __value_type, Rows > __transpose;
+		typedef SquareMatrix< __value_type, Count > __square_type;
+		typedef SquareMatrix< __value_type, Count > __transpose;
 
 	public:
 		//!\~english Typedef on the policy	\~french Typedef sur la politique
-		typedef typename Matrix< __value_type, Rows, Rows >::policy policy;
+		typedef typename Matrix< __value_type, Count, Count >::policy policy;
 		//!\~english Typedef on the data type	\~french Typedef sur le type de données
-		typedef typename Matrix< __value_type, Rows, Rows >::value_type value_type;
+		typedef typename Matrix< __value_type, Count, Count >::value_type value_type;
 		//!\~english Typedef on the column type	\~french Typedef sur le type de colonne
-		typedef typename Matrix< __value_type, Rows, Rows >::col_type col_type;
+		typedef typename Matrix< __value_type, Count, Count >::col_type col_type;
 		//!\~english Typedef on the line type	\~french Typedef sur le type de ligne
-		typedef typename Matrix< __value_type, Rows, Rows >::row_type row_type;
+		typedef typename Matrix< __value_type, Count, Count >::row_type row_type;
 		//!\~english Typedef on the transposed matrix type	\~french Typedef sur le type de matrice transposée
 		typedef __square_type transpose_type;
 		//!\~english Typedef on this matrix type	\~french Typedef sur le type de cette matrice
 		typedef __square_type square_matrix_type;
 		//!\~english Typedef on this matrix type	\~french Typedef sur le type de cette matrice
-		typedef Matrix< T, Rows, Rows > my_matrix_type;
+		typedef Matrix< T, Count, Count > my_matrix_type;
 		//!\~english Typedef on this matrix type	\~french Typedef sur le type de cette matrice
 		typedef __square_type my_square_type;
 
@@ -69,12 +69,12 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_tValue	The matrix is initialised as Jordan with that value
+		 *\param[in]	p_value	The matrix is initialised as Jordan with that value
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_tValue	La matrice est initialisée comme une Jordan avec cette valeur
+		 *\param[in]	p_value	La matrice est initialisée comme une Jordan avec cette valeur
 		 */
-		SquareMatrix( T const & p_tValue );
+		SquareMatrix( T const & p_value );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -83,7 +83,7 @@ namespace Castor
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_matrix	L'objet Matrix à copier
 		 */
-		SquareMatrix( SquareMatrix< T, Rows > const & p_matrix );
+		SquareMatrix( SquareMatrix< T, Count > const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Move Constructor
@@ -92,7 +92,7 @@ namespace Castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	p_matrix	L'objet Matrix à déplacer
 		 */
-		SquareMatrix( SquareMatrix< T, Rows > && p_matrix );
+		SquareMatrix( SquareMatrix< T, Count > && p_matrix );
 		/**
 		 *\~english
 		 *\brief		Move Constructor
@@ -111,7 +111,7 @@ namespace Castor
 		 *\brief		Constructeur par copie convertie
 		 *\param[in]	p_matrix	L'objet Matrix à copier
 		 */
-		template< typename Type > SquareMatrix( SquareMatrix< Type, Rows > const & p_matrix );
+		template< typename Type > SquareMatrix( SquareMatrix< Type, Count > const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Conversion Copy Constructor
@@ -120,16 +120,16 @@ namespace Castor
 		 *\brief		Constructeur par copie convertie
 		 *\param[in]	p_matrix	L'objet Matrix à copier
 		 */
-		template< typename Type > SquareMatrix( Matrix< Type, Rows, Rows > const & p_matrix );
+		template< typename Type > SquareMatrix( Matrix< Type, Count, Count > const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pMatrix	Data buffer to copy in the matrix
+		 *\param[in]	p_matrix	Data buffer to copy in the matrix
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pMatrix	Buffer de données à copier dans la matrice
+		 *\param[in]	p_matrix	Buffer de données à copier dans la matrice
 		 */
-		template< typename Type > SquareMatrix( Type const * p_pMatrix );
+		template< typename Type > SquareMatrix( Type const * p_matrix );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -147,18 +147,18 @@ namespace Castor
 		 *\param[in]	x, y	La ligne et la colonne ignorées
 		 *\return		La matrice mineure
 		 */
-		SquareMatrix < T, Rows - 1 > get_minor( uint32_t x, uint32_t y )const;
+		SquareMatrix < T, Count - 1 > get_minor( uint32_t x, uint32_t y )const;
 		/**
 		 *\~english
 		 *\brief		Computes the cofactor value of given row and column
-		 *\param[in]	p_uiRow, p_uiColumn	Row and column
+		 *\param[in]	p_row, p_column	Row and column
 		 *\return		The cofactor
 		 *\~french
 		 *\brief		Calcule le cofacteur à la ligne et la colonne données
-		 *\param[in]	p_uiRow, p_uiColumn	La ligne et la colonne
+		 *\param[in]	p_row, p_column	La ligne et la colonne
 		 *\return		Le cofacteur
 		 */
-		__value_type get_cofactor( uint32_t p_uiRow, uint32_t p_uiColumn )const;
+		__value_type get_cofactor( uint32_t p_column, uint32_t p_row )const;
 		/**
 		 *\~english
 		 *\brief		Computes the determinant of this matrix
@@ -185,7 +185,7 @@ namespace Castor
 		 *\brief		Transpose cette matrice
 		 *\return		Une référence sur cette matrice
 		 */
-		SquareMatrix< T, Rows > & transpose();
+		SquareMatrix< T, Count > & transpose();
 		/**
 		 *\~english
 		 *\brief		Tells if this matrix is symmetrical
@@ -212,7 +212,7 @@ namespace Castor
 		 *\brief		Récupère la matrice inverse de cette matrice
 		 *\return		La matrice inverse
 		 */
-		SquareMatrix< T, Rows > get_inverse()const;
+		SquareMatrix< T, Count > get_inverse()const;
 		/**
 		 *\~english
 		 *\brief		Inverts this matrix
@@ -221,40 +221,7 @@ namespace Castor
 		 *\brief		Inverse cette matrice
 		 *\return		Une référence sur cette matrice
 		 */
-		SquareMatrix< T, Rows > & invert();
-		/**
-		 *\~english
-		 *\brief		Multiplication function
-		 *\param[in]	p_matrix	The matrix to multiply
-		 *\return		The multiplication result
-		 *\~french
-		 *\brief		Fonction de multiplication
-		 *\param[in]	p_matrix	La matrice à multiplier
-		 *\return		Le résultat de la multiplication
-		 */
-		SquareMatrix< T, Rows > multiply( my_square_type const & p_matrix )const;
-		/**
-		 *\~english
-		 *\brief		Multiplication function
-		 *\param[in]	p_matrix	The matrix to multiply
-		 *\return		The multiplication result
-		 *\~french
-		 *\brief		Fonction de multiplication
-		 *\param[in]	p_matrix	La matrice à multiplier
-		 *\return		Le résultat de la multiplication
-		 */
-		template< typename Type > SquareMatrix< T, Rows > multiply( SquareMatrix< Type, Rows > const & p_matrix )const;
-		/**
-		 *\~english
-		 *\brief		Multiplication function
-		 *\param[in]	p_matrix	The matrix to multiply
-		 *\return		The multiplication result
-		 *\~french
-		 *\brief		Fonction de multiplication
-		 *\param[in]	p_matrix	La matrice à multiplier
-		 *\return		Le résultat de la multiplication
-		 */
-		template <uint32_t _Columns> Matrix< T, Rows, _Columns > multiply( Matrix< T, Rows, _Columns > const & p_matrix )const;
+		SquareMatrix< T, Count > & invert();
 		/**
 		 *\~english
 		 *\brief		Conversion Copy assignment operator
@@ -265,7 +232,7 @@ namespace Castor
 		 *\param[in]	p_matrix	L'objet Matrix à copier
 		 *\return		Une référence sur cet objet SquareMatrix
 		 */
-		template< typename Type > SquareMatrix< T, Rows > & operator =( Matrix< Type, Rows, Rows > const & p_matrix );
+		template< typename Type > SquareMatrix< T, Count > & operator=( Matrix< Type, Count, Count > const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -276,7 +243,7 @@ namespace Castor
 		 *\param[in]	p_matrix	L'objet SquareMatrix à copier
 		 *\return		Une référence sur cet objet SquareMatrix
 		 */
-		SquareMatrix< T, Rows > & operator =( SquareMatrix< T, Rows > const & p_matrix );
+		SquareMatrix< T, Count > & operator=( SquareMatrix< T, Count > const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -287,7 +254,7 @@ namespace Castor
 		 *\param[in]	p_matrix	L'objet SquareMatrix à déplacer
 		 *\return		Une référence sur cet objet SquareMatrix
 		 */
-		SquareMatrix< T, Rows > & operator =( SquareMatrix< T, Rows > && p_matrix );
+		SquareMatrix< T, Count > & operator=( SquareMatrix< T, Count > && p_matrix );
 		/**
 		 *\~english
 		 *\brief		Conversion Copy assignment operator
@@ -298,7 +265,7 @@ namespace Castor
 		 *\param[in]	p_matrix	L'objet SquareMatrix à copier
 		 *\return		Une référence sur cet objet SquareMatrix
 		 */
-		template< typename Type > SquareMatrix< T, Rows > & operator =( SquareMatrix< Type, Rows > const & p_matrix );
+		template< typename Type > SquareMatrix< T, Count > & operator=( SquareMatrix< Type, Count > const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Addition assignment operator
@@ -309,7 +276,7 @@ namespace Castor
 		 *\param[in]	p_matrix	L'objet SquareMatrix à ajouter
 		 *\return		Une référence sur cet objet SquareMatrix
 		 */
-		template< typename Type > SquareMatrix< T, Rows > & operator +=( SquareMatrix< Type, Rows > const & p_matrix );
+		template< typename Type > SquareMatrix< T, Count > & operator+=( SquareMatrix< Type, Count > const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
@@ -320,7 +287,7 @@ namespace Castor
 		 *\param[in]	p_matrix	L'objet SquareMatrix à soustraire
 		 *\return		Une référence sur cet objet SquareMatrix
 		 */
-		template< typename Type > SquareMatrix< T, Rows > & operator -=( SquareMatrix< Type, Rows > const & p_matrix );
+		template< typename Type > SquareMatrix< T, Count > & operator-=( SquareMatrix< Type, Count > const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
@@ -331,95 +298,95 @@ namespace Castor
 		 *\param[in]	p_matrix	L'objet SquareMatrix à multiplier
 		 *\return		Une référence sur cet objet SquareMatrix
 		 */
-		template< typename Type > SquareMatrix< T, Rows > & operator *=( SquareMatrix< Type, Rows > const & p_matrix );
+		template< typename Type > SquareMatrix< T, Count > & operator*=( SquareMatrix< Type, Count > const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Conversion Copy assignment operator
-		 *\param[in]	p_pMatrix	The data buffer to copy
+		 *\param[in]	p_matrix	The data buffer to copy
 		 *\return		A reference to this SquareMatrix object
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie convertie
-		 *\param[in]	p_pMatrix	Le buffer de données à copier
+		 *\param[in]	p_matrix	Le buffer de données à copier
 		 *\return		Une référence sur cet objet SquareMatrix
 		 */
-		template< typename Type > SquareMatrix< T, Rows > & operator = ( Type const * p_pMatrix );
+		template< typename Type > SquareMatrix< T, Count > & operator=( Type const * p_matrix );
 		/**
 		 *\~english
 		 *\brief		Addition assignment operator
-		 *\param[in]	p_pMatrix	The data buffer to add
+		 *\param[in]	p_matrix	The data buffer to add
 		 *\return		A reference to this SquareMatrix object
 		 *\~french
 		 *\brief		Opérateur d'affectation par addition
-		 *\param[in]	p_pMatrix	Le buffer de données à ajouter
+		 *\param[in]	p_matrix	Le buffer de données à ajouter
 		 *\return		Une référence sur cet SquareMatrix Point
 		 */
-		template< typename Type > SquareMatrix< T, Rows > & operator +=( Type const * p_pMatrix );
+		template< typename Type > SquareMatrix< T, Count > & operator+=( Type const * p_matrix );
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_pMatrix	The data buffer to substract
+		 *\param[in]	p_matrix	The data buffer to substract
 		 *\return		A reference to this SquareMatrix object
 		 *\~french
 		 *\brief		Opérateur d'affectation par soustraction
-		 *\param[in]	p_pMatrix	Le buffer de données à soustraire
+		 *\param[in]	p_matrix	Le buffer de données à soustraire
 		 *\return		Une référence sur cet objet SquareMatrix
 		 */
-		template< typename Type > SquareMatrix< T, Rows > & operator -=( Type const * p_pMatrix );
+		template< typename Type > SquareMatrix< T, Count > & operator-=( Type const * p_matrix );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
-		 *\param[in]	p_pMatrix	The data buffer to multiply
+		 *\param[in]	p_matrix	The data buffer to multiply
 		 *\return		A reference to this SquareMatrix object
 		 *\~french
 		 *\brief		Opérateur d'affectation par multiplication
-		 *\param[in]	p_pMatrix	Le buffer de données à multiplier
+		 *\param[in]	p_matrix	Le buffer de données à multiplier
 		 *\return		Une référence sur cet objet SquareMatrix
 		 */
-		template< typename Type > SquareMatrix< T, Rows > & operator *=( Type const * p_pMatrix );
+		template< typename Type > SquareMatrix< T, Count > & operator*=( Type const * p_matrix );
 		/**
 		 *\~english
 		 *\brief		Addition assignment operator
-		 *\param[in]	p_tValue	The value to add
+		 *\param[in]	p_value	The value to add
 		 *\return		A reference to this SquareMatrix object
 		 *\~french
 		 *\brief		Opérateur d'affectation par addition
-		 *\param[in]	p_tValue	La valeur à additionner
+		 *\param[in]	p_value	La valeur à additionner
 		 *\return		Une référence sur cet objet SquareMatrix
 		 */
-		SquareMatrix< T, Rows > & operator +=( T const & p_tValue );
+		SquareMatrix< T, Count > & operator+=( T const & p_value );
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_tValue	The value to substract
+		 *\param[in]	p_value	The value to substract
 		 *\return		A reference to this SquareMatrix object
 		 *\~french
 		 *\brief		Opérateur d'affectation par soustraction
-		 *\param[in]	p_tValue	La valeur à soustraire
+		 *\param[in]	p_value	La valeur à soustraire
 		 *\return		Une référence sur cet objet SquareMatrix
 		 */
-		SquareMatrix< T, Rows > & operator -=( T const & p_tValue );
+		SquareMatrix< T, Count > & operator-=( T const & p_value );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
-		 *\param[in]	p_tValue	The value to multiply
+		 *\param[in]	p_value	The value to multiply
 		 *\return		A reference to this SquareMatrix object
 		 *\~french
 		 *\brief		Opérateur d'affectation par multiplication
-		 *\param[in]	p_tValue	La valeur à multiplier
+		 *\param[in]	p_value	La valeur à multiplier
 		 *\return		Une référence sur cet objet SquareMatrix
 		 */
-		SquareMatrix< T, Rows > & operator *=( T const & p_tValue );
+		SquareMatrix< T, Count > & operator*=( T const & p_value );
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
-		 *\param[in]	p_tValue	The value to divide
+		 *\param[in]	p_value	The value to divide
 		 *\return		A reference to this SquareMatrix object
 		 *\~french
 		 *\brief		Opérateur d'affectation par division
-		 *\param[in]	p_tValue	La valeur à diviser
+		 *\param[in]	p_value	La valeur à diviser
 		 *\return		Une référence sur cet objet SquareMatrix
 		 */
-		SquareMatrix< T, Rows > & operator /=( T const & p_tValue );
+		SquareMatrix< T, Count > & operator/=( T const & p_value );
 	};
 	/**
 	 *\~english
@@ -431,7 +398,7 @@ namespace Castor
 	 *\param[in]	p_mtxA, p_mtxB	Les matrices à comparer
 	 *\return		\p true si les matrices ont les mêmes dimensions et les mêmes valeurs
 	 */
-	template< typename T, uint32_t Rows > bool operator ==( SquareMatrix< T, Rows > const & p_mtxA, SquareMatrix< T, Rows > const & p_mtxB );
+	template< typename T, uint32_t Count > bool operator==( SquareMatrix< T, Count > const & p_mtxA, SquareMatrix< T, Count > const & p_mtxB );
 	/**
 	 *\~english
 	 *\brief		Difference operator
@@ -442,7 +409,7 @@ namespace Castor
 	 *\param[in]	p_mtxA, p_mtxB	Les matrices à comparer
 	 *\return		\p true si les matrices ont des dimensions différentes ou au moins une valeur différente
 	 */
-	template< typename T, uint32_t Rows > bool operator !=( SquareMatrix< T, Rows > const & p_mtxA, SquareMatrix< T, Rows > const & p_mtxB );
+	template< typename T, uint32_t Count > bool operator!=( SquareMatrix< T, Count > const & p_mtxA, SquareMatrix< T, Count > const & p_mtxB );
 	/**
 	 *\~english
 	 *\brief		Addition operator
@@ -453,7 +420,7 @@ namespace Castor
 	 *\param[in]	p_mtxA, p_mtxB	Les matrices à additionner
 	 *\return		Le résultat de l'addition
 	 */
-	template< typename T, uint32_t Rows, typename U > SquareMatrix< T, Rows > operator +( SquareMatrix< T, Rows > const & p_mtxA, SquareMatrix< U, Rows > const & p_mtxB );
+	template< typename T, uint32_t Count, typename U > SquareMatrix< T, Count > operator+( SquareMatrix< T, Count > const & p_mtxA, SquareMatrix< U, Count > const & p_mtxB );
 	/**
 	 *\~english
 	 *\brief		Substraction operator
@@ -464,7 +431,7 @@ namespace Castor
 	 *\param[in]	p_mtxA, p_mtxB	Les matrices à soustraire
 	 *\return		Le résultat de la soustraction
 	 */
-	template< typename T, uint32_t Rows, typename U > SquareMatrix< T, Rows > operator -( SquareMatrix< T, Rows > const & p_mtxA, SquareMatrix< U, Rows > const & p_mtxB );
+	template< typename T, uint32_t Count, typename U > SquareMatrix< T, Count > operator-( SquareMatrix< T, Count > const & p_mtxA, SquareMatrix< U, Count > const & p_mtxB );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
@@ -475,7 +442,18 @@ namespace Castor
 	 *\param[in]	p_mtxA, p_mtxB	Les matrices à multiplier
 	 *\return		Le résultat de la multiplication
 	 */
-	template< typename T, uint32_t Rows, typename U > SquareMatrix< T, Rows > operator *( SquareMatrix< T, Rows > const & p_mtxA, SquareMatrix< U, Rows > const & p_mtxB );
+	template< typename T, uint32_t Count, typename U > SquareMatrix< T, Count > operator*( SquareMatrix< T, Count > const & p_mtxA, SquareMatrix< U, Count > const & p_mtxB );
+	/**
+	 *\~english
+	 *\brief		Multiplication operator
+	 *\param[in]	p_mtxA, p_mtxB	The matrices to multiply
+	 *\return		The multiplication result
+	 *\~french
+	 *\brief		Opérateur de multiplication
+	 *\param[in]	p_mtxA, p_mtxB	Les matrices à multiplier
+	 *\return		Le résultat de la multiplication
+	 */
+	template< typename T, uint32_t Count, typename U, size_t Columns > SquareMatrix< T, Count > operator*( SquareMatrix< T, Count > const & p_mtxA, Matrix< U, Columns, Count > const & p_mtxB );
 	/**
 	 *\~english
 	 *\brief		Addition operator
@@ -486,7 +464,7 @@ namespace Castor
 	 *\param[in]	p_mtxA, p_mtxB	Les matrices à additionner
 	 *\return		Le résultat de l'addition
 	 */
-	template< typename T, uint32_t Rows, typename U > SquareMatrix< T, Rows > operator + ( SquareMatrix< T, Rows > const & p_mtxA, U const *	p_mtxB );
+	template< typename T, uint32_t Count, typename U > SquareMatrix< T, Count > operator+( SquareMatrix< T, Count > const & p_mtxA, U const * p_mtxB );
 	/**
 	 *\~english
 	 *\brief		Substraction operator
@@ -497,7 +475,7 @@ namespace Castor
 	 *\param[in]	p_mtxA, p_mtxB	Les matrices à soustraire
 	 *\return		Le résultat de la soustraction
 	 */
-	template< typename T, uint32_t Rows, typename U > SquareMatrix< T, Rows > operator - ( SquareMatrix< T, Rows > const & p_mtxA, U const *	p_mtxB );
+	template< typename T, uint32_t Count, typename U > SquareMatrix< T, Count > operator-( SquareMatrix< T, Count > const & p_mtxA, U const * p_mtxB );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
@@ -508,98 +486,109 @@ namespace Castor
 	 *\param[in]	p_mtxA, p_mtxB	Les matrices à multiplier
 	 *\return		Le résultat de la multiplication
 	 */
-	template< typename T, uint32_t Rows, typename U > SquareMatrix< T, Rows > operator * ( SquareMatrix< T, Rows > const & p_mtxA, U const *	p_mtxB );
+	template< typename T, uint32_t Count, typename U > SquareMatrix< T, Count > operator*( SquareMatrix< T, Count > const & p_mtxA, U const * p_mtxB );
 	/**
 	 *\~english
 	 *\brief		Addition operator
 	 *\param[in]	p_mtxA		The matrix
-	 *\param[in]	p_tValue	The value to add
+	 *\param[in]	p_value	The value to add
 	 *\return		The addition result
 	 *\~french
 	 *\brief		Opérateur de addition
 	 *\param[in]	p_mtxA		La matrice
-	 *\param[in]	p_tValue	La valeur à additionner
+	 *\param[in]	p_value	La valeur à additionner
 	 *\return		Le résultat de l'addition
 	 */
-	template< typename T, uint32_t Rows, typename U > SquareMatrix< T, Rows > operator + ( SquareMatrix< T, Rows > const & p_mtxA, T const &	p_tValue );
+	template< typename T, uint32_t Count, typename U > SquareMatrix< T, Count > operator+( SquareMatrix< T, Count > const & p_mtxA, T const & p_value );
 	/**
 	 *\~english
 	 *\brief		Substraction operator
 	 *\param[in]	p_mtxA		The matrix
-	 *\param[in]	p_tValue	The value to substract
+	 *\param[in]	p_value	The value to substract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opérateur de soustraction
 	 *\param[in]	p_mtxA		La matrice
-	 *\param[in]	p_tValue	La valeur à soustraire
+	 *\param[in]	p_value	La valeur à soustraire
 	 *\return		Le résultat de la soustraction
 	 */
-	template< typename T, uint32_t Rows, typename U > SquareMatrix< T, Rows > operator - ( SquareMatrix< T, Rows > const & p_mtxA, T const &	p_tValue );
+	template< typename T, uint32_t Count, typename U > SquareMatrix< T, Count > operator-( SquareMatrix< T, Count > const & p_mtxA, T const &	p_value );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
 	 *\param[in]	p_mtxA		The matrix to multiply
-	 *\param[in]	p_tValue	The value
+	 *\param[in]	p_value	The value
 	 *\return		The multiplication result
 	 *\~french
 	 *\brief		Opérateur de multiplication
 	 *\param[in]	p_mtxA		La matrice à multiplier
-	 *\param[in]	p_tValue	La valeur
+	 *\param[in]	p_value	La valeur
 	 *\return		Le résultat de la multiplication
 	 */
-	template< typename T, uint32_t Rows, typename U > SquareMatrix< T, Rows > operator *( SquareMatrix< T, Rows > const & p_mtxA, T const & p_tValue );
+	template< typename T, uint32_t Count, typename U > SquareMatrix< T, Count > operator*( SquareMatrix< T, Count > const & p_mtxA, T const & p_value );
 	/**
 	 *\~english
 	 *\brief		Division operator
 	 *\param[in]	p_mtxA		The matrix to divide
-	 *\param[in]	p_tValue	The value
+	 *\param[in]	p_value	The value
 	 *\return		The division result
 	 *\~french
 	 *\brief		Opérateur de division
 	 *\param[in]	p_mtxA		La matrice à diviser
-	 *\param[in]	p_tValue	La valeur
+	 *\param[in]	p_value	La valeur
 	 *\return		Le résultat de la division
 	 */
-	template< typename T, uint32_t Rows, typename U > SquareMatrix< T, Rows > operator /( SquareMatrix< T, Rows > const & p_mtxA, T const & p_tValue );
+	template< typename T, uint32_t Count, typename U > SquareMatrix< T, Count > operator/( SquareMatrix< T, Count > const & p_mtxA, T const & p_value );
+	/**
+	 *\~english
+	 *\brief		Multiplication operator
+	 *\param[in]	p_mtxA, p_mtxB	The matrices to multiply
+	 *\return		The multiplication result
+	 *\~french
+	 *\brief		Opérateur de multiplication
+	 *\param[in]	p_mtxA, p_mtxB	Les matrices à multiplier
+	 *\return		Le résultat de la multiplication
+	 */
+	template< typename T, uint32_t Count, typename U, size_t Rows > Matrix< T, Count, Rows > operator*( Matrix< U, Count, Rows > const & p_mtxA, SquareMatrix< T, Count > const & p_mtxB );
 	/**
 	 *\~english
 	 *\brief		Addition operator
 	 *\param[in]	p_matrix	The matrix
-	 *\param[in]	p_tValue	The value to add
+	 *\param[in]	p_value	The value to add
 	 *\return		The addition result
 	 *\~french
 	 *\brief		Opérateur de addition
 	 *\param[in]	p_matrix	La matrice
-	 *\param[in]	p_tValue	La valeur à additionner
+	 *\param[in]	p_value	La valeur à additionner
 	 *\return		Le résultat de l'addition
 	 */
-	template< typename T, uint32_t Rows > SquareMatrix< T, Rows > operator + ( T const &	p_tValue, SquareMatrix< T, Rows > const & p_matrix );
+	template< typename T, uint32_t Count > SquareMatrix< T, Count > operator+( T const & p_value, SquareMatrix< T, Count > const & p_matrix );
 	/**
 	 *\~english
 	 *\brief		Substraction operator
 	 *\param[in]	p_matrix	The matrix
-	 *\param[in]	p_tValue	The value to substract
+	 *\param[in]	p_value	The value to substract
 	 *\return		The substraction result
 	 *\~french
 	 *\brief		Opérateur de soustraction
 	 *\param[in]	p_matrix	La matrice
-	 *\param[in]	p_tValue	La valeur à soustraire
+	 *\param[in]	p_value	La valeur à soustraire
 	 *\return		Le résultat de la soustraction
 	 */
-	template< typename T, uint32_t Rows > SquareMatrix< T, Rows > operator -( T const & p_tValue, SquareMatrix< T, Rows > const & p_matrix );
+	template< typename T, uint32_t Count > SquareMatrix< T, Count > operator-( T const & p_value, SquareMatrix< T, Count > const & p_matrix );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
 	 *\param[in]	p_matrix	The matrix to multiply
-	 *\param[in]	p_tValue	The value
+	 *\param[in]	p_value	The value
 	 *\return		The multiplication result
 	 *\~french
 	 *\brief		Opérateur de multiplication
 	 *\param[in]	p_matrix	La matrice à multiplier
-	 *\param[in]	p_tValue	La valeur
+	 *\param[in]	p_value	La valeur
 	 *\return		Le résultat de la multiplication
 	 */
-	template< typename T, uint32_t Rows > SquareMatrix< T, Rows > operator *( T const & p_tValue, SquareMatrix< T, Rows > const & p_matrix );
+	template< typename T, uint32_t Count > SquareMatrix< T, Count > operator*( T const & p_value, SquareMatrix< T, Count > const & p_matrix );
 	/**
 	 *\~english
 	 *\brief		Negation operator
@@ -610,7 +599,7 @@ namespace Castor
 	 *\param[in]	p_matrix	La matrice
 	 *\return		Le résultat de la négation
 	 */
-	template< typename T, uint32_t Rows > SquareMatrix< T, Rows > operator -( SquareMatrix< T, Rows > const & p_matrix );
+	template< typename T, uint32_t Count > SquareMatrix< T, Count > operator-( SquareMatrix< T, Count > const & p_matrix );
 }
 
 #include "SquareMatrix.inl"
