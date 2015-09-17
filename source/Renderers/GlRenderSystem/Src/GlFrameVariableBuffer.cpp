@@ -870,7 +870,7 @@ namespace GlRender
 	bool GlFrameVariableBuffer::DoInitialise( ShaderProgramBase * p_pProgram )
 	{
 		uint32_t l_uiIndex = m_glBuffer.GetGlIndex();
-		bool l_bReturn = false;
+		bool l_return = false;
 		GlShaderProgram * l_pProgram = static_cast< GlShaderProgram * >( p_pProgram );
 		int l_max = 0;
 		m_gl.GetIntegerv( eGL_MAX_UNIFORM_BUFFER_BINDINGS, &l_max );
@@ -932,21 +932,21 @@ namespace GlRender
 					}
 
 					m_glBuffer.Unbind();
-					l_bReturn = true;
+					l_return = true;
 				}
 			}
 			else
 			{
-				l_bReturn = false;
+				l_return = false;
 			}
 		}
 		else
 		{
 			DoCleanup();
-			l_bReturn = false;
+			l_return = false;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void GlFrameVariableBuffer::DoCleanup()

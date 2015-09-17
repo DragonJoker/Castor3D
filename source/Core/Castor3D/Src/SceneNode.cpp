@@ -23,60 +23,60 @@ namespace Castor3D
 
 	bool SceneNode::TextLoader::operator()( SceneNode const & p_node, TextFile & p_file )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		Logger::LogInfo( cuT( "Writing Node " ) + p_node.GetName() );
 
 		if ( p_node.GetName() != cuT( "RootNode" ) )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\tscene_node \"" ) + p_node.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\tscene_node \"" ) + p_node.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
 
-			if ( l_bReturn && p_node.GetParent() )
+			if ( l_return && p_node.GetParent() )
 			{
-				l_bReturn = p_file.WriteText( cuT( "\t\tparent \"" ) + p_node.GetParent()->GetName() + cuT( "\"\n" ) ) > 0;
+				l_return = p_file.WriteText( cuT( "\t\tparent \"" ) + p_node.GetParent()->GetName() + cuT( "\"\n" ) ) > 0;
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = p_file.Print( 256, cuT( "\t\torientation " ) ) > 0 && Quaternion::TextLoader()( p_node.GetOrientation(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+				l_return = p_file.Print( 256, cuT( "\t\torientation " ) ) > 0 && Quaternion::TextLoader()( p_node.GetOrientation(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = p_file.Print( 256, cuT( "\t\tposition " ) ) > 0 && Point3r::TextLoader()( p_node.GetPosition(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+				l_return = p_file.Print( 256, cuT( "\t\tposition " ) ) > 0 && Point3r::TextLoader()( p_node.GetPosition(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = p_file.Print( 256, cuT( "\t\tscale " ) ) > 0 && Point3r::TextLoader()( p_node.GetScale(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+				l_return = p_file.Print( 256, cuT( "\t\tscale " ) ) > 0 && Point3r::TextLoader()( p_node.GetScale(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = p_file.WriteText( cuT( "\n\t}\n" ) ) > 0;
+				l_return = p_file.WriteText( cuT( "\n\t}\n" ) ) > 0;
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Writing Childs" ) );
 
-			for ( SceneNode::node_const_iterator l_it = p_node.ChildsBegin(); l_it != p_node.ChildsEnd() && l_bReturn; ++l_it )
+			for ( SceneNode::node_const_iterator l_it = p_node.ChildsBegin(); l_it != p_node.ChildsEnd() && l_return; ++l_it )
 			{
 				SceneNodeSPtr l_node = l_it->second.lock();
 
 				if ( l_node )
 				{
-					l_bReturn = SceneNode::TextLoader()( *l_node, p_file );
+					l_return = SceneNode::TextLoader()( *l_node, p_file );
 				}
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Childs Written" ) );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -88,58 +88,58 @@ namespace Castor3D
 
 	bool SceneNode::BinaryParser::Fill( SceneNode const & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_SCENE_NODE );
 		Point3f l_scale;
 		Point3f l_position;
 
 		if ( p_obj.GetName() != cuT( "RootNode" ) )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
+			l_return = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = DoFillChunk( p_obj.GetOrientation(), eCHUNK_TYPE_NODE_ORIENTATION, l_chunk );
+				l_return = DoFillChunk( p_obj.GetOrientation(), eCHUNK_TYPE_NODE_ORIENTATION, l_chunk );
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				l_position = p_obj.GetPosition();
-				l_bReturn = DoFillChunk( l_position, eCHUNK_TYPE_NODE_POSITION, l_chunk );
+				l_return = DoFillChunk( l_position, eCHUNK_TYPE_NODE_POSITION, l_chunk );
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				l_scale = p_obj.GetScale();
-				l_bReturn = DoFillChunk( l_scale, eCHUNK_TYPE_NODE_SCALE, l_chunk );
+				l_return = DoFillChunk( l_scale, eCHUNK_TYPE_NODE_SCALE, l_chunk );
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			for ( SceneNode::node_const_iterator l_it = p_obj.ChildsBegin(); l_it != p_obj.ChildsEnd() && l_bReturn; ++l_it )
+			for ( SceneNode::node_const_iterator l_it = p_obj.ChildsBegin(); l_it != p_obj.ChildsEnd() && l_return; ++l_it )
 			{
 				SceneNodeSPtr l_node = l_it->second.lock();
 
 				if ( l_node )
 				{
-					l_bReturn = SceneNode::BinaryParser( m_path ).Fill( *l_node, l_chunk );
+					l_return = SceneNode::BinaryParser( m_path ).Fill( *l_node, l_chunk );
 				}
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			l_chunk.Finalise();
 			p_chunk.AddSubChunk( l_chunk );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool SceneNode::BinaryParser::Parse( SceneNode & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		Quaternion l_orientation;
 		Point3f l_scale;
 		Point3f l_position;
@@ -147,16 +147,16 @@ namespace Castor3D
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
 			BinaryChunk l_chunk;
-			l_bReturn = p_chunk.GetSubChunk( l_chunk );
+			l_return = p_chunk.GetSubChunk( l_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				switch ( l_chunk.GetChunkType() )
 				{
 				case eCHUNK_TYPE_NODE_ORIENTATION:
-					l_bReturn = DoParseChunk( l_orientation, l_chunk );
+					l_return = DoParseChunk( l_orientation, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetOrientation( l_orientation );
 					}
@@ -164,9 +164,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_NODE_POSITION:
-					l_bReturn = DoParseChunk( l_position, l_chunk );
+					l_return = DoParseChunk( l_position, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetPosition( l_position );
 					}
@@ -174,9 +174,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_NODE_SCALE:
-					l_bReturn = DoParseChunk( l_scale, l_chunk );
+					l_return = DoParseChunk( l_scale, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetScale( l_scale );
 					}
@@ -187,43 +187,43 @@ namespace Castor3D
 				{
 					BinaryChunk l_chunkNode;
 					String l_name;
-					l_bReturn = l_chunk.GetSubChunk( l_chunkNode );
+					l_return = l_chunk.GetSubChunk( l_chunkNode );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						switch ( l_chunkNode.GetChunkType() )
 						{
 						case eCHUNK_TYPE_NAME:
-							l_bReturn = DoParseChunk( l_name, l_chunkNode );
+							l_return = DoParseChunk( l_name, l_chunkNode );
 							break;
 
 						default:
-							l_bReturn = false;
+							l_return = false;
 							break;
 						}
 
-						if ( l_bReturn )
+						if ( l_return )
 						{
 							SceneNodeSPtr l_node = p_obj.GetScene()->CreateSceneNode( l_name, p_obj.shared_from_this() );
-							l_bReturn = SceneNode::BinaryParser( m_path ).Parse( *l_node, l_chunk );
+							l_return = SceneNode::BinaryParser( m_path ).Parse( *l_node, l_chunk );
 						}
 					}
 				}
 				break;
 
 				default:
-					l_bReturn = false;
+					l_return = false;
 					break;
 				}
 			}
 
-			if ( !l_bReturn )
+			if ( !l_return )
 			{
 				p_chunk.EndParse();
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************

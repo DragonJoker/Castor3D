@@ -119,7 +119,7 @@ namespace GlRender
 
 	bool GlVertexBufferObject::Initialise( eBUFFER_ACCESS_TYPE p_eType, eBUFFER_ACCESS_NATURE p_eNature, ShaderProgramBaseSPtr p_pProgram )
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		GlShaderProgramSPtr l_pNewProgram = std::static_pointer_cast< GlShaderProgram >( p_pProgram );
 		GlShaderProgramSPtr l_pOldProgram = m_pProgram.lock();
 
@@ -134,20 +134,20 @@ namespace GlRender
 
 			if ( l_pNewProgram )
 			{
-				l_bReturn = DoAttributesInitialise();
+				l_return = DoAttributesInitialise();
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = GlBuffer< uint8_t >::DoInitialise( p_eType, p_eNature );
+				l_return = GlBuffer< uint8_t >::DoInitialise( p_eType, p_eNature );
 			}
 		}
 		else if ( !l_pOldProgram )
 		{
-			l_bReturn = GlBuffer< uint8_t >::DoInitialise( p_eType, p_eNature );
+			l_return = GlBuffer< uint8_t >::DoInitialise( p_eType, p_eNature );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void GlVertexBufferObject::Cleanup()
@@ -159,37 +159,37 @@ namespace GlRender
 	bool GlVertexBufferObject::Bind()
 	{
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
-		bool l_bReturn = l_pBuffer && l_pBuffer->IsAssigned();
+		bool l_return = l_pBuffer && l_pBuffer->IsAssigned();
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = GlBuffer< uint8_t >::DoBind();
+			l_return = GlBuffer< uint8_t >::DoBind();
 
 			if ( !l_pBuffer->GetRenderSystem()->UseShaders() || m_pProgram.expired() )
 			{
 				static const uint32_t s_arraySize[] = { 1, 2, 3, 4, 4, 1, 2, 3, 4 };
 				static const uint32_t s_arrayType[] = { eGL_TYPE_REAL, eGL_TYPE_REAL, eGL_TYPE_REAL, eGL_TYPE_REAL, eGL_TYPE_UNSIGNED_BYTE, eGL_TYPE_UNSIGNED_INT, eGL_TYPE_UNSIGNED_INT, eGL_TYPE_UNSIGNED_INT, eGL_TYPE_UNSIGNED_INT };
 
-				for ( BufferDeclaration::BufferElementDeclarationArrayConstIt l_it = m_bufferDeclaration.Begin(); l_bReturn && l_it != m_bufferDeclaration.End(); ++l_it )
+				for ( BufferDeclaration::BufferElementDeclarationArrayConstIt l_it = m_bufferDeclaration.Begin(); l_return && l_it != m_bufferDeclaration.End(); ++l_it )
 				{
 					switch ( l_it->m_eUsage )
 					{
 					case eELEMENT_USAGE_POSITION:
-						l_bReturn &= m_gl.EnableClientState( eGL_BUFFER_USAGE_VERTEX_ARRAY );
-						l_bReturn &= m_gl.VertexPointer( s_arraySize[l_it->m_eDataType], s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
+						l_return &= m_gl.EnableClientState( eGL_BUFFER_USAGE_VERTEX_ARRAY );
+						l_return &= m_gl.VertexPointer( s_arraySize[l_it->m_eDataType], s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
 						break;
 
 					case eELEMENT_USAGE_NORMAL:
-						l_bReturn &= m_gl.EnableClientState( eGL_BUFFER_USAGE_NORMAL_ARRAY );
-						l_bReturn &= m_gl.NormalPointer( s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
+						l_return &= m_gl.EnableClientState( eGL_BUFFER_USAGE_NORMAL_ARRAY );
+						l_return &= m_gl.NormalPointer( s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
 						break;
 
 					case eELEMENT_USAGE_TANGENT:
 
 						if ( m_gl.HasTangentPointer() )
 						{
-							l_bReturn &= m_gl.EnableClientState( eGL_BUFFER_USAGE_TANGENT_ARRAY );
-							l_bReturn &= m_gl.TangentPointer( s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
+							l_return &= m_gl.EnableClientState( eGL_BUFFER_USAGE_TANGENT_ARRAY );
+							l_return &= m_gl.TangentPointer( s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
 						}
 
 						break;
@@ -198,39 +198,39 @@ namespace GlRender
 
 						if ( m_gl.HasBinormalPointer() )
 						{
-							l_bReturn &= m_gl.EnableClientState( eGL_BUFFER_USAGE_BINORMAL_ARRAY );
-							l_bReturn &= m_gl.BinormalPointer( s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
+							l_return &= m_gl.EnableClientState( eGL_BUFFER_USAGE_BINORMAL_ARRAY );
+							l_return &= m_gl.BinormalPointer( s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
 						}
 
 						break;
 
 					case eELEMENT_USAGE_DIFFUSE:
-						l_bReturn &= m_gl.EnableClientState( eGL_BUFFER_USAGE_COLOR_ARRAY );
-						l_bReturn &= m_gl.ColorPointer( s_arraySize[l_it->m_eDataType], s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
+						l_return &= m_gl.EnableClientState( eGL_BUFFER_USAGE_COLOR_ARRAY );
+						l_return &= m_gl.ColorPointer( s_arraySize[l_it->m_eDataType], s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
 						break;
 
 					case eELEMENT_USAGE_TEXCOORDS0:
-						l_bReturn &= m_gl.ClientActiveTexture( eGL_TEXTURE_INDEX_0 );
-						l_bReturn &= m_gl.EnableClientState( eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY );
-						l_bReturn &= m_gl.TexCoordPointer( s_arraySize[l_it->m_eDataType], s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
+						l_return &= m_gl.ClientActiveTexture( eGL_TEXTURE_INDEX_0 );
+						l_return &= m_gl.EnableClientState( eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY );
+						l_return &= m_gl.TexCoordPointer( s_arraySize[l_it->m_eDataType], s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
 						break;
 
 					case eELEMENT_USAGE_TEXCOORDS1:
-						l_bReturn &= m_gl.ClientActiveTexture( eGL_TEXTURE_INDEX_1 );
-						l_bReturn &= m_gl.EnableClientState( eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY );
-						l_bReturn &= m_gl.TexCoordPointer( s_arraySize[l_it->m_eDataType], s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
+						l_return &= m_gl.ClientActiveTexture( eGL_TEXTURE_INDEX_1 );
+						l_return &= m_gl.EnableClientState( eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY );
+						l_return &= m_gl.TexCoordPointer( s_arraySize[l_it->m_eDataType], s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
 						break;
 
 					case eELEMENT_USAGE_TEXCOORDS2:
-						l_bReturn &= m_gl.ClientActiveTexture( eGL_TEXTURE_INDEX_2 );
-						l_bReturn &= m_gl.EnableClientState( eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY );
-						l_bReturn &= m_gl.TexCoordPointer( s_arraySize[l_it->m_eDataType], s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
+						l_return &= m_gl.ClientActiveTexture( eGL_TEXTURE_INDEX_2 );
+						l_return &= m_gl.EnableClientState( eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY );
+						l_return &= m_gl.TexCoordPointer( s_arraySize[l_it->m_eDataType], s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
 						break;
 
 					case eELEMENT_USAGE_TEXCOORDS3:
-						l_bReturn &= m_gl.ClientActiveTexture( eGL_TEXTURE_INDEX_3 );
-						l_bReturn &= m_gl.EnableClientState( eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY );
-						l_bReturn &= m_gl.TexCoordPointer( s_arraySize[l_it->m_eDataType], s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
+						l_return &= m_gl.ClientActiveTexture( eGL_TEXTURE_INDEX_3 );
+						l_return &= m_gl.EnableClientState( eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY );
+						l_return &= m_gl.TexCoordPointer( s_arraySize[l_it->m_eDataType], s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
 						break;
 					}
 				}
@@ -241,7 +241,7 @@ namespace GlRender
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void GlVertexBufferObject::Unbind()
@@ -326,17 +326,17 @@ namespace GlRender
 
 	bool GlVertexBufferObject::DoAttributesBind()
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
-		for ( auto && l_it = m_arrayAttributes.begin(); l_it != m_arrayAttributes.end() && l_bReturn; ++l_it )
+		for ( auto && l_it = m_arrayAttributes.begin(); l_it != m_arrayAttributes.end() && l_return; ++l_it )
 		{
 			if ( ( *l_it )->GetLocation() != eGL_INVALID_INDEX )
 			{
-				l_bReturn = ( *l_it )->Bind( false );
+				l_return = ( *l_it )->Bind( false );
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void GlVertexBufferObject::DoAttributesUnbind()

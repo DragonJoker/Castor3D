@@ -37,7 +37,7 @@ namespace CastorShape
 		}	eEVENT;
 
 	public:
-		MainFrame( wxWindow * parent, wxString const & title, Castor3D::eRENDERER_TYPE p_eRenderer );
+		MainFrame( GuiCommon::SplashScreen * p_splashScreen, wxString const & title );
 		~MainFrame();
 
 		bool Initialise();
@@ -47,18 +47,12 @@ namespace CastorShape
 		void SetCurrentPanel( RenderPanel * p_pCheck, RenderPanel * p_pValue );
 		void LoadScene( wxString const & p_strFileName );
 
-		inline Castor3D::Engine * GetEngine()const
-		{
-			return m_castor3D;
-		}
-
 	private:
-		void DoLoadPlugins();
 		void DoInitialiseGUI();
 		bool DoInitialise3D();
-		bool DoInitialiseImages();
 		void DoPopulateStatusBar();
 		void DoPopulateToolbar();
+		void DoPopulateMenus();
 		void DoInitialisePerspectives();
 		void DoSetSelectionType( SelectionType p_eType );
 		void DoSetActionType( ActionType p_eType );
@@ -154,14 +148,11 @@ namespace CastorShape
 		MaterialInfos m_selectedMaterial;
 
 		// Other
-		GuiCommon::ImagesLoader * m_pImagesLoader;
 		bool m_bWireFrame;
 		wxTimer * m_timer;
 		GuiCommon::SplashScreen * m_pSplashScreen;
-		Castor3D::Engine * m_castor3D;
 		int m_iNbGeometries;
 		Castor::Path m_strFilePath;
-		Castor3D::eRENDERER_TYPE m_eRenderer;
 	};
 }
 

@@ -90,29 +90,29 @@ namespace Castor
 
 			bool DoIsValidDay( int p_iDay, int p_iMonth, int p_iYear )
 			{
-				bool l_bReturn = false;
+				bool l_return = false;
 
 				if ( p_iDay > 0 )
 				{
 					if ( p_iMonth == 1 || p_iMonth == 3 || p_iMonth == 5 || p_iMonth == 7 || p_iMonth == 8 || p_iMonth == 10 || p_iMonth == 12 )
 					{
-						l_bReturn = p_iDay <= 31;
+						l_return = p_iDay <= 31;
 					}
 					else if ( p_iMonth != 2 )
 					{
-						l_bReturn = p_iDay <= 30;
+						l_return = p_iDay <= 30;
 					}
 					else if ( p_iYear % 400 == 0 || ( p_iYear % 4 == 0 && p_iYear % 100 != 0 ) )
 					{
-						l_bReturn = p_iDay <= 29;
+						l_return = p_iDay <= 29;
 					}
 					else
 					{
-						l_bReturn = p_iDay <= 28;
+						l_return = p_iDay <= 28;
 					}
 				}
 
-				return l_bReturn;
+				return l_return;
 			}
 
 			template< typename InChar, typename OutChar > struct StringConverter;
@@ -175,24 +175,24 @@ namespace Castor
 
 		bool is_integer( String const & p_strToTest, std::locale const & CU_PARAM_UNUSED( p_locale ) )
 		{
-			bool l_bReturn = true;
+			bool l_return = true;
 
 			if ( ! p_strToTest.empty() )
 			{
-				l_bReturn = ( p_strToTest[0] >= '0' && p_strToTest[0] <= '9' ) || p_strToTest[0] == '-';
+				l_return = ( p_strToTest[0] >= '0' && p_strToTest[0] <= '9' ) || p_strToTest[0] == '-';
 
-				for ( std::size_t i = 1; i < p_strToTest.size() && l_bReturn; i++ )
+				for ( std::size_t i = 1; i < p_strToTest.size() && l_return; i++ )
 				{
-					l_bReturn = p_strToTest[i] >= '0' && p_strToTest[i] <= '9';
+					l_return = p_strToTest[i] >= '0' && p_strToTest[i] <= '9';
 				}
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 
 		bool is_floating( String const & p_strToTest, std::locale const & CU_PARAM_UNUSED( p_locale ) )
 		{
-			bool		l_bReturn = false;
+			bool		l_return = false;
 			StringArray	l_arrayParts;
 			String		l_strText( p_strToTest );
 			std::size_t	l_nSize;
@@ -202,20 +202,20 @@ namespace Castor
 
 			if ( l_nSize > 0 && l_nSize < 3 )
 			{
-				l_bReturn = is_integer( l_arrayParts[0] );
+				l_return = is_integer( l_arrayParts[0] );
 
-				if ( l_bReturn && l_nSize > 1 )
+				if ( l_return && l_nSize > 1 )
 				{
-					l_bReturn = is_integer( l_arrayParts[1] );
+					l_return = is_integer( l_arrayParts[1] );
 				}
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 
 		bool is_date( String const & p_strToTest, std::locale const & p_locale )
 		{
-			bool l_bReturn = false;
+			bool l_return = false;
 			String l_strText( p_strToTest );
 			String l_strYear;
 			String l_strMonth;
@@ -236,7 +236,7 @@ namespace Castor
 
 			if ( l_arraySplitted.size() == 3 && is_integer( l_arraySplitted[0] ) && is_integer( l_arraySplitted[2] ) )
 			{
-				l_bReturn = true;
+				l_return = true;
 
 				switch ( l_order )
 				{
@@ -269,30 +269,30 @@ namespace Castor
 					break;
 
 				default:
-					l_bReturn = false;
+					l_return = false;
 				}
 
-				l_bReturn &= l_tmbuf.tm_mon > 0 && l_tmbuf.tm_mon <= 12;
+				l_return &= l_tmbuf.tm_mon > 0 && l_tmbuf.tm_mon <= 12;
 
-				if ( l_bReturn )
+				if ( l_return )
 				{
 					if ( l_strYear.size() > 2 )
 					{
-						l_bReturn = l_tmbuf.tm_year > 1900 && l_tmbuf.tm_year < 2500;
+						l_return = l_tmbuf.tm_year > 1900 && l_tmbuf.tm_year < 2500;
 					}
 					else if ( l_strYear.size() == 2 )
 					{
-						l_bReturn = true;
+						l_return = true;
 					}
 				}
 
-				if ( l_bReturn )
+				if ( l_return )
 				{
-					l_bReturn = DoIsValidDay( l_tmbuf.tm_mday, l_tmbuf.tm_mon, l_tmbuf.tm_year );
+					l_return = DoIsValidDay( l_tmbuf.tm_mday, l_tmbuf.tm_mon, l_tmbuf.tm_year );
 				}
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 
 		bool is_upper_case( String const & p_strToTest )

@@ -15,26 +15,26 @@ namespace Castor
 
 	bool Colour::BinaryLoader::operator()( Colour & p_colour, BinaryFile & p_file )
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
-		for ( uint8_t i = 0; i < Colour::eCOMPONENT_COUNT && l_bReturn; i++ )
+		for ( uint8_t i = 0; i < Colour::eCOMPONENT_COUNT && l_return; i++ )
 		{
-			l_bReturn = p_file.Read( p_colour[Colour::eCOMPONENT( i )] ) == sizeof( float );
+			l_return = p_file.Read( p_colour[Colour::eCOMPONENT( i )] ) == sizeof( float );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool Colour::BinaryLoader::operator()( Colour const & p_colour, BinaryFile & p_file )
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
-		for ( uint8_t i = 0; i < Colour::eCOMPONENT_COUNT && l_bReturn; i++ )
+		for ( uint8_t i = 0; i < Colour::eCOMPONENT_COUNT && l_return; i++ )
 		{
-			l_bReturn = p_file.Write( p_colour[Colour::eCOMPONENT( i )] ) == sizeof( float );
+			l_return = p_file.Write( p_colour[Colour::eCOMPONENT( i )] ) == sizeof( float );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -46,18 +46,18 @@ namespace Castor
 
 	bool Colour::TextLoader::operator()( Colour & p_colour, TextFile & p_file )
 	{
-		bool l_bReturn;
+		bool l_return;
 		String l_strLine;
-		l_bReturn = p_file.ReadLine( l_strLine, 1024 ) > 0;
+		l_return = p_file.ReadLine( l_strLine, 1024 ) > 0;
 		StringArray l_arraySplitted;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			l_arraySplitted = str_utils::split( l_strLine, cuT( " \t,;" ) );
-			l_bReturn = l_arraySplitted.size() >= Colour::eCOMPONENT_COUNT;
+			l_return = l_arraySplitted.size() >= Colour::eCOMPONENT_COUNT;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			while ( l_arraySplitted.size() > Colour::eCOMPONENT_COUNT )
 			{
@@ -70,7 +70,7 @@ namespace Castor
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool Colour::TextLoader::operator()( Colour const & p_colour, TextFile & p_file )
@@ -755,14 +755,14 @@ namespace Castor
 
 	bool operator ==( Colour const & p_clrA, Colour const & p_clrB )
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
-		for ( uint8_t i = 0; i < Colour::eCOMPONENT_COUNT && l_bReturn; i++ )
+		for ( uint8_t i = 0; i < Colour::eCOMPONENT_COUNT && l_return; i++ )
 		{
-			l_bReturn = p_clrA[Colour::eCOMPONENT( i )] == p_clrB[Colour::eCOMPONENT( i )];
+			l_return = p_clrA[Colour::eCOMPONENT( i )] == p_clrB[Colour::eCOMPONENT( i )];
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool operator !=( Colour const & p_clrA, Colour const & p_clrB )

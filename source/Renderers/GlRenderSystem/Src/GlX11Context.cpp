@@ -370,7 +370,7 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithoutFBConfig( IntArray & p_arr
 
 bool GlContextImpl::DoCreateGl3Context( Castor3D::RenderWindow * p_pWindow )
 {
-	bool l_bReturn = false;
+	bool l_return = false;
 #if !C3DGL_LIMIT_TO_2_1
 	GlRenderSystem * l_pRenderSystem = static_cast< GlRenderSystem * >( p_pWindow->GetEngine()->GetRenderSystem() );
 	GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_pRenderSystem->GetMainContext() );
@@ -401,18 +401,18 @@ bool GlContextImpl::DoCreateGl3Context( Castor3D::RenderWindow * p_pWindow )
 		if ( !m_glXContext )
 		{
 			Logger::LogWarning( str_utils::from_str( "GlXContext::Create - glXCreateContextAttribs failed" ) );
-			l_bReturn = false;
+			l_return = false;
 		}
 		else
 		{
 			Logger::LogDebug( str_utils::from_str( "GlXContext::Create - glXContext 3.x/4.x compatible created" ) );
-			l_bReturn = true;
+			l_return = true;
 		}
 	}
 
 #else
-	l_bReturn = true;
+	l_return = true;
 #endif
-	return l_bReturn;
+	return l_return;
 }
 #endif

@@ -31,7 +31,7 @@ namespace Castor
 
 	bool FileParser::ParseFile( TextFile & p_file )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( p_file.IsOk() )
 		{
@@ -193,14 +193,14 @@ namespace Castor
 			else
 			{
 				DoValidate();
-				l_bReturn = true;
+				l_return = true;
 			}
 
 			Logger::LogInfo( cuT( "FileParser : Finished parsing file [" ) + p_file.GetFileName() + cuT( "]" ) );
 		}
 
 		DoCleanupParser();
-		return l_bReturn;
+		return l_return;
 	}
 
 	void FileParser::ParseError( String const & p_strError )
@@ -219,29 +219,29 @@ namespace Castor
 
 	bool FileParser::CheckParams( String const & p_strParams, ParserParameterArrayConstIt p_itBegin, ParserParameterArrayConstIt p_itEnd )
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		String l_strParams( p_strParams );
 		str_utils::trim( l_strParams );
 		String l_strMissingParam;
 		std::for_each( p_itBegin, p_itEnd, [&]( ParserParameterBaseSPtr p_pParam )
 		{
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = p_pParam->Parse( l_strParams );
+				l_return = p_pParam->Parse( l_strParams );
 
-				if ( !l_bReturn )
+				if ( !l_return )
 				{
 					l_strMissingParam = p_pParam->GetStrType();
 				}
 			}
 		} );
 
-		if ( !l_bReturn )
+		if ( !l_return )
 		{
 			ParseError( cuT( "Directive <" ) + m_pParsingContext->strFunctionName + cuT( "> needs a <" ) + l_strMissingParam + cuT( "> param that is currently missing" ) );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void FileParser::AddParser( int p_iSection, String const & p_strName, PParserFunction p_pfnFunction, int p_iCount, ... )
@@ -385,7 +385,7 @@ namespace Castor
 	bool FileParser::DoParseScriptLine( String & p_strLine )
 	{
 		bool l_bContinue = true;
-		bool l_bReturn = false;
+		bool l_return = false;
 		std::size_t l_uiBlockEndIndex = p_strLine.find( cuT( "}" ) );
 
 		if ( l_uiBlockEndIndex != String::npos )
@@ -399,11 +399,11 @@ namespace Castor
 
 				if ( !p_strLine.empty() )
 				{
-					l_bReturn = DoParseScriptLine( p_strLine );
+					l_return = DoParseScriptLine( p_strLine );
 				}
 				else
 				{
-					l_bReturn = false;
+					l_return = false;
 				}
 
 				l_bContinue = false;
@@ -416,15 +416,15 @@ namespace Castor
 
 				if ( !p_strLine.empty() )
 				{
-					l_bReturn = DoParseScriptLine( p_strLine );
+					l_return = DoParseScriptLine( p_strLine );
 				}
 				else
 				{
-					l_bReturn = false;
+					l_return = false;
 				}
 
 				DoParseScriptBlockEnd();
-				l_bReturn = false;
+				l_return = false;
 				l_bContinue = false;
 			}
 			else
@@ -443,20 +443,20 @@ namespace Castor
 		{
 			if ( m_pParsingContext->stackSections.top() >= 0 && m_pParsingContext->stackSections.top() < m_iSectionCount )
 			{
-				l_bReturn = DoInvokeParser( p_strLine, m_mapParsers[m_pParsingContext->stackSections.top()] );
+				l_return = DoInvokeParser( p_strLine, m_mapParsers[m_pParsingContext->stackSections.top()] );
 			}
 			else
 			{
-				l_bReturn = DoDelegateParser( p_strLine );
+				l_return = DoDelegateParser( p_strLine );
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool FileParser::DoParseScriptBlockEnd()
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( m_pParsingContext->stackSections.top() >= 0 && m_pParsingContext->stackSections.top() < m_iSectionCount )
 		{
@@ -465,20 +465,20 @@ namespace Castor
 			if ( l_iter == m_mapParsers[m_pParsingContext->stackSections.top()].end() )
 			{
 				m_pParsingContext->stackSections.pop();
-				l_bReturn = false;
+				l_return = false;
 			}
 			else
 			{
-				l_bReturn = l_iter->second.first( this, l_iter->second.second );
+				l_return = l_iter->second.first( this, l_iter->second.second );
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool FileParser::DoInvokeParser( String & p_strLine, AttributeParserMap const & p_parsers )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		StringArray l_splitCmd = str_utils::split( p_strLine, cuT( " \t" ), 1, false );
 		m_pParsingContext->strFunctionName = l_splitCmd[0];
 		AttributeParserMap::const_iterator const & l_iter = p_parsers.find( l_splitCmd[0] );
@@ -500,15 +500,15 @@ namespace Castor
 			{
 				bool l_ignored = true;
 				std::swap( l_ignored, m_bIgnored );
-				l_bReturn = l_iter->second.first( this, l_iter->second.second );
+				l_return = l_iter->second.first( this, l_iter->second.second );
 				std::swap( l_ignored, m_bIgnored );
 			}
 			else
 			{
-				l_bReturn = l_iter->second.first( this, l_iter->second.second );
+				l_return = l_iter->second.first( this, l_iter->second.second );
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 }

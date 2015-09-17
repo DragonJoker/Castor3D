@@ -35,37 +35,37 @@ namespace Castor3D
 
 	bool Overlay::BinaryParser::Fill( Overlay const & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_OVERLAY );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = OverlayCategory::BinaryParser( m_path ).Fill( *p_obj.m_pOverlayCategory, l_chunk );
+			l_return = OverlayCategory::BinaryParser( m_path ).Fill( *p_obj.m_pOverlayCategory, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
+			l_return = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
 		}
 
-		for ( auto && l_it = p_obj.begin(); l_it != p_obj.end() && l_bReturn; ++l_it )
+		for ( auto && l_it = p_obj.begin(); l_it != p_obj.end() && l_return; ++l_it )
 		{
 			OverlaySPtr l_overlay = *l_it;
-			l_bReturn = Overlay::BinaryParser( m_path, m_engine ).Fill( *l_overlay, l_chunk );
+			l_return = Overlay::BinaryParser( m_path, m_engine ).Fill( *l_overlay, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			l_chunk.Finalise();
 			p_chunk.AddSubChunk( l_chunk );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool Overlay::BinaryParser::Parse( Overlay & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		eOVERLAY_TYPE l_type;
 		String l_name;
 		OverlaySPtr l_overlay;
@@ -73,9 +73,9 @@ namespace Castor3D
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
 			BinaryChunk l_chunk;
-			l_bReturn = p_chunk.GetSubChunk( l_chunk );
+			l_return = p_chunk.GetSubChunk( l_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				switch ( p_chunk.GetChunkType() )
 				{
@@ -84,20 +84,20 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_OVERLAY_TYPE:
-					l_bReturn = DoParseChunk( l_type, l_chunk );
+					l_return = DoParseChunk( l_type, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						l_overlay = m_engine->CreateOverlay( l_type, cuT( "" ), p_obj.shared_from_this(), p_obj.GetScene() );
-						l_bReturn = Overlay::BinaryParser( m_path, m_engine ).Parse( *l_overlay, l_chunk );
+						l_return = Overlay::BinaryParser( m_path, m_engine ).Parse( *l_overlay, l_chunk );
 					}
 
 					break;
 
 				case eCHUNK_TYPE_NAME:
-					l_bReturn = DoParseChunk( l_name, l_chunk );
+					l_return = DoParseChunk( l_name, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetName( l_name );
 					}
@@ -105,18 +105,18 @@ namespace Castor3D
 					break;
 
 				default:
-					l_bReturn = OverlayCategory::BinaryParser( m_path ).Parse( *p_obj.m_pOverlayCategory, l_chunk );
+					l_return = OverlayCategory::BinaryParser( m_path ).Parse( *p_obj.m_pOverlayCategory, l_chunk );
 					break;
 				}
 			}
 
-			if ( !l_bReturn )
+			if ( !l_return )
 			{
 				p_chunk.EndParse();
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -165,7 +165,7 @@ namespace Castor3D
 
 	bool Overlay::AddChild( OverlaySPtr p_pOverlay )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		int l_index = 1;
 
 		if ( !m_overlays.empty() )

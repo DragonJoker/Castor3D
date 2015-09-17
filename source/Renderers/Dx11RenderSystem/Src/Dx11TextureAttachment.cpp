@@ -24,7 +24,7 @@ namespace Dx11Render
 
 	bool DxTextureAttachment::DownloadBuffer( PxBufferBaseSPtr p_pBuffer )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		//D3D11_MAPPED_SUBRESOURCE l_mappedResource;
 		//ID3D11Resource * l_pResource;
 		//ID3D11RenderTargetView * l_pSurface = m_pDxTexture.lock()->GetRenderTargetView();
@@ -33,15 +33,15 @@ namespace Dx11Render
 		//
 		//if( l_hr == S_OK && l_mappedResource.pData != NULL )
 		//{
-		//	l_bReturn = true;
+		//	l_return = true;
 		//	std::memcpy( p_pBuffer->ptr(), l_mappedResource.pData, p_pBuffer->size() );
 		//}
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool DxTextureAttachment::Blit( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, eINTERPOLATION_MODE CU_PARAM_UNUSED( p_eInterpolation ) )
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		DxFrameBufferSPtr l_pBuffer = std::static_pointer_cast< DxFrameBuffer >( p_pBuffer );
 		RECT l_rcSrc = { p_rectSrc.left(), p_rectSrc.top(), p_rectSrc.right(), p_rectSrc.bottom() };
 		RECT l_rcDst = { p_rectDst.left(), p_rectDst.top(), p_rectDst.right(), p_rectDst.bottom() };
@@ -65,7 +65,7 @@ namespace Dx11Render
 
 		SafeRelease( l_pSrcSurface );
 		SafeRelease( l_pDstSurface );
-		return l_bReturn;
+		return l_return;
 	}
 
 	ID3D11View * DxTextureAttachment::GetSurface()const

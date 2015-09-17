@@ -20,41 +20,41 @@ namespace Castor3D
 {
 	bool BillboardList::TextLoader::operator()( BillboardList const & p_obj, Castor::TextFile & p_file )
 	{
-		bool l_bReturn = p_file.WriteText( cuT( "\tbillboard \"" ) + p_obj.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( cuT( "\tbillboard \"" ) + p_obj.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = MovableObject::TextLoader()( p_obj, p_file );
+			l_return = MovableObject::TextLoader()( p_obj, p_file );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\t\tmaterial \"" ) + p_obj.GetMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\t\tmaterial \"" ) + p_obj.GetMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.Print( 256, cuT( "\t\tdimensions %d %d" ), p_obj.GetDimensions().width(), p_obj.GetDimensions().height() ) > 0;
+			l_return = p_file.Print( 256, cuT( "\t\tdimensions %d %d" ), p_obj.GetDimensions().width(), p_obj.GetDimensions().height() ) > 0;
 		}
 
-		if ( l_bReturn && p_obj.GetCount() )
+		if ( l_return && p_obj.GetCount() )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\t\tpositions\n\t\t{\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\t\tpositions\n\t\t{\n" ) ) > 0;
 
 			for ( Point3rArray::const_iterator l_it = p_obj.Begin(); l_it != p_obj.End(); ++l_it )
 			{
-				l_bReturn = p_file.Print( 256, cuT( "\t\t\tpos %f %f %f" ), l_it->at( 0 ), l_it->at( 1 ), l_it->at( 2 ) ) > 0;
+				l_return = p_file.Print( 256, cuT( "\t\t\tpos %f %f %f" ), l_it->at( 0 ), l_it->at( 1 ), l_it->at( 2 ) ) > 0;
 			}
 
-			l_bReturn = p_file.WriteText( cuT( "\t\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\t\t}\n" ) ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\t}\n" ) ) > 0;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -66,38 +66,38 @@ namespace Castor3D
 
 	bool BillboardList::BinaryParser::Fill( BillboardList const & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_BILLBOARD );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = MovableObject::BinaryParser( m_path ).Fill( p_obj, l_chunk );
+			l_return = MovableObject::BinaryParser( m_path ).Fill( p_obj, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetMaterial()->GetName(), eCHUNK_TYPE_BILLBOARD_MATERIAL, l_chunk );
+			l_return = DoFillChunk( p_obj.GetMaterial()->GetName(), eCHUNK_TYPE_BILLBOARD_MATERIAL, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetDimensions(), eCHUNK_TYPE_BILLBOARD_DIMENSIONS, l_chunk );
+			l_return = DoFillChunk( p_obj.GetDimensions(), eCHUNK_TYPE_BILLBOARD_DIMENSIONS, l_chunk );
 		}
 
-		if ( l_bReturn && p_obj.GetCount() )
+		if ( l_return && p_obj.GetCount() )
 		{
 			for ( Point3rArray::const_iterator l_it = p_obj.Begin(); l_it != p_obj.End(); ++l_it )
 			{
-				l_bReturn = DoFillChunk( *l_it, eCHUNK_TYPE_BILLBOARD_POSITION, l_chunk );
+				l_return = DoFillChunk( *l_it, eCHUNK_TYPE_BILLBOARD_POSITION, l_chunk );
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool BillboardList::BinaryParser::Parse( BillboardList & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		String l_name;
 		Size l_size;
 		Point3r l_position;
@@ -105,16 +105,16 @@ namespace Castor3D
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
 			BinaryChunk l_chunk;
-			l_bReturn = p_chunk.GetSubChunk( l_chunk );
+			l_return = p_chunk.GetSubChunk( l_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				switch ( l_chunk.GetChunkType() )
 				{
 				case eCHUNK_TYPE_BILLBOARD_MATERIAL:
-					l_bReturn = DoParseChunk( l_name, l_chunk );
+					l_return = DoParseChunk( l_name, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetMaterial( p_obj.GetScene()->GetEngine()->GetMaterialManager().find( l_name ) );
 					}
@@ -122,28 +122,28 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_BILLBOARD_DIMENSIONS:
-					l_bReturn = DoParseChunk( l_size, l_chunk );
+					l_return = DoParseChunk( l_size, l_chunk );
 					p_obj.SetDimensions( l_size );
 					break;
 
 				case eCHUNK_TYPE_BILLBOARD_POSITION:
-					l_bReturn = DoParseChunk( l_position, l_chunk );
+					l_return = DoParseChunk( l_position, l_chunk );
 					p_obj.AddPoint( l_position );
 					break;
 
 				default:
-					l_bReturn = MovableObject::BinaryParser( m_path ).Parse( p_obj, l_chunk );
+					l_return = MovableObject::BinaryParser( m_path ).Parse( p_obj, l_chunk );
 					break;
 				}
 			}
 
-			if ( !l_bReturn )
+			if ( !l_return )
 			{
 				p_chunk.EndParse();
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -182,7 +182,7 @@ namespace Castor3D
 	bool BillboardList::InitialiseShader( RenderTechniqueBase & p_technique )
 	{
 		MaterialSPtr l_pMaterial = m_wpMaterial.lock();
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( l_pMaterial && l_pMaterial->GetPassCount() )
 		{
@@ -192,9 +192,9 @@ namespace Castor3D
 			if ( m_wpProgram.expired() || m_wpProgram.lock() != l_pProgram )
 			{
 				m_wpProgram = l_pProgram;
-				l_bReturn = DoInitialise();
+				l_return = DoInitialise();
 
-				if ( l_bReturn )
+				if ( l_return )
 				{
 					l_pMaterial->Initialise();
 					m_pDimensionsUniform->SetValue( Point2i( m_dimensions.width(), m_dimensions.height() ) );
@@ -206,11 +206,11 @@ namespace Castor3D
 			}
 			else
 			{
-				l_bReturn = true;
+				l_return = true;
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void BillboardList::Cleanup()

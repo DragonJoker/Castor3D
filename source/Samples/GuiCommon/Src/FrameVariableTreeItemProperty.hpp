@@ -70,24 +70,6 @@ namespace GuiCommon
 		~FrameVariableTreeItemProperty();
 		/**
 		 *\~english
-		 *\brief		Creates and fills the overlay properties, in the given wxPropertyGrid
-		 *\param[in]	p_grid	The target wxPropertyGrid
-		 *\~french
-		 *\brief		Construit et remplit les propriétés de l'incrustation, dans la wxPropertyGrid donnée
-		 *\param[in]	p_grid	La wxPropertyGrid cible
-		 */
-		virtual void CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
-		/**
-		 *\~english
-		 *\brief		Call when a property grid property is changed
-		 *\param[in]	p_event	The event
-		 *\~french
-		 *\brief		Appelée lorsqu'une propriété est changée
-		 *\param[in]	p_event	L'évènement
-		 */
-		virtual void OnPropertyChange( wxPropertyGridEvent & p_event );
-		/**
-		 *\~english
 		 *\brief		Retrieves the camera
 		 *\return		The value
 		 *\~french
@@ -110,6 +92,16 @@ namespace GuiCommon
 		{
 			return m_buffer.lock();
 		}
+
+	private:
+		/**
+		 *\copydoc GuiCommon::TreeItemProperty::DoCreateProperties
+		 */
+		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		/**
+		 *\copydoc GuiCommon::TreeItemProperty::DoPropertyChange
+		 */
+		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
 		void OnTypeChange( Castor3D::eFRAME_VARIABLE_TYPE p_value );

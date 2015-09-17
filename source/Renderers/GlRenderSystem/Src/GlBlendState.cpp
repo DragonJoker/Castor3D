@@ -19,7 +19,7 @@ namespace GlRender
 
 	bool GlBlendState::Apply()
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		bool l_bEnabled = false;
 
 		if ( GetColourMaskR() != m_currentState->GetColourMaskR()
@@ -35,13 +35,13 @@ namespace GlRender
 		{
 			if ( !m_currentState->IsAlphaToCoverageEnabled() )
 			{
-				l_bReturn &= m_gl.Enable( eGL_TWEAK_ALPHA_TO_COVERAGE );
+				l_return &= m_gl.Enable( eGL_TWEAK_ALPHA_TO_COVERAGE );
 				m_currentState->EnableAlphaToCoverage( IsAlphaToCoverageEnabled() );
 			}
 
 			if ( m_uiSampleMask != m_currentState->GetSampleCoverageMask() )
 			{
-				l_bReturn &= m_gl.SampleCoverage( float( GetSampleCoverageMask() / double( 0xFFFFFFFF ) ), false );
+				l_return &= m_gl.SampleCoverage( float( GetSampleCoverageMask() / double( 0xFFFFFFFF ) ), false );
 				m_currentState->SetSampleCoverageMask( GetSampleCoverageMask() );
 			}
 
@@ -49,7 +49,7 @@ namespace GlRender
 		}
 		else if ( m_currentState->IsAlphaToCoverageEnabled() )
 		{
-			l_bReturn &= m_gl.Disable( eGL_TWEAK_ALPHA_TO_COVERAGE );
+			l_return &= m_gl.Disable( eGL_TWEAK_ALPHA_TO_COVERAGE );
 			m_currentState->EnableAlphaToCoverage( IsAlphaToCoverageEnabled() );
 		}
 
@@ -65,13 +65,13 @@ namespace GlRender
 					{
 						m_currentState->EnableBlend( true, i );
 
-						l_bReturn &= m_gl.BlendFunc( i, m_gl.Get( GetRgbSrcBlend( i ) ), m_gl.Get( GetRgbDstBlend( i ) ), m_gl.Get( GetAlphaSrcBlend( i ) ), m_gl.Get( GetAlphaDstBlend( i ) ) );
+						l_return &= m_gl.BlendFunc( i, m_gl.Get( GetRgbSrcBlend( i ) ), m_gl.Get( GetRgbDstBlend( i ) ), m_gl.Get( GetAlphaSrcBlend( i ) ), m_gl.Get( GetAlphaDstBlend( i ) ) );
 						m_currentState->SetRgbSrcBlend( GetRgbSrcBlend( i ), i );
 						m_currentState->SetRgbDstBlend( GetRgbDstBlend( i ), i );
 						m_currentState->SetAlphaSrcBlend( GetAlphaSrcBlend( i ), i );
 						m_currentState->SetAlphaDstBlend( GetAlphaDstBlend( i ), i );
 
-						l_bReturn &= m_gl.BlendEquation( i, m_gl.Get( GetRgbBlendOp( i ) ) );
+						l_return &= m_gl.BlendEquation( i, m_gl.Get( GetRgbBlendOp( i ) ) );
 						m_currentState->SetRgbBlendOp( GetRgbBlendOp( i ), i );
 					}
 					else
@@ -81,7 +81,7 @@ namespace GlRender
 							|| GetAlphaSrcBlend( i ) != m_currentState->GetAlphaSrcBlend( i )
 							|| GetAlphaDstBlend( i ) != m_currentState->GetAlphaDstBlend( i ) )
 						{
-							l_bReturn &= m_gl.BlendFunc( i, m_gl.Get( GetRgbSrcBlend( i ) ), m_gl.Get( GetRgbDstBlend( i ) ), m_gl.Get( GetAlphaSrcBlend( i ) ), m_gl.Get( GetAlphaDstBlend( i ) ) );
+							l_return &= m_gl.BlendFunc( i, m_gl.Get( GetRgbSrcBlend( i ) ), m_gl.Get( GetRgbDstBlend( i ) ), m_gl.Get( GetAlphaSrcBlend( i ) ), m_gl.Get( GetAlphaDstBlend( i ) ) );
 							m_currentState->SetRgbSrcBlend( GetRgbSrcBlend( i ), i );
 							m_currentState->SetRgbDstBlend( GetRgbDstBlend( i ), i );
 							m_currentState->SetAlphaSrcBlend( GetAlphaSrcBlend( i ), i );
@@ -90,7 +90,7 @@ namespace GlRender
 
 						if ( GetRgbBlendOp( i ) != !m_currentState->GetRgbBlendOp( i ) )
 						{
-							l_bReturn &= m_gl.BlendEquation( i, m_gl.Get( GetRgbBlendOp( i ) ) );
+							l_return &= m_gl.BlendEquation( i, m_gl.Get( GetRgbBlendOp( i ) ) );
 							m_currentState->SetRgbBlendOp( GetRgbBlendOp( i ), i );
 						}
 					}
@@ -98,8 +98,8 @@ namespace GlRender
 				else if ( m_currentState->IsBlendEnabled( i ) )
 				{
 					m_currentState->EnableBlend( false, i );
-					l_bReturn &= m_gl.BlendFunc( i, eGL_BLEND_FACTOR_ONE, eGL_BLEND_FACTOR_ZERO, eGL_BLEND_FACTOR_ONE, eGL_BLEND_FACTOR_ZERO );
-					l_bReturn &= m_gl.BlendEquation( i, eGL_BLEND_OP_ADD );
+					l_return &= m_gl.BlendFunc( i, eGL_BLEND_FACTOR_ONE, eGL_BLEND_FACTOR_ZERO, eGL_BLEND_FACTOR_ONE, eGL_BLEND_FACTOR_ZERO );
+					l_return &= m_gl.BlendEquation( i, eGL_BLEND_OP_ADD );
 				}
 			}
 		}
@@ -113,13 +113,13 @@ namespace GlRender
 				{
 					m_currentState->EnableBlend( true, 0 );
 
-					l_bReturn &= m_gl.BlendFunc( m_gl.Get( GetRgbSrcBlend() ), m_gl.Get( GetRgbDstBlend() ), m_gl.Get( GetAlphaSrcBlend() ), m_gl.Get( GetAlphaDstBlend() ) );
+					l_return &= m_gl.BlendFunc( m_gl.Get( GetRgbSrcBlend() ), m_gl.Get( GetRgbDstBlend() ), m_gl.Get( GetAlphaSrcBlend() ), m_gl.Get( GetAlphaDstBlend() ) );
 					m_currentState->SetRgbSrcBlend( GetRgbSrcBlend() );
 					m_currentState->SetRgbDstBlend( GetRgbDstBlend() );
 					m_currentState->SetAlphaSrcBlend( GetAlphaSrcBlend() );
 					m_currentState->SetAlphaDstBlend( GetAlphaDstBlend() );
 
-					l_bReturn &= m_gl.BlendEquation( m_gl.Get( GetRgbBlendOp() ) );
+					l_return &= m_gl.BlendEquation( m_gl.Get( GetRgbBlendOp() ) );
 					m_currentState->SetRgbBlendOp( GetRgbBlendOp() );
 				}
 				else
@@ -129,7 +129,7 @@ namespace GlRender
 						|| GetAlphaSrcBlend() != m_currentState->GetAlphaSrcBlend()
 						|| GetAlphaDstBlend() != m_currentState->GetAlphaDstBlend() )
 					{
-						l_bReturn &= m_gl.BlendFunc( m_gl.Get( GetRgbSrcBlend() ), m_gl.Get( GetRgbDstBlend() ), m_gl.Get( GetAlphaSrcBlend() ), m_gl.Get( GetAlphaDstBlend() ) );
+						l_return &= m_gl.BlendFunc( m_gl.Get( GetRgbSrcBlend() ), m_gl.Get( GetRgbDstBlend() ), m_gl.Get( GetAlphaSrcBlend() ), m_gl.Get( GetAlphaDstBlend() ) );
 						m_currentState->SetRgbSrcBlend( GetRgbSrcBlend() );
 						m_currentState->SetRgbDstBlend( GetRgbDstBlend() );
 						m_currentState->SetAlphaSrcBlend( GetAlphaSrcBlend() );
@@ -138,7 +138,7 @@ namespace GlRender
 
 					if ( GetRgbBlendOp() != !m_currentState->GetRgbBlendOp() )
 					{
-						l_bReturn &= m_gl.BlendEquation( m_gl.Get( GetRgbBlendOp() ) );
+						l_return &= m_gl.BlendEquation( m_gl.Get( GetRgbBlendOp() ) );
 						m_currentState->SetRgbBlendOp( GetRgbBlendOp() );
 					}
 				}
@@ -146,8 +146,8 @@ namespace GlRender
 			else if ( m_currentState->IsBlendEnabled() )
 			{
 				m_currentState->EnableBlend( false );
-				l_bReturn &= m_gl.BlendFunc( eGL_BLEND_FACTOR_ONE, eGL_BLEND_FACTOR_ZERO, eGL_BLEND_FACTOR_ONE, eGL_BLEND_FACTOR_ZERO );
-				l_bReturn &= m_gl.BlendEquation( eGL_BLEND_OP_ADD );
+				l_return &= m_gl.BlendFunc( eGL_BLEND_FACTOR_ONE, eGL_BLEND_FACTOR_ZERO, eGL_BLEND_FACTOR_ONE, eGL_BLEND_FACTOR_ZERO );
+				l_return &= m_gl.BlendEquation( eGL_BLEND_OP_ADD );
 			}
 		}
 
@@ -155,19 +155,19 @@ namespace GlRender
 		{
 			if ( GetBlendFactors() != m_currentState->GetBlendFactors() )
 			{
-				l_bReturn &= m_gl.BlendColor( GetBlendFactors() );
+				l_return &= m_gl.BlendColor( GetBlendFactors() );
 				m_currentState->SetBlendFactors( GetBlendFactors() );
 			}
 
-			l_bReturn &= m_gl.Enable( eGL_TWEAK_BLEND );
+			l_return &= m_gl.Enable( eGL_TWEAK_BLEND );
 		}
 		else
 		{
-			l_bReturn &= m_gl.Disable( eGL_TWEAK_BLEND );
+			l_return &= m_gl.Disable( eGL_TWEAK_BLEND );
 		}
 
 		m_bChanged = false;
-		return l_bReturn;
+		return l_return;
 	}
 
 	BlendStateSPtr GlBlendState::DoCreateCurrent()

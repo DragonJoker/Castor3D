@@ -20,20 +20,22 @@ namespace GuiCommon
 	}
 
 	SceneTreeItemProperty::SceneTreeItemProperty( bool p_editable, SceneSPtr p_scene )
-		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_SCENE )
+		: TreeItemProperty( p_scene->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_SCENE )
 		, m_scene( p_scene )
 	{
 		PROPERTY_CATEGORY_SCENE = _( "Scene: " );
 		PROPERTY_SCENE_AMBIENT_LIGHT = _( "Ambient light" );
 		PROPERTY_SCENE_BACKGROUND_COLOUR = _( "Background Colour" );
 		PROPERTY_SCENE_BACKGROUND_IMAGE = _( "Background Image" );
+
+		CreateTreeItemMenu();
 	}
 
 	SceneTreeItemProperty::~SceneTreeItemProperty()
 	{
 	}
 
-	void SceneTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void SceneTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		SceneSPtr l_scene = GetScene();
 
@@ -50,7 +52,7 @@ namespace GuiCommon
 		}
 	}
 
-	void SceneTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void SceneTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		SceneSPtr l_scene = GetScene();
 		wxPGProperty * l_property = p_event.GetProperty();

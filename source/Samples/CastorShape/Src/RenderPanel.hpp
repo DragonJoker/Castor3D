@@ -29,12 +29,12 @@ namespace CastorShape
 	class RenderPanel : public wxPanel
 	{
 	public:
-		RenderPanel( MainFrame * p_mainFrame, wxWindow * parent, wxWindowID p_id,
-					 Castor3D::eVIEWPORT_TYPE p_renderType,
+		RenderPanel( Castor3D::eVIEWPORT_TYPE p_renderType,
 					 Castor3D::SceneSPtr p_scene,
+					 Castor3D::ePROJECTION_DIRECTION p_look,
+					 wxWindow * parent, wxWindowID p_id,
 					 wxPoint const & pos = wxDefaultPosition,
 					 wxSize const & size = wxDefaultSize,
-					 Castor3D::ePROJECTION_DIRECTION p_look = Castor3D::ePROJECTION_DIRECTION_FRONT,
 					 long style = wxDEFAULT_FRAME_STYLE );
 		~RenderPanel();
 
@@ -108,7 +108,6 @@ namespace CastorShape
 		std::shared_ptr< CameraRotateEvent > m_pRotateCamEvent;
 		std::shared_ptr< CameraTranslateEvent > m_pTranslateCamEvent;
 
-		MainFrame * m_mainFrame;
 		ActionType m_actionType;
 		SelectionType m_selectionType;
 		Castor3D::PointLightWPtr m_light1;

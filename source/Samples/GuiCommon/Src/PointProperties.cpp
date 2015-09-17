@@ -23,7 +23,6 @@ WX_PG_IMPLEMENT_VARIANT_DATA_DUMMY_EQ( Point4d )
 
 namespace GuiCommon
 {
-
 	GC_PG_IMPLEMENT_PROPERTY_CLASS( Point2bProperty, wxPGProperty, Point2b, Point2b const &, TextCtrl )
 	GC_PG_IMPLEMENT_PROPERTY_CLASS( Point3bProperty, wxPGProperty, Point3b, Point3b const &, TextCtrl )
 	GC_PG_IMPLEMENT_PROPERTY_CLASS( Point4bProperty, wxPGProperty, Point4b, Point4b const &, TextCtrl )

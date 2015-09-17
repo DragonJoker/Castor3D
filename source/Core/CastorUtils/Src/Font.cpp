@@ -34,7 +34,7 @@ namespace Castor
 
 		inline bool CheckErr( FT_Error p_iErr, const char * p_szName )
 		{
-			bool l_bReturn = true;
+			bool l_return = true;
 			static std::map< FT_Error, std::string > MapErrors;
 
 			if ( MapErrors.empty() )
@@ -118,10 +118,10 @@ namespace Castor
 				}
 
 				LOADER_ERROR( l_strError );
-				l_bReturn = false;
+				l_return = false;
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 
 		struct SFreeTypeFontImpl
@@ -224,7 +224,7 @@ namespace Castor
 
 	bool Font::BinaryLoader::operator()( Font & p_font, Path const & p_pathFile )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( ! p_pathFile.empty() )
 		{
@@ -259,7 +259,7 @@ namespace Castor
 				p_font.GetGlyphLoader().Cleanup();
 				p_font.SetMaxHeight( l_iMaxHeight );
 				p_font.SetMaxWidth( l_iMaxWidth );
-				l_bReturn = true;
+				l_return = true;
 			}
 			catch ( std::runtime_error & p_exc )
 			{
@@ -267,7 +267,7 @@ namespace Castor
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*********************************************************************************************

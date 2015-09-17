@@ -18,22 +18,22 @@ namespace Castor3D
 	bool Material::BinaryParser::Parse( Material & p_obj, BinaryChunk & p_chunk )const
 	{
 		p_obj.Cleanup();
-		bool l_bReturn = true;
+		bool l_return = true;
 		String l_name;
 
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
 			BinaryChunk l_chunk;
-			l_bReturn = p_chunk.GetSubChunk( l_chunk );
+			l_return = p_chunk.GetSubChunk( l_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				switch ( l_chunk.GetChunkType() )
 				{
 				case eCHUNK_TYPE_NAME:
-					l_bReturn = DoParseChunk( l_name, l_chunk );
+					l_return = DoParseChunk( l_name, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.m_name = l_name;
 					}
@@ -42,49 +42,49 @@ namespace Castor3D
 
 				case eCHUNK_TYPE_MATERIAL_PASS:
 					PassSPtr l_pass = p_obj.CreatePass();
-					l_bReturn = Pass::BinaryParser( m_path ).Parse( *l_pass, l_chunk );
+					l_return = Pass::BinaryParser( m_path ).Parse( *l_pass, l_chunk );
 					break;
 				}
 			}
 
-			if ( !l_bReturn )
+			if ( !l_return )
 			{
 				p_chunk.EndParse();
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool Material::BinaryParser::Fill( Material const & p_obj, BinaryChunk & p_chunk )const
 	{
 		BinaryChunk  l_chunk( eCHUNK_TYPE_MATERIAL );
-		bool l_bReturn = true;
+		bool l_return = true;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
+			l_return = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			auto l_it = p_obj.begin();
 			Pass::BinaryParser l_parser( m_path );
 
-			while ( l_bReturn && l_it != p_obj.end() )
+			while ( l_return && l_it != p_obj.end() )
 			{
-				l_bReturn = l_parser.Fill( const_cast< Pass const & >( *( *l_it ) ), l_chunk );
+				l_return = l_parser.Fill( const_cast< Pass const & >( *( *l_it ) ), l_chunk );
 				++l_it;
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			l_chunk.Finalise();
 			p_chunk.AddSubChunk( l_chunk );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -96,11 +96,11 @@ namespace Castor3D
 
 	bool Material::TextLoader::operator()( Material const & p_material, TextFile & p_file )
 	{
-		bool l_bReturn = p_file.WriteText( cuT( "material \"" ) + p_material.GetName() + cuT( "\"\n" ) ) > 0;
+		bool l_return = p_file.WriteText( cuT( "material \"" ) + p_material.GetName() + cuT( "\"\n" ) ) > 0;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( cuT( "{\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "{\n" ) ) > 0;
 		}
 
 		bool l_bFirst = true;
@@ -116,15 +116,15 @@ namespace Castor3D
 				p_file.WriteText( cuT( "\n" ) );
 			}
 
-			l_bReturn = Pass::TextLoader()( *l_pass, p_file );
+			l_return = Pass::TextLoader()( *l_pass, p_file );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( cuT( "}\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "}\n" ) ) > 0;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*********************************************************************************************
@@ -216,14 +216,14 @@ namespace Castor3D
 
 	bool Material::HasAlphaBlending()const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		uint32_t l_uiCount = GetPassCount();
 
-		for ( uint32_t i = 0; i < l_uiCount && l_bReturn; i++ )
+		for ( uint32_t i = 0; i < l_uiCount && l_return; i++ )
 		{
-			l_bReturn = m_passes[i]->HasAlphaBlending();
+			l_return = m_passes[i]->HasAlphaBlending();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 }

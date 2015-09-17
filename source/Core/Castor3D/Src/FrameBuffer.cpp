@@ -26,14 +26,14 @@ namespace Castor3D
 
 	bool FrameBuffer::Bind( eFRAMEBUFFER_MODE p_eMode, eFRAMEBUFFER_TARGET p_eTarget )
 	{
-		bool l_bReturn = DoBind( p_eTarget );
+		bool l_return = DoBind( p_eTarget );
 
-		if ( l_bReturn && m_arrayAttaches.size() && p_eMode == eFRAMEBUFFER_MODE_AUTOMATIC )
+		if ( l_return && m_arrayAttaches.size() && p_eMode == eFRAMEBUFFER_MODE_AUTOMATIC )
 		{
 			SetDrawBuffers( m_arrayAttaches );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void FrameBuffer::Unbind()
@@ -67,26 +67,26 @@ namespace Castor3D
 
 	bool FrameBuffer::Attach( eATTACHMENT_POINT p_eAttachment, DynamicTextureSPtr p_pTexture, eTEXTURE_TARGET p_eTarget, int p_iLayer )
 	{
-		bool l_bReturn = DoAttach( p_eAttachment, p_pTexture, p_eTarget, p_iLayer );
+		bool l_return = DoAttach( p_eAttachment, p_pTexture, p_eTarget, p_iLayer );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			DoTexAttach( p_eAttachment, p_pTexture );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool FrameBuffer::Attach( eATTACHMENT_POINT p_eAttachment, RenderBufferSPtr p_pRenderBuffer )
 	{
-		bool l_bReturn = DoAttach( p_eAttachment, p_pRenderBuffer );
+		bool l_return = DoAttach( p_eAttachment, p_pRenderBuffer );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			DoRboAttach( p_eAttachment, p_pRenderBuffer );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void FrameBuffer::DetachAll()
@@ -112,40 +112,40 @@ namespace Castor3D
 
 	bool FrameBuffer::BlitInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrcDst, uint32_t p_uiComponents )
 	{
-		bool l_bReturn = p_pBuffer->Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_DRAW );
+		bool l_return = p_pBuffer->Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_DRAW );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_READ );
+			l_return = Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_READ );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoStretchInto( p_pBuffer, p_rectSrcDst, p_rectSrcDst, p_uiComponents, eINTERPOLATION_MODE_NEAREST );
+			l_return = DoStretchInto( p_pBuffer, p_rectSrcDst, p_rectSrcDst, p_uiComponents, eINTERPOLATION_MODE_NEAREST );
 			p_pBuffer->Unbind();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool FrameBuffer::StretchInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE p_eInterpolation )
 	{
-		bool l_bReturn = p_pBuffer->Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_DRAW );
+		bool l_return = p_pBuffer->Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_DRAW );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_READ );
+			l_return = Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_READ );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = DoStretchInto( p_pBuffer, p_rectSrc, p_rectDst, p_uiComponents, p_eInterpolation );
+				l_return = DoStretchInto( p_pBuffer, p_rectSrc, p_rectDst, p_uiComponents, p_eInterpolation );
 				Unbind();
 			}
 
 			p_pBuffer->Unbind();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void FrameBuffer::RenderToBuffer( FrameBufferSPtr p_pBuffer, Size const & p_sizeDst, uint32_t p_uiComponents, DepthStencilStateSPtr p_pDepthStencilState, RasteriserStateSPtr p_pRasteriserState )

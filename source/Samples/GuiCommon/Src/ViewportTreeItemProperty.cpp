@@ -14,32 +14,47 @@ namespace GuiCommon
 {
 	namespace
 	{
-		static const wxString PROPERTY_CATEGORY_VIEWPORT = _( "Viewport" );
-		static const wxString PROPERTY_VIEWPORT_TYPE = _( "Type" );
-		static const wxString PROPERTY_VIEWPORT_TYPE_3D = _( "3D" );
-		static const wxString PROPERTY_VIEWPORT_TYPE_2D = _( "2D" );
-		static const wxString PROPERTY_VIEWPORT_SIZE = _( "Size" );
-		static const wxString PROPERTY_VIEWPORT_TOP = _( "Top" );
-		static const wxString PROPERTY_VIEWPORT_BOTTOM = _( "Bottom" );
-		static const wxString PROPERTY_VIEWPORT_LEFT = _( "Left" );
-		static const wxString PROPERTY_VIEWPORT_RIGHT = _( "Right" );
-		static const wxString PROPERTY_VIEWPORT_NEAR = _( "Near" );
-		static const wxString PROPERTY_VIEWPORT_FAR = _( "Far" );
-		static const wxString PROPERTY_VIEWPORT_FOVY = _( "FOV Y" );
-		static const wxString PROPERTY_VIEWPORT_RATIO = _( "Ratio" );
+		static wxString PROPERTY_CATEGORY_VIEWPORT = _( "Viewport" );
+		static wxString PROPERTY_VIEWPORT_TYPE = _( "Type" );
+		static wxString PROPERTY_VIEWPORT_TYPE_3D = _( "3D" );
+		static wxString PROPERTY_VIEWPORT_TYPE_2D = _( "2D" );
+		static wxString PROPERTY_VIEWPORT_SIZE = _( "Size" );
+		static wxString PROPERTY_VIEWPORT_TOP = _( "Top" );
+		static wxString PROPERTY_VIEWPORT_BOTTOM = _( "Bottom" );
+		static wxString PROPERTY_VIEWPORT_LEFT = _( "Left" );
+		static wxString PROPERTY_VIEWPORT_RIGHT = _( "Right" );
+		static wxString PROPERTY_VIEWPORT_NEAR = _( "Near" );
+		static wxString PROPERTY_VIEWPORT_FAR = _( "Far" );
+		static wxString PROPERTY_VIEWPORT_FOVY = _( "FOV Y" );
+		static wxString PROPERTY_VIEWPORT_RATIO = _( "Ratio" );
 	}
 
 	ViewportTreeItemProperty::ViewportTreeItemProperty( bool p_editable, Castor3D::ViewportSPtr p_viewport )
-		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_VIEWPORT )
+		: TreeItemProperty( p_viewport->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_VIEWPORT )
 		, m_viewport( p_viewport )
 	{
+		PROPERTY_CATEGORY_VIEWPORT = _( "Viewport" );
+		PROPERTY_VIEWPORT_TYPE = _( "Type" );
+		PROPERTY_VIEWPORT_TYPE_3D = _( "3D" );
+		PROPERTY_VIEWPORT_TYPE_2D = _( "2D" );
+		PROPERTY_VIEWPORT_SIZE = _( "Size" );
+		PROPERTY_VIEWPORT_TOP = _( "Top" );
+		PROPERTY_VIEWPORT_BOTTOM = _( "Bottom" );
+		PROPERTY_VIEWPORT_LEFT = _( "Left" );
+		PROPERTY_VIEWPORT_RIGHT = _( "Right" );
+		PROPERTY_VIEWPORT_NEAR = _( "Near" );
+		PROPERTY_VIEWPORT_FAR = _( "Far" );
+		PROPERTY_VIEWPORT_FOVY = _( "FOV Y" );
+		PROPERTY_VIEWPORT_RATIO = _( "Ratio" );
+
+		CreateTreeItemMenu();
 	}
 
 	ViewportTreeItemProperty::~ViewportTreeItemProperty()
 	{
 	}
 
-	void ViewportTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void ViewportTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
@@ -75,7 +90,7 @@ namespace GuiCommon
 		}
 	}
 
-	void ViewportTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void ViewportTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		wxPGProperty * l_property = p_event.GetProperty();
 		ViewportSPtr l_viewport = GetViewport();
@@ -136,99 +151,99 @@ namespace GuiCommon
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
-		l_viewport->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_viewport]()
+		DoApplyChange( [p_value, l_viewport]()
 		{
 			l_viewport->SetType( p_value );
-		} ) );
+		} );
 	}
 
 	void ViewportTreeItemProperty::OnSizeChange( Castor::Size const & p_value )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
-		l_viewport->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_viewport]()
+		DoApplyChange( [p_value, l_viewport]()
 		{
 			l_viewport->SetSize( p_value );
-		} ) );
+		} );
 	}
 
 	void ViewportTreeItemProperty::OnTopChange( double p_value )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
-		l_viewport->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_viewport]()
+		DoApplyChange( [p_value, l_viewport]()
 		{
 			l_viewport->SetTop( p_value );
-		} ) );
+		} );
 	}
 
 	void ViewportTreeItemProperty::OnBottomChange( double p_value )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
-		l_viewport->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_viewport]()
+		DoApplyChange( [p_value, l_viewport]()
 		{
 			l_viewport->SetBottom( p_value );
-		} ) );
+		} );
 	}
 
 	void ViewportTreeItemProperty::OnLeftChange( double p_value )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
-		l_viewport->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_viewport]()
+		DoApplyChange( [p_value, l_viewport]()
 		{
 			l_viewport->SetLeft( p_value );
-		} ) );
+		} );
 	}
 
 	void ViewportTreeItemProperty::OnRightChange( double p_value )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
-		l_viewport->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_viewport]()
+		DoApplyChange( [p_value, l_viewport]()
 		{
 			l_viewport->SetRight( p_value );
-		} ) );
+		} );
 	}
 
 	void ViewportTreeItemProperty::OnNearChange( double p_value )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
-		l_viewport->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_viewport]()
+		DoApplyChange( [p_value, l_viewport]()
 		{
 			l_viewport->SetNear( p_value );
-		} ) );
+		} );
 	}
 
 	void ViewportTreeItemProperty::OnFarChange( double p_value )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
-		l_viewport->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_viewport]()
+		DoApplyChange( [p_value, l_viewport]()
 		{
 			l_viewport->SetFar( p_value );
-		} ) );
+		} );
 	}
 
 	void ViewportTreeItemProperty::OnFovYChange( double p_value )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
-		l_viewport->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_viewport]()
+		DoApplyChange( [p_value, l_viewport]()
 		{
 			l_viewport->SetFovY( Angle::FromDegrees( p_value ) );
-		} ) );
+		} );
 	}
 
 	void ViewportTreeItemProperty::OnRatioChange( double p_value )
 	{
 		ViewportSPtr l_viewport = GetViewport();
 
-		l_viewport->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_viewport]()
+		DoApplyChange( [p_value, l_viewport]()
 		{
 			l_viewport->SetRatio( p_value );
-		} ) );
+		} );
 	}
 }

@@ -64,7 +64,7 @@ namespace GlRender
 
 	bool GlShaderObject::Compile()
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		m_strLoadedSource.clear();
 
 		for ( int i = eSHADER_MODEL_5; i >= eSHADER_MODEL_1 && m_strLoadedSource.empty(); i-- )
@@ -82,7 +82,7 @@ namespace GlRender
 
 		if ( m_pParent->GetRenderSystem()->UseShaders() && m_eStatus != eSHADER_STATUS_ERROR && !m_strLoadedSource.empty() )
 		{
-			l_bReturn = true;
+			l_return = true;
 
 			if ( m_pParent->GetRenderSystem()->HasShaderType( m_eType ) )
 			{
@@ -97,9 +97,9 @@ namespace GlRender
 #else
 				strncpy( l_buffer, l_strTmp.c_str(), l_strTmp.size() );
 #endif
-				l_bReturn &= m_gl.ShaderSource( m_shaderObject, 1, const_cast< const char ** >( &l_buffer ), & l_iLength );
-				l_bReturn &= m_gl.CompileShader( m_shaderObject );
-				l_bReturn &= m_gl.GetShaderiv( m_shaderObject, eGL_SHADER_STATUS_COMPILE, & l_iCompiled );
+				l_return &= m_gl.ShaderSource( m_shaderObject, 1, const_cast< const char ** >( &l_buffer ), & l_iLength );
+				l_return &= m_gl.CompileShader( m_shaderObject );
+				l_return &= m_gl.GetShaderiv( m_shaderObject, eGL_SHADER_STATUS_COMPILE, & l_iCompiled );
 
 				if ( l_iCompiled != 0 )
 				{
@@ -123,11 +123,11 @@ namespace GlRender
 					}
 				}
 
-				l_bReturn = m_eStatus == eSHADER_STATUS_COMPILED;
+				l_return = m_eStatus == eSHADER_STATUS_COMPILED;
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void GlShaderObject::Detach()

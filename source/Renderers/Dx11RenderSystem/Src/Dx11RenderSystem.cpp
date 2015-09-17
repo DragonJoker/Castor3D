@@ -57,7 +57,7 @@ void DxRenderSystem::CheckShaderSupport()
 
 bool DxRenderSystem::InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swapChainDesc )
 {
-	bool l_bReturn = true;
+	bool l_return = true;
 	static std::map< D3D_FEATURE_LEVEL, String > StrFeatureLevel;
 
 	IDXGIFactory * l_factory = NULL;
@@ -213,18 +213,18 @@ bool DxRenderSystem::InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swa
 		else
 		{
 			Logger::LogWarning( StringStream() << cuT( "Dx11Context ::InitialiseDevice - Error creating device : 0x" ) << std::hex << uint32_t( l_hr ) );
-			l_bReturn = false;
+			l_return = false;
 		}
 
 		l_factory->Release();
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 bool DxRenderSystem::CheckSupport( eSHADER_MODEL p_eProfile )
 {
-	bool l_bReturn = false;
+	bool l_return = false;
 
 	switch ( p_eProfile )
 	{
@@ -233,15 +233,15 @@ bool DxRenderSystem::CheckSupport( eSHADER_MODEL p_eProfile )
 	case eSHADER_MODEL_3:
 	case eSHADER_MODEL_4:
 	case eSHADER_MODEL_5:
-		l_bReturn = true;
+		l_return = true;
 		break;
 
 	default:
-		l_bReturn = false;
+		l_return = false;
 		break;
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 ContextSPtr DxRenderSystem::CreateContext()

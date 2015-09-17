@@ -169,7 +169,7 @@ namespace Castor
 
 	bool Image::BinaryLoader::operator()( Image const & p_image, Path const & p_path )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		FIBITMAP * l_pImage = NULL;
 		Size const & l_size = p_image.GetDimensions();
 		int32_t l_w = int32_t( l_size.width() );
@@ -184,7 +184,7 @@ namespace Castor
 			{
 				memcpy( FreeImage_GetBits( l_pImage ), l_pBufferRGB->const_ptr(), l_pBufferRGB->size() );
 				FREE_IMAGE_FORMAT l_fif = FIF_PNG;
-				l_bReturn = FreeImage_Save( l_fif, l_pImage, str_utils::to_str( p_path ).c_str(), 0 ) != 0;
+				l_return = FreeImage_Save( l_fif, l_pImage, str_utils::to_str( p_path ).c_str(), 0 ) != 0;
 				FreeImage_Unload( l_pImage );
 			}
 		}
@@ -223,12 +223,12 @@ namespace Castor
 					}
 				}
 
-				l_bReturn = FreeImage_Save( FIF_BMP, l_pImage, str_utils::to_str( p_path ).c_str(), 0 ) != 0;
+				l_return = FreeImage_Save( FIF_BMP, l_pImage, str_utils::to_str( p_path ).c_str(), 0 ) != 0;
 				FreeImage_Unload( l_pImage );
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	Image::Image( String const & p_strName, Size const & p_ptSize, ePIXEL_FORMAT p_ePixelFormat, ByteArray const & p_buffer, ePIXEL_FORMAT p_eBufferFormat )

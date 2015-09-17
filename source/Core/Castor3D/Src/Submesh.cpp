@@ -27,13 +27,13 @@ namespace Castor3D
 
 	bool Submesh::TextLoader::operator()( Submesh const & p_submesh, TextFile & p_file )
 	{
-		bool l_bReturn = p_file.WriteText( cuT( "\t\t\tsubmesh\n\t\t\t{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( cuT( "\t\t\tsubmesh\n\t\t\t{\n" ) ) > 0;
 		Point3r l_ptPos;
 		Point3r l_ptTan;
 		Point3r l_ptNml;
 		Point3r l_ptTex;
 
-		for ( uint32_t i = 0; i < p_submesh.GetPointsCount() && l_bReturn; i++ )
+		for ( uint32_t i = 0; i < p_submesh.GetPointsCount() && l_return; i++ )
 		{
 			Vertex::GetPosition( p_submesh[i]->const_ptr(), l_ptPos );
 			Vertex::GetNormal( p_submesh[i]->const_ptr(), l_ptNml );
@@ -44,25 +44,25 @@ namespace Castor3D
 			l_streamNml << l_ptNml[0] << cuT( " " ) << l_ptNml[1] << cuT( " " ) << l_ptNml[2];
 			l_streamTan << l_ptTan[0] << cuT( " " ) << l_ptTan[1] << cuT( " " ) << l_ptTan[2];
 			l_streamTex << l_ptTex[0] << cuT( " " ) << l_ptTex[1] << cuT( " " ) << l_ptTex[2];
-			l_bReturn = p_file.Print( 1024, cuT( "\t\t\t\tvertex %s\n" ), l_streamPos.str().c_str() ) > 0;
-			l_bReturn = p_file.Print( 1024, cuT( "\t\t\t\tnormal %s\n" ), l_streamNml.str().c_str() ) > 0;
-			l_bReturn = p_file.Print( 1024, cuT( "\t\t\t\ttangent %s\n" ), l_streamTan.str().c_str() ) > 0;
-			l_bReturn = p_file.Print( 1024, cuT( "\t\t\t\tuvw %s\n" ), l_streamTex.str().c_str() ) > 0;
+			l_return = p_file.Print( 1024, cuT( "\t\t\t\tvertex %s\n" ), l_streamPos.str().c_str() ) > 0;
+			l_return = p_file.Print( 1024, cuT( "\t\t\t\tnormal %s\n" ), l_streamNml.str().c_str() ) > 0;
+			l_return = p_file.Print( 1024, cuT( "\t\t\t\ttangent %s\n" ), l_streamTan.str().c_str() ) > 0;
+			l_return = p_file.Print( 1024, cuT( "\t\t\t\tuvw %s\n" ), l_streamTex.str().c_str() ) > 0;
 		}
 
 		uint32_t l_uiNbFaces = p_submesh.GetFaceCount();
 
-		for ( uint32_t j = 0; j < l_uiNbFaces && l_bReturn; j++ )
+		for ( uint32_t j = 0; j < l_uiNbFaces && l_return; j++ )
 		{
-			l_bReturn = Face::TextLoader()( *p_submesh.GetFace( j ), p_file );
+			l_return = Face::TextLoader()( *p_submesh.GetFace( j ), p_file );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\t\t\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\t\t\t}\n" ) ) > 0;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -74,7 +74,7 @@ namespace Castor3D
 
 	bool Submesh::BinaryParser::Fill( Submesh const & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_SUBMESH );
 		double l_buffer[12];
 		Point3r l_ptPos;
@@ -82,7 +82,7 @@ namespace Castor3D
 		Point3r l_ptNml;
 		Point3r l_ptTex;
 
-		for ( uint32_t i = 0; i < p_obj.GetPointsCount() && l_bReturn; i++ )
+		for ( uint32_t i = 0; i < p_obj.GetPointsCount() && l_return; i++ )
 		{
 			Vertex::GetPosition( p_obj[i]->const_ptr(), l_ptPos );
 			Vertex::GetNormal( p_obj[i]->const_ptr(), l_ptNml );
@@ -100,28 +100,28 @@ namespace Castor3D
 			l_buffer[ 9] = double( l_ptTex[0] );
 			l_buffer[10] = double( l_ptTex[1] );
 			l_buffer[11] = double( l_ptTex[2] );
-			l_bReturn = DoFillChunk( l_buffer, eCHUNK_TYPE_SUBMESH_VERTEX, l_chunk );
+			l_return = DoFillChunk( l_buffer, eCHUNK_TYPE_SUBMESH_VERTEX, l_chunk );
 		}
 
 		uint32_t l_uiNbFaces = p_obj.GetFaceCount();
 
-		for ( uint32_t j = 0; j < l_uiNbFaces && l_bReturn; j++ )
+		for ( uint32_t j = 0; j < l_uiNbFaces && l_return; j++ )
 		{
-			l_bReturn = Face::BinaryParser( m_path ).Fill( *p_obj.GetFace( j ), l_chunk );
+			l_return = Face::BinaryParser( m_path ).Fill( *p_obj.GetFace( j ), l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			l_chunk.Finalise();
 			p_chunk.AddSubChunk( l_chunk );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool Submesh::BinaryParser::Parse( Submesh & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		String l_name;
 		std::vector< real > l_pos;
 		std::vector< real > l_tan;
@@ -139,16 +139,16 @@ namespace Castor3D
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
 			BinaryChunk l_chunk;
-			l_bReturn = p_chunk.GetSubChunk( l_chunk );
+			l_return = p_chunk.GetSubChunk( l_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				switch ( l_chunk.GetChunkType() )
 				{
 				case eCHUNK_TYPE_SUBMESH_VERTEX:
-					l_bReturn = DoParseChunk( l_buffer, l_chunk );
+					l_return = DoParseChunk( l_buffer, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						l_pos.push_back( real( l_buffer[ 0] ) );
 						l_pos.push_back( real( l_buffer[ 1] ) );
@@ -167,9 +167,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_SUBMESH_FACE:
-					l_bReturn = Face::BinaryParser( m_path ).Parse( l_face, l_chunk );
+					l_return = Face::BinaryParser( m_path ).Parse( l_face, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						stFACE_INDICES l_indices = { l_face.GetVertexIndex( 0 ), l_face.GetVertexIndex( 1 ), l_face.GetVertexIndex( 2 ) };
 						l_faces.push_back( l_indices );
@@ -178,25 +178,25 @@ namespace Castor3D
 					break;
 
 				default:
-					l_bReturn = false;
+					l_return = false;
 					break;
 				}
 			}
 
-			if ( !l_bReturn )
+			if ( !l_return )
 			{
 				p_chunk.EndParse();
 			}
 		}
 
-		if ( l_bReturn && !l_pos.empty() )
+		if ( l_return && !l_pos.empty() )
 		{
 			stVERTEX_GROUP l_group = { uint32_t( l_pos.size() / 3 ), l_pos.data(), l_nml.data(), l_tan.data(), NULL, l_tex.data(), NULL };
 			p_obj.AddPoints( l_group );
 			p_obj.AddFaceGroup( l_faces.data(), uint32_t( l_faces.size() ) );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************

@@ -57,24 +57,6 @@ namespace GuiCommon
 		~SubmeshTreeItemProperty();
 		/**
 		 *\~english
-		 *\brief		Creates and fills the submesh properties, in the given wxPropertyGrid
-		 *\param[in]	p_grid	The target wxPropertyGrid
-		 *\~french
-		 *\brief		Construit et remplit les propriétés du maillage, dans la wxPropertyGrid donnée
-		 *\param[in]	p_grid	La wxPropertyGrid cible
-		 */
-		virtual void CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
-		/**
-		 *\~english
-		 *\brief		Call when a property grid property is changed
-		 *\param[in]	p_event	The event
-		 *\~french
-		 *\brief		Appelée lorsqu'une propriété est changée
-		 *\param[in]	p_event	L'évènement
-		 */
-		virtual void OnPropertyChange( wxPropertyGridEvent & p_event );
-		/**
-		 *\~english
 		 *\brief		Retrieves the submesh
 		 *\return		The value
 		 *\~french
@@ -97,6 +79,16 @@ namespace GuiCommon
 		{
 			return m_pGeometry.lock();
 		}
+
+	private:
+		/**
+		 *\copydoc GuiCommon::TreeItemProperty::DoCreateProperties
+		 */
+		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		/**
+		 *\copydoc GuiCommon::TreeItemProperty::DoPropertyChange
+		 */
+		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
 		void OnMaterialChange( Castor::String const & p_name );

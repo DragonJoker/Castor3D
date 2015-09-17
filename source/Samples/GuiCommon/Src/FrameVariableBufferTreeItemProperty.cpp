@@ -1,7 +1,6 @@
 #include "FrameVariableBufferTreeItemProperty.hpp"
 
 #include <FrameVariableBuffer.hpp>
-#include <FunctorEvent.hpp>
 
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>
@@ -17,19 +16,21 @@ namespace GuiCommon
 		static wxString PROPERTY_NAME = _( "Name" );
 	}
 
-	FrameVariableBufferTreeItemProperty::FrameVariableBufferTreeItemProperty( bool p_editable, FrameVariableBufferSPtr p_buffer )
-		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_CAMERA )
+	FrameVariableBufferTreeItemProperty::FrameVariableBufferTreeItemProperty( Engine * p_engine, bool p_editable, FrameVariableBufferSPtr p_buffer )
+		: TreeItemProperty( p_engine, p_editable, ePROPERTY_DATA_TYPE_CAMERA )
 		, m_buffer( p_buffer )
 	{
 		PROPERTY_CATEGORY_FRAME_VARIABLE_BUFFER = _( "Frame Variable Buffer: " );
 		PROPERTY_NAME = _( "Name" );
+
+		CreateTreeItemMenu();
 	}
 
 	FrameVariableBufferTreeItemProperty::~FrameVariableBufferTreeItemProperty()
 	{
 	}
 
-	void FrameVariableBufferTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void FrameVariableBufferTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		FrameVariableBufferSPtr l_buffer = GetBuffer();
 
@@ -40,7 +41,7 @@ namespace GuiCommon
 		}
 	}
 
-	void FrameVariableBufferTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void FrameVariableBufferTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		wxPGProperty * l_property = p_event.GetProperty();
 		FrameVariableBufferSPtr l_buffer = GetBuffer();

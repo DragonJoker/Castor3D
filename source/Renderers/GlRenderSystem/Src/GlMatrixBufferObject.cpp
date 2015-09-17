@@ -32,7 +32,7 @@ namespace GlRender
 
 	bool GlMatrixBufferObject::Initialise( eBUFFER_ACCESS_TYPE p_eType, eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram )
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		GlShaderProgramSPtr l_pNewProgram = std::static_pointer_cast< GlShaderProgram >( p_pProgram );
 		GlShaderProgramSPtr l_pOldProgram = m_pProgram.lock();
 
@@ -43,20 +43,20 @@ namespace GlRender
 
 			if ( l_pNewProgram )
 			{
-				l_bReturn = DoAttributeInitialise();
+				l_return = DoAttributeInitialise();
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = GlBuffer< real >::DoInitialise( p_eType, p_eNature );
+				l_return = GlBuffer< real >::DoInitialise( p_eType, p_eNature );
 			}
 		}
 		else if ( !l_pOldProgram )
 		{
-			l_bReturn = GlBuffer< real >::DoInitialise( p_eType, p_eNature );
+			l_return = GlBuffer< real >::DoInitialise( p_eType, p_eNature );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void GlMatrixBufferObject::Cleanup()
@@ -68,19 +68,19 @@ namespace GlRender
 	bool GlMatrixBufferObject::Bind( uint32_t p_uiCount )
 	{
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
-		bool l_bReturn = l_pBuffer && l_pBuffer->IsAssigned();
+		bool l_return = l_pBuffer && l_pBuffer->IsAssigned();
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = GlBuffer< real >::DoBind();
+			l_return = GlBuffer< real >::DoBind();
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoAttributeBind( p_uiCount > 1 );
+			l_return = DoAttributeBind( p_uiCount > 1 );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void GlMatrixBufferObject::Unbind()
@@ -124,26 +124,26 @@ namespace GlRender
 
 	bool GlMatrixBufferObject::DoAttributeInitialise()
 	{
-		bool l_bReturn = m_pAttribute->Initialise();
-		return l_bReturn;
+		bool l_return = m_pAttribute->Initialise();
+		return l_return;
 	}
 
 	bool GlMatrixBufferObject::DoAttributeBind( bool p_bInstanced )
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		uint32_t l_uiLocation = m_pAttribute->GetLocation();
 
 		if ( l_uiLocation != eGL_INVALID_INDEX )
 		{
-			for ( int i = 0; i < 4 && l_bReturn; ++i )
+			for ( int i = 0; i < 4 && l_return; ++i )
 			{
-				l_bReturn = m_gl.EnableVertexAttribArray( l_uiLocation + i );
-				l_bReturn &= m_gl.VertexAttribPointer( l_uiLocation + i, 4, eGL_TYPE_REAL, false, 16 * sizeof( real ), BUFFER_OFFSET( i * 4 * sizeof( real ) ) );
-				l_bReturn &= m_gl.VertexAttribDivisor( l_uiLocation + i, p_bInstanced ? 1 : 0 );
+				l_return = m_gl.EnableVertexAttribArray( l_uiLocation + i );
+				l_return &= m_gl.VertexAttribPointer( l_uiLocation + i, 4, eGL_TYPE_REAL, false, 16 * sizeof( real ), BUFFER_OFFSET( i * 4 * sizeof( real ) ) );
+				l_return &= m_gl.VertexAttribDivisor( l_uiLocation + i, p_bInstanced ? 1 : 0 );
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void GlMatrixBufferObject::DoAttributeUnbind()

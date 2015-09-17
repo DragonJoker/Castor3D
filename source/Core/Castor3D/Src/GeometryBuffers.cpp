@@ -22,24 +22,24 @@ namespace Castor3D
 
 	bool GeometryBuffers::Bind()
 	{
-		bool l_bReturn = m_pVertexBuffer && m_pIndexBuffer;
+		bool l_return = m_pVertexBuffer && m_pIndexBuffer;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = m_pVertexBuffer->Bind();
+			l_return = m_pVertexBuffer->Bind();
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				if ( m_bMatrixBuffer )
 				{
-					l_bReturn = m_pMatrixBuffer->Bind( 1 );
+					l_return = m_pMatrixBuffer->Bind( 1 );
 				}
 
-				if ( l_bReturn && m_bIndexBuffer )
+				if ( l_return && m_bIndexBuffer )
 				{
-					l_bReturn = m_pIndexBuffer->Bind();
+					l_return = m_pIndexBuffer->Bind();
 
-					if ( !l_bReturn )
+					if ( !l_return )
 					{
 						m_pIndexBuffer->Unbind();
 					}
@@ -47,7 +47,7 @@ namespace Castor3D
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void GeometryBuffers::Unbind()

@@ -19,7 +19,7 @@ RenderEngine::~RenderEngine()
 
 bool RenderEngine::Draw()
 {
-	bool l_bReturn = false;
+	bool l_return = false;
 	std::ofstream l_imageFile( str_utils::to_str( m_strFileName ), std::ios_base::binary );
 
 	if ( l_imageFile )
@@ -139,10 +139,10 @@ bool RenderEngine::Draw()
 			}
 		}
 
-		l_bReturn = true;
+		l_return = true;
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 #pragma warning( pop )

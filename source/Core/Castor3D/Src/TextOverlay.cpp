@@ -30,29 +30,29 @@ namespace Castor3D
 			l_pParent = l_pParent->GetParent();
 		}
 
-		bool l_bReturn = p_file.WriteText( l_strTabs + cuT( "text_overlay " ) + p_overlay.GetOverlayName() + cuT( "\n" ) + l_strTabs + cuT( "{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( l_strTabs + cuT( "text_overlay " ) + p_overlay.GetOverlayName() + cuT( "\n" ) + l_strTabs + cuT( "{\n" ) ) > 0;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( l_strTabs + cuT( "\tfont " ) + p_overlay.GetFontName() ) > 0;
+			l_return = p_file.WriteText( l_strTabs + cuT( "\tfont " ) + p_overlay.GetFontName() ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( l_strTabs + cuT( "\tcaption " ) + p_overlay.GetCaption() ) > 0;
+			l_return = p_file.WriteText( l_strTabs + cuT( "\tcaption " ) + p_overlay.GetCaption() ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = Overlay::TextLoader()( p_overlay.GetOverlay(), p_file );
+			l_return = Overlay::TextLoader()( p_overlay.GetOverlay(), p_file );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( l_strTabs + cuT( "}\n" ) ) > 0;
+			l_return = p_file.WriteText( l_strTabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -64,32 +64,32 @@ namespace Castor3D
 
 	bool TextOverlay::BinaryParser::Fill( TextOverlay const & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetFontName(), eCHUNK_TYPE_OVERLAY_FONT, p_chunk );
+			l_return = DoFillChunk( p_obj.GetFontName(), eCHUNK_TYPE_OVERLAY_FONT, p_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetCaption(), eCHUNK_TYPE_OVERLAY_CAPTION, p_chunk );
+			l_return = DoFillChunk( p_obj.GetCaption(), eCHUNK_TYPE_OVERLAY_CAPTION, p_chunk );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool TextOverlay::BinaryParser::Parse( TextOverlay & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		String l_name;
 
 		switch ( p_chunk.GetChunkType() )
 		{
 		case eCHUNK_TYPE_OVERLAY_FONT:
-			l_bReturn = DoParseChunk( l_name, p_chunk );
+			l_return = DoParseChunk( l_name, p_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				p_obj.SetFont( l_name );
 			}
@@ -97,9 +97,9 @@ namespace Castor3D
 			break;
 
 		case eCHUNK_TYPE_OVERLAY_CAPTION:
-			l_bReturn = DoParseChunk( l_name, p_chunk );
+			l_return = DoParseChunk( l_name, p_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				p_obj.SetCaption( l_name );
 			}
@@ -107,16 +107,16 @@ namespace Castor3D
 			break;
 
 		default:
-			l_bReturn = false;
+			l_return = false;
 			break;
 		}
 
-		if ( !l_bReturn )
+		if ( !l_return )
 		{
 			p_chunk.EndParse();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************

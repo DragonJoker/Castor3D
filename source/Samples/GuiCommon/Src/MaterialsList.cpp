@@ -140,6 +140,7 @@ namespace GuiCommon
 	BEGIN_EVENT_TABLE( MaterialsList, wxTreeCtrl )
 		EVT_CLOSE( MaterialsList::OnClose )
 		EVT_TREE_SEL_CHANGED( wxID_ANY, MaterialsList::OnSelectItem )
+		EVT_TREE_ITEM_RIGHT_CLICK( wxID_ANY, MaterialsList::OnMouseRButtonUp )
 	END_EVENT_TABLE()
 
 	void MaterialsList::OnClose( wxCloseEvent & p_event )
@@ -153,6 +154,13 @@ namespace GuiCommon
 		TreeItemProperty * l_data = reinterpret_cast< TreeItemProperty * >( p_event.GetClientObject() );
 		m_propertiesHolder->SetPropertyData( l_data );
 		p_event.Skip();
+	}
+
+	void MaterialsList::OnMouseRButtonUp( wxTreeEvent & p_event )
+	{
+		TreeItemProperty * l_data = reinterpret_cast< TreeItemProperty * >( p_event.GetClientObject() );
+		wxPoint l_position = wxGetMousePosition();
+		l_data->DisplayTreeItemMenu( this, l_position.x, l_position.y );
 	}
 
 	//void MaterialsList::AddItem( String const & p_strMaterialName )

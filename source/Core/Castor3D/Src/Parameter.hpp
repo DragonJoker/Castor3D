@@ -79,7 +79,7 @@ namespace Castor3D
 		template< typename T, uint32_t N >
 		inline bool Add( Castor::String const & p_strName, T const( & p_tParam )[N] )
 		{
-			bool l_bReturn = false;
+			bool l_return = false;
 			ParamNameMapIt l_it = m_mapParameters.find( p_strName );
 
 			if ( l_it == m_mapParameters.end() )
@@ -87,10 +87,10 @@ namespace Castor3D
 				ByteArray l_param( sizeof( T ) * N, 0 );
 				std::memcpy( &l_param[0], p_tParam, sizeof( T ) * N );
 				m_mapParameters.insert( std::make_pair( p_strName, l_param ) );
-				l_bReturn = true;
+				l_return = true;
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -111,7 +111,7 @@ namespace Castor3D
 		template< typename T >
 		inline bool Add( Castor::String const & p_strName, T * p_tParam, uint32_t p_uiCount )
 		{
-			bool l_bReturn = false;
+			bool l_return = false;
 			ParamNameMapIt l_it = m_mapParameters.find( p_strName );
 
 			if ( l_it == m_mapParameters.end() )
@@ -119,10 +119,10 @@ namespace Castor3D
 				ByteArray l_param( sizeof( T ) * p_uiCount, 0 );
 				std::memcpy( &l_param[0], p_tParam, sizeof( T ) * p_uiCount );
 				m_mapParameters.insert( std::make_pair( p_strName, l_param ) );
-				l_bReturn = true;
+				l_return = true;
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -141,7 +141,7 @@ namespace Castor3D
 		template< typename T >
 		inline bool Add( Castor::String const & p_strName, T const & p_tParam )
 		{
-			bool l_bReturn = false;
+			bool l_return = false;
 			ParamNameMapIt l_it = m_mapParameters.find( p_strName );
 
 			if ( l_it == m_mapParameters.end() )
@@ -149,10 +149,10 @@ namespace Castor3D
 				ByteArray l_param( sizeof( T ), 0 );
 				std::memcpy( &l_param[0], &p_tParam, sizeof( T ) );
 				m_mapParameters.insert( std::make_pair( p_strName, l_param ) );
-				l_bReturn = true;
+				l_return = true;
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -169,16 +169,16 @@ namespace Castor3D
 		template< typename T >
 		inline bool Set( Castor::String const & p_strName, T const & p_tParam )
 		{
-			bool l_bReturn = false;
+			bool l_return = false;
 			ParamNameMapIt l_it = m_mapParameters.find( p_strName );
 
 			if ( l_it != m_mapParameters.end() )
 			{
 				std::memcpy( &l_it->second[0], &p_tParam, sizeof( T ) );
-				l_bReturn = true;
+				l_return = true;
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -195,7 +195,7 @@ namespace Castor3D
 		template< typename T >
 		inline bool Get( Castor::String const & p_strName, T & p_tParam )const
 		{
-			bool l_bReturn = false;
+			bool l_return = false;
 			ParamNameMapConstIt l_it = m_mapParameters.find( p_strName );
 
 			if ( l_it != m_mapParameters.end() )
@@ -203,11 +203,11 @@ namespace Castor3D
 				if ( sizeof( T ) <= l_it->second.size() )
 				{
 					std::memcpy( &p_tParam, &l_it->second[0], sizeof( T ) );
-					l_bReturn = true;
+					l_return = true;
 				}
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -224,7 +224,7 @@ namespace Castor3D
 		template< typename T, uint32_t N >
 		inline bool Get( Castor::String const & p_strName, T( & p_tParam )[N] )const
 		{
-			bool l_bReturn = false;
+			bool l_return = false;
 			ParamNameMapConstIt l_it = m_mapParameters.find( p_strName );
 
 			if ( l_it != m_mapParameters.end() )
@@ -232,11 +232,11 @@ namespace Castor3D
 				if ( sizeof( T ) * N >= l_it->second.size() )
 				{
 					std::memcpy( &p_tParam, &l_it->second[0], l_it->second.size() );
-					l_bReturn = true;
+					l_return = true;
 				}
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -255,7 +255,7 @@ namespace Castor3D
 		template< typename T, uint32_t N >
 		inline bool Get( Castor::String const & p_strName, T * p_tParam, uint32_t p_uiCount )const
 		{
-			bool l_bReturn = false;
+			bool l_return = false;
 			ParamNameMapConstIt l_it = m_mapParameters.find( p_strName );
 
 			if ( l_it != m_mapParameters.end() )
@@ -263,11 +263,11 @@ namespace Castor3D
 				if ( sizeof( T ) * p_uiCount >= l_it->second.size() )
 				{
 					std::memcpy( &p_tParam, &l_it->second[0], l_it->second.size() );
-					l_bReturn = true;
+					l_return = true;
 				}
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 
 	private:

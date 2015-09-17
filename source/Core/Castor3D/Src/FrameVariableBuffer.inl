@@ -1,11 +1,13 @@
-﻿#include "FrameVariable.hpp"
+#include "MatrixFrameVariable.hpp"
+#include "OneFrameVariable.hpp"
+#include "PointFrameVariable.hpp"
 
 namespace Castor3D
 {
 	template< typename T >
 	bool FrameVariableBuffer::GetVariable( Castor::String const & p_strName, std::shared_ptr< OneFrameVariable< T > > & p_pVariable )const
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		FrameVariablePtrStrMapConstIt l_it = m_mapVariables.find( p_strName );
 
 		if ( l_it != m_mapVariables.end() )
@@ -15,17 +17,17 @@ namespace Castor3D
 			if ( l_pVariable->GetFullType() == OneFrameVariableDefinitions< T >::Full )
 			{
 				p_pVariable = std::static_pointer_cast< OneFrameVariable< T > >( l_pVariable );
-				l_bReturn = true;
+				l_return = true;
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	template< typename T, uint32_t Count >
 	bool FrameVariableBuffer::GetVariable( Castor::String const & p_strName, std::shared_ptr< PointFrameVariable< T, Count > > & p_pVariable )const
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		FrameVariablePtrStrMapConstIt l_it = m_mapVariables.find( p_strName );
 
 		if ( l_it != m_mapVariables.end() )
@@ -35,17 +37,17 @@ namespace Castor3D
 			if ( l_pVariable->GetFullType() == PntFrameVariableDefinitions< T, Count >::Full )
 			{
 				p_pVariable = std::static_pointer_cast< PointFrameVariable< T, Count > >( l_pVariable );
-				l_bReturn = true;
+				l_return = true;
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	bool FrameVariableBuffer::GetVariable( Castor::String const & p_strName, std::shared_ptr< MatrixFrameVariable< T, Rows, Columns > > & p_pVariable )const
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		FrameVariablePtrStrMapConstIt l_it = m_mapVariables.find( p_strName );
 
 		if ( l_it != m_mapVariables.end() )
@@ -55,10 +57,10 @@ namespace Castor3D
 			if ( l_pVariable->GetFullType() == MtxFrameVariableDefinitions< T, Rows, Columns >::Full )
 			{
 				p_pVariable = std::static_pointer_cast< MatrixFrameVariable< T, Rows, Columns > >( l_pVariable );
-				l_bReturn = true;
+				l_return = true;
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 }

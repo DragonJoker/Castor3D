@@ -52,24 +52,24 @@ namespace Castor3D
 
 	bool AnimatedObjectGroup::TextLoader::operator()( AnimatedObjectGroup const & p_group, TextFile & p_file )
 	{
-		bool l_bReturn = p_file.WriteText( cuT( "animated_object_group " ) + p_group.GetName() + cuT( "\n{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( cuT( "animated_object_group " ) + p_group.GetName() + cuT( "\n{\n" ) ) > 0;
 
-		for ( StrSet::const_iterator l_it = p_group.AnimationsBegin(); l_it != p_group.AnimationsEnd() && l_bReturn; ++l_it )
+		for ( StrSet::const_iterator l_it = p_group.AnimationsBegin(); l_it != p_group.AnimationsEnd() && l_return; ++l_it )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\tanimation " ) + *l_it + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\tanimation " ) + *l_it + cuT( "\n" ) ) > 0;
 		}
 
-		for ( AnimatedObjectPtrStrMap::const_iterator l_it = p_group.ObjectsBegin(); l_it != p_group.ObjectsEnd() && l_bReturn; ++l_it )
+		for ( AnimatedObjectPtrStrMap::const_iterator l_it = p_group.ObjectsBegin(); l_it != p_group.ObjectsEnd() && l_return; ++l_it )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\tanimated_object " ) + l_it->first + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\tanimated_object " ) + l_it->first + cuT( "\n" ) ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( cuT( "}\n\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "}\n\n" ) ) > 0;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -117,14 +117,14 @@ namespace Castor3D
 
 	bool AnimatedObjectGroup::AddObject( AnimatedObjectSPtr p_pObject )
 	{
-		bool l_bReturn = p_pObject && m_mapObjects.find( p_pObject->GetName() ) == m_mapObjects.end();
+		bool l_return = p_pObject && m_mapObjects.find( p_pObject->GetName() ) == m_mapObjects.end();
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			m_mapObjects.insert( std::make_pair( p_pObject->GetName(), p_pObject ) );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void AnimatedObjectGroup::AddAnimation( String const & p_strName )

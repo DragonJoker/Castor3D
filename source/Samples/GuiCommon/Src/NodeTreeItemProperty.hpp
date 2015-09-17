@@ -57,24 +57,6 @@ namespace GuiCommon
 		~NodeTreeItemProperty();
 		/**
 		 *\~english
-		 *\brief		Creates and fills the object properties, in the given wxPropertyGrid
-		 *\param[in]	p_grid	The target wxPropertyGrid
-		 *\~french
-		 *\brief		Construit et remplit les propriétés de l'objet, dans la wxPropertyGrid donnée
-		 *\param[in]	p_grid	La wxPropertyGrid cible
-		 */
-		virtual void CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
-		/**
-		 *\~english
-		 *\brief		Call when a property grid property is changed
-		 *\param[in]	p_event	The event
-		 *\~french
-		 *\brief		Appelée lorsqu'une propriété est changée
-		 *\param[in]	p_event	L'évènement
-		 */
-		virtual void OnPropertyChange( wxPropertyGridEvent & p_event );
-		/**
-		 *\~english
 		 *\brief		Retrieves the object
 		 *\return		The value
 		 *\~french
@@ -87,9 +69,20 @@ namespace GuiCommon
 		}
 
 	private:
+		/**
+		 *\copydoc GuiCommon::TreeItemProperty::DoCreateProperties
+		 */
+		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		/**
+		 *\copydoc GuiCommon::TreeItemProperty::DoPropertyChange
+		 */
+		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
+
+	private:
 		void OnPositionChange( Castor::Point3r const & p_value );
 		void OnScaleChange( Castor::Point3r const & p_value );
 		void OnOrientationChange( Castor::Quaternion const & p_value );
+		void OnVisibilityChange( bool p_value );
 
 	private:
 		Castor3D::Engine * m_engine;

@@ -31,19 +31,19 @@ namespace GlRender
 
 	bool GlAttributeBase::Initialise()
 	{
-		bool l_bReturn = !m_pRenderSystem->UseShaders();
+		bool l_return = !m_pRenderSystem->UseShaders();
 
-		if ( !m_pProgram.expired() && m_pProgram.lock()->GetStatus() == ePROGRAM_STATUS_LINKED && !l_bReturn )
+		if ( !m_pProgram.expired() && m_pProgram.lock()->GetStatus() == ePROGRAM_STATUS_LINKED && !l_return )
 		{
 			m_uiAttribLocation = m_pProgram.lock()->GetAttributeLocation( m_strAttribName );
 
 			if ( m_uiAttribLocation != eGL_INVALID_INDEX )
 			{
-				l_bReturn = true;
+				l_return = true;
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void GlAttributeBase::Cleanup()
@@ -54,18 +54,18 @@ namespace GlRender
 
 	bool GlAttributeBase::Bind( bool p_bNormalised )
 	{
-		bool l_bReturn = m_gl.EnableVertexAttribArray( m_uiAttribLocation );
+		bool l_return = m_gl.EnableVertexAttribArray( m_uiAttribLocation );
 
 		if ( m_eGlType == eGL_TYPE_INT )
 		{
-			l_bReturn &= m_gl.VertexAttribPointer( m_uiAttribLocation, m_iCount, m_eGlType, m_iStride, BUFFER_OFFSET( m_uiOffset ) );
+			l_return &= m_gl.VertexAttribPointer( m_uiAttribLocation, m_iCount, m_eGlType, m_iStride, BUFFER_OFFSET( m_uiOffset ) );
 		}
 		else
 		{
-			l_bReturn &= m_gl.VertexAttribPointer( m_uiAttribLocation, m_iCount, m_eGlType, p_bNormalised, m_iStride, BUFFER_OFFSET( m_uiOffset ) );
+			l_return &= m_gl.VertexAttribPointer( m_uiAttribLocation, m_iCount, m_eGlType, p_bNormalised, m_iStride, BUFFER_OFFSET( m_uiOffset ) );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void GlAttributeBase::Unbind()

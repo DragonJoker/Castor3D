@@ -17,14 +17,14 @@ namespace Castor3D
 
 	bool RenderBufferAttachment::Attach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer )
 	{
-		bool l_bReturn = FrameBufferAttachment::Attach( p_eAttachment, p_pFrameBuffer );
+		bool l_return = FrameBufferAttachment::Attach( p_eAttachment, p_pFrameBuffer );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			p_pFrameBuffer->Attach( this );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void RenderBufferAttachment::Detach()

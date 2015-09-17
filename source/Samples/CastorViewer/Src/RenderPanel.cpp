@@ -21,8 +21,6 @@
 using namespace Castor3D;
 using namespace Castor;
 
-DECLARE_APP( CastorViewer::CastorViewerApp )
-
 namespace CastorViewer
 {
 	RenderPanel::RenderPanel( wxWindow * parent, wxWindowID p_id, wxPoint const & pos, wxSize const & size, long style )
@@ -102,7 +100,7 @@ namespace CastorViewer
 					m_pRotateCamEvent = std::make_shared< CameraRotateEvent >( l_cameraNode, real( 0 ), real( 0 ), real( 0 ) );
 					m_pTranslateCamEvent = std::make_shared< CameraTranslateEvent >( l_cameraNode, real( 0 ), real( 0 ), real( 0 ) );
 					m_pRenderWindow = p_pWindow;
-					m_pKeyboardEvent = std::make_shared< KeyboardEvent >( p_pWindow, wxGetApp().GetMainFrame() );
+					m_pKeyboardEvent = std::make_shared< KeyboardEvent >( p_pWindow );
 				}
 			}
 		}

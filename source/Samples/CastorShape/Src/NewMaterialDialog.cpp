@@ -141,9 +141,9 @@ namespace CastorShape
 		m_properties->Append( new wxColourProperty( PROPERTY_PASS_SPECULAR ) )->Hide( true );
 		m_properties->Append( new wxColourProperty( PROPERTY_PASS_EMISSIVE ) )->Hide( true );
 		m_properties->Append( new wxFloatProperty( PROPERTY_PASS_EXPONENT ) )->Hide( true );
-		m_properties->Append( new wxBoolProperty( PROPERTY_PASS_TWO_SIDED ) )->Hide( true );
+		m_properties->Append( CreateProperty( PROPERTY_PASS_TWO_SIDED, true, true ) )->Hide( true );
 		m_properties->Append( new wxFloatProperty( PROPERTY_PASS_OPACITY ) )->Hide( true );
-		m_properties->Append( CreateButtonProperty( PROPERTY_PASS_SHADER, PROPERTY_PASS_EDIT_SHADER, static_cast< ButtonEventMethod >( &NewMaterialDialog::OnEditShader ), this, m_editor ) )->Hide( true );
+		m_properties->Append( CreateProperty( PROPERTY_PASS_SHADER, PROPERTY_PASS_EDIT_SHADER, static_cast< ButtonEventMethod >( &NewMaterialDialog::OnEditShader ), this, m_editor ) )->Hide( true );
 		m_properties->Append( new wxEnumProperty( PROPERTY_PASS_TEXTURES, wxPG_LABEL, l_choices ) )->Hide( true );
 		DoCreateTextureProperties();
 	}

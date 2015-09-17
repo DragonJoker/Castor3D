@@ -19,14 +19,14 @@ namespace Castor3D
 	{
 		m_eAttachedTarget = p_eTarget;
 		m_iAttachedLayer = p_iLayer;
-		bool l_bReturn = FrameBufferAttachment::Attach( p_eAttachment, p_pFrameBuffer );
+		bool l_return = FrameBufferAttachment::Attach( p_eAttachment, p_pFrameBuffer );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			p_pFrameBuffer->Attach( this );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void TextureAttachment::Detach()

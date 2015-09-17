@@ -58,15 +58,15 @@ namespace Dx11Render
 
 	bool DxBlendState::Apply()
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
 		if ( m_bChanged )
 		{
 			Cleanup();
-			l_bReturn = Initialise();
+			l_return = Initialise();
 		}
 
-		if ( l_bReturn && m_pBlendState )
+		if ( l_return && m_pBlendState )
 		{
 			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 
@@ -76,7 +76,7 @@ namespace Dx11Render
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	BlendStateSPtr DxBlendState::DoCreateCurrent()

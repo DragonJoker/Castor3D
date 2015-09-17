@@ -26,7 +26,7 @@ namespace GuiCommon
 	}
 
 	LightTreeItemProperty::LightTreeItemProperty( bool p_editable, LightSPtr p_light )
-		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_LIGHT )
+		: TreeItemProperty( p_light->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_LIGHT )
 		, m_light( p_light )
 	{
 		PROPERTY_CATEGORY_LIGHT = _( "Light: " );
@@ -38,13 +38,15 @@ namespace GuiCommon
 		PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
 		PROPERTY_LIGHT_CUT_OFF = _( "Cut off" );
 		PROPERTY_LIGHT_EXPONENT = _( "Exponent" );
+
+		CreateTreeItemMenu();
 	}
 
 	LightTreeItemProperty::~LightTreeItemProperty()
 	{
 	}
 
-	void LightTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void LightTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		LightSPtr l_light = GetLight();
 
@@ -75,7 +77,7 @@ namespace GuiCommon
 		}
 	}
 
-	void LightTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void LightTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		LightSPtr l_light = GetLight();
 		wxPGProperty * l_property = p_event.GetProperty();
@@ -142,37 +144,37 @@ namespace GuiCommon
 	{
 		LightSPtr l_light = GetLight();
 
-		l_light->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_light]()
+		DoApplyChange( [p_value, l_light]()
 		{
 			l_light->SetAmbient( p_value );
-		} ) );
+		} );
 	}
 
 	void LightTreeItemProperty::OnDiffuseColourChange( Colour const & p_value )
 	{
 		LightSPtr l_light = GetLight();
 
-		l_light->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_light]()
+		DoApplyChange( [p_value, l_light]()
 		{
 			l_light->SetDiffuse( p_value );
-		} ) );
+		} );
 	}
 
 	void LightTreeItemProperty::OnSpecularColourChange( Colour const & p_value )
 	{
 		LightSPtr l_light = GetLight();
 
-		l_light->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_light]()
+		DoApplyChange( [p_value, l_light]()
 		{
 			l_light->SetSpecular( p_value );
-		} ) );
+		} );
 	}
 
 	void LightTreeItemProperty::OnAttenuationChange( Point3f const & p_value )
 	{
 		LightSPtr l_light = GetLight();
 
-		l_light->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_light]()
+		DoApplyChange( [p_value, l_light]()
 		{
 			if ( l_light->GetLightType() == eLIGHT_TYPE_POINT )
 			{
@@ -182,26 +184,26 @@ namespace GuiCommon
 			{
 				l_light->GetSpotLight()->SetAttenuation( p_value );
 			}
-		} ) );
+		} );
 	}
 
 	void LightTreeItemProperty::OnCutOffChange( double p_value )
 	{
 		LightSPtr l_light = GetLight();
 
-		l_light->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_light]()
+		DoApplyChange( [p_value, l_light]()
 		{
 			l_light->GetSpotLight()->SetCutOff( p_value );
-		} ) );
+		} );
 	}
 
 	void LightTreeItemProperty::OnExponentChange( double p_value )
 	{
 		LightSPtr l_light = GetLight();
 
-		l_light->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_light]()
+		DoApplyChange( [p_value, l_light]()
 		{
 			l_light->GetSpotLight()->SetExponent( p_value );
-		} ) );
+		} );
 	}
 }

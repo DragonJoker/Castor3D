@@ -22,7 +22,7 @@ include( PCHSupport )
 # Force Unicode projects (MBCS is past :P)
 add_definitions( -DUNICODE -D_UNICODE )
 
-set( CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Set only Debug and Release configuration types" FORCE )
+set( CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo" CACHE STRING "The configuration types" FORCE )
     
 # Declare the project
 project( ${MAIN_PROJECT_NAME} )

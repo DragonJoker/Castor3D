@@ -11,16 +11,6 @@ namespace GuiCommon
 {
 	//************************************************************************************************
 
-	wxPGProperty * CreateButtonProperty( wxString const & p_name, wxString const & p_label, ButtonEventMethod p_method, wxEvtHandler * p_handler, wxPGEditor * p_editor )
-	{
-		wxPGProperty * l_return = new wxStringProperty( p_name, wxPG_LABEL, p_label );
-		l_return->SetEditor( p_editor );
-		l_return->SetClientObject( new ButtonData( p_method, p_handler ) );
-		return l_return;
-	}
-
-	//************************************************************************************************
-
 	ButtonData::ButtonData( ButtonEventMethod p_method, wxEvtHandler * p_handler )
 		: m_method( p_method )
 		, m_handler( p_handler )
@@ -61,6 +51,47 @@ namespace GuiCommon
 		}
 
 		return false;
+	}
+	//************************************************************************************************
+
+	wxFloatProperty * CreateProperty( wxString const & p_name, double const & p_value )
+	{
+		return new wxFloatProperty( p_name, wxPG_LABEL, p_value );
+	}
+
+	wxFloatProperty * CreateProperty( wxString const & p_name, float const & p_value )
+	{
+		return new wxFloatProperty( p_name, wxPG_LABEL, p_value );
+	}
+
+	wxIntProperty * CreateProperty( wxString const & p_name, int const & p_value )
+	{
+		return new wxIntProperty( p_name, wxPG_LABEL, p_value );
+	}
+
+	wxUIntProperty * CreateProperty( wxString const & p_name, uint32_t const & p_value )
+	{
+		return new wxUIntProperty( p_name, wxPG_LABEL, p_value );
+	}
+
+	wxBoolProperty * CreateProperty( wxString const & p_name, bool const & p_value, bool p_checkbox )
+	{
+		wxBoolProperty * l_return = new wxBoolProperty( p_name, wxPG_LABEL );
+		l_return->SetAttribute( wxT( "UseCheckbox" ), p_checkbox );
+		return l_return;
+	}
+
+	wxStringProperty * CreateProperty( wxString const & p_name, wxString const & p_value )
+	{
+		return new wxStringProperty( p_name, wxPG_LABEL, p_value );
+	}
+
+	wxStringProperty * CreateProperty( wxString const & p_name, wxString const & p_value, ButtonEventMethod p_method, wxEvtHandler * p_handler, wxPGEditor * p_editor )
+	{
+		wxStringProperty * l_return = new wxStringProperty( p_name, wxPG_LABEL, p_value );
+		l_return->SetEditor( p_editor );
+		l_return->SetClientObject( new ButtonData( p_method, p_handler ) );
+		return l_return;
 	}
 
 	//************************************************************************************************

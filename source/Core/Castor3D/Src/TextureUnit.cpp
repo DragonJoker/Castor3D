@@ -22,7 +22,7 @@ namespace Castor3D
 
 	bool TextureUnit::BinaryParser::Parse( TextureUnit & p_unit, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		p_unit.Cleanup();
 		String l_strFile;
 		eTEXTURE_MAP_MODE l_eMode;
@@ -41,16 +41,16 @@ namespace Castor3D
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
 			BinaryChunk l_chunk;
-			l_bReturn = p_chunk.GetSubChunk( l_chunk );
+			l_return = p_chunk.GetSubChunk( l_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				switch ( l_chunk.GetChunkType() )
 				{
 				case eCHUNK_TYPE_TEXTURE_FILE:
-					l_bReturn = DoParseChunk( l_strFile, l_chunk );
+					l_return = DoParseChunk( l_strFile, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_unit.LoadTexture( m_path / l_strFile );
 					}
@@ -58,11 +58,11 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_TEXTURE_FORMAT:
-					l_bReturn = DoParseChunk( l_ePf, l_chunk );
+					l_return = DoParseChunk( l_ePf, l_chunk );
 					break;
 
 				case eCHUNK_TYPE_TEXTURE_DIMENSIONS:
-					l_bReturn = DoParseChunk( l_size, l_chunk );
+					l_return = DoParseChunk( l_size, l_chunk );
 					break;
 
 				case eCHUNK_TYPE_TEXTURE_DATA:
@@ -73,9 +73,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_TEXTURE_MAP:
-					l_bReturn = DoParseChunk( l_eMode, l_chunk );
+					l_return = DoParseChunk( l_eMode, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_unit.SetMappingMode( l_eMode );
 					}
@@ -83,9 +83,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_TEXTURE_ALPHA_FUNC:
-					l_bReturn = DoParseChunk( l_eAlphaFn, l_chunk );
+					l_return = DoParseChunk( l_eAlphaFn, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_unit.SetAlphaFunc( l_eAlphaFn );
 					}
@@ -93,9 +93,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_TEXTURE_ALPHA_BLEND:
-					l_bReturn = DoParseChunk( l_eAlphaBlend, l_chunk );
+					l_return = DoParseChunk( l_eAlphaBlend, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_unit.SetAlpFunction( l_eAlphaBlend );
 					}
@@ -103,9 +103,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_TEXTURE_ALPHA_BLEND0:
-					l_bReturn = DoParseChunk( l_eSrc, l_chunk );
+					l_return = DoParseChunk( l_eSrc, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_unit.SetAlpArgument( eBLEND_SRC_INDEX_0, l_eSrc );
 					}
@@ -113,9 +113,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_TEXTURE_ALPHA_BLEND1:
-					l_bReturn = DoParseChunk( l_eSrc, l_chunk );
+					l_return = DoParseChunk( l_eSrc, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_unit.SetAlpArgument( eBLEND_SRC_INDEX_1, l_eSrc );
 					}
@@ -123,9 +123,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_TEXTURE_ALPHA_BLEND2:
-					l_bReturn = DoParseChunk( l_eSrc, l_chunk );
+					l_return = DoParseChunk( l_eSrc, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_unit.SetAlpArgument( eBLEND_SRC_INDEX_2, l_eSrc );
 					}
@@ -133,9 +133,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_TEXTURE_RGB_BLEND:
-					l_bReturn = DoParseChunk( l_eRgbBlend, l_chunk );
+					l_return = DoParseChunk( l_eRgbBlend, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_unit.SetRgbFunction( l_eRgbBlend );
 					}
@@ -143,9 +143,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_TEXTURE_RGB_BLEND0:
-					l_bReturn = DoParseChunk( l_eSrc, l_chunk );
+					l_return = DoParseChunk( l_eSrc, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_unit.SetRgbArgument( eBLEND_SRC_INDEX_0, l_eSrc );
 					}
@@ -153,9 +153,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_TEXTURE_RGB_BLEND1:
-					l_bReturn = DoParseChunk( l_eSrc, l_chunk );
+					l_return = DoParseChunk( l_eSrc, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_unit.SetRgbArgument( eBLEND_SRC_INDEX_1, l_eSrc );
 					}
@@ -163,9 +163,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_TEXTURE_RGB_BLEND2:
-					l_bReturn = DoParseChunk( l_eSrc, l_chunk );
+					l_return = DoParseChunk( l_eSrc, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_unit.SetRgbArgument( eBLEND_SRC_INDEX_2, l_eSrc );
 					}
@@ -173,9 +173,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_TEXTURE_COLOUR:
-					l_bReturn = DoParseChunk( l_colour, l_chunk );
+					l_return = DoParseChunk( l_colour, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_unit.SetBlendColour( l_colour );
 					}
@@ -183,9 +183,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_TEXTURE_CHANNEL:
-					l_bReturn = DoParseChunk( l_eChannel, l_chunk );
+					l_return = DoParseChunk( l_eChannel, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_unit.SetChannel( l_eChannel );
 					}
@@ -194,24 +194,24 @@ namespace Castor3D
 				}
 			}
 
-			if ( !l_bReturn )
+			if ( !l_return )
 			{
 				p_chunk.EndParse();
-				l_bReturn = false;
+				l_return = false;
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool TextureUnit::BinaryParser::Fill( TextureUnit const & p_unit, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_PASS_TEXTURE );
 		TextureBaseSPtr l_pTexture = p_unit.GetTexture();
 		bool l_written = false;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			Path l_path = p_unit.GetTexturePath();
 
@@ -228,7 +228,7 @@ namespace Castor3D
 					}
 
 					File::CopyFile( l_path, m_path / cuT( "Textures" ) );
-					l_bReturn = DoFillChunk( l_relative, eCHUNK_TYPE_TEXTURE_FILE, l_chunk );
+					l_return = DoFillChunk( l_relative, eCHUNK_TYPE_TEXTURE_FILE, l_chunk );
 					l_written = true;
 				}
 			}
@@ -238,16 +238,16 @@ namespace Castor3D
 
 				if ( l_pBuffer )
 				{
-					l_bReturn = DoFillChunk( l_pTexture->GetPixelFormat(), eCHUNK_TYPE_TEXTURE_FORMAT, l_chunk );
+					l_return = DoFillChunk( l_pTexture->GetPixelFormat(), eCHUNK_TYPE_TEXTURE_FORMAT, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
-						l_bReturn = DoFillChunk( l_pTexture->GetDimensions(), eCHUNK_TYPE_TEXTURE_DIMENSIONS, l_chunk );
+						l_return = DoFillChunk( l_pTexture->GetDimensions(), eCHUNK_TYPE_TEXTURE_DIMENSIONS, l_chunk );
 					}
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
-						l_bReturn = DoFillChunk( l_pBuffer, l_pTexture->GetBuffer()->size(), eCHUNK_TYPE_TEXTURE_DATA, l_chunk );
+						l_return = DoFillChunk( l_pBuffer, l_pTexture->GetBuffer()->size(), eCHUNK_TYPE_TEXTURE_DATA, l_chunk );
 					}
 
 					l_written = true;
@@ -255,73 +255,73 @@ namespace Castor3D
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_unit.GetMappingMode(), eCHUNK_TYPE_TEXTURE_MAP, l_chunk );
+			l_return = DoFillChunk( p_unit.GetMappingMode(), eCHUNK_TYPE_TEXTURE_MAP, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_unit.GetAlphaFunc(), eCHUNK_TYPE_TEXTURE_ALPHA_FUNC, l_chunk );
+			l_return = DoFillChunk( p_unit.GetAlphaFunc(), eCHUNK_TYPE_TEXTURE_ALPHA_FUNC, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_unit.GetAlpFunction(), eCHUNK_TYPE_TEXTURE_ALPHA_BLEND, l_chunk );
+			l_return = DoFillChunk( p_unit.GetAlpFunction(), eCHUNK_TYPE_TEXTURE_ALPHA_BLEND, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_unit.GetAlpArgument( eBLEND_SRC_INDEX_0 ), eCHUNK_TYPE_TEXTURE_ALPHA_BLEND0, l_chunk );
+			l_return = DoFillChunk( p_unit.GetAlpArgument( eBLEND_SRC_INDEX_0 ), eCHUNK_TYPE_TEXTURE_ALPHA_BLEND0, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_unit.GetAlpArgument( eBLEND_SRC_INDEX_1 ), eCHUNK_TYPE_TEXTURE_ALPHA_BLEND1, l_chunk );
+			l_return = DoFillChunk( p_unit.GetAlpArgument( eBLEND_SRC_INDEX_1 ), eCHUNK_TYPE_TEXTURE_ALPHA_BLEND1, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_unit.GetAlpArgument( eBLEND_SRC_INDEX_2 ), eCHUNK_TYPE_TEXTURE_ALPHA_BLEND2, l_chunk );
+			l_return = DoFillChunk( p_unit.GetAlpArgument( eBLEND_SRC_INDEX_2 ), eCHUNK_TYPE_TEXTURE_ALPHA_BLEND2, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_unit.GetRgbFunction(), eCHUNK_TYPE_TEXTURE_RGB_BLEND, l_chunk );
+			l_return = DoFillChunk( p_unit.GetRgbFunction(), eCHUNK_TYPE_TEXTURE_RGB_BLEND, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_unit.GetRgbArgument( eBLEND_SRC_INDEX_0 ), eCHUNK_TYPE_TEXTURE_MAP, l_chunk );
+			l_return = DoFillChunk( p_unit.GetRgbArgument( eBLEND_SRC_INDEX_0 ), eCHUNK_TYPE_TEXTURE_MAP, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_unit.GetRgbArgument( eBLEND_SRC_INDEX_1 ), eCHUNK_TYPE_TEXTURE_MAP, l_chunk );
+			l_return = DoFillChunk( p_unit.GetRgbArgument( eBLEND_SRC_INDEX_1 ), eCHUNK_TYPE_TEXTURE_MAP, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_unit.GetRgbArgument( eBLEND_SRC_INDEX_2 ), eCHUNK_TYPE_TEXTURE_MAP, l_chunk );
+			l_return = DoFillChunk( p_unit.GetRgbArgument( eBLEND_SRC_INDEX_2 ), eCHUNK_TYPE_TEXTURE_MAP, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_unit.GetBlendColour(), eCHUNK_TYPE_TEXTURE_COLOUR, l_chunk );
+			l_return = DoFillChunk( p_unit.GetBlendColour(), eCHUNK_TYPE_TEXTURE_COLOUR, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_unit.GetChannel(), eCHUNK_TYPE_TEXTURE_CHANNEL, l_chunk );
+			l_return = DoFillChunk( p_unit.GetChannel(), eCHUNK_TYPE_TEXTURE_CHANNEL, l_chunk );
 		}
 
-		if ( l_bReturn && l_written )
+		if ( l_return && l_written )
 		{
 			l_chunk.Finalise();
-			l_bReturn = p_chunk.AddSubChunk( l_chunk );
+			l_return = p_chunk.AddSubChunk( l_chunk );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -338,7 +338,7 @@ namespace Castor3D
 		static const String l_strAlphaFuncs				[eALPHA_FUNC_COUNT			]	= { cuT( "always"	),	cuT( "less"	),	cuT( "less_or_equal"	),	cuT( "equal"	),	cuT( "not_equal"	),	cuT( "greater_or_equal"	),	cuT( "greater"	),	cuT( "never"	) };
 		static const String l_strTextureRgbFunctions	[eRGB_BLEND_FUNC_COUNT		]	= { cuT( "none"	),	cuT( "first_arg"	),	cuT( "add"	),	cuT( "add_signed"	),	cuT( "modulate"	),	cuT( "interpolate"	),	cuT( "substract"	),	cuT( "dot3_rgb"	),	cuT( "dot3_rgba"	) };
 		static const String l_strFormats				[ePIXEL_FORMAT_COUNT		]	= { cuT( "l4"	),	cuT( "a4l4"	),	cuT( "l8"	),	cuT( "a8l8"	),	cuT( "a1r5g5b5"	),	cuT( "a4r4g4b4"	),	cuT( "r8g8b8"	),	cuT( "a8r8g8b8"	),	cuT( "dxtc1"	),	cuT( "dxtc3"	),	cuT( "dxtc5"	),	cuT( "yuy2"	),	cuT( "depth16"	),	cuT( "depth24" ),	cuT( "depth32" ) };
-		bool l_bReturn = true;
+		bool l_return = true;
 
 		if ( p_unit.IsTextured() && p_unit.GetTexture() )
 		{
@@ -346,60 +346,60 @@ namespace Castor3D
 
 			if ( l_texture->GetType() == eTEXTURE_TYPE_DYNAMIC || !p_unit.GetTexturePath().empty() )
 			{
-				if ( l_bReturn )
+				if ( l_return )
 				{
-					l_bReturn = p_file.WriteText( cuT( "\t\ttexture_unit\n\t\t{\n" ) ) > 0;
+					l_return = p_file.WriteText( cuT( "\t\ttexture_unit\n\t\t{\n" ) ) > 0;
 				}
 
-				if ( l_bReturn )
+				if ( l_return )
 				{
-					l_bReturn = p_file.Print( 256, cuT( "\t\t\tcolour " ) ) > 0 && Colour::TextLoader()( p_unit.GetBlendColour(), p_file ) && p_file.Print( 256, cuT( "\n" ) ) > 0;
+					l_return = p_file.Print( 256, cuT( "\t\t\tcolour " ) ) > 0 && Colour::TextLoader()( p_unit.GetBlendColour(), p_file ) && p_file.Print( 256, cuT( "\n" ) ) > 0;
 				}
 
-				if ( l_bReturn && p_unit.GetMappingMode() != eTEXTURE_MAP_MODE_NONE )
+				if ( l_return && p_unit.GetMappingMode() != eTEXTURE_MAP_MODE_NONE )
 				{
-					l_bReturn = p_file.Print( 256, cuT( "\t\t\tmap_type %i\n" ), p_unit.GetMappingMode() ) > 0;
+					l_return = p_file.Print( 256, cuT( "\t\t\tmap_type %i\n" ), p_unit.GetMappingMode() ) > 0;
 				}
 
-				if ( l_bReturn && l_texture->GetSampler() && l_texture->GetSampler()->GetName() != cuT( "Default" ) )
+				if ( l_return && l_texture->GetSampler() && l_texture->GetSampler()->GetName() != cuT( "Default" ) )
 				{
-					l_bReturn = p_file.WriteText( cuT( "\t\t\tsampler \"" ) + l_texture->GetSampler()->GetName() + cuT( "\"\n" ) ) > 0;
+					l_return = p_file.WriteText( cuT( "\t\t\tsampler \"" ) + l_texture->GetSampler()->GetName() + cuT( "\"\n" ) ) > 0;
 				}
 
-				if ( l_bReturn && p_unit.GetChannel() != 0 )
+				if ( l_return && p_unit.GetChannel() != 0 )
 				{
 					switch ( p_unit.GetChannel() )
 					{
 					case eTEXTURE_CHANNEL_COLOUR	:
-						l_bReturn = p_file.WriteText( cuT( "\t\t\tchannel colour\n" ) ) > 0;
+						l_return = p_file.WriteText( cuT( "\t\t\tchannel colour\n" ) ) > 0;
 						break;
 
 					case eTEXTURE_CHANNEL_DIFFUSE	:
-						l_bReturn = p_file.WriteText( cuT( "\t\t\tchannel diffuse\n" ) ) > 0;
+						l_return = p_file.WriteText( cuT( "\t\t\tchannel diffuse\n" ) ) > 0;
 						break;
 
 					case eTEXTURE_CHANNEL_NORMAL	:
-						l_bReturn = p_file.WriteText( cuT( "\t\t\tchannel normal\n" ) ) > 0;
+						l_return = p_file.WriteText( cuT( "\t\t\tchannel normal\n" ) ) > 0;
 						break;
 
 					case eTEXTURE_CHANNEL_OPACITY	:
-						l_bReturn = p_file.WriteText( cuT( "\t\t\tchannel opacity\n" ) ) > 0;
+						l_return = p_file.WriteText( cuT( "\t\t\tchannel opacity\n" ) ) > 0;
 						break;
 
 					case eTEXTURE_CHANNEL_SPECULAR	:
-						l_bReturn = p_file.WriteText( cuT( "\t\t\tchannel specular\n" ) ) > 0;
+						l_return = p_file.WriteText( cuT( "\t\t\tchannel specular\n" ) ) > 0;
 						break;
 
 					case eTEXTURE_CHANNEL_HEIGHT	:
-						l_bReturn = p_file.WriteText( cuT( "\t\t\tchannel height\n" ) ) > 0;
+						l_return = p_file.WriteText( cuT( "\t\t\tchannel height\n" ) ) > 0;
 						break;
 
 					case eTEXTURE_CHANNEL_AMBIENT	:
-						l_bReturn = p_file.WriteText( cuT( "\t\t\tchannel ambient\n" ) ) > 0;
+						l_return = p_file.WriteText( cuT( "\t\t\tchannel ambient\n" ) ) > 0;
 						break;
 
 					case eTEXTURE_CHANNEL_GLOSS		:
-						l_bReturn = p_file.WriteText( cuT( "\t\t\tchannel gloss\n" ) ) > 0;
+						l_return = p_file.WriteText( cuT( "\t\t\tchannel gloss\n" ) ) > 0;
 						break;
 
 					default:
@@ -407,26 +407,26 @@ namespace Castor3D
 					}
 				}
 
-				if ( l_bReturn && p_unit.GetAlphaFunc() != eALPHA_FUNC_ALWAYS )
+				if ( l_return && p_unit.GetAlphaFunc() != eALPHA_FUNC_ALWAYS )
 				{
-					l_bReturn = p_file.WriteText( cuT( "\t\t\talpha_func " ) + l_strAlphaFuncs[p_unit.GetAlphaFunc()] + cuT( " " ) + str_utils::to_string( p_unit.GetAlphaValue() ) + cuT( "\n" ) ) > 0;
+					l_return = p_file.WriteText( cuT( "\t\t\talpha_func " ) + l_strAlphaFuncs[p_unit.GetAlphaFunc()] + cuT( " " ) + str_utils::to_string( p_unit.GetAlphaValue() ) + cuT( "\n" ) ) > 0;
 				}
 
-				if ( l_bReturn && p_unit.GetRgbFunction() != eRGB_BLEND_FUNC_NONE )
+				if ( l_return && p_unit.GetRgbFunction() != eRGB_BLEND_FUNC_NONE )
 				{
-					l_bReturn = p_file.WriteText( cuT( "\t\t\trgb_blend " ) + l_strTextureRgbFunctions[p_unit.GetRgbFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( eBLEND_SRC_INDEX_0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( eBLEND_SRC_INDEX_1 )] + cuT( "\n" ) ) > 0;
+					l_return = p_file.WriteText( cuT( "\t\t\trgb_blend " ) + l_strTextureRgbFunctions[p_unit.GetRgbFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( eBLEND_SRC_INDEX_0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( eBLEND_SRC_INDEX_1 )] + cuT( "\n" ) ) > 0;
 				}
 
-				if ( l_bReturn && p_unit.GetAlpFunction() != eALPHA_BLEND_FUNC_NONE )
+				if ( l_return && p_unit.GetAlpFunction() != eALPHA_BLEND_FUNC_NONE )
 				{
-					l_bReturn = p_file.WriteText( cuT( "\t\t\talpha_blend " ) + l_strTextureAlphaFunctions[p_unit.GetAlpFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( eBLEND_SRC_INDEX_0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( eBLEND_SRC_INDEX_1 )] + cuT( "\n" ) ) > 0;
+					l_return = p_file.WriteText( cuT( "\t\t\talpha_blend " ) + l_strTextureAlphaFunctions[p_unit.GetAlpFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( eBLEND_SRC_INDEX_0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( eBLEND_SRC_INDEX_1 )] + cuT( "\n" ) ) > 0;
 				}
 
 				if ( l_texture->GetType() == eTEXTURE_TYPE_DYNAMIC )
 				{
-					if ( l_bReturn && p_unit.GetRenderTarget() )
+					if ( l_return && p_unit.GetRenderTarget() )
 					{
-						l_bReturn = RenderTarget::TextLoader( cuT( "\t\t\t" ) )( *p_unit.GetRenderTarget(), p_file );
+						l_return = RenderTarget::TextLoader( cuT( "\t\t\t" ) )( *p_unit.GetRenderTarget(), p_file );
 					}
 				}
 				else
@@ -441,17 +441,17 @@ namespace Castor3D
 					}
 
 					File::CopyFile( l_path, p_file.GetFilePath() / cuT( "Textures" ) );
-					l_bReturn = p_file.WriteText( cuT( "\t\t\timage \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+					l_return = p_file.WriteText( cuT( "\t\t\timage \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
 				}
 
-				if ( l_bReturn )
+				if ( l_return )
 				{
-					l_bReturn = p_file.WriteText( cuT( "\t\t}\n" ) ) > 0;
+					l_return = p_file.WriteText( cuT( "\t\t}\n" ) ) > 0;
 				}
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*********************************************************************************************
@@ -697,7 +697,7 @@ namespace Castor3D
 
 	bool TextureUnit::LoadTexture( Path const & p_pathFile )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		ImageSPtr l_pImage;
 
 		if ( !p_pathFile.empty() && File::FileExists( p_pathFile ) )
@@ -724,10 +724,10 @@ namespace Castor3D
 			SetTexture( l_pStaTexture );
 			m_pathTexture = p_pathFile;
 			m_bChanged = true;
-			l_bReturn = true;
+			l_return = true;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool TextureUnit::IsTextureInitialised()const

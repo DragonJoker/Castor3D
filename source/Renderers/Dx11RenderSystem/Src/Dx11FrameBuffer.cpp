@@ -39,7 +39,7 @@ namespace Dx11Render
 
 	bool DxFrameBuffer::SetDrawBuffers()
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( m_mapRbo.size() || m_mapTex.size() )
 		{
@@ -73,7 +73,7 @@ namespace Dx11Render
 				m_arrayOldRenderTargets.resize( l_arraySurfaces.size() );
 				l_pDeviceContext->OMGetRenderTargets( UINT( l_arraySurfaces.size() ), m_arrayOldRenderTargets.data(), &m_pOldDepthStencilView );
 				l_pDeviceContext->OMSetRenderTargets( UINT( l_arraySurfaces.size() ), &l_arraySurfaces[0], l_pView );
-				l_bReturn = true;
+				l_return = true;
 			}
 			else if ( l_pView )
 			{
@@ -82,7 +82,7 @@ namespace Dx11Render
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	ColourRenderBufferSPtr DxFrameBuffer::CreateColourRenderBuffer( ePIXEL_FORMAT p_ePixelFormat )

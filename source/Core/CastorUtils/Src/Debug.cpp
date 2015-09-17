@@ -27,7 +27,7 @@ namespace Castor
 	{
 #if defined( NDEBUG )
 
-		static void ShowBacktrace( StringStream & p_stream )
+		void ShowBacktrace( StringStream & p_stream )
 		{
 		}
 

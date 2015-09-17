@@ -16,7 +16,7 @@ namespace Dx11Render
 	template< typename T, class D3dBufferObject >
 	bool DxBufferObject< T, D3dBufferObject >::Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_eType, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		T * l_pReturn = NULL;
 		DirectX11::LockBuffer( l_pReturn, m_pBufferObject, 0, p_iSize, DirectX11::GetBufferMapMode( p_eNature ) );
 
@@ -24,10 +24,10 @@ namespace Dx11Render
 		{
 			std::memcpy( l_pReturn, p_pBuffer, p_iSize );
 			DirectX11::UnlockBuffer( m_pBufferObject );
-			l_bReturn = true;
+			l_return = true;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	template< typename T, class D3dBufferObject >

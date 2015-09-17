@@ -82,11 +82,11 @@ namespace Castor3D
 	bool OverlayManager::WriteOverlays( Castor::TextFile & p_file )const
 	{
 		OverlayCollection::lock();
-		bool l_bReturn = true;
+		bool l_return = true;
 		auto && l_it = m_overlays.begin();
 		bool l_bFirst = true;
 
-		while ( l_bReturn && l_it != m_overlays.end() )
+		while ( l_return && l_it != m_overlays.end() )
 		{
 			OverlaySPtr l_overlay = *l_it;
 
@@ -102,26 +102,26 @@ namespace Castor3D
 			switch ( l_overlay->GetType() )
 			{
 			case eOVERLAY_TYPE_PANEL:
-				l_bReturn = PanelOverlay::TextLoader()( *l_overlay->GetPanelOverlay(), p_file );
+				l_return = PanelOverlay::TextLoader()( *l_overlay->GetPanelOverlay(), p_file );
 				break;
 
 			case eOVERLAY_TYPE_BORDER_PANEL:
-				l_bReturn = BorderPanelOverlay::TextLoader()( *l_overlay->GetBorderPanelOverlay(), p_file );
+				l_return = BorderPanelOverlay::TextLoader()( *l_overlay->GetBorderPanelOverlay(), p_file );
 				break;
 
 			case eOVERLAY_TYPE_TEXT:
-				l_bReturn = TextOverlay::TextLoader()( *l_overlay->GetTextOverlay(), p_file );
+				l_return = TextOverlay::TextLoader()( *l_overlay->GetTextOverlay(), p_file );
 				break;
 
 			default:
-				l_bReturn = false;
+				l_return = false;
 			}
 
 			++l_it;
 		}
 
 		OverlayCollection::unlock();
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool OverlayManager::ReadOverlays( Castor::TextFile & p_file )
@@ -133,39 +133,39 @@ namespace Castor3D
 	bool OverlayManager::SaveOverlays( Castor::BinaryFile & p_file )const
 	{
 		OverlayCollection::lock();
-		bool l_bReturn = p_file.Write( uint32_t( m_overlays.size() ) ) == sizeof( uint32_t );
+		bool l_return = p_file.Write( uint32_t( m_overlays.size() ) ) == sizeof( uint32_t );
 		auto && l_it = m_overlays.begin();
 
-		while ( l_bReturn && l_it != m_overlays.end() )
+		while ( l_return && l_it != m_overlays.end() )
 		{
 			OverlaySPtr l_overlay = *l_it;
-			l_bReturn = BinaryLoader< Overlay >()( *l_overlay, p_file );
+			l_return = BinaryLoader< Overlay >()( *l_overlay, p_file );
 			++l_it;
 		}
 
 		OverlayCollection::unlock();
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool OverlayManager::LoadOverlays( Castor::BinaryFile & p_file )
 	{
 		OverlayCollection::lock();
 		uint32_t l_uiSize;
-		bool l_bReturn = p_file.Write( l_uiSize ) == sizeof( uint32_t );
+		bool l_return = p_file.Write( l_uiSize ) == sizeof( uint32_t );
 		String l_strName;
 		eOVERLAY_TYPE l_eType;
 		OverlaySPtr l_pOverlay;
 
-		for ( uint32_t i = 0; i < l_uiSize && l_bReturn; i++ )
+		for ( uint32_t i = 0; i < l_uiSize && l_return; i++ )
 		{
-			l_bReturn = p_file.Read( l_strName );
+			l_return = p_file.Read( l_strName );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = p_file.Read( l_eType ) == sizeof( eOVERLAY_TYPE );
+				l_return = p_file.Read( l_eType ) == sizeof( eOVERLAY_TYPE );
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				l_pOverlay = OverlayCollection::find( l_strName ) ;
 
@@ -176,17 +176,17 @@ namespace Castor3D
 					AddOverlay( l_strName, l_pOverlay, nullptr );
 				}
 
-				l_bReturn = l_pOverlay != nullptr;
+				l_return = l_pOverlay != nullptr;
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = BinaryLoader< Overlay >()( *l_pOverlay, p_file );
+				l_return = BinaryLoader< Overlay >()( *l_pOverlay, p_file );
 			}
 		}
 
 		OverlayCollection::unlock();
-		return l_bReturn;
+		return l_return;
 	}
 
 	void OverlayManager::Update()

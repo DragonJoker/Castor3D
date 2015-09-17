@@ -16,17 +16,19 @@ namespace GuiCommon
 	}
 
 	GeometryTreeItemProperty::GeometryTreeItemProperty( bool p_editable, Castor3D::GeometrySPtr p_pGeometry )
-		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_GEOMETRY )
+		: TreeItemProperty( p_pGeometry->GetScene()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_GEOMETRY )
 		, m_pGeometry( p_pGeometry )
 	{
 		PROPERTY_CATEGORY_GEOMETRY = _( "Geometry: " );
+
+		CreateTreeItemMenu();
 	}
 
 	GeometryTreeItemProperty::~GeometryTreeItemProperty()
 	{
 	}
 
-	void GeometryTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void GeometryTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		GeometrySPtr l_geometry = GetGeometry();
 
@@ -36,7 +38,7 @@ namespace GuiCommon
 		}
 	}
 
-	void GeometryTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void GeometryTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		GeometrySPtr l_geometry = GetGeometry();
 		wxPGProperty * l_property = p_event.GetProperty();

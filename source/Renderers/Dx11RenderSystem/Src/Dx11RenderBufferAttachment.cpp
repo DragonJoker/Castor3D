@@ -36,7 +36,7 @@ namespace Dx11Render
 
 	bool DxRenderBufferAttachment::Blit( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, eINTERPOLATION_MODE CU_PARAM_UNUSED( p_eInterpolation ) )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		DxFrameBufferSPtr l_pBuffer = std::static_pointer_cast< DxFrameBuffer >( p_pBuffer );
 		RECT l_rcSrc = { p_rectSrc.left(), p_rectSrc.top(), p_rectSrc.right(), p_rectSrc.bottom() };
 		RECT l_rcDst = { p_rectDst.left(), p_rectDst.top(), p_rectDst.right(), p_rectDst.bottom() };
@@ -61,7 +61,7 @@ namespace Dx11Render
 
 		SafeRelease( l_pSrcSurface );
 		SafeRelease( l_pDstSurface );
-		return l_bReturn;
+		return l_return;
 	}
 
 	ID3D11View * DxRenderBufferAttachment::GetSurface()const

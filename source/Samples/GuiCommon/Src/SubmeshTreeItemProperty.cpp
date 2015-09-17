@@ -22,19 +22,21 @@ namespace GuiCommon
 	}
 
 	SubmeshTreeItemProperty::SubmeshTreeItemProperty( bool p_editable, GeometrySPtr p_pGeometry, SubmeshSPtr p_pSubmesh )
-		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_SUBMESH )
+		: TreeItemProperty( p_pSubmesh->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_SUBMESH )
 		, m_pGeometry( p_pGeometry )
 		, m_pSubmesh( p_pSubmesh )
 	{
 		PROPERTY_CATEGORY_SUBMESH = _( "Submesh: " );
 		PROPERTY_SUBMESH_MATERIAL = _( "Material" );
+
+		CreateTreeItemMenu();
 	}
 
 	SubmeshTreeItemProperty::~SubmeshTreeItemProperty()
 	{
 	}
 
-	void SubmeshTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void SubmeshTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		GeometrySPtr l_geometry = GetGeometry();
 		SubmeshSPtr l_submesh = GetSubmesh();
@@ -42,11 +44,11 @@ namespace GuiCommon
 		if ( l_geometry && l_submesh )
 		{
 			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SUBMESH + wxString( l_geometry->GetName() ) ) );
-			p_grid->Append( DoCreateMaterialProperty( PROPERTY_SUBMESH_MATERIAL, l_geometry->GetScene()->GetEngine() ) )->SetValue( wxVariant( l_geometry->GetMaterial( l_submesh )->GetName() ) );
+			p_grid->Append( DoCreateMaterialProperty( PROPERTY_SUBMESH_MATERIAL ) )->SetValue( wxVariant( l_geometry->GetMaterial( l_submesh )->GetName() ) );
 		}
 	}
 
-	void SubmeshTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void SubmeshTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		wxPGProperty * l_property = p_event.GetProperty();
 		GeometrySPtr l_geometry = GetGeometry();
@@ -66,7 +68,7 @@ namespace GuiCommon
 		SubmeshSPtr l_submesh = GetSubmesh();
 		GeometrySPtr l_geometry = GetGeometry();
 
-		l_submesh->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_name, l_geometry, l_submesh]()
+		DoApplyChange( [p_name, l_geometry, l_submesh]()
 		{
 			MaterialManager & l_manager = l_submesh->GetEngine()->GetMaterialManager();
 			MaterialSPtr l_material = l_manager.find( p_name );
@@ -76,6 +78,6 @@ namespace GuiCommon
 				l_geometry->SetMaterial( l_submesh, l_material );
 				l_geometry->GetScene()->InitialiseGeometries();
 			}
-		} ) );
+		} );
 	}
 }

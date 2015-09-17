@@ -11,15 +11,15 @@ using namespace GuiCommon;
 using namespace Castor3D;
 using namespace Castor;
 
-SplashScreen::SplashScreen( wxWindow * p_pParent, wxString const & p_strTitle, wxString const & p_strCopyright, wxPoint const & p_ptTitlePos, wxPoint const & p_ptCopyrightPos, wxPoint const & p_ptVersionPos, wxPoint p_ptPos, int p_iRange )
-	:	wxFrame( p_pParent, wxID_ANY, p_strTitle, p_ptPos, wxSize( 512, 384 ), wxCLIP_CHILDREN | wxFRAME_FLOAT_ON_PARENT | wxBORDER_NONE	)
-	,	m_bmpSplash( splash_xpm	)
-	,	m_ptTitlePosition( p_ptTitlePos	)
-	,	m_ptCopyrightPosition( p_ptCopyrightPos	)
-	,	m_ptVersionPosition( p_ptVersionPos	)
-	,	m_strCopyright( p_strCopyright	)
-	,	m_strEngineVersion( _( "Castor3D Version " )	)
+SplashScreen::SplashScreen( wxString const & p_strTitle, wxPoint const & p_ptTitlePos, wxPoint const & p_ptCopyrightPos, wxPoint const & p_ptVersionPos, wxPoint p_ptPos, int p_iRange )
+	: wxFrame( NULL, wxID_ANY, p_strTitle, p_ptPos, wxSize( 512, 384 ), wxCLIP_CHILDREN | wxBORDER_NONE )
+	, m_bmpSplash( splash_xpm )
+	, m_ptTitlePosition( p_ptTitlePos )
+	, m_ptCopyrightPosition( p_ptCopyrightPos )
+	, m_ptVersionPosition( p_ptVersionPos )
+	, m_strEngineVersion( _( "Castor3D Version " ) )
 {
+	m_strCopyright << wxDateTime().Now().GetCurrentYear() << wxT( " " ) << _( "DragonJoker, All rights shared" );
 	SetBackgroundStyle( wxBG_STYLE_CUSTOM );
 	m_strEngineVersion.clear();
 	m_strEngineVersion << CASTOR_VERSION_MAJOR << wxT( "." ) << CASTOR_VERSION_MINOR << wxT( "." ) << CASTOR_VERSION_BUILD;
@@ -45,7 +45,6 @@ void SplashScreen::Step( int p_iIncrement )
 {
 	m_pGauge->SetValue( m_pGauge->GetValue() + p_iIncrement );
 	m_strSubStatus.clear();
-	//	Refresh();
 	wxClientDC l_clientDC( m_pPanelBmp );
 	DoDraw( & l_clientDC );
 }
@@ -53,7 +52,6 @@ void SplashScreen::Step( int p_iIncrement )
 void SplashScreen::SubStatus( wxString const & p_strText )
 {
 	m_strSubStatus = p_strText;
-	//	Refresh();
 	wxClientDC l_clientDC( m_pPanelBmp );
 	DoDraw( & l_clientDC );
 }
@@ -62,10 +60,11 @@ void SplashScreen::DoDraw( wxDC * p_pDC )
 {
 	if ( IsVisible() )
 	{
+		wxString l_name = GetTitle();
+		l_name.Replace( wxT( " " ), wxT( "\n" ) );
 		wxSize l_size;
 		wxFont l_font( 40, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false, wxT( "Arial" ) );
 		p_pDC->SetBackgroundMode( wxTRANSPARENT );
-//		p_pDC->SetTextBackground( *wxBLACK );
 		p_pDC->DrawBitmap( m_bmpSplash, wxPoint( 0, 0 ) );
 		p_pDC->SetTextForeground( wxColour( 92, 92, 92 ) );
 		l_font.SetPointSize( 70 );
@@ -74,7 +73,7 @@ void SplashScreen::DoDraw( wxDC * p_pDC )
 		p_pDC->SetTextForeground( *wxWHITE );
 		l_font.SetPointSize( 40 );
 		p_pDC->SetFont( l_font );
-		p_pDC->DrawText( GetTitle(), m_ptTitlePosition );
+		p_pDC->DrawText( l_name, m_ptTitlePosition );
 		p_pDC->SetTextForeground( *wxWHITE );
 		l_font.SetPointSize( 10 );
 		p_pDC->SetFont( l_font );
@@ -92,14 +91,14 @@ void SplashScreen::DoDraw( wxDC * p_pDC )
 }
 
 BEGIN_EVENT_TABLE( SplashScreen, wxFrame )
-	EVT_PAINT(	SplashScreen::OnPaint )
-	EVT_ERASE_BACKGROUND(	SplashScreen::OnEraseBackground )
+	EVT_PAINT( SplashScreen::OnPaint )
+	EVT_ERASE_BACKGROUND( SplashScreen::OnEraseBackground )
 END_EVENT_TABLE()
 
 void SplashScreen::OnPaint( wxPaintEvent & p_event )
 {
-	wxAutoBufferedPaintDC l_paintDC( this );
-	DoDraw( & l_paintDC );
+	wxPaintDC l_paintDC( this );
+	DoDraw( &l_paintDC );
 	p_event.Skip();
 }
 

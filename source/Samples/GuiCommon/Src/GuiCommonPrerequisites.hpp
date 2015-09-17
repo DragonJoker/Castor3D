@@ -113,6 +113,8 @@ namespace GuiCommon
 
 	static const int GC_IMG_SIZE = 16;
 
+	class CastorApplication;
+
 	class PropertiesHolder;
 	class TreeItemProperty;
 	class CameraTreeItemProperty;
@@ -279,6 +281,10 @@ namespace GuiCommon
 #endif
 
 #define wxCOMBO_NEW	_( "New..." )
+
+	static const wxString CSCN_WILDCARD = wxT( " (*.cscn)|*.cscn|" );
+	static const wxString CBSN_WILDCARD = wxT( " (*.cbsn)|*.cbsn|" );
+	static const wxString ZIP_WILDCARD = wxT( " (*.zip)|*.zip|" );
 }
 
 #endif

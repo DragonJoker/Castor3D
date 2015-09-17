@@ -15,24 +15,24 @@ namespace Castor3D
 {
 	bool Camera::TextLoader::operator()( Camera const & p_camera, TextFile & p_file )
 	{
-		bool l_bReturn = p_file.WriteText( cuT( "\tcamera \"" ) + p_camera.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( cuT( "\tcamera \"" ) + p_camera.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = MovableObject::TextLoader()( p_camera, p_file );
+			l_return = MovableObject::TextLoader()( p_camera, p_file );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = Viewport::TextLoader()( * p_camera.GetViewport(), p_file );
+			l_return = Viewport::TextLoader()( * p_camera.GetViewport(), p_file );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\t}\n" ) ) > 0;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -44,52 +44,52 @@ namespace Castor3D
 
 	bool Camera::BinaryParser::Fill( Camera const & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_CAMERA );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = MovableObject::BinaryParser( m_path ).Fill( p_obj, l_chunk );
+			l_return = MovableObject::BinaryParser( m_path ).Fill( p_obj, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( uint8_t( p_obj.GetPrimitiveType() ), eCHUNK_TYPE_CAMERA_PRIMITIVES, l_chunk );
+			l_return = DoFillChunk( uint8_t( p_obj.GetPrimitiveType() ), eCHUNK_TYPE_CAMERA_PRIMITIVES, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = Viewport::BinaryParser( m_path ).Fill( *p_obj.GetViewport(), l_chunk );
+			l_return = Viewport::BinaryParser( m_path ).Fill( *p_obj.GetViewport(), l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			l_chunk.Finalise();
 			p_chunk.AddSubChunk( l_chunk );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool Camera::BinaryParser::Parse( Camera & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		uint8_t l_type;
 		String l_name;
 
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
 			BinaryChunk l_chunk;
-			l_bReturn = p_chunk.GetSubChunk( l_chunk );
+			l_return = p_chunk.GetSubChunk( l_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				switch ( l_chunk.GetChunkType() )
 				{
 				case eCHUNK_TYPE_CAMERA_PRIMITIVES:
-					l_bReturn = DoParseChunk( l_type, l_chunk );
+					l_return = DoParseChunk( l_type, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetPrimitiveType( eTOPOLOGY( l_type ) );
 					}
@@ -97,22 +97,22 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_VIEWPORT:
-					l_bReturn = Viewport::BinaryParser( m_path ).Parse( *p_obj.GetViewport(), l_chunk );
+					l_return = Viewport::BinaryParser( m_path ).Parse( *p_obj.GetViewport(), l_chunk );
 					break;
 
 				default:
-					l_bReturn = MovableObject::BinaryParser( m_path ).Parse( p_obj, l_chunk );
+					l_return = MovableObject::BinaryParser( m_path ).Parse( p_obj, l_chunk );
 					break;
 				}
 			}
 
-			if ( !l_bReturn )
+			if ( !l_return )
 			{
 				p_chunk.EndParse();
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 	//*************************************************************************************************
 
@@ -252,9 +252,9 @@ namespace Castor3D
 
 	bool Camera::Select( SceneSPtr p_pScene, eSELECTION_MODE p_eMode, int p_iX, int p_iY, stSELECT_RESULT & p_stFound )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	eVIEWPORT_TYPE Camera::GetViewportType()const
@@ -279,7 +279,7 @@ namespace Castor3D
 
 	bool Camera::IsVisible( CubeBox const & p_box, Matrix4x4r const & p_transformations )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		//Point3r l_ptCorners[8];
 		//l_ptCorners[0] = p_box.GetMin();
 		//l_ptCorners[1] = p_box.GetMax();
@@ -310,26 +310,26 @@ namespace Castor3D
 		//}
 
 		//// Test positive vertex from the axis aligned box to be inside the frustum view.
-		//for( int i = 0; i < eFRUSTUM_PLANE_COUNT && l_bReturn; ++i )
+		//for( int i = 0; i < eFRUSTUM_PLANE_COUNT && l_return; ++i )
 		//{
 		//	if( m_planes[i].Distance( GetVertexP( l_ptMin, l_ptMax, m_planes[i].GetNormal() ) ) < 0 )
 		//	{
-		//		l_bReturn = false;
+		//		l_return = false;
 		//	}
 		//}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool Camera::IsVisible( Point3r const & p_point )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
-		for ( int i = 0; i < 6 && l_bReturn; i++ )
+		for ( int i = 0; i < 6 && l_return; i++ )
 		{
-			l_bReturn = m_planes[i].Distance( p_point ) >= 0;
+			l_return = m_planes[i].Distance( p_point ) >= 0;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 }

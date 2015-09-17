@@ -101,34 +101,34 @@ namespace Castor3D
 	bool FrameVariable::TextLoader::operator()( FrameVariable const & p_variable, TextFile & p_file )
 	{
 		String l_strTabs = cuT( "\t\t\t\t" );
-		bool l_bReturn = p_file.WriteText( l_strTabs + cuT( "variable\n" ) ) > 0;
+		bool l_return = p_file.WriteText( l_strTabs + cuT( "variable\n" ) ) > 0;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( l_strTabs + cuT( "{\n" ) ) > 0;
+			l_return = p_file.WriteText( l_strTabs + cuT( "{\n" ) ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( l_strTabs + cuT( "\ttype " ) + p_variable.GetFullTypeName() + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( l_strTabs + cuT( "\ttype " ) + p_variable.GetFullTypeName() + cuT( "\n" ) ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( l_strTabs + cuT( "\tname " ) + p_variable.GetName() + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( l_strTabs + cuT( "\tname " ) + p_variable.GetName() + cuT( "\n" ) ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( l_strTabs + cuT( "\tvalue " ) + p_variable.GetStrValue() + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( l_strTabs + cuT( "\tvalue " ) + p_variable.GetStrValue() + cuT( "\n" ) ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( l_strTabs + cuT( "}\n" ) ) > 0;
+			l_return = p_file.WriteText( l_strTabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************

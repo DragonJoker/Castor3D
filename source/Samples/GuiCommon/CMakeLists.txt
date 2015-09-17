@@ -87,12 +87,15 @@ file( GLOB ${PROJECT_NAME}_SYSTEM_HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Renderer*.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*List*.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*List*.inl
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Application*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Application*.inl
 )
 file( GLOB ${PROJECT_NAME}_SYSTEM_SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Loader*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Screen*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Renderer*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*List*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Application*.cpp
 )
 source_group( "Header Files\\System" FILES ${${PROJECT_NAME}_SYSTEM_HEADER_FILES} )
 source_group( "Source Files\\System" FILES ${${PROJECT_NAME}_SYSTEM_SOURCE_FILES} )

@@ -736,17 +736,17 @@
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline bool operator==( Matrix< T, Rows, Columns > const & p_mtxA, Matrix< T, Rows, Columns > const & p_mtxB )
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
-		for ( uint32_t i = 0; i < Rows && l_bReturn; i++ )
+		for ( uint32_t i = 0; i < Rows && l_return; i++ )
 		{
-			for ( uint32_t j = 0; j < Columns && l_bReturn; j++ )
+			for ( uint32_t j = 0; j < Columns && l_return; j++ )
 			{
-				l_bReturn = Castor::Policy< T >::equals( p_mtxA[j][i], p_mtxB[j][i] );
+				l_return = Castor::Policy< T >::equals( p_mtxA[j][i], p_mtxB[j][i] );
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline bool operator!=( Matrix< T, Rows, Columns > const & p_mtxA, Matrix< T, Rows, Columns > const & p_mtxB )

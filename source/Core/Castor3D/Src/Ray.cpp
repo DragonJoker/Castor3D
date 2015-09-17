@@ -302,13 +302,13 @@ real Ray::Intersects( GeometrySPtr p_pGeometry, FaceSPtr * CU_PARAM_UNUSED( p_pp
 
 bool Ray::ProjectVertex( Point3r const & p_point, Point3r & p_result )
 {
-	bool l_bReturn = false;
+	bool l_return = false;
 
 	if ( point::dot( m_ptDirection, p_point ) >= 0.0 )
 	{
 		p_result = m_ptDirection * real( point::dot( m_ptDirection, p_point ) / point::distance( m_ptDirection ) );
-		l_bReturn = true;
+		l_return = true;
 	}
 
-	return l_bReturn;
+	return l_return;
 }

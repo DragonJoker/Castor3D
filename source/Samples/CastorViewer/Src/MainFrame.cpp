@@ -5,52 +5,6 @@
 #include "SceneExporter.hpp"
 #include "PropertiesHolder.hpp"
 
-#include <xpms/scene_blanc.xpm>
-#include <xpms/mat_blanc.xpm>
-#include <xpms/castor_transparent.xpm>
-#include <xpms/castor.xpm>
-#include <xpms/export.xpm>
-#include <xpms/log.xpm>
-#include <xpms/properties.xpm>
-#include <xpms/node.xpm>
-#include <xpms/node_sel.xpm>
-#include <xpms/camera.xpm>
-#include <xpms/camera_sel.xpm>
-#include <xpms/directional.xpm>
-#include <xpms/directional_sel.xpm>
-#include <xpms/point.xpm>
-#include <xpms/point_sel.xpm>
-#include <xpms/spot.xpm>
-#include <xpms/spot_sel.xpm>
-#include <xpms/geometry.xpm>
-#include <xpms/geometry_sel.xpm>
-#include <xpms/submesh.xpm>
-#include <xpms/submesh_sel.xpm>
-#include <xpms/scene.xpm>
-#include <xpms/scene_sel.xpm>
-#include <xpms/panel.xpm>
-#include <xpms/panel_sel.xpm>
-#include <xpms/border_panel.xpm>
-#include <xpms/border_panel_sel.xpm>
-#include <xpms/text.xpm>
-#include <xpms/text_sel.xpm>
-#include <xpms/material.xpm>
-#include <xpms/material_sel.xpm>
-#include <xpms/pass.xpm>
-#include <xpms/pass_sel.xpm>
-#include <xpms/texture.xpm>
-#include <xpms/texture_sel.xpm>
-#include <xpms/viewport.xpm>
-#include <xpms/viewport_sel.xpm>
-#include <xpms/render_window.xpm>
-#include <xpms/render_window_sel.xpm>
-#include <xpms/render_target.xpm>
-#include <xpms/render_target_sel.xpm>
-#include <xpms/frame_variable.xpm>
-#include <xpms/frame_variable_sel.xpm>
-#include <xpms/frame_variable_buffer.xpm>
-#include <xpms/frame_variable_buffer_sel.xpm>
-
 #include <wx/display.h>
 #include <wx/aui/auibar.h>
 #include <wx/renderer.h>
@@ -83,6 +37,8 @@
 #include <VersionException.hpp>
 #include <PluginException.hpp>
 
+#include <xpms/castor.xpm>
+
 using namespace Castor3D;
 using namespace Castor;
 using namespace GuiCommon;
@@ -94,14 +50,11 @@ namespace CastorViewer
 	{
 		static const bool CASTOR3D_THREADED = false;
 #if defined( NDEBUG )
-		static const int CASTOR_WANTED_FPS	= 120;
+		static const int CASTOR_WANTED_FPS = 120;
 #else
-		static const int CASTOR_WANTED_FPS	= 30;
+		static const int CASTOR_WANTED_FPS = 30;
 #endif
-		static const wxString CSCN_WILDCARD = wxT( " (*.cscn)|*.cscn|" );
-		static const wxString CBSN_WILDCARD = wxT( " (*.cbsn)|*.cbsn|" );
 		static const wxString OBJ_WILDCARD = wxT( " (*.obj)|*.obj|" );
-		static const wxString ZIP_WILDCARD = wxT( " (*.zip)|*.zip|" );
 
 		typedef enum eID
 		{
@@ -117,15 +70,6 @@ namespace CastorViewer
 			eID_ERRLOG_TIMER,
 		}	eID;
 
-		typedef enum eBMP
-		{
-			eBMP_SCENES = GuiCommon::eBMP_COUNT,
-			eBMP_MATERIALS,
-			eBMP_EXPORT,
-			eBMP_LOGS,
-			eBMP_PROPERTIES,
-		}	eBMP;
-
 		void IndentPressedBitmap( wxRect * rect, int button_state )
 		{
 			if ( button_state == wxAUI_BUTTON_STATE_PRESSED )
@@ -136,13 +80,9 @@ namespace CastorViewer
 		}
 	}
 
-	DECLARE_APP( CastorViewerApp )
-
-	MainFrame::MainFrame( wxWindow * p_pParent, wxString const & p_strTitle, eRENDERER_TYPE p_eRenderer )
-		: wxFrame( p_pParent, wxID_ANY, p_strTitle, wxDefaultPosition, wxSize( 800, 700 ) )
-		, m_pCastor3D( NULL )
+	MainFrame::MainFrame( SplashScreen * p_splashScreen, wxString const & p_strTitle )
+		: wxFrame( NULL, wxID_ANY, p_strTitle, wxDefaultPosition, wxSize( 800, 700 ) )
 		, m_pRenderPanel( NULL )
-		, m_pImagesLoader( new ImagesLoader )
 		, m_timer( NULL )
 		, m_timerMsg( NULL )
 		, m_timerErr( NULL )
@@ -151,33 +91,26 @@ namespace CastorViewer
 		, m_errorLog( NULL )
 		, m_iLogsHeight( 100 )
 		, m_iPropertiesWidth( 240 )
-		, m_eRenderer( p_eRenderer )
 		, m_sceneObjectsList( NULL )
 		, m_materialsList( NULL )
 		, m_propertiesContainer( NULL )
 		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
 		, m_toolBar( NULL )
+		, m_splashScreen( p_splashScreen )
 	{
 	}
 
 	MainFrame::~MainFrame()
 	{
 		m_auiManager.UnInit();
-		delete m_pImagesLoader;
 	}
 
 	bool MainFrame::Initialise()
 	{
 		Logger::RegisterCallback( std::bind( &MainFrame::DoLogCallback, this, std::placeholders::_1, std::placeholders::_2 ), this );
-		wxDisplay l_display;
-		wxRect l_rect = l_display.GetClientArea();
-		wxString l_strCopyright;
-		l_strCopyright << wxDateTime().Now().GetCurrentYear();
-		SplashScreen l_splashScreen( this, wxT( "Castor\nViewer" ), l_strCopyright + cuT( " " ) + _( " DragonJoker, All rights shared" ), wxPoint( 10, 230 ), wxPoint( 200, 300 ), wxPoint( 180, 260 ), wxPoint( ( l_rect.width - 512 ) / 2, ( l_rect.height - 384 ) / 2 ), 9 );
-		m_pSplashScreen = &l_splashScreen;
-		bool l_bReturn = DoInitialiseImages();
+		bool l_return = DoInitialiseImages();
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			DoPopulateStatusBar();
 			DoPopulateToolBar();
@@ -185,17 +118,16 @@ namespace CastorViewer
 			SetIcon( l_icon );
 			DoInitialiseGUI();
 			DoInitialisePerspectives();
-			l_bReturn = DoInitialise3D();
+			l_return = DoInitialise3D();
 		}
 
-		l_splashScreen.Close();
-		Show( l_bReturn );
-		return l_bReturn;
+		Show( l_return );
+		return l_return;
 	}
 
 	void MainFrame::LoadScene( wxString const & p_strFileName )
 	{
-		if ( m_pRenderPanel && m_pCastor3D )
+		if ( m_pRenderPanel && wxGetApp().GetCastor() )
 		{
 			Logger::LogDebug( ( wxChar const * )( cuT( "MainFrame::LoadScene - " ) + p_strFileName ).c_str() );
 
@@ -217,7 +149,7 @@ namespace CastorViewer
 				}
 
 				m_pRenderPanel->SetRenderWindow( nullptr );
-				RenderWindowSPtr l_window = GuiCommon::LoadScene( *m_pCastor3D, m_strFilePath, CASTOR_WANTED_FPS, CASTOR3D_THREADED );
+				RenderWindowSPtr l_window = GuiCommon::LoadScene( *wxGetApp().GetCastor(), m_strFilePath, CASTOR_WANTED_FPS, CASTOR3D_THREADED );
 
 				if ( l_window )
 				{
@@ -242,11 +174,11 @@ namespace CastorViewer
 
 					if ( CASTOR3D_THREADED )
 					{
-						m_pCastor3D->StartRendering();
+						wxGetApp().GetCastor()->StartRendering();
 					}
 
-					m_sceneObjectsList->LoadScene( m_pCastor3D, m_pMainScene.lock() );
-					m_materialsList->LoadMaterials( m_pCastor3D );
+					m_sceneObjectsList->LoadScene( wxGetApp().GetCastor(), m_pMainScene.lock() );
+					m_materialsList->LoadMaterials( wxGetApp().GetCastor() );
 					wxSize l_size = GetClientSize();
 #if wxCHECK_VERSION( 2, 9, 0 )
 					SetMinClientSize( l_size );
@@ -273,12 +205,6 @@ namespace CastorViewer
 		{
 			m_auiManager.LoadPerspective( m_currentPerspective );
 		}
-	}
-
-	void MainFrame::DoLoadPlugins()
-	{
-		m_pSplashScreen->Step( _( "Loading plugins" ), 1 );
-		GuiCommon::LoadPlugins( *m_pCastor3D );
 	}
 
 	void MainFrame::DoInitialiseGUI()
@@ -339,40 +265,13 @@ namespace CastorViewer
 
 	bool MainFrame::DoInitialise3D()
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		Logger::LogInfo( cuT( "Initialising Castor3D" ) );
-		m_pCastor3D = new Engine();
-		DoLoadPlugins();
 
 		try
 		{
-			m_pSplashScreen->Step( _( "Initialising main window" ), 1 );
 
-			if ( m_eRenderer == eRENDERER_TYPE_UNDEFINED )
-			{
-				RendererSelector m_dialog( m_pCastor3D, this, wxT( "Castor Viewer" ) );
-				int l_iReturn = m_dialog.ShowModal();
-
-				if ( l_iReturn == wxID_OK )
-				{
-					m_eRenderer = m_dialog.GetSelectedRenderer();
-				}
-				else
-				{
-					l_bReturn = false;
-				}
-			}
-			else
-			{
-				l_bReturn = true;
-			}
-
-			if ( l_bReturn )
-			{
-				l_bReturn = m_pCastor3D->LoadRenderer( m_eRenderer );
-			}
-
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				Logger::LogInfo( cuT( "Castor3D Initialised" ) );
 
@@ -398,61 +297,14 @@ namespace CastorViewer
 		catch ( ... )
 		{
 			wxMessageBox( _( "Problem occured while initialising Castor3D.\nLook at CastorViewer.log for more details" ), _( "Exception" ), wxOK | wxCENTRE | wxICON_ERROR );
-			l_bReturn = false;
+			l_return = false;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool MainFrame::DoInitialiseImages()
 	{
-		m_pSplashScreen->Step( _( "Loading images" ), 1 );
-		m_pImagesLoader->AddBitmap( eBMP_SCENE, scene_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_SCENE_SEL, scene_sel_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_NODE, node_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_NODE_SEL, node_sel_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_CAMERA, camera_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_CAMERA_SEL, camera_sel_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_GEOMETRY, geometry_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_GEOMETRY_SEL, geometry_sel_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_DIRECTIONAL_LIGHT, directional_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_DIRECTIONAL_LIGHT_SEL, directional_sel_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_POINT_LIGHT, point_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_POINT_LIGHT_SEL, point_sel_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_SPOT_LIGHT, spot_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_SPOT_LIGHT_SEL, spot_sel_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_SUBMESH, submesh_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_SUBMESH_SEL, submesh_sel_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_PANEL_OVERLAY, panel_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_PANEL_OVERLAY_SEL, panel_sel_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_BORDER_PANEL_OVERLAY, border_panel_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_BORDER_PANEL_OVERLAY_SEL, border_panel_sel_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_TEXT_OVERLAY, text_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_TEXT_OVERLAY_SEL, text_sel_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_MATERIAL, material_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_MATERIAL_SEL, material_sel_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_PASS, pass_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_PASS_SEL, pass_sel_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_TEXTURE, texture_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_TEXTURE_SEL, texture_sel_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_VIEWPORT, viewport_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_VIEWPORT_SEL, viewport_sel_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_RENDER_TARGET, render_target_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_RENDER_TARGET_SEL, render_target_sel_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_RENDER_WINDOW, render_window_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_RENDER_WINDOW_SEL, render_window_sel_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_FRAME_VARIABLE, frame_variable_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_FRAME_VARIABLE_SEL, frame_variable_sel_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_FRAME_VARIABLE_BUFFER, frame_variable_buffer_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL, frame_variable_buffer_sel_xpm );
-
-		m_pImagesLoader->AddBitmap( CV_IMG_CASTOR, castor_transparent_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_SCENES, scene_blanc_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_MATERIALS, mat_blanc_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_EXPORT, export_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_LOGS, log_xpm );
-		m_pImagesLoader->AddBitmap( eBMP_PROPERTIES, properties_xpm );
-		m_pImagesLoader->WaitAsyncLoads();
 		return true;
 	}
 
@@ -465,22 +317,22 @@ namespace CastorViewer
 
 	void MainFrame::DoPopulateToolBar()
 	{
-		m_pSplashScreen->Step( _( "Loading toolbar" ), 1 );
+		m_splashScreen->Step( _( "Loading toolbar" ), 1 );
 		m_toolBar = new wxAuiToolBar( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_TB_PLAIN_BACKGROUND | wxAUI_TB_HORIZONTAL );
 		m_toolBar->SetArtProvider( new AuiToolBarArt );
 		m_toolBar->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_toolBar->SetToolBitmapSize( wxSize( 32, 32 ) );
-		m_toolBar->AddTool( eID_TOOL_LOAD_SCENE, _( "Load Scene" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_SCENES ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Open a new scene" ) );
-		m_pSplashScreen->Step( 1 );
-		m_toolBar->AddTool( eID_TOOL_EXPORT_SCENE, _( "Export Scene" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_EXPORT ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Export the current scene" ) );
-		m_pSplashScreen->Step( 1 );
+		m_toolBar->AddTool( eID_TOOL_LOAD_SCENE, _( "Load Scene" ), wxImage( *ImagesLoader::GetBitmap( eBMP_SCENES ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Open a new scene" ) );
+		m_splashScreen->Step( 1 );
+		m_toolBar->AddTool( eID_TOOL_EXPORT_SCENE, _( "Export Scene" ), wxImage( *ImagesLoader::GetBitmap( eBMP_EXPORT ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Export the current scene" ) );
+		m_splashScreen->Step( 1 );
 		m_toolBar->AddSeparator();
-		m_toolBar->AddTool( eID_TOOL_SHOW_LOGS, _( "Logs" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_LOGS ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display logs" ) );
-		m_pSplashScreen->Step( 1 );
-		m_toolBar->AddTool( eID_TOOL_SHOW_LISTS, _( "Lists" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_MATERIALS ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display lists" ) );
-		m_pSplashScreen->Step( 1 );
-		m_toolBar->AddTool( eID_TOOL_SHOW_PROPERTIES, _( "Properties" ), wxImage( *m_pImagesLoader->GetBitmap( eBMP_PROPERTIES ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display properties" ) );
-		m_pSplashScreen->Step( 1 );
+		m_toolBar->AddTool( eID_TOOL_SHOW_LOGS, _( "Logs" ), wxImage( *ImagesLoader::GetBitmap( eBMP_LOGS ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display logs" ) );
+		m_splashScreen->Step( 1 );
+		m_toolBar->AddTool( eID_TOOL_SHOW_LISTS, _( "Lists" ), wxImage( *ImagesLoader::GetBitmap( eBMP_MATERIALS ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display lists" ) );
+		m_splashScreen->Step( 1 );
+		m_toolBar->AddTool( eID_TOOL_SHOW_PROPERTIES, _( "Properties" ), wxImage( *ImagesLoader::GetBitmap( eBMP_PROPERTIES ) ).Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Display properties" ) );
+		m_splashScreen->Step( 1 );
 		m_toolBar->Realize();
 		m_auiManager.AddPane( m_toolBar, wxAuiPaneInfo().Name( wxT( "MainToolBar" ) ).ToolbarPane().Top().Row( 1 ).Dockable( false ).Gripper( false ) );
 	}
@@ -553,9 +405,9 @@ namespace CastorViewer
 	{
 		if ( p_event.GetId() == eID_RENDER_TIMER )
 		{
-			if ( m_pCastor3D )
+			if ( wxGetApp().GetCastor() )
 			{
-				m_pCastor3D->RenderOneFrame();
+				wxGetApp().GetCastor()->RenderOneFrame();
 			}
 		}
 		else if ( p_event.GetId() == eID_MSGLOG_TIMER && m_messageLog )
@@ -630,12 +482,12 @@ namespace CastorViewer
 			m_pRenderPanel->SetRenderWindow( nullptr );
 		}
 
-		if ( m_pCastor3D )
+		if ( wxGetApp().GetCastor() )
 		{
 #if CASTOR3D_THREADED
-			m_pCastor3D->EndRendering();
+			wxGetApp().GetCastor()->EndRendering();
 #endif
-			m_pCastor3D->Cleanup();
+			wxGetApp().GetCastor()->Cleanup();
 		}
 
 		if ( m_pRenderPanel )
@@ -646,14 +498,6 @@ namespace CastorViewer
 		}
 
 		DestroyChildren();
-
-		if ( m_pImagesLoader )
-		{
-			m_pImagesLoader->Cleanup();
-		}
-
-		delete m_pCastor3D;
-		m_pCastor3D = NULL;
 		p_event.Skip();
 	}
 
@@ -714,17 +558,17 @@ namespace CastorViewer
 				if ( l_pathFile.GetExtension() == cuT( "obj" ) )
 				{
 					ObjSceneExporter l_exporter;
-					l_exporter.ExportScene( m_pCastor3D, *m_pMainScene.lock(), l_pathFile );
+					l_exporter.ExportScene( wxGetApp().GetCastor(), *m_pMainScene.lock(), l_pathFile );
 				}
 				else if ( l_pathFile.GetExtension() == cuT( "cscn" ) )
 				{
 					CscnSceneExporter l_exporter;
-					l_exporter.ExportScene( m_pCastor3D, *m_pMainScene.lock(), l_pathFile );
+					l_exporter.ExportScene( wxGetApp().GetCastor(), *m_pMainScene.lock(), l_pathFile );
 				}
 				else if ( l_pathFile.GetExtension() == cuT( "cbsn" ) )
 				{
 					CbsnSceneExporter l_exporter;
-					l_exporter.ExportScene( m_pCastor3D, *m_pMainScene.lock(), l_pathFile );
+					l_exporter.ExportScene( wxGetApp().GetCastor(), *m_pMainScene.lock(), l_pathFile );
 				}
 			}
 		}

@@ -51,20 +51,20 @@ namespace Castor3D
 		 */
 		bool operator()( uint8_t const * p_pValues, uint32_t p_uiSize, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
-			bool l_bReturn = true;
+			bool l_return = true;
 
 			try
 			{
 				BinaryChunk l_chunk( p_eChunkType );
 				l_chunk.SetData( p_pValues, p_uiSize );
-				l_bReturn = p_chunk.AddSubChunk( l_chunk );
+				l_return = p_chunk.AddSubChunk( l_chunk );
 			}
 			catch ( ... )
 			{
-				l_bReturn = false;
+				l_return = false;
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 	};
 	/*!
@@ -148,7 +148,7 @@ namespace Castor3D
 		 */
 		bool operator()( Castor::String const & p_strValue, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
-			bool l_bReturn = true;
+			bool l_return = true;
 
 			try
 			{
@@ -157,10 +157,10 @@ namespace Castor3D
 			}
 			catch ( ... )
 			{
-				l_bReturn = false;
+				l_return = false;
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 	};
 	/*!
@@ -174,7 +174,7 @@ namespace Castor3D
 		 */
 		bool operator()( Castor::Path const & p_strValue, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
-			bool l_bReturn = true;
+			bool l_return = true;
 
 			try
 			{
@@ -183,10 +183,10 @@ namespace Castor3D
 			}
 			catch ( ... )
 			{
-				l_bReturn = false;
+				l_return = false;
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 	};
 	/*!

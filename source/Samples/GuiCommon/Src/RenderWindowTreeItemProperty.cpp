@@ -16,17 +16,19 @@ namespace GuiCommon
 	}
 
 	RenderWindowTreeItemProperty::RenderWindowTreeItemProperty( bool p_editable, RenderWindowSPtr p_window )
-		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_RENDER_WINDOW )
+		: TreeItemProperty( p_window->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_RENDER_WINDOW )
 		, m_window( p_window )
 	{
 		PROPERTY_CATEGORY_RENDER_WINDOW = _( "Render Window: " );
+
+		CreateTreeItemMenu();
 	}
 
 	RenderWindowTreeItemProperty::~RenderWindowTreeItemProperty()
 	{
 	}
 
-	void RenderWindowTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void RenderWindowTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		RenderWindowSPtr l_window = GetRenderWindow();
 
@@ -36,7 +38,7 @@ namespace GuiCommon
 		}
 	}
 
-	void RenderWindowTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void RenderWindowTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		RenderWindowSPtr l_window = GetRenderWindow();
 		wxPGProperty * l_property = p_event.GetProperty();

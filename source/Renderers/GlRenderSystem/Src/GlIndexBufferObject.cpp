@@ -26,12 +26,12 @@ namespace GlRender
 
 	bool GlIndexBufferObject::Initialise( eBUFFER_ACCESS_TYPE p_eType, eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram )
 	{
-		bool l_bReturn = GlBuffer< uint32_t >::DoInitialise( p_eType, p_eNature );
-		//if( l_bReturn )
+		bool l_return = GlBuffer< uint32_t >::DoInitialise( p_eType, p_eNature );
+		//if( l_return )
 		//{
 		//	m_pBuffer->Clear();
 		//}
-		return l_bReturn;
+		return l_return;
 	}
 
 	void GlIndexBufferObject::Cleanup()
@@ -42,14 +42,14 @@ namespace GlRender
 	bool GlIndexBufferObject::Bind()
 	{
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
-		bool l_bReturn = l_pBuffer && l_pBuffer->IsAssigned();
+		bool l_return = l_pBuffer && l_pBuffer->IsAssigned();
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = GlBuffer< uint32_t >::DoBind();
+			l_return = GlBuffer< uint32_t >::DoBind();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void GlIndexBufferObject::Unbind()

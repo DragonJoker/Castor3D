@@ -14,8 +14,8 @@ namespace Castor3D
 
 	bool MovableObject::TextLoader::operator()( MovableObject const & p_object, TextFile & p_file )
 	{
-		bool l_bReturn = p_file.WriteText( cuT( "\t\tparent \"" ) + p_object.GetParent()->GetName() + cuT( "\"\n" ) ) > 0;
-		return l_bReturn;
+		bool l_return = p_file.WriteText( cuT( "\t\tparent \"" ) + p_object.GetParent()->GetName() + cuT( "\"\n" ) ) > 0;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -27,32 +27,32 @@ namespace Castor3D
 
 	bool MovableObject::BinaryParser::Fill( MovableObject const & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, p_chunk );
+			l_return = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, p_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetParent()->GetName(), eCHUNK_TYPE_MOVABLE_NODE, p_chunk );
+			l_return = DoFillChunk( p_obj.GetParent()->GetName(), eCHUNK_TYPE_MOVABLE_NODE, p_chunk );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool MovableObject::BinaryParser::Parse( MovableObject & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		String l_name;
 
 		switch ( p_chunk.GetChunkType() )
 		{
 		case eCHUNK_TYPE_MOVABLE_NODE:
-			l_bReturn = DoParseChunk( l_name, p_chunk );
+			l_return = DoParseChunk( l_name, p_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				SceneNodeSPtr l_pParent = p_obj.GetScene()->GetNode( l_name );
 
@@ -62,19 +62,19 @@ namespace Castor3D
 				}
 				else
 				{
-					l_bReturn = false;
+					l_return = false;
 				}
 			}
 
 			break;
 		}
 
-		if ( !l_bReturn )
+		if ( !l_return )
 		{
 			p_chunk.EndParse();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************

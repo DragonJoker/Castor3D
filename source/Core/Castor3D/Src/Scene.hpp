@@ -1123,7 +1123,7 @@ namespace Castor3D
 		template< class ObjectType, typename KeyType >
 		bool DoCheckObject( KeyType const & p_key, std::map< KeyType, std::shared_ptr< ObjectType > > & p_map, Castor::String const & p_strType )
 		{
-			bool l_bReturn = false;
+			bool l_return = false;
 
 			if ( !p_key.empty() )
 			{
@@ -1132,7 +1132,7 @@ namespace Castor3D
 
 				if ( l_it == p_map.end() )
 				{
-					l_bReturn = true;
+					l_return = true;
 				}
 				else
 				{
@@ -1145,12 +1145,12 @@ namespace Castor3D
 				Castor::Logger::LogWarning( cuT( "Scene::CreateObject - The object name is void" ) );
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		template< class ObjectType, typename KeyType >
 		bool DoAddObject( std::shared_ptr< ObjectType > p_pObject, std::map< KeyType, std::shared_ptr< ObjectType > > & p_map, Castor::String const & p_strType )
 		{
-			bool l_bReturn = false;
+			bool l_return = false;
 
 			if ( p_pObject )
 			{
@@ -1160,7 +1160,7 @@ namespace Castor3D
 				if ( l_it == p_map.end() )
 				{
 					p_map.insert( std::make_pair( p_pObject->GetName(), p_pObject ) );
-					l_bReturn = true;
+					l_return = true;
 				}
 				else
 				{
@@ -1173,7 +1173,7 @@ namespace Castor3D
 				Castor::Logger::LogWarning( cuT( "Scene::AddObject - The given object is null" ) );
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		template< class ObjectType, typename KeyType >
 		std::shared_ptr< ObjectType > DoGetObject( std::map< KeyType, std::shared_ptr< ObjectType > > const & p_map, KeyType const & p_key )const

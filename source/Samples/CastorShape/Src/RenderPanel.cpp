@@ -19,11 +19,9 @@ using namespace Castor3D;
 using namespace CastorShape;
 using namespace Castor;
 
-DECLARE_APP( CastorShapeApp );
-
 #define ID_NEW_WINDOW 10000
 
-RenderPanel::RenderPanel( MainFrame * p_mainFrame, wxWindow * parent, wxWindowID p_id, eVIEWPORT_TYPE p_renderType, SceneSPtr p_scene, wxPoint const & pos, wxSize const & size, ePROJECTION_DIRECTION p_look, long style )
+RenderPanel::RenderPanel( eVIEWPORT_TYPE p_renderType, SceneSPtr p_scene, ePROJECTION_DIRECTION p_look, wxWindow * parent, wxWindowID p_id, wxPoint const & pos, wxSize const & size, long style )
 	: wxPanel( parent, p_id, pos, size, style )
 	, m_renderType( p_renderType )
 	, m_lookAt( p_look )
@@ -33,7 +31,6 @@ RenderPanel::RenderPanel( MainFrame * p_mainFrame, wxWindow * parent, wxWindowID
 	, m_mouseMiddleDown( false )
 	, m_actionType( atNone )
 	, m_selectionType( stNone )
-	, m_mainFrame( p_mainFrame )
 	, m_rZoom( 1.0 )
 {
 }
@@ -57,12 +54,12 @@ void RenderPanel::DrawOneFrame()
 
 void RenderPanel::SelectGeometry( GeometrySPtr p_geometry )
 {
-	m_mainFrame->SelectGeometry( p_geometry );
+	wxGetApp().GetMainFrame()->SelectGeometry( p_geometry );
 }
 
 void RenderPanel::SelectVertex( Vertex * p_vertex )
 {
-	m_mainFrame->SelectVertex( p_vertex );
+	wxGetApp().GetMainFrame()->SelectVertex( p_vertex );
 }
 
 void RenderPanel::DestroyRenderWindow()
@@ -76,9 +73,9 @@ void RenderPanel::InitialiseRenderWindow()
 	StringStream l_streamName;
 	l_streamName << cuT( "RenderPanel_" ) << GetId();
 	SceneNodeSPtr l_pNode;
-	RenderWindowSPtr l_pRenderWindow = m_mainFrame->GetEngine()->CreateRenderWindow();
-	RenderTargetSPtr l_pRenderTarget = m_mainFrame->GetEngine()->CreateRenderTarget( eTARGET_TYPE_WINDOW );
-	SceneNodeSPtr l_pCamBaseNode = m_mainScene->CreateSceneNode( l_streamName.str() + cuT( "_CamNode"	), m_mainScene->GetCameraRootNode()	);
+	RenderWindowSPtr l_pRenderWindow = wxGetApp().GetCastor()->CreateRenderWindow();
+	RenderTargetSPtr l_pRenderTarget = wxGetApp().GetCastor()->CreateRenderTarget( eTARGET_TYPE_WINDOW );
+	SceneNodeSPtr l_pCamBaseNode = m_mainScene->CreateSceneNode( l_streamName.str() + cuT( "_CamNode" ), m_mainScene->GetCameraRootNode()	);
 	l_pCamBaseNode->SetPosition( Point3r( 0, 0, -100 ) );
 
 	if ( m_renderType == eVIEWPORT_TYPE_3D )
@@ -158,17 +155,17 @@ void RenderPanel::OnClose( wxCloseEvent & WXUNUSED( p_event ) )
 
 void RenderPanel::OnEnterWindow( wxMouseEvent & WXUNUSED( event ) )
 {
-	if ( m_mainFrame != NULL )
+	if ( wxGetApp().GetMainFrame() != NULL )
 	{
-		m_mainFrame->SetCurrentPanel( this, this );
+		wxGetApp().GetMainFrame()->SetCurrentPanel( this, this );
 	}
 }
 
 void RenderPanel::OnLeaveWindow( wxMouseEvent & WXUNUSED( event ) )
 {
-	if ( m_mainFrame != NULL )
+	if ( wxGetApp().GetMainFrame() != NULL )
 	{
-		m_mainFrame->SetCurrentPanel( this, NULL );
+		wxGetApp().GetMainFrame()->SetCurrentPanel( this, NULL );
 	}
 }
 
@@ -178,17 +175,17 @@ void RenderPanel::OnEraseBackground( wxEraseEvent & WXUNUSED( p_event ) )
 
 void RenderPanel::OnSetFocus( wxFocusEvent & WXUNUSED( p_event ) )
 {
-	if ( m_mainFrame != NULL )
+	if ( wxGetApp().GetMainFrame() != NULL )
 	{
-		m_mainFrame->SetCurrentPanel( this, this );
+		wxGetApp().GetMainFrame()->SetCurrentPanel( this, this );
 	}
 }
 
 void RenderPanel::OnKillFocus( wxFocusEvent & WXUNUSED( p_event ) )
 {
-	if ( m_mainFrame != NULL )
+	if ( wxGetApp().GetMainFrame() != NULL )
 	{
-		m_mainFrame->SetCurrentPanel( this, NULL );
+		wxGetApp().GetMainFrame()->SetCurrentPanel( this, NULL );
 	}
 }
 

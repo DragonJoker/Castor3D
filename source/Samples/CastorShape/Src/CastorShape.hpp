@@ -20,14 +20,15 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "CastorShapePrerequisites.hpp"
 
+#include <CastorApplication.hpp>
+
 namespace CastorShape
 {
 	class CastorShapeApp
-		: public wxApp
+		: public GuiCommon::CastorApplication
 	{
 	public:
-		virtual bool OnInit();
-		virtual int OnExit();
+		CastorShapeApp();
 
 		inline MainFrame * GetMainFrame()const
 		{
@@ -35,9 +36,15 @@ namespace CastorShape
 		}
 
 	private:
+		virtual void DoLoadAppImages();
+		virtual wxWindow * DoInitialiseMainFrame( GuiCommon::SplashScreen * p_splashScreen );
+
+	private:
 		MainFrame * m_mainFrame;
 		std::unique_ptr< wxLocale > m_locale;
 	};
 }
+
+wxDECLARE_APP( CastorShape::CastorShapeApp );
 
 #endif

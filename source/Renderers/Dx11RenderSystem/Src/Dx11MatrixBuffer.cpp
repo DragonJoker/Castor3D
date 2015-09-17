@@ -39,13 +39,13 @@ namespace Dx11Render
 #if 1
 		return true;
 #else
-		bool l_bReturn = false;
+		bool l_return = false;
 		m_pProgram = std::static_pointer_cast< DxShaderProgram >( p_pProgram );
 
 		if ( m_pBuffer )
 		{
 			DxShaderProgramSPtr l_pProgram = m_pProgram.lock();
-			bool l_bReturn = false;
+			bool l_return = false;
 
 			if ( l_pProgram )
 			{
@@ -72,7 +72,7 @@ namespace Dx11Render
 				{
 					HRESULT l_hr = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() )->GetDevice()->CreateInputLayout( &l_arrayDxElements[0], UINT( l_arrayDxElements.size() ), reinterpret_cast< DWORD const * >( l_pBlob->GetBufferPointer() ), l_pBlob->GetBufferSize(), &m_pDxDeclaration );
 					dxDebugName( m_pRenderSystem, m_pBufferObject, MtxInputLayout );
-					l_bReturn = dxCheckError( l_hr, "ID3D11Device::CreateInputLayout" );
+					l_return = dxCheckError( l_hr, "ID3D11Device::CreateInputLayout" );
 				}
 			}
 
@@ -102,11 +102,11 @@ namespace Dx11Render
 					dxDebugName( m_pRenderSystem, m_pBufferObject, MatrixBuffer );
 				}
 
-				l_bReturn = dxCheckError( l_hr, "ID3D11Device::CreateIndexBuffer" );
+				l_return = dxCheckError( l_hr, "ID3D11Device::CreateIndexBuffer" );
 			}
 			else
 			{
-				l_bReturn = false;
+				l_return = false;
 			}
 
 			if ( m_pBufferObject )
@@ -128,24 +128,24 @@ namespace Dx11Render
 				}
 
 				m_pBuffer->Assign();
-				l_bReturn = true;
+				l_return = true;
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 #endif
 	}
 
 	bool DxMatrixBuffer::Bind( uint32_t p_uiCount )
 	{
 		return true;
-		bool l_bReturn = true;
+		bool l_return = true;
 
 		if ( m_pBuffer && m_pBuffer->IsAssigned() )
 		{
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void DxMatrixBuffer::Unbind()

@@ -7,14 +7,14 @@ namespace Castor3D
 {
 	bool DirectionalLight::TextLoader::operator()( DirectionalLight const & p_light, TextFile & p_file )
 	{
-		bool l_bReturn = LightCategory::TextLoader()( p_light, p_file );
+		bool l_return = LightCategory::TextLoader()( p_light, p_file );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\n\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\n\t}\n" ) ) > 0;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -26,45 +26,45 @@ namespace Castor3D
 
 	bool DirectionalLight::BinaryParser::Fill( DirectionalLight const & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_LIGHT );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = LightCategory::BinaryParser( m_path ).Fill( p_obj, l_chunk );
+			l_return = LightCategory::BinaryParser( m_path ).Fill( p_obj, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			l_chunk.Finalise();
 			p_chunk.AddSubChunk( l_chunk );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool DirectionalLight::BinaryParser::Parse( DirectionalLight & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		String l_name;
 
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
 			BinaryChunk l_chunk;
-			l_bReturn = p_chunk.GetSubChunk( l_chunk );
+			l_return = p_chunk.GetSubChunk( l_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = LightCategory::BinaryParser( m_path ).Parse( p_obj, l_chunk );
+				l_return = LightCategory::BinaryParser( m_path ).Parse( p_obj, l_chunk );
 			}
 
-			if ( !l_bReturn )
+			if ( !l_return )
 			{
 				p_chunk.EndParse();
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
