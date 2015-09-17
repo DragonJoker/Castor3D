@@ -452,7 +452,7 @@ namespace Deferred
 			FrameVariableBufferSPtr l_scene = m_pEngine->GetShaderManager().CreateSceneBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL );
 			m_lightPassScene = l_scene;
 
-			m_pGeometryBuffers->GetVertexBuffer().Create();
+			m_pGeometryBuffers->Create();
 
 			for ( int i = 0; i < eSHADER_MODEL_COUNT; i++ )
 			{
@@ -471,7 +471,7 @@ namespace Deferred
 
 	void RenderTechnique::DoDestroy()
 	{
-		m_pGeometryBuffers->GetVertexBuffer().Destroy();
+		m_pGeometryBuffers->Destroy();
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 		{
@@ -488,15 +488,15 @@ namespace Deferred
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT && l_bReturn; i++ )
 		{
-			m_lightPassTextures[i]->SetDimension(	eTEXTURE_DIMENSION_2D );
+			m_lightPassTextures[i]->SetDimension( eTEXTURE_DIMENSION_2D );
 
 			if ( i != eDS_TEXTURE_POSITION )
 			{
-				m_lightPassTextures[i]->SetImage(	m_size, ePIXEL_FORMAT_A8R8G8B8 );
+				m_lightPassTextures[i]->SetImage( m_size, ePIXEL_FORMAT_A8R8G8B8 );
 			}
 			else
 			{
-				m_lightPassTextures[i]->SetImage(	m_size, ePIXEL_FORMAT_ARGB32F );
+				m_lightPassTextures[i]->SetImage( m_size, ePIXEL_FORMAT_ARGB32F );
 			}
 
 			m_lightPassTextures[i]->Initialise( p_index++ );
@@ -523,8 +523,7 @@ namespace Deferred
 		FrameVariableBufferSPtr l_scene = m_lightPassShaderProgram->FindFrameVariableBuffer( ShaderProgramBase::BufferScene );
 		l_scene->GetVariable( ShaderProgramBase::CameraPos, m_pShaderCamera );
 		m_lightPassScene = l_scene;
-		m_pGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, m_lightPassShaderProgram );
-		m_pGeometryBuffers->Initialise();
+		m_pGeometryBuffers->Initialise( m_lightPassShaderProgram, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 		return l_bReturn;
 	}
 
@@ -751,7 +750,7 @@ namespace Deferred
 		String l_strVertexInMatrices = l_pConstants->Matrices();
 		String l_strVertexOutMatrices = l_pVariables->GetVertexOutMatrices();
 		String l_strVertexMatrixCopy = l_pVariables->GetVertexMatrixCopy();
-		str_utils::replace( l_strVertexOutMatrices, cuT( "out" ), l_strOut );
+		string::replace( l_strVertexOutMatrices, cuT( "out" ), l_strOut );
 		l_strReturn += l_strVersion;
 		l_strReturn += l_strAttribute0 + cuT( " <vec4> vertex;\n" );
 		l_strReturn += l_strAttribute1 + cuT( " <vec3> normal;\n" );
@@ -797,7 +796,7 @@ namespace Deferred
 
 		l_strReturn += cuT( "}\n" );
 
-		str_utils::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetStdLayout( 140 ) );
+		string::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetStdLayout( 140 ) );
 		return l_strReturn;
 	}
 
@@ -823,7 +822,7 @@ namespace Deferred
 		String l_strPixelInMatrices = l_pConstants->Matrices();
 		String l_strPixelScene = l_pConstants->Scene();
 		String l_strPixelPass = l_pConstants->Pass();
-		str_utils::replace( l_strPixelInMatrices, cuT( "in" ), l_strIn );
+		string::replace( l_strPixelInMatrices, cuT( "in" ), l_strIn );
 		l_strReturn += l_strVersion;
 		l_strReturn += l_strPixelInMatrices;
 		l_strReturn += l_strPixelScene;
@@ -912,10 +911,10 @@ namespace Deferred
 		l_strReturn += l_strPixelMainDeclarations + l_strPixelMainLightsLoopAfterLightDir + l_strPixelMainLightsLoopEnd + l_strPixelMainEnd;
 		//		Logger::LogDebug( l_strReturn );
 
-		str_utils::replace( l_strReturn, cuT( "<texture1D>" ), l_strTexture1D );
-		str_utils::replace( l_strReturn, cuT( "<texture2D>" ), l_strTexture2D );
-		str_utils::replace( l_strReturn, cuT( "<texture3D>" ), l_strTexture3D );
-		str_utils::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetStdLayout( 140 ) );
+		string::replace( l_strReturn, cuT( "<texture1D>" ), l_strTexture1D );
+		string::replace( l_strReturn, cuT( "<texture2D>" ), l_strTexture2D );
+		string::replace( l_strReturn, cuT( "<texture3D>" ), l_strTexture3D );
+		string::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetStdLayout( 140 ) );
 		return l_strReturn;
 	}
 
@@ -939,7 +938,7 @@ namespace Deferred
 		String l_strVertexInMatrices = l_pConstants->Matrices();
 		String l_strVertexOutMatrices = l_pVariables->GetVertexOutMatrices();
 		String l_strVertexMatrixCopy = l_pVariables->GetVertexMatrixCopy();
-		str_utils::replace( l_strVertexOutMatrices, cuT( "out" ), l_strOut );
+		string::replace( l_strVertexOutMatrices, cuT( "out" ), l_strOut );
 		l_strReturn += l_strVersion;
 		l_strReturn += l_strAttribute0 + cuT( " <vec4> vertex;\n" );
 		l_strReturn += l_strAttribute1 + cuT( " <vec2> texture;\n" );
@@ -954,7 +953,7 @@ namespace Deferred
 		l_strReturn += cuT( "	vtx_texture = texture;\n" );
 		l_strReturn += cuT( "}\n" );
 
-		str_utils::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetStdLayout( 140 ) );
+		string::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetStdLayout( 140 ) );
 		return l_strReturn;
 	}
 
@@ -976,7 +975,7 @@ namespace Deferred
 		String l_strPixelScene = l_pConstants->Scene();
 		String l_strPixelPass = l_pConstants->Pass();
 		String l_strPixelMtxModelView = l_pVariables->GetPixelMtxModelView();
-		str_utils::replace( l_strPixelInMatrices, cuT( "in" ), l_strIn );
+		string::replace( l_strPixelInMatrices, cuT( "in" ), l_strIn );
 		l_strReturn += l_strVersion;
 		l_strReturn += l_strPixelInMatrices;
 		l_strReturn += l_strPixelScene;
@@ -984,12 +983,12 @@ namespace Deferred
 		l_strReturn += l_pKeywords->GetPixelOut();
 		l_strReturn += cuT( "uniform sampler1D c3d_sLights;\n" );
 		l_strReturn += deferredShaderSource.GetLSPixelProgram();
-		str_utils::replace( l_strReturn, cuT( "<pxlin_mtxModelView>" ), l_strPixelMtxModelView );
+		string::replace( l_strReturn, cuT( "<pxlin_mtxModelView>" ), l_strPixelMtxModelView );
 
-		str_utils::replace( l_strReturn, cuT( "<texture1D>" ), l_strTexture1D );
-		str_utils::replace( l_strReturn, cuT( "<texture2D>" ), l_strTexture2D );
-		str_utils::replace( l_strReturn, cuT( "<texture3D>" ), l_strTexture3D );
-		str_utils::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetStdLayout( 140 ) );
+		string::replace( l_strReturn, cuT( "<texture1D>" ), l_strTexture1D );
+		string::replace( l_strReturn, cuT( "<texture2D>" ), l_strTexture2D );
+		string::replace( l_strReturn, cuT( "<texture3D>" ), l_strTexture3D );
+		string::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetStdLayout( 140 ) );
 		return l_strReturn;
 	}
 #endif

@@ -537,6 +537,21 @@ namespace Castor
 		{
 			return StringCaster< T, U >::Cast( p_src );
 		}
+		/**
+		 *\~english
+		 *\brief		Casts a string value in another string type
+		 *\param[in]	p_value	The source value
+		 *\return		The cast string
+		 *\~french
+		 *\brief		Convertit une chaîne dans un autre type de chaîne
+		 *\param[in]	p_value	La valeur source
+		 *\return		La chaîne convertie
+		 */
+		template< typename T, typename U >
+		std::basic_string< T > string_cast( U const * p_src )
+		{
+			return StringCaster< T, U >::Cast( p_src );
+		}
 	};
 	/*!
 	\author 	Sylvain DOREMUS

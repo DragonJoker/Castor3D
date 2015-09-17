@@ -397,7 +397,7 @@ namespace Castor
 			if ( p_path.find( name + Path::Separator ) == 0 )
 			{
 				// First file folder is this one, complete this folder with the file's ones
-				Path l_path = p_path.substr( name.size() + 1 );
+				l_path = p_path.substr( name.size() + 1 );
 
 				if ( l_path == p_path.GetFileName() + cuT( "." ) + p_path.GetExtension() )
 				{

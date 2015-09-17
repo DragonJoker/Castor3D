@@ -216,7 +216,7 @@ namespace Castor
 
 				// We want to conver the base, so do it and output.
 
-				int digits[CHAR_BIT * sizeof( NumType )];
+				int digits[CHAR_BIT * sizeof( NumType )] = { 0 };
 				int i = 0;
 				NumType tempVal = absVal( val );
 

@@ -94,14 +94,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Begins the overlays rendering
-		 *\param[in]	p_size			The render window size
-		 *\param[in]	p_projection	The projection matrix
+		 *\param[in]	p_size	The render window size
 		 *\~french
 		 *\brief		Commence le rendu des incrustations
-		 *\param[in]	p_size			La taille de la fenêtre de rendu
-		 *\param[in]	p_projection	La matrice de projection
+		 *\param[in]	p_size	La taille de la fenêtre de rendu
 		 */
-		void BeginRender( Castor::Size const & p_size, Castor::Matrix4x4r const & p_projection );
+		void BeginRender( Castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Ends the overlays rendering
@@ -254,8 +252,6 @@ namespace Castor3D
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_panelVertex;
 		//!\~english Border panel overlays vertex array (quad definition)	\~french Tableau de vertex (définition du quad) pour les incrustations bordure
 		std::array< Castor3D::BufferElementGroupSPtr, 8 * 6 > m_borderVertex;
-		//!\~english The projection matrix	\~french La matrice de projection
-		Castor::Matrix4x4r m_projection;
 	};
 }
 

@@ -1,4 +1,6 @@
-﻿namespace Castor
+﻿#include "Templates.hpp"
+
+namespace Castor
 {
 //*************************************************************************************************
 
@@ -83,7 +85,7 @@
 
 		if ( p_value )
 		{
-			for ( uint32_t i = 0; i < Columns && i < Rows; i++ )
+			for ( uint32_t i = 0; i < min_value< Columns, Rows >::value; i++ )
 			{
 				m_columns[i][i] = T( p_value );
 			}

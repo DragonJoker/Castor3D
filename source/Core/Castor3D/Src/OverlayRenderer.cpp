@@ -242,10 +242,9 @@ namespace Castor3D
 		}
 	}
 
-	void OverlayRenderer::BeginRender( Size const & p_size, Matrix4x4r const & p_projection )
+	void OverlayRenderer::BeginRender( Size const & p_size )
 	{
 		m_size = p_size;
-		m_projection = p_projection;
 	}
 
 	void OverlayRenderer::EndRender()

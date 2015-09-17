@@ -203,14 +203,14 @@ namespace Castor
 
 			l_tmp = l_strBegin;
 
-			for ( std::list< String >::iterator l_it = l_list.begin(); l_it != l_list.end(); ++l_it )
+			for ( auto && l_folder : l_list )
 			{
 				if ( !l_tmp.empty() )
 				{
 					l_tmp += Separator;
 				}
 
-				l_tmp += *l_it;
+				l_tmp += l_folder;
 			}
 
 			assign( l_tmp + l_strEnd );

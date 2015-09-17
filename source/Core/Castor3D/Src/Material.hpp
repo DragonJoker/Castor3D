@@ -295,7 +295,7 @@ namespace Castor3D
 		 *\brief		Récupère le moteur
 		 *\return		Le moteur
 		 */
-		inline Engine * GetEngine()
+		inline Engine * GetEngine()const
 		{
 			return m_pEngine;
 		}
