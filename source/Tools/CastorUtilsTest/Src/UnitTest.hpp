@@ -39,9 +39,6 @@ namespace Testing
 
 	class TestCase
 	{
-	private:
-		std::string	m_strName;
-
 	public:
 		TestCase( std::string const & p_strName );
 		virtual ~TestCase();
@@ -53,6 +50,9 @@ namespace Testing
 
 	protected:
 		void DoExecuteTest( std::function< void( uint32_t &, uint32_t & ) > p_test, uint32_t & p_errCount, uint32_t & p_testCount, std::string const & p_name );
+
+	private:
+		std::string	m_strName;
 	};
 
 	DECLARE_SMART_PTR( TestCase );

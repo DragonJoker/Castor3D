@@ -302,37 +302,35 @@ namespace Deferred
 
 	protected:
 		//!\~english The various textures	\~french Les diverses textures
-		Castor3D::DynamicTextureSPtr m_pDsTextures[eDS_TEXTURE_COUNT];
+		Castor3D::DynamicTextureSPtr m_lightPassTextures[eDS_TEXTURE_COUNT];
 		//!\~english The buffer receiving the depth colour	\~french Le tampon recevant la couleur de la profondeur
-		Castor3D::DepthStencilRenderBufferSPtr m_pDsBufDepth;
+		Castor3D::DepthStencilRenderBufferSPtr m_lightPassBufDepth;
 		//!\~english The deferred shading frame buffer	\~french Le tampon d'image pour le deferred shading
-		Castor3D::FrameBufferSPtr m_pDsFrameBuffer;
+		Castor3D::FrameBufferSPtr m_lightPassFrameBuffer;
 		//!\~english The attachments between textures and deferred shading frame buffer	\~french Les attaches entre les texture et le tampon deferred shading
-		Castor3D::TextureAttachmentSPtr m_pDsTexAttachs[eDS_TEXTURE_COUNT];
+		Castor3D::TextureAttachmentSPtr m_lightPassTexAttachs[eDS_TEXTURE_COUNT];
 		//!\~english The attach between depth texture and deferred shading frame buffer	\~french L'attache entre la texture profondeur et le tampon deferred shading
-		Castor3D::RenderBufferAttachmentSPtr m_pDsDepthAttach;
+		Castor3D::RenderBufferAttachmentSPtr m_lightPassDepthAttach;
 		//!\~english The shader program used to render lights	\~french Le shader utilisé pour rendre les lumières
-		Castor3D::ShaderProgramBaseSPtr m_pDsShaderProgram;
+		Castor3D::ShaderProgramBaseSPtr m_lightPassShaderProgram;
 		//!\~english The framve variable buffer used to apply matrices	\~french Le tampon de variables shader utilisé pour appliquer les matrices
-		Castor3D::FrameVariableBufferWPtr m_pDsMatrices;
+		Castor3D::FrameVariableBufferWPtr m_lightPassMatrices;
 		//!\~english The framve variable buffer used to transmit scene values	\~french Le tampon de variables shader utilisé pour transmettre les variables de scène
-		Castor3D::FrameVariableBufferWPtr m_pDsScene;
+		Castor3D::FrameVariableBufferWPtr m_lightPassScene;
 		//!\~english Buffer elements declaration	\~french Déclaration des éléments d'un vertex
 		Castor3D::BufferDeclarationSPtr m_pDeclaration;
 		//!\~english Vertex array (quad definition)	\~french Tableau de vertex (définition du quad)
-		std::array< Castor3D::BufferElementGroupSPtr, 4 > m_arrayVertex;
+		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
 		//!\~english Geometry buffers holder	\~french Conteneur de buffers de géométries
 		Castor3D::GeometryBuffersSPtr m_pGeometryBuffers;
-		//!	4 * [3(vertex position) 2(texture coordinates)]
-		Castor::real m_pBuffer[20];
 		//!\~english The viewport used when rendering is done	\~french Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture)
 		Castor3D::ViewportSPtr m_pViewport;
 		//!\~english The shader variable containing the camera position	\~french La variable de shader contenant la position de la caméra
 		Castor3D::Point3rFrameVariableSPtr m_pShaderCamera;
 		//!\~english The depth stencil state used by the geometric pass	\~french Le DepthStencilState utilisé par la passe géométrique
-		Castor3D::DepthStencilStateSPtr m_pDsGeometricState;
+		Castor3D::DepthStencilStateSPtr m_geometryPassDsState;
 		//!\~english The depth stencil state used byt he lights pass	\~french Le DepthStencilState utilisé par la passe lumières
-		Castor3D::DepthStencilStateSPtr m_pDsLightsState;
+		Castor3D::DepthStencilStateSPtr m_lightPassDsState;
 	};
 }
 
