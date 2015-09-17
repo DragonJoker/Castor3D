@@ -408,12 +408,13 @@ namespace Castor3D
 		}
 
 		m_pEngine->GetRenderSystem()->GetPipeline()->ApplyViewport( m_size.width(), m_size.height() );
+		m_pEngine->GetRenderSystem()->GetPipeline().SetProjectionMatrix( m_projection );
 		return l_return;
 	}
 
 	void Viewport::GetDirection( Point2i const & p_ptMouse, Point3r & p_ptResult )
 	{
 		Point4r l_viewport( real( 0 ), real( 0 ), real( m_size.width() ), real( m_size.height() ) );
-		m_pEngine->GetRenderSystem()->GetPipeline()->UnProject( Point3i( p_ptMouse[0], p_ptMouse[1], 1 ), l_viewport, p_ptResult );
+		m_pEngine->GetRenderSystem()->GetPipeline().UnProject( Point3i( p_ptMouse[0], p_ptMouse[1], 1 ), l_viewport, p_ptResult );
 	}
 }

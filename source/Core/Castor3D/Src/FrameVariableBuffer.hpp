@@ -294,7 +294,7 @@ namespace Castor3D
 		//!\~english The variables ordered by name	\~french Les variables, triées par nom
 		FrameVariablePtrStrMap m_mapVariables;
 		//!\~english The render system	\~french Le render system
-		RenderSystem * m_pRenderSystem;
+		RenderSystem * m_renderSystem;
 		//!\~english The buffer name	\~french Le nom du tampon
 		Castor::String m_strName;
 		//!\~english The data buffer	\~french Le tampon de données

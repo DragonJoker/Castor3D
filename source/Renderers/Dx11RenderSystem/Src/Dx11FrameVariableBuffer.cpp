@@ -382,7 +382,7 @@ namespace Dx11Render
 			l_d3dInitData.SysMemSlicePitch = 0;
 
 			l_hr = l_pDevice->CreateBuffer( &l_d3dBufferDesc, &l_d3dInitData, &m_pDxBuffer );
-			dxTrack( static_cast< DxRenderSystem * >( m_pRenderSystem ), m_pDxBuffer, ConstantBuffer );
+			dxTrack( static_cast< DxRenderSystem * >( m_renderSystem ), m_pDxBuffer, ConstantBuffer );
 		}
 
 		return l_hr == S_OK;
@@ -390,7 +390,7 @@ namespace Dx11Render
 
 	void DxFrameVariableBuffer::DoCleanup()
 	{
-		ReleaseTracked( m_pRenderSystem, m_pDxBuffer );
+		ReleaseTracked( m_renderSystem, m_pDxBuffer );
 	}
 
 	bool DxFrameVariableBuffer::DoBind( uint32_t p_uiIndex )
@@ -399,7 +399,7 @@ namespace Dx11Render
 
 		if ( !l_return )
 		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 			D3D11_MAPPED_SUBRESOURCE l_mapped = { 0 };
 			HRESULT l_hr = l_pDeviceContext->Map( m_pDxBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &l_mapped );
 

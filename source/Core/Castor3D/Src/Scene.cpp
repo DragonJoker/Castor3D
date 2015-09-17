@@ -638,7 +638,7 @@ namespace Castor3D
 	void Scene::Render( RenderTechniqueBase & p_technique, eTOPOLOGY p_eTopology, double CU_PARAM_UNUSED( p_dFrameTime ), Camera const & p_camera )
 	{
 		RenderSystem * l_pRenderSystem = m_pEngine->GetRenderSystem();
-		Pipeline * l_pPipeline = l_pRenderSystem->GetPipeline();
+		Pipeline & l_pipeline = l_pRenderSystem->GetPipeline();
 		ContextRPtr l_pContext = l_pRenderSystem->GetCurrentContext();
 		PassSPtr l_pPass;
 		MaterialSPtr l_pMaterial;
@@ -648,20 +648,17 @@ namespace Castor3D
 
 		if ( !m_arraySubmeshesNoAlpha.empty() || !m_arraySubmeshesAlpha.empty() || !m_mapBillboardsLists.empty() )
 		{
-			l_pPipeline->MatrixMode( eMTXMODE_MODEL );
-			l_pPipeline->LoadIdentity();
-
 			if ( !m_arraySubmeshesNoAlpha.empty() )
 			{
 				l_pContext->CullFace( eFACE_BACK );
 
 				if ( l_pRenderSystem->HasInstancing() )
 				{
-					DoRenderSubmeshesInstanced( p_technique, p_camera, *l_pPipeline, p_eTopology, m_mapSubmeshesNoAlpha.begin(), m_mapSubmeshesNoAlpha.end() );
+					DoRenderSubmeshesInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_mapSubmeshesNoAlpha.begin(), m_mapSubmeshesNoAlpha.end() );
 				}
 				else
 				{
-					DoRenderSubmeshesNonInstanced( p_technique, p_camera, *l_pPipeline, p_eTopology, m_arraySubmeshesNoAlpha.begin(), m_arraySubmeshesNoAlpha.end() );
+					DoRenderSubmeshesNonInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_arraySubmeshesNoAlpha.begin(), m_arraySubmeshesNoAlpha.end() );
 				}
 			}
 
@@ -672,16 +669,16 @@ namespace Castor3D
 					if ( l_pRenderSystem->HasInstancing() )
 					{
 						l_pContext->CullFace( eFACE_FRONT );
-						DoRenderSubmeshesInstanced( p_technique, p_camera, *l_pPipeline, p_eTopology, m_mapSubmeshesAlpha.begin(), m_mapSubmeshesAlpha.end() );
+						DoRenderSubmeshesInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_mapSubmeshesAlpha.begin(), m_mapSubmeshesAlpha.end() );
 						l_pContext->CullFace( eFACE_BACK );
-						DoRenderSubmeshesInstanced( p_technique, p_camera, *l_pPipeline, p_eTopology, m_mapSubmeshesAlpha.begin(), m_mapSubmeshesAlpha.end() );
+						DoRenderSubmeshesInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_mapSubmeshesAlpha.begin(), m_mapSubmeshesAlpha.end() );
 					}
 					else
 					{
 						l_pContext->CullFace( eFACE_FRONT );
-						DoRenderSubmeshesNonInstanced( p_technique, p_camera, *l_pPipeline, p_eTopology, m_arraySubmeshesAlpha.begin(), m_arraySubmeshesAlpha.end() );
+						DoRenderSubmeshesNonInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_arraySubmeshesAlpha.begin(), m_arraySubmeshesAlpha.end() );
 						l_pContext->CullFace( eFACE_BACK );
-						DoRenderSubmeshesNonInstanced( p_technique, p_camera, *l_pPipeline, p_eTopology, m_arraySubmeshesAlpha.begin(), m_arraySubmeshesAlpha.end() );
+						DoRenderSubmeshesNonInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_arraySubmeshesAlpha.begin(), m_arraySubmeshesAlpha.end() );
 					}
 				}
 				else
@@ -695,18 +692,18 @@ namespace Castor3D
 
 					DoResortAlpha( p_camera, m_arraySubmeshesAlpha.begin(), m_arraySubmeshesAlpha.end(), m_mapSubmeshesAlphaSorted, 1 );
 					l_pContext->CullFace( eFACE_FRONT );
-					DoRenderAlphaSortedSubmeshes( p_technique, *l_pPipeline, p_eTopology, m_mapSubmeshesAlphaSorted.begin(), m_mapSubmeshesAlphaSorted.end() );
+					DoRenderAlphaSortedSubmeshes( p_technique, l_pipeline, p_eTopology, m_mapSubmeshesAlphaSorted.begin(), m_mapSubmeshesAlphaSorted.end() );
 					l_pContext->CullFace( eFACE_BACK );
-					DoRenderAlphaSortedSubmeshes( p_technique, *l_pPipeline, p_eTopology, m_mapSubmeshesAlphaSorted.begin(), m_mapSubmeshesAlphaSorted.end() );
+					DoRenderAlphaSortedSubmeshes( p_technique, l_pipeline, p_eTopology, m_mapSubmeshesAlphaSorted.begin(), m_mapSubmeshesAlphaSorted.end() );
 				}
 			}
 
 			if ( !m_mapBillboardsLists.empty() )
 			{
 				l_pContext->CullFace( eFACE_FRONT );
-				DoRenderBillboards( p_technique, *l_pPipeline, m_mapBillboardsLists.begin(), m_mapBillboardsLists.end() );
+				DoRenderBillboards( p_technique, l_pipeline, m_mapBillboardsLists.begin(), m_mapBillboardsLists.end() );
 				l_pContext->CullFace( eFACE_BACK );
-				DoRenderBillboards( p_technique, *l_pPipeline, m_mapBillboardsLists.begin(), m_mapBillboardsLists.end() );
+				DoRenderBillboards( p_technique, l_pipeline, m_mapBillboardsLists.begin(), m_mapBillboardsLists.end() );
 			}
 		}
 	}
@@ -1602,7 +1599,7 @@ namespace Castor3D
 
 	void Scene::DoRenderSubmeshNonInstanced( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology )
 	{
-		p_pipeline.SetModel( p_node.m_pNode->GetDerivedTransformationMatrix() );
+		p_pipeline.SetModelMatrix( p_node.m_pNode->GetDerivedTransformationMatrix() );
 		DoRenderSubmesh( p_technique, p_pipeline, p_node, p_eTopology );
 	}
 
@@ -1703,10 +1700,8 @@ namespace Castor3D
 		for ( auto l_it = p_itBegin; l_it != p_itEnd; ++l_it )
 		{
 			l_it->second->InitialiseShader( p_technique );
-			p_pipeline.PushMatrix();
-			p_pipeline.MultMatrix( l_it->second->GetParent()->GetDerivedTransformationMatrix() );
+			p_pipeline.SetModelMatrix( l_it->second->GetParent()->GetDerivedTransformationMatrix() );
 			l_it->second->Render();
-			p_pipeline.PopMatrix();
 		}
 	}
 
@@ -1828,7 +1823,7 @@ namespace Castor3D
 			{
 				if ( l_renderSystem->GetMainContext()->IsDeferredShadingSet() )
 				{
-					//m_pCameraPos->SetValue( m_pRenderSystem->GetPipeline()->GetMatrix( eMTXMODE_VIEW ) * l_position );
+					//m_pCameraPos->SetValue( m_renderSystem->GetPipeline()->GetMatrix( eMTXMODE_VIEW ) * l_position );
 					l_cameraPos->SetValue( l_position );
 				}
 				else

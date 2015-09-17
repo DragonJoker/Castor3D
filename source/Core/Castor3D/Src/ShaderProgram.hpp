@@ -598,7 +598,7 @@ namespace Castor3D
 		 */
 		inline RenderSystem * GetRenderSystem()const
 		{
-			return m_pRenderSystem;
+			return m_renderSystem;
 		}
 
 	protected:
@@ -637,7 +637,7 @@ namespace Castor3D
 		//!\~english Array of files path, sorted by shader model	\~french Tableau des chemins de fichiers, triés par modèle de shader
 		std::array< Castor::Path, eSHADER_MODEL_COUNT > m_arrayFiles;
 		//!\~english The RenderSystem instance	\~french L'instance du RenderSystem
-		RenderSystem * m_pRenderSystem;
+		RenderSystem * m_renderSystem;
 		//!\~english The frame variable buffers map, ordered by name	\~french La liste des buffers de variable de frame, triés par nom
 		FrameVariableBufferPtrStrMap m_frameVariableBuffersByName;
 		//!\~english The frame variable buffers map, ordered by shader type	\~french La liste des buffers de variable de frame, triés par type de shader

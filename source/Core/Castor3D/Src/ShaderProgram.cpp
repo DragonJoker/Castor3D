@@ -168,7 +168,7 @@ namespace Castor3D
 		: m_eStatus( ePROGRAM_STATUS_NOTLINKED )
 		, m_bEnabled( true )
 		, m_eLanguage( p_eLanguage )
-		, m_pRenderSystem( p_pRenderSystem )
+		, m_renderSystem( p_pRenderSystem )
 	{
 	}
 
@@ -210,7 +210,7 @@ namespace Castor3D
 		{
 			m_activeShaders.clear();
 
-			if ( m_pRenderSystem->UseShaders() )
+			if ( m_renderSystem->UseShaders() )
 			{
 				bool l_bResult = true;
 
@@ -296,7 +296,7 @@ namespace Castor3D
 	{
 		bool l_return = false;
 
-		if ( m_pRenderSystem->UseShaders() && m_eStatus != ePROGRAM_STATUS_ERROR )
+		if ( m_renderSystem->UseShaders() && m_eStatus != ePROGRAM_STATUS_ERROR )
 		{
 			if ( m_eStatus != ePROGRAM_STATUS_LINKED )
 			{
@@ -319,7 +319,7 @@ namespace Castor3D
 
 	void ShaderProgramBase::Bind( uint8_t CU_PARAM_UNUSED( p_byIndex ), uint8_t CU_PARAM_UNUSED( p_byCount ) )
 	{
-		if ( m_pRenderSystem->UseShaders() && m_bEnabled && m_eStatus == ePROGRAM_STATUS_LINKED )
+		if ( m_renderSystem->UseShaders() && m_bEnabled && m_eStatus == ePROGRAM_STATUS_LINKED )
 		{
 			for ( auto && l_shader : m_activeShaders )
 			{
@@ -337,7 +337,7 @@ namespace Castor3D
 
 	void ShaderProgramBase::Unbind()
 	{
-		if ( m_pRenderSystem->UseShaders() && m_bEnabled && m_eStatus == ePROGRAM_STATUS_LINKED )
+		if ( m_renderSystem->UseShaders() && m_bEnabled && m_eStatus == ePROGRAM_STATUS_LINKED )
 		{
 			uint32_t l_index = 0;
 
@@ -360,7 +360,7 @@ namespace Castor3D
 
 		for ( auto && l_shader : m_pShaders )
 		{
-			if ( l_shader && m_pRenderSystem->HasShaderType( eSHADER_TYPE( i++ ) ) )
+			if ( l_shader && m_renderSystem->HasShaderType( eSHADER_TYPE( i++ ) ) )
 			{
 				l_shader->SetFile( p_eModel, p_path );
 			}
@@ -406,7 +406,7 @@ namespace Castor3D
 			{
 				for ( int i = 0; i < eSHADER_MODEL_COUNT; ++i )
 				{
-					if ( m_pRenderSystem->CheckSupport( eSHADER_MODEL( i ) ) )
+					if ( m_renderSystem->CheckSupport( eSHADER_MODEL( i ) ) )
 					{
 						m_pShaders[p_eTarget]->SetFile( eSHADER_MODEL( i ), p_pathFile );
 					}
@@ -453,7 +453,7 @@ namespace Castor3D
 			{
 				for ( int i = 0; i < eSHADER_MODEL_COUNT; ++i )
 				{
-					if ( m_pRenderSystem->CheckSupport( eSHADER_MODEL( i ) ) )
+					if ( m_renderSystem->CheckSupport( eSHADER_MODEL( i ) ) )
 					{
 						m_pShaders[p_eTarget]->SetSource( eSHADER_MODEL( i ), p_strSource );
 					}

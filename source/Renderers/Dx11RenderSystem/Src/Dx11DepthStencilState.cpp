@@ -10,7 +10,7 @@ namespace Dx11Render
 {
 	DxDepthStencilState::DxDepthStencilState( DxRenderSystem * p_pRenderSystem )
 		: DepthStencilState()
-		, m_pRenderSystem( p_pRenderSystem )
+		, m_renderSystem( p_pRenderSystem )
 		, m_pDepthStencilState( NULL )
 	{
 		CreateCurrent();
@@ -45,8 +45,8 @@ namespace Dx11Render
 			l_depthStencilDesc.BackFace.StencilDepthFailOp = DirectX11::Get( m_stStencilBack.m_eDepthFailOp );
 			l_depthStencilDesc.BackFace.StencilPassOp = DirectX11::Get( m_stStencilBack.m_ePassOp );
 			l_depthStencilDesc.BackFace.StencilFunc = DirectX11::Get( m_stStencilBack.m_eFunc );
-			HRESULT l_hr = m_pRenderSystem->GetDevice()->CreateDepthStencilState( &l_depthStencilDesc, &m_pDepthStencilState );
-			dxTrack( m_pRenderSystem, m_pDepthStencilState, DepthStencilState );
+			HRESULT l_hr = m_renderSystem->GetDevice()->CreateDepthStencilState( &l_depthStencilDesc, &m_pDepthStencilState );
+			dxTrack( m_renderSystem, m_pDepthStencilState, DepthStencilState );
 			l_return = dxCheckError( l_hr, "CreateDepthStencilState" );
 			m_bChanged = false;
 		}
@@ -56,7 +56,7 @@ namespace Dx11Render
 
 	void DxDepthStencilState::Cleanup()
 	{
-		ReleaseTracked( m_pRenderSystem, m_pDepthStencilState );
+		ReleaseTracked( m_renderSystem, m_pDepthStencilState );
 	}
 
 	bool DxDepthStencilState::Apply()
@@ -71,7 +71,7 @@ namespace Dx11Render
 
 		if ( l_return && m_pDepthStencilState )
 		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 
 			if ( l_pDeviceContext )
 			{
@@ -84,6 +84,6 @@ namespace Dx11Render
 
 	DepthStencilStateSPtr DxDepthStencilState::DoCreateCurrent()
 	{
-		return std::make_unique< DxDepthStencilState >( m_pRenderSystem );
+		return std::make_unique< DxDepthStencilState >( m_renderSystem );
 	}
 }

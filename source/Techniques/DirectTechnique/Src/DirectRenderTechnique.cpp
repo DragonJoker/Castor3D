@@ -222,20 +222,20 @@ namespace Direct
 
 	String RenderTechnique::DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
-		if ( !m_pRenderSystem )
+		if ( !m_renderSystem )
 		{
 			CASTOR_EXCEPTION( "No renderer selected" );
 		}
 
 #if C3D_HAS_GL_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
+		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
 			return DoGetGlVertexShaderSource( p_uiProgramFlags );
 		}
 #endif
 
 #if C3D_HAS_D3D11_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
+		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
 		{
 			return DoGetD3D11VertexShaderSource( p_uiProgramFlags );
 		}
@@ -246,20 +246,20 @@ namespace Direct
 
 	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_uiFlags )const
 	{
-		if ( !m_pRenderSystem )
+		if ( !m_renderSystem )
 		{
 			CASTOR_EXCEPTION( "No renderer selected" );
 		}
 
 #if C3D_HAS_GL_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
+		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
 			return DoGetGlPixelShaderSource( p_uiFlags );
 		}
 #endif
 
 #if C3D_HAS_D3D11_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
+		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
 		{
 			return DoGetD3D11PixelShaderSource( p_uiFlags );
 		}
@@ -273,7 +273,7 @@ namespace Direct
 	{
 		using namespace GLSL;
 
-		GlslWriter l_writer( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl(), eSHADER_TYPE_VERTEX );
+		GlslWriter l_writer( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl(), eSHADER_TYPE_VERTEX );
 		l_writer << GLSL::Version() << Endl();
 		// Vertex inputs
 		ATTRIBUTE( l_writer, Vec4, vertex );
@@ -361,7 +361,7 @@ namespace Direct
 	{
 		using namespace GlRender::GLSL;
 
-		GlslWriter l_writer( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl(), eSHADER_TYPE_PIXEL );
+		GlslWriter l_writer( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl(), eSHADER_TYPE_PIXEL );
 		l_writer << GLSL::Version() << Endl();
 
 		UBO_MATRIX( l_writer );
@@ -539,7 +539,7 @@ namespace Direct
 	String RenderTechnique::DoGetD3D11VertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
 		String l_strReturn;
-		DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( m_pRenderSystem );
+		DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( m_renderSystem );
 		std::unique_ptr< UniformsBase > l_pUniforms = UniformsBase::Get( *l_renderSystem );
 		std::unique_ptr< InOutsBase > l_pInputs = InOutsBase::Get( *l_renderSystem );
 
@@ -574,7 +574,7 @@ namespace Direct
 	String RenderTechnique::DoGetD3D11PixelShaderSource( uint32_t p_uiFlags )const
 	{
 		String l_strReturn;
-		DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( m_pRenderSystem );
+		DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( m_renderSystem );
 		std::unique_ptr< UniformsBase > l_pUniforms = UniformsBase::Get( *l_renderSystem );
 		std::unique_ptr< InOutsBase > l_pInputs = InOutsBase::Get( *l_renderSystem );
 

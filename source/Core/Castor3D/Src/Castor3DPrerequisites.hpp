@@ -1097,6 +1097,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( DepthStencilState );
 	DECLARE_SMART_PTR( RasteriserState );
 	DECLARE_SMART_PTR( BlendState );
+	DECLARE_SMART_PTR( IPipelineImpl );
 
 	DECLARE_COLLECTION( DepthStencilState, Castor::String, DepthStencilState );
 	DECLARE_COLLECTION( RasteriserState, Castor::String, RasteriserState );

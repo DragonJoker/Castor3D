@@ -22,7 +22,7 @@ namespace Dx11Render
 
 	void DxVertexShader::DoBind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->VSSetShader( m_pVertexShader, NULL, 0 );
 		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_VERTEX );
 
@@ -45,7 +45,7 @@ namespace Dx11Render
 
 	void DxVertexShader::DoUnbind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_VERTEX );
 
 		if ( !l_ubos.empty() )
@@ -64,12 +64,12 @@ namespace Dx11Render
 	{
 		if ( m_pCompiled )
 		{
-			ID3D11Device * l_pDevice = m_pRenderSystem->GetDevice();
+			ID3D11Device * l_pDevice = m_renderSystem->GetDevice();
 
 			if ( l_pDevice )
 			{
 				HRESULT l_hr = l_pDevice->CreateVertexShader( reinterpret_cast< DWORD * >( m_pCompiled->GetBufferPointer() ), m_pCompiled->GetBufferSize(), NULL, &m_pVertexShader );
-				dxTrack( m_pRenderSystem, m_pVertexShader, VSShader );
+				dxTrack( m_renderSystem, m_pVertexShader, VSShader );
 
 				if ( l_hr == S_OK )
 				{
@@ -81,6 +81,6 @@ namespace Dx11Render
 
 	void DxVertexShader::Detach()
 	{
-		ReleaseTracked( m_pRenderSystem, m_pVertexShader );
+		ReleaseTracked( m_renderSystem, m_pVertexShader );
 	}
 }

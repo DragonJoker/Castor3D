@@ -13,7 +13,7 @@ namespace GlRender
 		,	m_ePackMode( p_ePackMode )
 		,	m_eAccessType( p_eType )
 		,	m_eAccessNature( p_eNature )
-		,	m_pRenderSystem( p_pRenderSystem )
+		,	m_renderSystem( p_pRenderSystem )
 	{
 	}
 

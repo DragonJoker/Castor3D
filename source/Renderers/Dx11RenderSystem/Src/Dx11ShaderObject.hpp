@@ -77,7 +77,7 @@ namespace Dx11Render
 		Castor::String m_strProfile;
 		HandleStrMap m_mapParamsByName;
 		ID3DBlob * m_pCompiled;
-		DxRenderSystem * m_pRenderSystem;
+		DxRenderSystem * m_renderSystem;
 	};
 }
 

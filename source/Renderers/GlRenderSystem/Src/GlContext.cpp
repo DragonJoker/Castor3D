@@ -49,7 +49,7 @@ namespace GlRender
 	bool GlContext::DoInitialise()
 	{
 		using namespace GLSL;
-		m_pGlRenderSystem = static_cast< GlRenderSystem * >( m_pRenderSystem );
+		m_pGlRenderSystem = static_cast< GlRenderSystem * >( m_renderSystem );
 		m_bInitialised = m_pImplementation->Initialise( m_pWindow );
 
 		if ( m_bInitialised )

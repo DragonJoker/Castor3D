@@ -13,7 +13,7 @@ namespace Dx11Render
 		: RenderBufferAttachment( p_pRenderBuffer )
 		, m_dxRenderBuffer( p_pRenderBuffer->GetDxRenderBuffer() )
 		, m_dwAttachment( 0xFFFFFFFF )
-		, m_pRenderSystem( p_pRenderSystem )
+		, m_renderSystem( p_pRenderSystem )
 	{
 	}
 
@@ -21,7 +21,7 @@ namespace Dx11Render
 		: RenderBufferAttachment( p_pRenderBuffer )
 		, m_dxRenderBuffer( p_pRenderBuffer->GetDxRenderBuffer() )
 		, m_dwAttachment( 0xFFFFFFFF )
-		, m_pRenderSystem( p_pRenderSystem )
+		, m_renderSystem( p_pRenderSystem )
 	{
 	}
 
@@ -54,7 +54,7 @@ namespace Dx11Render
 			l_box.right = l_rcSrc.right;
 			l_box.top = l_rcSrc.top;
 			l_box.bottom = l_rcSrc.bottom;
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 			l_pDeviceContext->CopySubresourceRegion( l_pDstSurface, 0, l_rcDst.left, l_rcDst.top, 0, l_pSrcSurface, 0, &l_box );
 			l_pDstSurface->Release();
 		}

@@ -127,7 +127,7 @@ namespace Castor3D
 		, m_pScene()
 		, m_factory( p_pEngine->GetOverlayFactory() )
 		, m_pEngine( p_pEngine )
-		, m_pRenderSystem( p_pEngine->GetRenderSystem() )
+		, m_renderSystem( p_pEngine->GetRenderSystem() )
 		, m_pOverlayCategory( p_pEngine->GetOverlayFactory().Create( p_eType ) )
 	{
 		m_pOverlayCategory->SetOverlay( this );
@@ -138,7 +138,7 @@ namespace Castor3D
 		, m_pParent( p_pParent )
 		, m_pScene( p_pScene )
 		, m_factory( p_pEngine->GetOverlayFactory() )
-		, m_pRenderSystem( p_pEngine->GetRenderSystem() )
+		, m_renderSystem( p_pEngine->GetRenderSystem() )
 		, m_pEngine( p_pEngine )
 		, m_pOverlayCategory( p_pEngine->GetOverlayFactory().Create( p_eType ) )
 	{

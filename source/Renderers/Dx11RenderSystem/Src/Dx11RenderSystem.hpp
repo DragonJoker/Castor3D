@@ -73,6 +73,11 @@ namespace Dx11Render
 			return true;
 		}
 
+		virtual Castor3D::IPipelineImplSPtr GetPipelineImpl()
+		{
+			return m_pipelineImpl;
+		}
+
 		inline ID3D11Device * GetDevice()
 		{
 			return m_pDevice;
@@ -91,6 +96,7 @@ namespace Dx11Render
 		ID3D11Device * m_pDevice;
 		D3D_FEATURE_LEVEL m_featureLevel;
 		DXGI_ADAPTER_DESC m_adapterDesc;
+		std::shared_ptr< DxPipelineImpl > m_pipelineImpl;
 
 #if !defined( NDEBUG )
 

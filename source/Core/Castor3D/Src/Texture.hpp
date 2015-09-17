@@ -406,7 +406,7 @@ namespace Castor3D
 		//!\~english The pixel buffer dimensions	\~french Les dimensions du buffer de pixels
 		Castor::Size m_size;
 		//!\~english The render system	\~french Le render system
-		RenderSystem * m_pRenderSystem;
+		RenderSystem * m_renderSystem;
 	};
 	/**
 	 *\~english

@@ -41,7 +41,7 @@ namespace GlRender
 		Castor3D::eBUFFER_ACCESS_NATURE m_eAccessNature;
 		uint8_t	* m_pPixels;
 		uint32_t m_uiPixelsSize;
-		GlRenderSystem * m_pRenderSystem;
+		GlRenderSystem * m_renderSystem;
 	};
 }
 

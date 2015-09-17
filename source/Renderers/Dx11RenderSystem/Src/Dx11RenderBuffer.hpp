@@ -49,7 +49,7 @@ namespace Dx11Render
 		Castor::Size m_size;
 		ID3D11View * m_pSurface;
 		ID3D11View * m_pOldSurface;
-		DxRenderSystem * m_pRenderSystem;
+		DxRenderSystem * m_renderSystem;
 		DXGI_FORMAT m_eFormat;
 		Castor3D::eBUFFER_COMPONENT m_eComponent;
 		Castor3D::RenderBuffer & m_renderBuffer;

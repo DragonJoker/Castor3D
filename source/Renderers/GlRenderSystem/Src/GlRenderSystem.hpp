@@ -72,6 +72,11 @@ namespace GlRender
 			return true;
 		}
 
+		virtual Castor3D::IPipelineImplSPtr GetPipelineImpl()
+		{
+			return m_pipelineImpl;
+		}
+
 		inline bool UseVertexBufferObjects()
 		{
 			return m_useVertexBufferObjects;
@@ -108,6 +113,7 @@ namespace GlRender
 		virtual void DoCleanup();
 
 	protected:
+		std::shared_ptr< GlPipelineImpl > m_pipelineImpl;
 		bool m_useVertexBufferObjects;
 		bool m_extensionsInit;
 		int m_iOpenGlMajor;

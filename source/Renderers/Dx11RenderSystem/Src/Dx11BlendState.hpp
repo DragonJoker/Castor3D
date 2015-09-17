@@ -51,7 +51,7 @@ namespace Dx11Render
 		virtual Castor3D::BlendStateSPtr DoCreateCurrent();
 
 	private:
-		DxRenderSystem * m_pRenderSystem;
+		DxRenderSystem * m_renderSystem;
 		ID3D11BlendState * m_pBlendState;
 	};
 }

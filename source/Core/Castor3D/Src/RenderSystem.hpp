@@ -118,30 +118,6 @@ namespace Castor3D
 		ShaderProgramBaseSPtr CreateShaderProgram( eSHADER_LANGUAGE p_eLanguage );
 		/**
 		 *\~english
-		 *\brief		Creates a IPipelineImpl, dependant of a shader language
-		 *\param[in]	p_pPipeline	The parent pipeline
-		 *\param[in]	p_eLanguage	The shader language
-		 *\return		The create IPipelineImpl, NULL if language is unsupported
-		 *\~french
-		 *\brief		Crée un IPipelineImpl, dépendant d'un langage de shader
-		 *\param[in]	p_pPipeline	Le pipeline parent
-		 *\param[in]	p_eLanguage	Le langage de shader
-		 *\return		Le IPipelineImpl créé, NULL si le langage n'est pas supporté
-		 */
-		IPipelineImpl * CreatePipeline( Pipeline * p_pPipeline, eSHADER_LANGUAGE p_eLanguage );
-		/**
-		 *\~english
-		 *\brief		Destroys a language specific IPipelineImpl
-		 *\param[in]	p_eLanguage	The shader language
-		 *\param[in]	p_pPipeline	The IPipelineImpl
-		 *\~french
-		 *\brief		Détruit un IPipelineImpl spécifique à un langage
-		 *\param[in]	p_eLanguage	Le langage de shader
-		 *\param[in]	p_pPipeline	Le IPipelineImpl
-		 */
-		void DestroyPipeline( eSHADER_LANGUAGE p_eLanguage, IPipelineImpl * p_pPipeline );
-		/**
-		 *\~english
 		 *\brief		Renders the scene ambient lighting
 		 *\param[in]	p_clColour			The light colour
 		 *\param[in]	p_variableBuffer	The variable buffer that receives the ambient light
@@ -427,6 +403,13 @@ namespace Castor3D
 		virtual std::shared_ptr< GpuBuffer< uint8_t > > CreateTextureBuffer( CpuBuffer< uint8_t > * p_pBuffer ) = 0;
 		/**
 		 *\~english
+		 *\return		A pipeline implementation, depending on loaded API
+		 *\~french
+		 *\return		Une implémentation de pipeline, en fonction de l'API chargée.
+		 */
+		virtual IPipelineImplSPtr GetPipelineImpl() = 0;
+		/**
+		 *\~english
 		 *\brief		Tells if multi-texturing is available
 		 *\~french
 		 *\brief		Dit si le multi-texturing est disponible
@@ -513,9 +496,19 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Récupère le pipeline
 		 */
-		inline Pipeline * GetPipeline()const
+		inline Pipeline const & GetPipeline()const
 		{
-			return m_pPipeline;
+			return *m_pipeline;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the pipeline
+		 *\~french
+		 *\brief		Récupère le pipeline
+		 */
+		inline Pipeline & GetPipeline()
+		{
+			return *m_pipeline;
 		}
 		/**
 		 *\~english
@@ -668,7 +661,7 @@ namespace Castor3D
 		//!\~english The core engine	\~french Le moteur
 		EngineRPtr m_pEngine;
 		//!\~english The matrix pipeline	\~french Le pipeline contenant les matrices
-		Pipeline * m_pPipeline;
+		std::unique_ptr< Pipeline > m_pipeline;
 		//!\~english Scene stack	\~french Pile des scènes
 		std::stack< SceneRPtr > m_stackScenes;
 		//!\~english The current loaded renderer api type	\~french Le type de l'api de rendu actuellement chargée

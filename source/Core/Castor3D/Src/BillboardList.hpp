@@ -353,7 +353,7 @@ namespace Castor3D
 
 	protected:
 		//!\~english  The RenderSystem	\~french La RenderSystem
-		RenderSystem * m_pRenderSystem;
+		RenderSystem * m_renderSystem;
 		//!\~english The positions list	\~french La liste des positions
 		Castor::Point3rArray m_arrayPositions;
 		//!\~english The Vertex buffer's description	\~french La description du tampon de sommets

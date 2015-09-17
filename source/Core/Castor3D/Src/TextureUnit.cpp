@@ -536,7 +536,7 @@ namespace Castor3D
 	{
 		if ( m_pTexture && m_pTexture->IsInitialised() )
 		{
-			Pipeline * l_pPipeline = GetEngine()->GetRenderSystem()->GetPipeline();
+			Pipeline & l_pipeline = GetEngine()->GetRenderSystem()->GetPipeline();
 			m_pTexture->Bind();
 
 			if ( m_bChanged && m_bAutoMipmaps || m_pTexture->GetType() == eTEXTURE_TYPE_DYNAMIC )
@@ -556,10 +556,7 @@ namespace Castor3D
 				m_bChanged = false;
 			}
 
-			m_ePrevMtxMode = l_pPipeline->MatrixMode( eMTXMODE( eMTXMODE_TEXTURE0 + GetIndex() ) );
-			l_pPipeline->LoadIdentity();
-			l_pPipeline->MultMatrix( m_mtxTransformations );
-			GetEngine()->GetRenderSystem()->GetPipeline()->MatrixMode( m_ePrevMtxMode );
+			l_pipeline.SetTextureMatrix( m_pTexture->GetIndex(), m_mtxTransformations );
 		}
 	}
 

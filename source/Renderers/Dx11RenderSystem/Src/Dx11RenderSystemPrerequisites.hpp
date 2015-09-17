@@ -176,7 +176,7 @@ namespace Dx11Render
 	class DxShaderProgram;
 	class DxFrameVariableBase;
 	class DxFrameVariableBuffer;
-	class DxPipeline;
+	class DxPipelineImpl;
 	class DxContext;
 	class DxRenderBuffer;
 	class DxColourRenderBuffer;

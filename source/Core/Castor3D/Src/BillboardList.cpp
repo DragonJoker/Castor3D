@@ -150,7 +150,7 @@ namespace Castor3D
 
 	BillboardList::BillboardList( SceneSPtr p_pScene, RenderSystem * p_pRenderSystem )
 		:	MovableObject( p_pScene, eMOVABLE_TYPE_BILLBOARD )
-		,	m_pRenderSystem( p_pRenderSystem )
+		,	m_renderSystem( p_pRenderSystem )
 		,	m_bNeedUpdate( false )
 	{
 		BufferElementDeclaration l_vertexDeclarationElements[] = { BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS ) };
@@ -164,7 +164,7 @@ namespace Castor3D
 	bool BillboardList::Initialise()
 	{
 		VertexBufferUPtr l_pVtxBuffer;
-		l_pVtxBuffer = std::make_unique< VertexBuffer >( m_pRenderSystem, &( *m_pDeclaration )[0], m_pDeclaration->Size() );
+		l_pVtxBuffer = std::make_unique< VertexBuffer >( m_renderSystem, &( *m_pDeclaration )[0], m_pDeclaration->Size() );
 		uint32_t l_uiStride = m_pDeclaration->GetStride();
 		l_pVtxBuffer->Resize( uint32_t( m_arrayPositions.size() * l_uiStride ) );
 		uint8_t * l_pBuffer = l_pVtxBuffer->data();
@@ -175,7 +175,7 @@ namespace Castor3D
 			l_pBuffer += l_uiStride;
 		}
 
-		m_pGeometryBuffers = m_pRenderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
+		m_pGeometryBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
 		return true;
 	}
 
@@ -247,7 +247,7 @@ namespace Castor3D
 	{
 		if ( !m_bNeedUpdate )
 		{
-			Pipeline * l_pPipeline = m_pRenderSystem->GetPipeline();
+			Pipeline & l_pipeline = m_renderSystem->GetPipeline();
 			ShaderProgramBaseSPtr l_pProgram = m_wpProgram.lock();
 			MaterialSPtr l_pMaterial = m_wpMaterial.lock();
 			VertexBuffer & l_vtxBuffer = m_pGeometryBuffers->GetVertexBuffer();
@@ -265,7 +265,7 @@ namespace Castor3D
 
 					if ( l_matrixBuffer )
 					{
-						l_pPipeline->ApplyMatrices( *l_matrixBuffer, 0xFFFFFFFFFFFFFFFF );
+						l_pipeline.ApplyMatrices( *l_matrixBuffer, 0xFFFFFFFFFFFFFFFF );
 					}
 
 					l_pass->Render( l_index++, l_count );

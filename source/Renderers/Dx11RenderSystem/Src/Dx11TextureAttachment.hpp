@@ -45,7 +45,7 @@ namespace Dx11Render
 		DWORD m_dwAttachment;
 		DxFrameBufferWPtr m_pFrameBuffer;
 		ID3D11RenderTargetView * m_pOldSurface;
-		DxRenderSystem * m_pRenderSystem;
+		DxRenderSystem * m_renderSystem;
 		DxDynamicTextureWPtr m_pDxTexture;
 	};
 }

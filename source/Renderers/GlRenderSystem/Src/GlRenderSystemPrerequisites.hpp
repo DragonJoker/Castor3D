@@ -129,9 +129,7 @@ namespace GlRender
 	class GlBlendState;
 	class GlDepthStencilState;
 	class GlRasteriserState;
-	class GlPipelineImplNoShader;
-	class GlPipelineImplGlsl;
-	class GlPipeline;
+	class GlPipelineImpl;
 	class GlContext;
 	class GlContextImpl;
 	class GlRenderSystem;

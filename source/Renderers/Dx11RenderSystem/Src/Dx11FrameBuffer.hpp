@@ -88,7 +88,7 @@ namespace Dx11Render
 		void DoCleanupOld();
 
 	private:
-		DxRenderSystem * m_pRenderSystem;
+		DxRenderSystem * m_renderSystem;
 		D3D11RenderTargetViewArray m_arrayOldRenderTargets;
 		ID3D11DepthStencilView * m_pOldDepthStencilView;
 	};

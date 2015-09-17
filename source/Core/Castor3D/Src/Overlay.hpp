@@ -704,7 +704,7 @@ namespace Castor3D
 		//!\~english The engine	\~french Le moteur
 		Engine * m_pEngine;
 		//!\~english The render system	\~french Le système de rendu
-		RenderSystem * m_pRenderSystem;
+		RenderSystem * m_renderSystem;
 	};
 }
 

@@ -233,6 +233,8 @@ namespace Castor3D
 					m_planes[i].Set( m_view * m_pViewport->GetFrustumPlane( eFRUSTUM_PLANE( i ) ).GetNormal(), l_position );
 				}
 			}
+
+			m_pEngine->GetRenderSystem()->GetPipeline().SetViewMatrix( m_view );
 		}
 
 		m_pEngine->GetRenderSystem()->SetCurrentCamera( this );

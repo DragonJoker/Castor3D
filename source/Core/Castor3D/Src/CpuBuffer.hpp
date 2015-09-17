@@ -59,7 +59,7 @@ namespace Castor3D
 			,	m_bToDelete( false )
 			,	m_pBuffer( )
 			,	m_arrayData( )
-			,	m_pRenderSystem( p_pRenderSystem )
+			,	m_renderSystem( p_pRenderSystem )
 			,	m_uiSavedSize( 0 )
 
 		{
@@ -424,7 +424,7 @@ namespace Castor3D
 		 */
 		virtual RenderSystem * GetRenderSystem()const
 		{
-			return m_pRenderSystem;
+			return m_renderSystem;
 		}
 		/**
 		 *\~english
@@ -482,7 +482,7 @@ namespace Castor3D
 		//!\~english The buffer data	\~french Les données du tampon
 		TArray m_arrayData;
 		//!\~english The RenderSystem, used to assign a GPU buffer	\~french Le RenderSystem, utilisée pour affecter un tampon GPU
-		RenderSystem * m_pRenderSystem;
+		RenderSystem * m_renderSystem;
 		//!<\~english The saved buffer size (to still have a size after clear)	\~french La taille sauvegardée, afin de toujours l'avoir après un clear
 		uint32_t m_uiSavedSize;
 	};

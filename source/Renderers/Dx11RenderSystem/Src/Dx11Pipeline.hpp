@@ -24,50 +24,17 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Dx11Render
 {
-	class DxPipelineImplHlsl
-		:	public Castor3D::IPipelineImpl
+	class DxPipelineImpl
+		: public Castor3D::IPipelineImpl
 	{
 	public:
-		DxPipelineImplHlsl( DxPipeline * p_pPipeline );
-		virtual ~DxPipelineImplHlsl();
+		DxPipelineImpl( Castor3D::Pipeline & p_pipeline );
+		virtual ~DxPipelineImpl();
 
-		virtual Castor3D::eMTXMODE MatrixMode( Castor3D::eMTXMODE p_eMode );
-		virtual bool LoadIdentity();
-		virtual bool PushMatrix();
-		virtual bool PopMatrix();
-		virtual bool MultMatrix( Castor::Matrix4x4r const & p_matrix );
-		virtual bool MultMatrix( real const * p_matrix );
-		virtual bool Perspective( Castor::Angle const & p_aFOVY, real p_rRatio, real p_rNear, real p_rFar );
-		virtual bool Frustum( real p_rLeft, real p_rRight, real p_rBottom, real p_rTop, real p_rNear, real p_rFar );
-		virtual bool Ortho( real p_rLeft, real p_rRight, real p_rBottom, real p_rTop, real p_rNear, real p_rFar );
 		virtual void ApplyViewport( int p_iWindowWidth, int p_iWindowHeight );
 
 	private:
-		void DoApplyMatrix();
-
-	private:
-		DxPipeline * m_pDxPipeline;
 		D3D11_VIEWPORT m_viewport;
-	};
-
-	class DxPipeline
-		:	public Castor3D::Pipeline
-	{
-	protected:
-		DxPipelineImplHlsl * m_pPipelineImplHlsl;
-		DxRenderSystem * m_pDxRenderSystem;
-
-	public:
-		DxPipeline( DxRenderSystem * p_pRenderSystem );
-		~DxPipeline();
-
-		virtual void Initialise();
-		virtual void UpdateFunctions( Castor3D::ShaderProgramBase * p_pProgram );
-
-		DxRenderSystem * GetDxRenderSystem()const
-		{
-			return m_pDxRenderSystem;
-		}
 	};
 }
 

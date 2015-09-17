@@ -41,11 +41,11 @@ ShaderProgramBaseSPtr ShaderManager::GetNewProgram( eSHADER_LANGUAGE p_eLanguage
 
 	if ( p_eLanguage != eSHADER_LANGUAGE_AUTO )
 	{
-		l_pReturn = m_pRenderSystem->CreateShaderProgram( p_eLanguage );
+		l_pReturn = m_renderSystem->CreateShaderProgram( p_eLanguage );
 	}
 	else
 	{
-		l_pReturn = m_pRenderSystem->CreateShaderProgram();
+		l_pReturn = m_renderSystem->CreateShaderProgram();
 	}
 
 	if ( l_pReturn )
@@ -91,7 +91,7 @@ ShaderProgramBaseSPtr ShaderManager::GetAutomaticProgram( RenderTechniqueBase co
 
 FrameVariableBufferSPtr ShaderManager::CreateMatrixBuffer( ShaderProgramBase & p_shader, uint32_t p_shaderMask )
 {
-	auto l_pMatrixBuffer = m_pRenderSystem->CreateFrameVariableBuffer( ShaderProgramBase::BufferMatrix );
+	auto l_pMatrixBuffer = m_renderSystem->CreateFrameVariableBuffer( ShaderProgramBase::BufferMatrix );
 	l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxProjection, 1 );
 	l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxModel, 1 );
 	l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxView, 1 );
@@ -99,10 +99,12 @@ FrameVariableBufferSPtr ShaderManager::CreateMatrixBuffer( ShaderProgramBase & p
 	l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxProjectionView, 1 );
 	l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxProjectionModelView, 1 );
 	l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxNormal, 1 );
-	l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxTexture0, 1 );
-	l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxTexture1, 1 );
-	l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxTexture2, 1 );
-	l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxTexture3, 1 );
+
+	for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )
+	{
+		l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxTexture[i], 1 );
+	}
+
 	l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxBones, 100 );
 	p_shader.AddFrameVariableBuffer( l_pMatrixBuffer, p_shaderMask );
 	return l_pMatrixBuffer;
@@ -110,7 +112,7 @@ FrameVariableBufferSPtr ShaderManager::CreateMatrixBuffer( ShaderProgramBase & p
 
 FrameVariableBufferSPtr ShaderManager::CreateSceneBuffer( ShaderProgramBase & p_shader, uint32_t p_shaderMask )
 {
-	auto l_pSceneBuffer = m_pRenderSystem->CreateFrameVariableBuffer( ShaderProgramBase::BufferScene );
+	auto l_pSceneBuffer = m_renderSystem->CreateFrameVariableBuffer( ShaderProgramBase::BufferScene );
 	l_pSceneBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_INT, ShaderProgramBase::LightsCount, 1 );
 	l_pSceneBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_VEC4F, ShaderProgramBase::AmbientLight, 1 );
 	l_pSceneBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_VEC3R, ShaderProgramBase::CameraPos, 1 );
@@ -120,7 +122,7 @@ FrameVariableBufferSPtr ShaderManager::CreateSceneBuffer( ShaderProgramBase & p_
 
 FrameVariableBufferSPtr ShaderManager::CreatePassBuffer( ShaderProgramBase & p_shader, uint32_t p_shaderMask )
 {
-	auto l_pPassBuffer = m_pRenderSystem->CreateFrameVariableBuffer( ShaderProgramBase::BufferPass );
+	auto l_pPassBuffer = m_renderSystem->CreateFrameVariableBuffer( ShaderProgramBase::BufferPass );
 	l_pPassBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_VEC4F, ShaderProgramBase::MatAmbient, 1 );
 	l_pPassBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_VEC4F, ShaderProgramBase::MatDiffuse, 1 );
 	l_pPassBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_VEC4F, ShaderProgramBase::MatEmissive, 1 );

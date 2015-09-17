@@ -18,12 +18,12 @@ namespace Dx11Render
 
 	DxHullShader::~DxHullShader()
 	{
-		ReleaseTracked( m_pRenderSystem, m_pHullShader );
+		ReleaseTracked( m_renderSystem, m_pHullShader );
 	}
 
 	void DxHullShader::DoBind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->HSSetShader( m_pHullShader, NULL, 0 );
 		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_HULL );
 
@@ -46,7 +46,7 @@ namespace Dx11Render
 
 	void DxHullShader::DoUnbind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_HULL );
 
 		if ( !l_ubos.empty() )
@@ -65,12 +65,12 @@ namespace Dx11Render
 	{
 		if ( m_pCompiled )
 		{
-			ID3D11Device * l_pDevice = m_pRenderSystem->GetDevice();
+			ID3D11Device * l_pDevice = m_renderSystem->GetDevice();
 
 			if ( l_pDevice )
 			{
 				HRESULT l_hr = l_pDevice->CreateHullShader( reinterpret_cast< DWORD * >( m_pCompiled->GetBufferPointer() ), m_pCompiled->GetBufferSize(), NULL, &m_pHullShader );
-				dxTrack( m_pRenderSystem, m_pHullShader, HSShader );
+				dxTrack( m_renderSystem, m_pHullShader, HSShader );
 
 				if ( l_hr == S_OK )
 				{
@@ -82,6 +82,6 @@ namespace Dx11Render
 
 	void DxHullShader::Detach()
 	{
-		ReleaseTracked( m_pRenderSystem, m_pHullShader );
+		ReleaseTracked( m_renderSystem, m_pHullShader );
 	}
 }

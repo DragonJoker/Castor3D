@@ -78,7 +78,7 @@ namespace Dx11Render
 	{
 		if ( !m_bInitialised )
 		{
-			DxRenderSystem * l_pRenderSystem = static_cast< DxRenderSystem * >( m_pRenderSystem );
+			DxRenderSystem * l_pRenderSystem = static_cast< DxRenderSystem * >( m_renderSystem );
 			m_hWnd = m_pWindow->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd();
 			m_size = m_pWindow->GetSize();
 
@@ -114,7 +114,7 @@ namespace Dx11Render
 
 	void DxContext::DoSetCurrent()
 	{
-		static_cast< DxRenderSystem * >( m_pRenderSystem )->GetDevice()->GetImmediateContext( &m_pDeviceContext );
+		static_cast< DxRenderSystem * >( m_renderSystem )->GetDevice()->GetImmediateContext( &m_pDeviceContext );
 	}
 
 	void DxContext::DoEndCurrent()
@@ -195,7 +195,7 @@ namespace Dx11Render
 	void DxContext::DoInitVolatileResources()
 	{
 		DoSetCurrent();
-		DxRenderSystem * l_pRenderSystem = static_cast< DxRenderSystem * >( m_pRenderSystem );
+		DxRenderSystem * l_pRenderSystem = static_cast< DxRenderSystem * >( m_renderSystem );
 		DxContextSPtr l_pMainContext = std::static_pointer_cast< DxContext >( l_pRenderSystem->GetMainContext() );
 		IDXGIFactory * l_factory = NULL;
 		HRESULT l_hr = CreateDXGIFactory( __uuidof( IDXGIFactory ) , reinterpret_cast< void ** >( &l_factory ) );
@@ -274,9 +274,9 @@ namespace Dx11Render
 			m_pSwapChain->SetFullscreenState( false, NULL );
 		}
 
-		ReleaseTracked( m_pRenderSystem, m_pDepthStencilView );
-		ReleaseTracked( m_pRenderSystem, m_pRenderTargetView );
-		ReleaseTracked( m_pRenderSystem, m_pSwapChain );
+		ReleaseTracked( m_renderSystem, m_pDepthStencilView );
+		ReleaseTracked( m_renderSystem, m_pRenderTargetView );
+		ReleaseTracked( m_renderSystem, m_pSwapChain );
 	}
 
 	HRESULT DxContext::DoInitPresentParameters()

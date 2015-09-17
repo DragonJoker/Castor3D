@@ -29,7 +29,7 @@ ShaderProgramBaseSPtr GlOverlayRenderer::DoCreateProgram( uint32_t p_uiFlags )
 	using namespace GLSL;
 
 	// Shader program
-	ShaderManager & l_manager = m_pRenderSystem->GetEngine()->GetShaderManager();
+	ShaderManager & l_manager = m_renderSystem->GetEngine()->GetShaderManager();
 	ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
 	l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
 	l_manager.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );

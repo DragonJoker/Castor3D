@@ -336,7 +336,7 @@ namespace Deferred
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 		{
-			m_lightPassTextures[i] = m_pRenderSystem->CreateDynamicTexture();
+			m_lightPassTextures[i] = m_renderSystem->CreateDynamicTexture();
 			m_lightPassTextures[i]->SetRenderTarget( p_renderTarget.shared_from_this() );
 			m_lightPassTexAttachs[i] = m_pRenderTarget->CreateAttachment( m_lightPassTextures[i] );
 		}
@@ -380,7 +380,7 @@ namespace Deferred
 		};
 		m_pDeclaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
 
-		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( m_pRenderSystem, l_vertexDeclarationElements );
+		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( m_renderSystem, l_vertexDeclarationElements );
 
 		real l_pBuffer[] =
 		{
@@ -403,9 +403,9 @@ namespace Deferred
 			l_buffer += l_stride;
 		}
 
-		m_pGeometryBuffers = m_pRenderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
+		m_pGeometryBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
 
-		m_pViewport = std::make_shared< Viewport >( m_pRenderSystem->GetEngine(), Size( 10, 10 ), eVIEWPORT_TYPE_2D );
+		m_pViewport = std::make_shared< Viewport >( m_renderSystem->GetEngine(), Size( 10, 10 ), eVIEWPORT_TYPE_2D );
 		m_pViewport->SetLeft( real( 0.0 ) );
 		m_pViewport->SetRight( real( 1.0 ) );
 		m_pViewport->SetTop( real( 1.0 ) );
@@ -430,7 +430,7 @@ namespace Deferred
 
 	bool RenderTechnique::DoCreate()
 	{
-		m_pRenderSystem->GetMainContext()->SetDeferredShading( true );
+		m_renderSystem->GetMainContext()->SetDeferredShading( true );
 		bool l_bReturn = m_lightPassFrameBuffer->Create( 0 );
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT && l_bReturn; i++ )
@@ -458,7 +458,7 @@ namespace Deferred
 			{
 				eSHADER_MODEL l_eModel = eSHADER_MODEL( i );
 
-				if ( m_pRenderSystem->CheckSupport( l_eModel ) )
+				if ( m_renderSystem->CheckSupport( l_eModel ) )
 				{
 					m_lightPassShaderProgram->SetSource( eSHADER_TYPE_VERTEX,	l_eModel, DoGetLightPassVertexShaderSource( 0 ) );
 					m_lightPassShaderProgram->SetSource( eSHADER_TYPE_PIXEL,	l_eModel, DoGetLightPassPixelShaderSource( 0 ) );
@@ -568,8 +568,8 @@ namespace Deferred
 	{
 		Size const & l_size = m_pRenderTarget->GetSize();
 		Size l_halfSize( l_size.width() / 2, l_size.height() / 2 );
-		Pipeline * l_pPipeline = m_pRenderSystem->GetPipeline();
-		ContextRPtr l_pContext = m_pRenderSystem->GetCurrentContext();
+		Pipeline & l_pipeline = m_renderSystem->GetPipeline();
+		ContextRPtr l_pContext = m_renderSystem->GetCurrentContext();
 		m_lightPassFrameBuffer->Unbind();
 
 		if ( m_pViewport )
@@ -580,22 +580,18 @@ namespace Deferred
 			//m_pRenderTarget->GetDepthStencilState()->Apply();
 			m_pRenderTarget->GetRasteriserState()->Apply();
 			//m_pRenderTarget->GetRenderer()->BeginScene();
-			l_pContext->SetClearColour( m_pRenderSystem->GetTopScene()->GetBackgroundColour() );
+			l_pContext->SetClearColour( m_renderSystem->GetTopScene()->GetBackgroundColour() );
 			l_pContext->Clear( eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL );
 			m_pViewport->SetSize( m_size );
 			m_pViewport->Render();
 			l_pContext->CullFace( eFACE_BACK );
-			l_pPipeline->MatrixMode( eMTXMODE_MODEL );
-			l_pPipeline->LoadIdentity();
-			l_pPipeline->MatrixMode( eMTXMODE_VIEW );
-			l_pPipeline->LoadIdentity();
 
 			if ( m_pShaderCamera )
 			{
 				Point3r l_position = m_pRenderTarget->GetCamera()->GetParent()->GetDerivedPosition();
 				m_pShaderCamera->SetValue( l_position );
 				m_lightPassShaderProgram->Bind( 0, 1 );
-				l_pPipeline->ApplyMatrices( *m_lightPassMatrices.lock(), 0xFFFFFFFFFFFFFFFF );
+				l_pipeline.ApplyMatrices( *m_lightPassMatrices.lock(), 0xFFFFFFFFFFFFFFFF );
 
 #if DEBUG_BUFFERS
 
@@ -640,20 +636,20 @@ namespace Deferred
 
 	String RenderTechnique::DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
-		if ( !m_pRenderSystem )
+		if ( !m_renderSystem )
 		{
 			CASTOR_EXCEPTION( "No renderer selected" );
 		}
 
 #if C3D_HAS_GL_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
+		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
 			return DoGetGlVertexShaderSource( p_uiProgramFlags );
 		}
 #endif
 
 #if C3D_HAS_D3D11_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
+		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
 		{
 			return DoGetD3D11VertexShaderSource( p_uiProgramFlags );
 		}
@@ -664,20 +660,20 @@ namespace Deferred
 
 	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_uiFlags )const
 	{
-		if ( !m_pRenderSystem )
+		if ( !m_renderSystem )
 		{
 			CASTOR_EXCEPTION( "No renderer selected" );
 		}
 
 #if C3D_HAS_GL_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
+		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
 			return DoGetGlPixelShaderSource( p_uiFlags );
 		}
 #endif
 
 #if C3D_HAS_D3D11_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
+		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
 		{
 			return DoGetD3D11PixelShaderSource( p_uiFlags );
 		}
@@ -688,20 +684,20 @@ namespace Deferred
 
 	String RenderTechnique::DoGetLightPassVertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
-		if ( !m_pRenderSystem )
+		if ( !m_renderSystem )
 		{
 			CASTOR_EXCEPTION( "No renderer selected" );
 		}
 
 #if C3D_HAS_GL_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
+		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
 			return DoGetGlLightPassVertexShaderSource( p_uiProgramFlags );
 		}
 #endif
 
 #if C3D_HAS_D3D11_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
+		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
 		{
 			return DoGetD3D11LightPassVertexShaderSource( p_uiProgramFlags );
 		}
@@ -712,20 +708,20 @@ namespace Deferred
 
 	String RenderTechnique::DoGetLightPassPixelShaderSource( uint32_t p_uiFlags )const
 	{
-		if ( !m_pRenderSystem )
+		if ( !m_renderSystem )
 		{
 			CASTOR_EXCEPTION( "No renderer selected" );
 		}
 
 #if C3D_HAS_GL_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
+		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
 			return DoGetGlLightPassPixelShaderSource( p_uiFlags );
 		}
 #endif
 
 #if C3D_HAS_D3D11_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
+		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
 		{
 			return DoGetD3D11LightPassPixelShaderSource( p_uiFlags );
 		}
@@ -738,9 +734,9 @@ namespace Deferred
 	String RenderTechnique::DoGetGlVertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
 		String	l_strReturn;
-		GLSL::VariablesBase * l_pVariables = GLSL::VariablesBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		GLSL::ConstantsBase * l_pConstants = GLSL::ConstantsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::KeywordsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
+		GLSL::VariablesBase * l_pVariables = GLSL::VariablesBase::Get( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl() );
+		GLSL::ConstantsBase * l_pConstants = GLSL::ConstantsBase::Get( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl() );
+		std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::KeywordsBase::Get( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl() );
 
 		String l_strVersion = l_pKeywords->GetVersion();
 		String l_strAttribute0 = l_pKeywords->GetAttribute( 0 );
@@ -808,9 +804,9 @@ namespace Deferred
 	String RenderTechnique::DoGetGlPixelShaderSource( uint32_t p_uiFlags )const
 	{
 		String	l_strReturn;
-		GLSL::VariablesBase * l_pVariables = GLSL::VariablesBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		GLSL::ConstantsBase * l_pConstants = GLSL::ConstantsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::KeywordsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
+		GLSL::VariablesBase * l_pVariables = GLSL::VariablesBase::Get( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl() );
+		GLSL::ConstantsBase * l_pConstants = GLSL::ConstantsBase::Get( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl() );
+		std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::KeywordsBase::Get( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl() );
 
 		String l_strVersion = l_pKeywords->GetVersion();
 		String l_strIn = l_pKeywords->GetIn();
@@ -926,9 +922,9 @@ namespace Deferred
 	String RenderTechnique::DoGetGlLightPassVertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
 		String	l_strReturn;
-		GLSL::VariablesBase * l_pVariables = GLSL::VariablesBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		GLSL::ConstantsBase * l_pConstants = GLSL::ConstantsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::KeywordsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
+		GLSL::VariablesBase * l_pVariables = GLSL::VariablesBase::Get( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl() );
+		GLSL::ConstantsBase * l_pConstants = GLSL::ConstantsBase::Get( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl() );
+		std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::KeywordsBase::Get( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl() );
 
 		String l_strVersion = l_pKeywords->GetVersion();
 		String l_strAttribute0 = l_pKeywords->GetAttribute( 0 );
@@ -965,9 +961,9 @@ namespace Deferred
 	String RenderTechnique::DoGetGlLightPassPixelShaderSource( uint32_t p_uiFlags )const
 	{
 		String	l_strReturn;
-		GLSL::VariablesBase * l_pVariables = GLSL::VariablesBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		GLSL::ConstantsBase * l_pConstants = GLSL::ConstantsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::KeywordsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
+		GLSL::VariablesBase * l_pVariables = GLSL::VariablesBase::Get( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl() );
+		GLSL::ConstantsBase * l_pConstants = GLSL::ConstantsBase::Get( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl() );
+		std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::KeywordsBase::Get( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl() );
 
 		String l_strVersion = l_pKeywords->GetVersion();
 		String l_strIn = l_pKeywords->GetIn();
@@ -1007,7 +1003,7 @@ namespace Deferred
 	String RenderTechnique::DoGetD3D11PixelShaderSource( uint32_t p_uiFlags )const
 	{
 		String l_strReturn;
-		DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( m_pRenderSystem );
+		DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( m_renderSystem );
 		std::unique_ptr< UniformsBase > l_pUniforms = UniformsBase::Get( *l_renderSystem );
 		std::unique_ptr< InOutsBase > l_pInputs = InOutsBase::Get( *l_renderSystem );
 

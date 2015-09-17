@@ -21,7 +21,7 @@ namespace Castor3D
 {
 	Context::Context()
 		:	m_pWindow( NULL )
-		,	m_pRenderSystem( NULL )
+		,	m_renderSystem( NULL )
 		,	m_bInitialised( false )
 		,	m_bDeferredShadingSet( false )
 		,	m_bMultiSampling( false )
@@ -63,9 +63,9 @@ namespace Castor3D
 	bool Context::Initialise( RenderWindow * p_window )
 	{
 		m_pWindow = p_window;
-		m_pRenderSystem	= m_pWindow->GetEngine()->GetRenderSystem();
+		m_renderSystem	= m_pWindow->GetEngine()->GetRenderSystem();
 		m_bDeferredShadingSet = p_window->IsUsingDeferredRendering();
-		ShaderManager & l_manager = m_pRenderSystem->GetEngine()->GetShaderManager();
+		ShaderManager & l_manager = m_renderSystem->GetEngine()->GetShaderManager();
 		ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
 		m_pBtoBShaderProgram = l_program;
 		m_mapDiffuse = l_program->CreateFrameVariable( ShaderProgramBase::MapDiffuse, eSHADER_TYPE_PIXEL );
@@ -82,7 +82,7 @@ namespace Castor3D
 		m_pViewport->SetBottom( real( 0.0 ) );
 		m_pViewport->SetNear( real( 0.0 ) );
 		m_pViewport->SetFar( real( 1.0 ) );
-		m_pDsStateBackground = m_pRenderSystem->GetEngine()->CreateDepthStencilState( cuT( "ContextBackgroundDSState" ) );
+		m_pDsStateBackground = m_renderSystem->GetEngine()->CreateDepthStencilState( cuT( "ContextBackgroundDSState" ) );
 		m_pDsStateBackground->SetDepthTest( false );
 		m_pDsStateBackground->SetDepthMask( eWRITING_MASK_ZERO );
 		bool l_return = DoInitialise();
@@ -120,19 +120,19 @@ namespace Castor3D
 		m_bMultiSampling = false;
 		m_pBtoBShaderProgram.reset();
 		m_bDeferredShadingSet = false;
-		m_pRenderSystem = NULL;
+		m_renderSystem = NULL;
 		m_pWindow = NULL;
 	}
 
 	void Context::SetCurrent()
 	{
 		DoSetCurrent();
-		m_pRenderSystem->SetCurrentContext( this );
+		m_renderSystem->SetCurrentContext( this );
 	}
 
 	void Context::EndCurrent()
 	{
-		m_pRenderSystem->SetCurrentContext( NULL );
+		m_renderSystem->SetCurrentContext( NULL );
 		DoEndCurrent();
 	}
 
@@ -184,9 +184,7 @@ namespace Castor3D
 
 			if ( l_matrices )
 			{
-				Matrix4x4rFrameVariableSPtr l_projection;
-				l_matrices->GetVariable( Pipeline::MtxProjection, l_projection );
-				l_projection->SetValue( m_pViewport->GetProjection() );
+				m_renderSystem->GetPipeline().ApplyProjection( *l_matrices );
 			}
 
 			l_pProgram->Bind( 0, 1 );

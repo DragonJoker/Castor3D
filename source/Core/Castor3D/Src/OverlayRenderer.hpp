@@ -233,7 +233,7 @@ namespace Castor3D
 		//!\~english The buffer elements declaration	\~french La déclaration des éléments du tampon
 		BufferDeclarationSPtr m_pDeclaration;
 		//!\~english The render system	\~french Le render system
-		RenderSystem * m_pRenderSystem;
+		RenderSystem * m_renderSystem;
 		//!\~english The current render target size	\~french Les dimensions de la cible du rendu courant
 		Castor::Size m_size;
 		//!\~english The shader programs used to render a panel (used for borders too)	\~french Les programmes de shader utilisés pour rendre un panneau (utilisé pour les bords aussi)

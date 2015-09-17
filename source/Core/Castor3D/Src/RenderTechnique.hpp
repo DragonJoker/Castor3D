@@ -273,7 +273,7 @@ namespace Castor3D
 		//!\~english The	engine	\~french Le moteur
 		Engine * m_pEngine;
 		//!\~english The	render system	\~french Le render system
-		RenderSystem * m_pRenderSystem;
+		RenderSystem * m_renderSystem;
 		//!\~english The	overlays blend state	\~french L'état de mélange pour les overlays
 		BlendStateWPtr m_wp2DBlendState;
 		//!\~english The	overlays depth stencil state	\~french L'état de profoundeur et stenxil pour les overlays

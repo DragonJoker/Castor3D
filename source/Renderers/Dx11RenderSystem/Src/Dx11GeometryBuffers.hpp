@@ -39,7 +39,7 @@ namespace Dx11Render
 		virtual void DoCleanup();
 
 	private:
-		DxRenderSystem * m_pRenderSystem;
+		DxRenderSystem * m_renderSystem;
 	};
 }
 

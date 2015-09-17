@@ -218,14 +218,15 @@ namespace Castor3D
 
 		if ( l_context && m_pRenderer )
 		{
-			Pipeline * l_pipeline = l_prenderSystem->GetPipeline();
+			Pipeline & l_pipeline = l_prenderSystem->GetPipeline();
 			l_context->CullFace( eFACE_BACK );
-
-			l_pipeline->ApplyViewport( p_size.width(), p_size.height() );
+			
 			Matrix4x4r l_projection;
-			matrix::ortho( l_projection, real( 0 ), real( p_size.width() ), real( p_size.height() ), real( 0 ), real( 0 ), real( 1000 ) );
-			matrix::transform( l_projection, Point3r( 0, 0, 0 ), Point3r( 1, 1, 0 ), Quaternion::Identity() );
-			m_pRenderer->BeginRender( p_size, l_projection );
+			MtxUtils::ortho( l_projection, real( 0.0 ), real( p_size.width() ), real( p_size.height() ), real( 0.0 ), real( 0.0 ), real( 1000.0 ) );
+			MtxUtils::transform( l_projection, Point3r( 0, 0, 0 ), Point3r( 1, 1, 0 ), Quaternion::Identity() );
+			l_pipeline.SetProjectionMatrix( l_transform * l_projection );
+			l_pipeline.ApplyViewport( p_size.width(), p_size.height() );
+			m_pRenderer->BeginRender( p_size );
 
 			for ( auto l_overlay : m_overlays )
 			{

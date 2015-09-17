@@ -68,7 +68,7 @@ namespace Dx11Render
 
 	void DxShaderProgram::RetrieveLinkerLog( String & strLog )
 	{
-		if ( !m_pRenderSystem->UseShaders() )
+		if ( !m_renderSystem->UseShaders() )
 		{
 			strLog = DirectX11::GetHlslErrorString( 0 );
 		}
@@ -86,7 +86,6 @@ namespace Dx11Render
 
 	void DxShaderProgram::Bind( uint8_t p_byIndex, uint8_t p_byCount )
 	{
-		m_pRenderSystem->GetPipeline()->UpdateFunctions( this );
 		ShaderProgramBase::Bind( p_byIndex, p_byCount );
 	}
 
@@ -140,6 +139,6 @@ namespace Dx11Render
 
 	std::shared_ptr< OneTextureFrameVariable > DxShaderProgram::DoCreateTextureVariable( int p_iNbOcc )
 	{
-		return std::make_shared< DxOneFrameVariable< TextureBaseRPtr > >( static_cast< DxRenderSystem * >( m_pRenderSystem ), this, p_iNbOcc );
+		return std::make_shared< DxOneFrameVariable< TextureBaseRPtr > >( static_cast< DxRenderSystem * >( m_renderSystem ), this, p_iNbOcc );
 	}
 }

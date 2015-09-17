@@ -47,7 +47,7 @@ namespace Dx11Render
 		D3D11_MAPPED_SUBRESOURCE l_mappedResource;
 		ID3D11Resource * l_pResource;
 		m_shaderResourceView->GetResource( &l_pResource );
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 		HRESULT l_hr = l_pDeviceContext->Map( l_pResource, 0, D3D11_MAP( DirectX11::GetLockFlags( p_mode ) ), 0, &l_mappedResource );
 		l_pResource->Release();
 
@@ -63,7 +63,7 @@ namespace Dx11Render
 	{
 		ID3D11Resource * l_pResource;
 		m_shaderResourceView->GetResource( &l_pResource );
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->Unmap( l_pResource, 0 );
 		l_pResource->Release();
 	}
@@ -106,7 +106,7 @@ namespace Dx11Render
 
 	bool DxDynamicTexture::DoBind( uint32_t p_index )
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 
 		if ( m_renderTargetView )
 		{

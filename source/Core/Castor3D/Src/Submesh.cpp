@@ -1112,7 +1112,7 @@ namespace Castor3D
 
 		if ( l_pProgram && l_matrixBuffer )
 		{
-			GetEngine()->GetRenderSystem()->GetPipeline()->ApplyMatrices( *l_matrixBuffer, 0xFFFFFFFFFFFFFFFF );
+			GetEngine()->GetRenderSystem()->GetPipeline().ApplyMatrices( *l_matrixBuffer, 0xFFFFFFFFFFFFFFFF );
 		}
 
 		return true;

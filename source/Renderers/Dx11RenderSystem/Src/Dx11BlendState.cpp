@@ -10,7 +10,7 @@ namespace Dx11Render
 {
 	DxBlendState::DxBlendState( DxRenderSystem * p_pRenderSystem )
 		: BlendState()
-		, m_pRenderSystem( p_pRenderSystem )
+		, m_renderSystem( p_pRenderSystem )
 		, m_pBlendState( NULL )
 	{
 		CreateCurrent();
@@ -45,15 +45,15 @@ namespace Dx11Render
 			l_blendDesc.RenderTarget[i].RenderTargetWriteMask = l_writeMask;
 		}
 
-		HRESULT l_hr = m_pRenderSystem->GetDevice()->CreateBlendState( &l_blendDesc, &m_pBlendState );
-		dxTrack( m_pRenderSystem, m_pBlendState, BlendState );
+		HRESULT l_hr = m_renderSystem->GetDevice()->CreateBlendState( &l_blendDesc, &m_pBlendState );
+		dxTrack( m_renderSystem, m_pBlendState, BlendState );
 		m_bChanged = false;
 		return dxCheckError( l_hr, "CreateBlendState" );
 	}
 
 	void DxBlendState::Cleanup()
 	{
-		ReleaseTracked( m_pRenderSystem, m_pBlendState );
+		ReleaseTracked( m_renderSystem, m_pBlendState );
 	}
 
 	bool DxBlendState::Apply()
@@ -68,7 +68,7 @@ namespace Dx11Render
 
 		if ( l_return && m_pBlendState )
 		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 
 			if ( l_pDeviceContext )
 			{
@@ -81,6 +81,6 @@ namespace Dx11Render
 
 	BlendStateSPtr DxBlendState::DoCreateCurrent()
 	{
-		return std::make_unique< DxBlendState >( m_pRenderSystem );
+		return std::make_unique< DxBlendState >( m_renderSystem );
 	}
 }

@@ -1149,7 +1149,7 @@ namespace Castor3D
 		 */
 		inline RenderSystem * GetRenderSystem()const
 		{
-			return m_pRenderSystem;
+			return m_renderSystem;
 		}
 		/**
 		 *\~english
@@ -1311,7 +1311,7 @@ namespace Castor3D
 		//!\~english The BlendState collection	\~french La collection de BlendState
 		BlendStateCollection m_blendStateManager;
 		//!\~english  The current RenderSystem	\~french Le RenderSystem courant
-		RenderSystem * m_pRenderSystem;
+		RenderSystem * m_renderSystem;
 		//!\~english  If \p false, the render can't be threaded	\~french Si \p false, le rendu ne peut pas être threadé
 		bool m_bThreaded;
 		//!\~english Tells if render is running	\~french Dit si le rendu est en cours

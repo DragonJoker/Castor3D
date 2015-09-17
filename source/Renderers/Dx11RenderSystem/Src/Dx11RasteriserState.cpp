@@ -10,7 +10,7 @@ namespace Dx11Render
 {
 	DxRasteriserState::DxRasteriserState( DxRenderSystem * p_pRenderSystem )
 		: RasteriserState()
-		, m_pRenderSystem( p_pRenderSystem )
+		, m_renderSystem( p_pRenderSystem )
 		, m_pRasteriserState( NULL )
 	{
 		CreateCurrent();
@@ -35,15 +35,15 @@ namespace Dx11Render
 		l_rasterDesc.FrontCounterClockwise = m_bFrontCCW;
 		l_rasterDesc.MultisampleEnable = m_bMultisampled;
 		l_rasterDesc.ScissorEnable = m_bScissor;
-		HRESULT l_hr = m_pRenderSystem->GetDevice()->CreateRasterizerState( &l_rasterDesc, &m_pRasteriserState );
-		dxTrack( m_pRenderSystem, m_pRasteriserState, RasteriserState );
+		HRESULT l_hr = m_renderSystem->GetDevice()->CreateRasterizerState( &l_rasterDesc, &m_pRasteriserState );
+		dxTrack( m_renderSystem, m_pRasteriserState, RasteriserState );
 		m_bChanged = false;
 		return dxCheckError( l_hr, "CreateRasterizerState" );
 	}
 
 	void DxRasteriserState::Cleanup()
 	{
-		ReleaseTracked( m_pRenderSystem, m_pRasteriserState );
+		ReleaseTracked( m_renderSystem, m_pRasteriserState );
 	}
 
 	bool DxRasteriserState::Apply()
@@ -58,7 +58,7 @@ namespace Dx11Render
 
 		if ( l_return && m_pRasteriserState )
 		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 
 			if ( l_pDeviceContext )
 			{
@@ -71,6 +71,6 @@ namespace Dx11Render
 
 	RasteriserStateSPtr DxRasteriserState::DoCreateCurrent()
 	{
-		return std::make_unique< DxRasteriserState >( m_pRenderSystem );
+		return std::make_unique< DxRasteriserState >( m_renderSystem );
 	}
 }

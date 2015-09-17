@@ -344,7 +344,7 @@ namespace Castor3D
 		//!\~english RenderWindow associated to this context	\~french RenderWindow associée à ce contexte
 		RenderWindow * m_pWindow;
 		//!\~english The render system	\~french Le render system
-		RenderSystem * m_pRenderSystem;
+		RenderSystem * m_renderSystem;
 		//!\~english Tells if the context is initialised	\~french Dit si le contexte est initialisé
 		bool m_bInitialised;
 		//!\~english Tells the context is currently set to use deferred shading	\~french Dit si le contexte est actuellement configuré pour utiliser le deferred shading

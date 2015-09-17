@@ -37,7 +37,7 @@ ShaderProgramBaseSPtr DxBillboardList::DoGetProgram( RenderTechniqueBase const &
 		cuT( "polygon" ),//eTOPOLOGY_POLYGON
 	};
 
-	ShaderProgramBaseSPtr l_pProgram = m_pRenderSystem->GetEngine()->GetShaderManager().GetNewProgram();
+	ShaderProgramBaseSPtr l_pProgram = m_renderSystem->GetEngine()->GetShaderManager().GetNewProgram();
 
 	//l_pProgram->CreateFrameVariable( ShaderProgramBase::MapAmbient, eSHADER_TYPE_PIXEL );
 	//l_pProgram->CreateFrameVariable( ShaderProgramBase::MapColour, eSHADER_TYPE_PIXEL );

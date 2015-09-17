@@ -30,7 +30,7 @@ namespace GlRender
 	{
 		ShaderProgramBase::Cleanup();
 
-		if ( m_pRenderSystem->UseShaders() )
+		if ( m_renderSystem->UseShaders() )
 		{
 			if ( m_programObject )
 			{
@@ -45,7 +45,7 @@ namespace GlRender
 	{
 		if ( m_eStatus != ePROGRAM_STATUS_LINKED )
 		{
-			if ( m_pRenderSystem->UseShaders() && !m_programObject )
+			if ( m_renderSystem->UseShaders() && !m_programObject )
 			{
 				m_programObject = m_gl.CreateProgram();
 				glTrack( m_gl, GlShaderProgram, this );
@@ -60,7 +60,7 @@ namespace GlRender
 		bool l_return = false;
 		int l_iLinked = 0;
 
-		if ( m_pRenderSystem->UseShaders() && m_eStatus != ePROGRAM_STATUS_ERROR )
+		if ( m_renderSystem->UseShaders() && m_eStatus != ePROGRAM_STATUS_ERROR )
 		{
 			l_return = true;
 			Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Programs attached : " ) << uint32_t( m_activeShaders.size() ) );
@@ -91,7 +91,7 @@ namespace GlRender
 
 	void GlShaderProgram::RetrieveLinkerLog( String & strLog )
 	{
-		if ( !m_pRenderSystem->UseShaders() )
+		if ( !m_renderSystem->UseShaders() )
 		{
 			strLog = m_gl.GetGlslErrorString( 0 );
 		}
@@ -121,17 +121,16 @@ namespace GlRender
 
 	void GlShaderProgram::Bind( uint8_t p_byIndex, uint8_t p_byCount )
 	{
-		if ( m_pRenderSystem->UseShaders() && m_programObject != 0 && m_bEnabled && m_eStatus == ePROGRAM_STATUS_LINKED )
+		if ( m_renderSystem->UseShaders() && m_programObject != 0 && m_bEnabled && m_eStatus == ePROGRAM_STATUS_LINKED )
 		{
 			m_gl.UseProgram( m_programObject );
-			m_pRenderSystem->GetPipeline()->UpdateFunctions( this );
 			ShaderProgramBase::Bind( p_byIndex, p_byCount );
 		}
 	}
 
 	void GlShaderProgram::Unbind()
 	{
-		if ( m_pRenderSystem->UseShaders() && m_programObject != 0 && m_bEnabled && m_eStatus == ePROGRAM_STATUS_LINKED )
+		if ( m_renderSystem->UseShaders() && m_programObject != 0 && m_bEnabled && m_eStatus == ePROGRAM_STATUS_LINKED )
 		{
 			uint32_t l_index = 0;
 
