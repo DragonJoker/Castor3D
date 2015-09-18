@@ -40,8 +40,8 @@ namespace GuiCommon
 {
 	wxPGEditor * PropertiesHolder::m_buttonEditor = NULL;
 
-	PropertiesHolder::PropertiesHolder( bool p_bCanEdit, wxWindow * p_pParent, wxPoint const & p_ptPos, wxSize const & p_size )
-		: wxPropertyGrid( p_pParent, wxID_ANY, p_ptPos, p_size, wxPG_BOLD_MODIFIED | wxPG_SPLITTER_AUTO_CENTER | wxPG_DEFAULT_STYLE )
+	PropertiesHolder::PropertiesHolder( bool p_bCanEdit, wxWindow * p_parent, wxPoint const & p_ptPos, wxSize const & p_size )
+		: wxPropertyGrid( p_parent, wxID_ANY, p_ptPos, p_size, wxPG_BOLD_MODIFIED | wxPG_SPLITTER_AUTO_CENTER | wxPG_DEFAULT_STYLE )
 		, m_bCanEdit( p_bCanEdit )
 		, m_data( NULL )
 	{

@@ -10,8 +10,8 @@ using namespace Castor;
 
 namespace Dx11Render
 {
-	DxHullShader::DxHullShader( DxShaderProgram * p_pParent )
-		: DxShaderObject( p_pParent, eSHADER_TYPE_HULL )
+	DxHullShader::DxHullShader( DxShaderProgram * p_parent )
+		: DxShaderObject( p_parent, eSHADER_TYPE_HULL )
 		, m_pHullShader( NULL )
 	{
 	}

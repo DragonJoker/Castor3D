@@ -62,7 +62,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief			Writes a pass into a text file
@@ -130,15 +130,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\remark		Used by Material, don't use it.
-		 *\param[in]	p_pEngine	The core engine
-		 *\param[in]	p_pParent	The parent material
+		 *\param[in]	p_engine	The core engine
+		 *\param[in]	p_parent	The parent material
 		 *\~french
 		 *\brief		Constructeur
 		 *\remark		A ne pas utiliser autrement que via la classe Material
-		 *\param[in]	p_pEngine	Le moteur
-		 *\param[in]	p_pParent	Le matériau parent
+		 *\param[in]	p_engine	Le moteur
+		 *\param[in]	p_parent	Le matériau parent
 		 */
-		Pass( Engine * p_pEngine, MaterialSPtr p_pParent = nullptr );
+		Pass( Engine * p_engine, MaterialSPtr p_parent = nullptr );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -291,7 +291,7 @@ namespace Castor3D
 		 *\brief		Récupère le shader
 		 *\return		\p nullptr si aucun
 		 */
-		template <typename T>
+		template< typename T >
 		std::shared_ptr<T> GetShader()const
 		{
 			std::shared_ptr<T> l_pReturn;
@@ -722,7 +722,7 @@ namespace Castor3D
 		 */
 		virtual Engine * GetEngine()const
 		{
-			return m_pEngine;
+			return m_engine;
 		}
 
 	private:
@@ -815,7 +815,7 @@ namespace Castor3D
 		DECLARE_MAP( eTEXTURE_CHANNEL, UnitVariablePair, UnitVariableChannel );
 		friend class Material;
 		//!\~english The core engine	\~french Le moteur
-		Engine * m_pEngine;
+		Engine * m_engine;
 		//!\~english Diffuse material colour	\~french La couleur diffuse
 		Castor::Colour m_clrDiffuse;
 		//!\~english Ambient material colour	\~french La couleur ambiante

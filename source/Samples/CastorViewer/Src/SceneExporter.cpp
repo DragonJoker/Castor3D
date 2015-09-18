@@ -11,7 +11,7 @@ namespace CastorViewer
 	namespace
 	{
 		template< typename TObj, typename TKey >
-		bool ParseCollection( Engine * p_pEngine, Collection< TObj, TKey > & p_collection, BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
+		bool ParseCollection( Engine * p_engine, Collection< TObj, TKey > & p_collection, BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
 		{
 			bool l_result = true;
 			p_collection.lock();
@@ -34,7 +34,7 @@ namespace CastorViewer
 
 			if ( !wxDirExists( ( p_pathFolder / cuT( "Texture" ) ).c_str() ) )
 			{
-				wxMkDir( string::to_str( p_pathFolder / cuT( "Texture" ) ).c_str(), 0777 );
+				wxMkDir( string::string_cast< char >( p_pathFolder / cuT( "Texture" ) ).c_str(), 0777 );
 			}
 
 			if ( wxFileExists( p_pathSrcFile ) )

@@ -105,7 +105,7 @@ namespace Castor3D
 		bool l_return = true;
 		String l_strText;
 		eTOPOLOGY l_ePrimType;
-		eFRAME_VARIABLE_TYPE l_eType;
+		eFRAME_VARIABLE_TYPE l_type;
 		FrameVariableSPtr l_pVariable;
 		uint8_t l_count;
 
@@ -142,7 +142,7 @@ namespace Castor3D
 
 			case eCHUNK_TYPE_PROGRAM_VARIABLE:
 				l_count = 0;
-				l_eType = eFRAME_VARIABLE_TYPE( -1 );
+				l_type = eFRAME_VARIABLE_TYPE( -1 );
 				l_strText.clear();
 				l_pVariable.reset();
 
@@ -162,7 +162,7 @@ namespace Castor3D
 						break;
 
 					case eCHUNK_TYPE_VARIABLE_TYPE:
-						l_return = DoParseChunk( l_eType, l_chunkVariable );
+						l_return = DoParseChunk( l_type, l_chunkVariable );
 						break;
 
 					case eCHUNK_TYPE_VARIABLE_VALUE:
@@ -178,10 +178,10 @@ namespace Castor3D
 
 					//if ( l_return && !l_pVariable )
 					//{
-					//	if ( l_count && l_eType != eFRAME_VARIABLE_TYPE( -1 ) && !l_strText.empty() )
+					//	if ( l_count && l_type != eFRAME_VARIABLE_TYPE( -1 ) && !l_strText.empty() )
 					//	{
 					//		FrameVariableBufferSPtr l_buffer = p_object.GetParent()->GetUserBuffer();
-					//		l_pVariable = l_buffer->CreateVariable( *p_object.GetParent(), l_eType, l_strText, l_count );
+					//		l_pVariable = l_buffer->CreateVariable( *p_object.GetParent(), l_type, l_strText, l_count );
 					//	}
 					//}
 
@@ -241,8 +241,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	ShaderObjectBase::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< ShaderObjectBase, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	ShaderObjectBase::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		:	Loader< ShaderObjectBase, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -308,10 +308,10 @@ namespace Castor3D
 		cuT( "pixel_program" ),
 	};
 
-	ShaderObjectBase::ShaderObjectBase( ShaderProgramBase * p_pParent, eSHADER_TYPE p_eType )
+	ShaderObjectBase::ShaderObjectBase( ShaderProgramBase * p_parent, eSHADER_TYPE p_type )
 		:	m_eStatus( eSHADER_STATUS_NOTCOMPILED )
-		,	m_eType( p_eType )
-		,	m_pParent( p_pParent )
+		,	m_type( p_type )
+		,	m_pParent( p_parent )
 		,	m_eInputType( eTOPOLOGY_TRIANGLES )
 		,	m_eOutputType( eTOPOLOGY_TRIANGLES )
 		,	m_eShaderModel( eSHADER_MODEL_1 )
@@ -407,10 +407,10 @@ namespace Castor3D
 		}
 	}
 
-	OneTextureFrameVariableSPtr ShaderObjectBase::FindFrameVariable( Castor::String const & p_strName )const
+	OneTextureFrameVariableSPtr ShaderObjectBase::FindFrameVariable( Castor::String const & p_name )const
 	{
 		OneTextureFrameVariableSPtr l_pReturn;
-		FrameVariablePtrStrMapConstIt l_it = m_mapFrameVariables.find( p_strName );
+		FrameVariablePtrStrMapConstIt l_it = m_mapFrameVariables.find( p_name );
 
 		if ( l_it != m_mapFrameVariables.end() )
 		{

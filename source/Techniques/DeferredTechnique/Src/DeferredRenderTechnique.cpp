@@ -343,9 +343,9 @@ namespace Deferred
 
 		m_lightPassBufDepth = m_lightPassFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24S8 );
 		m_lightPassDepthAttach = m_pRenderTarget->CreateAttachment( m_lightPassBufDepth );
-		m_lightPassShaderProgram = m_pEngine->GetShaderManager().GetNewProgram();
+		m_lightPassShaderProgram = m_engine->GetShaderManager().GetNewProgram();
 
-		m_geometryPassDsState = m_pEngine->CreateDepthStencilState( cuT( "GeometricPassState" ) );
+		m_geometryPassDsState = m_engine->CreateDepthStencilState( cuT( "GeometricPassState" ) );
 		m_geometryPassDsState->SetStencilTest( true );
 		m_geometryPassDsState->SetStencilReadMask( 0xFFFFFFFF );
 		m_geometryPassDsState->SetStencilWriteMask( 0xFFFFFFFF );
@@ -362,7 +362,7 @@ namespace Deferred
 		m_geometryPassDsState->SetDepthTest( true );
 		m_geometryPassDsState->SetDepthMask( eWRITING_MASK_ALL );
 
-		m_lightPassDsState = m_pEngine->CreateDepthStencilState( cuT( "LightPassState" ) );
+		m_lightPassDsState = m_engine->CreateDepthStencilState( cuT( "LightPassState" ) );
 		m_lightPassDsState->SetStencilTest( true );
 		m_lightPassDsState->SetStencilReadMask( 0xFFFFFFFF );
 		m_lightPassDsState->SetStencilWriteMask( 0 );
@@ -405,18 +405,18 @@ namespace Deferred
 
 		m_pGeometryBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
 
-		m_pViewport = std::make_shared< Viewport >( m_renderSystem->GetEngine(), Size( 10, 10 ), eVIEWPORT_TYPE_2D );
-		m_pViewport->SetLeft( real( 0.0 ) );
-		m_pViewport->SetRight( real( 1.0 ) );
-		m_pViewport->SetTop( real( 1.0 ) );
-		m_pViewport->SetBottom( real( 0.0 ) );
-		m_pViewport->SetNear( real( 0.0 ) );
-		m_pViewport->SetFar( real( 1.0 ) );
+		m_viewport = std::make_shared< Viewport >( m_renderSystem->GetEngine(), Size( 10, 10 ), eVIEWPORT_TYPE_2D );
+		m_viewport->SetLeft( real( 0.0 ) );
+		m_viewport->SetRight( real( 1.0 ) );
+		m_viewport->SetTop( real( 1.0 ) );
+		m_viewport->SetBottom( real( 0.0 ) );
+		m_viewport->SetNear( real( 0.0 ) );
+		m_viewport->SetFar( real( 1.0 ) );
 	}
 
 	RenderTechnique::~RenderTechnique()
 	{
-		m_pViewport.reset();
+		m_viewport.reset();
 		m_pGeometryBuffers.reset();
 		m_lightPassShaderProgram.reset();
 		m_pDeclaration.reset();
@@ -448,8 +448,8 @@ namespace Deferred
 				m_lightPassShaderProgram->CreateFrameVariable( g_strNames[i], eSHADER_TYPE_PIXEL )->SetValue( m_lightPassTextures[i].get() );
 			}
 
-			m_lightPassMatrices = m_pEngine->GetShaderManager().CreateMatrixBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
-			FrameVariableBufferSPtr l_scene = m_pEngine->GetShaderManager().CreateSceneBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL );
+			m_lightPassMatrices = m_engine->GetShaderManager().CreateMatrixBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
+			FrameVariableBufferSPtr l_scene = m_engine->GetShaderManager().CreateSceneBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL );
 			m_lightPassScene = l_scene;
 
 			m_pGeometryBuffers->Create();
@@ -571,7 +571,7 @@ namespace Deferred
 		ContextRPtr l_pContext = m_renderSystem->GetCurrentContext();
 		m_lightPassFrameBuffer->Unbind();
 
-		if ( m_pViewport )
+		if ( m_viewport )
 		{
 			bool l_bReturn = true;
 			m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
@@ -581,8 +581,8 @@ namespace Deferred
 			//m_pRenderTarget->GetRenderer()->BeginScene();
 			l_pContext->SetClearColour( m_renderSystem->GetTopScene()->GetBackgroundColour() );
 			l_pContext->Clear( eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL );
-			m_pViewport->SetSize( m_size );
-			m_pViewport->Render();
+			m_viewport->SetSize( m_size );
+			m_viewport->Render();
 			l_pContext->CullFace( eFACE_BACK );
 
 			if ( m_pShaderCamera )

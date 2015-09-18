@@ -44,14 +44,14 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_eMode	The file open mode
+		 *\param[in]	p_mode	The file open mode
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_eMode	Le mode d'ouverture du fichier
+		 *\param[in]	p_mode	Le mode d'ouverture du fichier
 		 */
-		Loader( File::eOPEN_MODE p_eMode, File::eENCODING_MODE p_eEncodingMode = File::eENCODING_MODE_ASCII )
-			: m_eOpenMode( p_eMode )
-			, m_eEncodingMode( p_eEncodingMode )
+		Loader( File::eOPEN_MODE p_mode, File::eENCODING_MODE p_encodingMode = File::eENCODING_MODE_ASCII )
+			: m_eOpenMode( p_mode )
+			, m_eEncodingMode( p_encodingMode )
 		{
 		}
 		/**

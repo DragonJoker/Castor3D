@@ -42,14 +42,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_eType			The texture type
+		 *\param[in]	p_type			The texture type
 		 *\param[in]	p_pRenderSystem	The render system
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_eType			Le type de texture
+		 *\param[in]	p_type			Le type de texture
 		 *\param[in]	p_pRenderSystem	Le render system
 		 */
-		TextureBase( eTEXTURE_TYPE p_eType, RenderSystem * p_pRenderSystem );
+		TextureBase( eTEXTURE_TYPE p_type, RenderSystem * p_pRenderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -176,7 +176,7 @@ namespace Castor3D
 		 */
 		inline eTEXTURE_TYPE GetType()const
 		{
-			return m_eType;
+			return m_type;
 		}
 		/**
 		 *\~english
@@ -388,7 +388,7 @@ namespace Castor3D
 		//!\~english Initialisation status	\~french Statut d'initialisation
 		bool m_bInitialised;
 		//!\~english Texture type	\~french Type de texture
-		eTEXTURE_TYPE m_eType;
+		eTEXTURE_TYPE m_type;
 		//!\~english Texture dimension count	\~french Compte des dimensions de la texture
 		eTEXTURE_DIMENSION m_eDimension;
 		//!\~english Texture mapping modes	\~french Modes de mappage de la texture

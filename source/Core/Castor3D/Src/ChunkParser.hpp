@@ -149,7 +149,7 @@ namespace Castor3D
 
 				if ( l_return )
 				{
-					p_strValue = Castor::string::from_str( l_pChar.data() );
+					p_strValue = Castor::string::string_cast< xchar >( l_pChar.data() );
 				}
 			}
 
@@ -177,7 +177,7 @@ namespace Castor3D
 
 				if ( l_return )
 				{
-					p_strValue = Castor::string::from_str( l_pChar.data() );
+					p_strValue = Castor::string::string_cast< xchar >( l_pChar.data() );
 				}
 			}
 

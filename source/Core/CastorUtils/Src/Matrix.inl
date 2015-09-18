@@ -128,14 +128,14 @@ namespace Castor
 	inline Point< T, Columns > Matrix< T, Columns, Rows >::get_row( uint32_t p_index )const
 	{
 		CASTOR_ASSERT( p_index < Rows );
-		Point< T, Columns > l_ptReturn;
+		Point< T, Columns > l_return;
 
 		for ( uint32_t i = 0; i < Columns; i++ )
 		{
-			l_ptReturn[i] = m_columns[i][p_index];
+			l_return[i] = m_columns[i][p_index];
 		}
 
-		return l_ptReturn;
+		return l_return;
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::get_row( uint32_t p_index, Point< T, Columns > & p_result )const
@@ -555,32 +555,32 @@ namespace Castor
 	template <typename T, uint32_t Columns, uint32_t Rows, typename U>
 	inline Point< T, Rows > operator*( Matrix< T, Columns, Rows > const & p_matrix, Point< U, Columns > const & p_vector )
 	{
-		Point< T, Rows > l_ptReturn;
+		Point< T, Rows > l_return;
 
 		for ( uint32_t i = 0; i < Columns; i++ )
 		{
 			for ( uint32_t j = 0; j < Rows; j++ )
 			{
-				l_ptReturn[j] += T( p_matrix[i][j] * p_vector[i] );
+				l_return[j] += T( p_matrix[i][j] * p_vector[i] );
 			}
 		}
 
-		return l_ptReturn;
+		return l_return;
 	}
 	template <typename T, uint32_t Columns, uint32_t Rows, typename U>
 	inline Point< T, Columns > operator*( Point< T, Rows > const & p_vector, Matrix< U, Columns, Rows > const & p_matrix )
 	{
-		Point< T, Columns > l_ptReturn;
+		Point< T, Columns > l_return;
 
 		for ( uint32_t i = 0; i < Columns; i++ )
 		{
 			for ( uint32_t j = 0; j < Rows; j++ )
 			{
-				l_ptReturn[i] += T( p_matrix[i][j] * p_vector[j] );
+				l_return[i] += T( p_matrix[i][j] * p_vector[j] );
 			}
 		}
 
-		return l_ptReturn;
+		return l_return;
 	}
 	template <typename T, uint32_t Columns, uint32_t Rows, typename U>
 	Matrix <T, Columns, Rows> operator+( Matrix< T, Columns, Rows > const & p_mtxA, U const * p_mtxB )

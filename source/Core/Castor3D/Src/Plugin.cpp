@@ -34,25 +34,24 @@ namespace Castor3D
 #	error "Implement ABI names for this compiler"
 #endif
 
-	PluginBase::PluginBase( ePLUGIN_TYPE p_eType, DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
+	PluginBase::PluginBase( ePLUGIN_TYPE p_type, DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
 		:	m_pfnGetRequiredVersion( 0 )
 		,	m_pfnGetName( 0 )
-		,	m_eType( p_eType )
+		,	m_type( p_type )
 		,	m_engine( p_engine )
 	{
 		if ( !p_pLibrary->GetFunction( m_pfnGetName, GetNameFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] plugin GetName function : " );
-			l_strError += string::to_string( dlerror() );
 			l_strError += System::GetLastErrorText();
-			CASTOR_PLUGIN_EXCEPTION( string::to_str( l_strError ), true );
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), true );
 		}
 
 		if ( !p_pLibrary->GetFunction( m_pfnGetRequiredVersion, GetRequiredVersionFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] plugin GetRequiredVersion function : " );
-			l_strError += string::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( string::to_str( l_strError ), true );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), true );
 		}
 
 		p_pLibrary->GetFunction( m_pfnOnLoad, GetOnLoadFunctionABIName );

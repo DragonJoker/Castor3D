@@ -7,8 +7,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	LightCategory::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		: Loader< LightCategory, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	LightCategory::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		: Loader< LightCategory, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 

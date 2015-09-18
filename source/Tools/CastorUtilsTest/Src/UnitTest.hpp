@@ -33,14 +33,14 @@ namespace Testing
 	inline std::string to_string< Castor::String >( Castor::String const & p_value )
 	{
 		std::stringstream l_stream;
-		l_stream << Castor::string::to_str( p_value );
+		l_stream << Castor::string::string_cast< char >( p_value );
 		return l_stream.str();
 	}
 
 	class TestCase
 	{
 	public:
-		TestCase( std::string const & p_strName );
+		TestCase( std::string const & p_name );
 		virtual ~TestCase();
 		virtual void Execute( uint32_t & p_errCount, uint32_t & p_testCount ) = 0;
 		inline std::string const & GetName()const

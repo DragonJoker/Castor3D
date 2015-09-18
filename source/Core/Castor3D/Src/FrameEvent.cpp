@@ -2,24 +2,24 @@
 
 namespace Castor3D
 {
-	FrameEvent::FrameEvent( eEVENT_TYPE p_eType )
-		:	m_eType( p_eType )
+	FrameEvent::FrameEvent( eEVENT_TYPE p_type )
+		:	m_type( p_type )
 	{
 	}
 
 	FrameEvent::FrameEvent( FrameEvent const & p_object )
-		:	m_eType( p_object.m_eType )
+		:	m_type( p_object.m_type )
 	{
 	}
 
 	FrameEvent::FrameEvent( FrameEvent && p_object )
-		:	m_eType( std::move( p_object.m_eType ) )
+		:	m_type( std::move( p_object.m_type ) )
 	{
 	}
 
 	FrameEvent & FrameEvent::operator =( FrameEvent const & p_object )
 	{
-		m_eType = p_object.m_eType;
+		m_type = p_object.m_type;
 		return *this;
 	}
 
@@ -27,8 +27,8 @@ namespace Castor3D
 	{
 		if ( this != &p_object )
 		{
-			m_eType = p_object.m_eType;
-			p_object.m_eType = eEVENT_TYPE_COUNT;
+			m_type = p_object.m_type;
+			p_object.m_type = eEVENT_TYPE_COUNT;
 		}
 
 		return *this;

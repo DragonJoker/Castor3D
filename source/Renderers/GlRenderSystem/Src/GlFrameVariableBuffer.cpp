@@ -662,8 +662,8 @@ namespace GlRender
 		}
 	}
 
-	GlFrameVariableBuffer::GlFrameVariableBuffer( OpenGl & p_gl, String const & p_strName, GlRenderSystem * p_pRenderSystem )
-		: FrameVariableBuffer( p_strName, p_pRenderSystem )
+	GlFrameVariableBuffer::GlFrameVariableBuffer( OpenGl & p_gl, String const & p_name, GlRenderSystem * p_pRenderSystem )
+		: FrameVariableBuffer( p_name, p_pRenderSystem )
 		, m_glBuffer( p_gl, eGL_BUFFER_TARGET_UNIFORM )
 		, m_iUniformBlockIndex( eGL_INVALID_INDEX )
 		, m_iUniformBlockSize( 0 )
@@ -675,13 +675,13 @@ namespace GlRender
 	{
 	}
 
-	FrameVariableSPtr GlFrameVariableBuffer::DoCreateVariable( ShaderProgramBase * p_pProgram, eFRAME_VARIABLE_TYPE p_eType, Castor::String const & p_strName, uint32_t p_uiNbOcc )
+	FrameVariableSPtr GlFrameVariableBuffer::DoCreateVariable( ShaderProgramBase * p_pProgram, eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_uiNbOcc )
 	{
 		FrameVariableSPtr l_pReturn;
 		GlVariableApplyerBaseSPtr l_pApplyer;
 		GlShaderProgram * l_pProgram = static_cast< GlShaderProgram * >( p_pProgram );
 
-		switch ( p_eType )
+		switch ( p_type )
 		{
 		case eFRAME_VARIABLE_TYPE_INT:
 			l_pReturn = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_INT >( m_gl, l_pProgram, p_uiNbOcc );
@@ -861,7 +861,7 @@ namespace GlRender
 
 		if ( l_pReturn )
 		{
-			l_pReturn->SetName( p_strName );
+			l_pReturn->SetName( p_name );
 		}
 
 		return l_pReturn;
@@ -880,7 +880,7 @@ namespace GlRender
 			if ( m_gl.HasUbo() && l_uiIndex == eGL_INVALID_INDEX )
 			{
 				m_gl.UseProgram( l_pProgram->GetGlProgram() );
-				m_iUniformBlockIndex = m_gl.GetUniformBlockIndex( l_pProgram->GetGlProgram(), string::to_str( m_strName ).c_str() );
+				m_iUniformBlockIndex = m_gl.GetUniformBlockIndex( l_pProgram->GetGlProgram(), string::string_cast< char >( m_strName ).c_str() );
 				uint32_t l_uiTotalSize = 0;
 
 				if ( m_iUniformBlockIndex != eGL_INVALID_INDEX )
@@ -899,9 +899,9 @@ namespace GlRender
 						char * l_szChar = new char[l_pVariable->GetName().size() + 1];
 						l_szChar[l_pVariable->GetName().size()] = 0;
 #if defined( _MSC_VER )
-						strncpy_s( l_szChar, l_pVariable->GetName().size() + 1, string::to_str( l_pVariable->GetName() ).c_str(), l_pVariable->GetName().size() );
+						strncpy_s( l_szChar, l_pVariable->GetName().size() + 1, string::string_cast< char >( l_pVariable->GetName() ).c_str(), l_pVariable->GetName().size() );
 #else
-						strncpy( l_szChar, string::to_str( l_pVariable->GetName() ).c_str(), l_pVariable->GetName().size() );
+						strncpy( l_szChar, string::string_cast< char >( l_pVariable->GetName() ).c_str(), l_pVariable->GetName().size() );
 #endif
 						l_arrayNames.push_back( l_szChar );
 					}

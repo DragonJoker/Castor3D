@@ -1095,10 +1095,10 @@ OpenGl::~OpenGl()
 bool OpenGl::PreInitialise( String const & p_strExtensions )
 {
 	char const * l_extensions = ( char const * )glGetString( GL_EXTENSIONS );
-	m_strExtensions = string::from_str( l_extensions ) + p_strExtensions;
-	m_strVendor = string::from_str( ( char const * )glGetString( GL_VENDOR ) );
-	m_strRenderer = string::from_str( ( char const * )glGetString( GL_RENDERER ) );
-	m_strVersion = string::from_str( ( char const * )glGetString( GL_VERSION ) );
+	m_strExtensions = string::string_cast< xchar >( l_extensions ) + p_strExtensions;
+	m_strVendor = string::string_cast< xchar >( ( char const * )glGetString( GL_VENDOR ) );
+	m_strRenderer = string::string_cast< xchar >( ( char const * )glGetString( GL_RENDERER ) );
+	m_strVersion = string::string_cast< xchar >( ( char const * )glGetString( GL_VERSION ) );
 	String l_strExtensions = m_strExtensions;
 	StringArray l_arrayExtensions = string::split( l_strExtensions, cuT( " " ), 10000, false );
 	Logger::LogDebug( cuT( "Available extensions :" ) );
@@ -1185,11 +1185,11 @@ bool OpenGl::PreInitialise( String const & p_strExtensions )
 bool OpenGl::Initialise()
 {
 #define GL_GET_FUNC( ptr, func, ext )\
-	if( !gl_api::GetFunction( cuT( "gl" ) + string::from_str( #func ), ptr->m_pfn##func ) )\
+	if( !gl_api::GetFunction( cuT( "gl" ) + string::string_cast< xchar >( #func ), ptr->m_pfn##func ) )\
 	{\
-		if( !gl_api::GetFunction( cuT( "gl" ) + string::from_str( #func ) + string::from_str( #ext ), ptr->m_pfn##func ) )\
+		if( !gl_api::GetFunction( cuT( "gl" ) + string::string_cast< xchar >( #func ) + string::string_cast< xchar >( #ext ), ptr->m_pfn##func ) )\
 		{\
-			Logger::LogWarning( cuT( "Unable to retrieve function gl" ) + string::from_str( #func ) );\
+			Logger::LogWarning( cuT( "Unable to retrieve function gl" ) + string::string_cast< xchar >( #func ) );\
 		}\
 	}
 	m_pfnGetError = &glGetError;
@@ -2262,9 +2262,9 @@ bool OpenGl::DebugMessageCallback( PFNGLDEBUGAMDPROC pfnProc, void * p_pThis )
 	return true;
 }
 
-bool OpenGl::PolygonMode( eGL_FACE p_eFacing, eGL_FILL_MODE p_eMode )
+bool OpenGl::PolygonMode( eGL_FACE p_eFacing, eGL_FILL_MODE p_mode )
 {
-	m_pfnPolygonMode( p_eFacing, p_eMode );
+	m_pfnPolygonMode( p_eFacing, p_mode );
 	return glCheckError( *this, "glPolygonMode" );
 }
 
@@ -2434,15 +2434,15 @@ bool OpenGl::DrawPixels( int width, int height, eGL_FORMAT format, eGL_TYPE type
 	return glCheckError( *this, "glDrawPixels" );
 }
 
-bool OpenGl::PixelStore( eGL_STORAGE_MODE p_eMode, int p_iParam )
+bool OpenGl::PixelStore( eGL_STORAGE_MODE p_mode, int p_iParam )
 {
-	m_pfnPixelStorei( p_eMode, p_iParam );
+	m_pfnPixelStorei( p_mode, p_iParam );
 	return glCheckError( *this, "glPixelStorei" );
 }
 
-bool OpenGl::PixelStore( eGL_STORAGE_MODE p_eMode, float p_fParam )
+bool OpenGl::PixelStore( eGL_STORAGE_MODE p_mode, float p_fParam )
 {
-	m_pfnPixelStoref( p_eMode, p_fParam );
+	m_pfnPixelStoref( p_mode, p_fParam );
 	return glCheckError( *this, "glPixelStoref" );
 }
 
@@ -3596,12 +3596,12 @@ void OpenGl::UnTrack( void * p_object )
 
 bool OpenGl::GlCheckError( std::string const & p_text )const
 {
-	return DoGlCheckError( string::from_str( p_text ) );
+	return DoGlCheckError( string::string_cast< xchar >( p_text ) );
 }
 
 bool OpenGl::GlCheckError( std::wstring const & p_text )const
 {
-	return DoGlCheckError( string::from_wstr( p_text ) );
+	return DoGlCheckError( string::string_cast< xchar >( p_text ) );
 }
 
 bool OpenGl::DoGlCheckError( String const & p_text )const
@@ -3758,7 +3758,7 @@ void OpenGl::DebugLog( eGL_DEBUG_SOURCE source, eGL_DEBUG_TYPE type, uint32_t id
 			break;
 		}
 
-		Logger::LogWarning(	l_strToLog + cuT( "Message:" ) + string::from_str( message ) );
+		Logger::LogWarning(	l_strToLog + cuT( "Message:" ) + string::string_cast< xchar >( message ) );
 	}
 }
 
@@ -3818,7 +3818,7 @@ void OpenGl::DebugLogAMD( uint32_t id, eGL_DEBUG_CATEGORY category, eGL_DEBUG_SE
 		break;
 	}
 
-	Logger::LogWarning(	l_strToLog + cuT( "Message:" ) + string::from_str( message ) );
+	Logger::LogWarning(	l_strToLog + cuT( "Message:" ) + string::string_cast< xchar >( message ) );
 }
 
 bool OpenGl::HasExtension( Castor::String const & p_strExtName )const

@@ -27,7 +27,7 @@ namespace GlRender
 	{
 		if ( m_iGlIndex == eGL_INVALID_INDEX )
 		{
-			GetVariableLocation( Castor::string::to_str( Castor3D::FrameVariable::m_strName ).c_str() );
+			GetVariableLocation( Castor::string::string_cast< char >( Castor3D::FrameVariable::m_strName ).c_str() );
 		}
 
 		return m_iGlIndex != eGL_INVALID_INDEX;

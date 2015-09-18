@@ -70,14 +70,14 @@ namespace Castor
 			 *\brief			Loads a font
 			 *\param[in,out]	p_font		The font to load
 			 *\param[in]		p_path		The path of the font file
-			 *\param[in]		p_uiHeight	The font precision
+			 *\param[in]		p_height	The font precision
 			 *\~french
 			 *\brief			Charge une police
 			 *\param[in,out]	p_font		La police à charger
 			 *\param[in]		p_path		Le chemin du fichier contenant la police
-			 *\param[in]		p_uiHeight	La précision de la police
+			 *\param[in]		p_height	La précision de la police
 			 */
-			CU_API bool operator()( Font & p_font, Path const & p_path, uint32_t p_uiHeight );
+			CU_API bool operator()( Font & p_font, Path const & p_path, uint32_t p_height );
 
 		private:
 			CU_API virtual bool operator()( Font & p_font, Path const & p_path );
@@ -136,27 +136,27 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_strName	The font name
-		 *\param[in]	p_uiHeight	The font char height
+		 *\param[in]	p_name	The font name
+		 *\param[in]	p_height	The font char height
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_strName	Le nom de la police
-		 *\param[in]	p_uiHeight	La hauteur des caractères de la police
+		 *\param[in]	p_name	Le nom de la police
+		 *\param[in]	p_height	La hauteur des caractères de la police
 		 */
-		CU_API Font( String const & p_strName, uint32_t p_uiHeight );
+		CU_API Font( String const & p_name, uint32_t p_height );
 		/**
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_path		The font file path
-		 *\param[in]	p_strName	The font name
-		 *\param[in]	p_uiHeight	The font char height
+		 *\param[in]	p_name	The font name
+		 *\param[in]	p_height	The font char height
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_path		Le chemin d'accès au fichier contenant la police
-		 *\param[in]	p_strName	Le nom de la police
-		 *\param[in]	p_uiHeight	La hauteur des caractères de la police
+		 *\param[in]	p_name	Le nom de la police
+		 *\param[in]	p_height	La hauteur des caractères de la police
 		 */
-		CU_API Font( Path const & p_path, String const & p_strName, uint32_t p_uiHeight );
+		CU_API Font( Path const & p_path, String const & p_name, uint32_t p_height );
 		/**
 		 *\~english
 		 *\brief		Destructor

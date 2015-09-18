@@ -29,8 +29,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	RenderTarget::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< RenderTarget, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	RenderTarget::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		:	Loader< RenderTarget, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 		,	m_tabs( p_tabs )
 	{
 	}
@@ -345,7 +345,7 @@ namespace Castor3D
 	const Castor::String RenderTarget::DefaultSamplerName = cuT( "DefaultRTSampler" );
 
 	RenderTarget::RenderTarget( Engine * p_pRoot, eTARGET_TYPE p_eTargetType )
-		: m_pEngine( p_pRoot )
+		: m_engine( p_pRoot )
 		, m_eTargetType( p_eTargetType )
 		, m_ePixelFormat( ePIXEL_FORMAT_A8R8G8B8 )
 		, m_eDepthFormat( ePIXEL_FORMAT_DEPTH24S8 )
@@ -395,11 +395,11 @@ namespace Castor3D
 
 			try
 			{
-				m_pRenderTechnique = m_pEngine->CreateTechnique( m_strTechniqueName, *this, l_params );
+				m_pRenderTechnique = m_engine->CreateTechnique( m_strTechniqueName, *this, l_params );
 			}
 			catch( Exception & p_exc )
 			{
-				Logger::LogError( cuT( "Couldn't load technique " ) + m_strTechniqueName + cuT( ": " ) + string::from_str( p_exc.GetFullDescription() ) );
+				Logger::LogError( cuT( "Couldn't load technique " ) + m_strTechniqueName + cuT( ": " ) + string::string_cast< xchar >( p_exc.GetFullDescription() ) );
 				throw;
 			}
 		}
@@ -467,7 +467,7 @@ namespace Castor3D
 
 	DynamicTextureSPtr RenderTarget::CreateDynamicTexture()const
 	{
-		return m_pEngine->GetRenderSystem()->CreateDynamicTexture();
+		return m_engine->GetRenderSystem()->CreateDynamicTexture();
 	}
 
 	eTOPOLOGY RenderTarget::GetPrimitiveType()const
@@ -580,11 +580,11 @@ namespace Castor3D
 		m_fbRightEye.m_pFrameBuffer->Resize( m_size );
 	}
 
-	void RenderTarget::SetTechnique( Castor::String const & p_strName )
+	void RenderTarget::SetTechnique( Castor::String const & p_name )
 	{
-		m_strTechniqueName = p_strName;
-		m_bDeferredRendering = p_strName == cuT( "deferred" );
-		m_bMultisampling = p_strName == cuT( "msaa" );
+		m_strTechniqueName = p_name;
+		m_bDeferredRendering = p_name == cuT( "deferred" );
+		m_bMultisampling = p_name == cuT( "msaa" );
 	}
 
 	void RenderTarget::DoRender( RenderTarget::stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, double p_dFrameTime )

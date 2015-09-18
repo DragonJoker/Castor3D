@@ -59,7 +59,7 @@ namespace GlRender
 		 *\brief		Stop using this shader. OpenGL calls will go through regular pipeline.
 		 */
 		virtual void Unbind();
-		virtual int GetAttributeLocation( Castor::String const & p_strName )const;
+		virtual int GetAttributeLocation( Castor::String const & p_name )const;
 		inline uint32_t & GetGlProgram()
 		{
 			return m_programObject;
@@ -70,7 +70,7 @@ namespace GlRender
 		}
 
 	private:
-		virtual Castor3D::ShaderObjectBaseSPtr DoCreateObject( Castor3D::eSHADER_TYPE p_eType );
+		virtual Castor3D::ShaderObjectBaseSPtr DoCreateObject( Castor3D::eSHADER_TYPE p_type );
 		virtual std::shared_ptr< Castor3D::OneTextureFrameVariable > DoCreateTextureVariable( int p_iNbOcc );
 
 	private:

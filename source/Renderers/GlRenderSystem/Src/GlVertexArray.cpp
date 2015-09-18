@@ -27,7 +27,7 @@ namespace GlRender
 	{
 	}
 
-	bool GlVertexArray::Initialise( eBUFFER_ACCESS_TYPE CU_PARAM_UNUSED( p_eType ), eBUFFER_ACCESS_NATURE CU_PARAM_UNUSED( p_eNature ), Castor3D::ShaderProgramBaseSPtr CU_PARAM_UNUSED( p_pProgram ) )
+	bool GlVertexArray::Initialise( eBUFFER_ACCESS_TYPE CU_PARAM_UNUSED( p_type ), eBUFFER_ACCESS_NATURE CU_PARAM_UNUSED( p_eNature ), Castor3D::ShaderProgramBaseSPtr CU_PARAM_UNUSED( p_pProgram ) )
 	{
 		return true;
 	}

@@ -139,15 +139,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Creates a scene with the given name.
 		 *\remark		If a scene with the given name already exists, it is returned and no scene is created
-		 *\param[in]	p_strName	The scene name
+		 *\param[in]	p_name	The scene name
 		 *\return		The created scene
 		 *\~french
 		 *\brief		Crée une scène avec le nom donné
 		 *\remark		Si une scène avec le nom voulu existe déjà, elle est retournée et aucune scène n'est créée
-		 *\param[in]	p_strName	Le nom de la scène
+		 *\param[in]	p_name	Le nom de la scène
 		 *\return		La scène
 		 */
-		SceneSPtr CreateScene( Castor::String const & p_strName );
+		SceneSPtr CreateScene( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Empties each scene
@@ -159,53 +159,53 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Creates a mesh with the given informations
 		 *\remark		If a mesh with the given name already exists, it is returned and no mesh is created
-		 *\param[in]	p_eType			Mesh type
-		 *\param[in]	p_strName		The wanted name
+		 *\param[in]	p_type			Mesh type
+		 *\param[in]	p_name		The wanted name
 		 *\return		The created mesh
 		 *\~french
 		 *\brief		Crée un mesh avec les informations données
 		 *\remark		Si un mesh avec le nom donné existe déjà, il est retourné et aucun mesh n'est créé
-		 *\param[in]	p_eType			Le type de mesh
-		 *\param[in]	p_strName		Le nom du mesh
+		 *\param[in]	p_type			Le type de mesh
+		 *\param[in]	p_name		Le nom du mesh
 		 *\return		Le mesh créé
 		 */
-		MeshSPtr CreateMesh( eMESH_TYPE p_eType, Castor::String const & p_strName );
+		MeshSPtr CreateMesh( eMESH_TYPE p_type, Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Creates a mesh with the given informations
 		 *\remark		If a mesh with the given name already exists, it is returned and no mesh is created
-		 *\param[in]	p_eType			Mesh type
-		 *\param[in]	p_strName		The wanted name
+		 *\param[in]	p_type			Mesh type
+		 *\param[in]	p_name		The wanted name
 		 *\param[in]	p_arrayFaces	The array of faces (for non custom meshes)
 		 *\return		The created mesh
 		 *\~french
 		 *\brief		Crée un mesh avec les informations données
 		 *\remark		Si un mesh avec le nom donné existe déjà, il est retourné et aucun mesh n'est créé
-		 *\param[in]	p_eType			Le type de mesh
-		 *\param[in]	p_strName		Le nom du mesh
+		 *\param[in]	p_type			Le type de mesh
+		 *\param[in]	p_name		Le nom du mesh
 		 *\param[in]	p_arrayFaces	Le tableau de faces (pour les mesh non custom)
 		 *\return		Le mesh créé
 		 */
-		MeshSPtr CreateMesh( eMESH_TYPE p_eType, Castor::String const & p_strName, UIntArray const & p_arrayFaces );
+		MeshSPtr CreateMesh( eMESH_TYPE p_type, Castor::String const & p_name, UIntArray const & p_arrayFaces );
 		/**
 		 *\~english
 		 *\brief		Creates a mesh with the given informations
 		 *\remark		If a mesh with the given name already exists, it is returned and no mesh is created
-		 *\param[in]	p_eType			Mesh type
-		 *\param[in]	p_strName		The wanted name
+		 *\param[in]	p_type			Mesh type
+		 *\param[in]	p_name		The wanted name
 		 *\param[in]	p_arrayFaces	The array of faces (for non custom meshes)
 		 *\param[in]	p_arraySizes	The array of dimensions (for non custom meshes)
 		 *\return		The created mesh
 		 *\~french
 		 *\brief		Crée un mesh avec les informations données
 		 *\remark		Si un mesh avec le nom donné existe déjà, il est retourné et aucun mesh n'est créé
-		 *\param[in]	p_eType			Le type de mesh
-		 *\param[in]	p_strName		Le nom du mesh
+		 *\param[in]	p_type			Le type de mesh
+		 *\param[in]	p_name		Le nom du mesh
 		 *\param[in]	p_arrayFaces	Le tableau de faces (pour les mesh non custom)
 		 *\param[in]	p_arraySizes	Le tableau de dimensions (pour les mesh non custom)
 		 *\return		Le mesh créé
 		 */
-		MeshSPtr CreateMesh( eMESH_TYPE p_eType, Castor::String const & p_strName, UIntArray const & p_arrayFaces, RealArray const & p_arraySizes );
+		MeshSPtr CreateMesh( eMESH_TYPE p_type, Castor::String const & p_name, UIntArray const & p_arrayFaces, RealArray const & p_arraySizes );
 		/**
 		 *\~english
 		 *\brief		Saves in a file all currently loaded meshes
@@ -232,21 +232,21 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Creates an overlay, given a type and the overlay definitions
 		 *\remark		If an overlay with the given name already exists, no creation is done, the return is the existing overlay
-		 *\param[in]	p_eType		The overlay type (panel, text ...)
-		 *\param[in]	p_strName	The overlay name
-		 *\param[in]	p_pParent	The parent overlay, NULL if none
-		 *\param[in]	p_pScene	The scene that holds the overlay
+		 *\param[in]	p_type		The overlay type (panel, text ...)
+		 *\param[in]	p_name	The overlay name
+		 *\param[in]	p_parent	The parent overlay, NULL if none
+		 *\param[in]	p_scene	The scene that holds the overlay
 		 *\return		The created overlay
 		 *\~french
 		 *\brief		Crée un overlay
 		 *\remark		Si un overlay avec le même nom existe déjà, aucune création n'est faite, l'existant est retourné
-		 *\param[in]	p_eType		Le type d'overlay
-		 *\param[in]	p_strName	Le nom voulu pour l'overlay
-		 *\param[in]	p_pParent	L'overlay parent, nullptr si aucun
-		 *\param[in]	p_pScene	La scène contenant l'overlay
+		 *\param[in]	p_type		Le type d'overlay
+		 *\param[in]	p_name	Le nom voulu pour l'overlay
+		 *\param[in]	p_parent	L'overlay parent, nullptr si aucun
+		 *\param[in]	p_scene	La scène contenant l'overlay
 		 *\return		L'overlay
 		 */
-		OverlaySPtr CreateOverlay( eOVERLAY_TYPE p_eType, Castor::String const & p_strName, OverlaySPtr p_pParent, SceneSPtr p_pScene );
+		OverlaySPtr CreateOverlay( eOVERLAY_TYPE p_type, Castor::String const & p_name, OverlaySPtr p_parent, SceneSPtr p_scene );
 		/**
 		 *\~english
 		 *\brief		Creates a render window
@@ -323,14 +323,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Loads a renderer plugin, given the renderer type
-		 *\param[in]	p_eType	The renderer type
+		 *\param[in]	p_type	The renderer type
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Charge un plugin de rendu, selon le type de rendu
-		 *\param[in]	p_eType	Le type de rendu
+		 *\param[in]	p_type	Le type de rendu
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool LoadRenderer( eRENDERER_TYPE p_eType );
+		bool LoadRenderer( eRENDERER_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Loads all the plugins located in working folder
@@ -477,7 +477,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates an RenderTechnique from a technique name
-		 *\param[in]	p_strName		The technique name
+		 *\param[in]	p_name		The technique name
 		 *\param[in]	p_renderTarget	The technique render target
 		 *\param[in]	p_params		The technique parameters
 		 *\return		The created RenderTechnique
@@ -488,7 +488,7 @@ namespace Castor3D
 		 *\param[in]	p_params		Les paramètres de la technique
 		 *\return		La RenderTechnique créée
 		 */
-		RenderTechniqueBaseSPtr CreateTechnique( Castor::String const & p_strName, RenderTarget & p_renderTarget, Parameters const & p_params );
+		RenderTechniqueBaseSPtr CreateTechnique( Castor::String const & p_name, RenderTarget & p_renderTarget, Parameters const & p_params );
 		/**
 		 *\~english
 		 *\brief		Checks the current support for given shader model
@@ -512,14 +512,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a render target of given type
-		 *\param[in]	p_eType	The render target type
+		 *\param[in]	p_type	The render target type
 		 *\return		The render target
 		 *\~french
 		 *\brief		Crée une cible de rendu du type voulu
-		 *\param[in]	p_eType	Le type de cible de rendu
+		 *\param[in]	p_type	Le type de cible de rendu
 		 *\return		La cible de rendu
 		 */
-		RenderTargetSPtr CreateRenderTarget( eTARGET_TYPE p_eType );
+		RenderTargetSPtr CreateRenderTarget( eTARGET_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Removes a render target from the render loop
@@ -551,54 +551,54 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Creates and returns a Sampler, given a name
 		 *\remark		If a Sampler with the same name exists, none is created
-		 *\param[in]	p_strName	The Sampler name
+		 *\param[in]	p_name	The Sampler name
 		 *\return		The created or existing Sampler
 		 *\~french
 		 *\brief		Crée et renvoie un Sampler, avec le nom donné
 		 *\remark		Si un Sampler avec le même nom existe, aucun n'est créé
-		 *\param[in]	p_strName	Le nom du Sampler
+		 *\param[in]	p_name	Le nom du Sampler
 		 *\return		Le Sampler créé ou existant
 		 */
-		SamplerSPtr CreateSampler( Castor::String const & p_strName );
+		SamplerSPtr CreateSampler( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Creates and returns a DepthStencilState, given a name
 		 *\remark		If a DepthStencilState with the same name exists, none is created
-		 *\param[in]	p_strName	The DepthStencilState name
+		 *\param[in]	p_name	The DepthStencilState name
 		 *\return		The created or existing DepthStencilState
 		 *\~french
 		 *\brief		Crée et renvoie un DepthStencilState, avec le nom donné
 		 *\remark		Si un DepthStencilState avec le même nom existe, aucun n'est créé
-		 *\param[in]	p_strName	Le nom du DepthStencilState
+		 *\param[in]	p_name	Le nom du DepthStencilState
 		 *\return		Le DepthStencilState créé ou existant
 		 */
-		DepthStencilStateSPtr CreateDepthStencilState( Castor::String const & p_strName );
+		DepthStencilStateSPtr CreateDepthStencilState( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Creates and returns a RasteriserState, given a name
 		 *\remark		If a RasteriserState with the same name exists, none is created
-		 *\param[in]	p_strName	The RasteriserState name
+		 *\param[in]	p_name	The RasteriserState name
 		 *\return		The created or existing RasteriserState
 		 *\~french
 		 *\brief		Crée et renvoie un RasteriserState, avec le nom donné
 		 *\remark		Si un RasteriserState avec le même nom existe, aucun n'est créé
-		 *\param[in]	p_strName	Le nom du RasteriserState
+		 *\param[in]	p_name	Le nom du RasteriserState
 		 *\return		Le RasteriserState créé ou existant
 		 */
-		RasteriserStateSPtr CreateRasteriserState( Castor::String const & p_strName );
+		RasteriserStateSPtr CreateRasteriserState( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Creates and returns a BlendState, given a name
 		 *\remark		If a BlendState with the same name exists, none is created
-		 *\param[in]	p_strName	The BlendState name
+		 *\param[in]	p_name	The BlendState name
 		 *\return		The created or existing BlendState
 		 *\~french
 		 *\brief		Crée et renvoie un BlendState, avec le nom donné
 		 *\remark		Si un BlendState avec le même nom existe, aucun n'est créé
-		 *\param[in]	p_strName	Le nom du BlendState
+		 *\param[in]	p_name	Le nom du BlendState
 		 *\return		Le BlendState créé ou existant
 		 */
-		BlendStateSPtr CreateBlendState( Castor::String const & p_strName );
+		BlendStateSPtr CreateBlendState( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Show or hide debug overlays
@@ -667,9 +667,9 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur la map des plugins
 		 *\return		L'itérateur
 		 */
-		inline PluginStrMapIt PluginsBegin( ePLUGIN_TYPE p_eType )
+		inline PluginStrMapIt PluginsBegin( ePLUGIN_TYPE p_type )
 		{
-			return m_arrayLoadedPlugins[p_eType].begin();
+			return m_arrayLoadedPlugins[p_type].begin();
 		}
 		/**
 		 *\~english
@@ -679,9 +679,9 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur la find de la map des plugins
 		 *\return		L'itérateur
 		 */
-		inline PluginStrMapIt PluginsEnd( ePLUGIN_TYPE p_eType )
+		inline PluginStrMapIt PluginsEnd( ePLUGIN_TYPE p_type )
 		{
-			return m_arrayLoadedPlugins[p_eType].end();
+			return m_arrayLoadedPlugins[p_type].end();
 		}
 		/**
 		 *\~english
@@ -691,9 +691,9 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur constant sur la map des plugins
 		 *\return		L'itérateur
 		 */
-		inline PluginStrMapConstIt PluginsBegin( ePLUGIN_TYPE p_eType )const
+		inline PluginStrMapConstIt PluginsBegin( ePLUGIN_TYPE p_type )const
 		{
-			return m_arrayLoadedPlugins[p_eType].begin();
+			return m_arrayLoadedPlugins[p_type].begin();
 		}
 		/**
 		 *\~english
@@ -703,9 +703,9 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur constant sur la find de la map des plugins
 		 *\return		L'itérateur
 		 */
-		inline PluginStrMapConstIt PluginsEnd( ePLUGIN_TYPE p_eType )const
+		inline PluginStrMapConstIt PluginsEnd( ePLUGIN_TYPE p_type )const
 		{
-			return m_arrayLoadedPlugins[p_eType].end();
+			return m_arrayLoadedPlugins[p_type].end();
 		}
 		/**
 		 *\~english

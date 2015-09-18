@@ -38,7 +38,7 @@ namespace GuiCommon
 		}	eID;
 
 	public:
-		RendererSelector( Castor3D::Engine * p_pEngine, wxWindow * p_pParent, wxString const & p_strTitle );
+		RendererSelector( Castor3D::Engine * p_engine, wxWindow * p_parent, wxString const & p_strTitle );
 		virtual ~RendererSelector();
 
 		Castor3D::eRENDERER_TYPE GetSelectedRenderer()const;
@@ -57,7 +57,7 @@ namespace GuiCommon
 	private:
 		wxImage * m_pImgCastor;
 		wxListBox * m_pListRenderers;
-		Castor3D::Engine * m_pEngine;
+		Castor3D::Engine * m_engine;
 	};
 }
 

@@ -16,8 +16,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	SceneNode::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< SceneNode, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	SceneNode::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		:	Loader< SceneNode, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -247,13 +247,13 @@ namespace Castor3D
 		Count++;
 	}
 
-	SceneNode::SceneNode( SceneSPtr p_pScene, String const & p_name )
+	SceneNode::SceneNode( SceneSPtr p_scene, String const & p_name )
 		: m_strName( p_name )
 		, m_bVisible( true )
 		, m_ptScale( 1.0, 1.0, 1.0 )
 		, m_ptPosition( 0.0, 0.0, 0.0 )
 		, m_bDisplayable( p_name == cuT( "RootNode" ) )
-		, m_pScene( p_pScene )
+		, m_pScene( p_scene )
 		, m_bMtxChanged( true )
 	{
 		if ( m_strName.empty() )
@@ -529,9 +529,9 @@ namespace Castor3D
 
 	Point3r SceneNode::GetDerivedPosition()
 	{
-		Point3r l_ptReturn;
-		matrix::get_translate( GetDerivedTransformationMatrix(), l_ptReturn );
-		return l_ptReturn;
+		Point3r l_return;
+		matrix::get_translate( GetDerivedTransformationMatrix(), l_return );
+		return l_return;
 	}
 
 	Quaternion SceneNode::GetDerivedOrientation()
@@ -543,9 +543,9 @@ namespace Castor3D
 
 	Point3r SceneNode::GetDerivedScale()
 	{
-		Point3r l_ptReturn;
-		matrix::get_scale( GetDerivedTransformationMatrix(), l_ptReturn );
-		return l_ptReturn;
+		Point3r l_return;
+		matrix::get_scale( GetDerivedTransformationMatrix(), l_return );
+		return l_return;
 	}
 
 	void SceneNode::DoComputeMatrix()

@@ -103,25 +103,25 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates an animation
-		 *\param[in]	p_strName	The animation name
+		 *\param[in]	p_name	The animation name
 		 *\return		The animation
 		 *\~french
 		 *\brief		Crée une animation
-		 *\param[in]	p_strName	Le nom de l'animation
+		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		l'animation
 		 */
-		AnimationSPtr CreateAnimation( Castor::String const & p_strName );
+		AnimationSPtr CreateAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
-		 *\param[in]	p_strName	The animation name
+		 *\param[in]	p_name	The animation name
 		 *\return		The animation
 		 *\~french
 		 *\brief		Récupère une animation
-		 *\param[in]	p_strName	Le nom de l'animation
+		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		AnimationSPtr GetAnimation( Castor::String const & p_strName );
+		AnimationSPtr GetAnimation( Castor::String const & p_name );
 
 	protected:
 		//!\~english All animations	\~french Toutes les animations

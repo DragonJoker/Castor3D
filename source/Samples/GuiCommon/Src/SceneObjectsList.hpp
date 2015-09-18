@@ -29,10 +29,10 @@ namespace GuiCommon
 		: public wxTreeCtrl
 	{
 	public:
-		SceneObjectsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_pParent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
+		SceneObjectsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
 		~SceneObjectsList();
 
-		void LoadScene( Castor3D::Engine * p_pEngine, Castor3D::SceneSPtr p_pScene );
+		void LoadScene( Castor3D::Engine * p_engine, Castor3D::SceneSPtr p_scene );
 		void UnloadScene();
 
 	protected:
@@ -50,7 +50,7 @@ namespace GuiCommon
 
 	private:
 		Castor3D::SceneWPtr m_pScene;
-		Castor3D::Engine * m_pEngine;
+		Castor3D::Engine * m_engine;
 		PropertiesHolder * m_propertiesHolder;
 	};
 }

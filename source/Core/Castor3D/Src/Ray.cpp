@@ -22,14 +22,14 @@ Ray::Ray( Point2i const & p_point, Camera const & p_camera )
 	point::normalise( m_ptDirection );
 }
 
-Ray::Ray( int p_iX, int p_iY, Camera const & p_camera )
+Ray::Ray( int p_x, int p_y, Camera const & p_camera )
 {
 	ViewportSPtr l_pViewport = p_camera.GetViewport();
 	m_ptOrigin = p_camera.GetParent()->GetPosition();
 	m_ptOrigin[2] += l_pViewport->GetNear();
 	Quaternion l_camOrient = p_camera.GetParent()->GetOrientation();
 	m_ptOrigin *= l_camOrient;
-	Point2i l_point( p_iX, p_iY );
+	Point2i l_point( p_x, p_y );
 	l_pViewport->GetDirection( l_point, m_ptDirection );
 	point::normalise( m_ptDirection );
 }

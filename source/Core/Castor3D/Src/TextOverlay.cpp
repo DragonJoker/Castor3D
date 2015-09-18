@@ -221,7 +221,7 @@ namespace Castor3D
 		}
 		else
 		{
-			CASTOR_EXCEPTION( "Font " + string::to_str( p_strFont ) + "not found" );
+			CASTOR_EXCEPTION( "Font " + string::string_cast< char >( p_strFont ) + "not found" );
 		}
 
 		m_pOverlay->GetEngine()->PostEvent( MakeInitialiseEvent( *this ) );
@@ -246,7 +246,7 @@ namespace Castor3D
 
 		if ( l_it == m_glyphsPositions.end() )
 		{
-			CASTOR_EXCEPTION( std::string( "No loaded glyph for character " ) + string::to_str( string::to_string( p_char ) ) );
+			CASTOR_EXCEPTION( std::string( "No loaded glyph for character " ) + string::string_cast< char >( string::to_string( p_char ) ) );
 		}
 
 		return l_it->second;

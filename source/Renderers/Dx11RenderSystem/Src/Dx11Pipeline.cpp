@@ -1,5 +1,8 @@
 #include "Dx11Pipeline.hpp"
 
+#include <FrameVariableBuffer.hpp>
+#include <MatrixFrameVariable.hpp>
+
 #include "Dx11Context.hpp"
 #include "Dx11RenderSystem.hpp"
 
@@ -12,7 +15,6 @@ namespace Dx11Render
 		: IPipelineImpl( p_pipeline )
 		, m_viewport()
 	{
-		m_viewport.MaxDepth = 1.0f;
 	}
 
 	DxPipelineImpl::~DxPipelineImpl()
@@ -29,5 +31,16 @@ namespace Dx11Render
 		m_viewport.TopLeftY = 0.0f;
 		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pipeline.GetRenderSystem()->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->RSSetViewports( 1, &m_viewport );
+	}
+
+	void DxPipelineImpl::ApplyMatrix( matrix4x4 const & p_matrix, Castor::String const & p_name, FrameVariableBuffer & p_matrixBuffer )
+	{
+		Matrix4x4rFrameVariableSPtr l_pVariable;
+		p_matrixBuffer.GetVariable( p_name, l_pVariable );
+
+		if ( l_pVariable )
+		{
+			l_pVariable->SetValue( p_matrix );
+		}
 	}
 }

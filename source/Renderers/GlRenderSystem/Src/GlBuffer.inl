@@ -14,9 +14,9 @@ namespace GlRender
 	}
 
 	template< typename T >
-	bool GlBuffer< T >::Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_eType, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
+	bool GlBuffer< T >::Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
 	{
-		return m_glBuffer.Fill( p_pBuffer, p_iSize, p_eType, p_eNature );
+		return m_glBuffer.Fill( p_pBuffer, p_iSize, p_type, p_eNature );
 	}
 
 	template< typename T >
@@ -32,14 +32,14 @@ namespace GlRender
 	}
 
 	template< typename T >
-	bool GlBuffer< T >::DoInitialise( Castor3D::eBUFFER_ACCESS_TYPE p_eType, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
+	bool GlBuffer< T >::DoInitialise( Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
 	{
 		bool l_return = true;
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
 
 		if ( l_pBuffer && l_pBuffer->GetSize() )
 		{
-			l_return = m_glBuffer.Initialise( &l_pBuffer->data()[0], l_pBuffer->GetSize(), p_eType, p_eNature );
+			l_return = m_glBuffer.Initialise( &l_pBuffer->data()[0], l_pBuffer->GetSize(), p_type, p_eNature );
 		}
 
 		if ( l_return )
@@ -78,9 +78,9 @@ namespace GlRender
 	}
 
 	template< typename T >
-	bool GlBuffer< T >::DoFill( T * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_eType, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
+	bool GlBuffer< T >::DoFill( T * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
 	{
-		return m_glBuffer.Fill( p_pBuffer, p_iSize, p_eType, p_eNature );
+		return m_glBuffer.Fill( p_pBuffer, p_iSize, p_type, p_eNature );
 	}
 
 	template< typename T >

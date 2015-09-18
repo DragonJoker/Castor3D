@@ -174,7 +174,7 @@ namespace Castor3D
 
 		Version l_version;
 		String l_strVersion;
-		Logger::LogInfo( l_strVersion + cuT( "Castor3D - Core engine version : " ) + string::to_string( l_version.m_iMajor ) + cuT( "." ) + string::to_string( l_version.m_iMinor ) + cuT( "." ) + string::to_string( l_version.m_iBuild ) );
+		Logger::LogInfo( StringStream() << cuT( "Castor3D - Core engine version : " ) << l_version );
 		std::locale::global( std::locale() );
 	}
 
@@ -521,15 +521,15 @@ namespace Castor3D
 		m_overlayManager.RenderOverlays( p_scene, p_size );
 	}
 
-	SceneSPtr Engine::CreateScene( String const & p_strName )
+	SceneSPtr Engine::CreateScene( String const & p_name )
 	{
-		SceneSPtr l_pReturn = m_sceneManager.find( p_strName );
+		SceneSPtr l_pReturn = m_sceneManager.find( p_name );
 
 		if ( ! l_pReturn )
 		{
-			l_pReturn = std::make_shared< Scene >( this, m_lightFactory, p_strName );
+			l_pReturn = std::make_shared< Scene >( this, m_lightFactory, p_name );
 			l_pReturn->Initialise();
-			m_sceneManager.insert( p_strName, l_pReturn );
+			m_sceneManager.insert( p_name, l_pReturn );
 		}
 
 		return l_pReturn;
@@ -547,24 +547,24 @@ namespace Castor3D
 		m_sceneManager.unlock();
 	}
 
-	MeshSPtr Engine::CreateMesh( eMESH_TYPE p_eType, Castor::String const & p_strMeshName )
+	MeshSPtr Engine::CreateMesh( eMESH_TYPE p_type, Castor::String const & p_strMeshName )
 	{
-		return CreateMesh( p_eType, p_strMeshName, UIntArray(), RealArray() );
+		return CreateMesh( p_type, p_strMeshName, UIntArray(), RealArray() );
 	}
 
-	MeshSPtr Engine::CreateMesh( eMESH_TYPE p_eType, Castor::String const & p_strMeshName, UIntArray const & p_arrayFaces )
+	MeshSPtr Engine::CreateMesh( eMESH_TYPE p_type, Castor::String const & p_strMeshName, UIntArray const & p_arrayFaces )
 	{
-		return CreateMesh( p_eType, p_strMeshName, p_arrayFaces, RealArray() );
+		return CreateMesh( p_type, p_strMeshName, p_arrayFaces, RealArray() );
 	}
 
-	MeshSPtr Engine::CreateMesh( eMESH_TYPE p_eType, Castor::String const & p_strMeshName, UIntArray const & p_arrayFaces, RealArray const & p_arraySizes )
+	MeshSPtr Engine::CreateMesh( eMESH_TYPE p_type, Castor::String const & p_strMeshName, UIntArray const & p_arrayFaces, RealArray const & p_arraySizes )
 	{
 		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexResources );
 		MeshSPtr l_pReturn = m_meshManager.find( p_strMeshName );
 
 		if ( !l_pReturn )
 		{
-			l_pReturn = std::make_shared< Mesh >( this, p_eType, p_strMeshName );
+			l_pReturn = std::make_shared< Mesh >( this, p_type, p_strMeshName );
 			l_pReturn->Initialise( p_arrayFaces, p_arraySizes );
 			m_meshManager.insert( p_strMeshName, l_pReturn );
 			Logger::LogInfo( cuT( "Engine::CreateMesh - Mesh [" ) + p_strMeshName + cuT( "] - Created" ) );
@@ -632,26 +632,26 @@ namespace Castor3D
 		return l_return;
 	}
 
-	OverlaySPtr Engine::CreateOverlay( eOVERLAY_TYPE p_eType, String const & p_strName, OverlaySPtr p_pParent, SceneSPtr p_pScene )
+	OverlaySPtr Engine::CreateOverlay( eOVERLAY_TYPE p_type, String const & p_name, OverlaySPtr p_parent, SceneSPtr p_scene )
 	{
-		OverlaySPtr l_pReturn = m_overlayManager.GetOverlay( p_strName );
+		OverlaySPtr l_pReturn = m_overlayManager.GetOverlay( p_name );
 
 		if ( !l_pReturn )
 		{
-			l_pReturn = std::make_shared< Overlay >( this, p_eType, p_pScene, p_pParent );
-			l_pReturn->SetName( p_strName );
+			l_pReturn = std::make_shared< Overlay >( this, p_type, p_scene, p_parent );
+			l_pReturn->SetName( p_name );
 
-			if ( p_pScene )
+			if ( p_scene )
 			{
-				p_pScene->AddOverlay( l_pReturn );
+				p_scene->AddOverlay( l_pReturn );
 			}
 
-			m_overlayManager.AddOverlay( p_strName, l_pReturn, p_pParent );
-			Logger::LogInfo( cuT( "Scene::CreateOverlay - Overlay [" ) + p_strName + cuT( "] - Created" ) );
+			m_overlayManager.AddOverlay( p_name, l_pReturn, p_parent );
+			Logger::LogInfo( cuT( "Scene::CreateOverlay - Overlay [" ) + p_name + cuT( "] - Created" ) );
 		}
 		else
 		{
-			Logger::LogWarning( cuT( "Scene::CreateOverlay - Can't create Overlay [" ) + p_strName + cuT( "] - Another overlay with the same name already exists" ) );
+			Logger::LogWarning( cuT( "Scene::CreateOverlay - Can't create Overlay [" ) + p_name + cuT( "] - Another overlay with the same name already exists" ) );
 		}
 
 		return  l_pReturn;
@@ -726,7 +726,7 @@ namespace Castor3D
 		}
 		catch ( std::exception & p_exc )
 		{
-			Logger::LogWarning( cuT( "LoadPlugin - Fail - " ) + string::from_str( p_exc.what() ) );
+			Logger::LogWarning( cuT( "LoadPlugin - Fail - " ) + string::string_cast< xchar >( p_exc.what() ) );
 		}
 		catch ( ... )
 		{
@@ -754,7 +754,7 @@ namespace Castor3D
 		}
 		catch ( std::exception & p_exc )
 		{
-			Logger::LogWarning( cuT( "LoadPlugin - Fail - " ) + string::from_str( p_exc.what() ) );
+			Logger::LogWarning( cuT( "LoadPlugin - Fail - " ) + string::string_cast< xchar >( p_exc.what() ) );
 		}
 		catch ( ... )
 		{
@@ -779,11 +779,11 @@ namespace Castor3D
 		return l_pReturn;
 	}
 
-	bool Engine::LoadRenderer( eRENDERER_TYPE p_eType )
+	bool Engine::LoadRenderer( eRENDERER_TYPE p_type )
 	{
 		bool l_return = false;
 		m_mutexRenderers.lock();
-		RendererPluginSPtr l_pPlugin = m_arrayRenderers[p_eType];
+		RendererPluginSPtr l_pPlugin = m_arrayRenderers[p_type];
 		m_mutexRenderers.unlock();
 
 		if ( l_pPlugin )
@@ -928,7 +928,7 @@ namespace Castor3D
 				{
 					String l_strError = cuT( "Error encountered while loading file [" ) + p_pathFile + cuT( "] : " );
 					l_strError += System::GetLastErrorText();
-					CASTOR_PLUGIN_EXCEPTION( string::to_str( l_strError ), true );
+					CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), true );
 				}
 
 				PluginBase::PGetTypeFunction l_pfnGetType;
@@ -936,12 +936,12 @@ namespace Castor3D
 				if ( !l_pLibrary->GetFunction( l_pfnGetType, GetTypeFunctionABIName ) )
 				{
 					String l_strError = cuT( "Error encountered while loading file [" ) + p_pathFile.GetFileName() + cuT( "] GetType plugin function => Not a Castor3D plugin" );
-					CASTOR_PLUGIN_EXCEPTION( string::to_str( l_strError ), true );
+					CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), true );
 				}
 
-				ePLUGIN_TYPE l_eType = l_pfnGetType();
+				ePLUGIN_TYPE l_type = l_pfnGetType();
 
-				switch ( l_eType )
+				switch ( l_type )
 				{
 				case ePLUGIN_TYPE_DIVIDER:
 					l_pReturn = std::make_shared< DividerPlugin >( l_pLibrary, this );
@@ -978,18 +978,18 @@ namespace Castor3D
 					Version l_toCheck( 0, 0 );
 					l_pReturn->GetRequiredVersion( l_toCheck );
 					String l_strToLog( cuT( "LoadPlugin - Plugin [" ) );
-					Logger::LogInfo( l_strToLog + l_pReturn->GetName() + cuT( "] - Required engine version : " ) + string::to_string( l_toCheck.m_iMajor ) + cuT( "." ) + string::to_string( l_toCheck.m_iMinor ) + cuT( "." ) + string::to_string( l_toCheck.m_iBuild ) );
+					Logger::LogInfo( StringStream() << l_strToLog << l_pReturn->GetName() << cuT( "] - Required engine version : " ) << l_toCheck );
 
 					if ( l_toCheck <= m_version )
 					{
 						m_mutexLoadedPluginTypes.lock();
-						m_mapLoadedPluginTypes.insert( std::make_pair( p_pathFile, l_eType ) );
+						m_mapLoadedPluginTypes.insert( std::make_pair( p_pathFile, l_type ) );
 						m_mutexLoadedPluginTypes.unlock();
 						m_mutexLoadedPlugins.lock();
-						m_arrayLoadedPlugins[l_eType].insert( std::make_pair( p_pathFile, l_pReturn ) );
+						m_arrayLoadedPlugins[l_type].insert( std::make_pair( p_pathFile, l_pReturn ) );
 						m_mutexLoadedPlugins.unlock();
 						m_mutexLibraries.lock();
-						m_librariesMap[l_eType].insert( std::make_pair( p_pathFile, l_pLibrary ) );
+						m_librariesMap[l_type].insert( std::make_pair( p_pathFile, l_pLibrary ) );
 						m_mutexLibraries.unlock();
 						l_strToLog = cuT( "LoadPlugin - Plugin [" );
 						Logger::LogInfo( l_strToLog + l_pReturn->GetName() + cuT( "] loaded" ) );
@@ -1011,10 +1011,10 @@ namespace Castor3D
 		}
 		else
 		{
-			ePLUGIN_TYPE l_eType = l_it->second;
+			ePLUGIN_TYPE l_type = l_it->second;
 			m_mutexLoadedPluginTypes.unlock();
 			m_mutexLoadedPlugins.lock();
-			l_pReturn = m_arrayLoadedPlugins[l_eType].find( p_pathFile )->second;
+			l_pReturn = m_arrayLoadedPlugins[l_type].find( p_pathFile )->second;
 			m_mutexLoadedPlugins.unlock();
 		}
 
@@ -1031,9 +1031,9 @@ namespace Castor3D
 		m_shaderManager.Update();
 	}
 
-	RenderTechniqueBaseSPtr Engine::CreateTechnique( Castor::String const & p_strName, RenderTarget & p_renderTarget, Parameters const & p_params )
+	RenderTechniqueBaseSPtr Engine::CreateTechnique( Castor::String const & p_name, RenderTarget & p_renderTarget, Parameters const & p_params )
 	{
-		return m_techniqueFactory.Create( p_strName, p_renderTarget, m_renderSystem, p_params );
+		return m_techniqueFactory.Create( p_name, p_renderTarget, m_renderSystem, p_params );
 	}
 
 	bool Engine::IsEnded()
@@ -1126,23 +1126,23 @@ namespace Castor3D
 		return l_return;
 	}
 
-	RenderTargetSPtr Engine::CreateRenderTarget( eTARGET_TYPE p_eType )
+	RenderTargetSPtr Engine::CreateRenderTarget( eTARGET_TYPE p_type )
 	{
 		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexResources );
-		RenderTargetSPtr l_pReturn = m_renderSystem->CreateRenderTarget( p_eType );
-		m_mapRenderTargets.insert( std::make_pair( p_eType, l_pReturn ) );
+		RenderTargetSPtr l_pReturn = m_renderSystem->CreateRenderTarget( p_type );
+		m_mapRenderTargets.insert( std::make_pair( p_type, l_pReturn ) );
 		return l_pReturn;
 	}
 
 	void Engine::RemoveRenderTarget( RenderTargetSPtr && p_pRenderTarget )
 	{
 		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexResources );
-		eTARGET_TYPE l_eType = p_pRenderTarget->GetTargetType();
-		RenderTargetMMapIt l_it = m_mapRenderTargets.find( l_eType );
+		eTARGET_TYPE l_type = p_pRenderTarget->GetTargetType();
+		RenderTargetMMapIt l_it = m_mapRenderTargets.find( l_type );
 
 		while ( l_it != m_mapRenderTargets.end() )
 		{
-			if ( l_it->first != l_eType )
+			if ( l_it->first != l_type )
 			{
 				l_it = m_mapRenderTargets.end();
 			}
@@ -1177,22 +1177,22 @@ namespace Castor3D
 		p_pListener.reset();
 	}
 
-	SamplerSPtr Engine::CreateSampler( String const & p_strName )
+	SamplerSPtr Engine::CreateSampler( String const & p_name )
 	{
 		SamplerSPtr l_pReturn;
 
-		if ( p_strName.empty() )
+		if ( p_name.empty() )
 		{
-			l_pReturn = m_renderSystem->CreateSampler( p_strName );
+			l_pReturn = m_renderSystem->CreateSampler( p_name );
 		}
 		else
 		{
-			l_pReturn = m_samplerManager.find( p_strName );
+			l_pReturn = m_samplerManager.find( p_name );
 
 			if ( !l_pReturn )
 			{
-				l_pReturn = m_renderSystem->CreateSampler( p_strName );
-				m_samplerManager.insert( p_strName, l_pReturn );
+				l_pReturn = m_renderSystem->CreateSampler( p_name );
+				m_samplerManager.insert( p_name, l_pReturn );
 				m_arrayListeners[0]->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
 			}
 		}
@@ -1200,14 +1200,14 @@ namespace Castor3D
 		return l_pReturn;
 	}
 
-	DepthStencilStateSPtr Engine::CreateDepthStencilState( String const & p_strName )
+	DepthStencilStateSPtr Engine::CreateDepthStencilState( String const & p_name )
 	{
-		DepthStencilStateSPtr l_pReturn = m_depthStencilStateManager.find( p_strName );
+		DepthStencilStateSPtr l_pReturn = m_depthStencilStateManager.find( p_name );
 
 		if ( m_renderSystem && !l_pReturn )
 		{
 			l_pReturn = m_renderSystem->CreateDepthStencilState();
-			m_depthStencilStateManager.insert( p_strName, l_pReturn );
+			m_depthStencilStateManager.insert( p_name, l_pReturn );
 			CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexResources );
 			m_arrayListeners[0]->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
 		}
@@ -1215,28 +1215,28 @@ namespace Castor3D
 		return l_pReturn;
 	}
 
-	RasteriserStateSPtr Engine::CreateRasteriserState( String const & p_strName )
+	RasteriserStateSPtr Engine::CreateRasteriserState( String const & p_name )
 	{
-		RasteriserStateSPtr l_pReturn = m_rasteriserStateManager.find( p_strName );
+		RasteriserStateSPtr l_pReturn = m_rasteriserStateManager.find( p_name );
 
 		if ( m_renderSystem && !l_pReturn )
 		{
 			l_pReturn = m_renderSystem->CreateRasteriserState();
-			m_rasteriserStateManager.insert( p_strName, l_pReturn );
+			m_rasteriserStateManager.insert( p_name, l_pReturn );
 			m_arrayListeners[0]->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
 		}
 
 		return l_pReturn;
 	}
 
-	BlendStateSPtr Engine::CreateBlendState( String const & p_strName )
+	BlendStateSPtr Engine::CreateBlendState( String const & p_name )
 	{
-		BlendStateSPtr l_pReturn = m_blendStateManager.find( p_strName );
+		BlendStateSPtr l_pReturn = m_blendStateManager.find( p_name );
 
 		if ( m_renderSystem && !l_pReturn )
 		{
 			l_pReturn = m_renderSystem->CreateBlendState();
-			m_blendStateManager.insert( p_strName, l_pReturn );
+			m_blendStateManager.insert( p_name, l_pReturn );
 			m_arrayListeners[0]->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
 		}
 

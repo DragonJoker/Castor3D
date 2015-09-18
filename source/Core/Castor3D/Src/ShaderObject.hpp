@@ -59,7 +59,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief			Writes a ShaderObject into a text file
@@ -128,14 +128,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pParent	Parent program
-		 *\param[in]	p_eType		Shader type
+		 *\param[in]	p_parent	Parent program
+		 *\param[in]	p_type		Shader type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pParent	programme parent
-		 *\param[in]	p_eType		Type de shader
+		 *\param[in]	p_parent	programme parent
+		 *\param[in]	p_type		Type de shader
 		 */
-		ShaderObjectBase( ShaderProgramBase * p_pParent, eSHADER_TYPE p_eType );
+		ShaderObjectBase( ShaderProgramBase * p_parent, eSHADER_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -160,12 +160,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines entry point for shader languages that need it
-		 *\param[in]	p_strName	The entry point
+		 *\param[in]	p_name	The entry point
 		 *\~french
 		 *\brief		Définit le point d'entrée pour ls langages en ayant besoin
-		 *\param[in]	p_strName	Le point d'entrée
+		 *\param[in]	p_name	Le point d'entrée
 		 */
-		virtual void SetEntryPoint( Castor::String const & p_strName ) = 0;
+		virtual void SetEntryPoint( Castor::String const & p_name ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the entry point
@@ -275,7 +275,7 @@ namespace Castor3D
 		 *\brief		Trouve une variable
 		 *\return		La variable trouvé, nullptr en cas d'échec
 		 */
-		OneTextureFrameVariableSPtr FindFrameVariable( Castor::String const & p_strName )const;
+		OneTextureFrameVariableSPtr FindFrameVariable( Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Removes all frame variables
@@ -311,39 +311,39 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Tells if the compiled shader has the given parameter
-		 *\param[in]	p_strName	The parameter name
+		 *\param[in]	p_name	The parameter name
 		 *\return		\p true if the parameter was found
 		 *\~french
 		 *\brief		Dit si le shader compilé a le paramètre donné
-		 *\param[in]	p_strName	Le nom du paramètre
+		 *\param[in]	p_name	Le nom du paramètre
 		 *\return		\p true si le paramètre a été trouvé
 		 */
-		virtual bool HasParameter( Castor::String const & CU_PARAM_UNUSED( p_strName ) )
+		virtual bool HasParameter( Castor::String const & CU_PARAM_UNUSED( p_name ) )
 		{
 			return false;
 		}
 		/**
 		 *\~english
 		 *\brief		Defines the given parameter value
-		 *\param[in]	p_strName	The parameter name
+		 *\param[in]	p_name	The parameter name
 		 *\param[in]	p_mtxValue	The parameter value
 		 *\~french
 		 *\brief		Définit la valeur du paramètre
-		 *\param[in]	p_strName	Le nom du paramètre
+		 *\param[in]	p_name	Le nom du paramètre
 		 *\param[in]	p_mtxValue	La valeur du paramètre
 		 */
-		virtual void SetParameter( Castor::String const & CU_PARAM_UNUSED( p_strName ), Castor::Matrix4x4r const & CU_PARAM_UNUSED( p_mtxValue ) ) {}
+		virtual void SetParameter( Castor::String const & CU_PARAM_UNUSED( p_name ), Castor::Matrix4x4r const & CU_PARAM_UNUSED( p_mtxValue ) ) {}
 		/**
 		 *\~english
 		 *\brief		Defines the given parameter value
-		 *\param[in]	p_strName	The parameter name
+		 *\param[in]	p_name	The parameter name
 		 *\param[in]	p_mtxValue	The parameter value
 		 *\~french
 		 *\brief		Définit la valeur du paramètre
-		 *\param[in]	p_strName	Le nom du paramètre
+		 *\param[in]	p_name	Le nom du paramètre
 		 *\param[in]	p_mtxValue	La valeur du paramètre
 		 */
-		virtual void SetParameter( Castor::String const & CU_PARAM_UNUSED( p_strName ), Castor::Matrix3x3r const & CU_PARAM_UNUSED( p_mtxValue ) ) {}
+		virtual void SetParameter( Castor::String const & CU_PARAM_UNUSED( p_name ), Castor::Matrix3x3r const & CU_PARAM_UNUSED( p_mtxValue ) ) {}
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader source for given model
@@ -406,7 +406,7 @@ namespace Castor3D
 		 */
 		inline Castor::String GetStrType()const
 		{
-			return string_type[m_eType];
+			return string_type[m_type];
 		}
 		/**
 		 *\~english
@@ -418,15 +418,15 @@ namespace Castor3D
 		 */
 		inline eSHADER_TYPE GetType()const
 		{
-			return m_eType;
+			return m_type;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the input primitives type
-		 *\param[in]	p_ePrimitiveType	The input primitives type
+		 *\param[in]	p_topology	The input primitives type
 		 *\~french
 		 *\brief		Définit le type des primitives en entrée
-		 *\param[in]	p_ePrimitiveType	Le type des primitives en entrée
+		 *\param[in]	p_topology	Le type des primitives en entrée
 		 */
 		inline void SetInputType( eTOPOLOGY val )
 		{
@@ -447,10 +447,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the output primitives type
-		 *\param[in]	p_ePrimitiveType	The primitives type
+		 *\param[in]	p_topology	The primitives type
 		 *\~french
 		 *\brief		Définit le type des primitives en sortie
-		 *\param[in]	p_ePrimitiveType	Le type des primitives
+		 *\param[in]	p_topology	Le type des primitives
 		 */
 		inline void SetOutputType( eTOPOLOGY val )
 		{
@@ -537,7 +537,7 @@ namespace Castor3D
 		//!\~english The parent shader program	\~french Le programme parent
 		ShaderProgramBase * m_pParent;
 		//!<\~english The shader type	\~french Le type de shader
-		eSHADER_TYPE m_eType;
+		eSHADER_TYPE m_type;
 		//!\~english Array of files path, sorted by shader model	\~french Tableau des chemins de fichiers, triés par modèle de shader
 		std::array< Castor::Path, eSHADER_MODEL_COUNT > m_arrayFiles;
 		//!\~english Array of source codes, sorted by shader model	\~french Tableau des codes sources, triés par modèle de shader

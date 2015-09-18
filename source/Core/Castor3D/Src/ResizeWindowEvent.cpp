@@ -28,7 +28,7 @@ namespace Castor3D
 		RenderWindow & l_window = this->m_window;
 		this->m_window = l_evt.m_window;
 		l_evt.m_window = l_window;
-		std::swap( this->m_eType, l_evt.m_eType );
+		std::swap( this->m_type, l_evt.m_type );
 		return *this;
 	}
 

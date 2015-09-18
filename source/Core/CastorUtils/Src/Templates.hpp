@@ -26,7 +26,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor
 {
-	namespace details
+	namespace detail
 	{
 		/*!
 		\author		Sylvain DOREMUS
@@ -135,7 +135,7 @@ namespace Castor
 	void clear_container( CtnrType & p_container )
 	{
 		typedef typename CtnrType::value_type value_type;
-		details::clear_content( p_container, value_type() );
+		detail::clear_content( p_container, value_type() );
 		CtnrType().swap( p_container );
 	}
 	/**
@@ -152,7 +152,7 @@ namespace Castor
 	void clear_pair_container( CtnrType & p_container )
 	{
 		typedef typename CtnrType::value_type value_type;
-		details::clear_pair_content( p_container, value_type() );
+		detail::clear_pair_content( p_container, value_type() );
 		CtnrType().swap( p_container );
 	}
 	/*!

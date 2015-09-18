@@ -94,10 +94,10 @@ namespace Dx11Render
 		ShaderProgramBase::Unbind();
 	}
 
-	ID3DBlob * DxShaderProgram::GetCompiled( Castor3D::eSHADER_TYPE p_eType )
+	ID3DBlob * DxShaderProgram::GetCompiled( Castor3D::eSHADER_TYPE p_type )
 	{
 		ID3DBlob * l_pReturn = NULL;
-		ShaderObjectBaseSPtr l_pObject = m_pShaders[p_eType];
+		ShaderObjectBaseSPtr l_pObject = m_pShaders[p_type];
 
 		if ( l_pObject && l_pObject->GetStatus() == eSHADER_STATUS_COMPILED )
 		{
@@ -107,11 +107,11 @@ namespace Dx11Render
 		return l_pReturn;
 	}
 
-	ShaderObjectBaseSPtr DxShaderProgram::DoCreateObject( eSHADER_TYPE p_eType )
+	ShaderObjectBaseSPtr DxShaderProgram::DoCreateObject( eSHADER_TYPE p_type )
 	{
 		ShaderObjectBaseSPtr l_pReturn;
 
-		switch ( p_eType )
+		switch ( p_type )
 		{
 		case eSHADER_TYPE_VERTEX:
 			l_pReturn = std::make_shared< DxVertexShader >( this );

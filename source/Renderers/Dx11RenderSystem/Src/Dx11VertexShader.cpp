@@ -10,8 +10,8 @@ using namespace Castor;
 
 namespace Dx11Render
 {
-	DxVertexShader::DxVertexShader( DxShaderProgram * p_pParent )
-		: DxShaderObject( p_pParent, eSHADER_TYPE_VERTEX )
+	DxVertexShader::DxVertexShader( DxShaderProgram * p_parent )
+		: DxShaderObject( p_parent, eSHADER_TYPE_VERTEX )
 		, m_pVertexShader( NULL )
 	{
 	}

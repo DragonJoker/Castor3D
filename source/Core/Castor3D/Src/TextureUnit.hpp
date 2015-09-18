@@ -58,7 +58,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a TextureUnit into a text file
@@ -125,12 +125,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param		p_pEngine	The Engine
+		 *\param		p_engine	The Engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param		p_pEngine	Le moteur
+		 *\param		p_engine	Le moteur
 		 */
-		TextureUnit( Engine * p_pEngine );
+		TextureUnit( Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -417,12 +417,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the texture mapping mode
-		 *\param[in]	p_eMode	The texture mapping mode
+		 *\param[in]	p_mode	The texture mapping mode
 		 *\~french
 		 *\brief		Définit le mode de mappage de la texture
-		 *\param[in]	p_eMode	Le mode de mappage de la texture
+		 *\param[in]	p_mode	Le mode de mappage de la texture
 		 */
-		void SetMappingMode( eTEXTURE_MAP_MODE p_eMode );
+		void SetMappingMode( eTEXTURE_MAP_MODE p_mode );
 		/**
 		 *\~english
 		 *\brief		Sets the target holding the texture
@@ -640,13 +640,13 @@ namespace Castor3D
 		 */
 		virtual Engine * GetEngine()const
 		{
-			return m_pEngine;
+			return m_engine;
 		}
 
 	private:
 		friend class TextureRenderer;
 		//!\~english The core engine	\~french Le moteur
-		Engine * m_pEngine;
+		Engine * m_engine;
 		//!\~english The unit index inside it's pass	\~french L'index de l'unité dans sa passe
 		uint32_t m_uiIndex;
 		//!\see eTEXTURE_CHANNEL	\~english The unit channel inside it's pass	\~french Le canal de l'unité dans sa passe

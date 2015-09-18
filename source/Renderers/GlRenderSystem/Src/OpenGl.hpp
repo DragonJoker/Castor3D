@@ -1401,10 +1401,10 @@ namespace GlRender
 
 			PixelFmt() {}
 
-			PixelFmt( eGL_FORMAT p_eFormat, eGL_INTERNAL p_eInternal, eGL_TYPE p_eType )
+			PixelFmt( eGL_FORMAT p_eFormat, eGL_INTERNAL p_eInternal, eGL_TYPE p_type )
 				: Format( p_eFormat )
 				, Internal( p_eInternal )
-				, Type( p_eType )
+				, Type( p_type )
 			{
 			}
 		};
@@ -1509,7 +1509,7 @@ namespace GlRender
 		bool ColorMask( bool p_r, bool p_g, bool p_b, bool p_a );
 		bool DebugMessageCallback( PFNGLDEBUGPROC pfnProc, void * p_pThis );
 		bool DebugMessageCallback( PFNGLDEBUGAMDPROC pfnProc, void * p_pThis );
-		bool PolygonMode( eGL_FACE p_eFacing, eGL_FILL_MODE p_eMode );
+		bool PolygonMode( eGL_FACE p_eFacing, eGL_FILL_MODE p_mode );
 		bool StencilOp( eGL_STENCIL_OP p_eStencilFail, eGL_STENCIL_OP p_eDepthFail, eGL_STENCIL_OP p_eStencilPass );
 		bool StencilFunc( eGL_FUNC p_eFunc, int p_iRef, uint32_t p_uiMask );
 		bool StencilMask( uint32_t p_uiMask );
@@ -1642,8 +1642,8 @@ namespace GlRender
 		bool ReadPixels( Castor::Rectangle const & p_rect, eGL_FORMAT format, eGL_TYPE type, void * pixels );
 		bool DrawBuffer( eGL_BUFFER p_eBuffer );
 		bool DrawPixels( int width, int height, eGL_FORMAT format, eGL_TYPE type, void const * data );
-		bool PixelStore( eGL_STORAGE_MODE p_eMode, int p_iParam );
-		bool PixelStore( eGL_STORAGE_MODE p_eMode, float p_fParam );
+		bool PixelStore( eGL_STORAGE_MODE p_mode, int p_iParam );
+		bool PixelStore( eGL_STORAGE_MODE p_mode, float p_fParam );
 
 		//@}
 		/**@name Sampler functions */
@@ -1902,13 +1902,13 @@ namespace GlRender
 		{
 			return TextureArguments[p_eArgument];
 		}
-		inline eGL_BLEND_FUNC Get( Castor3D::eRGB_BLEND_FUNC p_eMode )const
+		inline eGL_BLEND_FUNC Get( Castor3D::eRGB_BLEND_FUNC p_mode )const
 		{
-			return RgbBlendFuncs[p_eMode];
+			return RgbBlendFuncs[p_mode];
 		}
-		inline eGL_BLEND_FUNC Get( Castor3D::eALPHA_BLEND_FUNC p_eMode )const
+		inline eGL_BLEND_FUNC Get( Castor3D::eALPHA_BLEND_FUNC p_mode )const
 		{
-			return AlphaBlendFuncs[p_eMode];
+			return AlphaBlendFuncs[p_mode];
 		}
 		inline eGL_BLEND_FACTOR Get( Castor3D::eBLEND p_eBlendFactor )const
 		{
@@ -1922,9 +1922,9 @@ namespace GlRender
 		{
 			return Usages[p_eUsage];
 		}
-		inline eGL_SHADER_TYPE Get( Castor3D::eSHADER_TYPE p_eType )const
+		inline eGL_SHADER_TYPE Get( Castor3D::eSHADER_TYPE p_type )const
 		{
-			return ShaderTypes[p_eType];
+			return ShaderTypes[p_type];
 		}
 		inline eGL_INTERNAL_FORMAT GetInternal( Castor::ePIXEL_FORMAT p_eFormat )const
 		{
@@ -1970,9 +1970,9 @@ namespace GlRender
 		{
 			return Faces[p_eFace];
 		}
-		inline eGL_FILL_MODE Get( Castor3D::eFILL_MODE p_eMode )const
+		inline eGL_FILL_MODE Get( Castor3D::eFILL_MODE p_mode )const
 		{
-			return FillModes[p_eMode];
+			return FillModes[p_mode];
 		}
 		inline eGL_FUNC Get( Castor3D::eSTENCIL_FUNC p_eFunc )const
 		{
@@ -2487,24 +2487,24 @@ namespace GlRender
 	namespace gl_api
 	{
 		template< typename Func >
-		bool GetFunction( Castor::String const & p_strName, Func & p_func )
+		bool GetFunction( Castor::String const & p_name, Func & p_func )
 		{
 #if defined( _WIN32 )
-			p_func = reinterpret_cast< Func >( wglGetProcAddress( Castor::string::to_str( p_strName ).c_str() ) );
+			p_func = reinterpret_cast< Func >( wglGetProcAddress( Castor::string::string_cast< char >( p_name ).c_str() ) );
 #else
-			p_func = reinterpret_cast< Func >( glXGetProcAddressARB( ( GLubyte const * )Castor::string::to_str( p_strName ).c_str() ) );
+			p_func = reinterpret_cast< Func >( glXGetProcAddressARB( ( GLubyte const * )Castor::string::string_cast< char >( p_name ).c_str() ) );
 #endif
 			return p_func != NULL;
 		}
 
 #if CASTOR_HAS_VARIADIC_TEMPLATES
 		template< typename Ret, typename ... Arguments >
-		bool GetFunction( Castor::String const & p_strName, std::function< Ret( Arguments... ) > & p_func )
+		bool GetFunction( Castor::String const & p_name, std::function< Ret( Arguments... ) > & p_func )
 		{
 			typedef Ret( CALLBACK * PFNType )( Arguments... );
 			PFNType l_pfnResult = NULL;
 
-			if ( GetFunction( p_strName, l_pfnResult ) )
+			if ( GetFunction( p_name, l_pfnResult ) )
 			{
 				p_func = l_pfnResult;
 			}
@@ -2513,12 +2513,12 @@ namespace GlRender
 		}
 #else
 		template< typename Ret >
-		bool GetFunction( Castor::String const & p_strName, std::function< Ret() > & p_func )
+		bool GetFunction( Castor::String const & p_name, std::function< Ret() > & p_func )
 		{
 			typedef Ret( CALLBACK * PFNType )();
 			PFNType l_pfnResult = NULL;
 
-			if ( GetFunction( p_strName, l_pfnResult ) )
+			if ( GetFunction( p_name, l_pfnResult ) )
 			{
 				p_func = l_pfnResult;
 			}
@@ -2527,12 +2527,12 @@ namespace GlRender
 		}
 
 		template< typename Ret, typename T1 >
-		bool GetFunction( Castor::String const & p_strName, std::function< Ret( T1 ) > & p_func )
+		bool GetFunction( Castor::String const & p_name, std::function< Ret( T1 ) > & p_func )
 		{
 			typedef Ret( CALLBACK * PFNType )( T1 );
 			PFNType l_pfnResult = NULL;
 
-			if ( GetFunction( p_strName, l_pfnResult ) )
+			if ( GetFunction( p_name, l_pfnResult ) )
 			{
 				p_func = l_pfnResult;
 			}
@@ -2541,12 +2541,12 @@ namespace GlRender
 		}
 
 		template< typename Ret, typename T1, typename T2 >
-		bool GetFunction( Castor::String const & p_strName, std::function< Ret( T1, T2 ) > & p_func )
+		bool GetFunction( Castor::String const & p_name, std::function< Ret( T1, T2 ) > & p_func )
 		{
 			typedef Ret( CALLBACK * PFNType )( T1, T2 );
 			PFNType l_pfnResult = NULL;
 
-			if ( GetFunction( p_strName, l_pfnResult ) )
+			if ( GetFunction( p_name, l_pfnResult ) )
 			{
 				p_func = l_pfnResult;
 			}
@@ -2555,12 +2555,12 @@ namespace GlRender
 		}
 
 		template< typename Ret, typename T1, typename T2, typename T3 >
-		bool GetFunction( Castor::String const & p_strName, std::function< Ret( T1, T2, T3 ) > & p_func )
+		bool GetFunction( Castor::String const & p_name, std::function< Ret( T1, T2, T3 ) > & p_func )
 		{
 			typedef Ret( CALLBACK * PFNType )( T1, T2, T3 );
 			PFNType l_pfnResult = NULL;
 
-			if ( GetFunction( p_strName, l_pfnResult ) )
+			if ( GetFunction( p_name, l_pfnResult ) )
 			{
 				p_func = l_pfnResult;
 			}
@@ -2569,12 +2569,12 @@ namespace GlRender
 		}
 
 		template< typename Ret, typename T1, typename T2, typename T3, typename T4 >
-		bool GetFunction( Castor::String const & p_strName, std::function< Ret( T1, T2, T3, T4 ) > & p_func )
+		bool GetFunction( Castor::String const & p_name, std::function< Ret( T1, T2, T3, T4 ) > & p_func )
 		{
 			typedef Ret( CALLBACK * PFNType )( T1, T2, T3, T4 );
 			PFNType l_pfnResult = NULL;
 
-			if ( GetFunction( p_strName, l_pfnResult ) )
+			if ( GetFunction( p_name, l_pfnResult ) )
 			{
 				p_func = l_pfnResult;
 			}
@@ -2583,12 +2583,12 @@ namespace GlRender
 		}
 
 		template< typename Ret, typename T1, typename T2, typename T3, typename T4, typename T5 >
-		bool GetFunction( Castor::String const & p_strName, std::function< Ret( T1, T2, T3, T4, T5 ) > & p_func )
+		bool GetFunction( Castor::String const & p_name, std::function< Ret( T1, T2, T3, T4, T5 ) > & p_func )
 		{
 			typedef Ret( CALLBACK * PFNType )( T1, T2, T3, T4, T5 );
 			PFNType l_pfnResult = NULL;
 
-			if ( GetFunction( p_strName, l_pfnResult ) )
+			if ( GetFunction( p_name, l_pfnResult ) )
 			{
 				p_func = l_pfnResult;
 			}
@@ -2597,12 +2597,12 @@ namespace GlRender
 		}
 
 		template< typename Ret, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6 >
-		bool GetFunction( Castor::String const & p_strName, std::function< Ret( T1, T2, T3, T4, T5, T6 ) > & p_func )
+		bool GetFunction( Castor::String const & p_name, std::function< Ret( T1, T2, T3, T4, T5, T6 ) > & p_func )
 		{
 			typedef Ret( CALLBACK * PFNType )( T1, T2, T3, T4, T5, T6 );
 			PFNType l_pfnResult = NULL;
 
-			if ( GetFunction( p_strName, l_pfnResult ) )
+			if ( GetFunction( p_name, l_pfnResult ) )
 			{
 				p_func = l_pfnResult;
 			}
@@ -2611,12 +2611,12 @@ namespace GlRender
 		}
 
 		template< typename Ret, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7 >
-		bool GetFunction( Castor::String const & p_strName, std::function< Ret( T1, T2, T3, T4, T5, T6, T7 ) > & p_func )
+		bool GetFunction( Castor::String const & p_name, std::function< Ret( T1, T2, T3, T4, T5, T6, T7 ) > & p_func )
 		{
 			typedef Ret( CALLBACK * PFNType )( T1, T2, T3, T4, T5, T6, T7 );
 			PFNType l_pfnResult = NULL;
 
-			if ( GetFunction( p_strName, l_pfnResult ) )
+			if ( GetFunction( p_name, l_pfnResult ) )
 			{
 				p_func = l_pfnResult;
 			}
@@ -2625,12 +2625,12 @@ namespace GlRender
 		}
 
 		template< typename Ret, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8 >
-		bool GetFunction( Castor::String const & p_strName, std::function< Ret( T1, T2, T3, T4, T5, T6, T7, T8 ) > & p_func )
+		bool GetFunction( Castor::String const & p_name, std::function< Ret( T1, T2, T3, T4, T5, T6, T7, T8 ) > & p_func )
 		{
 			typedef Ret( CALLBACK * PFNType )( T1, T2, T3, T4, T5, T6, T7, T8 );
 			PFNType l_pfnResult = NULL;
 
-			if ( GetFunction( p_strName, l_pfnResult ) )
+			if ( GetFunction( p_name, l_pfnResult ) )
 			{
 				p_func = l_pfnResult;
 			}
@@ -2639,12 +2639,12 @@ namespace GlRender
 		}
 
 		template< typename Ret, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9 >
-		bool GetFunction( Castor::String const & p_strName, std::function< Ret( T1, T2, T3, T4, T5, T6, T7, T8, T9 ) > & p_func )
+		bool GetFunction( Castor::String const & p_name, std::function< Ret( T1, T2, T3, T4, T5, T6, T7, T8, T9 ) > & p_func )
 		{
 			typedef Ret( CALLBACK * PFNType )( T1, T2, T3, T4, T5, T6, T7, T8, T9 );
 			PFNType l_pfnResult = NULL;
 
-			if ( GetFunction( p_strName, l_pfnResult ) )
+			if ( GetFunction( p_name, l_pfnResult ) )
 			{
 				p_func = l_pfnResult;
 			}
@@ -2653,12 +2653,12 @@ namespace GlRender
 		}
 
 		template< typename Ret, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9, typename T10 >
-		bool GetFunction( Castor::String const & p_strName, std::function< Ret( T1, T2, T3, T4, T5, T6, T7, T8, T9, T10 ) > & p_func )
+		bool GetFunction( Castor::String const & p_name, std::function< Ret( T1, T2, T3, T4, T5, T6, T7, T8, T9, T10 ) > & p_func )
 		{
 			typedef Ret( CALLBACK * PFNType )( T1, T2, T3, T4, T5, T6, T7, T8, T9, T10 );
 			PFNType l_pfnResult = NULL;
 
-			if ( GetFunction( p_strName, l_pfnResult ) )
+			if ( GetFunction( p_name, l_pfnResult ) )
 			{
 				p_func = l_pfnResult;
 			}

@@ -14,7 +14,7 @@ namespace GlRender
 		,	m_bufferDeclaration( p_declaration )
 	{
 		GlAttributeBaseSPtr l_pAttribute;
-		GlRenderSystem * l_pRenderSystem = static_cast< GlRenderSystem * >( p_pBuffer->GetRenderSystem() );
+		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_pBuffer->GetRenderSystem() );
 
 		for ( BufferDeclaration::BufferElementDeclarationArrayConstIt l_it = m_bufferDeclaration.Begin(); l_it != m_bufferDeclaration.End(); ++l_it )
 		{
@@ -61,39 +61,39 @@ namespace GlRender
 			switch ( l_it->m_eDataType )
 			{
 			case eELEMENT_TYPE_1FLOAT:
-				l_pAttribute = std::make_shared< GlAttribute1r >( p_gl, l_pRenderSystem, l_name );
+				l_pAttribute = std::make_shared< GlAttribute1r >( p_gl, l_renderSystem, l_name );
 				break;
 
 			case eELEMENT_TYPE_2FLOATS:
-				l_pAttribute = std::make_shared< GlAttribute2r >( p_gl, l_pRenderSystem, l_name );
+				l_pAttribute = std::make_shared< GlAttribute2r >( p_gl, l_renderSystem, l_name );
 				break;
 
 			case eELEMENT_TYPE_3FLOATS:
-				l_pAttribute = std::make_shared< GlAttribute3r >( p_gl, l_pRenderSystem, l_name );
+				l_pAttribute = std::make_shared< GlAttribute3r >( p_gl, l_renderSystem, l_name );
 				break;
 
 			case eELEMENT_TYPE_4FLOATS:
-				l_pAttribute = std::make_shared< GlAttribute4r >( p_gl, l_pRenderSystem, l_name );
+				l_pAttribute = std::make_shared< GlAttribute4r >( p_gl, l_renderSystem, l_name );
 				break;
 
 			case eELEMENT_TYPE_COLOUR:
-				l_pAttribute = std::make_shared< GlAttribute1ui >( p_gl, l_pRenderSystem, l_name );
+				l_pAttribute = std::make_shared< GlAttribute1ui >( p_gl, l_renderSystem, l_name );
 				break;
 
 			case eELEMENT_TYPE_1INT:
-				l_pAttribute = std::make_shared< GlAttribute1i >( p_gl, l_pRenderSystem, l_name );
+				l_pAttribute = std::make_shared< GlAttribute1i >( p_gl, l_renderSystem, l_name );
 				break;
 
 			case eELEMENT_TYPE_2INTS:
-				l_pAttribute = std::make_shared< GlAttribute2i >( p_gl, l_pRenderSystem, l_name );
+				l_pAttribute = std::make_shared< GlAttribute2i >( p_gl, l_renderSystem, l_name );
 				break;
 
 			case eELEMENT_TYPE_3INTS:
-				l_pAttribute = std::make_shared< GlAttribute3i >( p_gl, l_pRenderSystem, l_name );
+				l_pAttribute = std::make_shared< GlAttribute3i >( p_gl, l_renderSystem, l_name );
 				break;
 
 			case eELEMENT_TYPE_4INTS:
-				l_pAttribute = std::make_shared< GlAttribute4i >( p_gl, l_pRenderSystem, l_name );
+				l_pAttribute = std::make_shared< GlAttribute4i >( p_gl, l_renderSystem, l_name );
 				break;
 			}
 
@@ -117,7 +117,7 @@ namespace GlRender
 		GlBuffer< uint8_t >::DoDestroy();
 	}
 
-	bool GlVertexBufferObject::Initialise( eBUFFER_ACCESS_TYPE p_eType, eBUFFER_ACCESS_NATURE p_eNature, ShaderProgramBaseSPtr p_pProgram )
+	bool GlVertexBufferObject::Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_eNature, ShaderProgramBaseSPtr p_pProgram )
 	{
 		bool l_return = true;
 		GlShaderProgramSPtr l_pNewProgram = std::static_pointer_cast< GlShaderProgram >( p_pProgram );
@@ -139,12 +139,12 @@ namespace GlRender
 
 			if ( l_return )
 			{
-				l_return = GlBuffer< uint8_t >::DoInitialise( p_eType, p_eNature );
+				l_return = GlBuffer< uint8_t >::DoInitialise( p_type, p_eNature );
 			}
 		}
 		else if ( !l_pOldProgram )
 		{
-			l_return = GlBuffer< uint8_t >::DoInitialise( p_eType, p_eNature );
+			l_return = GlBuffer< uint8_t >::DoInitialise( p_type, p_eNature );
 		}
 
 		return l_return;

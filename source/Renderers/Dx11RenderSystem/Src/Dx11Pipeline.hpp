@@ -32,6 +32,7 @@ namespace Dx11Render
 		virtual ~DxPipelineImpl();
 
 		virtual void ApplyViewport( int p_iWindowWidth, int p_iWindowHeight );
+		virtual void ApplyMatrix( matrix4x4 const & p_matrix, Castor::String const & p_name, Castor3D::FrameVariableBuffer & p_matrixBuffer );
 
 	private:
 		D3D11_VIEWPORT m_viewport;

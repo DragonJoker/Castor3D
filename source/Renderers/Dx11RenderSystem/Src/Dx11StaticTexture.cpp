@@ -98,17 +98,21 @@ namespace Dx11Render
 
 	bool DxStaticTexture::DoBind( uint32_t p_index )
 	{
-		//ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 
-		//if ( m_pShaderResourceView )
-		//{
-		//	ID3D11Resource * l_pResource;
-		//	m_pShaderResourceView->GetResource( &l_pResource );
-		//	StringStream l_name;
-		//	l_name << cuT( "StaticTexture_" ) << ( void * )this << cuT( "_SRV.png" );
-		//	D3DX11SaveTextureToFile( l_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
-		//	l_pResource->Release();
-		//}
+#if DX_DEBUG_RT
+
+		if ( m_pShaderResourceView )
+		{
+			ID3D11Resource * l_pResource;
+			m_pShaderResourceView->GetResource( &l_pResource );
+			StringStream l_name;
+			l_name << cuT( "StaticTexture_" ) << ( void * )this << cuT( "_SRV.png" );
+			D3DX11SaveTextureToFile( l_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
+			l_pResource->Release();
+		}
+
+#endif
 
 		return true;
 	}

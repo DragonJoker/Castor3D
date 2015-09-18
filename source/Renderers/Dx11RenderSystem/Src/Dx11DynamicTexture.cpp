@@ -108,15 +108,19 @@ namespace Dx11Render
 	{
 		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 
-		if ( m_renderTargetView )
+#if DX_DEBUG_RT
+
+		if ( m_shaderResourceView )
 		{
 			ID3D11Resource * l_pResource;
-			m_renderTargetView->GetResource( &l_pResource );
+			m_shaderResourceView->GetResource( &l_pResource );
 			StringStream l_name;
-			l_name << cuT( "DynamicTexture_" ) << ( void * )this << cuT( "_RTV.png" );
+			l_name << cuT( "DynamicTexture_" ) << ( void * )this << cuT( "_SRV.png" );
 			D3DX11SaveTextureToFile( l_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
 			l_pResource->Release();
 		}
+
+#endif
 
 		return true;
 	}

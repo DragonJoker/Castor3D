@@ -324,7 +324,7 @@ namespace Deferred
 		//!\~english Geometry buffers holder	\~french Conteneur de buffers de géométries
 		Castor3D::GeometryBuffersSPtr m_pGeometryBuffers;
 		//!\~english The viewport used when rendering is done	\~french Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture)
-		Castor3D::ViewportSPtr m_pViewport;
+		Castor3D::ViewportSPtr m_viewport;
 		//!\~english The shader variable containing the camera position	\~french La variable de shader contenant la position de la caméra
 		Castor3D::Point3rFrameVariableSPtr m_pShaderCamera;
 		//!\~english The depth stencil state used by the geometric pass	\~french Le DepthStencilState utilisé par la passe géométrique

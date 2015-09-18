@@ -63,7 +63,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Function operator
@@ -135,15 +135,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_pMesh		The parent mesh
-		 *\param[in]	p_pEngine	The core engine
+		 *\param[in]	p_engine	The core engine
 		 *\param[in]	p_uiID		The submesh ID
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_pMesh		Le mesh parent
-		 *\param[in]	p_pEngine	Le moteur
+		 *\param[in]	p_engine	Le moteur
 		 *\param[in]	p_uiID		L'ID du submesh
 		 */
-		Submesh( MeshRPtr p_pMesh, Engine * p_pEngine = nullptr, uint32_t p_uiID = 1 );
+		Submesh( MeshRPtr p_pMesh, Engine * p_engine = nullptr, uint32_t p_uiID = 1 );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -325,14 +325,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Draws the submesh
-		 *\param[in]	p_eMode	The render mode
+		 *\param[in]	p_mode	The render mode
 		 *\param[in]	p_pass	The Pass containing material informations
 		 *\~french
 		 *\brief		Dessine le submesh
-		 *\param[in]	p_eMode	Le mode de rendu
+		 *\param[in]	p_mode	Le mode de rendu
 		 *\param[in]	p_pass	La Pass contenant les informations de matériau
 		 */
-		void Draw( eTOPOLOGY p_eMode, Pass const & p_pass );
+		void Draw( eTOPOLOGY p_mode, Pass const & p_pass );
 		/**
 		 *\~english
 		 *\brief		Creates faces from the points
@@ -785,7 +785,7 @@ namespace Castor3D
 		 */
 		virtual Engine * GetEngine()const
 		{
-			return m_pEngine;
+			return m_engine;
 		}
 
 	private:
@@ -800,7 +800,7 @@ namespace Castor3D
 
 	private:
 		//!\~english The core engine	\~french Le moteur
-		Engine * m_pEngine;
+		Engine * m_engine;
 		//!\~english The submesh ID	\~french L'id du sbmesh
 		uint32_t m_uiID;
 		//!\~english The submesh instances count	\~french Le nombre d'instances du submesh

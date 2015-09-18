@@ -13,166 +13,6 @@ namespace Castor
 {
 	namespace string
 	{
-		namespace
-		{
-			int DoGetMonthIndex( String const & p_strMonth )
-			{
-				int l_iReturn = 0;
-				static std::map< String, int > l_mapMonths;
-
-				if ( l_mapMonths.empty() )
-				{
-					l_mapMonths.insert( std::make_pair( cuT( "janvier"	),	 1 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "février"	),	 2 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "fevrier"	),	 2 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "mars"	),	 3 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "avril"	),	 4 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "mai"	),	 5 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "juin"	),	 6 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "juillet"	),	 7 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "août"	),	 8 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "aout"	),	 8 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "septembre"	),	 9 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "octobre"	),	10 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "novembre"	),	11 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "décembre"	),	12 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "decembre"	),	12 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "jan"	),	 1 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "fév"	),	 2 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "fev"	),	 2 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "mar"	),	 3 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "avr"	),	 4 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "mai"	),	 5 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "jun"	),	 6 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "jul"	),	 7 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "aoû"	),	 8 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "aou"	),	 8 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "sep"	),	 9 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "oct"	),	10 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "nov"	),	11 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "déc"	),	12 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "dec"	),	12 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "january"	),	 1 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "february"	),	 2 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "march"	),	 3 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "april"	),	 4 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "may"	),	 5 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "june"	),	 6 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "july"	),	 7 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "august"	),	 8 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "september"	),	 9 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "october"	),	10 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "november"	),	11 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "december"	),	12 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "feb"	),	 2 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "apr"	),	 4 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "may"	),	 5 ) );
-					l_mapMonths.insert( std::make_pair( cuT( "aug"	),	 8 ) );
-				}
-
-				if ( is_integer( p_strMonth ) )
-				{
-					l_iReturn = to_int( p_strMonth );
-				}
-				else
-				{
-					String l_strMonthLC = p_strMonth;
-					std::map< String, int >::const_iterator l_it = l_mapMonths.find( to_lower_case( l_strMonthLC ) );
-
-					if ( l_it != l_mapMonths.end() )
-					{
-						l_iReturn = l_it->second;
-					}
-				}
-
-				return l_iReturn;
-			}
-
-			bool DoIsValidDay( int p_iDay, int p_iMonth, int p_iYear )
-			{
-				bool l_return = false;
-
-				if ( p_iDay > 0 )
-				{
-					if ( p_iMonth == 1 || p_iMonth == 3 || p_iMonth == 5 || p_iMonth == 7 || p_iMonth == 8 || p_iMonth == 10 || p_iMonth == 12 )
-					{
-						l_return = p_iDay <= 31;
-					}
-					else if ( p_iMonth != 2 )
-					{
-						l_return = p_iDay <= 30;
-					}
-					else if ( p_iYear % 400 == 0 || ( p_iYear % 4 == 0 && p_iYear % 100 != 0 ) )
-					{
-						l_return = p_iDay <= 29;
-					}
-					else
-					{
-						l_return = p_iDay <= 28;
-					}
-				}
-
-				return l_return;
-			}
-
-			template< typename InChar, typename OutChar > struct StringConverter;
-
-			template<> struct StringConverter< char, wchar_t >
-			{
-				static void Convert( std::basic_string< char > const & p_strIn, std::basic_string< wchar_t > & p_strOut, std::locale const & p_locale = std::locale() )
-				{
-					if ( !p_strIn.empty() )
-					{
-						typedef std::codecvt< wchar_t, char, std::mbstate_t > facet_type;
-						typedef facet_type::result result_type;
-						const facet_type & facet = std::use_facet< facet_type >( p_locale );
-						std::mbstate_t state = std::mbstate_t();
-						std::vector< wchar_t > dst( p_strIn.size() * facet.max_length(), 0 );
-						const char * endSrc = NULL;
-						wchar_t * endDst = NULL;
-						facet.in( state,
-								  p_strIn.data(), p_strIn.data() + p_strIn.size(), endSrc,
-								  &dst[0], &dst[0] + dst.size(), endDst
-								);
-						p_strOut = std::wstring( &dst.front(), endDst );
-					}
-				}
-			};
-
-			template<> struct StringConverter< wchar_t, char >
-			{
-				static void Convert( std::basic_string< wchar_t > const & p_strIn, std::basic_string< char > & p_strOut, std::locale const & p_locale = std::locale() )
-				{
-					if ( !p_strIn.empty() )
-					{
-						typedef std::codecvt< wchar_t, char, std::mbstate_t > facet_type;
-						typedef facet_type::result result_type;
-						const facet_type & facet = std::use_facet< facet_type >( p_locale );
-						std::mbstate_t state = std::mbstate_t();
-						std::vector< char > dst( p_strIn.size() * facet.max_length(), 0 );
-						const wchar_t * endSrc = NULL;
-						char * endDst = NULL;
-						facet.out( state,
-								   p_strIn.data(), p_strIn.data() + p_strIn.size(), endSrc,
-								   &dst[0], &dst[0] + dst.size(), endDst
-								 );
-						p_strOut = std::string( &dst.front(), endDst );
-					}
-				}
-			};
-
-			template< typename InChar >
-			struct StringConverter< InChar, InChar >
-			{
-				static void Convert( std::basic_string< InChar > const & p_strIn, std::basic_string< InChar > & p_strOut, std::locale const & p_locale = std::locale() )
-				{
-					p_strOut = p_strIn;
-				}
-			};
-		}
-
-		//*************************************************************************************************
-
 		bool is_integer( String const & p_strToTest, std::locale const & CU_PARAM_UNUSED( p_locale ) )
 		{
 			bool l_return = true;
@@ -211,98 +51,6 @@ namespace Castor
 			}
 
 			return l_return;
-		}
-
-		bool is_date( String const & p_strToTest, std::locale const & p_locale )
-		{
-			bool l_return = false;
-			String l_strText( p_strToTest );
-			String l_strYear;
-			String l_strMonth;
-			String l_strDay;
-			std::tm l_tmbuf = { 0 };
-			std::time_get<xchar> const & l_timeFacet =  std::use_facet< std::time_get< xchar > >( p_locale );
-			std::time_get<xchar>::dateorder l_order = l_timeFacet.date_order();
-			StringArray l_arraySplitted;
-			replace( l_strText, cuT( "/" ), cuT( " " ) );
-			replace( l_strText, cuT( "-" ), cuT( " " ) );
-
-			while ( l_strText.find( cuT( "  " ) ) != String::npos )
-			{
-				replace( l_strText, cuT( "  " ), cuT( " " ) );
-			}
-
-			l_arraySplitted = split( l_strText, cuT( " " ), 4, false );
-
-			if ( l_arraySplitted.size() == 3 && is_integer( l_arraySplitted[0] ) && is_integer( l_arraySplitted[2] ) )
-			{
-				l_return = true;
-
-				switch ( l_order )
-				{
-				case std::time_base::dmy:
-					l_strYear = l_arraySplitted[2];
-					l_tmbuf.tm_mday = to_int( l_arraySplitted[0] );
-					l_tmbuf.tm_mon = DoGetMonthIndex( l_arraySplitted[1] );
-					l_tmbuf.tm_year = to_int( l_arraySplitted[2] );
-					break;
-
-				case std::time_base::mdy:
-					l_strYear = l_arraySplitted[2];
-					l_tmbuf.tm_mon = DoGetMonthIndex( l_arraySplitted[0] );
-					l_tmbuf.tm_mday = to_int( l_arraySplitted[1] );
-					l_tmbuf.tm_year = to_int( l_arraySplitted[2] );
-					break;
-
-				case std::time_base::ydm:
-					l_strYear = l_arraySplitted[0];
-					l_tmbuf.tm_year = to_int( l_arraySplitted[0] );
-					l_tmbuf.tm_mday = to_int( l_arraySplitted[1] );
-					l_tmbuf.tm_mon = DoGetMonthIndex( l_arraySplitted[2] );
-					break;
-
-				case std::time_base::ymd:
-					l_strYear = l_arraySplitted[0];
-					l_tmbuf.tm_year = to_int( l_arraySplitted[0] );
-					l_tmbuf.tm_mon = DoGetMonthIndex( l_arraySplitted[1] );
-					l_tmbuf.tm_mday = to_int( l_arraySplitted[2] );
-					break;
-
-				default:
-					l_return = false;
-				}
-
-				l_return &= l_tmbuf.tm_mon > 0 && l_tmbuf.tm_mon <= 12;
-
-				if ( l_return )
-				{
-					if ( l_strYear.size() > 2 )
-					{
-						l_return = l_tmbuf.tm_year > 1900 && l_tmbuf.tm_year < 2500;
-					}
-					else if ( l_strYear.size() == 2 )
-					{
-						l_return = true;
-					}
-				}
-
-				if ( l_return )
-				{
-					l_return = DoIsValidDay( l_tmbuf.tm_mday, l_tmbuf.tm_mon, l_tmbuf.tm_year );
-				}
-			}
-
-			return l_return;
-		}
-
-		bool is_upper_case( String const & p_strToTest )
-		{
-			return p_strToTest == upper_case( p_strToTest );
-		}
-
-		bool is_lower_case( String const & p_strToTest )
-		{
-			return p_strToTest == lower_case( p_strToTest );
 		}
 
 		short to_short( String const & p_strToTest, std::locale const & p_locale )
@@ -399,6 +147,16 @@ namespace Castor
 			}
 
 			return l_rReturn;
+		}
+
+		bool is_upper_case( String const & p_strToTest )
+		{
+			return p_strToTest == upper_case( p_strToTest );
+		}
+
+		bool is_lower_case( String const & p_strToTest )
+		{
+			return p_strToTest == lower_case( p_strToTest );
 		}
 
 		String upper_case( String const & p_str )
@@ -579,10 +337,10 @@ namespace Castor
 
 		String & replace( String & p_str, String const & p_find, String const & p_replaced )
 		{
-			String		l_temp;
-			String		l_return;
-			std::size_t	l_currentPos	= 0;
-			std::size_t	l_pos			= 0;
+			String l_temp;
+			String l_return;
+			std::size_t l_currentPos = 0;
+			std::size_t l_pos = 0;
 
 			while ( ( l_pos = p_str.find( p_find, l_currentPos ) ) != String::npos )
 			{
@@ -598,46 +356,6 @@ namespace Castor
 
 			p_str = l_return;
 			return p_str;
-		}
-
-		String from_str( std::string const & p_strString )
-		{
-			String l_return;
-			StringConverter< char, xchar >::Convert( p_strString, l_return );
-			return l_return;
-		}
-
-		String from_wstr( std::wstring const & p_strString )
-		{
-			String l_return;
-			StringConverter< wchar_t, xchar >::Convert( p_strString, l_return );
-			return l_return;
-		}
-
-		std::string to_str( std::wstring const & p_str )
-		{
-			std::string l_return;
-			StringConverter< wchar_t, char >::Convert( p_str, l_return );
-			return l_return;
-		}
-
-		std::wstring to_wstr( std::string const & p_str )
-		{
-			std::wstring l_return;
-			StringConverter< char, wchar_t >::Convert( p_str, l_return );
-			return l_return;
-		}
-
-		String from_char( char p_char )
-		{
-			char l_szTmp[2] = { p_char, '\0' };
-			return from_str( l_szTmp );
-		}
-
-		String from_wchar( wchar_t p_wchar )
-		{
-			wchar_t l_wszTmp[2] = { p_wchar, L'\0' };
-			return from_wstr( l_wszTmp );
 		}
 	}
 }

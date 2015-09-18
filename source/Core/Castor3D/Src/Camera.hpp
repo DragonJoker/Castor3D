@@ -160,38 +160,38 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
 		 *\remark		Not to be used by the user, use Scene::CreateCamera instead
-		 *\param[in]	p_strName			The camera name
+		 *\param[in]	p_name			The camera name
 		 *\param[in]	p_pMaterial				The parent camera node
-		 *\param[in]	p_pViewport			Viewport to copy
-		 *\param[in]	p_ePrimitiveType	The camera display mode
+		 *\param[in]	p_viewport			Viewport to copy
+		 *\param[in]	p_topology	The camera display mode
 		 *\~french
 		 *\brief		Constructeur
 		 *\remark		L'utilisateur ne devrait pas s'en servir, préférer l'utilisation de Scene::CreateCamera
-		 *\param[in]	p_strName			Le nom de la caméra
+		 *\param[in]	p_name			Le nom de la caméra
 		 *\param[in]	p_pMaterial				SceneNode parent
-		 *\param[in]	p_pViewport			Viewport à copier
-		 *\param[in]	p_ePrimitiveType	Mode d'affichage de la caméra
+		 *\param[in]	p_viewport			Viewport à copier
+		 *\param[in]	p_topology	Mode d'affichage de la caméra
 		 */
-		Camera( SceneSPtr p_pScene, Castor::String const & p_strName, const SceneNodeSPtr p_pMaterial, ViewportSPtr p_pViewport, eTOPOLOGY p_ePrimitiveType = eTOPOLOGY_TRIANGLES );
+		Camera( SceneSPtr p_scene, Castor::String const & p_name, const SceneNodeSPtr p_pMaterial, ViewportSPtr p_viewport, eTOPOLOGY p_topology = eTOPOLOGY_TRIANGLES );
 		/**
 		 *\~english
 		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
 		 *\remark		Not to be used by the user, use Scene::CreateCamera instead
-		 *\param[in]	p_strName			The camera name
+		 *\param[in]	p_name			The camera name
 		 *\param[in]	p_pMaterial				The parent camera node
 		 *\param[in]	p_size				The viewport render size
-		 *\param[in]	p_eType				Projection type
-		 *\param[in]	p_ePrimitiveType	The camera display mode
+		 *\param[in]	p_type				Projection type
+		 *\param[in]	p_topology	The camera display mode
 		 *\~french
 		 *\brief		Constructeur
 		 *\remark		L'utilisateur ne devrait pas s'en servir, préférer l'utilisation de Scene::CreateCamera
-		 *\param[in]	p_strName			Le nom de la caméra
+		 *\param[in]	p_name			Le nom de la caméra
 		 *\param[in]	p_pMaterial				SceneNode parent
 		 *\param[in]	p_size				Les dimensions de rendu du viewport
-		 *\param[in]	p_eType				Type de projection
-		 *\param[in]	p_ePrimitiveType	Mode d'affichage de la caméra
+		 *\param[in]	p_type				Type de projection
+		 *\param[in]	p_topology	Mode d'affichage de la caméra
 		 */
-		Camera( SceneSPtr p_pScene, Castor::String const & p_strName, const SceneNodeSPtr p_pMaterial, Castor::Size const & p_size, eVIEWPORT_TYPE p_eType, eTOPOLOGY p_ePrimitiveType = eTOPOLOGY_TRIANGLES );
+		Camera( SceneSPtr p_scene, Castor::String const & p_name, const SceneNodeSPtr p_pMaterial, Castor::Size const & p_size, eVIEWPORT_TYPE p_type, eTOPOLOGY p_topology = eTOPOLOGY_TRIANGLES );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -216,12 +216,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Resizes the viewport
-		 *\param[in]	p_uiWidth, p_uiHeight	Display window size
+		 *\param[in]	p_width, p_height	Display window size
 		 *\~french
 		 *\brief		Redimensionne le viewport
-		 *\param[in]	p_uiWidth, p_uiHeight	Dimensions de la fenêtre d'affichage
+		 *\param[in]	p_width, p_height	Dimensions de la fenêtre d'affichage
 		 */
-		void Resize( uint32_t p_uiWidth, uint32_t p_uiHeight );
+		void Resize( uint32_t p_width, uint32_t p_height );
 		/**
 		 *\~english
 		 *\brief		Resizes the viewport
@@ -248,21 +248,21 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Returns the first object at mouse coords x and y
-		 *\param[in]	p_pScene	The scene used for the selection
-		 *\param[in]	p_eMode		The selection mode (vertex, face, submesh, geometry)
-		 *\param[in]	p_iX		The x mouse coordinate
-		 *\param[in]	p_iY		The y mouse coordinate
+		 *\param[in]	p_scene	The scene used for the selection
+		 *\param[in]	p_mode		The selection mode (vertex, face, submesh, geometry)
+		 *\param[in]	p_x		The x mouse coordinate
+		 *\param[in]	p_y		The y mouse coordinate
 		 *\param[out]	p_stFound	The selection result
 		 *\return		\p true if something was found, false if not
 		 *\~french
 		 *\brief		Récupère l'objet le plus proche aux coordonnées souris x et y
-		 *\param[in]	p_pScene	La scène où on doit sélectionner un objet
-		 *\param[in]	p_eMode		Le mode de sélection (vertex, face, submesh, geometry)
-		 *\param[in]	p_iX, p_iY	Les coordonnées de la souris
+		 *\param[in]	p_scene	La scène où on doit sélectionner un objet
+		 *\param[in]	p_mode		Le mode de sélection (vertex, face, submesh, geometry)
+		 *\param[in]	p_x, p_y	Les coordonnées de la souris
 		 *\param[out]	p_stFound	Le résultat de la sélection
 		 *\return		\p false si aucun objet n'a été trouvé
 		*/
-		bool Select( SceneSPtr p_pScene, eSELECTION_MODE p_eMode, int p_iX, int p_iY, stSELECT_RESULT & p_stFound );
+		bool Select( SceneSPtr p_scene, eSELECTION_MODE p_mode, int p_x, int p_y, stSELECT_RESULT & p_stFound );
 		/**
 		 *\~english
 		 *\brief		Retrieves the Viewport
@@ -273,7 +273,7 @@ namespace Castor3D
 		 */
 		inline ViewportSPtr	GetViewport()const
 		{
-			return m_pViewport;
+			return m_viewport;
 		}
 		/**
 		 *\~english
@@ -285,7 +285,7 @@ namespace Castor3D
 		 */
 		inline eTOPOLOGY GetPrimitiveType()const
 		{
-			return m_ePrimitiveType;
+			return m_topology;
 		}
 		/**
 		 *\~english
@@ -297,7 +297,7 @@ namespace Castor3D
 		 */
 		inline void SetPrimitiveType( eTOPOLOGY val )
 		{
-			m_ePrimitiveType = val;
+			m_topology = val;
 		}
 		/**
 		 *\~english
@@ -369,7 +369,7 @@ namespace Castor3D
 		 */
 		virtual Engine * GetEngine()const
 		{
-			return m_pEngine;
+			return m_engine;
 		}
 		/**
 		 *\~english
@@ -386,11 +386,11 @@ namespace Castor3D
 		friend class Scene;
 		friend class CameraRenderer;
 		//!\~english The core engine	\~french Le moteur
-		Engine * m_pEngine;
+		Engine * m_engine;
 		//!\~english The viewport of the camera	\~french Le viewport de la caméra
-		ViewportSPtr m_pViewport;
+		ViewportSPtr m_viewport;
 		//!\~english Primitive display type	\~french Type des primitives d'affichage
-		eTOPOLOGY m_ePrimitiveType;
+		eTOPOLOGY m_topology;
 		//!\~english The view frustum's planes	\~french Les plans du frustum de vue
 		Castor::PlaneEquation< real > m_planes[eFRUSTUM_PLANE_COUNT];
 		//!\~english The view matrix	\~french La matrice vue

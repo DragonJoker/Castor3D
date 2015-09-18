@@ -139,7 +139,7 @@ namespace Castor
 	\brief		Cas d'arrêt pour Exponentielle
 	\remark		Valide pour les nombres positifs
 	*/
-	template <typename T> struct expPos<0, T>
+	template< typename T > struct expPos<0, T>
 	{
 		inline double operator()( T x )
 		{
@@ -153,7 +153,7 @@ namespace Castor
 	\~french
 	\brief		Exponentielle utilisant une implémentation template
 	*/
-	template <typename T> struct exp
+	template< typename T > struct exp
 	{
 	private:
 		enum
@@ -189,7 +189,7 @@ namespace Castor
 	\~french
 	\brief		Cas d'arrêt pour Logarithme Népérien
 	*/
-	template <typename T> struct lnN<0, T>
+	template< typename T > struct lnN<0, T>
 	{
 		inline double operator()( T x )
 		{
@@ -203,7 +203,7 @@ namespace Castor
 	\~french
 	\brief		Logarithme Népérien utilisant une implémentation template
 	*/
-	template <typename T> struct ln
+	template< typename T > struct ln
 	{
 	private:
 		enum
@@ -229,7 +229,7 @@ namespace Castor
 	 *\param[in]	p_value			La valeur à tester
 	 *\return		Le résultat
 	 */
-	template <typename T>
+	template< typename T >
 	inline T const & minmax( T const & p_min, T const & p_value, T const & p_max )
 	{
 		if ( p_value < p_min )
@@ -256,7 +256,7 @@ namespace Castor
 	 *\param[in]	p_value			La valeur à clamper
 	 *\return		Le résultat
 	 */
-	template <typename T>
+	template< typename T >
 	inline void clamp( T const & p_min, T & p_value, T const & p_max )
 	{
 		if ( p_value < p_min )
@@ -282,7 +282,7 @@ namespace Castor
 	 *\param[in]	p_value			La valeur à clamper
 	 *\return		Le résultat
 	 */
-	template <typename T>
+	template< typename T >
 	inline T clamp( T const & p_min, T const & p_value, T const & p_max )
 	{
 		T l_tReturn = p_value;

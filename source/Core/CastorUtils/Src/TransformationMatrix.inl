@@ -16,7 +16,7 @@ namespace Castor
 	}
 
 	template< typename T, typename U >
-	SquareMatrix< TypeA, 4 > & MtxUtils::set_rotate( SquareMatrix< TypeA, 4 > & p_matrix, Angle const & p_angle, Point< TypeB, 3 > const & p_axis )
+	SquareMatrix< T, 4 > & matrix::set_rotate( SquareMatrix< T, 4 > & p_matrix, Angle const & p_angle, Point< U, 3 > const & p_axis )
 	{
 		T l_cos = T( p_angle.Cos() );
 		T l_sin = T( p_angle.Sin() );
@@ -257,12 +257,6 @@ namespace Castor
 		p_matrix[3][1] = -point::dot( l_u, p_ptEye );
 		p_matrix[3][2] =  point::dot( l_f, p_ptEye );
 		return p_matrix;
-	}
-
-	template <typename T, typename U, uint32_t Count>
-	Point<U, Count> matrix::mult( SquareMatrix< T, 4 > const & p_matrix, Point<U, Count> const & p_vertex )
-	{
-		return MtxMultiplicator< T, U, Count >()( p_matrix, p_vertex );
 	}
 
 	template< typename T >

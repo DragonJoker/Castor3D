@@ -93,8 +93,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	FrameVariable::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< FrameVariable, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	FrameVariable::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		:	Loader< FrameVariable, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 

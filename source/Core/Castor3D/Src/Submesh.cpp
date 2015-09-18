@@ -20,8 +20,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Submesh::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< Submesh, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	Submesh::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		:	Loader< Submesh, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -201,9 +201,9 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Submesh::Submesh( MeshRPtr p_pMesh, Engine * p_pEngine, uint32_t p_uiId )
-		: m_pEngine( p_pEngine )
-		, m_defaultMaterial( p_pEngine->GetMaterialManager().GetDefaultMaterial() )
+	Submesh::Submesh( MeshRPtr p_pMesh, Engine * p_engine, uint32_t p_uiId )
+		: m_engine( p_engine )
+		, m_defaultMaterial( p_engine->GetMaterialManager().GetDefaultMaterial() )
 		, m_uiID( p_uiId )
 		, m_pParentMesh( p_pMesh )
 		, m_uiProgramFlags( 0 )
@@ -488,16 +488,16 @@ namespace Castor3D
 	{
 		DoGenerateVertexBuffer();
 		DoGenerateIndexBuffer();
-		//if( m_pEngine->GetRenderSystem()->HasInstancing() )
+		//if( m_engine->GetRenderSystem()->HasInstancing() )
 		{
 			DoGenerateMatrixBuffer();
 		}
-		m_pEngine->PostEvent( MakeInitialiseEvent( *this ) );
+		m_engine->PostEvent( MakeInitialiseEvent( *this ) );
 	}
 
 	SubmeshSPtr Submesh::Clone()
 	{
-		SubmeshSPtr l_clone = std::make_shared< Submesh >( m_pParentMesh, m_pEngine, m_uiID );
+		SubmeshSPtr l_clone = std::make_shared< Submesh >( m_pParentMesh, m_engine, m_uiID );
 		uint32_t l_uiStride = m_pDeclaration->GetStride();
 
 		//On effectue une copie des vertex
@@ -523,11 +523,11 @@ namespace Castor3D
 		DoCreateGeometryBuffers();
 	}
 
-	void Submesh::Draw( eTOPOLOGY p_eMode, Pass const & p_pass )
+	void Submesh::Draw( eTOPOLOGY p_mode, Pass const & p_pass )
 	{
-		if ( p_eMode != m_eCurDrawType )
+		if ( p_mode != m_eCurDrawType )
 		{
-			m_eCurDrawType = p_eMode;
+			m_eCurDrawType = p_mode;
 		}
 
 		if ( DoPrepareGeometryBuffers( p_pass ) )

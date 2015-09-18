@@ -27,7 +27,7 @@ namespace Dx11Render
 		:	public Castor3D::BillboardList
 	{
 	public:
-		DxBillboardList( Castor3D::SceneSPtr p_pScene, DxRenderSystem * p_pRenderSystem );
+		DxBillboardList( Castor3D::SceneSPtr p_scene, DxRenderSystem * p_pRenderSystem );
 		virtual ~DxBillboardList();
 
 	private:

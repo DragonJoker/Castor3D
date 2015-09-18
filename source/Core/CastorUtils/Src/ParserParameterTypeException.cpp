@@ -41,6 +41,6 @@ namespace Castor
 			"rectangle",
 			"colour",
 		};
-		m_description = "Wrong parameter type for directive " + string::to_str( p_directive ) + ", user gave " + StrParameterType[p_eGivenType] + " while parameter base type is " + StrParameterType[p_eExpectedType];
+		m_description = "Wrong parameter type for directive " + string::string_cast< char >( p_directive ) + ", user gave " + StrParameterType[p_eGivenType] + " while parameter base type is " + StrParameterType[p_eExpectedType];
 	}
 }

@@ -157,8 +157,8 @@ namespace Dx11Render
 		}
 	}
 
-	DxFrameVariableBuffer::DxFrameVariableBuffer( String const & p_strName, DxRenderSystem * p_pRenderSystem )
-		: FrameVariableBuffer( p_strName, p_pRenderSystem )
+	DxFrameVariableBuffer::DxFrameVariableBuffer( String const & p_name, DxRenderSystem * p_pRenderSystem )
+		: FrameVariableBuffer( p_name, p_pRenderSystem )
 		, m_pDxRenderSystem( p_pRenderSystem )
 		, m_pDxBuffer( NULL )
 	{
@@ -168,12 +168,12 @@ namespace Dx11Render
 	{
 	}
 
-	FrameVariableSPtr DxFrameVariableBuffer::DoCreateVariable( ShaderProgramBase * p_pProgram, eFRAME_VARIABLE_TYPE p_eType, Castor::String const & p_strName, uint32_t p_uiNbOcc )
+	FrameVariableSPtr DxFrameVariableBuffer::DoCreateVariable( ShaderProgramBase * p_pProgram, eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_uiNbOcc )
 	{
 		FrameVariableSPtr l_pReturn;
 		DxShaderProgram * l_pProgram = static_cast< DxShaderProgram * >( p_pProgram );
 
-		switch ( p_eType )
+		switch ( p_type )
 		{
 		case eFRAME_VARIABLE_TYPE_INT:
 			l_pReturn = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_INT >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
@@ -318,7 +318,7 @@ namespace Dx11Render
 
 		if ( l_pReturn )
 		{
-			l_pReturn->SetName( p_strName );
+			l_pReturn->SetName( p_name );
 		}
 
 		return l_pReturn;

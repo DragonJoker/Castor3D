@@ -9,9 +9,9 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	MovingObjectBase::MovingObjectBase( eMOVING_OBJECT_TYPE p_eType )
+	MovingObjectBase::MovingObjectBase( eMOVING_OBJECT_TYPE p_type )
 		:	m_rLength( 0.0 )
-		,	m_eType( p_eType )
+		,	m_type( p_type )
 	{
 		m_mtxFinalTransformation.set_identity();
 	}

@@ -49,7 +49,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		MaterialManager( Engine * p_pEngine );
+		MaterialManager( Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -145,7 +145,7 @@ namespace Castor3D
 		//!\~english The default material	\~french Le matériau par défaut
 		MaterialSPtr m_defaultMaterial;
 		//!\~english The engine	\~french Le moteur
-		Engine * m_pEngine;
+		Engine * m_engine;
 	};
 }
 

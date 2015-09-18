@@ -32,8 +32,8 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlRenderSystem::GlRenderSystem( Engine * p_pEngine )
-		: RenderSystem( p_pEngine, eRENDERER_TYPE_OPENGL )
+	GlRenderSystem::GlRenderSystem( Engine * p_engine )
+		: RenderSystem( p_engine, eRENDERER_TYPE_OPENGL )
 		, m_iOpenGlMajor( 0 )
 		, m_iOpenGlMinor( 0 )
 		, m_useVertexBufferObjects( false )
@@ -169,14 +169,14 @@ namespace GlRender
 		return std::make_shared< GlBlendState >( m_gl );
 	}
 
-	FrameVariableBufferSPtr GlRenderSystem::CreateFrameVariableBuffer( Castor::String const & p_strName )
+	FrameVariableBufferSPtr GlRenderSystem::CreateFrameVariableBuffer( Castor::String const & p_name )
 	{
-		return std::make_shared< GlFrameVariableBuffer >( m_gl, p_strName, this );
+		return std::make_shared< GlFrameVariableBuffer >( m_gl, p_name, this );
 	}
 
-	BillboardListSPtr GlRenderSystem::CreateBillboardsList( Castor3D::SceneSPtr p_pScene )
+	BillboardListSPtr GlRenderSystem::CreateBillboardsList( Castor3D::SceneSPtr p_scene )
 	{
-		return std::make_shared< GlBillboardList >( p_pScene, this, m_gl );
+		return std::make_shared< GlBillboardList >( p_scene, this, m_gl );
 	}
 
 	SamplerSPtr GlRenderSystem::CreateSampler( Castor::String const & p_name )

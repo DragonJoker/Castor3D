@@ -10,11 +10,11 @@ using namespace Castor;
 
 namespace Dx11Render
 {
-	DxShaderObject::DxShaderObject( DxShaderProgram * p_pParent, eSHADER_TYPE p_eType )
-		: ShaderObjectBase( p_pParent, p_eType )
-		, m_pShaderProgram( p_pParent )
+	DxShaderObject::DxShaderObject( DxShaderProgram * p_parent, eSHADER_TYPE p_type )
+		: ShaderObjectBase( p_parent, p_type )
+		, m_pShaderProgram( p_parent )
 		, m_pCompiled( NULL )
-		, m_renderSystem( static_cast< DxRenderSystem * >( p_pParent->GetRenderSystem() ) )
+		, m_renderSystem( static_cast< DxRenderSystem * >( p_parent->GetRenderSystem() ) )
 	{
 		m_eShaderModel = eSHADER_MODEL_3;
 	}
@@ -40,7 +40,7 @@ namespace Dx11Render
 		if ( infologLength > 0 )
 		{
 			char * infoLog = new char[infologLength];
-			p_strCompilerLog = string::from_str( infoLog );
+			p_strCompilerLog = string::string_cast< xchar >( infoLog );
 			delete [] infoLog;
 		}
 
@@ -70,20 +70,20 @@ namespace Dx11Render
 			if ( m_renderSystem->CheckSupport( eSHADER_MODEL( i ) ) )
 			{
 				m_strLoadedSource = m_arraySources[i];
-				l_strProfile = l_strProfiles[m_eType][i];
+				l_strProfile = l_strProfiles[m_type][i];
 			}
 		}
 
 		if ( m_renderSystem->UseShaders() && m_eStatus != eSHADER_STATUS_ERROR && !m_strLoadedSource.empty() )
 		{
-			l_strSource = string::to_str( m_strLoadedSource );
+			l_strSource = string::string_cast< char >( m_strLoadedSource );
 			m_eStatus = eSHADER_STATUS_NOTCOMPILED;
 			ID3DBlob * l_pErrors = NULL;
 			UINT l_uiFlags = 0;
 #if !defined( NDEBUG )
 			l_uiFlags |= D3DCOMPILE_DEBUG | D3DCOMPILE_WARNINGS_ARE_ERRORS;
 #endif
-			HRESULT l_hr = D3DX11CompileFromMemory( l_strSource.c_str(), UINT( l_strSource.size() ), NULL, NULL, NULL, string::to_str( GetEntryPoint() ).c_str(), l_strProfile.c_str(), l_uiFlags, 0, NULL, &m_pCompiled, &l_pErrors, NULL );
+			HRESULT l_hr = D3DX11CompileFromMemory( l_strSource.c_str(), UINT( l_strSource.size() ), NULL, NULL, NULL, string::string_cast< char >( GetEntryPoint() ).c_str(), l_strProfile.c_str(), l_uiFlags, 0, NULL, &m_pCompiled, &l_pErrors, NULL );
 
 			if ( l_hr == S_OK )
 			{
@@ -91,7 +91,7 @@ namespace Dx11Render
 			}
 			else if ( l_pErrors )
 			{
-				Logger::LogInfo( string::from_str( reinterpret_cast< char * >( l_pErrors->GetBufferPointer() ) ) );
+				Logger::LogInfo( string::string_cast< xchar >( reinterpret_cast< char * >( l_pErrors->GetBufferPointer() ) ) );
 				Logger::LogInfo( m_strLoadedSource );
 				m_eStatus = eSHADER_STATUS_ERROR;
 				m_strLoadedSource.clear();

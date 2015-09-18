@@ -66,7 +66,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 * Writes a Castor3D::SceneNode into a text file
@@ -151,14 +151,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pScene	The parent scene
+		 *\param[in]	p_scene	The parent scene
 		 *\param[in]	p_name		The node's name. If empty the name is "SceneNode<s_nbSceneNodes>"
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pScene	La scène parente
+		 *\param[in]	p_scene	La scène parente
 		 *\param[in]	p_name		The node's name. If empty the name is "SceneNode<s_nbSceneNodes>"
 		 */
-		SceneNode( SceneSPtr p_pScene, Castor::String const & p_name = Castor::cuEmptyString );
+		SceneNode( SceneSPtr p_scene, Castor::String const & p_name = Castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor

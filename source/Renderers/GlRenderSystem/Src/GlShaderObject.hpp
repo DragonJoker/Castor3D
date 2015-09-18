@@ -42,7 +42,7 @@ namespace GlRender
 		/**
 		 * Constructor
 		 */
-		GlShaderObject( OpenGl & p_gl, GlShaderProgram * p_pParent, Castor3D::eSHADER_TYPE p_eType );
+		GlShaderObject( OpenGl & p_gl, GlShaderProgram * p_parent, Castor3D::eSHADER_TYPE p_type );
 		/**
 		 * Destructor
 		 */
@@ -72,7 +72,7 @@ namespace GlRender
 		 */
 		virtual void DestroyProgram();
 
-		virtual void SetEntryPoint( Castor::String const & CU_PARAM_UNUSED( p_strName ) )	{}
+		virtual void SetEntryPoint( Castor::String const & CU_PARAM_UNUSED( p_name ) )	{}
 		virtual Castor::String	GetEntryPoint()const
 		{
 			return cuT( "" );
@@ -80,47 +80,47 @@ namespace GlRender
 		/**
 		 *\~english
 		 *\brief		Tells if the compiled shader has the given parameter
-		 *\param[in]	p_strName	The parameter name
+		 *\param[in]	p_name	The parameter name
 		 *\return		\p true if the parameter was found
 		 *\~french
 		 *\brief		Dit si le shader compilé a le paramètre donné
-		 *\param[in]	p_strName	Le nom du paramètre
+		 *\param[in]	p_name	Le nom du paramètre
 		 *\return		\p true si le paramètre a été trouvé
 		 */
-		virtual bool HasParameter( Castor::String const & p_strName );
+		virtual bool HasParameter( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Gives the wanted parameter from compiled shader
-		 *\param[in]	p_strName	The parameter name
+		 *\param[in]	p_name	The parameter name
 		 *\return		\p NULL if not found or if shader isn't compiled
 		 *\~french
 		 *\brief		Récupère le paramètre à partir du shader compilé
-		 *\param[in]	p_strName	Le nom du paramètre
+		 *\param[in]	p_name	Le nom du paramètre
 		 *\return		\p NULL si le paramètre n'a pas été trouvé ou si le shader n'est pas compilé
 		 */
-		uint32_t GetParameter( Castor::String const & p_strName );
+		uint32_t GetParameter( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Defines the given parameter value
-		 *\param[in]	p_strName	The parameter name
+		 *\param[in]	p_name	The parameter name
 		 *\param[in]	p_mtxValue	The parameter value
 		 *\~french
 		 *\brief		Définit la valeur du paramètre
-		 *\param[in]	p_strName	Le nom du paramètre
+		 *\param[in]	p_name	Le nom du paramètre
 		 *\param[in]	p_mtxValue	La valeur du paramètre
 		 */
-		virtual void SetParameter( Castor::String const & p_strName, Castor::Matrix4x4r const & p_mtxValue );
+		virtual void SetParameter( Castor::String const & p_name, Castor::Matrix4x4r const & p_mtxValue );
 		/**
 		 *\~english
 		 *\brief		Defines the given parameter value
-		 *\param[in]	p_strName	The parameter name
+		 *\param[in]	p_name	The parameter name
 		 *\param[in]	p_mtxValue	The parameter value
 		 *\~french
 		 *\brief		Définit la valeur du paramètre
-		 *\param[in]	p_strName	Le nom du paramètre
+		 *\param[in]	p_name	Le nom du paramètre
 		 *\param[in]	p_mtxValue	La valeur du paramètre
 		 */
-		virtual void SetParameter( Castor::String const & p_strName, Castor::Matrix3x3r const & p_mtxValue );
+		virtual void SetParameter( Castor::String const & p_name, Castor::Matrix3x3r const & p_mtxValue );
 
 	private:
 		/**

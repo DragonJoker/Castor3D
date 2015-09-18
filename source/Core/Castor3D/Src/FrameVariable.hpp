@@ -61,7 +61,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a FrameVariable into a text file
@@ -228,14 +228,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the name of the variable, as it appears in the shader program
-		 *\param[in]	p_strName	The variable name
+		 *\param[in]	p_name	The variable name
 		 *\~french
 		 *\brief		Définit le nom de la variable
-		 *\param[in]	p_strName	Le nom
+		 *\param[in]	p_name	Le nom
 		 */
-		virtual void SetName( Castor::String const & p_strName )
+		virtual void SetName( Castor::String const & p_name )
 		{
-			m_strName = p_strName;
+			m_strName = p_name;
 		}
 		/**
 		 *\~english
@@ -375,7 +375,7 @@ namespace Castor3D
 	\~french
 	\brief		Représentation d'une variable de shader à type variable
 	*/
-	template <typename T>
+	template< typename T >
 	class TFrameVariable
 		:	public FrameVariable
 	{

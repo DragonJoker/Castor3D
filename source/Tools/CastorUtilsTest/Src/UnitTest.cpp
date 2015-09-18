@@ -31,8 +31,8 @@ namespace Testing
 
 	//*************************************************************************************************
 
-	TestCase::TestCase( std::string const & p_strName )
-		: m_strName( p_strName )
+	TestCase::TestCase( std::string const & p_name )
+		: m_strName( p_name )
 	{
 	}
 

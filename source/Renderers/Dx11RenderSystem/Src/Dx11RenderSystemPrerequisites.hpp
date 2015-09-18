@@ -131,6 +131,9 @@ DECLARE_GUID( IID_IDXGIFactory,					0x7b7166ec, 0x21c7, 0x44ae, 0xb2, 0x1a, 0xc9
 #	if !defined( D3D_DEBUG_INFO )
 #		define D3D_DEBUG_INFO
 #	endif
+#	define DX_DEBUG_RT 1
+#else
+#	define DX_DEBUG_RT 0
 #endif
 
 #ifdef _WIN32
@@ -332,9 +335,9 @@ namespace Dx11Render
 		{
 			return DrawTypes[p_index];
 		}
-		static inline D3D11_USAGE Get( Castor3D::eBUFFER_ACCESS_TYPE p_eType )
+		static inline D3D11_USAGE Get( Castor3D::eBUFFER_ACCESS_TYPE p_type )
 		{
-			return Usages[p_eType];
+			return Usages[p_type];
 		}
 		static inline D3D11_DEPTH_WRITE_MASK Get( Castor3D::eWRITING_MASK p_eMask )
 		{
@@ -352,9 +355,9 @@ namespace Dx11Render
 		{
 			return StencilOps[p_eOp];
 		}
-		static inline D3D11_FILL_MODE Get( Castor3D::eFILL_MODE p_eMode )
+		static inline D3D11_FILL_MODE Get( Castor3D::eFILL_MODE p_mode )
 		{
-			return FillModes[p_eMode];
+			return FillModes[p_mode];
 		}
 		static inline D3D11_CULL_MODE Get( Castor3D::eFACE p_eFace )
 		{

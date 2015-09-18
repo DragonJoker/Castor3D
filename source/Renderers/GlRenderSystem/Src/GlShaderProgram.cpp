@@ -112,7 +112,7 @@ namespace GlRender
 				{
 					char * l_pTmp = new char[l_iLength];
 					m_gl.GetProgramInfoLog( m_programObject, l_iLength, &l_iLength2, l_pTmp );
-					strLog = string::from_str( l_pTmp );
+					strLog = string::string_cast< xchar >( l_pTmp );
 					delete [] l_pTmp;
 				}
 			}
@@ -144,21 +144,21 @@ namespace GlRender
 		}
 	}
 
-	int GlShaderProgram::GetAttributeLocation( String const & p_strName )const
+	int GlShaderProgram::GetAttributeLocation( String const & p_name )const
 	{
 		int l_iReturn = eGL_INVALID_INDEX;
 
 		if ( m_programObject != eGL_INVALID_INDEX && m_gl.IsProgram( m_programObject ) )
 		{
-			l_iReturn = m_gl.GetAttribLocation( m_programObject, string::to_str( p_strName ).c_str() );
+			l_iReturn = m_gl.GetAttribLocation( m_programObject, string::string_cast< char >( p_name ).c_str() );
 		}
 
 		return l_iReturn;
 	}
 
-	ShaderObjectBaseSPtr GlShaderProgram::DoCreateObject( eSHADER_TYPE p_eType )
+	ShaderObjectBaseSPtr GlShaderProgram::DoCreateObject( eSHADER_TYPE p_type )
 	{
-		ShaderObjectBaseSPtr l_pReturn = std::make_shared< GlShaderObject >( m_gl, this, p_eType );
+		ShaderObjectBaseSPtr l_pReturn = std::make_shared< GlShaderObject >( m_gl, this, p_type );
 		return l_pReturn;
 	}
 

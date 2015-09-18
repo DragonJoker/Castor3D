@@ -34,7 +34,7 @@ namespace Dx11Render
 		/**
 		 * Constructor
 		 */
-		DxShaderObject( DxShaderProgram * p_pParent, Castor3D::eSHADER_TYPE p_eType );
+		DxShaderObject( DxShaderProgram * p_parent, Castor3D::eSHADER_TYPE p_type );
 		/**
 		 * Destructor
 		 */
@@ -57,9 +57,9 @@ namespace Dx11Render
 
 		virtual void CreateProgram() {}
 
-		virtual	void SetEntryPoint( Castor::String const & p_strName )
+		virtual	void SetEntryPoint( Castor::String const & p_name )
 		{
-			m_strEntryPoint = p_strName;
+			m_strEntryPoint = p_name;
 		}
 		virtual	Castor::String GetEntryPoint()const
 		{

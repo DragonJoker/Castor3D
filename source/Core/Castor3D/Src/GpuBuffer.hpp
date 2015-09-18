@@ -77,18 +77,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Initialisation function, used by VBOs
-		 *\param[in]	p_eType		Buffer access type
+		 *\param[in]	p_type		Buffer access type
 		 *\param[in]	p_eNature	Buffer access nature
 		 *\param[in]	p_pProgram	The shader program
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Fonction d'initialisation, utilisée par les VBOs
-		 *\param[in]	p_eType		Type d'accès du tampon
+		 *\param[in]	p_type		Type d'accès du tampon
 		 *\param[in]	p_eNature	Nature d'accès du tampon
 		 *\param[in]	p_pProgram	Le programme de shader
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Initialise( eBUFFER_ACCESS_TYPE p_eType, eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram = nullptr ) = 0;
+		virtual bool Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram = nullptr ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function
@@ -159,18 +159,18 @@ namespace Castor3D
 		 *\brief		Transmits data to the GPU buffer from RAM
 		 *\param[in]	p_pBuffer	The data
 		 *\param[in]	p_iSize		Data buffer size
-		 *\param[in]	p_eType		Transfer type
+		 *\param[in]	p_type		Transfer type
 		 *\param[in]	p_eNature	Transfer nature
 		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Transfère des données au tampon GPU à partir de la ram
 		 *\param[in]	p_pBuffer	Les données
 		 *\param[in]	p_iSize		Taille du tampon de données
-		 *\param[in]	p_eType		Type de transfert
+		 *\param[in]	p_type		Type de transfert
 		 *\param[in]	p_eNature	Nature du transfert
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_eType, Castor3D::eBUFFER_ACCESS_NATURE p_eNature ) = 0;
+		virtual bool Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature ) = 0;
 	};
 }
 

@@ -64,7 +64,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief			Writes a material into a text file
@@ -137,14 +137,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pEngine			The core engine
-		 *\param[in]	p_strName			The material name
+		 *\param[in]	p_engine			The core engine
+		 *\param[in]	p_name			The material name
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pEngine			Le moteur
-		 *\param[in]	p_strName			Le nom du matériau
+		 *\param[in]	p_engine			Le moteur
+		 *\param[in]	p_name			Le nom du matériau
 		 */
-		Material( Engine * p_pEngine, Castor::String const & p_strName = Castor::cuEmptyString );
+		Material( Engine * p_engine, Castor::String const & p_name = Castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -297,7 +297,7 @@ namespace Castor3D
 		 */
 		inline Engine * GetEngine()const
 		{
-			return m_pEngine;
+			return m_engine;
 		}
 		/**
 		 *\~english
@@ -313,7 +313,7 @@ namespace Castor3D
 
 	private:
 		PassPtrArray m_passes;
-		Engine * m_pEngine;
+		Engine * m_engine;
 	};
 }
 

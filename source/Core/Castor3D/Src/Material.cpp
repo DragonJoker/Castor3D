@@ -89,8 +89,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Material::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< Material, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	Material::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		:	Loader< Material, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -103,13 +103,13 @@ namespace Castor3D
 			l_return = p_file.WriteText( cuT( "{\n" ) ) > 0;
 		}
 
-		bool l_bFirst = true;
+		bool l_first = true;
 
 		for ( auto && l_pass : p_material )
 		{
-			if ( l_bFirst )
+			if ( l_first )
 			{
-				l_bFirst = false;
+				l_first = false;
 			}
 			else
 			{
@@ -131,9 +131,9 @@ namespace Castor3D
 
 	const Castor::String Material::DefaultMaterialName = cuT( "DefaultMaterial" );
 
-	Material::Material( Engine * p_pEngine, String const & p_name )
+	Material::Material( Engine * p_engine, String const & p_name )
 		:	Resource<Material>( p_name )
-		,	m_pEngine( p_pEngine )
+		,	m_engine( p_engine )
 	{
 	}
 
@@ -191,7 +191,7 @@ namespace Castor3D
 
 	PassSPtr Material::CreatePass()
 	{
-		PassSPtr l_newPass = std::make_shared< Pass >( m_pEngine, shared_from_this() );
+		PassSPtr l_newPass = std::make_shared< Pass >( m_engine, shared_from_this() );
 		m_passes.push_back( l_newPass );
 		return l_newPass;
 	}

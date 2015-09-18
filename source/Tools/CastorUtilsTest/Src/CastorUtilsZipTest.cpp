@@ -93,8 +93,8 @@ namespace Testing
 							TEST_EQUAL( l_outTxtData, l_inTxtData );
 						}
 
-						std::remove( string::to_str( l_folder / l_binName ).c_str() );
-						std::remove( string::to_str( l_folder / l_txtName ).c_str() );
+						std::remove( string::string_cast< char >( l_folder / l_binName ).c_str() );
+						std::remove( string::string_cast< char >( l_folder / l_txtName ).c_str() );
 						File::DirectoryDelete( l_folder / l_folder2 );
 						File::DirectoryDelete( l_folder / l_folder1 );
 						File::DirectoryDelete( l_folder );
@@ -104,9 +104,9 @@ namespace Testing
 						TEST_CHECK( File::DirectoryExists( l_folder ) );
 					}
 
-					std::remove( string::to_str( l_binName ).c_str() );
-					std::remove( string::to_str( l_txtName ).c_str() );
-					std::remove( string::to_str( l_zipName ).c_str() );
+					std::remove( string::string_cast< char >( l_binName ).c_str() );
+					std::remove( string::string_cast< char >( l_txtName ).c_str() );
+					std::remove( string::string_cast< char >( l_zipName ).c_str() );
 					File::DirectoryDelete( l_folder2 );
 					File::DirectoryDelete( l_folder1 );
 				}

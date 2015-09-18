@@ -74,14 +74,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pEngine		The engine
+		 *\param[in]	p_engine		The engine
 		 *\param[in]	p_eRendererType	The render API
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pEngine		Le moteur
+		 *\param[in]	p_engine		Le moteur
 		 *\param[in]	p_eRendererType	L'API de rendu
 		 */
-		RenderSystem( Engine * p_pEngine, eRENDERER_TYPE p_eRendererType );
+		RenderSystem( Engine * p_engine, eRENDERER_TYPE p_eRendererType );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -130,12 +130,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Pushes a scene on th stack
-		 *\param[in]	p_pScene	The scene
+		 *\param[in]	p_scene	The scene
 		 *\~french
 		 *\brief		Met une scène sur la pile
-		 *\param[in]	p_pScene	La scène
+		 *\param[in]	p_scene	La scène
 		 */
-		void PushScene( Scene * p_pScene );
+		void PushScene( Scene * p_scene );
 		/**
 		 *\~english
 		 *\brief		Pops a scene from the stack
@@ -224,7 +224,7 @@ namespace Castor3D
 		 *\brief		Crée un FrameVariableBuffer
 		 *\return		Le FrameVariableBuffer créé
 		 */
-		virtual FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_strName ) = 0;
+		virtual FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_name ) = 0;
 		/**
 		 *\~english
 		 *\brief		Tells if the renderer API supports depth buffer for main FBO
@@ -264,14 +264,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Create a billboards list
-		 *\param[in]	p_pScene		The parent scene
+		 *\param[in]	p_scene		The parent scene
 		 *\return		The object
 		 *\~french
 		 *\brief		Crée une liste de billboards
-		 *\param[in]	p_pScene		La scène parente
+		 *\param[in]	p_scene		La scène parente
 		 *\return		L'objet
 		 */
-		virtual BillboardListSPtr CreateBillboardsList( SceneSPtr p_pScene ) = 0;
+		virtual BillboardListSPtr CreateBillboardsList( SceneSPtr p_scene ) = 0;
 		/**
 		 *\~english
 		 *\brief		Create a sampler
@@ -286,14 +286,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Create a render target
-		 *\param[in]	p_eType	The render target type
+		 *\param[in]	p_type	The render target type
 		 *\return		The object
 		 *\~french
 		 *\brief		Crée une cible de rendu
-		 *\param[in]	p_eType	Le type de cible de rendu
+		 *\param[in]	p_type	Le type de cible de rendu
 		 *\return		L'objet
 		 */
-		virtual RenderTargetSPtr CreateRenderTarget( eTARGET_TYPE p_eType ) = 0;
+		virtual RenderTargetSPtr CreateRenderTarget( eTARGET_TYPE p_type ) = 0;
 		/**
 		 *\~english
 		 *\brief		Create a render window
@@ -325,12 +325,12 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Creates a texture
 		 *\remarks		Only the render system can do that
-		 *\param[in]	p_eType	The texture type
+		 *\param[in]	p_type	The texture type
 		 *\return		The created texture, dependant of current API
 		 *\~french
 		 *\brief		Crée une texture
 		 *\remarks		Seul le render system peut faire ça
-		 *\param[in]	p_eType	Le type de texture
+		 *\param[in]	p_type	Le type de texture
 		 *\return		La texture créée, dépendante de l'API actuelle
 		 */
 		virtual StaticTextureSPtr CreateStaticTexture() = 0;
@@ -338,12 +338,12 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Creates a texture
 		 *\remarks		Only the render system can do that
-		 *\param[in]	p_eType	The texture type
+		 *\param[in]	p_type	The texture type
 		 *\return		The created texture, dependant of current API
 		 *\~french
 		 *\brief		Crée une texture
 		 *\remarks		Seul le render system peut faire ça
-		 *\param[in]	p_eType	Le type de texture
+		 *\param[in]	p_type	Le type de texture
 		 *\return		La texture créée, dépendante de l'API actuelle
 		 */
 		virtual DynamicTextureSPtr CreateDynamicTexture() = 0;
@@ -441,14 +441,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Tells if the RenderSystem supports given shader type
-		 *\param[in]	p_eType	The shader type
+		 *\param[in]	p_type	The shader type
 		 *\~french
 		 *\brief		Dit si le RenderSystem supporte le type de shader donné
-		 *\param[in]	p_eType	Le type de shader
+		 *\param[in]	p_type	Le type de shader
 		 */
-		inline bool HasShaderType( eSHADER_TYPE p_eType )const
+		inline bool HasShaderType( eSHADER_TYPE p_type )const
 		{
-			return m_useShader[p_eType];
+			return m_useShader[p_type];
 		}
 		/**
 		 *\~english
@@ -488,7 +488,7 @@ namespace Castor3D
 		 */
 		inline Engine * GetEngine()const
 		{
-			return m_pEngine;
+			return m_engine;
 		}
 		/**
 		 *\~english
@@ -659,7 +659,7 @@ namespace Castor3D
 		//!\~english The currently active render context	\~french Le contexte de rendu actuellement actif
 		ContextRPtr m_pCurrentContext;
 		//!\~english The core engine	\~french Le moteur
-		EngineRPtr m_pEngine;
+		EngineRPtr m_engine;
 		//!\~english The matrix pipeline	\~french Le pipeline contenant les matrices
 		std::unique_ptr< Pipeline > m_pipeline;
 		//!\~english Scene stack	\~french Pile des scènes

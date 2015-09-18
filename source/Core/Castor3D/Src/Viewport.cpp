@@ -176,8 +176,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Viewport::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< Viewport, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	Viewport::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		:	Loader< Viewport, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -224,69 +224,69 @@ namespace Castor3D
 
 	const String Viewport::string_type[eVIEWPORT_TYPE_COUNT] = { cuT( "3d" ), cuT( "2d" ) };
 
-	Viewport::Viewport( Engine * p_pEngine, Size const & p_size, eVIEWPORT_TYPE p_eType )
-		:	m_eType( p_eType )
+	Viewport::Viewport( Engine * p_engine, Size const & p_size, eVIEWPORT_TYPE p_type )
+		:	m_type( p_type )
 		,	m_size( p_size )
-		,	m_rLeft( -1 )
-		,	m_rRight( 1 )
-		,	m_rTop( 1 )
-		,	m_rBottom( -1 )
-		,	m_rFar( 20000 )
-		,	m_rNear( real( 0.2 ) )
-		,	m_aFovY( Angle::FromDegrees( 45 ) )
-		,	m_rRatio( 1 )
-		,	m_pEngine( p_pEngine )
-		,	m_bModified( true )
+		,	m_left( -1 )
+		,	m_right( 1 )
+		,	m_top( 1 )
+		,	m_bottom( -1 )
+		,	m_far( 20000 )
+		,	m_near( real( 0.2 ) )
+		,	m_fovY( Angle::FromDegrees( 45 ) )
+		,	m_ratio( 1 )
+		,	m_engine( p_engine )
+		,	m_modified( true )
 	{
-		if ( m_eType != eVIEWPORT_TYPE_2D )
+		if ( m_type != eVIEWPORT_TYPE_2D )
 		{
-			m_rNear = real( 0.1 ); // not zero or we have a Z fight (?????)
+			m_near = real( 0.1 ); // not zero or we have a Z fight (?????)
 		}
 
-		m_rRatio = real( p_size.width() ) / p_size.height();
+		m_ratio = real( p_size.width() ) / p_size.height();
 	}
 
 	Viewport::Viewport( Viewport const & p_viewport )
-		:	m_eType( p_viewport.m_eType )
+		:	m_type( p_viewport.m_type )
 		,	m_size( p_viewport.m_size )
-		,	m_rLeft( p_viewport.m_rLeft )
-		,	m_rRight( p_viewport.m_rRight )
-		,	m_rTop( p_viewport.m_rTop )
-		,	m_rBottom( p_viewport.m_rBottom )
-		,	m_rFar( p_viewport.m_rFar )
-		,	m_rNear( p_viewport.m_rNear )
-		,	m_aFovY( p_viewport.m_aFovY )
-		,	m_rRatio( p_viewport.m_rRatio )
-		,	m_pEngine( p_viewport.m_pEngine )
-		,	m_bModified( p_viewport.m_bModified )
+		,	m_left( p_viewport.m_left )
+		,	m_right( p_viewport.m_right )
+		,	m_top( p_viewport.m_top )
+		,	m_bottom( p_viewport.m_bottom )
+		,	m_far( p_viewport.m_far )
+		,	m_near( p_viewport.m_near )
+		,	m_fovY( p_viewport.m_fovY )
+		,	m_ratio( p_viewport.m_ratio )
+		,	m_engine( p_viewport.m_engine )
+		,	m_modified( p_viewport.m_modified )
 	{
 	}
 
 	Viewport::Viewport( Viewport && p_viewport )
-		:	m_eType( std::move( p_viewport.m_eType ) )
+		:	m_type( std::move( p_viewport.m_type ) )
 		,	m_size( std::move( p_viewport.m_size ) )
-		,	m_rLeft( std::move( p_viewport.m_rLeft ) )
-		,	m_rRight( std::move( p_viewport.m_rRight ) )
-		,	m_rTop( std::move( p_viewport.m_rTop ) )
-		,	m_rBottom( std::move( p_viewport.m_rBottom ) )
-		,	m_rFar( std::move( p_viewport.m_rFar ) )
-		,	m_rNear( std::move( p_viewport.m_rNear ) )
-		,	m_aFovY( std::move( p_viewport.m_aFovY ) )
-		,	m_rRatio( std::move( p_viewport.m_rRatio ) )
-		,	m_pEngine( std::move( p_viewport.m_pEngine ) )
-		,	m_bModified( std::move( p_viewport.m_bModified ) )
+		,	m_left( std::move( p_viewport.m_left ) )
+		,	m_right( std::move( p_viewport.m_right ) )
+		,	m_top( std::move( p_viewport.m_top ) )
+		,	m_bottom( std::move( p_viewport.m_bottom ) )
+		,	m_far( std::move( p_viewport.m_far ) )
+		,	m_near( std::move( p_viewport.m_near ) )
+		,	m_fovY( std::move( p_viewport.m_fovY ) )
+		,	m_ratio( std::move( p_viewport.m_ratio ) )
+		,	m_engine( std::move( p_viewport.m_engine ) )
+		,	m_modified( std::move( p_viewport.m_modified ) )
 	{
-		p_viewport.m_eType = eVIEWPORT_TYPE_3D;
-		p_viewport.m_rLeft = -2;
-		p_viewport.m_rRight = 2;
-		p_viewport.m_rTop = 2;
-		p_viewport.m_rBottom = -2;
-		p_viewport.m_rFar = 2000;
-		p_viewport.m_rNear = 1.0;
-		p_viewport.m_aFovY = Angle::FromDegrees( 45.0 );
-		p_viewport.m_rRatio = 1;
-		p_viewport.m_pEngine = NULL;
-		p_viewport.m_bModified = true;
+		p_viewport.m_type = eVIEWPORT_TYPE_3D;
+		p_viewport.m_left = -2;
+		p_viewport.m_right = 2;
+		p_viewport.m_top = 2;
+		p_viewport.m_bottom = -2;
+		p_viewport.m_far = 2000;
+		p_viewport.m_near = 1.0;
+		p_viewport.m_fovY = Angle::FromDegrees( 45.0 );
+		p_viewport.m_ratio = 1;
+		p_viewport.m_engine = NULL;
+		p_viewport.m_modified = true;
 	}
 
 	Viewport::~Viewport()
@@ -295,18 +295,18 @@ namespace Castor3D
 
 	Viewport & Viewport::operator =( Viewport const & p_viewport )
 	{
-		m_eType = p_viewport.m_eType;
+		m_type = p_viewport.m_type;
 		m_size = p_viewport.m_size;
-		m_rLeft = p_viewport.m_rLeft;
-		m_rRight = p_viewport.m_rRight;
-		m_rTop = p_viewport.m_rTop;
-		m_rBottom = p_viewport.m_rBottom;
-		m_rFar = p_viewport.m_rFar;
-		m_rNear = p_viewport.m_rNear;
-		m_aFovY = p_viewport.m_aFovY;
-		m_rRatio = p_viewport.m_rRatio;
-		m_pEngine = p_viewport.m_pEngine;
-		m_bModified = p_viewport.m_bModified;
+		m_left = p_viewport.m_left;
+		m_right = p_viewport.m_right;
+		m_top = p_viewport.m_top;
+		m_bottom = p_viewport.m_bottom;
+		m_far = p_viewport.m_far;
+		m_near = p_viewport.m_near;
+		m_fovY = p_viewport.m_fovY;
+		m_ratio = p_viewport.m_ratio;
+		m_engine = p_viewport.m_engine;
+		m_modified = p_viewport.m_modified;
 		return * this;
 	}
 
@@ -314,29 +314,29 @@ namespace Castor3D
 	{
 		if ( this != & p_viewport )
 		{
-			m_eType = std::move( p_viewport.m_eType );
+			m_type = std::move( p_viewport.m_type );
 			m_size = std::move( p_viewport.m_size );
-			m_rLeft = std::move( p_viewport.m_rLeft );
-			m_rRight = std::move( p_viewport.m_rRight );
-			m_rTop = std::move( p_viewport.m_rTop );
-			m_rBottom = std::move( p_viewport.m_rBottom );
-			m_rFar = std::move( p_viewport.m_rFar );
-			m_rNear = std::move( p_viewport.m_rNear );
-			m_aFovY = std::move( p_viewport.m_aFovY );
-			m_rRatio = std::move( p_viewport.m_rRatio );
-			m_pEngine = std::move( p_viewport.m_pEngine );
-			m_bModified = std::move( p_viewport.m_bModified );
-			p_viewport.m_eType = eVIEWPORT_TYPE_3D;
-			p_viewport.m_rLeft = -2;
-			p_viewport.m_rRight = 2;
-			p_viewport.m_rTop = 2;
-			p_viewport.m_rBottom = -2;
-			p_viewport.m_rFar = 2000;
-			p_viewport.m_rNear = 1.0;
-			p_viewport.m_aFovY = Angle::FromDegrees( 45.0 );
-			p_viewport.m_rRatio = 1;
-			p_viewport.m_pEngine = NULL;
-			p_viewport.m_bModified = true;
+			m_left = std::move( p_viewport.m_left );
+			m_right = std::move( p_viewport.m_right );
+			m_top = std::move( p_viewport.m_top );
+			m_bottom = std::move( p_viewport.m_bottom );
+			m_far = std::move( p_viewport.m_far );
+			m_near = std::move( p_viewport.m_near );
+			m_fovY = std::move( p_viewport.m_fovY );
+			m_ratio = std::move( p_viewport.m_ratio );
+			m_engine = std::move( p_viewport.m_engine );
+			m_modified = std::move( p_viewport.m_modified );
+			p_viewport.m_type = eVIEWPORT_TYPE_3D;
+			p_viewport.m_left = -2;
+			p_viewport.m_right = 2;
+			p_viewport.m_top = 2;
+			p_viewport.m_bottom = -2;
+			p_viewport.m_far = 2000;
+			p_viewport.m_near = 1.0;
+			p_viewport.m_fovY = Angle::FromDegrees( 45.0 );
+			p_viewport.m_ratio = 1;
+			p_viewport.m_engine = NULL;
+			p_viewport.m_modified = true;
 		}
 
 		return * this;
@@ -348,45 +348,44 @@ namespace Castor3D
 
 		if ( IsModified() )
 		{
-			if ( !m_pEngine->GetRenderSystem()->HasNonPowerOfTwoTextures() )
+			if ( !m_engine->GetRenderSystem()->HasNonPowerOfTwoTextures() )
 			{
 				m_size.set( GetNext2Pow( m_size.width() ), GetNext2Pow( m_size.height() ) );
 			}
 
-			Point3r l_ptU( 0, 1, 0 );
-			Point3r l_ptD( 0, 0, 1 );
-			real l_rFarHeight = 0;
-			real l_rFarWidth = 0;
-			real l_rNearHeight = 0;
-			real l_rNearWidth = 0;
+			Point3r l_d( 0, 0, 1 );
+			real l_farHeight = 0;
+			real l_farWidth = 0;
+			real l_nearHeight = 0;
+			real l_nearWidth = 0;
 
 			if ( GetType() == eVIEWPORT_TYPE_3D )
 			{
-				real l_rTan = real( tan( GetFovY().Radians() / 2 ) );
-				l_rNearHeight = 2 * l_rTan * GetNear();
-				l_rNearWidth = l_rNearHeight * GetRatio();
-				l_rFarHeight = 2 * l_rTan * GetFar();
-				l_rFarWidth = l_rFarHeight * GetRatio();
+				real l_tan = real( tan( GetFovY().Radians() / 2 ) );
+				l_nearHeight = 2 * l_tan * GetNear();
+				l_nearWidth = l_nearHeight * GetRatio();
+				l_farHeight = 2 * l_tan * GetFar();
+				l_farWidth = l_farHeight * GetRatio();
 			}
 			else if ( GetType() == eVIEWPORT_TYPE_2D )
 			{
-				l_rNearHeight = GetBottom() - GetTop();
-				l_rNearWidth = GetRight() - GetLeft();
-				l_rFarHeight = l_rNearHeight;
-				l_rFarWidth = l_rNearWidth;
+				l_nearHeight = GetBottom() - GetTop();
+				l_nearWidth = GetRight() - GetLeft();
+				l_farHeight = l_nearHeight;
+				l_farWidth = l_nearWidth;
 			}
 
 			// N => Near, F => Far, C => Center, T => Top, L => Left, R => Right, B => Bottom
-			Point3r l_ptNC( l_ptD * GetNear() );
-			Point3r l_ptFC( l_ptD * GetFar() );
-			Point3r l_ptNTL( l_ptNC  + Point3r( real( 0 ), l_rNearHeight / 2, real( 0 ) ) - Point3r( l_rNearWidth / 2, real( 0 ), real( 0 ) ) );
-			Point3r l_ptNBL( l_ptNTL - Point3r( real( 0 ), l_rNearHeight, real( 0 ) ) );
-			Point3r l_ptNTR( l_ptNTL + Point3r( l_rNearWidth, real( 0 ), real( 0 ) ) );
-			Point3r l_ptNBR( l_ptNBL + Point3r( l_rNearWidth, real( 0 ), real( 0 ) ) );
-			Point3r l_ptFTL( l_ptFC  + Point3r( real( 0 ), l_rFarHeight / 2, real( 0 ) ) - Point3r( l_rFarWidth / 2, real( 0 ), real( 0 ) ) );
-			Point3r l_ptFBL( l_ptFTL - Point3r( real( 0 ), l_rFarHeight, real( 0 ) ) );
-			Point3r l_ptFTR( l_ptFTL + Point3r( l_rFarWidth, real( 0 ), real( 0 ) ) );
-			Point3r l_ptFBR( l_ptFBL + Point3r( l_rFarWidth, real( 0 ), real( 0 ) ) );
+			Point3r l_ptNC( l_d * GetNear() );
+			Point3r l_ptFC( l_d * GetFar() );
+			Point3r l_ptNTL( l_ptNC  + Point3r( real( 0 ), l_nearHeight / 2, real( 0 ) ) - Point3r( l_nearWidth / 2, real( 0 ), real( 0 ) ) );
+			Point3r l_ptNBL( l_ptNTL - Point3r( real( 0 ), l_nearHeight, real( 0 ) ) );
+			Point3r l_ptNTR( l_ptNTL + Point3r( l_nearWidth, real( 0 ), real( 0 ) ) );
+			Point3r l_ptNBR( l_ptNBL + Point3r( l_nearWidth, real( 0 ), real( 0 ) ) );
+			Point3r l_ptFTL( l_ptFC  + Point3r( real( 0 ), l_farHeight / 2, real( 0 ) ) - Point3r( l_farWidth / 2, real( 0 ), real( 0 ) ) );
+			Point3r l_ptFBL( l_ptFTL - Point3r( real( 0 ), l_farHeight, real( 0 ) ) );
+			Point3r l_ptFTR( l_ptFTL + Point3r( l_farWidth, real( 0 ), real( 0 ) ) );
+			Point3r l_ptFBR( l_ptFBL + Point3r( l_farWidth, real( 0 ), real( 0 ) ) );
 			m_planes[eFRUSTUM_PLANE_NEAR].Set( l_ptNBL, l_ptNTL, l_ptNTR );
 			m_planes[eFRUSTUM_PLANE_FAR].Set( l_ptFBR, l_ptFTR, l_ptFTL );
 			m_planes[eFRUSTUM_PLANE_LEFT].Set( l_ptFBL, l_ptFTL, l_ptNTL );
@@ -394,27 +393,27 @@ namespace Castor3D
 			m_planes[eFRUSTUM_PLANE_TOP].Set( l_ptNTL, l_ptFTL, l_ptFTR );
 			m_planes[eFRUSTUM_PLANE_BOTTOM].Set( l_ptNBR, l_ptFBR, l_ptFBL );
 
-			if ( m_eType == eVIEWPORT_TYPE_3D )
+			if ( m_type == eVIEWPORT_TYPE_3D )
 			{
-				matrix::perspective( m_projection, m_aFovY, m_rRatio, m_rNear, m_rFar );
+				matrix::perspective( m_projection, m_fovY, m_ratio, m_near, m_far );
 			}
-			else if ( m_eType == eVIEWPORT_TYPE_2D )
+			else if ( m_type == eVIEWPORT_TYPE_2D )
 			{
-				matrix::ortho( m_projection, m_rLeft, m_rRight, m_rBottom, m_rTop, m_rNear, m_rFar );
+				matrix::ortho( m_projection, m_left, m_right, m_bottom, m_top, m_near, m_far );
 			}
 
-			m_bModified = false;
+			m_modified = false;
 			l_return = true;
 		}
 
-		m_pEngine->GetRenderSystem()->GetPipeline()->ApplyViewport( m_size.width(), m_size.height() );
-		m_pEngine->GetRenderSystem()->GetPipeline().SetProjectionMatrix( m_projection );
+		m_engine->GetRenderSystem()->GetPipeline().ApplyViewport( m_size.width(), m_size.height() );
+		m_engine->GetRenderSystem()->GetPipeline().SetProjectionMatrix( m_projection );
 		return l_return;
 	}
 
 	void Viewport::GetDirection( Point2i const & p_ptMouse, Point3r & p_ptResult )
 	{
 		Point4r l_viewport( real( 0 ), real( 0 ), real( m_size.width() ), real( m_size.height() ) );
-		m_pEngine->GetRenderSystem()->GetPipeline().UnProject( Point3i( p_ptMouse[0], p_ptMouse[1], 1 ), l_viewport, p_ptResult );
+		m_engine->GetRenderSystem()->GetPipeline().UnProject( Point3i( p_ptMouse[0], p_ptMouse[1], 1 ), l_viewport, p_ptResult );
 	}
 }

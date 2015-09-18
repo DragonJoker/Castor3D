@@ -17,8 +17,8 @@ using namespace GlRender;
 
 //*************************************************************************************************
 
-GlBillboardList::GlBillboardList( Castor3D::SceneSPtr p_pScene, GlRenderSystem * p_pRenderSystem, OpenGl & p_gl )
-	: BillboardList( p_pScene, p_pRenderSystem )
+GlBillboardList::GlBillboardList( Castor3D::SceneSPtr p_scene, GlRenderSystem * p_pRenderSystem, OpenGl & p_gl )
+	: BillboardList( p_scene, p_pRenderSystem )
 	, m_gl( p_gl )
 {
 }

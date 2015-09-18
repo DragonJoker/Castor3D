@@ -62,7 +62,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a render window into a text file
@@ -288,12 +288,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the Scene
-		 *\param[in]	p_pScene	The new Scene
+		 *\param[in]	p_scene	The new Scene
 		 *\~french
 		 *\brief		Définit la Scene
-		 *\param[in]	p_pScene	La nouvelle Scene
+		 *\param[in]	p_scene	La nouvelle Scene
 		 */
-		void SetScene( SceneSPtr p_pScene );
+		void SetScene( SceneSPtr p_scene );
 		/**
 		 *\~english
 		 *\brief		Retrieves the window dimensions
@@ -542,7 +542,7 @@ namespace Castor3D
 		 */
 		virtual Engine * GetEngine()const
 		{
-			return m_pEngine;
+			return m_engine;
 		}
 
 	protected:
@@ -568,7 +568,7 @@ namespace Castor3D
 
 	private:
 		//!\~english The core engine	\~french Le moteur
-		Engine * m_pEngine;
+		Engine * m_engine;
 		//!\~english Total number of render windows	\~french Nombre total de fenêtres de rendu
 		static uint32_t s_nbRenderWindows;
 		//!\~english This window's index	\~french Index de la fenêtre

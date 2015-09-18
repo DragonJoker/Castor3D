@@ -47,9 +47,9 @@ namespace CastorShape
 		static wxString PROPERTY_CHANNEL_GLOSS = _( "Gloss" );
 	}
 
-	NewMaterialDialog::NewMaterialDialog( wxPGEditor * p_editor, Engine * p_pEngine, wxWindow * parent, wxWindowID p_id, wxString const & p_name, wxPoint const & pos, wxSize const & size, long style )
+	NewMaterialDialog::NewMaterialDialog( wxPGEditor * p_editor, Engine * p_engine, wxWindow * parent, wxWindowID p_id, wxString const & p_name, wxPoint const & pos, wxSize const & size, long style )
 		: wxDialog( parent, p_id, p_name, pos, size, style, p_name )
-		, m_pEngine( p_pEngine )
+		, m_engine( p_engine )
 		, m_editor( p_editor )
 	{
 		PROPERTY_CATEGORY_MATERIAL = _( "Material: " );
@@ -82,7 +82,7 @@ namespace CastorShape
 		SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		wxSize l_size = GetClientSize();
 		l_size.y -= 30;
-		m_material = std::make_shared< Material >( m_pEngine, cuT( "NewMaterial" ) );
+		m_material = std::make_shared< Material >( m_engine, cuT( "NewMaterial" ) );
 
 		m_properties = new wxPropertyGrid( this, wxID_ANY, wxDefaultPosition, l_size, wxPG_SPLITTER_AUTO_CENTER | wxPG_DEFAULT_STYLE );
 		m_properties->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
@@ -175,7 +175,7 @@ namespace CastorShape
 
 		if ( p_value != wxCOMBO_NEW )
 		{
-			m_pass = m_material->GetPass( str_utils::to_int( p_value ) );
+			m_pass = m_material->GetPass( string::to_int( p_value ) );
 			m_properties->SetPropertyValue( PROPERTY_PASS_DIFFUSE, wxVariant( wxColour( m_pass->GetAmbient().to_bgr() ) ) );
 			m_properties->SetPropertyValue( PROPERTY_PASS_AMBIENT, wxVariant( wxColour( m_pass->GetDiffuse().to_bgr() ) ) );
 			m_properties->SetPropertyValue( PROPERTY_PASS_SPECULAR, wxVariant( wxColour( m_pass->GetSpecular().to_bgr() ) ) );
@@ -284,7 +284,7 @@ namespace CastorShape
 
 		if ( p_value != wxCOMBO_NEW )
 		{
-			m_texture = m_pass->GetTextureUnit( str_utils::to_int( p_value ) );
+			m_texture = m_pass->GetTextureUnit( string::to_int( p_value ) );
 			wxString l_selected;
 
 			switch ( m_texture->GetChannel() )
@@ -379,8 +379,8 @@ namespace CastorShape
 
 	void NewMaterialDialog::OnOk( wxCommandEvent & WXUNUSED( p_event ) )
 	{
-		m_pEngine->GetMaterialManager().insert( m_material->GetName(), m_material );
-		m_pEngine->PostEvent( MakeInitialiseEvent( *m_material ) );
+		m_engine->GetMaterialManager().insert( m_material->GetName(), m_material );
+		m_engine->PostEvent( MakeInitialiseEvent( *m_material ) );
 		EndModal( wxID_OK );
 	}
 

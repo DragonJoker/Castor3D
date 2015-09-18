@@ -114,8 +114,8 @@ wxString StcTextEditor::TextAutoCompleter::GetNext()
 #endif
 //*************************************************************************************************
 
-StcTextEditor::StcTextEditor( StcContext & p_context, wxWindow * p_pParent, wxWindowID p_id, wxPoint const & p_ptPos, wxSize const & p_size, long p_lStyle )
-	:	wxStyledTextCtrl( p_pParent, p_id, p_ptPos, p_size, p_lStyle )
+StcTextEditor::StcTextEditor( StcContext & p_context, wxWindow * p_parent, wxWindowID p_id, wxPoint const & p_ptPos, wxSize const & p_size, long p_lStyle )
+	:	wxStyledTextCtrl( p_parent, p_id, p_ptPos, p_size, p_lStyle )
 	, m_context( p_context )
 	, m_strFilename( wxEmptyString )
 	, m_iLineNrID( 0 )
@@ -299,7 +299,7 @@ wxString StcTextEditor::DeterminePrefs( wxString const & p_strFilename )
 	return l_strReturn;
 }
 
-bool StcTextEditor::InitializePrefs( wxString const & p_strName )
+bool StcTextEditor::InitializePrefs( wxString const & p_name )
 {
 	StyleClearAll();
 	LanguageInfoPtr l_pCurInfo;
@@ -309,7 +309,7 @@ bool StcTextEditor::InitializePrefs( wxString const & p_strName )
 	{
 		l_pCurInfo = * l_it;
 
-		if ( l_pCurInfo->GetName().c_str() == p_strName )
+		if ( l_pCurInfo->GetName().c_str() == p_name )
 		{
 			l_bFound = true;
 		}
@@ -357,9 +357,9 @@ bool StcTextEditor::InitializePrefs( wxString const & p_strName )
 
 			for ( int j = eSTC_TYPE_DEFAULT; j < eSTC_TYPE_COUNT; ++j )
 			{
-				eSTC_TYPE l_eType = eSTC_TYPE( j );
-				int l_iStyle = l_lexerAssoc[l_eType];
-				StyleInfoPtr const & l_stCurType = l_pCurInfo->GetStyle( l_eType );
+				eSTC_TYPE l_type = eSTC_TYPE( j );
+				int l_iStyle = l_lexerAssoc[l_type];
+				StyleInfoPtr const & l_stCurType = l_pCurInfo->GetStyle( l_type );
 				wxFont l_font( l_stCurType->GetFontSize(), wxMODERN, wxNORMAL, wxNORMAL, false, l_stCurType->GetFontName() );
 				StyleSetFont( l_iStyle, l_font );
 
@@ -379,9 +379,9 @@ bool StcTextEditor::InitializePrefs( wxString const & p_strName )
 				StyleSetVisible( l_iStyle, ( l_stCurType->GetFontStyle() & eSTC_STYLE_HIDDEN ) == 0 );
 				StyleSetCase( l_iStyle, ( l_stCurType->GetLetterCase() ) );
 
-				if ( ! l_pCurInfo->GetWords( l_eType ).empty() )
+				if ( ! l_pCurInfo->GetWords( l_type ).empty() )
 				{
-					Castor::String l_words = l_pCurInfo->GetWords( l_eType );
+					Castor::String l_words = l_pCurInfo->GetWords( l_type );
 					SetKeyWords( l_iNbKeywords, l_words.c_str() );
 					Castor::StringArray l_array = Castor::string::split( l_words, cuT( " \t\n\r" ), -1, false );
 

@@ -28,7 +28,7 @@ namespace Dx11Render
 		:	public Castor3D::FrameVariableBuffer
 	{
 	public:
-		DxFrameVariableBuffer( Castor::String const & p_strName, DxRenderSystem * p_pRenderSystem );
+		DxFrameVariableBuffer( Castor::String const & p_name, DxRenderSystem * p_pRenderSystem );
 		virtual ~DxFrameVariableBuffer();
 
 		inline ID3D11Buffer * GetDxBuffer()
@@ -37,7 +37,7 @@ namespace Dx11Render
 		}
 
 	private:
-		virtual Castor3D::FrameVariableSPtr DoCreateVariable( Castor3D::ShaderProgramBase * p_pProgram, Castor3D::eFRAME_VARIABLE_TYPE p_eType, Castor::String const & p_strName, uint32_t p_uiNbOcc = 1 );
+		virtual Castor3D::FrameVariableSPtr DoCreateVariable( Castor3D::ShaderProgramBase * p_pProgram, Castor3D::eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_uiNbOcc = 1 );
 		virtual bool DoInitialise( Castor3D::ShaderProgramBase * p_pProgram );
 		virtual void DoCleanup();
 		virtual bool DoBind( uint32_t p_index );

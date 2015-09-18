@@ -76,9 +76,9 @@ namespace GuiCommon
 IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Root_Language )
 {
 	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_pContext );
-	String l_strName;
-	p_arrayParams[0]->Get( l_strName );
-	l_pContext->pCurrentLanguage->SetName( l_strName );
+	String l_name;
+	p_arrayParams[0]->Get( l_name );
+	l_pContext->pCurrentLanguage->SetName( l_name );
 }
 END_ATTRIBUTE_PUSH( eSECTION_LANGUAGE )
 
@@ -172,27 +172,27 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Style_FgColour )
 {
 	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_pContext );
-	String l_strName;
-	p_arrayParams[0]->Get( l_strName );
-	l_pContext->pCurrentStyle->SetForeground( l_strName );
+	String l_name;
+	p_arrayParams[0]->Get( l_name );
+	l_pContext->pCurrentStyle->SetForeground( l_name );
 }
 END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Style_BgColour )
 {
 	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_pContext );
-	String l_strName;
-	p_arrayParams[0]->Get( l_strName );
-	l_pContext->pCurrentStyle->SetBackground( l_strName );
+	String l_name;
+	p_arrayParams[0]->Get( l_name );
+	l_pContext->pCurrentStyle->SetBackground( l_name );
 }
 END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Style_FontName )
 {
 	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_pContext );
-	String l_strName;
-	p_arrayParams[0]->Get( l_strName );
-	l_pContext->pCurrentStyle->SetFontName( l_strName );
+	String l_name;
+	p_arrayParams[0]->Get( l_name );
+	l_pContext->pCurrentStyle->SetFontName( l_name );
 }
 END_ATTRIBUTE()
 

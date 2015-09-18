@@ -11,7 +11,7 @@ using namespace C3dAssimp;
 
 //*************************************************************************************************
 
-namespace details
+namespace detail
 {
 	struct stBONE_NODE
 	{
@@ -40,7 +40,7 @@ namespace details
 		{
 			const aiNodeAnim * l_pNodeAnim = p_pAnimation->mChannels[i];
 
-			if ( string::from_str( l_pNodeAnim->mNodeName.data ) == p_strNodeName )
+			if ( string::string_cast< xchar >( l_pNodeAnim->mNodeName.data ) == p_strNodeName )
 			{
 				l_pReturn = l_pNodeAnim;
 			}
@@ -166,9 +166,9 @@ C3D_Assimp_API ImporterPlugin::ExtensionArray GetExtensions()
 	return l_arrayReturn;
 }
 
-C3D_Assimp_API void Create( Engine * p_pEngine, ImporterPlugin * p_pPlugin )
+C3D_Assimp_API void Create( Engine * p_engine, ImporterPlugin * p_pPlugin )
 {
-	ImporterSPtr l_pImporter = std::make_shared< AssimpImporter >( p_pEngine );
+	ImporterSPtr l_pImporter = std::make_shared< AssimpImporter >( p_engine );
 	p_pPlugin->AttachImporter( l_pImporter );
 }
 
@@ -187,8 +187,8 @@ C3D_Assimp_API void OnUnload( Castor3D::Engine * p_engine )
 
 //*************************************************************************************************
 
-AssimpImporter::AssimpImporter( Engine * p_pEngine )
-	:	Importer( p_pEngine	)
+AssimpImporter::AssimpImporter( Engine * p_engine )
+	:	Importer( p_engine	)
 	,	m_anonymous( 0	)
 {
 }
@@ -205,7 +205,7 @@ SceneSPtr AssimpImporter::DoImportScene()
 	if ( m_pMesh )
 	{
 		m_pMesh->GenerateBuffers();
-		l_pScene = m_pEngine->CreateScene( cuT( "Scene_ASSIMP" ) );
+		l_pScene = m_engine->CreateScene( cuT( "Scene_ASSIMP" ) );
 		SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( m_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 		GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( m_pMesh->GetName() );
 		l_pGeometry->AttachTo( l_pNode );
@@ -220,7 +220,7 @@ MeshSPtr AssimpImporter::DoImportMesh()
 {
 	String l_name = m_fileName.GetFileName();
 	String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
-	m_pMesh = m_pEngine->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName, UIntArray(), RealArray() );
+	m_pMesh = m_engine->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName, UIntArray(), RealArray() );
 
 	if ( !m_pMesh->GetSubmeshCount() )
 	{
@@ -247,7 +247,7 @@ MeshSPtr AssimpImporter::DoImportMesh()
 		}
 
 		// And have it read the given file with some postprocessing
-		aiScene const * l_pScene = importer.ReadFile( string::to_str( m_fileName ), l_uiFlags );
+		aiScene const * l_pScene = importer.ReadFile( string::string_cast< char >( m_fileName ), l_uiFlags );
 
 		if ( l_pScene )
 		{
@@ -284,7 +284,7 @@ MeshSPtr AssimpImporter::DoImportMesh()
 			}
 			else
 			{
-				m_pEngine->GetMeshManager().erase( l_meshName );
+				m_engine->GetMeshManager().erase( l_meshName );
 				m_pMesh.reset();
 			}
 
@@ -294,7 +294,7 @@ MeshSPtr AssimpImporter::DoImportMesh()
 		{
 			// The import failed, report it
 			Logger::LogError( std::stringstream() << "Scene import failed : " << importer.GetErrorString() );
-			m_pEngine->GetMeshManager().erase( l_meshName );
+			m_engine->GetMeshManager().erase( l_meshName );
 			m_pMesh.reset();
 		}
 	}
@@ -446,10 +446,10 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 {
 	MaterialSPtr l_pReturn;
 	PassSPtr l_pPass;
-	MaterialManager & l_mtlManager = m_pEngine->GetMaterialManager();
+	MaterialManager & l_mtlManager = m_engine->GetMaterialManager();
 	aiString l_mtlname;
 	p_pAiMaterial->Get( AI_MATKEY_NAME, l_mtlname );
-	String l_strName = string::from_str( l_mtlname.C_Str() );
+	String l_name = string::string_cast< xchar >( l_mtlname.C_Str() );
 	aiColor3D l_clrAmbient( 1, 1, 1 );
 	aiColor3D l_clrDiffuse( 1, 1, 1 );
 	aiColor3D l_clrSpecular( 1, 1, 1 );
@@ -462,12 +462,12 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 	aiString l_shnTexName;
 	aiString l_spcTexName;
 
-	if ( l_strName.empty() )
+	if ( l_name.empty() )
 	{
-		l_strName = m_fileName.GetFileName() + string::to_string( m_anonymous++ );;
+		l_name = m_fileName.GetFileName() + string::to_string( m_anonymous++ );
 	}
 
-	l_pReturn = l_mtlManager.find( l_strName );
+	l_pReturn = l_mtlManager.find( l_name );
 
 	if ( !l_pReturn )
 	{
@@ -475,7 +475,7 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 		float l_fShininess = 0.5f;
 		float l_fShininessStrength = 1.0f;
 		int l_iTwoSided = 0;
-		l_pReturn = std::make_shared< Material >( m_pEngine, l_strName );
+		l_pReturn = std::make_shared< Material >( m_engine, l_name );
 		l_pReturn->CreatePass();
 		l_pPass = l_pReturn->GetPass( 0 );
 		p_pAiMaterial->Get( AI_MATKEY_COLOR_AMBIENT, l_clrAmbient );
@@ -516,7 +516,7 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 
 		if ( l_difTexName.length > 0 && std::string( l_difTexName.C_Str() ).find( "_Cine_" ) != String::npos && std::string( l_difTexName.C_Str() ).find( "/MI_CH_" ) != String::npos )
 		{
-			String l_strGlob = string::from_str( l_difTexName.C_Str() ) + cuT( ".tga" );
+			String l_strGlob = string::string_cast< xchar >( l_difTexName.C_Str() ) + cuT( ".tga" );
 			string::replace( l_strGlob, cuT( "/MI_CH_" ), cuT( "TX_CH_" ) );
 			String l_strDiff = l_strGlob;
 			String l_strNorm = l_strGlob;
@@ -531,46 +531,46 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 		{
 			if ( l_ambTexName.length > 0 )
 			{
-				DoAddTexture( string::from_str( l_ambTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_AMBIENT	);
+				DoAddTexture( string::string_cast< xchar >( l_ambTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_AMBIENT	);
 			}
 
 			if ( l_difTexName.length > 0 )
 			{
-				DoAddTexture( string::from_str( l_difTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_DIFFUSE	);
+				DoAddTexture( string::string_cast< xchar >( l_difTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_DIFFUSE	);
 			}
 
 			if ( l_opaTexName.length > 0 )
 			{
-				DoAddTexture( string::from_str( l_opaTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_OPACITY	);
+				DoAddTexture( string::string_cast< xchar >( l_opaTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_OPACITY	);
 			}
 
 			if ( l_shnTexName.length > 0 )
 			{
-				DoAddTexture( string::from_str( l_shnTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_GLOSS	);
+				DoAddTexture( string::string_cast< xchar >( l_shnTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_GLOSS	);
 			}
 
 			if ( l_spcTexName.length > 0 )
 			{
-				DoAddTexture( string::from_str( l_spcTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_SPECULAR	);
+				DoAddTexture( string::string_cast< xchar >( l_spcTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_SPECULAR	);
 			}
 
 			if ( l_nmlTexName.length > 0 )
 			{
-				DoAddTexture( string::from_str( l_nmlTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_NORMAL	);
+				DoAddTexture( string::string_cast< xchar >( l_nmlTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_NORMAL	);
 
 				if ( l_hgtTexName.length > 0 )
 				{
-					DoAddTexture( string::from_str( l_hgtTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_HEIGHT	);
+					DoAddTexture( string::string_cast< xchar >( l_hgtTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_HEIGHT	);
 				}
 			}
 			else if ( l_hgtTexName.length > 0 )
 			{
-				DoAddTexture( string::from_str( l_hgtTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_NORMAL	);
+				DoAddTexture( string::string_cast< xchar >( l_hgtTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_NORMAL	);
 			}
 		}
 
-		l_mtlManager.insert( l_strName, l_pReturn );
-		m_pEngine->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
+		l_mtlManager.insert( l_name, l_pReturn );
+		m_engine->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
 	}
 
 	return l_pReturn;
@@ -581,22 +581,22 @@ void AssimpImporter::DoProcessBones( SkeletonSPtr p_pSkeleton, aiBone ** p_pBone
 	for ( uint32_t i = 0; i < p_uiCount; ++i )
 	{
 		aiBone * l_pAiBone = p_pBones[i];
-		String l_strName = string::from_str( l_pAiBone->mName.C_Str() );
+		String l_name = string::string_cast< xchar >( l_pAiBone->mName.C_Str() );
 		uint32_t l_uiIndex;
 
-		if ( m_mapBoneByID.find( l_strName ) == m_mapBoneByID.end() )
+		if ( m_mapBoneByID.find( l_name ) == m_mapBoneByID.end() )
 		{
 			BoneSPtr l_pBone = std::make_shared< Bone >( *p_pSkeleton );
-			l_pBone->SetName( l_strName );
+			l_pBone->SetName( l_name );
 			l_pBone->SetOffsetMatrix( Matrix4x4r( &l_pAiBone->mOffsetMatrix.Transpose().a1 ) );
 			l_uiIndex = uint32_t( m_arrayBones.size() );
 			m_arrayBones.push_back( l_pBone );
-			m_mapBoneByID[l_strName] = l_uiIndex;
+			m_mapBoneByID[l_name] = l_uiIndex;
 			p_pSkeleton->AddBone( l_pBone );
 		}
 		else
 		{
-			l_uiIndex = m_mapBoneByID[l_strName];
+			l_uiIndex = m_mapBoneByID[l_name];
 		}
 
 		for ( uint32_t j = 0; j < l_pAiBone->mNumWeights; ++j )
@@ -608,33 +608,33 @@ void AssimpImporter::DoProcessBones( SkeletonSPtr p_pSkeleton, aiBone ** p_pBone
 	}
 }
 
-AnimationSPtr AssimpImporter::DoProcessAnimation( SkeletonSPtr p_pSkeleton, aiNode * p_pNode, aiAnimation * p_pAnimation )
+AnimationSPtr AssimpImporter::DoProcessAnimation( SkeletonSPtr p_pSkeleton, aiNode * p_node, aiAnimation * p_pAnimation )
 {
-	String l_strName = string::from_str( p_pAnimation->mName.C_Str() );
+	String l_name = string::string_cast< xchar >( p_pAnimation->mName.C_Str() );
 
-	if ( l_strName.empty() )
+	if ( l_name.empty() )
 	{
-		l_strName = m_fileName.GetFileName();
+		l_name = m_fileName.GetFileName();
 	}
 
-	AnimationSPtr l_pAnimation = p_pSkeleton->CreateAnimation( l_strName );
+	AnimationSPtr l_pAnimation = p_pSkeleton->CreateAnimation( l_name );
 	real l_rTicksPerSecond = real( p_pAnimation->mTicksPerSecond != 0 ? p_pAnimation->mTicksPerSecond : 25.0 );
-	DoProcessAnimationNodes( l_pAnimation, l_rTicksPerSecond, p_pSkeleton, p_pNode, p_pAnimation, nullptr );
+	DoProcessAnimationNodes( l_pAnimation, l_rTicksPerSecond, p_pSkeleton, p_node, p_pAnimation, nullptr );
 	return l_pAnimation;
 }
 
-void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_pAnimation, real p_rTicksPerSecond, SkeletonSPtr p_pSkeleton, aiNode * p_pNode, aiAnimation * p_paiAnimation, MovingObjectBaseSPtr p_pObject )
+void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_pAnimation, real p_rTicksPerSecond, SkeletonSPtr p_pSkeleton, aiNode * p_node, aiAnimation * p_paiAnimation, MovingObjectBaseSPtr p_pObject )
 {
-	String l_strName = string::from_str( p_pNode->mName.data );
-	const aiNodeAnim * l_pNodeAnim = ::details::FindNodeAnim( p_paiAnimation, l_strName );
-	Matrix4x4r l_mtxNode( &p_pNode->mTransformation/*.Transpose()*/.a1 );
+	String l_name = string::string_cast< xchar >( p_node->mName.data );
+	const aiNodeAnim * l_pNodeAnim = ::detail::FindNodeAnim( p_paiAnimation, l_name );
+	Matrix4x4r l_mtxNode( &p_node->mTransformation/*.Transpose()*/.a1 );
 	MovingObjectBaseSPtr l_pObject;
 
 	if ( l_pNodeAnim )
 	{
 		BonePtrArrayConstIt l_itBone = std::find_if( p_pSkeleton->Begin(), p_pSkeleton->End(), [&]( BoneSPtr p_pBone )
 		{
-			return p_pBone->GetName() == l_strName;
+			return p_pBone->GetName() == l_name;
 		} );
 
 		if ( l_itBone != p_pSkeleton->End() )
@@ -684,9 +684,9 @@ void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_pAnimation, real p
 		l_pObject->SetNodeTransform( l_mtxNode );
 	}
 
-	for ( uint32_t i = 0 ; i < p_pNode->mNumChildren ; i++ )
+	for ( uint32_t i = 0 ; i < p_node->mNumChildren ; i++ )
 	{
-		DoProcessAnimationNodes( p_pAnimation, p_rTicksPerSecond, p_pSkeleton, p_pNode->mChildren[i], p_paiAnimation, l_pObject );
+		DoProcessAnimationNodes( p_pAnimation, p_rTicksPerSecond, p_pSkeleton, p_node->mChildren[i], p_paiAnimation, l_pObject );
 	}
 }
 

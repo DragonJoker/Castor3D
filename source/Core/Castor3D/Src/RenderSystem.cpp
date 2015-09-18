@@ -22,8 +22,8 @@ using namespace Castor;
 
 //*************************************************************************************************
 
-RenderSystem::RenderSystem( Engine * p_pEngine, eRENDERER_TYPE p_eRendererType )
-	: m_pEngine( p_pEngine )
+RenderSystem::RenderSystem( Engine * p_engine, eRENDERER_TYPE p_eRendererType )
+	: m_engine( p_engine )
 	, m_useMultiTexturing( false )
 	, m_bInitialised( false )
 	, m_useShaders( false )
@@ -75,9 +75,9 @@ void RenderSystem::RenderAmbientLight( Castor::Colour const & p_clColour, FrameV
 	l_pVariable->SetValue( l_ptColour );
 }
 
-void RenderSystem::PushScene( Scene * p_pScene )
+void RenderSystem::PushScene( Scene * p_scene )
 {
-	m_stackScenes.push( p_pScene );
+	m_stackScenes.push( p_scene );
 }
 
 void RenderSystem::PopScene()
@@ -108,7 +108,7 @@ ShaderProgramBaseSPtr RenderSystem::CreateShaderProgram( eSHADER_LANGUAGE p_eLan
 	}
 	else
 	{
-		ShaderPluginSPtr l_pPlugin = m_pEngine->GetShaderPlugin( p_eLanguage );
+		ShaderPluginSPtr l_pPlugin = m_engine->GetShaderPlugin( p_eLanguage );
 
 		if ( l_pPlugin )
 		{
@@ -167,7 +167,7 @@ bool RenderSystem::DoTrack( void * p_object, std::string const & p_type, std::st
 
 bool RenderSystem::DoTrack( Named * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name )
 {
-	return DoTrack( reinterpret_cast< void * >( p_object ), p_type + ": " + string::to_str( p_object->GetName() ), p_file, p_line, p_name );
+	return DoTrack( reinterpret_cast< void * >( p_object ), p_type + ": " + string::string_cast< char >( p_object->GetName() ), p_file, p_line, p_name );
 }
 
 bool RenderSystem::DoUntrack( void * p_object, ObjectDeclaration & p_declaration )
@@ -216,7 +216,7 @@ void RenderSystem::DoReportTracked()
 	{
 		std::stringstream l_stream;
 		l_stream << "Leaked 0x" << std::hex << l_decl.m_object << std::dec << " (" << l_decl.m_name << "), from file " << l_decl.m_file << ", line " << l_decl.m_line << std::endl;
-		l_stream << string::to_str( l_decl.m_stack ) << std::endl;
+		l_stream << string::string_cast< char >( l_decl.m_stack ) << std::endl;
 		Castor::Logger::LogError( l_stream.str() );
 	}
 }

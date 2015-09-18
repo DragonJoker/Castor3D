@@ -14,13 +14,13 @@ namespace Castor
 	}
 
 	Path::Path( char const * p_data )
-		:	String( string::from_str( p_data ) )
+		:	String( string::string_cast< xchar >( p_data ) )
 	{
 		DoNormalise();
 	}
 
 	Path::Path( wchar_t const * p_data )
-		:	String( string::from_wstr( p_data ) )
+		:	String( string::string_cast< xchar >( p_data ) )
 	{
 		DoNormalise();
 	}
@@ -73,7 +73,7 @@ namespace Castor
 	Path & Path::operator /=( char const * p_pBuffer )
 	{
 		push_back( Separator );
-		String::operator+=( string::from_str( p_pBuffer ) );
+		String::operator+=( string::string_cast< xchar >( p_pBuffer ) );
 		DoNormalise();
 		return *this;
 	}
@@ -81,7 +81,7 @@ namespace Castor
 	Path & Path::operator /=( wchar_t const * p_pBuffer )
 	{
 		push_back( Separator );
-		String::operator+=( string::from_wstr( p_pBuffer ) );
+		String::operator+=( string::string_cast< xchar >( p_pBuffer ) );
 		DoNormalise();
 		return *this;
 	}

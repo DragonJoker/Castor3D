@@ -166,7 +166,7 @@ namespace GuiCommon
 			if ( p_fileName.GetExtension() != cuT( "cbsn" ) && p_fileName.GetExtension() != cuT( "zip" ) )
 			{
 				Path l_meshFilePath = p_fileName;
-				str_utils::replace( l_meshFilePath, cuT( "cscn" ), cuT( "cmsh" ) );
+				string::replace( l_meshFilePath, cuT( "cscn" ), cuT( "cmsh" ) );
 
 				if ( File::FileExists( l_meshFilePath ) )
 				{
@@ -312,25 +312,25 @@ namespace GuiCommon
 		}
 	}
 
-	void CreateBitmapFromBuffer( uint8_t const * p_pBuffer, uint32_t p_uiWidth, uint32_t p_uiHeight, wxBitmap & p_bitmap )
+	void CreateBitmapFromBuffer( uint8_t const * p_pBuffer, uint32_t p_width, uint32_t p_height, wxBitmap & p_bitmap )
 	{
-		p_bitmap.Create( p_uiWidth, p_uiHeight, 24 );
+		p_bitmap.Create( p_width, p_height, 24 );
 		wxNativePixelData l_data( p_bitmap );
 
-		if ( p_bitmap.IsOk() && uint32_t( l_data.GetWidth() ) == p_uiWidth && uint32_t( l_data.GetHeight() ) == p_uiHeight )
+		if ( p_bitmap.IsOk() && uint32_t( l_data.GetWidth() ) == p_width && uint32_t( l_data.GetHeight() ) == p_height )
 		{
 			wxNativePixelData::Iterator l_it( l_data );
 			uint8_t const * l_pBuffer = p_pBuffer;
 
 			try
 			{
-				for ( uint32_t i = 0; i < p_uiHeight && l_it.IsOk(); i++ )
+				for ( uint32_t i = 0; i < p_height && l_it.IsOk(); i++ )
 				{
 #if defined( _WIN32 )
 					wxNativePixelData::Iterator l_rowStart = l_it;
 #endif
 
-					for ( uint32_t j = 0; j < p_uiWidth && l_it.IsOk(); j++ )
+					for ( uint32_t j = 0; j < p_width && l_it.IsOk(); j++ )
 					{
 						l_it.Blue() = *l_pBuffer;
 						l_pBuffer++;
@@ -393,7 +393,7 @@ namespace GuiCommon
 
 		if ( !p_fileName.empty() )
 		{
-			String l_strLowered = str_utils::lower_case( p_fileName );
+			String l_strLowered = string::lower_case( p_fileName );
 			p_engine.Cleanup();
 
 			bool l_continue = true;

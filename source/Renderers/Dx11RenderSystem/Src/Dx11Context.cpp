@@ -78,11 +78,11 @@ namespace Dx11Render
 	{
 		if ( !m_bInitialised )
 		{
-			DxRenderSystem * l_pRenderSystem = static_cast< DxRenderSystem * >( m_renderSystem );
+			DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( m_renderSystem );
 			m_hWnd = m_pWindow->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd();
 			m_size = m_pWindow->GetSize();
 
-			if ( DoInitPresentParameters() == S_OK &&  l_pRenderSystem->InitialiseDevice( m_hWnd, m_deviceParams ) )
+			if ( DoInitPresentParameters() == S_OK &&  l_renderSystem->InitialiseDevice( m_hWnd, m_deviceParams ) )
 			{
 				DoInitVolatileResources();
 				Logger::LogInfo( StringStream() << cuT( "Dx11Context::DoInitialise - Context for window 0x" ) << std::hex << m_hWnd << cuT( " initialised" ) );
@@ -91,7 +91,7 @@ namespace Dx11Render
 
 			if ( m_bInitialised )
 			{
-				auto l_uniforms = UniformsBase::Get( *l_pRenderSystem );
+				auto l_uniforms = UniformsBase::Get( *l_renderSystem );
 				StringStream l_vtxShader;
 				l_vtxShader << l_uniforms->GetVertexInMatrices( 0 ) << std::endl;
 				l_vtxShader << ShaderModel1_2_3_4::VtxShader;
@@ -195,8 +195,8 @@ namespace Dx11Render
 	void DxContext::DoInitVolatileResources()
 	{
 		DoSetCurrent();
-		DxRenderSystem * l_pRenderSystem = static_cast< DxRenderSystem * >( m_renderSystem );
-		DxContextSPtr l_pMainContext = std::static_pointer_cast< DxContext >( l_pRenderSystem->GetMainContext() );
+		DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( m_renderSystem );
+		DxContextSPtr l_pMainContext = std::static_pointer_cast< DxContext >( l_renderSystem->GetMainContext() );
 		IDXGIFactory * l_factory = NULL;
 		HRESULT l_hr = CreateDXGIFactory( __uuidof( IDXGIFactory ) , reinterpret_cast< void ** >( &l_factory ) );
 		ID3D11Texture2D * l_pDSTex = NULL;
@@ -204,8 +204,8 @@ namespace Dx11Render
 
 		if ( l_factory )
 		{
-			HRESULT l_hr = l_factory->CreateSwapChain( l_pRenderSystem->GetDevice(), &m_deviceParams, &m_pSwapChain );
-			dxTrack( l_pRenderSystem, m_pSwapChain, SwapChain );
+			HRESULT l_hr = l_factory->CreateSwapChain( l_renderSystem->GetDevice(), &m_deviceParams, &m_pSwapChain );
+			dxTrack( l_renderSystem, m_pSwapChain, SwapChain );
 			l_factory->Release();
 			bool l_bContinue = dxCheckError( l_hr, "CreateSwapChain" );
 
@@ -217,8 +217,8 @@ namespace Dx11Render
 
 			if ( l_bContinue )
 			{
-				l_hr = l_pRenderSystem->GetDevice()->CreateRenderTargetView( l_pRTTex, NULL, &m_pRenderTargetView );
-				dxTrack( l_pRenderSystem, m_pRenderTargetView, ContextRTView );
+				l_hr = l_renderSystem->GetDevice()->CreateRenderTargetView( l_pRTTex, NULL, &m_pRenderTargetView );
+				dxTrack( l_renderSystem, m_pRenderTargetView, ContextRTView );
 				l_bContinue = dxCheckError( l_hr, "CreateRenderTargetView" );
 				l_pRTTex->Release();
 			}
@@ -238,7 +238,7 @@ namespace Dx11Render
 				l_descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 				l_descDepth.CPUAccessFlags = 0;
 				l_descDepth.MiscFlags = 0;
-				l_hr = l_pRenderSystem->GetDevice()->CreateTexture2D( &l_descDepth, NULL, &l_pDSTex );
+				l_hr = l_renderSystem->GetDevice()->CreateTexture2D( &l_descDepth, NULL, &l_pDSTex );
 				l_bContinue = dxCheckError( l_hr, "CreateTexture2D" );
 			}
 
@@ -249,8 +249,8 @@ namespace Dx11Render
 				l_descDSV.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 				l_descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 				l_descDSV.Texture2D.MipSlice = 0;
-				l_hr = l_pRenderSystem->GetDevice()->CreateDepthStencilView( l_pDSTex, &l_descDSV, &m_pDepthStencilView );
-				dxTrack( l_pRenderSystem, m_pDepthStencilView, ContextDSView );
+				l_hr = l_renderSystem->GetDevice()->CreateDepthStencilView( l_pDSTex, &l_descDSV, &m_pDepthStencilView );
+				dxTrack( l_renderSystem, m_pDepthStencilView, ContextDSView );
 				l_bContinue = dxCheckError( l_hr, "CreateDepthStencilView" );
 				l_pDSTex->Release();
 			}

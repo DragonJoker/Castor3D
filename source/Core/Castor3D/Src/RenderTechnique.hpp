@@ -271,7 +271,7 @@ namespace Castor3D
 		//!\~english The parent render target	\~french La render target parente
 		RenderTarget * m_pRenderTarget;
 		//!\~english The	engine	\~french Le moteur
-		Engine * m_pEngine;
+		Engine * m_engine;
 		//!\~english The	render system	\~french Le render system
 		RenderSystem * m_renderSystem;
 		//!\~english The	overlays blend state	\~french L'état de mélange pour les overlays

@@ -64,12 +64,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_strName	The name of the animation
+		 *\param[in]	p_name	The name of the animation
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_strName	Le nom de l'animation
+		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		Animation( Castor::String const & p_strName = Castor::cuEmptyString );
+		Animation( Castor::String const & p_name = Castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor

@@ -33,9 +33,9 @@ using namespace Castor;
 
 namespace GuiCommon
 {
-	MaterialsList::MaterialsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_pParent, wxPoint const & p_ptPos, wxSize const & p_size )
-		: wxTreeCtrl( p_pParent, wxID_ANY, p_ptPos, p_size, wxTR_DEFAULT_STYLE | wxTR_HIDE_ROOT | wxNO_BORDER )
-		, m_pEngine( NULL )
+	MaterialsList::MaterialsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos, wxSize const & p_size )
+		: wxTreeCtrl( p_parent, wxID_ANY, p_ptPos, p_size, wxTR_DEFAULT_STYLE | wxTR_HIDE_ROOT | wxNO_BORDER )
+		, m_engine( NULL )
 		, m_propertiesHolder( p_propertiesHolder )
 	{
 		wxBusyCursor l_wait;
@@ -79,18 +79,18 @@ namespace GuiCommon
 		DeleteAllItems();
 	}
 
-	void MaterialsList::LoadMaterials( Castor3D::Engine * p_pEngine )
+	void MaterialsList::LoadMaterials( Castor3D::Engine * p_engine )
 	{
-		m_pEngine = p_pEngine;
+		m_engine = p_engine;
 		wxTreeItemId l_root = AddRoot( _( "Root" ), eBMP_SCENE, eBMP_SCENE_SEL );
-		m_pEngine->GetMaterialManager().lock();
+		m_engine->GetMaterialManager().lock();
 
-		for ( auto && l_pair : m_pEngine->GetMaterialManager() )
+		for ( auto && l_pair : m_engine->GetMaterialManager() )
 		{
 			DoAddMaterial( l_root, l_pair.second );
 		}
 
-		m_pEngine->GetMaterialManager().unlock();
+		m_engine->GetMaterialManager().unlock();
 	}
 
 	void MaterialsList::UnloadMaterials()
@@ -165,7 +165,7 @@ namespace GuiCommon
 
 	//void MaterialsList::AddItem( String const & p_strMaterialName )
 	//{
-	//	MaterialSPtr l_pMaterial = m_pEngine->GetMaterialManager().find( p_strMaterialName );
+	//	MaterialSPtr l_pMaterial = m_engine->GetMaterialManager().find( p_strMaterialName );
 	//	int l_iIndex = m_pListImages->GetImageCount();
 	//	wxListItem l_item;
 	//	l_item.SetColumn( 0 );
@@ -190,16 +190,16 @@ namespace GuiCommon
 	//	}
 	//}
 	//
-	//wxImage * MaterialsList::CreateMaterialImage( MaterialSPtr p_pMaterial, uint32_t p_uiWidth, uint32_t p_uiHeight )
+	//wxImage * MaterialsList::CreateMaterialImage( MaterialSPtr p_pMaterial, uint32_t p_width, uint32_t p_height )
 	//{
-	//	wxBitmap l_bmpReturn( p_uiWidth, p_uiHeight, 32 );
+	//	wxBitmap l_bmpReturn( p_width, p_height, 32 );
 	//	wxMemoryDC l_dcReturn( l_bmpReturn );
 	//
 	//	if ( p_pMaterial )
 	//	{
 	//		if ( p_pMaterial->GetPassCount() )
 	//		{
-	//			wxImage * l_pPassImage = CreatePassImage( p_pMaterial->GetPass( 0 ), p_uiWidth, p_uiHeight );
+	//			wxImage * l_pPassImage = CreatePassImage( p_pMaterial->GetPass( 0 ), p_width, p_height );
 	//			wxBitmap l_bmpPass( *l_pPassImage, 32 );
 	//			l_dcReturn.DrawBitmap( l_bmpPass, 0, 0, true );
 	//			delete l_pPassImage;
@@ -209,17 +209,17 @@ namespace GuiCommon
 	//	return new wxImage( l_bmpReturn.ConvertToImage() );
 	//}
 	//
-	//wxImage * MaterialsList::CreatePassImage( PassSPtr p_pPass, uint32_t p_uiWidth, uint32_t p_uiHeight )
+	//wxImage * MaterialsList::CreatePassImage( PassSPtr p_pPass, uint32_t p_width, uint32_t p_height )
 	//{
 	//	wxImage * l_pReturn = NULL;
 	//
 	//	if ( p_pPass )
 	//	{
-	//		wxBitmap l_bmpReturn( p_uiWidth, p_uiHeight, 32 );
+	//		wxBitmap l_bmpReturn( p_width, p_height, 32 );
 	//		wxMemoryDC l_dcReturn( l_bmpReturn );
 	//		wxImage * l_pMask = NULL;
 	//		typedef uint32_t uint;
-	//		l_pMask = new wxImage( p_uiWidth, p_uiHeight );
+	//		l_pMask = new wxImage( p_width, p_height );
 	//		l_pMask->InitAlpha();
 	//		uint8_t l_byRe;
 	//		uint8_t l_byGe;
@@ -234,8 +234,8 @@ namespace GuiCommon
 	//		uint8_t l_byG;
 	//		uint8_t l_byB;
 	//		uint8_t l_byA = 255;
-	//		double l_dMiddleX = double( p_uiWidth ) / 2.0;
-	//		double l_dMiddleY = double( p_uiHeight ) / 2.0;
+	//		double l_dMiddleX = double( p_width ) / 2.0;
+	//		double l_dMiddleY = double( p_height ) / 2.0;
 	//		double l_dMaxRadius = std::sqrt( ( l_dMiddleX * l_dMiddleX ) + ( l_dMiddleY * l_dMiddleY ) );
 	//		double l_dMinRadius = 0.0;
 	//		double l_dMidRadius1 = l_dMaxRadius / 3.0;
@@ -256,7 +256,7 @@ namespace GuiCommon
 	//		if ( p_pPass->GetTextureUnitsCount() )
 	//		{
 	//			l_byA = 127;
-	//			wxImage * l_pImage = CreateTextureUnitImage( p_pPass->GetTextureUnit( eTEXTURE_CHANNEL_DIFFUSE ), p_uiWidth, p_uiHeight );
+	//			wxImage * l_pImage = CreateTextureUnitImage( p_pPass->GetTextureUnit( eTEXTURE_CHANNEL_DIFFUSE ), p_width, p_height );
 	//
 	//			if ( l_pImage )
 	//			{
@@ -266,9 +266,9 @@ namespace GuiCommon
 	//			}
 	//		}
 	//
-	//		for ( uint x = 0; x < p_uiWidth; ++x )
+	//		for ( uint x = 0; x < p_width; ++x )
 	//		{
-	//			for ( uint y = 0; y < p_uiHeight; ++y )
+	//			for ( uint y = 0; y < p_height; ++y )
 	//			{
 	//				l_dX = double( x ) - l_dMiddleX;
 	//				l_dY = double( y ) - l_dMiddleY;
@@ -310,7 +310,7 @@ namespace GuiCommon
 	//	return l_pReturn;
 	//}
 	//
-	//wxImage * MaterialsList::CreateTextureUnitImage( TextureUnitSPtr p_pUnit, uint32_t p_uiWidth, uint32_t p_uiHeight )
+	//wxImage * MaterialsList::CreateTextureUnitImage( TextureUnitSPtr p_pUnit, uint32_t p_width, uint32_t p_height )
 	//{
 	//	wxImage * l_pReturn = NULL;
 	//
@@ -324,7 +324,7 @@ namespace GuiCommon
 	//			if ( l_bmp.IsOk() )
 	//			{
 	//				l_pReturn = new wxImage( l_bmp.ConvertToImage() );
-	//				l_pReturn->Rescale( p_uiWidth, p_uiHeight, wxIMAGE_QUALITY_HIGHEST );
+	//				l_pReturn->Rescale( p_width, p_height, wxIMAGE_QUALITY_HIGHEST );
 	//			}
 	//		}
 	//		catch ( ... )

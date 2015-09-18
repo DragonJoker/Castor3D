@@ -172,7 +172,7 @@ namespace Castor3D
 		/**
 		 * Constructor
 		 */
-		SceneFileParser( Engine * p_pEngine );
+		SceneFileParser( Engine * p_engine );
 		/**
 		 * Destructor
 		 */
@@ -196,7 +196,7 @@ namespace Castor3D
 
 		inline Engine * GetEngine()const
 		{
-			return m_pEngine;
+			return m_engine;
 		}
 		inline ScenePtrStrMap::iterator ScenesBegin()
 		{
@@ -224,7 +224,7 @@ namespace Castor3D
 	private:
 		Castor::String m_strSceneFilePath;
 		ScenePtrStrMap m_mapScenes;
-		Engine * m_pEngine;
+		Engine * m_engine;
 		RenderWindowSPtr m_renderWindow;
 
 	};

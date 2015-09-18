@@ -46,7 +46,7 @@ namespace Castor3D
 	\~french
 	\brief		Variable simple à type variable
 	*/
-	template <typename T>
+	template< typename T >
 	class OneFrameVariable
 		: public TFrameVariable<T>
 	{

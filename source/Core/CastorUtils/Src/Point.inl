@@ -6,386 +6,386 @@ namespace
 	{
 		static inline Castor::Point< T1, C1 > add( Castor::Point< T1, C1 > const & p_ptA, Castor::Point< T2, C2 > const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer += p_pVal;
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > sub( Castor::Point< T1, C1 > const & p_ptA, Castor::Point< T2, C2 > const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer -= p_pVal;
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > mul( Castor::Point< T1, C1 > const & p_ptA, Castor::Point< T2, C2 > const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer *= p_pVal;
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > div( Castor::Point< T1, C1 > const & p_ptA, Castor::Point< T2, C2 > const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer /= p_pVal;
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > add( Castor::Point< T1, C1 > const & p_ptA, T2 * p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB, p_ptB + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer += p_pVal;
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > sub( Castor::Point< T1, C1 > const & p_ptA, T2 * p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB, p_ptB + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer -= p_pVal;
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > mul( Castor::Point< T1, C1 > const & p_ptA, T2 * p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB, p_ptB + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer *= p_pVal;
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > div( Castor::Point< T1, C1 > const & p_ptA, T2 * p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB, p_ptB + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer /= p_pVal;
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > add( Castor::Point< T1, C1 > const & p_ptA, T2 const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
+			Castor::Point< T1, C1 > l_return( p_ptA );
 
 			for ( uint32_t i = 0; i < C1; ++i )
 			{
-				l_ptReturn[i] += p_ptB;
+				l_return[i] += p_ptB;
 			}
 
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > sub( Castor::Point< T1, C1 > const & p_ptA, T2 const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
+			Castor::Point< T1, C1 > l_return( p_ptA );
 
 			for ( uint32_t i = 0; i < C1; ++i )
 			{
-				l_ptReturn[i] -= p_ptB;
+				l_return[i] -= p_ptB;
 			}
 
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > mul( Castor::Point< T1, C1 > const & p_ptA, T2 const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
+			Castor::Point< T1, C1 > l_return( p_ptA );
 
 			for ( uint32_t i = 0; i < C1; ++i )
 			{
-				l_ptReturn[i] *= p_ptB;
+				l_return[i] *= p_ptB;
 			}
 
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > div( Castor::Point< T1, C1 > const & p_ptA, T2 const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
+			Castor::Point< T1, C1 > l_return( p_ptA );
 
 			for ( uint32_t i = 0; i < C1; ++i )
 			{
-				l_ptReturn[i] /= p_ptB;
+				l_return[i] /= p_ptB;
 			}
 
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > add( Castor::Coords< T1, C1 > const & p_ptA, Castor::Point< T2, C2 > const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer += p_pVal;
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > sub( Castor::Coords< T1, C1 > const & p_ptA, Castor::Point< T2, C2 > const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer -= p_pVal;
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > mul( Castor::Coords< T1, C1 > const & p_ptA, Castor::Point< T2, C2 > const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer *= p_pVal;
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > div( Castor::Coords< T1, C1 > const & p_ptA, Castor::Point< T2, C2 > const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer /= p_pVal;
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > add( Castor::Coords< T1, C1 > const & p_ptA, T2 * p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB, p_ptB + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer += p_pVal;
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > sub( Castor::Coords< T1, C1 > const & p_ptA, T2 * p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB, p_ptB + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer -= p_pVal;
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > mul( Castor::Coords< T1, C1 > const & p_ptA, T2 * p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB, p_ptB + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer *= p_pVal;
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > div( Castor::Coords< T1, C1 > const & p_ptA, T2 * p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB, p_ptB + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer /= p_pVal;
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > add( Castor::Coords< T1, C1 > const & p_ptA, T2 const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
+			Castor::Point< T1, C1 > l_return( p_ptA );
 
 			for ( uint32_t i = 0; i < C1; ++i )
 			{
-				l_ptReturn[i] += p_ptB;
+				l_return[i] += p_ptB;
 			}
 
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > sub( Castor::Coords< T1, C1 > const & p_ptA, T2 const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
+			Castor::Point< T1, C1 > l_return( p_ptA );
 
 			for ( uint32_t i = 0; i < C1; ++i )
 			{
-				l_ptReturn[i] -= p_ptB;
+				l_return[i] -= p_ptB;
 			}
 
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > mul( Castor::Coords< T1, C1 > const & p_ptA, T2 const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
+			Castor::Point< T1, C1 > l_return( p_ptA );
 
 			for ( uint32_t i = 0; i < C1; ++i )
 			{
-				l_ptReturn[i] *= p_ptB;
+				l_return[i] *= p_ptB;
 			}
 
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > div( Castor::Coords< T1, C1 > const & p_ptA, T2 const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
+			Castor::Point< T1, C1 > l_return( p_ptA );
 
 			for ( uint32_t i = 0; i < C1; ++i )
 			{
-				l_ptReturn[i] /= p_ptB;
+				l_return[i] /= p_ptB;
 			}
 
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > add( Castor::Coords< T1, C1 > const & p_ptA, Castor::Coords< T2, C2 > const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer = T1( *l_pBuffer + p_pVal );
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > sub( Castor::Coords< T1, C1 > const & p_ptA, Castor::Coords< T2, C2 > const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer = T1( *l_pBuffer - p_pVal );
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > mul( Castor::Coords< T1, C1 > const & p_ptA, Castor::Coords< T2, C2 > const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer = T1( *l_pBuffer * p_pVal );
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > div( Castor::Coords< T1, C1 > const & p_ptA, Castor::Coords< T2, C2 > const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer = T1( *l_pBuffer / p_pVal );
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > add( Castor::Point< T1, C1 > const & p_ptA, Castor::Coords< T2, C2 > const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer = T1( *l_pBuffer + p_pVal );
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > sub( Castor::Point< T1, C1 > const & p_ptA, Castor::Coords< T2, C2 > const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer = T1( *l_pBuffer - p_pVal );
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > mul( Castor::Point< T1, C1 > const & p_ptA, Castor::Coords< T2, C2 > const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer = T1( *l_pBuffer * p_pVal );
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 
 		static inline Castor::Point< T1, C1 > div( Castor::Point< T1, C1 > const & p_ptA, Castor::Coords< T2, C2 > const & p_ptB )
 		{
-			Castor::Point< T1, C1 > l_ptReturn( p_ptA );
-			T1 * l_pBuffer = l_ptReturn.ptr();
+			Castor::Point< T1, C1 > l_return( p_ptA );
+			T1 * l_pBuffer = l_return.ptr();
 			std::for_each( p_ptB.const_ptr(), p_ptB.const_ptr() + std::min( C1, C2 ), [&]( T2 p_pVal )
 			{
 				*l_pBuffer = T1( *l_pBuffer / p_pVal );
 				l_pBuffer++;
 			} );
-			return l_ptReturn;
+			return l_return;
 		}
 	};
 
@@ -980,8 +980,8 @@ namespace Castor
 //*************************************************************************************************
 
 	template< typename T, uint32_t Count >
-	Point< T, Count >::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< Point< T, Count >, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	Point< T, Count >::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		:	Loader< Point< T, Count >, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -1570,14 +1570,14 @@ namespace Castor
 	template< typename T, uint32_t Count >
 	inline Point< T, Count > operator -( Point< T, Count > const & p_pt )
 	{
-		Point< T, Count > l_ptReturn;
+		Point< T, Count > l_return;
 
 		for ( uint32_t i = 0; i < Count; ++i )
 		{
-			l_ptReturn[i] = -p_pt[i];
+			l_return[i] = -p_pt[i];
 		}
 
-		return l_ptReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -1606,9 +1606,9 @@ namespace Castor
 		template< typename T, uint32_t Count >
 		Point< T, Count > get_normalised( Point< T, Count > const & p_ptPoint )
 		{
-			Point< T, Count > l_ptReturn( p_ptPoint );
-			normalise( l_ptReturn );
-			return l_ptReturn;
+			Point< T, Count > l_return( p_ptPoint );
+			normalise( l_return );
+			return l_return;
 		}
 
 		template< typename T, typename U, uint32_t Count >

@@ -48,12 +48,12 @@ namespace Castor3D
 		}
 		catch ( Exception & p_exc )
 		{
-			Logger::LogError( StringStream() << cuT( "Encountered exception while processing events: " ) << string::from_str( p_exc.GetFullDescription() ) );
+			Logger::LogError( StringStream() << cuT( "Encountered exception while processing events: " ) << string::string_cast< xchar >( p_exc.GetFullDescription() ) );
 			l_return = false;
 		}
 		catch ( std::exception & p_exc )
 		{
-			Logger::LogError( StringStream() << cuT( "Encountered exception while processing events: " ) << string::from_str( p_exc.what() ) );
+			Logger::LogError( StringStream() << cuT( "Encountered exception while processing events: " ) << string::string_cast< xchar >( p_exc.what() ) );
 			l_return = false;
 		}
 		catch ( ... )

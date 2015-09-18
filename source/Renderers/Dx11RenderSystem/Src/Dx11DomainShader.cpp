@@ -10,8 +10,8 @@ using namespace Castor;
 
 namespace Dx11Render
 {
-	DxDomainShader::DxDomainShader( DxShaderProgram * p_pParent )
-		: DxShaderObject( p_pParent, eSHADER_TYPE_DOMAIN )
+	DxDomainShader::DxDomainShader( DxShaderProgram * p_parent )
+		: DxShaderObject( p_parent, eSHADER_TYPE_DOMAIN )
 		, m_pDomainShader( NULL )
 	{
 	}

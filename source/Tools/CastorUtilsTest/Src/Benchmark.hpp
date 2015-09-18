@@ -47,7 +47,7 @@ namespace Testing
 		typedef std::function< void() > CallbackBench;
 
 	public:
-		BenchCase( std::string const & p_strName );
+		BenchCase( std::string const & p_name );
 		virtual ~BenchCase();
 		virtual void Execute() = 0;
 		inline std::string const & GetSummary()const

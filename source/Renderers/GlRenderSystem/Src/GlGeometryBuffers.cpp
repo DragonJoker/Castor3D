@@ -22,9 +22,9 @@ namespace GlRender
 	{
 	}
 
-	bool GlGeometryBuffers::Draw( eTOPOLOGY p_ePrimitiveType, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex )
+	bool GlGeometryBuffers::Draw( eTOPOLOGY p_topology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex )
 	{
-		eGL_PRIMITIVE l_eMode = m_gl.Get( p_ePrimitiveType );
+		eGL_PRIMITIVE l_eMode = m_gl.Get( p_topology );
 
 		if ( p_pProgram && p_pProgram->HasObject( eSHADER_TYPE_HULL ) )
 		{

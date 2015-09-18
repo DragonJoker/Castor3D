@@ -148,8 +148,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	BillboardList::BillboardList( SceneSPtr p_pScene, RenderSystem * p_pRenderSystem )
-		:	MovableObject( p_pScene, eMOVABLE_TYPE_BILLBOARD )
+	BillboardList::BillboardList( SceneSPtr p_scene, RenderSystem * p_pRenderSystem )
+		:	MovableObject( p_scene, eMOVABLE_TYPE_BILLBOARD )
 		,	m_renderSystem( p_pRenderSystem )
 		,	m_bNeedUpdate( false )
 	{

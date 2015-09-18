@@ -236,7 +236,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( File::eENCODING_MODE p_eEncodingMode = File::eENCODING_MODE_ASCII );
+			TextLoader( File::eENCODING_MODE p_encodingMode = File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Loads a Coords< T, Count > object from a text file

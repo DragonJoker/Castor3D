@@ -47,29 +47,29 @@ namespace Castor3D
 		if ( !p_pLibrary->GetFunction( m_pfnGetShaderLanguage, GetShaderLanguageFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] GetShaderLanguage plugin function : " );
-			l_strError += string::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( string::to_str( l_strError ), false );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
 		if ( !p_pLibrary->GetFunction( m_pfnCreateShader, CreateShaderFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] CreateShader plugin function : " );
-			l_strError += string::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( string::to_str( l_strError ), false );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
 		if ( !p_pLibrary->GetFunction( m_pfnCreatePipeline, CreatePipelineFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] CreatePipeline plugin function : " );
-			l_strError += string::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( string::to_str( l_strError ), false );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
 		if ( !p_pLibrary->GetFunction( m_pfnDestroyPipeline, DestroyPipelineFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] DestroyPipeline plugin function : " );
-			l_strError += string::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( string::to_str( l_strError ), false );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
 		if ( m_pfnOnLoad )

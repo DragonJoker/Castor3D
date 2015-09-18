@@ -141,7 +141,7 @@ namespace Castor
 
 			if ( l_error != 0 && ( l_szError = strerror( l_error ) ) != NULL )
 			{
-				l_strReturn = string::to_string( l_error ) + cuT( " (" ) + string::from_str( l_szError ) + cuT( ")" );
+				l_strReturn = string::to_string( l_error ) + cuT( " (" ) + string::string_cast< xchar >( l_szError ) + cuT( ")" );
 				string::replace( l_strReturn, cuT( "\n" ), cuT( "" ) );
 			}
 

@@ -44,12 +44,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_strName	The object name
+		 *\param[in]	p_name	The object name
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_strName	Le nom de l'objet
+		 *\param[in]	p_name	Le nom de l'objet
 		 */
-		AnimatedObject( Castor::String const & p_strName );
+		AnimatedObject( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -69,30 +69,30 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Starts the animation identified by the given name
-		 *\param[in]	p_strName	The name of the animation
+		 *\param[in]	p_name	The name of the animation
 		 *\~french
 		 *\brief		Démarre l'animation identifiée par le nom donné
-		 *\param[in]	p_strName	Le nom de l'animation
+		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		void StartAnimation( Castor::String const & p_strName );
+		void StartAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Stops the animation identified by the given name
-		 *\param[in]	p_strName	The name of the animation
+		 *\param[in]	p_name	The name of the animation
 		 *\~french
 		 *\brief		Stoppe l'animation identifiée par le nom donné
-		 *\param[in]	p_strName	Le nom de l'animation
+		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		void StopAnimation( Castor::String const & p_strName );
+		void StopAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Pauses the animation identified by the given name
-		 *\param[in]	p_strName	The name of the animation
+		 *\param[in]	p_name	The name of the animation
 		 *\~french
 		 *\brief		Met en pause l'animation identifiée par le nom donné
-		 *\param[in]	p_strName	Le nom de l'animation
+		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		void PauseAnimation( Castor::String const & p_strName );
+		void PauseAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Starts all animations
@@ -117,14 +117,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
-		 *\param[in]	p_strName	The animation name
+		 *\param[in]	p_name	The animation name
 		 *\return		The animation
 		 *\~french
 		 *\brief		Récupère une animation
-		 *\param[in]	p_strName	Le nom de l'animation
+		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		AnimationSPtr GetAnimation( Castor::String const & p_strName );
+		AnimationSPtr GetAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the first animation

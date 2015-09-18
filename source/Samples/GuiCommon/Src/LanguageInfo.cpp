@@ -49,7 +49,7 @@ namespace GuiCommon
 	{
 	}
 
-	void LanguageInfo::SetWords( eSTC_TYPE p_eType, Castor::StringArray const & p_arrayWords )
+	void LanguageInfo::SetWords( eSTC_TYPE p_type, Castor::StringArray const & p_arrayWords )
 	{
 		String l_strWords;
 		std::for_each( p_arrayWords.begin(), p_arrayWords.end(), [&]( String const & p_strWord )
@@ -61,6 +61,6 @@ namespace GuiCommon
 
 			l_strWords += p_strWord;
 		} );
-		m_arrayWords[p_eType] = l_strWords;
+		m_arrayWords[p_type] = l_strWords;
 	}
 }

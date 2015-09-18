@@ -29,8 +29,8 @@ using namespace Castor;
 
 namespace Dx11Render
 {
-	DxRenderSystem::DxRenderSystem( Engine * p_pEngine )
-		: RenderSystem( p_pEngine, eRENDERER_TYPE_DIRECT3D )
+	DxRenderSystem::DxRenderSystem( Engine * p_engine )
+		: RenderSystem( p_engine, eRENDERER_TYPE_DIRECT3D )
 		, m_pDevice( NULL )
 	{
 		Logger::LogInfo( cuT( "Dx11RenderSystem::Dx11RenderSystem" ) );
@@ -153,7 +153,7 @@ namespace Dx11Render
 								}
 							}
 
-							int l_iWantedFPS = int( 1.0 / m_pEngine->GetFrameTime() );
+							int l_iWantedFPS = int( 1.0 / m_engine->GetFrameTime() );
 
 							for ( std::vector< DXGI_MODE_DESC >::iterator l_it = l_matchingDisplayModes.begin(); l_it != l_matchingDisplayModes.end() && !l_bFound; ++l_it )
 							{
@@ -207,7 +207,7 @@ namespace Dx11Render
 			if ( !IsInitialised() )
 			{
 				Initialise();
-				m_pEngine->GetMaterialManager().Initialise();
+				m_engine->GetMaterialManager().Initialise();
 			}
 
 			if ( m_pDevice )
@@ -274,14 +274,14 @@ namespace Dx11Render
 		return std::make_shared< DxBlendState >( this );
 	}
 
-	FrameVariableBufferSPtr DxRenderSystem::CreateFrameVariableBuffer( Castor::String const & p_strName )
+	FrameVariableBufferSPtr DxRenderSystem::CreateFrameVariableBuffer( Castor::String const & p_name )
 	{
-		return std::make_shared< DxFrameVariableBuffer >( p_strName, this );
+		return std::make_shared< DxFrameVariableBuffer >( p_name, this );
 	}
 
-	BillboardListSPtr DxRenderSystem::CreateBillboardsList( Castor3D::SceneSPtr p_pScene )
+	BillboardListSPtr DxRenderSystem::CreateBillboardsList( Castor3D::SceneSPtr p_scene )
 	{
-		return std::make_shared< DxBillboardList >( p_pScene, this );
+		return std::make_shared< DxBillboardList >( p_scene, this );
 	}
 
 	SamplerSPtr DxRenderSystem::CreateSampler( Castor::String const & p_name )
@@ -289,9 +289,9 @@ namespace Dx11Render
 		return std::make_shared< DxSampler >( this, p_name );
 	}
 
-	RenderTargetSPtr DxRenderSystem::CreateRenderTarget( Castor3D::eTARGET_TYPE p_eType )
+	RenderTargetSPtr DxRenderSystem::CreateRenderTarget( Castor3D::eTARGET_TYPE p_type )
 	{
-		return std::make_shared< DxRenderTarget >( this, p_eType );
+		return std::make_shared< DxRenderTarget >( this, p_type );
 	}
 
 	RenderWindowSPtr DxRenderSystem::CreateRenderWindow()
@@ -356,7 +356,7 @@ namespace Dx11Render
 			// Store the dedicated video card memory in megabytes.
 			int l_videoCardMemory = int( m_adapterDesc.DedicatedVideoMemory / 1024 / 1024 );
 			// Convert the name of the video card to a character array and store it.
-	    	String l_strVideoCardDescription = string::from_wstr( m_adapterDesc.Description );
+	    	String l_strVideoCardDescription = string::string_cast< xchar >( m_adapterDesc.Description );
 			Logger::LogInfo( cuT( "Video card name: " ) + l_strVideoCardDescription );
 			Logger::LogInfo( StringStream() << cuT( "Video card memory: " ) << l_videoCardMemory );
 			m_pipeline->Initialise();

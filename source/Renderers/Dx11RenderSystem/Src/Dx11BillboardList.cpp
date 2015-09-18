@@ -7,8 +7,8 @@ using namespace Dx11Render;
 
 //*************************************************************************************************
 
-DxBillboardList::DxBillboardList( Castor3D::SceneSPtr p_pScene, DxRenderSystem * p_pRenderSystem )
-	: BillboardList( p_pScene, p_pRenderSystem )
+DxBillboardList::DxBillboardList( Castor3D::SceneSPtr p_scene, DxRenderSystem * p_pRenderSystem )
+	: BillboardList( p_scene, p_pRenderSystem )
 {
 }
 

@@ -34,7 +34,7 @@ namespace GlRender
 
 		virtual bool Create();
 		virtual void Destroy();
-		virtual bool Initialise( Castor3D::eBUFFER_ACCESS_TYPE p_eType, Castor3D::eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram );
+		virtual bool Initialise( Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram );
 		virtual void Cleanup();
 		virtual uint8_t * Lock( uint32_t CU_PARAM_UNUSED( p_uiOffset ), uint32_t CU_PARAM_UNUSED( p_uiCount ), uint32_t CU_PARAM_UNUSED( p_uiFlags ) )
 		{
@@ -43,7 +43,7 @@ namespace GlRender
 		virtual void Unlock() {}
 		virtual bool Bind();
 		virtual void Unbind();
-		virtual bool Fill( uint8_t const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_eType, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
+		virtual bool Fill( uint8_t const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
 		{
 			return false;
 		}

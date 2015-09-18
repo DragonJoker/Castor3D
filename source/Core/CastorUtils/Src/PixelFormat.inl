@@ -3746,11 +3746,11 @@ namespace Castor
 		}
 		static inline void convert( uint8_t const *, uint8_t *, ePIXEL_FORMAT )
 		{
-			UNSUPPORTED_ERROR( "No conversion from " + string::to_str( to_string() ) + " defined" );
+			UNSUPPORTED_ERROR( "No conversion from " + string::string_cast< char >( to_string() ) + " defined" );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, ePIXEL_FORMAT p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			UNSUPPORTED_ERROR( "No conversion from " + string::to_str( to_string() ) + " defined" );
+			UNSUPPORTED_ERROR( "No conversion from " + string::string_cast< char >( to_string() ) + " defined" );
 		}
 		template< TPL_PIXEL_FORMAT PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
@@ -3780,11 +3780,11 @@ namespace Castor
 		}
 		static inline void convert( uint8_t const *, uint8_t *, ePIXEL_FORMAT )
 		{
-			UNSUPPORTED_ERROR( "No conversion from " + string::to_str( to_string() ) + " defined" );
+			UNSUPPORTED_ERROR( "No conversion from " + string::string_cast< char >( to_string() ) + " defined" );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, ePIXEL_FORMAT p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			UNSUPPORTED_ERROR( "No conversion from " + string::to_str( to_string() ) + " defined" );
+			UNSUPPORTED_ERROR( "No conversion from " + string::string_cast< char >( to_string() ) + " defined" );
 		}
 		template< TPL_PIXEL_FORMAT PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{
@@ -3814,11 +3814,11 @@ namespace Castor
 		}
 		static inline void convert( uint8_t const *, uint8_t *, ePIXEL_FORMAT )
 		{
-			UNSUPPORTED_ERROR( "No conversion from " + string::to_str( to_string() ) + " defined" );
+			UNSUPPORTED_ERROR( "No conversion from " + string::string_cast< char >( to_string() ) + " defined" );
 		}
 		static inline void convert( uint8_t const *& p_pSrcBuffer, uint32_t p_uiSrcSize, ePIXEL_FORMAT p_eDstFormat, uint8_t *& p_pDstBuffer, uint32_t p_uiDstSize )
 		{
-			UNSUPPORTED_ERROR( "No conversion from " + string::to_str( to_string() ) + " defined" );
+			UNSUPPORTED_ERROR( "No conversion from " + string::string_cast< char >( to_string() ) + " defined" );
 		}
 		template< TPL_PIXEL_FORMAT PF > static inline void convert( uint8_t const *& p_pSrc, uint8_t *& p_pDst )
 		{

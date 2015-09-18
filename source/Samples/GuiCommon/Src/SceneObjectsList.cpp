@@ -60,9 +60,9 @@ using namespace Castor;
 
 namespace GuiCommon
 {
-	SceneObjectsList::SceneObjectsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_pParent, wxPoint const & p_ptPos, wxSize const & p_size )
-		: wxTreeCtrl( p_pParent, wxID_ANY, p_ptPos, p_size, wxTR_DEFAULT_STYLE | wxNO_BORDER )
-		, m_pEngine( NULL )
+	SceneObjectsList::SceneObjectsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos, wxSize const & p_size )
+		: wxTreeCtrl( p_parent, wxID_ANY, p_ptPos, p_size, wxTR_DEFAULT_STYLE | wxNO_BORDER )
+		, m_engine( NULL )
 		, m_propertiesHolder( p_propertiesHolder )
 	{
 		wxBusyCursor l_wait;
@@ -149,28 +149,28 @@ namespace GuiCommon
 	{
 	}
 
-	void SceneObjectsList::LoadScene( Engine * p_pEngine, SceneSPtr p_pScene )
+	void SceneObjectsList::LoadScene( Engine * p_engine, SceneSPtr p_scene )
 	{
-		m_pScene = p_pScene;
-		m_pEngine = p_pEngine;
+		m_pScene = p_scene;
+		m_engine = p_engine;
 
-		if ( p_pScene )
+		if ( p_scene )
 		{
-			wxTreeItemId l_scene = AddRoot( p_pScene->GetName(), eBMP_SCENE, eBMP_SCENE_SEL, new SceneTreeItemProperty( m_propertiesHolder->IsEditable(), p_pScene ) );
+			wxTreeItemId l_scene = AddRoot( p_scene->GetName(), eBMP_SCENE, eBMP_SCENE_SEL, new SceneTreeItemProperty( m_propertiesHolder->IsEditable(), p_scene ) );
 
-			for ( auto && l_it = p_pScene->GetEngine()->RenderWindowsBegin(); l_it != p_pScene->GetEngine()->RenderWindowsEnd(); ++l_it )
+			for ( auto && l_it = p_scene->GetEngine()->RenderWindowsBegin(); l_it != p_scene->GetEngine()->RenderWindowsEnd(); ++l_it )
 			{
 				DoAddRenderWindow( l_scene, l_it->second );
 			}
 
-			SceneNodeSPtr l_rootNode = p_pScene->GetRootNode();
+			SceneNodeSPtr l_rootNode = p_scene->GetRootNode();
 
 			if ( l_rootNode )
 			{
 				DoAddNode( l_scene, l_rootNode );
 			}
 
-			for ( auto && l_overlay : p_pEngine->GetOverlayManager() )
+			for ( auto && l_overlay : p_engine->GetOverlayManager() )
 			{
 				if ( l_overlay->GetName() != cuT( "DebugPanel" ) )
 				{
@@ -277,7 +277,7 @@ namespace GuiCommon
 
 		for ( auto && l_pair : p_node->GetChilds() )
 		{
-			DoAddNode( AppendItem( p_id, l_pair.first, eBMP_NODE, eBMP_NODE_SEL, new NodeTreeItemProperty( m_propertiesHolder->IsEditable(), m_pEngine, l_pair.second.lock() ) ), l_pair.second.lock() );
+			DoAddNode( AppendItem( p_id, l_pair.first, eBMP_NODE, eBMP_NODE_SEL, new NodeTreeItemProperty( m_propertiesHolder->IsEditable(), m_engine, l_pair.second.lock() ) ), l_pair.second.lock() );
 		}
 	}
 

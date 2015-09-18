@@ -211,7 +211,7 @@ namespace CastorShape
 
 		if ( ! m_strFilePath.empty() )
 		{
-			String l_strLowered = str_utils::lower_case( m_strFilePath );
+			String l_strLowered = string::lower_case( m_strFilePath );
 			SceneSPtr l_mainScene = m_mainScene.lock();
 
 			if ( l_mainScene )
@@ -223,7 +223,7 @@ namespace CastorShape
 
 			SceneSPtr l_scene;
 
-			if ( str_utils::lower_case( m_strFilePath.GetExtension() ) == cuT( "cscn" ) || str_utils::lower_case( m_strFilePath.GetExtension() ) == cuT( "cbsn" ) )
+			if ( string::lower_case( m_strFilePath.GetExtension() ) == cuT( "cscn" ) || string::lower_case( m_strFilePath.GetExtension() ) == cuT( "cbsn" ) )
 			{
 				RenderWindowSPtr l_window = GuiCommon::LoadScene( *wxGetApp().GetCastor(), m_strFilePath, CASTOR_WANTED_FPS, false );
 
@@ -248,7 +248,7 @@ namespace CastorShape
 
 						for ( ImporterPlugin::ExtensionArrayIt l_itExt = l_arrayExtensions.begin(); l_itExt != l_arrayExtensions.end() && !l_pImporter; ++l_itExt )
 						{
-							if ( str_utils::lower_case( m_strFilePath.GetExtension() ) == str_utils::lower_case( l_itExt->first ) )
+							if ( string::lower_case( m_strFilePath.GetExtension() ) == string::lower_case( l_itExt->first ) )
 							{
 								l_pImporter = l_pPlugin->GetImporter();
 							}
@@ -432,7 +432,7 @@ namespace CastorShape
 		}
 		catch ( Castor::Exception & p_exc )
 		{
-			wxMessageBox( str_utils::from_str( p_exc.GetDescription() ), _( "Exception" ), wxOK | wxCENTRE | wxICON_ERROR );
+			wxMessageBox( string::string_cast< xchar >( p_exc.GetDescription() ), _( "Exception" ), wxOK | wxCENTRE | wxICON_ERROR );
 			l_return = false;
 		}
 		catch ( ... )
@@ -572,26 +572,26 @@ namespace CastorShape
 		}
 	}
 
-	void MainFrame::DoSetSelectionType( SelectionType p_eType )
+	void MainFrame::DoSetSelectionType( SelectionType p_type )
 	{
-		m_3dFrame->SetSelectionType( p_eType );
+		m_3dFrame->SetSelectionType( p_type );
 
 		if ( m_bMultiFrames )
 		{
-			m_2dFrameHD->SetSelectionType( p_eType );
-			m_2dFrameBG->SetSelectionType( p_eType );
-			m_2dFrameBD->SetSelectionType( p_eType );
+			m_2dFrameHD->SetSelectionType( p_type );
+			m_2dFrameBG->SetSelectionType( p_type );
+			m_2dFrameBD->SetSelectionType( p_type );
 		}
 	}
-	void MainFrame::DoSetActionType( ActionType p_eType )
+	void MainFrame::DoSetActionType( ActionType p_type )
 	{
-		m_3dFrame->SetActionType( p_eType );
+		m_3dFrame->SetActionType( p_type );
 
 		if ( m_bMultiFrames )
 		{
-			m_2dFrameHD->SetActionType( p_eType );
-			m_2dFrameBG->SetActionType( p_eType );
-			m_2dFrameBD->SetActionType( p_eType );
+			m_2dFrameHD->SetActionType( p_type );
+			m_2dFrameBG->SetActionType( p_type );
+			m_2dFrameBD->SetActionType( p_type );
 		}
 	}
 
@@ -942,7 +942,7 @@ namespace CastorShape
 		{
 			for ( auto && l_itExt : std::static_pointer_cast< ImporterPlugin >( l_it->second )->GetExtensions() )
 			{
-				String l_strExt = str_utils::lower_case( l_itExt.first );
+				String l_strExt = string::lower_case( l_itExt.first );
 				l_wildcard << wxT( "|" ) << l_itExt.second << wxT( " (*." ) << l_strExt << wxT( ")|*." ) << l_strExt;
 			}
 		}
@@ -1309,7 +1309,7 @@ namespace CastorShape
 			{
 				l_pPlugin = std::static_pointer_cast< DividerPlugin, PluginBase >( l_it->second );
 
-				if ( str_utils::lower_case( l_pPlugin->GetDividerType() ) == cuT( "pn_tri" ) )
+				if ( string::lower_case( l_pPlugin->GetDividerType() ) == cuT( "pn_tri" ) )
 				{
 					l_pDivider = l_pPlugin->CreateDivider();
 				}
@@ -1340,7 +1340,7 @@ namespace CastorShape
 			{
 				l_pPlugin = std::static_pointer_cast< DividerPlugin, PluginBase >( l_it->second );
 
-				if ( str_utils::lower_case( l_pPlugin->GetDividerType() ) == cuT( "pn_tri" ) )
+				if ( string::lower_case( l_pPlugin->GetDividerType() ) == cuT( "pn_tri" ) )
 				{
 					l_pDivider = l_pPlugin->CreateDivider();
 				}

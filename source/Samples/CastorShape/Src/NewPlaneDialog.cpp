@@ -15,8 +15,8 @@ namespace CastorShape
 		static wxString PLANE_DEPTH_SUBDIVISIONS = _( "Depth subdivisions" );
 	}
 
-	NewPlaneDialog::NewPlaneDialog( Engine * p_pEngine, wxWindow * parent, wxWindowID p_id )
-		: NewGeometryDialog( p_pEngine, parent, p_id, _( "New plane" ) )
+	NewPlaneDialog::NewPlaneDialog( Engine * p_engine, wxWindow * parent, wxWindowID p_id )
+		: NewGeometryDialog( p_engine, parent, p_id, _( "New plane" ) )
 	{
 		PLANE_WIDTH = _( "Width" );
 		PLANE_DEPTH = _( "Depth" );

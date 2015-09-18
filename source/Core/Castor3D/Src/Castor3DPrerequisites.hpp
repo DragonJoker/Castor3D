@@ -203,7 +203,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( Vertex );
 	DECLARE_SMART_PTR( BufferElementGroup );
 
-	template <typename T> class Pattern;
+	template< typename T > class Pattern;
 	typedef Pattern<	Vertex				>	VertexPattern;
 	typedef Pattern<	Castor::Point3r		>	Point3rPattern;
 	typedef Pattern<	VertexSPtr			>	VertexPtrPattern;

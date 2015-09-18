@@ -30,7 +30,7 @@ namespace GlRender
 		: public Castor3D::RenderSystem
 	{
 	public:
-		GlRenderSystem( Castor3D::Engine * p_pEngine );
+		GlRenderSystem( Castor3D::Engine * p_engine );
 		virtual ~GlRenderSystem();
 
 		void CheckShaderSupport();	//!< Checks the different shader types support.
@@ -43,7 +43,7 @@ namespace GlRender
 		virtual Castor3D::RasteriserStateSPtr CreateRasteriserState();
 		virtual Castor3D::BlendStateSPtr CreateBlendState();
 		virtual Castor3D::SamplerSPtr CreateSampler( Castor::String const & p_name );
-		virtual Castor3D::RenderTargetSPtr CreateRenderTarget( Castor3D::eTARGET_TYPE p_eType );
+		virtual Castor3D::RenderTargetSPtr CreateRenderTarget( Castor3D::eTARGET_TYPE p_type );
 		virtual Castor3D::RenderWindowSPtr CreateRenderWindow();
 		virtual Castor3D::ShaderProgramBaseSPtr CreateGlslShaderProgram();
 		virtual Castor3D::ShaderProgramBaseSPtr CreateShaderProgram();
@@ -54,8 +54,8 @@ namespace GlRender
 		virtual std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > CreateTextureBuffer( Castor3D::CpuBuffer<uint8_t > * p_pBuffer );
 		virtual Castor3D::StaticTextureSPtr CreateStaticTexture();
 		virtual Castor3D::DynamicTextureSPtr CreateDynamicTexture();
-		virtual Castor3D::FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_strName );
-		virtual Castor3D::BillboardListSPtr CreateBillboardsList( Castor3D::SceneSPtr p_pScene );
+		virtual Castor3D::FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_name );
+		virtual Castor3D::BillboardListSPtr CreateBillboardsList( Castor3D::SceneSPtr p_scene );
 
 		virtual Castor3D::ShaderProgramBaseSPtr DoCreateHlslShaderProgram()
 		{

@@ -325,7 +325,7 @@ namespace Castor3D
 		}
 
 	private:
-		void DoApplyMatrix( matrix4x4 const & p_matrix, Castor::String const & p_strName, FrameVariableBuffer & p_matrixBuffer );
+		void DoApplyMatrix( matrix4x4 const & p_matrix, Castor::String const & p_name, FrameVariableBuffer & p_matrixBuffer );
 		IPipelineImplSPtr DoGetImpl()const
 		{
 			return m_impl.lock();

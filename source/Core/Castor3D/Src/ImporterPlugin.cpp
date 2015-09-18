@@ -36,22 +36,22 @@ namespace Castor3D
 		if ( !p_pLibrary->GetFunction( m_pfnCreateImporter, CreateImporterFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] CreateImporter plugin function : " );
-			l_strError += string::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( string::to_str( l_strError ), false );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
 		if ( !p_pLibrary->GetFunction( m_pfnDestroyImporter, DestroyImporterFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] DestroyImporter plugin function : " );
-			l_strError += string::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( string::to_str( l_strError ), false );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
 		if ( !p_pLibrary->GetFunction( m_pfnGetExtension, GetExtensionFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] GetExtension plugin function : " );
-			l_strError += string::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( string::to_str( l_strError ), false );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
 		if ( m_pfnOnLoad )

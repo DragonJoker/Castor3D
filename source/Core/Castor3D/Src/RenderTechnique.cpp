@@ -29,18 +29,18 @@ namespace Castor3D
 	RenderTechniqueBase::RenderTechniqueBase( String const & p_name, RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & CU_PARAM_UNUSED( p_params ) )
 		:	m_pRenderTarget( &p_renderTarget )
 		,	m_renderSystem( p_pRenderSystem )
-		,	m_pEngine( p_pRenderSystem->GetEngine() )
+		,	m_engine( p_pRenderSystem->GetEngine() )
 		,	m_name( p_name )
 	{
-		m_sampler = m_pEngine->CreateSampler( cuT( "RENDER_TECHNIQUE_SAMPLER" ) );
+		m_sampler = m_engine->CreateSampler( cuT( "RENDER_TECHNIQUE_SAMPLER" ) );
 		m_pFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
 		m_pColorBuffer = m_renderSystem->CreateDynamicTexture();
 		m_pDepthBuffer = m_pFrameBuffer->CreateDepthStencilRenderBuffer(	ePIXEL_FORMAT_DEPTH24S8 );
 		m_pColorBuffer->SetRenderTarget( p_renderTarget.shared_from_this() );
 		m_pColorAttach = m_pRenderTarget->CreateAttachment( m_pColorBuffer );
 		m_pDepthAttach = m_pRenderTarget->CreateAttachment( m_pDepthBuffer );
-		m_wp2DBlendState = m_pEngine->CreateBlendState( cuT( "RT_OVERLAY_BLEND" ) );
-		m_wp2DDepthStencilState = m_pEngine->CreateDepthStencilState( cuT( "RT_OVERLAY_DS" ) );
+		m_wp2DBlendState = m_engine->CreateBlendState( cuT( "RT_OVERLAY_BLEND" ) );
+		m_wp2DDepthStencilState = m_engine->CreateDepthStencilState( cuT( "RT_OVERLAY_DS" ) );
 
 		m_sampler->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_CLAMP_TO_EDGE );
 		m_sampler->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_CLAMP_TO_EDGE );
@@ -183,7 +183,7 @@ namespace Castor3D
 			m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
 			m_wp2DBlendState.lock()->Apply();
 			m_wp2DDepthStencilState.lock()->Apply();
-			m_pEngine->RenderOverlays( *m_renderSystem->GetTopScene(), m_size );
+			m_engine->RenderOverlays( *m_renderSystem->GetTopScene(), m_size );
 			m_pFrameBuffer->Unbind();
 			m_renderSystem->PopScene();
 			m_pFrameBuffer->RenderToBuffer( m_pRenderTarget->GetFrameBuffer(), m_pRenderTarget->GetSize(), eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH, m_pRenderTarget->GetDepthStencilState(), m_pRenderTarget->GetRasteriserState() );
@@ -193,7 +193,7 @@ namespace Castor3D
 			//m_pRenderTarget->GetFrameBuffer()->Unbind();
 			m_wp2DBlendState.lock()->Apply();
 			m_wp2DDepthStencilState.lock()->Apply();
-			m_pEngine->RenderOverlays( *m_renderSystem->GetTopScene(), m_size );
+			m_engine->RenderOverlays( *m_renderSystem->GetTopScene(), m_size );
 			m_renderSystem->PopScene();
 		}
 	}

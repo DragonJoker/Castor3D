@@ -10,8 +10,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	AnimatedObject::AnimatedObject( Castor::String const & p_strName )
-		:	Named( p_strName )
+	AnimatedObject::AnimatedObject( Castor::String const & p_name )
+		:	Named( p_name )
 	{
 	}
 
@@ -30,10 +30,10 @@ namespace Castor3D
 		} );
 	}
 
-	void AnimatedObject::StartAnimation( String const & p_strName )
+	void AnimatedObject::StartAnimation( String const & p_name )
 	{
 		AnimationSPtr l_animation;
-		AnimationPtrStrMapIt l_it = m_mapAnimations.find( p_strName );
+		AnimationPtrStrMapIt l_it = m_mapAnimations.find( p_name );
 
 		if ( l_it != m_mapAnimations.end() )
 		{
@@ -41,10 +41,10 @@ namespace Castor3D
 		}
 	}
 
-	void AnimatedObject::StopAnimation( String const & p_strName )
+	void AnimatedObject::StopAnimation( String const & p_name )
 	{
 		AnimationSPtr l_animation;
-		AnimationPtrStrMapIt l_it = m_mapAnimations.find( p_strName );
+		AnimationPtrStrMapIt l_it = m_mapAnimations.find( p_name );
 
 		if ( l_it != m_mapAnimations.end() )
 		{
@@ -52,10 +52,10 @@ namespace Castor3D
 		}
 	}
 
-	void AnimatedObject::PauseAnimation( String const & p_strName )
+	void AnimatedObject::PauseAnimation( String const & p_name )
 	{
 		AnimationSPtr l_animation;
-		AnimationPtrStrMapIt l_it = m_mapAnimations.find( p_strName );
+		AnimationPtrStrMapIt l_it = m_mapAnimations.find( p_name );
 
 		if ( l_it != m_mapAnimations.end() )
 		{
@@ -87,10 +87,10 @@ namespace Castor3D
 		} );
 	}
 
-	AnimationSPtr AnimatedObject::GetAnimation( Castor::String const & p_strName )
+	AnimationSPtr AnimatedObject::GetAnimation( Castor::String const & p_name )
 	{
 		AnimationSPtr l_return;
-		AnimationPtrStrMapIt l_it = m_mapAnimations.find( p_strName );
+		AnimationPtrStrMapIt l_it = m_mapAnimations.find( p_name );
 
 		if ( l_it != m_mapAnimations.end() )
 		{

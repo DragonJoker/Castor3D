@@ -194,12 +194,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_eType		The chunk type
+		 *\param[in]	p_type		The chunk type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_eType		Le type du chunk
+		 *\param[in]	p_type		Le type du chunk
 		 */
-		BinaryChunk( eCHUNK_TYPE p_eType );
+		BinaryChunk( eCHUNK_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Computes the final data buffer from each one added until this call

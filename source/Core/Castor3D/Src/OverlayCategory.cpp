@@ -14,8 +14,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	OverlayCategory::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< OverlayCategory, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	OverlayCategory::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		:	Loader< OverlayCategory, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -188,8 +188,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	OverlayCategory::OverlayCategory( eOVERLAY_TYPE p_eType )
-		: m_eType( p_eType )
+	OverlayCategory::OverlayCategory( eOVERLAY_TYPE p_type )
+		: m_type( p_type )
 		, m_bVisible( true )
 		, m_changed( true )
 		, m_uv( 0, 0, 1, 1 )

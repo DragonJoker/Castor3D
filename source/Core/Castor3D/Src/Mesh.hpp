@@ -68,7 +68,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a mesh into a text file
@@ -134,27 +134,27 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pEngine	The parent engine
+		 *\param[in]	p_engine	The parent engine
 		 *\param[in]	p_name		This mesh name
 		 *\param[in]	p_eMeshType	The mesh type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pEngine	Le moteur parent
+		 *\param[in]	p_engine	Le moteur parent
 		 *\param[in]	p_name		Le nom du maillage
 		 *\param[in]	p_eMeshType	Le type de maillage
 		 */
-		Mesh( Engine * p_pEngine, eMESH_TYPE p_eType, Castor::String const & p_name );
+		Mesh( Engine * p_engine, eMESH_TYPE p_type, Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pEngine	The parent engine
+		 *\param[in]	p_engine	The parent engine
 		 *\param[in]	p_eMeshType	The mesh type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pEngine	Le moteur parent
+		 *\param[in]	p_engine	Le moteur parent
 		 *\param[in]	p_eMeshType	Le type de maillage
 		 */
-		Mesh( Engine * p_pEngine, eMESH_TYPE p_eMeshType = eMESH_TYPE_CUSTOM );
+		Mesh( Engine * p_engine, eMESH_TYPE p_eMeshType = eMESH_TYPE_CUSTOM );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -418,7 +418,7 @@ namespace Castor3D
 		//!\~english The MeshCategory factory	\~french la fabrique de MeshCategory
 		MeshFactory & m_factory;
 		//!\~english The parent engine	\~french Le moteur parent
-		Engine * m_pEngine;
+		Engine * m_engine;
 		//!\~english The skeleton	\~french Le squelette
 		SkeletonSPtr m_pSkeleton;
 	};

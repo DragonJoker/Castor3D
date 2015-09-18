@@ -4,9 +4,9 @@
 namespace Castor
 {
 	BlockTimer::BlockTimer( char const * p_szFunction, char const * p_szFile, uint32_t p_uiLine )
-		:	m_strFunction( string::from_str( p_szFunction )	)
-		,	m_strFile( string::from_str( p_szFile )	)
-		,	m_uiLine( p_uiLine	)
+		: m_strFunction( string::string_cast< xchar >( p_szFunction ) )
+		, m_strFile( string::string_cast< xchar >( p_szFile ) )
+		, m_uiLine( p_uiLine )
 	{
 #if CASTOR_USE_TRACK
 #	if CASTOR_USE_LOG_TRACK

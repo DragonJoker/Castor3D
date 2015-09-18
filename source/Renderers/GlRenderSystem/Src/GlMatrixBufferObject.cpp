@@ -12,8 +12,8 @@ namespace GlRender
 	GlMatrixBufferObject::GlMatrixBufferObject( OpenGl & p_gl, HardwareBufferPtr p_pBuffer )
 		:	GlBuffer< real >( p_gl, eGL_BUFFER_TARGET_ARRAY, p_pBuffer )
 	{
-		GlRenderSystem * l_pRenderSystem = static_cast< GlRenderSystem * >( p_pBuffer->GetRenderSystem() );
-		m_pAttribute = std::make_shared< GlAttribute< real, 16 > >( p_gl, l_pRenderSystem, cuT( "transform" ) );
+		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_pBuffer->GetRenderSystem() );
+		m_pAttribute = std::make_shared< GlAttribute< real, 16 > >( p_gl, l_renderSystem, cuT( "transform" ) );
 	}
 
 	GlMatrixBufferObject::~GlMatrixBufferObject()
@@ -30,7 +30,7 @@ namespace GlRender
 		GlBuffer< real >::DoDestroy();
 	}
 
-	bool GlMatrixBufferObject::Initialise( eBUFFER_ACCESS_TYPE p_eType, eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram )
+	bool GlMatrixBufferObject::Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram )
 	{
 		bool l_return = true;
 		GlShaderProgramSPtr l_pNewProgram = std::static_pointer_cast< GlShaderProgram >( p_pProgram );
@@ -48,12 +48,12 @@ namespace GlRender
 
 			if ( l_return )
 			{
-				l_return = GlBuffer< real >::DoInitialise( p_eType, p_eNature );
+				l_return = GlBuffer< real >::DoInitialise( p_type, p_eNature );
 			}
 		}
 		else if ( !l_pOldProgram )
 		{
-			l_return = GlBuffer< real >::DoInitialise( p_eType, p_eNature );
+			l_return = GlBuffer< real >::DoInitialise( p_type, p_eNature );
 		}
 
 		return l_return;

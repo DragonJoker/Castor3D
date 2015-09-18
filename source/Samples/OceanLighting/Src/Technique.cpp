@@ -472,7 +472,7 @@ void RenderTechnique::loadPrograms( bool all )
 	String l_strOpt;
 	char options[512];
 	sprintf( options, "#version 130\n#define %sSEA_CONTRIB\n#define %sSUN_CONTRIB\n#define %sSKY_CONTRIB\n#define %sCLOUDS\n#define %sHARDWARE_ANISTROPIC_FILTERING\n", m_seaContrib ? "" : "NO_", m_sunContrib ? "" : "NO_", m_skyContrib ? "" : "NO_", m_cloudLayer ? "" : "NO_", m_manualFilter ? "NO_" : "" );
-	l_strOpt = string::from_str( options );
+	l_strOpt = string::string_cast< xchar >( options );
 	Path l_pathShare = Engine::GetDataDirectory() / cuT( "OceanLighting" ) / cuT( "Glsl130_Shaders" );
 	TextFile( l_pathShare / cuT( "atmosphere.frag"	), File::eOPEN_MODE_READ ).CopyToString( l_strAtmF );
 	TextFile( l_pathShare / cuT( "atmosphere.vert"	), File::eOPEN_MODE_READ ).CopyToString( l_strAtmV );
@@ -931,7 +931,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	m_pTexIrradiance->SetDimension( eTEXTURE_DIMENSION_2D );
 	buffer = PxBufferBase::create( Size( 64, 16 ), ePIXEL_FORMAT_RGB16F32F );
 
-	if ( Castor::FOpen( f, string::to_str( Engine::GetDataDirectory() / cuT( "OceanLighting/data/irradiance.raw" ) ).c_str(), "rb" ) )
+	if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/irradiance.raw" ) ).c_str(), "rb" ) )
 	{
 		fread( buffer->ptr(), 1, 16 * 64 * 3 * sizeof( float ), f );
 		fclose( f );
@@ -948,7 +948,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	m_pTexInscatter->SetDimension( eTEXTURE_DIMENSION_3D );
 	buffer = PxBufferBase::create( Size( na * nb, nv * nr ), ePIXEL_FORMAT_RGB16F32F );
 
-	if ( Castor::FOpen( f, string::to_str( Engine::GetDataDirectory() / cuT( "OceanLighting/data/inscatter.raw" ) ).c_str(), "rb" ) )
+	if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/inscatter.raw" ) ).c_str(), "rb" ) )
 	{
 		fread( buffer->ptr(), 1, nr * nv * nb * na * 4 * sizeof( float ), f );
 		fclose( f );
@@ -960,7 +960,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	m_pTexTransmittance->SetDimension( eTEXTURE_DIMENSION_2D );
 	buffer = PxBufferBase::create( Size( 256, 64 ), ePIXEL_FORMAT_RGB16F32F );
 
-	if ( Castor::FOpen( f, string::to_str( Engine::GetDataDirectory() / cuT( "OceanLighting/data/transmittance.raw" ) ).c_str(), "rb" ) )
+	if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/transmittance.raw" ) ).c_str(), "rb" ) )
 	{
 		fread( buffer->ptr(), 1, 256 * 64 * 3 * sizeof( float ), f );
 		fclose( f );
@@ -972,7 +972,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	m_pTexNoise->SetDimension( eTEXTURE_DIMENSION_2D );
 	m_pTexNoise->SetImage( Size( 512, 512 ), ePIXEL_FORMAT_L8 );
 
-	if ( Castor::FOpen( f, string::to_str( Engine::GetDataDirectory() / cuT( "OceanLighting/data/noise.pgm" ) ).c_str(), "rb" ) )
+	if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/noise.pgm" ) ).c_str(), "rb" ) )
 	{
 		unsigned char * img = new unsigned char[512 * 512 + 38];
 		fread( img, 1, 512 * 512 + 38, f );
@@ -1247,7 +1247,7 @@ void RenderTechnique::DoEndRender()
 	matrix::perspective( proj, Angle::FromDegrees( 90.0 ), double( m_width ) / double( m_height ), 0.1 * ch, 1000000.0 * ch );
 	matrix::roll( roll, Angle::FromRadians( m_cameraTheta ) );
 #if ENABLE_FFT
-	MtxUtils::yaw( yaw, Angle::FromDegrees( m_cameraPhi ) );
+	matrix::yaw( yaw, Angle::FromDegrees( m_cameraPhi ) );
 	view = yaw * view;
 #endif
 	view = roll * view;

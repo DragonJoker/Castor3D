@@ -48,11 +48,11 @@ namespace Castor3D
 		Ray( Castor::Point2i const & p_ptPoint, Camera const & p_camera );
 		/**
 		 *\brief		Constructor from mouse coordinates and a viewport
-		 *\param[in]	p_iX	The mouse x
-		 *\param[in]	p_iY	The mouse y
+		 *\param[in]	p_x	The mouse x
+		 *\param[in]	p_y	The mouse y
 		 *\param[in]	p_camera	The camera from which to retrieve the ray
 		 */
-		Ray( int p_iX, int p_iY, Camera const & p_camera );
+		Ray( int p_x, int p_y, Camera const & p_camera );
 		/**
 		 *\brief		Constructor from mouse coordinates and a viewport
 		 *\param[in]	p_ptOrigin	The origin of the ray

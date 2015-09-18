@@ -110,7 +110,7 @@ namespace Castor
 			if ( p_iErr != 0 )
 			{
 				std::map< FT_Error, std::string >::const_iterator l_it = MapErrors.find( p_iErr );
-				std::string l_strError = "ERROR : " + std::string( p_szName ) + " failed - " + string::to_str( string::to_string( p_iErr ) );
+				std::string l_strError = "ERROR : " + std::string( p_szName ) + " failed - " + string::string_cast< char >( string::to_string( p_iErr ) );
 
 				if ( l_it != MapErrors.end() )
 				{
@@ -142,7 +142,7 @@ namespace Castor
 			virtual void Initialise()
 			{
 				CHECK_FT_ERR( FT_Init_FreeType, &m_library );
-				CHECK_FT_ERR( FT_New_Face, m_library, string::to_str( m_path ).c_str(), 0, &m_face );
+				CHECK_FT_ERR( FT_New_Face, m_library, string::string_cast< char >( m_path ).c_str(), 0, &m_face );
 				CHECK_FT_ERR( FT_Select_Charmap, m_face, FT_ENCODING_UNICODE );
 				CHECK_FT_ERR( FT_Set_Pixel_Sizes, m_face, 0, m_height );
 			}
@@ -216,9 +216,9 @@ namespace Castor
 	{
 	}
 
-	bool Font::BinaryLoader::operator()( Font & p_font, Path const & p_pathFile, uint32_t p_uiHeight )
+	bool Font::BinaryLoader::operator()( Font & p_font, Path const & p_pathFile, uint32_t p_height )
 	{
-		m_uiHeight = p_uiHeight;
+		m_uiHeight = p_height;
 		return operator()( p_font, p_pathFile );
 	}
 
@@ -272,9 +272,9 @@ namespace Castor
 
 	//*********************************************************************************************
 
-	Font::Font( String const & p_strName, uint32_t p_uiHeight )
-		: Resource< Font >( p_strName )
-		, m_uiHeight( p_uiHeight )
+	Font::Font( String const & p_name, uint32_t p_height )
+		: Resource< Font >( p_name )
+		, m_uiHeight( p_height )
 		, m_iMaxHeight( 0 )
 		, m_iMaxTop( 0 )
 		, m_iMaxWidth( 0 )
@@ -282,14 +282,14 @@ namespace Castor
 	{
 	}
 
-	Font::Font( Path const & p_path, String const & p_strName, uint32_t p_uiHeight )
-		: Resource< Font >( p_strName )
-		, m_uiHeight( p_uiHeight )
+	Font::Font( Path const & p_path, String const & p_name, uint32_t p_height )
+		: Resource< Font >( p_name )
+		, m_uiHeight( p_height )
 		, m_iMaxHeight( 0 )
 		, m_iMaxTop( 0 )
 		, m_iMaxWidth( 0 )
 		, m_glyphs( std::numeric_limits< uint16_t >::max() )
-		, m_glyphLoader( std::make_unique< ft::SFreeTypeFontImpl >( p_path, p_uiHeight ) )
+		, m_glyphLoader( std::make_unique< ft::SFreeTypeFontImpl >( p_path, p_height ) )
 	{
 	}
 

@@ -358,7 +358,7 @@ namespace Castor3D
 		//!\~english The GeometryBuffers used when rendering from a buffer to another one	\~french Le GeometryBuffers utilisé lors du rendu d'un tampon vers un autre
 		GeometryBuffersSPtr m_pGeometryBuffers;
 		//!\~english The Viewport used when rendering from a buffer to another one	\~french Le Viewport utilisé lors du rendu d'un tampon vers un autre
-		ViewportSPtr m_pViewport;
+		ViewportSPtr m_viewport;
 		//!\~english Buffer elements declaration	\~french Déclaration des éléments d'un vertex
 		Castor3D::BufferDeclarationSPtr m_pDeclaration;
 		//!\~english Vertex array (quad definition)	\~french Tableau de vertex (définition du quad)

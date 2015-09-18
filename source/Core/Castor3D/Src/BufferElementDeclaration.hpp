@@ -53,19 +53,19 @@ namespace Castor3D
 		 *\brief		Constructor
 		 *\param[in]	p_uiStream	Stream index
 		 *\param[in]	p_eUsage	Element usage
-		 *\param[in]	p_eType		Element type
+		 *\param[in]	p_type		Element type
 		 *\param[in]	p_uiOffset	Offset in the stream
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_uiStream	Index du flux
 		 *\param[in]	p_eUsage	Utilisation de l'élément
-		 *\param[in]	p_eType		Type de l'élément
+		 *\param[in]	p_type		Type de l'élément
 		 *\param[in]	p_uiOffset	Offset dans le tampon
 		 */
-		BufferElementDeclaration( uint32_t p_uiStream, eELEMENT_USAGE p_eUsage, eELEMENT_TYPE p_eType, uint32_t p_uiOffset = 0 )
+		BufferElementDeclaration( uint32_t p_uiStream, eELEMENT_USAGE p_eUsage, eELEMENT_TYPE p_type, uint32_t p_uiOffset = 0 )
 			:	m_uiStream( p_uiStream )
 			,	m_eUsage( p_eUsage )
-			,	m_eDataType( p_eType )
+			,	m_eDataType( p_type )
 			,	m_uiOffset( p_uiOffset )
 		{
 		}

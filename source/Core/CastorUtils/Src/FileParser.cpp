@@ -244,7 +244,7 @@ namespace Castor
 		return l_return;
 	}
 
-	void FileParser::AddParser( int p_iSection, String const & p_strName, PParserFunction p_pfnFunction, int p_iCount, ... )
+	void FileParser::AddParser( int p_iSection, String const & p_name, PParserFunction p_pfnFunction, int p_iCount, ... )
 	{
 		ParserParameterArray l_arrayParams;
 		va_list l_valist;
@@ -379,7 +379,7 @@ namespace Castor
 		}
 
 		va_end( l_valist );
-		m_mapParsers[p_iSection][p_strName] = std::make_pair( p_pfnFunction, l_arrayParams );
+		m_mapParsers[p_iSection][p_name] = std::make_pair( p_pfnFunction, l_arrayParams );
 	}
 
 	bool FileParser::DoParseScriptLine( String & p_strLine )
