@@ -26,52 +26,9 @@ file(
 		${PROJECT_NAME}_datas1
 		${CMAKE_CURRENT_SOURCE_DIR}/rsc/*.*
 )
-
-file(
-    COPY
-        ${${PROJECT_NAME}_datas1}
-    DESTINATION
-        ${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/share/${PROJECT_NAME}
-)
-
-file(
-    COPY
-        ${${PROJECT_NAME}_datas1}
-    DESTINATION
-        ${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/share/${PROJECT_NAME}
-)
-
-install(
-	FILES ${${PROJECT_NAME}_datas1}
-	DESTINATION ${CMAKE_INSTALL_PREFIX}/share/${PROJECT_NAME}/
-	COMPONENT ${PROJECT_NAME}
-)
-
-file(
-	GLOB
-		${PROJECT_NAME}_datas2
-		${CMAKE_CURRENT_SOURCE_DIR}/rsc/data/*.*
-)
-
-file(
-    COPY
-        ${${PROJECT_NAME}_datas2}
-    DESTINATION
-        ${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/share/${PROJECT_NAME}/data
-)
-
-file(
-    COPY
-        ${${PROJECT_NAME}_datas2}
-    DESTINATION
-        ${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/share/${PROJECT_NAME}/data
-)
-
-install(
-	FILES ${${PROJECT_NAME}_datas2}
-	DESTINATION ${CMAKE_INSTALL_PREFIX}/share/${PROJECT_NAME}/data/
-	COMPONENT ${PROJECT_NAME}
-)
+copy_target_files( ${PROJECT_NAME} "" ${${PROJECT_NAME}_datas1} )
+copy_target_directory( ${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/rsc/data data )
+copy_target_directory( ${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/rsc/Glsl130_Shaders Glsl130_Shaders )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Samples" )
 set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
