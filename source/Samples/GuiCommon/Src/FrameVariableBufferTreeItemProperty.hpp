@@ -38,14 +38,16 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Constructor
+		 *\param[in]	p_engine	The engine, to post events to.
 		 *\param[in]	p_editable	Tells if the properties are modifiable
 		 *\param[in]	p_buffer	The target buffer
 		 *\~french
 		 *\brief		Constructeur
+		 *\param[in]	p_engine	Le moteur, auquel on va poster les évènements
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_buffer	Le tampon cible
 		 */
-		FrameVariableBufferTreeItemProperty( bool p_editable, Castor3D::FrameVariableBufferSPtr p_buffer );
+		FrameVariableBufferTreeItemProperty( Castor3D::Engine * p_engine, bool p_editable, Castor3D::FrameVariableBufferSPtr p_buffer );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -53,24 +55,6 @@ namespace GuiCommon
 		 *\brief		Destructeur
 		 */
 		~FrameVariableBufferTreeItemProperty();
-		/**
-		 *\~english
-		 *\brief		Creates and fills the overlay properties, in the given wxPropertyGrid
-		 *\param[in]	p_grid	The target wxPropertyGrid
-		 *\~french
-		 *\brief		Construit et remplit les propriétés de l'incrustation, dans la wxPropertyGrid donnée
-		 *\param[in]	p_grid	La wxPropertyGrid cible
-		 */
-		virtual void CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
-		/**
-		 *\~english
-		 *\brief		Call when a property grid property is changed
-		 *\param[in]	p_event	The event
-		 *\~french
-		 *\brief		Appelée lorsqu'une propriété est changée
-		 *\param[in]	p_event	L'évènement
-		 */
-		virtual void OnPropertyChange( wxPropertyGridEvent & p_event );
 		/**
 		 *\~english
 		 *\brief		Retrieves the camera
@@ -83,6 +67,16 @@ namespace GuiCommon
 		{
 			return m_buffer.lock();
 		}
+
+	private:
+		/**
+		 *\copydoc GuiCommon::TreeItemProperty::DoCreateProperties
+		 */
+		virtual void DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid );
+		/**
+		 *\copydoc GuiCommon::TreeItemProperty::DoPropertyChange
+		 */
+		virtual void DoPropertyChange( wxPropertyGridEvent & p_event );
 
 	private:
 		Castor3D::FrameVariableBufferWPtr m_buffer;

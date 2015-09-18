@@ -16,15 +16,15 @@ namespace GlRender
 	template< typename T >
 	bool GlBufferBase< T >::Create()
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
 		if ( m_uiGlIndex == eGL_INVALID_INDEX )
 		{
-			l_bReturn = m_gl.GenBuffers( 1, &m_uiGlIndex );
+			l_return = m_gl.GenBuffers( 1, &m_uiGlIndex );
 			glTrack( m_gl, GlBufferBase, this );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	template< typename T >
@@ -104,8 +104,8 @@ namespace GlRender
 	template< typename T >
 	bool GlBufferBase< T >::Unlock()
 	{
-		bool l_bReturn = m_uiGlIndex != eGL_INVALID_INDEX;
-		l_bReturn &= m_gl.UnmapBuffer( m_eTarget );
-		return l_bReturn;
+		bool l_return = m_uiGlIndex != eGL_INVALID_INDEX;
+		l_return &= m_gl.UnmapBuffer( m_eTarget );
+		return l_return;
 	}
 }

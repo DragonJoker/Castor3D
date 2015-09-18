@@ -1111,14 +1111,14 @@ namespace Testing
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator ==( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
 	{
-		bool l_bReturn = ( Count == _Count );
+		bool l_return = ( Count == _Count );
 
-		for ( uint32_t i = 0; i < Count && l_bReturn; i++ )
+		for ( uint32_t i = 0; i < Count && l_return; i++ )
 		{
-			l_bReturn = Castor::Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			l_return = Castor::Policy< T >::equals( p_ptA[i], p_ptB[i] );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator !=( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
@@ -1507,14 +1507,14 @@ namespace Testing
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator ==( Point< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
 	{
-		bool l_bReturn = ( Count == _Count );
+		bool l_return = ( Count == _Count );
 
-		for ( uint32_t i = 0; i < Count && l_bReturn; i++ )
+		for ( uint32_t i = 0; i < Count && l_return; i++ )
 		{
-			l_bReturn = Castor::Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			l_return = Castor::Policy< T >::equals( p_ptA[i], p_ptB[i] );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator !=( Point< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
@@ -1584,14 +1584,14 @@ namespace Testing
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator ==( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
 	{
-		bool l_bReturn = ( Count == _Count );
+		bool l_return = ( Count == _Count );
 
-		for ( uint32_t i = 0; i < Count && l_bReturn; i++ )
+		for ( uint32_t i = 0; i < Count && l_return; i++ )
 		{
-			l_bReturn = Castor::Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			l_return = Castor::Policy< T >::equals( p_ptA[i], p_ptB[i] );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator !=( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
@@ -1631,14 +1631,14 @@ namespace Testing
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator ==( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
 	{
-		bool l_bReturn = ( Count == _Count );
+		bool l_return = ( Count == _Count );
 
-		for ( uint32_t i = 0; i < Count && l_bReturn; i++ )
+		for ( uint32_t i = 0; i < Count && l_return; i++ )
 		{
-			l_bReturn = Castor::Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			l_return = Castor::Policy< T >::equals( p_ptA[i], p_ptB[i] );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator !=( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )

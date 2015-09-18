@@ -57,15 +57,15 @@ namespace GlRender
 
 	bool GlShaderProgram::Link()
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		int l_iLinked = 0;
 
 		if ( m_pRenderSystem->UseShaders() && m_eStatus != ePROGRAM_STATUS_ERROR )
 		{
-			l_bReturn = true;
+			l_return = true;
 			Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Programs attached : " ) << uint32_t( m_activeShaders.size() ) );
-			l_bReturn &= m_gl.LinkProgram( m_programObject );
-			l_bReturn &= m_gl.GetProgramiv( m_programObject, eGL_SHADER_STATUS_LINK, &l_iLinked );
+			l_return &= m_gl.LinkProgram( m_programObject );
+			l_return &= m_gl.GetProgramiv( m_programObject, eGL_SHADER_STATUS_LINK, &l_iLinked );
 			Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Program link status : " ) << l_iLinked );
 			RetrieveLinkerLog( m_linkerLog );
 
@@ -83,10 +83,10 @@ namespace GlRender
 				m_eStatus = ePROGRAM_STATUS_ERROR;
 			}
 
-			l_bReturn = m_eStatus == ePROGRAM_STATUS_LINKED;
+			l_return = m_eStatus == ePROGRAM_STATUS_LINKED;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void GlShaderProgram::RetrieveLinkerLog( String & strLog )

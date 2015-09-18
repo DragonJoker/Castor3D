@@ -12,17 +12,25 @@
 #include <SceneObjectsList.hpp>
 #include <Logger.hpp>
 #include <Path.hpp>
-#include <Path.hpp>
 
 namespace CastorViewer
 {
 	class RenderPanel;
 
+	typedef enum eBMP
+	{
+		eBMP_SCENES = GuiCommon::eBMP_COUNT,
+		eBMP_MATERIALS,
+		eBMP_EXPORT,
+		eBMP_LOGS,
+		eBMP_PROPERTIES,
+	}	eBMP;
+
 	class MainFrame
 		: public wxFrame
 	{
 	public:
-		MainFrame( wxWindow * parent, wxString const & title, Castor3D::eRENDERER_TYPE p_eRenderer );
+		MainFrame( GuiCommon::SplashScreen * p_splashScreen, wxString const & title );
 		~MainFrame();
 
 		bool Initialise();
@@ -30,11 +38,6 @@ namespace CastorViewer
 		void ToggleFullScreen( bool p_fullscreen );
 
 	private:
-		bool DoLoadMeshFile();
-		bool DoLoadTextSceneFile();
-		bool DoLoadBinarySceneFile();
-		void DoLoadSceneFile();
-		void DoLoadPlugins();
 		void DoInitialiseGUI();
 		bool DoInitialise3D();
 		bool DoInitialiseImages();
@@ -66,22 +69,18 @@ namespace CastorViewer
 		wxAuiManager m_auiManager;
 		RenderPanel * m_pRenderPanel;
 		wxTimer * m_timer;
-		wxPanel * m_pBgPanel;
 		wxAuiToolBar * m_toolBar;
 		wxAuiNotebook * m_logTabsContainer;
 		wxAuiNotebook * m_sceneTabsContainer;
-		PropertiesHolder * m_propertiesContainer;
+		GuiCommon::PropertiesHolder * m_propertiesContainer;
 		wxListBox * m_messageLog;
 		wxListBox * m_errorLog;
-		GuiCommon::ImagesLoader * m_pImagesLoader;
-		GuiCommon::SplashScreen * m_pSplashScreen;
+		GuiCommon::SplashScreen * m_splashScreen;
 		GuiCommon::SceneObjectsList * m_sceneObjectsList;
 		GuiCommon::MaterialsList * m_materialsList;
 		Castor3D::SceneWPtr m_pMainScene;
 		Castor3D::CameraWPtr m_pMainCamera;
 		Castor3D::SceneNodeWPtr m_pSceneNode;
-		Castor3D::Engine * m_pCastor3D;
-		Castor3D::eRENDERER_TYPE m_eRenderer;
 		Castor::Path m_strFilePath;
 		wxString m_currentPerspective;
 		wxString m_fullScreenPerspective;

@@ -16,15 +16,15 @@ namespace Castor3D
 
 	bool MatrixBuffer::Bind( uint32_t p_uiCount )
 	{
-		bool l_bReturn	= false;
+		bool l_return	= false;
 		GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
 		if ( l_pBuffer )
 		{
-			l_bReturn = l_pBuffer->Bind( p_uiCount );
+			l_return = l_pBuffer->Bind( p_uiCount );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool MatrixBuffer::DoCreateBuffer()

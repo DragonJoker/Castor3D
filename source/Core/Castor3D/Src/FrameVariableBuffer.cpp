@@ -65,7 +65,7 @@ namespace Castor3D
 
 	bool FrameVariableBuffer::Initialise( ShaderProgramBase & p_program )
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
 		if ( !DoInitialise( &p_program ) )
 		{
@@ -90,7 +90,7 @@ namespace Castor3D
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void FrameVariableBuffer::Cleanup()

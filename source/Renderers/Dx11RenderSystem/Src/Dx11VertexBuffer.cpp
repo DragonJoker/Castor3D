@@ -38,23 +38,23 @@ namespace Dx11Render
 
 	bool DxVertexBuffer::Initialise( eBUFFER_ACCESS_TYPE p_eType, eBUFFER_ACCESS_NATURE p_eNature, ShaderProgramBaseSPtr p_pProgram )
 	{
-		bool l_bReturn = ( m_pBuffer != NULL );
+		bool l_return = ( m_pBuffer != NULL );
 		m_pProgram = std::static_pointer_cast< DxShaderProgram >( p_pProgram );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			m_pBuffer->Unassign();
 			// Création de la déclaration
-			l_bReturn = DoCreateLayout();
+			l_return = DoCreateLayout();
 
 			// Création du vertex buffer
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = DoCreateBuffer( p_eType, p_eNature );
+				l_return = DoCreateBuffer( p_eType, p_eNature );
 			}
 
 			// Remplissage du buffer si besoin est
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				if ( p_eType != eBUFFER_ACCESS_TYPE_STATIC )
 				{
@@ -76,14 +76,14 @@ namespace Dx11Render
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool DxVertexBuffer::Bind()
 	{
-		bool l_bReturn = m_pBuffer && m_pBuffer->IsAssigned() && m_pBufferObject;
+		bool l_return = m_pBuffer && m_pBuffer->IsAssigned() && m_pBufferObject;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pBuffer->GetRenderSystem()->GetCurrentContext() )->GetDeviceContext();
 			UINT l_uiStrides[1] = { m_declaration.GetStride() };
@@ -93,7 +93,7 @@ namespace Dx11Render
 			l_pDeviceContext->IASetInputLayout( m_pDxDeclaration );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void DxVertexBuffer::Unbind()
@@ -113,7 +113,7 @@ namespace Dx11Render
 	bool DxVertexBuffer::DoCreateLayout()
 	{
 		DxShaderProgramSPtr l_pProgram = m_pProgram.lock();
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( l_pProgram )
 		{
@@ -249,11 +249,11 @@ namespace Dx11Render
 				DxRenderSystem * l_renderSystem = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() );
 				HRESULT l_hr = l_renderSystem->GetDevice()->CreateInputLayout( &l_arrayDxElements[0], UINT( l_arrayDxElements.size() ), reinterpret_cast< DWORD const * >( l_pBlob->GetBufferPointer() ), l_pBlob->GetBufferSize(), &m_pDxDeclaration );
 				dxDebugName( l_renderSystem, m_pDxDeclaration, VtxInputLayout );
-				l_bReturn = dxCheckError( l_hr, "ID3D11Device::CreateInputLayout" );
+				l_return = dxCheckError( l_hr, "ID3D11Device::CreateInputLayout" );
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool DxVertexBuffer::DoCreateBuffer( eBUFFER_ACCESS_TYPE p_eType, eBUFFER_ACCESS_NATURE p_eNature )

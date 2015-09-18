@@ -113,6 +113,8 @@ namespace GuiCommon
 
 	static const int GC_IMG_SIZE = 16;
 
+	class CastorApplication;
+
 	class PropertiesHolder;
 	class TreeItemProperty;
 	class CameraTreeItemProperty;
@@ -193,6 +195,32 @@ namespace GuiCommon
 	void CreateBitmapFromBuffer( Castor3D::TextureUnitSPtr p_pUnit, wxBitmap & p_bitmap );
 	/**
 	 *\~english
+	 *\brief		Loads a scene.
+	 *\param[in]	p_engine	The engine.
+	 *\param[in]	p_fileName	The scene file name.
+	 *\param[in]	p_wantedFps	The wanted FPS.
+	 *\param[in]	p_threaded	Tells if the engine must initialise its threaded render loop.
+	 *\return		true if everything is ok.
+	 *\~french
+	 *\brief		Charge une scène.
+	 *\param[in]	p_engine	Le moteur.
+	 *\param[in]	p_fileName	Le nom du fichier de scène.
+	 *\param[in]	p_wantedFps	Les FPS voulues.
+	 *\param[in]	p_threaded	Dit si le moteur doit initialiser sa boucle de rendu threadée.
+	 *\return		true si tout s'est bien passé.
+	 */
+	Castor3D::RenderWindowSPtr LoadScene( Castor3D::Engine & p_engine, Castor::String const & p_fileName, uint32_t p_wantedFps, bool p_threaded );
+	/**
+	 *\~english
+	 *\brief		Loads the eingine plugins.
+	 *\param[in]	p_engine	The engine.
+	 *\~french
+	 *\brief		Charge les plugins du moteur.
+	 *\param[in]	p_engine	Le moteur.
+	 */
+	void LoadPlugins( Castor3D::Engine & p_engine );
+	/**
+	 *\~english
 	 *\brief		Creates a WindowHandle from a wxWindow
 	 *\param[in]	p_window	The window
 	 *\return		The created WindowHandle
@@ -253,6 +281,10 @@ namespace GuiCommon
 #endif
 
 #define wxCOMBO_NEW	_( "New..." )
+
+	static const wxString CSCN_WILDCARD = wxT( " (*.cscn)|*.cscn|" );
+	static const wxString CBSN_WILDCARD = wxT( " (*.cbsn)|*.cbsn|" );
+	static const wxString ZIP_WILDCARD = wxT( " (*.zip)|*.zip|" );
 }
 
 #endif

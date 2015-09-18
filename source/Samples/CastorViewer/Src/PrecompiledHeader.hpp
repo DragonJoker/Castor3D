@@ -132,6 +132,4 @@
 #	include <GuiCommonPrerequisites.hpp>
 #endif
 
-using namespace GuiCommon;
-
 #endif

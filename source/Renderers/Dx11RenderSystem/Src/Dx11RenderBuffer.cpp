@@ -35,9 +35,9 @@ namespace Dx11Render
 
 	bool DxRenderBuffer::Initialise( Size const & p_size )
 	{
-		bool l_bReturn = m_size == p_size && m_pSurface != NULL;
+		bool l_return = m_size == p_size && m_pSurface != NULL;
 
-		if ( !l_bReturn )
+		if ( !l_return )
 		{
 			m_size = p_size;
 
@@ -120,11 +120,11 @@ namespace Dx11Render
 					}
 				}
 
-				l_bReturn = l_hr == S_OK;
+				l_return = l_hr == S_OK;
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void DxRenderBuffer::Cleanup()

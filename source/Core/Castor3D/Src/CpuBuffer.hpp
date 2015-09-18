@@ -83,14 +83,14 @@ namespace Castor3D
 		 */
 		virtual bool Create()
 		{
-			bool l_bReturn = DoCreateBuffer();
+			bool l_return = DoCreateBuffer();
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = GetGpuBuffer()->Create();
+				l_return = GetGpuBuffer()->Create();
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -137,15 +137,15 @@ namespace Castor3D
 		 */
 		virtual bool Initialise( eBUFFER_ACCESS_TYPE p_eType, eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram = nullptr )
 		{
-			bool l_bReturn	= false;
+			bool l_return	= false;
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
 			if ( l_pBuffer )
 			{
-				l_bReturn = l_pBuffer->Initialise( p_eType, p_eNature, p_pProgram );
+				l_return = l_pBuffer->Initialise( p_eType, p_eNature, p_pProgram );
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -210,15 +210,15 @@ namespace Castor3D
 		 */
 		virtual bool Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_eType, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
 		{
-			bool l_bReturn = false;
+			bool l_return = false;
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
 			if ( l_pBuffer )
 			{
-				l_bReturn = l_pBuffer->Fill( p_pBuffer, p_iSize, p_eType, p_eNature );
+				l_return = l_pBuffer->Fill( p_pBuffer, p_iSize, p_eType, p_eNature );
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -230,15 +230,15 @@ namespace Castor3D
 		 */
 		virtual bool Bind()
 		{
-			bool l_bReturn	= false;
+			bool l_return	= false;
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
 			if ( l_pBuffer )
 			{
-				l_bReturn = l_pBuffer->Bind();
+				l_return = l_pBuffer->Bind();
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english

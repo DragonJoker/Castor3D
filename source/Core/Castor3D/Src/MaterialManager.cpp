@@ -82,11 +82,11 @@ namespace Castor3D
 
 		m_pEngine->GetSamplerManager().unlock();
 		MaterialCollection::lock();
-		bool l_bReturn = true;
+		bool l_return = true;
 		MaterialCollectionConstIt l_it = begin();
 		bool l_bFirst = true;
 
-		while ( l_bReturn && l_it != end() )
+		while ( l_return && l_it != end() )
 		{
 			if ( l_bFirst )
 			{
@@ -97,12 +97,12 @@ namespace Castor3D
 				p_file.WriteText( cuT( "\n" ) );
 			}
 
-			l_bReturn = Material::TextLoader()( * l_it->second, p_file );
+			l_return = Material::TextLoader()( * l_it->second, p_file );
 			++l_it;
 		}
 
 		MaterialCollection::unlock();
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool MaterialManager::Read( TextFile & p_file )

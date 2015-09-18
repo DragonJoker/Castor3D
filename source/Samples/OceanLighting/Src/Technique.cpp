@@ -473,20 +473,20 @@ void RenderTechnique::loadPrograms( bool all )
 	char options[512];
 	sprintf( options, "#version 130\n#define %sSEA_CONTRIB\n#define %sSUN_CONTRIB\n#define %sSKY_CONTRIB\n#define %sCLOUDS\n#define %sHARDWARE_ANISTROPIC_FILTERING\n", m_seaContrib ? "" : "NO_", m_sunContrib ? "" : "NO_", m_skyContrib ? "" : "NO_", m_cloudLayer ? "" : "NO_", m_manualFilter ? "NO_" : "" );
 	l_strOpt = str_utils::from_str( options );
-	Path l_pathShare = Engine::GetDataDirectory();
-	TextFile( l_pathShare / cuT( "OceanLighting/atmosphere.frag"	), File::eOPEN_MODE_READ ).CopyToString( l_strAtmF );
-	TextFile( l_pathShare / cuT( "OceanLighting/atmosphere.vert"	), File::eOPEN_MODE_READ ).CopyToString( l_strAtmV );
+	Path l_pathShare = Engine::GetDataDirectory() / cuT( "OceanLighting" ) / cuT( "Glsl130_Shaders" );
+	TextFile( l_pathShare / cuT( "atmosphere.frag"	), File::eOPEN_MODE_READ ).CopyToString( l_strAtmF );
+	TextFile( l_pathShare / cuT( "atmosphere.vert"	), File::eOPEN_MODE_READ ).CopyToString( l_strAtmV );
 #if ENABLE_FFT
-	TextFile( l_pathShare / cuT( "OceanLighting/ocean_fft.frag"	), File::eOPEN_MODE_READ ).CopyToString( l_strOcnF );
-	TextFile( l_pathShare / cuT( "OceanLighting/ocean_fft.vert"	), File::eOPEN_MODE_READ ).CopyToString( l_strOcnV );
+	TextFile( l_pathShare / cuT( "ocean_fft.frag"	), File::eOPEN_MODE_READ ).CopyToString( l_strOcnF );
+	TextFile( l_pathShare / cuT( "ocean_fft.vert"	), File::eOPEN_MODE_READ ).CopyToString( l_strOcnV );
 #else
-	TextFile( l_pathShare / cuT( "OceanLighting/ocean.frag"	), File::eOPEN_MODE_READ ).CopyToString( l_strOcnF );
-	TextFile( l_pathShare / cuT( "OceanLighting/ocean.vert"	), File::eOPEN_MODE_READ ).CopyToString( l_strOcnV );
+	TextFile( l_pathShare / cuT( "ocean.frag"	), File::eOPEN_MODE_READ ).CopyToString( l_strOcnF );
+	TextFile( l_pathShare / cuT( "ocean.vert"	), File::eOPEN_MODE_READ ).CopyToString( l_strOcnV );
 #endif
-	TextFile( l_pathShare / cuT( "OceanLighting/sky.frag"	), File::eOPEN_MODE_READ ).CopyToString( l_strSkyF );
-	TextFile( l_pathShare / cuT( "OceanLighting/sky.vert"	), File::eOPEN_MODE_READ ).CopyToString( l_strSkyV );
-	TextFile( l_pathShare / cuT( "OceanLighting/skymap.frag"	), File::eOPEN_MODE_READ ).CopyToString( l_strMapF );
-	TextFile( l_pathShare / cuT( "OceanLighting/skymap.vert"	), File::eOPEN_MODE_READ ).CopyToString( l_strMapV );
+	TextFile( l_pathShare / cuT( "sky.frag"	), File::eOPEN_MODE_READ ).CopyToString( l_strSkyF );
+	TextFile( l_pathShare / cuT( "sky.vert"	), File::eOPEN_MODE_READ ).CopyToString( l_strSkyV );
+	TextFile( l_pathShare / cuT( "skymap.frag"	), File::eOPEN_MODE_READ ).CopyToString( l_strMapF );
+	TextFile( l_pathShare / cuT( "skymap.vert"	), File::eOPEN_MODE_READ ).CopyToString( l_strMapV );
 	l_strSrcF = l_strOpt + cuT( "\n" ) + l_strAtmF + cuT( "\n" ) + l_strOcnF;
 	l_strSrcV = l_strOpt + cuT( "\n" ) + l_strAtmV + cuT( "\n" ) + l_strOcnV;
 	Logger::LogDebug( "Loading 'render' shader program" );
@@ -590,8 +590,8 @@ void RenderTechnique::loadPrograms( bool all )
 	{
 		String l_strCloV;
 		String l_strCloF;
-		TextFile( l_pathShare / cuT( "OceanLighting/clouds.vert" ), File::eOPEN_MODE_READ ).CopyToString( l_strCloV );
-		TextFile( l_pathShare / cuT( "OceanLighting/clouds.frag" ), File::eOPEN_MODE_READ ).CopyToString( l_strCloF );
+		TextFile( l_pathShare / cuT( "clouds.vert" ), File::eOPEN_MODE_READ ).CopyToString( l_strCloV );
+		TextFile( l_pathShare / cuT( "clouds.frag" ), File::eOPEN_MODE_READ ).CopyToString( l_strCloF );
 		l_strSrcV = l_strOpt + cuT( "\n" ) + l_strAtmV + cuT( "\n" ) + l_strCloV;
 		l_strSrcF = l_strOpt + cuT( "\n" ) + l_strAtmF + cuT( "\n" ) + l_strCloF;
 		Logger::LogDebug( "Loading 'clouds' shader program" );
@@ -631,14 +631,14 @@ void RenderTechnique::loadPrograms( bool all )
 	String l_strFtxV;
 	String l_strFtyF;
 	String l_strFtyV;
-	TextFile( l_pathShare / cuT( "OceanLighting/init.frag"	), File::eOPEN_MODE_READ ).CopyToString( l_strIniF );
-	TextFile( l_pathShare / cuT( "OceanLighting/init.vert"	), File::eOPEN_MODE_READ ).CopyToString( l_strIniV );
-	TextFile( l_pathShare / cuT( "OceanLighting/variances.frag"	), File::eOPEN_MODE_READ ).CopyToString( l_strVarF );
-	TextFile( l_pathShare / cuT( "OceanLighting/variances.vert"	), File::eOPEN_MODE_READ ).CopyToString( l_strVarV );
-	TextFile( l_pathShare / cuT( "OceanLighting/fftx.frag"	), File::eOPEN_MODE_READ ).CopyToString( l_strFtxF );
-	TextFile( l_pathShare / cuT( "OceanLighting/fftx.vert"	), File::eOPEN_MODE_READ ).CopyToString( l_strFtxV );
-	TextFile( l_pathShare / cuT( "OceanLighting/ffty.frag"	), File::eOPEN_MODE_READ ).CopyToString( l_strFtyF );
-	TextFile( l_pathShare / cuT( "OceanLighting/ffty.vert"	), File::eOPEN_MODE_READ ).CopyToString( l_strFtyV );
+	TextFile( l_pathShare / cuT( "init.frag"	), File::eOPEN_MODE_READ ).CopyToString( l_strIniF );
+	TextFile( l_pathShare / cuT( "init.vert"	), File::eOPEN_MODE_READ ).CopyToString( l_strIniV );
+	TextFile( l_pathShare / cuT( "variances.frag"	), File::eOPEN_MODE_READ ).CopyToString( l_strVarF );
+	TextFile( l_pathShare / cuT( "variances.vert"	), File::eOPEN_MODE_READ ).CopyToString( l_strVarV );
+	TextFile( l_pathShare / cuT( "fftx.frag"	), File::eOPEN_MODE_READ ).CopyToString( l_strFtxF );
+	TextFile( l_pathShare / cuT( "fftx.vert"	), File::eOPEN_MODE_READ ).CopyToString( l_strFtxV );
+	TextFile( l_pathShare / cuT( "ffty.frag"	), File::eOPEN_MODE_READ ).CopyToString( l_strFtyF );
+	TextFile( l_pathShare / cuT( "ffty.vert"	), File::eOPEN_MODE_READ ).CopyToString( l_strFtyV );
 	l_strSrcV = l_strIniV;
 	l_strSrcF = l_strIniF;
 	Logger::LogDebug( "Loading 'init' shader program" );
@@ -913,6 +913,13 @@ void RenderTechnique::DoDestroy()
 
 bool RenderTechnique::DoInitialise( uint32_t & p_index )
 {
+	m_pSamplerNearestClamp->Initialise();
+	m_pSamplerNearestRepeat->Initialise();
+	m_pSamplerLinearClamp->Initialise();
+	m_pSamplerLinearRepeat->Initialise();
+	m_pSamplerAnisotropicClamp->Initialise();
+	m_pSamplerAnisotropicRepeat->Initialise();
+
 	bool l_bReturn = m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
 	PxBufferBaseSPtr buffer;
 

@@ -1876,15 +1876,15 @@ bool OpenGl::SwapBuffers( HDC hdc )
 
 bool OpenGl::SwapInterval( int interval )
 {
-	bool l_bReturn = false;
+	bool l_return = false;
 
 	if ( m_pfnSwapInterval )
 	{
 		m_pfnSwapInterval( interval );
-		l_bReturn = glCheckError( *this, "glSwapInterval" );
+		l_return = glCheckError( *this, "glSwapInterval" );
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 HGLRC OpenGl::CreateContext( HDC hdc )
@@ -1921,15 +1921,15 @@ bool OpenGl::SwapBuffers( Display * pDisplay, GLXDrawable drawable )
 
 bool OpenGl::SwapInterval( Display * pDisplay, GLXDrawable drawable, int interval )
 {
-	bool l_bReturn = false;
+	bool l_return = false;
 
 	if ( m_pfnSwapInterval )
 	{
 		m_pfnSwapInterval( pDisplay, drawable, interval );
-		l_bReturn = glCheckError( *this, "glSwapInterval" );
+		l_return = glCheckError( *this, "glSwapInterval" );
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 GLXContext OpenGl::CreateContext( Display * pDisplay, XVisualInfo * pVisualInfo, GLXContext shareList, Bool direct )
@@ -2855,7 +2855,7 @@ bool OpenGl::RenderbufferStorage( eGL_RENDERBUFFER_MODE p_eBindingMode, eGL_REND
 
 bool OpenGl::RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE p_eBindingMode, int p_iSamples, eGL_RENDERBUFFER_STORAGE p_eFormat, int width, int height )
 {
-	bool l_bReturn = true;
+	bool l_return = true;
 	int l_iMaxSamples;
 	int l_iMaxSize;
 	OpenGl::GetIntegerv( eGL_MAX_SAMPLES, &l_iMaxSamples );
@@ -2864,26 +2864,26 @@ bool OpenGl::RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE p_eBindingMod
 	if ( p_iSamples <= l_iMaxSamples && width <= l_iMaxSize && height < l_iMaxSize )
 	{
 		m_pfnRenderbufferStorageMultisample( p_eBindingMode, p_iSamples, p_eFormat, width, height );
-		l_bReturn = glCheckError( *this, "glRenderbufferStorageMultisample" );
+		l_return = glCheckError( *this, "glRenderbufferStorageMultisample" );
 	}
 	else if ( p_iSamples > l_iMaxSamples )
 	{
 		Logger::LogWarning( String( cuT( "glRenderbufferStorageMultisample - Asked for more samples than available, setting it to max available" ) ) );
 		m_pfnRenderbufferStorageMultisample( p_eBindingMode, l_iMaxSamples, p_eFormat, width, height );
-		l_bReturn = glCheckError( *this, "glRenderbufferStorageMultisample" );
+		l_return = glCheckError( *this, "glRenderbufferStorageMultisample" );
 	}
 	else if ( width > l_iMaxSize )
 	{
 		Logger::LogError( String( cuT( "glRenderbufferStorageMultisample - Asked for greater width than available" ) ) );
-		l_bReturn = false;
+		l_return = false;
 	}
 	else if ( height > l_iMaxSize )
 	{
 		Logger::LogError( String( cuT( "glRenderbufferStorageMultisample - Asked for greater height than available" ) ) );
-		l_bReturn = false;
+		l_return = false;
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 bool OpenGl::RenderbufferStorage( eGL_RENDERBUFFER_MODE p_eBindingMode, eGL_RENDERBUFFER_STORAGE p_eFormat, Castor::Size const & size )
@@ -2894,7 +2894,7 @@ bool OpenGl::RenderbufferStorage( eGL_RENDERBUFFER_MODE p_eBindingMode, eGL_REND
 
 bool OpenGl::RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE p_eBindingMode, int p_iSamples, eGL_RENDERBUFFER_STORAGE p_eFormat, Castor::Size const & size )
 {
-	bool l_bReturn = true;
+	bool l_return = true;
 	int l_iMaxSamples;
 	int l_iMaxSize;
 	OpenGl::GetIntegerv( eGL_MAX_SAMPLES, &l_iMaxSamples );
@@ -2903,26 +2903,26 @@ bool OpenGl::RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE p_eBindingMod
 	if ( p_iSamples <= l_iMaxSamples && int( size.width() ) <= l_iMaxSize && int( size.height() ) < l_iMaxSize )
 	{
 		m_pfnRenderbufferStorageMultisample( p_eBindingMode, p_iSamples, p_eFormat, size.width(), size.height() );
-		l_bReturn = glCheckError( *this, "glRenderbufferStorageMultisample" );
+		l_return = glCheckError( *this, "glRenderbufferStorageMultisample" );
 	}
 	else if ( p_iSamples > l_iMaxSamples )
 	{
 		Logger::LogWarning( String( cuT( "glRenderbufferStorageMultisample - Asked for more samples than available, setting it to max available" ) ) );
 		m_pfnRenderbufferStorageMultisample( p_eBindingMode, l_iMaxSamples, p_eFormat, size.width(), size.height() );
-		l_bReturn = glCheckError( *this, "glRenderbufferStorageMultisample" );
+		l_return = glCheckError( *this, "glRenderbufferStorageMultisample" );
 	}
 	else if ( int( size.width() ) > l_iMaxSize )
 	{
 		Logger::LogError( String( cuT( "glRenderbufferStorageMultisample - Asked for greater width than available" ) ) );
-		l_bReturn = false;
+		l_return = false;
 	}
 	else if ( int( size.height() ) > l_iMaxSize )
 	{
 		Logger::LogError( String( cuT( "glRenderbufferStorageMultisample - Asked for greater height than available" ) ) );
-		l_bReturn = false;
+		l_return = false;
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 bool OpenGl::GetRenderbufferParameteriv( eGL_RENDERBUFFER_MODE p_eBindingMode, eGL_RENDERBUFFER_PARAMETER p_eParam, int * values )
@@ -3569,15 +3569,15 @@ bool OpenGl::DeleteVertexArrays( int n, uint32_t * arrays )
 
 bool OpenGl::PatchParameter( eGL_PATCH_PARAMETER p_eParam, int p_iValue )
 {
-	bool l_bReturn = false;
+	bool l_return = false;
 
 	if ( m_pfnPatchParameteri )
 	{
 		m_pfnPatchParameteri( p_eParam, p_iValue );
-		l_bReturn = glCheckError( *this, "glPatchParameteri" );
+		l_return = glCheckError( *this, "glPatchParameteri" );
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 #if !defined( NDEBUG )
@@ -3606,7 +3606,7 @@ bool OpenGl::GlCheckError( std::wstring const & p_text )const
 
 bool OpenGl::DoGlCheckError( String const & p_text )const
 {
-	bool l_bReturn = true;
+	bool l_return = true;
 	uint32_t l_errorCode = GetError();
 
 	if ( l_errorCode != GL_NO_ERROR )
@@ -3621,10 +3621,10 @@ bool OpenGl::DoGlCheckError( String const & p_text )const
 		}
 
 		Logger::LogError( l_strError );
-		l_bReturn = false;
+		l_return = false;
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 eGL_LOCK OpenGl::GetLockFlags( uint32_t p_uiFlags )const
@@ -3823,9 +3823,9 @@ void OpenGl::DebugLogAMD( uint32_t id, eGL_DEBUG_CATEGORY category, eGL_DEBUG_SE
 
 bool OpenGl::HasExtension( Castor::String const & p_strExtName )const
 {
-	bool l_bReturn = m_strExtensions.find( p_strExtName ) != Castor::String::npos;
+	bool l_return = m_strExtensions.find( p_strExtName ) != Castor::String::npos;
 
-	if ( l_bReturn )
+	if ( l_return )
 	{
 		Logger::LogDebug( cuT( "Extension [" ) + p_strExtName + cuT( "] available" ) );
 	}
@@ -3834,7 +3834,7 @@ bool OpenGl::HasExtension( Castor::String const & p_strExtName )const
 		Logger::LogWarning( cuT( "Extension [" ) + p_strExtName + cuT( "] unavailable" ) );
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 bool OpenGl::HasMultiTexturing()const

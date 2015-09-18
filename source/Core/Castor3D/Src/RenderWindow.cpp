@@ -36,25 +36,25 @@ namespace Castor3D
 	bool RenderWindow::TextLoader::operator()( RenderWindow const & p_window, TextFile & p_file )
 	{
 		Logger::LogInfo( cuT( "RenderWindow::Write - Window Name" ) );
-		bool l_bReturn = p_file.WriteText( cuT( "window \"" ) + p_window.GetName() + cuT( "\"\n{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( cuT( "window \"" ) + p_window.GetName() + cuT( "\"\n{\n" ) ) > 0;
 
-		if ( l_bReturn && p_window.GetVSync() )
+		if ( l_return && p_window.GetVSync() )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\tvsync true\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\tvsync true\n" ) ) > 0;
 		}
 
-		if ( l_bReturn && p_window.IsFullscreen() )
+		if ( l_return && p_window.IsFullscreen() )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\tfullscreen true\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\tfullscreen true\n" ) ) > 0;
 		}
 
-		if ( l_bReturn && p_window.GetRenderTarget() )
+		if ( l_return && p_window.GetRenderTarget() )
 		{
-			l_bReturn = RenderTarget::TextLoader( cuT( "\t" ) )( *p_window.GetRenderTarget(), p_file );
+			l_return = RenderTarget::TextLoader( cuT( "\t" ) )( *p_window.GetRenderTarget(), p_file );
 		}
 
 		p_file.WriteText( cuT( "}\n" ) );
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -66,36 +66,36 @@ namespace Castor3D
 
 	bool RenderWindow::BinaryParser::Fill( RenderWindow const & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_WINDOW );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetVSync(), eCHUNK_TYPE_WINDOW_VSYNC, l_chunk );
+			l_return = DoFillChunk( p_obj.GetVSync(), eCHUNK_TYPE_WINDOW_VSYNC, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.IsFullscreen(), eCHUNK_TYPE_WINDOW_FULLSCREEN, l_chunk );
+			l_return = DoFillChunk( p_obj.IsFullscreen(), eCHUNK_TYPE_WINDOW_FULLSCREEN, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = RenderTarget::BinaryParser( m_path ).Fill( *p_obj.GetRenderTarget(), l_chunk );
+			l_return = RenderTarget::BinaryParser( m_path ).Fill( *p_obj.GetRenderTarget(), l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			l_chunk.Finalise();
 			p_chunk.AddSubChunk( l_chunk );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool RenderWindow::BinaryParser::Parse( RenderWindow & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		String l_name;
 		bool l_bool;
 		RenderTargetSPtr l_target;
@@ -103,16 +103,16 @@ namespace Castor3D
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
 			BinaryChunk l_chunk;
-			l_bReturn = p_chunk.GetSubChunk( l_chunk );
+			l_return = p_chunk.GetSubChunk( l_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				switch ( l_chunk.GetChunkType() )
 				{
 				case eCHUNK_TYPE_WINDOW_VSYNC:
-					l_bReturn = DoParseChunk( l_bool, l_chunk );
+					l_return = DoParseChunk( l_bool, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetVSync( l_bool );
 					}
@@ -120,9 +120,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_WINDOW_FULLSCREEN:
-					l_bReturn = DoParseChunk( l_bool, l_chunk );
+					l_return = DoParseChunk( l_bool, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetFullscreen( l_bool );
 					}
@@ -131,22 +131,22 @@ namespace Castor3D
 
 				case eCHUNK_TYPE_TARGET:
 					l_target = p_obj.GetEngine()->CreateRenderTarget( eTARGET_TYPE_WINDOW );
-					l_bReturn = RenderTarget::BinaryParser( m_path ).Parse( *l_target, l_chunk );
+					l_return = RenderTarget::BinaryParser( m_path ).Parse( *l_target, l_chunk );
 					break;
 
 				default:
-					l_bReturn = false;
+					l_return = false;
 					break;
 				}
 			}
 
-			if ( !l_bReturn )
+			if ( !l_return )
 			{
 				p_chunk.EndParse();
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************

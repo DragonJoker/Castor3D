@@ -1,7 +1,6 @@
 #include "FrameVariableTreeItemProperty.hpp"
 
 #include <FrameVariableBuffer.hpp>
-#include <FunctorEvent.hpp>
 #include <MatrixFrameVariable.hpp>
 #include <OneFrameVariable.hpp>
 #include <PointFrameVariable.hpp>
@@ -246,7 +245,7 @@ namespace GuiCommon
 	}
 
 	FrameVariableTreeItemProperty::FrameVariableTreeItemProperty( bool p_editable, Castor3D::FrameVariableSPtr p_variable, FrameVariableBufferSPtr p_buffer )
-		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_CAMERA )
+		: TreeItemProperty( p_variable->GetProgram()->GetRenderSystem()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_CAMERA )
 		, m_variable( p_variable )
 		, m_type( eSHADER_TYPE_COUNT )
 		, m_buffer( p_buffer )
@@ -291,10 +290,12 @@ namespace GuiCommon
 		PROPERTY_TYPE_DMAT3 = wxT( "dmat3x3" );
 		PROPERTY_TYPE_DMAT4 = wxT( "dmat4x4" );
 		PROPERTY_TYPE_SAMPLER = wxT( "sampler" );
+
+		CreateTreeItemMenu();
 	}
 
 	FrameVariableTreeItemProperty::FrameVariableTreeItemProperty( bool p_editable, Castor3D::FrameVariableSPtr p_variable, eSHADER_TYPE p_type )
-		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_CAMERA )
+		: TreeItemProperty( p_variable->GetProgram()->GetRenderSystem()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_CAMERA )
 		, m_variable( p_variable )
 		, m_type( p_type )
 	{
@@ -304,7 +305,7 @@ namespace GuiCommon
 	{
 	}
 
-	void FrameVariableTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void FrameVariableTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		FrameVariableSPtr l_variable = GetVariable();
 
@@ -358,7 +359,7 @@ namespace GuiCommon
 		}
 	}
 
-	void FrameVariableTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void FrameVariableTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		wxPGProperty * l_property = p_event.GetProperty();
 		FrameVariableSPtr l_variable = GetVariable();
@@ -490,11 +491,11 @@ namespace GuiCommon
 
 		if ( l_buffer )
 		{
-			l_variable->GetProgram()->GetRenderSystem()->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [&p_value, l_variable, &l_buffer, this]()
+			DoApplyChange( [&p_value, l_variable, &l_buffer, this]()
 			{
 				l_buffer->RemoveVariable( l_variable->GetName() );
 				m_variable = l_buffer->CreateVariable( *l_variable->GetProgram(), p_value, l_variable->GetName(), l_variable->GetOccCount() );
-			} ) );
+			} );
 		}
 	}
 
@@ -505,11 +506,11 @@ namespace GuiCommon
 
 		if ( l_buffer )
 		{
-			l_variable->GetProgram()->GetRenderSystem()->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [&p_value, l_variable, &l_buffer, this]()
+			DoApplyChange( [&p_value, l_variable, &l_buffer, this]()
 			{
 				l_buffer->RemoveVariable( l_variable->GetName() );
 				m_variable = l_buffer->CreateVariable( *l_variable->GetProgram(), l_variable->GetFullType(), p_value, l_variable->GetOccCount() );
-			} ) );
+			} );
 		}
 	}
 
@@ -517,9 +518,9 @@ namespace GuiCommon
 	{
 		FrameVariableSPtr l_variable = GetVariable();
 
-		l_variable->GetProgram()->GetRenderSystem()->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [&p_value, l_variable]()
+		DoApplyChange( [&p_value, l_variable]()
 		{
 			DoSetValue( l_variable, p_value );
-		} ) );
+		} );
 	}
 }

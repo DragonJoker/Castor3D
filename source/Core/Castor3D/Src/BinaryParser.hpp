@@ -67,14 +67,14 @@ namespace Castor3D
 		virtual bool Fill( TParsed const & p_obj, Castor::BinaryFile & p_file )const
 		{
 			BinaryChunk l_chunk;
-			bool l_bReturn = Fill( p_obj, l_chunk );
+			bool l_return = Fill( p_obj, l_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = l_chunk.Write( p_file );
+				l_return = l_chunk.Write( p_file );
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -91,14 +91,14 @@ namespace Castor3D
 		virtual bool Parse( TParsed & p_obj, Castor::BinaryFile & p_file )const
 		{
 			BinaryChunk l_chunk;
-			bool l_bReturn = l_chunk.Read( p_file );
+			bool l_return = l_chunk.Read( p_file );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = Parse( p_obj, l_chunk );
+				l_return = Parse( p_obj, l_chunk );
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english

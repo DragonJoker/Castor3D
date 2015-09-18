@@ -54,14 +54,14 @@ namespace Castor3D
 		 */
 		bool operator()( uint8_t * p_pValues, uint32_t p_uiSize, BinaryChunk & p_chunk )
 		{
-			bool l_bReturn = p_chunk.CheckAvailable( p_uiSize );
+			bool l_return = p_chunk.CheckAvailable( p_uiSize );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				p_chunk.Get( p_pValues, p_uiSize );
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 	};
 	/*!
@@ -139,21 +139,21 @@ namespace Castor3D
 		 */
 		bool operator()( Castor::String & p_strValue, BinaryChunk & p_chunk )
 		{
-			bool l_bReturn = p_chunk.CheckAvailable( 1 );
+			bool l_return = p_chunk.CheckAvailable( 1 );
 			uint32_t l_uiSize = p_chunk.GetRemaining();
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				std::vector< char > l_pChar( l_uiSize + 1, 0 );
-				l_bReturn = ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( l_pChar.data() ), l_uiSize, p_chunk );
+				l_return = ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( l_pChar.data() ), l_uiSize, p_chunk );
 
-				if ( l_bReturn )
+				if ( l_return )
 				{
 					p_strValue = Castor::str_utils::from_str( l_pChar.data() );
 				}
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 	};
 	/*!
@@ -167,21 +167,21 @@ namespace Castor3D
 		 */
 		bool operator()( Castor::Path & p_strValue, BinaryChunk & p_chunk )
 		{
-			bool l_bReturn = p_chunk.CheckAvailable( 1 );
+			bool l_return = p_chunk.CheckAvailable( 1 );
 			uint32_t l_uiSize = p_chunk.GetRemaining();
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				std::vector< char > l_pChar( l_uiSize + 1, 0 );
-				l_bReturn = ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( l_pChar.data() ), l_uiSize, p_chunk );
+				l_return = ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( l_pChar.data() ), l_uiSize, p_chunk );
 
-				if ( l_bReturn )
+				if ( l_return )
 				{
 					p_strValue = Castor::str_utils::from_str( l_pChar.data() );
 				}
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 	};
 	/*!

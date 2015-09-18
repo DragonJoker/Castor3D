@@ -37,8 +37,7 @@ namespace Castor3D
 	class C3D_API Subdivider
 	{
 	protected:
-		typedef void SubdivisionEndFunction( void *, Subdivider * );
-		typedef SubdivisionEndFunction * PSubdivisionEndFunction;
+		typedef std::function< void( Subdivider & ) > SubdivisionEndFunction;
 
 	public:
 		/**
@@ -70,23 +69,6 @@ namespace Castor3D
 		 *\param[in]	p_bThreaded			Dit si la subdivision doit être threadée
 		 */
 		virtual void Subdivide( SubmeshSPtr p_pSubmesh, int p_occurences, bool p_bGenerateBuffers = true, bool p_bThreaded = false );
-		/**
-		 *\~english
-		 *\brief		Defines a function to execute when the threaded subdivision ends
-		 *\remarks		That function *MUST NEITHER* destroy the thread *NOR* the subdivider
-		 *\param[in]	p_pfnSubdivisionEnd	Pointer over the function to execute
-		 *\param[in]	p_pArg				Optional parameter for the function
-		 *\~french
-		 *\brief		Définit une fonction qui sera appelée lors de la fin de la subdivision
-		 *\remarks		Cette fonction ne doit pas détruire le thread ni le subdiviseur
-		 *\param[in]	p_pfnSubdivisionEnd	Pointeur de la fonction à exécuter
-		 *\param[in]	p_pArg				Paramètre optionnel de la fonction
-		 */
-		void SetThreadEndFunction( PSubdivisionEndFunction p_pfnSubdivisionEnd, void * p_pArg = nullptr )
-		{
-			m_pfnSubdivisionEnd = p_pfnSubdivisionEnd;
-			m_pArg = p_pArg;
-		}
 		/**
 		 *\~english
 		 *\brief		Cleans all member variables
@@ -175,6 +157,22 @@ namespace Castor3D
 		 *\return		La valeur
 		 */
 		BufferElementGroupSPtr GetPoint( uint32_t i )const;
+		/**
+		 *\~english
+		 *\brief		Defines a function to execute when the threaded subdivision ends
+		 *\remarks		That function *MUST NEITHER* destroy the thread *NOR* the subdivider
+		 *\param[in]	p_pfnSubdivisionEnd	Pointer over the function to execute
+		 *\param[in]	p_pArg				Optional parameter for the function
+		 *\~french
+		 *\brief		Définit une fonction qui sera appelée lors de la fin de la subdivision
+		 *\remarks		Cette fonction ne doit pas détruire le thread ni le subdiviseur
+		 *\param[in]	p_pfnSubdivisionEnd	Pointeur de la fonction à exécuter
+		 *\param[in]	p_pArg				Paramètre optionnel de la fonction
+		 */
+		inline void SetSubdivisionEndCallback( SubdivisionEndFunction p_pfnSubdivisionEnd )
+		{
+			m_pfnSubdivisionEnd = p_pfnSubdivisionEnd;
+		}
 
 	protected:
 		/**
@@ -260,9 +258,7 @@ namespace Castor3D
 		//!\~english Tells if the buffers must be generatef	\~french Dit si les tampons doivent être générés
 		bool m_bGenerateBuffers;
 		//!\~english The subdivision end callback	\~french Le callback de fin de subdivision
-		PSubdivisionEndFunction m_pfnSubdivisionEnd;
-		//!\~english The subdivision end callback parameter	\~french Le paramètre du callback de fin de subdivision
-		void * m_pArg;
+		SubdivisionEndFunction m_pfnSubdivisionEnd;
 		//!\~english The subdivision thread	\~french Le thread de subdivision
 		std::shared_ptr< std::thread > m_pThread;
 		//!\~english Tells that the subdivision is threaded	\~french Dit si la subdivision est threadée

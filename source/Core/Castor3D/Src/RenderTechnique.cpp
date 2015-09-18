@@ -54,17 +54,17 @@ namespace Castor3D
 
 	bool RenderTechniqueBase::Create()
 	{
-		bool l_bReturn = true;
-		l_bReturn &= m_pFrameBuffer->Create( 0 );
-		l_bReturn &= m_pColorBuffer->Create();
-		l_bReturn &= m_pDepthBuffer->Create();
+		bool l_return = true;
+		l_return &= m_pFrameBuffer->Create( 0 );
+		l_return &= m_pColorBuffer->Create();
+		l_return &= m_pDepthBuffer->Create();
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoCreate();
+			l_return = DoCreate();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void RenderTechniqueBase::Destroy()
@@ -77,9 +77,9 @@ namespace Castor3D
 
 	bool RenderTechniqueBase::Initialise( uint32_t & p_index )
 	{
-		bool l_bReturn = m_sampler->Initialise();
+		bool l_return = m_sampler->Initialise();
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			if ( m_pRenderTarget->GetCamera() )
 			{
@@ -91,32 +91,32 @@ namespace Castor3D
 			m_pColorBuffer->SetSampler( m_sampler );
 			m_size = m_pColorBuffer->GetDimensions();
 			m_rect.set( 0, 0, m_size.width(), m_size.height() );
-			l_bReturn = m_pColorBuffer->Initialise( p_index++ );
+			l_return = m_pColorBuffer->Initialise( p_index++ );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = m_pDepthBuffer->Initialise( m_size );
+			l_return = m_pDepthBuffer->Initialise( m_size );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+			l_return = m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = m_pColorAttach->Attach( eATTACHMENT_POINT_COLOUR0, m_pFrameBuffer, eTEXTURE_TARGET_2D );
+				l_return = m_pColorAttach->Attach( eATTACHMENT_POINT_COLOUR0, m_pFrameBuffer, eTEXTURE_TARGET_2D );
 
-				if ( l_bReturn && m_pDepthAttach->GetRenderBuffer() == m_pDepthBuffer )
+				if ( l_return && m_pDepthAttach->GetRenderBuffer() == m_pDepthBuffer )
 				{
-					l_bReturn = m_pDepthAttach->Attach( eATTACHMENT_POINT_DEPTH, m_pFrameBuffer );
+					l_return = m_pDepthAttach->Attach( eATTACHMENT_POINT_DEPTH, m_pFrameBuffer );
 				}
 
 				m_pFrameBuffer->Unbind();
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			BlendStateSPtr l_pState = m_wp2DBlendState.lock();
 			l_pState->EnableAlphaToCoverage( false );
@@ -125,22 +125,22 @@ namespace Castor3D
 			l_pState->SetRgbSrcBlend( eBLEND_SRC_ALPHA );
 			l_pState->SetRgbDstBlend( eBLEND_INV_SRC_ALPHA );
 			l_pState->EnableBlend( true );
-			l_bReturn = l_pState->Initialise();
+			l_return = l_pState->Initialise();
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			DepthStencilStateSPtr l_pState = m_wp2DDepthStencilState.lock();
 			l_pState->SetDepthTest( false );
-			l_bReturn = l_pState->Initialise();
+			l_return = l_pState->Initialise();
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoInitialise( p_index );
+			l_return = DoInitialise( p_index );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void RenderTechniqueBase::Cleanup()

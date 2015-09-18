@@ -88,7 +88,7 @@ namespace GlRender
 			{
 				m_pfnBind = PBindFunction( [this]( eGL_TEXDIM p_eDimension, uint32_t CU_PARAM_UNUSED( p_uiIndex ) )
 				{
-					bool l_bReturn = true;
+					bool l_return = true;
 					eGL_INTERPOLATION_MODE l_eMinMode = m_gl.Get( GetInterpolationMode( eINTERPOLATION_FILTER_MIN ) );
 
 					if ( GetInterpolationMode( eINTERPOLATION_FILTER_MIP ) != eINTERPOLATION_MODE_UNDEFINED )
@@ -119,17 +119,17 @@ namespace GlRender
 						}
 					}
 
-					l_bReturn &= m_gl.TexParameter( p_eDimension, eGL_TEXTURE_PARAMETER_MINLOD, float( GetMinLod() ) );
-					l_bReturn &= m_gl.TexParameter( p_eDimension, eGL_TEXTURE_PARAMETER_MAXLOD, float( GetMaxLod() ) );
-					l_bReturn &= m_gl.TexParameter( p_eDimension, eGL_TEXTURE_PARAMETER_LODBIAS, float( GetLodBias() ) );
-					l_bReturn &= m_gl.TexParameter( p_eDimension, eGL_TEXTURE_PARAMETER_WRAP_S, m_gl.Get( GetWrappingMode( eTEXTURE_UVW_U ) ) );
-					l_bReturn &= m_gl.TexParameter( p_eDimension, eGL_TEXTURE_PARAMETER_WRAP_T, m_gl.Get( GetWrappingMode( eTEXTURE_UVW_V ) ) );
-					l_bReturn &= m_gl.TexParameter( p_eDimension, eGL_TEXTURE_PARAMETER_WRAP_R, m_gl.Get( GetWrappingMode( eTEXTURE_UVW_W ) ) );
-					l_bReturn &= m_gl.TexParameter( p_eDimension, eGL_TEXTURE_PARAMETER_MIN_FILTER, l_eMinMode );
-					l_bReturn &= m_gl.TexParameter( p_eDimension, eGL_TEXTURE_PARAMETER_MAG_FILTER, m_gl.Get( GetInterpolationMode( eINTERPOLATION_FILTER_MAG ) ) );
-					//l_bReturn &= m_gl.TexParameter( p_eDimension, eGL_TEXTURE_PARAMETER_BORDERCOLOUR, GetBorderColour().const_ptr() );
-					l_bReturn &= m_gl.TexParameter( p_eDimension, eGL_TEXTURE_PARAMETER_MAX_ANISOTROPY,	float( GetMaxAnisotropy() ) );
-					return l_bReturn;
+					l_return &= m_gl.TexParameter( p_eDimension, eGL_TEXTURE_PARAMETER_MINLOD, float( GetMinLod() ) );
+					l_return &= m_gl.TexParameter( p_eDimension, eGL_TEXTURE_PARAMETER_MAXLOD, float( GetMaxLod() ) );
+					l_return &= m_gl.TexParameter( p_eDimension, eGL_TEXTURE_PARAMETER_LODBIAS, float( GetLodBias() ) );
+					l_return &= m_gl.TexParameter( p_eDimension, eGL_TEXTURE_PARAMETER_WRAP_S, m_gl.Get( GetWrappingMode( eTEXTURE_UVW_U ) ) );
+					l_return &= m_gl.TexParameter( p_eDimension, eGL_TEXTURE_PARAMETER_WRAP_T, m_gl.Get( GetWrappingMode( eTEXTURE_UVW_V ) ) );
+					l_return &= m_gl.TexParameter( p_eDimension, eGL_TEXTURE_PARAMETER_WRAP_R, m_gl.Get( GetWrappingMode( eTEXTURE_UVW_W ) ) );
+					l_return &= m_gl.TexParameter( p_eDimension, eGL_TEXTURE_PARAMETER_MIN_FILTER, l_eMinMode );
+					l_return &= m_gl.TexParameter( p_eDimension, eGL_TEXTURE_PARAMETER_MAG_FILTER, m_gl.Get( GetInterpolationMode( eINTERPOLATION_FILTER_MAG ) ) );
+					//l_return &= m_gl.TexParameter( p_eDimension, eGL_TEXTURE_PARAMETER_BORDERCOLOUR, GetBorderColour().const_ptr() );
+					l_return &= m_gl.TexParameter( p_eDimension, eGL_TEXTURE_PARAMETER_MAX_ANISOTROPY,	float( GetMaxAnisotropy() ) );
+					return l_return;
 				} );
 				m_pfnUnbind = PUnbindFunction( [&]() {} );
 			}

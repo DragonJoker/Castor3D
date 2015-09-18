@@ -46,6 +46,7 @@ namespace GuiCommon
 		DECLARE_EVENT_TABLE()
 		void OnClose( wxCloseEvent & p_event );
 		void OnSelectItem( wxTreeEvent & p_event );
+		void OnMouseRButtonUp( wxTreeEvent & p_event );
 
 	private:
 		Castor3D::SceneWPtr m_pScene;

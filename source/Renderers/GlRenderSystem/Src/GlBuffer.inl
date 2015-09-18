@@ -34,20 +34,20 @@ namespace GlRender
 	template< typename T >
 	bool GlBuffer< T >::DoInitialise( Castor3D::eBUFFER_ACCESS_TYPE p_eType, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
 
 		if ( l_pBuffer && l_pBuffer->GetSize() )
 		{
-			l_bReturn = m_glBuffer.Initialise( &l_pBuffer->data()[0], l_pBuffer->GetSize(), p_eType, p_eNature );
+			l_return = m_glBuffer.Initialise( &l_pBuffer->data()[0], l_pBuffer->GetSize(), p_eType, p_eNature );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			l_pBuffer->Assign();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	template< typename T >

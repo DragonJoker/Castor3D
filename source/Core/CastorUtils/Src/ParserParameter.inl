@@ -24,11 +24,11 @@ namespace Castor
 		 */
 		inline bool ParseSize( String & p_strParams, Size & p_vResult )
 		{
-			bool l_bReturn = false;
+			bool l_return = false;
 
 			if ( p_strParams == cuT( "screen_size" ) )
 			{
-				l_bReturn = Castor::System::GetScreenSize( 0, p_vResult );
+				l_return = Castor::System::GetScreenSize( 0, p_vResult );
 			}
 			else
 			{
@@ -50,11 +50,11 @@ namespace Castor
 						std::basic_istringstream< xchar > l_stream( l_arrayValues[1] );
 						l_stream >> p_vResult.ptr()[1];
 					}
-					l_bReturn = true;
+					l_return = true;
 				}
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -72,7 +72,7 @@ namespace Castor
 		 */
 		inline bool ParsePosition( String & p_strParams, Position & p_vResult )
 		{
-			bool l_bReturn = false;
+			bool l_return = false;
 
 			StringArray l_arrayValues = str_utils::split( p_strParams, cuT( " \t,;" ) );
 
@@ -92,10 +92,10 @@ namespace Castor
 					std::basic_istringstream< xchar > l_stream( l_arrayValues[1] );
 					l_stream >> p_vResult.ptr()[1];
 				}
-				l_bReturn = true;
+				l_return = true;
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -113,7 +113,7 @@ namespace Castor
 		 */
 		inline bool ParseRectangle( String & p_strParams, Rectangle & p_vResult )
 		{
-			bool l_bReturn = false;
+			bool l_return = false;
 
 			StringArray l_arrayValues = str_utils::split( p_strParams, cuT( " \t,;" ) );
 
@@ -141,10 +141,10 @@ namespace Castor
 					std::basic_istringstream< xchar > l_stream( l_arrayValues[3] );
 					l_stream >> p_vResult.ptr()[3];
 				}
-				l_bReturn = true;
+				l_return = true;
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -163,7 +163,7 @@ namespace Castor
 		template< typename T, uint32_t Count >
 		inline bool ParseVector( String & p_strParams, Point< T, Count > & p_vResult )
 		{
-			bool l_bReturn = false;
+			bool l_return = false;
 			StringArray l_arrayValues = str_utils::split( p_strParams, cuT( " \t,;" ), Count + 1, false );
 
 			if ( l_arrayValues.size() >= Count )
@@ -181,10 +181,10 @@ namespace Castor
 					l_stream >> p_vResult[i];
 				}
 
-				l_bReturn = true;
+				l_return = true;
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -202,7 +202,7 @@ namespace Castor
 		 */
 		inline bool ParseColour( String & p_strParams, Colour & p_colour )
 		{
-			bool l_bReturn = false;
+			bool l_return = false;
 			StringArray l_arrayValues = str_utils::split( p_strParams, cuT( " \t,;" ) );
 
 			if ( l_arrayValues.size() >= Colour::eCOMPONENT_COUNT )
@@ -222,7 +222,7 @@ namespace Castor
 					p_colour[Colour::eCOMPONENT( i )] = l_dComponent;
 				}
 
-				l_bReturn = true;
+				l_return = true;
 			}
 			else if ( l_arrayValues.size() == 3 )
 			{
@@ -237,10 +237,10 @@ namespace Castor
 				}
 
 				p_colour[Colour::eCOMPONENT_ALPHA] = 1.0;
-				l_bReturn = true;
+				l_return = true;
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -255,21 +255,21 @@ namespace Castor
 		template< typename T >
 		inline bool ParseInteger( String & p_strParams, T & p_tResult, typename std::enable_if < !std::is_unsigned< T >::value >::type * = 0 )
 		{
-			bool l_bReturn = false;
+			bool l_return = false;
 			StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
 
 			if ( l_array.size() )
 			{
-				l_bReturn = str_utils::is_integer( l_array[0] );
+				l_return = str_utils::is_integer( l_array[0] );
 				int64_t l_i64Tmp = 0;
 
-				if ( l_bReturn )
+				if ( l_return )
 				{
 					l_i64Tmp = str_utils::to_long_long( l_array[0] );
-					l_bReturn = ( l_i64Tmp > std::numeric_limits< T >::lowest() ) && ( l_i64Tmp < std::numeric_limits< T >::max() );
+					l_return = ( l_i64Tmp > std::numeric_limits< T >::lowest() ) && ( l_i64Tmp < std::numeric_limits< T >::max() );
 				}
 
-				if ( l_bReturn )
+				if ( l_return )
 				{
 					p_tResult = static_cast< T >( l_i64Tmp );
 				}
@@ -282,7 +282,7 @@ namespace Castor
 				}
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -297,21 +297,21 @@ namespace Castor
 		template< typename T >
 		inline bool ParseInteger( String & p_strParams, T & p_tResult, typename std::enable_if< std::is_unsigned< T >::value >::type * = 0 )
 		{
-			bool l_bReturn = false;
+			bool l_return = false;
 			StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
 
 			if ( l_array.size() )
 			{
-				l_bReturn = str_utils::is_integer( l_array[0] );
+				l_return = str_utils::is_integer( l_array[0] );
 				uint64_t l_ui64Tmp = 0;
 
-				if ( l_bReturn )
+				if ( l_return )
 				{
 					l_ui64Tmp = str_utils::to_long_long( l_array[0] );
-					l_bReturn = ( l_ui64Tmp > std::numeric_limits< T >::lowest() ) && ( l_ui64Tmp < std::numeric_limits< T >::max() );
+					l_return = ( l_ui64Tmp > std::numeric_limits< T >::lowest() ) && ( l_ui64Tmp < std::numeric_limits< T >::max() );
 				}
 
-				if ( l_bReturn )
+				if ( l_return )
 				{
 					p_tResult = static_cast< T >( l_ui64Tmp );
 				}
@@ -324,7 +324,7 @@ namespace Castor
 				}
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -339,21 +339,21 @@ namespace Castor
 		template< typename T >
 		inline bool ParseFloat( String & p_strParams, T & p_tResult )
 		{
-			bool l_bReturn = false;
+			bool l_return = false;
 			StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
 
 			if ( l_array.size() )
 			{
-				l_bReturn = str_utils::is_floating( l_array[0] );
+				l_return = str_utils::is_floating( l_array[0] );
 				long double l_ldTmp = 0;
 
-				if ( l_bReturn )
+				if ( l_return )
 				{
 					l_ldTmp = str_utils::to_long_double( l_array[0] );
-					l_bReturn = ( l_ldTmp > std::numeric_limits< T >::lowest() ) && ( l_ldTmp < std::numeric_limits< T >::max() );
+					l_return = ( l_ldTmp > std::numeric_limits< T >::lowest() ) && ( l_ldTmp < std::numeric_limits< T >::max() );
 				}
 
-				if ( l_bReturn )
+				if ( l_return )
 				{
 					p_tResult = static_cast< T >( l_ldTmp );
 				}
@@ -366,7 +366,7 @@ namespace Castor
 				}
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 	}
 
@@ -543,14 +543,14 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_BOOL >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
 		p_strParams.clear();
 
 		if ( !l_array.empty() )
 		{
 			m_value = str_utils::to_lower_case( l_array[0] ) == cuT( "true" );
-			l_bReturn = l_array[0] == cuT( "true" ) || l_array[0] == cuT( "false" );
+			l_return = l_array[0] == cuT( "true" ) || l_array[0] == cuT( "false" );
 
 			if ( l_array.size() > 1 )
 			{
@@ -558,7 +558,7 @@ namespace Castor
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -580,9 +580,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_INT8 >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseInteger( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseInteger( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -604,9 +604,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_INT16 >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseInteger( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseInteger( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -628,9 +628,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_INT32 >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseInteger( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseInteger( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -652,9 +652,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_INT64 >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseInteger( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseInteger( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -676,9 +676,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_UINT8 >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseInteger( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseInteger( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -700,9 +700,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_UINT16 >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseInteger( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseInteger( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -724,9 +724,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_UINT32 >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseInteger( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseInteger( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -754,7 +754,7 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
 		p_strParams.clear();
 
@@ -765,7 +765,7 @@ namespace Castor
 			if ( l_it != m_mapValues.end() )
 			{
 				m_value = l_it->second;
-				l_bReturn = true;
+				l_return = true;
 			}
 
 			if ( l_array.size() > 1 )
@@ -774,7 +774,7 @@ namespace Castor
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -802,7 +802,7 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		m_value = 0;
 		StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
 		p_strParams.clear();
@@ -818,7 +818,7 @@ namespace Castor
 				if ( l_it != m_mapValues.end() )
 				{
 					m_value |= l_it->second;
-					l_bReturn = true;
+					l_return = true;
 				}
 			}
 
@@ -828,7 +828,7 @@ namespace Castor
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -850,9 +850,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_UINT64 >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseInteger( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseInteger( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -874,9 +874,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_FLOAT >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseFloat( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseFloat( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -898,9 +898,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_DOUBLE >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseFloat( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseFloat( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -922,9 +922,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_LONGDOUBLE >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseFloat( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseFloat( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -946,14 +946,14 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_PIXELFORMAT >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
 		p_strParams.clear();
 
 		if ( l_array.size() )
 		{
 			m_value = PF::GetFormatByName( l_array[0] );
-			l_bReturn = m_value != ePIXEL_FORMAT_COUNT;
+			l_return = m_value != ePIXEL_FORMAT_COUNT;
 
 			if ( l_array.size() > 1 )
 			{
@@ -961,7 +961,7 @@ namespace Castor
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -983,9 +983,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_POINT2I >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseVector( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseVector( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -1007,9 +1007,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_POINT3I >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseVector( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseVector( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -1031,9 +1031,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_POINT4I >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseVector( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseVector( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -1055,9 +1055,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_POINT2F >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseVector( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseVector( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -1079,9 +1079,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_POINT3F >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseVector( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseVector( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -1103,9 +1103,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_POINT4F >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseVector( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseVector( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -1127,9 +1127,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_POINT2D >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseVector( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseVector( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -1151,9 +1151,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_POINT3D >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseVector( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseVector( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -1175,9 +1175,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_POINT4D >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseVector( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseVector( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -1199,9 +1199,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_SIZE >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseSize( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseSize( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -1223,9 +1223,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_POSITION >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParsePosition( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParsePosition( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -1247,9 +1247,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_RECTANGLE >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseRectangle( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseRectangle( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -1271,9 +1271,9 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_COLOUR >::Parse( String & p_strParams )
 	{
-		bool l_bReturn = false;
-		l_bReturn = ParseColour( p_strParams, m_value );
-		return l_bReturn;
+		bool l_return = false;
+		l_return = ParseColour( p_strParams, m_value );
+		return l_return;
 	}
 
 	//*************************************************************************************************

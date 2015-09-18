@@ -20,42 +20,42 @@ namespace Castor3D
 	bool Geometry::TextLoader::operator()( Geometry const & p_geometry, TextFile & p_file )
 	{
 		Logger::LogInfo( cuT( "Writing Geometry " ) + p_geometry.GetName() );
-		bool l_bReturn = p_file.WriteText( cuT( "\tobject \"" ) + p_geometry.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( cuT( "\tobject \"" ) + p_geometry.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = MovableObject::TextLoader()( p_geometry, p_file );
+			l_return = MovableObject::TextLoader()( p_geometry, p_file );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = Mesh::TextLoader()( *p_geometry.GetMesh(), p_file );
+			l_return = Mesh::TextLoader()( *p_geometry.GetMesh(), p_file );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\t\tmaterials\n\t\t{\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\t\tmaterials\n\t\t{\n" ) ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			for ( auto && l_submesh : *p_geometry.GetMesh() )
 			{
-				l_bReturn = p_file.WriteText( cuT( "\t\t\t\tmaterial \"" ) + p_geometry.GetMaterial( l_submesh )->GetName() + cuT( "\"\n" ) ) > 0;
+				l_return = p_file.WriteText( cuT( "\t\t\t\tmaterial \"" ) + p_geometry.GetMaterial( l_submesh )->GetName() + cuT( "\"\n" ) ) > 0;
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\t\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\t\t}\n" ) ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\t}\n" ) ) > 0;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -67,43 +67,43 @@ namespace Castor3D
 
 	bool Geometry::BinaryParser::Fill( Geometry const & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_GEOMETRY );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = MovableObject::BinaryParser( m_path ).Fill( p_obj, l_chunk );
+			l_return = MovableObject::BinaryParser( m_path ).Fill( p_obj, l_chunk );
 		}
 
-		if ( l_bReturn && p_obj.GetMesh() )
+		if ( l_return && p_obj.GetMesh() )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetMesh()->GetName(), eCHUNK_TYPE_GEOMETRY_MESH, l_chunk );
+			l_return = DoFillChunk( p_obj.GetMesh()->GetName(), eCHUNK_TYPE_GEOMETRY_MESH, l_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				uint32_t l_id = 0;
 
 				for ( auto && l_submesh : *p_obj.GetMesh() )
 				{
-					l_bReturn = DoFillChunk( l_id, eCHUNK_TYPE_GEOMETRY_MATERIAL_ID, l_chunk );
-					l_bReturn = DoFillChunk( p_obj.GetMaterial( l_submesh )->GetName(), eCHUNK_TYPE_GEOMETRY_MATERIAL_NAME, l_chunk );
+					l_return = DoFillChunk( l_id, eCHUNK_TYPE_GEOMETRY_MATERIAL_ID, l_chunk );
+					l_return = DoFillChunk( p_obj.GetMaterial( l_submesh )->GetName(), eCHUNK_TYPE_GEOMETRY_MATERIAL_NAME, l_chunk );
 					l_id++;
 				}
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			l_chunk.Finalise();
 			p_chunk.AddSubChunk( l_chunk );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool Geometry::BinaryParser::Parse( Geometry & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		String l_name;
 		uint32_t l_id = 0;
 		MaterialManager & l_mtlManager = p_obj.GetScene()->GetEngine()->GetMaterialManager();
@@ -111,20 +111,20 @@ namespace Castor3D
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
 			BinaryChunk l_chunk;
-			l_bReturn = p_chunk.GetSubChunk( l_chunk );
+			l_return = p_chunk.GetSubChunk( l_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				switch ( l_chunk.GetChunkType() )
 				{
 				case eCHUNK_TYPE_MOVABLE_NODE:
-					l_bReturn = MovableObject::BinaryParser( m_path ).Parse( p_obj, l_chunk );
+					l_return = MovableObject::BinaryParser( m_path ).Parse( p_obj, l_chunk );
 					break;
 
 				case eCHUNK_TYPE_GEOMETRY_MESH:
-					l_bReturn = DoParseChunk( l_name, l_chunk );
+					l_return = DoParseChunk( l_name, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetMesh( p_obj.GetScene()->GetEngine()->GetMeshManager().find( l_name ) );
 					}
@@ -132,13 +132,13 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_GEOMETRY_MATERIAL_ID:
-					l_bReturn = DoParseChunk( l_id, l_chunk );
+					l_return = DoParseChunk( l_id, l_chunk );
 					break;
 
 				case eCHUNK_TYPE_GEOMETRY_MATERIAL_NAME:
-					l_bReturn = DoParseChunk( l_name, l_chunk );
+					l_return = DoParseChunk( l_name, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetMaterial( p_obj.GetMesh()->GetSubmesh( l_id ), l_mtlManager.find( l_name ) );
 					}
@@ -147,13 +147,13 @@ namespace Castor3D
 				}
 			}
 
-			if ( !l_bReturn )
+			if ( !l_return )
 			{
 				p_chunk.EndParse();
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************

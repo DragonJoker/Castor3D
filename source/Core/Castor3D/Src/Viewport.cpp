@@ -14,60 +14,60 @@ namespace Castor3D
 
 	bool Viewport::BinaryParser::Fill( Viewport const & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_CAMERA );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( uint8_t( p_obj.GetType() ), eCHUNK_TYPE_VIEWPORT_TYPE, l_chunk );
+			l_return = DoFillChunk( uint8_t( p_obj.GetType() ), eCHUNK_TYPE_VIEWPORT_TYPE, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( double( p_obj.GetNear() ), eCHUNK_TYPE_VIEWPORT_NEAR, l_chunk );
+			l_return = DoFillChunk( double( p_obj.GetNear() ), eCHUNK_TYPE_VIEWPORT_NEAR, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( double( p_obj.GetFar() ), eCHUNK_TYPE_VIEWPORT_FAR, l_chunk );
+			l_return = DoFillChunk( double( p_obj.GetFar() ), eCHUNK_TYPE_VIEWPORT_FAR, l_chunk );
 		}
 
 		if ( p_obj.GetType() == eVIEWPORT_TYPE_2D )
 		{
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = DoFillChunk( double( p_obj.GetLeft() ), eCHUNK_TYPE_VIEWPORT_LEFT, l_chunk );
+				l_return = DoFillChunk( double( p_obj.GetLeft() ), eCHUNK_TYPE_VIEWPORT_LEFT, l_chunk );
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = DoFillChunk( double( p_obj.GetRight() ), eCHUNK_TYPE_VIEWPORT_RIGHT, l_chunk );
+				l_return = DoFillChunk( double( p_obj.GetRight() ), eCHUNK_TYPE_VIEWPORT_RIGHT, l_chunk );
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = DoFillChunk( double( p_obj.GetTop() ), eCHUNK_TYPE_VIEWPORT_TOP, l_chunk );
+				l_return = DoFillChunk( double( p_obj.GetTop() ), eCHUNK_TYPE_VIEWPORT_TOP, l_chunk );
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = DoFillChunk( double( p_obj.GetBottom() ), eCHUNK_TYPE_VIEWPORT_BOTTOM, l_chunk );
+				l_return = DoFillChunk( double( p_obj.GetBottom() ), eCHUNK_TYPE_VIEWPORT_BOTTOM, l_chunk );
 			}
 		}
 		else
 		{
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = DoFillChunk( double( p_obj.GetFovY().Degrees() ), eCHUNK_TYPE_VIEWPORT_FOVY, l_chunk );
+				l_return = DoFillChunk( double( p_obj.GetFovY().Degrees() ), eCHUNK_TYPE_VIEWPORT_FOVY, l_chunk );
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool Viewport::BinaryParser::Parse( Viewport & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		uint8_t l_type;
 		String l_name;
 		double l_value;
@@ -75,16 +75,16 @@ namespace Castor3D
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
 			BinaryChunk l_chunk;
-			l_bReturn = p_chunk.GetSubChunk( l_chunk );
+			l_return = p_chunk.GetSubChunk( l_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				switch ( l_chunk.GetChunkType() )
 				{
 				case eCHUNK_TYPE_VIEWPORT_TYPE:
-					l_bReturn = DoParseChunk( l_type, l_chunk );
+					l_return = DoParseChunk( l_type, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetType( eVIEWPORT_TYPE( l_type ) );
 					}
@@ -92,9 +92,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_VIEWPORT_NEAR:
-					l_bReturn = DoParseChunk( l_value, l_chunk );
+					l_return = DoParseChunk( l_value, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetNear( real( l_value ) );
 					}
@@ -102,9 +102,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_VIEWPORT_FAR:
-					l_bReturn = DoParseChunk( l_value, l_chunk );
+					l_return = DoParseChunk( l_value, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetFar( real( l_value ) );
 					}
@@ -112,9 +112,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_VIEWPORT_LEFT:
-					l_bReturn = DoParseChunk( l_value, l_chunk );
+					l_return = DoParseChunk( l_value, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetLeft( real( l_value ) );
 					}
@@ -122,9 +122,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_VIEWPORT_RIGHT:
-					l_bReturn = DoParseChunk( l_value, l_chunk );
+					l_return = DoParseChunk( l_value, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetRight( real( l_value ) );
 					}
@@ -132,9 +132,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_VIEWPORT_TOP:
-					l_bReturn = DoParseChunk( l_value, l_chunk );
+					l_return = DoParseChunk( l_value, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetTop( real( l_value ) );
 					}
@@ -142,9 +142,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_VIEWPORT_BOTTOM:
-					l_bReturn = DoParseChunk( l_value, l_chunk );
+					l_return = DoParseChunk( l_value, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetBottom( real( l_value ) );
 					}
@@ -152,9 +152,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_VIEWPORT_FOVY:
-					l_bReturn = DoParseChunk( l_value, l_chunk );
+					l_return = DoParseChunk( l_value, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetFovY( Angle::FromDegrees( l_value ) );
 					}
@@ -163,13 +163,13 @@ namespace Castor3D
 				}
 			}
 
-			if ( !l_bReturn )
+			if ( !l_return )
 			{
 				p_chunk.EndParse();
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -181,41 +181,41 @@ namespace Castor3D
 
 	bool Viewport::TextLoader::operator()( Viewport const & p_viewport, TextFile & p_file )
 	{
-		bool l_bReturn = p_file.WriteText( cuT( "\t\tviewport\n\t\t{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( cuT( "\t\tviewport\n\t\t{\n" ) ) > 0;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\t\t\ttype " ) + Viewport::string_type[p_viewport.GetType()] + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\t\t\ttype " ) + Viewport::string_type[p_viewport.GetType()] + cuT( "\n" ) ) > 0;
 		}
 
 		if ( p_viewport.GetType() == eVIEWPORT_TYPE_2D )
 		{
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = p_file.Print( 256, cuT( "\t\t\tnear %f\n" ), p_viewport.GetNear() ) > 0;
-				l_bReturn = p_file.Print( 256, cuT( "\t\t\tfar %f\n" ), p_viewport.GetFar() ) > 0;
-				l_bReturn = p_file.Print( 256, cuT( "\t\t\tleft %f\n" ), p_viewport.GetLeft() ) > 0;
-				l_bReturn = p_file.Print( 256, cuT( "\t\t\tright %f\n" ), p_viewport.GetRight() ) > 0;
-				l_bReturn = p_file.Print( 256, cuT( "\t\t\ttop %f\n" ), p_viewport.GetTop() ) > 0;
-				l_bReturn = p_file.Print( 256, cuT( "\t\t\tbottom %f\n" ), p_viewport.GetBottom() ) > 0;
+				l_return = p_file.Print( 256, cuT( "\t\t\tnear %f\n" ), p_viewport.GetNear() ) > 0;
+				l_return = p_file.Print( 256, cuT( "\t\t\tfar %f\n" ), p_viewport.GetFar() ) > 0;
+				l_return = p_file.Print( 256, cuT( "\t\t\tleft %f\n" ), p_viewport.GetLeft() ) > 0;
+				l_return = p_file.Print( 256, cuT( "\t\t\tright %f\n" ), p_viewport.GetRight() ) > 0;
+				l_return = p_file.Print( 256, cuT( "\t\t\ttop %f\n" ), p_viewport.GetTop() ) > 0;
+				l_return = p_file.Print( 256, cuT( "\t\t\tbottom %f\n" ), p_viewport.GetBottom() ) > 0;
 			}
 		}
 		else
 		{
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = p_file.Print( 256, cuT( "\t\t\tnear %f\n" ), p_viewport.GetNear() ) > 0;
-				l_bReturn = p_file.Print( 256, cuT( "\t\t\tfar %f\n" ), p_viewport.GetFar() ) > 0;
-				l_bReturn = p_file.Print( 256, cuT( "\t\t\tfov_y %f\n" ), p_viewport.GetFovY().Degrees() ) > 0;
+				l_return = p_file.Print( 256, cuT( "\t\t\tnear %f\n" ), p_viewport.GetNear() ) > 0;
+				l_return = p_file.Print( 256, cuT( "\t\t\tfar %f\n" ), p_viewport.GetFar() ) > 0;
+				l_return = p_file.Print( 256, cuT( "\t\t\tfov_y %f\n" ), p_viewport.GetFovY().Degrees() ) > 0;
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\t\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\t\t}\n" ) ) > 0;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -342,7 +342,7 @@ namespace Castor3D
 
 	bool Viewport::Render()
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( IsModified() )
 		{
@@ -392,7 +392,7 @@ namespace Castor3D
 			m_planes[eFRUSTUM_PLANE_TOP		].Set( l_ptNTL, l_ptFTL, l_ptFTR );
 			m_planes[eFRUSTUM_PLANE_BOTTOM	].Set( l_ptNBR, l_ptFBR, l_ptFBL );
 			m_bModified = false;
-			l_bReturn = true;
+			l_return = true;
 		}
 
 		Pipeline * l_pPipeline = m_pEngine->GetRenderSystem()->GetPipeline();
@@ -409,7 +409,7 @@ namespace Castor3D
 			l_pPipeline->Ortho( m_rLeft, m_rRight, m_rBottom, m_rTop, m_rNear, m_rFar );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void Viewport::GetDirection( Point2i const & p_ptMouse, Point3r & p_ptResult )

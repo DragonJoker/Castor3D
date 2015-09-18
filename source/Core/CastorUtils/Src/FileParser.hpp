@@ -47,7 +47,7 @@ namespace Castor
 #	define IMPLEMENT_ATTRIBUTE_PARSER( nmspc, X )\
 		bool nmspc::X( Castor::FileParser * p_pParser, Castor::ParserParameterArray const & p_arrayParams )\
 		{\
-			bool l_bReturn = false;\
+			bool l_return = false;\
 			FileParserContextSPtr p_pContext = p_pParser->GetContext();\
 			try\
 			{\
@@ -60,9 +60,9 @@ namespace Castor
 			{\
 				PARSING_ERROR( str_utils::from_str( p_exc.what() ) );\
 			}\
-			l_bReturn = true;\
+			l_return = true;\
 			p_pContext->stackSections.push( x );\
-			return l_bReturn;\
+			return l_return;\
 		}
 
 	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
@@ -72,8 +72,8 @@ namespace Castor
 			{\
 				PARSING_ERROR( str_utils::from_str( p_exc.what() ) );\
 			}\
-			l_bReturn = false;\
-			return l_bReturn;\
+			l_return = false;\
+			return l_return;\
 		}
 
 	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
@@ -83,9 +83,9 @@ namespace Castor
 			{\
 				PARSING_ERROR( str_utils::from_str( p_exc.what() ) );\
 			}\
-			l_bReturn = false;\
+			l_return = false;\
 			p_pContext->stackSections.pop();\
-			return l_bReturn;\
+			return l_return;\
 		}
 
 	//!\~english Define to ease the call to FileParser::ParseError	\~french Un define pour faciliter l'appel de FileParser::ParseError

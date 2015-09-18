@@ -2,6 +2,7 @@
 
 #include "BlendState.hpp"
 #include "CleanupEvent.hpp"
+#include "DebugOverlays.hpp"
 #include "DepthStencilState.hpp"
 #include "DividerPlugin.hpp"
 #include "ImporterPlugin.hpp"
@@ -160,10 +161,7 @@ namespace Castor3D
 		, m_overlayManager( this )
 		, m_pMainWindow( NULL )
 		, m_bDefaultInitialised( false )
-		, m_vertexCount( 0 )
-		, m_faceCount( 0 )
-		, m_objectCount( 0 )
-		, m_showDebug( false )
+		, m_debugOverlays( std::make_unique< DebugOverlays >() )
 	{
 		CASTOR_INIT_UNIQUE_INSTANCE();
 
@@ -182,6 +180,7 @@ namespace Castor3D
 
 	Engine::~Engine()
 	{
+		m_debugOverlays.reset();
 		m_pDefaultBlendState.reset();
 		m_pLightsSampler.reset();
 		m_pDefaultSampler.reset();
@@ -253,7 +252,7 @@ namespace Castor3D
 			CASTOR_ASSERT( false );
 			CASTOR_EXCEPTION( "Render loop is already started" );
 		}
-		else
+		else if ( m_bCleaned )
 		{
 			m_bCleaned = false;
 			m_uiWantedFPS = p_wantedFPS;
@@ -582,16 +581,16 @@ namespace Castor3D
 	{
 		m_meshManager.lock();
 		Path l_path = p_file.GetFileFullPath();
-		bool l_bReturn = true;
+		bool l_return = true;
 		MeshCollectionConstIt l_it = m_meshManager.begin();
 
 		if ( l_path.GetExtension() == cuT( "cmsh" ) )
 		{
-			l_bReturn = p_file.Write( uint32_t( m_meshManager.size() ) ) == sizeof( uint32_t );
+			l_return = p_file.Write( uint32_t( m_meshManager.size() ) ) == sizeof( uint32_t );
 
-			while ( l_it != m_meshManager.end() && l_bReturn )
+			while ( l_it != m_meshManager.end() && l_return )
 			{
-				//l_bReturn = Mesh::BinaryLoader()( * l_it->second, p_file);
+				//l_return = Mesh::BinaryLoader()( * l_it->second, p_file);
 				++l_it;
 			}
 		}
@@ -599,25 +598,25 @@ namespace Castor3D
 		{
 			l_path = l_path.GetPath() / l_path.GetFileName() + cuT( ".cmsh" );
 			BinaryFile l_file( l_path, File::eOPEN_MODE_WRITE );
-			l_bReturn = l_file.Write( uint32_t( m_meshManager.size() ) ) == sizeof( uint32_t );
+			l_return = l_file.Write( uint32_t( m_meshManager.size() ) ) == sizeof( uint32_t );
 
-			while ( l_it != m_meshManager.end() && l_bReturn )
+			while ( l_it != m_meshManager.end() && l_return )
 			{
-				//			l_bReturn = Mesh::BinaryLoader()( * l_it->second, p_file);
+				//l_return = Mesh::BinaryLoader()( * l_it->second, p_file);
 				++l_it;
 			}
 		}
 
 		m_meshManager.unlock();
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool Engine::LoadMeshes( BinaryFile & p_file )
 	{
 		uint32_t l_uiSize;
-		bool l_bReturn = p_file.Read( l_uiSize ) == sizeof( uint32_t );
+		bool l_return = p_file.Read( l_uiSize ) == sizeof( uint32_t );
 
-		for ( uint32_t i = 0; i < l_uiSize && l_bReturn; i++ )
+		for ( uint32_t i = 0; i < l_uiSize && l_return; i++ )
 		{
 			MeshSPtr l_pMesh = m_meshManager.find( cuEmptyString );
 
@@ -627,10 +626,10 @@ namespace Castor3D
 				m_meshManager.insert( cuEmptyString, l_pMesh );
 			}
 
-			//		l_bReturn = Mesh::BinaryLoader()( * l_pMesh, p_file);
+			//l_return = Mesh::BinaryLoader()( * l_pMesh, p_file);
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	OverlaySPtr Engine::CreateOverlay( eOVERLAY_TYPE p_eType, String const & p_strName, OverlaySPtr p_pParent, SceneSPtr p_pScene )
@@ -671,28 +670,28 @@ namespace Castor3D
 	bool Engine::RemoveRenderWindow( uint32_t p_uiIndex )
 	{
 		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexResources );
-		bool l_bReturn = false;
+		bool l_return = false;
 		RenderWindowMap::iterator l_it = m_mapWindows.find( p_uiIndex );
 
 		if ( l_it != m_mapWindows.end() )
 		{
 			m_mapWindows.erase( l_it );
-			l_bReturn = true;
+			l_return = true;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool Engine::RemoveRenderWindow( RenderWindowSPtr p_pWindow )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( p_pWindow )
 		{
-			l_bReturn = RemoveRenderWindow( p_pWindow->GetIndex() );
+			l_return = RemoveRenderWindow( p_pWindow->GetIndex() );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void Engine::RemoveAllRenderWindows()
@@ -782,7 +781,7 @@ namespace Castor3D
 
 	bool Engine::LoadRenderer( eRENDERER_TYPE p_eType )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		m_mutexRenderers.lock();
 		RendererPluginSPtr l_pPlugin = m_arrayRenderers[p_eType];
 		m_mutexRenderers.unlock();
@@ -799,10 +798,10 @@ namespace Castor3D
 			m_pLightsSampler = CreateSampler( cuT( "LightsSampler" ) );
 			m_pLightsSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_NEAREST );
 			m_pLightsSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_NEAREST );
-			l_bReturn = true;
+			l_return = true;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void Engine::LoadAllPlugins( Path const & p_strFolder )
@@ -1105,26 +1104,26 @@ namespace Castor3D
 
 	bool Engine::SupportsShaderModel( eSHADER_MODEL p_eShaderModel )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( m_pRenderSystem )
 		{
-			l_bReturn = m_pRenderSystem->CheckSupport( p_eShaderModel );
+			l_return = m_pRenderSystem->CheckSupport( p_eShaderModel );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool Engine::SupportsDepthBuffer()const
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( m_pRenderSystem )
 		{
-			l_bReturn = m_pRenderSystem->SupportsDepthBuffer();
+			l_return = m_pRenderSystem->SupportsDepthBuffer();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	RenderTargetSPtr Engine::CreateRenderTarget( eTARGET_TYPE p_eType )
@@ -1246,20 +1245,14 @@ namespace Castor3D
 
 	void Engine::ShowDebugOverlays( bool p_show )
 	{
-		m_showDebug = p_show;
-		OverlaySPtr l_panel = m_debugPanel.lock();
-
-		if ( l_panel )
-		{
-			l_panel->SetVisible( p_show );
-		}
+		m_debugOverlays->Show( p_show );
 	}
 
-	void Engine::DoPreRender( double & p_cpuTime, double & p_gpuTime )
+	void Engine::DoPreRender()
 	{
 		PreciseTimer l_timer;
 		m_pRenderSystem->GetMainContext()->SetCurrent();
-		p_gpuTime += l_timer.TimeMs();
+		m_debugOverlays->EndGpuTask();
 
 		for ( auto && l_listener : m_arrayListeners )
 		{
@@ -1269,13 +1262,12 @@ namespace Castor3D
 		UpdateOverlayManager();
 		UpdateShaderManager();
 
-		p_cpuTime += l_timer.TimeMs();
+		m_debugOverlays->EndCpuTask();
 		m_pRenderSystem->GetMainContext()->EndCurrent();
 	}
 
-	void Engine::DoRender( bool p_bForce, double & p_cpuTime, double & p_gpuTime, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount )
+	void Engine::DoRender( bool p_bForce, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount )
 	{
-		PreciseTimer l_timer;
 		m_pRenderSystem->GetMainContext()->SetCurrent();
 
 		// Reverse iterator because we want to render textures before windows
@@ -1287,14 +1279,14 @@ namespace Castor3D
 			l_rit->second->Render( m_dFrameTime );
 		}
 
-		p_gpuTime += l_timer.TimeMs();
+		m_debugOverlays->EndGpuTask();
 
 		for ( auto && l_listener : m_arrayListeners )
 		{
 			l_listener->FireEvents( eEVENT_TYPE_QUEUE_RENDER );
 		}
 
-		p_cpuTime += l_timer.TimeMs();
+		m_debugOverlays->EndCpuTask();
 
 		for ( auto && l_it : m_mapWindows )
 		{
@@ -1302,20 +1294,19 @@ namespace Castor3D
 		}
 
 		m_pRenderSystem->GetMainContext()->EndCurrent();
-		p_gpuTime += l_timer.TimeMs();
+		m_debugOverlays->EndGpuTask();
 	}
 
-	void Engine::DoPostRender( double & p_cpuTime, double & p_gpuTime )
+	void Engine::DoPostRender()
 	{
-		PreciseTimer l_timer;
-		p_gpuTime += l_timer.TimeMs();
+		m_debugOverlays->EndGpuTask();
 
 		for ( auto && l_listener : m_arrayListeners )
 		{
 			l_listener->FireEvents( eEVENT_TYPE_POST_RENDER );
 		}
 
-		p_cpuTime += l_timer.TimeMs();
+		m_debugOverlays->EndCpuTask();
 	}
 
 	void Engine::DoUpdate( bool p_bForce )
@@ -1325,18 +1316,11 @@ namespace Castor3D
 			uint32_t l_vertices = 0;
 			uint32_t l_faces = 0;
 			uint32_t l_objects = 0;
-			double l_cpuTime = 0;
-			double l_gpuTime = 0;
-			PreciseTimer l_timer;
-
-			DoPreRender( l_cpuTime, l_gpuTime );
-			DoRender( p_bForce, l_cpuTime, l_gpuTime, l_vertices, l_faces, l_objects );
-			DoPostRender( l_cpuTime, l_gpuTime );
-
-			if ( m_showDebug )
-			{
-				DoUpdateDebugOverlays( l_cpuTime, l_gpuTime, l_timer.TimeMs(), l_vertices, l_faces, l_objects );
-			}
+			m_debugOverlays->StartFrame();
+			DoPreRender();
+			DoRender( p_bForce, l_vertices, l_faces, l_objects );
+			DoPostRender();
+			m_debugOverlays->EndFrame( l_vertices, l_faces, l_objects );
 		}
 	}
 
@@ -1435,65 +1419,8 @@ namespace Castor3D
 			}
 			else
 			{
-				OverlaySPtr l_panel = m_overlayManager.GetOverlay( cuT( "DebugPanel" ) );
-				m_debugPanel = l_panel;
-				m_debugCpuTime = m_overlayManager.GetOverlay( cuT( "DebugPanel-CpuTime-Value" ) )->GetTextOverlay();
-				m_debugGpuTime = m_overlayManager.GetOverlay( cuT( "DebugPanel-GpuTime-Value" ) )->GetTextOverlay();
-				m_debugTotalTime = m_overlayManager.GetOverlay( cuT( "DebugPanel-TotalTime-Value" ) )->GetTextOverlay();
-				m_debugVertexCount = m_overlayManager.GetOverlay( cuT( "DebugPanel-VertexCount-Value" ) )->GetTextOverlay();
-				m_debugFaceCount = m_overlayManager.GetOverlay( cuT( "DebugPanel-FaceCount-Value" ) )->GetTextOverlay();
-				m_debugObjectCount = m_overlayManager.GetOverlay( cuT( "DebugPanel-ObjectCount-Value" ) )->GetTextOverlay();
-
-				if ( l_panel )
-				{
-					l_panel->SetVisible( m_showDebug );
-				}
+				m_debugOverlays->Initialise( m_overlayManager );
 			}
-		}
-	}
-
-	void Engine::DoUpdateDebugOverlays( double p_cpuTime, double p_gpuTime, double p_totalTime, uint32_t p_vertices, uint32_t p_faces, uint32_t p_objects )
-	{
-		TextOverlaySPtr l_txt = m_debugCpuTime.lock();
-
-		if ( l_txt )
-		{
-			l_txt->SetCaption( str_utils::to_string( int( p_cpuTime ) ) + cuT( " ms" ) );
-		}
-
-		l_txt = m_debugGpuTime.lock();
-
-		if ( l_txt )
-		{
-			l_txt->SetCaption( str_utils::to_string( int( p_gpuTime ) ) + cuT( " ms" ) );
-		}
-
-		l_txt = m_debugTotalTime.lock();
-
-		if ( l_txt )
-		{
-			l_txt->SetCaption( str_utils::to_string( int( p_totalTime ) ) + cuT( " ms" ) );
-		}
-
-		l_txt = m_debugVertexCount.lock();
-
-		if ( l_txt )
-		{
-			l_txt->SetCaption( str_utils::to_string( p_vertices ) );
-		}
-
-		l_txt = m_debugFaceCount.lock();
-
-		if ( l_txt )
-		{
-			l_txt->SetCaption( str_utils::to_string( p_faces ) );
-		}
-
-		l_txt = m_debugObjectCount.lock();
-
-		if ( l_txt )
-		{
-			l_txt->SetCaption( str_utils::to_string( p_objects ) );
 		}
 	}
 }

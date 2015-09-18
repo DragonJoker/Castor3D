@@ -22,15 +22,15 @@ namespace Dx11Render
 	{
 		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->IASetPrimitiveTopology( DirectX11::Get( p_ePrimitiveType ) );
-		bool l_bReturn = m_pVertexBuffer->Bind();
+		bool l_return = m_pVertexBuffer->Bind();
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			if ( m_pIndexBuffer )
 			{
-				l_bReturn = m_pIndexBuffer->Bind();
+				l_return = m_pIndexBuffer->Bind();
 
-				if ( l_bReturn )
+				if ( l_return )
 				{
 					l_pDeviceContext->DrawIndexed( p_uiSize, p_uiIndex, 0 );
 					m_pIndexBuffer->Unbind();
@@ -44,29 +44,29 @@ namespace Dx11Render
 			m_pVertexBuffer->Unbind();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool DxGeometryBuffers::DrawInstanced( eTOPOLOGY p_ePrimitiveType, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex, uint32_t p_uiCount )
 	{
 		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->IASetPrimitiveTopology( DirectX11::Get( p_ePrimitiveType ) );
-		bool l_bReturn = m_pVertexBuffer->Bind();
+		bool l_return = m_pVertexBuffer->Bind();
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			if ( m_pMatrixBuffer )
 			{
-				l_bReturn = m_pMatrixBuffer->Bind( p_uiCount );
+				l_return = m_pMatrixBuffer->Bind( p_uiCount );
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				if ( m_pIndexBuffer )
 				{
-					l_bReturn = m_pIndexBuffer->Bind();
+					l_return = m_pIndexBuffer->Bind();
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						l_pDeviceContext->DrawIndexedInstanced( p_uiSize, p_uiCount, p_uiIndex, 0, 0 );
 						m_pIndexBuffer->Unbind();
@@ -81,7 +81,7 @@ namespace Dx11Render
 			m_pVertexBuffer->Unbind();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool DxGeometryBuffers::Initialise()

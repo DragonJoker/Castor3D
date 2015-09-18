@@ -289,6 +289,18 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Retrieves the engine
+		 *\return		The engine
+		 *\~french
+		 *\brief		Récupère le moteur
+		 *\return		Le moteur
+		 */
+		inline Engine * GetEngine()
+		{
+			return m_pEngine;
+		}
+		/**
+		 *\~english
 		 *\return		\p true if all passes needs alpha blending
 		 *\~french
 		 *\return		\p true si toutes les passes ont besoin d'alpha blending

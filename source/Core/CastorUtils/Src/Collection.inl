@@ -72,15 +72,15 @@ inline bool Collection< T, U >::insert( key_param_type p_key, TObjSPtr p_element
 {
 	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
 	TObjPtrMapIt l_it = m_objectMap.find( p_key );
-	bool l_bReturn = false;
+	bool l_return = false;
 
 	if ( l_it == m_objectMap.end() )
 	{
 		m_objectMap.insert( value_type( p_key, p_element ) );
-		l_bReturn = true;
+		l_return = true;
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 template< typename T, typename U >
 inline bool Collection< T, U >::has( key_param_type p_key )const

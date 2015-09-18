@@ -45,16 +45,16 @@ namespace GlRender
 
 	bool GlRenderBuffer::Initialise( Size const & p_size )
 	{
-		bool l_bReturn = m_size == p_size;
+		bool l_return = m_size == p_size;
 
-		if ( !l_bReturn && Bind() )
+		if ( !l_return && Bind() )
 		{
 			m_size = p_size;
-			l_bReturn = m_gl.RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE_DEFAULT, m_renderBuffer.GetSamplesCount(), m_eInternal, p_size );
+			l_return = m_gl.RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE_DEFAULT, m_renderBuffer.GetSamplesCount(), m_eInternal, p_size );
 			Unbind();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void GlRenderBuffer::Cleanup()
@@ -73,24 +73,24 @@ namespace GlRender
 
 	bool GlRenderBuffer::Resize( Size const & p_size )
 	{
-		bool l_bReturn = m_size == p_size;
+		bool l_return = m_size == p_size;
 
-		if ( !l_bReturn && Bind() )
+		if ( !l_return && Bind() )
 		{
 			m_size = p_size;
 
 			if ( m_renderBuffer.GetSamplesCount() > 1 )
 			{
-				l_bReturn = m_gl.RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE_DEFAULT, m_renderBuffer.GetSamplesCount(), m_eInternal, p_size );
+				l_return = m_gl.RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE_DEFAULT, m_renderBuffer.GetSamplesCount(), m_eInternal, p_size );
 			}
 			else
 			{
-				l_bReturn = m_gl.RenderbufferStorage( eGL_RENDERBUFFER_MODE_DEFAULT, m_eInternal, p_size );
+				l_return = m_gl.RenderbufferStorage( eGL_RENDERBUFFER_MODE_DEFAULT, m_eInternal, p_size );
 			}
 
 			Unbind();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 }

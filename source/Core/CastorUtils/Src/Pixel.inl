@@ -84,14 +84,14 @@
 
 		static bool Equals( Pixel< FT > & p_pxA, Pixel< FT > const & p_pxB )
 		{
-			bool l_bReturn = true;
+			bool l_return = true;
 
 			for ( uint8_t i = 0; i < pixel_definitions< FT >::Size; i++ )
 			{
-				l_bReturn = p_pxA[i] == p_pxB[i];
+				l_return = p_pxA[i] == p_pxB[i];
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 	};
 

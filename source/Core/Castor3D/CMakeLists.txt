@@ -342,29 +342,9 @@ add_target_doc( ${PROJECT_NAME} "English" "*.h *.hpp" )
 file(
 	GLOB
 		CoreZipFiles
-		${CMAKE_SOURCE_DIR}/../data/Core/*.zip
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/Data/*.zip
 )
-
-file(
-	COPY
-		${CoreZipFiles}
-	DESTINATION
-		${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/share/${PROJECT_NAME}
-)
-
-file(
-	COPY
-		${CoreZipFiles}
-	DESTINATION
-		${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/share/${PROJECT_NAME}
-)
-
-# Preparing core zip data files installation
-install(
-	FILES ${CoreZipFiles}
-	DESTINATION share/${PROJECT_NAME}
-	COMPONENT ${PROJECT_NAME}
-)
+copy_target_files( ${PROJECT_NAME} "" ${CoreZipFiles} )
 	
 # Copying shader languages files
 file(
@@ -372,27 +352,7 @@ file(
 		ShaderLanguagesFiles
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/Languages/*.lang
 )
-
-file(
-	COPY
-		${ShaderLanguagesFiles}
-	DESTINATION
-		${PROJECTS_BINARIES_OUTPUT_DIR_RELEASE}/share/${PROJECT_NAME}
-)
-
-file(
-	COPY
-		${ShaderLanguagesFiles}
-	DESTINATION
-		${PROJECTS_BINARIES_OUTPUT_DIR_DEBUG}/share/${PROJECT_NAME}
-)
-
-# Preparing shader languages files installation
-install(
-	FILES ${ShaderLanguagesFiles}
-	DESTINATION share/${PROJECT_NAME}
-	COMPONENT ${PROJECT_NAME}
-)
+copy_target_files( ${PROJECT_NAME} "" ${ShaderLanguagesFiles} )
 
 # Preparing sample scene files installation
 file(

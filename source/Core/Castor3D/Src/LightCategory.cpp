@@ -15,47 +15,47 @@ namespace Castor3D
 	bool LightCategory::TextLoader::operator()( LightCategory const & p_light, TextFile & p_file )
 	{
 		Logger::LogInfo( cuT( "Writing Light " ) + p_light.GetLight()->GetName() );
-		bool l_bReturn = p_file.WriteText( cuT( "\tlight \"" ) + p_light.GetLight()->GetName() + cuT( "\"\n\t{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( cuT( "\tlight \"" ) + p_light.GetLight()->GetName() + cuT( "\"\n\t{\n" ) ) > 0;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = MovableObject::TextLoader()( *p_light.GetLight(), p_file );
+			l_return = MovableObject::TextLoader()( *p_light.GetLight(), p_file );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			switch ( p_light.GetLightType() )
 			{
 			case eLIGHT_TYPE_DIRECTIONAL:
-				l_bReturn = p_file.WriteText( cuT( "\t\ttype directional\n" ) ) > 0;
+				l_return = p_file.WriteText( cuT( "\t\ttype directional\n" ) ) > 0;
 				break;
 
 			case eLIGHT_TYPE_POINT:
-				l_bReturn = p_file.WriteText( cuT( "\t\ttype point_light\n" ) ) > 0;
+				l_return = p_file.WriteText( cuT( "\t\ttype point_light\n" ) ) > 0;
 				break;
 
 			case eLIGHT_TYPE_SPOT:
-				l_bReturn = p_file.WriteText( cuT( "\t\ttype spot_light\n" ) ) > 0;
+				l_return = p_file.WriteText( cuT( "\t\ttype spot_light\n" ) ) > 0;
 				break;
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\t\tambient " ) ) > 0 && Point4f::TextLoader()( p_light.GetAmbient(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\t\tambient " ) ) > 0 && Point4f::TextLoader()( p_light.GetAmbient(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\t\tdiffuse " ) ) > 0 && Point4f::TextLoader()( p_light.GetDiffuse(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\t\tdiffuse " ) ) > 0 && Point4f::TextLoader()( p_light.GetDiffuse(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\t\tspecular " ) ) > 0 && Point4f::TextLoader()( p_light.GetSpecular(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\t\tspecular " ) ) > 0 && Point4f::TextLoader()( p_light.GetSpecular(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -67,51 +67,51 @@ namespace Castor3D
 
 	bool LightCategory::BinaryParser::Fill( LightCategory const & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = MovableObject::BinaryParser( m_path ).Fill( *p_obj.GetLight(), p_chunk );
+			l_return = MovableObject::BinaryParser( m_path ).Fill( *p_obj.GetLight(), p_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetLightType(), eCHUNK_TYPE_LIGHT_TYPE, p_chunk );
+			l_return = DoFillChunk( p_obj.GetLightType(), eCHUNK_TYPE_LIGHT_TYPE, p_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetAmbient(), eCHUNK_TYPE_LIGHT_AMBIENT, p_chunk );
+			l_return = DoFillChunk( p_obj.GetAmbient(), eCHUNK_TYPE_LIGHT_AMBIENT, p_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetDiffuse(), eCHUNK_TYPE_LIGHT_DIFFUSE, p_chunk );
+			l_return = DoFillChunk( p_obj.GetDiffuse(), eCHUNK_TYPE_LIGHT_DIFFUSE, p_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetSpecular(), eCHUNK_TYPE_LIGHT_SPECULAR, p_chunk );
+			l_return = DoFillChunk( p_obj.GetSpecular(), eCHUNK_TYPE_LIGHT_SPECULAR, p_chunk );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool LightCategory::BinaryParser::Parse( LightCategory & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		Point4f l_colour;
 
 		switch ( p_chunk.GetChunkType() )
 		{
 		case eCHUNK_TYPE_MOVABLE_NODE:
-			l_bReturn = MovableObject::BinaryParser( m_path ).Parse( *p_obj.GetLight(), p_chunk );
+			l_return = MovableObject::BinaryParser( m_path ).Parse( *p_obj.GetLight(), p_chunk );
 			break;
 
 		case eCHUNK_TYPE_LIGHT_AMBIENT:
-			l_bReturn = DoParseChunk( l_colour, p_chunk );
+			l_return = DoParseChunk( l_colour, p_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				p_obj.SetAmbient( l_colour );
 			}
@@ -119,9 +119,9 @@ namespace Castor3D
 			break;
 
 		case eCHUNK_TYPE_LIGHT_DIFFUSE:
-			l_bReturn = DoParseChunk( l_colour, p_chunk );
+			l_return = DoParseChunk( l_colour, p_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				p_obj.SetDiffuse( l_colour );
 			}
@@ -129,9 +129,9 @@ namespace Castor3D
 			break;
 
 		case eCHUNK_TYPE_LIGHT_SPECULAR:
-			l_bReturn = DoParseChunk( l_colour, p_chunk );
+			l_return = DoParseChunk( l_colour, p_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				p_obj.SetSpecular( l_colour );
 			}
@@ -139,12 +139,12 @@ namespace Castor3D
 			break;
 		}
 
-		if ( !l_bReturn )
+		if ( !l_return )
 		{
 			p_chunk.EndParse();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************

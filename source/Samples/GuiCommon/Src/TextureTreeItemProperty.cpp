@@ -27,7 +27,7 @@ namespace GuiCommon
 	}
 
 	TextureTreeItemProperty::TextureTreeItemProperty( bool p_editable, TextureUnitSPtr p_texture )
-		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_TEXTURE )
+		: TreeItemProperty( p_texture->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_TEXTURE )
 		, m_texture( p_texture )
 	{
 		PROPERTY_CATEGORY_TEXTURE = _( "Texture" );
@@ -41,13 +41,15 @@ namespace GuiCommon
 		PROPERTY_CHANNEL_HEIGHT = _( "Height" );
 		PROPERTY_CHANNEL_AMBIENT = _( "Ambient" );
 		PROPERTY_CHANNEL_GLOSS = _( "Gloss" );
+
+		CreateTreeItemMenu();
 	}
 
 	TextureTreeItemProperty::~TextureTreeItemProperty()
 	{
 	}
 
-	void TextureTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void TextureTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		TextureUnitSPtr l_unit = GetTexture();
 
@@ -109,7 +111,7 @@ namespace GuiCommon
 		}
 	}
 
-	void TextureTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void TextureTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		TextureUnitSPtr l_unit = GetTexture();
 		wxPGProperty * l_property = p_event.GetProperty();
@@ -169,17 +171,17 @@ namespace GuiCommon
 	{
 		TextureUnitSPtr l_unit = GetTexture();
 
-		l_unit->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_unit]()
+		DoApplyChange( [p_value, l_unit]()
 		{
 			l_unit->SetChannel( p_value );
-		} ) );
+		} );
 	}
 
 	void TextureTreeItemProperty::OnImageChange( Castor::String const & p_value )
 	{
 		TextureUnitSPtr l_unit = GetTexture();
 
-		l_unit->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_unit]()
+		DoApplyChange( [p_value, l_unit]()
 		{
 			if ( File::FileExists( p_value ) )
 			{
@@ -188,6 +190,6 @@ namespace GuiCommon
 				l_unit->LoadTexture( p_value );
 				l_unit->Initialise();
 			}
-		} ) );
+		} );
 	}
 }

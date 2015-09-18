@@ -174,7 +174,7 @@ namespace Castor3D
 
 		if ( m_pfnSubdivisionEnd )
 		{
-			m_pfnSubdivisionEnd( m_pArg, this );
+			m_pfnSubdivisionEnd( *this );
 		}
 
 		return 0;

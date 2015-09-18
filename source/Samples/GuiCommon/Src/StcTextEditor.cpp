@@ -165,7 +165,7 @@ StcTextEditor::~StcTextEditor()
 
 bool StcTextEditor::LoadFile()
 {
-	bool l_bReturn = false;
+	bool l_return = false;
 #if wxUSE_FILEDLG
 
 	if ( ! m_strFilename )
@@ -180,9 +180,9 @@ bool StcTextEditor::LoadFile()
 		m_strFilename = l_dlg.GetPath();
 	}
 
-	l_bReturn = LoadFile( m_strFilename );
+	l_return = LoadFile( m_strFilename );
 #endif
-	return l_bReturn;
+	return l_return;
 }
 
 bool StcTextEditor::LoadFile( wxString const & p_strFilename )
@@ -213,7 +213,7 @@ void StcTextEditor::SetText( wxString const & p_strSource )
 
 bool StcTextEditor::SaveFile()
 {
-	bool l_bReturn = false;
+	bool l_return = false;
 #if wxUSE_FILEDLG
 
 	if ( IsModified() )
@@ -224,43 +224,43 @@ bool StcTextEditor::SaveFile()
 
 			if ( l_dlg.ShowModal() != wxID_OK )
 			{
-				l_bReturn = false;
+				l_return = false;
 			}
 			else
 			{
-				l_bReturn = true;
+				l_return = true;
 				m_strFilename = l_dlg.GetPath();
 			}
 		}
 		else
 		{
-			l_bReturn = true;
+			l_return = true;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = SaveFile( m_strFilename );
+			l_return = SaveFile( m_strFilename );
 		}
 	}
 	else
 	{
-		l_bReturn = true;
+		l_return = true;
 	}
 
 #endif
-	return l_bReturn;
+	return l_return;
 }
 
 bool StcTextEditor::SaveFile( wxString const & p_strFilename )
 {
-	bool l_bReturn = true;
+	bool l_return = true;
 
 	if ( IsModified() )
 	{
-		l_bReturn = wxStyledTextCtrl::SaveFile( p_strFilename );
+		l_return = wxStyledTextCtrl::SaveFile( p_strFilename );
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 bool StcTextEditor::IsModified()

@@ -307,7 +307,7 @@ MeshSPtr AssimpImporter::DoImportMesh()
 
 bool AssimpImporter::DoProcessMesh( SkeletonSPtr p_pSkeleton, aiMesh const * p_pAiMesh, aiScene const * p_pAiScene, SubmeshSPtr p_pSubmesh )
 {
-	bool l_bReturn = false;
+	bool l_return = false;
 	MaterialSPtr l_pMaterial;
 
 	if ( p_pAiMesh->mMaterialIndex < p_pAiScene->mNumMaterials )
@@ -436,10 +436,10 @@ bool AssimpImporter::DoProcessMesh( SkeletonSPtr p_pSkeleton, aiMesh const * p_p
 			p_pSubmesh->ComputeTangentsFromNormals();
 		}
 
-		l_bReturn = true;
+		l_return = true;
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial )

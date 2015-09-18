@@ -21,8 +21,6 @@
 using namespace Castor3D;
 using namespace Castor;
 
-DECLARE_APP( CastorViewer::CastorViewerApp )
-
 namespace CastorViewer
 {
 	RenderPanel::RenderPanel( wxWindow * parent, wxWindowID p_id, wxPoint const & pos, wxSize const & size, long style )
@@ -102,7 +100,7 @@ namespace CastorViewer
 					m_pRotateCamEvent = std::make_shared< CameraRotateEvent >( l_cameraNode, real( 0 ), real( 0 ), real( 0 ) );
 					m_pTranslateCamEvent = std::make_shared< CameraTranslateEvent >( l_cameraNode, real( 0 ), real( 0 ), real( 0 ) );
 					m_pRenderWindow = p_pWindow;
-					m_pKeyboardEvent = std::make_shared< KeyboardEvent >( p_pWindow, wxGetApp().GetMainFrame() );
+					m_pKeyboardEvent = std::make_shared< KeyboardEvent >( p_pWindow );
 				}
 			}
 		}
@@ -263,8 +261,8 @@ namespace CastorViewer
 		else
 		{
 			wxClientDC l_dc( this );
-			l_dc.SetBrush( wxBrush( INACTIVE_TAB_COLOUR ) );
-			l_dc.SetPen( wxPen( INACTIVE_TAB_COLOUR ) );
+			l_dc.SetBrush( wxBrush( GuiCommon::INACTIVE_TAB_COLOUR ) );
+			l_dc.SetPen( wxPen( GuiCommon::INACTIVE_TAB_COLOUR ) );
 			l_dc.DrawRectangle( 0, 0, p_event.GetSize().x, p_event.GetSize().y );
 		}
 
@@ -278,8 +276,8 @@ namespace CastorViewer
 		if ( !l_pWindow )
 		{
 			wxClientDC l_dc( this );
-			l_dc.SetBrush( wxBrush( INACTIVE_TAB_COLOUR ) );
-			l_dc.SetPen( wxPen( INACTIVE_TAB_COLOUR ) );
+			l_dc.SetBrush( wxBrush( GuiCommon::INACTIVE_TAB_COLOUR ) );
+			l_dc.SetPen( wxPen( GuiCommon::INACTIVE_TAB_COLOUR ) );
 			l_dc.DrawRectangle( 0, 0, GetClientSize().x, GetClientSize().y );
 		}
 
@@ -293,8 +291,8 @@ namespace CastorViewer
 		if ( !l_pWindow )
 		{
 			wxPaintDC l_dc( this );
-			l_dc.SetBrush( wxBrush( INACTIVE_TAB_COLOUR ) );
-			l_dc.SetPen( wxPen( INACTIVE_TAB_COLOUR ) );
+			l_dc.SetBrush( wxBrush( GuiCommon::INACTIVE_TAB_COLOUR ) );
+			l_dc.SetPen( wxPen( GuiCommon::INACTIVE_TAB_COLOUR ) );
 			l_dc.DrawRectangle( 0, 0, GetClientSize().x, GetClientSize().y );
 		}
 

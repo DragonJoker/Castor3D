@@ -11,36 +11,36 @@ namespace Castor3D
 
 	bool Vertex::TextLoader::operator()( Vertex & CU_PARAM_UNUSED( p_object ), TextFile & CU_PARAM_UNUSED( p_file ) )
 	{
-		bool l_bReturn = false;
-// 		bool l_bReturn = TextLoader< Point3r >()( p_object.GetNormal(), p_file );
+		bool l_return = false;
+// 		bool l_return = TextLoader< Point3r >()( p_object.GetNormal(), p_file );
 //
-// 		if( l_bReturn )
+// 		if( l_return )
 // 		{
-// 			l_bReturn = TextLoader< Point3r >()( p_object.GetTangent(), p_file );
+// 			l_return = TextLoader< Point3r >()( p_object.GetTangent(), p_file );
 // 		}
 //
-// 		if( l_bReturn )
+// 		if( l_return )
 // 		{
-// 			l_bReturn = TextLoader< Point2r >()( p_object.GetTexCoord(), p_file );
+// 			l_return = TextLoader< Point2r >()( p_object.GetTexCoord(), p_file );
 // 		}
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool Vertex::TextLoader::operator()( Vertex const & CU_PARAM_UNUSED( p_object ), TextFile & CU_PARAM_UNUSED( p_file ) )
 	{
-		bool l_bReturn = false;
-// 		bool l_bReturn = TextLoader< Point3r >()( p_object.GetNormal(), p_file );
+		bool l_return = false;
+// 		bool l_return = TextLoader< Point3r >()( p_object.GetNormal(), p_file );
 //
-// 		if( l_bReturn )
+// 		if( l_return )
 // 		{
-// 			l_bReturn = TextLoader< Point3r >()( p_object.GetTangent(), p_file );
+// 			l_return = TextLoader< Point3r >()( p_object.GetTangent(), p_file );
 // 		}
 //
-// 		if( l_bReturn )
+// 		if( l_return )
 // 		{
-// 			l_bReturn = TextLoader< Point2r >()( p_object.GetTexCoord(), p_file );
+// 			l_return = TextLoader< Point2r >()( p_object.GetTexCoord(), p_file );
 // 		}
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************

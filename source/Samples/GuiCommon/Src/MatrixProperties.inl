@@ -82,7 +82,7 @@ namespace GuiCommon
 
 	template< typename Type, size_t Count > void SetVariantFromMatrix( wxVariant & p_variant, Castor::SquareMatrix< Type, Count > const & p_value )
 	{
-		MatrixRefFromVariant( p_variant ) = p_value;
+		MatrixRefFromVariant< Type, Count >( p_variant ) = p_value;
 	}
 
 	//************************************************************************************************
@@ -111,7 +111,9 @@ namespace GuiCommon
 
 			for ( size_t i = 0; i < Count; ++i )
 			{
-				SetVariantFromPoint( p_prop->Item( i )->GetValue(), Castor::Point< T, Count >( l_matrix[i] ) );
+				wxVariant l_value = p_prop->Item( i )->GetValue();
+				SetVariantFromPoint< T, Count >( l_value, Castor::Point< T, Count >( l_matrix[i] ) );
+				p_prop->Item( i )->SetValue( l_value );
 			}
 		}
 		static wxVariant ChildChanged( wxVariant & p_thisValue, int p_index, wxVariant & p_newValue )

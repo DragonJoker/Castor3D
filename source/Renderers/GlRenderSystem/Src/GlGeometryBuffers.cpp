@@ -83,21 +83,21 @@ namespace GlRender
 
 	bool GlGeometryBuffers::Initialise()
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 #if !C3DGL_LIMIT_TO_2_1
 
 		if ( m_gl.HasVao() )
 		{
 			m_pfnBind = PFnBind( [&]()
 			{
-				bool l_bReturn = m_uiIndex != eGL_INVALID_INDEX;
+				bool l_return = m_uiIndex != eGL_INVALID_INDEX;
 
-				if ( l_bReturn )
+				if ( l_return )
 				{
-					l_bReturn = m_gl.BindVertexArray( m_uiIndex );
+					l_return = m_gl.BindVertexArray( m_uiIndex );
 				}
 
-				return l_bReturn;
+				return l_return;
 			} );
 			m_pfnUnbind = PFnUnbind( [&]()
 			{
@@ -114,9 +114,9 @@ namespace GlRender
 			{
 				if ( m_pVertexBuffer )
 				{
-					l_bReturn = m_gl.BindVertexArray( m_uiIndex );
+					l_return = m_gl.BindVertexArray( m_uiIndex );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						m_pVertexBuffer->Bind();
 
@@ -147,10 +147,10 @@ namespace GlRender
 				GeometryBuffers::Unbind();
 			} );
 			m_uiIndex = 0;
-			l_bReturn = true;
+			l_return = true;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void GlGeometryBuffers::Cleanup()

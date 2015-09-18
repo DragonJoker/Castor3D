@@ -91,7 +91,7 @@ Generator::~Generator()
 
 bool Generator::Step()
 {
-	bool l_bReturn = false;
+	bool l_return = false;
 
 	if ( m_bInitialised )
 	{
@@ -106,16 +106,16 @@ bool Generator::Step()
 			{
 				SwapBuffers();
 				m_bEnded = true;
-				l_bReturn = true;
+				l_return = true;
 			}
 		}
 		else
 		{
-			l_bReturn = false;
+			l_return = false;
 		}
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 void Generator::SetRed( uint8_t val )
@@ -188,15 +188,15 @@ void Generator::ClearAllThreads()
 
 bool Generator::AllEnded()
 {
-	bool l_bReturn = true;
+	bool l_return = true;
 	uint32_t l_uiCount = DoGetThreadsCount();
 
-	for ( uint32_t i = 0; i < l_uiCount && l_bReturn; i++ )
+	for ( uint32_t i = 0; i < l_uiCount && l_return; i++ )
 	{
-		l_bReturn &= m_arraySlaveThreads[i] == NULL || m_arraySlaveThreads[i]->IsEnded();
+		l_return &= m_arraySlaveThreads[i] == NULL || m_arraySlaveThreads[i]->IsEnded();
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 void Generator::Suspend()

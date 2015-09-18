@@ -39,17 +39,36 @@ http://www.gnu.org/copyleft/lesser.txt.
 // Implements sans constructor function. Also, first arg is class name, not
 // property name.
 #define GC_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN( PROPNAME, T, EDITOR )\
-	const wxPGEditor* PROPNAME::DoGetEditorClass()const\
+	template<> const wxPGEditor* PROPNAME::DoGetEditorClass()const\
 	{\
 		return wxPGEditor_##EDITOR;\
 	}
+	
+// common part of the macros below
+#define GC_IMPLEMENT_CLASS_COMMON( name, basename, baseclsinfo2, func )\
+	template<>\
+	wxClassInfo name::ms_classInfo( wxT( #name ),\
+						&basename::ms_classInfo,\
+						baseclsinfo2,\
+						int( sizeof( name ) ),\
+						func );\
+	template<>\
+	wxClassInfo * name::GetClassInfo() const\
+	{\
+		return &name::ms_classInfo;\
+	}
+
+#define GC_IMPLEMENT_CLASS_COMMON1( name, basename, func )\
+    GC_IMPLEMENT_CLASS_COMMON( name, basename, NULL, func )
 
 // Single inheritance with one base class
 #define GC_IMPLEMENT_DYNAMIC_CLASS( name, basename )\
-	wxIMPLEMENT_CLASS_COMMON1( name, basename, name::wxCreateObject )\
 	template<>\
 	wxObject* name::wxCreateObject()\
-		{ return new name; }
+	{\
+		return new name;\
+	}\
+	GC_IMPLEMENT_CLASS_COMMON1( name, basename, name::wxCreateObject )
 
 //
 // Property class implementation helper macros.
@@ -85,6 +104,14 @@ namespace GuiCommon
 		virtual void UpdateControl(wxPGProperty* property, wxWindow* ctrl) const;
 		virtual bool OnEvent( wxPropertyGrid * p_propgrid, wxPGProperty * p_property, wxWindow * p_wnd_primary, wxEvent & p_event )const;
 	};
+
+	wxFloatProperty * CreateProperty( wxString const & p_name, double const & p_value );
+	wxFloatProperty * CreateProperty( wxString const & p_name, float const & p_value );
+	wxIntProperty * CreateProperty( wxString const & p_name, int const & p_value );
+	wxUIntProperty * CreateProperty( wxString const & p_name, uint32_t const & p_value );
+	wxBoolProperty * CreateProperty( wxString const & p_name, bool const & p_value, bool p_checkbox );
+	wxStringProperty * CreateProperty( wxString const & p_name, wxString const & p_value );
+	wxStringProperty * CreateProperty( wxString const & p_name, wxString const & p_value, ButtonEventMethod p_method, wxEvtHandler * p_handler, wxPGEditor * p_editor );
 }
 
 #include "AdditionalProperties.inl"

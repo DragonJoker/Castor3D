@@ -16,17 +16,19 @@ namespace GuiCommon
 	}
 
 	RenderTargetTreeItemProperty::RenderTargetTreeItemProperty( bool p_editable, RenderTargetSPtr p_target )
-		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_RENDER_TARGET )
+		: TreeItemProperty( p_target->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_RENDER_TARGET )
 		, m_target( p_target )
 	{
 		PROPERTY_CATEGORY_RENDER_TARGET = _( "Render Target: " );
+
+		CreateTreeItemMenu();
 	}
 
 	RenderTargetTreeItemProperty::~RenderTargetTreeItemProperty()
 	{
 	}
 
-	void RenderTargetTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void RenderTargetTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		RenderTargetSPtr l_target = GetRenderTarget();
 
@@ -42,7 +44,7 @@ namespace GuiCommon
 		}
 	}
 
-	void RenderTargetTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void RenderTargetTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		RenderTargetSPtr l_target = GetRenderTarget();
 		wxPGProperty * l_property = p_event.GetProperty();

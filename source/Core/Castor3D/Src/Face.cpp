@@ -11,8 +11,8 @@ namespace Castor3D
 
 	bool Face::TextLoader::operator()( Castor3D::Face const & p_face, TextFile & p_file )
 	{
-		bool l_bReturn = p_file.Print( 1024, cuT( "\t\t\t\tface %i %i %i\n" ), p_face.GetVertexIndex( 0 ), p_face.GetVertexIndex( 1 ), p_face.GetVertexIndex( 2 ) ) > 0;
-		return l_bReturn;
+		bool l_return = p_file.Print( 1024, cuT( "\t\t\t\tface %i %i %i\n" ), p_face.GetVertexIndex( 0 ), p_face.GetVertexIndex( 1 ), p_face.GetVertexIndex( 2 ) ) > 0;
+		return l_return;
 	}
 
 	//*************************************************************************************************

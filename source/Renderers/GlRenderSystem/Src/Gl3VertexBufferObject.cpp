@@ -17,19 +17,19 @@ namespace GlRender
 	bool Gl3VertexBufferObject::Bind()
 	{
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
-		bool l_bReturn = l_pBuffer && l_pBuffer->IsAssigned();
+		bool l_return = l_pBuffer && l_pBuffer->IsAssigned();
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoBind();
+			l_return = DoBind();
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoAttributesBind();
+			l_return = DoAttributesBind();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void Gl3VertexBufferObject::Unbind()

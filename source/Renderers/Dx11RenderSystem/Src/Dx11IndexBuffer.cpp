@@ -33,7 +33,7 @@ namespace Dx11Render
 
 	bool DxIndexBuffer::Initialise( eBUFFER_ACCESS_TYPE p_eType, eBUFFER_ACCESS_NATURE p_eNature, ShaderProgramBaseSPtr p_pProgram )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( m_pBuffer )
 		{
@@ -65,11 +65,11 @@ namespace Dx11Render
 					dxDebugName( l_renderSystem, m_pBufferObject, IndexBuffer );
 				}
 
-				l_bReturn = dxCheckError( l_hr, "ID3D11Device::CreateIndexBuffer" );
+				l_return = dxCheckError( l_hr, "ID3D11Device::CreateIndexBuffer" );
 			}
 			else
 			{
-				l_bReturn = false;
+				l_return = false;
 			}
 
 			if ( m_pBufferObject )
@@ -91,16 +91,16 @@ namespace Dx11Render
 				}
 
 				m_pBuffer->Assign();
-				l_bReturn = true;
+				l_return = true;
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool DxIndexBuffer::Bind()
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
 		if ( m_pBuffer && m_pBuffer->IsAssigned() )
 		{
@@ -108,7 +108,7 @@ namespace Dx11Render
 			l_pDeviceContext->IASetIndexBuffer( m_pBufferObject, DXGI_FORMAT_R32_UINT, 0 );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void DxIndexBuffer::Unbind()

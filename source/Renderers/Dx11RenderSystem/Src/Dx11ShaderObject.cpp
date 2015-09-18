@@ -61,7 +61,7 @@ namespace Dx11Render
 			{ "ps_2_0",	"ps_2_0",	"ps_4_0",	"ps_4_1",	"ps_5_0" },
 			{ "",		"",			"",			"",			"cs_5_0" },
 		};
-		bool l_bReturn = false;
+		bool l_return = false;
 		std::string l_strSource;
 		std::string l_strProfile;
 
@@ -98,9 +98,9 @@ namespace Dx11Render
 			}
 
 			SafeRelease( l_pErrors );
-			l_bReturn = m_eStatus == eSHADER_STATUS_COMPILED;
+			l_return = m_eStatus == eSHADER_STATUS_COMPILED;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 }

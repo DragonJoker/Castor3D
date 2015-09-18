@@ -19,24 +19,24 @@ namespace Castor3D
 
 	bool ShaderProgramBase::BinaryParser::Fill( ShaderProgramBase const & p_object, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_SHADER_PROGRAM );
 
-		for ( int i = 0; i < eSHADER_TYPE_COUNT && l_bReturn; ++i )
+		for ( int i = 0; i < eSHADER_TYPE_COUNT && l_return; ++i )
 		{
 			ShaderObjectBaseSPtr l_obj = p_object.m_pShaders[i];
 
 			if ( l_obj )
 			{
 				BinaryChunk l_chunk( eCHUNK_TYPE_SHADER_OBJECT );
-				l_bReturn = DoFillChunk( eSHADER_TYPE( i ), eCHUNK_TYPE_SHADER_OBJECT_TYPE, l_chunk );
+				l_return = DoFillChunk( eSHADER_TYPE( i ), eCHUNK_TYPE_SHADER_OBJECT_TYPE, l_chunk );
 
-				if ( l_bReturn )
+				if ( l_return )
 				{
-					l_bReturn = ShaderObjectBase::BinaryParser( m_path ).Fill( *l_obj, l_chunk );
+					l_return = ShaderObjectBase::BinaryParser( m_path ).Fill( *l_obj, l_chunk );
 				}
 
-				if ( l_bReturn )
+				if ( l_return )
 				{
 					l_chunk.Finalise();
 					p_chunk.AddSubChunk( l_chunk );
@@ -44,13 +44,13 @@ namespace Castor3D
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool ShaderProgramBase::BinaryParser::Parse( ShaderProgramBase & p_object, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
-		return l_bReturn;
+		bool l_return = true;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -62,7 +62,7 @@ namespace Castor3D
 
 	bool ShaderProgramBase::TextLoader::operator()( ShaderProgramBase const & p_shaderProgram, TextFile & p_file )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		bool l_hasFile = false;
 		int i = 0;
 		int j = 0;
@@ -86,44 +86,44 @@ namespace Castor3D
 			switch ( p_shaderProgram.GetLanguage() )
 			{
 			case eSHADER_LANGUAGE_GLSL:
-				l_bReturn = p_file.WriteText( l_strTabs + cuT( "gl_shader_program\n" ) ) > 0;
+				l_return = p_file.WriteText( l_strTabs + cuT( "gl_shader_program\n" ) ) > 0;
 				break;
 
 			case eSHADER_LANGUAGE_HLSL:
-				l_bReturn = p_file.WriteText( l_strTabs + cuT( "hl_shader_program\n" ) ) > 0;
+				l_return = p_file.WriteText( l_strTabs + cuT( "hl_shader_program\n" ) ) > 0;
 				break;
 
 			default:
-				l_bReturn = false;
+				l_return = false;
 				break;
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = p_file.WriteText( l_strTabs + cuT( "{\n" ) ) > 0;
+				l_return = p_file.WriteText( l_strTabs + cuT( "{\n" ) ) > 0;
 			}
 
-			for ( int i = 0; i < eSHADER_TYPE_COUNT && l_bReturn; i++ )
+			for ( int i = 0; i < eSHADER_TYPE_COUNT && l_return; i++ )
 			{
 				l_pObject = p_shaderProgram.m_pShaders[i];
 
 				if ( l_pObject )
 				{
-					l_bReturn = ShaderObjectBase::TextLoader()( *l_pObject, p_file );
+					l_return = ShaderObjectBase::TextLoader()( *l_pObject, p_file );
 				}
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = p_file.WriteText( l_strTabs + cuT( "}\n" ) ) > 0;
+				l_return = p_file.WriteText( l_strTabs + cuT( "}\n" ) ) > 0;
 			}
 		}
 		else
 		{
-			l_bReturn = true;
+			l_return = true;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -294,7 +294,7 @@ namespace Castor3D
 
 	bool ShaderProgramBase::Link()
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( m_pRenderSystem->UseShaders() && m_eStatus != ePROGRAM_STATUS_ERROR )
 		{
@@ -311,10 +311,10 @@ namespace Castor3D
 				m_eStatus = ePROGRAM_STATUS_LINKED;
 			}
 
-			l_bReturn = m_eStatus == ePROGRAM_STATUS_LINKED;
+			l_return = m_eStatus == ePROGRAM_STATUS_LINKED;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void ShaderProgramBase::Bind( uint8_t CU_PARAM_UNUSED( p_byIndex ), uint8_t CU_PARAM_UNUSED( p_byCount ) )
@@ -435,14 +435,14 @@ namespace Castor3D
 
 	bool ShaderProgramBase::HasFile( eSHADER_TYPE p_eTarget )const
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( m_pShaders[p_eTarget] )
 		{
-			l_bReturn = m_pShaders[p_eTarget]->HasFile();
+			l_return = m_pShaders[p_eTarget]->HasFile();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void ShaderProgramBase::SetSource( eSHADER_TYPE p_eTarget, eSHADER_MODEL p_eModel, String const & p_strSource )
@@ -482,14 +482,14 @@ namespace Castor3D
 
 	bool ShaderProgramBase::HasSource( eSHADER_TYPE p_eTarget )const
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( m_pShaders[p_eTarget] )
 		{
-			l_bReturn = m_pShaders[p_eTarget]->HasSource();
+			l_return = m_pShaders[p_eTarget]->HasSource();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void ShaderProgramBase::SetEntryPoint( eSHADER_TYPE p_eTarget, String const & p_strName )

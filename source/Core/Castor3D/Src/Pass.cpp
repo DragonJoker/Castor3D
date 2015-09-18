@@ -42,61 +42,61 @@ namespace Castor3D
 
 	bool Pass::BinaryParser::Fill( Pass const & p_pass, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_MATERIAL_PASS );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_pass.GetAmbient(), eCHUNK_TYPE_PASS_AMBIENT, l_chunk );
+			l_return = DoFillChunk( p_pass.GetAmbient(), eCHUNK_TYPE_PASS_AMBIENT, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_pass.GetDiffuse(), eCHUNK_TYPE_PASS_AMBIENT, l_chunk );
+			l_return = DoFillChunk( p_pass.GetDiffuse(), eCHUNK_TYPE_PASS_AMBIENT, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_pass.GetSpecular(), eCHUNK_TYPE_PASS_AMBIENT, l_chunk );
+			l_return = DoFillChunk( p_pass.GetSpecular(), eCHUNK_TYPE_PASS_AMBIENT, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_pass.GetEmissive(), eCHUNK_TYPE_PASS_AMBIENT, l_chunk );
+			l_return = DoFillChunk( p_pass.GetEmissive(), eCHUNK_TYPE_PASS_AMBIENT, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_pass.GetShininess(), eCHUNK_TYPE_PASS_EXPONENT, l_chunk );
+			l_return = DoFillChunk( p_pass.GetShininess(), eCHUNK_TYPE_PASS_EXPONENT, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_pass.GetAlpha(), eCHUNK_TYPE_PASS_ALPHA, l_chunk );
+			l_return = DoFillChunk( p_pass.GetAlpha(), eCHUNK_TYPE_PASS_ALPHA, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_pass.IsTwoSided(), eCHUNK_TYPE_PASS_TWOSIDED, l_chunk );
+			l_return = DoFillChunk( p_pass.IsTwoSided(), eCHUNK_TYPE_PASS_TWOSIDED, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			uint32_t l_uiValues[] = { p_pass.GetBlendState()->GetAlphaSrcBlend(), p_pass.GetBlendState()->GetAlphaDstBlend() };
-			l_bReturn = DoFillChunk( l_uiValues, eCHUNK_TYPE_PASS_BLEND_FUNC, l_chunk );
+			l_return = DoFillChunk( l_uiValues, eCHUNK_TYPE_PASS_BLEND_FUNC, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			ShaderProgramBaseSPtr l_pProgram = p_pass.GetShader< ShaderProgramBase >();
 
 			if ( l_pProgram )
 			{
-				l_bReturn = ShaderProgramBase::BinaryParser( m_path ).Fill( *l_pProgram, l_chunk );
+				l_return = ShaderProgramBase::BinaryParser( m_path ).Fill( *l_pProgram, l_chunk );
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			for ( uint32_t i = 0; i < p_pass.GetTextureUnitsCount(); i++ )
 			{
@@ -104,23 +104,23 @@ namespace Castor3D
 
 				if ( l_pUnit )
 				{
-					l_bReturn = TextureUnit::BinaryParser( m_path ).Fill( *l_pUnit, l_chunk );
+					l_return = TextureUnit::BinaryParser( m_path ).Fill( *l_pUnit, l_chunk );
 				}
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			l_chunk.Finalise();
-			l_bReturn = p_chunk.AddSubChunk( l_chunk );
+			l_return = p_chunk.AddSubChunk( l_chunk );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool Pass::BinaryParser::Parse( Pass & p_pass, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		p_pass.Cleanup();
 		float l_fFloat;
 		bool l_bBool;
@@ -133,16 +133,16 @@ namespace Castor3D
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
 			BinaryChunk l_chunk;
-			l_bReturn = p_chunk.GetSubChunk( l_chunk );
+			l_return = p_chunk.GetSubChunk( l_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				switch ( l_chunk.GetChunkType() )
 				{
 				case eCHUNK_TYPE_PASS_ALPHA:
-					l_bReturn = DoParseChunk( l_fFloat, l_chunk );
+					l_return = DoParseChunk( l_fFloat, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_pass.SetAlpha( l_fFloat );
 					}
@@ -150,9 +150,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_PASS_EXPONENT:
-					l_bReturn = DoParseChunk( l_fFloat, l_chunk );
+					l_return = DoParseChunk( l_fFloat, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_pass.SetShininess( l_fFloat );
 					}
@@ -160,25 +160,25 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_PASS_AMBIENT:
-					l_bReturn = DoParseChunk( p_pass.GetAmbient(), l_chunk );
+					l_return = DoParseChunk( p_pass.GetAmbient(), l_chunk );
 					break;
 
 				case eCHUNK_TYPE_PASS_DIFFUSE:
-					l_bReturn = DoParseChunk( p_pass.GetAmbient(), l_chunk );
+					l_return = DoParseChunk( p_pass.GetAmbient(), l_chunk );
 					break;
 
 				case eCHUNK_TYPE_PASS_SPECULAR:
-					l_bReturn = DoParseChunk( p_pass.GetAmbient(), l_chunk );
+					l_return = DoParseChunk( p_pass.GetAmbient(), l_chunk );
 					break;
 
 				case eCHUNK_TYPE_PASS_EMISSIVE:
-					l_bReturn = DoParseChunk( p_pass.GetAmbient(), l_chunk );
+					l_return = DoParseChunk( p_pass.GetAmbient(), l_chunk );
 					break;
 
 				case eCHUNK_TYPE_PASS_TWOSIDED:
-					l_bReturn = DoParseChunk( l_bBool, l_chunk );
+					l_return = DoParseChunk( l_bBool, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_pass.SetTwoSided( l_bBool );
 					}
@@ -187,9 +187,9 @@ namespace Castor3D
 
 				case eCHUNK_TYPE_PASS_GLSHADER:
 					l_pProgram = p_pass.GetEngine()->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_GLSL );
-					l_bReturn = ShaderProgramBase::BinaryParser( m_path ).Parse( *l_pProgram, l_chunk );
+					l_return = ShaderProgramBase::BinaryParser( m_path ).Parse( *l_pProgram, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_pass.SetShader( l_pProgram );
 					}
@@ -198,9 +198,9 @@ namespace Castor3D
 
 				case eCHUNK_TYPE_PASS_HLSHADER:
 					l_pProgram = p_pass.GetEngine()->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_HLSL );
-					l_bReturn = ShaderProgramBase::BinaryParser( m_path ).Parse( *l_pProgram, l_chunk );
+					l_return = ShaderProgramBase::BinaryParser( m_path ).Parse( *l_pProgram, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_pass.SetShader( l_pProgram );
 					}
@@ -209,9 +209,9 @@ namespace Castor3D
 
 				case eCHUNK_TYPE_PASS_TEXTURE:
 					l_pUnit = p_pass.AddTextureUnit();
-					l_bReturn = TextureUnit::BinaryParser( m_path ).Parse( *l_pUnit, l_chunk );
+					l_return = TextureUnit::BinaryParser( m_path ).Parse( *l_pUnit, l_chunk );
 
-					if ( !l_bReturn )
+					if ( !l_return )
 					{
 						p_pass.DestroyTextureUnit( p_pass.GetTextureUnitsCount() - 1 );
 					}
@@ -219,9 +219,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_PASS_BLEND_FUNC:
-					l_bReturn = DoParseChunk( l_eSrc, l_chunk ) && DoParseChunk( l_eDst, l_chunk );
+					l_return = DoParseChunk( l_eSrc, l_chunk ) && DoParseChunk( l_eDst, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_pass.GetBlendState()->SetRgbSrcBlend( l_eSrc );
 						p_pass.GetBlendState()->SetRgbDstBlend( l_eDst );
@@ -233,14 +233,14 @@ namespace Castor3D
 				}
 			}
 
-			if ( !l_bReturn )
+			if ( !l_return )
 			{
 				p_chunk.EndParse();
-				l_bReturn = false;
+				l_return = false;
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*********************************************************************************************
@@ -272,91 +272,91 @@ namespace Castor3D
 			cuT( "src1_alpha" ),
 			cuT( "inv_src1_alpha" ),
 		};
-		bool l_bReturn = p_file.WriteText( cuT( "\tpass\n\t{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( cuT( "\tpass\n\t{\n" ) ) > 0;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.Print( 256, cuT( "\t\tambient " ) ) > 0;
+			l_return = p_file.Print( 256, cuT( "\t\tambient " ) ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = Colour::TextLoader()( p_pass.GetAmbient(), p_file );
+			l_return = Colour::TextLoader()( p_pass.GetAmbient(), p_file );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.Print( 256, cuT( "\n\t\tdiffuse " ) ) > 0;
+			l_return = p_file.Print( 256, cuT( "\n\t\tdiffuse " ) ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = Colour::TextLoader()( p_pass.GetDiffuse(), p_file );
+			l_return = Colour::TextLoader()( p_pass.GetDiffuse(), p_file );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.Print( 256, cuT( "\n\t\temissive " ) ) > 0;
+			l_return = p_file.Print( 256, cuT( "\n\t\temissive " ) ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = Colour::TextLoader()( p_pass.GetEmissive(), p_file );
+			l_return = Colour::TextLoader()( p_pass.GetEmissive(), p_file );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.Print( 256, cuT( "\n\t\tspecular " ) ) > 0;
+			l_return = p_file.Print( 256, cuT( "\n\t\tspecular " ) ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = Colour::TextLoader()( p_pass.GetSpecular(), p_file );
+			l_return = Colour::TextLoader()( p_pass.GetSpecular(), p_file );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.Print( 256, cuT( "\n\t\tshininess %f\n" ), p_pass.GetShininess() ) > 0;
+			l_return = p_file.Print( 256, cuT( "\n\t\tshininess %f\n" ), p_pass.GetShininess() ) > 0;
 		}
 
-		if ( l_bReturn && p_pass.GetAlpha() < 1 )
+		if ( l_return && p_pass.GetAlpha() < 1 )
 		{
-			l_bReturn = p_file.Print( 256, cuT( "\n\t\talpha %f\n" ), p_pass.GetAlpha() ) > 0;
+			l_return = p_file.Print( 256, cuT( "\n\t\talpha %f\n" ), p_pass.GetAlpha() ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\t\ttwo_sided " ) + String( p_pass.IsTwoSided() ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\t\ttwo_sided " ) + String( p_pass.IsTwoSided() ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
 		}
 
-		if ( l_bReturn && ( p_pass.GetBlendState()->GetAlphaSrcBlend() != eBLEND_ONE || p_pass.GetBlendState()->GetAlphaDstBlend() != eBLEND_ZERO ) )
+		if ( l_return && ( p_pass.GetBlendState()->GetAlphaSrcBlend() != eBLEND_ONE || p_pass.GetBlendState()->GetAlphaDstBlend() != eBLEND_ZERO ) )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\t\tblend_func " ) + StrBlendFactors[p_pass.GetBlendState()->GetAlphaSrcBlend()] + cuT( " " ) + StrBlendFactors[p_pass.GetBlendState()->GetAlphaDstBlend()] + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\t\tblend_func " ) + StrBlendFactors[p_pass.GetBlendState()->GetAlphaSrcBlend()] + cuT( " " ) + StrBlendFactors[p_pass.GetBlendState()->GetAlphaDstBlend()] + cuT( "\n" ) ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			uint32_t l_uiNbTextureUnits = p_pass.GetTextureUnitsCount();
 			bool l_bFirst = true;
 
-			for ( uint32_t i = 0; i < l_uiNbTextureUnits && l_bReturn; i++ )
+			for ( uint32_t i = 0; i < l_uiNbTextureUnits && l_return; i++ )
 			{
 				p_file.WriteText( cuT( "\n" ) );
-				l_bReturn = TextureUnit::TextLoader()( * p_pass.GetTextureUnit( i ), p_file );
+				l_return = TextureUnit::TextLoader()( * p_pass.GetTextureUnit( i ), p_file );
 			}
 		}
 
-		if ( l_bReturn && p_pass.HasShader() )
+		if ( l_return && p_pass.HasShader() )
 		{
-			l_bReturn = ShaderProgramBase::TextLoader()( * p_pass.GetShader<ShaderProgramBase>(), p_file );
+			l_return = ShaderProgramBase::TextLoader()( * p_pass.GetShader<ShaderProgramBase>(), p_file );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\t}\n" ) ) > 0;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*********************************************************************************************
@@ -601,7 +601,7 @@ namespace Castor3D
 	bool Pass::DestroyTextureUnit( uint32_t p_uiIndex )
 	{
 		CASTOR_ASSERT( p_uiIndex < m_arrayTextureUnits.size() );
-		bool l_bReturn = false;
+		bool l_return = false;
 		Logger::LogInfo( StringStream() << cuT( "Destroying TextureUnit " ) << p_uiIndex );
 		TextureUnitPtrArray::iterator l_it = m_arrayTextureUnits.begin();
 		m_arrayTextureUnits.erase( l_it + p_uiIndex );
@@ -612,8 +612,8 @@ namespace Castor3D
 			( *l_it )->SetIndex( ++i );
 		}
 
-		l_bReturn = true;
-		return l_bReturn;
+		l_return = true;
+		return l_return;
 	}
 
 	TextureUnitSPtr Pass::GetTextureUnit( uint32_t p_uiIndex )const

@@ -1,31 +1,5 @@
 namespace GuiCommon
 {
-	//************************************************************************************************
-
-	inline wxPGProperty * CreateProperty( wxString const & p_name, double const & p_value )
-	{
-		return new wxFloatProperty( p_name, wxPG_LABEL, p_value );
-	}
-
-	inline wxPGProperty * CreateProperty( wxString const & p_name, float const & p_value )
-	{
-		return new wxFloatProperty( p_name, wxPG_LABEL, p_value );
-	}
-
-	inline wxPGProperty * CreateProperty( wxString const & p_name, int const & p_value )
-	{
-		return new wxIntProperty( p_name, wxPG_LABEL, p_value );
-	}
-
-	inline wxPGProperty * CreateProperty( wxString const & p_name, uint32_t const & p_value )
-	{
-		return new wxUIntProperty( p_name, wxPG_LABEL, p_value );
-	}
-
-	inline wxPGProperty * CreateProperty( wxString const & p_name, bool const & p_value )
-	{
-		return new wxBoolProperty( p_name, wxPG_LABEL, p_value );
-	}
 
 	//************************************************************************************************
 

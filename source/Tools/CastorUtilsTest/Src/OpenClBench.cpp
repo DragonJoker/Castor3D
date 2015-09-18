@@ -21,7 +21,7 @@ namespace Testing
 {
 	bool CheckErr( cl_int p_iErr, const char * p_szName )
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		static std::map< cl_int, Castor::String > MapErrors;
 
 		if ( MapErrors.empty() )
@@ -118,10 +118,10 @@ namespace Testing
 				Castor::Logger::LogWarning( Castor::StringStream() << cuT( "ERROR: " ) << Castor::str_utils::from_str( p_szName ) << cuT( " - 0x" ) << std::hex << p_iErr );
 			}
 
-			l_bReturn = false;
+			l_return = false;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	OpenCLBench::OpenCLBench()

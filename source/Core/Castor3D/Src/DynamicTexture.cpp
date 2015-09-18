@@ -54,19 +54,19 @@ namespace Castor3D
 
 	bool DynamicTexture::BindAt( uint32_t p_index )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( m_bInitialised )
 		{
-			l_bReturn = DoBind( p_index );
+			l_return = DoBind( p_index );
 
-			if ( l_bReturn && GetSampler() )
+			if ( l_return && GetSampler() )
 			{
-				l_bReturn = GetSampler()->Bind( m_eDimension, p_index );
+				l_return = GetSampler()->Bind( m_eDimension, p_index );
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void DynamicTexture::UnbindFrom( uint32_t p_index )

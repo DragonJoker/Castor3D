@@ -30,31 +30,31 @@ namespace Castor3D
 			l_pParent = l_pParent->GetParent();
 		}
 
-		bool l_bReturn = p_file.Print( 1024, cuT( "%S\tposition " ), l_strTabs.c_str() ) > 0;
+		bool l_return = p_file.Print( 1024, cuT( "%S\tposition " ), l_strTabs.c_str() ) > 0;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = Point2d::TextLoader()( p_overlay.GetPosition(), p_file );
+			l_return = Point2d::TextLoader()( p_overlay.GetPosition(), p_file );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.Print( 1024, cuT( "\n%S\tsize " ), l_strTabs.c_str() ) > 0;
+			l_return = p_file.Print( 1024, cuT( "\n%S\tsize " ), l_strTabs.c_str() ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = Point2d::TextLoader()( p_overlay.GetSize(), p_file );
+			l_return = Point2d::TextLoader()( p_overlay.GetSize(), p_file );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( l_strTabs + cuT( "\tvisible " ) + ( p_overlay.IsVisible() ? String( cuT( "true" ) ) : String( cuT( "false" ) ) ) ) > 0;
+			l_return = p_file.WriteText( l_strTabs + cuT( "\tvisible " ) + ( p_overlay.IsVisible() ? String( cuT( "true" ) ) : String( cuT( "false" ) ) ) ) > 0;
 		}
 
-		if ( l_bReturn && p_overlay.GetMaterial() )
+		if ( l_return && p_overlay.GetMaterial() )
 		{
-			l_bReturn = p_file.WriteText( l_strTabs + cuT( "\tmaterial " ) + p_overlay.GetMaterial()->GetName() ) > 0;
+			l_return = p_file.WriteText( l_strTabs + cuT( "\tmaterial " ) + p_overlay.GetMaterial()->GetName() ) > 0;
 		}
 
 		for ( auto && l_overlay : p_overlay.GetOverlay() )
@@ -62,23 +62,23 @@ namespace Castor3D
 			switch ( l_overlay->GetType() )
 			{
 			case eOVERLAY_TYPE_PANEL:
-				l_bReturn = PanelOverlay::TextLoader()( *l_overlay->GetPanelOverlay(), p_file );
+				l_return = PanelOverlay::TextLoader()( *l_overlay->GetPanelOverlay(), p_file );
 				break;
 
 			case eOVERLAY_TYPE_BORDER_PANEL:
-				l_bReturn = BorderPanelOverlay::TextLoader()( *l_overlay->GetBorderPanelOverlay(), p_file );
+				l_return = BorderPanelOverlay::TextLoader()( *l_overlay->GetBorderPanelOverlay(), p_file );
 				break;
 
 			case eOVERLAY_TYPE_TEXT:
-				l_bReturn = TextOverlay::TextLoader()( *l_overlay->GetTextOverlay(), p_file );
+				l_return = TextOverlay::TextLoader()( *l_overlay->GetTextOverlay(), p_file );
 				break;
 
 			default:
-				l_bReturn = false;
+				l_return = false;
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -90,56 +90,56 @@ namespace Castor3D
 
 	bool OverlayCategory::BinaryParser::Fill( OverlayCategory const & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetType(), eCHUNK_TYPE_OVERLAY_TYPE, p_chunk );
+			l_return = DoFillChunk( p_obj.GetType(), eCHUNK_TYPE_OVERLAY_TYPE, p_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetPosition(), eCHUNK_TYPE_OVERLAY_POSITION, p_chunk );
+			l_return = DoFillChunk( p_obj.GetPosition(), eCHUNK_TYPE_OVERLAY_POSITION, p_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetSize().const_ptr(), 2, eCHUNK_TYPE_OVERLAY_SIZE, p_chunk );
+			l_return = DoFillChunk( p_obj.GetSize().const_ptr(), 2, eCHUNK_TYPE_OVERLAY_SIZE, p_chunk );
 		}
 
-		if ( l_bReturn && p_obj.GetMaterial() )
+		if ( l_return && p_obj.GetMaterial() )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetMaterial()->GetName(), eCHUNK_TYPE_OVERLAY_MATERIAL, p_chunk );
+			l_return = DoFillChunk( p_obj.GetMaterial()->GetName(), eCHUNK_TYPE_OVERLAY_MATERIAL, p_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.IsVisible(), eCHUNK_TYPE_OVERLAY_VISIBLE, p_chunk );
+			l_return = DoFillChunk( p_obj.IsVisible(), eCHUNK_TYPE_OVERLAY_VISIBLE, p_chunk );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool OverlayCategory::BinaryParser::Parse( OverlayCategory & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		bool l_visible;
 		String l_name;
 
 		switch ( p_chunk.GetChunkType() )
 		{
 		case eCHUNK_TYPE_OVERLAY_POSITION:
-			l_bReturn = DoParseChunk( p_obj.GetPosition(), p_chunk );
+			l_return = DoParseChunk( p_obj.GetPosition(), p_chunk );
 			break;
 
 		case eCHUNK_TYPE_OVERLAY_SIZE:
-			l_bReturn = DoParseChunk( p_obj.GetSize().ptr(), 2, p_chunk );
+			l_return = DoParseChunk( p_obj.GetSize().ptr(), 2, p_chunk );
 			break;
 
 		case eCHUNK_TYPE_OVERLAY_MATERIAL:
-			l_bReturn = DoParseChunk( l_name, p_chunk );
+			l_return = DoParseChunk( l_name, p_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				p_obj.SetMaterial( p_obj.m_pOverlay->GetEngine()->GetMaterialManager().find( l_name ) );
 			}
@@ -147,9 +147,9 @@ namespace Castor3D
 			break;
 
 		case eCHUNK_TYPE_OVERLAY_VISIBLE:
-			l_bReturn = DoParseChunk( l_visible, p_chunk );
+			l_return = DoParseChunk( l_visible, p_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				p_obj.SetVisible( l_visible );
 			}
@@ -160,30 +160,30 @@ namespace Castor3D
 			switch ( p_obj.GetType() )
 			{
 			case eOVERLAY_TYPE_PANEL:
-				l_bReturn = PanelOverlay::BinaryParser( m_path ).Parse( *static_cast< PanelOverlay * >( &p_obj ), p_chunk );
+				l_return = PanelOverlay::BinaryParser( m_path ).Parse( *static_cast< PanelOverlay * >( &p_obj ), p_chunk );
 				break;
 
 			case eOVERLAY_TYPE_BORDER_PANEL:
-				l_bReturn = BorderPanelOverlay::BinaryParser( m_path ).Parse( *static_cast< BorderPanelOverlay * >( &p_obj ), p_chunk );
+				l_return = BorderPanelOverlay::BinaryParser( m_path ).Parse( *static_cast< BorderPanelOverlay * >( &p_obj ), p_chunk );
 				break;
 
 			case eOVERLAY_TYPE_TEXT:
-				l_bReturn = TextOverlay::BinaryParser( m_path ).Parse( *static_cast< TextOverlay * >( &p_obj ), p_chunk );
+				l_return = TextOverlay::BinaryParser( m_path ).Parse( *static_cast< TextOverlay * >( &p_obj ), p_chunk );
 				break;
 
 			default:
-				l_bReturn = false;
+				l_return = false;
 			}
 
 			break;
 		}
 
-		if ( !l_bReturn )
+		if ( !l_return )
 		{
 			p_chunk.EndParse();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************

@@ -108,85 +108,85 @@ namespace Castor3D
 	bool Scene::TextLoader::operator()( Scene const & p_scene, TextFile & p_file )
 	{
 		Logger::LogInfo( cuT( "Scene::Write - Scene Name" ) );
-		bool l_bReturn = p_file.WriteText( cuT( "scene \"" ) + p_scene.GetName() + cuT( "\"\n{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( cuT( "scene \"" ) + p_scene.GetName() + cuT( "\"\n{\n" ) ) > 0;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.Print( 256, cuT( "\tbackground_colour " ) ) > 0 && Colour::TextLoader()( p_scene.GetBackgroundColour(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_return = p_file.Print( 256, cuT( "\tbackground_colour " ) ) > 0 && Colour::TextLoader()( p_scene.GetBackgroundColour(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.Print( 256, cuT( "\tambient_light " ) ) > 0 && Colour::TextLoader()( p_scene.GetAmbientLight(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_return = p_file.Print( 256, cuT( "\tambient_light " ) ) > 0 && Colour::TextLoader()( p_scene.GetAmbientLight(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Camera Nodes" ) );
-			l_bReturn = SceneNode::TextLoader()( *p_scene.GetCameraRootNode(), p_file );
+			l_return = SceneNode::TextLoader()( *p_scene.GetCameraRootNode(), p_file );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Object Nodes" ) );
-			l_bReturn = SceneNode::TextLoader()( *p_scene.GetObjectRootNode(), p_file );
+			l_return = SceneNode::TextLoader()( *p_scene.GetObjectRootNode(), p_file );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Cameras" ) );
 			CameraPtrStrMapConstIt l_it = p_scene.CamerasBegin();
 
-			while ( l_bReturn && l_it != p_scene.CamerasEnd() )
+			while ( l_return && l_it != p_scene.CamerasEnd() )
 			{
-				l_bReturn = Camera::TextLoader()( *l_it->second, p_file );
+				l_return = Camera::TextLoader()( *l_it->second, p_file );
 				++l_it;
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Lights" ) );
 			LightPtrIntMapConstIt l_it = p_scene.LightsBegin();
 
-			while ( l_bReturn && l_it != p_scene.LightsEnd() )
+			while ( l_return && l_it != p_scene.LightsEnd() )
 			{
 				switch ( l_it->second->GetLightType() )
 				{
 				case eLIGHT_TYPE_DIRECTIONAL:
-					l_bReturn = DirectionalLight::TextLoader()( *l_it->second->GetDirectionalLight(), p_file );
+					l_return = DirectionalLight::TextLoader()( *l_it->second->GetDirectionalLight(), p_file );
 					break;
 
 				case eLIGHT_TYPE_POINT:
-					l_bReturn = PointLight::TextLoader()( *l_it->second->GetPointLight(), p_file );
+					l_return = PointLight::TextLoader()( *l_it->second->GetPointLight(), p_file );
 					break;
 
 				case eLIGHT_TYPE_SPOT:
-					l_bReturn = SpotLight::TextLoader()( *l_it->second->GetSpotLight(), p_file );
+					l_return = SpotLight::TextLoader()( *l_it->second->GetSpotLight(), p_file );
 					break;
 
 				default:
-					l_bReturn = false;
+					l_return = false;
 				}
 
 				++l_it;
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Geometries" ) );
 			GeometryPtrStrMapConstIt l_it = p_scene.GeometriesBegin();
 
-			while ( l_bReturn && l_it != p_scene.GeometriesEnd() )
+			while ( l_return && l_it != p_scene.GeometriesEnd() )
 			{
-				l_bReturn = Geometry::TextLoader()( *l_it->second, p_file );
+				l_return = Geometry::TextLoader()( *l_it->second, p_file );
 				++l_it;
 			}
 		}
 
 		p_file.WriteText( cuT( "}\n\n" ) );
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -198,108 +198,108 @@ namespace Castor3D
 
 	bool Scene::BinaryParser::Fill( Scene const & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_SCENE );
-		l_bReturn = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
+		l_return = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetBackgroundColour(), eCHUNK_TYPE_SCENE_BACKGROUND, l_chunk );
+			l_return = DoFillChunk( p_obj.GetBackgroundColour(), eCHUNK_TYPE_SCENE_BACKGROUND, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetAmbientLight(), eCHUNK_TYPE_SCENE_AMBIENT, l_chunk );
+			l_return = DoFillChunk( p_obj.GetAmbientLight(), eCHUNK_TYPE_SCENE_AMBIENT, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = SceneNode::BinaryParser( m_path ).Fill( *p_obj.GetCameraRootNode(), l_chunk );
+			l_return = SceneNode::BinaryParser( m_path ).Fill( *p_obj.GetCameraRootNode(), l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = SceneNode::BinaryParser( m_path ).Fill( *p_obj.GetObjectRootNode(), l_chunk );
+			l_return = SceneNode::BinaryParser( m_path ).Fill( *p_obj.GetObjectRootNode(), l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			CameraPtrStrMapConstIt l_it = p_obj.CamerasBegin();
 
-			while ( l_bReturn && l_it != p_obj.CamerasEnd() )
+			while ( l_return && l_it != p_obj.CamerasEnd() )
 			{
-				l_bReturn = Camera::BinaryParser( m_path ).Fill( *l_it->second, l_chunk );
+				l_return = Camera::BinaryParser( m_path ).Fill( *l_it->second, l_chunk );
 				++l_it;
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			LightPtrIntMapConstIt l_it = p_obj.LightsBegin();
 
-			while ( l_bReturn && l_it != p_obj.LightsEnd() )
+			while ( l_return && l_it != p_obj.LightsEnd() )
 			{
 				switch ( l_it->second->GetLightType() )
 				{
 				case eLIGHT_TYPE_DIRECTIONAL:
-					l_bReturn = DirectionalLight::BinaryParser( m_path ).Fill( *l_it->second->GetDirectionalLight(), l_chunk );
+					l_return = DirectionalLight::BinaryParser( m_path ).Fill( *l_it->second->GetDirectionalLight(), l_chunk );
 					break;
 
 				case eLIGHT_TYPE_POINT:
-					l_bReturn = PointLight::BinaryParser( m_path ).Fill( *l_it->second->GetPointLight(), l_chunk );
+					l_return = PointLight::BinaryParser( m_path ).Fill( *l_it->second->GetPointLight(), l_chunk );
 					break;
 
 				case eLIGHT_TYPE_SPOT:
-					l_bReturn = SpotLight::BinaryParser( m_path ).Fill( *l_it->second->GetSpotLight(), l_chunk );
+					l_return = SpotLight::BinaryParser( m_path ).Fill( *l_it->second->GetSpotLight(), l_chunk );
 					break;
 
 				default:
-					l_bReturn = false;
+					l_return = false;
 				}
 
 				++l_it;
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			GeometryPtrStrMapConstIt l_it = p_obj.GeometriesBegin();
 
-			while ( l_bReturn && l_it != p_obj.GeometriesEnd() )
+			while ( l_return && l_it != p_obj.GeometriesEnd() )
 			{
-				l_bReturn = Geometry::BinaryParser( m_path ).Fill( *l_it->second, l_chunk );
+				l_return = Geometry::BinaryParser( m_path ).Fill( *l_it->second, l_chunk );
 				++l_it;
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			l_chunk.Finalise();
 			p_chunk.AddSubChunk( l_chunk );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool Scene::BinaryParser::Parse( Scene & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		Colour l_colour;
 		String l_name;
 
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
 			BinaryChunk l_chunk;
-			l_bReturn = p_chunk.GetSubChunk( l_chunk );
+			l_return = p_chunk.GetSubChunk( l_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				switch ( l_chunk.GetChunkType() )
 				{
 				case eCHUNK_TYPE_NAME:
-					l_bReturn = DoParseChunk( l_name, l_chunk );
+					l_return = DoParseChunk( l_name, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetName( l_name );
 					}
@@ -307,9 +307,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_SCENE_BACKGROUND:
-					l_bReturn = DoParseChunk( l_colour, l_chunk );
+					l_return = DoParseChunk( l_colour, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetBackgroundColour( l_colour );
 					}
@@ -317,9 +317,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_SCENE_AMBIENT:
-					l_bReturn = DoParseChunk( l_colour, l_chunk );
+					l_return = DoParseChunk( l_colour, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetAmbientLight( l_colour );
 					}
@@ -329,22 +329,22 @@ namespace Castor3D
 				case eCHUNK_TYPE_SCENE_NODE:
 				{
 					BinaryChunk l_chunkNode;
-					l_bReturn = l_chunk.GetSubChunk( l_chunkNode );
+					l_return = l_chunk.GetSubChunk( l_chunkNode );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						switch ( l_chunkNode.GetChunkType() )
 						{
 						case eCHUNK_TYPE_NAME:
-							l_bReturn = DoParseChunk( l_name, l_chunkNode );
+							l_return = DoParseChunk( l_name, l_chunkNode );
 							break;
 
 						default:
-							l_bReturn = false;
+							l_return = false;
 							break;
 						}
 
-						if ( l_bReturn )
+						if ( l_return )
 						{
 							SceneNodeSPtr l_node;
 
@@ -367,7 +367,7 @@ namespace Castor3D
 								l_node = p_obj.CreateSceneNode( l_name );
 							}
 
-							l_bReturn = SceneNode::BinaryParser( m_path ).Parse( *l_node, l_chunk );
+							l_return = SceneNode::BinaryParser( m_path ).Parse( *l_node, l_chunk );
 						}
 					}
 				}
@@ -376,25 +376,25 @@ namespace Castor3D
 				case eCHUNK_TYPE_CAMERA:
 				{
 					BinaryChunk l_chunkCamera;
-					l_bReturn = l_chunk.GetSubChunk( l_chunkCamera );
+					l_return = l_chunk.GetSubChunk( l_chunkCamera );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						switch ( l_chunkCamera.GetChunkType() )
 						{
 						case eCHUNK_TYPE_NAME:
-							l_bReturn = DoParseChunk( l_name, l_chunkCamera );
+							l_return = DoParseChunk( l_name, l_chunkCamera );
 							break;
 
 						default:
-							l_bReturn = false;
+							l_return = false;
 							break;
 						}
 
-						if ( l_bReturn )
+						if ( l_return )
 						{
 							CameraSPtr l_camera = p_obj.CreateCamera( l_name, 100, 100, nullptr, eVIEWPORT_TYPE_3D );
-							l_bReturn = Camera::BinaryParser( m_path ).Parse( *l_camera, l_chunk );
+							l_return = Camera::BinaryParser( m_path ).Parse( *l_camera, l_chunk );
 						}
 					}
 				}
@@ -407,23 +407,23 @@ namespace Castor3D
 					String l_nodeName;
 					eLIGHT_TYPE l_type = eLIGHT_TYPE_COUNT;
 
-					while ( l_bReturn && ( l_name.empty() || l_type == eLIGHT_TYPE_COUNT ) )
+					while ( l_return && ( l_name.empty() || l_type == eLIGHT_TYPE_COUNT ) )
 					{
 						BinaryChunk l_chunkLight;
-						l_bReturn = l_chunk.GetSubChunk( l_chunkLight );
+						l_return = l_chunk.GetSubChunk( l_chunkLight );
 
-						if ( l_bReturn )
+						if ( l_return )
 						{
 							switch ( l_chunkLight.GetChunkType() )
 							{
 							case eCHUNK_TYPE_NAME:
-								l_bReturn = DoParseChunk( l_name, l_chunkLight );
+								l_return = DoParseChunk( l_name, l_chunkLight );
 								break;
 
 							case eCHUNK_TYPE_MOVABLE_NODE:
-								l_bReturn = DoParseChunk( l_nodeName, l_chunkLight );
+								l_return = DoParseChunk( l_nodeName, l_chunkLight );
 
-								if ( l_bReturn )
+								if ( l_return )
 								{
 									l_node = p_obj.GetNode( l_nodeName );
 								}
@@ -431,20 +431,20 @@ namespace Castor3D
 								break;
 
 							case eCHUNK_TYPE_LIGHT_TYPE:
-								l_bReturn = DoParseChunk( l_type, l_chunkLight );
+								l_return = DoParseChunk( l_type, l_chunkLight );
 								break;
 
 							default:
-								l_bReturn = false;
+								l_return = false;
 								break;
 							}
 						}
 					}
 
-					if ( l_bReturn && !l_name.empty() && l_type != eLIGHT_TYPE_COUNT )
+					if ( l_return && !l_name.empty() && l_type != eLIGHT_TYPE_COUNT )
 					{
 						LightSPtr l_light = p_obj.CreateLight( l_name, l_node, l_type );
-						l_bReturn = Light::BinaryParser( m_path ).Parse( *l_light, l_chunk );
+						l_return = Light::BinaryParser( m_path ).Parse( *l_light, l_chunk );
 					}
 				}
 				break;
@@ -452,43 +452,43 @@ namespace Castor3D
 				case eCHUNK_TYPE_GEOMETRY:
 				{
 					BinaryChunk l_chunkGeometry;
-					l_bReturn = l_chunk.GetSubChunk( l_chunkGeometry );
+					l_return = l_chunk.GetSubChunk( l_chunkGeometry );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						switch ( l_chunkGeometry.GetChunkType() )
 						{
 						case eCHUNK_TYPE_NAME:
-							l_bReturn = DoParseChunk( l_name, l_chunkGeometry );
+							l_return = DoParseChunk( l_name, l_chunkGeometry );
 							break;
 
 						default:
-							l_bReturn = false;
+							l_return = false;
 							break;
 						}
 
-						if ( l_bReturn )
+						if ( l_return )
 						{
 							GeometrySPtr l_geometry = p_obj.CreateGeometry( l_name );
-							l_bReturn = Geometry::BinaryParser( m_path ).Parse( *l_geometry, l_chunk );
+							l_return = Geometry::BinaryParser( m_path ).Parse( *l_geometry, l_chunk );
 						}
 					}
 				}
 				break;
 
 				default:
-					l_bReturn = false;
+					l_return = false;
 					break;
 				}
 			}
 
-			if ( !l_bReturn )
+			if ( !l_return )
 			{
 				p_chunk.EndParse();
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -583,11 +583,24 @@ namespace Castor3D
 		m_arrayCamerasToDelete.clear();
 		m_arrayNodesToDelete.clear();
 		m_addedNodes.clear();
-		m_rootCameraNode->Detach();
-		m_rootCameraNode.reset();
-		m_rootObjectNode->Detach();
-		m_rootObjectNode.reset();
-		m_rootNode->Detach();
+
+		if ( m_rootCameraNode )
+		{
+			m_rootCameraNode->Detach();
+			m_rootCameraNode.reset();
+		}
+
+		if ( m_rootObjectNode )
+		{
+			m_rootObjectNode->Detach();
+			m_rootObjectNode.reset();
+		}
+
+		if ( m_rootNode )
+		{
+			m_rootNode->Detach();
+		}
+
 		m_rootNode.reset();
 		m_mapLights.clear();
 		m_alphaDepthState.reset();
@@ -694,7 +707,7 @@ namespace Castor3D
 
 	bool Scene::SetBackgroundImage( Path const & p_pathFile )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		ImageSPtr l_pImage;
 
 		if ( !p_pathFile.empty() )
@@ -722,10 +735,10 @@ namespace Castor3D
 				m_pBackgroundImage->GenerateMipmaps();
 				m_pBackgroundImage->Unbind();
 			} ) );
-			l_bReturn = true;
+			l_return = true;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void Scene::InitialiseGeometries()
@@ -1188,17 +1201,17 @@ namespace Castor3D
 	bool Scene::ImportExternal( String const & p_fileName, Importer & p_importer )
 	{
 		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-		bool l_bReturn = true;
+		bool l_return = true;
 		SceneSPtr l_pScene = p_importer.ImportScene( p_fileName, Parameters() );
 
 		if ( l_pScene )
 		{
 			Merge( l_pScene );
 			m_changed = true;
-			l_bReturn = true;
+			l_return = true;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void Scene::Select( Ray * p_ray, GeometrySPtr & p_geo, SubmeshSPtr & p_submesh, FaceSPtr * p_face, Vertex * p_vertex )

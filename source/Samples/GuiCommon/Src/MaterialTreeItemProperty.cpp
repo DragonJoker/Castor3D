@@ -16,17 +16,19 @@ namespace GuiCommon
 	}
 
 	MaterialTreeItemProperty::MaterialTreeItemProperty( bool p_editable, MaterialSPtr p_material )
-		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_MATERIAL )
+		: TreeItemProperty( p_material->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_MATERIAL )
 		, m_material( p_material )
 	{
 		PROPERTY_CATEGORY_MATERIAL = _( "Material: " );
+
+		CreateTreeItemMenu();
 	}
 
 	MaterialTreeItemProperty::~MaterialTreeItemProperty()
 	{
 	}
 
-	void MaterialTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void MaterialTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		MaterialSPtr l_material = GetMaterial();
 
@@ -36,7 +38,7 @@ namespace GuiCommon
 		}
 	}
 
-	void MaterialTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void MaterialTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		MaterialSPtr l_material = GetMaterial();
 		wxPGProperty * l_property = p_event.GetProperty();

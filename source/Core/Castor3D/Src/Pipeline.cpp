@@ -305,58 +305,58 @@ eMTXMODE IPipelineImpl::MatrixMode( eMTXMODE p_eMode )
 
 bool IPipelineImpl::LoadIdentity()
 {
-	bool l_bReturn = false;
+	bool l_return = false;
 	CASTOR_ASSERT( m_pPipeline->m_eCurrentMode >= 0 && m_pPipeline->m_eCurrentMode < eMTXMODE_COUNT );
 
 	if ( m_pPipeline->m_pRenderSystem->UseShaders() )
 	{
 		GetCurrentMatrix().set_identity();
-		l_bReturn = true;
+		l_return = true;
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 bool IPipelineImpl::PushMatrix()
 {
-	bool l_bReturn = false;
+	bool l_return = false;
 	CASTOR_ASSERT( m_pPipeline->m_eCurrentMode >= 0 && m_pPipeline->m_eCurrentMode < eMTXMODE_COUNT );
 
 	if ( m_pPipeline->m_pRenderSystem->UseShaders() )
 	{
 		m_pPipeline->m_matrix[m_pPipeline->m_eCurrentMode].push( GetCurrentMatrix() );
-		l_bReturn = true;
+		l_return = true;
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 bool IPipelineImpl::PopMatrix()
 {
-	bool l_bReturn = false;
+	bool l_return = false;
 	CASTOR_ASSERT( m_pPipeline->m_eCurrentMode >= 0 && m_pPipeline->m_eCurrentMode < eMTXMODE_COUNT );
 
 	if ( m_pPipeline->m_pRenderSystem->UseShaders() )
 	{
 		m_pPipeline->m_matrix[m_pPipeline->m_eCurrentMode].pop();
-		l_bReturn = true;
+		l_return = true;
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 bool IPipelineImpl::MultMatrix( Matrix4x4r const & p_matrix )
 {
-	bool l_bReturn = false;
+	bool l_return = false;
 	CASTOR_ASSERT( m_pPipeline->m_eCurrentMode >= 0 && m_pPipeline->m_eCurrentMode < eMTXMODE_COUNT );
 
 	if ( m_pPipeline->m_pRenderSystem->UseShaders() )
 	{
 		GetCurrentMatrix() *= p_matrix;
-		l_bReturn = true;
+		l_return = true;
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 bool IPipelineImpl::MultMatrix( real const * p_matrix )
@@ -366,46 +366,46 @@ bool IPipelineImpl::MultMatrix( real const * p_matrix )
 
 bool IPipelineImpl::Perspective( Angle const & p_aFOVY, real p_rRatio, real p_rNear, real p_rFar )
 {
-	bool l_bReturn = false;
+	bool l_return = false;
 
 	if ( m_pPipeline->m_pRenderSystem->UseShaders() )
 	{
 		MtxUtils::perspective_rh( GetCurrentMatrix(), p_aFOVY, p_rRatio, p_rNear, p_rFar );
-		l_bReturn = true;
+		l_return = true;
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 bool IPipelineImpl::Frustum( real p_rLeft, real p_rRight, real p_rBottom, real p_rTop, real p_rNear, real p_rFar )
 {
-	bool l_bReturn = false;
+	bool l_return = false;
 
 	if ( m_pPipeline->m_pRenderSystem->UseShaders() )
 	{
 		MtxUtils::frustum_rh( GetCurrentMatrix(), p_rLeft, p_rRight, p_rBottom, p_rTop, p_rNear, p_rFar );
-		l_bReturn = true;
+		l_return = true;
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 bool IPipelineImpl::Ortho( real p_rLeft, real p_rRight, real p_rBottom, real p_rTop, real p_rNear, real p_rFar )
 {
-	bool l_bReturn = false;
+	bool l_return = false;
 
 	if ( m_pPipeline->m_pRenderSystem->UseShaders() )
 	{
 		MtxUtils::ortho_rh( GetCurrentMatrix(), p_rLeft, p_rRight, p_rBottom, p_rTop, p_rNear, p_rFar );
-		l_bReturn = true;
+		l_return = true;
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 bool IPipelineImpl::Project( Point3r const & p_ptObj, Point4r const & p_ptViewport, Point3r & p_ptResult )
 {
-	bool l_bReturn = false;
+	bool l_return = false;
 
 	if ( m_pPipeline->m_pRenderSystem->UseShaders() && m_pPipeline->HasMatrix( eMTXMODE_VIEW ) && m_pPipeline->HasMatrix( eMTXMODE_MODEL ) && m_pPipeline->HasMatrix( eMTXMODE_PROJECTION ) )
 	{
@@ -420,15 +420,15 @@ bool IPipelineImpl::Project( Point3r const & p_ptObj, Point4r const & p_ptViewpo
 		l_ptTmp[0] = l_ptTmp[0] * p_ptViewport[2] + p_ptViewport[0];
 		l_ptTmp[1] = l_ptTmp[1] * p_ptViewport[3] + p_ptViewport[1];
 		p_ptResult = Point3r( l_ptTmp.const_ptr() );
-		l_bReturn = true;
+		l_return = true;
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 bool IPipelineImpl::UnProject( Point3i const & p_ptWin, Point4r const & p_ptViewport, Point3r & p_ptResult )
 {
-	bool l_bReturn = false;
+	bool l_return = false;
 
 	if ( m_pPipeline->m_pRenderSystem->UseShaders() && m_pPipeline->HasMatrix( eMTXMODE_VIEW ) && m_pPipeline->HasMatrix( eMTXMODE_MODEL ) && m_pPipeline->HasMatrix( eMTXMODE_PROJECTION ) )
 	{
@@ -443,10 +443,10 @@ bool IPipelineImpl::UnProject( Point3i const & p_ptWin, Point4r const & p_ptView
 		l_ptObj = l_mInverse.get_inverse() * l_ptTmp;
 		l_ptObj /= l_ptObj[3];
 		p_ptResult = Point3r( l_ptObj.const_ptr() );
-		l_bReturn = true;
+		l_return = true;
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 bool IPipelineImpl::PickMatrix( real x, real y, real width, real height, int viewport[] )

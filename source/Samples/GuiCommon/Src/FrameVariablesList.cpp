@@ -102,7 +102,7 @@ namespace GuiCommon
 
 	void FrameVariablesList::DoAddBuffer( wxTreeItemId p_id, FrameVariableBufferSPtr p_buffer )
 	{
-		wxTreeItemId l_id = AppendItem( p_id, p_buffer->GetName(), eID_FRAME_VARIABLE_BUFFER, eID_FRAME_VARIABLE_BUFFER_SEL, new FrameVariableBufferTreeItemProperty( m_propertiesHolder->IsEditable(), p_buffer ) );
+		wxTreeItemId l_id = AppendItem( p_id, p_buffer->GetName(), eID_FRAME_VARIABLE_BUFFER, eID_FRAME_VARIABLE_BUFFER_SEL, new FrameVariableBufferTreeItemProperty( m_program.lock()->GetRenderSystem()->GetEngine(), m_propertiesHolder->IsEditable(), p_buffer ) );
 		uint32_t l_index = 0;
 
 		for ( auto && l_variable : *p_buffer )
@@ -138,6 +138,7 @@ namespace GuiCommon
 	BEGIN_EVENT_TABLE( FrameVariablesList, wxTreeCtrl )
 		EVT_CLOSE( FrameVariablesList::OnClose )
 		EVT_TREE_SEL_CHANGED( wxID_ANY, FrameVariablesList::OnSelectItem )
+		EVT_TREE_ITEM_RIGHT_CLICK( wxID_ANY, FrameVariablesList::OnMouseRButtonUp )
 	END_EVENT_TABLE()
 
 	void FrameVariablesList::OnClose( wxCloseEvent & p_event )
@@ -151,5 +152,9 @@ namespace GuiCommon
 		TreeItemProperty * l_data = reinterpret_cast< TreeItemProperty * >( p_event.GetClientObject() );
 		m_propertiesHolder->SetPropertyData( l_data );
 		p_event.Skip();
+	}
+
+	void FrameVariablesList::OnMouseRButtonUp( wxTreeEvent & p_event )
+	{
 	}
 }

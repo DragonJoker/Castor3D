@@ -164,7 +164,11 @@ namespace GuiCommon
 			}
 
 			SceneNodeSPtr l_rootNode = p_pScene->GetRootNode();
-			DoAddNode( l_scene, l_rootNode );
+
+			if ( l_rootNode )
+			{
+				DoAddNode( l_scene, l_rootNode );
+			}
 
 			for ( auto && l_overlay : p_pEngine->GetOverlayManager() )
 			{
@@ -301,6 +305,7 @@ namespace GuiCommon
 	BEGIN_EVENT_TABLE( SceneObjectsList, wxTreeCtrl )
 		EVT_CLOSE( SceneObjectsList::OnClose )
 		EVT_TREE_SEL_CHANGED( wxID_ANY, SceneObjectsList::OnSelectItem )
+		EVT_TREE_ITEM_RIGHT_CLICK( wxID_ANY, SceneObjectsList::OnMouseRButtonUp )
 	END_EVENT_TABLE()
 
 	void SceneObjectsList::OnClose( wxCloseEvent & p_event )
@@ -314,5 +319,9 @@ namespace GuiCommon
 		TreeItemProperty * l_data = reinterpret_cast< TreeItemProperty * >( p_event.GetClientObject() );
 		m_propertiesHolder->SetPropertyData( l_data );
 		p_event.Skip();
+	}
+
+	void SceneObjectsList::OnMouseRButtonUp( wxTreeEvent & p_event )
+	{
 	}
 }

@@ -1898,6 +1898,7 @@ namespace Castor3D
 	class RenderTechniqueBase;
 	class RenderWindow;		//!< The render window handler class
 	class IWindowHandle;
+	class DebugOverlays;
 	class Engine;			//!< The Castor3D core system
 	class RendererServer;	//!< Manages graphics related stuff
 	class PluginBase;		//!< The base plugin handler class

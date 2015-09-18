@@ -954,27 +954,27 @@ namespace Castor
 	template< typename T, uint32_t Count >
 	bool Point< T, Count >::BinaryLoader::operator()( Point< T, Count > & p_object, BinaryFile & p_file )
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
-		for ( uint32_t i = 0; i < Count && l_bReturn; ++i )
+		for ( uint32_t i = 0; i < Count && l_return; ++i )
 		{
-			l_bReturn = p_file.Read( p_object[i] ) == sizeof( T );
+			l_return = p_file.Read( p_object[i] ) == sizeof( T );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	template< typename T, uint32_t Count >
 	bool Point< T, Count >::BinaryLoader::operator()( Point< T, Count > const & p_object, BinaryFile & p_file )
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
-		for ( uint32_t i = 0; i < Count && l_bReturn; ++i )
+		for ( uint32_t i = 0; i < Count && l_return; ++i )
 		{
-			l_bReturn = p_file.Write( p_object[i] ) == sizeof( T );
+			l_return = p_file.Write( p_object[i] ) == sizeof( T );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 //*************************************************************************************************
@@ -1020,8 +1020,8 @@ namespace Castor
 			l_streamWord << p_object[i];
 		}
 
-		bool l_bReturn = p_file.Print( 1024, cuT( "%s" ), l_streamWord.str().c_str() ) > 0;
-		return l_bReturn;
+		bool l_return = p_file.Print( 1024, cuT( "%s" ), l_streamWord.str().c_str() ) > 0;
+		return l_return;
 	}
 
 //*************************************************************************************************
@@ -1394,14 +1394,14 @@ namespace Castor
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator ==( Point< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
 	{
-		bool l_bReturn = ( Count == _Count );
+		bool l_return = ( Count == _Count );
 
-		for ( uint32_t i = 0; i < Count && l_bReturn; i++ )
+		for ( uint32_t i = 0; i < Count && l_return; i++ )
 		{
-			l_bReturn = Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			l_return = Policy< T >::equals( p_ptA[i], p_ptB[i] );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator !=( Point< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
@@ -1471,14 +1471,14 @@ namespace Castor
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator ==( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
 	{
-		bool l_bReturn = ( Count == _Count );
+		bool l_return = ( Count == _Count );
 
-		for ( uint32_t i = 0; i < Count && l_bReturn; i++ )
+		for ( uint32_t i = 0; i < Count && l_return; i++ )
 		{
-			l_bReturn = Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			l_return = Policy< T >::equals( p_ptA[i], p_ptB[i] );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator !=( Coords< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
@@ -1518,14 +1518,14 @@ namespace Castor
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator ==( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
 	{
-		bool l_bReturn = ( Count == _Count );
+		bool l_return = ( Count == _Count );
 
-		for ( uint32_t i = 0; i < Count && l_bReturn; i++ )
+		for ( uint32_t i = 0; i < Count && l_return; i++ )
 		{
-			l_bReturn = Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			l_return = Policy< T >::equals( p_ptA[i], p_ptB[i] );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator !=( Point< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )

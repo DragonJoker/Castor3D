@@ -46,11 +46,11 @@ namespace GlRender
 
 	bool GlFrameBuffer::SetDrawBuffers( uint32_t p_uiSize, eATTACHMENT_POINT const * p_eAttaches )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( m_arrayGlAttaches.size() )
 		{
-			l_bReturn = SetDrawBuffers();
+			l_return = SetDrawBuffers();
 		}
 		else if ( p_uiSize )
 		{
@@ -65,27 +65,27 @@ namespace GlRender
 				}
 			}
 
-			l_bReturn = m_gl.DrawBuffers( int( l_arrayAttaches.size() ), &l_arrayAttaches[0] );
+			l_return = m_gl.DrawBuffers( int( l_arrayAttaches.size() ), &l_arrayAttaches[0] );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool GlFrameBuffer::SetDrawBuffers()
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( m_arrayGlAttaches.size() )
 		{
-			l_bReturn = m_gl.DrawBuffers( int( m_arrayGlAttaches.size() ), &m_arrayGlAttaches[0] );
+			l_return = m_gl.DrawBuffers( int( m_arrayGlAttaches.size() ), &m_arrayGlAttaches[0] );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool GlFrameBuffer::SetReadBuffer( eATTACHMENT_POINT p_eAttach )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		eGL_BUFFER l_eAttach = m_gl.Get( m_gl.Get( p_eAttach ) );
 		UIntArrayIt l_it = std::find( m_arrayGlAttaches.begin(), m_arrayGlAttaches.end(), l_eAttach );
 
@@ -94,7 +94,7 @@ namespace GlRender
 			m_gl.ReadBuffer( l_eAttach );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool GlFrameBuffer::IsComplete()
@@ -114,15 +114,15 @@ namespace GlRender
 
 	bool GlFrameBuffer::DoBind( eFRAMEBUFFER_TARGET p_eTarget )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( m_uiGlName != eGL_INVALID_INDEX )
 		{
 			m_eGlBindingMode = m_gl.Get( p_eTarget );
-			l_bReturn = m_gl.BindFramebuffer( m_eGlBindingMode, m_uiGlName );
+			l_return = m_gl.BindFramebuffer( m_eGlBindingMode, m_uiGlName );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void GlFrameBuffer::DoUnbind()
@@ -145,7 +145,7 @@ namespace GlRender
 
 	bool GlFrameBuffer::DoAttach( eATTACHMENT_POINT p_eAttachment, DynamicTextureSPtr p_pTexture, eTEXTURE_TARGET p_eTarget, int p_iLayer )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( m_gl.HasFbo() )
 		{
@@ -158,11 +158,11 @@ namespace GlRender
 
 				if ( l_pTexture->GetDimension() == eTEXTURE_DIMENSION_1D )
 				{
-					l_bReturn = m_gl.FramebufferTexture1D( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetDimension() ), l_pTexture->GetGlName(), 0 );
+					l_return = m_gl.FramebufferTexture1D( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetDimension() ), l_pTexture->GetGlName(), 0 );
 				}
 				else
 				{
-					l_bReturn = m_gl.FramebufferTexture( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, l_pTexture->GetGlName(), 0 );
+					l_return = m_gl.FramebufferTexture( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, l_pTexture->GetGlName(), 0 );
 				}
 
 				break;
@@ -171,11 +171,11 @@ namespace GlRender
 
 				if ( l_pTexture->GetDimension() == eTEXTURE_DIMENSION_2D )
 				{
-					l_bReturn = m_gl.FramebufferTexture2D( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetDimension() ), l_pTexture->GetGlName(), 0 );
+					l_return = m_gl.FramebufferTexture2D( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetDimension() ), l_pTexture->GetGlName(), 0 );
 				}
 				else
 				{
-					l_bReturn = m_gl.FramebufferTexture( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, l_pTexture->GetGlName(), 0 );
+					l_return = m_gl.FramebufferTexture( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, l_pTexture->GetGlName(), 0 );
 				}
 
 				break;
@@ -184,32 +184,32 @@ namespace GlRender
 
 				if ( l_pTexture->GetDimension() == eTEXTURE_DIMENSION_3D )
 				{
-					l_bReturn = m_gl.FramebufferTexture3D( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetDimension() ), l_pTexture->GetGlName(), 0, p_iLayer );
+					l_return = m_gl.FramebufferTexture3D( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetDimension() ), l_pTexture->GetGlName(), 0, p_iLayer );
 				}
 				else
 				{
-					l_bReturn = m_gl.FramebufferTexture( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, l_pTexture->GetGlName(), 0 );
+					l_return = m_gl.FramebufferTexture( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, l_pTexture->GetGlName(), 0 );
 				}
 
 				break;
 
 			case eTEXTURE_TARGET_LAYER:
-				l_bReturn = m_gl.FramebufferTextureLayer( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, l_pTexture->GetGlName(), 0, p_iLayer );
+				l_return = m_gl.FramebufferTextureLayer( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, l_pTexture->GetGlName(), 0, p_iLayer );
 				break;
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			DoGlAttach( p_eAttachment );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool GlFrameBuffer::DoAttach( eATTACHMENT_POINT p_eAttachment, RenderBufferSPtr p_pRenderBuffer )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( m_gl.HasFbo() )
 		{
@@ -237,16 +237,16 @@ namespace GlRender
 
 			if ( l_uiGlName != eGL_INVALID_INDEX )
 			{
-				l_bReturn = m_gl.FramebufferRenderbuffer( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, eGL_RENDERBUFFER_MODE_DEFAULT, l_uiGlName );
+				l_return = m_gl.FramebufferRenderbuffer( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, eGL_RENDERBUFFER_MODE_DEFAULT, l_uiGlName );
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			DoGlAttach( p_eAttachment );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void GlFrameBuffer::DoDetachAll()

@@ -29,7 +29,7 @@ namespace GuiCommon
 	}
 
 	PassTreeItemProperty::PassTreeItemProperty( bool p_editable, Castor3D::PassSPtr p_pass )
-		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_PASS )
+		: TreeItemProperty( p_pass->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_PASS )
 		, m_pass( p_pass )
 	{
 		PROPERTY_CATEGORY_PASS = _( "Pass: " );
@@ -42,13 +42,15 @@ namespace GuiCommon
 		PROPERTY_PASS_OPACITY = _( "Opacity" );
 		PROPERTY_PASS_SHADER = _( "Shader" );
 		PROPERTY_PASS_EDIT_SHADER = _( "Edit Shader..." );
+
+		CreateTreeItemMenu();
 	}
 
 	PassTreeItemProperty::~PassTreeItemProperty()
 	{
 	}
 
-	void PassTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void PassTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		PassSPtr l_pass = GetPass();
 
@@ -62,15 +64,11 @@ namespace GuiCommon
 			p_grid->Append( new wxFloatProperty( PROPERTY_PASS_EXPONENT ) )->SetValue( l_pass->GetShininess() );
 			p_grid->Append( new wxBoolProperty( PROPERTY_PASS_TWO_SIDED, wxPG_BOOL_USE_CHECKBOX ) )->SetValue( l_pass->IsTwoSided() );
 			p_grid->Append( new wxFloatProperty( PROPERTY_PASS_OPACITY ) )->SetValue( l_pass->GetAlpha() );
-
-			wxPGProperty * l_prop = p_grid->Append( new wxStringProperty( PROPERTY_PASS_SHADER ) );
-			l_prop->SetValue( PROPERTY_PASS_EDIT_SHADER );
-			l_prop->SetEditor( p_editor );
-			l_prop->SetClientObject( new ButtonData( static_cast< ButtonEventMethod >( &PassTreeItemProperty::OnEditShader ), this ) );
+			p_grid->Append( CreateProperty( PROPERTY_PASS_SHADER, PROPERTY_PASS_EDIT_SHADER, static_cast< ButtonEventMethod >( &PassTreeItemProperty::OnEditShader ), this, p_editor ) );
 		}
 	}
 
-	void PassTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void PassTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		PassSPtr l_pass = GetPass();
 		wxPGProperty * l_property = p_event.GetProperty();
@@ -118,70 +116,70 @@ namespace GuiCommon
 	{
 		PassSPtr l_pass = GetPass();
 
-		l_pass->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_pass]()
+		DoApplyChange( [p_value, l_pass]()
 		{
 			l_pass->SetAmbient( p_value );
-		} ) );
+		} );
 	}
 
 	void PassTreeItemProperty::OnDiffuseColourChange( Colour const & p_value )
 	{
 		PassSPtr l_pass = GetPass();
 
-		l_pass->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_pass]()
+		DoApplyChange( [p_value, l_pass]()
 		{
 			l_pass->SetDiffuse( p_value );
-		} ) );
+		} );
 	}
 
 	void PassTreeItemProperty::OnSpecularColourChange( Colour const & p_value )
 	{
 		PassSPtr l_pass = GetPass();
 
-		l_pass->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_pass]()
+		DoApplyChange( [p_value, l_pass]()
 		{
 			l_pass->SetSpecular( p_value );
-		} ) );
+		} );
 	}
 
 	void PassTreeItemProperty::OnEmissiveColourChange( Colour const & p_value )
 	{
 		PassSPtr l_pass = GetPass();
 
-		l_pass->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_pass]()
+		DoApplyChange( [p_value, l_pass]()
 		{
 			l_pass->SetSpecular( p_value );
-		} ) );
+		} );
 	}
 
 	void PassTreeItemProperty::OnExponentChange( double p_value )
 	{
 		PassSPtr l_pass = GetPass();
 
-		l_pass->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_pass]()
+		DoApplyChange( [p_value, l_pass]()
 		{
 			l_pass->SetShininess( p_value );
-		} ) );
+		} );
 	}
 
 	void PassTreeItemProperty::OnTwoSidedChange( bool p_value )
 	{
 		PassSPtr l_pass = GetPass();
 
-		l_pass->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_pass]()
+		DoApplyChange( [p_value, l_pass]()
 		{
 			l_pass->SetTwoSided( p_value );
-		} ) );
+		} );
 	}
 
 	void PassTreeItemProperty::OnOpacityChange( double p_value )
 	{
 		PassSPtr l_pass = GetPass();
 
-		l_pass->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_pass]()
+		DoApplyChange( [p_value, l_pass]()
 		{
 			l_pass->SetAlpha( p_value );
-		} ) );
+		} );
 	}
 
 	bool PassTreeItemProperty::OnEditShader( wxPGProperty * p_property )

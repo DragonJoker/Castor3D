@@ -37,13 +37,6 @@ namespace GuiCommon
 			eID_LIST_RENDERERS,
 		}	eID;
 
-	private:
-		wxImage * m_pImgCastor;
-		wxListBox * m_pListRenderers;
-		wxButton * m_pBtnOk;
-		wxButton * m_pBtnCancel;
-		Castor3D::Engine * m_pEngine;
-
 	public:
 		RendererSelector( Castor3D::Engine * p_pEngine, wxWindow * p_pParent, wxString const & p_strTitle );
 		virtual ~RendererSelector();
@@ -60,6 +53,11 @@ namespace GuiCommon
 		void OnKeyUp( wxKeyEvent & p_event );
 		void OnButtonOk( wxCommandEvent & p_event );
 		void OnButtonCancel( wxCommandEvent & p_event );
+
+	private:
+		wxImage * m_pImgCastor;
+		wxListBox * m_pListRenderers;
+		Castor3D::Engine * m_pEngine;
 	};
 }
 

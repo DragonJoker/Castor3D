@@ -245,7 +245,7 @@ namespace Castor
 
 	bool File::IsOk()const
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( m_pFile )
 		{
@@ -253,12 +253,12 @@ namespace Castor
 			{
 				if ( feof( m_pFile ) == 0 )
 				{
-					l_bReturn = true;
+					l_return = true;
 				}
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	long long File::Tell()
@@ -322,7 +322,7 @@ namespace Castor
 	bool File::ListDirectoryFiles( Path const & p_folderPath, PathArray & p_files, bool CU_PARAM_UNUSED( p_recursive ) )
 	{
 		REQUIRE( ! p_folderPath.empty() );
-		bool l_bReturn = false;
+		bool l_return = false;
 #if defined( _WIN32 )
 		WIN32_FIND_DATA l_findData;
 		HANDLE l_hHandle = ::FindFirstFile( ( p_folderPath / cuT( "*.*" ) ).c_str(), &l_findData );
@@ -337,9 +337,9 @@ namespace Castor
 				p_files.push_back( l_strBuffer );
 			}
 
-			l_bReturn = true;
+			l_return = true;
 
-			while ( l_bReturn )
+			while ( l_return )
 			{
 				if ( ::FindNextFile( l_hHandle, &l_findData ) && l_findData.cFileName != l_strBuffer )
 				{
@@ -352,11 +352,11 @@ namespace Castor
 				}
 				else
 				{
-					l_bReturn = false;
+					l_return = false;
 				}
 			}
 
-			l_bReturn = true;
+			l_return = true;
 		}
 
 #elif defined( __linux__ )
@@ -399,7 +399,7 @@ namespace Castor
 				break;
 			}
 
-			l_bReturn = false;
+			l_return = false;
 		}
 		else
 		{
@@ -414,13 +414,13 @@ namespace Castor
 			}
 
 			closedir( l_pDir );
-			l_bReturn = true;
+			l_return = true;
 		}
 
 #else
 #	error "Unsupported platform"
 #endif
-		return l_bReturn;
+		return l_return;
 	}
 
 	Path File::DirectoryGetCurrent()

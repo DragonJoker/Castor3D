@@ -179,7 +179,7 @@ namespace GlRender
 
 	bool GlContextImpl::DoCreateGl3Context( RenderWindow * p_window )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		try
 		{
@@ -223,22 +223,22 @@ namespace GlRender
 				EndCurrent();
 				m_gl.DeleteContext( l_hContext );
 				Logger::LogInfo( cuT( "GlContext::GlContext - OpenGL 3.x context created" ) );
-				l_bReturn = m_hContext != NULL;
+				l_return = m_hContext != NULL;
 			}
 			else
 			{
 				//It's not possible to make a GL 3[0] context. Use the old style context (GL 2.1 and before)
 				l_pRenderSystem->SetOpenGlVersion( 2, 1 );
 				Logger::LogWarning( cuT( "GlContext::GlContext - Can't create OpenGL 3.x context" ) );
-				l_bReturn = true;
+				l_return = true;
 			}
 		}
 		catch ( ... )
 		{
-			l_bReturn = false;
+			l_return = false;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	HGLRC GlContextImpl::DoCreateDummyContext( RenderWindow * p_window )
@@ -255,7 +255,7 @@ namespace GlRender
 
 	bool GlContextImpl::DoSelectPixelFormat( RenderWindow * p_window )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		PIXELFORMATDESCRIPTOR l_pfd = { 0 };
 		l_pfd.nSize = sizeof( PIXELFORMATDESCRIPTOR );
 		l_pfd.nVersion = 1;
@@ -299,9 +299,9 @@ namespace GlRender
 
 		if ( l_iPixelFormats )
 		{
-			l_bReturn = ::SetPixelFormat( m_hDC, l_iPixelFormats, &l_pfd ) != FALSE;
+			l_return = ::SetPixelFormat( m_hDC, l_iPixelFormats, &l_pfd ) != FALSE;
 
-			if ( !l_bReturn )
+			if ( !l_return )
 			{
 				Castor::String l_error = Castor::System::GetLastErrorText();
 
@@ -312,7 +312,7 @@ namespace GlRender
 				else
 				{
 					Logger::LogWarning( cuT( "ChoosePixelFormat failed" ) );
-					l_bReturn = true;
+					l_return = true;
 				}
 			}
 		}
@@ -321,12 +321,12 @@ namespace GlRender
 			Logger::LogError( cuT( "SetPixelFormat failed : " ) + Castor::System::GetLastErrorText() );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool GlContextImpl::DoSelectStereoPixelFormat( RenderWindow * p_window )
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		GlRenderSystem * l_pRenderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
 		PIXELFORMATDESCRIPTOR l_pfd = { 0 };
 		l_pfd.nSize = sizeof( PIXELFORMATDESCRIPTOR );
@@ -386,21 +386,21 @@ namespace GlRender
 
 		if ( l_bStereoAvailable )
 		{
-			l_bReturn = ::SetPixelFormat( m_hDC, l_iPixelFormat, &l_pfd ) == TRUE;
+			l_return = ::SetPixelFormat( m_hDC, l_iPixelFormat, &l_pfd ) == TRUE;
 
-			if ( !l_bReturn )
+			if ( !l_return )
 			{
 				l_bStereoAvailable = false;
-				l_bReturn = DoSelectPixelFormat( p_window );
+				l_return = DoSelectPixelFormat( p_window );
 			}
 		}
 		else
 		{
-			l_bReturn = DoSelectPixelFormat( p_window );
+			l_return = DoSelectPixelFormat( p_window );
 		}
 
 		l_pRenderSystem->SetStereoAvailable( l_bStereoAvailable );
-		return l_bReturn;
+		return l_return;
 	}
 }
 

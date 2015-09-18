@@ -1,7 +1,6 @@
 #include "CameraTreeItemProperty.hpp"
 
 #include <Camera.hpp>
-#include <FunctorEvent.hpp>
 
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>
@@ -29,7 +28,7 @@ namespace GuiCommon
 	}
 
 	CameraTreeItemProperty::CameraTreeItemProperty( bool p_editable, Castor3D::CameraSPtr p_camera )
-		: TreeItemProperty( p_editable, ePROPERTY_DATA_TYPE_CAMERA )
+		: TreeItemProperty( p_camera->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_CAMERA )
 		, m_camera( p_camera )
 	{
 		PROPERTY_CATEGORY_CAMERA = _( "Camera: " );
@@ -45,13 +44,15 @@ namespace GuiCommon
 		PROPERTY_TOPOLOGY_QUADS = _( "Quads" );
 		PROPERTY_TOPOLOGY_QUAD_STRIP = _( "Quad Strip" );
 		PROPERTY_TOPOLOGY_POLYGON = _( "Polygon" );
+
+		CreateTreeItemMenu();
 	}
 
 	CameraTreeItemProperty::~CameraTreeItemProperty()
 	{
 	}
 
-	void CameraTreeItemProperty::CreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
+	void CameraTreeItemProperty::DoCreateProperties( wxPGEditor * p_editor, wxPropertyGrid * p_grid )
 	{
 		CameraSPtr l_camera = GetCamera();
 
@@ -118,7 +119,7 @@ namespace GuiCommon
 		}
 	}
 
-	void CameraTreeItemProperty::OnPropertyChange( wxPropertyGridEvent & p_event )
+	void CameraTreeItemProperty::DoPropertyChange( wxPropertyGridEvent & p_event )
 	{
 		wxPGProperty * l_property = p_event.GetProperty();
 		CameraSPtr l_camera = GetCamera();
@@ -175,9 +176,9 @@ namespace GuiCommon
 	{
 		CameraSPtr l_camera = GetCamera();
 
-		l_camera->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_value, l_camera]()
+		DoApplyChange( [p_value, l_camera]()
 		{
 			l_camera->SetPrimitiveType( p_value );
-		} ) );
+		} );
 	}
 }

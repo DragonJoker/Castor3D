@@ -111,85 +111,85 @@ namespace Castor3D
 
 	bool Sampler::BinaryParser::Fill( Sampler const & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_SAMPLER );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
+			l_return = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetInterpolationMode( eINTERPOLATION_FILTER_MIN ), eCHUNK_TYPE_SAMPLER_MINFILTER, l_chunk );
+			l_return = DoFillChunk( p_obj.GetInterpolationMode( eINTERPOLATION_FILTER_MIN ), eCHUNK_TYPE_SAMPLER_MINFILTER, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetInterpolationMode( eINTERPOLATION_FILTER_MAG ), eCHUNK_TYPE_SAMPLER_MAGFILTER, l_chunk );
+			l_return = DoFillChunk( p_obj.GetInterpolationMode( eINTERPOLATION_FILTER_MAG ), eCHUNK_TYPE_SAMPLER_MAGFILTER, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetInterpolationMode( eINTERPOLATION_FILTER_MIP ), eCHUNK_TYPE_SAMPLER_MIPFILTER, l_chunk );
+			l_return = DoFillChunk( p_obj.GetInterpolationMode( eINTERPOLATION_FILTER_MIP ), eCHUNK_TYPE_SAMPLER_MIPFILTER, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			float l_float = float( p_obj.GetMinLod() );
-			l_bReturn = DoFillChunk( l_float, eCHUNK_TYPE_SAMPLER_MINLOD, l_chunk );
+			l_return = DoFillChunk( l_float, eCHUNK_TYPE_SAMPLER_MINLOD, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			float l_float = float( p_obj.GetMaxLod() );
-			l_bReturn = DoFillChunk( l_float, eCHUNK_TYPE_SAMPLER_MAXLOD, l_chunk );
+			l_return = DoFillChunk( l_float, eCHUNK_TYPE_SAMPLER_MAXLOD, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			float l_float = float( p_obj.GetLodBias() );
-			l_bReturn = DoFillChunk( l_float, eCHUNK_TYPE_SAMPLER_LODBIAS, l_chunk );
+			l_return = DoFillChunk( l_float, eCHUNK_TYPE_SAMPLER_LODBIAS, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetWrappingMode( eTEXTURE_UVW_U ), eCHUNK_TYPE_SAMPLER_UWRAP, l_chunk );
+			l_return = DoFillChunk( p_obj.GetWrappingMode( eTEXTURE_UVW_U ), eCHUNK_TYPE_SAMPLER_UWRAP, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetWrappingMode( eTEXTURE_UVW_V ), eCHUNK_TYPE_SAMPLER_VWRAP, l_chunk );
+			l_return = DoFillChunk( p_obj.GetWrappingMode( eTEXTURE_UVW_V ), eCHUNK_TYPE_SAMPLER_VWRAP, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetWrappingMode( eTEXTURE_UVW_W ), eCHUNK_TYPE_SAMPLER_WWRAP, l_chunk );
+			l_return = DoFillChunk( p_obj.GetWrappingMode( eTEXTURE_UVW_W ), eCHUNK_TYPE_SAMPLER_WWRAP, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetBorderColour(), eCHUNK_TYPE_SAMPLER_COLOUR, l_chunk );
+			l_return = DoFillChunk( p_obj.GetBorderColour(), eCHUNK_TYPE_SAMPLER_COLOUR, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			float l_float = float( p_obj.GetMaxAnisotropy() );
-			l_bReturn = DoFillChunk( l_float, eCHUNK_TYPE_SAMPLER_MAXANISOTROPY, l_chunk );
+			l_return = DoFillChunk( l_float, eCHUNK_TYPE_SAMPLER_MAXANISOTROPY, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			l_chunk.Finalise();
 			p_chunk.AddSubChunk( l_chunk );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool Sampler::BinaryParser::Parse( Sampler & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		float l_float;
 		eINTERPOLATION_MODE l_mode;
 		eWRAP_MODE l_wrap;
@@ -199,16 +199,16 @@ namespace Castor3D
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
 			BinaryChunk l_chunk;
-			l_bReturn = p_chunk.GetSubChunk( l_chunk );
+			l_return = p_chunk.GetSubChunk( l_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				switch ( l_chunk.GetChunkType() )
 				{
 				case eCHUNK_TYPE_NAME:
-					l_bReturn = DoParseChunk( l_name, l_chunk );
+					l_return = DoParseChunk( l_name, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetName( l_name );
 					}
@@ -216,9 +216,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_SAMPLER_MINFILTER:
-					l_bReturn = DoParseChunk( l_mode, l_chunk );
+					l_return = DoParseChunk( l_mode, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetInterpolationMode( eINTERPOLATION_FILTER_MIN, l_mode );
 					}
@@ -226,9 +226,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_SAMPLER_MAGFILTER:
-					l_bReturn = DoParseChunk( l_mode, l_chunk );
+					l_return = DoParseChunk( l_mode, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetInterpolationMode( eINTERPOLATION_FILTER_MAG, l_mode );
 					}
@@ -236,9 +236,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_SAMPLER_MIPFILTER:
-					l_bReturn = DoParseChunk( l_mode, l_chunk );
+					l_return = DoParseChunk( l_mode, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetInterpolationMode( eINTERPOLATION_FILTER_MIP, l_mode );
 					}
@@ -246,9 +246,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_SAMPLER_MINLOD:
-					l_bReturn = DoParseChunk( l_float, l_chunk );
+					l_return = DoParseChunk( l_float, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetMinLod( l_float );
 					}
@@ -256,9 +256,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_SAMPLER_MAXLOD:
-					l_bReturn = DoParseChunk( l_float, l_chunk );
+					l_return = DoParseChunk( l_float, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetMaxLod( l_float );
 					}
@@ -266,9 +266,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_SAMPLER_LODBIAS:
-					l_bReturn = DoParseChunk( l_float, l_chunk );
+					l_return = DoParseChunk( l_float, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetLodBias( l_float );
 					}
@@ -276,9 +276,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_SAMPLER_UWRAP:
-					l_bReturn = DoParseChunk( l_wrap, l_chunk );
+					l_return = DoParseChunk( l_wrap, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetWrappingMode( eTEXTURE_UVW_U, l_wrap );
 					}
@@ -286,9 +286,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_SAMPLER_VWRAP:
-					l_bReturn = DoParseChunk( l_wrap, l_chunk );
+					l_return = DoParseChunk( l_wrap, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetWrappingMode( eTEXTURE_UVW_V, l_wrap );
 					}
@@ -296,9 +296,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_SAMPLER_WWRAP:
-					l_bReturn = DoParseChunk( l_wrap, l_chunk );
+					l_return = DoParseChunk( l_wrap, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetWrappingMode( eTEXTURE_UVW_W, l_wrap );
 					}
@@ -306,9 +306,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_SAMPLER_COLOUR:
-					l_bReturn = DoParseChunk( l_colour, l_chunk );
+					l_return = DoParseChunk( l_colour, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetBorderColour( l_colour );
 					}
@@ -316,9 +316,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_SAMPLER_MAXANISOTROPY:
-					l_bReturn = DoParseChunk( l_float, l_chunk );
+					l_return = DoParseChunk( l_float, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetMaxAnisotropy( l_float );
 					}
@@ -326,18 +326,18 @@ namespace Castor3D
 					break;
 
 				default:
-					l_bReturn = false;
+					l_return = false;
 					break;
 				}
 			}
 
-			if ( !l_bReturn )
+			if ( !l_return )
 			{
 				p_chunk.EndParse();
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*********************************************************************************************

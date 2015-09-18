@@ -104,7 +104,7 @@ namespace Castor
 	{
 		bool GetScreenSize( uint32_t p_screen, Castor::Size & p_size )
 		{
-			bool l_bReturn = false;
+			bool l_return = false;
 			Display * pdsp = NULL;
 			Screen * pscr = NULL;
 			pdsp = XOpenDisplay( NULL );
@@ -124,13 +124,13 @@ namespace Castor
 				else
 				{
 					p_size.set( pscr->width, pscr->height );
-					l_bReturn = true;
+					l_return = true;
 				}
 
 				XCloseDisplay( pdsp );
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 
 		String GetLastErrorText()
