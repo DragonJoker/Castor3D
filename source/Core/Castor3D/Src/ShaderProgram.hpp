@@ -284,28 +284,6 @@ namespace Castor3D
 		void AddFrameVariableBuffer( FrameVariableBufferSPtr p_pVariableBuffer, uint32_t p_shaderMask );
 		/**
 		 *\~english
-		 *\brief		Retrieves the frame variables bound to one shader type
-		 *\param[in]	p_type	The shader type
-		 *\return		The list
-		 *\~french
-		 *\brief		Récupère les variables de frame liées à un type de shader particulier
-		 *\param[in]	p_type	The shader type
-		 *\return		La liste
-		 */
-		FrameVariablePtrList & GetFrameVariables( eSHADER_TYPE p_type );
-		/**
-		 *\~english
-		 *\brief		Retrieves the frame variables bound to one shader type
-		 *\param[in]	p_type	The shader type
-		 *\return		The list
-		 *\~french
-		 *\brief		Récupère les variables de frame liées à un type de shader particulier
-		 *\param[in]	p_type	The shader type
-		 *\return		La liste
-		 */
-		FrameVariablePtrList const & GetFrameVariables( eSHADER_TYPE p_type )const;
-		/**
-		 *\~english
 		 *\brief		Resets compilation variables to be able to compile again
 		 *\~french
 		 *\brief		Réinitialise les variables de compilation afin de pouvoir compiler le shader à nouveau
@@ -514,6 +492,37 @@ namespace Castor3D
 		FrameVariableBufferSPtr FindFrameVariableBuffer( Castor::String const & p_name )const;
 		/**
 		 *\~english
+		 *\brief		Retrieves the frame variables bound to one shader type
+		 *\param[in]	p_type	The shader type
+		 *\return		The list
+		 *\~french
+		 *\brief		Récupère les variables de frame liées à un type de shader particulier
+		 *\param[in]	p_type	The shader type
+		 *\return		La liste
+		 */
+		FrameVariablePtrList & GetFrameVariables( eSHADER_TYPE p_type );
+		/**
+		 *\~english
+		 *\brief		Retrieves the frame variables bound to one shader type
+		 *\param[in]	p_type	The shader type
+		 *\return		The list
+		 *\~french
+		 *\brief		Récupère les variables de frame liées à un type de shader particulier
+		 *\param[in]	p_type	The shader type
+		 *\return		La liste
+		 */
+		FrameVariablePtrList const & GetFrameVariables( eSHADER_TYPE p_type )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the vertex shader source matching the given flags
+		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
+		 *\~french
+		 *\brief		Récupère le source du vertex shader qui correspond aux flags donnés
+		 *\param[in]	p_uiProgramFlags	Combinaison de ePROGRAM_FLAG
+		 */
+		Castor::String GetVertexShaderSource( uint32_t p_uiProgramFlags )const;
+		/**
+		 *\~english
 		 *\brief		Retrieves the frame variable buffers bound to one shader type
 		 *\param[in]	p_type	The shader type
 		 *\return		The list
@@ -622,6 +631,15 @@ namespace Castor3D
 		 *\return		La variable créée, nullptr en cas d'échec
 		 */
 		virtual OneTextureFrameVariableSPtr DoCreateTextureVariable( int p_iNbOcc ) = 0;
+		/**
+		 *\~english
+		 *\brief		Retrieves the vertex shader source matching the given flags
+		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
+		 *\~french
+		 *\brief		Récupère le source du vertex shader qui correspond aux flags donnés
+		 *\param[in]	p_uiProgramFlags	Combinaison de ePROGRAM_FLAG
+		 */
+		virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const = 0;
 
 	protected:
 		//!<\~english The program status	\~french Le statut du programme

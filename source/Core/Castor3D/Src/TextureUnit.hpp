@@ -363,14 +363,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the unit index
-		 *\param[in]	p_uiIndex	The new value
+		 *\param[in]	p_index	The new value
 		 *\~french
 		 *\brief		Définit l'index de l'unité
-		 *\param[in]	p_uiIndex	La nouvelle valeur
+		 *\param[in]	p_index	La nouvelle valeur
 		 */
-		inline void SetIndex( uint32_t p_uiIndex )
+		inline void SetIndex( uint32_t p_index )
 		{
-			m_uiIndex = p_uiIndex;
+			m_uiIndex = p_index;
 		}
 		/**
 		 *\~english

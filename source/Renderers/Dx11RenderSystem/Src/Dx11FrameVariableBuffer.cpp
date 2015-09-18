@@ -393,7 +393,7 @@ namespace Dx11Render
 		ReleaseTracked( m_renderSystem, m_pDxBuffer );
 	}
 
-	bool DxFrameVariableBuffer::DoBind( uint32_t p_uiIndex )
+	bool DxFrameVariableBuffer::DoBind( uint32_t p_index )
 	{
 		bool l_return = !m_pDxBuffer;
 
@@ -414,7 +414,7 @@ namespace Dx11Render
 		return l_return;
 	}
 
-	void DxFrameVariableBuffer::DoUnbind( uint32_t p_uiIndex )
+	void DxFrameVariableBuffer::DoUnbind( uint32_t p_index )
 	{
 	}
 }

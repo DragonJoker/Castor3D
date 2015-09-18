@@ -56,9 +56,9 @@ struct LexerStylesAssoc
 		}
 	}
 
-	inline int operator []( uint32_t p_uiIndex )
+	inline int operator []( uint32_t p_index )
 	{
-		return m_iStyles[p_uiIndex];
+		return m_iStyles[p_index];
 	}
 };
 

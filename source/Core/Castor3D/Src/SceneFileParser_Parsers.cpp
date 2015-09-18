@@ -1704,9 +1704,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshFaceUV )
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
 	String l_strParams;
 	p_arrayParams[0]->Get( l_strParams );
-	SubmeshSPtr l_pSubmesh = l_pContext->pSubmesh;
+	SubmeshSPtr l_submesh = l_pContext->pSubmesh;
 
-	if ( l_pSubmesh )
+	if ( l_submesh )
 	{
 		if ( !l_pContext->vertexTex.size() )
 		{
@@ -1748,9 +1748,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshFaceUVW )
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
 	String l_strParams;
 	p_arrayParams[0]->Get( l_strParams );
-	SubmeshSPtr l_pSubmesh = l_pContext->pSubmesh;
+	SubmeshSPtr l_submesh = l_pContext->pSubmesh;
 
-	if ( l_pSubmesh )
+	if ( l_submesh )
 	{
 		if ( !l_pContext->vertexTex.size() )
 		{
@@ -1798,9 +1798,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshFaceNormals )
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
 	String l_strParams;
 	p_arrayParams[0]->Get( l_strParams );
-	SubmeshSPtr l_pSubmesh = l_pContext->pSubmesh;
+	SubmeshSPtr l_submesh = l_pContext->pSubmesh;
 
-	if ( l_pSubmesh )
+	if ( l_submesh )
 	{
 		if ( !l_pContext->vertexNml.size() )
 		{
@@ -1848,9 +1848,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshFaceTangents )
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
 	String l_strParams;
 	p_arrayParams[0]->Get( l_strParams );
-	SubmeshSPtr l_pSubmesh = l_pContext->pSubmesh;
+	SubmeshSPtr l_submesh = l_pContext->pSubmesh;
 
-	if ( l_pSubmesh )
+	if ( l_submesh )
 	{
 		if ( !l_pContext->vertexTan.size() )
 		{
@@ -2581,7 +2581,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderUboShaders )
 		uint32_t l_value;
 		p_arrayParams[0]->Get( l_value );
 
-		if ( !l_value )
+		if ( l_value )
 		{
 			l_pContext->pShaderProgram->AddFrameVariableBuffer( l_pContext->pFrameVariableBuffer, l_value );
 		}
@@ -2696,8 +2696,29 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderUboVariable )
 	{
 		PARSING_ERROR( cuT( "Directive <constants_buffer::variable>: Invalid empty name" ) );
 	}
+	else
+	{
+		l_pContext->uiUInt32 = 1;
+	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_SHADER_UBO_VARIABLE )
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderVariableCount )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_pContext );
+	uint32_t l_param;
+	p_arrayParams[0]->Get( l_param );
+
+	if ( l_pContext->pFrameVariableBuffer )
+	{
+		l_pContext->uiUInt32 = l_param;
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <variable::count>: Shader constants buffer not initialised" ) );
+	}
+}
+END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderVariableType )
 {
@@ -2709,7 +2730,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderVariableType )
 	{
 		if ( !l_pContext->pFrameVariable )
 		{
-			l_pContext->pFrameVariable = l_pContext->pFrameVariableBuffer->CreateVariable( *l_pContext->pShaderProgram.get(), eFRAME_VARIABLE_TYPE( l_uiType ), l_pContext->strName2 );
+			l_pContext->pFrameVariable = l_pContext->pFrameVariableBuffer->CreateVariable( *l_pContext->pShaderProgram.get(), eFRAME_VARIABLE_TYPE( l_uiType ), l_pContext->strName2, l_pContext->uiUInt32 );
 		}
 		else
 		{

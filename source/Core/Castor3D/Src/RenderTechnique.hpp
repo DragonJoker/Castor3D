@@ -149,15 +149,6 @@ namespace Castor3D
 		void EndRender();
 		/**
 		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags
-		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
-		 *\~french
-		 *\brief		Récupère le source du vertex shader qui correspond aux flags donnés
-		 *\param[in]	p_uiProgramFlags	Combinaison de ePROGRAM_FLAG
-		 */
-		Castor::String GetVertexShaderSource( uint32_t p_uiProgramFlags )const;
-		/**
-		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags
 		 *\param[in]	p_uiFlags	A combination of eTEXTURE_CHANNEL
 		 *\~french
@@ -246,15 +237,6 @@ namespace Castor3D
 		 *\brief		Fonction de fin de rendu
 		 */
 		virtual void DoEndRender() = 0;
-		/**
-		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags
-		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
-		 *\~french
-		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
-		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
-		 */
-		virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags

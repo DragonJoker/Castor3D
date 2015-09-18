@@ -667,11 +667,11 @@ namespace Castor3D
 		return l_pReturn;
 	}
 
-	bool Engine::RemoveRenderWindow( uint32_t p_uiIndex )
+	bool Engine::RemoveRenderWindow( uint32_t p_index )
 	{
 		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexResources );
 		bool l_return = false;
-		RenderWindowMap::iterator l_it = m_mapWindows.find( p_uiIndex );
+		RenderWindowMap::iterator l_it = m_mapWindows.find( p_index );
 
 		if ( l_it != m_mapWindows.end() )
 		{

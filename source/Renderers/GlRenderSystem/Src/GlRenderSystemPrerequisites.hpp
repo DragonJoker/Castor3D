@@ -275,11 +275,13 @@ namespace GlRender
 			{
 				return m_strGSOutEmissiveDecl;
 			}
-			virtual Castor::String GetLayout( uint32_t p_uiIndex )const = 0;
-			virtual Castor::String GetAttribute( uint32_t p_uiIndex )const
+			virtual Castor::String GetLayout( uint32_t p_index )const = 0;
+			virtual Castor::String GetAttribute( uint32_t p_index )const
 			{
-				return GetLayout( p_uiIndex ) + m_strAttribute;
+				return GetLayout( p_index ) + m_strAttribute;
 			}
+			virtual bool HasNamedFragData()const = 0;
+			virtual Castor::String GetFragData( uint32_t p_index )const = 0;
 		};
 
 		template< int Version, class Enable = void > class Keywords;
@@ -306,9 +308,21 @@ namespace GlRender
 				m_strGSOutEmissiveName = cuT( "gl_FragData[6]" );
 			}
 
-			virtual Castor::String GetLayout( uint32_t CU_PARAM_UNUSED( p_uiIndex ) )const
+			virtual Castor::String GetLayout( uint32_t CU_PARAM_UNUSED( p_index ) )const
 			{
 				return cuT( "" );
+			}
+
+			virtual Castor::String GetFragData( uint32_t p_index )const
+			{
+				Castor::StringStream l_stream;
+				l_stream << cuT( "gl_FragData[" ) << p_index << cuT( "]" );
+				return l_stream.str();
+			}
+
+			virtual bool HasNamedFragData()const
+			{
+				return false;
 			}
 		};
 
@@ -336,9 +350,21 @@ namespace GlRender
 				m_strGSOutEmissiveName = cuT( "gl_FragData[6]" );
 			}
 
-			virtual Castor::String GetLayout( uint32_t CU_PARAM_UNUSED( p_uiIndex ) )const
+			virtual Castor::String GetLayout( uint32_t CU_PARAM_UNUSED( p_index ) )const
 			{
 				return cuT( "" );
+			}
+
+			virtual Castor::String GetFragData( uint32_t p_index )const
+			{
+				Castor::StringStream l_stream;
+				l_stream << cuT( "gl_FragData[" ) << p_index << cuT( "]" );
+				return l_stream.str();
+			}
+
+			virtual bool HasNamedFragData()const
+			{
+				return false;
 			}
 		};
 
@@ -365,11 +391,28 @@ namespace GlRender
 				m_strGSOutDiffuseName = cuT( "out_c3dDiffuse" );
 				m_strGSOutSpecularName = cuT( "out_c3dSpecular" );
 				m_strGSOutEmissiveName = cuT( "out_c3dEmissive" );
+				m_strGSOutPositionDecl = GetLayout( 0 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutPositionName + cuT( ";" );
+				m_strGSOutDiffuseDecl = GetLayout( 1 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutDiffuseName + cuT( ";" );
+				m_strGSOutNormalDecl = GetLayout( 2 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutNormalName + cuT( ";" );
+				m_strGSOutTangentDecl = GetLayout( 3 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutTangentName + cuT( ";" );
+				m_strGSOutBitangentDecl = GetLayout( 4 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutBitangentName + cuT( ";" );
+				m_strGSOutSpecularDecl = GetLayout( 5 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutSpecularName + cuT( ";" );
+				m_strGSOutEmissiveDecl = GetLayout( 6 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutEmissiveName + cuT( ";" );
 			}
 
-			virtual Castor::String GetLayout( uint32_t CU_PARAM_UNUSED( p_uiIndex ) )const
+			virtual Castor::String GetLayout( uint32_t CU_PARAM_UNUSED( p_index ) )const
 			{
 				return cuT( "" );
+			}
+
+			virtual Castor::String GetFragData( uint32_t CU_PARAM_UNUSED( p_index ) )const
+			{
+				return cuT( "" );
+			}
+
+			virtual bool HasNamedFragData()const
+			{
+				return true;
 			}
 		};
 
@@ -405,9 +448,19 @@ namespace GlRender
 				m_strGSOutEmissiveDecl = GetLayout( 6 ) + m_strOut + cuT( " vec4 " ) + m_strGSOutEmissiveName + cuT( ";" );
 			}
 
-			virtual Castor::String GetLayout( uint32_t p_uiIndex )const
+			virtual Castor::String GetLayout( uint32_t p_index )const
 			{
-				return cuT( "layout( location=" ) + Castor::string::to_string( p_uiIndex ) + cuT( " ) " );
+				return cuT( "layout( location=" ) + Castor::string::to_string( p_index ) + cuT( " ) " );
+			}
+
+			virtual Castor::String GetFragData( uint32_t CU_PARAM_UNUSED( p_index ) )const
+			{
+				return cuT( "" );
+			}
+
+			virtual bool HasNamedFragData()const
+			{
+				return true;
 			}
 		};
 

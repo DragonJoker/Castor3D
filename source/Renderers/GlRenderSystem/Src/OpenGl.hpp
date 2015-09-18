@@ -1597,7 +1597,7 @@ namespace GlRender
 		bool Material( eGL_DRAW_BUFFER_MODE face, eGL_MATERIAL_COMPONENT pname, float const * param );
 		bool BlendFunc( eGL_BLEND_FACTOR sfactor, eGL_BLEND_FACTOR dfactor );
 		bool BlendFunc( eGL_BLEND_FACTOR p_eRgbSrc, eGL_BLEND_FACTOR p_eRgbDst, eGL_BLEND_FACTOR p_eAlphaSrc, eGL_BLEND_FACTOR p_eAlphaDst );
-		bool BlendFunc( uint32_t p_uiIndex, eGL_BLEND_FACTOR p_eRgbSrc, eGL_BLEND_FACTOR p_eRgbDst, eGL_BLEND_FACTOR p_eAlphaSrc, eGL_BLEND_FACTOR p_eAlphaDst );
+		bool BlendFunc( uint32_t p_index, eGL_BLEND_FACTOR p_eRgbSrc, eGL_BLEND_FACTOR p_eRgbDst, eGL_BLEND_FACTOR p_eAlphaSrc, eGL_BLEND_FACTOR p_eAlphaDst );
 		bool BlendEquation( eGL_BLEND_OP p_eOp );
 		bool BlendEquation( uint32_t p_uiBuffer, eGL_BLEND_OP p_eOp );
 		bool AlphaFunc( eGL_FUNC func, float ref );
@@ -1882,9 +1882,9 @@ namespace GlRender
 		{
 			return TextureDimensions[p_index];
 		}
-		inline eGL_LIGHT_INDEX Get( Castor3D::eLIGHT_INDEXES p_uiIndex )const
+		inline eGL_LIGHT_INDEX Get( Castor3D::eLIGHT_INDEXES p_index )const
 		{
-			return LightIndexes[p_uiIndex];
+			return LightIndexes[p_index];
 		}
 		inline eGL_FUNC Get( Castor3D::eALPHA_FUNC p_eAlphaFunc )const
 		{

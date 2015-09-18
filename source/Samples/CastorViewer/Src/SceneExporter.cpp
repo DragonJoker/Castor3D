@@ -193,10 +193,10 @@ namespace CastorViewer
 
 			for ( uint32_t j = 0; j < l_uiNbPoints; j++ )
 			{
-				real * l_pVertex = reinterpret_cast< real * >( &l_pVtx[j * l_uiStride] );
-				Vertex::GetPosition( l_pVertex, l_ptPos );
-				Vertex::GetNormal( l_pVertex, l_ptNml );
-				Vertex::GetTexCoord( l_pVertex, l_ptTex );
+				real * l_vertex = reinterpret_cast< real * >( &l_pVtx[j * l_uiStride] );
+				Vertex::GetPosition( l_vertex, l_ptPos );
+				Vertex::GetNormal( l_vertex, l_ptNml );
+				Vertex::GetTexCoord( l_vertex, l_ptTex );
 				l_strV  << cuT( "v " ) << l_ptPos[0] << " " << l_ptPos[1] << " " << l_ptPos[2] << cuT( "\n" );
 				l_strVN << cuT( "vn " ) << l_ptNml[0] << " " << l_ptNml[1] << " " << l_ptNml[2] << cuT( "\n" );
 				l_strVT << cuT( "vt " ) << l_ptTex[0] << " " << l_ptTex[1] << cuT( "\n" );

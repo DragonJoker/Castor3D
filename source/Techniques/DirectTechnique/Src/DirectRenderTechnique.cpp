@@ -11,7 +11,7 @@
 #include <Logger.hpp>
 
 #if C3D_HAS_GL_RENDERER
-#	include <GlPixelShaderSource.hpp>
+#	include <GlShaderSource.hpp>
 #	include <GlRenderSystem.hpp>
 using namespace GlRender;
 #endif
@@ -220,30 +220,6 @@ namespace Direct
 		m_pFrameBuffer->Unbind();
 	}
 
-	String RenderTechnique::DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const
-	{
-		if ( !m_renderSystem )
-		{
-			CASTOR_EXCEPTION( "No renderer selected" );
-		}
-
-#if C3D_HAS_GL_RENDERER
-		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
-		{
-			return DoGetGlVertexShaderSource( p_uiProgramFlags );
-		}
-#endif
-
-#if C3D_HAS_D3D11_RENDERER
-		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
-		{
-			return DoGetD3D11VertexShaderSource( p_uiProgramFlags );
-		}
-#endif
-
-		CASTOR_EXCEPTION( "No renderer selected" );
-	}
-
 	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_uiFlags )const
 	{
 		if ( !m_renderSystem )
@@ -252,110 +228,26 @@ namespace Direct
 		}
 
 #if C3D_HAS_GL_RENDERER
+
 		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
 			return DoGetGlPixelShaderSource( p_uiFlags );
 		}
-#endif
 
+#endif
 #if C3D_HAS_D3D11_RENDERER
+
 		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
 		{
 			return DoGetD3D11PixelShaderSource( p_uiFlags );
 		}
+
 #endif
 
 		CASTOR_EXCEPTION( "No renderer selected" );
 	}
 
 #if C3D_HAS_GL_RENDERER
-	String RenderTechnique::DoGetGlVertexShaderSource( uint32_t p_uiProgramFlags )const
-	{
-		using namespace GLSL;
-
-		GlslWriter l_writer( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl(), eSHADER_TYPE_VERTEX );
-		l_writer << GLSL::Version() << Endl();
-		// Vertex inputs
-		ATTRIBUTE( l_writer, Vec4, vertex );
-		ATTRIBUTE( l_writer, Vec3, normal );
-		ATTRIBUTE( l_writer, Vec3, tangent );
-		ATTRIBUTE( l_writer, Vec3, bitangent );
-		ATTRIBUTE( l_writer, Vec3, texture );
-		IVec4 bone_ids;
-		Vec4 weights;
-		Mat4 transform;
-
-		if ( ( p_uiProgramFlags & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
-		{
-			bone_ids = l_writer.GetAttribute< IVec4 >( cuT( "bone_ids" ) );
-			weights = l_writer.GetAttribute< Vec4 >( cuT( "weights" ) );
-		}
-
-		if ( ( p_uiProgramFlags & ePROGRAM_FLAG_INSTANCIATION ) == ePROGRAM_FLAG_INSTANCIATION )
-		{
-			transform = l_writer.GetAttribute< Mat4 >( cuT( "transform" ) );
-		}
-
-		UBO_MATRIX( l_writer );
-
-		// Outputs
-		OUT( l_writer, Vec3, vtx_vertex );
-		OUT( l_writer, Vec3, vtx_normal );
-		OUT( l_writer, Vec3, vtx_tangent );
-		OUT( l_writer, Vec3, vtx_bitangent );
-		OUT( l_writer, Vec3, vtx_texture );
-		l_writer << Legacy_MatrixOut();
-
-		std::function< void() > l_main = [&]()
-		{
-			l_writer << Legacy_MatrixCopy();
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Vertex, vec4( vertex.xyz(), 1.0 ) );
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Normal, vec4( normal, 0.0 ) );
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Tangent, vec4( tangent, 0.0 ) );
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Bitangent, vec4( bitangent, 0.0 ) );
-
-			if ( ( p_uiProgramFlags & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
-			{
-				LOCALE( l_writer, Mat4, l_mtxBoneTransform );
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids[Int( 0 )]] * weights[Int( 0 )];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids[Int( 1 )]] * weights[Int( 1 )];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids[Int( 2 )]] * weights[Int( 2 )];
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids[Int( 3 )]] * weights[Int( 3 )];
-				//l_mtxBoneTransform = transpose( l_mtxBoneTransform );
-				l_v4Vertex = l_mtxBoneTransform * l_v4Vertex;
-				l_v4Normal = l_mtxBoneTransform * l_v4Normal;
-				l_v4Tangent = l_mtxBoneTransform * l_v4Tangent;
-				l_v4Bitangent = l_mtxBoneTransform * l_v4Bitangent;
-			}
-
-			if ( ( p_uiProgramFlags & ePROGRAM_FLAG_INSTANCIATION ) == ePROGRAM_FLAG_INSTANCIATION )
-			{
-				LOCALE_ASSIGN( l_writer, Mat4, l_mtxMV, c3d_mtxView * transform );
-				LOCALE_ASSIGN( l_writer, Mat4, l_mtxN, transpose( inverse( l_mtxMV ) ) );
-				l_v4Vertex = l_mtxMV * l_v4Vertex;
-				l_v4Normal = l_mtxN * l_v4Normal;
-				l_v4Tangent = l_mtxN * l_v4Tangent;
-				l_v4Bitangent = l_mtxN * l_v4Bitangent;
-			}
-			else
-			{
-				l_v4Vertex = c3d_mtxModelView * l_v4Vertex;
-				l_v4Normal = c3d_mtxNormal * l_v4Normal;
-				l_v4Tangent = c3d_mtxNormal * l_v4Tangent;
-				l_v4Bitangent = c3d_mtxNormal * l_v4Bitangent;
-			}
-
-			vtx_texture = texture;
-			vtx_vertex = l_v4Vertex.xyz();
-			vtx_normal = normalize( l_v4Normal.xyz() );
-			vtx_tangent = normalize( l_v4Tangent.xyz() );
-			vtx_bitangent = normalize( l_v4Bitangent.xyz() );
-			BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * l_v4Vertex;
-		};
-
-		l_writer.Implement_Function< void >( cuT( "main" ), l_main );
-		return l_writer.Finalise();
-	}
 
 	String RenderTechnique::DoGetGlPixelShaderSource( uint32_t p_uiFlags )const
 	{
@@ -533,43 +425,9 @@ namespace Direct
 		l_writer.Implement_Function< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();
 	}
+
 #endif
-
 #if C3D_HAS_D3D11_RENDERER
-	String RenderTechnique::DoGetD3D11VertexShaderSource( uint32_t p_uiProgramFlags )const
-	{
-		String l_strReturn;
-		DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( m_renderSystem );
-		std::unique_ptr< UniformsBase > l_pUniforms = UniformsBase::Get( *l_renderSystem );
-		std::unique_ptr< InOutsBase > l_pInputs = InOutsBase::Get( *l_renderSystem );
-
-		if ( l_pUniforms && l_pInputs )
-		{
-			l_strReturn += l_pUniforms->GetVertexInMatrices( 0 );
-			l_strReturn += l_pInputs->GetVtxInput();
-			l_strReturn += l_pInputs->GetVtxOutput();
-			l_strReturn +=
-				cuT( "VtxOutput mainVx( in VtxInput p_input )\n" )
-				cuT( "{\n" )
-				cuT( "	VtxOutput l_output;\n" )
-				cuT( "	p_input.Position.w = 1.0f;\n" )
-				cuT( "	float3x3 l_mtxNormal = (float3x3)c3d_mtxNormal;\n" )
-				cuT( "	l_output.Position = mul( p_input.Position, c3d_mtxProjectionModelView );\n" )
-				cuT( "	l_output.Normal = normalize( mul( p_input.Normal, l_mtxNormal ) );\n" )
-				cuT( "	l_output.Tangent = normalize( mul( p_input.Tangent, l_mtxNormal ) );\n" )
-				cuT( "	l_output.Binormal = cross( l_output.Tangent, l_output.Normal );\n" )
-				cuT( "	l_output.Vertex = mul( p_input.Position, c3d_mtxModelView ).xyz;\n" )
-				cuT( "	l_output.TextureUV = p_input.TextureUV;\n" )
-				cuT( "	float3 tmpVec = -l_output.Vertex;\n" )
-				cuT( "	l_output.Eye.x = dot( tmpVec, l_output.Tangent );\n" )
-				cuT( "	l_output.Eye.y = dot( tmpVec, l_output.Binormal );\n" )
-				cuT( "	l_output.Eye.z = dot( tmpVec, l_output.Normal  );\n" )
-				cuT( "	return l_output;\n" )
-				cuT( "}\n" );
-		}
-
-		return l_strReturn;
-	}
 
 	String RenderTechnique::DoGetD3D11PixelShaderSource( uint32_t p_uiFlags )const
 	{
@@ -688,5 +546,6 @@ namespace Direct
 
 		return l_strReturn;
 	}
+
 #endif
 }

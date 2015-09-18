@@ -226,36 +226,36 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Destroys a TextureUnit at the given index
-		 *\param[in]	p_uiIndex	the index of the TextureUnit to destroy
+		 *\param[in]	p_index	the index of the TextureUnit to destroy
 		 *\return		\p false if the index was out of bounds
 		 *\~french
 		 *\brief		Détruit la TextureUnit à l'index donné
-		 *\param[in]	p_uiIndex	L'index de la TextureUnit à détruire
+		 *\param[in]	p_index	L'index de la TextureUnit à détruire
 		 *\return		\p false si l'index était hors bornes
 		 */
-		bool DestroyTextureUnit( uint32_t p_uiIndex );
+		bool DestroyTextureUnit( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Retrieves the TextureUnit at the given index
-		 *\param[in]	p_uiIndex	The index of the TextureUnit to retrieve
+		 *\param[in]	p_index	The index of the TextureUnit to retrieve
 		 *\return		The retrieved TextureUnit, nullptr if none
 		 *\~french
 		 *\brief		Récupère la TextureUnit à l'index donné
-		 *\param[in]	p_uiIndex	L'index voulu
-		 *\return		La TextureUnit récupérée, nullptr si p_uiIndex était hors bornes
+		 *\param[in]	p_index	L'index voulu
+		 *\return		La TextureUnit récupérée, nullptr si p_index était hors bornes
 		 */
-		TextureUnitSPtr GetTextureUnit( uint32_t p_uiIndex )const;
+		TextureUnitSPtr GetTextureUnit( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the image path of the TextureUnit at the given index
-		 *\param[in]	p_uiIndex	The index of the TextureUnit we want the image path
+		 *\param[in]	p_index	The index of the TextureUnit we want the image path
 		 *\return		The path, void if none
 		 *\~french
 		 *\brief		Récupère le chemin de l'image de la TextureUnit à l'index donné
-		 *\param[in]	p_uiIndex	L'index voulu
+		 *\param[in]	p_index	L'index voulu
 		 *\return		Le chemin, vide si aucun
 		 */
-		Castor::String GetTexturePath( uint32_t p_uiIndex );
+		Castor::String GetTexturePath( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Defines the shader program

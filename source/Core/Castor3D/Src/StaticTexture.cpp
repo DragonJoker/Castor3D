@@ -19,11 +19,11 @@ namespace Castor3D
 	{
 	}
 
-	bool StaticTexture::Initialise( uint32_t p_uiIndex )
+	bool StaticTexture::Initialise( uint32_t p_index )
 	{
 		if ( !m_bInitialised )
 		{
-			m_uiIndex = p_uiIndex;
+			m_uiIndex = p_index;
 			m_bInitialised = DoInitialise();
 		}
 		else

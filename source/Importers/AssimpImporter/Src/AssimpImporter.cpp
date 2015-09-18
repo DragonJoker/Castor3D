@@ -224,7 +224,7 @@ MeshSPtr AssimpImporter::DoImportMesh()
 
 	if ( !m_pMesh->GetSubmeshCount() )
 	{
-		SubmeshSPtr l_pSubmesh;
+		SubmeshSPtr l_submesh;
 		Assimp::Importer importer;
 		uint32_t l_uiFlags = aiProcess_Triangulate | aiProcess_JoinIdenticalVertices | aiProcess_OptimizeMeshes | aiProcess_OptimizeGraph | aiProcess_FixInfacingNormals;
 		String l_strNormals;
@@ -268,10 +268,10 @@ MeshSPtr AssimpImporter::DoImportMesh()
 				{
 					if ( l_bCreate )
 					{
-						l_pSubmesh = m_pMesh->CreateSubmesh();
+						l_submesh = m_pMesh->CreateSubmesh();
 					}
 
-					l_bCreate = DoProcessMesh( l_pSkeleton, l_pScene->mMeshes[i], l_pScene, l_pSubmesh );
+					l_bCreate = DoProcessMesh( l_pSkeleton, l_pScene->mMeshes[i], l_pScene, l_submesh );
 				}
 
 				if ( l_pScene->HasAnimations() && l_pSkeleton )

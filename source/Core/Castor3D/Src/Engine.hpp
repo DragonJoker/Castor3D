@@ -259,14 +259,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Removes a render window, by index
-		 *\param[in]	p_uiIndex	The window index
+		 *\param[in]	p_index	The window index
 		 *\return		\p false if the render window was not found
 		 *\~french
 		 *\brief		Supprime une fenêtre de rendu, par index
-		 *\param[in]	p_uiIndex	L'index de la fenêtre
+		 *\param[in]	p_index	L'index de la fenêtre
 		 *\return		\p false si la fenêtre n'a pas été trouvée
 		 */
-		bool RemoveRenderWindow( uint32_t p_uiIndex );
+		bool RemoveRenderWindow( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Removes a render window, by pointer

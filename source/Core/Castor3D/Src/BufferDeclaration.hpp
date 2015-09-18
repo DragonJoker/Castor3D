@@ -150,33 +150,33 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Array accessor
 		 *\remark		That function doesn't check if index is out of bound so expect crashes if used incorrectly
-		 *\param[in]	p_uiIndex	The index
+		 *\param[in]	p_index	The index
 		 *\return		The element at given index
 		 *\~french
 		 *\brief		Accesseur de type tableau
 		 *\remark		Cette fonction ne vérifie pas la validité de l'index donné, donc attention aux crashes si mal utilisée
-		 *\param[in]	p_uiIndex	L'index
+		 *\param[in]	p_index	L'index
 		 *\return		L'élément à l'index donné
 		 */
-		inline BufferElementDeclaration const & operator []( uint32_t p_uiIndex )const
+		inline BufferElementDeclaration const & operator []( uint32_t p_index )const
 		{
-			return m_arrayElements[p_uiIndex];
+			return m_arrayElements[p_index];
 		}
 		/**
 		 *\~english
 		 *\brief		Array accessor
 		 *\remark		That function doesn't check if index is out of bound so expect crashes if used incorrectly
-		 *\param[in]	p_uiIndex	The index
+		 *\param[in]	p_index	The index
 		 *\return		The element at given index
 		 *\~french
 		 *\brief		Accesseur de type tableau
 		 *\remark		Cette fonction ne vérifie pas la validité de l'index donné, donc attention aux crashes si mal utilisée
-		 *\param[in]	p_uiIndex	L'index
+		 *\param[in]	p_index	L'index
 		 *\return		L'élément à l'index donné
 		 */
-		inline BufferElementDeclaration & operator []( uint32_t p_uiIndex )
+		inline BufferElementDeclaration & operator []( uint32_t p_index )
 		{
-			return m_arrayElements[p_uiIndex];
+			return m_arrayElements[p_index];
 		}
 
 	private:

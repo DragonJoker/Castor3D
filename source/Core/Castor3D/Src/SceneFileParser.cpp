@@ -401,8 +401,8 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_PASS, cuT( "texture_unit" ), Parser_PassTextureUnit );
 	AddParser( eSECTION_PASS, cuT( "gl_shader_program" ), Parser_PassGlShader );
 	AddParser( eSECTION_PASS, cuT( "hl_shader_program" ), Parser_PassHlShader );
-	AddParser(	eSECTION_PASS, cuT( "alpha_blend_mode" ), Parser_PassAlphaBlendMode, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapBlendModes );
-	AddParser(	eSECTION_PASS, cuT( "colour_blend_mode" ), Parser_PassColourBlendMode, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapBlendModes );
+	AddParser( eSECTION_PASS, cuT( "alpha_blend_mode" ), Parser_PassAlphaBlendMode, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapBlendModes );
+	AddParser( eSECTION_PASS, cuT( "colour_blend_mode" ), Parser_PassColourBlendMode, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapBlendModes );
 
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "image" ), Parser_UnitImage, 1, ePARAMETER_TYPE_PATH );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "render_target" ), Parser_UnitRenderTarget );
@@ -442,6 +442,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 
 	AddParser( eSECTION_SHADER_SAMPLER, cuT( "value" ), Parser_ShaderSamplerValue, 1, ePARAMETER_TYPE_INT32 );
 
+	AddParser( eSECTION_SHADER_UBO_VARIABLE, cuT( "count" ), Parser_ShaderVariableCount, 1, ePARAMETER_TYPE_UINT32 );
 	AddParser( eSECTION_SHADER_UBO_VARIABLE, cuT( "type" ), Parser_ShaderVariableType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapVariableTypes );
 	AddParser( eSECTION_SHADER_UBO_VARIABLE, cuT( "value" ), Parser_ShaderVariableValue, 1, ePARAMETER_TYPE_TEXT );
 

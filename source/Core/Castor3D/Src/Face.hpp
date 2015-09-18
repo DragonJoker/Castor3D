@@ -177,17 +177,17 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex index
-		 *\param[in]	p_uiIndex	The index of the concerned vertex
+		 *\param[in]	p_index	The index of the concerned vertex
 		 *\return		The vertex index
 		 *\~french
 		 *\brief		Récupère l'indice du vertex voulu
-		 *\param[in]	p_uiIndex	L'index du vertex concerné
+		 *\param[in]	p_index	L'index du vertex concerné
 		 *\return		L'indice
 		 */
-		inline uint32_t GetVertexIndex( uint32_t p_uiIndex )const
+		inline uint32_t GetVertexIndex( uint32_t p_index )const
 		{
-			CASTOR_ASSERT( p_uiIndex < 3 );
-			return m_pIndex[p_uiIndex];
+			CASTOR_ASSERT( p_index < 3 );
+			return m_pIndex[p_index];
 		}
 
 	private:

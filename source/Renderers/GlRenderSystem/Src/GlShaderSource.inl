@@ -379,6 +379,24 @@ namespace GlRender
 		}
 
 		template< typename T >
+		inline T GlslWriter::GetFragData( Castor::String const & p_name, uint32_t p_index )
+		{
+			Castor::String l_name;
+
+			if( m_keywords->HasNamedFragData() )
+			{
+				*this << T().m_type << p_name << cuT( ";" ) << Endl();
+				l_name = p_name;
+			}
+			else
+			{
+				l_name = m_keywords->GetFragData( p_index );
+			}
+
+			return T( this, l_name );
+		}
+
+		template< typename T >
 		inline Array< T > GlslWriter::GetAttribute( Castor::String const & p_name, uint32_t p_dimension )
 		{
 			*this << Attribute() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();

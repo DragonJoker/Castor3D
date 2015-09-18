@@ -258,9 +258,9 @@ real Ray::Intersects( GeometrySPtr p_pGeometry, FaceSPtr * CU_PARAM_UNUSED( p_pp
 
 			//if (Intersects( l_sphere) >= 0.0f)
 			//{
-			//	for (uint32_t k = 0; k < l_pSubmesh->GetFaceCount(); k++)
+			//	for (uint32_t k = 0; k < l_submesh->GetFaceCount(); k++)
 			//	{
-			//		FaceSPtr l_pFace = l_pSubmesh->GetFace( k );
+			//		FaceSPtr l_pFace = l_submesh->GetFace( k );
 
 			//		if ((l_curfaceDist = Intersects( * l_pFace)) >= 0.0 && l_curfaceDist < l_faceDist)
 			//		{
@@ -271,7 +271,7 @@ real Ray::Intersects( GeometrySPtr p_pGeometry, FaceSPtr * CU_PARAM_UNUSED( p_pp
 
 			//			if (p_ppSubmesh)
 			//			{
-			//				*p_ppSubmesh = l_pSubmesh;
+			//				*p_ppSubmesh = l_submesh;
 			//			}
 
 			//			l_faceDist = l_curfaceDist;

@@ -2,6 +2,7 @@
 
 #include <FrameVariableBuffer.hpp>
 #include <MatrixFrameVariable.hpp>
+#include <TransformationMatrix.hpp>
 
 #include "Dx11Context.hpp"
 #include "Dx11RenderSystem.hpp"
@@ -40,7 +41,7 @@ namespace Dx11Render
 
 		if ( l_pVariable )
 		{
-			l_pVariable->SetValue( p_matrix );
+			l_pVariable->SetValue( matrix::get_switch_hand( p_matrix ) );
 		}
 	}
 }

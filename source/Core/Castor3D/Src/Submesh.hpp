@@ -434,102 +434,6 @@ namespace Castor3D
 		uint32_t GetRefCount( MaterialSPtr p_material )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves an iterator over the first vertex of the submesh
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur le premier vertex du submesh
-		 *\return		L'itérateur
-		 */
-		VertexPtrArrayIt VerticesBegin()
-		{
-			return m_points.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves a constant iterator over the first vertex of the submesh
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur constant sur le premier vertex du submesh
-		 *\return		L'itérateur
-		 */
-		VertexPtrArrayConstIt VerticesBegin()const
-		{
-			return m_points.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator over the end of the vertex array
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin du tableau de vertex
-		 *\return		L'itérateur
-		 */
-		VertexPtrArrayIt VerticesEnd()
-		{
-			return m_points.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves a constant iterator over the end of the vertex array
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur constant sur la fin du tableau de vertex
-		 *\return		L'itérateur
-		 */
-		VertexPtrArrayConstIt VerticesEnd()const
-		{
-			return m_points.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator over the first vertex of the submesh
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur le premier vertex du submesh
-		 *\return		L'itérateur
-		 */
-		FacePtrArrayIt FacesBegin()
-		{
-			return m_arrayFaces.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves a constant iterator over the first vertex of the submesh
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur constant sur le premier vertex du submesh
-		 *\return		L'itérateur
-		 */
-		FacePtrArrayConstIt FacesBegin()const
-		{
-			return m_arrayFaces.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator over the end of the vertex array
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin du tableau de vertex
-		 *\return		L'itérateur
-		 */
-		FacePtrArrayIt FacesEnd()
-		{
-			return m_arrayFaces.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves a constant iterator over the end of the vertex array
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur constant sur la fin du tableau de vertex
-		 *\return		L'itérateur
-		 */
-		FacePtrArrayConstIt FacesEnd()const
-		{
-			return m_arrayFaces.end();
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the skeleton
 		 *\return		The value
 		 *\~french
@@ -555,32 +459,32 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the point at given index
-		 *\param[in]	p_uiIndex	The index
+		 *\param[in]	p_index	The index
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère le point à l'index donné
-		 *\param[in]	p_uiIndex	L'index
+		 *\param[in]	p_index	L'index
 		 *\return		La valeur
 		 */
-		inline BufferElementGroupSPtr operator []( uint32_t p_uiIndex )const
+		inline BufferElementGroupSPtr operator []( uint32_t p_index )const
 		{
-			CASTOR_ASSERT( p_uiIndex < m_points.size() );
-			return m_points[p_uiIndex];
+			CASTOR_ASSERT( p_index < m_points.size() );
+			return m_points[p_index];
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the point at given index
-		 *\param[in]	p_uiIndex	The index
+		 *\param[in]	p_index	The index
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère le point à l'index donné
-		 *\param[in]	p_uiIndex	L'index
+		 *\param[in]	p_index	L'index
 		 *\return		La valeur
 		 */
-		inline BufferElementGroupSPtr GetPoint( uint32_t p_uiIndex )const
+		inline BufferElementGroupSPtr GetPoint( uint32_t p_index )const
 		{
-			CASTOR_ASSERT( p_uiIndex < m_points.size() );
-			return m_points[p_uiIndex];
+			CASTOR_ASSERT( p_index < m_points.size() );
+			return m_points[p_index];
 		}
 		/**
 		 *\~english
@@ -669,17 +573,17 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the face at given index
-		 *\param[in]	p_uiIndex	The index
+		 *\param[in]	p_index	The index
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère récupère la face à l'index donné
-		 *\param[in]	p_uiIndex	L'index
+		 *\param[in]	p_index	L'index
 		 *\return		La valeur
 		 */
-		inline FaceSPtr GetFace( uint32_t p_uiIndex )const
+		inline FaceSPtr GetFace( uint32_t p_index )const
 		{
-			CASTOR_ASSERT( p_uiIndex < m_arrayFaces.size() );
-			return m_arrayFaces[p_uiIndex];
+			CASTOR_ASSERT( p_index < m_arrayFaces.size() );
+			return m_arrayFaces[p_index];
 		}
 		/**
 		 *\~english

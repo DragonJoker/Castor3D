@@ -22,7 +22,7 @@ namespace GlRender
 	{
 	}
 
-	bool GlGeometryBuffers::Draw( eTOPOLOGY p_topology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex )
+	bool GlGeometryBuffers::Draw( eTOPOLOGY p_topology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index )
 	{
 		eGL_PRIMITIVE l_eMode = m_gl.Get( p_topology );
 
@@ -36,11 +36,11 @@ namespace GlRender
 		{
 			if ( m_pIndexBuffer )
 			{
-				m_gl.DrawElements( l_eMode, int( p_uiSize ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_uiIndex ) );
+				m_gl.DrawElements( l_eMode, int( p_uiSize ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ) );
 			}
 			else
 			{
-				m_gl.DrawArrays( l_eMode, int( p_uiIndex ), int( p_uiSize ) );
+				m_gl.DrawArrays( l_eMode, int( p_index ), int( p_uiSize ) );
 			}
 
 			Unbind();
@@ -49,7 +49,7 @@ namespace GlRender
 		return true;
 	}
 
-	bool GlGeometryBuffers::DrawInstanced( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex, uint32_t p_uiCount )
+	bool GlGeometryBuffers::DrawInstanced( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index, uint32_t p_uiCount )
 	{
 		eGL_PRIMITIVE l_eMode = m_gl.Get( p_eTopology );
 
@@ -68,11 +68,11 @@ namespace GlRender
 		{
 			if ( m_pIndexBuffer )
 			{
-				m_gl.DrawElementsInstanced( l_eMode, int( p_uiSize ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_uiIndex ), int( p_uiCount ) );
+				m_gl.DrawElementsInstanced( l_eMode, int( p_uiSize ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ), int( p_uiCount ) );
 			}
 			else
 			{
-				m_gl.DrawArraysInstanced( l_eMode, int( p_uiIndex ), int( p_uiSize ), int( p_uiCount ) );
+				m_gl.DrawArraysInstanced( l_eMode, int( p_index ), int( p_uiSize ), int( p_uiCount ) );
 			}
 
 			Unbind();

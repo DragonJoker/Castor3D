@@ -24,7 +24,7 @@ namespace
 		cuT( "VtxOutput mainVx( VtxInput p_input )\n" )
 		cuT( "{\n" )
 		cuT( "	VtxOutput l_output;\n" )
-		cuT( "	l_output.Position = mul( float4( p_input.Position, 0.0, 1.0 ), c3d_mtxProjection );\n" )
+		cuT( "	l_output.Position = mul( c3d_mtxProjection, float4( p_input.Position, 0.0, 1.0 ) );\n" )
 		cuT( "	l_output.TextureUV = p_input.TextureUV;\n" )
 		cuT( "	return l_output;\n" )
 		cuT( "}\n" );

@@ -16,13 +16,13 @@ namespace GlRender
 	{
 		typedef TextureBaseRPtr	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
 			std::shared_ptr< GlOneFrameVariable< value_type > > l_pVariable = std::static_pointer_cast< GlOneFrameVariable< value_type > >( p_pVariable );
 
 			if ( l_pVariable->GetOccCount() <= 1 && l_pVariable->GetValue() )
 			{
-				p_gl.SetUniform1v( p_uiIndex, l_pVariable->GetOccCount(), ( int * )&l_pVariable->GetValue()->GetIndex() );
+				p_gl.SetUniform1v( p_index, l_pVariable->GetOccCount(), ( int * )&l_pVariable->GetValue()->GetIndex() );
 			}
 		}
 	};
@@ -31,9 +31,9 @@ namespace GlRender
 	{
 		typedef int	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniform1v( p_uiIndex, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform1v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -41,9 +41,9 @@ namespace GlRender
 	{
 		typedef uint32_t	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniform1v( p_uiIndex, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform1v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -51,9 +51,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniform1v( p_uiIndex, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform1v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -61,9 +61,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniform1v( p_uiIndex, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform1v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -71,9 +71,9 @@ namespace GlRender
 	{
 		typedef int	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniform2v( p_uiIndex, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform2v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -81,9 +81,9 @@ namespace GlRender
 	{
 		typedef int	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniform3v( p_uiIndex, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform3v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -91,9 +91,9 @@ namespace GlRender
 	{
 		typedef int	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniform4v( p_uiIndex, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform4v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -101,9 +101,9 @@ namespace GlRender
 	{
 		typedef uint32_t	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniform2v( p_uiIndex, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform2v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -111,9 +111,9 @@ namespace GlRender
 	{
 		typedef uint32_t	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniform3v( p_uiIndex, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform3v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -121,9 +121,9 @@ namespace GlRender
 	{
 		typedef uint32_t	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniform4v( p_uiIndex, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform4v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -131,9 +131,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniform2v( p_uiIndex, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform2v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -141,9 +141,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniform3v( p_uiIndex, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform3v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -151,9 +151,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniform4v( p_uiIndex, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform4v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -161,9 +161,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniform2v( p_uiIndex, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform2v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -171,9 +171,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniform3v( p_uiIndex, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform3v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -181,9 +181,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniform4v( p_uiIndex, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform4v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -191,9 +191,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniformMatrix2x2v( p_uiIndex, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix2x2v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -201,9 +201,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniformMatrix2x3v( p_uiIndex, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix2x3v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -211,9 +211,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniformMatrix2x4v( p_uiIndex, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix2x4v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -221,9 +221,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniformMatrix3x2v( p_uiIndex, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix3x2v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -231,9 +231,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniformMatrix3x3v( p_uiIndex, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix3x3v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -241,9 +241,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniformMatrix3x4v( p_uiIndex, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix3x4v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -251,9 +251,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniformMatrix4x2v( p_uiIndex, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix4x2v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -261,9 +261,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniformMatrix4x3v( p_uiIndex, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix4x3v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -271,9 +271,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniformMatrix4x4v( p_uiIndex, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix4x4v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -281,9 +281,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniformMatrix2x2v( p_uiIndex, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix2x2v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -291,9 +291,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniformMatrix2x3v( p_uiIndex, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix2x3v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -301,9 +301,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniformMatrix2x4v( p_uiIndex, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix2x4v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -311,9 +311,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniformMatrix3x2v( p_uiIndex, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix3x2v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -321,9 +321,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniformMatrix3x3v( p_uiIndex, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix3x3v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -331,9 +331,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniformMatrix3x4v( p_uiIndex, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix3x4v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -341,9 +341,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniformMatrix4x2v( p_uiIndex, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix4x2v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -351,9 +351,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniformMatrix4x3v( p_uiIndex, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix4x3v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
@@ -361,15 +361,15 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
-			p_gl.SetUniformMatrix4x4v( p_uiIndex, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix4x4v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
 		}
 	};
 
 	template< eFRAME_VARIABLE_TYPE Type > struct GlVariableApplyer
 	{
-		inline void operator()( OpenGl & p_gl, uint32_t p_uiIndex, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
 		{
 			CASTOR_EXCEPTION( "VariableApplyer - Unsupported arguments" );
 		}

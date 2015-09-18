@@ -33,7 +33,7 @@ void Torus::Generate()
 	if ( m_uiInternalNbFaces >= 3 && m_uiExternalNbFaces >= 3 )
 	{
 		Submesh & l_submesh = *( GetMesh()->CreateSubmesh() );
-		BufferElementGroupSPtr l_pVertex;
+		BufferElementGroupSPtr l_vertex;
 		uint32_t l_uiCur = 0;
 		uint32_t l_uiPrv = 0;
 		uint32_t l_uiPCr = 0;
@@ -51,9 +51,9 @@ void Torus::Generate()
 
 		for ( uint32_t j = 0; j < l_uiIntMax; j++ )
 		{
-			l_pVertex = l_submesh.AddPoint( m_rInternalRadius * cos( l_rAngleIn ) + m_rExternalRadius, m_rInternalRadius * sin( l_rAngleIn ), 0.0 );
-			Vertex::SetTexCoord(	l_pVertex, real( 0.0 ), real( j ) / m_uiInternalNbFaces );
-			Vertex::SetNormal(	l_pVertex, point::get_normalised( Point3r( real( cos( l_rAngleIn ) ), real( sin( l_rAngleIn ) ), real( 0.0 ) ) ) );
+			l_vertex = l_submesh.AddPoint( m_rInternalRadius * cos( l_rAngleIn ) + m_rExternalRadius, m_rInternalRadius * sin( l_rAngleIn ), 0.0 );
+			Vertex::SetTexCoord(	l_vertex, real( 0.0 ), real( j ) / m_uiInternalNbFaces );
+			Vertex::SetNormal(	l_vertex, point::get_normalised( Point3r( real( cos( l_rAngleIn ) ), real( sin( l_rAngleIn ) ), real( 0.0 ) ) ) );
 			l_uiCur++;
 			l_rAngleIn += l_rStepAngleIn;
 		}
@@ -66,12 +66,12 @@ void Torus::Generate()
 
 			for ( uint32_t j = 0; j < l_uiIntMax; j++ )
 			{
-				l_pVertex = l_submesh[j];
-				Vertex::GetPosition( l_pVertex, l_ptPos );
-				Vertex::GetNormal( l_pVertex, l_ptNml );
-				l_pVertex = l_submesh.AddPoint( l_ptPos[0] * cos( l_rAngleEx ), l_ptPos[1], l_ptPos[0] * sin( l_rAngleEx ) );
-				Vertex::SetTexCoord(	l_pVertex, real( i ) / m_uiExternalNbFaces, real( j ) / m_uiInternalNbFaces );
-				Vertex::SetNormal(	l_pVertex, point::get_normalised( Point3r( real( l_ptNml[0] * cos( l_rAngleEx ) ), real( l_ptNml[1] ), real( l_ptNml[0] * sin( l_rAngleEx ) ) ) ) );
+				l_vertex = l_submesh[j];
+				Vertex::GetPosition( l_vertex, l_ptPos );
+				Vertex::GetNormal( l_vertex, l_ptNml );
+				l_vertex = l_submesh.AddPoint( l_ptPos[0] * cos( l_rAngleEx ), l_ptPos[1], l_ptPos[0] * sin( l_rAngleEx ) );
+				Vertex::SetTexCoord(	l_vertex, real( i ) / m_uiExternalNbFaces, real( j ) / m_uiInternalNbFaces );
+				Vertex::SetNormal(	l_vertex, point::get_normalised( Point3r( real( l_ptNml[0] * cos( l_rAngleEx ) ), real( l_ptNml[1] ), real( l_ptNml[0] * sin( l_rAngleEx ) ) ) ) );
 			}
 
 			for ( uint32_t j = 0; j < l_uiIntMax - 1; j++ )

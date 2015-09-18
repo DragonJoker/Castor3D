@@ -543,15 +543,15 @@ namespace Castor3D
 		m_mapUnits.clear();
 	}
 
-	void Pass::Render( uint8_t p_uiIndex, uint8_t p_uiCount )
+	void Pass::Render( uint8_t p_index, uint8_t p_uiCount )
 	{
 		m_pBlendState->Apply();
-		DoRender( p_uiIndex, p_uiCount );
+		DoRender( p_index, p_uiCount );
 	}
 
-	void Pass::Render2D( uint8_t p_uiIndex, uint8_t p_uiCount )
+	void Pass::Render2D( uint8_t p_index, uint8_t p_uiCount )
 	{
-		DoRender( p_uiIndex, p_uiCount );
+		DoRender( p_index, p_uiCount );
 	}
 
 	void Pass::EndRender()
@@ -598,13 +598,13 @@ namespace Castor3D
 		return l_pReturn;
 	}
 
-	bool Pass::DestroyTextureUnit( uint32_t p_uiIndex )
+	bool Pass::DestroyTextureUnit( uint32_t p_index )
 	{
-		CASTOR_ASSERT( p_uiIndex < m_arrayTextureUnits.size() );
+		CASTOR_ASSERT( p_index < m_arrayTextureUnits.size() );
 		bool l_return = false;
-		Logger::LogInfo( StringStream() << cuT( "Destroying TextureUnit " ) << p_uiIndex );
+		Logger::LogInfo( StringStream() << cuT( "Destroying TextureUnit " ) << p_index );
 		TextureUnitPtrArray::iterator l_it = m_arrayTextureUnits.begin();
-		m_arrayTextureUnits.erase( l_it + p_uiIndex );
+		m_arrayTextureUnits.erase( l_it + p_index );
 		uint32_t i = 0;
 
 		for ( l_it = m_arrayTextureUnits.begin(); l_it != m_arrayTextureUnits.end(); ++l_it )
@@ -616,16 +616,16 @@ namespace Castor3D
 		return l_return;
 	}
 
-	TextureUnitSPtr Pass::GetTextureUnit( uint32_t p_uiIndex )const
+	TextureUnitSPtr Pass::GetTextureUnit( uint32_t p_index )const
 	{
-		CASTOR_ASSERT( p_uiIndex < m_arrayTextureUnits.size() );
-		return m_arrayTextureUnits[p_uiIndex];
+		CASTOR_ASSERT( p_index < m_arrayTextureUnits.size() );
+		return m_arrayTextureUnits[p_index];
 	}
 
-	String Pass::GetTexturePath( uint32_t p_uiIndex )
+	String Pass::GetTexturePath( uint32_t p_index )
 	{
-		CASTOR_ASSERT( p_uiIndex < m_arrayTextureUnits.size() );
-		return m_arrayTextureUnits[p_uiIndex]->GetTexturePath();
+		CASTOR_ASSERT( p_index < m_arrayTextureUnits.size() );
+		return m_arrayTextureUnits[p_index]->GetTexturePath();
 	}
 
 	void Pass::SetShader( ShaderProgramBaseSPtr p_pProgram )

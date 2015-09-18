@@ -272,6 +272,10 @@ namespace Castor
 				l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT > >( *m_pParsingContext, *reinterpret_cast< UIntStrMap * >( va_arg( l_valist, void * ) ) ) );
 				break;
 
+			case ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT:
+				l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT > >( *m_pParsingContext, *reinterpret_cast< UIntStrMap * >( va_arg( l_valist, void * ) ) ) );
+				break;
+
 			case ePARAMETER_TYPE_BOOL:
 				l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_BOOL > >( *m_pParsingContext ) );
 				break;
@@ -441,13 +445,18 @@ namespace Castor
 
 		if ( l_bContinue )
 		{
-			if ( m_pParsingContext->stackSections.top() >= 0 && m_pParsingContext->stackSections.top() < m_iSectionCount )
+			if ( !m_pParsingContext->stackSections.empty() )
 			{
-				l_return = DoInvokeParser( p_strLine, m_mapParsers[m_pParsingContext->stackSections.top()] );
-			}
-			else
-			{
-				l_return = DoDelegateParser( p_strLine );
+				int l_section = m_pParsingContext->stackSections.top();
+				
+				if ( l_section >= 0 && l_section < m_iSectionCount )
+				{
+					l_return = DoInvokeParser( p_strLine, m_mapParsers[m_pParsingContext->stackSections.top()] );
+				}
+				else
+				{
+					l_return = DoDelegateParser( p_strLine );
+				}
 			}
 		}
 

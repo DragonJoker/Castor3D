@@ -74,7 +74,7 @@ ShaderProgramBaseSPtr ShaderManager::GetAutomaticProgram( RenderTechniqueBase co
 		{
 			for ( int i = 0; i < eSHADER_MODEL_COUNT; ++i )
 			{
-				l_pReturn->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL( i ), p_technique.GetVertexShaderSource( p_uiProgramFlags ) );
+				l_pReturn->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL( i ), l_pReturn->GetVertexShaderSource( p_uiProgramFlags ) );
 				l_pReturn->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL( i ), p_technique.GetPixelShaderSource( p_uiTextureFlags ) );
 			}
 

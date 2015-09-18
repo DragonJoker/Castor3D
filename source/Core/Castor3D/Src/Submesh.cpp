@@ -354,13 +354,13 @@ namespace Castor3D
 			{
 				for ( uint32_t i = 0; i < l_vertices.m_uiCount; i++ )
 				{
-					BufferElementGroupSPtr l_pVertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
-					Vertex::SetPosition( l_pVertex, l_vertices.m_pVtx );
-					Vertex::SetNormal( l_pVertex, l_vertices.m_pNml );
-					Vertex::SetTangent( l_pVertex, l_vertices.m_pTan );
-					Vertex::SetBitangent( l_pVertex, l_vertices.m_pBin );
-					Vertex::SetTexCoord( l_pVertex, l_vertices.m_pTex );
-					m_points.push_back( l_pVertex );
+					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
+					Vertex::SetPosition( l_vertex, l_vertices.m_pVtx );
+					Vertex::SetNormal( l_vertex, l_vertices.m_pNml );
+					Vertex::SetTangent( l_vertex, l_vertices.m_pTan );
+					Vertex::SetBitangent( l_vertex, l_vertices.m_pBin );
+					Vertex::SetTexCoord( l_vertex, l_vertices.m_pTex );
+					m_points.push_back( l_vertex );
 					l_pData += l_uiStride;
 					l_vertices.m_pVtx += Vertex::GetCountPos();
 					l_vertices.m_pNml += Vertex::GetCountNml();
@@ -373,11 +373,11 @@ namespace Castor3D
 			{
 				for ( uint32_t i = 0; i < l_vertices.m_uiCount; i++ )
 				{
-					BufferElementGroupSPtr l_pVertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
-					Vertex::SetPosition( l_pVertex, l_vertices.m_pVtx );
-					Vertex::SetNormal( l_pVertex, l_vertices.m_pNml );
-					Vertex::SetTexCoord( l_pVertex, l_vertices.m_pTex );
-					m_points.push_back( l_pVertex );
+					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
+					Vertex::SetPosition( l_vertex, l_vertices.m_pVtx );
+					Vertex::SetNormal( l_vertex, l_vertices.m_pNml );
+					Vertex::SetTexCoord( l_vertex, l_vertices.m_pTex );
+					m_points.push_back( l_vertex );
 					l_pData += l_uiStride;
 					l_vertices.m_pVtx += Vertex::GetCountPos();
 					l_vertices.m_pNml += Vertex::GetCountNml();
@@ -388,10 +388,10 @@ namespace Castor3D
 			{
 				for ( uint32_t i = 0; i < l_vertices.m_uiCount; i++ )
 				{
-					BufferElementGroupSPtr l_pVertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
-					Vertex::SetPosition( l_pVertex, l_vertices.m_pVtx );
-					Vertex::SetNormal( l_pVertex, l_vertices.m_pNml );
-					m_points.push_back( l_pVertex );
+					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
+					Vertex::SetPosition( l_vertex, l_vertices.m_pVtx );
+					Vertex::SetNormal( l_vertex, l_vertices.m_pNml );
+					m_points.push_back( l_vertex );
 					l_pData += l_uiStride;
 					l_vertices.m_pVtx += Vertex::GetCountPos();
 					l_vertices.m_pNml += Vertex::GetCountNml();
@@ -401,10 +401,10 @@ namespace Castor3D
 			{
 				for ( uint32_t i = 0; i < l_vertices.m_uiCount; i++ )
 				{
-					BufferElementGroupSPtr l_pVertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
-					Vertex::SetPosition( l_pVertex, l_vertices.m_pVtx );
-					Vertex::SetTexCoord( l_pVertex, l_vertices.m_pTex );
-					m_points.push_back( l_pVertex );
+					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
+					Vertex::SetPosition( l_vertex, l_vertices.m_pVtx );
+					Vertex::SetTexCoord( l_vertex, l_vertices.m_pTex );
+					m_points.push_back( l_vertex );
 					l_pData += l_uiStride;
 					l_vertices.m_pVtx += Vertex::GetCountPos();
 					l_vertices.m_pTex += Vertex::GetCountTex();
@@ -414,9 +414,9 @@ namespace Castor3D
 			{
 				for ( uint32_t i = 0; i < l_vertices.m_uiCount; i++ )
 				{
-					BufferElementGroupSPtr l_pVertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
-					Vertex::SetPosition( l_pVertex, l_vertices.m_pVtx );
-					m_points.push_back( l_pVertex );
+					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
+					Vertex::SetPosition( l_vertex, l_vertices.m_pVtx );
+					m_points.push_back( l_vertex );
 					l_pData += l_uiStride;
 					l_vertices.m_pVtx += Vertex::GetCountPos();
 				}

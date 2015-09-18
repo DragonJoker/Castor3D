@@ -27,7 +27,7 @@ namespace GlRender
 {
 	struct GlVariableApplyerBase
 	{
-		virtual void operator()( OpenGl & p_gl, uint32_t p_uiIndex, Castor3D::FrameVariableSPtr p_pVariable ) = 0;
+		virtual void operator()( OpenGl & p_gl, uint32_t p_index, Castor3D::FrameVariableSPtr p_pVariable ) = 0;
 	};
 
 	class UboVariableInfos

@@ -69,29 +69,21 @@ namespace PnTriangles
 
 	void Subdivider::DoSubdivide()
 	{
-		Castor3D::FacePtrArray l_facesArray;
-
-		for ( uint32_t i = 0; i < m_submesh->GetFaceCount(); i++ )
-		{
-			l_facesArray.push_back( m_submesh->GetFace( i ) );
-		}
-
+		Castor3D::FacePtrArray l_facesArray = m_submesh->GetFaces();
 		m_submesh->ClearFaces();
 		std::map< uint32_t, Castor::PlaneEquation< double > > l_posnml;
 		uint32_t i = 0;
 
-		for ( VertexPtrArrayConstIt l_it = m_submesh->VerticesBegin(); l_it != m_submesh->VerticesEnd(); ++l_it )
+		for ( auto && l_point : m_submesh->GetPoints() )
 		{
 			Point3r l_position, l_normal;
-			Castor3D::BufferElementGroupSPtr l_point = *l_it;
 			Castor3D::Vertex::GetPosition( l_point, l_position );
 			Castor3D::Vertex::GetNormal( l_point, l_normal );
 			l_posnml.insert( std::make_pair( i++, Castor::PlaneEquation< double >( Point3d( l_normal[0], l_normal[1], l_normal[2] ), Point3d( l_position[0], l_position[1], l_position[2] ) ) ) );
 		}
 		
-		for ( Castor3D::FacePtrArray::iterator l_it = l_facesArray.begin(); l_it != l_facesArray.end(); ++l_it )
+		for ( auto && l_face : l_facesArray )
 		{
-			Castor3D::FaceSPtr l_face = *l_it;
 			DoComputeFaces( 0.0, 0.0, 1.0, 1.0, m_occurences, Patch( l_posnml[l_face->GetVertexIndex( 0 )], l_posnml[l_face->GetVertexIndex( 1 )], l_posnml[l_face->GetVertexIndex( 2 )] ) );
 		}
 

@@ -602,4 +602,9 @@ namespace Castor3D
 	{
 		return m_pShaders[p_type]->GetFrameVariables();
 	}
+
+	String ShaderProgramBase::GetVertexShaderSource( uint32_t p_uiProgramFlags )const
+	{
+		return DoGetVertexShaderSource( p_uiProgramFlags );
+	}
 }

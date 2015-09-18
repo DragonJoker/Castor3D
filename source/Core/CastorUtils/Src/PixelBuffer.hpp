@@ -106,34 +106,34 @@ namespace Castor
 		 *\~english
 		 *\brief		Retrieves the column at given index
 		 *\remark		No check is made, if you make an index error, expect a crash
-		 *\param[in]	p_uiIndex	The wanted index
+		 *\param[in]	p_index	The wanted index
 		 *\return		A constant reference on column at wanted index
 		 *\~french
 		 *\brief		Récupère la colonne à l'index donné
 		 *\remark		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
-		 *\param[in]	p_uiIndex	L'index
+		 *\param[in]	p_index	L'index
 		 *\return		Une référence constante sur la colonne à l'index voulu
 		 */
-		inline column const & operator []( uint32_t p_uiIndex )const
+		inline column const & operator []( uint32_t p_index )const
 		{
-			do_init_column( p_uiIndex );
+			do_init_column( p_index );
 			return m_column;
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the column at given index
 		 *\remark		No check is made, if you make an index error, expect a crash
-		 *\param[in]	p_uiIndex	The wanted index
+		 *\param[in]	p_index	The wanted index
 		 *\return		A reference on column at wanted index
 		 *\~french
 		 *\brief		Récupère la colonne à l'index donné
 		 *\remark		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
-		 *\param[in]	p_uiIndex	L'index
+		 *\param[in]	p_index	L'index
 		 *\return		Une référence sur la colonne à l'index voulu
 		 */
-		inline column & operator []( uint32_t p_uiIndex )
+		inline column & operator []( uint32_t p_index )
 		{
-			do_init_column( p_uiIndex );
+			do_init_column( p_index );
 			return m_column;
 		}
 		/**

@@ -9,9 +9,9 @@ using namespace Castor;
 
 //*************************************************************************************************
 
-Generator::Thread::Thread( Generator * p_parent, uint32_t p_uiIndex, int iWidth, int iTop, int iBottom, int iTotalHeight, UbPixel const & p_pxColour )
+Generator::Thread::Thread( Generator * p_parent, uint32_t p_index, int iWidth, int iTop, int iBottom, int iTotalHeight, UbPixel const & p_pxColour )
 	:	m_pParent( p_parent )
-	,	m_uiIndex( p_uiIndex )
+	,	m_uiIndex( p_index )
 	,	m_iWidth( iWidth )
 	,	m_iBottom( iBottom )
 	,	m_iTop( iTop )

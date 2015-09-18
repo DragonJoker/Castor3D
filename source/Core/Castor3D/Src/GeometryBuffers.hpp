@@ -135,33 +135,33 @@ namespace Castor3D
 		 *\brief		Draws the geometry held into the buffers
 		 *\param[in]	p_eTopology	The wanted topology
 		 *\param[in]	p_uiSize	Specifies the number of elements to be rendered
-		 *\param[in]	p_uiIndex	Specifies the starting index in the enabled arrays
+		 *\param[in]	p_index	Specifies the starting index in the enabled arrays
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Dessine la géométrie contenue dans les buffers
 		 *\param[in]	p_eTopology	La topologie voulue
 		 *\param[in]	p_uiSize	Spécifie le nombre de vertices à rendre
-		 *\param[in]	p_uiIndex	Spécifie l'indice du premier vertice
+		 *\param[in]	p_index	Spécifie l'indice du premier vertice
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Draw( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex ) = 0;
+		virtual bool Draw( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Draws the geometry held into the buffers
 		 *\param[in]	p_eTopology	The wanted topology
 		 *\param[in]	p_uiSize	Specifies the number of elements to be rendered
-		 *\param[in]	p_uiIndex	Specifies the starting index in the enabled arrays
+		 *\param[in]	p_index	Specifies the starting index in the enabled arrays
 		 *\param[in]	p_uiCount	The instances count
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Dessine la géométrie contenue dans les buffers
 		 *\param[in]	p_eTopology	La topologie voulue
 		 *\param[in]	p_uiSize	Spécifie le nombre de vertices à rendre
-		 *\param[in]	p_uiIndex	Spécifie l'indice du premier vertice
+		 *\param[in]	p_index	Spécifie l'indice du premier vertice
 		 *\param[in]	p_uiCount	Le nombre d'instances à dessiner
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool DrawInstanced( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex, uint32_t p_uiCount ) = 0;
+		virtual bool DrawInstanced( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index, uint32_t p_uiCount ) = 0;
 		/**
 		 *\~english
 		 *\brief		Binds the geometry buffers

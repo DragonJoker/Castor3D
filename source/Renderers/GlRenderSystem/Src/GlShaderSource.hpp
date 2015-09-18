@@ -138,6 +138,7 @@ namespace GlRender
 		//! No UBO
 		struct Legacy_MatrixOut {};
 		struct Legacy_MatrixCopy {};
+		struct Legacy_PixelModelView {};
 
 		//! Miscellaneous
 		struct Endl {};
@@ -214,6 +215,7 @@ namespace GlRender
 			template< typename T > inline T GetBuiltin( Castor::String const & p_name );
 			template< typename T > inline T GetLayout( Castor::String const & p_name );
 			template< typename T > inline T GetUniform( Castor::String const & p_name );
+			template< typename T > inline T GetFragData( Castor::String const & p_name, uint32_t p_index );
 			template< typename T > inline Array< T > GetAttribute( Castor::String const & p_name, uint32_t p_dimension );
 			template< typename T > inline Array< T > GetOut( Castor::String const & p_name, uint32_t p_dimension );
 			template< typename T > inline Array< T > GetIn( Castor::String const & p_name, uint32_t p_dimension );
@@ -234,6 +236,7 @@ namespace GlRender
 
 			GlslWriter & operator<<( Legacy_MatrixOut const & p_rhs );
 			GlslWriter & operator<<( Legacy_MatrixCopy const & p_rhs );
+			GlslWriter & operator<<( Legacy_PixelModelView const & p_rhs );
 
 			GlslWriter & operator<<( Endl const & p_rhs );
 			GlslWriter & operator<<( Castor::String const & p_rhs );
@@ -2879,6 +2882,12 @@ namespace GlRender
 
 #define BUILTIN_ARRAY( Writer, Type, Name, Dimension )\
 	Array< Type > Name = ( Writer ).GetBuiltin< Type >( cuT( #Name ), Dimension )
+
+#define FRAG_OUTPUT( Writer, Type, Name, Index )\
+	Type Name = ( Writer ).GetFragData< Type >( cuT( #Name ), Index )
+
+#define FRAG_OUTPUT_ARRAY( Writer, Type, Name, Index, Dimension )\
+	Type Name = ( Writer ).GetFragData< Type >( cuT( #Name ), Index, Dimension )
 
 #define OUT( Writer, Type, Name )\
 	Type Name = ( Writer ).GetOut< Type >( cuT( #Name ) )

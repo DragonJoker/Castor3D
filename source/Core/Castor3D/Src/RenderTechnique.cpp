@@ -198,11 +198,6 @@ namespace Castor3D
 		}
 	}
 
-	String RenderTechniqueBase::GetVertexShaderSource( uint32_t p_uiProgramFlags )const
-	{
-		return DoGetVertexShaderSource( p_uiProgramFlags );
-	}
-
 	String RenderTechniqueBase::GetPixelShaderSource( uint32_t p_uiFlags )const
 	{
 		return DoGetPixelShaderSource( p_uiFlags );

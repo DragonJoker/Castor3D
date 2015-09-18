@@ -260,17 +260,17 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets element value at given index
-		 *\param[in]	p_uiIndex	The index
+		 *\param[in]	p_index	The index
 		 *\param[in]	p_value	The value
 		 *\~french
 		 *\brief		Définit la valeur de l'élément à l'index donné
-		 *\param[in]	p_uiIndex	L'index
+		 *\param[in]	p_index	L'index
 		 *\param[in]	p_value	La valeur
 		 */
-		virtual void SetElement( uint32_t p_uiIndex, T const & p_value )
+		virtual void SetElement( uint32_t p_index, T const & p_value )
 		{
-			CASTOR_ASSERT( p_uiIndex < m_arrayData.size() );
-			m_arrayData[p_uiIndex] = p_value;
+			CASTOR_ASSERT( p_index < m_arrayData.size() );
+			m_arrayData[p_index] = p_value;
 		}
 		/**
 		 *\~english

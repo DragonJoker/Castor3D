@@ -1486,9 +1486,9 @@ namespace Castor3D
 
 			for ( SubmeshNodesMapConstIt l_itSubmeshes = l_itNodes->second.begin(); l_itSubmeshes != l_itNodes->second.end(); ++l_itSubmeshes )
 			{
-				SubmeshSPtr l_pSubmesh = l_itSubmeshes->first;
+				SubmeshSPtr l_submesh = l_itSubmeshes->first;
 
-				if ( l_renderSystem->HasInstancing() && l_pSubmesh->GetRefCount( l_pMaterial ) > 1 )
+				if ( l_renderSystem->HasInstancing() && l_submesh->GetRefCount( l_pMaterial ) > 1 )
 				{
 					DoRenderSubmeshInstancedMultiple( p_technique, p_pipeline, l_itSubmeshes->second, p_eTopology );
 				}
@@ -1507,10 +1507,10 @@ namespace Castor3D
 		for ( RenderNodeByDistanceMMapConstIt l_it = p_begin; l_it != p_end; ++l_it )
 		{
 			stRENDER_NODE const & l_renderNode = l_it->second;
-			SubmeshSPtr l_pSubmesh = l_renderNode.m_pSubmesh;
+			SubmeshSPtr l_submesh = l_renderNode.m_pSubmesh;
 			SceneNodeSPtr l_pNode = l_renderNode.m_pNode;
 
-			if ( l_renderSystem->HasInstancing() && l_pSubmesh->GetRefCount( l_renderNode.m_pMaterial ) > 1 )
+			if ( l_renderSystem->HasInstancing() && l_submesh->GetRefCount( l_renderNode.m_pMaterial ) > 1 )
 			{
 				DoRenderSubmeshInstancedSingle( p_technique, p_pipeline, l_renderNode, p_eTopology );
 			}
@@ -1544,20 +1544,20 @@ namespace Castor3D
 
 	void Scene::DoRenderSubmeshInstancedMultiple( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, RenderNodeArray const & p_nodes, eTOPOLOGY p_eTopology )
 	{
-		SubmeshSPtr l_pSubmesh = p_nodes[0].m_pSubmesh;
+		SubmeshSPtr l_submesh = p_nodes[0].m_pSubmesh;
 		SceneNodeSPtr l_pNode = p_nodes[0].m_pNode;
 		MaterialSPtr l_pMaterial = p_nodes[0].m_pMaterial;
 
-		if ( l_pSubmesh->GetGeometryBuffers()->HasMatrixBuffer() )
+		if ( l_submesh->GetGeometryBuffers()->HasMatrixBuffer() )
 		{
-			MatrixBuffer & l_mtxBuffer = l_pSubmesh->GetGeometryBuffers()->GetMatrixBuffer();
+			MatrixBuffer & l_mtxBuffer = l_submesh->GetGeometryBuffers()->GetMatrixBuffer();
 			uint32_t l_uiSize = l_mtxBuffer.GetSize();
 			real * l_pBuffer = l_mtxBuffer.data();
-			uint32_t l_count = l_pSubmesh->GetRefCount( l_pMaterial );
+			uint32_t l_count = l_submesh->GetRefCount( l_pMaterial );
 
 			for ( auto && l_it : p_nodes )
 			{
-				if ( ( l_pSubmesh->GetProgramFlags() & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
+				if ( ( l_submesh->GetProgramFlags() & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
 				{
 					std::memcpy( l_pBuffer, l_it.m_pNode->GetDerivedTransformationMatrix().get_inverse().const_ptr(), 16 * sizeof( real ) );
 				}
@@ -1575,16 +1575,16 @@ namespace Castor3D
 
 	void Scene::DoRenderSubmeshInstancedSingle( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology )
 	{
-		SubmeshSPtr l_pSubmesh = p_node.m_pSubmesh;
+		SubmeshSPtr l_submesh = p_node.m_pSubmesh;
 		SceneNodeSPtr l_pNode = p_node.m_pNode;
 
-		if ( l_pSubmesh->GetGeometryBuffers()->HasMatrixBuffer() )
+		if ( l_submesh->GetGeometryBuffers()->HasMatrixBuffer() )
 		{
-			MatrixBuffer & l_mtxBuffer = l_pSubmesh->GetGeometryBuffers()->GetMatrixBuffer();
+			MatrixBuffer & l_mtxBuffer = l_submesh->GetGeometryBuffers()->GetMatrixBuffer();
 			uint32_t l_uiSize = l_mtxBuffer.GetSize();
 			real * l_pBuffer = l_mtxBuffer.data();
 
-			if ( ( l_pSubmesh->GetProgramFlags() & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
+			if ( ( l_submesh->GetProgramFlags() & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
 			{
 				std::memcpy( l_pBuffer, l_pNode->GetDerivedTransformationMatrix().get_inverse().const_ptr(), 16 * sizeof( real ) );
 			}

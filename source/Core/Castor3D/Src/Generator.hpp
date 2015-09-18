@@ -51,7 +51,7 @@ namespace Castor3D
 			mutable std::recursive_mutex		m_mutex;
 
 		public:
-			Thread( Generator * p_parent, uint32_t p_uiIndex, int iWidth, int iTop, int iBottom, int iTotalHeight, Castor::UbPixel const & p_pxColour );
+			Thread( Generator * p_parent, uint32_t p_index, int iWidth, int iTop, int iBottom, int iTotalHeight, Castor::UbPixel const & p_pxColour );
 			virtual ~Thread();
 
 			void Run();

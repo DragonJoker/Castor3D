@@ -20,7 +20,7 @@ namespace Castor3D
 	{
 	}
 
-	bool DynamicTexture::Initialise( uint32_t p_uiIndex )
+	bool DynamicTexture::Initialise( uint32_t p_index )
 	{
 		if ( !m_bInitialised )
 		{
@@ -32,7 +32,7 @@ namespace Castor3D
 				m_pPixelBuffer = l_img.Resample( l_size ).GetPixels();
 			}
 
-			m_uiIndex = p_uiIndex;
+			m_uiIndex = p_index;
 			m_bInitialised = DoInitialise();
 
 			if ( GetSampler() )

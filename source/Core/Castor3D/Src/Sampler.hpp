@@ -162,15 +162,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Applies the sampler
 		 *\param[in]	p_eDimension	The texture dimension
-		 *\param[in]	p_uiIndex		The sampler index
+		 *\param[in]	p_index		The sampler index
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Applique le sampler
 		 *\param[in]	p_eDimension	La dimension de la texture
-		 *\param[in]	p_uiIndex		L'index du sampler
+		 *\param[in]	p_index		L'index du sampler
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Bind( eTEXTURE_DIMENSION p_eDimension, uint32_t p_uiIndex ) = 0;
+		virtual bool Bind( eTEXTURE_DIMENSION p_eDimension, uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Removes the sampler

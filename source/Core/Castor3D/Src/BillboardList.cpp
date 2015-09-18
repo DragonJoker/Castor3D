@@ -222,11 +222,11 @@ namespace Castor3D
 		m_pGeometryBuffers.reset();
 	}
 
-	void BillboardList::RemovePoint( uint32_t p_uiIndex )
+	void BillboardList::RemovePoint( uint32_t p_index )
 	{
-		if ( p_uiIndex < m_arrayPositions.size() )
+		if ( p_index < m_arrayPositions.size() )
 		{
-			m_arrayPositions.erase( m_arrayPositions.begin() + p_uiIndex );
+			m_arrayPositions.erase( m_arrayPositions.begin() + p_index );
 			m_bNeedUpdate = true;
 		}
 	}

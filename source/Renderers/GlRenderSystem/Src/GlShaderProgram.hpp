@@ -72,6 +72,7 @@ namespace GlRender
 	private:
 		virtual Castor3D::ShaderObjectBaseSPtr DoCreateObject( Castor3D::eSHADER_TYPE p_type );
 		virtual std::shared_ptr< Castor3D::OneTextureFrameVariable > DoCreateTextureVariable( int p_iNbOcc );
+		virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const;
 
 	private:
 		uint32_t m_programObject;

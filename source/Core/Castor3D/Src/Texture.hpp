@@ -92,14 +92,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Initialisation function
-		 *\param[in]	p_uiIndex		The texture index
+		 *\param[in]	p_index		The texture index
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Fonction d'initialisation
-		 *\param[in]	p_uiIndex		L'index de la texture
+		 *\param[in]	p_index		L'index de la texture
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Initialise( uint32_t p_uiIndex ) = 0;
+		virtual bool Initialise( uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function
