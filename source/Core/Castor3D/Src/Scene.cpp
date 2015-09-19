@@ -75,7 +75,7 @@ namespace Castor3D
 			memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
 		}
 
-		void ApplyLightMtxComponent( Coords4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
+		void ApplyLightMtxComponent( Point4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
 		{
 			uint8_t * l_pDst = p_data.get_at( p_index * 10 + p_offset++, 0 );
 			memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );

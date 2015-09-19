@@ -41,7 +41,14 @@ namespace Castor3D
 
 	Pipeline::Pipeline( RenderSystem & p_renderSystem )
 		: m_renderSystem( p_renderSystem )
-		, m_mtxIdentity( 1.0 )
+		, m_mtxIdentity( 1 )
+		, m_mtxView( 1 )
+		, m_mtxModel( 1 )
+		, m_mtxProjection( 1 )
+		, m_mtxProjectionView( 1 )
+		, m_mtxModelView( 1 )
+		, m_mtxNormal( 1 )
+		, m_mtxProjectionModelView( 1 )
 	{
 	}
 
@@ -128,7 +135,6 @@ namespace Castor3D
 
 	void Pipeline::ApplyModelView( FrameVariableBuffer & p_matrixBuffer )
 	{
-		// Model view must always be computed because normal and projection model view are computed from it
 		m_mtxModelView = m_mtxView * m_mtxModel;
 		DoApplyMatrix( m_mtxModelView, MtxModelView, p_matrixBuffer );
 	}

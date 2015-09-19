@@ -68,6 +68,15 @@ namespace Castor
 		SquareMatrix();
 		/**
 		 *\~english
+		 *\brief		Constructor.
+		 *\remarks		The matrix buffer won't be initialised.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\remarks		Le tampon de la matrice ne sera pas initialisé.
+		 */
+		SquareMatrix( mtx_noinit const & );
+		/**
+		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_value	The matrix is initialised as Jordan with that value
 		 *\~french

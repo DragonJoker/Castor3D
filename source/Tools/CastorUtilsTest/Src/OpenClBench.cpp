@@ -234,13 +234,20 @@ namespace Testing
 			l_bContinue = CheckErr( l_iErr, "Kernel::setArg() - m_clBufferMtx4x4B" );
 		}
 
-		if ( l_bContinue )
+		try
 		{
-			m_queue.enqueueNDRangeKernel( m_kernel, cl::NullRange, cl::NDRange( 1, 1 ), cl::NDRange( 4, 4 ), NULL, &m_event );
-			m_queue.enqueueReadBuffer( m_clBufferMtx4x4C, CL_TRUE, 0, 16 * sizeof( float ), m_bufferMtx4x4C );
-		}
+			if ( l_bContinue )
+			{
+				m_queue.enqueueNDRangeKernel( m_kernel, cl::NullRange, cl::NDRange( 1, 1 ), cl::NDRange( 4, 4 ), NULL, &m_event );
+				m_queue.enqueueReadBuffer( m_clBufferMtx4x4C, CL_TRUE, 0, 16 * sizeof( float ), m_bufferMtx4x4C );
+			}
 
-		m_bClInitialised = l_bContinue;
+			m_bClInitialised = l_bContinue;
+		}
+		catch( cl::Error & p_exc )
+		{
+			l_bContinue = CheckErr( p_exc.err(), "Kernel::enqueueNDRangeKernel() - m_kernel" );
+		}
 	}
 
 	OpenCLBench::~OpenCLBench()

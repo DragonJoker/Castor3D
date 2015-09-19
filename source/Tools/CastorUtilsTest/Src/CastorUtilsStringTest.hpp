@@ -19,11 +19,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CUT_STRING_TEST_H___
 
 #include "UnitTest.hpp"
+#include "Benchmark.hpp"
 
 namespace Testing
 {
 	class CastorUtilsStringTest
-		:	public TestCase
+		: public TestCase
 	{
 	public:
 		CastorUtilsStringTest();
@@ -32,6 +33,27 @@ namespace Testing
 
 	private:
 		void StringConversions( uint32_t & p_errCount, uint32_t & p_testCount );
+	};
+
+	class CastorUtilsStringBench
+		: public BenchCase
+	{
+	public:
+		CastorUtilsStringBench();
+		virtual ~CastorUtilsStringBench();
+		virtual void Execute();
+
+	private:
+		void StrToWStrUsingConvert();
+		void StrToWStrUsingWiden();
+		void WStrToStrUsingConvert();
+		void WStrToStrUsingNarrow();
+
+	private:
+		std::string m_strIn;
+		std::wstring m_wstrIn;
+		std::wstring m_wstrOut;
+		std::string m_strOut;
 	};
 }
 

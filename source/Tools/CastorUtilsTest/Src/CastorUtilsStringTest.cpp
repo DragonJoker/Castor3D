@@ -4,59 +4,63 @@
 
 using namespace Castor;
 
-namespace
-{
-	template< typename InChar, typename OutChar >
-	inline void convert( std::basic_string< InChar > const & p_strIn, std::basic_string< OutChar > & p_strOut, std::locale const & p_locale = std::locale() )
-	{
-		if ( !p_strIn.empty() )
-		{
-			typedef typename std::codecvt< OutChar, InChar, std::mbstate_t > facet_type;
-			typedef typename facet_type::result result_type;
-			std::mbstate_t l_state = std::mbstate_t();
-			result_type l_result;
-			std::vector< OutChar > l_buffer( p_strIn.size() );
-			InChar const * l_pEndIn = NULL;
-			OutChar * l_pEndOut = NULL;
-			l_result = std::use_facet< facet_type >( p_locale ).in( l_state,
-						p_strIn.data(),		p_strIn.data() + p_strIn.length(),		l_pEndIn,
-						&l_buffer.front(),	&l_buffer.front() + l_buffer.size(),	l_pEndOut
-																	);
-			p_strOut = std::basic_string< OutChar >( &l_buffer.front(), l_pEndOut );
-		}
-		else
-		{
-			p_strOut.clear();
-		}
-	}
-
-	inline void narrow( std::wstring const & p_wstrIn, std::string & p_strOut )
-	{
-		p_strOut.resize( p_wstrIn.size() + 1, '\0' );
-		std::ostringstream l_stream;
-		std::ctype< wchar_t > const & l_ctfacet = std::use_facet< std::ctype< wchar_t > >( l_stream.getloc() );
-
-		if ( p_wstrIn.size() > 0 )
-		{
-			l_ctfacet.narrow( p_wstrIn.data(), p_wstrIn.data() + p_wstrIn.size(), '?', &p_strOut[0] );
-		}
-	}
-
-	inline void widen( std::string const & p_strIn, std::wstring & p_wstrOut )
-	{
-		p_wstrOut.resize( p_strIn.size() + 1, L'\0' );
-		std::wostringstream l_wstream;
-		std::ctype< wchar_t > const & l_ctfacet = std::use_facet< std::ctype< wchar_t > >( l_wstream.getloc() );
-
-		if ( p_strIn.size() > 0 )
-		{
-			l_ctfacet.widen( p_strIn.data(), p_strIn.data() + p_strIn.size(), &p_wstrOut[0] );
-		}
-	}
-}
-
 namespace Testing
 {
+	//*********************************************************************************************
+
+	namespace
+	{
+		template< typename InChar, typename OutChar >
+		inline void convert( std::basic_string< InChar > const & p_strIn, std::basic_string< OutChar > & p_strOut, std::locale const & p_locale = std::locale() )
+		{
+			if ( !p_strIn.empty() )
+			{
+				typedef typename std::codecvt< OutChar, InChar, std::mbstate_t > facet_type;
+				typedef typename facet_type::result result_type;
+				std::mbstate_t l_state = std::mbstate_t();
+				result_type l_result;
+				std::vector< OutChar > l_buffer( p_strIn.size() );
+				InChar const * l_pEndIn = NULL;
+				OutChar * l_pEndOut = NULL;
+				l_result = std::use_facet< facet_type >( p_locale ).in( l_state,
+							p_strIn.data(),		p_strIn.data() + p_strIn.length(),		l_pEndIn,
+							&l_buffer.front(),	&l_buffer.front() + l_buffer.size(),	l_pEndOut
+																		);
+				p_strOut = std::basic_string< OutChar >( &l_buffer.front(), l_pEndOut );
+			}
+			else
+			{
+				p_strOut.clear();
+			}
+		}
+
+		inline void narrow( std::wstring const & p_wstrIn, std::string & p_strOut )
+		{
+			p_strOut.resize( p_wstrIn.size() + 1, '\0' );
+			std::ostringstream l_stream;
+			std::ctype< wchar_t > const & l_ctfacet = std::use_facet< std::ctype< wchar_t > >( l_stream.getloc() );
+
+			if ( p_wstrIn.size() > 0 )
+			{
+				l_ctfacet.narrow( p_wstrIn.data(), p_wstrIn.data() + p_wstrIn.size(), '?', &p_strOut[0] );
+			}
+		}
+
+		inline void widen( std::string const & p_strIn, std::wstring & p_wstrOut )
+		{
+			p_wstrOut.resize( p_strIn.size() + 1, L'\0' );
+			std::wostringstream l_wstream;
+			std::ctype< wchar_t > const & l_ctfacet = std::use_facet< std::ctype< wchar_t > >( l_wstream.getloc() );
+
+			if ( p_strIn.size() > 0 )
+			{
+				l_ctfacet.widen( p_strIn.data(), p_strIn.data() + p_strIn.size(), &p_wstrOut[0] );
+			}
+		}
+	}
+
+	//*********************************************************************************************
+
 	CastorUtilsStringTest::CastorUtilsStringTest()
 		:	TestCase( "CastorUtilsStringTest" )
 	{
@@ -115,4 +119,47 @@ namespace Testing
 		Logger::LogInfo(	"		Result : " + l_strOut );
 		TEST_EQUAL( l_strOut, l_strIn );
 	}
+
+	//*********************************************************************************************
+
+	CastorUtilsStringBench::CastorUtilsStringBench()
+		: BenchCase( "CastorUtilsStringBench" )
+		, m_strIn( "STR : Bonjoir éêèàÉÊÈÀ" )
+		, m_wstrIn( L"STR : Bonjoir éêèàÉÊÈÀ" )
+	{
+	}
+
+	CastorUtilsStringBench::~CastorUtilsStringBench()
+	{
+	}
+
+	void CastorUtilsStringBench::Execute()
+	{
+		BENCHMARK( StrToWStrUsingConvert, NB_TESTS );
+		BENCHMARK( StrToWStrUsingWiden, NB_TESTS );
+		BENCHMARK( WStrToStrUsingConvert, NB_TESTS );
+		BENCHMARK( WStrToStrUsingNarrow, NB_TESTS );
+	}
+
+	void CastorUtilsStringBench::StrToWStrUsingConvert()
+	{
+		convert( m_strIn, m_wstrOut );
+	}
+
+	void CastorUtilsStringBench::StrToWStrUsingWiden()
+	{
+		widen( m_strIn, m_wstrOut );
+	}
+
+	void CastorUtilsStringBench::WStrToStrUsingConvert()
+	{
+		convert( m_wstrIn, m_strOut );
+	}
+
+	void CastorUtilsStringBench::WStrToStrUsingNarrow()
+	{
+		narrow( m_wstrIn, m_strOut );
+	}
+
+	//*********************************************************************************************
 }

@@ -26,6 +26,16 @@ namespace Castor
 {
 	/*!
 	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		18/09/2015
+	\~english
+	\brief		Used to construct a matrix without initialising it's buffer.
+	\~french
+	\brief		Utilisé pour construicre une matrice sans initialiser son tampon.
+	*/
+	struct mtx_noinit {};
+	/*!
+	\author		Sylvain DOREMUS
 	\version	0.1.0.0
 	\date		09/02/2010
 	\~english
@@ -45,6 +55,7 @@ namespace Castor
 		typedef Matrix< __value_type, Rows, Columns > __transpose;
 		typedef Point< __value_type, Columns > __row;
 		typedef Coords< __value_type, Rows > __column;
+		static const std::size_t count = Rows * Columns;
 		static const std::size_t size = sizeof( T ) * Rows * Columns;
 
 	public:
@@ -69,6 +80,15 @@ namespace Castor
 		 *\brief		Constructeur
 		 */
 		Matrix();
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\remarks		The matrix buffer won't be initialised.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\remarks		Le tampon de la matrice ne sera pas initialisé.
+		 */
+		Matrix( mtx_noinit const & );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -274,7 +294,7 @@ namespace Castor
 		 *\param[in]	p_index	L'index
 		 *\return		Un pointeur constant sur le premier élément de la colonne
 		 */
-		col_type const & operator[]( uint32_t p_index )const;
+		Point< value_type, Rows > operator[]( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the column at given index

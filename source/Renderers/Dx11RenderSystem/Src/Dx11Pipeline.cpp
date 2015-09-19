@@ -41,7 +41,7 @@ namespace Dx11Render
 
 		if ( l_pVariable )
 		{
-			l_pVariable->SetValue( matrix::get_switch_hand( p_matrix ) );
+			l_pVariable->SetValue( p_matrix );
 		}
 	}
 }

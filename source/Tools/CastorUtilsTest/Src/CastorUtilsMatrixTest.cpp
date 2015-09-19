@@ -17,8 +17,10 @@
 
 namespace Testing
 {
-	template< typename CharT, typename T, uint32_t Rows, uint32_t Columns >
-	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & p_streamOut, Castor::Matrix< T, Rows, Columns > const & p_matrix )
+	//*********************************************************************************************
+
+	template< typename StreamT, typename T, uint32_t Columns, uint32_t Rows >
+	inline StreamT & operator<<( StreamT & p_streamOut, Castor::Matrix< T, Columns, Rows > const & p_matrix )
 	{
 		auto l_precision = p_streamOut.precision( 10 );
 
@@ -37,10 +39,19 @@ namespace Testing
 		return p_streamOut;
 	}
 
-	inline void randomInit( float * p_pData1, float * p_pData2, uint32_t size )
+	template< typename T, size_t Rows >
+	Castor::String PrintMatrix( Castor::SquareMatrix< T, Rows > const & p_matrix )
+	{
+		Castor::StringStream l_stream;
+		l_stream << p_matrix;
+		return l_stream.str();
+	}
+
+	template< typename T >
+	inline void randomInit( T * p_pData1, T * p_pData2, uint32_t size )
 	{
 		std::random_device l_generator;
-		std::uniform_real< float > l_distribution( 0.0f, 1.0f );
+		std::uniform_real< T > l_distribution( T( 0.0 ), T( 1.0 ) );
 
 		for ( uint32_t i = 0; i < size; ++i )
 		{
@@ -49,33 +60,11 @@ namespace Testing
 		}
 	}
 
-	inline void randomInit( double * p_pData1, double * p_pData2, uint32_t size )
+	template< typename T >
+	inline void randomInit( T * p_pData, uint32_t size )
 	{
 		std::random_device l_generator;
-		std::uniform_real< double > l_distribution( 0.0, 1.0 );
-
-		for ( uint32_t i = 0; i < size; ++i )
-		{
-			p_pData1[i] = l_distribution( l_generator );
-			p_pData2[i] = p_pData1[i];
-		}
-	}
-
-	inline void randomInit( float * p_pData, uint32_t size )
-	{
-		std::random_device l_generator;
-		std::uniform_real< float > l_distribution( 0.0f, 1.0f );
-
-		for ( uint32_t i = 0; i < size; ++i )
-		{
-			p_pData[i] = l_distribution( l_generator );
-		}
-	}
-
-	inline void randomInit( double * p_pData, uint32_t size )
-	{
-		std::random_device l_generator;
-		std::uniform_real< double > l_distribution( 0.0, 1.0 );
+		std::uniform_real< T > l_distribution( T( 0.0 ), T( 1.0 ) );
 
 		for ( uint32_t i = 0; i < size; ++i )
 		{
@@ -85,43 +74,26 @@ namespace Testing
 
 #if defined( CASTOR_USE_GLM )
 
-	inline bool operator==( Castor::Matrix4x4f const & a, glm::mat4x4 const & b )
+	template< typename T >
+	inline bool operator==( Castor::SquareMatrix< T, 4 > const & a, glm::mat4x4 const & b )
 	{
-		return std::abs( a[0][0] - b[0][0] ) < 0.000001
-			&& std::abs( a[0][1] - b[0][1] ) < 0.000001
-			&& std::abs( a[0][2] - b[0][2] ) < 0.000001
-			&& std::abs( a[0][3] - b[0][3] ) < 0.000001
-			&& std::abs( a[1][0] - b[1][0] ) < 0.000001
-			&& std::abs( a[1][1] - b[1][1] ) < 0.000001
-			&& std::abs( a[1][2] - b[1][2] ) < 0.000001
-			&& std::abs( a[1][3] - b[1][3] ) < 0.000001
-			&& std::abs( a[2][0] - b[2][0] ) < 0.000001
-			&& std::abs( a[2][1] - b[2][1] ) < 0.000001
-			&& std::abs( a[2][2] - b[2][2] ) < 0.000001
-			&& std::abs( a[2][3] - b[2][3] ) < 0.000001
-			&& std::abs( a[3][0] - b[3][0] ) < 0.000001
-			&& std::abs( a[3][1] - b[3][1] ) < 0.000001
-			&& std::abs( a[3][2] - b[3][2] ) < 0.000001
-			&& std::abs( a[3][3] - b[3][3] ) < 0.000001;
-	}
-	inline bool operator==( Castor::Matrix4x4d const & a, glm::mat4x4 const & b )
-	{
-		return std::abs( a[0][0] - b[0][0] ) < 0.000001
-			&& std::abs( a[0][1] - b[0][1] ) < 0.000001
-			&& std::abs( a[0][2] - b[0][2] ) < 0.000001
-			&& std::abs( a[0][3] - b[0][3] ) < 0.000001
-			&& std::abs( a[1][0] - b[1][0] ) < 0.000001
-			&& std::abs( a[1][1] - b[1][1] ) < 0.000001
-			&& std::abs( a[1][2] - b[1][2] ) < 0.000001
-			&& std::abs( a[1][3] - b[1][3] ) < 0.000001
-			&& std::abs( a[2][0] - b[2][0] ) < 0.000001
-			&& std::abs( a[2][1] - b[2][1] ) < 0.000001
-			&& std::abs( a[2][2] - b[2][2] ) < 0.000001
-			&& std::abs( a[2][3] - b[2][3] ) < 0.000001
-			&& std::abs( a[3][0] - b[3][0] ) < 0.000001
-			&& std::abs( a[3][1] - b[3][1] ) < 0.000001
-			&& std::abs( a[3][2] - b[3][2] ) < 0.000001
-			&& std::abs( a[3][3] - b[3][3] ) < 0.000001;
+		T l_epsilon = T( 0.0001 );
+		return std::abs( a[0][0] - b[0][0] ) < l_epsilon
+			&& std::abs( a[0][1] - b[0][1] ) < l_epsilon
+			&& std::abs( a[0][2] - b[0][2] ) < l_epsilon
+			&& std::abs( a[0][3] - b[0][3] ) < l_epsilon
+			&& std::abs( a[1][0] - b[1][0] ) < l_epsilon
+			&& std::abs( a[1][1] - b[1][1] ) < l_epsilon
+			&& std::abs( a[1][2] - b[1][2] ) < l_epsilon
+			&& std::abs( a[1][3] - b[1][3] ) < l_epsilon
+			&& std::abs( a[2][0] - b[2][0] ) < l_epsilon
+			&& std::abs( a[2][1] - b[2][1] ) < l_epsilon
+			&& std::abs( a[2][2] - b[2][2] ) < l_epsilon
+			&& std::abs( a[2][3] - b[2][3] ) < l_epsilon
+			&& std::abs( a[3][0] - b[3][0] ) < l_epsilon
+			&& std::abs( a[3][1] - b[3][1] ) < l_epsilon
+			&& std::abs( a[3][2] - b[3][2] ) < l_epsilon
+			&& std::abs( a[3][3] - b[3][3] ) < l_epsilon;
 	}
 
 	template< typename CharType >
@@ -164,43 +136,30 @@ namespace Testing
 		return p_stream;
 	}
 
-	void PrintMatrix( glm::mat3x3 const & p_value )
+	Castor::String PrintMatrix( glm::mat4 const & p_matrix )
 	{
-		std::stringstream l_stream;
-		l_stream << p_value;
-		Castor::Logger::LogInfo( l_stream );
+		Castor::StringStream l_stream;
+		l_stream << p_matrix;
+		return l_stream.str();
 	}
 
-	void PrintMatrix( glm::mat4x4 const & p_value )
+	Castor::String PrintMatrix( glm::mat3 const & p_matrix )
 	{
-		std::stringstream l_stream;
-		l_stream << p_value;
-		Castor::Logger::LogInfo( l_stream );
+		Castor::StringStream l_stream;
+		l_stream << p_matrix;
+		return l_stream.str();
 	}
+
 #endif
 
-	template< typename T >
-	void PrintMatrix( Castor::SquareMatrix< T, 3 > const & p_value )
-	{
-		std::stringstream l_stream;
-		l_stream << p_value;
-		Castor::Logger::LogInfo( l_stream );
-	}
-	
-	template< typename T >
-	void PrintMatrix( Castor::SquareMatrix< T, 4 > const & p_value )
-	{
-		std::stringstream l_stream;
-		l_stream << p_value;
-		Castor::Logger::LogInfo( l_stream );
-	}
+	//*********************************************************************************************
 
 	template<>
 	inline std::string to_string< Castor::Matrix4x4f >( Castor::Matrix4x4f const & p_value )
 	{
 		std::stringstream l_stream;
 		l_stream << std::endl;
-		l_stream << p_value;
+		::operator<<( l_stream, p_value );
 		return l_stream.str();
 	}
 
@@ -209,7 +168,7 @@ namespace Testing
 	{
 		std::stringstream l_stream;
 		l_stream << std::endl;
-		l_stream << p_value;
+		::operator<<( l_stream, p_value );
 		return l_stream.str();
 	}
 
@@ -218,7 +177,7 @@ namespace Testing
 	{
 		std::stringstream l_stream;
 		l_stream << std::endl;
-		l_stream << p_value;
+		::operator<<( l_stream, p_value );
 		return l_stream.str();
 	}
 
@@ -227,7 +186,7 @@ namespace Testing
 	{
 		std::stringstream l_stream;
 		l_stream << std::endl;
-		l_stream << p_value;
+		::operator<<( l_stream, p_value );
 		return l_stream.str();
 	}
 
@@ -253,10 +212,31 @@ namespace Testing
 
 #endif
 
-	using namespace Castor;
+	//*********************************************************************************************
+
+	using Castor::real;
+	using Castor::Angle;
+	using Castor::Logger;
+	using Castor::matrix;
+	using Castor::Matrix4x4f;
+	using Castor::Matrix4x4r;
+	using Castor::Matrix4x4d;
+	using Castor::Matrix3x3f;
+	using Castor::Matrix3x3r;
+	using Castor::Matrix3x3d;
+	using Castor::Point3f;
+	using Castor::Point3r;
+	using Castor::Point3d;
+	using Castor::Point4f;
+	using Castor::Point4r;
+	using Castor::Point4d;
+	using Castor::Quaternion;
+	using Castor::StringStream;
+
+	//*********************************************************************************************
 
 	CastorUtilsMatrixTest::CastorUtilsMatrixTest()
-		:	TestCase( "CastorUtilsMatrixTest" )
+		: TestCase( "CastorUtilsMatrixTest" )
 	{
 	}
 
@@ -288,11 +268,7 @@ namespace Testing
 		l_mtxRGBtoYUV[0][2] =  0.615;
 		l_mtxRGBtoYUV[1][2] = -0.51499;
 		l_mtxRGBtoYUV[2][2] = -0.10001;
-		Logger::LogInfo( cuT( "	RGB to YUV conversion matrix (BT 601) :" ) );
-		PrintMatrix( l_mtxRGBtoYUV );
 		Matrix3x3d l_mtxYUVtoRGB( l_mtxRGBtoYUV.get_inverse() );
-		Logger::LogInfo( cuT( "	YUV to RGB conversion matrix (BT 601) :" ) );
-		PrintMatrix( l_mtxYUVtoRGB );
 		TEST_EQUAL( l_mtxRGBtoYUV, l_mtxYUVtoRGB.get_inverse() );
 		l_mtxRGBtoYUV[0][0] =  0.2126;
 		l_mtxRGBtoYUV[1][0] =  0.7152;
@@ -303,11 +279,7 @@ namespace Testing
 		l_mtxRGBtoYUV[0][2] =  0.615;
 		l_mtxRGBtoYUV[1][2] = -0.55861;
 		l_mtxRGBtoYUV[2][2] = -0.05639;
-		Logger::LogInfo( cuT( "	RGB to YUV conversion matrix (BT 709) :" ) );
-		PrintMatrix( l_mtxRGBtoYUV );
 		l_mtxYUVtoRGB = l_mtxRGBtoYUV.get_inverse();
-		Logger::LogInfo( cuT( "	YUV to RGB conversion matrix (BT 709) :" ) );
-		PrintMatrix( l_mtxYUVtoRGB );
 		TEST_EQUAL( l_mtxRGBtoYUV, l_mtxYUVtoRGB.get_inverse() );
 	}
 
@@ -315,53 +287,39 @@ namespace Testing
 
 	void CastorUtilsMatrixTest::MatrixInversionComparison( uint32_t & p_errCount, uint32_t & p_testCount )
 	{
-		char l_msg[64] = { 0 };
-		Matrix4x4r l_mtx;
-		glm::mat4x4 l_glm;
-		randomInit( l_mtx.ptr(), &l_glm[0][0], 16 );
-		TEST_EQUAL( l_mtx, l_glm );
-		Logger::LogInfo( cuT( "	Matrix Inversion with CastorUtils :" ) );
-		Logger::LogInfo( cuT( "		Normal :" ) );
-		PrintMatrix( l_mtx );
-		Matrix4x4r l_mtxInv( l_mtx.get_inverse() );
-		Logger::LogInfo( cuT( "		Inverted :" ) );
-		PrintMatrix( l_mtxInv );
-		Logger::LogInfo( cuT( "	Matrix Inversion with GLM :" ) );
-		Logger::LogInfo( cuT( "		Normal :" ) );
-		PrintMatrix( l_glm );
-		glm::mat4x4 l_glmInv( glm::inverse( l_glm ) );
-		Logger::LogInfo( cuT( "		Inverted :" ) );
-		PrintMatrix( l_glmInv );
-		TEST_EQUAL( l_mtxInv, l_glmInv );
+		for ( int i = 0; i < 10; ++i )
+		{
+			char l_msg[64] = { 0 };
+			Matrix4x4r l_mtx;
+			glm::mat4 l_glm;
+			randomInit( l_mtx.ptr(), &l_glm[0][0], 16 );
+			TEST_EQUAL( l_mtx, l_glm );
+			Matrix4x4r l_mtxInv( l_mtx.get_inverse() );
+			glm::mat4 l_glmInv( glm::inverse( l_glm ) );
+			TEST_EQUAL( l_mtxInv, l_glmInv );
+		}
 	}
 
 	void CastorUtilsMatrixTest::MatrixMultiplicationComparison( uint32_t & p_errCount, uint32_t & p_testCount )
 	{
-		char l_msg[64] = { 0 };
-		Matrix4x4r l_mtxA;
-		glm::mat4x4 l_glmA;
-		randomInit( l_mtxA.ptr(), &l_glmA[0][0], 16 );
-		Matrix4x4r l_mtxB;
-		glm::mat4x4 l_glmB;
-		randomInit( l_mtxB.ptr(), &l_glmB[0][0], 16 );
-		TEST_EQUAL( l_mtxA, l_glmA );
-		TEST_EQUAL( l_mtxB, l_glmB );
-		Matrix4x4r l_mtxC( l_mtxA * l_mtxB );
-		Matrix4x4r l_mtxD( l_mtxB * l_mtxA );
-		Logger::LogInfo( cuT( "	Matrix Multiplication with CastorUtils :" ) );
-		Logger::LogInfo( cuT( "		l_mtxC :" ) );
-		PrintMatrix( l_mtxC );
-		Logger::LogInfo( cuT( "		l_mtxD :" ) );
-		PrintMatrix( l_mtxD );
-		glm::mat4x4 l_glmC( l_glmA * l_glmB );
-		glm::mat4x4 l_glmD( l_glmB * l_glmA );
-		Logger::LogInfo( cuT( "	Matrix Multiplication with glm :" ) );
-		Logger::LogInfo( cuT( "		l_glmC :" ) );
-		PrintMatrix( l_glmC );
-		Logger::LogInfo( cuT( "		l_glmD :" ) );
-		PrintMatrix( l_glmD );
-		TEST_EQUAL( l_mtxC, l_glmC );
-		TEST_EQUAL( l_mtxD, l_glmD );
+		for ( int i = 0; i < 10; ++i )
+		{
+			char l_msg[64] = { 0 };
+			Matrix4x4r l_mtxA;
+			glm::mat4 l_glmA;
+			randomInit( l_mtxA.ptr(), &l_glmA[0][0], 16 );
+			Matrix4x4r l_mtxB;
+			glm::mat4 l_glmB;
+			randomInit( l_mtxB.ptr(), &l_glmB[0][0], 16 );
+			TEST_EQUAL( l_mtxA, l_glmA );
+			TEST_EQUAL( l_mtxB, l_glmB );
+			Matrix4x4r l_mtxC( l_mtxA * l_mtxB );
+			Matrix4x4r l_mtxD( l_mtxB * l_mtxA );
+			glm::mat4 l_glmC( l_glmA * l_glmB );
+			glm::mat4 l_glmD( l_glmB * l_glmA );
+			TEST_EQUAL( l_mtxC, l_glmC );
+			TEST_EQUAL( l_mtxD, l_glmD );
+		}
 	}
 
 	void CastorUtilsMatrixTest::TransformationMatrixComparison( uint32_t & p_errCount, uint32_t & p_testCount )
@@ -597,4 +555,100 @@ namespace Testing
 	}
 
 #endif
+
+	//*********************************************************************************************
+
+	CastorUtilsMatrixBench::CastorUtilsMatrixBench()
+		: BenchCase( "CastorUtilsMatrixBench" )
+	{
+		m_mtx1[0][0] =  0.299f;
+		m_mtx1[1][0] =  0.587f;
+		m_mtx1[2][0] =  0.114f;
+		m_mtx1[3][0] = 0.0f;
+		m_mtx1[0][1] = -0.14713f;
+		m_mtx1[1][1] = -0.28886f;
+		m_mtx1[2][1] =  0.436f;
+		m_mtx1[3][1] = 0.0f;
+		m_mtx1[0][2] =  0.615f;
+		m_mtx1[1][2] = -0.51499f;
+		m_mtx1[2][2] = -0.10001f;
+		m_mtx1[3][2] = 0.0f;
+		m_mtx1[0][3] =  0.0f;
+		m_mtx1[1][3] = 0.0f;
+		m_mtx1[2][3] = 0.0f;
+		m_mtx1[3][3] = 1.0f;
+#if defined( CASTOR_USE_GLM )
+		m_mtx1glm[0][0] =  0.299f;
+		m_mtx1glm[1][0] =  0.587f;
+		m_mtx1glm[2][0] =  0.114f;
+		m_mtx1glm[3][0] = 0.0f;
+		m_mtx1glm[0][1] = -0.14713f;
+		m_mtx1glm[1][1] = -0.28886f;
+		m_mtx1glm[2][1] =  0.436f;
+		m_mtx1glm[3][1] = 0.0f;
+		m_mtx1glm[0][2] =  0.615f;
+		m_mtx1glm[1][2] = -0.51499f;
+		m_mtx1glm[2][2] = -0.10001f;
+		m_mtx1glm[3][2] = 0.0f;
+		m_mtx1glm[0][3] =  0.0f;
+		m_mtx1glm[1][3] = 0.0f;
+		m_mtx1glm[2][3] = 0.0f;
+		m_mtx1glm[3][3] = 1.0f;
+		randomInit( m_mtx2.ptr(), &m_mtx2glm[0][0], 16 );
+#endif
+	}
+
+	CastorUtilsMatrixBench::~CastorUtilsMatrixBench()
+	{
+	}
+
+	void CastorUtilsMatrixBench::Execute()
+	{
+		BENCHMARK( MatrixMultiplicationsCastor, NB_TESTS );
+#if defined( CASTOR_USE_GLM )
+		BENCHMARK( MatrixMultiplicationsGlm, NB_TESTS );
+#endif
+		BENCHMARK( MatrixInversionCastor, NB_TESTS );
+#if defined( CASTOR_USE_GLM )
+		BENCHMARK( MatrixInversionGlm, NB_TESTS );
+#endif
+		BENCHMARK( MatrixCopyCastor, NB_TESTS );
+#if defined( CASTOR_USE_GLM )
+		BENCHMARK( MatrixCopyGlm, NB_TESTS );
+#endif
+	}
+
+	void CastorUtilsMatrixBench::MatrixMultiplicationsCastor()
+	{
+		DoNotOptimizeAway( m_mtx1 * m_mtx2 );
+	}
+
+	void CastorUtilsMatrixBench::MatrixInversionCastor()
+	{
+		DoNotOptimizeAway( m_mtx1.get_inverse() );
+	}
+
+	void CastorUtilsMatrixBench::MatrixCopyCastor()
+	{
+		DoNotOptimizeAway( m_mtx2 = m_mtx1 );
+	}
+
+#if defined( CASTOR_USE_GLM )
+
+	void CastorUtilsMatrixBench::MatrixMultiplicationsGlm()
+	{
+		DoNotOptimizeAway( m_mtx1glm * m_mtx2glm );
+	}
+	void CastorUtilsMatrixBench::MatrixInversionGlm()
+	{
+		DoNotOptimizeAway( glm::inverse( m_mtx1glm ) );
+	}
+	void CastorUtilsMatrixBench::MatrixCopyGlm()
+	{
+		DoNotOptimizeAway( m_mtx2glm = m_mtx1glm );
+	}
+
+#endif
+
+	//*********************************************************************************************
 }

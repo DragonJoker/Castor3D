@@ -5,7 +5,6 @@
 
 #include "BenchManager.hpp"
 #include "OpenClBench.hpp"
-#include "CastorUtilsBench.hpp"
 #include "CastorUtilsMatrixTest.hpp"
 #include "CastorUtilsPixelFormatTest.hpp"
 #include "CastorUtilsStringTest.hpp"
@@ -31,7 +30,8 @@ int main( int argc, char const * argv[] )
 #if defined( CASTOR_USE_OCL )
 	Testing::Register( std::make_shared< Testing::OpenCLBench >() );
 #endif
-	Testing::Register( std::make_shared< Testing::CastorUtilsBench >() );
+	Testing::Register( std::make_shared< Testing::CastorUtilsMatrixBench >() );
+	Testing::Register( std::make_shared< Testing::CastorUtilsStringBench >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsMatrixTest >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsPixelFormatTest >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsStringTest >() );

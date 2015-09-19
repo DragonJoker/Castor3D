@@ -50,7 +50,7 @@ namespace Dx11Render
 				l_desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 				l_desc.CPUAccessFlags = DirectX11::GetCpuAccessFlags( p_type | p_eNature );
 				l_desc.MiscFlags = 0;
-				l_desc.StructureByteStride = 0;//sizeof( uint32_t );
+				l_desc.StructureByteStride = 0;
 
 				if ( p_type == eBUFFER_ACCESS_TYPE_STATIC )
 				{

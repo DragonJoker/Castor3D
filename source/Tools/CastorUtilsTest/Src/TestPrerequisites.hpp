@@ -38,7 +38,7 @@ namespace Testing
 #if defined( NDEBUG )
 	static const uint32_t NB_TESTS = 10000000;
 #else
-	static const uint32_t NB_TESTS = 1000;
+	static const uint32_t NB_TESTS = 1000000;
 #endif
 	static const uint32_t BENCH_TITLE_WIDTH = 60;
 	static const uint32_t TEST_TITLE_WIDTH = 60;
