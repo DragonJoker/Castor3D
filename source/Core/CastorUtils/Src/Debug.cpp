@@ -127,29 +127,33 @@ namespace Castor
 
 			// symbol->Name type is char [1] so there is space for \0 already
 			SYMBOL_INFO * l_symbol( ( SYMBOL_INFO * ) malloc( sizeof( SYMBOL_INFO ) + ( MaxFnNameLen * sizeof( char ) ) ) );
-			l_symbol->MaxNameLen = MaxFnNameLen;
-			l_symbol->SizeOfStruct = sizeof( SYMBOL_INFO );
 
-			if ( !SymbolsInitialised )
+			if ( l_symbol )
 			{
-				SymbolsInitialised = SymInitialize( l_process, NULL, TRUE ) == TRUE;
-			}
+				l_symbol->MaxNameLen = MaxFnNameLen;
+				l_symbol->SizeOfStruct = sizeof( SYMBOL_INFO );
 
-			if ( SymbolsInitialised )
-			{
-				for ( unsigned int i = 0; i < l_num; ++i )
+				if ( !SymbolsInitialised )
 				{
-					if ( SymFromAddr( l_process, reinterpret_cast< DWORD64 >( l_backTrace[i] ), 0, l_symbol ) )
+					SymbolsInitialised = SymInitialize( l_process, NULL, TRUE ) == TRUE;
+				}
+
+				if ( SymbolsInitialised )
+				{
+					for ( unsigned int i = 0; i < l_num; ++i )
 					{
-						p_stream << cuT( "== " ) << Demangle( std::string( l_symbol->Name, l_symbol->Name + l_symbol->NameLen ) ) << std::endl;
+						if ( SymFromAddr( l_process, reinterpret_cast< DWORD64 >( l_backTrace[i] ), 0, l_symbol ) )
+						{
+							p_stream << cuT( "== " ) << Demangle( std::string( l_symbol->Name, l_symbol->Name + l_symbol->NameLen ) ) << std::endl;
+						}
 					}
+				}
+				else
+				{
+					p_stream << "== Unable to retrieve the call stack" << std::endl;
 				}
 
 				free( l_symbol );
-			}
-			else
-			{
-				p_stream << "== Unable to retrieve the call stack" << std::endl;
 			}
 		}
 

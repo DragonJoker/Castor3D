@@ -26,7 +26,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor
 {
-	namespace details
+	namespace detail
 	{
 		/*!
 		\author		Sylvain DOREMUS
@@ -135,7 +135,7 @@ namespace Castor
 	void clear_container( CtnrType & p_container )
 	{
 		typedef typename CtnrType::value_type value_type;
-		details::clear_content( p_container, value_type() );
+		detail::clear_content( p_container, value_type() );
 		CtnrType().swap( p_container );
 	}
 	/**
@@ -152,7 +152,7 @@ namespace Castor
 	void clear_pair_container( CtnrType & p_container )
 	{
 		typedef typename CtnrType::value_type value_type;
-		details::clear_pair_content( p_container, value_type() );
+		detail::clear_pair_content( p_container, value_type() );
 		CtnrType().swap( p_container );
 	}
 	/*!
@@ -807,6 +807,90 @@ namespace Castor
 		{
 			return p_a = convert< Ty >( p_b );
 		}
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		17/09/2015
+	\~english
+	\brief		Used to have the minimum value of two, at compile time.
+	\~french
+	\brief		Utilisé pour obtenir la valeur minimale entre deux, à la compilation.
+	*/
+	template< uint32_t A, uint32_t B, typename Enable = void > struct min_value;
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		17/09/2015
+	\~english
+	\brief		Used to have the minimum value of two, at compile time.
+	\remarks	min_value specialisation for A <= B.
+	\~french
+	\brief		Utilisé pour obtenir la valeur minimale entre deux, à la compilation.
+	\remarks	spécialisation de min_value pour A <= B.
+	*/
+	template< uint32_t A, uint32_t B >
+	struct min_value< A, B, typename std::enable_if< ( A <= B ) >::type >
+	{
+		static const uint32_t value = A;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		17/09/2015
+	\~english
+	\brief		Used to have the minimum value of two, at compile time.
+	\remarks	min_value specialisation for B < A.
+	\~french
+	\brief		Utilisé pour obtenir la valeur minimale entre deux, à la compilation.
+	\remarks	spécialisation de min_value pour B < A.
+	*/
+	template< uint32_t A, uint32_t B >
+	struct min_value< A, B, typename std::enable_if< ( B < A ) >::type >
+	{
+		static const uint32_t value = A;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		17/09/2015
+	\~english
+	\brief		Used to have the maximum value of two, at compile time.
+	\~french
+	\brief		Utilisé pour obtenir la valeur maximale entre deux, à la compilation.
+	*/
+	template< uint32_t A, uint32_t B, typename Enable = void > struct max_value;
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		17/09/2015
+	\~english
+	\brief		Used to have the maximum value of two, at compile time.
+	\remarks	max_value specialisation for A >= B.
+	\~french
+	\brief		Utilisé pour obtenir la valeur maximale entre deux, à la compilation.
+	\remarks	spécialisation de max_value pour A <= B.
+	*/
+	template< uint32_t A, uint32_t B >
+	struct max_value< A, B, typename std::enable_if< ( A >= B ) >::type >
+	{
+		static const uint32_t value = A;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		17/09/2015
+	\~english
+	\brief		Used to have the maximum value of two, at compile time.
+	\remarks	max_value specialisation for B > A.
+	\~french
+	\brief		Utilisé pour obtenir la valeur maximale entre deux, à la compilation.
+	\remarks	spécialisation de max_value pour B > A.
+	*/
+	template< uint32_t A, uint32_t B >
+	struct max_value< A, B, typename std::enable_if< ( B > A ) >::type >
+	{
+		static const uint32_t value = A;
 	};
 }
 

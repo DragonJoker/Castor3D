@@ -81,14 +81,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the bone name
-		 *\param[in]	p_strName	The new value
+		 *\param[in]	p_name	The new value
 		 *\~french
 		 *\brief		Définit le nom du bone
-		 *\param[in]	p_strName	La nouvelle valeur
+		 *\param[in]	p_name	La nouvelle valeur
 		 */
-		inline void SetName( Castor::String const & p_strName )
+		inline void SetName( Castor::String const & p_name )
 		{
-			m_strName = p_strName;
+			m_strName = p_name;
 		}
 		/**
 		 *\~english

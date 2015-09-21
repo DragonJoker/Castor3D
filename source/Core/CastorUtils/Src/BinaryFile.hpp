@@ -47,7 +47,7 @@ namespace Castor
 		 *\param[in]	p_fileName	Le chemin du fichier
 		 *\param[in]	p_iMode		Le mode d'ouverture, combinaison d'un ou plusieurs eOPEN_MODE
 		 */
-		CU_API BinaryFile( Path const & p_fileName, int p_iMode, eENCODING_MODE p_eEncodingMode = eENCODING_MODE_ASCII );
+		CU_API BinaryFile( Path const & p_fileName, int p_iMode, eENCODING_MODE p_encodingMode = eENCODING_MODE_ASCII );
 		/**
 		 *\~english
 		 *\brief		Destructor, closes the file

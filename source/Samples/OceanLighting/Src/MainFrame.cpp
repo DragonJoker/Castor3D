@@ -33,9 +33,9 @@ namespace OceanLighting
 			,	m_pMutex( p_pMutex	)
 		{
 		}
-		void operator()( Engine * p_pEngine, Path const & p_pathFile )
+		void operator()( Engine * p_engine, Path const & p_pathFile )
 		{
-			PluginBaseSPtr l_pPlugin = p_pEngine->LoadPlugin( p_pathFile );
+			PluginBaseSPtr l_pPlugin = p_engine->LoadPlugin( p_pathFile );
 
 			if ( !l_pPlugin )
 			{
@@ -66,44 +66,44 @@ namespace OceanLighting
 		p_pSizer->Add( l_pSizerLine, wxSizerFlags( 0 ).Expand().Border( wxALL, 5 ) );
 	}
 
-	void AddSpinCtrl( wxWindow * p_pParent, wxString const & p_strCaption, wxWindowID p_id, int p_iMin, int p_iMax, int p_iValue, void * p_pClientData, wxSizer * p_pSizer )
+	void AddSpinCtrl( wxWindow * p_parent, wxString const & p_strCaption, wxWindowID p_id, int p_iMin, int p_iMax, int p_iValue, void * p_pClientData, wxSizer * p_pSizer )
 	{
-		wxStaticText * l_pStaticText = new wxStaticText( p_pParent, wxID_ANY, p_strCaption );
-		wxSpinCtrl * l_pSpinCtrl = new wxSpinCtrl( p_pParent, p_id );
+		wxStaticText * l_pStaticText = new wxStaticText( p_parent, wxID_ANY, p_strCaption );
+		wxSpinCtrl * l_pSpinCtrl = new wxSpinCtrl( p_parent, p_id );
 		l_pSpinCtrl->SetRange( p_iMin, p_iMax );
 		l_pSpinCtrl->SetValue( p_iValue );
 		l_pSpinCtrl->SetClientData( &p_pClientData );
 		AddElemToSizer( l_pStaticText, l_pSpinCtrl, p_pSizer );
 	}
 
-	void AddTextCtrl( wxWindow * p_pParent, wxString const & p_strCaption, wxWindowID p_id, float p_fValue, void * p_pClientData, wxSizer * p_pSizer, wxValidator const & p_validator = wxDefaultValidator )
+	void AddTextCtrl( wxWindow * p_parent, wxString const & p_strCaption, wxWindowID p_id, float p_fValue, void * p_pClientData, wxSizer * p_pSizer, wxValidator const & p_validator = wxDefaultValidator )
 	{
 		StringStream l_strValue;
 		l_strValue << p_fValue;
-		wxStaticText * l_pStaticText = new wxStaticText( p_pParent, wxID_ANY, p_strCaption );
-		wxTextCtrl * l_pTextCtrl = new wxTextCtrl( p_pParent, p_id, l_strValue.str() );
+		wxStaticText * l_pStaticText = new wxStaticText( p_parent, wxID_ANY, p_strCaption );
+		wxTextCtrl * l_pTextCtrl = new wxTextCtrl( p_parent, p_id, l_strValue.str() );
 		l_pTextCtrl->SetValidator( p_validator );
 		l_pTextCtrl->SetClientData( &p_pClientData );
 		AddElemToSizer( l_pStaticText, l_pTextCtrl, p_pSizer );
 	}
 
-	void AddColourPickerCtrl( wxWindow * p_pParent, wxString const & p_strCaption, wxWindowID p_id, Point4f const & p_ptColour, void * p_pClientData, wxSizer * p_pSizer )
+	void AddColourPickerCtrl( wxWindow * p_parent, wxString const & p_strCaption, wxWindowID p_id, Point4f const & p_ptColour, void * p_pClientData, wxSizer * p_pSizer )
 	{
-		wxStaticText * l_pStaticText = new wxStaticText( p_pParent, wxID_ANY, p_strCaption );
-		wxColourPickerCtrl * l_pColourPickerCtrl = new wxColourPickerCtrl( p_pParent, p_id, wxColour( uint8_t( p_ptColour[0] * 255 ), uint8_t( p_ptColour[1] * 255 ), uint8_t( p_ptColour[2] * 255 ), uint8_t( p_ptColour[3] * 255 ) ) );
+		wxStaticText * l_pStaticText = new wxStaticText( p_parent, wxID_ANY, p_strCaption );
+		wxColourPickerCtrl * l_pColourPickerCtrl = new wxColourPickerCtrl( p_parent, p_id, wxColour( uint8_t( p_ptColour[0] * 255 ), uint8_t( p_ptColour[1] * 255 ), uint8_t( p_ptColour[2] * 255 ), uint8_t( p_ptColour[3] * 255 ) ) );
 		l_pColourPickerCtrl->SetClientData( p_pClientData );
 		AddElemToSizer( l_pStaticText, l_pColourPickerCtrl, p_pSizer );
 	}
 
-	void AddButton( wxWindow * p_pParent, wxString const & p_strCaption, wxWindowID p_id, wxSizer * p_pSizer )
+	void AddButton( wxWindow * p_parent, wxString const & p_strCaption, wxWindowID p_id, wxSizer * p_pSizer )
 	{
-		wxButton * l_pButton = new wxButton( p_pParent, p_id, p_strCaption );
+		wxButton * l_pButton = new wxButton( p_parent, p_id, p_strCaption );
 		AddElemToSizer( l_pButton, p_pSizer );
 	}
 
-	void AddCheckBox( wxWindow * p_pParent, wxString const & p_strCaption, wxWindowID p_id, bool p_bValue, void * p_pClientData, wxSizer * p_pSizer )
+	void AddCheckBox( wxWindow * p_parent, wxString const & p_strCaption, wxWindowID p_id, bool p_bValue, void * p_pClientData, wxSizer * p_pSizer )
 	{
-		wxCheckBox * l_pCheckBox = new wxCheckBox( p_pParent, p_id, p_strCaption );
+		wxCheckBox * l_pCheckBox = new wxCheckBox( p_parent, p_id, p_strCaption );
 		l_pCheckBox->SetClientData( p_pClientData );
 		l_pCheckBox->SetValue( p_bValue );
 		AddElemToSizer( l_pCheckBox, p_pSizer );
@@ -253,7 +253,7 @@ namespace OceanLighting
 		return l_bReturn;
 	}
 
-	bool MainFrame::DoInitialise3D( wxWindow * p_pParent )
+	bool MainFrame::DoInitialise3D( wxWindow * p_parent )
 	{
 		typedef std::shared_ptr< std::thread > thread_sptr;
 		DECLARE_VECTOR( thread_sptr, ThreadPtr );
@@ -345,9 +345,9 @@ namespace OceanLighting
 			m_pWindow = m_pCastor3D->CreateRenderWindow();
 			m_pWindow->SetRenderTarget( l_pTarget );
 #if defined( _WIN32 )
-			WindowHandle l_handle( std::make_shared< IMswWindowHandle >( p_pParent->GetHandle() ) );
+			WindowHandle l_handle( std::make_shared< IMswWindowHandle >( p_parent->GetHandle() ) );
 #elif defined( __linux__ )
-			GtkWidget * l_pGtkWidget = static_cast< GtkWidget * >( p_pParent->GetHandle() );
+			GtkWidget * l_pGtkWidget = static_cast< GtkWidget * >( p_parent->GetHandle() );
 			GLXDrawable l_drawable = None;
 			Display * l_pDisplay = NULL;
 

@@ -51,15 +51,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_pProgram		The program
-		 *\param[in]	p_strName		The buffer name
+		 *\param[in]	p_name		The buffer name
 		 *\param[in]	p_pRenderSystem	The render system
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_pProgram		Le programme
-		 *\param[in]	p_strName		Le nom du tampon
+		 *\param[in]	p_name		Le nom du tampon
 		 *\param[in]	p_pRenderSystem	Le render system
 		 */
-		FrameVariableBuffer( Castor::String const & p_strName, RenderSystem * p_pRenderSystem );
+		FrameVariableBuffer( Castor::String const & p_name, RenderSystem * p_pRenderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -107,18 +107,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a variable of the wanted type
-		 *\param[in]	p_eType		The wanted type
-		 *\param[in]	p_strName	The variable name
+		 *\param[in]	p_type		The wanted type
+		 *\param[in]	p_name	The variable name
 		 *\param[in]	p_uiNbOcc	The array dimension
 		 *\return		The created variable, nullptr if failed
 		 *\~french
 		 *\brief		Crée une variable du type demandé
-		 *\param[in]	p_eType		Le type voulu
-		 *\param[in]	p_strName	Le nom de la variable
+		 *\param[in]	p_type		Le type voulu
+		 *\param[in]	p_name	Le nom de la variable
 		 *\param[in]	p_uiNbOcc	Les dimensions du tableau
 		 *\return		La variable créée, nullptr en cas d'échec
 		 */
-		FrameVariableSPtr CreateVariable( ShaderProgramBase & p_program, eFRAME_VARIABLE_TYPE p_eType, Castor::String const & p_strName, uint32_t p_uiNbOcc = 1 );
+		FrameVariableSPtr CreateVariable( ShaderProgramBase & p_program, eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_uiNbOcc = 1 );
 		/**
 		 *\~english
 		 *\brief		Removes a variable from this buffer
@@ -131,42 +131,42 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves a variable by name
-		 *\param[in]	p_strName	The variable name
+		 *\param[in]	p_name	The variable name
 		 *\param[out]	p_pVariable	Receives the found variable, nullptr if failed
 		 *\return		\p false if failed
 		 *\~french
 		 *\brief		Récupère une variable par son nom
-		 *\param[in]	p_strName	Le nom de la variable
+		 *\param[in]	p_name	Le nom de la variable
 		 *\param[out]	p_pVariable	Reçoit la variable récupérée, nullptr en cas d'échec
 		 *\return		\p false en cas d'échec
 		 */
-		template< typename T > bool GetVariable( Castor::String const & p_strName, std::shared_ptr< OneFrameVariable< T > > & p_pVariable )const;
+		template< typename T > bool GetVariable( Castor::String const & p_name, std::shared_ptr< OneFrameVariable< T > > & p_pVariable )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a variable by name
-		 *\param[in]	p_strName	The variable name
+		 *\param[in]	p_name	The variable name
 		 *\param[out]	p_pVariable	Receives the found variable, nullptr if failed
 		 *\return		\p false if failed
 		 *\~french
 		 *\brief		Récupère une variable par son nom
-		 *\param[in]	p_strName	Le nom de la variable
+		 *\param[in]	p_name	Le nom de la variable
 		 *\param[out]	p_pVariable	Reçoit la variable récupérée, nullptr en cas d'échec
 		 *\return		\p false en cas d'échec
 		 */
-		template< typename T, uint32_t Count > bool GetVariable( Castor::String const & p_strName, std::shared_ptr< PointFrameVariable< T, Count > > & p_pVariable )const;
+		template< typename T, uint32_t Count > bool GetVariable( Castor::String const & p_name, std::shared_ptr< PointFrameVariable< T, Count > > & p_pVariable )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a variable by name
-		 *\param[in]	p_strName	The variable name
+		 *\param[in]	p_name	The variable name
 		 *\param[out]	p_pVariable	Receives the found variable, nullptr if failed
 		 *\return		\p false if failed
 		 *\~french
 		 *\brief		Récupère une variable par son nom
-		 *\param[in]	p_strName	Le nom de la variable
+		 *\param[in]	p_name	Le nom de la variable
 		 *\param[out]	p_pVariable	Reçoit la variable récupérée, nullptr en cas d'échec
 		 *\return		\p false en cas d'échec
 		 */
-		template< typename T, uint32_t Rows, uint32_t Columns > bool GetVariable( Castor::String const & p_strName, std::shared_ptr< MatrixFrameVariable< T, Rows, Columns > > & p_pVariable )const;
+		template< typename T, uint32_t Rows, uint32_t Columns > bool GetVariable( Castor::String const & p_name, std::shared_ptr< MatrixFrameVariable< T, Rows, Columns > > & p_pVariable )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the variables buffer name
@@ -232,18 +232,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a variable of the wanted type
-		 *\param[in]	p_eType		The wanted type
-		 *\param[in]	p_strName	The variable name
+		 *\param[in]	p_type		The wanted type
+		 *\param[in]	p_name	The variable name
 		 *\param[in]	p_uiNbOcc	The array dimension
 		 *\return		The created variable, nullptr if failed
 		 *\~french
 		 *\brief		Crée une variable du type demandé
-		 *\param[in]	p_eType		Le type voulu
-		 *\param[in]	p_strName	Le nom de la variable
+		 *\param[in]	p_type		Le type voulu
+		 *\param[in]	p_name	Le nom de la variable
 		 *\param[in]	p_uiNbOcc	Les dimensions du tableau
 		 *\return		La variable créée, nullptr en cas d'échec
 		 */
-		virtual FrameVariableSPtr DoCreateVariable( ShaderProgramBase * p_pProgram, eFRAME_VARIABLE_TYPE p_eType, Castor::String const & p_strName, uint32_t p_uiNbOcc = 1 ) = 0;
+		virtual FrameVariableSPtr DoCreateVariable( ShaderProgramBase * p_pProgram, eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_uiNbOcc = 1 ) = 0;
 		/**
 		 *\~english
 		 *\brief		Initialises all the variables and the GPU buffer associated
@@ -294,7 +294,7 @@ namespace Castor3D
 		//!\~english The variables ordered by name	\~french Les variables, triées par nom
 		FrameVariablePtrStrMap m_mapVariables;
 		//!\~english The render system	\~french Le render system
-		RenderSystem * m_pRenderSystem;
+		RenderSystem * m_renderSystem;
 		//!\~english The buffer name	\~french Le nom du tampon
 		Castor::String m_strName;
 		//!\~english The data buffer	\~french Le tampon de données

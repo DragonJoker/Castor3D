@@ -9,8 +9,8 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlShaderObject::GlShaderObject( OpenGl & p_gl, GlShaderProgram * p_pParent, eSHADER_TYPE p_eType )
-		:	ShaderObjectBase( p_pParent, p_eType )
+	GlShaderObject::GlShaderObject( OpenGl & p_gl, GlShaderProgram * p_parent, eSHADER_TYPE p_type )
+		:	ShaderObjectBase( p_parent, p_type )
 		,	m_shaderObject( 0 )
 		,	m_pShaderProgram( NULL )
 		,	m_gl( p_gl )
@@ -55,9 +55,9 @@ namespace GlRender
 
 	void GlShaderObject::CreateProgram()
 	{
-		if ( m_pParent->GetRenderSystem()->UseShaders() && m_pParent->GetRenderSystem()->HasShaderType( m_eType ) )
+		if ( m_pParent->GetRenderSystem()->UseShaders() && m_pParent->GetRenderSystem()->HasShaderType( m_type ) )
 		{
-			m_shaderObject = m_gl.CreateShader( m_gl.Get( m_eType ) );
+			m_shaderObject = m_gl.CreateShader( m_gl.Get( m_type ) );
 			glTrack( m_gl, GlShaderObject, this );
 		}
 	}
@@ -84,7 +84,7 @@ namespace GlRender
 		{
 			l_return = true;
 
-			if ( m_pParent->GetRenderSystem()->HasShaderType( m_eType ) )
+			if ( m_pParent->GetRenderSystem()->HasShaderType( m_type ) )
 			{
 				m_eStatus = eSHADER_STATUS_NOTCOMPILED;
 				int l_iCompiled = 0;
@@ -132,7 +132,7 @@ namespace GlRender
 
 	void GlShaderObject::Detach()
 	{
-		if ( m_eStatus == eSHADER_STATUS_COMPILED && m_pShaderProgram && m_pParent->GetRenderSystem()->HasShaderType( m_eType ) )
+		if ( m_eStatus == eSHADER_STATUS_COMPILED && m_pShaderProgram && m_pParent->GetRenderSystem()->HasShaderType( m_type ) )
 		{
 			m_gl.DetachShader( m_pShaderProgram->GetGlProgram(), m_shaderObject );
 			m_pShaderProgram = NULL;
@@ -145,12 +145,12 @@ namespace GlRender
 	{
 		Detach();
 
-		if ( m_eStatus == eSHADER_STATUS_COMPILED && m_pParent->GetRenderSystem()->HasShaderType( m_eType ) )
+		if ( m_eStatus == eSHADER_STATUS_COMPILED && m_pParent->GetRenderSystem()->HasShaderType( m_type ) )
 		{
 			m_pShaderProgram = &static_cast< GlShaderProgram & >( p_program );
 			m_gl.AttachShader( m_pShaderProgram->GetGlProgram(), m_shaderObject );
 
-			//if( m_eType == eSHADER_TYPE_GEOMETRY )
+			//if( m_type == eSHADER_TYPE_GEOMETRY )
 			//{
 			//	int l_iTmp;
 			//	m_gl.GetIntegerv( eGL_GETINTEGER_PARAM_MAX_GEOMETRY_OUTPUT_VERTICES,	&l_iTmp );
@@ -161,24 +161,24 @@ namespace GlRender
 		}
 	}
 
-	bool GlShaderObject::HasParameter( Castor::String const & p_strName )
+	bool GlShaderObject::HasParameter( Castor::String const & p_name )
 	{
-		return GetParameter( p_strName ) != eGL_INVALID_INDEX;
+		return GetParameter( p_name ) != eGL_INVALID_INDEX;
 	}
 
-	uint32_t GlShaderObject::GetParameter( Castor::String const & p_strName )
+	uint32_t GlShaderObject::GetParameter( Castor::String const & p_name )
 	{
 		uint32_t l_uiReturn = uint32_t( eGL_INVALID_INDEX );
 
 		if ( m_eStatus == eSHADER_STATUS_COMPILED )
 		{
-			UIntStrMap::iterator l_it = m_mapParamsByName.find( p_strName );
+			UIntStrMap::iterator l_it = m_mapParamsByName.find( p_name );
 
 			if ( l_it == m_mapParamsByName.end() )
 			{
 				uint32_t l_uiProgram = m_pShaderProgram->GetGlProgram();
-				m_mapParamsByName.insert( std::make_pair( p_strName, m_gl.GetUniformLocation( l_uiProgram, string::string_cast< char >( p_strName ).c_str() ) ) );
-				l_it = m_mapParamsByName.find( p_strName );
+				m_mapParamsByName.insert( std::make_pair( p_name, m_gl.GetUniformLocation( l_uiProgram, string::string_cast< char >( p_name ).c_str() ) ) );
+				l_it = m_mapParamsByName.find( p_name );
 			}
 
 			l_uiReturn = l_it->second;
@@ -187,9 +187,9 @@ namespace GlRender
 		return l_uiReturn;
 	}
 
-	void GlShaderObject::SetParameter( Castor::String const & p_strName, Castor::Matrix4x4r const & p_mtxValue )
+	void GlShaderObject::SetParameter( Castor::String const & p_name, Castor::Matrix4x4r const & p_mtxValue )
 	{
-		uint32_t l_uiParam = GetParameter( p_strName );
+		uint32_t l_uiParam = GetParameter( p_name );
 
 		if ( l_uiParam != eGL_INVALID_INDEX )
 		{
@@ -197,9 +197,9 @@ namespace GlRender
 		}
 	}
 
-	void GlShaderObject::SetParameter( Castor::String const & p_strName, Castor::Matrix3x3r const & p_mtxValue )
+	void GlShaderObject::SetParameter( Castor::String const & p_name, Castor::Matrix3x3r const & p_mtxValue )
 	{
-		uint32_t l_uiParam = GetParameter( p_strName );
+		uint32_t l_uiParam = GetParameter( p_name );
 
 		if ( l_uiParam != eGL_INVALID_INDEX )
 		{

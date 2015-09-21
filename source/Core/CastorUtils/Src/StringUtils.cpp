@@ -337,10 +337,10 @@ namespace Castor
 
 		String & replace( String & p_str, String const & p_find, String const & p_replaced )
 		{
-			String		l_temp;
-			String		l_return;
-			std::size_t	l_currentPos	= 0;
-			std::size_t	l_pos			= 0;
+			String l_temp;
+			String l_return;
+			std::size_t l_currentPos = 0;
+			std::size_t l_pos = 0;
 
 			while ( ( l_pos = p_str.find( p_find, l_currentPos ) ) != String::npos )
 			{

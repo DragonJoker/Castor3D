@@ -46,7 +46,7 @@ namespace Castor3D
 	\~french
 	\brief		Variable simple à type variable
 	*/
-	template <typename T>
+	template< typename T >
 	class OneFrameVariable
 		: public TFrameVariable<T>
 	{
@@ -139,48 +139,48 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Retrieves the value at given index
 		 *\remark		Check the index bounds
-		 *\param[in]	p_uiIndex	The index
+		 *\param[in]	p_index	The index
 		 *\return		A reference to the value at given index
 		 *\~french
 		 *\brief		Récupère la valeur à l'index donné
 		 *\remark		Vérifie que l'index est dans les bornes
-		 *\param[in]	p_uiIndex	L'indice
+		 *\param[in]	p_index	L'indice
 		 *\return		Une référence sur la valeur à l'index donné
 		 */
-		inline T & GetValue( uint32_t p_uiIndex )throw( std::out_of_range );
+		inline T & GetValue( uint32_t p_index )throw( std::out_of_range );
 		/**
 		 *\~english
 		 *\brief		Retrieves the value at given index
 		 *\remark		Check the index bounds
-		 *\param[in]	p_uiIndex	The index
+		 *\param[in]	p_index	The index
 		 *\return		A constant reference to the value at given index
 		 *\~french
 		 *\brief		Récupère la valeur à l'index donné
 		 *\remark		Vérifie que l'index est dans les bornes
-		 *\param[in]	p_uiIndex	L'indice
+		 *\param[in]	p_index	L'indice
 		 *\return		Une référence constante sur la valeur à l'index donné
 		 */
-		inline T const & GetValue( uint32_t p_uiIndex )const throw( std::out_of_range );
+		inline T const & GetValue( uint32_t p_index )const throw( std::out_of_range );
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable
-		 *\param[in]	p_tValue	The new value
+		 *\param[in]	p_value	The new value
 		 *\~french
 		 *\brief		Définit la valeur de la variable
-		 *\param[in]	p_tValue	La valeur
+		 *\param[in]	p_value	La valeur
 		 */
-		inline void SetValue( T const & p_tValue );
+		inline void SetValue( T const & p_value );
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable
-		 *\param[in]	p_tValue	The new value
-		 *\param[in]	p_uiIndex	The index of the value
+		 *\param[in]	p_value	The new value
+		 *\param[in]	p_index	The index of the value
 		 *\~french
 		 *\brief		Définit la valeur de la variable
-		 *\param[in]	p_tValue	La valeur
-		 *\param[in]	p_uiIndex	L'index de la valeur à modifier
+		 *\param[in]	p_value	La valeur
+		 *\param[in]	p_index	L'index de la valeur à modifier
 		 */
-		inline void SetValue( T const & p_tValue, uint32_t p_uiIndex );
+		inline void SetValue( T const & p_value, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Retrieves the byte size of the variable
@@ -212,33 +212,33 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Array subscript operator
 		 *\remark		Doesn't check the index bounds
-		 *\param[in]	p_uiIndex	The index
+		 *\param[in]	p_index	The index
 		 *\return		A reference to the value at given index
 		 *\~french
 		 *\brief		Opérateur d'accès de type tableau
 		 *\remark		Ne vérifie pas que l'index est dans les bornes
-		 *\param[in]	p_uiIndex	L'indice
+		 *\param[in]	p_index	L'indice
 		 *\return		Une référence sur la valeur à l'index donné
 		 */
-		inline T & operator[]( uint32_t p_uiIndex )
+		inline T & operator[]( uint32_t p_index )
 		{
-			return this->m_pValues[p_uiIndex];
+			return this->m_pValues[p_index];
 		}
 		/**
 		 *\~english
 		 *\brief		Array subscript operator
 		 *\remark		Doesn't check the index bounds
-		 *\param[in]	p_uiIndex	The index
+		 *\param[in]	p_index	The index
 		 *\return		A constant reference to the value at given index
 		 *\~french
 		 *\brief		Opérateur d'accès de type tableau
 		 *\remark		Ne vérifie pas que l'index est dans les bornes
-		 *\param[in]	p_uiIndex	L'indice
+		 *\param[in]	p_index	L'indice
 		 *\return		Une référence constante sur la valeur à l'index donné
 		 */
-		inline T const & operator[]( uint32_t p_uiIndex )const
+		inline T const & operator[]( uint32_t p_index )const
 		{
-			return this->m_pValues[p_uiIndex];
+			return this->m_pValues[p_index];
 		}
 		/**
 		 *\~english
@@ -294,13 +294,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Defines the value of the variable, from a string
 		 *\param[in]	p_strValue	The string containing the value
-		 *\param[in]	p_uiIndex	The index of the value
+		 *\param[in]	p_index	The index of the value
 		 *\~french
 		 *\brief		Définit la valeur de la variable à partir d'une chaîne
 		 *\param[in]	p_strValue	La chaîne
-		 *\param[in]	p_uiIndex	L'index de la valeur à modifier
+		 *\param[in]	p_index	L'index de la valeur à modifier
 		 */
-		inline void DoSetValueStr( Castor::String const & p_strValue, uint32_t p_uiIndex );
+		inline void DoSetValueStr( Castor::String const & p_strValue, uint32_t p_index );
 	};
 }
 

@@ -1,16 +1,19 @@
 ﻿#include "Context.hpp"
+
+#include "Buffer.hpp"
 #include "DepthStencilState.hpp"
+#include "Engine.hpp"
+#include "FrameVariableBuffer.hpp"
+#include "MatrixFrameVariable.hpp"
 #include "OneFrameVariable.hpp"
+#include "Pipeline.hpp"
 #include "RenderWindow.hpp"
 #include "RenderSystem.hpp"
-#include "Texture.hpp"
-#include "Buffer.hpp"
-#include "Viewport.hpp"
-#include "ShaderProgram.hpp"
-#include "Vertex.hpp"
-#include "Pipeline.hpp"
-#include "Engine.hpp"
 #include "ShaderManager.hpp"
+#include "ShaderProgram.hpp"
+#include "Texture.hpp"
+#include "Vertex.hpp"
+#include "Viewport.hpp"
 
 using namespace Castor;
 
@@ -18,7 +21,7 @@ namespace Castor3D
 {
 	Context::Context()
 		:	m_pWindow( NULL )
-		,	m_pRenderSystem( NULL )
+		,	m_renderSystem( NULL )
 		,	m_bInitialised( false )
 		,	m_bDeferredShadingSet( false )
 		,	m_bMultiSampling( false )
@@ -60,33 +63,26 @@ namespace Castor3D
 	bool Context::Initialise( RenderWindow * p_window )
 	{
 		m_pWindow = p_window;
-		m_pRenderSystem	= m_pWindow->GetEngine()->GetRenderSystem();
+		m_renderSystem	= m_pWindow->GetEngine()->GetRenderSystem();
 		m_bDeferredShadingSet = p_window->IsUsingDeferredRendering();
-		ShaderManager & l_manager = m_pRenderSystem->GetEngine()->GetShaderManager();
+		ShaderManager & l_manager = m_renderSystem->GetEngine()->GetShaderManager();
 		ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
 		m_pBtoBShaderProgram = l_program;
 		m_mapDiffuse = l_program->CreateFrameVariable( ShaderProgramBase::MapDiffuse, eSHADER_TYPE_PIXEL );
 		l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 		m_bMultiSampling = p_window->IsMultisampling();
-		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( m_pRenderSystem, &( *m_pDeclaration )[0], m_pDeclaration->Size() );
-		IndexBufferUPtr l_pIdxBuffer = std::make_unique< IndexBuffer >( m_pRenderSystem );
-		uint32_t l_uiStride = m_pDeclaration->GetStride();
-		l_pVtxBuffer->Resize( m_arrayVertex.size() * l_uiStride );
-		m_arrayVertex[0]->LinkCoords( &l_pVtxBuffer->data()[0 * l_uiStride], l_uiStride );
-		m_arrayVertex[1]->LinkCoords( &l_pVtxBuffer->data()[1 * l_uiStride], l_uiStride );
-		m_arrayVertex[2]->LinkCoords( &l_pVtxBuffer->data()[2 * l_uiStride], l_uiStride );
-		m_arrayVertex[3]->LinkCoords( &l_pVtxBuffer->data()[3 * l_uiStride], l_uiStride );
-		m_arrayVertex[4]->LinkCoords( &l_pVtxBuffer->data()[4 * l_uiStride], l_uiStride );
-		m_arrayVertex[5]->LinkCoords( &l_pVtxBuffer->data()[5 * l_uiStride], l_uiStride );
-		m_pGeometryBuffers = m_pRenderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
-		m_pViewport = std::make_shared< Viewport >( m_pRenderSystem->GetEngine(), Size( 10, 10 ), eVIEWPORT_TYPE_2D );
-		m_pViewport->SetLeft( real( 0.0 ) );
-		m_pViewport->SetRight( real( 1.0 ) );
-		m_pViewport->SetTop( real( 1.0 ) );
-		m_pViewport->SetBottom( real( 0.0 ) );
-		m_pViewport->SetNear( real( 0.0 ) );
-		m_pViewport->SetFar( real( 1.0 ) );
-		m_pDsStateBackground = m_pRenderSystem->GetEngine()->CreateDepthStencilState( cuT( "ContextBackgroundDSState" ) );
+		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( m_renderSystem, &( *m_pDeclaration )[0], m_pDeclaration->Size() );
+		l_pVtxBuffer->Resize( m_arrayVertex.size() * m_pDeclaration->GetStride() );
+		l_pVtxBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
+		m_pGeometryBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
+		m_viewport = std::make_shared< Viewport >( m_renderSystem->GetEngine(), Size( 10, 10 ), eVIEWPORT_TYPE_2D );
+		m_viewport->SetLeft( real( 0.0 ) );
+		m_viewport->SetRight( real( 1.0 ) );
+		m_viewport->SetTop( real( 1.0 ) );
+		m_viewport->SetBottom( real( 0.0 ) );
+		m_viewport->SetNear( real( 0.0 ) );
+		m_viewport->SetFar( real( 1.0 ) );
+		m_pDsStateBackground = m_renderSystem->GetEngine()->CreateDepthStencilState( cuT( "ContextBackgroundDSState" ) );
 		m_pDsStateBackground->SetDepthTest( false );
 		m_pDsStateBackground->SetDepthMask( eWRITING_MASK_ZERO );
 		bool l_return = DoInitialise();
@@ -95,9 +91,8 @@ namespace Castor3D
 		{
 			SetCurrent();
 			l_program->Initialise();
-			m_pGeometryBuffers->GetVertexBuffer().Create();
-			m_pGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, l_program );
-			m_pGeometryBuffers->Initialise();
+			m_pGeometryBuffers->Create();
+			m_pGeometryBuffers->Initialise( l_program, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 			EndCurrent();
 		}
 
@@ -109,8 +104,7 @@ namespace Castor3D
 		m_bInitialised = false;
 		SetCurrent();
 		m_pGeometryBuffers->Cleanup();
-		m_pGeometryBuffers->GetVertexBuffer().Cleanup();
-		m_pGeometryBuffers->GetVertexBuffer().Destroy();
+		m_pGeometryBuffers->Destroy();
 		ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
 
 		if ( l_pProgram )
@@ -121,24 +115,24 @@ namespace Castor3D
 		EndCurrent();
 		DoCleanup();
 		m_pDsStateBackground.reset();
-		m_pViewport.reset();
+		m_viewport.reset();
 		m_pGeometryBuffers.reset();
 		m_bMultiSampling = false;
 		m_pBtoBShaderProgram.reset();
 		m_bDeferredShadingSet = false;
-		m_pRenderSystem = NULL;
+		m_renderSystem = NULL;
 		m_pWindow = NULL;
 	}
 
 	void Context::SetCurrent()
 	{
 		DoSetCurrent();
-		m_pRenderSystem->SetCurrentContext( this );
+		m_renderSystem->SetCurrentContext( this );
 	}
 
 	void Context::EndCurrent()
 	{
-		m_pRenderSystem->SetCurrentContext( NULL );
+		m_renderSystem->SetCurrentContext( NULL );
 		DoEndCurrent();
 	}
 
@@ -176,9 +170,9 @@ namespace Castor3D
 	void Context::BToBRender( Castor::Size const & p_size, TextureBaseSPtr p_pTexture, uint32_t p_uiComponents )
 	{
 		ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
-		m_pViewport->SetSize( p_size );
+		m_viewport->SetSize( p_size );
 		Clear( p_uiComponents );
-		m_pViewport->Render();
+		m_viewport->Render();
 		CullFace( eFACE_BACK );
 		uint32_t l_id = p_pTexture->GetIndex();
 		p_pTexture->SetIndex( 0 );
@@ -186,13 +180,14 @@ namespace Castor3D
 		if ( l_pProgram && l_pProgram->GetStatus() == ePROGRAM_STATUS_LINKED )
 		{
 			m_mapDiffuse->SetValue( p_pTexture.get() );
-			l_pProgram->Bind( 0, 1 );
 			FrameVariableBufferSPtr l_matrices = l_pProgram->FindFrameVariableBuffer( ShaderProgramBase::BufferMatrix );
 
 			if ( l_matrices )
 			{
-				m_pRenderSystem->GetPipeline()->ApplyProjection( *l_matrices );
+				m_renderSystem->GetPipeline().ApplyProjection( *l_matrices );
 			}
+
+			l_pProgram->Bind( 0, 1 );
 		}
 
 		if ( p_pTexture->BindAt( 0 ) )

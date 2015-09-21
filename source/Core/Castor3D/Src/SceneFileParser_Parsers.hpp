@@ -189,6 +189,7 @@ namespace Castor3D
 
 	// Shader UBO Variables Parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderVariableType )
+	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderVariableCount )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderVariableValue )
 
 	// Font Parsers

@@ -162,18 +162,18 @@ namespace Castor
 		 *\~english
 		 *\brief		Retrieves a function
 		 *\param[in]	p_pfnFunction	Receives the function
-		 *\param[in]	p_strName		The function name
+		 *\param[in]	p_name		The function name
 		 *\return		\p true if the function was correctly retrieved
 		 *\~french
 		 *\brief		Récupère une fonction
 		 *\param[in]	p_pfnFunction	Reçoit la fonction
-		 *\param[in]	p_strName		Le nom de la fonction
+		 *\param[in]	p_name		Le nom de la fonction
 		 *\return		\p true si la fonction a été correctement récupérée
 		 */
 		template< typename FuncType >
-		bool GetFunction( FuncType & p_pfnFunction, String const & p_strName )throw()
+		bool GetFunction( FuncType & p_pfnFunction, String const & p_name )throw()
 		{
-			p_pfnFunction = reinterpret_cast< FuncType >( DoGetFunction( p_strName ) );
+			p_pfnFunction = reinterpret_cast< FuncType >( DoGetFunction( p_name ) );
 			return p_pfnFunction != NULL;
 		}
 		/**
@@ -203,7 +203,7 @@ namespace Castor
 
 	private:
 		CU_API void DoClose()throw();
-		CU_API void * DoGetFunction( String const & p_strName )throw();
+		CU_API void * DoGetFunction( String const & p_name )throw();
 
 	private:
 		void * m_pLibrary;

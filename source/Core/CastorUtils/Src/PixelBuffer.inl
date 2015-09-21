@@ -149,11 +149,11 @@
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
-	void PxBuffer< FT >::do_init_column( uint32_t p_uiColumn )const
+	void PxBuffer< FT >::do_init_column( uint32_t p_column )const
 	{
-		if ( p_uiColumn < width() )
+		if ( p_column < width() )
 		{
-			uint8_t * l_pBuffer = &m_pBuffer[p_uiColumn * width() * pixel_definitions< FT >::Size];
+			uint8_t * l_pBuffer = &m_pBuffer[p_column * width() * pixel_definitions< FT >::Size];
 			m_column = column( height() );
 
 			for ( uint32_t j = 0; j < height(); j++ )

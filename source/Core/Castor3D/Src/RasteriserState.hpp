@@ -88,15 +88,15 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the fill mode
-		 *\param[in]	p_eMode	The new value
+		 *\param[in]	p_mode	The new value
 		 *\~french
 		 *\brief		Définit le mode de remplissage
-		 *\param[in]	p_eMode	La nouvelle valeur
+		 *\param[in]	p_mode	La nouvelle valeur
 		 */
-		inline void SetFillMode( Castor3D::eFILL_MODE p_eMode )
+		inline void SetFillMode( Castor3D::eFILL_MODE p_mode )
 		{
-			m_bChanged |= m_eFillMode != p_eMode;
-			m_eFillMode = p_eMode;
+			m_bChanged |= m_eFillMode != p_mode;
+			m_eFillMode = p_mode;
 		}
 		/**
 		 *\~english

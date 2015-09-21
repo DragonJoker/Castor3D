@@ -62,12 +62,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_eType	The moving thing type
+		 *\param[in]	p_type	The moving thing type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_eType	Le type du machin mouvant
+		 *\param[in]	p_type	Le type du machin mouvant
 		 */
-		MovingObjectBase( eMOVING_OBJECT_TYPE p_eType );
+		MovingObjectBase( eMOVING_OBJECT_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -393,7 +393,7 @@ namespace Castor3D
 		 */
 		inline eMOVING_OBJECT_TYPE GetType()const
 		{
-			return m_eType;
+			return m_type;
 		}
 		/**
 		 *\~english
@@ -517,7 +517,7 @@ namespace Castor3D
 		//!\~english Actual transformations	\~french Transformations actuelles
 		Castor::Matrix4x4r m_mtxTransformations;
 		//!\~english The moving thing type	\~french Le type du machin mouvant
-		eMOVING_OBJECT_TYPE m_eType;
+		eMOVING_OBJECT_TYPE m_type;
 		//!\~english The matrix holding transformation at current time	\~french La matrice de transformation complète au temps courant de l'animation
 		Castor::Matrix4x4r m_mtxFinalTransformation;
 	};

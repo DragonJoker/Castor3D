@@ -100,7 +100,7 @@ namespace Dx11Render
 			}
 
 			l_hr = l_pDevice->CreateSamplerState( &m_tex2dSampler, &m_pSamplerState );
-			dxDebugName( static_cast< DxRenderSystem * >( GetEngine()->GetRenderSystem() ), m_pSamplerState, SamplerState );
+			dxTrack( static_cast< DxRenderSystem * >( GetEngine()->GetRenderSystem() ), m_pSamplerState, SamplerState );
 		}
 
 		return l_hr == S_OK;
@@ -111,10 +111,10 @@ namespace Dx11Render
 		ReleaseTracked( GetEngine()->GetRenderSystem(), m_pSamplerState );
 	}
 
-	bool DxSampler::Bind( eTEXTURE_DIMENSION CU_PARAM_UNUSED( p_eDimension ), uint32_t p_uiIndex )
+	bool DxSampler::Bind( eTEXTURE_DIMENSION CU_PARAM_UNUSED( p_eDimension ), uint32_t p_index )
 	{
 		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( GetEngine()->GetRenderSystem()->GetCurrentContext() )->GetDeviceContext();
-		l_pDeviceContext->PSSetSamplers( p_uiIndex, 1, &m_pSamplerState );
+		l_pDeviceContext->PSSetSamplers( p_index, 1, &m_pSamplerState );
 		return true;
 	}
 

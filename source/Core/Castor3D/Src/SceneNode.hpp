@@ -43,7 +43,7 @@ namespace Castor3D
 	{
 	public:
 		//!\~english The total number of scene nodes	\~french Le nombre total de noeuds de scène
-		static unsigned long long Count;
+		static uint64_t Count;
 		/*!
 		\author Sylvain DOREMUS
 		\version 0.6.1.0
@@ -66,7 +66,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 * Writes a Castor3D::SceneNode into a text file
@@ -151,14 +151,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pScene	The parent scene
+		 *\param[in]	p_scene	The parent scene
 		 *\param[in]	p_name		The node's name. If empty the name is "SceneNode<s_nbSceneNodes>"
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pScene	La scène parente
+		 *\param[in]	p_scene	La scène parente
 		 *\param[in]	p_name		The node's name. If empty the name is "SceneNode<s_nbSceneNodes>"
 		 */
-		SceneNode( SceneSPtr p_pScene, Castor::String const & p_name = Castor::cuEmptyString );
+		SceneNode( SceneSPtr p_scene, Castor::String const & p_name = Castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -688,6 +688,12 @@ namespace Castor3D
 
 	private:
 		void DoComputeMatrix();
+		/**
+		 *\~english
+		 *\brief		Sets this node's children's absolute transformation matrix to be recalculated
+		 *\~french
+		 *\brief		Fait que la matrice de transfomation des enfants de ce noeud doit être recalculée
+		 */
 		void DoUpdateChildsDerivedTransform();
 
 	protected:

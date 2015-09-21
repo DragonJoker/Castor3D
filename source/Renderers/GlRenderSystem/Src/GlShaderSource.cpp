@@ -70,6 +70,14 @@ namespace GlRender
 			return *this;
 		}
 
+		void Expr::UpdateWriter( Expr const & p_expr )
+		{
+			if ( !m_writer )
+			{
+				m_writer = p_expr.m_writer;
+			}
+		}
+
 		//*****************************************************************************************
 
 		Type::Type( Castor::String const & p_type )
@@ -529,6 +537,12 @@ namespace GlRender
 		GlslWriter & GlslWriter::operator<<( Legacy_MatrixCopy const & p_rhs )
 		{
 			m_stream << m_variables->GetVertexMatrixCopy() << std::endl;
+			return *this;
+		}
+
+		GlslWriter & GlslWriter::operator<<( Legacy_PixelModelView const & p_rhs )
+		{
+			m_stream << m_variables->GetPixelMtxModelView() << std::endl;
 			return *this;
 		}
 

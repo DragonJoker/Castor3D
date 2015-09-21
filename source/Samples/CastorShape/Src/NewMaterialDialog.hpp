@@ -28,7 +28,7 @@ namespace CastorShape
 		: public wxDialog
 	{
 	public:
-		NewMaterialDialog( wxPGEditor * p_editor, Castor3D::Engine * p_pEngine, wxWindow * parent, wxWindowID p_id, wxString const & p_name = cuT( "New Material" ), wxPoint const & pos = wxDefaultPosition, wxSize const & size = wxSize( 380, 500 ), long style = wxDEFAULT_DIALOG_STYLE );
+		NewMaterialDialog( wxPGEditor * p_editor, Castor3D::Engine * p_engine, wxWindow * parent, wxWindowID p_id, wxString const & p_name = cuT( "New Material" ), wxPoint const & pos = wxDefaultPosition, wxSize const & size = wxSize( 380, 500 ), long style = wxDEFAULT_DIALOG_STYLE );
 		~NewMaterialDialog();
 
 		Castor3D::MaterialSPtr GetMaterial()const
@@ -68,7 +68,7 @@ namespace CastorShape
 		wxPGEditor * m_editor;
 		wxPropertyGrid * m_properties;
 		Castor3D::MaterialSPtr m_material;
-		Castor3D::Engine * m_pEngine;
+		Castor3D::Engine * m_engine;
 		Castor3D::PassSPtr m_pass;
 		Castor3D::TextureUnitSPtr m_texture;
 	};

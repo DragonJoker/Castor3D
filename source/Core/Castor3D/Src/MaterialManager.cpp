@@ -13,8 +13,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	MaterialManager::MaterialManager( Engine * p_pEngine )
-		:	 m_pEngine( p_pEngine )
+	MaterialManager::MaterialManager( Engine * p_engine )
+		:	 m_engine( p_engine )
 	{
 	}
 
@@ -29,13 +29,13 @@ namespace Castor3D
 
 		if ( !m_defaultMaterial )
 		{
-			m_defaultMaterial = std::make_shared< Material >( m_pEngine, Material::DefaultMaterialName );
+			m_defaultMaterial = std::make_shared< Material >( m_engine, Material::DefaultMaterialName );
 			m_defaultMaterial->CreatePass();
 			m_defaultMaterial->GetPass( 0 )->SetTwoSided( true );
 			MaterialCollection::insert( Material::DefaultMaterialName, m_defaultMaterial );
 		}
 
-		m_pEngine->PostEvent( MakeInitialiseEvent( *m_defaultMaterial ) );
+		m_engine->PostEvent( MakeInitialiseEvent( *m_defaultMaterial ) );
 	}
 
 	void MaterialManager::Cleanup()
@@ -44,7 +44,7 @@ namespace Castor3D
 
 		std::for_each( begin(), end(), [&]( std::pair< String, MaterialSPtr > p_pair )
 		{
-			m_pEngine->PostEvent( MakeCleanupEvent( *p_pair.second ) );
+			m_engine->PostEvent( MakeCleanupEvent( *p_pair.second ) );
 		} );
 
 		MaterialCollection::unlock();
@@ -73,24 +73,24 @@ namespace Castor3D
 
 	bool MaterialManager::Write( TextFile & p_file )const
 	{
-		m_pEngine->GetSamplerManager().lock();
+		m_engine->GetSamplerManager().lock();
 
-		for ( SamplerCollection::TObjPtrMapIt l_it = m_pEngine->GetSamplerManager().begin(); l_it != m_pEngine->GetSamplerManager().end(); ++l_it )
+		for ( SamplerCollection::TObjPtrMapIt l_it = m_engine->GetSamplerManager().begin(); l_it != m_engine->GetSamplerManager().end(); ++l_it )
 		{
 			Sampler::TextLoader()( *l_it->second, p_file );
 		}
 
-		m_pEngine->GetSamplerManager().unlock();
+		m_engine->GetSamplerManager().unlock();
 		MaterialCollection::lock();
 		bool l_return = true;
 		MaterialCollectionConstIt l_it = begin();
-		bool l_bFirst = true;
+		bool l_first = true;
 
 		while ( l_return && l_it != end() )
 		{
-			if ( l_bFirst )
+			if ( l_first )
 			{
-				l_bFirst = false;
+				l_first = false;
 			}
 			else
 			{
@@ -107,7 +107,7 @@ namespace Castor3D
 
 	bool MaterialManager::Read( TextFile & p_file )
 	{
-		SceneFileParser l_parser( m_pEngine );
+		SceneFileParser l_parser( m_engine );
 		l_parser.ParseFile( p_file );
 		return true;
 	}

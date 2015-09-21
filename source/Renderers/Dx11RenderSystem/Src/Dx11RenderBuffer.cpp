@@ -13,7 +13,7 @@ namespace Dx11Render
 		: m_size( 0, 0 )
 		, m_pSurface( NULL )
 		, m_pOldSurface( NULL )
-		, m_pRenderSystem( p_pRenderSystem )
+		, m_renderSystem( p_pRenderSystem )
 		, m_eFormat( p_eFormat )
 		, m_eComponent( p_eComponent )
 		, m_renderBuffer( p_renderBuffer )
@@ -55,7 +55,7 @@ namespace Dx11Render
 				{
 					l_dwMsType = m_renderBuffer.GetSamplesCount();
 
-					if ( m_pRenderSystem->GetDevice()->CheckMultisampleQualityLevels( m_eFormat, l_dwMsType, ( UINT * )&l_dwMsQuality ) == S_OK )
+					if ( m_renderSystem->GetDevice()->CheckMultisampleQualityLevels( m_eFormat, l_dwMsType, ( UINT * )&l_dwMsQuality ) == S_OK )
 					{
 						if ( l_dwMsQuality > 0 )
 						{
@@ -87,13 +87,13 @@ namespace Dx11Render
 					l_descTex.BindFlags = D3D11_BIND_RENDER_TARGET;
 					l_descTex.CPUAccessFlags = 0;
 					l_descTex.MiscFlags = 0;
-					l_hr = m_pRenderSystem->GetDevice()->CreateTexture2D( &l_descTex, NULL, &m_pTexture );
-					dxDebugName( m_pRenderSystem, m_pTexture, RTTexture );
+					l_hr = m_renderSystem->GetDevice()->CreateTexture2D( &l_descTex, NULL, &m_pTexture );
+					dxTrack( m_renderSystem, m_pTexture, RTTexture );
 
 					if ( l_hr == S_OK )
 					{
-						l_hr = m_pRenderSystem->GetDevice()->CreateRenderTargetView( m_pTexture, NULL, reinterpret_cast< ID3D11RenderTargetView ** >( &m_pSurface ) );
-						dxDebugName( m_pRenderSystem, m_pSurface, RTView );
+						l_hr = m_renderSystem->GetDevice()->CreateRenderTargetView( m_pTexture, NULL, reinterpret_cast< ID3D11RenderTargetView ** >( &m_pSurface ) );
+						dxTrack( m_renderSystem, m_pSurface, RTView );
 					}
 				}
 				else
@@ -110,13 +110,13 @@ namespace Dx11Render
 					l_descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 					l_descDepth.CPUAccessFlags = 0;
 					l_descDepth.MiscFlags = 0;
-					l_hr = m_pRenderSystem->GetDevice()->CreateTexture2D( &l_descDepth, NULL, &m_pTexture );
-					dxDebugName( m_pRenderSystem, m_pTexture, DSTexture );
+					l_hr = m_renderSystem->GetDevice()->CreateTexture2D( &l_descDepth, NULL, &m_pTexture );
+					dxTrack( m_renderSystem, m_pTexture, DSTexture );
 
 					if ( l_hr == S_OK )
 					{
-						l_hr = m_pRenderSystem->GetDevice()->CreateDepthStencilView( m_pTexture, NULL, reinterpret_cast< ID3D11DepthStencilView ** >( &m_pSurface ) );
-						dxDebugName( m_pRenderSystem, m_pSurface, DSView );
+						l_hr = m_renderSystem->GetDevice()->CreateDepthStencilView( m_pTexture, NULL, reinterpret_cast< ID3D11DepthStencilView ** >( &m_pSurface ) );
+						dxTrack( m_renderSystem, m_pSurface, DSView );
 					}
 				}
 
@@ -129,8 +129,8 @@ namespace Dx11Render
 
 	void DxRenderBuffer::Cleanup()
 	{
-		ReleaseTracked( m_pRenderSystem, m_pSurface );
-		ReleaseTracked( m_pRenderSystem, m_pTexture );
+		ReleaseTracked( m_renderSystem, m_pSurface );
+		ReleaseTracked( m_renderSystem, m_pTexture );
 		SafeRelease( m_pOldSurface );
 	}
 

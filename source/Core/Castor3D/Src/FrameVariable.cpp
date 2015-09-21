@@ -93,8 +93,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	FrameVariable::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< FrameVariable, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	FrameVariable::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		:	Loader< FrameVariable, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -204,13 +204,13 @@ namespace Castor3D
 		SetValueStr( p_strValue, 0 );
 	}
 
-	void FrameVariable::SetValueStr( String const & p_strValue, uint32_t p_uiIndex )
+	void FrameVariable::SetValueStr( String const & p_strValue, uint32_t p_index )
 	{
-		if ( p_uiIndex < m_uiOcc )
+		if ( p_index < m_uiOcc )
 		{
-			m_strValue[p_uiIndex] = p_strValue;
+			m_strValue[p_index] = p_strValue;
 			m_bChanged = true;
-			DoSetValueStr( p_strValue, p_uiIndex );
+			DoSetValueStr( p_strValue, p_index );
 		}
 		else
 		{

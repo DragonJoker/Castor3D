@@ -129,7 +129,7 @@ namespace Castor3D
 		 *\param[in]	p_uiFlags	Combinaison de eTEXTURE_CHANNEL
 		 *\return		Le programme
 		 */
-		virtual ShaderProgramBaseSPtr DoGetProgram( uint32_t p_uiFlags ) = 0;
+		virtual ShaderProgramBaseSPtr DoCreateProgram( uint32_t p_uiFlags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Initialises the buffers
@@ -168,6 +168,19 @@ namespace Castor3D
 		ShaderProgramBaseSPtr DoGetTextProgram( uint32_t p_uiFlags );
 		/**
 		 *\~english
+		 *\brief		Retrieves a program compiled using given flags.
+		 *\param[in]	p_uiFlags	Bitwise ORed eTEXTURE_CHANNEL.
+		 *\param[in,out]p_programs	Looks for a matching shader in this map, creates it if not found and add it to the map.
+		 *\return		The program
+		 *\~french
+		 *\brief		Récupère un programme compilé en utilisant les indicateurs donnés.
+		 *\param[in]	p_uiFlags	Combinaison de eTEXTURE_CHANNEL.
+		 *\param[in,out]p_programs	Recherche un shader correspondant dans cette map. S'il n'y en a pas, crée le programme et l'ajoute à la map.
+		 *\return		Le programme
+		 */
+		virtual ShaderProgramBaseSPtr DoGetProgram( uint32_t p_uiFlags, std::map< uint32_t, ShaderProgramBaseSPtr > & p_programs );
+		/**
+		 *\~english
 		 *\brief		Creates a GeometryBuffers that can contain 1000 characters.
 		 *\remarks		Adds this GeometryBuffers to the text GeometryBuffers array.
 		 *\return		The created GeometryBuffers.
@@ -181,19 +194,17 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Function to draw an overlay
 		 *\param[in]	p_material			The overlay material
-		 *\param[in]	p_pipeline			The pipeline
 		 *\param[in]	p_geometryBuffers	The overlay geometry buffers
 		 *\param[in]	p_texture			An optional font texture
 		 *\param[in]	p_count				The vertex count
 		 *\~french
 		 *\brief		Fonction de dessin d'une incrustation
 		 *\param[in]	p_material			The overlay material
-		 *\param[in]	p_pipeline			Le pipeline
 		 *\param[in]	p_geometryBuffers	Les buffer de la géométrie de l'incrustation
 		 *\param[in]	p_texture			Une texture de polices optionnelle
 		 *\param[in]	p_count				Le nombre de sommets
 		 */
-		void DoDrawItem( Material & p_material, Pipeline & p_pipeline, GeometryBuffersSPtr p_geometryBuffers, DynamicTextureSPtr p_texture, uint32_t p_count );
+		void DoDrawItem( Material & p_material, GeometryBuffersSPtr p_geometryBuffers, DynamicTextureSPtr p_texture, uint32_t p_count );
 		/**
 		 *\~english
 		 *\brief		Fills a GeometryBuffers from a part of a text vertex array
@@ -220,7 +231,7 @@ namespace Castor3D
 		//!\~english The buffer elements declaration	\~french La déclaration des éléments du tampon
 		BufferDeclarationSPtr m_pDeclaration;
 		//!\~english The render system	\~french Le render system
-		RenderSystem * m_pRenderSystem;
+		RenderSystem * m_renderSystem;
 		//!\~english The current render target size	\~french Les dimensions de la cible du rendu courant
 		Castor::Size m_size;
 		//!\~english The shader programs used to render a panel (used for borders too)	\~french Les programmes de shader utilisés pour rendre un panneau (utilisé pour les bords aussi)
@@ -239,12 +250,8 @@ namespace Castor3D
 		Castor::String m_previousCaption;
 		//!\~english Panel overlays vertex array (quad definition)	\~french Tableau de vertex (définition du quad) pour les incrustations panneau
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_panelVertex;
-		//!	6 * [2 uint (vertex position) + 2 float (texture coordinates)]
-		uint8_t m_panelBuffer[6 * 2 * 2 * 4];
 		//!\~english Border panel overlays vertex array (quad definition)	\~french Tableau de vertex (définition du quad) pour les incrustations bordure
 		std::array< Castor3D::BufferElementGroupSPtr, 8 * 6 > m_borderVertex;
-		//!	8 * 6 * [2 uint (vertex position) + 2 float (texture coordinates)]
-		uint8_t m_borderBuffer[8 * 6 * 2 * 2 * 4];
 	};
 }
 

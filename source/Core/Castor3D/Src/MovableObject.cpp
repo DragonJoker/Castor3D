@@ -7,8 +7,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	MovableObject::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< MovableObject, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	MovableObject::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		:	Loader< MovableObject, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -79,17 +79,17 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	MovableObject::MovableObject( SceneSPtr p_pScene, eMOVABLE_TYPE p_eType )
-		:	m_eType( p_eType )
-		,	m_pScene( p_pScene )
+	MovableObject::MovableObject( SceneSPtr p_scene, eMOVABLE_TYPE p_type )
+		:	m_type( p_type )
+		,	m_pScene( p_scene )
 	{
 	}
 
-	MovableObject::MovableObject( SceneSPtr p_pScene, SceneNodeSPtr p_sn, String const & p_name, eMOVABLE_TYPE p_eType )
+	MovableObject::MovableObject( SceneSPtr p_scene, SceneNodeSPtr p_sn, String const & p_name, eMOVABLE_TYPE p_type )
 		:	m_strName( p_name )
 		,	m_pSceneNode( p_sn )
-		,	m_eType( p_eType )
-		,	m_pScene( p_pScene )
+		,	m_type( p_type )
+		,	m_pScene( p_scene )
 	{
 	}
 

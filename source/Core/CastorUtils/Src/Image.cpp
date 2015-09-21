@@ -118,12 +118,12 @@ namespace Castor
 			}
 		}
 
-		FREE_IMAGE_COLOR_TYPE	l_eType		= FreeImage_GetColorType(	l_pImage );
+		FREE_IMAGE_COLOR_TYPE	l_type		= FreeImage_GetColorType(	l_pImage );
 		uint32_t l_width = FreeImage_GetWidth( l_pImage );
 		uint32_t l_height = FreeImage_GetHeight( l_pImage );
 		Size l_size( l_width, l_height );
 
-		if ( l_eType == FIC_RGBALPHA )
+		if ( l_type == FIC_RGBALPHA )
 		{
 			l_ePF = ePIXEL_FORMAT_A8R8G8B8;
 			FIBITMAP * l_dib32 = FreeImage_ConvertTo32Bits( l_pImage );
@@ -231,29 +231,29 @@ namespace Castor
 		return l_return;
 	}
 
-	Image::Image( String const & p_strName, Size const & p_ptSize, ePIXEL_FORMAT p_ePixelFormat, ByteArray const & p_buffer, ePIXEL_FORMAT p_eBufferFormat )
-		:	Resource< Image >	( p_strName	)
+	Image::Image( String const & p_name, Size const & p_ptSize, ePIXEL_FORMAT p_ePixelFormat, ByteArray const & p_buffer, ePIXEL_FORMAT p_eBufferFormat )
+		:	Resource< Image >	( p_name	)
 		,	m_pBuffer( PxBufferBase::create( p_ptSize, p_ePixelFormat, &p_buffer[0], p_eBufferFormat )	)
 	{
 		CHECK_INVARIANTS();
 	}
 
-	Image::Image( String const & p_strName, Size const & p_ptSize, ePIXEL_FORMAT p_ePixelFormat, uint8_t const * p_pBuffer, ePIXEL_FORMAT p_eBufferFormat )
-		:	Resource< Image >	( p_strName	)
+	Image::Image( String const & p_name, Size const & p_ptSize, ePIXEL_FORMAT p_ePixelFormat, uint8_t const * p_pBuffer, ePIXEL_FORMAT p_eBufferFormat )
+		:	Resource< Image >	( p_name	)
 		,	m_pBuffer( PxBufferBase::create( p_ptSize, p_ePixelFormat, p_pBuffer, p_eBufferFormat )	)
 	{
 		CHECK_INVARIANTS();
 	}
 
-	Image::Image( String const & p_strName, PxBufferBase const & p_buffer )
-		:	Resource< Image >	( p_strName	)
+	Image::Image( String const & p_name, PxBufferBase const & p_buffer )
+		:	Resource< Image >	( p_name	)
 		,	m_pBuffer( p_buffer.clone()	)
 	{
 		CHECK_INVARIANTS();
 	}
 
-	Image::Image( String const & p_strName, Path const & p_pathFile )
-		:	Resource< Image >	( p_strName	)
+	Image::Image( String const & p_name, Path const & p_pathFile )
+		:	Resource< Image >	( p_name	)
 		,	m_pathFile( p_pathFile	)
 	{
 		Image::BinaryLoader()( *this, p_pathFile );
@@ -338,7 +338,7 @@ namespace Castor
 				memcpy( FreeImage_GetBits( l_pImage ), m_pBuffer->const_ptr(), m_pBuffer->size() );
 				uint32_t				l_width		= p_size.width();
 				uint32_t				l_height	= p_size.height();
-				FREE_IMAGE_COLOR_TYPE	l_eType		= FreeImage_GetColorType( l_pImage );
+				FREE_IMAGE_COLOR_TYPE	l_type		= FreeImage_GetColorType( l_pImage );
 				FIBITMAP * l_pRescaled = FreeImage_Rescale( l_pImage, l_width, l_height, FILTER_BICUBIC );
 
 				if ( l_pRescaled )

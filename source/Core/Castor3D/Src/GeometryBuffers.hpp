@@ -64,52 +64,104 @@ namespace Castor3D
 		virtual ~GeometryBuffers();
 		/**
 		 *\~english
+		 *\brief		Creates the buffers on GPU
+		 *\return		\p true if OK
+		 *\~french
+		 *\brief		Crée les tampons au niveau GPU
+		 *\return		\p true si tout s'est bien passé
+		 */
+		bool Create();
+		/**
+		 *\~english
+		 *\brief		Destroys the buffers on GPU
+		 *\~french
+		 *\brief		Détruit les tampons au niveau GPU
+		 */
+		void Destroy();
+		/**
+		 *\~english
 		 *\brief		Initialisation function
+		 *\param[in]	p_shader				The shader program
+		 *\param[in]	p_vtxType, p_vtxAccess	Vertex buffer access flags
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Fonction d'initialisation
+		 *\param[in]	p_shader				Le programme shader
+		 *\param[in]	p_vtxType, p_vtxAccess	Indicateurs d'accès pour le tampon de sommets
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Initialise() = 0;
+		bool Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature );
+		/**
+		 *\~english
+		 *\brief		Initialisation function
+		 *\param[in]	p_shader				The shader program
+		 *\param[in]	p_vtxType, p_vtxAccess	Vertex buffer access flags
+		 *\param[in]	p_idxType, p_idxAccess	Index buffer access flags
+		 *\return		\p true if OK
+		 *\~french
+		 *\brief		Fonction d'initialisation
+		 *\param[in]	p_shader				Le programme shader
+		 *\param[in]	p_vtxType, p_vtxAccess	Indicateurs d'accès pour le tampon de sommets
+		 *\param[in]	p_idxType, p_idxAccess	Indicateurs d'accès pour le tampon d'indices
+		 *\return		\p true si tout s'est bien passé
+		 */
+		bool Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature, eBUFFER_ACCESS_TYPE p_idxType, eBUFFER_ACCESS_NATURE p_idxNature );
+		/**
+		 *\~english
+		 *\brief		Initialisation function
+		 *\param[in]	p_shader				The shader program
+		 *\param[in]	p_vtxType, p_vtxAccess	Vertex buffer access flags
+		 *\param[in]	p_idxType, p_idxAccess	Index buffer access flags
+		 *\param[in]	p_mtxType, p_mtxAccess	Matrix buffer access flags
+		 *\return		\p true if OK
+		 *\~french
+		 *\brief		Fonction d'initialisation
+		 *\param[in]	p_shader				Le programme shader
+		 *\param[in]	p_vtxType, p_vtxAccess	Indicateurs d'accès pour le tampon de sommets
+		 *\param[in]	p_idxType, p_idxAccess	Indicateurs d'accès pour le tampon d'indices
+		 *\param[in]	p_mtxType, p_mtxAccess	Indicateurs d'accès pour le tampon de matrices
+		 *\return		\p true si tout s'est bien passé
+		 */
+		bool Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature, eBUFFER_ACCESS_TYPE p_idxType, eBUFFER_ACCESS_NATURE p_idxNature, eBUFFER_ACCESS_TYPE p_mtxType, eBUFFER_ACCESS_NATURE p_mtxNature );
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		virtual void Cleanup() = 0;
+		void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Draws the geometry held into the buffers
 		 *\param[in]	p_eTopology	The wanted topology
 		 *\param[in]	p_uiSize	Specifies the number of elements to be rendered
-		 *\param[in]	p_uiIndex	Specifies the starting index in the enabled arrays
+		 *\param[in]	p_index	Specifies the starting index in the enabled arrays
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Dessine la géométrie contenue dans les buffers
 		 *\param[in]	p_eTopology	La topologie voulue
 		 *\param[in]	p_uiSize	Spécifie le nombre de vertices à rendre
-		 *\param[in]	p_uiIndex	Spécifie l'indice du premier vertice
+		 *\param[in]	p_index	Spécifie l'indice du premier vertice
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Draw( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex ) = 0;
+		virtual bool Draw( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Draws the geometry held into the buffers
 		 *\param[in]	p_eTopology	The wanted topology
 		 *\param[in]	p_uiSize	Specifies the number of elements to be rendered
-		 *\param[in]	p_uiIndex	Specifies the starting index in the enabled arrays
+		 *\param[in]	p_index	Specifies the starting index in the enabled arrays
 		 *\param[in]	p_uiCount	The instances count
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Dessine la géométrie contenue dans les buffers
 		 *\param[in]	p_eTopology	La topologie voulue
 		 *\param[in]	p_uiSize	Spécifie le nombre de vertices à rendre
-		 *\param[in]	p_uiIndex	Spécifie l'indice du premier vertice
+		 *\param[in]	p_index	Spécifie l'indice du premier vertice
 		 *\param[in]	p_uiCount	Le nombre d'instances à dessiner
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool DrawInstanced( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex, uint32_t p_uiCount ) = 0;
+		virtual bool DrawInstanced( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index, uint32_t p_uiCount ) = 0;
 		/**
 		 *\~english
 		 *\brief		Binds the geometry buffers
@@ -188,6 +240,24 @@ namespace Castor3D
 		{
 			return m_bMatrixBuffer;
 		}
+
+	protected:
+		/**
+		 *\~english
+		 *\brief		Initialisation function
+		 *\return		\p true if OK
+		 *\~french
+		 *\brief		Fonction d'initialisation
+		 *\return		\p true si tout s'est bien passé
+		 */
+		virtual bool DoInitialise() = 0;
+		/**
+		 *\~english
+		 *\brief		Cleanup function
+		 *\~french
+		 *\brief		Fonction de nettoyage
+		 */
+		virtual void DoCleanup() = 0;
 
 	protected:
 		//!\~english The vertex buffer	\~french Le tampon de sommets

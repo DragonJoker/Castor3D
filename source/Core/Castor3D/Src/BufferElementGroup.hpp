@@ -38,13 +38,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_pBuffer		The data buffer
-		 *\param[in]	p_uiIndex		The group index
+		 *\param[in]	p_index		The group index
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_pBuffer		Le tampon de données
-		 *\param[in]	p_uiIndex		L'indice du groupe
+		 *\param[in]	p_index		L'indice du groupe
 		 */
-		BufferElementGroup( uint8_t * p_pBuffer = NULL, uint32_t p_uiIndex = 0 );
+		BufferElementGroup( uint8_t * p_pBuffer = NULL, uint32_t p_index = 0 );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -109,14 +109,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the group index
-		 *\param[in]	p_uiIndex	The new value
+		 *\param[in]	p_index	The new value
 		 *\~french
 		 *\brief		Définit l'indice du groupe
-		 *\param[in]	p_uiIndex	La nouvelle valeur
+		 *\param[in]	p_index	La nouvelle valeur
 		 */
-		inline void SetIndex( uint32_t p_uiIndex )
+		inline void SetIndex( uint32_t p_index )
 		{
-			m_uiIndex = p_uiIndex;
+			m_uiIndex = p_index;
 		}
 
 	protected:

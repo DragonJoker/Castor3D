@@ -80,7 +80,7 @@ namespace OceanLighting
 		bool Initialise();
 
 	private:
-		bool DoInitialise3D( wxWindow * p_pParent );
+		bool DoInitialise3D( wxWindow * p_parent );
 
 		DECLARE_EVENT_TABLE()
 		void OnPaint( wxPaintEvent & p_event );

@@ -10,10 +10,10 @@ using namespace Castor3D;
 
 namespace GuiCommon
 {
-	RendererSelector::RendererSelector( Engine * p_pEngine, wxWindow * p_pParent, wxString const & p_strTitle )
-		: wxDialog( p_pParent, wxID_ANY, p_strTitle + _( " - Select renderer" ), wxDefaultPosition, wxSize( 500, 500 ), wxDEFAULT_DIALOG_STYLE )
+	RendererSelector::RendererSelector( Engine * p_engine, wxWindow * p_parent, wxString const & p_strTitle )
+		: wxDialog( p_parent, wxID_ANY, p_strTitle + _( " - Select renderer" ), wxDefaultPosition, wxSize( 500, 500 ), wxDEFAULT_DIALOG_STYLE )
 		, m_pImgCastor( ImagesLoader::GetBitmap( CV_IMG_CASTOR ) )
-		, m_pEngine( p_pEngine )
+		, m_engine( p_engine )
 	{
 		SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		SetForegroundColour( PANEL_FOREGROUND_COLOUR );
@@ -42,7 +42,7 @@ namespace GuiCommon
 		GradientButton * l_cancel = new GradientButton( this, wxID_CANCEL, l_strCancel );
 		l_pTitle->SetFont( l_font );
 
-		for ( RendererPtrArrayIt l_it = m_pEngine->RenderersBegin(); l_it != m_pEngine->RenderersEnd(); ++l_it )
+		for ( RendererPtrArrayIt l_it = m_engine->RenderersBegin(); l_it != m_engine->RenderersEnd(); ++l_it )
 		{
 			if ( * l_it )
 			{

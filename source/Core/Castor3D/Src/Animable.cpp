@@ -13,15 +13,15 @@ namespace Castor3D
 	{
 	}
 
-	AnimationSPtr Animable::CreateAnimation( Castor::String const & p_strName )
+	AnimationSPtr Animable::CreateAnimation( Castor::String const & p_name )
 	{
 		AnimationSPtr l_return;
-		AnimationPtrStrMapIt l_it = m_mapAnimations.find( p_strName );
+		AnimationPtrStrMapIt l_it = m_mapAnimations.find( p_name );
 
 		if ( l_it == m_mapAnimations.end() )
 		{
-			l_return = std::make_shared< Animation >( p_strName );
-			m_mapAnimations.insert( std::make_pair( p_strName, l_return ) );
+			l_return = std::make_shared< Animation >( p_name );
+			m_mapAnimations.insert( std::make_pair( p_name, l_return ) );
 		}
 		else
 		{
@@ -31,10 +31,10 @@ namespace Castor3D
 		return l_return;
 	}
 
-	AnimationSPtr Animable::GetAnimation( Castor::String const & p_strName )
+	AnimationSPtr Animable::GetAnimation( Castor::String const & p_name )
 	{
 		AnimationSPtr l_return;
-		AnimationPtrStrMapIt l_it = m_mapAnimations.find( p_strName );
+		AnimationPtrStrMapIt l_it = m_mapAnimations.find( p_name );
 
 		if ( l_it != m_mapAnimations.end() )
 		{

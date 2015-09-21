@@ -44,7 +44,7 @@ namespace GlRender
 		virtual ~GlOverlayRenderer();
 
 	private:
-		virtual Castor3D::ShaderProgramBaseSPtr DoGetProgram( uint32_t p_uiFlags );
+		virtual Castor3D::ShaderProgramBaseSPtr DoCreateProgram( uint32_t p_uiFlags );
 		virtual void DoInitialise();
 		virtual void DoCleanup();
 

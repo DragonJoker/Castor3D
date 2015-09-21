@@ -150,82 +150,82 @@ private:
 };
 
 const nullptr_t nullptr = {};
-template <typename T>
+template< typename T >
 inline bool operator ==( T const * p_pPointer, nullptr_t const & p_pNull )
 {
 	return p_pPointer == NULL;
 }
-template <typename T>
+template< typename T >
 inline bool operator !=( T const * p_pPointer, nullptr_t const & p_pNull )
 {
 	return p_pPointer;
 }
-template <typename T>
+template< typename T >
 inline bool operator ==( nullptr_t p_pNull, T const * p_pPointer )
 {
 	return p_pPointer == NULL;
 }
-template <typename T>
+template< typename T >
 inline bool operator !=( nullptr_t p_pNull, T const * p_pPointer )
 {
 	return p_pPointer;
 }
-template <typename T>
+template< typename T >
 inline bool operator ==( T * p_pPointer, nullptr_t const & p_pNull )
 {
 	return p_pPointer == NULL;
 }
-template <typename T>
+template< typename T >
 inline bool operator !=( T * p_pPointer, nullptr_t const & p_pNull )
 {
 	return p_pPointer;
 }
-template <typename T>
+template< typename T >
 inline bool operator ==( nullptr_t p_pNull, T * p_pPointer )
 {
 	return p_pPointer == NULL;
 }
-template <typename T>
+template< typename T >
 inline bool operator !=( nullptr_t p_pNull, T * p_pPointer )
 {
 	return p_pPointer;
 }
-template <typename T>
+template< typename T >
 inline bool operator ==( std::shared_ptr<T> const & p_pPointer, nullptr_t const & p_pNull )
 {
 	return p_pPointer.use_count() == 0;
 }
-template <typename T>
+template< typename T >
 inline bool operator !=( std::shared_ptr<T> const & p_pPointer, nullptr_t const & p_pNull )
 {
 	return ! p_pPointer.use_count() > 0;
 }
-template <typename T>
+template< typename T >
 inline bool operator ==( nullptr_t p_pNull, std::shared_ptr<T> const & p_pPointer )
 {
 	return p_pPointer.use_count() == 0;
 }
-template <typename T>
+template< typename T >
 inline bool operator !=( nullptr_t p_pNull, std::shared_ptr<T> const & p_pPointer )
 {
 	return ! p_pPointer.use_count() > 0;
 }
-template <typename T>
+template< typename T >
 inline bool operator ==( std::shared_ptr<T> & p_pPointer, nullptr_t const & p_pNull )
 {
 	return p_pPointer.use_count() == 0;
 }
-template <typename T>
+template< typename T >
 inline bool operator !=( std::shared_ptr<T> & p_pPointer, nullptr_t const & p_pNull )
 {
 	return ! p_pPointer.use_count() > 0;
 }
-template <typename T>
+template< typename T >
 inline bool operator ==( nullptr_t p_pNull, std::shared_ptr<T> & p_pPointer )
 {
 	return p_pPointer.use_count() == 0;
 }
-template <typename T>
+template< typename T >
 inline bool operator !=( nullptr_t p_pNull, std::shared_ptr<T> & p_pPointer )
 {
 	return ! p_pPointer.use_count() > 0;

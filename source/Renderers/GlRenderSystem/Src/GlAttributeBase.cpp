@@ -15,7 +15,7 @@ namespace GlRender
 		,	m_uiOffset( 0 )
 		,	m_iStride( 0 )
 		,	m_eGlType( p_eGlType )
-		,	m_pRenderSystem( p_pRenderSystem )
+		,	m_renderSystem( p_pRenderSystem )
 		,	m_gl( p_gl )
 	{
 	}
@@ -31,7 +31,7 @@ namespace GlRender
 
 	bool GlAttributeBase::Initialise()
 	{
-		bool l_return = !m_pRenderSystem->UseShaders();
+		bool l_return = !m_renderSystem->UseShaders();
 
 		if ( !m_pProgram.expired() && m_pProgram.lock()->GetStatus() == ePROGRAM_STATUS_LINKED && !l_return )
 		{

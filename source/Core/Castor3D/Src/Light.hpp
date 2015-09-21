@@ -44,31 +44,31 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pScene		Parent scene
-		 *\param[in]	p_pNode			The parent scene node
+		 *\param[in]	p_scene		Parent scene
+		 *\param[in]	p_node			The parent scene node
 		 *\param[in]	p_pFactory		Factory used to create the LightCategory
 		 *\param[in]	p_eLightType	The light type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pScene		La scène parente
-		 *\param[in]	p_pNode			Le scene node parent
+		 *\param[in]	p_scene		La scène parente
+		 *\param[in]	p_node			Le scene node parent
 		 *\param[in]	p_pFactory		La fabrique de LightCategory
 		 *\param[in]	p_eLightType	Le type de lumière
 		 */
-		Light( LightFactory & p_factory, SceneSPtr p_pScene, eLIGHT_TYPE p_eLightType, SceneNodeSPtr p_pNode, Castor::String const & p_name );
+		Light( LightFactory & p_factory, SceneSPtr p_scene, eLIGHT_TYPE p_eLightType, SceneNodeSPtr p_node, Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pScene		Parent scene
+		 *\param[in]	p_scene		Parent scene
 		 *\param[in]	p_pFactory		Factory used to create the LightCategory
 		 *\param[in]	p_eLightType	The light type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pScene		La scène parente
+		 *\param[in]	p_scene		La scène parente
 		 *\param[in]	p_pFactory		La fabrique de LightCategory
 		 *\param[in]	p_eLightType	Le type de lumière
 		 */
-		Light( LightFactory & p_factory, SceneSPtr p_pScene, eLIGHT_TYPE p_eLightType );
+		Light( LightFactory & p_factory, SceneSPtr p_scene, eLIGHT_TYPE p_eLightType );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -97,12 +97,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Attaches this light to a Material
-		 *\param[in]	p_pNode	The new light's parent node
+		 *\param[in]	p_node	The new light's parent node
 		 *\~french
 		 *\brief		Attache cette lumière au node donné
-		 *\param[in]	p_pNode	Le nouveau node parent de cette lumière
+		 *\param[in]	p_node	Le nouveau node parent de cette lumière
 		 */
-		virtual void AttachTo( SceneNodeSPtr p_pNode );
+		virtual void AttachTo( SceneNodeSPtr p_node );
 		/**
 		 *\~english
 		 *\brief		Retrieves the DirectionalLight category
@@ -452,12 +452,12 @@ namespace Castor3D
 		 */
 		virtual Engine * GetEngine()const
 		{
-			return m_pEngine;
+			return m_engine;
 		}
 
 	protected:
 		//!\~english The core engine	\~french Le moteur
-		Engine * m_pEngine;
+		Engine * m_engine;
 		//!\~english Tells the light is enabled	\~french Dit si la lumière est active ou pas
 		bool m_enabled;
 		//!\~english The Light category that effectively holds light data	\~french la light category contenant les données de la lumière

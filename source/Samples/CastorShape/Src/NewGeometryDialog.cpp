@@ -21,9 +21,9 @@ namespace CastorShape
 		static wxString GEOMETRY_MATERIAL = _( "Material" );
 	}
 
-	NewGeometryDialog::NewGeometryDialog( Engine * p_pEngine, wxWindow * parent, wxWindowID p_id, wxString const & p_name, wxPoint const & pos, wxSize const & size, long style )
+	NewGeometryDialog::NewGeometryDialog( Engine * p_engine, wxWindow * parent, wxWindowID p_id, wxString const & p_name, wxPoint const & pos, wxSize const & size, long style )
 		: wxDialog( parent, p_id, p_name, pos, size, style, p_name )
-		, m_engine( p_pEngine )
+		, m_engine( p_engine )
 		, m_properties( NULL )
 	{
 		GEOMETRY_NAME = _( "Name" );

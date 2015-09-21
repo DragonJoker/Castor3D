@@ -163,8 +163,11 @@ namespace Castor
 			bool m_set;
 		};
 
-		typedef basic_indent_buffer< char > indent_buffer;
-		typedef basic_indent_buffer< wchar_t > windent_buffer;
+		typedef basic_indent_buffer< char > spc_indent_buffer;
+		typedef basic_indent_buffer< wchar_t > wspc_indent_buffer;
+
+		typedef basic_indent_buffer< char, '\t' > tab_indent_buffer;
+		typedef basic_indent_buffer< wchar_t, L'\t' > wtab_indent_buffer;
 	}
 }
 

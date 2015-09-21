@@ -53,7 +53,7 @@ namespace Dx11Render
 
 	private:
 		ID3D11ShaderResourceView * m_pShaderResourceView;
-		DxRenderSystem * m_pRenderSystem;
+		DxRenderSystem * m_renderSystem;
 	};
 }
 

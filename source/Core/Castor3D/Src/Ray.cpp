@@ -22,14 +22,14 @@ Ray::Ray( Point2i const & p_point, Camera const & p_camera )
 	point::normalise( m_ptDirection );
 }
 
-Ray::Ray( int p_iX, int p_iY, Camera const & p_camera )
+Ray::Ray( int p_x, int p_y, Camera const & p_camera )
 {
 	ViewportSPtr l_pViewport = p_camera.GetViewport();
 	m_ptOrigin = p_camera.GetParent()->GetPosition();
 	m_ptOrigin[2] += l_pViewport->GetNear();
 	Quaternion l_camOrient = p_camera.GetParent()->GetOrientation();
 	m_ptOrigin *= l_camOrient;
-	Point2i l_point( p_iX, p_iY );
+	Point2i l_point( p_x, p_y );
 	l_pViewport->GetDirection( l_point, m_ptDirection );
 	point::normalise( m_ptDirection );
 }
@@ -258,9 +258,9 @@ real Ray::Intersects( GeometrySPtr p_pGeometry, FaceSPtr * CU_PARAM_UNUSED( p_pp
 
 			//if (Intersects( l_sphere) >= 0.0f)
 			//{
-			//	for (uint32_t k = 0; k < l_pSubmesh->GetFaceCount(); k++)
+			//	for (uint32_t k = 0; k < l_submesh->GetFaceCount(); k++)
 			//	{
-			//		FaceSPtr l_pFace = l_pSubmesh->GetFace( k );
+			//		FaceSPtr l_pFace = l_submesh->GetFace( k );
 
 			//		if ((l_curfaceDist = Intersects( * l_pFace)) >= 0.0 && l_curfaceDist < l_faceDist)
 			//		{
@@ -271,7 +271,7 @@ real Ray::Intersects( GeometrySPtr p_pGeometry, FaceSPtr * CU_PARAM_UNUSED( p_pp
 
 			//			if (p_ppSubmesh)
 			//			{
-			//				*p_ppSubmesh = l_pSubmesh;
+			//				*p_ppSubmesh = l_submesh;
 			//			}
 
 			//			l_faceDist = l_curfaceDist;

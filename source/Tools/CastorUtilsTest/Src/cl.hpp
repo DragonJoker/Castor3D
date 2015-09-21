@@ -1566,7 +1566,7 @@ static cl_uint getContextPlatformVersion(cl_context context)
 }
 #endif // CL_HPP_TARGET_OPENCL_VERSION >= 120 && CL_HPP_MINIMUM_OPENCL_VERSION < 120
 
-template <typename T>
+template< typename T >
 class Wrapper
 {
 public:
@@ -1785,13 +1785,13 @@ protected:
     }
 };
 
-template <typename T>
+template< typename T >
 inline bool operator==(const Wrapper<T> &lhs, const Wrapper<T> &rhs)
 {
     return lhs() == rhs();
 }
 
-template <typename T>
+template< typename T >
 inline bool operator!=(const Wrapper<T> &lhs, const Wrapper<T> &rhs)
 {
     return !operator==(lhs, rhs);
@@ -1997,7 +1997,7 @@ public:
     }
 
     //! \brief Wrapper for clGetDeviceInfo().
-    template <typename T>
+    template< typename T >
     cl_int getInfo(cl_device_info name, T* param) const
     {
         return detail::errHandler(
@@ -2789,7 +2789,7 @@ public:
     }
 
     //! \brief Wrapper for clGetContextInfo().
-    template <typename T>
+    template< typename T >
     cl_int getInfo(cl_context_info name, T* param) const
     {
         return detail::errHandler(
@@ -2931,7 +2931,7 @@ public:
     }
 
     //! \brief Wrapper for clGetEventInfo().
-    template <typename T>
+    template< typename T >
     cl_int getInfo(cl_event_info name, T* param) const
     {
         return detail::errHandler(
@@ -2954,7 +2954,7 @@ public:
     }
 
     //! \brief Wrapper for clGetEventProfilingInfo().
-    template <typename T>
+    template< typename T >
     cl_int getProfilingInfo(cl_profiling_info name, T* param) const
     {
         return detail::errHandler(detail::getInfo(
@@ -3146,7 +3146,7 @@ public:
 
 
     //! \brief Wrapper for clGetMemObjectInfo().
-    template <typename T>
+    template< typename T >
     cl_int getInfo(cl_mem_info name, T* param) const
     {
         return detail::errHandler(
@@ -4051,7 +4051,7 @@ protected:
 
 public:
     //! \brief Wrapper for clGetImageInfo().
-    template <typename T>
+    template< typename T >
     cl_int getImageInfo(cl_image_info name, T* param) const
     {
         return detail::errHandler(
@@ -5200,7 +5200,7 @@ public:
     }
 
     //! \brief Wrapper for clGetMemObjectInfo().
-    template <typename T>
+    template< typename T >
     cl_int getInfo(cl_pipe_info name, T* param) const
     {
         return detail::errHandler(
@@ -5333,7 +5333,7 @@ public:
     }
 
     //! \brief Wrapper for clGetSamplerInfo().
-    template <typename T>
+    template< typename T >
     cl_int getInfo(cl_sampler_info name, T* param) const
     {
         return detail::errHandler(
@@ -5453,7 +5453,7 @@ struct KernelArgumentHandler;
 
 // Enable for objects that are not subclasses of memory
 // Pointers, constants etc
-template <typename T>
+template< typename T >
 struct KernelArgumentHandler<T, typename std::enable_if<!std::is_base_of<cl::Memory, T>::value>::type>
 {
     static size_type size(const T&) { return sizeof(T); }
@@ -5462,7 +5462,7 @@ struct KernelArgumentHandler<T, typename std::enable_if<!std::is_base_of<cl::Mem
 
 // Enable for subclasses of memory where we want to get a reference to the cl_mem out
 // and pass that in for safety
-template <typename T>
+template< typename T >
 struct KernelArgumentHandler<T, typename std::enable_if<std::is_base_of<cl::Memory, T>::value>::type>
 {
     static size_type size(const T&) { return sizeof(cl_mem); }
@@ -5557,7 +5557,7 @@ public:
         return *this;
     }
 
-    template <typename T>
+    template< typename T >
     cl_int getInfo(cl_kernel_info name, T* param) const
     {
         return detail::errHandler(
@@ -5579,7 +5579,7 @@ public:
     }
 
 #if CL_HPP_TARGET_OPENCL_VERSION >= 120
-    template <typename T>
+    template< typename T >
     cl_int getArgInfo(cl_uint argIndex, cl_kernel_arg_info name, T* param) const
     {
         return detail::errHandler(
@@ -5601,7 +5601,7 @@ public:
     }
 #endif // CL_HPP_TARGET_OPENCL_VERSION >= 120
 
-    template <typename T>
+    template< typename T >
     cl_int getWorkGroupInfo(
         const Device& device, cl_kernel_work_group_info name, T* param) const
     {
@@ -5687,7 +5687,7 @@ public:
 
     /*! \brief setArg overload taking a POD type
      */
-    template <typename T>
+    template< typename T >
     typename std::enable_if<!std::is_pointer<T>::value, cl_int>::type
         setArg(cl_uint index, const T &value)
     {
@@ -6185,7 +6185,7 @@ public:
     }
 #endif // CL_HPP_TARGET_OPENCL_VERSION >= 120
 
-    template <typename T>
+    template< typename T >
     cl_int getInfo(cl_program_info name, T* param) const
     {
         return detail::errHandler(
@@ -6206,7 +6206,7 @@ public:
         return param;
     }
 
-    template <typename T>
+    template< typename T >
     cl_int getBuildInfo(
         const Device& device, cl_program_build_info name, T* param) const
     {
@@ -6710,7 +6710,7 @@ public:
         return *this;
     }
 
-    template <typename T>
+    template< typename T >
     cl_int getInfo(cl_command_queue_info name, T* param) const
     {
         return detail::errHandler(
@@ -7788,7 +7788,7 @@ public:
         return *this;
     }
 
-    template <typename T>
+    template< typename T >
     cl_int getInfo(cl_command_queue_info name, T* param) const
     {
         return detail::errHandler(

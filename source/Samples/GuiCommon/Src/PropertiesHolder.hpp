@@ -28,7 +28,7 @@ namespace GuiCommon
 		: public wxPropertyGrid
 	{
 	public:
-		PropertiesHolder( bool p_bCanEdit, wxWindow * p_pParent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
+		PropertiesHolder( bool p_bCanEdit, wxWindow * p_parent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
 		~PropertiesHolder();
 
 		void SetPropertyData( TreeItemProperty * p_data );

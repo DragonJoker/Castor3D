@@ -19,11 +19,11 @@ namespace Castor3D
 	{
 	}
 
-	bool StaticTexture::Initialise( uint32_t p_uiIndex )
+	bool StaticTexture::Initialise( uint32_t p_index )
 	{
 		if ( !m_bInitialised )
 		{
-			m_uiIndex = p_uiIndex;
+			m_uiIndex = p_index;
 			m_bInitialised = DoInitialise();
 		}
 		else
@@ -37,7 +37,7 @@ namespace Castor3D
 
 	void StaticTexture::SetImage( Castor::Point3ui const & p_dimensions, Castor::PxBufferBaseSPtr p_pBuffer )
 	{
-		if ( !m_pRenderSystem->HasNonPowerOfTwoTextures() )
+		if ( !m_renderSystem->HasNonPowerOfTwoTextures() )
 		{
 			m_uiDepth = GetNext2Pow( p_dimensions[2] );
 			Size l_size( GetNext2Pow( p_dimensions[0] ), GetNext2Pow( p_dimensions[1] ) * m_uiDepth );

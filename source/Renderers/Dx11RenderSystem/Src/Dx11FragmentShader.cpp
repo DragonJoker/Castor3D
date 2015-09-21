@@ -10,20 +10,20 @@ using namespace Castor;
 
 namespace Dx11Render
 {
-	DxFragmentShader::DxFragmentShader( DxShaderProgram * p_pParent )
-		: DxShaderObject( p_pParent, eSHADER_TYPE_PIXEL )
+	DxFragmentShader::DxFragmentShader( DxShaderProgram * p_parent )
+		: DxShaderObject( p_parent, eSHADER_TYPE_PIXEL )
 		, m_pPixelShader( NULL )
 	{
 	}
 
 	DxFragmentShader::~DxFragmentShader()
 	{
-		ReleaseTracked( m_pRenderSystem, m_pPixelShader );
+		ReleaseTracked( m_renderSystem, m_pPixelShader );
 	}
 
 	void DxFragmentShader::DoBind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->PSSetShader( m_pPixelShader, NULL, 0 );
 		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_PIXEL );
 
@@ -46,7 +46,7 @@ namespace Dx11Render
 
 	void DxFragmentShader::DoUnbind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_PIXEL );
 
 		if ( !l_ubos.empty() )
@@ -65,12 +65,12 @@ namespace Dx11Render
 	{
 		if ( m_pCompiled )
 		{
-			ID3D11Device * l_pDevice = m_pRenderSystem->GetDevice();
+			ID3D11Device * l_pDevice = m_renderSystem->GetDevice();
 
 			if ( l_pDevice )
 			{
 				HRESULT l_hr = l_pDevice->CreatePixelShader( reinterpret_cast< DWORD * >( m_pCompiled->GetBufferPointer() ), m_pCompiled->GetBufferSize(), NULL, &m_pPixelShader );
-				dxDebugName( m_pRenderSystem, m_pPixelShader, PSShader );
+				dxTrack( m_renderSystem, m_pPixelShader, PSShader );
 
 				if ( l_hr == S_OK )
 				{
@@ -82,6 +82,6 @@ namespace Dx11Render
 
 	void DxFragmentShader::Detach()
 	{
-		ReleaseTracked( m_pRenderSystem, m_pPixelShader );
+		ReleaseTracked( m_renderSystem, m_pPixelShader );
 	}
 }

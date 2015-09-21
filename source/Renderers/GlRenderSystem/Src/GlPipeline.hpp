@@ -24,66 +24,17 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GlRender
 {
-	class GlPipelineImplNoShader
-		:	public Castor3D::IPipelineImpl
-		,	public Castor::NonCopyable
+	class GlPipelineImpl
+		: public Castor3D::IPipelineImpl
 	{
 	public:
-		GlPipelineImplNoShader( OpenGl & p_gl, GlPipeline * p_pPipeline );
-		virtual ~GlPipelineImplNoShader();
+		GlPipelineImpl( OpenGl & p_gl, Castor3D::Pipeline & p_pipeline );
+		virtual ~GlPipelineImpl();
 
-	private:
-		virtual void ShowMatrices( Castor::String const & p_strText );
-		virtual void GetMatrix( Castor3D::eMTXMODE p_eMode );
-		virtual Castor3D::eMTXMODE MatrixMode( Castor3D::eMTXMODE p_eMode );
-		virtual bool LoadIdentity();
-		virtual bool PushMatrix();
-		virtual bool PopMatrix();
-		virtual bool MultMatrix( Castor::Matrix4x4r const & p_matrix );
-		virtual bool MultMatrix( real const * p_matrix );
-		virtual bool Perspective( Castor::Angle const & p_aFOVY, real p_rRatio, real p_rNear, real p_rFar );
-		virtual bool Frustum( real p_rLeft, real p_rRight, real p_rBottom, real p_rTop, real p_rNear, real p_rFar );
-		virtual bool Ortho( real p_rLeft, real p_rRight, real p_rBottom, real p_rTop, real p_rNear, real p_rFar );
-		virtual void ApplyViewport( int p_iWindowWidth, int p_iWindowHeight );
-
-	private:
-		OpenGl & m_gl;
-	};
-
-	class GlPipelineImplGlsl
-		:	public Castor3D::IPipelineImpl
-		,	public Castor::NonCopyable
-	{
-	public:
-		GlPipelineImplGlsl( OpenGl & p_gl, GlPipeline * p_pPipeline );
-		virtual ~GlPipelineImplGlsl();
-
-	private:
 		virtual void ApplyViewport( int p_iWindowWidth, int p_iWindowHeight );
 
 	protected:
 		OpenGl & m_gl;
-	};
-
-	class GlPipeline
-		:	public Castor3D::Pipeline
-	{
-	private:
-		GlPipelineImplNoShader * m_pPipelineNoShader;
-		GlPipelineImplGlsl * m_pPipelineGlsl;
-		GlRenderSystem * m_pGlRenderSystem;
-
-	public:
-		GlPipeline( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem );
-		virtual ~GlPipeline();
-
-		virtual void Initialise();
-		virtual void UpdateFunctions( Castor3D::ShaderProgramBase * p_pProgram );
-
-		GlRenderSystem * GetGlRenderSystem()const
-		{
-			return m_pGlRenderSystem;
-		}
 	};
 }
 

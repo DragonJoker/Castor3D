@@ -43,12 +43,12 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_uiWidth, p_uiHeight	The dimensions
+		 *\param[in]	p_width, p_height	The dimensions
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_uiWidth, p_uiHeight	Les dimensions
+		 *\param[in]	p_width, p_height	Les dimensions
 		 */
-		CU_API Size( uint32_t p_uiWidth = 0, uint32_t p_uiHeight = 0 );
+		CU_API Size( uint32_t p_width = 0, uint32_t p_height = 0 );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -99,12 +99,12 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Sets the size values
-		 *\param[in]	p_uiWidth, p_uiHeight	The dimensions
+		 *\param[in]	p_width, p_height	The dimensions
 		 *\~french
 		 *\brief		Définit la taille
-		 *\param[in]	p_uiWidth, p_uiHeight	Les dimensions
+		 *\param[in]	p_width, p_height	Les dimensions
 		 */
-		CU_API void set( uint32_t p_uiWidth, uint32_t p_uiHeight );
+		CU_API void set( uint32_t p_width, uint32_t p_height );
 		/**
 		 *\~english
 		 *\brief		Retrieves the width

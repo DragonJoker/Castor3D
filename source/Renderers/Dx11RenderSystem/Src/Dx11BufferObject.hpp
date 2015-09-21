@@ -34,7 +34,7 @@ namespace Dx11Render
 		DxBufferObject( HardwareBufferPtr p_pBuffer );
 		virtual ~DxBufferObject();
 
-		virtual bool Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_eType, Castor3D::eBUFFER_ACCESS_NATURE p_eNature );
+		virtual bool Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature );
 
 		HardwareBufferPtr GetCpuBuffer()const
 		{

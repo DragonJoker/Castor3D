@@ -15,8 +15,8 @@ namespace Castor3D
 {
 	//*************************************************************************************************
 
-	Overlay::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< Overlay, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	Overlay::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		:	Loader< Overlay, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -121,26 +121,26 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Overlay::Overlay( Engine * p_pEngine, eOVERLAY_TYPE p_eType )
-		: m_manager( p_pEngine->GetOverlayManager() )
+	Overlay::Overlay( Engine * p_engine, eOVERLAY_TYPE p_type )
+		: m_manager( p_engine->GetOverlayManager() )
 		, m_pParent()
 		, m_pScene()
-		, m_factory( p_pEngine->GetOverlayFactory() )
-		, m_pEngine( p_pEngine )
-		, m_pRenderSystem( p_pEngine->GetRenderSystem() )
-		, m_pOverlayCategory( p_pEngine->GetOverlayFactory().Create( p_eType ) )
+		, m_factory( p_engine->GetOverlayFactory() )
+		, m_engine( p_engine )
+		, m_renderSystem( p_engine->GetRenderSystem() )
+		, m_pOverlayCategory( p_engine->GetOverlayFactory().Create( p_type ) )
 	{
 		m_pOverlayCategory->SetOverlay( this );
 	}
 
-	Overlay::Overlay( Engine * p_pEngine, eOVERLAY_TYPE p_eType, SceneSPtr p_pScene, OverlaySPtr p_pParent )
-		: m_manager( p_pEngine->GetOverlayManager() )
-		, m_pParent( p_pParent )
-		, m_pScene( p_pScene )
-		, m_factory( p_pEngine->GetOverlayFactory() )
-		, m_pRenderSystem( p_pEngine->GetRenderSystem() )
-		, m_pEngine( p_pEngine )
-		, m_pOverlayCategory( p_pEngine->GetOverlayFactory().Create( p_eType ) )
+	Overlay::Overlay( Engine * p_engine, eOVERLAY_TYPE p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
+		: m_manager( p_engine->GetOverlayManager() )
+		, m_pParent( p_parent )
+		, m_pScene( p_scene )
+		, m_factory( p_engine->GetOverlayFactory() )
+		, m_renderSystem( p_engine->GetRenderSystem() )
+		, m_engine( p_engine )
+		, m_pOverlayCategory( p_engine->GetOverlayFactory().Create( p_type ) )
 	{
 		m_pOverlayCategory->SetOverlay( this );
 	}
@@ -163,7 +163,7 @@ namespace Castor3D
 		}
 	}
 
-	bool Overlay::AddChild( OverlaySPtr p_pOverlay )
+	bool Overlay::AddChild( OverlaySPtr p_overlay )
 	{
 		bool l_return = false;
 		int l_index = 1;
@@ -173,8 +173,8 @@ namespace Castor3D
 			l_index = ( *( m_overlays.end() - 1 ) )->GetIndex() + 1;
 		}
 
-		p_pOverlay->SetOrder( l_index, GetLevel() + 1 );
-		m_overlays.push_back( p_pOverlay );
+		p_overlay->SetOrder( l_index, GetLevel() + 1 );
+		m_overlays.push_back( p_overlay );
 		return true;
 	}
 

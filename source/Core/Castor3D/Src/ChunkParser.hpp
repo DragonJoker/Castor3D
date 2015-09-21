@@ -97,35 +97,35 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves a value array from a chunk
-		 *\param[out]	p_tValue	Receives the parsed values
+		 *\param[out]	p_value	Receives the parsed values
 		 *\param[in]	p_chunk		The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
-		 *\param[out]	p_tValue	Reçoit les valeurs
+		 *\param[out]	p_value	Reçoit les valeurs
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< uint32_t Count >
-		bool operator()( T( & p_tValue )[Count], BinaryChunk & p_chunk )
+		bool operator()( T( & p_value )[Count], BinaryChunk & p_chunk )
 		{
-			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_tValue ), Count * sizeof( T ), p_chunk );
+			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value ), Count * sizeof( T ), p_chunk );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a value from a chunk
-		 *\param[out]	p_tValue	Receives the parsed value
+		 *\param[out]	p_value	Receives the parsed value
 		 *\param[in]	p_chunk		The chunk containing the value
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Récupère une valeur à partir d'un chunk
-		 *\param[out]	p_tValue	Reçoit la valeur
+		 *\param[out]	p_value	Reçoit la valeur
 		 *\param[in]	p_chunk		Le chunk contenant la valeur
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( T & p_tValue, BinaryChunk & p_chunk )
+		bool operator()( T & p_value, BinaryChunk & p_chunk )
 		{
-			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( &p_tValue ), sizeof( T ), p_chunk );
+			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( &p_value ), sizeof( T ), p_chunk );
 		}
 	};
 	/*!

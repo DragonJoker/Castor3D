@@ -30,7 +30,7 @@ namespace Dx11Render
 		/**
 		 * Constructor
 		 */
-		DxDomainShader( DxShaderProgram * p_pParent );
+		DxDomainShader( DxShaderProgram * p_parent );
 		/**
 		 * Destructor
 		 */

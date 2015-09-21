@@ -145,6 +145,8 @@ namespace Castor
 		m_wcout = new LogStreambuf< wchar_t, InfoLogStreambufTraits< wchar_t > >( std::wcout );
 		m_wcerr = new LogStreambuf< wchar_t, ErrorLogStreambufTraits< wchar_t > >( std::wcerr );
 		m_wclog = new LogStreambuf< wchar_t, DebugLogStreambufTraits< wchar_t > >( std::wclog );
+		m_initialised = false;
+		m_stopped = true;
 	}
 
 	Logger::~Logger()
@@ -368,8 +370,11 @@ namespace Castor
 
 	void Logger::DoSetFileName( String const & logFilePath, ELogType logLevel )
 	{
-		std::unique_lock< std::mutex > lock( m_mutex );
-		m_impl->SetFileName( logFilePath, logLevel );
+		m_initialised = true;
+		{
+			std::unique_lock< std::mutex > lock( m_mutex );
+			m_impl->SetFileName( logFilePath, logLevel );
+		}
 	}
 
 	void Logger::DoPushMessage( ELogType logLevel, std::string const & message )
@@ -422,13 +427,22 @@ namespace Castor
 		m_stopped = false;
 		m_logThread = std::thread( [this]()
 		{
-			while ( !m_stopped )
+			while ( !m_initialised && !m_stopped )
 			{
-				DoFlushQueue();
 				std::this_thread::sleep_for( std::chrono::milliseconds( 10 ) );
 			}
 
-			DoFlushQueue();
+			while ( !m_stopped )
+			{
+				DoFlushQueue();
+				std::this_thread::sleep_for( std::chrono::milliseconds( 100 ) );
+			}
+
+			if ( m_initialised )
+			{
+				DoFlushQueue();
+			}
+
 			{
 				std::unique_lock< std::mutex > l_lock( m_mutexThreadEnded );
 				m_threadEnded.notify_all();

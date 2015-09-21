@@ -44,15 +44,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_rTimeIndex	When the key frame starts
-		 *\param[in]	p_tValue		The wanted value
+		 *\param[in]	p_value		The wanted value
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_rTimeIndex	Quand la key frame commence
-		 *\param[in]	p_tValue		La valeur voulue
+		 *\param[in]	p_value		La valeur voulue
 		 */
-		KeyFrame( real p_rTimeIndex = 0, T const & p_tValue = T() )
+		KeyFrame( real p_rTimeIndex = 0, T const & p_value = T() )
 			:	m_rTimeIndex( p_rTimeIndex )
-			,	m_tValue( p_tValue )
+			,	m_tValue( p_value )
 		{
 		}
 		/**
@@ -72,9 +72,9 @@ namespace Castor3D
 		 *\brief		Définit la translation voulue
 		 *\param[in]	p_ptTranslate	La translation
 		 */
-		inline void SetValue( T const & p_tValue )
+		inline void SetValue( T const & p_value )
 		{
-			m_tValue = p_tValue;
+			m_tValue = p_value;
 		}
 		/**
 		 *\~english

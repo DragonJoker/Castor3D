@@ -33,7 +33,23 @@ http://www.gnu.org/copyleft/lesser.txt.
 #undef CASTOR_HAS_MAKE_UNIQUE
 
 #if defined( _MSC_VER)
-#	if _MSC_VER >= 1800
+#	if _MSC_VER >= 1900
+#		define CASTOR_HAS_ALIGNAS					1
+#		define CASTOR_HAS_STDTHREAD					1
+#		define CASTOR_TYPE( x )						: x
+#		define CASTOR_HAS_NULLPTR					1
+#		define CASTOR_HAS_STDSMARTPTR				1
+#		define CASTOR_HAS_STDFUNCTIONAL				1
+#		define CASTOR_HAS_TR1FUNCTIONAL				1
+#		define CASTOR_HAS_STDARRAY					1
+#		define CASTOR_HAS_DEFAULTED_FUNC			1
+#		define CASTOR_HAS_DELETED_FUNC				1
+#		define CASTOR_HAS_TR1SMARTPTR				1
+#		define CASTOR_HAS_TR1ARRAY					1
+#		define CASTOR_HAS_VARIADIC_TEMPLATES		1
+#		define CASTOR_HAS_MAKE_UNIQUE				1
+#	elif _MSC_VER >= 1800
+#		define CASTOR_HAS_ALIGNAS					0
 #		define CASTOR_HAS_STDTHREAD					1
 #		define CASTOR_TYPE( x )						: x
 #		define CASTOR_HAS_NULLPTR					1
@@ -48,6 +64,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #		define CASTOR_HAS_VARIADIC_TEMPLATES		1
 #		define CASTOR_HAS_MAKE_UNIQUE				1
 #	elif _MSC_VER >= 1700
+#		define CASTOR_HAS_ALIGNAS					0
 #		define CASTOR_HAS_STDTHREAD					1
 #		define CASTOR_TYPE( x )						: x
 #		define CASTOR_HAS_NULLPTR					1
@@ -62,6 +79,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #		define CASTOR_HAS_VARIADIC_TEMPLATES		0
 #		define CASTOR_HAS_MAKE_UNIQUE				0
 #	elif _MSC_VER >= 1600
+#		define CASTOR_HAS_ALIGNAS					0
 #		define CASTOR_HAS_STDTHREAD					0
 #		define CASTOR_TYPE( x )
 #		define CASTOR_HAS_NULLPTR					1
@@ -76,6 +94,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #		define CASTOR_HAS_VARIADIC_TEMPLATES		0
 #		define CASTOR_HAS_MAKE_UNIQUE				0
 #	elif _MSC_VER > 1500
+#		define CASTOR_HAS_ALIGNAS					0
 #		define CASTOR_HAS_STDTHREAD					0
 #		define CASTOR_TYPE( x )
 #		define CASTOR_HAS_NULLPTR					0
@@ -90,6 +109,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #		define CASTOR_HAS_VARIADIC_TEMPLATES		0
 #		define CASTOR_HAS_MAKE_UNIQUE				0
 #	else
+#		define CASTOR_HAS_ALIGNAS					0
 #		define CASTOR_HAS_STDTHREAD					0
 #		define CASTOR_TYPE( x )
 #		define CASTOR_HAS_NULLPTR					0
@@ -105,6 +125,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #		define CASTOR_HAS_MAKE_UNIQUE				0
 #	endif
 #elif defined( __clang__)
+#	define CASTOR_HAS_ALIGNAS						__has_feature(cxx_alignas)
 #	define CASTOR_HAS_STDTHREAD						1
 #	define CASTOR_TYPE( x )							: x
 #	define CASTOR_HAS_NULLPTR						__has_feature(cxx_nullptr)
@@ -120,8 +141,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	define CASTOR_HAS_MAKE_UNIQUE					__has_feature(cxx_variadic_templates)
 #elif defined( __GNUG__)
 #	define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
-#	if GCC_VERSION >= 40900
-#		if defined( _WIN32 )
+#	if defined( _WIN32 )
+#		if GCC_VERSION >= 40900
+#			define CASTOR_HAS_ALIGNAS				1
 #			define CASTOR_TYPE( x )					: x
 #			define CASTOR_HAS_STDTHREAD				0
 #			define CASTOR_HAS_NULLPTR				1
@@ -135,7 +157,38 @@ http://www.gnu.org/copyleft/lesser.txt.
 #			define CASTOR_HAS_TR1FUNCTIONAL			1
 #			define CASTOR_HAS_VARIADIC_TEMPLATES	1
 #			define CASTOR_HAS_MAKE_UNIQUE			1
+#		elif GCC_VERSION >= 40800
+#			define CASTOR_HAS_ALIGNAS				1
+#			define CASTOR_TYPE( x )					: x
+#			define CASTOR_HAS_STDTHREAD				1
+#			define CASTOR_HAS_NULLPTR				1
+#			define CASTOR_HAS_STDSMARTPTR			1
+#			define CASTOR_HAS_STDARRAY				1
+#			define CASTOR_HAS_DEFAULTED_FUNC		1
+#			define CASTOR_HAS_DELETED_FUNC			1
+#			define CASTOR_HAS_TR1SMARTPTR			1
+#			define CASTOR_HAS_TR1ARRAY				1
+#			define CASTOR_HAS_STDFUNCTIONAL			1
+#			define CASTOR_HAS_TR1FUNCTIONAL			1
+#			define CASTOR_HAS_VARIADIC_TEMPLATES	1
+#			define CASTOR_HAS_MAKE_UNIQUE			1
+#		elif GCC_VERSION >= 40600
+#			define CASTOR_HAS_ALIGNAS				0
+#			define CASTOR_TYPE( x )					: x
+#			define CASTOR_HAS_STDTHREAD				0
+#			define CASTOR_HAS_NULLPTR				1
+#			define CASTOR_HAS_STDSMARTPTR			1
+#			define CASTOR_HAS_STDARRAY				1
+#			define CASTOR_HAS_DEFAULTED_FUNC		1
+#			define CASTOR_HAS_DELETED_FUNC			1
+#			define CASTOR_HAS_TR1SMARTPTR			1
+#			define CASTOR_HAS_TR1ARRAY				1
+#			define CASTOR_HAS_STDFUNCTIONAL			1
+#			define CASTOR_HAS_TR1FUNCTIONAL			1
+#			define CASTOR_HAS_VARIADIC_TEMPLATES	1
+#			define CASTOR_HAS_MAKE_UNIQUE			0
 #		elif GCC_VERSION >= 40500
+#			define CASTOR_HAS_ALIGNAS				0
 #			define CASTOR_TYPE( x )					: x
 #			define CASTOR_HAS_STDTHREAD				1
 #			define CASTOR_HAS_NULLPTR				1
@@ -150,6 +203,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #			define CASTOR_HAS_VARIADIC_TEMPLATES	1
 #			define CASTOR_HAS_MAKE_UNIQUE			1
 #		else
+#			define CASTOR_HAS_ALIGNAS				0
 #			define CASTOR_TYPE( x )
 #			define CASTOR_HAS_STDTHREAD				1
 #			define CASTOR_HAS_NULLPTR				1
@@ -164,10 +218,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 #			define CASTOR_HAS_VARIADIC_TEMPLATES	1
 #			define CASTOR_HAS_MAKE_UNIQUE			1
 #		endif
-#	elif GCC_VERSION >= 40600
-#		if defined( _WIN32 )
+#	else
+#		if GCC_VERSION >= 40800
+#			define CASTOR_HAS_ALIGNAS				1
 #			define CASTOR_TYPE( x )					: x
-#			define CASTOR_HAS_STDTHREAD				0
+#			define CASTOR_HAS_STDTHREAD				1
 #			define CASTOR_HAS_NULLPTR				1
 #			define CASTOR_HAS_STDSMARTPTR			1
 #			define CASTOR_HAS_STDARRAY				1
@@ -178,8 +233,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #			define CASTOR_HAS_STDFUNCTIONAL			1
 #			define CASTOR_HAS_TR1FUNCTIONAL			1
 #			define CASTOR_HAS_VARIADIC_TEMPLATES	1
-#			define CASTOR_HAS_MAKE_UNIQUE			0
-#		else
+#			define CASTOR_HAS_MAKE_UNIQUE			1
+#		elif GCC_VERSION >= 40600
 #			define CASTOR_TYPE( x )					: x
 #			define CASTOR_HAS_STDTHREAD				1
 #			define CASTOR_HAS_NULLPTR				1
@@ -193,34 +248,50 @@ http://www.gnu.org/copyleft/lesser.txt.
 #			define CASTOR_HAS_TR1FUNCTIONAL			1
 #			define CASTOR_HAS_VARIADIC_TEMPLATES	1
 #			define CASTOR_HAS_MAKE_UNIQUE			0
+#		elif GCC_VERSION >= 40400
+#			define CASTOR_HAS_STDTHREAD				0
+#			define CASTOR_HAS_NULLPTR				0
+#			define CASTOR_HAS_STDFUNCTIONAL			0
+#			define CASTOR_HAS_STDSMARTPTR			1
+#			define CASTOR_HAS_STDARRAY				1
+#			define CASTOR_HAS_DEFAULTED_FUNC		1
+#			define CASTOR_HAS_DELETED_FUNC			1
+#			define CASTOR_HAS_TR1FUNCTIONAL			1
+#			define CASTOR_HAS_TR1SMARTPTR			1
+#			define CASTOR_HAS_TR1ARRAY				1
+#			define CASTOR_HAS_VARIADIC_TEMPLATES	1
+#			define CASTOR_HAS_MAKE_UNIQUE			0
+#		elif GCC_VERSION >= 40300
+#			define CASTOR_HAS_STDTHREAD				0
+#			define CASTOR_HAS_NULLPTR				0
+#			define CASTOR_HAS_STDFUNCTIONAL			0
+#			define CASTOR_HAS_STDSMARTPTR			0
+#			define CASTOR_HAS_STDARRAY				0
+#			define CASTOR_HAS_DEFAULTED_FUNC		0
+#			define CASTOR_HAS_DELETED_FUNC			0
+#			define CASTOR_HAS_TR1FUNCTIONAL			1
+#			define CASTOR_HAS_TR1SMARTPTR			1
+#			define CASTOR_HAS_TR1ARRAY				1
+#			define CASTOR_HAS_VARIADIC_TEMPLATES	1
+#			define CASTOR_HAS_MAKE_UNIQUE			0
+#		else
+#			define CASTOR_HAS_STDTHREAD				0
+#			define CASTOR_HAS_NULLPTR				0
+#			define CASTOR_HAS_STDFUNCTIONAL			0
+#			define CASTOR_HAS_STDSMARTPTR			0
+#			define CASTOR_HAS_STDARRAY				0
+#			define CASTOR_HAS_DEFAULTED_FUNC		0
+#			define CASTOR_HAS_DELETED_FUNC			0
+#			define CASTOR_HAS_TR1SMARTPTR			0
+#			define CASTOR_HAS_TR1ARRAY				0
+#			define CASTOR_HAS_TR1FUNCTIONAL			0
+#			define CASTOR_HAS_VARIADIC_TEMPLATES	0
+#			define CASTOR_HAS_MAKE_UNIQUE			0
 #		endif
-#	elif GCC_VERSION >= 40400
-#		define CASTOR_HAS_STDTHREAD					0
-#		define CASTOR_HAS_NULLPTR					0
-#		define CASTOR_HAS_STDFUNCTIONAL				0
-#		define CASTOR_HAS_STDSMARTPTR				1
-#		define CASTOR_HAS_STDARRAY					1
-#		define CASTOR_HAS_DEFAULTED_FUNC			1
-#		define CASTOR_HAS_DELETED_FUNC				1
-#		define CASTOR_HAS_TR1FUNCTIONAL				1
-#		define CASTOR_HAS_TR1SMARTPTR				1
-#		define CASTOR_HAS_TR1ARRAY					1
-#		define CASTOR_HAS_VARIADIC_TEMPLATES		1
-#		define CASTOR_HAS_MAKE_UNIQUE				0
-#	elif GCC_VERSION >= 40300
-#		define CASTOR_HAS_STDTHREAD					0
-#		define CASTOR_HAS_NULLPTR					0
-#		define CASTOR_HAS_STDFUNCTIONAL				0
-#		define CASTOR_HAS_STDSMARTPTR				0
-#		define CASTOR_HAS_STDARRAY					0
-#		define CASTOR_HAS_DEFAULTED_FUNC			0
-#		define CASTOR_HAS_DELETED_FUNC				0
-#		define CASTOR_HAS_TR1FUNCTIONAL				1
-#		define CASTOR_HAS_TR1SMARTPTR				1
-#		define CASTOR_HAS_TR1ARRAY					1
-#		define CASTOR_HAS_VARIADIC_TEMPLATES		1
-#		define CASTOR_HAS_MAKE_UNIQUE				0
-#	else
+#	endif
+#elif defined( __BORLANDC__ )
+#	warning "Theoretically supported compiler, but untested yet"
+#	if __BORLANDC__ >= 0x621
 #		define CASTOR_HAS_STDTHREAD					0
 #		define CASTOR_HAS_NULLPTR					0
 #		define CASTOR_HAS_STDFUNCTIONAL				0
@@ -233,22 +304,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #		define CASTOR_HAS_TR1FUNCTIONAL				0
 #		define CASTOR_HAS_VARIADIC_TEMPLATES		0
 #		define CASTOR_HAS_MAKE_UNIQUE				0
-#	endif
-#elif defined( __BORLANDC__ )
-#	warning "Theoretically supported compiler, but untested yet"
-#	if __BORLANDC__ >= 0x621
-#		define CASTOR_HAS_STDTHREAD						0
-#		define CASTOR_HAS_NULLPTR						0
-#		define CASTOR_HAS_STDFUNCTIONAL					0
-#		define CASTOR_HAS_STDSMARTPTR					0
-#		define CASTOR_HAS_STDARRAY						0
-#		define CASTOR_HAS_DEFAULTED_FUNC				0
-#		define CASTOR_HAS_DELETED_FUNC					0
-#		define CASTOR_HAS_TR1SMARTPTR					0
-#		define CASTOR_HAS_TR1ARRAY						0
-#		define CASTOR_HAS_TR1FUNCTIONAL					0
-#		define CASTOR_HAS_VARIADIC_TEMPLATES			0
-#		define CASTOR_HAS_MAKE_UNIQUE					0
 #	endif
 #else
 #	error "Yet unsupported compiler"

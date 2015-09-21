@@ -36,19 +36,19 @@ Resource< T >::~Resource()
 }
 
 template< class T >
-void Resource< T >::ChangeName( String const & p_strName )
+void Resource< T >::ChangeName( String const & p_name )
 {
 	collection l_collection;
 
-	if ( !l_collection.has( p_strName ) )
+	if ( !l_collection.has( p_name ) )
 	{
 		std::shared_ptr< T > l_pThis = l_collection.erase( m_name );
 
 		if ( l_pThis )
 		{
-			l_collection.insert( p_strName, l_pThis );
+			l_collection.insert( p_name, l_pThis );
 		}
 	}
 
-	m_name = p_strName;
+	m_name = p_name;
 }

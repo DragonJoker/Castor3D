@@ -129,27 +129,27 @@ namespace Castor
 			typedef MapIt iterator;
 			typedef MapConstIt const_iterator;
 
-			ParserFunctionAndParams & operator []( String const & p_strName )
+			ParserFunctionAndParams & operator []( String const & p_name )
 			{
-				MapIt l_it = m_map.find( p_strName );
+				MapIt l_it = m_map.find( p_name );
 
 				if ( l_it == m_map.end() )
 				{
-					m_map.insert( std::make_pair( p_strName, ParserFunctionAndParams() ) );
-					l_it = m_map.find( p_strName );
+					m_map.insert( std::make_pair( p_name, ParserFunctionAndParams() ) );
+					l_it = m_map.find( p_name );
 				}
 
 				return l_it->second;
 			}
 
-			iterator find( String const & p_strName )
+			iterator find( String const & p_name )
 			{
-				return m_map.find( p_strName );
+				return m_map.find( p_name );
 			}
 
-			const_iterator find( String const & p_strName )const
+			const_iterator find( String const & p_name )const
 			{
-				return m_map.find( p_strName );
+				return m_map.find( p_name );
 			}
 
 			iterator begin()
@@ -258,19 +258,19 @@ namespace Castor
 		 *\~english
 		 *\brief		Adds a parser function to the parsers list
 		 *\param[in]	p_iSection		The parser section
-		 *\param[in]	p_strName		The parser name
+		 *\param[in]	p_name		The parser name
 		 *\param[in]	p_pfnFunction	The parser function
 		 *\param[in]	p_iCount		The expected parameters list count
 		 *\param[in]	...				The expected parameters list
 		 *\~french
 		 *\brief		Ajoute une foncction d'analyse à la liste
 		 *\param[in]	p_iSection		La section
-		 *\param[in]	p_strName		Le nom
+		 *\param[in]	p_name		Le nom
 		 *\param[in]	p_pfnFunction	La fonction d'analyse
 		 *\param[in]	p_iCount		Le compte des paramètres attendus
 		 *\param[in]	...				La liste des paramètres attendus
 		 */
-		CU_API void AddParser( int p_iSection, String const & p_strName, PParserFunction p_pfnFunction, int p_iCount = 0, ... );
+		CU_API void AddParser( int p_iSection, String const & p_name, PParserFunction p_pfnFunction, int p_iCount = 0, ... );
 		/**
 		 *\~english
 		 *\brief		Tells if the read lines are to be ignored

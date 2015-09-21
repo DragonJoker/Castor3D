@@ -35,15 +35,18 @@
 #include <Logger.hpp>
 
 #if C3D_HAS_GL_RENDERER
-#	include <GlPixelShaderSource.hpp>
-#	include <GlDeferredShaderSource.hpp>
+
+#	include <GlShaderSource.hpp>
 #	include <GlRenderSystem.hpp>
 using namespace GlRender;
+
 #endif
 
 #if C3D_HAS_D3D11_RENDERER
+
 #	include <Dx11RenderSystem.hpp>
 using namespace Dx11Render;
+
 #endif
 
 using namespace Castor;
@@ -52,6 +55,7 @@ using namespace Castor3D;
 namespace Deferred
 {
 #if C3D_HAS_D3D11_RENDERER
+
 	class DeferredShaderSource
 	{
 	protected:
@@ -311,6 +315,7 @@ namespace Deferred
 	};
 
 	DeferredShaderSource g_ds;
+
 #endif
 
 	String g_strNames[] =
@@ -332,102 +337,93 @@ namespace Deferred
 		:	RenderTechniqueBase( cuT( "deferred" ), p_renderTarget, p_pRenderSystem, p_params )
 	{
 		Logger::LogInfo( cuT( "Using deferred shading" ) );
-		m_pDsFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
+		m_lightPassFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 		{
-			m_pDsTextures[i] = m_pRenderSystem->CreateDynamicTexture();
-			m_pDsTextures[i]->SetRenderTarget( p_renderTarget.shared_from_this() );
-			m_pDsTexAttachs[i] = m_pRenderTarget->CreateAttachment( m_pDsTextures[i] );
+			m_lightPassTextures[i] = m_renderSystem->CreateDynamicTexture();
+			m_lightPassTextures[i]->SetRenderTarget( p_renderTarget.shared_from_this() );
+			m_lightPassTexAttachs[i] = m_pRenderTarget->CreateAttachment( m_lightPassTextures[i] );
 		}
 
-		m_pDsBufDepth = m_pDsFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24S8 );
-		m_pDsDepthAttach = m_pRenderTarget->CreateAttachment( m_pDsBufDepth );
-		m_pDsShaderProgram = m_pEngine->GetShaderManager().GetNewProgram();
-		m_pDsGeometricState = m_pEngine->CreateDepthStencilState( cuT( "GeometricPassState" ) );
-		m_pDsLightsState = m_pEngine->CreateDepthStencilState( cuT( "LightPassState" ) );
+		m_lightPassBufDepth = m_lightPassFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24S8 );
+		m_lightPassDepthAttach = m_pRenderTarget->CreateAttachment( m_lightPassBufDepth );
+		m_lightPassShaderProgram = m_engine->GetShaderManager().GetNewProgram();
 
-		m_pDsGeometricState->SetStencilTest( true );
-		m_pDsGeometricState->SetStencilReadMask( 0xFFFFFFFF );
-		m_pDsGeometricState->SetStencilWriteMask( 0xFFFFFFFF );
-		m_pDsGeometricState->SetStencilFrontRef( 1 );
-		m_pDsGeometricState->SetStencilBackRef( 1 );
-		m_pDsGeometricState->SetStencilFrontFunc( eSTENCIL_FUNC_NEVER );
-		m_pDsGeometricState->SetStencilBackFunc( eSTENCIL_FUNC_NEVER );
-		m_pDsGeometricState->SetStencilFrontFailOp( eSTENCIL_OP_REPLACE );
-		m_pDsGeometricState->SetStencilBackFailOp( eSTENCIL_OP_REPLACE );
-		m_pDsGeometricState->SetStencilFrontDepthFailOp( eSTENCIL_OP_KEEP );
-		m_pDsGeometricState->SetStencilBackDepthFailOp( eSTENCIL_OP_KEEP );
-		m_pDsGeometricState->SetStencilFrontPassOp( eSTENCIL_OP_KEEP );
-		m_pDsGeometricState->SetStencilBackPassOp( eSTENCIL_OP_KEEP );
-		m_pDsGeometricState->SetDepthTest( true );
-		m_pDsGeometricState->SetDepthMask( eWRITING_MASK_ALL );
+		m_geometryPassDsState = m_engine->CreateDepthStencilState( cuT( "GeometricPassState" ) );
+		m_geometryPassDsState->SetStencilTest( true );
+		m_geometryPassDsState->SetStencilReadMask( 0xFFFFFFFF );
+		m_geometryPassDsState->SetStencilWriteMask( 0xFFFFFFFF );
+		m_geometryPassDsState->SetStencilFrontRef( 1 );
+		m_geometryPassDsState->SetStencilBackRef( 1 );
+		m_geometryPassDsState->SetStencilFrontFunc( eSTENCIL_FUNC_NEVER );
+		m_geometryPassDsState->SetStencilBackFunc( eSTENCIL_FUNC_NEVER );
+		m_geometryPassDsState->SetStencilFrontFailOp( eSTENCIL_OP_REPLACE );
+		m_geometryPassDsState->SetStencilBackFailOp( eSTENCIL_OP_REPLACE );
+		m_geometryPassDsState->SetStencilFrontDepthFailOp( eSTENCIL_OP_KEEP );
+		m_geometryPassDsState->SetStencilBackDepthFailOp( eSTENCIL_OP_KEEP );
+		m_geometryPassDsState->SetStencilFrontPassOp( eSTENCIL_OP_KEEP );
+		m_geometryPassDsState->SetStencilBackPassOp( eSTENCIL_OP_KEEP );
+		m_geometryPassDsState->SetDepthTest( true );
+		m_geometryPassDsState->SetDepthMask( eWRITING_MASK_ALL );
 
-		m_pDsLightsState->SetStencilTest( true );
-		m_pDsLightsState->SetStencilReadMask( 0xFFFFFFFF );
-		m_pDsLightsState->SetStencilWriteMask( 0 );
-		m_pDsLightsState->SetStencilFrontRef( 1 );
-		m_pDsLightsState->SetStencilBackRef( 1 );
-		m_pDsLightsState->SetStencilFrontFunc( eSTENCIL_FUNC_EQUAL );
-		m_pDsLightsState->SetStencilBackFunc( eSTENCIL_FUNC_EQUAL );
-		m_pDsLightsState->SetDepthTest( true );
-		m_pDsLightsState->SetDepthMask( eWRITING_MASK_ZERO );
+		m_lightPassDsState = m_engine->CreateDepthStencilState( cuT( "LightPassState" ) );
+		m_lightPassDsState->SetStencilTest( true );
+		m_lightPassDsState->SetStencilReadMask( 0xFFFFFFFF );
+		m_lightPassDsState->SetStencilWriteMask( 0 );
+		m_lightPassDsState->SetStencilFrontRef( 1 );
+		m_lightPassDsState->SetStencilBackRef( 1 );
+		m_lightPassDsState->SetStencilFrontFunc( eSTENCIL_FUNC_EQUAL );
+		m_lightPassDsState->SetStencilBackFunc( eSTENCIL_FUNC_EQUAL );
+		m_lightPassDsState->SetDepthTest( true );
+		m_lightPassDsState->SetDepthMask( eWRITING_MASK_ZERO );
 
 		BufferElementDeclaration l_vertexDeclarationElements[] =
 		{
-			BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION,	eELEMENT_TYPE_3FLOATS ),
-			BufferElementDeclaration( 0, eELEMENT_USAGE_TEXCOORDS0,	eELEMENT_TYPE_2FLOATS ),
+			BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS ),
+			BufferElementDeclaration( 0, eELEMENT_USAGE_TEXCOORDS0, eELEMENT_TYPE_2FLOATS ),
 		};
+		m_pDeclaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
+
+		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( m_renderSystem, l_vertexDeclarationElements );
 
 		real l_pBuffer[] =
 		{
-			0, 0, 0, 0, 0,
-			0, 1, 0, 0, 1,
-			1, 1, 0, 1, 1,
-			1, 0, 0, 1, 0,
+			0, 0, 0, 0,
+			1, 1, 1, 1,
+			0, 1, 0, 1,
+			0, 0, 0, 0,
+			1, 0, 1, 0,
+			1, 1, 1, 1,
 		};
+		uint32_t l_stride = m_pDeclaration->GetStride();
+		CASTOR_ASSERT( sizeof( l_pBuffer ) == 6 * l_stride );
+		l_pVtxBuffer->Resize( sizeof( l_pBuffer ) );
+		uint8_t * l_buffer = l_pVtxBuffer->data();
+		std::memcpy( l_buffer, l_pBuffer, sizeof( l_pBuffer ) );
 
-		std::memcpy( m_pBuffer, l_pBuffer, sizeof( l_pBuffer ) );
-		m_pDeclaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
-		uint32_t l_uiStride = m_pDeclaration->GetStride();
-		uint32_t i = 0;
-
-		std::for_each( m_arrayVertex.begin(), m_arrayVertex.end(), [&]( BufferElementGroupSPtr & p_vertex )
+		for ( auto && l_vertex : m_arrayVertex )
 		{
-			p_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_pBuffer )[i++ * m_pDeclaration->GetStride()] );
-		} );
+			l_vertex = std::make_shared< BufferElementGroup >( l_buffer );
+			l_buffer += l_stride;
+		}
 
-		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( m_pRenderSystem, l_vertexDeclarationElements );
-		IndexBufferUPtr l_pIdxBuffer = std::make_unique< IndexBuffer >( m_pRenderSystem );
+		m_pGeometryBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
 
-		l_pVtxBuffer->Resize( 4 * l_uiStride );
-		m_arrayVertex[0]->LinkCoords( &l_pVtxBuffer->data()[0 * l_uiStride], l_uiStride );
-		m_arrayVertex[1]->LinkCoords( &l_pVtxBuffer->data()[1 * l_uiStride], l_uiStride );
-		m_arrayVertex[2]->LinkCoords( &l_pVtxBuffer->data()[2 * l_uiStride], l_uiStride );
-		m_arrayVertex[3]->LinkCoords( &l_pVtxBuffer->data()[3 * l_uiStride], l_uiStride );
-
-		l_pIdxBuffer->AddElement( 0 );
-		l_pIdxBuffer->AddElement( 2 );
-		l_pIdxBuffer->AddElement( 1 );
-		l_pIdxBuffer->AddElement( 0 );
-		l_pIdxBuffer->AddElement( 3 );
-		l_pIdxBuffer->AddElement( 2 );
-		m_pGeometryBuffers = m_pRenderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), nullptr );
-
-		m_pViewport = std::make_shared< Viewport >( m_pRenderSystem->GetEngine(), Size( 10, 10 ), eVIEWPORT_TYPE_2D );
-		m_pViewport->SetLeft( real( 0.0 ) );
-		m_pViewport->SetRight( real( 1.0 ) );
-		m_pViewport->SetTop( real( 1.0 ) );
-		m_pViewport->SetBottom( real( 0.0 ) );
-		m_pViewport->SetNear( real( 0.0 ) );
-		m_pViewport->SetFar( real( 1.0 ) );
+		m_viewport = std::make_shared< Viewport >( m_renderSystem->GetEngine(), Size( 10, 10 ), eVIEWPORT_TYPE_2D );
+		m_viewport->SetLeft( real( 0.0 ) );
+		m_viewport->SetRight( real( 1.0 ) );
+		m_viewport->SetTop( real( 1.0 ) );
+		m_viewport->SetBottom( real( 0.0 ) );
+		m_viewport->SetNear( real( 0.0 ) );
+		m_viewport->SetFar( real( 1.0 ) );
 	}
 
 	RenderTechnique::~RenderTechnique()
 	{
-		m_pViewport.reset();
+		m_viewport.reset();
 		m_pGeometryBuffers.reset();
-		m_pDsShaderProgram.reset();
+		m_lightPassShaderProgram.reset();
 		m_pDeclaration.reset();
 	}
 
@@ -439,39 +435,38 @@ namespace Deferred
 
 	bool RenderTechnique::DoCreate()
 	{
-		m_pRenderSystem->GetMainContext()->SetDeferredShading( true );
-		bool l_bReturn = m_pDsFrameBuffer->Create( 0 );
+		m_renderSystem->GetMainContext()->SetDeferredShading( true );
+		bool l_bReturn = m_lightPassFrameBuffer->Create( 0 );
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT && l_bReturn; i++ )
 		{
-			l_bReturn = m_pDsTextures[i]->Create();
-			m_pDsTextures[i]->SetSampler( m_sampler );
+			l_bReturn = m_lightPassTextures[i]->Create();
+			m_lightPassTextures[i]->SetSampler( m_sampler );
 		}
 
-		l_bReturn &= m_pDsBufDepth->Create();
+		l_bReturn &= m_lightPassBufDepth->Create();
 
 		if ( l_bReturn )
 		{
 			for ( int i = 0; i < eDS_TEXTURE_COUNT && l_bReturn; i++ )
 			{
-				m_pDsShaderProgram->CreateFrameVariable( g_strNames[i], eSHADER_TYPE_PIXEL )->SetValue( m_pDsTextures[i].get() );
+				m_lightPassShaderProgram->CreateFrameVariable( g_strNames[i], eSHADER_TYPE_PIXEL )->SetValue( m_lightPassTextures[i].get() );
 			}
 
-			m_pDsMatrices = m_pEngine->GetShaderManager().CreateMatrixBuffer( *m_pDsShaderProgram, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
-			FrameVariableBufferSPtr l_scene = m_pEngine->GetShaderManager().CreateSceneBuffer( *m_pDsShaderProgram, MASK_SHADER_TYPE_PIXEL );
-			m_pDsScene = l_scene;
+			m_lightPassMatrices = m_engine->GetShaderManager().CreateMatrixBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
+			FrameVariableBufferSPtr l_scene = m_engine->GetShaderManager().CreateSceneBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL );
+			m_lightPassScene = l_scene;
 
-			m_pGeometryBuffers->GetVertexBuffer().Create();
-			m_pGeometryBuffers->GetIndexBuffer().Create();
+			m_pGeometryBuffers->Create();
 
 			for ( int i = 0; i < eSHADER_MODEL_COUNT; i++ )
 			{
 				eSHADER_MODEL l_eModel = eSHADER_MODEL( i );
 
-				if ( m_pRenderSystem->CheckSupport( l_eModel ) )
+				if ( m_renderSystem->CheckSupport( l_eModel ) )
 				{
-					m_pDsShaderProgram->SetSource( eSHADER_TYPE_VERTEX,	l_eModel, DoGetLightPassVertexShaderSource( 0 ) );
-					m_pDsShaderProgram->SetSource( eSHADER_TYPE_PIXEL,	l_eModel, DoGetLightPassPixelShaderSource( 0 ) );
+					m_lightPassShaderProgram->SetSource( eSHADER_TYPE_VERTEX,	l_eModel, DoGetLightPassVertexShaderSource( 0 ) );
+					m_lightPassShaderProgram->SetSource( eSHADER_TYPE_PIXEL,	l_eModel, DoGetLightPassPixelShaderSource( 0 ) );
 				}
 			}
 		}
@@ -481,16 +476,15 @@ namespace Deferred
 
 	void RenderTechnique::DoDestroy()
 	{
-		m_pGeometryBuffers->GetVertexBuffer().Destroy();
-		m_pGeometryBuffers->GetIndexBuffer().Destroy();
+		m_pGeometryBuffers->Destroy();
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 		{
-			m_pDsTextures[i]->Destroy();
+			m_lightPassTextures[i]->Destroy();
 		}
 
-		m_pDsBufDepth->Destroy();
-		m_pDsFrameBuffer->Destroy();
+		m_lightPassBufDepth->Destroy();
+		m_lightPassFrameBuffer->Destroy();
 	}
 
 	bool RenderTechnique::DoInitialise( uint32_t & p_index )
@@ -499,80 +493,78 @@ namespace Deferred
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT && l_bReturn; i++ )
 		{
-			m_pDsTextures[i]->SetDimension(	eTEXTURE_DIMENSION_2D );
+			m_lightPassTextures[i]->SetDimension( eTEXTURE_DIMENSION_2D );
 
 			if ( i != eDS_TEXTURE_POSITION )
 			{
-				m_pDsTextures[i]->SetImage(	m_size, ePIXEL_FORMAT_A8R8G8B8 );
+				m_lightPassTextures[i]->SetImage( m_size, ePIXEL_FORMAT_A8R8G8B8 );
 			}
 			else
 			{
-				m_pDsTextures[i]->SetImage(	m_size, ePIXEL_FORMAT_ARGB32F );
+				m_lightPassTextures[i]->SetImage( m_size, ePIXEL_FORMAT_ARGB32F );
 			}
 
-			m_pDsTextures[i]->Initialise( p_index++ );
+			m_lightPassTextures[i]->Initialise( p_index++ );
 		}
 
-		m_pDsBufDepth->Initialise( m_size );
+		m_lightPassBufDepth->Initialise( m_size );
 
-		if ( m_pDsFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
+		if ( m_lightPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
 		{
 			for ( int i = 0; i < eDS_TEXTURE_COUNT && l_bReturn; i++ )
 			{
-				l_bReturn &= m_pDsTexAttachs[i]->Attach( eATTACHMENT_POINT( eATTACHMENT_POINT_COLOUR0 + i ),	m_pDsFrameBuffer, eTEXTURE_TARGET_2D );
+				l_bReturn &= m_lightPassTexAttachs[i]->Attach( eATTACHMENT_POINT( eATTACHMENT_POINT_COLOUR0 + i ), m_lightPassFrameBuffer, eTEXTURE_TARGET_2D );
 			}
 
-			l_bReturn &= m_pDsDepthAttach->Attach( eATTACHMENT_POINT_DEPTH,	m_pDsFrameBuffer );
-			m_pDsFrameBuffer->Unbind();
+			l_bReturn &= m_lightPassDepthAttach->Attach( eATTACHMENT_POINT_DEPTH, m_lightPassFrameBuffer );
+			m_lightPassFrameBuffer->Unbind();
 		}
 
-		m_pDsGeometricState->Initialise();
-		m_pDsLightsState->Initialise();
+		m_geometryPassDsState->Initialise();
+		m_lightPassDsState->Initialise();
 
-		m_pDsShaderProgram->Initialise();
-		m_pDsMatrices = m_pDsShaderProgram->FindFrameVariableBuffer( ShaderProgramBase::BufferMatrix );
-		FrameVariableBufferSPtr l_scene = m_pDsShaderProgram->FindFrameVariableBuffer( ShaderProgramBase::BufferScene );
+		m_lightPassShaderProgram->Initialise();
+		m_lightPassMatrices = m_lightPassShaderProgram->FindFrameVariableBuffer( ShaderProgramBase::BufferMatrix );
+		FrameVariableBufferSPtr l_scene = m_lightPassShaderProgram->FindFrameVariableBuffer( ShaderProgramBase::BufferScene );
 		l_scene->GetVariable( ShaderProgramBase::CameraPos, m_pShaderCamera );
-		m_pDsScene = l_scene;
-		m_pGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, m_pDsShaderProgram );
-		m_pGeometryBuffers->GetIndexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, m_pDsShaderProgram );
-		m_pGeometryBuffers->Initialise();
+		m_lightPassScene = l_scene;
+		m_pGeometryBuffers->Initialise( m_lightPassShaderProgram, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 		return l_bReturn;
 	}
 
 	void RenderTechnique::DoCleanup()
 	{
 		m_pShaderCamera.reset();
-		m_pDsGeometricState->Cleanup();
-		m_pDsLightsState->Cleanup();
+		m_geometryPassDsState->Cleanup();
+		m_lightPassDsState->Cleanup();
 		m_pGeometryBuffers->Cleanup();
-		m_pDsShaderProgram->Cleanup();
-		m_pDsFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+		m_lightPassShaderProgram->Cleanup();
+		m_lightPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 		{
-			m_pDsTexAttachs[i]->Detach();
+			m_lightPassTexAttachs[i]->Detach();
 		}
 
-		m_pDsDepthAttach->Detach();
-		m_pDsFrameBuffer->Unbind();
+		m_lightPassDepthAttach->Detach();
+		m_lightPassFrameBuffer->Unbind();
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 		{
-			m_pDsTextures[i]->Cleanup();
+			m_lightPassTextures[i]->Cleanup();
 		}
 
-		m_pDsBufDepth->Cleanup();
+		m_lightPassBufDepth->Cleanup();
 	}
 
 	bool RenderTechnique::DoBeginRender()
 	{
-		return m_pDsFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );;
+		return m_lightPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );;
 	}
 
 	bool RenderTechnique::DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime )
 	{
-		m_pDsGeometricState->Apply();
+		m_geometryPassDsState->Apply();
 		return RenderTechniqueBase::DoRender( p_scene, p_camera, p_ePrimitives, p_dFrameTime );
 	}
 
@@ -580,67 +572,65 @@ namespace Deferred
 	{
 		Size const & l_size = m_pRenderTarget->GetSize();
 		Size l_halfSize( l_size.width() / 2, l_size.height() / 2 );
-		Pipeline * l_pPipeline = m_pRenderSystem->GetPipeline();
-		ContextRPtr l_pContext = m_pRenderSystem->GetCurrentContext();
-		m_pDsFrameBuffer->Unbind();
+		Pipeline & l_pipeline = m_renderSystem->GetPipeline();
+		ContextRPtr l_pContext = m_renderSystem->GetCurrentContext();
+		m_lightPassFrameBuffer->Unbind();
 
-		if ( m_pViewport )
+		if ( m_viewport )
 		{
 			bool l_bReturn = true;
 			m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
-			m_pDsLightsState->Apply();
+			m_lightPassDsState->Apply();
 			//m_pRenderTarget->GetDepthStencilState()->Apply();
 			m_pRenderTarget->GetRasteriserState()->Apply();
 			//m_pRenderTarget->GetRenderer()->BeginScene();
-			l_pContext->SetClearColour( m_pRenderSystem->GetTopScene()->GetBackgroundColour() );
+			l_pContext->SetClearColour( m_renderSystem->GetTopScene()->GetBackgroundColour() );
 			l_pContext->Clear( eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL );
-			m_pViewport->SetSize( m_size );
-			m_pViewport->Render();
+			m_viewport->SetSize( m_size );
+			m_viewport->Render();
 			l_pContext->CullFace( eFACE_BACK );
-			l_pPipeline->MatrixMode( eMTXMODE_MODEL );
-			l_pPipeline->LoadIdentity();
-			l_pPipeline->MatrixMode( eMTXMODE_VIEW );
-			l_pPipeline->LoadIdentity();
 
 			if ( m_pShaderCamera )
 			{
 				Point3r l_position = m_pRenderTarget->GetCamera()->GetParent()->GetDerivedPosition();
 				m_pShaderCamera->SetValue( l_position );
-				m_pDsShaderProgram->Bind( 0, 1 );
-				l_pPipeline->ApplyMatrices( *m_pDsMatrices.lock(), 0xFFFFFFFFFFFFFFFF );
+				m_lightPassShaderProgram->Bind( 0, 1 );
+				l_pipeline.ApplyMatrices( *m_lightPassMatrices.lock(), 0xFFFFFFFFFFFFFFFF );
 
 #if DEBUG_BUFFERS
+
 				int l_width = int( m_size.width() );
 				int l_height = int( m_size.height() );
 				int l_thirdWidth = int( l_width / 3.0f );
 				int l_twoThirdWidth = int( 2.0f * l_width / 3.0f );
 				int l_halfHeight = int( l_height / 2.0f );
-				m_pDsTexAttachs[eDS_TEXTURE_POSITION]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( 0, 0, l_thirdWidth, l_halfHeight ), eINTERPOLATION_MODE_LINEAR );
-				m_pDsTexAttachs[eDS_TEXTURE_DIFFUSE]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( l_thirdWidth, 0, l_twoThirdWidth, l_halfHeight ), eINTERPOLATION_MODE_LINEAR );
-				m_pDsTexAttachs[eDS_TEXTURE_NORMALS]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( l_twoThirdWidth, 0, l_width, l_halfHeight ), eINTERPOLATION_MODE_LINEAR );
-				m_pDsTexAttachs[eDS_TEXTURE_TANGENT]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( 0, l_halfHeight, l_thirdWidth, l_height ), eINTERPOLATION_MODE_LINEAR );
-				m_pDsTexAttachs[eDS_TEXTURE_BITANGENT]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( l_thirdWidth, l_halfHeight, l_twoThirdWidth, l_height ), eINTERPOLATION_MODE_LINEAR );
-				m_pDsTexAttachs[eDS_TEXTURE_SPECULAR]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( l_twoThirdWidth, l_halfHeight, l_width, l_height ), eINTERPOLATION_MODE_LINEAR );
+				m_lightPassTexAttachs[eDS_TEXTURE_POSITION]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( 0, 0, l_thirdWidth, l_halfHeight ), eINTERPOLATION_MODE_LINEAR );
+				m_lightPassTexAttachs[eDS_TEXTURE_DIFFUSE]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( l_thirdWidth, 0, l_twoThirdWidth, l_halfHeight ), eINTERPOLATION_MODE_LINEAR );
+				m_lightPassTexAttachs[eDS_TEXTURE_NORMALS]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( l_twoThirdWidth, 0, l_width, l_halfHeight ), eINTERPOLATION_MODE_LINEAR );
+				m_lightPassTexAttachs[eDS_TEXTURE_TANGENT]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( 0, l_halfHeight, l_thirdWidth, l_height ), eINTERPOLATION_MODE_LINEAR );
+				m_lightPassTexAttachs[eDS_TEXTURE_BITANGENT]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( l_thirdWidth, l_halfHeight, l_twoThirdWidth, l_height ), eINTERPOLATION_MODE_LINEAR );
+				m_lightPassTexAttachs[eDS_TEXTURE_SPECULAR]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( l_twoThirdWidth, l_halfHeight, l_width, l_height ), eINTERPOLATION_MODE_LINEAR );
+
 #else
 
 				for ( int i = 0; i < eDS_TEXTURE_COUNT && l_bReturn; i++ )
 				{
-					l_bReturn = m_pDsTextures[i]->Bind();
+					l_bReturn = m_lightPassTextures[i]->Bind();
 				}
 
 				if ( l_bReturn )
 				{
-					m_pGeometryBuffers->Draw( eTOPOLOGY_TRIANGLES, m_pDsShaderProgram, m_pGeometryBuffers->GetIndexBuffer().GetSize(), 0 );
+					m_pGeometryBuffers->Draw( eTOPOLOGY_TRIANGLES, m_lightPassShaderProgram, m_arrayVertex.size(), 0 );
 
 					for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 					{
-						m_pDsTextures[i]->Unbind();
+						m_lightPassTextures[i]->Unbind();
 					}
 				}
 
 #endif
 
-				m_pDsShaderProgram->Unbind();
+				m_lightPassShaderProgram->Unbind();
 			}
 
 			//m_pRenderTarget->EndScene();
@@ -648,49 +638,27 @@ namespace Deferred
 		}
 	}
 
-	String RenderTechnique::DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const
-	{
-		if ( !m_pRenderSystem )
-		{
-			CASTOR_EXCEPTION( "No renderer selected" );
-		}
-
-#if C3D_HAS_GL_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
-		{
-			return DoGetGlVertexShaderSource( p_uiProgramFlags );
-		}
-#endif
-
-#if C3D_HAS_D3D11_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
-		{
-			return DoGetD3D11VertexShaderSource( p_uiProgramFlags );
-		}
-#endif
-
-		CASTOR_EXCEPTION( "No renderer selected" );
-	}
-
 	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_uiFlags )const
 	{
-		if ( !m_pRenderSystem )
+		if ( !m_renderSystem )
 		{
 			CASTOR_EXCEPTION( "No renderer selected" );
 		}
 
 #if C3D_HAS_GL_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
+
+		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
 			return DoGetGlPixelShaderSource( p_uiFlags );
 		}
 #endif
-
 #if C3D_HAS_D3D11_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
+
+		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
 		{
 			return DoGetD3D11PixelShaderSource( p_uiFlags );
 		}
+
 #endif
 
 		CASTOR_EXCEPTION( "No renderer selected" );
@@ -698,23 +666,26 @@ namespace Deferred
 
 	String RenderTechnique::DoGetLightPassVertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
-		if ( !m_pRenderSystem )
+		if ( !m_renderSystem )
 		{
 			CASTOR_EXCEPTION( "No renderer selected" );
 		}
 
 #if C3D_HAS_GL_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
+
+		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
 			return DoGetGlLightPassVertexShaderSource( p_uiProgramFlags );
 		}
-#endif
 
+#endif
 #if C3D_HAS_D3D11_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
+
+		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
 		{
 			return DoGetD3D11LightPassVertexShaderSource( p_uiProgramFlags );
 		}
+
 #endif
 
 		CASTOR_EXCEPTION( "No renderer selected" );
@@ -722,302 +693,310 @@ namespace Deferred
 
 	String RenderTechnique::DoGetLightPassPixelShaderSource( uint32_t p_uiFlags )const
 	{
-		if ( !m_pRenderSystem )
+		if ( !m_renderSystem )
 		{
 			CASTOR_EXCEPTION( "No renderer selected" );
 		}
 
 #if C3D_HAS_GL_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
+
+		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
 			return DoGetGlLightPassPixelShaderSource( p_uiFlags );
 		}
-#endif
 
+#endif
 #if C3D_HAS_D3D11_RENDERER
-		if ( m_pRenderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
+
+		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
 		{
 			return DoGetD3D11LightPassPixelShaderSource( p_uiFlags );
 		}
+
 #endif
 
 		CASTOR_EXCEPTION( "No renderer selected" );
 	}
 
 #if C3D_HAS_GL_RENDERER
-	String RenderTechnique::DoGetGlVertexShaderSource( uint32_t p_uiProgramFlags )const
-	{
-		String	l_strReturn;
-		GLSL::VariablesBase * l_pVariables = GLSL::VariablesBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		GLSL::ConstantsBase * l_pConstants = GLSL::ConstantsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::KeywordsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-
-		String l_strVersion = l_pKeywords->GetVersion();
-		String l_strAttribute0 = l_pKeywords->GetAttribute( 0 );
-		String l_strAttribute1 = l_pKeywords->GetAttribute( 1 );
-		String l_strAttribute2 = l_pKeywords->GetAttribute( 2 );
-		String l_strAttribute3 = l_pKeywords->GetAttribute( 3 );
-		String l_strAttribute4 = l_pKeywords->GetAttribute( 4 );
-		String l_strAttribute5 = l_pKeywords->GetAttribute( 5 );
-		String l_strIn = l_pKeywords->GetIn();
-		String l_strOut = l_pKeywords->GetOut();
-
-		String l_strVertexInMatrices = l_pConstants->Matrices();
-		String l_strVertexOutMatrices = l_pVariables->GetVertexOutMatrices();
-		String l_strVertexMatrixCopy = l_pVariables->GetVertexMatrixCopy();
-		string::replace( l_strVertexOutMatrices, cuT( "out" ), l_strOut );
-		l_strReturn += l_strVersion;
-		l_strReturn += l_strAttribute0 + cuT( " <vec4> vertex;\n" );
-		l_strReturn += l_strAttribute1 + cuT( " <vec3> normal;\n" );
-		l_strReturn += l_strAttribute2 + cuT( " <vec3> tangent;\n" );
-		l_strReturn += l_strAttribute3 + cuT( " <vec3> bitangent;\n" );
-		l_strReturn += l_strAttribute4 + cuT( " <vec3> texture;\n" );
-
-		if ( ( p_uiProgramFlags & ePROGRAM_FLAG_INSTANCIATION ) == ePROGRAM_FLAG_INSTANCIATION )
-		{
-			l_strReturn += l_strAttribute5	+ cuT( "    <mat4>   transform;\n" );
-		}
-
-		l_strReturn += l_strVertexInMatrices;
-		l_strReturn += l_strOut + cuT( " <vec3> vtx_vertex;\n" );
-		l_strReturn += l_strOut + cuT( " <vec3> vtx_normal;\n" );
-		l_strReturn += l_strOut + cuT( " <vec3> vtx_tangent;\n" );
-		l_strReturn += l_strOut + cuT( " <vec3> vtx_bitangent;\n" );
-		l_strReturn += l_strOut + cuT( " <vec3> vtx_texture;\n" );
-		l_strReturn += l_strVertexOutMatrices;
-		l_strReturn += cuT( "void main()\n" );
-		l_strReturn += cuT( "{\n" );
-		l_strReturn += l_strVertexMatrixCopy;
-		l_strReturn += cuT( "	vtx_texture = texture;\n" );
-
-		if ( ( p_uiProgramFlags & ePROGRAM_FLAG_INSTANCIATION ) == ePROGRAM_FLAG_INSTANCIATION )
-		{
-			l_strReturn += cuT( "	<mat4> l_mtxMV = c3d_mtxView * transform;\n" );
-			l_strReturn += cuT( "	<mat4> l_mtxN = transpose( inverse( l_mtxMV ) );\n" );
-			l_strReturn += cuT( "	vtx_normal = normalize( (l_mtxN * <vec4>( normal, 0.0 )).xyz );\n" );
-			l_strReturn += cuT( "	vtx_tangent = normalize( (l_mtxN * <vec4>( tangent, 0.0 )).xyz );\n" );
-			l_strReturn += cuT( "	vtx_bitangent = normalize( (l_mtxN * <vec4>( bitangent, 0.0 )).xyz );\n" );
-			l_strReturn += cuT( "	<vec4> l_v4Vtx = l_mtxMV * vertex;\n" );
-			l_strReturn += cuT( "	gl_Position = c3d_mtxProjection * l_mtxMV * vertex;\n" );
-		}
-		else
-		{
-			l_strReturn += cuT( "	vtx_normal = normalize( (c3d_mtxNormal * <vec4>( normal, 0.0 )).xyz );\n" );
-			l_strReturn += cuT( "	vtx_tangent = normalize( (c3d_mtxNormal * <vec4>( tangent, 0.0 )).xyz );\n" );
-			l_strReturn += cuT( "	vtx_bitangent = normalize( (c3d_mtxNormal * <vec4>( bitangent, 0.0 )).xyz );\n" );
-			l_strReturn += cuT( "	<vec4> l_v4Vtx = c3d_mtxModelView * vertex;\n" );
-			l_strReturn += cuT( "	gl_Position = c3d_mtxProjectionModelView * vertex;\n" );
-		}
-
-		l_strReturn += cuT( "}\n" );
-
-		string::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetStdLayout( 140 ) );
-		return l_strReturn;
-	}
 
 	String RenderTechnique::DoGetGlPixelShaderSource( uint32_t p_uiFlags )const
 	{
-		String	l_strReturn;
-		GLSL::VariablesBase * l_pVariables = GLSL::VariablesBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		GLSL::ConstantsBase * l_pConstants = GLSL::ConstantsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::KeywordsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
+		using namespace GLSL;
 
-		String l_strVersion = l_pKeywords->GetVersion();
-		String l_strIn = l_pKeywords->GetIn();
-		String l_strOut = l_pKeywords->GetOut();
-		String l_strTexture1D = l_pKeywords->GetTexture1D();
-		String l_strTexture2D = l_pKeywords->GetTexture2D();
-		String l_strTexture3D = l_pKeywords->GetTexture3D();
+		GlslWriter l_writer( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl(), eSHADER_TYPE_VERTEX );
+		l_writer << GLSL::Version() << Endl();
 
-		String l_strPixelDeclarations = deferredShaderSource.GetGSPixelDeclarations();
-		String l_strPixelMainDeclarations = deferredShaderSource.GetGSPixelMainDeclarations();
-		String l_strPixelMainLightsLoopAfterLightDir = deferredShaderSource.GetGSPixelMainLightsLoopAfterLightDir();
-		String l_strPixelMainLightsLoopEnd;
-		String l_strPixelMainEnd = deferredShaderSource.GetGSPixelMainEnd();
-		String l_strPixelInMatrices = l_pConstants->Matrices();
-		String l_strPixelScene = l_pConstants->Scene();
-		String l_strPixelPass = l_pConstants->Pass();
-		string::replace( l_strPixelInMatrices, cuT( "in" ), l_strIn );
-		l_strReturn += l_strVersion;
-		l_strReturn += l_strPixelInMatrices;
-		l_strReturn += l_strPixelScene;
-		l_strReturn += l_strPixelPass;
-		l_strReturn += l_strIn + cuT( " <vec3> vtx_vertex;\n" );
-		l_strReturn += l_strIn + cuT( " <vec3> vtx_normal;\n" );
-		l_strReturn += l_strIn + cuT( " <vec3> vtx_tangent;\n" );
-		l_strReturn += l_strIn + cuT( " <vec3> vtx_bitangent;\n" );
-		l_strReturn += l_strIn + cuT( " <vec3> vtx_texture;\n" );
-		l_strReturn += l_strPixelDeclarations;
-		l_strReturn += l_pKeywords->GetGSOutPositionDecl();
-		l_strReturn += l_pKeywords->GetGSOutDiffuseDecl();
-		l_strReturn += l_pKeywords->GetGSOutNormalDecl();
-		l_strReturn += l_pKeywords->GetGSOutTangentDecl();
-		l_strReturn += l_pKeywords->GetGSOutBitangentDecl();
-		l_strReturn += l_pKeywords->GetGSOutSpecularDecl();
-		l_strReturn += l_pKeywords->GetGSOutEmissiveDecl();
+		// UBOs
+		UBO_MATRIX( l_writer );
+		UBO_SCENE( l_writer );
+		UBO_PASS( l_writer );
+
+		// Fragment Intputs
+		IN( l_writer, Vec3, vtx_vertex );
+		IN( l_writer, Vec3, vtx_normal );
+		IN( l_writer, Vec3, vtx_tangent );
+		IN( l_writer, Vec3, vtx_bitangent );
+		IN( l_writer, Vec3, vtx_texture );
+
+		UNIFORM( l_writer, Sampler1D, c3d_sLights );
+		Sampler2D c3d_mapColour;
+		Sampler2D c3d_mapAmbient;
+		Sampler2D c3d_mapDiffuse;
+		Sampler2D c3d_mapNormal;
+		Sampler2D c3d_mapOpacity;
+		Sampler2D c3d_mapSpecular;
+		Sampler2D c3d_mapHeight;
+		Sampler2D c3d_mapGloss;
+
+		Lighting< BlinnPhongLightingModel > l_lighting;
+		l_lighting.Declare_Light( l_writer );
+		l_lighting.Declare_GetLight( l_writer );
+		l_lighting.Declare_ComputeLightDirection( l_writer );
+		l_lighting.Declare_ComputeFresnel( l_writer );
+
+		if ( ( p_uiFlags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
+		{
+			l_lighting.Declare_Bump( l_writer );
+		}
 
 		if ( p_uiFlags != 0 )
 		{
 			if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
 			{
-				l_strReturn += cuT( "uniform sampler2D c3d_mapColour;\n" );
-				l_strPixelMainDeclarations += cuT( "	vec4 l_v4MapColour = <texture2D>( c3d_mapColour, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
-				l_strPixelMainLightsLoopEnd += cuT( "	l_v4Diffuse *= l_v4MapColour;\n" );
+				c3d_mapColour = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapColour" ) );
 			}
 
 			if ( ( p_uiFlags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
 			{
-				l_strReturn += cuT( "uniform sampler2D c3d_mapAmbient;\n" );
-				l_strPixelMainDeclarations += cuT( "	vec4    l_v4MapAmbient = <texture2D>( c3d_mapAmbient, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
-				l_strPixelMainLightsLoopEnd += cuT( "	l_v4Diffuse *= l_v4MapAmbient;\n" );
+				c3d_mapAmbient = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapAmbient" ) );
 			}
 
 			if ( ( p_uiFlags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
 			{
-				l_strReturn += cuT( "uniform sampler2D c3d_mapDiffuse;\n" );
-				l_strPixelMainDeclarations += cuT( "	vec4 l_v4MapDiffuse = <texture2D>( c3d_mapDiffuse, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
-				l_strPixelMainLightsLoopEnd += cuT( "	l_v4Diffuse *= l_v4MapDiffuse;\n" );
+				c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapDiffuse" ) );
 			}
 
 			if ( ( p_uiFlags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
 			{
-				l_strReturn += cuT( "uniform sampler2D c3d_mapNormal;\n" );
-				l_strPixelMainDeclarations += cuT( "	vec4 l_v4MapNormal = <texture2D>( c3d_mapNormal, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
-				l_strPixelMainDeclarations += cuT( "	l_v4Normal += vec4( normalize( (l_v4MapNormal.xyz * 2.0 - 1.0) ), 0 );\n" );
-				l_strPixelMainDeclarations += cuT( "	l_v4Tangent -= vec4( l_v4Normal.xyz * dot( l_v4Tangent.xyz, l_v4Normal.xyz ), 0 );\n" );
-				l_strPixelMainDeclarations += cuT( "	l_v4Bitangent = vec4( cross( l_v4Normal.xyz, l_v4Tangent.xyz ), 1 );\n" );
+				c3d_mapNormal = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNormal" ) );
 			}
 
 			if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
 			{
-				l_strReturn += cuT( "uniform sampler2D c3d_mapOpacity;\n" );
-				l_strPixelMainDeclarations += cuT( "	vec4 l_v4MapOpacity = <texture2D>( c3d_mapOpacity, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
-				l_strPixelMainLightsLoopEnd += cuT( "	l_fAlpha = l_v4MapOpacity.r * c3d_fMatOpacity;\n" );
+				c3d_mapOpacity = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapOpacity" ) );
 			}
 
 			if ( ( p_uiFlags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
 			{
-				l_strReturn += cuT( "uniform sampler2D c3d_mapSpecular;\n" );
-				l_strPixelMainDeclarations += cuT( "	vec4 l_v4MapSpecular = <texture2D>( c3d_mapSpecular, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
-				l_strPixelMainLightsLoopEnd += cuT( "	l_v4Specular.xyz *= l_v4MapSpecular.xyz;\n" );
+				c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSpecular" ) );
 			}
 
 			if ( ( p_uiFlags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
 			{
-				l_strReturn += cuT( "uniform sampler2D c3d_mapHeight;\n" );
-				l_strPixelMainDeclarations += cuT( "	vec4 l_v4MapHeight = <texture2D>( c3d_mapHeight, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
+				c3d_mapHeight = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapHeight" ) );
 			}
 
 			if ( ( p_uiFlags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
 			{
-				l_strReturn += cuT( "uniform sampler2D c3d_mapGloss;\n" );
-				l_strPixelMainDeclarations += cuT( "	vec4 l_v4MapGloss = <texture2D>( c3d_mapGloss, vec2( vtx_texture.x, vtx_texture.y ) );\n" );
-				l_strPixelMainLightsLoopEnd += cuT( "	l_v4Specular.w *= l_v4MapGloss.x;\n" );
+				c3d_mapGloss = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapGloss" ) );
 			}
 		}
+		
+		uint32_t l_index = 0;
+		FRAG_OUTPUT( l_writer, Vec4, out_c3dPosition, l_index++ );
+		FRAG_OUTPUT( l_writer, Vec4, out_c3dDiffuse, l_index++ );
+		FRAG_OUTPUT( l_writer, Vec4, out_c3dNormal, l_index++ );
+		FRAG_OUTPUT( l_writer, Vec4, out_c3dTangent, l_index++ );
+		FRAG_OUTPUT( l_writer, Vec4, out_c3dBitangent, l_index++ );
+		FRAG_OUTPUT( l_writer, Vec4, out_c3dSpecular, l_index++ );
+		FRAG_OUTPUT( l_writer, Vec4, out_c3dEmissive, l_index++ );
 
-		l_strPixelMainLightsLoopEnd += cuT( "	" ) + l_pKeywords->GetGSOutPositionName() + cuT( " = vec4( l_v4Position.xyz, 1 );\n" );
-		l_strPixelMainLightsLoopEnd += cuT( "	" ) + l_pKeywords->GetGSOutDiffuseName() + cuT( " = vec4( l_v4Diffuse.xyz, 1 );\n" );
-		l_strPixelMainLightsLoopEnd += cuT( "	" ) + l_pKeywords->GetGSOutNormalName() + cuT( " = vec4( l_v4Normal.xyz, 1 );\n" );
-		l_strPixelMainLightsLoopEnd += cuT( "	" ) + l_pKeywords->GetGSOutTangentName() + cuT( " = vec4( l_v4Tangent.xyz, 1 );\n" );
-		l_strPixelMainLightsLoopEnd += cuT( "	" ) + l_pKeywords->GetGSOutBitangentName() + cuT( " = vec4( l_v4Bitangent.xyz, 1 );\n" );
-		l_strPixelMainLightsLoopEnd += cuT( "	" ) + l_pKeywords->GetGSOutSpecularName() + cuT( " = vec4( l_v4Specular );\n" );
-		l_strPixelMainLightsLoopEnd += cuT( "	" ) + l_pKeywords->GetGSOutEmissiveName() + cuT( " = vec4( l_v4Emissive );\n" );
-		l_strReturn += l_strPixelMainDeclarations + l_strPixelMainLightsLoopAfterLightDir + l_strPixelMainLightsLoopEnd + l_strPixelMainEnd;
-		//		Logger::LogDebug( l_strReturn );
+		std::function< void() > l_main = [&]()
+		{
+			LOCALE_ASSIGN( l_writer, Vec4, l_v3Position, vtx_vertex.xyz() );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, normalize( vec3( vtx_tangent.x(), vtx_tangent.y(), vtx_tangent.z() ) ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, normalize( vec3( vtx_bitangent.x(), vtx_bitangent.y(), vtx_bitangent.z() ) ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, vec3( Float( &l_writer, 0.0f ), 0, 0 ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, vec3( Float( 0.0f ), 0, 0 ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Specular, vec4( Float( 0.0f ), 0, 0, 0 ) );
+			//LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, normalize( vec3( vtx_vertex.x(), vtx_vertex.y(), vtx_vertex.z() ) ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, normalize( c3d_v3CameraPosition - vec3( vtx_vertex.x(), vtx_vertex.y(), vtx_vertex.z() ) ) );
+			LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
+			LOCALE_ASSIGN( l_writer, Float, l_fShininess, c3d_fMatShininess );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.xyz() );
+			l_v3Diffuse = c3d_v4MatDiffuse;
 
-		string::replace( l_strReturn, cuT( "<texture1D>" ), l_strTexture1D );
-		string::replace( l_strReturn, cuT( "<texture2D>" ), l_strTexture2D );
-		string::replace( l_strReturn, cuT( "<texture3D>" ), l_strTexture3D );
-		string::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetStdLayout( 140 ) );
-		return l_strReturn;
+			if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
+			{
+				l_v3Diffuse *= texture2D( c3d_mapColour, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz();
+			}
+
+			if ( ( p_uiFlags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
+			{
+				l_v3Diffuse *= texture2D( c3d_mapAmbient, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz();
+			}
+
+			if ( ( p_uiFlags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
+			{
+				l_v3Diffuse *= texture2D( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz();
+			}
+
+			if ( ( p_uiFlags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
+			{
+				l_v3Normal += normalize( texture2D( c3d_mapNormal, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz() * 2.0 - 1.0 );
+				l_v3Tangent -= l_v3Normal * dot( l_v3Tangent, l_v3Normal );
+				l_v3Bitangent = cross( l_v3Normal, l_v3Tangent );
+			}
+
+			if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
+			{
+				l_fAlpha = texture2D( c3d_mapOpacity, vec2( vtx_texture.x(), vtx_texture.y() ) ).r() * c3d_fMatOpacity;
+			}
+
+			if ( ( p_uiFlags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
+			{
+				l_v4Specular.xyz() *= texture2D( c3d_mapSpecular, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz();
+			}
+
+			if ( ( p_uiFlags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
+			{
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapHeight, texture2D( c3d_mapHeight, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz() );
+			}
+
+			if ( ( p_uiFlags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
+			{
+				l_v4Specular.w() *= texture2D( c3d_mapGloss, vec2( vtx_texture.x(), vtx_texture.y() ) ).x();
+			}
+
+			out_c3dPosition = vec4( l_v3Position, 1 );
+			out_c3dDiffuse = vec4( l_v3Diffuse, 1 );
+			out_c3dNormal = vec4( l_v3Normal, 1 );
+			out_c3dTangent = vec4( l_v3Tangent, 1 );
+			out_c3dBitangent = vec4( l_v3Bitangent, 1 );
+			out_c3dSpecular = vec4( l_v4Specular );
+			out_c3dEmissive = vec4( l_v3Emissive );
+		};
+
+		l_writer.Implement_Function< void >( cuT( "main" ), l_main );
+		return l_writer.Finalise();
 	}
 
 	String RenderTechnique::DoGetGlLightPassVertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
-		String	l_strReturn;
-		GLSL::VariablesBase * l_pVariables = GLSL::VariablesBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		GLSL::ConstantsBase * l_pConstants = GLSL::ConstantsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::KeywordsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
+		using namespace GLSL;
 
-		String l_strVersion = l_pKeywords->GetVersion();
-		String l_strAttribute0 = l_pKeywords->GetAttribute( 0 );
-		String l_strAttribute1 = l_pKeywords->GetAttribute( 1 );
-		String l_strAttribute2 = l_pKeywords->GetAttribute( 2 );
-		String l_strAttribute3 = l_pKeywords->GetAttribute( 3 );
-		String l_strAttribute4 = l_pKeywords->GetAttribute( 4 );
-		String l_strAttribute5 = l_pKeywords->GetAttribute( 5 );
-		String l_strIn = l_pKeywords->GetIn();
-		String l_strOut = l_pKeywords->GetOut();
+		GlslWriter l_writer( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl(), eSHADER_TYPE_VERTEX );
+		l_writer << GLSL::Version() << Endl();
 
-		String l_strVertexInMatrices = l_pConstants->Matrices();
-		String l_strVertexOutMatrices = l_pVariables->GetVertexOutMatrices();
-		String l_strVertexMatrixCopy = l_pVariables->GetVertexMatrixCopy();
-		string::replace( l_strVertexOutMatrices, cuT( "out" ), l_strOut );
-		l_strReturn += l_strVersion;
-		l_strReturn += l_strAttribute0 + cuT( " <vec4> vertex;\n" );
-		l_strReturn += l_strAttribute1 + cuT( " <vec2> texture;\n" );
-		l_strReturn += l_strVertexInMatrices;
-		l_strReturn += l_strOut + cuT( " <vec2> vtx_texture;\n" );
-		l_strReturn += l_strVertexOutMatrices;
-		l_strReturn += cuT( "void main( void )\n" );
-		l_strReturn += cuT( "{\n" );
-		l_strReturn += l_strVertexMatrixCopy;
-		l_strReturn += cuT( "	<vec4> position = c3d_mtxProjectionModelView * vertex;\n" );
-		l_strReturn += cuT( "	gl_Position = vec4( position.x, position.y, position.z, position.w );\n" );
-		l_strReturn += cuT( "	vtx_texture = texture;\n" );
-		l_strReturn += cuT( "}\n" );
+		// Vertex inputs
+		ATTRIBUTE( l_writer, Vec4, vertex );
+		ATTRIBUTE( l_writer, Vec3, texture );
 
-		string::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetStdLayout( 140 ) );
-		return l_strReturn;
+		// UBOs
+		UBO_MATRIX( l_writer );
+
+		// Outputs
+		OUT( l_writer, Vec3, vtx_texture );
+		l_writer << Legacy_MatrixOut();
+
+		std::function< void() > l_main = [&]()
+		{
+			l_writer << Legacy_MatrixCopy();
+			vtx_texture = texture;
+			LOCALE_ASSIGN( l_writer, Vec4, position, c3d_mtxProjectionModelView * vertex );
+			BUILTIN( l_writer, Vec4, gl_Position ) = vec4( position.x(), position.y(), position.z(), position.w() );
+		};
+
+		l_writer.Implement_Function< void >( cuT( "main" ), l_main );
+		return l_writer.Finalise();
 	}
 
 	String RenderTechnique::DoGetGlLightPassPixelShaderSource( uint32_t p_uiFlags )const
 	{
-		String	l_strReturn;
-		GLSL::VariablesBase * l_pVariables = GLSL::VariablesBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		GLSL::ConstantsBase * l_pConstants = GLSL::ConstantsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
-		std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::KeywordsBase::Get( static_cast< GlRenderSystem * >( m_pRenderSystem )->GetOpenGl() );
+		using namespace GLSL;
 
-		String l_strVersion = l_pKeywords->GetVersion();
-		String l_strIn = l_pKeywords->GetIn();
-		String l_strOut = l_pKeywords->GetOut();
-		String l_strTexture1D = l_pKeywords->GetTexture1D();
-		String l_strTexture2D = l_pKeywords->GetTexture2D();
-		String l_strTexture3D = l_pKeywords->GetTexture3D();
+		GlslWriter l_writer( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl(), eSHADER_TYPE_VERTEX );
+		l_writer << GLSL::Version() << Endl();
 
-		String l_strPixelInMatrices = l_pVariables->GetPixelInMatrices();
-		String l_strPixelScene = l_pConstants->Scene();
-		String l_strPixelPass = l_pConstants->Pass();
-		String l_strPixelMtxModelView = l_pVariables->GetPixelMtxModelView();
-		string::replace( l_strPixelInMatrices, cuT( "in" ), l_strIn );
-		l_strReturn += l_strVersion;
-		l_strReturn += l_strPixelInMatrices;
-		l_strReturn += l_strPixelScene;
-		l_strReturn += l_strPixelPass;
-		l_strReturn += l_pKeywords->GetPixelOut();
-		l_strReturn += cuT( "uniform sampler1D c3d_sLights;\n" );
-		l_strReturn += deferredShaderSource.GetLSPixelProgram();
-		string::replace( l_strReturn, cuT( "<pxlin_mtxModelView>" ), l_strPixelMtxModelView );
+		// UBOs
+		UBO_MATRIX( l_writer );
+		UBO_SCENE( l_writer );
+		UBO_PASS( l_writer );
 
-		string::replace( l_strReturn, cuT( "<texture1D>" ), l_strTexture1D );
-		string::replace( l_strReturn, cuT( "<texture2D>" ), l_strTexture2D );
-		string::replace( l_strReturn, cuT( "<texture3D>" ), l_strTexture3D );
-		string::replace( l_strReturn, cuT( "<layout>" ), l_pKeywords->GetStdLayout( 140 ) );
-		return l_strReturn;
+		UNIFORM( l_writer, Sampler1D, c3d_sLights );
+		UNIFORM( l_writer, Sampler2D, c3d_mapPosition );
+		UNIFORM( l_writer, Sampler2D, c3d_mapDiffuse );
+		UNIFORM( l_writer, Sampler2D, c3d_mapNormals );
+		UNIFORM( l_writer, Sampler2D, c3d_mapTangent );
+		UNIFORM( l_writer, Sampler2D, c3d_mapBitangent );
+		UNIFORM( l_writer, Sampler2D, c3d_mapSpecular );
+		UNIFORM( l_writer, Sampler2D, c3d_mapEmissive );
+
+		IN( l_writer, Vec2, vtx_texture );
+
+		LAYOUT( l_writer, Vec4, pxl_v4FragColor );
+
+		Lighting< BlinnPhongLightingModel > l_lighting;
+		l_lighting.Declare_Light( l_writer );
+		l_lighting.Declare_GetLight( l_writer );
+		l_lighting.Declare_ComputeLightDirection( l_writer );
+		l_lighting.Declare_ComputeFresnel( l_writer );
+		l_lighting.Declare_Bump( l_writer );
+
+		std::function< void() > l_main = [&]()
+		{
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Positions, texture2D( c3d_mapPosition, vtx_texture ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Diffuses, texture2D( c3d_mapDiffuse, vtx_texture ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Normals, texture2D( c3d_mapNormals, vtx_texture ) / 2.0 );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Tangents, texture2D( c3d_mapTangent, vtx_texture ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Bitangents, texture2D( c3d_mapBitangent, vtx_texture ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Speculars, texture2D( c3d_mapSpecular, vtx_texture ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Emissives, texture2D( c3d_mapEmissive, vtx_texture ) );
+			LOCALE_ASSIGN( l_writer, Float, l_fShininess, l_v4Speculars.w() );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Position, l_v4Positions.xyz() );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, l_v4Normals.xyz() );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, l_v4Bitangents.xyz() );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, l_v4Tangents.xyz() );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Specular, vec3( Float( &l_writer, 0 ), 0, 0 ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, vec3( Float( &l_writer, 0 ), 0, 0 ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, l_v4Emissives.xyz() );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpVec, neg( l_v3Position ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, vec3( dot( l_v3TmpVec, l_v3Tangent ), dot( l_v3TmpVec, l_v3Bitangent ), dot( l_v3TmpVec, l_v3Normal ) ) );
+			l_v3EyeVec = normalize( l_v3EyeVec );
+
+			FOR( l_writer, Int, i, 0, cuT( "i < c3d_iLightsCount" ), cuT( "++i" ) )
+			{
+				LOCALE_ASSIGN( l_writer, GLSL::Light, l_light, l_lighting.GetLight( i ) );
+				LOCALE_ASSIGN( l_writer, Vec4, l_v4LightDir, l_lighting.ComputeLightDirection( l_light, l_v3Position, c3d_mtxModelView ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3LightDir, l_v4LightDir.xyz() );
+				LOCALE_ASSIGN( l_writer, Float, l_fAttenuation, l_v4LightDir.w() );
+				l_lighting.Bump( l_v3Tangent, l_v3Bitangent, l_v3Normal, l_v3LightDir, l_fAttenuation );
+				LOCALE_ASSIGN( l_writer, Float, l_fLambert, max( Float( &l_writer, 0 ), dot( l_v3Normal, l_v3LightDir ) ) );
+				LOCALE_ASSIGN( l_writer, Vec4, l_v3MatSpecular, l_v4Speculars.xyz() );
+				LOCALE_ASSIGN( l_writer, Float, l_fFresnel, l_lighting.ComputeFresnel( l_fLambert, l_v3LightDir, l_v3Normal, l_v3EyeVec, l_fShininess, l_v3MatSpecular ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpDiffuse, l_light.m_v4Diffuse().xyz() * l_v4Diffuses.xyz() * l_fLambert );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpSpecular, l_light.m_v4Specular().xyz() * l_v3MatSpecular * l_fFresnel );
+				l_v3Diffuse += l_v3TmpDiffuse * l_fAttenuation;
+				l_v3Specular += l_v3TmpSpecular * l_fAttenuation;
+			}
+			ROF
+
+			pxl_v4FragColor = vec4( l_v3Emissive + l_v3Diffuse + l_v3Specular, 1 );
+		};
+
+		l_writer.Implement_Function< void >( cuT( "main" ), l_main );
+		return l_writer.Finalise();
 	}
+
 #endif
-
 #if C3D_HAS_D3D11_RENDERER
-	String RenderTechnique::DoGetD3D11VertexShaderSource( uint32_t p_uiProgramFlags )const
-	{
-		return g_ds.GetGSVertexProgram();
-	}
 
 	String RenderTechnique::DoGetD3D11PixelShaderSource( uint32_t p_uiFlags )const
 	{
 		String l_strReturn;
-		DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( m_pRenderSystem );
+		DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( m_renderSystem );
 		std::unique_ptr< UniformsBase > l_pUniforms = UniformsBase::Get( *l_renderSystem );
 		std::unique_ptr< InOutsBase > l_pInputs = InOutsBase::Get( *l_renderSystem );
 
@@ -1131,5 +1110,6 @@ namespace Deferred
 	{
 		return g_ds.GetLSPixelProgram();
 	}
+
 #endif
 }

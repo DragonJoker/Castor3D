@@ -49,15 +49,11 @@ namespace Castor
 		//!\~english Gradient to radian conversion constant	\~french Constante de conversion de gradient vers radian
 		CU_API static const double GradToRadian;
 		//!\~english Pi constant, expressed in real	\~french Constante pi exprimée en real
-		CU_API static const real Pi;
-		//!\~english Pi constant, expressed in double	\~french Constante pi exprimée en double
-		CU_API static const double PiDouble;
-		//!\~english Pi constant, expressed in float	\~french Constante pi exprimée en float
-		CU_API static const float PiFloat;
+		CU_API static const double Pi;
 		//!\~english Pi * 2 constant	\~french Constante pi * 2
-		CU_API static const real PiMult2;
+		CU_API static const double PiMult2;
 		//!\~english Pi / 2 constant	\~french Constante pi / 2
-		CU_API static const real PiDiv2;
+		CU_API static const double PiDiv2;
 
 	private:
 		/**
@@ -70,7 +66,7 @@ namespace Castor
 		 */
 		template< typename T >
 		Angle( T p_radians )
-			:	m_rAngle( real( p_radians )	)
+			: m_radians( double( p_radians ) )
 		{
 		}
 
@@ -182,7 +178,7 @@ namespace Castor
 		 *\brief		Conversion en degrés
 		 *\return		La valeur de l'angle, en degrés
 		 */
-		CU_API real Degrees()const;
+		CU_API double Degrees()const;
 		/**
 		 *\~english
 		 *\brief		Conversion to radians
@@ -191,7 +187,7 @@ namespace Castor
 		 *\brief		Conversion en radians
 		 *\return		La valeur de l'angle, en radians
 		 */
-		CU_API real Radians()const;
+		CU_API double Radians()const;
 		/**
 		 *\~english
 		 *\brief		Conversion to gradients
@@ -200,7 +196,7 @@ namespace Castor
 		 *\brief		Conversion en gradients
 		 *\return		La valeur de l'angle, en gradients
 		 */
-		CU_API real Grads()const;
+		CU_API double Grads()const;
 		/**
 		 *\~english
 		 *\brief		Sets this angle value from degrees
@@ -209,7 +205,7 @@ namespace Castor
 		 *\brief		Définit la valeur de cet angle à partir de degrés
 		 *\param[in]	p_rAngle	L'angle exprimé en degrés
 		 */
-		CU_API void Degrees( real p_rAngle );
+		CU_API void Degrees( double p_rAngle );
 		/**
 		 *\~english
 		 *\brief		Sets this angle value from radians
@@ -218,7 +214,7 @@ namespace Castor
 		 *\brief		Définit la valeur de cet angle à partir de radians
 		 *\param[in]	p_rAngle	L'angle exprimé en radians
 		 */
-		CU_API void Radians( real p_rAngle );
+		CU_API void Radians( double p_rAngle );
 		/**
 		 *\~english
 		 *\brief		Sets this angle value from gradients
@@ -227,7 +223,7 @@ namespace Castor
 		 *\brief		Définit la valeur de cet angle à partir de gradients
 		 *\param[in]	p_rAngle	L'angle exprimé en gradients
 		 */
-		CU_API void Grads( real p_rAngle );
+		CU_API void Grads( double p_rAngle );
 		/**
 		 *\~english
 		 *\brief		Trigonometric cosine
@@ -236,7 +232,7 @@ namespace Castor
 		 *\brief		Cosinus trigonométrique
 		 *\return		Le cosinus de cet angle
 		 */
-		CU_API real Cos()const;
+		CU_API double Cos()const;
 		/**
 		 *\~english
 		 *\brief		Trigonometric sine
@@ -245,7 +241,7 @@ namespace Castor
 		 *\brief		Sinus trigonométrique
 		 *\return		Le sinus de cet angle
 		 */
-		CU_API real Sin()const;
+		CU_API double Sin()const;
 		/**
 		 *\~english
 		 *\brief		Trigonometric tangent
@@ -254,7 +250,7 @@ namespace Castor
 		 *\brief		Tangente trigonométrique
 		 *\return		La tangente de cet angle
 		 */
-		CU_API real Tan()const;
+		CU_API double Tan()const;
 		/**
 		 *\~english
 		 *\brief		Hyperbolic cosine
@@ -263,7 +259,7 @@ namespace Castor
 		 *\brief		Cosinus hyperbolique
 		 *\return		Le cosinus hyperbolique de cet angle
 		 */
-		CU_API real Cosh()const;
+		CU_API double Cosh()const;
 		/**
 		 *\~english
 		 *\brief		Hyperbolic sine
@@ -272,7 +268,7 @@ namespace Castor
 		 *\brief		Sinus hyperbolique
 		 *\return		Le sinus hyperbolique de cet angle
 		 */
-		CU_API real Sinh()const;
+		CU_API double Sinh()const;
 		/**
 		 *\~english
 		 *\brief		Hyperbolic tangent
@@ -281,7 +277,7 @@ namespace Castor
 		 *\brief		Tangente hyperbolique
 		 *\return		La tangente hyperbolique de cet angle
 		 */
-		CU_API real Tanh()const;
+		CU_API double Tanh()const;
 		/**
 		 *\~english
 		 *\brief		Computes this angle's value from the given cosine value
@@ -290,7 +286,7 @@ namespace Castor
 		 *\brief		Calcule la valeur de cet angle à partir du cosinus donné
 		 *\param[in]	p_rValue	Le cosinus
 		 */
-		CU_API void ACos( real p_rValue );
+		CU_API void ACos( double p_rValue );
 		/**
 		 *\~english
 		 *\brief		Computes this angle's value from the given sine value
@@ -299,7 +295,7 @@ namespace Castor
 		 *\brief		Calcule la valeur de cet angle à partir du sinus donné
 		 *\param[in]	p_rValue	Le sinus
 		 */
-		CU_API void ASin( real p_rValue );
+		CU_API void ASin( double p_rValue );
 		/**
 		 *\~english
 		 *\brief		Computes this angle's value from the given tangent value
@@ -308,7 +304,7 @@ namespace Castor
 		 *\brief		Calcule la valeur de cet angle à partir de la tangente donné
 		 *\param[in]	p_rValue	La tangente
 		 */
-		CU_API void ATan( real p_rValue );
+		CU_API void ATan( double p_rValue );
 		/**
 		 *\~english
 		 *\brief		Addition assignment operator
@@ -363,7 +359,7 @@ namespace Castor
 		 *\param[in]	p_scalar	Le scalaire à multiplier à celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		CU_API Angle & operator *=( real p_scalar );
+		CU_API Angle & operator *=( double p_scalar );
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
@@ -374,10 +370,11 @@ namespace Castor
 		 *\param[in]	p_scalar	Le scalaire diviseur de celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		CU_API Angle & operator /=( real p_scalar );
+		CU_API Angle & operator /=( double p_scalar );
 
 	private:
-		real m_rAngle; // Angle in radian
+		//!\~english The angle value	\~french La valeur de l'angle
+		double m_radians;
 		friend CU_API bool operator ==( Angle const & p_angleA, Angle const & p_angleB );
 	};
 	/**
@@ -466,7 +463,7 @@ namespace Castor
 	 *\param[in]	p_scalar	Second opérande
 	 *\return		Le résultat de la multiplication
 	 */
-	CU_API Angle operator *( Angle const & p_angle, real p_scalar );
+	CU_API Angle operator *( Angle const & p_angle, double p_scalar );
 	/**
 	 *\~english
 	 *\brief		Division operator
@@ -479,7 +476,7 @@ namespace Castor
 	 *\param[in]	p_scalar	Second opérande
 	 *\return		Le résultat de la division
 	 */
-	CU_API Angle operator /( Angle const & p_angle, real p_scalar );
+	CU_API Angle operator /( Angle const & p_angle, double p_scalar );
 }
 
 #endif

@@ -395,6 +395,8 @@ namespace Castor
 		std::mutex m_mutexQueue;
 		//! The logging thread
 		std::thread m_logThread;
+		//! Tells if the logger is initialised
+		std::atomic_bool m_initialised;
 		//! Tells if the thread must be stopped
 		std::atomic_bool m_stopped;
 		//! Event raised when the thread is ended

@@ -36,14 +36,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Writes a subchunk value into a chunk
-		 *\param[in]	p_tValue		The values
+		 *\param[in]	p_value		The values
 		 *\param[in]	p_uiSize		The values size
 		 *\param[in]	p_eChunkType	The subchunk type
 		 *\param[in]	p_chunk			The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
-		 *\param[in]	p_tValue		Les valeurs
+		 *\param[in]	p_value		Les valeurs
 		 *\param[in]	p_uiSize		La taille des valeurs
 		 *\param[in]	p_eChunkType	Le type du subchunk
 		 *\param[in]	p_chunk			Le chunk
@@ -82,14 +82,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Writes a subchunk value into a chunk
-		 *\param[in]	p_tValue		The values
+		 *\param[in]	p_value		The values
 		 *\param[in]	p_uiCount		The values count
 		 *\param[in]	p_eChunkType	The subchunk type
 		 *\param[in]	p_chunk			The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
-		 *\param[in]	p_tValue		Les valeurs
+		 *\param[in]	p_value		Les valeurs
 		 *\param[in]	p_uiCount		Le nombre de valeurs
 		 *\param[in]	p_eChunkType	Le type du subchunk
 		 *\param[in]	p_chunk			Le chunk
@@ -102,39 +102,39 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Writes a subchunk value into a chunk
-		 *\param[in]	p_tValue		The values
+		 *\param[in]	p_value		The values
 		 *\param[in]	p_eChunkType	The subchunk type
 		 *\param[in]	p_chunk			The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
-		 *\param[in]	p_tValue		Les valeurs
+		 *\param[in]	p_value		Les valeurs
 		 *\param[in]	p_eChunkType	Le type du subchunk
 		 *\param[in]	p_chunk			Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< uint32_t Count >
-		bool operator()( T const( & p_tValue )[Count], eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		bool operator()( T const( & p_value )[Count], eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
-			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_tValue ), Count * sizeof( T ), p_eChunkType, p_chunk );
+			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value ), Count * sizeof( T ), p_eChunkType, p_chunk );
 		}
 		/**
 		 *\~english
 		 *\brief		Writes a subchunk value into a chunk
-		 *\param[in]	p_tValue		The value
+		 *\param[in]	p_value		The value
 		 *\param[in]	p_eChunkType	The subchunk type
 		 *\param[in]	p_chunk			The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
-		 *\param[in]	p_tValue		La valeur
+		 *\param[in]	p_value		La valeur
 		 *\param[in]	p_eChunkType	Le type du subchunk
 		 *\param[in]	p_chunk			Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( T const & p_tValue, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		bool operator()( T const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
-			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( &p_tValue ), sizeof( T ), p_eChunkType, p_chunk );
+			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( &p_value ), sizeof( T ), p_eChunkType, p_chunk );
 		}
 	};
 	/*!

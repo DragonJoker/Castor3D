@@ -47,7 +47,7 @@ namespace Dx11Render
 		D3D11_MAPPED_SUBRESOURCE l_mappedResource;
 		ID3D11Resource * l_pResource;
 		m_shaderResourceView->GetResource( &l_pResource );
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 		HRESULT l_hr = l_pDeviceContext->Map( l_pResource, 0, D3D11_MAP( DirectX11::GetLockFlags( p_mode ) ), 0, &l_mappedResource );
 		l_pResource->Release();
 
@@ -63,7 +63,7 @@ namespace Dx11Render
 	{
 		ID3D11Resource * l_pResource;
 		m_shaderResourceView->GetResource( &l_pResource );
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->Unmap( l_pResource, 0 );
 		l_pResource->Release();
 	}
@@ -87,7 +87,7 @@ namespace Dx11Render
 				l_desc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 				l_desc.Texture2D.MipSlice = 0;
 				l_hr = l_pDevice->CreateRenderTargetView( l_pTexture, NULL, &m_renderTargetView );
-				dxDebugName( m_renderSystem, m_renderTargetView, DynamicRTView );
+				dxTrack( m_renderSystem, m_renderTargetView, DynamicRTView );
 			}
 
 			D3D11_SHADER_RESOURCE_VIEW_DESC l_desc = {};
@@ -96,7 +96,7 @@ namespace Dx11Render
 			l_desc.Texture2D.MipLevels = 1;
 			l_desc.Texture2D.MostDetailedMip = 0;
 			l_hr = l_pDevice->CreateShaderResourceView( l_pTexture, &l_desc, &m_shaderResourceView );
-			dxDebugName( m_renderSystem, m_shaderResourceView, DynamicSRView );
+			dxTrack( m_renderSystem, m_shaderResourceView, DynamicSRView );
 			l_pTexture->Release();
 		}
 
@@ -106,17 +106,21 @@ namespace Dx11Render
 
 	bool DxDynamicTexture::DoBind( uint32_t p_index )
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 
-		if ( m_renderTargetView )
+#if DX_DEBUG_RT
+
+		if ( m_shaderResourceView )
 		{
 			ID3D11Resource * l_pResource;
-			m_renderTargetView->GetResource( &l_pResource );
+			m_shaderResourceView->GetResource( &l_pResource );
 			StringStream l_name;
-			l_name << cuT( "DynamicTexture_" ) << ( void * )this << cuT( "_RTV.png" );
+			l_name << cuT( "DynamicTexture_" ) << ( void * )this << cuT( "_SRV.png" );
 			D3DX11SaveTextureToFile( l_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
 			l_pResource->Release();
 		}
+
+#endif
 
 		return true;
 	}

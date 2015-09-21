@@ -22,9 +22,9 @@ namespace GlRender
 	{
 	}
 
-	bool GlGeometryBuffers::Draw( eTOPOLOGY p_ePrimitiveType, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex )
+	bool GlGeometryBuffers::Draw( eTOPOLOGY p_topology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index )
 	{
-		eGL_PRIMITIVE l_eMode = m_gl.Get( p_ePrimitiveType );
+		eGL_PRIMITIVE l_eMode = m_gl.Get( p_topology );
 
 		if ( p_pProgram && p_pProgram->HasObject( eSHADER_TYPE_HULL ) )
 		{
@@ -36,11 +36,11 @@ namespace GlRender
 		{
 			if ( m_pIndexBuffer )
 			{
-				m_gl.DrawElements( l_eMode, int( p_uiSize ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_uiIndex ) );
+				m_gl.DrawElements( l_eMode, int( p_uiSize ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ) );
 			}
 			else
 			{
-				m_gl.DrawArrays( l_eMode, int( p_uiIndex ), int( p_uiSize ) );
+				m_gl.DrawArrays( l_eMode, int( p_index ), int( p_uiSize ) );
 			}
 
 			Unbind();
@@ -49,7 +49,7 @@ namespace GlRender
 		return true;
 	}
 
-	bool GlGeometryBuffers::DrawInstanced( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex, uint32_t p_uiCount )
+	bool GlGeometryBuffers::DrawInstanced( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index, uint32_t p_uiCount )
 	{
 		eGL_PRIMITIVE l_eMode = m_gl.Get( p_eTopology );
 
@@ -68,11 +68,11 @@ namespace GlRender
 		{
 			if ( m_pIndexBuffer )
 			{
-				m_gl.DrawElementsInstanced( l_eMode, int( p_uiSize ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_uiIndex ), int( p_uiCount ) );
+				m_gl.DrawElementsInstanced( l_eMode, int( p_uiSize ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ), int( p_uiCount ) );
 			}
 			else
 			{
-				m_gl.DrawArraysInstanced( l_eMode, int( p_uiIndex ), int( p_uiSize ), int( p_uiCount ) );
+				m_gl.DrawArraysInstanced( l_eMode, int( p_index ), int( p_uiSize ), int( p_uiCount ) );
 			}
 
 			Unbind();
@@ -81,7 +81,17 @@ namespace GlRender
 		return true;
 	}
 
-	bool GlGeometryBuffers::Initialise()
+	bool GlGeometryBuffers::Bind()
+	{
+		return m_pfnBind();
+	}
+
+	void GlGeometryBuffers::Unbind()
+	{
+		m_pfnUnbind();
+	}
+
+	bool GlGeometryBuffers::DoInitialise()
 	{
 		bool l_return = false;
 #if !C3DGL_LIMIT_TO_2_1
@@ -153,7 +163,7 @@ namespace GlRender
 		return l_return;
 	}
 
-	void GlGeometryBuffers::Cleanup()
+	void GlGeometryBuffers::DoCleanup()
 	{
 #if !C3DGL_LIMIT_TO_2_1
 
@@ -168,15 +178,5 @@ namespace GlRender
 
 #endif
 		m_uiIndex = eGL_INVALID_INDEX;
-	}
-
-	bool GlGeometryBuffers::Bind()
-	{
-		return m_pfnBind();
-	}
-
-	void GlGeometryBuffers::Unbind()
-	{
-		m_pfnUnbind();
 	}
 }

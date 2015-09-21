@@ -16,22 +16,22 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Light::Light( LightFactory & p_factory, SceneSPtr p_pScene, eLIGHT_TYPE p_eLightType, SceneNodeSPtr p_pNode, String const & p_name )
-		: MovableObject( p_pScene, p_pNode, p_name, eMOVABLE_TYPE_LIGHT )
-		, m_pEngine( p_pScene->GetEngine() )
+	Light::Light( LightFactory & p_factory, SceneSPtr p_scene, eLIGHT_TYPE p_eLightType, SceneNodeSPtr p_node, String const & p_name )
+		: MovableObject( p_scene, p_node, p_name, eMOVABLE_TYPE_LIGHT )
+		, m_engine( p_scene->GetEngine() )
 		, m_enabled( false )
 	{
 		m_pCategory = p_factory.Create( p_eLightType );
 		m_pCategory->SetLight( this );
 
-		if ( p_pNode )
+		if ( p_node )
 		{
-			m_pCategory->SetPositionType( Point4f( p_pNode->GetPosition()[0], p_pNode->GetPosition()[1], p_pNode->GetPosition()[2], real( 0.0 ) ) );
+			m_pCategory->SetPositionType( Point4f( p_node->GetPosition()[0], p_node->GetPosition()[1], p_node->GetPosition()[2], real( 0.0 ) ) );
 		}
 	}
 
-	Light::Light( LightFactory & p_factory, SceneSPtr p_pScene, eLIGHT_TYPE p_eLightType )
-		:	Light( p_factory, p_pScene, p_eLightType, nullptr, String() )
+	Light::Light( LightFactory & p_factory, SceneSPtr p_scene, eLIGHT_TYPE p_eLightType )
+		:	Light( p_factory, p_scene, p_eLightType, nullptr, String() )
 	{
 	}
 

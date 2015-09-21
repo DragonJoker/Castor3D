@@ -13,8 +13,8 @@ namespace CastorShape
 		static wxString CUBE_DEPTH = _( "Face count" );
 	}
 
-	NewCubeDialog::NewCubeDialog( Engine * p_pEngine, wxWindow * parent, wxWindowID p_id )
-		: NewGeometryDialog( p_pEngine, parent, p_id, _( "New cube" ) )
+	NewCubeDialog::NewCubeDialog( Engine * p_engine, wxWindow * parent, wxWindowID p_id )
+		: NewGeometryDialog( p_engine, parent, p_id, _( "New cube" ) )
 	{
 		CUBE_WIDTH = _( "Radius" );
 		CUBE_HEIGHT = _( "Height" );

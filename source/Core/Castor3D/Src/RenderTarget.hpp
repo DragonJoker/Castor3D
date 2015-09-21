@@ -63,7 +63,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_tabs	Les tabulations à mettre à chaque début de ligne
 			 */
-			TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a render target into a text file
@@ -246,12 +246,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the RenderTechnique
-		 *\param[in]	p_strName	The RenderTechnique name
+		 *\param[in]	p_name	The RenderTechnique name
 		 *\~french
 		 *\brief		Définit la RenderTechnique
-		 *\param[in]	p_strName	La RenderTechnique name
+		 *\param[in]	p_name	La RenderTechnique name
 		 */
-		void SetTechnique( Castor::String const & p_strName );
+		void SetTechnique( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves the eTOPOLOGY
@@ -505,14 +505,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the Scene
-		 *\param[in]	p_pScene	The new Scene
+		 *\param[in]	p_scene	The new Scene
 		 *\~french
 		 *\brief		Définit la Scene
-		 *\param[in]	p_pScene	La nouvelle Scene
+		 *\param[in]	p_scene	La nouvelle Scene
 		 */
-		inline void	SetScene( SceneSPtr p_pScene )
+		inline void	SetScene( SceneSPtr p_scene )
 		{
-			m_pScene = p_pScene;
+			m_pScene = p_scene;
 		}
 		/**
 		 *\~english
@@ -702,7 +702,7 @@ namespace Castor3D
 		 */
 		virtual Engine * GetEngine()const
 		{
-			return m_pEngine;
+			return m_engine;
 		}
 
 	private:
@@ -714,7 +714,7 @@ namespace Castor3D
 
 	protected:
 		//!\~english The core engine	\~french Le moteur
-		Engine * m_pEngine;
+		Engine * m_engine;
 		//!\~english The render target type	\~french Type de RenderTarget
 		eTARGET_TYPE m_eTargetType;
 		//!\~english Tells if the target is initalised	\~french Dit si la cible est initialisée

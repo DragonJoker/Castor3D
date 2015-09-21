@@ -357,9 +357,9 @@ namespace Castor
 		 *\remark		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
 		 *\return		Une référence sur la donnée à l'index voulu
 		 */
-		inline component_ref operator[]( uint8_t p_uiIndex )
+		inline component_ref operator[]( uint8_t p_index )
 		{
-			return m_pComponents.get()[p_uiIndex];
+			return m_pComponents.get()[p_index];
 		}
 		/**
 		 *\~english
@@ -371,9 +371,9 @@ namespace Castor
 		 *\remark		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
 		 *\return		Une référence constante sur la donnée à l'index voulu
 		 */
-		inline component_const_ref operator[]( uint8_t p_uiIndex )const
+		inline component_const_ref operator[]( uint8_t p_index )const
 		{
-			return m_pComponents.get()[p_uiIndex];
+			return m_pComponents.get()[p_index];
 		}
 		/**
 		 *\~english

@@ -78,15 +78,15 @@ namespace GlRender
 				m_gl.SetSamplerParameter( m_uiSamplerId, eGL_SAMPLER_PARAMETER_MAGFILTER, m_gl.Get( GetInterpolationMode( eINTERPOLATION_FILTER_MAG ) ) );
 				m_gl.SetSamplerParameter( m_uiSamplerId, eGL_SAMPLER_PARAMETER_BORDERCOLOUR, GetBorderColour().const_ptr() );
 				m_gl.SetSamplerParameter( m_uiSamplerId, eGL_SAMPLER_PARAMETER_MAXANISOTROPY, float( GetMaxAnisotropy() ) );
-				m_pfnBind = PBindFunction( [this]( eGL_TEXDIM CU_PARAM_UNUSED( p_eDimension ), uint32_t p_uiIndex )
+				m_pfnBind = PBindFunction( [this]( eGL_TEXDIM CU_PARAM_UNUSED( p_eDimension ), uint32_t p_index )
 				{
-					return m_gl.BindSampler( p_uiIndex, m_uiSamplerId );
+					return m_gl.BindSampler( p_index, m_uiSamplerId );
 				} );
 				m_pfnUnbind = PUnbindFunction( [&]() {} );
 			}
 			else
 			{
-				m_pfnBind = PBindFunction( [this]( eGL_TEXDIM p_eDimension, uint32_t CU_PARAM_UNUSED( p_uiIndex ) )
+				m_pfnBind = PBindFunction( [this]( eGL_TEXDIM p_eDimension, uint32_t CU_PARAM_UNUSED( p_index ) )
 				{
 					bool l_return = true;
 					eGL_INTERPOLATION_MODE l_eMinMode = m_gl.Get( GetInterpolationMode( eINTERPOLATION_FILTER_MIN ) );
@@ -151,9 +151,9 @@ namespace GlRender
 		m_pfnUnbind = nullptr;
 	}
 
-	bool GlSampler::Bind( eTEXTURE_DIMENSION p_eDimension, uint32_t p_uiIndex )
+	bool GlSampler::Bind( eTEXTURE_DIMENSION p_eDimension, uint32_t p_index )
 	{
-		return m_pfnBind( m_gl.Get( p_eDimension ), p_uiIndex );
+		return m_pfnBind( m_gl.Get( p_eDimension ), p_index );
 	}
 
 	void GlSampler::Unbind()

@@ -62,7 +62,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief			Writes a pass into a text file
@@ -130,15 +130,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\remark		Used by Material, don't use it.
-		 *\param[in]	p_pEngine	The core engine
-		 *\param[in]	p_pParent	The parent material
+		 *\param[in]	p_engine	The core engine
+		 *\param[in]	p_parent	The parent material
 		 *\~french
 		 *\brief		Constructeur
 		 *\remark		A ne pas utiliser autrement que via la classe Material
-		 *\param[in]	p_pEngine	Le moteur
-		 *\param[in]	p_pParent	Le matériau parent
+		 *\param[in]	p_engine	Le moteur
+		 *\param[in]	p_parent	Le matériau parent
 		 */
-		Pass( Engine * p_pEngine, MaterialSPtr p_pParent = nullptr );
+		Pass( Engine * p_engine, MaterialSPtr p_parent = nullptr );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -226,36 +226,36 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Destroys a TextureUnit at the given index
-		 *\param[in]	p_uiIndex	the index of the TextureUnit to destroy
+		 *\param[in]	p_index	the index of the TextureUnit to destroy
 		 *\return		\p false if the index was out of bounds
 		 *\~french
 		 *\brief		Détruit la TextureUnit à l'index donné
-		 *\param[in]	p_uiIndex	L'index de la TextureUnit à détruire
+		 *\param[in]	p_index	L'index de la TextureUnit à détruire
 		 *\return		\p false si l'index était hors bornes
 		 */
-		bool DestroyTextureUnit( uint32_t p_uiIndex );
+		bool DestroyTextureUnit( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Retrieves the TextureUnit at the given index
-		 *\param[in]	p_uiIndex	The index of the TextureUnit to retrieve
+		 *\param[in]	p_index	The index of the TextureUnit to retrieve
 		 *\return		The retrieved TextureUnit, nullptr if none
 		 *\~french
 		 *\brief		Récupère la TextureUnit à l'index donné
-		 *\param[in]	p_uiIndex	L'index voulu
-		 *\return		La TextureUnit récupérée, nullptr si p_uiIndex était hors bornes
+		 *\param[in]	p_index	L'index voulu
+		 *\return		La TextureUnit récupérée, nullptr si p_index était hors bornes
 		 */
-		TextureUnitSPtr GetTextureUnit( uint32_t p_uiIndex )const;
+		TextureUnitSPtr GetTextureUnit( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the image path of the TextureUnit at the given index
-		 *\param[in]	p_uiIndex	The index of the TextureUnit we want the image path
+		 *\param[in]	p_index	The index of the TextureUnit we want the image path
 		 *\return		The path, void if none
 		 *\~french
 		 *\brief		Récupère le chemin de l'image de la TextureUnit à l'index donné
-		 *\param[in]	p_uiIndex	L'index voulu
+		 *\param[in]	p_index	L'index voulu
 		 *\return		Le chemin, vide si aucun
 		 */
-		Castor::String GetTexturePath( uint32_t p_uiIndex );
+		Castor::String GetTexturePath( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Defines the shader program
@@ -291,7 +291,7 @@ namespace Castor3D
 		 *\brief		Récupère le shader
 		 *\return		\p nullptr si aucun
 		 */
-		template <typename T>
+		template< typename T >
 		std::shared_ptr<T> GetShader()const
 		{
 			std::shared_ptr<T> l_pReturn;
@@ -722,7 +722,7 @@ namespace Castor3D
 		 */
 		virtual Engine * GetEngine()const
 		{
-			return m_pEngine;
+			return m_engine;
 		}
 
 	private:
@@ -815,7 +815,7 @@ namespace Castor3D
 		DECLARE_MAP( eTEXTURE_CHANNEL, UnitVariablePair, UnitVariableChannel );
 		friend class Material;
 		//!\~english The core engine	\~french Le moteur
-		Engine * m_pEngine;
+		Engine * m_engine;
 		//!\~english Diffuse material colour	\~french La couleur diffuse
 		Castor::Colour m_clrDiffuse;
 		//!\~english Ambient material colour	\~french La couleur ambiante

@@ -54,6 +54,7 @@ namespace GlRender
 			Expr( GlslWriter * p_writer, Castor::String const & p_init );
 			Expr( Expr const & p_rhs );
 			Expr & operator =( Expr const & p_rhs );
+			void UpdateWriter( Expr const & p_expr );
 
 			GlslWriter * m_writer;
 			mutable Castor::StringStream m_value;
@@ -137,6 +138,7 @@ namespace GlRender
 		//! No UBO
 		struct Legacy_MatrixOut {};
 		struct Legacy_MatrixCopy {};
+		struct Legacy_PixelModelView {};
 
 		//! Miscellaneous
 		struct Endl {};
@@ -213,6 +215,7 @@ namespace GlRender
 			template< typename T > inline T GetBuiltin( Castor::String const & p_name );
 			template< typename T > inline T GetLayout( Castor::String const & p_name );
 			template< typename T > inline T GetUniform( Castor::String const & p_name );
+			template< typename T > inline T GetFragData( Castor::String const & p_name, uint32_t p_index );
 			template< typename T > inline Array< T > GetAttribute( Castor::String const & p_name, uint32_t p_dimension );
 			template< typename T > inline Array< T > GetOut( Castor::String const & p_name, uint32_t p_dimension );
 			template< typename T > inline Array< T > GetIn( Castor::String const & p_name, uint32_t p_dimension );
@@ -233,6 +236,7 @@ namespace GlRender
 
 			GlslWriter & operator<<( Legacy_MatrixOut const & p_rhs );
 			GlslWriter & operator<<( Legacy_MatrixCopy const & p_rhs );
+			GlslWriter & operator<<( Legacy_PixelModelView const & p_rhs );
 
 			GlslWriter & operator<<( Endl const & p_rhs );
 			GlslWriter & operator<<( Castor::String const & p_rhs );
@@ -257,6 +261,7 @@ namespace GlRender
 			Sampler1D( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "sampler1D " ), p_writer, p_name ) {}
 			template< typename T > inline Sampler1D & operator=( T const & p_rhs )
 			{
+				UpdateWriter( p_rhs );
 				m_writer->WriteAssign( *this, p_rhs );
 				return *this;
 			}
@@ -272,6 +277,7 @@ namespace GlRender
 			Sampler2D( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "sampler2D " ), p_writer, p_name ) {}
 			template< typename T > inline Sampler2D & operator=( T const & p_rhs )
 			{
+				UpdateWriter( p_rhs );
 				m_writer->WriteAssign( *this, p_rhs );
 				return *this;
 			}
@@ -287,6 +293,7 @@ namespace GlRender
 			Sampler3D( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "sampler3D " ), p_writer, p_name ) {}
 			template< typename T > inline Sampler3D & operator=( T const & p_rhs )
 			{
+				UpdateWriter( p_rhs );
 				m_writer->WriteAssign( *this, p_rhs );
 				return *this;
 			}
@@ -320,11 +327,21 @@ namespace GlRender
 			Int( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "int " ), p_writer, p_name ) {}
 			inline Int & operator=( Int const & p_rhs )
 			{
-				m_writer->WriteAssign( *this, p_rhs );
+				if ( m_writer )
+				{
+					m_writer->WriteAssign( *this, p_rhs );
+				}
+				else
+				{
+					Type::operator=( p_rhs );
+					m_writer = p_rhs.m_writer;
+				}
+
 				return *this;
 			}
 			template< typename T > inline Int & operator=( T const & p_rhs )
 			{
+				UpdateWriter( p_rhs );
 				m_writer->WriteAssign( *this, p_rhs );
 				return *this;
 			}
@@ -376,11 +393,21 @@ namespace GlRender
 			Float( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "float " ), p_writer, p_name ) {}
 			Float & operator=( Float const & p_rhs )
 			{
-				m_writer->WriteAssign( *this, p_rhs );
+				if ( m_writer )
+				{
+					m_writer->WriteAssign( *this, p_rhs );
+				}
+				else
+				{
+					Type::operator=( p_rhs );
+					m_writer = p_rhs.m_writer;
+				}
+
 				return *this;
 			}
 			template< typename T > inline Float & operator=( T const & p_rhs )
 			{
+				UpdateWriter( p_rhs );
 				m_writer->WriteAssign( *this, p_rhs );
 				return *this;
 			}
@@ -400,11 +427,21 @@ namespace GlRender
 			Vec2( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "vec2 " ), p_writer, p_name ) {}
 			inline Vec2 & operator=( Vec2 const & p_rhs )
 			{
-				m_writer->WriteAssign( *this, p_rhs );
+				if ( m_writer )
+				{
+					m_writer->WriteAssign( *this, p_rhs );
+				}
+				else
+				{
+					Type::operator=( p_rhs );
+					m_writer = p_rhs.m_writer;
+				}
+
 				return *this;
 			}
 			template< typename T > inline Vec2 & operator=( T const & p_rhs )
 			{
+				UpdateWriter( p_rhs );
 				m_writer->WriteAssign( *this, p_rhs );
 				return *this;
 			}
@@ -445,11 +482,21 @@ namespace GlRender
 			Vec3( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "vec3 " ), p_writer, p_name ) {}
 			inline Vec3 & operator=( Vec3 const & p_rhs )
 			{
-				m_writer->WriteAssign( *this, p_rhs );
+				if ( m_writer )
+				{
+					m_writer->WriteAssign( *this, p_rhs );
+				}
+				else
+				{
+					Type::operator=( p_rhs );
+					m_writer = p_rhs.m_writer;
+				}
+
 				return *this;
 			}
 			template< typename T > inline Vec3 & operator=( T const & p_rhs )
 			{
+				UpdateWriter( p_rhs );
 				m_writer->WriteAssign( *this, p_rhs );
 				return *this;
 			}
@@ -652,11 +699,21 @@ namespace GlRender
 			Vec4( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "vec4 " ), p_writer, p_name ) {}
 			inline Vec4 & operator=( Vec4 const & p_rhs )
 			{
-				m_writer->WriteAssign( *this, p_rhs );
+				if ( m_writer )
+				{
+					m_writer->WriteAssign( *this, p_rhs );
+				}
+				else
+				{
+					Type::operator=( p_rhs );
+					m_writer = p_rhs.m_writer;
+				}
+
 				return *this;
 			}
 			template< typename T > inline Vec4 & operator=( T const & p_rhs )
 			{
+				UpdateWriter( p_rhs );
 				m_writer->WriteAssign( *this, p_rhs );
 				return *this;
 			}
@@ -1441,11 +1498,21 @@ namespace GlRender
 			IVec2( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "ivec2 " ), p_writer, p_name ) {}
 			inline IVec2 & operator=( IVec2 const & p_rhs )
 			{
-				m_writer->WriteAssign( *this, p_rhs );
+				if ( m_writer )
+				{
+					m_writer->WriteAssign( *this, p_rhs );
+				}
+				else
+				{
+					Type::operator=( p_rhs );
+					m_writer = p_rhs.m_writer;
+				}
+
 				return *this;
 			}
 			template< typename T > inline IVec2 & operator=( T const & p_rhs )
 			{
+				UpdateWriter( p_rhs );
 				m_writer->WriteAssign( *this, p_rhs );
 				return *this;
 			}
@@ -1486,11 +1553,21 @@ namespace GlRender
 			IVec3( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "ivec3 " ), p_writer, p_name ) {}
 			inline IVec3 & operator=( IVec3 const & p_rhs )
 			{
-				m_writer->WriteAssign( *this, p_rhs );
+				if ( m_writer )
+				{
+					m_writer->WriteAssign( *this, p_rhs );
+				}
+				else
+				{
+					Type::operator=( p_rhs );
+					m_writer = p_rhs.m_writer;
+				}
+
 				return *this;
 			}
 			template< typename T > inline IVec3 & operator=( T const & p_rhs )
 			{
+				UpdateWriter( p_rhs );
 				m_writer->WriteAssign( *this, p_rhs );
 				return *this;
 			}
@@ -1693,11 +1770,21 @@ namespace GlRender
 			IVec4( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "ivec4 " ), p_writer, p_name ) {}
 			inline IVec4 & operator=( IVec4 const & p_rhs )
 			{
-				m_writer->WriteAssign( *this, p_rhs );
+				if ( m_writer )
+				{
+					m_writer->WriteAssign( *this, p_rhs );
+				}
+				else
+				{
+					Type::operator=( p_rhs );
+					m_writer = p_rhs.m_writer;
+				}
+
 				return *this;
 			}
 			template< typename T > inline IVec4 & operator=( T const & p_rhs )
 			{
+				UpdateWriter( p_rhs );
 				m_writer->WriteAssign( *this, p_rhs );
 				return *this;
 			}
@@ -2482,11 +2569,21 @@ namespace GlRender
 			Mat3( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "mat3 " ), p_writer, p_name ) {}
 			inline Mat3 & operator=( Mat3 const & p_rhs )
 			{
-				m_writer->WriteAssign( *this, p_rhs );
+				if ( m_writer )
+				{
+					m_writer->WriteAssign( *this, p_rhs );
+				}
+				else
+				{
+					Type::operator=( p_rhs );
+					m_writer = p_rhs.m_writer;
+				}
+
 				return *this;
 			}
 			template< typename T > inline Mat3 & operator=( T const & p_rhs )
 			{
+				UpdateWriter( p_rhs );
 				m_writer->WriteAssign( *this, p_rhs );
 				return *this;
 			}
@@ -2503,11 +2600,21 @@ namespace GlRender
 			Mat4( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "mat4 " ), p_writer, p_name ) {}
 			inline Mat4 & operator=( Mat4 const & p_rhs )
 			{
-				m_writer->WriteAssign( *this, p_rhs );
+				if ( m_writer )
+				{
+					m_writer->WriteAssign( *this, p_rhs );
+				}
+				else
+				{
+					Type::operator=( p_rhs );
+					m_writer = p_rhs.m_writer;
+				}
+
 				return *this;
 			}
 			template< typename T > inline Mat4 & operator=( T const & p_rhs )
 			{
+				UpdateWriter( p_rhs );
 				m_writer->WriteAssign( *this, p_rhs );
 				return *this;
 			}
@@ -2524,11 +2631,21 @@ namespace GlRender
 			Light( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "Light " ), p_writer, p_name ) {}
 			inline Light & operator=( Light const & p_rhs )
 			{
-				m_writer->WriteAssign( *this, p_rhs );
+				if ( m_writer )
+				{
+					m_writer->WriteAssign( *this, p_rhs );
+				}
+				else
+				{
+					Type::operator=( p_rhs );
+					m_writer = p_rhs.m_writer;
+				}
+
 				return *this;
 			}
 			template< typename T > inline Light & operator=( T const & p_rhs )
 			{
+				UpdateWriter( p_rhs );
 				m_writer->WriteAssign( *this, p_rhs );
 				return *this;
 			}
@@ -2576,11 +2693,21 @@ namespace GlRender
 			gl_PerVertex( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "gl_PerVertex " ), p_writer, p_name ) {}
 			inline gl_PerVertex & operator=( gl_PerVertex const & p_rhs )
 			{
-				m_writer->WriteAssign( *this, p_rhs );
+				if ( m_writer )
+				{
+					m_writer->WriteAssign( *this, p_rhs );
+				}
+				else
+				{
+					Type::operator=( p_rhs );
+					m_writer = p_rhs.m_writer;
+				}
+
 				return *this;
 			}
 			template< typename T > inline gl_PerVertex & operator=( T const & p_rhs )
 			{
+				UpdateWriter( p_rhs );
 				m_writer->WriteAssign( *this, p_rhs );
 				return *this;
 			}
@@ -2755,6 +2882,12 @@ namespace GlRender
 
 #define BUILTIN_ARRAY( Writer, Type, Name, Dimension )\
 	Array< Type > Name = ( Writer ).GetBuiltin< Type >( cuT( #Name ), Dimension )
+
+#define FRAG_OUTPUT( Writer, Type, Name, Index )\
+	Type Name = ( Writer ).GetFragData< Type >( cuT( #Name ), Index )
+
+#define FRAG_OUTPUT_ARRAY( Writer, Type, Name, Index, Dimension )\
+	Type Name = ( Writer ).GetFragData< Type >( cuT( #Name ), Index, Dimension )
 
 #define OUT( Writer, Type, Name )\
 	Type Name = ( Writer ).GetOut< Type >( cuT( #Name ) )

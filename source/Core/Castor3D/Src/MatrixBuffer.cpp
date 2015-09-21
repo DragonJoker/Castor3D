@@ -31,7 +31,7 @@ namespace Castor3D
 	{
 		if ( !m_pBuffer )
 		{
-			m_pBuffer = m_pRenderSystem->CreateMatrixBuffer( this );
+			m_pBuffer = m_renderSystem->CreateMatrixBuffer( this );
 		}
 
 		return m_pBuffer != nullptr;

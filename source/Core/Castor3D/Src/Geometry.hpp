@@ -119,19 +119,19 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\remark		Not to be used by the user, use Scene::CreatePrimitive function
-		 *\param[in]	p_pScene	The parent scene
+		 *\param[in]	p_scene	The parent scene
 		 *\param[in]	p_mesh		The mesh, default is nullptr
 		 *\param[in]	p_sn		The scene node to which the geometry is attached
 		 *\param[in]	p_name		The geometry name, default is void
 		 *\~french
 		 *\brief		Constructeur
 		 *\remark		A ne pas utiliser directement, utilisez Scene::CreatePrimitive
-		 *\param[in]	p_pScene	La scène parente
+		 *\param[in]	p_scene	La scène parente
 		 *\param[in]	p_mesh		Le maillage, par défaut nullptr
 		 *\param[in]	p_sn		Le scene node auquel la géométrie est attachée
 		 *\param[in]	p_name		Nom de la géométrie
 		 */
-		Geometry( SceneSPtr p_pScene = nullptr, MeshSPtr p_mesh = nullptr, SceneNodeSPtr p_sn = nullptr, Castor::String const & p_name = cuT( "" ) );
+		Geometry( SceneSPtr p_scene = nullptr, MeshSPtr p_mesh = nullptr, SceneNodeSPtr p_sn = nullptr, Castor::String const & p_name = cuT( "" ) );
 		/**
 		 *\~english
 		 *\brief		Destructor

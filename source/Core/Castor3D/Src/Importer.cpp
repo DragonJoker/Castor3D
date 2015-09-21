@@ -3,9 +3,9 @@
 using namespace Castor3D;
 using namespace Castor;
 
-Importer::Importer( Engine * p_pEngine )
+Importer::Importer( Engine * p_engine )
 	:	m_fileName()
-	,	m_pEngine( p_pEngine )
+	,	m_engine( p_engine )
 {
 }
 

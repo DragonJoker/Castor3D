@@ -37,7 +37,7 @@ namespace GlRender
 
 	protected:
 		OpenGl & m_gl;
-		GlRenderSystem * m_pRenderSystem;
+		GlRenderSystem * m_renderSystem;
 	};
 }
 

@@ -64,7 +64,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a Viewport into a text file
@@ -131,17 +131,17 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pEngine	The core engine
+		 *\param[in]	p_engine	The core engine
 		 *\param[in]	p_size		The viewport render size
-		 *\param[in]	p_eType		Projection type
+		 *\param[in]	p_type		Projection type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pEngine	Le moteur
+		 *\param[in]	p_engine	Le moteur
 		 *\param[in]	p_size		Les dimensions de rendu du viewport
 		 *\param[in]	p_pMaterial		SceneNode parent
-		 *\param[in]	p_eType		Type de projection
+		 *\param[in]	p_type		Type de projection
 		 */
-		Viewport( Engine * p_pEngine, Castor::Size const & p_size, eVIEWPORT_TYPE p_eType );
+		Viewport( Engine * p_engine, Castor::Size const & p_size, eVIEWPORT_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -245,7 +245,7 @@ namespace Castor3D
 		 */
 		inline eVIEWPORT_TYPE GetType()const
 		{
-			return m_eType;
+			return m_type;
 		}
 		/**
 		 *\~english
@@ -257,7 +257,7 @@ namespace Castor3D
 		 */
 		inline real GetRatio()const
 		{
-			return m_rRatio;
+			return m_ratio;
 		}
 		/**
 		 *\~english
@@ -269,7 +269,7 @@ namespace Castor3D
 		 */
 		inline real GetNear()const
 		{
-			return m_rNear;
+			return m_near;
 		}
 		/**
 		 *\~english
@@ -281,7 +281,7 @@ namespace Castor3D
 		 */
 		inline real GetFar()const
 		{
-			return m_rFar;
+			return m_far;
 		}
 		/**
 		 *\~english
@@ -293,7 +293,7 @@ namespace Castor3D
 		 */
 		inline Castor::Angle GetFovY()const
 		{
-			return m_aFovY;
+			return m_fovY;
 		}
 		/**
 		 *\~english
@@ -305,7 +305,7 @@ namespace Castor3D
 		 */
 		inline real GetLeft()const
 		{
-			return m_rLeft;
+			return m_left;
 		}
 		/**
 		 *\~english
@@ -317,7 +317,7 @@ namespace Castor3D
 		 */
 		inline real GetRight()const
 		{
-			return m_rRight;
+			return m_right;
 		}
 		/**
 		 *\~english
@@ -329,7 +329,7 @@ namespace Castor3D
 		 */
 		inline real GetTop()const
 		{
-			return m_rTop;
+			return m_top;
 		}
 		/**
 		 *\~english
@@ -341,7 +341,7 @@ namespace Castor3D
 		 */
 		inline real GetBottom()const
 		{
-			return m_rBottom;
+			return m_bottom;
 		}
 		/**
 		 *\~english
@@ -377,7 +377,7 @@ namespace Castor3D
 		 */
 		inline bool IsModified()const
 		{
-			return m_bModified;
+			return m_modified;
 		}
 		/**
 		 *\~english
@@ -387,9 +387,9 @@ namespace Castor3D
 		 *\brief		Récupère le type de projection du viewport
 		 *\return		La valeur
 		 */
-		inline void SetType( eVIEWPORT_TYPE p_eType )
+		inline void SetType( eVIEWPORT_TYPE p_type )
 		{
-			m_eType = p_eType;
+			m_type = p_type;
 		}
 		/**
 		 *\~english
@@ -401,7 +401,7 @@ namespace Castor3D
 		 */
 		inline void SetRatio( real p_rRatio )
 		{
-			m_rRatio = p_rRatio;
+			m_ratio = p_rRatio;
 		}
 		/**
 		 *\~english
@@ -413,8 +413,8 @@ namespace Castor3D
 		 */
 		inline void SetNear( real p_rNear )
 		{
-			m_rNear = p_rNear;
-			m_bModified = true;
+			m_near = p_rNear;
+			m_modified = true;
 		}
 		/**
 		 *\~english
@@ -426,8 +426,8 @@ namespace Castor3D
 		 */
 		inline void SetFar( real p_rFar )
 		{
-			m_rFar = p_rFar;
-			m_bModified = true;
+			m_far = p_rFar;
+			m_modified = true;
 		}
 		/**
 		 *\~english
@@ -439,8 +439,8 @@ namespace Castor3D
 		 */
 		inline void SetFovY( Castor::Angle const & p_aFovY )
 		{
-			m_aFovY = p_aFovY;
-			m_bModified = true;
+			m_fovY = p_aFovY;
+			m_modified = true;
 		}
 		/**
 		 *\~english
@@ -452,8 +452,8 @@ namespace Castor3D
 		 */
 		inline void SetLeft( real p_rLeft )
 		{
-			m_rLeft = p_rLeft;
-			m_bModified = true;
+			m_left = p_rLeft;
+			m_modified = true;
 		}
 		/**
 		 *\~english
@@ -465,8 +465,8 @@ namespace Castor3D
 		 */
 		inline void SetRight( real p_rRight )
 		{
-			m_rRight = p_rRight;
-			m_bModified = true;
+			m_right = p_rRight;
+			m_modified = true;
 		}
 		/**
 		 *\~english
@@ -478,8 +478,8 @@ namespace Castor3D
 		 */
 		inline void SetTop( real p_rTop )
 		{
-			m_rTop = p_rTop;
-			m_bModified = true;
+			m_top = p_rTop;
+			m_modified = true;
 		}
 		/**
 		 *\~english
@@ -491,8 +491,8 @@ namespace Castor3D
 		 */
 		inline void SetBottom( real p_rBottom )
 		{
-			m_rBottom = p_rBottom;
-			m_bModified = true;
+			m_bottom = p_rBottom;
+			m_modified = true;
 		}
 		/**
 		 *\~english
@@ -518,36 +518,50 @@ namespace Castor3D
 		 */
 		inline Engine * GetEngine()const
 		{
-			return m_pEngine;
+			return m_engine;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the projection matrix
+		 *\return		The matrix
+		 *\~french
+		 *\brief		Récupère la matrice de projection
+		 *\return		La matrice
+		 */
+		inline Castor::Matrix4x4r const & GetProjection()const
+		{
+			return m_projection;
 		}
 
 	private:
 		//!\~english The left viewport plane	\~french Position du plan gauche
-		real m_rLeft;
+		real m_left;
 		//!\~english The right viewport plane	\~french Position du plan droit
-		real m_rRight;
+		real m_right;
 		//!\~english The top viewport plane	\~french Position du plan haut
-		real m_rTop;
+		real m_top;
 		//!\~english The bottom viewport plane	\~french Position du plan bas
-		real m_rBottom;
+		real m_bottom;
 		//!\~english The viewport farthest viewable distance	\~french Position du plan lointain
-		real m_rFar;
+		real m_far;
 		//!\~english The viewport nearest viewable distance	\~french Position du plan proche
-		real m_rNear;
+		real m_near;
 		//!\~english The viewport vertical FOV 	\~french Angle de vue vezrtical
-		Castor::Angle m_aFovY;
+		Castor::Angle m_fovY;
 		//!\~english The projection type	\~french Type de projection
-		eVIEWPORT_TYPE m_eType;
+		eVIEWPORT_TYPE m_type;
 		//!\~english The viewport render size	\~french Dimensions du viewport
 		Castor::Size m_size;
 		//!\~english The display window ratio (4:3, 16:9, ...)	\~french Ratio d'affichage
-		real m_rRatio;
+		real m_ratio;
 		//!\~english The core engine	\~french Le moteur
-		Engine * m_pEngine;
+		Engine * m_engine;
 		//!\~english Tells the view frustum's planes need to be updated	\~french Dit que les plans du frustum de vue doivent être mis à jour
-		bool m_bModified;
+		bool m_modified;
 		//!\~english The view frustum's planes	\~french Les plans du frustum de vue
 		Castor::PlaneEquation< real >	m_planes[eFRUSTUM_PLANE_COUNT];
+		//!\~english The projection matrix.	\~french La matrice de projection.
+		Castor::Matrix4x4r m_projection;
 	};
 }
 

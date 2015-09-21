@@ -26,9 +26,9 @@ namespace GlRender
 		return GlBuffer< uint8_t >::DoDestroy();
 	}
 
-	bool GlTextureBufferObject::Initialise( Castor3D::eBUFFER_ACCESS_TYPE p_eType, eBUFFER_ACCESS_NATURE p_eNature, ShaderProgramBaseSPtr p_pProgram )
+	bool GlTextureBufferObject::Initialise( Castor3D::eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_eNature, ShaderProgramBaseSPtr p_pProgram )
 	{
-		bool l_return = GlBuffer< uint8_t >::DoInitialise( p_eType, p_eNature );
+		bool l_return = GlBuffer< uint8_t >::DoInitialise( p_type, p_eNature );
 		//if( l_return )
 		//{
 		//	m_pBuffer->Clear();

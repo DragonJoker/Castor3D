@@ -29,7 +29,7 @@ namespace GuiCommon
 		: public wxFrame
 	{
 	public:
-		ShaderDialog( Castor3D::Engine * p_pEngine, bool p_bCanEdit, wxWindow * p_pParent, Castor3D::PassSPtr p_pPass, wxPoint const & p_ptPosition = wxDefaultPosition, const wxSize p_ptSize = wxSize( 800, 600 ) );
+		ShaderDialog( Castor3D::Engine * p_engine, bool p_bCanEdit, wxWindow * p_parent, Castor3D::PassSPtr p_pPass, wxPoint const & p_ptPosition = wxDefaultPosition, const wxSize p_ptSize = wxSize( 800, 600 ) );
 		~ShaderDialog();
 
 	private:
@@ -40,8 +40,8 @@ namespace GuiCommon
 		void DoCleanup();
 		void DoLoadShader();
 		void DoOpenShaderFile();
-		void DoFolder( Castor3D::eSHADER_TYPE p_eType );
-		void DoSave( Castor3D::eSHADER_TYPE p_eType, bool p_createIfNone );
+		void DoFolder( Castor3D::eSHADER_TYPE p_type );
+		void DoSave( Castor3D::eSHADER_TYPE p_type, bool p_createIfNone );
 
 		DECLARE_EVENT_TABLE()
 		void OnOpenFile( wxCommandEvent & p_event );
@@ -63,7 +63,7 @@ namespace GuiCommon
 		bool m_bCompiled;
 		bool m_bOwnShader;
 		bool m_bCanEdit;
-		Castor3D::Engine * m_pEngine;
+		Castor3D::Engine * m_engine;
 	};
 }
 

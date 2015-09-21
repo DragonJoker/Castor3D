@@ -36,9 +36,9 @@ namespace CastorShape
 		/**
 		 * Constructor
 		 *\param[in]	p_strFileName	The file path
-		 *\param[in]	p_pScene	The scene to render
+		 *\param[in]	p_scene	The scene to render
 		 */
-		RenderEngine( Castor::String const & p_strFileName, Castor3D::SceneSPtr p_pScene );
+		RenderEngine( Castor::String const & p_strFileName, Castor3D::SceneSPtr p_scene );
 		/**
 		 * Destructor
 		 */

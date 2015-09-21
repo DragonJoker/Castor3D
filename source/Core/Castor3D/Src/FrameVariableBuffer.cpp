@@ -8,9 +8,9 @@ namespace Castor3D
 {
 	uint32_t FrameVariableBuffer::sm_uiCount = 0;
 
-	FrameVariableBuffer::FrameVariableBuffer( String const & p_strName, RenderSystem * p_pRenderSystem )
-		:	m_pRenderSystem( p_pRenderSystem )
-		,	m_strName( p_strName )
+	FrameVariableBuffer::FrameVariableBuffer( String const & p_name, RenderSystem * p_pRenderSystem )
+		:	m_renderSystem( p_pRenderSystem )
+		,	m_strName( p_name )
 		,	m_uiIndex( sm_uiCount++ )
 	{
 	}
@@ -20,18 +20,18 @@ namespace Castor3D
 		CASTOR_ASSERT( m_mapVariables.size() == 0 && m_listVariables.size() == 0 );
 	}
 
-	FrameVariableSPtr FrameVariableBuffer::CreateVariable( ShaderProgramBase & p_program, eFRAME_VARIABLE_TYPE p_eType, String const & p_strName, uint32_t p_uiNbOcc )
+	FrameVariableSPtr FrameVariableBuffer::CreateVariable( ShaderProgramBase & p_program, eFRAME_VARIABLE_TYPE p_type, String const & p_name, uint32_t p_uiNbOcc )
 	{
 		FrameVariableSPtr l_pReturn;
-		FrameVariablePtrStrMapConstIt l_it = m_mapVariables.find( p_strName );
+		FrameVariablePtrStrMapConstIt l_it = m_mapVariables.find( p_name );
 
 		if ( l_it == m_mapVariables.end() )
 		{
-			l_pReturn = DoCreateVariable( &p_program, p_eType, p_strName, p_uiNbOcc );
+			l_pReturn = DoCreateVariable( &p_program, p_type, p_name, p_uiNbOcc );
 
 			if ( l_pReturn )
 			{
-				m_mapVariables.insert( std::make_pair( p_strName, l_pReturn ) );
+				m_mapVariables.insert( std::make_pair( p_name, l_pReturn ) );
 				m_listVariables.push_back( l_pReturn );
 			}
 		}

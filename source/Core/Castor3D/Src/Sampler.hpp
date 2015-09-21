@@ -61,7 +61,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief			Writes a sampler into a text file
@@ -128,13 +128,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_name	    The sampler name
-		 *\param[in]	p_pEngine	The core engine
+		 *\param[in]	p_engine	The core engine
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_name	    Le nom du sampler
-		 *\param[in]	p_pEngine	Le moteur
+		 *\param[in]	p_engine	Le moteur
 		 */
-		Sampler( Engine * p_pEngine, Castor::String const & p_name = Castor::cuEmptyString );
+		Sampler( Engine * p_engine, Castor::String const & p_name = Castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -162,15 +162,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Applies the sampler
 		 *\param[in]	p_eDimension	The texture dimension
-		 *\param[in]	p_uiIndex		The sampler index
+		 *\param[in]	p_index		The sampler index
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Applique le sampler
 		 *\param[in]	p_eDimension	La dimension de la texture
-		 *\param[in]	p_uiIndex		L'index du sampler
+		 *\param[in]	p_index		L'index du sampler
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Bind( eTEXTURE_DIMENSION p_eDimension, uint32_t p_uiIndex ) = 0;
+		virtual bool Bind( eTEXTURE_DIMENSION p_eDimension, uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Removes the sampler
@@ -196,15 +196,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Defines the interpolation mode for given filter
 		 *\param[in]	p_eFilter	The concerned filter
-		 *\param[in]	p_eMode		The wanted mode
+		 *\param[in]	p_mode		The wanted mode
 		 *\~french
 		 *\brief		Définit le mode d'interpolation pour le filtre donné
 		 *\param[in]	p_eFilter	Le filtre concerné
-		 *\param[in]	p_eMode		Le mode souhaité
+		 *\param[in]	p_mode		Le mode souhaité
 		 */
-		inline void SetInterpolationMode( eINTERPOLATION_FILTER p_eFilter, eINTERPOLATION_MODE p_eMode )
+		inline void SetInterpolationMode( eINTERPOLATION_FILTER p_eFilter, eINTERPOLATION_MODE p_mode )
 		{
-			m_eInterpolationModes[p_eFilter] = p_eMode;
+			m_eInterpolationModes[p_eFilter] = p_mode;
 		}
 		/**
 		 *\~english
@@ -224,15 +224,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Defines the wrapping mode for given dimension
 		 *\param[in]	p_eUVW	The dimension
-		 *\param[in]	p_eMode	The wrapping mode
+		 *\param[in]	p_mode	The wrapping mode
 		 *\~french
 		 *\brief		Définit le mode de wrap pour la dimension donnée
 		 *\param[in]	p_eUVW	La dimension
-		 *\param[in]	p_eMode	Le mode de wrap
+		 *\param[in]	p_mode	Le mode de wrap
 		 */
-		inline void SetWrappingMode( eTEXTURE_UVW p_eUVW, eWRAP_MODE p_eMode )
+		inline void SetWrappingMode( eTEXTURE_UVW p_eUVW, eWRAP_MODE p_mode )
 		{
-			m_eWrapModes[p_eUVW] = p_eMode;
+			m_eWrapModes[p_eUVW] = p_mode;
 		}
 		/**
 		 *\~english
@@ -386,12 +386,12 @@ namespace Castor3D
 		 */
 		virtual Engine * GetEngine()const
 		{
-			return m_pEngine;
+			return m_engine;
 		}
 
 	private:
 		//!\~english The core engine	\~french Le moteur
-		Engine * m_pEngine;
+		Engine * m_engine;
 		//!\~english Sampler interpolation modes	\~french Modes d'interpolation du sampler
 		eINTERPOLATION_MODE m_eInterpolationModes[eINTERPOLATION_FILTER_COUNT];
 		//!\~english Sampler wrapping modes	\~french Modes de wrapping du sampler

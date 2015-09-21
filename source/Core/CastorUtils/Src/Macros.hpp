@@ -143,12 +143,22 @@ typedef wchar_t ychar;
 #if CASTOR_HAS_DEFAULTED_FUNC
 #	define CASTOR_DEFAULT = default
 #else
-#	define d_default
+#	define CASTOR_DEFAULT
 #endif
 #if CASTOR_HAS_DELETED_FUNC
 #	define CASTOR_DELETED = delete
 #else
-#	define d_deleted
+#	define CASTOR_DELETED
+#endif
+#if CASTOR_HAS_ALIGNAS
+#	define CASTOR_ALIGNED_VAR( a, t, n ) t alignas( a ) n
+#else
+#	if defined( __GNUG__)
+#		define CASTOR_ALIGNED_VAR( a, t, n ) t n __attribute__( ( aligned( a ) ) )
+#	elif defined( __clang__)
+#	elif defined( _MSC_VER )
+#		define CASTOR_ALIGNED_VAR( a, t, n ) __declspec( align( a ) ) t n
+#	endif
 #endif
 
 #define DECLARE_SMART_PTR( class_name )\

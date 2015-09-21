@@ -39,19 +39,19 @@ void Plane::Generate()
 	real l_gapH = m_depth / ( m_subDivisionsD + 1 );
 	Point3r l_ptCurrentUV;
 	Point3r l_ptPreviousUV;
-	BufferElementGroupSPtr l_pVertex;
+	BufferElementGroupSPtr l_vertex;
 	Point3r l_ptNormal( 0.0, 1.0, 0.0 );
 	Point3r l_ptTangent;
 	Point2r l_ptUv;
-	SubmeshSPtr l_pSubmesh = GetMesh()->CreateSubmesh();
+	SubmeshSPtr l_submesh = GetMesh()->CreateSubmesh();
 
 	for ( uint32_t i = 0; i < l_nbVertexW; i++ )
 	{
 		for ( uint32_t j = 0; j < l_nbVertexH; j++ )
 		{
-			l_pVertex = l_pSubmesh->AddPoint( ( i * l_gapW ), ( j * l_gapH ), 0.0 );
-			Vertex::SetTexCoord(	l_pVertex, ( i * l_gapW / m_width ), ( j * l_gapH / m_depth ) );
-			Vertex::SetNormal(	l_pVertex, 0.0, 0.0, 1.0 );
+			l_vertex = l_submesh->AddPoint( ( i * l_gapW ), ( j * l_gapH ), 0.0 );
+			Vertex::SetTexCoord(	l_vertex, ( i * l_gapW / m_width ), ( j * l_gapH / m_depth ) );
+			Vertex::SetNormal(	l_vertex, 0.0, 0.0, 1.0 );
 		}
 	}
 
@@ -59,13 +59,13 @@ void Plane::Generate()
 	{
 		for ( uint32_t j = i * ( m_subDivisionsD + 1 ); j < ( i + 1 ) * ( m_subDivisionsD + 1 ); j++ )
 		{
-			l_pSubmesh->AddFace( j + i,							j + m_subDivisionsW + 2 + i,	j + m_subDivisionsW + 3 + i	);
-			l_pSubmesh->AddFace( j + m_subDivisionsW + 3 + i,	j + i + 1,						j + i	);
+			l_submesh->AddFace( j + i,							j + m_subDivisionsW + 2 + i,	j + m_subDivisionsW + 3 + i	);
+			l_submesh->AddFace( j + m_subDivisionsW + 3 + i,	j + i + 1,						j + i	);
 		}
 	}
 
 //	ComputeNormals();
-	l_pSubmesh->ComputeTangentsFromNormals();
+	l_submesh->ComputeTangentsFromNormals();
 	GetMesh()->ComputeContainers();
 }
 

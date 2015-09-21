@@ -173,10 +173,10 @@ namespace Castor3D
 	 *\return		false si p_a.major est inférieur à p_b.major ou s'ils sont égaux et p_a.minor est inférieur à p_b.minor ou si majors et minors sont égaux et p_a.build est inférieur à p_b.build
 	 */
 	C3D_API bool operator >=( Castor3D::Version const & p_a, Castor3D::Version const & p_b );
-}
 
-C3D_API std::ostream & operator <<( std::ostream & p_stream, Castor3D::Version const & p_version );
-C3D_API std::wostream & operator <<( std::wostream & p_stream, Castor3D::Version const & p_version );
-C3D_API Castor::String & operator <<( Castor::String & p_stream, Castor3D::Version const & p_version );
+	C3D_API std::ostream & operator <<( std::ostream & p_stream, Castor3D::Version const & p_version );
+	C3D_API std::wostream & operator <<( std::wostream & p_stream, Castor3D::Version const & p_version );
+	C3D_API Castor::String & operator <<( Castor::String & p_stream, Castor3D::Version const & p_version );
+}
 
 #endif

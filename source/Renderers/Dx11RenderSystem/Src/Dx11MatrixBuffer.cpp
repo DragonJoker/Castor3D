@@ -34,7 +34,7 @@ namespace Dx11Render
 		DxBufferObject< real, ID3D11Buffer >::DoCleanup();
 	}
 
-	bool DxMatrixBuffer::Initialise( eBUFFER_ACCESS_TYPE p_eType, eBUFFER_ACCESS_NATURE p_eNature, ShaderProgramBaseSPtr p_pProgram )
+	bool DxMatrixBuffer::Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_eNature, ShaderProgramBaseSPtr p_pProgram )
 	{
 #if 1
 		return true;
@@ -71,7 +71,7 @@ namespace Dx11Render
 				if ( l_pBlob )
 				{
 					HRESULT l_hr = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() )->GetDevice()->CreateInputLayout( &l_arrayDxElements[0], UINT( l_arrayDxElements.size() ), reinterpret_cast< DWORD const * >( l_pBlob->GetBufferPointer() ), l_pBlob->GetBufferSize(), &m_pDxDeclaration );
-					dxDebugName( m_pRenderSystem, m_pBufferObject, MtxInputLayout );
+					dxTrack( m_renderSystem, m_pBufferObject, MtxInputLayout );
 					l_return = dxCheckError( l_hr, "ID3D11Device::CreateInputLayout" );
 				}
 			}
@@ -83,23 +83,23 @@ namespace Dx11Render
 				HRESULT l_hr;
 				D3D11_BUFFER_DESC l_desc = { 0 };
 				l_desc.ByteWidth = l_uiSize * UINT( sizeof( uint32_t ) );
-				l_desc.Usage = DirectX11::Get( p_eType );
+				l_desc.Usage = DirectX11::Get( p_type );
 				l_desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-				l_desc.CPUAccessFlags = DirectX11::GetCpuAccessFlags( p_eType | p_eNature );
+				l_desc.CPUAccessFlags = DirectX11::GetCpuAccessFlags( p_type | p_eNature );
 				l_desc.MiscFlags = 0;
 				l_desc.StructureByteStride = 0;//sizeof( uint32_t );
 
-				if ( p_eType == eBUFFER_ACCESS_TYPE_STATIC )
+				if ( p_type == eBUFFER_ACCESS_TYPE_STATIC )
 				{
 					D3D11_SUBRESOURCE_DATA l_data = { 0 };
 					l_data.pSysMem = &m_pBuffer->data()[0];
 					l_hr = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() )->GetDevice()->CreateBuffer( &l_desc, &l_data, &m_pBufferObject );
-					dxDebugName( m_pRenderSystem, m_pBufferObject, MatrixBuffer );
+					dxTrack( m_renderSystem, m_pBufferObject, MatrixBuffer );
 				}
 				else
 				{
 					l_hr = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() )->GetDevice()->CreateBuffer( &l_desc, NULL, &m_pBufferObject );
-					dxDebugName( m_pRenderSystem, m_pBufferObject, MatrixBuffer );
+					dxTrack( m_renderSystem, m_pBufferObject, MatrixBuffer );
 				}
 
 				l_return = dxCheckError( l_hr, "ID3D11Device::CreateIndexBuffer" );
@@ -111,7 +111,7 @@ namespace Dx11Render
 
 			if ( m_pBufferObject )
 			{
-				if ( p_eType != eBUFFER_ACCESS_TYPE_STATIC )
+				if ( p_type != eBUFFER_ACCESS_TYPE_STATIC )
 				{
 					UINT l_uiSize = UINT( m_pBuffer->GetSize() );
 

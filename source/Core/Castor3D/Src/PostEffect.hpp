@@ -88,7 +88,7 @@ namespace Castor3D
 
 	protected:
 		//!\~english The	render system	\~french Le render system
-		RenderSystem *	m_pRenderSystem;
+		RenderSystem *	m_renderSystem;
 	};
 }
 

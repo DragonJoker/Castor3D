@@ -9,9 +9,9 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	MovingObjectBase::MovingObjectBase( eMOVING_OBJECT_TYPE p_eType )
+	MovingObjectBase::MovingObjectBase( eMOVING_OBJECT_TYPE p_type )
 		:	m_rLength( 0.0 )
-		,	m_eType( p_eType )
+		,	m_type( p_type )
 	{
 		m_mtxFinalTransformation.set_identity();
 	}
@@ -80,18 +80,18 @@ namespace Castor3D
 
 	Matrix4x4r MovingObjectBase::DoComputeTransform( real p_rTime )
 	{
-		Matrix4x4r l_mtxReturn;
+		Matrix4x4r l_return;
 
 		if ( HasKeyFrames() )
 		{
-			MtxUtils::set_transform_rh( l_mtxReturn, DoComputeTranslation( p_rTime ), DoComputeScaling( p_rTime ), DoComputeRotation( p_rTime ) );
+			matrix::set_transform( l_return, DoComputeTranslation( p_rTime ), DoComputeScaling( p_rTime ), DoComputeRotation( p_rTime ) );
 		}
 		else
 		{
-			l_mtxReturn = m_mtxNodeTransform;
+			l_return = m_mtxNodeTransform;
 		}
 
-		return l_mtxReturn;
+		return l_return;
 	}
 
 	Point3r MovingObjectBase::DoComputeScaling( real p_rTime )

@@ -29,7 +29,7 @@ namespace GlRender
 	{
 	private:
 		typedef std::function< void() > PUnbindFunction;
-		typedef std::function< bool( eGL_TEXDIM p_eDimension, uint32_t p_uiIndex ) > PBindFunction;
+		typedef std::function< bool( eGL_TEXDIM p_eDimension, uint32_t p_index ) > PBindFunction;
 
 	public:
 		GlSampler( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem, Castor::String const & p_name );
@@ -37,7 +37,7 @@ namespace GlRender
 
 		virtual bool Initialise();
 		virtual void Cleanup();
-		virtual bool Bind( Castor3D::eTEXTURE_DIMENSION p_eDimension, uint32_t p_uiIndex );
+		virtual bool Bind( Castor3D::eTEXTURE_DIMENSION p_eDimension, uint32_t p_index );
 		virtual void Unbind();
 
 	private:

@@ -15,8 +15,8 @@ namespace CastorShape
 		static wxString TORUS_EXTERNAL_DEPTH_SUBDIVISIONS = _( "External subdivisions" );
 	}
 
-	NewTorusDialog::NewTorusDialog( Engine * p_pEngine, wxWindow * parent, wxWindowID p_id )
-		: NewGeometryDialog( p_pEngine, parent, p_id, cuT( "New torus" ) )
+	NewTorusDialog::NewTorusDialog( Engine * p_engine, wxWindow * parent, wxWindowID p_id )
+		: NewGeometryDialog( p_engine, parent, p_id, cuT( "New torus" ) )
 	{
 		TORUS_INTERNAL_RADIUS = _( "Internal radius" );
 		TORUS_EXTERNAL_RADIUS = _( "External radius" );

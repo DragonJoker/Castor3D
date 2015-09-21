@@ -65,7 +65,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a scene into a text file
@@ -162,16 +162,16 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pEngine		The core engine
+		 *\param[in]	p_engine		The core engine
 		 *\param[in]	p_lightFactory	The factory used to create the lights
 		 *\param[in]	p_name			The scene name
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pEngine		Le moteur
+		 *\param[in]	p_engine		Le moteur
 		 *\param[in]	p_lightFactory	La fabrique utilisée pour créer les lumières
 		 *\param[in]	p_name			Le nom de la scène
 		 */
-		Scene( Engine * p_pEngine, LightFactory & p_lightFactory, Castor::String const & p_name = Castor::cuEmptyString );
+		Scene( Engine * p_engine, LightFactory & p_lightFactory, Castor::String const & p_name = Castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -283,42 +283,42 @@ namespace Castor3D
 		 *\brief		Creates a camera
 		 *\param[in]	p_name		The camera name
 		 *\param[in]	p_ww, p_wh	The window size
-		 *\param[in]	p_pNode		The camera's parent node
+		 *\param[in]	p_node		The camera's parent node
 		 *\param[in]	p_type		The viewport projection type
 		 *\~french
 		 *\brief		Crée une caméra
 		 *\param[in]	p_name		Le nom de la caméra
 		 *\param[in]	p_ww, p_wh	Les dimensions de la fenêtre
-		 *\param[in]	p_pNode		Le node auquel attacher la caméra
+		 *\param[in]	p_node		Le node auquel attacher la caméra
 		 *\param[in]	p_type		Le type de projection du viewport
 		 */
-		CameraSPtr CreateCamera( Castor::String const & p_name, int p_ww, int p_wh, SceneNodeSPtr p_pNode, eVIEWPORT_TYPE p_type );
+		CameraSPtr CreateCamera( Castor::String const & p_name, int p_ww, int p_wh, SceneNodeSPtr p_node, eVIEWPORT_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Creates a camera
 		 *\param[in]	p_name		The camera name
-		 *\param[in]	p_pNode		The camera's parent node
-		 *\param[in]	p_pViewport	The viewport
+		 *\param[in]	p_node		The camera's parent node
+		 *\param[in]	p_viewport	The viewport
 		 *\~french
 		 *\brief		Crée une caméra
 		 *\param[in]	p_name		Le nom de la caméra
-		 *\param[in]	p_pNode		Le node auquel attacher la caméra
-		 *\param[in]	p_pViewport	Le viewport
+		 *\param[in]	p_node		Le node auquel attacher la caméra
+		 *\param[in]	p_viewport	Le viewport
 		 */
-		CameraSPtr CreateCamera( Castor::String const & p_name, SceneNodeSPtr p_pNode, ViewportSPtr p_pViewport );
+		CameraSPtr CreateCamera( Castor::String const & p_name, SceneNodeSPtr p_node, ViewportSPtr p_viewport );
 		/**
 		 *\~english
 		 *\brief		Creates a light
 		 *\param[in]	p_name			The light name
-		 *\param[in]	p_pNode			The light's parent node
+		 *\param[in]	p_node			The light's parent node
 		 *\param[in]	p_eLightType	The light type
 		 *\~french
 		 *\brief		Crée une lumière
 		 *\param[in]	p_name			Le nom de la lumière
-		 *\param[in]	p_pNode			Le node auquel attacher la lumière
+		 *\param[in]	p_node			Le node auquel attacher la lumière
 		 *\param[in]	p_eLightType	Le type de la lumière
 		 */
-		LightSPtr CreateLight( Castor::String const & p_name, SceneNodeSPtr p_pNode, eLIGHT_TYPE p_eLightType );
+		LightSPtr CreateLight( Castor::String const & p_name, SceneNodeSPtr p_node, eLIGHT_TYPE p_eLightType );
 		/**
 		 *\~english
 		 *\brief		Creates an animated object group
@@ -458,12 +458,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Removes the node given in argument from the scene
-		 *\param[in]	p_pNode	The node
+		 *\param[in]	p_node	The node
 		 *\~french
 		 *\brief		Enlève le node donné de la scène
-		 *\param[in]	p_pNode	La lumière
+		 *\param[in]	p_node	La lumière
 		 */
-		void RemoveNode( SceneNodeSPtr p_pNode );
+		void RemoveNode( SceneNodeSPtr p_node );
 		/**
 		 *\~english
 		 *\brief		Removes the geometry given in argument from the scene and deletes it
@@ -575,12 +575,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Merges the content of the given scene to this scene
-		 *\param[in]	p_pScene	The scene to merge into this one
+		 *\param[in]	p_scene	The scene to merge into this one
 		 *\~french
 		 *\brief		Intègre à cette scène le contenu de celle donnée
-		 *\param[in]	p_pScene	La scène à intégrer
+		 *\param[in]	p_scene	La scène à intégrer
 		 */
-		void Merge( SceneSPtr p_pScene );
+		void Merge( SceneSPtr p_scene );
 		/**
 		 *\~english
 		 *\brief		Clears the overlay list
@@ -591,13 +591,13 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Adds an overlay to the list
-		 *\param[in]	p_pOverlay	The overlay to add
+		 *\param[in]	p_overlay	The overlay to add
 		 *\~french
 		 *\brief		Ajoute un overlay à ceux déjà présents
-		 *\param[in]	p_pOverlay	L'overlay
+		 *\param[in]	p_overlay	L'overlay
 		 *\return
 		 */
-		void AddOverlay( OverlaySPtr p_pOverlay );
+		void AddOverlay( OverlaySPtr p_overlay );
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertices count
@@ -998,7 +998,7 @@ namespace Castor3D
 		 */
 		inline Engine * GetEngine()const
 		{
-			return m_pEngine;
+			return m_engine;
 		}
 		/**
 		 *\~english
@@ -1035,9 +1035,9 @@ namespace Castor3D
 		void DoBindCamera( FrameVariableBuffer & p_sceneBuffer );
 
 		template< typename MapType >
-		void DoMerge( SceneSPtr p_pScene, MapType & p_map, MapType & p_myMap )
+		void DoMerge( SceneSPtr p_scene, MapType & p_map, MapType & p_myMap )
 		{
-			Castor::String l_strName;
+			Castor::String l_name;
 
 			for ( typename MapType::iterator l_it = p_map.begin(); l_it != p_map.end(); ++l_it )
 			{
@@ -1052,15 +1052,15 @@ namespace Castor3D
 					l_it->second->AttachTo( m_rootObjectNode );
 				}
 
-				l_strName = l_it->first;
+				l_name = l_it->first;
 
-				while ( p_myMap.find( l_strName ) != p_myMap.end() )
+				while ( p_myMap.find( l_name ) != p_myMap.end() )
 				{
-					l_strName = p_pScene->GetName() + cuT( "_" ) + l_strName;
+					l_name = p_scene->GetName() + cuT( "_" ) + l_name;
 				}
 
-				l_it->second->SetName( l_strName );
-				p_myMap.insert( std::make_pair( l_strName, l_it->second ) );
+				l_it->second->SetName( l_name );
+				p_myMap.insert( std::make_pair( l_name, l_it->second ) );
 			}
 
 			p_map.clear();
@@ -1254,7 +1254,7 @@ namespace Castor3D
 		//!\~english The overlays array	\~french Le tableau d'overlays
 		OverlayPtrArray m_arrayOverlays;
 		//!\~english The core engine	\~french Le moteur
-		Engine * m_pEngine;
+		Engine * m_engine;
 		//!\~english Lights map, ordered by index	\~french Map de lumières, triées par index
 		std::map< int, LightSPtr > m_mapLights;
 		//!\~english The geometries with no alpha blending, sorted by material	\~french Les géométries n'ayant pas d'alpha blend, triées par matériau

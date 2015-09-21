@@ -47,7 +47,7 @@ namespace Dx11Render
 		DWORD m_dwAttachment;
 		DxFrameBufferWPtr m_pFrameBuffer;
 		DxRenderBuffer & m_dxRenderBuffer;
-		DxRenderSystem * m_pRenderSystem;
+		DxRenderSystem * m_renderSystem;
 	};
 }
 #endif

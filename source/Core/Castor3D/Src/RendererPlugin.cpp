@@ -38,21 +38,21 @@ namespace Castor3D
 		if ( !p_pLibrary->GetFunction( m_pfnGetRendererType, GetRendererTypeFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] GetRendererType plugin function : " );
-			l_strError += string::to_string( dlerror() );
+			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
 		if ( !p_pLibrary->GetFunction( m_pfnCreateRenderSystem, CreateRenderSystemFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] CreateRenderSystem plugin function : " );
-			l_strError += string::to_string( dlerror() );
+			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
 		if ( !p_pLibrary->GetFunction( m_pfnDestroyRenderSystem, DestroyRenderSystemFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] DestroyRenderSystem plugin function : " );
-			l_strError += string::to_string( dlerror() );
+			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
@@ -70,13 +70,13 @@ namespace Castor3D
 		}
 	}
 
-	RenderSystem * RendererPlugin::CreateRenderSystem( Engine * p_pEngine )
+	RenderSystem * RendererPlugin::CreateRenderSystem( Engine * p_engine )
 	{
 		RenderSystem * l_pReturn = NULL;
 
 		if ( m_pfnCreateRenderSystem )
 		{
-			l_pReturn = m_pfnCreateRenderSystem( p_pEngine );
+			l_pReturn = m_pfnCreateRenderSystem( p_engine );
 		}
 
 		return l_pReturn;

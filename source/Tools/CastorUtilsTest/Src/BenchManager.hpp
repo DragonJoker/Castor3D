@@ -24,10 +24,6 @@ namespace Testing
 {
 	class BenchManager
 	{
-	private:
-		static std::vector< BenchCaseSPtr > m_arrayBenchs;
-		static std::vector< TestCaseSPtr > m_arrayTests;
-
 	public:
 		BenchManager();
 		~BenchManager();
@@ -36,6 +32,10 @@ namespace Testing
 		static void ExecuteBenchs();
 		static void BenchsSummary();
 		static uint32_t ExecuteTests();
+
+	private:
+		static std::vector< BenchCaseSPtr > m_arrayBenchs;
+		static std::vector< TestCaseSPtr > m_arrayTests;
 	};
 
 	bool Register( BenchCaseSPtr p_pBench );

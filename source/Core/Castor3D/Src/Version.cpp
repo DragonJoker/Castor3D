@@ -92,22 +92,23 @@ namespace Castor3D
 	{
 		return !( p_a < p_b );
 	}
-}
 
-std::ostream & operator <<( std::ostream & p_stream, Castor3D::Version const & p_version )
-{
-	p_stream << p_version.m_iMajor << "." << p_version.m_iMinor << "." << p_version.m_iBuild;
-	return p_stream;
-}
+	std::ostream & operator <<( std::ostream & p_stream, Castor3D::Version const & p_version )
+	{
+		p_stream << p_version.m_iMajor << "." << p_version.m_iMinor << "." << p_version.m_iBuild;
+		return p_stream;
+	}
 
-std::wostream & operator <<( std::wostream & p_stream, Castor3D::Version const & p_version )
-{
-	p_stream << p_version.m_iMajor << L"." << p_version.m_iMinor << L"." << p_version.m_iBuild;
-	return p_stream;
-}
+	std::wostream & operator <<( std::wostream & p_stream, Castor3D::Version const & p_version )
+	{
+		p_stream << p_version.m_iMajor << L"." << p_version.m_iMinor << L"." << p_version.m_iBuild;
+		return p_stream;
+	}
 
-Castor::String & operator <<( Castor::String & p_stream, Castor3D::Version const & p_version )
-{
-	p_stream + string::to_string( p_version.m_iMajor ) + cuT( "." ) + string::to_string( p_version.m_iMinor ) + cuT( "." ) + string::to_string( p_version.m_iBuild );
-	return p_stream;
+	Castor::String & operator <<( Castor::String & p_stream, Castor3D::Version const & p_version )
+	{
+		StringStream l_stream;
+		l_stream << p_version;
+		return p_stream += l_stream.str();
+	}
 }

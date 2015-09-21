@@ -164,15 +164,6 @@ namespace Direct
 		virtual void DoEndRender();
 		/**
 		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags
-		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
-		 *\~french
-		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
-		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
-		 */
-		virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const;
-		/**
-		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags
 		 *\param[in]	p_uiFlags	A combination of eTEXTURE_CHANNEL
 		 *\~french
@@ -182,15 +173,6 @@ namespace Direct
 		virtual Castor::String DoGetPixelShaderSource( uint32_t p_uiFlags )const;
 
 #if C3D_HAS_GL_RENDERER
-		/**
-		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags
-		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
-		 *\~french
-		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
-		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
-		 */
-		Castor::String DoGetGlVertexShaderSource( uint32_t p_uiProgramFlags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags
@@ -203,15 +185,6 @@ namespace Direct
 #endif
 
 #if C3D_HAS_D3D11_RENDERER
-		/**
-		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags
-		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
-		 *\~french
-		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
-		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
-		 */
-		Castor::String DoGetD3D11VertexShaderSource( uint32_t p_uiProgramFlags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags

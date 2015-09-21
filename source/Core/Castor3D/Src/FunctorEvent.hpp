@@ -67,7 +67,7 @@ namespace Castor3D
 		{
 			FunctorEvent l_evt( p_copy );
 			std::swap( m_functor, l_evt.m_functor );
-			std::swap( m_eType, l_evt.m_eType );
+			std::swap( m_type, l_evt.m_type );
 			return *this;
 		}
 

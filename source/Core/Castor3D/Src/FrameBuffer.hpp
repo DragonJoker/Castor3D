@@ -40,12 +40,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\para[in]		p_pEngine	The core engine
+		 *\para[in]		p_engine	The core engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\para[in]		p_pEngine	Le moteur
+		 *\para[in]		p_engine	Le moteur
 		 */
-		FrameBuffer( Engine * p_pEngine );
+		FrameBuffer( Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -75,15 +75,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
 		 *\param[in]	p_eTarget	The frame buffer binding target
-		 *\param[in]	p_eMode		The frame buffer binding mode
+		 *\param[in]	p_mode		The frame buffer binding mode
 		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
 		 *\param[in]	p_eTarget	La cible d'activation du tampon d'image
-		 *\param[in]	p_eMode		Le mode d'activation du tampon d'image
+		 *\param[in]	p_mode		Le mode d'activation du tampon d'image
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool Bind( eFRAMEBUFFER_MODE p_eMode = eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET p_eTarget = eFRAMEBUFFER_TARGET_BOTH );
+		bool Bind( eFRAMEBUFFER_MODE p_mode = eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET p_eTarget = eFRAMEBUFFER_TARGET_BOTH );
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
@@ -457,7 +457,7 @@ namespace Castor3D
 		//!\~english Attached textures map	\~french Map des textures attachées
 		TexAttachMap m_mapTex;
 		//!\~english The engine	\~french Le moteur
-		Engine * m_pEngine;
+		Engine * m_engine;
 		//!\~english All attchments	\~french Toutes les attaches
 		AttachArray m_arrayAttaches;
 	};

@@ -17,7 +17,7 @@ using namespace Dx11Render;
 DxRenderTarget::DxRenderTarget( DxRenderSystem * p_pRenderSystem, eTARGET_TYPE p_type )
 	: RenderTarget( p_pRenderSystem->GetEngine(), p_type )
 	, m_bInitialised( false )
-	, m_pRenderSystem( p_pRenderSystem )
+	, m_renderSystem( p_pRenderSystem )
 {
 }
 
@@ -29,7 +29,7 @@ void DxRenderTarget::Clear()
 {
 	if ( m_bInitialised )
 	{
-		DxContextRPtr l_pContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() );
+		DxContextRPtr l_pContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() );
 		ID3D11DeviceContext * l_pDeviceContext = l_pContext->GetDeviceContext();
 		SceneSPtr l_scene = GetScene();
 
@@ -55,11 +55,11 @@ RenderBufferAttachmentSPtr DxRenderTarget::CreateAttachment( RenderBufferSPtr p_
 
 	if ( p_pRenderBuffer->GetComponent() == eBUFFER_COMPONENT_COLOUR )
 	{
-		l_pReturn = std::make_shared< DxRenderBufferAttachment >( static_cast< DxRenderSystem * >( m_pRenderSystem ), std::static_pointer_cast< DxColourRenderBuffer >( p_pRenderBuffer ) );
+		l_pReturn = std::make_shared< DxRenderBufferAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), std::static_pointer_cast< DxColourRenderBuffer >( p_pRenderBuffer ) );
 	}
 	else
 	{
-		l_pReturn = std::make_shared< DxRenderBufferAttachment >( static_cast< DxRenderSystem * >( m_pRenderSystem ), std::static_pointer_cast< DxDepthStencilRenderBuffer >( p_pRenderBuffer ) );
+		l_pReturn = std::make_shared< DxRenderBufferAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), std::static_pointer_cast< DxDepthStencilRenderBuffer >( p_pRenderBuffer ) );
 	}
 
 	return l_pReturn;
@@ -67,10 +67,10 @@ RenderBufferAttachmentSPtr DxRenderTarget::CreateAttachment( RenderBufferSPtr p_
 
 TextureAttachmentSPtr DxRenderTarget::CreateAttachment( DynamicTextureSPtr p_pTexture )const
 {
-	return std::make_shared< DxTextureAttachment >( static_cast< DxRenderSystem * >( m_pRenderSystem ), p_pTexture );
+	return std::make_shared< DxTextureAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), p_pTexture );
 }
 
 FrameBufferSPtr DxRenderTarget::CreateFrameBuffer()const
 {
-	return std::make_shared< DxFrameBuffer >( static_cast< DxRenderSystem * >( m_pRenderSystem ) );
+	return std::make_shared< DxFrameBuffer >( static_cast< DxRenderSystem * >( m_renderSystem ) );
 }

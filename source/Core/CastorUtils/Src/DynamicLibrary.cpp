@@ -86,18 +86,18 @@ namespace Castor
 	{
 		if ( !m_pLibrary )
 		{
-			std::string l_strName( string::string_cast< char >( p_name ) );
+			std::string l_name( string::string_cast< char >( p_name ) );
 #if defined( _WIN32 )
 			UINT l_uiOldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
 
 			try
 			{
-				m_pLibrary = ::LoadLibraryA( l_strName.c_str() );
+				m_pLibrary = ::LoadLibraryA( l_name.c_str() );
 				m_pathLibrary = p_name;
 			}
 			catch ( ... )
 			{
-				Logger::LogError( std::string( "Can't load dynamic library at [" ) + l_strName + std::string( "]" ) );
+				Logger::LogError( std::string( "Can't load dynamic library at [" ) + l_name + std::string( "]" ) );
 				m_pLibrary = NULL;
 			}
 
@@ -106,12 +106,12 @@ namespace Castor
 
 			try
 			{
-				m_pLibrary = dlopen( l_strName.c_str(), RTLD_LAZY );
+				m_pLibrary = dlopen( l_name.c_str(), RTLD_LAZY );
 				m_pathLibrary = p_name;
 			}
 			catch ( ... )
 			{
-				Logger::LogError( std::string( "Can't load dynamic library at [" ) + l_strName + std::string( "]" ) );
+				Logger::LogError( std::string( "Can't load dynamic library at [" ) + l_name + std::string( "]" ) );
 				m_pLibrary = NULL;
 			}
 
@@ -128,21 +128,21 @@ namespace Castor
 
 		if ( m_pLibrary )
 		{
-			std::string l_strName( string::string_cast< char >( p_name ) );
+			std::string l_name( string::string_cast< char >( p_name ) );
 #if defined( _WIN32 )
 			UINT l_uiOldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
-			l_pReturn = reinterpret_cast< void * >( ::GetProcAddress( static_cast< HMODULE >( m_pLibrary ), l_strName.c_str() ) );
+			l_pReturn = reinterpret_cast< void * >( ::GetProcAddress( static_cast< HMODULE >( m_pLibrary ), l_name.c_str() ) );
 			::SetErrorMode( l_uiOldMode );
 #else
 
 			try
 			{
-				l_pReturn = dlsym( m_pLibrary, l_strName.c_str() );
+				l_pReturn = dlsym( m_pLibrary, l_name.c_str() );
 			}
 			catch ( ... )
 			{
 				l_pReturn = NULL;
-				Logger::LogError( std::string( "Can't load function [" ) + l_strName + std::string( "]" ) );
+				Logger::LogError( std::string( "Can't load function [" ) + l_name + std::string( "]" ) );
 			}
 
 #endif

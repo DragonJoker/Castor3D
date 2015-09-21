@@ -5,8 +5,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Sampler::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< Sampler, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	Sampler::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		:	Loader< Sampler, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -342,8 +342,8 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	Sampler::Sampler( Engine * p_pEngine, String const & p_name )
-		: m_pEngine( p_pEngine )
+	Sampler::Sampler( Engine * p_engine, String const & p_name )
+		: m_engine( p_engine )
 		, m_rMinLod( -1000 )
 		, m_rMaxLod( 1000 )
 		, m_clrBorderColour( Colour::from_components( 0, 0, 0, 0 ) )

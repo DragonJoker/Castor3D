@@ -66,7 +66,7 @@ namespace Castor3D
 		{
 			CleanupEvent l_evt( p_copy );
 			std::swap( m_object, l_evt.m_object );
-			std::swap( m_eType, l_evt.m_eType );
+			std::swap( m_type, l_evt.m_type );
 			return *this;
 		}
 

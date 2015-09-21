@@ -10,20 +10,20 @@ using namespace Castor;
 
 namespace Dx11Render
 {
-	DxDomainShader::DxDomainShader( DxShaderProgram * p_pParent )
-		: DxShaderObject( p_pParent, eSHADER_TYPE_DOMAIN )
+	DxDomainShader::DxDomainShader( DxShaderProgram * p_parent )
+		: DxShaderObject( p_parent, eSHADER_TYPE_DOMAIN )
 		, m_pDomainShader( NULL )
 	{
 	}
 
 	DxDomainShader::~DxDomainShader()
 	{
-		ReleaseTracked( m_pRenderSystem, m_pDomainShader );
+		ReleaseTracked( m_renderSystem, m_pDomainShader );
 	}
 
 	void DxDomainShader::DoBind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->DSSetShader( m_pDomainShader, NULL, 0 );
 		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_DOMAIN );
 
@@ -46,7 +46,7 @@ namespace Dx11Render
 
 	void DxDomainShader::DoUnbind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_DOMAIN );
 
 		if ( !l_ubos.empty() )
@@ -65,12 +65,12 @@ namespace Dx11Render
 	{
 		if ( m_pCompiled )
 		{
-			ID3D11Device * l_pDevice = m_pRenderSystem->GetDevice();
+			ID3D11Device * l_pDevice = m_renderSystem->GetDevice();
 
 			if ( l_pDevice )
 			{
 				HRESULT l_hr = l_pDevice->CreateDomainShader( reinterpret_cast< DWORD * >( m_pCompiled->GetBufferPointer() ), m_pCompiled->GetBufferSize(), NULL, &m_pDomainShader );
-				dxDebugName( m_pRenderSystem, m_pDomainShader, DSShader );
+				dxTrack( m_renderSystem, m_pDomainShader, DSShader );
 
 				if ( l_hr == S_OK )
 				{
@@ -82,6 +82,6 @@ namespace Dx11Render
 
 	void DxDomainShader::Detach()
 	{
-		ReleaseTracked( m_pRenderSystem, m_pDomainShader );
+		ReleaseTracked( m_renderSystem, m_pDomainShader );
 	}
 }
