@@ -19,7 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_PREREQUISITES_H___
 
 #if defined( _MSC_VER )
-// disable: "<type> needs to have dll-interface to be used by clients'
+// disable: "<type > needs to have dll-interface to be used by clients'
 // Happens on STL member variables which are not public therefore is ok
 #	pragma warning( disable:4251 )
 // disable: "non dll-interface class used as base for dll-interface class"
@@ -38,7 +38,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	define CASTOR_MSW
 #	if defined( _MSC_VER )
 #		pragma warning( push )
-// disable: "<symbol> no suitable definition provided for explicit instantiation request"
+// disable: "<symbol > no suitable definition provided for explicit instantiation request"
 // Happens when deriving from Manager
 #   	pragma warning( disable : 4661 )
 // disable: "C++ exception specification ignored except to indicate a function is not __declspec(nothrow)"
@@ -54,8 +54,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	endif
 #endif
 
-#include <CastorUtilsPrerequisites.hpp>
-#include <Collection.hpp>
+#include <CastorUtilsPrerequisites.hpp >
+#include <Collection.hpp >
 
 namespace Castor3D
 {
@@ -73,7 +73,7 @@ namespace Castor3D
 	*/
 	typedef enum eINTERPOLATOR_MODE
 	{
-		eINTERPOLATOR_MODE_LINEAR,	//!<\~english Linear mode	\~french Mode linéaire
+		eINTERPOLATOR_MODE_LINEAR, //!<\~english Linear mode	\~french Mode linéaire
 		eINTERPOLATOR_MODE_COUNT
 	}	eINTERPOLATOR_MODE;
 
@@ -90,15 +90,15 @@ namespace Castor3D
 	template< class Type, eINTERPOLATOR_MODE Mode > class Interpolator;
 	template< typename T > class KeyFrame;
 
-	typedef KeyFrame< Castor::Point3r		> ScaleKeyFrame;
-	typedef KeyFrame< Castor::Point3r		> TranslateKeyFrame;
-	typedef KeyFrame< Castor::Quaternion	> RotateKeyFrame;
+	typedef KeyFrame< Castor::Point3r > ScaleKeyFrame;
+	typedef KeyFrame< Castor::Point3r > TranslateKeyFrame;
+	typedef KeyFrame< Castor::Quaternion > RotateKeyFrame;
 
-	typedef Interpolator< Castor::Point3r,		eINTERPOLATOR_MODE_LINEAR > LinearPointInterpolator;
-	typedef Interpolator< Castor::Quaternion,	eINTERPOLATOR_MODE_LINEAR > LinearQuaternionInterpolator;
+	typedef Interpolator< Castor::Point3r, eINTERPOLATOR_MODE_LINEAR > LinearPointInterpolator;
+	typedef Interpolator< Castor::Quaternion, eINTERPOLATOR_MODE_LINEAR > LinearQuaternionInterpolator;
 
-	typedef std::pair< uint32_t, real >	VertexWeight;//!<\~english Vertex weight, a simple pair of ID and weight	\~french Poids de vertice, simple paire d'un ID et du poids
-	typedef std::map< Castor::String, uint32_t >	UIntStrMap;
+	typedef std::pair< uint32_t, real > VertexWeight;//!<\~english Vertex weight, a simple pair of ID and weight	\~french Poids de vertice, simple paire d'un ID et du poids
+	typedef std::map< Castor::String, uint32_t > UIntStrMap;
 
 	DECLARE_SMART_PTR( ScaleKeyFrame );
 	DECLARE_SMART_PTR( TranslateKeyFrame );
@@ -112,31 +112,31 @@ namespace Castor3D
 	DECLARE_SMART_PTR( Animable );
 
 	//! AnimatedObjectGroup pointer map, sorted by name
-	DECLARE_MAP(	Castor::String,	AnimatedObjectGroupSPtr,	AnimatedObjectGroupPtrStr );
+	DECLARE_MAP( Castor::String, AnimatedObjectGroupSPtr, AnimatedObjectGroupPtrStr );
 	//! Animation pointer map, sorted by name
-	DECLARE_MAP(	Castor::String,	AnimationSPtr,				AnimationPtrStr );
+	DECLARE_MAP( Castor::String, AnimationSPtr, AnimationPtrStr );
 	//! KeyFrame pointer map, sorted by time index
-	DECLARE_MAP(	real,			ScaleKeyFrameSPtr,			ScaleKeyFramePtrReal );
+	DECLARE_MAP( real, ScaleKeyFrameSPtr, ScaleKeyFramePtrReal );
 	//! KeyFrame pointer map, sorted by time index
-	DECLARE_MAP(	real,			TranslateKeyFrameSPtr,		TranslateKeyFramePtrReal );
+	DECLARE_MAP( real, TranslateKeyFrameSPtr, TranslateKeyFramePtrReal );
 	//! KeyFrame pointer map, sorted by time index
-	DECLARE_MAP(	real,			RotateKeyFrameSPtr,			RotateKeyFramePtrReal );
+	DECLARE_MAP( real, RotateKeyFrameSPtr, RotateKeyFramePtrReal );
 	//! AnimatedObject pointer map, sorted by name
-	DECLARE_MAP(	Castor::String,	AnimatedObjectSPtr,			AnimatedObjectPtrStr );
+	DECLARE_MAP( Castor::String, AnimatedObjectSPtr, AnimatedObjectPtrStr );
 	//! MovingObject pointer map, sorted by name
-	DECLARE_MAP(	Castor::String,	MovingObjectBaseSPtr,		MovingObjectPtrStr );
+	DECLARE_MAP( Castor::String, MovingObjectBaseSPtr, MovingObjectPtrStr );
 	//! KeyFrame pointer array
-	DECLARE_VECTOR(	ScaleKeyFrameSPtr,							ScaleKeyFramePtr );
+	DECLARE_VECTOR( ScaleKeyFrameSPtr, ScaleKeyFramePtr );
 	//! KeyFrame pointer array
-	DECLARE_VECTOR(	TranslateKeyFrameSPtr,						TranslateKeyFramePtr );
+	DECLARE_VECTOR( TranslateKeyFrameSPtr, TranslateKeyFramePtr );
 	//! KeyFrame pointer array
-	DECLARE_VECTOR(	RotateKeyFrameSPtr,							RotateKeyFramePtr );
+	DECLARE_VECTOR( RotateKeyFrameSPtr, RotateKeyFramePtr );
 	//! VertexWeight pointer array
-	DECLARE_VECTOR( VertexWeight,								VertexWeight );
+	DECLARE_VECTOR( VertexWeight, VertexWeight );
 	//! Bone pointer array
-	DECLARE_VECTOR(	BoneSPtr,									BonePtr );
+	DECLARE_VECTOR( BoneSPtr, BonePtr );
 	//! MovingObject pointer array
-	DECLARE_VECTOR(	MovingObjectBaseSPtr,						MovingObjectPtr );
+	DECLARE_VECTOR( MovingObjectBaseSPtr, MovingObjectPtr );
 
 	//@}
 	/**@name Camera */
@@ -153,9 +153,9 @@ namespace Castor3D
 	DECLARE_SMART_PTR( Ray );
 
 	//! Camera pointer map, sorted by name
-	DECLARE_MAP(	Castor::String,	CameraSPtr,		CameraPtrStr );
+	DECLARE_MAP( Castor::String, CameraSPtr, CameraPtrStr );
 	//! Camera pointer array
-	DECLARE_VECTOR(	CameraSPtr,						CameraPtr );
+	DECLARE_VECTOR( CameraSPtr, CameraPtr );
 
 	//@}
 	/**@name Geometry */
@@ -171,7 +171,7 @@ namespace Castor3D
 	typedef enum eMESH_TYPE
 	CASTOR_TYPE( uint8_t )
 	{
-		eMESH_TYPE_CUSTOM,		//!< Custom mesh type => User defined vertex...
+		eMESH_TYPE_CUSTOM,		//!< Custom mesh type = > User defined vertex...
 		eMESH_TYPE_CONE,		//!< Cone mesh type
 		eMESH_TYPE_CYLINDER,	//!< Cylinder mesh type
 		eMESH_TYPE_SPHERE,		//!< Rectangular faces sphere mesh type
@@ -193,8 +193,8 @@ namespace Castor3D
 	CASTOR_TYPE( uint8_t )
 	{
 		eNORMAL_FLAT,	//!<\~english Flat (face) normals	\~french Normales plates (par face)
-		eNORMAL_SMOOTH,	//!<\~english Smooth normals		\~french Normales smooth
-		eNORMAL_COUNT,	//!<\~english Count				\~french Compte
+		eNORMAL_SMOOTH,	//!<\~english Smooth normals	\~french Normales smooth
+		eNORMAL_COUNT,	//!<\~english Count	\~french Compte
 	}	eNORMAL;
 
 	class Vertex;
@@ -203,11 +203,11 @@ namespace Castor3D
 	DECLARE_SMART_PTR( Vertex );
 	DECLARE_SMART_PTR( BufferElementGroup );
 
-	template <typename T> class Pattern;
-	typedef Pattern<	Vertex				>	VertexPattern;
-	typedef Pattern<	Castor::Point3r		>	Point3rPattern;
-	typedef Pattern<	VertexSPtr			>	VertexPtrPattern;
-	typedef Pattern<	Castor::Point3rSPtr	>	Point3rPtrPattern;
+	template <typename T > class Pattern;
+	typedef Pattern< Vertex > VertexPattern;
+	typedef Pattern< Castor::Point3r > Point3rPattern;
+	typedef Pattern< VertexSPtr > VertexPtrPattern;
+	typedef Pattern< Castor::Point3rSPtr > Point3rPtrPattern;
 
 	struct FaceGroup;
 	class Face;
@@ -227,63 +227,63 @@ namespace Castor3D
 	class MovableObject;
 	class Subdivider;
 
-	DECLARE_SMART_PTR(	VertexPattern );
-	DECLARE_SMART_PTR(	Point3rPattern );
-	DECLARE_SMART_PTR(	VertexPtrPattern );
-	DECLARE_SMART_PTR(	Point3rPtrPattern );
-	DECLARE_SMART_PTR(	Face );
-	DECLARE_SMART_PTR(	Graph );
-	DECLARE_SMART_PTR(	Mesh );
-	DECLARE_SMART_PTR(	MeshCategory );
-	DECLARE_SMART_PTR(	Submesh );
-	DECLARE_SMART_PTR(	Cone );
-	DECLARE_SMART_PTR(	Cylinder );
-	DECLARE_SMART_PTR(	Icosahedron );
-	DECLARE_SMART_PTR(	Cube );
-	DECLARE_SMART_PTR(	Plane );
-	DECLARE_SMART_PTR(	Projection );
-	DECLARE_SMART_PTR(	Sphere );
-	DECLARE_SMART_PTR(	Torus );
-	DECLARE_SMART_PTR(	Geometry );
-	DECLARE_SMART_PTR(	MovableObject );
-	DECLARE_SMART_PTR(	Subdivider );
-	DECLARE_SMART_PTR(	FaceGroup );
+	DECLARE_SMART_PTR( VertexPattern );
+	DECLARE_SMART_PTR( Point3rPattern );
+	DECLARE_SMART_PTR( VertexPtrPattern );
+	DECLARE_SMART_PTR( Point3rPtrPattern );
+	DECLARE_SMART_PTR( Face );
+	DECLARE_SMART_PTR( Graph );
+	DECLARE_SMART_PTR( Mesh );
+	DECLARE_SMART_PTR( MeshCategory );
+	DECLARE_SMART_PTR( Submesh );
+	DECLARE_SMART_PTR( Cone );
+	DECLARE_SMART_PTR( Cylinder );
+	DECLARE_SMART_PTR( Icosahedron );
+	DECLARE_SMART_PTR( Cube );
+	DECLARE_SMART_PTR( Plane );
+	DECLARE_SMART_PTR( Projection );
+	DECLARE_SMART_PTR( Sphere );
+	DECLARE_SMART_PTR( Torus );
+	DECLARE_SMART_PTR( Geometry );
+	DECLARE_SMART_PTR( MovableObject );
+	DECLARE_SMART_PTR( Subdivider );
+	DECLARE_SMART_PTR( FaceGroup );
 
 	class MeshFactory;
 	DECLARE_SMART_PTR( MeshFactory );
 
 	//! Vertex array
-	DECLARE_VECTOR(	Vertex,									Vertex );
+	DECLARE_VECTOR( Vertex, Vertex );
 	//! Vertex pointer array
-	DECLARE_VECTOR(	BufferElementGroupSPtr,					VertexPtr );
+	DECLARE_VECTOR( BufferElementGroupSPtr, VertexPtr );
 	//! Face array
-	DECLARE_VECTOR(	Face,									Face );
+	DECLARE_VECTOR( Face, Face );
 	//! Face pointer array
-	DECLARE_VECTOR(	FaceSPtr,								FacePtr );
+	DECLARE_VECTOR( FaceSPtr, FacePtr );
 	//! FaceGroup pointer array
-	DECLARE_VECTOR(	FaceGroupSPtr,							FaceGroupPtr );
+	DECLARE_VECTOR( FaceGroupSPtr, FaceGroupPtr );
 	//! Submesh pointer array
-	DECLARE_VECTOR(	SubmeshSPtr,							SubmeshPtr );
+	DECLARE_VECTOR( SubmeshSPtr, SubmeshPtr );
 	//! Geometry pointer array
-	DECLARE_VECTOR(	GeometrySPtr,							GeometryPtr );
+	DECLARE_VECTOR( GeometrySPtr, GeometryPtr );
 	//! Vertex pointer list
-	DECLARE_LIST(	VertexSPtr,								VertexPtr );
+	DECLARE_LIST( VertexSPtr, VertexPtr );
 	//! Mesh pointer array
-	DECLARE_MAP(	Castor::String,		MeshSPtr,			MeshPtrStr );
+	DECLARE_MAP( Castor::String, MeshSPtr, MeshPtrStr );
 	//! MovableObject pointer map, sorted by name
-	DECLARE_MAP(	Castor::String,		MovableObjectSPtr,	MovableObjectPtrStr );
+	DECLARE_MAP( Castor::String, MovableObjectSPtr, MovableObjectPtrStr );
 	//! Geometry pointer map, sorted by name
-	DECLARE_MAP(	Castor::String,		GeometrySPtr,		GeometryPtrStr );
-	DECLARE_MAP(	uint32_t,			int,				IntUInt );
-	DECLARE_MAP(	Castor::String,		SubmeshSPtr,		SubmeshPtrStr );
-	DECLARE_MAP(	Castor::String,		int,				IntStr );
+	DECLARE_MAP( Castor::String, GeometrySPtr, GeometryPtrStr );
+	DECLARE_MAP( uint32_t, int, IntUInt );
+	DECLARE_MAP( Castor::String, SubmeshSPtr, SubmeshPtrStr );
+	DECLARE_MAP( Castor::String, int, IntStr );
 
 	//@}
 	/**@name Importer */
 	//@{
 
 	class Importer;
-	DECLARE_SMART_PTR(	Importer );
+	DECLARE_SMART_PTR( Importer );
 
 	//@}
 	/**@name Light */
@@ -311,21 +311,21 @@ namespace Castor3D
 	class PointLight;
 	class SpotLight;
 
-	DECLARE_SMART_PTR(	Light );
-	DECLARE_SMART_PTR(	LightCategory );
-	DECLARE_SMART_PTR(	DirectionalLight );
-	DECLARE_SMART_PTR(	PointLight );
-	DECLARE_SMART_PTR(	SpotLight );
+	DECLARE_SMART_PTR( Light );
+	DECLARE_SMART_PTR( LightCategory );
+	DECLARE_SMART_PTR( DirectionalLight );
+	DECLARE_SMART_PTR( PointLight );
+	DECLARE_SMART_PTR( SpotLight );
 
 	class LightFactory;
 	DECLARE_SMART_PTR( LightFactory );
 
 	//! Array of lights
-	DECLARE_VECTOR(	LightSPtr,					LightPtr );
+	DECLARE_VECTOR( LightSPtr, LightPtr );
 	//! Map of lights, sorted by name
-	DECLARE_MAP(	Castor::String,	LightSPtr,	LightPtrStr );
+	DECLARE_MAP( Castor::String, LightSPtr, LightPtrStr );
 	//! Map of lights, sorted by index
-	DECLARE_MAP(	int,			LightSPtr,	LightPtrInt );
+	DECLARE_MAP( int, LightSPtr, LightPtrInt );
 
 	//@}
 	/**@name Material */
@@ -341,9 +341,9 @@ namespace Castor3D
 	typedef enum eTEXTURE_MAP_MODE
 	CASTOR_TYPE( uint8_t )
 	{
-		eTEXTURE_MAP_MODE_NONE,			//!<\~english  Usual map mode		\~french Mode habituel (aucune transformation des UVW)
-		eTEXTURE_MAP_MODE_REFLECTION,	//!<\~english  Reflexion map mode	\~french Mode reflexion map
-		eTEXTURE_MAP_MODE_SPHERE,		//!<\~english  Sphere map mode		\~french Mode sphere map
+		eTEXTURE_MAP_MODE_NONE,			//!<\~english Usual map mode	\~french Mode habituel (aucune transformation des UVW)
+		eTEXTURE_MAP_MODE_REFLECTION,	//!<\~english Reflexion map mode	\~french Mode reflexion map
+		eTEXTURE_MAP_MODE_SPHERE,		//!<\~english Sphere map mode	\~french Mode sphere map
 		eTEXTURE_MAP_MODE_COUNT,
 	}	eTEXTURE_MAP_MODE;
 	/*!
@@ -356,14 +356,14 @@ namespace Castor3D
 	typedef enum eALPHA_FUNC
 	CASTOR_TYPE( uint8_t )
 	{
-		eALPHA_FUNC_ALWAYS,				//!<\~english Always take texture colour											\~french Prend toujours la couleur de la texture
-		eALPHA_FUNC_LESS,				//!<\~english Takes texture colour if alpha is less than given value				\~french Prend la couleur de la texture si l'alpha est inferieur a la valeur donnee
+		eALPHA_FUNC_ALWAYS,				//!<\~english Always take texture colour	\~french Prend toujours la couleur de la texture
+		eALPHA_FUNC_LESS,				//!<\~english Takes texture colour if alpha is less than given value	\~french Prend la couleur de la texture si l'alpha est inferieur a la valeur donnee
 		eALPHA_FUNC_LESS_OR_EQUAL,		//!<\~english Takes texture colour if alpha is less than or equal to given value	\~french Prend la couleur de la texture si l'alpha est inferieur ou egal a la valeur donnee
-		eALPHA_FUNC_EQUAL,				//!<\~english Takes texture colour if alpha is equal to given value					\~french Prend la couleur de la texture si l'alpha est egal a la valeur donnee
-		eALPHA_FUNC_NOT_EQUAL,			//!<\~english Takes texture colour if alpha is different of given value				\~french Prend la couleur de la texture si l'alpha est different de la valeur donnee
+		eALPHA_FUNC_EQUAL,				//!<\~english Takes texture colour if alpha is equal to given value	\~french Prend la couleur de la texture si l'alpha est egal a la valeur donnee
+		eALPHA_FUNC_NOT_EQUAL,			//!<\~english Takes texture colour if alpha is different of given value	\~french Prend la couleur de la texture si l'alpha est different de la valeur donnee
 		eALPHA_FUNC_GREATER_OR_EQUAL,	//!<\~english Takes texture colour if alpha is grater than or equal to given value	\~french Prend la couleur de la texture si l'alpha est superieur ou egal a la valeur donnee
-		eALPHA_FUNC_GREATER,			//!<\~english Takes texture colour if alpha is greater than given value				\~french Prend la couleur de la texture si l'alpha est superieur a la valeur donnee
-		eALPHA_FUNC_NEVER,				//!<\~english Never take texture colour												\~french Ne prend jamais la couleur de la texture
+		eALPHA_FUNC_GREATER,			//!<\~english Takes texture colour if alpha is greater than given value	\~french Prend la couleur de la texture si l'alpha est superieur a la valeur donnee
+		eALPHA_FUNC_NEVER,				//!<\~english Never take texture colour	\~french Ne prend jamais la couleur de la texture
 		eALPHA_FUNC_COUNT,
 	}	eALPHA_FUNC;
 	/*!
@@ -547,11 +547,11 @@ namespace Castor3D
 	typedef enum eTEXTURE_DIMENSION
 	CASTOR_TYPE( uint8_t )
 	{
-		eTEXTURE_DIMENSION_1D,		//!< 1 dimension textures => one coordinate => U mapping
-		eTEXTURE_DIMENSION_2D,		//!< 2 dimensions textures => two coordinates => UV mapping
-		eTEXTURE_DIMENSION_3D,		//!< 3 dimensions textures => three coordinates => UVW mapping
-		eTEXTURE_DIMENSION_2DMS,	//!< 2 dimensions textures with multisample support => two coordinates => UV mapping
-		eTEXTURE_DIMENSION_2DARRAY,	//!< 2 dimensions textures array => two coordinates => UV mapping
+		eTEXTURE_DIMENSION_1D,		//!< 1 dimension textures = > one coordinate = > U mapping
+		eTEXTURE_DIMENSION_2D,		//!< 2 dimensions textures = > two coordinates = > UV mapping
+		eTEXTURE_DIMENSION_3D,		//!< 3 dimensions textures = > three coordinates = > UVW mapping
+		eTEXTURE_DIMENSION_2DMS,	//!< 2 dimensions textures with multisample support = > two coordinates = > UV mapping
+		eTEXTURE_DIMENSION_2DARRAY,	//!< 2 dimensions textures array = > two coordinates = > UV mapping
 		eTEXTURE_DIMENSION_COUNT,
 	}	eTEXTURE_DIMENSION;
 	/*!
@@ -622,16 +622,16 @@ namespace Castor3D
 	typedef enum eTEXTURE_CHANNEL
 	CASTOR_TYPE( uint32_t )
 	{
-		eTEXTURE_CHANNEL_COLOUR		= 0x00000001,	//!< Colour map
-		eTEXTURE_CHANNEL_DIFFUSE	= 0x00000002,	//!< Diffuse map
-		eTEXTURE_CHANNEL_NORMAL		= 0x00000004,	//!< Normal map
-		eTEXTURE_CHANNEL_OPACITY	= 0x00000008,	//!< Opacity map
-		eTEXTURE_CHANNEL_SPECULAR	= 0x00000010,	//!< Specular map
-		eTEXTURE_CHANNEL_HEIGHT		= 0x00000020,	//!< Height map
-		eTEXTURE_CHANNEL_AMBIENT	= 0x00000040,	//!< Ambient map
-		eTEXTURE_CHANNEL_GLOSS		= 0x00000080,	//!< Gloss map
-		eTEXTURE_CHANNEL_TEXT		= 0x00000100,	//!< Not really a texture channel (it is out of eTEXTURE_CHANNEL_ALL), used to tell we want text overlay shader source
-		eTEXTURE_CHANNEL_ALL		= 0x000000FF,
+		eTEXTURE_CHANNEL_COLOUR = 0x00000001,	//!< Colour map
+		eTEXTURE_CHANNEL_DIFFUSE = 0x00000002,	//!< Diffuse map
+		eTEXTURE_CHANNEL_NORMAL = 0x00000004,	//!< Normal map
+		eTEXTURE_CHANNEL_OPACITY = 0x00000008,	//!< Opacity map
+		eTEXTURE_CHANNEL_SPECULAR = 0x00000010,	//!< Specular map
+		eTEXTURE_CHANNEL_HEIGHT = 0x00000020,	//!< Height map
+		eTEXTURE_CHANNEL_AMBIENT = 0x00000040,	//!< Ambient map
+		eTEXTURE_CHANNEL_GLOSS = 0x00000080,	//!< Gloss map
+		eTEXTURE_CHANNEL_TEXT = 0x00000100,		//!< Not really a texture channel (it is out of eTEXTURE_CHANNEL_ALL), used to tell we want text overlay shader source
+		eTEXTURE_CHANNEL_ALL = 0x000000FF,
 	}	eTEXTURE_CHANNEL;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -666,33 +666,33 @@ namespace Castor3D
 	class MaterialManager;
 	class Sampler;
 
-	DECLARE_SMART_PTR(	TextureBase );
-	DECLARE_SMART_PTR(	StaticTexture );
-	DECLARE_SMART_PTR(	DynamicTexture );
-	DECLARE_SMART_PTR(	TextureUnit );
-	DECLARE_SMART_PTR(	Material );
-	DECLARE_SMART_PTR(	Pass );
+	DECLARE_SMART_PTR( TextureBase );
+	DECLARE_SMART_PTR( StaticTexture );
+	DECLARE_SMART_PTR( DynamicTexture );
+	DECLARE_SMART_PTR( TextureUnit );
+	DECLARE_SMART_PTR( Material );
+	DECLARE_SMART_PTR( Pass );
 	DECLARE_SMART_PTR( MaterialManager );
 	DECLARE_SMART_PTR( Sampler );
 
 	//! Material pointer array
-	DECLARE_VECTOR(	MaterialSPtr,						MaterialPtr );
+	DECLARE_VECTOR( MaterialSPtr, MaterialPtr );
 	//! TextureUnit array
-	DECLARE_VECTOR(	TextureUnit,						TextureUnit );
+	DECLARE_VECTOR( TextureUnit, TextureUnit );
 	//! TextureUnit pointer array
-	DECLARE_VECTOR(	TextureUnitSPtr,					TextureUnitPtr );
+	DECLARE_VECTOR( TextureUnitSPtr, TextureUnitPtr );
 	//! Pass array
-	DECLARE_VECTOR(	Pass,								Pass );
+	DECLARE_VECTOR( Pass, Pass );
 	//! Pass pointer array
-	DECLARE_VECTOR(	PassSPtr,							PassPtr );
+	DECLARE_VECTOR( PassSPtr, PassPtr );
 	//! uint32_t array
-	DECLARE_VECTOR(	uint32_t,							UInt );
+	DECLARE_VECTOR( uint32_t, UInt );
 	//! Material pointer map, sorted by name
-	DECLARE_MAP(	Castor::String,	MaterialSPtr,		MaterialPtrStr );
+	DECLARE_MAP( Castor::String, MaterialSPtr, MaterialPtrStr );
 	//! Material pointer map
-	DECLARE_MAP(	uint32_t,		MaterialSPtr,		MaterialPtrUInt );
+	DECLARE_MAP( uint32_t, MaterialSPtr, MaterialPtrUInt );
 	//! Sampler collection
-	DECLARE_COLLECTION(	Sampler, Castor::String,	Sampler );
+	DECLARE_COLLECTION( Sampler, Castor::String, Sampler );
 
 	DECLARE_SMART_PTR( SamplerCollection );
 
@@ -877,8 +877,8 @@ namespace Castor3D
 	typedef enum eLOCK_FLAG
 	CASTOR_TYPE( uint32_t )
 	{
-		eLOCK_FLAG_READ_ONLY	= 1 << 0,
-		   eLOCK_FLAG_WRITE_ONLY	= 1 << 1,
+		eLOCK_FLAG_READ_ONLY = 1 << 0,
+		   eLOCK_FLAG_WRITE_ONLY = 1 << 1,
 	}	eLOCK_FLAG;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -893,9 +893,9 @@ namespace Castor3D
 	typedef enum eBUFFER_ACCESS_TYPE
 	CASTOR_TYPE( uint32_t )
 	{
-		eBUFFER_ACCESS_TYPE_STATIC		= 1 << 0,	//!< Modified once and used many times
-			eBUFFER_ACCESS_TYPE_DYNAMIC		= 1 << 1,	//!< Modified many times and used many times
-			   eBUFFER_ACCESS_TYPE_STREAM		= 1 << 2,	//!< Modified oncce and used at most a few times
+		eBUFFER_ACCESS_TYPE_STATIC = 1 << 0,	//!< Modified once and used many times
+		eBUFFER_ACCESS_TYPE_DYNAMIC = 1 << 1,	//!< Modified many times and used many times
+		eBUFFER_ACCESS_TYPE_STREAM = 1 << 2,	//!< Modified oncce and used at most a few times
 	}	eBUFFER_ACCESS_TYPE;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -910,9 +910,9 @@ namespace Castor3D
 	typedef enum eBUFFER_ACCESS_NATURE
 	CASTOR_TYPE( uint32_t )
 	{
-		eBUFFER_ACCESS_NATURE_DRAW	= 1 << 4,	//!< Modified by CPU and used by GPU
-		 eBUFFER_ACCESS_NATURE_READ	= 1 << 5,	//!< Modified by GPU and used by CPU
-		  eBUFFER_ACCESS_NATURE_COPY	= 1 << 6,	//!< Modified by GPU and used by GPU
+		eBUFFER_ACCESS_NATURE_DRAW = 1 << 4,	//!< Modified by CPU and used by GPU
+		eBUFFER_ACCESS_NATURE_READ = 1 << 5,	//!< Modified by GPU and used by CPU
+		eBUFFER_ACCESS_NATURE_COPY = 1 << 6,	//!< Modified by GPU and used by GPU
 	}	eBUFFER_ACCESS_NATURE;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -1067,7 +1067,7 @@ namespace Castor3D
 		eELEMENT_TYPE_COUNT,
 	}	eELEMENT_TYPE;
 
-	template< typename T> class CpuBuffer;
+	template< typename T > class CpuBuffer;
 	class RenderSystem;
 	class Context;
 	class RenderWindow;
@@ -1119,17 +1119,17 @@ namespace Castor3D
 	class SceneFileContext;
 	class SceneFileParser;
 
-	DECLARE_SMART_PTR(	SceneNode );
-	DECLARE_SMART_PTR(	Scene );
-	DECLARE_SMART_PTR(	SceneFileContext );
-	DECLARE_SMART_PTR(	SceneFileParser );
+	DECLARE_SMART_PTR( SceneNode );
+	DECLARE_SMART_PTR( Scene );
+	DECLARE_SMART_PTR( SceneFileContext );
+	DECLARE_SMART_PTR( SceneFileParser );
 
 	//! SceneNode pointer array
-	DECLARE_VECTOR(	SceneNodeSPtr,					SceneNodePtr );
+	DECLARE_VECTOR( SceneNodeSPtr, SceneNodePtr );
 	//! Scene pointer map, sorted by name
-	DECLARE_MAP(	Castor::String,	SceneSPtr,		ScenePtrStr );
+	DECLARE_MAP( Castor::String, SceneSPtr, ScenePtrStr );
 	//! SceneNode pointer map, sorted by name
-	DECLARE_MAP(	Castor::String,	SceneNodeSPtr,	SceneNodePtrStr );
+	DECLARE_MAP( Castor::String, SceneNodeSPtr, SceneNodePtrStr );
 
 	//@}
 	/**@name Shader */
@@ -1212,7 +1212,7 @@ namespace Castor3D
 	typedef enum eSHADER_TYPE
 	CASTOR_TYPE( int8_t )
 	{
-		eSHADER_TYPE_NONE		= -1,
+		eSHADER_TYPE_NONE = -1,
 			 eSHADER_TYPE_VERTEX,
 			 eSHADER_TYPE_HULL,
 			 eSHADER_TYPE_DOMAIN,
@@ -1246,9 +1246,9 @@ namespace Castor3D
 	typedef enum ePROGRAM_FLAG
 	CASTOR_TYPE( uint32_t )
 	{
-		ePROGRAM_FLAG_INSTANCIATION	= 0x01,	//!<\~english Program using instanciation	\~french Programme utilisant l'instanciation
-		ePROGRAM_FLAG_SKINNING		= 0x02,	//!<\~english Program using skeleton animations	\~french Programme utilisant les animations par squelette
-		ePROGRAM_FLAG_BILLBOARDS	= 0x04,	//!<\~english Program used by billboards	\~french Programme utilisé par des billboards
+		ePROGRAM_FLAG_INSTANCIATION = 0x01,	//!<\~english Program using instanciation	\~french Programme utilisant l'instanciation
+		ePROGRAM_FLAG_SKINNING = 0x02,		//!<\~english Program using skeleton animations	\~french Programme utilisant les animations par squelette
+		ePROGRAM_FLAG_BILLBOARDS = 0x04,	//!<\~english Program used by billboards	\~french Programme utilisé par des billboards
 	}	ePROGRAM_FLAG;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -1392,89 +1392,89 @@ namespace Castor3D
 	class FrameVariableBuffer;
 	class FrameVariableLink;
 	class ProgramLinks;
-	template <	typename T										> class OneFrameVariable;
-	template <	typename T, uint32_t Count						> class PointFrameVariable;
-	template <	typename T,	uint32_t Rows,	uint32_t Columns	> class MatrixFrameVariable;
+	template < typename T > class OneFrameVariable;
+	template < typename T, uint32_t Count > class PointFrameVariable;
+	template < typename T, uint32_t Rows, uint32_t Columns > class MatrixFrameVariable;
 
-	typedef OneFrameVariable<		TextureBase *			>	OneTextureFrameVariable;
-	typedef OneFrameVariable<		bool					>	OneBoolFrameVariable;
-	typedef OneFrameVariable<		int						>	OneIntFrameVariable;
-	typedef OneFrameVariable<		uint32_t				>	OneUIntFrameVariable;
-	typedef OneFrameVariable<		float					>	OneFloatFrameVariable;
-	typedef OneFrameVariable<		double					>	OneDoubleFrameVariable;
-	typedef OneFrameVariable<		real					>	OneRealFrameVariable;
-	typedef PointFrameVariable<		bool,			2		>	Point2bFrameVariable;
-	typedef PointFrameVariable<		bool,			3		>	Point3bFrameVariable;
-	typedef PointFrameVariable<		bool,			4		>	Point4bFrameVariable;
-	typedef PointFrameVariable<		int,			2		>	Point2iFrameVariable;
-	typedef PointFrameVariable<		int,			3		>	Point3iFrameVariable;
-	typedef PointFrameVariable<		int,			4		>	Point4iFrameVariable;
-	typedef PointFrameVariable<		uint32_t,		2		>	Point2uiFrameVariable;
-	typedef PointFrameVariable<		uint32_t,		3		>	Point3uiFrameVariable;
-	typedef PointFrameVariable<		uint32_t,		4		>	Point4uiFrameVariable;
-	typedef PointFrameVariable<		float,			2		>	Point2fFrameVariable;
-	typedef PointFrameVariable<		float,			3		>	Point3fFrameVariable;
-	typedef PointFrameVariable<		float,			4		>	Point4fFrameVariable;
-	typedef PointFrameVariable<		double,			2		>	Point2dFrameVariable;
-	typedef PointFrameVariable<		double,			3		>	Point3dFrameVariable;
-	typedef PointFrameVariable<		double,			4		>	Point4dFrameVariable;
-	typedef PointFrameVariable<		real,			2		>	Point2rFrameVariable;
-	typedef PointFrameVariable<		real,			3		>	Point3rFrameVariable;
-	typedef PointFrameVariable<		real,			4		>	Point4rFrameVariable;
-	typedef MatrixFrameVariable<	bool,			2,	2	>	Matrix2x2bFrameVariable;
-	typedef MatrixFrameVariable<	bool,			2,	3	>	Matrix2x3bFrameVariable;
-	typedef MatrixFrameVariable<	bool,			2,	4	>	Matrix2x4bFrameVariable;
-	typedef MatrixFrameVariable<	bool,			3,	2	>	Matrix3x2bFrameVariable;
-	typedef MatrixFrameVariable<	bool,			3,	3	>	Matrix3x3bFrameVariable;
-	typedef MatrixFrameVariable<	bool,			3,	4	>	Matrix3x4bFrameVariable;
-	typedef MatrixFrameVariable<	bool,			4,	2	>	Matrix4x2bFrameVariable;
-	typedef MatrixFrameVariable<	bool,			4,	3	>	Matrix4x3bFrameVariable;
-	typedef MatrixFrameVariable<	bool,			4,	4	>	Matrix4x4bFrameVariable;
-	typedef MatrixFrameVariable<	int,			2,	2	>	Matrix2x2iFrameVariable;
-	typedef MatrixFrameVariable<	int,			2,	3	>	Matrix2x3iFrameVariable;
-	typedef MatrixFrameVariable<	int,			2,	4	>	Matrix2x4iFrameVariable;
-	typedef MatrixFrameVariable<	int,			3,	2	>	Matrix3x2iFrameVariable;
-	typedef MatrixFrameVariable<	int,			3,	3	>	Matrix3x3iFrameVariable;
-	typedef MatrixFrameVariable<	int,			3,	4	>	Matrix3x4iFrameVariable;
-	typedef MatrixFrameVariable<	int,			4,	2	>	Matrix4x2iFrameVariable;
-	typedef MatrixFrameVariable<	int,			4,	3	>	Matrix4x3iFrameVariable;
-	typedef MatrixFrameVariable<	int,			4,	4	>	Matrix4x4iFrameVariable;
-	typedef MatrixFrameVariable<	unsigned  int,	2,	2	>	Matrix2x2uiFrameVariable;
-	typedef MatrixFrameVariable<	unsigned  int,	2,	3	>	Matrix2x3uiFrameVariable;
-	typedef MatrixFrameVariable<	unsigned  int,	2,	4	>	Matrix2x4uiFrameVariable;
-	typedef MatrixFrameVariable<	unsigned  int,	3,	2	>	Matrix3x2uiFrameVariable;
-	typedef MatrixFrameVariable<	unsigned  int,	3,	3	>	Matrix3x3uiFrameVariable;
-	typedef MatrixFrameVariable<	unsigned  int,	3,	4	>	Matrix3x4uiFrameVariable;
-	typedef MatrixFrameVariable<	unsigned  int,	4,	2	>	Matrix4x2uiFrameVariable;
-	typedef MatrixFrameVariable<	unsigned  int,	4,	3	>	Matrix4x3uiFrameVariable;
-	typedef MatrixFrameVariable<	unsigned  int,	4,	4	>	Matrix4x4uiFrameVariable;
-	typedef MatrixFrameVariable<	float,			2,	2	>	Matrix2x2fFrameVariable;
-	typedef MatrixFrameVariable<	float,			2,	3	>	Matrix2x3fFrameVariable;
-	typedef MatrixFrameVariable<	float,			2,	4	>	Matrix2x4fFrameVariable;
-	typedef MatrixFrameVariable<	float,			3,	2	>	Matrix3x2fFrameVariable;
-	typedef MatrixFrameVariable<	float,			3,	3	>	Matrix3x3fFrameVariable;
-	typedef MatrixFrameVariable<	float,			3,	4	>	Matrix3x4fFrameVariable;
-	typedef MatrixFrameVariable<	float,			4,	2	>	Matrix4x2fFrameVariable;
-	typedef MatrixFrameVariable<	float,			4,	3	>	Matrix4x3fFrameVariable;
-	typedef MatrixFrameVariable<	float,			4,	4	>	Matrix4x4fFrameVariable;
-	typedef MatrixFrameVariable<	double,			2,	2	>	Matrix2x2dFrameVariable;
-	typedef MatrixFrameVariable<	double,			2,	3	>	Matrix2x3dFrameVariable;
-	typedef MatrixFrameVariable<	double,			2,	4	>	Matrix2x4dFrameVariable;
-	typedef MatrixFrameVariable<	double,			3,	2	>	Matrix3x2dFrameVariable;
-	typedef MatrixFrameVariable<	double,			3,	3	>	Matrix3x3dFrameVariable;
-	typedef MatrixFrameVariable<	double,			3,	4	>	Matrix3x4dFrameVariable;
-	typedef MatrixFrameVariable<	double,			4,	2	>	Matrix4x2dFrameVariable;
-	typedef MatrixFrameVariable<	double,			4,	3	>	Matrix4x3dFrameVariable;
-	typedef MatrixFrameVariable<	double,			4,	4	>	Matrix4x4dFrameVariable;
-	typedef MatrixFrameVariable<	real,			2,	2	>	Matrix2x2rFrameVariable;
-	typedef MatrixFrameVariable<	real,			2,	3	>	Matrix2x3rFrameVariable;
-	typedef MatrixFrameVariable<	real,			2,	4	>	Matrix2x4rFrameVariable;
-	typedef MatrixFrameVariable<	real,			3,	2	>	Matrix3x2rFrameVariable;
-	typedef MatrixFrameVariable<	real,			3,	3	>	Matrix3x3rFrameVariable;
-	typedef MatrixFrameVariable<	real,			3,	4	>	Matrix3x4rFrameVariable;
-	typedef MatrixFrameVariable<	real,			4,	2	>	Matrix4x2rFrameVariable;
-	typedef MatrixFrameVariable<	real,			4,	3	>	Matrix4x3rFrameVariable;
-	typedef MatrixFrameVariable<	real,			4,	4	>	Matrix4x4rFrameVariable;
+	typedef OneFrameVariable< TextureBase * > OneTextureFrameVariable;
+	typedef OneFrameVariable< bool > OneBoolFrameVariable;
+	typedef OneFrameVariable< int > OneIntFrameVariable;
+	typedef OneFrameVariable< uint32_t > OneUIntFrameVariable;
+	typedef OneFrameVariable< float > OneFloatFrameVariable;
+	typedef OneFrameVariable< double > OneDoubleFrameVariable;
+	typedef OneFrameVariable< real > OneRealFrameVariable;
+	typedef PointFrameVariable< bool, 2 > Point2bFrameVariable;
+	typedef PointFrameVariable< bool, 3 > Point3bFrameVariable;
+	typedef PointFrameVariable< bool, 4 > Point4bFrameVariable;
+	typedef PointFrameVariable< int, 2 > Point2iFrameVariable;
+	typedef PointFrameVariable< int, 3 > Point3iFrameVariable;
+	typedef PointFrameVariable< int, 4 > Point4iFrameVariable;
+	typedef PointFrameVariable< uint32_t, 2 > Point2uiFrameVariable;
+	typedef PointFrameVariable< uint32_t, 3 > Point3uiFrameVariable;
+	typedef PointFrameVariable< uint32_t, 4 > Point4uiFrameVariable;
+	typedef PointFrameVariable< float, 2 > Point2fFrameVariable;
+	typedef PointFrameVariable< float, 3 > Point3fFrameVariable;
+	typedef PointFrameVariable< float, 4 > Point4fFrameVariable;
+	typedef PointFrameVariable< double, 2 > Point2dFrameVariable;
+	typedef PointFrameVariable< double, 3 > Point3dFrameVariable;
+	typedef PointFrameVariable< double, 4 > Point4dFrameVariable;
+	typedef PointFrameVariable< real, 2 > Point2rFrameVariable;
+	typedef PointFrameVariable< real, 3 > Point3rFrameVariable;
+	typedef PointFrameVariable< real, 4 > Point4rFrameVariable;
+	typedef MatrixFrameVariable< bool, 2, 2 > Matrix2x2bFrameVariable;
+	typedef MatrixFrameVariable< bool, 2, 3 > Matrix2x3bFrameVariable;
+	typedef MatrixFrameVariable< bool, 2, 4 > Matrix2x4bFrameVariable;
+	typedef MatrixFrameVariable< bool, 3, 2 > Matrix3x2bFrameVariable;
+	typedef MatrixFrameVariable< bool, 3, 3 > Matrix3x3bFrameVariable;
+	typedef MatrixFrameVariable< bool, 3, 4 > Matrix3x4bFrameVariable;
+	typedef MatrixFrameVariable< bool, 4, 2 > Matrix4x2bFrameVariable;
+	typedef MatrixFrameVariable< bool, 4, 3 > Matrix4x3bFrameVariable;
+	typedef MatrixFrameVariable< bool, 4, 4 > Matrix4x4bFrameVariable;
+	typedef MatrixFrameVariable< int, 2, 2 > Matrix2x2iFrameVariable;
+	typedef MatrixFrameVariable< int, 2, 3 > Matrix2x3iFrameVariable;
+	typedef MatrixFrameVariable< int, 2, 4 > Matrix2x4iFrameVariable;
+	typedef MatrixFrameVariable< int, 3, 2 > Matrix3x2iFrameVariable;
+	typedef MatrixFrameVariable< int, 3, 3 > Matrix3x3iFrameVariable;
+	typedef MatrixFrameVariable< int, 3, 4 > Matrix3x4iFrameVariable;
+	typedef MatrixFrameVariable< int, 4, 2 > Matrix4x2iFrameVariable;
+	typedef MatrixFrameVariable< int, 4, 3 > Matrix4x3iFrameVariable;
+	typedef MatrixFrameVariable< int, 4, 4 > Matrix4x4iFrameVariable;
+	typedef MatrixFrameVariable< unsigned  int, 2, 2 > Matrix2x2uiFrameVariable;
+	typedef MatrixFrameVariable< unsigned  int, 2, 3 > Matrix2x3uiFrameVariable;
+	typedef MatrixFrameVariable< unsigned  int, 2, 4 > Matrix2x4uiFrameVariable;
+	typedef MatrixFrameVariable< unsigned  int, 3, 2 > Matrix3x2uiFrameVariable;
+	typedef MatrixFrameVariable< unsigned  int, 3, 3 > Matrix3x3uiFrameVariable;
+	typedef MatrixFrameVariable< unsigned  int, 3, 4 > Matrix3x4uiFrameVariable;
+	typedef MatrixFrameVariable< unsigned  int, 4, 2 > Matrix4x2uiFrameVariable;
+	typedef MatrixFrameVariable< unsigned  int, 4, 3 > Matrix4x3uiFrameVariable;
+	typedef MatrixFrameVariable< unsigned  int, 4, 4 > Matrix4x4uiFrameVariable;
+	typedef MatrixFrameVariable< float, 2, 2 > Matrix2x2fFrameVariable;
+	typedef MatrixFrameVariable< float, 2, 3 > Matrix2x3fFrameVariable;
+	typedef MatrixFrameVariable< float, 2, 4 > Matrix2x4fFrameVariable;
+	typedef MatrixFrameVariable< float, 3, 2 > Matrix3x2fFrameVariable;
+	typedef MatrixFrameVariable< float, 3, 3 > Matrix3x3fFrameVariable;
+	typedef MatrixFrameVariable< float, 3, 4 > Matrix3x4fFrameVariable;
+	typedef MatrixFrameVariable< float, 4, 2 > Matrix4x2fFrameVariable;
+	typedef MatrixFrameVariable< float, 4, 3 > Matrix4x3fFrameVariable;
+	typedef MatrixFrameVariable< float, 4, 4 > Matrix4x4fFrameVariable;
+	typedef MatrixFrameVariable< double, 2, 2 > Matrix2x2dFrameVariable;
+	typedef MatrixFrameVariable< double, 2, 3 > Matrix2x3dFrameVariable;
+	typedef MatrixFrameVariable< double, 2, 4 > Matrix2x4dFrameVariable;
+	typedef MatrixFrameVariable< double, 3, 2 > Matrix3x2dFrameVariable;
+	typedef MatrixFrameVariable< double, 3, 3 > Matrix3x3dFrameVariable;
+	typedef MatrixFrameVariable< double, 3, 4 > Matrix3x4dFrameVariable;
+	typedef MatrixFrameVariable< double, 4, 2 > Matrix4x2dFrameVariable;
+	typedef MatrixFrameVariable< double, 4, 3 > Matrix4x3dFrameVariable;
+	typedef MatrixFrameVariable< double, 4, 4 > Matrix4x4dFrameVariable;
+	typedef MatrixFrameVariable< real, 2, 2 > Matrix2x2rFrameVariable;
+	typedef MatrixFrameVariable< real, 2, 3 > Matrix2x3rFrameVariable;
+	typedef MatrixFrameVariable< real, 2, 4 > Matrix2x4rFrameVariable;
+	typedef MatrixFrameVariable< real, 3, 2 > Matrix3x2rFrameVariable;
+	typedef MatrixFrameVariable< real, 3, 3 > Matrix3x3rFrameVariable;
+	typedef MatrixFrameVariable< real, 3, 4 > Matrix3x4rFrameVariable;
+	typedef MatrixFrameVariable< real, 4, 2 > Matrix4x2rFrameVariable;
+	typedef MatrixFrameVariable< real, 4, 3 > Matrix4x3rFrameVariable;
+	typedef MatrixFrameVariable< real, 4, 4 > Matrix4x4rFrameVariable;
 
 	DECLARE_SMART_PTR( OneTextureFrameVariable );
 	DECLARE_SMART_PTR( OneBoolFrameVariable );
@@ -1557,20 +1557,20 @@ namespace Castor3D
 	DECLARE_SMART_PTR( Matrix4x4rFrameVariable );
 
 	DECLARE_SMART_PTR( FrameVariableLink );
-	DECLARE_SMART_PTR(	ProgramLinks );
+	DECLARE_SMART_PTR( ProgramLinks );
 	DECLARE_SMART_PTR( ShaderManager );
 	DECLARE_SMART_PTR( FrameVariableBuffer );
-	DECLARE_SMART_PTR(	FrameVariable );
-	DECLARE_SMART_PTR(	ShaderObjectBase );
-	DECLARE_SMART_PTR(	ShaderProgramBase );
+	DECLARE_SMART_PTR( FrameVariable );
+	DECLARE_SMART_PTR( ShaderObjectBase );
+	DECLARE_SMART_PTR( ShaderProgramBase );
 
 	DECLARE_LIST( FrameVariableLinkSPtr, VariableLinkPtr );
-	DECLARE_MAP( ShaderProgramBase *, ProgramLinksSPtr,	LinksPtrListProgram );
-	DECLARE_VECTOR(	ShaderProgramBaseSPtr, ShaderProgramPtr );
-	DECLARE_VECTOR(	ShaderObjectBaseSPtr, ShaderObjectPtr );
+	DECLARE_MAP( ShaderProgramBase *, ProgramLinksSPtr, LinksPtrListProgram );
+	DECLARE_VECTOR( ShaderProgramBaseSPtr, ShaderProgramPtr );
+	DECLARE_VECTOR( ShaderObjectBaseSPtr, ShaderObjectPtr );
 	DECLARE_LIST( FrameVariableSPtr, FrameVariablePtr );
 	DECLARE_LIST( FrameVariableBufferSPtr, FrameVariableBufferPtr );
-	DECLARE_MAP( Castor::String, FrameVariableWPtr,	FrameVariablePtrStr );
+	DECLARE_MAP( Castor::String, FrameVariableWPtr, FrameVariablePtrStr );
 	DECLARE_MAP( Castor::String, FrameVariableBufferWPtr, FrameVariableBufferPtrStr );
 	DECLARE_MAP( eSHADER_TYPE, FrameVariableBufferWPtr, FrameVariableBufferPtrShader );
 
@@ -1626,13 +1626,13 @@ namespace Castor3D
 	typedef enum ePLUGIN_TYPE
 	CASTOR_TYPE( uint8_t )
 	{
-		ePLUGIN_TYPE_RENDERER,		//!< Renderer plugin (OpenGl2, 3 or Direct3D)
-		ePLUGIN_TYPE_IMPORTER,		//!< Importer plugin
-		ePLUGIN_TYPE_DIVIDER,		//!< Mesh Divider plugin
-		ePLUGIN_TYPE_GENERATOR,		//!< Procedural generator
-		ePLUGIN_TYPE_PROGRAM,		//!< Shader programs plugin
-		ePLUGIN_TYPE_TECHNIQUE,		//!< Render technique plugin
-		ePLUGIN_TYPE_POSTFX,		//!< Post effect plugin
+		ePLUGIN_TYPE_RENDERER,	//!< Renderer plugin (OpenGl2, 3 or Direct3D)
+		ePLUGIN_TYPE_IMPORTER,	//!< Importer plugin
+		ePLUGIN_TYPE_DIVIDER,	//!< Mesh Divider plugin
+		ePLUGIN_TYPE_GENERATOR,	//!< Procedural generator
+		ePLUGIN_TYPE_TECHNIQUE,	//!< Render technique plugin
+		ePLUGIN_TYPE_POSTFX,	//!< Post effect plugin
+		ePLUGIN_TYPE_GENERIC,	//!< Generic plugin
 		ePLUGIN_TYPE_COUNT,
 	}	ePLUGIN_TYPE;
 	/*!
@@ -1650,7 +1650,7 @@ namespace Castor3D
 		eRENDERER_TYPE_UNDEFINED = -1,
 		eRENDERER_TYPE_OPENGL = 0,		//!< OpenGl Renderer
 		eRENDERER_TYPE_DIRECT3D = 1,	//!< Direct3D11 Renderer
-		 eRENDERER_TYPE_COUNT = 2,
+		eRENDERER_TYPE_COUNT = 2,
 	}	eRENDERER_TYPE;
 	/*!
 	\author		Sylvain DOREMUS
@@ -1787,8 +1787,8 @@ namespace Castor3D
 	typedef enum eVIEWPORT_TYPE
 	CASTOR_TYPE( uint8_t )
 	{
-		eVIEWPORT_TYPE_3D,	//!< 3 Dimensions projection type
-		eVIEWPORT_TYPE_2D,	//!< 2 Dimensions projection type
+		eVIEWPORT_TYPE_3D,		//!< 3 Dimensions projection type
+		eVIEWPORT_TYPE_2D,		//!< 2 Dimensions projection type
 		eVIEWPORT_TYPE_COUNT,
 	}	eVIEWPORT_TYPE;
 	/*!
@@ -1905,7 +1905,7 @@ namespace Castor3D
 	class RendererPlugin;	//!< The base plugin handler class
 	class ImporterPlugin;	//!< The base plugin handler class
 	class DividerPlugin;	//!< The base plugin handler class
-	class ShaderPlugin;		//!< The base plugin handler class
+	class GenericPlugin;		//!< The base plugin handler class
 	class FrameEvent;		//!< The frame event representation
 	class FrameListener;	//!< The frame event listener
 	class Version;			//!< Castor3D Version
@@ -1913,56 +1913,56 @@ namespace Castor3D
 	class Parameters;
 	class BillboardList;
 
-	DECLARE_SMART_PTR(	RenderWindow );
-	DECLARE_SMART_PTR(	RenderBuffer );
-	DECLARE_SMART_PTR(	ColourRenderBuffer );
-	DECLARE_SMART_PTR(	DepthStencilRenderBuffer );
-	DECLARE_SMART_PTR(	FrameBufferAttachment );
-	DECLARE_SMART_PTR(	RenderBufferAttachment );
-	DECLARE_SMART_PTR(	TextureAttachment );
-	DECLARE_SMART_PTR(	FrameBuffer );
-	DECLARE_SMART_PTR(	RenderTechniqueBase );
-	DECLARE_SMART_PTR(	PostEffect );
-	DECLARE_SMART_PTR(	Engine );
-	DECLARE_SMART_PTR(	RendererServer );
-	DECLARE_SMART_PTR(	PluginBase );
-	DECLARE_SMART_PTR(	RendererPlugin );
-	DECLARE_SMART_PTR(	ImporterPlugin );
-	DECLARE_SMART_PTR(	DividerPlugin );
-	DECLARE_SMART_PTR(	ShaderPlugin );
-	DECLARE_SMART_PTR(	FrameEvent );
-	DECLARE_SMART_PTR(	FrameListener );
+	DECLARE_SMART_PTR( RenderWindow );
+	DECLARE_SMART_PTR( RenderBuffer );
+	DECLARE_SMART_PTR( ColourRenderBuffer );
+	DECLARE_SMART_PTR( DepthStencilRenderBuffer );
+	DECLARE_SMART_PTR( FrameBufferAttachment );
+	DECLARE_SMART_PTR( RenderBufferAttachment );
+	DECLARE_SMART_PTR( TextureAttachment );
+	DECLARE_SMART_PTR( FrameBuffer );
+	DECLARE_SMART_PTR( RenderTechniqueBase );
+	DECLARE_SMART_PTR( PostEffect );
+	DECLARE_SMART_PTR( Engine );
+	DECLARE_SMART_PTR( RendererServer );
+	DECLARE_SMART_PTR( PluginBase );
+	DECLARE_SMART_PTR( RendererPlugin );
+	DECLARE_SMART_PTR( ImporterPlugin );
+	DECLARE_SMART_PTR( DividerPlugin );
+	DECLARE_SMART_PTR( GenericPlugin );
+	DECLARE_SMART_PTR( FrameEvent );
+	DECLARE_SMART_PTR( FrameListener );
 	DECLARE_SMART_PTR( IWindowHandle );
-	DECLARE_SMART_PTR(	BillboardList );
+	DECLARE_SMART_PTR( BillboardList );
 
 	class TechniqueFactory;
-	DECLARE_SMART_PTR(	TechniqueFactory );
+	DECLARE_SMART_PTR( TechniqueFactory );
 
 	//! real array
-	DECLARE_VECTOR(	real,									Real );
+	DECLARE_VECTOR( real, Real );
 	//! RenderWindow pointer array
-	DECLARE_VECTOR(	RenderWindowSPtr,						RenderWindowPtr );
+	DECLARE_VECTOR( RenderWindowSPtr, RenderWindowPtr );
 	//! RenderBuffer pointer array
-	DECLARE_VECTOR(	RenderBufferSPtr,						RenderBufferPtr );
+	DECLARE_VECTOR( RenderBufferSPtr, RenderBufferPtr );
 	//! FrameEvent pointer array
-	DECLARE_VECTOR(	FrameEventSPtr,							FrameEventPtr );
+	DECLARE_VECTOR( FrameEventSPtr, FrameEventPtr );
 	//! FrameListener pointer array
-	DECLARE_VECTOR(	FrameListenerSPtr,						FrameListenerPtr );
+	DECLARE_VECTOR( FrameListenerSPtr, FrameListenerPtr );
 	//! RenderWindow pointer map, sorted by index
-	DECLARE_MAP(	uint32_t,			RenderWindowSPtr,	RenderWindow );
+	DECLARE_MAP( uint32_t, RenderWindowSPtr, RenderWindow );
 	//! Plugin map, sorted by name
-	DECLARE_MAP(	Castor::String,		PluginBaseSPtr,		PluginStr );
-	DECLARE_MAP(	int,				Castor::String,		StrInt );
-	DECLARE_VECTOR(	PostEffectSPtr,							PostEffectPtr );
-	DECLARE_VECTOR(	BillboardListSPtr,						BillboardList );
+	DECLARE_MAP( Castor::String, PluginBaseSPtr, PluginStr );
+	DECLARE_MAP( int, Castor::String, StrInt );
+	DECLARE_VECTOR( PostEffectSPtr, PostEffectPtr );
+	DECLARE_VECTOR( BillboardListSPtr, BillboardList );
 
-	DECLARE_COLLECTION( Scene,				Castor::String,	Scene );
-	DECLARE_COLLECTION( Animation,			Castor::String, Animation );
-	DECLARE_COLLECTION( Mesh,				Castor::String, Mesh );
-	DECLARE_COLLECTION( Overlay,			Castor::String, Overlay );
-	DECLARE_COLLECTION( Material,			Castor::String, Material );
-	DECLARE_COLLECTION( Castor::Image,		Castor::String,	Image );
-	DECLARE_COLLECTION( Castor::Font,		Castor::String, Font );
+	DECLARE_COLLECTION( Scene, Castor::String, Scene );
+	DECLARE_COLLECTION( Animation, Castor::String, Animation );
+	DECLARE_COLLECTION( Mesh, Castor::String, Mesh );
+	DECLARE_COLLECTION( Overlay, Castor::String, Overlay );
+	DECLARE_COLLECTION( Material, Castor::String, Material );
+	DECLARE_COLLECTION( Castor::Image, Castor::String, Image );
+	DECLARE_COLLECTION( Castor::Font, Castor::String, Font );
 
 	DECLARE_SMART_PTR( SceneCollection );
 	DECLARE_SMART_PTR( AnimationCollection );
@@ -1972,13 +1972,12 @@ namespace Castor3D
 	DECLARE_SMART_PTR( ImageCollection );
 	DECLARE_SMART_PTR( FontCollection );
 
-	DECLARE_ARRAY(	RendererPluginSPtr,			eRENDERER_TYPE_COUNT,		RendererPtr );
-	DECLARE_ARRAY(	PluginStrMap,				ePLUGIN_TYPE_COUNT,			PluginStrMap );
-	DECLARE_MAP(	eSHADER_LANGUAGE,			ShaderPluginSPtr,			ShaderPlugin );
-	DECLARE_MAP(	Castor::Path,				Castor::DynamicLibrarySPtr,	DynamicLibraryPtrPath );
-	DECLARE_ARRAY(	DynamicLibraryPtrPathMap,	ePLUGIN_TYPE_COUNT,			DynamicLibraryPtrPathMap );
-	DECLARE_MAP(	Castor::Path,				ePLUGIN_TYPE,				PluginTypePath );
-	DECLARE_MAP(	Castor::String,				BillboardListSPtr,			BillboardListStr );
+	DECLARE_ARRAY( RendererPluginSPtr, eRENDERER_TYPE_COUNT, RendererPtr );
+	DECLARE_ARRAY( PluginStrMap, ePLUGIN_TYPE_COUNT, PluginStrMap );
+	DECLARE_MAP( Castor::Path, Castor::DynamicLibrarySPtr, DynamicLibraryPtrPath );
+	DECLARE_ARRAY( DynamicLibraryPtrPathMap, ePLUGIN_TYPE_COUNT, DynamicLibraryPtrPathMap );
+	DECLARE_MAP( Castor::Path, ePLUGIN_TYPE, PluginTypePath );
+	DECLARE_MAP( Castor::String, BillboardListSPtr, BillboardListStr );
 
 	typedef std::map< Castor::String, RenderWindowSPtr > WindowPtrStrMap;
 

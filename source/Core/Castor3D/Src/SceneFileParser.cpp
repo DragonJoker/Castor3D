@@ -1,6 +1,7 @@
 ﻿#include "SceneFileParser.hpp"
 
 #include "Engine.hpp"
+#include "GenericPlugin.hpp"
 #include "SceneFileParser_Parsers.hpp"
 #include "SceneNode.hpp"
 #include "Pass.hpp"
@@ -239,7 +240,7 @@ void SceneFileContext::Initialise()
 //****************************************************************************************************
 
 SceneFileParser::SceneFileParser( Engine * p_pEngine )
-	:	FileParser( eSECTION_ROOT,  eSECTION_COUNT )
+	: FileParser( eSECTION_ROOT )
 	, m_pEngine( p_pEngine )
 {
 }
@@ -252,9 +253,9 @@ RenderWindowSPtr SceneFileParser::GetRenderWindow()
 {
 	RenderWindowSPtr l_pReturn;
 
-	if ( m_pParsingContext )
+	if ( m_context )
 	{
-		l_pReturn = std::static_pointer_cast< SceneFileContext >( m_pParsingContext )->pWindow;
+		l_pReturn = std::static_pointer_cast< SceneFileContext >( m_context )->pWindow;
 	}
 
 	return l_pReturn;
@@ -299,7 +300,7 @@ bool SceneFileParser::ParseFile( Path const & p_pathFile )
 void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 {
 	SceneFileContextSPtr l_pContext = std::make_shared< SceneFileContext >( this, &p_file );
-	m_pParsingContext = l_pContext;
+	m_context = l_pContext;
 	AddParser( eSECTION_ROOT, cuT( "mtl_file" ), Parser_RootMtlFile, 1, ePARAMETER_TYPE_PATH );
 	AddParser( eSECTION_ROOT, cuT( "scene" ), Parser_RootScene, 1, ePARAMETER_TYPE_NAME );
 	AddParser( eSECTION_ROOT, cuT( "font" ), Parser_RootFont, 1, ePARAMETER_TYPE_NAME );
@@ -408,8 +409,8 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_PASS, cuT( "texture_unit" ), Parser_PassTextureUnit );
 	AddParser( eSECTION_PASS, cuT( "gl_shader_program" ), Parser_PassGlShader );
 	AddParser( eSECTION_PASS, cuT( "hl_shader_program" ), Parser_PassHlShader );
-	AddParser(	eSECTION_PASS, cuT( "alpha_blend_mode" ), Parser_PassAlphaBlendMode, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapBlendModes );
-	AddParser(	eSECTION_PASS, cuT( "colour_blend_mode" ), Parser_PassColourBlendMode, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapBlendModes );
+	AddParser( eSECTION_PASS, cuT( "alpha_blend_mode" ), Parser_PassAlphaBlendMode, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapBlendModes );
+	AddParser( eSECTION_PASS, cuT( "colour_blend_mode" ), Parser_PassColourBlendMode, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapBlendModes );
 
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "image" ), Parser_UnitImage, 1, ePARAMETER_TYPE_PATH );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "render_target" ), Parser_UnitRenderTarget );
@@ -434,7 +435,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_HLSL_SHADER, cuT( "geometry_program" ), Parser_GeometryShader );
 	AddParser( eSECTION_HLSL_SHADER, cuT( "hull_program" ), Parser_HullShader );
 	AddParser( eSECTION_HLSL_SHADER, cuT( "domain_program" ), Parser_DomainShader );
-	AddParser( eSECTION_GLSL_SHADER, cuT( "constants_buffer" ), Parser_ConstantsBuffer, 1, ePARAMETER_TYPE_NAME );
+	AddParser( eSECTION_HLSL_SHADER, cuT( "constants_buffer" ), Parser_ConstantsBuffer, 1, ePARAMETER_TYPE_NAME );
 	AddParser( eSECTION_HLSL_SHADER, cuT( "}" ), Parser_ShaderEnd );
 
 	AddParser( eSECTION_SHADER_PROGRAM, cuT( "entry" ), Parser_ShaderProgramEntry, 1, ePARAMETER_TYPE_NAME );
@@ -524,6 +525,11 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_ANIMGROUP, cuT( "animated_object" ), Parser_GroupAnimatedObject, 1, ePARAMETER_TYPE_NAME );
 	AddParser( eSECTION_ANIMGROUP, cuT( "animation" ), Parser_GroupAnimation, 1, ePARAMETER_TYPE_NAME );
 
+	for ( auto && l_it : m_pEngine->GetPlugins( ePLUGIN_TYPE_GENERIC ) )
+	{
+		std::static_pointer_cast< GenericPlugin >( l_it.second )->AddOptionalParsers( this );
+	}
+
 	if ( m_pEngine->GetRenderSystem() )
 	{
 		l_pContext->eRendererType = m_pEngine->GetRenderSystem()->GetRendererType();
@@ -532,7 +538,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 
 void SceneFileParser::DoCleanupParser()
 {
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( m_pParsingContext );
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( m_context );
 
 	for ( ScenePtrStrMap::iterator l_it = l_pContext->mapScenes.begin(); l_it != l_pContext->mapScenes.end(); ++l_it )
 	{
@@ -543,7 +549,7 @@ void SceneFileParser::DoCleanupParser()
 void SceneFileParser::DoDiscardParser( String const & p_strLine )
 {
 	String l_strWarning;
-	l_strWarning + cuT( "Parser not found @ line #" ) + string::to_string( m_pParsingContext->ui64Line ) + cuT( " : " ) + p_strLine;
+	l_strWarning + cuT( "Parser not found @ line #" ) + string::to_string( m_context->ui64Line ) + cuT( " : " ) + p_strLine;
 	Logger::LogError( l_strWarning );
 }
 

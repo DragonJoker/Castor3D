@@ -118,30 +118,6 @@ namespace Castor3D
 		ShaderProgramBaseSPtr CreateShaderProgram( eSHADER_LANGUAGE p_eLanguage );
 		/**
 		 *\~english
-		 *\brief		Creates a IPipelineImpl, dependant of a shader language
-		 *\param[in]	p_pPipeline	The parent pipeline
-		 *\param[in]	p_eLanguage	The shader language
-		 *\return		The create IPipelineImpl, NULL if language is unsupported
-		 *\~french
-		 *\brief		Crée un IPipelineImpl, dépendant d'un langage de shader
-		 *\param[in]	p_pPipeline	Le pipeline parent
-		 *\param[in]	p_eLanguage	Le langage de shader
-		 *\return		Le IPipelineImpl créé, NULL si le langage n'est pas supporté
-		 */
-		IPipelineImpl * CreatePipeline( Pipeline * p_pPipeline, eSHADER_LANGUAGE p_eLanguage );
-		/**
-		 *\~english
-		 *\brief		Destroys a language specific IPipelineImpl
-		 *\param[in]	p_eLanguage	The shader language
-		 *\param[in]	p_pPipeline	The IPipelineImpl
-		 *\~french
-		 *\brief		Détruit un IPipelineImpl spécifique à un langage
-		 *\param[in]	p_eLanguage	Le langage de shader
-		 *\param[in]	p_pPipeline	Le IPipelineImpl
-		 */
-		void DestroyPipeline( eSHADER_LANGUAGE p_eLanguage, IPipelineImpl * p_pPipeline );
-		/**
-		 *\~english
 		 *\brief		Renders the scene ambient lighting
 		 *\param[in]	p_clColour			The light colour
 		 *\param[in]	p_variableBuffer	The variable buffer that receives the ambient light

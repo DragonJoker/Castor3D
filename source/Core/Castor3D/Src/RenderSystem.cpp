@@ -12,7 +12,6 @@
 #include "Sampler.hpp"
 #include "Overlay.hpp"
 #include "OverlayRenderer.hpp"
-#include "ShaderPlugin.hpp"
 #include "Viewport.hpp"
 
 #include <Debug.hpp>
@@ -104,50 +103,8 @@ ShaderProgramBaseSPtr RenderSystem::CreateShaderProgram( eSHADER_LANGUAGE p_eLan
 	{
 		l_pReturn = CreateShaderProgram();
 	}
-	else
-	{
-		ShaderPluginSPtr l_pPlugin = m_pEngine->GetShaderPlugin( p_eLanguage );
-
-		if ( l_pPlugin )
-		{
-			l_pReturn = l_pPlugin->CreateShader( this );
-		}
-	}
 
 	return l_pReturn;
-}
-
-IPipelineImpl * RenderSystem::CreatePipeline( Pipeline * p_pPipeline, eSHADER_LANGUAGE p_eLanguage )
-{
-	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-	IPipelineImpl * l_pReturn = NULL;
-
-	if ( p_eLanguage != eSHADER_LANGUAGE_GLSL && p_eLanguage != eSHADER_LANGUAGE_HLSL )
-	{
-		ShaderPluginSPtr l_pPlugin = m_pEngine->GetShaderPlugin( p_eLanguage );
-
-		if ( l_pPlugin )
-		{
-			l_pReturn = l_pPlugin->CreatePipeline( p_pPipeline, this );
-		}
-	}
-
-	return l_pReturn;
-}
-
-void RenderSystem::DestroyPipeline( eSHADER_LANGUAGE p_eLanguage, IPipelineImpl * p_pPipeline )
-{
-	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-
-	if ( p_eLanguage != eSHADER_LANGUAGE_GLSL && p_eLanguage != eSHADER_LANGUAGE_HLSL )
-	{
-		ShaderPluginSPtr l_pPlugin = m_pEngine->GetShaderPlugin( p_eLanguage );
-
-		if ( l_pPlugin )
-		{
-			l_pPlugin->DestroyPipeline( p_pPipeline );
-		}
-	}
 }
 
 Camera * RenderSystem::GetCurrentCamera()const
