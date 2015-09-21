@@ -319,7 +319,7 @@ namespace Castor3D
 		 *\param[in]	p_eLanguage	Le langage
 		 *\return		\p NULL si non trouvé
 		 */
-		ShaderPluginSPtr GetShaderPlugin( eSHADER_LANGUAGE p_eLanguage );
+		PluginStrMap GetPlugins( ePLUGIN_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Loads a renderer plugin, given the renderer type
@@ -1231,7 +1231,6 @@ namespace Castor3D
 		void DoLock();
 		void DoUnlock();
 		PluginBaseSPtr LoadRendererPlugin( Castor::DynamicLibrarySPtr p_pLibrary );
-		PluginBaseSPtr LoadProgramPlugin( Castor::DynamicLibrarySPtr p_pLibrary );
 		PluginBaseSPtr LoadTechniquePlugin( Castor::DynamicLibrarySPtr p_pLibrary );
 		PluginBaseSPtr InternalLoadPlugin( Castor::Path const & p_pathFile );
 		void DoRenderOneFrame();
@@ -1254,10 +1253,6 @@ namespace Castor3D
 		PluginStrMapArray m_arrayLoadedPlugins;
 		//!\~english The mutex protecting the loaded plugins map	\~french Le mutex protégeant la map des plugins chargés
 		std::recursive_mutex m_mutexLoadedPlugins;
-		//!\~english The loaded shader plugins map	\~french La map des plugins de shader chargés
-		ShaderPluginMap m_mapShaderPlugins;
-		//!\~english The mutex protecting the loaded shader plugins map	\~french Le mutex protégeant la map des plugins de shader chargés
-		std::recursive_mutex m_mutexShaderPlugins;
 		//!\~english The loaded plugins map, sorted by plugin type	\~french La map des plugins chargés, triés par type de plugin
 		PluginTypePathMap m_mapLoadedPluginTypes;
 		//!\~english The mutex protecting the loaded plugins map sorted by type	\~french Le mutex protégeant la map de plugins chargés triés par type

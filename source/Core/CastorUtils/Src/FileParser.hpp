@@ -41,58 +41,65 @@ namespace Castor
 	typedef ParserFunction * PParserFunction;
 
 	//!\~english Define to ease the declaration of a parser	\~french Un define pour faciliter la déclaration d'un analyseur
-#	define DECLARE_ATTRIBUTE_PARSER( X ) bool X( Castor::FileParser * p_pParser, Castor::ParserParameterArray const & p_arrayParams );
+#define DECLARE_ATTRIBUTE_PARSER( X )\
+	bool X( Castor::FileParser * p_pParser, Castor::ParserParameterArray const & p_arrayParams );
 
 	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
-#	define IMPLEMENT_ATTRIBUTE_PARSER( nmspc, X )\
-		bool nmspc::X( Castor::FileParser * p_pParser, Castor::ParserParameterArray const & p_arrayParams )\
+#define IMPLEMENT_ATTRIBUTE_PARSER( nmspc, X )\
+	bool nmspc::X( Castor::FileParser * p_pParser, Castor::ParserParameterArray const & p_arrayParams )\
+	{\
+		bool l_return = false;\
+		FileParserContextSPtr p_pContext = p_pParser->GetContext();\
+		try\
 		{\
-			bool l_return = false;\
-			FileParserContextSPtr p_pContext = p_pParser->GetContext();\
-			try\
-			{\
-				if( !p_pParser->IsIgnored() )
+			if( !p_pParser->IsIgnored() )
 
 	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
-#	define END_ATTRIBUTE_PUSH( x )\
-			}\
-			catch( ParserParameterTypeException p_exc )\
-			{\
-				PARSING_ERROR( string::string_cast< xchar >( p_exc.what() ) );\
-			}\
-			l_return = true;\
-			p_pContext->stackSections.push( x );\
-			return l_return;\
-		}
+#define END_ATTRIBUTE_PUSH( x )\
+		}\
+		catch( ParserParameterTypeException p_exc )\
+		{\
+			PARSING_ERROR( string::string_cast< xchar >( p_exc.what() ) );\
+		}\
+		l_return = true;\
+		p_pContext->stackSections.push( x );\
+		return l_return;\
+	}
 
 	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
-#	define END_ATTRIBUTE()\
-			}\
-			catch( ParserParameterTypeException p_exc )\
-			{\
-				PARSING_ERROR( string::string_cast< xchar >( p_exc.what() ) );\
-			}\
-			l_return = false;\
-			return l_return;\
-		}
+#define END_ATTRIBUTE()\
+		}\
+		catch( ParserParameterTypeException p_exc )\
+		{\
+			PARSING_ERROR( string::string_cast< xchar >( p_exc.what() ) );\
+		}\
+		l_return = false;\
+		return l_return;\
+	}
 
 	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
-#	define END_ATTRIBUTE_POP()\
-			}\
-			catch( ParserParameterTypeException p_exc )\
-			{\
-				PARSING_ERROR( string::string_cast< xchar >( p_exc.what() ) );\
-			}\
-			l_return = false;\
-			p_pContext->stackSections.pop();\
-			return l_return;\
-		}
+#define END_ATTRIBUTE_POP()\
+		}\
+		catch( ParserParameterTypeException p_exc )\
+		{\
+			PARSING_ERROR( string::string_cast< xchar >( p_exc.what() ) );\
+		}\
+		l_return = false;\
+		p_pContext->stackSections.pop();\
+		return l_return;\
+	}
 
 	//!\~english Define to ease the call to FileParser::ParseError	\~french Un define pour faciliter l'appel de FileParser::ParseError
-#	define PARSING_ERROR( p_strError) p_pParser->ParseError( (p_strError) )
+#define PARSING_ERROR( p_strError )\
+	p_pParser->ParseError( p_strError )
 
 	//!\~english Define to ease the call to FileParser::ParseWarning	\~french Un define pour faciliter l'appel de FileParser::ParseWarning
-#	define PARSING_WARNING( p_strWarning) p_pParser->ParseWarning( (p_strWarning) )
+#define PARSING_WARNING( p_strWarning )\
+	p_pParser->ParseWarning( p_strWarning )
+
+	//!\~english Define to ease creation of a section name	\~french Un define pour faciliter la création d'un nom de section
+#define MAKE_SECTION_NAME( a, b, c, d )\
+	( (uint32_t( a ) << 24 ) | ( uint32_t( b ) << 16 ) | ( uint32_t( c ) << 8 ) | ( uint32_t( d ) << 0 ) )
 
 	/*!
 	\author		Sylvain DOREMUS
@@ -107,7 +114,9 @@ namespace Castor
 	{
 	private:
 		typedef std::pair< PParserFunction, ParserParameterArray > ParserFunctionAndParams;
+
 #if defined( _MSC_VER )
+
 		/*!
 		\author		Sylvain DOREMUS
 		\version	0.7.0.0
@@ -172,22 +181,23 @@ namespace Castor
 				return m_map.end();
 			}
 		};
+
 #else
+
 		DECLARE_MAP( String, ParserFunctionAndParams, AttributeParser );
+
 #endif
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_iRootSectionNumber	The root section id
-		 *\param[in]	p_iSectionCount			The sections count
+		 *\param[in]	p_rootSectionId	The root section id
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_iRootSectionNumber	L'id de la section de root
-		 *\param[in]	p_iSectionCount			Le nombre de sections
+		 *\param[in]	p_rootSectionId	L'id de la section de root
 		 */
-		CU_API FileParser( int p_iRootSectionNumber, int p_iSectionCount );
+		CU_API FileParser( uint32_t p_rootSectionId );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -257,20 +267,20 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Adds a parser function to the parsers list
-		 *\param[in]	p_iSection		The parser section
+		 *\param[in]	p_section	The parser section
 		 *\param[in]	p_name		The parser name
-		 *\param[in]	p_pfnFunction	The parser function
-		 *\param[in]	p_iCount		The expected parameters list count
-		 *\param[in]	...				The expected parameters list
+		 *\param[in]	p_function	The parser function
+		 *\param[in]	p_count		The expected parameters list count
+		 *\param[in]	...			The expected parameters list
 		 *\~french
 		 *\brief		Ajoute une foncction d'analyse à la liste
-		 *\param[in]	p_iSection		La section
-		 *\param[in]	p_name		Le nom
-		 *\param[in]	p_pfnFunction	La fonction d'analyse
-		 *\param[in]	p_iCount		Le compte des paramètres attendus
-		 *\param[in]	...				La liste des paramètres attendus
+		 *\param[in]	p_section	La section
+		 *\param[in]	p_name		Le nom de la fonction
+		 *\param[in]	p_function	La fonction d'analyse
+		 *\param[in]	p_count		Le nombre de paramètres attendus
+		 *\param[in]	...			La liste des paramètres attendus
 		 */
-		CU_API void AddParser( int p_iSection, String const & p_name, PParserFunction p_pfnFunction, int p_iCount = 0, ... );
+		CU_API void AddParser( uint32_t p_section, String const & p_name, PParserFunction p_function, uint32_t p_count = 0, ... );
 		/**
 		 *\~english
 		 *\brief		Tells if the read lines are to be ignored
@@ -279,7 +289,7 @@ namespace Castor
 		 */
 		inline bool IsIgnored()const
 		{
-			return m_bIgnored;
+			return m_ignored;
 		}
 		/**
 		 *\~english
@@ -289,7 +299,7 @@ namespace Castor
 		 */
 		inline void Ignore()
 		{
-			m_bIgnored = true;
+			m_ignored = true;
 		}
 		/**
 		 *\~english
@@ -301,7 +311,7 @@ namespace Castor
 		 */
 		inline FileParserContextSPtr GetContext()
 		{
-			return m_pParsingContext;
+			return m_context;
 		}
 
 	protected:
@@ -353,17 +363,16 @@ namespace Castor
 		bool DoInvokeParser( Castor::String & p_line, AttributeParserMap const & p_parsers );
 
 	private:
-		int m_iRootSectionNumber;
-		int m_iSectionCount;
-		int m_iIgnoreLevel;
+		uint32_t m_rootSectionId;
+		int m_ignoreLevel;
 
 	protected:
 		//!\~english The map holding the parsers, sorted by section	\~french La map de parseurs, triés par section
-		std::map< int, AttributeParserMap > m_mapParsers;
+		std::map< uint32_t, AttributeParserMap > m_parsers;
 		//!\~english Th parser context	\~french Le contexte du parseur
-		FileParserContextSPtr m_pParsingContext;
+		FileParserContextSPtr m_context;
 		//!\~english Tells the lines parsed are to be ignored	\~french Dit que les ligne slues sont ignorées
-		bool m_bIgnored;
+		bool m_ignored;
 	};
 }
 

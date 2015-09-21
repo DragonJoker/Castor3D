@@ -15,8 +15,8 @@ using namespace Castor;
 namespace GuiCommon
 {
 	LanguageFileParser::LanguageFileParser( StcContext * p_pStcContext )
-		:	FileParser( eSECTION_ROOT, eSECTION_COUNT )
-		,	m_pStcContext( p_pStcContext )
+		: FileParser( eSECTION_ROOT )
+		, m_pStcContext( p_pStcContext )
 	{
 	}
 
@@ -27,7 +27,7 @@ namespace GuiCommon
 	void LanguageFileParser::DoInitialiseParser( TextFile & p_file )
 	{
 		LanguageFileContextPtr l_pContext = std::make_shared< LanguageFileContext >( &p_file );
-		m_pParsingContext = l_pContext;
+		m_context = l_pContext;
 		AddParser( eSECTION_ROOT,		cuT( "language"	),	Root_Language		, 1,	ePARAMETER_TYPE_NAME	);
 		AddParser( eSECTION_LANGUAGE,	cuT( "pattern"	),	Language_Pattern	, 1,	ePARAMETER_TYPE_TEXT	);
 		AddParser( eSECTION_LANGUAGE,	cuT( "lexer"	),	Language_Lexer		, 1,	ePARAMETER_TYPE_CHECKED_TEXT,	&l_pContext->mapLexers	);
@@ -48,28 +48,28 @@ namespace GuiCommon
 
 	void LanguageFileParser::DoCleanupParser()
 	{
-		std::static_pointer_cast< LanguageFileContext >( m_pParsingContext )->pCurrentLanguage.reset();
+		std::static_pointer_cast< LanguageFileContext >( m_context )->pCurrentLanguage.reset();
 	}
 
 	void LanguageFileParser::DoDiscardParser( String const & p_strLine )
 	{
-		if ( m_pParsingContext->stackSections.top() == eSECTION_LIST )
+		if ( m_context->stackSections.top() == eSECTION_LIST )
 		{
 			String l_strWords( p_strLine );
 			string::replace( l_strWords, cuT( "\\" ), cuT( "" ) );
 			StringArray l_arrayWords = string::split( string::trim( l_strWords ), cuT( "\t " ), 1000, false );
-			LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( m_pParsingContext );
+			LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( m_context );
 			l_pContext->arrayWords.insert( l_pContext->arrayWords.end(), l_arrayWords.begin(), l_arrayWords.end() );
 		}
 		else
 		{
-			Logger::LogWarning( cuT( "Parser not found @ line " ) + string::to_string( m_pParsingContext->ui64Line ) + cuT( " : " ) + p_strLine );
+			Logger::LogWarning( cuT( "Parser not found @ line " ) + string::to_string( m_context->ui64Line ) + cuT( " : " ) + p_strLine );
 		}
 	}
 
 	void LanguageFileParser::DoValidate()
 	{
-		m_pStcContext->AddLanguage( std::static_pointer_cast< LanguageFileContext >( m_pParsingContext )->pCurrentLanguage );
+		m_pStcContext->AddLanguage( std::static_pointer_cast< LanguageFileContext >( m_context )->pCurrentLanguage );
 	}
 }
 

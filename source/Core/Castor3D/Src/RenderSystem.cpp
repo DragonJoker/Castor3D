@@ -12,7 +12,6 @@
 #include "Sampler.hpp"
 #include "Overlay.hpp"
 #include "OverlayRenderer.hpp"
-#include "ShaderPlugin.hpp"
 #include "Viewport.hpp"
 
 #include <Debug.hpp>
@@ -100,23 +99,8 @@ Scene * RenderSystem::GetTopScene()
 ShaderProgramBaseSPtr RenderSystem::CreateShaderProgram( eSHADER_LANGUAGE p_eLanguage )
 {
 	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-	ShaderProgramBaseSPtr l_pReturn;
 
-	if ( p_eLanguage == eSHADER_LANGUAGE_GLSL || p_eLanguage == eSHADER_LANGUAGE_HLSL )
-	{
-		l_pReturn = CreateShaderProgram();
-	}
-	else
-	{
-		ShaderPluginSPtr l_pPlugin = m_engine->GetShaderPlugin( p_eLanguage );
-
-		if ( l_pPlugin )
-		{
-			l_pReturn = l_pPlugin->CreateShader( this );
-		}
-	}
-
-	return l_pReturn;
+	return CreateShaderProgram();
 }
 
 Camera * RenderSystem::GetCurrentCamera()const
