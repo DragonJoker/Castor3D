@@ -167,11 +167,14 @@ namespace Castor3D
 					Glyph & l_glyph = *l_it->second;
 					Size l_size = l_glyph.GetSize();
 					ByteArray l_buffer = l_glyph.GetBitmap();
+					uint32_t l_dstLineIndex = ( l_uiTotalWidth * l_uiOffY ) + l_uiOffX;
+					uint8_t * l_dstLineBuffer = &l_pBuffer[l_dstLineIndex];
 
 					for ( uint32_t i = 0; i < l_size.height(); ++i )
 					{
-						CASTOR_ASSERT( ( l_uiTotalWidth * ( l_uiOffY + i ) ) + l_uiOffX + l_size.width() <= l_bufsize );
-						std::memcpy( &l_pBuffer[( l_uiTotalWidth * ( l_uiOffY + i ) ) + l_uiOffX], &l_buffer[i * l_size.width()], l_size.width() );
+						CASTOR_ASSERT( l_dstLineIndex + l_size.width() <= l_bufsize );
+						std::memcpy( l_dstLineBuffer, &l_buffer[i * l_size.width()], l_size.width() );
+						l_dstLineBuffer += l_uiTotalWidth;
 					}
 
 					m_glyphsPositions[l_glyph.GetCharacter()] = Position( l_uiOffX, l_uiOffY );
@@ -188,6 +191,15 @@ namespace Castor3D
 		m_pTexture->Bind();
 		m_pTexture->GenerateMipmaps();
 		m_pTexture->Unbind();
+
+#if DEBUG_BUFFERS
+
+		uint8_t * l_buffer = m_pTexture->Lock( eLOCK_FLAG_READ_ONLY );
+		std::memcpy( m_pTexture->GetBuffer()->ptr(), l_buffer, m_pTexture->GetBuffer()->size() );
+		const Image l_tmp( cuT( "tmp" ), *m_pTexture->GetBuffer() );
+		Image::BinaryLoader()( l_tmp, File::GetUserDirectory() / cuT( "Font_" ) + l_pFont->GetName() + cuT( ".bmp" ) );
+
+#endif
 	}
 
 	void TextOverlay::Cleanup()
@@ -403,7 +415,7 @@ namespace Castor3D
 				Position l_uvPosition = GetGlyphPosition( l_character );
 				double l_uvX = double( l_uvPosition.x() ) / l_texDim.width();
 				double l_uvY = double( l_uvPosition.y() ) / l_texDim.height();
-				double l_uvStepX = l_charSize[0] / l_texDim.height();
+				double l_uvStepX = l_charSize[0] / l_texDim.width();
 				double l_uvStepY = l_charSize[1] / l_texDim.height();
 				double l_uvCrop = l_charCrop / l_texDim.height();
 
