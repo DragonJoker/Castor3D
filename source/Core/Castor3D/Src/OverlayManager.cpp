@@ -237,8 +237,8 @@ namespace Castor3D
 					l_overlay->Render( p_size );
 				}
 			}
-
-			unlock();
 		}
+
+		unlock();
 	}
 }

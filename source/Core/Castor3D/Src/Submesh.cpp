@@ -1097,22 +1097,20 @@ namespace Castor3D
 
 		if ( l_pProgram && l_pProgram->GetStatus() == ePROGRAM_STATUS_LINKED )
 		{
-			l_pProgram.reset();
-		}
+			if ( m_pGeometryBuffers && ( m_eCurDrawType != m_ePrvDrawType || m_bDirty ) )
+			{
+				m_ePrvDrawType = m_eCurDrawType;
+				m_bDirty = false;
+				m_pGeometryBuffers->Cleanup();
+				m_pGeometryBuffers->Initialise( l_pProgram, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
+			}
 
-		if ( m_pGeometryBuffers && ( m_eCurDrawType != m_ePrvDrawType || m_bDirty ) )
-		{
-			m_ePrvDrawType = m_eCurDrawType;
-			m_bDirty = false;
-			m_pGeometryBuffers->Cleanup();
-			m_pGeometryBuffers->Initialise( l_pProgram, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
-		}
+			auto l_matrixBuffer = p_pass.GetMatrixBuffer();
 
-		auto l_matrixBuffer = p_pass.GetMatrixBuffer();
-
-		if ( l_pProgram && l_matrixBuffer )
-		{
-			GetEngine()->GetRenderSystem()->GetPipeline().ApplyMatrices( *l_matrixBuffer, 0xFFFFFFFFFFFFFFFF );
+			if ( l_pProgram && l_matrixBuffer )
+			{
+				GetEngine()->GetRenderSystem()->GetPipeline().ApplyMatrices( *l_matrixBuffer, 0xFFFFFFFFFFFFFFFF );
+			}
 		}
 
 		return true;

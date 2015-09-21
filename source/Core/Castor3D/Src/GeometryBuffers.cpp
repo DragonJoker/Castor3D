@@ -8,12 +8,10 @@ using namespace Castor;
 namespace Castor3D
 {
 	GeometryBuffers::GeometryBuffers( VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer )
-		:	m_pVertexBuffer( std::move( p_pVertexBuffer ) )
-		,	m_pIndexBuffer( std::move( p_pIndexBuffer ) )
-		,	m_pMatrixBuffer( std::move( p_pMatrixBuffer ) )
+		: m_pVertexBuffer( std::move( p_pVertexBuffer ) )
+		, m_pIndexBuffer( std::move( p_pIndexBuffer ) )
+		, m_pMatrixBuffer( std::move( p_pMatrixBuffer ) )
 	{
-		m_bIndexBuffer = m_pIndexBuffer != nullptr;
-		m_bMatrixBuffer = m_pMatrixBuffer != nullptr;
 	}
 
 	GeometryBuffers::~GeometryBuffers()
@@ -22,19 +20,19 @@ namespace Castor3D
 
 	bool GeometryBuffers::Create()
 	{
-		bool l_return = true;
+		bool l_return = DoCreate();
 
 		if ( l_return && m_pVertexBuffer )
 		{
 			l_return = m_pVertexBuffer->Create();
 		}
 
-		if ( l_return && m_pIndexBuffer && m_bIndexBuffer )
+		if ( l_return && m_pIndexBuffer )
 		{
 			l_return = m_pIndexBuffer->Create();
 		}
 
-		if ( l_return && m_pMatrixBuffer && m_bMatrixBuffer )
+		if ( l_return && m_pMatrixBuffer )
 		{
 			l_return = m_pMatrixBuffer->Create();
 		}
@@ -49,15 +47,17 @@ namespace Castor3D
 			m_pVertexBuffer->Destroy();
 		}
 		
-		if ( m_pIndexBuffer && m_bIndexBuffer )
+		if ( m_pIndexBuffer )
 		{
 			m_pIndexBuffer->Destroy();
 		}
 
-		if ( m_pMatrixBuffer && m_bMatrixBuffer )
+		if ( m_pMatrixBuffer )
 		{
 			m_pMatrixBuffer->Destroy();
 		}
+
+		DoDestroy();
 	}
 
 	bool GeometryBuffers::Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature )
@@ -86,7 +86,7 @@ namespace Castor3D
 			l_return = m_pVertexBuffer->Initialise( p_vtxType, p_vtxNature, p_shader );
 		}
 
-		if ( l_return && m_pIndexBuffer && m_bIndexBuffer )
+		if ( l_return && m_pIndexBuffer )
 		{
 			l_return = m_pIndexBuffer->Initialise( p_idxType, p_idxNature, p_shader );
 		}
@@ -108,14 +108,14 @@ namespace Castor3D
 			l_return = m_pVertexBuffer->Initialise( p_vtxType, p_vtxNature, p_shader );
 		}
 
-		if ( l_return && m_pIndexBuffer && m_bIndexBuffer )
+		if ( l_return && m_pIndexBuffer )
 		{
 			l_return = m_pIndexBuffer->Initialise( p_idxType, p_idxNature, p_shader );
 		}
 
-		if ( l_return && m_pMatrixBuffer && m_bMatrixBuffer )
+		if ( l_return && m_pMatrixBuffer )
 		{
-			l_return = m_pMatrixBuffer->Initialise( p_mtxType, p_mtxNature, p_shader );
+			m_pMatrixBuffer->Initialise( p_mtxType, p_mtxNature, p_shader );
 		}
 
 		if ( l_return )
@@ -135,12 +135,12 @@ namespace Castor3D
 			m_pVertexBuffer->Cleanup();
 		}
 		
-		if ( m_pIndexBuffer && m_bIndexBuffer )
+		if ( m_pIndexBuffer )
 		{
 			m_pIndexBuffer->Cleanup();
 		}
 
-		if ( m_pMatrixBuffer && m_bMatrixBuffer )
+		if ( m_pMatrixBuffer )
 		{
 			m_pMatrixBuffer->Cleanup();
 		}
@@ -154,12 +154,12 @@ namespace Castor3D
 		{
 			l_return = m_pVertexBuffer->Bind();
 
-			if ( l_return && m_pMatrixBuffer && m_bMatrixBuffer )
+			if ( l_return && m_pMatrixBuffer )
 			{
 				l_return = m_pMatrixBuffer->Bind( 1 );
 			}
 
-			if ( l_return && m_pIndexBuffer && m_bIndexBuffer )
+			if ( l_return && m_pIndexBuffer )
 			{
 				l_return = m_pIndexBuffer->Bind();
 			}
@@ -172,14 +172,14 @@ namespace Castor3D
 	{
 		if ( m_pVertexBuffer && m_pIndexBuffer )
 		{
-			if ( m_bMatrixBuffer )
+			if ( m_pMatrixBuffer )
 			{
 				m_pMatrixBuffer->Unbind();
 			}
 
 			m_pVertexBuffer->Unbind();
 
-			if ( m_bIndexBuffer )
+			if ( m_pIndexBuffer )
 			{
 				m_pIndexBuffer->Unbind();
 			}

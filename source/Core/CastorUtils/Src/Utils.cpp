@@ -17,8 +17,6 @@
 #	include <malloc.h>
 #	define CU_ALIGNED_FREE( m ) _aligned_free( m )
 #	define CU_ALIGNED_ALLOC( m, a, s ) m = _aligned_malloc( s, a )
-//#	define CU_ALIGNED_FREE( m ) free( m )
-//#	define CU_ALIGNED_ALLOC( m, a, s ) m = malloc( s )
 #else
 #	include <stdlib.h>
 #	define CU_ALIGNED_FREE( m ) free( m )

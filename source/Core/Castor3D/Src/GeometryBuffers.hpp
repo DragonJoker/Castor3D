@@ -226,7 +226,7 @@ namespace Castor3D
 		 */
 		inline bool HasIndexBuffer()
 		{
-			return m_bIndexBuffer;
+			return m_pIndexBuffer != nullptr;
 		}
 		/**
 		 *\~english
@@ -238,10 +238,26 @@ namespace Castor3D
 		 */
 		inline bool HasMatrixBuffer()
 		{
-			return m_bMatrixBuffer;
+			return m_pMatrixBuffer != nullptr;
 		}
 
 	protected:
+		/**
+		 *\~english
+		 *\brief		Creates the GPU related stuff
+		 *\return		\p true if OK
+		 *\~french
+		 *\brief		Crée les objets GPU
+		 *\return		\p true si tout s'est bien passé
+		 */
+		virtual bool DoCreate() = 0;
+		/**
+		 *\~english
+		 *\brief		Destroys the GPU related stuff
+		 *\~french
+		 *\brief		Détruit les objets GPU
+		 */
+		virtual void DoDestroy() = 0;
 		/**
 		 *\~english
 		 *\brief		Initialisation function
@@ -266,10 +282,6 @@ namespace Castor3D
 		IndexBufferUPtr m_pIndexBuffer;
 		//!\~english The matrix buffer	\~french Le tampon de matrices
 		MatrixBufferUPtr m_pMatrixBuffer;
-		//!\~english Tells the geometry buffers has an index buffer	\~french Dit si le conteneur possède un tampon d'indices
-		bool m_bIndexBuffer;
-		//!\~english Tells the geometry buffers has a matrix buffer	\~french Dit si le conteneur possède un tampon de matrices
-		bool m_bMatrixBuffer;
 	};
 }
 

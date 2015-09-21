@@ -91,9 +91,10 @@ namespace GlRender
 		m_pfnUnbind();
 	}
 
-	bool GlGeometryBuffers::DoInitialise()
+	bool GlGeometryBuffers::DoCreate()
 	{
 		bool l_return = false;
+
 #if !C3DGL_LIMIT_TO_2_1
 
 		if ( m_gl.HasVao() )
@@ -120,33 +121,12 @@ namespace GlRender
 				glTrack( m_gl, GlGeometryBuffers, this );
 			}
 
-			if ( m_uiIndex != eGL_INVALID_INDEX )
-			{
-				if ( m_pVertexBuffer )
-				{
-					l_return = m_gl.BindVertexArray( m_uiIndex );
-
-					if ( l_return )
-					{
-						m_pVertexBuffer->Bind();
-
-						if ( m_pIndexBuffer )
-						{
-							m_pIndexBuffer->Bind();
-						}
-
-						if ( m_pMatrixBuffer )
-						{
-							m_pMatrixBuffer->Bind( 2 );
-						}
-
-						m_gl.BindVertexArray( 0 );
-					}
-				}
-			}
+			l_return = m_uiIndex != eGL_INVALID_INDEX;
 		}
 		else
+
 #endif
+
 		{
 			m_pfnBind = PFnBind( [&]()
 			{
@@ -163,20 +143,54 @@ namespace GlRender
 		return l_return;
 	}
 
-	void GlGeometryBuffers::DoCleanup()
+	void GlGeometryBuffers::DoDestroy()
 	{
-#if !C3DGL_LIMIT_TO_2_1
-
-		if ( m_gl.HasVao() )
+		if ( m_uiIndex && m_uiIndex != eGL_INVALID_INDEX )
 		{
-			if ( m_uiIndex != eGL_INVALID_INDEX )
-			{
-				glUntrack( m_gl, this );
-				m_gl.DeleteVertexArrays( 1, &m_uiIndex );
-			}
+			glUntrack( m_gl, this );
+			m_gl.DeleteVertexArrays( 1, &m_uiIndex );
 		}
 
-#endif
 		m_uiIndex = eGL_INVALID_INDEX;
+	}
+
+	bool GlGeometryBuffers::DoInitialise()
+	{
+		bool l_return = false;
+
+		if ( m_uiIndex != 0 && m_uiIndex != eGL_INVALID_INDEX )
+		{
+			if ( m_pVertexBuffer )
+			{
+				l_return = m_gl.BindVertexArray( m_uiIndex );
+
+				if ( l_return )
+				{
+					m_pVertexBuffer->Bind();
+
+					if ( m_pIndexBuffer )
+					{
+						m_pIndexBuffer->Bind();
+					}
+
+					if ( m_pMatrixBuffer )
+					{
+						m_pMatrixBuffer->Bind( 2 );
+					}
+
+					m_gl.BindVertexArray( 0 );
+				}
+			}
+		}
+		else
+		{
+			l_return = true;
+		}
+
+		return l_return;
+	}
+
+	void GlGeometryBuffers::DoCleanup()
+	{
 	}
 }

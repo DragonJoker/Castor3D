@@ -52,8 +52,8 @@ void Torus::Generate()
 		for ( uint32_t j = 0; j < l_uiIntMax; j++ )
 		{
 			l_vertex = l_submesh.AddPoint( m_rInternalRadius * cos( l_rAngleIn ) + m_rExternalRadius, m_rInternalRadius * sin( l_rAngleIn ), 0.0 );
-			Vertex::SetTexCoord(	l_vertex, real( 0.0 ), real( j ) / m_uiInternalNbFaces );
-			Vertex::SetNormal(	l_vertex, point::get_normalised( Point3r( real( cos( l_rAngleIn ) ), real( sin( l_rAngleIn ) ), real( 0.0 ) ) ) );
+			Vertex::SetTexCoord( l_vertex, real( 0.0 ), real( j ) / m_uiInternalNbFaces );
+			Vertex::SetNormal( l_vertex, point::get_normalised( Point3r( real( cos( l_rAngleIn ) ), real( sin( l_rAngleIn ) ), real( 0.0 ) ) ) );
 			l_uiCur++;
 			l_rAngleIn += l_rStepAngleIn;
 		}
@@ -70,8 +70,8 @@ void Torus::Generate()
 				Vertex::GetPosition( l_vertex, l_ptPos );
 				Vertex::GetNormal( l_vertex, l_ptNml );
 				l_vertex = l_submesh.AddPoint( l_ptPos[0] * cos( l_rAngleEx ), l_ptPos[1], l_ptPos[0] * sin( l_rAngleEx ) );
-				Vertex::SetTexCoord(	l_vertex, real( i ) / m_uiExternalNbFaces, real( j ) / m_uiInternalNbFaces );
-				Vertex::SetNormal(	l_vertex, point::get_normalised( Point3r( real( l_ptNml[0] * cos( l_rAngleEx ) ), real( l_ptNml[1] ), real( l_ptNml[0] * sin( l_rAngleEx ) ) ) ) );
+				Vertex::SetTexCoord( l_vertex, real( i ) / m_uiExternalNbFaces, real( j ) / m_uiInternalNbFaces );
+				Vertex::SetNormal( l_vertex, point::get_normalised( Point3r( real( l_ptNml[0] * cos( l_rAngleEx ) ), real( l_ptNml[1] ), real( l_ptNml[0] * sin( l_rAngleEx ) ) ) ) );
 			}
 
 			for ( uint32_t j = 0; j < l_uiIntMax - 1; j++ )
@@ -105,24 +105,6 @@ void Torus::Generate()
 		l_uiPrv++;
 		l_uiCur++;
 		l_submesh.ComputeTangentsFromNormals();
-		/*
-				for( uint32_t i = 0; i < m_uiInternalNbFaces; i++ )
-				{
-					l_submesh[i]->GetTangent( l_ptTangent0 );
-					l_ptTangent0	+= l_submesh[l_uiPrv + i]->GetTangent( l_ptTangent1);
-					point::normalise( l_ptTangent0 );
-					l_submesh[l_uiPrv + i]->SetTangent(	l_ptTangent0	);
-				}
-
-
-				for( uint32_t i = 0; i <= l_uiMax; i++ )
-				{
-					l_submesh[(m_uiInternalNbFaces + 1) * i]->GetTangent( l_ptTangent0 );
-					l_ptTangent0	+= l_submesh[(m_uiInternalNbFaces + 1) * (i + 1) - 1]->GetTangent( l_ptTangent1 );
-					point::normalise( l_ptTangent0	);
-					l_submesh[(m_uiInternalNbFaces + 1) * (i + 1) - 1]->SetTangent(	l_ptTangent0	);
-				}
-		*/
 	}
 
 	GetMesh()->ComputeContainers();

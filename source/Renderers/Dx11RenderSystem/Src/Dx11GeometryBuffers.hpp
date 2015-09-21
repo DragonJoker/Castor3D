@@ -35,6 +35,8 @@ namespace Dx11Render
 		virtual bool DrawInstanced( Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index, uint32_t p_uiCount );
 
 	private:
+		virtual bool DoCreate();
+		virtual void DoDestroy();
 		virtual bool DoInitialise();
 		virtual void DoCleanup();
 
