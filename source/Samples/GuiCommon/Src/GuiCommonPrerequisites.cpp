@@ -166,7 +166,7 @@ namespace GuiCommon
 			if ( p_fileName.GetExtension() != cuT( "cbsn" ) && p_fileName.GetExtension() != cuT( "zip" ) )
 			{
 				Path l_meshFilePath = p_fileName;
-				str_utils::replace( l_meshFilePath, cuT( "cscn" ), cuT( "cmsh" ) );
+				string::replace( l_meshFilePath, cuT( "cscn" ), cuT( "cmsh" ) );
 
 				if ( File::FileExists( l_meshFilePath ) )
 				{
@@ -393,7 +393,7 @@ namespace GuiCommon
 
 		if ( !p_fileName.empty() )
 		{
-			String l_strLowered = str_utils::lower_case( p_fileName );
+			String l_strLowered = string::lower_case( p_fileName );
 			p_engine.Cleanup();
 
 			bool l_continue = true;
@@ -541,7 +541,7 @@ namespace GuiCommon
 
 	FontSPtr make_Font( Engine * p_engine, wxFont const & p_font )
 	{
-		String l_name = make_String( p_font.GetFaceName() ) + str_utils::to_string( p_font.GetPointSize() );
+		String l_name = make_String( p_font.GetFaceName() ) + string::to_string( p_font.GetPointSize() );
 		FontCollection & l_manager = p_engine->GetFontManager();
 		FontSPtr l_font = l_manager.find( l_name );
 
@@ -557,5 +557,15 @@ namespace GuiCommon
 		}
 
 		return l_font;
+	}
+
+	Castor::String make_String( wxString const & p_value )
+	{
+		return Castor::String( p_value.mb_str( wxConvUTF8 ).data() );
+	}
+
+	wxString make_wxString( Castor::String const & p_value )
+	{
+		return wxString( p_value.c_str(), wxConvUTF8 );
 	}
 }

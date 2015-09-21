@@ -92,8 +92,8 @@ ShaderProgramBaseSPtr DxOverlayRenderer::DoGetProgram( uint32_t p_uiFlags )
 
 	if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
 	{
-		l_strPs += cuT( "Texture2D c3d_mapColour: register( t" ) + str_utils::to_string( l_index ) + cuT( " );\n" );
-		l_strPs += cuT( "SamplerState colourSampler: register( s" ) + str_utils::to_string( l_index ) + cuT( " );\n" );
+		l_strPs += cuT( "Texture2D c3d_mapColour: register( t" ) + string::to_string( l_index ) + cuT( " );\n" );
+		l_strPs += cuT( "SamplerState colourSampler: register( s" ) + string::to_string( l_index ) + cuT( " );\n" );
 		l_strPsMain += cuT( "	l_v4Ambient = c3d_mapColour.Sample( colourSampler, p_input.TextureUV );\n" );
 		l_program->CreateFrameVariable( ShaderProgramBase::MapColour, eSHADER_TYPE_PIXEL );
 		l_index++;
@@ -101,8 +101,8 @@ ShaderProgramBaseSPtr DxOverlayRenderer::DoGetProgram( uint32_t p_uiFlags )
 
 	if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
 	{
-		l_strPs += cuT( "Texture2D c3d_mapOpacity: register( t" ) + str_utils::to_string( l_index ) + cuT( " );\n" );
-		l_strPs += cuT( "SamplerState opacitySampler: register( s" ) + str_utils::to_string( l_index ) + cuT( " );\n" );
+		l_strPs += cuT( "Texture2D c3d_mapOpacity: register( t" ) + string::to_string( l_index ) + cuT( " );\n" );
+		l_strPs += cuT( "SamplerState opacitySampler: register( s" ) + string::to_string( l_index ) + cuT( " );\n" );
 		l_strPsMain += cuT( "	l_fAlpha *= c3d_mapOpacity.Sample( opacitySampler, p_input.TextureUV ).r;\n" );
 		l_program->CreateFrameVariable( ShaderProgramBase::MapOpacity, eSHADER_TYPE_PIXEL );
 		l_index++;

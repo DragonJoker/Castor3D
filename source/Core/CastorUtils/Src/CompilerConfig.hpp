@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_COMPILER_CONFIG_H___
 #define ___CASTOR_COMPILER_CONFIG_H___
 
-#undef CASTOR_UNICODE
+#undef CASTOR_USE_UNICODE
 #undef CASTOR_HAS_NULLPTR
 #undef CASTOR_HAS_STDSMARTPTR
 #undef CASTOR_HAS_TR1SMARTPTR

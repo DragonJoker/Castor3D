@@ -40,7 +40,7 @@ namespace Dx11Render
 		if ( infologLength > 0 )
 		{
 			char * infoLog = new char[infologLength];
-			p_strCompilerLog = str_utils::from_str( infoLog );
+			p_strCompilerLog = string::string_cast< xchar >( infoLog );
 			delete [] infoLog;
 		}
 
@@ -76,14 +76,14 @@ namespace Dx11Render
 
 		if ( m_pRenderSystem->UseShaders() && m_eStatus != eSHADER_STATUS_ERROR && !m_strLoadedSource.empty() )
 		{
-			l_strSource = str_utils::to_str( m_strLoadedSource );
+			l_strSource = string::string_cast< char >( m_strLoadedSource );
 			m_eStatus = eSHADER_STATUS_NOTCOMPILED;
 			ID3DBlob * l_pErrors = NULL;
 			UINT l_uiFlags = 0;
 #if !defined( NDEBUG )
 			l_uiFlags |= D3DCOMPILE_DEBUG | D3DCOMPILE_WARNINGS_ARE_ERRORS;
 #endif
-			HRESULT l_hr = D3DX11CompileFromMemory( l_strSource.c_str(), UINT( l_strSource.size() ), NULL, NULL, NULL, str_utils::to_str( GetEntryPoint() ).c_str(), l_strProfile.c_str(), l_uiFlags, 0, NULL, &m_pCompiled, &l_pErrors, NULL );
+			HRESULT l_hr = D3DX11CompileFromMemory( l_strSource.c_str(), UINT( l_strSource.size() ), NULL, NULL, NULL, string::string_cast< char >( GetEntryPoint() ).c_str(), l_strProfile.c_str(), l_uiFlags, 0, NULL, &m_pCompiled, &l_pErrors, NULL );
 
 			if ( l_hr == S_OK )
 			{
@@ -91,7 +91,7 @@ namespace Dx11Render
 			}
 			else if ( l_pErrors )
 			{
-				Logger::LogInfo( str_utils::from_str( reinterpret_cast< char * >( l_pErrors->GetBufferPointer() ) ) );
+				Logger::LogInfo( string::string_cast< xchar >( reinterpret_cast< char * >( l_pErrors->GetBufferPointer() ) ) );
 				Logger::LogInfo( m_strLoadedSource );
 				m_eStatus = eSHADER_STATUS_ERROR;
 				m_strLoadedSource.clear();

@@ -116,7 +116,7 @@ namespace Castor3D
 		};
 
 	public:
-		DECLARE_MAP( xchar, Castor::Position, GlyphPosition );
+		DECLARE_MAP( char32_t, Castor::Position, GlyphPosition );
 
 	public:
 		/**

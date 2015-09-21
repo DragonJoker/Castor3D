@@ -162,11 +162,11 @@ namespace Castor3D
 			{
 				uint32_t l_uiOffX = 0;
 
-				for ( uint32_t x = 0; x < l_uiCount && l_it != l_pFont->end(); ++x )
+				for ( uint32_t x = 0; x < 16 && l_it != l_pFont->end(); ++x )
 				{
-					Glyph * l_glyph = l_it->second;
-					Size l_size = l_glyph->GetSize();
-					ByteArray l_buffer = l_glyph->GetBitmap();
+					Glyph & l_glyph = *l_it->second;
+					Size l_size = l_glyph.GetSize();
+					ByteArray l_buffer = l_glyph.GetBitmap();
 
 					for ( uint32_t i = 0; i < l_size.height(); ++i )
 					{
@@ -174,7 +174,7 @@ namespace Castor3D
 						std::memcpy( &l_pBuffer[( l_uiTotalWidth * ( l_uiOffY + i ) ) + l_uiOffX], &l_buffer[i * l_size.width()], l_size.width() );
 					}
 
-					m_glyphsPositions[l_glyph->GetCharacter()] = Position( l_uiOffX, l_uiOffY );
+					m_glyphsPositions[l_glyph.GetCharacter()] = Position( l_uiOffX, l_uiOffY );
 					l_uiOffX += l_uiMaxWidth;
 					++l_it;
 				}
@@ -221,7 +221,7 @@ namespace Castor3D
 		}
 		else
 		{
-			CASTOR_EXCEPTION( "Font " + str_utils::to_str( p_strFont ) + "not found" );
+			CASTOR_EXCEPTION( "Font " + string::string_cast< char >( p_strFont ) + "not found" );
 		}
 
 		m_pOverlay->GetEngine()->PostEvent( MakeInitialiseEvent( *this ) );
@@ -246,7 +246,7 @@ namespace Castor3D
 
 		if ( l_it == m_glyphsPositions.end() )
 		{
-			CASTOR_EXCEPTION( std::string( "No loaded glyph for character " ) + str_utils::to_str( str_utils::to_string( p_char ) ) );
+			CASTOR_EXCEPTION( std::string( "No loaded glyph for character " ) + string::string_cast< char >( string::to_string( p_char ) ) );
 		}
 
 		return l_it->second;
@@ -274,7 +274,7 @@ namespace Castor3D
 				m_arrayVtx.reserve( m_previousCaption.size() * 6 );
 				Point2d l_ptPosition;
 
-				StringArray l_lines = str_utils::split( m_previousCaption, cuT( "\n" ), std::count( m_previousCaption.begin(), m_previousCaption.end(), cuT( '\n' ) ) + 1 );
+				StringArray l_lines = string::split( m_previousCaption, cuT( "\n" ), std::count( m_previousCaption.begin(), m_previousCaption.end(), cuT( '\n' ) ) + 1 );
 
 				for ( StringArrayConstIt l_itLines = l_lines.begin(); l_itLines != l_lines.end() && l_ptPosition[1] < l_ptSize[1]; ++l_itLines )
 				{
@@ -282,35 +282,46 @@ namespace Castor3D
 					double l_wordWidth = 0;
 					String l_word;
 
-					for ( String::const_iterator l_itLine = l_line.begin(); l_itLine != l_line.end() && l_ptPosition[1] < l_ptSize[1]; ++l_itLine )
+					for ( string::utf8::iterator l_itLine = l_line.begin(); l_itLine != l_line.end() && l_ptPosition[1] < l_ptSize[1]; ++l_itLine )
 					{
-						xchar const & l_character = *l_itLine;
-						Glyph const & l_glyph = l_pFont->GetGlyphAt( l_character );
-						Point2d l_charSize( double( std::max( l_glyph.GetSize().width(), l_glyph.GetAdvance().width() ) ), double( std::max( l_glyph.GetSize().height(), l_glyph.GetAdvance().height() ) ) );
+						char32_t const & l_character = *l_itLine;
 
-						if ( l_character == cuT( '\r' ) )
+						if ( l_pFont->HasGlyphAt( l_character ) )
 						{
-							DoWriteWord( p_renderer, l_word, l_wordWidth, l_ptSize, l_ptPosition );
-							l_ptPosition[0] = 0;
-							l_wordWidth = 0;
-						}
-						else if ( l_character == cuT( ' ' ) )
-						{
-							DoWriteWord( p_renderer, l_word, l_wordWidth, l_ptSize, l_ptPosition );
-							l_word.clear();
-							l_wordWidth = 0;
-							l_ptPosition[0] += l_charSize[0];
-						}
-						else if ( l_character == cuT( '\t' ) )
-						{
-							DoWriteWord( p_renderer, l_word, l_wordWidth, l_ptSize, l_ptPosition );
-							l_word.clear();
-							l_wordWidth = 0;
-							l_ptPosition[0] += l_charSize[0];
+							Glyph const & l_glyph = l_pFont->GetGlyphAt( l_character );
+							Point2d l_charSize( double( std::max( l_glyph.GetSize().width(), l_glyph.GetAdvance().width() ) ), double( std::max( l_glyph.GetSize().height(), l_glyph.GetAdvance().height() ) ) );
+
+							if ( l_character == cuT( '\r' ) )
+							{
+								DoWriteWord( p_renderer, l_word, l_wordWidth, l_ptSize, l_ptPosition );
+								l_ptPosition[0] = 0;
+								l_wordWidth = 0;
+							}
+							else if ( l_character == cuT( ' ' ) )
+							{
+								DoWriteWord( p_renderer, l_word, l_wordWidth, l_ptSize, l_ptPosition );
+								l_word.clear();
+								l_wordWidth = 0;
+								l_ptPosition[0] += l_charSize[0];
+							}
+							else if ( l_character == cuT( '\t' ) )
+							{
+								DoWriteWord( p_renderer, l_word, l_wordWidth, l_ptSize, l_ptPosition );
+								l_word.clear();
+								l_wordWidth = 0;
+								l_ptPosition[0] += l_charSize[0];
+							}
+							else
+							{
+								l_word += l_character;
+								l_wordWidth += l_charSize[0];
+							}
 						}
 						else
 						{
-							l_word += l_character;
+							Glyph const & l_glyph = l_pFont->GetGlyphAt( cuT( '_' ) );
+							Point2d l_charSize( double( std::max( l_glyph.GetSize().width(), l_glyph.GetAdvance().width() ) ), double( std::max( l_glyph.GetSize().height(), l_glyph.GetAdvance().height() ) ) );
+							l_word += cuT( '_' );
 							l_wordWidth += l_charSize[0];
 						}
 					}
@@ -341,9 +352,9 @@ namespace Castor3D
 			p_position[1] += l_pFont->GetMaxHeight();
 		}
 
-		for ( String::const_iterator l_it = p_word.begin(); l_it != p_word.end() && p_position[1] < p_size[1]; ++l_it )
+		for ( string::utf8::iterator l_it = p_word.begin(); l_it != p_word.end() && p_position[1] < p_size[1]; ++l_it )
 		{
-			xchar const & l_character = *l_it;
+			char32_t const & l_character = *l_it;
 			double l_charCrop = 0;
 			Glyph const & l_glyph = l_pFont->GetGlyphAt( l_character );
 			Point2d l_charSize( double( std::max( l_glyph.GetSize().width(), l_glyph.GetAdvance().width() ) ), double( std::max( l_glyph.GetSize().height(), l_glyph.GetAdvance().height() ) ) );

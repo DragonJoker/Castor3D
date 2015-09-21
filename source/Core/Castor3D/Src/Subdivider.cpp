@@ -216,15 +216,15 @@ String & operator << ( String & p_stream, Castor3D::BufferElementGroup const & p
 {
 	Point3r l_ptPos( reinterpret_cast< real const * >( p_vertex.const_ptr() ) );
 	p_stream += cuT( "Vertex[" );
-	p_stream += str_utils::to_string( p_vertex.GetIndex() );
+	p_stream += string::to_string( p_vertex.GetIndex() );
 	p_stream += cuT( "] - Buffer : [" );
-	p_stream += str_utils::to_string( l_ptPos.const_ptr() );
+	p_stream += string::to_string( l_ptPos.const_ptr() );
 	p_stream += cuT( "] - (" );
-	p_stream += str_utils::to_string( l_ptPos[0] );
+	p_stream += string::to_string( l_ptPos[0] );
 	p_stream += cuT( "," );
-	p_stream += str_utils::to_string( l_ptPos[1] );
+	p_stream += string::to_string( l_ptPos[1] );
 	p_stream += cuT( "," );
-	p_stream += str_utils::to_string( l_ptPos[2] );
+	p_stream += string::to_string( l_ptPos[2] );
 	p_stream += cuT( ")" );
 	return p_stream;
 }

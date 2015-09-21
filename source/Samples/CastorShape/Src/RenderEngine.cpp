@@ -20,7 +20,7 @@ RenderEngine::~RenderEngine()
 bool RenderEngine::Draw()
 {
 	bool l_return = false;
-	std::ofstream l_imageFile( str_utils::to_str( m_strFileName ), std::ios_base::binary );
+	std::ofstream l_imageFile( string::string_cast< char >( m_strFileName ), std::ios_base::binary );
 
 	if ( l_imageFile )
 	{

@@ -255,7 +255,7 @@
 	template< typename T, uint32_t Count >
 	inline void PointFrameVariable< T, Count >::DoSetValueStr( Castor::String const & p_strValue, uint32_t p_uiIndex )
 	{
-		Castor::StringArray l_arraySplitted = Castor::str_utils::split( p_strValue, cuT( ", \t" ) );
+		Castor::StringArray l_arraySplitted = Castor::string::split( p_strValue, cuT( ", \t" ) );
 		Castor::Coords< T, Count > l_ptValue( GetValue( p_uiIndex ) );
 
 		if ( l_arraySplitted.size() == Count )

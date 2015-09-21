@@ -89,21 +89,21 @@ namespace Castor3D
 
 			if ( l_txt )
 			{
-				l_txt->SetCaption( str_utils::to_string( int( m_cpuTime ) ) + cuT( " ms" ) );
+				l_txt->SetCaption( string::to_string( int( m_cpuTime ) ) + cuT( " ms" ) );
 			}
 
 			l_txt = m_debugGpuTime.lock();
 
 			if ( l_txt )
 			{
-				l_txt->SetCaption( str_utils::to_string( int( m_gpuTime ) ) + cuT( " ms" ) );
+				l_txt->SetCaption( string::to_string( int( m_gpuTime ) ) + cuT( " ms" ) );
 			}
 
 			l_txt = m_debugTotalTime.lock();
 
 			if ( l_txt )
 			{
-				l_txt->SetCaption( str_utils::to_string( int( l_time ) ) + cuT( " ms" ) );
+				l_txt->SetCaption( string::to_string( int( l_time ) ) + cuT( " ms" ) );
 			}
 
 			l_txt = m_debugAverageFps.lock();
@@ -111,28 +111,28 @@ namespace Castor3D
 			if ( l_txt )
 			{
 				double l_avgTime = std::accumulate( m_framesTimes.begin(), m_framesTimes.end(), 0.0 ) / m_framesTimes.size();
-				l_txt->SetCaption( str_utils::to_string( int( 1000 / l_avgTime ) ) + cuT( " frames/s" ) );
+				l_txt->SetCaption( string::to_string( int( 1000 / l_avgTime ) ) + cuT( " frames/s" ) );
 			}
 
 			l_txt = m_debugVertexCount.lock();
 
 			if ( l_txt )
 			{
-				l_txt->SetCaption( str_utils::to_string( p_vertices ) );
+				l_txt->SetCaption( string::to_string( p_vertices ) );
 			}
 
 			l_txt = m_debugFaceCount.lock();
 
 			if ( l_txt )
 			{
-				l_txt->SetCaption( str_utils::to_string( p_faces ) );
+				l_txt->SetCaption( string::to_string( p_faces ) );
 			}
 
 			l_txt = m_debugObjectCount.lock();
 
 			if ( l_txt )
 			{
-				l_txt->SetCaption( str_utils::to_string( p_objects ) );
+				l_txt->SetCaption( string::to_string( p_objects ) );
 			}
 
 			m_frameIndex = ++m_frameIndex % 100;

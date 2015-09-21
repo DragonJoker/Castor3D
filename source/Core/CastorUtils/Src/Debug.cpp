@@ -62,7 +62,7 @@ namespace Castor
 					l_ret = p_name;
 				}
 
-				return str_utils::string_cast< xchar >( l_ret );
+				return string::string_cast< xchar >( l_ret );
 			}
 
 #	elif defined( _MSC_VER )
@@ -81,14 +81,14 @@ namespace Castor
 					l_ret = p_name;
 				}
 
-				return str_utils::string_cast< xchar >( l_ret );
+				return string::string_cast< xchar >( l_ret );
 			}
 
 #	else
 
 			String Demangle( const std::string & p_name )
 			{
-				return str_utils::string_cast< xchar >( p_name );
+				return string::string_cast< xchar >( p_name );
 			}
 
 #	endif

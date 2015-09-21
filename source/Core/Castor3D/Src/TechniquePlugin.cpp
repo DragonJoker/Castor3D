@@ -15,15 +15,15 @@ namespace Castor3D
 #pragma warning( disable:4290 )
 #if defined( _MSC_VER)
 #	if defined( _WIN64 )
-	static const String RegisterTechniqueFunctionABIName		= cuT( "?RegisterTechnique@@YAXAEAVTechniqueFactory@Castor3D@@@Z" );
-	static const String UnregisterTechniqueFunctionABIName		= cuT( "?UnregisterTechnique@@YAXAEAVTechniqueFactory@Castor3D@@@Z" );
+	static const String RegisterTechniqueFunctionABIName = cuT( "?RegisterTechnique@@YAXAEAVTechniqueFactory@Castor3D@@@Z" );
+	static const String UnregisterTechniqueFunctionABIName = cuT( "?UnregisterTechnique@@YAXAEAVTechniqueFactory@Castor3D@@@Z" );
 #	else
-	static const String RegisterTechniqueFunctionABIName		= cuT( "?RegisterTechnique@@YAXAAVTechniqueFactory@Castor3D@@@Z" );
-	static const String UnregisterTechniqueFunctionABIName		= cuT( "?UnregisterTechnique@@YAXAAVTechniqueFactory@Castor3D@@@Z" );
+	static const String RegisterTechniqueFunctionABIName = cuT( "?RegisterTechnique@@YAXAAVTechniqueFactory@Castor3D@@@Z" );
+	static const String UnregisterTechniqueFunctionABIName = cuT( "?UnregisterTechnique@@YAXAAVTechniqueFactory@Castor3D@@@Z" );
 #	endif
 #elif defined( __GNUG__)
-	static const String RegisterTechniqueFunctionABIName		= cuT( "_Z17RegisterTechniqueN8Castor3D17TechniqueFactoryE" );
-	static const String UnregisterTechniqueFunctionABIName		= cuT( "_Z19UnregisterTechniqueN8Castor3D17TechniqueFactoryE" );
+	static const String RegisterTechniqueFunctionABIName = cuT( "_Z17RegisterTechniqueN8Castor3D17TechniqueFactoryE" );
+	static const String UnregisterTechniqueFunctionABIName = cuT( "_Z19UnregisterTechniqueN8Castor3D17TechniqueFactoryE" );
 #else
 #	error "Implement ABI names for this compiler"
 #endif

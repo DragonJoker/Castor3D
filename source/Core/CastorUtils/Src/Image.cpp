@@ -84,11 +84,11 @@ namespace Castor
 		ePIXEL_FORMAT l_ePF = ePIXEL_FORMAT_R8G8B8;
 		FIBITMAP * l_pImage = NULL;
 		int l_iFlags = BMP_DEFAULT;
-		FREE_IMAGE_FORMAT l_fif = FreeImage_GetFileType( str_utils::to_str( p_path ).c_str(), 0 );
+		FREE_IMAGE_FORMAT l_fif = FreeImage_GetFileType( string::string_cast< char >( p_path ).c_str(), 0 );
 
 		if ( l_fif == FIF_UNKNOWN )
 		{
-			l_fif = FreeImage_GetFIFFromFilename( str_utils::to_str( p_path ).c_str() );
+			l_fif = FreeImage_GetFIFFromFilename( string::string_cast< char >( p_path ).c_str() );
 		}
 		else if ( l_fif == FIF_TIFF )
 		{
@@ -100,7 +100,7 @@ namespace Castor
 			LOADER_ERROR( "Can't load image : unsupported image format" );
 		}
 
-		l_pImage = FreeImage_Load( l_fif, str_utils::to_str( p_path ).c_str() );
+		l_pImage = FreeImage_Load( l_fif, string::string_cast< char >( p_path ).c_str() );
 
 		if ( !l_pImage )
 		{
@@ -114,7 +114,7 @@ namespace Castor
 
 			if ( !l_pImage )
 			{
-				LOADER_ERROR( "Can't load image : " + str_utils::to_str( p_path ) );
+				LOADER_ERROR( "Can't load image : " + string::string_cast< char >( p_path ) );
 			}
 		}
 
@@ -132,7 +132,7 @@ namespace Castor
 
 			if ( !l_pImage )
 			{
-				LOADER_ERROR( "Can't convert image to 32 bits with alpha : " + str_utils::to_str( p_path ) );
+				LOADER_ERROR( "Can't convert image to 32 bits with alpha : " + string::string_cast< char >( p_path ) );
 			}
 		}
 		else
@@ -144,7 +144,7 @@ namespace Castor
 
 			if ( !l_pImage )
 			{
-				LOADER_ERROR( "Can't convert image to 24 bits : " + str_utils::to_str( p_path ) );
+				LOADER_ERROR( "Can't convert image to 24 bits : " + string::string_cast< char >( p_path ) );
 			}
 		}
 
@@ -184,7 +184,7 @@ namespace Castor
 			{
 				memcpy( FreeImage_GetBits( l_pImage ), l_pBufferRGB->const_ptr(), l_pBufferRGB->size() );
 				FREE_IMAGE_FORMAT l_fif = FIF_PNG;
-				l_return = FreeImage_Save( l_fif, l_pImage, str_utils::to_str( p_path ).c_str(), 0 ) != 0;
+				l_return = FreeImage_Save( l_fif, l_pImage, string::string_cast< char >( p_path ).c_str(), 0 ) != 0;
 				FreeImage_Unload( l_pImage );
 			}
 		}
@@ -223,7 +223,7 @@ namespace Castor
 					}
 				}
 
-				l_return = FreeImage_Save( FIF_BMP, l_pImage, str_utils::to_str( p_path ).c_str(), 0 ) != 0;
+				l_return = FreeImage_Save( FIF_BMP, l_pImage, string::string_cast< char >( p_path ).c_str(), 0 ) != 0;
 				FreeImage_Unload( l_pImage );
 			}
 		}
@@ -499,7 +499,7 @@ namespace Castor
 		REQUIRE( Rectangle( 0, 0 , GetWidth(), GetHeight() ).intersects( l_rcRect ) == eINTERSECTION_IN );
 		Size l_ptSize( l_rcRect.width(), l_rcRect.height() );
 		// Création de la sous-image à remplir
-		Image l_img( m_name + cuT( "_Sub" ) + str_utils::to_string( l_rcRect[0] ) + cuT( "x" ) + str_utils::to_string( l_rcRect[1] ) + cuT( ":" ) + str_utils::to_string( l_ptSize.width() ) + cuT( "x" ) + str_utils::to_string( l_ptSize.height() ), l_ptSize, GetPixelFormat() );
+		Image l_img( m_name + cuT( "_Sub" ) + string::to_string( l_rcRect[0] ) + cuT( "x" ) + string::to_string( l_rcRect[1] ) + cuT( ":" ) + string::to_string( l_ptSize.width() ) + cuT( "x" ) + string::to_string( l_ptSize.height() ), l_ptSize, GetPixelFormat() );
 		// Calcul de variables temporaires
 		uint8_t const *	l_pSrc			= m_pBuffer->get_at( l_rcRect.left(), l_rcRect.top() );
 		uint8_t 	*	l_pDest			= l_img.m_pBuffer->get_at( 0, 0 );

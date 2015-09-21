@@ -36,7 +36,7 @@ namespace Dx11Render
 		inline Castor::String GetVertexInMatrices( int32_t p_index )const
 		{
 			xchar l_buffer[1024];
-#if !defined( _UNICODE )
+#if !CASTOR_USE_UNICODE
 			sprintf( l_buffer, m_strVertexInMatrices.c_str(), p_index );
 #else
 			wsprintf( l_buffer, m_strVertexInMatrices.c_str(), p_index );
@@ -46,7 +46,7 @@ namespace Dx11Render
 		inline Castor::String GetPixelInMatrices( int32_t p_index )const
 		{
 			xchar l_buffer[1024];
-#if !defined( _UNICODE )
+#if !CASTOR_USE_UNICODE
 			sprintf( l_buffer, m_strPixelInMatrices.c_str(), p_index );
 #else
 			wsprintf( l_buffer, m_strPixelInMatrices.c_str(), p_index );
@@ -56,7 +56,7 @@ namespace Dx11Render
 		inline Castor::String GetPixelPass( int32_t p_index )const
 		{
 			xchar l_buffer[1024];
-#if !defined( _UNICODE )
+#if !CASTOR_USE_UNICODE
 			sprintf( l_buffer, m_strPixelPass.c_str(), p_index );
 #else
 			wsprintf( l_buffer, m_strPixelPass.c_str(), p_index );
@@ -66,7 +66,7 @@ namespace Dx11Render
 		inline Castor::String GetPixelScene( int32_t p_index )const
 		{
 			xchar l_buffer[1024];
-#if !defined( _UNICODE )
+#if !CASTOR_USE_UNICODE
 			sprintf( l_buffer, m_strPixelScene.c_str(), p_index );
 #else
 			wsprintf( l_buffer, m_strPixelScene.c_str(), p_index );

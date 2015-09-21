@@ -1095,12 +1095,12 @@ OpenGl::~OpenGl()
 bool OpenGl::PreInitialise( String const & p_strExtensions )
 {
 	char const * l_extensions = ( char const * )glGetString( GL_EXTENSIONS );
-	m_strExtensions = str_utils::from_str( l_extensions ) + p_strExtensions;
-	m_strVendor = str_utils::from_str( ( char const * )glGetString( GL_VENDOR ) );
-	m_strRenderer = str_utils::from_str( ( char const * )glGetString( GL_RENDERER ) );
-	m_strVersion = str_utils::from_str( ( char const * )glGetString( GL_VERSION ) );
+	m_strExtensions = string::string_cast< xchar >( l_extensions ) + p_strExtensions;
+	m_strVendor = string::string_cast< xchar >( ( char const * )glGetString( GL_VENDOR ) );
+	m_strRenderer = string::string_cast< xchar >( ( char const * )glGetString( GL_RENDERER ) );
+	m_strVersion = string::string_cast< xchar >( ( char const * )glGetString( GL_VERSION ) );
 	String l_strExtensions = m_strExtensions;
-	StringArray l_arrayExtensions = str_utils::split( l_strExtensions, cuT( " " ), 10000, false );
+	StringArray l_arrayExtensions = string::split( l_strExtensions, cuT( " " ), 10000, false );
 	Logger::LogDebug( cuT( "Available extensions :" ) );
 	std::for_each( l_arrayExtensions.begin(), l_arrayExtensions.end(), [&]( String const & p_strExtension )
 	{
@@ -1185,11 +1185,11 @@ bool OpenGl::PreInitialise( String const & p_strExtensions )
 bool OpenGl::Initialise()
 {
 #define GL_GET_FUNC( ptr, func, ext )\
-	if( !gl_api::GetFunction( cuT( "gl" ) + str_utils::from_str( #func ), ptr->m_pfn##func ) )\
+	if( !gl_api::GetFunction( cuT( "gl" ) + string::string_cast< xchar >( #func ), ptr->m_pfn##func ) )\
 	{\
-		if( !gl_api::GetFunction( cuT( "gl" ) + str_utils::from_str( #func ) + str_utils::from_str( #ext ), ptr->m_pfn##func ) )\
+		if( !gl_api::GetFunction( cuT( "gl" ) + string::string_cast< xchar >( #func ) + string::string_cast< xchar >( #ext ), ptr->m_pfn##func ) )\
 		{\
-			Logger::LogWarning( cuT( "Unable to retrieve function gl" ) + str_utils::from_str( #func ) );\
+			Logger::LogWarning( cuT( "Unable to retrieve function gl" ) + string::string_cast< xchar >( #func ) );\
 		}\
 	}
 	m_pfnGetError = &glGetError;
@@ -3596,12 +3596,12 @@ void OpenGl::UnTrack( void * p_object )
 
 bool OpenGl::GlCheckError( std::string const & p_text )const
 {
-	return DoGlCheckError( str_utils::from_str( p_text ) );
+	return DoGlCheckError( string::string_cast< xchar >( p_text ) );
 }
 
 bool OpenGl::GlCheckError( std::wstring const & p_text )const
 {
-	return DoGlCheckError( str_utils::from_wstr( p_text ) );
+	return DoGlCheckError( string::string_cast< xchar >( p_text ) );
 }
 
 bool OpenGl::DoGlCheckError( String const & p_text )const
@@ -3741,7 +3741,7 @@ void OpenGl::DebugLog( eGL_DEBUG_SOURCE source, eGL_DEBUG_TYPE type, uint32_t id
 			break;
 		}
 
-		l_strToLog += cuT( "ID:" ) + str_utils::to_string( id ) + cuT( "\t" );
+		l_strToLog += cuT( "ID:" ) + string::to_string( id ) + cuT( "\t" );
 
 		switch ( severity )
 		{
@@ -3758,7 +3758,7 @@ void OpenGl::DebugLog( eGL_DEBUG_SOURCE source, eGL_DEBUG_TYPE type, uint32_t id
 			break;
 		}
 
-		Logger::LogWarning(	l_strToLog + cuT( "Message:" ) + str_utils::from_str( message ) );
+		Logger::LogWarning(	l_strToLog + cuT( "Message:" ) + string::string_cast< xchar >( message ) );
 	}
 }
 
@@ -3801,7 +3801,7 @@ void OpenGl::DebugLogAMD( uint32_t id, eGL_DEBUG_CATEGORY category, eGL_DEBUG_SE
 		break;
 	}
 
-	l_strToLog += cuT( "ID:" ) + str_utils::to_string( id ) + cuT( "\t" );
+	l_strToLog += cuT( "ID:" ) + string::to_string( id ) + cuT( "\t" );
 
 	switch ( severity )
 	{
@@ -3818,7 +3818,7 @@ void OpenGl::DebugLogAMD( uint32_t id, eGL_DEBUG_CATEGORY category, eGL_DEBUG_SE
 		break;
 	}
 
-	Logger::LogWarning(	l_strToLog + cuT( "Message:" ) + str_utils::from_str( message ) );
+	Logger::LogWarning(	l_strToLog + cuT( "Message:" ) + string::string_cast< xchar >( message ) );
 }
 
 bool OpenGl::HasExtension( Castor::String const & p_strExtName )const

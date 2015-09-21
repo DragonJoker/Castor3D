@@ -1,3 +1,5 @@
+option( CASTOR_USE_UNICODE "Use UNICODE strings (not recommended)" FALSE)
+
 project( CastorUtils )
 
 include( Doxygen )
@@ -126,6 +128,11 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		set( CASTOR_USE_LOG_TRACK 1 )
 	else()
 		set( CASTOR_USE_LOG_TRACK 0 )
+	endif()
+	if( CASTOR_USE_UNICODE )
+		set( CASTOR_USE_UNICODE 1 )
+	else()
+		set( CASTOR_USE_UNICODE 0 )
 	endif()
 	
 	configure_file( 

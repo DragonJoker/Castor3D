@@ -13,11 +13,11 @@ using namespace Castor;
 namespace Castor3D
 {
 #if defined( _MSC_VER)
-	static const String CreateGeneratorFunctionABIName		= cuT( "?CreateGenerator@@YAPAVGenerator@Castor3D@@PAVTextureUnit@2@@Z" );
-	static const String DestroyGeneratorFunctionABIName		= cuT( "?DestroyGenerator@@YAXPAVGenerator@Castor3D@@@Z" );
+	static const String CreateGeneratorFunctionABIName = cuT( "?CreateGenerator@@YAPAVGenerator@Castor3D@@PAVTextureUnit@2@@Z" );
+	static const String DestroyGeneratorFunctionABIName = cuT( "?DestroyGenerator@@YAXPAVGenerator@Castor3D@@@Z" );
 #elif defined( __GNUG__)
-	static const String CreateGeneratorFunctionABIName		= cuT( "_Z15CreateGeneratorPN8Castor3D11TextureUnitE" );
-	static const String DestroyGeneratorFunctionABIName		= cuT( "_Z16DestroyGeneratorPN8Castor3D9GeneratorE" );
+	static const String CreateGeneratorFunctionABIName = cuT( "_Z15CreateGeneratorPN8Castor3D11TextureUnitE" );
+	static const String DestroyGeneratorFunctionABIName = cuT( "_Z16DestroyGeneratorPN8Castor3D9GeneratorE" );
 #else
 #	error "Implement ABI names for this compiler"
 #endif
@@ -28,15 +28,15 @@ namespace Castor3D
 		if ( !p_pLibrary->GetFunction( m_pfnCreateGenerator, CreateGeneratorFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] CreateGenerator plugin function : " );
-			l_strError += str_utils::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
+			l_strError += string::to_string( dlerror() );
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
 		if ( !p_pLibrary->GetFunction( m_pfnDestroyGenerator, DestroyGeneratorFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] DestroyGenerator plugin function : " );
-			l_strError += str_utils::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
+			l_strError += string::to_string( dlerror() );
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
 		if ( m_pfnOnLoad )

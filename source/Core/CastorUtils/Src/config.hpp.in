@@ -32,4 +32,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #undef CASTOR_USE_LOG_TRACK
 #define CASTOR_USE_LOG_TRACK @CASTOR_USE_LOG_TRACK@
 
+//! Tells whether or not use log for function tracking (if not, std::cout is used)
+#undef CASTOR_USE_UNICODE
+#define CASTOR_USE_UNICODE @CASTOR_USE_UNICODE@
+
 #endif

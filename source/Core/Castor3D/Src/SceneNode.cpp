@@ -241,7 +241,7 @@ namespace Castor3D
 		if ( m_strName.empty() )
 		{
 			m_strName = cuT( "SceneNode_%d" );
-			m_strName += str_utils::to_string( Count );
+			m_strName += string::to_string( Count );
 		}
 
 		Count++;
@@ -259,7 +259,7 @@ namespace Castor3D
 		if ( m_strName.empty() )
 		{
 			m_strName = cuT( "SceneNode_%d" );
-			m_strName += str_utils::to_string( Count );
+			m_strName += string::to_string( Count );
 		}
 
 		Count++;

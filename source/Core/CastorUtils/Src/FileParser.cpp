@@ -46,9 +46,9 @@ namespace Castor
 			String l_strLine2;
 			String l_file;
 			p_file.CopyToString( l_file );
-			str_utils::replace( l_file, cuT( "\r\n" ), cuT( "\n" ) );
-			str_utils::replace( l_file, cuT( "\n\n" ), cuT( "\n" ) );
-			StringArray l_lines = str_utils::split( l_file, cuT( "\n" ), std::count( l_file.begin(), l_file.end(), '\n' ) + 1, true );
+			string::replace( l_file, cuT( "\r\n" ), cuT( "\n" ) );
+			string::replace( l_file, cuT( "\n\n" ), cuT( "\n" ) );
+			StringArray l_lines = string::split( l_file, cuT( "\n" ), std::count( l_file.begin(), l_file.end(), '\n' ) + 1, true );
 			auto l_it = l_lines.begin();
 
 			while ( l_it != l_lines.end() )
@@ -63,8 +63,8 @@ namespace Castor
 					l_bReuse = false;
 				}
 
-				//Logger::LogDebug( str_utils::to_string( m_pParsingContext->ui64Line ) + cuT( " - " ) + l_strLine.c_str() );
-				str_utils::trim( l_strLine );
+				//Logger::LogDebug( string::to_string( m_pParsingContext->ui64Line ) + cuT( " - " ) + l_strLine.c_str() );
+				string::trim( l_strLine );
 
 				if ( !l_strLine.empty() )
 				{
@@ -121,7 +121,7 @@ namespace Castor
 								{
 									// We got a "{" at the end of the line, so we split the line in two and reuse the line
 									l_strLine2 = l_strLine.substr( 0, l_strLine.size() - 1 );
-									str_utils::trim( l_strLine2 );
+									string::trim( l_strLine2 );
 									l_bNextIsOpenBrace = DoParseScriptLine( l_strLine2 );
 									l_strLine = cuT( "{" );
 									l_bReuse = true;
@@ -221,7 +221,7 @@ namespace Castor
 	{
 		bool l_return = true;
 		String l_strParams( p_strParams );
-		str_utils::trim( l_strParams );
+		string::trim( l_strParams );
 		String l_strMissingParam;
 		std::for_each( p_itBegin, p_itEnd, [&]( ParserParameterBaseSPtr p_pParam )
 		{
@@ -394,7 +394,7 @@ namespace Castor
 			{
 				// Block end at the beginning of the line, we treat it then we parse the line
 				p_strLine = p_strLine.substr( 1 );
-				str_utils::trim( p_strLine );
+				string::trim( p_strLine );
 				DoParseScriptBlockEnd();
 
 				if ( !p_strLine.empty() )
@@ -412,7 +412,7 @@ namespace Castor
 			{
 				// Block end at the end of the line : we treat the line then the block end
 				p_strLine = p_strLine.substr( 0, l_uiBlockEndIndex );
-				str_utils::trim( p_strLine );
+				string::trim( p_strLine );
 
 				if ( !p_strLine.empty() )
 				{
@@ -479,7 +479,7 @@ namespace Castor
 	bool FileParser::DoInvokeParser( String & p_strLine, AttributeParserMap const & p_parsers )
 	{
 		bool l_return = false;
-		StringArray l_splitCmd = str_utils::split( p_strLine, cuT( " \t" ), 1, false );
+		StringArray l_splitCmd = string::split( p_strLine, cuT( " \t" ), 1, false );
 		m_pParsingContext->strFunctionName = l_splitCmd[0];
 		AttributeParserMap::const_iterator const & l_iter = p_parsers.find( l_splitCmd[0] );
 
@@ -493,7 +493,7 @@ namespace Castor
 
 			if ( l_splitCmd.size() >= 2 )
 			{
-				l_strParameters = str_utils::trim( l_splitCmd[1] );
+				l_strParameters = string::trim( l_splitCmd[1] );
 			}
 
 			if ( !CheckParams( l_strParameters, l_iter->second.second.begin(), l_iter->second.second.end() ) )

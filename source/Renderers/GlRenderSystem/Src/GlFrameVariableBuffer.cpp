@@ -880,7 +880,7 @@ namespace GlRender
 			if ( m_gl.HasUbo() && l_uiIndex == eGL_INVALID_INDEX )
 			{
 				m_gl.UseProgram( l_pProgram->GetGlProgram() );
-				m_iUniformBlockIndex = m_gl.GetUniformBlockIndex( l_pProgram->GetGlProgram(), str_utils::to_str( m_strName ).c_str() );
+				m_iUniformBlockIndex = m_gl.GetUniformBlockIndex( l_pProgram->GetGlProgram(), string::string_cast< char >( m_strName ).c_str() );
 				uint32_t l_uiTotalSize = 0;
 
 				if ( m_iUniformBlockIndex != eGL_INVALID_INDEX )
@@ -899,9 +899,9 @@ namespace GlRender
 						char * l_szChar = new char[l_pVariable->GetName().size() + 1];
 						l_szChar[l_pVariable->GetName().size()] = 0;
 #if defined( _MSC_VER )
-						strncpy_s( l_szChar, l_pVariable->GetName().size() + 1, str_utils::to_str( l_pVariable->GetName() ).c_str(), l_pVariable->GetName().size() );
+						strncpy_s( l_szChar, l_pVariable->GetName().size() + 1, string::string_cast< char >( l_pVariable->GetName() ).c_str(), l_pVariable->GetName().size() );
 #else
-						strncpy( l_szChar, str_utils::to_str( l_pVariable->GetName() ).c_str(), l_pVariable->GetName().size() );
+						strncpy( l_szChar, string::string_cast< char >( l_pVariable->GetName() ).c_str(), l_pVariable->GetName().size() );
 #endif
 						l_arrayNames.push_back( l_szChar );
 					}

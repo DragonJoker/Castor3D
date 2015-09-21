@@ -14,29 +14,29 @@ namespace Castor3D
 {
 #pragma warning( disable:4290 )
 #if defined( _MSC_VER)
-	static const String GetShaderLanguageFunctionABIName	= cuT( "?GetShaderLanguage@@YA?AW4eSHADER_LANGUAGE@Castor3D@@XZ" );
+	static const String GetShaderLanguageFunctionABIName = cuT( "?GetShaderLanguage@@YA?AW4eSHADER_LANGUAGE@Castor3D@@XZ" );
 #	if defined( _WIN64 )
-	static const String CreatePipelineFunctionABIName		= cuT( "?CreatePipeline@@YAPEAVIPipelineImpl@Castor3D@@PEAVPipeline@2@PEAVRenderSystem@2@@Z" );
-	static const String DestroyPipelineFunctionABIName		= cuT( "?DestroyPipeline@@YAXPEAVIPipelineImpl@Castor3D@@@Z" );
+	static const String CreatePipelineFunctionABIName = cuT( "?CreatePipeline@@YAPEAVIPipelineImpl@Castor3D@@PEAVPipeline@2@PEAVRenderSystem@2@@Z" );
+	static const String DestroyPipelineFunctionABIName = cuT( "?DestroyPipeline@@YAXPEAVIPipelineImpl@Castor3D@@@Z" );
 #		if ( _MSC_VER < 1700 )
-	static const String CreateShaderFunctionABIName			= cuT( "?CreateShader@@YA?AV?$shared_ptr@VShaderProgramBase@Castor3D@@@tr1@std@@PEAVRenderSystem@Castor3D@@@Z" );
+	static const String CreateShaderFunctionABIName = cuT( "?CreateShader@@YA?AV?$shared_ptr@VShaderProgramBase@Castor3D@@@tr1@std@@PEAVRenderSystem@Castor3D@@@Z" );
 #		else
-	static const String CreateShaderFunctionABIName			= cuT( "?CreateShader@@YA?AV?$shared_ptr@VShaderProgramBase@Castor3D@@@std@@PEAVRenderSystem@Castor3D@@@Z" );
+	static const String CreateShaderFunctionABIName = cuT( "?CreateShader@@YA?AV?$shared_ptr@VShaderProgramBase@Castor3D@@@std@@PEAVRenderSystem@Castor3D@@@Z" );
 #		endif
 #	else
-	static const String CreatePipelineFunctionABIName		= cuT( "?CreatePipeline@@YAPAVIPipelineImpl@Castor3D@@PAVPipeline@2@PAVRenderSystem@2@@Z" );
-	static const String DestroyPipelineFunctionABIName		= cuT( "?DestroyPipeline@@YAXPAVIPipelineImpl@Castor3D@@@Z" );
+	static const String CreatePipelineFunctionABIName = cuT( "?CreatePipeline@@YAPAVIPipelineImpl@Castor3D@@PAVPipeline@2@PAVRenderSystem@2@@Z" );
+	static const String DestroyPipelineFunctionABIName = cuT( "?DestroyPipeline@@YAXPAVIPipelineImpl@Castor3D@@@Z" );
 #		if ( _MSC_VER < 1700 )
-	static const String CreateShaderFunctionABIName			= cuT( "?CreateShader@@YA?AV?$shared_ptr@VShaderProgramBase@Castor3D@@@tr1@std@@PAVRenderSystem@Castor3D@@@Z" );
+	static const String CreateShaderFunctionABIName = cuT( "?CreateShader@@YA?AV?$shared_ptr@VShaderProgramBase@Castor3D@@@tr1@std@@PAVRenderSystem@Castor3D@@@Z" );
 #		else
-	static const String CreateShaderFunctionABIName			= cuT( "?CreateShader@@YA?AV?$shared_ptr@VShaderProgramBase@Castor3D@@@std@@PAVRenderSystem@Castor3D@@@Z" );
+	static const String CreateShaderFunctionABIName = cuT( "?CreateShader@@YA?AV?$shared_ptr@VShaderProgramBase@Castor3D@@@std@@PAVRenderSystem@Castor3D@@@Z" );
 #		endif
 #	endif
 #elif defined( __GNUG__)
-	static const String GetShaderLanguageFunctionABIName	= cuT( "_Z17GetShaderLanguagev" );
-	static const String CreateShaderFunctionABIName			= cuT( "_Z12CreateShaderPN8Castor3D12RenderSystemE" );
-	static const String CreatePipelineFunctionABIName		= cuT( "_Z14CreatePipelinePN8Castor3D12RenderSystemE" );
-	static const String DestroyPipelineFunctionABIName		= cuT( "_Z15DestroyPipelinePN8Castor3D13IPipelineImplE" );
+	static const String GetShaderLanguageFunctionABIName = cuT( "_Z17GetShaderLanguagev" );
+	static const String CreateShaderFunctionABIName = cuT( "_Z12CreateShaderPN8Castor3D12RenderSystemE" );
+	static const String CreatePipelineFunctionABIName = cuT( "_Z14CreatePipelinePN8Castor3D12RenderSystemE" );
+	static const String DestroyPipelineFunctionABIName = cuT( "_Z15DestroyPipelinePN8Castor3D13IPipelineImplE" );
 #else
 #	error "Implement ABI names for this compiler"
 #endif
@@ -47,29 +47,29 @@ namespace Castor3D
 		if ( !p_pLibrary->GetFunction( m_pfnGetShaderLanguage, GetShaderLanguageFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] GetShaderLanguage plugin function : " );
-			l_strError += str_utils::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
+			l_strError += string::to_string( dlerror() );
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
 		if ( !p_pLibrary->GetFunction( m_pfnCreateShader, CreateShaderFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] CreateShader plugin function : " );
-			l_strError += str_utils::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
+			l_strError += string::to_string( dlerror() );
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
 		if ( !p_pLibrary->GetFunction( m_pfnCreatePipeline, CreatePipelineFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] CreatePipeline plugin function : " );
-			l_strError += str_utils::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
+			l_strError += string::to_string( dlerror() );
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
 		if ( !p_pLibrary->GetFunction( m_pfnDestroyPipeline, DestroyPipelineFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] DestroyPipeline plugin function : " );
-			l_strError += str_utils::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
+			l_strError += string::to_string( dlerror() );
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
 		if ( m_pfnOnLoad )

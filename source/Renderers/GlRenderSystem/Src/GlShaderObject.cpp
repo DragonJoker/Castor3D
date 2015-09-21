@@ -43,7 +43,7 @@ namespace GlRender
 		{
 			char * infoLog = new char[infologLength];
 			m_gl.GetShaderInfoLog( m_shaderObject, infologLength, & charsWritten, infoLog );
-			p_strCompilerLog = str_utils::from_str( infoLog );
+			p_strCompilerLog = string::string_cast< xchar >( infoLog );
 			delete [] infoLog;
 		}
 
@@ -89,7 +89,7 @@ namespace GlRender
 				m_eStatus = eSHADER_STATUS_NOTCOMPILED;
 				int l_iCompiled = 0;
 				int l_iLength = int( m_strLoadedSource.size() );
-				std::string l_strTmp = str_utils::to_str( m_strLoadedSource );
+				std::string l_strTmp = string::string_cast< char >( m_strLoadedSource );
 				std::vector< char > l_pszTmp( m_strLoadedSource.size() + 1 );
 				char * l_buffer = l_pszTmp.data();
 #if defined( _MSC_VER )
@@ -177,7 +177,7 @@ namespace GlRender
 			if ( l_it == m_mapParamsByName.end() )
 			{
 				uint32_t l_uiProgram = m_pShaderProgram->GetGlProgram();
-				m_mapParamsByName.insert( std::make_pair( p_strName, m_gl.GetUniformLocation( l_uiProgram, str_utils::to_str( p_strName ).c_str() ) ) );
+				m_mapParamsByName.insert( std::make_pair( p_strName, m_gl.GetUniformLocation( l_uiProgram, string::string_cast< char >( p_strName ).c_str() ) ) );
 				l_it = m_mapParamsByName.find( p_strName );
 			}
 

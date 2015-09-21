@@ -362,8 +362,8 @@ namespace Castor3D
 		, m_fbLeftEye( *this )
 		, m_fbRightEye( *this )
 	{
-		m_wpDepthStencilState = p_pRoot->CreateDepthStencilState( cuT( "RenderTargetState_" ) + str_utils::to_string( m_uiIndex ) );
-		m_wpRasteriserState = p_pRoot->CreateRasteriserState( cuT( "RenderTargetState_" ) + str_utils::to_string( m_uiIndex ) );
+		m_wpDepthStencilState = p_pRoot->CreateDepthStencilState( cuT( "RenderTargetState_" ) + string::to_string( m_uiIndex ) );
+		m_wpRasteriserState = p_pRoot->CreateRasteriserState( cuT( "RenderTargetState_" ) + string::to_string( m_uiIndex ) );
 	}
 
 	RenderTarget::~RenderTarget()
@@ -399,7 +399,7 @@ namespace Castor3D
 			}
 			catch( Exception & p_exc )
 			{
-				Logger::LogError( cuT( "Couldn't load technique " ) + m_strTechniqueName + cuT( ": " ) + str_utils::from_str( p_exc.GetFullDescription() ) );
+				Logger::LogError( cuT( "Couldn't load technique " ) + m_strTechniqueName + cuT( ": " ) + string::string_cast< xchar >( p_exc.GetFullDescription() ) );
 				throw;
 			}
 		}
@@ -503,7 +503,7 @@ namespace Castor3D
 		SceneNodeSPtr l_pRECamNode;
 		String l_strLENodeName;
 		String l_strRENodeName;
-		String l_strIndex = cuT( "_RT" ) + str_utils::to_string( m_uiIndex );
+		String l_strIndex = cuT( "_RT" ) + string::to_string( m_uiIndex );
 		SceneSPtr l_pScene = GetScene();
 
 		if ( l_pScene )
@@ -607,7 +607,7 @@ namespace Castor3D
 #if DEBUG_BUFFERS
 		p_fb.m_pColorAttach->DownloadBuffer( p_fb.m_pColorTexture->GetBuffer() );
 		const Image l_tmp( cuT( "tmp" ), *p_fb.m_pColorTexture->GetBuffer() );
-		Image::BinaryLoader()( l_tmp, File::GetUserDirectory() / cuT( "RenderTargetTexture_" ) + str_utils::to_string( ptrdiff_t( p_fb.m_pColorTexture.get() ), 16 ) + cuT( ".bmp" ) );
+		Image::BinaryLoader()( l_tmp, File::GetUserDirectory() / cuT( "RenderTargetTexture_" ) + string::to_string( ptrdiff_t( p_fb.m_pColorTexture.get() ), 16 ) + cuT( ".bmp" ) );
 #endif
 	}
 }

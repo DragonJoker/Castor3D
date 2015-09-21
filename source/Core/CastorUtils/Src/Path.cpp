@@ -14,13 +14,13 @@ namespace Castor
 	}
 
 	Path::Path( char const * p_data )
-		:	String( str_utils::from_str( p_data ) )
+		:	String( string::string_cast< xchar >( p_data ) )
 	{
 		DoNormalise();
 	}
 
 	Path::Path( wchar_t const * p_data )
-		:	String( str_utils::from_wstr( p_data ) )
+		:	String( string::string_cast< xchar >( p_data ) )
 	{
 		DoNormalise();
 	}
@@ -73,7 +73,7 @@ namespace Castor
 	Path & Path::operator /=( char const * p_pBuffer )
 	{
 		push_back( Separator );
-		String::operator+=( str_utils::from_str( p_pBuffer ) );
+		String::operator+=( string::string_cast< xchar >( p_pBuffer ) );
 		DoNormalise();
 		return *this;
 	}
@@ -81,7 +81,7 @@ namespace Castor
 	Path & Path::operator /=( wchar_t const * p_pBuffer )
 	{
 		push_back( Separator );
-		String::operator+=( str_utils::from_wstr( p_pBuffer ) );
+		String::operator+=( string::string_cast< xchar >( p_pBuffer ) );
 		DoNormalise();
 		return *this;
 	}
@@ -170,15 +170,15 @@ namespace Castor
 
 			xchar l_sep[3] = { Separator, 0 };
 			String l_tmp( *this );
-			str_utils::replace( l_tmp, cuT( "/" ), l_sep );
-			str_utils::replace( l_tmp, cuT( "\\" ), l_sep );
+			string::replace( l_tmp, cuT( "/" ), l_sep );
+			string::replace( l_tmp, cuT( "\\" ), l_sep );
 
 			if ( this->at( this->size() - 1 ) == Separator )
 			{
 				l_strEnd = Separator;
 			}
 
-			StringArray l_folders = str_utils::split( l_tmp, l_sep, 1000, false );
+			StringArray l_folders = string::split( l_tmp, l_sep, 1000, false );
 			std::list< String > l_list( l_folders.begin(), l_folders.end() );
 			l_tmp.clear();
 			std::list< String >::iterator l_it = std::find( l_list.begin(), l_list.end(), cuT( ".." ) );

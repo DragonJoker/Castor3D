@@ -56,14 +56,14 @@ namespace GuiCommon
 		if ( m_pParsingContext->stackSections.top() == eSECTION_LIST )
 		{
 			String l_strWords( p_strLine );
-			str_utils::replace( l_strWords, wxT( "\\" ), wxT( "" ) );
-			StringArray l_arrayWords = str_utils::split( str_utils::trim( l_strWords ), wxT( "\t " ), 1000, false );
+			string::replace( l_strWords, cuT( "\\" ), cuT( "" ) );
+			StringArray l_arrayWords = string::split( string::trim( l_strWords ), cuT( "\t " ), 1000, false );
 			LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( m_pParsingContext );
 			l_pContext->arrayWords.insert( l_pContext->arrayWords.end(), l_arrayWords.begin(), l_arrayWords.end() );
 		}
 		else
 		{
-			Logger::LogWarning( cuT( "Parser not found @ line " ) + str_utils::to_string( m_pParsingContext->ui64Line ) + cuT( " : " ) + p_strLine );
+			Logger::LogWarning( cuT( "Parser not found @ line " ) + string::to_string( m_pParsingContext->ui64Line ) + cuT( " : " ) + p_strLine );
 		}
 	}
 
@@ -90,7 +90,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Language_Pattern )
 
 	if ( !l_strParams.empty() )
 	{
-		StringArray l_array = str_utils::split( l_strParams, cuT( "\t ,;" ), 100, false );
+		StringArray l_array = string::split( l_strParams, cuT( "\t ,;" ), 100, false );
 		String l_strPatterns;
 		std::for_each( l_array.begin(), l_array.end(), [&]( String const & p_strPattern )
 		{
@@ -127,7 +127,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Language_FoldFlags )
 
 	if ( !l_strParams.empty() )
 	{
-		StringArray l_array = str_utils::split( l_strParams, cuT( "\t ,;" ), 100, false );
+		StringArray l_array = string::split( l_strParams, cuT( "\t ,;" ), 100, false );
 		unsigned long l_ulFoldFlags = 0;
 		std::for_each( l_array.begin(), l_array.end(), [&]( String const & p_strFoldFlag )
 		{
@@ -204,23 +204,23 @@ IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Style_FontStyle )
 	if ( !l_strParams.empty() )
 	{
 		LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_pContext );
-		StringArray l_arrayStyles = str_utils::split( str_utils::lower_case( str_utils::trim( l_strParams ) ), wxT( "\t " ), 10, false );
+		StringArray l_arrayStyles = string::split( string::lower_case( string::trim( l_strParams ) ), cuT( "\t " ), 10, false );
 		int l_iStyle = 0;
 		std::for_each( l_arrayStyles.begin(), l_arrayStyles.end(), [&]( String const & p_strStyle )
 		{
-			if ( p_strStyle == wxT( "bold" ) )
+			if ( p_strStyle == cuT( "bold" ) )
 			{
 				l_iStyle |= eSTC_STYLE_BOLD;
 			}
-			else if ( p_strStyle == wxT( "italic" ) )
+			else if ( p_strStyle == cuT( "italic" ) )
 			{
 				l_iStyle |= eSTC_STYLE_ITALIC;
 			}
-			else if ( p_strStyle == wxT( "underlined" ) )
+			else if ( p_strStyle == cuT( "underlined" ) )
 			{
 				l_iStyle |= eSTC_STYLE_UNDERL;
 			}
-			else if ( p_strStyle == wxT( "hidden" ) )
+			else if ( p_strStyle == cuT( "hidden" ) )
 			{
 				l_iStyle |= eSTC_STYLE_HIDDEN;
 			}

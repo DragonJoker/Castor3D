@@ -32,7 +32,7 @@ namespace Castor
 			}
 			else
 			{
-				StringArray l_arrayValues = str_utils::split( p_strParams, cuT( " \t,;" ) );
+				StringArray l_arrayValues = string::split( p_strParams, cuT( " \t,;" ) );
 
 				if ( l_arrayValues.size() >= 2 )
 				{
@@ -41,7 +41,7 @@ namespace Castor
 					{
 						p_strParams += p_strParam + cuT( " " );
 					} );
-					str_utils::trim( p_strParams );
+					string::trim( p_strParams );
 					{
 						std::basic_istringstream< xchar > l_stream( l_arrayValues[0] );
 						l_stream >> p_vResult.ptr()[0];
@@ -74,7 +74,7 @@ namespace Castor
 		{
 			bool l_return = false;
 
-			StringArray l_arrayValues = str_utils::split( p_strParams, cuT( " \t,;" ) );
+			StringArray l_arrayValues = string::split( p_strParams, cuT( " \t,;" ) );
 
 			if ( l_arrayValues.size() >= 2 )
 			{
@@ -83,7 +83,7 @@ namespace Castor
 				{
 					p_strParams += p_strParam + cuT( " " );
 				} );
-				str_utils::trim( p_strParams );
+				string::trim( p_strParams );
 				{
 					std::basic_istringstream< xchar > l_stream( l_arrayValues[0] );
 					l_stream >> p_vResult.ptr()[0];
@@ -115,7 +115,7 @@ namespace Castor
 		{
 			bool l_return = false;
 
-			StringArray l_arrayValues = str_utils::split( p_strParams, cuT( " \t,;" ) );
+			StringArray l_arrayValues = string::split( p_strParams, cuT( " \t,;" ) );
 
 			if ( l_arrayValues.size() >= 4 )
 			{
@@ -124,7 +124,7 @@ namespace Castor
 				{
 					p_strParams += p_strParam + cuT( " " );
 				} );
-				str_utils::trim( p_strParams );
+				string::trim( p_strParams );
 				{
 					std::basic_istringstream< xchar > l_stream( l_arrayValues[0] );
 					l_stream >> p_vResult.ptr()[0];
@@ -164,7 +164,7 @@ namespace Castor
 		inline bool ParseVector( String & p_strParams, Point< T, Count > & p_vResult )
 		{
 			bool l_return = false;
-			StringArray l_arrayValues = str_utils::split( p_strParams, cuT( " \t,;" ), Count + 1, false );
+			StringArray l_arrayValues = string::split( p_strParams, cuT( " \t,;" ), Count + 1, false );
 
 			if ( l_arrayValues.size() >= Count )
 			{
@@ -173,7 +173,7 @@ namespace Castor
 				{
 					p_strParams += p_strParam + cuT( " " );
 				} );
-				str_utils::trim( p_strParams );
+				string::trim( p_strParams );
 
 				for ( uint32_t i = 0; i < Count; i++ )
 				{
@@ -203,7 +203,7 @@ namespace Castor
 		inline bool ParseColour( String & p_strParams, Colour & p_colour )
 		{
 			bool l_return = false;
-			StringArray l_arrayValues = str_utils::split( p_strParams, cuT( " \t,;" ) );
+			StringArray l_arrayValues = string::split( p_strParams, cuT( " \t,;" ) );
 
 			if ( l_arrayValues.size() >= Colour::eCOMPONENT_COUNT )
 			{
@@ -212,7 +212,7 @@ namespace Castor
 				{
 					p_strParams += p_strParam + cuT( " " );
 				} );
-				str_utils::trim( p_strParams );
+				string::trim( p_strParams );
 
 				for ( uint8_t i = 0; i < Colour::eCOMPONENT_COUNT; i++ )
 				{
@@ -256,16 +256,16 @@ namespace Castor
 		inline bool ParseInteger( String & p_strParams, T & p_tResult, typename std::enable_if < !std::is_unsigned< T >::value >::type * = 0 )
 		{
 			bool l_return = false;
-			StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
+			StringArray l_array = string::split( p_strParams, cuT( " \t,;" ), 1, false );
 
 			if ( l_array.size() )
 			{
-				l_return = str_utils::is_integer( l_array[0] );
+				l_return = string::is_integer( l_array[0] );
 				int64_t l_i64Tmp = 0;
 
 				if ( l_return )
 				{
-					l_i64Tmp = str_utils::to_long_long( l_array[0] );
+					l_i64Tmp = string::to_long_long( l_array[0] );
 					l_return = ( l_i64Tmp > std::numeric_limits< T >::lowest() ) && ( l_i64Tmp < std::numeric_limits< T >::max() );
 				}
 
@@ -298,16 +298,16 @@ namespace Castor
 		inline bool ParseInteger( String & p_strParams, T & p_tResult, typename std::enable_if< std::is_unsigned< T >::value >::type * = 0 )
 		{
 			bool l_return = false;
-			StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
+			StringArray l_array = string::split( p_strParams, cuT( " \t,;" ), 1, false );
 
 			if ( l_array.size() )
 			{
-				l_return = str_utils::is_integer( l_array[0] );
+				l_return = string::is_integer( l_array[0] );
 				uint64_t l_ui64Tmp = 0;
 
 				if ( l_return )
 				{
-					l_ui64Tmp = str_utils::to_long_long( l_array[0] );
+					l_ui64Tmp = string::to_long_long( l_array[0] );
 					l_return = ( l_ui64Tmp > std::numeric_limits< T >::lowest() ) && ( l_ui64Tmp < std::numeric_limits< T >::max() );
 				}
 
@@ -340,16 +340,16 @@ namespace Castor
 		inline bool ParseFloat( String & p_strParams, T & p_tResult )
 		{
 			bool l_return = false;
-			StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
+			StringArray l_array = string::split( p_strParams, cuT( " \t,;" ), 1, false );
 
 			if ( l_array.size() )
 			{
-				l_return = str_utils::is_floating( l_array[0] );
+				l_return = string::is_floating( l_array[0] );
 				long double l_ldTmp = 0;
 
 				if ( l_return )
 				{
-					l_ldTmp = str_utils::to_long_double( l_array[0] );
+					l_ldTmp = string::to_long_double( l_array[0] );
 					l_return = ( l_ldTmp > std::numeric_limits< T >::lowest() ) && ( l_ldTmp < std::numeric_limits< T >::max() );
 				}
 
@@ -435,13 +435,13 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_NAME >::Parse( String & p_strParams )
 	{
-		StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
+		StringArray l_array = string::split( p_strParams, cuT( " \t,;" ), 1, false );
 		p_strParams.clear();
 
 		if ( !l_array.empty() )
 		{
 			m_value = l_array[0];
-			str_utils::trim( m_value );
+			string::trim( m_value );
 
 			if ( !m_value.empty() )
 			{
@@ -512,7 +512,7 @@ namespace Castor
 						if ( l_uiIndex != m_value.size() - 1 )
 						{
 							p_strParams = m_value.substr( l_uiIndex + 1 );
-							str_utils::trim( p_strParams );
+							string::trim( p_strParams );
 						}
 
 						m_value = m_value.substr( 0, l_uiIndex );
@@ -544,12 +544,12 @@ namespace Castor
 	inline bool ParserParameter< ePARAMETER_TYPE_BOOL >::Parse( String & p_strParams )
 	{
 		bool l_return = false;
-		StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
+		StringArray l_array = string::split( p_strParams, cuT( " \t,;" ), 1, false );
 		p_strParams.clear();
 
 		if ( !l_array.empty() )
 		{
-			m_value = str_utils::to_lower_case( l_array[0] ) == cuT( "true" );
+			m_value = string::to_lower_case( l_array[0] ) == cuT( "true" );
 			l_return = l_array[0] == cuT( "true" ) || l_array[0] == cuT( "false" );
 
 			if ( l_array.size() > 1 )
@@ -755,7 +755,7 @@ namespace Castor
 	inline bool ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT >::Parse( String & p_strParams )
 	{
 		bool l_return = false;
-		StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
+		StringArray l_array = string::split( p_strParams, cuT( " \t,;" ), 1, false );
 		p_strParams.clear();
 
 		if ( !l_array.empty() )
@@ -804,12 +804,12 @@ namespace Castor
 	{
 		bool l_return = false;
 		m_value = 0;
-		StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
+		StringArray l_array = string::split( p_strParams, cuT( " \t,;" ), 1, false );
 		p_strParams.clear();
 
 		if ( !l_array.empty() )
 		{
-			StringArray l_values = str_utils::split( l_array[0], cuT( "|" ), std::count( l_array[0].begin(), l_array[0].end(), cuT( '|' ) ) + 1, false );
+			StringArray l_values = string::split( l_array[0], cuT( "|" ), std::count( l_array[0].begin(), l_array[0].end(), cuT( '|' ) ) + 1, false );
 
 			for ( auto && l_value : l_values )
 			{
@@ -947,7 +947,7 @@ namespace Castor
 	inline bool ParserParameter< ePARAMETER_TYPE_PIXELFORMAT >::Parse( String & p_strParams )
 	{
 		bool l_return = false;
-		StringArray l_array = str_utils::split( p_strParams, cuT( " \t,;" ), 1, false );
+		StringArray l_array = string::split( p_strParams, cuT( " \t,;" ), 1, false );
 		p_strParams.clear();
 
 		if ( l_array.size() )

@@ -175,6 +175,6 @@
 	template< typename T >
 	inline void OneFrameVariable< T >::DoSetValueStr( Castor::String const & p_strValue, uint32_t p_uiIndex )
 	{
-		Castor::str_utils::parse( p_strValue, this->m_pValues[p_uiIndex] );
+		Castor::string::parse( p_strValue, this->m_pValues[p_uiIndex] );
 	}
 }

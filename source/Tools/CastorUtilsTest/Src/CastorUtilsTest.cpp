@@ -113,7 +113,7 @@ namespace
 			p_stream << uint32_t( PF::GetBytesPerPixel( p_pixel.get_format() ) );
 			p_stream << ", Format : ";
 			p_stream.width( 10 );
-			p_stream << str_utils::string_cast< CharType >( PF::GetFormatName( p_pixel.get_format() ) );
+			p_stream << string::string_cast< CharType >( PF::GetFormatName( p_pixel.get_format() ) );
 			p_stream << ", Value : (";
 			p_stream.width( 3 );
 			p_stream << int( PF::GetByteRed( p_pixel ) );
@@ -158,7 +158,7 @@ namespace
 			p_stream << uint32_t( PF::GetBytesPerPixel( p_pixel.get_format() ) );
 			p_stream << ", Format : ";
 			p_stream.width( 10 );
-			p_stream << str_utils::string_cast< CharType >( PF::GetFormatName( p_pixel.get_format() ) );
+			p_stream << string::string_cast< CharType >( PF::GetFormatName( p_pixel.get_format() ) );
 			p_stream << ", Value : (";
 			p_stream.width( 11 );
 			p_stream << int( PF::GetUInt32Depth( p_pixel ) );
@@ -264,7 +264,7 @@ namespace
 		p_stream << uint32_t( PF::GetBytesPerPixel( p_buffer.format() ) );
 		p_stream << ", Format : ";
 		p_stream.width( 10 );
-		p_stream << str_utils::string_cast< CharType >( PF::GetFormatName( p_buffer.format() ) );
+		p_stream << string::string_cast< CharType >( PF::GetFormatName( p_buffer.format() ) );
 		return p_stream;
 	}
 	
@@ -569,25 +569,25 @@ namespace Testing
 		std::wstring l_wstrIn = L"STR : Bonjoir éêèàÉÊÈÀ";
 		std::wstring l_wstrOut;
 		std::string l_strOut;
-		l_tstrOut = str_utils::from_str( l_strIn );
+		l_tstrOut = string::string_cast< xchar >( l_strIn );
 		Logger::LogInfo(	"	Conversion from std::string to String" );
 		Logger::LogInfo(	"		Entry  : " + l_strIn );
 		Logger::LogInfo( cuT(	"		Result : " ) + l_tstrOut );
 		Logger::LogInfo(	"" );
 		TEST_EQUAL( l_tstrOut, l_tstrIn );
-		l_tstrOut = str_utils::from_wstr( l_wstrIn );
+		l_tstrOut = string::string_cast< xchar >( l_wstrIn );
 		Logger::LogInfo(	"	Conversion from std::wstring to String" );
 		Logger::LogInfo( L"		Entry  : " + l_wstrIn );
 		Logger::LogInfo( cuT(	"		Result : " ) + l_tstrOut );
 		Logger::LogInfo(	"" );
 		TEST_EQUAL( l_tstrOut, l_tstrIn );
-		l_strOut = str_utils::to_str( l_tstrIn );
+		l_strOut = string::string_cast< char >( l_tstrIn );
 		Logger::LogInfo(	"	Conversion from String to std::string" );
 		Logger::LogInfo( cuT(	"		Entry  : " ) + l_tstrIn );
 		Logger::LogInfo(	"		Result : " + l_strOut );
 		Logger::LogInfo(	"" );
 		TEST_EQUAL( l_strOut, l_strIn );
-		l_wstrOut = str_utils::to_wstr( l_tstrIn );
+		l_wstrOut = string::string_cast< wchar_t >( l_tstrIn );
 		Logger::LogInfo(	"	Conversion from String to std::wstring" );
 		Logger::LogInfo( cuT(	"		Entry  : " ) + l_tstrIn );
 		Logger::LogInfo( L"		Result : " + l_wstrOut );
@@ -814,16 +814,16 @@ namespace Testing
 							TEST_EQUAL( l_outTxtData, l_inTxtData );
 						}
 
-						std::remove( str_utils::to_str( l_folder / l_binName ).c_str() );
-						std::remove( str_utils::to_str( l_folder / l_txtName ).c_str() );
+						std::remove( string::string_cast< char >( l_folder / l_binName ).c_str() );
+						std::remove( string::string_cast< char >( l_folder / l_txtName ).c_str() );
 						File::DirectoryDelete( l_folder / l_folder2 );
 						File::DirectoryDelete( l_folder / l_folder1 );
 						File::DirectoryDelete( l_folder );
 					}
 
-					std::remove( str_utils::to_str( l_binName ).c_str() );
-					std::remove( str_utils::to_str( l_txtName ).c_str() );
-					std::remove( str_utils::to_str( l_zipName ).c_str() );
+					std::remove( string::string_cast< char >( l_binName ).c_str() );
+					std::remove( string::string_cast< char >( l_txtName ).c_str() );
+					std::remove( string::string_cast< char >( l_zipName ).c_str() );
 					File::DirectoryDelete( l_folder2 );
 					File::DirectoryDelete( l_folder1 );
 				}
