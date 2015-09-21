@@ -110,12 +110,12 @@ namespace GuiCommon
 			}
 			catch ( Exception & exc )
 			{
-				Logger::LogError( std::stringstream() << str_utils::string_cast< char >( m_internalName ) << " - Initialisation failed : " << exc.GetFullDescription() );
+				Logger::LogError( std::stringstream() << string::string_cast< char >( m_internalName ) << " - Initialisation failed : " << exc.GetFullDescription() );
 				l_return = false;
 			}
 			catch ( std::exception & exc )
 			{
-				Logger::LogError( std::stringstream() << str_utils::string_cast< char >( m_internalName ) << " - Initialisation failed : " << exc.what() );
+				Logger::LogError( std::stringstream() << string::string_cast< char >( m_internalName ) << " - Initialisation failed : " << exc.what() );
 				l_return = false;
 			}
 		}

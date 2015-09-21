@@ -86,7 +86,7 @@ namespace Castor
 	{
 		if ( !m_pLibrary )
 		{
-			std::string l_strName( str_utils::to_str( p_name ) );
+			std::string l_strName( string::string_cast< char >( p_name ) );
 #if defined( _WIN32 )
 			UINT l_uiOldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
 
@@ -128,7 +128,7 @@ namespace Castor
 
 		if ( m_pLibrary )
 		{
-			std::string l_strName( str_utils::to_str( p_name ) );
+			std::string l_strName( string::string_cast< char >( p_name ) );
 #if defined( _WIN32 )
 			UINT l_uiOldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
 			l_pReturn = reinterpret_cast< void * >( ::GetProcAddress( static_cast< HMODULE >( m_pLibrary ), l_strName.c_str() ) );

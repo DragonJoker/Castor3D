@@ -70,7 +70,7 @@ namespace Castor
 		}
 
 		FILE * file;
-		Castor::FOpen( file, str_utils::to_str( p_logFilePath ).c_str(), "w" );
+		Castor::FOpen( file, string::string_cast< char >( p_logFilePath ).c_str(), "w" );
 
 		if ( file )
 		{
@@ -80,12 +80,12 @@ namespace Castor
 
 	void LoggerImpl::PrintMessage( ELogType logLevel, std::string const & message )
 	{
-		DoPrintMessage( logLevel, str_utils::from_str( message ) );
+		DoPrintMessage( logLevel, string::string_cast< xchar >( message ) );
 	}
 
 	void LoggerImpl::PrintMessage( ELogType logLevel, std::wstring const & message )
 	{
-		DoPrintMessage( logLevel, str_utils::from_wstr( message ) );
+		DoPrintMessage( logLevel, string::string_cast< xchar >( message ) );
 	}
 
 	void LoggerImpl::LogMessageQueue( MessageQueue const & p_queue )
@@ -96,7 +96,7 @@ namespace Castor
 		Castor::Localtime( &l_dtToday, &l_tTime );
 		char l_buffer[33] = { 0 };
 		strftime( l_buffer, 32, "%Y-%m-%d %H:%M:%S", &l_dtToday );
-		String l_timeStamp = str_utils::from_str( l_buffer );
+		String l_timeStamp = string::string_cast< xchar >( l_buffer );
 
 		FILE * logFiles[ELogType_COUNT] = { NULL };
 		std::map< String, FILE * > opened;
@@ -113,7 +113,7 @@ namespace Castor
 
 					if ( l_it == opened.end() )
 					{
-						FOpen( file, str_utils::to_str( m_logFilePath[message->m_type] ).c_str(), "a" );
+						FOpen( file, string::string_cast< char >( m_logFilePath[message->m_type] ).c_str(), "a" );
 
 						if ( file )
 						{
@@ -134,7 +134,7 @@ namespace Castor
 
 					if ( toLog.find( cuT( '\n' ) ) != String::npos )
 					{
-						StringArray array = str_utils::split( toLog, cuT( "\n" ), uint32_t( std::count( toLog.begin(), toLog.end(), cuT( '\n' ) ) + 1 ) );
+						StringArray array = string::split( toLog, cuT( "\n" ), uint32_t( std::count( toLog.begin(), toLog.end(), cuT( '\n' ) ) + 1 ) );
 
 						for ( auto && line : array )
 						{
@@ -163,7 +163,7 @@ namespace Castor
 	{
 		if ( message.find( cuT( '\n' ) ) != String::npos )
 		{
-			StringArray array = str_utils::split( message, cuT( "\n" ), uint32_t( std::count( message.begin(), message.end(), cuT( '\n' ) ) + 1 ) );
+			StringArray array = string::split( message, cuT( "\n" ), uint32_t( std::count( message.begin(), message.end(), cuT( '\n' ) ) + 1 ) );
 
 			for ( auto && line : array )
 			{
@@ -202,7 +202,7 @@ namespace Castor
 
 		if ( logFile )
 		{
-			std::string logLine = str_utils::to_str( timestamp + cuT( " - " ) + m_headers[logLevel] + line );
+			std::string logLine = string::string_cast< char >( timestamp + cuT( " - " ) + m_headers[logLevel] + line );
 			fwrite( logLine.c_str(), 1, logLine.size(), logFile );
 			fwrite( "\n", 1, 1, logFile );
 		}

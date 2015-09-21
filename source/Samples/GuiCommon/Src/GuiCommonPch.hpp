@@ -139,14 +139,4 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	include <Castor3DPrerequisites.hpp>
 #endif
 
-#ifndef _UNICODE
-#	if CASTOR_UNICODE
-#		error "GuiCommon compiling in ASCII mode while Castor3D is in UNICODE mode"
-#	endif
-#else
-#	if !CASTOR_UNICODE
-#		error "GuiCommon compiling in UNICODE mode while Castor3D is in ASCII mode"
-#	endif
-#endif
-
 #endif

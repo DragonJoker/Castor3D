@@ -108,6 +108,6 @@ std::wostream & operator <<( std::wostream & p_stream, Castor3D::Version const &
 
 Castor::String & operator <<( Castor::String & p_stream, Castor3D::Version const & p_version )
 {
-	p_stream + str_utils::to_string( p_version.m_iMajor ) + cuT( "." ) + str_utils::to_string( p_version.m_iMinor ) + cuT( "." ) + str_utils::to_string( p_version.m_iBuild );
+	p_stream + string::to_string( p_version.m_iMajor ) + cuT( "." ) + string::to_string( p_version.m_iMinor ) + cuT( "." ) + string::to_string( p_version.m_iBuild );
 	return p_stream;
 }

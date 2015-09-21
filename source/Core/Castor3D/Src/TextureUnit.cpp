@@ -409,7 +409,7 @@ namespace Castor3D
 
 				if ( l_return && p_unit.GetAlphaFunc() != eALPHA_FUNC_ALWAYS )
 				{
-					l_return = p_file.WriteText( cuT( "\t\t\talpha_func " ) + l_strAlphaFuncs[p_unit.GetAlphaFunc()] + cuT( " " ) + str_utils::to_string( p_unit.GetAlphaValue() ) + cuT( "\n" ) ) > 0;
+					l_return = p_file.WriteText( cuT( "\t\t\talpha_func " ) + l_strAlphaFuncs[p_unit.GetAlphaFunc()] + cuT( " " ) + string::to_string( p_unit.GetAlphaValue() ) + cuT( "\n" ) ) > 0;
 				}
 
 				if ( l_return && p_unit.GetRgbFunction() != eRGB_BLEND_FUNC_NONE )
@@ -548,7 +548,7 @@ namespace Castor3D
 					uint8_t * l_buffer = m_pTexture->Lock( eLOCK_FLAG_READ_ONLY );
 					std::memcpy( m_pTexture->GetBuffer()->ptr(), l_buffer, m_pTexture->GetBuffer()->size() );
 					const Image l_tmp( cuT( "tmp" ), *m_pTexture->GetBuffer() );
-					Image::BinaryLoader()( l_tmp, File::GetUserDirectory() / cuT( "TextureUnitTexture_" ) + str_utils::to_string( ptrdiff_t( m_pTexture.get() ) ) + cuT( ".bmp" ) );
+					Image::BinaryLoader()( l_tmp, File::GetUserDirectory() / cuT( "TextureUnitTexture_" ) + string::to_string( ptrdiff_t( m_pTexture.get() ) ) + cuT( ".bmp" ) );
 				}
 
 #endif

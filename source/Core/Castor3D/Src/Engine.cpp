@@ -174,7 +174,7 @@ namespace Castor3D
 
 		Version l_version;
 		String l_strVersion;
-		Logger::LogInfo( l_strVersion + cuT( "Castor3D - Core engine version : " ) + str_utils::to_string( l_version.m_iMajor ) + cuT( "." ) + str_utils::to_string( l_version.m_iMinor ) + cuT( "." ) + str_utils::to_string( l_version.m_iBuild ) );
+		Logger::LogInfo( l_strVersion + cuT( "Castor3D - Core engine version : " ) + string::to_string( l_version.m_iMajor ) + cuT( "." ) + string::to_string( l_version.m_iMinor ) + cuT( "." ) + string::to_string( l_version.m_iBuild ) );
 		std::locale::global( std::locale() );
 	}
 
@@ -726,7 +726,7 @@ namespace Castor3D
 		}
 		catch ( std::exception & p_exc )
 		{
-			Logger::LogWarning( cuT( "LoadPlugin - Fail - " ) + str_utils::from_str( p_exc.what() ) );
+			Logger::LogWarning( cuT( "LoadPlugin - Fail - " ) + string::string_cast< xchar >( p_exc.what() ) );
 		}
 		catch ( ... )
 		{
@@ -754,7 +754,7 @@ namespace Castor3D
 		}
 		catch ( std::exception & p_exc )
 		{
-			Logger::LogWarning( cuT( "LoadPlugin - Fail - " ) + str_utils::from_str( p_exc.what() ) );
+			Logger::LogWarning( cuT( "LoadPlugin - Fail - " ) + string::string_cast< xchar >( p_exc.what() ) );
 		}
 		catch ( ... )
 		{
@@ -928,7 +928,7 @@ namespace Castor3D
 				{
 					String l_strError = cuT( "Error encountered while loading file [" ) + p_pathFile + cuT( "] : " );
 					l_strError += System::GetLastErrorText();
-					CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), true );
+					CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), true );
 				}
 
 				PluginBase::PGetTypeFunction l_pfnGetType;
@@ -936,7 +936,7 @@ namespace Castor3D
 				if ( !l_pLibrary->GetFunction( l_pfnGetType, GetTypeFunctionABIName ) )
 				{
 					String l_strError = cuT( "Error encountered while loading file [" ) + p_pathFile.GetFileName() + cuT( "] GetType plugin function => Not a Castor3D plugin" );
-					CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), true );
+					CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), true );
 				}
 
 				ePLUGIN_TYPE l_eType = l_pfnGetType();
@@ -978,7 +978,7 @@ namespace Castor3D
 					Version l_toCheck( 0, 0 );
 					l_pReturn->GetRequiredVersion( l_toCheck );
 					String l_strToLog( cuT( "LoadPlugin - Plugin [" ) );
-					Logger::LogInfo( l_strToLog + l_pReturn->GetName() + cuT( "] - Required engine version : " ) + str_utils::to_string( l_toCheck.m_iMajor ) + cuT( "." ) + str_utils::to_string( l_toCheck.m_iMinor ) + cuT( "." ) + str_utils::to_string( l_toCheck.m_iBuild ) );
+					Logger::LogInfo( l_strToLog + l_pReturn->GetName() + cuT( "] - Required engine version : " ) + string::to_string( l_toCheck.m_iMajor ) + cuT( "." ) + string::to_string( l_toCheck.m_iMinor ) + cuT( "." ) + string::to_string( l_toCheck.m_iBuild ) );
 
 					if ( l_toCheck <= m_version )
 					{

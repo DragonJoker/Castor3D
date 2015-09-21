@@ -383,7 +383,7 @@ bool StcTextEditor::InitializePrefs( wxString const & p_strName )
 				{
 					Castor::String l_words = l_pCurInfo->GetWords( l_eType );
 					SetKeyWords( l_iNbKeywords, l_words.c_str() );
-					Castor::StringArray l_array = Castor::str_utils::split( l_words, cuT( " \t\n\r" ), -1, false );
+					Castor::StringArray l_array = Castor::string::split( l_words, cuT( " \t\n\r" ), -1, false );
 
 					for ( Castor::StringArray::iterator l_it = l_array.begin(); l_it != l_array.end(); ++l_it )
 					{

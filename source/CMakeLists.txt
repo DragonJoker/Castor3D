@@ -19,8 +19,6 @@ set( CMAKE_MODULE_PATH
 set( CMAKE_TEMPLATES_DIR ${CMAKE_SOURCE_DIR}/CMake/Templates )
 # Experimental Precompiled headers support for GCC
 include( PCHSupport )
-# Force Unicode projects (MBCS is past :P)
-add_definitions( -DUNICODE -D_UNICODE )
 
 set( CMAKE_CONFIGURATION_TYPES "Debug;Release;RelWithDebInfo" CACHE STRING "The configuration types" FORCE )
     

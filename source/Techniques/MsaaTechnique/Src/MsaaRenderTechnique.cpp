@@ -690,7 +690,7 @@ namespace Msaa
 			l_strDeclarations += l_pUniforms->GetPixelScene( 1 );
 			l_strDeclarations += l_pUniforms->GetPixelPass( 2 );
 			l_strDeclarations += l_pInputs->GetPxlInput();
-			l_strMainDeclarations = str_utils::replace( l_strMainDeclarations, cuT( "[PxlOutput]" ), l_pInputs->GetPxlOutput() );
+			l_strMainDeclarations = string::replace( l_strMainDeclarations, cuT( "[PxlOutput]" ), l_pInputs->GetPxlOutput() );
 
 			if ( p_uiFlags )
 			{

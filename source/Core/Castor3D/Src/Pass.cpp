@@ -774,7 +774,7 @@ namespace Castor3D
 			}
 
 			p_unit->SetIndex( p_index++ );
-			Logger::LogDebug( cuT( "	" ) + TEXTURE_CHANNEL_NAME[p_channel] + cuT( " map at index " ) + str_utils::to_string( p_unit->GetIndex() ) );
+			Logger::LogDebug( cuT( "	" ) + TEXTURE_CHANNEL_NAME[p_channel] + cuT( " map at index " ) + string::to_string( p_unit->GetIndex() ) );
 			m_uiTextureFlags |= p_channel;
 			p_unit->Initialise();
 		}
@@ -794,7 +794,7 @@ namespace Castor3D
 			}
 
 			p_unit->SetIndex( p_index++ );
-			Logger::LogDebug( cuT( "	" ) + TEXTURE_CHANNEL_NAME[p_channel] + cuT( " map at index " ) + str_utils::to_string( p_unit->GetIndex() ) );
+			Logger::LogDebug( cuT( "	" ) + TEXTURE_CHANNEL_NAME[p_channel] + cuT( " map at index " ) + string::to_string( p_unit->GetIndex() ) );
 			m_uiTextureFlags |= p_channel;
 			p_unit->Initialise();
 		}

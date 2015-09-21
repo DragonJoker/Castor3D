@@ -36,7 +36,7 @@ SplashScreen::~SplashScreen()
 
 void SplashScreen::Step( wxString const & p_strText, int p_iIncrement )
 {
-	Logger::LogInfo( String( cuT( "SplashScreen::Step - " ) ) + ( wxChar const * )p_strText.c_str() );
+	Logger::LogInfo( String( cuT( "SplashScreen::Step - " ) ) + make_String( p_strText ) );
 	m_strStatus = p_strText;
 	Step( p_iIncrement );
 }

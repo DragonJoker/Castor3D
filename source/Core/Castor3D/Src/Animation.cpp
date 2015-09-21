@@ -64,7 +64,7 @@ namespace Castor3D
 	MovingObjectBaseSPtr Animation::AddMovingObject()
 	{
 		std::shared_ptr< MovingNode > l_pObj = std::make_shared< MovingNode >();
-		m_mapToMove.insert( std::make_pair( str_utils::to_string( uint32_t( m_mapToMove.size() ) ), l_pObj ) );
+		m_mapToMove.insert( std::make_pair( string::to_string( uint32_t( m_mapToMove.size() ) ), l_pObj ) );
 		return l_pObj;
 	}
 

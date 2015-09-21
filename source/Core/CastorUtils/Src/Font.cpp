@@ -110,7 +110,7 @@ namespace Castor
 			if ( p_iErr != 0 )
 			{
 				std::map< FT_Error, std::string >::const_iterator l_it = MapErrors.find( p_iErr );
-				std::string l_strError = "ERROR : " + std::string( p_szName ) + " failed - " + str_utils::to_str( str_utils::to_string( p_iErr ) );
+				std::string l_strError = "ERROR : " + std::string( p_szName ) + " failed - " + string::string_cast< char >( string::to_string( p_iErr ) );
 
 				if ( l_it != MapErrors.end() )
 				{
@@ -142,7 +142,7 @@ namespace Castor
 			virtual void Initialise()
 			{
 				CHECK_FT_ERR( FT_Init_FreeType, &m_library );
-				CHECK_FT_ERR( FT_New_Face, m_library, str_utils::to_str( m_path ).c_str(), 0, &m_face );
+				CHECK_FT_ERR( FT_New_Face, m_library, string::string_cast< char >( m_path ).c_str(), 0, &m_face );
 				CHECK_FT_ERR( FT_Select_Charmap, m_face, FT_ENCODING_UNICODE );
 				CHECK_FT_ERR( FT_Set_Pixel_Sizes, m_face, 0, m_height );
 			}
@@ -239,17 +239,19 @@ namespace Castor
 
 				p_font.SetFaceName( p_pathFile.GetFileName() );
 				p_font.GetGlyphLoader().Initialise();
-				uint16_t l_usMin = std::numeric_limits< uint8_t >::lowest();
-				uint16_t l_usMax = std::numeric_limits< uint8_t >::max();
+				uint8_t l_usMin = std::numeric_limits< uint8_t >::lowest();
+				uint8_t l_usMax = std::numeric_limits< uint8_t >::max();
 				int l_iMaxHeight = 0;
 				int l_iMaxWidth = 0;
 				int l_iMaxTop = 0;
 
 				// We first load the glyphs, updating the top position
-				for ( wchar_t c = l_usMin; c < l_usMax; c++ )
+				for ( uint8_t c = l_usMin; c < l_usMax; c++ )
 				{
-					l_iMaxTop = std::max( l_iMaxTop, p_font.LoadGlyph( c ) );
-					Glyph & l_glyph = p_font[c];
+					char l_tmp[] = { char( c ), 0, 0, 0 };
+					char32_t l_char = string::utf8::to_utf8( l_tmp );
+					l_iMaxTop = std::max( l_iMaxTop, p_font.LoadGlyph( l_char ) );
+					Glyph & l_glyph = p_font[l_char];
 					Size l_size( l_glyph.GetSize() );
 					Position l_ptPosition( l_glyph.GetPosition() );
 					l_iMaxHeight = std::max< int >( l_iMaxHeight, l_size.height() );
@@ -278,7 +280,6 @@ namespace Castor
 		, m_iMaxHeight( 0 )
 		, m_iMaxTop( 0 )
 		, m_iMaxWidth( 0 )
-		, m_glyphs( std::numeric_limits< uint16_t >::max() )
 	{
 	}
 
@@ -288,7 +289,6 @@ namespace Castor
 		, m_iMaxHeight( 0 )
 		, m_iMaxTop( 0 )
 		, m_iMaxWidth( 0 )
-		, m_glyphs( std::numeric_limits< uint16_t >::max() )
 		, m_glyphLoader( std::make_unique< ft::SFreeTypeFontImpl >( p_path, p_uiHeight ) )
 	{
 	}
@@ -297,18 +297,17 @@ namespace Castor
 	{
 	}
 
-	void Font::SetGlyphAt( wchar_t p_char, Size const & p_size, Position p_position, Size const & p_advance, ByteArray const & p_bitmap )
+	int Font::LoadGlyph( char32_t p_char )
 	{
-		m_glyphs[p_char] = Glyph( p_char, p_size, p_position, p_advance, p_bitmap );
-	}
+		auto && l_it = m_loadedGlyphs.find( p_char );
 
-	int Font::LoadGlyph( wchar_t p_char )
-	{
-		Glyph & l_glyph = m_glyphs[p_char];
-		l_glyph = Glyph( p_char );
-		int l_top = m_glyphLoader->LoadGlyph( l_glyph );
-		m_loadedGlyphs[p_char] = &l_glyph;
-		return l_top;
+		if ( l_it == m_loadedGlyphs.end() )
+		{
+			m_loadedGlyphs.insert( std::make_pair( p_char, std::make_unique< Glyph >( p_char ) ) );
+			l_it = m_loadedGlyphs.find( p_char );
+		}
+
+		return m_glyphLoader->LoadGlyph( *l_it->second );
 	}
 
 	BEGIN_INVARIANT_BLOCK( Font )

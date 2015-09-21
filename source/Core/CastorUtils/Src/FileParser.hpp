@@ -58,7 +58,7 @@ namespace Castor
 			}\
 			catch( ParserParameterTypeException p_exc )\
 			{\
-				PARSING_ERROR( str_utils::from_str( p_exc.what() ) );\
+				PARSING_ERROR( string::string_cast< xchar >( p_exc.what() ) );\
 			}\
 			l_return = true;\
 			p_pContext->stackSections.push( x );\
@@ -70,7 +70,7 @@ namespace Castor
 			}\
 			catch( ParserParameterTypeException p_exc )\
 			{\
-				PARSING_ERROR( str_utils::from_str( p_exc.what() ) );\
+				PARSING_ERROR( string::string_cast< xchar >( p_exc.what() ) );\
 			}\
 			l_return = false;\
 			return l_return;\
@@ -81,7 +81,7 @@ namespace Castor
 			}\
 			catch( ParserParameterTypeException p_exc )\
 			{\
-				PARSING_ERROR( str_utils::from_str( p_exc.what() ) );\
+				PARSING_ERROR( string::string_cast< xchar >( p_exc.what() ) );\
 			}\
 			l_return = false;\
 			p_pContext->stackSections.pop();\

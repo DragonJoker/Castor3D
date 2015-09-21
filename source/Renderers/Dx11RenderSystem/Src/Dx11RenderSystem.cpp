@@ -351,7 +351,7 @@ void DxRenderSystem::DoInitialise()
 		// Store the dedicated video card memory in megabytes.
 		int l_videoCardMemory = int( m_adapterDesc.DedicatedVideoMemory / 1024 / 1024 );
 		// Convert the name of the video card to a character array and store it.
-		String l_strVideoCardDescription = str_utils::from_wstr( m_adapterDesc.Description );
+		String l_strVideoCardDescription = string::string_cast< xchar >( m_adapterDesc.Description );
 		Logger::LogInfo( cuT( "Video card name: " ) + l_strVideoCardDescription );
 		Logger::LogInfo( StringStream() << cuT( "Video card memory: " ) << l_videoCardMemory );
 		m_pPipeline->Initialise();

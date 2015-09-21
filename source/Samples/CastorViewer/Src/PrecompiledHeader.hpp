@@ -107,16 +107,6 @@
 #	include <vector>
 #	include <cmath>
 
-#	ifndef _UNICODE
-#		if CASTOR_UNICODE
-#			error "CastorViewer compiling in ASCII mode while Castor3D is in UNICODE mode"
-#		endif
-#	else
-#		if ! CASTOR_UNICODE
-#			error "CastorViewer compiling in UNICODE mode while Castor3D is in ASCII mode"
-#		endif
-#	endif
-
 #	include <SceneObjectsList.hpp>
 #	include <ImagesLoader.hpp>
 #	include <PropertiesHolder.hpp>

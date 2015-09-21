@@ -175,7 +175,7 @@ namespace CastorShape
 
 		if ( p_value != wxCOMBO_NEW )
 		{
-			m_pass = m_material->GetPass( str_utils::to_int( p_value ) );
+			m_pass = m_material->GetPass( string::to_int( p_value ) );
 			m_properties->SetPropertyValue( PROPERTY_PASS_DIFFUSE, wxVariant( wxColour( m_pass->GetAmbient().to_bgr() ) ) );
 			m_properties->SetPropertyValue( PROPERTY_PASS_AMBIENT, wxVariant( wxColour( m_pass->GetDiffuse().to_bgr() ) ) );
 			m_properties->SetPropertyValue( PROPERTY_PASS_SPECULAR, wxVariant( wxColour( m_pass->GetSpecular().to_bgr() ) ) );
@@ -284,7 +284,7 @@ namespace CastorShape
 
 		if ( p_value != wxCOMBO_NEW )
 		{
-			m_texture = m_pass->GetTextureUnit( str_utils::to_int( p_value ) );
+			m_texture = m_pass->GetTextureUnit( string::to_int( p_value ) );
 			wxString l_selected;
 
 			switch ( m_texture->GetChannel() )

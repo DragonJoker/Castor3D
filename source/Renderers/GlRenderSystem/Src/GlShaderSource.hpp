@@ -386,7 +386,7 @@ namespace GlRender
 			}
 			template< typename T > inline Float & operator=( float p_rhs )
 			{
-				*m_writer << Castor::String( *this ) << cuT( " = " ) << Castor::str_utils::to_string( p_rhs ) << cuT( ";" ) << Endl();
+				*m_writer << Castor::String( *this ) << cuT( " = " ) << Castor::string::to_string( p_rhs ) << cuT( ";" ) << Endl();
 				return *this;
 			}
 			inline operator float()

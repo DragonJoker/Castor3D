@@ -111,11 +111,11 @@ namespace Testing
 
 			if ( l_it != MapErrors.end() )
 			{
-				Castor::Logger::LogWarning( Castor::StringStream() << cuT( "ERROR: " ) << Castor::str_utils::from_str( p_szName ) << cuT( " - 0x" ) << std::hex << p_iErr << cuT( " (" ) << l_it->second << cuT( ")" ) );
+				Castor::Logger::LogWarning( Castor::StringStream() << cuT( "ERROR: " ) << Castor::string::string_cast< xchar >( p_szName ) << cuT( " - 0x" ) << std::hex << p_iErr << cuT( " (" ) << l_it->second << cuT( ")" ) );
 			}
 			else
 			{
-				Castor::Logger::LogWarning( Castor::StringStream() << cuT( "ERROR: " ) << Castor::str_utils::from_str( p_szName ) << cuT( " - 0x" ) << std::hex << p_iErr );
+				Castor::Logger::LogWarning( Castor::StringStream() << cuT( "ERROR: " ) << Castor::string::string_cast< xchar >( p_szName ) << cuT( " - 0x" ) << std::hex << p_iErr );
 			}
 
 			l_return = false;
@@ -181,7 +181,7 @@ namespace Testing
 		if ( l_bContinue )
 		{
 			Castor::Path l_filePath = Castor::File::DirectoryGetCurrent();
-			std::string l_path = Castor::str_utils::to_str( l_filePath / cuT( "mtx_ope.cl" ) );
+			std::string l_path = Castor::string::string_cast< char >( l_filePath / cuT( "mtx_ope.cl" ) );
 			std::ifstream l_file( l_path );
 			l_bContinue = CheckErr( l_file ? CL_SUCCESS : -1, l_path.c_str() );
 

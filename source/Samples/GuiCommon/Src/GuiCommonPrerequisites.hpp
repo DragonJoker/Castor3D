@@ -255,10 +255,7 @@ namespace GuiCommon
 	 *\param[in]	p_value	Le wxString
 	 *\return		Le Castor::String
 	 */
-	inline Castor::String make_String( wxString const & p_value )
-	{
-		return Castor::String( p_value.c_str() );
-	}
+	Castor::String make_String( wxString const & p_value );
 	/**
 	 *\~english
 	 *\brief		Creates a wxString from a Castor::String
@@ -269,10 +266,7 @@ namespace GuiCommon
 	 *\param[in]	p_value	Le Castor::String
 	 *\return		Le wxString
 	 */
-	inline wxString make_wxString( Castor::String const & p_value )
-	{
-		return wxString( p_value.c_str() );
-	}
+	wxString make_wxString( Castor::String const & p_value );
 
 #if wxVERSION_NUMBER >= 2900
 #	define	wxIMAGE_QUALITY_HIGHEST wxIMAGE_QUALITY_BICUBIC

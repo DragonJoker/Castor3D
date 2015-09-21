@@ -41,20 +41,20 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_wcChar	The glyph character
+		 *\param[in]	p_char		The glyph character
 		 *\param[in]	p_size		The glyph dimensions
 		 *\param[in]	p_position	The glyph position
 		 *\param[in]	p_advance	Pixels to advance in order to go next character
 		 *\param[in]	p_bitmap	The glyph image
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_wcChar	Le caractère de la glyphe
+		 *\param[in]	p_char		Le caractère de la glyphe
 		 *\param[in]	p_size		Les dimensions de la glyphe
 		 *\param[in]	p_position	La position de la glyphe
 		 *\param[in]	p_advance	Nombre de pixels pour placer le caractère suivant
 		 *\param[in]	p_bitmap	L'image de la glyphe
 		 */
-		CU_API Glyph( wchar_t p_wcChar = 0, Size const & p_size = Size(), Position const & p_position = Position(), Size const & p_advance = Size(), ByteArray const & p_bitmap = ByteArray() );
+		CU_API Glyph( char32_t p_char = 0, Size const & p_size = Size(), Position const & p_position = Position(), Size const & p_advance = Size(), ByteArray const & p_bitmap = ByteArray() );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -70,9 +70,9 @@ namespace Castor
 		 *\brief		Récupère le caractère de la glyphe
 		 *\return		La valeur
 		 */
-		inline wchar_t GetCharacter()const
+		inline char32_t GetCharacter()const
 		{
-			return m_wcCharacter;
+			return m_character;
 		}
 		/**
 		 *\~english
@@ -193,7 +193,7 @@ namespace Castor
 		//!\~english Glyph image	\~french Image de la glyphe
 		ByteArray m_bitmap;
 		//!\~english Glyph character	\~french Caractère de la glyphe
-		wchar_t m_wcCharacter;
+		char32_t m_character;
 	};
 }
 

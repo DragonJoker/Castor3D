@@ -482,7 +482,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerMinLod )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <sampler_state::min_lod> : LOD out of bounds [-1000,1000] : " ) + str_utils::to_string( l_rValue ) );
+			PARSING_ERROR( cuT( "Directive <sampler_state::min_lod> : LOD out of bounds [-1000,1000] : " ) + string::to_string( l_rValue ) );
 		}
 	}
 }
@@ -507,7 +507,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerMaxLod )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <sampler_state::max_lod> : LOD out of bounds [-1000,1000] : " ) + str_utils::to_string( l_rValue ) );
+			PARSING_ERROR( cuT( "Directive <sampler_state::max_lod> : LOD out of bounds [-1000,1000] : " ) + string::to_string( l_rValue ) );
 		}
 	}
 }
@@ -532,7 +532,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerLodBias )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <sampler_state::lod_bias> : LOD out of bounds [-1000,1000] : " ) + str_utils::to_string( l_rValue ) );
+			PARSING_ERROR( cuT( "Directive <sampler_state::lod_bias> : LOD out of bounds [-1000,1000] : " ) + string::to_string( l_rValue ) );
 		}
 	}
 }
@@ -778,7 +778,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneImport )
 	Path l_path;
 	Path l_pathFile = p_pContext->pFile->GetFilePath() / p_arrayParams[0]->Get( l_path );
 
-	if ( str_utils::lower_case( l_pathFile.GetExtension() ) == cuT( "cmsh" ) )
+	if ( string::lower_case( l_pathFile.GetExtension() ) == cuT( "cmsh" ) )
 	{
 		BinaryFile l_file( l_pathFile, File::eOPEN_MODE_READ );
 //		Mesh::BinaryLoader()( *l_pContext->pMesh, l_file );
@@ -800,7 +800,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneImport )
 
 				for ( ImporterPlugin::ExtensionArrayIt l_itExt = l_arrayExtensions.begin(); l_itExt != l_arrayExtensions.end() && !l_pImporter; ++l_itExt )
 				{
-					if ( str_utils::lower_case( l_pathFile.GetExtension() ) == str_utils::lower_case( l_itExt->first ) )
+					if ( string::lower_case( l_pathFile.GetExtension() ) == string::lower_case( l_itExt->first ) )
 					{
 						l_pImporter = l_pPlugin->GetImporter();
 					}
@@ -1297,56 +1297,56 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshType )
 	{
 		if ( l_strType != cuT( "custom" ) )
 		{
-			StringArray l_arrayMeshInfos = str_utils::split( l_strParams, cuT( " " ) );
+			StringArray l_arrayMeshInfos = string::split( l_strParams, cuT( " " ) );
 			l_strType = l_arrayMeshInfos[0];
 
 			if ( l_strType == cuT( "cube" ) )
 			{
 				l_eType = eMESH_TYPE_CUBE;
-				l_arraySizes.push_back( str_utils::to_real(	l_arrayMeshInfos[1] ) );
-				l_arraySizes.push_back( str_utils::to_real(	l_arrayMeshInfos[2] ) );
-				l_arraySizes.push_back( str_utils::to_real(	l_arrayMeshInfos[3] ) );
+				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[1] ) );
+				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[2] ) );
+				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[3] ) );
 			}
 			else if ( l_strType == cuT( "cone" ) )
 			{
 				l_eType = eMESH_TYPE_CONE;
-				l_arrayFaces.push_back( str_utils::to_int(	l_arrayMeshInfos[1] ) );
-				l_arraySizes.push_back( str_utils::to_real(	l_arrayMeshInfos[2] ) );
-				l_arraySizes.push_back( str_utils::to_real(	l_arrayMeshInfos[3] ) );
+				l_arrayFaces.push_back( string::to_int(	l_arrayMeshInfos[1] ) );
+				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[2] ) );
+				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[3] ) );
 			}
 			else if ( l_strType == cuT( "cylinder" ) )
 			{
 				l_eType = eMESH_TYPE_CYLINDER;
-				l_arrayFaces.push_back( str_utils::to_int(	l_arrayMeshInfos[1] ) );
-				l_arraySizes.push_back( str_utils::to_real(	l_arrayMeshInfos[2] ) );
-				l_arraySizes.push_back( str_utils::to_real(	l_arrayMeshInfos[3] ) );
+				l_arrayFaces.push_back( string::to_int(	l_arrayMeshInfos[1] ) );
+				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[2] ) );
+				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[3] ) );
 			}
 			else if ( l_strType == cuT( "sphere" ) )
 			{
 				l_eType = eMESH_TYPE_SPHERE;
-				l_arrayFaces.push_back( str_utils::to_int(	l_arrayMeshInfos[1] ) );
-				l_arraySizes.push_back( str_utils::to_real(	l_arrayMeshInfos[2] ) );
+				l_arrayFaces.push_back( string::to_int(	l_arrayMeshInfos[1] ) );
+				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[2] ) );
 			}
 			else if ( l_strType == cuT( "icosahedron" ) )
 			{
 				l_eType = eMESH_TYPE_ICOSAHEDRON;
-				l_arraySizes.push_back( str_utils::to_real(	l_arrayMeshInfos[1] ) );
+				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[1] ) );
 			}
 			else if ( l_strType == cuT( "plane" ) )
 			{
 				l_eType = eMESH_TYPE_PLANE;
-				l_arrayFaces.push_back( str_utils::to_int(	l_arrayMeshInfos[1] ) );
-				l_arrayFaces.push_back( str_utils::to_int(	l_arrayMeshInfos[2] ) );
-				l_arraySizes.push_back( str_utils::to_real(	l_arrayMeshInfos[3] ) );
-				l_arraySizes.push_back( str_utils::to_real(	l_arrayMeshInfos[4] ) );
+				l_arrayFaces.push_back( string::to_int(	l_arrayMeshInfos[1] ) );
+				l_arrayFaces.push_back( string::to_int(	l_arrayMeshInfos[2] ) );
+				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[3] ) );
+				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[4] ) );
 			}
 			else if ( l_strType == cuT( "torus" ) )
 			{
 				l_eType = eMESH_TYPE_TORUS;
-				l_arrayFaces.push_back( str_utils::to_int(	l_arrayMeshInfos[1] ) );
-				l_arrayFaces.push_back( str_utils::to_int(	l_arrayMeshInfos[2] ) );
-				l_arraySizes.push_back( str_utils::to_real(	l_arrayMeshInfos[3] ) );
-				l_arraySizes.push_back( str_utils::to_real(	l_arrayMeshInfos[4] ) );
+				l_arrayFaces.push_back( string::to_int(	l_arrayMeshInfos[1] ) );
+				l_arrayFaces.push_back( string::to_int(	l_arrayMeshInfos[2] ) );
+				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[3] ) );
+				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[4] ) );
 			}
 			else
 			{
@@ -1433,7 +1433,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshImport )
 	if ( p_arrayParams.size() > 1 )
 	{
 		String l_strTmp;
-		StringArray l_arrayStrParams = str_utils::split( p_arrayParams[1]->Get( l_strTmp ), cuT( "-" ), 20, false );
+		StringArray l_arrayStrParams = string::split( p_arrayParams[1]->Get( l_strTmp ), cuT( "-" ), 20, false );
 
 		if ( l_arrayStrParams.size() )
 		{
@@ -1458,7 +1458,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshImport )
 		}
 	}
 
-	if ( str_utils::lower_case( l_pathFile.GetExtension() ) == cuT( "cmsh" ) )
+	if ( string::lower_case( l_pathFile.GetExtension() ) == cuT( "cmsh" ) )
 	{
 		BinaryFile l_file( l_pathFile, File::eOPEN_MODE_READ );
 //		Mesh::BinaryLoader()( *l_pContext->pMesh, l_file );
@@ -1480,7 +1480,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshImport )
 
 				for ( ImporterPlugin::ExtensionArrayIt l_itExt = l_arrayExtensions.begin(); l_itExt != l_arrayExtensions.end() && !l_pImporter; ++l_itExt )
 				{
-					if ( str_utils::lower_case( l_pathFile.GetExtension() ) == str_utils::lower_case( l_itExt->first ) )
+					if ( string::lower_case( l_pathFile.GetExtension() ) == string::lower_case( l_itExt->first ) )
 					{
 						l_pImporter = l_pPlugin->GetImporter();
 					}
@@ -1518,7 +1518,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshDivide )
 		{
 			l_pPlugin = std::static_pointer_cast< DividerPlugin, PluginBase >( l_it->second );
 
-			if ( str_utils::lower_case( l_pPlugin->GetDividerType() ) == str_utils::lower_case( l_strName ) )
+			if ( string::lower_case( l_pPlugin->GetDividerType() ) == string::lower_case( l_strName ) )
 			{
 				l_pDivider = l_pPlugin->CreateDivider();
 			}
@@ -1664,7 +1664,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshFace )
 	if ( l_pContext->pSubmesh )
 	{
 		Point3i l_pt3Indices;
-		StringArray l_arrayValues = str_utils::split( l_strParams, cuT( " " ) );
+		StringArray l_arrayValues = string::split( l_strParams, cuT( " " ) );
 		l_pContext->iFace1 = -1;
 		l_pContext->iFace2 = -1;
 
@@ -1714,26 +1714,26 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshFaceUV )
 		}
 
 		Point3i l_pt3Indices;
-		StringArray l_arrayValues = str_utils::split( l_strParams, cuT( " " ), 20 );
+		StringArray l_arrayValues = string::split( l_strParams, cuT( " " ), 20 );
 
 		if ( l_arrayValues.size() >= 6 && l_pContext->iFace1 != -1 )
 		{
-			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = str_utils::to_real( l_arrayValues[0] );
-			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = str_utils::to_real( l_arrayValues[1] );
-			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = str_utils::to_real( l_arrayValues[2] );
-			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = str_utils::to_real( l_arrayValues[3] );
-			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = str_utils::to_real( l_arrayValues[4] );
-			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = str_utils::to_real( l_arrayValues[5] );
+			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[0] );
+			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[1] );
+			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[2] );
+			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[3] );
+			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[4] );
+			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[5] );
 		}
 
 		if ( l_arrayValues.size() >= 8 && l_pContext->iFace2 != -1 )
 		{
-			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = str_utils::to_real( l_arrayValues[0] );
-			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = str_utils::to_real( l_arrayValues[1] );
-			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace2 + 1] * 3] = str_utils::to_real( l_arrayValues[4] );
-			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace2 + 1] * 3] = str_utils::to_real( l_arrayValues[5] );
-			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = str_utils::to_real( l_arrayValues[6] );
-			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = str_utils::to_real( l_arrayValues[7] );
+			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[0] );
+			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[1] );
+			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace2 + 1] * 3] = string::to_real( l_arrayValues[4] );
+			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace2 + 1] * 3] = string::to_real( l_arrayValues[5] );
+			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[6] );
+			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[7] );
 		}
 	}
 	else
@@ -1758,32 +1758,32 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshFaceUVW )
 		}
 
 		Point3i l_pt3Indices;
-		StringArray l_arrayValues = str_utils::split( l_strParams, cuT( " " ), 20 );
+		StringArray l_arrayValues = string::split( l_strParams, cuT( " " ), 20 );
 
 		if ( l_arrayValues.size() >= 9 && l_pContext->iFace1 != -1 )
 		{
-			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = str_utils::to_real( l_arrayValues[0] );
-			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = str_utils::to_real( l_arrayValues[1] );
-			l_pContext->vertexTex[2 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = str_utils::to_real( l_arrayValues[2] );
-			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = str_utils::to_real( l_arrayValues[3] );
-			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = str_utils::to_real( l_arrayValues[4] );
-			l_pContext->vertexTex[2 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = str_utils::to_real( l_arrayValues[5] );
-			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = str_utils::to_real( l_arrayValues[6] );
-			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = str_utils::to_real( l_arrayValues[7] );
-			l_pContext->vertexTex[2 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = str_utils::to_real( l_arrayValues[8] );
+			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[0] );
+			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[1] );
+			l_pContext->vertexTex[2 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[2] );
+			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[3] );
+			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[4] );
+			l_pContext->vertexTex[2 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[5] );
+			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[6] );
+			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[7] );
+			l_pContext->vertexTex[2 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[8] );
 		}
 
 		if ( l_arrayValues.size() >= 12 && l_pContext->iFace2 != -1 )
 		{
-			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = str_utils::to_real( l_arrayValues[0] );
-			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = str_utils::to_real( l_arrayValues[1] );
-			l_pContext->vertexTex[2 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = str_utils::to_real( l_arrayValues[2] );
-			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = str_utils::to_real( l_arrayValues[6] );
-			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = str_utils::to_real( l_arrayValues[7] );
-			l_pContext->vertexTex[2 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = str_utils::to_real( l_arrayValues[8] );
-			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = str_utils::to_real( l_arrayValues[ 9] );
-			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = str_utils::to_real( l_arrayValues[10] );
-			l_pContext->vertexTex[2 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = str_utils::to_real( l_arrayValues[11] );
+			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[0] );
+			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[1] );
+			l_pContext->vertexTex[2 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[2] );
+			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[6] );
+			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[7] );
+			l_pContext->vertexTex[2 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[8] );
+			l_pContext->vertexTex[0 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[ 9] );
+			l_pContext->vertexTex[1 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[10] );
+			l_pContext->vertexTex[2 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[11] );
 		}
 	}
 	else
@@ -1808,32 +1808,32 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshFaceNormals )
 		}
 
 		Point3i l_pt3Indices;
-		StringArray l_arrayValues = str_utils::split( l_strParams, cuT( " " ), 20 );
+		StringArray l_arrayValues = string::split( l_strParams, cuT( " " ), 20 );
 
 		if ( l_arrayValues.size() >= 9 && l_pContext->iFace1 != -1 )
 		{
-			l_pContext->vertexNml[0 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = str_utils::to_real( l_arrayValues[0] );
-			l_pContext->vertexNml[1 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = str_utils::to_real( l_arrayValues[1] );
-			l_pContext->vertexNml[2 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = str_utils::to_real( l_arrayValues[2] );
-			l_pContext->vertexNml[0 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = str_utils::to_real( l_arrayValues[3] );
-			l_pContext->vertexNml[1 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = str_utils::to_real( l_arrayValues[4] );
-			l_pContext->vertexNml[2 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = str_utils::to_real( l_arrayValues[5] );
-			l_pContext->vertexNml[0 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = str_utils::to_real( l_arrayValues[6] );
-			l_pContext->vertexNml[1 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = str_utils::to_real( l_arrayValues[7] );
-			l_pContext->vertexNml[2 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = str_utils::to_real( l_arrayValues[8] );
+			l_pContext->vertexNml[0 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[0] );
+			l_pContext->vertexNml[1 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[1] );
+			l_pContext->vertexNml[2 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[2] );
+			l_pContext->vertexNml[0 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[3] );
+			l_pContext->vertexNml[1 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[4] );
+			l_pContext->vertexNml[2 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[5] );
+			l_pContext->vertexNml[0 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[6] );
+			l_pContext->vertexNml[1 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[7] );
+			l_pContext->vertexNml[2 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[8] );
 		}
 
 		if ( l_arrayValues.size() >= 12 && l_pContext->iFace2 != -1 )
 		{
-			l_pContext->vertexNml[0 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = str_utils::to_real( l_arrayValues[ 0] );
-			l_pContext->vertexNml[1 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = str_utils::to_real( l_arrayValues[ 1] );
-			l_pContext->vertexNml[2 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = str_utils::to_real( l_arrayValues[ 2] );
-			l_pContext->vertexNml[0 + l_pContext->faces[l_pContext->iFace2 + 1] * 3] = str_utils::to_real( l_arrayValues[ 6] );
-			l_pContext->vertexNml[1 + l_pContext->faces[l_pContext->iFace2 + 1] * 3] = str_utils::to_real( l_arrayValues[ 7] );
-			l_pContext->vertexNml[2 + l_pContext->faces[l_pContext->iFace2 + 1] * 3] = str_utils::to_real( l_arrayValues[ 8] );
-			l_pContext->vertexNml[0 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = str_utils::to_real( l_arrayValues[ 9] );
-			l_pContext->vertexNml[1 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = str_utils::to_real( l_arrayValues[10] );
-			l_pContext->vertexNml[2 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = str_utils::to_real( l_arrayValues[11] );
+			l_pContext->vertexNml[0 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[ 0] );
+			l_pContext->vertexNml[1 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[ 1] );
+			l_pContext->vertexNml[2 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[ 2] );
+			l_pContext->vertexNml[0 + l_pContext->faces[l_pContext->iFace2 + 1] * 3] = string::to_real( l_arrayValues[ 6] );
+			l_pContext->vertexNml[1 + l_pContext->faces[l_pContext->iFace2 + 1] * 3] = string::to_real( l_arrayValues[ 7] );
+			l_pContext->vertexNml[2 + l_pContext->faces[l_pContext->iFace2 + 1] * 3] = string::to_real( l_arrayValues[ 8] );
+			l_pContext->vertexNml[0 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[ 9] );
+			l_pContext->vertexNml[1 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[10] );
+			l_pContext->vertexNml[2 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[11] );
 		}
 	}
 	else
@@ -1858,32 +1858,32 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshFaceTangents )
 		}
 
 		Point3i l_pt3Indices;
-		StringArray l_arrayValues = str_utils::split( l_strParams, cuT( " " ), 20 );
+		StringArray l_arrayValues = string::split( l_strParams, cuT( " " ), 20 );
 
 		if ( l_arrayValues.size() >= 9 && l_pContext->iFace1 != -1 )
 		{
-			l_pContext->vertexTan[0 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = str_utils::to_real( l_arrayValues[0] );
-			l_pContext->vertexTan[1 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = str_utils::to_real( l_arrayValues[1] );
-			l_pContext->vertexTan[2 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = str_utils::to_real( l_arrayValues[2] );
-			l_pContext->vertexTan[0 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = str_utils::to_real( l_arrayValues[3] );
-			l_pContext->vertexTan[1 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = str_utils::to_real( l_arrayValues[4] );
-			l_pContext->vertexTan[2 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = str_utils::to_real( l_arrayValues[5] );
-			l_pContext->vertexTan[0 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = str_utils::to_real( l_arrayValues[6] );
-			l_pContext->vertexTan[1 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = str_utils::to_real( l_arrayValues[7] );
-			l_pContext->vertexTan[2 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = str_utils::to_real( l_arrayValues[8] );
+			l_pContext->vertexTan[0 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[0] );
+			l_pContext->vertexTan[1 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[1] );
+			l_pContext->vertexTan[2 + l_pContext->faces[l_pContext->iFace1 + 0] * 3] = string::to_real( l_arrayValues[2] );
+			l_pContext->vertexTan[0 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[3] );
+			l_pContext->vertexTan[1 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[4] );
+			l_pContext->vertexTan[2 + l_pContext->faces[l_pContext->iFace1 + 1] * 3] = string::to_real( l_arrayValues[5] );
+			l_pContext->vertexTan[0 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[6] );
+			l_pContext->vertexTan[1 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[7] );
+			l_pContext->vertexTan[2 + l_pContext->faces[l_pContext->iFace1 + 2] * 3] = string::to_real( l_arrayValues[8] );
 		}
 
 		if ( l_arrayValues.size() >= 12 && l_pContext->iFace2 != -1 )
 		{
-			l_pContext->vertexTan[0 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = str_utils::to_real( l_arrayValues[ 0] );
-			l_pContext->vertexTan[1 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = str_utils::to_real( l_arrayValues[ 1] );
-			l_pContext->vertexTan[2 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = str_utils::to_real( l_arrayValues[ 2] );
-			l_pContext->vertexTan[0 + l_pContext->faces[l_pContext->iFace2 + 1] * 3] = str_utils::to_real( l_arrayValues[ 6] );
-			l_pContext->vertexTan[1 + l_pContext->faces[l_pContext->iFace2 + 1] * 3] = str_utils::to_real( l_arrayValues[ 7] );
-			l_pContext->vertexTan[2 + l_pContext->faces[l_pContext->iFace2 + 1] * 3] = str_utils::to_real( l_arrayValues[ 8] );
-			l_pContext->vertexTan[0 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = str_utils::to_real( l_arrayValues[ 9] );
-			l_pContext->vertexTan[1 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = str_utils::to_real( l_arrayValues[10] );
-			l_pContext->vertexTan[2 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = str_utils::to_real( l_arrayValues[11] );
+			l_pContext->vertexTan[0 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[ 0] );
+			l_pContext->vertexTan[1 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[ 1] );
+			l_pContext->vertexTan[2 + l_pContext->faces[l_pContext->iFace2 + 0] * 3] = string::to_real( l_arrayValues[ 2] );
+			l_pContext->vertexTan[0 + l_pContext->faces[l_pContext->iFace2 + 1] * 3] = string::to_real( l_arrayValues[ 6] );
+			l_pContext->vertexTan[1 + l_pContext->faces[l_pContext->iFace2 + 1] * 3] = string::to_real( l_arrayValues[ 7] );
+			l_pContext->vertexTan[2 + l_pContext->faces[l_pContext->iFace2 + 1] * 3] = string::to_real( l_arrayValues[ 8] );
+			l_pContext->vertexTan[0 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[ 9] );
+			l_pContext->vertexTan[1 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[10] );
+			l_pContext->vertexTan[2 + l_pContext->faces[l_pContext->iFace2 + 2] * 3] = string::to_real( l_arrayValues[11] );
 		}
 	}
 	else

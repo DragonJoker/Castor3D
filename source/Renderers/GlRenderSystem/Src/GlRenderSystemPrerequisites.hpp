@@ -187,7 +187,7 @@ namespace GlRender
 			static std::unique_ptr< GLSL::KeywordsBase > Get( OpenGl const & p_gl );
 			inline Castor::String GetStdLayout( int p_index )const
 			{
-				return m_strStdLayout + cuT( "( std" ) + Castor::str_utils::to_string( p_index ) + cuT( " ) " );
+				return m_strStdLayout + cuT( "( std" ) + Castor::string::to_string( p_index ) + cuT( " ) " );
 			}
 			inline Castor::String const & GetVersion()const
 			{
@@ -320,7 +320,7 @@ namespace GlRender
 		public:
 			Keywords()
 			{
-				m_strVersion = cuT( "#version " ) + Castor::str_utils::to_string( Version );
+				m_strVersion = cuT( "#version " ) + Castor::string::to_string( Version );
 				m_strAttribute = cuT( "in" );
 				m_strIn = cuT( "in" );
 				m_strOut = cuT( "out" );
@@ -351,7 +351,7 @@ namespace GlRender
 			Keywords()
 			{
 				m_strStdLayout  = cuT( "layout" );
-				m_strVersion = cuT( "#version " ) + Castor::str_utils::to_string( Version );
+				m_strVersion = cuT( "#version " ) + Castor::string::to_string( Version );
 				m_strAttribute = cuT( "in" );
 				m_strIn = cuT( "in" );
 				m_strOut = cuT( "out" );
@@ -382,7 +382,7 @@ namespace GlRender
 			Keywords()
 			{
 				m_strStdLayout  = cuT( "layout" );
-				m_strVersion = cuT( "#version " ) + Castor::str_utils::to_string( Version );
+				m_strVersion = cuT( "#version " ) + Castor::string::to_string( Version );
 				m_strAttribute = cuT( "in" );
 				m_strIn = cuT( "in" );
 				m_strOut = cuT( "out" );
@@ -409,7 +409,7 @@ namespace GlRender
 
 			virtual Castor::String GetLayout( uint32_t p_uiIndex )const
 			{
-				return cuT( "layout( location=" ) + Castor::str_utils::to_string( p_uiIndex ) + cuT( " ) " );
+				return cuT( "layout( location=" ) + Castor::string::to_string( p_uiIndex ) + cuT( " ) " );
 			}
 		};
 
