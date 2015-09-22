@@ -12,6 +12,7 @@
 #include "Mesh.hpp"
 #include "Overlay.hpp"
 #include "Pipeline.hpp"
+#include "PostFxPlugin.hpp"
 #include "Plugin.hpp"
 #include "RasteriserState.hpp"
 #include "RendererPlugin.hpp"
@@ -824,22 +825,20 @@ namespace Castor3D
 					break;
 
 				case ePLUGIN_TYPE_RENDERER:
-				{
 					l_pReturn = LoadRendererPlugin( l_pLibrary );
-				}
-				break;
+					break;
 
 				case ePLUGIN_TYPE_GENERIC:
-				{
 					l_pReturn = std::make_shared< GenericPlugin >( l_pLibrary, this );
-				}
-				break;
+					break;
 
 				case ePLUGIN_TYPE_TECHNIQUE:
-				{
 					l_pReturn = LoadTechniquePlugin( l_pLibrary );
-				}
-				break;
+					break;
+
+				case ePLUGIN_TYPE_POSTFX:
+					l_pReturn = std::make_shared< PostFxPlugin >( l_pLibrary, this );
+					break;
 
 				default:
 					break;

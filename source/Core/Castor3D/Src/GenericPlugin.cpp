@@ -26,14 +26,10 @@ namespace Castor3D
 #endif
 
 	GenericPlugin::GenericPlugin( DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
-		:	PluginBase( ePLUGIN_TYPE_GENERIC, p_pLibrary, p_engine )
+		: PluginBase( ePLUGIN_TYPE_GENERIC, p_pLibrary, p_engine )
 	{
-		if ( !p_pLibrary->GetFunction( m_pfnAddOptionalParsers, AddOptionalParsersFunctionABIName ) )
-		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] AddOptionalParsers plugin function : " );
-			l_strError += string::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
-		}
+		// Since this is an optional function, don't fail on error.
+		p_pLibrary->GetFunction( m_pfnAddOptionalParsers, AddOptionalParsersFunctionABIName );
 
 		if ( m_pfnOnLoad )
 		{

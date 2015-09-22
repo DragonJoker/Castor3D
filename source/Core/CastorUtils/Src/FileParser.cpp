@@ -257,7 +257,7 @@ namespace Castor
 			va_list l_valist;
 			va_start( l_valist, p_count );
 
-			for ( int i = 0; i < p_count; ++i )
+			for ( uint32_t i = 0; i < p_count; ++i )
 			{
 				ePARAMETER_TYPE l_eParamType =  ePARAMETER_TYPE( va_arg( l_valist, int ) );
 
@@ -280,7 +280,7 @@ namespace Castor
 					break;
 
 				case ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT > >( *m_pParsingContext, *reinterpret_cast< UIntStrMap * >( va_arg( l_valist, void * ) ) ) );
+					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT > >( *m_context, *reinterpret_cast< UIntStrMap * >( va_arg( l_valist, void * ) ) ) );
 					break;
 
 				case ePARAMETER_TYPE_BOOL:
