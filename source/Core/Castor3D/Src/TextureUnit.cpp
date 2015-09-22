@@ -548,7 +548,7 @@ namespace Castor3D
 					uint8_t * l_buffer = m_pTexture->Lock( eLOCK_FLAG_READ_ONLY );
 					std::memcpy( m_pTexture->GetBuffer()->ptr(), l_buffer, m_pTexture->GetBuffer()->size() );
 					const Image l_tmp( cuT( "tmp" ), *m_pTexture->GetBuffer() );
-					Image::BinaryLoader()( l_tmp, File::GetUserDirectory() / cuT( "TextureUnitTexture_" ) + string::to_string( ptrdiff_t( m_pTexture.get() ) ) + cuT( ".bmp" ) );
+					Image::BinaryLoader()( l_tmp, Engine::GetEngineDirectory() / cuT( "TextureUnitTexture_" ) + string::to_string( ptrdiff_t( m_pTexture.get() ) ) + cuT( ".bmp" ) );
 				}
 
 #endif

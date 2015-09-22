@@ -141,22 +141,17 @@ namespace GlRender
 
 	void GlContext::DoBind( Castor3D::eBUFFER p_eBuffer, Castor3D::eFRAMEBUFFER_TARGET p_eTarget )
 	{
+		if ( m_gl.HasFbo() )
+		{
+			m_gl.BindFramebuffer( m_gl.Get( p_eTarget ), 0 );
+		}
+
 		if ( p_eTarget == eFRAMEBUFFER_TARGET_DRAW )
 		{
-			if ( m_gl.HasFbo() )
-			{
-				m_gl.BindFramebuffer( eGL_FRAMEBUFFER_MODE_DRAW, 0 );
-			}
-
 			m_gl.DrawBuffer( m_gl.Get( p_eBuffer ) );
 		}
 		else if ( p_eTarget == eFRAMEBUFFER_TARGET_READ )
 		{
-			if ( m_gl.HasFbo() )
-			{
-				m_gl.BindFramebuffer( eGL_FRAMEBUFFER_MODE_READ, 0 );
-			}
-
 			m_gl.ReadBuffer( m_gl.Get( p_eBuffer ) );
 		}
 	}

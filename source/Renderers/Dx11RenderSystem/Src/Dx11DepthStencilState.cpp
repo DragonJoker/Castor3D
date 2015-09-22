@@ -75,7 +75,7 @@ namespace Dx11Render
 
 			if ( l_pDeviceContext )
 			{
-				l_pDeviceContext->OMSetDepthStencilState( m_pDepthStencilState, 1 );
+				l_pDeviceContext->OMSetDepthStencilState( m_pDepthStencilState, m_stStencilFront.m_ref );
 			}
 		}
 

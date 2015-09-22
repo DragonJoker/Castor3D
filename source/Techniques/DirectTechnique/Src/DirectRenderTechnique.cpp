@@ -164,11 +164,6 @@ namespace Direct
 	PixelShaderSource g_ps;
 #endif
 
-	RenderTechnique::RenderTechnique()
-		: RenderTechniqueBase( cuT( "direct" ) )
-	{
-	}
-
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
 		: RenderTechniqueBase( cuT( "direct" ), p_renderTarget, p_pRenderSystem, p_params )
 	{

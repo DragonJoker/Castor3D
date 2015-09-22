@@ -19,18 +19,11 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	RenderTechniqueBase::RenderTechniqueBase( String const & p_name )
-		:	m_pRenderTarget( NULL )
-		,	m_renderSystem( NULL )
-		,	m_name( p_name )
-	{
-	}
-
 	RenderTechniqueBase::RenderTechniqueBase( String const & p_name, RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & CU_PARAM_UNUSED( p_params ) )
-		:	m_pRenderTarget( &p_renderTarget )
-		,	m_renderSystem( p_pRenderSystem )
-		,	m_engine( p_pRenderSystem->GetEngine() )
-		,	m_name( p_name )
+		: m_pRenderTarget( &p_renderTarget )
+		, m_renderSystem( p_pRenderSystem )
+		, m_engine( p_pRenderSystem->GetEngine() )
+		, m_name( p_name )
 	{
 		m_sampler = m_engine->CreateSampler( cuT( "RENDER_TECHNIQUE_SAMPLER" ) );
 		m_pFrameBuffer = m_pRenderTarget->CreateFrameBuffer();

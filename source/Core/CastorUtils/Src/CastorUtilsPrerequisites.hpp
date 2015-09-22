@@ -18,8 +18,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_UTILS_PREREQUISITES_H___
 #define ___CASTOR_UTILS_PREREQUISITES_H___
 
-#pragma warning( disable:4316 )
-
 #include "Macros.hpp"
 
 #if CASTOR_HAS_STDARRAY || CASTOR_HAS_TR1ARRAY

@@ -169,15 +169,9 @@ namespace Msaa
 	PixelShaderSource g_ps;
 #endif
 
-	RenderTechnique::RenderTechnique()
-		:	RenderTechniqueBase( cuT( "msaa" ) )
-		,	m_iSamplesCount( 0 )
-	{
-	}
-
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
-		:	RenderTechniqueBase( cuT( "msaa" ), p_renderTarget, p_pRenderSystem, p_params )
-		,	m_iSamplesCount( 0 )
+		: RenderTechniqueBase( cuT( "msaa" ), p_renderTarget, p_pRenderSystem, p_params )
+		, m_iSamplesCount( 0 )
 	{
 		if ( p_params.Get( cuT( "samples_count" ), m_iSamplesCount ) && m_iSamplesCount > 1 )
 		{
@@ -320,7 +314,7 @@ namespace Msaa
 
 			m_pColorAttach->DownloadBuffer( m_pColorBuffer->GetBuffer() );
 			const Image l_image( cuT( "Tmp" ), *m_pColorBuffer->GetBuffer() );
-			Image::BinaryLoader()( l_image, File::GetUserDirectory() / cuT( "MsaaImage.bmp" ) );
+			Image::BinaryLoader()( l_image, Engine::GetEngineDirectory() / cuT( "MsaaImage.bmp" ) );
 
 #	endif
 		}

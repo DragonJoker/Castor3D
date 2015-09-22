@@ -131,6 +131,8 @@ namespace Castor
 			virtual bool operator()( Point< T, Count > const & p_object, TextFile & p_file );
 		};
 
+		CASTOR_ALIGNED_CLASS( 16 );
+
 	private:
 		template< typename U, uint32_t _Count > friend class Point;
 

@@ -145,11 +145,13 @@ typedef wchar_t ychar;
 #else
 #	define CASTOR_DEFAULT
 #endif
+
 #if CASTOR_HAS_DELETED_FUNC
 #	define CASTOR_DELETED = delete
 #else
 #	define CASTOR_DELETED
 #endif
+
 #if CASTOR_HAS_ALIGNAS
 #	define CASTOR_ALIGNED_VAR( a, t, n ) t alignas( a ) n
 #else
@@ -160,6 +162,21 @@ typedef wchar_t ychar;
 #		define CASTOR_ALIGNED_VAR( a, t, n ) __declspec( align( a ) ) t n
 #	endif
 #endif
+
+#define CASTOR_ALIGNED_CLASS( a )\
+	void * operator new( size_t p_size )\
+	{\
+		void * l_storage = Castor::System::AlignedAlloc( a, p_size );\
+		if ( !l_storage )\
+		{\
+			throw std::bad_alloc;\
+		}\
+		return l_storage;\
+	}\
+	void operator delete( void * p_memory )\
+	{\
+		Castor::System::AlignedFree( p_memory );\
+	}
 
 #define DECLARE_SMART_PTR( class_name )\
 	typedef std::shared_ptr< class_name > class_name##SPtr;\

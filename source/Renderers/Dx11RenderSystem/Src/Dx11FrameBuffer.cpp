@@ -145,6 +145,28 @@ namespace Dx11Render
 
 	void DxFrameBuffer::DoUnbind()
 	{
+#if DX_DEBUG_RT
+
+		if ( !m_mapTex.empty() )
+		{
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
+
+			for ( auto && l_attachIt : m_mapTex )
+			{
+				if ( l_attachIt.first >= eATTACHMENT_POINT_COLOUR0 && l_attachIt.first <= eATTACHMENT_POINT_COLOUR15 )
+				{
+					ID3D11Resource * l_pResource = NULL;
+					std::static_pointer_cast< DxDynamicTexture >( l_attachIt.second )->GetRenderTargetView()->GetResource( &l_pResource );
+					StringStream l_name;
+					l_name << Engine::GetEngineDirectory() << cuT( "\\DynamicTexture_" ) << ( void * )l_attachIt.second.get() << cuT( "_FBA.png" );
+					D3DX11SaveTextureToFile( l_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
+					l_pResource->Release();
+				}
+			}
+		}
+
+#endif
+
 		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 		D3D11RenderTargetViewArray l_arraySurfaces;
 		ID3D11DepthStencilView * l_pView = m_pOldDepthStencilView;

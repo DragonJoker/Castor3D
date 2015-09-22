@@ -124,6 +124,19 @@ namespace Dx11Render
 
 	void DxContext::DoSwapBuffers()
 	{
+#if DX_DEBUG_RT
+
+		static_cast< DxRenderSystem * >( m_renderSystem )->GetDevice()->GetImmediateContext( &m_pDeviceContext );
+		ID3D11Resource * l_pResource;
+		m_pRenderTargetView->GetResource( &l_pResource );
+		Castor::StringStream l_name;
+		l_name << Castor3D::Engine::GetEngineDirectory() << cuT( "\\DynamicTexture_" ) << ( void * )m_pRenderTargetView << cuT( "_SRV.png" );
+		D3DX11SaveTextureToFile( m_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
+		l_pResource->Release();
+		SafeRelease( m_pDeviceContext );
+
+#endif
+
 		if ( m_pSwapChain )
 		{
 			if ( m_pWindow->GetVSync() )

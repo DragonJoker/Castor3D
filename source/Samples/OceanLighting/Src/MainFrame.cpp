@@ -87,10 +87,10 @@ namespace OceanLighting
 		AddElemToSizer( l_pStaticText, l_pTextCtrl, p_pSizer );
 	}
 
-	void AddColourPickerCtrl( wxWindow * p_parent, wxString const & p_strCaption, wxWindowID p_id, Point4f const & p_ptColour, void * p_pClientData, wxSizer * p_pSizer )
+	void AddColourPickerCtrl( wxWindow * p_parent, wxString const & p_strCaption, wxWindowID p_id, Colour const & p_ptColour, void * p_pClientData, wxSizer * p_pSizer )
 	{
 		wxStaticText * l_pStaticText = new wxStaticText( p_parent, wxID_ANY, p_strCaption );
-		wxColourPickerCtrl * l_pColourPickerCtrl = new wxColourPickerCtrl( p_parent, p_id, wxColour( uint8_t( p_ptColour[0] * 255 ), uint8_t( p_ptColour[1] * 255 ), uint8_t( p_ptColour[2] * 255 ), uint8_t( p_ptColour[3] * 255 ) ) );
+		wxColourPickerCtrl * l_pColourPickerCtrl = new wxColourPickerCtrl( p_parent, p_id, wxColour( uint8_t( p_ptColour.red() ), uint8_t( p_ptColour.green() ), uint8_t( p_ptColour.blue() ), uint8_t( p_ptColour.alpha() ) ) );
 		l_pColourPickerCtrl->SetClientData( p_pClientData );
 		AddElemToSizer( l_pStaticText, l_pColourPickerCtrl, p_pSizer );
 	}
@@ -168,10 +168,10 @@ namespace OceanLighting
 
 		if ( l_bReturn )
 		{
-//			TwInit(TW_OPENGL, NULL);
-//			TwGLUTModifiersFunc(glutGetModifiers);
-//			bar = TwNewBar("Parameters");
-//			TwDefine("Parameters size='220 460'");
+			//TwInit(TW_OPENGL, NULL);
+			//TwGLUTModifiersFunc(glutGetModifiers);
+			//bar = TwNewBar("Parameters");
+			//TwDefine("Parameters size='220 460'");
 			wxPanel * l_pOptionsPanel = new wxPanel( this, wxID_ANY, wxPoint( 0, 0 ), wxSize( 220, 768 ) );
 			wxBoxSizer * l_pSizerPanel = new wxBoxSizer( wxVERTICAL );
 			wxArrayString l_arrayCharsFloats;
@@ -190,56 +190,56 @@ namespace OceanLighting
 			l_arrayCharsFloats.push_back( wxT( "-" ) );
 			l_validatorFloat.SetIncludes( l_arrayCharsFloats );
 #if ENABLE_FFT
-//			TwAddVarCB(bar, "Wind speed", TW_TYPE_FLOAT, setFloat, getFloat, &WIND, "min=3.0 max=21.0 step=1.0 group=Spectrum");
+			//TwAddVarCB(bar, "Wind speed", TW_TYPE_FLOAT, setFloat, getFloat, &WIND, "min=3.0 max=21.0 step=1.0 group=Spectrum");
 			AddSpinCtrl( l_pOptionsPanel, wxT( "Wind speed" ), eID_WIND_SPEED, 3, 21, int( m_pTechnique->GetWindSpeed() ), &m_pTechnique->GetWindSpeed(), l_pSizerPanel );
-//			TwAddVarCB(bar, "Inv. wave age", TW_TYPE_FLOAT, setFloat, getFloat, &OMEGA, "min=0.8 max=5.0 step=0.1 group=Spectrum");
+			//TwAddVarCB(bar, "Inv. wave age", TW_TYPE_FLOAT, setFloat, getFloat, &OMEGA, "min=0.8 max=5.0 step=0.1 group=Spectrum");
 			AddTextCtrl( l_pOptionsPanel, wxT( "Inv. wave age" ), eID_WAVE_AGE, m_pTechnique->GetOmega(), &m_pTechnique->GetOmega(), l_pSizerPanel, l_validatorFloat );
-//			TwAddVarCB(bar, "Amplitude", TW_TYPE_FLOAT, setFloat, getFloat, &A, "min=0.01 max=1000.0 step=0.01 group=Spectrum");
+			//TwAddVarCB(bar, "Amplitude", TW_TYPE_FLOAT, setFloat, getFloat, &A, "min=0.01 max=1000.0 step=0.01 group=Spectrum");
 			AddTextCtrl( l_pOptionsPanel, wxT( "Amplitude" ), eID_AMPLITUDE, m_pTechnique->GetA(), &m_pTechnique->GetA(), l_pSizerPanel, l_validatorFloat );
-//			TwAddButton(bar, "Generate", computeSlopeVarianceTex, NULL, "group=Spectrum");
+			//TwAddButton(bar, "Generate", computeSlopeVarianceTex, NULL, "group=Spectrum");
 			AddButton( l_pOptionsPanel, wxT( "Generate" ), eID_GENERATE, l_pSizerPanel );
-//			TwAddVarRW(bar, "Choppy", TW_TYPE_BOOL8, &m_choppy, "group=Rendering");
+			//TwAddVarRW(bar, "Choppy", TW_TYPE_BOOL8, &m_choppy, "group=Rendering");
 			AddCheckBox( l_pOptionsPanel, wxT( "Choppy" ), eID_CHOPPY, m_pTechnique->GetChoppy(), &m_pTechnique->GetChoppy(), l_pSizerPanel );
 #endif
-//			TwAddVarRW(bar, "Altitude", TW_TYPE_FLOAT, &m_cameraHeight, "min=-10.0 max=8000 group=Rendering");
+			//TwAddVarRW(bar, "Altitude", TW_TYPE_FLOAT, &m_cameraHeight, "min=-10.0 max=8000 group=Rendering");
 			AddSpinCtrl( l_pOptionsPanel, wxT( "Altitude" ), eID_ALTITUDE, -10, 8000, int( m_pTechnique->GetCameraHeight() ), &m_pTechnique->GetCameraHeight(), l_pSizerPanel );
-//			TwAddVarRO(bar, "Theta", TW_TYPE_FLOAT, &m_cameraTheta, "group=Rendering");
+			//TwAddVarRO(bar, "Theta", TW_TYPE_FLOAT, &m_cameraTheta, "group=Rendering");
 			AddTextCtrl( l_pOptionsPanel, wxT( "Theta" ), eID_THETA, m_pTechnique->GetCameraTheta(), &m_pTechnique->GetCameraTheta(), l_pSizerPanel, l_validatorFloat );
-//			TwAddVarRO(bar, "Phi", TW_TYPE_FLOAT, &m_cameraPhi, "group=Rendering");
+			//TwAddVarRO(bar, "Phi", TW_TYPE_FLOAT, &m_cameraPhi, "group=Rendering");
 			AddTextCtrl( l_pOptionsPanel, wxT( "Phi" ), eID_PHI, m_pTechnique->GetCameraPhi(), &m_pTechnique->GetCameraPhi(), l_pSizerPanel, l_validatorFloat );
-//			TwAddVarRW(bar, "Grid size", TW_TYPE_FLOAT, &m_gridSize, "min=1.0 max=10.0 step=1.0 group=Rendering");
+			//TwAddVarRW(bar, "Grid size", TW_TYPE_FLOAT, &m_gridSize, "min=1.0 max=10.0 step=1.0 group=Rendering");
 			AddSpinCtrl( l_pOptionsPanel, wxT( "Grid size" ), eID_GRID_SIZE, 1, 10, int( m_pTechnique->GetGridSize() ), &m_pTechnique->GetGridSize(), l_pSizerPanel );
-//			TwAddVarRW(bar, "Sea color", TW_TYPE_COLOR4F, &m_seaColor, "group=Rendering");
+			//TwAddVarRW(bar, "Sea color", TW_TYPE_COLOR4F, &m_seaColor, "group=Rendering");
 			AddColourPickerCtrl( l_pOptionsPanel, wxT( "Sea color" ), eID_SEA_COLOUR, m_pTechnique->GetSeaColour(), &m_pTechnique->GetSeaColour(), l_pSizerPanel );
-//			TwAddVarRW(bar, "Exposure", TW_TYPE_FLOAT, &m_hdrExposure, "min=0.01 max=4.0 step=0.01 group=Rendering");
+			//TwAddVarRW(bar, "Exposure", TW_TYPE_FLOAT, &m_hdrExposure, "min=0.01 max=4.0 step=0.01 group=Rendering");
 			AddTextCtrl( l_pOptionsPanel, wxT( "Exposure" ), eID_EXPOSURE, m_pTechnique->GetHdrExposure(), &m_pTechnique->GetHdrExposure(), l_pSizerPanel, l_validatorFloat );
-//			TwAddVarRW(bar, "Animation", TW_TYPE_BOOL8, &m_animate, "group=Rendering");
+			//TwAddVarRW(bar, "Animation", TW_TYPE_BOOL8, &m_animate, "group=Rendering");
 			AddCheckBox( l_pOptionsPanel, wxT( "Animation" ), eID_ANIMATION, m_pTechnique->GetAnimate(), &m_pTechnique->GetAnimate(), l_pSizerPanel );
-//			TwAddVarRW(bar, "Grid", TW_TYPE_BOOL8, &m_grid, "group=Rendering");
+			//TwAddVarRW(bar, "Grid", TW_TYPE_BOOL8, &m_grid, "group=Rendering");
 			AddCheckBox( l_pOptionsPanel, wxT( "Grid" ), eID_GRID, m_pTechnique->GetGrid(), &m_pTechnique->GetGrid(), l_pSizerPanel );
-//			TwAddVarCB(bar, "Sea", TW_TYPE_BOOL8, setBool, getBool, &seaContrib, "group=Rendering");
+			//TwAddVarCB(bar, "Sea", TW_TYPE_BOOL8, setBool, getBool, &seaContrib, "group=Rendering");
 			AddCheckBox( l_pOptionsPanel, wxT( "Sea" ), eID_SEA, m_pTechnique->GetSea(), &m_pTechnique->GetSea(), l_pSizerPanel );
-//			TwAddVarCB(bar, "Sun", TW_TYPE_BOOL8, setBool, getBool, &sunContrib, "group=Rendering");
+			//TwAddVarCB(bar, "Sun", TW_TYPE_BOOL8, setBool, getBool, &sunContrib, "group=Rendering");
 			AddCheckBox( l_pOptionsPanel, wxT( "Sun" ), eID_SUN, m_pTechnique->GetSun(), &m_pTechnique->GetSun(), l_pSizerPanel );
-//			TwAddVarCB(bar, "Sky", TW_TYPE_BOOL8, setBool, getBool, &skyContrib, "group=Rendering");
+			//TwAddVarCB(bar, "Sky", TW_TYPE_BOOL8, setBool, getBool, &skyContrib, "group=Rendering");
 			AddCheckBox( l_pOptionsPanel, wxT( "Sky" ), eID_SKY, m_pTechnique->GetSky(), &m_pTechnique->GetSky(), l_pSizerPanel );
-//			TwAddVarCB(bar, "Manual filter", TW_TYPE_BOOL8, setBool, getBool, &manualFilter, "group=Rendering");
+			//TwAddVarCB(bar, "Manual filter", TW_TYPE_BOOL8, setBool, getBool, &manualFilter, "group=Rendering");
 			AddCheckBox( l_pOptionsPanel, wxT( "Manual filter" ), eID_MANUAL_FILTER, m_pTechnique->GetManualFilter(), &m_pTechnique->GetManualFilter(), l_pSizerPanel );
-//			TwAddVarRW(bar, "Octaves", TW_TYPE_FLOAT, &m_octaves, "min=1.0 max=16.0 step=1.0 group=Clouds");
+			//TwAddVarRW(bar, "Octaves", TW_TYPE_FLOAT, &m_octaves, "min=1.0 max=16.0 step=1.0 group=Clouds");
 			AddSpinCtrl( l_pOptionsPanel, wxT( "Clouds octaves" ), eID_OCTAVES, 1, 16, int( m_pTechnique->GetOctaves() ), &m_pTechnique->GetOctaves(), l_pSizerPanel );
-//			TwAddVarRW(bar, "Clouds lacunarity", TW_TYPE_FLOAT, &m_lacunarity, "min=0.1 max=3.0 step=0.1 group=Clouds");
+			//TwAddVarRW(bar, "Clouds lacunarity", TW_TYPE_FLOAT, &m_lacunarity, "min=0.1 max=3.0 step=0.1 group=Clouds");
 			AddTextCtrl( l_pOptionsPanel, wxT( "Clouds lacunarity" ), eID_LACUNARITY, m_pTechnique->GetLacunarity(), &m_pTechnique->GetLacunarity(), l_pSizerPanel, l_validatorFloat );
-//			TwAddVarRW(bar, "Clouds gain", TW_TYPE_FLOAT, &m_gain, "min=0.01 max=2.0 step=0.01 group=Clouds");
+			//TwAddVarRW(bar, "Clouds gain", TW_TYPE_FLOAT, &m_gain, "min=0.01 max=2.0 step=0.01 group=Clouds");
 			AddTextCtrl( l_pOptionsPanel, wxT( "Clouds gain" ), eID_GAIN, m_pTechnique->GetGain(), &m_pTechnique->GetGain(), l_pSizerPanel, l_validatorFloat );
-//			TwAddVarRW(bar, "Clouds norm", TW_TYPE_FLOAT, &m_norm, "min=0.01 max=1.0 step=0.01 group=Clouds");
+			//TwAddVarRW(bar, "Clouds norm", TW_TYPE_FLOAT, &m_norm, "min=0.01 max=1.0 step=0.01 group=Clouds");
 			AddTextCtrl( l_pOptionsPanel, wxT( "Clouds norm" ), eID_NORM, m_pTechnique->GetNorm(), &m_pTechnique->GetNorm(), l_pSizerPanel, l_validatorFloat );
-//			TwAddVarRW(bar, "Clouds clamp1", TW_TYPE_FLOAT, &m_clamp1, "min=-1.0 max=1.0 step=0.01 group=Clouds");
+			//TwAddVarRW(bar, "Clouds clamp1", TW_TYPE_FLOAT, &m_clamp1, "min=-1.0 max=1.0 step=0.01 group=Clouds");
 			AddTextCtrl( l_pOptionsPanel, wxT( "Clouds clamp1" ), eID_CLAMP1, m_pTechnique->GetClamp1(), &m_pTechnique->GetClamp1(), l_pSizerPanel, l_validatorFloat );
-//			TwAddVarRW(bar, "Clouds clamp2", TW_TYPE_FLOAT, &m_clamp2, "min=-1.0 max=1.0 step=0.01 group=Clouds");
+			//TwAddVarRW(bar, "Clouds clamp2", TW_TYPE_FLOAT, &m_clamp2, "min=-1.0 max=1.0 step=0.01 group=Clouds");
 			AddTextCtrl( l_pOptionsPanel, wxT( "Clouds clamp2" ), eID_CLAMP2, m_pTechnique->GetClamp2(), &m_pTechnique->GetClamp2(), l_pSizerPanel, l_validatorFloat );
-//			TwAddVarRW(bar, "Clouds color", TW_TYPE_COLOR4F, &m_cloudColor, "group=Clouds");
+			//TwAddVarRW(bar, "Clouds color", TW_TYPE_COLOR4F, &m_cloudColor, "group=Clouds");
 			AddColourPickerCtrl( l_pOptionsPanel, wxT( "Clouds Color" ), eID_COLOUR, m_pTechnique->GetColour(), &m_pTechnique->GetColour(), l_pSizerPanel );
-//			TwAddVarCB(bar, "Enable", TW_TYPE_BOOL8, setBool, getBool, &m_cloudLayer, "group=Clouds");
+			//TwAddVarCB(bar, "Enable", TW_TYPE_BOOL8, setBool, getBool, &m_cloudLayer, "group=Clouds");
 			AddCheckBox( l_pOptionsPanel, wxT( "Enable clouds" ), eID_ENABLE, m_pTechnique->GetClouds(), &m_pTechnique->GetClouds(), l_pSizerPanel );
 			l_pOptionsPanel->SetSizer( l_pSizerPanel );
 			l_pSizerPanel->SetSizeHints( l_pOptionsPanel );
@@ -440,7 +440,7 @@ namespace OceanLighting
 			m_pCastor3D->RenderOneFrame();
 		}
 
-//		TwDraw();
+		//TwDraw();
 		p_event.Skip();
 	}
 
@@ -454,16 +454,16 @@ namespace OceanLighting
 			m_pTechnique->Resize( m_width, m_height );
 		}
 
-//		TwWindowSize(x, y);
+		//TwWindowSize(x, y);
 		p_event.Skip();
 	}
 
 	void MainFrame::OnKeyUp( wxKeyEvent & p_event )
 	{
-//		if (TwEventKeyboardGLUT(c, x, y))
-//		{
-//			return;
-//		}
+		//if (TwEventKeyboardGLUT(c, x, y))
+		//{
+		//	return;
+		//}
 		switch ( p_event.GetKeyCode() )
 		{
 			/*
@@ -509,7 +509,7 @@ namespace OceanLighting
 				m_pTechnique->CameraHeightPlus( 1.1f );
 			}
 
-//			TwRefreshBar(bar);
+			//TwRefreshBar(bar);
 			break;
 
 		case WXK_PAGEDOWN:
@@ -518,7 +518,7 @@ namespace OceanLighting
 				m_pTechnique->CameraHeightMinus( 1.1f );
 			}
 
-//			TwRefreshBar(bar);
+			//TwRefreshBar(bar);
 			break;
 		}
 

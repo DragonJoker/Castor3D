@@ -237,26 +237,25 @@ namespace Castor3D
 		{
 			Engine * l_pEngine = GetEngine();
 			RenderTargetSPtr l_pTarget = GetRenderTarget();
+			m_pContext->SetCurrent();
 
-			if ( p_bForce )
+			if ( l_pTarget && l_pTarget->IsInitialised() )
 			{
-				if ( l_pTarget && l_pTarget->IsInitialised() )
+				l_pEngine->GetDefaultBlendState()->Apply();
+
+				if ( IsUsingStereo() && abs( GetIntraOcularDistance() ) > std::numeric_limits< real >::epsilon() && l_pEngine->GetRenderSystem()->IsStereoAvailable() )
 				{
-					l_pEngine->GetDefaultBlendState()->Apply();
-
-					if ( IsUsingStereo() && abs( GetIntraOcularDistance() ) > std::numeric_limits< real >::epsilon() && l_pEngine->GetRenderSystem()->IsStereoAvailable() )
-					{
-						DoRender( eBUFFER_BACK_LEFT, l_pTarget->GetTextureLEye() );
-						DoRender( eBUFFER_BACK_RIGHT, l_pTarget->GetTextureREye() );
-					}
-					else
-					{
-						DoRender( eBUFFER_BACK, l_pTarget->GetTexture() );
-					}
+					DoRender( eBUFFER_BACK_LEFT, l_pTarget->GetTextureLEye() );
+					DoRender( eBUFFER_BACK_RIGHT, l_pTarget->GetTextureREye() );
 				}
-
-				m_pContext->SwapBuffers();
+				else
+				{
+					DoRender( eBUFFER_BACK, l_pTarget->GetTexture() );
+				}
 			}
+
+			m_pContext->EndCurrent();
+			m_pContext->SwapBuffers();
 		}
 	}
 

@@ -1172,16 +1172,19 @@ namespace Castor3D
 	{
 		m_renderSystem->GetMainContext()->SetCurrent();
 
-		// Reverse iterator because we want to render textures before windows
-		for ( auto l_rit = m_mapRenderTargets.rbegin(); l_rit != m_mapRenderTargets.rend(); ++l_rit )
+		if ( m_renderSystem->GetRendererType() != eRENDERER_TYPE_DIRECT3D )
 		{
-			p_objCount += l_rit->second->GetScene()->GetGeometriesCount();
-			p_fceCount += l_rit->second->GetScene()->GetFaceCount();
-			p_vtxCount += l_rit->second->GetScene()->GetVertexCount();
-			l_rit->second->Render( m_dFrameTime );
-		}
+			// Reverse iterator because we want to render textures before windows
+			for ( auto l_rit = m_mapRenderTargets.rbegin(); l_rit != m_mapRenderTargets.rend(); ++l_rit )
+			{
+				p_objCount += l_rit->second->GetScene()->GetGeometriesCount();
+				p_fceCount += l_rit->second->GetScene()->GetFaceCount();
+				p_vtxCount += l_rit->second->GetScene()->GetVertexCount();
+				l_rit->second->Render( m_dFrameTime );
+			}
 
-		m_debugOverlays->EndGpuTask();
+			m_debugOverlays->EndGpuTask();
+		}
 
 		for ( auto && l_listener : m_arrayListeners )
 		{
@@ -1189,13 +1192,13 @@ namespace Castor3D
 		}
 
 		m_debugOverlays->EndCpuTask();
+		m_renderSystem->GetMainContext()->EndCurrent();
 
 		for ( auto && l_it : m_mapWindows )
 		{
 			l_it.second->RenderOneFrame( p_bForce );
 		}
 
-		m_renderSystem->GetMainContext()->EndCurrent();
 		m_debugOverlays->EndGpuTask();
 	}
 

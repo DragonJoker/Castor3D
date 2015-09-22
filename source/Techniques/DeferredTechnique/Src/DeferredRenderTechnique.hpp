@@ -73,15 +73,6 @@ namespace Deferred
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\remarks		Used only by TechniqueFactory
-		 *\~french
-		 *\brief		Constructeur
-		 *\remarks		Utilisé uniquement par TechniqueFactory
-		 */
-		RenderTechnique();
-		/**
-		 *\~english
-		 *\brief		Constructor
 		 *\param[in]	p_renderTarget	The render target for this technique
 		 *\param[in]	p_pRenderSystem	The render system
 		 *\param[in]	p_params		The technique parameters

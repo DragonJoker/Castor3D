@@ -26,9 +26,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #pragma warning( disable:4275 )
 
 #if !defined( NDEBUG )
-#	define DEBUG_BUFFERS	0
+#	define DEBUG_BUFFERS 0
 #else
-#	define DEBUG_BUFFERS	0
+#	define DEBUG_BUFFERS 0
 #endif
 
 namespace Castor3D
@@ -47,15 +47,6 @@ namespace Castor3D
 	class C3D_API RenderTechniqueBase
 	{
 	protected:
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_name			The technique name
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_name			Le nom de la technique
-		 */
-		RenderTechniqueBase( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Constructor

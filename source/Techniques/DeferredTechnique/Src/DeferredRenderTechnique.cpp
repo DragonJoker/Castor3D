@@ -328,13 +328,8 @@ namespace Deferred
 		cuT( "c3d_mapSpecular" ),
 	};
 
-	RenderTechnique::RenderTechnique()
-		:	RenderTechniqueBase( cuT( "deferred" ) )
-	{
-	}
-
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
-		:	RenderTechniqueBase( cuT( "deferred" ), p_renderTarget, p_pRenderSystem, p_params )
+		: RenderTechniqueBase( cuT( "deferred" ), p_renderTarget, p_pRenderSystem, p_params )
 	{
 		Logger::LogInfo( cuT( "Using deferred shading" ) );
 		m_lightPassFrameBuffer = m_pRenderTarget->CreateFrameBuffer();

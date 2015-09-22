@@ -166,24 +166,18 @@ namespace Ssaa
 	PixelShaderSource g_ps;
 #endif
 
-	RenderTechnique::RenderTechnique()
-		:	RenderTechniqueBase( cuT( "ssaa" ) )
-		,	m_iSamplesCount( 0 )
-	{
-	}
-
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
-		:	RenderTechniqueBase( cuT( "ssaa" ), p_renderTarget, p_pRenderSystem, p_params )
-		,	m_iSamplesCount( 0 )
+		: RenderTechniqueBase( cuT( "ssaa" ), p_renderTarget, p_pRenderSystem, p_params )
+		, m_iSamplesCount( 0 )
 	{
 		if ( p_params.Get( cuT( "samples_count" ), m_iSamplesCount ) && m_iSamplesCount > 1 )
 		{
 			Logger::LogInfo( std::stringstream() << "Using SSAA, " << m_iSamplesCount << " samples" );
-			m_pSsFrameBuffer	= m_pRenderTarget->CreateFrameBuffer();
-			m_pSsColorBuffer	= m_pSsFrameBuffer->CreateColourRenderBuffer( ePIXEL_FORMAT_A8R8G8B8 );
-			m_pSsColorAttach	= m_pRenderTarget->CreateAttachment( m_pSsColorBuffer );
-			m_pSsDepthBuffer	= m_pSsFrameBuffer->CreateDepthStencilRenderBuffer(	ePIXEL_FORMAT_DEPTH24 );
-			m_pSsDepthAttach	= m_pRenderTarget->CreateAttachment( m_pSsDepthBuffer );
+			m_pSsFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
+			m_pSsColorBuffer = m_pSsFrameBuffer->CreateColourRenderBuffer( ePIXEL_FORMAT_A8R8G8B8 );
+			m_pSsColorAttach = m_pRenderTarget->CreateAttachment( m_pSsColorBuffer );
+			m_pSsDepthBuffer = m_pSsFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24 );
+			m_pSsDepthAttach = m_pRenderTarget->CreateAttachment( m_pSsDepthBuffer );
 			m_pBoundFrameBuffer = m_pSsFrameBuffer;
 		}
 		else
