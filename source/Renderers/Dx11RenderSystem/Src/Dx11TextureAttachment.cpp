@@ -12,7 +12,7 @@ namespace Dx11Render
 		: TextureAttachment( p_pTexture )
 		, m_pOldSurface( NULL )
 		, m_dwAttachment( 0xFFFFFFFF )
-		, m_pRenderSystem( p_pRenderSystem )
+		, m_renderSystem( p_pRenderSystem )
 		, m_pDxTexture( std::static_pointer_cast< DxDynamicTexture >( p_pTexture ) )
 	{
 	}
@@ -25,17 +25,28 @@ namespace Dx11Render
 	bool DxTextureAttachment::DownloadBuffer( PxBufferBaseSPtr p_pBuffer )
 	{
 		bool l_return = false;
-		//D3D11_MAPPED_SUBRESOURCE l_mappedResource;
-		//ID3D11Resource * l_pResource;
-		//ID3D11RenderTargetView * l_pSurface = m_pDxTexture.lock()->GetRenderTargetView();
-		//l_pSurface->GetResource( &l_pResource );
-		//HRESULT l_hr = m_pRenderSystem->GetDeviceContext()->Map( l_pResource, 0, D3D11_MAP_READ, 0, &l_mappedResource );
-		//
-		//if( l_hr == S_OK && l_mappedResource.pData != NULL )
-		//{
-		//	l_return = true;
-		//	std::memcpy( p_pBuffer->ptr(), l_mappedResource.pData, p_pBuffer->size() );
-		//}
+		ID3D11RenderTargetView * l_pSurface = m_pDxTexture.lock()->GetRenderTargetView();
+
+		if ( l_pSurface )
+		{
+			ID3D11Resource * l_pResource = NULL;
+			l_pSurface->GetResource( &l_pResource );
+
+			if ( l_pResource )
+			{
+				ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
+				D3D11_MAPPED_SUBRESOURCE l_mappedResource;
+				HRESULT l_hr = l_pDeviceContext->Map( l_pResource, 0, D3D11_MAP_READ, 0, &l_mappedResource );
+		
+				if( l_hr == S_OK && l_mappedResource.pData != NULL )
+				{
+					l_return = true;
+					std::memcpy( p_pBuffer->ptr(), l_mappedResource.pData, p_pBuffer->size() );
+					l_pDeviceContext->Unmap( l_pResource, 0 );
+				}
+			}
+		}
+
 		return l_return;
 	}
 
@@ -59,7 +70,7 @@ namespace Dx11Render
 			l_box.right = l_rcSrc.right;
 			l_box.top = l_rcSrc.top;
 			l_box.bottom = l_rcSrc.bottom;
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 			l_pDeviceContext->CopySubresourceRegion( l_pDstSurface, 0, l_rcDst.left, l_rcDst.top, 0, l_pSrcSurface, 0, &l_box );
 		}
 

@@ -74,7 +74,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Saves an overlay into a text file
@@ -142,12 +142,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_eType		The overlay type
+		 *\param[in]	p_type		The overlay type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_eType		Le type de l'incrustation
+		 *\param[in]	p_type		Le type de l'incrustation
 		 */
-		OverlayCategory( eOVERLAY_TYPE p_eType );
+		OverlayCategory( eOVERLAY_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -256,11 +256,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the overlay size
-		 *\param[in]	p_pParent	The parent overlay
+		 *\param[in]	p_parent	The parent overlay
 		 *\param[in]	p_ptSize	The new value
 		 *\~french
 		 *\brief		Définit la taille de l'incrustation
-		 *\param[in]	p_pParent	L'overlay parent
+		 *\param[in]	p_parent	L'overlay parent
 		 *\param[in]	p_ptSize	La nouvelle valeur
 		 */
 		void SetSize( Castor::Point2d const & p_ptSize )
@@ -373,7 +373,7 @@ namespace Castor3D
 		 */
 		inline eOVERLAY_TYPE GetType()const
 		{
-			return m_eType;
+			return m_type;
 		}
 		/**
 		 *\~english
@@ -578,7 +578,7 @@ namespace Castor3D
 		//!\~english The material name	\~french Le nom du matériau
 		Castor::String m_strMatName;
 		//!\~english The overlay type	\~french Le type de l'incrustation
-		eOVERLAY_TYPE m_eType;
+		eOVERLAY_TYPE m_type;
 		//!\~english The vertex buffer data	\~french Les données du tampon de sommets
 		VertexArray m_arrayVtx;
 		//!\~english Tells the overlay has changed and must be updated	\~french Dit que l'incrustation a changé et doit être mise à jour

@@ -147,8 +147,8 @@ namespace Castor3D
 		{
 			uint32_t l_uiMaxWidth = l_pFont->GetMaxWidth();
 			uint32_t l_uiMaxHeight = l_pFont->GetMaxHeight();
-			uint32_t l_uiCount = uint32_t( std::ceil( std::distance( l_pFont->begin(), l_pFont->end() ) / 16.0 ) );
-			m_pTexture->SetImage( Size( l_uiMaxWidth * 16, l_uiMaxHeight * l_uiCount ), ePIXEL_FORMAT_L8 );
+			uint32_t l_count = uint32_t( std::ceil( std::distance( l_pFont->begin(), l_pFont->end() ) / 16.0 ) );
+			m_pTexture->SetImage( Size( l_uiMaxWidth * 16, l_uiMaxHeight * l_count ), ePIXEL_FORMAT_L8 );
 
 			Castor::Font::GlyphMap::const_iterator l_it = l_pFont->begin();
 			Size l_sizeImg = m_pTexture->GetDimensions();
@@ -158,7 +158,7 @@ namespace Castor3D
 			uint8_t * l_pBuffer = m_pTexture->GetBuffer()->ptr();
 			size_t l_bufsize = m_pTexture->GetBuffer()->size();
 
-			for ( uint32_t y = 0; y < l_uiCount && l_it != l_pFont->end(); ++y )
+			for ( uint32_t y = 0; y < l_count && l_it != l_pFont->end(); ++y )
 			{
 				uint32_t l_uiOffX = 0;
 
@@ -197,7 +197,7 @@ namespace Castor3D
 		uint8_t * l_buffer = m_pTexture->Lock( eLOCK_FLAG_READ_ONLY );
 		std::memcpy( m_pTexture->GetBuffer()->ptr(), l_buffer, m_pTexture->GetBuffer()->size() );
 		const Image l_tmp( cuT( "tmp" ), *m_pTexture->GetBuffer() );
-		Image::BinaryLoader()( l_tmp, File::GetUserDirectory() / cuT( "Font_" ) + l_pFont->GetName() + cuT( ".bmp" ) );
+		Image::BinaryLoader()( l_tmp, Engine::GetEngineDirectory() / cuT( "Font_" ) + l_pFont->GetName() + cuT( ".bmp" ) );
 
 #endif
 	}

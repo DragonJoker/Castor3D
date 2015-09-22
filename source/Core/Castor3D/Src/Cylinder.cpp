@@ -33,11 +33,11 @@ namespace Castor3D
 			Submesh & l_submeshTop	= *GetMesh()->CreateSubmesh();
 			Submesh & l_submeshSide	= *GetMesh()->CreateSubmesh();
 			//CALCUL DE LA POSITION DES POINTS
-			real angleRotation = Angle::PiMult2 / m_nbFaces;
+			real angleRotation = real( Angle::PiMult2 / m_nbFaces );
 			uint32_t i = 0;
 			real l_rCosRot = cos( angleRotation );
 			real l_rSinRot = sin( angleRotation );
-			BufferElementGroupSPtr l_pVertex;
+			BufferElementGroupSPtr l_vertex;
 			real l_rCos = real( 1 );
 			real l_rSin = real( 0 );
 			real l_rCosT = real( 1 );
@@ -47,16 +47,16 @@ namespace Castor3D
 			{
 				if ( i < m_nbFaces )
 				{
-					l_pVertex = l_submeshBase.AddPoint(	m_radius * l_rCos,	-m_height / 2,	m_radius * l_rSin );
-					Vertex::SetTexCoord( l_pVertex,	( 1 + l_rCos ) / 2,	( 1 + l_rSin ) / 2 );
-					l_pVertex = l_submeshTop.AddPoint(	m_radius * l_rCosT,	 m_height / 2,	m_radius * l_rSinT );
-					Vertex::SetTexCoord( l_pVertex,	( 1 + l_rCosT ) / 2,	( 1 + l_rSinT ) / 2 );
+					l_vertex = l_submeshBase.AddPoint(	m_radius * l_rCos,	-m_height / 2,	m_radius * l_rSin );
+					Vertex::SetTexCoord( l_vertex,	( 1 + l_rCos ) / 2,	( 1 + l_rSin ) / 2 );
+					l_vertex = l_submeshTop.AddPoint(	m_radius * l_rCosT,	 m_height / 2,	m_radius * l_rSinT );
+					Vertex::SetTexCoord( l_vertex,	( 1 + l_rCosT ) / 2,	( 1 + l_rSinT ) / 2 );
 				}
 
-				l_pVertex = l_submeshSide.AddPoint(	m_radius * l_rCos,	-m_height / 2,	m_radius * l_rSin );
-				Vertex::SetTexCoord( l_pVertex,	real( 1.0 ) - real( i ) / m_nbFaces,	real( 0.0 ) );
-				l_pVertex = l_submeshSide.AddPoint(	m_radius * l_rCos,	 m_height / 2,	m_radius * l_rSin );
-				Vertex::SetTexCoord( l_pVertex,	real( 1.0 ) - real( i ) / m_nbFaces,	real( 1.0 ) );
+				l_vertex = l_submeshSide.AddPoint(	m_radius * l_rCos,	-m_height / 2,	m_radius * l_rSin );
+				Vertex::SetTexCoord( l_vertex,	real( 1.0 ) - real( i ) / m_nbFaces,	real( 0.0 ) );
+				l_vertex = l_submeshSide.AddPoint(	m_radius * l_rCos,	 m_height / 2,	m_radius * l_rSin );
+				Vertex::SetTexCoord( l_vertex,	real( 1.0 ) - real( i ) / m_nbFaces,	real( 1.0 ) );
 				i++;
 				const real l_newCos = l_rCosRot * l_rCos - l_rSinRot * l_rSin;
 				const real l_newSin = l_rSinRot * l_rCos + l_rCosRot * l_rSin;

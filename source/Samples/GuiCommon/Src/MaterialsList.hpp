@@ -28,10 +28,10 @@ namespace GuiCommon
 		: public wxTreeCtrl
 	{
 	public:
-		MaterialsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_pParent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
+		MaterialsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
 		~MaterialsList();
 
-		void LoadMaterials( Castor3D::Engine * p_pEngine );
+		void LoadMaterials( Castor3D::Engine * p_engine );
 		void UnloadMaterials();
 
 	private:
@@ -45,7 +45,7 @@ namespace GuiCommon
 		void OnMouseRButtonUp( wxTreeEvent & p_event );
 
 	private:
-		Castor3D::Engine * m_pEngine;
+		Castor3D::Engine * m_engine;
 		PropertiesHolder * m_propertiesHolder;
 	};
 }

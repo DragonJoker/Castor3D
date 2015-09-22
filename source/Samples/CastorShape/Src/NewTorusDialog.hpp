@@ -25,7 +25,7 @@ namespace CastorShape
 	class NewTorusDialog : public NewGeometryDialog
 	{
 	public:
-		NewTorusDialog( Castor3D::Engine * p_pEngine, wxWindow * parent, wxWindowID p_id );
+		NewTorusDialog( Castor3D::Engine * p_engine, wxWindow * parent, wxWindowID p_id );
 		~NewTorusDialog();
 
 		Castor::real GetInternalRadius()const;

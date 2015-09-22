@@ -86,7 +86,7 @@ namespace C3dAssimp
 		std::vector< Castor3D::BoneSPtr > m_arrayBones;
 
 	public:
-		AssimpImporter( Castor3D::Engine * p_pEngine );
+		AssimpImporter( Castor3D::Engine * p_engine );
 		~AssimpImporter();
 
 	private:
@@ -96,8 +96,8 @@ namespace C3dAssimp
 		bool DoProcessMesh( Castor3D::SkeletonSPtr p_pSkeleton, aiMesh const * p_pAiMesh, aiScene const * p_pAiScene, Castor3D::SubmeshSPtr p_pSubmesh );
 		Castor3D::MaterialSPtr DoProcessMaterial( aiMaterial const * p_pAiMaterial );
 		void DoProcessBones( Castor3D::SkeletonSPtr p_pSkeleton, aiBone ** p_pBones, uint32_t p_uiCount, std::vector< Castor3D::stVERTEX_BONE_DATA > & p_arrayVertices );
-		Castor3D::AnimationSPtr DoProcessAnimation( Castor3D::SkeletonSPtr, aiNode * p_pNode, aiAnimation * p_pAnimation );
-		void DoProcessAnimationNodes( Castor3D::AnimationSPtr p_pAnimation, Castor::real p_rTicksPerSecond, Castor3D::SkeletonSPtr, aiNode * p_pNode, aiAnimation * p_paiAnimation, Castor3D::MovingObjectBaseSPtr p_pObject );
+		Castor3D::AnimationSPtr DoProcessAnimation( Castor3D::SkeletonSPtr, aiNode * p_node, aiAnimation * p_pAnimation );
+		void DoProcessAnimationNodes( Castor3D::AnimationSPtr p_pAnimation, Castor::real p_rTicksPerSecond, Castor3D::SkeletonSPtr, aiNode * p_node, aiAnimation * p_paiAnimation, Castor3D::MovingObjectBaseSPtr p_pObject );
 		void DoAddTexture( Castor::String const & p_strValue, Castor3D::PassSPtr p_pPass, Castor3D::eTEXTURE_CHANNEL p_eChannel );
 		void DoAddKeyframes( Castor3D::AnimationSPtr p_pAnimation, aiAnimation * p_paiAnimation );
 	};

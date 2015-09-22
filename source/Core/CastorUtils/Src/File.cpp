@@ -278,7 +278,7 @@ namespace Castor
 	uint64_t File::DoWrite( uint8_t const * p_pBuffer, uint64_t p_uiSize )
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( IsOk() && ( m_iMode | eOPEN_MODE_WRITE ) );
+		REQUIRE( IsOk() && ( m_iMode & eOPEN_MODE_WRITE ) );
 		uint64_t l_uiReturn = 0;
 
 		if ( IsOk() )
@@ -295,7 +295,7 @@ namespace Castor
 	uint64_t File::DoRead( uint8_t * p_pBuffer, uint64_t p_uiSize )
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( IsOk() && ( m_iMode | eOPEN_MODE_READ ) );
+		REQUIRE( IsOk() && ( m_iMode & eOPEN_MODE_READ ) );
 		uint64_t l_uiReturn = 0;
 		uint64_t l_uiPrev = 1;
 

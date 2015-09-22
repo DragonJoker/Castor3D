@@ -31,13 +31,17 @@ namespace Dx11Render
 		DxGeometryBuffers( DxRenderSystem * p_pRenderSystem, Castor3D::VertexBufferUPtr p_pVertexBuffer, Castor3D::IndexBufferUPtr p_pIndexBuffer, Castor3D::MatrixBufferUPtr p_pMatrixBuffer );
 		virtual ~DxGeometryBuffers();
 
-		virtual bool Draw( Castor3D::eTOPOLOGY p_ePrimitiveType, Castor3D::ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex );
-		virtual bool DrawInstanced( Castor3D::eTOPOLOGY p_ePrimitiveType, Castor3D::ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex, uint32_t p_uiCount );
-		virtual bool Initialise();
-		virtual void Cleanup();
+		virtual bool Draw( Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index );
+		virtual bool DrawInstanced( Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index, uint32_t p_uiCount );
 
 	private:
-		DxRenderSystem * m_pRenderSystem;
+		virtual bool DoCreate();
+		virtual void DoDestroy();
+		virtual bool DoInitialise();
+		virtual void DoCleanup();
+
+	private:
+		DxRenderSystem * m_renderSystem;
 	};
 }
 

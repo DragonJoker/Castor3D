@@ -40,17 +40,20 @@ namespace Testing
 
 	class TestCase
 	{
-	private:
-		std::string	m_strName;
-
 	public:
-		TestCase( std::string const & p_strName );
+		TestCase( std::string const & p_name );
 		virtual ~TestCase();
 		virtual void Execute( uint32_t & p_errCount, uint32_t & p_testCount ) = 0;
 		inline std::string const & GetName()const
 		{
 			return m_strName;
 		}
+
+	protected:
+		void DoExecuteTest( std::function< void( uint32_t &, uint32_t & ) > p_test, uint32_t & p_errCount, uint32_t & p_testCount, std::string const & p_name );
+
+	private:
+		std::string	m_strName;
 	};
 
 	DECLARE_SMART_PTR( TestCase );
@@ -70,13 +73,32 @@ namespace Testing
 		std::string m_what;
 	};
 
-#	define TEST_CHECK( x ) p_testCount++;if( !(x) ) { p_errCount++;Castor::Logger::LogWarning( std::stringstream() << __FILE__ << " - " << __FUNCTION__ << ", line " << __LINE__ << ": " << #x ); }
-#	define TEST_EQUAL( x, y ) p_testCount++;if( !(x == y) ) { p_errCount++;Castor::Logger::LogWarning( std::stringstream() << __FILE__ << " - " << __FUNCTION__ << ", line " << __LINE__ << ": " << #x << " == " << #y << " (" << Castor::string::string_cast< char >( Testing::to_string( x ) ) << " != " << Castor::string::string_cast< char >( Testing::to_string( y ) ) << ")" ); }
-#	define TEST_REQUIRE( x ) p_testCount++;if( !(x) ) { p_errCount++;throw TestFailed( #x, __FILE__, __FUNCTION__, __LINE__ ); }
-#	define EXECUTE_TEST( test_func, errors, tests ) \
-    Logger::LogInfo( std::stringstream() << "*** Begin test case " << #test_func << " ***" );\
-	test_func( errors, tests );\
-    Logger::LogInfo( std::stringstream() << "*** End test case " << #test_func << " ***" )
+#	define TEST_CHECK( x )\
+	p_testCount++;\
+	if( !(x) )\
+	{\
+		p_errCount++;\
+		Castor::Logger::LogWarning( std::stringstream() << "Failure at " << __FILE__ << " - " << __FUNCTION__ << ", line " << __LINE__ << ": " << #x );\
+	}
+
+#	define TEST_EQUAL( x, y )\
+	p_testCount++;\
+	if( !(x == y) )\
+	{\
+		p_errCount++;\
+		Castor::Logger::LogWarning( std::stringstream() << "Failure at " << __FILE__ << " - " << __FUNCTION__ << ", line " << __LINE__ << ": " << #x << " == " << #y << " (" << Testing::to_string( x ) << " != " << Testing::to_string( y ) << ")" );\
+	}
+
+#	define TEST_REQUIRE( x )\
+	p_testCount++;\
+	if( !(x) )\
+	{\
+		p_errCount++;\
+		throw TestFailed( #x, __FILE__, __FUNCTION__, __LINE__ );\
+	}
+
+#	define EXECUTE_TEST( class_name, test_func, errors, tests )\
+	DoExecuteTest( std::bind( &class_name::test_func, this, std::placeholders::_1, std::placeholders::_2 ), errors, tests, #test_func );
 }
 
 #endif

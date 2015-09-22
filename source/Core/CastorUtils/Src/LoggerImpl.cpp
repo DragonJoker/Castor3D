@@ -97,60 +97,48 @@ namespace Castor
 		char l_buffer[33] = { 0 };
 		strftime( l_buffer, 32, "%Y-%m-%d %H:%M:%S", &l_dtToday );
 		String l_timeStamp = string::string_cast< xchar >( l_buffer );
-
-		FILE * logFiles[ELogType_COUNT] = { NULL };
-		std::map< String, FILE * > opened;
+		StringStream l_logs[ELogType_COUNT];
 
 		try
 		{
 			for ( auto && message : p_queue )
 			{
-				FILE * file = logFiles[message->m_type];
+				StringStream & l_stream = l_logs[message->m_type];
+				String l_toLog = message->GetMessage();
 
-				if ( !file )
+				if ( l_toLog.find( cuT( '\n' ) ) != String::npos )
 				{
-					auto && l_it = opened.find( m_logFilePath[message->m_type] );
+					StringArray l_array = string::split( l_toLog, cuT( "\n" ), uint32_t( std::count( l_toLog.begin(), l_toLog.end(), cuT( '\n' ) ) + 1 ) );
 
-					if ( l_it == opened.end() )
+					for ( auto && l_line : l_array )
 					{
-						FOpen( file, string::string_cast< char >( m_logFilePath[message->m_type] ).c_str(), "a" );
-
-						if ( file )
-						{
-							opened.insert( std::make_pair( m_logFilePath[message->m_type], file ) );
-						}
+						DoLogLine( l_timeStamp, l_line, l_stream, message->m_type );
 					}
-					else
-					{
-						file = l_it->second;
-					}
-
-					logFiles[message->m_type] = file;
 				}
-
-				if ( file )
+				else
 				{
-					String toLog = message->GetMessage();
-
-					if ( toLog.find( cuT( '\n' ) ) != String::npos )
-					{
-						StringArray array = string::split( toLog, cuT( "\n" ), uint32_t( std::count( toLog.begin(), toLog.end(), cuT( '\n' ) ) + 1 ) );
-
-						for ( auto && line : array )
-						{
-							DoLogLine( l_timeStamp, line, file, message->m_type );
-						}
-					}
-					else
-					{
-						DoLogLine( l_timeStamp, toLog, file, message->m_type );
-					}
+					DoLogLine( l_timeStamp, l_toLog, l_stream, message->m_type );
 				}
 			}
 
-			for ( auto && it : opened )
+			int i = 0;
+
+			for ( auto && l_stream : l_logs )
 			{
-				fclose( it.second );
+				String l_text = l_stream.str();
+
+				if ( !l_text.empty() )
+				{
+					FILE * l_file = NULL;
+					FOpen( l_file, string::string_cast< char >( m_logFilePath[i++] ).c_str(), "a" );
+
+					if ( l_file )
+					{
+						std::string l_log = string::string_cast< char >( l_text );
+						fwrite( l_log.c_str(), sizeof( char ), l_log.size(), l_file );
+						fclose( l_file );
+					}
+				}
 			}
 		}
 		catch ( std::exception & )
@@ -182,7 +170,7 @@ namespace Castor
 		m_console->Print( line, true );
 	}
 
-	void LoggerImpl::DoLogLine( String const & timestamp, String const & line, FILE * logFile, ELogType logLevel )
+	void LoggerImpl::DoLogLine( String const & timestamp, String const & line, StringStream & stream, ELogType logLevel )
 	{
 #if defined( NDEBUG )
 		DoPrintLine( line, logLevel );
@@ -200,12 +188,7 @@ namespace Castor
 			}
 		}
 
-		if ( logFile )
-		{
-			std::string logLine = string::string_cast< char >( timestamp + cuT( " - " ) + m_headers[logLevel] + line );
-			fwrite( logLine.c_str(), 1, logLine.size(), logFile );
-			fwrite( "\n", 1, 1, logFile );
-		}
+		stream << timestamp << cuT( " - " ) << m_headers[logLevel] << line << std::endl;
 	}
 }
 

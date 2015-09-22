@@ -10,11 +10,11 @@ using namespace Castor;
 
 namespace Dx11Render
 {
-	DxShaderObject::DxShaderObject( DxShaderProgram * p_pParent, eSHADER_TYPE p_eType )
-		: ShaderObjectBase( p_pParent, p_eType )
-		, m_pShaderProgram( p_pParent )
+	DxShaderObject::DxShaderObject( DxShaderProgram * p_parent, eSHADER_TYPE p_type )
+		: ShaderObjectBase( p_parent, p_type )
+		, m_pShaderProgram( p_parent )
 		, m_pCompiled( NULL )
-		, m_pRenderSystem( static_cast< DxRenderSystem * >( p_pParent->GetRenderSystem() ) )
+		, m_renderSystem( static_cast< DxRenderSystem * >( p_parent->GetRenderSystem() ) )
 	{
 		m_eShaderModel = eSHADER_MODEL_3;
 	}
@@ -67,14 +67,14 @@ namespace Dx11Render
 
 		for ( int i = eSHADER_MODEL_5; i >= eSHADER_MODEL_1 && m_strLoadedSource.empty(); i-- )
 		{
-			if ( m_pRenderSystem->CheckSupport( eSHADER_MODEL( i ) ) )
+			if ( m_renderSystem->CheckSupport( eSHADER_MODEL( i ) ) )
 			{
 				m_strLoadedSource = m_arraySources[i];
-				l_strProfile = l_strProfiles[m_eType][i];
+				l_strProfile = l_strProfiles[m_type][i];
 			}
 		}
 
-		if ( m_pRenderSystem->UseShaders() && m_eStatus != eSHADER_STATUS_ERROR && !m_strLoadedSource.empty() )
+		if ( m_renderSystem->UseShaders() && m_eStatus != eSHADER_STATUS_ERROR && !m_strLoadedSource.empty() )
 		{
 			l_strSource = string::string_cast< char >( m_strLoadedSource );
 			m_eStatus = eSHADER_STATUS_NOTCOMPILED;

@@ -14,8 +14,8 @@ namespace Castor3D
 	{
 	}
 
-	BinaryChunk::BinaryChunk( eCHUNK_TYPE p_eType )
-		:	m_eChunkType( p_eType )
+	BinaryChunk::BinaryChunk( eCHUNK_TYPE p_type )
+		:	m_eChunkType( p_type )
 		,	m_uiIndex( 0 )
 	{
 	}

@@ -169,8 +169,8 @@ namespace GuiCommon
 		Point4i l_rec = p_overlay->GetBorderPixelSize();
 		p_grid->Append( new RectangleProperty( PROPERTY_OVERLAY_BORDER_SIZE ) )->SetValue( wxVariant( l_rec ) );
 		p_grid->Append( DoCreateMaterialProperty( PROPERTY_OVERLAY_BORDER_MATERIAL ) )->SetValue( wxVariant( p_overlay->GetBorderMaterial()->GetName() ) );
-		p_grid->Append( new Point4dProperty( GC_POINT_XYZW, PROPERTY_OVERLAY_BORDER_INNER_UV ) )->SetValue( wxVariant( p_overlay->GetBorderInnerUV() ) );
-		p_grid->Append( new Point4dProperty( GC_POINT_XYZW, PROPERTY_OVERLAY_BORDER_OUTER_UV ) )->SetValue( wxVariant( p_overlay->GetBorderOuterUV() ) );
+		p_grid->Append( new Point4dProperty( GC_POINT_XYZW, PROPERTY_OVERLAY_BORDER_INNER_UV ) )->SetValue( wxVariant() << p_overlay->GetBorderInnerUV() );
+		p_grid->Append( new Point4dProperty( GC_POINT_XYZW, PROPERTY_OVERLAY_BORDER_OUTER_UV ) )->SetValue( wxVariant() << p_overlay->GetBorderOuterUV() );
 		p_grid->Append( new wxEnumProperty( PROPERTY_OVERLAY_BORDER_POSITION, PROPERTY_OVERLAY_BORDER_POSITION, l_choices ) )->SetValue( l_selected );
 	}
 

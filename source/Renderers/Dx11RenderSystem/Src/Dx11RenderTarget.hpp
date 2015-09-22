@@ -38,7 +38,7 @@ namespace Dx11Render
 
 	private:
 		bool m_bInitialised;
-		DxRenderSystem * m_pRenderSystem;
+		DxRenderSystem * m_renderSystem;
 	};
 }
 

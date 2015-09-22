@@ -157,8 +157,8 @@ namespace Dx11Render
 		}
 	}
 
-	DxFrameVariableBuffer::DxFrameVariableBuffer( String const & p_strName, DxRenderSystem * p_pRenderSystem )
-		: FrameVariableBuffer( p_strName, p_pRenderSystem )
+	DxFrameVariableBuffer::DxFrameVariableBuffer( String const & p_name, DxRenderSystem * p_pRenderSystem )
+		: FrameVariableBuffer( p_name, p_pRenderSystem )
 		, m_pDxRenderSystem( p_pRenderSystem )
 		, m_pDxBuffer( NULL )
 	{
@@ -168,12 +168,12 @@ namespace Dx11Render
 	{
 	}
 
-	FrameVariableSPtr DxFrameVariableBuffer::DoCreateVariable( ShaderProgramBase * p_pProgram, eFRAME_VARIABLE_TYPE p_eType, Castor::String const & p_strName, uint32_t p_uiNbOcc )
+	FrameVariableSPtr DxFrameVariableBuffer::DoCreateVariable( ShaderProgramBase * p_pProgram, eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_uiNbOcc )
 	{
 		FrameVariableSPtr l_pReturn;
 		DxShaderProgram * l_pProgram = static_cast< DxShaderProgram * >( p_pProgram );
 
-		switch ( p_eType )
+		switch ( p_type )
 		{
 		case eFRAME_VARIABLE_TYPE_INT:
 			l_pReturn = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_INT >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
@@ -318,7 +318,7 @@ namespace Dx11Render
 
 		if ( l_pReturn )
 		{
-			l_pReturn->SetName( p_strName );
+			l_pReturn->SetName( p_name );
 		}
 
 		return l_pReturn;
@@ -382,7 +382,7 @@ namespace Dx11Render
 			l_d3dInitData.SysMemSlicePitch = 0;
 
 			l_hr = l_pDevice->CreateBuffer( &l_d3dBufferDesc, &l_d3dInitData, &m_pDxBuffer );
-			dxDebugName( static_cast< DxRenderSystem * >( m_pRenderSystem ), m_pDxBuffer, ConstantBuffer );
+			dxTrack( static_cast< DxRenderSystem * >( m_renderSystem ), m_pDxBuffer, ConstantBuffer );
 		}
 
 		return l_hr == S_OK;
@@ -390,16 +390,16 @@ namespace Dx11Render
 
 	void DxFrameVariableBuffer::DoCleanup()
 	{
-		ReleaseTracked( m_pRenderSystem, m_pDxBuffer );
+		ReleaseTracked( m_renderSystem, m_pDxBuffer );
 	}
 
-	bool DxFrameVariableBuffer::DoBind( uint32_t p_uiIndex )
+	bool DxFrameVariableBuffer::DoBind( uint32_t p_index )
 	{
 		bool l_return = !m_pDxBuffer;
 
 		if ( !l_return )
 		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 			D3D11_MAPPED_SUBRESOURCE l_mapped = { 0 };
 			HRESULT l_hr = l_pDeviceContext->Map( m_pDxBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &l_mapped );
 
@@ -414,7 +414,7 @@ namespace Dx11Render
 		return l_return;
 	}
 
-	void DxFrameVariableBuffer::DoUnbind( uint32_t p_uiIndex )
+	void DxFrameVariableBuffer::DoUnbind( uint32_t p_index )
 	{
 	}
 }

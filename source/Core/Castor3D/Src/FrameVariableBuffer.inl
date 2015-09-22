@@ -5,10 +5,10 @@
 namespace Castor3D
 {
 	template< typename T >
-	bool FrameVariableBuffer::GetVariable( Castor::String const & p_strName, std::shared_ptr< OneFrameVariable< T > > & p_pVariable )const
+	bool FrameVariableBuffer::GetVariable( Castor::String const & p_name, std::shared_ptr< OneFrameVariable< T > > & p_pVariable )const
 	{
 		bool l_return = false;
-		FrameVariablePtrStrMapConstIt l_it = m_mapVariables.find( p_strName );
+		FrameVariablePtrStrMapConstIt l_it = m_mapVariables.find( p_name );
 
 		if ( l_it != m_mapVariables.end() )
 		{
@@ -25,10 +25,10 @@ namespace Castor3D
 	}
 
 	template< typename T, uint32_t Count >
-	bool FrameVariableBuffer::GetVariable( Castor::String const & p_strName, std::shared_ptr< PointFrameVariable< T, Count > > & p_pVariable )const
+	bool FrameVariableBuffer::GetVariable( Castor::String const & p_name, std::shared_ptr< PointFrameVariable< T, Count > > & p_pVariable )const
 	{
 		bool l_return = false;
-		FrameVariablePtrStrMapConstIt l_it = m_mapVariables.find( p_strName );
+		FrameVariablePtrStrMapConstIt l_it = m_mapVariables.find( p_name );
 
 		if ( l_it != m_mapVariables.end() )
 		{
@@ -45,10 +45,10 @@ namespace Castor3D
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	bool FrameVariableBuffer::GetVariable( Castor::String const & p_strName, std::shared_ptr< MatrixFrameVariable< T, Rows, Columns > > & p_pVariable )const
+	bool FrameVariableBuffer::GetVariable( Castor::String const & p_name, std::shared_ptr< MatrixFrameVariable< T, Rows, Columns > > & p_pVariable )const
 	{
 		bool l_return = false;
-		FrameVariablePtrStrMapConstIt l_it = m_mapVariables.find( p_strName );
+		FrameVariablePtrStrMapConstIt l_it = m_mapVariables.find( p_name );
 
 		if ( l_it != m_mapVariables.end() )
 		{

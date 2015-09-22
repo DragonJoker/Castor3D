@@ -48,7 +48,7 @@ namespace GlRender
 	protected:
 		bool m_bCleaned;
 		OpenGl & m_gl;
-		GlRenderSystem * m_pRenderSystem;
+		GlRenderSystem * m_renderSystem;
 	};
 }
 

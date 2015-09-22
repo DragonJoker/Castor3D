@@ -5,8 +5,8 @@ using namespace Castor;
 
 namespace GuiCommon
 {
-	StyleInfo::StyleInfo( wxString const & p_strName, wxString const & p_strForeground, wxString const & p_strBackground, wxString const & p_strFontName, int p_iFontSize, int p_iFontStyle, int p_iLetterCase )
-		:	m_strName( p_strName	)
+	StyleInfo::StyleInfo( wxString const & p_name, wxString const & p_strForeground, wxString const & p_strBackground, wxString const & p_strFontName, int p_iFontSize, int p_iFontStyle, int p_iLetterCase )
+		:	m_strName( p_name	)
 		,	m_strForeground( p_strForeground	)
 		,	m_strBackground( p_strBackground	)
 		,	m_strFontName( p_strFontName	)

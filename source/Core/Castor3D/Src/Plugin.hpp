@@ -61,16 +61,16 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_eType		The plugin type
+		 *\param[in]	p_type		The plugin type
 		 *\param[in]	p_pLibrary	The shared library holding the plugin
 		 *\param[in]	p_engine	The engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_eType		Le type du plugin
+		 *\param[in]	p_type		Le type du plugin
 		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
 		 *\param[in]	p_engine	Le moteur
 		 */
-		PluginBase( ePLUGIN_TYPE p_eType, Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
+		PluginBase( ePLUGIN_TYPE p_type, Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
 
 	public:
 		/**
@@ -108,7 +108,7 @@ namespace Castor3D
 		 */
 		inline ePLUGIN_TYPE GetType()const
 		{
-			return m_eType;
+			return m_type;
 		}
 
 	protected:
@@ -121,7 +121,7 @@ namespace Castor3D
 		//!\~english The plugin's unloading function	\~french La fonction de déchargement du plugin
 		POnUnloadFunction m_pfnOnUnload;
 		//!\~english The plugin type	\~french Le type du plugin
-		ePLUGIN_TYPE m_eType;
+		ePLUGIN_TYPE m_type;
 		//!\~english The engine	\~french Le moteur
 		Engine * m_engine;
 	};

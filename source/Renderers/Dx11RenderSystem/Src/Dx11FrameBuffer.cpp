@@ -13,7 +13,7 @@ namespace Dx11Render
 {
 	DxFrameBuffer::DxFrameBuffer( DxRenderSystem * p_pRenderSystem )
 		: FrameBuffer( p_pRenderSystem->GetEngine() )
-		, m_pRenderSystem( p_pRenderSystem )
+		, m_renderSystem( p_pRenderSystem )
 		, m_pOldDepthStencilView( NULL )
 	{
 	}
@@ -43,7 +43,7 @@ namespace Dx11Render
 
 		if ( m_mapRbo.size() || m_mapTex.size() )
 		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 			D3D11RenderTargetViewArray l_arraySurfaces;
 			ID3D11DepthStencilView * l_pView = NULL;
 			l_arraySurfaces.reserve( m_mapTex.size() + m_mapRbo.size() );
@@ -87,12 +87,12 @@ namespace Dx11Render
 
 	ColourRenderBufferSPtr DxFrameBuffer::CreateColourRenderBuffer( ePIXEL_FORMAT p_ePixelFormat )
 	{
-		return std::make_shared< DxColourRenderBuffer >( m_pRenderSystem, p_ePixelFormat );
+		return std::make_shared< DxColourRenderBuffer >( m_renderSystem, p_ePixelFormat );
 	}
 
 	DepthStencilRenderBufferSPtr DxFrameBuffer::CreateDepthStencilRenderBuffer( ePIXEL_FORMAT p_ePixelFormat )
 	{
-		return std::make_shared< DxDepthStencilRenderBuffer >( m_pRenderSystem, p_ePixelFormat );
+		return std::make_shared< DxDepthStencilRenderBuffer >( m_renderSystem, p_ePixelFormat );
 	}
 
 	ID3D11View * DxFrameBuffer::GetSurface( Castor3D::eATTACHMENT_POINT p_eAttach )
@@ -145,7 +145,29 @@ namespace Dx11Render
 
 	void DxFrameBuffer::DoUnbind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+#if DX_DEBUG_RT
+
+		if ( !m_mapTex.empty() )
+		{
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
+
+			for ( auto && l_attachIt : m_mapTex )
+			{
+				if ( l_attachIt.first >= eATTACHMENT_POINT_COLOUR0 && l_attachIt.first <= eATTACHMENT_POINT_COLOUR15 )
+				{
+					ID3D11Resource * l_pResource = NULL;
+					std::static_pointer_cast< DxDynamicTexture >( l_attachIt.second )->GetRenderTargetView()->GetResource( &l_pResource );
+					StringStream l_name;
+					l_name << Engine::GetEngineDirectory() << cuT( "\\DynamicTexture_" ) << ( void * )l_attachIt.second.get() << cuT( "_FBA.png" );
+					D3DX11SaveTextureToFile( l_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
+					l_pResource->Release();
+				}
+			}
+		}
+
+#endif
+
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 		D3D11RenderTargetViewArray l_arraySurfaces;
 		ID3D11DepthStencilView * l_pView = m_pOldDepthStencilView;
 
@@ -197,7 +219,7 @@ namespace Dx11Render
 
 		for ( auto && l_eAttach : m_arrayAttaches )
 		{
-			if ( ( l_eAttach != eATTACHMENT_POINT_DEPTH && l_eAttach != eATTACHMENT_POINT_STENCIL ) || m_pRenderSystem->GetFeatureLevel() > D3D_FEATURE_LEVEL_10_1 )
+			if ( ( l_eAttach != eATTACHMENT_POINT_DEPTH && l_eAttach != eATTACHMENT_POINT_STENCIL ) || m_renderSystem->GetFeatureLevel() > D3D_FEATURE_LEVEL_10_1 )
 			{
 				if ( ( l_bDepth && l_eAttach == eATTACHMENT_POINT_DEPTH ) || ( l_bStencil && l_eAttach == eATTACHMENT_POINT_STENCIL ) || ( l_bColour && l_eAttach != eATTACHMENT_POINT_DEPTH && l_eAttach != eATTACHMENT_POINT_STENCIL ) )
 				{
@@ -213,7 +235,7 @@ namespace Dx11Render
 		}
 
 		HRESULT l_hr = S_OK;
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pRenderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 
 		for ( auto l_itArray : l_arrayPairs )
 		{

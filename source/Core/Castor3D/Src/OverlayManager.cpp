@@ -20,16 +20,16 @@ namespace Castor3D
 {
 	struct OverlayInitialiser
 	{
-		void operator()( OverlaySPtr p_pOverlay )
+		void operator()( OverlaySPtr p_overlay )
 		{
-			p_pOverlay->Initialise();
+			p_overlay->Initialise();
 		}
 	};
 
 	//*************************************************************************************************
 
-	OverlayManager::OverlayManager( Engine * p_pEngine )
-		: m_pEngine( p_pEngine )
+	OverlayManager::OverlayManager( Engine * p_engine )
+		: m_engine( p_engine )
 		, m_overlayCountPerLevel( 1000, 0 )
 	{
 	}
@@ -46,19 +46,19 @@ namespace Castor3D
 		OverlayCollection::unlock();
 	}
 
-	void OverlayManager::AddOverlay( Castor::String const & p_strName, OverlaySPtr p_pOverlay, OverlaySPtr p_pParent )
+	void OverlayManager::AddOverlay( Castor::String const & p_name, OverlaySPtr p_overlay, OverlaySPtr p_parent )
 	{
-		OverlayCollection::insert( p_strName, p_pOverlay );
+		OverlayCollection::insert( p_name, p_overlay );
 		int l_level = 0;
 
-		if ( !p_pParent )
+		if ( !p_parent )
 		{
-			m_overlays.push_back( p_pOverlay );
+			m_overlays.push_back( p_overlay );
 		}
 		else
 		{
-			l_level = p_pParent->GetLevel() + 1;
-			p_pParent->AddChild( p_pOverlay );
+			l_level = p_parent->GetLevel() + 1;
+			p_parent->AddChild( p_overlay );
 		}
 
 		if ( l_level > int( m_overlayCountPerLevel.size() ) )
@@ -69,14 +69,14 @@ namespace Castor3D
 		m_overlayCountPerLevel[l_level]++;
 	}
 
-	bool OverlayManager::HasOverlay( Castor::String const & p_strName )
+	bool OverlayManager::HasOverlay( Castor::String const & p_name )
 	{
-		return OverlayCollection::has( p_strName );
+		return OverlayCollection::has( p_name );
 	}
 
-	OverlaySPtr OverlayManager::GetOverlay( Castor::String const & p_strName )
+	OverlaySPtr OverlayManager::GetOverlay( Castor::String const & p_name )
 	{
-		return OverlayCollection::find( p_strName );
+		return OverlayCollection::find( p_name );
 	}
 
 	bool OverlayManager::WriteOverlays( Castor::TextFile & p_file )const
@@ -84,15 +84,15 @@ namespace Castor3D
 		OverlayCollection::lock();
 		bool l_return = true;
 		auto && l_it = m_overlays.begin();
-		bool l_bFirst = true;
+		bool l_first = true;
 
 		while ( l_return && l_it != m_overlays.end() )
 		{
 			OverlaySPtr l_overlay = *l_it;
 
-			if ( l_bFirst )
+			if ( l_first )
 			{
-				l_bFirst = false;
+				l_first = false;
 			}
 			else
 			{
@@ -126,7 +126,7 @@ namespace Castor3D
 
 	bool OverlayManager::ReadOverlays( Castor::TextFile & p_file )
 	{
-		SceneFileParser l_parser( m_pEngine );
+		SceneFileParser l_parser( m_engine );
 		return l_parser.ParseFile( p_file );
 	}
 
@@ -150,38 +150,38 @@ namespace Castor3D
 	bool OverlayManager::LoadOverlays( Castor::BinaryFile & p_file )
 	{
 		OverlayCollection::lock();
-		uint32_t l_uiSize;
-		bool l_return = p_file.Write( l_uiSize ) == sizeof( uint32_t );
-		String l_strName;
-		eOVERLAY_TYPE l_eType;
-		OverlaySPtr l_pOverlay;
+		uint32_t l_size;
+		bool l_return = p_file.Write( l_size ) == sizeof( uint32_t );
+		String l_name;
+		eOVERLAY_TYPE l_type;
+		OverlaySPtr l_overlay;
 
-		for ( uint32_t i = 0; i < l_uiSize && l_return; i++ )
+		for ( uint32_t i = 0; i < l_size && l_return; i++ )
 		{
-			l_return = p_file.Read( l_strName );
+			l_return = p_file.Read( l_name );
 
 			if ( l_return )
 			{
-				l_return = p_file.Read( l_eType ) == sizeof( eOVERLAY_TYPE );
+				l_return = p_file.Read( l_type ) == sizeof( eOVERLAY_TYPE );
 			}
 
 			if ( l_return )
 			{
-				l_pOverlay = OverlayCollection::find( l_strName ) ;
+				l_overlay = OverlayCollection::find( l_name ) ;
 
-				if ( !l_pOverlay )
+				if ( !l_overlay )
 				{
-					l_pOverlay = std::make_shared< Overlay >( m_pEngine, l_eType );
-					l_pOverlay->SetName( l_strName );
-					AddOverlay( l_strName, l_pOverlay, nullptr );
+					l_overlay = std::make_shared< Overlay >( m_engine, l_type );
+					l_overlay->SetName( l_name );
+					AddOverlay( l_name, l_overlay, nullptr );
 				}
 
-				l_return = l_pOverlay != nullptr;
+				l_return = l_overlay != nullptr;
 			}
 
 			if ( l_return )
 			{
-				l_return = BinaryLoader< Overlay >()( *l_pOverlay, p_file );
+				l_return = BinaryLoader< Overlay >()( *l_overlay, p_file );
 			}
 		}
 
@@ -191,7 +191,7 @@ namespace Castor3D
 
 	void OverlayManager::Update()
 	{
-		if ( m_pEngine->IsCleaned() )
+		if ( m_engine->IsCleaned() )
 		{
 			if ( m_pRenderer )
 			{
@@ -203,7 +203,7 @@ namespace Castor3D
 		{
 			if ( !m_pRenderer )
 			{
-				m_pRenderer = m_pEngine->GetRenderSystem()->CreateOverlayRenderer();
+				m_pRenderer = m_engine->GetRenderSystem()->CreateOverlayRenderer();
 				m_pRenderer->Initialise();
 			}
 		}
@@ -211,28 +211,29 @@ namespace Castor3D
 
 	void OverlayManager::RenderOverlays( Scene const & p_scene, Castor::Size const & p_size )
 	{
+		RenderSystem * l_renderSystem = m_engine->GetRenderSystem();
+		Pipeline & l_pipeline = l_renderSystem->GetPipeline();
+
+		if ( m_size != p_size )
+		{
+			m_size = p_size;
+			l_pipeline.Ortho( real( 0.0 ), real( m_size.width() ), real( m_size.height() ), real( 0.0 ), real( 0.0 ), real( 1000.0 ) );
+			m_projection = l_pipeline.GetProjectionMatrix();
+		}
+		else
+		{
+			l_pipeline.SetProjectionMatrix( m_projection );
+		}
+
 		lock();
 		Update();
-		RenderSystem * l_prenderSystem = m_pEngine->GetRenderSystem();
-		Context * l_context = l_prenderSystem->GetCurrentContext();
+		Context * l_context = l_renderSystem->GetCurrentContext();
 
 		if ( l_context && m_pRenderer )
 		{
-			Pipeline * l_pipeline = l_prenderSystem->GetPipeline();
 			l_context->CullFace( eFACE_BACK );
-
-			eMTXMODE l_oldMode = l_pipeline->MatrixMode( eMTXMODE_PROJECTION );
-			l_pipeline->PushMatrix();
-			l_pipeline->Ortho( 0.0, real( p_size.width() ), real( p_size.height() ), 0.0, 0.0, 1000.0 );
-			Matrix4x4r l_mtxTransform;
-			MtxUtils::set_transform_rh(
-				l_mtxTransform,
-				Point3r( 0, 0, 0 ),
-				Point3r( 1, 1, 0 ),
-				Quaternion::Identity()
-			);
-			l_pipeline->MultMatrix( l_mtxTransform );
-			m_pRenderer->BeginRender( p_size );
+			l_pipeline.ApplyViewport( m_size.width(), m_size.height() );
+			m_pRenderer->BeginRender( m_size );
 
 			for ( auto l_overlay : m_overlays )
 			{
@@ -240,13 +241,11 @@ namespace Castor3D
 
 				if ( !l_scene || l_scene->GetName() == p_scene.GetName() )
 				{
-					l_overlay->Render( p_size );
+					l_overlay->Render( m_size );
 				}
 			}
-
-			l_pipeline->PopMatrix();
-			l_pipeline->MatrixMode( l_oldMode );
-			unlock();
 		}
+
+		unlock();
 	}
 }

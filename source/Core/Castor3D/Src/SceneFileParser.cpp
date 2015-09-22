@@ -238,9 +238,9 @@ void SceneFileContext::Initialise()
 
 //****************************************************************************************************
 
-SceneFileParser::SceneFileParser( Engine * p_pEngine )
+SceneFileParser::SceneFileParser( Engine * p_engine )
 	:	FileParser( eSECTION_ROOT,  eSECTION_COUNT )
-	, m_pEngine( p_pEngine )
+	, m_engine( p_engine )
 {
 }
 
@@ -250,14 +250,7 @@ SceneFileParser::~SceneFileParser()
 
 RenderWindowSPtr SceneFileParser::GetRenderWindow()
 {
-	RenderWindowSPtr l_pReturn;
-
-	if ( m_pParsingContext )
-	{
-		l_pReturn = std::static_pointer_cast< SceneFileContext >( m_pParsingContext )->pWindow;
-	}
-
-	return l_pReturn;
+	return m_renderWindow;
 }
 
 bool SceneFileParser::ParseFile( TextFile & p_file )
@@ -408,8 +401,8 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_PASS, cuT( "texture_unit" ), Parser_PassTextureUnit );
 	AddParser( eSECTION_PASS, cuT( "gl_shader_program" ), Parser_PassGlShader );
 	AddParser( eSECTION_PASS, cuT( "hl_shader_program" ), Parser_PassHlShader );
-	AddParser(	eSECTION_PASS, cuT( "alpha_blend_mode" ), Parser_PassAlphaBlendMode, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapBlendModes );
-	AddParser(	eSECTION_PASS, cuT( "colour_blend_mode" ), Parser_PassColourBlendMode, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapBlendModes );
+	AddParser( eSECTION_PASS, cuT( "alpha_blend_mode" ), Parser_PassAlphaBlendMode, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapBlendModes );
+	AddParser( eSECTION_PASS, cuT( "colour_blend_mode" ), Parser_PassColourBlendMode, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapBlendModes );
 
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "image" ), Parser_UnitImage, 1, ePARAMETER_TYPE_PATH );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "render_target" ), Parser_UnitRenderTarget );
@@ -449,6 +442,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 
 	AddParser( eSECTION_SHADER_SAMPLER, cuT( "value" ), Parser_ShaderSamplerValue, 1, ePARAMETER_TYPE_INT32 );
 
+	AddParser( eSECTION_SHADER_UBO_VARIABLE, cuT( "count" ), Parser_ShaderVariableCount, 1, ePARAMETER_TYPE_UINT32 );
 	AddParser( eSECTION_SHADER_UBO_VARIABLE, cuT( "type" ), Parser_ShaderVariableType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapVariableTypes );
 	AddParser( eSECTION_SHADER_UBO_VARIABLE, cuT( "value" ), Parser_ShaderVariableValue, 1, ePARAMETER_TYPE_TEXT );
 
@@ -524,20 +518,23 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_ANIMGROUP, cuT( "animated_object" ), Parser_GroupAnimatedObject, 1, ePARAMETER_TYPE_NAME );
 	AddParser( eSECTION_ANIMGROUP, cuT( "animation" ), Parser_GroupAnimation, 1, ePARAMETER_TYPE_NAME );
 
-	if ( m_pEngine->GetRenderSystem() )
+	if ( m_engine->GetRenderSystem() )
 	{
-		l_pContext->eRendererType = m_pEngine->GetRenderSystem()->GetRendererType();
+		l_pContext->eRendererType = m_engine->GetRenderSystem()->GetRendererType();
 	}
 }
 
 void SceneFileParser::DoCleanupParser()
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( m_pParsingContext );
+	m_pParsingContext.reset();
 
 	for ( ScenePtrStrMap::iterator l_it = l_pContext->mapScenes.begin(); l_it != l_pContext->mapScenes.end(); ++l_it )
 	{
 		m_mapScenes.insert( std::make_pair( l_it->first,  l_it->second ) );
 	}
+
+	m_renderWindow = l_pContext->pWindow;
 }
 
 void SceneFileParser::DoDiscardParser( String const & p_strLine )

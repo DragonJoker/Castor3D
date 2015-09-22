@@ -66,6 +66,45 @@ namespace Castor
 		 *\return		Le texte
 		 */
 		CU_API String GetLastErrorText();
+		/**
+		 *\~english
+		 *\brief		Allocates aligned memory.
+		 *\param[in]	p_alignment	The alignment value, must be a power of two.
+		 *\param[in]	p_size		The wanted size.
+		 *\return		The allocated memory, NULL on error.
+		 *\~french
+		 *\brief		Alloue de la mémoire alignée.
+		 *\param[in]	p_alignment	La valeur d'alignement, doit être une puissance de deux.
+		 *\param[in]	p_size		La taille désirée.
+		 *\return		La mémoire allouée, NULL en cas d'erreur.
+		 */
+		CU_API void * AlignedAlloc( size_t p_alignment, size_t p_size );
+		/**
+		 *\~english
+		 *\brief		Deallocates aligned memory.
+		 *\param[in]	p_memory	The memory.
+		 *\~french
+		 *\brief		Désalloue de la mémoire alignée.
+		 *\param[in]	p_memory	La mémoire.
+		 */
+		CU_API void AlignedFree( void * p_memory );
+		/**
+		 *\~english
+		 *\brief		Allocates aligned memory.
+		 *\param[in]	p_alignment	The alignment value, must be a power of two.
+		 *\param[in]	p_size		The wanted size.
+		 *\return		The allocated memory, NULL on error.
+		 *\~french
+		 *\brief		Alloue de la mémoire alignée.
+		 *\param[in]	p_alignment	La valeur d'alignement, doit être une puissance de deux.
+		 *\param[in]	p_size		La taille désirée.
+		 *\return		La mémoire allouée, NULL en cas d'erreur.
+		 */
+		template< typename T >
+		T * AlignedAlloc( size_t p_alignment, size_t p_size )
+		{
+			return reinterpret_cast< T * >( AlignedAlloc( p_alignment, p_size ) );
+		}
 	}
 	/**
 	 *\see			localtime

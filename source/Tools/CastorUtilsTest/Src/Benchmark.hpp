@@ -44,16 +44,10 @@ namespace Testing
 
 	class BenchCase
 	{
-	private:
-		std::string				m_strName;
-		double					m_dCumulativeTimes;
-		Castor::PreciseTimer	m_preciseTimer;
-		uint64_t				m_uiTotalExecutions;
-		std::string				m_strSummary;
 		typedef std::function< void() > CallbackBench;
 
 	public:
-		BenchCase( std::string const & p_strName );
+		BenchCase( std::string const & p_name );
 		virtual ~BenchCase();
 		virtual void Execute() = 0;
 		inline std::string const & GetSummary()const
@@ -63,6 +57,13 @@ namespace Testing
 
 	protected:
 		void DoBench( std::string p_name, CallbackBench p_bench, uint64_t p_ui64Calls );
+
+	private:
+		std::string m_strName;
+		double m_dCumulativeTimes;
+		Castor::PreciseTimer m_preciseTimer;
+		uint64_t m_uiTotalExecutions;
+		std::string m_strSummary;
 	};
 
 #	define BENCHMARK( Name, Calls ) DoBench( #Name, [&](){ Name(); }, Calls )

@@ -145,7 +145,7 @@ namespace Castor3D
 		 *\brief		Récupère le nombre de points
 		 *\return		La valeur
 		 */
-		uint32_t GetNbPoints()const;
+		uint32_t GetPointsCount()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the wanted point
@@ -157,6 +157,13 @@ namespace Castor3D
 		 *\return		La valeur
 		 */
 		BufferElementGroupSPtr GetPoint( uint32_t i )const;
+		/**
+		 *\~english
+		 *\return		Retrieves the points array
+		 *\~french
+		 *\return		Récupère le tableau de points
+		 */
+		VertexPtrArray const & GetPoints()const;
 		/**
 		 *\~english
 		 *\brief		Defines a function to execute when the threaded subdivision ends

@@ -305,15 +305,16 @@ namespace Dx11Render
 		virtual void Bind( uint8_t p_byIndex, uint8_t p_byCount );
 		virtual void Unbind();
 
-		int GetAttributeLocation( Castor::String const & CU_PARAM_UNUSED( p_strName ) )const
+		int GetAttributeLocation( Castor::String const & CU_PARAM_UNUSED( p_name ) )const
 		{
 			return 0;
 		}
-		ID3DBlob * GetCompiled( Castor3D::eSHADER_TYPE p_eType );
+		ID3DBlob * GetCompiled( Castor3D::eSHADER_TYPE p_type );
 
 	private:
-		Castor3D::ShaderObjectBaseSPtr DoCreateObject( Castor3D::eSHADER_TYPE p_eType );
+		Castor3D::ShaderObjectBaseSPtr DoCreateObject( Castor3D::eSHADER_TYPE p_type );
 		virtual std::shared_ptr< Castor3D::OneTextureFrameVariable > DoCreateTextureVariable( int p_iNbOcc );
+		virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const;
 
 	protected:
 		Castor::String m_linkerLog;

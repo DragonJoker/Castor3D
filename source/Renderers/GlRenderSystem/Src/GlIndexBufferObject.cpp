@@ -24,9 +24,9 @@ namespace GlRender
 		GlBuffer< uint32_t >::DoDestroy();
 	}
 
-	bool GlIndexBufferObject::Initialise( eBUFFER_ACCESS_TYPE p_eType, eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram )
+	bool GlIndexBufferObject::Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram )
 	{
-		bool l_return = GlBuffer< uint32_t >::DoInitialise( p_eType, p_eNature );
+		bool l_return = GlBuffer< uint32_t >::DoInitialise( p_type, p_eNature );
 		//if( l_return )
 		//{
 		//	m_pBuffer->Clear();

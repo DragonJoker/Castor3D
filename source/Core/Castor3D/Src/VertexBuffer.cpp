@@ -19,7 +19,7 @@ namespace Castor3D
 	{
 		if ( !m_pBuffer )
 		{
-			m_pBuffer = m_pRenderSystem->CreateVertexBuffer( m_bufferDeclaration, this );
+			m_pBuffer = m_renderSystem->CreateVertexBuffer( m_bufferDeclaration, this );
 		}
 
 		return m_pBuffer != nullptr;

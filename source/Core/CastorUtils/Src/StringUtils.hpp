@@ -337,7 +337,7 @@ namespace Castor
 		 *\param[out]	p_val		Reçoit la valeur récupérée
 		 *\return
 		 */
-		template <typename T>
+		template< typename T >
 		inline void parse( String const & p_str, T & p_val, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
@@ -353,16 +353,16 @@ namespace Castor
 		 *\param[out]	p_val		Reçoit la valeur récupérée
 		 *\return
 		 */
-		template <typename T>
+		template< typename T >
 		inline void extract( String & p_str, T & p_val, std::locale const & p_locale = std::locale() );
 		/**
 		 *\~english
 		 *\brief		Puts a value into a String
-		 *\param[in]	p_tValue	The value
+		 *\param[in]	p_value	The value
 		 *\return		The String containing the value
 		 *\~french
 		 *\brief		Met une valeur dans un String
-		 *\param[in]	p_tValue	La valeur
+		 *\param[in]	p_value	La valeur
 		 *\return		Le String contenant la valeur
 		 */
 		template< typename T >
@@ -370,11 +370,11 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Casts a string value in another string type
-		 *\param[in]	p_tValue	The source value
+		 *\param[in]	p_src	The source value
 		 *\return		The cast string
 		 *\~french
 		 *\brief		Convertit une chaîne dans un autre type de chaîne
-		 *\param[in]	p_tValue	La valeur source
+		 *\param[in]	p_src	La valeur source
 		 *\return		La chaîne convertie
 		 */
 		template< typename T, typename U >
@@ -382,11 +382,11 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Casts a string value in another string type
-		 *\param[in]	p_tValue	The source value
+		 *\param[in]	p_src	The source value
 		 *\return		The cast string
 		 *\~french
 		 *\brief		Convertit une chaîne dans un autre type de chaîne
-		 *\param[in]	p_tValue	La valeur source
+		 *\param[in]	p_src	La valeur source
 		 *\return		La chaîne convertie
 		 */
 		template< typename T, typename U >
@@ -394,11 +394,11 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Casts a string value in another string type
-		 *\param[in]	p_tValue	The source value
+		 *\param[in]	p_src	The source value
 		 *\return		The cast string
 		 *\~french
 		 *\brief		Convertit une chaîne dans un autre type de chaîne
-		 *\param[in]	p_tValue	La valeur source
+		 *\param[in]	p_src	La valeur source
 		 *\return		La chaîne convertie
 		 */
 		template< typename T, typename U >

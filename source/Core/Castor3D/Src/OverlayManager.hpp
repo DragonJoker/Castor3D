@@ -49,7 +49,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		OverlayManager( Engine * p_pEngine );
+		OverlayManager( Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -67,38 +67,38 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Add an overlay to the lists, given it's name
-		 *\param[in]	p_strName	The overlay name
-		 *\param[in]	p_pOverlay	The overlay
-		 *\param[in]	p_pParent	The parent overlay
+		 *\param[in]	p_name	The overlay name
+		 *\param[in]	p_overlay	The overlay
+		 *\param[in]	p_parent	The parent overlay
 		 *\~french
 		 *\brief		Ajoute une incrustation aux listes, selon son nom
-		 *\param[in]	p_strName	Le nom
-		 *\param[in]	p_pOverlay	L'incrustation
-		 *\param[in]	p_pParent	L'incrustation parente
+		 *\param[in]	p_name	Le nom
+		 *\param[in]	p_overlay	L'incrustation
+		 *\param[in]	p_parent	L'incrustation parente
 		 */
-		void AddOverlay( Castor::String const & p_strName, OverlaySPtr p_pOverlay, OverlaySPtr p_pParent );
+		void AddOverlay( Castor::String const & p_name, OverlaySPtr p_overlay, OverlaySPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Retrieves the overlay with the given name
-		 *\param[in]	p_strName	The name
+		 *\param[in]	p_name	The name
 		 *\return		The overlay, \p nullptr if not found
 		 *\~french
 		 *\brief		Récupère l'incrustation avec le nom donné
-		 *\param[in]	p_strName	Le nom
+		 *\param[in]	p_name	Le nom
 		 *\return		L'incrustation, \p nullptr si non trouvée
 		 */
-		OverlaySPtr GetOverlay( Castor::String const & p_strName );
+		OverlaySPtr GetOverlay( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Checks if an overlay with the given name exists
-		 *\param[in]	p_strName	The name
+		 *\param[in]	p_name	The name
 		 *\return		\p true if an overlay is defined with given name
 		 *\~french
 		 *\brief		Vérifie si une incrustation avec le nom donné existe
-		 *\param[in]	p_strName	Le nom
+		 *\param[in]	p_name	Le nom
 		 *\return		\p true Si une incrustation est défini avec le nom donné
 		 */
-		bool HasOverlay( Castor::String const & p_strName );
+		bool HasOverlay( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Writes overlays in a text file
@@ -278,11 +278,15 @@ namespace Castor3D
 		//!\~english The overlays, in rendering order.	\~french Les incrustations, dans l'ordre de rendu.
 		OverlayPtrArray m_overlays;
 		//!\~english The engine	\~french Le moteur
-		Engine * m_pEngine;
+		Engine * m_engine;
 		//!\~english The overlay renderer	\~french le renderer d'incrustation
 		OverlayRendererSPtr m_pRenderer;
 		//!\~english The overlay count, per level	\~french Le nombre d'incrustations par niveau
 		std::vector< int > m_overlayCountPerLevel;
+		//!\~english The pojection matrix.	\~french La matrice de projection.
+		Castor::Matrix4x4r m_projection;
+		//!\~english The last display size.	\~french Les dimensions du dernier affichage.
+		Castor::Size m_size;
 	};
 	typedef OverlayManager::iterator OverlayManagerIt;
 	typedef OverlayManager::const_iterator OverlayManagerConstIt;

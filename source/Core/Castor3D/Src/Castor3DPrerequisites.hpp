@@ -203,7 +203,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( Vertex );
 	DECLARE_SMART_PTR( BufferElementGroup );
 
-	template <typename T> class Pattern;
+	template< typename T > class Pattern;
 	typedef Pattern<	Vertex				>	VertexPattern;
 	typedef Pattern<	Castor::Point3r		>	Point3rPattern;
 	typedef Pattern<	VertexSPtr			>	VertexPtrPattern;
@@ -1097,6 +1097,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( DepthStencilState );
 	DECLARE_SMART_PTR( RasteriserState );
 	DECLARE_SMART_PTR( BlendState );
+	DECLARE_SMART_PTR( IPipelineImpl );
 
 	DECLARE_COLLECTION( DepthStencilState, Castor::String, DepthStencilState );
 	DECLARE_COLLECTION( RasteriserState, Castor::String, RasteriserState );

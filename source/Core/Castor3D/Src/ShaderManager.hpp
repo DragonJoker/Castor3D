@@ -161,7 +161,7 @@ namespace Castor3D
 		 */
 		inline void SetRenderSystem( RenderSystem * const & p_pRenderSystem )
 		{
-			m_pRenderSystem = p_pRenderSystem;
+			m_renderSystem = p_pRenderSystem;
 		}
 		/**
 		 *\~english
@@ -221,7 +221,7 @@ namespace Castor3D
 		//!\~english The maximal number of vertices the geometry shader can output	\~french Nombre maximale de vertex qu'un shader géométrique peut sortir
 		int m_nbVerticesOut;
 		//!\~english The RenderSystem used to create programs	\~french Le RenderSystem utilisé pour la création des programmes
-		RenderSystem * m_pRenderSystem;
+		RenderSystem * m_renderSystem;
 	};
 }
 

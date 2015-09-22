@@ -31,7 +31,7 @@ namespace GlRender
 		,	public Castor::NonCopyable
 	{
 	public:
-		GlFrameBuffer( OpenGl & p_gl, Castor3D::Engine * p_pEngine );
+		GlFrameBuffer( OpenGl & p_gl, Castor3D::Engine * p_engine );
 		virtual ~GlFrameBuffer();
 
 		virtual bool Create( int p_iSamplesCount );

@@ -68,7 +68,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Saves an overlay into a text file
@@ -145,29 +145,29 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pEngine	The engine
-		 *\param[in]	p_eType		The overlay type
+		 *\param[in]	p_engine	The engine
+		 *\param[in]	p_type		The overlay type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pEngine	Le moteur
-		 *\param[in]	p_eType		Le type de l'incrustation
+		 *\param[in]	p_engine	Le moteur
+		 *\param[in]	p_type		Le type de l'incrustation
 		 */
-		Overlay( Engine * p_pEngine, eOVERLAY_TYPE p_eType );
+		Overlay( Engine * p_engine, eOVERLAY_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pEngine	The engine
-		 *\param[in]	p_eType		The overlay type
-		 *\param[in]	p_pScene	The scene holding the overlay
-		 *\param[in]	p_pParent	The parent overlay (if any)
+		 *\param[in]	p_engine	The engine
+		 *\param[in]	p_type		The overlay type
+		 *\param[in]	p_scene	The scene holding the overlay
+		 *\param[in]	p_parent	The parent overlay (if any)
 		 *\~english
 		 *\brief		Constructeur
-		 *\param[in]	p_pEngine	Le moteur
-		 *\param[in]	p_eType		Le type de l'incrustation
-		 *\param[in]	p_pScene	La scène parent
-		 *\param[in]	p_pParent	L'incrustation parente
+		 *\param[in]	p_engine	Le moteur
+		 *\param[in]	p_type		Le type de l'incrustation
+		 *\param[in]	p_scene	La scène parent
+		 *\param[in]	p_parent	L'incrustation parente
 		 */
-		Overlay( Engine * p_pEngine, eOVERLAY_TYPE p_eType, SceneSPtr p_pScene, OverlaySPtr p_pParent );
+		Overlay( Engine * p_engine, eOVERLAY_TYPE p_type, SceneSPtr p_scene, OverlaySPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -187,14 +187,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Adds a child to the overlay
-		 *\param[in]	p_pOverlay	The overlay to add
+		 *\param[in]	p_overlay	The overlay to add
 		 *\return		\p true if successful, false if not
 		 *\~french
 		 *\brief		Ajoute un enfant à l'incrustation
-		 *\param[in]	p_pOverlay	L'incrustation enfant
+		 *\param[in]	p_overlay	L'incrustation enfant
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool AddChild( OverlaySPtr p_pOverlay );
+		bool AddChild( OverlaySPtr p_overlay );
 		/**
 		 *\~english
 		 *\brief		Initialises the overlay.
@@ -309,7 +309,7 @@ namespace Castor3D
 		 */
 		inline Engine * GetEngine()
 		{
-			return m_pEngine;
+			return m_engine;
 		}
 		/**
 		 *\~english
@@ -676,14 +676,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the name of the overlay
-		 *\param[in]	p_strName	The new name
+		 *\param[in]	p_name	The new name
 		 *\~french
 		 *\brief		Définit le nom de l'incrustation
-		 *\param[in]	p_strName	Le nouveau nom
+		 *\param[in]	p_name	Le nouveau nom
 		 */
-		inline void SetName( Castor::String const & p_strName )
+		inline void SetName( Castor::String const & p_name )
 		{
-			m_strName = p_strName;
+			m_strName = p_name;
 		}
 
 	protected:
@@ -702,9 +702,9 @@ namespace Castor3D
 		//!\~english The factory	\~french La fabrique
 		OverlayFactory & m_factory;
 		//!\~english The engine	\~french Le moteur
-		Engine * m_pEngine;
+		Engine * m_engine;
 		//!\~english The render system	\~french Le système de rendu
-		RenderSystem * m_pRenderSystem;
+		RenderSystem * m_renderSystem;
 	};
 }
 

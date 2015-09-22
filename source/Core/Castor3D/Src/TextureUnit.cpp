@@ -31,7 +31,7 @@ namespace Castor3D
 		eRGB_BLEND_FUNC l_eRgbBlend;
 		Colour l_colour;
 		eTEXTURE_CHANNEL l_eChannel;
-		String l_strName;
+		String l_name;
 		ePIXEL_FORMAT l_ePf;
 		Size l_size;
 		eBLEND_SOURCE l_eSrc;
@@ -326,8 +326,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	TextureUnit::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< TextureUnit, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	TextureUnit::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		:	Loader< TextureUnit, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -456,8 +456,8 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	TextureUnit::TextureUnit( Engine * p_pEngine )
-		: m_pEngine( p_pEngine )
+	TextureUnit::TextureUnit( Engine * p_engine )
+		: m_engine( p_engine )
 		, m_uiIndex( 0 )
 		, m_clrBlend( Colour::from_rgba( 0xFFFFFFFF ) )
 		, m_eChannel( eTEXTURE_CHANNEL_DIFFUSE )
@@ -473,14 +473,14 @@ namespace Castor3D
 		m_eRgbArguments[1] = eBLEND_SOURCE_COUNT;
 		m_eAlpArguments[0] = eBLEND_SOURCE_COUNT;
 		m_eAlpArguments[1] = eBLEND_SOURCE_COUNT;
-		m_pSampler = m_pEngine->GetDefaultSampler();
+		m_pSampler = m_engine->GetDefaultSampler();
 	}
 
 	TextureUnit::~TextureUnit()
 	{
 		if ( !m_pRenderTarget.expired() )
 		{
-			m_pEngine->RemoveRenderTarget( std::move( m_pRenderTarget.lock() ) );
+			m_engine->RemoveRenderTarget( std::move( m_pRenderTarget.lock() ) );
 		}
 	}
 
@@ -536,7 +536,7 @@ namespace Castor3D
 	{
 		if ( m_pTexture && m_pTexture->IsInitialised() )
 		{
-			Pipeline * l_pPipeline = GetEngine()->GetRenderSystem()->GetPipeline();
+			Pipeline & l_pipeline = GetEngine()->GetRenderSystem()->GetPipeline();
 			m_pTexture->Bind();
 
 			if ( m_bChanged && m_bAutoMipmaps || m_pTexture->GetType() == eTEXTURE_TYPE_DYNAMIC )
@@ -548,7 +548,7 @@ namespace Castor3D
 					uint8_t * l_buffer = m_pTexture->Lock( eLOCK_FLAG_READ_ONLY );
 					std::memcpy( m_pTexture->GetBuffer()->ptr(), l_buffer, m_pTexture->GetBuffer()->size() );
 					const Image l_tmp( cuT( "tmp" ), *m_pTexture->GetBuffer() );
-					Image::BinaryLoader()( l_tmp, File::GetUserDirectory() / cuT( "TextureUnitTexture_" ) + string::to_string( ptrdiff_t( m_pTexture.get() ) ) + cuT( ".bmp" ) );
+					Image::BinaryLoader()( l_tmp, Engine::GetEngineDirectory() / cuT( "TextureUnitTexture_" ) + string::to_string( ptrdiff_t( m_pTexture.get() ) ) + cuT( ".bmp" ) );
 				}
 
 #endif
@@ -556,10 +556,7 @@ namespace Castor3D
 				m_bChanged = false;
 			}
 
-			m_ePrevMtxMode = l_pPipeline->MatrixMode( eMTXMODE( eMTXMODE_TEXTURE0 + GetIndex() ) );
-			l_pPipeline->LoadIdentity();
-			l_pPipeline->MultMatrix( m_mtxTransformations );
-			GetEngine()->GetRenderSystem()->GetPipeline()->MatrixMode( m_ePrevMtxMode );
+			l_pipeline.SetTextureMatrix( m_pTexture->GetIndex(), m_mtxTransformations );
 		}
 	}
 
@@ -702,12 +699,12 @@ namespace Castor3D
 
 		if ( !p_pathFile.empty() && File::FileExists( p_pathFile ) )
 		{
-			l_pImage = m_pEngine->GetImageManager().find( p_pathFile.GetFileName() );
+			l_pImage = m_engine->GetImageManager().find( p_pathFile.GetFileName() );
 
 			if ( !l_pImage )
 			{
 				l_pImage = std::make_shared< Image >( p_pathFile.GetFileName(), p_pathFile );
-				m_pEngine->GetImageManager().insert( p_pathFile.GetFileName(), l_pImage );
+				m_engine->GetImageManager().insert( p_pathFile.GetFileName(), l_pImage );
 			}
 			else if ( !l_pImage->GetBuffer() )
 			{
@@ -718,7 +715,7 @@ namespace Castor3D
 
 		if ( l_pImage )
 		{
-			StaticTextureSPtr l_pStaTexture = m_pEngine->GetRenderSystem()->CreateStaticTexture();
+			StaticTextureSPtr l_pStaTexture = m_engine->GetRenderSystem()->CreateStaticTexture();
 			l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
 			l_pStaTexture->SetImage( l_pImage->GetPixels() );
 			SetTexture( l_pStaTexture );
@@ -745,8 +742,8 @@ namespace Castor3D
 		return m_pTexture->GetMappingMode();
 	}
 
-	void TextureUnit::SetMappingMode( eTEXTURE_MAP_MODE p_eMode )
+	void TextureUnit::SetMappingMode( eTEXTURE_MAP_MODE p_mode )
 	{
-		return m_pTexture->SetMappingMode( p_eMode );
+		return m_pTexture->SetMappingMode( p_mode );
 	}
 }

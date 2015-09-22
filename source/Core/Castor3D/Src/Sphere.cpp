@@ -30,13 +30,13 @@ void Sphere::Generate()
 	if ( m_nbFaces >= 3 )
 	{
 		Submesh & l_submesh = *GetMesh()->CreateSubmesh();
-		real 					l_rAngle	= Angle::PiMult2 / m_nbFaces;
+		real 					l_rAngle	= real( Angle::PiMult2 ) / m_nbFaces;
 		std::vector< Point2r >	l_arc( m_nbFaces + 1 );
 		real 					l_rAlpha	= 0;
 		uint32_t				l_iCur		= 0;
 		uint32_t				l_iPrv		= 0;
 		real					l_rAlphaI	= 0;
-		BufferElementGroupSPtr	l_pVertex;
+		BufferElementGroupSPtr	l_vertex;
 		real					l_rCos;
 		real					l_rSin;
 		Point2r					l_ptT;
@@ -66,10 +66,10 @@ void Sphere::Generate()
 				{
 					l_rCos = cos( l_rAlphaI );
 					l_rSin = sin( l_rAlphaI );
-					l_pVertex = l_submesh.AddPoint(	l_ptT[0] * l_rCos,	l_ptT[1],	l_ptT[0] * l_rSin );
-					Vertex::SetTexCoord(	l_pVertex, real( i ) / m_nbFaces,	real( 1.0 + l_ptT[1] / m_radius ) / 2	);
-					Vertex::SetNormal(	l_pVertex, point::get_normalised( Vertex::GetPosition( l_pVertex, l_ptPos ) ) );
-//					l_pVertex->SetTangent( point::get_normalised( Point3r( real( cos( dAlphaI + Angle::PiDiv2 ) ), real( 0.0 ),	real( sin( dAlphaI + Angle::PiDiv2 ) ) ) ) );
+					l_vertex = l_submesh.AddPoint(	l_ptT[0] * l_rCos,	l_ptT[1],	l_ptT[0] * l_rSin );
+					Vertex::SetTexCoord(	l_vertex, real( i ) / m_nbFaces,	real( 1.0 + l_ptT[1] / m_radius ) / 2	);
+					Vertex::SetNormal(	l_vertex, point::get_normalised( Vertex::GetPosition( l_vertex, l_ptPos ) ) );
+//					l_vertex->SetTangent( point::get_normalised( Point3r( real( cos( dAlphaI + Angle::PiDiv2 ) ), real( 0.0 ),	real( sin( dAlphaI + Angle::PiDiv2 ) ) ) ) );
 					l_iCur++;
 				}
 			}
@@ -81,10 +81,10 @@ void Sphere::Generate()
 			{
 				l_rCos = cos( l_rAlphaI );
 				l_rSin = sin( l_rAlphaI );
-				l_pVertex = l_submesh.AddPoint(	l_ptB[0] * l_rCos,	l_ptB[1],	l_ptB[0] * l_rSin );
-				Vertex::SetTexCoord(	l_pVertex, real( i ) / m_nbFaces,	real( 1.0 + l_ptB[1] / m_radius ) / 2	);
-				Vertex::SetNormal(	l_pVertex, point::get_normalised( Vertex::GetPosition( l_pVertex, l_ptPos ) ) );
-//				l_pVertex->SetTangent( point::get_normalised( Point3r( real( cos( dAlphaI + Angle::PiDiv2 ) ), real( 0.0 ),	real( sin( dAlphaI + Angle::PiDiv2 ) ) ) ) );
+				l_vertex = l_submesh.AddPoint(	l_ptB[0] * l_rCos,	l_ptB[1],	l_ptB[0] * l_rSin );
+				Vertex::SetTexCoord(	l_vertex, real( i ) / m_nbFaces,	real( 1.0 + l_ptB[1] / m_radius ) / 2	);
+				Vertex::SetNormal(	l_vertex, point::get_normalised( Vertex::GetPosition( l_vertex, l_ptPos ) ) );
+//				l_vertex->SetTangent( point::get_normalised( Point3r( real( cos( dAlphaI + Angle::PiDiv2 ) ), real( 0.0 ),	real( sin( dAlphaI + Angle::PiDiv2 ) ) ) ) );
 			}
 
 			//		Reconstition des faces

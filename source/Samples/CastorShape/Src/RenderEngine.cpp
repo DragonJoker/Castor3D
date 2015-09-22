@@ -7,9 +7,9 @@ using namespace Castor3D;
 using namespace Castor;
 using namespace CastorShape;
 
-RenderEngine::RenderEngine( String const & p_strFileName, SceneSPtr p_pScene )
+RenderEngine::RenderEngine( String const & p_strFileName, SceneSPtr p_scene )
 	:	m_strFileName( p_strFileName )
-	,	m_pScene( p_pScene )
+	,	m_pScene( p_scene )
 {
 }
 

@@ -54,8 +54,8 @@ namespace CastorShape
 		void DoPopulateToolbar();
 		void DoPopulateMenus();
 		void DoInitialisePerspectives();
-		void DoSetSelectionType( SelectionType p_eType );
-		void DoSetActionType( ActionType p_eType );
+		void DoSetSelectionType( SelectionType p_type );
+		void DoSetActionType( ActionType p_type );
 		void DoCreateGeometry( Castor3D::eMESH_TYPE p_meshType, Castor::String p_name, Castor::OutputStream const & p_meshStrVars, wxString const & p_baseName, Castor3D::SceneSPtr p_scene, NewGeometryDialog * p_dialog, uint32_t i = 0, uint32_t j = 0, Castor::real a = 0.0, Castor::real b = 0.0, Castor::real c = 0.0 );
 
 		DECLARE_EVENT_TABLE()

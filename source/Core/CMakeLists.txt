@@ -1,3 +1,5 @@
+option( CASTOR_BUILD_CASTOR3D "Build Castor3D" TRUE )
+
 function( CoreInit )
 	set( Cutils "no (Not wanted)" PARENT_SCOPE )
 	set( C3D "no (Not wanted)" PARENT_SCOPE )
@@ -18,9 +20,11 @@ function( CoreBuild )
 		PARENT_SCOPE
 	)
 
-	set( Build ${C3D} )
-	add_subdirectory( Core/Castor3D )
-	set( C3D ${Build} PARENT_SCOPE )
+	if ( ${CASTOR_BUILD_CASTOR3D} )
+		set( Build ${C3D} )
+		add_subdirectory( Core/Castor3D )
+		set( C3D ${Build} PARENT_SCOPE )
+	endif ()
 
 	set( CastorMinLibraries
 		${CastorMinLibraries}

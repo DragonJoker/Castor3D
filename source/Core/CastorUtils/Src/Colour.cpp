@@ -39,8 +39,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	Colour::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< Colour, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	Colour::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		:	Loader< Colour, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 

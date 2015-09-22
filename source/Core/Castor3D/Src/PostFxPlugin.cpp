@@ -39,7 +39,7 @@ namespace Castor3D
 		if ( !p_pLibrary->GetFunction( m_pfnCreateEffect, CreateEffectFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] CreateEffect plugin function : " );
-			l_strError += string::to_string( dlerror() );
+			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 

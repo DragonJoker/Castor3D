@@ -136,6 +136,7 @@ namespace GlRender
 		template< typename T >
 		inline GlslBool & GlslBool::operator=( T const & p_rhs )
 		{
+			UpdateWriter( p_rhs );
 			m_writer->WriteAssign( *this, p_rhs );
 			return *this;
 		}
@@ -160,7 +161,7 @@ namespace GlRender
 		template< typename U >
 		T & Array< T >::operator[]( U const & p_offset )
 		{
-			*T::m_writer << T::m_name << cuT( "[" ) << p_offset << cuT( "]" );
+			T::m_value << Castor::String( *static_cast< T * >( this )  ) << cuT( "[" ) << ToString( p_offset ) << cuT( "]" );
 			return *this;
 		}
 
@@ -375,6 +376,24 @@ namespace GlRender
 		{
 			*this << Uniform() << T().m_type << p_name << cuT( ";" ) << Endl();
 			return T( this, p_name );
+		}
+
+		template< typename T >
+		inline T GlslWriter::GetFragData( Castor::String const & p_name, uint32_t p_index )
+		{
+			Castor::String l_name;
+
+			if( m_keywords->HasNamedFragData() )
+			{
+				*this << T().m_type << p_name << cuT( ";" ) << Endl();
+				l_name = p_name;
+			}
+			else
+			{
+				l_name = m_keywords->GetFragData( p_index );
+			}
+
+			return T( this, l_name );
 		}
 
 		template< typename T >

@@ -9,9 +9,9 @@ using namespace Castor;
 
 //*************************************************************************************************
 
-Generator::Thread::Thread( Generator * p_pParent, uint32_t p_uiIndex, int iWidth, int iTop, int iBottom, int iTotalHeight, UbPixel const & p_pxColour )
-	:	m_pParent( p_pParent )
-	,	m_uiIndex( p_uiIndex )
+Generator::Thread::Thread( Generator * p_parent, uint32_t p_index, int iWidth, int iTop, int iBottom, int iTotalHeight, UbPixel const & p_pxColour )
+	:	m_pParent( p_parent )
+	,	m_uiIndex( p_index )
 	,	m_iWidth( iWidth )
 	,	m_iBottom( iBottom )
 	,	m_iTop( iTop )
@@ -69,7 +69,7 @@ int Generator::Thread::Entry()
 
 //*************************************************************************************************
 
-Generator::Generator( Engine * p_pEngine, int p_width, int p_height )
+Generator::Generator( Engine * p_engine, int p_width, int p_height )
 	:	m_iWidth( p_width )
 	,	m_iHeight( p_height )
 	,	m_ullStep( 0 )
@@ -77,7 +77,7 @@ Generator::Generator( Engine * p_pEngine, int p_width, int p_height )
 	,	m_bEnded( true )
 	,	m_frontBuffer( Size( p_width, p_height ) )
 	,	m_backBuffer( Size( p_width, p_height ) )
-	,	m_pEngine( p_pEngine )
+	,	m_engine( p_engine )
 {
 //	uint8_t l_tmp[] = { 255, 255, 255, 255 };
 //	m_pxColour.set<ePIXEL_FORMAT_A8R8G8B8>( l_tmp);
@@ -189,9 +189,9 @@ void Generator::ClearAllThreads()
 bool Generator::AllEnded()
 {
 	bool l_return = true;
-	uint32_t l_uiCount = DoGetThreadsCount();
+	uint32_t l_count = DoGetThreadsCount();
 
-	for ( uint32_t i = 0; i < l_uiCount && l_return; i++ )
+	for ( uint32_t i = 0; i < l_count && l_return; i++ )
 	{
 		l_return &= m_arraySlaveThreads[i] == NULL || m_arraySlaveThreads[i]->IsEnded();
 	}
@@ -214,7 +214,7 @@ void Generator::DoCleanup()
 
 Point2i Generator::_loadImage( String const & p_strImagePath, Image & CU_PARAM_UNUSED( p_image ) )
 {
-	ImageCollection & l_imgCollection = m_pEngine->GetImageManager();
+	ImageCollection & l_imgCollection = m_engine->GetImageManager();
 	ImageSPtr l_pImage = l_imgCollection.find( p_strImagePath );
 
 	if ( !l_pImage )

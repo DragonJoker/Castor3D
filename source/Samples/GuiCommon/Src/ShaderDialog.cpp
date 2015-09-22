@@ -35,8 +35,8 @@ namespace GuiCommon
 		eID_MENU_PREFS,
 	}	eID;
 
-	ShaderDialog::ShaderDialog( Engine * p_pEngine, bool p_bCanEdit, wxWindow * p_pParent, PassSPtr p_pPass, wxPoint const & p_ptPosition, const wxSize p_ptSize )
-		: wxFrame( p_pParent, wxID_ANY, _( "Shaders" ), p_ptPosition, p_ptSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMAXIMIZE_BOX )
+	ShaderDialog::ShaderDialog( Engine * p_engine, bool p_bCanEdit, wxWindow * p_parent, PassSPtr p_pPass, wxPoint const & p_ptPosition, const wxSize p_ptSize )
+		: wxFrame( p_parent, wxID_ANY, _( "Shaders" ), p_ptPosition, p_ptSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMAXIMIZE_BOX )
 		, m_pPass( p_pPass )
 		, m_bCompiled( true )
 		, m_bOwnShader( true )
@@ -46,7 +46,7 @@ namespace GuiCommon
 #else
 		, m_bCanEdit( p_bCanEdit || true )
 #endif
-		, m_pEngine( p_pEngine )
+		, m_engine( p_engine )
 		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
 	{
 		DoInitialiseShaderLanguage();
@@ -82,7 +82,7 @@ namespace GuiCommon
 
 				if ( l_technique )
 				{
-					m_pShaderProgram = m_pEngine->GetShaderManager().GetAutomaticProgram( *l_technique, l_pass->GetTextureFlags(), 0 );
+					m_pShaderProgram = m_engine->GetShaderManager().GetAutomaticProgram( *l_technique, l_pass->GetTextureFlags(), 0 );
 					m_bOwnShader = true;
 				}
 			}
@@ -166,7 +166,7 @@ namespace GuiCommon
 		if ( m_bOwnShader && !m_pShaderProgram.expired() )
 		{
 			m_pPass.lock()->SetShader( nullptr );
-			//m_pEngine->GetShaderManager().RemoveProgram( m_pShaderProgram.lock() );
+			//m_engine->GetShaderManager().RemoveProgram( m_pShaderProgram.lock() );
 			m_pShaderProgram.reset();
 		}
 	}
@@ -191,7 +191,7 @@ namespace GuiCommon
 		{
 			if ( m_pShaderProgram.expired() )
 			{
-				m_pShaderProgram = m_pEngine->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_GLSL );
+				m_pShaderProgram = m_engine->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_GLSL );
 			}
 
 			for ( int i = eSHADER_TYPE_VERTEX; i < eSHADER_TYPE_COUNT; i++ )
@@ -211,20 +211,20 @@ namespace GuiCommon
 		}
 	}
 
-	void ShaderDialog::DoFolder( eSHADER_TYPE p_eType )
+	void ShaderDialog::DoFolder( eSHADER_TYPE p_type )
 	{
 		wxFileDialog l_dialog( this, _( "Select a shader program file" ), wxEmptyString, wxEmptyString, wxEmptyString );
 
 		if ( l_dialog.ShowModal() == wxID_OK )
 		{
-			m_pEditorPages[p_eType]->LoadFile( l_dialog.GetPath() );
+			m_pEditorPages[p_type]->LoadFile( l_dialog.GetPath() );
 			m_bCompiled = false;
 		}
 	}
 
-	void ShaderDialog::DoSave( Castor3D::eSHADER_TYPE p_eType, bool p_createIfNone )
+	void ShaderDialog::DoSave( Castor3D::eSHADER_TYPE p_type, bool p_createIfNone )
 	{
-		m_pEditorPages[p_eType]->SaveFile( p_createIfNone );
+		m_pEditorPages[p_type]->SaveFile( p_createIfNone );
 	}
 
 	BEGIN_EVENT_TABLE( ShaderDialog, wxFrame )
@@ -237,19 +237,19 @@ namespace GuiCommon
 
 	void ShaderDialog::OnOpenFile( wxCommandEvent & p_event )
 	{
-		eSHADER_TYPE l_eType = eSHADER_TYPE_COUNT;
+		eSHADER_TYPE l_type = eSHADER_TYPE_COUNT;
 
-		for ( int i = 0; i < eSHADER_TYPE_COUNT && l_eType == eSHADER_TYPE_COUNT; i++ )
+		for ( int i = 0; i < eSHADER_TYPE_COUNT && l_type == eSHADER_TYPE_COUNT; i++ )
 		{
 			if ( m_pNotebookEditors->GetPage( i ) == m_pNotebookEditors->GetCurrentPage() )
 			{
-				l_eType = eSHADER_TYPE( i );
+				l_type = eSHADER_TYPE( i );
 			}
 		}
 
-		if ( l_eType != eSHADER_TYPE_COUNT )
+		if ( l_type != eSHADER_TYPE_COUNT )
 		{
-			DoFolder( l_eType );
+			DoFolder( l_type );
 		}
 
 		p_event.Skip();
@@ -269,19 +269,19 @@ namespace GuiCommon
 
 	void ShaderDialog::OnSaveFile( wxCommandEvent & p_event )
 	{
-		eSHADER_TYPE l_eType = eSHADER_TYPE_COUNT;
+		eSHADER_TYPE l_type = eSHADER_TYPE_COUNT;
 
-		for ( int i = 0; i < eSHADER_TYPE_COUNT && l_eType == eSHADER_TYPE_COUNT; i++ )
+		for ( int i = 0; i < eSHADER_TYPE_COUNT && l_type == eSHADER_TYPE_COUNT; i++ )
 		{
 			if ( m_pNotebookEditors->GetPage( i ) == m_pNotebookEditors->GetCurrentPage() )
 			{
-				l_eType = eSHADER_TYPE( i );
+				l_type = eSHADER_TYPE( i );
 			}
 		}
 
-		if ( l_eType != eSHADER_TYPE_COUNT )
+		if ( l_type != eSHADER_TYPE_COUNT )
 		{
-			DoSave( l_eType, true );
+			DoSave( l_type, true );
 		}
 
 		p_event.Skip();
@@ -289,9 +289,9 @@ namespace GuiCommon
 
 	void ShaderDialog::OnSaveAll( wxCommandEvent & p_event )
 	{
-		eSHADER_TYPE l_eType = eSHADER_TYPE_COUNT;
+		eSHADER_TYPE l_type = eSHADER_TYPE_COUNT;
 
-		for ( int i = 0; i < eSHADER_TYPE_COUNT && l_eType == eSHADER_TYPE_COUNT; i++ )
+		for ( int i = 0; i < eSHADER_TYPE_COUNT && l_type == eSHADER_TYPE_COUNT; i++ )
 		{
 			DoSave( eSHADER_TYPE( i ), false );
 		}

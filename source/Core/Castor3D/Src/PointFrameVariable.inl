@@ -183,9 +183,9 @@
 	}
 
 	template< typename T, uint32_t Count >
-	inline void PointFrameVariable< T, Count >::SetValue( Castor::Point< T, Count > const & p_ptValue, uint32_t p_uiIndex )
+	inline void PointFrameVariable< T, Count >::SetValue( Castor::Point< T, Count > const & p_ptValue, uint32_t p_index )
 	{
-		Castor::Coords< T, Count > l_ptValue( GetValue( p_uiIndex ) );
+		Castor::Coords< T, Count > l_ptValue( GetValue( p_index ) );
 		memcpy( l_ptValue.ptr(), p_ptValue.const_ptr(), l_ptValue.size() );
 		TFrameVariable< T >::m_bChanged = true;
 	}
@@ -203,11 +203,11 @@
 	}
 
 	template< typename T, uint32_t Count >
-	inline Castor::Coords< T, Count > PointFrameVariable< T, Count >::GetValue( uint32_t p_uiIndex )throw( std::out_of_range )
+	inline Castor::Coords< T, Count > PointFrameVariable< T, Count >::GetValue( uint32_t p_index )throw( std::out_of_range )
 	{
-		if ( p_uiIndex < this->m_uiOcc )
+		if ( p_index < this->m_uiOcc )
 		{
-			return Castor::Coords< T, Count >( &this->m_pValues[p_uiIndex * Count] );
+			return Castor::Coords< T, Count >( &this->m_pValues[p_index * Count] );
 		}
 		else
 		{
@@ -216,11 +216,11 @@
 	}
 
 	template< typename T, uint32_t Count >
-	inline Castor::Point< T, Count > PointFrameVariable< T, Count >::GetValue( uint32_t p_uiIndex )const throw( std::out_of_range )
+	inline Castor::Point< T, Count > PointFrameVariable< T, Count >::GetValue( uint32_t p_index )const throw( std::out_of_range )
 	{
-		if ( p_uiIndex < this->m_uiOcc )
+		if ( p_index < this->m_uiOcc )
 		{
-			return Castor::Point< T, Count >( &this->m_pValues[p_uiIndex * Count] );
+			return Castor::Point< T, Count >( &this->m_pValues[p_index * Count] );
 		}
 		else
 		{
@@ -253,10 +253,10 @@
 	}
 
 	template< typename T, uint32_t Count >
-	inline void PointFrameVariable< T, Count >::DoSetValueStr( Castor::String const & p_strValue, uint32_t p_uiIndex )
+	inline void PointFrameVariable< T, Count >::DoSetValueStr( Castor::String const & p_strValue, uint32_t p_index )
 	{
 		Castor::StringArray l_arraySplitted = Castor::string::split( p_strValue, cuT( ", \t" ) );
-		Castor::Coords< T, Count > l_ptValue( GetValue( p_uiIndex ) );
+		Castor::Coords< T, Count > l_ptValue( GetValue( p_index ) );
 
 		if ( l_arraySplitted.size() == Count )
 		{

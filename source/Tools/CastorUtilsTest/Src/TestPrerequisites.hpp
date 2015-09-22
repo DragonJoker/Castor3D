@@ -33,14 +33,16 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Logger.hpp>
 #include <PreciseTimer.hpp>
 
-#if defined( NDEBUG )
-#	define NB_TESTS 1000000
-#else
-#	define NB_TESTS 1000
-#endif
-
 namespace Testing
 {
+#if defined( NDEBUG )
+	static const uint32_t NB_TESTS = 10000000;
+#else
+	static const uint32_t NB_TESTS = 1000000;
+#endif
+	static const uint32_t BENCH_TITLE_WIDTH = 60;
+	static const uint32_t TEST_TITLE_WIDTH = 60;
+
 	class BenchCase;
 	class TestCase;
 	class BenchManager;

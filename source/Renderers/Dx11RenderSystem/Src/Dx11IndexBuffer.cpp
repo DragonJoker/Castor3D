@@ -31,7 +31,7 @@ namespace Dx11Render
 		DxBufferObject< uint32_t, ID3D11Buffer >::DoCleanup();
 	}
 
-	bool DxIndexBuffer::Initialise( eBUFFER_ACCESS_TYPE p_eType, eBUFFER_ACCESS_NATURE p_eNature, ShaderProgramBaseSPtr p_pProgram )
+	bool DxIndexBuffer::Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_eNature, ShaderProgramBaseSPtr p_pProgram )
 	{
 		bool l_return = false;
 
@@ -46,23 +46,23 @@ namespace Dx11Render
 				HRESULT l_hr;
 				D3D11_BUFFER_DESC l_desc = { 0 };
 				l_desc.ByteWidth = l_uiSize * UINT( sizeof( uint32_t ) );
-				l_desc.Usage = DirectX11::Get( p_eType );
+				l_desc.Usage = DirectX11::Get( p_type );
 				l_desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-				l_desc.CPUAccessFlags = DirectX11::GetCpuAccessFlags( p_eType | p_eNature );
+				l_desc.CPUAccessFlags = DirectX11::GetCpuAccessFlags( p_type | p_eNature );
 				l_desc.MiscFlags = 0;
-				l_desc.StructureByteStride = 0;//sizeof( uint32_t );
+				l_desc.StructureByteStride = 0;
 
-				if ( p_eType == eBUFFER_ACCESS_TYPE_STATIC )
+				if ( p_type == eBUFFER_ACCESS_TYPE_STATIC )
 				{
 					D3D11_SUBRESOURCE_DATA l_data = { 0 };
 					l_data.pSysMem = &m_pBuffer->data()[0];
 					l_hr = l_pDevice->CreateBuffer( &l_desc, &l_data, &m_pBufferObject );
-					dxDebugName( l_renderSystem, m_pBufferObject, IndexBuffer );
+					dxTrack( l_renderSystem, m_pBufferObject, IndexBuffer );
 				}
 				else
 				{
 					l_hr = l_pDevice->CreateBuffer( &l_desc, NULL, &m_pBufferObject );
-					dxDebugName( l_renderSystem, m_pBufferObject, IndexBuffer );
+					dxTrack( l_renderSystem, m_pBufferObject, IndexBuffer );
 				}
 
 				l_return = dxCheckError( l_hr, "ID3D11Device::CreateIndexBuffer" );
@@ -74,7 +74,7 @@ namespace Dx11Render
 
 			if ( m_pBufferObject )
 			{
-				if ( p_eType != eBUFFER_ACCESS_TYPE_STATIC )
+				if ( p_type != eBUFFER_ACCESS_TYPE_STATIC )
 				{
 					UINT l_uiSize = UINT( m_pBuffer->GetSize() );
 

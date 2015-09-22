@@ -6,7 +6,7 @@ using namespace Castor3D;
 //*************************************************************************************************
 
 PostEffect::PostEffect( RenderSystem * p_pRenderSystem )
-	:	m_pRenderSystem( p_pRenderSystem )
+	:	m_renderSystem( p_pRenderSystem )
 {
 }
 

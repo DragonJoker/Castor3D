@@ -51,7 +51,7 @@ namespace Dx11Render
 		virtual Castor3D::DepthStencilStateSPtr DoCreateCurrent();
 
 	private:
-		DxRenderSystem * m_pRenderSystem;
+		DxRenderSystem * m_renderSystem;
 		ID3D11DepthStencilState * m_pDepthStencilState;
 	};
 }

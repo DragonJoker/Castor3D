@@ -64,7 +64,7 @@
 
 		//*************************************************************************************************
 
-		template <typename T>
+		template< typename T >
 		inline void parse( String const & p_str, T & p_val, std::locale const & p_locale )
 		{
 			StringStream l_out( p_str );
@@ -72,7 +72,7 @@
 			l_out >> p_val;
 		}
 
-		template <typename T>
+		template< typename T >
 		inline void extract( String & p_str, T & p_val, std::locale const & p_locale )
 		{
 			StringStream l_out( p_str );

@@ -29,8 +29,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	RenderTarget::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< RenderTarget, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	RenderTarget::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		:	Loader< RenderTarget, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 		,	m_tabs( p_tabs )
 	{
 	}
@@ -345,7 +345,7 @@ namespace Castor3D
 	const Castor::String RenderTarget::DefaultSamplerName = cuT( "DefaultRTSampler" );
 
 	RenderTarget::RenderTarget( Engine * p_pRoot, eTARGET_TYPE p_eTargetType )
-		: m_pEngine( p_pRoot )
+		: m_engine( p_pRoot )
 		, m_eTargetType( p_eTargetType )
 		, m_ePixelFormat( ePIXEL_FORMAT_A8R8G8B8 )
 		, m_eDepthFormat( ePIXEL_FORMAT_DEPTH24S8 )
@@ -395,7 +395,7 @@ namespace Castor3D
 
 			try
 			{
-				m_pRenderTechnique = m_pEngine->CreateTechnique( m_strTechniqueName, *this, l_params );
+				m_pRenderTechnique = m_engine->CreateTechnique( m_strTechniqueName, *this, l_params );
 			}
 			catch( Exception & p_exc )
 			{
@@ -467,7 +467,7 @@ namespace Castor3D
 
 	DynamicTextureSPtr RenderTarget::CreateDynamicTexture()const
 	{
-		return m_pEngine->GetRenderSystem()->CreateDynamicTexture();
+		return m_engine->GetRenderSystem()->CreateDynamicTexture();
 	}
 
 	eTOPOLOGY RenderTarget::GetPrimitiveType()const
@@ -542,8 +542,8 @@ namespace Castor3D
 
 			if ( l_pScene )
 			{
-				l_strLENodeName	= l_pCamNode->GetName() + l_strIndex + cuT( "_LEye" );
-				l_strRENodeName	= l_pCamNode->GetName() + l_strIndex + cuT( "_REye" );
+				l_strLENodeName = l_pCamNode->GetName() + l_strIndex + cuT( "_LEye" );
+				l_strRENodeName = l_pCamNode->GetName() + l_strIndex + cuT( "_REye" );
 				l_pLECamNode = l_pScene->CreateSceneNode( l_strLENodeName, l_pScene->GetNode( l_pCamNode->GetName() ) );
 				l_pRECamNode = l_pScene->CreateSceneNode( l_strRENodeName, l_pScene->GetNode( l_pCamNode->GetName() ) );
 				l_pLECamNode->Translate( Point3r( -m_rIntraOcularDistance / 2, 0, 0 ) );
@@ -580,11 +580,11 @@ namespace Castor3D
 		m_fbRightEye.m_pFrameBuffer->Resize( m_size );
 	}
 
-	void RenderTarget::SetTechnique( Castor::String const & p_strName )
+	void RenderTarget::SetTechnique( Castor::String const & p_name )
 	{
-		m_strTechniqueName = p_strName;
-		m_bDeferredRendering = p_strName == cuT( "deferred" );
-		m_bMultisampling = p_strName == cuT( "msaa" );
+		m_strTechniqueName = p_name;
+		m_bDeferredRendering = p_name == cuT( "deferred" );
+		m_bMultisampling = p_name == cuT( "msaa" );
 	}
 
 	void RenderTarget::DoRender( RenderTarget::stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, double p_dFrameTime )
@@ -604,10 +604,14 @@ namespace Castor3D
 
 		m_pCurrentFrameBuffer.reset();
 		m_pCurrentCamera.reset();
+
 #if DEBUG_BUFFERS
+
 		p_fb.m_pColorAttach->DownloadBuffer( p_fb.m_pColorTexture->GetBuffer() );
 		const Image l_tmp( cuT( "tmp" ), *p_fb.m_pColorTexture->GetBuffer() );
-		Image::BinaryLoader()( l_tmp, File::GetUserDirectory() / cuT( "RenderTargetTexture_" ) + string::to_string( ptrdiff_t( p_fb.m_pColorTexture.get() ), 16 ) + cuT( ".bmp" ) );
+		Image::BinaryLoader()( l_tmp, Engine::GetEngineDirectory() / cuT( "RenderTargetTexture_" ) + string::to_string( ptrdiff_t( p_fb.m_pColorTexture.get() ), 16 ) + cuT( ".bmp" ) );
+
 #endif
+
 	}
 }

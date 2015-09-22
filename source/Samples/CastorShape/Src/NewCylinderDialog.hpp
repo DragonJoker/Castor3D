@@ -25,7 +25,7 @@ namespace CastorShape
 	class NewCylinderDialog : public NewGeometryDialog
 	{
 	public:
-		NewCylinderDialog( Castor3D::Engine * p_pEngine, wxWindow * parent, wxWindowID p_id );
+		NewCylinderDialog( Castor3D::Engine * p_engine, wxWindow * parent, wxWindowID p_id );
 		~NewCylinderDialog();
 
 		Castor::real GetRadius()const;

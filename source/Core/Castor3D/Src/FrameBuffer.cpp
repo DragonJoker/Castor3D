@@ -15,8 +15,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	FrameBuffer::FrameBuffer( Engine * p_pEngine )
-		:	m_pEngine( p_pEngine )
+	FrameBuffer::FrameBuffer( Engine * p_engine )
+		:	m_engine( p_engine )
 	{
 	}
 
@@ -24,11 +24,11 @@ namespace Castor3D
 	{
 	}
 
-	bool FrameBuffer::Bind( eFRAMEBUFFER_MODE p_eMode, eFRAMEBUFFER_TARGET p_eTarget )
+	bool FrameBuffer::Bind( eFRAMEBUFFER_MODE p_mode, eFRAMEBUFFER_TARGET p_eTarget )
 	{
 		bool l_return = DoBind( p_eTarget );
 
-		if ( l_return && m_arrayAttaches.size() && p_eMode == eFRAMEBUFFER_MODE_AUTOMATIC )
+		if ( l_return && m_arrayAttaches.size() && p_mode == eFRAMEBUFFER_MODE_AUTOMATIC )
 		{
 			SetDrawBuffers( m_arrayAttaches );
 		}
@@ -158,7 +158,7 @@ namespace Castor3D
 			{
 				p_pDepthStencilState->Apply();
 				p_pRasteriserState->Apply();
-				m_pEngine->GetRenderSystem()->GetCurrentContext()->BToBRender( p_sizeDst, l_pTexture, p_uiComponents );
+				m_engine->GetRenderSystem()->GetCurrentContext()->BToBRender( p_sizeDst, l_pTexture, p_uiComponents );
 				p_pBuffer->Unbind();
 
 				if ( p_pBuffer->m_mapTex.size() )

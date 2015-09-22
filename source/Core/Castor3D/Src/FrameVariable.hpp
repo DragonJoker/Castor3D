@@ -61,7 +61,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a FrameVariable into a text file
@@ -217,25 +217,25 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable, from a string
-		 *\param[in]	p_uiIndex	The index of the value
+		 *\param[in]	p_index	The index of the value
 		 *\param[in]	p_strValue	The string containing the value
 		 *\~french
 		 *\brief		Définit la valeur de cette variable à partir d'une chaîne
-		 *\param[in]	p_uiIndex	L'index de la valeur
+		 *\param[in]	p_index	L'index de la valeur
 		 *\param[in]	p_strValue	La chaîne contenant la valeur
 		 */
-		virtual void SetValueStr( Castor::String const & p_strValue, uint32_t p_uiIndex );
+		virtual void SetValueStr( Castor::String const & p_strValue, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Defines the name of the variable, as it appears in the shader program
-		 *\param[in]	p_strName	The variable name
+		 *\param[in]	p_name	The variable name
 		 *\~french
 		 *\brief		Définit le nom de la variable
-		 *\param[in]	p_strName	Le nom
+		 *\param[in]	p_name	Le nom
 		 */
-		virtual void SetName( Castor::String const & p_strName )
+		virtual void SetName( Castor::String const & p_name )
 		{
-			m_strName = p_strName;
+			m_strName = p_name;
 		}
 		/**
 		 *\~english
@@ -264,17 +264,17 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the variable string value at given index
-		 *\param[in]	p_uiIndex	The index
+		 *\param[in]	p_index	The index
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la valeur chaîne de la variable à l'index donné
-		 *\param[in]	p_uiIndex	L'index
+		 *\param[in]	p_index	L'index
 		 *\return		La valeur
 		 */
-		inline Castor::String GetStrValue( uint32_t p_uiIndex )const
+		inline Castor::String GetStrValue( uint32_t p_index )const
 		{
-			CASTOR_ASSERT( p_uiIndex < m_uiOcc );
-			return m_strValue[p_uiIndex];
+			CASTOR_ASSERT( p_index < m_uiOcc );
+			return m_strValue[p_index];
 		}
 		/**
 		 *\~english
@@ -334,14 +334,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable, from a string
-		 *\param[in]	p_uiIndex	The index of the value
+		 *\param[in]	p_index	The index of the value
 		 *\param[in]	p_strValue	The string containing the value
 		 *\~french
 		 *\brief		Définit la valeur de cette variable à partir d'une chaîne
-		 *\param[in]	p_uiIndex	L'index de la valeur
+		 *\param[in]	p_index	L'index de la valeur
 		 *\param[in]	p_strValue	La chaîne contenant la valeur
 		 */
-		virtual void DoSetValueStr( Castor::String const & p_strValue, uint32_t p_uiIndex ) = 0;
+		virtual void DoSetValueStr( Castor::String const & p_strValue, uint32_t p_index ) = 0;
 
 	protected:
 		//!\~english The variable name as it appears in the shader program	\~french Le nom de la variable tel qu'il apparaît dans le shader
@@ -375,7 +375,7 @@ namespace Castor3D
 	\~french
 	\brief		Représentation d'une variable de shader à type variable
 	*/
-	template <typename T>
+	template< typename T >
 	class TFrameVariable
 		:	public FrameVariable
 	{

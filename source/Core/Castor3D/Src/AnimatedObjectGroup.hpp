@@ -66,16 +66,16 @@ namespace Castor3D
 			 *\brief		Loads an AnimatedObjectGroup from a binary file
 			 *\param[in]	p_file		The file to load the AnimatedObjectGroup from
 			 *\param[in]	p_group		The AnimatedObjectGroup to load
-			 *\param[in]	p_pScene	The scene which holds the AnimatedObjectGroup
+			 *\param[in]	p_scene	The scene which holds the AnimatedObjectGroup
 			 *\return		\p true if OK
 			 *\~french
 			 *\brief		Charge un AnimatedObjectGroup à partir d'un fichier binaire
 			 *\param[in]	p_file		Le fichier où charger le AnimatedObjectGroup
 			 *\param[in]	p_group		Le AnimatedObjectGroup à charger
-			 *\param[in]	p_pScene	La scène qui contient le AnimatedObjectGroup
+			 *\param[in]	p_scene	La scène qui contient le AnimatedObjectGroup
 			 *\return		\p true si tout s'est bien passé
 			 */
-			virtual bool operator()( AnimatedObjectGroup & p_group, Castor::BinaryFile & p_file, Scene * p_pScene );
+			virtual bool operator()( AnimatedObjectGroup & p_group, Castor::BinaryFile & p_file, Scene * p_scene );
 
 		private:
 			virtual bool operator()( AnimatedObjectGroup & p_group, Castor::BinaryFile & p_file );
@@ -103,7 +103,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes an animated object group into a text file
@@ -130,14 +130,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Specified constructor
-		 *\param[in]	p_pScene	The scene
-		 *\param[in]	p_strName	The group name
+		 *\param[in]	p_scene	The scene
+		 *\param[in]	p_name	The group name
 		 *\~french
 		 *\brief		Constructeur spécifié
-		 *\param[in]	p_pScene	La scène
-		 *\param[in]	p_strName	Le nom du groupe
+		 *\param[in]	p_scene	La scène
+		 *\param[in]	p_name	Le nom du groupe
 		 */
-		AnimatedObjectGroup( SceneSPtr p_pScene, Castor::String const & p_strName );
+		AnimatedObjectGroup( SceneSPtr p_scene, Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -157,14 +157,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates an AnimatedObject from the MovableObject given as a parameter, adds it to the list
-		 *\param[in]	p_strName	The name
+		 *\param[in]	p_name	The name
 		 *\return		The created AnimatedObject
 		 *\~french
 		 *\brief		Crée un AnimatedObject à partir du MovableObject donné, l'ajoute à la liste
-		 *\param[in]	p_strName	Le nom
+		 *\param[in]	p_name	Le nom
 		 *\return		L'AnimatedObject créé
 		 */
-		AnimatedObjectSPtr CreateObject( Castor::String const & p_strName );
+		AnimatedObjectSPtr CreateObject( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Adds an AnimatedObject to this group.
@@ -179,12 +179,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Adds the animation to the list
-		 *\param[in]	p_strName	The animation to add
+		 *\param[in]	p_name	The animation to add
 		 *\~english
 		 *\brief		Ajoute une animation à la liste
-		 *\param[in]	p_strName	L'animation à ajouter
+		 *\param[in]	p_name	L'animation à ajouter
 		 */
-		void AddAnimation( Castor::String const & p_strName );
+		void AddAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Updates all animated objects
@@ -195,41 +195,41 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the loop status of wanted animation
-		 *\param[in]	p_strName	The name of the animation
+		 *\param[in]	p_name	The name of the animation
 		 *\param[in]	p_bLooped	The status
 		 *\~french
 		 *\brief		Définit le statut de bouclage de l'animation voulue
-		 *\param[in]	p_strName	Le nom de l'animation
+		 *\param[in]	p_name	Le nom de l'animation
 		 *\param[in]	p_bLooped	Le statut
 		 */
-		void SetAnimationLooped( Castor::String const & p_strName, bool p_bLooped );
+		void SetAnimationLooped( Castor::String const & p_name, bool p_bLooped );
 		/**
 		 *\~english
 		 *\brief		Starts the animation identified by the given name
-		 *\param[in]	p_strName	The name of the animation
+		 *\param[in]	p_name	The name of the animation
 		 *\~french
 		 *\brief		Démarre l'animation identifiée par le nom donné
-		 *\param[in]	p_strName	Le nom de l'animation
+		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		void StartAnimation( Castor::String const & p_strName );
+		void StartAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Stops the animation identified by the given name
-		 *\param[in]	p_strName	The name of the animation
+		 *\param[in]	p_name	The name of the animation
 		 *\~french
 		 *\brief		Stoppe l'animation identifiée par le nom donné
-		 *\param[in]	p_strName	Le nom de l'animation
+		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		void StopAnimation( Castor::String const & p_strName );
+		void StopAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Pauses the animation identified by the given name
-		 *\param[in]	p_strName	The name of the animation
+		 *\param[in]	p_name	The name of the animation
 		 *\~french
 		 *\brief		Met en pause l'animation identifiée par le nom donné
-		 *\param[in]	p_strName	Le nom de l'animation
+		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		void PauseAnimation( Castor::String const & p_strName );
+		void PauseAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Starts all animations

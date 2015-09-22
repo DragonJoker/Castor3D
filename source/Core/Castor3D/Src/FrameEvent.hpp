@@ -41,12 +41,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_eType	The event type
+		 *\param[in]	p_type	The event type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_eType	Le type d'évènement
+		 *\param[in]	p_type	Le type d'évènement
 		 */
-		FrameEvent( eEVENT_TYPE p_eType );
+		FrameEvent( eEVENT_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -115,12 +115,12 @@ namespace Castor3D
 		 */
 		inline eEVENT_TYPE GetType()
 		{
-			return m_eType;
+			return m_type;
 		}
 
 	protected:
 		//!\~english The event type	\~french Le type d'évènement
-		eEVENT_TYPE m_eType;
+		eEVENT_TYPE m_type;
 	};
 }
 

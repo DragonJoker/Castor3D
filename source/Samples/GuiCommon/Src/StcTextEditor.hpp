@@ -100,7 +100,7 @@ namespace GuiCommon
 #endif
 
 	public:
-		StcTextEditor( StcContext & p_context, wxWindow * p_pParent, wxWindowID p_id = wxID_ANY, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize, long p_lStyle = wxVSCROLL );
+		StcTextEditor( StcContext & p_context, wxWindow * p_parent, wxWindowID p_id = wxID_ANY, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize, long p_lStyle = wxVSCROLL );
 		virtual ~StcTextEditor();
 
 		bool LoadFile();

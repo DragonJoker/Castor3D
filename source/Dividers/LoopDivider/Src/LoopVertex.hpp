@@ -39,10 +39,10 @@ namespace Loop
 		Vertex( Castor3D::BufferElementGroupSPtr p_ptPoint );
 		~Vertex();
 
-		bool HasEdge( uint32_t p_uiIndex );
-		EdgeSPtr GetEdge( uint32_t p_uiIndex );
-		void AddEdge( EdgeSPtr p_pEdge, uint32_t p_uiIndex );
-		void RemoveEdge( uint32_t p_uiIndex );
+		bool HasEdge( uint32_t p_index );
+		EdgeSPtr GetEdge( uint32_t p_index );
+		void AddEdge( EdgeSPtr p_pEdge, uint32_t p_index );
+		void RemoveEdge( uint32_t p_index );
 
 		/**@name Accessors */
 		//@{
@@ -54,23 +54,31 @@ namespace Loop
 		{
 			return m_ptPoint->GetIndex();
 		}
-		inline uint32_t Size()const
+		inline uint32_t size()const
 		{
 			return uint32_t( m_mapEdges.size() );
 		}
-		inline EdgePtrUIntMap::iterator Begin()
+		inline EdgePtrUIntMap::iterator begin()
 		{
 			return m_mapEdges.begin();
 		}
-		inline EdgePtrUIntMap::const_iterator End()const
+		inline EdgePtrUIntMap::const_iterator begin()const
+		{
+			return m_mapEdges.begin();
+		}
+		inline EdgePtrUIntMap::iterator end()
 		{
 			return m_mapEdges.end();
 		}
-		inline void Erase( EdgePtrUIntMap::iterator p_it )
+		inline EdgePtrUIntMap::const_iterator end()const
+		{
+			return m_mapEdges.end();
+		}
+		inline void erase( EdgePtrUIntMap::iterator p_it )
 		{
 			m_mapEdges.erase( p_it );
 		}
-		inline void Clear()
+		inline void clear()
 		{
 			m_mapEdges.clear();
 		}

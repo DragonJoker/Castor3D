@@ -33,81 +33,97 @@ namespace Testing
 
 	void BenchManager::ExecuteBenchs()
 	{
-		Logger::LogInfo( cuT(	"*********************************************************************************************" ) );
+		Logger::LogInfo( cuT( "*********************************************************************************************" ) );
+		StringStream l_benchSep;
+		l_benchSep.width( BENCH_TITLE_WIDTH );
+		l_benchSep.fill( cuT( '*' ) );
+		l_benchSep << cuT( '*' );
 
 		if ( m_arrayBenchs.size() )
 		{
-			Logger::LogInfo( cuT(	"Benchmarks - Begin" ) );
-			Logger::LogInfo(	cuT(	"**************************************************" ) );
-			std::for_each( m_arrayBenchs.begin(), m_arrayBenchs.end(), []( BenchCaseSPtr p_bench )
+			Logger::LogInfo( cuT( "\nBenchmarks - Begin\n" ) );
+			Logger::LogInfo( l_benchSep );
+
+			for ( auto l_bench : m_arrayBenchs )
 			{
-				p_bench->Execute();
-			} );
-			Logger::LogInfo( cuT(	"Benchmarks - End" ) );
+				l_bench->Execute();
+			}
+
+			Logger::LogInfo( cuT( "\nBenchmarks - End\n" ) );
 		}
 		else
 		{
-			Logger::LogInfo( cuT(	"No bench" ) );
+			Logger::LogInfo( cuT( "\nNo bench\n" ) );
 		}
 
-		Logger::LogInfo( cuT(	"*********************************************************************************************" ) );
+		Logger::LogInfo( cuT( "*********************************************************************************************" ) );
 	}
 
 	void BenchManager::BenchsSummary()
 	{
-		Logger::LogInfo(	cuT(	"**************************************************" ) );
-		std::for_each( m_arrayBenchs.begin(), m_arrayBenchs.end(), []( BenchCaseSPtr p_bench )
+		StringStream l_benchSep;
+		l_benchSep.width( BENCH_TITLE_WIDTH );
+		l_benchSep.fill( cuT( '*' ) );
+		l_benchSep << cuT( '*' );
+		Logger::LogInfo( l_benchSep );
+
+		for ( auto l_bench : m_arrayBenchs )
 		{
-			Logger::LogInfo(	p_bench->GetSummary().c_str() );
-		} );
+			Logger::LogInfo( l_bench->GetSummary().c_str() );
+		}
 	}
 
 	uint32_t BenchManager::ExecuteTests()
 	{
 		uint32_t l_errCount = 0;
 		uint32_t l_testCount = 0;
-		Logger::LogInfo( cuT(	"*********************************************************************************************" ) );
+		Logger::LogInfo( cuT( "*********************************************************************************************" ) );
+		StringStream l_testSep;
+		l_testSep.width( BENCH_TITLE_WIDTH );
+		l_testSep.fill( cuT( '*' ) );
+		l_testSep << cuT( '*' );
 
 		if ( m_arrayTests.size() )
 		{
-			Logger::LogInfo( cuT(	"Tests - Begin" ) );
-			Logger::LogInfo( cuT(	"**************************************************" ) );
-			std::for_each( m_arrayTests.begin(), m_arrayTests.end(), [&]( TestCaseSPtr p_pCode )
+			Logger::LogInfo( cuT( "\nTests - Begin\n" ) );
+			Logger::LogInfo( l_testSep );
+
+			for ( auto && l_testCase : m_arrayTests )
 			{
 				try
 				{
-					p_pCode->Execute( l_errCount, l_testCount );
+					l_testCase->Execute( l_errCount, l_testCount );
 				}
 				catch ( TestFailed & exc )
 				{
-					Logger::LogWarning(	"*	Test " + p_pCode->GetName() + " execution failed (" + exc.what() + ") " );
+					Logger::LogWarning( "*	Test " + l_testCase->GetName() + " execution failed (" + exc.what() + ") " );
 				}
 				catch ( std::exception & exc )
 				{
 					l_errCount++;
-					Logger::LogInfo( std::stringstream() << "*	Test " << p_pCode->GetName().c_str() << " execution failed (" << exc.what() << ")" );
+					Logger::LogInfo( std::stringstream() << "*	Test " << l_testCase->GetName().c_str() << " execution failed (" << exc.what() << ")" );
 				}
 				catch ( ... )
 				{
 					l_errCount++;
-					Logger::LogInfo(	"*	Test " + p_pCode->GetName() + " execution failed (Unknown reason)" );
+					Logger::LogInfo( "*	Test " + l_testCase->GetName() + " execution failed (Unknown reason)" );
 				}
 
-				Logger::LogInfo(	cuT(	"**************************************************" ) );
-			} );
+				Logger::LogInfo( l_testSep );
+			}
 
 			if ( l_errCount )
 			{
-				Logger::LogInfo( StringStream() << cuT(	"Tests - End, " ) << l_errCount << cuT( " errors detected out of " ) << l_testCount << cuT( " tests" ) );
+				Logger::LogInfo( StringStream() << ( "\nTests - End, " ) << l_errCount << cuT( " errors detected out of " ) << l_testCount << cuT( " tests\n" ) );
 			}
 			else
 			{
-				Logger::LogInfo( StringStream() << cuT(	"Tests - End, no error detected out of " ) << l_testCount << cuT( " tests" ) );
+				Logger::LogInfo( StringStream() << cuT( "\nTests - End, no error detected out of " ) << l_testCount << cuT( " tests\n" ) );
 			}
 		}
 		else
 		{
-			Logger::LogInfo( cuT(	"No test" ) );
+			Logger::LogInfo( cuT(	"\nNo test\n" ) );
 		}
 
 		Logger::LogInfo( cuT(	"*********************************************************************************************" ) );

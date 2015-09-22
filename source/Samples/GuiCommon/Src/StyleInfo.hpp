@@ -94,7 +94,7 @@ namespace GuiCommon
 		int m_iLetterCase;
 
 	public:
-		StyleInfo( wxString const & p_strName, wxString const & p_strForeground, wxString const & p_strBackground, wxString const & p_strFontName, int p_iFontsize, int p_iFontstyle, int p_iLetterCase );
+		StyleInfo( wxString const & p_name, wxString const & p_strForeground, wxString const & p_strBackground, wxString const & p_strFontName, int p_iFontsize, int p_iFontstyle, int p_iLetterCase );
 		StyleInfo( StyleInfo const & p_infos );
 		StyleInfo & operator =( StyleInfo const & p_infos );
 		virtual ~StyleInfo();

@@ -41,7 +41,7 @@ namespace Castor3D
 	private:
 		friend class PluginBase;
 		friend class Engine;
-		typedef void CreateImporterFunction( Engine * p_pEngine, ImporterPlugin * p_pPlugin );
+		typedef void CreateImporterFunction( Engine * p_engine, ImporterPlugin * p_pPlugin );
 		typedef void DestroyImporterFunction( ImporterPlugin * p_pPlugin );
 		typedef ExtensionArray GetExtensionFunction();
 

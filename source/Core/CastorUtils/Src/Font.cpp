@@ -216,9 +216,9 @@ namespace Castor
 	{
 	}
 
-	bool Font::BinaryLoader::operator()( Font & p_font, Path const & p_pathFile, uint32_t p_uiHeight )
+	bool Font::BinaryLoader::operator()( Font & p_font, Path const & p_pathFile, uint32_t p_height )
 	{
-		m_uiHeight = p_uiHeight;
+		m_uiHeight = p_height;
 		return operator()( p_font, p_pathFile );
 	}
 
@@ -274,22 +274,22 @@ namespace Castor
 
 	//*********************************************************************************************
 
-	Font::Font( String const & p_strName, uint32_t p_uiHeight )
-		: Resource< Font >( p_strName )
-		, m_uiHeight( p_uiHeight )
+	Font::Font( String const & p_name, uint32_t p_height )
+		: Resource< Font >( p_name )
+		, m_uiHeight( p_height )
 		, m_iMaxHeight( 0 )
 		, m_iMaxTop( 0 )
 		, m_iMaxWidth( 0 )
 	{
 	}
 
-	Font::Font( Path const & p_path, String const & p_strName, uint32_t p_uiHeight )
-		: Resource< Font >( p_strName )
-		, m_uiHeight( p_uiHeight )
+	Font::Font( Path const & p_path, String const & p_name, uint32_t p_height )
+		: Resource< Font >( p_name )
+		, m_uiHeight( p_height )
 		, m_iMaxHeight( 0 )
 		, m_iMaxTop( 0 )
 		, m_iMaxWidth( 0 )
-		, m_glyphLoader( std::make_unique< ft::SFreeTypeFontImpl >( p_path, p_uiHeight ) )
+		, m_glyphLoader( std::make_unique< ft::SFreeTypeFontImpl >( p_path, p_height ) )
 	{
 	}
 

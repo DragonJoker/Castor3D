@@ -2262,9 +2262,9 @@ bool OpenGl::DebugMessageCallback( PFNGLDEBUGAMDPROC pfnProc, void * p_pThis )
 	return true;
 }
 
-bool OpenGl::PolygonMode( eGL_FACE p_eFacing, eGL_FILL_MODE p_eMode )
+bool OpenGl::PolygonMode( eGL_FACE p_eFacing, eGL_FILL_MODE p_mode )
 {
-	m_pfnPolygonMode( p_eFacing, p_eMode );
+	m_pfnPolygonMode( p_eFacing, p_mode );
 	return glCheckError( *this, "glPolygonMode" );
 }
 
@@ -2434,15 +2434,15 @@ bool OpenGl::DrawPixels( int width, int height, eGL_FORMAT format, eGL_TYPE type
 	return glCheckError( *this, "glDrawPixels" );
 }
 
-bool OpenGl::PixelStore( eGL_STORAGE_MODE p_eMode, int p_iParam )
+bool OpenGl::PixelStore( eGL_STORAGE_MODE p_mode, int p_iParam )
 {
-	m_pfnPixelStorei( p_eMode, p_iParam );
+	m_pfnPixelStorei( p_mode, p_iParam );
 	return glCheckError( *this, "glPixelStorei" );
 }
 
-bool OpenGl::PixelStore( eGL_STORAGE_MODE p_eMode, float p_fParam )
+bool OpenGl::PixelStore( eGL_STORAGE_MODE p_mode, float p_fParam )
 {
-	m_pfnPixelStoref( p_eMode, p_fParam );
+	m_pfnPixelStoref( p_mode, p_fParam );
 	return glCheckError( *this, "glPixelStoref" );
 }
 

@@ -39,12 +39,12 @@ namespace GlRender
 
 	bool GlContextImpl::Initialise( RenderWindow * p_window )
 	{
-		GlRenderSystem * l_pRenderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
-		GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_pRenderSystem->GetMainContext() );
+		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
+		GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 		m_hDC = ::GetDC( p_window->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd() );
 		bool l_bHasPF = false;
 
-		if ( !l_pRenderSystem->IsInitialised() )
+		if ( !l_renderSystem->IsInitialised() )
 		{
 			m_hContext = DoCreateDummyContext( p_window );
 			SetCurrent();
@@ -74,7 +74,7 @@ namespace GlRender
 			}
 			else
 			{
-				l_pRenderSystem->SetStereoAvailable( false );
+				l_renderSystem->SetStereoAvailable( false );
 				l_bHasPF = DoSelectPixelFormat( p_window );
 			}
 		}
@@ -103,14 +103,14 @@ namespace GlRender
 		}
 		else
 		{
-			Logger::LogError( string::string_cast< xchar >( "No supported pixel format found, context creation failed" ) );
+			Logger::LogError( cuT( "No supported pixel format found, context creation failed" ) );
 		}
 
 		if ( m_bInitialised )
 		{
 			glTrack( m_gl, GlContextImpl, this );
 			SetCurrent();
-			l_pRenderSystem->Initialise();
+			l_renderSystem->Initialise();
 			p_window->GetEngine()->GetMaterialManager().Initialise();
 #if !defined( NDEBUG )
 
@@ -183,7 +183,7 @@ namespace GlRender
 
 		try
 		{
-			GlRenderSystem * l_pRenderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
+			GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
 
 			if ( m_gl.HasCreateContextAttribs() )
 			{
@@ -199,7 +199,7 @@ namespace GlRender
 				l_attribList.push_back( eGL_PROFILE_ATTRIB_MASK );
 				l_attribList.push_back( C3D_GL_CONTEXT_CREATION_DEFAULT_MASK );
 				l_attribList.push_back( 0	);
-				GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_pRenderSystem->GetMainContext() );
+				GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 				SetCurrent();
 
 				if ( m_gl.HasExtension( ARB_create_context ) )
@@ -228,7 +228,7 @@ namespace GlRender
 			else
 			{
 				//It's not possible to make a GL 3[0] context. Use the old style context (GL 2.1 and before)
-				l_pRenderSystem->SetOpenGlVersion( 2, 1 );
+				l_renderSystem->SetOpenGlVersion( 2, 1 );
 				Logger::LogWarning( cuT( "GlContext::GlContext - Can't create OpenGL 3.x context" ) );
 				l_return = true;
 			}
@@ -327,7 +327,7 @@ namespace GlRender
 	bool GlContextImpl::DoSelectStereoPixelFormat( RenderWindow * p_window )
 	{
 		bool l_return = false;
-		GlRenderSystem * l_pRenderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
+		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
 		PIXELFORMATDESCRIPTOR l_pfd = { 0 };
 		l_pfd.nSize = sizeof( PIXELFORMATDESCRIPTOR );
 		int l_iPixelFormat = ::DescribePixelFormat( m_hDC, 1, sizeof( PIXELFORMATDESCRIPTOR ), &l_pfd );
@@ -399,7 +399,7 @@ namespace GlRender
 			l_return = DoSelectPixelFormat( p_window );
 		}
 
-		l_pRenderSystem->SetStereoAvailable( l_bStereoAvailable );
+		l_renderSystem->SetStereoAvailable( l_bStereoAvailable );
 		return l_return;
 	}
 }

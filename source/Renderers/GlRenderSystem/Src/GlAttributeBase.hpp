@@ -67,7 +67,7 @@ namespace GlRender
 		uint32_t m_uiOffset;
 		int m_iStride;
 		eGL_TYPE m_eGlType;
-		GlRenderSystem * m_pRenderSystem;
+		GlRenderSystem * m_renderSystem;
 		OpenGl & m_gl;
 	};
 }

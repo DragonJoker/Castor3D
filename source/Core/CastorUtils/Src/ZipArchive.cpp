@@ -190,7 +190,7 @@ namespace Castor
 
 						//Read the compressed file
 						zip_uint64_t l_read = 0;
-						Path l_name = string::to_string( l_stat.name );
+						Path l_name = string::string_cast< xchar >( l_stat.name );
 						StringArray l_folders = string::split( l_name.GetPath(), string::to_string( Path::Separator ), 100, false );
 
 						if ( !l_folders.empty() )
@@ -273,7 +273,7 @@ namespace Castor
 
 					if ( !File::FileExists( string::string_cast< xchar >( l_file ) ) )
 					{
-						CASTOR_EXCEPTION( "Couldn't file doesn't exist : " + l_file );
+						CASTOR_EXCEPTION( "The file doesn't exist: " + l_file );
 					}
 
 					struct zip_source * l_source = zip_source_file( m_zip, l_file.c_str(), 0, 0 );
@@ -283,7 +283,7 @@ namespace Castor
 						if ( zip_add( m_zip, l_file.c_str(), l_source ) == -1 )
 						{
 							std::string l_error = zip_strerror( m_zip );
-							CASTOR_EXCEPTION( "Couldn't add file to a ZIP archive : " + l_error );
+							CASTOR_EXCEPTION( "Couldn't add file to a ZIP archive: " + l_error );
 						}
 
 						struct zip_stat l_stat = { 0 };
@@ -291,7 +291,7 @@ namespace Castor
 						if ( zip_stat( m_zip, l_file.c_str(), 0, &l_stat ) == -1 )
 						{
 							std::string l_error = zip_strerror( m_zip );
-							CASTOR_EXCEPTION( "Couldn't add file to a ZIP archive : " + l_error );
+							CASTOR_EXCEPTION( "Couldn't add file to a ZIP archive: " + l_error );
 						}
 						else
 						{
@@ -301,7 +301,7 @@ namespace Castor
 					else
 					{
 						std::string l_error = zip_strerror( m_zip );
-						CASTOR_EXCEPTION( "Couldn't write ZIP archive : " + l_error );
+						CASTOR_EXCEPTION( "Couldn't write ZIP archive: " + l_error );
 					}
 				}
 			}
@@ -397,7 +397,7 @@ namespace Castor
 			if ( p_path.find( name + Path::Separator ) == 0 )
 			{
 				// First file folder is this one, complete this folder with the file's ones
-				Path l_path = p_path.substr( name.size() + 1 );
+				l_path = p_path.substr( name.size() + 1 );
 
 				if ( l_path == p_path.GetFileName() + cuT( "." ) + p_path.GetExtension() )
 				{

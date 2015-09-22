@@ -64,6 +64,8 @@ namespace CastorViewer
 			return m_pRenderWindow.lock();
 		}
 
+		CASTOR_ALIGNED_CLASS( 16 );
+
 	private:
 		void DoStartTimer( int p_iId );
 		void DoStopTimer( int p_iId );

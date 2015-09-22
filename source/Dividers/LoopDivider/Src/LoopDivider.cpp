@@ -14,7 +14,7 @@ namespace Loop
 	{
 		double alpha( uint32_t n )
 		{
-			double l_tmp = 3.0 + 2.0 * cos( 2.0 * Angle::PiDouble / n );
+			double l_tmp = 3.0 + 2.0 * cos( 2.0 * Angle::Pi / n );
 			double l_beta = 1.25 - ( l_tmp * l_tmp ) / 32.0;
 			return n * ( 1 - l_beta ) / l_beta;
 		}
@@ -33,15 +33,16 @@ namespace Loop
 	void Subdivider::DoInitialise()
 	{
 		Castor3D::Subdivider::DoInitialise();
+		uint32_t l_index = 0;
 
-		for ( uint32_t i = 0; i < GetNbPoints(); i++ )
+		for ( auto && l_point : GetPoints() )
 		{
-			m_mapVertex.insert( std::make_pair( i, std::make_shared< Vertex >( GetPoint( i ) ) ) );
+			m_mapVertex.insert( std::make_pair( l_index++, std::make_shared< Vertex >( l_point ) ) );
 		}
 
-		for ( uint32_t j = 0; j < m_submesh->GetFaceCount(); j++ )
+		for ( auto && l_face : m_submesh->GetFaces() )
 		{
-			m_facesEdges.push_back( std::make_shared< FaceEdges >( this, m_submesh->GetFace( j ), m_mapVertex ) );
+			m_facesEdges.push_back( std::make_shared< FaceEdges >( this, l_face, m_mapVertex ) );
 		}
 
 		m_submesh->ClearFaces();
@@ -87,9 +88,9 @@ namespace Loop
 		FaceEdgesPtrArray l_old;
 		std::swap( l_old, m_facesEdges );
 
-		for ( FaceEdgesPtrArray::iterator l_it = l_old.begin(); l_it != l_old.end(); ++l_it )
+		for ( auto && l_faceEdges : l_old )
 		{
-			( *l_it )->Divide( real( 0.5 ), m_mapVertex, m_facesEdges );
+			l_faceEdges->Divide( real( 0.5 ), m_mapVertex, m_facesEdges );
 		}
 	}
 
@@ -97,24 +98,24 @@ namespace Loop
 	{
 		std::map< uint32_t, Point3r > l_positions;
 
-		for ( VertexPtrUIntMap::iterator l_it = m_mapVertex.begin(); l_it != m_mapVertex.end(); ++l_it )
+		for ( auto && l_it : m_mapVertex )
 		{
 			Point3r l_point;
-			Castor3D::Vertex::GetPosition( l_it->second->GetPoint(), l_point );
-			l_positions.insert( std::make_pair( l_it->first, l_point ) );
+			Castor3D::Vertex::GetPosition( l_it.second->GetPoint(), l_point );
+			l_positions.insert( std::make_pair( l_it.first, l_point ) );
 		}
 
-		for ( VertexPtrUIntMap::iterator l_itVertex = m_mapVertex.begin(); l_itVertex != m_mapVertex.end(); ++l_itVertex )
+		for ( auto && l_it : m_mapVertex )
 		{
-			VertexSPtr l_pVertex = l_itVertex->second;
-			uint32_t l_nbEdges = l_pVertex->Size();
-			Coords3r l_position = Castor3D::Vertex::GetPosition( l_pVertex->GetPoint(), l_position );
+			VertexSPtr l_vertex = l_it.second;
+			uint32_t l_nbEdges = l_vertex->size();
+			Coords3r l_position = Castor3D::Vertex::GetPosition( l_vertex->GetPoint(), l_position );
 			real l_alpha = real( alpha( l_nbEdges ) );
 			l_position *= l_alpha;
 
-			for ( EdgePtrUIntMap::iterator l_it = l_pVertex->Begin(); l_it != l_pVertex->End(); ++l_it )
+			for ( auto && l_it : *l_vertex )
 			{
-				l_position += l_positions[l_it->first];
+				l_position += l_positions[l_it.first];
 			}
 
 			l_position /= l_alpha + l_nbEdges;

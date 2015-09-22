@@ -88,7 +88,7 @@ namespace GuiCommon
 		SplashScreen l_splashScreen( m_displayName, wxPoint( 10, 230 ), wxPoint( 200, 300 ), wxPoint( 180, 260 ), wxPoint( ( l_rect.width - 512 ) / 2, ( l_rect.height - 384 ) / 2 ), m_steps );
 		m_splashScreen = &l_splashScreen;
 		wxApp::SetTopWindow( m_splashScreen );
-		wxWindow * l_window;
+		wxWindow * l_window = NULL;
 
 		if ( l_return )
 		{

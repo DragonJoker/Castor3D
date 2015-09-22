@@ -38,7 +38,7 @@ void Projection::Generate()
 		uint32_t l_uiNbElem = m_pPattern->GetSize();
 		real l_fTotalDistance = 0.0;
 		Point3r l_ptDiff;
-		SubmeshSPtr l_pSubmesh;
+		SubmeshSPtr l_submesh;
 		real l_fDistanceToOrigin = 0.0;
 		Point3r l_ptCurrentUV;
 		Point3r l_ptPreviousUV;
@@ -81,7 +81,7 @@ void Projection::Generate()
 
 				for (uint32_t i = 0; i < l_uiNbElem; i++)
 				{
-					l_pPattern->AddElement( *l_pSubmesh->AddPoint( l_pPreviousPattern->GetElement( i ).GetPoint() + m_vAxis ), i);
+					l_pPattern->AddElement( *l_submesh->AddPoint( l_pPreviousPattern->GetElement( i ).GetPoint() + m_vAxis ), i);
 				}
 
 				for (uint32_t i = 1; i < l_uiNbElem; i++)
@@ -95,7 +95,7 @@ void Projection::Generate()
 					l_fDistanceToOrigin += real( point::distance_squared( l_ptDiff ) );
 					l_ptCurrentUV[1] = l_fDistanceToOrigin / l_fTotalDistance;
 
-					l_pSubmesh->AddQuadFace( l_ptV0.GetIndex(), l_ptV1.GetIndex(), l_ptV2.GetIndex(), l_ptV3.GetIndex(), l_uiNbElem, l_ptPreviousUV, l_ptCurrentUV);
+					l_submesh->AddQuadFace( l_ptV0.GetIndex(), l_ptV1.GetIndex(), l_ptV2.GetIndex(), l_ptV3.GetIndex(), l_uiNbElem, l_ptPreviousUV, l_ptCurrentUV);
 
 					l_ptPreviousUV[1] = l_ptCurrentUV[1];
 				}

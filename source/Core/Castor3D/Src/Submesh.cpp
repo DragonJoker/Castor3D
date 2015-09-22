@@ -20,8 +20,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Submesh::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< Submesh, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	Submesh::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		:	Loader< Submesh, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -201,9 +201,9 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Submesh::Submesh( MeshRPtr p_pMesh, Engine * p_pEngine, uint32_t p_uiId )
-		: m_pEngine( p_pEngine )
-		, m_defaultMaterial( p_pEngine->GetMaterialManager().GetDefaultMaterial() )
+	Submesh::Submesh( MeshRPtr p_pMesh, Engine * p_engine, uint32_t p_uiId )
+		: m_engine( p_engine )
+		, m_defaultMaterial( p_engine->GetMaterialManager().GetDefaultMaterial() )
 		, m_uiID( p_uiId )
 		, m_pParentMesh( p_pMesh )
 		, m_uiProgramFlags( 0 )
@@ -220,23 +220,10 @@ namespace Castor3D
 
 	void Submesh::Initialise()
 	{
-		m_pGeometryBuffers->GetVertexBuffer().Create();
-		m_pGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
-
-		if ( m_pGeometryBuffers->HasIndexBuffer() )
+		if ( m_pGeometryBuffers->Create() )
 		{
-			m_pGeometryBuffers->GetIndexBuffer().Create();
-			m_pGeometryBuffers->GetIndexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
+			m_bInitialised = m_pGeometryBuffers->Initialise( nullptr, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
 		}
-
-		if ( m_pGeometryBuffers->HasMatrixBuffer() )
-		{
-			m_pGeometryBuffers->GetMatrixBuffer().Create();
-			m_pGeometryBuffers->GetMatrixBuffer().Initialise( eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
-		}
-
-		m_pGeometryBuffers->Initialise();
-		m_bInitialised = true;
 	}
 
 	void Submesh::Cleanup()
@@ -367,13 +354,13 @@ namespace Castor3D
 			{
 				for ( uint32_t i = 0; i < l_vertices.m_uiCount; i++ )
 				{
-					BufferElementGroupSPtr l_pVertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
-					Vertex::SetPosition( l_pVertex, l_vertices.m_pVtx );
-					Vertex::SetNormal( l_pVertex, l_vertices.m_pNml );
-					Vertex::SetTangent( l_pVertex, l_vertices.m_pTan );
-					Vertex::SetBitangent( l_pVertex, l_vertices.m_pBin );
-					Vertex::SetTexCoord( l_pVertex, l_vertices.m_pTex );
-					m_points.push_back( l_pVertex );
+					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
+					Vertex::SetPosition( l_vertex, l_vertices.m_pVtx );
+					Vertex::SetNormal( l_vertex, l_vertices.m_pNml );
+					Vertex::SetTangent( l_vertex, l_vertices.m_pTan );
+					Vertex::SetBitangent( l_vertex, l_vertices.m_pBin );
+					Vertex::SetTexCoord( l_vertex, l_vertices.m_pTex );
+					m_points.push_back( l_vertex );
 					l_pData += l_uiStride;
 					l_vertices.m_pVtx += Vertex::GetCountPos();
 					l_vertices.m_pNml += Vertex::GetCountNml();
@@ -386,11 +373,11 @@ namespace Castor3D
 			{
 				for ( uint32_t i = 0; i < l_vertices.m_uiCount; i++ )
 				{
-					BufferElementGroupSPtr l_pVertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
-					Vertex::SetPosition( l_pVertex, l_vertices.m_pVtx );
-					Vertex::SetNormal( l_pVertex, l_vertices.m_pNml );
-					Vertex::SetTexCoord( l_pVertex, l_vertices.m_pTex );
-					m_points.push_back( l_pVertex );
+					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
+					Vertex::SetPosition( l_vertex, l_vertices.m_pVtx );
+					Vertex::SetNormal( l_vertex, l_vertices.m_pNml );
+					Vertex::SetTexCoord( l_vertex, l_vertices.m_pTex );
+					m_points.push_back( l_vertex );
 					l_pData += l_uiStride;
 					l_vertices.m_pVtx += Vertex::GetCountPos();
 					l_vertices.m_pNml += Vertex::GetCountNml();
@@ -401,10 +388,10 @@ namespace Castor3D
 			{
 				for ( uint32_t i = 0; i < l_vertices.m_uiCount; i++ )
 				{
-					BufferElementGroupSPtr l_pVertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
-					Vertex::SetPosition( l_pVertex, l_vertices.m_pVtx );
-					Vertex::SetNormal( l_pVertex, l_vertices.m_pNml );
-					m_points.push_back( l_pVertex );
+					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
+					Vertex::SetPosition( l_vertex, l_vertices.m_pVtx );
+					Vertex::SetNormal( l_vertex, l_vertices.m_pNml );
+					m_points.push_back( l_vertex );
 					l_pData += l_uiStride;
 					l_vertices.m_pVtx += Vertex::GetCountPos();
 					l_vertices.m_pNml += Vertex::GetCountNml();
@@ -414,10 +401,10 @@ namespace Castor3D
 			{
 				for ( uint32_t i = 0; i < l_vertices.m_uiCount; i++ )
 				{
-					BufferElementGroupSPtr l_pVertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
-					Vertex::SetPosition( l_pVertex, l_vertices.m_pVtx );
-					Vertex::SetTexCoord( l_pVertex, l_vertices.m_pTex );
-					m_points.push_back( l_pVertex );
+					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
+					Vertex::SetPosition( l_vertex, l_vertices.m_pVtx );
+					Vertex::SetTexCoord( l_vertex, l_vertices.m_pTex );
+					m_points.push_back( l_vertex );
 					l_pData += l_uiStride;
 					l_vertices.m_pVtx += Vertex::GetCountPos();
 					l_vertices.m_pTex += Vertex::GetCountTex();
@@ -427,9 +414,9 @@ namespace Castor3D
 			{
 				for ( uint32_t i = 0; i < l_vertices.m_uiCount; i++ )
 				{
-					BufferElementGroupSPtr l_pVertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
-					Vertex::SetPosition( l_pVertex, l_vertices.m_pVtx );
-					m_points.push_back( l_pVertex );
+					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
+					Vertex::SetPosition( l_vertex, l_vertices.m_pVtx );
+					m_points.push_back( l_vertex );
 					l_pData += l_uiStride;
 					l_vertices.m_pVtx += Vertex::GetCountPos();
 				}
@@ -501,16 +488,16 @@ namespace Castor3D
 	{
 		DoGenerateVertexBuffer();
 		DoGenerateIndexBuffer();
-		//if( m_pEngine->GetRenderSystem()->HasInstancing() )
+		//if( m_engine->GetRenderSystem()->HasInstancing() )
 		{
 			DoGenerateMatrixBuffer();
 		}
-		m_pEngine->PostEvent( MakeInitialiseEvent( *this ) );
+		m_engine->PostEvent( MakeInitialiseEvent( *this ) );
 	}
 
 	SubmeshSPtr Submesh::Clone()
 	{
-		SubmeshSPtr l_clone = std::make_shared< Submesh >( m_pParentMesh, m_pEngine, m_uiID );
+		SubmeshSPtr l_clone = std::make_shared< Submesh >( m_pParentMesh, m_engine, m_uiID );
 		uint32_t l_uiStride = m_pDeclaration->GetStride();
 
 		//On effectue une copie des vertex
@@ -536,11 +523,11 @@ namespace Castor3D
 		DoCreateGeometryBuffers();
 	}
 
-	void Submesh::Draw( eTOPOLOGY p_eMode, Pass const & p_pass )
+	void Submesh::Draw( eTOPOLOGY p_mode, Pass const & p_pass )
 	{
-		if ( p_eMode != m_eCurDrawType )
+		if ( p_mode != m_eCurDrawType )
 		{
-			m_eCurDrawType = p_eMode;
+			m_eCurDrawType = p_mode;
 		}
 
 		if ( DoPrepareGeometryBuffers( p_pass ) )
@@ -1078,22 +1065,8 @@ namespace Castor3D
 
 		if ( m_pGeometryBuffers )
 		{
-			m_pGeometryBuffers->GetVertexBuffer().Cleanup();
-			m_pGeometryBuffers->GetVertexBuffer().Destroy();
-
-			if ( m_pGeometryBuffers->HasIndexBuffer() )
-			{
-				m_pGeometryBuffers->GetIndexBuffer().Cleanup();
-				m_pGeometryBuffers->GetIndexBuffer().Destroy();
-			}
-
-			if ( m_pGeometryBuffers->HasMatrixBuffer() )
-			{
-				m_pGeometryBuffers->GetMatrixBuffer().Cleanup();
-				m_pGeometryBuffers->GetMatrixBuffer().Destroy();
-			}
-
 			m_pGeometryBuffers->Cleanup();
+			m_pGeometryBuffers->Destroy();
 		}
 	}
 
@@ -1121,57 +1094,25 @@ namespace Castor3D
 	bool Submesh::DoPrepareGeometryBuffers( Pass const & p_pass )
 	{
 		ShaderProgramBaseSPtr l_pProgram = p_pass.GetShader< ShaderProgramBase >();
-		bool l_bUseShader = l_pProgram && l_pProgram->GetStatus() == ePROGRAM_STATUS_LINKED;
 
-		if ( m_eCurDrawType != m_ePrvDrawType || !m_pGeometryBuffers )
+		if ( l_pProgram && l_pProgram->GetStatus() == ePROGRAM_STATUS_LINKED )
 		{
-			m_ePrvDrawType = m_eCurDrawType;
-			m_pGeometryBuffers->GetVertexBuffer().Cleanup();
-
-			if ( l_bUseShader )
+			if ( m_pGeometryBuffers && ( m_eCurDrawType != m_ePrvDrawType || m_bDirty ) )
 			{
-				m_pGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, l_pProgram );
-			}
-			else
-			{
-				m_pGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
-			}
-
-			if ( m_pGeometryBuffers->HasIndexBuffer() )
-			{
-				m_pGeometryBuffers->GetIndexBuffer().Cleanup();
-				m_pGeometryBuffers->GetIndexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
-			}
-
-			if ( m_pGeometryBuffers->HasMatrixBuffer() )
-			{
-				m_pGeometryBuffers->GetMatrixBuffer().Cleanup();
-				m_pGeometryBuffers->GetMatrixBuffer().Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, l_pProgram );
-			}
-
-			if ( m_pGeometryBuffers )
-			{
+				m_ePrvDrawType = m_eCurDrawType;
+				m_bDirty = false;
 				m_pGeometryBuffers->Cleanup();
+				m_pGeometryBuffers->Initialise( l_pProgram, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
 			}
 
-			m_pGeometryBuffers->Initialise();
-		}
-		else if ( m_bDirty )
-		{
-			m_pGeometryBuffers->Initialise();
+			auto l_matrixBuffer = p_pass.GetMatrixBuffer();
+
+			if ( l_pProgram && l_matrixBuffer )
+			{
+				GetEngine()->GetRenderSystem()->GetPipeline().ApplyMatrices( *l_matrixBuffer, 0xFFFFFFFFFFFFFFFF );
+			}
 		}
 
-		auto l_matrixBuffer = p_pass.GetMatrixBuffer();
-
-		if ( l_bUseShader && l_matrixBuffer )
-		{
-			GetEngine()->GetRenderSystem()->GetPipeline()->ApplyMatrices( *l_matrixBuffer, 0xFFFFFFFFFFFFFFFF );
-		}
-		else
-		{
-			l_bUseShader = true;
-		}
-
-		return l_bUseShader;
+		return true;
 	}
 }

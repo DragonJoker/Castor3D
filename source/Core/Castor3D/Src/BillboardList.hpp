@@ -119,14 +119,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pScene		The parent scene
+		 *\param[in]	p_scene		The parent scene
 		 *\param[in]	p_pRenderSystem	The RenderSystem
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pScene		La scene parente
+		 *\param[in]	p_scene		La scene parente
 		 *\param[in]	p_pRenderSystem	Le RenderSystem
 		 */
-		BillboardList( SceneSPtr p_pScene, RenderSystem * p_pRenderSystem );
+		BillboardList( SceneSPtr p_scene, RenderSystem * p_pRenderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -164,16 +164,16 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Gets a point from the list
-		 *\param[in]	p_uiIndex	The point index
+		 *\param[in]	p_index	The point index
 		 *\return		The point
 		 *\~french
 		 *\brief		Recupere un point de la liste
-		 *\param[in]	p_uiIndex	L'index du point
+		 *\param[in]	p_index	L'index du point
 		 *\return		Le point
 		 */
-		Castor::Point3r const & GetAt( uint32_t p_uiIndex )const
+		Castor::Point3r const & GetAt( uint32_t p_index )const
 		{
-			return m_arrayPositions[p_uiIndex];
+			return m_arrayPositions[p_index];
 		}
 		/**
 		 *\~english
@@ -190,17 +190,17 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets a point in the list
-		 *\param[in]	p_uiIndex		The point index
+		 *\param[in]	p_index		The point index
 		 *\param[in]	p_ptPosition	The point
 		 *\~french
 		 *\brief		Definit un point de la liste
-		 *\param[in]	p_uiIndex		L'index du point
+		 *\param[in]	p_index		L'index du point
 		 *\param[in]	p_ptPosition	Le point
 		 */
-		void SetAt( uint32_t p_uiIndex, Castor::Point3r const & p_ptPosition )
+		void SetAt( uint32_t p_index, Castor::Point3r const & p_ptPosition )
 		{
 			m_bNeedUpdate = true;
-			m_arrayPositions[p_uiIndex] = p_ptPosition;
+			m_arrayPositions[p_index] = p_ptPosition;
 		}
 		/**
 		 *\~english
@@ -226,12 +226,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Removes a point from the list
-		 *\param[in]	p_uiIndex	The point index
+		 *\param[in]	p_index	The point index
 		 *\~french
 		 *\brief		Retire un point de la liste
-		 *\param[in]	p_uiIndex	L'index du point
+		 *\param[in]	p_index	L'index du point
 		 */
-		void RemovePoint( uint32_t p_uiIndex );
+		void RemovePoint( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Adds a point to the list
@@ -353,7 +353,7 @@ namespace Castor3D
 
 	protected:
 		//!\~english  The RenderSystem	\~french La RenderSystem
-		RenderSystem * m_pRenderSystem;
+		RenderSystem * m_renderSystem;
 		//!\~english The positions list	\~french La liste des positions
 		Castor::Point3rArray m_arrayPositions;
 		//!\~english The Vertex buffer's description	\~french La description du tampon de sommets

@@ -4,8 +4,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Face::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< Face, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	Face::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		:	Loader< Face, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 

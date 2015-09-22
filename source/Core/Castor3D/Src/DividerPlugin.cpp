@@ -40,21 +40,21 @@ namespace Castor3D
 		if ( !p_pLibrary->GetFunction( m_pfnGetDividerType, GetDividerTypeFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] GetDividerType plugin function : " );
-			l_strError += string::to_string( dlerror() );
+			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
 		if ( !p_pLibrary->GetFunction( m_pfnCreateDivider, CreateDividerFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] CreateDivider plugin function : " );
-			l_strError += string::to_string( dlerror() );
+			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
 		if ( !p_pLibrary->GetFunction( m_pfnDestroyDivider, DestroyDividerFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] DestroyDivider plugin function : " );
-			l_strError += string::to_string( dlerror() );
+			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 

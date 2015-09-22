@@ -163,16 +163,16 @@ namespace GuiCommon
 		LanguageInfo();
 		virtual ~LanguageInfo();
 
-		void SetWords( eSTC_TYPE p_eType, Castor::StringArray const & p_arrayWords );
+		void SetWords( eSTC_TYPE p_type, Castor::StringArray const & p_arrayWords );
 
 		inline int GetFoldFlags()const
 		{
 			return m_iFoldFlags;
 		}
 
-		inline Castor::String const & GetWords( eSTC_TYPE p_eType )const
+		inline Castor::String const & GetWords( eSTC_TYPE p_type )const
 		{
-			return m_arrayWords[p_eType];
+			return m_arrayWords[p_type];
 		}
 
 		inline Castor::String const & GetFilePattern()const
@@ -190,14 +190,14 @@ namespace GuiCommon
 			return m_eLexerID;
 		}
 
-		inline StyleInfoPtr & GetStyle( eSTC_TYPE p_eType )
+		inline StyleInfoPtr & GetStyle( eSTC_TYPE p_type )
 		{
-			return m_arrayStyles[p_eType];
+			return m_arrayStyles[p_type];
 		}
 
-		inline StyleInfoPtr const & GetStyle( eSTC_TYPE p_eType )const
+		inline StyleInfoPtr const & GetStyle( eSTC_TYPE p_type )const
 		{
-			return m_arrayStyles[p_eType];
+			return m_arrayStyles[p_type];
 		}
 
 		inline void SetLexer( eSTC_LEX p_eLexer )

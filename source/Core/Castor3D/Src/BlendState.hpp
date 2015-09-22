@@ -182,9 +182,9 @@ namespace Castor3D
 		 *\brief		RÃ©cupÃ¨re le statut d'activation du blending
 		 *\return		La valeur
 		 */
-		inline bool IsBlendEnabled( uint8_t p_uiIndex = 0 )const
+		inline bool IsBlendEnabled( uint8_t p_index = 0 )const
 		{
-			return m_rtStates[p_uiIndex].m_bEnableBlend;
+			return m_rtStates[p_index].m_bEnableBlend;
 		}
 		/**
 		 *\~english
@@ -194,10 +194,10 @@ namespace Castor3D
 		 *\brief		DÃ©finit le statut d'activation du blending
 		 *\param[in]	p_bEnable	La nouvelle valeur
 		 */
-		inline void EnableBlend( bool p_bEnable, uint8_t p_uiIndex = 0 )
+		inline void EnableBlend( bool p_bEnable, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_uiIndex].m_bEnableBlend != p_bEnable;
-			m_rtStates[p_uiIndex].m_bEnableBlend = p_bEnable;
+			m_bChanged |= m_rtStates[p_index].m_bEnableBlend != p_bEnable;
+			m_rtStates[p_index].m_bEnableBlend = p_bEnable;
 		}
 		/**
 		 *\~english
@@ -207,9 +207,9 @@ namespace Castor3D
 		 *\brief		RÃ©cupÃ¨re le facteur source RGB
 		 *\return		La valeur
 		 */
-		inline eBLEND GetRgbSrcBlend( uint8_t p_uiIndex = 0 )const
+		inline eBLEND GetRgbSrcBlend( uint8_t p_index = 0 )const
 		{
-			return m_rtStates[p_uiIndex].m_eRgbSrcBlend;
+			return m_rtStates[p_index].m_eRgbSrcBlend;
 		}
 		/**
 		 *\~english
@@ -219,10 +219,10 @@ namespace Castor3D
 		 *\brief		DÃ©finit le facteur source RGB
 		 *\param[in]	p_eValue	La nouvelle valeur
 		 */
-		inline void SetRgbSrcBlend( eBLEND p_eValue, uint8_t p_uiIndex = 0 )
+		inline void SetRgbSrcBlend( eBLEND p_eValue, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_uiIndex].m_eRgbSrcBlend != p_eValue;
-			m_rtStates[p_uiIndex].m_eRgbSrcBlend = p_eValue;
+			m_bChanged |= m_rtStates[p_index].m_eRgbSrcBlend != p_eValue;
+			m_rtStates[p_index].m_eRgbSrcBlend = p_eValue;
 		}
 		/**
 		 *\~english
@@ -232,9 +232,9 @@ namespace Castor3D
 		 *\brief		RÃ©cupÃ¨re le facteur destination RGB
 		 *\return		La valeur
 		 */
-		inline eBLEND GetRgbDstBlend( uint8_t p_uiIndex = 0 )const
+		inline eBLEND GetRgbDstBlend( uint8_t p_index = 0 )const
 		{
-			return m_rtStates[p_uiIndex].m_eRgbDstBlend;
+			return m_rtStates[p_index].m_eRgbDstBlend;
 		}
 		/**
 		 *\~english
@@ -244,10 +244,10 @@ namespace Castor3D
 		 *\brief		DÃ©finit le facteur destination RGB
 		 *\param[in]	p_eValue	La nouvelle valeur
 		 */
-		inline void SetRgbDstBlend( eBLEND p_eValue, uint8_t p_uiIndex = 0 )
+		inline void SetRgbDstBlend( eBLEND p_eValue, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_uiIndex].m_eRgbDstBlend != p_eValue;
-			m_rtStates[p_uiIndex].m_eRgbDstBlend = p_eValue;
+			m_bChanged |= m_rtStates[p_index].m_eRgbDstBlend != p_eValue;
+			m_rtStates[p_index].m_eRgbDstBlend = p_eValue;
 		}
 		/**
 		 *\~english
@@ -257,9 +257,9 @@ namespace Castor3D
 		 *\brief		RÃ©cupÃ¨re l'opÃ©ration de blend RGB
 		 *\return		La valeur
 		 */
-		inline eBLEND_OP GetRgbBlendOp( uint8_t p_uiIndex = 0 )const
+		inline eBLEND_OP GetRgbBlendOp( uint8_t p_index = 0 )const
 		{
-			return m_rtStates[p_uiIndex].m_eRgbBlendOp;
+			return m_rtStates[p_index].m_eRgbBlendOp;
 		}
 		/**
 		 *\~english
@@ -269,10 +269,10 @@ namespace Castor3D
 		 *\brief		DÃ©finit l'opÃ©ration de blend RGB
 		 *\param[in]	p_eValue	La nouvelle valeur
 		 */
-		inline void SetRgbBlendOp( eBLEND_OP p_eValue, uint8_t p_uiIndex = 0 )
+		inline void SetRgbBlendOp( eBLEND_OP p_eValue, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_uiIndex].m_eRgbBlendOp != p_eValue;
-			m_rtStates[p_uiIndex].m_eRgbBlendOp = p_eValue;
+			m_bChanged |= m_rtStates[p_index].m_eRgbBlendOp != p_eValue;
+			m_rtStates[p_index].m_eRgbBlendOp = p_eValue;
 		}
 		/**
 		 *\~english
@@ -282,9 +282,9 @@ namespace Castor3D
 		 *\brief		RÃ©cupÃ¨re le facteur source alpha
 		 *\return		La valeur
 		 */
-		inline eBLEND GetAlphaSrcBlend( uint8_t p_uiIndex = 0 )const
+		inline eBLEND GetAlphaSrcBlend( uint8_t p_index = 0 )const
 		{
-			return m_rtStates[p_uiIndex].m_eAlphaSrcBlend;
+			return m_rtStates[p_index].m_eAlphaSrcBlend;
 		}
 		/**
 		 *\~english
@@ -294,10 +294,10 @@ namespace Castor3D
 		 *\brief		DÃ©finit le facteur source alpha
 		 *\param[in]	p_eValue	La nouvelle valeur
 		 */
-		inline void SetAlphaSrcBlend( eBLEND p_eValue, uint8_t p_uiIndex = 0 )
+		inline void SetAlphaSrcBlend( eBLEND p_eValue, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_uiIndex].m_eAlphaSrcBlend != p_eValue;
-			m_rtStates[p_uiIndex].m_eAlphaSrcBlend = p_eValue;
+			m_bChanged |= m_rtStates[p_index].m_eAlphaSrcBlend != p_eValue;
+			m_rtStates[p_index].m_eAlphaSrcBlend = p_eValue;
 		}
 		/**
 		 *\~english
@@ -307,9 +307,9 @@ namespace Castor3D
 		 *\brief		RÃ©cupÃ¨re le facteur destination alpha
 		 *\return		La valeur
 		 */
-		inline eBLEND GetAlphaDstBlend( uint8_t p_uiIndex = 0 )const
+		inline eBLEND GetAlphaDstBlend( uint8_t p_index = 0 )const
 		{
-			return m_rtStates[p_uiIndex].m_eAlphaDstBlend;
+			return m_rtStates[p_index].m_eAlphaDstBlend;
 		}
 		/**
 		 *\~english
@@ -319,10 +319,10 @@ namespace Castor3D
 		 *\brief		DÃ©finit le facteur destination alpha
 		 *\param[in]	p_eValue	La nouvelle valeur
 		 */
-		inline void SetAlphaDstBlend( eBLEND p_eValue, uint8_t p_uiIndex = 0 )
+		inline void SetAlphaDstBlend( eBLEND p_eValue, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_uiIndex].m_eAlphaDstBlend != p_eValue;
-			m_rtStates[p_uiIndex].m_eAlphaDstBlend = p_eValue;
+			m_bChanged |= m_rtStates[p_index].m_eAlphaDstBlend != p_eValue;
+			m_rtStates[p_index].m_eAlphaDstBlend = p_eValue;
 		}
 		/**
 		 *\~english
@@ -332,9 +332,9 @@ namespace Castor3D
 		 *\brief		RÃ©cupÃ¨re l'opÃ©ration de blend RGB
 		 *\return		La valeur
 		 */
-		inline eBLEND_OP GetAlphaBlendOp( uint8_t p_uiIndex = 0 )const
+		inline eBLEND_OP GetAlphaBlendOp( uint8_t p_index = 0 )const
 		{
-			return m_rtStates[p_uiIndex].m_eAlphaBlendOp;
+			return m_rtStates[p_index].m_eAlphaBlendOp;
 		}
 		/**
 		 *\~english
@@ -344,10 +344,10 @@ namespace Castor3D
 		 *\brief		DÃ©finit l'opÃ©ration de blend RGB
 		 *\param[in]	p_eValue	La nouvelle valeur
 		 */
-		inline void SetAlphaBlendOp( eBLEND_OP p_eValue, uint8_t p_uiIndex = 0 )
+		inline void SetAlphaBlendOp( eBLEND_OP p_eValue, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_uiIndex].m_eAlphaBlendOp != p_eValue;
-			m_rtStates[p_uiIndex].m_eAlphaBlendOp = p_eValue;
+			m_bChanged |= m_rtStates[p_index].m_eAlphaBlendOp != p_eValue;
+			m_rtStates[p_index].m_eAlphaBlendOp = p_eValue;
 		}
 		/**
 		 *\~english
@@ -357,9 +357,9 @@ namespace Castor3D
 		 *\brief		RÃ©cupÃ¨re le masque d'Ã©criture de la cible de rendu
 		 *\return		La valeur
 		 */
-		inline uint8_t GetWriteMask( uint8_t p_uiIndex = 0 )const
+		inline uint8_t GetWriteMask( uint8_t p_index = 0 )const
 		{
-			return m_rtStates[p_uiIndex].m_uiWriteMask;
+			return m_rtStates[p_index].m_uiWriteMask;
 		}
 		/**
 		 *\~english
@@ -369,10 +369,10 @@ namespace Castor3D
 		 *\brief		DÃ©finit le masque d'Ã©criture de la cible de rendu
 		 *\param[in]	p_byMask	La nouvelle valeur
 		 */
-		inline void SetWriteMask( uint8_t p_byMask, uint8_t p_uiIndex = 0 )
+		inline void SetWriteMask( uint8_t p_byMask, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_uiIndex].m_uiWriteMask != p_byMask;
-			m_rtStates[p_uiIndex].m_uiWriteMask = p_byMask;
+			m_bChanged |= m_rtStates[p_index].m_uiWriteMask != p_byMask;
+			m_rtStates[p_index].m_uiWriteMask = p_byMask;
 		}
 		/**
 		 *\~english

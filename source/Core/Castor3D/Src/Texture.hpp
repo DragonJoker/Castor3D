@@ -42,14 +42,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_eType			The texture type
+		 *\param[in]	p_type			The texture type
 		 *\param[in]	p_pRenderSystem	The render system
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_eType			Le type de texture
+		 *\param[in]	p_type			Le type de texture
 		 *\param[in]	p_pRenderSystem	Le render system
 		 */
-		TextureBase( eTEXTURE_TYPE p_eType, RenderSystem * p_pRenderSystem );
+		TextureBase( eTEXTURE_TYPE p_type, RenderSystem * p_pRenderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -92,14 +92,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Initialisation function
-		 *\param[in]	p_uiIndex		The texture index
+		 *\param[in]	p_index		The texture index
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Fonction d'initialisation
-		 *\param[in]	p_uiIndex		L'index de la texture
+		 *\param[in]	p_index		L'index de la texture
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Initialise( uint32_t p_uiIndex ) = 0;
+		virtual bool Initialise( uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function
@@ -176,7 +176,7 @@ namespace Castor3D
 		 */
 		inline eTEXTURE_TYPE GetType()const
 		{
-			return m_eType;
+			return m_type;
 		}
 		/**
 		 *\~english
@@ -388,7 +388,7 @@ namespace Castor3D
 		//!\~english Initialisation status	\~french Statut d'initialisation
 		bool m_bInitialised;
 		//!\~english Texture type	\~french Type de texture
-		eTEXTURE_TYPE m_eType;
+		eTEXTURE_TYPE m_type;
 		//!\~english Texture dimension count	\~french Compte des dimensions de la texture
 		eTEXTURE_DIMENSION m_eDimension;
 		//!\~english Texture mapping modes	\~french Modes de mappage de la texture
@@ -406,7 +406,7 @@ namespace Castor3D
 		//!\~english The pixel buffer dimensions	\~french Les dimensions du buffer de pixels
 		Castor::Size m_size;
 		//!\~english The render system	\~french Le render system
-		RenderSystem * m_pRenderSystem;
+		RenderSystem * m_renderSystem;
 	};
 	/**
 	 *\~english

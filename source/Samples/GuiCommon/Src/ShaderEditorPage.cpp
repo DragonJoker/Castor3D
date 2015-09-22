@@ -12,8 +12,8 @@ using namespace Castor3D;
 using namespace Castor;
 namespace GuiCommon
 {
-	ShaderEditorPage::ShaderEditorPage( bool p_bCanEdit, StcContext & p_stcContext, Castor3D::ShaderProgramBaseSPtr p_shader, Castor3D::eSHADER_TYPE p_type, wxWindow * p_pParent, wxPoint const & p_ptPosition, const wxSize p_ptSize )
-		: wxPanel( p_pParent, wxID_ANY, p_ptPosition, p_ptSize )
+	ShaderEditorPage::ShaderEditorPage( bool p_bCanEdit, StcContext & p_stcContext, Castor3D::ShaderProgramBaseSPtr p_shader, Castor3D::eSHADER_TYPE p_type, wxWindow * p_parent, wxPoint const & p_ptPosition, const wxSize p_ptSize )
+		: wxPanel( p_parent, wxID_ANY, p_ptPosition, p_ptSize )
 		, m_shaderProgram( p_shader )
 		, m_stcContext( p_stcContext )
 		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
@@ -85,25 +85,25 @@ namespace GuiCommon
 	{
 		m_shaderModel = eSHADER_MODEL_COUNT;
 		ShaderProgramBaseSPtr l_program = m_shaderProgram.lock();
-		RenderSystem * l_pRenderSystem = l_program->GetRenderSystem();
+		RenderSystem * l_renderSystem = l_program->GetRenderSystem();
 
-		if ( l_pRenderSystem->CheckSupport( eSHADER_MODEL_5 ) )
+		if ( l_renderSystem->CheckSupport( eSHADER_MODEL_5 ) )
 		{
 			m_shaderModel = eSHADER_MODEL_5;
 		}
-		else if ( l_pRenderSystem->CheckSupport( eSHADER_MODEL_4 ) )
+		else if ( l_renderSystem->CheckSupport( eSHADER_MODEL_4 ) )
 		{
 			m_shaderModel = eSHADER_MODEL_4;
 		}
-		else if ( l_pRenderSystem->CheckSupport( eSHADER_MODEL_3 ) )
+		else if ( l_renderSystem->CheckSupport( eSHADER_MODEL_3 ) )
 		{
 			m_shaderModel = eSHADER_MODEL_3;
 		}
-		else if ( l_pRenderSystem->CheckSupport( eSHADER_MODEL_2 ) )
+		else if ( l_renderSystem->CheckSupport( eSHADER_MODEL_2 ) )
 		{
 			m_shaderModel = eSHADER_MODEL_2;
 		}
-		else if ( l_pRenderSystem->CheckSupport( eSHADER_MODEL_1 ) )
+		else if ( l_renderSystem->CheckSupport( eSHADER_MODEL_1 ) )
 		{
 			m_shaderModel = eSHADER_MODEL_1;
 		}

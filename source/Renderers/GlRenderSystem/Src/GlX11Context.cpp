@@ -65,8 +65,8 @@ bool GlContextImpl::Initialise( RenderWindow * p_pWindow )
 
 	try
 	{
-		GlRenderSystem * l_pRenderSystem = static_cast< GlRenderSystem * >( p_pWindow->GetEngine()->GetRenderSystem() );
-		GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_pRenderSystem->GetMainContext() );
+		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_pWindow->GetEngine()->GetRenderSystem() );
+		GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 		int l_iScreen = DefaultScreen( m_pDisplay );
 		int l_iMajor, l_iMinor;
 		bool l_bOk = glXQueryVersion( m_pDisplay, &l_iMajor, &l_iMinor );
@@ -150,13 +150,13 @@ bool GlContextImpl::Initialise( RenderWindow * p_pWindow )
 
 			if ( !m_glXContext )
 			{
-				Logger::LogWarning( string::string_cast< xchar >( "GlXContext::Create - glXCreateContext failed" ) );
+				Logger::LogWarning( cuT( "GlXContext::Create - glXCreateContext failed" ) );
 			}
 			else
 			{
-				Logger::LogInfo( string::string_cast< xchar >( "GlXContext::Create - glXContext created" ) );
+				Logger::LogInfo( cuT( "GlXContext::Create - glXContext created" ) );
 
-				if ( !l_pRenderSystem->IsInitialised() )
+				if ( !l_renderSystem->IsInitialised() )
 				{
 					glXMakeCurrent( m_pDisplay, m_drawable, m_glXContext );
 					m_gl.PreInitialise( String() );
@@ -172,10 +172,10 @@ bool GlContextImpl::Initialise( RenderWindow * p_pWindow )
 					m_bInitialised = true;
 				}
 
-				if ( !l_pRenderSystem->IsInitialised() )
+				if ( !l_renderSystem->IsInitialised() )
 				{
 					glXMakeCurrent( m_pDisplay, m_drawable, m_glXContext );
-					l_pRenderSystem->Initialise();
+					l_renderSystem->Initialise();
 					p_pWindow->GetEngine()->GetMaterialManager().Initialise();
 					glXMakeCurrent( m_pDisplay, None, NULL );
 				}
@@ -294,17 +294,17 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_pW
 				if ( !m_pFbConfig )
 				{
 					// Last FBConfig try failed
-					Logger::LogWarning( string::string_cast< xchar >( "GlXContext::Create - Default glXChooseFBConfig failed" ) );
+					Logger::LogWarning( cuT( "GlXContext::Create - Default glXChooseFBConfig failed" ) );
 					l_pReturn = DoCreateVisualInfoWithoutFBConfig( p_arrayAttribs, p_iScreen );
 				}
 				else
 				{
-					Logger::LogDebug( string::string_cast< xchar >( "GlXContext::Create - Default glXChooseFBConfig successful" ) );
+					Logger::LogDebug( cuT( "GlXContext::Create - Default glXChooseFBConfig successful" ) );
 				}
 			}
 			else
 			{
-				Logger::LogDebug( string::string_cast< xchar >( "GlXContext::Create - Mono glXChooseFBConfig successful with detailed attributes" ) );
+				Logger::LogDebug( cuT( "GlXContext::Create - Mono glXChooseFBConfig successful with detailed attributes" ) );
 			}
 		}
 		else
@@ -316,12 +316,12 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_pW
 			if ( !m_pFbConfig )
 			{
 				// Last FBConfig try failed, we try from XVisualInfo
-				Logger::LogWarning( string::string_cast< xchar >( "GlXContext::Create - Default glXChooseFBConfig failed" ) );
+				Logger::LogWarning( cuT( "GlXContext::Create - Default glXChooseFBConfig failed" ) );
 				l_pReturn = DoCreateVisualInfoWithoutFBConfig( p_arrayAttribs, p_iScreen );
 			}
 			else
 			{
-				Logger::LogDebug( string::string_cast< xchar >( "GlXContext::Create - Default glXChooseFBConfig successful" ) );
+				Logger::LogDebug( cuT( "GlXContext::Create - Default glXChooseFBConfig successful" ) );
 			}
 		}
 	}
@@ -330,11 +330,11 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_pW
 		if ( p_pWindow->IsUsingStereo() )
 		{
 			p_pWindow->GetEngine()->GetRenderSystem()->SetStereoAvailable( true );
-			Logger::LogDebug( string::string_cast< xchar >( "GlXContext::Create - Stereo glXChooseFBConfig successful with detailed attributes" ) );
+			Logger::LogDebug( cuT( "GlXContext::Create - Stereo glXChooseFBConfig successful with detailed attributes" ) );
 		}
 		else
 		{
-			Logger::LogDebug( string::string_cast< xchar >( "GlXContext::Create - glXChooseFBConfig successful with detailed attributes" ) );
+			Logger::LogDebug( cuT( "GlXContext::Create - glXChooseFBConfig successful with detailed attributes" ) );
 		}
 	}
 
@@ -344,11 +344,11 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_pW
 
 		if ( !l_pReturn )
 		{
-			Logger::LogError( string::string_cast< xchar >( "GlXContext::Create - glXGetVisualFromFBConfig failed" ) );
+			Logger::LogError( cuT( "GlXContext::Create - glXGetVisualFromFBConfig failed" ) );
 		}
 		else
 		{
-			Logger::LogDebug( string::string_cast< xchar >( "GlXContext::Create - GlXGetVisualFromFBConfig successful" ) );
+			Logger::LogDebug( cuT( "GlXContext::Create - GlXGetVisualFromFBConfig successful" ) );
 		}
 	}
 
@@ -362,7 +362,7 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithoutFBConfig( IntArray & p_arr
 
 	if ( !l_pReturn )
 	{
-		Logger::LogError( string::string_cast< xchar >( "GlXContext::Create - glXChooseVisual failed" ) );
+		Logger::LogError( cuT( "GlXContext::Create - glXChooseVisual failed" ) );
 	}
 
 	return l_pReturn;
@@ -372,8 +372,8 @@ bool GlContextImpl::DoCreateGl3Context( Castor3D::RenderWindow * p_pWindow )
 {
 	bool l_return = false;
 #if !C3DGL_LIMIT_TO_2_1
-	GlRenderSystem * l_pRenderSystem = static_cast< GlRenderSystem * >( p_pWindow->GetEngine()->GetRenderSystem() );
-	GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_pRenderSystem->GetMainContext() );
+	GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_pWindow->GetEngine()->GetRenderSystem() );
+	GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 
 	if ( m_gl.HasCreateContextAttribs() )
 	{
@@ -400,12 +400,12 @@ bool GlContextImpl::DoCreateGl3Context( Castor3D::RenderWindow * p_pWindow )
 
 		if ( !m_glXContext )
 		{
-			Logger::LogWarning( string::string_cast< xchar >( "GlXContext::Create - glXCreateContextAttribs failed" ) );
+			Logger::LogWarning( cuT( "GlXContext::Create - glXCreateContextAttribs failed" ) );
 			l_return = false;
 		}
 		else
 		{
-			Logger::LogDebug( string::string_cast< xchar >( "GlXContext::Create - glXContext 3.x/4.x compatible created" ) );
+			Logger::LogDebug( cuT( "GlXContext::Create - glXContext 3.x/4.x compatible created" ) );
 			l_return = true;
 		}
 	}

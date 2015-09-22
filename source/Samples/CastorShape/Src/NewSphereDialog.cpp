@@ -13,8 +13,8 @@ namespace CastorShape
 		static wxString SPHERE_SUBDIVISIONS = _( "Subdivisions" );
 	}
 
-	NewSphereDialog::NewSphereDialog( Engine * p_pEngine, wxWindow * parent, wxWindowID p_id )
-		: NewGeometryDialog( p_pEngine, parent, p_id, _( "New sphere" ) )
+	NewSphereDialog::NewSphereDialog( Engine * p_engine, wxWindow * parent, wxWindowID p_id )
+		: NewGeometryDialog( p_engine, parent, p_id, _( "New sphere" ) )
 	{
 		SPHERE_RADIUS = _( "Radius" );
 		SPHERE_SUBDIVISIONS = _( "Subdivisions" );

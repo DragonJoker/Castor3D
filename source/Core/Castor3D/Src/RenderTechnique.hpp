@@ -26,9 +26,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #pragma warning( disable:4275 )
 
 #if !defined( NDEBUG )
-#	define DEBUG_BUFFERS	0
+#	define DEBUG_BUFFERS 0
 #else
-#	define DEBUG_BUFFERS	0
+#	define DEBUG_BUFFERS 0
 #endif
 
 namespace Castor3D
@@ -47,15 +47,6 @@ namespace Castor3D
 	class C3D_API RenderTechniqueBase
 	{
 	protected:
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_name			The technique name
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_name			Le nom de la technique
-		 */
-		RenderTechniqueBase( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -149,15 +140,6 @@ namespace Castor3D
 		void EndRender();
 		/**
 		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags
-		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
-		 *\~french
-		 *\brief		Récupère le source du vertex shader qui correspond aux flags donnés
-		 *\param[in]	p_uiProgramFlags	Combinaison de ePROGRAM_FLAG
-		 */
-		Castor::String GetVertexShaderSource( uint32_t p_uiProgramFlags )const;
-		/**
-		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags
 		 *\param[in]	p_uiFlags	A combination of eTEXTURE_CHANNEL
 		 *\~french
@@ -248,15 +230,6 @@ namespace Castor3D
 		virtual void DoEndRender() = 0;
 		/**
 		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags
-		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
-		 *\~french
-		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
-		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
-		 */
-		virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const = 0;
-		/**
-		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags
 		 *\param[in]	p_uiFlags	A combination of eTEXTURE_CHANNEL
 		 *\~french
@@ -271,9 +244,9 @@ namespace Castor3D
 		//!\~english The parent render target	\~french La render target parente
 		RenderTarget * m_pRenderTarget;
 		//!\~english The	engine	\~french Le moteur
-		Engine * m_pEngine;
+		Engine * m_engine;
 		//!\~english The	render system	\~french Le render system
-		RenderSystem * m_pRenderSystem;
+		RenderSystem * m_renderSystem;
 		//!\~english The	overlays blend state	\~french L'état de mélange pour les overlays
 		BlendStateWPtr m_wp2DBlendState;
 		//!\~english The	overlays depth stencil state	\~french L'état de profoundeur et stenxil pour les overlays

@@ -31,7 +31,7 @@ namespace Dx11Render
 		:	public Castor3D::RenderSystem
 	{
 	public:
-		DxRenderSystem( Castor3D::Engine * p_pEngine );
+		DxRenderSystem( Castor3D::Engine * p_engine );
 		virtual ~DxRenderSystem();
 
 		void CheckShaderSupport();
@@ -44,7 +44,7 @@ namespace Dx11Render
 		virtual Castor3D::RasteriserStateSPtr CreateRasteriserState();
 		virtual Castor3D::BlendStateSPtr CreateBlendState();
 		virtual Castor3D::SamplerSPtr CreateSampler( Castor::String const & p_name );
-		virtual Castor3D::RenderTargetSPtr CreateRenderTarget( Castor3D::eTARGET_TYPE p_eType );
+		virtual Castor3D::RenderTargetSPtr CreateRenderTarget( Castor3D::eTARGET_TYPE p_type );
 		virtual Castor3D::RenderWindowSPtr CreateRenderWindow();
 		virtual Castor3D::ShaderProgramBaseSPtr CreateHlslShaderProgram();
 		virtual Castor3D::ShaderProgramBaseSPtr CreateShaderProgram();
@@ -55,8 +55,8 @@ namespace Dx11Render
 		virtual std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > CreateTextureBuffer( Castor3D::CpuBuffer<uint8_t > * p_pBuffer );
 		virtual Castor3D::StaticTextureSPtr CreateStaticTexture();
 		virtual Castor3D::DynamicTextureSPtr CreateDynamicTexture();
-		virtual Castor3D::FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_strName );
-		virtual Castor3D::BillboardListSPtr CreateBillboardsList( Castor3D::SceneSPtr p_pScene );
+		virtual Castor3D::FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_name );
+		virtual Castor3D::BillboardListSPtr CreateBillboardsList( Castor3D::SceneSPtr p_scene );
 
 		virtual Castor3D::ShaderProgramBaseSPtr CreateGlslShaderProgram()
 		{
@@ -71,6 +71,11 @@ namespace Dx11Render
 		virtual bool SupportsDepthBuffer()const
 		{
 			return true;
+		}
+
+		virtual Castor3D::IPipelineImplSPtr GetPipelineImpl()
+		{
+			return m_pipelineImpl;
 		}
 
 		inline ID3D11Device * GetDevice()
@@ -91,6 +96,7 @@ namespace Dx11Render
 		ID3D11Device * m_pDevice;
 		D3D_FEATURE_LEVEL m_featureLevel;
 		DXGI_ADAPTER_DESC m_adapterDesc;
+		std::shared_ptr< DxPipelineImpl > m_pipelineImpl;
 
 #if !defined( NDEBUG )
 
@@ -102,12 +108,12 @@ namespace Dx11Render
 			return m_pDebug;
 		}
 
-		void SetDxDebugName( ID3D11Device * p_object, std::string const & p_name, std::string const & p_file, int line );
-		void SetDxDebugName( ID3D11DeviceChild * p_object, std::string const & p_name, std::string const & p_file, int line );
-		void SetDxDebugName( IDXGIDeviceSubObject * p_object, std::string const & p_name, std::string const & p_file, int line );
-		void UnsetDxDebugName( ID3D11Device * p_object );
-		void UnsetDxDebugName( ID3D11DeviceChild * p_object );
-		void UnsetDxDebugName( IDXGIDeviceSubObject * p_object );
+		void Track( ID3D11Device * p_object, std::string const & p_name, std::string const & p_file, int line );
+		void Track( ID3D11DeviceChild * p_object, std::string const & p_name, std::string const & p_file, int line );
+		void Track( IDXGIDeviceSubObject * p_object, std::string const & p_name, std::string const & p_file, int line );
+		void Untrack( ID3D11Device * p_object );
+		void Untrack( ID3D11DeviceChild * p_object );
+		void Untrack( IDXGIDeviceSubObject * p_object );
 
 #endif
 	};

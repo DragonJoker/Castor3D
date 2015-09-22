@@ -131,6 +131,9 @@ DECLARE_GUID( IID_IDXGIFactory,					0x7b7166ec, 0x21c7, 0x44ae, 0xb2, 0x1a, 0xc9
 #	if !defined( D3D_DEBUG_INFO )
 #		define D3D_DEBUG_INFO
 #	endif
+#	define DX_DEBUG_RT 1
+#else
+#	define DX_DEBUG_RT 0
 #endif
 
 #ifdef _WIN32
@@ -147,12 +150,12 @@ DECLARE_GUID( IID_IDXGIFactory,					0x7b7166ec, 0x21c7, 0x44ae, 0xb2, 0x1a, 0xc9
 
 #	if !defined( NDEBUG )
 #		define dxCheckError( hr, txt ) Dx11Render::DirectX11::CheckError( hr, cuT( txt ) )
-#		define dxDebugName( rs, obj, type ) rs->SetDxDebugName( obj, #type, __FILE__, __LINE__ )
-#		define dxUnDebugName( rs, obj ) rs->UnsetDxDebugName( obj )
+#		define dxTrack( rs, obj, type ) rs->Track( obj, #type, __FILE__, __LINE__ )
+#		define dxUntrack( rs, obj ) rs->Untrack( obj )
 #	else
 #		define dxCheckError( hr, txt ) SUCCEEDED( hr )
-#		define dxDebugName( rs, obj, txt )
-#		define dxUnDebugName( rs, obj )
+#		define dxTrack( rs, obj, txt )
+#		define dxUntrack( rs, obj )
 #	endif
 
 namespace Dx11Render
@@ -176,7 +179,7 @@ namespace Dx11Render
 	class DxShaderProgram;
 	class DxFrameVariableBase;
 	class DxFrameVariableBuffer;
-	class DxPipeline;
+	class DxPipelineImpl;
 	class DxContext;
 	class DxRenderBuffer;
 	class DxColourRenderBuffer;
@@ -296,9 +299,9 @@ namespace Dx11Render
 		{
 			return TextureDimensions[p_index];
 		}
-		static inline DWORD Get( Castor3D::eLIGHT_INDEXES p_uiIndex )
+		static inline DWORD Get( Castor3D::eLIGHT_INDEXES p_index )
 		{
-			return LightIndexes[p_uiIndex];
+			return LightIndexes[p_index];
 		}
 		static inline DWORD Get( Castor3D::eINTERPOLATION_MODE p_eInterpolationMode )
 		{
@@ -332,9 +335,9 @@ namespace Dx11Render
 		{
 			return DrawTypes[p_index];
 		}
-		static inline D3D11_USAGE Get( Castor3D::eBUFFER_ACCESS_TYPE p_eType )
+		static inline D3D11_USAGE Get( Castor3D::eBUFFER_ACCESS_TYPE p_type )
 		{
-			return Usages[p_eType];
+			return Usages[p_type];
 		}
 		static inline D3D11_DEPTH_WRITE_MASK Get( Castor3D::eWRITING_MASK p_eMask )
 		{
@@ -352,9 +355,9 @@ namespace Dx11Render
 		{
 			return StencilOps[p_eOp];
 		}
-		static inline D3D11_FILL_MODE Get( Castor3D::eFILL_MODE p_eMode )
+		static inline D3D11_FILL_MODE Get( Castor3D::eFILL_MODE p_mode )
 		{
-			return FillModes[p_eMode];
+			return FillModes[p_mode];
 		}
 		static inline D3D11_CULL_MODE Get( Castor3D::eFACE p_eFace )
 		{
@@ -414,7 +417,7 @@ namespace Dx11Render
 	{
 		if ( p_ptReleasable )
 		{
-			dxUnDebugName( static_cast< DxRenderSystem * >( p_rs ), p_ptReleasable );
+			dxUntrack( static_cast< DxRenderSystem * >( p_rs ), p_ptReleasable );
 			p_ptReleasable->Release();
 			p_ptReleasable = NULL;
 		}

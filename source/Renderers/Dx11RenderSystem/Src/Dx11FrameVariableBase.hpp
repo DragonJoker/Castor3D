@@ -43,7 +43,7 @@ namespace Dx11Render
 	protected:
 		std::string m_stdstrName;
 		bool m_bPresentInProgram;
-		DxRenderSystem * m_pRenderSystem;
+		DxRenderSystem * m_renderSystem;
 	};
 }
 

@@ -20,8 +20,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Mesh::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< Mesh, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	Mesh::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		:	Loader< Mesh, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -125,18 +125,18 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Mesh::Mesh( Engine * p_pEngine, eMESH_TYPE p_eMeshType, String const & p_name )
+	Mesh::Mesh( Engine * p_engine, eMESH_TYPE p_eMeshType, String const & p_name )
 		:	Resource< Mesh >( p_name )
 		,	m_modified( false )
-		,	m_factory( p_pEngine->GetMeshFactory() )
-		,	m_pEngine( p_pEngine )
+		,	m_factory( p_engine->GetMeshFactory() )
+		,	m_engine( p_engine )
 	{
 		m_pMeshCategory = m_factory.Create( p_eMeshType );
 		m_pMeshCategory->SetMesh( this );
 	}
 
-	Mesh::Mesh( Engine * p_pEngine, eMESH_TYPE p_eMeshType )
-		:	Mesh( p_pEngine, p_eMeshType, cuEmptyString )
+	Mesh::Mesh( Engine * p_engine, eMESH_TYPE p_eMeshType )
+		:	Mesh( p_engine, p_eMeshType, cuEmptyString )
 	{
 	}
 
@@ -163,9 +163,9 @@ namespace Castor3D
 			return;
 		}
 
-		uint32_t l_uiCount = GetSubmeshCount();
+		uint32_t l_count = GetSubmeshCount();
 
-		for ( uint32_t i = 0; i < l_uiCount; i++ )
+		for ( uint32_t i = 0; i < l_count; i++ )
 		{
 			m_submeshes[i]->ComputeContainers();
 		}
@@ -250,7 +250,7 @@ namespace Castor3D
 
 	SubmeshSPtr Mesh::CreateSubmesh()
 	{
-		SubmeshSPtr l_submesh = std::make_shared< Submesh >( this, m_pEngine, GetSubmeshCount() );
+		SubmeshSPtr l_submesh = std::make_shared< Submesh >( this, m_engine, GetSubmeshCount() );
 		m_submeshes.push_back( l_submesh );
 		return l_submesh;
 	}
@@ -282,7 +282,7 @@ namespace Castor3D
 
 	MeshSPtr Mesh::Clone( String const & p_name )
 	{
-		MeshSPtr l_clone = std::make_shared< Mesh >( m_pEngine, GetMeshType(), p_name );
+		MeshSPtr l_clone = std::make_shared< Mesh >( m_engine, GetMeshType(), p_name );
 
 		for ( auto && l_submesh : m_submeshes )
 		{

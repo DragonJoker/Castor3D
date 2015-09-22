@@ -61,7 +61,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a movable object into a text file
@@ -130,20 +130,20 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		MovableObject( SceneSPtr p_pScene, eMOVABLE_TYPE p_eType );
+		MovableObject( SceneSPtr p_scene, eMOVABLE_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_sn	Parent node
 		 *\param[in]	p_name	The name
-		 *\param[in]	p_eType	MovableObject type
+		 *\param[in]	p_type	MovableObject type
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_sn	Noeud parent
 		 *\param[in]	p_name	Le nom
-		 *\param[in]	p_eType	Le type de MovableObject
+		 *\param[in]	p_type	Le type de MovableObject
 		 */
-		MovableObject( SceneSPtr p_pScene, SceneNodeSPtr p_sn, Castor::String const & p_name, eMOVABLE_TYPE p_eType );
+		MovableObject( SceneSPtr p_scene, SceneNodeSPtr p_sn, Castor::String const & p_name, eMOVABLE_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -218,24 +218,24 @@ namespace Castor3D
 		 */
 		inline eMOVABLE_TYPE GetType()const
 		{
-			return m_eType;
+			return m_type;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the object name
-		 *\param[in]	p_strName	The new value
+		 *\param[in]	p_name	The new value
 		 *\~french
 		 *\brief		Définit le nom de l'objet
-		 *\param[in]	p_strName	La nouvelle valeur
+		 *\param[in]	p_name	La nouvelle valeur
 		 */
-		inline void SetName( Castor::String const & p_strName )
+		inline void SetName( Castor::String const & p_name )
 		{
-			m_strName = p_strName;
+			m_strName = p_name;
 		}
 
 	protected:
 		//!\~english Movable object type	\~french Le type d'objet déplaçable
-		eMOVABLE_TYPE m_eType;
+		eMOVABLE_TYPE m_type;
 		//!\~english The object name	\~french Le nom de l'objet
 		Castor::String m_strName;
 		//!\~english The parent node name	\~french Le nom du noeud parent

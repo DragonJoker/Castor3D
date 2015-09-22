@@ -44,12 +44,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pEngine		The core engine
+		 *\param[in]	p_engine		The core engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pEngine		Le moteur
+		 *\param[in]	p_engine		Le moteur
 		 */
-		Importer( Engine * p_pEngine );
+		Importer( Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Scene import Function
@@ -86,7 +86,7 @@ namespace Castor3D
 		 */
 		inline Engine * GetEngine()const
 		{
-			return m_pEngine;
+			return m_engine;
 		}
 
 	protected:
@@ -117,7 +117,7 @@ namespace Castor3D
 		//!\~english The loaded scene nodes	\~french Les noeuds chargés
 		SceneNodePtrArray m_nodes;
 		//!\~english The core engine	\~french Le moteur
-		Engine * m_pEngine;
+		Engine * m_engine;
 		//!\~english The loaded geometries	\~french Les géométries chargées
 		GeometryPtrStrMap m_geometries;
 		//!\~english Import configuration parameters	\~french Paramètres de configuration de l'import

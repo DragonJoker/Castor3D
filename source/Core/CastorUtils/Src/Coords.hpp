@@ -105,7 +105,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( File::eENCODING_MODE p_eEncodingMode = File::eENCODING_MODE_ASCII );
+			TextLoader( File::eENCODING_MODE p_encodingMode = File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Loads a Coords< T, Count > object from a text file
@@ -208,7 +208,7 @@ namespace Castor
 		 *\param[in]	p_pValues	Les valeurs à affecter
 		 *\return		Une référence sur cet objet Coords
 		 */
-		Coords< T, Count > & operator =( T * p_pValues );
+		Coords< T, Count > & operator=( T * p_pValues );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -219,7 +219,7 @@ namespace Castor
 		 *\param[in]	p_pt	L'objet Coords à copier
 		 *\return		Une référence sur cet objet Coords
 		 */
-		Coords< T, Count > & operator =( Coords< T, Count > const & p_pt );
+		Coords< T, Count > & operator=( Coords< T, Count > const & p_pt );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -230,7 +230,7 @@ namespace Castor
 		 *\param[in]	p_pt	L'objet Coords à déplacer
 		 *\return		Une référence sur cet objet Coords
 		 */
-		Coords< T, Count > & operator =( Coords< T, Count > && p_pt );
+		Coords< T, Count > & operator=( Coords< T, Count > && p_pt );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -241,7 +241,7 @@ namespace Castor
 		 *\param[in]	p_pt	L'objet Point à copier
 		 *\return		Une référence sur cet objet Point
 		 */
-		Coords< T, Count > & operator =( Point< T, Count > const & p_pt );
+		Coords< T, Count > & operator=( Point< T, Count > const & p_pt );
 		/**
 		 *\~english
 		 *\brief		Addition assignment operator
@@ -252,7 +252,7 @@ namespace Castor
 		 *\param[in]	p_pt	L'objet Coords à ajouter
 		 *\return		Une référence sur cet objet Coords
 		 */
-		template< typename U, uint32_t _Count > Coords< T, Count > & operator +=( Coords< U, _Count > const & p_pt );
+		template< typename U, uint32_t _Count > Coords< T, Count > & operator+=( Coords< U, _Count > const & p_pt );
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
@@ -263,7 +263,7 @@ namespace Castor
 		 *\param[in]	p_pt	L'objet Coords à soustraire
 		 *\return		Une référence sur cet objet Coords
 		 */
-		template< typename U, uint32_t _Count > Coords< T, Count > & operator -=( Coords< U, _Count > const & p_pt );
+		template< typename U, uint32_t _Count > Coords< T, Count > & operator-=( Coords< U, _Count > const & p_pt );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
@@ -274,7 +274,7 @@ namespace Castor
 		 *\param[in]	p_pt	L'objet Coords à multiplier
 		 *\return		Une référence sur cet objet Coords
 		 */
-		template< typename U, uint32_t _Count > Coords< T, Count > & operator *=( Coords< U, _Count > const & p_pt );
+		template< typename U, uint32_t _Count > Coords< T, Count > & operator*=( Coords< U, _Count > const & p_pt );
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
@@ -285,7 +285,7 @@ namespace Castor
 		 *\param[in]	p_pt	L'objet Coords à diviser
 		 *\return		Une référence sur cet objet Coords
 		 */
-		template< typename U, uint32_t _Count > Coords< T, Count > & operator /=( Coords< U, _Count > const & p_pt );
+		template< typename U, uint32_t _Count > Coords< T, Count > & operator/=( Coords< U, _Count > const & p_pt );
 		/**
 		 *\~english
 		 *\brief		Addition assignment operator
@@ -296,7 +296,7 @@ namespace Castor
 		 *\param[in]	p_pt	L'objet Coords à ajouter
 		 *\return		Une référence sur cet objet Coords
 		 */
-		template< typename U, uint32_t _Count > Coords< T, Count > & operator +=( Point< U, _Count > const & p_pt );
+		template< typename U, uint32_t _Count > Coords< T, Count > & operator+=( Point< U, _Count > const & p_pt );
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
@@ -307,7 +307,7 @@ namespace Castor
 		 *\param[in]	p_pt	L'objet Coords à soustraire
 		 *\return		Une référence sur cet objet Coords
 		 */
-		template< typename U, uint32_t _Count > Coords< T, Count > & operator -=( Point< U, _Count > const & p_pt );
+		template< typename U, uint32_t _Count > Coords< T, Count > & operator-=( Point< U, _Count > const & p_pt );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
@@ -318,7 +318,7 @@ namespace Castor
 		 *\param[in]	p_pt	L'objet Coords à multiplier
 		 *\return		Une référence sur cet objet Coords
 		 */
-		template< typename U, uint32_t _Count > Coords< T, Count > & operator *=( Point< U, _Count > const & p_pt );
+		template< typename U, uint32_t _Count > Coords< T, Count > & operator*=( Point< U, _Count > const & p_pt );
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
@@ -329,7 +329,7 @@ namespace Castor
 		 *\param[in]	p_pt	L'objet Coords à diviser
 		 *\return		Une référence sur cet objet Coords
 		 */
-		template< typename U, uint32_t _Count > Coords< T, Count > & operator /=( Point< U, _Count > const & p_pt );
+		template< typename U, uint32_t _Count > Coords< T, Count > & operator/=( Point< U, _Count > const & p_pt );
 		/**
 		 *\~english
 		 *\brief		Addition assignment operator
@@ -340,7 +340,7 @@ namespace Castor
 		 *\param[in]	p_coords	Les valeurs à additionner
 		 *\return		Une référence sur cet objet Coords
 		 */
-		template< typename U >	Coords< T, Count > & operator +=( U const * p_coords );
+		template< typename U >	Coords< T, Count > & operator+=( U const * p_coords );
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
@@ -351,7 +351,7 @@ namespace Castor
 		 *\param[in]	p_coords	Les valeurs à soustraire
 		 *\return		Une référence sur cet objet Coords
 		 */
-		template< typename U >	Coords< T, Count > & operator -=( U const * p_coords );
+		template< typename U >	Coords< T, Count > & operator-=( U const * p_coords );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
@@ -362,7 +362,7 @@ namespace Castor
 		 *\param[in]	p_coords	Les valeurs à multiplier
 		 *\return		Une référence sur cet objet Coords
 		 */
-		template< typename U >	Coords< T, Count > & operator *=( U const * p_coords );
+		template< typename U >	Coords< T, Count > & operator*=( U const * p_coords );
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
@@ -373,7 +373,7 @@ namespace Castor
 		 *\param[in]	p_coords	Les valeurs à diviser
 		 *\return		Une référence sur cet objet Coords
 		 */
-		template< typename U >	Coords< T, Count > & operator /=( U const * p_coords );
+		template< typename U >	Coords< T, Count > & operator/=( U const * p_coords );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
@@ -384,7 +384,7 @@ namespace Castor
 		 *\param[in]	p_coord	La valeur à multiplier
 		 *\return		Une référence sur cet objet Coords
 		 */
-		Coords< T, Count > & operator *=( T const & p_coord );
+		Coords< T, Count > & operator*=( T const & p_coord );
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
@@ -395,7 +395,7 @@ namespace Castor
 		 *\param[in]	p_coord	La valeur à diviser
 		 *\return		Une référence sur cet objet Coords
 		 */
-		Coords< T, Count > & operator /=( T const & p_coord );
+		Coords< T, Count > & operator/=( T const & p_coord );
 		/**
 		 *\~english
 		 *\brief		Swaps this pont data with the parameter ones
@@ -595,7 +595,7 @@ namespace Castor
 	 *\param[in]	p_ptA, p_ptB	Les points à comparer
 	 *\return		\p true si les points ont les mêmes dimensions et les mêmes valeurs
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count	> bool operator ==( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> bool operator==( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
 	/**
 	 *\~english
 	 *\brief		Difference operator
@@ -606,7 +606,140 @@ namespace Castor
 	 *\param[in]	p_ptA, p_ptB	Les points à comparer
 	 *\return		\p true si les points ont des dimensions différentes ou au moins une valeur différente
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count	> bool operator !=( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> bool operator!=( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	/**
+	 *\~english
+	 *\brief		Addition operator
+	 *\param[in]	p_ptA, p_ptB	The points to add
+	 *\return		The addition result
+	 *\~french
+	 *\brief		Opérateur d'addition
+	 *\param[in]	p_ptA, p_ptB	Les points à additionner
+	 *\return		Le résultat de l'addition
+	 */
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> Point< T, Count > operator+( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	/**
+	 *\~english
+	 *\brief		Substraction operator
+	 *\param[in]	p_ptA, p_ptB	The points to substract
+	 *\return		The substraction result
+	 *\~french
+	 *\brief		Opérateur de soustraction
+	 *\param[in]	p_ptA, p_ptB	Les points à soustraire
+	 *\return		Le résultat de la soustraction
+	 */
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> Point< T, Count > operator-( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	/**
+	 *\~english
+	 *\brief		Multiplication operator
+	 *\param[in]	p_ptA, p_ptB	The points to multiply
+	 *\return		The multiplication result
+	 *\~french
+	 *\brief		Opérateur de multiplication
+	 *\param[in]	p_ptA, p_ptB	Les points à multiplier
+	 *\return		Le résultat de la multiplication
+	 */
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> Point< T, Count > operator*( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	/**
+	 *\~english
+	 *\brief		Division operator
+	 *\param[in]	p_ptA, p_ptB	The points to divide
+	 *\return		The division result
+	 *\~french
+	 *\brief		Opérateur de division
+	 *\param[in]	p_ptA, p_ptB	Les points à diviser
+	 *\return		Le résultat de la division
+	 */
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> Point< T, Count > operator/( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	/**
+	 *\~english
+	 *\brief		Vectorial product operator
+	 *\param[in]	p_ptA, p_ptB	The points to multiply
+	 *\return		The vectorial product
+	 *\~french
+	 *\brief		Opérateur de produit vectoriel
+	 *\param[in]	p_ptA, p_ptB	Les points à multiplier
+	 *\return		Le résultat du produit vectoriel
+	 */
+	template< typename T, typename U > Point< T, 3 > operator^( Coords< T, 3 > const & p_ptA, Coords< U, 3 > const & p_ptB );
+	/**
+	 *\~english
+	 *\brief		Addition operator
+	 *\param[in]	p_pt		The point
+	 *\param[in]	p_coords	The values to add
+	 *\return		The addition result
+	 *\~french
+	 *\brief		Opérateur d'addition
+	 *\param[in]	p_pt		Le point
+	 *\param[in]	p_coords	Les valeurs à additionner
+	 *\return		Le résultat de l'addition
+	 */
+	template< typename T, uint32_t Count, typename U > Point< T, Count > operator+( Coords< T, Count > const & p_pt, U const * p_coords );
+	/**
+	 *\~english
+	 *\brief		Substraction operator
+	 *\param[in]	p_pt		The point
+	 *\param[in]	p_coords	The values to substract
+	 *\return		The substraction result
+	 *\~french
+	 *\brief		Opérateur de soustraction
+	 *\param[in]	p_pt		Le point
+	 *\param[in]	p_coords	Les valeurs à soustraire
+	 *\return		Le résultat de la soustraction
+	 */
+	template< typename T, uint32_t Count, typename U > Point< T, Count > operator-( Coords< T, Count > const & p_pt, U const * p_coords );
+	/**
+	 *\~english
+	 *\brief		Multiplication operator
+	 *\param[in]	p_pt		The point
+	 *\param[in]	p_coords	The values to multiply
+	 *\return		The multiplication result
+	 *\~french
+	 *\brief		Opérateur de multiplication
+	 *\param[in]	p_pt		Le point
+	 *\param[in]	p_coords	Les valeurs à mulitplier
+	 *\return		Le résultat de la multiplication
+	 */
+	template< typename T, uint32_t Count, typename U > Point< T, Count > operator*( Coords< T, Count > const & p_pt, U const * p_coords );
+	/**
+	 *\~english
+	 *\brief		Division operator
+	 *\param[in]	p_pt		The point to divide
+	 *\param[in]	p_coords	The values
+	 *\return		The division result
+	 *\~french
+	 *\brief		Opérateur de division
+	 *\param[in]	p_pt		Le point à diviser
+	 *\param[in]	p_coords	Les valeurs
+	 *\return		Le résultat de la division
+	 */
+	template< typename T, uint32_t Count, typename U > Point< T, Count > operator/( Coords< T, Count > const & p_pt, U const * p_coords );
+	/**
+	 *\~english
+	 *\brief		Multiplication operator
+	 *\param[in]	p_pt	The point to multiply
+	 *\param[in]	p_coord	The value
+	 *\return		The multiplication result
+	 *\~french
+	 *\brief		Opérateur de multiplication
+	 *\param[in]	p_pt	Le point à multiplier
+	 *\param[in]	p_coord	La valeur
+	 *\return		Le résultat de la multiplication
+	 */
+	template< typename T, uint32_t Count > Point< T, Count > operator*( Coords< T, Count > const & p_pt, T const & p_coord );
+	/**
+	 *\~english
+	 *\brief		Division operator
+	 *\param[in]	p_pt	The point to divide
+	 *\param[in]	p_coord	The value
+	 *\return		The division result
+	 *\~french
+	 *\brief		Opérateur de division
+	 *\param[in]	p_pt	Le point à diviser
+	 *\param[in]	p_coord	La valeur
+	 *\return		Le résultat de la division
+	 */
+	template< typename T, uint32_t Count > Point< T, Count > operator/( Coords< T, Count > const & p_pt, T const & p_coord );
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		10/07/2012
@@ -733,7 +866,7 @@ namespace Castor
  *\param[in]		p_pt		Le point entré
  *\return			Une référence sur le flux
  */
-template< typename T, uint32_t Count > Castor::String & operator <<( Castor::String & p_streamOut, Castor::Coords< T, Count > const & p_pt );
+template< typename T, uint32_t Count > Castor::String & operator<<( Castor::String & p_streamOut, Castor::Coords< T, Count > const & p_pt );
 /**
  *\~english
  *\brief			Stream operator
@@ -746,7 +879,7 @@ template< typename T, uint32_t Count > Castor::String & operator <<( Castor::Str
  *\param[in,out]	p_pt		Le point sortie
  *\return			Une référence sur le flux
  */
-template< typename T, uint32_t Count > Castor::String & operator >>( Castor::String & p_streamIn, Castor::Coords< T, Count > & p_pt );
+template< typename T, uint32_t Count > Castor::String & operator>>( Castor::String & p_streamIn, Castor::Coords< T, Count > & p_pt );
 /**
  *\~english
  *\brief			Stream operator
@@ -759,7 +892,7 @@ template< typename T, uint32_t Count > Castor::String & operator >>( Castor::Str
  *\param[in]		p_pt		Le point entré
  *\return			Une référence sur le flux
  */
-template< typename T, uint32_t Count, typename CharType > std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & p_streamOut, Castor::Coords< T, Count > const & p_pt );
+template< typename T, uint32_t Count, typename CharType > std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & p_streamOut, Castor::Coords< T, Count > const & p_pt );
 /**
  *\~english
  *\brief			Stream operator
@@ -772,7 +905,7 @@ template< typename T, uint32_t Count, typename CharType > std::basic_ostream< Ch
  *\param[in,out]	p_pt		Le point sortie
  *\return			Une référence sur le flux
  */
-template< typename T, uint32_t Count, typename CharType > std::basic_istream< CharType > & operator >>( std::basic_istream< CharType > & p_streamIn, Castor::Coords< T, Count > & p_pt );
+template< typename T, uint32_t Count, typename CharType > std::basic_istream< CharType > & operator>>( std::basic_istream< CharType > & p_streamIn, Castor::Coords< T, Count > & p_pt );
 
 #include "Coords.inl"
 

@@ -14,7 +14,7 @@ namespace Dx11Render
 	}
 
 	template< typename T, class D3dBufferObject >
-	bool DxBufferObject< T, D3dBufferObject >::Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_eType, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
+	bool DxBufferObject< T, D3dBufferObject >::Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
 	{
 		bool l_return = false;
 		T * l_pReturn = NULL;

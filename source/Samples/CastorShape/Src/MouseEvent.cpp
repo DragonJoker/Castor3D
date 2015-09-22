@@ -6,9 +6,9 @@ using namespace Castor;
 
 //********************************************************************************************
 
-MouseCameraEvent::MouseCameraEvent( SceneNode * p_pNode, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
+MouseCameraEvent::MouseCameraEvent( SceneNode * p_node, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
 	:	FrameEvent( eEVENT_TYPE_PRE_RENDER )
-	,	m_pNode( p_pNode )
+	,	m_pNode( p_node )
 	,	m_rDeltaX( p_rDeltaX )
 	,	m_rDeltaY( p_rDeltaY )
 	,	m_rDeltaZ( p_rDeltaZ )
@@ -35,13 +35,13 @@ void MouseCameraEvent::Add( FrameEventSPtr p_pThis, FrameListenerSPtr p_pListene
 
 //********************************************************************************************
 
-CameraRotateEvent::CameraRotateEvent( SceneNodeSPtr p_pNode, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
-	:	MouseCameraEvent( p_pNode.get(), p_rDeltaX, p_rDeltaY, p_rDeltaZ )
+CameraRotateEvent::CameraRotateEvent( SceneNodeSPtr p_node, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
+	:	MouseCameraEvent( p_node.get(), p_rDeltaX, p_rDeltaY, p_rDeltaZ )
 {
 }
 
-CameraRotateEvent::CameraRotateEvent( SceneNode * p_pNode, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
-	:	MouseCameraEvent( p_pNode, p_rDeltaX, p_rDeltaY, p_rDeltaZ )
+CameraRotateEvent::CameraRotateEvent( SceneNode * p_node, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
+	:	MouseCameraEvent( p_node, p_rDeltaX, p_rDeltaY, p_rDeltaZ )
 {
 }
 
@@ -62,13 +62,13 @@ bool CameraRotateEvent::Apply()
 
 //********************************************************************************************
 
-CameraTranslateEvent::CameraTranslateEvent( SceneNodeSPtr p_pNode, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
-	:	MouseCameraEvent( p_pNode.get(), p_rDeltaX, p_rDeltaY, p_rDeltaZ )
+CameraTranslateEvent::CameraTranslateEvent( SceneNodeSPtr p_node, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
+	:	MouseCameraEvent( p_node.get(), p_rDeltaX, p_rDeltaY, p_rDeltaZ )
 {
 }
 
-CameraTranslateEvent::CameraTranslateEvent( SceneNode * p_pNode, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
-	:	MouseCameraEvent( p_pNode, p_rDeltaX, p_rDeltaY, p_rDeltaZ )
+CameraTranslateEvent::CameraTranslateEvent( SceneNode * p_node, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
+	:	MouseCameraEvent( p_node, p_rDeltaX, p_rDeltaY, p_rDeltaZ )
 {
 }
 

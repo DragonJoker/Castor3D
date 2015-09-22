@@ -168,18 +168,18 @@ namespace GuiCommon
 	 *\brief		Copies the buffer into the bitmap
 	 *\remark		The buffer must be in BGRA 32bits
 	 *\param[in]	p_pBuffer	The buffer
-	 *\param[in]	p_uiWidth	The buffer image's width
-	 *\param[in]	p_uiHeight	The buffer image's height
+	 *\param[in]	p_width	The buffer image's width
+	 *\param[in]	p_height	The buffer image's height
 	 *\param[out]	p_bitmap	Receives the generated bitmap
 	 *\~french
 	 *\brief		Copie le buffer donné dans un bitmap
 	 *\remark		Le buffer doit être en format BGRA 32bits
 	 *\param[in]	p_pBuffer	Le buffer
-	 *\param[in]	p_uiWidth	La largeur de l'image
-	 *\param[in]	p_uiHeight	La hauteur de l'image
+	 *\param[in]	p_width	La largeur de l'image
+	 *\param[in]	p_height	La hauteur de l'image
 	 *\param[out]	p_bitmap	Re�oit le bitmap g�n�r�
 	 */
-	void CreateBitmapFromBuffer( uint8_t const * p_pBuffer, uint32_t p_uiWidth, uint32_t p_uiHeight, wxBitmap & p_bitmap );
+	void CreateBitmapFromBuffer( uint8_t const * p_pBuffer, uint32_t p_width, uint32_t p_height, wxBitmap & p_bitmap );
 	/**
 	 *\~english
 	 *\brief		Copies the unit texture into the bitmap

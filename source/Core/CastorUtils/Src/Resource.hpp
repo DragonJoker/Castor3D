@@ -102,13 +102,13 @@ namespace Castor
 		 *\~english
 		 *\brief		Defines the resource name
 		 *\remark		Also tells the collection the new resource name
-		 *\param[in]	p_strName	The new name
+		 *\param[in]	p_name	The new name
 		 *\~french
 		 *\brief		Définit le nom de la ressource
 		 *\remark		Dit aussi à la collection le nouveau de la ressource
-		 *\param[in]	p_strName	Le nouveau nom
+		 *\param[in]	p_name	Le nouveau nom
 		 */
-		void ChangeName( String const & p_strName );
+		void ChangeName( String const & p_name );
 	};
 
 #	include "Resource.inl"

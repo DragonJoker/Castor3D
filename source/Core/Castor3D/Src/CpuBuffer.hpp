@@ -59,7 +59,7 @@ namespace Castor3D
 			,	m_bToDelete( false )
 			,	m_pBuffer( )
 			,	m_arrayData( )
-			,	m_pRenderSystem( p_pRenderSystem )
+			,	m_renderSystem( p_pRenderSystem )
 			,	m_uiSavedSize( 0 )
 
 		{
@@ -126,23 +126,23 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Initialisation function, initialises GPU buffer
-		 *\param[in]	p_eType		Buffer access type
+		 *\param[in]	p_type		Buffer access type
 		 *\param[in]	p_eNature	Buffer access nature
 		 *\param[in]	p_pProgram	The shader program
 		 *\~french
 		 *\brief		Fonction d'initialisation, initialise le GPU tampon
-		 *\param[in]	p_eType		Type d'accès du tampon
+		 *\param[in]	p_type		Type d'accès du tampon
 		 *\param[in]	p_eNature	Nature d'accès du tampon
 		 *\param[in]	p_pProgram	Le programme shader
 		 */
-		virtual bool Initialise( eBUFFER_ACCESS_TYPE p_eType, eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram = nullptr )
+		virtual bool Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram = nullptr )
 		{
 			bool l_return	= false;
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
 			if ( l_pBuffer )
 			{
-				l_return = l_pBuffer->Initialise( p_eType, p_eNature, p_pProgram );
+				l_return = l_pBuffer->Initialise( p_type, p_eNature, p_pProgram );
 			}
 
 			return l_return;
@@ -197,25 +197,25 @@ namespace Castor3D
 		 *\brief		Transmits data to the GPU buffer from RAM
 		 *\param[in]	p_pBuffer	The data
 		 *\param[in]	p_iSize		Data buffer size
-		 *\param[in]	p_eType		Transfer type
+		 *\param[in]	p_type		Transfer type
 		 *\param[in]	p_eNature	Transfer nature
 		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Transfère des données au tampon GPU à partir de la ram
 		 *\param[in]	p_pBuffer	Les données
 		 *\param[in]	p_iSize		Taille du tampon de données
-		 *\param[in]	p_eType		Type de transfert
+		 *\param[in]	p_type		Type de transfert
 		 *\param[in]	p_eNature	Nature du transfert
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_eType, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
+		virtual bool Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
 		{
 			bool l_return = false;
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
 			if ( l_pBuffer )
 			{
-				l_return = l_pBuffer->Fill( p_pBuffer, p_iSize, p_eType, p_eNature );
+				l_return = l_pBuffer->Fill( p_pBuffer, p_iSize, p_type, p_eNature );
 			}
 
 			return l_return;
@@ -260,29 +260,29 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets element value at given index
-		 *\param[in]	p_uiIndex	The index
-		 *\param[in]	p_tValue	The value
+		 *\param[in]	p_index	The index
+		 *\param[in]	p_value	The value
 		 *\~french
 		 *\brief		Définit la valeur de l'élément à l'index donné
-		 *\param[in]	p_uiIndex	L'index
-		 *\param[in]	p_tValue	La valeur
+		 *\param[in]	p_index	L'index
+		 *\param[in]	p_value	La valeur
 		 */
-		virtual void SetElement( uint32_t p_uiIndex, T const & p_tValue )
+		virtual void SetElement( uint32_t p_index, T const & p_value )
 		{
-			CASTOR_ASSERT( p_uiIndex < m_arrayData.size() );
-			m_arrayData[p_uiIndex] = p_tValue;
+			CASTOR_ASSERT( p_index < m_arrayData.size() );
+			m_arrayData[p_index] = p_value;
 		}
 		/**
 		 *\~english
 		 *\brief		Adds a value at the end of the buffer
-		 *\param[in]	p_tValue	The value
+		 *\param[in]	p_value	The value
 		 *\~french
 		 *\brief		Ajoute une valeur à la fin du tampon
-		 *\param[in]	p_tValue	La valeur
+		 *\param[in]	p_value	La valeur
 		 */
-		virtual void AddElement( T const & p_tValue )
+		virtual void AddElement( T const & p_value )
 		{
-			m_arrayData.push_back( p_tValue );
+			m_arrayData.push_back( p_value );
 		}
 		/**
 		 *\~english
@@ -424,7 +424,7 @@ namespace Castor3D
 		 */
 		virtual RenderSystem * GetRenderSystem()const
 		{
-			return m_pRenderSystem;
+			return m_renderSystem;
 		}
 		/**
 		 *\~english
@@ -482,7 +482,7 @@ namespace Castor3D
 		//!\~english The buffer data	\~french Les données du tampon
 		TArray m_arrayData;
 		//!\~english The RenderSystem, used to assign a GPU buffer	\~french Le RenderSystem, utilisée pour affecter un tampon GPU
-		RenderSystem * m_pRenderSystem;
+		RenderSystem * m_renderSystem;
 		//!<\~english The saved buffer size (to still have a size after clear)	\~french La taille sauvegardée, afin de toujours l'avoir après un clear
 		uint32_t m_uiSavedSize;
 	};

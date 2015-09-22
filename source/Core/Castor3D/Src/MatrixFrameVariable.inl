@@ -445,9 +445,9 @@
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	inline void MatrixFrameVariable< T, Rows, Columns >::SetValue( Castor::Matrix< T, Rows, Columns > const & p_mtxValue, uint32_t p_uiIndex )
+	inline void MatrixFrameVariable< T, Rows, Columns >::SetValue( Castor::Matrix< T, Rows, Columns > const & p_mtxValue, uint32_t p_index )
 	{
-		m_mtxValue[p_uiIndex] = p_mtxValue;
+		m_mtxValue[p_index] = p_mtxValue;
 		TFrameVariable< T >::m_bChanged = true;
 	}
 
@@ -464,11 +464,11 @@
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	inline Castor::Matrix< T, Rows, Columns > & MatrixFrameVariable< T, Rows, Columns >::GetValue( uint32_t p_uiIndex )throw( std::out_of_range )
+	inline Castor::Matrix< T, Rows, Columns > & MatrixFrameVariable< T, Rows, Columns >::GetValue( uint32_t p_index )throw( std::out_of_range )
 	{
-		if ( p_uiIndex < TFrameVariable< T >::m_uiOcc )
+		if ( p_index < TFrameVariable< T >::m_uiOcc )
 		{
-			return m_mtxValue[p_uiIndex];
+			return m_mtxValue[p_index];
 		}
 		else
 		{
@@ -477,11 +477,11 @@
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	inline Castor::Matrix< T, Rows, Columns > const & MatrixFrameVariable< T, Rows, Columns >::GetValue( uint32_t p_uiIndex )const throw( std::out_of_range )
+	inline Castor::Matrix< T, Rows, Columns > const & MatrixFrameVariable< T, Rows, Columns >::GetValue( uint32_t p_index )const throw( std::out_of_range )
 	{
-		if ( p_uiIndex < TFrameVariable< T >::m_uiOcc )
+		if ( p_index < TFrameVariable< T >::m_uiOcc )
 		{
-			return m_mtxValue[p_uiIndex];
+			return m_mtxValue[p_index];
 		}
 		else
 		{
@@ -528,7 +528,7 @@
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	inline void MatrixFrameVariable< T, Rows, Columns >::DoSetValueStr( Castor::String const & p_strValue, uint32_t p_uiIndex )
+	inline void MatrixFrameVariable< T, Rows, Columns >::DoSetValueStr( Castor::String const & p_strValue, uint32_t p_index )
 	{
 		Castor::StringArray l_arrayLines = Castor::string::split( p_strValue, cuT( ";" ) );
 
@@ -547,7 +547,7 @@
 
 					for ( uint32_t j = 0; j < Columns; j++ )
 					{
-						policy::assign( m_mtxValue[p_uiIndex][j][i], policy::parse( l_arraySplitted[j] ) );
+						policy::assign( m_mtxValue[p_index][j][i], policy::parse( l_arraySplitted[j] ) );
 					}
 				}
 			}

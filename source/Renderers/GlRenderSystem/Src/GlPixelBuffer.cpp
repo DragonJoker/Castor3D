@@ -6,14 +6,14 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlPixelBuffer::GlPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem, uint8_t * p_pPixels, uint32_t p_uiPixelsSize, eGL_BUFFER_TARGET p_ePackMode, eBUFFER_ACCESS_TYPE p_eType, eBUFFER_ACCESS_NATURE p_eNature )
+	GlPixelBuffer::GlPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem, uint8_t * p_pPixels, uint32_t p_uiPixelsSize, eGL_BUFFER_TARGET p_ePackMode, eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_eNature )
 		:	GlBufferBase< uint8_t >( p_gl, p_ePackMode )
 		,	m_uiPixelsSize( p_uiPixelsSize )
 		,	m_pPixels( p_pPixels )
 		,	m_ePackMode( p_ePackMode )
-		,	m_eAccessType( p_eType )
+		,	m_eAccessType( p_type )
 		,	m_eAccessNature( p_eNature )
-		,	m_pRenderSystem( p_pRenderSystem )
+		,	m_renderSystem( p_pRenderSystem )
 	{
 	}
 

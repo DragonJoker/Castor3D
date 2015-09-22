@@ -572,26 +572,26 @@ namespace CastorShape
 		}
 	}
 
-	void MainFrame::DoSetSelectionType( SelectionType p_eType )
+	void MainFrame::DoSetSelectionType( SelectionType p_type )
 	{
-		m_3dFrame->SetSelectionType( p_eType );
+		m_3dFrame->SetSelectionType( p_type );
 
 		if ( m_bMultiFrames )
 		{
-			m_2dFrameHD->SetSelectionType( p_eType );
-			m_2dFrameBG->SetSelectionType( p_eType );
-			m_2dFrameBD->SetSelectionType( p_eType );
+			m_2dFrameHD->SetSelectionType( p_type );
+			m_2dFrameBG->SetSelectionType( p_type );
+			m_2dFrameBD->SetSelectionType( p_type );
 		}
 	}
-	void MainFrame::DoSetActionType( ActionType p_eType )
+	void MainFrame::DoSetActionType( ActionType p_type )
 	{
-		m_3dFrame->SetActionType( p_eType );
+		m_3dFrame->SetActionType( p_type );
 
 		if ( m_bMultiFrames )
 		{
-			m_2dFrameHD->SetActionType( p_eType );
-			m_2dFrameBG->SetActionType( p_eType );
-			m_2dFrameBD->SetActionType( p_eType );
+			m_2dFrameHD->SetActionType( p_type );
+			m_2dFrameBG->SetActionType( p_type );
+			m_2dFrameBD->SetActionType( p_type );
 		}
 	}
 

@@ -68,7 +68,7 @@ namespace Dx11Render
 
 	void DxShaderProgram::RetrieveLinkerLog( String & strLog )
 	{
-		if ( !m_pRenderSystem->UseShaders() )
+		if ( !m_renderSystem->UseShaders() )
 		{
 			strLog = DirectX11::GetHlslErrorString( 0 );
 		}
@@ -86,7 +86,6 @@ namespace Dx11Render
 
 	void DxShaderProgram::Bind( uint8_t p_byIndex, uint8_t p_byCount )
 	{
-		m_pRenderSystem->GetPipeline()->UpdateFunctions( this );
 		ShaderProgramBase::Bind( p_byIndex, p_byCount );
 	}
 
@@ -95,10 +94,10 @@ namespace Dx11Render
 		ShaderProgramBase::Unbind();
 	}
 
-	ID3DBlob * DxShaderProgram::GetCompiled( Castor3D::eSHADER_TYPE p_eType )
+	ID3DBlob * DxShaderProgram::GetCompiled( Castor3D::eSHADER_TYPE p_type )
 	{
 		ID3DBlob * l_pReturn = NULL;
-		ShaderObjectBaseSPtr l_pObject = m_pShaders[p_eType];
+		ShaderObjectBaseSPtr l_pObject = m_pShaders[p_type];
 
 		if ( l_pObject && l_pObject->GetStatus() == eSHADER_STATUS_COMPILED )
 		{
@@ -108,11 +107,11 @@ namespace Dx11Render
 		return l_pReturn;
 	}
 
-	ShaderObjectBaseSPtr DxShaderProgram::DoCreateObject( eSHADER_TYPE p_eType )
+	ShaderObjectBaseSPtr DxShaderProgram::DoCreateObject( eSHADER_TYPE p_type )
 	{
 		ShaderObjectBaseSPtr l_pReturn;
 
-		switch ( p_eType )
+		switch ( p_type )
 		{
 		case eSHADER_TYPE_VERTEX:
 			l_pReturn = std::make_shared< DxVertexShader >( this );
@@ -140,6 +139,42 @@ namespace Dx11Render
 
 	std::shared_ptr< OneTextureFrameVariable > DxShaderProgram::DoCreateTextureVariable( int p_iNbOcc )
 	{
-		return std::make_shared< DxOneFrameVariable< TextureBaseRPtr > >( static_cast< DxRenderSystem * >( m_pRenderSystem ), this, p_iNbOcc );
+		return std::make_shared< DxOneFrameVariable< TextureBaseRPtr > >( static_cast< DxRenderSystem * >( m_renderSystem ), this, p_iNbOcc );
 	}
+
+	String DxShaderProgram::DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const
+	{
+		String l_strReturn;
+		DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( m_renderSystem );
+		std::unique_ptr< UniformsBase > l_pUniforms = UniformsBase::Get( *l_renderSystem );
+		std::unique_ptr< InOutsBase > l_pInputs = InOutsBase::Get( *l_renderSystem );
+
+		if ( l_pUniforms && l_pInputs )
+		{
+			l_strReturn += l_pUniforms->GetVertexInMatrices( 0 );
+			l_strReturn += l_pInputs->GetVtxInput();
+			l_strReturn += l_pInputs->GetVtxOutput();
+			l_strReturn +=
+				cuT( "VtxOutput mainVx( in VtxInput p_input )\n" )
+				cuT( "{\n" )
+				cuT( "	VtxOutput l_output;\n" )
+				cuT( "	p_input.Position.w = 1.0f;\n" )
+				cuT( "	float3x3 l_mtxNormal = (float3x3)c3d_mtxNormal;\n" )
+				cuT( "	l_output.Position = mul( p_input.Position, c3d_mtxProjectionModelView );\n" )
+				cuT( "	l_output.Normal = normalize( mul( p_input.Normal, l_mtxNormal ) );\n" )
+				cuT( "	l_output.Tangent = normalize( mul( p_input.Tangent, l_mtxNormal ) );\n" )
+				cuT( "	l_output.Binormal = cross( l_output.Tangent, l_output.Normal );\n" )
+				cuT( "	l_output.Vertex = mul( p_input.Position, c3d_mtxModelView ).xyz;\n" )
+				cuT( "	l_output.TextureUV = p_input.TextureUV;\n" )
+				cuT( "	float3 tmpVec = -l_output.Vertex;\n" )
+				cuT( "	l_output.Eye.x = dot( tmpVec, l_output.Tangent );\n" )
+				cuT( "	l_output.Eye.y = dot( tmpVec, l_output.Binormal );\n" )
+				cuT( "	l_output.Eye.z = dot( tmpVec, l_output.Normal  );\n" )
+				cuT( "	return l_output;\n" )
+				cuT( "}\n" );
+		}
+
+		return l_strReturn;
+	}
+
 }

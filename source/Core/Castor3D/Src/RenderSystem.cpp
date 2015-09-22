@@ -22,13 +22,12 @@ using namespace Castor;
 
 //*************************************************************************************************
 
-RenderSystem::RenderSystem( Engine * p_pEngine, eRENDERER_TYPE p_eRendererType )
-	: m_pEngine( p_pEngine )
+RenderSystem::RenderSystem( Engine * p_engine, eRENDERER_TYPE p_eRendererType )
+	: m_engine( p_engine )
 	, m_useMultiTexturing( false )
 	, m_bInitialised( false )
 	, m_useShaders( false )
 	, m_forceShaders( false )
-	, m_pPipeline( nullptr )
 	, m_eRendererType( p_eRendererType )
 	, m_bStereoAvailable( false )
 	, m_pCurrentContext( NULL )
@@ -42,10 +41,13 @@ RenderSystem::RenderSystem( Engine * p_pEngine, eRENDERER_TYPE p_eRendererType )
 	m_useShader[eSHADER_TYPE_GEOMETRY] = false;
 	m_useShader[eSHADER_TYPE_HULL] = false;
 	m_useShader[eSHADER_TYPE_DOMAIN] = false;
+
+	m_pipeline = std::make_unique< Pipeline >( *this );
 }
 
 RenderSystem::~RenderSystem()
 {
+	m_pipeline.reset();
 }
 
 void RenderSystem::Initialise()
@@ -73,9 +75,9 @@ void RenderSystem::RenderAmbientLight( Castor::Colour const & p_clColour, FrameV
 	l_pVariable->SetValue( l_ptColour );
 }
 
-void RenderSystem::PushScene( Scene * p_pScene )
+void RenderSystem::PushScene( Scene * p_scene )
 {
-	m_stackScenes.push( p_pScene );
+	m_stackScenes.push( p_scene );
 }
 
 void RenderSystem::PopScene()
@@ -106,7 +108,7 @@ ShaderProgramBaseSPtr RenderSystem::CreateShaderProgram( eSHADER_LANGUAGE p_eLan
 	}
 	else
 	{
-		ShaderPluginSPtr l_pPlugin = m_pEngine->GetShaderPlugin( p_eLanguage );
+		ShaderPluginSPtr l_pPlugin = m_engine->GetShaderPlugin( p_eLanguage );
 
 		if ( l_pPlugin )
 		{
@@ -115,39 +117,6 @@ ShaderProgramBaseSPtr RenderSystem::CreateShaderProgram( eSHADER_LANGUAGE p_eLan
 	}
 
 	return l_pReturn;
-}
-
-IPipelineImpl * RenderSystem::CreatePipeline( Pipeline * p_pPipeline, eSHADER_LANGUAGE p_eLanguage )
-{
-	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-	IPipelineImpl * l_pReturn = NULL;
-
-	if ( p_eLanguage != eSHADER_LANGUAGE_GLSL && p_eLanguage != eSHADER_LANGUAGE_HLSL )
-	{
-		ShaderPluginSPtr l_pPlugin = m_pEngine->GetShaderPlugin( p_eLanguage );
-
-		if ( l_pPlugin )
-		{
-			l_pReturn = l_pPlugin->CreatePipeline( p_pPipeline, this );
-		}
-	}
-
-	return l_pReturn;
-}
-
-void RenderSystem::DestroyPipeline( eSHADER_LANGUAGE p_eLanguage, IPipelineImpl * p_pPipeline )
-{
-	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-
-	if ( p_eLanguage != eSHADER_LANGUAGE_GLSL && p_eLanguage != eSHADER_LANGUAGE_HLSL )
-	{
-		ShaderPluginSPtr l_pPlugin = m_pEngine->GetShaderPlugin( p_eLanguage );
-
-		if ( l_pPlugin )
-		{
-			l_pPlugin->DestroyPipeline( p_pPipeline );
-		}
-	}
 }
 
 Camera * RenderSystem::GetCurrentCamera()const

@@ -104,15 +104,15 @@
 	}
 
 	template< typename T >
-	inline void OneFrameVariable< T >::SetValue( T const & p_tValue )
+	inline void OneFrameVariable< T >::SetValue( T const & p_value )
 	{
-		OneFrameVariable< T >::SetValue( p_tValue, 0 );
+		OneFrameVariable< T >::SetValue( p_value, 0 );
 	}
 
 	template< typename T >
-	inline void OneFrameVariable< T >::SetValue( T const & p_tValue, uint32_t p_uiIndex )
+	inline void OneFrameVariable< T >::SetValue( T const & p_value, uint32_t p_index )
 	{
-		policy::assign( this->m_pValues[p_uiIndex], p_tValue );
+		policy::assign( this->m_pValues[p_index], p_value );
 		TFrameVariable< T >::m_bChanged = true;
 	}
 
@@ -129,11 +129,11 @@
 	}
 
 	template< typename T >
-	inline T & OneFrameVariable< T >::GetValue( uint32_t p_uiIndex )throw( std::out_of_range )
+	inline T & OneFrameVariable< T >::GetValue( uint32_t p_index )throw( std::out_of_range )
 	{
-		if ( p_uiIndex < TFrameVariable< T >::m_uiOcc )
+		if ( p_index < TFrameVariable< T >::m_uiOcc )
 		{
-			return this->m_pValues[p_uiIndex];
+			return this->m_pValues[p_index];
 		}
 		else
 		{
@@ -142,11 +142,11 @@
 	}
 
 	template< typename T >
-	inline T const & OneFrameVariable< T >::GetValue( uint32_t p_uiIndex )const throw( std::out_of_range )
+	inline T const & OneFrameVariable< T >::GetValue( uint32_t p_index )const throw( std::out_of_range )
 	{
-		if ( p_uiIndex < TFrameVariable< T >::m_uiOcc )
+		if ( p_index < TFrameVariable< T >::m_uiOcc )
 		{
-			return this->m_pValues[p_uiIndex];
+			return this->m_pValues[p_index];
 		}
 		else
 		{
@@ -173,8 +173,8 @@
 	}
 
 	template< typename T >
-	inline void OneFrameVariable< T >::DoSetValueStr( Castor::String const & p_strValue, uint32_t p_uiIndex )
+	inline void OneFrameVariable< T >::DoSetValueStr( Castor::String const & p_strValue, uint32_t p_index )
 	{
-		Castor::string::parse( p_strValue, this->m_pValues[p_uiIndex] );
+		Castor::string::parse( p_strValue, this->m_pValues[p_index] );
 	}
 }

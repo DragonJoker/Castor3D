@@ -73,9 +73,8 @@ namespace Castor3D
 		MovingObjectBaseSPtr l_return;
 		MovingObjectPtrStrMapIt l_it = m_mapToMove.find( p_pObject->GetName() );
 
-		if ( l_it != m_mapToMove.end() )
+		if ( l_it == m_mapToMove.end() )
 		{
-			l_return = l_it->second;
 			std::shared_ptr< MovingObject > l_pObj = std::make_shared< MovingObject >();
 			l_pObj->SetObject( p_pObject );
 			l_return = l_pObj;
@@ -94,9 +93,8 @@ namespace Castor3D
 		MovingObjectBaseSPtr l_return;
 		MovingObjectPtrStrMapIt l_it = m_mapToMove.find( p_pBone->GetName() );
 
-		if ( l_it != m_mapToMove.end() )
+		if ( l_it == m_mapToMove.end() )
 		{
-			l_return = l_it->second;
 			std::shared_ptr< MovingBone > l_pObj = std::make_shared< MovingBone >();
 			l_pObj->SetBone( p_pBone );
 			l_return = l_pObj;

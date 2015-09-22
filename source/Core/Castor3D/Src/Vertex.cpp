@@ -4,8 +4,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Vertex::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< Vertex, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	Vertex::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		:	Loader< Vertex, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 

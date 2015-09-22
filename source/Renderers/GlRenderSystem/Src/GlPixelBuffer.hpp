@@ -26,7 +26,7 @@ namespace GlRender
 		:	public GlBufferBase< uint8_t >
 	{
 	public:
-		GlPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem, uint8_t * p_pPixels, uint32_t p_uiPixelsSize, eGL_BUFFER_TARGET p_ePackMode, Castor3D::eBUFFER_ACCESS_TYPE p_eType, Castor3D::eBUFFER_ACCESS_NATURE p_eNature );
+		GlPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem, uint8_t * p_pPixels, uint32_t p_uiPixelsSize, eGL_BUFFER_TARGET p_ePackMode, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature );
 		virtual ~GlPixelBuffer();
 
 		virtual bool Activate();
@@ -41,7 +41,7 @@ namespace GlRender
 		Castor3D::eBUFFER_ACCESS_NATURE m_eAccessNature;
 		uint8_t	* m_pPixels;
 		uint32_t m_uiPixelsSize;
-		GlRenderSystem * m_pRenderSystem;
+		GlRenderSystem * m_renderSystem;
 	};
 }
 

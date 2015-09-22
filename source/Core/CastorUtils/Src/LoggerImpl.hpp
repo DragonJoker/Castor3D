@@ -176,17 +176,17 @@ namespace Castor
 		*/
 		void DoPrintLine( String const & line, ELogType logType );
 
-		/** Logs a line in the given file
+		/** Logs a line in the given stream
 		@param[in] timestamp
 			The line timestamp
 		@param[in] line
 			The line
-		@param logFile
-			The file
+		@param stream
+			The stream
 		@param[in] logType
 			The log level
 		*/
-		void DoLogLine( String const & timestamp, String const & line, FILE * logFile, ELogType logType );
+		void DoLogLine( String const & timestamp, String const & line, StringStream & stream, ELogType logType );
 
 	private:
 		//! The files paths, per log level
