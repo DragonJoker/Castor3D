@@ -5,12 +5,14 @@
 #include "DebugOverlays.hpp"
 #include "DepthStencilState.hpp"
 #include "DividerPlugin.hpp"
+#include "GenericPlugin.hpp"
 #include "ImporterPlugin.hpp"
 #include "InitialiseEvent.hpp"
 #include "Material.hpp"
 #include "Mesh.hpp"
 #include "Overlay.hpp"
 #include "Pipeline.hpp"
+#include "PostFxPlugin.hpp"
 #include "Plugin.hpp"
 #include "RasteriserState.hpp"
 #include "RendererPlugin.hpp"
@@ -21,7 +23,6 @@
 #include "Sampler.hpp"
 #include "Scene.hpp"
 #include "SceneFileParser.hpp"
-#include "ShaderPlugin.hpp"
 #include "ShaderProgram.hpp"
 #include "TechniquePlugin.hpp"
 #include "TextOverlay.hpp"
@@ -666,19 +667,10 @@ namespace Castor3D
 		return l_pReturn;
 	}
 
-	ShaderPluginSPtr Engine::GetShaderPlugin( eSHADER_LANGUAGE p_eLanguage )
+	PluginStrMap Engine::GetPlugins( ePLUGIN_TYPE p_type )
 	{
-		ShaderPluginSPtr l_pReturn;
-		m_mutexShaderPlugins.lock();
-		ShaderPluginMapIt l_it = m_mapShaderPlugins.find( p_eLanguage );
-
-		if ( l_it != m_mapShaderPlugins.end() )
-		{
-			l_pReturn = l_it->second;
-		}
-
-		m_mutexShaderPlugins.unlock();
-		return l_pReturn;
+		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexLoadedPlugins );
+		return m_arrayLoadedPlugins[p_type];
 	}
 
 	bool Engine::LoadRenderer( eRENDERER_TYPE p_type )
@@ -785,27 +777,6 @@ namespace Castor3D
 		return l_pReturn;
 	}
 
-	PluginBaseSPtr Engine::LoadProgramPlugin( DynamicLibrarySPtr p_pLibrary )
-	{
-		ShaderPluginSPtr l_pShader = std::make_shared< ShaderPlugin >( p_pLibrary, this );
-		PluginBaseSPtr l_pReturn = std::static_pointer_cast< PluginBase, ShaderPlugin >( l_pShader );
-		eSHADER_LANGUAGE l_eLanguage = l_pShader->GetShaderLanguage();
-		m_mutexShaderPlugins.lock();
-		ShaderPluginMap::iterator l_it = m_mapShaderPlugins.find( l_eLanguage );
-
-		if ( l_it == m_mapShaderPlugins.end() )
-		{
-			m_mapShaderPlugins.insert( std::make_pair( l_eLanguage, l_pShader ) );
-		}
-		else
-		{
-			l_pReturn.reset();
-		}
-
-		m_mutexShaderPlugins.unlock();
-		return l_pReturn;
-	}
-
 	PluginBaseSPtr Engine::LoadTechniquePlugin( DynamicLibrarySPtr p_pLibrary )
 	{
 		return std::make_shared< TechniquePlugin >( p_pLibrary, this );
@@ -854,22 +825,20 @@ namespace Castor3D
 					break;
 
 				case ePLUGIN_TYPE_RENDERER:
-				{
 					l_pReturn = LoadRendererPlugin( l_pLibrary );
-				}
-				break;
+					break;
 
-				case ePLUGIN_TYPE_PROGRAM:
-				{
-					l_pReturn = LoadProgramPlugin( l_pLibrary );
-				}
-				break;
+				case ePLUGIN_TYPE_GENERIC:
+					l_pReturn = std::make_shared< GenericPlugin >( l_pLibrary, this );
+					break;
 
 				case ePLUGIN_TYPE_TECHNIQUE:
-				{
 					l_pReturn = LoadTechniquePlugin( l_pLibrary );
-				}
-				break;
+					break;
+
+				case ePLUGIN_TYPE_POSTFX:
+					l_pReturn = std::make_shared< PostFxPlugin >( l_pLibrary, this );
+					break;
 
 				default:
 					break;

@@ -36,36 +36,35 @@ namespace Castor3D
 	*/
 	typedef enum eSECTION CASTOR_TYPE( uint32_t )
 	{
-		eSECTION_ROOT,					//!< No section id est root
-		eSECTION_SCENE,					//!< Scene section
-		eSECTION_WINDOW,				//!< Window section
-		eSECTION_SAMPLER,				//!< Sampler state section
-		eSECTION_CAMERA,				//!< Camera section
-		eSECTION_VIEWPORT,				//!< Viewport section
-		eSECTION_LIGHT,					//!< Light section
-		eSECTION_NODE,					//!< SceneNode section
-		eSECTION_OBJECT,				//!< Geometry section
-		eSECTION_OBJECT_MATERIALS,		//!< Geometry materials section
-		eSECTION_FONT,					//!< Font section
-		eSECTION_PANEL_OVERLAY,			//!< Panel Overlay sections
-		eSECTION_BORDER_PANEL_OVERLAY,	//!< Border Panel Overlay sections
-		eSECTION_TEXT_OVERLAY,			//!< Text Overlay sections
-		eSECTION_MESH,					//!< Mesh subsection of a geometry section
-		eSECTION_SUBMESH,				//!< Submesh subsection of a Mesh subsection
-		eSECTION_MATERIAL,				//!< Material section
-		eSECTION_PASS,					//!< Pass subsection of a material section
-		eSECTION_TEXTURE_UNIT,			//!< TextureUnit subsection of a pass subsection
-		eSECTION_RENDER_TARGET,			//!< RenderTarget subsection of a texture unit or window subsection
-		eSECTION_GLSL_SHADER,			//!< GLSL Shader subsection of a pass subsection
-		eSECTION_HLSL_SHADER,			//!< HLSL Shader subsection of a pass subsection
-		eSECTION_SHADER_PROGRAM,		//!< Shader Program subsection of a shader subsection
-		eSECTION_SHADER_SAMPLER,		//!< Sampler shader variable subsection of a shader program subsection
-		eSECTION_SHADER_UBO,			//!< UBO subsection of a shader subsection
-		eSECTION_SHADER_UBO_VARIABLE,	//!< Variable subsection of a UBO subsection
-		eSECTION_BILLBOARD,				//!< Billboards list section
-		eSECTION_BILLBOARD_LIST,		//!< Billboards points list subsection
-		eSECTION_ANIMGROUP,				//!< Animated Objects Groups section
-		eSECTION_COUNT
+		eSECTION_ROOT = MAKE_SECTION_NAME( 'R', 'O', 'O', 'T' ),					//!< No section id est root
+		eSECTION_SCENE = MAKE_SECTION_NAME( 'S', 'C', 'N', 'E' ),					//!< Scene section
+		eSECTION_WINDOW = MAKE_SECTION_NAME( 'W', 'N', 'D', 'W' ),					//!< Window section
+		eSECTION_SAMPLER = MAKE_SECTION_NAME( 'S', 'M', 'P', 'R' ),					//!< Sampler state section
+		eSECTION_CAMERA = MAKE_SECTION_NAME( 'C', 'A', 'M', 'R' ),					//!< Camera section
+		eSECTION_VIEWPORT = MAKE_SECTION_NAME( 'V', 'W', 'P', 'T' ),				//!< Viewport section
+		eSECTION_LIGHT = MAKE_SECTION_NAME( 'L', 'G', 'H', 'T' ),					//!< Light section
+		eSECTION_NODE = MAKE_SECTION_NAME( 'N', 'O', 'D', 'E' ),					//!< SceneNode section
+		eSECTION_OBJECT = MAKE_SECTION_NAME( 'O', 'B', 'J', 'T' ),					//!< Geometry section
+		eSECTION_OBJECT_MATERIALS = MAKE_SECTION_NAME( 'O', 'M', 'T', 'L' ),		//!< Geometry materials section
+		eSECTION_FONT = MAKE_SECTION_NAME( 'F', 'O', 'N', 'T' ),					//!< Font section
+		eSECTION_PANEL_OVERLAY = MAKE_SECTION_NAME( 'P', 'O', 'V', 'L' ),			//!< Panel Overlay sections
+		eSECTION_BORDER_PANEL_OVERLAY = MAKE_SECTION_NAME( 'B', 'O', 'V', 'L' ),	//!< Border Panel Overlay sections
+		eSECTION_TEXT_OVERLAY = MAKE_SECTION_NAME( 'T', 'O', 'V', 'L' ),			//!< Text Overlay sections
+		eSECTION_MESH = MAKE_SECTION_NAME( 'M', 'E', 'S', 'H' ),					//!< Mesh subsection of a geometry section
+		eSECTION_SUBMESH = MAKE_SECTION_NAME( 'S', 'M', 'S', 'H' ),					//!< Submesh subsection of a Mesh subsection
+		eSECTION_MATERIAL = MAKE_SECTION_NAME( 'M', 'T', 'R', 'L' ),				//!< Material section
+		eSECTION_PASS = MAKE_SECTION_NAME( 'P', 'A', 'S', 'S' ),					//!< Pass subsection of a material section
+		eSECTION_TEXTURE_UNIT = MAKE_SECTION_NAME( 'U', 'N', 'I', 'T' ),			//!< TextureUnit subsection of a pass subsection
+		eSECTION_RENDER_TARGET = MAKE_SECTION_NAME( 'R', 'T', 'G', 'R' ),			//!< RenderTarget subsection of a texture unit or window subsection
+		eSECTION_GLSL_SHADER = MAKE_SECTION_NAME( 'G', 'L', 'S', 'L' ),				//!< GLSL Shader subsection of a pass subsection
+		eSECTION_HLSL_SHADER = MAKE_SECTION_NAME( 'H', 'L', 'S', 'L' ),				//!< HLSL Shader subsection of a pass subsection
+		eSECTION_SHADER_PROGRAM = MAKE_SECTION_NAME( 'S', 'P', 'G', 'M' ),			//!< Shader Program subsection of a shader subsection
+		eSECTION_SHADER_SAMPLER = MAKE_SECTION_NAME( 'S', 'S', 'P', 'R' ),			//!< Sampler shader variable subsection of a shader program subsection
+		eSECTION_SHADER_UBO = MAKE_SECTION_NAME( 'S', 'U', 'B', 'O' ),				//!< UBO subsection of a shader subsection
+		eSECTION_SHADER_UBO_VARIABLE = MAKE_SECTION_NAME( 'S', 'U', 'B', 'V' ),		//!< Variable subsection of a UBO subsection
+		eSECTION_BILLBOARD = MAKE_SECTION_NAME( 'B', 'L', 'B', 'd' ),				//!< Billboards list section
+		eSECTION_BILLBOARD_LIST = MAKE_SECTION_NAME( 'B', 'L', 'B', 'L' ),			//!< Billboards points list subsection
+		eSECTION_ANIMGROUP = MAKE_SECTION_NAME( 'A', 'M', 'G', 'P' ),				//!< Animated Objects Groups section
 	}	eSECTION;
 	//! The context used into parsing functions
 	/*!
