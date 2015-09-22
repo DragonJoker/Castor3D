@@ -24,7 +24,7 @@ endfunction( PostEffectsBuild )
 
 function( PostEffectsSummary msg )
 	SET( msg_tmp "\n\nPostEffects :" )
-	SET( msg_tmp "${msg_tmp}\n    SSAO                 ${Ssao}" )
+	SET( msg_tmp "${msg_tmp}\n    SSAO                ${Ssao}" )
 	SET( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 endfunction( PostEffectsSummary )
 

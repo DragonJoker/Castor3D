@@ -24,7 +24,7 @@ endfunction( GenericBuild )
 
 function( GenericSummary msg )
 	SET( msg_tmp "\n\nGeneric :" )
-	SET( msg_tmp "${msg_tmp}\n    CastorGui         ${Cgui}" )
+	SET( msg_tmp "${msg_tmp}\n    CastorGui           ${Cgui}" )
 	SET( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 endfunction( GenericSummary )
 

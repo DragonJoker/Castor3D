@@ -403,13 +403,16 @@ namespace Castor3D
 				l_pipeline.Ortho( m_left, m_right, m_bottom, m_top, m_near, m_far );
 			}
 
+			m_projection = l_pipeline.GetProjectionMatrix();
 			m_modified = false;
 			l_return = true;
-			m_projection = l_pipeline.GetProjectionMatrix();
+		}
+		else
+		{
+			l_pipeline.SetProjectionMatrix( m_projection );
 		}
 
 		l_pipeline.ApplyViewport( m_size.width(), m_size.height() );
-		l_pipeline.SetProjectionMatrix( m_projection );
 		return l_return;
 	}
 
