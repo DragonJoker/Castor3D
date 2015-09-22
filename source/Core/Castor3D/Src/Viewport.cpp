@@ -345,6 +345,7 @@ namespace Castor3D
 	bool Viewport::Render()
 	{
 		bool l_return = false;
+		Pipeline & l_pipeline = m_engine->GetRenderSystem()->GetPipeline();
 
 		if ( IsModified() )
 		{
@@ -395,19 +396,20 @@ namespace Castor3D
 
 			if ( m_type == eVIEWPORT_TYPE_3D )
 			{
-				matrix::perspective( m_projection, m_fovY, m_ratio, m_near, m_far );
+				l_pipeline.Perspective( m_fovY, m_ratio, m_near, m_far );
 			}
 			else if ( m_type == eVIEWPORT_TYPE_2D )
 			{
-				matrix::ortho( m_projection, m_left, m_right, m_bottom, m_top, m_near, m_far );
+				l_pipeline.Ortho( m_left, m_right, m_bottom, m_top, m_near, m_far );
 			}
 
 			m_modified = false;
 			l_return = true;
+			m_projection = l_pipeline.GetProjectionMatrix();
 		}
 
-		m_engine->GetRenderSystem()->GetPipeline().ApplyViewport( m_size.width(), m_size.height() );
-		m_engine->GetRenderSystem()->GetPipeline().SetProjectionMatrix( m_projection );
+		l_pipeline.ApplyViewport( m_size.width(), m_size.height() );
+		l_pipeline.SetProjectionMatrix( m_projection );
 		return l_return;
 	}
 

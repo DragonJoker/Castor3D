@@ -411,14 +411,6 @@ namespace Testing
 			l_mat = glm::ortho( l_left, l_right, l_bottom, l_top, l_near, l_far );
 			TEST_EQUAL( l_mtx, l_mat );
 		}
-		Logger::LogInfo( cuT( "	Centered Ortho" ) );
-		{
-			Matrix4x4r l_mtx( 1 );
-			matrix::ortho( l_mtx, l_left, l_right, l_bottom, l_top );
-			glm::mat4 l_mat;
-			l_mat = glm::ortho( l_left, l_right, l_bottom, l_top );
-			TEST_EQUAL( l_mtx, l_mat );
-		}
 		Logger::LogInfo( cuT( "	Frustum" ) );
 		{
 			Matrix4x4r l_mtx( 1 );

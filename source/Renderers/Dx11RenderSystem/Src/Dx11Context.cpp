@@ -28,8 +28,7 @@ namespace ShaderModel1_2_3_4
 		cuT( "{\n" )
 		cuT( "	VtxOutput l_output;\n" )
 		cuT( "	p_input.Position.w = 1.0f;\n" )
-		cuT( "	l_output.Position = mul( p_input.Position, c3d_mtxProjection );\n" )
-		//cuT( "	l_output.Position = mul( c3d_mtxProjection, p_input.Position );\n" )
+		cuT( "	l_output.Position = mul( c3d_mtxProjection, p_input.Position );\n" )
 		cuT( "	l_output.TextureUV = p_input.TextureUV;\n" )
 		cuT( "	return l_output;\n" )
 		cuT( "}\n" );

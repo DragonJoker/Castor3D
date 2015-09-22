@@ -13,7 +13,7 @@ using namespace Castor;
 namespace Dx11Render
 {
 	DxPipelineImpl::DxPipelineImpl( Pipeline & p_pipeline )
-		: IPipelineImpl( p_pipeline )
+		: IPipelineImpl( p_pipeline, false )
 		, m_viewport()
 	{
 	}
@@ -34,7 +34,7 @@ namespace Dx11Render
 		l_pDeviceContext->RSSetViewports( 1, &m_viewport );
 	}
 
-	void DxPipelineImpl::ApplyMatrix( matrix4x4 const & p_matrix, Castor::String const & p_name, FrameVariableBuffer & p_matrixBuffer )
+	void DxPipelineImpl::ApplyMatrix( Castor::Matrix4x4r const & p_matrix, Castor::String const & p_name, FrameVariableBuffer & p_matrixBuffer )
 	{
 		Matrix4x4rFrameVariableSPtr l_pVariable;
 		p_matrixBuffer.GetVariable( p_name, l_pVariable );

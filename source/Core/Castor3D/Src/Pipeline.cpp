@@ -215,7 +215,40 @@ namespace Castor3D
 		}
 	}
 
-	void Pipeline::DoApplyMatrix( matrix4x4 const & p_mtxMatrix, String const & p_name, FrameVariableBuffer & p_matrixBuffer )
+	void Pipeline::Perspective( Angle const & p_aFOVY, real p_aspect, real p_near, real p_far )
+	{
+		matrix::perspective( m_mtxProjection, p_aFOVY, p_aspect, p_near, p_far );
+	}
+
+	void Pipeline::Frustum( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far )
+	{
+		matrix::frustum( m_mtxProjection, p_left, p_right, p_bottom, p_top, p_near, p_far );
+	}
+
+	void Pipeline::Ortho( real p_left, real p_right, real p_bottom, real p_top )
+	{
+		matrix::ortho( m_mtxProjection, p_left, p_right, p_bottom, p_top, real( -1 ), real( 1 ) );
+	}
+
+	void Pipeline::Ortho( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far )
+	{
+		if ( DoGetImpl()->m_rightHanded )
+		{
+			matrix::ortho( m_mtxProjection, p_left, p_right, p_bottom, p_top, p_near, p_far );
+		}
+		else
+		{
+			m_mtxProjection.set_identity();
+			m_mtxProjection[0][0] = real( 2 / ( p_right - p_left ) );
+			m_mtxProjection[1][1] = real( 2 / ( p_top - p_bottom ) );
+			m_mtxProjection[2][2] = real( 1 / ( p_near - p_far ) );
+			m_mtxProjection[3][0] = real( ( p_left + p_right ) / ( p_left - p_right ) );
+			m_mtxProjection[3][1] = real( ( p_bottom + p_top ) / ( p_bottom - p_top ) );
+			m_mtxProjection[3][2] = real( p_near / ( p_near - p_far ) );
+		}
+	}
+
+	void Pipeline::DoApplyMatrix( Castor::Matrix4x4r const & p_mtxMatrix, String const & p_name, FrameVariableBuffer & p_matrixBuffer )
 	{
 		IPipelineImplSPtr l_impl = DoGetImpl();
 
@@ -227,8 +260,9 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	IPipelineImpl::IPipelineImpl( Pipeline & p_pipeline )
+	IPipelineImpl::IPipelineImpl( Pipeline & p_pipeline, bool p_rightHanded )
 		: m_pipeline( p_pipeline )
+		, m_rightHanded( p_rightHanded )
 	{
 	}
 
@@ -236,7 +270,7 @@ namespace Castor3D
 	{
 	}
 
-	void IPipelineImpl::ApplyMatrix( matrix4x4 const & p_matrix, Castor::String const & p_name, FrameVariableBuffer & p_matrixBuffer )
+	void IPipelineImpl::ApplyMatrix( Castor::Matrix4x4r const & p_matrix, Castor::String const & p_name, FrameVariableBuffer & p_matrixBuffer )
 	{
 		Matrix4x4rFrameVariableSPtr l_pVariable;
 		p_matrixBuffer.GetVariable( p_name, l_pVariable );

@@ -341,24 +341,6 @@ namespace Castor
 		 *\param[in]	right		Right clipping plane value
 		 *\param[in]	bottom		Bottom clipping plane value
 		 *\param[in]	top			Top clipping plane value
-		 *\~french
-		 *\brief		Construit une matrice de projection orthographique non centrée
-		 *\param[out]	p_matrix	La matrice qui contiendra le résultat
-		 *\param[in]	left		Position du plan gauche
-		 *\param[in]	right		Position du plan droit
-		 *\param[in]	bottom		Position du plan bas
-		 *\param[in]	top			Position du plan haut
-		 */
-		template< typename TypeA, typename TypeB >
-		static SquareMatrix< TypeA, 4 > & ortho( SquareMatrix< TypeA, 4 > & p_matrix, TypeB left, TypeB right, TypeB bottom, TypeB top );
-		/**
-		 *\~english
-		 *\brief		Builds a matrix that sets a non centered orthogonal projection from the given parameters
-		 *\param[out]	p_matrix	The matrix that will receive the perspective matrix
-		 *\param[in]	left		Left clipping plane value
-		 *\param[in]	right		Right clipping plane value
-		 *\param[in]	bottom		Bottom clipping plane value
-		 *\param[in]	top			Top clipping plane value
 		 *\param[in]	zNear		Near clipping plane value
 		 *\param[in]	zFar		Far clipping plane value
 		 *\~french

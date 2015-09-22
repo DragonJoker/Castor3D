@@ -198,18 +198,6 @@ namespace Castor
 	}
 
 	template< typename T, typename U >
-	SquareMatrix< T, 4 > & matrix::ortho( SquareMatrix< T, 4 > & p_matrix, U left, U right, U bottom, U top )
-	{
-		p_matrix.set_identity();
-		p_matrix[0][0] = T( 2 / ( right - left ) );
-		p_matrix[1][1] = T( 2 / ( top - bottom ) );
-		p_matrix[2][2] = - T( 1 );
-		p_matrix[3][0] = T( -( right + left ) / ( right - left ) );
-		p_matrix[3][1] = T( -( top + bottom ) / ( top - bottom ) );
-		return p_matrix;
-	}
-
-	template< typename T, typename U >
 	SquareMatrix< T, 4 > & matrix::ortho( SquareMatrix< T, 4 > & p_matrix, U left, U right, U bottom, U top, U zNear, U zFar )
 	{
 		p_matrix.set_identity();

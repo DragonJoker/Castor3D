@@ -211,22 +211,29 @@ namespace Castor3D
 
 	void OverlayManager::RenderOverlays( Scene const & p_scene, Castor::Size const & p_size )
 	{
+		RenderSystem * l_renderSystem = m_engine->GetRenderSystem();
+		Pipeline & l_pipeline = l_renderSystem->GetPipeline();
+
+		if ( m_size != p_size )
+		{
+			m_size = p_size;
+			l_pipeline.Ortho( real( 0.0 ), real( m_size.width() ), real( m_size.height() ), real( 0.0 ), real( 0.0 ), real( 1000.0 ) );
+			m_projection = l_pipeline.GetProjectionMatrix();
+		}
+		else
+		{
+			l_pipeline.SetProjectionMatrix( m_projection );
+		}
+
 		lock();
 		Update();
-		RenderSystem * l_renderSystem = m_engine->GetRenderSystem();
 		Context * l_context = l_renderSystem->GetCurrentContext();
 
 		if ( l_context && m_pRenderer )
 		{
-			Pipeline & l_pipeline = l_renderSystem->GetPipeline();
 			l_context->CullFace( eFACE_BACK );
-			
-			Matrix4x4r l_projection;
-			matrix::ortho( l_projection, real( 0.0 ), real( p_size.width() ), real( p_size.height() ), real( 0.0 ), real( 0.0 ), real( 1000.0 ) );
-			matrix::transform( l_projection, Point3r( 0, 0, 0 ), Point3r( 1, 1, 0 ), Quaternion::Identity() );
-			l_pipeline.SetProjectionMatrix( l_projection );
-			l_pipeline.ApplyViewport( p_size.width(), p_size.height() );
-			m_pRenderer->BeginRender( p_size );
+			l_pipeline.ApplyViewport( m_size.width(), m_size.height() );
+			m_pRenderer->BeginRender( m_size );
 
 			for ( auto l_overlay : m_overlays )
 			{
@@ -234,7 +241,7 @@ namespace Castor3D
 
 				if ( !l_scene || l_scene->GetName() == p_scene.GetName() )
 				{
-					l_overlay->Render( p_size );
+					l_overlay->Render( m_size );
 				}
 			}
 		}

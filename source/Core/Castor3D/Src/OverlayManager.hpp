@@ -283,6 +283,10 @@ namespace Castor3D
 		OverlayRendererSPtr m_pRenderer;
 		//!\~english The overlay count, per level	\~french Le nombre d'incrustations par niveau
 		std::vector< int > m_overlayCountPerLevel;
+		//!\~english The pojection matrix.	\~french La matrice de projection.
+		Castor::Matrix4x4r m_projection;
+		//!\~english The last display size.	\~french Les dimensions du dernier affichage.
+		Castor::Size m_size;
 	};
 	typedef OverlayManager::iterator OverlayManagerIt;
 	typedef OverlayManager::const_iterator OverlayManagerConstIt;

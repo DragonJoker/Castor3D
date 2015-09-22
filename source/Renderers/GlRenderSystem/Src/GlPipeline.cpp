@@ -8,7 +8,7 @@ using namespace Castor;
 namespace GlRender
 {
 	GlPipelineImpl::GlPipelineImpl( OpenGl & p_gl, Pipeline & p_pipeline )
-		: IPipelineImpl( p_pipeline )
+		: IPipelineImpl( p_pipeline, true )
 		, m_gl( p_gl )
 	{
 	}
