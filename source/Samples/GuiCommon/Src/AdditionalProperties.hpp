@@ -77,6 +77,79 @@ http://www.gnu.org/copyleft/lesser.txt.
 	GC_IMPLEMENT_DYNAMIC_CLASS( NAME, UPCLASS )\
 	GC_PG_IMPLEMENT_PROPERTY_CLASS_PLAIN( NAME, T, EDITOR )
 
+// Add getter (ie. classname << variant) separately to allow
+// custom implementations.
+#define GC_PG_IMPLEMENT_ALIGNED_VARIANT_DATA_EXPORTED_NO_EQ_NO_GETTER( classname, alignment, expdecl ) \
+	const char* classname##_VariantType = #classname; \
+	class classname##VariantData: public wxVariantData \
+	{ \
+	public:\
+		classname##VariantData() {} \
+		classname##VariantData( const classname & value ) { m_value = value; } \
+		classname &GetValue() { return m_value; } \
+		const classname &GetValue() const { return m_value; } \
+		virtual bool Eq( wxVariantData & data ) const; \
+		virtual wxString GetType() const; \
+		virtual wxVariantData* Clone() const { return new classname##VariantData( m_value ); } \
+		CASTOR_ALIGNED_CLASS( alignment )\
+	protected:\
+		classname m_value; \
+	};\
+	\
+	wxString classname##VariantData::GetType() const\
+	{\
+		return wxS( #classname );\
+	}\
+	\
+	expdecl wxVariant & operator<<( wxVariant & variant, const classname & value )\
+	{\
+		classname##VariantData * data = new classname##VariantData( value );\
+		variant.SetData( data );\
+		return variant;\
+	} \
+	expdecl classname & classname##RefFromVariant( wxVariant & variant ) \
+	{ \
+		wxASSERT_MSG( variant.GetType() == wxS( #classname ), \
+					  wxString::Format( "Variant type should have been '%s'" \
+									   "instead of '%s'", \
+									   wxS( #classname ), \
+									   variant.GetType().c_str() ) ); \
+		classname##VariantData *data = \
+			( classname##VariantData * ) variant.GetData(); \
+		return data->GetValue();\
+	} \
+	expdecl const classname& classname##RefFromVariant( const wxVariant& variant ) \
+	{ \
+		wxASSERT_MSG( variant.GetType() == wxS( #classname ), \
+					  wxString::Format( "Variant type should have been '%s'" \
+									   "instead of '%s'", \
+									   wxS( #classname ), \
+									   variant.GetType().c_str() ) ); \
+		classname##VariantData * data = \
+			( classname##VariantData * ) variant.GetData(); \
+		return data->GetValue();\
+	}
+
+#define GC_PG_IMPLEMENT_ALIGNED_VARIANT_DATA_GETTER( classname, expdecl ) \
+	expdecl classname & operator<<( classname &value, const wxVariant & variant )\
+	{\
+		wxASSERT( variant.GetType() == #classname );\
+		\
+		classname##VariantData * data = ( classname##VariantData * ) variant.GetData();\
+		value = data->GetValue();\
+		return value;\
+	}
+
+// with Eq() implementation that always returns false
+#define GC_PG_IMPLEMENT_ALIGNED_VARIANT_DATA_EXPORTED_DUMMY_EQ( classname, alignment, expdecl ) \
+	GC_PG_IMPLEMENT_ALIGNED_VARIANT_DATA_EXPORTED_NO_EQ_NO_GETTER( classname, alignment, wxEMPTY_PARAMETER_VALUE expdecl ) \
+	GC_PG_IMPLEMENT_ALIGNED_VARIANT_DATA_GETTER( classname, wxEMPTY_PARAMETER_VALUE expdecl ) \
+	\
+	bool classname##VariantData::Eq( wxVariantData & WXUNUSED( data ) ) const \
+	{\
+		return false; \
+	}
+
 namespace GuiCommon
 {
 	template< typename T > T GetValue( wxVariant const & p_variant );

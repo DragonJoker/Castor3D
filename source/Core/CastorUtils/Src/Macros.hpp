@@ -169,7 +169,7 @@ typedef wchar_t ychar;
 		void * l_storage = Castor::System::AlignedAlloc( a, p_size );\
 		if ( !l_storage )\
 		{\
-			throw std::bad_alloc;\
+			throw std::bad_alloc();\
 		}\
 		return l_storage;\
 	}\
