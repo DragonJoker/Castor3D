@@ -34,7 +34,7 @@ namespace Castor
 	\remark		Sorte de spécialisation de Coords< 2, uint32_t >
 	*/
 	class Size
-		: private Coords< uint32_t, 2 >
+		: public Coords< uint32_t, 2 >
 	{
 	private:
 		typedef Coords< uint32_t, 2 > BaseType;

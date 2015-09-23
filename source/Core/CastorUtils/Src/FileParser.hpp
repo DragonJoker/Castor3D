@@ -112,7 +112,7 @@ namespace Castor
 	*/
 	class FileParser
 	{
-	private:
+	public:
 		typedef std::pair< PParserFunction, ParserParameterArray > ParserFunctionAndParams;
 
 #if defined( _MSC_VER )
@@ -187,6 +187,8 @@ namespace Castor
 		DECLARE_MAP( String, ParserFunctionAndParams, AttributeParser );
 
 #endif
+
+		typedef std::map< uint32_t, AttributeParserMap > AttributeParsersBySection;
 
 	public:
 		/**
@@ -283,6 +285,21 @@ namespace Castor
 		CU_API void AddParser( uint32_t p_section, String const & p_name, PParserFunction p_function, uint32_t p_count = 0, ... );
 		/**
 		 *\~english
+		 *\brief		Adds a parser function to the parsers list
+		 *\param[in]	p_section	The parser section
+		 *\param[in]	p_name		The parser name
+		 *\param[in]	p_function	The parser function
+		 *\param[in]	p_params	The expected parameters
+		 *\~french
+		 *\brief		Ajoute une fonction d'analyse à la liste
+		 *\param[in]	p_section	La section
+		 *\param[in]	p_name		Le nom de la fonction
+		 *\param[in]	p_function	La fonction d'analyse
+		 *\param[in]	p_params	Les paramètres attendus
+		 */
+		CU_API void AddParser( uint32_t p_section, String const & p_name, PParserFunction p_function, ParserParameterArray && p_params );
+		/**
+		 *\~english
 		 *\brief		Tells if the read lines are to be ignored
 		 *\~french
 		 *\brief		Dit si les lignes suivantes doivent être ignorées
@@ -368,7 +385,7 @@ namespace Castor
 
 	protected:
 		//!\~english The map holding the parsers, sorted by section	\~french La map de parseurs, triés par section
-		std::map< uint32_t, AttributeParserMap > m_parsers;
+		AttributeParsersBySection m_parsers;
 		//!\~english Th parser context	\~french Le contexte du parseur
 		FileParserContextSPtr m_context;
 		//!\~english Tells the lines parsed are to be ignored	\~french Dit que les ligne slues sont ignorées

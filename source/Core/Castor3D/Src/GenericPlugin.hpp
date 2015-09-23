@@ -63,15 +63,6 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		virtual ~GenericPlugin();
-		/**
-		 *\~english
-		 *\brief		Adds optional parsers to the given scene file parser.
-		 *\param[in]	p_parser	The scene file parser.
-		 *\~french
-		 *\brief		Ajoute des fonctions d'analyse à l'analyseur donné.
-		 *\param[in]	p_parser	L'analyseur de fichiers de scène.
-		 */
-		void AddOptionalParsers( SceneFileParser * p_parser );
 
 	private:
 		PAddOptionalParsersFunction m_pfnAddOptionalParsers;

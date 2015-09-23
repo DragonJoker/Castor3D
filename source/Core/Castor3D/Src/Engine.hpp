@@ -30,6 +30,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "TechniqueFactory.hpp"
 #include "Version.hpp"
 
+#include <FileParser.hpp>
 #include <Unique.hpp>
 #include <SquareMatrix.hpp>
 
@@ -608,6 +609,26 @@ namespace Castor3D
 		 *\param[in]	p_show	Le statut
 		 */
 		void ShowDebugOverlays( bool p_show );
+		/**
+		 *\~english
+		 *\brief		Registers additional parsers for SceneFileParser.
+		 *\param[in]	p_name		The registering name.
+		 *\param[in]	p_parsers	The parsers.
+		 *\~french
+		 *\brief		Enregistre des analyseurs supplémentaires pour SceneFileParser.
+		 *\param[in]	p_name		Le nom d'enregistrement.
+		 *\param[in]	p_parsers	Les analyseurs.
+		 */
+		void RegisterParsers( Castor::String const & p_name, Castor::FileParser::AttributeParsersBySection && p_parsers );
+		/**
+		 *\~english
+		 *\brief		Unregisters parsers for SceneFileParser.
+		 *\param[in]	p_name		The registering name.
+		 *\~french
+		 *\brief		Désenregistre des analyseurs pour SceneFileParser.
+		 *\param[in]	p_name		Le nom d'enregistrement.
+		 */
+		void UnregisterParsers( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves plugins path
@@ -1221,6 +1242,18 @@ namespace Castor3D
 		{
 			return m_pLightsSampler;
 		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the SceneFileParser additional parsers.
+		 *\return		The parsers.
+		 *\~french
+		 *\brief		Récupère les analyseurs supplémentaires pour SceneFileParser.
+		 *\return		Les analyseurs
+		 */
+		inline std::map< Castor::String, Castor::FileParser::AttributeParsersBySection > GetAdditionalParsers()const
+		{
+			return m_additionalParsers;
+		}
 
 	private:
 		uint32_t DoMainLoop();
@@ -1331,6 +1364,8 @@ namespace Castor3D
 		bool m_bDefaultInitialised;
 		//!\~english The debug overlays are shown.	\~french Les incrustations de débogage.
 		std::unique_ptr< DebugOverlays > m_debugOverlays;
+		//!\~english The map holding the parsers, sorted by section, and plugin name	\~french La map de parseurs, triés par section, et nom de plugin
+		std::map< Castor::String, Castor::FileParser::AttributeParsersBySection > m_additionalParsers;
 	};
 }
 

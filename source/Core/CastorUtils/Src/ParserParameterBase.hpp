@@ -87,8 +87,8 @@ namespace Castor
 		 *\brief		Constructor
 		 *\param[in]	p_context	Le contexte d'analyse
 		 */
-		CU_API ParserParameterBase( FileParserContext & p_context )
-			: m_context( p_context )
+		CU_API ParserParameterBase( String const & p_functionName )
+			: m_functionName( p_functionName )
 		{
 		}
 		/**
@@ -145,7 +145,8 @@ namespace Castor
 		template< typename T > T const & Get( T & p_value );
 
 	protected:
-		FileParserContext & m_context;
+		//!\~english The parent function name.	\~french Le nom de la fonction parente.
+		String m_functionName;
 	};
 }
 

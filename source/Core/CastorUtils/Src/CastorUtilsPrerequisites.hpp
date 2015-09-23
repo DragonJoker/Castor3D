@@ -144,6 +144,7 @@ namespace Castor
 	class Font;
 	class Glyph;
 	class Image;
+	class Colour;
 	template< typename T >
 	class Line2D;
 	template< typename T >

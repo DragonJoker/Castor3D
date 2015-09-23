@@ -55,7 +55,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		virtual ePARAMETER_TYPE GetType();
 		virtual xchar const * GetStrType();
 		virtual bool Parse( String & p_strParams );
@@ -79,7 +79,7 @@ namespace Castor
 		: public ParserParameter< ePARAMETER_TYPE_TEXT >
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		virtual ePARAMETER_TYPE GetType();
 		virtual ePARAMETER_TYPE GetBaseType();
 		virtual xchar const * GetStrType();
@@ -100,7 +100,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		virtual ePARAMETER_TYPE GetType();
 		virtual xchar const * GetStrType();
 		virtual bool Parse( String & p_strParams );
@@ -124,7 +124,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -148,7 +148,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -172,7 +172,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -196,7 +196,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -220,7 +220,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -244,7 +244,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -268,7 +268,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -292,7 +292,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -316,7 +316,7 @@ namespace Castor
 		: public ParserParameter< ePARAMETER_TYPE_UINT32 >
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context, UIntStrMap const & p_mapValues );
+		inline ParserParameter( String const & p_functionName, UIntStrMap const & p_mapValues );
 		inline ePARAMETER_TYPE GetType();
 		inline ePARAMETER_TYPE GetBaseType();
 		inline xchar const * GetStrType();
@@ -340,7 +340,7 @@ namespace Castor
 		: public ParserParameter< ePARAMETER_TYPE_UINT32 >
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context, UIntStrMap const & p_mapValues );
+		inline ParserParameter( String const & p_functionName, UIntStrMap const & p_mapValues );
 		inline ePARAMETER_TYPE GetType();
 		inline ePARAMETER_TYPE GetBaseType();
 		inline xchar const * GetStrType();
@@ -364,7 +364,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -388,7 +388,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -412,7 +412,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -436,7 +436,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -460,7 +460,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -484,7 +484,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -508,7 +508,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -532,7 +532,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -556,7 +556,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -580,7 +580,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -604,7 +604,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -628,7 +628,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -652,7 +652,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -676,7 +676,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -700,7 +700,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -724,7 +724,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -748,7 +748,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
@@ -772,7 +772,7 @@ namespace Castor
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( FileParserContext & p_context );
+		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
 		inline bool Parse( String & p_strParams );
