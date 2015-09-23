@@ -341,15 +341,6 @@ namespace Castor3D
 		void SetIntraOcularDistance( real p_rIao );
 		/**
 		 *\~english
-		 *\brief		Retrieves the stereo status
-		 *\return		\p true if stereo is used
-		 *\~french
-		 *\brief		Récupère le statut d'utilisation stéréo
-		 *\return		\p true si le rendu stéréo est utilisé
-		 */
-		bool IsUsingDeferredRendering()const;
-		/**
-		 *\~english
 		 *\brief		Retrieves the window pixel format
 		 *\return		The window pixel format
 		 *\~french

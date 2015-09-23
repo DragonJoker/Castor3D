@@ -624,18 +624,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the stereo status
-		 *\return		\p true if stereo is used
-		 *\~french
-		 *\brief		Récupère le statut d'utilisation stéréo
-		 *\return		\p true si le rendu stéréo est utilisé
-		 */
-		inline bool IsUsingDeferredRendering()const
-		{
-			return m_bDeferredRendering;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the window pixel format
 		 *\return		The window pixel format
 		 *\~french
@@ -743,8 +731,6 @@ namespace Castor3D
 		stFRAME_BUFFER m_fbLeftEye;
 		//!\~english Frame buffer for right eye	\~french Le tampon d'image pour l'oeil droit
 		stFRAME_BUFFER m_fbRightEye;
-		//!\~english Tells the window uses deferred rendering (only if MSAA is deactivated)	\~french Dit si la fenêtre utilise le deferred rendering (uniquement si le MSAA est désactivé)
-		bool m_bDeferredRendering;
 		//!\~english The currently active frame buffer (useful in stereoscopic rendering)	\~french Le tampon d'image actuellement actif (utile en rendu stéréoscopique)
 		FrameBufferWPtr m_pCurrentFrameBuffer;
 		//!\~english The currently active camera (useful in stereoscopic rendering)	\~french La caméra actuellement active (utile en rendu stéréoscopique)
