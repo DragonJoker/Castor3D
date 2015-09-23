@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "OverlayCategory.hpp"
 
+#include <Rectangle.hpp>
+
 #pragma warning( push )
 #pragma warning( disable:4251 )
 #pragma warning( disable:4275 )

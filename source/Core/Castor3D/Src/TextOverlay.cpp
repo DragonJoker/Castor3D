@@ -124,6 +124,8 @@ namespace Castor3D
 	TextOverlay::TextOverlay()
 		: OverlayCategory( eOVERLAY_TYPE_TEXT )
 		, m_wrappingMode( eTEXT_WRAPPING_MODE_NONE )
+		, m_hAlign( eHALIGN_LEFT )
+		, m_vAlign( eVALIGN_CENTER )
 	{
 	}
 
@@ -287,6 +289,9 @@ namespace Castor3D
 				Point2d l_ptPosition;
 
 				StringArray l_lines = string::split( m_previousCaption, cuT( "\n" ), std::count( m_previousCaption.begin(), m_previousCaption.end(), cuT( '\n' ) ) + 1 );
+				double l_lineWidth = 0;
+				std::vector< OverlayCategory::VertexArray > l_linesVtx;
+				OverlayCategory::VertexArray l_lineVtx;
 
 				for ( StringArrayConstIt l_itLines = l_lines.begin(); l_itLines != l_lines.end() && l_ptPosition[1] < l_ptSize[1]; ++l_itLines )
 				{
@@ -305,20 +310,20 @@ namespace Castor3D
 
 							if ( l_character == cuT( '\r' ) )
 							{
-								DoWriteWord( p_renderer, l_word, l_wordWidth, l_ptSize, l_ptPosition );
+								DoWriteWord( p_renderer, l_word, l_wordWidth, l_ptSize, l_ptPosition, l_lineWidth, l_lineVtx, l_linesVtx );
 								l_ptPosition[0] = 0;
 								l_wordWidth = 0;
 							}
 							else if ( l_character == cuT( ' ' ) )
 							{
-								DoWriteWord( p_renderer, l_word, l_wordWidth, l_ptSize, l_ptPosition );
+								DoWriteWord( p_renderer, l_word, l_wordWidth, l_ptSize, l_ptPosition, l_lineWidth, l_lineVtx, l_linesVtx );
 								l_word.clear();
 								l_wordWidth = 0;
 								l_ptPosition[0] += l_charSize[0];
 							}
 							else if ( l_character == cuT( '\t' ) )
 							{
-								DoWriteWord( p_renderer, l_word, l_wordWidth, l_ptSize, l_ptPosition );
+								DoWriteWord( p_renderer, l_word, l_wordWidth, l_ptSize, l_ptPosition, l_lineWidth, l_lineVtx, l_linesVtx );
 								l_word.clear();
 								l_wordWidth = 0;
 								l_ptPosition[0] += l_charSize[0];
@@ -340,11 +345,24 @@ namespace Castor3D
 
 					if ( !l_word.empty() )
 					{
-						DoWriteWord( p_renderer, l_word, l_wordWidth, l_ptSize, l_ptPosition );
+						DoWriteWord( p_renderer, l_word, l_wordWidth, l_ptSize, l_ptPosition, l_lineWidth, l_lineVtx, l_linesVtx );
+
+						if ( !l_lineVtx.empty() )
+						{
+							DoAlignHorizontally( l_ptSize[0], l_lineWidth, l_lineVtx, l_linesVtx );
+						}
 					}
 
+					l_linesVtx.push_back( l_lineVtx );
 					l_ptPosition[0] = 0;
 					l_ptPosition[1] += l_pFont->GetMaxHeight();
+				}
+
+				DoAlignVertically( l_ptSize[1], l_ptPosition[1], l_linesVtx );
+
+				for ( auto && l_lineVtx : l_linesVtx )
+				{
+					m_arrayVtx.insert( m_arrayVtx.end(), l_lineVtx.begin(), l_lineVtx.end() );
 				}
 
 				// TODO : Check for glyphs that need to be loaded and added to the texture
@@ -352,16 +370,17 @@ namespace Castor3D
 		}
 	}
 
-	void TextOverlay::DoWriteWord( OverlayRendererSPtr p_renderer, std::u32string const & p_word, double p_wordWidth, Point2d const & p_size, Point2d & p_position )
+	void TextOverlay::DoWriteWord( OverlayRendererSPtr p_renderer, std::u32string const & p_word, double p_wordWidth, Point2d const & p_size, Point2d & p_position, double & p_lineWidth, OverlayCategory::VertexArray & p_lineVtx, std::vector< OverlayCategory::VertexArray > & p_linesVtx )
 	{
 		FontSPtr l_pFont = GetFont();
 		Size const & l_texDim = m_pTexture->GetDimensions();
 		Position l_ovPosition = GetAbsolutePosition( p_renderer->GetSize() );
+		uint32_t l_maxHeight = l_pFont->GetMaxHeight();
 
 		if ( p_position[0] + p_wordWidth > p_size[0] && m_wrappingMode == eTEXT_WRAPPING_MODE_BREAK_WORDS )
 		{
 			p_position[0] = 0;
-			p_position[1] += l_pFont->GetMaxHeight();
+			p_position[1] += l_maxHeight;
 		}
 
 		for ( auto l_it = p_word.begin(); l_it != p_word.end() && p_position[1] < p_size[1]; ++l_it )
@@ -382,7 +401,8 @@ namespace Castor3D
 				else if ( m_wrappingMode == eTEXT_WRAPPING_MODE_BREAK )
 				{
 					p_position[0] = 0;
-					p_position[1] += l_pFont->GetMaxHeight();
+					p_position[1] += l_maxHeight;
+					DoAlignHorizontally( p_size[0], p_lineWidth, p_lineVtx, p_linesVtx );
 				}
 			}
 			else if ( p_position[0] + l_charSize[0] > p_size[0] )
@@ -394,7 +414,8 @@ namespace Castor3D
 				else if ( m_wrappingMode == eTEXT_WRAPPING_MODE_BREAK )
 				{
 					p_position[0] = 0;
-					p_position[1] += l_pFont->GetMaxHeight();
+					p_position[1] += l_maxHeight;
+					DoAlignHorizontally( p_size[0], p_lineWidth, p_lineVtx, p_linesVtx );
 				}
 			}
 
@@ -418,22 +439,72 @@ namespace Castor3D
 				double l_uvStepX = l_charSize[0] / l_texDim.width();
 				double l_uvStepY = l_charSize[1] / l_texDim.height();
 				double l_uvCrop = l_charCrop / l_texDim.height();
+				p_lineWidth += l_width;
 
 				OverlayCategory::Vertex l_vertexTR = { { int32_t( l_ovPosition.x() + ( l_position[0] + l_width ) ), int32_t( l_ovPosition.y() + ( l_position[1] ) ),           }, { real( l_uvX + l_uvStepX ), real( l_uvY + l_uvStepY ) } };
 				OverlayCategory::Vertex l_vertexTL = { { int32_t( l_ovPosition.x() + ( l_position[0] ) ),           int32_t( l_ovPosition.y() + ( l_position[1] ) ),           }, { real( l_uvX ),             real( l_uvY + l_uvStepY ) } };
 				OverlayCategory::Vertex l_vertexBL = { { int32_t( l_ovPosition.x() + ( l_position[0] ) ),           int32_t( l_ovPosition.y() + ( l_position[1] + l_height ) ) }, { real( l_uvX ),             real( l_uvY + l_uvCrop ) } };
 				OverlayCategory::Vertex l_vertexBR = { { int32_t( l_ovPosition.x() + ( l_position[0] + l_width ) ), int32_t( l_ovPosition.y() + ( l_position[1] + l_height ) ) }, { real( l_uvX + l_uvStepX ), real( l_uvY + l_uvCrop ) } };
 
-				m_arrayVtx.push_back( l_vertexBL );
-				m_arrayVtx.push_back( l_vertexBR );
-				m_arrayVtx.push_back( l_vertexTL );
+				p_lineVtx.push_back( l_vertexBL );
+				p_lineVtx.push_back( l_vertexBR );
+				p_lineVtx.push_back( l_vertexTL );
 
-				m_arrayVtx.push_back( l_vertexTR );
-				m_arrayVtx.push_back( l_vertexTL );
-				m_arrayVtx.push_back( l_vertexBR );
+				p_lineVtx.push_back( l_vertexTR );
+				p_lineVtx.push_back( l_vertexTL );
+				p_lineVtx.push_back( l_vertexBR );
 			}
 
 			p_position[0] += l_charSize[0];
+		}
+	}
+
+	void TextOverlay::DoAlignHorizontally( double p_width, double & p_lineWidth, OverlayCategory::VertexArray & p_lineVtx, std::vector< OverlayCategory::VertexArray > & p_linesVtx )
+	{
+		if ( m_hAlign != eHALIGN_LEFT )
+		{
+			double l_offset = p_width - p_lineWidth;
+
+			if ( m_hAlign == eHALIGN_CENTER )
+			{
+				l_offset /= 2;
+			}
+
+			for ( auto && l_vertex : p_lineVtx )
+			{
+				int32_t * l_position = l_vertex.coords;
+				l_position[0] += int32_t( l_offset );
+			}
+		}
+
+		p_linesVtx.push_back( p_lineVtx );
+		p_lineVtx.clear();
+		p_lineWidth = 0;
+	}
+
+	void TextOverlay::DoAlignVertically( double p_height, double p_linesHeight, std::vector< OverlayCategory::VertexArray > & p_linesVtx )
+	{
+		if ( m_vAlign != eVALIGN_TOP )
+		{
+			double l_offset = 0;
+
+			if ( m_vAlign == eVALIGN_CENTER )
+			{
+				l_offset = ( p_height - p_linesHeight ) / 2;
+			}
+			else
+			{
+				l_offset = p_height - p_linesHeight;
+			}
+
+			for ( auto && l_lineVtx : p_linesVtx )
+			{
+				for ( auto && l_vertex : l_lineVtx )
+				{
+					int32_t * l_position = l_vertex.coords;
+					l_position[1] += int32_t( l_offset );
+				}
+			}
 		}
 	}
 }

@@ -34,7 +34,7 @@ namespace Castor
 	\remark		Sorte de spécialisation de Coords< 2, int32_t >
 	*/
 	class Position
-		: private Coords< int32_t, 2 >
+		: public Coords< int32_t, 2 >
 	{
 	private:
 		typedef Coords< int32_t, 2 > BaseType;

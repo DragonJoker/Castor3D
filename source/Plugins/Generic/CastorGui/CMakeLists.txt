@@ -20,6 +20,8 @@ add_target(
 	plugin
 	"Castor3D"
 	"${CastorMinLibraries}"
+	"CastorGuiPch.hpp"
+	"CastorGuiPch.cpp"
 )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Generic" )

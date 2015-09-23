@@ -185,6 +185,17 @@ namespace Castor3D
 		Castor::String const & GetFontName()const;
 		/**
 		 *\~english
+		 *\brief		Retrieves the wanted glyph position
+		 *\param[in]	p_char	The glyph index
+		 *\return		The position
+		 *\~french
+		 *\brief		Récupère la position de la glyphe voulue
+		 *\param[in]	p_char	L'indice de la glyphe
+		 *\return		La position
+		 */
+		Castor::Position const & GetGlyphPosition( char32_t p_char )const;
+		/**
+		 *\~english
 		 *\brief		Retrieves the panel vertex buffer
 		 *\return		The buffer
 		 *\~french
@@ -259,15 +270,54 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the wanted glyph position
-		 *\param[in]	p_char	The glyph index
-		 *\return		The position
+		 *\brief		Retrieves the horizontal alignment
+		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la position de la glyphe voulue
-		 *\param[in]	p_char	L'indice de la glyphe
-		 *\return		La position
-		 */
-		Castor::Position const & GetGlyphPosition(char32_t p_char )const;
+		 *\brief		Récupère l'alignement horizontal
+		 *\return		La valeur
+		*/
+		inline eHALIGN GetHAlign()const
+		{
+			return m_hAlign;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the vertical alignment
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère l'alignement vertical
+		 *\return		La valeur
+		*/
+		inline eVALIGN GetVAlign()const
+		{
+			return m_vAlign;
+		}
+		/**
+		 *\~english
+		 *\brief		Defines the horizontal alignment
+		 *\param[in]	p_align	The new value
+		 *\~french
+		 *\brief		Définit l'alignement horizontal
+		 *\param[in]	p_align	La nouvelle valeur
+		*/
+		inline void SetHAlign( eHALIGN p_align )
+		{
+			m_changed = m_hAlign != p_align;
+			m_hAlign = p_align;
+		}
+		/**
+		 *\~english
+		 *\brief		Defines the vertical alignment
+		 *\param[in]	p_align	The new value
+		 *\~french
+		 *\brief		Définit l'alignement vertical
+		 *\param[in]	p_align	La nouvelle valeur
+		*/
+		inline void SetVAlign( eVALIGN p_align )
+		{
+			m_changed = m_vAlign != p_align;
+			m_vAlign = p_align;
+		}
 
 	protected:
 		/**
@@ -290,21 +340,55 @@ namespace Castor3D
 		virtual void DoUpdate( OverlayRendererSPtr p_renderer );
 		/**
 		 *\~english
-		 *\brief		Adds a word to the vertex buffer
-		 *\param[in]	p_renderer	The renderer used to draw this overlay
-		 *\param[in]	p_word		The word to add
-		 *\param[in]	p_wordWidth	The word width
-		 *\param[in]	p_position	The word position
-		 *\param[in]	p_size		The overlay size
+		 *\brief		Adds a word to the vertex buffer.
+		 *\param[in]	p_renderer	The renderer used to draw this overlay.
+		 *\param[in]	p_word		The word to add.
+		 *\param[in]	p_wordWidth	The word width.
+		 *\param[in]	p_position	The word position.
+		 *\param[in]	p_size		The overlay size.
+		 *\param[out]	p_lineWidth	The line width.
+		 *\param[out]	p_lineVtx	The line.
+		 *\param[out]	p_linesVtx	The lines.
 		 *\~french
-		 *\brief		Ajoute un mot au tampon de sommets
-		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation
-		 *\param[in]	p_word		Le mot à ajouter
-		 *\param[in]	p_wordWidth	La largeur du mot
-		 *\param[in]	p_position	La position du mot
-		 *\param[in]	p_size		La taille de l'incrustation
+		 *\brief		Ajoute un mot au tampon de sommets.
+		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation.
+		 *\param[in]	p_word		Le mot à ajouter.
+		 *\param[in]	p_wordWidth	La largeur du mot.
+		 *\param[in]	p_position	La position du mot.
+		 *\param[in]	p_size		La taille de l'incrustation.
+		 *\param[out]	p_lineWidth	La largeur de la ligne.
+		 *\param[out]	p_lineVtx	La ligne.
+		 *\param[out]	p_linesVtx	Les lignes.
 		 */
-		void DoWriteWord( OverlayRendererSPtr p_renderer, std::u32string const & p_word, double p_wordWidth, Castor::Point2d const & p_size, Castor::Point2d & p_position );
+		void DoWriteWord( OverlayRendererSPtr p_renderer, std::u32string const & p_word, double p_wordWidth, Castor::Point2d const & p_size, Castor::Point2d & p_position, double & p_lineWidth, OverlayCategory::VertexArray & p_lineVtx, std::vector< OverlayCategory::VertexArray > & p_linesVtx );
+		/**
+		 *\~english
+		 *\brief		Horizontally align a line.
+		 *\param[in]	p_width		The overlay width.
+		 *\param[out]	p_lineWidth	The line width.
+		 *\param[out]	p_lineVtx	The line.
+		 *\param[out]	p_linesVtx	The lines.
+		 *\~french
+		 *\brief		Aligne horizontalement une ligne.
+		 *\param[in]	p_width		La largeur de l'incrustation.
+		 *\param[out]	p_lineWidth	La largeur de la ligne.
+		 *\param[out]	p_lineVtx	La ligne.
+		 *\param[out]	p_linesVtx	Les lignes.
+		 */
+		void DoAlignHorizontally( double p_width, double & p_lineWidth, OverlayCategory::VertexArray & p_lineVtx, std::vector< OverlayCategory::VertexArray > & p_linesVtx );
+		/**
+		 *\~english
+		 *\brief		Vertically align text
+		 *\param[in]	p_height		The overlay width
+		 *\param[out]	p_linesHeight	The lines height
+		 *\param[out]	p_linesVtx		the lines
+		 *\~french
+		 *\brief		Aligne verticalement un texte.
+		 *\param[in]	p_height		La hauteur de l'incrustation.
+		 *\param[out]	p_linesHeight	La hauteur des lignes.
+		 *\param[out]	p_linesVtx		Les lignes.
+		 */
+		void DoAlignVertically( double p_height, double p_linesHeight, std::vector< OverlayCategory::VertexArray > & p_linesVtx );
 
 	protected:
 		//!\~english The current overlay caption	\~french Le texte courant de l'incrustation
@@ -323,6 +407,10 @@ namespace Castor3D
 		GlyphPositionMap m_glyphsPositions;
 		//!\~english The wrapping mode	\~french Le mode de découpe du texte
 		eTEXT_WRAPPING_MODE m_wrappingMode;
+		//!\~english The horizontal alignment.	\~french L'alignement horizontal du texte.
+		eHALIGN m_hAlign;
+		//!\~english The vertical alignment.	\~french L'alignement vertical du texte.
+		eVALIGN m_vAlign;
 	};
 }
 

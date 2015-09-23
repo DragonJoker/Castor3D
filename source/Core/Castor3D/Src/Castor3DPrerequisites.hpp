@@ -98,7 +98,7 @@ namespace Castor3D
 	typedef Interpolator< Castor::Quaternion, eINTERPOLATOR_MODE_LINEAR > LinearQuaternionInterpolator;
 
 	typedef std::pair< uint32_t, real > VertexWeight;//!<\~english Vertex weight, a simple pair of ID and weight	\~french Poids de vertice, simple paire d'un ID et du poids
-	typedef std::map< Castor::String, uint32_t > UIntStrMap;
+	using Castor::UIntStrMap;
 
 	DECLARE_SMART_PTR( ScaleKeyFrame );
 	DECLARE_SMART_PTR( TranslateKeyFrame );
@@ -732,6 +732,43 @@ namespace Castor3D
 		//!\~english The text jumps to next line without cutting words	\~french Le texte passe à la ligne suivante, sans découper les mots
 		eTEXT_WRAPPING_MODE_BREAK_WORDS,
 	}	eTEXT_WRAPPING_MODE;
+	/*!
+	\author		Sylvain DOREMUS
+	\date		23/09/2015
+	\version	0.8.0
+	\~english
+	\brief		Horizontal alignments for text overlays.
+	\~french
+	\brief		Alignemens horizontaux pour les incrutstations texte.
+	*/
+	typedef enum eHALIGN
+	{
+		//!\~english Aligned on the left.	\~french Aligné à gauche.
+		eHALIGN_LEFT,
+		//!\~english Centered horizontally.	\~french Centré, horizontalement.
+		eHALIGN_CENTER,
+		//!\~english Aligned on the right.	\~french Aligné à droite.
+		eHALIGN_RIGHT,
+	}	eHALIGN;
+	/*!
+	\author		Sylvain DOREMUS
+	\date		23/09/2015
+	\version	0.8.0
+	\~english
+	\brief		Vertical alignments for text overlays.
+	\~french
+	\brief		Alignemens verticaux pour les incrutstations texte.
+	*/
+	typedef enum eVALIGN
+	{
+		//!\~english Aligned on the top.	\~french Aligné en haut.
+		eVALIGN_TOP,
+		//!\~english Centered vertically.	\~french Centré, verticalement.
+		eVALIGN_CENTER,
+		//!\~english Aligned on the bottom.	\~french Aligné en bas.
+		eVALIGN_BOTTOM,
+	}	eVALIGN;
+
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		28/11/2014

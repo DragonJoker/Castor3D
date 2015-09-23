@@ -1119,6 +1119,30 @@ namespace Castor3D
 		m_debugOverlays->Show( p_show );
 	}
 
+	void Engine::RegisterParsers( Castor::String const & p_name, Castor::FileParser::AttributeParsersBySection && p_parsers )
+	{
+		auto && l_it = m_additionalParsers.find( p_name );
+
+		if ( l_it != m_additionalParsers.end() )
+		{
+			CASTOR_EXCEPTION( "RegisterParsers - Duplicate entry for " + p_name );
+		}
+
+		m_additionalParsers.insert( std::make_pair( p_name, p_parsers ) );
+	}
+
+	void Engine::UnregisterParsers( Castor::String const & p_name )
+	{
+		auto && l_it = m_additionalParsers.find( p_name );
+
+		if ( l_it == m_additionalParsers.end() )
+		{
+			CASTOR_EXCEPTION( "UnregisterParsers - Unregistered entry " + p_name );
+		}
+
+		m_additionalParsers.erase( l_it );
+	}
+
 	void Engine::DoPreRender()
 	{
 		PreciseTimer l_timer;
