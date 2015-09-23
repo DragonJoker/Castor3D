@@ -92,6 +92,19 @@ namespace Castor
 		CU_API Quaternion( Point3f const & p_vector, Angle const & p_angle );
 		/**
 		 *\~english
+		 *\brief		Constructor from Euler angles.
+		 *\param[in]	p_yaw	The Y axis angle.
+		 *\param[in]	p_pitch	The X axis angle.
+		 *\param[in]	p_roll	The Z axis angle.
+		 *\~french
+		 *\brief		Constructeur à partir d'angles d'Euler.
+		 *\param[in]	p_yaw	L'angle de rotation autour de l'axe Y.
+		 *\param[in]	p_pitch	L'angle de rotation autour de l'axe X.
+		 *\param[in]	p_roll	L'angle de rotation autour de l'axe Z.
+		 */
+		CU_API Quaternion( Angle const & p_yaw, Angle const & p_pitch, Angle const & p_roll );
+		/**
+		 *\~english
 		 *\brief		Constructor from axis and angle
 		 *\param[in]	p_vector	A point containing the axis values
 		 *\param[in]	p_angle		The angle
@@ -384,6 +397,32 @@ namespace Castor
 		 *\param[out]	p_x, p_y, p_z	Les axes
 		 */
 		CU_API void ToAxes( Point3d & p_x, Point3d & p_y, Point3d & p_z )const;
+		/**
+		 *\~english
+		 *\brief		Updates this Quaternion from Euler angles
+		 *\param[in]	p_yaw	The Y axis angle
+		 *\param[in]	p_pitch	The X axis angle
+		 *\param[in]	p_roll	The Z axis angle
+		 *\~french
+		 *\brief		Met àjour ce Quaternion à partir d'angles d'Euler
+		 *\param[in]	p_yaw	L'angle de rotation autour de l'axe Y
+		 *\param[in]	p_pitch	L'angle de rotation autour de l'axe X
+		 *\param[in]	p_roll	L'angle de rotation autour de l'axe Z
+		 */
+		CU_API void FromEulerAngles( Angle const & p_yaw, Angle const & p_pitch, Angle const & p_roll );
+		/**
+		 *\~english
+		 *\brief		Computes Euler angles from this Quaternion
+		 *\param[out]	p_yaw	The Y axis angle
+		 *\param[out]	p_pitch	The X axis angle
+		 *\param[out]	p_roll	The Z axis angle
+		 *\~french
+		 *\brief		Calcule des angles d'Euler à partir de ce Quaternion
+		 *\param[out]	p_yaw	L'angle de rotation autour de l'axe Y
+		 *\param[out]	p_pitch	L'angle de rotation autour de l'axe X
+		 *\param[out]	p_roll	L'angle de rotation autour de l'axe Z
+		 */
+		CU_API void ToEulerAngles( Angle & p_yaw, Angle & p_pitch, Angle & p_roll );
 		/**
 		 *\~english
 		 *\brief		Retrieves the Y axis rotation value

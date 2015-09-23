@@ -137,7 +137,7 @@ namespace CastorViewer
 
 				if ( l_pScene )
 				{
-					SceneNodeSPtr l_cameraNode = l_pScene->GetCameraRootNode();
+					SceneNodeSPtr l_cameraNode = p_pWindow->GetCamera()->GetParent();
 					m_ptOriginalPosition = l_cameraNode->GetPosition();
 					m_qOriginalOrientation = l_cameraNode->GetOrientation();
 					m_pRotateCamEvent = std::make_shared< CameraRotateEvent >( l_cameraNode, real( 0 ), real( 0 ), real( 0 ) );

@@ -8,8 +8,8 @@ using namespace Castor;
 
 namespace CastorViewer
 {
-	CameraRotateEvent::CameraRotateEvent( SceneNodeSPtr p_pMaterial, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
-		: MouseCameraEvent( p_pMaterial, p_rDeltaX, p_rDeltaY, p_rDeltaZ )
+	CameraRotateEvent::CameraRotateEvent( SceneNodeSPtr p_node, real p_dx, real p_dy, real p_dz )
+		: MouseCameraEvent( p_node, p_dx, p_dy, p_dz )
 	{
 	}
 
@@ -19,18 +19,16 @@ namespace CastorViewer
 
 	bool CameraRotateEvent::Apply()
 	{
-		SceneNodeSPtr l_node = m_pMaterial.lock();
+		SceneNodeSPtr l_node = m_node.lock();
 
 		if ( l_node )
 		{
-			l_node->Yaw( Angle::FromDegrees( m_rDeltaX ) );
-			l_node->Roll( Angle::FromDegrees( m_rDeltaY ) );
-			l_node->Pitch( Angle::FromDegrees( m_rDeltaZ ) );
+			l_node->Rotate( Quaternion( Angle::FromDegrees( m_dx ), Angle::FromDegrees( m_dy ), Angle::FromDegrees( m_dz ) ) );
 		}
 
-		m_rDeltaX = 0;
-		m_rDeltaY = 0;
-		m_rDeltaZ = 0;
+		m_dx = 0;
+		m_dy = 0;
+		m_dz = 0;
 		return true;
 	}
 }

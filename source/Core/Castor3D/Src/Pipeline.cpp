@@ -217,34 +217,41 @@ namespace Castor3D
 
 	void Pipeline::Perspective( Angle const & p_aFOVY, real p_aspect, real p_near, real p_far )
 	{
-		matrix::perspective( m_mtxProjection, p_aFOVY, p_aspect, p_near, p_far );
+		IPipelineImplSPtr l_impl = DoGetImpl();
+
+		if ( l_impl )
+		{
+			l_impl->Perspective( m_mtxProjection, p_aFOVY, p_aspect, p_near, p_far );
+		}
 	}
 
 	void Pipeline::Frustum( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far )
 	{
-		matrix::frustum( m_mtxProjection, p_left, p_right, p_bottom, p_top, p_near, p_far );
-	}
+		IPipelineImplSPtr l_impl = DoGetImpl();
 
-	void Pipeline::Ortho( real p_left, real p_right, real p_bottom, real p_top )
-	{
-		matrix::ortho( m_mtxProjection, p_left, p_right, p_bottom, p_top, real( -1 ), real( 1 ) );
+		if ( l_impl )
+		{
+			l_impl->Frustum( m_mtxProjection, p_left, p_right, p_bottom, p_top, p_near, p_far );
+		}
 	}
 
 	void Pipeline::Ortho( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far )
 	{
-		if ( DoGetImpl()->m_rightHanded )
+		IPipelineImplSPtr l_impl = DoGetImpl();
+
+		if ( l_impl )
 		{
-			matrix::ortho( m_mtxProjection, p_left, p_right, p_bottom, p_top, p_near, p_far );
+			l_impl->Ortho( m_mtxProjection, p_left, p_right, p_bottom, p_top, p_near, p_far );
 		}
-		else
+	}
+
+	void Pipeline::LookAt( Point3r const & p_eye, Point3r const & p_center, Point3r const & p_up )
+	{
+		IPipelineImplSPtr l_impl = DoGetImpl();
+
+		if ( l_impl )
 		{
-			m_mtxProjection.set_identity();
-			m_mtxProjection[0][0] = real( 2 / ( p_right - p_left ) );
-			m_mtxProjection[1][1] = real( 2 / ( p_top - p_bottom ) );
-			m_mtxProjection[2][2] = real( 1 / ( p_near - p_far ) );
-			m_mtxProjection[3][0] = real( ( p_left + p_right ) / ( p_left - p_right ) );
-			m_mtxProjection[3][1] = real( ( p_bottom + p_top ) / ( p_bottom - p_top ) );
-			m_mtxProjection[3][2] = real( p_near / ( p_near - p_far ) );
+			l_impl->LookAt( m_mtxProjection, p_eye, p_center, p_up );
 		}
 	}
 

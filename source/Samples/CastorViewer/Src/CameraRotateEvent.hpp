@@ -9,7 +9,7 @@ namespace CastorViewer
 		:	public MouseCameraEvent
 	{
 	public:
-		CameraRotateEvent( Castor3D::SceneNodeSPtr p_pMaterial, Castor::real p_rDeltaX, Castor::real p_rDeltaY, Castor::real p_rDeltaZ );
+		CameraRotateEvent( Castor3D::SceneNodeSPtr p_node, Castor::real p_dx, Castor::real p_dy, Castor::real p_dz );
 		virtual ~CameraRotateEvent();
 
 		virtual bool Apply();

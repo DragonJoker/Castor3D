@@ -87,6 +87,80 @@ namespace Castor3D
 		 *\param[in]	p_iWindowWidth, p_iWindowHeight	Les dimensions.
 		 */
 		virtual void ApplyViewport( int p_iWindowWidth, int p_iWindowHeight ) = 0;
+		/**
+		 *\~english
+		 *\brief		Builds a matrix that sets a centered perspective projection from the given parameters.
+		 *\param[out]	p_result	The matrix that will receive the result.
+		 *\param[in]	p_aFOVY		Y Field of View.
+		 *\param[in]	p_aspect	Width / Height ratio.
+		 *\param[in]	p_near		Near clipping plane value.
+		 *\param[in]	p_far		Far clipping plane value.
+		 *\~french
+		 *\brief		Construit une matrice de projection en perspective centrée.
+		 *\param[out]	p_result	La matrice qui contiendra le résultat.
+		 *\param[in]	p_aFOVY		Angle de vision Y.
+		 *\param[in]	p_aspect	Ratio Largeur / Hauteur.
+		 *\param[in]	p_near		Position du plan proche.
+		 *\param[in]	p_far		Position du plan éloigné.
+		 */
+		virtual void Perspective( Castor::Matrix4x4r & p_result, Castor::Angle const & p_aFOVY, real p_aspect, real p_near, real p_far ) = 0;
+		/**
+		 *\~english
+		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters.
+		 *\param[out]	p_result	The matrix that will receive the result.
+		 *\param[in]	p_left		Left clipping plane value.
+		 *\param[in]	p_right		Right clipping plane value.
+		 *\param[in]	p_bottom	Bottom clipping plane value.
+		 *\param[in]	p_top		Top clipping plane value.
+		 *\param[in]	p_near		Near clipping plane value.
+		 *\param[in]	p_far		Far clipping plane value.
+		 *\~french
+		 *\brief		Construit une matrice de projection en perspective non centrée.
+		 *\param[out]	p_result	La matrice qui contiendra le résultat.
+		 *\param[in]	p_left		Position du plan gauche.
+		 *\param[in]	p_right		Position du plan droit.
+		 *\param[in]	p_bottom	Position du plan bas.
+		 *\param[in]	p_top		Position du plan haut.
+		 *\param[in]	p_near		Position du plan proche.
+		 *\param[in]	p_far		Position du plan éloigné.
+		 */
+		virtual void Frustum( Castor::Matrix4x4r & p_result, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far ) = 0;
+		/**
+		 *\~english
+		 *\brief		Builds a matrix that sets an orthogonal projection.
+		 *\param[out]	p_result	The matrix that will receive the result.
+		 *\param[in]	p_left		Left clipping plane value.
+		 *\param[in]	p_right		Right clipping plane value.
+		 *\param[in]	p_bottom	Bottom clipping plane value.
+		 *\param[in]	p_top		Top clipping plane value.
+		 *\param[in]	p_near		Near clipping plane value.
+		 *\param[in]	p_far		Far clipping plane value.
+		 *\~french
+		 *\brief		Construit une matrice de projection orthographique.
+		 *\param[out]	p_result	La matrice qui contiendra le résultat.
+		 *\param[in]	p_left		Position du plan gauche.
+		 *\param[in]	p_right		Position du plan droit.
+		 *\param[in]	p_bottom	Position du plan bas.
+		 *\param[in]	p_top		Position du plan haut.
+		 *\param[in]	p_near		Position du plan proche.
+		 *\param[in]	p_far		Position du plan éloigné.
+		 */
+		virtual void Ortho( Castor::Matrix4x4r & p_result, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far ) = 0;
+		/**
+		 *\~english
+		 *\brief		Builds a view matrix that looks at a given point.
+		 *\param[out]	p_result	The matrix that will receive the result.
+		 *\param[in]	p_eye		The eye position.
+		 *\param[in]	p_center	The point to look at.
+		 *\param[in]	p_up		The up direction..
+		 *\~french
+		 *\brief		Construit une matrice de vue regardant un point donné.
+		 *\param[out]	p_result	La matrice qui contiendra le résultat.
+		 *\param[in]	p_eye		La position de l'oeil.
+		 *\param[in]	p_center	Le point à regarder.
+		 *\param[in]	p_up		La direction vers le haut.
+		 */
+		virtual void LookAt( Castor::Matrix4x4r & p_result, Castor::Point3r const & p_eye, Castor::Point3r const & p_center, Castor::Point3r const & p_up ) = 0;
 
 	protected:
 		//!\~english The parent pipeline	\~french Le pipeline parent
@@ -298,23 +372,7 @@ namespace Castor3D
 		void Frustum( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
 		/**
 		 *\~english
-		 *\brief		Builds a matrix that sets an orthogonal projection from the given parameters
-		 *\param[in]	p_left		Left clipping plane value
-		 *\param[in]	p_right		Right clipping plane value
-		 *\param[in]	p_bottom	Bottom clipping plane value
-		 *\param[in]	p_top		Top clipping plane value
-		 *\~french
-		 *\brief		Construit une matrice de projection orthographique
-		 *\param[in]	p_left		Position du plan gauche
-		 *\param[in]	p_right		Position du plan droit
-		 *\param[in]	p_bottom	Position du plan bas
-		 *\param[in]	p_top		Position du plan haut
-		 */
-		void Ortho( real p_left, real p_right, real p_bottom, real p_top );
-		/**
-		 *\~english
 		 *\brief		Builds a matrix that sets a non centered orthogonal projection from the given parameters
-		 *\param[out]	p_matrix	The matrix that will receive the perspective matrix
 		 *\param[in]	p_left		Left clipping plane value
 		 *\param[in]	p_right		Right clipping plane value
 		 *\param[in]	p_bottom	Bottom clipping plane value
@@ -323,7 +381,6 @@ namespace Castor3D
 		 *\param[in]	p_far		Far clipping plane value
 		 *\~french
 		 *\brief		Construit une matrice de projection orthographique non centrée
-		 *\param[out]	p_matrix	La matrice qui contiendra le résultat
 		 *\param[in]	p_left		Position du plan gauche
 		 *\param[in]	p_right		Position du plan droit
 		 *\param[in]	p_bottom	Position du plan bas
@@ -332,6 +389,19 @@ namespace Castor3D
 		 *\param[in]	p_far		Position du plan lointain
 		 */
 		void Ortho( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		/**
+		 *\~english
+		 *\brief		Builds a view matrix that looks at a given point.
+		 *\param[in]	p_eye		The eye position.
+		 *\param[in]	p_center	The point to look at.
+		 *\param[in]	p_up		The up direction..
+		 *\~french
+		 *\brief		Construit une matrice de vue regardant un point donné.
+		 *\param[in]	p_eye		La position de l'oeil.
+		 *\param[in]	p_center	Le point à regarder.
+		 *\param[in]	p_up		La direction vers le haut.
+		 */
+		void LookAt( Castor::Point3r const & p_eye, Castor::Point3r const & p_center, Castor::Point3r const & p_up );
 		/**
 		 *\~english
 		 *\brief		Updates the used implementation.

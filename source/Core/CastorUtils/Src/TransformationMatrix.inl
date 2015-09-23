@@ -13,6 +13,7 @@ namespace Castor
 		Point3r l_axis;
 		Angle l_angle;
 		p_quat.ToAxisAngle( l_axis, l_angle );
+		return matrix::rotate( p_matrix, l_angle, l_axis );
 	}
 
 	template< typename T, typename U >
@@ -183,67 +184,69 @@ namespace Castor
 	}
 
 	template< typename T, typename U >
-	SquareMatrix< T, 4 > & matrix::perspective( SquareMatrix< T, 4 > & p_matrix, Angle const & p_aFOVY, U aspect, U zNear, U zFar )
+	SquareMatrix< T, 4 > & matrix::perspective( SquareMatrix< T, 4 > & p_matrix, Angle const & p_aFOVY, U p_aspect, U p_near, U p_far )
 	{
-		T range = T( ( 1 / tan( p_aFOVY.Radians() / 2 ) ) );
+		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/gluPerspective.xml)
+		T l_range = T( ( 1 / tan( p_aFOVY.Radians() * 0.5 ) ) );
 		p_matrix.initialise();
-		p_matrix[0][0] = T( range / aspect );
-		p_matrix[1][1] = T( range );
-		//p_matrix[2][2] = T( zFar / ( zNear - zFar ) );
-		p_matrix[2][2] = T( - ( zFar + zNear ) / ( zFar - zNear ) );
-		p_matrix[2][3] = T( - 1 );
-		//p_matrix[3][2] = T( zNear * zFar / ( zNear - zFar ) );
-		p_matrix[3][2] = T( - 2 * zFar * zNear / ( zFar - zNear ) );
-		return p_matrix;
-	}
-
-	template< typename T, typename U >
-	SquareMatrix< T, 4 > & matrix::ortho( SquareMatrix< T, 4 > & p_matrix, U left, U right, U bottom, U top, U zNear, U zFar )
-	{
-		p_matrix.set_identity();
-		p_matrix[0][0] = T( 2 / ( right - left ) );
-		p_matrix[1][1] = T( 2 / ( top - bottom ) );
-		p_matrix[2][2] = T( -2 / ( zFar - zNear ) );
-		p_matrix[3][0] = T( -( right + left ) / ( right - left ) );
-		p_matrix[3][1] = T( -( top + bottom ) / ( top - bottom ) );
-		p_matrix[3][2] = T( -( zFar + zNear ) / ( zFar - zNear ) );
-		p_matrix[3][3] = 1;
-		return p_matrix;
-	}
-
-	template< typename T, typename U >
-	SquareMatrix< T, 4 > & matrix::frustum( SquareMatrix< T, 4 > & p_matrix, U left, U right, U bottom, U top, U nearVal, U farVal )
-	{
-		p_matrix.initialise();
-		p_matrix[0][0] = T( ( 2 * nearVal ) / ( right - left ) );
-		p_matrix[1][1] = T( ( 2 * nearVal ) / ( top - bottom ) );
-		p_matrix[2][0] = T( ( right + left ) / ( right - left ) );
-		p_matrix[2][1] = T( ( top + bottom ) / ( top - bottom ) );
-		p_matrix[2][2] = T( ( nearVal + farVal ) / ( nearVal - farVal ) );
+		p_matrix[0][0] = T( l_range / p_aspect );
+		p_matrix[1][1] = T( l_range );
+		p_matrix[2][2] = T( ( p_far + p_near ) / ( p_near - p_far ) );
 		p_matrix[2][3] = T( -1 );
-		p_matrix[3][2] = T( ( 2 * farVal * nearVal ) / ( nearVal - farVal ) );
+		p_matrix[3][2] = T( 2 * p_far * p_near / ( p_near - p_far ) );
 		return p_matrix;
 	}
 
 	template< typename T, typename U >
-	SquareMatrix< T, 4 > & matrix::look_at( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_ptEye, Point< U, 3 > const & p_ptCenter, Point< U, 3 > const & p_ptUp )
+	SquareMatrix< T, 4 > & matrix::ortho( SquareMatrix< T, 4 > & p_matrix, U p_left, U p_right, U p_bottom, U p_top, U p_near, U p_far )
 	{
-		Point< T, 3 > l_f( point::get_normalised( p_ptCenter - p_ptEye ) );
-		Point< T, 3 > l_s( point::get_normalised( l_f ^ p_ptUp ) );
-		Point< T, 3 > l_u( point::get_normalised( l_s ^ l_f ) );
+		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/glOrtho.xml)
+		p_matrix.set_identity();
+		p_matrix[0][0] = T( 2 / ( p_right - p_left ) );
+		p_matrix[1][1] = T( 2 / ( p_top - p_bottom ) );
+		p_matrix[2][2] = T( -2 / ( p_far - p_near ) );
+		p_matrix[3][0] = T( -( p_right + p_left ) / ( p_right - p_left ) );
+		p_matrix[3][1] = T( -( p_top + p_bottom ) / ( p_top - p_bottom ) );
+		p_matrix[3][2] = T( -( p_far + p_near ) / ( p_far - p_near ) );
+		return p_matrix;
+	}
+
+	template< typename T, typename U >
+	SquareMatrix< T, 4 > & matrix::frustum( SquareMatrix< T, 4 > & p_matrix, U p_left, U p_right, U p_bottom, U p_top, U p_near, U p_far )
+	{
+		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/glFrustum.xml)
+		p_matrix.initialise();
+		p_matrix[0][0] = T( ( 2 * p_near ) / ( p_right - p_left ) );
+		p_matrix[1][1] = T( ( 2 * p_near ) / ( p_top - p_bottom ) );
+		p_matrix[2][0] = T( ( p_right + p_left ) / ( p_right - p_left ) );
+		p_matrix[2][1] = T( ( p_top + p_bottom ) / ( p_top - p_bottom ) );
+		p_matrix[2][2] = T( -( p_far + p_near ) / ( p_far - p_near ) );
+		p_matrix[2][3] = T( -1 );
+		p_matrix[3][2] = T( -( 2 * p_far * p_near ) / ( p_far - p_near ) );
+		return p_matrix;
+	}
+
+	template< typename T, typename U >
+	SquareMatrix< T, 4 > & matrix::look_at( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_eye, Point< U, 3 > const & p_center, Point< U, 3 > const & p_up )
+	{
+		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/gluLookAt.xml)
+		Point< T, 3 > l_f( point::get_normalised( p_center - p_eye ) );
+		Point< T, 3 > l_u( point::get_normalised( p_up ) );
+		Point< T, 3 > l_s( point::get_normalised( l_f ^ l_u ) );
+		l_u = l_s ^ l_f;
 		p_matrix.set_identity();
 		p_matrix[0][0] =  l_s[0];
-		p_matrix[1][0] =  l_s[1];
-		p_matrix[2][0] =  l_s[2];
 		p_matrix[0][1] =  l_u[0];
-		p_matrix[1][1] =  l_u[1];
-		p_matrix[2][1] =  l_u[2];
 		p_matrix[0][2] = -l_f[0];
+		p_matrix[1][0] =  l_s[1];
+		p_matrix[1][1] =  l_u[1];
 		p_matrix[1][2] = -l_f[1];
+		p_matrix[2][0] =  l_s[2];
+		p_matrix[2][1] =  l_u[2];
 		p_matrix[2][2] = -l_f[2];
-		p_matrix[3][0] = -point::dot( l_s, p_ptEye );
-		p_matrix[3][1] = -point::dot( l_u, p_ptEye );
-		p_matrix[3][2] =  point::dot( l_f, p_ptEye );
+		p_matrix[3][0] = 0;
+		p_matrix[3][1] = 0;
+		p_matrix[3][2] = 0;
 		return p_matrix;
 	}
 

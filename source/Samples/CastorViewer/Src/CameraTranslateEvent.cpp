@@ -7,8 +7,8 @@ using namespace Castor;
 
 namespace CastorViewer
 {
-	CameraTranslateEvent::CameraTranslateEvent( SceneNodeSPtr p_pMaterial, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
-		: MouseCameraEvent( p_pMaterial, p_rDeltaX, p_rDeltaY, p_rDeltaZ )
+	CameraTranslateEvent::CameraTranslateEvent( SceneNodeSPtr p_node, real p_dx, real p_dy, real p_dz )
+		: MouseCameraEvent( p_node, p_dx, p_dy, p_dz )
 	{
 	}
 
@@ -18,16 +18,18 @@ namespace CastorViewer
 
 	bool CameraTranslateEvent::Apply()
 	{
-		SceneNodeSPtr l_node = m_pMaterial.lock();
+		SceneNodeSPtr l_node = m_node.lock();
 
 		if ( l_node )
 		{
-			l_node->Translate( Point3r( m_rDeltaX, m_rDeltaY, m_rDeltaZ ) );
+			Quaternion l_orientation = l_node->GetOrientation();
+			Point3r l_translation( m_dx, m_dy, m_dz );
+			l_node->Translate( l_orientation.Transform( l_translation, l_translation ) );
 		}
 
-		m_rDeltaX = 0;
-		m_rDeltaY = 0;
-		m_rDeltaZ = 0;
+		m_dx = 0;
+		m_dy = 0;
+		m_dz = 0;
 		return true;
 	}
 }
