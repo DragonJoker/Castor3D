@@ -38,6 +38,40 @@ namespace Testing
 		return l_stream.str();
 	}
 
+	template< typename T, typename U >
+	inline bool compare( T const & p_a, U const & p_b )
+	{
+		return p_a == p_b;
+	}
+
+	template<>
+	inline bool compare< float, float >( float const & p_a, float const & p_b )
+	{
+		float l_epsilon = float( 0.0001 );
+		return std::abs( p_a - p_b ) < l_epsilon;
+	}
+
+	template<>
+	inline bool compare< float, double >( float const & p_a, double const & p_b )
+	{
+		float l_epsilon = float( 0.0001 );
+		return std::abs( p_a - p_b ) < l_epsilon;
+	}
+
+	template<>
+	inline bool compare< double, double >( double const & p_a, double const & p_b )
+	{
+		double l_epsilon = double( 0.0001 );
+		return std::abs( p_a - p_b ) < l_epsilon;
+	}
+
+	template<>
+	inline bool compare< double, float >( double const & p_a, float const & p_b )
+	{
+		double l_epsilon = double( 0.0001 );
+		return std::abs( p_a - p_b ) < l_epsilon;
+	}
+
 	class TestCase
 	{
 	public:
@@ -83,7 +117,7 @@ namespace Testing
 
 #	define TEST_EQUAL( x, y )\
 	p_testCount++;\
-	if( !(x == y) )\
+	if( !compare( x, y ) )\
 	{\
 		p_errCount++;\
 		Castor::Logger::LogWarning( std::stringstream() << "Failure at " << __FILE__ << " - " << __FUNCTION__ << ", line " << __LINE__ << ": " << #x << " == " << #y << " (" << Testing::to_string( x ) << " != " << Testing::to_string( y ) << ")" );\

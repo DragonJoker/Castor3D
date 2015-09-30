@@ -492,12 +492,15 @@ namespace Testing
 		Logger::LogInfo( cuT( "	Rotate on all" ) );
 		for ( double r = 0; r < 360; r += 1 )
 		{
-				Quaternion l_quaternion( Point3r( 1, 1, 1 ), Angle::FromDegrees( r ) );
-				glm::quat l_quat = glm::angleAxis( glm::radians( float( r ) ), glm::normalize( glm::vec3( 1, 1, 1 ) ) );
+				Quaternion l_quaternion( Angle::FromDegrees( r ), Angle::FromDegrees( r ), Angle::FromDegrees( r ) );
+				glm::quat l_quat( glm::vec3( glm::radians( float( r ) ), glm::radians( float( r ) ), glm::radians( float( r ) ) ) );
 				Matrix4x4d l_matrix;
 				l_quaternion.ToRotationMatrix( l_matrix );
 				glm::mat4 l_mat = glm::mat4_cast( l_quat );
 				TEST_EQUAL( l_matrix, l_mat );
+				TEST_EQUAL( l_quaternion.GetPitch().Radians(), glm::pitch( l_quat ) );
+				TEST_EQUAL( l_quaternion.GetYaw().Radians(), glm::yaw( l_quat ) );
+				TEST_EQUAL( l_quaternion.GetRoll().Radians(), glm::roll( l_quat ) );
 		}
 
 		Quaternion l_quaternionSrc( Point3r( 1, 1, 1 ), Angle::FromDegrees( 0 ) );
