@@ -23,6 +23,8 @@ namespace Castor3D
 		{
 			l_list.clear();
 		}
+
+		DoFlush();
 	}
 
 	void FrameListener::PostEvent( FrameEventSPtr p_event )

@@ -53,7 +53,7 @@ namespace GuiCommon
 
 	void LanguageFileParser::DoDiscardParser( String const & p_strLine )
 	{
-		if ( m_context->stackSections.top() == eSECTION_LIST )
+		if ( m_context->m_sections.top() == eSECTION_LIST )
 		{
 			String l_strWords( p_strLine );
 			string::replace( l_strWords, cuT( "\\" ), cuT( "" ) );
@@ -63,7 +63,7 @@ namespace GuiCommon
 		}
 		else
 		{
-			Logger::LogWarning( cuT( "Parser not found @ line " ) + string::to_string( m_context->ui64Line ) + cuT( " : " ) + p_strLine );
+			Logger::LogWarning( cuT( "Parser not found @ line " ) + string::to_string( m_context->m_line ) + cuT( " : " ) + p_strLine );
 		}
 	}
 
@@ -75,18 +75,18 @@ namespace GuiCommon
 
 IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Root_Language )
 {
-	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_pContext );
+	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_context );
 	String l_name;
-	p_arrayParams[0]->Get( l_name );
+	p_params[0]->Get( l_name );
 	l_pContext->pCurrentLanguage->SetName( l_name );
 }
 END_ATTRIBUTE_PUSH( eSECTION_LANGUAGE )
 
 IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Language_Pattern )
 {
-	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_pContext );
+	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_context );
 	String l_strParams;
-	p_arrayParams[0]->Get( l_strParams );
+	p_params[0]->Get( l_strParams );
 
 	if ( !l_strParams.empty() )
 	{
@@ -112,18 +112,18 @@ END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Language_Lexer )
 {
-	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_pContext );
+	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_context );
 	uint32_t l_uiLexer;
-	p_arrayParams[0]->Get( l_uiLexer );
+	p_params[0]->Get( l_uiLexer );
 	l_pContext->pCurrentLanguage->SetLexer( eSTC_LEX( l_uiLexer ) );
 }
 END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Language_FoldFlags )
 {
-	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_pContext );
+	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_context );
 	String l_strParams;
-	p_arrayParams[0]->Get( l_strParams );
+	p_params[0]->Get( l_strParams );
 
 	if ( !l_strParams.empty() )
 	{
@@ -144,7 +144,7 @@ END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Language_Section )
 {
-	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_pContext );
+	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_context );
 	l_pContext->arrayWords.clear();
 	l_pContext->eStyle = eSTC_TYPE_COUNT;
 	l_pContext->eType = eSTC_TYPE_COUNT;
@@ -153,7 +153,7 @@ END_ATTRIBUTE_PUSH( eSECTION_SECTION )
 
 IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Language_Style )
 {
-	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_pContext );
+	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_context );
 	l_pContext->arrayWords.clear();
 	l_pContext->eStyle = eSTC_TYPE_COUNT;
 	l_pContext->eType = eSTC_TYPE_COUNT;
@@ -162,36 +162,36 @@ END_ATTRIBUTE_PUSH( eSECTION_STYLE )
 
 IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Style_Type )
 {
-	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_pContext );
+	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_context );
 	uint32_t l_uiType;
-	p_arrayParams[0]->Get( l_uiType );
+	p_params[0]->Get( l_uiType );
 	l_pContext->pCurrentStyle = l_pContext->pCurrentLanguage->GetStyle( eSTC_TYPE( l_uiType ) );
 }
 END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Style_FgColour )
 {
-	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_pContext );
+	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_context );
 	String l_name;
-	p_arrayParams[0]->Get( l_name );
+	p_params[0]->Get( l_name );
 	l_pContext->pCurrentStyle->SetForeground( l_name );
 }
 END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Style_BgColour )
 {
-	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_pContext );
+	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_context );
 	String l_name;
-	p_arrayParams[0]->Get( l_name );
+	p_params[0]->Get( l_name );
 	l_pContext->pCurrentStyle->SetBackground( l_name );
 }
 END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Style_FontName )
 {
-	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_pContext );
+	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_context );
 	String l_name;
-	p_arrayParams[0]->Get( l_name );
+	p_params[0]->Get( l_name );
 	l_pContext->pCurrentStyle->SetFontName( l_name );
 }
 END_ATTRIBUTE()
@@ -199,11 +199,11 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Style_FontStyle )
 {
 	String l_strParams;
-	p_arrayParams[0]->Get( l_strParams );
+	p_params[0]->Get( l_strParams );
 
 	if ( !l_strParams.empty() )
 	{
-		LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_pContext );
+		LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_context );
 		StringArray l_arrayStyles = string::split( string::lower_case( string::trim( l_strParams ) ), cuT( "\t " ), 10, false );
 		int l_iStyle = 0;
 		std::for_each( l_arrayStyles.begin(), l_arrayStyles.end(), [&]( String const & p_strStyle )
@@ -236,25 +236,25 @@ END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Style_FontSize )
 {
-	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_pContext );
+	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_context );
 	int32_t l_iSize;
-	p_arrayParams[0]->Get( l_iSize );
+	p_params[0]->Get( l_iSize );
 	l_pContext->pCurrentStyle->SetFontSize( l_iSize );
 }
 END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Section_Type )
 {
-	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_pContext );
+	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_context );
 	uint32_t l_uiType;
-	p_arrayParams[0]->Get( l_uiType );
+	p_params[0]->Get( l_uiType );
 	l_pContext->eType = eSTC_TYPE( l_uiType );
 }
 END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Section_End )
 {
-	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_pContext );
+	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_context );
 
 	if ( l_pContext->eType != eSTC_TYPE_COUNT )
 	{

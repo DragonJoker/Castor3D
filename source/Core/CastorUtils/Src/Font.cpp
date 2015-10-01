@@ -158,7 +158,9 @@ namespace Castor
 			virtual int LoadGlyph( Glyph & p_glyph )
 			{
 				FT_Glyph l_ftGlyph;
-				CHECK_FT_ERR( FT_Load_Glyph, m_face, FT_Get_Char_Index( m_face, p_glyph.GetCharacter() ), FT_LOAD_DEFAULT );
+				uint8_t l_char = uint8_t( p_glyph.GetCharacter() );
+				FT_UInt l_index = FT_Get_Char_Index( m_face, l_char );
+				CHECK_FT_ERR( FT_Load_Glyph, m_face, l_index, FT_LOAD_DEFAULT );
 				CHECK_FT_ERR( FT_Get_Glyph, m_face->glyph, &l_ftGlyph );
 				CHECK_FT_ERR( FT_Glyph_To_Bitmap, &l_ftGlyph, FT_RENDER_MODE_NORMAL, 0, 1 );
 				FT_BitmapGlyph l_ftBmpGlyph = FT_BitmapGlyph( l_ftGlyph );
@@ -168,7 +170,7 @@ namespace Castor
 				Size l_size( l_pitch, l_ftBitmap.rows );
 				Position l_ptPosition( l_ftBmpGlyph->left, l_ftBmpGlyph->top );
 				uint32_t l_uiSize = l_size.width() * l_size.height();
-				ByteArray l_bitmap( l_uiSize, 0 );
+				ByteArray l_bitmap( l_uiSize );
 				uint32_t l_uiIndex = 0;
 				CASTOR_ASSERT( l_uiSize == l_size.width() * l_size.height() );
 
@@ -290,7 +292,9 @@ namespace Castor
 		, m_iMaxTop( 0 )
 		, m_iMaxWidth( 0 )
 		, m_glyphLoader( std::make_unique< ft::SFreeTypeFontImpl >( p_path, p_height ) )
+		, m_pathFile( p_path )
 	{
+		BinaryLoader()( *this, p_path, p_height );
 	}
 
 	Font::~Font()

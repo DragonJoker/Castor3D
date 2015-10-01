@@ -38,7 +38,7 @@ namespace Castor3D
 	\remarks	Initialise le membre donné lors de la construction.
 	*/
 	template< class T >
-	class C3D_API InitialiseEvent
+	class InitialiseEvent
 		: public FrameEvent
 	{
 	private:

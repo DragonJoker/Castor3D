@@ -117,6 +117,16 @@ namespace Castor3D
 		{
 			return m_size;
 		}
+		/**
+		 *\~english
+		 *\return		true if the render size has changed.
+		 *\~french
+		 *\return		true si la taille de rendu a changé.
+		 */
+		bool IsSizeChanged()const
+		{
+			return m_sizeChanged;
+		}
 
 	protected:
 		/**
@@ -252,6 +262,8 @@ namespace Castor3D
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_panelVertex;
 		//!\~english Border panel overlays vertex array (quad definition)	\~french Tableau de vertex (définition du quad) pour les incrustations bordure
 		std::array< Castor3D::BufferElementGroupSPtr, 8 * 6 > m_borderVertex;
+		//!\~english Tells if the render size has changed.	\~french Dit si les dimension du rendu ont changé.
+		bool m_sizeChanged;
 	};
 }
 

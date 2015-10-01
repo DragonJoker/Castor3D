@@ -73,7 +73,7 @@ namespace Castor3D
 			File::DirectoryCreate( GetEngineDirectory() );
 		}
 
-		CreateFrameListener();
+		m_defaultListener = CreateFrameListener( cuT( "Default" ) );
 
 		Version l_version;
 		String l_strVersion;
@@ -96,12 +96,12 @@ namespace Castor3D
 		m_blendStateManager.clear();
 		m_animationManager.clear();
 		m_meshManager.clear();
-		m_overlayManager.clear();
+		m_overlayManager.Clear();
 		m_fontManager.clear();
 		m_imageManager.clear();
 		m_sceneManager.clear();
 		m_materialManager.clear();
-		m_arrayListeners.clear();
+		m_listeners.clear();
 
 		// Destroy the RenderSystem
 		if ( m_renderSystem )
@@ -176,11 +176,16 @@ namespace Castor3D
 		{
 			ClearScenes();
 
+			for ( auto && l_listener : m_listeners )
+			{
+				l_listener.second->Flush();
+			}
+
 			m_depthStencilStateManager.lock();
 
 			for ( auto && l_it : m_depthStencilStateManager )
 			{
-				m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
+				PostEvent( MakeCleanupEvent( *l_it.second ) );
 			}
 
 			m_depthStencilStateManager.unlock();
@@ -188,7 +193,7 @@ namespace Castor3D
 
 			for ( auto && l_it : m_rasteriserStateManager )
 			{
-				m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
+				PostEvent( MakeCleanupEvent( *l_it.second ) );
 			}
 
 			m_rasteriserStateManager.unlock();
@@ -196,7 +201,7 @@ namespace Castor3D
 
 			for ( auto && l_it : m_blendStateManager )
 			{
-				m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
+				PostEvent( MakeCleanupEvent( *l_it.second ) );
 			}
 
 			m_blendStateManager.unlock();
@@ -204,7 +209,7 @@ namespace Castor3D
 
 			for ( auto && l_it : m_samplerManager )
 			{
-				m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
+				PostEvent( MakeCleanupEvent( *l_it.second ) );
 			}
 
 			m_samplerManager.unlock();
@@ -212,23 +217,16 @@ namespace Castor3D
 
 			for ( auto && l_it : m_meshManager )
 			{
-				m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
+				PostEvent( MakeCleanupEvent( *l_it.second ) );
 			}
 
 			m_meshManager.unlock();
-			m_overlayManager.lock();
-
-			for ( auto && l_it : reinterpret_cast< OverlayCollection & >( m_overlayManager ) )
-			{
-				m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
-			}
-
-			m_overlayManager.unlock();
+			m_overlayManager.Cleanup();
 			m_materialManager.lock();
 
 			for ( auto && l_it : m_materialManager )
 			{
-				m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
+				PostEvent( MakeCleanupEvent( *l_it.second ) );
 			}
 
 			m_materialManager.unlock();
@@ -238,28 +236,28 @@ namespace Castor3D
 
 				for ( auto && l_it : m_shaderManager )
 				{
-					m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it ) );
+					PostEvent( MakeCleanupEvent( *l_it ) );
 				}
 
 				for ( auto && l_it : m_mapWindows )
 				{
-					m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *l_it.second ) );
+					PostEvent( MakeCleanupEvent( *l_it.second ) );
 				}
 			}
 
 			if ( m_pDefaultBlendState )
 			{
-				m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *m_pDefaultBlendState ) );
+				PostEvent( MakeCleanupEvent( *m_pDefaultBlendState ) );
 			}
 
 			if ( m_pLightsSampler )
 			{
-				m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *m_pLightsSampler ) );
+				PostEvent( MakeCleanupEvent( *m_pLightsSampler ) );
 			}
 
 			if ( m_pDefaultSampler )
 			{
-				m_arrayListeners[0]->PostEvent( MakeCleanupEvent( *m_pDefaultSampler ) );
+				PostEvent( MakeCleanupEvent( *m_pDefaultSampler ) );
 			}
 
 			SetCleaned();
@@ -285,7 +283,7 @@ namespace Castor3D
 
 			m_samplerManager.clear();
 			m_shaderManager.ClearShaders();
-			m_overlayManager.ClearOverlays();
+			m_overlayManager.Clear();
 			m_materialManager.DeleteAll();
 			m_sceneManager.clear();
 			{
@@ -301,26 +299,19 @@ namespace Castor3D
 			m_blendStateManager.clear();
 			RemoveAllRenderWindows();
 
-			for ( auto && l_listener : m_arrayListeners )
-			{
-				l_listener->Flush();
-			}
-
-			FrameListenerSPtr l_pListener = m_arrayListeners[0];
-
 			if ( m_pDefaultBlendState )
 			{
-				l_pListener->PostEvent( MakeInitialiseEvent( *m_pDefaultBlendState ) );
+				PostEvent( MakeInitialiseEvent( *m_pDefaultBlendState ) );
 			}
 
 			if ( m_pDefaultSampler )
 			{
-				l_pListener->PostEvent( MakeInitialiseEvent( *m_pDefaultSampler ) );
+				PostEvent( MakeInitialiseEvent( *m_pDefaultSampler ) );
 			}
 
 			if ( m_pLightsSampler )
 			{
-				l_pListener->PostEvent( MakeInitialiseEvent( *m_pLightsSampler ) );
+				PostEvent( MakeInitialiseEvent( *m_pLightsSampler ) );
 			}
 		}
 	}
@@ -417,11 +408,6 @@ namespace Castor3D
 		{
 			DoRenderOneFrame();
 		}
-	}
-
-	void Engine::RenderOverlays( Scene const & p_scene, Castor::Size const & p_size )
-	{
-		m_overlayManager.RenderOverlays( p_scene, p_size );
 	}
 
 	SceneSPtr Engine::CreateScene( String const & p_name )
@@ -533,31 +519,6 @@ namespace Castor3D
 		}
 
 		return l_return;
-	}
-
-	OverlaySPtr Engine::CreateOverlay( eOVERLAY_TYPE p_type, String const & p_name, OverlaySPtr p_parent, SceneSPtr p_scene )
-	{
-		OverlaySPtr l_pReturn = m_overlayManager.GetOverlay( p_name );
-
-		if ( !l_pReturn )
-		{
-			l_pReturn = std::make_shared< Overlay >( this, p_type, p_scene, p_parent );
-			l_pReturn->SetName( p_name );
-
-			if ( p_scene )
-			{
-				p_scene->AddOverlay( l_pReturn );
-			}
-
-			m_overlayManager.AddOverlay( p_name, l_pReturn, p_parent );
-			Logger::LogInfo( cuT( "Scene::CreateOverlay - Overlay [" ) + p_name + cuT( "] - Created" ) );
-		}
-		else
-		{
-			Logger::LogWarning( cuT( "Scene::CreateOverlay - Can't create Overlay [" ) + p_name + cuT( "] - Another overlay with the same name already exists" ) );
-		}
-
-		return  l_pReturn;
 	}
 
 	RenderWindowSPtr Engine::CreateRenderWindow()
@@ -727,10 +688,11 @@ namespace Castor3D
 	void Engine::PostEvent( FrameEventSPtr p_pEvent )
 	{
 		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexResources );
+		FrameListenerSPtr l_listener = m_defaultListener.lock();
 
-		if ( m_arrayListeners.size() )
+		if ( l_listener )
 		{
-			m_arrayListeners[0]->PostEvent( p_pEvent );
+			l_listener->PostEvent( p_pEvent );
 		}
 	}
 
@@ -1029,23 +991,49 @@ namespace Castor3D
 		}
 	}
 
-	FrameListenerSPtr Engine::CreateFrameListener()
+	FrameListenerWPtr Engine::CreateFrameListener( String const & p_name )
 	{
-		FrameListenerSPtr l_pReturn = std::make_shared< FrameListener >();
-		m_arrayListeners.push_back( l_pReturn );
-		return l_pReturn;
-	}
+		FrameListenerSPtr l_return;
+		auto l_it = m_listeners.find( p_name );
 
-	void Engine::DestroyFrameListener( FrameListenerSPtr & p_pListener )
-	{
-		FrameListenerPtrArrayIt l_it = std::find( m_arrayListeners.begin(), m_arrayListeners.end(), p_pListener );
-
-		if ( l_it != m_arrayListeners.end() )
+		if ( l_it == m_listeners.end() )
 		{
-			m_arrayListeners.erase( l_it );
+			l_it = m_listeners.insert( std::make_pair( p_name, std::make_shared< FrameListener >() ) ).first;
 		}
 
-		p_pListener.reset();
+		return l_it->second;
+	}
+
+	void Engine::AddFrameListener( String const & p_name, FrameListenerSPtr && p_listener )
+	{
+		if ( m_listeners.find( p_name ) != m_listeners.end() )
+		{
+			CASTOR_EXCEPTION( "A listener with this name already exists: " + string::string_cast< char >( p_name ) );
+		}
+
+		m_listeners.insert( std::make_pair( p_name, std::move( p_listener ) ) );
+	}
+
+	FrameListener & Engine::GetFrameListener( String const & p_name )
+	{
+		auto l_it = m_listeners.find( p_name );
+
+		if ( l_it == m_listeners.end() )
+		{
+			CASTOR_EXCEPTION( "No listener with this name: " + string::string_cast< char >( p_name ) );
+		}
+
+		return *l_it->second;
+	}
+
+	void Engine::DestroyFrameListener( String const & p_name )
+	{
+		auto l_it = m_listeners.find( p_name );
+
+		if ( l_it != m_listeners.end() )
+		{
+			m_listeners.erase( l_it );
+		}
 	}
 
 	SamplerSPtr Engine::CreateSampler( String const & p_name )
@@ -1064,7 +1052,7 @@ namespace Castor3D
 			{
 				l_pReturn = m_renderSystem->CreateSampler( p_name );
 				m_samplerManager.insert( p_name, l_pReturn );
-				m_arrayListeners[0]->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
+				PostEvent( MakeInitialiseEvent( *l_pReturn ) );
 			}
 		}
 
@@ -1080,7 +1068,7 @@ namespace Castor3D
 			l_pReturn = m_renderSystem->CreateDepthStencilState();
 			m_depthStencilStateManager.insert( p_name, l_pReturn );
 			CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexResources );
-			m_arrayListeners[0]->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
+			PostEvent( MakeInitialiseEvent( *l_pReturn ) );
 		}
 
 		return l_pReturn;
@@ -1094,7 +1082,7 @@ namespace Castor3D
 		{
 			l_pReturn = m_renderSystem->CreateRasteriserState();
 			m_rasteriserStateManager.insert( p_name, l_pReturn );
-			m_arrayListeners[0]->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
+			PostEvent( MakeInitialiseEvent( *l_pReturn ) );
 		}
 
 		return l_pReturn;
@@ -1108,7 +1096,7 @@ namespace Castor3D
 		{
 			l_pReturn = m_renderSystem->CreateBlendState();
 			m_blendStateManager.insert( p_name, l_pReturn );
-			m_arrayListeners[0]->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
+			PostEvent( MakeInitialiseEvent( *l_pReturn ) );
 		}
 
 		return l_pReturn;
@@ -1149,9 +1137,9 @@ namespace Castor3D
 		m_renderSystem->GetMainContext()->SetCurrent();
 		m_debugOverlays->EndGpuTask();
 
-		for ( auto && l_listener : m_arrayListeners )
+		for ( auto && l_listener : m_listeners )
 		{
-			l_listener->FireEvents( eEVENT_TYPE_PRE_RENDER );
+			l_listener.second->FireEvents( eEVENT_TYPE_PRE_RENDER );
 		}
 
 		UpdateOverlayManager();
@@ -1179,9 +1167,9 @@ namespace Castor3D
 			m_debugOverlays->EndGpuTask();
 		}
 
-		for ( auto && l_listener : m_arrayListeners )
+		for ( auto && l_listener : m_listeners )
 		{
-			l_listener->FireEvents( eEVENT_TYPE_QUEUE_RENDER );
+			l_listener.second->FireEvents( eEVENT_TYPE_QUEUE_RENDER );
 		}
 
 		m_debugOverlays->EndCpuTask();
@@ -1199,9 +1187,9 @@ namespace Castor3D
 	{
 		m_debugOverlays->EndGpuTask();
 
-		for ( auto && l_listener : m_arrayListeners )
+		for ( auto && l_listener : m_listeners )
 		{
-			l_listener->FireEvents( eEVENT_TYPE_POST_RENDER );
+			l_listener.second->FireEvents( eEVENT_TYPE_POST_RENDER );
 		}
 
 		m_debugOverlays->EndCpuTask();

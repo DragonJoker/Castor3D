@@ -115,6 +115,7 @@ namespace Castor3D
 		: OverlayCategory( eOVERLAY_TYPE_BORDER_PANEL )
 		, m_borderOuterUv( 0, 0, 1, 1 )
 		, m_borderInnerUv( 0.33, 0.33, 0.66, 0.66 )
+		, m_borderChanged( true )
 	{
 		m_arrayVtx.resize( 6 );
 		m_arrayVtxBorder.resize( 48 );
@@ -132,7 +133,6 @@ namespace Castor3D
 	void BorderPanelOverlay::SetBorderMaterial( MaterialSPtr p_pMaterial )
 	{
 		m_pBorderMaterial = p_pMaterial;
-		m_changed = true;
 
 		if ( p_pMaterial )
 		{
@@ -144,55 +144,58 @@ namespace Castor3D
 		}
 	}
 
-	void BorderPanelOverlay::UpdatePositionAndSize()
+	void BorderPanelOverlay::DoUpdateSize()
 	{
-		OverlayCategory::UpdatePositionAndSize();
+		OverlayCategory::DoUpdateSize();
 		OverlayRendererSPtr l_renderer = GetOverlay().GetOverlayManager().GetRenderer();
 
 		if ( l_renderer )
 		{
-			OverlaySPtr l_parent = GetOverlay().GetParent();
-			Size l_sz = l_renderer->GetSize();
-			Point2d l_totalSize( l_sz.width(), l_sz.height() );
-
-			if ( l_parent )
+			if ( IsSizeChanged() || l_renderer->IsSizeChanged() )
 			{
-				Point2d l_parentSize = l_parent->GetAbsoluteSize();
-				l_totalSize[0] = l_parentSize[0] * l_totalSize[0];
-				l_totalSize[1] = l_parentSize[1] * l_totalSize[1];
-			}
+				OverlaySPtr l_parent = GetOverlay().GetParent();
+				Size l_sz = l_renderer->GetSize();
+				Point2d l_totalSize( l_sz.width(), l_sz.height() );
 
-			Rectangle l_sizes = GetBorderPixelSize();
-			Point4d l_ptSizes = GetBorderSize();
-			bool l_changed = m_changed;
+				if ( l_parent )
+				{
+					Point2d l_parentSize = l_parent->GetAbsoluteSize();
+					l_totalSize[0] = l_parentSize[0] * l_totalSize[0];
+					l_totalSize[1] = l_parentSize[1] * l_totalSize[1];
+				}
 
-			if ( l_sizes.left() )
-			{
-				l_changed = !Castor::Policy< double >::equals( l_ptSizes[0], l_sizes.left() / l_totalSize[0] );
-				l_ptSizes[0] = l_sizes.left() / l_totalSize[0];
-			}
+				Rectangle l_sizes = GetBorderPixelSize();
+				Point4d l_ptSizes = GetBorderSize();
+				bool l_changed = m_borderChanged;
 
-			if ( l_sizes.top() )
-			{
-				l_changed = !Castor::Policy< double >::equals( l_ptSizes[1], l_sizes.top() / l_totalSize[1] );
-				l_ptSizes[1] = l_sizes.top() / l_totalSize[1];
-			}
+				if ( l_sizes.left() )
+				{
+					l_changed = !Castor::Policy< double >::equals( l_ptSizes[0], l_sizes.left() / l_totalSize[0] );
+					l_ptSizes[0] = l_sizes.left() / l_totalSize[0];
+				}
 
-			if ( l_sizes.right() )
-			{
-				l_changed = !Castor::Policy< double >::equals( l_ptSizes[2], l_sizes.right() / l_totalSize[0] );
-				l_ptSizes[2] = l_sizes.right() / l_totalSize[0];
-			}
+				if ( l_sizes.top() )
+				{
+					l_changed = !Castor::Policy< double >::equals( l_ptSizes[1], l_sizes.top() / l_totalSize[1] );
+					l_ptSizes[1] = l_sizes.top() / l_totalSize[1];
+				}
 
-			if ( l_sizes.bottom() )
-			{
-				l_changed = !Castor::Policy< double >::equals( l_ptSizes[3], l_sizes.bottom() / l_totalSize[1] );
-				l_ptSizes[3] = l_sizes.bottom() / l_totalSize[1];
-			}
+				if ( l_sizes.right() )
+				{
+					l_changed = !Castor::Policy< double >::equals( l_ptSizes[2], l_sizes.right() / l_totalSize[0] );
+					l_ptSizes[2] = l_sizes.right() / l_totalSize[0];
+				}
 
-			if ( l_changed )
-			{
-				SetBorderSize( l_ptSizes );
+				if ( l_sizes.bottom() )
+				{
+					l_changed = !Castor::Policy< double >::equals( l_ptSizes[3], l_sizes.bottom() / l_totalSize[1] );
+					l_ptSizes[3] = l_sizes.bottom() / l_totalSize[1];
+				}
+
+				if ( l_changed )
+				{
+					SetBorderSize( l_ptSizes );
+				}
 			}
 		}
 	}
@@ -231,13 +234,11 @@ namespace Castor3D
 		p_renderer->DrawBorderPanel( *this );
 	}
 
-	void BorderPanelOverlay::DoUpdate( OverlayRendererSPtr p_renderer )
+	void BorderPanelOverlay::DoUpdateBuffer( Size const & p_size )
 	{
-		int l_zIndex = 0;
-		Size l_screenSize = p_renderer->GetSize();
-		Position l_pos = GetAbsolutePosition( l_screenSize );
-		Size l_size = GetAbsoluteSize( l_screenSize );
-		Rectangle l_sizes = GetAbsoluteBorderSize( l_screenSize );
+		Position l_pos = GetAbsolutePosition( p_size );
+		Size l_size = GetAbsoluteSize( p_size );
+		Rectangle l_sizes = GetAbsoluteBorderSize( p_size );
 
 		int32_t l_centerL = l_pos.x();
 		int32_t l_centerT = l_pos.y();

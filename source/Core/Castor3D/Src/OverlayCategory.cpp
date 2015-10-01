@@ -191,7 +191,8 @@ namespace Castor3D
 	OverlayCategory::OverlayCategory( eOVERLAY_TYPE p_type )
 		: m_type( p_type )
 		, m_bVisible( true )
-		, m_changed( true )
+		, m_sizeChanged( true )
+		, m_positionChanged( true )
 		, m_uv( 0, 0, 1, 1 )
 		, m_index( 0 )
 		, m_level( 0 )
@@ -208,10 +209,13 @@ namespace Castor3D
 
 		if ( l_renderer )
 		{
-			if ( m_changed )
+			if ( IsPositionChanged() || IsSizeChanged() || l_renderer->IsSizeChanged() )
 			{
-				DoUpdate( l_renderer );
-				m_changed = false;
+				DoUpdatePosition();
+				DoUpdateSize();
+				DoUpdateBuffer( l_renderer->GetSize() );
+				m_sizeChanged = false;
+				m_positionChanged = false;
 			}
 
 			DoRender( l_renderer );
@@ -221,7 +225,6 @@ namespace Castor3D
 	void OverlayCategory::SetMaterial( MaterialSPtr p_pMaterial )
 	{
 		m_pMaterial = p_pMaterial;
-		m_changed = true;
 
 		if ( p_pMaterial )
 		{
@@ -236,67 +239,6 @@ namespace Castor3D
 	String const & OverlayCategory::GetOverlayName()const
 	{
 		return m_pOverlay->GetName();
-	}
-
-	void OverlayCategory::UpdatePositionAndSize()
-	{
-		OverlayRendererSPtr l_renderer = GetOverlay().GetOverlayManager().GetRenderer();
-
-		if ( l_renderer )
-		{
-			OverlaySPtr l_parent = GetOverlay().GetParent();
-			Size l_sz = l_renderer->GetSize();
-			Point2d l_totalSize( l_sz.width(), l_sz.height() );
-
-			if ( l_parent )
-			{
-				Point2d l_parentSize = l_parent->GetAbsoluteSize();
-				l_totalSize[0] = l_parentSize[0] * l_totalSize[0];
-				l_totalSize[1] = l_parentSize[1] * l_totalSize[1];
-			}
-
-			Position l_pos = GetPixelPosition();
-			Point2d l_ptPos = GetPosition();
-			bool l_changed = m_changed;
-
-			if ( l_pos.x() )
-			{
-				l_changed = !Castor::Policy< double >::equals( l_ptPos[0], l_pos.x() / l_totalSize[0] );
-				l_ptPos[0] = l_pos.x() / l_totalSize[0];
-			}
-
-			if ( l_pos.y() )
-			{
-				l_changed = !Castor::Policy< double >::equals( l_ptPos[1], l_pos.y() / l_totalSize[1] );
-				l_ptPos[1] = l_pos.y() / l_totalSize[1];
-			}
-
-			if ( l_changed )
-			{
-				SetPosition( l_ptPos );
-			}
-
-			Size l_size = GetPixelSize();
-			Point2d l_ptSize = GetSize();
-			l_changed = m_changed;
-
-			if ( l_size.width() )
-			{
-				l_changed = !Castor::Policy< double >::equals( l_ptSize[0], l_size.width() / l_totalSize[0] );
-				l_ptSize[0] = l_size.width() / l_totalSize[0];
-			}
-
-			if ( l_size.height() )
-			{
-				l_changed = !Castor::Policy< double >::equals( l_ptSize[1], l_size.height() / l_totalSize[1] );
-				l_ptSize[1] = l_size.height() / l_totalSize[1];
-			}
-
-			if ( l_changed )
-			{
-				SetSize( l_ptSize );
-			}
-		}
 	}
 
 	Position OverlayCategory::GetAbsolutePosition( Castor::Size const & p_size )const
@@ -336,5 +278,113 @@ namespace Castor3D
 		}
 
 		return l_size;
+	}
+
+	bool OverlayCategory::IsSizeChanged()const
+	{
+		bool l_changed = m_sizeChanged;
+		OverlaySPtr l_parent = GetOverlay().GetParent();
+
+		if ( !l_changed && l_parent )
+		{
+			l_changed = l_parent->IsSizeChanged();
+		}
+
+		return l_changed;
+	}
+
+	bool OverlayCategory::IsPositionChanged()const
+	{
+		bool l_changed = m_positionChanged;
+		OverlaySPtr l_parent = GetOverlay().GetParent();
+
+		if ( !l_changed && l_parent )
+		{
+			l_changed = l_parent->IsPositionChanged();
+		}
+
+		return l_changed;
+	}
+
+	Point2d OverlayCategory::DoGetTotalSize()const
+	{
+		OverlaySPtr l_parent = GetOverlay().GetParent();
+		Size l_renderSize = GetOverlay().GetOverlayManager().GetRenderer()->GetSize();
+		Point2d l_totalSize( l_renderSize.width(), l_renderSize.height() );
+
+		if ( l_parent )
+		{
+			Point2d l_parentSize = l_parent->GetAbsoluteSize();
+			l_totalSize[0] = l_parentSize[0] * l_totalSize[0];
+			l_totalSize[1] = l_parentSize[1] * l_totalSize[1];
+		}
+
+		return l_totalSize;
+	}
+
+	void OverlayCategory::DoUpdatePosition()
+	{
+		OverlayRendererSPtr l_renderer = GetOverlay().GetOverlayManager().GetRenderer();
+
+		if ( l_renderer )
+		{
+			if ( IsPositionChanged() || l_renderer->IsSizeChanged() )
+			{
+				Point2d l_totalSize = DoGetTotalSize();
+				bool l_changed = m_positionChanged;
+				Position l_pos = GetPixelPosition();
+				Point2d l_ptPos = GetPosition();
+
+				if ( l_pos.x() )
+				{
+					l_changed = !Castor::Policy< double >::equals( l_ptPos[0], l_pos.x() / l_totalSize[0] );
+					l_ptPos[0] = l_pos.x() / l_totalSize[0];
+				}
+
+				if ( l_pos.y() )
+				{
+					l_changed = !Castor::Policy< double >::equals( l_ptPos[1], l_pos.y() / l_totalSize[1] );
+					l_ptPos[1] = l_pos.y() / l_totalSize[1];
+				}
+
+				if ( l_changed )
+				{
+					SetPosition( l_ptPos );
+				}
+			}
+		}
+	}
+
+	void OverlayCategory::DoUpdateSize()
+	{
+		OverlayRendererSPtr l_renderer = GetOverlay().GetOverlayManager().GetRenderer();
+
+		if ( l_renderer )
+		{
+			if ( IsSizeChanged() || l_renderer->IsSizeChanged() )
+			{
+				Point2d l_totalSize = DoGetTotalSize();
+				bool l_changed = m_sizeChanged;
+				Size l_size = GetPixelSize();
+				Point2d l_ptSize = GetSize();
+
+				if ( l_size.width() )
+				{
+					l_changed = !Castor::Policy< double >::equals( l_ptSize[0], l_size.width() / l_totalSize[0] );
+					l_ptSize[0] = l_size.width() / l_totalSize[0];
+				}
+
+				if ( l_size.height() )
+				{
+					l_changed = !Castor::Policy< double >::equals( l_ptSize[1], l_size.height() / l_totalSize[1] );
+					l_ptSize[1] = l_size.height() / l_totalSize[1];
+				}
+
+				if ( l_changed )
+				{
+					SetSize( l_ptSize );
+				}
+			}
+		}
 	}
 }

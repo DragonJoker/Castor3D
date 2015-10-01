@@ -38,8 +38,8 @@ namespace Castor
 			bool l_bCommented = false;
 			Logger::LogInfo( cuT( "FileParser : Parsing file [" ) + p_file.GetFileName() + cuT( "]" ) );
 			DoInitialiseParser( p_file );
-			m_context->stackSections.push( m_rootSectionId );
-			m_context->ui64Line = 0;
+			m_context->m_sections.push( m_rootSectionId );
+			m_context->m_line = 0;
 			bool l_bReuse = false;
 			String l_strLine;
 			String l_strLine2;
@@ -55,14 +55,14 @@ namespace Castor
 				if ( !l_bReuse )
 				{
 					l_strLine = *l_it++;
-					m_context->ui64Line++;
+					m_context->m_line++;
 				}
 				else
 				{
 					l_bReuse = false;
 				}
 
-				//Logger::LogDebug( string::to_string( m_context->ui64Line ) + cuT( " - " ) + l_strLine.c_str() );
+				//Logger::LogDebug( string::to_string( m_context->m_line ) + cuT( " - " ) + l_strLine.c_str() );
 				string::trim( l_strLine );
 
 				if ( !l_strLine.empty() )
@@ -185,7 +185,7 @@ namespace Castor
 				}
 			}
 
-			if ( m_context->stackSections.top() != m_rootSectionId )
+			if ( m_context->m_sections.top() != m_rootSectionId )
 			{
 				ParseError( cuT( "Unexpected end of file" ) );
 			}
@@ -205,14 +205,14 @@ namespace Castor
 	void FileParser::ParseError( String const & p_strError )
 	{
 		StringStream l_strError;
-		l_strError << cuT( "Error, line #" ) << m_context->ui64Line << cuT( ": " ) << p_strError;
+		l_strError << cuT( "Error, line #" ) << m_context->m_line << cuT( ": " ) << p_strError;
 		Logger::LogError( l_strError.str() );
 	}
 
 	void FileParser::ParseWarning( String const & p_strWarning )
 	{
 		StringStream l_strError;
-		l_strError << cuT( "Warning, line #" ) << m_context->ui64Line << cuT( ": " ) << p_strWarning;
+		l_strError << cuT( "Warning, line #" ) << m_context->m_line << cuT( ": " ) << p_strWarning;
 		Logger::LogWarning( l_strError.str() );
 	}
 
@@ -237,13 +237,13 @@ namespace Castor
 
 		if ( !l_return )
 		{
-			ParseError( cuT( "Directive <" ) + m_context->strFunctionName + cuT( "> needs a <" ) + l_strMissingParam + cuT( "> param that is currently missing" ) );
+			ParseError( cuT( "Directive <" ) + m_context->m_functionName + cuT( "> needs a <" ) + l_strMissingParam + cuT( "> param that is currently missing" ) );
 		}
 
 		return l_return;
 	}
 
-	void FileParser::AddParser( uint32_t p_section, String const & p_name, PParserFunction p_function, uint32_t p_count, ... )
+	void FileParser::AddParser( uint32_t p_section, String const & p_name, ParserFunction p_function, uint32_t p_count, ... )
 	{
 		ParserParameterArray l_params;
 		va_list l_valist;
@@ -385,7 +385,7 @@ namespace Castor
 		AddParser( p_section, p_name, p_function, std::move( l_params ) );
 	}
 
-	void FileParser::AddParser( uint32_t p_section, String const & p_name, PParserFunction p_function, ParserParameterArray && p_params )
+	void FileParser::AddParser( uint32_t p_section, String const & p_name, ParserFunction p_function, ParserParameterArray && p_params )
 	{
 		auto && l_sectionIt = m_parsers.find( p_section );
 
@@ -395,7 +395,7 @@ namespace Castor
 		}
 		else
 		{
-			m_parsers[p_section][p_name] = std::make_pair( p_function, p_params );
+			m_parsers[p_section][p_name] = { p_function, p_params };
 		}
 	}
 
@@ -458,9 +458,9 @@ namespace Castor
 
 		if ( l_bContinue )
 		{
-			if ( !m_context->stackSections.empty() )
+			if ( !m_context->m_sections.empty() )
 			{
-				l_return = DoInvokeParser( p_strLine, m_parsers[m_context->stackSections.top()] );
+				l_return = DoInvokeParser( p_strLine, m_parsers[m_context->m_sections.top()] );
 			}
 			else
 			{
@@ -475,18 +475,18 @@ namespace Castor
 	{
 		bool l_return = false;
 
-		if ( !m_context->stackSections.empty() )
+		if ( !m_context->m_sections.empty() )
 		{
-			AttributeParserMap::const_iterator const & l_iter = m_parsers[m_context->stackSections.top()].find( cuT( "}" ) );
+			AttributeParserMap::const_iterator const & l_iter = m_parsers[m_context->m_sections.top()].find( cuT( "}" ) );
 
-			if ( l_iter == m_parsers[m_context->stackSections.top()].end() )
+			if ( l_iter == m_parsers[m_context->m_sections.top()].end() )
 			{
-				m_context->stackSections.pop();
+				m_context->m_sections.pop();
 				l_return = false;
 			}
 			else
 			{
-				l_return = l_iter->second.first( this, l_iter->second.second );
+				l_return = l_iter->second.m_function( this, l_iter->second.m_params );
 			}
 		}
 
@@ -497,7 +497,7 @@ namespace Castor
 	{
 		bool l_return = false;
 		StringArray l_splitCmd = string::split( p_strLine, cuT( " \t" ), 1, false );
-		m_context->strFunctionName = l_splitCmd[0];
+		m_context->m_functionName = l_splitCmd[0];
 		AttributeParserMap::const_iterator const & l_iter = p_parsers.find( l_splitCmd[0] );
 
 		if ( l_iter == p_parsers.end() )
@@ -513,16 +513,16 @@ namespace Castor
 				l_strParameters = string::trim( l_splitCmd[1] );
 			}
 
-			if ( !CheckParams( l_strParameters, l_iter->second.second.begin(), l_iter->second.second.end() ) )
+			if ( !CheckParams( l_strParameters, l_iter->second.m_params.begin(), l_iter->second.m_params.end() ) )
 			{
 				bool l_ignored = true;
 				std::swap( l_ignored, m_ignored );
-				l_return = l_iter->second.first( this, l_iter->second.second );
+				l_return = l_iter->second.m_function( this, l_iter->second.m_params );
 				std::swap( l_ignored, m_ignored );
 			}
 			else
 			{
-				l_return = l_iter->second.first( this, l_iter->second.second );
+				l_return = l_iter->second.m_function( this, l_iter->second.m_params );
 			}
 		}
 

@@ -35,18 +35,13 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace CastorGui
 {
-	const int DEFAULT_HEIGHT = 25;
-	const Castor::String DEFAULT_FONT_NAME = _T( "Arial" );
-	const uint32_t DEFAULT_FONT_HEIGHT = 11;
+	const Castor::String PLUGIN_NAME = cuT( "CastorGui" );
+	static const uint32_t DEFAULT_HEIGHT = 25;
 	/*!
-	@author
-		Sylvain DOREMUS
-	@date
-		23/05/2012
-	@version
-		1.3.0.0
-	@brief
-		Enumeration of supported controls in a OptionsPanel
+	 *\author		Sylvain DOREMUS
+	 *\date		23/05/2012
+	 *\version		0.1.0
+	 *\brief		Enumeration of supported controls in a OptionsPanel
 	*/
 	typedef enum eCONTROL_TYPE
 		: uint8_t
@@ -67,14 +62,10 @@ namespace CastorGui
 	}	eCONTROL_TYPE;
 
 	/*!
-	@author
-		Sylvain DOREMUS
-	@date
-		06/03/2015
-	@version
-		2.0.0
-	@brief
-		Enumeration of supported combobox events
+	 *\author		Sylvain DOREMUS
+	 *\date		06/03/2015
+	 *\version		0.1.0
+	 *\brief		Enumeration of supported combobox events
 	*/
 	typedef enum eCOMBOBOX_EVENT
 		: uint8_t
@@ -86,14 +77,10 @@ namespace CastorGui
 	}	eCOMBOBOX_EVENT;
 
 	/*!
-	@author
-		Sylvain DOREMUS
-	@date
-		06/03/2015
-	@version
-		2.0.0
-	@brief
-		Enumeration of supported listbox events
+	 *\author		Sylvain DOREMUS
+	 *\date		06/03/2015
+	 *\version		0.1.0
+	 *\brief		Enumeration of supported listbox events
 	*/
 	typedef enum eLISTBOX_EVENT
 		: uint8_t
@@ -105,14 +92,10 @@ namespace CastorGui
 	}	eLISTBOX_EVENT;
 
 	/*!
-	@author
-		Sylvain DOREMUS
-	@date
-		06/03/2015
-	@version
-		2.0.0
-	@brief
-		Enumeration of supported button events
+	 *\author		Sylvain DOREMUS
+	 *\date		06/03/2015
+	 *\version		0.1.0
+	 *\brief		Enumeration of supported button events
 	*/
 	typedef enum eBUTTON_EVENT
 		: uint8_t
@@ -124,14 +107,10 @@ namespace CastorGui
 	}	eBUTTON_EVENT;
 
 	/*!
-	@author
-		Sylvain DOREMUS
-	@date
-		06/03/2015
-	@version
-		2.0.0
-	@brief
-		Enumeration of supported slider events
+	 *\author		Sylvain DOREMUS
+	 *\date		06/03/2015
+	 *\version		0.1.0
+	 *\brief		Enumeration of supported slider events
 	*/
 	typedef enum eSLIDER_EVENT
 		: uint8_t
@@ -145,14 +124,10 @@ namespace CastorGui
 	}	eSLIDER_EVENT;
 
 	/*!
-	@author
-		Sylvain DOREMUS
-	@date
-		06/03/2015
-	@version
-		2.0.0
-	@brief
-		Enumeration of supported edit events
+	 *\author		Sylvain DOREMUS
+	 *\date		06/03/2015
+	 *\version		0.1.0
+	 *\brief		Enumeration of supported edit events
 	*/
 	typedef enum eEDIT_EVENT
 		: uint8_t
@@ -166,14 +141,10 @@ namespace CastorGui
 	}	eEDIT_EVENT;
 
 	/*!
-	@author
-		Sylvain DOREMUS
-	@date
-		11/02/2015
-	@version
-		2.0.0
-	@brief
-		Comb control supported styles
+	 *\author		Sylvain DOREMUS
+	 *\date		11/02/2015
+	 *\version		0.1.0
+	 *\brief		Comb control supported styles
 	*/
 	typedef enum eCOMBO_STYLE
 		: uint32_t
@@ -183,14 +154,10 @@ namespace CastorGui
 	}	eCOMBO_STYLE;
 
 	/*!
-	@author
-		Sylvain DOREMUS
-	@date
-		11/02/2015
-	@version
-		2.0.0
-	@brief
-		Edit control supported styles
+	 *\author		Sylvain DOREMUS
+	 *\date		11/02/2015
+	 *\version		0.1.0
+	 *\brief		Edit control supported styles
 	*/
 	typedef enum eEDIT_STYLE
 		: uint32_t
@@ -206,14 +173,10 @@ namespace CastorGui
 	}	eEDIT_STYLE;
 
 	/*!
-	@author
-		Sylvain DOREMUS
-	@date
-		11/02/2015
-	@version
-		2.0.0
-	@brief
-		Slider control supported styles
+	 *\author		Sylvain DOREMUS
+	 *\date		11/02/2015
+	 *\version		0.1.0
+	 *\brief		Slider control supported styles
 	*/
 	typedef enum eSLIDER_STYLE
 		: uint32_t
@@ -225,14 +188,10 @@ namespace CastorGui
 	}	eSLIDER_STYLE;
 
 	/*!
-	@author
-		Sylvain DOREMUS
-	@date
-		11/02/2015
-	@version
-		2.0.0
-	@brief
-		Static control supported styles
+	 *\author		Sylvain DOREMUS
+	 *\date		11/02/2015
+	 *\version		0.1.0
+	 *\brief		Static control supported styles
 	*/
 	typedef enum eSTATIC_STYLE
 		: uint32_t
@@ -252,14 +211,10 @@ namespace CastorGui
 	}	eSTATIC_STYLE;
 
 	/*!
-	@author
-		Sylvain DOREMUS
-	@date
-		23/05/2012
-	@version
-		1.3.0.0
-	@brief
-		Enumeration of supported GUI events in ControlInfos
+	 *\author		Sylvain DOREMUS
+	 *\date		23/05/2012
+	 *\version		0.1.0
+	 *\brief		Enumeration of supported GUI events in ControlInfos
 	*/
 	typedef enum eGUI_EVENT
 		: uint8_t
@@ -271,14 +226,10 @@ namespace CastorGui
 	}	eGUI_EVENT;
 
 	/*!
-	@author
-		Sylvain DOREMUS
-	@date
-		02/03/2015
-	@version
-		2.0.0
-	@brief
-		Mouse buttons enumeration
+	 *\author		Sylvain DOREMUS
+	 *\date		02/03/2015
+	 *\version		0.1.0
+	 *\brief		Mouse buttons enumeration
 	*/
 	typedef enum eMOUSE_BUTTON
 	{
@@ -293,14 +244,10 @@ namespace CastorGui
 	}	eMOUSE_BUTTON;
 
 	/*!
-	@author
-		Sylvain DOREMUS
-	@date
-		02/03/2015
-	@version
-		2.0.0
-	@brief
-		Keyboard keys enumeration
+	 *\author		Sylvain DOREMUS
+	 *\date		02/03/2015
+	 *\version		0.1.0
+	 *\brief		Keyboard keys enumeration
 	*/
 	typedef enum eKEYBOARD_KEY
 	{
@@ -413,14 +360,10 @@ namespace CastorGui
 	}	eKEYBOARD_KEY;
 
 	/*!
-	@author
-		Sylvain DOREMUS
-	@date
-		10/03/2015
-	@version
-		2.0.0
-	@brief
-		Mouse cursors enumeration
+	 *\author		Sylvain DOREMUS
+	 *\date		10/03/2015
+	 *\version		0.1.0
+	 *\brief		Mouse cursors enumeration
 	*/
 	typedef enum eMOUSE_CURSOR
 	{
@@ -435,14 +378,26 @@ namespace CastorGui
 	}	eMOUSE_CURSOR;
 
 	/*!
-	@author
-		Sylvain DOREMUS
-	@date
-		12/03/2015
-	@version
-		2.0.0
-	@brief
-		Enumeration of supported control events
+	 *\author		Sylvain DOREMUS
+	 *\date		02/03/2015
+	 *\version		0.1.0
+	 *\brief		Supported events enumeration
+	*/
+	typedef enum eEVENT_TYPE
+	{
+		//! Control event type
+		eEVENT_TYPE_CONTROL,
+		//! Mouse event type
+		eEVENT_TYPE_MOUSE,
+		//! Keyboard event type
+		eEVENT_TYPE_KEYBOARD,
+	}	eEVENT_TYPE;
+
+	/*!
+	 *\author		Sylvain DOREMUS
+	 *\date		12/03/2015
+	 *\version		0.1.0
+	 *\brief		Enumeration of supported control events
 	*/
 	typedef enum eCONTROL_EVENT
 		: uint8_t
@@ -456,14 +411,10 @@ namespace CastorGui
 	}	eCONTROL_EVENT;
 
 	/*!
-	@author
-		Sylvain DOREMUS
-	@date
-		02/03/2015
-	@version
-		2.0.0
-	@brief
-		Supported mouse events enumeration
+	 *\author		Sylvain DOREMUS
+	 *\date		02/03/2015
+	 *\version		0.1.0
+	 *\brief		Supported mouse events enumeration
 	*/
 	typedef enum eMOUSE_EVENT
 	{
@@ -486,14 +437,10 @@ namespace CastorGui
 	}	eMOUSE_EVENT;
 
 	/*!
-	@author
-		Sylvain DOREMUS
-	@date
-		02/03/2015
-	@version
-		2.0.0
-	@brief
-		Supported keyboard events enumeration
+	 *\author		Sylvain DOREMUS
+	 *\date		02/03/2015
+	 *\version		0.1.0
+	 *\brief		Supported keyboard events enumeration
 	*/
 	typedef enum eKEYBOARD_EVENT
 	{
@@ -509,6 +456,7 @@ namespace CastorGui
 
 	template< class Derived > class EventHandler;
 	class ControlsManager;
+
 	class Control;
 	class ButtonCtrl;
 	class ComboBoxCtrl;
@@ -516,128 +464,42 @@ namespace CastorGui
 	class ListBoxCtrl;
 	class SliderCtrl;
 	class StaticCtrl;
-	typedef std::vector< std::shared_ptr< Control > > ControlArray;
 
+	class GuiEvent;
+	class ControlEvent;
+	class KeyboardEvent;
+	class MouseEvent;
 
-	/** Creates a panel overlay
-	@param[in] p_engine
-		The engine
-	@param[in] p_name
-		The overlay name
-	@param[in] p_position
-		The overlay position
-	@param[in] p_size
-		The overlay size
-	@param[in] p_material
-		The overlay material
-	@param[in] p_parent
-		The parent overlay
-	@return
-		The created overlay
+	DECLARE_SMART_PTR( ControlsManager );
+	DECLARE_SMART_PTR( Control );
+	DECLARE_SMART_PTR( ButtonCtrl );
+	DECLARE_SMART_PTR( ComboBoxCtrl );
+	DECLARE_SMART_PTR( EditCtrl );
+	DECLARE_SMART_PTR( ListBoxCtrl );
+	DECLARE_SMART_PTR( SliderCtrl );
+	DECLARE_SMART_PTR( StaticCtrl );
+	DECLARE_SMART_PTR( GuiEvent );
+	DECLARE_SMART_PTR( ControlEvent );
+	DECLARE_SMART_PTR( KeyboardEvent );
+	DECLARE_SMART_PTR( MouseEvent );
+
+	typedef std::vector< ControlSPtr > ControlArray;
+
+	/** Creates a colour material.
+	 *\param[in]	p_engine	The engine.
+	 *\param[in]	p_name		The material name.
+	 *\param[in]	p_colour	The material colour.
+	 *\return		The created material.
 	*/
-	Castor3D::PanelOverlaySPtr CreatePanel( Castor3D::Engine * p_engine, Castor::String const & p_name, Castor::Point2d const & p_position, Castor::Point2d const & p_size, Castor3D::MaterialSPtr p_material, Castor3D::OverlaySPtr p_parent = nullptr );
+	Castor3D::MaterialSPtr CreateMaterial( Castor3D::Engine * p_engine, Castor::String const & p_name, Castor::Colour const & p_colour );
 
-	/** Creates a panel overlay
-	@param[in] p_engine
-		The engine
-	@param[in] p_name
-		The overlay name
-	@param[in] p_position
-		The overlay pixel position
-	@param[in] p_size
-		The overlay pixel size
-	@param[in] p_material
-		The overlay material
-	@param[in] p_parent
-		The parent overlay
-	@return
-		The created overlay
+	/** Creates a texture material.
+	 *\param[in]	p_engine	The engine.
+	 *\param[in]	p_name		The material name.
+	 *\param[in]	p_texture	The material texture.
+	 *\return		The created material.
 	*/
-	Castor3D::PanelOverlaySPtr CreatePanel( Castor3D::Engine * p_engine, Castor::String const & p_name, Castor::Position const & p_position, Castor::Size const & p_size, Castor3D::MaterialSPtr p_material, Castor3D::OverlaySPtr p_parent = nullptr );
-
-	/** Creates a border panel overlay
-	@param[in] p_engine
-		The engine
-	@param[in] p_name
-		The overlay name
-	@param[in] p_position
-		The overlay position
-	@param[in] p_size
-		The overlay size
-	@param[in] p_material
-		The overlay material
-	@param[in] p_bordersSize
-		The overlay borders size
-	@param[in] p_bordersMaterial
-		The overlay borders material
-	@param[in] p_parent
-		The parent overlay
-	@return
-		The created overlay
-	*/
-	Castor3D::BorderPanelOverlaySPtr CreateBorderPanel( Castor3D::Engine * p_engine, Castor::String const & p_name, Castor::Point2d const & p_position, Castor::Point2d const & p_size, Castor3D::MaterialSPtr p_material, Castor::Point4d const & p_bordersSize, Castor3D::MaterialSPtr p_bordersMaterial, Castor3D::OverlaySPtr p_parent = nullptr );
-
-	/** Creates a panel overlay
-	@param[in] p_engine
-		The engine
-	@param[in] p_name
-		The overlay name
-	@param[in] p_position
-		The overlay pixel position
-	@param[in] p_size
-		The overlay pixel size
-	@param[in] p_material
-		The overlay material
-	@param[in] p_bordersSize
-		The overlay borders pixel size
-	@param[in] p_bordersMaterial
-		The overlay borders material
-	@param[in] p_parent
-		The parent overlay
-	@return
-		The created overlay
-	*/
-	Castor3D::BorderPanelOverlaySPtr CreateBorderPanel( Castor3D::Engine * p_engine, Castor::String const & p_name, Castor::Position const & p_position, Castor::Size const & p_size, Castor3D::MaterialSPtr p_material, Castor::Rectangle const & p_bordersSize, Castor3D::MaterialSPtr p_bordersMaterial, Castor3D::OverlaySPtr p_parent = nullptr );
-
-	/** Creates a border panel overlay
-	@param[in] p_engine
-		The engine
-	@param[in] p_name
-		The overlay name
-	@param[in] p_position
-		The overlay position
-	@param[in] p_size
-		The overlay size
-	@param[in] p_material
-		The overlay material
-	@param[in] p_font
-		The overlay font
-	@param[in] p_parent
-		The parent overlay
-	@return
-		The created overlay
-	*/
-	Castor3D::TextOverlaySPtr CreateText( Castor3D::Engine * p_engine, Castor::String const & p_name, Castor::Point2d const & p_position, Castor::Point2d const & p_size, Castor3D::MaterialSPtr p_material, Castor::FontSPtr p_font, Castor3D::OverlaySPtr p_parent = nullptr );
-
-	/** Creates a panel overlay
-	@param[in] p_engine
-		The engine
-	@param[in] p_name
-		The overlay name
-	@param[in] p_position
-		The overlay pixel position
-	@param[in] p_size
-		The overlay pixel size
-	@param[in] p_material
-		The overlay material
-	@param[in] p_font
-		The overlay font
-	@param[in] p_parent
-		The parent overlay
-	@return
-		The created overlay
-	*/
-	Castor3D::TextOverlaySPtr CreateText( Castor3D::Engine * p_engine, Castor::String const & p_name, Castor::Position const & p_position, Castor::Size const & p_size, Castor3D::MaterialSPtr p_material, Castor::FontSPtr p_font, Castor3D::OverlaySPtr p_parent = nullptr );
+	Castor3D::MaterialSPtr CreateMaterial( Castor3D::Engine * p_engine, Castor::String const & p_name, Castor3D::TextureBaseSPtr p_texture );
 }
 
 #endif

@@ -1,6 +1,9 @@
 #include "CastorGuiPrerequisites.hpp"
 
 #include <BorderPanelOverlay.hpp>
+#include <Engine.hpp>
+#include <InitialiseEvent.hpp>
+#include <MaterialManager.hpp>
 #include <Overlay.hpp>
 #include <PanelOverlay.hpp>
 #include <TextOverlay.hpp>
@@ -12,65 +15,45 @@ using namespace Castor3D;
 
 namespace CastorGui
 {
-	PanelOverlaySPtr CreatePanel( Engine * p_engine, String const & p_name, Point2d const & p_position, Point2d const & p_size, MaterialSPtr p_material, OverlaySPtr p_parent )
+	MaterialSPtr CreateMaterial( Engine * p_engine, String const & p_name, Colour const & p_colour )
 	{
-		OverlaySPtr l_overlay = p_engine->CreateOverlay( eOVERLAY_TYPE_PANEL, p_name, p_parent, nullptr );
-		l_overlay->SetPosition( p_position );
-		l_overlay->SetSize( p_size );
-		return l_overlay->GetPanelOverlay();
-	}
+		MaterialManager & l_manager = p_engine->GetMaterialManager();
+		MaterialSPtr l_return = l_manager.find( p_name );
 
-	PanelOverlaySPtr CreatePanel( Engine * p_engine, String const & p_name, Position const & p_position, Size const & p_size, MaterialSPtr p_material, OverlaySPtr p_parent )
-	{
-		OverlaySPtr l_overlay = p_engine->CreateOverlay( eOVERLAY_TYPE_PANEL, p_name, p_parent, nullptr );
-		l_overlay->SetPixelPosition( p_position );
-		l_overlay->SetPixelSize( p_size );
-		return l_overlay->GetPanelOverlay();
-	}
+		if ( !l_return )
+		{
+			l_return = std::make_shared< Material >( p_engine, p_name );
+			l_return->CreatePass();
+			p_engine->PostEvent( MakeInitialiseEvent( *l_return ) );
+			l_manager.insert( p_name, l_return );
+		}
 
-	BorderPanelOverlaySPtr CreateBorderPanel( Engine * p_engine, String const & p_name, Point2d const & p_position, Point2d const & p_size, MaterialSPtr p_material, Point4d const & p_bordersSize, MaterialSPtr p_bordersMaterial, OverlaySPtr p_parent )
-	{
-		OverlaySPtr l_overlay = p_engine->CreateOverlay( eOVERLAY_TYPE_BORDER_PANEL, p_name, p_parent, nullptr );
-		l_overlay->SetMaterial( p_material );
-		l_overlay->SetPosition( p_position );
-		l_overlay->SetSize( p_size );
-		BorderPanelOverlaySPtr l_return = l_overlay->GetBorderPanelOverlay();
-		l_return->SetBorderMaterial( p_bordersMaterial );
-		l_return->SetBorderSize( p_bordersSize );
+		l_return->GetPass( 0 )->SetAmbient( p_colour );
 		return l_return;
 	}
 
-	BorderPanelOverlaySPtr CreateBorderPanel( Engine * p_engine, String const & p_name, Position const & p_position, Size const & p_size, MaterialSPtr p_material, Rectangle const & p_bordersSize, MaterialSPtr p_bordersMaterial, OverlaySPtr p_parent )
+	MaterialSPtr CreateMaterial( Engine * p_engine, String const & p_name, TextureBaseSPtr p_texture )
 	{
-		OverlaySPtr l_overlay = p_engine->CreateOverlay( eOVERLAY_TYPE_BORDER_PANEL, p_name, p_parent, nullptr );
-		l_overlay->SetPixelPosition( p_position );
-		l_overlay->SetPixelSize( p_size );
-		l_overlay->SetMaterial( p_material );
-		BorderPanelOverlaySPtr l_return = l_overlay->GetBorderPanelOverlay();
-		l_return->SetBorderMaterial( p_bordersMaterial );
-		l_return->SetBorderPixelSize( p_bordersSize );
-		return l_return;
-	}
+		MaterialManager & l_manager = p_engine->GetMaterialManager();
+		MaterialSPtr l_return = l_manager.find( p_name );
 
-	TextOverlaySPtr CreateText( Engine * p_engine, String const & p_name, Point2d const & p_position, Point2d const & p_size, MaterialSPtr p_material, FontSPtr p_font, OverlaySPtr p_parent )
-	{
-		OverlaySPtr l_overlay = p_engine->CreateOverlay( eOVERLAY_TYPE_TEXT, p_name, p_parent, nullptr );
-		l_overlay->SetMaterial( p_material );
-		TextOverlaySPtr l_return = l_overlay->GetTextOverlay();
-		l_return->SetPosition( p_position );
-		l_return->SetSize( p_size );
-		l_return->SetFont( p_font->GetName() );
-		return l_return;
-	}
+		if ( !l_return )
+		{
+			l_return = std::make_shared< Material >( p_engine, p_name );
+			l_return->CreatePass();
+			p_engine->PostEvent( MakeInitialiseEvent( *l_return ) );
+			l_manager.insert( p_name, l_return );
+		}
 
-	TextOverlaySPtr CreateText( Engine * p_engine, String const & p_name, Position const & p_position, Size const & p_size, MaterialSPtr p_material, FontSPtr p_font, OverlaySPtr p_parent )
-	{
-		OverlaySPtr l_overlay = p_engine->CreateOverlay( eOVERLAY_TYPE_TEXT, p_name, p_parent, nullptr );
-		l_overlay->SetMaterial( p_material );
-		TextOverlaySPtr l_return = l_overlay->GetTextOverlay();
-		l_return->SetPixelPosition( p_position );
-		l_return->SetPixelSize( p_size );
-		l_return->SetFont( p_font->GetName() );
+		PassSPtr l_pass = l_return->GetPass( 0 );
+
+		if ( l_pass->GetTextureUnitsCount() == 0 )
+		{
+			l_pass->AddTextureUnit();
+		}
+
+		TextureUnitSPtr l_unit = l_pass->GetTextureUnit( 0 );
+		l_unit->SetTexture( p_texture );
 		return l_return;
 	}
 }

@@ -1,0 +1,93 @@
+debug_overlays true
+
+font "Arial_11"
+{
+	file "arial.ttf"
+	height 11
+}
+
+gui
+{
+	default_font "Arial_11"
+
+	button "Coin!!"
+	{
+		pixel_position 750 50
+		pixel_size 75 25
+		background "Yellow"
+		foreground "Black"
+		caption "Click Me!!"
+	}
+
+	listbox "TestList"
+	{
+		pixel_position 750 85
+		pixel_size 75 100
+		background "DarkBlue"
+		item "Item 1"
+		item "Item 2"
+		item "Item 3"
+	}
+}
+
+scene "Scene"
+{
+	background_colour 0.5 0.5 0.5 1.0
+	ambient_light 0.5 0.5 0.5 1.0
+
+	scene_node "SunLightNode1"
+	{
+		position  0.0 -1.0 -1.0
+	}
+	light "SunLight1"
+	{
+		parent		"SunLightNode1"
+		type		directional
+		diffuse		0.8 0.8 0.8 1.0
+		specular	1.0 1.0 1.0 1.0
+	}
+
+	scene_node "FinalNode"
+	{
+	}
+	object "FinalPrimitive"
+	{
+		parent "FinalNode"
+		mesh "Mesh"
+		{
+			type torus 40 40 25 50
+		}
+		material "Gray"
+	}
+
+	scene_node "MainCameraNode"
+	{
+		position 0.0 0.0 -100.0
+	}
+	camera "MainCamera"
+	{
+		parent "MainCameraNode"
+		primitive triangles
+		viewport "MainViewport"
+		{
+			type			3d
+			size			screen_size
+			fov_y			45.0
+			aspect_ratio	1.778
+		}
+	}
+}
+
+window "Window"
+{
+	render_target
+	{
+		format		argb32
+		depth		depth24s8
+		size		screen_size
+		scene		"Scene"
+		camera		"MainCamera"
+	}
+	fullscreen	false
+	vsync		true
+}

@@ -78,6 +78,15 @@ namespace Castor3D
 		bool FireEvents( eEVENT_TYPE p_type );
 
 	protected:
+		/**
+		 *\~english
+		 *\brief		Empties the event lists.
+		 *\~french
+		 *\brief		Vide les listes d'évènements.
+		 */
+		virtual void DoFlush(){}
+
+	protected:
 		//!\~english The events arrays	\~french Les tableaux d'évènements
 		std::array< FrameEventPtrArray,	eEVENT_TYPE_COUNT > m_events;
 		//!\~english Mutex to make this class thread safe	\~french Mutex pour rendre cette classe thread safe
