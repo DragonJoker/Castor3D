@@ -14,16 +14,12 @@ using namespace Castor3D;
 
 namespace CastorGui
 {
-	ButtonCtrl::ButtonCtrl( ControlSPtr p_parent, uint32_t p_id )
-		: Control( eCONTROL_TYPE_BUTTON, p_parent, p_id )
+	ButtonCtrl::ButtonCtrl( ControlRPtr p_parent, uint32_t p_id )
+		: ButtonCtrl( p_parent, p_id, cuT( "" ), Position(), Size(), 0, true )
 	{
-		SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
-		EventHandler::Connect( eMOUSE_EVENT_MOUSE_ENTER, std::bind( &ButtonCtrl::OnMouseEnter, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eMOUSE_EVENT_MOUSE_LEAVE, std::bind( &ButtonCtrl::OnMouseLeave, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eMOUSE_EVENT_MOUSE_BUTTON_RELEASED, std::bind( &ButtonCtrl::OnMouseLButtonUp, this, std::placeholders::_1 ) );
 	}
 
-	ButtonCtrl::ButtonCtrl( ControlSPtr p_parent, uint32_t p_id, String const & p_caption, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
+	ButtonCtrl::ButtonCtrl( ControlRPtr p_parent, uint32_t p_id, String const & p_caption, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
 		: Control( eCONTROL_TYPE_BUTTON, p_parent, p_id, p_position, p_size, p_style, p_visible )
 		, m_caption( p_caption )
 	{
@@ -49,14 +45,14 @@ namespace CastorGui
 		}
 	}
 
-	void ButtonCtrl::SetMouseOverBackgroundTexture( Castor3D::TextureBaseSPtr p_texture )
+	void ButtonCtrl::SetMouseOverBackgroundMaterial( MaterialSPtr p_material )
 	{
-		m_mouseOverBackgroundTexture = p_texture;
+		m_mouseOverBackgroundMaterial = p_material;
 	}
 
-	void ButtonCtrl::SetMouseOverForegroundTexture( Castor3D::TextureBaseSPtr p_texture )
+	void ButtonCtrl::SetMouseOverForegroundMaterial( MaterialSPtr p_material )
 	{
-		m_mouseOverForegroundTexture = p_texture;
+		m_mouseOverForegroundMaterial = p_material;
 	}
 
 	void ButtonCtrl::DoCreate()
@@ -68,6 +64,21 @@ namespace CastorGui
 		l_text->SetCaption( m_caption );
 		l_text->SetVisible( DoIsVisible() );
 		m_text = l_text;
+
+		if ( !GetBackgroundMaterial() )
+		{
+			SetBackgroundMaterial( GetEngine()->GetMaterialManager().find( cuT( "Black" ) ) );
+		}
+
+		if ( m_mouseOverBackgroundMaterial.expired() )
+		{
+			m_mouseOverBackgroundMaterial = DoCreateMaterial( GetBackgroundMaterial(), 0.1f );
+		}
+
+		if ( m_mouseOverForegroundMaterial.expired() )
+		{
+			m_mouseOverForegroundMaterial = DoCreateMaterial( GetForegroundMaterial(), -0.1f );
+		}
 	}
 
 	void ButtonCtrl::DoDestroy()
@@ -97,20 +108,19 @@ namespace CastorGui
 
 	void ButtonCtrl::DoSetBackgroundMaterial( MaterialSPtr p_material )
 	{
-		Colour l_colour = p_material->GetPass( 0 )->GetAmbient();
-		m_mouseOverBackgroundColour.red() = std::min( 1.0f, l_colour.red() + 0.1f );
-		m_mouseOverBackgroundColour.green() = std::min( 1.0f, l_colour.green() + 0.1f );
-		m_mouseOverBackgroundColour.blue() = std::min( 1.0f, l_colour.blue() + 0.1f );
-		m_mouseOverBackgroundColour.alpha() = std::min( 1.0f, l_colour.alpha() + 0.1f );
+		if ( GetEngine() )
+		{
+			m_mouseOverBackgroundMaterial = DoCreateMaterial( p_material, 0.1f );
+		}
 	}
 
 	void ButtonCtrl::DoSetForegroundMaterial( MaterialSPtr p_material )
 	{
-		Colour l_colour = p_material->GetPass( 0 )->GetAmbient();
-		m_mouseOverForegroundColour.red() = std::max( 0.0f, l_colour.red() - 0.1f );
-		m_mouseOverForegroundColour.green() = std::max( 0.0f, l_colour.green() - 0.1f );
-		m_mouseOverForegroundColour.blue() = std::max( 0.0f, l_colour.blue() - 0.1f );
-		m_mouseOverForegroundColour.alpha() = std::max( 0.0f, l_colour.alpha() - 0.1f );
+		if ( GetEngine() )
+		{
+			m_mouseOverForegroundMaterial = DoCreateMaterial( p_material, -0.1f );
+		}
+
 		TextOverlaySPtr l_text = m_text.lock();
 
 		if ( l_text )
@@ -132,62 +142,26 @@ namespace CastorGui
 
 	void ButtonCtrl::OnMouseEnter( MouseEvent const & p_event )
 	{
-		m_text.lock()->GetMaterial()->GetPass( 0 )->SetAmbient( m_mouseOverForegroundColour );
+		m_text.lock()->SetMaterial( m_mouseOverForegroundMaterial.lock() );
 		BorderPanelOverlaySPtr l_panel = GetBackground();
 
 		if ( l_panel )
 		{
-			l_panel->GetMaterial()->GetPass( 0 )->SetAmbient( m_mouseOverBackgroundColour );
-			l_panel->GetBorderMaterial()->GetPass( 0 )->SetAmbient( m_mouseOverForegroundColour );
-
-			if ( m_mouseOverBackgroundTexture )
-			{
-				m_backgroundTexture = l_panel->GetMaterial()->GetPass( 0 )->GetTextureUnit( 0 ) ->GetTexture();
-				l_panel->GetMaterial()->GetPass( 0 )->GetTextureUnit( 0 ) ->SetTexture( m_mouseOverBackgroundTexture );
-
-				if ( m_mouseOverForegroundTexture )
-				{
-					m_foregroundTexture = l_panel->GetBorderMaterial()->GetPass( 0 )->GetTextureUnit( 0 ) ->GetTexture();
-					l_panel->GetBorderMaterial()->GetPass( 0 )->GetTextureUnit( 0 ) ->SetTexture( m_mouseOverForegroundTexture );
-				}
-				else
-				{
-					m_foregroundTexture = l_panel->GetBorderMaterial()->GetPass( 0 )->GetTextureUnit( 0 ) ->GetTexture();
-					l_panel->GetBorderMaterial()->GetPass( 0 )->GetTextureUnit( 0 ) ->SetTexture( m_mouseOverBackgroundTexture );
-				}
-			}
-
+			l_panel->SetMaterial( m_mouseOverBackgroundMaterial.lock() );
+			l_panel->SetBorderMaterial( m_mouseOverForegroundMaterial.lock() );
 			l_panel.reset();
 		}
 	}
 
 	void ButtonCtrl::OnMouseLeave( MouseEvent const & p_event )
 	{
-		m_text.lock()->GetMaterial()->GetPass( 0 )->SetAmbient( m_foregroundColour );
+		m_text.lock()->SetMaterial( m_foregroundMaterial.lock() );
 		BorderPanelOverlaySPtr l_panel = GetBackground();
 
 		if ( l_panel )
 		{
-			l_panel->GetMaterial()->GetPass( 0 )->SetAmbient( m_backgroundColour );
-			l_panel->GetBorderMaterial()->GetPass( 0 )->SetAmbient( m_foregroundColour );
-
-			if ( m_backgroundTexture )
-			{
-				l_panel->GetMaterial()->GetPass( 0 )->GetTextureUnit( 0 ) ->SetTexture( m_backgroundTexture );
-
-				if ( m_foregroundTexture )
-				{
-					l_panel->GetBorderMaterial()->GetPass( 0 )->GetTextureUnit( 0 ) ->SetTexture( m_foregroundTexture );
-				}
-				else
-				{
-					l_panel->GetBorderMaterial()->GetPass( 0 )->GetTextureUnit( 0 ) ->SetTexture( m_backgroundTexture );
-				}
-				
-				m_backgroundTexture.reset();
-				m_foregroundTexture.reset();
-			}
-
+			l_panel->SetMaterial( m_backgroundMaterial.lock() );
+			l_panel->SetBorderMaterial( m_foregroundMaterial.lock() );
 			l_panel.reset();
 		}
 	}
@@ -198,5 +172,15 @@ namespace CastorGui
 		{
 			m_signals[eBUTTON_EVENT_CLICKED]();
 		}
+	}
+
+	MaterialSPtr ButtonCtrl::DoCreateMaterial( MaterialSPtr p_material, float p_offset )
+	{
+		Colour l_colour = p_material->GetPass( 0 )->GetAmbient();
+		l_colour.red() = float( l_colour.red() ) + p_offset;
+		l_colour.green() = float( l_colour.green() ) + p_offset;
+		l_colour.blue() = float( l_colour.blue() ) + p_offset;
+		l_colour.alpha() = float( l_colour.alpha() ) + p_offset;
+		return CreateMaterial( GetEngine(), p_material->GetName() + cuT( "_MO" ), l_colour );
 	}
 }

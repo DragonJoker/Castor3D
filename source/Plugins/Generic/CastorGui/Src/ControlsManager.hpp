@@ -44,24 +44,24 @@ namespace CastorGui
 		/** Constructor
 		 *\param[in]	p_engine		The engine
 		*/
-		ControlsManager( Castor3D::Engine * p_engine );
+		C3D_CGui_API ControlsManager( Castor3D::Engine * p_engine );
 
 		/** Destructor
 		*/
-		virtual ~ControlsManager();
+		C3D_CGui_API virtual ~ControlsManager();
 
 		/** Initialises the base materials.
 		 *\return		true, hopefully :P
 		*/
-		bool Initialise();
+		C3D_CGui_API bool Initialise();
 
 		/** Cleans up the manager.
 		*/
-		void Cleanup();
+		C3D_CGui_API void Cleanup();
 
 		/** Handles all queued events
 		*/
-		void ProcessEvents();
+		C3D_CGui_API void ProcessEvents();
 
 		/** Retrieves the current mouse position
 		 *\return		The value
@@ -102,22 +102,22 @@ namespace CastorGui
 		/** Fires a mouse move event
 		 *\param[in]	p_position		The mouse position
 		*/
-		void FireMouseMove( Castor::Position const & p_position );
+		C3D_CGui_API void FireMouseMove( Castor::Position const & p_position );
 
 		/** Fires a mouse pushed event
 		 *\param[in]	p_button		The mouse button
 		*/
-		void FireMouseButtonPushed( eMOUSE_BUTTON p_button );
+		C3D_CGui_API void FireMouseButtonPushed( eMOUSE_BUTTON p_button );
 
 		/** Fires a mouse released event
 		 *\param[in]	p_button		The mouse button
 		*/
-		void FireMouseButtonReleased( eMOUSE_BUTTON p_button );
+		C3D_CGui_API void FireMouseButtonReleased( eMOUSE_BUTTON p_button );
 
 		/** Fires a mouse wheel event
 		 *\param[in]	p_offsets		The mouse wheel offsets (x and y)
 		*/
-		void FireMouseWheel( Castor::Position const & p_offsets );
+		C3D_CGui_API void FireMouseWheel( Castor::Position const & p_offsets );
 
 		//@}
 		/**@name Keyboard events */
@@ -129,7 +129,7 @@ namespace CastorGui
 		 *\param[in]	p_alt		Tells if the Alt key is down
 		 *\param[in]	p_shift		Tells if the Shift key is down
 		*/
-		void FireKeyDown( eKEYBOARD_KEY p_key, bool p_ctrl, bool p_alt, bool p_shift );
+		C3D_CGui_API void FireKeyDown( eKEYBOARD_KEY p_key, bool p_ctrl, bool p_alt, bool p_shift );
 
 		/** Fires a keyboard key up event
 		 *\param[in]	p_key		The key
@@ -137,13 +137,13 @@ namespace CastorGui
 		 *\param[in]	p_alt		Tells if the Alt key is down
 		 *\param[in]	p_shift		Tells if the Shift key is down
 		*/
-		void FireKeyUp( eKEYBOARD_KEY p_key, bool p_ctrl, bool p_alt, bool p_shift );
+		C3D_CGui_API void FireKeyUp( eKEYBOARD_KEY p_key, bool p_ctrl, bool p_alt, bool p_shift );
 
 		/** Fires a printable key event
 		 *\param[in]	p_key		The key
 		 *\param[in]	p_char		The character coorresponding to the key, displayable as is
 		*/
-		void FireChar( eKEYBOARD_KEY p_key, Castor::String const & p_char );
+		C3D_CGui_API void FireChar( eKEYBOARD_KEY p_key, Castor::String const & p_char );
 
 		//@}
 		/**@name Controls management */
@@ -152,28 +152,28 @@ namespace CastorGui
 		/** Creates the given control's overlays and binds its callbacks to appropriate events
 		 *\param[in]	p_control		The control
 		*/
-		void Create( ControlSPtr p_control );
+		C3D_CGui_API void Create( ControlSPtr p_control );
 
 		/** Destroys the given control's overlays and unbinds its callbacks from appropriate events.
 		 *\param[in]	p_control		The control.
 		*/
-		void Destroy( ControlSPtr p_control );
+		C3D_CGui_API void Destroy( ControlSPtr p_control );
 
 		/** Adds a control that can an event target
 		 *\param[in]	p_control		The control
 		*/
-		void AddControl( ControlSPtr p_control );
+		C3D_CGui_API void AddControl( ControlSPtr p_control );
 
 		/** Removes a control
 		 *\param[in]	p_id		The control ID
 		*/
-		void RemoveControl( uint32_t p_id );
+		C3D_CGui_API void RemoveControl( uint32_t p_id );
 
 		/** Retrieves a control
 		 *\param[in]	p_id		The control ID
 		 *\return		The contro
 		*/
-		ControlSPtr GetControl( uint32_t p_id );
+		C3D_CGui_API ControlSPtr GetControl( uint32_t p_id );
 
 		/** Retrieves the active control
 		 *\return		The control

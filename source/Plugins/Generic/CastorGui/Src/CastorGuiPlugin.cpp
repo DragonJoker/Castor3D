@@ -207,9 +207,15 @@ namespace CastorGui
 
 			CreateDefaultParsers( l_return, eSECTION_LISTBOX, &Parser_ListBoxEnd );
 			AddParser( l_return, eSECTION_LISTBOX, cuT( "item" ), &Parser_ListBoxItem, 1, ePARAMETER_TYPE_TEXT );
+			AddParser( l_return, eSECTION_LISTBOX, cuT( "selected_item_background" ), &Parser_ListBoxSelectedItemBackground, 1, ePARAMETER_TYPE_NAME );
+			AddParser( l_return, eSECTION_LISTBOX, cuT( "selected_item_foreground" ), &Parser_ListBoxSelectedItemForeground, 1, ePARAMETER_TYPE_NAME );
+			AddParser( l_return, eSECTION_LISTBOX, cuT( "highlighted_item_background" ), &Parser_ListBoxHighlightedItemBackground, 1, ePARAMETER_TYPE_NAME );
 
 			CreateDefaultParsers( l_return, eSECTION_COMBOBOX, &Parser_ComboBoxEnd );
 			AddParser( l_return, eSECTION_COMBOBOX, cuT( "item" ), &Parser_ComboBoxItem, 1, ePARAMETER_TYPE_TEXT );
+			AddParser( l_return, eSECTION_COMBOBOX, cuT( "selected_item_background" ), &Parser_ComboBoxSelectedItemBackground, 1, ePARAMETER_TYPE_NAME );
+			AddParser( l_return, eSECTION_COMBOBOX, cuT( "selected_item_foreground" ), &Parser_ComboBoxSelectedItemForeground, 1, ePARAMETER_TYPE_NAME );
+			AddParser( l_return, eSECTION_COMBOBOX, cuT( "highlighted_item_background" ), &Parser_ComboBoxHighlightedItemBackground, 1, ePARAMETER_TYPE_NAME );
 
 			CreateDefaultParsers( l_return, eSECTION_STATIC, &Parser_StaticEnd );
 			CreateDefaultParsers( l_return, eSECTION_SLIDER, &Parser_SliderEnd );

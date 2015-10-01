@@ -39,19 +39,12 @@ namespace CastorGui
 		 *\param[in]	p_type		The type.
 		 *\param[in]	p_parent	The parent control, if any.
 		 *\param[in]	p_id		The control ID.
-		 */
-		Control( eCONTROL_TYPE p_type, ControlSPtr p_parent, uint32_t p_id );
-
-		/** Constructor.
-		 *\param[in]	p_type		The type.
-		 *\param[in]	p_parent	The parent control, if any.
-		 *\param[in]	p_id		The control ID.
 		 *\param[in]	p_position	The position.
 		 *\param[in]	p_size		The size.
 		 *\param[in]	p_style		The style.
 		 *\param[in]	p_visible	Initial visibility status.
 		 */
-		Control( eCONTROL_TYPE p_type, ControlSPtr p_parent, uint32_t p_id, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
+		Control( eCONTROL_TYPE p_type, ControlRPtr p_parent, uint32_t p_id, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
 
 		/** Destructor.
 		 */
@@ -185,9 +178,9 @@ namespace CastorGui
 		/** Retrieves the control's parent
 		 *\return		The parent
 		*/
-		inline ControlSPtr GetParent()const
+		inline ControlRPtr GetParent()const
 		{
-			return m_parent.lock();
+			return m_parent;
 		}
 
 		/** Retrieves the control's main overlay (to be the parent of child controls' overlays)
@@ -297,7 +290,7 @@ namespace CastorGui
 
 	protected:
 		//! The parent control, if any
-		ControlWPtr m_parent;
+		ControlRPtr m_parent;
 		//! The cursor when mouse is over this control
 		eMOUSE_CURSOR m_cursor;
 		//! The background material

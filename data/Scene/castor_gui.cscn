@@ -6,6 +6,34 @@ font "Arial_11"
 	height 11
 }
 
+material "DarkerBlue"
+{
+	pass
+	{
+		ambient 0.0 0.0 0.25 1.0
+	}
+}
+
+material "DiffuseMap"
+{
+	pass
+	{
+		ambient 0.0745	0.0745	0.0745 1.0
+		diffuse 0.75164	0.75164	0.75164 1.0
+		emissive 0.0 0.0 0.0 1.0
+		shininess 50.2
+		two_sided true
+
+		texture_unit
+		{
+			image "Texturing/Texturing/Diffuse.bmp"
+			colour 1.0 1.0 1.0 1.0
+			channel colour
+			sampler	"Linear"
+		}
+	}
+}
+
 gui
 {
 	default_font "Arial_11"
@@ -24,9 +52,43 @@ gui
 		pixel_position 750 85
 		pixel_size 75 100
 		background "DarkBlue"
-		item "Item 1"
-		item "Item 2"
-		item "Item 3"
+		foreground "White"
+		selected_item_background "DarkGreen"
+		selected_item_foreground "LightGray"
+		highlighted_item_background "DarkerBlue"
+		item "List Item 1"
+		item "List Item 2"
+		item "List Item 3"
+	}
+
+	combobox "TestCombo"
+	{
+		pixel_position 750 200
+		pixel_size 125 25
+		background "DarkBlue"
+		foreground "White"
+		selected_item_background "DarkGreen"
+		selected_item_foreground "LightGray"
+		highlighted_item_background "DarkerBlue"
+		item "Combo Item 1"
+		item "Combo Item 2"
+		item "Combo Item 3"
+	}
+	
+	edit "TestEdit"
+	{
+		pixel_position 750 240
+		pixel_size 125 50
+		background "White"
+		foreground "DarkBlue"
+	}
+	
+	edit "TextureEdit"
+	{
+		pixel_position 1000 240
+		pixel_size 512 512
+		background "DiffuseMap"
+		foreground "White"
 	}
 }
 

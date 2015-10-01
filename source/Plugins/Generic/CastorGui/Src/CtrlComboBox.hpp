@@ -35,7 +35,7 @@ namespace CastorGui
 		*\param[in]	p_parent		The parent control, if an
 		*\param[in]	p_id		The control ID
 		*/
-		ComboBoxCtrl( ControlSPtr p_parent, uint32_t p_id );
+		ComboBoxCtrl( ControlRPtr p_parent, uint32_t p_id );
 
 		/** Constructor
 		*\param[in]	p_parent		The parent control, if an
@@ -47,7 +47,7 @@ namespace CastorGui
 		*\param[in]	p_style		The styl
 		*\param[in]	p_visible		Initial visibility statu
 		*/
-		ComboBoxCtrl( ControlSPtr p_parent, uint32_t p_id, Castor::StringArray const & p_values, int p_selected, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
+		ComboBoxCtrl( ControlRPtr p_parent, uint32_t p_id, Castor::StringArray const & p_values, int p_selected, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
 
 		/** Constructor
 		*\param[in]	p_parent		The parent control, if an
@@ -71,19 +71,59 @@ namespace CastorGui
 		*/
 		virtual ~ComboBoxCtrl();
 
+		/** Sets the background material for selected item
+		 *\param[in]	p_material		The new value
+		 */
+		void SetSelectedItemBackgroundMaterial( Castor3D::MaterialSPtr p_material );
+
+		/** Sets the foreground material for selected item
+		 *\param[in]	p_material		The new value
+		 */
+		void SetSelectedItemForegroundMaterial( Castor3D::MaterialSPtr p_material );
+
+		/** Sets the background material for an highlighted item
+		 *\param[in]	p_material	The new value
+		 */
+		void SetHighlightedItemBackgroundMaterial( Castor3D::MaterialSPtr p_material );
+
+		/** Sets the background material for an unselected item
+		 *\param[in]	p_material	The new value
+		 */
+		void SetItemBackgroundMaterial( Castor3D::MaterialSPtr p_material );
+
+		/** Retrieves the background material for selected item
+		 *\return		The value
+		 */
+		Castor3D::MaterialSPtr GetSelectedItemBackgroundMaterial()const;
+
+		/** Retrieves the foreground material for selected item
+		 *\return		The value
+		 */
+		Castor3D::MaterialSPtr GetSelectedItemForegroundMaterial()const;
+
+		/** Retrieves the background material for an highlighted item
+		 *\return		The value
+		 */
+		Castor3D::MaterialSPtr GetHighlightedItemBackgroundMaterial()const;
+
+		/** Retrieves the background material for an unselected item
+		 *\return		The value
+		 */
+		Castor3D::MaterialSPtr GetItemBackgroundMaterial()const;
+
 		/** Appends a new item
-		*\param[in]	p_value		The ite
+		*\param[in]	p_value		The item
 		*/
 		void AppendItem( Castor::String  const & p_value );
 
 		/** Removes an item
-		*\param[in]	p_value		The item inde
+		*\param[in]	p_value		The item index
 		*/
 		void RemoveItem( int p_value );
 
 		/** Sets an item text
-		*\param[in]	p_index		The item inde
-		*\param[in]	p_text		The item tex
+		*\param[in]	p_index		The item index
+		*\param[in]	p_text		The item text
 		*/
 		void SetItemText( int p_index, Castor::String const & p_text );
 
@@ -92,29 +132,29 @@ namespace CastorGui
 		void Clear();
 
 		/** Sets the selected item
-		*\param[in]	p_value		The new valu
+		*\param[in]	p_value		The new value
 		*/
 		void SetSelected( int p_value );
 
 		/** Retrieves the items
-		 *\return		The valu
+		 *\return		The value
 		*/
 		Castor::StringArray const & GetItems()const;
 
 		/** Retrieves the items count
-		 *\return		The valu
+		 *\return		The value
 		*/
 		uint32_t GetItemCount()const;
 
 		/** Retrieves the selected item index
-		 *\return		The valu
+		 *\return		The value
 		*/
 		int GetSelected()const;
 
 		/** Connects a function to a combobox event
-		*\param[in]	p_event		The event typ
-		*\param[in]	p_function		The functio
-		 *\return		The internal function index, to be able to disconnect i
+		*\param[in]	p_event			The event type
+		*\param[in]	p_function		The function
+		 *\return		The internal function index, to be able to disconnect it
 		*/
 		inline uint32_t Connect( eCOMBOBOX_EVENT p_event, std::function< void( int ) > p_function )
 		{
@@ -122,8 +162,8 @@ namespace CastorGui
 		}
 
 		/** Disconnects a function from a combobox event
-		*\param[in]	p_event		The event typ
-		*\param[in]	p_index		The function inde
+		*\param[in]	p_event		The event type
+		*\param[in]	p_index		The function index
 		*/
 		inline void Disconnect( eCOMBOBOX_EVENT p_event, uint32_t p_index )
 		{
@@ -164,17 +204,17 @@ namespace CastorGui
 		virtual void DoSetVisible( bool p_visible );
 
 		/** Event raised when an item is selected in the choices listbox
-		*\param[in]	p_selected		The item inde
+		*\param[in]	p_selected		The item index
 		*/
 		void OnSelected( int p_selected );
 
 		/** Event when a keyboard key is pressed
-		*\param[in]	p_event		The keyboard even
+		*\param[in]	p_event		The keyboard event
 		*/
 		void OnKeyDown( KeyboardEvent const & p_event );
 
 		/** Event when a keyboard key is pressed on the active tick or line control
-		*\param[in]	p_event		The keyboard even
+		*\param[in]	p_event		The keyboard event
 		*/
 		void OnNcKeyDown( ControlSPtr p_control, KeyboardEvent const & p_event );
 

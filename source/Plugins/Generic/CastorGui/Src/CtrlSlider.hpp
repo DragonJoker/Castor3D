@@ -37,7 +37,7 @@ namespace CastorGui
 		*\param[in]	p_parent		The parent control, if any
 		*\param[in]	p_id		The control ID
 		*/
-		SliderCtrl( ControlSPtr p_parent, uint32_t p_id );
+		SliderCtrl( ControlRPtr p_parent, uint32_t p_id );
 
 		/** Constructor
 		*\param[in]	p_parent		The parent control, if an
@@ -49,7 +49,7 @@ namespace CastorGui
 		*\param[in]	p_style		The styl
 		*\param[in]	p_visible		Initial visibility statu
 		*/
-		SliderCtrl( ControlSPtr p_parent, uint32_t p_id, Range const & p_range, int p_value, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
+		SliderCtrl( ControlRPtr p_parent, uint32_t p_id, Range const & p_range, int p_value, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
 
 		/** Destructor
 		*/

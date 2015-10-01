@@ -15,13 +15,12 @@ using namespace Castor3D;
 
 namespace CastorGui
 {
-	ListBoxCtrl::ListBoxCtrl( ControlSPtr p_parent, uint32_t p_id )
-		: Control( eCONTROL_TYPE_LIST, p_parent, p_id )
-		, m_selected( -1 )
+	ListBoxCtrl::ListBoxCtrl( ControlRPtr p_parent, uint32_t p_id )
+		: ListBoxCtrl( p_parent, p_id, StringArray(), -1, Position(), Size(), 0, true )
 	{
 	}
 
-	ListBoxCtrl::ListBoxCtrl( ControlSPtr p_parent, uint32_t p_id, StringArray const & p_values, int p_selected, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
+	ListBoxCtrl::ListBoxCtrl( ControlRPtr p_parent, uint32_t p_id, StringArray const & p_values, int p_selected, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
 		: Control( eCONTROL_TYPE_LIST, p_parent, p_id, p_position, p_size, p_style, p_visible )
 		, m_values( p_values )
 		, m_initialValues( p_values )
@@ -204,7 +203,7 @@ namespace CastorGui
 
 	StaticCtrlSPtr ListBoxCtrl::DoCreateItemCtrl( String const & p_value )
 	{
-		StaticCtrlSPtr l_static = std::make_shared< StaticCtrl >( shared_from_this(), p_value, Position(), Size( GetSize().width(), DEFAULT_HEIGHT ), eSTATIC_STYLE_VALIGN_CENTER );
+		StaticCtrlSPtr l_static = std::make_shared< StaticCtrl >( this, p_value, Position(), Size( GetSize().width(), DEFAULT_HEIGHT ), eSTATIC_STYLE_VALIGN_CENTER );
 		l_static->SetCatchesMouseEvents( true );
 		l_static->ConnectNC( eMOUSE_EVENT_MOUSE_ENTER, std::bind( &ListBoxCtrl::OnItemMouseEnter, this, std::placeholders::_1, std::placeholders::_2 ) );
 		l_static->ConnectNC( eMOUSE_EVENT_MOUSE_LEAVE, std::bind( &ListBoxCtrl::OnItemMouseLeave, this, std::placeholders::_1, std::placeholders::_2 ) );
@@ -243,10 +242,10 @@ namespace CastorGui
 
 		if ( !l_material )
 		{
-			Colour l_colour;
-			l_colour.red() = std::min( 1.0f, l_colour.red() / 2.0f );
-			l_colour.green() = std::min( 1.0f, l_colour.green() / 2.0f );
-			l_colour.blue() = std::min( 1.0f, l_colour.blue() / 2.0f );
+			Colour l_colour = GetBackgroundMaterial()->GetPass( 0 )->GetAmbient();
+			l_colour.red() = std::min( 1.0f, float( l_colour.red() ) / 2.0f );
+			l_colour.green() = std::min( 1.0f, float( l_colour.green() ) / 2.0f );
+			l_colour.blue() = std::min( 1.0f, float( l_colour.blue() ) / 2.0f );
 			l_colour.alpha() = 1.0f;
 			SetHighlightedItemBackgroundMaterial( CreateMaterial( GetEngine(), GetBackgroundMaterial()->GetName() + cuT( "_Highlight" ), l_colour ) );
 		}
@@ -291,7 +290,17 @@ namespace CastorGui
 		int i = 0;
 		Colour l_colour = p_material->GetPass( 0 )->GetAmbient();
 		SetItemBackgroundMaterial( p_material );
-		SetHighlightedItemBackgroundMaterial( nullptr );
+
+		if ( GetEngine() )
+		{
+			Colour l_colour;
+			l_colour.red() = std::min( 1.0f, l_colour.red() / 2.0f );
+			l_colour.green() = std::min( 1.0f, l_colour.green() / 2.0f );
+			l_colour.blue() = std::min( 1.0f, l_colour.blue() / 2.0f );
+			l_colour.alpha() = 1.0f;
+			SetHighlightedItemBackgroundMaterial( CreateMaterial( GetEngine(), GetBackgroundMaterial()->GetName() + cuT( "_Highlight" ), l_colour ) );
+		}
+
 		l_colour.alpha() = 0.0;
 		p_material->GetPass( 0 )->SetAmbient( l_colour );
 

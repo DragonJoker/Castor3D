@@ -11,20 +11,12 @@ using namespace Castor3D;
 
 namespace CastorGui
 {
-	SliderCtrl::SliderCtrl( ControlSPtr p_parent, uint32_t p_id )
-		: Control( eCONTROL_TYPE_SLIDER, p_parent, p_id )
-		, m_range( std::make_pair( 0, 100 ) )
-		, m_value( 0 )
-		, m_scrolling( false )
+	SliderCtrl::SliderCtrl( ControlRPtr p_parent, uint32_t p_id )
+		: SliderCtrl( p_parent, p_id, Range( 0, 100 ), 0, Position(), Size(), 0, true )
 	{
-		SetBackgroundBorders( Rectangle() );
-		EventHandler::Connect( eMOUSE_EVENT_MOUSE_MOVE, std::bind( &SliderCtrl::OnMouseMove, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eMOUSE_EVENT_MOUSE_LEAVE, std::bind( &SliderCtrl::OnMouseLeave, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eMOUSE_EVENT_MOUSE_BUTTON_RELEASED, std::bind( &SliderCtrl::OnMouseLButtonUp, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &SliderCtrl::OnKeyDown, this, std::placeholders::_1 ) );
 	}
 
-	SliderCtrl::SliderCtrl( ControlSPtr p_parent, uint32_t p_id, Range const & p_range, int p_value, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
+	SliderCtrl::SliderCtrl( ControlRPtr p_parent, uint32_t p_id, Range const & p_range, int p_value, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
 		: Control( eCONTROL_TYPE_SLIDER, p_parent, p_id, p_position, p_size, p_style, p_visible )
 		, m_range( p_range )
 		, m_value( p_value )
@@ -35,6 +27,22 @@ namespace CastorGui
 		EventHandler::Connect( eMOUSE_EVENT_MOUSE_LEAVE, std::bind( &SliderCtrl::OnMouseLeave, this, std::placeholders::_1 ) );
 		EventHandler::Connect( eMOUSE_EVENT_MOUSE_BUTTON_RELEASED, std::bind( &SliderCtrl::OnMouseLButtonUp, this, std::placeholders::_1 ) );
 		EventHandler::Connect( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &SliderCtrl::OnKeyDown, this, std::placeholders::_1 ) );
+
+		StaticCtrlSPtr l_line = std::make_shared< StaticCtrl >( this, cuT( "" ), Position(), Size() );
+		l_line->SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
+		l_line->SetVisible( DoIsVisible() );
+		l_line->ConnectNC( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &SliderCtrl::OnNcKeyDown, this, std::placeholders::_1, std::placeholders::_2 ) );
+		m_line = l_line;
+
+		StaticCtrlSPtr l_tick = std::make_shared< StaticCtrl >( this, cuT( "" ), Position(), Size() );
+		l_tick->SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
+		l_tick->SetVisible( DoIsVisible() );
+		l_tick->SetCatchesMouseEvents( true );
+		l_tick->ConnectNC( eMOUSE_EVENT_MOUSE_MOVE, std::bind( &SliderCtrl::OnTickMouseMove, this, std::placeholders::_1, std::placeholders::_2 ) );
+		l_tick->ConnectNC( eMOUSE_EVENT_MOUSE_BUTTON_PUSHED, std::bind( &SliderCtrl::OnTickMouseLButtonDown, this, std::placeholders::_1, std::placeholders::_2 ) );
+		l_tick->ConnectNC( eMOUSE_EVENT_MOUSE_BUTTON_RELEASED, std::bind( &SliderCtrl::OnTickMouseLButtonUp, this, std::placeholders::_1, std::placeholders::_2 ) );
+		l_tick->ConnectNC( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &SliderCtrl::OnNcKeyDown, this, std::placeholders::_1, std::placeholders::_2 ) );
+		m_tick = l_tick;
 	}
 
 	SliderCtrl::~SliderCtrl()
@@ -104,28 +112,15 @@ namespace CastorGui
 
 	void SliderCtrl::DoCreate()
 	{
-		StaticCtrlSPtr l_line = std::make_shared< StaticCtrl >( shared_from_this(), cuT( "" ), Position(), Size() );
+		StaticCtrlSPtr l_line = m_line.lock();
 		l_line->SetBackgroundMaterial( GetEngine()->GetMaterialManager().find( cuT( "Gray" ) ) );
 		l_line->SetForegroundMaterial( GetForegroundMaterial() );
-		l_line->SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
-		l_line->SetVisible( DoIsVisible() );
-		l_line->ConnectNC( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &SliderCtrl::OnNcKeyDown, this, std::placeholders::_1, std::placeholders::_2 ) );
 		GetControlsManager()->Create( l_line );
-		m_line = l_line;
 
-		StaticCtrlSPtr l_tick = std::make_shared< StaticCtrl >( shared_from_this(), cuT( "" ), Position(), Size() );
+		StaticCtrlSPtr l_tick = m_tick.lock();
 		l_tick->SetBackgroundMaterial( GetEngine()->GetMaterialManager().find( cuT( "White" ) ) );
 		l_tick->SetForegroundMaterial( GetForegroundMaterial() );
-		l_tick->SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
-		l_tick->SetVisible( DoIsVisible() );
-		l_tick->SetCatchesMouseEvents( true );
-		l_tick->ConnectNC( eMOUSE_EVENT_MOUSE_MOVE, std::bind( &SliderCtrl::OnTickMouseMove, this, std::placeholders::_1, std::placeholders::_2 ) );
-		l_tick->ConnectNC( eMOUSE_EVENT_MOUSE_BUTTON_PUSHED, std::bind( &SliderCtrl::OnTickMouseLButtonDown, this, std::placeholders::_1, std::placeholders::_2 ) );
-		l_tick->ConnectNC( eMOUSE_EVENT_MOUSE_BUTTON_RELEASED, std::bind( &SliderCtrl::OnTickMouseLButtonUp, this, std::placeholders::_1, std::placeholders::_2 ) );
-		l_tick->ConnectNC( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &SliderCtrl::OnNcKeyDown, this, std::placeholders::_1, std::placeholders::_2 ) );
 		GetControlsManager()->Create( l_tick );
-		m_tick = l_tick;
-
 		DoUpdateLineAndTick();
 	}
 

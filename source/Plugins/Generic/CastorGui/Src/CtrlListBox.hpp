@@ -35,7 +35,7 @@ namespace CastorGui
 		 *\param[in]	p_parent	The parent control, if any
 		 *\param[in]	p_id		The control ID
 		 */
-		ListBoxCtrl( ControlSPtr p_parent, uint32_t p_id );
+		ListBoxCtrl( ControlRPtr p_parent, uint32_t p_id );
 
 		/** Constructor
 		 *\param[in]	p_parent		The parent control, if any
@@ -47,7 +47,7 @@ namespace CastorGui
 		 *\param[in]	p_style			The style
 		 *\param[in]	p_visible		Initial visibility status
 		 */
-		ListBoxCtrl( ControlSPtr p_parent, uint32_t p_id, Castor::StringArray const & p_values, int p_selected, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
+		ListBoxCtrl( ControlRPtr p_parent, uint32_t p_id, Castor::StringArray const & p_values, int p_selected, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
 
 		/** Constructor
 		 *\param[in]	p_parent		The parent control, if any

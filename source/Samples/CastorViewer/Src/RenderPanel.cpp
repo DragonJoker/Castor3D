@@ -16,6 +16,10 @@
 #include <WindowHandle.hpp>
 #include <Utils.hpp>
 
+#if HAS_CASTORGUI
+#	include <ControlsManager.hpp>
+#endif
+
 #define ID_NEW_WINDOW 10000
 
 using namespace Castor3D;
@@ -23,6 +27,44 @@ using namespace Castor;
 
 namespace CastorViewer
 {
+#if HAS_CASTORGUI
+	namespace
+	{
+		CastorGui::eKEYBOARD_KEY ConvertKeyCode( int p_code )
+		{
+			CastorGui::eKEYBOARD_KEY l_return = CastorGui::eKEYBOARD_KEY_NONE;
+
+			if ( p_code < 0x20 )
+			{
+				switch ( p_code )
+				{
+				case WXK_BACK:
+				case WXK_TAB:
+				case WXK_RETURN:
+				case WXK_ESCAPE:
+					l_return = CastorGui::eKEYBOARD_KEY( p_code );
+					break;
+				}
+			}
+			else if ( p_code == 0x7F )
+			{
+				l_return = CastorGui::eKEY_DELETE;
+			}
+			else if ( p_code > 0xFF )
+			{
+				l_return = CastorGui::eKEYBOARD_KEY( p_code + CastorGui::eKEY_START - WXK_START );
+			}
+			else
+			{
+				// ASCII or extended ASCII character
+				l_return = CastorGui::eKEYBOARD_KEY( p_code );
+			}
+
+			return l_return;
+		}
+	}
+#endif
+
 	RenderPanel::RenderPanel( wxWindow * parent, wxWindowID p_id, wxPoint const & pos, wxSize const & size, long style )
 		: wxPanel( parent, p_id, pos, size, style )
 		, m_mouseLeftDown( false )
@@ -37,6 +79,7 @@ namespace CastorViewer
 		, m_oldY( 0.0 )
 		, m_eCameraMode( eCAMERA_MODE_FIXED )
 		, m_rFpCamSpeed( 2.0 )
+		, m_controlsManager( nullptr )
 	{
 		for ( int i = 0; i < eTIMER_ID_COUNT; i++ )
 		{
@@ -102,6 +145,10 @@ namespace CastorViewer
 					m_pRenderWindow = p_pWindow;
 					m_pKeyboardEvent = std::make_shared< KeyboardEvent >( p_pWindow );
 				}
+
+#if HAS_CASTORGUI
+				m_controlsManager = &static_cast< CastorGui::ControlsManager & >( p_pWindow->GetEngine()->GetFrameListener( CastorGui::PLUGIN_NAME ) );
+#endif
 			}
 		}
 	}
@@ -202,6 +249,7 @@ namespace CastorViewer
 		EVT_KILL_FOCUS( RenderPanel::OnKillFocus )
 		EVT_KEY_DOWN( RenderPanel::OnKeyDown )
 		EVT_KEY_UP( RenderPanel::OnKeyUp )
+		EVT_CHAR( RenderPanel::OnChar )
 		EVT_LEFT_DCLICK( RenderPanel::OnMouseLDClick )
 		EVT_LEFT_DOWN( RenderPanel::OnMouseLDown )
 		EVT_LEFT_UP( RenderPanel::OnMouseLUp )
@@ -358,6 +406,13 @@ namespace CastorViewer
 			break;
 		}
 
+#if HAS_CASTORGUI
+		if ( m_controlsManager )
+		{
+			m_controlsManager->FireKeyDown( ConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() );
+		}
+#endif
+
 		p_event.Skip();
 	}
 
@@ -402,7 +457,27 @@ namespace CastorViewer
 			break;
 		}
 
+#if HAS_CASTORGUI
+		if ( m_controlsManager )
+		{
+			m_controlsManager->FireKeyUp( ConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() );
+		}
+#endif
+
 		p_event.Skip();
+	}
+
+	void RenderPanel::OnChar( wxKeyEvent & p_event )
+	{
+#if HAS_CASTORGUI
+		if ( m_controlsManager )
+		{
+			wxChar l_key = p_event.GetUnicodeKey();
+			wxString l_tmp;
+			l_tmp << l_key;
+			m_controlsManager->FireChar( ConvertKeyCode( p_event.GetKeyCode() ), String( l_tmp.mb_str( wxConvUTF8 ) ) );
+		}
+#endif
 	}
 
 	void RenderPanel::OnMouseLDClick( wxMouseEvent & p_event )
@@ -421,6 +496,14 @@ namespace CastorViewer
 		SetCursor( *m_pCursorNone );
 		m_oldX = real( p_event.GetX() );
 		m_oldY = real( p_event.GetY() );
+
+#if HAS_CASTORGUI
+		if ( m_controlsManager )
+		{
+			m_controlsManager->FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_LEFT );
+		}
+#endif
+
 		p_event.Skip();
 	}
 
@@ -428,6 +511,14 @@ namespace CastorViewer
 	{
 		m_mouseLeftDown = false;
 		SetCursor( *m_pCursorArrow );
+
+#if HAS_CASTORGUI
+		if ( m_controlsManager )
+		{
+			m_controlsManager->FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_LEFT );
+		}
+#endif
+
 		p_event.Skip();
 	}
 
@@ -436,12 +527,28 @@ namespace CastorViewer
 		m_mouseMiddleDown = true;
 		m_oldX = real( p_event.GetX() );
 		m_oldY = real( p_event.GetY() );
+
+#if HAS_CASTORGUI
+		if ( m_controlsManager )
+		{
+			m_controlsManager->FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_MIDDLE );
+		}
+#endif
+
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnMouseMUp( wxMouseEvent & p_event )
 	{
 		m_mouseMiddleDown = false;
+
+#if HAS_CASTORGUI
+		if ( m_controlsManager )
+		{
+			m_controlsManager->FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_MIDDLE );
+		}
+#endif
+
 		p_event.Skip();
 	}
 
@@ -451,6 +558,14 @@ namespace CastorViewer
 		SetCursor( *m_pCursorNone );
 		m_oldX = real( p_event.GetX() );
 		m_oldY = real( p_event.GetY() );
+
+#if HAS_CASTORGUI
+		if ( m_controlsManager )
+		{
+			m_controlsManager->FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_RIGHT );
+		}
+#endif
+
 		p_event.Skip();
 	}
 
@@ -458,6 +573,14 @@ namespace CastorViewer
 	{
 		m_mouseRightDown = false;
 		SetCursor( *m_pCursorArrow );
+
+#if HAS_CASTORGUI
+		if ( m_controlsManager )
+		{
+			m_controlsManager->FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_RIGHT );
+		}
+#endif
+
 		p_event.Skip();
 	}
 
@@ -494,6 +617,13 @@ namespace CastorViewer
 			p_event.Skip();
 		}
 
+#if HAS_CASTORGUI
+		if ( m_controlsManager )
+		{
+			m_controlsManager->FireMouseMove( Position( m_x, m_y ) );
+		}
+#endif
+
 		m_oldX = m_x;
 		m_oldY = m_y;
 	}
@@ -510,6 +640,13 @@ namespace CastorViewer
 		{
 			m_rFpCamSpeed /= real( 0.9 );
 		}
+
+#if HAS_CASTORGUI
+		if ( m_controlsManager )
+		{
+			m_controlsManager->FireMouseWheel( Position( 0, l_wheelRotation ) );
+		}
+#endif
 
 		p_event.Skip();
 	}
