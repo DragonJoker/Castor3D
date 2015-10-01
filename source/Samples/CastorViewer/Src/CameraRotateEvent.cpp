@@ -24,9 +24,9 @@ namespace CastorViewer
 
 		if ( l_node )
 		{
-			l_node->Rotate( Quaternion( Angle::FromDegrees( 0.0/*m_dy*/ ), Angle::FromDegrees( m_dx ), Angle::FromDegrees( 0.0/*m_dz*/ ) ) );
-			g_cumul += m_dx;
-			Logger::LogDebug( StringStream() << cuT( "Cumul: " ) << g_cumul << cuT( " - Dx: " ) << m_dx << cuT( " - Orientation: " ) << l_node->GetOrientation() );
+			l_node->Rotate( Quaternion( Angle::FromDegrees( /*m_dx*/0.0 ), Angle::FromDegrees( m_dy ), Angle::FromDegrees( /*m_dz*/0.0 ) ) );
+			g_cumul += m_dy;
+			Logger::LogDebug( StringStream() << cuT( "Cumul: " ) << g_cumul << cuT( " - Dy: " ) << m_dy << cuT( " - Orientation: " ) << l_node->GetOrientation() );
 		}
 
 		m_dx = 0;
