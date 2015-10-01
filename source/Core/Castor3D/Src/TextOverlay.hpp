@@ -167,15 +167,6 @@ namespace Castor3D
 		void SetFont( Castor::String const & p_strFont );
 		/**
 		 *\~english
-		 *\brief		Sets the material
-		 *\param[in]	p_pMaterial	The new value
-		 *\~french
-		 *\brief		Définit le matériau
-		 *\param[in]	p_pMaterial	La nouvelle valeur
-		 */
-		virtual void SetMaterial( MaterialSPtr p_pMaterial );
-		/**
-		 *\~english
 		 *\brief		Retrieves the font name
 		 *\return		The value
 		 *\~french
@@ -241,7 +232,7 @@ namespace Castor3D
 		inline void SetCaption( Castor::String const & p_strCaption )
 		{
 			m_strCaption = p_strCaption;
-			m_changed = true;
+			m_textChanged = true;
 		}
 		/**
 		 *\~english
@@ -253,8 +244,8 @@ namespace Castor3D
 		 */
 		inline void SetTextWrappingMode( eTEXT_WRAPPING_MODE p_mode )
 		{
+			m_textChanged |= m_wrappingMode != p_mode;
 			m_wrappingMode = p_mode;
-			m_changed = true;
 		}
 		/**
 		 *\~english
@@ -302,7 +293,7 @@ namespace Castor3D
 		*/
 		inline void SetHAlign( eHALIGN p_align )
 		{
-			m_changed = m_hAlign != p_align;
+			m_textChanged |= m_hAlign != p_align;
 			m_hAlign = p_align;
 		}
 		/**
@@ -315,52 +306,42 @@ namespace Castor3D
 		*/
 		inline void SetVAlign( eVALIGN p_align )
 		{
-			m_changed = m_vAlign != p_align;
+			m_textChanged |= m_vAlign != p_align;
 			m_vAlign = p_align;
 		}
 
 	protected:
 		/**
-		 *\~english
-		 *\brief		Draws the overlay
-		 *\param[in]	p_renderer	The renderer used to draw this overlay
-		 *\~french
-		 *\brief		Dessine l'incrustation
-		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation
+		 *\copydoc		Castor3D::OverlayCategory::DoRender.
 		 */
 		virtual void DoRender( OverlayRendererSPtr p_renderer );
 		/**
-		 *\~english
-		 *\brief		Updates the vertex buffer
-		 *\param[in]	p_renderer	The renderer used to draw this overlay
-		 *\~french
-		 *\brief		Met à jour le tampon de sommets
-		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation
+		 *\copydoc		Castor3D::OverlayCategory::DoUpdateBuffer.
 		 */
-		virtual void DoUpdate( OverlayRendererSPtr p_renderer );
+		virtual void DoUpdateBuffer( Castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Adds a word to the vertex buffer.
-		 *\param[in]	p_renderer	The renderer used to draw this overlay.
-		 *\param[in]	p_word		The word to add.
-		 *\param[in]	p_wordWidth	The word width.
-		 *\param[in]	p_position	The word position.
-		 *\param[in]	p_size		The overlay size.
-		 *\param[out]	p_lineWidth	The line width.
-		 *\param[out]	p_lineVtx	The line.
-		 *\param[out]	p_linesVtx	The lines.
+		 *\param[in]	p_renderSize	The render size.
+		 *\param[in]	p_word			The word to add.
+		 *\param[in]	p_wordWidth		The word width.
+		 *\param[in]	p_position		The word position.
+		 *\param[in]	p_size			The overlay size.
+		 *\param[out]	p_lineWidth		The line width.
+		 *\param[out]	p_lineVtx		The line.
+		 *\param[out]	p_linesVtx		The lines.
 		 *\~french
 		 *\brief		Ajoute un mot au tampon de sommets.
-		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation.
-		 *\param[in]	p_word		Le mot à ajouter.
-		 *\param[in]	p_wordWidth	La largeur du mot.
-		 *\param[in]	p_position	La position du mot.
-		 *\param[in]	p_size		La taille de l'incrustation.
-		 *\param[out]	p_lineWidth	La largeur de la ligne.
-		 *\param[out]	p_lineVtx	La ligne.
-		 *\param[out]	p_linesVtx	Les lignes.
+		 *\param[in]	p_renderSize	Les dimensions de la zone de rendu.
+		 *\param[in]	p_word			Le mot à ajouter.
+		 *\param[in]	p_wordWidth		La largeur du mot.
+		 *\param[in]	p_position		La position du mot.
+		 *\param[in]	p_size			La taille de l'incrustation.
+		 *\param[out]	p_lineWidth		La largeur de la ligne.
+		 *\param[out]	p_lineVtx		La ligne.
+		 *\param[out]	p_linesVtx		Les lignes.
 		 */
-		void DoWriteWord( OverlayRendererSPtr p_renderer, Castor::String const & p_word, double p_wordWidth, Castor::Point2d const & p_size, Castor::Point2d & p_position, double & p_lineWidth, OverlayCategory::VertexArray & p_lineVtx, std::vector< OverlayCategory::VertexArray > & p_linesVtx );
+		void DoWriteWord( Castor::Size const & p_renderSize, Castor::String const & p_word, double p_wordWidth, Castor::Point2d const & p_size, Castor::Point2d & p_position, double & p_lineWidth, OverlayCategory::VertexArray & p_lineVtx, std::vector< OverlayCategory::VertexArray > & p_linesVtx );
 		/**
 		 *\~english
 		 *\brief		Horizontally align a line.
@@ -411,6 +392,8 @@ namespace Castor3D
 		eHALIGN m_hAlign;
 		//!\~english The vertical alignment.	\~french L'alignement vertical du texte.
 		eVALIGN m_vAlign;
+		//!\~english Tells if the text (caption, wrap mode, or alignments) has changed.	\~french Dit si le texte (contenu, mode de découpe, alignements) a changé.
+		bool m_textChanged;
 	};
 }
 

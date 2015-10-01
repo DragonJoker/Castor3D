@@ -71,12 +71,10 @@ namespace Castor3D
 		p_renderer->DrawPanel( *this );
 	}
 
-	void PanelOverlay::DoUpdate( OverlayRendererSPtr p_renderer )
+	void PanelOverlay::DoUpdateBuffer( Size const & p_size )
 	{
-		int l_zIndex = 0;
-		Size l_screenSize = p_renderer->GetSize();
-		Position l_pos = GetAbsolutePosition( l_screenSize );
-		Size l_size = GetAbsoluteSize( l_screenSize );
+		Position l_pos = GetAbsolutePosition( p_size );
+		Size l_size = GetAbsoluteSize( p_size );
 
 		int32_t l_centerL = l_pos.x();
 		int32_t l_centerT = l_pos.y();

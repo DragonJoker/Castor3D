@@ -525,7 +525,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 		{
 			for ( auto && l_itParsers : l_itSections.second )
 			{
-				AddParser( l_itSections.first, l_itParsers.first, l_itParsers.second.first, std::move( l_itParsers.second.second ) );
+				AddParser( l_itSections.first, l_itParsers.first, l_itParsers.second.m_function, std::move( l_itParsers.second.m_params ) );
 			}
 		}
 	}
@@ -552,7 +552,7 @@ void SceneFileParser::DoCleanupParser()
 void SceneFileParser::DoDiscardParser( String const & p_strLine )
 {
 	String l_strWarning;
-	l_strWarning + cuT( "Parser not found @ line #" ) + string::to_string( m_context->ui64Line ) + cuT( " : " ) + p_strLine;
+	l_strWarning + cuT( "Parser not found @ line #" ) + string::to_string( m_context->m_line ) + cuT( " : " ) + p_strLine;
 	Logger::LogError( l_strWarning );
 }
 

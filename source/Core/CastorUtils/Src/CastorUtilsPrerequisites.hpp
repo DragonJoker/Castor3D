@@ -142,6 +142,7 @@ namespace Castor
 	class FileParser;
 	class FileParserContext;
 	class Font;
+	class FontManager;
 	class Glyph;
 	class Image;
 	class Colour;

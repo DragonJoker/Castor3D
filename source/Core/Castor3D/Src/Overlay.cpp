@@ -88,7 +88,7 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						l_overlay = m_engine->CreateOverlay( l_type, cuT( "" ), p_obj.shared_from_this(), p_obj.GetScene() );
+						l_overlay = m_engine->GetOverlayManager().CreateOverlay( l_type, cuT( "" ), p_obj.shared_from_this(), p_obj.GetScene() );
 						l_return = Overlay::BinaryParser( m_path, m_engine ).Parse( *l_overlay, l_chunk );
 					}
 
@@ -153,7 +153,6 @@ namespace Castor3D
 	{
 		if ( IsVisible() )
 		{
-			m_pOverlayCategory->UpdatePositionAndSize();
 			m_pOverlayCategory->Render();
 
 			for ( auto && l_overlay : m_overlays )

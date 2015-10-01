@@ -1984,8 +1984,8 @@ namespace Castor3D
 	DECLARE_VECTOR( RenderBufferSPtr, RenderBufferPtr );
 	//! FrameEvent pointer array
 	DECLARE_VECTOR( FrameEventSPtr, FrameEventPtr );
-	//! FrameListener pointer array
-	DECLARE_VECTOR( FrameListenerSPtr, FrameListenerPtr );
+	//! FrameListener pointer map, sorted by name
+	DECLARE_MAP( Castor::String, FrameListenerSPtr, FrameListenerPtrStr );
 	//! RenderWindow pointer map, sorted by index
 	DECLARE_MAP( uint32_t, RenderWindowSPtr, RenderWindow );
 	//! Plugin map, sorted by name
@@ -1997,18 +1997,8 @@ namespace Castor3D
 	DECLARE_COLLECTION( Scene, Castor::String, Scene );
 	DECLARE_COLLECTION( Animation, Castor::String, Animation );
 	DECLARE_COLLECTION( Mesh, Castor::String, Mesh );
-	DECLARE_COLLECTION( Overlay, Castor::String, Overlay );
 	DECLARE_COLLECTION( Material, Castor::String, Material );
 	DECLARE_COLLECTION( Castor::Image, Castor::String, Image );
-	DECLARE_COLLECTION( Castor::Font, Castor::String, Font );
-
-	DECLARE_SMART_PTR( SceneCollection );
-	DECLARE_SMART_PTR( AnimationCollection );
-	DECLARE_SMART_PTR( MeshCollection );
-	DECLARE_SMART_PTR( OverlayCollection );
-	DECLARE_SMART_PTR( MaterialCollection );
-	DECLARE_SMART_PTR( ImageCollection );
-	DECLARE_SMART_PTR( FontCollection );
 
 	DECLARE_ARRAY( RendererPluginSPtr, eRENDERER_TYPE_COUNT, RendererPtr );
 	DECLARE_ARRAY( PluginStrMap, ePLUGIN_TYPE_COUNT, PluginStrMap );

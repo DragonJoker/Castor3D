@@ -36,11 +36,11 @@ namespace Castor3D
 	\brief		Collection d'incrustations, avec des fonctions additionnelles d'ajout et de suppression pour gérer les Z-Index
 	*/
 	class C3D_API OverlayManager
-		: private OverlayCollection
+		: private Castor::Collection< Overlay, Castor::String >
 	{
 	public:
-		typedef OverlayCollectionIt iterator;
-		typedef OverlayCollectionConstIt const_iterator;
+		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapIt iterator;
+		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapConstIt const_iterator;
 
 	public:
 		/**
@@ -63,20 +63,192 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Vide les listes d'incrustations
 		 */
-		void ClearOverlays();
+		void Clear();
+		/**
+		 *\~english
+		 *\brief		Cleans all overlays up.
+		 *\~french
+		 *\brief		Nettoie les incrustations.
+		 */
+		void Cleanup();
+		/**
+		 *\~english
+		 *\brief		Creates a panel overlay.
+		 *\remarks		Posts the intialisation event to the engine.
+		 *\param[in]	p_name		The overlay name.
+		 *\param[in]	p_position	The position, relative to parent, or screen, if no parent.
+		 *\param[in]	p_size		The size, relative to parent, or screen, if no parent.
+		 *\param[in]	p_material	The overlay material.
+		 *\param[in]	p_parent	The parent overlay.
+		 *\return		The created overlay.
+		 *\~french
+		 *\brief		Crée une incrustation panneau.
+		 *\remarks		Poste l'évènement d'initialisation au moteur.
+		 *\param[in]	p_name		Le nom de l'incrustation.
+		 *\param[in]	p_position	La position relative au parent, ou à l'écran, si pas de parent.
+		 *\param[in]	p_size		La taille relative au parent, ou à l'écran, si pas de parent.
+		 *\param[in]	p_material	Le matériau de l'incrustation.
+		 *\param[in]	p_parent	L'incrustation parente.
+		 *\return		L'incrustation ainsi créée.
+		 */
+		PanelOverlaySPtr CreatePanel( Castor::String const & p_name, Castor::Point2d const & p_position, Castor::Point2d const & p_size, MaterialSPtr p_material, OverlaySPtr p_parent = nullptr );
+		/**
+		 *\~english
+		 *\brief		Creates a panel overlay.
+		 *\remarks		Posts the intialisation event to the engine.
+		 *\param[in]	p_name		The overlay name.
+		 *\param[in]	p_position	The position in pixels, inside the parent, or screen if no parent.
+		 *\param[in]	p_size		The absolute size in pixels.
+		 *\param[in]	p_material	The overlay material.
+		 *\param[in]	p_parent	The parent overlay.
+		 *\return		The created overlay.
+		 *\~french
+		 *\brief		Crée une incrustation panneau.
+		 *\remarks		Poste l'évènement d'initialisation au moteur.
+		 *\param[in]	p_name		Le nom de l'incrustation.
+		 *\param[in]	p_position	La position en pixels, dans le parent, ou l'écran, si pas de parent.
+		 *\param[in]	p_size		La taille absolue, en pixels.
+		 *\param[in]	p_material	Le matériau de l'incrustation.
+		 *\param[in]	p_parent	L'incrustation parente.
+		 *\return		L'incrustation ainsi créée.
+		 */
+		PanelOverlaySPtr CreatePanel( Castor::String const & p_name, Castor::Position const & p_position, Castor::Size const & p_size, MaterialSPtr p_material, OverlaySPtr p_parent = nullptr );
+		/**
+		 *\~english
+		 *\brief		Creates a border panel overlay.
+		 *\remarks		Posts the intialisation event to the engine.
+		 *\param[in]	p_name				The overlay name.
+		 *\param[in]	p_position			The position, relative to parent, or screen, if no parent.
+		 *\param[in]	p_size				The size, relative to parent, or screen, if no parent.
+		 *\param[in]	p_material			The overlay material.
+		 *\param[in]	p_bordersSize		The overlay borders size.
+		 *\param[in]	p_bordersMaterial	The overlay borders material.
+		 *\param[in]	p_parent			The parent overlay.
+		 *\return		The created overlay.
+		 *\~french
+		 *\brief		Crée une incrustation panneau borduré.
+		 *\remarks		Poste l'évènement d'initialisation au moteur.
+		 *\param[in]	p_name				Le nom de l'incrustation.
+		 *\param[in]	p_position			La position relative au parent, ou à l'écran, si pas de parent.
+		 *\param[in]	p_size				La taille relative au parent, ou à l'écran, si pas de parent.
+		 *\param[in]	p_material			Le matériau de l'incrustation.
+		 *\param[in]	p_bordersSize		Les dimensions des bords de l'incrustation.
+		 *\param[in]	p_bordersMaterial	Le matériau des bordures de l'incrustation.
+		 *\param[in]	p_parent			L'incrustation parente.
+		 *\return		L'incrustation ainsi créée.
+		 */
+		BorderPanelOverlaySPtr CreateBorderPanel( Castor::String const & p_name, Castor::Point2d const & p_position, Castor::Point2d const & p_size, MaterialSPtr p_material, Castor::Point4d const & p_bordersSize, MaterialSPtr p_bordersMaterial, OverlaySPtr p_parent = nullptr );
+		/**
+		 *\~english
+		 *\brief		Creates a panel overlay.
+		 *\remarks		Posts the intialisation event to the engine.
+		 *\param[in]	p_name				The overlay name.
+		 *\param[in]	p_position			The position in pixels, inside the parent, or screen if no parent.
+		 *\param[in]	p_size				The absolute size in pixels.
+		 *\param[in]	p_material			The overlay material.
+		 *\param[in]	p_bordersSize		The overlay borders pixel size.
+		 *\param[in]	p_bordersMaterial	The overlay borders material.
+		 *\param[in]	p_parent			The parent overlay.
+		 *\return		The created overlay.
+		 *\brief		Crée une incrustation panneau borduré.
+		 *\remarks		Poste l'évènement d'initialisation au moteur.
+		 *\param[in]	p_name				Le nom de l'incrustation.
+		 *\param[in]	p_position			La position en pixels, dans le parent, ou l'écran, si pas de parent.
+		 *\param[in]	p_size				La taille absolue, en pixels.
+		 *\param[in]	p_material			Le matériau de l'incrustation.
+		 *\param[in]	p_bordersSize		Les dimensions des bords de l'incrustation.
+		 *\param[in]	p_bordersMaterial	Le matériau des bordures de l'incrustation.
+		 *\param[in]	p_parent			L'incrustation parente.
+		 *\return		L'incrustation ainsi créée.
+		 */
+		BorderPanelOverlaySPtr CreateBorderPanel( Castor::String const & p_name, Castor::Position const & p_position, Castor::Size const & p_size, MaterialSPtr p_material, Castor::Rectangle const & p_bordersSize, MaterialSPtr p_bordersMaterial, OverlaySPtr p_parent = nullptr );
+		/**
+		 *\~english
+		 *\brief		Creates a text overlay.
+		 *\remarks		Posts the intialisation event to the engine.
+		 *\param[in]	p_name		The overlay name.
+		 *\param[in]	p_position	The position, relative to parent, or screen, if no parent.
+		 *\param[in]	p_size		The size, relative to parent, or screen, if no parent.
+		 *\param[in]	p_material	The overlay material.
+		 *\param[in]	p_font		The font used to display the text.
+		 *\param[in]	p_parent	The parent overlay.
+		 *\return		The created overlay.
+		 *\~french
+		 *\brief		Crée une incrustation texte.
+		 *\remarks		Poste l'évènement d'initialisation au moteur.
+		 *\param[in]	p_name		Le nom de l'incrustation.
+		 *\param[in]	p_position	La position relative au parent, ou à l'écran, si pas de parent.
+		 *\param[in]	p_size		La taille relative au parent, ou à l'écran, si pas de parent.
+		 *\param[in]	p_material	Le matériau de l'incrustation.
+		 *\param[in]	p_font		La police utilisée pour afficher le texte.
+		 *\param[in]	p_parent	L'incrustation parente.
+		 *\return		L'incrustation ainsi créée.
+		 */
+		TextOverlaySPtr CreateText( Castor::String const & p_name, Castor::Point2d const & p_position, Castor::Point2d const & p_size, MaterialSPtr p_material, Castor::FontSPtr p_font, OverlaySPtr p_parent = nullptr );
+		/**
+		 *\~english
+		 *\brief		Creates a text overlay.
+		 *\remarks		Posts the intialisation event to the engine.
+		 *\param[in]	p_name		The overlay name.
+		 *\param[in]	p_position	The position in pixels, inside the parent, or screen if no parent.
+		 *\param[in]	p_size		The absolute size in pixels.
+		 *\param[in]	p_material	The overlay material.
+		 *\param[in]	p_font		The font used to display the text.
+		 *\param[in]	p_parent	The parent overlay.
+		 *\return		The created overlay.
+		 *\~french
+		 *\brief		Crée une incrustation panneau.
+		 *\remarks		Poste l'évènement d'initialisation au moteur.
+		 *\param[in]	p_name		Le nom de l'incrustation.
+		 *\param[in]	p_position	La position en pixels, dans le parent, ou l'écran, si pas de parent.
+		 *\param[in]	p_size		La taille absolue, en pixels.
+		 *\param[in]	p_material	Le matériau de l'incrustation.
+		 *\param[in]	p_font		La police utilisée pour afficher le texte.
+		 *\param[in]	p_parent	L'incrustation parente.
+		 *\return		L'incrustation ainsi créée.
+		 */
+		TextOverlaySPtr CreateText( Castor::String const & p_name, Castor::Position const & p_position, Castor::Size const & p_size, MaterialSPtr p_material, Castor::FontSPtr p_font, OverlaySPtr p_parent = nullptr );
+		/**
+		 *\~english
+		 *\brief		Creates an overlay, given a type and the overlay definitions
+		 *\remark		If an overlay with the given name already exists, no creation is done, the return is the existing overlay
+		 *\param[in]	p_type		The overlay type (panel, text ...)
+		 *\param[in]	p_name	The overlay name
+		 *\param[in]	p_parent	The parent overlay, NULL if none
+		 *\param[in]	p_scene	The scene that holds the overlay
+		 *\return		The created overlay
+		 *\~french
+		 *\brief		Crée un overlay
+		 *\remark		Si un overlay avec le même nom existe déjà, aucune création n'est faite, l'existant est retourné
+		 *\param[in]	p_type		Le type d'overlay
+		 *\param[in]	p_name	Le nom voulu pour l'overlay
+		 *\param[in]	p_parent	L'overlay parent, nullptr si aucun
+		 *\param[in]	p_scene	La scène contenant l'overlay
+		 *\return		L'overlay
+		 */
+		OverlaySPtr CreateOverlay( eOVERLAY_TYPE p_type, Castor::String const & p_name, OverlaySPtr p_parent, SceneSPtr p_scene );
 		/**
 		 *\~english
 		 *\brief		Add an overlay to the lists, given it's name
-		 *\param[in]	p_name	The overlay name
+		 *\param[in]	p_name		The overlay name
 		 *\param[in]	p_overlay	The overlay
 		 *\param[in]	p_parent	The parent overlay
 		 *\~french
 		 *\brief		Ajoute une incrustation aux listes, selon son nom
-		 *\param[in]	p_name	Le nom
+		 *\param[in]	p_name		Le nom
 		 *\param[in]	p_overlay	L'incrustation
 		 *\param[in]	p_parent	L'incrustation parente
 		 */
 		void AddOverlay( Castor::String const & p_name, OverlaySPtr p_overlay, OverlaySPtr p_parent );
+		/**
+		 *\~english
+		 *\brief		Removes an overlay from the lists.
+		 *\param[in]	p_name		The overlay name.
+		 *\~french
+		 *\brief		Enlève une incrustation des listes.
+		 *\param[in]	p_name		Le nom de l'incrustation.
+		 */
+		void RemoveOverlay( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves the overlay with the given name
@@ -150,6 +322,17 @@ namespace Castor3D
 		 *\brief		Initialise ou nettoie l'OverlayRenderer, selon le statut du rendu
 		 */
 		void Update();
+		/**
+		 *\~english
+		 *\brief		Renders all visible overlays
+		 *\param[in]	p_scene	The scene displayed, to display its overlays and the global ones
+		 *\param[in]	p_size	The render target size
+		 *\~french
+		 *\brief		Fonction de rendu des overlays visibles
+		 *\param[in]	p_scene	La scène rendue, pour afficher ses overlays en plus des globaux
+		 *\param[in]	p_size	Les dimensions de la cible du rendu
+		 */
+		void RenderOverlays( Scene const & p_scene, Castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Retrieves the overlay renderer
@@ -258,21 +441,6 @@ namespace Castor3D
 		{
 			return m_overlays.rend();
 		}
-		/**
-		 *\~english
-		 *\brief		Renders the overlays
-		 *\param[in]	p_scene	The currently rendered scene
-		 *\param[in]	p_size	The render window size
-		 *\~french
-		 *\brief		Dessine les incrustations
-		 *\param[in]	p_scene	La scène en cours de rendu
-		 *\param[in]	p_size	La taille de la fenêtre de rendu
-		 */
-		void RenderOverlays( Scene const & p_scene, Castor::Size const & p_size );
-
-		using OverlayCollection::lock;
-		using OverlayCollection::unlock;
-		using OverlayCollection::clear;
 
 	private:
 		//!\~english The overlays, in rendering order.	\~french Les incrustations, dans l'ordre de rendu.

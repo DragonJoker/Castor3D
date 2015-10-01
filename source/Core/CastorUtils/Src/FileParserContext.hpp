@@ -64,16 +64,51 @@ namespace Castor
 		 *\brief		Destructeur
 		 */
 		CU_API virtual ~FileParserContext();
+		/**
+		 *\~english
+		 *\brief		Registers a user context.
+		 *\param[in]	p_name	The context name, must be unique.
+		 *\param[in]	p_data	The user context data.
+		 *\~french
+		 *\brief		Enregistre un contexte utilisateur.
+		 *\param[in]	p_name	Le nom du contexte, doit être unique.
+		 *\param[in]	p_data	Les données du contexte utilisateur.
+		 */
+		CU_API void RegisterUserContext( String const & p_name, void * p_data );
+		/**
+		 *\~english
+		 *\brief		Unregisters a user context.
+		 *\param[in]	p_name	The context name.
+		 *\return		The user context data.
+		 *\~french
+		 *\brief		Désenregistre un contexte utilisateur.
+		 *\param[in]	p_name	Le nom du contexte.
+		 *\return		Les données du contexte utilisateur.
+		 */
+		CU_API void * UnregisterUserContext( String const & p_name );
+		/**
+		 *\~english
+		 *\brief		Retrieves a user context.
+		 *\param[in]	p_name	The context name.
+		 *\return		The user context data.
+		 *\~french
+		 *\brief		Récupère un contexte utilisateur.
+		 *\param[in]	p_name	Le nom du contexte.
+		 *\return		Les données du contexte utilisateur.
+		 */
+		CU_API void * GetUserContext( String const & p_name );
 
 	public:
 		//!\~english The file currently parsed	\~french Le fichier en cours d'analyse
-		TextFile * pFile;
+		TextFile * m_file;
 		//!\~english The current line	\~french La ligne en cours d'analyse
-		unsigned long long ui64Line;
+		unsigned long long m_line;
 		//!\~english The sections stack	\~french La pile de sections
-		std::stack< int > stackSections;
+		std::stack< int > m_sections;
 		//!\~english The current function name	\~french Le nom de la fonction actuelle
-		String strFunctionName;
+		String m_functionName;
+		//!\~english The user context data, useful in plug-ins.	\~french Les données de contexte utilisateur, utile dans les plug-ins.
+		std::map< String, void * > m_userContexts;
 	};
 }
 

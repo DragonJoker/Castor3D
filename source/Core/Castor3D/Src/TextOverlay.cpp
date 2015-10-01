@@ -126,6 +126,7 @@ namespace Castor3D
 		, m_wrappingMode( eTEXT_WRAPPING_MODE_NONE )
 		, m_hAlign( eHALIGN_LEFT )
 		, m_vAlign( eVALIGN_CENTER )
+		, m_textChanged( true )
 	{
 	}
 
@@ -217,8 +218,8 @@ namespace Castor3D
 	{
 		// Récupération / Création de la police
 		Engine * l_engine = m_pOverlay->GetEngine();
-		FontCollection & l_fontCollection = l_engine->GetFontManager();
-		FontSPtr l_pFont = l_fontCollection.find( p_strFont );
+		FontManager & l_fontManager = l_engine->GetFontManager();
+		FontSPtr l_pFont = l_fontManager.get_font( p_strFont );
 
 		if ( l_pFont )
 		{
@@ -240,13 +241,7 @@ namespace Castor3D
 
 		m_pOverlay->GetEngine()->PostEvent( MakeInitialiseEvent( *this ) );
 		m_strFontName = p_strFont;
-		m_changed = true;
-	}
-
-	void TextOverlay::SetMaterial( MaterialSPtr p_pMaterial )
-	{
-		OverlayCategory::SetMaterial( p_pMaterial );
-		m_changed = true;
+		m_textChanged = true;
 	}
 
 	String const & TextOverlay::GetFontName()const
@@ -271,19 +266,18 @@ namespace Castor3D
 		p_renderer->DrawText( *this );
 	}
 
-	void TextOverlay::DoUpdate( OverlayRendererSPtr p_renderer )
+	void TextOverlay::DoUpdateBuffer( Size const & p_size )
 	{
 		FontSPtr l_pFont = GetFont();
 
 		if ( !m_strCaption.empty() && l_pFont )
 		{
-			if ( m_previousCaption != m_strCaption )
+			if ( m_textChanged )
 			{
 				Point2d l_ovAbsSize = GetOverlay().GetAbsoluteSize();
-				Point2d l_ptSize( p_renderer->GetSize().width() * l_ovAbsSize[0], p_renderer->GetSize().height() * l_ovAbsSize[1] );
+				Point2d l_ptSize( p_size.width() * l_ovAbsSize[0], p_size.height() * l_ovAbsSize[1] );
 				Size l_screenSize = Size( uint32_t( l_ptSize[0] ), uint32_t( l_ptSize[1] ) );
 				m_previousCaption = m_strCaption;
-				int l_zIndex = 0;
 				m_arrayVtx.clear();
 				m_arrayVtx.reserve( m_previousCaption.size() * 6 );
 				Point2d l_ptPosition;
@@ -310,20 +304,20 @@ namespace Castor3D
 
 							if ( l_character == cuT( '\r' ) )
 							{
-								DoWriteWord( p_renderer, l_word, l_wordWidth, l_ptSize, l_ptPosition, l_lineWidth, l_lineVtx, l_linesVtx );
+								DoWriteWord( p_size, l_word, l_wordWidth, l_ptSize, l_ptPosition, l_lineWidth, l_lineVtx, l_linesVtx );
 								l_ptPosition[0] = 0;
 								l_wordWidth = 0;
 							}
 							else if ( l_character == cuT( ' ' ) )
 							{
-								DoWriteWord( p_renderer, l_word, l_wordWidth, l_ptSize, l_ptPosition, l_lineWidth, l_lineVtx, l_linesVtx );
+								DoWriteWord( p_size, l_word, l_wordWidth, l_ptSize, l_ptPosition, l_lineWidth, l_lineVtx, l_linesVtx );
 								l_word.clear();
 								l_wordWidth = 0;
 								l_ptPosition[0] += l_charSize[0];
 							}
 							else if ( l_character == cuT( '\t' ) )
 							{
-								DoWriteWord( p_renderer, l_word, l_wordWidth, l_ptSize, l_ptPosition, l_lineWidth, l_lineVtx, l_linesVtx );
+								DoWriteWord( p_size, l_word, l_wordWidth, l_ptSize, l_ptPosition, l_lineWidth, l_lineVtx, l_linesVtx );
 								l_word.clear();
 								l_wordWidth = 0;
 								l_ptPosition[0] += l_charSize[0];
@@ -345,7 +339,7 @@ namespace Castor3D
 
 					if ( !l_word.empty() )
 					{
-						DoWriteWord( p_renderer, l_word, l_wordWidth, l_ptSize, l_ptPosition, l_lineWidth, l_lineVtx, l_linesVtx );
+						DoWriteWord( p_size, l_word, l_wordWidth, l_ptSize, l_ptPosition, l_lineWidth, l_lineVtx, l_linesVtx );
 
 						if ( !l_lineVtx.empty() )
 						{
@@ -366,15 +360,16 @@ namespace Castor3D
 				}
 
 				// TODO : Check for glyphs that need to be loaded and added to the texture
+				m_textChanged = false;
 			}
 		}
 	}
 
-	void TextOverlay::DoWriteWord( OverlayRendererSPtr p_renderer, String const & p_word, double p_wordWidth, Point2d const & p_size, Point2d & p_position, double & p_lineWidth, OverlayCategory::VertexArray & p_lineVtx, std::vector< OverlayCategory::VertexArray > & p_linesVtx )
+	void TextOverlay::DoWriteWord( Size const & p_renderSize, String const & p_word, double p_wordWidth, Point2d const & p_size, Point2d & p_position, double & p_lineWidth, OverlayCategory::VertexArray & p_lineVtx, std::vector< OverlayCategory::VertexArray > & p_linesVtx )
 	{
 		FontSPtr l_pFont = GetFont();
 		Size const & l_texDim = m_pTexture->GetDimensions();
-		Position l_ovPosition = GetAbsolutePosition( p_renderer->GetSize() );
+		Position l_ovPosition = GetAbsolutePosition( p_renderSize );
 		uint32_t l_maxHeight = l_pFont->GetMaxHeight();
 
 		if ( p_position[0] + p_wordWidth > p_size[0] && m_wrappingMode == eTEXT_WRAPPING_MODE_BREAK_WORDS )

@@ -46,6 +46,7 @@ namespace Castor3D
 		: m_renderSystem( p_pRenderSystem )
 		, m_previousPanelZIndex( 0 )
 		, m_previousBorderZIndex( 0 )
+		, m_sizeChanged( false )
 	{
 		BufferElementDeclaration l_vertexDeclarationElements[] =
 		{
@@ -244,11 +245,16 @@ namespace Castor3D
 
 	void OverlayRenderer::BeginRender( Size const & p_size )
 	{
-		m_size = p_size;
+		if ( m_size != p_size )
+		{
+			m_sizeChanged = true;
+			m_size = p_size;
+		}
 	}
 
 	void OverlayRenderer::EndRender()
 	{
+		m_sizeChanged = false;
 	}
 
 	ShaderProgramBaseSPtr OverlayRenderer::DoGetPanelProgram( uint32_t p_uiFlags )

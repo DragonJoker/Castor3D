@@ -33,8 +33,7 @@ namespace Castor
 	struct MessageBase
 	{
 		/** Constructor
-		@param[in] type
-			The message type
+		*\param[in]	type		The message typ
 		*/
 		MessageBase( ELogType type )
 			: m_type( type )
@@ -42,8 +41,7 @@ namespace Castor
 		}
 
 		/** Retrieves the message content
-		@return
-			The message text
+		 *\return		The message tex
 		*/
 		virtual String GetMessage() = 0;
 
@@ -60,10 +58,8 @@ namespace Castor
 		typedef std::basic_string< Char > string_type;
 
 		/** Constructor
-		@param[in] type
-			The message type
-		@param[in] message
-			The message text
+		*\param[in]	type		The message typ
+		*\param[in]	message		The message tex
 		*/
 		BasicMessage( ELogType type, string_type const & message )
 			: MessageBase( type )
@@ -111,8 +107,7 @@ namespace Castor
 		virtual ~LoggerImpl();
 
 		/** Initialises the headers, from the given logger
-		@param[in] logger
-			The logger
+		*\param[in]	logger		The logge
 		*/
 		void Initialise( Logger const & logger );
 
@@ -129,62 +124,48 @@ namespace Castor
 		void UnregisterCallback( void * p_pCaller );
 
 		/** Sets the file for given log level
-		@param[in] logFilePath
-			The file path
-		@param[in] logLevel
-			The log level.
+		*\param[in]	logFilePath		The file pat
+		*\param[in]	logLevel		The log level
 			If ELogType_COUNT, sets the file for every log level
 		*/
 		void SetFileName( String const & logFilePath, ELogType logLevel );
 
 		/** Prints a message to the console
-		@param[in] logLevel
-			The log level.
-		@param[in] message
-			The message.
+		*\param[in]	logLevel		The log level
+		*\param[in]	message		The message
 		*/
 		void PrintMessage( ELogType logLevel, std::string const & message );
 
 		/** Prints a message to the console
-		@param[in] logLevel
-			The log level.
-		@param[in] message
-			The message.
+		*\param[in]	logLevel		The log level
+		*\param[in]	message		The message
 		*/
 		void PrintMessage( ELogType logLevel, std::wstring const & message );
 
 		/** Logs a message queue
-		@param[in] queue
-			The messages
+		*\param[in]	queue		The message
 		*/
 		void LogMessageQueue( MessageQueue const & queue );
 
 	private:
 		/** Prints a message to the console
-		@param[in] logLevel
-			The log level.
-		@param[in] message
-			The message.
+		*\param[in]	logLevel		The log level
+		*\param[in]	message		The message
 		*/
 		void DoPrintMessage( ELogType logLevel, String const & message );
 
 		/** Prints a line to the console
-		@param[in] line
-			The line
-		@param[in] logType
-			The log level
+		*\param[in]	line		The lin
+		*\param[in]	logType		The log leve
 		*/
 		void DoPrintLine( String const & line, ELogType logType );
 
 		/** Logs a line in the given stream
-		@param[in] timestamp
-			The line timestamp
-		@param[in] line
-			The line
+		*\param[in]	timestamp		The line timestam
+		*\param[in]	line		The lin
 		@param stream
 			The stream
-		@param[in] logType
-			The log level
+		*\param[in]	logType		The log leve
 		*/
 		void DoLogLine( String const & timestamp, String const & line, StringStream & stream, ELogType logType );
 

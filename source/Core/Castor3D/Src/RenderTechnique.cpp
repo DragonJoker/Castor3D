@@ -176,7 +176,7 @@ namespace Castor3D
 			m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
 			m_wp2DBlendState.lock()->Apply();
 			m_wp2DDepthStencilState.lock()->Apply();
-			m_engine->RenderOverlays( *m_renderSystem->GetTopScene(), m_size );
+			m_engine->GetOverlayManager().RenderOverlays( *m_renderSystem->GetTopScene(), m_size );
 			m_pFrameBuffer->Unbind();
 			m_renderSystem->PopScene();
 			m_pFrameBuffer->RenderToBuffer( m_pRenderTarget->GetFrameBuffer(), m_pRenderTarget->GetSize(), eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH, m_pRenderTarget->GetDepthStencilState(), m_pRenderTarget->GetRasteriserState() );
@@ -186,7 +186,7 @@ namespace Castor3D
 			//m_pRenderTarget->GetFrameBuffer()->Unbind();
 			m_wp2DBlendState.lock()->Apply();
 			m_wp2DDepthStencilState.lock()->Apply();
-			m_engine->RenderOverlays( *m_renderSystem->GetTopScene(), m_size );
+			m_engine->GetOverlayManager().RenderOverlays( *m_renderSystem->GetTopScene(), m_size );
 			m_renderSystem->PopScene();
 		}
 	}

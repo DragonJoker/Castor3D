@@ -158,23 +158,13 @@ namespace Castor3D
 
 	protected:
 		/**
-		 *\~english
-		 *\brief		Draws the overlay
-		 *\param[in]	p_renderer	The renderer used to draw this overlay
-		 *\~french
-		 *\brief		Dessine l'incrustation
-		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation
+		 *\copydoc		Castor3D::OverlayCategory::DoRender.
 		 */
 		virtual void DoRender( OverlayRendererSPtr p_renderer );
 		/**
-		 *\~english
-		 *\brief		Updates the vertex buffer
-		 *\param[in]	p_renderer	The renderer used to draw this overlay
-		 *\~french
-		 *\brief		Met à jour le tampon de sommets
-		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation
+		 *\copydoc		Castor3D::OverlayCategory::DoUpdateBuffer.
 		 */
-		virtual void DoUpdate( OverlayRendererSPtr p_renderer );
+		virtual void DoUpdateBuffer( Castor::Size const & p_screenSize );
 	};
 }
 
