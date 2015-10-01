@@ -12,25 +12,12 @@ using namespace Castor3D;
 
 namespace CastorGui
 {
-	EditCtrl::EditCtrl( ControlSPtr p_parent, uint32_t p_id )
-		: Control( eCONTROL_TYPE_EDIT, p_parent, p_id )
-		, m_caption()
-		, m_caretIt( m_caption.end() )
-		, m_active( false )
+	EditCtrl::EditCtrl( ControlRPtr p_parent, uint32_t p_id )
+		: EditCtrl( p_parent, p_id, String(), Position(), Size(), 0, true )
 	{
-		m_caretIt = m_caption.end();
-		m_cursor = eMOUSE_CURSOR_TEXT;
-		SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
-		EventHandler::Connect( eMOUSE_EVENT_MOUSE_BUTTON_PUSHED, std::bind( &EditCtrl::OnMouseLButtonDown, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eMOUSE_EVENT_MOUSE_BUTTON_RELEASED, std::bind( &EditCtrl::OnMouseLButtonUp, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &EditCtrl::OnKeyDown, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eKEYBOARD_EVENT_KEY_RELEASED, std::bind( &EditCtrl::OnKeyUp, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eKEYBOARD_EVENT_CHAR, std::bind( &EditCtrl::OnChar, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eCONTROL_EVENT_ACTIVATE, std::bind( &EditCtrl::OnActivate, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eCONTROL_EVENT_DEACTIVATE, std::bind( &EditCtrl::OnDeactivate, this, std::placeholders::_1 ) );
 	}
 
-	EditCtrl::EditCtrl( ControlSPtr p_parent, uint32_t p_id, String const & p_caption, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
+	EditCtrl::EditCtrl( ControlRPtr p_parent, uint32_t p_id, String const & p_caption, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
 		: Control( eCONTROL_TYPE_EDIT, p_parent, p_id, p_position, p_size, p_style, p_visible )
 		, m_caption( p_caption )
 		, m_caretIt( p_caption.end() )

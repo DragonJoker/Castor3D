@@ -10,6 +10,10 @@
 #include <wx/panel.h>
 #include <wx/timer.h>
 
+#if HAS_CASTORGUI
+#	include <CastorGuiPrerequisites.hpp>
+#endif
+
 namespace CastorViewer
 {
 	class MouseCameraEvent;
@@ -74,32 +78,33 @@ namespace CastorViewer
 		void DoReloadScene();
 
 		DECLARE_EVENT_TABLE()
-		virtual void OnTimerFwd( wxTimerEvent & p_event );
-		virtual void OnTimerBck( wxTimerEvent & p_event );
-		virtual void OnTimerLft( wxTimerEvent & p_event );
-		virtual void OnTimerRgt( wxTimerEvent & p_event );
-		virtual void OnTimerUp( wxTimerEvent & p_event );
-		virtual void OnTimerDwn( wxTimerEvent &	p_event );
-		virtual void OnSize( wxSizeEvent & p_event );
-		virtual void OnMove( wxMoveEvent & p_event );
-		virtual void OnPaint( wxPaintEvent & p_event );
-		virtual void OnEnterWindow( wxMouseEvent & p_event );
-		virtual void OnLeaveWindow( wxMouseEvent & p_event );
-		virtual void OnEraseBackground( wxEraseEvent & p_event );
-		virtual void OnSetFocus( wxFocusEvent & p_event );
-		virtual void OnKillFocus( wxFocusEvent & p_event );
-		virtual void OnKeyDown( wxKeyEvent & p_event );
-		virtual void OnKeyUp( wxKeyEvent & p_event );
-		virtual void OnMouseLDClick( wxMouseEvent & p_event );
-		virtual void OnMouseLDown( wxMouseEvent & p_event );
-		virtual void OnMouseLUp( wxMouseEvent & p_event );
-		virtual void OnMouseMDown( wxMouseEvent & p_event );
-		virtual void OnMouseMUp( wxMouseEvent & p_event );
-		virtual void OnMouseRDown( wxMouseEvent & p_event );
-		virtual void OnMouseRUp( wxMouseEvent & p_event );
-		virtual void OnMouseMove( wxMouseEvent & p_event );
-		virtual void OnMouseWheel( wxMouseEvent & p_event );
-		virtual void OnMenuClose( wxCommandEvent & p_event );
+		void OnTimerFwd( wxTimerEvent & p_event );
+		void OnTimerBck( wxTimerEvent & p_event );
+		void OnTimerLft( wxTimerEvent & p_event );
+		void OnTimerRgt( wxTimerEvent & p_event );
+		void OnTimerUp( wxTimerEvent & p_event );
+		void OnTimerDwn( wxTimerEvent &	p_event );
+		void OnSize( wxSizeEvent & p_event );
+		void OnMove( wxMoveEvent & p_event );
+		void OnPaint( wxPaintEvent & p_event );
+		void OnEnterWindow( wxMouseEvent & p_event );
+		void OnLeaveWindow( wxMouseEvent & p_event );
+		void OnEraseBackground( wxEraseEvent & p_event );
+		void OnSetFocus( wxFocusEvent & p_event );
+		void OnKillFocus( wxFocusEvent & p_event );
+		void OnKeyDown( wxKeyEvent & p_event );
+		void OnKeyUp( wxKeyEvent & p_event );
+		void OnChar( wxKeyEvent & p_event );
+		void OnMouseLDClick( wxMouseEvent & p_event );
+		void OnMouseLDown( wxMouseEvent & p_event );
+		void OnMouseLUp( wxMouseEvent & p_event );
+		void OnMouseMDown( wxMouseEvent & p_event );
+		void OnMouseMUp( wxMouseEvent & p_event );
+		void OnMouseRDown( wxMouseEvent & p_event );
+		void OnMouseRUp( wxMouseEvent & p_event );
+		void OnMouseMove( wxMouseEvent & p_event );
+		void OnMouseWheel( wxMouseEvent & p_event );
+		void OnMenuClose( wxCommandEvent & p_event );
 
 	public:
 		Castor::real m_deltaX;
@@ -128,6 +133,10 @@ namespace CastorViewer
 		FirstPersonCameraTranslateEventSPtr m_pFpTranslateCamEvent;
 		KeyboardEventSPtr m_pKeyboardEvent;
 		Castor::real m_rFpCamSpeed;
+
+#if HAS_CASTORGUI
+		CastorGui::ControlsManagerRPtr m_controlsManager;
+#endif
 	};
 }
 

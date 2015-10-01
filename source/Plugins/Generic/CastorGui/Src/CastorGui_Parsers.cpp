@@ -27,13 +27,13 @@ namespace CastorGui
 		StaticCtrlSPtr m_static;
 		uint32_t m_ctrlId = 0;
 
-		ControlSPtr GetTop()const
+		ControlRPtr GetTop()const
 		{
-			ControlSPtr l_return;
+			ControlRPtr l_return = NULL;
 
 			if ( !m_parents.empty() )
 			{
-				l_return = m_parents.top();
+				l_return = m_parents.top().get();
 			}
 
 			return l_return;
@@ -189,6 +189,66 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ComboBoxItem )
 }
 END_ATTRIBUTE()
 
+IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ComboBoxSelectedItemBackground )
+{
+	ControlsManager & l_ctrlsManager = GetControlsManager( p_context );
+	ParserContext & l_context = GetParserContext( p_context );
+	ComboBoxCtrlSPtr l_combo = l_context.m_combo;
+
+	if ( l_combo )
+	{
+		String l_name;
+		p_params[0]->Get( l_name );
+		MaterialManager & l_manager = l_ctrlsManager.GetEngine()->GetMaterialManager();
+		l_combo->SetSelectedItemBackgroundMaterial( l_manager.find( l_name ) );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <gui::combobox::selected_item_background> : no combo box initialised." ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ComboBoxSelectedItemForeground )
+{
+	ControlsManager & l_ctrlsManager = GetControlsManager( p_context );
+	ParserContext & l_context = GetParserContext( p_context );
+	ComboBoxCtrlSPtr l_combo = l_context.m_combo;
+
+	if ( l_combo )
+	{
+		String l_name;
+		p_params[0]->Get( l_name );
+		MaterialManager & l_manager = l_ctrlsManager.GetEngine()->GetMaterialManager();
+		l_combo->SetSelectedItemForegroundMaterial( l_manager.find( l_name ) );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <gui::combobox::selected_item_foreground> : no combo box initialised." ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ComboBoxHighlightedItemBackground )
+{
+	ControlsManager & l_ctrlsManager = GetControlsManager( p_context );
+	ParserContext & l_context = GetParserContext( p_context );
+	ComboBoxCtrlSPtr l_combo = l_context.m_combo;
+
+	if ( l_combo )
+	{
+		String l_name;
+		p_params[0]->Get( l_name );
+		MaterialManager & l_manager = l_ctrlsManager.GetEngine()->GetMaterialManager();
+		l_combo->SetHighlightedItemBackgroundMaterial( l_manager.find( l_name ) );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <gui::combobox::highlighted_item_background> : no combo box initialised." ) );
+	}
+}
+END_ATTRIBUTE()
+
 IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ComboBoxEnd )
 {
 	ParserContext & l_context = GetParserContext( p_context );
@@ -222,6 +282,66 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ListBoxItem )
 }
 END_ATTRIBUTE()
 
+IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ListBoxSelectedItemBackground )
+{
+	ControlsManager & l_ctrlsManager = GetControlsManager( p_context );
+	ParserContext & l_context = GetParserContext( p_context );
+	ListBoxCtrlSPtr l_listbox = l_context.m_listbox;
+
+	if ( l_listbox )
+	{
+		String l_name;
+		p_params[0]->Get( l_name );
+		MaterialManager & l_manager = l_ctrlsManager.GetEngine()->GetMaterialManager();
+		l_listbox->SetSelectedItemBackgroundMaterial( l_manager.find( l_name ) );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <gui::listbox::selected_item_background> : no list box initialised." ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ListBoxSelectedItemForeground )
+{
+	ControlsManager & l_ctrlsManager = GetControlsManager( p_context );
+	ParserContext & l_context = GetParserContext( p_context );
+	ListBoxCtrlSPtr l_listbox = l_context.m_listbox;
+
+	if ( l_listbox )
+	{
+		String l_name;
+		p_params[0]->Get( l_name );
+		MaterialManager & l_manager = l_ctrlsManager.GetEngine()->GetMaterialManager();
+		l_listbox->SetSelectedItemForegroundMaterial( l_manager.find( l_name ) );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <gui::listbox::selected_item_foreground> : no list box initialised." ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ListBoxHighlightedItemBackground )
+{
+	ControlsManager & l_ctrlsManager = GetControlsManager( p_context );
+	ParserContext & l_context = GetParserContext( p_context );
+	ListBoxCtrlSPtr l_listbox = l_context.m_listbox;
+
+	if ( l_listbox )
+	{
+		String l_name;
+		p_params[0]->Get( l_name );
+		MaterialManager & l_manager = l_ctrlsManager.GetEngine()->GetMaterialManager();
+		l_listbox->SetHighlightedItemBackgroundMaterial( l_manager.find( l_name ) );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <gui::listbox::highlighted_item_background> : no list box initialised." ) );
+	}
+}
+END_ATTRIBUTE()
+
 IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ListBoxEnd )
 {
 	ParserContext & l_context = GetParserContext( p_context );
@@ -248,7 +368,7 @@ END_ATTRIBUTE_POP()
 IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ControlPixelPosition )
 {
 	ParserContext & l_context = GetParserContext( p_context );
-	ControlSPtr l_control = l_context.GetTop();
+	ControlRPtr l_control = l_context.GetTop();
 
 	if ( l_control )
 	{
@@ -266,7 +386,7 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ControlPixelSize )
 {
 	ParserContext & l_context = GetParserContext( p_context );
-	ControlSPtr l_control = l_context.GetTop();
+	ControlRPtr l_control = l_context.GetTop();
 
 	if ( l_control )
 	{
@@ -285,7 +405,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ControlBackground )
 {
 	ControlsManager & l_ctrlsManager = GetControlsManager( p_context );
 	ParserContext & l_context = GetParserContext( p_context );
-	ControlSPtr l_control = l_context.GetTop();
+	ControlRPtr l_control = l_context.GetTop();
 
 	if ( l_control )
 	{
@@ -305,7 +425,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ControlForeground )
 {
 	ControlsManager & l_ctrlsManager = GetControlsManager( p_context );
 	ParserContext & l_context = GetParserContext( p_context );
-	ControlSPtr l_control = l_context.GetTop();
+	ControlRPtr l_control = l_context.GetTop();
 
 	if ( l_control )
 	{

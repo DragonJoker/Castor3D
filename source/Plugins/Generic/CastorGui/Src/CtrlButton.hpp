@@ -33,63 +33,63 @@ namespace CastorGui
 	{
 	public:
 		/** Constructor
-		*\param[in]	p_parent		The parent control, if any
-		*\param[in]	p_id		The control ID
-		*/
-		ButtonCtrl( ControlSPtr p_parent, uint32_t p_id );
+		 *\param[in]	p_parent	The parent control, if any
+		 *\param[in]	p_id		The control ID
+		 */
+		ButtonCtrl( ControlRPtr p_parent, uint32_t p_id );
 
 		/** Constructor
-		*\param[in]	p_parent		The parent control, if an
-		*\param[in]	p_caption		The captio
-		*\param[in]	p_id		The control I
-		*\param[in]	p_position		The positio
-		*\param[in]	p_size		The siz
-		*\param[in]	p_style		The styl
-		*\param[in]	p_visible		Initial visibility statu
-		*/
-		ButtonCtrl( ControlSPtr p_parent, uint32_t p_id, Castor::String const & p_caption, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
+		 *\param[in]	p_parent		The parent control, if any
+		 *\param[in]	p_caption		The caption
+		 *\param[in]	p_id			The control ID
+		 *\param[in]	p_position		The position
+		 *\param[in]	p_size			The size
+		 *\param[in]	p_style			The style
+		 *\param[in]	p_visible		Initial visibility status
+		 */
+		ButtonCtrl( ControlRPtr p_parent, uint32_t p_id, Castor::String const & p_caption, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
 
 		/** Destructor
 		*/
 		virtual ~ButtonCtrl();
 
 		/** Sets the caption
-		*\param[in]	p_value		The new valu
-		*/
+		 *\param[in]	p_value		The new value
+		 */
 		void SetCaption( Castor::String const & p_value );
 
 		/** Sets the mouse over background texture
-		*\param[in]	p_texture		The new valu
-		*/
-		void SetMouseOverBackgroundTexture( Castor3D::TextureBaseSPtr p_texture );
+		 *\param[in]	p_material		The new value
+		 */
+		void SetMouseOverBackgroundMaterial( Castor3D::MaterialSPtr p_material );
 
 		/** Sets the mouse over foreground texture
-		*\param[in]	p_texture		The new valu
-		*/
-		void SetMouseOverForegroundTexture( Castor3D::TextureBaseSPtr p_texture );
+		 *\param[in]	p_material		The new value
+		 */
+		void SetMouseOverForegroundMaterial( Castor3D::MaterialSPtr p_material );
 
 		/** Retrieves the caption
 		 *\return		The valu
-		*/
+		 */
 		inline Castor::String const & GetCaption()const
 		{
 			return m_caption;
 		}
 
 		/** Connects a function to a button event
-		*\param[in]	p_event		The event typ
-		*\param[in]	p_function		The functio
-		 *\return		The internal function index, to be able to disconnect i
-		*/
+		 *\param[in]	p_event			The event type
+		 *\param[in]	p_function		The function
+		 *\return		The internal function index, to be able to disconnect it
+		 */
 		inline uint32_t Connect( eBUTTON_EVENT p_event, std::function< void() > p_function )
 		{
 			return m_signals[p_event].Connect( p_function );
 		}
 
 		/** Disconnects a function from a button event
-		*\param[in]	p_event		The event typ
-		*\param[in]	p_index		The function inde
-		*/
+		 *\param[in]	p_event		The event type
+		 *\param[in]	p_index		The function index
+		 */
 		inline void Disconnect( eBUTTON_EVENT p_event, uint32_t p_index )
 		{
 			m_signals[p_event].Disconnect( p_index );
@@ -125,41 +125,36 @@ namespace CastorGui
 		virtual void DoSetVisible( bool p_visible );
 
 		/** Event when mouse enters the control
-		*\param[in]	p_event		The mouse even
-		*/
+		 *\param[in]	p_event		The mouse event
+		 */
 		void OnMouseEnter( MouseEvent const & p_event );
 
 		/** Event when mouse leaves the control
-		*\param[in]	p_event		The mouse even
-		*/
+		 *\param[in]	p_event		The mouse event
+		 */
 		void OnMouseLeave( MouseEvent const & p_event );
 
 		/** Event when mouse left button is released
-		*\param[in]	p_event		The mouse even
-		*/
+		 *\param[in]	p_event		The mouse event
+		 */
 		void OnMouseLButtonUp( MouseEvent const & p_event );
+
+		/** Creates a material with an ambient colour equal to p_material->ambient + p_offset
+		 *\param[in]	p_material	The material.
+		 *\param[in]	p_offset	The colour offset.
+		 *\return		The created material.
+		 */
+		Castor3D::MaterialSPtr DoCreateMaterial( Castor3D::MaterialSPtr p_material, float p_offset );
 
 	private:
 		//! The caption
 		Castor::String m_caption;
 		//! The text overlay used to display the caption
 		Castor3D::TextOverlayWPtr m_text;
-		//! The background colour
-		Castor::Colour m_backgroundColour;
-		//! The mouse over background colour
-		Castor::Colour m_mouseOverBackgroundColour;
-		//! The foreground colour
-		Castor::Colour m_foregroundColour;
-		//! The mouse over foreground colour
-		Castor::Colour m_mouseOverForegroundColour;
 		//! The mouse over background texture
-		Castor3D::TextureBaseSPtr m_mouseOverBackgroundTexture;
-		//! The background texture
-		Castor3D::TextureBaseSPtr m_backgroundTexture;
+		Castor3D::MaterialWPtr m_mouseOverBackgroundMaterial;
 		//! The mouse over foreground texture
-		Castor3D::TextureBaseSPtr m_mouseOverForegroundTexture;
-		//! The foreground texture
-		Castor3D::TextureBaseSPtr m_foregroundTexture;
+		Castor3D::MaterialWPtr m_mouseOverForegroundMaterial;
 		//! The button events signals
 		Signal< std::function< void() > > m_signals[eBUTTON_EVENT_COUNT];
 	};

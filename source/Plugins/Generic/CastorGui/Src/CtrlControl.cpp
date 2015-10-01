@@ -15,20 +15,7 @@ using namespace Castor3D;
 
 namespace CastorGui
 {
-	Control::Control( eCONTROL_TYPE p_type, ControlSPtr p_parent, uint32_t p_id )
-		: EventHandler< Control >( p_type != eCONTROL_TYPE_STATIC )
-		, m_type( p_type )
-		, m_id( p_id )
-		, m_visible( true )
-		, m_borders( 0, 0, 0, 0 )
-		, m_cursor( eMOUSE_CURSOR_HAND )
-		, m_parent( p_parent )
-		, m_engine( NULL )
-		, m_style( 0 )
-	{
-	}
-
-	Control::Control( eCONTROL_TYPE p_type, ControlSPtr p_parent, uint32_t p_id, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
+	Control::Control( eCONTROL_TYPE p_type, ControlRPtr p_parent, uint32_t p_id, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
 		: EventHandler< Control >( p_type != eCONTROL_TYPE_STATIC )
 		, m_type( p_type )
 		, m_id( p_id )
@@ -52,7 +39,7 @@ namespace CastorGui
 		m_engine = p_engine;
 		m_ctrlManager = p_ctrlManager;
 		OverlaySPtr l_parentOv;
-		ControlSPtr l_parent = m_parent.lock();
+		ControlRPtr l_parent = GetParent();
 
 		if ( l_parent )
 		{
@@ -100,7 +87,7 @@ namespace CastorGui
 
 	Position Control::GetAbsolutePosition()const
 	{
-		ControlSPtr l_parent = GetParent();
+		ControlRPtr l_parent = GetParent();
 		Position l_return = m_position;
 
 		if ( l_parent )
@@ -170,12 +157,11 @@ namespace CastorGui
 	bool Control::IsVisible()const
 	{
 		bool l_visible = m_visible;
-		ControlSPtr l_parent = GetParent();
+		ControlRPtr l_parent = GetParent();
 
 		if ( l_visible && l_parent )
 		{
 			l_visible = l_parent->IsVisible();
-			l_parent.reset();
 		}
 
 		return l_visible;

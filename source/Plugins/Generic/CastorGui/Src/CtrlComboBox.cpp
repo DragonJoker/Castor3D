@@ -12,20 +12,66 @@ using namespace Castor3D;
 
 namespace CastorGui
 {
-	ComboBoxCtrl::ComboBoxCtrl( ControlSPtr p_parent, uint32_t p_id )
-		: Control( eCONTROL_TYPE_COMBO, p_parent, p_id )
+	ComboBoxCtrl::ComboBoxCtrl( ControlRPtr p_parent, uint32_t p_id )
+		: ComboBoxCtrl( p_parent, p_id, StringArray(), -1, Position(), Size(), 0, true )
 	{
 	}
 
-	ComboBoxCtrl::ComboBoxCtrl( ControlSPtr p_parent, uint32_t p_id, StringArray const & p_values, int p_selected, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
+	ComboBoxCtrl::ComboBoxCtrl( ControlRPtr p_parent, uint32_t p_id, StringArray const & p_values, int p_selected, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
 		: Control( eCONTROL_TYPE_COMBO, p_parent, p_id, p_position, p_size, p_style, p_visible )
 		, m_values( p_values )
 		, m_selected( p_selected )
 	{
+		m_expand = std::make_shared< ButtonCtrl >( this, GetId() << 12, cuT( "+" ), Position( p_size.width() - p_size.height(), 0 ), Size( p_size.height(), p_size.height() ) );
+		m_expand->SetVisible( DoIsVisible() );
+		m_expand->Connect( eBUTTON_EVENT_CLICKED, std::bind( &ComboBoxCtrl::DoSwitchExpand, this ) );
+
+		m_choices = std::make_shared< ListBoxCtrl >( this, ( GetId() << 12 ) + 1, m_values, m_selected, Position( 0, p_size.height() ), Size( p_size.width() - p_size.height(), -1 ), 0, false );
+		m_choices->Connect( eLISTBOX_EVENT_SELECTED, std::bind( &ComboBoxCtrl::OnSelected, this, std::placeholders::_1 ) );
 	}
 
 	ComboBoxCtrl::~ComboBoxCtrl()
 	{
+	}
+
+	void ComboBoxCtrl::SetSelectedItemBackgroundMaterial( MaterialSPtr p_material )
+	{
+		m_choices->SetSelectedItemBackgroundMaterial( p_material );
+	}
+
+	void ComboBoxCtrl::SetSelectedItemForegroundMaterial( MaterialSPtr p_material )
+	{
+		m_choices->SetSelectedItemForegroundMaterial( p_material );
+	}
+
+	void ComboBoxCtrl::SetHighlightedItemBackgroundMaterial( MaterialSPtr p_material )
+	{
+		m_choices->SetHighlightedItemBackgroundMaterial( p_material );
+	}
+
+	void ComboBoxCtrl::SetItemBackgroundMaterial( MaterialSPtr p_material )
+	{
+		m_choices->SetItemBackgroundMaterial( p_material );
+	}
+
+	MaterialSPtr ComboBoxCtrl::GetSelectedItemBackgroundMaterial()const
+	{
+		return m_choices->GetSelectedItemBackgroundMaterial();
+	}
+
+	MaterialSPtr ComboBoxCtrl::GetSelectedItemForegroundMaterial()const
+	{
+		return m_choices->GetSelectedItemForegroundMaterial();
+	}
+
+	MaterialSPtr ComboBoxCtrl::GetHighlightedItemBackgroundMaterial()const
+	{
+		return m_choices->GetHighlightedItemBackgroundMaterial();
+	}
+
+	MaterialSPtr ComboBoxCtrl::GetItemBackgroundMaterial()const
+	{
+		return m_choices->GetItemBackgroundMaterial();
 	}
 
 	void ComboBoxCtrl::AppendItem( String  const & p_value )
@@ -72,15 +118,14 @@ namespace CastorGui
 	{
 		SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
 
-		m_expand = std::make_shared< ButtonCtrl >( shared_from_this(), GetId() << 12, cuT( "+" ), Position( GetSize().width() - GetSize().height(), 0 ), Size( GetSize().height(), GetSize().height() ) );
 		m_expand->SetForegroundMaterial( GetForegroundMaterial() );
-		m_expand->SetVisible( DoIsVisible() );
-		m_expand->Connect( eBUTTON_EVENT_CLICKED, std::bind( &ComboBoxCtrl::DoSwitchExpand, this ) );
+		m_expand->SetPosition( Position( GetSize().width() - GetSize().height(), 0 ) );
+		m_expand->SetSize( Size( GetSize().height(), GetSize().height() ) );
 
-		m_choices = std::make_shared< ListBoxCtrl >( shared_from_this(), ( GetId() << 12 ) + 1, m_values, m_selected, Position( 0, GetSize().height() ), Size( GetSize().width() - GetSize().height(), -1 ), 0, false );
 		m_choices->SetBackgroundMaterial( GetBackgroundMaterial() );
 		m_choices->SetForegroundMaterial( GetForegroundMaterial() );
-		m_choices->Connect( eLISTBOX_EVENT_SELECTED, std::bind( &ComboBoxCtrl::OnSelected, this, std::placeholders::_1 ) );
+		m_choices->SetPosition( Position( 0, GetSize().height() ) );
+		m_choices->SetSize( Size( GetSize().width() - GetSize().height(), -1 ) );
 
 		EventHandler::Connect( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &ComboBoxCtrl::OnKeyDown, this, std::placeholders::_1 ) );
 		EventHandler::ConnectNC( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &ComboBoxCtrl::OnNcKeyDown, this, std::placeholders::_1, std::placeholders::_2 ) );

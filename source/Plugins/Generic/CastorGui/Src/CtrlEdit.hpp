@@ -36,7 +36,7 @@ namespace CastorGui
 		*\param[in]	p_parent		The parent control, if any
 		*\param[in]	p_id		The control ID
 		*/
-		EditCtrl( ControlSPtr p_parent, uint32_t p_id );
+		EditCtrl( ControlRPtr p_parent, uint32_t p_id );
 
 		/** Constructor
 		*\param[in]	p_parent		The parent control, if an
@@ -47,7 +47,7 @@ namespace CastorGui
 		*\param[in]	p_style		The styl
 		*\param[in]	p_visible		Initial visibility statu
 		*/
-		EditCtrl( ControlSPtr p_parent, uint32_t p_id, Castor::String const & p_caption, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
+		EditCtrl( ControlRPtr p_parent, uint32_t p_id, Castor::String const & p_caption, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
 
 		/** Destructor
 		*/

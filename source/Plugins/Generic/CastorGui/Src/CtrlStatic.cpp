@@ -12,13 +12,12 @@ namespace CastorGui
 {
 	int StaticCtrl::m_count = 0xFF000000;
 
-	StaticCtrl::StaticCtrl( ControlSPtr p_parent, uint32_t p_id )
-		: Control( eCONTROL_TYPE_STATIC, p_parent, p_id )
+	StaticCtrl::StaticCtrl( ControlRPtr p_parent, uint32_t p_id )
+		: StaticCtrl( p_parent, String(), Position(), Size(), 0, true )
 	{
-		SetBackgroundBorders( Rectangle() );
 	}
 
-	StaticCtrl::StaticCtrl( ControlSPtr p_parent, String const & p_caption, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
+	StaticCtrl::StaticCtrl( ControlRPtr p_parent, String const & p_caption, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
 		: Control( eCONTROL_TYPE_STATIC, p_parent, m_count++, p_position, p_size, p_style, p_visible )
 		, m_caption( p_caption )
 	{
