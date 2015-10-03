@@ -22,7 +22,7 @@ namespace Castor3D
 
 	bool Overlay::TextLoader::operator()( Overlay const & p_overlay, TextFile & p_file )
 	{
-		return OverlayCategory::TextLoader()( *p_overlay.m_pOverlayCategory, p_file );
+		return OverlayCategory::TextLoader()( *p_overlay.m_category, p_file );
 	}
 
 	//*************************************************************************************************
@@ -40,7 +40,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = OverlayCategory::BinaryParser( m_path ).Fill( *p_obj.m_pOverlayCategory, l_chunk );
+			l_return = OverlayCategory::BinaryParser( m_path ).Fill( *p_obj.m_category, l_chunk );
 		}
 
 		if ( l_return )
@@ -105,7 +105,7 @@ namespace Castor3D
 					break;
 
 				default:
-					l_return = OverlayCategory::BinaryParser( m_path ).Parse( *p_obj.m_pOverlayCategory, l_chunk );
+					l_return = OverlayCategory::BinaryParser( m_path ).Parse( *p_obj.m_category, l_chunk );
 					break;
 				}
 			}
@@ -128,9 +128,9 @@ namespace Castor3D
 		, m_factory( p_engine->GetOverlayFactory() )
 		, m_engine( p_engine )
 		, m_renderSystem( p_engine->GetRenderSystem() )
-		, m_pOverlayCategory( p_engine->GetOverlayFactory().Create( p_type ) )
+		, m_category( p_engine->GetOverlayFactory().Create( p_type ) )
 	{
-		m_pOverlayCategory->SetOverlay( this );
+		m_category->SetOverlay( this );
 	}
 
 	Overlay::Overlay( Engine * p_engine, eOVERLAY_TYPE p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
@@ -140,9 +140,9 @@ namespace Castor3D
 		, m_factory( p_engine->GetOverlayFactory() )
 		, m_renderSystem( p_engine->GetRenderSystem() )
 		, m_engine( p_engine )
-		, m_pOverlayCategory( p_engine->GetOverlayFactory().Create( p_type ) )
+		, m_category( p_engine->GetOverlayFactory().Create( p_type ) )
 	{
-		m_pOverlayCategory->SetOverlay( this );
+		m_category->SetOverlay( this );
 	}
 
 	Overlay::~Overlay()
@@ -153,7 +153,7 @@ namespace Castor3D
 	{
 		if ( IsVisible() )
 		{
-			m_pOverlayCategory->Render();
+			m_category->Render();
 
 			for ( auto && l_overlay : m_overlays )
 			{
@@ -179,12 +179,12 @@ namespace Castor3D
 
 	void Overlay::Initialise()
 	{
-		m_pOverlayCategory->Initialise();
+		m_category->Initialise();
 	}
 
 	void Overlay::Cleanup()
 	{
-		m_pOverlayCategory->Cleanup();
+		m_category->Cleanup();
 	}
 
 	int Overlay::GetChildsCount( int p_level )const
@@ -208,35 +208,41 @@ namespace Castor3D
 
 	PanelOverlaySPtr Overlay::GetPanelOverlay()const
 	{
-		PanelOverlaySPtr l_return;
-
-		if ( m_pOverlayCategory->GetType() == eOVERLAY_TYPE_PANEL )
+		if ( m_category->GetType() != eOVERLAY_TYPE_PANEL )
 		{
-			l_return = std::static_pointer_cast< PanelOverlay >( m_pOverlayCategory );
+			CASTOR_EXCEPTION( "This overlay is not a panel." );
 		}
 
-		return l_return;
+		return std::static_pointer_cast< PanelOverlay >( m_category );
 	}
 
 	BorderPanelOverlaySPtr Overlay::GetBorderPanelOverlay()const
 	{
-		BorderPanelOverlaySPtr l_return;
-
-		if ( m_pOverlayCategory->GetType() == eOVERLAY_TYPE_BORDER_PANEL )
+		if ( m_category->GetType() != eOVERLAY_TYPE_BORDER_PANEL )
 		{
-			l_return = std::static_pointer_cast< BorderPanelOverlay >( m_pOverlayCategory );
+			CASTOR_EXCEPTION( "This overlay is not a border panel." );
 		}
 
-		return l_return;
+		return std::static_pointer_cast< BorderPanelOverlay >( m_category );
 	}
 
 	TextOverlaySPtr Overlay::GetTextOverlay()const
 	{
-		TextOverlaySPtr l_return;
-
-		if ( m_pOverlayCategory->GetType() == eOVERLAY_TYPE_TEXT )
+		if ( m_category->GetType() != eOVERLAY_TYPE_TEXT )
 		{
-			l_return = std::static_pointer_cast< TextOverlay >( m_pOverlayCategory );
+			CASTOR_EXCEPTION( "This overlay is not a text." );
+		}
+
+		return std::static_pointer_cast< TextOverlay >( m_category );
+	}
+
+	bool Overlay::IsVisible()const
+	{
+		bool l_return = m_category->IsVisible();
+
+		if ( l_return && GetParent() )
+		{
+			l_return = GetParent()->IsVisible();
 		}
 
 		return l_return;

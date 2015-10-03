@@ -45,7 +45,7 @@ namespace GuiCommon
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
 		 *\param[in]	p_overlay	L'incrustation cible
 		 */
-		OverlayTreeItemProperty( bool p_editable, Castor3D::OverlaySPtr p_overlay );
+		OverlayTreeItemProperty( bool p_editable, Castor3D::OverlayCategorySPtr p_overlay );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -61,7 +61,7 @@ namespace GuiCommon
 		 *\brief		Récupère l'incrustation
 		 *\return		La valeur
 		 */
-		inline Castor3D::OverlaySPtr GetOverlay()
+		inline Castor3D::OverlayCategorySPtr GetOverlay()
 		{
 			return m_overlay.lock();
 		}
@@ -95,7 +95,7 @@ namespace GuiCommon
 		void OnFontChange( Castor::FontSPtr p_value );
 
 	private:
-		Castor3D::OverlayWPtr m_overlay;
+		Castor3D::OverlayCategoryWPtr m_overlay;
 	};
 }
 

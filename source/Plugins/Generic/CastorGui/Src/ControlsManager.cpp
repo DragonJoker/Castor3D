@@ -74,8 +74,9 @@ namespace CastorGui
 		}
 	}
 
-	void ControlsManager::FireMouseMove( Position const & p_position )
+	bool ControlsManager::FireMouseMove( Position const & p_position )
 	{
+		bool l_return = false;
 		m_mouse.m_position = p_position;
 		bool l_unset = false;
 		ControlSPtr l_control = DoGetMouseTargetableControl( p_position );
@@ -101,16 +102,20 @@ namespace CastorGui
 			}
 
 			l_control->PushEvent( MouseEvent( eMOUSE_EVENT_MOUSE_MOVE, p_position ) );
+			l_return = true;
 			m_lastMouseTarget = l_control;
 		}
 		else if ( l_unset )
 		{
 			//m_generator.lock()->SetCursor( eMOUSE_CURSOR_ARROW );
 		}
+
+		return l_return;
 	}
 
-	void ControlsManager::FireMouseButtonPushed( eMOUSE_BUTTON p_button )
+	bool ControlsManager::FireMouseButtonPushed( eMOUSE_BUTTON p_button )
 	{
+		bool l_return = false;
 		m_mouse.m_buttons[p_button] = true;
 		m_mouse.m_changed = p_button;
 		ControlSPtr l_control = DoGetMouseTargetableControl( m_mouse.m_position );
@@ -130,12 +135,16 @@ namespace CastorGui
 			}
 
 			l_control->PushEvent( MouseEvent( eMOUSE_EVENT_MOUSE_BUTTON_PUSHED, m_mouse.m_position, p_button ) );
+			l_return = true;
 			m_activeControl = l_control;
 		}
+
+		return l_return;
 	}
 
-	void ControlsManager::FireMouseButtonReleased( eMOUSE_BUTTON p_button )
+	bool ControlsManager::FireMouseButtonReleased( eMOUSE_BUTTON p_button )
 	{
+		bool l_return = false;
 		m_mouse.m_buttons[p_button] = false;
 		m_mouse.m_changed = p_button;
 		ControlSPtr l_control = DoGetMouseTargetableControl( m_mouse.m_position );
@@ -143,23 +152,42 @@ namespace CastorGui
 		if ( l_control )
 		{
 			l_control->PushEvent( MouseEvent( eMOUSE_EVENT_MOUSE_BUTTON_RELEASED, m_mouse.m_position, p_button ) );
+			l_return = true;
 			m_activeControl = l_control;
 		}
+		else
+		{
+			ControlSPtr l_active = m_activeControl.lock();
+
+			if ( l_active )
+			{
+				l_active->PushEvent( ControlEvent( eCONTROL_EVENT_DEACTIVATE, l_control ) );
+			}
+
+			m_activeControl.reset();
+		}
+
+		return l_return;
 	}
 
-	void ControlsManager::FireMouseWheel( Position const & p_offsets )
+	bool ControlsManager::FireMouseWheel( Position const & p_offsets )
 	{
+		bool l_return = false;
 		m_mouse.m_wheel += p_offsets;
 		ControlSPtr l_control = DoGetMouseTargetableControl( m_mouse.m_position );
 
 		if ( l_control )
 		{
 			l_control->PushEvent( MouseEvent( eMOUSE_EVENT_MOUSE_WHEEL, p_offsets ) );
+			l_return = true;
 		}
+
+		return l_return;
 	}
 
-	void ControlsManager::FireKeyDown( eKEYBOARD_KEY p_key, bool p_ctrl, bool p_alt, bool p_shift )
+	bool ControlsManager::FireKeyDown( eKEYBOARD_KEY p_key, bool p_ctrl, bool p_alt, bool p_shift )
 	{
+		bool l_return = false;
 		ControlSPtr l_control = m_activeControl.lock();
 
 		if ( l_control )
@@ -180,11 +208,15 @@ namespace CastorGui
 			}
 
 			l_control->PushEvent( KeyboardEvent( eKEYBOARD_EVENT_KEY_PUSHED, p_key, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
+			l_return = true;
 		}
+
+		return l_return;
 	}
 
-	void ControlsManager::FireKeyUp( eKEYBOARD_KEY p_key, bool p_ctrl, bool p_alt, bool p_shift )
+	bool ControlsManager::FireKeyUp( eKEYBOARD_KEY p_key, bool p_ctrl, bool p_alt, bool p_shift )
 	{
+		bool l_return = false;
 		ControlSPtr l_control = m_activeControl.lock();
 
 		if ( l_control )
@@ -205,17 +237,24 @@ namespace CastorGui
 			}
 
 			l_control->PushEvent( KeyboardEvent( eKEYBOARD_EVENT_KEY_RELEASED, p_key, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
+			l_return = true;
 		}
+
+		return l_return;
 	}
 
-	void ControlsManager::FireChar( eKEYBOARD_KEY p_key, String const & p_char )
+	bool ControlsManager::FireChar( eKEYBOARD_KEY p_key, String const & p_char )
 	{
+		bool l_return = false;
 		ControlSPtr l_control = m_activeControl.lock();
 
 		if ( l_control )
 		{
 			l_control->PushEvent( KeyboardEvent( eKEYBOARD_EVENT_CHAR, p_key, p_char, m_keyboard.m_ctrl, m_keyboard.m_alt, m_keyboard.m_shift ) );
+			l_return = true;
 		}
+
+		return l_return;
 	}
 
 	void ControlsManager::Create( ControlSPtr p_control )

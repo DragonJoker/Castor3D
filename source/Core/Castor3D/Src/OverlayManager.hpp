@@ -28,6 +28,28 @@ namespace Castor3D
 {
 	/*!
 	\author 	Sylvain DOREMUS
+	\date 		03/10/2015
+	\version	0.8.0
+	\~english
+	\brief		Structure used to sort overlays by order.
+	\~french
+	\brief		Structure utilisée pour trier les incrustations par ordre.
+	*/
+	struct OverlayCategorySort
+	{
+		/**
+		 *\~english
+		 *\brief		Comparison operator.
+		 *\~french
+		 *\brief		Opérateur de comparaison.
+		 */
+		bool operator()( OverlayCategorySPtr p_a, OverlayCategorySPtr p_b )
+		{
+			return p_a->GetLevel() < p_b->GetLevel() || ( p_a->GetLevel() == p_b->GetLevel() && p_a->GetIndex() < p_b->GetIndex() );
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
 	\date 		09/02/2010
 	\version	0.1
 	\~english
@@ -41,6 +63,7 @@ namespace Castor3D
 	public:
 		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapIt iterator;
 		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapConstIt const_iterator;
+		typedef std::set< OverlayCategorySPtr, OverlayCategorySort > OverlayCategorySet;
 
 	public:
 		/**
@@ -273,6 +296,24 @@ namespace Castor3D
 		bool HasOverlay( Castor::String const & p_name );
 		/**
 		 *\~english
+		 *\brief		Initialises or cleans up the OverlayRenderer, according to engine rendering status
+		 *\~french
+		 *\brief		Initialise ou nettoie l'OverlayRenderer, selon le statut du rendu
+		 */
+		void Update();
+		/**
+		 *\~english
+		 *\brief		Renders all visible overlays
+		 *\param[in]	p_scene	The scene displayed, to display its overlays and the global ones
+		 *\param[in]	p_size	The render target size
+		 *\~french
+		 *\brief		Fonction de rendu des overlays visibles
+		 *\param[in]	p_scene	La scène rendue, pour afficher ses overlays en plus des globaux
+		 *\param[in]	p_size	Les dimensions de la cible du rendu
+		 */
+		void RenderOverlays( Scene const & p_scene, Castor::Size const & p_size );
+		/**
+		 *\~english
 		 *\brief		Writes overlays in a text file
 		 *\param[out]	p_file	The file
 		 *\return		\p true if ok
@@ -317,24 +358,6 @@ namespace Castor3D
 		bool LoadOverlays( Castor::BinaryFile & p_file );
 		/**
 		 *\~english
-		 *\brief		Initialises or cleans up the OverlayRenderer, according to engine rendering status
-		 *\~french
-		 *\brief		Initialise ou nettoie l'OverlayRenderer, selon le statut du rendu
-		 */
-		void Update();
-		/**
-		 *\~english
-		 *\brief		Renders all visible overlays
-		 *\param[in]	p_scene	The scene displayed, to display its overlays and the global ones
-		 *\param[in]	p_size	The render target size
-		 *\~french
-		 *\brief		Fonction de rendu des overlays visibles
-		 *\param[in]	p_scene	La scène rendue, pour afficher ses overlays en plus des globaux
-		 *\param[in]	p_size	Les dimensions de la cible du rendu
-		 */
-		void RenderOverlays( Scene const & p_scene, Castor::Size const & p_size );
-		/**
-		 *\~english
 		 *\brief		Retrieves the overlay renderer
 		 *\return		The overlay renderer
 		 *\~french
@@ -353,7 +376,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur la première incrustation
 		 *\return		La valeur
 		 */
-		inline OverlayPtrArray::iterator begin()
+		inline OverlayCategorySet::iterator begin()
 		{
 			return m_overlays.begin();
 		}
@@ -365,43 +388,19 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur la première incrustation
 		 *\return		La valeur
 		 */
-		inline OverlayPtrArray::const_iterator begin()const
+		inline OverlayCategorySet::const_iterator begin()const
 		{
 			return m_overlays.begin();
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves an iterator to the first overlay
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la première incrustation
-		 *\return		La valeur
-		 */
-		inline OverlayPtrArray::reverse_iterator rbegin()
-		{
-			return m_overlays.rbegin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first overlay
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la première incrustation
-		 *\return		La valeur
-		 */
-		inline OverlayPtrArray::const_reverse_iterator rbegin()const
-		{
-			return m_overlays.rbegin();
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves an iterator to after the last overlay
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère un itérateur sur après la dernière incrustation
 		 *\return		La valeur
 		 */
-		inline OverlayPtrArray::iterator end()
+		inline OverlayCategorySet::iterator end()
 		{
 			return m_overlays.end();
 		}
@@ -413,38 +412,14 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur après la dernière incrustation
 		 *\return		La valeur
 		 */
-		inline OverlayPtrArray::const_iterator end()const
+		inline OverlayCategorySet::const_iterator end()const
 		{
 			return m_overlays.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to after the last overlay
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur après la dernière incrustation
-		 *\return		La valeur
-		 */
-		inline OverlayPtrArray::reverse_iterator rend()
-		{
-			return m_overlays.rend();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to after the last overlay
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur après la dernière incrustation
-		 *\return		La valeur
-		 */
-		inline OverlayPtrArray::const_reverse_iterator rend()const
-		{
-			return m_overlays.rend();
 		}
 
 	private:
 		//!\~english The overlays, in rendering order.	\~french Les incrustations, dans l'ordre de rendu.
-		OverlayPtrArray m_overlays;
+		OverlayCategorySet m_overlays;
 		//!\~english The engine	\~french Le moteur
 		Engine * m_engine;
 		//!\~english The overlay renderer	\~french le renderer d'incrustation

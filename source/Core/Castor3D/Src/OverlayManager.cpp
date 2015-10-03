@@ -153,11 +153,7 @@ namespace Castor3D
 		Castor::Collection< Overlay, Castor::String >::insert( p_name, p_overlay );
 		int l_level = 0;
 
-		if ( !p_parent )
-		{
-			m_overlays.push_back( p_overlay );
-		}
-		else
+		if ( p_parent )
 		{
 			l_level = p_parent->GetLevel() + 1;
 			p_parent->AddChild( p_overlay );
@@ -168,8 +164,8 @@ namespace Castor3D
 			m_overlayCountPerLevel.resize( m_overlayCountPerLevel.size() * 2 );
 		}
 
-		p_overlay->SetOrder( m_overlayCountPerLevel[l_level], l_level );
-		m_overlayCountPerLevel[l_level]++;
+		p_overlay->SetOrder( ++m_overlayCountPerLevel[l_level], l_level );
+		m_overlays.insert( p_overlay->GetCategory() );
 	}
 
 	void OverlayManager::RemoveOverlay( Castor::String const & p_name )
@@ -201,116 +197,6 @@ namespace Castor3D
 	OverlaySPtr OverlayManager::GetOverlay( Castor::String const & p_name )
 	{
 		return Castor::Collection< Overlay, Castor::String >::find( p_name );
-	}
-
-	bool OverlayManager::WriteOverlays( Castor::TextFile & p_file )const
-	{
-		Castor::Collection< Overlay, Castor::String >::lock();
-		bool l_return = true;
-		auto && l_it = m_overlays.begin();
-		bool l_first = true;
-
-		while ( l_return && l_it != m_overlays.end() )
-		{
-			OverlaySPtr l_overlay = *l_it;
-
-			if ( l_first )
-			{
-				l_first = false;
-			}
-			else
-			{
-				p_file.WriteText( cuT( "\n" ) );
-			}
-
-			switch ( l_overlay->GetType() )
-			{
-			case eOVERLAY_TYPE_PANEL:
-				l_return = PanelOverlay::TextLoader()( *l_overlay->GetPanelOverlay(), p_file );
-				break;
-
-			case eOVERLAY_TYPE_BORDER_PANEL:
-				l_return = BorderPanelOverlay::TextLoader()( *l_overlay->GetBorderPanelOverlay(), p_file );
-				break;
-
-			case eOVERLAY_TYPE_TEXT:
-				l_return = TextOverlay::TextLoader()( *l_overlay->GetTextOverlay(), p_file );
-				break;
-
-			default:
-				l_return = false;
-			}
-
-			++l_it;
-		}
-
-		Castor::Collection< Overlay, Castor::String >::unlock();
-		return l_return;
-	}
-
-	bool OverlayManager::ReadOverlays( Castor::TextFile & p_file )
-	{
-		SceneFileParser l_parser( m_engine );
-		return l_parser.ParseFile( p_file );
-	}
-
-	bool OverlayManager::SaveOverlays( Castor::BinaryFile & p_file )const
-	{
-		Castor::Collection< Overlay, Castor::String >::lock();
-		bool l_return = p_file.Write( uint32_t( m_overlays.size() ) ) == sizeof( uint32_t );
-		auto && l_it = m_overlays.begin();
-
-		while ( l_return && l_it != m_overlays.end() )
-		{
-			OverlaySPtr l_overlay = *l_it;
-			l_return = BinaryLoader< Overlay >()( *l_overlay, p_file );
-			++l_it;
-		}
-
-		Castor::Collection< Overlay, Castor::String >::unlock();
-		return l_return;
-	}
-
-	bool OverlayManager::LoadOverlays( Castor::BinaryFile & p_file )
-	{
-		Castor::Collection< Overlay, Castor::String >::lock();
-		uint32_t l_size;
-		bool l_return = p_file.Write( l_size ) == sizeof( uint32_t );
-		String l_name;
-		eOVERLAY_TYPE l_type;
-		OverlaySPtr l_overlay;
-
-		for ( uint32_t i = 0; i < l_size && l_return; i++ )
-		{
-			l_return = p_file.Read( l_name );
-
-			if ( l_return )
-			{
-				l_return = p_file.Read( l_type ) == sizeof( eOVERLAY_TYPE );
-			}
-
-			if ( l_return )
-			{
-				l_overlay = Castor::Collection< Overlay, Castor::String >::find( l_name ) ;
-
-				if ( !l_overlay )
-				{
-					l_overlay = std::make_shared< Overlay >( m_engine, l_type );
-					l_overlay->SetName( l_name );
-					AddOverlay( l_name, l_overlay, nullptr );
-				}
-
-				l_return = l_overlay != nullptr;
-			}
-
-			if ( l_return )
-			{
-				l_return = BinaryLoader< Overlay >()( *l_overlay, p_file );
-			}
-		}
-
-		Castor::Collection< Overlay, Castor::String >::unlock();
-		return l_return;
 	}
 
 	void OverlayManager::Update()
@@ -359,17 +245,126 @@ namespace Castor3D
 			l_pipeline.ApplyViewport( m_size.width(), m_size.height() );
 			m_pRenderer->BeginRender( m_size );
 
-			for ( auto l_overlay : m_overlays )
+			for ( auto l_category : m_overlays )
 			{
-				SceneSPtr l_scene = l_overlay->GetScene();
+				SceneSPtr l_scene = l_category->GetOverlay().GetScene();
 
-				if ( !l_scene || l_scene->GetName() == p_scene.GetName() )
+				if ( l_category->GetOverlay().IsVisible() && ( !l_scene || l_scene->GetName() == p_scene.GetName() ) )
 				{
-					l_overlay->Render( m_size );
+					l_category->Render();
 				}
 			}
 		}
 
 		unlock();
+	}
+
+	bool OverlayManager::WriteOverlays( Castor::TextFile & p_file )const
+	{
+		Castor::Collection< Overlay, Castor::String >::lock();
+		bool l_return = true;
+		auto && l_it = m_overlays.begin();
+		bool l_first = true;
+
+		while ( l_return && l_it != m_overlays.end() )
+		{
+			Overlay & l_overlay = ( *l_it )->GetOverlay();
+
+			if ( l_first )
+			{
+				l_first = false;
+			}
+			else
+			{
+				p_file.WriteText( cuT( "\n" ) );
+			}
+
+			switch ( l_overlay.GetType() )
+			{
+			case eOVERLAY_TYPE_PANEL:
+				l_return = PanelOverlay::TextLoader()( *l_overlay.GetPanelOverlay(), p_file );
+				break;
+
+			case eOVERLAY_TYPE_BORDER_PANEL:
+				l_return = BorderPanelOverlay::TextLoader()( *l_overlay.GetBorderPanelOverlay(), p_file );
+				break;
+
+			case eOVERLAY_TYPE_TEXT:
+				l_return = TextOverlay::TextLoader()( *l_overlay.GetTextOverlay(), p_file );
+				break;
+
+			default:
+				l_return = false;
+			}
+
+			++l_it;
+		}
+
+		Castor::Collection< Overlay, Castor::String >::unlock();
+		return l_return;
+	}
+
+	bool OverlayManager::ReadOverlays( Castor::TextFile & p_file )
+	{
+		SceneFileParser l_parser( m_engine );
+		return l_parser.ParseFile( p_file );
+	}
+
+	bool OverlayManager::SaveOverlays( Castor::BinaryFile & p_file )const
+	{
+		Castor::Collection< Overlay, Castor::String >::lock();
+		bool l_return = p_file.Write( uint32_t( m_overlays.size() ) ) == sizeof( uint32_t );
+		auto && l_it = m_overlays.begin();
+
+		while ( l_return && l_it != m_overlays.end() )
+		{
+			l_return = BinaryLoader< Overlay >()( ( *l_it )->GetOverlay(), p_file );
+			++l_it;
+		}
+
+		Castor::Collection< Overlay, Castor::String >::unlock();
+		return l_return;
+	}
+
+	bool OverlayManager::LoadOverlays( Castor::BinaryFile & p_file )
+	{
+		Castor::Collection< Overlay, Castor::String >::lock();
+		uint32_t l_size;
+		bool l_return = p_file.Write( l_size ) == sizeof( uint32_t );
+		String l_name;
+		eOVERLAY_TYPE l_type;
+		OverlaySPtr l_overlay;
+
+		for ( uint32_t i = 0; i < l_size && l_return; i++ )
+		{
+			l_return = p_file.Read( l_name );
+
+			if ( l_return )
+			{
+				l_return = p_file.Read( l_type ) == sizeof( eOVERLAY_TYPE );
+			}
+
+			if ( l_return )
+			{
+				l_overlay = Castor::Collection< Overlay, Castor::String >::find( l_name ) ;
+
+				if ( !l_overlay )
+				{
+					l_overlay = std::make_shared< Overlay >( m_engine, l_type );
+					l_overlay->SetName( l_name );
+					AddOverlay( l_name, l_overlay, nullptr );
+				}
+
+				l_return = l_overlay != nullptr;
+			}
+
+			if ( l_return )
+			{
+				l_return = BinaryLoader< Overlay >()( *l_overlay, p_file );
+			}
+		}
+
+		Castor::Collection< Overlay, Castor::String >::unlock();
+		return l_return;
 	}
 }

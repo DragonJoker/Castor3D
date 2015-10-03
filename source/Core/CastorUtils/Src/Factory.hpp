@@ -39,12 +39,12 @@ namespace Castor
 	\remark		Les classes pouvant être enregistrées doivent implémenter une fonction de la forme suivante :
 				<br />static std::shared_ptr< Obj > Create();
 	*/
-	template< class Obj, class Key, typename Creator, class Predicate >
+	template< class Obj, class Key, class PtrType, typename Creator, class Predicate >
 	class Factory
 		: public Castor::NonCopyable
 	{
 	protected:
-		typedef std::shared_ptr< Obj > ObjPtr;
+		typedef PtrType ObjPtr;
 		typedef std::map< Key, Creator, Predicate > ObjMap;
 
 	public:

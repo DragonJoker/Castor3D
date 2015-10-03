@@ -181,6 +181,7 @@ namespace Castor
 	class TextLoader;
 	template< class Obj,
 			  class Key,
+			  class PtrType=std::shared_ptr< Obj >,
 			  typename PFNCreate = std::function< std::shared_ptr< Obj >() >,
 			  class Predicate = std::less< Key > >
 	class Factory;

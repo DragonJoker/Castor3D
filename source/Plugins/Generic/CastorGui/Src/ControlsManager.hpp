@@ -99,51 +99,58 @@ namespace CastorGui
 		/**@name Mouse events */
 		//@{
 
-		/** Fires a mouse move event
-		 *\param[in]	p_position		The mouse position
-		*/
-		C3D_CGui_API void FireMouseMove( Castor::Position const & p_position );
+		/** Fires a mouse move event.
+		 *\param[in]	p_position	The mouse position.
+		 *\return		\p true if the event is processed by a control.
+		 */
+		C3D_CGui_API bool FireMouseMove( Castor::Position const & p_position );
 
-		/** Fires a mouse pushed event
-		 *\param[in]	p_button		The mouse button
-		*/
-		C3D_CGui_API void FireMouseButtonPushed( eMOUSE_BUTTON p_button );
+		/** Fires a mouse pushed event.
+		 *\param[in]	p_button	The mouse button.
+		 *\return		\p true if the event is processed by a control.
+		 */
+		C3D_CGui_API bool FireMouseButtonPushed( eMOUSE_BUTTON p_button );
 
-		/** Fires a mouse released event
-		 *\param[in]	p_button		The mouse button
-		*/
-		C3D_CGui_API void FireMouseButtonReleased( eMOUSE_BUTTON p_button );
+		/** Fires a mouse released event.
+		 *\param[in]	p_button	The mouse button.
+		 *\return		\p true if the event is processed by a control.
+		 */
+		C3D_CGui_API bool FireMouseButtonReleased( eMOUSE_BUTTON p_button );
 
-		/** Fires a mouse wheel event
-		 *\param[in]	p_offsets		The mouse wheel offsets (x and y)
-		*/
-		C3D_CGui_API void FireMouseWheel( Castor::Position const & p_offsets );
+		/** Fires a mouse wheel event.
+		 *\param[in]	p_offsets	The mouse wheel offsets (x and y).
+		 *\return		\p true if the event is processed by a control.
+		 */
+		C3D_CGui_API bool FireMouseWheel( Castor::Position const & p_offsets );
 
 		//@}
 		/**@name Keyboard events */
 		//@{
 
-		/** Fires a keyboard key down event
-		 *\param[in]	p_key		The key
-		 *\param[in]	p_ctrl		Tells if the Ctrl key is down
-		 *\param[in]	p_alt		Tells if the Alt key is down
-		 *\param[in]	p_shift		Tells if the Shift key is down
-		*/
-		C3D_CGui_API void FireKeyDown( eKEYBOARD_KEY p_key, bool p_ctrl, bool p_alt, bool p_shift );
+		/** Fires a keyboard key down event.
+		 *\param[in]	p_key		The key.
+		 *\param[in]	p_ctrl		Tells if the Ctrl key is down.
+		 *\param[in]	p_alt		Tells if the Alt key is down.
+		 *\param[in]	p_shift		Tells if the Shift key is down.
+		 *\return		\p true if the event is processed by a control.
+		 */
+		C3D_CGui_API bool FireKeyDown( eKEYBOARD_KEY p_key, bool p_ctrl, bool p_alt, bool p_shift );
 
-		/** Fires a keyboard key up event
-		 *\param[in]	p_key		The key
-		 *\param[in]	p_ctrl		Tells if the Ctrl key is down
-		 *\param[in]	p_alt		Tells if the Alt key is down
-		 *\param[in]	p_shift		Tells if the Shift key is down
+		/** Fires a keyboard key up event.
+		 *\param[in]	p_key		The key.
+		 *\param[in]	p_ctrl		Tells if the Ctrl key is down.
+		 *\param[in]	p_alt		Tells if the Alt key is down.
+		 *\param[in]	p_shift		Tells if the Shift key is down.
+		 *\return		\p true if the event is processed by a control.
 		*/
-		C3D_CGui_API void FireKeyUp( eKEYBOARD_KEY p_key, bool p_ctrl, bool p_alt, bool p_shift );
+		C3D_CGui_API bool FireKeyUp( eKEYBOARD_KEY p_key, bool p_ctrl, bool p_alt, bool p_shift );
 
-		/** Fires a printable key event
-		 *\param[in]	p_key		The key
-		 *\param[in]	p_char		The character coorresponding to the key, displayable as is
+		/** Fires a printable key event.
+		 *\param[in]	p_key		The key.
+		 *\param[in]	p_char		The character coorresponding to the key, displayable as is.
+		 *\return		\p true if the event is processed by a control.
 		*/
-		C3D_CGui_API void FireChar( eKEYBOARD_KEY p_key, Castor::String const & p_char );
+		C3D_CGui_API bool FireChar( eKEYBOARD_KEY p_key, Castor::String const & p_char );
 
 		//@}
 		/**@name Controls management */
