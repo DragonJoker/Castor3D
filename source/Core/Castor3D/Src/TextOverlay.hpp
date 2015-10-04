@@ -267,7 +267,7 @@ namespace Castor3D
 		 *\param[in]	p_char	L'indice de la glyphe
 		 *\return		La position
 		 */
-		Castor::Position const & GetGlyphPosition( xchar p_char )const;
+		Castor::Position const & GetGlyphPosition(char32_t p_char )const;
 
 	protected:
 		/**
@@ -304,7 +304,7 @@ namespace Castor3D
 		 *\param[in]	p_position	La position du mot
 		 *\param[in]	p_size		La taille de l'incrustation
 		 */
-		void DoWriteWord( OverlayRendererSPtr p_renderer, Castor::String const & p_word, double p_wordWidth, Castor::Point2d const & p_size, Castor::Point2d & p_position );
+		void DoWriteWord( OverlayRendererSPtr p_renderer, std::u32string const & p_word, double p_wordWidth, Castor::Point2d const & p_size, Castor::Point2d & p_position );
 
 	protected:
 		//!\~english The current overlay caption	\~french Le texte courant de l'incrustation

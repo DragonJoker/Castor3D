@@ -20,8 +20,8 @@ namespace Ase
 
 	SceneSPtr AseImporter::DoImportScene()
 	{
-		SceneSPtr l_pScene = m_pEngine->CreateScene( cuT( "Scene_ASE" ) );
-		m_pFileParser = new AseFileParser( m_pEngine );
+		SceneSPtr l_pScene = m_engine->CreateScene( cuT( "Scene_ASE" ) );
+		m_pFileParser = new AseFileParser( m_engine );
 		m_pFileParser->ParseFile( m_fileName, l_pScene );
 		MeshSPtr l_pMesh;
 
@@ -44,7 +44,7 @@ namespace Ase
 
 	MeshSPtr AseImporter::DoImportMesh()
 	{
-		m_pFileParser = new AseFileParser( m_pEngine );
+		m_pFileParser = new AseFileParser( m_engine );
 		m_pFileParser->ParseFile( m_fileName );
 		MeshSPtr l_pMesh = m_pFileParser->GetMesh();
 

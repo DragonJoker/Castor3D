@@ -45,7 +45,7 @@ SceneSPtr Md2Importer::DoImportScene()
 	if ( l_pMesh )
 	{
 		l_pMesh->GenerateBuffers();
-		l_pScene = m_pEngine->CreateScene( cuT( "Scene_MD2" ) );
+		l_pScene = m_engine->CreateScene( cuT( "Scene_MD2" ) );
 		SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 		GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
 		l_pGeometry->AttachTo( l_pNode );
@@ -70,7 +70,7 @@ MeshSPtr Md2Importer::DoImportMesh()
 	m_pFile			= new BinaryFile( m_fileName, File::eOPEN_MODE_READ );
 	l_meshName		= m_fileName.GetFileName();
 	l_materialName	= m_fileName.GetFileName();
-	l_pMesh			= m_pEngine->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName, l_faces, l_sizes );
+	l_pMesh			= m_engine->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName, l_faces, l_sizes );
 	m_pFile->Read( m_header );
 
 	if ( m_header.m_version != 8 )
@@ -79,13 +79,13 @@ MeshSPtr Md2Importer::DoImportMesh()
 	}
 	else
 	{
-		l_material = m_pEngine->GetMaterialManager().find( l_materialName );
+		l_material = m_engine->GetMaterialManager().find( l_materialName );
 
 		if ( !l_material )
 		{
-			l_material = std::make_shared< Material >( m_pEngine, l_materialName );
+			l_material = std::make_shared< Material >( m_engine, l_materialName );
 			l_material->CreatePass();
-			m_pEngine->GetMaterialManager().insert( l_materialName, l_material );
+			m_engine->GetMaterialManager().insert( l_materialName, l_material );
 		}
 
 		l_pass = l_material->GetPass( 0 );
@@ -101,7 +101,7 @@ MeshSPtr Md2Importer::DoImportMesh()
 		}
 
 		l_pMesh->ComputeNormals();
-		m_pEngine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_material ) );
+		m_engine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_material ) );
 	}
 
 	DoCleanUp();
@@ -126,12 +126,12 @@ void Md2Importer::DoReadMD2Data( PassSPtr p_pPass )
 
 		for ( int i = 0 ; i < m_header.m_numSkins && !l_pTexture ; i++ )
 		{
-			String l_strValue = str_utils::from_str( m_skins[i] );
+			String l_strValue = string::string_cast< xchar >( m_skins[i] );
 
 			if ( !l_strValue.empty() )
 			{
 				String l_strPath = m_filePath / l_strValue;
-				l_pImage = m_pEngine->GetImageManager().find( l_strValue );
+				l_pImage = m_engine->GetImageManager().find( l_strValue );
 
 				if ( !l_pImage )
 				{
@@ -143,7 +143,7 @@ void Md2Importer::DoReadMD2Data( PassSPtr p_pPass )
 					if ( File::FileExists( l_strPath ) )
 					{
 						l_pImage = std::make_shared< Image >( l_strValue, l_strPath );
-						m_pEngine->GetImageManager().insert( l_strValue, l_pImage );
+						m_engine->GetImageManager().insert( l_strValue, l_pImage );
 					}
 				}
 			}
@@ -151,7 +151,7 @@ void Md2Importer::DoReadMD2Data( PassSPtr p_pPass )
 			if ( l_pImage && p_pPass )
 			{
 				l_pTexture = p_pPass->AddTextureUnit();
-				StaticTextureSPtr l_pStaTexture = m_pEngine->GetRenderSystem()->CreateStaticTexture();
+				StaticTextureSPtr l_pStaTexture = m_engine->GetRenderSystem()->CreateStaticTexture();
 				l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
 				l_pStaTexture->SetImage( l_pImage->GetPixels() );
 				l_pTexture->SetTexture( l_pStaTexture );

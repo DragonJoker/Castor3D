@@ -51,7 +51,7 @@ namespace Lwo
 		if ( l_pMesh )
 		{
 			l_pMesh->GenerateBuffers();
-			l_pScene = m_pEngine->CreateScene( cuT( "Scene_LWO" ) );
+			l_pScene = m_engine->CreateScene( cuT( "Scene_LWO" ) );
 			SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 			GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
 			l_pGeometry->AttachTo( l_pNode );
@@ -76,7 +76,7 @@ namespace Lwo
 		{
 			Logger::LogDebug( cuT( "**************************************************" ) );
 			Logger::LogDebug( cuT( "Importing mesh from file : [" ) + m_fileName + cuT( "]" ) );
-			l_pReturn = m_pEngine->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName, l_faces, l_sizes );
+			l_pReturn = m_engine->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName, l_faces, l_sizes );
 			DoRead( &l_currentChunk );
 			char l_szName[5] = { 0, 0, 0, 0 , 0 };
 			l_currentChunk.m_uiRead += UI4( m_pFile->ReadArray(	l_szName, 4	) );
@@ -220,11 +220,11 @@ namespace Lwo
 
 		for ( std::vector< SubmeshPtrStrPair >::iterator l_it = m_arraySubmeshByMatName.begin() ; l_it != m_arraySubmeshByMatName.end() ; ++l_it )
 		{
-			l_pMaterial = m_pEngine->GetMaterialManager().find( str_utils::from_str( l_it->first ) );
+			l_pMaterial = m_engine->GetMaterialManager().find( string::string_cast< xchar >( l_it->first ) );
 
 			if ( l_pMaterial )
 			{
-				m_pEngine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_pMaterial ) );
+				m_engine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_pMaterial ) );
 				l_it->second->SetDefaultMaterial( l_pMaterial );
 			}
 		}
@@ -920,7 +920,7 @@ namespace Lwo
 						StringStream l_strLog( cuT( "			Texture found: " ) );
 						Logger::LogDebug( l_strLog << l_it->second->GetPath().c_str() );
 						l_pTexture = p_pPass->AddTextureUnit();
-						StaticTextureSPtr l_pStaTexture = m_pEngine->GetRenderSystem()->CreateStaticTexture();
+						StaticTextureSPtr l_pStaTexture = m_engine->GetRenderSystem()->CreateStaticTexture();
 						l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
 						l_pStaTexture->SetImage( l_it->second->GetPixels() );
 						l_pTexture->SetTexture( l_pStaTexture );
@@ -1032,9 +1032,9 @@ namespace Lwo
 		if ( l_bContinue )
 		{
 			p_pChunk->m_uiRead += UI4( m_strSource.size() + 1 + ( 1 - m_strSource.size() % 2 ) );
-			Logger::LogDebug( cuT( "	Name : "	) + str_utils::from_str( m_strName 	) );
-			Logger::LogDebug( cuT( "	Source : " 	) + str_utils::from_str( m_strSource 	) );
-			l_pMaterial = std::make_shared< Material >( GetEngine(), str_utils::from_str( m_strName ) );
+			Logger::LogDebug( cuT( "	Name : "	) + string::string_cast< xchar >( m_strName 	) );
+			Logger::LogDebug( cuT( "	Source : " 	) + string::string_cast< xchar >( m_strSource 	) );
+			l_pMaterial = std::make_shared< Material >( GetEngine(), string::string_cast< xchar >( m_strName ) );
 			l_pPass = l_pMaterial->GetPass( 0 );
 		}
 
@@ -1109,7 +1109,7 @@ namespace Lwo
 			l_pPass->SetSpecular(	l_clrBase * l_fSpec 					);
 			l_pPass->SetShininess(	float( 2 ^ int( ( 10 * l_fGlos ) + 2 ) )	);
 			l_pPass->SetTwoSided(	l_usSide == 3 							);
-			GetEngine()->GetMaterialManager().insert( str_utils::from_str( m_strName ), l_pMaterial );
+			GetEngine()->GetMaterialManager().insert( string::string_cast< xchar >( m_strName ), l_pMaterial );
 			GetEngine()->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_pMaterial ) );
 		}
 		else
@@ -1143,8 +1143,8 @@ namespace Lwo
 				case eID_TAG_CLIP_STIL:
 					DoRead( l_strName );
 					l_currentSubchunk.m_usRead += UI2( l_strName.size() + 1 + ( 1 - l_strName.size() % 2 ) );
-					Logger::LogDebug( cuT( "		Image : " ) + str_utils::from_str( l_strName ) );
-					l_pathImage = str_utils::from_str( l_strName );
+					Logger::LogDebug( cuT( "		Image : " ) + string::string_cast< xchar >( l_strName ) );
+					l_pathImage = string::string_cast< xchar >( l_strName );
 					l_pImage = GetEngine()->GetImageManager().find( l_pathImage );
 
 					if ( !l_pImage )
@@ -1448,8 +1448,8 @@ namespace Lwo
 			Logger::LogDebug( StringStream() << cuT( "\tFlags:  0x" ) << std::hex << l_usFlags );
 			Logger::LogDebug( StringStream() << cuT( "\tPivot:  " ) << l_ptPivot );
 			Logger::LogDebug( StringStream() << cuT( "\tParent: " ) << l_usParent );
-			String l_strNameTmp = str_utils::from_str( l_strName );
-			str_utils::to_lower_case( l_strNameTmp );
+			String l_strNameTmp = string::string_cast< xchar >( l_strName );
+			string::to_lower_case( l_strNameTmp );
 
 			if ( l_usFlags & 0x01 || l_strNameTmp.find( cuT( "bip" ) ) == 0 || l_strNameTmp.find( cuT( "fcfx" ) ) == 0 || l_strNameTmp.find( cuT( "gundummy" ) ) == 0 || l_strNameTmp.find( cuT( "flap_bone" ) ) == 0 )
 			{

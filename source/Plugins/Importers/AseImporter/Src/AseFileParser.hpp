@@ -34,23 +34,22 @@ namespace Ase
 	*/
 	typedef enum eASE_SECTION
 	{
-		eASE_SECTION_ROOT
-		,	eASE_SECTION_SCENE
-		,	eASE_SECTION_MATERIALS
-		,	eASE_SECTION_MATERIAL
-		,	eASE_SECTION_SUBMAT
-		,	eASE_SECTION_MAPDIFFUSE
-		,	eASE_SECTION_GEOMETRY
-		,	eASE_SECTION_GEONODE
-		,	eASE_SECTION_GEOMESH
-		,	eASE_SECTION_VERTEXLIST
-		,	eASE_SECTION_FACELIST
-		,	eASE_SECTION_TVERTEXLIST
-		,	eASE_SECTION_TFACELIST
-		,	eASE_SECTION_CVERTEXLIST
-		,	eASE_SECTION_CFACELIST
-		,	eASE_SECTION_NORMALSLIST
-		,	eASE_SECTION_COUNT
+		eASE_SECTION_ROOT = MAKE_SECTION_NAME( 'R', 'O', 'O', 'T' ),
+		eASE_SECTION_SCENE = MAKE_SECTION_NAME ( 'S', 'C', 'N', 'E' ),
+		eASE_SECTION_MATERIALS = MAKE_SECTION_NAME ( 'M', 'A', 'T', 'S' ),
+		eASE_SECTION_MATERIAL = MAKE_SECTION_NAME ( 'M', 'A', 'T', 'L' ),
+		eASE_SECTION_SUBMAT = MAKE_SECTION_NAME ( 'S', 'M', 'A', 'T' ),
+		eASE_SECTION_MAPDIFFUSE = MAKE_SECTION_NAME ( 'D', 'I', 'F', 'F' ),
+		eASE_SECTION_GEOMETRY = MAKE_SECTION_NAME ( 'G', 'M', 'T', 'Y' ),
+		eASE_SECTION_GEONODE = MAKE_SECTION_NAME ( 'G', 'N', 'O', 'D' ),
+		eASE_SECTION_GEOMESH = MAKE_SECTION_NAME ( 'G', 'M', 'S', 'H' ),
+		eASE_SECTION_VERTEXLIST = MAKE_SECTION_NAME ( 'L', 'V', 'E', 'R' ),
+		eASE_SECTION_FACELIST = MAKE_SECTION_NAME ( 'L', 'F', 'C', 'E' ),
+		eASE_SECTION_TVERTEXLIST = MAKE_SECTION_NAME ( 'L', 'T', 'V', 'X' ),
+		eASE_SECTION_TFACELIST = MAKE_SECTION_NAME ( 'L', 'T', 'F', 'C' ),
+		eASE_SECTION_CVERTEXLIST = MAKE_SECTION_NAME ( 'L', 'C', 'V', 'X' ),
+		eASE_SECTION_CFACELIST = MAKE_SECTION_NAME ( 'L', 'C', 'F', 'C' ),
+		eASE_SECTION_NORMALSLIST = MAKE_SECTION_NAME ( 'L', 'N', 'M', 'L' ),
 	}	eASE_SECTION;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -104,7 +103,7 @@ namespace Ase
 		 */
 		inline Castor3D::Engine * GetEngine()const
 		{
-			return m_pEngine;
+			return m_engine;
 		}
 		/**
 		 *\~english
@@ -132,7 +131,7 @@ namespace Ase
 	private:
 		Castor3D::SceneSPtr m_pScene;
 		Castor3D::MeshSPtr m_pMesh;
-		Castor3D::Engine * m_pEngine;
+		Castor3D::Engine * m_engine;
 	};
 
 	DECLARE_ATTRIBUTE_PARSER( AseParser_RootFormat					)

@@ -675,7 +675,6 @@ namespace SMax
 		virtual Castor3D::SceneSPtr	DoImportScene();
 		virtual Castor3D::MeshSPtr	DoImportMesh();
 
-		int DoGetString( xchar * p_pBuffer );
 		int DoGetString( Castor::String & p_strString );
 		void DoReadChunk( SMaxChunk * p_pChunk );
 		void DoProcessNextChunk( SMaxChunk * p_pChunk, Castor3D::MeshSPtr p_pMesh );

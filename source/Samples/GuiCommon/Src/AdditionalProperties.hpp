@@ -81,7 +81,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 // custom implementations.
 #define GC_PG_IMPLEMENT_ALIGNED_VARIANT_DATA_EXPORTED_NO_EQ_NO_GETTER( classname, alignment, expdecl ) \
 	const char* classname##_VariantType = #classname; \
-	class classname##VariantData: public wxVariantData \
+	class classname##VariantData\
+		: public wxVariantData\
+		, public Castor::Aligned< alignment >\
 	{ \
 	public:\
 		classname##VariantData() {} \
@@ -91,7 +93,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 		virtual bool Eq( wxVariantData & data ) const; \
 		virtual wxString GetType() const; \
 		virtual wxVariantData* Clone() const { return new classname##VariantData( m_value ); } \
-		CASTOR_ALIGNED_CLASS( alignment )\
 	protected:\
 		classname m_value; \
 	};\

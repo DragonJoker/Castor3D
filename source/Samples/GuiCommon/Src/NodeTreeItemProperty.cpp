@@ -81,27 +81,33 @@ namespace GuiCommon
 		}
 	}
 
-	void NodeTreeItemProperty::OnPositionChange( Castor::Point3r const & p_value )
+	void NodeTreeItemProperty::OnPositionChange( Point3r const & p_value )
 	{
 		SceneNodeSPtr l_node = GetNode();
+		float x = p_value[0];
+		float y = p_value[1];
+		float z = p_value[2];
 
-		DoApplyChange( [p_value, l_node]()
+		DoApplyChange( [x, y, z, l_node]()
 		{
-			l_node->SetPosition( p_value );
+			l_node->SetPosition( Point3r( x, y, z ) );
 		} );
 	}
 
-	void NodeTreeItemProperty::OnScaleChange( Castor::Point3r const & p_value )
+	void NodeTreeItemProperty::OnScaleChange( Point3r const & p_value )
 	{
 		SceneNodeSPtr l_node = GetNode();
+		float x = p_value[0];
+		float y = p_value[1];
+		float z = p_value[2];
 
-		DoApplyChange( [p_value, l_node]()
+		DoApplyChange( [x, y, z, l_node]()
 		{
-			l_node->SetScale( p_value );
+			l_node->SetScale( Point3r( x, y, z ) );
 		} );
 	}
 
-	void NodeTreeItemProperty::OnOrientationChange( Castor::Quaternion const & p_value )
+	void NodeTreeItemProperty::OnOrientationChange( Quaternion const & p_value )
 	{
 		SceneNodeSPtr l_node = GetNode();
 

@@ -20,6 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "File.hpp"
 #include "NonCopyable.hpp"
+#include "Aligned.hpp"
 
 #include <cmath>
 #include <iostream>
@@ -38,6 +39,7 @@ namespace Castor
 	*/
 	template< typename T, uint32_t Count >
 	class Point
+		: Aligned< 16 >
 	{
 	public:
 		/*!
@@ -130,8 +132,6 @@ namespace Castor
 			 */
 			virtual bool operator()( Point< T, Count > const & p_object, TextFile & p_file );
 		};
-
-		CASTOR_ALIGNED_CLASS( 16 );
 
 	private:
 		template< typename U, uint32_t _Count > friend class Point;

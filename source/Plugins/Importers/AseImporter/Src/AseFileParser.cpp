@@ -34,9 +34,9 @@ using namespace Castor;
 namespace Ase
 {
 	AseFileParser::AseFileParser( Engine * p_pEngine )
-		:	FileParser( eASE_SECTION_ROOT, eASE_SECTION_COUNT )
-		,	m_pScene( NULL )
-		,	m_pEngine( p_pEngine )
+		: FileParser( eASE_SECTION_ROOT )
+		, m_pScene( NULL )
+		, m_engine( p_pEngine )
 	{
 	}
 
@@ -180,7 +180,7 @@ namespace Ase
 		AddParser( eASE_SECTION_NORMALSLIST,	cuT( "*MESH_VERTEXNORMAL"		),	AseParser_NormalsListVertexNormal	);
 		AddParser( eASE_SECTION_NORMALSLIST,	cuT( "}"						),	AseParser_NormalsListEnd			);
 		std::shared_ptr< AseFileContext > l_pContext = std::make_shared< AseFileContext >( this, &p_file );
-		m_pParsingContext = std::static_pointer_cast< FileParserContext >( l_pContext );
+		m_context = std::static_pointer_cast< FileParserContext >( l_pContext );
 		l_pContext->Initialise();
 		l_pContext->strName.clear();
 		l_pContext->pScene = m_pScene;
@@ -193,12 +193,12 @@ namespace Ase
 	void AseFileParser::DoDiscardParser( String const & p_strLine )
 	{
 		StringStream strToLog( cuT( "Parser not found @ line #" ) );
-		Logger::LogWarning( strToLog << m_pParsingContext->ui64Line << cuT( " : " ) << p_strLine );
+		Logger::LogWarning( strToLog << m_context->ui64Line << cuT( " : " ) << p_strLine );
 	}
 
 	void AseFileParser::DoValidate()
 	{
-		std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( m_pParsingContext );
+		std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( m_context );
 
 		if ( !m_pScene )
 		{
@@ -218,7 +218,7 @@ namespace
 	void RetrieveFace( int * p_indices, String p_strLine )
 	{
 		int l_index = 0;
-		sscanf( str_utils::to_str( p_strLine ).c_str(), "%d:\tA:\t%d B:\t%d C:\t%d", & l_index, & p_indices[0], & p_indices[1], & p_indices[2] );
+		sscanf( string::string_cast< char >( p_strLine ).c_str(), "%d:\tA:\t%d B:\t%d C:\t%d", & l_index, & p_indices[0], & p_indices[1], & p_indices[2] );
 	}
 
 	template< size_t Count, typename Type >
@@ -365,7 +365,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_MaterialName )
 	MaterialSPtr l_pMaterial;
 	String l_strName;
 	p_arrayParams[0]->Get( l_strName );
-	str_utils::replace( l_strName, cuT( "\"" ), cuT( "" ) );
+	string::replace( l_strName, cuT( "\"" ), cuT( "" ) );
 	l_pMaterial = l_manager.find( l_strName );
 
 	if ( !l_pMaterial )
@@ -525,7 +525,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_MapDiffuseBitmap )
 	ImageSPtr l_pImage;
 	ImageCollection & l_imgCollection = l_pEngine->GetImageManager();
 	StaticTextureSPtr l_pTexture;
-	str_utils::replace( l_strName, cuT( "\"" ), cuT( "" ) );
+	string::replace( l_strName, cuT( "\"" ), cuT( "" ) );
 
 	if ( File::FileExists( l_strName ) )
 	{

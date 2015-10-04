@@ -36,7 +36,7 @@ SceneSPtr PlyImporter::DoImportScene()
 	if ( l_pMesh )
 	{
 		l_pMesh->GenerateBuffers();
-		l_pScene = m_pEngine->CreateScene( cuT( "Scene_PLY" ) );
+		l_pScene = m_engine->CreateScene( cuT( "Scene_PLY" ) );
 		SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 		GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
 		l_pGeometry->AttachTo( l_pNode );
@@ -53,9 +53,9 @@ MeshSPtr PlyImporter::DoImportMesh()
 	String l_name = m_fileName.GetFileName();
 	String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
 	String l_materialName = l_meshName;
-	MeshSPtr l_pMesh = m_pEngine->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName, l_faces, l_sizes );
+	MeshSPtr l_pMesh = m_engine->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName, l_faces, l_sizes );
 	std::ifstream l_isFile;
-	l_isFile.open( str_utils::to_str( m_fileName ).c_str(), std::ios::in );
+	l_isFile.open( string::string_cast< char >( m_fileName ).c_str(), std::ios::in );
 	std::string l_strLine;
 	std::istringstream l_ssToken;
 	String::size_type l_stIndex;
@@ -64,14 +64,14 @@ MeshSPtr PlyImporter::DoImportMesh()
 	Coords3r l_ptNml;
 	Coords2r l_ptTex;
 	SubmeshSPtr l_pSubmesh = l_pMesh->CreateSubmesh();
-	MaterialSPtr l_pMaterial = m_pEngine->GetMaterialManager().find( l_materialName );
+	MaterialSPtr l_pMaterial = m_engine->GetMaterialManager().find( l_materialName );
 
 	if ( ! l_pMaterial )
 	{
-		l_pMaterial = std::make_shared< Material >( m_pEngine, l_materialName );
+		l_pMaterial = std::make_shared< Material >( m_engine, l_materialName );
 		l_pMaterial->CreatePass();
-		m_pEngine->GetMaterialManager().insert( l_materialName, l_pMaterial );
-		m_pEngine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_pMaterial ) );
+		m_engine->GetMaterialManager().insert( l_materialName, l_pMaterial );
+		m_engine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_pMaterial ) );
 	}
 
 	l_pMaterial->GetPass( 0 )->SetTwoSided( true );

@@ -111,7 +111,7 @@
  *\subsubsection CastorUtils
  *<ul>
  *<li>Removed all static members and globals.</li>
- *<li>Removed String class, added str_utils.</li>
+ *<li>Removed String class, added string.</li>
  *<li>Removed all dependencies to boost, except for thread, for non C++11 compilers.</li>
  *<li>Modified Point, moved functions that shouldn't be in that class in a small helper class : point. It holds normalise, get_normalised, dot, all distance functions, cos_theta, negate.</li>
  *<li>Modified FileParser in order to be able to ignore complete sections without commenting it (such as HLSL shader blocks in GlRenderSystem...).</li>
@@ -353,7 +353,7 @@
  *\subsubsection CastorUtils
  *<ul>
  *<li>Toutes les variables statiques et globales ont été enlevées.</li>
- *<li>Remplacement de la classe String par une classe str_utils.</li>
+ *<li>Remplacement de la classe String par une classe string.</li>
  *<li>Suppression des dépendances à boost, à part pour thread, et uniquement pour les compilateurs ne supportant pas std::thread.</li>
  *<li>Les macros cstrnlen, cstrftime, cstrncpy, cfopen, cfopen64, cfseek et cftell ont été remplacées par des fonctions dans Castor.</li>
  *<li>Suppression de la macro DECLARE_SHARED_PTR, remplacée par DECLARE_SMART_PTR, et les typedefs XxxPtr ont été remplacés par leurs équivalents XxxSPtr.</li>
