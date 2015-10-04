@@ -317,25 +317,33 @@ namespace GuiCommon
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnBorderInnerUVChange( Castor::Point4d const & p_uv )
+	void OverlayTreeItemProperty::OnBorderInnerUVChange( Castor::Point4d const & p_value )
 	{
 		OverlaySPtr l_overlay = GetOverlay();
 		CASTOR_ASSERT( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
+		double x = p_value[0];
+		double y = p_value[1];
+		double z = p_value[2];
+		double w = p_value[3];
 
-		DoApplyChange( [p_uv, l_overlay]()
+		DoApplyChange( [x, y, z, w, l_overlay]()
 		{
-			l_overlay->GetBorderPanelOverlay()->SetBorderInnerUV( p_uv );
+			l_overlay->GetBorderPanelOverlay()->SetBorderInnerUV( Point4d( x, y, z, w ) );
 		} );
 	}
 
-	void OverlayTreeItemProperty::OnBorderOuterUVChange( Castor::Point4d const & p_uv )
+	void OverlayTreeItemProperty::OnBorderOuterUVChange( Castor::Point4d const & p_value )
 	{
 		OverlaySPtr l_overlay = GetOverlay();
 		CASTOR_ASSERT( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
+		double x = p_value[0];
+		double y = p_value[1];
+		double z = p_value[2];
+		double w = p_value[3];
 
-		DoApplyChange( [p_uv, l_overlay]()
+		DoApplyChange( [x, y, z, w, l_overlay]()
 		{
-			l_overlay->GetBorderPanelOverlay()->SetBorderOuterUV( p_uv );
+			l_overlay->GetBorderPanelOverlay()->SetBorderOuterUV( Point4d( x, y, z, w ) );
 		} );
 	}
 

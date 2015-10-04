@@ -56,7 +56,7 @@ SceneSPtr Md3Importer::DoImportScene()
 	if ( l_pMesh )
 	{
 		l_pMesh->GenerateBuffers();
-		l_pScene = m_pEngine->CreateScene( cuT( "Scene_MD3" ) );
+		l_pScene = m_engine->CreateScene( cuT( "Scene_MD3" ) );
 		SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 		GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
 		l_pGeometry->AttachTo( l_pNode );
@@ -69,14 +69,14 @@ SceneSPtr Md3Importer::DoImportScene()
 MeshSPtr Md3Importer::DoImportMesh()
 {
 	m_pFile = new BinaryFile( m_fileName, File::eOPEN_MODE_READ );
-	SceneSPtr l_pScene = m_pEngine->CreateScene( cuT( "Scene_MD3" ) );
+	SceneSPtr l_pScene = m_engine->CreateScene( cuT( "Scene_MD3" ) );
 	UIntArray l_faces;
 	RealArray l_sizes;
 	MaterialSPtr		l_material;
 	PassSPtr			l_pass;
 	String l_meshName = m_fileName.GetFileName();
 	String l_materialName	= m_fileName.GetFileName();
-	MeshSPtr l_pMesh = m_pEngine->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName, l_faces, l_sizes );
+	MeshSPtr l_pMesh = m_engine->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName, l_faces, l_sizes );
 	m_pFile->Read( m_header );
 	char * l_id = m_header.m_fileID;
 
@@ -85,13 +85,13 @@ MeshSPtr Md3Importer::DoImportMesh()
 	}
 	else
 	{
-		l_material = m_pEngine->GetMaterialManager().find( l_materialName );
+		l_material = m_engine->GetMaterialManager().find( l_materialName );
 
 		if ( !l_material )
 		{
-			l_material = std::make_shared< Material >( m_pEngine, l_materialName );
+			l_material = std::make_shared< Material >( m_engine, l_materialName );
 			l_material->CreatePass();
-			m_pEngine->GetMaterialManager().insert( l_materialName, l_material );
+			m_engine->GetMaterialManager().insert( l_materialName, l_material );
 		}
 
 		l_pass = l_material->GetPass( 0 );
@@ -106,7 +106,7 @@ MeshSPtr Md3Importer::DoImportMesh()
 		}
 
 		l_pMesh->ComputeNormals();
-		m_pEngine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_material ) );
+		m_engine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_material ) );
 		DoCleanUp();
 	}
 
@@ -161,12 +161,12 @@ void Md3Importer::DoReadMD3Data( MeshSPtr p_pMesh, PassSPtr p_pPass )
 
 		for ( int i = 0 ; i < l_meshHeader.m_numSkins && !l_pTexture ; i++ )
 		{
-			String l_strValue = str_utils::from_str( m_skins[i].m_strName );
+			String l_strValue = string::string_cast< xchar >( m_skins[i].m_strName );
 
 			if ( !l_strValue.empty() )
 			{
 				String l_strPath = m_filePath / l_strValue;
-				l_pImage = m_pEngine->GetImageManager().find( l_strValue );
+				l_pImage = m_engine->GetImageManager().find( l_strValue );
 
 				if ( !l_pImage )
 				{
@@ -178,7 +178,7 @@ void Md3Importer::DoReadMD3Data( MeshSPtr p_pMesh, PassSPtr p_pPass )
 					if ( File::FileExists( l_strPath ) )
 					{
 						l_pImage = std::make_shared< Image >( l_strValue, l_strPath );
-						m_pEngine->GetImageManager().insert( l_strValue, l_pImage );
+						m_engine->GetImageManager().insert( l_strValue, l_pImage );
 					}
 				}
 			}
@@ -186,7 +186,7 @@ void Md3Importer::DoReadMD3Data( MeshSPtr p_pMesh, PassSPtr p_pPass )
 			if ( l_pImage && p_pPass )
 			{
 				l_pTexture = p_pPass->AddTextureUnit();
-				StaticTextureSPtr l_pStaTexture = m_pEngine->GetRenderSystem()->CreateStaticTexture();
+				StaticTextureSPtr l_pStaTexture = m_engine->GetRenderSystem()->CreateStaticTexture();
 				l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
 				l_pStaTexture->SetImage( l_pImage->GetPixels() );
 				l_pTexture->SetTexture( l_pStaTexture );
@@ -230,7 +230,7 @@ void Md3Importer::DoConvertDataStructures( MeshSPtr p_pMesh, Md3MeshInfo p_meshH
 {
 	BufferElementGroupSPtr l_pVertex;
 	SubmeshSPtr l_pSubmesh = p_pMesh->CreateSubmesh();
-	m_mapSubmeshesByName.insert( std::make_pair( str_utils::from_str( p_meshHeader.m_strName ), l_pSubmesh ) );
+	m_mapSubmeshesByName.insert( std::make_pair( string::string_cast< xchar >( p_meshHeader.m_strName ), l_pSubmesh ) );
 
 	for ( int i = 0 ; i < p_meshHeader.m_numVertices ; i++ )
 	{
@@ -310,13 +310,13 @@ bool Md3Importer::DoLoadSkin( String const & p_strSkin )
 			{
 				l_strImage = l_strLine.substr( l_strLine.find_last_of( ',' ) + 1 );
 				l_strImage = l_strImage.substr( l_strImage.find_last_of( '/' ) + 1 );
-				MaterialSPtr l_material = m_pEngine->GetMaterialManager().find( l_strSection );
+				MaterialSPtr l_material = m_engine->GetMaterialManager().find( l_strSection );
 
 				if ( ! l_material )
 				{
-					l_material = std::make_shared< Material >( m_pEngine, l_strSection );
+					l_material = std::make_shared< Material >( m_engine, l_strSection );
 					l_material->CreatePass();
-					m_pEngine->GetMaterialManager().insert( l_strSection, l_material );
+					m_engine->GetMaterialManager().insert( l_strSection, l_material );
 				}
 
 				PassSPtr l_pass = l_material->GetPass( 0 );
@@ -338,22 +338,22 @@ bool Md3Importer::DoLoadSkin( String const & p_strSkin )
 							l_imgCollection.insert( l_strImage, l_pImage );
 						}
 
-						StaticTextureSPtr l_pStaTexture = m_pEngine->GetRenderSystem()->CreateStaticTexture();
+						StaticTextureSPtr l_pStaTexture = m_engine->GetRenderSystem()->CreateStaticTexture();
 						l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
 						l_pStaTexture->SetImage( l_pImage->GetPixels() );
 						l_unit->SetTexture( l_pStaTexture );
 					}
 					else if ( File::FileExists( l_fileIO.GetFilePath() / l_strImage ) )
 					{
-						ImageSPtr l_pImage = m_pEngine->GetImageManager().find( l_fileIO.GetFilePath() / l_strImage );
+						ImageSPtr l_pImage = m_engine->GetImageManager().find( l_fileIO.GetFilePath() / l_strImage );
 
 						if ( ! l_pImage )
 						{
 							l_pImage = std::make_shared< Image >( l_fileIO.GetFilePath() / l_strImage, l_fileIO.GetFilePath() / l_strImage );
-							m_pEngine->GetImageManager().insert( l_fileIO.GetFilePath() / l_strImage, l_pImage );
+							m_engine->GetImageManager().insert( l_fileIO.GetFilePath() / l_strImage, l_pImage );
 						}
 
-						StaticTextureSPtr l_pStaTexture = m_pEngine->GetRenderSystem()->CreateStaticTexture();
+						StaticTextureSPtr l_pStaTexture = m_engine->GetRenderSystem()->CreateStaticTexture();
 						l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
 						l_pStaTexture->SetImage( l_pImage->GetPixels() );
 						l_unit->SetTexture( l_pStaTexture );
@@ -365,7 +365,7 @@ bool Md3Importer::DoLoadSkin( String const & p_strSkin )
 				}
 
 				m_mapSubmeshesByName.find( l_strSection )->second->SetDefaultMaterial( l_material );
-				m_pEngine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_material ) );
+				m_engine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_material ) );
 			}
 		}
 
@@ -392,13 +392,13 @@ bool Md3Importer::DoLoadShader( MeshSPtr p_pMesh, String const & p_strShader )
 			l_fileIO.ReadLine( l_strLine, 255 );
 			StringStream l_strMatName( l_strName );
 			l_strMatName << "_" << l_uiIndex;
-			MaterialSPtr l_material = m_pEngine->GetMaterialManager().find( l_strMatName.str() );
+			MaterialSPtr l_material = m_engine->GetMaterialManager().find( l_strMatName.str() );
 
 			if ( ! l_material )
 			{
-				l_material = std::make_shared< Material >( m_pEngine, l_strMatName.str() );
+				l_material = std::make_shared< Material >( m_engine, l_strMatName.str() );
 				l_material->CreatePass();
-				m_pEngine->GetMaterialManager().insert( l_strMatName.str(), l_material );
+				m_engine->GetMaterialManager().insert( l_strMatName.str(), l_material );
 			}
 
 			PassSPtr l_pass = l_material->GetPass( 0 );
@@ -412,30 +412,30 @@ bool Md3Importer::DoLoadShader( MeshSPtr p_pMesh, String const & p_strShader )
 
 				if ( File::FileExists( l_strLine ) )
 				{
-					ImageSPtr l_pImage = m_pEngine->GetImageManager().find( l_strLine );
+					ImageSPtr l_pImage = m_engine->GetImageManager().find( l_strLine );
 
 					if ( !l_pImage )
 					{
 						l_pImage = std::make_shared< Image >( l_strLine, l_strLine );
-						m_pEngine->GetImageManager().insert( l_strLine, l_pImage );
+						m_engine->GetImageManager().insert( l_strLine, l_pImage );
 					}
 
-					StaticTextureSPtr l_pStaTexture = m_pEngine->GetRenderSystem()->CreateStaticTexture();
+					StaticTextureSPtr l_pStaTexture = m_engine->GetRenderSystem()->CreateStaticTexture();
 					l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
 					l_pStaTexture->SetImage( l_pImage->GetPixels() );
 					l_unit->SetTexture( l_pStaTexture );
 				}
 				else if ( File::FileExists( l_fileIO.GetFilePath() / l_strLine ) )
 				{
-					ImageSPtr l_pImage = m_pEngine->GetImageManager().find( l_fileIO.GetFilePath() / l_strLine );
+					ImageSPtr l_pImage = m_engine->GetImageManager().find( l_fileIO.GetFilePath() / l_strLine );
 
 					if ( !l_pImage )
 					{
 						l_pImage = std::make_shared< Image >( l_fileIO.GetFilePath() / l_strLine, l_fileIO.GetFilePath() / l_strLine );
-						m_pEngine->GetImageManager().insert( l_fileIO.GetFilePath() / l_strLine, l_pImage );
+						m_engine->GetImageManager().insert( l_fileIO.GetFilePath() / l_strLine, l_pImage );
 					}
 
-					StaticTextureSPtr l_pStaTexture = m_pEngine->GetRenderSystem()->CreateStaticTexture();
+					StaticTextureSPtr l_pStaTexture = m_engine->GetRenderSystem()->CreateStaticTexture();
 					l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
 					l_pStaTexture->SetImage( l_pImage->GetPixels() );
 					l_unit->SetTexture( l_pStaTexture );
@@ -447,7 +447,7 @@ bool Md3Importer::DoLoadShader( MeshSPtr p_pMesh, String const & p_strShader )
 			}
 
 			p_pMesh->GetSubmesh( l_uiIndex )->SetDefaultMaterial( l_material );
-			m_pEngine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_material ) );
+			m_engine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_material ) );
 			l_uiIndex++;
 		}
 

@@ -163,7 +163,7 @@ namespace Castor
 	class Point;
 	class Position;
 	class PxBufferBase;
-	template < TPL_PIXEL_FORMAT FT >
+	template< TPL_PIXEL_FORMAT FT >
 	class PxBuffer;
 	class Quaternion;
 	class Rectangle;
@@ -177,11 +177,15 @@ namespace Castor
 	class TextFile;
 	template< class T >
 	class TextLoader;
-	template< class Obj, class Key, typename PFNCreate = std::function< std::shared_ptr< Obj >() >, class Predicate = std::less< Key > >
+	template< class Obj,
+			  class Key,
+			  typename PFNCreate = std::function< std::shared_ptr< Obj >() >,
+			  class Predicate = std::less< Key > >
 	class Factory;
 	class Path;
 	class DynamicLibrary;
-
+	template< int A >
+	struct Aligned;
 	struct MessageBase;
 	class Logger;
 	class LoggerImpl;

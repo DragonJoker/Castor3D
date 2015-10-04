@@ -44,54 +44,55 @@ namespace Castor3D
 	private:
 		struct Md3Header
 		{
-			char	m_fileID[4];
-			int		m_version;
-			char	m_strFile[68];
-			int		m_numFrames;
-			int		m_numTags;
-			int		m_numMeshes;
-			int		m_numMaxSkins;
-			int		m_headerSize;
-			int		m_tagStart;
-			int		m_tagEnd;
-			int		m_fileSize;
+			char m_fileID[4];
+			int m_version;
+			char m_strFile[68];
+			int m_numFrames;
+			int m_numTags;
+			int m_numMeshes;
+			int m_numMaxSkins;
+			int m_headerSize;
+			int m_tagStart;
+			int m_tagEnd;
+			int m_fileSize;
 		};
 
 		struct Md3MeshInfo
 		{
-			char	m_meshID[4];
-			char	m_strName[68];
-			int		m_numMeshFrames;
-			int		m_numSkins;
-			int     m_numVertices;
-			int		m_numTriangles;
-			int		m_triStart;
-			int		m_headerSize;
-			int     m_uvStart;
-			int		m_vertexStart;
-			int		m_meshSize;
+			char m_meshID[4];
+			char m_strName[68];
+			int m_numMeshFrames;
+			int m_numSkins;
+			int m_numVertices;
+			int m_numTriangles;
+			int m_triStart;
+			int m_headerSize;
+			int m_uvStart;
+			int m_vertexStart;
+			int m_meshSize;
 		};
 
 		struct Md3Tag
+			: Castor::AlignedFrom< Castor::Point3r >
 		{
-			char			m_strName[64];
-			Castor::Point3r	m_position;
-			real			m_rotation[3][3];
+			char m_strName[64];
+			Castor::Point3r m_position;
+			real m_rotation[3][3];
 		};
 
 		struct Md3Bone
 		{
-			real	m_mins[3];
-			real	m_maxs[3];
-			real	m_position[3];
-			real	m_scale;
-			char	m_creator[16];
+			real m_mins[3];
+			real m_maxs[3];
+			real m_position[3];
+			real m_scale;
+			char m_creator[16];
 		};
 
 
 		struct Md3Triangle
 		{
-			signed short	 m_vertex[3];
+			signed short  m_vertex[3];
 			uint8_t m_normal[2];
 		};
 

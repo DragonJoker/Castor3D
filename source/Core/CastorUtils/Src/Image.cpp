@@ -509,7 +509,7 @@ namespace Castor
 		// Copie des pixels de l'image originale dans la sous-image
 		for ( int i = l_rcRect.left(); i < l_rcRect.right(); ++i )
 		{
-			std::copy( l_pSrc, l_pSrc + l_uiDestPitch, l_pDest );
+			std::memcpy( l_pDest, l_pSrc, l_uiDestPitch );
 			l_pSrc  += l_uiSrcPitch;
 			l_pDest += l_uiDestPitch;
 		}

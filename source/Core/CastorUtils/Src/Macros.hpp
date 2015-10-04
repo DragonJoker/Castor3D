@@ -71,11 +71,13 @@ typedef wchar_t ychar;
 
 #define CASTOR_COUCOU Castor::Logger::LogDebug( cuT( "Coucou % 4d : %s @ line %d" ), __COUNTER__, __FUNCTION__, __LINE__ );
 
-#if defined( _MSC_VER)
+#if defined( _MSC_VER )
 #	include <tchar.h>
 #	define cvsnprintf _vsntprintf_s
 #	define ccsncpy( x, y, z ) _tcsncpy_s( x, z, y, z )
-#	define sscanf sscanf_s
+#	if _MSC_VER < 1900
+#		define sscanf sscanf_s
+#	endif
 #elif defined( __clang__)
 #	if !defined( _WIN32 )
 #		define _FILE_OFFSET_BITS 64
@@ -151,32 +153,6 @@ typedef wchar_t ychar;
 #else
 #	define CASTOR_DELETED
 #endif
-
-#if CASTOR_HAS_ALIGNAS
-#	define CASTOR_ALIGNED_VAR( a, t, n ) t alignas( a ) n
-#else
-#	if defined( __GNUG__)
-#		define CASTOR_ALIGNED_VAR( a, t, n ) t n __attribute__( ( aligned( a ) ) )
-#	elif defined( __clang__)
-#	elif defined( _MSC_VER )
-#		define CASTOR_ALIGNED_VAR( a, t, n ) __declspec( align( a ) ) t n
-#	endif
-#endif
-
-#define CASTOR_ALIGNED_CLASS( a )\
-	void * operator new( size_t p_size )\
-	{\
-		void * l_storage = Castor::System::AlignedAlloc( a, p_size );\
-		if ( !l_storage )\
-		{\
-			throw std::bad_alloc();\
-		}\
-		return l_storage;\
-	}\
-	void operator delete( void * p_memory )\
-	{\
-		Castor::System::AlignedFree( p_memory );\
-	}
 
 #define DECLARE_SMART_PTR( class_name )\
 	typedef std::shared_ptr< class_name > class_name##SPtr;\

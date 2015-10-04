@@ -43,7 +43,7 @@ namespace Obj
 		if ( l_pMesh )
 		{
 			l_pMesh->GenerateBuffers();
-			l_pScene = std::make_shared< Scene >( m_pEngine, m_pEngine->GetLightFactory(), cuT( "Scene_OBJ" ) );
+			l_pScene = std::make_shared< Scene >( m_engine, m_engine->GetLightFactory(), cuT( "Scene_OBJ" ) );
 			SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 			GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
 			l_pGeometry->AttachTo( l_pNode );
@@ -124,7 +124,7 @@ namespace Obj
 		if ( l_pImage && p_pPass )
 		{
 			TextureUnitSPtr l_pTexture = p_pPass->AddTextureUnit();
-			StaticTextureSPtr l_pStaTexture = m_pEngine->GetRenderSystem()->CreateStaticTexture();
+			StaticTextureSPtr l_pStaTexture = m_engine->GetRenderSystem()->CreateStaticTexture();
 			l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
 			l_pStaTexture->SetImage( l_pImage->GetPixels() );
 			l_pTexture->SetTexture( l_pStaTexture );
@@ -137,7 +137,7 @@ namespace Obj
 	{
 		String						l_name = m_fileName.GetFileName();
 		String						l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
-		MeshSPtr					l_pReturn = m_pEngine->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName );
+		MeshSPtr					l_pReturn = m_engine->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName );
 		String						l_strSection;
 		String						l_strValue;
 		String						l_strLine;
@@ -156,7 +156,7 @@ namespace Obj
 		stUV						l_uv;
 		stNORMAL					l_normal;
 		stGROUP 		*			l_pGroup		= NULL;
-		MaterialManager 	&		l_mtlManager	= m_pEngine->GetMaterialManager();
+		MaterialManager 	&		l_mtlManager	= m_engine->GetMaterialManager();
 		FaceArray 		*			l_pArrayIndex	= NULL;
 
 		while ( m_pFile->IsOk() )
@@ -165,7 +165,7 @@ namespace Obj
 
 			if ( !l_strLine.empty() )
 			{
-				l_arraySplitted = str_utils::split( l_strLine, cuT( " " ), 1 );
+				l_arraySplitted = string::split( l_strLine, cuT( " " ), 1 );
 
 				if ( l_arraySplitted.size() >= 1 )
 				{
@@ -180,8 +180,8 @@ namespace Obj
 						l_strValue.clear();
 					}
 
-					str_utils::trim( l_strValue );
-					str_utils::trim( l_strSection );
+					string::trim( l_strValue );
+					string::trim( l_strSection );
 
 					if ( l_strSection == cuT( "mtllib" ) )
 					{
@@ -276,11 +276,11 @@ namespace Obj
 							l_pArrayIndex = &( l_itGroup->second );
 						}
 
-						String l_strName = str_utils::lower_case( l_pGroup->m_strName );
+						String l_strName = string::lower_case( l_pGroup->m_strName );
 
 						if ( l_strName.find( cuT( "gundummy" ) ) == String::npos && l_strName.find( cuT( "bip01" ) ) == String::npos && l_strName.find( cuT( "fcfx_" ) ) == String::npos && l_strName.find( cuT( "bbone_" ) ) == String::npos )
 						{
-							l_arrayFace = str_utils::split( l_strValue, cuT( " " ) );
+							l_arrayFace = string::split( l_strValue, cuT( " " ) );
 							uint32_t l_uiV1, l_uiV2, l_uiV3;
 
 							if ( l_arrayFace.size() == 3 )
@@ -331,8 +331,8 @@ namespace Obj
 
 	uint32_t ObjImporter::DoRetrieveIndex( String & p_strIndex, uint32_t p_uiSize )
 	{
-		str_utils::trim( p_strIndex );
-		int l_iIndex = str_utils::to_int( p_strIndex );
+		string::trim( p_strIndex );
+		int l_iIndex = string::to_int( p_strIndex );
 		uint32_t l_uiReturn;
 
 		if ( l_iIndex < 0 )
@@ -355,8 +355,8 @@ namespace Obj
 		StringArray l_arrayIndex;
 		uint32_t l_uiIndex = 0;
 		UIntUIntMap::iterator l_it;
-		str_utils::replace( l_strFace, cuT( "//" ), cuT( "/ /" ) );
-		l_arrayIndex = str_utils::split( l_strFace, cuT( "/" ) );
+		string::replace( l_strFace, cuT( "//" ), cuT( "/ /" ) );
+		l_arrayIndex = string::split( l_strFace, cuT( "/" ) );
 
 		if ( l_arrayIndex.size() > 0 )
 		{
@@ -379,7 +379,7 @@ namespace Obj
 			if ( l_arrayIndex.size() >= 2 )
 			{
 				// It seems there are more than only vertex index
-				str_utils::trim( l_arrayIndex[1] );
+				string::trim( l_arrayIndex[1] );
 
 				if ( !l_arrayIndex[1].empty() )
 				{
@@ -395,7 +395,7 @@ namespace Obj
 				{
 					p_pGroup->m_bHasNormals = true;
 					// It seems there are normals index
-					str_utils::trim( l_arrayIndex[2] );
+					string::trim( l_arrayIndex[2] );
 
 					if ( !l_arrayIndex[2].empty() )
 					{
@@ -427,7 +427,7 @@ namespace Obj
 		{
 			if ( p_pGroup->m_arraySubVtx.size() )
 			{
-				String l_strName = str_utils::lower_case( p_pGroup->m_strName );
+				String l_strName = string::lower_case( p_pGroup->m_strName );
 
 				if ( l_strName.find( cuT( "gundummy" ) ) == String::npos && l_strName.find( cuT( "bip01" ) ) == String::npos && l_strName.find( cuT( "fcfx_" ) ) == String::npos && l_strName.find( cuT( "bbone_" ) ) == String::npos && p_pGroup->m_arrayVtx.size() )
 				{
@@ -458,7 +458,7 @@ namespace Obj
 							Coords3r	l_ptNml;
 							Coords3r	l_ptTan;
 							Logger::LogDebug( cuT( "Submesh :         " ) + p_context.m_strName );
-							Logger::LogDebug( cuT( "-	Vertices :    " ) + str_utils::to_string( uint32_t( p_context.m_arrayVtx.size() ) ) );
+							Logger::LogDebug( cuT( "-	Vertices :    " ) + string::to_string( uint32_t( p_context.m_arrayVtx.size() ) ) );
 							Logger::LogDebug( cuT( "-	Material :    " ) + p_context.m_pMaterial->GetName() );
 							// Valid because for each pass of each material we have an entry in those 3 maps
 							p_context.m_pSubmesh->SetDefaultMaterial( p_context.m_pMaterial );
@@ -586,12 +586,12 @@ namespace Obj
 
 	void ObjImporter::DoParseTexParam( String const & p_strParam, float * p_values )
 	{
-		StringArray l_arraySplitted = str_utils::split( p_strParam, cuT( " " ) );
+		StringArray l_arraySplitted = string::split( p_strParam, cuT( " " ) );
 		std::size_t l_uiMax = std::min< std::size_t >( 4, l_arraySplitted.size() );
 
 		for ( std::size_t i = 1 ; i < l_uiMax ; i++ )
 		{
-			p_values[i - 1] = str_utils::to_float( l_arraySplitted[i] );
+			p_values[i - 1] = string::to_float( l_arraySplitted[i] );
 		}
 	}
 
@@ -602,13 +602,13 @@ namespace Obj
 
 		if ( p_uiIndex < p_strSrc.size() )
 		{
-			l_arraySplitted = str_utils::split( p_strSrc.substr( p_uiIndex ), cuT( " " ), 2 );
+			l_arraySplitted = string::split( p_strSrc.substr( p_uiIndex ), cuT( " " ), 2 );
 
 			if ( l_arraySplitted.size() > 1 )
 			{
 				if ( p_strParam == cuT( "s" ) || p_strParam == cuT( "o" ) || p_strParam == cuT( "t" ) )
 				{
-					l_bReturn = str_utils::is_floating( l_arraySplitted[0] );
+					l_bReturn = string::is_floating( l_arraySplitted[0] );
 				}
 				else if ( p_strParam == cuT( "blendu" ) || p_strParam == cuT( "blendv" ) || p_strParam == cuT( "cc" ) || p_strParam == cuT( "clamp" ) )
 				{
@@ -616,15 +616,15 @@ namespace Obj
 				}
 				else if ( p_strParam == cuT( "texres" ) )
 				{
-					l_bReturn = str_utils::is_integer( l_arraySplitted[0] );
+					l_bReturn = string::is_integer( l_arraySplitted[0] );
 				}
 				else if ( p_strParam == cuT( "bm" ) )
 				{
-					l_bReturn = str_utils::is_floating( l_arraySplitted[0] );
+					l_bReturn = string::is_floating( l_arraySplitted[0] );
 				}
 				else if ( p_strParam == cuT( "mm" ) )
 				{
-					l_bReturn = str_utils::is_floating( l_arraySplitted[0] );
+					l_bReturn = string::is_floating( l_arraySplitted[0] );
 				}
 				else if ( p_strParam == cuT( "imfchan" ) )
 				{
@@ -647,7 +647,7 @@ namespace Obj
 		float				l_components[3];
 		float				l_fAlpha		= 1.0f;
 		bool				l_bOpaFound		= false;
-		MaterialManager &	l_mtlManager	= m_pEngine->GetMaterialManager();
+		MaterialManager &	l_mtlManager	= m_engine->GetMaterialManager();
 		TextFile			l_matFile		( p_pathMatFile, File::eOPEN_MODE_READ );
 
 		while ( l_matFile.IsOk() )
@@ -656,7 +656,7 @@ namespace Obj
 
 			if ( !l_strLine.empty() )
 			{
-				l_arraySplitted = str_utils::split( l_strLine, cuT( " " ), 1 );
+				l_arraySplitted = string::split( l_strLine, cuT( " " ), 1 );
 
 				if ( l_arraySplitted.size() >= 1 )
 				{
@@ -671,8 +671,8 @@ namespace Obj
 						l_strValue.clear();
 					}
 
-					str_utils::trim( l_strValue );
-					str_utils::trim( str_utils::to_lower_case( l_strSection ) );
+					string::trim( l_strValue );
+					string::trim( string::to_lower_case( l_strSection ) );
 
 					if ( l_strSection == cuT( "newmtl" ) )
 					{
@@ -691,10 +691,10 @@ namespace Obj
 
 						if ( !l_pMaterial )
 						{
-							l_pMaterial = std::make_shared< Material >( m_pEngine, l_strValue );
+							l_pMaterial = std::make_shared< Material >( m_engine, l_strValue );
 							m_arrayLoadedMaterials.push_back( l_pMaterial );
 							l_mtlManager.insert( l_strValue, l_pMaterial );
-							m_pEngine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_pMaterial ) );
+							m_engine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_pMaterial ) );
 						}
 
 						l_pPass = l_pMaterial->CreatePass();
@@ -734,13 +734,13 @@ namespace Obj
 						if ( !l_bOpaFound )
 						{
 							l_bOpaFound = true;
-							l_fAlpha = str_utils::to_float( l_strValue );
+							l_fAlpha = string::to_float( l_strValue );
 						}
 					}
 					else if ( l_strSection == cuT( "ns" ) )
 					{
 						// Shininess
-						l_pPass->SetShininess( str_utils::to_float( l_strValue ) );
+						l_pPass->SetShininess( string::to_float( l_strValue ) );
 					}
 					else if ( l_strSection == cuT( "map_kd" ) )
 					{

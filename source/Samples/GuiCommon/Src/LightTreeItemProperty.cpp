@@ -142,68 +142,63 @@ namespace GuiCommon
 
 	void LightTreeItemProperty::OnAmbientColourChange( Colour const & p_value )
 	{
-		LightSPtr l_light = GetLight();
-
-		DoApplyChange( [p_value, l_light]()
+		DoApplyChange( [p_value, this]()
 		{
-			l_light->SetAmbient( p_value );
+			GetLight()->SetAmbient( p_value );
 		} );
 	}
 
 	void LightTreeItemProperty::OnDiffuseColourChange( Colour const & p_value )
 	{
-		LightSPtr l_light = GetLight();
-
-		DoApplyChange( [p_value, l_light]()
+		DoApplyChange( [p_value, this]()
 		{
-			l_light->SetDiffuse( p_value );
+			GetLight()->SetDiffuse( p_value );
 		} );
 	}
 
 	void LightTreeItemProperty::OnSpecularColourChange( Colour const & p_value )
 	{
-		LightSPtr l_light = GetLight();
-
-		DoApplyChange( [p_value, l_light]()
+		DoApplyChange( [p_value, this]()
 		{
-			l_light->SetSpecular( p_value );
+			GetLight()->SetSpecular( p_value );
 		} );
 	}
 
 	void LightTreeItemProperty::OnAttenuationChange( Point3f const & p_value )
 	{
-		LightSPtr l_light = GetLight();
+		float x = p_value[0];
+		float y = p_value[1];
+		float z = p_value[2];
 
-		DoApplyChange( [p_value, l_light]()
+		DoApplyChange( [x, y, z, this]()
 		{
+			Point3f l_value( x, y, z );
+			LightSPtr l_light = GetLight();
+
 			if ( l_light->GetLightType() == eLIGHT_TYPE_POINT )
 			{
-				l_light->GetPointLight()->SetAttenuation( p_value );
+				l_light->GetPointLight()->SetAttenuation( l_value );
 			}
 			else
 			{
-				l_light->GetSpotLight()->SetAttenuation( p_value );
+				l_light->GetSpotLight()->SetAttenuation( l_value );
 			}
 		} );
 	}
 
 	void LightTreeItemProperty::OnCutOffChange( double p_value )
 	{
-		LightSPtr l_light = GetLight();
-
-		DoApplyChange( [p_value, l_light]()
+		DoApplyChange( [p_value, this]()
 		{
-			l_light->GetSpotLight()->SetCutOff( p_value );
+			GetLight()->GetSpotLight()->SetCutOff( p_value );
 		} );
 	}
 
 	void LightTreeItemProperty::OnExponentChange( double p_value )
 	{
-		LightSPtr l_light = GetLight();
-
-		DoApplyChange( [p_value, l_light]()
+		DoApplyChange( [p_value, this]()
 		{
-			l_light->GetSpotLight()->SetExponent( p_value );
+			GetLight()->GetSpotLight()->SetExponent( p_value );
 		} );
 	}
 }

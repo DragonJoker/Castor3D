@@ -35,6 +35,7 @@ namespace CastorViewer
 
 	class RenderPanel
 		: public wxPanel
+		, public Castor::AlignedFrom< Castor::Point3r >
 	{
 	private:
 		typedef enum eTIMER_ID :
@@ -63,8 +64,6 @@ namespace CastorViewer
 		{
 			return m_pRenderWindow.lock();
 		}
-
-		CASTOR_ALIGNED_CLASS( 16 );
 
 	private:
 		void DoStartTimer( int p_iId );

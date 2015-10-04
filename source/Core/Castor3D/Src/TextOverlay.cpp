@@ -252,7 +252,7 @@ namespace Castor3D
 		return GetFont()->GetName();
 	}
 
-	Position const & TextOverlay::GetGlyphPosition( xchar p_char )const
+	Position const & TextOverlay::GetGlyphPosition( char32_t p_char )const
 	{
 		GlyphPositionMapConstIt l_it = m_glyphsPositions.find( p_char );
 
@@ -292,7 +292,7 @@ namespace Castor3D
 				{
 					String const & l_line = *l_itLines;
 					double l_wordWidth = 0;
-					String l_word;
+					std::u32string l_word;
 
 					for ( string::utf8::iterator l_itLine = l_line.begin(); l_itLine != l_line.end() && l_ptPosition[1] < l_ptSize[1]; ++l_itLine )
 					{
@@ -352,7 +352,7 @@ namespace Castor3D
 		}
 	}
 
-	void TextOverlay::DoWriteWord( OverlayRendererSPtr p_renderer, String const & p_word, double p_wordWidth, Point2d const & p_size, Point2d & p_position )
+	void TextOverlay::DoWriteWord( OverlayRendererSPtr p_renderer, std::u32string const & p_word, double p_wordWidth, Point2d const & p_size, Point2d & p_position )
 	{
 		FontSPtr l_pFont = GetFont();
 		Size const & l_texDim = m_pTexture->GetDimensions();
@@ -364,7 +364,7 @@ namespace Castor3D
 			p_position[1] += l_pFont->GetMaxHeight();
 		}
 
-		for ( string::utf8::iterator l_it = p_word.begin(); l_it != p_word.end() && p_position[1] < p_size[1]; ++l_it )
+		for ( auto l_it = p_word.begin(); l_it != p_word.end() && p_position[1] < p_size[1]; ++l_it )
 		{
 			char32_t const & l_character = *l_it;
 			double l_charCrop = 0;

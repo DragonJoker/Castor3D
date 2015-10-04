@@ -1,6 +1,7 @@
 ﻿#include "Templates.hpp"
 
 #include "Utils.hpp"
+#include "Aligned.hpp"
 
 namespace Castor
 {
@@ -8,7 +9,7 @@ namespace Castor
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows >::Matrix()
-		: m_data( System::AlignedAlloc< T >( 16, size ) )
+		: m_data( AlignedAlloc< T >( 16, size ) )
 		, m_ownCoords( true )
 	{
 		do_update_columns();
@@ -16,14 +17,14 @@ namespace Castor
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows >::Matrix( mtx_noinit const & )
-		: m_data( System::AlignedAlloc< T >( 16, size ) )
+		: m_data( AlignedAlloc< T >( 16, size ) )
 		, m_ownCoords( true )
 	{
 		do_update_columns();
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows >::Matrix( T const & p_value )
-		: m_data( System::AlignedAlloc< T >( 16, size ) )
+		: m_data( AlignedAlloc< T >( 16, size ) )
 		, m_ownCoords( true )
 	{
 		do_update_columns();
@@ -32,7 +33,7 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	template< typename Type >
 	inline Matrix< T, Columns, Rows >::Matrix( Type const * p_matrix )
-		: m_data( System::AlignedAlloc< T >( 16, size ) )
+		: m_data( AlignedAlloc< T >( 16, size ) )
 		, m_ownCoords( true )
 	{
 		do_update_columns();
@@ -46,7 +47,7 @@ namespace Castor
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	Matrix< T, Columns, Rows >::Matrix( Matrix< T, Columns, Rows > const & p_matrix )
-		: m_data( System::AlignedAlloc< T >( 16, size ) )
+		: m_data( AlignedAlloc< T >( 16, size ) )
 		, m_ownCoords( true )
 	{
 		do_update_columns();
@@ -65,7 +66,7 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	template< typename Type >
 	inline Matrix< T, Columns, Rows >::Matrix( Matrix< Type, Columns, Rows > const & p_matrix )
-		: m_data( System::AlignedAlloc< T >( 16, size ) )
+		: m_data( AlignedAlloc< T >( 16, size ) )
 		, m_ownCoords( true )
 	{
 		do_update_columns();
@@ -82,7 +83,7 @@ namespace Castor
 	{
 		if ( m_ownCoords )
 		{
-			System::AlignedFree( m_data );
+			AlignedFree( m_data );
 		}
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
@@ -278,7 +279,7 @@ namespace Castor
 		{
 			if ( m_ownCoords )
 			{
-				System::AlignedFree( m_data );
+				AlignedFree( m_data );
 			}
 
 			m_data = std::move( p_matrix.m_data );
@@ -430,7 +431,7 @@ namespace Castor
 	{
 		if ( m_ownCoords )
 		{
-			System::AlignedFree( m_data );
+			AlignedFree( m_data );
 			m_data = NULL;
 		}
 
