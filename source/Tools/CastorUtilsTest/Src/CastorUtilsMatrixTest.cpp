@@ -51,7 +51,7 @@ namespace Testing
 	inline void randomInit( T * p_pData1, T * p_pData2, uint32_t size )
 	{
 		std::random_device l_generator;
-		std::uniform_real< T > l_distribution( T( 0.0 ), T( 1.0 ) );
+		std::uniform_real_distribution< T > l_distribution( T( 0.0 ), T( 1.0 ) );
 
 		for ( uint32_t i = 0; i < size; ++i )
 		{
@@ -64,7 +64,7 @@ namespace Testing
 	inline void randomInit( T * p_pData, uint32_t size )
 	{
 		std::random_device l_generator;
-		std::uniform_real< T > l_distribution( T( 0.0 ), T( 1.0 ) );
+		std::uniform_real_distribution< T > l_distribution( T( 0.0 ), T( 1.0 ) );
 
 		for ( uint32_t i = 0; i < size; ++i )
 		{

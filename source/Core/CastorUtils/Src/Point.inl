@@ -1,4 +1,5 @@
-﻿#include "PointOperators.inl"
+﻿#include "PointOperators.hpp"
+#include <cstring>
 
 namespace Castor
 {
@@ -340,28 +341,28 @@ namespace Castor
 	template< typename U >
 	inline Point< T, Count > & Point< T, Count >::operator+=( U const * p_coords )
 	{
-		return PtAssignOperators< T, U, Count, _Count >::add( *this, p_coords );
+		return PtAssignOperators< T, U, Count, Count >::add( *this, p_coords );
 	}
 
 	template< typename T, uint32_t Count >
 	template< typename U >
 	inline Point< T, Count > & Point< T, Count >::operator-=( U const * p_coords )
 	{
-		return PtAssignOperators< T, U, Count, _Count >::sub( *this, p_coords );
+		return PtAssignOperators< T, U, Count, Count >::sub( *this, p_coords );
 	}
 
 	template< typename T, uint32_t Count >
 	template< typename U >
 	inline Point< T, Count > & Point< T, Count >::operator*=( U const * p_coords )
 	{
-		return PtAssignOperators< T, U, Count, _Count >::mul( *this, p_coords );
+		return PtAssignOperators< T, U, Count, Count >::mul( *this, p_coords );
 	}
 
 	template< typename T, uint32_t Count >
 	template< typename U >
 	inline Point< T, Count > & Point< T, Count >::operator/=( U const * p_coords )
 	{
-		return PtAssignOperators< T, U, Count, _Count >::div( *this, p_coords );
+		return PtAssignOperators< T, U, Count, Count >::div( *this, p_coords );
 	}
 
 	template< typename T, uint32_t Count >

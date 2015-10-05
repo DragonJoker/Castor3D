@@ -635,8 +635,8 @@ inline Castor::String & operator<<( Castor::String & p_strOut, Castor::Matrix< T
 	{
 		for ( uint32_t j = 0; j < Rows; j++ )
 		{
-			p_streamOut.width( 15 );
-			p_streamOut << std::right << p_matrix[i][j];
+			l_streamOut.width( 15 );
+			l_streamOut << std::right << p_matrix[i][j];
 		}
 
 		l_streamOut << std::endl;

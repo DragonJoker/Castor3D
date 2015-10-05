@@ -1,4 +1,6 @@
-﻿namespace Castor
+#include <locale>
+
+namespace Castor
 {
 	namespace string
 	{
@@ -15,7 +17,6 @@
 					if ( !p_strIn.empty() )
 					{
 						typedef std::codecvt< wchar_t, char, std::mbstate_t > facet_type;
-						typedef facet_type::result result_type;
 						const facet_type & facet = std::use_facet< facet_type >( p_locale );
 						std::mbstate_t state = std::mbstate_t();
 						std::vector< wchar_t > dst( p_strIn.size() * facet.max_length(), 0 );
@@ -37,7 +38,6 @@
 					if ( !p_strIn.empty() )
 					{
 						typedef std::codecvt< wchar_t, char, std::mbstate_t > facet_type;
-						typedef facet_type::result result_type;
 						const facet_type & facet = std::use_facet< facet_type >( p_locale );
 						std::mbstate_t state = std::mbstate_t();
 						std::vector< char > dst( p_strIn.size() * facet.max_length(), 0 );

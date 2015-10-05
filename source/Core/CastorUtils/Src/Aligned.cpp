@@ -7,7 +7,7 @@
 #else
 #	include <stdlib.h>
 #	define CU_ALIGNED_FREE( m ) free( m )
-#	define CU_ALIGNED_ALLOC( m, a, s ) posix_memalign( m, a, s )
+#	define CU_ALIGNED_ALLOC( m, a, s ) posix_memalign( &m, a, s )
 #	if defined( __GNUG__ )
 #		include <sys/time.h>
 #		include <errno.h>

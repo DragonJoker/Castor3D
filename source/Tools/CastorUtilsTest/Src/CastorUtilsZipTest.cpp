@@ -4,6 +4,8 @@
 #include <BinaryFile.hpp>
 #include <TextFile.hpp>
 
+#include <cstring>
+
 #pragma warning( disable:4996 )
 
 using namespace Castor;

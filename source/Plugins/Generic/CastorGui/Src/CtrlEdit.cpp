@@ -148,7 +148,7 @@ namespace CastorGui
 	String EditCtrl::DoGetCaptionWithCaret()const
 	{
 		String l_caption( m_caption.begin(), m_caretIt.internal() );
-		l_caption += _T( '|' );
+		l_caption += cuT( '|' );
 
 		if ( m_caretIt != m_caption.end() )
 		{

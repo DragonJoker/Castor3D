@@ -153,7 +153,7 @@ namespace Castor
 			Castor::AlignedFree( p_memory );
 		}
 	}
-	CASTOR_ALIGNED_ATTRIBUTE( T );
+	CASTOR_ALIGNED_ATTRIBUTE( CASTOR_ALIGN_OF( T ) );
 }
 
 #endif

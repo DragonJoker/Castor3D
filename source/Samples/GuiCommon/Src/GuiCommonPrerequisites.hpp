@@ -155,13 +155,13 @@ namespace GuiCommon
 	DECLARE_MAP( int, Castor3D::FrameVariableWPtr, FrameVariable );
 	DECLARE_ARRAY( StyleInfoPtr, eSTC_TYPE_COUNT, StyleInfoPtr );
 
-	static const wxColour PANEL_BACKGROUND_COLOUR = wxColour( 30, 30, 30 );
-	static const wxColour PANEL_FOREGROUND_COLOUR = wxColour( 220, 220, 220 );
-	static const wxColour BORDER_COLOUR = wxColour( 90, 90, 90 );
-	static const wxColour INACTIVE_TAB_COLOUR = wxColour( 60, 60, 60 );
-	static const wxColour ACTIVE_TAB_COLOUR = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
-	static const wxColour INACTIVE_TEXT_COLOUR = wxColour( 200, 200, 200 );
-	static const wxColour ACTIVE_TEXT_COLOUR = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
+	static wxColour PANEL_BACKGROUND_COLOUR;
+	static wxColour PANEL_FOREGROUND_COLOUR;
+	static wxColour BORDER_COLOUR;
+	static wxColour INACTIVE_TAB_COLOUR;
+	static wxColour INACTIVE_TEXT_COLOUR;
+	static wxColour ACTIVE_TAB_COLOUR;
+	static wxColour ACTIVE_TEXT_COLOUR;
 
 	/**
 	 *\~english
@@ -177,7 +177,7 @@ namespace GuiCommon
 	 *\param[in]	p_pBuffer	Le buffer
 	 *\param[in]	p_width	La largeur de l'image
 	 *\param[in]	p_height	La hauteur de l'image
-	 *\param[out]	p_bitmap	Re�oit le bitmap g�n�r�
+	 *\param[out]	p_bitmap	Reçoit le bitmap généré
 	 */
 	void CreateBitmapFromBuffer( uint8_t const * p_pBuffer, uint32_t p_width, uint32_t p_height, wxBitmap & p_bitmap );
 	/**

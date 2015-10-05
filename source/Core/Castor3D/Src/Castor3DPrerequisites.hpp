@@ -54,8 +54,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	endif
 #endif
 
-#include <CastorUtilsPrerequisites.hpp >
-#include <Collection.hpp >
+#include <CastorUtilsPrerequisites.hpp>
+#include <Collection.hpp>
 
 namespace Castor3D
 {

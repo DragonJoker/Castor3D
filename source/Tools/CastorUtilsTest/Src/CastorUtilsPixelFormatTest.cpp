@@ -107,11 +107,11 @@ namespace
 			
 			for ( uint32_t x = 0; x < l_width; ++x )
 			{
-				PxBuffer< PF >::column const & l_column = p_buffer[x];
+				typename PxBuffer< PF >::column const & l_column = p_buffer[x];
 				
 				for ( uint32_t y = 0; y < l_height; ++y )
 				{
-					PxBuffer< PF >::pixel const & l_pixel = l_column[y];
+					typename PxBuffer< PF >::pixel const & l_pixel = l_column[y];
 					p_stream << "0x";
 					p_stream.width( 2 );
 					p_stream << std::hex << int( PF::GetByteAlpha( l_pixel ) );
@@ -144,11 +144,11 @@ namespace
 			
 			for ( uint32_t x = 0; x < l_width; ++x )
 			{
-				PxBuffer< PF >::column const & l_column = p_buffer[x];
+				typename PxBuffer< PF >::column const & l_column = p_buffer[x];
 				
 				for ( uint32_t y = 0; y < l_height; ++y )
 				{
-					PxBuffer< PF >::pixel const & l_pixel = l_column[y];
+					typename PxBuffer< PF >::pixel const & l_pixel = l_column[y];
 					p_stream << "0x";
 					p_stream.width( 6 );
 					p_stream << std::hex << int( PF::GetUInt24Depth( l_pixel ) );

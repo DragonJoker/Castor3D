@@ -1,3 +1,5 @@
+#include <xmmintrin.h>
+
 namespace
 {
 	template< typename Type, uint32_t Count > struct SqrMtxInverter;
@@ -177,9 +179,9 @@ namespace
 			Castor::Point< Type, 3 > l_ptSrcA0( p_mtxA[0][0], p_mtxA[0][1], p_mtxA[0][2] );
 			Castor::Point< Type, 3 > l_ptSrcA1( p_mtxA[1][0], p_mtxA[1][1], p_mtxA[1][2] );
 			Castor::Point< Type, 3 > l_ptSrcA2( p_mtxA[2][0], p_mtxA[2][1], p_mtxA[2][2] );
-			row_type( p_mtxA[0] ) = ( l_ptSrcA0 * p_mtxB[0][0] + l_ptSrcA1 * p_mtxB[0][1] + l_ptSrcA2 * p_mtxB[0][2] );
-			row_type( p_mtxA[1] ) = ( l_ptSrcA0 * p_mtxB[1][0] + l_ptSrcA1 * p_mtxB[1][1] + l_ptSrcA2 * p_mtxB[1][2] );
-			row_type( p_mtxA[2] ) = ( l_ptSrcA0 * p_mtxB[2][0] + l_ptSrcA1 * p_mtxB[2][1] + l_ptSrcA2 * p_mtxB[2][2] );
+			std::memcpy( p_mtxA[0].ptr(), ( l_ptSrcA0 * p_mtxB[0][0] + l_ptSrcA1 * p_mtxB[0][1] + l_ptSrcA2 * p_mtxB[0][2] ), Size );
+			std::memcpy( p_mtxA[1].ptr(), ( l_ptSrcA0 * p_mtxB[1][0] + l_ptSrcA1 * p_mtxB[1][1] + l_ptSrcA2 * p_mtxB[1][2] ), Size );
+			std::memcpy( p_mtxA[2].ptr(), ( l_ptSrcA0 * p_mtxB[2][0] + l_ptSrcA1 * p_mtxB[2][1] + l_ptSrcA2 * p_mtxB[2][2] ), Size );
 		}
 	};
 
@@ -193,8 +195,8 @@ namespace
 			typedef typename Castor::SquareMatrix< Type, 2 >::row_type row_type;
 			Castor::Point< Type, 2 > l_ptSrcA0( p_mtxA[0][0], p_mtxA[0][1] );
 			Castor::Point< Type, 2 > l_ptSrcA1( p_mtxA[1][0], p_mtxA[1][1] );
-			row_type( p_mtxA[0] ) = ( l_ptSrcA0 * p_mtxB[0][0] + l_ptSrcA1 * p_mtxB[0][1] );
-			row_type( p_mtxA[1] ) = ( l_ptSrcA0 * p_mtxB[1][0] + l_ptSrcA1 * p_mtxB[1][1] );
+			std::memcpy( p_mtxA[0].ptr(), ( l_ptSrcA0 * p_mtxB[0][0] + l_ptSrcA1 * p_mtxB[0][1] ), Size );
+			std::memcpy( p_mtxA[1].ptr(), ( l_ptSrcA0 * p_mtxB[1][0] + l_ptSrcA1 * p_mtxB[1][1] ), Size );
 		}
 	};
 
@@ -401,7 +403,7 @@ namespace Castor
 		{
 			for ( uint32_t j = 0; j < Count && l_bReturn; j++ )
 			{
-				l_bReturn = Castor::Policy< T >::equals( m_columns[i][j], m_columns[j][i] );
+				l_bReturn = Castor::Policy< T >::equals( this->m_columns[i][j], this->m_columns[j][i] );
 			}
 		}
 
@@ -416,7 +418,7 @@ namespace Castor
 		{
 			for ( uint32_t j = 0; j < Count && l_bReturn; j++ )
 			{
-				if ( !Castor::Policy< T >::is_null( m_columns[i][j] + m_columns[j][i] ) )
+				if ( !Castor::Policy< T >::is_null( this->m_columns[i][j] + this->m_columns[j][i] ) )
 				{
 					l_bReturn = false;
 				}
@@ -447,7 +449,7 @@ namespace Castor
 				{
 					if ( j != y )
 					{
-						l_return[l_i][l_j++] = m_columns[i][j];
+						l_return[l_i][l_j++] = this->m_columns[i][j];
 					}
 				}
 
