@@ -82,14 +82,6 @@ namespace GuiCommon
 
 #endif
 
-		PANEL_BACKGROUND_COLOUR = wxColour( 30, 30, 30 );
-		PANEL_FOREGROUND_COLOUR = wxColour( 220, 220, 220 );
-		BORDER_COLOUR = wxColour( 90, 90, 90 );
-		INACTIVE_TAB_COLOUR = wxColour( 60, 60, 60 );
-		INACTIVE_TEXT_COLOUR = wxColour( 200, 200, 200 );
-		ACTIVE_TAB_COLOUR = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHT );
-		ACTIVE_TEXT_COLOUR = wxSystemSettings::GetColour( wxSYS_COLOUR_HIGHLIGHTTEXT );
-
 		bool l_return = DoParseCommandLine();
 		wxDisplay l_display;
 		wxRect l_rect = l_display.GetClientArea();

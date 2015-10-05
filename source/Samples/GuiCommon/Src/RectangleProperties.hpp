@@ -38,10 +38,7 @@ namespace GuiCommon
 
 	protected:
 		// I stands for internal
-		inline void SetValueI( Castor::Rectangle const & value )
-		{
-			m_value = WXVARIANT( value );
-		}
+		void SetValueI( Castor::Rectangle const & value );
 	};
 }
 

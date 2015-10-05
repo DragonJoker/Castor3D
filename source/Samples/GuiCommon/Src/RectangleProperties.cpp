@@ -65,4 +65,10 @@ namespace GuiCommon
 		newVariant << point;
 		return newVariant;
 	}
+
+	void RectangleProperty::SetValueI( Castor::Rectangle const & value )
+	{
+		Castor::Point4i l_value( value.left(), value.top(), value.right(), value.bottom() );
+		m_value = WXVARIANT( l_value );
+	}
 }

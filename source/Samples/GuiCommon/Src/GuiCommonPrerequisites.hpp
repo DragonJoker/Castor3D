@@ -155,13 +155,13 @@ namespace GuiCommon
 	DECLARE_MAP( int, Castor3D::FrameVariableWPtr, FrameVariable );
 	DECLARE_ARRAY( StyleInfoPtr, eSTC_TYPE_COUNT, StyleInfoPtr );
 
-	static wxColour PANEL_BACKGROUND_COLOUR;
-	static wxColour PANEL_FOREGROUND_COLOUR;
-	static wxColour BORDER_COLOUR;
-	static wxColour INACTIVE_TAB_COLOUR;
-	static wxColour INACTIVE_TEXT_COLOUR;
-	static wxColour ACTIVE_TAB_COLOUR;
-	static wxColour ACTIVE_TEXT_COLOUR;
+	static const wxColour PANEL_BACKGROUND_COLOUR = wxColour( 30, 30, 30 );
+	static const wxColour PANEL_FOREGROUND_COLOUR = wxColour( 220, 220, 220 );
+	static const wxColour BORDER_COLOUR = wxColour( 90, 90, 90 );
+	static const wxColour INACTIVE_TAB_COLOUR = wxColour( 60, 60, 60 );
+	static const wxColour INACTIVE_TEXT_COLOUR = wxColour( 200, 200, 200 );
+	static const wxColour ACTIVE_TAB_COLOUR = wxColour( 51, 153, 255, 255 );
+	static const wxColour ACTIVE_TEXT_COLOUR = wxColour( 255, 255, 255, 255 );
 
 	/**
 	 *\~english
