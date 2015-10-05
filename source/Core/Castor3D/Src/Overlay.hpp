@@ -342,6 +342,26 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		\p true if this overlay's or one of its parents' size has changed.
+		 *\~french
+		 *\return		\p true si les dimensions de cette incrustation ou d'un de ses parents ont changé.
+		 */
+		bool IsSizeChanged()const
+		{
+			return m_pOverlayCategory->IsSizeChanged();
+		}
+		/**
+		 *\~english
+		 *\return		\p true if this overlay's or one of its parents' position has changed.
+		 *\~french
+		 *\return		\p true si la position de cette incrustation ou d'un de ses parents a changé.
+		 */
+		bool IsPositionChanged()const
+		{
+			return m_pOverlayCategory->IsPositionChanged();
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the engine
 		 *\return		The value
 		 *\~french
