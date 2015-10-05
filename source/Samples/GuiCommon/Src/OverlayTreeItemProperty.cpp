@@ -177,7 +177,7 @@ namespace GuiCommon
 	void OverlayTreeItemProperty::DoCreateTextOverlayProperties( wxPropertyGrid * p_grid, TextOverlaySPtr p_overlay )
 	{
 		p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_TEXT_OVERLAY ) );
-		FontSPtr l_font = p_overlay->GetFont();
+		FontSPtr l_font = p_overlay->GetFontTexture()->GetFont();
 		wxFontInfo l_info( l_font->GetHeight() );
 		l_info.FaceName( l_font->GetFaceName() );
 		p_grid->Append( new wxFontProperty( PROPERTY_OVERLAY_FONT ) )->SetValue( wxVariant( wxFont( l_info ) ) );

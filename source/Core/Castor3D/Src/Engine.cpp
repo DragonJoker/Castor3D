@@ -174,12 +174,14 @@ namespace Castor3D
 	{
 		if ( !IsCleaned() )
 		{
-			ClearScenes();
+			SetCleaned();
 
 			for ( auto && l_listener : m_listeners )
 			{
 				l_listener.second->Flush();
 			}
+
+			ClearScenes();
 
 			m_depthStencilStateManager.lock();
 
@@ -259,8 +261,6 @@ namespace Castor3D
 			{
 				PostEvent( MakeCleanupEvent( *m_pDefaultSampler ) );
 			}
-
-			SetCleaned();
 
 			if ( m_pThreadMainLoop )
 			{

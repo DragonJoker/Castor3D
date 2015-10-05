@@ -7,27 +7,34 @@
 #include <BorderPanelOverlay.hpp>
 #include <TextOverlay.hpp>
 
+#include <Font.hpp>
+
 using namespace Castor;
 using namespace Castor3D;
 
 namespace CastorGui
 {
-	ComboBoxCtrl::ComboBoxCtrl( ControlRPtr p_parent, uint32_t p_id )
-		: ComboBoxCtrl( p_parent, p_id, StringArray(), -1, Position(), Size(), 0, true )
+	ComboBoxCtrl::ComboBoxCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id )
+		: ComboBoxCtrl( p_engine, p_parent, p_id, StringArray(), -1, Position(), Size(), 0, true )
 	{
 	}
 
-	ComboBoxCtrl::ComboBoxCtrl( ControlRPtr p_parent, uint32_t p_id, StringArray const & p_values, int p_selected, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( eCONTROL_TYPE_COMBO, p_parent, p_id, p_position, p_size, p_style, p_visible )
+	ComboBoxCtrl::ComboBoxCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, StringArray const & p_values, int p_selected, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
+		: Control( eCONTROL_TYPE_COMBO, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
 		, m_values( p_values )
 		, m_selected( p_selected )
 	{
-		m_expand = std::make_shared< ButtonCtrl >( this, GetId() << 12, cuT( "+" ), Position( p_size.width() - p_size.height(), 0 ), Size( p_size.height(), p_size.height() ) );
+		m_expand = std::make_shared< ButtonCtrl >( p_engine, this, GetId() << 12, cuT( "+" ), Position( p_size.width() - p_size.height(), 0 ), Size( p_size.height(), p_size.height() ) );
 		m_expand->SetVisible( DoIsVisible() );
 		m_expand->Connect( eBUTTON_EVENT_CLICKED, std::bind( &ComboBoxCtrl::DoSwitchExpand, this ) );
 
-		m_choices = std::make_shared< ListBoxCtrl >( this, ( GetId() << 12 ) + 1, m_values, m_selected, Position( 0, p_size.height() ), Size( p_size.width() - p_size.height(), -1 ), 0, false );
+		m_choices = std::make_shared< ListBoxCtrl >( p_engine, this, ( GetId() << 12 ) + 1, m_values, m_selected, Position( 0, p_size.height() ), Size( p_size.width() - p_size.height(), -1 ), 0, false );
 		m_choices->Connect( eLISTBOX_EVENT_SELECTED, std::bind( &ComboBoxCtrl::OnSelected, this, std::placeholders::_1 ) );
+
+		TextOverlaySPtr l_text = GetEngine()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_TEXT, cuT( "T_CtrlCombo_" ) + string::to_string( GetId() ), GetBackground()->GetOverlay().shared_from_this(), nullptr )->GetTextOverlay();
+		l_text->SetPixelSize( Size( GetSize().width() - GetSize().height(), GetSize().height() ) );
+		l_text->SetVAlign( eVALIGN_CENTER );
+		m_text = l_text;
 	}
 
 	ComboBoxCtrl::~ComboBoxCtrl()
@@ -114,6 +121,18 @@ namespace CastorGui
 		return m_choices->GetSelected();
 	}
 
+	void ComboBoxCtrl::SetFont( Castor::String const & p_font )
+	{
+		TextOverlaySPtr l_text = m_text.lock();
+
+		if ( l_text )
+		{
+			l_text->SetFont( p_font );
+		}
+
+		m_choices->SetFont( p_font );
+	}
+
 	void ComboBoxCtrl::DoCreate()
 	{
 		SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
@@ -130,18 +149,22 @@ namespace CastorGui
 		EventHandler::Connect( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &ComboBoxCtrl::OnKeyDown, this, std::placeholders::_1 ) );
 		EventHandler::ConnectNC( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &ComboBoxCtrl::OnNcKeyDown, this, std::placeholders::_1, std::placeholders::_2 ) );
 
-		TextOverlaySPtr l_text = GetEngine()->GetOverlayManager().CreateText( cuT( "T_CtrlCombo_" ) + string::to_string( GetId() ), Position(), Size( GetSize().width() - GetSize().height(), GetSize().height() ), GetForegroundMaterial(), GetControlsManager()->GetDefaultFont(), GetBackground()->GetOverlay().shared_from_this() );
-		l_text->SetVAlign( eVALIGN_CENTER );
+		ControlsManagerSPtr l_manager = GetControlsManager();
+		TextOverlaySPtr l_text = m_text.lock();
+		l_text->SetMaterial( GetForegroundMaterial() );
+		l_text->SetPixelSize( Size( GetSize().width() - GetSize().height(), GetSize().height() ) );
+
+		if ( !l_text->GetFontTexture() || !l_text->GetFontTexture()->GetFont() )
+		{
+			l_text->SetFont( GetControlsManager()->GetDefaultFont()->GetName() );
+		}
+
 		int l_sel = GetSelected();
 
 		if ( l_sel >= 0 && uint32_t( l_sel ) < GetItemCount() )
 		{
 			l_text->SetCaption( GetItems()[l_sel] );
 		}
-
-		m_text = l_text;
-		ControlsManagerSPtr l_manager = GetControlsManager();
-
 		if ( l_manager )
 		{
 			l_manager->Create( m_expand );
@@ -168,7 +191,7 @@ namespace CastorGui
 
 		if ( l_text )
 		{
-			l_text->SetPixelPosition( p_value );
+			//l_text->SetPixelPosition( p_value );
 			l_text.reset();
 		}
 

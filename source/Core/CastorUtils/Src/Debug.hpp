@@ -33,6 +33,37 @@ namespace Castor
 		 *\param[in,out]	p_stream	Le flux
 		 */
 		CU_API void ShowBacktrace( StringStream & p_stream );
+
+		/*!
+		\author 	Sylvain DOREMUS
+		\date		05/10/2015
+		\version	0.8.0
+		\~english
+		\brief		Helper class used to enable allocation backtrace retrieval.
+		\~french
+		\brief		Classe d'aide permettant la récupération de la pile d'appels d'allocation.
+		*/
+		class Backtraced
+		{
+#if !defined( NDEBUG )
+		protected:
+			Backtraced()
+			{
+				StringStream l_backtrace;
+				Castor::Debug::ShowBacktrace( l_backtrace );
+				m_callStack = l_backtrace.str();
+			}
+
+			virtual ~Backtraced()
+			{
+			}
+
+		private:
+			String m_callStack;
+#else
+#endif
+
+		};
 	}
 }
 

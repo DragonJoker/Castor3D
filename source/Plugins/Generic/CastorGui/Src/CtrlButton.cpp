@@ -9,24 +9,35 @@
 #include <Pass.hpp>
 #include <TextOverlay.hpp>
 
+#include <Font.hpp>
+
 using namespace Castor;
 using namespace Castor3D;
 
 namespace CastorGui
 {
-	ButtonCtrl::ButtonCtrl( ControlRPtr p_parent, uint32_t p_id )
-		: ButtonCtrl( p_parent, p_id, cuT( "" ), Position(), Size(), 0, true )
+	ButtonCtrl::ButtonCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id )
+		: ButtonCtrl( p_engine, p_parent, p_id, cuT( "" ), Position(), Size(), 0, true )
 	{
 	}
 
-	ButtonCtrl::ButtonCtrl( ControlRPtr p_parent, uint32_t p_id, String const & p_caption, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( eCONTROL_TYPE_BUTTON, p_parent, p_id, p_position, p_size, p_style, p_visible )
+	ButtonCtrl::ButtonCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, String const & p_caption, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
+		: Control( eCONTROL_TYPE_BUTTON, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
 		, m_caption( p_caption )
 	{
 		SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
 		EventHandler::Connect( eMOUSE_EVENT_MOUSE_ENTER, std::bind( &ButtonCtrl::OnMouseEnter, this, std::placeholders::_1 ) );
 		EventHandler::Connect( eMOUSE_EVENT_MOUSE_LEAVE, std::bind( &ButtonCtrl::OnMouseLeave, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eMOUSE_EVENT_MOUSE_BUTTON_RELEASED, std::bind( &ButtonCtrl::OnMouseLButtonUp, this, std::placeholders::_1 ) );
+		EventHandler::Connect( eMOUSE_EVENT_MOUSE_BUTTON_PUSHED, std::bind( &ButtonCtrl::OnMouseButtonDown, this, std::placeholders::_1 ) );
+		EventHandler::Connect( eMOUSE_EVENT_MOUSE_BUTTON_RELEASED, std::bind( &ButtonCtrl::OnMouseButtonUp, this, std::placeholders::_1 ) );
+
+		TextOverlaySPtr l_text = GetEngine()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_TEXT, cuT( "T_CtrlButton_" ) + string::to_string( GetId() ), GetBackground()->GetOverlay().shared_from_this(), nullptr )->GetTextOverlay();
+		l_text->SetPixelSize( GetSize() );
+		l_text->SetHAlign( eHALIGN_CENTER );
+		l_text->SetVAlign( eVALIGN_CENTER );
+		l_text->SetCaption( m_caption );
+		l_text->SetVisible( DoIsVisible() );
+		m_text = l_text;
 	}
 
 	ButtonCtrl::~ButtonCtrl()
@@ -41,43 +52,104 @@ namespace CastorGui
 		if ( l_text )
 		{
 			l_text->SetCaption( p_value );
-			l_text.reset();
 		}
 	}
 
-	void ButtonCtrl::SetMouseOverBackgroundMaterial( MaterialSPtr p_material )
+	void ButtonCtrl::SetTextMaterial( MaterialSPtr p_material )
 	{
-		m_mouseOverBackgroundMaterial = p_material;
+		m_textMaterial = p_material;
 	}
 
-	void ButtonCtrl::SetMouseOverForegroundMaterial( MaterialSPtr p_material )
+	void ButtonCtrl::SetHighlightedBackgroundMaterial( MaterialSPtr p_material )
 	{
-		m_mouseOverForegroundMaterial = p_material;
+		m_highlightedBackgroundMaterial = p_material;
+	}
+
+	void ButtonCtrl::SetHighlightedForegroundMaterial( MaterialSPtr p_material )
+	{
+		m_highlightedForegroundMaterial = p_material;
+	}
+
+	void ButtonCtrl::SetHighlightedTextMaterial( MaterialSPtr p_material )
+	{
+		m_highlightedTextMaterial = p_material;
+	}
+
+	void ButtonCtrl::SetPushedBackgroundMaterial( MaterialSPtr p_material )
+	{
+		m_pushedBackgroundMaterial = p_material;
+	}
+
+	void ButtonCtrl::SetPushedForegroundMaterial( MaterialSPtr p_material )
+	{
+		m_pushedForegroundMaterial = p_material;
+	}
+
+	void ButtonCtrl::SetPushedTextMaterial( MaterialSPtr p_material )
+	{
+		m_pushedTextMaterial = p_material;
+	}
+
+	void ButtonCtrl::SetFont( Castor::String const & p_font )
+	{
+		TextOverlaySPtr l_text = m_text.lock();
+
+		if ( l_text )
+		{
+			l_text->SetFont( p_font );
+		}
 	}
 
 	void ButtonCtrl::DoCreate()
 	{
 		GetBackground()->SetBorderPosition( eBORDER_POSITION_INTERNAL );
-		TextOverlaySPtr l_text = GetEngine()->GetOverlayManager().CreateText( cuT( "T_CtrlButton_" ) + string::to_string( GetId() ), Position(), GetSize(), GetForegroundMaterial(), GetControlsManager()->GetDefaultFont(), GetBackground()->GetOverlay().shared_from_this() );
-		l_text->SetHAlign( eHALIGN_CENTER );
-		l_text->SetVAlign( eVALIGN_CENTER );
-		l_text->SetCaption( m_caption );
-		l_text->SetVisible( DoIsVisible() );
-		m_text = l_text;
 
 		if ( !GetBackgroundMaterial() )
 		{
 			SetBackgroundMaterial( GetEngine()->GetMaterialManager().find( cuT( "Black" ) ) );
 		}
 
-		if ( m_mouseOverBackgroundMaterial.expired() )
+		if ( m_textMaterial.expired() )
 		{
-			m_mouseOverBackgroundMaterial = DoCreateMaterial( GetBackgroundMaterial(), 0.1f );
+			m_textMaterial = GetForegroundMaterial();
 		}
 
-		if ( m_mouseOverForegroundMaterial.expired() )
+		if ( m_highlightedBackgroundMaterial.expired() )
 		{
-			m_mouseOverForegroundMaterial = DoCreateMaterial( GetForegroundMaterial(), -0.1f );
+			m_highlightedBackgroundMaterial = DoCreateMaterial( GetBackgroundMaterial(), 0.1f );
+		}
+
+		if ( m_highlightedForegroundMaterial.expired() )
+		{
+			m_highlightedForegroundMaterial = DoCreateMaterial( GetForegroundMaterial(), -0.1f );
+		}
+
+		if ( m_highlightedTextMaterial.expired() )
+		{
+			m_highlightedTextMaterial = m_highlightedBackgroundMaterial.lock();
+		}
+
+		if ( m_pushedBackgroundMaterial.expired() )
+		{
+			m_pushedBackgroundMaterial = DoCreateMaterial( GetBackgroundMaterial(), 0.1f );
+		}
+
+		if ( m_pushedForegroundMaterial.expired() )
+		{
+			m_pushedForegroundMaterial = DoCreateMaterial( GetForegroundMaterial(), -0.1f );
+		}
+
+		if ( m_pushedTextMaterial.expired() )
+		{
+			m_pushedTextMaterial = m_pushedBackgroundMaterial.lock();
+		}
+
+		TextOverlaySPtr l_text = m_text.lock();
+		l_text->SetMaterial( m_textMaterial.lock() );
+
+		if ( !l_text->GetFontTexture() || !l_text->GetFontTexture()->GetFont() )
+		{
+			l_text->SetFont( GetControlsManager()->GetDefaultFont()->GetName() );
 		}
 	}
 
@@ -110,7 +182,7 @@ namespace CastorGui
 	{
 		if ( GetEngine() )
 		{
-			m_mouseOverBackgroundMaterial = DoCreateMaterial( p_material, 0.1f );
+			m_highlightedBackgroundMaterial = DoCreateMaterial( p_material, 0.1f );
 		}
 	}
 
@@ -118,15 +190,7 @@ namespace CastorGui
 	{
 		if ( GetEngine() )
 		{
-			m_mouseOverForegroundMaterial = DoCreateMaterial( p_material, -0.1f );
-		}
-
-		TextOverlaySPtr l_text = m_text.lock();
-
-		if ( l_text )
-		{
-			l_text->SetMaterial( p_material );
-			l_text.reset();
+			m_highlightedForegroundMaterial = DoCreateMaterial( p_material, -0.1f );
 		}
 	}
 
@@ -142,20 +206,20 @@ namespace CastorGui
 
 	void ButtonCtrl::OnMouseEnter( MouseEvent const & p_event )
 	{
-		m_text.lock()->SetMaterial( m_mouseOverForegroundMaterial.lock() );
+		m_text.lock()->SetMaterial( m_highlightedTextMaterial.lock() );
 		BorderPanelOverlaySPtr l_panel = GetBackground();
 
 		if ( l_panel )
 		{
-			l_panel->SetMaterial( m_mouseOverBackgroundMaterial.lock() );
-			l_panel->SetBorderMaterial( m_mouseOverForegroundMaterial.lock() );
+			l_panel->SetMaterial( m_highlightedBackgroundMaterial.lock() );
+			l_panel->SetBorderMaterial( m_highlightedForegroundMaterial.lock() );
 			l_panel.reset();
 		}
 	}
 
 	void ButtonCtrl::OnMouseLeave( MouseEvent const & p_event )
 	{
-		m_text.lock()->SetMaterial( m_foregroundMaterial.lock() );
+		m_text.lock()->SetMaterial( m_textMaterial.lock() );
 		BorderPanelOverlaySPtr l_panel = GetBackground();
 
 		if ( l_panel )
@@ -166,10 +230,36 @@ namespace CastorGui
 		}
 	}
 
-	void ButtonCtrl::OnMouseLButtonUp( MouseEvent const & p_event )
+	void ButtonCtrl::OnMouseButtonDown( MouseEvent const & p_event )
 	{
 		if ( p_event.GetButton() == eMOUSE_BUTTON_LEFT )
 		{
+			m_text.lock()->SetMaterial( m_pushedTextMaterial.lock() );
+			BorderPanelOverlaySPtr l_panel = GetBackground();
+
+			if ( l_panel )
+			{
+				l_panel->SetMaterial( m_pushedBackgroundMaterial.lock() );
+				l_panel->SetBorderMaterial( m_pushedForegroundMaterial.lock() );
+				l_panel.reset();
+			}
+		}
+	}
+
+	void ButtonCtrl::OnMouseButtonUp( MouseEvent const & p_event )
+	{
+		if ( p_event.GetButton() == eMOUSE_BUTTON_LEFT )
+		{
+			m_text.lock()->SetMaterial( m_highlightedTextMaterial.lock() );
+			BorderPanelOverlaySPtr l_panel = GetBackground();
+
+			if ( l_panel )
+			{
+				l_panel->SetMaterial( m_highlightedBackgroundMaterial.lock() );
+				l_panel->SetBorderMaterial( m_highlightedForegroundMaterial.lock() );
+				l_panel.reset();
+			}
+
 			m_signals[eBUTTON_EVENT_CLICKED]();
 		}
 	}

@@ -7,21 +7,24 @@
 #include <PanelOverlay.hpp>
 #include <TextOverlay.hpp>
 
+#include <Font.hpp>
+
 using namespace Castor;
 using namespace Castor3D;
 
 namespace CastorGui
 {
-	EditCtrl::EditCtrl( ControlRPtr p_parent, uint32_t p_id )
-		: EditCtrl( p_parent, p_id, String(), Position(), Size(), 0, true )
+	EditCtrl::EditCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id )
+		: EditCtrl( p_engine, p_parent, p_id, String(), Position(), Size(), 0, true )
 	{
 	}
 
-	EditCtrl::EditCtrl( ControlRPtr p_parent, uint32_t p_id, String const & p_caption, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( eCONTROL_TYPE_EDIT, p_parent, p_id, p_position, p_size, p_style, p_visible )
+	EditCtrl::EditCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, String const & p_caption, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
+		: Control( eCONTROL_TYPE_EDIT, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
 		, m_caption( p_caption )
 		, m_caretIt( p_caption.end() )
 		, m_active( false )
+		, m_multiLine( false )
 	{
 		m_caretIt = m_caption.end();
 		m_cursor = eMOUSE_CURSOR_TEXT;
@@ -33,6 +36,14 @@ namespace CastorGui
 		EventHandler::Connect( eKEYBOARD_EVENT_CHAR, std::bind( &EditCtrl::OnChar, this, std::placeholders::_1 ) );
 		EventHandler::Connect( eCONTROL_EVENT_ACTIVATE, std::bind( &EditCtrl::OnActivate, this, std::placeholders::_1 ) );
 		EventHandler::Connect( eCONTROL_EVENT_DEACTIVATE, std::bind( &EditCtrl::OnDeactivate, this, std::placeholders::_1 ) );
+
+		TextOverlaySPtr l_text = GetEngine()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_TEXT, cuT( "T_CtrlEdit_" ) + string::to_string( GetId() ), GetBackground()->GetOverlay().shared_from_this(), nullptr )->GetTextOverlay();
+		l_text->SetPixelSize( GetSize() );
+		l_text->SetVAlign( eVALIGN_TOP );
+		l_text->SetVisible( DoIsVisible() );
+		m_text = l_text;
+
+		DoUpdateStyle();
 	}
 
 	EditCtrl::~EditCtrl()
@@ -46,18 +57,26 @@ namespace CastorGui
 		DoUpdateCaption();
 	}
 
+	void EditCtrl::SetFont( Castor::String const & p_font )
+	{
+		TextOverlaySPtr l_text = m_text.lock();
+
+		if ( l_text )
+		{
+			l_text->SetFont( p_font );
+		}
+	}
+
 	void EditCtrl::DoCreate()
 	{
-		TextOverlaySPtr l_text = GetEngine()->GetOverlayManager().CreateText( cuT( "T_CtrlEdit_" ) + string::to_string( GetId() ), Position(), GetSize(), GetForegroundMaterial(), GetControlsManager()->GetDefaultFont(), GetBackground()->GetOverlay().shared_from_this() );
-		l_text->SetVAlign( eVALIGN_TOP );
-		l_text->SetVisible( DoIsVisible() );
+		TextOverlaySPtr l_text = m_text.lock();
+		l_text->SetMaterial( GetForegroundMaterial() );
 
-		if ( ( GetStyle() & eEDIT_STYLE_MULTILINE ) == eEDIT_STYLE_MULTILINE )
+		if ( !l_text->GetFontTexture() || !l_text->GetFontTexture()->GetFont() )
 		{
-			l_text->SetTextWrappingMode( eTEXT_WRAPPING_MODE_BREAK );
+			l_text->SetFont( GetControlsManager()->GetDefaultFont()->GetName() );
 		}
 
-		m_text = l_text;
 		DoUpdateCaption();
 	}
 
@@ -113,6 +132,19 @@ namespace CastorGui
 		}
 	}
 
+	void EditCtrl::DoUpdateStyle()
+	{
+		TextOverlaySPtr l_text = m_text.lock();
+
+		if ( l_text )
+		{
+			if ( IsMultiLine() )
+			{
+				l_text->SetTextWrappingMode( eTEXT_WRAPPING_MODE_BREAK );
+			}
+		}
+	}
+
 	String EditCtrl::DoGetCaptionWithCaret()const
 	{
 		String l_caption( m_caption.begin(), m_caretIt.internal() );
@@ -153,6 +185,11 @@ namespace CastorGui
 		if ( l_code >= 0x20 && l_code <= 255 && l_code != eKEY_DELETE )
 		{
 			DoAddCharAtCaret( p_event.GetChar() );
+			m_signals[eEDIT_EVENT_UPDATED]( m_caption );
+		}
+		else if ( l_code == eKEY_RETURN && IsMultiLine() )
+		{
+			DoAddCharAtCaret( cuT( "\n" ) );
 			m_signals[eEDIT_EVENT_UPDATED]( m_caption );
 		}
 	}

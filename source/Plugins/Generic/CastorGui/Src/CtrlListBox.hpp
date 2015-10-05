@@ -32,12 +32,14 @@ namespace CastorGui
 	{
 	public:
 		/** Constructor
+		 *\param[in]	p_engine	The engine
 		 *\param[in]	p_parent	The parent control, if any
 		 *\param[in]	p_id		The control ID
 		 */
-		ListBoxCtrl( ControlRPtr p_parent, uint32_t p_id );
+		ListBoxCtrl( Castor3D::Engine * p_engine, ControlRPtr p_parent, uint32_t p_id );
 
 		/** Constructor
+		 *\param[in]	p_engine		The engine
 		 *\param[in]	p_parent		The parent control, if any
 		 *\param[in]	p_values		The values list
 		 *\param[in]	p_selected		The selected value index (-1 for no selection)
@@ -47,7 +49,7 @@ namespace CastorGui
 		 *\param[in]	p_style			The style
 		 *\param[in]	p_visible		Initial visibility status
 		 */
-		ListBoxCtrl( ControlRPtr p_parent, uint32_t p_id, Castor::StringArray const & p_values, int p_selected, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
+		ListBoxCtrl( Castor3D::Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Castor::StringArray const & p_values, int p_selected, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
 
 		/** Constructor
 		 *\param[in]	p_parent		The parent control, if any
@@ -111,6 +113,11 @@ namespace CastorGui
 		 *\param[in]	p_index		The new value
 		 */
 		void SetSelected( int p_index );
+
+		/** Sets the caption font.
+		*\param[in]	p_font	The new value.
+		*/
+		void SetFont( Castor::String const & p_font );
 
 		/** Retrieves the items
 		 *\return		The value
@@ -300,6 +307,8 @@ namespace CastorGui
 		Castor3D::MaterialWPtr m_selectedItemForegroundMaterial;
 		//! The listbox events signals
 		Signal< std::function< void( int ) > > m_signals[eLISTBOX_EVENT_COUNT];
+		//! The items font name.
+		Castor::String m_fontName;
 	};
 }
 

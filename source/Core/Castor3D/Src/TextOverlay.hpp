@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_TEXT_OVERLAY_H___
 
 #include "OverlayCategory.hpp"
+#include "FontTexture.hpp"
 
 #pragma warning( push )
 #pragma warning( disable:4251 )
@@ -167,24 +168,14 @@ namespace Castor3D
 		void SetFont( Castor::String const & p_strFont );
 		/**
 		 *\~english
-		 *\brief		Retrieves the font name
-		 *\return		The value
+		 *\return		The FontTexture.
 		 *\~french
-		 *\brief		Récupère le nom de la police
-		 *\return		La valeur
+		 *\return		La FontTexture.
 		 */
-		Castor::String const & GetFontName()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the wanted glyph position
-		 *\param[in]	p_char	The glyph index
-		 *\return		The position
-		 *\~french
-		 *\brief		Récupère la position de la glyphe voulue
-		 *\param[in]	p_char	L'indice de la glyphe
-		 *\return		La position
-		 */
-		Castor::Position const & GetGlyphPosition( char32_t p_char )const;
+		inline FontTextureSPtr GetFontTexture()const
+		{
+			return m_fontTexture.lock();
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the panel vertex buffer
@@ -196,18 +187,6 @@ namespace Castor3D
 		inline OverlayCategory::VertexArray const & GetTextVertex()const
 		{
 			return m_arrayVtx;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the font
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la police
-		 *\return		La valeur
-		 */
-		Castor::FontSPtr GetFont()const
-		{
-			return m_wpFont.lock();
 		}
 		/**
 		 *\~english
@@ -246,18 +225,6 @@ namespace Castor3D
 		{
 			m_textChanged |= m_wrappingMode != p_mode;
 			m_wrappingMode = p_mode;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture
-		 *\return		The texture
-		 *\~french
-		 *\brief		Récupère la texture
-		 *\return		La texture
-		 */
-		inline DynamicTextureSPtr GetTexture()const
-		{
-			return m_pTexture;
 		}
 		/**
 		 *\~english
@@ -376,16 +343,8 @@ namespace Castor3D
 		Castor::String m_strCaption;
 		//!\~english The previous overlay caption	\~french Le texte précédent de l'incrustation
 		Castor::String m_previousCaption;
-		//!\~english The font	\~french La police
-		Castor::FontWPtr m_wpFont;
-		//!\~english The texture sampler	\~french L'échantillonneur de la texture
-		SamplerWPtr m_wpSampler;
-		//!\~english The texture that will receive the glyphs	\~french La texture qui recevra les glyphes
-		DynamicTextureSPtr m_pTexture;
-		//!\~english The font name	\~french Le nom de la police
-		Castor::String m_strFontName;
-		//!\~english Glyphs positions in the texture	\~french Position des glyphes
-		GlyphPositionMap m_glyphsPositions;
+		//!\~english The texture associated to the overlay font.	\~french La texture associée à la police de l'incrustation.
+		FontTextureWPtr m_fontTexture;
 		//!\~english The wrapping mode	\~french Le mode de découpe du texte
 		eTEXT_WRAPPING_MODE m_wrappingMode;
 		//!\~english The horizontal alignment.	\~french L'alignement horizontal du texte.

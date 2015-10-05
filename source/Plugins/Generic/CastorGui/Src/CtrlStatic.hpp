@@ -32,20 +32,22 @@ namespace CastorGui
 	{
 	public:
 		/** Constructor
+		 *\param[in]	p_engine	The engine
 		 *\param[in]	p_parent	The parent control, if any
 		 *\param[in]	p_id		The control ID.
 		*/
-		StaticCtrl( ControlRPtr p_parent, uint32_t p_id );
+		StaticCtrl( Castor3D::Engine * p_engine, ControlRPtr p_parent, uint32_t p_id );
 
 		/** Constructor
-		*\param[in]	p_parent	The parent control, if any
-		*\param[in]	p_caption	The static caption
-		*\param[in]	p_position	The control position
-		*\param[in]	p_size		The control siz
-		*\param[in]	p_style		The control styly
-		*\param[in]	p_visible	Initial visibility status
-		*/
-		StaticCtrl( ControlRPtr p_parent, Castor::String const & p_caption, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
+		 *\param[in]	p_engine	The engine
+		 *\param[in]	p_parent	The parent control, if any
+		 *\param[in]	p_caption	The static caption
+		 *\param[in]	p_position	The control position
+		 *\param[in]	p_size		The control siz
+		 *\param[in]	p_style		The control styly
+		 *\param[in]	p_visible	Initial visibility status
+		 */
+		StaticCtrl( Castor3D::Engine * p_engine, ControlRPtr p_parent, Castor::String const & p_caption, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
 
 		/** Destructor
 		*/
@@ -55,6 +57,11 @@ namespace CastorGui
 		*\param[in]	p_value		The new value
 		*/
 		void SetCaption( Castor::String const & p_value );
+
+		/** Sets the caption font.
+		*\param[in]	p_font	The new value.
+		*/
+		void SetFont( Castor::String const & p_font );
 
 		/** Retrieve the static caption
 		 *\return		The value
@@ -92,6 +99,10 @@ namespace CastorGui
 		/** @copydoc CastorGui::Control::DoSetVisible
 		*/
 		virtual void DoSetVisible( bool p_visible );
+
+		/** @copydoc CastorGui::Control::DoUpdateStyle
+		*/
+		virtual void DoUpdateStyle();
 
 	private:
 		//! The static caption

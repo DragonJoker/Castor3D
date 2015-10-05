@@ -1,12 +1,13 @@
 ﻿#include "TextOverlay.hpp"
 
-#include "DynamicTexture.hpp"
 #include "Engine.hpp"
+#include "FontTexture.hpp"
 #include "InitialiseEvent.hpp"
 #include "Overlay.hpp"
 #include "OverlayRenderer.hpp"
 #include "RenderSystem.hpp"
 #include "Sampler.hpp"
+#include "StaticTexture.hpp"
 
 #include <Font.hpp>
 #include <Image.hpp>
@@ -34,7 +35,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "\tfont " ) + p_overlay.GetFontName() ) > 0;
+			l_return = p_file.WriteText( l_strTabs + cuT( "\tfont " ) + p_overlay.GetFontTexture()->GetFontName() ) > 0;
 		}
 
 		if ( l_return )
@@ -68,7 +69,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = DoFillChunk( p_obj.GetFontName(), eCHUNK_TYPE_OVERLAY_FONT, p_chunk );
+			l_return = DoFillChunk( p_obj.GetFontTexture()->GetFontName(), eCHUNK_TYPE_OVERLAY_FONT, p_chunk );
 		}
 
 		if ( l_return )
@@ -132,9 +133,6 @@ namespace Castor3D
 
 	TextOverlay::~TextOverlay()
 	{
-		m_pTexture.reset();
-		m_wpFont.reset();
-		m_wpSampler.reset();
 	}
 
 	OverlayCategorySPtr TextOverlay::Create()
@@ -144,74 +142,10 @@ namespace Castor3D
 
 	void TextOverlay::Initialise()
 	{
-		FontSPtr l_pFont = GetFont();
-
-		if ( l_pFont )
-		{
-			uint32_t l_uiMaxWidth = l_pFont->GetMaxWidth();
-			uint32_t l_uiMaxHeight = l_pFont->GetMaxHeight();
-			uint32_t l_count = uint32_t( std::ceil( std::distance( l_pFont->begin(), l_pFont->end() ) / 16.0 ) );
-			m_pTexture->SetImage( Size( l_uiMaxWidth * 16, l_uiMaxHeight * l_count ), ePIXEL_FORMAT_L8 );
-
-			Castor::Font::GlyphMap::const_iterator l_it = l_pFont->begin();
-			Size l_sizeImg = m_pTexture->GetDimensions();
-			uint32_t l_uiTotalWidth = l_sizeImg.width();
-			uint32_t l_uiTotalHeight = l_sizeImg.height();
-			uint32_t l_uiOffY = l_uiTotalHeight - l_uiMaxHeight;
-			uint8_t * l_pBuffer = m_pTexture->GetBuffer()->ptr();
-			size_t l_bufsize = m_pTexture->GetBuffer()->size();
-
-			for ( uint32_t y = 0; y < l_count && l_it != l_pFont->end(); ++y )
-			{
-				uint32_t l_uiOffX = 0;
-
-				for ( uint32_t x = 0; x < 16 && l_it != l_pFont->end(); ++x )
-				{
-					Glyph & l_glyph = *l_it->second;
-					Size l_size = l_glyph.GetSize();
-					ByteArray l_buffer = l_glyph.GetBitmap();
-					uint32_t l_dstLineIndex = ( l_uiTotalWidth * l_uiOffY ) + l_uiOffX;
-					uint8_t * l_dstLineBuffer = &l_pBuffer[l_dstLineIndex];
-
-					for ( uint32_t i = 0; i < l_size.height(); ++i )
-					{
-						CASTOR_ASSERT( l_dstLineIndex + l_size.width() <= l_bufsize );
-						std::memcpy( l_dstLineBuffer, &l_buffer[i * l_size.width()], l_size.width() );
-						l_dstLineBuffer += l_uiTotalWidth;
-					}
-
-					m_glyphsPositions[l_glyph.GetCharacter()] = Position( l_uiOffX, l_uiOffY );
-					l_uiOffX += l_uiMaxWidth;
-					++l_it;
-				}
-
-				l_uiOffY -= l_uiMaxHeight;
-			}
-		}
-
-		m_pTexture->Create();
-		m_pTexture->Initialise( 0 );
-		m_pTexture->Bind();
-		m_pTexture->GenerateMipmaps();
-		m_pTexture->Unbind();
-
-#if DEBUG_BUFFERS
-
-		uint8_t * l_buffer = m_pTexture->Lock( eLOCK_FLAG_READ_ONLY );
-		std::memcpy( m_pTexture->GetBuffer()->ptr(), l_buffer, m_pTexture->GetBuffer()->size() );
-		const Image l_tmp( cuT( "tmp" ), *m_pTexture->GetBuffer() );
-		Image::BinaryLoader()( l_tmp, Engine::GetEngineDirectory() / cuT( "Font_" ) + l_pFont->GetName() + cuT( ".bmp" ) );
-
-#endif
 	}
 
 	void TextOverlay::Cleanup()
 	{
-		if ( m_pTexture )
-		{
-			m_pTexture->Cleanup();
-			m_pTexture->Destroy();
-		}
 	}
 
 	void TextOverlay::SetFont( String const & p_strFont )
@@ -223,16 +157,14 @@ namespace Castor3D
 
 		if ( l_pFont )
 		{
-			m_wpFont = l_pFont;
-			SamplerSPtr l_pSampler = l_engine->CreateSampler( p_strFont );
-			l_pSampler->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_CLAMP_TO_EDGE );
-			l_pSampler->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_CLAMP_TO_EDGE );
-			l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
-			l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
-			m_wpSampler = l_pSampler;
-			m_pTexture = l_engine->GetRenderSystem()->CreateDynamicTexture();
-			m_pTexture->SetDimension( eTEXTURE_DIMENSION_2D );
-			m_pTexture->SetSampler( l_pSampler );
+			FontTextureSPtr l_fontTexture = m_pOverlay->GetEngine()->GetOverlayManager().GetFontTexture( l_pFont->GetName() );
+
+			if ( !l_fontTexture )
+			{
+				l_fontTexture = m_pOverlay->GetEngine()->GetOverlayManager().CreateFontTexture( l_pFont );
+			}
+
+			m_fontTexture = l_fontTexture;
 		}
 		else
 		{
@@ -240,25 +172,7 @@ namespace Castor3D
 		}
 
 		m_pOverlay->GetEngine()->PostEvent( MakeInitialiseEvent( *this ) );
-		m_strFontName = p_strFont;
 		m_textChanged = true;
-	}
-
-	String const & TextOverlay::GetFontName()const
-	{
-		return GetFont()->GetName();
-	}
-
-	Position const & TextOverlay::GetGlyphPosition( char32_t p_char )const
-	{
-		GlyphPositionMapConstIt l_it = m_glyphsPositions.find( p_char );
-
-		if ( l_it == m_glyphsPositions.end() )
-		{
-			CASTOR_EXCEPTION( std::string( "No loaded glyph for character " ) + string::string_cast< char >( string::to_string( p_char ) ) );
-		}
-
-		return l_it->second;
 	}
 
 	void TextOverlay::DoRender( OverlayRendererSPtr p_renderer )
@@ -268,107 +182,112 @@ namespace Castor3D
 
 	void TextOverlay::DoUpdateBuffer( Size const & p_size )
 	{
-		FontSPtr l_pFont = GetFont();
+		FontTextureSPtr l_fontTexture = GetFontTexture();
 
-		if ( !m_strCaption.empty() && l_pFont )
+		if ( l_fontTexture )
 		{
-			if ( m_textChanged )
+			FontSPtr l_pFont = l_fontTexture->GetFont();
+
+			if ( !m_strCaption.empty() && l_pFont )
 			{
-				Point2d l_ovAbsSize = GetOverlay().GetAbsoluteSize();
-				Point2d l_ptSize( p_size.width() * l_ovAbsSize[0], p_size.height() * l_ovAbsSize[1] );
-				Size l_screenSize = Size( uint32_t( l_ptSize[0] ), uint32_t( l_ptSize[1] ) );
-				m_previousCaption = m_strCaption;
-				m_arrayVtx.clear();
-				m_arrayVtx.reserve( m_previousCaption.size() * 6 );
-				Point2d l_ptPosition;
-
-				StringArray l_lines = string::split( m_previousCaption, cuT( "\n" ), std::count( m_previousCaption.begin(), m_previousCaption.end(), cuT( '\n' ) ) + 1 );
-				double l_lineWidth = 0;
-				std::vector< OverlayCategory::VertexArray > l_linesVtx;
-				OverlayCategory::VertexArray l_lineVtx;
-
-				for ( StringArrayConstIt l_itLines = l_lines.begin(); l_itLines != l_lines.end() && l_ptPosition[1] < l_ptSize[1]; ++l_itLines )
+				if ( m_textChanged )
 				{
-					String const & l_line = *l_itLines;
-					double l_wordWidth = 0;
-					std::u32string l_word;
+					Point2d l_ovAbsSize = GetOverlay().GetAbsoluteSize();
+					Point2d l_ptSize( p_size.width() * l_ovAbsSize[0], p_size.height() * l_ovAbsSize[1] );
+					m_previousCaption = m_strCaption;
+					m_arrayVtx.clear();
+					m_arrayVtx.reserve( m_previousCaption.size() * 6 );
+					Point2d l_ptPosition;
 
-					for ( string::utf8::iterator l_itLine = l_line.begin(); l_itLine != l_line.end() && l_ptPosition[1] < l_ptSize[1]; ++l_itLine )
+					StringArray l_lines = string::split( m_previousCaption, cuT( "\n" ), std::count( m_previousCaption.begin(), m_previousCaption.end(), cuT( '\n' ) ) + 1 );
+					double l_lineWidth = 0;
+					std::vector< OverlayCategory::VertexArray > l_linesVtx;
+					OverlayCategory::VertexArray l_lineVtx;
+
+					for ( StringArrayConstIt l_itLines = l_lines.begin(); l_itLines != l_lines.end() && l_ptPosition[1] < l_ptSize[1]; ++l_itLines )
 					{
-						char32_t const & l_character = *l_itLine;
+						String const & l_line = *l_itLines;
+						double l_wordWidth = 0;
+						std::u32string l_word;
 
-						if ( l_pFont->HasGlyphAt( l_character ) )
+						for ( string::utf8::iterator l_itLine = l_line.begin(); l_itLine != l_line.end() && l_ptPosition[1] < l_ptSize[1]; ++l_itLine )
 						{
-							Glyph const & l_glyph = l_pFont->GetGlyphAt( l_character );
-							Point2d l_charSize( double( std::max( l_glyph.GetSize().width(), l_glyph.GetAdvance().width() ) ), double( std::max( l_glyph.GetSize().height(), l_glyph.GetAdvance().height() ) ) );
+							char32_t const & l_character = *l_itLine;
 
-							if ( l_character == cuT( '\r' ) )
+							if ( l_pFont->HasGlyphAt( l_character ) )
 							{
-								DoWriteWord( p_size, l_word, l_wordWidth, l_ptSize, l_ptPosition, l_lineWidth, l_lineVtx, l_linesVtx );
-								l_ptPosition[0] = 0;
-								l_wordWidth = 0;
-							}
-							else if ( l_character == cuT( ' ' ) )
-							{
-								DoWriteWord( p_size, l_word, l_wordWidth, l_ptSize, l_ptPosition, l_lineWidth, l_lineVtx, l_linesVtx );
-								l_word.clear();
-								l_wordWidth = 0;
-								l_ptPosition[0] += l_charSize[0];
-							}
-							else if ( l_character == cuT( '\t' ) )
-							{
-								DoWriteWord( p_size, l_word, l_wordWidth, l_ptSize, l_ptPosition, l_lineWidth, l_lineVtx, l_linesVtx );
-								l_word.clear();
-								l_wordWidth = 0;
-								l_ptPosition[0] += l_charSize[0];
+								Glyph const & l_glyph = l_pFont->GetGlyphAt( l_character );
+								Point2d l_charSize( double( std::max( l_glyph.GetSize().width(), l_glyph.GetAdvance().width() ) ), double( std::max( l_glyph.GetSize().height(), l_glyph.GetAdvance().height() ) ) );
+
+								if ( l_character == cuT( '\r' ) )
+								{
+									DoWriteWord( p_size, l_word, l_wordWidth, l_ptSize, l_ptPosition, l_lineWidth, l_lineVtx, l_linesVtx );
+									l_ptPosition[0] = 0;
+									l_wordWidth = 0;
+								}
+								else if ( l_character == cuT( ' ' ) )
+								{
+									DoWriteWord( p_size, l_word, l_wordWidth, l_ptSize, l_ptPosition, l_lineWidth, l_lineVtx, l_linesVtx );
+									l_word.clear();
+									l_wordWidth = 0;
+									l_ptPosition[0] += l_charSize[0];
+								}
+								else if ( l_character == cuT( '\t' ) )
+								{
+									DoWriteWord( p_size, l_word, l_wordWidth, l_ptSize, l_ptPosition, l_lineWidth, l_lineVtx, l_linesVtx );
+									l_word.clear();
+									l_wordWidth = 0;
+									l_ptPosition[0] += l_charSize[0];
+								}
+								else
+								{
+									l_word += l_character;
+									l_wordWidth += l_charSize[0];
+								}
 							}
 							else
 							{
-								l_word += l_character;
+								Glyph const & l_glyph = l_pFont->GetGlyphAt( cuT( '_' ) );
+								Point2d l_charSize( double( std::max( l_glyph.GetSize().width(), l_glyph.GetAdvance().width() ) ), double( std::max( l_glyph.GetSize().height(), l_glyph.GetAdvance().height() ) ) );
+								l_word += cuT( '_' );
 								l_wordWidth += l_charSize[0];
 							}
 						}
-						else
+
+						if ( !l_word.empty() )
 						{
-							Glyph const & l_glyph = l_pFont->GetGlyphAt( cuT( '_' ) );
-							Point2d l_charSize( double( std::max( l_glyph.GetSize().width(), l_glyph.GetAdvance().width() ) ), double( std::max( l_glyph.GetSize().height(), l_glyph.GetAdvance().height() ) ) );
-							l_word += cuT( '_' );
-							l_wordWidth += l_charSize[0];
+							DoWriteWord( p_size, l_word, l_wordWidth, l_ptSize, l_ptPosition, l_lineWidth, l_lineVtx, l_linesVtx );
+
+							if ( !l_lineVtx.empty() )
+							{
+								DoAlignHorizontally( l_ptSize[0], l_lineWidth, l_lineVtx, l_linesVtx );
+							}
 						}
+
+						l_linesVtx.push_back( l_lineVtx );
+						l_ptPosition[0] = 0;
+						l_ptPosition[1] += l_pFont->GetMaxHeight();
 					}
 
-					if ( !l_word.empty() )
+					DoAlignVertically( l_ptSize[1], l_ptPosition[1], l_linesVtx );
+
+					for ( auto && l_lineVtx : l_linesVtx )
 					{
-						DoWriteWord( p_size, l_word, l_wordWidth, l_ptSize, l_ptPosition, l_lineWidth, l_lineVtx, l_linesVtx );
-
-						if ( !l_lineVtx.empty() )
-						{
-							DoAlignHorizontally( l_ptSize[0], l_lineWidth, l_lineVtx, l_linesVtx );
-						}
+						m_arrayVtx.insert( m_arrayVtx.end(), l_lineVtx.begin(), l_lineVtx.end() );
 					}
 
-					l_linesVtx.push_back( l_lineVtx );
-					l_ptPosition[0] = 0;
-					l_ptPosition[1] += l_pFont->GetMaxHeight();
+					// TODO : Check for glyphs that need to be loaded and added to the texture
+					m_textChanged = false;
 				}
-
-				DoAlignVertically( l_ptSize[1], l_ptPosition[1], l_linesVtx );
-
-				for ( auto && l_lineVtx : l_linesVtx )
-				{
-					m_arrayVtx.insert( m_arrayVtx.end(), l_lineVtx.begin(), l_lineVtx.end() );
-				}
-
-				// TODO : Check for glyphs that need to be loaded and added to the texture
-				m_textChanged = false;
 			}
 		}
 	}
 
 	void TextOverlay::DoWriteWord( Size const & p_renderSize, std::u32string const & p_word, double p_wordWidth, Point2d const & p_size, Point2d & p_position, double & p_lineWidth, OverlayCategory::VertexArray & p_lineVtx, std::vector< OverlayCategory::VertexArray > & p_linesVtx )
 	{
-		FontSPtr l_pFont = GetFont();
-		Size const & l_texDim = m_pTexture->GetDimensions();
+		FontTextureSPtr l_fontTexture = GetFontTexture();
+		FontSPtr l_pFont = l_fontTexture->GetFont();
+		Size const & l_texDim = l_fontTexture->GetTexture()->GetDimensions();
 		Position l_ovPosition = GetAbsolutePosition( p_renderSize );
 		uint32_t l_maxHeight = l_pFont->GetMaxHeight();
 
@@ -428,7 +347,7 @@ namespace Castor3D
 				Point2d l_position( p_position[0], ( p_position[1] + l_pFont->GetMaxHeight() - ( l_glyph.GetPosition().y() ) ) );
 				double l_width = l_charSize[0];
 				double l_height = ( l_charSize[1] - l_charCrop );
-				Position l_uvPosition = GetGlyphPosition( l_character );
+				Position l_uvPosition = l_fontTexture->GetGlyphPosition( l_character );
 				double l_uvX = double( l_uvPosition.x() ) / l_texDim.width();
 				double l_uvY = double( l_uvPosition.y() ) / l_texDim.height();
 				double l_uvStepX = l_charSize[0] / l_texDim.width();

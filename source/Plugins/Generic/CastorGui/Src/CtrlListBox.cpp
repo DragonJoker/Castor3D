@@ -10,18 +10,20 @@
 #include <OverlayManager.hpp>
 #include <TextOverlay.hpp>
 
+#include <Font.hpp>
+
 using namespace Castor;
 using namespace Castor3D;
 
 namespace CastorGui
 {
-	ListBoxCtrl::ListBoxCtrl( ControlRPtr p_parent, uint32_t p_id )
-		: ListBoxCtrl( p_parent, p_id, StringArray(), -1, Position(), Size(), 0, true )
+	ListBoxCtrl::ListBoxCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id )
+		: ListBoxCtrl( p_engine, p_parent, p_id, StringArray(), -1, Position(), Size(), 0, true )
 	{
 	}
 
-	ListBoxCtrl::ListBoxCtrl( ControlRPtr p_parent, uint32_t p_id, StringArray const & p_values, int p_selected, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( eCONTROL_TYPE_LIST, p_parent, p_id, p_position, p_size, p_style, p_visible )
+	ListBoxCtrl::ListBoxCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, StringArray const & p_values, int p_selected, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
+		: Control( eCONTROL_TYPE_LIST, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
 		, m_values( p_values )
 		, m_initialValues( p_values )
 		, m_selected( p_selected )
@@ -66,10 +68,10 @@ namespace CastorGui
 
 		if ( GetControlsManager() )
 		{
-			StaticCtrlSPtr l_static = DoCreateItemCtrl( p_value );
-			GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this, l_static]()
+			StaticCtrlSPtr l_item = DoCreateItemCtrl( p_value );
+			GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this, l_item]()
 			{
-				GetControlsManager()->Create( l_static );
+				GetControlsManager()->Create( l_item );
 			} ) );
 
 			DoUpdateItems();
@@ -182,6 +184,16 @@ namespace CastorGui
 		}
 	}
 
+	void ListBoxCtrl::SetFont( Castor::String const & p_font )
+	{
+		m_fontName = p_font;
+
+		for ( auto && l_item : m_items )
+		{
+			l_item->SetFont( m_fontName );
+		}
+	}
+
 	void ListBoxCtrl::DoUpdateItems()
 	{
 		Position l_position;
@@ -203,23 +215,33 @@ namespace CastorGui
 
 	StaticCtrlSPtr ListBoxCtrl::DoCreateItemCtrl( String const & p_value )
 	{
-		StaticCtrlSPtr l_static = std::make_shared< StaticCtrl >( this, p_value, Position(), Size( GetSize().width(), DEFAULT_HEIGHT ), eSTATIC_STYLE_VALIGN_CENTER );
-		l_static->SetCatchesMouseEvents( true );
-		l_static->ConnectNC( eMOUSE_EVENT_MOUSE_ENTER, std::bind( &ListBoxCtrl::OnItemMouseEnter, this, std::placeholders::_1, std::placeholders::_2 ) );
-		l_static->ConnectNC( eMOUSE_EVENT_MOUSE_LEAVE, std::bind( &ListBoxCtrl::OnItemMouseLeave, this, std::placeholders::_1, std::placeholders::_2 ) );
-		l_static->ConnectNC( eMOUSE_EVENT_MOUSE_BUTTON_RELEASED, std::bind( &ListBoxCtrl::OnItemMouseLButtonUp, this, std::placeholders::_1, std::placeholders::_2 ) );
-		l_static->ConnectNC( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &ListBoxCtrl::OnItemKeyDown, this, std::placeholders::_1, std::placeholders::_2 ) );
-		m_items.push_back( l_static );
-		return l_static;
+		StaticCtrlSPtr l_item = std::make_shared< StaticCtrl >( GetEngine(), this, p_value, Position(), Size( GetSize().width(), DEFAULT_HEIGHT ), eSTATIC_STYLE_VALIGN_CENTER );
+		l_item->SetCatchesMouseEvents( true );
+		l_item->ConnectNC( eMOUSE_EVENT_MOUSE_ENTER, std::bind( &ListBoxCtrl::OnItemMouseEnter, this, std::placeholders::_1, std::placeholders::_2 ) );
+		l_item->ConnectNC( eMOUSE_EVENT_MOUSE_LEAVE, std::bind( &ListBoxCtrl::OnItemMouseLeave, this, std::placeholders::_1, std::placeholders::_2 ) );
+		l_item->ConnectNC( eMOUSE_EVENT_MOUSE_BUTTON_RELEASED, std::bind( &ListBoxCtrl::OnItemMouseLButtonUp, this, std::placeholders::_1, std::placeholders::_2 ) );
+		l_item->ConnectNC( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &ListBoxCtrl::OnItemKeyDown, this, std::placeholders::_1, std::placeholders::_2 ) );
+
+		if ( m_fontName.empty() )
+		{
+			l_item->SetFont( GetControlsManager()->GetDefaultFont()->GetName() );
+		}
+		else
+		{
+			l_item->SetFont( m_fontName );
+		}
+
+		m_items.push_back( l_item );
+		return l_item;
 	}
 
 	void ListBoxCtrl::DoCreateItem( String const & p_value )
 	{
-		StaticCtrlSPtr l_static = DoCreateItemCtrl( p_value );
-		GetControlsManager()->Create( l_static );
-		l_static->SetBackgroundMaterial( GetItemBackgroundMaterial() );
-		l_static->SetForegroundMaterial( GetForegroundMaterial() );
-		l_static->SetVisible( DoIsVisible() );
+		StaticCtrlSPtr l_item = DoCreateItemCtrl( p_value );
+		GetControlsManager()->Create( l_item );
+		l_item->SetBackgroundMaterial( GetItemBackgroundMaterial() );
+		l_item->SetForegroundMaterial( GetForegroundMaterial() );
+		l_item->SetVisible( DoIsVisible() );
 	}
 
 	void ListBoxCtrl::DoCreate()

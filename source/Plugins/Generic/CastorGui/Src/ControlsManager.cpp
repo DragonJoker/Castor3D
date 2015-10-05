@@ -260,7 +260,7 @@ namespace CastorGui
 	void ControlsManager::Create( ControlSPtr p_control )
 	{
 		AddControl( p_control );
-		p_control->Create( shared_from_this(), m_engine );
+		p_control->Create( shared_from_this() );
 	}
 
 	void ControlsManager::Destroy( ControlSPtr p_control )

@@ -232,6 +232,58 @@ namespace CastorViewer
 		m_oldY = 0.0;
 	}
 
+	real RenderPanel::DoTransformX( int x )
+	{
+		real l_result = x;
+		RenderWindowSPtr l_window = m_pRenderWindow.lock();
+
+		if ( l_window )
+		{
+			l_result *= real( l_window->GetCamera()->GetWidth() ) / GetClientSize().x;
+		}
+
+		return l_result;
+	}
+
+	real RenderPanel::DoTransformY( int y )
+	{
+		real l_result = y;
+		RenderWindowSPtr l_window = m_pRenderWindow.lock();
+
+		if ( l_window )
+		{
+			l_result *= real( l_window->GetCamera()->GetHeight() ) / GetClientSize().y;
+		}
+
+		return l_result;
+	}
+
+	int RenderPanel::DoTransformX( real x )
+	{
+		int l_result = x;
+		RenderWindowSPtr l_window = m_pRenderWindow.lock();
+
+		if ( l_window )
+		{
+			l_result = int( x * GetClientSize().x / real( l_window->GetCamera()->GetWidth() ) );
+		}
+
+		return l_result;
+	}
+
+	int RenderPanel::DoTransformY( real y )
+	{
+		int l_result = y;
+		RenderWindowSPtr l_window = m_pRenderWindow.lock();
+
+		if ( l_window )
+		{
+			l_result = y * GetClientSize().y / real( l_window->GetCamera()->GetHeight() );
+		}
+
+		return l_result;
+	}
+
 	BEGIN_EVENT_TABLE( RenderPanel, wxPanel )
 		EVT_TIMER( eTIMER_ID_FORWARD, RenderPanel::OnTimerFwd )
 		EVT_TIMER( eTIMER_ID_BACK, RenderPanel::OnTimerBck )
@@ -491,8 +543,8 @@ namespace CastorViewer
 	void RenderPanel::OnMouseLDown( wxMouseEvent & p_event )
 	{
 		m_mouseLeftDown = true;
-		m_oldX = real( p_event.GetX() );
-		m_oldY = real( p_event.GetY() );
+		m_oldX = DoTransformX( p_event.GetX() );
+		m_oldY = DoTransformY( p_event.GetY() );
 
 #if HAS_CASTORGUI
 		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_LEFT ) )
@@ -521,8 +573,8 @@ namespace CastorViewer
 	void RenderPanel::OnMouseMDown( wxMouseEvent & p_event )
 	{
 		m_mouseMiddleDown = true;
-		m_oldX = real( p_event.GetX() );
-		m_oldY = real( p_event.GetY() );
+		m_oldX = DoTransformX( p_event.GetX() );
+		m_oldY = DoTransformY( p_event.GetY() );
 
 #if HAS_CASTORGUI
 		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_MIDDLE ) )
@@ -550,8 +602,8 @@ namespace CastorViewer
 	void RenderPanel::OnMouseRDown( wxMouseEvent & p_event )
 	{
 		m_mouseRightDown = true;
-		m_oldX = real( p_event.GetX() );
-		m_oldY = real( p_event.GetY() );
+		m_oldX = DoTransformX( p_event.GetX() );
+		m_oldY = DoTransformY( p_event.GetY() );
 
 #if HAS_CASTORGUI
 		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_RIGHT ) )
@@ -579,8 +631,8 @@ namespace CastorViewer
 
 	void RenderPanel::OnMouseMove( wxMouseEvent & p_event )
 	{
-		m_x = real( p_event.GetX() );
-		m_y = real( p_event.GetY() );
+		m_x = DoTransformX( p_event.GetX() );
+		m_y = DoTransformY( p_event.GetY() );
 
 #if HAS_CASTORGUI
 		if ( m_controlsManager && m_controlsManager->FireMouseMove( Position( m_x, m_y ) ) )
@@ -607,7 +659,7 @@ namespace CastorViewer
 
 				if ( m_mouseLeftDown || m_mouseRightDown )
 				{
-					WarpPointer( int( m_oldX ), int( m_oldY ) );
+					WarpPointer( DoTransformX( m_oldX ), DoTransformY( m_oldY ) );
 					m_x = m_oldX;
 					m_y = m_oldY;
 				}

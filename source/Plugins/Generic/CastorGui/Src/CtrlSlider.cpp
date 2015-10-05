@@ -11,13 +11,13 @@ using namespace Castor3D;
 
 namespace CastorGui
 {
-	SliderCtrl::SliderCtrl( ControlRPtr p_parent, uint32_t p_id )
-		: SliderCtrl( p_parent, p_id, Range( 0, 100 ), 0, Position(), Size(), 0, true )
+	SliderCtrl::SliderCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id )
+		: SliderCtrl( p_engine, p_parent, p_id, Range( 0, 100 ), 0, Position(), Size(), 0, true )
 	{
 	}
 
-	SliderCtrl::SliderCtrl( ControlRPtr p_parent, uint32_t p_id, Range const & p_range, int p_value, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: Control( eCONTROL_TYPE_SLIDER, p_parent, p_id, p_position, p_size, p_style, p_visible )
+	SliderCtrl::SliderCtrl( Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Range const & p_range, int p_value, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
+		: Control( eCONTROL_TYPE_SLIDER, p_engine, p_parent, p_id, p_position, p_size, p_style, p_visible )
 		, m_range( p_range )
 		, m_value( p_value )
 		, m_scrolling( false )
@@ -28,13 +28,13 @@ namespace CastorGui
 		EventHandler::Connect( eMOUSE_EVENT_MOUSE_BUTTON_RELEASED, std::bind( &SliderCtrl::OnMouseLButtonUp, this, std::placeholders::_1 ) );
 		EventHandler::Connect( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &SliderCtrl::OnKeyDown, this, std::placeholders::_1 ) );
 
-		StaticCtrlSPtr l_line = std::make_shared< StaticCtrl >( this, cuT( "" ), Position(), Size() );
+		StaticCtrlSPtr l_line = std::make_shared< StaticCtrl >( p_engine, this, cuT( "" ), Position(), Size() );
 		l_line->SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
 		l_line->SetVisible( DoIsVisible() );
 		l_line->ConnectNC( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &SliderCtrl::OnNcKeyDown, this, std::placeholders::_1, std::placeholders::_2 ) );
 		m_line = l_line;
 
-		StaticCtrlSPtr l_tick = std::make_shared< StaticCtrl >( this, cuT( "" ), Position(), Size() );
+		StaticCtrlSPtr l_tick = std::make_shared< StaticCtrl >( p_engine, this, cuT( "" ), Position(), Size() );
 		l_tick->SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
 		l_tick->SetVisible( DoIsVisible() );
 		l_tick->SetCatchesMouseEvents( true );
@@ -55,7 +55,7 @@ namespace CastorGui
 		DoUpdateLineAndTick();
 	}
 
-	void SliderCtrl::SetValue( int p_value )
+	void SliderCtrl::SetValue( int32_t p_value )
 	{
 		m_value =  p_value;
 		DoUpdateLineAndTick();
@@ -341,5 +341,10 @@ namespace CastorGui
 		Point2i l_delta = l_relativePosition - m_mouse;
 		m_mouse = Position( l_relativePosition[0], l_relativePosition[1] );
 		DoUpdateTick( Position( l_delta[0], l_delta[1] ) );
+	}
+
+	void SliderCtrl::DoUpdateStyle()
+	{
+		DoUpdateLineAndTick();
 	}
 }

@@ -214,7 +214,7 @@ namespace Castor3D
 		 *\param[in]	p_texture			Une texture de polices optionnelle
 		 *\param[in]	p_count				Le nombre de sommets
 		 */
-		void DoDrawItem( Material & p_material, GeometryBuffersSPtr p_geometryBuffers, DynamicTextureSPtr p_texture, uint32_t p_count );
+		void DoDrawItem( Material & p_material, GeometryBuffersSPtr p_geometryBuffers, TextureBaseSPtr p_texture, uint32_t p_count );
 		/**
 		 *\~english
 		 *\brief		Fills a GeometryBuffers from a part of a text vertex array

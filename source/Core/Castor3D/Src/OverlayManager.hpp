@@ -64,6 +64,7 @@ namespace Castor3D
 		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapIt iterator;
 		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapConstIt const_iterator;
 		typedef std::set< OverlayCategorySPtr, OverlayCategorySort > OverlayCategorySet;
+		DECLARE_MAP( Castor::String, FontTextureSPtr, FontTextureStr );
 
 	public:
 		/**
@@ -357,6 +358,28 @@ namespace Castor3D
 		 */
 		bool LoadOverlays( Castor::BinaryFile & p_file );
 		/**
+		*\~english
+		*\brief		Retrieves a FontTexture given a font name.
+		*\param[in]	p_name	The font name.
+		*\return		The FontTexture if it exist, nullptr if not.
+		*\~french
+		*\brief		Récupère une FontTexture, à partir d'un nom de police.
+		*\param[in]	p_name	Le nom de la police.
+		*\return		La FontTexture si elle exite, nullptr sinon.
+		*/
+		FontTextureSPtr GetFontTexture( Castor::String const & p_name );
+		/**
+		 *\~english
+		 *\brief		Creates a FontTexture from a font.
+		 *\param[in]	p_font	The font.
+		 *\return		The created FontTexture.
+		 *\~french
+		 *\brief		Crée une FontTexture, à partir d'une police.
+		 *\param[in]	p_font	La police.
+		 *\return		La FontTexture créée.
+		 */
+		FontTextureSPtr CreateFontTexture( Castor::FontSPtr p_font );
+		/**
 		 *\~english
 		 *\brief		Retrieves the overlay renderer
 		 *\return		The overlay renderer
@@ -430,6 +453,8 @@ namespace Castor3D
 		Castor::Matrix4x4r m_projection;
 		//!\~english The last display size.	\~french Les dimensions du dernier affichage.
 		Castor::Size m_size;
+		//!\~english The FontTextures, sorted by font name.	\~french Les FontTexutrs, triées par nom de policce.
+		FontTextureStrMap m_fontTextures;
 	};
 	typedef OverlayManager::iterator OverlayManagerIt;
 	typedef OverlayManager::const_iterator OverlayManagerConstIt;

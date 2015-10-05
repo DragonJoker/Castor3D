@@ -32,22 +32,24 @@ namespace CastorGui
 	{
 	public:
 		/** Constructor
-		*\param[in]	p_parent		The parent control, if an
-		*\param[in]	p_id		The control ID
-		*/
-		ComboBoxCtrl( ControlRPtr p_parent, uint32_t p_id );
+		 *\param[in]	p_engine	The engine
+		 *\param[in]	p_parent	The parent control, if any
+		 *\param[in]	p_id		The control ID
+		 */
+		ComboBoxCtrl( Castor3D::Engine * p_engine, ControlRPtr p_parent, uint32_t p_id );
 
 		/** Constructor
-		*\param[in]	p_parent		The parent control, if an
-		*\param[in]	p_values		The list value
-		*\param[in]	p_selected		The selected valu
-		*\param[in]	p_id		The control I
-		*\param[in]	p_position		The positio
-		*\param[in]	p_size		The siz
-		*\param[in]	p_style		The styl
-		*\param[in]	p_visible		Initial visibility statu
-		*/
-		ComboBoxCtrl( ControlRPtr p_parent, uint32_t p_id, Castor::StringArray const & p_values, int p_selected, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
+		 *\param[in]	p_engine	The engine
+		 *\param[in]	p_parent	The parent control, if any
+		 *\param[in]	p_values	The list value
+		 *\param[in]	p_selected	The selected value
+		 *\param[in]	p_id		The control ID
+		 *\param[in]	p_position	The position
+		 *\param[in]	p_size		The size
+		 *\param[in]	p_style		The style
+		 *\param[in]	p_visible	Initial visibility status
+		 */
+		ComboBoxCtrl( Castor3D::Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Castor::StringArray const & p_values, int p_selected, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
 
 		/** Constructor
 		*\param[in]	p_parent		The parent control, if an
@@ -150,6 +152,11 @@ namespace CastorGui
 		 *\return		The value
 		*/
 		int GetSelected()const;
+
+		/** Sets the caption font.
+		*\param[in]	p_font	The new value.
+		*/
+		void SetFont( Castor::String const & p_font );
 
 		/** Connects a function to a combobox event
 		*\param[in]	p_event			The event type

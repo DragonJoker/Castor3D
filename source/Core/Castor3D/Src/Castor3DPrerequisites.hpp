@@ -795,10 +795,12 @@ namespace Castor3D
 	class OverlayManager;
 	class OverlayFactory;
 	class OverlayRenderer;
+	class FontTexture;
 
 	DECLARE_SMART_PTR( OverlayFactory );
 	DECLARE_SMART_PTR( OverlayManager );
 	DECLARE_SMART_PTR( OverlayRenderer );
+	DECLARE_SMART_PTR( FontTexture );
 
 	DECLARE_SMART_PTR( Overlay );
 	DECLARE_SMART_PTR( OverlayCategory );

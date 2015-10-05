@@ -2,6 +2,7 @@
 
 #include "CleanupEvent.hpp"
 #include "FunctorEvent.hpp"
+#include "InitialiseEvent.hpp"
 #include "Overlay.hpp"
 #include "OverlayRenderer.hpp"
 #include "PanelOverlay.hpp"
@@ -46,6 +47,7 @@ namespace Castor3D
 		Castor::Collection< Overlay, Castor::String >::lock();
 		Castor::Collection< Overlay, Castor::String >::clear();
 		m_overlays.clear();
+		m_fontTextures.clear();
 		Castor::Collection< Overlay, Castor::String >::unlock();
 	}
 
@@ -56,6 +58,11 @@ namespace Castor3D
 		for ( auto && l_overlay : *this )
 		{
 			m_engine->PostEvent( MakeCleanupEvent( *l_overlay ) );
+		}
+
+		for ( auto && l_it : m_fontTextures )
+		{
+			m_engine->PostEvent( MakeCleanupEvent( *l_it.second ) );
 		}
 
 		Castor::Collection< Overlay, Castor::String >::unlock();
@@ -254,6 +261,8 @@ namespace Castor3D
 					l_category->Render();
 				}
 			}
+
+			m_pRenderer->EndRender();
 		}
 
 		unlock();
@@ -365,6 +374,34 @@ namespace Castor3D
 		}
 
 		Castor::Collection< Overlay, Castor::String >::unlock();
+		return l_return;
+	}
+
+	FontTextureSPtr OverlayManager::GetFontTexture( Castor::String const & p_name )
+	{
+		auto l_it = m_fontTextures.find( p_name );
+		FontTextureSPtr l_return;
+
+		if ( l_it != m_fontTextures.end() )
+		{
+			l_return = l_it->second;
+		}
+
+		return l_return;
+	}
+
+	FontTextureSPtr OverlayManager::CreateFontTexture( Castor::FontSPtr p_font )
+	{
+		auto l_it = m_fontTextures.find( p_font->GetName() );
+		FontTextureSPtr l_return;
+
+		if ( l_it == m_fontTextures.end() )
+		{
+			l_return = std::make_shared< FontTexture >( m_engine, p_font );
+			m_fontTextures.insert( std::make_pair( p_font->GetName(), l_return ) );
+			m_engine->PostEvent( MakeInitialiseEvent( *l_return ) );
+		}
+
 		return l_return;
 	}
 }

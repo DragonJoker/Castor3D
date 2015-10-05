@@ -75,6 +75,10 @@ namespace CastorViewer
 		void DoResetCamera();
 		void DoSwitchPrimitiveType();
 		void DoReloadScene();
+		Castor::real DoTransformX( int x );
+		Castor::real DoTransformY( int y );
+		int DoTransformX( Castor::real x );
+		int DoTransformY( Castor::real y );
 
 		DECLARE_EVENT_TABLE()
 		void OnTimerFwd( wxTimerEvent & p_event );

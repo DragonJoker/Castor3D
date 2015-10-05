@@ -39,7 +39,7 @@ namespace Castor
 	*/
 	template< typename T, uint32_t Count >
 	class Point
-		: Aligned< 16 >
+		: public Aligned< 16 >
 	{
 	public:
 		/*!

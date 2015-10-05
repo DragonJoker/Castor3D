@@ -37,6 +37,7 @@ namespace CastorGui
 	public:
 		/** Constructor.
 		 *\param[in]	p_type		The type.
+		 *\param[in]	p_engine	The engine.
 		 *\param[in]	p_parent	The parent control, if any.
 		 *\param[in]	p_id		The control ID.
 		 *\param[in]	p_position	The position.
@@ -44,7 +45,7 @@ namespace CastorGui
 		 *\param[in]	p_style		The style.
 		 *\param[in]	p_visible	Initial visibility status.
 		 */
-		Control( eCONTROL_TYPE p_type, ControlRPtr p_parent, uint32_t p_id, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
+		Control( eCONTROL_TYPE p_type, Castor3D::Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Castor::Position const & p_position, Castor::Size const & p_size, uint32_t p_style = 0, bool p_visible = true );
 
 		/** Destructor.
 		 */
@@ -52,9 +53,8 @@ namespace CastorGui
 
 		/** Creates the control's overlays.
 		 *\param[in]	p_ctrlManager	The controls manager.
-		 *\param[in]	p_engine		The engine.
 		 */
-		void Create( ControlsManagerSPtr p_ctrlManager, Castor3D::Engine * p_engine );
+		void Create( ControlsManagerSPtr p_ctrlManager );
 
 		/** Destroys the control's overlays.
 		 */
@@ -104,6 +104,16 @@ namespace CastorGui
 		 *\param[in]	p_id		The control ID.
 		 */
 		ControlSPtr GetChildControl( uint32_t p_id );
+
+		/** Retrieves the style
+		 *\return		The value
+		 */
+		void AddStyle( uint32_t );
+
+		/** Retrieves the style
+		 *\return		The value
+		 */
+		void RemoveStyle( uint32_t );
 
 		/** Retrieves the control ID.
 		 *\return		The value.
@@ -234,22 +244,22 @@ namespace CastorGui
 		virtual void DoDestroy() = 0;
 
 		/** Sets the position
-		*\param[in]	p_value		The new valu
+		*\param[in]	p_value		The new value
 		*/
 		virtual void DoSetPosition( Castor::Position const & p_value ) = 0;
 
 		/** Sets the size
-		*\param[in]	p_value		The new valu
+		*\param[in]	p_value		The new value
 		*/
 		virtual void DoSetSize( Castor::Size const & p_value ) = 0;
 
 		/** Sets the background material
-		*\param[in]	p_material		The new valu
+		*\param[in]	p_material		The new value
 		*/
 		virtual void DoSetBackgroundMaterial( Castor3D::MaterialSPtr p_material ) = 0;
 
 		/** Sets the foreground material
-		*\param[in]	p_material		The new valu
+		*\param[in]	p_material		The new value
 		*/
 		virtual void DoSetForegroundMaterial( Castor3D::MaterialSPtr p_material ) = 0;
 
@@ -264,8 +274,8 @@ namespace CastorGui
 
 		/** Tells if the control catches 'tab' key
 		 *\remarks		A control catches 'tab' key when it is visible, enabled, and when it explicitly catches it (disabled by default
-		 *\return		false if the 'tab' key doesn't affect the contro
-		*/
+		 *\return		false if the 'tab' key doesn't affect the control
+		 */
 		virtual bool DoCatchesTabKey()const
 		{
 			return IsVisible();
@@ -273,18 +283,24 @@ namespace CastorGui
 
 		/** Tells if the control catches 'return' key
 		 *\remarks		A control catches 'return' key when it is visible, enabled, and when it explicitly catches it (disabled by default
-		 *\return		false if the 'return' key doesn't affect the contro
-		*/
+		 *\return		false if the 'return' key doesn't affect the control
+		 */
 		virtual bool DoCatchesReturnKey()const
 		{
 			return IsVisible();
 		}
 
 		/** Sets the visibility
-		 *\remarks		Used for derived control specific behaviou
-		*\param[in]	p_value		The new valu
-		*/
+		 *\remarks		Used for derived control specific behavious
+		 *\param[in]	p_value		The new value
+		 */
 		virtual void DoSetVisible( bool p_visible )
+		{
+		}
+
+		/** Updates the style relative stuff.
+		*/
+		virtual void DoUpdateStyle()
 		{
 		}
 
@@ -304,7 +320,7 @@ namespace CastorGui
 		//! The type
 		const eCONTROL_TYPE m_type;
 		//! The style
-		const uint32_t m_style;
+		uint32_t m_style;
 		//! The position
 		Castor::Position m_position;
 		//! The dimensions

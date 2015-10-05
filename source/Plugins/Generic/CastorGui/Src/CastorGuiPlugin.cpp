@@ -176,8 +176,12 @@ namespace CastorGui
 		{
 			AddParser( p_parsers, p_section, cuT( "pixel_position" ), &Parser_ControlPixelPosition, 1, ePARAMETER_TYPE_POSITION );
 			AddParser( p_parsers, p_section, cuT( "pixel_size" ), &Parser_ControlPixelSize, 1, ePARAMETER_TYPE_SIZE );
-			AddParser( p_parsers, p_section, cuT( "background" ), &Parser_ControlBackground, 1, ePARAMETER_TYPE_NAME );
-			AddParser( p_parsers, p_section, cuT( "foreground" ), &Parser_ControlForeground, 1, ePARAMETER_TYPE_NAME );
+			AddParser( p_parsers, p_section, cuT( "pixel_border_size" ), &Parser_ControlPixelBorderSize, 1, ePARAMETER_TYPE_RECTANGLE );
+			AddParser( p_parsers, p_section, cuT( "background_material" ), &Parser_ControlBackgroundMaterial, 1, ePARAMETER_TYPE_NAME );
+			AddParser( p_parsers, p_section, cuT( "border_material" ), &Parser_ControlBorderMaterial, 1, ePARAMETER_TYPE_NAME );
+			AddParser( p_parsers, p_section, cuT( "border_inner_uv" ), &Parser_ControlBorderInnerUv, 1, ePARAMETER_TYPE_POINT4D );
+			AddParser( p_parsers, p_section, cuT( "border_outer_uv" ), &Parser_ControlBorderOuterUv, 1, ePARAMETER_TYPE_POINT4D );
+			AddParser( p_parsers, p_section, cuT( "center_uv" ), &Parser_ControlCenterUv, 1, ePARAMETER_TYPE_POINT4D );
 			AddParser( p_parsers, p_section, cuT( "button" ), &Parser_Button, 1, ePARAMETER_TYPE_NAME );
 			AddParser( p_parsers, p_section, cuT( "static" ), &Parser_Static, 1, ePARAMETER_TYPE_NAME );
 			AddParser( p_parsers, p_section, cuT( "slider" ), &Parser_Slider, 1, ePARAMETER_TYPE_NAME );
@@ -203,23 +207,41 @@ namespace CastorGui
 			AddParser( l_return, eSECTION_GUI, cuT( "}" ), &Parser_GuiEnd, 0 );
 
 			CreateDefaultParsers( l_return, eSECTION_BUTTON, &Parser_ButtonEnd );
+			AddParser( l_return, eSECTION_BUTTON, cuT( "text_material" ), &Parser_ButtonTextMaterial, 1, ePARAMETER_TYPE_NAME );
+			AddParser( l_return, eSECTION_BUTTON, cuT( "highlighted_background_material" ), &Parser_ButtonHighlightedBackgroundMaterial, 1, ePARAMETER_TYPE_NAME );
+			AddParser( l_return, eSECTION_BUTTON, cuT( "highlighted_foreground_material" ), &Parser_ButtonHighlightedForegroundMaterial, 1, ePARAMETER_TYPE_NAME );
+			AddParser( l_return, eSECTION_BUTTON, cuT( "highlighted_text_material" ), &Parser_ButtonHighlightedTextMaterial, 1, ePARAMETER_TYPE_NAME );
+			AddParser( l_return, eSECTION_BUTTON, cuT( "pushed_background_material" ), &Parser_ButtonPushedBackgroundMaterial, 1, ePARAMETER_TYPE_NAME );
+			AddParser( l_return, eSECTION_BUTTON, cuT( "pushed_foreground_material" ), &Parser_ButtonPushedForegroundMaterial, 1, ePARAMETER_TYPE_NAME );
+			AddParser( l_return, eSECTION_BUTTON, cuT( "pushed_text_material" ), &Parser_ButtonPushedTextMaterial, 1, ePARAMETER_TYPE_NAME );
+			AddParser( l_return, eSECTION_BUTTON, cuT( "font" ), &Parser_ButtonFont, 1, ePARAMETER_TYPE_NAME );
 			AddParser( l_return, eSECTION_BUTTON, cuT( "caption" ), &Parser_ButtonCaption, 1, ePARAMETER_TYPE_TEXT );
 
 			CreateDefaultParsers( l_return, eSECTION_LISTBOX, &Parser_ListBoxEnd );
+			AddParser( l_return, eSECTION_LISTBOX, cuT( "font" ), &Parser_ListBoxFont, 1, ePARAMETER_TYPE_NAME );
 			AddParser( l_return, eSECTION_LISTBOX, cuT( "item" ), &Parser_ListBoxItem, 1, ePARAMETER_TYPE_TEXT );
-			AddParser( l_return, eSECTION_LISTBOX, cuT( "selected_item_background" ), &Parser_ListBoxSelectedItemBackground, 1, ePARAMETER_TYPE_NAME );
-			AddParser( l_return, eSECTION_LISTBOX, cuT( "selected_item_foreground" ), &Parser_ListBoxSelectedItemForeground, 1, ePARAMETER_TYPE_NAME );
-			AddParser( l_return, eSECTION_LISTBOX, cuT( "highlighted_item_background" ), &Parser_ListBoxHighlightedItemBackground, 1, ePARAMETER_TYPE_NAME );
+			AddParser( l_return, eSECTION_LISTBOX, cuT( "selected_item_background_material" ), &Parser_ListBoxSelectedItemBackgroundMaterial, 1, ePARAMETER_TYPE_NAME );
+			AddParser( l_return, eSECTION_LISTBOX, cuT( "selected_item_foreground_material" ), &Parser_ListBoxSelectedItemForegroundMaterial, 1, ePARAMETER_TYPE_NAME );
+			AddParser( l_return, eSECTION_LISTBOX, cuT( "highlighted_item_background_material" ), &Parser_ListBoxHighlightedItemBackgroundMaterial, 1, ePARAMETER_TYPE_NAME );
 
 			CreateDefaultParsers( l_return, eSECTION_COMBOBOX, &Parser_ComboBoxEnd );
+			AddParser( l_return, eSECTION_COMBOBOX, cuT( "font" ), &Parser_ComboBoxFont, 1, ePARAMETER_TYPE_NAME );
 			AddParser( l_return, eSECTION_COMBOBOX, cuT( "item" ), &Parser_ComboBoxItem, 1, ePARAMETER_TYPE_TEXT );
-			AddParser( l_return, eSECTION_COMBOBOX, cuT( "selected_item_background" ), &Parser_ComboBoxSelectedItemBackground, 1, ePARAMETER_TYPE_NAME );
-			AddParser( l_return, eSECTION_COMBOBOX, cuT( "selected_item_foreground" ), &Parser_ComboBoxSelectedItemForeground, 1, ePARAMETER_TYPE_NAME );
-			AddParser( l_return, eSECTION_COMBOBOX, cuT( "highlighted_item_background" ), &Parser_ComboBoxHighlightedItemBackground, 1, ePARAMETER_TYPE_NAME );
+			AddParser( l_return, eSECTION_COMBOBOX, cuT( "selected_item_background_material" ), &Parser_ComboBoxSelectedItemBackgroundMaterial, 1, ePARAMETER_TYPE_NAME );
+			AddParser( l_return, eSECTION_COMBOBOX, cuT( "selected_item_foreground_material" ), &Parser_ComboBoxSelectedItemForegroundMaterial, 1, ePARAMETER_TYPE_NAME );
+			AddParser( l_return, eSECTION_COMBOBOX, cuT( "highlighted_item_background_material" ), &Parser_ComboBoxHighlightedItemBackgroundMaterial, 1, ePARAMETER_TYPE_NAME );
 
 			CreateDefaultParsers( l_return, eSECTION_STATIC, &Parser_StaticEnd );
-			CreateDefaultParsers( l_return, eSECTION_SLIDER, &Parser_SliderEnd );
+			AddParser( l_return, eSECTION_STATIC, cuT( "font" ), &Parser_StaticFont, 1, ePARAMETER_TYPE_NAME );
+			AddParser( l_return, eSECTION_STATIC, cuT( "caption" ), &Parser_StaticCaption, 1, ePARAMETER_TYPE_TEXT );
+
 			CreateDefaultParsers( l_return, eSECTION_EDIT, &Parser_EditEnd );
+			AddParser( l_return, eSECTION_EDIT, cuT( "font" ), &Parser_EditFont, 1, ePARAMETER_TYPE_NAME );
+			AddParser( l_return, eSECTION_EDIT, cuT( "multiline" ), &Parser_EditMultiLine, 1, ePARAMETER_TYPE_BOOL );
+			AddParser( l_return, eSECTION_EDIT, cuT( "caption" ), &Parser_EditCaption, 1, ePARAMETER_TYPE_TEXT );
+
+			CreateDefaultParsers( l_return, eSECTION_SLIDER, &Parser_SliderEnd );
+
 			return l_return;
 		}
 	}
