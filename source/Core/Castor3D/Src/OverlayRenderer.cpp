@@ -46,6 +46,7 @@ namespace Castor3D
 		: m_renderSystem( p_pRenderSystem )
 		, m_previousPanelZIndex( 0 )
 		, m_previousBorderZIndex( 0 )
+		, m_sizeChanged( false )
 	{
 		BufferElementDeclaration l_vertexDeclarationElements[] =
 		{
@@ -205,7 +206,7 @@ namespace Castor3D
 
 	void OverlayRenderer::DrawText( TextOverlay & p_overlay )
 	{
-		FontSPtr l_pFont = p_overlay.GetFont();
+		FontSPtr l_pFont = p_overlay.GetFontTexture()->GetFont();
 
 		if ( l_pFont )
 		{
@@ -230,7 +231,7 @@ namespace Castor3D
 					l_geometryBuffers.push_back( DoFillTextPart( l_count, l_it, l_index ) );
 				}
 
-				DynamicTextureSPtr l_texture = p_overlay.GetTexture();
+				TextureBaseSPtr l_texture = p_overlay.GetFontTexture()->GetTexture();
 				l_count = l_arrayVtx.size();
 
 				for ( auto l_vtxBuffer : l_geometryBuffers )
@@ -244,11 +245,16 @@ namespace Castor3D
 
 	void OverlayRenderer::BeginRender( Size const & p_size )
 	{
-		m_size = p_size;
+		if ( m_size != p_size )
+		{
+			m_sizeChanged = true;
+			m_size = p_size;
+		}
 	}
 
 	void OverlayRenderer::EndRender()
 	{
+		m_sizeChanged = false;
 	}
 
 	ShaderProgramBaseSPtr OverlayRenderer::DoGetPanelProgram( uint32_t p_uiFlags )
@@ -317,7 +323,7 @@ namespace Castor3D
 		return l_geometryBuffers;
 	}
 
-	void OverlayRenderer::DoDrawItem( Material & p_material, GeometryBuffersSPtr p_geometryBuffers, DynamicTextureSPtr p_texture, uint32_t p_count )
+	void OverlayRenderer::DoDrawItem( Material & p_material, GeometryBuffersSPtr p_geometryBuffers, TextureBaseSPtr p_texture, uint32_t p_count )
 	{
 		uint8_t l_byIndex = 0;
 		uint8_t l_byCount = uint8_t( p_material.GetPassCount() );

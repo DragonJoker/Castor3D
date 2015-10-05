@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_TEXT_OVERLAY_H___
 
 #include "OverlayCategory.hpp"
+#include "FontTexture.hpp"
 
 #pragma warning( push )
 #pragma warning( disable:4251 )
@@ -167,22 +168,14 @@ namespace Castor3D
 		void SetFont( Castor::String const & p_strFont );
 		/**
 		 *\~english
-		 *\brief		Sets the material
-		 *\param[in]	p_pMaterial	The new value
+		 *\return		The FontTexture.
 		 *\~french
-		 *\brief		Définit le matériau
-		 *\param[in]	p_pMaterial	La nouvelle valeur
+		 *\return		La FontTexture.
 		 */
-		virtual void SetMaterial( MaterialSPtr p_pMaterial );
-		/**
-		 *\~english
-		 *\brief		Retrieves the font name
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le nom de la police
-		 *\return		La valeur
-		 */
-		Castor::String const & GetFontName()const;
+		inline FontTextureSPtr GetFontTexture()const
+		{
+			return m_fontTexture.lock();
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the panel vertex buffer
@@ -194,18 +187,6 @@ namespace Castor3D
 		inline OverlayCategory::VertexArray const & GetTextVertex()const
 		{
 			return m_arrayVtx;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the font
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la police
-		 *\return		La valeur
-		 */
-		Castor::FontSPtr GetFont()const
-		{
-			return m_wpFont.lock();
 		}
 		/**
 		 *\~english
@@ -230,7 +211,7 @@ namespace Castor3D
 		inline void SetCaption( Castor::String const & p_strCaption )
 		{
 			m_strCaption = p_strCaption;
-			m_changed = true;
+			m_textChanged = true;
 		}
 		/**
 		 *\~english
@@ -242,87 +223,136 @@ namespace Castor3D
 		 */
 		inline void SetTextWrappingMode( eTEXT_WRAPPING_MODE p_mode )
 		{
+			m_textChanged |= m_wrappingMode != p_mode;
 			m_wrappingMode = p_mode;
-			m_changed = true;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the texture
-		 *\return		The texture
+		 *\brief		Retrieves the horizontal alignment
+		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la texture
-		 *\return		La texture
-		 */
-		inline DynamicTextureSPtr GetTexture()const
+		 *\brief		Récupère l'alignement horizontal
+		 *\return		La valeur
+		*/
+		inline eHALIGN GetHAlign()const
 		{
-			return m_pTexture;
+			return m_hAlign;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the wanted glyph position
-		 *\param[in]	p_char	The glyph index
-		 *\return		The position
+		 *\brief		Retrieves the vertical alignment
+		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la position de la glyphe voulue
-		 *\param[in]	p_char	L'indice de la glyphe
-		 *\return		La position
-		 */
-		Castor::Position const & GetGlyphPosition(char32_t p_char )const;
+		 *\brief		Récupère l'alignement vertical
+		 *\return		La valeur
+		*/
+		inline eVALIGN GetVAlign()const
+		{
+			return m_vAlign;
+		}
+		/**
+		 *\~english
+		 *\brief		Defines the horizontal alignment
+		 *\param[in]	p_align	The new value
+		 *\~french
+		 *\brief		Définit l'alignement horizontal
+		 *\param[in]	p_align	La nouvelle valeur
+		*/
+		inline void SetHAlign( eHALIGN p_align )
+		{
+			m_textChanged |= m_hAlign != p_align;
+			m_hAlign = p_align;
+		}
+		/**
+		 *\~english
+		 *\brief		Defines the vertical alignment
+		 *\param[in]	p_align	The new value
+		 *\~french
+		 *\brief		Définit l'alignement vertical
+		 *\param[in]	p_align	La nouvelle valeur
+		*/
+		inline void SetVAlign( eVALIGN p_align )
+		{
+			m_textChanged |= m_vAlign != p_align;
+			m_vAlign = p_align;
+		}
 
 	protected:
 		/**
-		 *\~english
-		 *\brief		Draws the overlay
-		 *\param[in]	p_renderer	The renderer used to draw this overlay
-		 *\~french
-		 *\brief		Dessine l'incrustation
-		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation
+		 *\copydoc		Castor3D::OverlayCategory::DoRender.
 		 */
 		virtual void DoRender( OverlayRendererSPtr p_renderer );
 		/**
-		 *\~english
-		 *\brief		Updates the vertex buffer
-		 *\param[in]	p_renderer	The renderer used to draw this overlay
-		 *\~french
-		 *\brief		Met à jour le tampon de sommets
-		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation
+		 *\copydoc		Castor3D::OverlayCategory::DoUpdateBuffer.
 		 */
-		virtual void DoUpdate( OverlayRendererSPtr p_renderer );
+		virtual void DoUpdateBuffer( Castor::Size const & p_size );
 		/**
 		 *\~english
-		 *\brief		Adds a word to the vertex buffer
-		 *\param[in]	p_renderer	The renderer used to draw this overlay
-		 *\param[in]	p_word		The word to add
-		 *\param[in]	p_wordWidth	The word width
-		 *\param[in]	p_position	The word position
-		 *\param[in]	p_size		The overlay size
+		 *\brief		Adds a word to the vertex buffer.
+		 *\param[in]	p_renderSize	The render size.
+		 *\param[in]	p_word			The word to add.
+		 *\param[in]	p_wordWidth		The word width.
+		 *\param[in]	p_position		The word position.
+		 *\param[in]	p_size			The overlay size.
+		 *\param[out]	p_lineWidth		The line width.
+		 *\param[out]	p_lineVtx		The line.
+		 *\param[out]	p_linesVtx		The lines.
 		 *\~french
-		 *\brief		Ajoute un mot au tampon de sommets
-		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation
-		 *\param[in]	p_word		Le mot à ajouter
-		 *\param[in]	p_wordWidth	La largeur du mot
-		 *\param[in]	p_position	La position du mot
-		 *\param[in]	p_size		La taille de l'incrustation
+		 *\brief		Ajoute un mot au tampon de sommets.
+		 *\param[in]	p_renderSize	Les dimensions de la zone de rendu.
+		 *\param[in]	p_word			Le mot à ajouter.
+		 *\param[in]	p_wordWidth		La largeur du mot.
+		 *\param[in]	p_position		La position du mot.
+		 *\param[in]	p_size			La taille de l'incrustation.
+		 *\param[out]	p_lineWidth		La largeur de la ligne.
+		 *\param[out]	p_lineVtx		La ligne.
+		 *\param[out]	p_linesVtx		Les lignes.
 		 */
-		void DoWriteWord( OverlayRendererSPtr p_renderer, std::u32string const & p_word, double p_wordWidth, Castor::Point2d const & p_size, Castor::Point2d & p_position );
+		void DoWriteWord( Castor::Size const & p_renderSize, std::u32string const & p_word, double p_wordWidth, Castor::Point2d const & p_size, Castor::Point2d & p_position, double & p_lineWidth, OverlayCategory::VertexArray & p_lineVtx, std::vector< OverlayCategory::VertexArray > & p_linesVtx );
+		/**
+		 *\~english
+		 *\brief		Horizontally align a line.
+		 *\param[in]	p_width		The overlay width.
+		 *\param[out]	p_lineWidth	The line width.
+		 *\param[out]	p_lineVtx	The line.
+		 *\param[out]	p_linesVtx	The lines.
+		 *\~french
+		 *\brief		Aligne horizontalement une ligne.
+		 *\param[in]	p_width		La largeur de l'incrustation.
+		 *\param[out]	p_lineWidth	La largeur de la ligne.
+		 *\param[out]	p_lineVtx	La ligne.
+		 *\param[out]	p_linesVtx	Les lignes.
+		 */
+		void DoAlignHorizontally( double p_width, double & p_lineWidth, OverlayCategory::VertexArray & p_lineVtx, std::vector< OverlayCategory::VertexArray > & p_linesVtx );
+		/**
+		 *\~english
+		 *\brief		Vertically align text
+		 *\param[in]	p_height		The overlay width
+		 *\param[out]	p_linesHeight	The lines height
+		 *\param[out]	p_linesVtx		the lines
+		 *\~french
+		 *\brief		Aligne verticalement un texte.
+		 *\param[in]	p_height		La hauteur de l'incrustation.
+		 *\param[out]	p_linesHeight	La hauteur des lignes.
+		 *\param[out]	p_linesVtx		Les lignes.
+		 */
+		void DoAlignVertically( double p_height, double p_linesHeight, std::vector< OverlayCategory::VertexArray > & p_linesVtx );
 
 	protected:
 		//!\~english The current overlay caption	\~french Le texte courant de l'incrustation
 		Castor::String m_strCaption;
 		//!\~english The previous overlay caption	\~french Le texte précédent de l'incrustation
 		Castor::String m_previousCaption;
-		//!\~english The font	\~french La police
-		Castor::FontWPtr m_wpFont;
-		//!\~english The texture sampler	\~french L'échantillonneur de la texture
-		SamplerWPtr m_wpSampler;
-		//!\~english The texture that will receive the glyphs	\~french La texture qui recevra les glyphes
-		DynamicTextureSPtr m_pTexture;
-		//!\~english The font name	\~french Le nom de la police
-		Castor::String m_strFontName;
-		//!\~english Glyphs positions in the texture	\~french Position des glyphes
-		GlyphPositionMap m_glyphsPositions;
+		//!\~english The texture associated to the overlay font.	\~french La texture associée à la police de l'incrustation.
+		FontTextureWPtr m_fontTexture;
 		//!\~english The wrapping mode	\~french Le mode de découpe du texte
 		eTEXT_WRAPPING_MODE m_wrappingMode;
+		//!\~english The horizontal alignment.	\~french L'alignement horizontal du texte.
+		eHALIGN m_hAlign;
+		//!\~english The vertical alignment.	\~french L'alignement vertical du texte.
+		eVALIGN m_vAlign;
+		//!\~english Tells if the text (caption, wrap mode, or alignments) has changed.	\~french Dit si le texte (contenu, mode de découpe, alignements) a changé.
+		bool m_textChanged;
 	};
 }
 

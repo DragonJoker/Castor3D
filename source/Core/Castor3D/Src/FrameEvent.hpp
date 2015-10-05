@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
+#include <Debug.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -36,6 +38,7 @@ namespace Castor3D
 				<br />La fonction de traitement doit être implémentée par les classes filles.
 	*/
 	class C3D_API FrameEvent
+		: public Castor::Debug::Backtraced
 	{
 	public:
 		/**

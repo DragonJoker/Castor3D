@@ -38,8 +38,8 @@ namespace Castor
 			bool l_bCommented = false;
 			Logger::LogInfo( cuT( "FileParser : Parsing file [" ) + p_file.GetFileName() + cuT( "]" ) );
 			DoInitialiseParser( p_file );
-			m_context->stackSections.push( m_rootSectionId );
-			m_context->ui64Line = 0;
+			m_context->m_sections.push( m_rootSectionId );
+			m_context->m_line = 0;
 			bool l_bReuse = false;
 			String l_strLine;
 			String l_strLine2;
@@ -55,14 +55,14 @@ namespace Castor
 				if ( !l_bReuse )
 				{
 					l_strLine = *l_it++;
-					m_context->ui64Line++;
+					m_context->m_line++;
 				}
 				else
 				{
 					l_bReuse = false;
 				}
 
-				//Logger::LogDebug( string::to_string( m_context->ui64Line ) + cuT( " - " ) + l_strLine.c_str() );
+				//Logger::LogDebug( string::to_string( m_context->m_line ) + cuT( " - " ) + l_strLine.c_str() );
 				string::trim( l_strLine );
 
 				if ( !l_strLine.empty() )
@@ -185,7 +185,7 @@ namespace Castor
 				}
 			}
 
-			if ( m_context->stackSections.top() != m_rootSectionId )
+			if ( m_context->m_sections.top() != m_rootSectionId )
 			{
 				ParseError( cuT( "Unexpected end of file" ) );
 			}
@@ -205,14 +205,14 @@ namespace Castor
 	void FileParser::ParseError( String const & p_strError )
 	{
 		StringStream l_strError;
-		l_strError << cuT( "Error, line #" ) << m_context->ui64Line << cuT( ": " ) << p_strError;
+		l_strError << cuT( "Error, line #" ) << m_context->m_line << cuT( ": " ) << p_strError;
 		Logger::LogError( l_strError.str() );
 	}
 
 	void FileParser::ParseWarning( String const & p_strWarning )
 	{
 		StringStream l_strError;
-		l_strError << cuT( "Warning, line #" ) << m_context->ui64Line << cuT( ": " ) << p_strWarning;
+		l_strError << cuT( "Warning, line #" ) << m_context->m_line << cuT( ": " ) << p_strWarning;
 		Logger::LogWarning( l_strError.str() );
 	}
 
@@ -237,13 +237,155 @@ namespace Castor
 
 		if ( !l_return )
 		{
-			ParseError( cuT( "Directive <" ) + m_context->strFunctionName + cuT( "> needs a <" ) + l_strMissingParam + cuT( "> param that is currently missing" ) );
+			ParseError( cuT( "Directive <" ) + m_context->m_functionName + cuT( "> needs a <" ) + l_strMissingParam + cuT( "> param that is currently missing" ) );
 		}
 
 		return l_return;
 	}
 
-	void FileParser::AddParser( uint32_t p_section, String const & p_name, PParserFunction p_function, uint32_t p_count, ... )
+	void FileParser::AddParser( uint32_t p_section, String const & p_name, ParserFunction p_function, uint32_t p_count, ... )
+	{
+		ParserParameterArray l_params;
+		va_list l_valist;
+		va_start( l_valist, p_count );
+
+		for ( uint32_t i = 0; i < p_count; ++i )
+		{
+			ePARAMETER_TYPE l_eParamType =  ePARAMETER_TYPE( va_arg( l_valist, int ) );
+
+			switch ( l_eParamType )
+			{
+			case ePARAMETER_TYPE_NAME:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_NAME > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_TEXT:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_TEXT > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_PATH:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_PATH > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_CHECKED_TEXT:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT > >( p_name, *reinterpret_cast< UIntStrMap * >( va_arg( l_valist, void * ) ) ) );
+				break;
+
+			case ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT > >( p_name, *reinterpret_cast< UIntStrMap * >( va_arg( l_valist, void * ) ) ) );
+				break;
+
+			case ePARAMETER_TYPE_BOOL:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_BOOL > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_INT8:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_INT8 > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_INT16:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_INT16 > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_INT32:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_INT32 > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_INT64:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_INT64 > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_UINT8:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_UINT8 > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_UINT16:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_UINT16 > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_UINT32:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_UINT32 > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_UINT64:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_UINT64 > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_FLOAT:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_FLOAT > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_DOUBLE:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_DOUBLE > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_LONGDOUBLE:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_LONGDOUBLE > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_PIXELFORMAT:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_PIXELFORMAT > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_POINT2I:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT2I > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_POINT3I:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT3I > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_POINT4I:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT4I > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_POINT2F:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT2F > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_POINT3F:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT3F > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_POINT4F:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT4F > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_POINT2D:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT2D > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_POINT3D:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT3D > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_POINT4D:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT4D > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_SIZE:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_SIZE > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_POSITION:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_POSITION > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_RECTANGLE:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_RECTANGLE > >( p_name ) );
+				break;
+
+			case ePARAMETER_TYPE_COLOUR:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_COLOUR > >( p_name ) );
+				break;
+			}
+		}
+
+		va_end( l_valist );
+		AddParser( p_section, p_name, p_function, std::move( l_params ) );
+	}
+
+	void FileParser::AddParser( uint32_t p_section, String const & p_name, ParserFunction p_function, ParserParameterArray && p_params )
 	{
 		auto && l_sectionIt = m_parsers.find( p_section );
 
@@ -253,144 +395,7 @@ namespace Castor
 		}
 		else
 		{
-			ParserParameterArray l_arrayParams;
-			va_list l_valist;
-			va_start( l_valist, p_count );
-
-			for ( uint32_t i = 0; i < p_count; ++i )
-			{
-				ePARAMETER_TYPE l_eParamType =  ePARAMETER_TYPE( va_arg( l_valist, int ) );
-
-				switch ( l_eParamType )
-				{
-				case ePARAMETER_TYPE_NAME:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_NAME > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_TEXT:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_TEXT > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_PATH:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_PATH > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_CHECKED_TEXT:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT > >( *m_context, *reinterpret_cast< UIntStrMap * >( va_arg( l_valist, void * ) ) ) );
-					break;
-
-				case ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT > >( *m_context, *reinterpret_cast< UIntStrMap * >( va_arg( l_valist, void * ) ) ) );
-					break;
-
-				case ePARAMETER_TYPE_BOOL:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_BOOL > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_INT8:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_INT8 > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_INT16:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_INT16 > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_INT32:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_INT32 > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_INT64:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_INT64 > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_UINT8:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_UINT8 > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_UINT16:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_UINT16 > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_UINT32:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_UINT32 > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_UINT64:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_UINT64 > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_FLOAT:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_FLOAT > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_DOUBLE:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_DOUBLE > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_LONGDOUBLE:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_LONGDOUBLE > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_PIXELFORMAT:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_PIXELFORMAT > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_POINT2I:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT2I > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_POINT3I:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT3I > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_POINT4I:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT4I > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_POINT2F:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT2F > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_POINT3F:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT3F > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_POINT4F:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT4F > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_POINT2D:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT2D > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_POINT3D:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT3D > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_POINT4D:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT4D > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_SIZE:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_SIZE > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_POSITION:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_POSITION > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_RECTANGLE:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_RECTANGLE > >( *m_context ) );
-					break;
-
-				case ePARAMETER_TYPE_COLOUR:
-					l_arrayParams.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_COLOUR > >( *m_context ) );
-					break;
-				}
-			}
-
-			va_end( l_valist );
-			m_parsers[p_section][p_name] = std::make_pair( p_function, l_arrayParams );
+			m_parsers[p_section][p_name] = { p_function, p_params };
 		}
 	}
 
@@ -453,9 +458,9 @@ namespace Castor
 
 		if ( l_bContinue )
 		{
-			if ( !m_context->stackSections.empty() )
+			if ( !m_context->m_sections.empty() )
 			{
-				l_return = DoInvokeParser( p_strLine, m_parsers[m_context->stackSections.top()] );
+				l_return = DoInvokeParser( p_strLine, m_parsers[m_context->m_sections.top()] );
 			}
 			else
 			{
@@ -470,18 +475,18 @@ namespace Castor
 	{
 		bool l_return = false;
 
-		if ( !m_context->stackSections.empty() )
+		if ( !m_context->m_sections.empty() )
 		{
-			AttributeParserMap::const_iterator const & l_iter = m_parsers[m_context->stackSections.top()].find( cuT( "}" ) );
+			AttributeParserMap::const_iterator const & l_iter = m_parsers[m_context->m_sections.top()].find( cuT( "}" ) );
 
-			if ( l_iter == m_parsers[m_context->stackSections.top()].end() )
+			if ( l_iter == m_parsers[m_context->m_sections.top()].end() )
 			{
-				m_context->stackSections.pop();
+				m_context->m_sections.pop();
 				l_return = false;
 			}
 			else
 			{
-				l_return = l_iter->second.first( this, l_iter->second.second );
+				l_return = l_iter->second.m_function( this, l_iter->second.m_params );
 			}
 		}
 
@@ -492,7 +497,7 @@ namespace Castor
 	{
 		bool l_return = false;
 		StringArray l_splitCmd = string::split( p_strLine, cuT( " \t" ), 1, false );
-		m_context->strFunctionName = l_splitCmd[0];
+		m_context->m_functionName = l_splitCmd[0];
 		AttributeParserMap::const_iterator const & l_iter = p_parsers.find( l_splitCmd[0] );
 
 		if ( l_iter == p_parsers.end() )
@@ -508,16 +513,16 @@ namespace Castor
 				l_strParameters = string::trim( l_splitCmd[1] );
 			}
 
-			if ( !CheckParams( l_strParameters, l_iter->second.second.begin(), l_iter->second.second.end() ) )
+			if ( !CheckParams( l_strParameters, l_iter->second.m_params.begin(), l_iter->second.m_params.end() ) )
 			{
 				bool l_ignored = true;
 				std::swap( l_ignored, m_ignored );
-				l_return = l_iter->second.first( this, l_iter->second.second );
+				l_return = l_iter->second.m_function( this, l_iter->second.m_params );
 				std::swap( l_ignored, m_ignored );
 			}
 			else
 			{
-				l_return = l_iter->second.first( this, l_iter->second.second );
+				l_return = l_iter->second.m_function( this, l_iter->second.m_params );
 			}
 		}
 

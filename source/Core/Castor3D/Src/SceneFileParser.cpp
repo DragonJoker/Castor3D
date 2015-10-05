@@ -519,9 +519,15 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_ANIMGROUP, cuT( "animated_object" ), Parser_GroupAnimatedObject, 1, ePARAMETER_TYPE_NAME );
 	AddParser( eSECTION_ANIMGROUP, cuT( "animation" ), Parser_GroupAnimation, 1, ePARAMETER_TYPE_NAME );
 
-	for ( auto && l_it : m_engine->GetPlugins( ePLUGIN_TYPE_GENERIC ) )
+	for ( auto && l_it : m_engine->GetAdditionalParsers() )
 	{
-		std::static_pointer_cast< GenericPlugin >( l_it.second )->AddOptionalParsers( this );
+		for ( auto && l_itSections : l_it.second )
+		{
+			for ( auto && l_itParsers : l_itSections.second )
+			{
+				AddParser( l_itSections.first, l_itParsers.first, l_itParsers.second.m_function, std::move( l_itParsers.second.m_params ) );
+			}
+		}
 	}
 
 	if ( m_engine->GetRenderSystem() )
@@ -546,7 +552,7 @@ void SceneFileParser::DoCleanupParser()
 void SceneFileParser::DoDiscardParser( String const & p_strLine )
 {
 	String l_strWarning;
-	l_strWarning + cuT( "Parser not found @ line #" ) + string::to_string( m_context->ui64Line ) + cuT( " : " ) + p_strLine;
+	l_strWarning + cuT( "Parser not found @ line #" ) + string::to_string( m_context->m_line ) + cuT( " : " ) + p_strLine;
 	Logger::LogError( l_strWarning );
 }
 

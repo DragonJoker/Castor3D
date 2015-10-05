@@ -142,8 +142,10 @@ namespace Castor
 	class FileParser;
 	class FileParserContext;
 	class Font;
+	class FontManager;
 	class Glyph;
 	class Image;
+	class Colour;
 	template< typename T >
 	class Line2D;
 	template< typename T >
@@ -179,6 +181,7 @@ namespace Castor
 	class TextLoader;
 	template< class Obj,
 			  class Key,
+			  class PtrType=std::shared_ptr< Obj >,
 			  typename PFNCreate = std::function< std::shared_ptr< Obj >() >,
 			  class Predicate = std::less< Key > >
 	class Factory;

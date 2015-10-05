@@ -17,9 +17,11 @@ include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
 
 add_target(
 	${PROJECT_NAME}
-	plugin
+	api_plugin
 	"Castor3D"
 	"${CastorMinLibraries}"
+	"CastorGuiPch.hpp"
+	"CastorGuiPch.cpp"
 )
 
 set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Generic" )

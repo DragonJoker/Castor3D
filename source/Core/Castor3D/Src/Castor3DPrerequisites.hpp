@@ -98,7 +98,7 @@ namespace Castor3D
 	typedef Interpolator< Castor::Quaternion, eINTERPOLATOR_MODE_LINEAR > LinearQuaternionInterpolator;
 
 	typedef std::pair< uint32_t, real > VertexWeight;//!<\~english Vertex weight, a simple pair of ID and weight	\~french Poids de vertice, simple paire d'un ID et du poids
-	typedef std::map< Castor::String, uint32_t > UIntStrMap;
+	using Castor::UIntStrMap;
 
 	DECLARE_SMART_PTR( ScaleKeyFrame );
 	DECLARE_SMART_PTR( TranslateKeyFrame );
@@ -733,6 +733,43 @@ namespace Castor3D
 		eTEXT_WRAPPING_MODE_BREAK_WORDS,
 	}	eTEXT_WRAPPING_MODE;
 	/*!
+	\author		Sylvain DOREMUS
+	\date		23/09/2015
+	\version	0.8.0
+	\~english
+	\brief		Horizontal alignments for text overlays.
+	\~french
+	\brief		Alignemens horizontaux pour les incrutstations texte.
+	*/
+	typedef enum eHALIGN
+	{
+		//!\~english Aligned on the left.	\~french Aligné à gauche.
+		eHALIGN_LEFT,
+		//!\~english Centered horizontally.	\~french Centré, horizontalement.
+		eHALIGN_CENTER,
+		//!\~english Aligned on the right.	\~french Aligné à droite.
+		eHALIGN_RIGHT,
+	}	eHALIGN;
+	/*!
+	\author		Sylvain DOREMUS
+	\date		23/09/2015
+	\version	0.8.0
+	\~english
+	\brief		Vertical alignments for text overlays.
+	\~french
+	\brief		Alignemens verticaux pour les incrutstations texte.
+	*/
+	typedef enum eVALIGN
+	{
+		//!\~english Aligned on the top.	\~french Aligné en haut.
+		eVALIGN_TOP,
+		//!\~english Centered vertically.	\~french Centré, verticalement.
+		eVALIGN_CENTER,
+		//!\~english Aligned on the bottom.	\~french Aligné en bas.
+		eVALIGN_BOTTOM,
+	}	eVALIGN;
+
+	/*!
 	\author 	Sylvain DOREMUS
 	\date 		28/11/2014
 	\~english
@@ -758,10 +795,12 @@ namespace Castor3D
 	class OverlayManager;
 	class OverlayFactory;
 	class OverlayRenderer;
+	class FontTexture;
 
 	DECLARE_SMART_PTR( OverlayFactory );
 	DECLARE_SMART_PTR( OverlayManager );
 	DECLARE_SMART_PTR( OverlayRenderer );
+	DECLARE_SMART_PTR( FontTexture );
 
 	DECLARE_SMART_PTR( Overlay );
 	DECLARE_SMART_PTR( OverlayCategory );
@@ -1947,8 +1986,8 @@ namespace Castor3D
 	DECLARE_VECTOR( RenderBufferSPtr, RenderBufferPtr );
 	//! FrameEvent pointer array
 	DECLARE_VECTOR( FrameEventSPtr, FrameEventPtr );
-	//! FrameListener pointer array
-	DECLARE_VECTOR( FrameListenerSPtr, FrameListenerPtr );
+	//! FrameListener pointer map, sorted by name
+	DECLARE_MAP( Castor::String, FrameListenerSPtr, FrameListenerPtrStr );
 	//! RenderWindow pointer map, sorted by index
 	DECLARE_MAP( uint32_t, RenderWindowSPtr, RenderWindow );
 	//! Plugin map, sorted by name
@@ -1960,18 +1999,8 @@ namespace Castor3D
 	DECLARE_COLLECTION( Scene, Castor::String, Scene );
 	DECLARE_COLLECTION( Animation, Castor::String, Animation );
 	DECLARE_COLLECTION( Mesh, Castor::String, Mesh );
-	DECLARE_COLLECTION( Overlay, Castor::String, Overlay );
 	DECLARE_COLLECTION( Material, Castor::String, Material );
 	DECLARE_COLLECTION( Castor::Image, Castor::String, Image );
-	DECLARE_COLLECTION( Castor::Font, Castor::String, Font );
-
-	DECLARE_SMART_PTR( SceneCollection );
-	DECLARE_SMART_PTR( AnimationCollection );
-	DECLARE_SMART_PTR( MeshCollection );
-	DECLARE_SMART_PTR( OverlayCollection );
-	DECLARE_SMART_PTR( MaterialCollection );
-	DECLARE_SMART_PTR( ImageCollection );
-	DECLARE_SMART_PTR( FontCollection );
 
 	DECLARE_ARRAY( RendererPluginSPtr, eRENDERER_TYPE_COUNT, RendererPtr );
 	DECLARE_ARRAY( PluginStrMap, ePLUGIN_TYPE_COUNT, PluginStrMap );

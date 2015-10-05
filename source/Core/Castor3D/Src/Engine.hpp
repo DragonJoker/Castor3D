@@ -30,6 +30,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "TechniqueFactory.hpp"
 #include "Version.hpp"
 
+#include <FileParser.hpp>
+#include <FontManager.hpp>
 #include <Unique.hpp>
 #include <SquareMatrix.hpp>
 
@@ -126,17 +128,6 @@ namespace Castor3D
 		void RenderOneFrame();
 		/**
 		 *\~english
-		 *\brief		Renders all visible overlays
-		 *\param[in]	p_scene	The scene displayed, to display its overlays and the global ones
-		 *\param[in]	p_size	The render target size
-		 *\~french
-		 *\brief		Fonction de rendu des overlays visibles
-		 *\param[in]	p_scene	La scène rendue, pour afficher ses overlays en plus des globaux
-		 *\param[in]	p_size	Les dimensions de la cible du rendu
-		 */
-		void RenderOverlays( Scene const & p_scene, Castor::Size const & p_size );
-		/**
-		 *\~english
 		 *\brief		Creates a scene with the given name.
 		 *\remark		If a scene with the given name already exists, it is returned and no scene is created
 		 *\param[in]	p_name	The scene name
@@ -228,25 +219,6 @@ namespace Castor3D
 		 *\return		\p true si tout s'est bien passé
 		 */
 		bool LoadMeshes( Castor::BinaryFile & p_file );
-		/**
-		 *\~english
-		 *\brief		Creates an overlay, given a type and the overlay definitions
-		 *\remark		If an overlay with the given name already exists, no creation is done, the return is the existing overlay
-		 *\param[in]	p_type		The overlay type (panel, text ...)
-		 *\param[in]	p_name	The overlay name
-		 *\param[in]	p_parent	The parent overlay, NULL if none
-		 *\param[in]	p_scene	The scene that holds the overlay
-		 *\return		The created overlay
-		 *\~french
-		 *\brief		Crée un overlay
-		 *\remark		Si un overlay avec le même nom existe déjà, aucune création n'est faite, l'existant est retourné
-		 *\param[in]	p_type		Le type d'overlay
-		 *\param[in]	p_name	Le nom voulu pour l'overlay
-		 *\param[in]	p_parent	L'overlay parent, nullptr si aucun
-		 *\param[in]	p_scene	La scène contenant l'overlay
-		 *\return		L'overlay
-		 */
-		OverlaySPtr CreateOverlay( eOVERLAY_TYPE p_type, Castor::String const & p_name, OverlaySPtr p_parent, SceneSPtr p_scene );
 		/**
 		 *\~english
 		 *\brief		Creates a render window
@@ -342,10 +314,10 @@ namespace Castor3D
 		void LoadAllPlugins( Castor::Path const & p_strFolder );
 		/**
 		 *\~english
-		 *\brief		Posts a frame event
+		 *\brief		Posts a frame event to the default frame listener
 		 *\param[in]	p_pEvent	The event to add
 		 *\~french
-		 *\brief		Ajoute un évènement de frame à la queue
+		 *\brief		Ajoute un évènement de frame au frame listener par défaut
 		 *\param[in]	p_pEvent	L'évènement
 		 */
 		void PostEvent( FrameEventSPtr p_pEvent );
@@ -531,22 +503,50 @@ namespace Castor3D
 		void RemoveRenderTarget( RenderTargetSPtr && p_pRenderTarget );
 		/**
 		 *\~english
-		 *\brief		Creates a FrameListener
-		 *\return		The created FrameListener
+		 *\brief		Creates a FrameListener.
+		 *\param[in]	p_name	The FrameListener's name.
+		 *\return		The created FrameListener.
 		 *\~french
-		 *\brief		Crée un FrameListener
-		 *\return		Le FrameListener créé
+		 *\brief		Crée un FrameListener.
+		 *\param[in]	p_name	Le nom du FrameListener.
+		 *\return		Le FrameListener créé.
 		 */
-		FrameListenerSPtr CreateFrameListener();
+		FrameListenerWPtr CreateFrameListener( Castor::String const & p_name );
 		/**
 		 *\~english
-		 *\brief		Destroys a FrameListener
-		 *\param[in]	p_pListener	The FrameListener
+		 *\brief		Creates a FrameListener.
+		 *\param[in]	p_name		The listener's name.
+		 *\param[in]	p_listener	The listener.
 		 *\~french
-		 *\brief		Détruit un FrameListener
-		 *\param[in]	p_pListener	Le FrameListener
+		 *\brief		Crée un FrameListener.
+		 *\param[in]	p_name		Le nom du listener.
+		 *\param[in]	p_listener	Le listener.
 		 */
-		void DestroyFrameListener( FrameListenerSPtr & p_pListener );
+		void AddFrameListener( Castor::String const & p_name, FrameListenerSPtr && p_listener );
+		/**
+		 *\~english
+		 *\brief		Retrieves a FrameListener.
+		 *\remarks		If the listener is not found, a CastorException is thrown.
+						Never keep this reference more than your needs, since the pointer referenced by it can be destroyed.
+		 *\param[in]	p_name	The FrameListener's name.
+		 *\return		The reference to the wanted listener.
+		 *\~french
+		 *\brief		Récupère un FrameListener.
+		 *\remarks		Si le listener n'a pas été trouvé, une CastorException est levée.
+						Ne gardez pas la référence plus que de besoin, le pointeur référencé peut être détruit.
+		 *\param[in]	p_name	Le nom du FrameListener.
+		 *\return		Une référence sur le listener.
+		 */
+		FrameListener & GetFrameListener( Castor::String const & p_name );
+		/**
+		 *\~english
+		 *\brief		Destroys a FrameListener.
+		 *\param[in]	p_name	The FrameListener's name.
+		 *\~french
+		 *\brief		Détruit un FrameListener.
+		 *\param[in]	p_name	Le nom du FrameListener.
+		 */
+		void DestroyFrameListener( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Creates and returns a Sampler, given a name
@@ -608,6 +608,26 @@ namespace Castor3D
 		 *\param[in]	p_show	Le statut
 		 */
 		void ShowDebugOverlays( bool p_show );
+		/**
+		 *\~english
+		 *\brief		Registers additional parsers for SceneFileParser.
+		 *\param[in]	p_name		The registering name.
+		 *\param[in]	p_parsers	The parsers.
+		 *\~french
+		 *\brief		Enregistre des analyseurs supplémentaires pour SceneFileParser.
+		 *\param[in]	p_name		Le nom d'enregistrement.
+		 *\param[in]	p_parsers	Les analyseurs.
+		 */
+		void RegisterParsers( Castor::String const & p_name, Castor::FileParser::AttributeParsersBySection && p_parsers );
+		/**
+		 *\~english
+		 *\brief		Unregisters parsers for SceneFileParser.
+		 *\param[in]	p_name		The registering name.
+		 *\~french
+		 *\brief		Désenregistre des analyseurs pour SceneFileParser.
+		 *\param[in]	p_name		Le nom d'enregistrement.
+		 */
+		void UnregisterParsers( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves plugins path
@@ -931,7 +951,7 @@ namespace Castor3D
 		 *\brief		Récupère la collection de polices
 		 *\return		La collection
 		 */
-		inline FontCollection const & GetFontManager()const
+		inline Castor::FontManager const & GetFontManager()const
 		{
 			return m_fontManager;
 		}
@@ -943,7 +963,7 @@ namespace Castor3D
 		 *\brief		Récupère la collection de polices
 		 *\return		La collection
 		 */
-		inline FontCollection & GetFontManager()
+		inline Castor::FontManager & GetFontManager()
 		{
 			return m_fontManager;
 		}
@@ -1221,6 +1241,18 @@ namespace Castor3D
 		{
 			return m_pLightsSampler;
 		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the SceneFileParser additional parsers.
+		 *\return		The parsers.
+		 *\~french
+		 *\brief		Récupère les analyseurs supplémentaires pour SceneFileParser.
+		 *\return		Les analyseurs
+		 */
+		inline std::map< Castor::String, Castor::FileParser::AttributeParsersBySection > GetAdditionalParsers()const
+		{
+			return m_additionalParsers;
+		}
 
 	private:
 		uint32_t DoMainLoop();
@@ -1272,13 +1304,15 @@ namespace Castor3D
 		//!\~english The engine version	\~french La version du moteur
 		Version m_version;
 		//!\~english The frame listeners array	\~french Le tableau de frame listeners
-		FrameListenerPtrArray m_arrayListeners;
+		FrameListenerPtrStrMap m_listeners;
+		//!\~english The default frame listener.	\~french Le frame listener par défaut.
+		FrameListenerWPtr m_defaultListener;
 		//!\~english The animations collection	\~french La collection d'animations
 		AnimationCollection m_animationManager;
 		//!\~english The meshes collection	\~french La collection de maillages
 		MeshCollection m_meshManager;
 		//!\~english The fonts collection	\~french La collection de polices
-		FontCollection m_fontManager;
+		Castor::FontManager m_fontManager;
 		//!\~english The images collection	\~french La collection d'images
 		ImageCollection m_imageManager;
 		//!\~english The scenes collection	\~french La collection de scènes
@@ -1317,7 +1351,7 @@ namespace Castor3D
 		bool m_bCreated;
 		//!\~english Tells if engine is cleaned up	\~french Dit si le moteur est nettoyé
 		bool m_bCleaned;
-		//!\~english The render window used to initalise the main context	\~french La render window utilisée pour initialiser le contexte de rendu principal
+		//!\~english The render window used to initalise the main rendering context	\~french La render window utilisée pour initialiser le contexte de rendu principal
 		RenderWindow * m_pMainWindow;
 		//!\~english The render targets map	\~french La map des cibles de rendu
 		RenderTargetMMap m_mapRenderTargets;
@@ -1331,6 +1365,8 @@ namespace Castor3D
 		bool m_bDefaultInitialised;
 		//!\~english The debug overlays are shown.	\~french Les incrustations de débogage.
 		std::unique_ptr< DebugOverlays > m_debugOverlays;
+		//!\~english The map holding the parsers, sorted by section, and plugin name	\~french La map de parseurs, triés par section, et nom de plugin
+		std::map< Castor::String, Castor::FileParser::AttributeParsersBySection > m_additionalParsers;
 	};
 }
 

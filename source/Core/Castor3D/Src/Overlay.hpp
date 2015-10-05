@@ -222,31 +222,52 @@ namespace Castor3D
 		int GetChildsCount( int p_level )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the panel overlay
-		 *\return		The category, nullptr if the overlay is not a panel
+		 *\brief		Retrieves the panel overlay.
+		 *\return		The category.
 		 *\~french
-		 *\brief		Récupère la l'incrustation panneau
-		 *\return		La catégorie, nullptr si l'incrustation n'est pas un panneau
+		 *\brief		Récupère la l'incrustation panneau.
+		 *\return		La catégorie.
 		 */
 		PanelOverlaySPtr GetPanelOverlay()const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the border panel overlay
-		 *\return		The category, nullptr if the overlay is not a border panel
+		 *\brief		Retrieves the border panel overlay.
+		 *\return		The category.
 		 *\~french
-		 *\brief		Récupère la l'incrustation panneau borduré
-		 *\return		La catégorie, nullptr si l'incrustation n'est pas un panneau borduré
+		 *\brief		Récupère la l'incrustation panneau borduré.
+		 *\return		La catégorie.
 		 */
 		BorderPanelOverlaySPtr GetBorderPanelOverlay()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the text overlay
-		 *\return		The category, nullptr if the overlay is not a text
+		 *\return		The category.
 		 *\~french
 		 *\brief		Récupère la l'incrustation texte
-		 *\return		La catégorie, nullptr si l'incrustation n'est pas un texte
+		 *\return		La catégorie.
 		 */
 		TextOverlaySPtr GetTextOverlay()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the visibility status
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le statut de visibilité
+		 *\return		La valeur
+		 */
+		bool IsVisible()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the overlay category.
+		 *\return		The category.
+		 *\~french
+		 *\brief		Récupère la categorie d'incrustation.
+		 *\return		La catégorie.
+		 */
+		OverlayCategorySPtr GetCategory()const
+		{
+			return m_category;
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute overlay position, in pixels
@@ -259,7 +280,7 @@ namespace Castor3D
 		 */
 		Castor::Position GetAbsolutePosition( Castor::Size const & p_size )const
 		{
-			return m_pOverlayCategory->GetAbsolutePosition( p_size );
+			return m_category->GetAbsolutePosition( p_size );
 		}
 		/**
 		 *\~english
@@ -273,7 +294,7 @@ namespace Castor3D
 		 */
 		Castor::Size GetAbsoluteSize( Castor::Size const & p_size )const
 		{
-			return m_pOverlayCategory->GetAbsoluteSize( p_size );
+			return m_category->GetAbsoluteSize( p_size );
 		}
 		/**
 		 *\~english
@@ -285,7 +306,7 @@ namespace Castor3D
 		 */
 		Castor::Point2d GetAbsolutePosition()const
 		{
-			return m_pOverlayCategory->GetAbsolutePosition();
+			return m_category->GetAbsolutePosition();
 		}
 		/**
 		 *\~english
@@ -297,7 +318,47 @@ namespace Castor3D
 		 */
 		Castor::Point2d GetAbsoluteSize()const
 		{
-			return m_pOverlayCategory->GetAbsoluteSize();
+			return m_category->GetAbsoluteSize();
+		}
+		/**
+		 *\~english
+		 *\return		\p true if this overlay's or one of its parents' size has changed.
+		 *\~french
+		 *\return		\p true si les dimensions de cette incrustation ou d'un de ses parents ont changé.
+		 */
+		bool IsSizeChanged()const
+		{
+			return m_category->IsSizeChanged();
+		}
+		/**
+		 *\~english
+		 *\return		\p true if this overlay's or one of its parents' position has changed.
+		 *\~french
+		 *\return		\p true si la position de cette incrustation ou d'un de ses parents a changé.
+		 */
+		bool IsPositionChanged()const
+		{
+			return m_category->IsPositionChanged();
+		}
+		/**
+		 *\~english
+		 *\return		\p true if this overlay's or one of its parents' size has changed.
+		 *\~french
+		 *\return		\p true si les dimensions de cette incrustation ou d'un de ses parents ont changé.
+		 */
+		bool IsSizeChanged()const
+		{
+			return m_pOverlayCategory->IsSizeChanged();
+		}
+		/**
+		 *\~english
+		 *\return		\p true if this overlay's or one of its parents' position has changed.
+		 *\~french
+		 *\return		\p true si la position de cette incrustation ou d'un de ses parents a changé.
+		 */
+		bool IsPositionChanged()const
+		{
+			return m_pOverlayCategory->IsPositionChanged();
 		}
 		/**
 		 *\~english
@@ -333,7 +394,7 @@ namespace Castor3D
 		 */
 		inline Castor::Point2d const & GetPosition()const
 		{
-			return m_pOverlayCategory->GetPosition();
+			return m_category->GetPosition();
 		}
 		/**
 		 *\~english
@@ -345,7 +406,7 @@ namespace Castor3D
 		 */
 		inline Castor::Point2d const & GetSize()const
 		{
-			return m_pOverlayCategory->GetSize();
+			return m_category->GetSize();
 		}
 		/**
 		 *\~english
@@ -357,7 +418,7 @@ namespace Castor3D
 		 */
 		inline Castor::Position const & GetPixelPosition()const
 		{
-			return m_pOverlayCategory->GetPixelPosition();
+			return m_category->GetPixelPosition();
 		}
 		/**
 		 *\~english
@@ -369,19 +430,7 @@ namespace Castor3D
 		 */
 		inline Castor::Size const & GetPixelSize()const
 		{
-			return m_pOverlayCategory->GetPixelSize();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the visibility status
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le statut de visibilité
-		 *\return		La valeur
-		 */
-		inline bool IsVisible()const
-		{
-			return m_pOverlayCategory->IsVisible();
+			return m_category->GetPixelSize();
 		}
 		/**
 		 *\~english
@@ -393,7 +442,7 @@ namespace Castor3D
 		 */
 		inline eOVERLAY_TYPE GetType()const
 		{
-			return m_pOverlayCategory->GetType();
+			return m_category->GetType();
 		}
 		/**
 		 *\~english
@@ -417,7 +466,7 @@ namespace Castor3D
 		 */
 		inline MaterialSPtr GetMaterial()const
 		{
-			return m_pOverlayCategory->GetMaterial();
+			return m_category->GetMaterial();
 		}
 		/**
 		 *\~english
@@ -429,7 +478,7 @@ namespace Castor3D
 		 */
 		inline Castor::Point2d & GetPosition()
 		{
-			return m_pOverlayCategory->GetPosition();
+			return m_category->GetPosition();
 		}
 		/**
 		 *\~english
@@ -441,7 +490,7 @@ namespace Castor3D
 		 */
 		inline Castor::Point2d & GetSize()
 		{
-			return m_pOverlayCategory->GetSize();
+			return m_category->GetSize();
 		}
 		/**
 		 *\~english
@@ -453,7 +502,7 @@ namespace Castor3D
 		 */
 		inline Castor::Position & GetPixelPosition()
 		{
-			return m_pOverlayCategory->GetPixelPosition();
+			return m_category->GetPixelPosition();
 		}
 		/**
 		 *\~english
@@ -465,7 +514,7 @@ namespace Castor3D
 		 */
 		inline Castor::Size & GetPixelSize()
 		{
-			return m_pOverlayCategory->GetPixelSize();
+			return m_category->GetPixelSize();
 		}
 		/**
 		 *\~english
@@ -489,7 +538,7 @@ namespace Castor3D
 		 */
 		inline int GetIndex()const
 		{
-			return m_pOverlayCategory->GetIndex();
+			return m_category->GetIndex();
 		}
 		/**
 		 *\~english
@@ -501,7 +550,7 @@ namespace Castor3D
 		 */
 		inline int GetLevel()const
 		{
-			return m_pOverlayCategory->GetLevel();
+			return m_category->GetLevel();
 		}
 		/**
 		 *\~english
@@ -597,7 +646,7 @@ namespace Castor3D
 		 */
 		inline void SetVisible( bool val )
 		{
-			m_pOverlayCategory->SetVisible( val );
+			m_category->SetVisible( val );
 		}
 		/**
 		 *\~english
@@ -611,7 +660,7 @@ namespace Castor3D
 		 */
 		inline void SetOrder( int p_index, int p_level )
 		{
-			m_pOverlayCategory->SetOrder( p_index, p_level );
+			m_category->SetOrder( p_index, p_level );
 		}
 		/**
 		 *\~english
@@ -623,7 +672,7 @@ namespace Castor3D
 		 */
 		inline void SetMaterial( MaterialSPtr p_pMaterial )
 		{
-			m_pOverlayCategory->SetMaterial( p_pMaterial );
+			m_category->SetMaterial( p_pMaterial );
 		}
 		/**
 		 *\~english
@@ -635,7 +684,7 @@ namespace Castor3D
 		 */
 		inline void SetPosition( Castor::Point2d const & p_ptPosition )
 		{
-			m_pOverlayCategory->SetPosition( p_ptPosition );
+			m_category->SetPosition( p_ptPosition );
 		}
 		/**
 		 *\~english
@@ -647,7 +696,7 @@ namespace Castor3D
 		 */
 		inline void SetSize( Castor::Point2d const & p_ptSize )
 		{
-			m_pOverlayCategory->SetSize( p_ptSize );
+			m_category->SetSize( p_ptSize );
 		}
 		/**
 		 *\~english
@@ -659,7 +708,7 @@ namespace Castor3D
 		 */
 		inline void SetPixelPosition( Castor::Position const & p_position )
 		{
-			m_pOverlayCategory->SetPixelPosition( p_position );
+			m_category->SetPixelPosition( p_position );
 		}
 		/**
 		 *\~english
@@ -671,7 +720,7 @@ namespace Castor3D
 		 */
 		inline void SetPixelSize( Castor::Size const & p_size )
 		{
-			m_pOverlayCategory->SetPixelSize( p_size );
+			m_category->SetPixelSize( p_size );
 		}
 		/**
 		 *\~english
@@ -696,7 +745,7 @@ namespace Castor3D
 		//!\~english The childs	\~french Les enfants
 		OverlayPtrArray m_overlays;
 		//!\~english The overlay category	\~french La catégorie de l'incrustation
-		OverlayCategorySPtr m_pOverlayCategory;
+		OverlayCategorySPtr m_category;
 		//!\~english The parent scene	\~french La scène parente
 		SceneWPtr m_pScene;
 		//!\~english The factory	\~french La fabrique

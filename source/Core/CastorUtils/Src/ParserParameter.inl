@@ -372,8 +372,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_TEXT >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_TEXT >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -413,8 +413,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_NAME >::ParserParameter( FileParserContext & p_context )
-		: ParserParameter< ePARAMETER_TYPE_TEXT >( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_NAME >::ParserParameter( String const & p_functionName )
+		: ParserParameter< ePARAMETER_TYPE_TEXT >( p_functionName )
 	{
 	}
 
@@ -477,8 +477,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_PATH >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_PATH >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -526,8 +526,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_BOOL >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_BOOL >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -563,8 +563,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_INT8 >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_INT8 >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -587,8 +587,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_INT16 >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_INT16 >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -611,8 +611,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_INT32 >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_INT32 >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -635,8 +635,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_INT64 >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_INT64 >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -659,8 +659,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_UINT8 >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_UINT8 >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -683,8 +683,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_UINT16 >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_UINT16 >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -707,8 +707,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_UINT32 >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_UINT32 >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -731,8 +731,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT >::ParserParameter( FileParserContext & p_context, UIntStrMap const & p_mapValues )
-		: ParserParameter< ePARAMETER_TYPE_UINT32 >( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT >::ParserParameter( String const & p_functionName, UIntStrMap const & p_mapValues )
+		: ParserParameter< ePARAMETER_TYPE_UINT32 >( p_functionName )
 		, m_mapValues( p_mapValues )
 	{
 	}
@@ -779,8 +779,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT >::ParserParameter( FileParserContext & p_context, UIntStrMap const & p_mapValues )
-		: ParserParameter< ePARAMETER_TYPE_UINT32 >( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT >::ParserParameter( String const & p_functionName, UIntStrMap const & p_mapValues )
+		: ParserParameter< ePARAMETER_TYPE_UINT32 >( p_functionName )
 		, m_mapValues( p_mapValues )
 	{
 	}
@@ -833,8 +833,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_UINT64 >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_UINT64 >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -857,8 +857,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_FLOAT >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_FLOAT >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -881,8 +881,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_DOUBLE >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_DOUBLE >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -905,8 +905,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_LONGDOUBLE >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_LONGDOUBLE >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -929,8 +929,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_PIXELFORMAT >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_PIXELFORMAT >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -966,8 +966,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_POINT2I >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_POINT2I >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -990,8 +990,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_POINT3I >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_POINT3I >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -1014,8 +1014,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_POINT4I >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_POINT4I >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -1038,8 +1038,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_POINT2F >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_POINT2F >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -1062,8 +1062,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_POINT3F >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_POINT3F >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -1086,8 +1086,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_POINT4F >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_POINT4F >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -1110,8 +1110,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_POINT2D >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_POINT2D >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -1134,8 +1134,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_POINT3D >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_POINT3D >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -1158,8 +1158,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_POINT4D >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_POINT4D >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -1182,8 +1182,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_SIZE >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_SIZE >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -1206,8 +1206,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_POSITION >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_POSITION >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -1230,8 +1230,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_RECTANGLE >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_RECTANGLE >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -1254,8 +1254,8 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	inline ParserParameter< ePARAMETER_TYPE_COLOUR >::ParserParameter( FileParserContext & p_context )
-		: ParserParameterBase( p_context )
+	inline ParserParameter< ePARAMETER_TYPE_COLOUR >::ParserParameter( String const & p_functionName )
+		: ParserParameterBase( p_functionName )
 	{
 	}
 
@@ -1290,7 +1290,7 @@ namespace Castor
 		}
 		else
 		{
-			throw ParserParameterTypeException( m_context.strFunctionName, l_given, l_expected );
+			throw ParserParameterTypeException( m_functionName, l_given, l_expected );
 		}
 
 		return p_value;

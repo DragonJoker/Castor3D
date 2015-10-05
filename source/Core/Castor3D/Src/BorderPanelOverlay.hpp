@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "OverlayCategory.hpp"
 
+#include <Rectangle.hpp>
+
 #pragma warning( push )
 #pragma warning( disable:4251 )
 #pragma warning( disable:4275 )
@@ -152,13 +154,6 @@ namespace Castor3D
 		void SetBorderMaterial( MaterialSPtr p_pMaterial );
 		/**
 		 *\~english
-		 *\brief		Updates the overlay position and size, taking care of wanted pixel size and position
-		 *\~french
-		 *\brief		Met à jour la position et la tille de l'incrustation, en prenant en compte la taille en pixel et la position en pixel voulues.
-		 */
-		virtual void UpdatePositionAndSize();
-		/**
-		 *\~english
 		 *\brief		Retrieves the panel vertex buffer
 		 *\return		The buffer
 		 *\~french
@@ -239,7 +234,7 @@ namespace Castor3D
 		 */
 		inline Castor::Point4d & GetBorderSize()
 		{
-			m_changed = true;
+			m_borderChanged = true;
 			return m_ptBorderSize;
 		}
 		/**
@@ -265,7 +260,7 @@ namespace Castor3D
 		inline void SetLeftBorderSize( double p_fSize )
 		{
 			m_ptBorderSize[0] = p_fSize;
-			m_changed = true;
+			m_borderChanged = true;
 		}
 		/**
 		 *\~english
@@ -278,7 +273,7 @@ namespace Castor3D
 		inline void SetTopBorderSize( double p_fSize )
 		{
 			m_ptBorderSize[1] = p_fSize;
-			m_changed = true;
+			m_borderChanged = true;
 		}
 		/**
 		 *\~english
@@ -291,7 +286,7 @@ namespace Castor3D
 		inline void SetRightBorderSize( double p_fSize )
 		{
 			m_ptBorderSize[2] = p_fSize;
-			m_changed = true;
+			m_borderChanged = true;
 		}
 		/**
 		 *\~english
@@ -304,7 +299,7 @@ namespace Castor3D
 		inline void SetBottomBorderSize( double p_fSize )
 		{
 			m_ptBorderSize[3] = p_fSize;
-			m_changed = true;
+			m_borderChanged = true;
 		}
 		/**
 		 *\~english
@@ -317,7 +312,7 @@ namespace Castor3D
 		inline void SetBorderSize( Castor::Point4d const & p_ptSize )
 		{
 			m_ptBorderSize = p_ptSize;
-			m_changed = true;
+			m_borderChanged = true;
 		}
 		/**
 		 *\~english
@@ -389,8 +384,8 @@ namespace Castor3D
 		 */
 		inline Castor::Rectangle & GetBorderPixelSize()
 		{
+			m_borderChanged = true;
 			return m_borderSize;
-			m_changed = true;
 		}
 		/**
 		 *\~english
@@ -403,7 +398,7 @@ namespace Castor3D
 		inline void SetLeftBorderPixelSize( int p_size )
 		{
 			m_borderSize[0] = p_size;
-			m_changed = true;
+			m_borderChanged = true;
 		}
 		/**
 		 *\~english
@@ -416,7 +411,7 @@ namespace Castor3D
 		inline void SetTopBorderPixelSize( int p_size )
 		{
 			m_borderSize[1] = p_size;
-			m_changed = true;
+			m_borderChanged = true;
 		}
 		/**
 		 *\~english
@@ -429,7 +424,7 @@ namespace Castor3D
 		inline void SetRightBorderPixelSize( int p_size )
 		{
 			m_borderSize[2] = p_size;
-			m_changed = true;
+			m_borderChanged = true;
 		}
 		/**
 		 *\~english
@@ -442,7 +437,7 @@ namespace Castor3D
 		inline void SetBottomBorderPixelSize( int p_size )
 		{
 			m_borderSize[3] = p_size;
-			m_changed = true;
+			m_borderChanged = true;
 		}
 		/**
 		 *\~english
@@ -455,7 +450,7 @@ namespace Castor3D
 		inline void SetBorderPixelSize( Castor::Rectangle const & p_size )
 		{
 			m_borderSize = p_size;
-			m_changed = true;
+			m_borderChanged = true;
 		}
 		/**
 		 *\~english
@@ -564,23 +559,17 @@ namespace Castor3D
 
 	protected:
 		/**
-		 *\~english
-		 *\brief		Draws the overlay
-		 *\param[in]	p_renderer	The renderer used to draw this overlay
-		 *\~french
-		 *\brief		Dessine l'incrustation
-		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation
+		 *\copydoc		Castor3D::OverlayCategory::DoRender.
 		 */
 		virtual void DoRender( OverlayRendererSPtr p_renderer );
 		/**
-		 *\~english
-		 *\brief		Updates the vertex buffer
-		 *\param[in]	p_renderer	The renderer used to draw this overlay
-		 *\~french
-		 *\brief		Met à jour le tampon de sommets
-		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation
+		 *\copydoc		Castor3D::OverlayCategory::DoUpdateBuffer.
 		 */
-		virtual void DoUpdate( OverlayRendererSPtr p_renderer );
+		virtual void DoUpdateBuffer( Castor::Size const & p_size );
+		/**
+		 *\copydoc		Castor3D::OverlayCategory::DoUpdateSize.
+		 */
+		virtual void DoUpdateSize();
 
 	protected:
 		//!\~english The border material	\~french Le matériau des bords
@@ -599,6 +588,8 @@ namespace Castor3D
 		Castor::Point4d m_borderOuterUv;
 		//!\~english The UV for the inner part of the border	\~french Les UV de la partie intérieure de la bordure
 		Castor::Point4d m_borderInnerUv;
+		//!\~english Tells if the border has changed, in any way.	\~french Dit si la bordure a changé, de quelque manière que ce soit.
+		bool m_borderChanged;
 	};
 }
 

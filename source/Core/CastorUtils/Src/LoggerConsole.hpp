@@ -45,16 +45,13 @@ namespace Castor
 		}
 
 		/** Configures console info for the given log type
-		@param[in] logLevel
-		 	The log level
+		*\param[in]	logLevel		 	The log leve
 		*/
 		virtual void BeginLog( ELogType p_logLevel ) = 0;
 
 		/** Prints a text in the console, adds the line end character if asked
-		@param[in] toLog
-			The text to log
-		@param[in] newLine
-		 	Tells if the line end character must be added
+		*\param[in]	toLog		The text to lo
+		*\param[in]	newLine		 	Tells if the line end character must be adde
 		*/
 		virtual void Print( String const & toLog, bool newLine ) = 0;
 	};
@@ -77,16 +74,13 @@ namespace Castor
 		}
 
 		/** Configures console info for the given log type
-		@param[in] logLevel
-			The log type
+		*\param[in]	logLevel		The log typ
 		*/
 		virtual void BeginLog( ELogType logLevel ) = 0;
 
 		/** Prints a text in the console, adds the line end character if asked
-		@param[in] toLog
-			The text to log
-		@param[in] newLine
-			Tells if the line end character must be added
+		*\param[in]	toLog		The text to lo
+		*\param[in]	newLine		Tells if the line end character must be adde
 		*/
 		virtual void Print( String const & toLog, bool newLine ) = 0;
 

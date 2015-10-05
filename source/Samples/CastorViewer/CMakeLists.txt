@@ -12,6 +12,12 @@ include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
 include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D/Src )
 include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
 
+if ( CASTOR_BUILD_GENERIC_CASTORGUI )
+	add_definitions( -DHAS_CASTORGUI=1 )
+	include_directories( ${CMAKE_SOURCE_DIR}/Plugins/Generic/CastorGui/Src )
+	set( CastorBinLibraries ${CastorBinLibraries} CastorGui )
+endif ()
+
 add_target(
 	${PROJECT_NAME}
 	bin

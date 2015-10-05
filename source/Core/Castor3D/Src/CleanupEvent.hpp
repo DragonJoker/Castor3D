@@ -38,7 +38,7 @@ namespace Castor3D
 	\remark		Nettoie le membre donné lors de la construction.
 	*/
 	template< class T >
-	class C3D_API CleanupEvent : public FrameEvent
+	class CleanupEvent : public FrameEvent
 	{
 	private:
 		/**

@@ -131,7 +131,7 @@ DECLARE_GUID( IID_IDXGIFactory,					0x7b7166ec, 0x21c7, 0x44ae, 0xb2, 0x1a, 0xc9
 #	if !defined( D3D_DEBUG_INFO )
 #		define D3D_DEBUG_INFO
 #	endif
-#	define DX_DEBUG_RT 1
+#	define DX_DEBUG_RT 0
 #else
 #	define DX_DEBUG_RT 0
 #endif
