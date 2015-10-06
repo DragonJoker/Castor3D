@@ -158,7 +158,7 @@ namespace Castor3D
 		}
 		else
 		{
-			return true;//m_pRenderTarget->GetFrameBuffer()->Bind();
+			return m_pRenderTarget->GetFrameBuffer()->Bind();
 		}
 	}
 
@@ -183,11 +183,11 @@ namespace Castor3D
 		}
 		else
 		{
-			//m_pRenderTarget->GetFrameBuffer()->Unbind();
 			m_wp2DBlendState.lock()->Apply();
 			m_wp2DDepthStencilState.lock()->Apply();
 			GetOwner()->GetOverlayManager().RenderOverlays( *m_renderSystem->GetTopScene(), m_size );
 			m_renderSystem->PopScene();
+			m_pRenderTarget->GetFrameBuffer()->Unbind();
 		}
 	}
 

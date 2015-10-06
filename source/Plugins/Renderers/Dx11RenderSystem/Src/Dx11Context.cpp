@@ -16,7 +16,7 @@ namespace ShaderModel1_2_3_4
 	static const String VtxShader =
 		cuT( "struct VtxInput\n" )
 		cuT( "{\n" )
-		cuT( "	float4 Position: POSITION;\n" )
+		cuT( "	float2 Position: POSITION;\n" )
 		cuT( "	float2 TextureUV: TEXCOORD0;\n" )
 		cuT( "};\n" )
 		cuT( "struct VtxOutput\n" )
@@ -27,8 +27,7 @@ namespace ShaderModel1_2_3_4
 		cuT( "VtxOutput mainVx( VtxInput p_input )\n" )
 		cuT( "{\n" )
 		cuT( "	VtxOutput l_output;\n" )
-		cuT( "	p_input.Position.w = 1.0f;\n" )
-		cuT( "	l_output.Position = mul( p_input.Position, c3d_mtxProjection );\n" )
+		cuT( "	l_output.Position = mul( float4( p_input.Position.xy, 0.0, 1.0 ), c3d_mtxProjection );\n" )
 		cuT( "	l_output.TextureUV = p_input.TextureUV;\n" )
 		cuT( "	return l_output;\n" )
 		cuT( "}\n" );
@@ -43,7 +42,7 @@ namespace ShaderModel1_2_3_4
 		cuT( "};\n" )
 		cuT( "float4 mainPx( PxlInput p_input ): SV_TARGET\n" )
 		cuT( "{\n" )
-		cuT( "	return diffuseTexture.Sample( DiffuseSampler, p_input.TextureUV );\n" )
+		cuT( "	return float4( p_input.TextureUV.xy, 0.0, 1.0 );//diffuseTexture.Sample( DiffuseSampler, p_input.TextureUV );\n" )
 		cuT( "}\n" );
 }
 
@@ -78,10 +77,11 @@ namespace Dx11Render
 	{
 		if ( !m_bInitialised )
 		{
+			DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( GetOwner() );
 			m_hWnd = m_pWindow->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd();
 			m_size = m_pWindow->GetSize();
 
-			if ( DoInitPresentParameters() == S_OK &&  static_cast< DxRenderSystem * >( GetOwner() )->InitialiseDevice( m_hWnd, m_deviceParams ) )
+			if ( DoInitPresentParameters() == S_OK &&  l_renderSystem->InitialiseDevice( m_hWnd, m_deviceParams ) )
 			{
 				DoInitVolatileResources();
 				Logger::LogInfo( StringStream() << cuT( "Dx11Context::DoInitialise - Context for window 0x" ) << std::hex << m_hWnd << cuT( " initialised" ) );
@@ -90,7 +90,7 @@ namespace Dx11Render
 
 			if ( m_bInitialised )
 			{
-				auto l_uniforms = UniformsBase::Get( *static_cast< DxRenderSystem * >( GetOwner() ) );
+				auto l_uniforms = UniformsBase::Get( *l_renderSystem );
 				StringStream l_vtxShader;
 				l_vtxShader << l_uniforms->GetVertexInMatrices( 0 ) << std::endl;
 				l_vtxShader << ShaderModel1_2_3_4::VtxShader;
@@ -114,6 +114,7 @@ namespace Dx11Render
 	void DxContext::DoSetCurrent()
 	{
 		static_cast< DxRenderSystem * >( GetOwner() )->GetDevice()->GetImmediateContext( &m_pDeviceContext );
+		m_pDeviceContext->OMSetRenderTargets( 1, &m_pRenderTargetView, m_pDepthStencilView );
 	}
 
 	void DxContext::DoEndCurrent()
@@ -123,6 +124,18 @@ namespace Dx11Render
 
 	void DxContext::DoSwapBuffers()
 	{
+		if ( m_pSwapChain )
+		{
+			if ( m_pWindow->GetVSync() )
+			{
+				m_pSwapChain->Present( 1, 0 );
+			}
+			else
+			{
+				m_pSwapChain->Present( 0, 0 );
+			}
+		}
+
 #if DX_DEBUG_RT
 
 		static_cast< DxRenderSystem * >( GetOwner() )->GetDevice()->GetImmediateContext( &m_pDeviceContext );
@@ -135,18 +148,6 @@ namespace Dx11Render
 		SafeRelease( m_pDeviceContext );
 
 #endif
-
-		if ( m_pSwapChain )
-		{
-			if ( m_pWindow->GetVSync() )
-			{
-				m_pSwapChain->Present( 1, 0 );
-			}
-			else
-			{
-				m_pSwapChain->Present( 0, 0 );
-			}
-		}
 	}
 
 	void DxContext::DoSetClearColour( Colour const & p_clrClear )

@@ -63,7 +63,7 @@ namespace GlRender
 				UBO_MATRIX( l_writer );
 
 				// Shader inputs
-				ATTRIBUTE( l_writer, Vec4, vertex );
+				ATTRIBUTE( l_writer, Vec2, vertex );
 				ATTRIBUTE( l_writer, Vec2, texture );
 
 				// Shader outputs
@@ -72,7 +72,7 @@ namespace GlRender
 				l_writer.Implement_Function< void >( cuT( "main" ), [&]()
 				{
 					vtx_texture = texture;
-					BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( vertex.x(), vertex.y(), vertex.z(), 1.0 );
+					BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( vertex.x(), vertex.y(), 0.0, 1.0 );
 				} );
 				l_strVtxShader = l_writer.Finalise();
 			}
@@ -163,6 +163,14 @@ namespace GlRender
 
 	void GlContext::DoCullFace( eFACE p_eCullFace )
 	{
-		m_gl.CullFace( m_gl.Get( p_eCullFace ) );
+		if ( p_eCullFace == eFACE_NONE )
+		{
+			m_gl.Disable( eGL_TWEAK_CULL_FACE );
+		}
+		else
+		{
+			m_gl.Enable( eGL_TWEAK_CULL_FACE );
+			m_gl.CullFace( m_gl.Get( p_eCullFace ) );
+		}
 	}
 }

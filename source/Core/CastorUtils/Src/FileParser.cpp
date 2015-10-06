@@ -61,7 +61,7 @@ namespace Castor
 					l_bReuse = false;
 				}
 
-				Logger::LogDebug( string::to_string( m_context->m_line ) + cuT( " - " ) + l_strLine.c_str() );
+				//Logger::LogDebug( string::to_string( m_context->m_line ) + cuT( " - " ) + l_strLine.c_str() );
 				string::trim( l_strLine );
 
 				if ( !l_strLine.empty() )
