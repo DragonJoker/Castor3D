@@ -77,7 +77,11 @@ namespace CastorViewer
 		, m_oldY( 0.0 )
 		, m_eCameraMode( eCAMERA_MODE_FIXED )
 		, m_rFpCamSpeed( 2.0 )
+#if HAS_CASTORGUI
+
 		, m_controlsManager( nullptr )
+
+#endif
 	{
 		for ( int i = 0; i < eTIMER_ID_COUNT; i++ )
 		{

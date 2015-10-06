@@ -1,9 +1,7 @@
 option( CASTOR_BUILD_TOOL_IMG_CONVERTER "Build ImgConverter (needs wxWidgets library)" FALSE )
-option( CASTOR_BUILD_TOOL_TESTING "Build CastorUtils testing project (needs GLM library)" FALSE )
 
 function( ToolsInit )
 	set( ImgConv "no (Not wanted)" PARENT_SCOPE )
-    set( Testing "no (Not wanted)" PARENT_SCOPE )
 endfunction( ToolsInit )
 
 function( ToolsBuild )
@@ -62,12 +60,6 @@ function( ToolsBuild )
 		endif()
 	endif()
 
-	if( ${CASTOR_BUILD_TOOL_TESTING} )
-        set( Build ${Testing} )
-		add_subdirectory( Tools/CastorUtilsTest )
-        set( Testing ${Build} PARENT_SCOPE )
-	endif()
-
 	set( CastorMinLibraries
 		${CastorMinLibraries}
 		PARENT_SCOPE
@@ -82,7 +74,6 @@ endfunction( ToolsBuild )
 function( ToolsSummary msg )
 	set( msg_tmp "\n\nTools :" )
 	set( msg_tmp "${msg_tmp}\n    ImgConverter        ${ImgConv}" )
-	set( msg_tmp "${msg_tmp}\n    CastorUtils test    ${Testing}" )
 	SET( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 endfunction( ToolsSummary )
 

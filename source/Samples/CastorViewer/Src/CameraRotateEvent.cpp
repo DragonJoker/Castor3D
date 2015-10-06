@@ -5,7 +5,6 @@
 
 using namespace Castor3D;
 using namespace Castor;
-double g_cumul = 0;
 
 namespace CastorViewer
 {
@@ -24,9 +23,7 @@ namespace CastorViewer
 
 		if ( l_node )
 		{
-			l_node->Rotate( Quaternion( Angle::FromDegrees( /*m_dx*/0.0 ), Angle::FromDegrees( m_dy ), Angle::FromDegrees( /*m_dz*/0.0 ) ) );
-			g_cumul += m_dy;
-			Logger::LogDebug( StringStream() << cuT( "Cumul: " ) << g_cumul << cuT( " - Dy: " ) << m_dy << cuT( " - Orientation: " ) << l_node->GetOrientation() );
+			l_node->Rotate( Quaternion( Angle::FromDegrees( m_dx ), Angle::FromDegrees( m_dy ), Angle::FromDegrees( m_dz ) ) );
 		}
 
 		m_dx = 0;

@@ -46,7 +46,6 @@ namespace Castor
 			String l_file;
 			p_file.CopyToString( l_file );
 			string::replace( l_file, cuT( "\r\n" ), cuT( "\n" ) );
-			string::replace( l_file, cuT( "\n\n" ), cuT( "\n" ) );
 			StringArray l_lines = string::split( l_file, cuT( "\n" ), std::count( l_file.begin(), l_file.end(), '\n' ) + 1, true );
 			auto l_it = l_lines.begin();
 
@@ -62,7 +61,7 @@ namespace Castor
 					l_bReuse = false;
 				}
 
-				//Logger::LogDebug( string::to_string( m_context->m_line ) + cuT( " - " ) + l_strLine.c_str() );
+				Logger::LogDebug( string::to_string( m_context->m_line ) + cuT( " - " ) + l_strLine.c_str() );
 				string::trim( l_strLine );
 
 				if ( !l_strLine.empty() )
@@ -137,12 +136,12 @@ namespace Castor
 										else
 										{
 											l_bNextIsOpenBrace = false;
-
-											if ( m_ignored )
-											{
-												m_ignoreLevel++;
-											}
+											DoEnterBlock();
 										}
+									}
+									else if ( l_strLine == cuT( "{" ) )
+									{
+										DoEnterBlock();
 									}
 									else
 									{
@@ -151,15 +150,9 @@ namespace Castor
 
 									if ( m_ignoreLevel > 0 )
 									{
-										if ( l_strLine.find( cuT( "}" ) ) == l_strLine.size() - 1 )
+										if ( !l_strLine.empty() && l_strLine.find( cuT( "}" ) ) == l_strLine.size() - 1 )
 										{
-											m_ignoreLevel--;
-
-											if ( m_ignoreLevel <= 0 )
-											{
-												m_ignored = false;
-												m_ignoreLevel = 0;
-											}
+											DoLeaveBlock();
 										}
 									}
 								}
@@ -185,7 +178,7 @@ namespace Castor
 				}
 			}
 
-			if ( m_context->m_sections.top() != m_rootSectionId )
+			if ( m_context->m_sections.empty() || m_context->m_sections.top() != m_rootSectionId )
 			{
 				ParseError( cuT( "Unexpected end of file" ) );
 			}
@@ -412,7 +405,7 @@ namespace Castor
 				// Block end at the beginning of the line, we treat it then we parse the line
 				p_strLine = p_strLine.substr( 1 );
 				string::trim( p_strLine );
-				DoParseScriptBlockEnd();
+				DoLeaveBlock();
 
 				if ( !p_strLine.empty() )
 				{
@@ -440,7 +433,7 @@ namespace Castor
 					l_return = false;
 				}
 
-				DoParseScriptBlockEnd();
+				DoLeaveBlock();
 				l_return = false;
 				l_bContinue = false;
 			}
@@ -500,32 +493,67 @@ namespace Castor
 		m_context->m_functionName = l_splitCmd[0];
 		AttributeParserMap::const_iterator const & l_iter = p_parsers.find( l_splitCmd[0] );
 
-		if ( l_iter == p_parsers.end() )
+		if ( !DoIsInIgnoredBlock() )
 		{
-			DoDiscardParser( p_strLine );
-		}
-		else
-		{
-			String l_strParameters;
-
-			if ( l_splitCmd.size() >= 2 )
+			if ( l_iter == p_parsers.end() )
 			{
-				l_strParameters = string::trim( l_splitCmd[1] );
-			}
-
-			if ( !CheckParams( l_strParameters, l_iter->second.m_params.begin(), l_iter->second.m_params.end() ) )
-			{
-				bool l_ignored = true;
-				std::swap( l_ignored, m_ignored );
-				l_return = l_iter->second.m_function( this, l_iter->second.m_params );
-				std::swap( l_ignored, m_ignored );
+				Ignore();
+				DoDiscardParser( p_strLine );
 			}
 			else
 			{
-				l_return = l_iter->second.m_function( this, l_iter->second.m_params );
+				String l_strParameters;
+
+				if ( l_splitCmd.size() >= 2 )
+				{
+					l_strParameters = string::trim( l_splitCmd[1] );
+				}
+
+				if ( !CheckParams( l_strParameters, l_iter->second.m_params.begin(), l_iter->second.m_params.end() ) )
+				{
+					bool l_ignored = true;
+					std::swap( l_ignored, m_ignored );
+					l_return = l_iter->second.m_function( this, l_iter->second.m_params );
+					std::swap( l_ignored, m_ignored );
+				}
+				else
+				{
+					l_return = l_iter->second.m_function( this, l_iter->second.m_params );
+				}
 			}
 		}
 
 		return l_return;
+	}
+
+	void FileParser::DoEnterBlock()
+	{
+		if ( m_ignored )
+		{
+			m_ignoreLevel++;
+		}
+	}
+
+	void FileParser::DoLeaveBlock()
+	{
+		if ( m_ignored )
+		{
+			m_ignoreLevel--;
+
+			if ( m_ignoreLevel <= 0 )
+			{
+				m_ignored = false;
+				m_ignoreLevel = 0;
+			}
+		}
+		else
+		{
+			DoParseScriptBlockEnd();
+		}
+	}
+
+	bool FileParser::DoIsInIgnoredBlock()
+	{
+		return m_ignored && m_ignoreLevel > 0;
 	}
 }

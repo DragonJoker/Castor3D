@@ -118,6 +118,8 @@ set( CastorBinsDependencies
 	Castor3D
 )
 
+option( CASTOR_BUILD_TEST "Build test projects" FALSE )
+
 if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 	if( Boost_FOUND )
 		add_subdirectory( Core )
