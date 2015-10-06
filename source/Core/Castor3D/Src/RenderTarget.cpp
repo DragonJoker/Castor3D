@@ -356,7 +356,6 @@ namespace Castor3D
 		, m_iSamplesCount( 0 )
 		, m_bStereo( false )
 		, m_rIntraOcularDistance( 0 )
-		, m_bDeferredRendering( false )
 		, m_uiIndex( ++sm_uiCount )
 		, m_strTechniqueName( cuT( "direct" ) )
 		, m_fbLeftEye( *this )
@@ -387,10 +386,6 @@ namespace Castor3D
 			else if ( m_strTechniqueName == cuT( "ssaa" ) )
 			{
 				l_params.Add( cuT( "samples_count" ), m_iSamplesCount );
-			}
-			else if ( m_strTechniqueName == cuT( "deferred" ) )
-			{
-				m_bDeferredRendering = true;
 			}
 
 			try
@@ -583,7 +578,6 @@ namespace Castor3D
 	void RenderTarget::SetTechnique( Castor::String const & p_name )
 	{
 		m_strTechniqueName = p_name;
-		m_bDeferredRendering = p_name == cuT( "deferred" );
 		m_bMultisampling = p_name == cuT( "msaa" );
 	}
 

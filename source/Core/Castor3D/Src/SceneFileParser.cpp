@@ -551,9 +551,7 @@ void SceneFileParser::DoCleanupParser()
 
 void SceneFileParser::DoDiscardParser( String const & p_strLine )
 {
-	String l_strWarning;
-	l_strWarning + cuT( "Parser not found @ line #" ) + string::to_string( m_context->m_line ) + cuT( " : " ) + p_strLine;
-	Logger::LogError( l_strWarning );
+	Logger::LogError( cuT( "Parser not found @ line #" ) + string::to_string( m_context->m_line ) + cuT( " : " ) + p_strLine );
 }
 
 void SceneFileParser::DoValidate()

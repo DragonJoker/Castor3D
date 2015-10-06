@@ -20,11 +20,10 @@ using namespace Castor;
 namespace Castor3D
 {
 	Context::Context()
-		:	m_pWindow( NULL )
-		,	m_renderSystem( NULL )
-		,	m_bInitialised( false )
-		,	m_bDeferredShadingSet( false )
-		,	m_bMultiSampling( false )
+		: m_pWindow( NULL )
+		, m_renderSystem( NULL )
+		, m_bInitialised( false )
+		, m_bMultiSampling( false )
 	{
 		BufferElementDeclaration l_vertexDeclarationElements[] =
 		{
@@ -64,7 +63,6 @@ namespace Castor3D
 	{
 		m_pWindow = p_window;
 		m_renderSystem	= m_pWindow->GetEngine()->GetRenderSystem();
-		m_bDeferredShadingSet = p_window->IsUsingDeferredRendering();
 		ShaderManager & l_manager = m_renderSystem->GetEngine()->GetShaderManager();
 		ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
 		m_pBtoBShaderProgram = l_program;
@@ -119,7 +117,6 @@ namespace Castor3D
 		m_pGeometryBuffers.reset();
 		m_bMultiSampling = false;
 		m_pBtoBShaderProgram.reset();
-		m_bDeferredShadingSet = false;
 		m_renderSystem = NULL;
 		m_pWindow = NULL;
 	}

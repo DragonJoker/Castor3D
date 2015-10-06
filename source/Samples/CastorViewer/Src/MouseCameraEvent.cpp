@@ -7,12 +7,12 @@ using namespace Castor;
 
 namespace CastorViewer
 {
-	MouseCameraEvent::MouseCameraEvent( SceneNodeSPtr p_pMaterial, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
+	MouseCameraEvent::MouseCameraEvent( SceneNodeSPtr p_node, real p_dx, real p_dy, real p_dz )
 		: FrameEvent( eEVENT_TYPE_PRE_RENDER )
-		, m_pMaterial( p_pMaterial )
-		, m_rDeltaX( p_rDeltaX )
-		, m_rDeltaY( p_rDeltaY )
-		, m_rDeltaZ( p_rDeltaZ )
+		, m_node( p_node )
+		, m_dx( p_dx )
+		, m_dy( p_dy )
+		, m_dz( p_dz )
 	{
 	}
 
@@ -20,12 +20,12 @@ namespace CastorViewer
 	{
 	}
 
-	void MouseCameraEvent::Add( MouseCameraEventSPtr p_event, FrameListenerSPtr p_listener, real p_deltaX, real p_deltaY, real p_deltaZ )
+	void MouseCameraEvent::Add( MouseCameraEventSPtr p_event, FrameListenerSPtr p_listener, real p_dx, real p_dy, real p_dz )
 	{
-		bool l_add = p_event->m_rDeltaX == 0 && p_event->m_rDeltaY == 0 && p_event->m_rDeltaZ == 0;
-		p_event->m_rDeltaX += p_deltaX;
-		p_event->m_rDeltaY += p_deltaY;
-		p_event->m_rDeltaZ += p_deltaZ;
+		bool l_add = p_event->m_dx == 0 && p_event->m_dy == 0 && p_event->m_dz == 0;
+		p_event->m_dx += p_dx;
+		p_event->m_dy += p_dy;
+		p_event->m_dz += p_dz;
 
 		if ( l_add )
 		{

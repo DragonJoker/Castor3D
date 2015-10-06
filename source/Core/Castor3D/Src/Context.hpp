@@ -132,28 +132,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Tells the context is using deferred shading
-		 *\~french
-		 *\brief		Dit si le contexte utilise le deferred shading
-		 */
-		inline bool IsDeferredShadingSet()const
-		{
-			return m_bDeferredShadingSet;
-		}
-		/**
-		 *\~english
-		 *\brief		Defines the deferred shading status
-		 *\param[in]	p_bVal	The status
-		 *\~french
-		 *\brief		Définit le statut du deferred shading
-		 *\param[in]	p_bVal	Le statut
-		 */
-		inline void SetDeferredShading( bool p_bVal )
-		{
-			m_bDeferredShadingSet = p_bVal;
-		}
-		/**
-		 *\~english
 		 *\brief		Tells the context is using multisampling
 		 *\~french
 		 *\brief		Dit si le contexte utilise le multisampling
@@ -347,8 +325,6 @@ namespace Castor3D
 		RenderSystem * m_renderSystem;
 		//!\~english Tells if the context is initialised	\~french Dit si le contexte est initialisé
 		bool m_bInitialised;
-		//!\~english Tells the context is currently set to use deferred shading	\~french Dit si le contexte est actuellement configuré pour utiliser le deferred shading
-		bool m_bDeferredShadingSet;
 		//!\~english Tells the context is currently set to use multisampling	\~french Dit si le contexte est actuellement configuré pour utiliser le multisampling
 		bool m_bMultiSampling;
 		//!\~english The ShaderProgram used when rendering from a buffer to another one	\~french Le ShaderProgram utilisé lors du rendu d'un tampon vers un autre

@@ -191,11 +191,6 @@ namespace Castor3D
 			SceneSPtr l_pScene = GetScene();
 			RenderTargetSPtr l_pTarget = GetRenderTarget();
 
-			if ( IsUsingDeferredRendering() )
-			{
-				m_pContext->SetDeferredShading( true );
-			}
-
 			if ( l_pScene )
 			{
 				m_pContext->SetClearColour( l_pScene->GetBackgroundColour() );
@@ -507,19 +502,6 @@ namespace Castor3D
 		{
 			l_pTarget->SetIntraOcularDistance( p_rIao );
 		}
-	}
-
-	bool RenderWindow::IsUsingDeferredRendering()const
-	{
-		bool l_return = false;
-		RenderTargetSPtr l_pTarget = GetRenderTarget();
-
-		if ( l_pTarget )
-		{
-			l_return = l_pTarget->IsUsingDeferredRendering();
-		}
-
-		return l_return;
 	}
 
 	Size RenderWindow::GetSize()const

@@ -1821,15 +1821,7 @@ namespace Castor3D
 
 			if ( l_cameraPos )
 			{
-				if ( l_renderSystem->GetMainContext()->IsDeferredShadingSet() )
-				{
-					//m_pCameraPos->SetValue( m_renderSystem->GetPipeline()->GetMatrix( eMTXMODE_VIEW ) * l_position );
-					l_cameraPos->SetValue( l_position );
-				}
-				else
-				{
-					l_cameraPos->SetValue( l_position );
-				}
+				l_cameraPos->SetValue( l_position );
 			}
 		}
 	}

@@ -47,7 +47,7 @@ add_target(
     "${CUT_CXX_FLAGS}"
 )
 
-set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Tools" )
+set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core/CastorUtils" )
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 add_target_test( ${PROJECT_NAME} )
 

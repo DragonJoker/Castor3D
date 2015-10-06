@@ -71,15 +71,17 @@ namespace CastorViewer
 		, m_mouseRightDown( false )
 		, m_mouseMiddleDown( false )
 		, m_rZoom( 1.0 )
-		, m_deltaX( 0.0 )
-		, m_deltaY( 0.0 )
 		, m_x( 0.0 )
 		, m_y( 0.0 )
 		, m_oldX( 0.0 )
 		, m_oldY( 0.0 )
 		, m_eCameraMode( eCAMERA_MODE_FIXED )
 		, m_rFpCamSpeed( 2.0 )
+#if HAS_CASTORGUI
+
 		, m_controlsManager( nullptr )
+
+#endif
 	{
 		for ( int i = 0; i < eTIMER_ID_COUNT; i++ )
 		{
@@ -137,7 +139,7 @@ namespace CastorViewer
 
 				if ( l_pScene )
 				{
-					SceneNodeSPtr l_cameraNode = l_pScene->GetCameraRootNode();
+					SceneNodeSPtr l_cameraNode = p_pWindow->GetCamera()->GetParent();
 					m_ptOriginalPosition = l_cameraNode->GetPosition();
 					m_qOriginalOrientation = l_cameraNode->GetOrientation();
 					m_pRotateCamEvent = std::make_shared< CameraRotateEvent >( l_cameraNode, real( 0 ), real( 0 ), real( 0 ) );
@@ -182,8 +184,6 @@ namespace CastorViewer
 			SceneSPtr l_pScene = l_pWindow->GetScene();
 			DoStopTimer( eTIMER_ID_COUNT );
 			m_rZoom = 1.0;
-			m_deltaX = 0.0;
-			m_deltaY = 0.0;
 			m_x = 0.0;
 			m_y = 0.0;
 			m_oldX = 0.0;
@@ -224,8 +224,6 @@ namespace CastorViewer
 		DoStopTimer( eTIMER_ID_COUNT );
 		wxGetApp().GetMainFrame()->LoadScene();
 		m_rZoom = 1.0;
-		m_deltaX = 0.0;
-		m_deltaY = 0.0;
 		m_x = 0.0;
 		m_y = 0.0;
 		m_oldX = 0.0;
@@ -643,18 +641,18 @@ namespace CastorViewer
 #endif
 		{
 			RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
-			m_deltaX = ( m_oldX - m_x ) / 2.0f;
-			m_deltaY = ( m_oldY - m_y ) / 2.0f;
+			real l_deltaX = ( m_oldX - m_x ) / 2.0f;
+			real l_deltaY = ( m_oldY - m_y ) / 2.0f;
 
 			if ( l_pWindow )
 			{
 				if ( m_mouseLeftDown )
 				{
-					MouseCameraEvent::Add( m_pRotateCamEvent, m_pListener, m_deltaX, 0, m_deltaY );
+					MouseCameraEvent::Add( m_pRotateCamEvent, m_pListener, l_deltaY, l_deltaX, 0 );
 				}
 				else if ( m_mouseRightDown )
 				{
-					MouseCameraEvent::Add( m_pTranslateCamEvent, m_pListener, -m_deltaX, m_deltaY, 0 );
+					MouseCameraEvent::Add( m_pTranslateCamEvent, m_pListener, -l_deltaX, l_deltaY, 0 );
 				}
 
 				if ( m_mouseLeftDown || m_mouseRightDown )

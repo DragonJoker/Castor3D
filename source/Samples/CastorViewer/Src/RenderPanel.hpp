@@ -110,8 +110,6 @@ namespace CastorViewer
 		void OnMenuClose( wxCommandEvent & p_event );
 
 	public:
-		Castor::real m_deltaX;
-		Castor::real m_deltaY;
 		Castor::real m_x;
 		Castor::real m_y;
 		Castor::real m_oldX;

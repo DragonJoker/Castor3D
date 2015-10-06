@@ -191,6 +191,11 @@ namespace Castor
 		FromAxisAngle( p_vector, p_angle );
 	}
 
+	Quaternion::Quaternion( Angle const & p_yaw, Angle const & p_pitch, Angle const & p_roll )
+	{
+		FromEulerAngles( p_yaw, p_pitch, p_roll );
+	}
+
 	Quaternion::~Quaternion()
 	{
 	}
@@ -446,31 +451,44 @@ namespace Castor
 		p_z[2] = l_mtxRot[2][2];
 	}
 
+	void Quaternion::FromEulerAngles( Angle const & p_pitch, Angle const & p_yaw, Angle const & p_roll )
+	{
+		double c1 = cos( p_pitch.Radians() / 2 );
+		double s1 = sin( p_pitch.Radians() / 2 );
+		double c2 = cos( p_yaw.Radians() / 2 );
+		double s2 = sin( p_yaw.Radians() / 2 );
+		double c3 = cos( p_roll.Radians() / 2 );
+		double s3 = sin( p_roll.Radians() / 2 );
+		x() = float( s1 * c2 * c3 ) - float( c1 * s2 * s3 );
+		y() = float( c1 * s2 * c3 ) + float( s1 * c2 * s3 );
+		z() = float( c1 * c2 * s3 ) - float( s1 * s2 * c3 );
+		w() = float( c1 * c2 * c3 ) + float( s1 * s2 * s3 );
+	}
+
+	void Quaternion::ToEulerAngles( Angle & p_pitch, Angle & p_yaw, Angle & p_roll )
+	{
+		p_yaw = GetYaw();
+		p_pitch = GetPitch();
+		p_roll = GetRoll();
+	}
+
 	Angle Quaternion::GetYaw()const
 	{
-		double const & x = m_data.quaternion.x;
-		double const & y = m_data.quaternion.y;
-		double const & z = m_data.quaternion.z;
-		double const & w = m_data.quaternion.w;
-		return Angle::FromRadians( asin( -2 * ( x * z - w * y ) ) );
+		return Angle::FromRadians( asin( -2 * ( x() * z() - w() * y() ) ) );
 	}
 
 	Angle Quaternion::GetPitch()const
 	{
-		double const & x = m_data.quaternion.x;
-		double const & y = m_data.quaternion.y;
-		double const & z = m_data.quaternion.z;
-		double const & w = m_data.quaternion.w;
-		return Angle::FromRadians( atan2( 2 * ( y * z + w * x ), w * w - x * x - y * y + z * z ) );
+		double l_res1 = 2.0 * ( y() * z() + w() * x() );
+		double l_res2 = w() * w() - x() * x() - y() * y() + z() * z();
+		return Angle::FromRadians( atan2( l_res1, l_res2 ) );
 	}
 
 	Angle Quaternion::GetRoll()const
 	{
-		double const & x = m_data.quaternion.x;
-		double const & y = m_data.quaternion.y;
-		double const & z = m_data.quaternion.z;
-		double const & w = m_data.quaternion.w;
-		return Angle::FromRadians( atan2( 2 * ( x * y + w * z ), w * w + x * x - y * y - z * z ) );
+		double l_res1 = 2 * ( x() * y() + w() * z() );
+		double l_res2 = w() * w() + x() * x() - y() * y() - z() * z();
+		return Angle::FromRadians( atan2( l_res1, l_res2 ) );
 	}
 
 	void Quaternion::Conjugate()

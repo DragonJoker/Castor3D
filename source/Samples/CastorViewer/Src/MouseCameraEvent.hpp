@@ -8,20 +8,20 @@
 namespace CastorViewer
 {
 	class MouseCameraEvent
-		:	public Castor3D::FrameEvent
+		: public Castor3D::FrameEvent
 	{
-	protected:
-		Castor3D::SceneNodeWPtr m_pMaterial;
-		RenderPanel * m_pPanel;
-		Castor::real m_rDeltaX;
-		Castor::real m_rDeltaY;
-		Castor::real m_rDeltaZ;
-
 	public:
-		MouseCameraEvent( Castor3D::SceneNodeSPtr p_pMaterial, Castor::real p_rDeltaX, Castor::real p_rDeltaY, Castor::real p_rDeltaZ );
+		MouseCameraEvent( Castor3D::SceneNodeSPtr p_node, Castor::real p_dx, Castor::real p_dy, Castor::real p_dz );
 		virtual ~MouseCameraEvent();
 
-		static void Add( MouseCameraEventSPtr p_pThis, Castor3D::FrameListenerSPtr p_pListener, Castor::real p_rDeltaX, Castor::real p_rDeltaY, Castor::real p_rDeltaZ );
+		static void Add( MouseCameraEventSPtr p_this, Castor3D::FrameListenerSPtr p_listener, Castor::real p_dx, Castor::real p_dy, Castor::real p_dz );
+
+	protected:
+		Castor3D::SceneNodeWPtr m_node;
+		RenderPanel * m_panel;
+		Castor::real m_dx;
+		Castor::real m_dy;
+		Castor::real m_dz;
 	};
 }
 
