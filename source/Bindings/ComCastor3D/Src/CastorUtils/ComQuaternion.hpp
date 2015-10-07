@@ -68,7 +68,8 @@ namespace CastorCom
 		STDMETHOD( GetRoll )( /* [out, retval] */ IAngle ** pVal );
 		STDMETHOD( GetMagnitude )( /* [out, retval] */ float * pVal );
 		STDMETHOD( Conjugate )();
-		STDMETHOD( Slerp )( /* [in] */ IQuaternion * quat, /* [in] */ float percent, /* [in] */ boolean shortest, /* [out, retval] */ IQuaternion ** pQuat );
+		STDMETHOD( Slerp )( /* [in] */ IQuaternion * quat, /* [in] */ float percent, /* [out, retval] */ IQuaternion ** pQuat );
+		STDMETHOD( Mix )( /* [in] */ IQuaternion * quat, /* [in] */ float percent, /* [out, retval] */ IQuaternion ** pQuat );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( Quaternion ), CQuaternion )

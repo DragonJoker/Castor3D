@@ -16,7 +16,7 @@ namespace CastorCom
 
 		if ( *pVal )
 		{
-			*pVal = Castor::Angle::Cos();
+			*pVal = float( Castor::Angle::Cos() );
 			hr = S_OK;
 		}
 
@@ -29,7 +29,7 @@ namespace CastorCom
 
 		if ( *pVal )
 		{
-			*pVal = Castor::Angle::Sin();
+			*pVal = float( Castor::Angle::Sin() );
 			hr = S_OK;
 		}
 
@@ -42,7 +42,7 @@ namespace CastorCom
 
 		if ( *pVal )
 		{
-			*pVal = Castor::Angle::Tan();
+			*pVal = float( Castor::Angle::Tan() );
 			hr = S_OK;
 		}
 
@@ -73,7 +73,7 @@ namespace CastorCom
 
 		if ( *pVal )
 		{
-			*pVal = Castor::Angle::Cosh();
+			*pVal = float( Castor::Angle::Cosh() );
 			hr = S_OK;
 		}
 
@@ -86,7 +86,7 @@ namespace CastorCom
 
 		if ( *pVal )
 		{
-			*pVal = Castor::Angle::Sinh();
+			*pVal = float( Castor::Angle::Sinh() );
 			hr = S_OK;
 		}
 
@@ -99,7 +99,7 @@ namespace CastorCom
 
 		if ( *pVal )
 		{
-			*pVal = Castor::Angle::Tanh();
+			*pVal = float( Castor::Angle::Tanh() );
 			hr = S_OK;
 		}
 

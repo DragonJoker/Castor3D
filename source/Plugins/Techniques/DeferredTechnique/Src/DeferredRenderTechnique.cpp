@@ -430,7 +430,6 @@ namespace Deferred
 
 	bool RenderTechnique::DoCreate()
 	{
-		m_renderSystem->GetMainContext()->SetDeferredShading( true );
 		bool l_bReturn = m_lightPassFrameBuffer->Create( 0 );
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT && l_bReturn; i++ )

@@ -104,7 +104,7 @@ namespace Castor
 	{
 		static const size_t align_value = A;
 
-		void * operator new( size_t p_size )\
+		void * operator new( size_t p_size )
 		{
 			void * l_storage = Castor::AlignedAlloc( align_value, p_size );
 
@@ -114,6 +114,11 @@ namespace Castor
 			}
 
 			return l_storage;
+		}
+
+		void * operator new( size_t p_size, std::nothrow_t )
+		{
+			return Castor::AlignedAlloc( align_value, p_size );
 		}
 
 		void operator delete( void * p_memory )
@@ -136,7 +141,7 @@ namespace Castor
 	{
 		static const size_t align_value = CASTOR_ALIGN_OF( T );
 
-		void * operator new( size_t p_size )\
+		void * operator new( size_t p_size )
 		{
 			void * l_storage = Castor::AlignedAlloc( align_value, p_size );
 
@@ -146,6 +151,11 @@ namespace Castor
 			}
 
 			return l_storage;
+		}
+
+			void * operator new( size_t p_size, std::nothrow_t )
+		{
+			return Castor::AlignedAlloc( align_value, p_size );
 		}
 
 		void operator delete( void * p_memory )

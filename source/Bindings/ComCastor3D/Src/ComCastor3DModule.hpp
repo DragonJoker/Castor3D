@@ -30,7 +30,8 @@ namespace CastorCom
 
 		static LPCOLESTR GetAppId() throw()
 		{
-			return m_appId;
+			USES_CONVERSION;
+			return T2W( m_appId );
 		}
 
 		static TCHAR * GetAppIdT() throw()

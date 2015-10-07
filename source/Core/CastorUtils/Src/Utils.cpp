@@ -57,16 +57,28 @@ namespace Castor
 
 		Castor::String GetLastErrorText()
 		{
-			String l_strReturn;
 			DWORD l_dwError = GetLastError();
-			LPTSTR l_szError = NULL;
+			String l_strReturn = string::to_string( l_dwError );;
 
-			if ( l_dwError != ERROR_SUCCESS && ::FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, l_dwError, 0, LPTSTR( &l_szError ), 0, NULL ) != 0 )
+			if ( l_dwError != ERROR_SUCCESS )
 			{
-				l_strReturn = string::to_string( l_dwError ) + cuT( " (" ) + l_szError + cuT( ")" );
-				string::replace( l_strReturn, cuT( "\r" ), cuT( "" ) );
-				string::replace( l_strReturn, cuT( "\n" ), cuT( "" ) );
-				LocalFree( l_szError );
+				LPTSTR l_szError = NULL;
+
+				if ( ::FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, l_dwError, 0, LPTSTR( &l_szError ), 0, NULL ) != 0 )
+				{
+					l_strReturn += cuT( " (" ) + String( l_szError ) + cuT( ")" );
+					string::replace( l_strReturn, cuT( "\r" ), cuT( "" ) );
+					string::replace( l_strReturn, cuT( "\n" ), cuT( "" ) );
+					LocalFree( l_szError );
+				}
+				else
+				{
+					l_strReturn += cuT( " (Unable to retrieve error text)" );
+				}
+			}
+			else
+			{
+				l_strReturn += cuT( " (No error)" );
 			}
 
 			return l_strReturn;

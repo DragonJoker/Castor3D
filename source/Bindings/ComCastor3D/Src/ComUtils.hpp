@@ -66,7 +66,7 @@ namespace CastorCom
 
 			if ( WideCharToMultiByte( CP_UTF8, 0, val, l_length, l_out.data(), int( l_out.size() ), NULL, NULL ) )
 			{
-				l_return = Castor::str_utils::from_str( std::string( l_out.begin(), l_out.end() ) );
+				l_return = Castor::string::string_cast< xchar >( std::string( l_out.begin(), l_out.end() ) );
 			}
 		}
 
@@ -85,7 +85,7 @@ namespace CastorCom
 	inline BSTR ToBstr( Castor::String const & val )
 	{
 		BSTR l_return = NULL;
-		std::string l_in = Castor::str_utils::string_cast< std::string >( val );
+		std::string l_in = Castor::string::string_cast< char >( val );
 		int l_length = int( l_in.size() );
 		int l_size = MultiByteToWideChar( CP_UTF8, 0, &l_in[0], l_length, NULL, 0 );
 

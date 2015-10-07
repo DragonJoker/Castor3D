@@ -22,8 +22,19 @@ namespace CastorCom
 		{
 			if ( pVal )
 			{
-				*pVal = m_internal->Initialise( Castor3D::WindowHandle( std::make_shared< Castor3D::IMswWindowHandle >( HWND( val ) ) ) ) ? VARIANT_TRUE : VARIANT_FALSE;
-				hr = S_OK;
+				try
+				{
+					*pVal = m_internal->Initialise( Castor3D::WindowHandle( std::make_shared< Castor3D::IMswWindowHandle >( HWND( val ) ) ) ) ? VARIANT_TRUE : VARIANT_FALSE;
+					hr = S_OK;
+				}
+				catch ( Castor::Exception & p_exc )
+				{
+					Castor::Logger::LogError( p_exc.GetFullDescription() );
+				}
+				catch ( std::exception & p_exc )
+				{
+					Castor::Logger::LogError( p_exc.what() );
+				}
 			}
 		}
 		else

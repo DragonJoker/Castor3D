@@ -1276,7 +1276,7 @@ namespace Castor3D
 		//!\~english The mutex, to make the main loop thread-safe	\~french Le mutex utilisé pour que la boucle principale soit thread-safe
 		std::mutex m_mutexMainLoop;
 		//!\~english The main loop, in case of threaded rendering	\~french La boucle principale, au cas où on fait du rendu threadé
-		std::unique_ptr< std::thread > m_pThreadMainLoop;
+		std::unique_ptr< std::thread > m_mainLoopThread;
 		//!\~english The loaded shared libraries map	\~french La map des shared libraries chargées
 		DynamicLibraryPtrPathMapArray m_librariesMap;
 		//!\~english The mutex protecting the loaded shared libraries map	\~french Le mutex protégeant la map des shared libraries chargées

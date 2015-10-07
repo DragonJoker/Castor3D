@@ -18,7 +18,7 @@ namespace CastorViewerSharp
 		/// <summary>
 		/// The Castor logger
 		/// </summary>
-		private logger m_logger;
+		private Logger m_logger;
 		/// <summary>
 		/// The render window
 		/// </summary>
@@ -45,9 +45,9 @@ namespace CastorViewerSharp
 		protected override void OnInitialized(EventArgs e)
 		{
 			base.OnInitialized(e);
-			m_logger = new logger();
+			m_logger = new Logger();
 			m_engine = new engine();
-			m_engine.Create(m_logger);
+			m_engine.Create();
 			LoadPlugins();
 			m_timer = new DispatcherTimer();
 			m_timer.Tick += new EventHandler( OnTimer );
@@ -92,7 +92,7 @@ namespace CastorViewerSharp
 		/// <param name="e"></param>
 		private void OnLoadScene(object sender, System.Windows.RoutedEventArgs e)
 		{
-			LoadScene("J:\\Projets\\Castor3D\\data\\Scene\\primitive.cscn");
+			LoadScene("J:\\Projets\\C++\\Castor3D\\data\\Scene\\Gui.zip");
 
 			//Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
 			//dlg.FileName = "Scene"; // Default file name
@@ -126,7 +126,7 @@ namespace CastorViewerSharp
 				if ( m_scene != null )
 				{
 					m_scene.ClearScene();
-					m_engine.RemoveScene( m_scene.name );
+					m_engine.RemoveScene( m_scene.Name );
 					m_logger.LogDebug( "MainFrame::LoadScene - scene erased from manager" );
 					m_scene = null;
 					m_logger.LogDebug( "Scene cleared" );
@@ -146,13 +146,13 @@ namespace CastorViewerSharp
 					if ( m_renderWindow.Initialise( hWnd ) )
 					{
 						Size sizeScreen = new Size();
-						Size sizeWnd = m_renderWindow.Size;
+						Size sizeWnd = m_renderWindow.RenderTarget.Size;
 						sizeScreen.Width = (uint)System.Windows.SystemParameters.PrimaryScreenWidth;
 						sizeScreen.Height = (uint)System.Windows.SystemParameters.PrimaryScreenHeight;
 
 						//m_listener = m_renderWindow.GetListener();
-						m_scene = m_renderWindow.Scene;
-                    
+						m_scene = m_renderWindow.RenderTarget.Scene;
+
 						if ( m_scene != null )
 						{
 							SceneNode camBaseNode = m_scene.CreateSceneNode( "CastorViewer_CamNode", m_scene.CameraRootNode );
@@ -163,22 +163,22 @@ namespace CastorViewerSharp
 							SceneNode camPitchNode = m_scene.CreateSceneNode( "CastorViewer_CamPitchNode", camYawNode );
 							SceneNode camRollNode = m_scene.CreateSceneNode( "CastorViewer_CamRollNode", camPitchNode );
 							camera cam = m_scene.CreateCamera( "CastorViewer_Camera", (int)sizeScreen.Width, (int)sizeScreen.Height, camRollNode, eVIEWPORT_TYPE.eVIEWPORT_TYPE_3D );
-							m_renderWindow.camera = cam;
-                    
-							if ( m_renderWindow.camera != null )
+							m_renderWindow.RenderTarget.camera = cam;
+
+							if ( m_renderWindow.RenderTarget.camera != null )
 							{
 								//m_pFpRotateCamEvent = std::make_shared< FPCameraRotateEvent		>( l_pCamRollNode,	real( 0 ), real( 0 ) );
 								//m_pFpTranslateCamEvent = std::make_shared< FPCameraTranslateEvent	>( l_pCamRollNode,	real( 0 ), real( 0 ), real( 0 ) );
 								//m_ptOriginalPosition = l_pCamRollNode->GetPosition();
 								//m_qOriginalOrientation = l_pCamRollNode->GetOrientation();
 							}
-                    
+
 							//m_pKeyboardEvent = std::make_shared< KeyboardEvent >( p_pWindow, wxGetApp().GetMainFrame() );
 						}
 					}
 
-					m_scene = m_renderWindow.Scene;
-					m_logger.LogMessage("Scene file read");
+					m_scene = m_renderWindow.RenderTarget.Scene;
+					m_logger.LogInfo("Scene file read");
 					m_timer.Start();
 				}
 			}

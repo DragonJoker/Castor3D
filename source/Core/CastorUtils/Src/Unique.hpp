@@ -121,8 +121,6 @@ namespace Castor
 		}
 	};
 
-	//!\~english Helper macro to declare the static member Unique< T >::m_pInstance	\~french Macro pour faciliter la déclaration du membre statique Unique< T >::m_pInstance
-#	define CASTOR_DECLARE_UNIQUE_INSTANCE( class_name )
 	//!\~english Helper macro to initialise the Unique instance	\~french Macro pour faciliter l'initialisation de l'instance de Unique
 #	define CASTOR_INIT_UNIQUE_INSTANCE() SetInstance( this )
 	//!\~english Helper macro to cleanup the Unique instance	\~french Macro pour faciliter le nettoyage de l'instance de Unique

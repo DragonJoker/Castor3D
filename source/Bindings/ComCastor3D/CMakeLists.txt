@@ -6,7 +6,7 @@ if ( MSVC )
 	if ( ATL_FOUND )
 		message( STATUS "+ Found ATL" )
 		set( CMC_VERSION_MAJOR 0 )
-		set( CMC_VERSION_MINOR 7 )
+		set( CMC_VERSION_MINOR 8 )
 		set( CMC_VERSION_BUILD 0 )
 		
 		configure_file( 
@@ -80,6 +80,7 @@ if ( MSVC )
 		add_interface( "C2669704-BF96-4D28-9627-7E625EA2EC99" RESRC_LIST RESH_LIST RESOURCE_ID "Scene" )
 		add_interface( "5B26DE5C-FFE8-42AE-A07C-837D5164CAFE" RESRC_LIST RESH_LIST RESOURCE_ID "Animation" )
 		add_interface( "53A552B5-8524-4DDD-987C-AC68AA87233E" RESRC_LIST RESH_LIST RESOURCE_ID "Skeleton" )
+		add_interface( "AD82930D-4682-4CF1-B9E8-EDFD869E7AF7" RESRC_LIST RESH_LIST RESOURCE_ID "RenderTarget" )
 		add_interface( "68E4373D-24BB-45FE-9717-CB512111A984" RESRC_LIST RESH_LIST RESOURCE_ID "RenderWindow" )
 		add_interface( "CA7E6B72-3130-4888-83D3-33BFBBA2B3FD" RESRC_LIST RESH_LIST RESOURCE_ID "BlendState" )
 		add_interface( "8699BD20-FDE7-4FA9-9265-60B539CCE45D" RESRC_LIST RESH_LIST RESOURCE_ID "DepthStencilState" )
@@ -170,8 +171,8 @@ if ( MSVC )
 		# Copy tlb files into Test directory.
 		add_custom_command( TARGET ComCastor3D
 			POST_BUILD
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different
-			${CMAKE_CURRENT_BINARY_DIR}/Castor3D.tlb ${CMAKE_CURRENT_BINARY_DIR}/Test/Src/
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/Castor3D.tlb ${CMAKE_CURRENT_BINARY_DIR}/Test/Src/
+			VERBATIM
 		)
 		
 		# install tlb files

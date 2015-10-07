@@ -34,8 +34,8 @@ namespace CastorCom
 	\brief		Cette classe définit un CColour accessible depuis COM
 	*/
 	class ATL_NO_VTABLE CColour
-		:	COM_ATL_OBJECT( Colour )
-		,	public Castor::Colour
+		: COM_ATL_OBJECT( Colour )
+		, public Castor::Colour
 	{
 	public:
 		/**
@@ -52,6 +52,18 @@ namespace CastorCom
 		 *\brief		Destructeur.
 		 */
 		COMC3D_API virtual ~CColour();
+		/**
+		*\~english
+		*\brief		Implicit conversion operator, to Castor::Point4f.
+		*\~french
+		*\brief		Opérateur de conversion implicite vers Castor::Point4f.
+		*/
+		inline operator Castor::Point4f()const
+		{
+			Castor::Point4f l_return;
+			this->to_bgra( l_return );
+			return l_return;
+		}
 
 		COM_PROPERTY( R, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_RED ), make_putter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_RED ) );
 		COM_PROPERTY( G, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_GREEN ), make_putter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_GREEN ) );
@@ -136,6 +148,92 @@ namespace CastorCom
 						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
 						 0,										// This is the context in the help file
 						 NULL );
+			}
+
+			return hr;
+		}
+
+	private:
+		Class * m_instance;
+		Function m_function;
+	};
+
+	template< typename Class >
+	struct VariableRefGetter< Class, Castor::Point4f >
+	{
+		typedef Castor::Point4f Value;
+		typedef Value const & ( Class::*Function )( )const;
+		VariableRefGetter( Class * instance, Function function )
+			: m_instance( instance )
+			, m_function( function )
+		{
+		}
+		HRESULT operator()( IColour ** value )
+		{
+			HRESULT hr = E_POINTER;
+
+			if ( m_instance )
+			{
+				if ( value )
+				{
+					hr = CColour::CreateInstance( value );
+
+					if ( hr == S_OK )
+					{
+						Castor::Colour * l_colour = static_cast< Castor::Colour * >( static_cast< CColour * >( *value ) );
+						l_colour->from_bgra( ( m_instance->*m_function )() );
+					}
+				}
+			}
+			else
+			{
+				hr = CComError::DispatchError(
+					E_FAIL,								// This represents the error
+					IID_IColour,							// This is the GUID of component throwing error
+					cuT( "NULL instance" ),				// This is generally displayed as the title
+					ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
+					0,										// This is the context in the help file
+					NULL );
+			}
+
+			return hr;
+		}
+
+	private:
+		Class * m_instance;
+		Function m_function;
+	};
+
+	template< typename Class >
+	struct VariablePutter< Class, Castor::Point4f const & >
+	{
+		typedef void ( Class::*Function )( Castor::Point4f const & );
+		VariablePutter( Class * instance, Function function )
+			: m_instance( instance )
+			, m_function( function )
+		{
+		}
+		HRESULT operator()( IColour * value )
+		{
+			HRESULT hr = E_POINTER;
+
+			if ( m_instance )
+			{
+				if ( value )
+				{
+					( m_instance->*m_function )( *static_cast< CColour * >( value ) );
+					hr = S_OK;
+				}
+			}
+			else
+			{
+				hr = CComError::DispatchError(
+					E_FAIL,								// This represents the error
+					IID_IColour,							// This is the GUID of component throwing error
+					cuT( "NULL instance" ),				// This is generally displayed as the title
+					ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
+					0,										// This is the context in the help file
+					NULL );
 			}
 
 			return hr;

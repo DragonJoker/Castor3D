@@ -18,7 +18,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef __COMC3D_COM_LIGHT_H__
 #define __COMC3D_COM_LIGHT_H__
 
-#include "ComLightCategory.hpp"
+#include "ComDirectionalLight.hpp"
+#include "ComPointLight.hpp"
+#include "ComSpotLight.hpp"
 
 #include <Light.hpp>
 
@@ -66,7 +68,9 @@ namespace CastorCom
 		COM_PROPERTY_GET( Type, eMOVABLE_TYPE, make_getter( m_internal.get(), &Castor3D::MovableObject::GetType ) );
 		COM_PROPERTY_GET( Scene, IScene *, make_getter( m_internal.get(), &Castor3D::MovableObject::GetScene ) );
 		COM_PROPERTY_GET( LightType, eLIGHT_TYPE, make_getter( m_internal.get(), &Castor3D::Light::GetLightType ) );
-		COM_PROPERTY_GET( Category, ILightCategory *, make_getter( m_internal.get(), &Castor3D::Light::GetLightCategory ) );
+		COM_PROPERTY_GET( DirectionalLight, IDirectionalLight *, make_getter( m_internal.get(), &Castor3D::Light::GetDirectionalLight ) );
+		COM_PROPERTY_GET( PointLight, IPointLight *, make_getter( m_internal.get(), &Castor3D::Light::GetPointLight ) );
+		COM_PROPERTY_GET( SpotLight, ISpotLight *, make_getter( m_internal.get(), &Castor3D::Light::GetSpotLight ) );
 
 		STDMETHOD( AttachTo )( /* [in] */ ISceneNode * val );
 		STDMETHOD( Detach )();

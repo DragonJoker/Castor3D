@@ -63,7 +63,7 @@ namespace Castor
 				}
 				else
 				{
-					CASTOR_EXCEPTION( "Can't create the font, invalid file: " + string::string_cast< char >( p_name ) );
+					CASTOR_EXCEPTION( "Can't create the font, invalid name: " + string::string_cast< char >( p_name ) + ", path: " + string::string_cast< char >( p_path ) );
 				}
 			}
 		}

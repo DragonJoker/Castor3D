@@ -58,7 +58,7 @@ namespace CastorCom
 		STDMETHOD( SetFileName )( /* [in] */ BSTR name, eLOG_TYPE target );
 		STDMETHOD( Cleanup )();
 		STDMETHOD( LogDebug )( /* [in] */ BSTR msg );
-		STDMETHOD( LogMessage )( /* [in] */ BSTR msg );
+		STDMETHOD( LogInfo )( /* [in] */ BSTR msg );
 		STDMETHOD( LogWarning )( /* [in] */ BSTR msg );
 		STDMETHOD( LogError )( /* [in] */ BSTR msg );
 	};

@@ -60,7 +60,7 @@ namespace CastorCom
 		COM_PROPERTY_GET( EngineDirectory, BSTR, make_static_getter( &Castor3D::Engine::GetEngineDirectory ) );
 		COM_PROPERTY_GET( DataDirectory, BSTR, make_static_getter( &Castor3D::Engine::GetDataDirectory ) );
 		
-		STDMETHOD( Create )( /* [in] */ ILogger * logger );
+		STDMETHOD( Create )();
 		STDMETHOD( Destroy )();
 		STDMETHOD( Initialise )( /* [in] */ int fps );
 		STDMETHOD( Cleanup )();

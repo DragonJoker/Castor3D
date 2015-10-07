@@ -432,7 +432,7 @@ typedef enum
 ]
 typedef enum
 {
-	eSHADER_TYPE_NONE	= -1,
+	eSHADER_TYPE_NONE = -1,
 	eSHADER_TYPE_VERTEX,
 	eSHADER_TYPE_HULL,
 	eSHADER_TYPE_DOMAIN,
@@ -508,17 +508,17 @@ interface IScene;
 	oleautomation
 ]
 interface IColour
-	:	IDispatch
+	: IDispatch
 {
 	// Properties
-	[propget, id(1), helpstring( "The red value" )] HRESULT R( [out, retval] float * pVal );
-	[propput, id(1), helpstring( "The red value" )] HRESULT R( [in] float val );
-	[propget, id(2), helpstring( "The green value" )] HRESULT G( [out, retval] float * pVal );
-	[propput, id(2), helpstring( "The green value" )] HRESULT G( [in] float val );
-	[propget, id(3), helpstring( "The blue value" )] HRESULT B( [out, retval] float * pVal );
-	[propput, id(3), helpstring( "The blue value" )] HRESULT B( [in] float val );
-	[propget, id(4), helpstring( "The alpha value" )] HRESULT A( [out, retval] float * pVal );
-	[propput, id(4), helpstring( "The alpha value" )] HRESULT A( [in] float val );
+	[propget, id( 1 ), helpstring( "The red value" )] HRESULT R( [out, retval] float * pVal );
+	[propput, id( 1 ), helpstring( "The red value" )] HRESULT R( [in] float val );
+	[propget, id( 2 ), helpstring( "The green value" )] HRESULT G( [out, retval] float * pVal );
+	[propput, id( 2 ), helpstring( "The green value" )] HRESULT G( [in] float val );
+	[propget, id( 3 ), helpstring( "The blue value" )] HRESULT B( [out, retval] float * pVal );
+	[propput, id( 3 ), helpstring( "The blue value" )] HRESULT B( [in] float val );
+	[propget, id( 4 ), helpstring( "The alpha value" )] HRESULT A( [out, retval] float * pVal );
+	[propput, id( 4 ), helpstring( "The alpha value" )] HRESULT A( [in] float val );
 };
 
 // IVector2D
@@ -529,18 +529,18 @@ interface IColour
 	oleautomation
 ]
 interface IVector2D
-	:	IDispatch
+	: IDispatch
 {
 	// Properties
-	[propget, id(1), helpstring( "The X coordinate" )] HRESULT X( [out, retval] float * pVal );
-	[propput, id(1), helpstring( "The X coordinate" )] HRESULT X( [in] float val );
-	[propget, id(2), helpstring( "The Y coordinate" )] HRESULT Y( [out, retval] float * pVal );
-	[propput, id(2), helpstring( "The Y coordinate" )] HRESULT Y( [in] float val );
+	[propget, id( 1 ), helpstring( "The X coordinate" )] HRESULT X( [out, retval] float * pVal );
+	[propput, id( 1 ), helpstring( "The X coordinate" )] HRESULT X( [in] float val );
+	[propget, id( 2 ), helpstring( "The Y coordinate" )] HRESULT Y( [out, retval] float * pVal );
+	[propput, id( 2 ), helpstring( "The Y coordinate" )] HRESULT Y( [in] float val );
 	// Methods
-	[id(4), helpstring( "Negates each coordinate" )] HRESULT Negate();
-	[id(5), helpstring( "Modifies Vector to make its length equal to 1" )] HRESULT Normalise();
-	[id(6), helpstring( "Scalar product" )] HRESULT Dot( [in] IVector2D * val, [out,retval] float * pRet );
-	[id(8), helpstring( "The vector length" )] HRESULT Length( [out,retval] float * pVal );
+	[id( 4 ), helpstring( "Negates each coordinate" )] HRESULT Negate();
+	[id( 5 ), helpstring( "Modifies Vector to make its length equal to 1" )] HRESULT Normalise();
+	[id( 6 ), helpstring( "Scalar product" )] HRESULT Dot( [in] IVector2D * val, [out, retval] float * pRet );
+	[id( 8 ), helpstring( "The vector length" )] HRESULT Length( [out, retval] float * pVal );
 };
 
 // IVector3D
@@ -551,21 +551,21 @@ interface IVector2D
 	oleautomation
 ]
 interface IVector3D
-	:	IDispatch
+	: IDispatch
 {
 	// Properties
-	[propget, id(1), helpstring( "The X coordinate" )] HRESULT X( [out, retval] float * pVal );
-	[propput, id(1), helpstring( "The X coordinate" )] HRESULT X( [in] float val );
-	[propget, id(2), helpstring( "The Y coordinate" )] HRESULT Y( [out, retval] float * pVal );
-	[propput, id(2), helpstring( "The Y coordinate" )] HRESULT Y( [in] float val );
-	[propget, id(3), helpstring( "The Z coordinate" )] HRESULT Z( [out, retval] float * pVal );
-	[propput, id(3), helpstring( "The Z coordinate" )] HRESULT Z( [in] float val );
+	[propget, id( 1 ), helpstring( "The X coordinate" )] HRESULT X( [out, retval] float * pVal );
+	[propput, id( 1 ), helpstring( "The X coordinate" )] HRESULT X( [in] float val );
+	[propget, id( 2 ), helpstring( "The Y coordinate" )] HRESULT Y( [out, retval] float * pVal );
+	[propput, id( 2 ), helpstring( "The Y coordinate" )] HRESULT Y( [in] float val );
+	[propget, id( 3 ), helpstring( "The Z coordinate" )] HRESULT Z( [out, retval] float * pVal );
+	[propput, id( 3 ), helpstring( "The Z coordinate" )] HRESULT Z( [in] float val );
 	// Methods
-	[id(4), helpstring( "Negates each coordinate" )] HRESULT Negate();
-	[id(5), helpstring( "Modifies Vector to make its length equal to 1" )] HRESULT Normalise();
-	[id(6), helpstring( "Scalar product" )] HRESULT Dot( [in] IVector3D * val, [out,retval] float * pRet );
-	[id(7), helpstring( "Cross product" )] HRESULT Cross( [in] IVector3D * val, [out,retval] IVector3D ** pRet );
-	[id(8), helpstring( "The vector length" )] HRESULT Length( [out,retval] float * pVal );
+	[id( 4 ), helpstring( "Negates each coordinate" )] HRESULT Negate();
+	[id( 5 ), helpstring( "Modifies Vector to make its length equal to 1" )] HRESULT Normalise();
+	[id( 6 ), helpstring( "Scalar product" )] HRESULT Dot( [in] IVector3D * val, [out, retval] float * pRet );
+	[id( 7 ), helpstring( "Cross product" )] HRESULT Cross( [in] IVector3D * val, [out, retval] IVector3D ** pRet );
+	[id( 8 ), helpstring( "The vector length" )] HRESULT Length( [out, retval] float * pVal );
 };
 
 // IAngle
@@ -576,23 +576,23 @@ interface IVector3D
 	oleautomation
 ]
 interface IAngle
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "The degrees value for the angle" )] HRESULT Degrees( [out, retval] float * pVal );
-	[propput, id(1), helpstring( "The degrees value for the angle" )] HRESULT Degrees( [in] float val );
-	[propget, id(2), helpstring( "The radians value for the angle" )] HRESULT Radians( [out, retval] float * pVal );
-	[propput, id(2), helpstring( "The radians value for the angle" )] HRESULT Radians( [in] float val );
-	[propget, id(3), helpstring( "The grads value for the angle" )] HRESULT Grads( [out, retval] float * pVal );
-	[propput, id(3), helpstring( "The grads value for the angle" )] HRESULT Grads( [in] float val );
-	[id( 4), helpstring( "The cosine value for this angle" )] HRESULT Cos( [out, retval] float * pVal );
-	[id( 5), helpstring( "The sine value for this angle" )] HRESULT Sin( [out, retval] float * pVal );
-	[id( 6), helpstring( "The tangent value for this angle" )] HRESULT Tan( [out, retval] float * pVal );
-	[id( 7), helpstring( "Sets this angle value from a cosine" )] HRESULT ACos( [in] float val );
-	[id( 8), helpstring( "Sets this angle value from a sine" )] HRESULT ASin( [in] float val );
-	[id( 9), helpstring( "Sets this angle value from a tangent" )] HRESULT ATan( [in] float val );
-	[id(10), helpstring( "The hyperbolic cosine value for this angle" )] HRESULT Cosh( [out, retval] float * pVal );
-	[id(11), helpstring( "The hyperbolic sine value for this angle" )] HRESULT Sinh( [out, retval] float * pVal );
-	[id(12), helpstring( "The hyperbolic tangent value for this angle" )] HRESULT Tanh( [out, retval] float * pVal );
+	[propget, id( 1 ), helpstring( "The degrees value for the angle" )] HRESULT Degrees( [out, retval] float * pVal );
+	[propput, id( 1 ), helpstring( "The degrees value for the angle" )] HRESULT Degrees( [in] float val );
+	[propget, id( 2 ), helpstring( "The radians value for the angle" )] HRESULT Radians( [out, retval] float * pVal );
+	[propput, id( 2 ), helpstring( "The radians value for the angle" )] HRESULT Radians( [in] float val );
+	[propget, id( 3 ), helpstring( "The grads value for the angle" )] HRESULT Grads( [out, retval] float * pVal );
+	[propput, id( 3 ), helpstring( "The grads value for the angle" )] HRESULT Grads( [in] float val );
+	[id( 4 ), helpstring( "The cosine value for this angle" )] HRESULT Cos( [out, retval] float * pVal );
+	[id( 5 ), helpstring( "The sine value for this angle" )] HRESULT Sin( [out, retval] float * pVal );
+	[id( 6 ), helpstring( "The tangent value for this angle" )] HRESULT Tan( [out, retval] float * pVal );
+	[id( 7 ), helpstring( "Sets this angle value from a cosine" )] HRESULT ACos( [in] float val );
+	[id( 8 ), helpstring( "Sets this angle value from a sine" )] HRESULT ASin( [in] float val );
+	[id( 9 ), helpstring( "Sets this angle value from a tangent" )] HRESULT ATan( [in] float val );
+	[id( 10 ), helpstring( "The hyperbolic cosine value for this angle" )] HRESULT Cosh( [out, retval] float * pVal );
+	[id( 11 ), helpstring( "The hyperbolic sine value for this angle" )] HRESULT Sinh( [out, retval] float * pVal );
+	[id( 12 ), helpstring( "The hyperbolic tangent value for this angle" )] HRESULT Tanh( [out, retval] float * pVal );
 };
 
 // IQuaternion
@@ -603,21 +603,22 @@ interface IAngle
 	oleautomation
 ]
 interface IQuaternion
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "The quaternions's rotation matrix" )] HRESULT RotationMatrix( [out, retval] IMatrix ** pVal );
-	[propput, id(1), helpstring( "The quaternions's rotation matrix" )] HRESULT RotationMatrix( [in] IMatrix * val );
-	[id( 2), helpstring( "Transforms a vector through this quaternion" )] HRESULT Transform( [in] IVector3D * val, [out, retval] IVector3D ** pVal );
-	[id( 3), helpstring( "Retrieves the quaternion's axis and angle" )] HRESULT ToAxisAngle( [out] IVector3D ** pAxis, [out] IAngle ** pAngle );
-	[id( 4), helpstring( "Defines this quaternion's axis and angle" )] HRESULT FromAxisAngle( [in] IVector3D * axis, [in] IAngle * angle );
-	[id( 5), helpstring( "Retrieves the quaternion's axes" )] HRESULT ToAxes( [out] IVector3D ** pX, [out] IVector3D ** pY, [out] IVector3D ** pZ );
-	[id( 6), helpstring( "Defines this quaternion's axes" )] HRESULT FromAxes( [in] IVector3D * x, [in] IVector3D * y, [in] IVector3D * z );
-	[id( 7), helpstring( "Retrieves the quaternion's rotation around the Y axis" )] HRESULT GetYaw( [out, retval] IAngle ** pVal );
-	[id( 8), helpstring( "Retrieves the quaternion's rotation around the X axis" )] HRESULT GetPitch( [out, retval] IAngle ** pVal );
-	[id( 9), helpstring( "Retrieves the quaternion's rotation around the Z axis" )] HRESULT GetRoll( [out, retval] IAngle ** pVal );
-	[id(10), helpstring( "Retrieves the quaternion's magnitude" )] HRESULT GetMagnitude([out, retval] float * pVal );
-	[id(11), helpstring( "Retrieves the quaternion's conjugate" )] HRESULT Conjugate();
-	[id(12), helpstring( "Interpolates between this quaternion and the other one, given a percentage" )] HRESULT Slerp( [in]IQuaternion * quat, [in] float percent, [in] boolean shortest, [out, retval] IQuaternion ** pQuat );
+	[propget, id( 1 ), helpstring( "The quaternions's rotation matrix" )] HRESULT RotationMatrix( [out, retval] IMatrix ** pVal );
+	[propput, id( 1 ), helpstring( "The quaternions's rotation matrix" )] HRESULT RotationMatrix( [in] IMatrix * val );
+	[id( 2 ), helpstring( "Transforms a vector through this quaternion" )] HRESULT Transform( [in] IVector3D * val, [out, retval] IVector3D ** pVal );
+	[id( 3 ), helpstring( "Retrieves the quaternion's axis and angle" )] HRESULT ToAxisAngle( [out] IVector3D ** pAxis, [out] IAngle ** pAngle );
+	[id( 4 ), helpstring( "Defines this quaternion's axis and angle" )] HRESULT FromAxisAngle( [in] IVector3D * axis, [in] IAngle * angle );
+	[id( 5 ), helpstring( "Retrieves the quaternion's axes" )] HRESULT ToAxes( [out] IVector3D ** pX, [out] IVector3D ** pY, [out] IVector3D ** pZ );
+	[id( 6 ), helpstring( "Defines this quaternion's axes" )] HRESULT FromAxes( [in] IVector3D * x, [in] IVector3D * y, [in] IVector3D * z );
+	[id( 7 ), helpstring( "Retrieves the quaternion's rotation around the Y axis" )] HRESULT GetYaw( [out, retval] IAngle ** pVal );
+	[id( 8 ), helpstring( "Retrieves the quaternion's rotation around the X axis" )] HRESULT GetPitch( [out, retval] IAngle ** pVal );
+	[id( 9 ), helpstring( "Retrieves the quaternion's rotation around the Z axis" )] HRESULT GetRoll( [out, retval] IAngle ** pVal );
+	[id( 10 ), helpstring( "Retrieves the quaternion's magnitude" )] HRESULT GetMagnitude( [out, retval] float * pVal );
+	[id( 11 ), helpstring( "Retrieves the quaternion's conjugate" )] HRESULT Conjugate();
+	[id( 12 ), helpstring( "Spherical linear interpolation with another quaternion, takes the shortest path." )] HRESULT Slerp( [in]IQuaternion * quat, [in] float percent, [out, retval] IQuaternion ** pQuat );
+	[id( 13 ), helpstring( "Spherical linear interpolation with another quaternion." )] HRESULT Mix( [in]IQuaternion * quat, [in] float percent, [out, retval] IQuaternion ** pQuat );
 }
 
 // IMatrix
@@ -628,10 +629,10 @@ interface IQuaternion
 	oleautomation
 ]
 interface IMatrix
-	:	IDispatch
+	: IDispatch
 {
-	[id(1), helpstring( "Transposes the matrix" )] HRESULT Transpose();
-	[id(2), helpstring( "Inverts the matrix" )] HRESULT Invert();
+	[id( 1 ), helpstring( "Transposes the matrix" )] HRESULT Transpose();
+	[id( 2 ), helpstring( "Inverts the matrix" )] HRESULT Invert();
 };
 
 // IPosition
@@ -642,16 +643,16 @@ interface IMatrix
 	oleautomation
 ]
 interface IPosition
-	:	IDispatch
+	: IDispatch
 {
 	// Properties
-	[propget, id(1), helpstring( "The X coordinate" )] HRESULT X( [out, retval] int * pVal );
-	[propput, id(1), helpstring( "The X coordinate" )] HRESULT X( [in] int val );
-	[propget, id(2), helpstring( "The Y coordinate" )] HRESULT Y( [out, retval] int * pVal );
-	[propput, id(2), helpstring( "The Y coordinate" )] HRESULT Y( [in] int val );
+	[propget, id( 1 ), helpstring( "The X coordinate" )] HRESULT X( [out, retval] int * pVal );
+	[propput, id( 1 ), helpstring( "The X coordinate" )] HRESULT X( [in] int val );
+	[propget, id( 2 ), helpstring( "The Y coordinate" )] HRESULT Y( [out, retval] int * pVal );
+	[propput, id( 2 ), helpstring( "The Y coordinate" )] HRESULT Y( [in] int val );
 	// Methods
-	[id(3), helpstring( "Sets the position coordinates" )] HRESULT Set( [in] int x, [in] int y );
-	[id(4), helpstring( "Moves the position with the given values" )] HRESULT Offset( [in] int x, [in] int y );
+	[id( 3 ), helpstring( "Sets the position coordinates" )] HRESULT Set( [in] int x, [in] int y );
+	[id( 4 ), helpstring( "Moves the position with the given values" )] HRESULT Offset( [in] int x, [in] int y );
 };
 
 // ISize
@@ -662,16 +663,16 @@ interface IPosition
 	oleautomation
 ]
 interface ISize
-	:	IDispatch
+	: IDispatch
 {
 	// Properties
-	[propget, id(1), helpstring( "The width value" )] HRESULT Width( [out, retval] unsigned int * pVal );
-	[propput, id(1), helpstring( "The width value" )] HRESULT Width( [in] unsigned int val );
-	[propget, id(2), helpstring( "The height value" )] HRESULT Height( [out, retval] unsigned int * pVal );
-	[propput, id(2), helpstring( "The height value" )] HRESULT Height( [in] unsigned int val );
+	[propget, id( 1 ), helpstring( "The width value" )] HRESULT Width( [out, retval] unsigned int * pVal );
+	[propput, id( 1 ), helpstring( "The width value" )] HRESULT Width( [in] unsigned int val );
+	[propget, id( 2 ), helpstring( "The height value" )] HRESULT Height( [out, retval] unsigned int * pVal );
+	[propput, id( 2 ), helpstring( "The height value" )] HRESULT Height( [in] unsigned int val );
 	// Methods
-	[id(3), helpstring( "Sets the size value" )] HRESULT Set( [in] unsigned int cx, [in] unsigned int cy );
-	[id(4), helpstring( "Adds the parameters to the size ones" )] HRESULT Grow( [in] int cx, [in] int cy );
+	[id( 3 ), helpstring( "Sets the size value" )] HRESULT Set( [in] unsigned int cx, [in] unsigned int cy );
+	[id( 4 ), helpstring( "Adds the parameters to the size ones" )] HRESULT Grow( [in] int cx, [in] int cy );
 };
 
 // IRectangle
@@ -682,23 +683,23 @@ interface ISize
 	oleautomation
 ]
 interface IRect
-	:	IDispatch
+	: IDispatch
 {
 	// Properties
-	[propget, id(1), helpstring( "The top value" )] HRESULT Top( [out, retval] int * pVal );
-	[propput, id(1), helpstring( "The top value" )] HRESULT Top( [in] int val );
-	[propget, id(2), helpstring( "The bottom value" )] HRESULT Bottom( [out, retval] int * pVal );
-	[propput, id(2), helpstring( "The bottom value" )] HRESULT Bottom( [in] int val );
-	[propget, id(3), helpstring( "The left value" )] HRESULT Left( [out, retval] int * pVal );
-	[propput, id(3), helpstring( "The left value" )] HRESULT Left( [in] int val );
-	[propget, id(4), helpstring( "The right value" )] HRESULT Right( [out, retval] int * pVal );
-	[propput, id(4), helpstring( "The right value" )] HRESULT Right( [in] int val );
-	[propget, id(5), helpstring( "The width value" )] HRESULT Width( [out, retval] int * pVal );
-	[propget, id(6), helpstring( "The height value" )] HRESULT Height( [out, retval] int * pVal );
+	[propget, id( 1 ), helpstring( "The top value" )] HRESULT Top( [out, retval] int * pVal );
+	[propput, id( 1 ), helpstring( "The top value" )] HRESULT Top( [in] int val );
+	[propget, id( 2 ), helpstring( "The bottom value" )] HRESULT Bottom( [out, retval] int * pVal );
+	[propput, id( 2 ), helpstring( "The bottom value" )] HRESULT Bottom( [in] int val );
+	[propget, id( 3 ), helpstring( "The left value" )] HRESULT Left( [out, retval] int * pVal );
+	[propput, id( 3 ), helpstring( "The left value" )] HRESULT Left( [in] int val );
+	[propget, id( 4 ), helpstring( "The right value" )] HRESULT Right( [out, retval] int * pVal );
+	[propput, id( 4 ), helpstring( "The right value" )] HRESULT Right( [in] int val );
+	[propget, id( 5 ), helpstring( "The width value" )] HRESULT Width( [out, retval] int * pVal );
+	[propget, id( 6 ), helpstring( "The height value" )] HRESULT Height( [out, retval] int * pVal );
 	// Methods
-	[id(7), helpstring( "Sets the rect values" )] HRESULT Set( [in] int top, [in] int left, [in] int right, [in] int bottom );
-	[id(8), helpstring( "Checks if the given point is in the rect" )] HRESULT IntersectsPosition( [in] IPosition * pos, [out,retval] eINTERSECTION * pVal );
-	[id(9), helpstring( "Checks if the given rectanggle intersects this one" )] HRESULT IntersectsRectangle( [in] IRect * rect, [out,retval] eINTERSECTION * pVal );
+	[id( 7 ), helpstring( "Sets the rect values" )] HRESULT Set( [in] int top, [in] int left, [in] int right, [in] int bottom );
+	[id( 8 ), helpstring( "Checks if the given point is in the rect" )] HRESULT IntersectsPosition( [in] IPosition * pos, [out, retval] eINTERSECTION * pVal );
+	[id( 9 ), helpstring( "Checks if the given rectanggle intersects this one" )] HRESULT IntersectsRectangle( [in] IRect * rect, [out, retval] eINTERSECTION * pVal );
 };
 
 // IGlyph
@@ -709,12 +710,12 @@ interface IRect
 	oleautomation
 ]
 interface IGlyph
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "property Size" )] HRESULT Size( [out, retval] ISize ** pVal );
-	[propget, id(2), helpstring( "property Position" )] HRESULT Position( [out, retval] IPosition ** pVal );
-	[propget, id(3), helpstring( "property Advance" )] HRESULT Advance( [out, retval] ISize ** pVal );
-	[id(4), helpstring( "method AdjustPosition" )] HRESULT AdjustPosition( [in] UINT x, [in] UINT y );
+	[propget, id( 1 ), helpstring( "property Size" )] HRESULT Size( [out, retval] ISize ** pVal );
+	[propget, id( 2 ), helpstring( "property Position" )] HRESULT Position( [out, retval] IPosition ** pVal );
+	[propget, id( 3 ), helpstring( "property Advance" )] HRESULT Advance( [out, retval] ISize ** pVal );
+	[id( 4 ), helpstring( "method AdjustPosition" )] HRESULT AdjustPosition( [in] UINT x, [in] UINT y );
 };
 
 // ICastorFont
@@ -725,13 +726,13 @@ interface IGlyph
 	oleautomation
 ]
 interface ICastorFont
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "property Height" )] HRESULT Height( [out, retval] UINT * pVal );
-	[propget, id(2), helpstring( "property MaxHeight" )] HRESULT MaxHeight( [out, retval] INT * pVal );
-	[propget, id(3), helpstring( "property MaxWidth" )] HRESULT MaxWidth( [out, retval] INT * pVal );
-	[id(4), helpstring( "method LoadFromFile" )] HRESULT LoadFromFile( [in] IEngine * engine, [in] BSTR path, [in] BSTR name, [in] UINT height );
-	[id(5), helpstring( "method GetGlyph" )] HRESULT GetGlyph( [in] WORD glyph, [out, retval] IGlyph ** pGlyph );
+	[propget, id( 1 ), helpstring( "property Height" )] HRESULT Height( [out, retval] UINT * pVal );
+	[propget, id( 2 ), helpstring( "property MaxHeight" )] HRESULT MaxHeight( [out, retval] INT * pVal );
+	[propget, id( 3 ), helpstring( "property MaxWidth" )] HRESULT MaxWidth( [out, retval] INT * pVal );
+	[id( 4 ), helpstring( "method LoadFromFile" )] HRESULT LoadFromFile( [in] IEngine * engine, [in] BSTR path, [in] BSTR name, [in] UINT height );
+	[id( 5 ), helpstring( "method GetGlyph" )] HRESULT GetGlyph( [in] WORD glyph, [out, retval] IGlyph ** pGlyph );
 };
 
 // IPixelBuffer
@@ -742,15 +743,15 @@ interface ICastorFont
 	oleautomation
 ]
 interface IPixelBuffer
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "property Dimensions" )] HRESULT Dimensions( [out, retval] ISize ** pVal );
-	[propget, id(2), helpstring( "property Width" )] HRESULT Width( [out, retval] unsigned int * pVal );
-	[propget, id(3), helpstring( "property Height" )] HRESULT Height( [out, retval] unsigned int * pVal );
-	[propget, id(4), helpstring( "property PixelFormat" )] HRESULT PixelFormat( [out, retval] ePIXEL_FORMAT * pVal );
-	[id(5), helpstring( "method Flip" )] HRESULT Flip();
-	[id(6), helpstring( "method Mirror" )] HRESULT Mirror();
-	[id(7), helpstring( "Initialises the buffer" )] HRESULT Initialise( ISize * size, ePIXEL_FORMAT pf );
+	[propget, id( 1 ), helpstring( "property Dimensions" )] HRESULT Dimensions( [out, retval] ISize ** pVal );
+	[propget, id( 2 ), helpstring( "property Width" )] HRESULT Width( [out, retval] unsigned int * pVal );
+	[propget, id( 3 ), helpstring( "property Height" )] HRESULT Height( [out, retval] unsigned int * pVal );
+	[propget, id( 4 ), helpstring( "property PixelFormat" )] HRESULT PixelFormat( [out, retval] ePIXEL_FORMAT * pVal );
+	[id( 5 ), helpstring( "method Flip" )] HRESULT Flip();
+	[id( 6 ), helpstring( "method Mirror" )] HRESULT Mirror();
+	[id( 7 ), helpstring( "Initialises the buffer" )] HRESULT Initialise( ISize * size, ePIXEL_FORMAT pf );
 };
 
 // IImage
@@ -761,18 +762,18 @@ interface IPixelBuffer
 	oleautomation
 ]
 interface IImage
-	:	IDispatch
+	: IDispatch
 {
 	// Properties
-	[propget, id(1), helpstring( "The image pixels buffer" )] HRESULT Buffer( [out, retval] IPixelBuffer ** pVal );
+	[propget, id( 1 ), helpstring( "The image pixels buffer" )] HRESULT Buffer( [out, retval] IPixelBuffer ** pVal );
 
 	// Methods
-	[id(2), helpstring( "method LoadFromFile" )] HRESULT LoadFromFile( [in] IEngine * engine, [in] BSTR name, [in] BSTR val );
-	[id(3), helpstring( "method LoadFromFormat" )] HRESULT LoadFromFormat( [in] IEngine * engine, [in] BSTR name, [in] ePIXEL_FORMAT fmt, [in] ISize * size );
-	[id(4), helpstring( "method Resample" )] HRESULT Resample( [in] ISize * val );
-	[id(5), helpstring( "method Fill" )] HRESULT Fill( [in] IColour * val );
-	[id(6), helpstring( "method CopyImage" )] HRESULT CopyImage( [in] IImage * pVal );
-	[id(7), helpstring( "method SubImage" )] HRESULT SubImage( [in] IRect * val, [out, retval] IImage ** pVal );
+	[id( 2 ), helpstring( "method LoadFromFile" )] HRESULT LoadFromFile( [in] IEngine * engine, [in] BSTR name, [in] BSTR val );
+	[id( 3 ), helpstring( "method LoadFromFormat" )] HRESULT LoadFromFormat( [in] IEngine * engine, [in] BSTR name, [in] ePIXEL_FORMAT fmt, [in] ISize * size );
+	[id( 4 ), helpstring( "method Resample" )] HRESULT Resample( [in] ISize * val );
+	[id( 5 ), helpstring( "method Fill" )] HRESULT Fill( [in] IColour * val );
+	[id( 6 ), helpstring( "method CopyImage" )] HRESULT CopyImage( [in] IImage * pVal );
+	[id( 7 ), helpstring( "method SubImage" )] HRESULT SubImage( [in] IRect * val, [out, retval] IImage ** pVal );
 };
 
 // ILogger
@@ -783,16 +784,16 @@ interface IImage
 	oleautomation
 ]
 interface ILogger
-	:	IDispatch
+	: IDispatch
 {
 	// Methods
-	[id(1), helpstring( "method Initialise" )] HRESULT Initialise( [in] eLOG_TYPE level );
-	[id(2), helpstring( "method SetFileName" )] HRESULT SetFileName( [in] BSTR name, eLOG_TYPE target );
-	[id(3), helpstring( "method Cleanup" )] HRESULT Cleanup();
-	[id(4), helpstring( "method LogDebug" )] HRESULT LogDebug( [in] BSTR msg );
-	[id(5), helpstring( "method LogMessage" )] HRESULT LogMessage( [in] BSTR msg );
-	[id(6), helpstring( "method LogWarning" )] HRESULT LogWarning( [in] BSTR msg );
-	[id(7), helpstring( "method LogError" )] HRESULT LogError( [in] BSTR msg );
+	[id( 1 ), helpstring( "method Initialise" )] HRESULT Initialise( [in] eLOG_TYPE level );
+	[id( 2 ), helpstring( "method SetFileName" )] HRESULT SetFileName( [in] BSTR name, eLOG_TYPE target );
+	[id( 3 ), helpstring( "method Cleanup" )] HRESULT Cleanup();
+	[id( 4 ), helpstring( "method LogDebug" )] HRESULT LogDebug( [in] BSTR msg );
+	[id( 5 ), helpstring( "method LogInfo" )] HRESULT LogInfo( [in] BSTR msg );
+	[id( 6 ), helpstring( "method LogWarning" )] HRESULT LogWarning( [in] BSTR msg );
+	[id( 7 ), helpstring( "method LogError" )] HRESULT LogError( [in] BSTR msg );
 };
 
 // IBlendState
@@ -803,35 +804,35 @@ interface ILogger
 	oleautomation
 ]
 interface IBlendState
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id( 1), helpstring( "The alpha to coverage enabled status" )] HRESULT AlphaToCoverageEnabled( [out, retval] boolean * pVal );
-	[propput, id( 1), helpstring( "The alpha to coverage enabled status" )] HRESULT AlphaToCoverageEnabled( [in] boolean val );
-	[propget, id( 2), helpstring( "The independant blend enabled status" )] HRESULT IndependantBlendEnabled( [out, retval] boolean * pVal );
-	[propput, id( 2), helpstring( "The independant blend enabled status" )] HRESULT IndependantBlendEnabled( [in] boolean val );
-    [propget, id( 3), helpstring( "The blend factors" )] HRESULT BlendFactors( [out, retval] IColour ** pVal );
-    [propput, id( 3), helpstring( "The blend factors" )] HRESULT BlendFactors( [in] IColour * val );
-	[propget, id( 4), helpstring( "The sample coverage mask" )] HRESULT SampleCoverageMask( [out, retval] unsigned int * pVal );
-	[propput, id( 4), helpstring( "The sample coverage mask" )] HRESULT SampleCoverageMask( [in] unsigned int val );
-	[propget, id( 5), helpstring( "The blend enabled status, for nth unit" )] HRESULT BlendEnabled( [in] unsigned int index, [out, retval] boolean * pVal );
-	[propput, id( 5), helpstring( "The blend enabled status, for nth unit" )] HRESULT BlendEnabled( [in] unsigned int index, [in] boolean val );
-	[propget, id( 6), helpstring( "The source source RGB blend value, for nth unit" )] HRESULT RgbSrcBlend( [in] unsigned int index, [out, retval] eBLEND * pVal );
-	[propput, id( 6), helpstring( "The source source RGB blend value, for nth unit" )] HRESULT RgbSrcBlend( [in] unsigned int index, [in] eBLEND val );
-	[propget, id( 7), helpstring( "The source destination RGB blend value, for nth unit" )] HRESULT RgbDstBlend( [in] unsigned int index, [out, retval] eBLEND * pVal );
-	[propput, id( 7), helpstring( "The source destination RGB blend value, for nth unit" )] HRESULT RgbDstBlend( [in] unsigned int index, [in] eBLEND val );
-	[propget, id( 8), helpstring( "The RGB blend operator, for nth unit" )] HRESULT RgbBlendOp( [in] unsigned int index, [out, retval] eBLEND_OP * pVal );
-	[propput, id( 8), helpstring( "The RGB blend operator, for nth unit" )] HRESULT RgbBlendOp( [in] unsigned int index, [in] eBLEND_OP val );
-	[propget, id( 9), helpstring( "The source source Alpha blend value, for nth unit" )] HRESULT AlphaSrcBlend( [in] unsigned int index, [out, retval] eBLEND * pVal );
-	[propput, id( 9), helpstring( "The source source Alpha blend value, for nth unit" )] HRESULT AlphaSrcBlend( [in] unsigned int index, [in] eBLEND val );
-	[propget, id(10), helpstring( "The source destination Alpha blend value, for nth unit" )] HRESULT AlphaDstBlend( [in] unsigned int index, [out, retval] eBLEND * pVal );
-	[propput, id(10), helpstring( "The source destination Alpha blend value, for nth unit" )] HRESULT AlphaDstBlend( [in] unsigned int index, [in] eBLEND val );
-	[propget, id(11), helpstring( "The Alpha blend operator, for nth unit" )] HRESULT AlphaBlendOp( [in] unsigned int index, [out, retval] eBLEND_OP * pVal );
-	[propput, id(11), helpstring( "The Alpha blend operator, for nth unit" )] HRESULT AlphaBlendOp( [in] unsigned int index, [in] eBLEND_OP val );
-	[propget, id(12), helpstring( "The render target write mask, for nth unit" )] HRESULT WriteMask( [in] unsigned int index, [out, retval] byte * pVal );
-	[propput, id(12), helpstring( "The render target write mask, for nth unit" )] HRESULT WriteMask( [in] unsigned int index, [in] byte val );
-	[id(13), helpstring( "Initialises the blend state" )] HRESULT Initialise();
-	[id(14), helpstring( "Cleans the blend state up" )] HRESULT Cleanup();
-	[id(15), helpstring( "The colour test mask" )] HRESULT SetColourMask( [in] eWRITING_MASK red, [in] eWRITING_MASK green, [in] eWRITING_MASK blue, [in] eWRITING_MASK alpha );
+	[propget, id( 1 ), helpstring( "The alpha to coverage enabled status" )] HRESULT AlphaToCoverageEnabled( [out, retval] boolean * pVal );
+	[propput, id( 1 ), helpstring( "The alpha to coverage enabled status" )] HRESULT AlphaToCoverageEnabled( [in] boolean val );
+	[propget, id( 2 ), helpstring( "The independant blend enabled status" )] HRESULT IndependantBlendEnabled( [out, retval] boolean * pVal );
+	[propput, id( 2 ), helpstring( "The independant blend enabled status" )] HRESULT IndependantBlendEnabled( [in] boolean val );
+	[propget, id( 3 ), helpstring( "The blend factors" )] HRESULT BlendFactors( [out, retval] IColour ** pVal );
+	[propput, id( 3 ), helpstring( "The blend factors" )] HRESULT BlendFactors( [in] IColour * val );
+	[propget, id( 4 ), helpstring( "The sample coverage mask" )] HRESULT SampleCoverageMask( [out, retval] unsigned int * pVal );
+	[propput, id( 4 ), helpstring( "The sample coverage mask" )] HRESULT SampleCoverageMask( [in] unsigned int val );
+	[propget, id( 5 ), helpstring( "The blend enabled status, for nth unit" )] HRESULT BlendEnabled( [in] unsigned int index, [out, retval] boolean * pVal );
+	[propput, id( 5 ), helpstring( "The blend enabled status, for nth unit" )] HRESULT BlendEnabled( [in] unsigned int index, [in] boolean val );
+	[propget, id( 6 ), helpstring( "The source source RGB blend value, for nth unit" )] HRESULT RgbSrcBlend( [in] unsigned int index, [out, retval] eBLEND * pVal );
+	[propput, id( 6 ), helpstring( "The source source RGB blend value, for nth unit" )] HRESULT RgbSrcBlend( [in] unsigned int index, [in] eBLEND val );
+	[propget, id( 7 ), helpstring( "The source destination RGB blend value, for nth unit" )] HRESULT RgbDstBlend( [in] unsigned int index, [out, retval] eBLEND * pVal );
+	[propput, id( 7 ), helpstring( "The source destination RGB blend value, for nth unit" )] HRESULT RgbDstBlend( [in] unsigned int index, [in] eBLEND val );
+	[propget, id( 8 ), helpstring( "The RGB blend operator, for nth unit" )] HRESULT RgbBlendOp( [in] unsigned int index, [out, retval] eBLEND_OP * pVal );
+	[propput, id( 8 ), helpstring( "The RGB blend operator, for nth unit" )] HRESULT RgbBlendOp( [in] unsigned int index, [in] eBLEND_OP val );
+	[propget, id( 9 ), helpstring( "The source source Alpha blend value, for nth unit" )] HRESULT AlphaSrcBlend( [in] unsigned int index, [out, retval] eBLEND * pVal );
+	[propput, id( 9 ), helpstring( "The source source Alpha blend value, for nth unit" )] HRESULT AlphaSrcBlend( [in] unsigned int index, [in] eBLEND val );
+	[propget, id( 10 ), helpstring( "The source destination Alpha blend value, for nth unit" )] HRESULT AlphaDstBlend( [in] unsigned int index, [out, retval] eBLEND * pVal );
+	[propput, id( 10 ), helpstring( "The source destination Alpha blend value, for nth unit" )] HRESULT AlphaDstBlend( [in] unsigned int index, [in] eBLEND val );
+	[propget, id( 11 ), helpstring( "The Alpha blend operator, for nth unit" )] HRESULT AlphaBlendOp( [in] unsigned int index, [out, retval] eBLEND_OP * pVal );
+	[propput, id( 11 ), helpstring( "The Alpha blend operator, for nth unit" )] HRESULT AlphaBlendOp( [in] unsigned int index, [in] eBLEND_OP val );
+	[propget, id( 12 ), helpstring( "The render target write mask, for nth unit" )] HRESULT WriteMask( [in] unsigned int index, [out, retval] byte * pVal );
+	[propput, id( 12 ), helpstring( "The render target write mask, for nth unit" )] HRESULT WriteMask( [in] unsigned int index, [in] byte val );
+	[id( 13 ), helpstring( "Initialises the blend state" )] HRESULT Initialise();
+	[id( 14 ), helpstring( "Cleans the blend state up" )] HRESULT Cleanup();
+	[id( 15 ), helpstring( "The colour test mask" )] HRESULT SetColourMask( [in] eWRITING_MASK red, [in] eWRITING_MASK green, [in] eWRITING_MASK blue, [in] eWRITING_MASK alpha );
 };
 
 // IDepthStencilState
@@ -842,41 +843,41 @@ interface IBlendState
 	oleautomation
 ]
 interface IDepthStencilState
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id( 1), helpstring( "The depth test enabled status" )] HRESULT DepthTest( [out, retval] boolean * pVal );
-	[propput, id( 1), helpstring( "The depth test enabled status" )] HRESULT DepthTest( [in] boolean val );
-	[propget, id( 2), helpstring( "The depth test function" )] HRESULT DepthFunc( [out, retval] eDEPTH_FUNC * pVal );
-	[propput, id( 2), helpstring( "The depth test function" )] HRESULT DepthFunc( [in] eDEPTH_FUNC val );
-	[propget, id( 3), helpstring( "The depth test mask" )] HRESULT DepthMask( [out, retval] eWRITING_MASK * pVal );
-	[propput, id( 3), helpstring( "The depth test mask" )] HRESULT DepthMask( [in] eWRITING_MASK val );
-	[propget, id( 4), helpstring( "The depth near distance" )] HRESULT DepthNear( [out, retval] double * pVal );
-	[propget, id( 5), helpstring( "The depth far distance" )] HRESULT DepthFar( [out, retval] double * pVal );
-	[propget, id( 6), helpstring( "The stencil test enabled status" )] HRESULT StencilTest( [out, retval] boolean * pVal );
-	[propput, id( 6), helpstring( "The stencil test enabled status" )] HRESULT StencilTest( [in] boolean val );
-	[propget, id( 7), helpstring( "The stencil test read mask" )] HRESULT StencilReadMask( [out, retval] unsigned long * pVal );
-	[propput, id( 7), helpstring( "The stencil test read mask" )] HRESULT StencilReadMask( [in] unsigned long val );
-	[propget, id( 8), helpstring( "The stencil test write mask" )] HRESULT StencilWriteMask( [out, retval] unsigned long * pVal );
-	[propput, id( 8), helpstring( "The stencil test write mask" )] HRESULT StencilWriteMask( [in] unsigned long val );
-	[propget, id( 9), helpstring( "The stencil test function, for the front faces" )] HRESULT StencilFrontFunc( [out, retval] eSTENCIL_FUNC * pVal );
-	[propput, id( 9), helpstring( "The stencil test function, for the front faces" )] HRESULT StencilFrontFunc( [in] eSTENCIL_FUNC val );
-	[propget, id(10), helpstring( "The stencil test failed operation, for the front faces" )] HRESULT StencilFrontFailOp( [out, retval] eSTENCIL_OP * pVal );
-	[propput, id(10), helpstring( "The stencil test failed operation, for the front faces" )] HRESULT StencilFrontFailOp( [in] eSTENCIL_OP val );
-	[propget, id(11), helpstring( "The stencil test, depth test failed operation, for the front faces" )] HRESULT StencilFrontDepthFailOp( [out, retval] eSTENCIL_OP * pVal );
-	[propput, id(11), helpstring( "The stencil test, depth test failed operation, for the front faces" )] HRESULT StencilFrontDepthFailOp( [in] eSTENCIL_OP val );
-	[propget, id(12), helpstring( "The stencil test passed operation, for the front faces" )] HRESULT StencilFrontPassOp( [out, retval] eSTENCIL_OP * pVal );
-	[propput, id(12), helpstring( "The stencil test passed operation, for the front faces" )] HRESULT StencilFrontPassOp( [in] eSTENCIL_OP val );
-	[propget, id(13), helpstring( "The stencil test function, for the back faces" )] HRESULT StencilBackFunc( [out, retval] eSTENCIL_FUNC * pVal );
-	[propput, id(13), helpstring( "The stencil test function, for the back faces" )] HRESULT StencilBackFunc( [in] eSTENCIL_FUNC val );
-	[propget, id(14), helpstring( "The stencil test failed operation, for the back faces" )] HRESULT StencilBackFailOp( [out, retval] eSTENCIL_OP * pVal );
-	[propput, id(14), helpstring( "The stencil test failed operation, for the back faces" )] HRESULT StencilBackFailOp( [in] eSTENCIL_OP val );
-	[propget, id(15), helpstring( "The stencil test, depth test failed operation, for the back faces" )] HRESULT StencilBackDepthFailOp( [out, retval] eSTENCIL_OP * pVal );
-	[propput, id(15), helpstring( "The stencil test, depth test failed operation, for the back faces" )] HRESULT StencilBackDepthFailOp( [in] eSTENCIL_OP val );
-	[propget, id(16), helpstring( "The stencil test passed operation, for the back faces" )] HRESULT StencilBackPassOp( [out, retval] eSTENCIL_OP * pVal );
-	[propput, id(16), helpstring( "The stencil test passed operation, for the back faces" )] HRESULT StencilBackPassOp( [in] eSTENCIL_OP val );
-	[id(17), helpstring( "Sets the depth test range" )] HRESULT SetDepthRange( [in] double dnear, [in] double dfar );
-	[id(18), helpstring( "Initialises the depth stencil state" )] HRESULT Initialise();
-	[id(19), helpstring( "Cleans the depth stencil state up" )] HRESULT Cleanup();
+	[propget, id( 1 ), helpstring( "The depth test enabled status" )] HRESULT DepthTest( [out, retval] boolean * pVal );
+	[propput, id( 1 ), helpstring( "The depth test enabled status" )] HRESULT DepthTest( [in] boolean val );
+	[propget, id( 2 ), helpstring( "The depth test function" )] HRESULT DepthFunc( [out, retval] eDEPTH_FUNC * pVal );
+	[propput, id( 2 ), helpstring( "The depth test function" )] HRESULT DepthFunc( [in] eDEPTH_FUNC val );
+	[propget, id( 3 ), helpstring( "The depth test mask" )] HRESULT DepthMask( [out, retval] eWRITING_MASK * pVal );
+	[propput, id( 3 ), helpstring( "The depth test mask" )] HRESULT DepthMask( [in] eWRITING_MASK val );
+	[propget, id( 4 ), helpstring( "The depth near distance" )] HRESULT DepthNear( [out, retval] double * pVal );
+	[propget, id( 5 ), helpstring( "The depth far distance" )] HRESULT DepthFar( [out, retval] double * pVal );
+	[propget, id( 6 ), helpstring( "The stencil test enabled status" )] HRESULT StencilTest( [out, retval] boolean * pVal );
+	[propput, id( 6 ), helpstring( "The stencil test enabled status" )] HRESULT StencilTest( [in] boolean val );
+	[propget, id( 7 ), helpstring( "The stencil test read mask" )] HRESULT StencilReadMask( [out, retval] unsigned long * pVal );
+	[propput, id( 7 ), helpstring( "The stencil test read mask" )] HRESULT StencilReadMask( [in] unsigned long val );
+	[propget, id( 8 ), helpstring( "The stencil test write mask" )] HRESULT StencilWriteMask( [out, retval] unsigned long * pVal );
+	[propput, id( 8 ), helpstring( "The stencil test write mask" )] HRESULT StencilWriteMask( [in] unsigned long val );
+	[propget, id( 9 ), helpstring( "The stencil test function, for the front faces" )] HRESULT StencilFrontFunc( [out, retval] eSTENCIL_FUNC * pVal );
+	[propput, id( 9 ), helpstring( "The stencil test function, for the front faces" )] HRESULT StencilFrontFunc( [in] eSTENCIL_FUNC val );
+	[propget, id( 10 ), helpstring( "The stencil test failed operation, for the front faces" )] HRESULT StencilFrontFailOp( [out, retval] eSTENCIL_OP * pVal );
+	[propput, id( 10 ), helpstring( "The stencil test failed operation, for the front faces" )] HRESULT StencilFrontFailOp( [in] eSTENCIL_OP val );
+	[propget, id( 11 ), helpstring( "The stencil test, depth test failed operation, for the front faces" )] HRESULT StencilFrontDepthFailOp( [out, retval] eSTENCIL_OP * pVal );
+	[propput, id( 11 ), helpstring( "The stencil test, depth test failed operation, for the front faces" )] HRESULT StencilFrontDepthFailOp( [in] eSTENCIL_OP val );
+	[propget, id( 12 ), helpstring( "The stencil test passed operation, for the front faces" )] HRESULT StencilFrontPassOp( [out, retval] eSTENCIL_OP * pVal );
+	[propput, id( 12 ), helpstring( "The stencil test passed operation, for the front faces" )] HRESULT StencilFrontPassOp( [in] eSTENCIL_OP val );
+	[propget, id( 13 ), helpstring( "The stencil test function, for the back faces" )] HRESULT StencilBackFunc( [out, retval] eSTENCIL_FUNC * pVal );
+	[propput, id( 13 ), helpstring( "The stencil test function, for the back faces" )] HRESULT StencilBackFunc( [in] eSTENCIL_FUNC val );
+	[propget, id( 14 ), helpstring( "The stencil test failed operation, for the back faces" )] HRESULT StencilBackFailOp( [out, retval] eSTENCIL_OP * pVal );
+	[propput, id( 14 ), helpstring( "The stencil test failed operation, for the back faces" )] HRESULT StencilBackFailOp( [in] eSTENCIL_OP val );
+	[propget, id( 15 ), helpstring( "The stencil test, depth test failed operation, for the back faces" )] HRESULT StencilBackDepthFailOp( [out, retval] eSTENCIL_OP * pVal );
+	[propput, id( 15 ), helpstring( "The stencil test, depth test failed operation, for the back faces" )] HRESULT StencilBackDepthFailOp( [in] eSTENCIL_OP val );
+	[propget, id( 16 ), helpstring( "The stencil test passed operation, for the back faces" )] HRESULT StencilBackPassOp( [out, retval] eSTENCIL_OP * pVal );
+	[propput, id( 16 ), helpstring( "The stencil test passed operation, for the back faces" )] HRESULT StencilBackPassOp( [in] eSTENCIL_OP val );
+	[id( 17 ), helpstring( "Sets the depth test range" )] HRESULT SetDepthRange( [in] double dnear, [in] double dfar );
+	[id( 18 ), helpstring( "Initialises the depth stencil state" )] HRESULT Initialise();
+	[id( 19 ), helpstring( "Cleans the depth stencil state up" )] HRESULT Cleanup();
 };
 
 // IRasteriserState
@@ -887,26 +888,53 @@ interface IDepthStencilState
 	oleautomation
 ]
 interface IRasteriserState
-	:	IDispatch
+	: IDispatch
 {
-    [propget, id( 1), helpstring( "The fill mode" )] HRESULT FillMode( [out, retval] eFILL_MODE * pVal );
-    [propput, id( 1), helpstring( "The fill mode" )] HRESULT FillMode( [in] eFILL_MODE val );
-    [propget, id( 2), helpstring( "The faces culled by rasteriser" )] HRESULT CulledFaces( [out, retval] eFACE * pVal );
-    [propput, id( 2), helpstring( "The faces culled by rasteriser" )] HRESULT CulledFaces( [in] eFACE val );
-    [propget, id( 3), helpstring( "The faces which are considered front facing (true => CCW, false => CW)" )] HRESULT FrontCCW( [out, retval] boolean * pVal );
-    [propput, id( 3), helpstring( "The faces which are considered front facing (true => CCW, false => CW)" )] HRESULT FrontCCW( [in] boolean val );
-    [propget, id( 4), helpstring( "The antialiased lines status" )] HRESULT AntialiasedLines( [out, retval] boolean * pVal );
-    [propput, id( 4), helpstring( "The antialiased lines status" )] HRESULT AntialiasedLines( [in] boolean val );
-    [propget, id( 5), helpstring( "The depth bias" )] HRESULT DepthBias( [out, retval] float * pVal );
-    [propput, id( 5), helpstring( "The depth bias" )] HRESULT DepthBias( [in] float val );
-    [propget, id( 6), helpstring( "The depth clipping enabled status" )] HRESULT DepthClipping( [out, retval] boolean * pVal );
-    [propput, id( 6), helpstring( "The depth clipping enabled status" )] HRESULT DepthClipping( [in] boolean val );
-    [propget, id( 7), helpstring( "The multisample enabled status" )] HRESULT Multisample( [out, retval] boolean * pVal );
-    [propput, id( 7), helpstring( "The multisample enabled status" )] HRESULT Multisample( [in] boolean val );
-    [propget, id( 8), helpstring( "The scissor test enabled status" )] HRESULT Scissor( [out, retval] boolean * pVal );
-    [propput, id( 8), helpstring( "The scissor test enabled status" )] HRESULT Scissor( [in] boolean val );
-	[id( 9), helpstring( "Initialises the rasteriser state" )] HRESULT Initialise();
-	[id(10), helpstring( "Cleans the rasteriser state up" )] HRESULT Cleanup();
+	[propget, id( 1 ), helpstring( "The fill mode" )] HRESULT FillMode( [out, retval] eFILL_MODE * pVal );
+	[propput, id( 1 ), helpstring( "The fill mode" )] HRESULT FillMode( [in] eFILL_MODE val );
+	[propget, id( 2 ), helpstring( "The faces culled by rasteriser" )] HRESULT CulledFaces( [out, retval] eFACE * pVal );
+	[propput, id( 2 ), helpstring( "The faces culled by rasteriser" )] HRESULT CulledFaces( [in] eFACE val );
+	[propget, id( 3 ), helpstring( "The faces which are considered front facing (true => CCW, false => CW)" )] HRESULT FrontCCW( [out, retval] boolean * pVal );
+	[propput, id( 3 ), helpstring( "The faces which are considered front facing (true => CCW, false => CW)" )] HRESULT FrontCCW( [in] boolean val );
+	[propget, id( 4 ), helpstring( "The antialiased lines status" )] HRESULT AntialiasedLines( [out, retval] boolean * pVal );
+	[propput, id( 4 ), helpstring( "The antialiased lines status" )] HRESULT AntialiasedLines( [in] boolean val );
+	[propget, id( 5 ), helpstring( "The depth bias" )] HRESULT DepthBias( [out, retval] float * pVal );
+	[propput, id( 5 ), helpstring( "The depth bias" )] HRESULT DepthBias( [in] float val );
+	[propget, id( 6 ), helpstring( "The depth clipping enabled status" )] HRESULT DepthClipping( [out, retval] boolean * pVal );
+	[propput, id( 6 ), helpstring( "The depth clipping enabled status" )] HRESULT DepthClipping( [in] boolean val );
+	[propget, id( 7 ), helpstring( "The multisample enabled status" )] HRESULT Multisample( [out, retval] boolean * pVal );
+	[propput, id( 7 ), helpstring( "The multisample enabled status" )] HRESULT Multisample( [in] boolean val );
+	[propget, id( 8 ), helpstring( "The scissor test enabled status" )] HRESULT Scissor( [out, retval] boolean * pVal );
+	[propput, id( 8 ), helpstring( "The scissor test enabled status" )] HRESULT Scissor( [in] boolean val );
+	[id( 9 ), helpstring( "Initialises the rasteriser state" )] HRESULT Initialise();
+	[id( 10 ), helpstring( "Cleans the rasteriser state up" )] HRESULT Cleanup();
+};
+
+// IRenderTarget
+[
+	uuid( EC5787A9-9B4B-4F14-B2FF-2C2FB9E58B90 ),
+	helpstring( "Castor3D RenderTarget interface" ),
+	dual,
+	oleautomation
+]
+interface IRenderTarget
+	: IDispatch
+{
+	[propget, id( 1 ), helpstring( "The samples count, when multisampling" )] HRESULT SamplesCount( [out, retval] unsigned int * pVal );
+	[propput, id( 1 ), helpstring( "The samples count, when multisampling" )] HRESULT SamplesCount( [in] unsigned int val );
+	[propget, id( 2 ), helpstring( "The target camera" )] HRESULT Camera( [out, retval] ICamera ** pVal );
+	[propput, id( 2 ), helpstring( "The target camera" )] HRESULT Camera( [in] ICamera * camera );
+	[propget, id( 3 ), helpstring( "The rendering primitive type" )] HRESULT PrimitiveType( [out, retval] eTOPOLOGY * pVal );
+	[propput, id( 3 ), helpstring( "The rendering primitive type" )] HRESULT PrimitiveType( [in] eTOPOLOGY val );
+	[propget, id( 4 ), helpstring( "The viewport type" )] HRESULT ViewportType( [out, retval] eVIEWPORT_TYPE * pVal );
+	[propput, id( 4 ), helpstring( "The viewport type" )] HRESULT ViewportType( [in] eVIEWPORT_TYPE val );
+	[propget, id( 5 ), helpstring( "The rendered scene" )] HRESULT Scene( [out, retval] IScene ** pVal );
+	[propput, id( 5 ), helpstring( "The rendered scene" )] HRESULT Scene( [in] IScene * val );
+	[propget, id( 6 ), helpstring( "The target pixel format" )] HRESULT PixelFormat( [out, retval] ePIXEL_FORMAT * pVal );
+	[propput, id( 6 ), helpstring( "The target pixel format" )] HRESULT PixelFormat( [in] ePIXEL_FORMAT val );
+	[propget, id( 7 ), helpstring( "The target size" )] HRESULT Size( [out, retval] ISize ** pVal );
+	[id( 9 ), helpstring( "Initialises the render target" ), local] HRESULT Initialise( [in] unsigned int index );
+	[id( 10 ), helpstring( "Cleans the render target up" )] HRESULT Cleanup();
 };
 
 // ISampler
@@ -917,32 +945,32 @@ interface IRasteriserState
 	oleautomation
 ]
 interface ISampler
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id( 2), helpstring( "The sampler min filter" )] HRESULT MinFilter( [out, retval] eINTERPOLATION_MODE * pVal );
-	[propput, id( 2), helpstring( "The sampler min filter" )] HRESULT MinFilter( [in] eINTERPOLATION_MODE val );
-	[propget, id( 3), helpstring( "The sampler mag filter" )] HRESULT MagFilter( [out, retval] eINTERPOLATION_MODE * pVal );
-	[propput, id( 3), helpstring( "The sampler mag filter" )] HRESULT MagFilter( [in] eINTERPOLATION_MODE val );
-	[propget, id( 4), helpstring( "The sampler mip filter" )] HRESULT MipFilter( [out, retval] eINTERPOLATION_MODE * pVal );
-	[propput, id( 4), helpstring( "The sampler mip filter" )] HRESULT MipFilter( [in] eINTERPOLATION_MODE val );
-	[propget, id( 5), helpstring( "The sampler U wrap mode" )] HRESULT UWrappingMode( [out, retval] eWRAP_MODE * pVal );
-	[propput, id( 5), helpstring( "The sampler U wrap mode" )] HRESULT UWrappingMode( [in] eWRAP_MODE val );
-	[propget, id( 6), helpstring( "The sampler V wrap mode" )] HRESULT VWrappingMode( [out, retval] eWRAP_MODE * pVal );
-	[propput, id( 6), helpstring( "The sampler V wrap mode" )] HRESULT VWrappingMode( [in] eWRAP_MODE val );
-	[propget, id( 7), helpstring( "The sampler W wrap mode" )] HRESULT WWrappingMode( [out, retval] eWRAP_MODE * pVal );
-	[propput, id( 7), helpstring( "The sampler W wrap mode" )] HRESULT WWrappingMode( [in] eWRAP_MODE val );
-	[propget, id( 8), helpstring( "The sampler max anisotropy" )] HRESULT MaxAnisotropy( [out, retval] float * pVal );
-	[propput, id( 8), helpstring( "The sampler max anisotropy" )] HRESULT MaxAnisotropy( [in] float val );
-	[propget, id( 9), helpstring( "The sampler min LOD" )] HRESULT MinLod( [out, retval] float * pVal );
-	[propput, id( 9), helpstring( "The sampler min LOD" )] HRESULT MinLod( [in] float val );
-	[propget, id(10), helpstring( "The sampler max LOD" )] HRESULT MaxLod( [out, retval] float * pVal );
-	[propput, id(10), helpstring( "The sampler max LOD" )] HRESULT MaxLod( [in] float val );
-	[propget, id(11), helpstring( "The sampler LOD bias" )] HRESULT LodBias( [out, retval] float * pVal );
-	[propput, id(11), helpstring( "The sampler LOD bias" )] HRESULT LodBias( [in] float val );
-    [propget, id(12), helpstring( "The sampler border colour" )] HRESULT BorderColour( [out, retval] IColour ** pVal );
-    [propput, id(12), helpstring( "The sampler border colour" )] HRESULT BorderColour( [in] IColour * val );
-	[id(13), helpstring( "Initialises the sampler" )] HRESULT Initialise();
-	[id(14), helpstring( "Cleans the sampler up" )] HRESULT Cleanup();
+	[propget, id( 2 ), helpstring( "The sampler min filter" )] HRESULT MinFilter( [out, retval] eINTERPOLATION_MODE * pVal );
+	[propput, id( 2 ), helpstring( "The sampler min filter" )] HRESULT MinFilter( [in] eINTERPOLATION_MODE val );
+	[propget, id( 3 ), helpstring( "The sampler mag filter" )] HRESULT MagFilter( [out, retval] eINTERPOLATION_MODE * pVal );
+	[propput, id( 3 ), helpstring( "The sampler mag filter" )] HRESULT MagFilter( [in] eINTERPOLATION_MODE val );
+	[propget, id( 4 ), helpstring( "The sampler mip filter" )] HRESULT MipFilter( [out, retval] eINTERPOLATION_MODE * pVal );
+	[propput, id( 4 ), helpstring( "The sampler mip filter" )] HRESULT MipFilter( [in] eINTERPOLATION_MODE val );
+	[propget, id( 5 ), helpstring( "The sampler U wrap mode" )] HRESULT UWrappingMode( [out, retval] eWRAP_MODE * pVal );
+	[propput, id( 5 ), helpstring( "The sampler U wrap mode" )] HRESULT UWrappingMode( [in] eWRAP_MODE val );
+	[propget, id( 6 ), helpstring( "The sampler V wrap mode" )] HRESULT VWrappingMode( [out, retval] eWRAP_MODE * pVal );
+	[propput, id( 6 ), helpstring( "The sampler V wrap mode" )] HRESULT VWrappingMode( [in] eWRAP_MODE val );
+	[propget, id( 7 ), helpstring( "The sampler W wrap mode" )] HRESULT WWrappingMode( [out, retval] eWRAP_MODE * pVal );
+	[propput, id( 7 ), helpstring( "The sampler W wrap mode" )] HRESULT WWrappingMode( [in] eWRAP_MODE val );
+	[propget, id( 8 ), helpstring( "The sampler max anisotropy" )] HRESULT MaxAnisotropy( [out, retval] float * pVal );
+	[propput, id( 8 ), helpstring( "The sampler max anisotropy" )] HRESULT MaxAnisotropy( [in] float val );
+	[propget, id( 9 ), helpstring( "The sampler min LOD" )] HRESULT MinLod( [out, retval] float * pVal );
+	[propput, id( 9 ), helpstring( "The sampler min LOD" )] HRESULT MinLod( [in] float val );
+	[propget, id( 10 ), helpstring( "The sampler max LOD" )] HRESULT MaxLod( [out, retval] float * pVal );
+	[propput, id( 10 ), helpstring( "The sampler max LOD" )] HRESULT MaxLod( [in] float val );
+	[propget, id( 11 ), helpstring( "The sampler LOD bias" )] HRESULT LodBias( [out, retval] float * pVal );
+	[propput, id( 11 ), helpstring( "The sampler LOD bias" )] HRESULT LodBias( [in] float val );
+	[propget, id( 12 ), helpstring( "The sampler border colour" )] HRESULT BorderColour( [out, retval] IColour ** pVal );
+	[propput, id( 12 ), helpstring( "The sampler border colour" )] HRESULT BorderColour( [in] IColour * val );
+	[id( 13 ), helpstring( "Initialises the sampler" )] HRESULT Initialise();
+	[id( 14 ), helpstring( "Cleans the sampler up" )] HRESULT Cleanup();
 };
 
 // ITextureBase
@@ -953,19 +981,19 @@ interface ISampler
 	oleautomation
 ]
 interface ITextureBase
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id( 1), helpstring( "The texture type" )] HRESULT Type( [out, retval] eTEXTURE_TYPE * pVal );
-	[propget, id( 2), helpstring( "The texture dimension" )] HRESULT Dimension( [out, retval] eTEXTURE_DIMENSION * pVal );
-	[propput, id( 2), helpstring( "The texture dimension" )] HRESULT Dimension( [in] eTEXTURE_DIMENSION val );
-	[propget, id( 3), helpstring( "The texture sampler" )] HRESULT Sampler( [out, retval] ISampler ** pVal );
-	[propput, id( 3), helpstring( "The texture sampler" )] HRESULT Sampler( [in] ISampler * val );
-	[propget, id( 4), helpstring( "The texture mapping mode" )] HRESULT MappingMode( [out, retval] eTEXTURE_MAP_MODE * pVal );
-	[propput, id( 4), helpstring( "The texture mapping mode" )] HRESULT MappingMode( [in] eTEXTURE_MAP_MODE val );
-	[propget, id( 5), helpstring( "The texture image buffer" )] HRESULT Buffer( [out, retval] IPixelBuffer ** pVal );
-	[propput, id( 5), helpstring( "The texture image buffer" )] HRESULT Buffer( [in] IPixelBuffer * val );
-	[id( 6), helpstring( "Initialises the texture" )] HRESULT Initialise( [in] unsigned int index );
-	[id( 7), helpstring( "Cleans the texture up" )] HRESULT Cleanup();
+	[propget, id( 1 ), helpstring( "The texture type" )] HRESULT Type( [out, retval] eTEXTURE_TYPE * pVal );
+	[propget, id( 2 ), helpstring( "The texture dimension" )] HRESULT Dimension( [out, retval] eTEXTURE_DIMENSION * pVal );
+	[propput, id( 2 ), helpstring( "The texture dimension" )] HRESULT Dimension( [in] eTEXTURE_DIMENSION val );
+	[propget, id( 3 ), helpstring( "The texture sampler" )] HRESULT Sampler( [out, retval] ISampler ** pVal );
+	[propput, id( 3 ), helpstring( "The texture sampler" )] HRESULT Sampler( [in] ISampler * val );
+	[propget, id( 4 ), helpstring( "The texture mapping mode" )] HRESULT MappingMode( [out, retval] eTEXTURE_MAP_MODE * pVal );
+	[propput, id( 4 ), helpstring( "The texture mapping mode" )] HRESULT MappingMode( [in] eTEXTURE_MAP_MODE val );
+	[propget, id( 5 ), helpstring( "The texture image buffer" )] HRESULT Buffer( [out, retval] IPixelBuffer ** pVal );
+	[propput, id( 5 ), helpstring( "The texture image buffer" )] HRESULT Buffer( [in] IPixelBuffer * val );
+	[id( 6 ), helpstring( "Initialises the texture" )] HRESULT Initialise( [in] unsigned int index );
+	[id( 7 ), helpstring( "Cleans the texture up" )] HRESULT Cleanup();
 };
 
 // IStaticTexture
@@ -976,10 +1004,10 @@ interface ITextureBase
 	oleautomation
 ]
 interface IStaticTexture
-	:	ITextureBase
+	: ITextureBase
 {
-    [id( 11), helpstring( "Sets a 1D or 2D image data" )] HRESULT SetImage( [in] IPixelBuffer * val );
-	[id( 12), helpstring( "Sets a 3D image data" )] HRESULT Set3DImage( [in] ISize * size, unsigned int depth, [in] IPixelBuffer * val );
+	[id( 11 ), helpstring( "Sets a 1D or 2D image data" )] HRESULT SetImage( [in] IPixelBuffer * val );
+	[id( 12 ), helpstring( "Sets a 3D image data" )] HRESULT Set3DImage( [in] ISize * size, unsigned int depth, [in] IPixelBuffer * val );
 };
 
 // IDynamicTexture
@@ -990,16 +1018,16 @@ interface IStaticTexture
 	oleautomation
 ]
 interface IDynamicTexture
-	:	ITextureBase
+	: ITextureBase
 {
-	[propget, id(11), helpstring( "The render target status" )] HRESULT RenderTarget( [out, retval] boolean * pVal );
-	[propput, id(11), helpstring( "The render target status" )] HRESULT RenderTarget( [in] boolean val );
-	[propget, id(12), helpstring( "The samples count" )] HRESULT SamplesCount( [out, retval] unsigned int * pVal );
-	[propput, id(12), helpstring( "The samples count" )] HRESULT SamplesCount( [in] unsigned int val );
-	[id(13), helpstring( "Sets a 2D image data" )] HRESULT Set2DImage( [in] ISize * size, [in] ePIXEL_FORMAT fmt );
-	[id(14), helpstring( "Sets a 3D image data" )] HRESULT Set3DImage( [in] ISize * size, unsigned int depth, [in] ePIXEL_FORMAT fmt );
-    [id(15), helpstring( "Resizes the 2D texture image" )] HRESULT Resize2D( [in] ISize * size );
-    [id(16), helpstring( "Resizes the 3D texture image" )] HRESULT Resize3D( [in] ISize * size, [in] unsigned int depth );
+	[propget, id( 11 ), helpstring( "The render target" )] HRESULT RenderTarget( [out, retval] IRenderTarget ** pVal );
+	[propput, id( 11 ), helpstring( "The render target" )] HRESULT RenderTarget( [in] IRenderTarget * val );
+	[propget, id( 12 ), helpstring( "The samples count" )] HRESULT SamplesCount( [out, retval] unsigned int * pVal );
+	[propput, id( 12 ), helpstring( "The samples count" )] HRESULT SamplesCount( [in] unsigned int val );
+	[id( 13 ), helpstring( "Sets a 2D image data" )] HRESULT Set2DImage( [in] ISize * size, [in] ePIXEL_FORMAT fmt );
+	[id( 14 ), helpstring( "Sets a 3D image data" )] HRESULT Set3DImage( [in] ISize * size, unsigned int depth, [in] ePIXEL_FORMAT fmt );
+	[id( 15 ), helpstring( "Resizes the 2D texture image" )] HRESULT Resize2D( [in] ISize * size );
+	[id( 16 ), helpstring( "Resizes the 3D texture image" )] HRESULT Resize3D( [in] ISize * size, [in] unsigned int depth );
 };
 
 // ITextureUnit
@@ -1010,27 +1038,27 @@ interface IDynamicTexture
 	oleautomation
 ]
 interface ITextureUnit
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id( 1), helpstring( "The unit texture" )] HRESULT Texture( [out, retval] ITextureBase ** pVal );
-	[propput, id( 1), helpstring( "The unit texture" )] HRESULT Texture( [in] ITextureBase * val );
-	[propget, id( 2), helpstring( "The Alpha Test function" )] HRESULT AlphaFunc( [out, retval] eALPHA_FUNC * pVal );
-	[propput, id( 2), helpstring( "The Alpha Test function" )] HRESULT AlphaFunc( [in] eALPHA_FUNC val );
-	[propget, id( 3), helpstring( "The Alpha Test reference value" )] HRESULT AlphaValue( [out, retval] float * pVal );
-	[propput, id( 3), helpstring( "The Alpha Test reference value" )] HRESULT AlphaValue( [in] float val );
-	[propget, id( 4), helpstring( "The Alpha Blending function" )] HRESULT AlpFunction( [out, retval] eALPHA_BLEND_FUNC * pVal );
-	[propput, id( 4), helpstring( "The Alpha Blending function" )] HRESULT AlpFunction( [in] eALPHA_BLEND_FUNC val );
-	[propget, id( 5), helpstring( "The Alpha Blending argument" )] HRESULT AlpArgument( [in] unsigned int index, [out, retval] eBLEND_SOURCE * pVal );
-	[propput, id( 5), helpstring( "The Alpha Blending argument" )] HRESULT AlpArgument( [in] unsigned int index, [in] eBLEND_SOURCE val );
-	[propget, id( 6), helpstring( "The RGB Blending function" )] HRESULT RgbFunction( [out, retval] eRGB_BLEND_FUNC * pVal );
-	[propput, id( 6), helpstring( "The RGB Blending function" )] HRESULT RgbFunction( [in] eRGB_BLEND_FUNC val );
-	[propget, id( 7), helpstring( "The RGB Blending argument" )] HRESULT RgbArgument( [in] unsigned int index, [out, retval] eBLEND_SOURCE * pVal );
-	[propput, id( 7), helpstring( "The RGB Blending argument" )] HRESULT RgbArgument( [in] unsigned int index, [in] eBLEND_SOURCE val );
-	[propget, id( 8), helpstring( "The texture channel" )] HRESULT Channel( [out, retval] eTEXTURE_CHANNEL * pVal );
-	[propput, id( 8), helpstring( "The texture channel" )] HRESULT Channel( [in] eTEXTURE_CHANNEL val );
-    [propget, id( 9), helpstring( "The texture blend colour" )] HRESULT BlendColour( [out, retval] IColour ** pVal );
-    [propput, id( 9), helpstring( "The texture blend colour" )] HRESULT BlendColour( [in] IColour * val );
-	[id(10), helpstring( "Loads the texture image from a file" )] HRESULT LoadTexture( [in] BSTR path );
+	[propget, id( 1 ), helpstring( "The unit texture" )] HRESULT Texture( [out, retval] ITextureBase ** pVal );
+	[propput, id( 1 ), helpstring( "The unit texture" )] HRESULT Texture( [in] ITextureBase * val );
+	[propget, id( 2 ), helpstring( "The Alpha Test function" )] HRESULT AlphaFunc( [out, retval] eALPHA_FUNC * pVal );
+	[propput, id( 2 ), helpstring( "The Alpha Test function" )] HRESULT AlphaFunc( [in] eALPHA_FUNC val );
+	[propget, id( 3 ), helpstring( "The Alpha Test reference value" )] HRESULT AlphaValue( [out, retval] float * pVal );
+	[propput, id( 3 ), helpstring( "The Alpha Test reference value" )] HRESULT AlphaValue( [in] float val );
+	[propget, id( 4 ), helpstring( "The Alpha Blending function" )] HRESULT AlpFunction( [out, retval] eALPHA_BLEND_FUNC * pVal );
+	[propput, id( 4 ), helpstring( "The Alpha Blending function" )] HRESULT AlpFunction( [in] eALPHA_BLEND_FUNC val );
+	[propget, id( 5 ), helpstring( "The Alpha Blending argument" )] HRESULT AlpArgument( [in] unsigned int index, [out, retval] eBLEND_SOURCE * pVal );
+	[propput, id( 5 ), helpstring( "The Alpha Blending argument" )] HRESULT AlpArgument( [in] unsigned int index, [in] eBLEND_SOURCE val );
+	[propget, id( 6 ), helpstring( "The RGB Blending function" )] HRESULT RgbFunction( [out, retval] eRGB_BLEND_FUNC * pVal );
+	[propput, id( 6 ), helpstring( "The RGB Blending function" )] HRESULT RgbFunction( [in] eRGB_BLEND_FUNC val );
+	[propget, id( 7 ), helpstring( "The RGB Blending argument" )] HRESULT RgbArgument( [in] unsigned int index, [out, retval] eBLEND_SOURCE * pVal );
+	[propput, id( 7 ), helpstring( "The RGB Blending argument" )] HRESULT RgbArgument( [in] unsigned int index, [in] eBLEND_SOURCE val );
+	[propget, id( 8 ), helpstring( "The texture channel" )] HRESULT Channel( [out, retval] eTEXTURE_CHANNEL * pVal );
+	[propput, id( 8 ), helpstring( "The texture channel" )] HRESULT Channel( [in] eTEXTURE_CHANNEL val );
+	[propget, id( 9 ), helpstring( "The texture blend colour" )] HRESULT BlendColour( [out, retval] IColour ** pVal );
+	[propput, id( 9 ), helpstring( "The texture blend colour" )] HRESULT BlendColour( [in] IColour * val );
+	[id( 10 ), helpstring( "Loads the texture image from a file" )] HRESULT LoadTexture( [in] BSTR path );
 };
 
 // IShaderProgram
@@ -1041,17 +1069,17 @@ interface ITextureUnit
 	oleautomation
 ]
 interface IShaderProgram
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "Retrieves the shader source for the shader object of wanted type" )] HRESULT File( [in] eSHADER_TYPE target, [in] eSHADER_MODEL model, [out, retval] BSTR * pVal );
-	[propput, id(1), helpstring( "Sets the shader source for the shader object of wanted type" )] HRESULT File( [in] eSHADER_TYPE target, [in] eSHADER_MODEL model, [in] BSTR val );
-	[propget, id(2), helpstring( "Retrieves the shader source for the shader object of wanted type" )] HRESULT Source( [in] eSHADER_TYPE target, [in] eSHADER_MODEL model, [out, retval] BSTR * pVal );
-	[propput, id(2), helpstring( "Sets the shader source for the shader object of wanted type" )] HRESULT Source( [in] eSHADER_TYPE target, [in] eSHADER_MODEL model, [in] BSTR val );
-	[propget, id(3), helpstring( "Retrieves the entry point for the shader object of wanted type" )] HRESULT EntryPoint( [in] eSHADER_TYPE target, [out, retval] BSTR * pVal );
-	[propput, id(3), helpstring( "Sets the entry point for the shader object of wanted type" )] HRESULT EntryPoint( [in] eSHADER_TYPE target, [in] BSTR val );
-	[id(4), helpstring( "Initialises the shader program" )] HRESULT Initialise();
-	[id(5), helpstring( "Cleans the shader program up" )] HRESULT Cleanup();
-	[id(6), helpstring( "Creates the shader object of wanted type" )] HRESULT CreateObject( [in] eSHADER_TYPE val );
+	[propget, id( 1 ), helpstring( "Retrieves the shader source for the shader object of wanted type" )] HRESULT File( [in] eSHADER_TYPE target, [in] eSHADER_MODEL model, [out, retval] BSTR * pVal );
+	[propput, id( 1 ), helpstring( "Sets the shader source for the shader object of wanted type" )] HRESULT File( [in] eSHADER_TYPE target, [in] eSHADER_MODEL model, [in] BSTR val );
+	[propget, id( 2 ), helpstring( "Retrieves the shader source for the shader object of wanted type" )] HRESULT Source( [in] eSHADER_TYPE target, [in] eSHADER_MODEL model, [out, retval] BSTR * pVal );
+	[propput, id( 2 ), helpstring( "Sets the shader source for the shader object of wanted type" )] HRESULT Source( [in] eSHADER_TYPE target, [in] eSHADER_MODEL model, [in] BSTR val );
+	[propget, id( 3 ), helpstring( "Retrieves the entry point for the shader object of wanted type" )] HRESULT EntryPoint( [in] eSHADER_TYPE target, [out, retval] BSTR * pVal );
+	[propput, id( 3 ), helpstring( "Sets the entry point for the shader object of wanted type" )] HRESULT EntryPoint( [in] eSHADER_TYPE target, [in] BSTR val );
+	[id( 4 ), helpstring( "Initialises the shader program" )] HRESULT Initialise();
+	[id( 5 ), helpstring( "Cleans the shader program up" )] HRESULT Cleanup();
+	[id( 6 ), helpstring( "Creates the shader object of wanted type" )] HRESULT CreateObject( [in] eSHADER_TYPE val );
 };
 
 // IPass
@@ -1062,29 +1090,29 @@ interface IShaderProgram
 	oleautomation
 ]
 interface IPass
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id( 1), helpstring( "The pass ambient colour" )] HRESULT Ambient( [out, retval] IColour ** pVal );
-	[propput, id( 1), helpstring( "The pass ambient colour" )] HRESULT Ambient( [in] IColour * val );
-	[propget, id( 2), helpstring( "The pass diffuse colour" )] HRESULT Diffuse( [out, retval] IColour ** pVal );
-	[propput, id( 2), helpstring( "The pass diffuse colour" )] HRESULT Diffuse( [in] IColour * val );
-	[propget, id( 3), helpstring( "The pass specular colour" )] HRESULT Specular( [out, retval] IColour ** pVal );
-	[propput, id( 3), helpstring( "The pass specular colour" )] HRESULT Specular( [in] IColour * val );
-	[propget, id( 4), helpstring( "The pass emissive colour" )] HRESULT Emissive( [out, retval] IColour ** pVal );
-	[propput, id( 4), helpstring( "The pass emissive colour" )] HRESULT Emissive( [in] IColour * val );
-    [propget, id( 5), helpstring( "The pass shininess value" )] HRESULT Shininess( [out, retval] float * pVal );
-    [propput, id( 5), helpstring( "The pass shininess value" )] HRESULT Shininess( [in] float val );
-    [propget, id( 6), helpstring( "The pass two sided status" )] HRESULT TwoSided( [out, retval] boolean * pVal );
-    [propput, id( 6), helpstring( "The pass two sided status" )] HRESULT TwoSided( [in] boolean val );
-    [propget, id( 7), helpstring( "The pass global alpha value" )] HRESULT Alpha( [out, retval] float * pVal );
-    [propput, id( 7), helpstring( "The pass global alpha value" )] HRESULT Alpha( [in] float val );
-	[propget, id( 8), helpstring( "The pass shader" )] HRESULT Shader( [out, retval] IShaderProgram ** pVal );
-	[propput, id( 8), helpstring( "The pass shader" )] HRESULT Shader( [in] IShaderProgram * val );
-	[propget, id( 9), helpstring( "Retrieves the units count" )] HRESULT TextureUnitCount( [out, retval] unsigned int * pVal );
-	[id(10), helpstring( "Creates a texture unit" )] HRESULT CreateTextureUnit( [out, retval] ITextureUnit ** pVal );
-	[id(11), helpstring( "Retrieves the texture unit at given index" )] HRESULT GetTextureUnitByIndex( [in] unsigned int index, [out, retval] ITextureUnit ** pVal );
-	[id(12), helpstring( "Destroys the texture unit" )] HRESULT DestroyTextureUnit( [in] ITextureUnit * val );
-	[id(13), helpstring( "Retrieves the texture unit at given channel" )] HRESULT GetTextureUnitByChannel( [in] eTEXTURE_CHANNEL channe, [out, retval] ITextureUnit ** pVal );
+	[propget, id( 1 ), helpstring( "The pass ambient colour" )] HRESULT Ambient( [out, retval] IColour ** pVal );
+	[propput, id( 1 ), helpstring( "The pass ambient colour" )] HRESULT Ambient( [in] IColour * val );
+	[propget, id( 2 ), helpstring( "The pass diffuse colour" )] HRESULT Diffuse( [out, retval] IColour ** pVal );
+	[propput, id( 2 ), helpstring( "The pass diffuse colour" )] HRESULT Diffuse( [in] IColour * val );
+	[propget, id( 3 ), helpstring( "The pass specular colour" )] HRESULT Specular( [out, retval] IColour ** pVal );
+	[propput, id( 3 ), helpstring( "The pass specular colour" )] HRESULT Specular( [in] IColour * val );
+	[propget, id( 4 ), helpstring( "The pass emissive colour" )] HRESULT Emissive( [out, retval] IColour ** pVal );
+	[propput, id( 4 ), helpstring( "The pass emissive colour" )] HRESULT Emissive( [in] IColour * val );
+	[propget, id( 5 ), helpstring( "The pass shininess value" )] HRESULT Shininess( [out, retval] float * pVal );
+	[propput, id( 5 ), helpstring( "The pass shininess value" )] HRESULT Shininess( [in] float val );
+	[propget, id( 6 ), helpstring( "The pass two sided status" )] HRESULT TwoSided( [out, retval] boolean * pVal );
+	[propput, id( 6 ), helpstring( "The pass two sided status" )] HRESULT TwoSided( [in] boolean val );
+	[propget, id( 7 ), helpstring( "The pass global alpha value" )] HRESULT Alpha( [out, retval] float * pVal );
+	[propput, id( 7 ), helpstring( "The pass global alpha value" )] HRESULT Alpha( [in] float val );
+	[propget, id( 8 ), helpstring( "The pass shader" )] HRESULT Shader( [out, retval] IShaderProgram ** pVal );
+	[propput, id( 8 ), helpstring( "The pass shader" )] HRESULT Shader( [in] IShaderProgram * val );
+	[propget, id( 9 ), helpstring( "Retrieves the units count" )] HRESULT TextureUnitCount( [out, retval] unsigned int * pVal );
+	[id( 10 ), helpstring( "Creates a texture unit" )] HRESULT CreateTextureUnit( [out, retval] ITextureUnit ** pVal );
+	[id( 11 ), helpstring( "Retrieves the texture unit at given index" )] HRESULT GetTextureUnitByIndex( [in] unsigned int index, [out, retval] ITextureUnit ** pVal );
+	[id( 12 ), helpstring( "Destroys the texture unit" )] HRESULT DestroyTextureUnit( [in] ITextureUnit * val );
+	[id( 13 ), helpstring( "Retrieves the texture unit at given channel" )] HRESULT GetTextureUnitByChannel( [in] eTEXTURE_CHANNEL channe, [out, retval] ITextureUnit ** pVal );
 };
 
 // IMaterial
@@ -1095,14 +1123,14 @@ interface IPass
 	oleautomation
 ]
 interface IMaterial
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id( 1), helpstring( "Retrieves the passes count" )] HRESULT PassCount( [out, retval] unsigned int * pVal );
-	[id(2), helpstring( "Initialises the material" )] HRESULT Initialise();
-	[id(3), helpstring( "Cleans the material up" )] HRESULT Cleanup();
-	[id(4), helpstring( "Creates a pass" )] HRESULT CreatePass( [out, retval] IPass ** pVal );
-	[id(5), helpstring( "Retrieves the pass at given index" )] HRESULT GetPass( [in] unsigned int val, [out, retval] IPass ** pVal );
-	[id(6), helpstring( "Destroys the given pass" )] HRESULT DestroyPass( [in] unsigned int val );
+	[propget, id( 1 ), helpstring( "Retrieves the passes count" )] HRESULT PassCount( [out, retval] unsigned int * pVal );
+	[id( 2 ), helpstring( "Initialises the material" )] HRESULT Initialise();
+	[id( 3 ), helpstring( "Cleans the material up" )] HRESULT Cleanup();
+	[id( 4 ), helpstring( "Creates a pass" )] HRESULT CreatePass( [out, retval] IPass ** pVal );
+	[id( 5 ), helpstring( "Retrieves the pass at given index" )] HRESULT GetPass( [in] unsigned int val, [out, retval] IPass ** pVal );
+	[id( 6 ), helpstring( "Destroys the given pass" )] HRESULT DestroyPass( [in] unsigned int val );
 };
 
 // ISubmesh
@@ -1113,12 +1141,12 @@ interface IMaterial
 	oleautomation
 ]
 interface ISubmesh
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "The faces count" )] HRESULT FaceCount( [out, retval] unsigned int * pVal );
-	[propget, id(2), helpstring( "The points count" )] HRESULT PointsCount( [out, retval] unsigned int * pVal );
-	[id(3), helpstring( "Adds a point to the submesh" )] HRESULT AddPoint( [in] IVector3D * val );
-	[id(4), helpstring( "Adds a face to the submesh, defined by its vertex indices" )] HRESULT AddFace( [in] unsigned int x, [in] unsigned int y, [in] unsigned int z );
+	[propget, id( 1 ), helpstring( "The faces count" )] HRESULT FaceCount( [out, retval] unsigned int * pVal );
+	[propget, id( 2 ), helpstring( "The points count" )] HRESULT PointsCount( [out, retval] unsigned int * pVal );
+	[id( 3 ), helpstring( "Adds a point to the submesh" )] HRESULT AddPoint( [in] IVector3D * val );
+	[id( 4 ), helpstring( "Adds a face to the submesh, defined by its vertex indices" )] HRESULT AddFace( [in] unsigned int x, [in] unsigned int y, [in] unsigned int z );
 };
 
 // IMesh
@@ -1129,15 +1157,15 @@ interface ISubmesh
 	oleautomation
 ]
 interface IMesh
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "The mesh type" )] HRESULT MeshType( [out, retval] eMESH_TYPE * pVal );
-	[propget, id(2), helpstring( "The total mesh's submeshes count" )] HRESULT SubmeshCount( [out, retval] unsigned int * pVal );
-	[propget, id(3), helpstring( "The total mesh's faces count" )] HRESULT FaceCount( [out, retval] unsigned int * pVal );
-	[propget, id(4), helpstring( "The total mesh's vertices count" )] HRESULT VertexCount( [out, retval] unsigned int * pVal );
-	[id(5), helpstring( "Retrieves the submesh at the given index" )] HRESULT GetSubmesh( [in] unsigned int val, [out, retval] ISubmesh ** pVal );
-	[id(6), helpstring( "Creates a new submesh for this mesh" )] HRESULT CreateSubmesh( [out, retval] ISubmesh ** pVal );
-	[id(7), helpstring( "Deletes the given submesh" )] HRESULT DeleteSubmesh( [in] ISubmesh * val );
+	[propget, id( 1 ), helpstring( "The mesh type" )] HRESULT MeshType( [out, retval] eMESH_TYPE * pVal );
+	[propget, id( 2 ), helpstring( "The total mesh's submeshes count" )] HRESULT SubmeshCount( [out, retval] unsigned int * pVal );
+	[propget, id( 3 ), helpstring( "The total mesh's faces count" )] HRESULT FaceCount( [out, retval] unsigned int * pVal );
+	[propget, id( 4 ), helpstring( "The total mesh's vertices count" )] HRESULT VertexCount( [out, retval] unsigned int * pVal );
+	[id( 5 ), helpstring( "Retrieves the submesh at the given index" )] HRESULT GetSubmesh( [in] unsigned int val, [out, retval] ISubmesh ** pVal );
+	[id( 6 ), helpstring( "Creates a new submesh for this mesh" )] HRESULT CreateSubmesh( [out, retval] ISubmesh ** pVal );
+	[id( 7 ), helpstring( "Deletes the given submesh" )] HRESULT DeleteSubmesh( [in] ISubmesh * val );
 };
 
 // IScene
@@ -1148,40 +1176,40 @@ interface IMesh
 	oleautomation
 ]
 interface IScene
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id( 1), helpstring( "The background colour" )] HRESULT BackgroundColour( [out, retval] IColour ** pVal );
-	[propput, id( 1), helpstring( "The background colour" )] HRESULT BackgroundColour( [in] IColour * val );
-	[propget, id( 2), helpstring( "The scene name" )] HRESULT Name( [out, retval] BSTR * pVal );
-	[propput, id( 2), helpstring( "The scene name" )] HRESULT Name( [in] BSTR val );
-	[propget, id( 3), helpstring( "The ambient light colour" )] HRESULT AmbientLight( [out, retval] IColour ** pVal );
-	[propput, id( 3), helpstring( "The ambient light colour" )] HRESULT AmbientLight( [in] IColour * val );
-	[propget, id( 4), helpstring( "The nodes count" )] HRESULT NodesCount( [out, retval] unsigned int * pVal );
-	[propget, id( 5), helpstring( "The lights count" )] HRESULT LightsCount( [out, retval] unsigned int * pVal );
-	[propget, id( 6), helpstring( "The geometries count" )] HRESULT GeometriesCount( [out, retval] unsigned int * pVal );
-	[propget, id( 7), helpstring( "The cameras count" )] HRESULT CamerasCount( [out, retval] unsigned int * pVal );
-	[propget, id( 8), helpstring( "The root scene node" )] HRESULT RootNode( [out, retval] ISceneNode ** pVal );
-	[propget, id( 9), helpstring( "The objects root scene node" )] HRESULT ObjectRootNode( [out, retval] ISceneNode ** pVal );
-	[propget, id(10), helpstring( "The cameras root scene node" )] HRESULT CameraRootNode( [out, retval] ISceneNode ** pVal );
-	[id(11), helpstring( "Clears the created objects maps" )] HRESULT ClearScene();
-	[id(12), helpstring( "Sets the background image" )] HRESULT SetBackgroundImage( [in] BSTR path );
-	[id(13), helpstring( "Creates a new scene node" )] HRESULT CreateSceneNode( [in] BSTR name, [in] ISceneNode * parent, [out, retval] ISceneNode ** pVal );
-	[id(14), helpstring( "Creates a new geometry" )] HRESULT CreateGeometry( [in] BSTR name, [out, retval] IGeometry ** pVal );
-	[id(15), helpstring( "Creates a new camera" )] HRESULT CreateCamera( [in] BSTR name, [in] int ww, [in] int wh, [in] ISceneNode * node, [in] eVIEWPORT_TYPE type, [out, retval] ICamera ** pVal );
-	[id(16), helpstring( "Creates a new light" )] HRESULT CreateLight( [in] BSTR name, [in] ISceneNode * node, [in] eLIGHT_TYPE type, [out, retval] ILight ** pVal );
-	[id(17), helpstring( "Retrieves the scene node with the given name" )] HRESULT GetNode( [in] BSTR name, [out, retval] ISceneNode ** pVal );
-	[id(18), helpstring( "Retrieves the geometry with the given name" )] HRESULT GetGeometry( [in] BSTR name, [out, retval] IGeometry ** pVal );
-	[id(19), helpstring( "Retrieves the light with the given name" )] HRESULT GetLight( [in] BSTR name, [out, retval] ILight ** pVal );
-	[id(20), helpstring( "Retrieves the camera with the given name" )] HRESULT GetCamera( [in] BSTR name, [out, retval] ICamera ** pVal );
-	[id(21), helpstring( "Removes the light with the given name" )] HRESULT RemoveLight( [in] ILight * light );
-	[id(22), helpstring( "Removes the scene node with the given name" )] HRESULT RemoveNode( [in] ISceneNode * node );
-	[id(23), helpstring( "Removes the geometry with the given name" )] HRESULT RemoveGeometry( [in] IGeometry * geometry );
-	[id(24), helpstring( "Removes the camera with the given name" )] HRESULT RemoveCamera( [in] ICamera * camera );
-	[id(25), helpstring( "Removes all lights from the scene" )] HRESULT RemoveAllLights();
-	[id(26), helpstring( "Removes all scene nodes from the scene" )] HRESULT RemoveAllNodes();
-	[id(27), helpstring( "Removes all geometries from the scene" )] HRESULT RemoveAllGeometries();
-	[id(29), helpstring( "Removes all cameras from the scene" )] HRESULT RemoveAllCameras();
-	[id(30), helpstring( "Retrieves the backround image" )] HRESULT GetBackgroundImage( [out, retval] ITextureBase ** pVal );
+	[propget, id( 1 ), helpstring( "The background colour" )] HRESULT BackgroundColour( [out, retval] IColour ** pVal );
+	[propput, id( 1 ), helpstring( "The background colour" )] HRESULT BackgroundColour( [in] IColour * val );
+	[propget, id( 2 ), helpstring( "The scene name" )] HRESULT Name( [out, retval] BSTR * pVal );
+	[propput, id( 2 ), helpstring( "The scene name" )] HRESULT Name( [in] BSTR val );
+	[propget, id( 3 ), helpstring( "The ambient light colour" )] HRESULT AmbientLight( [out, retval] IColour ** pVal );
+	[propput, id( 3 ), helpstring( "The ambient light colour" )] HRESULT AmbientLight( [in] IColour * val );
+	[propget, id( 4 ), helpstring( "The nodes count" )] HRESULT NodesCount( [out, retval] unsigned int * pVal );
+	[propget, id( 5 ), helpstring( "The lights count" )] HRESULT LightsCount( [out, retval] unsigned int * pVal );
+	[propget, id( 6 ), helpstring( "The geometries count" )] HRESULT GeometriesCount( [out, retval] unsigned int * pVal );
+	[propget, id( 7 ), helpstring( "The cameras count" )] HRESULT CamerasCount( [out, retval] unsigned int * pVal );
+	[propget, id( 8 ), helpstring( "The root scene node" )] HRESULT RootNode( [out, retval] ISceneNode ** pVal );
+	[propget, id( 9 ), helpstring( "The objects root scene node" )] HRESULT ObjectRootNode( [out, retval] ISceneNode ** pVal );
+	[propget, id( 10 ), helpstring( "The cameras root scene node" )] HRESULT CameraRootNode( [out, retval] ISceneNode ** pVal );
+	[id( 11 ), helpstring( "Clears the created objects maps" )] HRESULT ClearScene();
+	[id( 12 ), helpstring( "Sets the background image" )] HRESULT SetBackgroundImage( [in] BSTR path );
+	[id( 13 ), helpstring( "Creates a new scene node" )] HRESULT CreateSceneNode( [in] BSTR name, [in] ISceneNode * parent, [out, retval] ISceneNode ** pVal );
+	[id( 14 ), helpstring( "Creates a new geometry" )] HRESULT CreateGeometry( [in] BSTR name, [out, retval] IGeometry ** pVal );
+	[id( 15 ), helpstring( "Creates a new camera" )] HRESULT CreateCamera( [in] BSTR name, [in] int ww, [in] int wh, [in] ISceneNode * node, [in] eVIEWPORT_TYPE type, [out, retval] ICamera ** pVal );
+	[id( 16 ), helpstring( "Creates a new light" )] HRESULT CreateLight( [in] BSTR name, [in] ISceneNode * node, [in] eLIGHT_TYPE type, [out, retval] ILight ** pVal );
+	[id( 17 ), helpstring( "Retrieves the scene node with the given name" )] HRESULT GetNode( [in] BSTR name, [out, retval] ISceneNode ** pVal );
+	[id( 18 ), helpstring( "Retrieves the geometry with the given name" )] HRESULT GetGeometry( [in] BSTR name, [out, retval] IGeometry ** pVal );
+	[id( 19 ), helpstring( "Retrieves the light with the given name" )] HRESULT GetLight( [in] BSTR name, [out, retval] ILight ** pVal );
+	[id( 20 ), helpstring( "Retrieves the camera with the given name" )] HRESULT GetCamera( [in] BSTR name, [out, retval] ICamera ** pVal );
+	[id( 21 ), helpstring( "Removes the light with the given name" )] HRESULT RemoveLight( [in] ILight * light );
+	[id( 22 ), helpstring( "Removes the scene node with the given name" )] HRESULT RemoveNode( [in] ISceneNode * node );
+	[id( 23 ), helpstring( "Removes the geometry with the given name" )] HRESULT RemoveGeometry( [in] IGeometry * geometry );
+	[id( 24 ), helpstring( "Removes the camera with the given name" )] HRESULT RemoveCamera( [in] ICamera * camera );
+	[id( 25 ), helpstring( "Removes all lights from the scene" )] HRESULT RemoveAllLights();
+	[id( 26 ), helpstring( "Removes all scene nodes from the scene" )] HRESULT RemoveAllNodes();
+	[id( 27 ), helpstring( "Removes all geometries from the scene" )] HRESULT RemoveAllGeometries();
+	[id( 29 ), helpstring( "Removes all cameras from the scene" )] HRESULT RemoveAllCameras();
+	[id( 30 ), helpstring( "Retrieves the backround image" )] HRESULT GetBackgroundImage( [out, retval] ITextureBase ** pVal );
 };
 
 // IRenderWindow
@@ -1192,25 +1220,14 @@ interface IScene
 	oleautomation
 ]
 interface IRenderWindow
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "The samples count, if multisampling" )] HRESULT SamplesCount( [out, retval] unsigned int * pVal );
-	[propput, id(1), helpstring( "The samples count, if multisampling" )] HRESULT SamplesCount( [in] unsigned int val );
-	[propget, id(2), helpstring( "The window camera" )] HRESULT Camera( [out, retval] ICamera ** pVal );
-	[propput, id(2), helpstring( "The window camera" )] HRESULT Camera( [in] ICamera * camera );
-	[propget, id(3), helpstring( "The rendering primitive type" )] HRESULT PrimitiveType( [out, retval] eTOPOLOGY * pVal );
-	[propput, id(3), helpstring( "The rendering primitive type" )] HRESULT PrimitiveType( [in] eTOPOLOGY val );
-	[propget, id(4), helpstring( "The viewport type" )] HRESULT ViewportType( [out, retval] eVIEWPORT_TYPE * pVal );
-	[propput, id(4), helpstring( "The viewport type" )] HRESULT ViewportType( [in] eVIEWPORT_TYPE val );
-	[propget, id(5), helpstring( "The rendered scene" )] HRESULT Scene( [out, retval] IScene ** pVal );
-	[propput, id(5), helpstring( "The rendered scene" )] HRESULT Scene( [in] IScene * val );
-	[propget, id(6), helpstring( "The window pixel format" )] HRESULT PixelFormat( [out, retval] ePIXEL_FORMAT * pVal );
-	[propput, id(6), helpstring( "The window pixel format" )] HRESULT PixelFormat( [in] ePIXEL_FORMAT val );
-	[propget, id(7), helpstring( "The window size" )] HRESULT Size( [out, retval] ISize ** pVal );
-	[propget, id(8), helpstring( "The window name" )] HRESULT Name( [out, retval] BSTR * pVal );
-	[id( 9), helpstring( "Initialises the render window" ), local] HRESULT Initialise( [in] LPVOID val, [out, retval] VARIANT_BOOL * pVal );
-	[id(10), helpstring( "Cleans the render window up" )] HRESULT Cleanup();
-	[id(11), helpstring( "Resizes the render window" )] HRESULT Resize( [in] ISize * size );
+	[propget, id( 1 ), helpstring( "The render target" )] HRESULT RenderTarget( [out, retval] IRenderTarget ** pVal );
+	[propput, id( 1 ), helpstring( "The render target" )] HRESULT RenderTarget( [in] IRenderTarget * camera );
+	[propget, id( 2 ), helpstring( "The window name" )] HRESULT Name( [out, retval] BSTR * pVal );
+	[id( 3 ), helpstring( "Initialises the render window" ), local] HRESULT Initialise( [in] LPVOID val, [out, retval] VARIANT_BOOL * pVal );
+	[id( 4 ), helpstring( "Cleans the render window up" )] HRESULT Cleanup();
+	[id( 5 ), helpstring( "Resizes the render window" )] HRESULT Resize( [in] ISize * size );
 };
 
 // IAnimation
@@ -1221,7 +1238,7 @@ interface IRenderWindow
 	oleautomation
 ]
 interface IAnimation
-	:	IDispatch
+	: IDispatch
 {
 };
 
@@ -1233,7 +1250,7 @@ interface IAnimation
 	oleautomation
 ]
 interface ISkeleton
-	:	IDispatch
+	: IDispatch
 {
 };
 
@@ -1245,13 +1262,13 @@ interface ISkeleton
 	oleautomation
 ]
 interface IMovableObject
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "The object name" )] HRESULT Name( [out, retval] BSTR * pVal );
-	[propget, id(2), helpstring( "The movable object type" )] HRESULT Type( [out, retval] eMOVABLE_TYPE * pVal );
-	[propget, id(3), helpstring( "The object's parent scene" )] HRESULT Scene( [out, retval] IScene ** pVal );
-	[id(4), helpstring( "Attaches the movable object to the given node" )] HRESULT AttachTo( [in] ISceneNode * val );
-	[id(5), helpstring( "Detaches the movable object from its parent node" )] HRESULT Detach();
+	[propget, id( 1 ), helpstring( "The object name" )] HRESULT Name( [out, retval] BSTR * pVal );
+	[propget, id( 2 ), helpstring( "The movable object type" )] HRESULT Type( [out, retval] eMOVABLE_TYPE * pVal );
+	[propget, id( 3 ), helpstring( "The object's parent scene" )] HRESULT Scene( [out, retval] IScene ** pVal );
+	[id( 4 ), helpstring( "Attaches the movable object to the given node" )] HRESULT AttachTo( [in] ISceneNode * val );
+	[id( 5 ), helpstring( "Detaches the movable object from its parent node" )] HRESULT Detach();
 };
 
 // ILightCategory
@@ -1262,14 +1279,14 @@ interface IMovableObject
 	oleautomation
 ]
 interface ILightCategory
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "The light ambient value" )] HRESULT Ambient( [out, retval] IColour ** pVal );
-	[propput, id(1), helpstring( "The light ambient value" )] HRESULT Ambient( [in] IColour * val );
-	[propget, id(2), helpstring( "The light diffuse value" )] HRESULT Diffuse( [out, retval] IColour ** pVal );
-	[propput, id(2), helpstring( "The light diffuse value" )] HRESULT Diffuse( [in] IColour * val );
-	[propget, id(3), helpstring( "The light specular value" )] HRESULT Specular( [out, retval] IColour ** pVal );
-	[propput, id(3), helpstring( "The light specular value" )] HRESULT Specular( [in] IColour * val );
+	[propget, id( 1 ), helpstring( "The light ambient value" )] HRESULT Ambient( [out, retval] IColour ** pVal );
+	[propput, id( 1 ), helpstring( "The light ambient value" )] HRESULT Ambient( [in] IColour * val );
+	[propget, id( 2 ), helpstring( "The light diffuse value" )] HRESULT Diffuse( [out, retval] IColour ** pVal );
+	[propput, id( 2 ), helpstring( "The light diffuse value" )] HRESULT Diffuse( [in] IColour * val );
+	[propget, id( 3 ), helpstring( "The light specular value" )] HRESULT Specular( [out, retval] IColour ** pVal );
+	[propput, id( 3 ), helpstring( "The light specular value" )] HRESULT Specular( [in] IColour * val );
 };
 
 // IDirectionalLight
@@ -1280,10 +1297,10 @@ interface ILightCategory
 	oleautomation
 ]
 interface IDirectionalLight
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "The light direction" )] HRESULT Direction( [out, retval] IVector3D ** pVal );
-	[propput, id(1), helpstring( "The light direction" )] HRESULT Direction( [in] IVector3D * val );
+	[propget, id( 1 ), helpstring( "The light direction" )] HRESULT Direction( [out, retval] IVector3D ** pVal );
+	[propput, id( 1 ), helpstring( "The light direction" )] HRESULT Direction( [in] IVector3D * val );
 };
 
 // IPointLight
@@ -1294,12 +1311,12 @@ interface IDirectionalLight
 	oleautomation
 ]
 interface IPointLight
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "The light source position" )] HRESULT Position( [out, retval] IVector3D ** pVal );
-	[propput, id(1), helpstring( "The light source position" )] HRESULT Position( [in] IVector3D * val );
-	[propget, id(2), helpstring( "The light attenuation values (constant, linear and quadratic)" )] HRESULT Attenuation( [out, retval] IVector3D ** pVal );
-	[propput, id(2), helpstring( "The light attenuation values (constant, linear and quadratic)" )] HRESULT Attenuation( [in] IVector3D * val );
+	[propget, id( 1 ), helpstring( "The light source position" )] HRESULT Position( [out, retval] IVector3D ** pVal );
+	[propput, id( 1 ), helpstring( "The light source position" )] HRESULT Position( [in] IVector3D * val );
+	[propget, id( 2 ), helpstring( "The light attenuation values (constant, linear and quadratic)" )] HRESULT Attenuation( [out, retval] IVector3D ** pVal );
+	[propput, id( 2 ), helpstring( "The light attenuation values (constant, linear and quadratic)" )] HRESULT Attenuation( [in] IVector3D * val );
 };
 
 // ISpotLight
@@ -1310,16 +1327,16 @@ interface IPointLight
 	oleautomation
 ]
 interface ISpotLight
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "The light source position" )] HRESULT Position( [out, retval] IVector3D ** pVal );
-	[propput, id(1), helpstring( "The light source position" )] HRESULT Position( [in] IVector3D * val );
-	[propget, id(2), helpstring( "The light attenuation values (constant, linear and quadratic)" )] HRESULT Attenuation( [out, retval] IVector3D ** pVal );
-	[propput, id(2), helpstring( "The light attenuation values (constant, linear and quadratic)" )] HRESULT Attenuation( [in] IVector3D * val );
-	[propget, id(3), helpstring( "The light exponent value" )] HRESULT Exponent( [out, retval] float * pVal );
-	[propput, id(3), helpstring( "The light exponent value" )] HRESULT Exponent( [in] float val );
-	[propget, id(4), helpstring( "The light cut off value" )] HRESULT CutOff( [out, retval] float * pVal );
-	[propput, id(4), helpstring( "The light cut off value" )] HRESULT CutOff( [in] float val );
+	[propget, id( 1 ), helpstring( "The light source position" )] HRESULT Position( [out, retval] IVector3D ** pVal );
+	[propput, id( 1 ), helpstring( "The light source position" )] HRESULT Position( [in] IVector3D * val );
+	[propget, id( 2 ), helpstring( "The light attenuation values (constant, linear and quadratic)" )] HRESULT Attenuation( [out, retval] IVector3D ** pVal );
+	[propput, id( 2 ), helpstring( "The light attenuation values (constant, linear and quadratic)" )] HRESULT Attenuation( [in] IVector3D * val );
+	[propget, id( 3 ), helpstring( "The light exponent value" )] HRESULT Exponent( [out, retval] float * pVal );
+	[propput, id( 3 ), helpstring( "The light exponent value" )] HRESULT Exponent( [in] float val );
+	[propget, id( 4 ), helpstring( "The light cut off value" )] HRESULT CutOff( [out, retval] float * pVal );
+	[propput, id( 4 ), helpstring( "The light cut off value" )] HRESULT CutOff( [in] float val );
 };
 
 // ICamera
@@ -1330,15 +1347,15 @@ interface ISpotLight
 	oleautomation
 ]
 interface ICamera
-	:	IMovableObject
+	: IMovableObject
 {
-	[propget, id(11), helpstring( "The camera rendering primitive type" )] HRESULT PrimitiveType( [out, retval] eTOPOLOGY * pVal );
-	[propput, id(11), helpstring( "The camera rendering primitive type" )] HRESULT PrimitiveType( [in] eTOPOLOGY val );
-	[propget, id(12), helpstring( "The camera viewport type" )] HRESULT ViewportType( [out, retval] eVIEWPORT_TYPE * pVal );
-	[propput, id(12), helpstring( "The camera viewport type" )] HRESULT ViewportType( [in] eVIEWPORT_TYPE val );
-	[propget, id(13), helpstring( "The camera horizontal resolution" )] HRESULT Width( [out, retval] unsigned int * pVal );
-	[propget, id(14), helpstring( "The camera vertical resolution" )] HRESULT Height( [out, retval] unsigned int * pVal );
-	[id(15), helpstring( "Changes the camera resolution" )] HRESULT Resize( [in] unsigned int width, [in] unsigned int height );
+	[propget, id( 11 ), helpstring( "The camera rendering primitive type" )] HRESULT PrimitiveType( [out, retval] eTOPOLOGY * pVal );
+	[propput, id( 11 ), helpstring( "The camera rendering primitive type" )] HRESULT PrimitiveType( [in] eTOPOLOGY val );
+	[propget, id( 12 ), helpstring( "The camera viewport type" )] HRESULT ViewportType( [out, retval] eVIEWPORT_TYPE * pVal );
+	[propput, id( 12 ), helpstring( "The camera viewport type" )] HRESULT ViewportType( [in] eVIEWPORT_TYPE val );
+	[propget, id( 13 ), helpstring( "The camera horizontal resolution" )] HRESULT Width( [out, retval] unsigned int * pVal );
+	[propget, id( 14 ), helpstring( "The camera vertical resolution" )] HRESULT Height( [out, retval] unsigned int * pVal );
+	[id( 15 ), helpstring( "Changes the camera resolution" )] HRESULT Resize( [in] unsigned int width, [in] unsigned int height );
 };
 
 // ILight
@@ -1349,10 +1366,12 @@ interface ICamera
 	oleautomation
 ]
 interface ILight
-	:	IMovableObject
+	: IMovableObject
 {
-	[propget, id(11), helpstring( "The light type" )] HRESULT LightType( [out, retval] eLIGHT_TYPE * pVal );
-	[propget, id(12), helpstring( "The light category" )] HRESULT Category( [out, retval] ILightCategory ** pVal );
+	[propget, id( 11 ), helpstring( "The light type" )] HRESULT LightType( [out, retval] eLIGHT_TYPE * pVal );
+	[propget, id( 12 ), helpstring( "The directional light category" )] HRESULT DirectionalLight( [out, retval] IDirectionalLight ** pVal );
+	[propget, id( 13 ), helpstring( "The point light category" )] HRESULT PointLight( [out, retval] IPointLight ** pVal );
+	[propget, id( 14 ), helpstring( "The spot light category" )] HRESULT SpotLight( [out, retval] ISpotLight ** pVal );
 };
 
 // IGeometry
@@ -1363,12 +1382,12 @@ interface ILight
 	oleautomation
 ]
 interface IGeometry
-	:	IMovableObject
+	: IMovableObject
 {
-	[propget, id(11), helpstring( "The geometry's mesh" )] HRESULT Mesh( [out, retval] IMesh ** pVal );
-	[propput, id(11), helpstring( "The geometry's mesh" )] HRESULT Mesh( [in] IMesh * val );
-	[id(12), helpstring( "Retrieves the given submesh's material" )] HRESULT GetMaterial( [in] ISubmesh * submesh, [out, retval] IMaterial ** pVal );
-	[id(13), helpstring( "Defines the given submesh's material" )] HRESULT SetMaterial( [in] ISubmesh * submesh, [in] IMaterial * val );
+	[propget, id( 11 ), helpstring( "The geometry's mesh" )] HRESULT Mesh( [out, retval] IMesh ** pVal );
+	[propput, id( 11 ), helpstring( "The geometry's mesh" )] HRESULT Mesh( [in] IMesh * val );
+	[id( 12 ), helpstring( "Retrieves the given submesh's material" )] HRESULT GetMaterial( [in] ISubmesh * submesh, [out, retval] IMaterial ** pVal );
+	[id( 13 ), helpstring( "Defines the given submesh's material" )] HRESULT SetMaterial( [in] ISubmesh * submesh, [in] IMaterial * val );
 };
 
 // ISceneNode
@@ -1379,24 +1398,24 @@ interface IGeometry
 	oleautomation
 ]
 interface ISceneNode
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "The node position" )] HRESULT Position( [out, retval] IVector3D ** pVal );
-	[propput, id(1), helpstring( "The node position" )] HRESULT Position( [in] IVector3D * val );
-	[propget, id(2), helpstring( "The node orientation" )] HRESULT Orientation( [out, retval] IQuaternion ** pVal );
-	[propput, id(2), helpstring( "The node orientation" )] HRESULT Orientation( [in] IQuaternion * val );
-	[propget, id(3), helpstring( "The node scale" )] HRESULT Scaling( [out, retval] IVector3D ** pVal );
-	[propput, id(3), helpstring( "The node scale" )] HRESULT Scaling( [in] IVector3D * val );
-	[id( 4), helpstring( "Attaches an object to the node" )] HRESULT AttachObject( [in] IMovableObject * val );
-	[id( 5), helpstring( "Detaches an object from the node" )] HRESULT DetachObject( [in] IMovableObject * val );
-	[id( 6), helpstring( "Attaches this node to another one" )] HRESULT AttachTo( [in] ISceneNode * val );
-	[id( 7), helpstring( "Detaches this node from its parent" )] HRESULT Detach();
-	[id( 8), helpstring( "Retrieves Y axis orientation" )] HRESULT Yaw( [in] IAngle * val );
-	[id( 9), helpstring( "Retrieves X axis orientation" )] HRESULT Pitch( [in] IAngle * val );
-	[id(10), helpstring( "Retrieves Z axis orientation" )] HRESULT Roll( [in] IAngle * val );
-	[id(11), helpstring( "Rotates the node" )] HRESULT Rotate( [in] IQuaternion * val );
-	[id(12), helpstring( "Translates the node" )] HRESULT Translate( [in] IVector3D * val );
-	[id(13), helpstring( "Scales the node" )] HRESULT Scale( [in] IVector3D * val );
+	[propget, id( 1 ), helpstring( "The node position" )] HRESULT Position( [out, retval] IVector3D ** pVal );
+	[propput, id( 1 ), helpstring( "The node position" )] HRESULT Position( [in] IVector3D * val );
+	[propget, id( 2 ), helpstring( "The node orientation" )] HRESULT Orientation( [out, retval] IQuaternion ** pVal );
+	[propput, id( 2 ), helpstring( "The node orientation" )] HRESULT Orientation( [in] IQuaternion * val );
+	[propget, id( 3 ), helpstring( "The node scale" )] HRESULT Scaling( [out, retval] IVector3D ** pVal );
+	[propput, id( 3 ), helpstring( "The node scale" )] HRESULT Scaling( [in] IVector3D * val );
+	[id( 4 ), helpstring( "Attaches an object to the node" )] HRESULT AttachObject( [in] IMovableObject * val );
+	[id( 5 ), helpstring( "Detaches an object from the node" )] HRESULT DetachObject( [in] IMovableObject * val );
+	[id( 6 ), helpstring( "Attaches this node to another one" )] HRESULT AttachTo( [in] ISceneNode * val );
+	[id( 7 ), helpstring( "Detaches this node from its parent" )] HRESULT Detach();
+	[id( 8 ), helpstring( "Retrieves Y axis orientation" )] HRESULT Yaw( [in] IAngle * val );
+	[id( 9 ), helpstring( "Retrieves X axis orientation" )] HRESULT Pitch( [in] IAngle * val );
+	[id( 10 ), helpstring( "Retrieves Z axis orientation" )] HRESULT Roll( [in] IAngle * val );
+	[id( 11 ), helpstring( "Rotates the node" )] HRESULT Rotate( [in] IQuaternion * val );
+	[id( 12 ), helpstring( "Translates the node" )] HRESULT Translate( [in] IVector3D * val );
+	[id( 13 ), helpstring( "Scales the node" )] HRESULT Scale( [in] IVector3D * val );
 };
 
 // IOverlayCategory
@@ -1407,19 +1426,19 @@ interface ISceneNode
 	oleautomation
 ]
 interface IOverlayCategory
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "The overlay type" )] HRESULT Type( [out, retval] eOVERLAY_TYPE * pVal );
-	[propget, id(2), helpstring( "The overlay position, relative to its parent" )] HRESULT Position( [out, retval] IVector2D ** pVal );
-	[propput, id(2), helpstring( "The overlay position, relative to its parent" )] HRESULT Position( [in] IVector2D * val );
-	[propget, id(3), helpstring( "The overlay size, relative to its parent" )] HRESULT Size( [out, retval] IVector2D ** pVal );
-	[propput, id(3), helpstring( "The overlay size, relative to its parent" )] HRESULT Size( [in] IVector2D * val );
-	[propget, id(4), helpstring( "The overlay visibility" )] HRESULT Visible( [out, retval] boolean * pVal );
-	[propput, id(4), helpstring( "The overlay visibility" )] HRESULT Visible( [in] boolean * val );
-	[propget, id(5), helpstring( "The overlay z-index" )] HRESULT ZIndex( [out, retval] int * pVal );
-	[propput, id(5), helpstring( "The overlay z-index" )] HRESULT ZIndex( [in] int val );
-	[propget, id(6), helpstring( "The overlay material" )] HRESULT Material( [out, retval] IMaterial ** pVal );
-	[propput, id(6), helpstring( "The overlay material" )] HRESULT Material( [in] IMaterial * val );
+	[propget, id( 1 ), helpstring( "The overlay type" )] HRESULT Type( [out, retval] eOVERLAY_TYPE * pVal );
+	[propget, id( 2 ), helpstring( "The overlay position, relative to its parent" )] HRESULT Position( [out, retval] IVector2D ** pVal );
+	[propput, id( 2 ), helpstring( "The overlay position, relative to its parent" )] HRESULT Position( [in] IVector2D * val );
+	[propget, id( 3 ), helpstring( "The overlay size, relative to its parent" )] HRESULT Size( [out, retval] IVector2D ** pVal );
+	[propput, id( 3 ), helpstring( "The overlay size, relative to its parent" )] HRESULT Size( [in] IVector2D * val );
+	[propget, id( 4 ), helpstring( "The overlay visibility" )] HRESULT Visible( [out, retval] boolean * pVal );
+	[propput, id( 4 ), helpstring( "The overlay visibility" )] HRESULT Visible( [in] boolean * val );
+	[propget, id( 5 ), helpstring( "The overlay z-index" )] HRESULT ZIndex( [out, retval] int * pVal );
+	[propput, id( 5 ), helpstring( "The overlay z-index" )] HRESULT ZIndex( [in] int val );
+	[propget, id( 6 ), helpstring( "The overlay material" )] HRESULT Material( [out, retval] IMaterial ** pVal );
+	[propput, id( 6 ), helpstring( "The overlay material" )] HRESULT Material( [in] IMaterial * val );
 };
 
 // IPanelOverlay
@@ -1430,7 +1449,7 @@ interface IOverlayCategory
 	oleautomation
 ]
 interface IPanelOverlay
-	:	IDispatch
+	: IDispatch
 {
 };
 
@@ -1442,18 +1461,18 @@ interface IPanelOverlay
 	oleautomation
 ]
 interface IBorderPanelOverlay
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "The bottom border width" )] HRESULT LeftBorderSize( [out, retval] float * pVal );
-	[propput, id(1), helpstring( "The bottom border width" )] HRESULT LeftBorderSize( [in] float val );
-	[propget, id(2), helpstring( "The right border width" )] HRESULT RightBorderSize( [out, retval] float * pVal );
-	[propput, id(2), helpstring( "The right border width" )] HRESULT RightBorderSize( [in] float val );
-	[propget, id(3), helpstring( "The top border width" )] HRESULT TopBorderSize( [out, retval] float * pVal );
-	[propput, id(3), helpstring( "The top border width" )] HRESULT TopBorderSize( [in] float val );
-	[propget, id(4), helpstring( "The bottom border width" )] HRESULT BottomBorderSize( [out, retval] float * pVal );
-	[propput, id(4), helpstring( "The bottom border width" )] HRESULT BottomBorderSize( [in] float val );
-	[propget, id(5), helpstring( "The border material" )] HRESULT BorderMaterial( [out, retval] IMaterial ** pVal );
-	[propput, id(5), helpstring( "The border material" )] HRESULT BorderMaterial( [in] IMaterial * val );
+	[propget, id( 1 ), helpstring( "The bottom border width" )] HRESULT LeftBorderSize( [out, retval] float * pVal );
+	[propput, id( 1 ), helpstring( "The bottom border width" )] HRESULT LeftBorderSize( [in] float val );
+	[propget, id( 2 ), helpstring( "The right border width" )] HRESULT RightBorderSize( [out, retval] float * pVal );
+	[propput, id( 2 ), helpstring( "The right border width" )] HRESULT RightBorderSize( [in] float val );
+	[propget, id( 3 ), helpstring( "The top border width" )] HRESULT TopBorderSize( [out, retval] float * pVal );
+	[propput, id( 3 ), helpstring( "The top border width" )] HRESULT TopBorderSize( [in] float val );
+	[propget, id( 4 ), helpstring( "The bottom border width" )] HRESULT BottomBorderSize( [out, retval] float * pVal );
+	[propput, id( 4 ), helpstring( "The bottom border width" )] HRESULT BottomBorderSize( [in] float val );
+	[propget, id( 5 ), helpstring( "The border material" )] HRESULT BorderMaterial( [out, retval] IMaterial ** pVal );
+	[propput, id( 5 ), helpstring( "The border material" )] HRESULT BorderMaterial( [in] IMaterial * val );
 };
 
 // ITextOverlay
@@ -1464,12 +1483,12 @@ interface IBorderPanelOverlay
 	oleautomation
 ]
 interface ITextOverlay
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "The text font" )] HRESULT Font( [out, retval] BSTR * pVal );
-	[propput, id(1), helpstring( "The text font" )] HRESULT Font( [in] BSTR val );
-	[propget, id(2), helpstring( "The text caption" )] HRESULT Caption( [out, retval] BSTR * pVal );
-	[propput, id(2), helpstring( "The text caption" )] HRESULT Caption( [in] BSTR val );
+	[propget, id( 1 ), helpstring( "The text font" )] HRESULT Font( [out, retval] BSTR * pVal );
+	[propput, id( 1 ), helpstring( "The text font" )] HRESULT Font( [in] BSTR val );
+	[propget, id( 2 ), helpstring( "The text caption" )] HRESULT Caption( [out, retval] BSTR * pVal );
+	[propput, id( 2 ), helpstring( "The text caption" )] HRESULT Caption( [in] BSTR val );
 };
 
 // IOverlay
@@ -1480,13 +1499,15 @@ interface ITextOverlay
 	oleautomation
 ]
 interface IOverlay
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "The overlay category" )] HRESULT Category( [out, retval] IOverlayCategory ** pVal );
-	[propget, id(2), helpstring( "The overlay name" )] HRESULT Name( [out, retval] BSTR * pVal );
-	[propput, id(2), helpstring( "The overlay name" )] HRESULT Name( [in] BSTR val );
-	[id(4), helpstring( "Retrieves the childs count" )] HRESULT GetChildsCount( [in] unsigned int * pVal );
-	[id(5), helpstring( "Adds a child" )] HRESULT AddChild( [in] IOverlay * overlay, [in] int zindex );
+	[propget, id( 1 ), helpstring( "The overlay name" )] HRESULT Name( [out, retval] BSTR * pVal );
+	[propput, id( 1 ), helpstring( "The overlay name" )] HRESULT Name( [in] BSTR val );
+	[propget, id( 2 ), helpstring( "The panel overlay category" )] HRESULT PanelOverlay( [out, retval] IPanelOverlay ** pVal );
+	[propget, id( 3 ), helpstring( "The border panel overlay category" )] HRESULT BorderPanelOverlay( [out, retval] IBorderPanelOverlay ** pVal );
+	[propget, id( 4 ), helpstring( "The text overlay category" )] HRESULT TextOverlay( [out, retval] ITextOverlay ** pVal );
+	[id( 5 ), helpstring( "Retrieves the childs count" )] HRESULT GetChildsCount( [in] unsigned int * pVal );
+	[id( 6 ), helpstring( "Adds a child" )] HRESULT AddChild( [in] IOverlay * overlay, [in] int zindex );
 };
 
 // IAnimable
@@ -1497,10 +1518,10 @@ interface IOverlay
 	oleautomation
 ]
 interface IAnimable
-	:	IDispatch
+	: IDispatch
 {
-	[id(1), helpstring( "Retrieves the animation with the given name" )] HRESULT GetAnimation( [in] BSTR name, [out, retval] IAnimation ** anim );
-	[id(2), helpstring( "Creates an animation" )] HRESULT CreateAnimation( [in] BSTR name, [out, retval] IAnimation ** anim );
+	[id( 1 ), helpstring( "Retrieves the animation with the given name" )] HRESULT GetAnimation( [in] BSTR name, [out, retval] IAnimation ** anim );
+	[id( 2 ), helpstring( "Creates an animation" )] HRESULT CreateAnimation( [in] BSTR name, [out, retval] IAnimation ** anim );
 };
 
 // IAnimatedObject
@@ -1511,21 +1532,21 @@ interface IAnimable
 	oleautomation
 ]
 interface IAnimatedObject
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "The animable geometry" )] HRESULT Geometry( [out, retval] IGeometry ** pVal );
-	[propput, id(1), helpstring( "The animable geometry" )] HRESULT Geometry( [in] IGeometry * val );
-	[propget, id(2), helpstring( "The animable mesh" )] HRESULT Mesh( [out, retval] IMesh ** pVal );
-	[propput, id(2), helpstring( "The animable mesh" )] HRESULT Mesh( [in] IMesh * val );
-	[propget, id(3), helpstring( "The animable skeleton" )] HRESULT Skeleton( [out, retval] ISkeleton ** pVal );
-	[propput, id(3), helpstring( "The animable skeleton" )] HRESULT Skeleton( [in] ISkeleton * val );
-	[id( 4), helpstring( "Retrieves the animation with given name" )] HRESULT GetAnimation( [in] BSTR name, [out, retval] IAnimation ** anim );
-	[id( 5), helpstring( "Starts all the animable animations" )] HRESULT StartAllAnimations();
-	[id( 6), helpstring( "Stops all the animable animations" )] HRESULT StopAllAnimations();
-	[id( 7), helpstring( "Pauses all the animable animations" )] HRESULT PauseAllAnimations();
-	[id( 8), helpstring( "Starts the animation with given name" )] HRESULT StartAnimation( [in] BSTR name );
-	[id( 9), helpstring( "Stops the animation with given name" )] HRESULT StopAnimation( [in] BSTR name );
-	[id(10), helpstring( "Pauses the animation with given name" )] HRESULT PauseAnimation( [in] BSTR name );
+	[propget, id( 1 ), helpstring( "The animable geometry" )] HRESULT Geometry( [out, retval] IGeometry ** pVal );
+	[propput, id( 1 ), helpstring( "The animable geometry" )] HRESULT Geometry( [in] IGeometry * val );
+	[propget, id( 2 ), helpstring( "The animable mesh" )] HRESULT Mesh( [out, retval] IMesh ** pVal );
+	[propput, id( 2 ), helpstring( "The animable mesh" )] HRESULT Mesh( [in] IMesh * val );
+	[propget, id( 3 ), helpstring( "The animable skeleton" )] HRESULT Skeleton( [out, retval] ISkeleton ** pVal );
+	[propput, id( 3 ), helpstring( "The animable skeleton" )] HRESULT Skeleton( [in] ISkeleton * val );
+	[id( 4 ), helpstring( "Retrieves the animation with given name" )] HRESULT GetAnimation( [in] BSTR name, [out, retval] IAnimation ** anim );
+	[id( 5 ), helpstring( "Starts all the animable animations" )] HRESULT StartAllAnimations();
+	[id( 6 ), helpstring( "Stops all the animable animations" )] HRESULT StopAllAnimations();
+	[id( 7 ), helpstring( "Pauses all the animable animations" )] HRESULT PauseAllAnimations();
+	[id( 8 ), helpstring( "Starts the animation with given name" )] HRESULT StartAnimation( [in] BSTR name );
+	[id( 9 ), helpstring( "Stops the animation with given name" )] HRESULT StopAnimation( [in] BSTR name );
+	[id( 10 ), helpstring( "Pauses the animation with given name" )] HRESULT PauseAnimation( [in] BSTR name );
 };
 
 // IAnimatedObjectGroup
@@ -1536,22 +1557,22 @@ interface IAnimatedObject
 	oleautomation
 ]
 interface IAnimatedObjectGroup
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "Retrieves the animsations count" )] HRESULT AnimationCount( [out, retval] unsigned int * pVal );
-	[propget, id(2), helpstring( "Retrieves the animable objects count" )] HRESULT ObjectCount( [out, retval] unsigned int * pVal );
-	[propget, id(3), helpstring( "Retrieves the scene" )] HRESULT Scene( [out, retval] IScene ** anim );
-	[id( 5), helpstring( "Retrieves the animable object with given name" )] HRESULT GetAnimableObject( [in] BSTR name, [out, retval] IAnimable ** obj );
-	[id( 6), helpstring( "Starts all the animable animations" )] HRESULT StartAllAnimations();
-	[id( 7), helpstring( "Stops all the animable animations" )] HRESULT StopAllAnimations();
-	[id( 8), helpstring( "Pauses all the animable animations" )] HRESULT PauseAllAnimations();
-	[id( 9), helpstring( "Starts the animation with given name" )] HRESULT StartAnimation( [in] BSTR name );
-	[id(10), helpstring( "Stops the animation with given name" )] HRESULT StopAnimation( [in] BSTR name );
-	[id(11), helpstring( "Pauses the animation with given name" )] HRESULT PauseAnimation( [in] BSTR name );
-	[id(12), helpstring( "Creates the animable object" )] HRESULT CreateObject( [in] BSTR name, [out, retval] IAnimable ** obj );
-	[id(13), helpstring( "Adds an animable object to the group" )] HRESULT AddObject( [in] IAnimable * obj, [out, retval] boolean * pVal );
-	[id(14), helpstring( "Adds an animation to the group" )] HRESULT AddAnimation( [in] BSTR name );
-	[id(15), helpstring( "Sets the animation loop status" )] HRESULT SetAnimationLooped( [in] BSTR name, [in] boolean val );
+	[propget, id( 1 ), helpstring( "Retrieves the animsations count" )] HRESULT AnimationCount( [out, retval] unsigned int * pVal );
+	[propget, id( 2 ), helpstring( "Retrieves the animable objects count" )] HRESULT ObjectCount( [out, retval] unsigned int * pVal );
+	[propget, id( 3 ), helpstring( "Retrieves the scene" )] HRESULT Scene( [out, retval] IScene ** anim );
+	[id( 5 ), helpstring( "Retrieves the animable object with given name" )] HRESULT GetAnimableObject( [in] BSTR name, [out, retval] IAnimable ** obj );
+	[id( 6 ), helpstring( "Starts all the animable animations" )] HRESULT StartAllAnimations();
+	[id( 7 ), helpstring( "Stops all the animable animations" )] HRESULT StopAllAnimations();
+	[id( 8 ), helpstring( "Pauses all the animable animations" )] HRESULT PauseAllAnimations();
+	[id( 9 ), helpstring( "Starts the animation with given name" )] HRESULT StartAnimation( [in] BSTR name );
+	[id( 10 ), helpstring( "Stops the animation with given name" )] HRESULT StopAnimation( [in] BSTR name );
+	[id( 11 ), helpstring( "Pauses the animation with given name" )] HRESULT PauseAnimation( [in] BSTR name );
+	[id( 12 ), helpstring( "Creates the animable object" )] HRESULT CreateObject( [in] BSTR name, [out, retval] IAnimable ** obj );
+	[id( 13 ), helpstring( "Adds an animable object to the group" )] HRESULT AddObject( [in] IAnimable * obj, [out, retval] boolean * pVal );
+	[id( 14 ), helpstring( "Adds an animation to the group" )] HRESULT AddAnimation( [in] BSTR name );
+	[id( 15 ), helpstring( "Sets the animation loop status" )] HRESULT SetAnimationLooped( [in] BSTR name, [in] boolean val );
 };
 
 // IEngine
@@ -1562,30 +1583,30 @@ interface IAnimatedObjectGroup
 	oleautomation
 ]
 interface IEngine
-	:	IDispatch
+	: IDispatch
 {
-	[propget, id(1), helpstring( "Retrieves the plugins directory" )] HRESULT PluginsDirectory( [out, retval] BSTR * path );
-	[propget, id(2), helpstring( "Retrieves engine directory" )] HRESULT EngineDirectory( [out, retval] BSTR * path );
-	[propget, id(3), helpstring( "Retrieves data directory" )] HRESULT DataDirectory( [out, retval] BSTR * path );
-	[id(11), helpstring( "Creates the endgine" )] HRESULT Create( [in] ILogger * logger );
-	[id(12), helpstring( "Destroys the engine" )] HRESULT Destroy();
-	[id(13), helpstring( "Initialises the endgine" )] HRESULT Initialise( [in] int fps );
-	[id(14), helpstring( "Cleans up the engine" )] HRESULT Cleanup();
-	[id(15), helpstring( "Creates a scene" )] HRESULT CreateScene( [in] BSTR name, [out, retval] IScene ** pVal );
-	[id(16), helpstring( "Cleans up the scenes" )] HRESULT ClearScenes();
-	[id(17), helpstring( "Loads a renderer" )] HRESULT LoadRenderer( [in] eRENDERER_TYPE type );
-	[id(18), helpstring( "Renders a frame" )] HRESULT RenderOneFrame();
-	[id(19), helpstring( "Loads a plugin from its path" )] HRESULT LoadPlugin( [in] BSTR path );
-	[id(20), helpstring( "Creates a mesh" )] HRESULT CreateMesh( [in] eMESH_TYPE type, [in] BSTR name, [out, retval] IMesh ** pVal );
-	[id(21), helpstring( "Creates an overlay" )] HRESULT CreateOverlay( [in] eOVERLAY_TYPE type, [in] BSTR name, [in] IOverlay * parent, [in] IScene * scene, [out, retval] IOverlay ** pVal );
-	[id(22), helpstring( "Creates a render window" )] HRESULT CreateRenderWindow( [out, retval] IRenderWindow ** pVal );
-	[id(23), helpstring( "Removes a render window" )] HRESULT RemoveWindow( [in] IRenderWindow * val );
-	[id(24), helpstring( "Creates a sampler" )] HRESULT CreateSampler( [in] BSTR name, [out, retval] ISampler ** pVal );
-	[id(25), helpstring( "Creates a blend state" )] HRESULT CreateBlendState( [in] BSTR name, [out, retval] IBlendState ** pVal );
-	[id(26), helpstring( "Creates a depth stencil state" )] HRESULT CreateDepthStencilState( [in] BSTR name, [out, retval] IDepthStencilState ** pVal );
-	[id(27), helpstring( "Creates a rasteriser state" )] HRESULT CreateRasteriserState( [in] BSTR name, [out, retval] IRasteriserState ** pVal );
-	[id(28), helpstring( "Removes the scene with the given name" )] HRESULT RemoveScene( [in] BSTR name );
-	[id(29), helpstring( "Loads a scene file" )] HRESULT LoadScene( [in] BSTR name, [out, retval] IRenderWindow ** window );
+	[propget, id( 1 ), helpstring( "Retrieves the plugins directory" )] HRESULT PluginsDirectory( [out, retval] BSTR * path );
+	[propget, id( 2 ), helpstring( "Retrieves engine directory" )] HRESULT EngineDirectory( [out, retval] BSTR * path );
+	[propget, id( 3 ), helpstring( "Retrieves data directory" )] HRESULT DataDirectory( [out, retval] BSTR * path );
+	[id( 11 ), helpstring( "Creates the endgine" )] HRESULT Create();
+	[id( 12 ), helpstring( "Destroys the engine" )] HRESULT Destroy();
+	[id( 13 ), helpstring( "Initialises the endgine" )] HRESULT Initialise( [in] int fps );
+	[id( 14 ), helpstring( "Cleans up the engine" )] HRESULT Cleanup();
+	[id( 15 ), helpstring( "Creates a scene" )] HRESULT CreateScene( [in] BSTR name, [out, retval] IScene ** pVal );
+	[id( 16 ), helpstring( "Cleans up the scenes" )] HRESULT ClearScenes();
+	[id( 17 ), helpstring( "Loads a renderer" )] HRESULT LoadRenderer( [in] eRENDERER_TYPE type );
+	[id( 18 ), helpstring( "Renders a frame" )] HRESULT RenderOneFrame();
+	[id( 19 ), helpstring( "Loads a plugin from its path" )] HRESULT LoadPlugin( [in] BSTR path );
+	[id( 20 ), helpstring( "Creates a mesh" )] HRESULT CreateMesh( [in] eMESH_TYPE type, [in] BSTR name, [out, retval] IMesh ** pVal );
+	[id( 21 ), helpstring( "Creates an overlay" )] HRESULT CreateOverlay( [in] eOVERLAY_TYPE type, [in] BSTR name, [in] IOverlay * parent, [in] IScene * scene, [out, retval] IOverlay ** pVal );
+	[id( 22 ), helpstring( "Creates a render window" )] HRESULT CreateRenderWindow( [out, retval] IRenderWindow ** pVal );
+	[id( 23 ), helpstring( "Removes a render window" )] HRESULT RemoveWindow( [in] IRenderWindow * val );
+	[id( 24 ), helpstring( "Creates a sampler" )] HRESULT CreateSampler( [in] BSTR name, [out, retval] ISampler ** pVal );
+	[id( 25 ), helpstring( "Creates a blend state" )] HRESULT CreateBlendState( [in] BSTR name, [out, retval] IBlendState ** pVal );
+	[id( 26 ), helpstring( "Creates a depth stencil state" )] HRESULT CreateDepthStencilState( [in] BSTR name, [out, retval] IDepthStencilState ** pVal );
+	[id( 27 ), helpstring( "Creates a rasteriser state" )] HRESULT CreateRasteriserState( [in] BSTR name, [out, retval] IRasteriserState ** pVal );
+	[id( 28 ), helpstring( "Removes the scene with the given name" )] HRESULT RemoveScene( [in] BSTR name );
+	[id( 29 ), helpstring( "Loads a scene file" )] HRESULT LoadScene( [in] BSTR name, [out, retval] IRenderWindow ** window );
 };
 
 // Castor3DLib
@@ -1599,7 +1620,7 @@ library Castor3D
 	importlib( "stdole32.tlb" ); // Import libraries containing. 
 	importlib( "stdole2.tlb" ); // standard COM API calls.
 
-	// Colour
+								// Colour
 	[
 		uuid( 22125089-C34A-4C20-B8F9-07907A8AEA0D )
 	]
@@ -1607,7 +1628,7 @@ library Castor3D
 	{
 		[default] interface IColour;
 	};
-	
+
 	// Vector2D
 	[
 		uuid( 9A7B169B-06DF-4617-A93D-3EF10A4362F7 )
@@ -1616,7 +1637,7 @@ library Castor3D
 	{
 		[default] interface IVector2D;
 	};
-	
+
 	// Vector3D
 	[
 		uuid( D406D2D9-865B-40CF-AB98-CA79F00C0797 )
@@ -1724,7 +1745,7 @@ library Castor3D
 	{
 		[default] interface ILogger;
 	};
-	
+
 	// BlendState
 	[
 		uuid( CA7E6B72-3130-4888-83D3-33BFBBA2B3FD )
@@ -2020,6 +2041,15 @@ library Castor3D
 	coclass Skeleton
 	{
 		[default] interface ISkeleton;
+	};
+
+	// RenderWindow
+	[
+		uuid( AD82930D-4682-4CF1-B9E8-EDFD869E7AF7 )
+	]
+	coclass RenderTarget
+	{
+		[default] interface IRenderTarget;
 	};
 
 	// RenderWindow
