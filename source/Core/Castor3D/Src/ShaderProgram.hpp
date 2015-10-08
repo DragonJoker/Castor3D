@@ -21,10 +21,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "FrameVariable.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	template< class Ty > struct FrameVariableCreator;
@@ -664,7 +660,5 @@ namespace Castor3D
 		FrameVariableBufferPtrList m_listFrameVariableBuffers;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

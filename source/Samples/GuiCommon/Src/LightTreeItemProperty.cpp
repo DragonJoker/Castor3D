@@ -190,7 +190,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			GetLight()->GetSpotLight()->SetCutOff( p_value );
+			GetLight()->GetSpotLight()->SetCutOff( float( p_value ) );
 		} );
 	}
 
@@ -198,7 +198,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			GetLight()->GetSpotLight()->SetExponent( p_value );
+			GetLight()->GetSpotLight()->SetExponent( float( p_value ) );
 		} );
 	}
 }

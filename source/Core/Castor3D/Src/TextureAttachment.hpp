@@ -31,7 +31,7 @@ namespace Castor3D
 	\~french
 	\brief		Description d'une liaison entre un tampon d'image et une texture
 	*/
-	class C3D_API TextureAttachment
+	class TextureAttachment
 		:	public FrameBufferAttachment
 	{
 	public:
@@ -43,14 +43,14 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_pTexture	La texture
 		 */
-		TextureAttachment( DynamicTextureSPtr p_pTexture );
+		C3D_API TextureAttachment( DynamicTextureSPtr p_pTexture );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~TextureAttachment();
+		C3D_API virtual ~TextureAttachment();
 		/**
 		 *\~english
 		 *\brief		Attaches the render buffer to the given frame buffer, at given attachment point
@@ -67,14 +67,14 @@ namespace Castor3D
 		 *\param[in]	p_iLayer		La couche associée, si p_eDimension vaut eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool Attach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer, eTEXTURE_TARGET p_eTarget, int p_iLayer = 0 );
+		C3D_API bool Attach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer, eTEXTURE_TARGET p_eTarget, int p_iLayer = 0 );
 		/**
 		 *\~english
 		 *\brief		Detaches the render buffer from the frame buffer
 		 *\~french
 		 *\brief		Détache la texture du tampon d'image
 		 */
-		void Detach();
+		C3D_API void Detach();
 		/**
 		 *\~english
 		 *\brief		Retrieves the texture

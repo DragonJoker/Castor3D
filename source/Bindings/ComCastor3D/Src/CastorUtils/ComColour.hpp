@@ -71,92 +71,10 @@ namespace CastorCom
 		COM_PROPERTY( A, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_ALPHA ), make_putter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_ALPHA ) );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
-	OBJECT_ENTRY_AUTO( __uuidof( Colour ), CColour )
+	OBJECT_ENTRY_AUTO( __uuidof( Colour ), CColour );
 
-	template< typename Class >
-	struct VariableRefGetter< Class, Castor::Colour >
-	{
-		typedef Castor::Colour Value;
-		typedef Value const & ( Class::*Function )()const;
-		VariableRefGetter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( IColour ** value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					hr = CColour::CreateInstance( value );
-
-					if ( hr == S_OK )
-					{
-						*static_cast< Castor::Colour * >( static_cast< CColour * >( *value ) ) = ( m_instance->*m_function )();
-					}
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_IColour,							// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
-
-	template< typename Class >
-	struct VariablePutter< Class, Castor::Colour const & >
-	{
-		typedef void ( Class::*Function )( Castor::Colour const & );
-		VariablePutter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( IColour * value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					( m_instance->*m_function )( *static_cast< CColour * >( value ) );
-					hr = S_OK;
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_IColour,							// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
+	DECLARE_VARIABLE_REF_GETTER( Colour, Castor, Colour );
+	DECLARE_VARIABLE_REF_PUTTER( Colour, Castor, Colour );
 
 	template< typename Class >
 	struct VariableRefGetter< Class, Castor::Point4f >
@@ -187,13 +105,7 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::DispatchError(
-					E_FAIL,								// This represents the error
-					IID_IColour,							// This is the GUID of component throwing error
-					cuT( "NULL instance" ),				// This is generally displayed as the title
-					ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-					0,										// This is the context in the help file
-					NULL );
+				hr = CComError::DispatchError( E_FAIL, IID_IColour, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
 			}
 
 			return hr;
@@ -227,13 +139,7 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::DispatchError(
-					E_FAIL,								// This represents the error
-					IID_IColour,							// This is the GUID of component throwing error
-					cuT( "NULL instance" ),				// This is generally displayed as the title
-					ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-					0,										// This is the context in the help file
-					NULL );
+				hr = CComError::DispatchError( E_FAIL, IID_IColour, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
 			}
 
 			return hr;

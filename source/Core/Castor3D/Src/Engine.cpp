@@ -460,8 +460,8 @@ namespace Castor3D
 
 		if ( !l_pReturn )
 		{
-			l_pReturn = std::make_shared< Mesh >( this, p_type, p_strMeshName );
-			l_pReturn->Initialise( p_arrayFaces, p_arraySizes );
+			l_pReturn = std::make_shared< Mesh >( this, p_strMeshName );
+			l_pReturn->Initialise( *m_meshFactory.Create( p_type ), p_arrayFaces, p_arraySizes );
 			m_meshManager.insert( p_strMeshName, l_pReturn );
 			Logger::LogInfo( cuT( "Engine::CreateMesh - Mesh [" ) + p_strMeshName + cuT( "] - Created" ) );
 		}
@@ -518,11 +518,11 @@ namespace Castor3D
 
 			if ( ! l_pMesh )
 			{
-				l_pMesh = std::make_shared< Mesh >( this, eMESH_TYPE_CUSTOM, cuEmptyString );
+				l_pMesh = std::make_shared< Mesh >( this, cuEmptyString );
 				m_meshManager.insert( cuEmptyString, l_pMesh );
 			}
 
-			//l_return = Mesh::BinaryLoader()( * l_pMesh, p_file);
+			l_return = Mesh::BinaryParser( p_file.GetFilePath() ).Parse( *l_pMesh, p_file );
 		}
 
 		return l_return;

@@ -21,13 +21,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <config.hpp>
 
 #if CASTOR_USE_PCH
-#	if defined( _MSC_VER )
-#		pragma warning( disable:4251 )
-#		pragma warning( disable:4275 )
-#		pragma warning( disable:4311 )
-#		pragma warning( disable:4312 )
-#	endif
-
 #	include <Logger.hpp>
 #	include <Pixel.hpp>
 
@@ -76,7 +69,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #	include "GlRenderSystemPrerequisites.hpp"
 
-#	pragma warning( pop )
 #endif
 
 #include <StringUtils.hpp>

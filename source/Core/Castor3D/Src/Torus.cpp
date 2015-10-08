@@ -8,11 +8,11 @@ using namespace Castor3D;
 using namespace Castor;
 
 Torus::Torus()
-	:	MeshCategory( eMESH_TYPE_TORUS )
-	,	m_rInternalRadius( 0 )
-	,	m_rExternalRadius( 0 )
-	,	m_uiInternalNbFaces( 0 )
-	,	m_uiExternalNbFaces( 0 )
+	: MeshGenerator( eMESH_TYPE_TORUS )
+	, m_rInternalRadius( 0 )
+	, m_rExternalRadius( 0 )
+	, m_uiInternalNbFaces( 0 )
+	, m_uiExternalNbFaces( 0 )
 {
 }
 
@@ -20,19 +20,22 @@ Torus::~Torus()
 {
 }
 
-MeshCategorySPtr Torus::Create()
+MeshGeneratorSPtr Torus::Create()
 {
 	return std::make_shared< Torus >();
 }
 
-void Torus::Generate()
+void Torus::Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
 {
-	m_rInternalRadius = std::abs( m_rInternalRadius );
-	m_rExternalRadius = std::abs( m_rExternalRadius );
+	m_rInternalRadius = std::abs( p_dimensions[0] );
+	m_rExternalRadius = std::abs( p_dimensions[1] );
+	m_uiInternalNbFaces = p_faces[0];
+	m_uiExternalNbFaces = p_faces[1];
+	p_mesh.Cleanup();
 
 	if ( m_uiInternalNbFaces >= 3 && m_uiExternalNbFaces >= 3 )
 	{
-		Submesh & l_submesh = *( GetMesh()->CreateSubmesh() );
+		Submesh & l_submesh = *( p_mesh.CreateSubmesh() );
 		BufferElementGroupSPtr l_vertex;
 		uint32_t l_uiCur = 0;
 		uint32_t l_uiPrv = 0;
@@ -107,15 +110,5 @@ void Torus::Generate()
 		l_submesh.ComputeTangentsFromNormals();
 	}
 
-	GetMesh()->ComputeContainers();
-}
-
-void Torus::Initialise( UIntArray const & p_arrayFaces, RealArray const & p_arrayDimensions )
-{
-	m_rInternalRadius = p_arrayDimensions[0];
-	m_rExternalRadius = p_arrayDimensions[1];
-	m_uiInternalNbFaces = p_arrayFaces[0];
-	m_uiExternalNbFaces = p_arrayFaces[1];
-	GetMesh()->Cleanup();
-	Generate();
+	p_mesh.ComputeContainers();
 }

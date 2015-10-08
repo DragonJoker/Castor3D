@@ -158,7 +158,7 @@ namespace GuiCommon
 
 		DoApplyChange( [p_value, l_pass]()
 		{
-			l_pass->SetShininess( p_value );
+			l_pass->SetShininess( float( p_value ) );
 		} );
 	}
 
@@ -178,7 +178,7 @@ namespace GuiCommon
 
 		DoApplyChange( [p_value, l_pass]()
 		{
-			l_pass->SetAlpha( p_value );
+			l_pass->SetAlpha( float( p_value ) );
 		} );
 	}
 

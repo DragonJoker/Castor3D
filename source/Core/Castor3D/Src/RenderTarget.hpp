@@ -21,10 +21,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "BinaryParser.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -38,7 +34,7 @@ namespace Castor3D
 	\brief		Classe de cible de rendu (render target)
 	\remark		Une render target dessine une scène dans un tampon d'image qui peut ensuite être utilisé dans une fenêtre pour un rendu direct, ou une texture pour un rendu hors écran
 	*/
-	class C3D_API RenderTarget
+	class RenderTarget
 		: public std::enable_shared_from_this< RenderTarget >
 	{
 	public:
@@ -50,7 +46,7 @@ namespace Castor3D
 		\~english
 		\brief		Loader de RenderTarget
 		*/
-		class C3D_API TextLoader
+		class TextLoader
 			: public Castor::Loader< RenderTarget, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
 			, public Castor::NonCopyable
 		{
@@ -63,7 +59,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_tabs	Les tabulations à mettre à chaque début de ligne
 			 */
-			TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a render target into a text file
@@ -74,7 +70,7 @@ namespace Castor3D
 			 *\param[in]	p_target	La cible de rendu
 			 *\param[in]	p_file		Le fichier
 			 */
-			virtual bool operator()( Castor3D::RenderTarget const & p_target, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( Castor3D::RenderTarget const & p_target, Castor::TextFile & p_file );
 
 		private:
 			//!\~english The tabulations to put at the beginning of each line	\~french Les tabulations à mettre à chaque début de ligne
@@ -88,7 +84,7 @@ namespace Castor3D
 		\~english
 		\brief		Loader de RenderTarget
 		*/
-		class C3D_API BinaryParser
+		class BinaryParser
 			: public Castor3D::BinaryParser< RenderTarget >
 		{
 		public:
@@ -100,7 +96,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -113,7 +109,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( RenderTarget const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( RenderTarget const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -126,7 +122,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( RenderTarget & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( RenderTarget & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	private:
@@ -174,14 +170,14 @@ namespace Castor3D
 		 *\param[in]	p_pRoot			Le moteur
 		 *\param[in]	p_eTargetType	Le type de render target
 		 */
-		RenderTarget( Engine * p_pRoot, eTARGET_TYPE p_eTargetType = eTARGET_TYPE_WINDOW );
+		C3D_API RenderTarget( Engine * p_pRoot, eTARGET_TYPE p_eTargetType = eTARGET_TYPE_WINDOW );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~RenderTarget();
+		C3D_API virtual ~RenderTarget();
 		/**
 		 *\~english
 		 *\brief		Main render function
@@ -190,7 +186,7 @@ namespace Castor3D
 		 *\brief		Fonction de rendu
 		 *\param[in]	p_displayMode	Mode de rendu
 		 */
-		virtual void Render() {}
+		C3D_API virtual void Render() {}
 		/**
 		 *\~english
 		 *\brief		Renders one frame
@@ -199,7 +195,7 @@ namespace Castor3D
 		 *\brief		Rend une image
 		 *\param[in]	p_dFrameTime		Le temps écoulé depuis le rendu de la dernière frame
 		 */
-		virtual void Render( double p_dFrameTime );
+		C3D_API virtual void Render( double p_dFrameTime );
 		/**
 		 *\~english
 		 *\brief		Initialisation function
@@ -210,14 +206,14 @@ namespace Castor3D
 		 *\remark		Initialise les buffers
 		 *\param[in]	p_index	L'index de texture de base
 		 */
-		void Initialise( uint32_t p_index );
+		C3D_API void Initialise( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Sets the target dimensions
@@ -226,14 +222,14 @@ namespace Castor3D
 		 *\brief		Définit les dimensions la cible
 		 *\param[in]	p_size	Les nouvelles dimensions
 		 */
-		void SetSize( Castor::Size const & p_size );
+		C3D_API void SetSize( Castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Updates the target dimensions on GPU side
 		 *\~french
 		 *\brief		Met à jour les dimensions de la cible du côté GPU
 		 */
-		void Resize();
+		C3D_API void Resize();
 		/**
 		 *\~english
 		 *\brief		Creates a dynamic texture
@@ -242,7 +238,7 @@ namespace Castor3D
 		 *\brief		Crée une texture dynamique
 		 *\return		La texture
 		 */
-		DynamicTextureSPtr CreateDynamicTexture()const;
+		C3D_API DynamicTextureSPtr CreateDynamicTexture()const;
 		/**
 		 *\~english
 		 *\brief		Defines the RenderTechnique
@@ -251,7 +247,7 @@ namespace Castor3D
 		 *\brief		Définit la RenderTechnique
 		 *\param[in]	p_name	La RenderTechnique name
 		 */
-		void SetTechnique( Castor::String const & p_name );
+		C3D_API void SetTechnique( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves the eTOPOLOGY
@@ -260,7 +256,7 @@ namespace Castor3D
 		 *\brief		Récupère le eTOPOLOGY
 		 *\return		Le eTOPOLOGY
 		 */
-		eTOPOLOGY GetPrimitiveType()const;
+		C3D_API eTOPOLOGY GetPrimitiveType()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the eVIEWPORT_TYPE
@@ -269,7 +265,7 @@ namespace Castor3D
 		 *\brief		Récupère le eVIEWPORT_TYPE
 		 *\return		Le eVIEWPORT_TYPE
 		 */
-		eVIEWPORT_TYPE GetViewportType()const;
+		C3D_API eVIEWPORT_TYPE GetViewportType()const;
 		/**
 		 *\~english
 		 *\brief		Sets the eTOPOLOGY
@@ -278,7 +274,7 @@ namespace Castor3D
 		 *\brief		Définit le eTOPOLOGY
 		 *\param[in]	val	Le nouveau eTOPOLOGY
 		 */
-		void SetPrimitiveType( eTOPOLOGY val );
+		C3D_API void SetPrimitiveType( eTOPOLOGY val );
 		/**
 		 *\~english
 		 *\brief		Sets the eVIEWPORT_TYPE
@@ -287,7 +283,7 @@ namespace Castor3D
 		 *\brief		Définit le eVIEWPORT_TYPE
 		 *\param[in]	val	Le nouveau eVIEWPORT_TYPE
 		 */
-		void SetViewportType( eVIEWPORT_TYPE val );
+		C3D_API void SetViewportType( eVIEWPORT_TYPE val );
 		/**
 		 *\~english
 		 *\brief		Sets the camera
@@ -298,7 +294,7 @@ namespace Castor3D
 		 *\remark		Définit aussi les caméras des yeux gauche et droit
 		 *\param[in]	p_pCamera	La nouvelle caméra
 		 */
-		void SetCamera( CameraSPtr p_pCamera );
+		C3D_API void SetCamera( CameraSPtr p_pCamera );
 		/**
 		 *\~english
 		 *\brief		Defines the intra ocular distance
@@ -307,14 +303,14 @@ namespace Castor3D
 		 *\brief		Définit la distance inter oculaire
 		 *\param[in]	p_rIod	La distance inter oculaire
 		 */
-		void SetIntraOcularDistance( real p_rIod );
+		C3D_API void SetIntraOcularDistance( real p_rIod );
 		/**
 		 *\~english
 		 *\brief		Clears the scene buffers
 		 *\~french
 		 *\brief		Nettoie les buffers de scène
 		 */
-		virtual void Clear() = 0;
+		C3D_API virtual void Clear() = 0;
 		/**
 		 *\~english
 		 *\brief		Creates an attachment to a render buffer
@@ -325,7 +321,7 @@ namespace Castor3D
 		 *\param[in]	p_pRenderBuffer	Le tampon de rendu
 		 *\return		L'attache créée
 		 */
-		virtual RenderBufferAttachmentSPtr CreateAttachment( RenderBufferSPtr p_pRenderBuffer )const = 0;
+		C3D_API virtual RenderBufferAttachmentSPtr CreateAttachment( RenderBufferSPtr p_pRenderBuffer )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates an attachment to a texture
@@ -336,7 +332,7 @@ namespace Castor3D
 		 *\param[in]	p_pTexture	La texture
 		 *\return		L'attache créée
 		 */
-		virtual TextureAttachmentSPtr CreateAttachment( DynamicTextureSPtr p_pTexture )const = 0;
+		C3D_API virtual TextureAttachmentSPtr CreateAttachment( DynamicTextureSPtr p_pTexture )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a frame buffer
@@ -345,7 +341,7 @@ namespace Castor3D
 		 *\brief		Crée un tampon d'image
 		 *\return		Le tampon d'image créé
 		 */
-		virtual FrameBufferSPtr CreateFrameBuffer()const = 0;
+		C3D_API virtual FrameBufferSPtr CreateFrameBuffer()const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the intialisation status
@@ -694,7 +690,7 @@ namespace Castor3D
 		}
 
 	private:
-		void DoRender( stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, double p_dFrameTime );
+		C3D_API void DoRender( stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, double p_dFrameTime );
 
 	public:
 		//!\~english The render target default sampler name	\~french Le nom du sampler par défaut pour la cible de rendu
@@ -751,7 +747,5 @@ namespace Castor3D
 		RasteriserStateWPtr m_wpRasteriserState;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

@@ -21,10 +21,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "MovableObject.hpp"
 #include "LightCategory.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -466,7 +462,5 @@ namespace Castor3D
 		int m_iIndex;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

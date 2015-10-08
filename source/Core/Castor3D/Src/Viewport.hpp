@@ -24,10 +24,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Angle.hpp>
 #include <PlaneEquation.hpp>
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -41,10 +37,10 @@ namespace Castor3D
 	\brief		Classe de représentation de viewport
 	\remark		Donne le type de projection FOV, ...
 	*/
-	class C3D_API Viewport
+	class Viewport
 	{
 	public:
-		static const Castor::String string_type[2];
+		C3D_API static const Castor::String string_type[2];
 
 		/*!
 		\author		Sylvain DOREMUS
@@ -55,7 +51,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de Viewport
 		*/
-		class C3D_API TextLoader : public Castor::Loader< Viewport, Castor::eFILE_TYPE_TEXT, Castor::TextFile >, public Castor::NonCopyable
+		class TextLoader
+			: public Castor::Loader< Viewport, Castor::eFILE_TYPE_TEXT, Castor::TextFile >, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -64,7 +61,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a Viewport into a text file
@@ -75,7 +72,7 @@ namespace Castor3D
 			 *\param[in]	p_file		Le fichier
 			 *\param[in]	p_viewport	Le Viewport
 			 */
-			virtual bool operator()( Castor3D::Viewport const & p_viewport, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( Castor3D::Viewport const & p_viewport, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -86,8 +83,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de Viewport
 		*/
-		class C3D_API BinaryParser
-			:	public Castor3D::BinaryParser< Viewport >
+		class BinaryParser
+			: public Castor3D::BinaryParser< Viewport >
 		{
 		public:
 			/**
@@ -98,7 +95,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -111,7 +108,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( Viewport const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( Viewport const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -124,7 +121,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( Viewport & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( Viewport & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	public:
@@ -141,7 +138,7 @@ namespace Castor3D
 		 *\param[in]	p_pMaterial		SceneNode parent
 		 *\param[in]	p_type		Type de projection
 		 */
-		Viewport( Engine * p_engine, Castor::Size const & p_size, eVIEWPORT_TYPE p_type );
+		C3D_API Viewport( Engine * p_engine, Castor::Size const & p_size, eVIEWPORT_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -150,7 +147,7 @@ namespace Castor3D
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_object	L'objet à copier
 		 */
-		Viewport( Viewport const & p_object );
+		C3D_API Viewport( Viewport const & p_object );
 		/**
 		 *\~english
 		 *\brief		Move constructor
@@ -159,7 +156,7 @@ namespace Castor3D
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	p_object	L'objet à déplacer
 		 */
-		Viewport( Viewport && p_object );
+		C3D_API Viewport( Viewport && p_object );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -170,7 +167,7 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet à copier
 		 *\return		Une référence sur cet objet
 		 */
-		Viewport & operator =( Viewport const & p_object );
+		C3D_API Viewport & operator=( Viewport const & p_object );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -181,14 +178,14 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet à déplacer
 		 *\return		Une référence sur cet objet
 		 */
-		Viewport & operator =( Viewport && p_object );
+		C3D_API Viewport & operator=( Viewport && p_object );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Viewport();
+		C3D_API virtual ~Viewport();
 		/**
 		 *\~english
 		 *\brief		Renders the viewport specifics
@@ -199,7 +196,7 @@ namespace Castor3D
 		 *\remark		Applique la perspective
 		 *\return		\p true si le frustum de vue a été modifié
 		 */
-		bool Render();
+		C3D_API bool Render();
 		/**
 		 *\~english
 		 *\brief		Asks the direction from the renderer and returns it
@@ -210,7 +207,7 @@ namespace Castor3D
 		 *\param[in]	p_ptMouse	La position dans l'écran
 		 *\param[out]	p_ptResult	La direction calculée
 		 */
-		void GetDirection( Castor::Point2i const & p_ptMouse, Castor::Point3r & p_ptResult );
+		C3D_API void GetDirection( Castor::Point2i const & p_ptMouse, Castor::Point3r & p_ptResult );
 		/**
 		 *\~english
 		 *\brief		Retrieves the viewport render size
@@ -564,7 +561,5 @@ namespace Castor3D
 		Castor::Matrix4x4r m_projection;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

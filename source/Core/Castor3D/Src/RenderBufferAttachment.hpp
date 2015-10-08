@@ -31,8 +31,8 @@ namespace Castor3D
 	\~french
 	\brief		Description d'une liaison entre un tampon d'image et un tampon de rendu
 	*/
-	class C3D_API RenderBufferAttachment
-		:	public FrameBufferAttachment
+	class RenderBufferAttachment
+		: public FrameBufferAttachment
 	{
 	public:
 		/**
@@ -43,14 +43,14 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_pRenderBuffer	Le tampon de rendu
 		 */
-		RenderBufferAttachment( RenderBufferSPtr p_pRenderBuffer );
+		C3D_API RenderBufferAttachment( RenderBufferSPtr p_pRenderBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~RenderBufferAttachment();
+		C3D_API virtual ~RenderBufferAttachment();
 		/**
 		 *\~english
 		 *\brief		Attaches the render buffer to the given frame buffer, at given attachment point
@@ -63,14 +63,14 @@ namespace Castor3D
 		 *\param[in]	p_pFrameBuffer	Le tampon d'image
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool Attach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer );
+		C3D_API bool Attach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer );
 		/**
 		 *\~english
 		 *\brief		Detaches the render buffer from the frame buffer
 		 *\~french
 		 *\brief		Détache le tampon de rendu du tampon d'image
 		 */
-		void Detach();
+		C3D_API void Detach();
 		/**
 		 *\~english
 		 *\brief		Retrieves the render buffer

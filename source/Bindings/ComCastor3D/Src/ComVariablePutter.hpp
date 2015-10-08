@@ -209,6 +209,70 @@ namespace CastorCom
 	{
 		return ParameteredParVariablePutter< Class, Value, Index >( ( Class * )instance, function, Index( index ) );
 	}
+
+#define DECLARE_VARIABLE_REF_PUTTER( ctype, nmspc, type )\
+	template< typename Class >\
+	struct VariablePutter< Class, nmspc::type const & >\
+	{\
+		typedef void ( Class::*Function )( nmspc::type const & );\
+		VariablePutter( Class * instance, Function function )\
+			:	m_instance( instance )\
+			,	m_function( function )\
+		{\
+		}\
+		HRESULT operator()( I##ctype * value )\
+		{\
+			HRESULT hr = E_POINTER;\
+			if ( m_instance )\
+			{\
+				if ( value )\
+				{\
+					( m_instance->*m_function )( *static_cast< C##ctype * >( value ) );\
+					hr = S_OK;\
+				}\
+			}\
+			else\
+			{\
+				hr = CComError::DispatchError( E_FAIL, IID_I##ctype, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );\
+			}\
+			return hr;\
+		}\
+	private:\
+		Class * m_instance;\
+		Function m_function;\
+	}
+
+#define DECLARE_VARIABLE_PTR_PUTTER( ctype, nmspc, type )\
+	template< typename Class >\
+	struct VariablePutter< Class, nmspc::type##SPtr >\
+	{\
+		typedef void ( Class::*Function )( nmspc::type##SPtr );\
+		VariablePutter( Class * instance, Function function )\
+			: m_instance( instance )\
+			, m_function( function )\
+		{\
+		}\
+		HRESULT operator()( I##ctype * value )\
+		{\
+			HRESULT hr = E_POINTER;\
+			if ( m_instance )\
+			{\
+				if ( value )\
+				{\
+					( m_instance->*m_function )( static_cast< C##ctype * >( value )->GetInternal() );\
+					hr = S_OK;\
+				}\
+			}\
+			else\
+			{\
+				hr = CComError::DispatchError( E_FAIL, IID_I##ctype, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );\
+			}\
+			return hr;\
+		}\
+	private:\
+		Class * m_instance;\
+		Function m_function;\
+	}
 }
 
 #endif

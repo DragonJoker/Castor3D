@@ -32,7 +32,7 @@ namespace Castor3D
 	\~french
 	\brief		Description d'une liaison entre un tampon d'image et un tamon de rendu
 	*/
-	class C3D_API FrameBufferAttachment
+	class FrameBufferAttachment
 	{
 	public:
 		/**
@@ -41,14 +41,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		FrameBufferAttachment();
+		C3D_API FrameBufferAttachment();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~FrameBufferAttachment();
+		C3D_API virtual ~FrameBufferAttachment();
 		/**
 		 *\~english
 		 *\brief		Attaches the render buffer to the given frame buffer, at given attachment point
@@ -61,14 +61,14 @@ namespace Castor3D
 		 *\param[in]	p_pFrameBuffer	Le tampon d'image
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Attach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer );
+		C3D_API virtual bool Attach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer );
 		/**
 		 *\~english
 		 *\brief		Detaches the render buffer from the frame buffer
 		 *\~french
 		 *\brief		Détache le tampon de rendu du tampon d'image
 		 */
-		virtual void Detach();
+		C3D_API virtual void Detach();
 		/**
 		 *\~english
 		 *\brief		Downloads the render buffer data
@@ -79,7 +79,26 @@ namespace Castor3D
 		 *\param[out]	p_pBuffer	Reçoit les données
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool DownloadBuffer( Castor::PxBufferBaseSPtr p_pBuffer ) = 0;
+		C3D_API virtual bool DownloadBuffer( Castor::PxBufferBaseSPtr p_pBuffer ) = 0;
+		/**
+		 *\~english
+		 *\brief		Blit this attachment's buffer into the given one
+		 *\remark		Interpolation for depth or stencil buffer must be eINTERPOLATION_MODE_NEAREST
+		 *\param[in]	p_pBuffer			The destination buffer
+		 *\param[in]	p_rectSrc			The source rectangle
+		 *\param[in]	p_rectDst			The destination rectangle
+		 *\param[in]	p_eInterpolation	The interpolation to apply if the image is stretched
+		 *\return		\p true if successful
+		 *\~french
+		 *\brief		Blitte le tampon de cette attache dans celui donné
+		 *\remark		L'interpolation pour un tampon stencil ou profondeur doit être eINTERPOLATION_MODE_NEAREST
+		 *\param[in]	p_pBuffer			Le tampon destination
+		 *\param[in]	p_rectSrc			Le rectangle source
+		 *\param[in]	p_rectDst			Le rectangle destination
+		 *\param[in]	p_eInterpolation	L'interpolation à appliquer si l'image est redimensionnée
+		 *\return		\p true si tout s'est bien passé
+		 */
+		C3D_API virtual bool Blit( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, eINTERPOLATION_MODE p_eInterpolation ) = 0;
 		/**
 		 *\~english
 		 *\return		\p true if the attachment has been made
@@ -112,25 +131,6 @@ namespace Castor3D
 		{
 			return m_eAttachmentPoint;
 		}
-		/**
-		 *\~english
-		 *\brief		Blit this attachment's buffer into the given one
-		 *\remark		Interpolation for depth or stencil buffer must be eINTERPOLATION_MODE_NEAREST
-		 *\param[in]	p_pBuffer			The destination buffer
-		 *\param[in]	p_rectSrc			The source rectangle
-		 *\param[in]	p_rectDst			The destination rectangle
-		 *\param[in]	p_eInterpolation	The interpolation to apply if the image is stretched
-		 *\return		\p true if successful
-		 *\~french
-		 *\brief		Blitte le tampon de cette attache dans celui donné
-		 *\remark		L'interpolation pour un tampon stencil ou profondeur doit être eINTERPOLATION_MODE_NEAREST
-		 *\param[in]	p_pBuffer			Le tampon destination
-		 *\param[in]	p_rectSrc			Le rectangle source
-		 *\param[in]	p_rectDst			Le rectangle destination
-		 *\param[in]	p_eInterpolation	L'interpolation à appliquer si l'image est redimensionnée
-		 *\return		\p true si tout s'est bien passé
-		 */
-		virtual bool Blit( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, eINTERPOLATION_MODE p_eInterpolation ) = 0;
 
 	protected:
 		/**
@@ -145,14 +145,14 @@ namespace Castor3D
 		 *\param[in]	p_pFrameBuffer	Le tampon d'image
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool DoAttach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer ) = 0;
+		C3D_API virtual bool DoAttach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer ) = 0;
 		/**
 		 *\~english
 		 *\brief		Detaches the render buffer from the frame buffer
 		 *\~french
 		 *\brief		Détache le tampon de rendu du tampon d'image
 		 */
-		virtual void DoDetach() = 0;
+		C3D_API virtual void DoDetach() = 0;
 
 	private:
 		//\~english The attachment point	\~french Le point d'attache

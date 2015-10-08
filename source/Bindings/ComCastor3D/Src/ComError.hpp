@@ -37,8 +37,18 @@ namespace CastorCom
 		/**
 		 *\~english
 		 *\brief		Throws an exception corresponding to the given Win32 Error code.
+		 *\param[in]	dwError			This represents the error.
+		 *\param[in]	clsid			This is the GUID of component throwing error.
+		 *\param[in]	szSource		This is generally displayed as the title.
+		 *\param[in]	dwHelpContext	This is the context in the help file.
+		 *\param[in]	szHelpFileName	This is the name of the file containing help text.
 		 *\~english
-		 *\brief		Lance une exception correspondant au code d'erreur Win32 donné
+		 *\brief		Lance une exception correspondant au code d'erreur Win32 donné.
+		 *\param[in]	dwError			Représente l'erreur.
+		 *\param[in]	clsid			Le GUID de l'élément d'où provient l'erreur.
+		 *\param[in]	szSource		Le titre.
+		 *\param[in]	dwHelpContext	Le contexte, dans le fichier d'aide.
+		 *\param[in]	szHelpFileName	Le nom du fichier contenant l'aide.
 		*/
 		COMC3D_API static HRESULT DispatchWin32Error(
 			DWORD dwError,
@@ -51,9 +61,21 @@ namespace CastorCom
 		 *\~english
 		 *\brief		Throws the given error code and the message corresponding to the code.
 		 *\remarks		If the code is a standard code and no message is provided, then the message is extracted from the system.
+		 *\param[in]	hError			This represents the error.
+		 *\param[in]	clsid			This is the GUID of component throwing error.
+		 *\param[in]	szSource		This is generally displayed as the title.
+		 *\param[in]	szDescription	This is the description.
+		 *\param[in]	dwHelpContext	This is the context in the help file.
+		 *\param[in]	szHelpFileName	This is the name of the file containing help text.
 		 *\~english
 		 *\brief		Lance une exception contenant le code d'erreur ainsi que le message associé.
 		 *\remarks		Si le code est un code standard et qu'aucun message n'est donné, le message est alors récupéré à partir du système.
+		 *\param[in]	hError			Représente l'erreur.
+		 *\param[in]	clsid			Le GUID de l'élément d'où provient l'erreur.
+		 *\param[in]	szSource		Le titre.
+		 *\param[in]	szDescription	La description.
+		 *\param[in]	dwHelpContext	Le contexte, dans le fichier d'aide.
+		 *\param[in]	szHelpFileName	Le nom du fichier contenant l'aide.
 		*/
 		COMC3D_API static HRESULT DispatchError(
 			HRESULT hError,

@@ -35,11 +35,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Unique.hpp>
 #include <SquareMatrix.hpp>
 
-#if defined( _MSC_VER )
-#	pragma warning( push )
-#	pragma warning( disable:4251 )
-#endif
-
 namespace Castor3D
 {
 	/*!
@@ -53,7 +48,7 @@ namespace Castor3D
 	\brief		Moteur principal
 	\remark		Contient les fenêtres de rendu, les plugins, drivers de rendu...
 	*/
-	class C3D_API Engine
+	class Engine
 		: Castor::Unique< Engine >
 		, std::enable_shared_from_this< Engine >
 	{
@@ -64,14 +59,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		Engine();
+		C3D_API Engine();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Engine();
+		C3D_API ~Engine();
 		/**
 		 *\~english
 		 *\brief		Initialisation function, sets the wanted frame rate
@@ -82,7 +77,7 @@ namespace Castor3D
 		 *\param[in]	p_wantedTBEF	Le nombre voulu du FPS
 		 *\param[in]	p_bThreaded		Si \p false, le rendu ne peut pas être threadé
 		 */
-		void Initialise( uint32_t p_wantedFPS = 100, bool p_bThreaded = false );
+		C3D_API void Initialise( uint32_t p_wantedFPS = 100, bool p_bThreaded = false );
 		/**
 		 *\~english
 		 *\brief		Cleanup function, destroys everything created from the beginning
@@ -91,7 +86,7 @@ namespace Castor3D
 		 *\brief		Fonction de nettoyage, détruit tout ce qui a été créé depuis le début
 		 *\remark		Détruit aussi les RenderWindows, les seules choses restantes après ça sont le RenderSystem et les plugins chargés
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Asks for render context creation
@@ -102,14 +97,14 @@ namespace Castor3D
 		 *\param[in]	p_pRenderWindow	La render window utilisée pour initialiser le contexte de rendu
 		 *\return		Le contexte créé, ou l'existant
 		 */
-		ContextSPtr CreateContext( RenderWindow * p_pRenderWindow );
+		C3D_API ContextSPtr CreateContext( RenderWindow * p_pRenderWindow );
 		/**
 		 *\~english
 		 *\brief		Starts threaded render loop
 		 *\~french
 		 *\brief		Commence le rendu threadé
 		 */
-		void StartRendering();
+		C3D_API void StartRendering();
 		/**
 		 *\~english
 		 *\brief		Ends the render, cleans up engine
@@ -118,14 +113,14 @@ namespace Castor3D
 		 *\brief		Termine le rendu, nettoie le moteur
 		 *\remark		Arrête la boucle de rendu threadé, si elle existe
 		 */
-		void EndRendering();
+		C3D_API void EndRendering();
 		/**
 		 *\~english
 		 *\brief		Renders one frame, only if not in render loop
 		 *\~french
 		 *\brief		Rend une image, uniquement hors de la boucle de rendu
 		 */
-		void RenderOneFrame();
+		C3D_API void RenderOneFrame();
 		/**
 		 *\~english
 		 *\brief		Creates a scene with the given name.
@@ -138,14 +133,14 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de la scène
 		 *\return		La scène
 		 */
-		SceneSPtr CreateScene( Castor::String const & p_name );
+		C3D_API SceneSPtr CreateScene( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Empties each scene
 		 *\~french
 		 *\brief		Vide chaque scène
 		 */
-		void ClearScenes();
+		C3D_API void ClearScenes();
 		/**
 		 *\~english
 		 *\brief		Creates a mesh with the given informations
@@ -160,7 +155,7 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom du mesh
 		 *\return		Le mesh créé
 		 */
-		MeshSPtr CreateMesh( eMESH_TYPE p_type, Castor::String const & p_name );
+		C3D_API MeshSPtr CreateMesh( eMESH_TYPE p_type, Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Creates a mesh with the given informations
@@ -177,7 +172,7 @@ namespace Castor3D
 		 *\param[in]	p_arrayFaces	Le tableau de faces (pour les mesh non custom)
 		 *\return		Le mesh créé
 		 */
-		MeshSPtr CreateMesh( eMESH_TYPE p_type, Castor::String const & p_name, UIntArray const & p_arrayFaces );
+		C3D_API MeshSPtr CreateMesh( eMESH_TYPE p_type, Castor::String const & p_name, UIntArray const & p_arrayFaces );
 		/**
 		 *\~english
 		 *\brief		Creates a mesh with the given informations
@@ -196,7 +191,7 @@ namespace Castor3D
 		 *\param[in]	p_arraySizes	Le tableau de dimensions (pour les mesh non custom)
 		 *\return		Le mesh créé
 		 */
-		MeshSPtr CreateMesh( eMESH_TYPE p_type, Castor::String const & p_name, UIntArray const & p_arrayFaces, RealArray const & p_arraySizes );
+		C3D_API MeshSPtr CreateMesh( eMESH_TYPE p_type, Castor::String const & p_name, UIntArray const & p_arrayFaces, RealArray const & p_arraySizes );
 		/**
 		 *\~english
 		 *\brief		Saves in a file all currently loaded meshes
@@ -207,7 +202,7 @@ namespace Castor3D
 		 *\param[out]	p_file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool SaveMeshes( Castor::BinaryFile & p_file );
+		C3D_API bool SaveMeshes( Castor::BinaryFile & p_file );
 		/**
 		 *\~english
 		 *\brief		Loads all meshes contained in the given file
@@ -218,7 +213,7 @@ namespace Castor3D
 		 *\param[out]	p_file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool LoadMeshes( Castor::BinaryFile & p_file );
+		C3D_API bool LoadMeshes( Castor::BinaryFile & p_file );
 		/**
 		 *\~english
 		 *\brief		Creates a render window
@@ -227,7 +222,7 @@ namespace Castor3D
 		 *\brief		Crée une fenêtre de rendu
 		 *\return		La fenêtre de rendu créée
 		 */
-		RenderWindowSPtr CreateRenderWindow();
+		C3D_API RenderWindowSPtr CreateRenderWindow();
 		/**
 		 *\~english
 		 *\brief		Removes a render window, by index
@@ -238,7 +233,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index de la fenêtre
 		 *\return		\p false si la fenêtre n'a pas été trouvée
 		 */
-		bool RemoveRenderWindow( uint32_t p_index );
+		C3D_API bool RemoveRenderWindow( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Removes a render window, by pointer
@@ -249,14 +244,14 @@ namespace Castor3D
 		 *\param[in]	p_window	Le pointeur sur la fenêtre de rendu
 		 *\return		\p false si la fenêtre n'a pas été trouvée
 		 */
-		bool RemoveRenderWindow( RenderWindowSPtr p_window );
+		C3D_API bool RemoveRenderWindow( RenderWindowSPtr p_window );
 		/**
 		 *\~english
 		 *\brief		Removes all render windows
 		 *\~french
 		 *\brief		Supprime toutes les fenêtres de rendu
 		 */
-		void RemoveAllRenderWindows();
+		C3D_API void RemoveAllRenderWindows();
 		/**
 		 *\~english
 		 *\brief		Loads a plugin, given the plugin name (ex: libGlRenderSystem.dll => GlRenderSystem)
@@ -269,7 +264,7 @@ namespace Castor3D
 		 *\param[in]	p_pathFolder	Un chemin optionnel, pour y trouver le plugin
 		 *\return		Le plugin chargé, \p nullptr si non trouvé (nom incorrect ou non trouvé dans le chemin donné ou le chemin principal)
 		 */
-		PluginBaseSPtr LoadPlugin( Castor::String const & p_strPluginName, Castor::Path const & p_pathFolder )throw();
+		C3D_API PluginBaseSPtr LoadPlugin( Castor::String const & p_strPluginName, Castor::Path const & p_pathFolder )throw();
 		/**
 		 *\~english
 		 *\brief		Loads a plugin, given the plugin file's full path
@@ -280,7 +275,7 @@ namespace Castor3D
 		 *\param[in]	p_filePath	Le chemin du plugin
 		 *\return		Le plugin chargé, \p nullptr si le chemin était incorrect ou s'il ne représentait pas un plugin valide
 		 */
-		PluginBaseSPtr LoadPlugin( Castor::Path const & p_fileFullPath )throw();
+		C3D_API PluginBaseSPtr LoadPlugin( Castor::Path const & p_fileFullPath )throw();
 		/**
 		 *\~english
 		 *\brief		Retrieves a shader plugin for given shader language
@@ -291,7 +286,7 @@ namespace Castor3D
 		 *\param[in]	p_eLanguage	Le langage
 		 *\return		\p NULL si non trouvé
 		 */
-		PluginStrMap GetPlugins( ePLUGIN_TYPE p_type );
+		C3D_API PluginStrMap GetPlugins( ePLUGIN_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Loads a renderer plugin, given the renderer type
@@ -302,7 +297,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de rendu
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool LoadRenderer( eRENDERER_TYPE p_type );
+		C3D_API bool LoadRenderer( eRENDERER_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Loads all the plugins located in working folder
@@ -311,7 +306,7 @@ namespace Castor3D
 		 *\brief		Charge tous les plugins d'un dossier donné
 		 *\param[in]	p_strFolder	Le dossier
 		 */
-		void LoadAllPlugins( Castor::Path const & p_strFolder );
+		C3D_API void LoadAllPlugins( Castor::Path const & p_strFolder );
 		/**
 		 *\~english
 		 *\brief		Posts a frame event to the default frame listener
@@ -320,7 +315,7 @@ namespace Castor3D
 		 *\brief		Ajoute un évènement de frame au frame listener par défaut
 		 *\param[in]	p_pEvent	L'évènement
 		 */
-		void PostEvent( FrameEventSPtr p_pEvent );
+		C3D_API void PostEvent( FrameEventSPtr p_pEvent );
 		/**
 		 *\~english
 		 *\brief		Retrieves the end status
@@ -331,7 +326,7 @@ namespace Castor3D
 		 *\remark		Thread-safe
 		 *\return		\p true si arrêté
 		 */
-		bool IsEnded();
+		C3D_API bool IsEnded();
 		/**
 		 *\~english
 		 *\brief		Tells the engine the render is ended
@@ -340,7 +335,7 @@ namespace Castor3D
 		 *\brief		Dit que le rendu est stoppé
 		 *\remark		Thread-safe
 		 */
-		void SetEnded();
+		C3D_API void SetEnded();
 		/**
 		 *\~english
 		 *\brief		Retrieves the render start status
@@ -351,7 +346,7 @@ namespace Castor3D
 		 *\remark		Thread-safe
 		 *\return		\p true si démarré
 		 */
-		bool IsStarted();
+		C3D_API bool IsStarted();
 		/**
 		 *\~english
 		 *\brief		Tells the engine the render is started
@@ -360,7 +355,7 @@ namespace Castor3D
 		 *\brief		Dit que le rendu est démarré
 		 *\remark		Thread-safe
 		 */
-		void SetStarted();
+		C3D_API void SetStarted();
 		/**
 		 *\~english
 		 *\brief		Retrieves the context creation status
@@ -371,7 +366,7 @@ namespace Castor3D
 		 *\remark		Thread-safe
 		 *\return		\p true si créé
 		 */
-		bool IsCreated();
+		C3D_API bool IsCreated();
 		/**
 		 *\~english
 		 *\brief		Tells the engine the render context is created
@@ -380,7 +375,7 @@ namespace Castor3D
 		 *\brief		Dit que le contexte de rendu est créé
 		 *\remark		Thread-safe
 		 */
-		void SetCreated();
+		C3D_API void SetCreated();
 		/**
 		 *\~english
 		 *\brief		Retrieves the render to-create status
@@ -391,7 +386,7 @@ namespace Castor3D
 		 *\remark		Thread-safe
 		 *\return		\p true si à créer
 		 */
-		bool IsToCreate();
+		C3D_API bool IsToCreate();
 		/**
 		 *\~english
 		 *\brief		Tells the engine the render context is to create
@@ -400,7 +395,7 @@ namespace Castor3D
 		 *\brief		Dit que le contexte de rendu est à créer
 		 *\remark		Thread-safe
 		 */
-		void SetToCreate();
+		C3D_API void SetToCreate();
 		/**
 		 *\~english
 		 *\brief		Retrieves the cleanup status
@@ -411,7 +406,7 @@ namespace Castor3D
 		 *\remark		Thread-safe
 		 *\return		\p true si nettoyé
 		 */
-		bool IsCleaned();
+		C3D_API bool IsCleaned();
 		/**
 		 *\~english
 		 *\brief		Tells the engine is cleaned up
@@ -420,7 +415,7 @@ namespace Castor3D
 		 *\brief		Dit que le moteur est nettoyé
 		 *\remark		Thread-safe
 		 */
-		void SetCleaned();
+		C3D_API void SetCleaned();
 		/**
 		 *\~english
 		 *\brief		Retrieves the wanted frame time
@@ -431,21 +426,21 @@ namespace Castor3D
 		 *\remark		Thread-safe
 		 *\return		Le temps, en secondes
 		 */
-		double GetFrameTime();
+		C3D_API double GetFrameTime();
 		/**
 		 *\~english
 		 *\brief		Updates the overlays collection
 		 *\~french
 		 *\brief		Met à jour la collection d'overlays
 		 */
-		void UpdateOverlayManager();
+		C3D_API void UpdateOverlayManager();
 		/**
 		 *\~english
 		 *\brief		Updates the shaders collection
 		 *\~french
 		 *\brief		Met à jour la collection de shaders
 		 */
-		void UpdateShaderManager();
+		C3D_API void UpdateShaderManager();
 		/**
 		 *\~english
 		 *\brief		Creates an RenderTechnique from a technique name
@@ -460,7 +455,7 @@ namespace Castor3D
 		 *\param[in]	p_params		Les paramètres de la technique
 		 *\return		La RenderTechnique créée
 		 */
-		RenderTechniqueBaseSPtr CreateTechnique( Castor::String const & p_name, RenderTarget & p_renderTarget, Parameters const & p_params );
+		C3D_API RenderTechniqueBaseSPtr CreateTechnique( Castor::String const & p_name, RenderTarget & p_renderTarget, Parameters const & p_params );
 		/**
 		 *\~english
 		 *\brief		Checks the current support for given shader model
@@ -471,7 +466,7 @@ namespace Castor3D
 		 *\param[in]	p_eShaderModel	le shader model
 		 *\return		\p true si le shader model est supporté dans la configuration actuelle
 		 */
-		bool SupportsShaderModel( eSHADER_MODEL p_eShaderModel );
+		C3D_API bool SupportsShaderModel( eSHADER_MODEL p_eShaderModel );
 		/**
 		 *\~english
 		 *\brief		Tells if the renderer API supports depth buffer for main FBO
@@ -480,7 +475,7 @@ namespace Castor3D
 		 *\brief		Dit si l'API de rendu supporte les tampons de profondeur pour le FBO principal
 		 *\return		Le statut du support
 		 */
-		bool SupportsDepthBuffer()const;
+		C3D_API bool SupportsDepthBuffer()const;
 		/**
 		 *\~english
 		 *\brief		Creates a render target of given type
@@ -491,7 +486,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de cible de rendu
 		 *\return		La cible de rendu
 		 */
-		RenderTargetSPtr CreateRenderTarget( eTARGET_TYPE p_type );
+		C3D_API RenderTargetSPtr CreateRenderTarget( eTARGET_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Removes a render target from the render loop
@@ -500,7 +495,7 @@ namespace Castor3D
 		 *\brief		Enlève une cible de rendu de la boucle de rendu
 		 *\param[in]	p_pRenderTarget	La cible de rendu
 		 */
-		void RemoveRenderTarget( RenderTargetSPtr && p_pRenderTarget );
+		C3D_API void RemoveRenderTarget( RenderTargetSPtr && p_pRenderTarget );
 		/**
 		 *\~english
 		 *\brief		Creates a FrameListener.
@@ -511,7 +506,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom du FrameListener.
 		 *\return		Le FrameListener créé.
 		 */
-		FrameListenerWPtr CreateFrameListener( Castor::String const & p_name );
+		C3D_API FrameListenerWPtr CreateFrameListener( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Creates a FrameListener.
@@ -522,7 +517,7 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom du listener.
 		 *\param[in]	p_listener	Le listener.
 		 */
-		void AddFrameListener( Castor::String const & p_name, FrameListenerSPtr && p_listener );
+		C3D_API void AddFrameListener( Castor::String const & p_name, FrameListenerSPtr && p_listener );
 		/**
 		 *\~english
 		 *\brief		Retrieves a FrameListener.
@@ -537,7 +532,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom du FrameListener.
 		 *\return		Une référence sur le listener.
 		 */
-		FrameListener & GetFrameListener( Castor::String const & p_name );
+		C3D_API FrameListener & GetFrameListener( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Destroys a FrameListener.
@@ -546,7 +541,7 @@ namespace Castor3D
 		 *\brief		Détruit un FrameListener.
 		 *\param[in]	p_name	Le nom du FrameListener.
 		 */
-		void DestroyFrameListener( Castor::String const & p_name );
+		C3D_API void DestroyFrameListener( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Creates and returns a Sampler, given a name
@@ -559,7 +554,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom du Sampler
 		 *\return		Le Sampler créé ou existant
 		 */
-		SamplerSPtr CreateSampler( Castor::String const & p_name );
+		C3D_API SamplerSPtr CreateSampler( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Creates and returns a DepthStencilState, given a name
@@ -572,7 +567,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom du DepthStencilState
 		 *\return		Le DepthStencilState créé ou existant
 		 */
-		DepthStencilStateSPtr CreateDepthStencilState( Castor::String const & p_name );
+		C3D_API DepthStencilStateSPtr CreateDepthStencilState( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Creates and returns a RasteriserState, given a name
@@ -585,7 +580,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom du RasteriserState
 		 *\return		Le RasteriserState créé ou existant
 		 */
-		RasteriserStateSPtr CreateRasteriserState( Castor::String const & p_name );
+		C3D_API RasteriserStateSPtr CreateRasteriserState( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Creates and returns a BlendState, given a name
@@ -598,7 +593,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom du BlendState
 		 *\return		Le BlendState créé ou existant
 		 */
-		BlendStateSPtr CreateBlendState( Castor::String const & p_name );
+		C3D_API BlendStateSPtr CreateBlendState( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Show or hide debug overlays
@@ -607,7 +602,7 @@ namespace Castor3D
 		 *\brief		Affiche ou cache les incrustations de débogage
 		 *\param[in]	p_show	Le statut
 		 */
-		void ShowDebugOverlays( bool p_show );
+		C3D_API void ShowDebugOverlays( bool p_show );
 		/**
 		 *\~english
 		 *\brief		Registers additional parsers for SceneFileParser.
@@ -618,7 +613,7 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom d'enregistrement.
 		 *\param[in]	p_parsers	Les analyseurs.
 		 */
-		void RegisterParsers( Castor::String const & p_name, Castor::FileParser::AttributeParsersBySection && p_parsers );
+		C3D_API void RegisterParsers( Castor::String const & p_name, Castor::FileParser::AttributeParsersBySection && p_parsers );
 		/**
 		 *\~english
 		 *\brief		Unregisters parsers for SceneFileParser.
@@ -627,7 +622,7 @@ namespace Castor3D
 		 *\brief		Désenregistre des analyseurs pour SceneFileParser.
 		 *\param[in]	p_name		Le nom d'enregistrement.
 		 */
-		void UnregisterParsers( Castor::String const & p_name );
+		C3D_API void UnregisterParsers( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves plugins path
@@ -636,7 +631,7 @@ namespace Castor3D
 		 *\brief		Récupère le chemin des plugins
 		 *\return		Le chemin des plugins
 		 */
-		static Castor::Path GetPluginsDirectory();
+		C3D_API static Castor::Path GetPluginsDirectory();
 		/**
 		 *\~english
 		 *\brief		Gives the Castor directory
@@ -645,7 +640,7 @@ namespace Castor3D
 		 *\brief		Donne le répertoire du Castor
 		 *\return		Le répertoire
 		 */
-		static Castor::Path GetEngineDirectory();
+		C3D_API static Castor::Path GetEngineDirectory();
 		/**
 		 *\~english
 		 *\brief		Retrieves data path
@@ -654,7 +649,7 @@ namespace Castor3D
 		 *\brief		Récupère le chemin des données
 		 *\return		Le chemin des données
 		 */
-		static Castor::Path GetDataDirectory();
+		C3D_API static Castor::Path GetDataDirectory();
 		/**
 		 *\~english
 		 *\brief		Retrieves the RenderTechnique factory
@@ -1325,7 +1320,7 @@ namespace Castor3D
 		MaterialManager m_materialManager;
 		//!\~english The LightCategory factory	\~french La fabrique de LightCategory
 		LightFactory m_lightFactory;
-		//!\~english The MeshCategory factory	\~french La fabrique de MeshCategory
+		//!\~english The MeshGenerator factory	\~french La fabrique de MeshGenerator
 		MeshFactory m_meshFactory;
 		//!\~english The OverlayCategory factory	\~french La fabrique de OverlayCategory
 		OverlayFactory m_overlayFactory;
@@ -1369,9 +1364,5 @@ namespace Castor3D
 		std::map< Castor::String, Castor::FileParser::AttributeParsersBySection > m_additionalParsers;
 	};
 }
-
-#if defined( _MSC_VER )
-#	pragma warning( pop )
-#endif
 
 #endif

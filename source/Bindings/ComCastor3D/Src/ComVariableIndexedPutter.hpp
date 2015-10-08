@@ -66,6 +66,33 @@ namespace CastorCom
 	{
 		return IndexedVariablePutter< Class, Value, Index >( ( Class * )instance, function );
 	}
+
+#define DECLARE_INDEXED_VAL_PUTTER( nmspc, type )\
+	template< typename Value, typename Index >\
+	struct IndexedVariablePutter< nmspc::type, Value, Index >\
+	{\
+		typedef void ( nmspc::type::*Function )( Value, Index );\
+		IndexedVariablePutter( nmspc::type * instance, Function function )\
+			: m_instance( instance )\
+			, m_function( function )\
+		{\
+		}\
+		template< typename _Index, typename _Value >\
+		HRESULT operator()( _Index index, _Value value )\
+		{\
+			( m_instance->*m_function )( parameter_cast< Value >( value ), index );\
+			return S_OK;\
+		}\
+	private:\
+		nmspc::type * m_instance;\
+		Function m_function;\
+	};\
+	template< typename Value, typename Index, typename _Class >\
+	IndexedVariablePutter< nmspc::type, Value, Index >\
+	make_indexed_putter( _Class * instance, void ( nmspc::type::*function )( Value, Index ) )\
+	{\
+		return IndexedVariablePutter< nmspc::type, Value, Index >( ( nmspc::type * )instance, function );\
+	}
 }
 
 #endif

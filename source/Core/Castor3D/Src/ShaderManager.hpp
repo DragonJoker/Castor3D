@@ -20,10 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -34,7 +30,7 @@ namespace Castor3D
 	\~french
 	\brief		Manager utilisé pour garder les programmes de shaders. Il les garde et permet leur destruction au cours d'une boucle de rendu
 	*/
-	class C3D_API ShaderManager
+	class ShaderManager
 	{
 	public:
 		/**
@@ -43,21 +39,21 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		ShaderManager();
+		C3D_API ShaderManager();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~ShaderManager();
+		C3D_API virtual ~ShaderManager();
 		/**
 		 *\~english
 		 *\brief		Destroys all the shaders of the array of shaders to destroy
 		 *\~french
 		 *\brief		Détruit tous les shaders du tableau de shaders à détruire
 		 */
-		void Update();
+		C3D_API void Update();
 		/**
 		 *\~english
 		 *\brief		Flushes the active shaders list and adds all it's shaders to the array of shaders to destroy
@@ -66,14 +62,14 @@ namespace Castor3D
 		 *\brief		Vide la liste des shaders actifs dans celle des shaders à détruire
 		 *\remarks		Appelle Update
 		 */
-		void Clear();
+		C3D_API void Clear();
 		/**
 		 *\~english
 		 *\brief		Flushes the active shaders list and adds all it's shaders to the array of shaders to destroy
 		 *\~french
 		 *\brief		Vide la liste des shaders actifs dans celle des shaders à détruire
 		 */
-		void ClearShaders();
+		C3D_API void ClearShaders();
 		/**
 		 *\~english
 		 *\brief		Creates a new program
@@ -84,7 +80,7 @@ namespace Castor3D
 		 *\param[in]	p_eLanguage	Le langage de shader souhaité
 		 *\return		Le programme créé
 		 */
-		ShaderProgramBaseSPtr GetNewProgram( eSHADER_LANGUAGE p_eLanguage = eSHADER_LANGUAGE_AUTO );
+		C3D_API ShaderProgramBaseSPtr GetNewProgram( eSHADER_LANGUAGE p_eLanguage = eSHADER_LANGUAGE_AUTO );
 		/**
 		 *\~english
 		 *\brief		Looks for an automatically generated program corresponding to given flags
@@ -100,7 +96,7 @@ namespace Castor3D
 		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
 		 *\return		Le programme trouvé ou créé
 		 */
-		ShaderProgramBaseSPtr GetAutomaticProgram( RenderTechniqueBase const & p_technique, uint32_t p_uiTextureFlags, uint32_t p_uiProgramFlags );
+		C3D_API ShaderProgramBaseSPtr GetAutomaticProgram( RenderTechniqueBase const & p_technique, uint32_t p_uiTextureFlags, uint32_t p_uiProgramFlags );
 		/**
 		 *\~english
 		 *\brief		Creates a matrix frame variable buffer
@@ -113,7 +109,7 @@ namespace Castor3D
 		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié
 		 *\return		Le frame variable buffer
 		 */
-		FrameVariableBufferSPtr CreateMatrixBuffer( ShaderProgramBase & p_program, uint32_t p_shaderMask );
+		C3D_API FrameVariableBufferSPtr CreateMatrixBuffer( ShaderProgramBase & p_program, uint32_t p_shaderMask );
 		/**
 		 *\~english
 		 *\brief		Creates a scene frame variable buffer
@@ -126,7 +122,7 @@ namespace Castor3D
 		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié
 		 *\return		Le frame variable buffer
 		 */
-		FrameVariableBufferSPtr CreateSceneBuffer( ShaderProgramBase & p_program, uint32_t p_shaderMask );
+		C3D_API FrameVariableBufferSPtr CreateSceneBuffer( ShaderProgramBase & p_program, uint32_t p_shaderMask );
 		/**
 		 *\~english
 		 *\brief		Creates a pass frame variable buffer
@@ -139,7 +135,7 @@ namespace Castor3D
 		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié
 		 *\return		Le frame variable buffer
 		 */
-		FrameVariableBufferSPtr CreatePassBuffer( ShaderProgramBase & p_program, uint32_t p_shaderMask );
+		C3D_API FrameVariableBufferSPtr CreatePassBuffer( ShaderProgramBase & p_program, uint32_t p_shaderMask );
 		/**
 		 *\~english
 		 *\brief		Creates the textures related frame variables
@@ -150,7 +146,7 @@ namespace Castor3D
 		 *\param[in]	p_uiTextureFlags	Une combinaison de eTEXTURE_CHANNEL
 		 *\param[in]	p_program			Le programme auquel le buffer est lié
 		 */
-		void CreateTextureVariables( ShaderProgramBase & p_program, uint32_t p_uiTextureFlags );
+		C3D_API void CreateTextureVariables( ShaderProgramBase & p_program, uint32_t p_uiTextureFlags );
 		/**
 		 *\~english
 		 *\brief		Sets the RenderSystem
@@ -224,7 +220,5 @@ namespace Castor3D
 		RenderSystem * m_renderSystem;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

@@ -31,7 +31,7 @@ namespace Castor3D
 	\~french
 	\brief		Classe de plugin d'import
 	*/
-	class C3D_API ImporterPlugin
+	class ImporterPlugin
 		: public PluginBase
 	{
 	public:
@@ -60,14 +60,14 @@ namespace Castor3D
 		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
 		 *\param[in]	p_engine	Le moteur
 		 */
-		ImporterPlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
+		C3D_API ImporterPlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~ImporterPlugin();
+		C3D_API virtual ~ImporterPlugin();
 		/**
 		 *\~english
 		 *\brief		Attaches the plugin to the given Importer
@@ -112,7 +112,7 @@ namespace Castor3D
 		 *\brief		Récupère le tableau des extensions supportées
 		 *\return		Le tableau d'extensions supportées
 		 */
-		ExtensionArray GetExtensions();
+		C3D_API ExtensionArray GetExtensions();
 
 	private:
 		PCreateImporterFunction m_pfnCreateImporter;
@@ -123,4 +123,3 @@ namespace Castor3D
 }
 
 #endif
-

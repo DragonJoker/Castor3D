@@ -4,13 +4,13 @@
 #include "Utils.hpp"
 
 #if defined( _WIN32 )
-#	if defined( _MSC_VER )
+#	if defined( _MSC_VER ) && _MSC_VER < 1900
 #		pragma warning( push )
 #		pragma warning( disable:4311 )
 #		pragma warning( disable:4312 )
 #	endif
 #	include <windows.h>
-#	if defined( _MSC_VER )
+#	if defined( _MSC_VER ) && _MSC_VER < 1900
 #		pragma warning( pop )
 #	endif
 #elif defined( __linux__ )

@@ -23,10 +23,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Path.hpp>
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -38,7 +34,7 @@ namespace Castor3D
 	\~french
 	\brief		Classe de base pour l'import de fichiers externes
 	*/
-	class C3D_API Importer
+	class Importer
 	{
 	public:
 		/**
@@ -49,7 +45,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_engine		Le moteur
 		 */
-		Importer( Engine * p_engine );
+		C3D_API Importer( Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Scene import Function
@@ -62,7 +58,7 @@ namespace Castor3D
 		 *\param[in]	p_parameters	Paramètres de configuration de l'import
 		 *\return		La Scene importée
 		 */
-		SceneSPtr ImportScene( Castor::Path const & p_pathFile, Parameters const & p_parameters );
+		C3D_API SceneSPtr ImportScene( Castor::Path const & p_pathFile, Parameters const & p_parameters );
 		/**
 		 *\~english
 		 *\brief		Mesh import Function
@@ -75,7 +71,7 @@ namespace Castor3D
 		 *\param[in]	p_parameters	Paramètres de configuration de l'import
 		 *\return		Le Mesh importé
 		 */
-		MeshSPtr ImportMesh( Castor::Path const & p_pathFile, Parameters const & p_parameters );
+		C3D_API MeshSPtr ImportMesh( Castor::Path const & p_pathFile, Parameters const & p_parameters );
 		/**
 		 *\~english
 		 *\brief		Retrieves the core engine
@@ -98,7 +94,7 @@ namespace Castor3D
 		 *\brief		Fonction d'import de Scene
 		 *\return		La Scene importée
 		 */
-		virtual SceneSPtr DoImportScene() = 0;
+		C3D_API virtual SceneSPtr DoImportScene() = 0;
 		/**
 		 *\~english
 		 *\brief		Mesh import Function
@@ -107,7 +103,7 @@ namespace Castor3D
 		 *\brief		Fonction d'import de Mesh
 		 *\return		Le Mesh importé
 		 */
-		virtual MeshSPtr DoImportMesh() = 0;
+		C3D_API virtual MeshSPtr DoImportMesh() = 0;
 
 	protected:
 		//!\~english The file name	\~french Le nom du fichier
@@ -124,7 +120,5 @@ namespace Castor3D
 		Parameters m_parameters;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

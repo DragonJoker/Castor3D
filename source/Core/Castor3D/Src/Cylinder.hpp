@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_CYLINDER_H___
 #define ___C3D_CYLINDER_H___
 
-#include "MeshCategory.hpp"
+#include "MeshGenerator.hpp"
 
 namespace Castor3D
 {
@@ -33,16 +33,16 @@ namespace Castor3D
 	\remark		Un cylindre est une primitive basique avec un nombre de faces paramétrable
 	*/
 	class C3D_API Cylinder
-		:	public MeshCategory
+		:	public MeshGenerator
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_factory	The factory used to clone this MeshCategory
+		 *\param[in]	p_factory	The factory used to clone this MeshGenerator
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_factory	La fabrique utilisée pour cloner cette MeshCategory
+		 *\param[in]	p_factory	La fabrique utilisée pour cloner cette MeshGenerator
 		 */
 		Cylinder();
 		/**
@@ -53,32 +53,13 @@ namespace Castor3D
 		 */
 		~Cylinder();
 		/**
-		 *\~english
-		 *\brief		Creation function, used by Factory
-		 *\return		Cylinder
-		 *\~french
-		 *\brief		Fonction de création, utilisée par la Factory
-		 *\return		Un cylindre
+		 *\copydoc		Castor3D::MeshGenerator::Create
 		 */
-		static MeshCategorySPtr Create();
+		static MeshGeneratorSPtr Create();
 		/**
-		 *\~english
-		 *\brief		Generates the cylinder points and faces
-		 *\~french
-		 *\brief		Génère les points et faces du cylindre
+		 *\copydoc		Castor3D::MeshGenerator::Generate
 		 */
-		virtual void Generate();
-		/**
-		 *\~english
-		 *\brief		Modifies the mesh caracteristics then rebuild it
-		 *\param[in]	p_arrayFaces		The new wanted mesh faces number
-		 *\param[in]	p_arrayDimensions	The new wanted mesh dimensions
-		 *\~french
-		 *\brief		Modifie les caractéristiques du mesh et le reconstruit
-		 *\param[in]	p_arrayFaces		Tableau contenant les nombres de faces
-		 *\param[in]	p_arrayDimensions	Tableau contenant les dimensions du mesh
-		 */
-		virtual void Initialise( UIntArray const & p_arrayFaces, RealArray const & p_arrayDimensions );
+		virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
 		/**
 		 *\~english
 		 *\brief		Retrieves number of faces

@@ -64,91 +64,10 @@ namespace CastorCom
 		STDMETHOD( Length )( /* [out,retval] */ FLOAT * pVal );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
-	OBJECT_ENTRY_AUTO( __uuidof( Vector2D ), CVector2D )
+	OBJECT_ENTRY_AUTO( __uuidof( Vector2D ), CVector2D );
 
-	template< typename Class >
-	struct VariableRefGetter< Class, Castor::Point2r >
-	{
-		typedef Castor::Point2r const & ( Class::*Function )()const;
-		VariableRefGetter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( IVector2D ** value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					hr = CVector2D::CreateInstance( value );
-
-					if ( hr == S_OK )
-					{
-						*static_cast< Castor::Point2r * >( static_cast< CVector2D * >( *value ) ) = ( m_instance->*m_function )();
-					}
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_IVector2D,							// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
-
-	template< typename Class >
-	struct VariablePutter< Class, Castor::Point2r const & >
-	{
-		typedef void ( Class::*Function )( Castor::Point2r const & );
-		VariablePutter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( IVector2D * value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					( m_instance->*m_function )( *static_cast< CVector2D * >( value ) );
-					hr = S_OK;
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_IVector2D,							// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
+	DECLARE_VARIABLE_REF_GETTER( Vector2D, Castor, Point2r );
+	DECLARE_VARIABLE_REF_PUTTER( Vector2D, Castor, Point2r );
 }
 
 #endif

@@ -1,8 +1,5 @@
 ﻿#include "Castor3DPch.hpp"
 
-#pragma warning( disable:4311 )
-#pragma warning( disable:4312 )
-
 #include <Point.hpp>
 #include <SquareMatrix.hpp>
 

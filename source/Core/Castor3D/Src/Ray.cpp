@@ -41,15 +41,15 @@ Ray::Ray( Point3r const & p_ptOrigin, Point3r const & p_ptDirection )
 }
 
 Ray::Ray( Ray const & p_ray )
-	:	m_ptOrigin( p_ray.m_ptOrigin )
-	,	m_ptDirection( p_ray.m_ptDirection )
+	: m_ptOrigin( p_ray.m_ptOrigin )
+	, m_ptDirection( p_ray.m_ptDirection )
 {
 	point::normalise( m_ptDirection );
 }
 
 Ray::Ray( Ray && p_ray )
-	:	m_ptOrigin( std::move( p_ray.m_ptOrigin ) )
-	,	m_ptDirection( std::move( p_ray.m_ptDirection ) )
+	: m_ptOrigin( std::move( p_ray.m_ptOrigin ) )
+	, m_ptDirection( std::move( p_ray.m_ptDirection ) )
 {
 	p_ray.m_ptOrigin	= Point3r();
 	p_ray.m_ptDirection	= Point3r();

@@ -25,10 +25,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "VertexBoneData.hpp"
 #include "VertexGroup.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -743,7 +739,5 @@ namespace Castor3D
 		bool m_bDirty;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

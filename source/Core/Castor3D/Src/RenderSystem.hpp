@@ -25,10 +25,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Colour.hpp>
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -64,7 +60,7 @@ namespace Castor3D
 	\remarks	Cette classe fait le lien entre Castor3D et l'api de rendu (OpenGL ou Direct3D)
 				<br />Ainsi c'est aussi la seule classe à même de créer les renderers
 	*/
-	class C3D_API RenderSystem
+	class RenderSystem
 	{
 	protected:
 		template< class Ty > friend struct RendererCreator;
@@ -81,28 +77,28 @@ namespace Castor3D
 		 *\param[in]	p_engine		Le moteur
 		 *\param[in]	p_eRendererType	L'API de rendu
 		 */
-		RenderSystem( Engine * p_engine, eRENDERER_TYPE p_eRendererType );
+		C3D_API RenderSystem( Engine * p_engine, eRENDERER_TYPE p_eRendererType );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~RenderSystem();
+		C3D_API virtual ~RenderSystem();
 		/**
 		 *\~english
 		 *\brief		Initialises the render system
 		 *\~french
 		 *\brief		Initialise le render system
 		 */
-		void Initialise();
+		C3D_API void Initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans the render system up
 		 *\~french
 		 *\brief		Nettoie le render system
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Creates a ShaderProgram in a given language
@@ -115,7 +111,7 @@ namespace Castor3D
 		 *\param[in]	p_eLanguage	Le langage du shader
 		 *\return		Le ShaderProgram créé
 		 */
-		ShaderProgramBaseSPtr CreateShaderProgram( eSHADER_LANGUAGE p_eLanguage );
+		C3D_API ShaderProgramBaseSPtr CreateShaderProgram( eSHADER_LANGUAGE p_eLanguage );
 		/**
 		 *\~english
 		 *\brief		Renders the scene ambient lighting
@@ -126,7 +122,7 @@ namespace Castor3D
 		 *\param[in]	p_clColour			La couleur de la lumière
 		 *\param[in]	p_variableBuffer	Le buffer the variables, qui reçoit la lumière ambient
 		 */
-		void RenderAmbientLight( Castor::Colour const & p_clColour, FrameVariableBuffer & p_variableBuffer );
+		C3D_API void RenderAmbientLight( Castor::Colour const & p_clColour, FrameVariableBuffer & p_variableBuffer );
 		/**
 		 *\~english
 		 *\brief		Pushes a scene on th stack
@@ -135,14 +131,14 @@ namespace Castor3D
 		 *\brief		Met une scène sur la pile
 		 *\param[in]	p_scene	La scène
 		 */
-		void PushScene( Scene * p_scene );
+		C3D_API void PushScene( Scene * p_scene );
 		/**
 		 *\~english
 		 *\brief		Pops a scene from the stack
 		 *\~french
 		 *\brief		Enlève la scène du haut de la pile
 		 */
-		void PopScene();
+		C3D_API void PopScene();
 		/**
 		 *\~english
 		 *\brief		Retrieves the top scene from the stack
@@ -151,7 +147,7 @@ namespace Castor3D
 		 *\brief		Récupère la scène du haut de la pile
 		 *\return		La scène, NULL si la pile est vide
 		 */
-		Scene * GetTopScene();
+		C3D_API Scene * GetTopScene();
 		/**
 		 *\~english
 		 *\brief		Retrieves the currently active camera
@@ -160,7 +156,7 @@ namespace Castor3D
 		 *\brief		Récupère la caméra actuellement active
 		 *\return		La caméra
 		 */
-		Camera * GetCurrentCamera()const;
+		C3D_API Camera * GetCurrentCamera()const;
 		/**
 		 *\~english
 		 *\brief		Defines the currently active camera
@@ -169,7 +165,7 @@ namespace Castor3D
 		 *\brief		Définit la caméra actuellement active
 		 *\param[in]	p_pCamera	La caméra
 		 */
-		void SetCurrentCamera( Camera * p_pCamera );
+		C3D_API void SetCurrentCamera( Camera * p_pCamera );
 		/**
 		 *\~english
 		 *\brief		Checks support for given shader model
@@ -180,7 +176,7 @@ namespace Castor3D
 		 *\param[in]	p_eProfile	Le modèle de shaders
 		 *\return		\p false si le modèle donné n'est pas supporté par l'API actuelle
 		 */
-		virtual	bool CheckSupport( eSHADER_MODEL p_eProfile ) = 0;
+		C3D_API virtual	bool CheckSupport( eSHADER_MODEL p_eProfile ) = 0;
 		/**
 		 *\~english
 		 *\brief		Checks if the loaded render API needs matrix transposition for shader variables
@@ -191,7 +187,7 @@ namespace Castor3D
 		 *\remarks		Nécessaire à cause de Direct3D 11
 		 *\return		\p false s'il la transposition n'est pas nécessaire
 		 */
-		virtual	bool NeedsMatrixTransposition()const = 0;
+		C3D_API virtual	bool NeedsMatrixTransposition()const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a geometries buffer holder
@@ -206,7 +202,7 @@ namespace Castor3D
 		 *\param[in]	p_pMatrixBuffer	Le tampon de matrices
 		 *\return		Le conteneur de buffers de géométrie
 		 */
-		virtual GeometryBuffersSPtr CreateGeometryBuffers( VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer ) = 0;
+		C3D_API virtual GeometryBuffersSPtr CreateGeometryBuffers( VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a rendering context
@@ -215,7 +211,7 @@ namespace Castor3D
 		 *\brief		Crée un contexte de rendu
 		 *\return		Le contexte créé
 		 */
-		virtual ContextSPtr CreateContext() = 0;
+		C3D_API virtual ContextSPtr CreateContext() = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a FrameVariableBuffer
@@ -224,7 +220,7 @@ namespace Castor3D
 		 *\brief		Crée un FrameVariableBuffer
 		 *\return		Le FrameVariableBuffer créé
 		 */
-		virtual FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_name ) = 0;
+		C3D_API virtual FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_name ) = 0;
 		/**
 		 *\~english
 		 *\brief		Tells if the renderer API supports depth buffer for main FBO
@@ -233,7 +229,7 @@ namespace Castor3D
 		 *\brief		Dit si l'API de rendu supporte les tampons de profondeur pour le FBO principal
 		 *\return		Le statut du support
 		 */
-		virtual bool SupportsDepthBuffer()const = 0;
+		C3D_API virtual bool SupportsDepthBuffer()const = 0;
 		/**
 		 *\~english
 		 *\brief		Create a depth and stencil states object
@@ -242,7 +238,7 @@ namespace Castor3D
 		 *\brief		Crée un objet d'états de depth et stencil
 		 *\return		L'objet
 		 */
-		virtual DepthStencilStateSPtr CreateDepthStencilState() = 0;
+		C3D_API virtual DepthStencilStateSPtr CreateDepthStencilState() = 0;
 		/**
 		 *\~english
 		 *\brief		Create a rasteriser states object
@@ -251,7 +247,7 @@ namespace Castor3D
 		 *\brief		Crée un objet d'états de rasteriser
 		 *\return		L'objet
 		 */
-		virtual RasteriserStateSPtr CreateRasteriserState() = 0;
+		C3D_API virtual RasteriserStateSPtr CreateRasteriserState() = 0;
 		/**
 		 *\~english
 		 *\brief		Create a blender states object
@@ -260,7 +256,7 @@ namespace Castor3D
 		 *\brief		Crée un objet d'états de blend
 		 *\return		L'objet
 		 */
-		virtual BlendStateSPtr CreateBlendState() = 0;
+		C3D_API virtual BlendStateSPtr CreateBlendState() = 0;
 		/**
 		 *\~english
 		 *\brief		Create a billboards list
@@ -271,7 +267,7 @@ namespace Castor3D
 		 *\param[in]	p_scene		La scène parente
 		 *\return		L'objet
 		 */
-		virtual BillboardListSPtr CreateBillboardsList( SceneSPtr p_scene ) = 0;
+		C3D_API virtual BillboardListSPtr CreateBillboardsList( SceneSPtr p_scene ) = 0;
 		/**
 		 *\~english
 		 *\brief		Create a sampler
@@ -282,7 +278,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de l'échantillonneur
 		 *\return		L'objet
 		 */
-		virtual SamplerSPtr CreateSampler( Castor::String const & p_name ) = 0;
+		C3D_API virtual SamplerSPtr CreateSampler( Castor::String const & p_name ) = 0;
 		/**
 		 *\~english
 		 *\brief		Create a render target
@@ -293,7 +289,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de cible de rendu
 		 *\return		L'objet
 		 */
-		virtual RenderTargetSPtr CreateRenderTarget( eTARGET_TYPE p_type ) = 0;
+		C3D_API virtual RenderTargetSPtr CreateRenderTarget( eTARGET_TYPE p_type ) = 0;
 		/**
 		 *\~english
 		 *\brief		Create a render window
@@ -302,7 +298,7 @@ namespace Castor3D
 		 *\brief		Crée une fenêtre de rendu
 		 *\return		L'objet
 		 */
-		virtual RenderWindowSPtr CreateRenderWindow() = 0;
+		C3D_API virtual RenderWindowSPtr CreateRenderWindow() = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a ShaderProgram (GLSL or HLSL only)
@@ -311,7 +307,7 @@ namespace Castor3D
 		 *\brief		Crée un ShaderProgram (GLSL ou HLSL seulement)
 		 *\return		Le ShaderProgram créé
 		 */
-		virtual ShaderProgramBaseSPtr CreateShaderProgram() = 0;
+		C3D_API virtual ShaderProgramBaseSPtr CreateShaderProgram() = 0;
 		/**
 		 *\~english
 		 *\brief		Creates an overlay renderer
@@ -320,7 +316,7 @@ namespace Castor3D
 		 *\brief		Crée un renderer d'incrustations
 		 *\return		Le renderer créé
 		 */
-		virtual OverlayRendererSPtr CreateOverlayRenderer() = 0;
+		C3D_API virtual OverlayRendererSPtr CreateOverlayRenderer() = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture
@@ -333,7 +329,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de texture
 		 *\return		La texture créée, dépendante de l'API actuelle
 		 */
-		virtual StaticTextureSPtr CreateStaticTexture() = 0;
+		C3D_API virtual StaticTextureSPtr CreateStaticTexture() = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture
@@ -346,7 +342,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de texture
 		 *\return		La texture créée, dépendante de l'API actuelle
 		 */
-		virtual DynamicTextureSPtr CreateDynamicTexture() = 0;
+		C3D_API virtual DynamicTextureSPtr CreateDynamicTexture() = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a vertex buffer, given a buffer declaration
@@ -361,7 +357,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le tampon hardware auquel sera lié le tampon de sommets
 		 *\return		Le tampon de sommets créé, dépendant de l'API actuelle
 		 */
-		virtual std::shared_ptr< GpuBuffer< uint8_t > > CreateVertexBuffer( BufferDeclaration const & p_elements, CpuBuffer< uint8_t > * p_pBuffer ) = 0;
+		C3D_API virtual std::shared_ptr< GpuBuffer< uint8_t > > CreateVertexBuffer( BufferDeclaration const & p_elements, CpuBuffer< uint8_t > * p_pBuffer ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates an index buffer
@@ -374,7 +370,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le tampon hardware auquel sera lié le tampon d'indices
 		 *\return		Le tampon d'indices créé, dépendant de l'API actuelle
 		 */
-		virtual std::shared_ptr< GpuBuffer< uint32_t > > CreateIndexBuffer( CpuBuffer< uint32_t > * p_pBuffer ) = 0;
+		C3D_API virtual std::shared_ptr< GpuBuffer< uint32_t > > CreateIndexBuffer( CpuBuffer< uint32_t > * p_pBuffer ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a matrix buffer
@@ -387,7 +383,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le tampon hardware auquel sera lié le tampon
 		 *\return		Le tampon créé, dépendant de l'API actuelle
 		 */
-		virtual std::shared_ptr< GpuBuffer< real > > CreateMatrixBuffer( CpuBuffer< real > * p_pBuffer ) = 0;
+		C3D_API virtual std::shared_ptr< GpuBuffer< real > > CreateMatrixBuffer( CpuBuffer< real > * p_pBuffer ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture buffer
@@ -400,14 +396,14 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le tampon hardware auquel sera lié le tampon de texture
 		 *\return		Le tampon de texture créé, dépendant de l'API actuelle
 		 */
-		virtual std::shared_ptr< GpuBuffer< uint8_t > > CreateTextureBuffer( CpuBuffer< uint8_t > * p_pBuffer ) = 0;
+		C3D_API virtual std::shared_ptr< GpuBuffer< uint8_t > > CreateTextureBuffer( CpuBuffer< uint8_t > * p_pBuffer ) = 0;
 		/**
 		 *\~english
 		 *\return		A pipeline implementation, depending on loaded API
 		 *\~french
 		 *\return		Une implémentation de pipeline, en fonction de l'API chargée.
 		 */
-		virtual IPipelineImplSPtr GetPipelineImpl() = 0;
+		C3D_API virtual IPipelineImplSPtr GetPipelineImpl() = 0;
 		/**
 		 *\~english
 		 *\brief		Tells if multi-texturing is available
@@ -624,14 +620,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise le render system
 		 */
-		virtual void DoInitialise() = 0;
+		C3D_API virtual void DoInitialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans the render system up
 		 *\~french
 		 *\brief		Nettoie le render system
 		 */
-		virtual void DoCleanup() = 0;
+		C3D_API virtual void DoCleanup() = 0;
 
 	protected:
 		//!\~english Mutex used to make this class thread safe	\~french Mutex pour rendre cette classe thread safe
@@ -689,16 +685,14 @@ namespace Castor3D
 		uint32_t m_id = 0;
 		std::list< ObjectDeclaration > m_allocated;
 
-		bool DoTrack( void * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name );
-		bool DoTrack( Castor::Named * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name );
-		bool DoUntrack( void * p_object, ObjectDeclaration & p_declaration );
-		bool DoUntrack( Castor::Named * p_object, ObjectDeclaration & p_declaration );
-		void DoReportTracked();
+		C3D_API bool DoTrack( void * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name );
+		C3D_API bool DoTrack( Castor::Named * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name );
+		C3D_API bool DoUntrack( void * p_object, ObjectDeclaration & p_declaration );
+		C3D_API bool DoUntrack( Castor::Named * p_object, ObjectDeclaration & p_declaration );
+		C3D_API void DoReportTracked();
 
 #endif
 	};
 }
-
-#pragma warning( pop )
 
 #endif

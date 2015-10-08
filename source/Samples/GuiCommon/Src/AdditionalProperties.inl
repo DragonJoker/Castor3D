@@ -24,7 +24,7 @@ namespace GuiCommon
 	template<>
 	inline float GetValue< float >( wxVariant const & p_variant )
 	{
-		return p_variant.GetDouble();
+		return float( p_variant.GetDouble() );
 	}
 
 	template<>

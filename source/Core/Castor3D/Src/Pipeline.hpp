@@ -23,10 +23,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <stack>
 #include <SquareMatrix.hpp>
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	static const uint32_t C3D_MAX_TEXTURE_MATRICES = 10;
@@ -569,7 +565,5 @@ namespace Castor3D
 		IPipelineImplWPtr m_impl;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

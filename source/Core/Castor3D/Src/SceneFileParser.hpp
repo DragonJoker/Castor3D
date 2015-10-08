@@ -24,10 +24,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <FileParserContext.hpp>
 #include "Submesh.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	//! Scene file sections Enum
@@ -228,7 +224,5 @@ namespace Castor3D
 
 	};
 }
-
-#pragma warning( pop )
 
 #endif

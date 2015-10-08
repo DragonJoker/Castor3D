@@ -21,7 +21,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	Submesh::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		:	Loader< Submesh, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+		: Loader< Submesh, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -68,7 +68,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	Submesh::BinaryParser::BinaryParser( Path const & p_path )
-		:	Castor3D::BinaryParser< Submesh >( p_path )
+		: Castor3D::BinaryParser< Submesh >( p_path )
 	{
 	}
 

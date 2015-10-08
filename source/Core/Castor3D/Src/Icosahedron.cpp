@@ -10,9 +10,9 @@ using namespace Castor3D;
 using namespace Castor;
 
 Icosahedron::Icosahedron()
-	:	MeshCategory( eMESH_TYPE_ICOSAHEDRON )
-	,	m_radius( 0 )
-	,	m_nbFaces( 0 )
+	: MeshGenerator( eMESH_TYPE_ICOSAHEDRON )
+	, m_radius( 0 )
+	, m_nbFaces( 0 )
 {
 }
 
@@ -20,19 +20,21 @@ Icosahedron::~Icosahedron()
 {
 }
 
-MeshCategorySPtr Icosahedron::Create()
+MeshGeneratorSPtr Icosahedron::Create()
 {
 	return std::make_shared< Icosahedron >();
 }
 
-void Icosahedron::Generate()
+void Icosahedron::Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
 {
+	m_radius = p_dimensions[0];
+
 	if ( m_radius < 0 )
 	{
 		m_radius = -m_radius;
 	}
 
-	SubmeshSPtr l_submesh = GetMesh()->CreateSubmesh();
+	SubmeshSPtr l_submesh = p_mesh.CreateSubmesh();
 
 	// Construction de l'icosaèdre
 	std::vector< real > l_vtx( 12 * 3 );
@@ -163,13 +165,5 @@ void Icosahedron::Generate()
 	}
 
 	l_submesh->ComputeTangentsFromNormals();
-	GetMesh()->ComputeContainers();
-}
-
-void Icosahedron::Initialise( UIntArray const & p_arrayFaces, RealArray const & p_arrayDimensions )
-{
-//	m_nbFaces = p_arrayFaces[0];
-	m_radius = p_arrayDimensions[0];
-	GetMesh()->Cleanup();
-	Generate();
+	p_mesh.ComputeContainers();
 }

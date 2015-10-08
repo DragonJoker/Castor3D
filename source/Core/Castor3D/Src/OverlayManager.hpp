@@ -20,10 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Overlay.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -57,7 +53,7 @@ namespace Castor3D
 	\~french
 	\brief		Collection d'incrustations, avec des fonctions additionnelles d'ajout et de suppression pour gérer les Z-Index
 	*/
-	class C3D_API OverlayManager
+	class OverlayManager
 		: private Castor::Collection< Overlay, Castor::String >
 	{
 	public:
@@ -73,28 +69,28 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		OverlayManager( Engine * p_engine );
+		C3D_API OverlayManager( Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~OverlayManager();
+		C3D_API virtual ~OverlayManager();
 		/**
 		 *\~english
 		 *\brief		Clears all overlays lists
 		 *\~french
 		 *\brief		Vide les listes d'incrustations
 		 */
-		void Clear();
+		C3D_API void Clear();
 		/**
 		 *\~english
 		 *\brief		Cleans all overlays up.
 		 *\~french
 		 *\brief		Nettoie les incrustations.
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Creates a panel overlay.
@@ -115,7 +111,7 @@ namespace Castor3D
 		 *\param[in]	p_parent	L'incrustation parente.
 		 *\return		L'incrustation ainsi créée.
 		 */
-		PanelOverlaySPtr CreatePanel( Castor::String const & p_name, Castor::Point2d const & p_position, Castor::Point2d const & p_size, MaterialSPtr p_material, OverlaySPtr p_parent = nullptr );
+		C3D_API PanelOverlaySPtr CreatePanel( Castor::String const & p_name, Castor::Point2d const & p_position, Castor::Point2d const & p_size, MaterialSPtr p_material, OverlaySPtr p_parent = nullptr );
 		/**
 		 *\~english
 		 *\brief		Creates a panel overlay.
@@ -136,7 +132,7 @@ namespace Castor3D
 		 *\param[in]	p_parent	L'incrustation parente.
 		 *\return		L'incrustation ainsi créée.
 		 */
-		PanelOverlaySPtr CreatePanel( Castor::String const & p_name, Castor::Position const & p_position, Castor::Size const & p_size, MaterialSPtr p_material, OverlaySPtr p_parent = nullptr );
+		C3D_API PanelOverlaySPtr CreatePanel( Castor::String const & p_name, Castor::Position const & p_position, Castor::Size const & p_size, MaterialSPtr p_material, OverlaySPtr p_parent = nullptr );
 		/**
 		 *\~english
 		 *\brief		Creates a border panel overlay.
@@ -161,7 +157,7 @@ namespace Castor3D
 		 *\param[in]	p_parent			L'incrustation parente.
 		 *\return		L'incrustation ainsi créée.
 		 */
-		BorderPanelOverlaySPtr CreateBorderPanel( Castor::String const & p_name, Castor::Point2d const & p_position, Castor::Point2d const & p_size, MaterialSPtr p_material, Castor::Point4d const & p_bordersSize, MaterialSPtr p_bordersMaterial, OverlaySPtr p_parent = nullptr );
+		C3D_API BorderPanelOverlaySPtr CreateBorderPanel( Castor::String const & p_name, Castor::Point2d const & p_position, Castor::Point2d const & p_size, MaterialSPtr p_material, Castor::Point4d const & p_bordersSize, MaterialSPtr p_bordersMaterial, OverlaySPtr p_parent = nullptr );
 		/**
 		 *\~english
 		 *\brief		Creates a panel overlay.
@@ -185,7 +181,7 @@ namespace Castor3D
 		 *\param[in]	p_parent			L'incrustation parente.
 		 *\return		L'incrustation ainsi créée.
 		 */
-		BorderPanelOverlaySPtr CreateBorderPanel( Castor::String const & p_name, Castor::Position const & p_position, Castor::Size const & p_size, MaterialSPtr p_material, Castor::Rectangle const & p_bordersSize, MaterialSPtr p_bordersMaterial, OverlaySPtr p_parent = nullptr );
+		C3D_API BorderPanelOverlaySPtr CreateBorderPanel( Castor::String const & p_name, Castor::Position const & p_position, Castor::Size const & p_size, MaterialSPtr p_material, Castor::Rectangle const & p_bordersSize, MaterialSPtr p_bordersMaterial, OverlaySPtr p_parent = nullptr );
 		/**
 		 *\~english
 		 *\brief		Creates a text overlay.
@@ -208,7 +204,7 @@ namespace Castor3D
 		 *\param[in]	p_parent	L'incrustation parente.
 		 *\return		L'incrustation ainsi créée.
 		 */
-		TextOverlaySPtr CreateText( Castor::String const & p_name, Castor::Point2d const & p_position, Castor::Point2d const & p_size, MaterialSPtr p_material, Castor::FontSPtr p_font, OverlaySPtr p_parent = nullptr );
+		C3D_API TextOverlaySPtr CreateText( Castor::String const & p_name, Castor::Point2d const & p_position, Castor::Point2d const & p_size, MaterialSPtr p_material, Castor::FontSPtr p_font, OverlaySPtr p_parent = nullptr );
 		/**
 		 *\~english
 		 *\brief		Creates a text overlay.
@@ -231,7 +227,7 @@ namespace Castor3D
 		 *\param[in]	p_parent	L'incrustation parente.
 		 *\return		L'incrustation ainsi créée.
 		 */
-		TextOverlaySPtr CreateText( Castor::String const & p_name, Castor::Position const & p_position, Castor::Size const & p_size, MaterialSPtr p_material, Castor::FontSPtr p_font, OverlaySPtr p_parent = nullptr );
+		C3D_API TextOverlaySPtr CreateText( Castor::String const & p_name, Castor::Position const & p_position, Castor::Size const & p_size, MaterialSPtr p_material, Castor::FontSPtr p_font, OverlaySPtr p_parent = nullptr );
 		/**
 		 *\~english
 		 *\brief		Creates an overlay, given a type and the overlay definitions
@@ -250,7 +246,7 @@ namespace Castor3D
 		 *\param[in]	p_scene	La scène contenant l'overlay
 		 *\return		L'overlay
 		 */
-		OverlaySPtr CreateOverlay( eOVERLAY_TYPE p_type, Castor::String const & p_name, OverlaySPtr p_parent, SceneSPtr p_scene );
+		C3D_API OverlaySPtr CreateOverlay( eOVERLAY_TYPE p_type, Castor::String const & p_name, OverlaySPtr p_parent, SceneSPtr p_scene );
 		/**
 		 *\~english
 		 *\brief		Add an overlay to the lists, given it's name
@@ -263,7 +259,7 @@ namespace Castor3D
 		 *\param[in]	p_overlay	L'incrustation
 		 *\param[in]	p_parent	L'incrustation parente
 		 */
-		void AddOverlay( Castor::String const & p_name, OverlaySPtr p_overlay, OverlaySPtr p_parent );
+		C3D_API void AddOverlay( Castor::String const & p_name, OverlaySPtr p_overlay, OverlaySPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Removes an overlay from the lists.
@@ -272,7 +268,7 @@ namespace Castor3D
 		 *\brief		Enlève une incrustation des listes.
 		 *\param[in]	p_name		Le nom de l'incrustation.
 		 */
-		void RemoveOverlay( Castor::String const & p_name );
+		C3D_API void RemoveOverlay( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves the overlay with the given name
@@ -283,7 +279,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom
 		 *\return		L'incrustation, \p nullptr si non trouvée
 		 */
-		OverlaySPtr GetOverlay( Castor::String const & p_name );
+		C3D_API OverlaySPtr GetOverlay( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Checks if an overlay with the given name exists
@@ -294,14 +290,14 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom
 		 *\return		\p true Si une incrustation est défini avec le nom donné
 		 */
-		bool HasOverlay( Castor::String const & p_name );
+		C3D_API bool HasOverlay( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Initialises or cleans up the OverlayRenderer, according to engine rendering status
 		 *\~french
 		 *\brief		Initialise ou nettoie l'OverlayRenderer, selon le statut du rendu
 		 */
-		void Update();
+		C3D_API void Update();
 		/**
 		 *\~english
 		 *\brief		Renders all visible overlays
@@ -312,7 +308,7 @@ namespace Castor3D
 		 *\param[in]	p_scene	La scène rendue, pour afficher ses overlays en plus des globaux
 		 *\param[in]	p_size	Les dimensions de la cible du rendu
 		 */
-		void RenderOverlays( Scene const & p_scene, Castor::Size const & p_size );
+		C3D_API void RenderOverlays( Scene const & p_scene, Castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Writes overlays in a text file
@@ -323,7 +319,7 @@ namespace Castor3D
 		 *\param[out]	p_file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool WriteOverlays( Castor::TextFile & p_file )const;
+		C3D_API bool WriteOverlays( Castor::TextFile & p_file )const;
 		/**
 		 *\~english
 		 *\brief		Reads overlays from a text file
@@ -334,7 +330,7 @@ namespace Castor3D
 		 *\param[in]	p_file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool ReadOverlays( Castor::TextFile & p_file );
+		C3D_API bool ReadOverlays( Castor::TextFile & p_file );
 		/**
 		 *\~english
 		 *\brief		Writes overlays in a binary file
@@ -345,7 +341,7 @@ namespace Castor3D
 		 *\param[out]	p_file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool SaveOverlays( Castor::BinaryFile & p_file )const;
+		C3D_API bool SaveOverlays( Castor::BinaryFile & p_file )const;
 		/**
 		 *\~english
 		 *\brief		Reads overlays from a binary file
@@ -356,7 +352,7 @@ namespace Castor3D
 		 *\param[in]	p_file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool LoadOverlays( Castor::BinaryFile & p_file );
+		C3D_API bool LoadOverlays( Castor::BinaryFile & p_file );
 		/**
 		*\~english
 		*\brief		Retrieves a FontTexture given a font name.
@@ -367,7 +363,7 @@ namespace Castor3D
 		*\param[in]	p_name	Le nom de la police.
 		*\return		La FontTexture si elle exite, nullptr sinon.
 		*/
-		FontTextureSPtr GetFontTexture( Castor::String const & p_name );
+		C3D_API FontTextureSPtr GetFontTexture( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Creates a FontTexture from a font.
@@ -378,7 +374,7 @@ namespace Castor3D
 		 *\param[in]	p_font	La police.
 		 *\return		La FontTexture créée.
 		 */
-		FontTextureSPtr CreateFontTexture( Castor::FontSPtr p_font );
+		C3D_API FontTextureSPtr CreateFontTexture( Castor::FontSPtr p_font );
 		/**
 		 *\~english
 		 *\brief		Retrieves the overlay renderer
@@ -459,7 +455,5 @@ namespace Castor3D
 	typedef OverlayManager::iterator OverlayManagerIt;
 	typedef OverlayManager::const_iterator OverlayManagerConstIt;
 }
-
-#pragma warning( pop )
 
 #endif

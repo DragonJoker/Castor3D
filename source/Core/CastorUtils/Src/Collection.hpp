@@ -24,9 +24,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "NonCopyable.hpp"
 #include "Assertion.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4661 )
-
 namespace Castor
 {
 	/*!
@@ -190,7 +187,5 @@ namespace Castor
 
 #include "Collection.inl"
 }
-
-#pragma warning( pop )
 
 #endif

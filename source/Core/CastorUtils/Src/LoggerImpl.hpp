@@ -23,9 +23,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "ELogType.hpp"
 #include "StringUtils.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4290 )
-
 namespace Castor
 {
 	/** Base class for a message representation
@@ -182,7 +179,5 @@ namespace Castor
 		std::mutex m_mutexCallbacks;
 	};
 }
-
-#pragma warning( pop)
 
 #endif

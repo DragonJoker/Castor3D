@@ -258,7 +258,7 @@ namespace CastorShape
 
 	void NewMaterialDialog::OnExponentChange( double p_value )
 	{
-		m_pass->SetShininess( p_value );
+		m_pass->SetShininess( float( p_value ) );
 	}
 
 	void NewMaterialDialog::OnTwoSidedChange( bool p_value )
@@ -268,7 +268,7 @@ namespace CastorShape
 
 	void NewMaterialDialog::OnOpacityChange( double p_value )
 	{
-		m_pass->SetAlpha( p_value );
+		m_pass->SetAlpha( float( p_value ) );
 	}
 
 	bool NewMaterialDialog::OnEditShader( wxPGProperty * p_property )

@@ -21,10 +21,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "BinaryParser.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -64,8 +60,8 @@ namespace Castor3D
 		\brief		OverlayCategory loader
 		\remark		Charge et enregistre les incrustations dans des fichiers
 		*/
-		class C3D_API TextLoader
-			:	public Castor::Loader< OverlayCategory, Castor::eFILE_TYPE_TEXT, Castor::TextFile >, public Castor::NonCopyable
+		class TextLoader
+			: public Castor::Loader< OverlayCategory, Castor::eFILE_TYPE_TEXT, Castor::TextFile >, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -74,7 +70,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Saves an overlay into a text file
@@ -87,7 +83,7 @@ namespace Castor3D
 			 *\param[in]	p_overlay	L'incrustation à enregistrer
 			 *\return		\p true si tout s'est bien passé
 			 */
-			virtual bool operator()( OverlayCategory const & p_overlay, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( OverlayCategory const & p_overlay, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -97,8 +93,8 @@ namespace Castor3D
 		\~english
 		\brief		Loader de OverlayCategory
 		*/
-		class C3D_API BinaryParser
-			:	public Castor3D::BinaryParser< OverlayCategory >
+		class BinaryParser
+			: public Castor3D::BinaryParser< OverlayCategory >
 		{
 		public:
 			/**
@@ -109,7 +105,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -122,7 +118,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( OverlayCategory const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( OverlayCategory const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -135,7 +131,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( OverlayCategory & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( OverlayCategory & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	public:
@@ -620,7 +616,5 @@ namespace Castor3D
 		Castor::Point4d m_uv;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

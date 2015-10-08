@@ -21,14 +21,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "Animable.hpp"
 #include "BinaryParser.hpp"
-#include "MeshCategory.hpp"
+#include "MeshGenerator.hpp"
 
 #include <CubeBox.hpp>
 #include <SphereBox.hpp>
-
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
 
 namespace Castor3D
 {
@@ -128,6 +124,9 @@ namespace Castor3D
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
 			virtual bool Parse( Mesh & p_obj, BinaryChunk & p_chunk )const;
+
+			using Castor3D::BinaryParser< Mesh >::Fill;
+			using Castor3D::BinaryParser< Mesh >::Parse;
 		};
 
 	public:
@@ -136,25 +135,21 @@ namespace Castor3D
 		 *\brief		Constructor
 		 *\param[in]	p_engine	The parent engine
 		 *\param[in]	p_name		This mesh name
-		 *\param[in]	p_eMeshType	The mesh type
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_engine	Le moteur parent
 		 *\param[in]	p_name		Le nom du maillage
-		 *\param[in]	p_eMeshType	Le type de maillage
 		 */
-		Mesh( Engine * p_engine, eMESH_TYPE p_type, Castor::String const & p_name );
+		Mesh( Engine * p_engine, Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_engine	The parent engine
-		 *\param[in]	p_eMeshType	The mesh type
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_engine	Le moteur parent
-		 *\param[in]	p_eMeshType	Le type de maillage
 		 */
-		Mesh( Engine * p_engine, eMESH_TYPE p_eMeshType = eMESH_TYPE_CUSTOM );
+		Mesh( Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -171,15 +166,17 @@ namespace Castor3D
 		void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Initialises mesh's vertex and faces
-		 *\param[in]	p_arrayFaces		The faces counts
-		 *\param[in]	p_arrayDimensions	The mesh dimensions
+		 *\brief		Creates mesh's vertex and faces.
+		 *\param[in]	p_generator		The mesh generator.
+		 *\param[in]	p_faces			The faces counts.
+		 *\param[in]	p_dimensions	The mesh dimensions.
 		 *\~french
-		 *\brief		Initialise les sommets et faces du maillage
-		 *\param[in]	p_arrayFaces		Les nombres de faces
-		 *\param[in]	p_arrayDimensions	Les dimensions du maillage
+		 *\brief		Crée les sommets et faces du maillage.
+		 *\param[in]	p_generator		Le générateur de maillage.
+		 *\param[in]	p_faces			The faces counts.
+		 *\param[in]	p_dimensions	The mesh dimensions.
 		 */
-		void Initialise( UIntArray const & p_arrayFaces, RealArray const & p_arrayDimensions );
+		void Initialise( MeshGenerator & p_generator, UIntArray const & p_faces, RealArray const & p_dimensions );
 		/**
 		 *\~english
 		 *\brief		Computes the collision box and sphere.
@@ -325,18 +322,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the mesh category type
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le type de la catégorie de maillage
-		 *\return		La valeur
-		 */
-		inline eMESH_TYPE GetMeshType()const
-		{
-			return m_pMeshCategory->GetMeshType();
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the collision box
 		 *\return		The value
 		 *\~french
@@ -403,10 +388,8 @@ namespace Castor3D
 		void UnRef( MaterialSPtr p_material );
 
 	protected:
-		friend class MeshCategory;
+		friend class MeshGenerator;
 		DECLARE_VECTOR( AnimationPtrStrMap, AnimationMap );
-		//!\~english The mesh category	\~french La catégorie de maillage
-		MeshCategorySPtr m_pMeshCategory;
 		//!\~english Tells whether or not the mesh is modified	\~french Dit si le maillage est modifié
 		bool m_modified;
 		//!\~english The collision box	\~french La boîte de collision
@@ -415,15 +398,11 @@ namespace Castor3D
 		Castor::SphereBox m_sphere;
 		//!\~english The submeshes array	\~french Le tableau de sous maillages
 		SubmeshPtrArray m_submeshes;
-		//!\~english The MeshCategory factory	\~french la fabrique de MeshCategory
-		MeshFactory & m_factory;
 		//!\~english The parent engine	\~french Le moteur parent
 		Engine * m_engine;
 		//!\~english The skeleton	\~french Le squelette
 		SkeletonSPtr m_pSkeleton;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

@@ -20,10 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -35,7 +31,7 @@ namespace Castor3D
 	\~french
 	\brief		Classe de configuration du rasteriser
 	*/
-	class C3D_API RasteriserState
+	class RasteriserState
 	{
 	public:
 		/**
@@ -44,35 +40,35 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		RasteriserState();
+		C3D_API RasteriserState();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~RasteriserState();
+		C3D_API virtual ~RasteriserState();
 		/**
 		 *\~english
 		 *\brief		Initialises the states
 		 *\~french
 		 *\brief		Initialise les états
 		 */
-		virtual bool Initialise() = 0;
+		C3D_API virtual bool Initialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans the states
 		 *\~french
 		 *\brief		Nettoie les états
 		 */
-		virtual void Cleanup() = 0;
+		C3D_API virtual void Cleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Applies the states
 		 *\~french
 		 *\brief		Applique les états
 		 */
-		virtual bool Apply() = 0;
+		C3D_API virtual bool Apply() = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the fill mode
@@ -281,21 +277,21 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Crée l'état utilisé pour stocker l'état courant
 		 */
-		void CreateCurrent();
+		C3D_API void CreateCurrent();
 		/**
 		 *\~english
 		 *\brief		Destroys the state used to save the current state
 		 *\~french
 		 *\brief		Détruit l'état utilisé pour stocker l'état courant
 		 */
-		void DestroyCurrent();
+		C3D_API void DestroyCurrent();
 		/**
 		 *\~english
 		 *\brief		Creates the state used to save the current state
 		 *\~french
 		 *\brief		Crée l'état utilisé pour stocker l'état courant
 		 */
-		virtual RasteriserStateSPtr DoCreateCurrent() = 0;
+		C3D_API virtual RasteriserStateSPtr DoCreateCurrent() = 0;
 
 	protected:
 		//!\~english Tells it has changed.	\~french Dit que l'état a changé.
@@ -322,7 +318,5 @@ namespace Castor3D
 		RasteriserStateSPtr m_currentState;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

@@ -21,10 +21,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "SceneFileParser.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	// Root parsers
@@ -255,7 +251,5 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_GroupAnimatedObject )
 	DECLARE_ATTRIBUTE_PARSER( Parser_GroupAnimation )
 }
-
-#pragma warning( pop )
 
 #endif

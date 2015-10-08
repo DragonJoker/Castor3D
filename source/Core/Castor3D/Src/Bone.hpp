@@ -22,10 +22,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <SquareMatrix.hpp>
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -39,7 +35,7 @@ namespace Castor3D
 	\brief		Classe contenant les données d'un bone
 	\remark		Contient les poids pour chaque vertice et la matrice de transformation de l'espace objet vers l'espace bone
 	*/
-	class C3D_API Bone
+	class Bone
 	{
 	private:
 		//!\~english The bone name	\~french Le nom du bone
@@ -58,14 +54,14 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_skeleton	Le squelette parent
 		 */
-		Bone( Skeleton & p_skeleton );
+		C3D_API Bone( Skeleton & p_skeleton );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Bone();
+		C3D_API virtual ~Bone();
 		/**
 		 *\~english
 		 *\brief		Retrieves the bone name
@@ -128,7 +124,5 @@ namespace Castor3D
 		}
 	};
 }
-
-#pragma warning( pop )
 
 #endif

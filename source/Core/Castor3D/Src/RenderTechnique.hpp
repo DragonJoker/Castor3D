@@ -21,10 +21,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include <Rectangle.hpp>
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 #if !defined( NDEBUG )
 #	define DEBUG_BUFFERS 0
 #else
@@ -44,7 +40,7 @@ namespace Castor3D
 	\brief		Classe de base d'une technique de rendu
 	\remarks	Une technique de rendu est la description d'une manière de rendre une cible de rendu
 	*/
-	class C3D_API RenderTechniqueBase
+	class RenderTechniqueBase
 	{
 	protected:
 		/**
@@ -61,7 +57,7 @@ namespace Castor3D
 		 *\param[in]	p_pRenderSystem	Le render system
 		 *\param[in]	p_params		Les paramètres de la technique
 		 */
-		RenderTechniqueBase( Castor::String const & p_name, RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params );
+		C3D_API RenderTechniqueBase( Castor::String const & p_name, RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params );
 
 	public:
 		/**
@@ -70,7 +66,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~RenderTechniqueBase();
+		C3D_API virtual ~RenderTechniqueBase();
 		/**
 		 *\~english
 		 *\brief		Creation function
@@ -79,14 +75,14 @@ namespace Castor3D
 		 *\brief		Fonction de création
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool Create();
+		C3D_API bool Create();
 		/**
 		 *\~english
 		 *\brief		Destruction function
 		 *\~french
 		 *\brief		Fonction de destruction
 		 */
-		void Destroy();
+		C3D_API void Destroy();
 		/**
 		 *\~english
 		 *\brief		Initialisation function
@@ -97,14 +93,14 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index de texture de base
 		 *\return		\p true if ok
 		 */
-		bool Initialise( uint32_t & p_index );
+		C3D_API bool Initialise( uint32_t & p_index );
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Render begin function
@@ -113,7 +109,7 @@ namespace Castor3D
 		 *\brief		Fonction de début de rendu
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool BeginRender();
+		C3D_API bool BeginRender();
 		/**
 		 *\~english
 		 *\brief		Render function
@@ -130,14 +126,14 @@ namespace Castor3D
 		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la dernière frame
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool Render( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime );
+		C3D_API bool Render( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime );
 		/**
 		 *\~english
 		 *\brief		Render end function
 		 *\~french
 		 *\brief		Fonction de fin de rendu
 		 */
-		void EndRender();
+		C3D_API void EndRender();
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags
@@ -146,7 +142,7 @@ namespace Castor3D
 		 *\brief		Récupère le source du pixel shader qui correspond aux flags donnés
 		 *\param[in]	p_uiFlags	Une combinaison de eTEXTURE_CHANNEL
 		 */
-		Castor::String GetPixelShaderSource( uint32_t p_uiFlags )const;
+		C3D_API Castor::String GetPixelShaderSource( uint32_t p_uiFlags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the technique name
@@ -169,14 +165,14 @@ namespace Castor3D
 		 *\brief		Fonction de création
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool DoCreate() = 0;
+		C3D_API virtual bool DoCreate() = 0;
 		/**
 		 *\~english
 		 *\brief		Destruction function
 		 *\~french
 		 *\brief		Fonction de destruction
 		 */
-		virtual void DoDestroy() = 0;
+		C3D_API virtual void DoDestroy() = 0;
 		/**
 		 *\~english
 		 *\brief		Initialisation function
@@ -187,14 +183,14 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index de texture de base
 		 *\return		\p true if ok
 		 */
-		virtual bool DoInitialise( uint32_t & p_index ) = 0;
+		C3D_API virtual bool DoInitialise( uint32_t & p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		virtual void DoCleanup() = 0;
+		C3D_API virtual void DoCleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Render begin function
@@ -203,7 +199,7 @@ namespace Castor3D
 		 *\brief		Fonction de début de rendu
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool DoBeginRender() = 0;
+		C3D_API virtual bool DoBeginRender() = 0;
 		/**
 		 *\~english
 		 *\brief		Render function
@@ -220,14 +216,14 @@ namespace Castor3D
 		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la dernière frame
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime );
+		C3D_API virtual bool DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime );
 		/**
 		 *\~english
 		 *\brief		Render end function
 		 *\~french
 		 *\brief		Fonction de fin de rendu
 		 */
-		virtual void DoEndRender() = 0;
+		C3D_API virtual void DoEndRender() = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags
@@ -236,7 +232,7 @@ namespace Castor3D
 		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
 		 *\param[in]	p_uiFlags	Une combinaison de eTEXTURE_CHANNEL
 		 */
-		virtual Castor::String DoGetPixelShaderSource( uint32_t p_uiFlags )const = 0;
+		C3D_API virtual Castor::String DoGetPixelShaderSource( uint32_t p_uiFlags )const = 0;
 
 	protected:
 		//!\~english The technique name	\~french Le nom de la technique
@@ -269,7 +265,5 @@ namespace Castor3D
 		RenderBufferAttachmentSPtr m_pDepthAttach;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

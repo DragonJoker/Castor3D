@@ -22,10 +22,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <PixelBufferBase.hpp>
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -553,7 +549,5 @@ namespace Castor3D
 		return p_streamIn;
 	}
 }
-
-#pragma warning( pop )
 
 #endif

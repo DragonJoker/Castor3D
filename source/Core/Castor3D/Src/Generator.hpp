@@ -23,10 +23,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Pixel.hpp>
 #include <PixelBuffer.hpp>
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	class C3D_API Generator
@@ -35,20 +31,20 @@ namespace Castor3D
 		class C3D_API Thread
 		{
 		private:
-			bool			m_bEnded;
-			bool			m_bLaunched;
-			bool			m_bStopped;
+			bool m_bEnded;
+			bool m_bLaunched;
+			bool m_bStopped;
 
 		protected:
-			Generator				*			m_pParent;
-			int									m_iWidth;
-			int									m_iTop;
-			int									m_iBottom;
-			int									m_iHeight;
-			Castor::UbPixel						m_pxColour;
-			uint32_t							m_uiIndex;
-			std::shared_ptr< std::thread >		m_pThread;
-			mutable std::recursive_mutex		m_mutex;
+			Generator * m_pParent;
+			int m_iWidth;
+			int m_iTop;
+			int m_iBottom;
+			int m_iHeight;
+			Castor::UbPixel m_pxColour;
+			uint32_t m_uiIndex;
+			std::shared_ptr< std::thread > m_pThread;
+			mutable std::recursive_mutex m_mutex;
 
 		public:
 			Thread( Generator * p_parent, uint32_t p_index, int iWidth, int iTop, int iBottom, int iTotalHeight, Castor::UbPixel const & p_pxColour );
@@ -97,18 +93,18 @@ namespace Castor3D
 		};
 
 	protected:
-		int							m_iWidth;
-		int							m_iHeight;
-		unsigned long long			m_ullStep;
-		Castor::PixelBuffer			m_frontBuffer;
-		Castor::PixelBuffer			m_backBuffer;
-		Castor::UbPixel				m_pxColour;
-		uint32_t					m_uiThreadCount;
-		bool						m_bEnded;
-		std::vector <Thread *>		m_arraySlaveThreads;
-		bool						m_bInitialised;
-		TextureUnit			*		m_pTexture;
-		Engine 		*			m_engine;
+		int m_iWidth;
+		int m_iHeight;
+		unsigned long long m_ullStep;
+		Castor::PixelBuffer m_frontBuffer;
+		Castor::PixelBuffer m_backBuffer;
+		Castor::UbPixel m_pxColour;
+		uint32_t m_uiThreadCount;
+		bool m_bEnded;
+		std::vector <Thread *> m_arraySlaveThreads;
+		bool m_bInitialised;
+		TextureUnit * m_pTexture;
+		Engine * m_engine;
 
 	public:
 		Generator( Engine * p_engine, int p_width, int p_height );
@@ -136,35 +132,35 @@ namespace Castor3D
 			return l_pThread;
 		}
 
-		inline uint8_t				GetRed()const
+		inline uint8_t GetRed()const
 		{
 			return m_pxColour[0];
 		}
-		inline uint8_t				GetGreen()const
+		inline uint8_t GetGreen()const
 		{
 			return m_pxColour[1];
 		}
-		inline uint8_t				GetBlue()const
+		inline uint8_t GetBlue()const
 		{
 			return m_pxColour[2];
 		}
-		inline bool							IsInitialised()const
+		inline bool IsInitialised()const
 		{
 			return m_bInitialised;
 		}
-		inline Castor::PixelBuffer const *	GetPixelsBuffer()const
+		inline Castor::PixelBuffer const * GetPixelsBuffer()const
 		{
 			return & m_frontBuffer;
 		}
-		inline Castor::PixelBuffer 	*	GetPixelsBuffer()
+		inline Castor::PixelBuffer * GetPixelsBuffer()
 		{
 			return & m_frontBuffer;
 		}
-		inline int							GetWidth()const
+		inline int GetWidth()const
 		{
 			return m_iWidth;
 		}
-		inline int							GetHeight()const
+		inline int GetHeight()const
 		{
 			return m_iHeight;
 		}
@@ -182,7 +178,5 @@ namespace Castor3D
 
 	extern int GetCPUCount();
 }
-
-#pragma warning( pop )
 
 #endif

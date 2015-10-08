@@ -459,7 +459,7 @@ interface IVector2D;
 interface IVector3D;
 interface IAngle;
 interface IQuaternion;
-interface IMatrix;
+interface IMatrix4x4;
 interface IPosition;
 interface ISize;
 interface IRect;
@@ -605,8 +605,8 @@ interface IAngle
 interface IQuaternion
 	: IDispatch
 {
-	[propget, id( 1 ), helpstring( "The quaternions's rotation matrix" )] HRESULT RotationMatrix( [out, retval] IMatrix ** pVal );
-	[propput, id( 1 ), helpstring( "The quaternions's rotation matrix" )] HRESULT RotationMatrix( [in] IMatrix * val );
+	[propget, id( 1 ), helpstring( "The quaternions's rotation matrix" )] HRESULT RotationMatrix( [out, retval] IMatrix4x4 ** pVal );
+	[propput, id( 1 ), helpstring( "The quaternions's rotation matrix" )] HRESULT RotationMatrix( [in] IMatrix4x4 * val );
 	[id( 2 ), helpstring( "Transforms a vector through this quaternion" )] HRESULT Transform( [in] IVector3D * val, [out, retval] IVector3D ** pVal );
 	[id( 3 ), helpstring( "Retrieves the quaternion's axis and angle" )] HRESULT ToAxisAngle( [out] IVector3D ** pAxis, [out] IAngle ** pAngle );
 	[id( 4 ), helpstring( "Defines this quaternion's axis and angle" )] HRESULT FromAxisAngle( [in] IVector3D * axis, [in] IAngle * angle );
@@ -621,14 +621,14 @@ interface IQuaternion
 	[id( 13 ), helpstring( "Spherical linear interpolation with another quaternion." )] HRESULT Mix( [in]IQuaternion * quat, [in] float percent, [out, retval] IQuaternion ** pQuat );
 }
 
-// IMatrix
+// IMatrix4x4
 [
 	uuid( 80CF5574-9CE8-4CF8-B402-F013A0A9BD4C ),
-	helpstring( "Square 4x4 matric interface" ),
+	helpstring( "Square 4x4 matrix interface" ),
 	dual,
 	oleautomation
 ]
-interface IMatrix
+interface IMatrix4x4
 	: IDispatch
 {
 	[id( 1 ), helpstring( "Transposes the matrix" )] HRESULT Transpose();
@@ -1159,13 +1159,12 @@ interface ISubmesh
 interface IMesh
 	: IDispatch
 {
-	[propget, id( 1 ), helpstring( "The mesh type" )] HRESULT MeshType( [out, retval] eMESH_TYPE * pVal );
-	[propget, id( 2 ), helpstring( "The total mesh's submeshes count" )] HRESULT SubmeshCount( [out, retval] unsigned int * pVal );
-	[propget, id( 3 ), helpstring( "The total mesh's faces count" )] HRESULT FaceCount( [out, retval] unsigned int * pVal );
-	[propget, id( 4 ), helpstring( "The total mesh's vertices count" )] HRESULT VertexCount( [out, retval] unsigned int * pVal );
-	[id( 5 ), helpstring( "Retrieves the submesh at the given index" )] HRESULT GetSubmesh( [in] unsigned int val, [out, retval] ISubmesh ** pVal );
-	[id( 6 ), helpstring( "Creates a new submesh for this mesh" )] HRESULT CreateSubmesh( [out, retval] ISubmesh ** pVal );
-	[id( 7 ), helpstring( "Deletes the given submesh" )] HRESULT DeleteSubmesh( [in] ISubmesh * val );
+	[propget, id( 1 ), helpstring( "The total mesh's submeshes count" )] HRESULT SubmeshCount( [out, retval] unsigned int * pVal );
+	[propget, id( 2 ), helpstring( "The total mesh's faces count" )] HRESULT FaceCount( [out, retval] unsigned int * pVal );
+	[propget, id( 3 ), helpstring( "The total mesh's vertices count" )] HRESULT VertexCount( [out, retval] unsigned int * pVal );
+	[id( 4 ), helpstring( "Retrieves the submesh at the given index" )] HRESULT GetSubmesh( [in] unsigned int val, [out, retval] ISubmesh ** pVal );
+	[id( 5 ), helpstring( "Creates a new submesh for this mesh" )] HRESULT CreateSubmesh( [out, retval] ISubmesh ** pVal );
+	[id( 6 ), helpstring( "Deletes the given submesh" )] HRESULT DeleteSubmesh( [in] ISubmesh * val );
 };
 
 // IScene
@@ -1665,13 +1664,13 @@ library Castor3D
 		[default] interface IQuaternion;
 	};
 
-	// Matrix
+	// IMatrix4x4
 	[
 		uuid( 3353741E-3F82-4A99-B8DC-6D6AB0584E04 )
 	]
-	coclass Matrix
+	coclass Matrix4x4
 	{
-		[default] interface IMatrix;
+		[default] interface IMatrix4x4;
 	};
 
 	// Position

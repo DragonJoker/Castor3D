@@ -22,10 +22,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "BufferElementDeclaration.hpp"
 #include "BufferDeclaration.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -125,7 +121,5 @@ namespace Castor3D
 		BufferDeclaration m_bufferDeclaration;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

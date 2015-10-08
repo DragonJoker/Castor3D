@@ -33,8 +33,8 @@ namespace Castor3D
 	\~french
 	\brief		La fabrique de techniques de rendu
 	*/
-	class C3D_API TechniqueFactory
-		:	public Castor::Factory< RenderTechniqueBase, Castor::String, std::shared_ptr< RenderTechniqueBase >, std::function< RenderTechniqueBaseSPtr( RenderTarget &, RenderSystem *, Parameters const & ) > >
+	class TechniqueFactory
+		: public Castor::Factory< RenderTechniqueBase, Castor::String, std::shared_ptr< RenderTechniqueBase >, std::function< RenderTechniqueBaseSPtr( RenderTarget &, RenderSystem *, Parameters const & ) > >
 	{
 	public:
 		/**
@@ -43,22 +43,24 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		TechniqueFactory();
+		C3D_API TechniqueFactory();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~TechniqueFactory();
+		C3D_API virtual ~TechniqueFactory();
 		/**
 		 *\~english
 		 *\brief		Registers all objects types
 		 *\~french
 		 *\brief		Enregistre tous les types d'objets
 		 */
-		virtual void Initialise();
+		C3D_API virtual void Initialise();
+
 #if !CASTOR_HAS_VARIADIC_TEMPLATES
+
 		/**
 		 *\~english
 		 *\brief		Creates an object from a key
@@ -87,7 +89,9 @@ namespace Castor3D
 
 			return l_return;
 		}
+
 #endif
+
 	};
 }
 

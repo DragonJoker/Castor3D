@@ -20,10 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Interpolator.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -74,7 +70,7 @@ namespace Castor3D
 		Castor::Quaternion const & operator()( real p_rPercent )
 		{
 			m_tCurrent = m_tSrc.Slerp( m_tDest, p_rPercent, true );
-//			m_tCurrent = m_tCurrent * (m_tDest - m_tSrc).Slerp( Castor::Quaternion::Identity(), 1.0f - p_rPercent, true );
+			//m_tCurrent = m_tCurrent * (m_tDest - m_tSrc).Slerp( Castor::Quaternion::Identity(), 1.0f - p_rPercent, true );
 			return m_tCurrent;
 		}
 
@@ -87,7 +83,5 @@ namespace Castor3D
 		Castor::Quaternion m_tDest;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

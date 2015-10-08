@@ -31,8 +31,8 @@ namespace Castor3D
 	\~french
 	\brief		Render tampon recevant une composante de profondeur et/ou de stencil
 	*/
-	class C3D_API DepthStencilRenderBuffer
-		:	public RenderBuffer
+	class DepthStencilRenderBuffer
+		: public RenderBuffer
 	{
 	public:
 		/**
@@ -43,14 +43,14 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_ePixelFormat	Le format des pixels du tampon
 		 */
-		DepthStencilRenderBuffer( Castor::ePIXEL_FORMAT p_eFormat );
+		C3D_API DepthStencilRenderBuffer( Castor::ePIXEL_FORMAT p_eFormat );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~DepthStencilRenderBuffer();
+		C3D_API virtual ~DepthStencilRenderBuffer();
 	};
 }
 

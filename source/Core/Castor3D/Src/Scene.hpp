@@ -23,10 +23,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Logger.hpp>
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -1287,7 +1283,5 @@ namespace Castor3D
 		std::set< int > m_setFreeLights;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

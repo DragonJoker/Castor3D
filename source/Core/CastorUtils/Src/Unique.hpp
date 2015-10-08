@@ -20,9 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "UnicityException.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4661 )
-
 namespace Castor
 {
 	/*!
@@ -126,7 +123,5 @@ namespace Castor
 	//!\~english Helper macro to cleanup the Unique instance	\~french Macro pour faciliter le nettoyage de l'instance de Unique
 #	define CASTOR_CLEANUP_UNIQUE_INSTANCE() SetInstance( NULL )
 }
-
-#pragma warning( pop )
 
 #endif

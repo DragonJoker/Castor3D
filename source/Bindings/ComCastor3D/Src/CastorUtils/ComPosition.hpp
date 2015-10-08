@@ -61,91 +61,10 @@ namespace CastorCom
 		STDMETHOD( Offset )( /* [in] */ INT x, /* [in] */ INT y );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
-	OBJECT_ENTRY_AUTO( __uuidof( Position ), CPosition )
+	OBJECT_ENTRY_AUTO( __uuidof( Position ), CPosition );
 
-	template< typename Class >
-	struct VariableRefGetter< Class, Castor::Position >
-	{
-		typedef Castor::Position const & ( Class::*Function )()const;
-		VariableRefGetter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( IPosition ** value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					hr = CPosition::CreateInstance( value );
-
-					if ( hr == S_OK )
-					{
-						*static_cast< Castor::Position * >( static_cast< CPosition * >( *value ) ) = ( m_instance->*m_function )();
-					}
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_IPosition,							// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
-
-	template< typename Class >
-	struct VariablePutter< Class, Castor::Position const & >
-	{
-		typedef void ( Class::*Function )( Castor::Position const & );
-		VariablePutter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( IPosition * value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					( m_instance->*m_function )( *static_cast< CPosition * >( value ) );
-					hr = S_OK;
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_IPosition,							// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
+	DECLARE_VARIABLE_REF_GETTER( Position, Castor, Position );
+	DECLARE_VARIABLE_REF_PUTTER( Position, Castor, Position );
 }
 
 #endif

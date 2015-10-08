@@ -1,5 +1,5 @@
 #include "ComQuaternion.hpp"
-#include "ComMatrix.hpp"
+
 #include "ComVector3D.hpp"
 #include "ComAngle.hpp"
 

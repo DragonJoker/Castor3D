@@ -21,10 +21,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "BinaryParser.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -37,7 +33,7 @@ namespace Castor3D
 	\brief		Contient les composantes d'une lumière
 	\remark		Dérivée en DirectionalLight, PointLight et SpotLight
 	*/
-	class C3D_API LightCategory
+	class LightCategory
 	{
 	public:
 		/*!
@@ -50,7 +46,6 @@ namespace Castor3D
 		*/
 		class C3D_API TextLoader
 			: public Castor::Loader< LightCategory, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -134,14 +129,14 @@ namespace Castor3D
 		 *\brief		Le constructeur utilisé par la fonction de clonage
 		 *\param[in]	p_eLightType	Le type de catégorie de lumière
 		 */
-		LightCategory( eLIGHT_TYPE p_eLightType );
+		C3D_API LightCategory( eLIGHT_TYPE p_eLightType );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~LightCategory();
+		C3D_API virtual ~LightCategory();
 		/**
 		 *\~english
 		 *\brief		Sets the light's ambient colour
@@ -150,7 +145,7 @@ namespace Castor3D
 		 *\brief		Définit la couleur ambiante
 		 *\param[in]	p_ambient	La nouvelle valeur
 		 */
-		void SetAmbient( Castor::Point4f const & p_ambient );
+		C3D_API void SetAmbient( Castor::Point4f const & p_ambient );
 		/**
 		 *\~english
 		 *\brief		Sets the light's diffuse colour
@@ -159,7 +154,7 @@ namespace Castor3D
 		 *\brief		Définit la couleur diffuse
 		 *\param[in]	p_diffuse	La nouvelle valeur
 		 */
-		void SetDiffuse( Castor::Point4f const & p_diffuse );
+		C3D_API void SetDiffuse( Castor::Point4f const & p_diffuse );
 		/**
 		 *\~english
 		 *\brief		Sets the light's specular colour
@@ -168,7 +163,7 @@ namespace Castor3D
 		 *\brief		Définit la couleur spéculaire
 		 *\param[in]	p_specular	La nouvelle valeur
 		 */
-		void SetSpecular( Castor::Point4f const & p_specular );
+		C3D_API void SetSpecular( Castor::Point4f const & p_specular );
 		/**
 		 *\~english
 		 *\brief		Retrieves the light type
@@ -334,7 +329,5 @@ namespace Castor3D
 		Castor::Point4f m_ptPositionType;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

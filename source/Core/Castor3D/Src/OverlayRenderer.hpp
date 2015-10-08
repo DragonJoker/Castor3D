@@ -21,10 +21,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "OverlayCategory.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 #ifdef DrawText
 #	undef DrawText
 #endif
@@ -39,7 +35,7 @@ namespace Castor3D
 	\~french
 	\brief		Le renderer d'incrustation
 	*/
-	class C3D_API OverlayRenderer
+	class OverlayRenderer
 	{
 	public:
 		/**
@@ -48,49 +44,49 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		OverlayRenderer( RenderSystem * p_pRenderSystem );
+		C3D_API OverlayRenderer( RenderSystem * p_pRenderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~OverlayRenderer();
+		C3D_API virtual ~OverlayRenderer();
 		/**
 		 *\~english
 		 *\brief		Initialises the buffers
 		 *\~french
 		 *\brief		Initialise les tampons
 		 */
-		void Initialise();
+		C3D_API void Initialise();
 		/**
 		 *\~english
 		 *\brief		Flushes the renderer
 		 *\~french
 		 *\brief		Nettoie le renderer
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Function to draw a PanelOverlay
 		 *\~french
 		 *\brief		Fonction de dessin d'un PanelOverlay
 		 */
-		void DrawPanel( PanelOverlay & p_pPanelOverlay );
+		C3D_API void DrawPanel( PanelOverlay & p_pPanelOverlay );
 		/**
 		 *\~english
 		 *\brief		Function to draw a BorderPanelOverlay
 		 *\~french
 		 *\brief		Fonction de dessin d'un BorderPanelOverlay
 		 */
-		void DrawBorderPanel( BorderPanelOverlay & p_pBorderPanelOverlay );
+		C3D_API void DrawBorderPanel( BorderPanelOverlay & p_pBorderPanelOverlay );
 		/**
 		 *\~english
 		 *\brief		Function to draw a TextOverlay
 		 *\~french
 		 *\brief		Fonction de dessin d'un TextOverlay
 		 */
-		void DrawText( TextOverlay & p_pTextPanelOverlay );
+		C3D_API void DrawText( TextOverlay & p_pTextPanelOverlay );
 		/**
 		 *\~english
 		 *\brief		Begins the overlays rendering
@@ -99,14 +95,14 @@ namespace Castor3D
 		 *\brief		Commence le rendu des incrustations
 		 *\param[in]	p_size	La taille de la fenêtre de rendu
 		 */
-		void BeginRender( Castor::Size const & p_size );
+		C3D_API void BeginRender( Castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Ends the overlays rendering
 		 *\~french
 		 *\brief		Termine le rendu des incrustations
 		 */
-		void EndRender();
+		C3D_API void EndRender();
 		/**
 		 *\~english
 		 *\brief		Retrieves the current render target size
@@ -139,21 +135,21 @@ namespace Castor3D
 		 *\param[in]	p_uiFlags	Combinaison de eTEXTURE_CHANNEL
 		 *\return		Le programme
 		 */
-		virtual ShaderProgramBaseSPtr DoCreateProgram( uint32_t p_uiFlags ) = 0;
+		C3D_API virtual ShaderProgramBaseSPtr DoCreateProgram( uint32_t p_uiFlags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Initialises the buffers
 		 *\~french
 		 *\brief		Initialise les tampons
 		 */
-		virtual void DoInitialise() = 0;
+		C3D_API virtual void DoInitialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Flushes the renderer
 		 *\~french
 		 *\brief		Nettoie le renderer
 		 */
-		virtual void DoCleanup() = 0;
+		C3D_API virtual void DoCleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves a panel program compiled using given flags
@@ -164,7 +160,7 @@ namespace Castor3D
 		 *\param[in]	p_uiFlags	Combinaison de eTEXTURE_CHANNEL
 		 *\return		Le programme
 		 */
-		ShaderProgramBaseSPtr DoGetPanelProgram( uint32_t p_uiFlags );
+		C3D_API ShaderProgramBaseSPtr DoGetPanelProgram( uint32_t p_uiFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves a text program compiled using given flags
@@ -175,7 +171,7 @@ namespace Castor3D
 		 *\param[in]	p_uiFlags	Combinaison de eTEXTURE_CHANNEL
 		 *\return		Le programme
 		 */
-		ShaderProgramBaseSPtr DoGetTextProgram( uint32_t p_uiFlags );
+		C3D_API ShaderProgramBaseSPtr DoGetTextProgram( uint32_t p_uiFlags );
 		/**
 		 *\~english
 		 *\brief		Retrieves a program compiled using given flags.
@@ -188,7 +184,7 @@ namespace Castor3D
 		 *\param[in,out]p_programs	Recherche un shader correspondant dans cette map. S'il n'y en a pas, crée le programme et l'ajoute à la map.
 		 *\return		Le programme
 		 */
-		virtual ShaderProgramBaseSPtr DoGetProgram( uint32_t p_uiFlags, std::map< uint32_t, ShaderProgramBaseSPtr > & p_programs );
+		C3D_API virtual ShaderProgramBaseSPtr DoGetProgram( uint32_t p_uiFlags, std::map< uint32_t, ShaderProgramBaseSPtr > & p_programs );
 		/**
 		 *\~english
 		 *\brief		Creates a GeometryBuffers that can contain 1000 characters.
@@ -199,7 +195,7 @@ namespace Castor3D
 		 *\remarks		Ajoute de GeometryBuffers au tableau de GeometryBuffers de texte.
 		 *\return		Le GeometryBuffers créé.
 		 */
-		GeometryBuffersSPtr DoCreateTextGeometryBuffers();
+		C3D_API GeometryBuffersSPtr DoCreateTextGeometryBuffers();
 		/**
 		 *\~english
 		 *\brief		Function to draw an overlay
@@ -214,7 +210,7 @@ namespace Castor3D
 		 *\param[in]	p_texture			Une texture de polices optionnelle
 		 *\param[in]	p_count				Le nombre de sommets
 		 */
-		void DoDrawItem( Material & p_material, GeometryBuffersSPtr p_geometryBuffers, TextureBaseSPtr p_texture, uint32_t p_count );
+		C3D_API void DoDrawItem( Material & p_material, GeometryBuffersSPtr p_geometryBuffers, TextureBaseSPtr p_texture, uint32_t p_count );
 		/**
 		 *\~english
 		 *\brief		Fills a GeometryBuffers from a part of a text vertex array
@@ -229,7 +225,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice courant dans le tableau de GeometryBuffers de texte
 		 *\return		Le GeometryBuffers utilisé.
 		 */
-		GeometryBuffersSPtr DoFillTextPart( int32_t p_count, OverlayCategory::VertexArray::const_iterator & p_it, uint32_t & p_index );
+		C3D_API GeometryBuffersSPtr DoFillTextPart( int32_t p_count, OverlayCategory::VertexArray::const_iterator & p_it, uint32_t & p_index );
 
 	protected:
 		//!\~english Geometry buffers for panels	\~french Tampons de géometrie pour les panneaux
@@ -266,7 +262,5 @@ namespace Castor3D
 		bool m_sizeChanged;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

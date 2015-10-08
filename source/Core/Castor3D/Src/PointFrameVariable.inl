@@ -191,19 +191,19 @@
 	}
 
 	template< typename T, uint32_t Count >
-	inline Castor::Coords< T, Count > PointFrameVariable< T, Count >::GetValue()throw( std::out_of_range )
+	inline Castor::Coords< T, Count > PointFrameVariable< T, Count >::GetValue()
 	{
 		return PointFrameVariable< T, Count >::GetValue( 0 );
 	}
 
 	template< typename T, uint32_t Count >
-	inline Castor::Point< T, Count > PointFrameVariable< T, Count >::GetValue()const throw( std::out_of_range )
+	inline Castor::Point< T, Count > PointFrameVariable< T, Count >::GetValue()const
 	{
 		return PointFrameVariable< T, Count >::GetValue( 0 );
 	}
 
 	template< typename T, uint32_t Count >
-	inline Castor::Coords< T, Count > PointFrameVariable< T, Count >::GetValue( uint32_t p_index )throw( std::out_of_range )
+	inline Castor::Coords< T, Count > PointFrameVariable< T, Count >::GetValue( uint32_t p_index )
 	{
 		if ( p_index < this->m_uiOcc )
 		{
@@ -216,7 +216,7 @@
 	}
 
 	template< typename T, uint32_t Count >
-	inline Castor::Point< T, Count > PointFrameVariable< T, Count >::GetValue( uint32_t p_index )const throw( std::out_of_range )
+	inline Castor::Point< T, Count > PointFrameVariable< T, Count >::GetValue( uint32_t p_index )const
 	{
 		if ( p_index < this->m_uiOcc )
 		{

@@ -22,14 +22,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "BinaryParser.hpp"
 #include "OverlayCategory.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
-#ifdef DrawText
-#	undef DrawText
-#endif
-
 namespace Castor3D
 {
 	/*!
@@ -42,9 +34,8 @@ namespace Castor3D
 	\brief		La classe d'incrustation
 	\remark		Une incrustation est un élément 2D qui est affiché en premier plan
 	*/
-	class C3D_API Overlay
+	class Overlay
 		: public std::enable_shared_from_this< Overlay >
-		, public Castor::NonCopyable
 	{
 	public:
 		/*!
@@ -59,7 +50,6 @@ namespace Castor3D
 		*/
 		class C3D_API TextLoader
 			: public Castor::Loader< Overlay, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -152,7 +142,7 @@ namespace Castor3D
 		 *\param[in]	p_engine	Le moteur
 		 *\param[in]	p_type		Le type de l'incrustation
 		 */
-		Overlay( Engine * p_engine, eOVERLAY_TYPE p_type );
+		C3D_API Overlay( Engine * p_engine, eOVERLAY_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -167,14 +157,14 @@ namespace Castor3D
 		 *\param[in]	p_scene	La scène parent
 		 *\param[in]	p_parent	L'incrustation parente
 		 */
-		Overlay( Engine * p_engine, eOVERLAY_TYPE p_type, SceneSPtr p_scene, OverlaySPtr p_parent );
+		C3D_API Overlay( Engine * p_engine, eOVERLAY_TYPE p_type, SceneSPtr p_scene, OverlaySPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Overlay();
+		C3D_API virtual ~Overlay();
 		/**
 		 *\~english
 		 *\brief		Draws the overlay
@@ -183,7 +173,7 @@ namespace Castor3D
 		 *\brief		Dessine l'incrustation
 		 *\param[in]	p_size	Les dimensions de la cible du rendu
 		 */
-		virtual void Render( Castor::Size const & p_size );
+		C3D_API virtual void Render( Castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Adds a child to the overlay
@@ -194,21 +184,21 @@ namespace Castor3D
 		 *\param[in]	p_overlay	L'incrustation enfant
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool AddChild( OverlaySPtr p_overlay );
+		C3D_API bool AddChild( OverlaySPtr p_overlay );
 		/**
 		 *\~english
 		 *\brief		Initialises the overlay.
 		 *\~french
 		 *\brief		Initialise l'incrustation.
 		 */
-		void Initialise();
+		C3D_API void Initialise();
 		/**
 		 *\~english
 		 *\brief		Cleanus the overlay up.
 		 *\~french
 		 *\brief		Nettoie l'incrustation.
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Retrieves the childs count at given level
@@ -219,7 +209,7 @@ namespace Castor3D
 		 *\param[in]	p_level	Le niveau voulu
 		 *\return		Le compte
 		 */
-		int GetChildsCount( int p_level )const;
+		C3D_API int GetChildsCount( int p_level )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the panel overlay.
@@ -228,7 +218,7 @@ namespace Castor3D
 		 *\brief		Récupère la l'incrustation panneau.
 		 *\return		La catégorie.
 		 */
-		PanelOverlaySPtr GetPanelOverlay()const;
+		C3D_API PanelOverlaySPtr GetPanelOverlay()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the border panel overlay.
@@ -237,7 +227,7 @@ namespace Castor3D
 		 *\brief		Récupère la l'incrustation panneau borduré.
 		 *\return		La catégorie.
 		 */
-		BorderPanelOverlaySPtr GetBorderPanelOverlay()const;
+		C3D_API BorderPanelOverlaySPtr GetBorderPanelOverlay()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the text overlay
@@ -246,7 +236,7 @@ namespace Castor3D
 		 *\brief		Récupère la l'incrustation texte
 		 *\return		La catégorie.
 		 */
-		TextOverlaySPtr GetTextOverlay()const;
+		C3D_API TextOverlaySPtr GetTextOverlay()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the visibility status
@@ -255,7 +245,7 @@ namespace Castor3D
 		 *\brief		Récupère le statut de visibilité
 		 *\return		La valeur
 		 */
-		bool IsVisible()const;
+		C3D_API bool IsVisible()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the overlay category.
@@ -736,7 +726,5 @@ namespace Castor3D
 		RenderSystem * m_renderSystem;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

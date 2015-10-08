@@ -22,10 +22,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "BinaryParser.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -37,7 +33,7 @@ namespace Castor3D
 	\~french
 	\brief		Définit un sampler pour une texture
 	*/
-	class C3D_API Sampler
+	class Sampler
 	{
 	public:
 		/*!
@@ -50,9 +46,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de Sampler
 		*/
-		class C3D_API TextLoader
-			:	public Castor::Loader< Sampler, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			,	public Castor::NonCopyable
+		class TextLoader
+			: public Castor::Loader< Sampler, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
 		{
 		public:
 			/**
@@ -61,7 +56,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief			Writes a sampler into a text file
@@ -72,7 +67,7 @@ namespace Castor3D
 			 *\param[in]		p_sampler	L'échantillonneur
 			 *\param[in,out]	p_file		Le fichier
 			 */
-			virtual bool operator()( Sampler const & p_sampler, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( Sampler const & p_sampler, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -83,7 +78,7 @@ namespace Castor3D
 		\brief		Loader de Sampler
 		*/
 		class C3D_API BinaryParser
-			:	public Castor3D::BinaryParser< Sampler >
+			: public Castor3D::BinaryParser< Sampler >
 		{
 		public:
 			/**
@@ -134,14 +129,14 @@ namespace Castor3D
 		 *\param[in]	p_name	    Le nom du sampler
 		 *\param[in]	p_engine	Le moteur
 		 */
-		Sampler( Engine * p_engine, Castor::String const & p_name = Castor::cuEmptyString );
+		C3D_API Sampler( Engine * p_engine, Castor::String const & p_name = Castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Sampler();
+		C3D_API virtual ~Sampler();
 		/**
 		 *\~english
 		 *\brief		Initialises the sampler
@@ -150,14 +145,14 @@ namespace Castor3D
 		 *\brief		Initialise le sampler
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Initialise() = 0;
+		C3D_API virtual bool Initialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanups the sampler
 		 *\~french
 		 *\brief		Nettoie le sampler
 		 */
-		virtual void Cleanup() = 0;
+		C3D_API virtual void Cleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Applies the sampler
@@ -170,14 +165,14 @@ namespace Castor3D
 		 *\param[in]	p_index		L'index du sampler
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Bind( eTEXTURE_DIMENSION p_eDimension, uint32_t p_index ) = 0;
+		C3D_API virtual bool Bind( eTEXTURE_DIMENSION p_eDimension, uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Removes the sampler
 		 *\~french
 		 *\brief		Enlève le sampler
 		 */
-		virtual void Unbind() = 0;
+		C3D_API virtual void Unbind() = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the interpolation mode for given filter
@@ -410,7 +405,5 @@ namespace Castor3D
 		Castor::String m_name;
 	};
 }
-
-#pragma warning( pop )
 
 #endif
