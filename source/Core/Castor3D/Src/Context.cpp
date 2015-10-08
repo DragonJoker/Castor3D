@@ -62,8 +62,8 @@ namespace Castor3D
 	bool Context::Initialise( RenderWindow * p_window )
 	{
 		m_pWindow = p_window;
-		m_renderSystem	= m_pWindow->GetEngine()->GetRenderSystem();
-		ShaderManager & l_manager = m_renderSystem->GetEngine()->GetShaderManager();
+		m_renderSystem	= m_pWindow->GetOwner()->GetRenderSystem();
+		ShaderManager & l_manager = m_renderSystem->GetOwner()->GetShaderManager();
 		ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
 		m_pBtoBShaderProgram = l_program;
 		m_mapDiffuse = l_program->CreateFrameVariable( ShaderProgramBase::MapDiffuse, eSHADER_TYPE_PIXEL );
@@ -73,14 +73,14 @@ namespace Castor3D
 		l_pVtxBuffer->Resize( m_arrayVertex.size() * m_pDeclaration->GetStride() );
 		l_pVtxBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
 		m_pGeometryBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
-		m_viewport = std::make_shared< Viewport >( m_renderSystem->GetEngine(), Size( 10, 10 ), eVIEWPORT_TYPE_2D );
+		m_viewport = std::make_shared< Viewport >( *m_renderSystem->GetOwner(), Size( 10, 10 ), eVIEWPORT_TYPE_2D );
 		m_viewport->SetLeft( real( 0.0 ) );
 		m_viewport->SetRight( real( 1.0 ) );
 		m_viewport->SetTop( real( 1.0 ) );
 		m_viewport->SetBottom( real( 0.0 ) );
 		m_viewport->SetNear( real( 0.0 ) );
 		m_viewport->SetFar( real( 1.0 ) );
-		m_pDsStateBackground = m_renderSystem->GetEngine()->CreateDepthStencilState( cuT( "ContextBackgroundDSState" ) );
+		m_pDsStateBackground = m_renderSystem->GetOwner()->CreateDepthStencilState( cuT( "ContextBackgroundDSState" ) );
 		m_pDsStateBackground->SetDepthTest( false );
 		m_pDsStateBackground->SetDepthMask( eWRITING_MASK_ZERO );
 		bool l_return = DoInitialise();

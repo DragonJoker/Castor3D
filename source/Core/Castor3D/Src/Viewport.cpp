@@ -224,19 +224,19 @@ namespace Castor3D
 
 	const String Viewport::string_type[eVIEWPORT_TYPE_COUNT] = { cuT( "3d" ), cuT( "2d" ) };
 
-	Viewport::Viewport( Engine * p_engine, Size const & p_size, eVIEWPORT_TYPE p_type )
-		:	m_type( p_type )
-		,	m_size( p_size )
-		,	m_left( -1 )
-		,	m_right( 1 )
-		,	m_top( 1 )
-		,	m_bottom( -1 )
-		,	m_far( 20000 )
-		,	m_near( real( 0.2 ) )
-		,	m_fovY( Angle::FromDegrees( 45 ) )
-		,	m_ratio( 1 )
-		,	m_engine( p_engine )
-		,	m_modified( true )
+	Viewport::Viewport( Engine & p_engine, Size const & p_size, eVIEWPORT_TYPE p_type )
+		: OwnedBy< Engine >( p_engine )
+		, m_type( p_type )
+		, m_size( p_size )
+		, m_left( -1 )
+		, m_right( 1 )
+		, m_top( 1 )
+		, m_bottom( -1 )
+		, m_far( 20000 )
+		, m_near( real( 0.2 ) )
+		, m_fovY( Angle::FromDegrees( 45 ) )
+		, m_ratio( 1 )
+		, m_modified( true )
 	{
 		if ( m_type != eVIEWPORT_TYPE_2D )
 		{
@@ -246,110 +246,18 @@ namespace Castor3D
 		m_ratio = real( p_size.width() ) / p_size.height();
 	}
 
-	Viewport::Viewport( Viewport const & p_viewport )
-		:	m_type( p_viewport.m_type )
-		,	m_size( p_viewport.m_size )
-		,	m_left( p_viewport.m_left )
-		,	m_right( p_viewport.m_right )
-		,	m_top( p_viewport.m_top )
-		,	m_bottom( p_viewport.m_bottom )
-		,	m_far( p_viewport.m_far )
-		,	m_near( p_viewport.m_near )
-		,	m_fovY( p_viewport.m_fovY )
-		,	m_ratio( p_viewport.m_ratio )
-		,	m_engine( p_viewport.m_engine )
-		,	m_modified( p_viewport.m_modified )
-	{
-	}
-
-	Viewport::Viewport( Viewport && p_viewport )
-		:	m_type( std::move( p_viewport.m_type ) )
-		,	m_size( std::move( p_viewport.m_size ) )
-		,	m_left( std::move( p_viewport.m_left ) )
-		,	m_right( std::move( p_viewport.m_right ) )
-		,	m_top( std::move( p_viewport.m_top ) )
-		,	m_bottom( std::move( p_viewport.m_bottom ) )
-		,	m_far( std::move( p_viewport.m_far ) )
-		,	m_near( std::move( p_viewport.m_near ) )
-		,	m_fovY( std::move( p_viewport.m_fovY ) )
-		,	m_ratio( std::move( p_viewport.m_ratio ) )
-		,	m_engine( std::move( p_viewport.m_engine ) )
-		,	m_modified( std::move( p_viewport.m_modified ) )
-	{
-		p_viewport.m_type = eVIEWPORT_TYPE_3D;
-		p_viewport.m_left = -2;
-		p_viewport.m_right = 2;
-		p_viewport.m_top = 2;
-		p_viewport.m_bottom = -2;
-		p_viewport.m_far = 2000;
-		p_viewport.m_near = 1.0;
-		p_viewport.m_fovY = Angle::FromDegrees( 45.0 );
-		p_viewport.m_ratio = 1;
-		p_viewport.m_engine = NULL;
-		p_viewport.m_modified = true;
-	}
-
 	Viewport::~Viewport()
 	{
-	}
-
-	Viewport & Viewport::operator =( Viewport const & p_viewport )
-	{
-		m_type = p_viewport.m_type;
-		m_size = p_viewport.m_size;
-		m_left = p_viewport.m_left;
-		m_right = p_viewport.m_right;
-		m_top = p_viewport.m_top;
-		m_bottom = p_viewport.m_bottom;
-		m_far = p_viewport.m_far;
-		m_near = p_viewport.m_near;
-		m_fovY = p_viewport.m_fovY;
-		m_ratio = p_viewport.m_ratio;
-		m_engine = p_viewport.m_engine;
-		m_modified = p_viewport.m_modified;
-		return * this;
-	}
-
-	Viewport & Viewport::operator =( Viewport && p_viewport )
-	{
-		if ( this != & p_viewport )
-		{
-			m_type = std::move( p_viewport.m_type );
-			m_size = std::move( p_viewport.m_size );
-			m_left = std::move( p_viewport.m_left );
-			m_right = std::move( p_viewport.m_right );
-			m_top = std::move( p_viewport.m_top );
-			m_bottom = std::move( p_viewport.m_bottom );
-			m_far = std::move( p_viewport.m_far );
-			m_near = std::move( p_viewport.m_near );
-			m_fovY = std::move( p_viewport.m_fovY );
-			m_ratio = std::move( p_viewport.m_ratio );
-			m_engine = std::move( p_viewport.m_engine );
-			m_modified = std::move( p_viewport.m_modified );
-			p_viewport.m_type = eVIEWPORT_TYPE_3D;
-			p_viewport.m_left = -2;
-			p_viewport.m_right = 2;
-			p_viewport.m_top = 2;
-			p_viewport.m_bottom = -2;
-			p_viewport.m_far = 2000;
-			p_viewport.m_near = 1.0;
-			p_viewport.m_fovY = Angle::FromDegrees( 45.0 );
-			p_viewport.m_ratio = 1;
-			p_viewport.m_engine = NULL;
-			p_viewport.m_modified = true;
-		}
-
-		return * this;
 	}
 
 	bool Viewport::Render()
 	{
 		bool l_return = false;
-		Pipeline & l_pipeline = m_engine->GetRenderSystem()->GetPipeline();
+		Pipeline & l_pipeline = GetOwner()->GetRenderSystem()->GetPipeline();
 
 		if ( IsModified() )
 		{
-			if ( !m_engine->GetRenderSystem()->HasNonPowerOfTwoTextures() )
+			if ( !GetOwner()->GetRenderSystem()->HasNonPowerOfTwoTextures() )
 			{
 				m_size.set( GetNext2Pow( m_size.width() ), GetNext2Pow( m_size.height() ) );
 			}
@@ -419,6 +327,6 @@ namespace Castor3D
 	void Viewport::GetDirection( Point2i const & p_ptMouse, Point3r & p_ptResult )
 	{
 		Point4r l_viewport( real( 0 ), real( 0 ), real( m_size.width() ), real( m_size.height() ) );
-		m_engine->GetRenderSystem()->GetPipeline().UnProject( Point3i( p_ptMouse[0], p_ptMouse[1], 1 ), l_viewport, p_ptResult );
+		GetOwner()->GetRenderSystem()->GetPipeline().UnProject( Point3i( p_ptMouse[0], p_ptMouse[1], 1 ), l_viewport, p_ptResult );
 	}
 }

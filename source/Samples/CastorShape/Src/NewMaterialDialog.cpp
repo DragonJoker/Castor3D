@@ -82,7 +82,7 @@ namespace CastorShape
 		SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		wxSize l_size = GetClientSize();
 		l_size.y -= 30;
-		m_material = std::make_shared< Material >( m_engine, cuT( "NewMaterial" ) );
+		m_material = std::make_shared< Material >( *m_engine, cuT( "NewMaterial" ) );
 
 		m_properties = new wxPropertyGrid( this, wxID_ANY, wxDefaultPosition, l_size, wxPG_SPLITTER_AUTO_CENTER | wxPG_DEFAULT_STYLE );
 		m_properties->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
@@ -273,7 +273,7 @@ namespace CastorShape
 
 	bool NewMaterialDialog::OnEditShader( wxPGProperty * p_property )
 	{
-		ShaderDialog * l_editor = new ShaderDialog( m_pass->GetEngine(), true, NULL, m_pass );
+		ShaderDialog * l_editor = new ShaderDialog( m_pass->GetOwner(), true, NULL, m_pass );
 		l_editor->Show();
 		return false;
 	}

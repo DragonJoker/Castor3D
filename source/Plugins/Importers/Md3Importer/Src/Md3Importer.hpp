@@ -131,7 +131,7 @@ namespace Castor3D
 		/**
 		 * Constructor
 		 */
-		Md3Importer( Engine * p_pEngine );
+		Md3Importer( Engine & p_pEngine );
 
 	private:
 		virtual SceneSPtr DoImportScene();

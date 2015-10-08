@@ -24,6 +24,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <stack>
 
 #include <Colour.hpp>
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -61,6 +62,7 @@ namespace Castor3D
 				<br />Ainsi c'est aussi la seule classe à même de créer les renderers
 	*/
 	class RenderSystem
+		: public Castor::OwnedBy< Engine >
 	{
 	protected:
 		template< class Ty > friend struct RendererCreator;
@@ -77,7 +79,7 @@ namespace Castor3D
 		 *\param[in]	p_engine		Le moteur
 		 *\param[in]	p_eRendererType	L'API de rendu
 		 */
-		C3D_API RenderSystem( Engine * p_engine, eRENDERER_TYPE p_eRendererType );
+		C3D_API RenderSystem( Engine & p_engine, eRENDERER_TYPE p_eRendererType );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -478,16 +480,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the engine
-		 *\~french
-		 *\brief		Récupère le moteur
-		 */
-		inline Engine * GetEngine()const
-		{
-			return m_engine;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the pipeline
 		 *\~french
 		 *\brief		Récupère le pipeline
@@ -654,8 +646,6 @@ namespace Castor3D
 		ContextWPtr m_wpMainContext;
 		//!\~english The currently active render context	\~french Le contexte de rendu actuellement actif
 		ContextRPtr m_pCurrentContext;
-		//!\~english The core engine	\~french Le moteur
-		EngineRPtr m_engine;
 		//!\~english The matrix pipeline	\~french Le pipeline contenant les matrices
 		std::unique_ptr< Pipeline > m_pipeline;
 		//!\~english Scene stack	\~french Pile des scènes

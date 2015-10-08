@@ -9,8 +9,9 @@ namespace Castor3D
 
 	BlendStateWPtr BlendState::m_wCurrentState;
 
-	BlendState::BlendState()
-		: m_bChanged( true )
+	BlendState::BlendState( Engine & p_engine )
+		: OwnedBy< Engine >( p_engine )
+		, m_bChanged( true )
 		, m_bEnableAlphaToCoverage( false )
 		, m_bIndependantBlend( false )
 	{

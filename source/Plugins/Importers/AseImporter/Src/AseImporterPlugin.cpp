@@ -29,7 +29,7 @@ C3D_Ase_API ImporterPlugin::ExtensionArray GetExtensions()
 
 C3D_Ase_API void Create( Engine * p_pEngine, ImporterPlugin * p_pPlugin )
 {
-	p_pPlugin->AttachImporter( std::make_shared< Ase::AseImporter >( p_pEngine ) );
+	p_pPlugin->AttachImporter( std::make_shared< Ase::AseImporter >( *p_pEngine ) );
 }
 
 C3D_Ase_API void Destroy( ImporterPlugin * p_pPlugin )

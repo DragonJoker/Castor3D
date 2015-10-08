@@ -22,6 +22,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "BinaryParser.hpp"
 
+#include <OwnedBy.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -34,6 +36,7 @@ namespace Castor3D
 	\brief		Définit un sampler pour une texture
 	*/
 	class Sampler
+		: public Castor::OwnedBy< Engine >
 	{
 	public:
 		/*!
@@ -129,7 +132,7 @@ namespace Castor3D
 		 *\param[in]	p_name	    Le nom du sampler
 		 *\param[in]	p_engine	Le moteur
 		 */
-		C3D_API Sampler( Engine * p_engine, Castor::String const & p_name = Castor::cuEmptyString );
+		C3D_API Sampler( Engine & p_engine, Castor::String const & p_name = Castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -373,20 +376,8 @@ namespace Castor3D
 		{
 			m_name = p_name;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Engine
-		 *\~french
-		 *\brief		Récupère l'Engine
-		 */
-		virtual Engine * GetEngine()const
-		{
-			return m_engine;
-		}
 
 	private:
-		//!\~english The core engine	\~french Le moteur
-		Engine * m_engine;
 		//!\~english Sampler interpolation modes	\~french Modes d'interpolation du sampler
 		eINTERPOLATION_MODE m_eInterpolationModes[eINTERPOLATION_FILTER_COUNT];
 		//!\~english Sampler wrapping modes	\~french Modes de wrapping du sampler

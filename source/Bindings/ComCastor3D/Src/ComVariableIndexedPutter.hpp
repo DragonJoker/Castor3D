@@ -20,6 +20,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "ComParameterCast.hpp"
 
+#include <Engine.hpp>
+#include <FunctorEvent.hpp>
+
 namespace CastorCom
 {
 	template< typename Class, typename Value, typename Index >
@@ -27,8 +30,8 @@ namespace CastorCom
 	{
 		typedef void ( Class::*Function )( Index, Value );
 		IndexedVariablePutter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
+			: m_instance( instance )
+			, m_function( function )
 		{
 		}
 		template< typename _Index, typename _Value >
@@ -43,13 +46,7 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						LIBID_Castor3D,							// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
+				hr = CComError::DispatchError( E_FAIL, LIBID_Castor3D, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
 			}
 
 			return S_OK;
@@ -65,6 +62,48 @@ namespace CastorCom
 	make_indexed_putter( _Class * instance, void ( Class::*function )( Index, Value ) )
 	{
 		return IndexedVariablePutter< Class, Value, Index >( ( Class * )instance, function );
+	}
+
+	template< typename Class, typename Value, typename Index >
+	struct IndexedVariablePutterEvt
+	{
+		typedef void ( Class::*Function )( Index, Value );
+		IndexedVariablePutterEvt( Class * instance, Function function )
+			: m_instance( instance )
+			, m_function( function )
+		{
+		}
+		template< typename _Index, typename _Value >
+		HRESULT operator()( _Index index, _Value value )
+		{
+			HRESULT hr = E_POINTER;
+
+			if ( m_instance )
+			{
+				m_instance->GetOwner()->PostEvent( Castor3D::MakeFunctorEvent( Castor3D::eEVENT_TYPE_PRE_RENDER, [this, index, value]()
+				{
+					( m_instance->*m_function )( parameter_cast< Index >( index ), parameter_cast< Value >( value ) );
+				} ) );
+				hr = S_OK;
+			}
+			else
+			{
+				hr = CComError::DispatchError( E_FAIL, LIBID_Castor3D, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+			}
+
+			return S_OK;
+		}
+
+	private:
+		Class * m_instance;
+		Function m_function;
+	};
+
+	template< typename Class, typename Value, typename Index, typename _Class >
+	IndexedVariablePutterEvt< Class, Value, Index >
+	make_indexed_putter_evt( _Class * instance, void ( Class::*function )( Index, Value ) )
+	{
+		return IndexedVariablePutterEvt< Class, Value, Index >( ( Class * )instance, function );
 	}
 
 #define DECLARE_INDEXED_VAL_PUTTER( nmspc, type )\
@@ -92,6 +131,36 @@ namespace CastorCom
 	make_indexed_putter( _Class * instance, void ( nmspc::type::*function )( Value, Index ) )\
 	{\
 		return IndexedVariablePutter< nmspc::type, Value, Index >( ( nmspc::type * )instance, function );\
+	}
+
+#define DECLARE_INDEXED_VAL_PUTTER_EVT( nmspc, type )\
+	template< typename Value, typename Index >\
+	struct IndexedVariablePutterEvt< nmspc::type, Value, Index >\
+	{\
+		typedef void ( nmspc::type::*Function )( Value, Index );\
+		IndexedVariablePutterEvt( nmspc::type * instance, Function function )\
+			: m_instance( instance )\
+			, m_function( function )\
+		{\
+		}\
+		template< typename _Index, typename _Value >\
+		HRESULT operator()( _Index index, _Value value )\
+		{\
+			m_instance->GetOwner()->PostEvent( Castor3D::MakeFunctorEvent( Castor3D::eEVENT_TYPE_PRE_RENDER, [this, value, index]()\
+			{\
+				( m_instance->*m_function )( parameter_cast< Value >( value ), index );\
+			} ) );\
+			return S_OK;\
+		}\
+	private:\
+		nmspc::type * m_instance;\
+		Function m_function;\
+	};\
+	template< typename Value, typename Index, typename _Class >\
+	IndexedVariablePutterEvt< nmspc::type, Value, Index >\
+	make_indexed_putter_evt( _Class * instance, void ( nmspc::type::*function )( Value, Index ) )\
+	{\
+		return IndexedVariablePutterEvt< nmspc::type, Value, Index >( ( nmspc::type * )instance, function );\
 	}
 }
 

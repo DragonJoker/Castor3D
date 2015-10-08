@@ -120,7 +120,7 @@ namespace Castor3D
 		Castor::BinaryFile *	m_pFile;
 
 	public:
-		Md2Importer( Engine * p_pEngine, Castor::String const & p_textureName = Castor::cuEmptyString );
+		Md2Importer( Engine & p_pEngine, Castor::String const & p_textureName = Castor::cuEmptyString );
 
 	private:
 		virtual SceneSPtr DoImportScene();

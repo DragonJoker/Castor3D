@@ -168,7 +168,7 @@ C3D_Assimp_API ImporterPlugin::ExtensionArray GetExtensions()
 
 C3D_Assimp_API void Create( Engine * p_engine, ImporterPlugin * p_pPlugin )
 {
-	ImporterSPtr l_pImporter = std::make_shared< AssimpImporter >( p_engine );
+	ImporterSPtr l_pImporter = std::make_shared< AssimpImporter >( *p_engine );
 	p_pPlugin->AttachImporter( l_pImporter );
 }
 
@@ -187,9 +187,9 @@ C3D_Assimp_API void OnUnload( Castor3D::Engine * p_engine )
 
 //*************************************************************************************************
 
-AssimpImporter::AssimpImporter( Engine * p_engine )
-	:	Importer( p_engine	)
-	,	m_anonymous( 0	)
+AssimpImporter::AssimpImporter( Engine & p_engine )
+	: Importer( p_engine )
+	, m_anonymous( 0 )
 {
 }
 
@@ -205,7 +205,7 @@ SceneSPtr AssimpImporter::DoImportScene()
 	if ( m_pMesh )
 	{
 		m_pMesh->GenerateBuffers();
-		l_pScene = m_engine->CreateScene( cuT( "Scene_ASSIMP" ) );
+		l_pScene = GetOwner()->CreateScene( cuT( "Scene_ASSIMP" ) );
 		SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( m_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 		GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( m_pMesh->GetName() );
 		l_pGeometry->AttachTo( l_pNode );
@@ -220,7 +220,7 @@ MeshSPtr AssimpImporter::DoImportMesh()
 {
 	String l_name = m_fileName.GetFileName();
 	String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
-	m_pMesh = m_engine->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName, UIntArray(), RealArray() );
+	m_pMesh = GetOwner()->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName, UIntArray(), RealArray() );
 
 	if ( !m_pMesh->GetSubmeshCount() )
 	{
@@ -284,7 +284,7 @@ MeshSPtr AssimpImporter::DoImportMesh()
 			}
 			else
 			{
-				m_engine->GetMeshManager().erase( l_meshName );
+				GetOwner()->GetMeshManager().erase( l_meshName );
 				m_pMesh.reset();
 			}
 
@@ -294,7 +294,7 @@ MeshSPtr AssimpImporter::DoImportMesh()
 		{
 			// The import failed, report it
 			Logger::LogError( std::stringstream() << "Scene import failed : " << importer.GetErrorString() );
-			m_engine->GetMeshManager().erase( l_meshName );
+			GetOwner()->GetMeshManager().erase( l_meshName );
 			m_pMesh.reset();
 		}
 	}
@@ -446,7 +446,7 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 {
 	MaterialSPtr l_pReturn;
 	PassSPtr l_pPass;
-	MaterialManager & l_mtlManager = m_engine->GetMaterialManager();
+	MaterialManager & l_mtlManager = GetOwner()->GetMaterialManager();
 	aiString l_mtlname;
 	p_pAiMaterial->Get( AI_MATKEY_NAME, l_mtlname );
 	String l_name = string::string_cast< xchar >( l_mtlname.C_Str() );
@@ -475,7 +475,7 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 		float l_fShininess = 0.5f;
 		float l_fShininessStrength = 1.0f;
 		int l_iTwoSided = 0;
-		l_pReturn = std::make_shared< Material >( m_engine, l_name );
+		l_pReturn = std::make_shared< Material >( *GetOwner(), l_name );
 		l_pReturn->CreatePass();
 		l_pPass = l_pReturn->GetPass( 0 );
 		p_pAiMaterial->Get( AI_MATKEY_COLOR_AMBIENT, l_clrAmbient );
@@ -570,7 +570,7 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 		}
 
 		l_mtlManager.insert( l_name, l_pReturn );
-		m_engine->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
+		GetOwner()->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
 	}
 
 	return l_pReturn;

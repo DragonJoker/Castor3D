@@ -27,7 +27,7 @@ namespace CastorCom
 	static const WORD MINOR_VERSION = ${CMC_VERSION_MINOR};
 #ifndef NDEBUG
 	static const Castor::Path HELP_DIR = "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}";
-	static const Castor::Path WIN_32 = "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}/ComCastor3D.dll";
+	static const Castor::Path WIN_32 = "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG}/ComCastor3Dd.dll";
 #else
 	static const Castor::Path HELP_DIR = "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}";
 	static const Castor::Path WIN_32 = "${CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE}/ComCastor3D.dll";

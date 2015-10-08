@@ -29,7 +29,7 @@ namespace GlRender
 		, public Castor::NonCopyable
 	{
 	public:
-		GlBlendState( OpenGl & p_gl );
+		GlBlendState( GlRenderSystem * p_renderSystem, OpenGl & p_gl );
 		virtual ~GlBlendState();
 		/**
 		 *\copydoc Castor3D::BlendState::Initialise
@@ -57,6 +57,7 @@ namespace GlRender
 
 	private:
 		OpenGl & m_gl;
+		GlRenderSystem * m_renderSystem;
 	};
 }
 

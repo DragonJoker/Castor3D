@@ -24,6 +24,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <FileParserContext.hpp>
 #include "Submesh.hpp"
 
+#include <OwnedBy.hpp>
+
 namespace Castor3D
 {
 	//! Scene file sections Enum
@@ -161,13 +163,15 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 25/08/2010
 	*/
-	class C3D_API SceneFileParser : public Castor::FileParser
+	class C3D_API SceneFileParser
+		: public Castor::FileParser
+		, public Castor::OwnedBy< Engine >
 	{
 	public:
 		/**
 		 * Constructor
 		 */
-		SceneFileParser( Engine * p_engine );
+		SceneFileParser( Engine & p_engine );
 		/**
 		 * Destructor
 		 */
@@ -189,10 +193,6 @@ namespace Castor3D
 		 */
 		bool ParseFile( Castor::Path const & p_pathFile );
 
-		inline Engine * GetEngine()const
-		{
-			return m_engine;
-		}
 		inline ScenePtrStrMap::iterator ScenesBegin()
 		{
 			return m_mapScenes.begin();
@@ -219,7 +219,6 @@ namespace Castor3D
 	private:
 		Castor::String m_strSceneFilePath;
 		ScenePtrStrMap m_mapScenes;
-		Engine * m_engine;
 		RenderWindowSPtr m_renderWindow;
 
 	};

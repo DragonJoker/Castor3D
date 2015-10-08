@@ -22,6 +22,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "BinaryParser.hpp"
 #include "OverlayCategory.hpp"
 
+#include <OwnedBy.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -36,6 +38,7 @@ namespace Castor3D
 	*/
 	class Overlay
 		: public std::enable_shared_from_this< Overlay >
+		, public Castor::OwnedBy< Engine >
 	{
 	public:
 		/*!
@@ -142,7 +145,7 @@ namespace Castor3D
 		 *\param[in]	p_engine	Le moteur
 		 *\param[in]	p_type		Le type de l'incrustation
 		 */
-		C3D_API Overlay( Engine * p_engine, eOVERLAY_TYPE p_type );
+		C3D_API Overlay( Engine & p_engine, eOVERLAY_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -157,7 +160,7 @@ namespace Castor3D
 		 *\param[in]	p_scene	La scène parent
 		 *\param[in]	p_parent	L'incrustation parente
 		 */
-		C3D_API Overlay( Engine * p_engine, eOVERLAY_TYPE p_type, SceneSPtr p_scene, OverlaySPtr p_parent );
+		C3D_API Overlay( Engine & p_engine, eOVERLAY_TYPE p_type, SceneSPtr p_scene, OverlaySPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -329,18 +332,6 @@ namespace Castor3D
 		bool IsPositionChanged()const
 		{
 			return m_category->IsPositionChanged();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the engine
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le moteur
-		 *\return		La valeur
-		 */
-		inline Engine * GetEngine()
-		{
-			return m_engine;
 		}
 		/**
 		 *\~english
@@ -720,8 +711,6 @@ namespace Castor3D
 		SceneWPtr m_pScene;
 		//!\~english The factory	\~french La fabrique
 		OverlayFactory & m_factory;
-		//!\~english The engine	\~french Le moteur
-		Engine * m_engine;
 		//!\~english The render system	\~french Le système de rendu
 		RenderSystem * m_renderSystem;
 	};

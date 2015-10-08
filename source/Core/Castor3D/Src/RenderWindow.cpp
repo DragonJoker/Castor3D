@@ -130,7 +130,7 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_TARGET:
-					l_target = p_obj.GetEngine()->CreateRenderTarget( eTARGET_TYPE_WINDOW );
+					l_target = p_obj.GetOwner()->CreateRenderTarget( eTARGET_TYPE_WINDOW );
 					l_return = RenderTarget::BinaryParser( m_path ).Parse( *l_target, l_chunk );
 					break;
 
@@ -153,29 +153,29 @@ namespace Castor3D
 
 	uint32_t RenderWindow::s_nbRenderWindows = 0;
 
-	RenderWindow::RenderWindow( Engine * p_pRoot )
-		: m_engine( p_pRoot )
+	RenderWindow::RenderWindow( Engine & p_engine )
+		: OwnedBy< Engine >( p_engine )
 		, m_strName( DoGetName() )
 		, m_index( s_nbRenderWindows )
-		, m_wpListener( p_pRoot->CreateFrameListener( cuT( "RenderWindow_" ) + string::to_string( s_nbRenderWindows ) ) )
+		, m_wpListener( p_engine.CreateFrameListener( cuT( "RenderWindow_" ) + string::to_string( s_nbRenderWindows ) ) )
 		, m_bInitialised( false )
 		, m_bVSync( false )
 		, m_bFullscreen( false )
 		, m_bResized( true )
 	{
-		m_wpDepthStencilState = m_engine->CreateDepthStencilState( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
-		m_wpRasteriserState = m_engine->CreateRasteriserState( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
+		m_wpDepthStencilState = GetOwner()->CreateDepthStencilState( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
+		m_wpRasteriserState = GetOwner()->CreateRasteriserState( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
 		s_nbRenderWindows++;
 	}
 
 	RenderWindow::~RenderWindow()
 	{
 		FrameListenerSPtr l_pListener( m_wpListener.lock() );
-		m_engine->DestroyFrameListener( cuT( "RenderWindow_" ) + string::to_string( m_index ) );
+		GetOwner()->DestroyFrameListener( cuT( "RenderWindow_" ) + string::to_string( m_index ) );
 
 		if ( !m_pRenderTarget.expired() )
 		{
-			m_engine->RemoveRenderTarget( std::move( m_pRenderTarget.lock() ) );
+			GetOwner()->RemoveRenderTarget( std::move( m_pRenderTarget.lock() ) );
 		}
 	}
 
@@ -185,7 +185,7 @@ namespace Castor3D
 
 		if ( m_handle )
 		{
-			m_pContext = GetEngine()->CreateContext( this );
+			m_pContext = GetOwner()->CreateContext( this );
 			m_bInitialised = m_pContext && m_pContext->IsInitialised();
 			m_pContext->SetCurrent();
 			SceneSPtr l_pScene = GetScene();
@@ -221,7 +221,7 @@ namespace Castor3D
 			l_pTarget->Cleanup();
 		}
 
-		if ( m_pContext != m_engine->GetRenderSystem()->GetMainContext() )
+		if ( m_pContext != GetOwner()->GetRenderSystem()->GetMainContext() )
 		{
 			m_pContext->Cleanup();
 		}
@@ -231,7 +231,7 @@ namespace Castor3D
 	{
 		if ( m_bInitialised )
 		{
-			Engine * l_pEngine = GetEngine();
+			Engine * l_pEngine = GetOwner();
 			RenderTargetSPtr l_pTarget = GetRenderTarget();
 			m_pContext->SetCurrent();
 
@@ -529,7 +529,7 @@ namespace Castor3D
 		m_pContext->Bind( p_eTargetBuffer, eFRAMEBUFFER_TARGET_DRAW );
 		m_wpDepthStencilState.lock()->Apply();
 		m_wpRasteriserState.lock()->Apply();
-		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
+		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 
 		if ( l_renderSystem->GetRendererType() != eRENDERER_TYPE_DIRECT3D )
 		{

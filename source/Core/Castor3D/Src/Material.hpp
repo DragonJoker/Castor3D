@@ -21,6 +21,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "BinaryParser.hpp"
 
+#include <OwnedBy.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -35,8 +37,9 @@ namespace Castor3D
 	\remark		Un matériau est composé d'une ou plusieurs passes
 	*/
 	class C3D_API Material
-		:	public Castor::Resource< Material >
-		,	public std::enable_shared_from_this< Material >
+		: public Castor::Resource< Material >
+		, public std::enable_shared_from_this< Material >
+		, public Castor::OwnedBy< Engine >
 	{
 	public:
 		/*!
@@ -125,7 +128,6 @@ namespace Castor3D
 			virtual bool Parse( Material & p_obj, BinaryChunk & p_chunk )const;
 
 		private:
-			//!\~english The engine	\~french Le moteur
 			Engine * m_engine;
 		};
 
@@ -133,14 +135,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_engine			The core engine
-		 *\param[in]	p_name			The material name
+		 *\param[in]	p_engine	The core engine
+		 *\param[in]	p_name		The material name
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_engine			Le moteur
-		 *\param[in]	p_name			Le nom du matériau
+		 *\param[in]	p_engine	Le moteur
+		 *\param[in]	p_name		Le nom du matériau
 		 */
-		Material( Engine * p_engine, Castor::String const & p_name = Castor::cuEmptyString );
+		Material( Engine & p_engine, Castor::String const & p_name = Castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -285,18 +287,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the engine
-		 *\return		The engine
-		 *\~french
-		 *\brief		Récupère le moteur
-		 *\return		Le moteur
-		 */
-		inline Engine * GetEngine()const
-		{
-			return m_engine;
-		}
-		/**
-		 *\~english
 		 *\return		\p true if all passes needs alpha blending
 		 *\~french
 		 *\return		\p true si toutes les passes ont besoin d'alpha blending
@@ -309,7 +299,6 @@ namespace Castor3D
 
 	private:
 		PassPtrArray m_passes;
-		Engine * m_engine;
 	};
 }
 

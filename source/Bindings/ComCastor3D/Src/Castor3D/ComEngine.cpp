@@ -32,7 +32,7 @@ namespace CastorCom
 		template< typename TObj >
 		std::shared_ptr< TObj > CreateObject( Castor3D::Engine & p_engine )
 		{
-			return std::make_shared< TObj >( &p_engine );
+			return std::make_shared< TObj >( p_engine );
 		}
 
 		template<>
@@ -44,7 +44,7 @@ namespace CastorCom
 		template<>
 		std::shared_ptr< Castor3D::Scene > CreateObject< Castor3D::Scene >( Castor3D::Engine & p_engine )
 		{
-			return std::make_shared< Castor3D::Scene >( &p_engine, p_engine.GetLightFactory() );
+			return std::make_shared< Castor3D::Scene >( p_engine, p_engine.GetLightFactory() );
 		}
 
 		template< typename TObj >
@@ -122,7 +122,7 @@ namespace CastorCom
 		Castor3D::RenderWindowSPtr DoLoadTextSceneFile( Castor3D::Engine & p_engine, Castor::Path const & p_fileName )
 		{
 			Castor3D::RenderWindowSPtr l_return;
-			Castor3D::SceneFileParser l_parser( &p_engine );
+			Castor3D::SceneFileParser l_parser( p_engine );
 
 			if ( l_parser.ParseFile( p_fileName ) )
 			{

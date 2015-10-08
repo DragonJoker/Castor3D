@@ -21,6 +21,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "BinaryParser.hpp"
 
+#include <OwnedBy.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -35,7 +37,8 @@ namespace Castor3D
 	\remark		Un noeud de scène est un parent pour à peu près tous les objets d'une scène : géométrie, caméra, ...
 	*/
 	class C3D_API SceneNode
-		:	public std::enable_shared_from_this< SceneNode >
+		: public std::enable_shared_from_this< SceneNode >
+		, public Castor::OwnedBy< Scene >
 	{
 	public:
 		//!\~english The total number of scene nodes	\~french Le nombre total de noeuds de scène
@@ -139,22 +142,24 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
+		 *\param[in]	p_scene	The parent scene.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
+		 *\param[in]	p_scene	La scène parente.
 		 */
-		SceneNode();
+		SceneNode( Scene & p_scene );
 		/**
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_scene	The parent scene
-		 *\param[in]	p_name		The node's name. If empty the name is "SceneNode<s_nbSceneNodes>"
+		 *\param[in]	p_name	The node's name. If empty the name is "SceneNode<s_nbSceneNodes>"
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_scene	La scène parente
-		 *\param[in]	p_name		The node's name. If empty the name is "SceneNode<s_nbSceneNodes>"
+		 *\param[in]	p_name	The node's name. If empty the name is "SceneNode<s_nbSceneNodes>"
 		 */
-		SceneNode( SceneSPtr p_scene, Castor::String const & p_name = Castor::cuEmptyString );
+		SceneNode( Scene & p_scene, Castor::String const & p_name = Castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -463,18 +468,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the scene
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la scène
-		 *\return		La valeur
-		 */
-		inline SceneSPtr GetScene()const
-		{
-			return m_pScene.lock();
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the node name
 		 *\return		The value
 		 *\~french
@@ -719,8 +712,6 @@ namespace Castor3D
 		SceneNodePtrStrMap m_mapChilds;
 		//!\~english  This node's attached objects	\~french Les objets attachés à ce noeud
 		MovableObjectPtrStrMap m_mapAttachedObjects;
-		//!\~english The parent scene	\~french La scène parente
-		SceneWPtr m_pScene;
 	};
 }
 

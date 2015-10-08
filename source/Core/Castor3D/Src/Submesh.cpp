@@ -201,9 +201,9 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Submesh::Submesh( MeshRPtr p_pMesh, Engine * p_engine, uint32_t p_uiId )
-		: m_engine( p_engine )
-		, m_defaultMaterial( p_engine->GetMaterialManager().GetDefaultMaterial() )
+	Submesh::Submesh( Engine & p_engine, MeshRPtr p_pMesh, uint32_t p_uiId )
+		: OwnedBy< Engine >( p_engine )
+		, m_defaultMaterial( p_engine.GetMaterialManager().GetDefaultMaterial() )
 		, m_uiID( p_uiId )
 		, m_pParentMesh( p_pMesh )
 		, m_uiProgramFlags( 0 )
@@ -488,16 +488,16 @@ namespace Castor3D
 	{
 		DoGenerateVertexBuffer();
 		DoGenerateIndexBuffer();
-		//if( m_engine->GetRenderSystem()->HasInstancing() )
+		//if( GetOwner()->GetRenderSystem()->HasInstancing() )
 		{
 			DoGenerateMatrixBuffer();
 		}
-		m_engine->PostEvent( MakeInitialiseEvent( *this ) );
+		GetOwner()->PostEvent( MakeInitialiseEvent( *this ) );
 	}
 
 	SubmeshSPtr Submesh::Clone()
 	{
-		SubmeshSPtr l_clone = std::make_shared< Submesh >( m_pParentMesh, m_engine, m_uiID );
+		SubmeshSPtr l_clone = std::make_shared< Submesh >( *GetOwner(), m_pParentMesh, m_uiID );
 		uint32_t l_uiStride = m_pDeclaration->GetStride();
 
 		//On effectue une copie des vertex
@@ -544,7 +544,7 @@ namespace Castor3D
 
 			if ( l_count > 1 )
 			{
-				if ( GetEngine()->GetRenderSystem()->HasInstancing() )
+				if ( GetOwner()->GetRenderSystem()->HasInstancing() )
 				{
 					m_pGeometryBuffers->DrawInstanced( m_eCurDrawType, l_pProgram, l_uiSize, 0, l_count );
 				}
@@ -1085,10 +1085,10 @@ namespace Castor3D
 			l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_BONE_WEIGHTS, eELEMENT_TYPE_4FLOATS ) );
 		}
 
-		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( GetEngine()->GetRenderSystem(), &l_vertexDeclarationElements[0], uint32_t( l_vertexDeclarationElements.size() ) );
-		IndexBufferUPtr l_pIdxBuffer = std::make_unique< IndexBuffer >( GetEngine()->GetRenderSystem() );
-		MatrixBufferUPtr l_pMtxBuffer = std::make_unique< MatrixBuffer >( GetEngine()->GetRenderSystem() );
-		m_pGeometryBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), std::move( l_pMtxBuffer ) );
+		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( GetOwner()->GetRenderSystem(), &l_vertexDeclarationElements[0], uint32_t( l_vertexDeclarationElements.size() ) );
+		IndexBufferUPtr l_pIdxBuffer = std::make_unique< IndexBuffer >( GetOwner()->GetRenderSystem() );
+		MatrixBufferUPtr l_pMtxBuffer = std::make_unique< MatrixBuffer >( GetOwner()->GetRenderSystem() );
+		m_pGeometryBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), std::move( l_pMtxBuffer ) );
 	}
 
 	bool Submesh::DoPrepareGeometryBuffers( Pass const & p_pass )
@@ -1109,7 +1109,7 @@ namespace Castor3D
 
 			if ( l_pProgram && l_matrixBuffer )
 			{
-				GetEngine()->GetRenderSystem()->GetPipeline().ApplyMatrices( *l_matrixBuffer, 0xFFFFFFFFFFFFFFFF );
+				GetOwner()->GetRenderSystem()->GetPipeline().ApplyMatrices( *l_matrixBuffer, 0xFFFFFFFFFFFFFFFF );
 			}
 		}
 

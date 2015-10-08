@@ -32,7 +32,7 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlRenderSystem::GlRenderSystem( Engine * p_engine )
+	GlRenderSystem::GlRenderSystem( Engine & p_engine )
 		: RenderSystem( p_engine, eRENDERER_TYPE_OPENGL )
 		, m_iOpenGlMajor( 0 )
 		, m_iOpenGlMinor( 0 )
@@ -156,17 +156,17 @@ namespace GlRender
 
 	DepthStencilStateSPtr GlRenderSystem::CreateDepthStencilState()
 	{
-		return std::make_shared< GlDepthStencilState >( m_gl );
+		return std::make_shared< GlDepthStencilState >( this, m_gl );
 	}
 
 	RasteriserStateSPtr GlRenderSystem::CreateRasteriserState()
 	{
-		return std::make_shared< GlRasteriserState >( m_gl );
+		return std::make_shared< GlRasteriserState >( this, m_gl );
 	}
 
 	BlendStateSPtr GlRenderSystem::CreateBlendState()
 	{
-		return std::make_shared< GlBlendState >( m_gl );
+		return std::make_shared< GlBlendState >( this, m_gl );
 	}
 
 	FrameVariableBufferSPtr GlRenderSystem::CreateFrameVariableBuffer( Castor::String const & p_name )

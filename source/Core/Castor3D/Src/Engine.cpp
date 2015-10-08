@@ -61,8 +61,8 @@ namespace Castor3D
 		, m_bCreateContext( false )
 		, m_bCreated( false )
 		, m_bCleaned( true )
-		, m_materialManager( this )
-		, m_overlayManager( this )
+		, m_materialManager( *this )
+		, m_overlayManager( *this )
 		, m_pMainWindow( NULL )
 		, m_bDefaultInitialised( false )
 		, m_debugOverlays( std::make_unique< DebugOverlays >() )
@@ -423,7 +423,7 @@ namespace Castor3D
 
 		if ( ! l_pReturn )
 		{
-			l_pReturn = std::make_shared< Scene >( this, m_lightFactory, p_name );
+			l_pReturn = std::make_shared< Scene >( *this, m_lightFactory, p_name );
 			l_pReturn->Initialise();
 			m_sceneManager.insert( p_name, l_pReturn );
 		}
@@ -460,7 +460,7 @@ namespace Castor3D
 
 		if ( !l_pReturn )
 		{
-			l_pReturn = std::make_shared< Mesh >( this, p_strMeshName );
+			l_pReturn = std::make_shared< Mesh >( *this, p_strMeshName );
 			l_pReturn->Initialise( *m_meshFactory.Create( p_type ), p_arrayFaces, p_arraySizes );
 			m_meshManager.insert( p_strMeshName, l_pReturn );
 			Logger::LogInfo( cuT( "Engine::CreateMesh - Mesh [" ) + p_strMeshName + cuT( "] - Created" ) );
@@ -518,7 +518,7 @@ namespace Castor3D
 
 			if ( ! l_pMesh )
 			{
-				l_pMesh = std::make_shared< Mesh >( this, cuEmptyString );
+				l_pMesh = std::make_shared< Mesh >( *this, cuEmptyString );
 				m_meshManager.insert( cuEmptyString, l_pMesh );
 			}
 
@@ -1302,7 +1302,7 @@ namespace Castor3D
 
 		if ( File::FileExists( l_path / cuT( "Core.zip" ) ) )
 		{
-			SceneFileParser l_parser( this );
+			SceneFileParser l_parser( *this );
 
 			if ( !l_parser.ParseFile( l_path / cuT( "Core.zip" ) ) )
 			{

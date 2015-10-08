@@ -22,6 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Parameter.hpp"
 
 #include <Path.hpp>
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -35,6 +36,7 @@ namespace Castor3D
 	\brief		Classe de base pour l'import de fichiers externes
 	*/
 	class Importer
+		: public Castor::OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -45,7 +47,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_engine		Le moteur
 		 */
-		C3D_API Importer( Engine * p_engine );
+		C3D_API Importer( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Scene import Function
@@ -72,18 +74,6 @@ namespace Castor3D
 		 *\return		Le Mesh importé
 		 */
 		C3D_API MeshSPtr ImportMesh( Castor::Path const & p_pathFile, Parameters const & p_parameters );
-		/**
-		 *\~english
-		 *\brief		Retrieves the core engine
-		 *\return		The engine
-		 *\~french
-		 *\brief		Récupère le moteur
-		 *\return		Le moteur
-		 */
-		inline Engine * GetEngine()const
-		{
-			return m_engine;
-		}
 
 	protected:
 		/**
@@ -112,8 +102,6 @@ namespace Castor3D
 		Castor::Path m_filePath;
 		//!\~english The loaded scene nodes	\~french Les noeuds chargés
 		SceneNodePtrArray m_nodes;
-		//!\~english The core engine	\~french Le moteur
-		Engine * m_engine;
 		//!\~english The loaded geometries	\~french Les géométries chargées
 		GeometryPtrStrMap m_geometries;
 		//!\~english Import configuration parameters	\~french Paramètres de configuration de l'import

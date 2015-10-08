@@ -15,33 +15,60 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___ASE_IMPORTER_H___
-#define ___ASE_IMPORTER_H___
+#ifndef ___CASTOR_OWNED_BY_H___
+#define ___CASTOR_OWNED_BY_H___
 
-#include "AseImporterPrerequisites.hpp"
+#include "CastorUtilsPrerequisites.hpp"
 
-namespace Ase
+namespace Castor
 {
 	/*!
 	\author		Sylvain DOREMUS
-	\date		25/08/2010
+	\version	0.8.0
+	\date		08/10/2015
 	\~english
-	\brief		ASE file importer
+	\brief		Class used to have an object owned by another one.
 	\~french
-	\brief		Importeur de fichiers ASE
+	\brief		Classe permettant d'avoir un objet controlé par un autre.
 	*/
-	class AseImporter : public Castor3D::Importer
+	template< class Owner >
+	class OwnedBy
 	{
-	private:
-		AseFileParser * m_pFileParser;
-
 	public:
-		AseImporter( Castor3D::Engine & p_pEngine );
-		~AseImporter();
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	p_owner		The owner object.
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	p_owner		L'objet propriétaire.
+		 */
+		inline OwnedBy( Owner & p_owner )
+			: m_owner( p_owner )
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
+		inline ~OwnedBy()
+		{
+		}
+		/**
+		 *\~english
+		 *\return		The owner object.
+		 *\~french
+		 *\brief		L'objet propriétaire.
+		 */
+		inline Owner * GetOwner()const
+		{
+			return &m_owner;
+		}
 
 	private:
-		virtual Castor3D::SceneSPtr DoImportScene();
-		virtual Castor3D::MeshSPtr DoImportMesh();
+		Owner & m_owner;
 	};
 }
 

@@ -23,10 +23,49 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "ComVector3D.hpp"
 #include "ComQuaternion.hpp"
 
+#include <Scene.hpp>
 #include <SceneNode.hpp>
 
 namespace CastorCom
 {
+	template< typename Value >
+	struct VariablePutterEvt< Castor3D::SceneNode, Value >
+	{
+		typedef void ( Castor3D::SceneNode::*Function )( Value );
+		VariablePutterEvt( Castor3D::SceneNode * instance, Function function )
+			: m_instance( instance )
+			, m_function( function )
+		{
+		}
+		template< typename _Value >
+		HRESULT operator()( _Value value )
+		{
+			HRESULT hr = E_POINTER;
+
+			if ( m_instance )
+			{
+				if ( value )
+				{
+					m_instance->GetOwner()->GetOwner()->PostEvent( Castor3D::MakeFunctorEvent( Castor3D::eEVENT_TYPE_PRE_RENDER, [this, value]
+					{
+						( m_instance->*m_function )( parameter_cast< Value >( value ) );
+					} ) );
+					hr = S_OK;
+				}
+			}
+			else
+			{
+				hr = CComError::DispatchError( E_FAIL, IID_ISceneNode, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+			}
+
+			return hr;
+		}
+
+	private:
+		Castor3D::SceneNode * m_instance;
+		Function m_function;
+	};
+
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.7.0
@@ -65,9 +104,9 @@ namespace CastorCom
 			m_internal = internal;
 		}
 
-		COM_PROPERTY( Position, IVector3D *, make_getter( m_internal.get(), &Castor3D::SceneNode::GetPosition ), make_putter( m_internal.get(), &Castor3D::SceneNode::SetPosition ) );
-		COM_PROPERTY( Orientation, IQuaternion *, make_getter( m_internal.get(), &Castor3D::SceneNode::GetOrientation ), make_putter( m_internal.get(), &Castor3D::SceneNode::SetOrientation ) );
-		COM_PROPERTY( Scaling, IVector3D *, make_getter( m_internal.get(), &Castor3D::SceneNode::GetScale ), make_putter( m_internal.get(), &Castor3D::SceneNode::SetScale ) );
+		COM_EVT_PROPERTY( Position, IVector3D *, make_getter( m_internal.get(), &Castor3D::SceneNode::GetPosition ), make_putter_evt( m_internal.get(), &Castor3D::SceneNode::SetPosition ) );
+		COM_EVT_PROPERTY( Orientation, IQuaternion *, make_getter( m_internal.get(), &Castor3D::SceneNode::GetOrientation ), make_putter_evt( m_internal.get(), &Castor3D::SceneNode::SetOrientation ) );
+		COM_EVT_PROPERTY( Scaling, IVector3D *, make_getter( m_internal.get(), &Castor3D::SceneNode::GetScale ), make_putter_evt( m_internal.get(), &Castor3D::SceneNode::SetScale ) );
 
 		STDMETHOD( AttachObject )( /* [in] */ IMovableObject * val );
 		STDMETHOD( DetachObject )( /* [in] */ IMovableObject * val );

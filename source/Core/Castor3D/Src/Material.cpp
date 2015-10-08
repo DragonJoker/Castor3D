@@ -10,8 +10,8 @@ using namespace Castor;
 namespace Castor3D
 {
 	Material::BinaryParser::BinaryParser( Path const & p_path, Engine * p_engine )
-		:	Castor3D::BinaryParser< Material >( p_path )
-		,	m_engine( p_engine )
+		: Castor3D::BinaryParser< Material >( p_path )
+		, m_engine( p_engine )
 	{
 	}
 
@@ -131,9 +131,9 @@ namespace Castor3D
 
 	const Castor::String Material::DefaultMaterialName = cuT( "DefaultMaterial" );
 
-	Material::Material( Engine * p_engine, String const & p_name )
-		:	Resource<Material>( p_name )
-		,	m_engine( p_engine )
+	Material::Material( Engine & p_engine, String const & p_name )
+		: Resource<Material>( p_name )
+		, OwnedBy< Engine >( p_engine )
 	{
 	}
 
@@ -191,7 +191,7 @@ namespace Castor3D
 
 	PassSPtr Material::CreatePass()
 	{
-		PassSPtr l_newPass = std::make_shared< Pass >( m_engine, shared_from_this() );
+		PassSPtr l_newPass = std::make_shared< Pass >( *GetOwner(), shared_from_this() );
 		m_passes.push_back( l_newPass );
 		return l_newPass;
 	}

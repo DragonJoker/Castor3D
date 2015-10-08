@@ -28,7 +28,7 @@ C3D_Dx11_API String GetName()
 
 C3D_Dx11_API RenderSystem * CreateRenderSystem( Engine * p_engine )
 {
-	return new DxRenderSystem( p_engine );
+	return new DxRenderSystem( *p_engine );
 }
 
 C3D_Dx11_API void DestroyRenderSystem( RenderSystem * p_pRenderSystem )

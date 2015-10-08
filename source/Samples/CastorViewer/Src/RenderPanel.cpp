@@ -149,7 +149,7 @@ namespace CastorViewer
 				}
 
 #if HAS_CASTORGUI
-				m_controlsManager = &static_cast< CastorGui::ControlsManager & >( p_pWindow->GetEngine()->GetFrameListener( CastorGui::PLUGIN_NAME ) );
+				m_controlsManager = &static_cast< CastorGui::ControlsManager & >( p_pWindow->GetOwner()->GetFrameListener( CastorGui::PLUGIN_NAME ) );
 #endif
 			}
 		}

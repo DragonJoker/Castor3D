@@ -21,6 +21,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "BinaryParser.hpp"
 
+#include <OwnedBy.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -34,6 +36,7 @@ namespace Castor3D
 	*/
 	class MaterialManager
 		: public MaterialCollection
+		, public Castor::OwnedBy< Engine >
 	{
 	private:
 		DECLARE_VECTOR(	MaterialWPtr, MaterialWPtr );
@@ -45,7 +48,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		C3D_API MaterialManager( Engine * p_engine );
+		C3D_API MaterialManager( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -140,8 +143,6 @@ namespace Castor3D
 	private:
 		//!\~english The default material	\~french Le matériau par défaut
 		MaterialSPtr m_defaultMaterial;
-		//!\~english The engine	\~french Le moteur
-		Engine * m_engine;
 	};
 }
 

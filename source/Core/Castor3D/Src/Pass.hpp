@@ -21,6 +21,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "BinaryParser.hpp"
 
+#include <OwnedBy.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -35,7 +37,8 @@ namespace Castor3D
 	\brief		Définition d'une passe d'un matériau
 	\remark		Une passe est composé de : couleurs (ambiante, diffuse, spéculaire, émissive), exposant, textures, programme de shader
 	*/
-	class C3D_API Pass
+	class Pass
+		: public Castor::OwnedBy< Engine >
 	{
 	public:
 		/*!
@@ -47,7 +50,7 @@ namespace Castor3D
 		\~french
 		\brief Loader de Pass
 		*/
-		class C3D_API TextLoader
+		class TextLoader
 			: public Castor::Loader< Pass, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
 			, public Castor::NonCopyable
 		{
@@ -58,7 +61,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief			Writes a pass into a text file
@@ -69,7 +72,7 @@ namespace Castor3D
 			 *\param[in]		p_pass	La passe à écrire
 			 *\param[in,out]	p_file	Le file où écrire la passe
 			 */
-			virtual bool operator()( Pass const & p_pass, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( Pass const & p_pass, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -80,7 +83,7 @@ namespace Castor3D
 		\~french
 		\brief		Loader de Pass
 		*/
-		class C3D_API BinaryParser
+		class BinaryParser
 			: public Castor3D::BinaryParser< Pass >
 		{
 		public:
@@ -92,7 +95,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_pathFile	Le chemin courant
 			 */
-			BinaryParser( Castor::Path const & p_pathFile );
+			C3D_API BinaryParser( Castor::Path const & p_pathFile );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -105,7 +108,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( Pass const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( Pass const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -118,7 +121,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( Pass & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( Pass & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	public:
@@ -134,28 +137,28 @@ namespace Castor3D
 		 *\param[in]	p_engine	Le moteur
 		 *\param[in]	p_parent	Le matériau parent
 		 */
-		Pass( Engine * p_engine, MaterialSPtr p_parent = nullptr );
+		C3D_API Pass( Engine & p_engine, MaterialSPtr p_parent = nullptr );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Pass();
+		C3D_API ~Pass();
 		/**
 		 *\~english
 		 *\brief		Initialises the pass and all it's dependencies
 		 *\~french
 		 *\brief		Initialise la passe et toutes ses dépendances
 		 */
-		void Initialise();
+		C3D_API void Initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans up the pass and all it's dependencies
 		 *\~french
 		 *\brief		Nettoie la passe et toutes ses dépendances
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Binds this pass to given program
@@ -169,7 +172,7 @@ namespace Castor3D
 		 *\param[in]	p_pProgram	Le programme
 		 *\return
 		 */
-		void BindToAutomaticProgram( ShaderProgramBaseSPtr p_pProgram );
+		C3D_API void BindToAutomaticProgram( ShaderProgramBaseSPtr p_pProgram );
 		/**
 		 *\~english
 		 *\brief		Applies the pass
@@ -180,7 +183,7 @@ namespace Castor3D
 		 *\param[in]	p_byIndex	L'index de la passe
 		 *\param[in]	p_byCount	Le compte des passes du material
 		 */
-		void Render( uint8_t p_byIndex, uint8_t p_byCount );
+		C3D_API void Render( uint8_t p_byIndex, uint8_t p_byCount );
 		/**
 		 *\~english
 		 *\brief		Applies the pass for 2D render
@@ -191,21 +194,21 @@ namespace Castor3D
 		 *\param[in]	p_byIndex	L'index de la passe
 		 *\param[in]	p_byCount	Le compte des passes du material
 		 */
-		void Render2D( uint8_t p_byIndex, uint8_t p_byCount );
+		C3D_API void Render2D( uint8_t p_byIndex, uint8_t p_byCount );
 		/**
 		 *\~english
 		 *\brief		Removes the pass (to avoid it from interfering with other passes)
 		 *\~french
 		 *\brief		Retire la passe du rendu courant
 		 */
-		void EndRender();
+		C3D_API void EndRender();
 		/**
 		 *\~english
 		 *\brief		Creates and adds a TextureUnit
 		 *\~french
 		 *\brief		Crée et ajoute une unité de texture
 		 */
-		TextureUnitSPtr AddTextureUnit();
+		C3D_API TextureUnitSPtr AddTextureUnit();
 		/**
 		 *\~english
 		 *\brief		Retrieves the TextureUnit at wanted channel
@@ -218,7 +221,7 @@ namespace Castor3D
 		 *\param[in]	p_eChannel	Le canal
 		 *\return		\p nullptr si pas de TextureUnit au canal voulu
 		 */
-		TextureUnitSPtr GetTextureUnit( eTEXTURE_CHANNEL p_eChannel );
+		C3D_API TextureUnitSPtr GetTextureUnit( eTEXTURE_CHANNEL p_eChannel );
 		/**
 		 *\~english
 		 *\brief		Destroys a TextureUnit at the given index
@@ -229,7 +232,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index de la TextureUnit à détruire
 		 *\return		\p false si l'index était hors bornes
 		 */
-		bool DestroyTextureUnit( uint32_t p_index );
+		C3D_API bool DestroyTextureUnit( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Retrieves the TextureUnit at the given index
@@ -240,7 +243,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index voulu
 		 *\return		La TextureUnit récupérée, nullptr si p_index était hors bornes
 		 */
-		TextureUnitSPtr GetTextureUnit( uint32_t p_index )const;
+		C3D_API TextureUnitSPtr GetTextureUnit( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the image path of the TextureUnit at the given index
@@ -251,7 +254,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index voulu
 		 *\return		Le chemin, vide si aucun
 		 */
-		Castor::String GetTexturePath( uint32_t p_index );
+		C3D_API Castor::String GetTexturePath( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Defines the shader program
@@ -260,7 +263,7 @@ namespace Castor3D
 		 *\brief		Définit le shader
 		 *\param[in]	p_pProgram	Le programme
 		 */
-		void SetShader( ShaderProgramBaseSPtr p_pProgram );
+		C3D_API void SetShader( ShaderProgramBaseSPtr p_pProgram );
 		/**
 		 *\~english
 		 *\brief		Tells if the pass needs alpha blending
@@ -269,7 +272,7 @@ namespace Castor3D
 		 *\brief		Dit si la passe a besoin de mélange d'alpha
 		 *\return		\p true si au moins une unité de texture a un canal alpha
 		 */
-		bool HasAlphaBlending()const;
+		C3D_API bool HasAlphaBlending()const;
 		/**
 		*\~english
 		*\brief			Tells if the pass has a shader program
@@ -278,7 +281,7 @@ namespace Castor3D
 		*\brief			Dit si la passe a un shader
 		*\return		\p true si le programme a été défini, \p false sinon
 		 */
-		bool HasShader()const;
+		C3D_API bool HasShader()const;
 		/**
 		 *\~english
 		 *\brief		Gives the current shader program
@@ -710,16 +713,6 @@ namespace Castor3D
 		{
 			return m_matrixBuffer.lock();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Engine
-		 *\~french
-		 *\brief		Récupère l'Engine
-		 */
-		virtual Engine * GetEngine()const
-		{
-			return m_engine;
-		}
 
 	private:
 		/**
@@ -736,21 +729,21 @@ namespace Castor3D
 		 *\param[in]	p_program	Le programme
 		 *\param[in,out]p_variable	Reçoit la variable shader
 		 */
-		void DoGetTexture( eTEXTURE_CHANNEL p_channel, Castor::String const & p_name, ShaderProgramBase & p_program, OneTextureFrameVariableWPtr & p_variable );
+		C3D_API void DoGetTexture( eTEXTURE_CHANNEL p_channel, Castor::String const & p_name, ShaderProgramBase & p_program, OneTextureFrameVariableWPtr & p_variable );
 		/**
 		 *\~english
 		 *\brief		Retrieves the channeled textures shader variables
 		 *\~french
 		 *\brief		Récupère les variables associées aux texture affectées à un canal
 		 */
-		void DoGetTextures();
+		C3D_API void DoGetTextures();
 		/**
 		 *\~english
 		 *\brief		Retrieves the pass, scene, and matrix buffers, and needed variables
 		 *\~french
 		 *\brief		Récupère les tampons de variables de passe, scène et matrices, ainsi que les variables nécessaires
 		 */
-		void DoGetBuffers();
+		C3D_API void DoGetBuffers();
 		/**
 		 *\~english
 		 *\brief		Prepares a texture to be integrated to the pass.
@@ -771,7 +764,7 @@ namespace Castor3D
 		 *\param[in,out]p_opacity		Reçoit le canal alpha de la texture
 		 *\return		\p true Si la texture possédait un canal alpha
 		 */
-		bool DoPrepareTexture( eTEXTURE_CHANNEL p_channel, TextureUnitSPtr p_unit, uint32_t & p_index, TextureUnitSPtr & p_opacitySource, Castor::PxBufferBaseSPtr & p_opacity );
+		C3D_API bool DoPrepareTexture( eTEXTURE_CHANNEL p_channel, TextureUnitSPtr p_unit, uint32_t & p_index, TextureUnitSPtr & p_opacitySource, Castor::PxBufferBaseSPtr & p_opacity );
 		/**
 		 *\~english
 		 *\brief		Prepares a texture to be integrated to the pass.
@@ -786,7 +779,7 @@ namespace Castor3D
 		 *\param[in]	p_unit			L'unité de texture
 		 *\param[in,out]p_index			L'index de la texture
 		 */
-		void DoPrepareTexture( eTEXTURE_CHANNEL p_channel, TextureUnitSPtr p_unit, uint32_t & p_index );
+		C3D_API void DoPrepareTexture( eTEXTURE_CHANNEL p_channel, TextureUnitSPtr p_unit, uint32_t & p_index );
 		/**
 		 *\~english
 		 *\brief		Applies the pass
@@ -797,21 +790,19 @@ namespace Castor3D
 		 *\param[in]	p_byIndex	L'index de la passe
 		 *\param[in]	p_byCount	Le compte des passes du material
 		 */
-		void DoRender( uint8_t p_byIndex, uint8_t p_byCount );
+		C3D_API void DoRender( uint8_t p_byIndex, uint8_t p_byCount );
 		/**
 		 *\~english
 		 *\brief		Fills shader variables
 		 *\~french
 		 *\brief		Remplit les variables de shader
 		 */
-		void DoFillShaderVariables();
+		C3D_API void DoFillShaderVariables();
 
 	protected:
 		typedef std::pair< TextureUnitWPtr, OneTextureFrameVariableWPtr > UnitVariablePair;
 		DECLARE_MAP( eTEXTURE_CHANNEL, UnitVariablePair, UnitVariableChannel );
 		friend class Material;
-		//!\~english The core engine	\~french Le moteur
-		Engine * m_engine;
 		//!\~english Diffuse material colour	\~french La couleur diffuse
 		Castor::Colour m_clrDiffuse;
 		//!\~english Ambient material colour	\~french La couleur ambiante

@@ -16,7 +16,7 @@ namespace GuiCommon
 	}
 
 	MaterialTreeItemProperty::MaterialTreeItemProperty( bool p_editable, MaterialSPtr p_material )
-		: TreeItemProperty( p_material->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_MATERIAL )
+		: TreeItemProperty( p_material->GetOwner(), p_editable, ePROPERTY_DATA_TYPE_MATERIAL )
 		, m_material( p_material )
 	{
 		PROPERTY_CATEGORY_MATERIAL = _( "Material: " );

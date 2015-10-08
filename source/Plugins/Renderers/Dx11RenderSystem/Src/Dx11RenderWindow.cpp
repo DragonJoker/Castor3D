@@ -8,7 +8,7 @@ using namespace Castor;
 namespace Dx11Render
 {
 	DxRenderWindow::DxRenderWindow( DxRenderSystem * p_pRenderSystem )
-		: RenderWindow( p_pRenderSystem->GetEngine() )
+		: RenderWindow( *p_pRenderSystem->GetOwner() )
 	{
 	}
 

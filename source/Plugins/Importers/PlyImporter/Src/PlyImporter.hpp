@@ -59,7 +59,7 @@ namespace C3dPly
 		/**
 		 * Constructor
 		 */
-		PlyImporter( Castor3D::Engine * p_pEngine );
+		PlyImporter( Castor3D::Engine & p_pEngine );
 
 	private:
 		virtual Castor3D::SceneSPtr DoImportScene();

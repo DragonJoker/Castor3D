@@ -196,7 +196,7 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 	{
 		BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS )
 	};
-	Engine * l_pEngine = m_renderSystem->GetEngine();
+	Engine * l_pEngine = m_renderSystem->GetOwner();
 	m_pSamplerNearestClamp = l_pEngine->CreateSampler( cuT( "NearestClamp" ) );
 	m_pSamplerNearestRepeat = l_pEngine->CreateSampler( cuT( "NearestRepeat" ) );
 	m_pSamplerLinearClamp = l_pEngine->CreateSampler( cuT( "LinearClamp" ) );
@@ -314,14 +314,14 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 	m_skyGBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBufferSky ), std::move( l_pIdxBufferSky ), nullptr );
 	m_skymapGBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBufferMap ), std::move( l_pIdxBufferMap ), nullptr );
 	m_cloudsGBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBufferClo ), std::move( l_pIdxBufferClo ), nullptr );
-	RasteriserStateSPtr l_pRasteriser = m_renderSystem->GetEngine()->CreateRasteriserState( cuT( "OceanLighting" ) );
+	RasteriserStateSPtr l_pRasteriser = m_renderSystem->GetOwner()->CreateRasteriserState( cuT( "OceanLighting" ) );
 	l_pRasteriser->SetCulledFaces( eFACE_NONE );
 	l_pRasteriser->SetFillMode( eFILL_MODE_SOLID );
 	m_pRasteriserState = l_pRasteriser;
-	DepthStencilStateSPtr l_pDepthStencil = m_renderSystem->GetEngine()->CreateDepthStencilState( cuT( "OceanLighting" ) );
+	DepthStencilStateSPtr l_pDepthStencil = m_renderSystem->GetOwner()->CreateDepthStencilState( cuT( "OceanLighting" ) );
 	l_pDepthStencil->SetDepthTest( false );
 	m_pDepthStencilState = l_pDepthStencil;
-	l_pRasteriser = m_renderSystem->GetEngine()->CreateRasteriserState( cuT( "OceanLighting_Render" ) );
+	l_pRasteriser = m_renderSystem->GetOwner()->CreateRasteriserState( cuT( "OceanLighting_Render" ) );
 	l_pRasteriser->SetCulledFaces( eFACE_NONE );
 	l_pRasteriser->SetFillMode( eFILL_MODE_SOLID );
 	m_renderRasteriserState = l_pRasteriser;
@@ -419,7 +419,7 @@ void RenderTechnique::loadPrograms( bool all )
 	l_strSrcF = l_strOpt + cuT( "\n" ) + l_strAtmF + cuT( "\n" ) + l_strOcnF;
 	l_strSrcV = l_strOpt + cuT( "\n" ) + l_strAtmV + cuT( "\n" ) + l_strOcnV;
 	Logger::LogDebug( "Loading 'render' shader program" );
-	m_render = m_renderSystem->GetEngine()->GetShaderManager().GetNewProgram();
+	m_render = m_renderSystem->GetOwner()->GetShaderManager().GetNewProgram();
 	m_render->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 	m_render->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
 	l_pConstants = m_renderSystem->CreateFrameVariableBuffer( cuT( "render" ) );
@@ -470,7 +470,7 @@ void RenderTechnique::loadPrograms( bool all )
 	l_strSrcV = l_strOpt + cuT( "\n" ) + l_strAtmV + cuT( "\n" ) + l_strSkyV;
 	l_strSrcF = l_strOpt + cuT( "\n" ) + l_strAtmF + cuT( "\n" ) + l_strSkyF;
 	Logger::LogDebug( "Loading 'sky' shader program" );
-	m_sky = m_renderSystem->GetEngine()->GetShaderManager().GetNewProgram();
+	m_sky = m_renderSystem->GetOwner()->GetShaderManager().GetNewProgram();
 	m_sky->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 	m_sky->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
 	l_pConstants = m_renderSystem->CreateFrameVariableBuffer( cuT( "sky" ) );
@@ -492,7 +492,7 @@ void RenderTechnique::loadPrograms( bool all )
 	l_strSrcV = l_strOpt + cuT( "\n" ) + l_strAtmV + cuT( "\n" ) + l_strMapV;
 	l_strSrcF = l_strOpt + cuT( "\n" ) + l_strAtmF + cuT( "\n" ) + l_strMapF;
 	Logger::LogDebug( "Loading 'skymap' shader program" );
-	m_skymap = m_renderSystem->GetEngine()->GetShaderManager().GetNewProgram();
+	m_skymap = m_renderSystem->GetOwner()->GetShaderManager().GetNewProgram();
 	m_skymap->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 	m_skymap->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
 	l_pConstants = m_renderSystem->CreateFrameVariableBuffer( cuT( "skymap" ) );
@@ -524,7 +524,7 @@ void RenderTechnique::loadPrograms( bool all )
 		l_strSrcV = l_strOpt + cuT( "\n" ) + l_strAtmV + cuT( "\n" ) + l_strCloV;
 		l_strSrcF = l_strOpt + cuT( "\n" ) + l_strAtmF + cuT( "\n" ) + l_strCloF;
 		Logger::LogDebug( "Loading 'clouds' shader program" );
-		m_clouds = m_renderSystem->GetEngine()->GetShaderManager().GetNewProgram();
+		m_clouds = m_renderSystem->GetOwner()->GetShaderManager().GetNewProgram();
 		m_clouds->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 		m_clouds->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
 		l_pConstants = m_renderSystem->CreateFrameVariableBuffer( cuT( "clouds" ) );
@@ -571,7 +571,7 @@ void RenderTechnique::loadPrograms( bool all )
 	l_strSrcV = l_strIniV;
 	l_strSrcF = l_strIniF;
 	Logger::LogDebug( "Loading 'init' shader program" );
-	m_init = m_renderSystem->GetEngine()->GetShaderManager().GetNewProgram();
+	m_init = m_renderSystem->GetOwner()->GetShaderManager().GetNewProgram();
 	m_init->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 	m_init->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
 	l_pConstants = m_renderSystem->CreateFrameVariableBuffer( cuT( "init" ) );
@@ -587,7 +587,7 @@ void RenderTechnique::loadPrograms( bool all )
 	l_strSrcV = l_strVarV;
 	l_strSrcF = l_strVarF;
 	Logger::LogDebug( "Loading 'variances' shader program" );
-	m_variances = m_renderSystem->GetEngine()->GetShaderManager().GetNewProgram();
+	m_variances = m_renderSystem->GetOwner()->GetShaderManager().GetNewProgram();
 	m_variances->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 	m_variances->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
 	l_pConstants = m_renderSystem->CreateFrameVariableBuffer( cuT( "variances" ) );
@@ -607,7 +607,7 @@ void RenderTechnique::loadPrograms( bool all )
 	l_strSrcV = l_strFtxV;
 	l_strSrcF = l_strFtxF;
 	Logger::LogDebug( "Loading 'fftx' shader program" );
-	m_fftx = m_renderSystem->GetEngine()->GetShaderManager().GetNewProgram();
+	m_fftx = m_renderSystem->GetOwner()->GetShaderManager().GetNewProgram();
 	m_fftx->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 	m_fftx->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
 	l_pConstants = m_renderSystem->CreateFrameVariableBuffer( cuT( "fftx" ) );
@@ -621,7 +621,7 @@ void RenderTechnique::loadPrograms( bool all )
 	l_strSrcV = l_strFtyV;
 	l_strSrcF = l_strFtyF;
 	Logger::LogDebug( "Loading 'ffty' shader program" );
-	m_ffty = m_renderSystem->GetEngine()->GetShaderManager().GetNewProgram();
+	m_ffty = m_renderSystem->GetOwner()->GetShaderManager().GetNewProgram();
 	m_ffty->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 	m_ffty->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
 	l_pConstants = m_renderSystem->CreateFrameVariableBuffer( cuT( "ffty" ) );
@@ -778,19 +778,19 @@ bool RenderTechnique::DoCreate()
 #else
 	m_pTexWave->Create();
 #endif
-	BlendStateSPtr l_pBlendState = m_renderSystem->GetEngine()->CreateBlendState( cuT( "OL_Clouds" ) );
+	BlendStateSPtr l_pBlendState = m_renderSystem->GetOwner()->CreateBlendState( cuT( "OL_Clouds" ) );
 	l_pBlendState->EnableBlend( true );
 	l_pBlendState->SetAlphaSrcBlend( eBLEND_SRC_ALPHA );
 	l_pBlendState->SetAlphaDstBlend( eBLEND_INV_SRC_ALPHA );
 	m_cloudsBlendState = l_pBlendState;
-	m_renderBlendState = m_renderSystem->GetEngine()->CreateBlendState( cuT( "OL_Render" ) );
-	m_skyBlendState = m_renderSystem->GetEngine()->CreateBlendState( cuT( "OL_Sky" ) );
-	m_skymapBlendState = m_renderSystem->GetEngine()->CreateBlendState( cuT( "OL_Skymap" ) );
+	m_renderBlendState = m_renderSystem->GetOwner()->CreateBlendState( cuT( "OL_Render" ) );
+	m_skyBlendState = m_renderSystem->GetOwner()->CreateBlendState( cuT( "OL_Sky" ) );
+	m_skymapBlendState = m_renderSystem->GetOwner()->CreateBlendState( cuT( "OL_Skymap" ) );
 #if ENABLE_FFT
-	m_initBlendState = m_renderSystem->GetEngine()->CreateBlendState( cuT( "OL_Init" ) );
-	m_variancesBlendState = m_renderSystem->GetEngine()->CreateBlendState( cuT( "OL_Variances" ) );
-	m_fftxBlendState = m_renderSystem->GetEngine()->CreateBlendState( cuT( "OL_Fftx" ) );
-	m_fftyBlendState = m_renderSystem->GetEngine()->CreateBlendState( cuT( "OL_Ffty" ) );
+	m_initBlendState = m_renderSystem->GetOwner()->CreateBlendState( cuT( "OL_Init" ) );
+	m_variancesBlendState = m_renderSystem->GetOwner()->CreateBlendState( cuT( "OL_Variances" ) );
+	m_fftxBlendState = m_renderSystem->GetOwner()->CreateBlendState( cuT( "OL_Fftx" ) );
+	m_fftyBlendState = m_renderSystem->GetOwner()->CreateBlendState( cuT( "OL_Ffty" ) );
 #endif
 	return true;
 }

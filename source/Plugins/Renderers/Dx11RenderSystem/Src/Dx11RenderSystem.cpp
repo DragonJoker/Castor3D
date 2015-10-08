@@ -29,7 +29,7 @@ using namespace Castor;
 
 namespace Dx11Render
 {
-	DxRenderSystem::DxRenderSystem( Engine * p_engine )
+	DxRenderSystem::DxRenderSystem( Engine & p_engine )
 		: RenderSystem( p_engine, eRENDERER_TYPE_DIRECT3D )
 		, m_pDevice( NULL )
 	{
@@ -153,7 +153,7 @@ namespace Dx11Render
 								}
 							}
 
-							int l_iWantedFPS = int( 1.0 / m_engine->GetFrameTime() );
+							int l_iWantedFPS = int( 1.0 / GetOwner()->GetFrameTime() );
 
 							for ( std::vector< DXGI_MODE_DESC >::iterator l_it = l_matchingDisplayModes.begin(); l_it != l_matchingDisplayModes.end() && !l_bFound; ++l_it )
 							{
@@ -207,7 +207,7 @@ namespace Dx11Render
 			if ( !IsInitialised() )
 			{
 				Initialise();
-				m_engine->GetMaterialManager().Initialise();
+				GetOwner()->GetMaterialManager().Initialise();
 			}
 
 			if ( m_pDevice )

@@ -16,7 +16,7 @@ namespace GuiCommon
 	}
 
 	RenderTargetTreeItemProperty::RenderTargetTreeItemProperty( bool p_editable, RenderTargetSPtr p_target )
-		: TreeItemProperty( p_target->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_RENDER_TARGET )
+		: TreeItemProperty( p_target->GetOwner(), p_editable, ePROPERTY_DATA_TYPE_RENDER_TARGET )
 		, m_target( p_target )
 	{
 		PROPERTY_CATEGORY_RENDER_TARGET = _( "Render Target: " );

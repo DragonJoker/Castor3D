@@ -21,6 +21,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "BinaryParser.hpp"
 
+#include <OwnedBy.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -34,7 +36,8 @@ namespace Castor3D
 	\brief		Représentation d'une unité de texture
 	\remark		Une unité de texture se compose d'une texture avec des options telles que son canal, modes de mélange, transformations.
 	*/
-	class C3D_API TextureUnit
+	class TextureUnit
+		: public Castor::OwnedBy< Engine >
 	{
 	public:
 		/*!
@@ -45,7 +48,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de TextureUnit
 		*/
-		class C3D_API TextLoader : public Castor::Loader< TextureUnit, Castor::eFILE_TYPE_TEXT, Castor::TextFile >, public Castor::NonCopyable
+		class TextLoader
+			: public Castor::Loader< TextureUnit, Castor::eFILE_TYPE_TEXT, Castor::TextFile >, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -54,7 +58,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a TextureUnit into a text file
@@ -65,7 +69,7 @@ namespace Castor3D
 			 *\param[in]	p_file	Le fichier
 			 *\param[in]	p_unit	La TextureUnit
 			 */
-			virtual bool operator()( TextureUnit const & p_unit, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( TextureUnit const & p_unit, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -76,8 +80,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de TextureUnit
 		*/
-		class C3D_API BinaryParser
-			:	public Castor3D::BinaryParser< TextureUnit >
+		class BinaryParser
+			: public Castor3D::BinaryParser< TextureUnit >
 		{
 		public:
 			/**
@@ -88,7 +92,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_pathFile	Le chemin courant
 			 */
-			BinaryParser( Castor::Path const & p_pathFile );
+			C3D_API BinaryParser( Castor::Path const & p_pathFile );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -101,7 +105,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( TextureUnit const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( TextureUnit const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -114,7 +118,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( TextureUnit & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( TextureUnit & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	public:
@@ -126,28 +130,28 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param		p_engine	Le moteur
 		 */
-		TextureUnit( Engine * p_engine );
+		C3D_API TextureUnit( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~TextureUnit();
+		C3D_API ~TextureUnit();
 		/**
 		 *\~english
 		 *\brief		Initialises the texture, id est : fills the image buffer, creates the texture in the render system
 		 *\~french
 		 *\brief		Initialise la texture, id est : remplit le buffer d'image, cree la texture au niveau du renderer
 		 */
-		void Initialise();
+		C3D_API void Initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans up the texture
 		 *\~french
 		 *\brief		Nettoie l'objet
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Sets the texture
@@ -156,21 +160,21 @@ namespace Castor3D
 		 *\brief		Definit la texture
 		 *\param[in]	p_pTexture	La texture
 		 */
-		void SetTexture( TextureBaseSPtr p_pTexture );
+		C3D_API void SetTexture( TextureBaseSPtr p_pTexture );
 		/**
 		 *\~english
 		 *\brief		Applies the texture unit
 		 *\~french
 		 *\brief		Applique la texture
 		 */
-		void Bind();
+		C3D_API void Bind();
 		/**
 		 *\~english
 		 *\brief		Removes the texture unit from the stack, in order not to interfere with other ones
 		 *\~french
 		 *\brief		Desactive la texture
 		 */
-		void Unbind();
+		C3D_API void Unbind();
 		/**
 		 *\~english
 		 *\brief		Uploads current image to the GPU
@@ -179,7 +183,7 @@ namespace Castor3D
 		 *\brief		Charge l'image courante sur le GPU
 		 *\param[in]	p_bSync	Dit si le chargement doit être synchrone ou pas
 		 */
-		void UploadImage( bool p_bSync );
+		C3D_API void UploadImage( bool p_bSync );
 		/**
 		 *\~english
 		 *\brief		Downloads the current image from the GPU
@@ -188,7 +192,7 @@ namespace Castor3D
 		 *\brief		Charge l'image courante à partir du GPU
 		 *\param[in]	p_bSync	Dit si le chargement doit être synchrone ou pas
 		 */
-		void DownloadImage( bool p_bSync );
+		C3D_API void DownloadImage( bool p_bSync );
 		/**
 		 *\~english
 		 *\brief		Loads the texture image from the given path
@@ -199,7 +203,106 @@ namespace Castor3D
 		 *\param[in]	p_pathFile	Le chemin du fichier image
 		 *\return		\p false si un problème quelconque est arrivé
 		 */
-		bool LoadTexture( Castor::Path const & p_pathFile );
+		C3D_API bool LoadTexture( Castor::Path const & p_pathFile );
+		/**
+		*\~english
+		*\brief		Retrieves the texture dimension
+		*\return		The texture dimension
+		*\~french
+		*\brief		Récupère la dimension de la texture
+		*\return		La dimension de la texture
+		*/
+		C3D_API eTEXTURE_DIMENSION GetDimension()const;
+		/**
+		*\~english
+		*\brief		Retrieves the texture mapping mode
+		*\return		The texture mapping mode
+		*\~french
+		*\brief		Récupère le mode mappage de la texture
+		*\return		Le mode mappage de la texture
+		*/
+		C3D_API eTEXTURE_MAP_MODE GetMappingMode()const;
+		/**
+		*\~english
+		*\brief		Defines the texture mapping mode
+		*\param[in]	p_mode	The texture mapping mode
+		*\~french
+		*\brief		Définit le mode de mappage de la texture
+		*\param[in]	p_mode	Le mode de mappage de la texture
+		*/
+		C3D_API void SetMappingMode( eTEXTURE_MAP_MODE p_mode );
+		/**
+		*\~english
+		*\brief		Retrieves the texture image buffer
+		*\return		The buffer
+		*\~french
+		*\brief		Récupère le buffer de l'image de la texture
+		*\return		Le buffer
+		*/
+		C3D_API uint8_t const * GetImageBuffer()const;
+		/**
+		*\~english
+		*\brief		Retrieves the texture image buffer
+		*\return		The buffer
+		*\~french
+		*\brief		Récupère le buffer de l'image de la texture
+		*\return		Le buffer
+		*/
+		C3D_API uint8_t * GetImageBuffer();
+		/**
+		*\~english
+		*\brief		Retrieves the texture image pixels
+		*\return		The pixels
+		*\~french
+		*\brief		Récupère les pixels de l'image de la texture
+		*\return		Les pixels
+		*/
+		C3D_API Castor::PxBufferBaseSPtr const GetImagePixels()const;
+		/**
+		*\~english
+		*\brief		Retrieves the texture image pixels
+		*\return		The pixels
+		*\~french
+		*\brief		Récupère les pixels de l'image de la texture
+		*\return		Les pixels
+		*/
+		C3D_API Castor::PxBufferBaseSPtr GetImagePixels();
+		/**
+		*\~english
+		*\brief		Retrieves the texture image size (in bytes)
+		*\return		The size
+		*\~french
+		*\brief		Récupère la taille de l'image de la texture (en octets)
+		*\return		La taille
+		*/
+		C3D_API uint32_t GetImageSize()const;
+		/**
+		*\~english
+		*\brief		Retrieves the texture image width
+		*\return		The width
+		*\~french
+		*\brief		Récupère la largeur de l'image de la texture
+		*\return		La largeur
+		*/
+		C3D_API uint32_t GetWidth()const;
+		/**
+		*\~english
+		*\brief		Retrieves the texture image height
+		*\return		The height
+		*\~french
+		*\brief		Récupère la hauteur de l'image de la texture
+		*\return		La hauteur
+		*/
+		C3D_API uint32_t GetHeight()const;
+		/**
+		*\~english
+		*\brief		Retrieves the texture image pixel format
+		*\return		The pixel format
+		*\~french
+		*\brief		Récupère le format des pixels de l'image de la texture
+		*\return		Le format des pixels
+		*/
+		C3D_API Castor::ePIXEL_FORMAT GetPixelFormat()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the texture file path
@@ -394,33 +497,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the texture dimension
-		 *\return		The texture dimension
-		 *\~french
-		 *\brief		Récupère la dimension de la texture
-		 *\return		La dimension de la texture
-		 */
-		eTEXTURE_DIMENSION GetDimension()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture mapping mode
-		 *\return		The texture mapping mode
-		 *\~french
-		 *\brief		Récupère le mode mappage de la texture
-		 *\return		Le mode mappage de la texture
-		 */
-		eTEXTURE_MAP_MODE GetMappingMode()const;
-		/**
-		 *\~english
-		 *\brief		Defines the texture mapping mode
-		 *\param[in]	p_mode	The texture mapping mode
-		 *\~french
-		 *\brief		Définit le mode de mappage de la texture
-		 *\param[in]	p_mode	Le mode de mappage de la texture
-		 */
-		void SetMappingMode( eTEXTURE_MAP_MODE p_mode );
-		/**
-		 *\~english
 		 *\brief		Sets the target holding the texture
 		 *\param[in]	p_pTarget	The new value
 		 *\~french
@@ -443,78 +519,6 @@ namespace Castor3D
 		{
 			m_pSampler = p_pSampler;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image buffer
-		 *\return		The buffer
-		 *\~french
-		 *\brief		Récupère le buffer de l'image de la texture
-		 *\return		Le buffer
-		 */
-		uint8_t const * GetImageBuffer()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image buffer
-		 *\return		The buffer
-		 *\~french
-		 *\brief		Récupère le buffer de l'image de la texture
-		 *\return		Le buffer
-		 */
-		uint8_t * GetImageBuffer();
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image pixels
-		 *\return		The pixels
-		 *\~french
-		 *\brief		Récupère les pixels de l'image de la texture
-		 *\return		Les pixels
-		 */
-		Castor::PxBufferBaseSPtr const GetImagePixels()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image pixels
-		 *\return		The pixels
-		 *\~french
-		 *\brief		Récupère les pixels de l'image de la texture
-		 *\return		Les pixels
-		 */
-		Castor::PxBufferBaseSPtr GetImagePixels();
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image size (in bytes)
-		 *\return		The size
-		 *\~french
-		 *\brief		Récupère la taille de l'image de la texture (en octets)
-		 *\return		La taille
-		 */
-		uint32_t GetImageSize()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image width
-		 *\return		The width
-		 *\~french
-		 *\brief		Récupère la largeur de l'image de la texture
-		 *\return		La largeur
-		 */
-		uint32_t GetWidth()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image height
-		 *\return		The height
-		 *\~french
-		 *\brief		Récupère la hauteur de l'image de la texture
-		 *\return		La hauteur
-		 */
-		uint32_t GetHeight()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image pixel format
-		 *\return		The pixel format
-		 *\~french
-		 *\brief		Récupère le format des pixels de l'image de la texture
-		 *\return		Le format des pixels
-		 */
-		Castor::ePIXEL_FORMAT GetPixelFormat()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the RGB blend parameter
@@ -628,21 +632,9 @@ namespace Castor3D
 		{
 			return m_pRenderTarget.lock();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Engine
-		 *\~french
-		 *\brief		Récupère l'Engine
-		 */
-		virtual Engine * GetEngine()const
-		{
-			return m_engine;
-		}
 
 	private:
 		friend class TextureRenderer;
-		//!\~english The core engine	\~french Le moteur
-		Engine * m_engine;
 		//!\~english The unit index inside it's pass	\~french L'index de l'unité dans sa passe
 		uint32_t m_uiIndex;
 		//!\see eTEXTURE_CHANNEL	\~english The unit channel inside it's pass	\~french Le canal de l'unité dans sa passe

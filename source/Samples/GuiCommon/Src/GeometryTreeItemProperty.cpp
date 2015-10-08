@@ -16,7 +16,7 @@ namespace GuiCommon
 	}
 
 	GeometryTreeItemProperty::GeometryTreeItemProperty( bool p_editable, Castor3D::GeometrySPtr p_pGeometry )
-		: TreeItemProperty( p_pGeometry->GetScene()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_GEOMETRY )
+		: TreeItemProperty( p_pGeometry->GetScene()->GetOwner(), p_editable, ePROPERTY_DATA_TYPE_GEOMETRY )
 		, m_pGeometry( p_pGeometry )
 	{
 		PROPERTY_CATEGORY_GEOMETRY = _( "Geometry: " );

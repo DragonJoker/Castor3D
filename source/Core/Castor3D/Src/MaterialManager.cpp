@@ -13,8 +13,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	MaterialManager::MaterialManager( Engine * p_engine )
-		:	 m_engine( p_engine )
+	MaterialManager::MaterialManager( Engine & p_engine )
+		: OwnedBy< Engine >( p_engine )
 	{
 	}
 
@@ -29,13 +29,13 @@ namespace Castor3D
 
 		if ( !m_defaultMaterial )
 		{
-			m_defaultMaterial = std::make_shared< Material >( m_engine, Material::DefaultMaterialName );
+			m_defaultMaterial = std::make_shared< Material >( *GetOwner(), Material::DefaultMaterialName );
 			m_defaultMaterial->CreatePass();
 			m_defaultMaterial->GetPass( 0 )->SetTwoSided( true );
 			MaterialCollection::insert( Material::DefaultMaterialName, m_defaultMaterial );
 		}
 
-		m_engine->PostEvent( MakeInitialiseEvent( *m_defaultMaterial ) );
+		GetOwner()->PostEvent( MakeInitialiseEvent( *m_defaultMaterial ) );
 	}
 
 	void MaterialManager::Cleanup()
@@ -44,7 +44,7 @@ namespace Castor3D
 
 		std::for_each( begin(), end(), [&]( std::pair< String, MaterialSPtr > p_pair )
 		{
-			m_engine->PostEvent( MakeCleanupEvent( *p_pair.second ) );
+			GetOwner()->PostEvent( MakeCleanupEvent( *p_pair.second ) );
 		} );
 
 		MaterialCollection::unlock();
@@ -73,14 +73,14 @@ namespace Castor3D
 
 	bool MaterialManager::Write( TextFile & p_file )const
 	{
-		m_engine->GetSamplerManager().lock();
+		GetOwner()->GetSamplerManager().lock();
 
-		for ( SamplerCollection::TObjPtrMapIt l_it = m_engine->GetSamplerManager().begin(); l_it != m_engine->GetSamplerManager().end(); ++l_it )
+		for ( SamplerCollection::TObjPtrMapIt l_it = GetOwner()->GetSamplerManager().begin(); l_it != GetOwner()->GetSamplerManager().end(); ++l_it )
 		{
 			Sampler::TextLoader()( *l_it->second, p_file );
 		}
 
-		m_engine->GetSamplerManager().unlock();
+		GetOwner()->GetSamplerManager().unlock();
 		MaterialCollection::lock();
 		bool l_return = true;
 		MaterialCollectionConstIt l_it = begin();
@@ -107,7 +107,7 @@ namespace Castor3D
 
 	bool MaterialManager::Read( TextFile & p_file )
 	{
-		SceneFileParser l_parser( m_engine );
+		SceneFileParser l_parser( *GetOwner() );
 		l_parser.ParseFile( p_file );
 		return true;
 	}

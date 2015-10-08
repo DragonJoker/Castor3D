@@ -30,7 +30,7 @@ namespace GlRender
 		: public Castor3D::RenderSystem
 	{
 	public:
-		GlRenderSystem( Castor3D::Engine * p_engine );
+		GlRenderSystem( Castor3D::Engine & p_engine );
 		virtual ~GlRenderSystem();
 
 		void CheckShaderSupport();	//!< Checks the different shader types support.

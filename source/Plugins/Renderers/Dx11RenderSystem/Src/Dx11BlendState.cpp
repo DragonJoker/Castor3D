@@ -9,7 +9,7 @@ using namespace Castor;
 namespace Dx11Render
 {
 	DxBlendState::DxBlendState( DxRenderSystem * p_pRenderSystem )
-		: BlendState()
+		: BlendState( *p_pRenderSystem->GetOwner() )
 		, m_renderSystem( p_pRenderSystem )
 		, m_pBlendState( NULL )
 	{

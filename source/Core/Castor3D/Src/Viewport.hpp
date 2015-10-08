@@ -23,6 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Angle.hpp>
 #include <PlaneEquation.hpp>
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -38,6 +39,7 @@ namespace Castor3D
 	\remark		Donne le type de projection FOV, ...
 	*/
 	class Viewport
+		: public Castor::OwnedBy< Engine >
 	{
 	public:
 		C3D_API static const Castor::String string_type[2];
@@ -138,47 +140,7 @@ namespace Castor3D
 		 *\param[in]	p_pMaterial		SceneNode parent
 		 *\param[in]	p_type		Type de projection
 		 */
-		C3D_API Viewport( Engine * p_engine, Castor::Size const & p_size, eVIEWPORT_TYPE p_type );
-		/**
-		 *\~english
-		 *\brief		Copy constructor
-		 *\param[in]	p_object	The object to copy
-		 *\~french
-		 *\brief		Constructeur par copie
-		 *\param[in]	p_object	L'objet à copier
-		 */
-		C3D_API Viewport( Viewport const & p_object );
-		/**
-		 *\~english
-		 *\brief		Move constructor
-		 *\param[in]	p_object	The object to move
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_object	L'objet à déplacer
-		 */
-		C3D_API Viewport( Viewport && p_object );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	p_object	The object to copy
-		 *\return		A reference to this object
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_object	L'objet à copier
-		 *\return		Une référence sur cet objet
-		 */
-		C3D_API Viewport & operator=( Viewport const & p_object );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	p_object	The object to move
-		 *\return		A reference to this object
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_object	L'objet à déplacer
-		 *\return		Une référence sur cet objet
-		 */
-		C3D_API Viewport & operator=( Viewport && p_object );
+		C3D_API Viewport( Engine & p_engine, Castor::Size const & p_size, eVIEWPORT_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -507,18 +469,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the engine
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le moteur
-		 *\return		La valeur
-		 */
-		inline Engine * GetEngine()const
-		{
-			return m_engine;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the projection matrix
 		 *\return		The matrix
 		 *\~french
@@ -551,8 +501,6 @@ namespace Castor3D
 		Castor::Size m_size;
 		//!\~english The display window ratio (4:3, 16:9, ...)	\~french Ratio d'affichage
 		real m_ratio;
-		//!\~english The core engine	\~french Le moteur
-		Engine * m_engine;
 		//!\~english Tells the view frustum's planes need to be updated	\~french Dit que les plans du frustum de vue doivent être mis à jour
 		bool m_modified;
 		//!\~english The view frustum's planes	\~french Les plans du frustum de vue

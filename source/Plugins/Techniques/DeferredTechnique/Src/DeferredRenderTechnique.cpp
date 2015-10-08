@@ -343,9 +343,9 @@ namespace Deferred
 
 		m_lightPassBufDepth = m_lightPassFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24S8 );
 		m_lightPassDepthAttach = m_pRenderTarget->CreateAttachment( m_lightPassBufDepth );
-		m_lightPassShaderProgram = m_engine->GetShaderManager().GetNewProgram();
+		m_lightPassShaderProgram = GetOwner()->GetShaderManager().GetNewProgram();
 
-		m_geometryPassDsState = m_engine->CreateDepthStencilState( cuT( "GeometricPassState" ) );
+		m_geometryPassDsState = GetOwner()->CreateDepthStencilState( cuT( "GeometricPassState" ) );
 		m_geometryPassDsState->SetStencilTest( true );
 		m_geometryPassDsState->SetStencilReadMask( 0xFFFFFFFF );
 		m_geometryPassDsState->SetStencilWriteMask( 0xFFFFFFFF );
@@ -362,7 +362,7 @@ namespace Deferred
 		m_geometryPassDsState->SetDepthTest( true );
 		m_geometryPassDsState->SetDepthMask( eWRITING_MASK_ALL );
 
-		m_lightPassDsState = m_engine->CreateDepthStencilState( cuT( "LightPassState" ) );
+		m_lightPassDsState = GetOwner()->CreateDepthStencilState( cuT( "LightPassState" ) );
 		m_lightPassDsState->SetStencilTest( true );
 		m_lightPassDsState->SetStencilReadMask( 0xFFFFFFFF );
 		m_lightPassDsState->SetStencilWriteMask( 0 );
@@ -405,7 +405,7 @@ namespace Deferred
 
 		m_pGeometryBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
 
-		m_viewport = std::make_shared< Viewport >( m_renderSystem->GetEngine(), Size( 10, 10 ), eVIEWPORT_TYPE_2D );
+		m_viewport = std::make_shared< Viewport >( *m_renderSystem->GetOwner(), Size( 10, 10 ), eVIEWPORT_TYPE_2D );
 		m_viewport->SetLeft( real( 0.0 ) );
 		m_viewport->SetRight( real( 1.0 ) );
 		m_viewport->SetTop( real( 1.0 ) );
@@ -447,8 +447,8 @@ namespace Deferred
 				m_lightPassShaderProgram->CreateFrameVariable( g_strNames[i], eSHADER_TYPE_PIXEL )->SetValue( m_lightPassTextures[i].get() );
 			}
 
-			m_lightPassMatrices = m_engine->GetShaderManager().CreateMatrixBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
-			FrameVariableBufferSPtr l_scene = m_engine->GetShaderManager().CreateSceneBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL );
+			m_lightPassMatrices = GetOwner()->GetShaderManager().CreateMatrixBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
+			FrameVariableBufferSPtr l_scene = GetOwner()->GetShaderManager().CreateSceneBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL );
 			m_lightPassScene = l_scene;
 
 			m_pGeometryBuffers->Create();

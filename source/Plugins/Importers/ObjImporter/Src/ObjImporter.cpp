@@ -28,10 +28,10 @@ using namespace Castor;
 
 namespace Obj
 {
-	ObjImporter::ObjImporter( Engine * p_pEngine )
-		:	Importer( p_pEngine )
-		,	m_collImages( p_pEngine->GetImageManager() )
-		,	m_pFile( nullptr )
+	ObjImporter::ObjImporter( Engine & p_pEngine )
+		: Importer( p_pEngine )
+		, m_collImages( p_pEngine.GetImageManager() )
+		, m_pFile( nullptr )
 	{
 	}
 
@@ -43,7 +43,7 @@ namespace Obj
 		if ( l_pMesh )
 		{
 			l_pMesh->GenerateBuffers();
-			l_pScene = std::make_shared< Scene >( m_engine, m_engine->GetLightFactory(), cuT( "Scene_OBJ" ) );
+			l_pScene = std::make_shared< Scene >( *GetOwner(), GetOwner()->GetLightFactory(), cuT( "Scene_OBJ" ) );
 			SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 			GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
 			l_pGeometry->AttachTo( l_pNode );
@@ -87,15 +87,15 @@ namespace Obj
 
 	void ObjImporter::DoAddTexture( String const & p_strValue, PassSPtr p_pPass, eTEXTURE_CHANNEL p_eChannel )
 	{
-		Point3f		l_offset		( 0, 0, 0 );
-		Point3f		l_scale			( 1, 1, 1 );
-		Point3f		l_turbulence	( 0, 0, 0 );
-		ImageSPtr	l_pImage;
-		String		l_strValue		( p_strValue );
+		Point3f l_offset( 0, 0, 0 );
+		Point3f l_scale( 1, 1, 1 );
+		Point3f l_turbulence( 0, 0, 0 );
+		ImageSPtr l_pImage;
+		String l_strValue( p_strValue );
 		DoParseTexParams( l_strValue, l_offset.ptr(), l_scale.ptr(), l_turbulence.ptr() );
-		m_mapOffsets[p_pPass]		= l_offset;
-		m_mapScales[p_pPass]		= l_scale;
-		m_mapTurbulences[p_pPass]	= l_turbulence;
+		m_mapOffsets[p_pPass] = l_offset;
+		m_mapScales[p_pPass] = l_scale;
+		m_mapTurbulences[p_pPass] = l_turbulence;
 		Logger::LogDebug( StringStream() << cuT( "-	Texture :    " ) + l_strValue );
 		Logger::LogDebug( StringStream() << cuT( "-	Offset :     " ) << l_offset );
 		Logger::LogDebug( StringStream() << cuT( "-	Scale :      " ) << l_scale );
@@ -124,7 +124,7 @@ namespace Obj
 		if ( l_pImage && p_pPass )
 		{
 			TextureUnitSPtr l_pTexture = p_pPass->AddTextureUnit();
-			StaticTextureSPtr l_pStaTexture = m_engine->GetRenderSystem()->CreateStaticTexture();
+			StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
 			l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
 			l_pStaTexture->SetImage( l_pImage->GetPixels() );
 			l_pTexture->SetTexture( l_pStaTexture );
@@ -135,29 +135,29 @@ namespace Obj
 
 	MeshSPtr ObjImporter::DoReadObjFile()
 	{
-		String						l_name = m_fileName.GetFileName();
-		String						l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
-		MeshSPtr					l_pReturn = m_engine->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName );
-		String						l_strSection;
-		String						l_strValue;
-		String						l_strLine;
-		String						l_strFace;
-		StringArray					l_arrayValues;
-		StringArray					l_arrayIndex;
-		StringArray					l_arraySplitted;
-		StringArray					l_arrayFace;
-		MaterialSPtr				l_pMaterial;
-		UvArray						l_arrayAllTex;
-		NormalArray					l_arrayAllNml;
-		VertexArray					l_arrayAllVtx;
-		FaceArrayGrpMap::iterator	l_itGroup;
-		stFACE_INDICES				l_face;
-		stVERTEX					l_vertex;
-		stUV						l_uv;
-		stNORMAL					l_normal;
-		stGROUP 		*			l_pGroup		= NULL;
-		MaterialManager 	&		l_mtlManager	= m_engine->GetMaterialManager();
-		FaceArray 		*			l_pArrayIndex	= NULL;
+		String l_name = m_fileName.GetFileName();
+		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
+		MeshSPtr l_pReturn = GetOwner()->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName );
+		String l_strSection;
+		String l_strValue;
+		String l_strLine;
+		String l_strFace;
+		StringArray l_arrayValues;
+		StringArray l_arrayIndex;
+		StringArray l_arraySplitted;
+		StringArray l_arrayFace;
+		MaterialSPtr l_pMaterial;
+		UvArray l_arrayAllTex;
+		NormalArray l_arrayAllNml;
+		VertexArray l_arrayAllVtx;
+		FaceArrayGrpMap::iterator l_itGroup;
+		stFACE_INDICES l_face;
+		stVERTEX l_vertex;
+		stUV l_uv;
+		stNORMAL l_normal;
+		stGROUP * l_pGroup = NULL;
+		MaterialManager & l_mtlManager = GetOwner()->GetMaterialManager();
+		FaceArray * l_pArrayIndex = NULL;
 
 		while ( m_pFile->IsOk() )
 		{
@@ -347,7 +347,6 @@ namespace Obj
 		return l_uiReturn;
 	}
 
-	//VertexSPtr ObjImporter::DoTreatFace( stFACE_INDICES & p_face, std::size_t p_uiIndex, String const & p_strFace, stGROUP * p_pGroup, Obj::VertexArray const & p_arrayVtx, NormalArray const & p_arrayNml, UvArray const & p_arrayTex )
 	uint32_t ObjImporter::DoTreatFace( stFACE_INDICES & p_face, std::size_t p_uiIndex, String const & p_strFace, stGROUP * p_pGroup, Obj::VertexArray const & p_arrayVtx, NormalArray const & p_arrayNml, UvArray const & p_arrayTex )
 	{
 		//	VertexSPtr l_pReturn;
@@ -374,7 +373,7 @@ namespace Obj
 
 			p_face.m_uiVertexIndex[p_uiIndex] = l_it->second;
 			p_pGroup->m_arraySubVtx.push_back( p_arrayVtx[l_uiIndex] );
-			//		l_pReturn = m_pSubmesh->AddPoint( p_arrayVtx[l_uiIndex].m_val[0], p_arrayVtx[l_uiIndex].m_val[1], p_arrayVtx[l_uiIndex].m_val[2] );
+			//l_pReturn = m_pSubmesh->AddPoint( p_arrayVtx[l_uiIndex].m_val[0], p_arrayVtx[l_uiIndex].m_val[1], p_arrayVtx[l_uiIndex].m_val[2] );
 
 			if ( l_arrayIndex.size() >= 2 )
 			{
@@ -386,7 +385,7 @@ namespace Obj
 					// We treat texture coordinates
 					l_uiIndex = DoRetrieveIndex( l_arrayIndex[1], uint32_t( p_arrayTex.size() ) );
 					p_pGroup->m_arrayTex.push_back( p_arrayTex[l_uiIndex] );
-					//				l_pReturn->SetTexCoord( p_arrayTex[l_uiIndex].m_val[0], p_arrayTex[l_uiIndex].m_val[1] );
+					//l_pReturn->SetTexCoord( p_arrayTex[l_uiIndex].m_val[0], p_arrayTex[l_uiIndex].m_val[1] );
 					stUVW l_uvw = { p_arrayTex[l_uiIndex].m_val[0], p_arrayTex[l_uiIndex].m_val[1], 0.0 };
 					p_pGroup->m_arraySubTex.push_back( l_uvw );
 				}
@@ -402,7 +401,7 @@ namespace Obj
 						// We treat the found normal
 						l_uiIndex = DoRetrieveIndex( l_arrayIndex[2], uint32_t( p_arrayNml.size() ) );
 						p_pGroup->m_arrayNml.push_back( p_arrayNml[l_uiIndex] );
-						//					l_pReturn->SetNormal( p_arrayNml[l_uiIndex].m_val[0], p_arrayNml[l_uiIndex].m_val[1], p_arrayNml[l_uiIndex].m_val[2] );
+						//l_pReturn->SetNormal( p_arrayNml[l_uiIndex].m_val[0], p_arrayNml[l_uiIndex].m_val[1], p_arrayNml[l_uiIndex].m_val[2] );
 						p_pGroup->m_arraySubNml.push_back( p_arrayNml[l_uiIndex] );
 					}
 				}
@@ -446,25 +445,25 @@ namespace Obj
 						stTHREAD_CONTEXT l_context = { l_strName, p_pMesh->CreateSubmesh(), p_pGroup->m_pMaterial, p_pGroup->m_arraySubVtx, p_pGroup->m_arraySubNml, p_pGroup->m_arraySubTex, p_pGroup->m_arrayFaces };
 						m_pThread = std::make_shared< std::thread >( [&]( stTHREAD_CONTEXT p_context )
 						{
-							Point3f		l_ptOffset;
-							Point3f		l_ptScale;
-							Point3f		l_ptTurb;
-							Point3f		l_ptDefaultOffset( 0, 0, 0 );
-							Point3f		l_ptDefaultScale( 1, 1, 1 );
-							Point3f		l_ptDefaultTurb( 0, 0, 0 );
-							String		l_strName;
-							VertexSPtr	l_pVertex;
-							Point2r		l_ptTex;
-							Coords3r	l_ptNml;
-							Coords3r	l_ptTan;
+							Point3f l_ptOffset;
+							Point3f l_ptScale;
+							Point3f l_ptTurb;
+							Point3f l_ptDefaultOffset( 0, 0, 0 );
+							Point3f l_ptDefaultScale( 1, 1, 1 );
+							Point3f l_ptDefaultTurb( 0, 0, 0 );
+							String l_strName;
+							VertexSPtr l_pVertex;
+							Point2r l_ptTex;
+							Coords3r l_ptNml;
+							Coords3r l_ptTan;
 							Logger::LogDebug( cuT( "Submesh :         " ) + p_context.m_strName );
 							Logger::LogDebug( cuT( "-	Vertices :    " ) + string::to_string( uint32_t( p_context.m_arrayVtx.size() ) ) );
 							Logger::LogDebug( cuT( "-	Material :    " ) + p_context.m_pMaterial->GetName() );
 							// Valid because for each pass of each material we have an entry in those 3 maps
 							p_context.m_pSubmesh->SetDefaultMaterial( p_context.m_pMaterial );
-							l_ptOffset	= m_mapOffsets		[p_context.m_pMaterial->GetPass( 0 )];
-							l_ptScale	= m_mapScales		[p_context.m_pMaterial->GetPass( 0 )];
-							l_ptTurb	= m_mapTurbulences	[p_context.m_pMaterial->GetPass( 0 )];
+							l_ptOffset	= m_mapOffsets[p_context.m_pMaterial->GetPass( 0 )];
+							l_ptScale	= m_mapScales[p_context.m_pMaterial->GetPass( 0 )];
+							l_ptTurb	= m_mapTurbulences[p_context.m_pMaterial->GetPass( 0 )];
 							Castor3D::stVERTEX_GROUP l_submesh = { uint32_t( p_context.m_arrayVtx.size() ), p_context.m_arrayVtx[0].m_val, NULL, NULL, NULL, NULL };
 
 							if ( p_context.m_arrayUvw.size() == p_context.m_arrayVtx.size() )
@@ -638,17 +637,17 @@ namespace Obj
 
 	void ObjImporter::DoReadMaterials( Path const & p_pathMatFile )
 	{
-		String				l_strLine;
-		String				l_strSection;
-		String				l_strValue;
-		StringArray			l_arraySplitted;
-		PassSPtr			l_pPass;
-		MaterialSPtr		l_pMaterial;
-		float				l_components[3];
-		float				l_fAlpha		= 1.0f;
-		bool				l_bOpaFound		= false;
-		MaterialManager &	l_mtlManager	= m_engine->GetMaterialManager();
-		TextFile			l_matFile		( p_pathMatFile, File::eOPEN_MODE_READ );
+		String l_strLine;
+		String l_strSection;
+		String l_strValue;
+		StringArray l_arraySplitted;
+		PassSPtr l_pPass;
+		MaterialSPtr l_pMaterial;
+		float l_components[3];
+		float l_fAlpha = 1.0f;
+		bool l_bOpaFound = false;
+		MaterialManager & l_mtlManager = GetOwner()->GetMaterialManager();
+		TextFile l_matFile( p_pathMatFile, File::eOPEN_MODE_READ );
 
 		while ( l_matFile.IsOk() )
 		{
@@ -691,10 +690,10 @@ namespace Obj
 
 						if ( !l_pMaterial )
 						{
-							l_pMaterial = std::make_shared< Material >( m_engine, l_strValue );
+							l_pMaterial = std::make_shared< Material >( *GetOwner(), l_strValue );
 							m_arrayLoadedMaterials.push_back( l_pMaterial );
 							l_mtlManager.insert( l_strValue, l_pMaterial );
-							m_engine->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_pMaterial ) );
+							GetOwner()->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_pMaterial ) );
 						}
 
 						l_pPass = l_pMaterial->CreatePass();

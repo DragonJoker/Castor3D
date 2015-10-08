@@ -21,6 +21,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "MovableObject.hpp"
 #include "LightCategory.hpp"
 
+#include <OwnedBy.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -35,6 +37,7 @@ namespace Castor3D
 	*/
 	class C3D_API Light
 		: public MovableObject
+		, public Castor::OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -440,20 +443,8 @@ namespace Castor3D
 		{
 			SetEnabled( false );
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Engine
-		 *\~french
-		 *\brief		Récupère l'Engine
-		 */
-		virtual Engine * GetEngine()const
-		{
-			return m_engine;
-		}
 
 	protected:
-		//!\~english The core engine	\~french Le moteur
-		Engine * m_engine;
 		//!\~english Tells the light is enabled	\~french Dit si la lumière est active ou pas
 		bool m_enabled;
 		//!\~english The Light category that effectively holds light data	\~french la light category contenant les données de la lumière

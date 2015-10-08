@@ -22,7 +22,7 @@ namespace GuiCommon
 	}
 
 	SubmeshTreeItemProperty::SubmeshTreeItemProperty( bool p_editable, GeometrySPtr p_pGeometry, SubmeshSPtr p_pSubmesh )
-		: TreeItemProperty( p_pSubmesh->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_SUBMESH )
+		: TreeItemProperty( p_pSubmesh->GetOwner(), p_editable, ePROPERTY_DATA_TYPE_SUBMESH )
 		, m_pGeometry( p_pGeometry )
 		, m_pSubmesh( p_pSubmesh )
 	{
@@ -70,7 +70,7 @@ namespace GuiCommon
 
 		DoApplyChange( [p_name, l_geometry, l_submesh]()
 		{
-			MaterialManager & l_manager = l_submesh->GetEngine()->GetMaterialManager();
+			MaterialManager & l_manager = l_submesh->GetOwner()->GetMaterialManager();
 			MaterialSPtr l_material = l_manager.find( p_name );
 
 			if ( l_material )

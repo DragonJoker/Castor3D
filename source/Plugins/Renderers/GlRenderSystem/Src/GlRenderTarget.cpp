@@ -14,7 +14,7 @@ using namespace Castor3D;
 using namespace Castor;
 
 GlRenderTarget::GlRenderTarget( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem, eTARGET_TYPE p_type )
-	: RenderTarget( p_pRenderSystem->GetEngine(), p_type )
+	: RenderTarget( *p_pRenderSystem->GetOwner(), p_type )
 	, m_gl( p_gl )
 	, m_renderSystem( p_pRenderSystem )
 {
@@ -50,5 +50,5 @@ TextureAttachmentSPtr GlRenderTarget::CreateAttachment( DynamicTextureSPtr p_pTe
 
 FrameBufferSPtr GlRenderTarget::CreateFrameBuffer()const
 {
-	return std::make_shared< GlFrameBuffer >( m_gl, m_renderSystem->GetEngine() );
+	return std::make_shared< GlFrameBuffer >( m_gl, *m_renderSystem->GetOwner() );
 }

@@ -28,7 +28,7 @@ C3D_Gl_API String GetName()
 
 C3D_Gl_API RenderSystem * CreateRenderSystem( Engine * p_engine )
 {
-	return new GlRenderSystem( p_engine );
+	return new GlRenderSystem( *p_engine );
 }
 
 C3D_Gl_API void DestroyRenderSystem( RenderSystem * p_pRenderSystem )

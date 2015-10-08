@@ -12,7 +12,7 @@ using namespace Castor;
 namespace Dx11Render
 {
 	DxFrameBuffer::DxFrameBuffer( DxRenderSystem * p_pRenderSystem )
-		: FrameBuffer( p_pRenderSystem->GetEngine() )
+		: FrameBuffer( *p_pRenderSystem->GetOwner() )
 		, m_renderSystem( p_pRenderSystem )
 		, m_pOldDepthStencilView( NULL )
 	{

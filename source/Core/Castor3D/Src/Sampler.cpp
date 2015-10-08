@@ -342,8 +342,8 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	Sampler::Sampler( Engine * p_engine, String const & p_name )
-		: m_engine( p_engine )
+	Sampler::Sampler( Engine & p_engine, String const & p_name )
+		: OwnedBy< Engine >( p_engine )
 		, m_rMinLod( -1000 )
 		, m_rMaxLod( 1000 )
 		, m_clrBorderColour( Colour::from_components( 0, 0, 0, 0 ) )

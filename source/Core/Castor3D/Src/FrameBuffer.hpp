@@ -20,6 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 #include <Rectangle.hpp>
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -35,6 +36,7 @@ namespace Castor3D
 	\remark		Un tampon d'image est là où une cible de rendu fait son rendu
 	*/
 	class FrameBuffer
+		: public Castor::OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -45,7 +47,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\para[in]		p_engine	Le moteur
 		 */
-		C3D_API FrameBuffer( Engine * p_engine );
+		C3D_API FrameBuffer( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -456,8 +458,6 @@ namespace Castor3D
 		RboAttachMap m_mapRbo;
 		//!\~english Attached textures map	\~french Map des textures attachées
 		TexAttachMap m_mapTex;
-		//!\~english The engine	\~french Le moteur
-		Engine * m_engine;
 		//!\~english All attchments	\~french Toutes les attaches
 		AttachArray m_arrayAttaches;
 	};

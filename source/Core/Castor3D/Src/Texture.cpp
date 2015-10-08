@@ -13,7 +13,7 @@ namespace Castor3D
 		, m_eMapMode( eTEXTURE_MAP_MODE_NONE )
 		, m_uiIndex( 0 )
 		, m_renderSystem( p_pRenderSystem )
-		, m_pSampler( p_pRenderSystem->GetEngine()->GetDefaultSampler() )
+		, m_pSampler( p_pRenderSystem->GetOwner()->GetDefaultSampler() )
 	{
 	}
 

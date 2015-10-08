@@ -21,6 +21,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "BinaryParser.hpp"
 
+#include <OwnedBy.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -36,6 +38,7 @@ namespace Castor3D
 	*/
 	class RenderTarget
 		: public std::enable_shared_from_this< RenderTarget >
+		, public Castor::OwnedBy< Engine >
 	{
 	public:
 		/*!
@@ -170,7 +173,7 @@ namespace Castor3D
 		 *\param[in]	p_pRoot			Le moteur
 		 *\param[in]	p_eTargetType	Le type de render target
 		 */
-		C3D_API RenderTarget( Engine * p_pRoot, eTARGET_TYPE p_eTargetType = eTARGET_TYPE_WINDOW );
+		C3D_API RenderTarget( Engine & p_pRoot, eTARGET_TYPE p_eTargetType = eTARGET_TYPE_WINDOW );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -678,16 +681,6 @@ namespace Castor3D
 		{
 			return m_eTargetType;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Engine
-		 *\~french
-		 *\brief		Récupère l'Engine
-		 */
-		virtual Engine * GetEngine()const
-		{
-			return m_engine;
-		}
 
 	private:
 		C3D_API void DoRender( stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, double p_dFrameTime );
@@ -697,8 +690,6 @@ namespace Castor3D
 		static const Castor::String DefaultSamplerName;
 
 	protected:
-		//!\~english The core engine	\~french Le moteur
-		Engine * m_engine;
 		//!\~english The render target type	\~french Type de RenderTarget
 		eTARGET_TYPE m_eTargetType;
 		//!\~english Tells if the target is initalised	\~french Dit si la cible est initialisée

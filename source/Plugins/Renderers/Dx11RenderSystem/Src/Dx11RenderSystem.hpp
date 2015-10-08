@@ -31,7 +31,7 @@ namespace Dx11Render
 		:	public Castor3D::RenderSystem
 	{
 	public:
-		DxRenderSystem( Castor3D::Engine * p_engine );
+		DxRenderSystem( Castor3D::Engine & p_engine );
 		virtual ~DxRenderSystem();
 
 		void CheckShaderSupport();

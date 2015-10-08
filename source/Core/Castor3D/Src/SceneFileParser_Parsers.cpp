@@ -65,7 +65,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootMtlFile )
 		TextFile l_fileMat( l_path, File::eOPEN_MODE_READ, File::eENCODING_MODE_ASCII );
 		Logger::LogInfo( cuT( "Loading materials file : " ) + l_path );
 
-		if ( l_pContext->m_pParser->GetEngine()->GetMaterialManager().Read( l_fileMat ) )
+		if ( l_pContext->m_pParser->GetOwner()->GetMaterialManager().Read( l_fileMat ) )
 		{
 			Logger::LogInfo( cuT( "Materials read" ) );
 		}
@@ -81,7 +81,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootScene )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
-	l_pContext->pScene = l_pContext->m_pParser->GetEngine()->CreateScene( p_params[0]->Get( l_name ) );
+	l_pContext->pScene = l_pContext->m_pParser->GetOwner()->CreateScene( p_params[0]->Get( l_name ) );
 	l_pContext->mapScenes.insert( std::make_pair( l_name, l_pContext->pScene ) );
 }
 END_ATTRIBUTE_PUSH( eSECTION_SCENE )
@@ -98,12 +98,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootMaterial )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
-	l_pContext->pMaterial = l_pContext->m_pParser->GetEngine()->GetMaterialManager().find( p_params[0]->Get( l_name ) );
+	l_pContext->pMaterial = l_pContext->m_pParser->GetOwner()->GetMaterialManager().find( p_params[0]->Get( l_name ) );
 
 	if ( !l_pContext->pMaterial )
 	{
-		l_pContext->pMaterial = std::make_shared< Material >( l_pContext->m_pParser->GetEngine(), l_name );
-		l_pContext->m_pParser->GetEngine()->GetMaterialManager().insert( l_name, l_pContext->pMaterial );
+		l_pContext->pMaterial = std::make_shared< Material >( *l_pContext->m_pParser->GetOwner(), l_name );
+		l_pContext->m_pParser->GetOwner()->GetMaterialManager().insert( l_name, l_pContext->pMaterial );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_MATERIAL )
@@ -118,7 +118,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootWindow )
 	}
 	else
 	{
-		l_pContext->pWindow = l_pContext->m_pParser->GetEngine()->CreateRenderWindow();
+		l_pContext->pWindow = l_pContext->m_pParser->GetOwner()->CreateRenderWindow();
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_WINDOW )
@@ -127,7 +127,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootPanelOverlay )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
-	l_pContext->pOverlay = l_pContext->m_pParser->GetEngine()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, nullptr );
+	l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, nullptr );
 	l_pContext->pOverlay->SetVisible( false );
 }
 END_ATTRIBUTE_PUSH( eSECTION_PANEL_OVERLAY )
@@ -136,7 +136,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootBorderPanelOverlay )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
-	l_pContext->pOverlay = l_pContext->m_pParser->GetEngine()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_BORDER_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, nullptr );
+	l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_BORDER_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, nullptr );
 	l_pContext->pOverlay->SetVisible( false );
 }
 END_ATTRIBUTE_PUSH( eSECTION_BORDER_PANEL_OVERLAY )
@@ -145,7 +145,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootTextOverlay )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
-	l_pContext->pOverlay = l_pContext->m_pParser->GetEngine()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_TEXT, p_params[0]->Get( l_name ), l_pContext->pOverlay, nullptr );
+	l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_TEXT, p_params[0]->Get( l_name ), l_pContext->pOverlay, nullptr );
 	l_pContext->pOverlay->SetVisible( false );
 }
 END_ATTRIBUTE_PUSH( eSECTION_TEXT_OVERLAY )
@@ -154,7 +154,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootSamplerState )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
-	l_pContext->pSampler = l_pContext->m_pParser->GetEngine()->CreateSampler( p_params[0]->Get( l_name ) );
+	l_pContext->pSampler = l_pContext->m_pParser->GetOwner()->CreateSampler( p_params[0]->Get( l_name ) );
 }
 END_ATTRIBUTE_PUSH( eSECTION_SAMPLER )
 
@@ -162,7 +162,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootDebugOverlays )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	bool l_value;
-	l_pContext->m_pParser->GetEngine()->ShowDebugOverlays( p_params[0]->Get( l_value ) );
+	l_pContext->m_pParser->GetOwner()->ShowDebugOverlays( p_params[0]->Get( l_value ) );
 }
 END_ATTRIBUTE_PUSH( eSECTION_SCENE )
 
@@ -172,7 +172,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_WindowRenderTarget )
 
 	if ( l_pContext->pWindow )
 	{
-		l_pContext->pRenderTarget = l_pContext->m_pParser->GetEngine()->CreateRenderTarget( eTARGET_TYPE_WINDOW );
+		l_pContext->pRenderTarget = l_pContext->m_pParser->GetOwner()->CreateRenderTarget( eTARGET_TYPE_WINDOW );
 	}
 	else
 	{
@@ -785,7 +785,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneImport )
 	}
 	else
 	{
-		Engine * l_pEngine = l_pContext->m_pParser->GetEngine();
+		Engine * l_pEngine = l_pContext->m_pParser->GetOwner();
 		ImporterPluginSPtr l_pPlugin;
 		ImporterSPtr l_pImporter;
 		ImporterPlugin::ExtensionArray l_arrayExtensions;
@@ -824,7 +824,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneBillboard )
 
 	if ( l_pContext->pScene )
 	{
-		l_pContext->pBillboards = l_pContext->m_pParser->GetEngine()->GetRenderSystem()->CreateBillboardsList( l_pContext->pScene );
+		l_pContext->pBillboards = l_pContext->m_pParser->GetOwner()->GetRenderSystem()->CreateBillboardsList( l_pContext->pScene );
 
 		if ( l_pContext->pBillboards )
 		{
@@ -867,7 +867,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ScenePanelOverlay )
 	if ( l_pContext->pScene )
 	{
 		String l_name;
-		l_pContext->pOverlay = l_pContext->m_pParser->GetEngine()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pScene );
+		l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pScene );
 		l_pContext->pOverlay->SetVisible( false );
 	}
 	else
@@ -884,7 +884,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneBorderPanelOverlay )
 	if ( l_pContext->pScene )
 	{
 		String l_name;
-		l_pContext->pOverlay = l_pContext->m_pParser->GetEngine()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_BORDER_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pScene );
+		l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_BORDER_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pScene );
 		l_pContext->pOverlay->SetVisible( false );
 	}
 	else
@@ -901,7 +901,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneTextOverlay )
 	if ( l_pContext->pScene )
 	{
 		String l_name;
-		l_pContext->pOverlay = l_pContext->m_pParser->GetEngine()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_TEXT, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pScene );
+		l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_TEXT, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pScene );
 		l_pContext->pOverlay->SetVisible( false );
 	}
 	else
@@ -1185,7 +1185,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ObjectMesh )
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	l_pContext->bBool1 = false;
 	p_params[0]->Get( l_pContext->strName2 );
-	l_pContext->pMesh = l_pContext->m_pParser->GetEngine()->GetMeshManager().find( l_pContext->strName2 );
+	l_pContext->pMesh = l_pContext->m_pParser->GetOwner()->GetMeshManager().find( l_pContext->strName2 );
 }
 END_ATTRIBUTE_PUSH( eSECTION_MESH )
 
@@ -1197,7 +1197,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ObjectMaterial )
 	{
 		if ( l_pContext->pGeometry->GetMesh() )
 		{
-			MaterialManager & l_manager = l_pContext->m_pParser->GetEngine()->GetMaterialManager();
+			MaterialManager & l_manager = l_pContext->m_pParser->GetOwner()->GetMaterialManager();
 			String l_name;
 			p_params[0]->Get( l_name );
 
@@ -1247,7 +1247,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ObjectMaterialsMaterial )
 	{
 		if ( l_pContext->pGeometry->GetMesh() )
 		{
-			MaterialManager & l_manager = l_pContext->m_pParser->GetEngine()->GetMaterialManager();
+			MaterialManager & l_manager = l_pContext->m_pParser->GetOwner()->GetMaterialManager();
 			String l_name;
 			uint16_t l_index;
 			p_params[0]->Get( l_index );
@@ -1354,7 +1354,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshType )
 			}
 		}
 
-		l_pContext->pMesh = l_pContext->m_pParser->GetEngine()->CreateMesh( l_type, l_pContext->strName2, l_arrayFaces, l_arraySizes );
+		l_pContext->pMesh = l_pContext->m_pParser->GetOwner()->CreateMesh( l_type, l_pContext->strName2, l_arrayFaces, l_arraySizes );
 	}
 	else
 	{
@@ -1376,7 +1376,7 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshFile )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	l_pContext->pMesh = l_pContext->m_pParser->GetEngine()->CreateMesh( eMESH_TYPE_CUSTOM, cuEmptyString, UIntArray(), RealArray() );
+	l_pContext->pMesh = l_pContext->m_pParser->GetOwner()->CreateMesh( eMESH_TYPE_CUSTOM, cuEmptyString, UIntArray(), RealArray() );
 	Path l_path;
 	p_params[0]->Get( l_path );
 
@@ -1465,7 +1465,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshImport )
 	}
 	else
 	{
-		Engine * l_pEngine = l_pContext->m_pParser->GetEngine();
+		Engine * l_pEngine = l_pContext->m_pParser->GetOwner();
 		ImporterPluginSPtr l_pPlugin;
 		ImporterSPtr l_pImporter;
 		ImporterPlugin::ExtensionArray l_arrayExtensions;
@@ -1503,7 +1503,7 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshDivide )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	Engine * l_pEngine = l_pContext->m_pParser->GetEngine();
+	Engine * l_pEngine = l_pContext->m_pParser->GetOwner();
 	DividerPluginSPtr l_pPlugin;
 	Subdivider * l_pDivider = NULL;
 
@@ -1971,7 +1971,7 @@ END_ATTRIBUTE_PUSH( eSECTION_PASS )
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MaterialEnd )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	l_pContext->m_pParser->GetEngine()->PostEvent( MakeInitialiseEvent( *l_pContext->pMaterial ) );
+	l_pContext->m_pParser->GetOwner()->PostEvent( MakeInitialiseEvent( *l_pContext->pMaterial ) );
 }
 END_ATTRIBUTE_POP()
 
@@ -2139,9 +2139,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassGlShader )
 
 	if ( l_pContext->uiPass >= 0 )
 	{
-		if ( l_pContext->m_pParser->GetEngine()->GetRenderSystem()->GetRendererType() == eRENDERER_TYPE_OPENGL )
+		if ( l_pContext->m_pParser->GetOwner()->GetRenderSystem()->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
-			l_pContext->pShaderProgram = l_pContext->m_pParser->GetEngine()->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_GLSL );
+			l_pContext->pShaderProgram = l_pContext->m_pParser->GetOwner()->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_GLSL );
 		}
 		else
 		{
@@ -2163,11 +2163,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassHlShader )
 
 	if ( l_pContext->uiPass >= 0 )
 	{
-		eRENDERER_TYPE l_eRendererType = l_pContext->m_pParser->GetEngine()->GetRenderSystem()->GetRendererType();
+		eRENDERER_TYPE l_eRendererType = l_pContext->m_pParser->GetOwner()->GetRenderSystem()->GetRendererType();
 
 		if ( l_eRendererType == eRENDERER_TYPE_DIRECT3D )
 		{
-			l_pContext->pShaderProgram = l_pContext->m_pParser->GetEngine()->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_HLSL );
+			l_pContext->pShaderProgram = l_pContext->m_pParser->GetOwner()->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_HLSL );
 		}
 		else
 		{
@@ -2218,7 +2218,7 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitImage )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	Engine * l_pEngine = l_pContext->m_pParser->GetEngine();
+	Engine * l_pEngine = l_pContext->m_pParser->GetOwner();
 	ImageCollection & l_imgCollection	= l_pEngine->GetImageManager();
 	ImageSPtr l_pImage;
 	StaticTextureSPtr l_pTexture;
@@ -2256,7 +2256,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitRenderTarget )
 
 	if ( l_pContext->pTextureUnit )
 	{
-		l_pContext->pRenderTarget = l_pContext->m_pParser->GetEngine()->CreateRenderTarget( eTARGET_TYPE_TEXTURE );
+		l_pContext->pRenderTarget = l_pContext->m_pParser->GetOwner()->CreateRenderTarget( eTARGET_TYPE_TEXTURE );
 	}
 	else
 	{
@@ -2361,7 +2361,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitSampler )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
-	SamplerSPtr l_pSampler = l_pContext->m_pParser->GetEngine()->GetSamplerManager().find( p_params[0]->Get( l_name ) );
+	SamplerSPtr l_pSampler = l_pContext->m_pParser->GetOwner()->GetSamplerManager().find( p_params[0]->Get( l_name ) );
 
 	if ( l_pSampler )
 	{
@@ -2478,7 +2478,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ConstantsBuffer )
 		}
 		else
 		{
-			l_pContext->pFrameVariableBuffer = l_pContext->m_pParser->GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( l_name );
+			l_pContext->pFrameVariableBuffer = l_pContext->m_pParser->GetOwner()->GetRenderSystem()->CreateFrameVariableBuffer( l_name );
 		}
 	}
 	else
@@ -2781,7 +2781,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_FontEnd )
 
 	if ( !l_pContext->strName.empty() && !l_pContext->path.empty() )
 	{
-		FontManager & l_fontCollection = l_pContext->m_pParser->GetEngine()->GetFontManager();
+		FontManager & l_fontCollection = l_pContext->m_pParser->GetOwner()->GetFontManager();
 		l_fontCollection.create_font( p_context->m_file->GetFilePath() / l_pContext->path, l_pContext->strName, l_pContext->iInt16 );
 	}
 }
@@ -2863,7 +2863,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_OverlayMaterial )
 	{
 		String l_name;
 		p_params[0]->Get( l_name );
-		MaterialManager & l_manager = l_pContext->m_pParser->GetEngine()->GetMaterialManager();
+		MaterialManager & l_manager = l_pContext->m_pParser->GetOwner()->GetMaterialManager();
 		l_pContext->pOverlay->SetMaterial( l_manager.find( l_name ) );
 	}
 	else
@@ -2877,7 +2877,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_OverlayPanelOverlay )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
-	l_pContext->pOverlay = l_pContext->m_pParser->GetEngine()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pOverlay->GetScene() );
+	l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pOverlay->GetScene() );
 	l_pContext->pOverlay->SetVisible( false );
 }
 END_ATTRIBUTE_PUSH( eSECTION_PANEL_OVERLAY )
@@ -2886,7 +2886,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_OverlayBorderPanelOverlay )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
-	l_pContext->pOverlay = l_pContext->m_pParser->GetEngine()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_BORDER_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pOverlay->GetScene() );
+	l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_BORDER_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pOverlay->GetScene() );
 	l_pContext->pOverlay->SetVisible( false );
 }
 END_ATTRIBUTE_PUSH( eSECTION_BORDER_PANEL_OVERLAY )
@@ -2895,7 +2895,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_OverlayTextOverlay )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
-	l_pContext->pOverlay = l_pContext->m_pParser->GetEngine()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_TEXT, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pOverlay->GetScene() );
+	l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_TEXT, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pOverlay->GetScene() );
 	l_pContext->pOverlay->SetVisible( false );
 }
 END_ATTRIBUTE_PUSH( eSECTION_TEXT_OVERLAY )
@@ -2971,7 +2971,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BorderPanelOverlayMaterial )
 	{
 		String l_name;
 		p_params[0]->Get( l_name );
-		MaterialManager & l_manager = l_pContext->m_pParser->GetEngine()->GetMaterialManager();
+		MaterialManager & l_manager = l_pContext->m_pParser->GetOwner()->GetMaterialManager();
 		l_overlay->GetBorderPanelOverlay()->SetBorderMaterial( l_manager.find( l_name ) );
 	}
 	else
@@ -3060,7 +3060,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_TextOverlayFont )
 
 	if ( l_overlay && l_overlay->GetType() == eOVERLAY_TYPE_TEXT )
 	{
-		FontManager & l_fontManager = l_pContext->m_pParser->GetEngine()->GetFontManager();
+		FontManager & l_fontManager = l_pContext->m_pParser->GetOwner()->GetFontManager();
 		String l_name;
 		p_params[0]->Get( l_name );
 
@@ -3147,7 +3147,7 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_CameraViewport )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	l_pContext->pViewport = std::make_shared< Viewport >( l_pContext->m_pParser->GetEngine(), Size( 100, 100 ), eVIEWPORT_TYPE_3D );
+	l_pContext->pViewport = std::make_shared< Viewport >( *l_pContext->m_pParser->GetOwner(), Size( 100, 100 ), eVIEWPORT_TYPE_3D );
 }
 END_ATTRIBUTE_PUSH( eSECTION_VIEWPORT )
 
@@ -3296,7 +3296,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BillboardMaterial )
 
 	if ( l_pContext->pBillboards )
 	{
-		MaterialManager & l_manager = l_pContext->m_pParser->GetEngine()->GetMaterialManager();
+		MaterialManager & l_manager = l_pContext->m_pParser->GetOwner()->GetMaterialManager();
 		String l_name;
 		p_params[0]->Get( l_name );
 
@@ -3328,7 +3328,7 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BillboardEnd )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	l_pContext->m_pParser->GetEngine()->PostEvent( MakeInitialiseEvent( *l_pContext->pBillboards ) );
+	l_pContext->m_pParser->GetOwner()->PostEvent( MakeInitialiseEvent( *l_pContext->pBillboards ) );
 	l_pContext->pBillboards = nullptr;
 }
 END_ATTRIBUTE_POP()

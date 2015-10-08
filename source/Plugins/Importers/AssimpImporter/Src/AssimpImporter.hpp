@@ -79,14 +79,8 @@ namespace C3dAssimp
 	*/
 	class AssimpImporter : public Castor3D::Importer
 	{
-	private:
-		int m_anonymous;
-		Castor3D::MeshSPtr m_pMesh;
-		std::map< Castor::String, uint32_t > m_mapBoneByID;
-		std::vector< Castor3D::BoneSPtr > m_arrayBones;
-
 	public:
-		AssimpImporter( Castor3D::Engine * p_engine );
+		AssimpImporter( Castor3D::Engine & p_engine );
 		~AssimpImporter();
 
 	private:
@@ -100,6 +94,12 @@ namespace C3dAssimp
 		void DoProcessAnimationNodes( Castor3D::AnimationSPtr p_pAnimation, Castor::real p_rTicksPerSecond, Castor3D::SkeletonSPtr, aiNode * p_node, aiAnimation * p_paiAnimation, Castor3D::MovingObjectBaseSPtr p_pObject );
 		void DoAddTexture( Castor::String const & p_strValue, Castor3D::PassSPtr p_pPass, Castor3D::eTEXTURE_CHANNEL p_eChannel );
 		void DoAddKeyframes( Castor3D::AnimationSPtr p_pAnimation, aiAnimation * p_paiAnimation );
+
+	private:
+		int m_anonymous;
+		Castor3D::MeshSPtr m_pMesh;
+		std::map< Castor::String, uint32_t > m_mapBoneByID;
+		std::vector< Castor3D::BoneSPtr > m_arrayBones;
 	};
 }
 

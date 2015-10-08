@@ -20,6 +20,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "ComParameterCast.hpp"
 
+#include <Engine.hpp>
+#include <FunctorEvent.hpp>
+
 namespace CastorCom
 {
 	template< typename Class, typename Value >
@@ -27,8 +30,8 @@ namespace CastorCom
 	{
 		typedef void ( Class::*Function )( Value );
 		VariablePutter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
+			: m_instance( instance )
+			, m_function( function )
 		{
 		}
 		template< typename _Value >
@@ -46,13 +49,7 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 LIBID_Castor3D,						// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
+				hr = CComError::DispatchError( E_FAIL, LIBID_Castor3D, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
 			}
 
 			return hr;
@@ -71,12 +68,57 @@ namespace CastorCom
 	}
 
 	template< typename Class, typename Value >
+	struct VariablePutterEvt
+	{
+		typedef void ( Class::*Function )( Value );
+		VariablePutterEvt( Class * instance, Function function )
+			: m_instance( instance )
+			, m_function( function )
+		{
+		}
+		template< typename _Value >
+		HRESULT operator()( _Value value )
+		{
+			HRESULT hr = E_POINTER;
+
+			if ( m_instance )
+			{
+				if ( value )
+				{
+					m_instance->GetOwner()->PostEvent( Castor3D::MakeFunctorEvent( Castor3D::eEVENT_TYPE_PRE_RENDER, [this, value]
+					{
+						( m_instance->*m_function )( parameter_cast< Value >( value ) );
+					} ) );
+					hr = S_OK;
+				}
+			}
+			else
+			{
+				hr = CComError::DispatchError( E_FAIL, LIBID_Castor3D, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+			}
+
+			return hr;
+		}
+
+	private:
+		Class * m_instance;
+		Function m_function;
+	};
+
+	template< typename Class, typename Value, typename _Class >
+	VariablePutterEvt< Class, Value >
+	make_putter_evt( _Class * instance, void ( Class::*function )( Value ) )
+	{
+		return VariablePutterEvt< Class, Value >( ( Class * )instance, function );
+	}
+
+	template< typename Class, typename Value >
 	struct VariableRetPutter
 	{
 		typedef Value & ( Class::*Function )();
 		VariableRetPutter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
+			: m_instance( instance )
+			, m_function( function )
 		{
 		}
 		template< typename Parameter >
@@ -91,13 +133,7 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 LIBID_Castor3D,						// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
+				hr = CComError::DispatchError( E_FAIL, LIBID_Castor3D, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
 			}
 
 			return hr;
@@ -120,9 +156,9 @@ namespace CastorCom
 	{
 		typedef Value & ( Class::*Function )( Index );
 		ParameteredVariablePutter( Class * instance, Function function, Index index )
-			:	m_instance( instance )
-			,	m_function( function )
-			,	m_index( index )
+			: m_instance( instance )
+			, m_function( function )
+			, m_index( index )
 		{
 		}
 		template< typename _Value >
@@ -138,13 +174,7 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 LIBID_Castor3D,						// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
+				hr = CComError::DispatchError( E_FAIL, LIBID_Castor3D, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
 			}
 
 			return hr;
@@ -168,9 +198,9 @@ namespace CastorCom
 	{
 		typedef void ( Class::*Function )( Index, Value );
 		ParameteredParVariablePutter( Class * instance, Function function, Index index )
-			:	m_instance( instance )
-			,	m_function( function )
-			,	m_index( index )
+			: m_instance( instance )
+			, m_function( function )
+			, m_index( index )
 		{
 		}
 		template< typename _Value >
@@ -185,13 +215,7 @@ namespace CastorCom
 			}
 			else
 			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 LIBID_Castor3D,						// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
+				hr = CComError::DispatchError( E_FAIL, LIBID_Castor3D, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
 			}
 
 			return hr;
@@ -216,8 +240,8 @@ namespace CastorCom
 	{\
 		typedef void ( Class::*Function )( nmspc::type const & );\
 		VariablePutter( Class * instance, Function function )\
-			:	m_instance( instance )\
-			,	m_function( function )\
+			: m_instance( instance )\
+			, m_function( function )\
 		{\
 		}\
 		HRESULT operator()( I##ctype * value )\

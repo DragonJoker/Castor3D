@@ -186,7 +186,7 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_PASS_GLSHADER:
-					l_pProgram = p_pass.GetEngine()->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_GLSL );
+					l_pProgram = p_pass.GetOwner()->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_GLSL );
 					l_return = ShaderProgramBase::BinaryParser( m_path ).Parse( *l_pProgram, l_chunk );
 
 					if ( l_return )
@@ -197,7 +197,7 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_PASS_HLSHADER:
-					l_pProgram = p_pass.GetEngine()->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_HLSL );
+					l_pProgram = p_pass.GetOwner()->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_HLSL );
 					l_return = ShaderProgramBase::BinaryParser( m_path ).Parse( *l_pProgram, l_chunk );
 
 					if ( l_return )
@@ -365,8 +365,8 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	Pass::Pass( Engine * p_engine, MaterialSPtr p_parent )
-		: m_engine( p_engine )
+	Pass::Pass( Engine & p_engine, MaterialSPtr p_parent )
+		: OwnedBy< Engine >( p_engine )
 		, m_fShininess( 50.0 )
 		, m_bDoubleFace( false )
 		, m_pParent( p_parent )
@@ -375,7 +375,7 @@ namespace Castor3D
 		, m_clrSpecular( Colour::from_rgba( 0xFFFFFFFF ) )
 		, m_clrEmissive( Colour::from_rgba( 0x000000FF ) )
 		, m_fAlpha( 1.0f )
-		, m_pBlendState( p_engine->GetRenderSystem()->CreateBlendState() )
+		, m_pBlendState( p_engine.GetRenderSystem()->CreateBlendState() )
 		, m_uiTextureFlags( 0 )
 		, m_bAutomaticShader( true )
 		, m_alphaBlendMode( eBLEND_MODE_ADDITIVE )
@@ -444,7 +444,7 @@ namespace Castor3D
 			l_pOpacityMap = AddTextureUnit();
 			l_pOpacityMap->SetAutoMipmaps( l_pOpaSrc->GetAutoMipmaps() );
 			l_pOpacityMap->SetChannel( eTEXTURE_CHANNEL_OPACITY );
-			StaticTextureSPtr l_pTexture = m_engine->GetRenderSystem()->CreateStaticTexture();
+			StaticTextureSPtr l_pTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
 			l_pTexture->SetDimension( eTEXTURE_DIMENSION_2D );
 			l_pTexture->SetImage( l_pImageOpa );
 			l_pTexture->SetSampler( l_pOpaSrc->GetTexture()->GetSampler() );
@@ -465,7 +465,7 @@ namespace Castor3D
 		{
 			m_pBlendState->EnableBlend( true );
 
-			if ( m_engine->GetRenderSystem()->GetCurrentContext()->IsMultiSampling() )
+			if ( GetOwner()->GetRenderSystem()->GetCurrentContext()->IsMultiSampling() )
 			{
 				m_pBlendState->EnableAlphaToCoverage( true );
 				m_pBlendState->SetAlphaSrcBlend( eBLEND_SRC_ALPHA );
@@ -571,7 +571,7 @@ namespace Castor3D
 
 	TextureUnitSPtr Pass::AddTextureUnit()
 	{
-		TextureUnitSPtr l_pReturn = std::make_shared< TextureUnit >( m_engine );
+		TextureUnitSPtr l_pReturn = std::make_shared< TextureUnit >( *GetOwner() );
 		uint32_t l_uiID = uint32_t( m_arrayTextureUnits.size() + 1 );
 		l_pReturn->SetIndex( l_uiID );
 		m_arrayTextureUnits.push_back( l_pReturn );
@@ -696,7 +696,7 @@ namespace Castor3D
 
 		if ( l_sceneBuffer )
 		{
-			RenderSystem * l_renderSystem = m_engine->GetRenderSystem();
+			RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 
 			if ( l_renderSystem->GetCurrentCamera() )
 			{

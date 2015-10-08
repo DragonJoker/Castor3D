@@ -45,7 +45,7 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 		cuT( "polygon" ),//eTOPOLOGY_POLYGON
 	};
 
-	ShaderManager & l_manager = m_renderSystem->GetEngine()->GetShaderManager();
+	ShaderManager & l_manager = m_renderSystem->GetOwner()->GetShaderManager();
 	ShaderProgramBaseSPtr l_pProgram = l_manager.GetNewProgram();
 	l_manager.CreateMatrixBuffer( *l_pProgram, MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
 	l_manager.CreateSceneBuffer( *l_pProgram, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );

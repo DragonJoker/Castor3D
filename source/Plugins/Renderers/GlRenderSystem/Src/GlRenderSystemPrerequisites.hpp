@@ -55,6 +55,7 @@ using Castor::real;
 
 namespace GlRender
 {
+	class GlRenderSystem;
 	class GlAttributeBase;
 	template< typename T, uint32_t Count > class GlAttribute;
 	template< typename T > class GlBufferBase;

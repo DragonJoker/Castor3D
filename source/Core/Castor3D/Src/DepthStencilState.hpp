@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
+#include <OwnedBy.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -32,6 +34,7 @@ namespace Castor3D
 	\brief		Classe de configuration des buffers de profondeur et stencil
 	*/
 	class DepthStencilState
+		: public Castor::OwnedBy< Engine >
 	{
 	protected:
 		/*!
@@ -60,11 +63,13 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
+		 *\param[in]	p_engine	The engine.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
+		 *\param[in]	p_engine	Le moteur.
 		 */
-		C3D_API DepthStencilState();
+		C3D_API DepthStencilState( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor

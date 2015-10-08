@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Overlay.hpp"
 
+#include <OwnedBy.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -55,6 +57,7 @@ namespace Castor3D
 	*/
 	class OverlayManager
 		: private Castor::Collection< Overlay, Castor::String >
+		, public Castor::OwnedBy< Engine >
 	{
 	public:
 		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapIt iterator;
@@ -69,7 +72,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		C3D_API OverlayManager( Engine * p_engine );
+		C3D_API OverlayManager( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -439,8 +442,6 @@ namespace Castor3D
 	private:
 		//!\~english The overlays, in rendering order.	\~french Les incrustations, dans l'ordre de rendu.
 		OverlayCategorySet m_overlays;
-		//!\~english The engine	\~french Le moteur
-		Engine * m_engine;
 		//!\~english The overlay renderer	\~french le renderer d'incrustation
 		OverlayRendererSPtr m_pRenderer;
 		//!\~english The overlay count, per level	\~french Le nombre d'incrustations par niveau

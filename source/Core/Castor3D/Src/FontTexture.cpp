@@ -13,19 +13,19 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	FontTexture::FontTexture( Engine * p_engine, FontSPtr p_font )
-		: m_font( p_font )
-		, m_engine( p_engine  )
+	FontTexture::FontTexture( Engine & p_engine, FontSPtr p_font )
+		: OwnedBy< Engine >( p_engine )
+		, m_font( p_font )
 	{
 		// Récupération / Création de la police
-		FontManager & l_fontManager = p_engine->GetFontManager();
-		SamplerSPtr l_pSampler = p_engine->CreateSampler( p_font->GetName() );
+		FontManager & l_fontManager = GetOwner()->GetFontManager();
+		SamplerSPtr l_pSampler = GetOwner()->CreateSampler( p_font->GetName() );
 		l_pSampler->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_CLAMP_TO_EDGE );
 		l_pSampler->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_CLAMP_TO_EDGE );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
 		m_sampler = l_pSampler;
-		m_texture = p_engine->GetRenderSystem()->CreateStaticTexture();
+		m_texture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
 		m_texture->SetDimension( eTEXTURE_DIMENSION_2D );
 		m_texture->SetSampler( l_pSampler );
 	}

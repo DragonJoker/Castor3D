@@ -18,7 +18,7 @@ namespace Castor3D
 {
 	Light::Light( LightFactory & p_factory, SceneSPtr p_scene, eLIGHT_TYPE p_eLightType, SceneNodeSPtr p_node, String const & p_name )
 		: MovableObject( p_scene, p_node, p_name, eMOVABLE_TYPE_LIGHT )
-		, m_engine( p_scene->GetEngine() )
+		, OwnedBy< Engine >( *p_scene->GetOwner() )
 		, m_enabled( false )
 	{
 		m_pCategory = p_factory.Create( p_eLightType );

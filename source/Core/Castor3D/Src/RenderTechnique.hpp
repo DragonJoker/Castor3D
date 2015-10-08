@@ -19,7 +19,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_RENDER_TECHNIQUE_H___
 
 #include "Castor3DPrerequisites.hpp"
+
 #include <Rectangle.hpp>
+#include <OwnedBy.hpp>
 
 #if !defined( NDEBUG )
 #	define DEBUG_BUFFERS 0
@@ -41,6 +43,7 @@ namespace Castor3D
 	\remarks	Une technique de rendu est la description d'une manière de rendre une cible de rendu
 	*/
 	class RenderTechniqueBase
+		: public Castor::OwnedBy< Engine >
 	{
 	protected:
 		/**
@@ -239,8 +242,6 @@ namespace Castor3D
 		Castor::String m_name;
 		//!\~english The parent render target	\~french La render target parente
 		RenderTarget * m_pRenderTarget;
-		//!\~english The	engine	\~french Le moteur
-		Engine * m_engine;
 		//!\~english The	render system	\~french Le render system
 		RenderSystem * m_renderSystem;
 		//!\~english The	overlays blend state	\~french L'état de mélange pour les overlays

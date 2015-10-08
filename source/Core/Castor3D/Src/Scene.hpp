@@ -22,6 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "SceneNode.hpp"
 
 #include <Logger.hpp>
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -38,8 +39,9 @@ namespace Castor3D
 	\remarks	Une scène est une collection de lumières, noeuds et géométries.
 				<br />Elle a au moins une caméra permettant son rendu
 	*/
-	class C3D_API Scene
+	class Scene
 		: public std::enable_shared_from_this< Scene >
+		, public Castor::OwnedBy< Engine >
 	{
 	public:
 		/*!
@@ -50,9 +52,9 @@ namespace Castor3D
 		\~english
 		\brief		Loader de scène
 		*/
-		class C3D_API TextLoader
-			:	public Castor::Loader< Scene, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			,	public Castor::NonCopyable
+		class TextLoader
+			: public Castor::Loader< Scene, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -61,7 +63,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a scene into a text file
@@ -72,7 +74,7 @@ namespace Castor3D
 			 *\param[in]	p_scene	La scène
 			 *\param[in]	p_file	Le fichier
 			 */
-			virtual bool operator()( Scene const & p_scene, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( Scene const & p_scene, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -82,8 +84,8 @@ namespace Castor3D
 		\~english
 		\brief		Loader de Sampler
 		*/
-		class C3D_API BinaryParser
-			:	public Castor3D::BinaryParser< Scene >
+		class BinaryParser
+			: public Castor3D::BinaryParser< Scene >
 		{
 		public:
 			/**
@@ -94,7 +96,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -107,7 +109,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( Scene const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( Scene const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -120,7 +122,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( Scene & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( Scene & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	private:
@@ -167,28 +169,28 @@ namespace Castor3D
 		 *\param[in]	p_lightFactory	La fabrique utilisée pour créer les lumières
 		 *\param[in]	p_name			Le nom de la scène
 		 */
-		Scene( Engine * p_engine, LightFactory & p_lightFactory, Castor::String const & p_name = Castor::cuEmptyString );
+		C3D_API Scene( Engine & p_engine, LightFactory & p_lightFactory, Castor::String const & p_name = Castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Scene();
+		C3D_API ~Scene();
 		/**
 		 *\~english
 		 *\brief		Initialises the scene
 		 *\~french
 		 *\brief		Initialise la scène
 		 */
-		void Initialise();
+		C3D_API void Initialise();
 		/**
 		 *\~english
 		 *\brief		Clears the maps, leaves the root nodes
 		 *\~french
 		 *\brief		Vide les maps, laisse les noeuds pères
 		 */
-		void ClearScene();
+		C3D_API void ClearScene();
 		/**
 		 *\~english
 		 *\brief		Renders the scene background
@@ -197,7 +199,7 @@ namespace Castor3D
 		 *\brief		Rend le fond de la scène
 		 *\param[in]	p_camera	La caméra utilisée pour le rendu
 		 */
-		void RenderBackground( Camera const & p_camera );
+		C3D_API void RenderBackground( Camera const & p_camera );
 		/**
 		 *\~english
 		 *\brief		Renders the scene in a given display mode
@@ -212,7 +214,7 @@ namespace Castor3D
 		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la frame précédente
 		 *\param[in]	p_camera		La caméra utilisée pour le rendu
 		 */
-		void Render( RenderTechniqueBase & p_technique, eTOPOLOGY p_displayMode, double p_dFrameTime, Camera const & p_camera );
+		C3D_API void Render( RenderTechniqueBase & p_technique, eTOPOLOGY p_displayMode, double p_dFrameTime, Camera const & p_camera );
 		/**
 		 *\~english
 		 *\brief		Sets the background image for the scene
@@ -221,7 +223,7 @@ namespace Castor3D
 		 *\brief		Définit l'image de fond pour la scène
 		 *\param[in]	p_pathFile	Le chemin d'accès à l'image
 		 */
-		bool SetBackgroundImage( Castor::Path const & p_pathFile );
+		C3D_API bool SetBackgroundImage( Castor::Path const & p_pathFile );
 		/**
 		 *\~english
 		 *\brief		Creates a scene node in the scene, attached to the root node
@@ -233,7 +235,7 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom du node
 		 *\return		Le noeud créé
 		 */
-		SceneNodeSPtr CreateSceneNode( Castor::String const & p_name );
+		C3D_API SceneNodeSPtr CreateSceneNode( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Creates a scene node in the scene, attached to the root node if th given parent is nullptr
@@ -245,7 +247,7 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom du node
 		 *\param[in]	p_parent	Le parent du node
 		 */
-		SceneNodeSPtr CreateSceneNode( Castor::String const & p_name, SceneNodeSPtr p_parent );
+		C3D_API SceneNodeSPtr CreateSceneNode( Castor::String const & p_name, SceneNodeSPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Creates a geometry, given a MeshType and the geometry definitions
@@ -262,7 +264,7 @@ namespace Castor3D
 		 *\param[in]	p_faces		Les nombres de faces
 		 *\param[in]	p_size		Les dimensions
 		 */
-		GeometrySPtr CreateGeometry( Castor::String const & p_name, eMESH_TYPE p_type, Castor::String const & p_meshName, UIntArray p_faces, RealArray p_size );
+		C3D_API GeometrySPtr CreateGeometry( Castor::String const & p_name, eMESH_TYPE p_type, Castor::String const & p_meshName, UIntArray p_faces, RealArray p_size );
 		/**
 		 *\~english
 		 *\brief		Creates a geometry, with no mesh
@@ -273,7 +275,7 @@ namespace Castor3D
 		 *\remarks		La géométrie n'est pas ajoutée aux géoméétries de la scène, il faut donc appeler AddPrimitive pour ce faire.
 		 *\param[in]	p_name	Le nom de la géométrie
 		 */
-		GeometrySPtr CreateGeometry( Castor::String const & p_name );
+		C3D_API GeometrySPtr CreateGeometry( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Creates a camera
@@ -288,7 +290,7 @@ namespace Castor3D
 		 *\param[in]	p_node		Le node auquel attacher la caméra
 		 *\param[in]	p_type		Le type de projection du viewport
 		 */
-		CameraSPtr CreateCamera( Castor::String const & p_name, int p_ww, int p_wh, SceneNodeSPtr p_node, eVIEWPORT_TYPE p_type );
+		C3D_API CameraSPtr CreateCamera( Castor::String const & p_name, int p_ww, int p_wh, SceneNodeSPtr p_node, eVIEWPORT_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Creates a camera
@@ -301,7 +303,7 @@ namespace Castor3D
 		 *\param[in]	p_node		Le node auquel attacher la caméra
 		 *\param[in]	p_viewport	Le viewport
 		 */
-		CameraSPtr CreateCamera( Castor::String const & p_name, SceneNodeSPtr p_node, ViewportSPtr p_viewport );
+		C3D_API CameraSPtr CreateCamera( Castor::String const & p_name, SceneNodeSPtr p_node, ViewportSPtr p_viewport );
 		/**
 		 *\~english
 		 *\brief		Creates a light
@@ -314,7 +316,7 @@ namespace Castor3D
 		 *\param[in]	p_node			Le node auquel attacher la lumière
 		 *\param[in]	p_eLightType	Le type de la lumière
 		 */
-		LightSPtr CreateLight( Castor::String const & p_name, SceneNodeSPtr p_node, eLIGHT_TYPE p_eLightType );
+		C3D_API LightSPtr CreateLight( Castor::String const & p_name, SceneNodeSPtr p_node, eLIGHT_TYPE p_eLightType );
 		/**
 		 *\~english
 		 *\brief		Creates an animated object group
@@ -323,14 +325,14 @@ namespace Castor3D
 		 *\brief		Crée un groupe d'objets animés
 		 *\param[in]	p_name	Le nom du groupe
 		 */
-		AnimatedObjectGroupSPtr CreateAnimatedObjectGroup( Castor::String const & p_name );
+		C3D_API AnimatedObjectGroupSPtr CreateAnimatedObjectGroup( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Initialises geometries
 		 *\~french
 		 *\brief		Initialise les géométries
 		 */
-		void InitialiseGeometries();
+		C3D_API void InitialiseGeometries();
 		/**
 		 *\~english
 		 *\brief		Adds a node to the scene
@@ -339,7 +341,7 @@ namespace Castor3D
 		 *\brief		Ajoute un node à la scène
 		 *\param[in]	p_node	Le node
 		 */
-		void AddNode( SceneNodeSPtr p_node );
+		C3D_API void AddNode( SceneNodeSPtr p_node );
 		/**
 		 *\~english
 		 *\brief		Adds a light to the scene
@@ -348,7 +350,7 @@ namespace Castor3D
 		 *\brief		Ajoute une lumière à la scène
 		 *\param[in]	p_light	La lumière
 		 */
-		void AddLight( LightSPtr p_light );
+		C3D_API void AddLight( LightSPtr p_light );
 		/**
 		 *\~english
 		 *\brief		Adds a geometry to the scene
@@ -357,7 +359,7 @@ namespace Castor3D
 		 *\brief		Ajoute une géométrie à la scène
 		 *\param[in]	p_geometry	La géométrie
 		 */
-		void AddGeometry( GeometrySPtr p_geometry );
+		C3D_API void AddGeometry( GeometrySPtr p_geometry );
 		/**
 		 *\~english
 		 *\brief		Adds a billboards list to the scene
@@ -366,7 +368,7 @@ namespace Castor3D
 		 *\brief		Ajoute une liste de billboards à la scène
 		 *\param[in]	p_pList	La liste de billboards
 		 */
-		void AddBillboards( BillboardListSPtr p_pList );
+		C3D_API void AddBillboards( BillboardListSPtr p_pList );
 		/**
 		 *\~english
 		 *\brief		Adds an animated object group
@@ -375,7 +377,7 @@ namespace Castor3D
 		 *\brief		Ajoute un groupe d'objets animés
 		 *\param[in]	p_pGroup	Le groupe d'objets animés
 		 */
-		void AddAnimatedObjectGroup( AnimatedObjectGroupSPtr p_pGroup );
+		C3D_API void AddAnimatedObjectGroup( AnimatedObjectGroupSPtr p_pGroup );
 		/**
 		 *\~english
 		 *\brief		Retrieves the node with the given name
@@ -386,7 +388,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom
 		 *\return		Le node, nullptr si non trouvé
 		 */
-		SceneNodeSPtr GetNode( Castor::String const & p_name )const;
+		C3D_API SceneNodeSPtr GetNode( Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the geometry with the given name
@@ -397,7 +399,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom
 		 *\return		La géométrie, nullptr si non trouvée
 		 */
-		GeometrySPtr GetGeometry( Castor::String const & p_name )const;
+		C3D_API GeometrySPtr GetGeometry( Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the light with the given name
@@ -408,7 +410,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom
 		 *\return		La lumière, nullptr si non trouvée
 		 */
-		LightSPtr GetLight( Castor::String const & p_name )const;
+		C3D_API LightSPtr GetLight( Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the billboards list with the given name
@@ -419,7 +421,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom
 		 *\return		La liste de billboards, nullptr si non trouvée
 		 */
-		BillboardListSPtr GetBillboards( Castor::String const & p_name )const;
+		C3D_API BillboardListSPtr GetBillboards( Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated object group with the given name
@@ -430,7 +432,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom
 		 *\return		Le groupe d'objets animés
 		 */
-		AnimatedObjectGroupSPtr GetAnimatedObjectGroup( Castor::String const & p_name )const;
+		C3D_API AnimatedObjectGroupSPtr GetAnimatedObjectGroup( Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the camera with the given name
@@ -441,7 +443,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom
 		 *\return		La caméra, nullptr si non trouvée
 		 */
-		CameraSPtr GetCamera( Castor::String const & p_name )const;
+		C3D_API CameraSPtr GetCamera( Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Removes the light given in argument from the scene
@@ -450,7 +452,7 @@ namespace Castor3D
 		 *\brief		Enlève la lumière donnée de la scène
 		 *\param[in]	p_pLight	La lumière
 		 */
-		void RemoveLight( LightSPtr p_pLight );
+		C3D_API void RemoveLight( LightSPtr p_pLight );
 		/**
 		 *\~english
 		 *\brief		Removes the node given in argument from the scene
@@ -459,7 +461,7 @@ namespace Castor3D
 		 *\brief		Enlève le node donné de la scène
 		 *\param[in]	p_node	La lumière
 		 */
-		void RemoveNode( SceneNodeSPtr p_node );
+		C3D_API void RemoveNode( SceneNodeSPtr p_node );
 		/**
 		 *\~english
 		 *\brief		Removes the geometry given in argument from the scene and deletes it
@@ -468,7 +470,7 @@ namespace Castor3D
 		 *\brief		Enlève la géométrie donnée de la scène
 		 *\param[in]	p_pGeometry	La géométrie
 		 */
-		void RemoveGeometry( GeometrySPtr p_pGeometry );
+		C3D_API void RemoveGeometry( GeometrySPtr p_pGeometry );
 		/**
 		 *\~english
 		 *\brief		Removes the billboards list given in argument from the scene and deletes it
@@ -477,7 +479,7 @@ namespace Castor3D
 		 *\brief		Enlève la liste de billboards donnée de la scène
 		 *\param[in]	p_pGeometry	La liste de billboards
 		 */
-		void RemoveBillboards( BillboardListSPtr p_pList );
+		C3D_API void RemoveBillboards( BillboardListSPtr p_pList );
 		/**
 		 *\~english
 		 *\brief		Removes the camera given in argument from the scene
@@ -486,7 +488,7 @@ namespace Castor3D
 		 *\brief		Enlève la caméra donnée de la scène
 		 *\param[in]	p_pCamera	La caméra
 		 */
-		void RemoveCamera( CameraSPtr p_pCamera );
+		C3D_API void RemoveCamera( CameraSPtr p_pCamera );
 		/**
 		 *\~english
 		 *\brief		Removes an animated object group from the scene
@@ -495,49 +497,49 @@ namespace Castor3D
 		 *\brief		Enlève un groupe d'objets animés de la scène
 		 *\param[in]	p_pGroup	Le groupe d'objets animés
 		 */
-		void RemoveAnimatedObjectGroup( AnimatedObjectGroupSPtr p_pGroup );
+		C3D_API void RemoveAnimatedObjectGroup( AnimatedObjectGroupSPtr p_pGroup );
 		/**
 		 *\~english
 		 *\brief		Removes all the lights from the scene
 		 *\~french
 		 *\brief		Enlève toutes les lumières de la scène
 		 */
-		void RemoveAllLights();
+		C3D_API void RemoveAllLights();
 		/**
 		 *\~english
 		 *\brief		Removes all the nodes from the scene
 		 *\~french
 		 *\brief		Enlève tous les nodes de la scène
 		 */
-		void RemoveAllNodes();
+		C3D_API void RemoveAllNodes();
 		/**
 		 *\~english
 		 *\brief		Removes all the geometries from the scene
 		 *\~french
 		 *\brief		Enlève totues les géométries de la scène
 		 */
-		void RemoveAllGeometries();
+		C3D_API void RemoveAllGeometries();
 		/**
 		 *\~english
 		 *\brief		Removes all the billboards lists from the scene
 		 *\~french
 		 *\brief		Enlève totues les listes de billboards de la scène
 		 */
-		void RemoveAllBillboards();
+		C3D_API void RemoveAllBillboards();
 		/**
 		 *\~english
 		 *\brief		Removes all the cameras from the scene
 		 *\~french
 		 *\brief		Enlève toutes les caméras de la scène
 		 */
-		void RemoveAllCameras();
+		C3D_API void RemoveAllCameras();
 		/**
 		 *\~english
 		 *\brief		Removes all the billboards lists from the scene
 		 *\~french
 		 *\brief		Enlève totues les listes de billboards de la scène
 		 */
-		void RemoveAllAnimatedObjectGroups();
+		C3D_API void RemoveAllAnimatedObjectGroups();
 		/**
 		 *\~english
 		 *\brief		Imports a scene from an foreign file
@@ -550,7 +552,7 @@ namespace Castor3D
 		 *\param[in]	p_importer	L'importeur chargé de la récupération des données
 		 *\return		\p false si un problème quelconque a été rencontré
 		 */
-		bool ImportExternal( Castor::String const & p_fileName, Importer & p_importer );
+		C3D_API bool ImportExternal( Castor::String const & p_fileName, Importer & p_importer );
 		/**
 		 *\~english
 		 *\brief		Selects the nearest element in the ray's way
@@ -567,7 +569,7 @@ namespace Castor3D
 		 *\param[out]	p_face		La face la plus proche, dans le submesh
 		 *\param[out]	p_vertex	Le vertex le plus proche, dans la face
 		 */
-		void Select( Ray * p_ray, GeometrySPtr & p_geo, SubmeshSPtr & p_submesh, FaceSPtr * p_face, Vertex * p_vertex );
+		C3D_API void Select( Ray * p_ray, GeometrySPtr & p_geo, SubmeshSPtr & p_submesh, FaceSPtr * p_face, Vertex * p_vertex );
 		/**
 		 *\~english
 		 *\brief		Merges the content of the given scene to this scene
@@ -576,14 +578,14 @@ namespace Castor3D
 		 *\brief		Intègre à cette scène le contenu de celle donnée
 		 *\param[in]	p_scene	La scène à intégrer
 		 */
-		void Merge( SceneSPtr p_scene );
+		C3D_API void Merge( SceneSPtr p_scene );
 		/**
 		 *\~english
 		 *\brief		Clears the overlay list
 		 *\~french
 		 *\brief		Vide la liste des overlays contenus dans la scène
 		 */
-		void ClearOverlays();
+		C3D_API void ClearOverlays();
 		/**
 		 *\~english
 		 *\brief		Adds an overlay to the list
@@ -593,7 +595,7 @@ namespace Castor3D
 		 *\param[in]	p_overlay	L'overlay
 		 *\return
 		 */
-		void AddOverlay( OverlaySPtr p_overlay );
+		C3D_API void AddOverlay( OverlaySPtr p_overlay );
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertices count
@@ -602,7 +604,7 @@ namespace Castor3D
 		 *\brief		Récupère le nombre de sommets
 		 *\return		La valeur
 		 */
-		uint32_t GetVertexCount()const;
+		C3D_API uint32_t GetVertexCount()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the faces count
@@ -611,7 +613,7 @@ namespace Castor3D
 		 *\brief		Récupère le nombre de faces
 		 *\return		La valeur
 		 */
-		uint32_t GetFaceCount()const;
+		C3D_API uint32_t GetFaceCount()const;
 		/**
 		 *\~english
 		 *\brief		Sets the background colour
@@ -986,18 +988,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the core engine
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le moteur
-		 *\return		La valeur
-		 */
-		inline Engine * GetEngine()const
-		{
-			return m_engine;
-		}
-		/**
-		 *\~english
 		 *\brief		Sets the ambient light colour
 		 *\param[in]	The new value
 		 *\~french
@@ -1249,8 +1239,6 @@ namespace Castor3D
 		LightFactory & m_lightFactory;
 		//!\~english The overlays array	\~french Le tableau d'overlays
 		OverlayPtrArray m_arrayOverlays;
-		//!\~english The core engine	\~french Le moteur
-		Engine * m_engine;
 		//!\~english Lights map, ordered by index	\~french Map de lumières, triées par index
 		std::map< int, LightSPtr > m_mapLights;
 		//!\~english The geometries with no alpha blending, sorted by material	\~french Les géométries n'ayant pas d'alpha blend, triées par matériau

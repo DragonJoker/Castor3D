@@ -22,7 +22,7 @@ namespace CastorGui
 
 		if ( !l_return )
 		{
-			l_return = std::make_shared< Material >( p_engine, p_name );
+			l_return = std::make_shared< Material >( *p_engine, p_name );
 			l_return->CreatePass();
 			p_engine->PostEvent( MakeInitialiseEvent( *l_return ) );
 			l_manager.insert( p_name, l_return );
@@ -39,7 +39,7 @@ namespace CastorGui
 
 		if ( !l_return )
 		{
-			l_return = std::make_shared< Material >( p_engine, p_name );
+			l_return = std::make_shared< Material >( *p_engine, p_name );
 			l_return->CreatePass();
 			p_engine->PostEvent( MakeInitialiseEvent( *l_return ) );
 			l_manager.insert( p_name, l_return );

@@ -22,6 +22,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "PluginException.hpp"
 #include <NonCopyable.hpp>
 
+#include <OwnedBy.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -37,6 +39,7 @@ namespace Castor3D
 	*/
 	class C3D_API PluginBase
 		: public Castor::NonCopyable
+		, public Castor::OwnedBy< Engine >
 	{
 	private:
 		//!< Signature for the plugin's loading function
@@ -70,7 +73,7 @@ namespace Castor3D
 		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
 		 *\param[in]	p_engine	Le moteur
 		 */
-		PluginBase( ePLUGIN_TYPE p_type, Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
+		PluginBase( ePLUGIN_TYPE p_type, Castor::DynamicLibrarySPtr p_pLibrary, Engine & p_engine );
 
 	public:
 		/**
@@ -122,8 +125,6 @@ namespace Castor3D
 		POnUnloadFunction m_pfnOnUnload;
 		//!\~english The plugin type	\~french Le type du plugin
 		ePLUGIN_TYPE m_type;
-		//!\~english The engine	\~french Le moteur
-		Engine * m_engine;
 	};
 }
 

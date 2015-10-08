@@ -30,7 +30,7 @@ namespace GuiCommon
 	}
 
 	ViewportTreeItemProperty::ViewportTreeItemProperty( bool p_editable, Castor3D::ViewportSPtr p_viewport )
-		: TreeItemProperty( p_viewport->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_VIEWPORT )
+		: TreeItemProperty( p_viewport->GetOwner(), p_editable, ePROPERTY_DATA_TYPE_VIEWPORT )
 		, m_viewport( p_viewport )
 	{
 		PROPERTY_CATEGORY_VIEWPORT = _( "Viewport" );

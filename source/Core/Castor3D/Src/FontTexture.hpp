@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
+#include <OwnedBy.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -32,6 +34,7 @@ namespace Castor3D
 	\brief		Contient la polica et la texture associée.
 	*/
 	class FontTexture
+		: public Castor::OwnedBy< Engine >
 	{
 	public:
 		DECLARE_MAP( char32_t, Castor::Position, GlyphPosition );
@@ -45,7 +48,7 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_font	La police.
 		 */
-		C3D_API FontTexture( Engine * p_engine, Castor::FontSPtr p_font );
+		C3D_API FontTexture( Engine & p_engine, Castor::FontSPtr p_font );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -113,8 +116,6 @@ namespace Castor3D
 		}
 
 	private:
-		//!\~english The engine.	\~french Le moteur.
-		Engine * m_engine;
 		//!\~english The font.	\~french La police.
 		Castor::FontWPtr m_font;
 		//!\~english The texture sampler.	\~french L'échantillonneur de la texture.

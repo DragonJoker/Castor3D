@@ -669,7 +669,7 @@ namespace SMax
 		/**
 		 * Constructor
 		 */
-		SMaxImporter( Castor3D::Engine * p_pEngine );
+		SMaxImporter( Castor3D::Engine & p_pEngine );
 
 	private:
 		virtual Castor3D::SceneSPtr	DoImportScene();

@@ -349,7 +349,7 @@ namespace Castor3D
 
 				if ( l_matrixBuffer )
 				{
-					p_material.GetEngine()->GetRenderSystem()->GetPipeline().ApplyProjection( *l_matrixBuffer );
+					p_material.GetOwner()->GetRenderSystem()->GetPipeline().ApplyProjection( *l_matrixBuffer );
 				}
 
 				if ( p_texture )

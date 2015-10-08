@@ -171,7 +171,7 @@ namespace Castor3D
 
 		if ( m_bGenerateBuffers )
 		{
-			m_submesh->GetEngine()->PostEvent( std::make_shared< SubdivisionFrameEvent >( m_submesh ) );
+			m_submesh->GetOwner()->PostEvent( std::make_shared< SubdivisionFrameEvent >( m_submesh ) );
 		}
 
 		if ( m_pfnSubdivisionEnd )
