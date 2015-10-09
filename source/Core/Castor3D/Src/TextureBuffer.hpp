@@ -34,18 +34,18 @@ namespace Castor3D
 	\remark		Contient l'image d'une texture
 	*/
 	class C3D_API TextureBuffer
-		:	public CpuBuffer< uint8_t >
+		: public CpuBuffer< uint8_t >
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pRenderSystem	The RenderSystem
+		 *\param[in]	p_engine		The engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pRenderSystem	The RenderSystem
+		 *\param[in]	p_engine		Le moteur
 		 */
-		TextureBuffer( RenderSystem * p_pRenderSystem );
+		TextureBuffer( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor

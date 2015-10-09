@@ -19,9 +19,9 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Context::Context()
-		: m_pWindow( NULL )
-		, m_renderSystem( NULL )
+	Context::Context( RenderSystem & p_renderSystem )
+		: OwnedBy< RenderSystem >( p_renderSystem )
+		, m_pWindow( NULL )
 		, m_bInitialised( false )
 		, m_bMultiSampling( false )
 	{
@@ -62,25 +62,24 @@ namespace Castor3D
 	bool Context::Initialise( RenderWindow * p_window )
 	{
 		m_pWindow = p_window;
-		m_renderSystem	= m_pWindow->GetOwner()->GetRenderSystem();
-		ShaderManager & l_manager = m_renderSystem->GetOwner()->GetShaderManager();
+		ShaderManager & l_manager = GetOwner()->GetOwner()->GetShaderManager();
 		ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
 		m_pBtoBShaderProgram = l_program;
 		m_mapDiffuse = l_program->CreateFrameVariable( ShaderProgramBase::MapDiffuse, eSHADER_TYPE_PIXEL );
 		l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 		m_bMultiSampling = p_window->IsMultisampling();
-		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( m_renderSystem, &( *m_pDeclaration )[0], m_pDeclaration->Size() );
+		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetOwner()->GetOwner(), &( *m_pDeclaration )[0], m_pDeclaration->Size() );
 		l_pVtxBuffer->Resize( m_arrayVertex.size() * m_pDeclaration->GetStride() );
 		l_pVtxBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
-		m_pGeometryBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
-		m_viewport = std::make_shared< Viewport >( *m_renderSystem->GetOwner(), Size( 10, 10 ), eVIEWPORT_TYPE_2D );
+		m_pGeometryBuffers = GetOwner()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
+		m_viewport = std::make_shared< Viewport >( *GetOwner()->GetOwner(), Size( 10, 10 ), eVIEWPORT_TYPE_2D );
 		m_viewport->SetLeft( real( 0.0 ) );
 		m_viewport->SetRight( real( 1.0 ) );
 		m_viewport->SetTop( real( 1.0 ) );
 		m_viewport->SetBottom( real( 0.0 ) );
 		m_viewport->SetNear( real( 0.0 ) );
 		m_viewport->SetFar( real( 1.0 ) );
-		m_pDsStateBackground = m_renderSystem->GetOwner()->CreateDepthStencilState( cuT( "ContextBackgroundDSState" ) );
+		m_pDsStateBackground = GetOwner()->GetOwner()->CreateDepthStencilState( cuT( "ContextBackgroundDSState" ) );
 		m_pDsStateBackground->SetDepthTest( false );
 		m_pDsStateBackground->SetDepthMask( eWRITING_MASK_ZERO );
 		bool l_return = DoInitialise();
@@ -117,19 +116,18 @@ namespace Castor3D
 		m_pGeometryBuffers.reset();
 		m_bMultiSampling = false;
 		m_pBtoBShaderProgram.reset();
-		m_renderSystem = NULL;
 		m_pWindow = NULL;
 	}
 
 	void Context::SetCurrent()
 	{
 		DoSetCurrent();
-		m_renderSystem->SetCurrentContext( this );
+		GetOwner()->SetCurrentContext( this );
 	}
 
 	void Context::EndCurrent()
 	{
-		m_renderSystem->SetCurrentContext( NULL );
+		GetOwner()->SetCurrentContext( NULL );
 		DoEndCurrent();
 	}
 
@@ -181,7 +179,7 @@ namespace Castor3D
 
 			if ( l_matrices )
 			{
-				m_renderSystem->GetPipeline().ApplyProjection( *l_matrices );
+				GetOwner()->GetPipeline().ApplyProjection( *l_matrices );
 			}
 
 			l_pProgram->Bind( 0, 1 );

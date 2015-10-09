@@ -10,9 +10,9 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	DynamicTexture::DynamicTexture( RenderSystem * p_pRenderSystem )
-		:	TextureBase( eTEXTURE_TYPE_DYNAMIC, p_pRenderSystem )
-		,	m_iSamplesCount( 0 )
+	DynamicTexture::DynamicTexture( RenderSystem & p_renderSystem )
+		: TextureBase( eTEXTURE_TYPE_DYNAMIC, p_renderSystem )
+		, m_iSamplesCount( 0 )
 	{
 	}
 
@@ -24,7 +24,7 @@ namespace Castor3D
 	{
 		if ( !m_bInitialised )
 		{
-			if ( !m_renderSystem->HasNonPowerOfTwoTextures() )
+			if ( !GetOwner()->HasNonPowerOfTwoTextures() )
 			{
 				Castor::Image l_img( cuT( "Tmp" ), *m_pPixelBuffer );
 				Castor::Size l_size = m_pPixelBuffer->dimensions();
@@ -87,7 +87,7 @@ namespace Castor3D
 		{
 			Castor::Size l_size = p_size;
 
-			if ( !m_renderSystem->HasNonPowerOfTwoTextures() )
+			if ( !GetOwner()->HasNonPowerOfTwoTextures() )
 			{
 				l_size.set( GetNext2Pow( l_size.width() ), GetNext2Pow( l_size.height() ) );
 			}
@@ -102,7 +102,7 @@ namespace Castor3D
 	{
 		Size l_size;
 
-		if ( !m_renderSystem->HasNonPowerOfTwoTextures() )
+		if ( !GetOwner()->HasNonPowerOfTwoTextures() )
 		{
 			m_uiDepth = GetNext2Pow( p_size[2] );
 			l_size.set( GetNext2Pow( p_size[0] ), GetNext2Pow( p_size[1] ) * m_uiDepth );
@@ -126,7 +126,7 @@ namespace Castor3D
 		m_uiDepth = 1;
 		Castor::Size l_size = p_size;
 
-		if ( !m_renderSystem->HasNonPowerOfTwoTextures() )
+		if ( !GetOwner()->HasNonPowerOfTwoTextures() )
 		{
 			l_size.set( GetNext2Pow( l_size.width() ), GetNext2Pow( l_size.height() ) );
 		}
@@ -138,7 +138,7 @@ namespace Castor3D
 	{
 		Size l_size;
 
-		if ( !m_renderSystem->HasNonPowerOfTwoTextures() )
+		if ( !GetOwner()->HasNonPowerOfTwoTextures() )
 		{
 			m_uiDepth = GetNext2Pow( p_size[2] );
 			l_size.set( GetNext2Pow( p_size[0] ), GetNext2Pow( p_size[1] ) * m_uiDepth );

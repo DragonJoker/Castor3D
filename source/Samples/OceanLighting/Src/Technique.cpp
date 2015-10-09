@@ -196,16 +196,16 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 	{
 		BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS )
 	};
-	Engine * l_pEngine = m_renderSystem->GetOwner();
+	Engine * l_pEngine = GetOwner();
 	m_pSamplerNearestClamp = l_pEngine->CreateSampler( cuT( "NearestClamp" ) );
 	m_pSamplerNearestRepeat = l_pEngine->CreateSampler( cuT( "NearestRepeat" ) );
 	m_pSamplerLinearClamp = l_pEngine->CreateSampler( cuT( "LinearClamp" ) );
 	m_pSamplerLinearRepeat = l_pEngine->CreateSampler( cuT( "LinearRepeat" ) );
 	m_pSamplerAnisotropicClamp = l_pEngine->CreateSampler( cuT( "AnisotropicClamp" ) );
 	m_pSamplerAnisotropicRepeat = l_pEngine->CreateSampler( cuT( "AnisotropicRepeat" ) );
-	m_pTexIrradiance = m_renderSystem->CreateStaticTexture();
-	m_pTexInscatter = m_renderSystem->CreateStaticTexture();
-	m_pTexTransmittance = m_renderSystem->CreateStaticTexture();
+	m_pTexIrradiance = GetOwner()->GetRenderSystem()->CreateStaticTexture();
+	m_pTexInscatter = GetOwner()->GetRenderSystem()->CreateStaticTexture();
+	m_pTexTransmittance = GetOwner()->GetRenderSystem()->CreateStaticTexture();
 	m_pTexSky = m_pRenderTarget->CreateDynamicTexture();
 	m_pTexNoise = m_pRenderTarget->CreateDynamicTexture();
 #if ENABLE_FFT
@@ -224,18 +224,18 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 	m_fftFbo2 = m_pRenderTarget->CreateFrameBuffer();
 	m_pAttachFftA = m_pRenderTarget->CreateAttachment( m_pTexFFTA );
 	m_pAttachFftB = m_pRenderTarget->CreateAttachment( m_pTexFFTB );
-	VertexBufferSPtr l_pVtxBufferVar = std::make_shared< VertexBuffer >( m_renderSystem, l_quadVertexDeclarationElements );
-	VertexBufferSPtr l_pVtxBufferIni = std::make_shared< VertexBuffer >( m_renderSystem, l_quadVertexDeclarationElements );
-	VertexBufferSPtr l_pVtxBufferFtx = std::make_shared< VertexBuffer >( m_renderSystem, l_quadVertexDeclarationElements );
-	VertexBufferSPtr l_pVtxBufferFty = std::make_shared< VertexBuffer >( m_renderSystem, l_quadVertexDeclarationElements );
-	IndexBufferSPtr l_pIdxBufferVar = std::make_shared< IndexBuffer >( m_renderSystem );
-	IndexBufferSPtr l_pIdxBufferIni = std::make_shared< IndexBuffer >( m_renderSystem );
-	IndexBufferSPtr l_pIdxBufferFtx = std::make_shared< IndexBuffer >( m_renderSystem );
-	IndexBufferSPtr l_pIdxBufferFty = std::make_shared< IndexBuffer >( m_renderSystem );
-	m_variancesGBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBufferVar ), std::move( l_pIdxBufferVar ), nullptr );
-	m_initGBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBufferIni ), std::move( l_pIdxBufferIni ), nullptr );
-	m_fftxGBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBufferFtx ), std::move( l_pIdxBufferFtx ), nullptr );
-	m_fftyGBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBufferFty ), std::move( l_pIdxBufferFty ), nullptr );
+	VertexBufferSPtr l_pVtxBufferVar = std::make_shared< VertexBuffer >( GetOwner()->GetRenderSystem(), l_quadVertexDeclarationElements );
+	VertexBufferSPtr l_pVtxBufferIni = std::make_shared< VertexBuffer >( GetOwner()->GetRenderSystem(), l_quadVertexDeclarationElements );
+	VertexBufferSPtr l_pVtxBufferFtx = std::make_shared< VertexBuffer >( GetOwner()->GetRenderSystem(), l_quadVertexDeclarationElements );
+	VertexBufferSPtr l_pVtxBufferFty = std::make_shared< VertexBuffer >( GetOwner()->GetRenderSystem(), l_quadVertexDeclarationElements );
+	IndexBufferSPtr l_pIdxBufferVar = std::make_shared< IndexBuffer >( GetOwner()->GetRenderSystem() );
+	IndexBufferSPtr l_pIdxBufferIni = std::make_shared< IndexBuffer >( GetOwner()->GetRenderSystem() );
+	IndexBufferSPtr l_pIdxBufferFtx = std::make_shared< IndexBuffer >( GetOwner()->GetRenderSystem() );
+	IndexBufferSPtr l_pIdxBufferFty = std::make_shared< IndexBuffer >( GetOwner()->GetRenderSystem() );
+	m_variancesGBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferVar ), std::move( l_pIdxBufferVar ), nullptr );
+	m_initGBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferIni ), std::move( l_pIdxBufferIni ), nullptr );
+	m_fftxGBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferFtx ), std::move( l_pIdxBufferFtx ), nullptr );
+	m_fftyGBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferFty ), std::move( l_pIdxBufferFty ), nullptr );
 	real l_quadVertices[] =
 	{
 		-1.0, -1.0, 0.0, 0.0
@@ -269,12 +269,12 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 #endif
 	m_fbo = m_pRenderTarget->CreateFrameBuffer();
 	m_pAttachSky = m_pRenderTarget->CreateAttachment( m_pTexSky );
-	VertexBufferUPtr l_pVtxBufferSky = std::make_unique< VertexBuffer >( m_renderSystem, l_skymapDeclaration );
-	VertexBufferUPtr l_pVtxBufferMap = std::make_unique< VertexBuffer >( m_renderSystem, l_skymapDeclaration );
-	VertexBufferUPtr l_pVtxBufferClo = std::make_unique< VertexBuffer >( m_renderSystem, l_cloudsVertexDeclarationElements );
-	IndexBufferUPtr l_pIdxBufferSky = std::make_unique< IndexBuffer >( m_renderSystem );
-	IndexBufferUPtr l_pIdxBufferMap = std::make_unique< IndexBuffer >( m_renderSystem );
-	IndexBufferUPtr l_pIdxBufferClo = std::make_unique< IndexBuffer >( m_renderSystem );
+	VertexBufferUPtr l_pVtxBufferSky = std::make_unique< VertexBuffer >( *GetOwner(), l_skymapDeclaration );
+	VertexBufferUPtr l_pVtxBufferMap = std::make_unique< VertexBuffer >( *GetOwner(), l_skymapDeclaration );
+	VertexBufferUPtr l_pVtxBufferClo = std::make_unique< VertexBuffer >( *GetOwner(), l_cloudsVertexDeclarationElements );
+	IndexBufferUPtr l_pIdxBufferSky = std::make_unique< IndexBuffer >( *GetOwner() );
+	IndexBufferUPtr l_pIdxBufferMap = std::make_unique< IndexBuffer >( *GetOwner() );
+	IndexBufferUPtr l_pIdxBufferClo = std::make_unique< IndexBuffer >( *GetOwner() );
 	real l_skyVertices[] =
 	{
 		-1, -1
@@ -311,17 +311,17 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 	std::memcpy( l_pIdxBufferSky->data(), &l_skyIndices[0], sizeof( l_skyIndices ) );
 	std::memcpy( l_pIdxBufferMap->data(), &l_skyIndices[0], sizeof( l_skyIndices ) );
 	std::memcpy( l_pIdxBufferClo->data(), &l_cloudsIndices[0], sizeof( l_cloudsIndices ) );
-	m_skyGBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBufferSky ), std::move( l_pIdxBufferSky ), nullptr );
-	m_skymapGBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBufferMap ), std::move( l_pIdxBufferMap ), nullptr );
-	m_cloudsGBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBufferClo ), std::move( l_pIdxBufferClo ), nullptr );
-	RasteriserStateSPtr l_pRasteriser = m_renderSystem->GetOwner()->CreateRasteriserState( cuT( "OceanLighting" ) );
+	m_skyGBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferSky ), std::move( l_pIdxBufferSky ), nullptr );
+	m_skymapGBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferMap ), std::move( l_pIdxBufferMap ), nullptr );
+	m_cloudsGBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferClo ), std::move( l_pIdxBufferClo ), nullptr );
+	RasteriserStateSPtr l_pRasteriser = GetOwner()->GetRenderSystem()->GetOwner()->CreateRasteriserState( cuT( "OceanLighting" ) );
 	l_pRasteriser->SetCulledFaces( eFACE_NONE );
 	l_pRasteriser->SetFillMode( eFILL_MODE_SOLID );
 	m_pRasteriserState = l_pRasteriser;
-	DepthStencilStateSPtr l_pDepthStencil = m_renderSystem->GetOwner()->CreateDepthStencilState( cuT( "OceanLighting" ) );
+	DepthStencilStateSPtr l_pDepthStencil = GetOwner()->GetRenderSystem()->GetOwner()->CreateDepthStencilState( cuT( "OceanLighting" ) );
 	l_pDepthStencil->SetDepthTest( false );
 	m_pDepthStencilState = l_pDepthStencil;
-	l_pRasteriser = m_renderSystem->GetOwner()->CreateRasteriserState( cuT( "OceanLighting_Render" ) );
+	l_pRasteriser = GetOwner()->GetRenderSystem()->GetOwner()->CreateRasteriserState( cuT( "OceanLighting_Render" ) );
 	l_pRasteriser->SetCulledFaces( eFACE_NONE );
 	l_pRasteriser->SetFillMode( eFILL_MODE_SOLID );
 	m_renderRasteriserState = l_pRasteriser;
@@ -419,10 +419,10 @@ void RenderTechnique::loadPrograms( bool all )
 	l_strSrcF = l_strOpt + cuT( "\n" ) + l_strAtmF + cuT( "\n" ) + l_strOcnF;
 	l_strSrcV = l_strOpt + cuT( "\n" ) + l_strAtmV + cuT( "\n" ) + l_strOcnV;
 	Logger::LogDebug( "Loading 'render' shader program" );
-	m_render = m_renderSystem->GetOwner()->GetShaderManager().GetNewProgram();
+	m_render = GetOwner()->GetRenderSystem()->GetOwner()->GetShaderManager().GetNewProgram();
 	m_render->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 	m_render->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
-	l_pConstants = m_renderSystem->CreateFrameVariableBuffer( cuT( "render" ) );
+	l_pConstants = GetOwner()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "render" ) );
 	m_render->AddFrameVariableBuffer( l_pConstants, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
 	m_renderSkyIrradianceSampler = m_render->CreateFrameVariable( cuT( "skyIrradianceSampler" ), eSHADER_TYPE_PIXEL );
 	m_renderInscatterSampler = m_render->CreateFrameVariable( cuT( "inscatterSampler" ), eSHADER_TYPE_PIXEL );
@@ -470,10 +470,10 @@ void RenderTechnique::loadPrograms( bool all )
 	l_strSrcV = l_strOpt + cuT( "\n" ) + l_strAtmV + cuT( "\n" ) + l_strSkyV;
 	l_strSrcF = l_strOpt + cuT( "\n" ) + l_strAtmF + cuT( "\n" ) + l_strSkyF;
 	Logger::LogDebug( "Loading 'sky' shader program" );
-	m_sky = m_renderSystem->GetOwner()->GetShaderManager().GetNewProgram();
+	m_sky = GetOwner()->GetRenderSystem()->GetOwner()->GetShaderManager().GetNewProgram();
 	m_sky->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 	m_sky->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
-	l_pConstants = m_renderSystem->CreateFrameVariableBuffer( cuT( "sky" ) );
+	l_pConstants = GetOwner()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "sky" ) );
 	m_sky->AddFrameVariableBuffer( l_pConstants, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
 	m_skySkyIrradianceSampler = m_sky->CreateFrameVariable( cuT( "skyIrradianceSampler" ), eSHADER_TYPE_PIXEL );
 	m_skyInscatterSampler = m_sky->CreateFrameVariable( cuT( "inscatterSampler" ), eSHADER_TYPE_PIXEL );
@@ -492,10 +492,10 @@ void RenderTechnique::loadPrograms( bool all )
 	l_strSrcV = l_strOpt + cuT( "\n" ) + l_strAtmV + cuT( "\n" ) + l_strMapV;
 	l_strSrcF = l_strOpt + cuT( "\n" ) + l_strAtmF + cuT( "\n" ) + l_strMapF;
 	Logger::LogDebug( "Loading 'skymap' shader program" );
-	m_skymap = m_renderSystem->GetOwner()->GetShaderManager().GetNewProgram();
+	m_skymap = GetOwner()->GetRenderSystem()->GetOwner()->GetShaderManager().GetNewProgram();
 	m_skymap->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 	m_skymap->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
-	l_pConstants = m_renderSystem->CreateFrameVariableBuffer( cuT( "skymap" ) );
+	l_pConstants = GetOwner()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "skymap" ) );
 	m_skymap->AddFrameVariableBuffer( l_pConstants, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
 	m_skymapSkyIrradianceSampler = m_skymap->CreateFrameVariable( cuT( "skyIrradianceSampler" ), eSHADER_TYPE_PIXEL );
 	m_skymapInscatterSampler = m_skymap->CreateFrameVariable( cuT( "inscatterSampler" ), eSHADER_TYPE_PIXEL );
@@ -524,10 +524,10 @@ void RenderTechnique::loadPrograms( bool all )
 		l_strSrcV = l_strOpt + cuT( "\n" ) + l_strAtmV + cuT( "\n" ) + l_strCloV;
 		l_strSrcF = l_strOpt + cuT( "\n" ) + l_strAtmF + cuT( "\n" ) + l_strCloF;
 		Logger::LogDebug( "Loading 'clouds' shader program" );
-		m_clouds = m_renderSystem->GetOwner()->GetShaderManager().GetNewProgram();
+		m_clouds = GetOwner()->GetRenderSystem()->GetOwner()->GetShaderManager().GetNewProgram();
 		m_clouds->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 		m_clouds->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
-		l_pConstants = m_renderSystem->CreateFrameVariableBuffer( cuT( "clouds" ) );
+		l_pConstants = GetOwner()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "clouds" ) );
 		m_clouds->AddFrameVariableBuffer( l_pConstants, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
 		m_cloudsSkyIrradianceSampler = m_clouds->CreateFrameVariable(	cuT( "skyIrradianceSampler" ), eSHADER_TYPE_PIXEL );
 		m_cloudsInscatterSampler = m_clouds->CreateFrameVariable(	cuT( "inscatterSampler" ), eSHADER_TYPE_PIXEL );
@@ -571,10 +571,10 @@ void RenderTechnique::loadPrograms( bool all )
 	l_strSrcV = l_strIniV;
 	l_strSrcF = l_strIniF;
 	Logger::LogDebug( "Loading 'init' shader program" );
-	m_init = m_renderSystem->GetOwner()->GetShaderManager().GetNewProgram();
+	m_init = GetOwner()->GetRenderSystem()->GetOwner()->GetShaderManager().GetNewProgram();
 	m_init->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 	m_init->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
-	l_pConstants = m_renderSystem->CreateFrameVariableBuffer( cuT( "init" ) );
+	l_pConstants = GetOwner()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "init" ) );
 	m_init->AddFrameVariableBuffer( l_pConstants, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
 	m_initSpectrum_1_2_Sampler = m_init->CreateFrameVariable(	cuT( "spectrum_1_2_Sampler" ), eSHADER_TYPE_PIXEL );
 	m_initSpectrum_3_4_Sampler = m_init->CreateFrameVariable(	cuT( "spectrum_3_4_Sampler" ), eSHADER_TYPE_PIXEL );
@@ -587,10 +587,10 @@ void RenderTechnique::loadPrograms( bool all )
 	l_strSrcV = l_strVarV;
 	l_strSrcF = l_strVarF;
 	Logger::LogDebug( "Loading 'variances' shader program" );
-	m_variances = m_renderSystem->GetOwner()->GetShaderManager().GetNewProgram();
+	m_variances = GetOwner()->GetRenderSystem()->GetOwner()->GetShaderManager().GetNewProgram();
 	m_variances->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 	m_variances->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
-	l_pConstants = m_renderSystem->CreateFrameVariableBuffer( cuT( "variances" ) );
+	l_pConstants = GetOwner()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "variances" ) );
 	m_variances->AddFrameVariableBuffer( l_pConstants, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
 	m_variancesSpectrum_1_2_Sampler = m_variances->CreateFrameVariable(	cuT( "spectrum_1_2_Sampler" ), eSHADER_TYPE_PIXEL );
 	m_variancesSpectrum_3_4_Sampler = m_variances->CreateFrameVariable(	cuT( "spectrum_3_4_Sampler" ), eSHADER_TYPE_PIXEL );
@@ -607,10 +607,10 @@ void RenderTechnique::loadPrograms( bool all )
 	l_strSrcV = l_strFtxV;
 	l_strSrcF = l_strFtxF;
 	Logger::LogDebug( "Loading 'fftx' shader program" );
-	m_fftx = m_renderSystem->GetOwner()->GetShaderManager().GetNewProgram();
+	m_fftx = GetOwner()->GetRenderSystem()->GetOwner()->GetShaderManager().GetNewProgram();
 	m_fftx->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 	m_fftx->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
-	l_pConstants = m_renderSystem->CreateFrameVariableBuffer( cuT( "fftx" ) );
+	l_pConstants = GetOwner()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "fftx" ) );
 	m_fftx->AddFrameVariableBuffer( l_pConstants, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
 	m_fftxButterflySampler = m_fftx->CreateFrameVariable(	cuT( "butterflySampler" ), eSHADER_TYPE_PIXEL );
 	m_fftxImgSampler = m_fftx->CreateFrameVariable(	cuT( "imgSampler" ), eSHADER_TYPE_PIXEL );
@@ -621,10 +621,10 @@ void RenderTechnique::loadPrograms( bool all )
 	l_strSrcV = l_strFtyV;
 	l_strSrcF = l_strFtyF;
 	Logger::LogDebug( "Loading 'ffty' shader program" );
-	m_ffty = m_renderSystem->GetOwner()->GetShaderManager().GetNewProgram();
+	m_ffty = GetOwner()->GetRenderSystem()->GetOwner()->GetShaderManager().GetNewProgram();
 	m_ffty->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_COUNT, l_strVertex + l_strSrcV );
 	m_ffty->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_COUNT, l_strPixel + l_strSrcF );
-	l_pConstants = m_renderSystem->CreateFrameVariableBuffer( cuT( "ffty" ) );
+	l_pConstants = GetOwner()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "ffty" ) );
 	m_ffty->AddFrameVariableBuffer( l_pConstants, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );
 	m_fftyButterflySampler = m_ffty->CreateFrameVariable(	cuT( "butterflySampler" ), eSHADER_TYPE_PIXEL );
 	m_fftyImgSampler = m_ffty->CreateFrameVariable(	cuT( "imgSampler" ), eSHADER_TYPE_PIXEL );
@@ -678,7 +678,7 @@ void RenderTechnique::generateMesh()
 		}
 	}
 
-	VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( m_renderSystem, l_meshDeclaration );
+	VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetOwner(), l_meshDeclaration );
 	l_pVtxBuffer->Resize( n * sizeof( float ) );
 	std::memcpy( l_pVtxBuffer->data(), &data[0], n * sizeof( float ) );
 	std::vector< uint32_t > indices( 6 * int( ceil( m_height * ( s + vmargin ) / m_gridSize ) + 4 ) * int( ceil( m_width * ( 1.0 + 2.0 * hmargin ) / m_gridSize ) + 4 ) );
@@ -703,10 +703,10 @@ void RenderTechnique::generateMesh()
 		nj++;
 	}
 
-	IndexBufferUPtr l_pIdxBuffer = std::make_unique< IndexBuffer >( m_renderSystem );
+	IndexBufferUPtr l_pIdxBuffer = std::make_unique< IndexBuffer >( *GetOwner() );
 	l_pIdxBuffer->Resize( n );
 	std::memcpy( l_pIdxBuffer->data(), &indices[0], n * sizeof( uint32_t ) );
-	m_renderGBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), nullptr );
+	m_renderGBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), nullptr );
 	m_renderGBuffers->Create();
 	m_renderGBuffers->Initialise( m_render, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 }
@@ -778,19 +778,19 @@ bool RenderTechnique::DoCreate()
 #else
 	m_pTexWave->Create();
 #endif
-	BlendStateSPtr l_pBlendState = m_renderSystem->GetOwner()->CreateBlendState( cuT( "OL_Clouds" ) );
+	BlendStateSPtr l_pBlendState = GetOwner()->GetRenderSystem()->GetOwner()->CreateBlendState( cuT( "OL_Clouds" ) );
 	l_pBlendState->EnableBlend( true );
 	l_pBlendState->SetAlphaSrcBlend( eBLEND_SRC_ALPHA );
 	l_pBlendState->SetAlphaDstBlend( eBLEND_INV_SRC_ALPHA );
 	m_cloudsBlendState = l_pBlendState;
-	m_renderBlendState = m_renderSystem->GetOwner()->CreateBlendState( cuT( "OL_Render" ) );
-	m_skyBlendState = m_renderSystem->GetOwner()->CreateBlendState( cuT( "OL_Sky" ) );
-	m_skymapBlendState = m_renderSystem->GetOwner()->CreateBlendState( cuT( "OL_Skymap" ) );
+	m_renderBlendState = GetOwner()->GetRenderSystem()->GetOwner()->CreateBlendState( cuT( "OL_Render" ) );
+	m_skyBlendState = GetOwner()->GetRenderSystem()->GetOwner()->CreateBlendState( cuT( "OL_Sky" ) );
+	m_skymapBlendState = GetOwner()->GetRenderSystem()->GetOwner()->CreateBlendState( cuT( "OL_Skymap" ) );
 #if ENABLE_FFT
-	m_initBlendState = m_renderSystem->GetOwner()->CreateBlendState( cuT( "OL_Init" ) );
-	m_variancesBlendState = m_renderSystem->GetOwner()->CreateBlendState( cuT( "OL_Variances" ) );
-	m_fftxBlendState = m_renderSystem->GetOwner()->CreateBlendState( cuT( "OL_Fftx" ) );
-	m_fftyBlendState = m_renderSystem->GetOwner()->CreateBlendState( cuT( "OL_Ffty" ) );
+	m_initBlendState = GetOwner()->GetRenderSystem()->GetOwner()->CreateBlendState( cuT( "OL_Init" ) );
+	m_variancesBlendState = GetOwner()->GetRenderSystem()->GetOwner()->CreateBlendState( cuT( "OL_Variances" ) );
+	m_fftxBlendState = GetOwner()->GetRenderSystem()->GetOwner()->CreateBlendState( cuT( "OL_Fftx" ) );
+	m_fftyBlendState = GetOwner()->GetRenderSystem()->GetOwner()->CreateBlendState( cuT( "OL_Ffty" ) );
 #endif
 	return true;
 }
@@ -1113,7 +1113,7 @@ bool RenderTechnique::DoBeginRender()
 
 bool RenderTechnique::Render( Scene & CU_PARAM_UNUSED( p_scene ), Camera & CU_PARAM_UNUSED( p_camera ), eTOPOLOGY CU_PARAM_UNUSED( p_ePrimitives ), double CU_PARAM_UNUSED( p_dFrameTime ) )
 {
-	Pipeline & l_pPipeline = m_renderSystem->GetPipeline();
+	Pipeline & l_pPipeline = GetOwner()->GetRenderSystem()->GetPipeline();
 	Point3f sun( sin( m_sunTheta ) * cos( m_sunPhi ), sin( m_sunTheta ) * sin( m_sunPhi ), cos( m_sunTheta ) );
 	m_fbo->Bind();
 	m_pDepthStencilState.lock()->Apply();
@@ -1145,7 +1145,7 @@ bool RenderTechnique::Render( Scene & CU_PARAM_UNUSED( p_scene ), Camera & CU_PA
 
 void RenderTechnique::DoEndRender()
 {
-	Pipeline & l_pPipeline = m_renderSystem->GetPipeline();
+	Pipeline & l_pPipeline = GetOwner()->GetRenderSystem()->GetPipeline();
 	Point3f sun( sin( m_sunTheta ) * cos( m_sunPhi ), sin( m_sunTheta ) * sin( m_sunPhi ), cos( m_sunTheta ) );
 #if ENABLE_FFT
 	static double m_lastTime = 0.0;
@@ -1698,7 +1698,7 @@ void RenderTechnique::computeSlopeVarianceTex( void * CU_PARAM_UNUSED( unused ) 
 	}
 
 	m_variancesFbo->Bind( eFRAMEBUFFER_MODE_AUTOMATIC );
-	m_renderSystem->GetPipeline()->ApplyViewport( m_N_SLOPE_VARIANCE, m_N_SLOPE_VARIANCE );
+	GetOwner()->GetRenderSystem()->GetPipeline()->ApplyViewport( m_N_SLOPE_VARIANCE, m_N_SLOPE_VARIANCE );
 	m_variancesGridSizes->SetValue( Point4f( m_GRID1_SIZE, m_GRID2_SIZE, m_GRID3_SIZE, m_GRID4_SIZE ) );
 	m_variancesSlopeVarianceDelta->SetValue( float( 0.5 * ( theoreticSlopeVariance - totalSlopeVariance ) ) );
 	m_variancesBlendState.lock()->Apply();
@@ -1795,7 +1795,7 @@ float * RenderTechnique::computeButterflyLookupTexture()
 
 void RenderTechnique::simulateFFTWaves( float t )
 {
-	RenderSystem * l_pRS = m_renderSystem;
+	RenderSystem * l_pRS = GetOwner()->GetRenderSystem();
 	Pipeline * l_pPipeline = l_pRS->GetPipeline();
 	TextureBaseSPtr l_pTex;
 	// init

@@ -1,15 +1,15 @@
 namespace Dx11Render
 {
 	template< typename T >
-	DxOneFrameVariable< T >::DxOneFrameVariable( DxRenderSystem * p_pRenderSystem, DxShaderProgram * p_pProgram, uint32_t p_uiOcc )
-		:	DxFrameVariableBase( p_pRenderSystem )
+	DxOneFrameVariable< T >::DxOneFrameVariable( DxRenderSystem * p_renderSystem, DxShaderProgram * p_pProgram, uint32_t p_uiOcc )
+		:	DxFrameVariableBase( p_renderSystem )
 		,	Castor3D::OneFrameVariable< T >	( p_pProgram, p_uiOcc )
 	{
 	}
 
 	template< typename T >
-	DxOneFrameVariable< T >::DxOneFrameVariable( DxRenderSystem * p_pRenderSystem, Castor3D::OneFrameVariable< T > * p_pVariable )
-		:	DxFrameVariableBase( p_pRenderSystem )
+	DxOneFrameVariable< T >::DxOneFrameVariable( DxRenderSystem * p_renderSystem, Castor3D::OneFrameVariable< T > * p_pVariable )
+		:	DxFrameVariableBase( p_renderSystem )
 		,	Castor3D::OneFrameVariable< T >( *p_pVariable )
 	{
 	}

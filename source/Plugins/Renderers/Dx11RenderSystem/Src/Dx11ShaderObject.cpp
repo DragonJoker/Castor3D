@@ -14,7 +14,7 @@ namespace Dx11Render
 		: ShaderObjectBase( p_parent, p_type )
 		, m_pShaderProgram( p_parent )
 		, m_pCompiled( NULL )
-		, m_renderSystem( static_cast< DxRenderSystem * >( p_parent->GetRenderSystem() ) )
+		, m_renderSystem( static_cast< DxRenderSystem * >( p_parent->GetOwner() ) )
 	{
 		m_eShaderModel = eSHADER_MODEL_3;
 	}

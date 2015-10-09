@@ -31,10 +31,10 @@ namespace GlRender
 	*/
 	template <typename T, uint32_t Count>
 	class GlAttribute
-		:	public GlAttributeBase
+		: public GlAttributeBase
 	{
 	public:
-		GlAttribute( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem, Castor::String const & p_strAttribName );
+		GlAttribute( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::String const & p_strAttribName );
 		virtual ~GlAttribute();
 	};
 }

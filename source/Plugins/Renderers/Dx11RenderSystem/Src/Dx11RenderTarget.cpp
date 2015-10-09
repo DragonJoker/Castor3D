@@ -14,9 +14,9 @@ using namespace Castor;
 using namespace Castor3D;
 using namespace Dx11Render;
 
-DxRenderTarget::DxRenderTarget( DxRenderSystem * p_pRenderSystem, eTARGET_TYPE p_type )
-	: RenderTarget( *p_pRenderSystem->GetOwner(), p_type )
-	, m_renderSystem( p_pRenderSystem )
+DxRenderTarget::DxRenderTarget( DxRenderSystem * p_renderSystem, eTARGET_TYPE p_type )
+	: RenderTarget( *p_renderSystem->GetOwner(), p_type )
+	, m_renderSystem( p_renderSystem )
 {
 }
 

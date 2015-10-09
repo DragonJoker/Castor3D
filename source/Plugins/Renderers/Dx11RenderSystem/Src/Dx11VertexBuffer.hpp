@@ -26,7 +26,7 @@ namespace Dx11Render
 		:	public DxBufferObject< uint8_t, ID3D11Buffer >, public Castor::NonCopyable
 	{
 	public:
-		DxVertexBuffer( Castor3D::BufferDeclaration const & p_declaration, HardwareBufferPtr p_pBuffer );
+		DxVertexBuffer( DxRenderSystem & p_renderSystem, Castor3D::BufferDeclaration const & p_declaration, HardwareBufferPtr p_pBuffer );
 		virtual ~DxVertexBuffer();
 
 		virtual bool Create();

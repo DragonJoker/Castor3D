@@ -5,9 +5,9 @@ using namespace Castor;
 
 namespace Dx11Render
 {
-	DxColourRenderBuffer::DxColourRenderBuffer( DxRenderSystem * p_pRenderSystem, ePIXEL_FORMAT p_eFormat )
+	DxColourRenderBuffer::DxColourRenderBuffer( DxRenderSystem * p_renderSystem, ePIXEL_FORMAT p_eFormat )
 		: ColourRenderBuffer( p_eFormat )
-		, m_dxRenderBuffer( p_pRenderSystem, DirectX11::Get( p_eFormat ), eBUFFER_COMPONENT_COLOUR, *this )
+		, m_dxRenderBuffer( p_renderSystem, DirectX11::Get( p_eFormat ), eBUFFER_COMPONENT_COLOUR, *this )
 	{
 	}
 

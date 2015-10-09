@@ -150,14 +150,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the RenderSystem
-		 *\param[in]	p_pRenderSystem	The new value
+		 *\param[in]	p_renderSystem	The new value
 		 *\~french
 		 *\brief		Définit le RenderSystem
-		 *\param[in]	p_pRenderSystem	La nouvelle valeur
+		 *\param[in]	p_renderSystem	La nouvelle valeur
 		 */
-		inline void SetRenderSystem( RenderSystem * const & p_pRenderSystem )
+		inline void SetRenderSystem( RenderSystem * const & p_renderSystem )
 		{
-			m_renderSystem = p_pRenderSystem;
+			m_renderSystem = p_renderSystem;
 		}
 		/**
 		 *\~english

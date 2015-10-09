@@ -11,9 +11,9 @@ using namespace Castor3D;
 
 namespace Dx11Render
 {
-	DxSampler::DxSampler( DxRenderSystem * p_pRenderSystem, Castor::String const & p_name )
-		: Sampler( *p_pRenderSystem->GetOwner(), p_name )
-		, m_pDxRenderSystem( p_pRenderSystem )
+	DxSampler::DxSampler( DxRenderSystem * p_renderSystem, Castor::String const & p_name )
+		: Sampler( *p_renderSystem->GetOwner(), p_name )
+		, m_pDxRenderSystem( p_renderSystem )
 		, m_pSamplerState( NULL )
 	{
 	}

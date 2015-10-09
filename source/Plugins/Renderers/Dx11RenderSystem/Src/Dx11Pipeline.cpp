@@ -41,7 +41,7 @@ namespace Dx11Render
 		m_viewport.MaxDepth = 1.0f;
 		m_viewport.TopLeftX = 0.0f;
 		m_viewport.TopLeftY = 0.0f;
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pipeline.GetRenderSystem()->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pipeline.GetOwner()->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->RSSetViewports( 1, &m_viewport );
 	}
 

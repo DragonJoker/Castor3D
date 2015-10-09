@@ -7,8 +7,8 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlSampler::GlSampler( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem, Castor::String const & p_name )
-		: Sampler( *p_pRenderSystem->GetOwner(), p_name )
+	GlSampler::GlSampler( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::String const & p_name )
+		: Sampler( *p_renderSystem->GetOwner(), p_name )
 		, m_uiSamplerId( eGL_INVALID_INDEX )
 		, m_gl( p_gl )
 	{

@@ -32,7 +32,7 @@ namespace GlRender
 		typedef std::function< bool( eGL_TEXDIM p_eDimension, uint32_t p_index ) > PBindFunction;
 
 	public:
-		GlSampler( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem, Castor::String const & p_name );
+		GlSampler( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::String const & p_name );
 		virtual ~GlSampler();
 
 		virtual bool Initialise();

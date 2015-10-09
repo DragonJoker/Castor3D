@@ -41,12 +41,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pRenderSystem	The render system
+		 *\param[in]	p_renderSystem	The render system
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pRenderSystem	Le render system
+		 *\param[in]	p_renderSystem	Le render system
 		 */
-		PostEffect( RenderSystem * p_pRenderSystem );
+		PostEffect( RenderSystem * p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor

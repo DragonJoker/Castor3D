@@ -37,7 +37,7 @@ namespace Dx11Render
 		:	public Castor3D::Context
 	{
 	public:
-		DxContext();
+		DxContext( DxRenderSystem & p_renderSystem );
 		virtual ~DxContext();
 
 		virtual void UpdateFullScreen( bool p_bVal );

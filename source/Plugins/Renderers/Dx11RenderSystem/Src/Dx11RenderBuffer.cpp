@@ -9,11 +9,11 @@ using namespace Castor;
 
 namespace Dx11Render
 {
-	DxRenderBuffer::DxRenderBuffer( DxRenderSystem * p_pRenderSystem, DXGI_FORMAT p_eFormat, eBUFFER_COMPONENT p_eComponent, RenderBuffer & p_renderBuffer )
+	DxRenderBuffer::DxRenderBuffer( DxRenderSystem * p_renderSystem, DXGI_FORMAT p_eFormat, eBUFFER_COMPONENT p_eComponent, RenderBuffer & p_renderBuffer )
 		: m_size( 0, 0 )
 		, m_pSurface( NULL )
 		, m_pOldSurface( NULL )
-		, m_renderSystem( p_pRenderSystem )
+		, m_renderSystem( p_renderSystem )
 		, m_eFormat( p_eFormat )
 		, m_eComponent( p_eComponent )
 		, m_renderBuffer( p_renderBuffer )

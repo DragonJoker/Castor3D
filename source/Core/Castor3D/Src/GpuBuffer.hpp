@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
+#include <OwnedBy.hpp>
+
 #include <cstddef>
 
 namespace Castor3D
@@ -36,6 +38,7 @@ namespace Castor3D
 	*/
 	template< typename T >
 	class GpuBuffer
+		: public Castor::OwnedBy< RenderSystem >
 	{
 	protected:
 		typedef Castor3D::CpuBuffer< T > * HardwareBufferPtr;
@@ -47,14 +50,19 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		GpuBuffer() {}
+		GpuBuffer( RenderSystem & p_renderSystem )
+			: Castor::OwnedBy< RenderSystem >( p_renderSystem )
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~GpuBuffer() {}
+		virtual ~GpuBuffer()
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Creation function

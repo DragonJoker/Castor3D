@@ -36,6 +36,7 @@ namespace Castor3D
 	*/
 	template< typename T >
 	class C3D_API CpuBuffer
+		: public Castor::OwnedBy< Engine >
 	{
 	protected:
 		typedef typename std::shared_ptr< GpuBuffer< T > > GpuBufferSPtr;
@@ -47,20 +48,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pRenderSystem	The RenderSystem
-		 *\param[in]	p_uiCount		The elements count
+		 *\param[in]	p_engine		The engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pRenderSystem	The RenderSystem
-		 *\param[in]	p_uiCount		Le compte des éléments
+		 *\param[in]	p_engine		Le moteur
 		 */
-		CpuBuffer( RenderSystem * p_pRenderSystem )
-			:	m_bAssigned( false )
-			,	m_bToDelete( false )
-			,	m_pBuffer( )
-			,	m_arrayData( )
-			,	m_renderSystem( p_pRenderSystem )
-			,	m_uiSavedSize( 0 )
+		CpuBuffer( Engine & p_engine )
+			: Castor::OwnedBy< Engine >( p_engine )
+			, m_bAssigned( false )
+			, m_bToDelete( false )
+			, m_pBuffer()
+			, m_arrayData()
+			, m_uiSavedSize( 0 )
 
 		{
 		}
@@ -416,18 +415,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the RenderSystem
-		 *\return		The RenderSystem
-		 *\~french
-		 *\brief		Récupère le RenderSystem
-		 *\return		Le RenderSystem
-		 */
-		virtual RenderSystem * GetRenderSystem()const
-		{
-			return m_renderSystem;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the data pointer
 		 *\return		The data pointer
 		 *\~french
@@ -450,18 +437,6 @@ namespace Castor3D
 		{
 			return ( m_arrayData.size() ? &m_arrayData[0] : NULL );
 		}
-		///**
-		// *\~english
-		// *\brief		Retrieves the shared pointer holding this
-		// *\return		The shared pointer
-		// *\~french
-		// *\brief		Récupère le shared pointer sur this
-		// *\return		Le shared pointer
-		// */
-		//virtual std::shared_ptr< CpuBuffer< T > > GetShared()
-		//{
-		//	return shared_from_this();
-		//}
 
 	protected:
 		/**
@@ -481,8 +456,6 @@ namespace Castor3D
 		GpuBufferSPtr m_pBuffer;
 		//!\~english The buffer data	\~french Les données du tampon
 		TArray m_arrayData;
-		//!\~english The RenderSystem, used to assign a GPU buffer	\~french Le RenderSystem, utilisée pour affecter un tampon GPU
-		RenderSystem * m_renderSystem;
 		//!<\~english The saved buffer size (to still have a size after clear)	\~french La taille sauvegardée, afin de toujours l'avoir après un clear
 		uint32_t m_uiSavedSize;
 	};

@@ -22,6 +22,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Texture.hpp"
 #include "BinaryParser.hpp"
 
+#include <OwnedBy.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -40,6 +42,7 @@ namespace Castor3D
 				<br />Utilise les GPU buffers si supportés (OpenGL Uniform Buffer Objects, Direct3D Constants buffers)
 	*/
 	class FrameVariableBuffer
+		: public Castor::OwnedBy< RenderSystem >
 	{
 	public:
 		/**
@@ -47,14 +50,14 @@ namespace Castor3D
 		 *\brief		Constructor
 		 *\param[in]	p_pProgram		The program
 		 *\param[in]	p_name		The buffer name
-		 *\param[in]	p_pRenderSystem	The render system
+		 *\param[in]	p_renderSystem	The render system
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_pProgram		Le programme
 		 *\param[in]	p_name		Le nom du tampon
-		 *\param[in]	p_pRenderSystem	Le render system
+		 *\param[in]	p_renderSystem	Le render system
 		 */
-		C3D_API FrameVariableBuffer( Castor::String const & p_name, RenderSystem * p_pRenderSystem );
+		C3D_API FrameVariableBuffer( Castor::String const & p_name, RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -291,8 +294,6 @@ namespace Castor3D
 		FrameVariablePtrList m_listInitialised;
 		//!\~english The variables ordered by name	\~french Les variables, triées par nom
 		FrameVariablePtrStrMap m_mapVariables;
-		//!\~english The render system	\~french Le render system
-		RenderSystem * m_renderSystem;
 		//!\~english The buffer name	\~french Le nom du tampon
 		Castor::String m_strName;
 		//!\~english The data buffer	\~french Le tampon de données

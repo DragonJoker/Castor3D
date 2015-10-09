@@ -37,7 +37,7 @@ namespace GlRender
 		typedef EndSceneFunction PEndSceneFunction;
 
 	public:
-		GlRenderTarget( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem, Castor3D::eTARGET_TYPE p_type );
+		GlRenderTarget( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor3D::eTARGET_TYPE p_type );
 		virtual ~GlRenderTarget();
 
 		virtual void Clear();

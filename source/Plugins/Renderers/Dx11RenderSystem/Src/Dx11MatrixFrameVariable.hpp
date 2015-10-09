@@ -30,8 +30,8 @@ namespace Dx11Render
 		,	public DxFrameVariableBase
 	{
 	public:
-		DxMatrixFrameVariable( DxRenderSystem * p_pRenderSystem, DxShaderProgram * p_pProgram, uint32_t p_uiOcc );
-		DxMatrixFrameVariable( DxRenderSystem * p_pRenderSystem, Castor3D::MatrixFrameVariable< T, Rows, Columns > * p_pVariable );
+		DxMatrixFrameVariable( DxRenderSystem * p_renderSystem, DxShaderProgram * p_pProgram, uint32_t p_uiOcc );
+		DxMatrixFrameVariable( DxRenderSystem * p_renderSystem, Castor3D::MatrixFrameVariable< T, Rows, Columns > * p_pVariable );
 		virtual ~DxMatrixFrameVariable();
 
 		virtual bool Initialise()

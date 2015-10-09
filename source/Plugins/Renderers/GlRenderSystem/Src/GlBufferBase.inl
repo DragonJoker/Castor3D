@@ -2,9 +2,9 @@ namespace GlRender
 {
 	template< typename T >
 	GlBufferBase< T >::GlBufferBase( OpenGl & p_gl, eGL_BUFFER_TARGET p_eTarget )
-		:	m_uiGlIndex( uint32_t( eGL_INVALID_INDEX )	)
-		,	m_eTarget( p_eTarget	)
-		,	m_gl( p_gl	)
+		: m_uiGlIndex( uint32_t( eGL_INVALID_INDEX ) )
+		, m_eTarget( p_eTarget )
+		, m_gl( p_gl )
 	{
 	}
 

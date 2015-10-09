@@ -1,14 +1,16 @@
 #include "GlIndexArray.hpp"
 
+#include "GlRenderSystem.hpp"
+
 using namespace Castor3D;
 using namespace Castor;
 
 namespace GlRender
 {
-	GlIndexArray::GlIndexArray( OpenGl & p_gl, HardwareBufferPtr p_pBuffer )
-		:	GpuBuffer()
-		,	m_pBuffer( p_pBuffer )
-		,	m_gl( p_gl )
+	GlIndexArray::GlIndexArray( GlRenderSystem & p_renderSystem, OpenGl & p_gl, HardwareBufferPtr p_pBuffer )
+		: GpuBuffer( p_renderSystem )
+		, m_pBuffer( p_pBuffer )
+		, m_gl( p_gl )
 	{
 	}
 

@@ -51,16 +51,16 @@ namespace Castor3D
 		 *\brief		Constructor
 		 *\param[in]	p_name			The technique name
 		 *\param[in]	p_renderTarget	The render target for this technique
-		 *\param[in]	p_pRenderSystem	The render system
+		 *\param[in]	p_renderSystem	The render system
 		 *\param[in]	p_params		The technique parameters
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_name			Le nom de la technique
 		 *\param[in]	p_renderTarget	La render target pour cette technique
-		 *\param[in]	p_pRenderSystem	Le render system
+		 *\param[in]	p_renderSystem	Le render system
 		 *\param[in]	p_params		Les paramètres de la technique
 		 */
-		C3D_API RenderTechniqueBase( Castor::String const & p_name, RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params );
+		C3D_API RenderTechniqueBase( Castor::String const & p_name, RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params );
 
 	public:
 		/**

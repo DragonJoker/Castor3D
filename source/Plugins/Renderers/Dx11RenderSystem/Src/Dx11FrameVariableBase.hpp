@@ -29,7 +29,7 @@ namespace Dx11Render
 	class DxFrameVariableBase
 	{
 	public:
-		DxFrameVariableBase( DxRenderSystem * p_pRenderSystem );
+		DxFrameVariableBase( DxRenderSystem * p_renderSystem );
 		virtual ~DxFrameVariableBase();
 
 	protected:

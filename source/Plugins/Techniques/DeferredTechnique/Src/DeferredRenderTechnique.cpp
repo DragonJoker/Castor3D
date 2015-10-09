@@ -380,7 +380,7 @@ namespace Deferred
 		};
 		m_pDeclaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
 
-		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( m_renderSystem, l_vertexDeclarationElements );
+		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( *m_renderSystem->GetOwner(), l_vertexDeclarationElements );
 
 		real l_pBuffer[] =
 		{

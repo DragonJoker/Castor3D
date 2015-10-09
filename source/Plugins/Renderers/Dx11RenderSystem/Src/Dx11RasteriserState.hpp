@@ -29,7 +29,7 @@ namespace Dx11Render
 		: public Castor3D::RasteriserState
 	{
 	public:
-		DxRasteriserState( DxRenderSystem * p_pRenderSystem );
+		DxRasteriserState( DxRenderSystem * p_renderSystem );
 		virtual ~DxRasteriserState();
 		/**
 		 *\copydoc Castor3D::RasteriserState::Initialise

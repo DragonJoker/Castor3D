@@ -7,8 +7,8 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlTextureBufferObject::GlTextureBufferObject( OpenGl & p_gl, HardwareBufferPtr p_pBuffer )
-		:	GlBuffer< uint8_t >( p_gl, eGL_BUFFER_TARGET_TEXTURE, p_pBuffer )
+	GlTextureBufferObject::GlTextureBufferObject( GlRenderSystem & p_renderSystem, OpenGl & p_gl, HardwareBufferPtr p_pBuffer )
+		: GlBuffer< uint8_t >( p_renderSystem, p_gl, eGL_BUFFER_TARGET_TEXTURE, p_pBuffer )
 	{
 	}
 

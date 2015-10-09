@@ -8,15 +8,15 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlAttributeBase::GlAttributeBase( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem, String const & p_strAttribName, eGL_TYPE p_eGlType, int p_iCount )
-		:	m_strAttribName( p_strAttribName )
-		,	m_uiAttribLocation( uint32_t( eGL_INVALID_INDEX ) )
-		,	m_iCount( p_iCount )
-		,	m_uiOffset( 0 )
-		,	m_iStride( 0 )
-		,	m_eGlType( p_eGlType )
-		,	m_renderSystem( p_pRenderSystem )
-		,	m_gl( p_gl )
+	GlAttributeBase::GlAttributeBase( OpenGl & p_gl, GlRenderSystem * p_renderSystem, String const & p_strAttribName, eGL_TYPE p_eGlType, int p_iCount )
+		: m_strAttribName( p_strAttribName )
+		, m_uiAttribLocation( uint32_t( eGL_INVALID_INDEX ) )
+		, m_iCount( p_iCount )
+		, m_uiOffset( 0 )
+		, m_iStride( 0 )
+		, m_eGlType( p_eGlType )
+		, m_renderSystem( p_renderSystem )
+		, m_gl( p_gl )
 	{
 	}
 

@@ -29,7 +29,7 @@ namespace Dx11Render
 		:	public Castor3D::DepthStencilRenderBuffer
 	{
 	public:
-		DxDepthStencilRenderBuffer( DxRenderSystem * p_pRenderSystem, Castor::ePIXEL_FORMAT p_eFormat );
+		DxDepthStencilRenderBuffer( DxRenderSystem * p_renderSystem, Castor::ePIXEL_FORMAT p_eFormat );
 		virtual ~DxDepthStencilRenderBuffer();
 
 		virtual bool Create();

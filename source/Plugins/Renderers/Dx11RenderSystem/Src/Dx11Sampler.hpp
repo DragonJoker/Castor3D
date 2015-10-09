@@ -28,7 +28,7 @@ namespace Dx11Render
 		:	public Castor3D::Sampler
 	{
 	public:
-		DxSampler( DxRenderSystem * p_pRenderSystem, Castor::String const & p_name );
+		DxSampler( DxRenderSystem * p_renderSystem, Castor::String const & p_name );
 		virtual ~DxSampler();
 
 		virtual bool Initialise();

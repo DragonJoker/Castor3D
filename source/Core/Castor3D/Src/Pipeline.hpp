@@ -20,8 +20,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <stack>
 #include <SquareMatrix.hpp>
+#include <OwnedBy.hpp>
+
+#include <stack>
 
 namespace Castor3D
 {
@@ -176,6 +178,7 @@ namespace Castor3D
 	\remark		Définit les diverses matrices, applique les transformations supportées.
 	*/
 	class C3D_API Pipeline
+		: public Castor::OwnedBy< RenderSystem >
 	{
 	protected:
 		friend class IPipelineImpl;
@@ -407,18 +410,6 @@ namespace Castor3D
 		virtual void UpdateImpl();
 		/**
 		 *\~english
-		 *\brief		Retrieves the render system.
-		 *\return		The render system.
-		 *\~french
-		 *\brief		Récupère le render system.
-		 *\return		Le render system.
-		 */
-		inline RenderSystem * GetRenderSystem()const
-		{
-			return &m_renderSystem;
-		}
-		/**
-		 *\~english
 		 *\brief		Sets the model matrix.
 		 *\param[in]	p_mtx	The new matrix.
 		 *\~french
@@ -559,8 +550,6 @@ namespace Castor3D
 		Castor::Matrix4x4r m_mtxNormal;
 		//!\~english The texture matrices	\~french Les matrices de texture
 		Castor::Matrix4x4r m_mtxTexture[C3D_MAX_TEXTURE_MATRICES];
-		//!\~english The RenderSystem	\~french Le RenderSystem
-		RenderSystem & m_renderSystem;
 		//!\~english The driver specific Pipeline implementation	\~french L'implémentation du Pipeline, fournie par le driver
 		IPipelineImplWPtr m_impl;
 	};

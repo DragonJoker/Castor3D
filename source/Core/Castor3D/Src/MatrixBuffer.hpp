@@ -39,12 +39,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pRenderSystem	The RenderSystem
+		 *\param[in]	p_engine		The engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pRenderSystem	The RenderSystem
+		 *\param[in]	p_engine		Le moteur
 		 */
-		MatrixBuffer( RenderSystem * p_pRenderSystem );
+		MatrixBuffer( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor

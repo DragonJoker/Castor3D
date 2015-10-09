@@ -28,7 +28,7 @@ namespace Dx11Render
 		:	public Castor3D::FrameVariableBuffer
 	{
 	public:
-		DxFrameVariableBuffer( Castor::String const & p_name, DxRenderSystem * p_pRenderSystem );
+		DxFrameVariableBuffer( Castor::String const & p_name, DxRenderSystem & p_renderSystem );
 		virtual ~DxFrameVariableBuffer();
 
 		inline ID3D11Buffer * GetDxBuffer()

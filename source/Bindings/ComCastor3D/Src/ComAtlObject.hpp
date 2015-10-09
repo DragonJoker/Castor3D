@@ -28,9 +28,9 @@ namespace CastorCom
 {
 	template< typename Class, const CLSID * ClsidClass, typename CObject, typename IObject, const CLSID * IidObject, UINT Resource >
 	class CComAtlObject
-		:	public ATL::CComObjectRootEx< ATL::CComSingleThreadModel >
-		,	public ATL::CComCoClass< CObject, ClsidClass >
-		,	public ATL::IDispatchImpl< IObject, IidObject, &LIBID_Castor3D, MAJOR_VERSION, MINOR_VERSION >
+		: public ATL::CComObjectRootEx< ATL::CComSingleThreadModel >
+		, public ATL::CComCoClass< CObject, ClsidClass >
+		, public ATL::IDispatchImpl< IObject, IidObject, &LIBID_Castor3D, MAJOR_VERSION, MINOR_VERSION >
 	{
 	public:
 		CComAtlObject()

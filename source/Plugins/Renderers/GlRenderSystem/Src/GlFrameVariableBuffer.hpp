@@ -57,7 +57,7 @@ namespace GlRender
 		: public Castor3D::FrameVariableBuffer
 	{
 	public:
-		GlFrameVariableBuffer( OpenGl & p_gl, Castor::String const & p_name, GlRenderSystem * p_pRenderSystem );
+		GlFrameVariableBuffer( OpenGl & p_gl, Castor::String const & p_name, GlRenderSystem & p_renderSystem );
 		virtual ~GlFrameVariableBuffer();
 
 	private:

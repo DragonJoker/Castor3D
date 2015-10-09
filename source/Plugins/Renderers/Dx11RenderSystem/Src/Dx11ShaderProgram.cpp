@@ -53,9 +53,9 @@ namespace Dx11Render
 		return l_pInputs;
 	}
 
-	DxShaderProgram::DxShaderProgram( DxRenderSystem * p_pRenderSystem )
-		: ShaderProgramBase( p_pRenderSystem, eSHADER_LANGUAGE_HLSL )
-		, m_pDxRenderSystem( p_pRenderSystem )
+	DxShaderProgram::DxShaderProgram( DxRenderSystem & p_renderSystem )
+		: ShaderProgramBase( p_renderSystem, eSHADER_LANGUAGE_HLSL )
+		, m_pDxRenderSystem( &p_renderSystem )
 	{
 		CreateObject( eSHADER_TYPE_VERTEX )->SetEntryPoint( cuT( "mainVx" ) );
 		CreateObject( eSHADER_TYPE_PIXEL )->SetEntryPoint( cuT( "mainPx" ) );
@@ -68,7 +68,7 @@ namespace Dx11Render
 
 	void DxShaderProgram::RetrieveLinkerLog( String & strLog )
 	{
-		if ( !m_renderSystem->UseShaders() )
+		if ( !GetOwner()->UseShaders() )
 		{
 			strLog = DirectX11::GetHlslErrorString( 0 );
 		}
@@ -139,15 +139,14 @@ namespace Dx11Render
 
 	std::shared_ptr< OneTextureFrameVariable > DxShaderProgram::DoCreateTextureVariable( int p_iNbOcc )
 	{
-		return std::make_shared< DxOneFrameVariable< TextureBaseRPtr > >( static_cast< DxRenderSystem * >( m_renderSystem ), this, p_iNbOcc );
+		return std::make_shared< DxOneFrameVariable< TextureBaseRPtr > >( m_pDxRenderSystem, this, p_iNbOcc );
 	}
 
 	String DxShaderProgram::DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
 		String l_strReturn;
-		DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( m_renderSystem );
-		std::unique_ptr< UniformsBase > l_pUniforms = UniformsBase::Get( *l_renderSystem );
-		std::unique_ptr< InOutsBase > l_pInputs = InOutsBase::Get( *l_renderSystem );
+		std::unique_ptr< UniformsBase > l_pUniforms = UniformsBase::Get( *m_pDxRenderSystem );
+		std::unique_ptr< InOutsBase > l_pInputs = InOutsBase::Get( *m_pDxRenderSystem );
 
 		if ( l_pUniforms && l_pInputs )
 		{

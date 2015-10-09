@@ -33,13 +33,13 @@ namespace GlRender
 	*/
 	template< typename T >
 	class GlBuffer
-		:	public Castor3D::GpuBuffer< T >
+		: public Castor3D::GpuBuffer< T >
 	{
 	protected:
 		typedef typename Castor3D::GpuBuffer< T >::HardwareBufferPtr HardwareBufferPtr;
 
 	public:
-		GlBuffer( OpenGl & p_gl, eGL_BUFFER_TARGET p_eTarget, HardwareBufferPtr p_pBuffer );
+		GlBuffer( GlRenderSystem & p_renderSystem, OpenGl & p_gl, eGL_BUFFER_TARGET p_eTarget, HardwareBufferPtr p_pBuffer );
 		virtual ~GlBuffer();
 
 		virtual bool Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature );

@@ -28,7 +28,7 @@ namespace Dx11Render
 		:	public Castor3D::GeometryBuffers
 	{
 	public:
-		DxGeometryBuffers( DxRenderSystem * p_pRenderSystem, Castor3D::VertexBufferUPtr p_pVertexBuffer, Castor3D::IndexBufferUPtr p_pIndexBuffer, Castor3D::MatrixBufferUPtr p_pMatrixBuffer );
+		DxGeometryBuffers( DxRenderSystem * p_renderSystem, Castor3D::VertexBufferUPtr p_pVertexBuffer, Castor3D::IndexBufferUPtr p_pIndexBuffer, Castor3D::MatrixBufferUPtr p_pMatrixBuffer );
 		virtual ~DxGeometryBuffers();
 
 		virtual bool Draw( Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index );

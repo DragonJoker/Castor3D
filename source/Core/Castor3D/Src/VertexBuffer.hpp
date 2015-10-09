@@ -42,32 +42,31 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pRenderSystem	The RenderSystem
-		 *\param[in]	p_pElements		The elements descriptions
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_pRenderSystem	The RenderSystem
-		 *\param[in]	p_pElements		Les descriptions des éléments
-		 */
-		template< uint32_t N >
-		VertexBuffer( RenderSystem * p_pRenderSystem, BufferElementDeclaration const( & p_pElements )[N] )
-			: CpuBuffer< uint8_t >( p_pRenderSystem )
-			, m_bufferDeclaration( p_pElements, N )
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_pRenderSystem	The RenderSystem
+		 *\param[in]	p_renderSystem	The RenderSystem
 		 *\param[in]	p_pElements		The elements descriptions
 		 *\param[in]	p_uiNbElements	The elements descriptions count
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pRenderSystem	The RenderSystem
+		 *\param[in]	p_renderSystem	The RenderSystem
 		 *\param[in]	p_pElements		Les descriptions des éléments
 		 *\param[in]	p_uiNbElements	Le compte des descriptions des éléments
 		 */
-		VertexBuffer( RenderSystem * p_pRenderSystem, BufferElementDeclaration const * p_pElements, uint32_t p_uiNbElements );
+		VertexBuffer( Engine & p_engine, BufferElementDeclaration const * p_pElements, uint32_t p_uiNbElements );
+		/**
+		*\~english
+		*\brief		Constructor
+		*\param[in]	p_engine		The engine
+		*\param[in]	p_pElements		The elements descriptions
+		*\~french
+		*\brief		Constructeur
+		*\param[in]	p_engine		Le moteur
+		*\param[in]	p_pElements		Les descriptions des éléments
+		*/
+		template< uint32_t N >
+		VertexBuffer( Engine & p_engine, BufferElementDeclaration const( &p_pElements )[N] )
+			: VertexBuffer( p_engine, p_pElements, N )
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Destructor

@@ -8,9 +8,9 @@ using namespace Castor;
 
 namespace Dx11Render
 {
-	DxDepthStencilState::DxDepthStencilState( DxRenderSystem * p_pRenderSystem )
-		: DepthStencilState( *p_pRenderSystem->GetOwner() )
-		, m_renderSystem( p_pRenderSystem )
+	DxDepthStencilState::DxDepthStencilState( DxRenderSystem * p_renderSystem )
+		: DepthStencilState( *p_renderSystem->GetOwner() )
+		, m_renderSystem( p_renderSystem )
 		, m_pDepthStencilState( NULL )
 	{
 		CreateCurrent();

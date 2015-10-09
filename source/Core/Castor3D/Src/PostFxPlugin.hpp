@@ -36,7 +36,7 @@ namespace Castor3D
 	{
 	private:
 		friend class PluginBase;
-		typedef PostEffectSPtr	CreateEffectFunction( RenderSystem * p_pRenderSystem );
+		typedef PostEffectSPtr	CreateEffectFunction( RenderSystem * p_renderSystem );
 
 		typedef CreateEffectFunction * PCreateEffectFunction;
 
@@ -62,14 +62,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a PostEffect object
-		 *\param[in]	p_pRenderSystem	The render system
+		 *\param[in]	p_renderSystem	The render system
 		 *\return		The created PostEffect instance
 		 *\~french
 		 *\brief		Crée un objet PostEffect
-		 *\param[in]	p_pRenderSystem	Le render system
+		 *\param[in]	p_renderSystem	Le render system
 		 *\return		L'instance de PostEffect créée
 		 */
-		PostEffectSPtr CreateEffect( RenderSystem * p_pRenderSystem );
+		PostEffectSPtr CreateEffect( RenderSystem * p_renderSystem );
 
 	private:
 		PCreateEffectFunction m_pfnCreateEffect;

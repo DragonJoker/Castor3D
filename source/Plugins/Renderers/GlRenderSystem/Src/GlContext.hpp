@@ -29,7 +29,7 @@ namespace GlRender
 		,	public Castor::NonCopyable
 	{
 	public:
-		GlContext( OpenGl & p_gl );
+		GlContext( GlRenderSystem & p_renderSystem, OpenGl & p_gl );
 		virtual ~GlContext();
 
 		GlContextImpl * GetImpl();

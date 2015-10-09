@@ -29,7 +29,7 @@ namespace Dx11Render
 		: public Castor3D::DepthStencilState
 	{
 	public:
-		DxDepthStencilState( DxRenderSystem * p_pRenderSystem );
+		DxDepthStencilState( DxRenderSystem * p_renderSystem );
 		virtual ~DxDepthStencilState();
 		/**
 		 *\copydoc Castor3D::DepthStencilState::Initialise

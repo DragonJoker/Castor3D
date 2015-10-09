@@ -10,8 +10,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	StaticTexture::StaticTexture( RenderSystem * p_pRenderSystem )
-		: TextureBase( eTEXTURE_TYPE_STATIC, p_pRenderSystem )
+	StaticTexture::StaticTexture( RenderSystem & p_renderSystem )
+		: TextureBase( eTEXTURE_TYPE_STATIC, p_renderSystem )
 	{
 	}
 
@@ -37,7 +37,7 @@ namespace Castor3D
 
 	void StaticTexture::SetImage( Castor::Point3ui const & p_dimensions, Castor::PxBufferBaseSPtr p_pBuffer )
 	{
-		if ( !m_renderSystem->HasNonPowerOfTwoTextures() )
+		if ( !GetOwner()->HasNonPowerOfTwoTextures() )
 		{
 			m_uiDepth = GetNext2Pow( p_dimensions[2] );
 			Size l_size( GetNext2Pow( p_dimensions[0] ), GetNext2Pow( p_dimensions[1] ) * m_uiDepth );

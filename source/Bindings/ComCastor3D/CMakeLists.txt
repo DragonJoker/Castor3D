@@ -110,7 +110,7 @@ if ( MSVC )
 		
 		# Define IDL files
 		file( GLOB COMCASTOR3D_IDL_FILES Src/*.idl )
-		file( GLOB COMCASTOR3D_DEF_FILES Src/*.def )
+		file( GLOB COMCASTOR3D_DEF_FILES_RELEASE Src/${PROJECT_NAME}.def )
 		
 		# MIDL compiler
 		add_com_interfaces( COMCASTOR3D_SOURCES_IDL_FILES ${COMCASTOR3D_IDL_FILES} )
@@ -125,7 +125,7 @@ if ( MSVC )
 		source_group( "IDL Files" FILES ${COMCASTOR3D_DEF_FILES} )
 		
 		add_target( 
-			ComCastor3D
+			${PROJECT_NAME}
 			dll
 			"CastorUtils;Castor3D"
 			"CastorUtils;Castor3D;${AtlLibraries}"
@@ -162,14 +162,14 @@ if ( MSVC )
 		source_group( "Header Files\\Castor3D" FILES ${COMCASTOR3D_HEADER_FILES} )
 		
 		# Copy tlb files into binaries directory.
-		add_custom_command( TARGET ComCastor3D
+		add_custom_command( TARGET ${PROJECT_NAME}
 			POST_BUILD
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different
 			${CMAKE_CURRENT_BINARY_DIR}/Castor3D.tlb ${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin/
 		)
 		
 		# Copy tlb files into Test directory.
-		add_custom_command( TARGET ComCastor3D
+		add_custom_command( TARGET ${PROJECT_NAME}
 			POST_BUILD
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/Castor3D.tlb ${CMAKE_CURRENT_BINARY_DIR}/Test/Src/
 			VERBATIM
@@ -179,12 +179,16 @@ if ( MSVC )
 		install(
 			FILES ${CMAKE_CURRENT_BINARY_DIR}/Castor3D.tlb
 			DESTINATION bin
-			COMPONENT ComCastor3D
+			COMPONENT ${PROJECT_NAME}
 		)
 		
-		set_property( TARGET ComCastor3D PROPERTY FOLDER "Bindings" )
-		add_target_astyle( ComCastor3D ".hpp;.inl;.cpp" )
+		set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Bindings/ComCastor3D" )
+		add_target_astyle( ${PROJECT_NAME} ".hpp;.inl;.cpp" )
 		set( Build "yes (version ${CMC_VERSION_MAJOR}.${CMC_VERSION_MINOR}.${CMC_VERSION_BUILD})" PARENT_SCOPE )
+
+		if( ${CASTOR_BUILD_TEST} )
+			add_subdirectory( Test )
+		endif()
 	else ()
 		set( Build "no (ATL libraries not found)" PARENT_SCOPE )
 	endif ()

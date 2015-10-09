@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "MovableObject.hpp"
 
+#include <OwnedBy.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -35,6 +37,7 @@ namespace Castor3D
 	*/
 	class BillboardList
 		: public MovableObject
+		, public Castor::OwnedBy< RenderSystem >
 	{
 	public:
 		/*!
@@ -116,13 +119,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_scene		The parent scene
-		 *\param[in]	p_pRenderSystem	The RenderSystem
+		 *\param[in]	p_renderSystem	The RenderSystem
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_scene		La scene parente
-		 *\param[in]	p_pRenderSystem	Le RenderSystem
+		 *\param[in]	p_renderSystem	Le RenderSystem
 		 */
-		C3D_API BillboardList( SceneSPtr p_scene, RenderSystem * p_pRenderSystem );
+		C3D_API BillboardList( SceneSPtr p_scene, RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -348,8 +351,6 @@ namespace Castor3D
 		C3D_API virtual ShaderProgramBaseSPtr DoGetProgram( RenderTechniqueBase const & p_technique, uint32_t p_flags ) = 0;
 
 	protected:
-		//!\~english  The RenderSystem	\~french La RenderSystem
-		RenderSystem * m_renderSystem;
 		//!\~english The positions list	\~french La liste des positions
 		Castor::Point3rArray m_arrayPositions;
 		//!\~english The Vertex buffer's description	\~french La description du tampon de sommets

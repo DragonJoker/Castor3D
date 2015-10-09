@@ -1,4 +1,6 @@
 #include "GlVertexArray.hpp"
+
+#include "GlRenderSystem.hpp"
 #include "OpenGl.hpp"
 
 using namespace Castor3D;
@@ -6,11 +8,11 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlVertexArray::GlVertexArray( OpenGl & p_gl, BufferDeclaration const & p_declaration, HardwareBufferPtr p_pBuffer )
-		:	GpuBuffer< uint8_t >()
-		,	m_bufferDeclaration( p_declaration )
-		,	m_pBuffer( p_pBuffer )
-		,	m_gl( p_gl )
+	GlVertexArray::GlVertexArray( GlRenderSystem & p_renderSystem, OpenGl & p_gl, BufferDeclaration const & p_declaration, HardwareBufferPtr p_pBuffer )
+		: GpuBuffer< uint8_t >( p_renderSystem )
+		, m_bufferDeclaration( p_declaration )
+		, m_pBuffer( p_pBuffer )
+		, m_gl( p_gl )
 	{
 	}
 

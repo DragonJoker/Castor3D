@@ -304,7 +304,7 @@ namespace Dx11Render
 		: public Castor3D::ShaderProgramBase
 	{
 	public:
-		DxShaderProgram( DxRenderSystem * p_pRenderSystem );
+		DxShaderProgram( DxRenderSystem & p_renderSystem );
 		virtual ~DxShaderProgram();
 
 		/**

@@ -36,7 +36,7 @@ namespace Dx11Render
 		/**
 		 * Constructor
 		 */
-		DxOverlayRenderer( DxRenderSystem * p_pRenderSystem );
+		DxOverlayRenderer( DxRenderSystem & p_renderSystem );
 		/**
 		 * Destructor
 		 */

@@ -40,7 +40,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	Pipeline::Pipeline( RenderSystem & p_renderSystem )
-		: m_renderSystem( p_renderSystem )
+		: OwnedBy< RenderSystem >( p_renderSystem )
 		, m_mtxIdentity( 1 )
 		, m_mtxView( 1 )
 		, m_mtxModel( 1 )
@@ -63,14 +63,14 @@ namespace Castor3D
 
 	void Pipeline::UpdateImpl()
 	{
-		m_impl = m_renderSystem.GetPipelineImpl();
+		m_impl = GetOwner()->GetPipelineImpl();
 	}
 
 	bool Pipeline::Project( Point3r const & p_ptObj, Point4r const & p_ptViewport, Point3r & p_ptResult )
 	{
 		bool l_bReturn = false;
 
-		if ( m_renderSystem.UseShaders() )
+		if ( GetOwner()->UseShaders() )
 		{
 			Point4r l_ptTmp( p_ptObj[0], p_ptObj[1], p_ptObj[2], real( 1 ) );
 			l_ptTmp = GetViewMatrix() * l_ptTmp;
@@ -93,7 +93,7 @@ namespace Castor3D
 	{
 		bool l_bReturn = false;
 
-		if ( m_renderSystem.UseShaders() )
+		if ( GetOwner()->UseShaders() )
 		{
 			Matrix4x4r l_mInverse = ( GetProjectionMatrix() * GetModelMatrix() * GetViewMatrix() ).get_inverse();
 			Point4r l_ptTmp( ( real )p_ptWin[0], ( real )p_ptWin[1], ( real )p_ptWin[2], real( 1 ) );

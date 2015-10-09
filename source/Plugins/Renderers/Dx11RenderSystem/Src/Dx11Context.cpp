@@ -49,8 +49,8 @@ namespace ShaderModel1_2_3_4
 
 namespace Dx11Render
 {
-	DxContext::DxContext()
-		: Context()
+	DxContext::DxContext( DxRenderSystem & p_renderSystem )
+		: Context( p_renderSystem )
 		, m_pSwapChain( NULL )
 		, m_pRenderTargetView( NULL )
 		, m_pDepthStencilView( NULL )
@@ -78,11 +78,10 @@ namespace Dx11Render
 	{
 		if ( !m_bInitialised )
 		{
-			DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( m_renderSystem );
 			m_hWnd = m_pWindow->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd();
 			m_size = m_pWindow->GetSize();
 
-			if ( DoInitPresentParameters() == S_OK &&  l_renderSystem->InitialiseDevice( m_hWnd, m_deviceParams ) )
+			if ( DoInitPresentParameters() == S_OK &&  static_cast< DxRenderSystem * >( GetOwner() )->InitialiseDevice( m_hWnd, m_deviceParams ) )
 			{
 				DoInitVolatileResources();
 				Logger::LogInfo( StringStream() << cuT( "Dx11Context::DoInitialise - Context for window 0x" ) << std::hex << m_hWnd << cuT( " initialised" ) );
@@ -91,7 +90,7 @@ namespace Dx11Render
 
 			if ( m_bInitialised )
 			{
-				auto l_uniforms = UniformsBase::Get( *l_renderSystem );
+				auto l_uniforms = UniformsBase::Get( *static_cast< DxRenderSystem * >( GetOwner() ) );
 				StringStream l_vtxShader;
 				l_vtxShader << l_uniforms->GetVertexInMatrices( 0 ) << std::endl;
 				l_vtxShader << ShaderModel1_2_3_4::VtxShader;
@@ -114,7 +113,7 @@ namespace Dx11Render
 
 	void DxContext::DoSetCurrent()
 	{
-		static_cast< DxRenderSystem * >( m_renderSystem )->GetDevice()->GetImmediateContext( &m_pDeviceContext );
+		static_cast< DxRenderSystem * >( GetOwner() )->GetDevice()->GetImmediateContext( &m_pDeviceContext );
 	}
 
 	void DxContext::DoEndCurrent()
@@ -126,7 +125,7 @@ namespace Dx11Render
 	{
 #if DX_DEBUG_RT
 
-		static_cast< DxRenderSystem * >( m_renderSystem )->GetDevice()->GetImmediateContext( &m_pDeviceContext );
+		static_cast< DxRenderSystem * >( GetOwner() )->GetDevice()->GetImmediateContext( &m_pDeviceContext );
 		ID3D11Resource * l_pResource;
 		m_pRenderTargetView->GetResource( &l_pResource );
 		Castor::StringStream l_name;
@@ -208,8 +207,8 @@ namespace Dx11Render
 	void DxContext::DoInitVolatileResources()
 	{
 		DoSetCurrent();
-		DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( m_renderSystem );
-		DxContextSPtr l_pMainContext = std::static_pointer_cast< DxContext >( l_renderSystem->GetMainContext() );
+		DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( GetOwner() );
+		DxContextSPtr l_pMainContext = std::static_pointer_cast< DxContext >( GetOwner()->GetMainContext() );
 		IDXGIFactory * l_factory = NULL;
 		HRESULT l_hr = CreateDXGIFactory( __uuidof( IDXGIFactory ) , reinterpret_cast< void ** >( &l_factory ) );
 		ID3D11Texture2D * l_pDSTex = NULL;
@@ -287,9 +286,9 @@ namespace Dx11Render
 			m_pSwapChain->SetFullscreenState( false, NULL );
 		}
 
-		ReleaseTracked( m_renderSystem, m_pDepthStencilView );
-		ReleaseTracked( m_renderSystem, m_pRenderTargetView );
-		ReleaseTracked( m_renderSystem, m_pSwapChain );
+		ReleaseTracked( GetOwner(), m_pDepthStencilView );
+		ReleaseTracked( GetOwner(), m_pRenderTargetView );
+		ReleaseTracked( GetOwner(), m_pSwapChain );
 	}
 
 	HRESULT DxContext::DoInitPresentParameters()

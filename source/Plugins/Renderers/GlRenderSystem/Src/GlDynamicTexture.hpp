@@ -29,7 +29,7 @@ namespace GlRender
 		,	public Castor::NonCopyable
 	{
 	public:
-		GlDynamicTexture( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem );
+		GlDynamicTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem );
 		~GlDynamicTexture();
 
 		virtual bool Create();

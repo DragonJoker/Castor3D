@@ -488,10 +488,12 @@ namespace Castor3D
 	{
 		DoGenerateVertexBuffer();
 		DoGenerateIndexBuffer();
-		//if( GetOwner()->GetRenderSystem()->HasInstancing() )
+
+		if( GetOwner()->GetRenderSystem()->HasInstancing() )
 		{
 			DoGenerateMatrixBuffer();
 		}
+
 		GetOwner()->PostEvent( MakeInitialiseEvent( *this ) );
 	}
 
@@ -1085,10 +1087,18 @@ namespace Castor3D
 			l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_BONE_WEIGHTS, eELEMENT_TYPE_4FLOATS ) );
 		}
 
-		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( GetOwner()->GetRenderSystem(), &l_vertexDeclarationElements[0], uint32_t( l_vertexDeclarationElements.size() ) );
-		IndexBufferUPtr l_pIdxBuffer = std::make_unique< IndexBuffer >( GetOwner()->GetRenderSystem() );
-		MatrixBufferUPtr l_pMtxBuffer = std::make_unique< MatrixBuffer >( GetOwner()->GetRenderSystem() );
-		m_pGeometryBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), std::move( l_pMtxBuffer ) );
+		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetOwner(), &l_vertexDeclarationElements[0], uint32_t( l_vertexDeclarationElements.size() ) );
+		IndexBufferUPtr l_pIdxBuffer = std::make_unique< IndexBuffer >( *GetOwner() );
+
+		if ( GetOwner()->GetRenderSystem()->HasInstancing() )
+		{
+			MatrixBufferUPtr l_pMtxBuffer = std::make_unique< MatrixBuffer >( *GetOwner() );
+			m_pGeometryBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), std::move( l_pMtxBuffer ) );
+		}
+		else
+		{
+			m_pGeometryBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), nullptr );
+		}
 	}
 
 	bool Submesh::DoPrepareGeometryBuffers( Pass const & p_pass )

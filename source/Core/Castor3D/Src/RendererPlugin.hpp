@@ -39,7 +39,7 @@ namespace Castor3D
 		friend class Engine;
 
 		typedef RenderSystem * CreateRenderSystemFunction( Engine * p_engine );
-		typedef void DestroyRenderSystemFunction( RenderSystem * p_pRenderSystem );
+		typedef void DestroyRenderSystemFunction( RenderSystem * p_renderSystem );
 		typedef eRENDERER_TYPE GetRendererTypeFunction();
 
 		typedef CreateRenderSystemFunction * PCreateRenderSystemFunction;
@@ -81,12 +81,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Destroys the given RenderSystem
-		 *\param[in]	p_pRenderSystem	The RenderSystem
+		 *\param[in]	p_renderSystem	The RenderSystem
 		 *\~french
 		 *\brief		Détruit le RenderSystem donné
-		 *\param[in]	p_pRenderSystem	Le RenderSystem
+		 *\param[in]	p_renderSystem	Le RenderSystem
 		 */
-		void DestroyRenderSystem( RenderSystem * p_pRenderSystem );
+		void DestroyRenderSystem( RenderSystem * p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Retrieves the renderer type

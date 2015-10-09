@@ -25,11 +25,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GlRender
 {
 	class GlMatrixBufferObject
-		:	public GlBuffer< real >
-		,	public Castor::NonCopyable
+		: public GlBuffer< real >
+		, public Castor::NonCopyable
 	{
 	public:
-		GlMatrixBufferObject( OpenGl & p_gl, HardwareBufferPtr p_pBuffer );
+		GlMatrixBufferObject( GlRenderSystem & p_renderSystem, OpenGl & p_gl, HardwareBufferPtr p_pBuffer );
 		virtual ~GlMatrixBufferObject();
 
 		virtual bool Create();

@@ -1,10 +1,11 @@
 namespace Dx11Render
 {
 	template< typename T, class D3dBufferObject >
-	DxBufferObject< T, D3dBufferObject >::DxBufferObject( HardwareBufferPtr p_pBuffer )
-		:	m_uiIndex( BuffersCount )
-		,	m_pBuffer( p_pBuffer )
-		,	m_pBufferObject( NULL )
+	DxBufferObject< T, D3dBufferObject >::DxBufferObject( DxRenderSystem & p_renderSystem, HardwareBufferPtr p_pBuffer )
+		: GpuBuffer< T >( p_renderSystem )
+		, m_uiIndex( BuffersCount )
+		, m_pBuffer( p_pBuffer )
+		, m_pBufferObject( NULL )
 	{
 	}
 
@@ -43,7 +44,7 @@ namespace Dx11Render
 			m_pBuffer->Unassign();
 		}
 
-		ReleaseTracked( m_pBuffer->GetRenderSystem(), m_pBufferObject );
+		ReleaseTracked( m_pBuffer->GetOwner()->GetRenderSystem(), m_pBufferObject );
 	}
 
 	template< typename T, class D3dBufferObject >

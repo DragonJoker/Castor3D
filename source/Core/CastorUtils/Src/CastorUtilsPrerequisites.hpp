@@ -156,6 +156,8 @@ namespace Castor
 	class Logger;
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	class Matrix;
+	template< class Owmer >
+	class OwnedBy;
 	class ParserParameterBase;
 	template< TPL_PIXEL_FORMAT FT >
 	class Pixel;

@@ -29,7 +29,7 @@ namespace Dx11Render
 		:	public Castor::NonCopyable
 	{
 	public:
-		DxRenderBuffer( DxRenderSystem * p_pRenderSystem, DXGI_FORMAT p_eFormat, Castor3D::eBUFFER_COMPONENT p_eComponent, Castor3D::RenderBuffer & p_renderBuffer );
+		DxRenderBuffer( DxRenderSystem * p_renderSystem, DXGI_FORMAT p_eFormat, Castor3D::eBUFFER_COMPONENT p_eComponent, Castor3D::RenderBuffer & p_renderBuffer );
 		~DxRenderBuffer();
 
 		bool Create();

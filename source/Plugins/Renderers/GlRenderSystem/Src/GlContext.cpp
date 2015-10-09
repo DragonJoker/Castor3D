@@ -21,9 +21,10 @@ using namespace Castor3D;
 
 namespace GlRender
 {
-	GlContext::GlContext( OpenGl & p_gl )
-		:	m_pGlRenderSystem( NULL )
-		,	m_gl( p_gl )
+	GlContext::GlContext( GlRenderSystem & p_renderSystem, OpenGl & p_gl )
+		: Context( p_renderSystem )
+		, m_pGlRenderSystem( &p_renderSystem )
+		, m_gl( p_gl )
 	{
 		m_pImplementation = new GlContextImpl( m_gl, this );
 	}
@@ -49,7 +50,6 @@ namespace GlRender
 	bool GlContext::DoInitialise()
 	{
 		using namespace GLSL;
-		m_pGlRenderSystem = static_cast< GlRenderSystem * >( m_renderSystem );
 		m_bInitialised = m_pImplementation->Initialise( m_pWindow );
 
 		if ( m_bInitialised )
